@@ -1,0 +1,306 @@
+\documentclass[11pt]{article}
+
+
+\begin{document}
+{\bf The design and implementation of Cadabra version 2}
+
+NEXT: scan through list of properties to see which ones should be native.
+
+\section{Looking back}
+
+
+A further change since the first public release is the increasing
+emphasis on web apps. Back in 2007 the idea of writing a user
+interface running in a web browser sounded ridiculous, but
+technologies have changed. 
+
+\section{Showcases: what you could not do before}
+
+- some computer vision example
+- a materials science example
+
+
+\section{New design principles}
+\subsection{Integrate abstract and component computations}
+
+There are, in fact, very few systems that handle abstract and
+component computations equally well.
+
+Also include purely numerical components so we can run computer vision
+algorithms. Requires pre-parsing and pre-computing of expressions.
+
+The strength of cadabra's component engine comes from the fact that it
+integrates seamlessly with abstract computations, and can handle
+components of any data type, from purely abstract via functional down
+to numerical.
+
+C++: \cite{ltensor},\cite{ftensor}.
+Matlab: \cite{TTB_Software}.
+
+
+\subsection{Rethink spinors}
+
+\subsection{Separate the data language from the programming language}
+
+\subsection{Make algorithms accessible from multiple languages}
+
+One advantage that single-language systems like described in the
+previous section have is that the algorithms used to manipulate the
+data are at the same time usable 'internally' in programs. An good
+example is the use of permutation groups -> lists.
+
+\subsection{Make algorithms explain what they do}
+
+A clean logging channel which can be viewed and inspected for problems.
+
+
+\subsection{Provide a full-fledged programming language}
+
+
+
+\subsection{Rethink the notebook interface}
+
+Is the 'we can execute the notebook in any order' paradigm a good one?
+See the IPython discussion recently. Notebooks have not changed much;
+there is room for a more 2d approach in which example snippets or
+tutorials can be seen at the same time as the main notebook.
+
+Useful: lock a cell to the screen, effectively splitting the screen in
+two. 
+
+Import notebook into another. 
+
+\subsection{Make progress update more central}
+
+In an interactive environment it is extremely useful to have a
+progress indicator. In the old cadabra.
+
+\subsection{Make the backend cell-based}
+
+The original version was driven by line-by-line input, 
+
+
+\subsection{Use CMake}
+
+This does not require much explanation: the original make + libtool
+solution is incredibly difficult to get right on all platforms, and
+CMake has grown into a nice and mature build system that just works.
+
+\subsection{Shy away from cross-platform GUI toolkits}
+
+Cadabra's graphical notebook interface was written using Gtkmm, which
+was, and still is, an excellent choice on Linux. It turned out to be a
+total horror on Windows (leading me to abandon that platform
+altogether), and still caused quite a number of problems on OS X.  I
+have briefly considered using a cross-platform GUI toolkits such as Qt
+or wxWindows for version 2. However, none of them `do one thing, and
+do it well', most are horribly bloated, and none of them look properly
+native on all three major platforms. I have thus decided to design the
+GUI layer to be as thin as possible, and write it on each platform
+separately using the native toolkits.
+
+The main problem with not using a web interface is that more work is
+necessary for nice output. 
+
+\subsection{Retain the property type system}
+
+Cadabra's type system is prototype-based, in contrast to the
+class-based approach followed by many other systems (e.g.~sympy). 
+The key ingredient is not the class, but rather its properties.
+The idea of the property system was the objects can have multiple,
+unrelated properties, which do not fit well when implemented in terms
+of a single object class. An example will clarify this. Consider the
+definition of $\mu$ and $\nu$ as being indices. In Cadabra you do
+\begin{quote}
+%{\mu,\nu}::Indices.
+\end{quote}
+You may also need to know that these indices are integers ranging from
+zero to three. You would do
+\begin{quote}
+%{\mu,\nu}::Integer(0..3).
+\end{quote}
+Now we could of course make this information part of the Indices
+object through inheritance: an index is also an integer. But this has
+two disadvantages. First of all, you may never need the information
+about an index being an integer. In many cases, this is simply
+additional data dragged along for no reason. But secondly, this means
+that the class hierarchy must know in advance all properties that an
+object can have. More complicated objects, e.g.~the Riemann tensor,
+will have loads of inherited objects to cover all the possible
+properties that this tensor may have. Many of those will never be
+needed, and there will always be additional properties which we have
+not thought about. 
+
+The problem with trying to capture mathematics into a class-based
+approach is that this is quickly turning into a nightmare. Mathematics
+forms an enormous hierarchy, and getting it right is very
+complex. However, it is rarely necessary to need all that in practical
+computations. I do not need to know that integers form a field
+etc. With a class-based system, you would first make this hierarchy
+and then use it. With a property or prototype-based system, you can
+pick the properties you need without worrying about the others.
+
+In the new parser we should be more flexible with white-space and
+allow ``{\mu,\nu} :: Indices.'' as well.
+
+
+On the other hand, it has often been annoying having to specify
+properties for objects both with their upper and lower indices,
+e.g.~for symmetric or anti-symmetric tensors. This should be improved.
+
+
+\subsection{Aim for backward compatibility}
+
+
+\subsection{Keep it simple}
+
+
+xExtras
+
+\section{IPython considerations}
+
+The notebook paradigm as implemented by IPython has a number of
+problems. First of all, it encourages coding without any structure, in
+the form of a long list of sequential commands and a polluted global
+namespace. Do you remember whether you already used variable
+'myresult' somewhere near the top when you are working 20 pages down
+the notebook? You should not have to, as this should be a local
+variable. The problem is of course that, in order to use results from
+one cell in the next, making everything global is the most trivial way
+to do it. If you want, current notebook interfaces allow you to
+declare local variables, but you have to do something special
+(e.g.~use 'Module' in Mathematica). Local should be the default.
+
+The second problem is that both IPython and Mathematica are very much
+tuned to a single programming and data language. Granted, IPython has
+'cell magic' which allows you to run things in other languages, but a
+mix-and-match using different languages is not well supported. It is
+especially problematic if you want to use the result of one cell as
+input for another cell.
+
+Another problem, which may be relatively easy to fix in ipython, but
+is a problem nevertheless, is the focus on a single view of the
+notebook. There is no way to open multiple views on different sections
+of your notebook. Mathematica has this problem as well.
+
+% http://www.pgbovine.net/ipython-notebook-first-impressions.htm
+
+%-------------------------------------------------------------------
+\section{Abstract and component computations}
+
+
+\section{Support}
+
+Stackoverflow cadabra?
+
+%-------------------------------------------------------------------
+\section{Structure through Python}
+
+In earlier versions, Cadabra contained its own small (and extremely
+limited) programming language. In the design of version 2, a decision
+was made to replace this language with Python. This not only gives
+much better structural control over expression manipulation, but it
+also makes it much easier to extend Cadabra with new functionality.
+
+
+\subsection{Keeping expression input simple}
+
+In the original cadabra language, you can start straightaway by
+entering a mathematical expression on the first line, but you can also
+start with code.  This is possible because the programming language
+and the manipulation language are part of the same structure. By
+
+In Cadabra V2, the decision was made to split input into cells which
+can have a different `language' attached to them. You can enter a
+mathematical expression, in which case the attached language is
+`cadabra'. Or you can enter a bit of Python code, in which case the
+attached language is `python'. How to glue.
+
+\subsection{Python data types}
+
+\begin{description}
+\item[{\tt Expr}] 
+\end{description}
+
+
+\begin{quote}
+import Cadabra;
+
+
+Cdb("A_{m n}::Symmetric");
+a = Cdb("A_{m n} B^{m n}");
+for t in SplitFactors(a):
+    cdb.Canonicalise(t);
+
+\end{quote}
+The {\tt Cdb} function calls provide you with a handle on 
+a Cadabra input cell. 
+
+\begin{quote}
+A_{m n}::Symmetric.
+a := A_{m n} B^{m n};
+\end{quote}
+\begin{quote}
+for t in SplitFactors(Prev("a")):
+   
+\end{quote}
+
+
+\subsection{Sympy integration}
+
+from sympy import *
+
+
+
+%-------------------------------------------------------------------
+
+\section{Version 2 notes}
+
+\subsection{Structure of expressions}
+
+To note:
+\begin{itemize}
+\item For a variety of reasons it is make precise when a node is ``a
+  term in a sum'' or ``a factor in a product''; the reason being that
+  a node being zero only influences a single term in a sum but it
+  influences all factors in a product. 
+
+\item Related to the above: many structure-probing functions currently
+  use ``parent'' without taking proper care of the fact that the
+  parent may be a wrapping ``Accent'' or ``Derivative''. 
+
+\item This is captured by ``term-like'' and ``factor-like''. The main
+  complication here is to make precise how far up we should go in the
+  tree. Probably just one step. ``Accent'' nodes should handle their
+  zero coefficients themselves, not rely on their child nodes to do
+  it. Single terms in an expression (e.g.~an expression which is just
+  ``A'') should also classify as term-like.
+\end{itemize}
+
+\subsection{Localisation of algorithms}
+
+\begin{itemize}
+\item Many algorithms be in a situation in which the called
+  node is a sum which ends up having zero or one terms. The logic of
+  propagating this should always be: you can touch everything at or
+  below the node, but you cannot remove the node, only set its
+  coefficient to zero. 
+
+\item However, whether or not a node becomes zero may be a function of
+  the parent node (example: varying a term should keep it intact if
+  the parent is a product-like node, but should remove it if it is a
+  sum-like node. See above.
+
+\item All algorithms should always return a consistent
+  tree. Therefore, it is for instance not allowed to return with the
+  iterator pointing to a sum node with zero coefficients (sum node
+  with non-unit multiplier error), the algorithm has to change this to
+  something valid.
+
+\end{itemize}
+
+
+\section{TODO}
+
+- split toolkit-independent parts off from the gui (the cell tree,
+  the manipulation of those cells, anything non-displaying)
