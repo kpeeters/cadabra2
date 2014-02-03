@@ -1,0 +1,33 @@
+
+\section{Pure Python examples}
+
+You can use Cadabra entirely from within Python, without using the
+multi-language GUI frontend. The present section contains some
+examples.
+
+\begin{verbatim}
+from cadabra import *
+
+Indices("i,j,k,l,m",position="fixed")
+Symmetric("A_{i j}")
+AntiSymmetric("B_{i j}")
+
+e1 = Ex("A_{i j} B^{i j}")
+
+Substitute(e1, Ex("B^{i j} -> C^{i j}"))
+
+Canonicalise(e1)
+\end{verbatim}
+
+The first line pulls in all Cadabra objects into the global namespace,
+so that you can use them without prefixing them with 'cadabra.'. The
+remainder of the example is pretty close to what you would write in
+the original Cadabra language. 
+
+\begin{verbatim}
+i,j,k,l::Indices(position=fixed)
+A_{i j}::Symmetric.
+B_{i j}::AntiSymmetric.
+e1:= A_{i j} B^{i j};
+Substitute( e1, 
+\end{verbatim}
