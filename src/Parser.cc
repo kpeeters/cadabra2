@@ -19,6 +19,8 @@
 */
 
 #include "Parser.hh"
+#include "PreProcessor.hh"
+
 #include <sstream>
 
 std::istream& operator>>(std::istream& str, Parser& pa)
@@ -35,12 +37,12 @@ std::istream& operator>>(std::istream& str, Parser& pa)
 	return str;
 	}
 
-std::ostream& operator<<(std::ostream& str, Parser& pa)
-	{
-	exptree_output eo(pa.tree);
-	eo.print_infix(str, pa.tree.begin());
-	return str;
-	}
+//std::ostream& operator<<(std::ostream& str, Parser& pa)
+//	{
+//	exptree_output eo(pa.tree);
+//	eo.print_infix(str, pa.tree.begin());
+//	return str;
+//	}
 
 str_node::bracket_t Parser::is_closing_bracket(const unsigned char& br) const
 	{
@@ -119,15 +121,14 @@ bool Parser::string2tree(const std::string& inp)
 	if(inp.size()==0 || inp[0]=='#' || inp[0]=='%') 
 		return true;
 
-	if(preprocess_) {
-		std::stringstream ss(inp), ss2;
-		preprocessor pp;
-		ss >> pp;
-		ss2 << pp;
-		str="  "+ss2.str()+"  ";
-		}
-	else str="  "+inp+"  "; // for lookahead
+	// Run the preprocessor.
+	std::stringstream ss(inp), ss2;
+	preprocessor pp;
+	ss >> pp;
+	ss2 << pp;
+	str="  "+ss2.str()+"  "; // for lookahead
 
+	// Initialise the parser.
 	unsigned int i=0; 
 	current_mode.push_back(m_initialgroup);
 	current_bracket.push_back((*parts).fl.bracket);
