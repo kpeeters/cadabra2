@@ -15,6 +15,12 @@ Ex::Ex(std::string ex_)
 	catch(std::exception& except) {
 		throw ParseException("Cannot parse");
 		}
+//
+//	exptree::iterator it=parser.tree.begin();
+//	while(it!=parser.tree.end()) {
+//		std::cout << *((*it).name) << std::endl;
+//		++it;
+//		}
 	}
 
 std::string Ex::get() 
