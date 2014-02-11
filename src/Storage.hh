@@ -392,5 +392,9 @@ class exptree_ordering {
 };
 
 
+/// Output routines for debugging purposes; display an entire expression tree in 
+/// human readable form.
+
+void stream_debug(ostream&, const exptree&);
 
 
