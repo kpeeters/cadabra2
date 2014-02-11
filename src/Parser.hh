@@ -68,6 +68,6 @@ class Parser {
 };
 
 std::istream& operator>>(std::istream&, Parser&);
-std::ostream& operator<<(std::ostream&, Parser&);
+//std::ostream& operator<<(std::ostream&, Parser&);
 
 

@@ -1,7 +1,7 @@
 /* 
 
 	Cadabra: a field-theory motivated computer algebra system.
-	Copyright (C) 2001-2011  Kasper Peeters <kasper.peeters@aei.mpg.de>
+	Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>
 
    This program is free software: you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -25,8 +25,7 @@
 
 */
 
-#ifndef storage_hh_
-#define storage_hh_
+#pragma once
 
 #include <iostream>
 #include <gmpxx.h>
@@ -393,5 +392,5 @@ class exptree_ordering {
 };
 
 
-#endif
+
 

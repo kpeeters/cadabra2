@@ -4,7 +4,38 @@
 \begin{document}
 {\bf The design and implementation of Cadabra version 2}
 
-NEXT: scan through list of properties to see which ones should be native.
+\section{To resolve}
+
+\begin{itemize}
+\item scan through list of properties to see which ones should be
+native.
+
+\item It would make sense to be able to write
+
+  \conjugate{ \alpha_{n} \alpha_{m} }
+
+and then apply the conjugation algorithm. Yes, this is precisely how
+things should work: the programming language should know about the
+algorithms, the data language should know about the operators. Systems
+like sympy would immediately work this out. The above would be
+declared as
+
+  \dagger{#}::ConjugateTranspose.
+  \dagger{#}::DisplayAsSuperscript.
+
+\item We need better logic to handle functional dependence like
+
+   A_\mu(x)  and  A(x)_{\mu} .
+
+Do we want to enforce the order of arguments (e.g. first functional
+'indices', then vector space indices?).  
+
+\item Get rid of different bracket types for grouping; this is rarely used and only
+makes the system more complicated. Brackets should be displayed
+whenever necessary, automatically. 
+\end{itemize}
+
+
 
 \section{Looking back}
 
@@ -34,8 +65,22 @@ integrates seamlessly with abstract computations, and can handle
 components of any data type, from purely abstract via functional down
 to numerical.
 
+Code generation, be able to write abstract tensor expressions
+including e.g.~derivatives and then stick component functions in, and
+then output as C code. See
+\url{http://groups.google.com/group/sympy/t/ee93372bf4d28443}
+and compare also Theano and in particular the
+very readable \url{http://www.iro.umontreal.ca/~lisa/pointeurs/theano_scipy2010.pdf}
+(write out what the example there means in terms of component functions).
+
 C++: \cite{ltensor},\cite{ftensor}.
 Matlab: \cite{TTB_Software}.
+Mathematica: \cite{kranc}
+
+Algorithm: walk down the tree depth first. At the lowest tensor, make
+a sparse map from all values of the free indices at that level to the
+value of the tensor components. Store this map associated to the
+node. Iterate over the tree.
 
 
 \subsection{Rethink spinors}

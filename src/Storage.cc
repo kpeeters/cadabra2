@@ -19,8 +19,8 @@
 */
 
 #include "Storage.hh"
-#include "combinatorics.hh"
-#include "props.hh"
+#include "Combinatorics.hh"
+#include "Props.hh"
 #include <iomanip>
 #include <sstream>
 #include <pcrecpp.h>
