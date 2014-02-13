@@ -15,17 +15,20 @@ Ex::Ex(std::string ex_)
 	catch(std::exception& except) {
 		throw ParseException("Cannot parse");
 		}
-//
-//	exptree::iterator it=parser.tree.begin();
-//	while(it!=parser.tree.end()) {
-//		std::cout << *((*it).name) << std::endl;
-//		++it;
-//		}
+
+	parser.tree.print_entire_tree(std::cout);
 	}
 
 std::string Ex::get() 
 	{ 
 	return ex; 
+	}
+
+std::string Algo(Ex& ex, bool repeat) 
+	{
+	if(repeat) std::cout << "true" << std::endl;
+	else std::cout << "false" << std::endl;
+	return ex.get();
 	}
 
 PyObject *ParseExceptionType = NULL;
@@ -38,7 +41,9 @@ void translate_ParseException(const ParseException &e)
 	}
 
 
-// Entry point for registration of the Cadabra Python module.
+// Entry point for registration of the Cadabra Python module. 
+// This registers the main Ex class which wraps Cadabra expressions, as well
+// as the various algorithms that can act on these.
 
 BOOST_PYTHON_MODULE(cadabra)
 	{
@@ -49,6 +54,11 @@ BOOST_PYTHON_MODULE(cadabra)
 
 	class_<Ex> pyEx("Ex", init<std::string>());
 	pyEx.def("get", &Ex::get);
+
+	// You can call algorithms on objects like this. The parameters are
+	// labelled by names.
+	def("Algo",&Algo, (arg("ex"),arg("repeat")));
+
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	}

@@ -29,6 +29,7 @@ endif()
 
 set(LOCAL_SRC_FILES 
   Exceptions.cc
+  Algorithm.cc
   Combinatorics.cc
   Parser.cc
   PreProcessor.cc

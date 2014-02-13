@@ -1773,8 +1773,8 @@ int exptree_ordering::can_swap(exptree::iterator one, exptree::iterator two, int
 	// index lines and make the expression meaningless.
 	// FIXME: this would ideally make use of index and conjugate index lines.
 
-	const DiracBar *db2 = properties::get_composite<DiracBar>(two);
-	if(! (ii1 && ii2 && db2) ) {
+//	const DiracBar *db2 = properties::get_composite<DiracBar>(two);
+	if(! (ii1 && ii2 /* && db2 */) ) {
 
 		// First of all, check whether there is an explicit declaration for the commutativity 
 		// of these two symbols.
