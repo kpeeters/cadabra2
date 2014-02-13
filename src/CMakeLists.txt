@@ -31,6 +31,7 @@ set(LOCAL_SRC_FILES
   Exceptions.cc
   Algorithm.cc
   Combinatorics.cc
+  YoungTab.cc
   Parser.cc
   PreProcessor.cc
   Storage.cc
