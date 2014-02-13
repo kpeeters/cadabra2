@@ -35,6 +35,7 @@ set(LOCAL_SRC_FILES
   PreProcessor.cc
   Storage.cc
   Props.cc
+  CoreProps.cc
   PythonCdb.cc
 )
 set(PUBLIC_HEADER_FILES

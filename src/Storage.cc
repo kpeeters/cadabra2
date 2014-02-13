@@ -21,6 +21,7 @@
 #include "Storage.hh"
 #include "Combinatorics.hh"
 #include "Props.hh"
+#include "CoreProps.hh"
 #include <iomanip>
 #include <sstream>
 #include <pcrecpp.h>

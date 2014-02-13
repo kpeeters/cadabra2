@@ -62,6 +62,8 @@ class active_node {
 		bool             has_argument(const std::string&) const;
 
 		iterator this_command;
+
+		bool interrupted=false;
 	protected:
 		exptree& tr;
 		mutable sibling_iterator args_begin_;
@@ -247,11 +249,6 @@ class algorithm : public active_node {
 		bool cleanup_anomalous_products(exptree& tr, exptree::iterator& it);
 };
 
-void cleanup_expression(exptree&);
-void cleanup_expression(exptree&, exptree::iterator&); // may change the pointer!
-void cleanup_sums_products(exptree&, exptree::iterator&);
-void cleanup_nests(exptree&tr, exptree::iterator &it, bool ignore_bracket_types=false);
-void cleanup_nests_below(exptree&tr, exptree::iterator it, bool ignore_bracket_types=false);
 
 template<class T>
 std::auto_ptr<algorithm> create(exptree& tr, exptree::iterator it)
