@@ -18,12 +18,8 @@
  
 */
 
-/* 
-   The storage.cc and props.cc files form one module which does not
-   depend on any other file in the system (except of course on the gmp
-   library).
-
-*/
+// Classes handling storage of property information. Actual property clases
+// are defined in CoreProps.hh.
 
 #pragma once
 
@@ -106,11 +102,6 @@ class list_property : public property_base {
 };
 
 
-
-class IndexInherit : virtual public property {
-	public: 
-		virtual std::string name() const { return std::string("IndexInherit"); };
-};
 
 // FIXME: The Inherit<...> template should be deprecated in favour of the 
 // [...]Base classes, which actually allow for a computation, instead of dumb
@@ -459,105 +450,4 @@ exptree::iterator properties::head(exptree::iterator it, bool ignore_parent_rel)
 		}
 	return dn;
 	}
-
-//template<class PropType>
-//properties::property_map_t::iterator properties::get_pattern(property_map_t::iterator it)
-//	{
-//	++it;
-//	while(it!=props.end()) {
-//		if(typeid( *(it->second.second) ) == typeid(PropType) ) {
-//			return it;
-//			}
-//		++it;
-//		}
-//	return it;
-//	}
-
-
-/* There are three special properties which are required at a much lower level
-	than the other ones, because they are used for comparison of exptrees:
-*/
-
-class Symbol : public property {
-	public:
-		virtual std::string name() const;
-
-		static const Symbol *get(exptree::iterator, bool ignore_parent_rel=false);
-};
-
-//class SymbolBase : public property {
-//
-//};
-
-class Coordinate : public property {
-	public:
-		virtual std::string name() const;
-};
-
-class Indices : public list_property {
-	public:
-		Indices();
-		virtual bool parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
-		virtual std::string name() const;
-		virtual std::string unnamed_argument() const { return "name"; };
-		virtual match_t equals(const property_base *) const;
-		
-		std::string set_name, parent_name;
-		enum position_t { free, fixed, independent } position_type;
-		exptree     values;
-};
-
-class SortOrder : public list_property {
-	public:
-		virtual std::string name() const;
-		virtual match_t equals(const property_base *) const;
-};
-
-class ImplicitIndex : virtual public property {
-	public:
-		virtual bool parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
-		virtual std::string name() const;
-		virtual std::string unnamed_argument() const { return "name"; };
-		virtual void display(std::ostream& str) const;
-
-		std::vector<std::string> set_names;
-};
-
-class Distributable : virtual public  property {
-	public:
-		virtual ~Distributable() {};
-		virtual std::string name() const;
-};
-
-class Accent : public PropertyInherit, public IndexInherit, virtual public property {
-	public:
-		virtual std::string name() const;
-};
-
-class DiracBar : public Accent, public Distributable, virtual public property {
-	public:
-		virtual std::string name() const;
-};
-
-class CommutingAsProduct : virtual public property {
-	public:
-		virtual std::string name() const;
-};
-
-class CommutingAsSum : virtual public property {
-	public:
-		virtual std::string name() const;
-};
-
-class CommutingBehaviour : virtual public list_property {
-	public:
-		virtual int sign() const=0;
-		virtual match_t equals(const property_base *) const;
-};
-
-class SelfCommutingBehaviour : virtual public property {
-	public:
-		virtual int sign() const=0;
-};
-
 
