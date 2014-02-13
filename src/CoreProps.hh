@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "Props.hh"
 #include "YoungTab.hh"
 
 // This file contains property classes which are central to the cadabra

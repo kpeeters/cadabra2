@@ -19,7 +19,8 @@
 */
 
 // Classes handling storage of property information. Actual property clases
-// are defined in CoreProps.hh.
+// are defined in CoreProps.hh. The implementation Props.cc makes use of
+// the information in CoreProps.hh, so these two bits are tightly coupled.
 
 #pragma once
 

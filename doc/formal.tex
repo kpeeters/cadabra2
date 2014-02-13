@@ -118,7 +118,16 @@ Import notebook into another.
 \subsection{Make progress update more central}
 
 In an interactive environment it is extremely useful to have a
-progress indicator. In the old cadabra.
+progress indicator. It is also important that any long-running
+computation can be interrupted without destroying the current state of
+the expression tree (i.e.~reverting to the state of the system before
+the computation was started). 
+
+TODO: We now enforce much more strictly that algorithms can only touch the
+data below the top node that they are given, by isolating this data in
+a separate exptree object and then handing only that exptree object to
+the algorithm. Algorithms run in threads, so that the main kernel
+never blocks.
 
 \subsection{Make the backend cell-based}
 
