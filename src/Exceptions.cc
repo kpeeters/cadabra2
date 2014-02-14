@@ -20,3 +20,8 @@ InterruptionException::InterruptionException(std::string s)
 	: CadabraException(s)
 	{
 	}
+
+ArgumentException::ArgumentException(std::string s)
+	: CadabraException(s)
+	{
+	}

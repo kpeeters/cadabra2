@@ -40,8 +40,12 @@ set(LOCAL_SRC_FILES
   Props.cc
   CoreProps.cc
   Numerical.cc
+  Exchange.cc
   PythonCdb.cc
   modules/Algebra.cc
+  properties/Weight.cc
+  properties/WeightInherit.cc
+  properties/Spinor.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh

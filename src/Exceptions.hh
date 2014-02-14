@@ -14,13 +14,24 @@ class ConsistencyException : public CadabraException {
 		ConsistencyException(std::string);
 };
 
+// Exception thrown when the parser cannot parse an input expression.
+
 class ParseException : public CadabraException {
 	public:
 		ParseException(std::string);
 };
 
+// Exception thrown when an algorithm determines that it was interrupted.
+
 class InterruptionException : public CadabraException {
 	public:
 		InterruptionException(std::string="");
+};
+
+// Exception thrown when arguments to an algorithm are not correct.
+
+class ArgumentException : public CadabraException {
+	public:
+		ArgumentException(std::string="");
 };
 
