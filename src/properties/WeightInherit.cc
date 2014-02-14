@@ -6,8 +6,8 @@ std::string WeightInherit::name() const
 	return "WeightInherit";
 	}
 
-WeightInherit::weight_error::weight_error(const std::string& str)
-	: consistency_error(str)
+WeightInherit::WeightException::WeightException(const std::string& str)
+	: ConsistencyException(str)
 	{
 	}
 
@@ -55,7 +55,7 @@ multiplier_t WeightInherit::value(exptree::iterator it, const std::string& force
 						ret=thisone;
 						}
 					else if(ret!=thisone) { // the weights in the sum are not uniform
-						throw weight_error("Encountered sum with un-equal weight terms.");
+						throw WeightException("Encountered sum with un-equal weight terms.");
 						}
 				  }
 			 }

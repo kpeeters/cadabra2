@@ -45,6 +45,8 @@ set(LOCAL_SRC_FILES
   modules/Algebra.cc
   properties/Weight.cc
   properties/WeightInherit.cc
+  properties/GammaMatrix.cc
+  properties/Matrix.cc
   properties/Spinor.cc
 )
 set(PUBLIC_HEADER_FILES
