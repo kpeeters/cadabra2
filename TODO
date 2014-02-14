@@ -1,0 +1,4 @@
+
+- Many classes depend for their implementation on other header files,
+  but those often contain a lot of mess which is unneeded. Separating
+  out classes into their own headers will clean this up. 

@@ -1,0 +1,39 @@
+\cdbproperty{WeightInherit}{\it label={\sf name}$\vert$all, type=Additive$\vert$Multiplicative, self={\sf value}}
+
+Indicates that the object inherits all weights of its child nodes. The
+label indicates which weights are inherited; use {\tt all} to inherit
+all weights. The type of inheritance determines whether weights of the
+child nodes should be added or multiplied. 
+
+Additive weight inheritance is used to assign a weight to sum-like
+objects. For example, if we declare
+\begin{screen}{0,1}
+f{#}::WeightInherit(label=all, type=Additive).
+A::Weight(label=field, value=3).
+\end{screen}
+then the expression~\verb|f{A}{A}| has weight~3. This is what would
+happen if `\verb|f|' would be a sum: the weight of the sum is the same
+as the weight of the terms (and is only defined if the weight of the
+all terms is equal).
+
+Multiplicative weight inheritance is used to assign a weight to 
+product-like objects. For example, if we declare
+\begin{screen}{0,1,2}
+f{#}::WeightInherit(label=all, type=Multiplicative).
+A::Weight(label=field, value=3).
+\end{screen}
+then the expression~\verb|f{A}{A}| has weight~6. This is what would
+happen if `\verb|f|' would be a product: the weight of the product is the same
+as the sum of the weights of the factors.
+
+Terms can be selected based on their weight by using the
+\subscommand{keep\_weight} and \subscommand{drop\_weight} algorithms.
+
+For more information on related topics, see \subsprop{IndexInherit}
+and \subsprop{PropertyInherit}.
+
+\cdbseeprop{Weight}
+\cdbseeprop{PropertyInherit}
+\cdbseeprop{IndexInherit}
+
+
