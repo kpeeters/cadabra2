@@ -18,7 +18,7 @@
  
 */
 
-#include "stopwatch.hh"
+#include "Stopwatch.hh"
 #include <assert.h>
 
 stopwatch::stopwatch()

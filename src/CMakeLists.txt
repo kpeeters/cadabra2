@@ -28,8 +28,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 set(LOCAL_SRC_FILES 
+  Stopwatch.cc
   Exceptions.cc
   Algorithm.cc
+  Cleanup.cc
   Combinatorics.cc
   YoungTab.cc
   Parser.cc

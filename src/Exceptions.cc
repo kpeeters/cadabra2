@@ -15,3 +15,8 @@ ConsistencyException::ConsistencyException(std::string s)
 	: CadabraException(s) 
 	{
 	}
+
+InterruptionException::InterruptionException(std::string s)
+	: CadabraException(s)
+	{
+	}
