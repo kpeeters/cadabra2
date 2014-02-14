@@ -24,18 +24,15 @@
 #define XPERM_USE_EXT  
 
 #include "Algebra.hh"
-//#include "display.hh"
 #include "Props.hh"
 #include "YoungTab.hh"
-
-#include "properties/WeightInherit.hh"
-
-//#include "convert.hh"
-//#include "exchange.hh"
-//#include "dummies.hh"
-//#include "field_theory.hh"
+#include "Exchange.hh"
 #include "Numerical.hh"
 #include "Cleanup.hh"
+
+#include "properties/WeightInherit.hh"
+#include "properties/Weight.hh"
+
 
 extern "C" {
 #ifdef NEW_XPERM
@@ -327,9 +324,9 @@ multiplier_t Derivative::value(exptree::iterator it, const std::string& forcedla
 unsigned int SatisfiesBianchi::size(exptree& tr, exptree::iterator it) const
 	{
 	exptree::sibling_iterator chld=tr.begin(it);
-	bool indexfirst=false;
+//	bool indexfirst=false;
 	if(chld->fl.parent_rel!=str_node::p_none) {
-		indexfirst=true;
+//		indexfirst=true;
 		++chld;
 		}
 	assert(chld->fl.parent_rel==str_node::p_none);
@@ -470,9 +467,9 @@ TableauBase::tab_t KroneckerDelta::get_tab(exptree& tr, exptree::iterator it, un
 	if(tr.number_of_children(it)%2!=0)
 		 throw ConsistencyException("Encountered a KroneckerDelta object with an odd number of indices.");
 
-	bool onlytwo=false;
-	if(tr.number_of_children(it)==2)
-		onlytwo=true;
+//	bool onlytwo=false;
+//	if(tr.number_of_children(it)==2)
+//		onlytwo=true;
 
 	tab_t tab;
 	for(unsigned int i=0; i<tr.number_of_children(it); i+=2) {
@@ -1620,7 +1617,7 @@ algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 						val=gnb->value(sib, label);
 //						txtout << *sib->name << " has weight " << val << std::endl;
 						}
-					catch(WeightInherit::weight_error& we) {
+					catch(WeightInherit::WeightException& we) {
 //						txtout << *sib->name << " has undeterminable weight " << std::endl;
 						// If we cannot determine the weight of this term because this is a sum of
 						// terms with different weights: keep when in @drop, drop when in @keep.
@@ -2592,8 +2589,7 @@ sym_asym::sym_asym(exptree& tr, iterator it)
 	: algorithm(tr, it), locate(tr, it)
 	{
 	if(number_of_args()<1 || !(*args_begin()->name=="\\comma")) {
-		txtout << "@sym needs a comma-separated list of objects over which to symmetrise." << std::endl;
-		throw constructor_error();
+		throw ArgumentException("@sym needs a comma-separated list of objects over which to symmetrise.");
 		}
 	}
 
@@ -2746,7 +2742,7 @@ algorithm::result_t sym_asym::doit(sibling_iterator& st, sibling_iterator& nd, b
 	raw_ints.clear();
 	raw_ints.block_length=0;
 	
-	debugout << "arglog " << argloc_2_treeloc.size() << std::endl;
+//	debugout << "arglog " << argloc_2_treeloc.size() << std::endl;
 
 	for(unsigned int i=0; i<argloc_2_treeloc.size(); ++i)
 		raw_ints.original.push_back(i);
@@ -3687,8 +3683,7 @@ eqn::eqn(exptree& tr, iterator it)
 bool eqn::can_apply(iterator it)
 	{
 	if(tr.number_of_children(tr.parent(it))!=1) {
-		txtout << "@(...) does not have any child nodes." << std::endl;
-		return false;
+		throw ArgumentException("@(...) does not have any child nodes.");
 		}
 	return true;
 	}
@@ -4077,7 +4072,7 @@ algorithm::result_t young_project_tensor::apply(iterator& it)
 		// Figure out the properties of the indices for which we want dummy partners.
 		exptree::index_iterator iit=tr.begin_index(it);
 		iit+=tab(0,abs(tab.selfdual_column)-1);
-		const numerical::Integer *itg=properties::get<numerical::Integer>(iit, true);
+		const Integer *itg=properties::get<Integer>(iit, true);
 		const Indices *ind=properties::get<Indices>(iit, true);
 		if(itg==0)
 			throw ConsistencyException("Need to know the range of the indices.");

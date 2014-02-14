@@ -30,6 +30,9 @@
 #include "YoungTab.hh"
 #include "Numerical.hh"
 
+#include "properties/AntiSymmetric.hh"
+#include "properties/Matrix.hh"
+
 class WeightInherit;
 class Weight;
 
@@ -40,11 +43,6 @@ namespace algebra {
 	void register_algorithms();
 };
 
-class Matrix : public ImplicitIndex, virtual public property {
-	public: 
-		virtual ~Matrix() {};
-		virtual std::string name() const;
-};
 
 class Commuting : virtual public CommutingBehaviour {
 	public:
@@ -131,22 +129,6 @@ class Diagonal : public Symmetric {
 // 		typedef index_pair_t std::pair<unsigned int, unsigned int
 // 		virtual std::vector<
 // };
-
-class Traceless : virtual public property  {
-	public:
-		virtual ~Traceless() {};
-		virtual std::string name() const;
-};
-
-class AntiSymmetric : public TableauBase, public Traceless, virtual public property  {
-	public:
-		virtual ~AntiSymmetric() {};
-		virtual bool parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
-		virtual std::string name() const;
-
-		virtual unsigned int size(exptree&, exptree::iterator) const;
-		virtual tab_t        get_tab(exptree&, exptree::iterator, unsigned int) const;
-};
 
 class SelfDual : public AntiSymmetric {
 	public:
