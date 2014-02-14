@@ -49,7 +49,6 @@ extern "C" {
 
 void algebra::register_properties()
 	{
-	properties::register_property(&create_property<Matrix>);
 	properties::register_property(&create_property<Commuting>);
 	properties::register_property(&create_property<AntiCommuting>);
 	properties::register_property(&create_property<NonCommuting>);
@@ -83,11 +82,6 @@ std::string SelfDual::name() const
 std::string AntiSelfDual::name() const
 	{
 	return "AntiSelfDual";
-	}
-
-std::string Matrix::name() const
-	{
-	return "Matrix";
 	}
 
 std::string Commuting::name() const
