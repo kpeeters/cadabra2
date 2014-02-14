@@ -41,6 +41,7 @@ set(LOCAL_SRC_FILES
   CoreProps.cc
   Numerical.cc
   PythonCdb.cc
+  modules/Algebra.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh
@@ -48,6 +49,7 @@ set(PUBLIC_HEADER_FILES
 )
 
 # Create Python dynamic library 'cadabra' without lib prefix.
+include_directories(".")
 add_library(cadabra SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra PROPERTIES PREFIX "")
 set_target_properties(cadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")

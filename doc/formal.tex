@@ -82,6 +82,9 @@ a sparse map from all values of the free indices at that level to the
 value of the tensor components. Store this map associated to the
 node. Iterate over the tree.
 
+\subsection{Notebook \LaTeX{} customisation}
+
+Enable inclusion of other packages and customisation of typesetting of expressions.
 
 \subsection{Rethink spinors}
 
@@ -330,6 +333,15 @@ To note:
   it. Single terms in an expression (e.g.~an expression which is just
   ``A'') should also classify as term-like.
 \end{itemize}
+
+\subsection{Source and documentation structure}
+
+The source tree follows the logic that files are either part of the
+small core, or they contain an algorithm, or they contain a property. 
+\begin{verbatim}
+src/properties
+src/algorithms
+\end{verbatim}
 
 \subsection{Localisation of algorithms}
 

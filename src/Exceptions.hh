@@ -21,6 +21,6 @@ class ParseException : public CadabraException {
 
 class InterruptionException : public CadabraException {
 	public:
-		InterruptionException(std::string);
+		InterruptionException(std::string="");
 };
 
