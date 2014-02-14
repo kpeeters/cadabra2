@@ -1668,3 +1668,24 @@ bool algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 	}
 
 
+bool algorithm::cleanup_anomalous_products(exptree& tr, exptree::iterator& it)
+	{
+	if(*(it->name)=="\\prod") {
+		 if(tr.number_of_children(it)==0) {
+			  it->name=name_set.insert("1").first;
+			  return true;
+			  }
+		 else if(tr.number_of_children(it)==1) {
+			  tr.begin(it)->fl.bracket=it->fl.bracket;
+			  tr.begin(it)->multiplier=it->multiplier;
+			  tr.flatten(it);
+			  exptree::iterator tmp=tr.erase(it);
+//			  txtout << "HERRE?" << std::endl;
+			  pushup_multiplier(tmp);
+			  it=tmp;
+			  return true;
+			  }
+		 }
+	return false;
+	}
+

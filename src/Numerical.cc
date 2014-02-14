@@ -76,8 +76,9 @@ bool Integer::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, 
 		else ++sib;
 		}
 
-	collect_terms ct(difference, difference.end());
-	ct.apply(sm);
+// V2: is this handled by the core?
+//	collect_terms ct(difference, difference.end());
+//	ct.apply(sm);
 
 	return true;
 	}
