@@ -1,6 +1,9 @@
 
 #pragma once
 
+#include "CoreProps.hh"
+#include "Exceptions.hh"
+
 class WeightInherit : virtual public WeightBase {
 	public:
 		// The following exception class is thrown when 'value' cannot figure out the 

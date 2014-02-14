@@ -1,5 +1,6 @@
 
 #include "Spinor.hh"
+#include "Exceptions.hh"
 
 Spinor::Spinor()
 	: dimension(10), weyl(true), chirality(positive), majorana(true)
@@ -24,8 +25,7 @@ bool Spinor::parse(exptree& tr, exptree::iterator it, exptree::iterator prop, ke
 	if(ki!=keyvals.end()) {
 		if(*ki->second->name=="Weyl") {
 			if(dimension%2!=0) {
-				txtout << "Weyl spinors require the dimension to be even." << std::endl;
-				return false;
+				throw ConsistencyException("Weyl spinors require the dimension to be even.");
 				}
 			weyl=true;
 			}
@@ -34,17 +34,17 @@ bool Spinor::parse(exptree& tr, exptree::iterator it, exptree::iterator prop, ke
 			if(dimension%8==2 || dimension%8==3 || dimension%8==4)
 				majorana=true;
 			else {
-				txtout << "Majorana spinors require the dimension to be 2,3,4 mod 8." << std::endl;
+				throw ConsistencyException("Majorana spinors require the dimension to be 2,3,4 mod 8.");
 				return false;
 				}
 			}
 		if(*ki->second->name=="MajoranaWeyl") { 
 			if(dimension%8==2) {
-				txtout << "setting to MajoranaWeyl" << std::endl;
+//				txtout << "setting to MajoranaWeyl" << std::endl;
 				weyl=true; majorana=true; 
 				}
 			else {
-				txtout << "Majorana-Weyl spinors require the dimension to be 2 mod 8." << std::endl;
+				throw ConsistencyException("Majorana-Weyl spinors require the dimension to be 2 mod 8.");
 				return false;
 				}
 			}
