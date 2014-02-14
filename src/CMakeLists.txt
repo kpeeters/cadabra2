@@ -46,8 +46,10 @@ set(LOCAL_SRC_FILES
   properties/Weight.cc
   properties/WeightInherit.cc
   properties/GammaMatrix.cc
+  properties/GammaTraceless.cc
   properties/Matrix.cc
   properties/Spinor.cc
+  modules/xperm_new.c
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh
