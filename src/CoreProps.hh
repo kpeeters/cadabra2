@@ -22,9 +22,12 @@
 
 #include "Props.hh"
 #include "YoungTab.hh"
+#include "Numerical.hh"
 
 // This file contains property classes which are central to the cadabra
-// core and required for basic algorithms to work.
+// core and required for basic algorithms to work. This is a collection
+// bag, should be split out according to class really, like we did
+// for Numerical already.
 
 class Symbol : public property {
 	public:
@@ -34,14 +37,6 @@ class Symbol : public property {
 };
 
 class Coordinate : public property {
-	public:
-		virtual std::string name() const;
-};
-
-/// Property indicating that an operator is numerically flat, so that
-/// numerical factors in the argument can be taken outside.
-
-class NumericalFlat : virtual public property {
 	public:
 		virtual std::string name() const;
 };
