@@ -36,7 +36,6 @@ whenever necessary, automatically.
 \end{itemize}
 
 
-
 \section{Looking back}
 
 
@@ -52,7 +51,7 @@ technologies have changed.
 
 
 \section{New design principles}
-\subsection{Integrate abstract and component computations}
+\subsection{Integrate abstract index, form and component computations}
 
 There are, in fact, very few systems that handle abstract and
 component computations equally well.
@@ -82,13 +81,26 @@ a sparse map from all values of the free indices at that level to the
 value of the tensor components. Store this map associated to the
 node. Iterate over the tree.
 
+Exterior calculus \cite{xTerior}. Need to be able to use '$\wedge$'
+notation. Maybe a 'Form' property which carries a degree parameter.
+
+
 \subsection{Notebook \LaTeX{} customisation}
 
 Enable inclusion of other packages and customisation of typesetting of expressions.
 
+\subsection{Community}
+
+Make it easier for 3rd party developers to add packages in the form of
+Python code. For this we would have to give the Python code access to
+the C++ tree. Can that be done safely? We also 
+
 \subsection{Rethink spinors}
 
 \subsection{Separate the data language from the programming language}
+
+When manipulating html, do you program in html? When manipulating images, do you write
+code in graphics?
 
 \subsection{Make algorithms accessible from multiple languages}
 
@@ -308,6 +320,16 @@ for t in SplitFactors(Prev("a")):
 from sympy import *
 
 
+
+\section{Migration from version 1 to 2}
+
+All version 1 notebooks can be converted easily to version 2 notebooks by 
+keeping the following guidelines in mind.
+\begin{enumerate}
+\item Some algorithms have changed their name to something more descriptive
+and less abbreviated, e.g.~{\tt prodflatten} now reads {\tt flatten\_product}.
+\item 
+\end{enumerate}
 
 %-------------------------------------------------------------------
 

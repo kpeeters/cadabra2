@@ -1,0 +1,30 @@
+\cdbproperty{EpsilonTensor}{{\it metric={\sf metric object}, delta={\sf
+Kronecker delta name}}}
+
+A fully anti-symmetric tensor, defined by
+\begin{equation}
+\epsilon_{m_1\ldots m_k} := \varepsilon_{m_1\ldots m_k}\,\sqrt{|g|}\,,
+\end{equation}
+where the components of~$\varepsilon_{m_1\ldots m_k}$ are 0, $+1$ or $-1$
+and~$\varepsilon_{01\cdots k}=1$,
+independent of the basis, and~$g$ denotes the metric
+determinant. 
+
+This property optionally takes a tensor which indicates the symbol
+which should be used as a \subsprop{KroneckerDelta} symbol when
+writing out the product of two epsilon tensors. Additionally, it takes
+a tensor which is the associated metric, from which the signature can
+be extracted. See the documentation of \subscommand{epsprod2gendelta}
+for more information on the use of these optional arguments.
+
+When the indices are in different positions it is understood that they
+are simply raised with the metric. This in particular implies
+\begin{equation}
+\epsilon^{m_1\ldots m_k} := g^{m_1 n_1} \cdots g^{m_k n_k} 
+\epsilon_{n_1\ldots n_k} = \frac{\varepsilon^{m_1\ldots m_k}}{\sqrt{|g|}}\,,
+\end{equation}
+again with~$\varepsilon^{m_1\ldots m_k}$ taking values 0, $+1$ or $-1$
+and $\varepsilon^{01\cdots k}=\pm 1$ depending on the signature of the
+metric.
+
+\cdbseealgo{epsprod2gendelta}

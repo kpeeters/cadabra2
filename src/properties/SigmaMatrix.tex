@@ -1,0 +1,20 @@
+\cdbproperty{SigmaMatrix}{}
+
+These are the invariant tensors relating the~$(\tfrac{1}{2},\tfrac{1}{2})$ to the vector representation of
+SO(3,1). \Cdb uses the Wess~\& Bagger conventions,
+which means that the metric has signature~$\eta = {\rm
+  diag}(-1,1,1,1)$ and
+\begin{equation}
+(\sigma^{\mu})_{\alpha\dot{\beta}} = ( -{\mathbb 1}, \vec\sigma )_{\alpha\dot{\beta}}\,,\quad
+(\bar{\sigma}^{\mu})^{\dot{\alpha}\beta} = (-{\mathbb 1}, -\vec\sigma)^{\dot{\alpha}\beta}\,.
+\end{equation}
+When the objects carry two vector indices, they are understood to be
+\begin{equation}
+(\sigma^{m n})_{\alpha}{}^{\beta} \equiv \frac{1}{4}( \sigma^m
+  \bar{\sigma}^n - \sigma^n \bar{\sigma}^m)_{\alpha}{}^{\beta}\,,\quad\quad
+(\bar{\sigma}^{m n})^{\dot{\alpha}}{}_{\dot{\beta}} \equiv
+  \frac{1}{4}(\bar{\sigma}^m \sigma^{n}
+- \bar{\sigma}^n \sigma^{m})^{\dot{\alpha}}{}_{\dot{\beta}}\,.
+\end{equation}
+See below for algorithms dealing with the conversion from indexed to
+index-free notation.

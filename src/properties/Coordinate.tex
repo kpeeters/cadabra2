@@ -1,0 +1,17 @@
+\cdbproperty{Coordinate}{}
+
+Declare a symbol to be a coordinate label (useful in combination
+  with \subsprop{Depends}). This is required if you want to write a
+  derivative with respect to a coordinate: the input
+\begin{screen}{1}
+A(x,x') + \diff{B(x,x')}_{x};
+\end{screen}
+will by default be seen as incorrect because the $x$ in the second
+term will be considered an index label, not a coordinate. The input
+\begin{screen}{1,2}
+{ x, x' }::Coordinate.
+A(x,x') + \diff{B(x,x')}_{x};
+\end{screen}
+is allowed and interpreted in the right way.
+
+\cdbseeprop{Symbol}

@@ -1,0 +1,21 @@
+\cdbproperty{KroneckerDelta}{}
+
+Denotes a generalised Kronecker
+  delta symbol. When the symbol carries two indices, it is the usual
+  Kronecker delta. When the number of indices is larger, the meaning
+  is
+\begin{equation}
+\delta_{m_1}{}^{n_1}{}_{m_2}{}^{n_2}{}_{\ldots m_k}{}^{n_k} =
+\delta_{[m 1}{}^{n_1} \delta_{m_2}{}^{n_2} \cdots \delta_{m_k]}{}^{n_k} \,,
+\end{equation}
+with unit weight anti-symmetrisation.  
+
+A symbol which is declared as a
+Kronecker delta has the property that it can be taken in and out of
+derivatives. The algorithm \subscommand{eliminate\_kr} eliminates
+normal Kronecker deltas by appropriately renaming indices (in order to
+eliminate Kronecker deltas with more than two indices, first
+use \subscommand{breakgendelta}).
+
+\cdbseealgo{eliminate_kr}
+\cdbseealgo{breakgendelta}

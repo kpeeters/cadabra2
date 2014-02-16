@@ -1,0 +1,15 @@
+\cdbproperty{NumericalFlat}{}
+
+Indicates that an operator is such that numerical factors can be taken
+out of its argument.
+\begin{screen}{1,2}
+Q{#}::NumericalFlat.
+Q( 3 A ) + R( 3 A );
+@numerical_flatten!(%);
+3 Q( A ) + R( 3 A );
+\end{screen}
+~
+
+\cdbseeprop{Derivative}
+\cdbseealgo{numerical_flatten}
+\cdbseealgo{listflatten}

@@ -1,0 +1,15 @@
+\cdbproperty{Metric}{{\it signature={\sf integer}}}
+
+Labels the object as a symmetric tensor, and optionally gives it the
+indicated signature through the {\tt signature} parameter.
+\begin{screen}{1,2,3}
+g_{m n}::Metric(signature=1).
+g_{m n} A^{n p};
+@eliminate_metric!(%);
+A_{m}^{p};
+\end{screen}
+Objects declared as \subsprop{Metrics} can be used to automatically
+raise or lower indices using the
+\subscommand{eliminate\_metric} command.
+
+\cdbseealgo{eliminate_metric}

@@ -1,0 +1,27 @@
+\cdbproperty{Matrix}{}
+
+Declares an object to have two implicit indices, thus making it a
+matrix object. This is useful in combination with the index bracket
+notation. Example:
+\begin{screen}{1,2}
+{m,n,p,q}::Indices.
+A::Matrix.
+V::ImplicitIndex.
+(A V)_{m};
+@expand!(%);
+A_{m n} V_{n};
+\end{screen}
+Objects with the \subsprop{Matrix} property automatically become
+non-commuting among themselves, but retain their commutativity
+properties with other objects.
+\begin{screen}{1,2}
+{A,C}::Matrix.
+A C B A;
+@prodsort!(%);
+A B C A;
+\end{screen}
+~
+
+\cdbseealgo{prodsort}
+\cdbseealgo{Spinor}
+\cdbseeprop{ImplicitIndex}

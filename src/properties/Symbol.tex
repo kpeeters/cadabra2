@@ -1,0 +1,16 @@
+\cdbproperty{Symbol}{}
+
+If you want to attach symbols to tensors in sub- or superscript, as
+in~$A^\dagger$, you need to inform the system that this symbol is not
+an index (otherwise it may interpret~$A^\dagger A^\dagger$ as two
+contracted vectors with vector indices~$\dagger$). This is done by
+associating the \subsprop{Symbol} property to the symbol; in this
+example
+\begin{screen}{1,2}
+\dagger::Symbol.
+A^\dagger A^\dagger;
+\end{screen}
+A related effect is induced by the \subsprop{Coordinate} property.
+
+\cdbseeprop{Coordinate}
+

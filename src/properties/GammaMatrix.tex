@@ -1,0 +1,15 @@
+\cdbproperty{GammaMatrix}{\it metric={\sf metric name}}
+
+A generalised generator of a Clifford algebra. With one vector index,
+  it satisfies
+\begin{equation}
+\{ \Gamma^m, \Gamma^n \} = 2\,\eta^{mn}\,.
+\end{equation}
+The objects with more vector indices are defined as
+\begin{equation}
+\Gamma^{m_1\ldots m_n} = \Gamma^{[m_1}\cdots \Gamma^{m_n]}\,,
+\end{equation}
+where the anti-symmetrisation includes a division by~$n!$.
+If you intend to use the \subscommand{join} algorithm, you have to add a
+key/value pair \verb|metric| to set the name of the tensor which acts
+as the unit element in the Clifford algebra.

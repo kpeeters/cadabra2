@@ -1,0 +1,18 @@
+\cdbproperty{ImplicitIndex}{}
+
+Indicates that the object carries implicit indices, e.g.~for objects
+representing matrices or vectors. Such objects will not be moved
+through each other, i.e.~they are mutually noncommuting.
+\begin{screen}{1,2,3}
+{M,A}::ImplicitIndex;
+M A;
+@prodsort!(%);
+M A;
+\end{screen}
+Without the \subsprop{ImplicitIndex} property, \subscommand{prodsort}
+would have freely moved the objects through each other.
+
+For more information on how to use matrices and vectors with implicit
+indices, see \subscommand{expand}.
+
+\cdbseealgo{expand}

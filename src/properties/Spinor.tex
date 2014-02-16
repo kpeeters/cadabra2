@@ -1,0 +1,20 @@
+\cdbproperty{Spinor}{\it dimension={\sf integer},
+type=Weyl$\vert$Majorana$\vert$MajoranaWeyl, chirality=Positive$\vert$Negative}
+
+Declares an object to be a spinor, i.e.~transforming in one of the
+spinor representations of the orthogonal or Lorentz group. The
+declaration should involve an indication of the dimension, as in the
+example below. It can optionally have type indicators (these should be
+{\tt Majorana}, {\tt Weyl} or {\tt MajoranaWeyl}) and chirality
+indicators for Weyl spinors ({\tt Positive} or {\tt Negative},
+indicating the eigenvalue with respect to the generalised~$\gamma_5$
+matrix). Here is an example:
+\begin{screen}{1,2}
+\psi::Spinor(dimension=11, type=Majorana).
+\end{screen}
+This property is taken into account by various algorithms such
+as \subscommand{fierz} and \subscommand{spinorsort}.
+
+\cdbseeprop{DiracBar}
+\cdbseealgo{fierz}
+\cdbseealgo{spinorsort}

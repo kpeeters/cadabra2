@@ -1,0 +1,14 @@
+\cdbproperty{Diagonal}{}
+
+Indicates that the object to which the property is attached only has
+non-zero components on the diagonal, i.e.~when all indices take the
+same value. 
+\begin{screen}{1,2}
+\delta_{m n}::Diagonal.
+\delta_{1 2} \delta_{1 2} - \delta_{1 1} \delta_{2 2};
+@canonicalise!(%);
+- \delta_{1 1}\delta_{2 2};
+\end{screen}
+~
+
+\cdbseeprop{Coordinate}

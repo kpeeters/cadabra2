@@ -1,0 +1,26 @@
+\cdbproperty{PartialDerivative}{}
+
+Makes an object a partial derivative, i.e.~a derivative which
+commutes. The object on which it acts has to be a non-sub/superscript
+child, while all the sub- or superscript child nodes are interpreted
+to be the variables with respect to which the derivative is taken.
+\begin{screen}{1,2,3,4}
+\partial{#}::PartialDerivative.
+A_{\mu}::Depends(\partial).
+\partial_{\nu}{A_{\mu} B_{\rho}};
+@prodrule!(%);
+\partial_{\nu}{A_\mu} B_{\rho}
+\end{screen}
+Note that derivative objects do not necessarily need to have a sub- or
+superscript child, they can be abstract derivatives as in
+\begin{screen}{1,2,3}
+D(d?)::PartialDerivative.
+D(c d e);
+@prodrule!(%);
+D(c) d e + c D(d) e + c d D(e);
+\end{screen}
+If you want to write a derivative with respect to a coordinate (instead
+of with respect to an index, as in the first example above), refer to
+the \subsprop{Coordinate} property.
+
+\cdbseeprop{Coordinate}

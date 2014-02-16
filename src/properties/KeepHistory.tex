@@ -1,0 +1,18 @@
+\cdbproperty{KeepHistory}{}
+
+This is a global property. When set to false, only the last version of
+each expression is kept in memory, thereby reducing memory usage for
+very large expressions. The default is ``true''. When set to
+``false'', \subscommand{pop} is no longer available to return to
+previous forms of the expression:
+\begin{screen}{1,2,3,4}
+::KeepHistory(false).
+(a+b)*(c+d);
+@distribute!(%);
+@pop(%);
+@pop: not applicable.
+\end{screen}
+In general this is only useful to conserve memory when extremely long
+expressions are manipulated.
+
+\cdbseealgo{pop}

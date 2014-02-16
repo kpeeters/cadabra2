@@ -40,6 +40,10 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
+void bang(Ex& ex)
+	{
+	std::cout << "BANG! " << ex.get() << std::endl;
+	}
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
@@ -58,7 +62,12 @@ BOOST_PYTHON_MODULE(cadabra)
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
 	def("Algo",&Algo, (arg("ex"),arg("repeat")));
+	
+	// This does not work; Python does not allow us to use an exclamation mark.
+	def("bang!", &bang);
 
+	// How can we give a handle to the tree in python? And how can we give
+	// Python access to properties?
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	}

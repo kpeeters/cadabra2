@@ -573,11 +573,6 @@ std::string SortOrder::name() const
 	return "SortOrder";
 	}
 
-std::string Distributable::name() const
-	{
-	return "Distributable";
-	}
-
 std::string ImplicitIndex::name() const
 	{
 	return "ImplicitIndex";
@@ -607,16 +602,6 @@ void ImplicitIndex::display(std::ostream& str) const
 		if(n>0) str << ", ";
 		str << set_names[n];
 		}
-	}
-
-std::string Accent::name() const
-	{
-	return "Accent";
-	}
-
-std::string DiracBar::name() const
-	{
-	return "DiracBar";
 	}
 
 std::string CommutingAsProduct::name() const

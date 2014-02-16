@@ -1,0 +1,45 @@
+\cdbproperty{Indices}{\it name={\sf set name}, parent={\sf parent set
+name}, position=free$\vert$fixed$\vert$independent}
+
+Declare index names to be usable for dummy index
+purposes. Typical usage is of the form
+\begin{screen}{1,2}
+{r,s,t}::Indices(vector).
+{a,b,c,d}::Indices(spinor).
+\end{screen}
+This indicates the name of the index set (``vector'' resp.~``spinor''
+in the example above). 
+
+Indices can occur as subscripts or superscripts, and you may use this
+to indicate e.g.~covariant and contravariant transformation
+behaviour. In this case, use the additional
+argument \verb|position=fixed| to indicate that the position carries
+meaning. If you do not want cadabra to automatically raise or lower
+indices when canonicalising expressions, or if upper and lower indices
+are not related at all, use \verb|position=independent|.
+
+When you work with vector spaces which are subspaces of larger spaces,
+it is possible to indicate that a given set of indices take values in
+a subset of values of a larger set. An example makes this more
+clear. Suppose we have one set of indices~$A,B,C$ which take values in
+a four-dimensional space, and another set of indices~$a,b,c$ which
+take values in a three-dimensional subspace. This is declared as
+\begin{screen}{1,2}
+{A,B,C}::Indices(fourD).
+{a,b,c}::Indices(threeD, parent=fourD).
+\end{screen}
+This will allow cadabra to canonicalise expressions which contain mixed
+index types, as in
+\begin{screen}{1,2,3,4,5,6}
+{A,B,C}::Indices(fourD).
+{a,b,c}::Indices(threeD, parent=fourD).
+M_{q? r?}::AntiSymmetric.
+M_{a A} + M_{A a}:
+@canonicalise!(%):
+@collect_terms!(%);
+0;
+\end{screen}
+Note the way in which the symmetry of the~$M$ tensor was declared here.
+
+\cdbseealgo{split_index}
+\cdbseeprop{Integer}

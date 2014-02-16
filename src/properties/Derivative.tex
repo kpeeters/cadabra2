@@ -1,0 +1,28 @@
+\cdbproperty{Derivative}{}
+
+An generic derivative object, satisfying the Leibnitz rule. These
+generic derivatives do not have to commute.
+\begin{screen}{1,2}
+D{#}::Derivative.
+D(A B C);
+@prodrule!(%);
+D(A) B C + A D(B) C + A B D(C);
+\end{screen}
+Refer to the documentation of \subsprop{PartialDerivative} on how to
+write derivatives with respect to coordinate indices or coordinates.
+
+Make sure to declare the derivative either using the ``with any arguments''
+notation as used above (using the hash mark), or by giving an
+appropriate pattern. The following does not work:
+\begin{screen}{1,2}
+D::Derivative.
+D(A B C);
+@prodrule!(%);
+@prodrule: not applicable.
+\end{screen}
+The pattern \verb|D| above does not match the expression \verb|D(A B C)| 
+and hence the algorithm does not know that \verb|D(A B C)| is a
+derivative acting on the product of three objects.
+
+\cdbseealgo{prodrule}
+\cdbseealgo{distribute}

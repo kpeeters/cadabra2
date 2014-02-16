@@ -1,0 +1,14 @@
+\cdbproperty{Integer}{\sf range}
+
+Indicates that the object takes values in the integers. An optional
+range can be specified,
+\begin{screen}{1,2,3}
+p::Integer;
+m::Integer(1..10);
+n::Integer(1..d-p);
+\end{screen}
+This property is often used in combination with the \subsprop{Indices}
+property to indicate the range of numbers over which indices run.
+
+\cdbseeprop{Indices}
+

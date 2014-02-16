@@ -1,0 +1,17 @@
+\cdbproperty{InverseMetric}{}
+
+This property is the partner of \subsprop{Metric}. It makes the
+associated two-tensor symmetric and also indicates that it can be used
+to raise or lower indices.
+\begin{screen}{1,2,3}
+g^{m n}::InverseMetric.
+g_{m n}::Metric.
+g_{m q} g^{m n} A_{n p};
+@eliminate_metric!(%);
+A_{q p};
+\end{screen}
+For more information, see \subsprop{Metric}.
+
+\cdbseealgo{eliminate_metric}
+\cdbseeprop{Metric}
+\cdbseeprop{Symmetric}

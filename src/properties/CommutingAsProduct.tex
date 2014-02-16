@@ -1,0 +1,32 @@
+\cdbproperty{CommutingAsProduct}{}
+
+This makes an object behave, for purposes of commutation rules, as a
+product. That is, when trying to move another object through it, the
+sign that is picked up is determined by moving the other object
+through all the non-index children. 
+
+In the example below, 
+\begin{screen}{1,2,3}
+A(#)::CommutingAsProduct.
+{Q,X,Y,Z}::AntiCommuting.
+A(Y)(Z)(Q)*A(X);
+@prodsort!(%);
+(-1) A(X) A(Y)(Z)(Q);
+\end{screen}
+The minus sign arises because it would also have been present when
+sorting {\tt (Y*Z*Q)*X}. 
+
+Note that this does not work when the arguments are given as a
+list separated by commas, for instance as {\tt A(Y,Z,Q)}. 
+% \begin{screen}{1,2,3}
+% A(#)::CommutingAsProduct.
+% \comma{#}::CommutingAsProduct.
+% {Q,X,Y,Z}::AntiCommuting.
+% A(Y,Z,Q)*A(X);
+% @prodsort!(%);
+% (-1) A(X) A(Y)(Z)(Q);
+% \end{screen}
+
+\cdbseeprop{CommutingAsSum}
+\cdbseeprop{AntiCommuting}
+

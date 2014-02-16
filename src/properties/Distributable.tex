@@ -1,0 +1,12 @@
+\cdbproperty{Distributable}{}
+
+ Makes an object distributable. When
+  the object has a sum as argument, it can be distributed over the
+  terms with \subscommand{distribute}, as in
+\begin{screen}{1,2,3}
+\hat{#}::Distributable.
+\hat{A+B+C D}:
+@distribute!(%);
+\hat{A} + \hat{B} + \hat{C D};
+\end{screen}
+~

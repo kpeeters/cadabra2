@@ -1,0 +1,26 @@
+\cdbproperty{LaTeXForm}{\sf valid \LaTeX{} expression}
+
+Changes the way in which symbols are displayed in the graphical
+interface. Example:
+\begin{screen}{1,2}
+\del{#}::LaTeXForm("\partial").
+\del_{m}(A);
+\end{screen}
+This prints $\partial_{m}(A);$ in the notebook, despite the fact
+that \verb|\del| is not a \LaTeX{} command.
+
+If you use this property to make a symbol printable, make sure to
+declare it \emph{before} any other properties are declared, otherwise
+the notebook will not know how to display the symbol and produce an
+error message.
+
+Note that the property is attached to a pattern (\verb|\del{#}| in
+this case) which matches the expression in which the replacement has
+to be made. If the pattern matches, the replacement will be done on
+the head symbol (\verb|\del| in this case). A pattern \verb|\del|
+without the argument wildcard \verb|#| would only replace
+when \verb|\del| occurs without any arguments (as in 
+e.g.~\verb|\del + A|).
+
+These settings have no effect in the command-line version.
+

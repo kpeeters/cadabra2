@@ -42,14 +42,17 @@ set(LOCAL_SRC_FILES
   Numerical.cc
   Exchange.cc
   PythonCdb.cc
-  modules/Algebra.cc
-  properties/Weight.cc
-  properties/WeightInherit.cc
+#  modules/Algebra.cc
+  properties/AntiSymmetric.cc
   properties/GammaMatrix.cc
   properties/GammaTraceless.cc
   properties/Matrix.cc
   properties/Spinor.cc
+  properties/Traceless.cc
+  properties/Weight.cc
+  properties/WeightInherit.cc
   modules/xperm_new.c
+  algorithms/distribute.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh
@@ -61,4 +64,4 @@ include_directories(".")
 add_library(cadabra SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra PROPERTIES PREFIX "")
 set_target_properties(cadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
-target_link_libraries(cadabra  ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
+target_link_libraries(cadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})

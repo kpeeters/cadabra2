@@ -32,6 +32,8 @@
 
 #include "properties/WeightInherit.hh"
 #include "properties/Weight.hh"
+#include "properties/Derivative.hh"
+#include "properties/PartialDerivative.hh"
 
 
 extern "C" {
@@ -66,8 +68,6 @@ void algebra::register_properties()
 	properties::register_property(&create_property<DAntiSymmetric>);
 	properties::register_property(&create_property<KroneckerDelta>);
 	properties::register_property(&create_property<EpsilonTensor>);
-	properties::register_property(&create_property<Derivative>);
-	properties::register_property(&create_property<PartialDerivative>);
 	}	
 
 void algebra::register_algorithms()
@@ -127,11 +127,6 @@ std::string Diagonal::name() const
 std::string Traceless::name() const
 	{
 	return "Traceless";
-	}
-
-std::string AntiSymmetric::name() const
-	{
-	return "AntiSymmetric";
 	}
 
 std::string DAntiSymmetric::name() const
@@ -248,22 +243,12 @@ bool SatisfiesBianchi::parse(exptree& tr, exptree::iterator st, exptree::iterato
 	return property::parse(tr,st,it,kv);
 	}
 
-bool AntiSymmetric::parse(exptree& tr, exptree::iterator st, exptree::iterator it, keyval_t& kv)
-	{
-	return property::parse(tr,st,it,kv);
-	}
-
 bool DAntiSymmetric::parse(exptree& tr, exptree::iterator st, exptree::iterator it, keyval_t& kv)
 	{
 	return property::parse(tr,st,it,kv);
 	}
 
 unsigned int Symmetric::size(exptree&, exptree::iterator) const
-	{
-	return 1;
-	}
-
-unsigned int AntiSymmetric::size(exptree&, exptree::iterator) const
 	{
 	return 1;
 	}
@@ -277,13 +262,6 @@ unsigned int KroneckerDelta::size(exptree&, exptree::iterator) const
 	{
 	return 1;
 	}
-
-
-unsigned int PartialDerivative::size(exptree& tr, exptree::iterator it) const
-	{
-	return Derivative::size(tr, it)+1;
-	}
-
 
 unsigned int SatisfiesBianchi::size(exptree& tr, exptree::iterator it) const
 	{
@@ -363,24 +341,6 @@ TableauBase::tab_t Symmetric::get_tab(exptree& tr, exptree::iterator it, unsigne
 	return tab;
 	}
 
-TableauBase::tab_t AntiSymmetric::get_tab(exptree& tr, exptree::iterator it, unsigned int num) const
-	{
-	assert(num==0);
-
-	const AntiSymmetric *pd;
-	for(;;) {
-		pd=properties::get<AntiSymmetric>(it);
-		if(!pd)
-			it=tr.begin(it);
-		else break;
-		} 
-
-	tab_t tab;
-	for(unsigned int i=0; i<tr.number_of_children(it); ++i)
-		tab.add_box(i,i);
-	return tab;
-	}
-
 TableauBase::tab_t SelfDual::get_tab(exptree& tr, exptree::iterator it, unsigned int num) const
 	{
 	tab_t ret=AntiSymmetric::get_tab(tr, it, num);
@@ -444,38 +404,6 @@ TableauBase::tab_t KroneckerDelta::get_tab(exptree& tr, exptree::iterator it, un
 	return tab;
 	}
 
-TableauBase::tab_t PartialDerivative::get_tab(exptree& tr, exptree::iterator it, unsigned int num) const
-	{
-	it=properties::head<PartialDerivative>(it);
-
-	bool indices_first=tr.begin(it)->is_index();
-	exptree::sibling_iterator argnode=tr.begin(it);
-	unsigned int number_of_indices=0;
-	while(argnode->is_index()) { ++argnode; ++number_of_indices; }
-	unsigned int arg_indices=tr.number_of_children(argnode);
-
-	if(num==0) { // symmetry of the derivative indices
-		tab_t tab;
-		int i=0;
-		exptree::index_iterator indit=tr.begin_index(it);
-		if(!indices_first) {
-			for(unsigned int k=0; k<arg_indices; ++k) ++indit;
-			i+=arg_indices;
-			}
-		while(indit!=tr.end_index(it)) {
-			if(tr.parent((exptree::iterator)indit)!=it) break;
-//			txtout << "T: " << i << " " << *indit->name << std::endl;
-			tab.add_box(0, i);
-			++i;
-			++indit;
-			}
-		return tab;
-		}
-	else {
-		return Derivative::get_tab(tr, it, num-1);
-		}
-	}
-
 
 void TableauSymmetry::display(std::ostream& str) const
 	{
@@ -533,11 +461,6 @@ bool TableauBase::is_simple_symmetry(exptree& tr, exptree::iterator it) const
 			return true;
 		}
 	return false;
-	}
-
-std::string PartialDerivative::name() const
-	{
-	return "PartialDerivative";
 	}
 
 template<class ForwardIterator>
@@ -1106,59 +1029,6 @@ algorithm::result_t index_object_cleanup::apply(iterator& it)
 	}
 
 
-
-prodcollectnum::prodcollectnum(exptree& tr, iterator it)
-	: algorithm(tr, it)
-	{
-	}
-
-bool prodcollectnum::can_apply(iterator it)
-	{
-	if(*it->name!="\\prod") return false;
-	sibling_iterator facs=tr.begin(it);
-	while(facs!=tr.end(it)) {
-		if(facs->is_rational() || *facs->multiplier!=1)
-			return true;
-		++facs;
-		}
-	return false;
-	}
-
-algorithm::result_t prodcollectnum::apply(iterator& it)
-	{
-	assert(*it->name=="\\prod");
-	sibling_iterator facs=tr.begin(it);
-	multiplier_t factor=1;
-	while(facs!=tr.end(it)) {
-		factor*=*facs->multiplier;
-		if(facs->is_rational()) {
-			multiplier_t tmp; // FIXME: there is a bug in gmp which means we have to put init on next line.
-			tmp=(*facs->name).c_str();
-			factor*=tmp;
-		   facs=tr.erase(facs);
-			if(facs==tr.end())
-				facs=tr.end(it);
-			}
-		else {
-			one(facs->multiplier);
-			++facs;
-			}
-		}
-	multiply(it->multiplier,factor);
-	if(tr.number_of_children(it)==1) { // i.e. from '3*4*7*a*9'
-		tr.begin(it)->fl.bracket=it->fl.bracket;
-		tr.begin(it)->fl.parent_rel=it->fl.parent_rel;
-		tr.begin(it)->multiplier=it->multiplier;
-		tr.flatten(it);
-		it=tr.erase(it);
-//		pushup_multiplier(it); This is not allowed (nor necessary) as it touches the tree above the entry point.
-		}
-	else if(tr.number_of_children(it)==0) { // i.e. from '3*4*7*9' 
-		it->name=name_set.insert("1").first;
-		}
-//	it->fl.mark=0;
-	return l_applied;
-	}
 
 
 

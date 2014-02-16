@@ -1,0 +1,14 @@
+\cdbproperty{SelfDual}{}
+
+Make a tensor fully anti-symmetric as well as self-dual. The
+conventions used are that self-duality means
+\begin{equation}
+F_{\mu_1\cdots \mu_n}
+= \frac{1}{n!} \epsilon_{\mu_1\cdots\mu_n \mu_{n+1}\cdots \mu_{2n}} F_{\mu_{n+1}\cdots\mu_{2n}}\,.
+\end{equation}
+This property used by the Young projection algorithms and
+the \subscommand{dualise\_tensor} algorithm, among others.
+
+\cdbseeprop{AntiSelfDual}
+\cdbseealgo{dualise_tensor}
+\cdbseealgo{young_project_tensor}

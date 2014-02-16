@@ -33,6 +33,8 @@
 #include "properties/AntiSymmetric.hh"
 #include "properties/Matrix.hh"
 
+
+
 class WeightInherit;
 class Weight;
 
@@ -265,14 +267,6 @@ class sumflatten : public algorithm {
 class listflatten : public algorithm {
 	public:
 		listflatten(exptree&, iterator);
-
-		virtual bool     can_apply(iterator);
-		virtual result_t apply(iterator&);
-};
-
-class prodcollectnum : public algorithm {
-	public:
-		prodcollectnum(exptree&, iterator);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

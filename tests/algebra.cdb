@@ -1,0 +1,17 @@
+# 
+# Test 1:= keep_terms
+
+from cadabra import *;
+
+obj1 = 'a1 + a2 + a3 + a4 + a5 + a6 + a7';
+keep_terms(obj1, {2,4});  // auto-converts string to ex
+// it is pass by reference, so obj1 gets modified. None of
+// this silly obj1 = blabla(obj1) nonsense.
+tst1 = 'a3 + a4 + a5 - obj1'; // python objects are known on the cdb side.
+collect_terms(tst1);
+assert(tst1);
+
+@keep_terms(%){2}{4};
+tst1:= a3 + a4 + a5 - @(obj1);
+@collect_terms!(%);
+@assert(tst1);

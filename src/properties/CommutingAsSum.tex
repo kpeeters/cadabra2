@@ -1,0 +1,20 @@
+\cdbproperty{CommutingAsSum}{}
+
+This makes an object behave, for purposes of commutation rules, as a
+sum.
+\begin{screen}{1,2,3}
+A(#)::CommutingAsSum.
+{Q,X,Y,Z}::AntiCommuting.
+A(Y)(Z)*A(X);
+@prodsort!(%);
+(-1) A(X) A(Y)(Z);
+\end{screen}
+The minus sign arises because it would also have been present when
+sorting the expression {\tt (Y+Z)*X}. 
+
+Note that this does not (yet) work when the arguments are given as a
+list separated by commas, as in {\tt A(Y,Z)}.
+
+\cdbseeprop{CommutingAsProduct}
+\cdbseeprop{AntiCommuting}
+
