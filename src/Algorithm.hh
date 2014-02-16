@@ -25,23 +25,10 @@
 #include "Props.hh"
 #include "Exceptions.hh"
 
-//#include "display.hh"
 #include <map>
-
-// These are initiated in main.cc
 #include <fstream>
-extern bool           interrupted;
+
 extern stopwatch      globaltime;
-
-///// An error class which should be thrown by any algorithm as soon as it
-///// detects that the "interrupted" flag has been set by the sigint signal 
-///// handler. 
-//class algorithm_interrupted : public std::logic_error {
-//	public:
-//		algorithm_interrupted();
-//		algorithm_interrupted(const std::string&);
-//};
-
 
 /// Base class for objects which represent algorithms, i.e. which get
 /// expanded by the manipulator when they are encountered in the tree.

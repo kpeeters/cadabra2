@@ -1,0 +1,22 @@
+\cdbproperty{SatisfiesBianchi}{}
+
+Indicates that an object satisfies a (generalised) Bianchi
+identity. This is often used to link a derivative operator to a
+curvature tensor, as in
+\begin{screen}{1,2,3,4,5,6,8}
+R_{m n p q}::RiemannTensor;
+D{#}::Derivative.
+D_{m}{ R_{n p q r} }::SatisfiesBianchi.
+A^{m n p q}::AntiSymmetric.
+D_{m}{ R_{n p q r} } A^{m n p q};
+@canonicalise!(%);
+(-1) D_{m}{ R_{r n p q} } A^{m n p q};
+@impose_bianchi!(%);
+0;
+\end{screen}
+This general method allows one to handle more than one type of
+derivative object.
+
+\cdbseeprop{RiemannTensor}
+\cdbseealgo{canonicalise}
+\cdbseealgo{impose_bianchi}

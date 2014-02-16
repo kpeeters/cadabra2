@@ -1,0 +1,19 @@
+\cdbproperty{IndexInherit}{}
+
+Indicates that an object should inherit the indices of its child
+objects. This is useful mainly for operators. Matrix transposition,
+for instance, could be written as 
+\begin{screen}{1,2,3}
+T{#}::IndexInherit.
+T(B_{m n}) + C_{m n};
+\end{screen}
+Without the \subsprop{IndexInherit} property, the object 
+\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch
+error would be reported. With the property, the first term has
+external indices \verb|m| and \verb|n|, just like the second term.
+
+This property is automatically associated to all \subsprop{Derivative} operators.
+
+\cdbseeprop{Indices}
+\cdbseeprop{Derivative}
+\cdbseeprop{PartialDerivative}

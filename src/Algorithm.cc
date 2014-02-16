@@ -23,6 +23,8 @@
 #include "Props.hh"
 #include "CoreProps.hh"
 
+#include "properties/Derivative.hh"
+
 #include <typeinfo>
 #include <sstream>
 

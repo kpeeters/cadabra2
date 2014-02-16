@@ -1,0 +1,15 @@
+\cdbproperty{SortOrder}{}
+
+A list property which determines the preferred order of objects when
+a \subscommand{prodsort} command is used. 
+\begin{screen}{1,2}
+{B,A,C,A_{m}}::SortOrder.
+A A_{m} B C;
+@prodsort!(%);
+B A C A_{m};
+\end{screen}
+As indicated in the example above, any type of object can appear in
+the list.
+
+\cdbseealgo{prodsort}
+

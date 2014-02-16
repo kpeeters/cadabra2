@@ -81,22 +81,6 @@ class ImplicitIndex : virtual public property {
 		std::vector<std::string> set_names;
 };
 
-class Distributable : virtual public  property {
-	public:
-		virtual ~Distributable() {};
-		virtual std::string name() const;
-};
-
-class Accent : public PropertyInherit, public IndexInherit, virtual public property {
-	public:
-		virtual std::string name() const;
-};
-
-class DiracBar : public Accent, public Distributable, virtual public property {
-	public:
-		virtual std::string name() const;
-};
-
 class CommutingAsProduct : virtual public property {
 	public:
 		virtual std::string name() const;
@@ -140,32 +124,5 @@ class TableauBase {
 		// Is the tableau either a single column or a single row, and without 
 		// duality projections?
 		bool                 is_simple_symmetry(exptree&, exptree::iterator) const;
-};
-
-class Derivative : public IndexInherit, 
-//                   public Inherit<DependsBase>,
-//                   public Inherit<Spinor>,
-//                   public Inherit<SortOrder>,
-                   public CommutingAsProduct, 
-                   public NumericalFlat,
-                   public WeightBase,
-                   public TableauBase,
-                   public Distributable, virtual public property {
-   public :
-      virtual ~Derivative() {};
-      virtual std::string name() const;
-
-      virtual unsigned int size(exptree&, exptree::iterator) const;
-      virtual tab_t        get_tab(exptree&, exptree::iterator, unsigned int) const;
-      virtual multiplier_t value(exptree::iterator, const std::string& forcedlabel) const;
-};
-
-class PartialDerivative : public Derivative, virtual public property {
-   public :
-      virtual ~PartialDerivative() {};
-      virtual std::string name() const;
-
-      virtual unsigned int size(exptree&, exptree::iterator) const;
-      virtual tab_t        get_tab(exptree&, exptree::iterator, unsigned int) const;
 };
 

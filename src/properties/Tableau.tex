@@ -1,0 +1,21 @@
+\cdbproperty{Tableau}{\it dimension={\sf integer}}
+
+Indicates that the object is a Young
+  diagram, i.e.~a tableau without labels in the boxes. The arguments
+  of a \subsprop{Tableau} property denote the lengths of the
+  successive rows,
+\begin{screen}{1,2}
+\tab{#}::Tableau.
+\tab{4}{2}{1};
+\end{screen}
+In the graphical interface this will display as
+\begin{equation*}
+\tableau{4 2 1}
+\end{equation*}
+For several algorithms, the dimension of the permutation group
+associated to the tableau must be known; this can be added as in the
+example below,
+\begin{screen}{1}
+\tab{#}::Tableau(dimension=10).
+\end{screen}
+~

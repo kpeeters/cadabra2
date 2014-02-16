@@ -1,0 +1,19 @@
+\cdbproperty{DependsInherit}{}
+
+Makes an object inherit all dependencies of the objects they
+contain. This makes it possible to define functions of objects which
+behave correctly inside derivatives.
+\begin{screen}{1,2}
+f{#}::DependsInherit.
+x::Coordinate.
+\partial{#}::PartialDerivative.
+\phi::Depends(x).
+\partial_{x}( g f(\phi) );
+@unwrap!(%);
+g \partial_{x}( f(\phi) );
+\end{screen}
+~
+
+\cdbseealgo{unwrap}
+\cdbseeprop{PartialDerivative}
+

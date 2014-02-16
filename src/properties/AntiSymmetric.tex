@@ -1,0 +1,17 @@
+\cdbproperty{AntiSymmetric}{}
+
+Makes an object antisymmetric in all its indices. Example:
+\begin{screen}{1,2,3,4}
+A_{m n}::AntiSymmetric.
+B_{m n}::Symmetric.
+A_{m n} B_{m n};
+@canonicalise!(%);
+0;
+\end{screen}
+For more complicated symmetries, use \subsprop{TableauSymmetry}.
+
+\cdbseealgo{canonicalise}
+\cdbseeprop{Symmetric}
+\cdbseeprop{TableauSymmetry}
+\cdbseeprop{DAntiSymmetric}
+

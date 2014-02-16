@@ -1,0 +1,17 @@
+\cdbproperty{SelfAntiCommuting}{}
+
+Used to make objects with indices anti-commuting when their index
+values are different. Example:
+\begin{screen}{1,2,3,5,6}
+\psi^{\mu}::SelfAntiCommuting.
+\psi^{\nu} \psi^{\mu}:
+@prodsort!(%);
+(-1) \psi^{\mu} \psi^{\nu};
+\psi^{\mu} \psi^{\mu}:
+@canonicalise!(%);
+0;
+\end{screen}
+This could not be handled with \subsprop{AntiCommuting} because that
+property handles the behaviour of \emph{different} expression patterns.
+
+\cdbseealgo{AntiCommuting}

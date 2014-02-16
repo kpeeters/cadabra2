@@ -1,0 +1,17 @@
+\cdbproperty{PostDefaultRules}{}
+
+Set the default rules, to be applied \emph{after} every new input has
+been processed and active nodes have been executed. Use the inert form
+of active nodes for those ones that only have to be come active upon
+actual evaluation of the rule,
+i.e.~\inertcommand{collect\_terms!(\%)}. Here is an example containing
+more than one rule:
+\begin{screen}{1,2}
+::PostDefaultRules( @@distribute!(%), @@prodsort!(%), @@collect_terms!(%) ).
+A*(B+C) + B*(A+C);
+2 A B + A C + B C;
+\end{screen}
+Note that the rules have to be given in order; the list will only be
+traversed once.
+
+\cdbseeprop{PreDefaultRules}

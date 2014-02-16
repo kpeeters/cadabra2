@@ -1,0 +1,12 @@
+\cdbproperty{TableauSymmetry}{\it shape={\sf tableau shape},
+indices={\sf index positions}, selfdual, antiselfdual}
+
+Takes lists of two key-value pairs as arguments, indicating the 
+shape of the Young tableau and the index slots associated to each box
+in the tableau. For instance
+\begin{screen}{1}
+R_{a b c d}::TableauSymmetry( shape={2,2}, indices={0,2,1,3} ).
+\end{screen}
+yields the symmetries of the Riemann tensor. Note that indices are
+counted from zero. It is also possible to label tensors as self-dual
+or anti-selfdual using the optional arguments.

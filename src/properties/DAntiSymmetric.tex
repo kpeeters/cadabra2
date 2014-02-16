@@ -1,0 +1,19 @@
+\cdbproperty{DAntiSymmetric}{}
+
+Declares an object to have the symmetries of the derivative of a fully
+anti-symmetric tensor, i.e.~to have a \subsprop{TableauSymmetry}
+corresponding to a hook-shape Young tableau.
+\begin{screen}{1,2}
+DF_{m n p q}::DAntiSymmetric.
+A_{m n p q}::AntiSymmetric.
+DF_{m n p q} A^{m n p q};
+@impose_bianchi!(%);
+0;
+\end{screen}
+The symmetries can also be declared directly
+using \subsprop{TableauSymmetry} but it is usually easier to read the
+\subsprop{DAntiSymmetric}
+form.
+
+\cdbseeprop{TableauSymmetry}
+\cdbseeprop{AntiSymmetric}

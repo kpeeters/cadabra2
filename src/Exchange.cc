@@ -18,12 +18,11 @@
  
 */
 
-#include "Exchange.hh"
-#include "Numerical.hh"
-//#include "modules/algebra.hh"
-//#include "modules/gamma.hh"
 #include <map>
 
+#include "Exchange.hh"
+#include "Numerical.hh"
+#include "properties/DiracBar.hh"
 
 // Find groups of identical tensors. 
 //

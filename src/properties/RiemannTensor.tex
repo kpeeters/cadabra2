@@ -1,0 +1,15 @@
+\cdbproperty{RiemannTensor}{}
+
+Gives an object the symmetry properties of a Riemann tensor.
+\begin{screen}{1,2}
+R_{m n p q}::RiemannTensor;
+A^{m n p}::AntiSymmetric.
+A^{m n p} R_{m n p q};
+@impose_bianchi!(%);
+0;
+\end{screen}
+Various other algorithms, such as \subscommand{canonicalise}, also
+take into account this property.
+
+\cdbseealgo{canonicalise}
+\cdbseealgo{impose_bianchi}

@@ -1,0 +1,45 @@
+\cdbproperty{Depends}{\it comma separated list of indices,
+coordinates, derivatives, accents}
+
+Makes an object implicitly dependent on other objects, i.e.~assumes
+that the indicated object is a function of the arguments of the
+property. For example,
+\begin{screen}{1,2}
+x::Coordinate.
+\phi::Depends(x).
+\end{screen}
+makes $\phi$ an implicit function of $x$. Instead of indicating the
+coordinate on which the object depends, it is also possible to
+indicate which derivatives would yield a non-zero answer, as in
+\begin{screen}{1,2}
+\nabla{#}::Derivative.
+\phi::Depends(\nabla).
+\end{screen}
+Finally, it is possible to use an index name to indicate on which
+coordinates a field depends,
+\begin{screen}{1,2}
+{m,n,p,q}::Indices(vector).
+\phi::Depends(m).
+\end{screen}
+
+Taking objects out of derivatives (because they do not depend on them)
+is handled using the \subscommand{unwrap} algorithm.
+
+If you want to make an object depend on more than one thing, you need
+to specify them all in one \subsprop{Depends} property. If you specify
+them in two separate properties, the last property will overwrite
+the previous one. Therefore, you get
+\begin{screen}{1,2,3,4,5,6}
+\hat{#}::Accent.
+\partial{#}::PartialDerivative.
+A::Depends(\hat).
+A::Depends(\partial).
+\hat{A};
+@unwrap!(%);
+A;
+\end{screen}
+instead of \verb|\hat{A}| which you might have expected.
+
+\cdbseealgo{unwrap}
+\cdbseeprop{Derivative}
+
