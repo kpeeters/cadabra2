@@ -14,9 +14,10 @@ distribute::distribute(exptree& tr, iterator it)
 
 bool distribute::can_apply(iterator st)
 	{
-	const Distributable *db=properties::get<Distributable>(st);
-	if(!db) 
-		return false;
+	// V2 FIXME: re-enable
+//	const Distributable *db=properties::get<Distributable>(st);
+//	if(!db) 
+//		return false;
 
 	sibling_iterator facs=tr.begin(st);
 	while(facs!=tr.end(st)) {
