@@ -43,16 +43,23 @@ set(LOCAL_SRC_FILES
   Exchange.cc
   PythonCdb.cc
 #  modules/Algebra.cc
+  properties/Accent.cc
   properties/AntiSymmetric.cc
+  properties/Derivative.cc
+  properties/DiracBar.cc
+  properties/Distributable.cc
   properties/GammaMatrix.cc
   properties/GammaTraceless.cc
   properties/Matrix.cc
+  properties/PartialDerivative.cc
   properties/Spinor.cc
   properties/Traceless.cc
   properties/Weight.cc
   properties/WeightInherit.cc
   modules/xperm_new.c
   algorithms/distribute.cc
+  algorithms/flatten_product.cc
+  algorithms/prodcollectnum.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh

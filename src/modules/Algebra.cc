@@ -64,7 +64,6 @@ void algebra::register_properties()
 	properties::register_property(&create_property<Diagonal>);
 	properties::register_property(&create_property<SelfDual>);
 	properties::register_property(&create_property<AntiSelfDual>);
-	properties::register_property(&create_property<Traceless>);
 	properties::register_property(&create_property<DAntiSymmetric>);
 	properties::register_property(&create_property<KroneckerDelta>);
 	properties::register_property(&create_property<EpsilonTensor>);
@@ -122,11 +121,6 @@ std::string Symmetric::name() const
 std::string Diagonal::name() const
 	{
 	return "Diagonal";
-	}
-
-std::string Traceless::name() const
-	{
-	return "Traceless";
 	}
 
 std::string DAntiSymmetric::name() const

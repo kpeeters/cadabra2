@@ -2,6 +2,28 @@
 #include "PythonCdb.hh"
 #include "Parser.hh"
 #include "Exceptions.hh"
+#include <boost/python/implicit.hpp>
+#include <sstream>
+
+Ex::Ex(const Ex& other)
+	{
+	// we cheat
+	ex="B_{m n}";
+	}
+
+std::string Ex::to_string() const
+	{
+	std::ostringstream str;
+	tree.print_entire_tree(str);
+
+	return str.str();
+	}
+
+Ex& Ex::operator=(const Ex& other)
+	{
+	ex="C_{m n}";
+	return *this;
+	}
 
 Ex::Ex(std::string ex_) 
 	: ex(ex_)
@@ -16,19 +38,33 @@ Ex::Ex(std::string ex_)
 		throw ParseException("Cannot parse");
 		}
 
-	parser.tree.print_entire_tree(std::cout);
+	tree=parser.tree;
 	}
 
-std::string Ex::get() 
+std::string Ex::get() const
 	{ 
 	return ex; 
 	}
 
-std::string Algo(Ex& ex, bool repeat) 
+void Ex::append(std::string v) 
 	{
-	if(repeat) std::cout << "true" << std::endl;
-	else std::cout << "false" << std::endl;
-	return ex.get();
+	ex+=v;
+	}
+
+Ex *Algo(Ex *ex, bool repeat) 
+	{
+//	if(repeat) std::cout << "true" << std::endl;
+//	else std::cout << "false" << std::endl;
+//	std::cout << ex->get() << std::endl;
+
+	return ex;
+	}
+
+Ex *Algo2(const std::string& ex, bool repeat)
+	{
+//	std::cout << "from string" << std::endl;
+	Ex *exobj = new Ex(ex);
+	return Algo(exobj, repeat);
 	}
 
 PyObject *ParseExceptionType = NULL;
@@ -48,6 +84,7 @@ void bang(Ex& ex)
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
 // as the various algorithms that can act on these.
+// http://stackoverflow.com/questions/6050996/boost-python-overloaded-functions-with-default-arguments-problem
 
 BOOST_PYTHON_MODULE(cadabra)
 	{
@@ -57,14 +94,18 @@ BOOST_PYTHON_MODULE(cadabra)
 	ParseExceptionType=pyParseException.ptr();
 
 	class_<Ex> pyEx("Ex", init<std::string>());
-	pyEx.def("get", &Ex::get);
+	pyEx.def("get",     &Ex::get)
+		.def("append",   &Ex::append)
+		.def("__repr__", &Ex::to_string);
+
+
+//	implicitly_convertible<std::string, Ex>();
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
-	def("Algo",&Algo, (arg("ex"),arg("repeat")));
-	
-	// This does not work; Python does not allow us to use an exclamation mark.
-	def("bang!", &bang);
+	def("Algo",  &Algo,  (arg("ex"),arg("repeat")), return_internal_reference<1>() );
+	def("Algo",  &Algo2, (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
+
 
 	// How can we give a handle to the tree in python? And how can we give
 	// Python access to properties?
