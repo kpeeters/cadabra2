@@ -3,6 +3,10 @@
 
 from cadabra import *;
 
+obj = 'a*(b+c)'
+distribute(obj,True)
+
+
 obj1 = 'a1 + a2 + a3 + a4 + a5 + a6 + a7';
 obj1 = Algo(obj1, True);
 

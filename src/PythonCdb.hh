@@ -35,7 +35,8 @@ class Ex {
 
 		Ex& operator=(const Ex&);
 
+		exptree     tree;
+
 	private:
 		std::string ex;
-		exptree     tree;
 };

@@ -4,6 +4,7 @@
 #include "Exceptions.hh"
 #include <boost/python/implicit.hpp>
 #include <sstream>
+#include "algorithms/distribute.hh"
 
 Ex::Ex(const Ex& other)
 	{
@@ -67,6 +68,27 @@ Ex *Algo2(const std::string& ex, bool repeat)
 	return Algo(exobj, repeat);
 	}
 
+Ex *distribute_algo(Ex *ex, bool repeat)
+	{
+	distribute dst(ex->tree, ex->tree.begin());
+
+	exptree::iterator it=ex->tree.begin().begin();
+	if(dst.can_apply(it)) {
+		dst.apply(it);
+		}
+	else {
+		std::cout << "cannot apply" << std::endl;
+		}
+
+	return ex;
+	}
+
+Ex *distribute_algo2(const std::string& ex, bool repeat)
+	{
+	Ex *exobj = new Ex(ex);
+	return distribute_algo(exobj, repeat);
+	}
+
 PyObject *ParseExceptionType = NULL;
 
 void translate_ParseException(const ParseException &e)
@@ -105,6 +127,9 @@ BOOST_PYTHON_MODULE(cadabra)
 	// labelled by names.
 	def("Algo",  &Algo,  (arg("ex"),arg("repeat")), return_internal_reference<1>() );
 	def("Algo",  &Algo2, (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
+
+	def("distribute",  &distribute_algo,  (arg("ex"),arg("repeat")), return_internal_reference<1>() );
+	def("distribute",  &distribute_algo2, (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
 
 
 	// How can we give a handle to the tree in python? And how can we give
