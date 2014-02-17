@@ -1,5 +1,7 @@
 
-#include "flatten_product.hh"
+#include "algorithms/flatten_product.hh"
+#include "properties/PartialDerivative.hh"
+
 
 flatten_product::flatten_product(exptree& tr, iterator it)
 	: algorithm(tr, it), make_consistent_only(false), is_diff(false)

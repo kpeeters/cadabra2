@@ -23,12 +23,19 @@
 
 #include <boost/python.hpp>
 #include <stdexcept>
+#include "Storage.hh"
 
 class Ex {
 	public:
+		Ex(const Ex&); 
 		Ex(std::string);
-		std::string get();
+		std::string get() const;
+		void append(std::string);
+		std::string to_string() const;
+
+		Ex& operator=(const Ex&);
 
 	private:
 		std::string ex;
+		exptree     tree;
 };

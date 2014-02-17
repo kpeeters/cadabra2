@@ -99,8 +99,21 @@ the C++ tree. Can that be done safely? We also
 
 \subsection{Separate the data language from the programming language}
 
-When manipulating html, do you program in html? When manipulating images, do you write
-code in graphics?
+When manipulating html, do you write your program in html as well?
+When manipulating images, do you draw your code as an image? These
+examples show that it often makes sense to distinguish the programming
+language from the data language.
+
+Most existing computer algebra systems assume that all maths can
+sensibly be transformed into a language of `functions applying to
+functions'. They hence conclude that for manipulation of mathematical
+formula, it is fine to use the same language to write the program as
+you do to write the mathematical expressions on which you want the
+program to act. Now this assumption certainly is true for a decent
+subset of mathematics. It is, unfortunately, not true in
+general. Tensor algebra in particular is just plain ugly and messy in
+this sort of notation.
+
 
 \subsection{Make algorithms accessible from multiple languages}
 
@@ -271,6 +284,13 @@ was made to replace this language with Python. This not only gives
 much better structural control over expression manipulation, but it
 also makes it much easier to extend Cadabra with new functionality.
 
+Python is not ideal either, of course. Its object model is bolted-on.
+Using indentation for scoping can be plain annoying.  But as a
+language to write programs which are not likely going to be thousands
+of lines long (users of cadabra are unlikely to write such long code),
+it is perfectly fine. And it interfaces with C++ beautifully through
+boost.python. Of course, Python's variable assignment model is rubbish,
+\url{http://rg03.wordpress.com/2007/04/21/semantics-of-python-variable-names-from-a-c-perspective/}.
 
 \subsection{Keeping expression input simple}
 
@@ -392,3 +412,18 @@ src/algorithms
 
 - split toolkit-independent parts off from the gui (the cell tree,
   the manipulation of those cells, anything non-displaying)
+
+
+% I want to define a function of a vector (momenta)
+% 
+% T[a_,b_,k_]:= k[a]k[b]/(k[-c]k[c])
+% 
+% How can I make it work even if instead of a single vector k I put in a 
+% certain linear combination of vectors like 
+% 
+% p + 3q+42t
+% 
+% The naive solution produce k[a] -> (p + 3q+42t)[a] that is not equal to 
+% p[a] + 3q[a]+42t[a].
+
+
