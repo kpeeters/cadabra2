@@ -52,4 +52,4 @@ if __name__ == '__main__':
      sys.ps1='> '
      sys.ps2='. '
      sh.runsource("from pcadabra import *")
-     sh.interact(banner='Cadabra v2.0, Copyright (c) 2014 Kasper Peeters\nhttp://cadabra.phi-sci.com/\n')
+     sh.interact(banner='Cadabra 2.0\nCopyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>\nInfo at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n')
