@@ -1,6 +1,30 @@
 \documentclass[11pt]{article}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{xcolor}
+%\usepackage[T1]{fontenc}
+%\usepackage{fourier}
+%\usepackage{baskervald}
+\usepackage{charter}
+%\usepackage[urw-garamond]{mathdesign}
+%\usepackage[T1]{fontenc}
+%\usepackage[osf]{mathpazo}
+%\usepackage{libertine}
+%\usepackage{librebaskerville}
+%\usepackage[T1]{fontenc}
+%\usepackage[T1]{fontenc}
+%\usepackage{stix}
+%\usepackage[garamond]{mathdesign}
+%\usepackage{fontspec}
+%\setmainfont{stone_serif_regular}
 
-
+\lstset{basicstyle=\small\color{black!60}\ttfamily, 
+        breaklines=true,
+        columns=fullflexible,
+        commentstyle=\color{gray!60},
+        numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt
+       }
 \begin{document}
 {\bf The design and implementation of Cadabra version 2}
 
@@ -11,28 +35,31 @@
 native.
 
 \item It would make sense to be able to write
-
+\begin{lstlisting}
   \conjugate{ \alpha_{n} \alpha_{m} }
-
+\end{lstlisting}
 and then apply the conjugation algorithm. Yes, this is precisely how
 things should work: the programming language should know about the
 algorithms, the data language should know about the operators. Systems
 like sympy would immediately work this out. The above would be
 declared as
-
-  \dagger{#}::ConjugateTranspose.
-  \dagger{#}::DisplayAsSuperscript.
-
+\begin{lstlisting}
+\dagger{#}::ConjugateTranspose.
+\dagger{#}::DisplayAsSuperscript.
+\end{lstlisting}
 \item We need better logic to handle functional dependence like
-
-   A_\mu(x)  and  A(x)_{\mu} .
-
+\begin{lstlisting}
+A_\mu(x)  and  A(x)_{\mu} .
+\end{lstlisting}
 Do we want to enforce the order of arguments (e.g. first functional
 'indices', then vector space indices?).  
 
 \item Get rid of different bracket types for grouping; this is rarely used and only
 makes the system more complicated. Brackets should be displayed
 whenever necessary, automatically. 
+
+\item Calling algorithms from within C++. This should look as much as possible
+as the Python version.
 \end{itemize}
 
 
@@ -222,8 +249,8 @@ etc. With a class-based system, you would first make this hierarchy
 and then use it. With a property or prototype-based system, you can
 pick the properties you need without worrying about the others.
 
-In the new parser we should be more flexible with white-space and
-allow ``{\mu,\nu} :: Indices.'' as well.
+%In the new parser we should be more flexible with white-space and
+%allow ``{\mu,\nu} :: Indices.'' as well.
 
 
 On the other hand, it has often been annoying having to specify
@@ -268,12 +295,16 @@ of your notebook. Mathematica has this problem as well.
 % http://www.pgbovine.net/ipython-notebook-first-impressions.htm
 
 %-------------------------------------------------------------------
-\section{Abstract and component computations}
-
-
 \section{Support}
 
 Stackoverflow cadabra?
+
+\section{Features that have disappeared}
+
+\begin{enumerate}
+\item Mixing active nodes into the expression tree. This is an ugly
+mix of programming and data language, which I want to avoid. 
+\end{enumerate}
 
 %-------------------------------------------------------------------
 \section{Structure through Python}
@@ -289,8 +320,10 @@ Using indentation for scoping can be plain annoying.  But as a
 language to write programs which are not likely going to be thousands
 of lines long (users of cadabra are unlikely to write such long code),
 it is perfectly fine. And it interfaces with C++ beautifully through
-boost.python. Of course, Python's variable assignment model is rubbish,
+boost.python. Of course, Python's variable assignment model is
+rubbish,
 \url{http://rg03.wordpress.com/2007/04/21/semantics-of-python-variable-names-from-a-c-perspective/}.
+
 
 \subsection{Keeping expression input simple}
 
@@ -308,37 +341,36 @@ attached language is `python'. How to glue.
 \subsection{Python data types}
 
 \begin{description}
-\item[{\tt Expr}] 
+\item[{\tt Ex}] 
 \end{description}
 
 
-\begin{quote}
-import Cadabra;
+\begin{lstlisting}
+from cadabra import *
 
+Symmetric('A_{m n}')
+a = Ex('A_{m n} B^{m n}');
+for t in split_factors(a):
+    canonicalise(t)
+\end{lstlisting}
 
-Cdb("A_{m n}::Symmetric");
-a = Cdb("A_{m n} B^{m n}");
-for t in SplitFactors(a):
-    cdb.Canonicalise(t);
+The {\tt cadabra} function calls provide you with a handle on a
+Cadabra input cell.
 
-\end{quote}
-The {\tt Cdb} function calls provide you with a handle on 
-a Cadabra input cell. 
+\begin{lstlisting}
+TableauSymmetric('A_{m n}', [0,1])
+a = Ex('A_{m n} B^{m n}')
 
-\begin{quote}
-A_{m n}::Symmetric.
-a := A_{m n} B^{m n};
-\end{quote}
-\begin{quote}
-for t in SplitFactors(Prev("a")):
-   
-\end{quote}
+for t in split_factors(a):
+   print t   
+\end{lstlisting}
 
 
 \subsection{Sympy integration}
 
+\begin{lstlisting}
 from sympy import *
-
+\end{lstlisting}
 
 
 \section{Migration from version 1 to 2}
@@ -427,3 +459,4 @@ src/algorithms
 % p[a] + 3q[a]+42t[a].
 
 
+\end{document}
