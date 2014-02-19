@@ -77,11 +77,6 @@ bool active_node::has_argument(const std::string& arg) const
 	return false;
 	}
 
-algorithm::constructor_error::constructor_error()
-	{
-	}
-
-
 algorithm::algorithm(exptree& tr_, iterator it_)
 	: active_node(tr_, it_),
 	  expression_modified(false), 
@@ -117,33 +112,6 @@ void algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool
 	iterator acton=tr.end();
 	subtree=tr.end();
 
-	// Figure out on which subtree the algorithm is supposed to act.
-
-	if(tr.number_of_children(this_command)>=1) {
-		iterator chld=tr.begin(this_command);
-		if(chld->fl.bracket==str_node::b_round && *this_command->name!="@") { // all normal commands
-			actold=tr.equation_by_number_or_name(chld, last_used_equation_number, equation_number);
-			global_success=g_arguments_accepted;
-			if(actold==tr.end()) {
-				throw ConsistencyException("Expression ("
-												+tr.equation_number_or_name(chld, last_used_equation_number)
-												+") does not exist.");
-				return;
-				}
-			else global_success=g_operand_determined;
-			}
-		else if(chld->fl.bracket==str_node::b_round && *this_command->name=="@") { // exception for '@(1)'
-			equation_number=lue;
-			global_success=g_operand_determined;
-			acton=chld;
-			}
-		else if(chld->fl.bracket==str_node::b_square) {
-			global_success=g_operand_determined;
-			acton=chld;
-//			if(chld->fl.bracket==str_node::b_square)
-//				chld->fl.bracket=str_node::b_none; // otherwise the square brackets stay forever
-			}
-		}
 
 	// Depending on the outcome, different actions should be taken to copy the
 	// original tree and store the result.
@@ -193,94 +161,6 @@ void algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool
 				}
 			}
 		discard_command_node=true;
-		}
-	else if(acton!=tr.end()) { // act on argument
-		subtree=acton;
-		if(multiple) {
-			 apply_recursive(subtree, true, act_at_level, called_by_manipulator, until_nochange);
-			}
-		else {
-			if(can_apply(subtree)) {
-				global_success=g_operand_determined;
-				++number_of_calls;
-				report_progress((*this_command->name).substr(1,
-																			(*this_command->name).size()-2), 
-									 0,0,1);
-				apply(subtree);
-				}
-			}
-		if(is_output_module)
-			global_success=g_applied;
-		if(/* expression_modified && */ subtree!=tr.end()) { // even if expr. not modified, keep original
-			global_success=g_applied;
-			check_consistency(tr.named_parent(subtree,"\\expression"));
-			multiply(subtree->multiplier, *this_command->multiplier);
-			subtree->fl.bracket=this_command->fl.bracket;
-			subtree->fl.parent_rel=this_command->fl.parent_rel;
-			
-			// Rename dummy indices in the replacement to avoid clashes
-			rename_replacement_dummies(subtree, true);
-			// Then safely replace. First remove all children of the command
-			// node which are not the replacement subtree.
-			sibling_iterator sibrem=tr.begin(this_command);
-			while(sibrem!=tr.end(this_command)) {
-				if(sibrem!=subtree)
-					sibrem=tr.erase(sibrem);
-				else
-					++sibrem;
-				}
-			// Now flatten the tree at the node.
-			tr.flatten(this_command);
-			tr.erase(this_command);
-			// SOMETHING IS WRONG WITH ARGUMENT STUFF.
-//			subtree=tr.replace(this_command,thiscp,subtree,citp);
-
-			// There are various situations which need to be cleaned up, but can only be handled
-			// here because algorithms themselves are not allowed to modify the tree above the
-			// entry point. The cases are a) nested products, b) numerical factors in products,
-			// c) one to the power something, d) numerical factors on sum nodes, e) nested sums.
-			if(*subtree->name=="\\prod") {
-				if(*tr.parent(subtree)->name=="\\prod") {
-					multiply(tr.parent(subtree)->multiplier, *subtree->multiplier);
-					tr.flatten(subtree);
-					subtree=tr.erase(subtree);
-					}
-				}
-			else {
-				if(*tr.parent(subtree)->name=="\\prod") {
-					if(*subtree->multiplier!=1) {
-						multiply(tr.parent(subtree)->multiplier, *subtree->multiplier);
-						subtree->multiplier=rat_set.insert(1).first;
-						}
-					}
-//				else if(*tr.parent(subtree)->name=="\\pow") {
-//					 // FIXME: NOT TRIGGERED?
-//					 if(subtree->is_identity()) {
-//						  node_one(tr.parent(subtree));
-//						  subtree=tr.parent(subtree);
-//						  }
-//					 }
-				else if(*subtree->name=="\\sum") {
-					if(*subtree->multiplier!=1) {
-						sibling_iterator sib=tr.begin(subtree);
-						while(sib!=tr.end(subtree)) {
-							multiply(sib->multiplier, *subtree->multiplier);
-							++sib;
-							}
-						::one(subtree->multiplier);
-						}
-					if(*tr.parent(subtree)->name=="\\sum") {
-						tr.flatten(subtree);
-						subtree=tr.erase(subtree);
-						}
-					}
-				}
-			discard_command_node=false;
-			}
-		else {
-			discard_command_node=true;
-			subtree=tr.end();
-			}
 		}
 
 	if(is_output_module) {

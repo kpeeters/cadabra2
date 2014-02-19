@@ -76,11 +76,6 @@ class algorithm : public active_node {
 		algorithm(exptree&, iterator);
 		virtual ~algorithm();
 
-		class constructor_error {
-			public:
-				constructor_error();
-		};
-
 		enum result_t {
 			l_no_action,
 			l_applied,
@@ -106,6 +101,8 @@ class algorithm : public active_node {
 													bool called_by_manipulator=false, bool until_nochange=false);
 	   void             apply(unsigned int last_used_equation_number, bool multiple, bool until_nochange,
 									  bool make_copy, int act_at_level=-1, bool called_by_manipulator=false);
+
+
 
 		// Per-call information
 		bool             expression_modified;

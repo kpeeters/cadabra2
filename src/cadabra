@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+import sys
+from code import InteractiveConsole
+import re
+import readline
+import rlcompleter
+
+class FileCacher:
+    "Cache the stdout text so we can analyze it before returning it"
+    def __init__(self): self.reset()
+    def reset(self): self.out = []
+    def write(self,line): self.out.append(line)
+    def flush(self):
+#        output = '\n'.join(self.out)
+        output=self.out
+        self.reset()
+        return output
+
+class Shell(InteractiveConsole):
+    "Wrapper around Python that can filter input/output to the shell"
+    def __init__(self):
+        self.stdout = sys.stdout
+        self.cache = FileCacher()
+#        readline.set_completer(rlcompleter.Completer(vars).complete)
+        InteractiveConsole.__init__(self)
+        return
+
+    def get_output(self): sys.stdout = self.cache
+    def return_output(self): sys.stdout = self.stdout
+
+    def push(self,line):
+        self.get_output()
+
+        # Detect cadabra declarations and rewrite to python form.
+        match = re.search('(.*?)[ ]*:=[ ]*([^;]*)[; ]*', line)
+        if match:
+            rewrite = match.group(1)+" = "+"Ex('"+match.group(2)+"')"
+            line=rewrite
+        
+        ret=InteractiveConsole.push(self,line)
+        self.return_output()
+        output = self.cache.flush()
+        # you can filter the output here by doing something like
+        # output = filter(output)
+        if len(output)>0:
+            print output[0] # or do something else with it
+        return ret
+
+if __name__ == '__main__':
+     sh = Shell()
+     sys.ps1='> '
+     sys.ps2='. '
+     sh.runsource("from pcadabra import *")
+     sh.interact(banner='Cadabra v2.0, Copyright (c) 2014 Kasper Peeters\nhttp://cadabra.phi-sci.com/\n')

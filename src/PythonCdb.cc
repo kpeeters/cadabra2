@@ -108,7 +108,7 @@ void bang(Ex& ex)
 // as the various algorithms that can act on these.
 // http://stackoverflow.com/questions/6050996/boost-python-overloaded-functions-with-default-arguments-problem
 
-BOOST_PYTHON_MODULE(cadabra)
+BOOST_PYTHON_MODULE(pcadabra)
 	{
 	using namespace boost::python;
 

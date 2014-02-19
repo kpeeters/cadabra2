@@ -3,11 +3,69 @@
 
 from cadabra import *;
 
-obj = 'a*(b+c)'
+obj = Ex('a*(b+c)')
 distribute(obj,True)
 
 
-obj1 = 'a1 + a2 + a3 + a4 + a5 + a6 + a7';
+
+How do we do this on the C++ side? 
+
+
+
+-----
+
+With a preprocessor we could turn
+
+obj := A_{m n} B_{n p};
+
+into 
+
+obj = Ex('A_{m n} B_{n p}');
+
+very easily and then all problems would go away. Ditto for
+
+distribute!(obj);
+
+to 
+
+distribute(obj, all=True);
+
+algo options:
+
+ all:      like !  synonym for deep
+ deep:     like !  make deep=True the default
+   actually, we could make this algo dependent; for some algorithms
+   like vary it does not make sense to do a deep default.
+ repeat:   like !! make repeat=False the default
+
+We could also wrap
+
+distribute(%);
+
+since (% is not a valid python sequence of characters anyway.
+
+
+Properties:
+
+  A_{m n}::Distributable(name='vector');
+
+to
+ 
+  Distributable('A_{m n}', name='vector');
+
+
+sed -e 's/\(((?!:=).)*\):=\(.*\)/\1 = Ex("\2")/'
+
+---------------------
+
+Indices('m,n,p,q,r', name='vector');
+ex = 'A_{m n} B_{m n}';
+substitute(ex, 'B_{p q} -> C_{p} C_{q}');
+
+
+
+
+obj1 = Ex('a1 + a2 + a3 + a4 + a5 + a6 + a7');
 obj1 = Algo(obj1, True);
 
 obj1 = keep_terms(obj1, {2,4});  // auto-converts string to ex

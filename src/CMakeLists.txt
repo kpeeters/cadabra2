@@ -68,7 +68,7 @@ set(PUBLIC_HEADER_FILES
 
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
-add_library(cadabra SHARED ${LOCAL_SRC_FILES})
-set_target_properties(cadabra PROPERTIES PREFIX "")
-set_target_properties(cadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
-target_link_libraries(cadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
+add_library(pcadabra SHARED ${LOCAL_SRC_FILES})
+set_target_properties(pcadabra PROPERTIES PREFIX "")
+set_target_properties(pcadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
+target_link_libraries(pcadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
