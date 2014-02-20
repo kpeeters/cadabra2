@@ -32,49 +32,8 @@ stopwatch algorithm::index_sw;
 stopwatch algorithm::get_dummy_sw;
 
 active_node::active_node(exptree& tr_, iterator it_)
-	: this_command(it_), tr(tr_), args_begin_(tr_.end()), args_end_(tr_.end())
+	: tr(tr_)
 	{
-	}
-
-exptree::sibling_iterator active_node::args_begin() const
-	{
-	if(args_begin_==tr.end() && this_command!=tr.end()) {
-		args_begin_=tr.begin(this_command);
-		args_end_  =tr.end(this_command);
-		if(args_begin_!=args_end_) {
-			if(args_begin_->fl.bracket==str_node::b_round ||
-				args_begin_->fl.bracket==str_node::b_square)
-				++args_begin_;
-			}
-		}
-	return args_begin_;
-	}
-
-exptree::sibling_iterator active_node::args_end() const
-	{
-	args_begin();
-	return args_end_;
-	}
-
-unsigned int active_node::number_of_args() const
-	{
-	sibling_iterator it=args_begin();
-	unsigned int ret=0;
-	while(it!=args_end()) {
-		++ret;
-		++it;
-		}
-	return ret;
-	}
-
-bool active_node::has_argument(const std::string& arg) const
-	{
-	sibling_iterator sit=args_begin();
-	while(sit!=args_end()) {
-		if(*sit->name==arg) return true;
-		++sit;
-		}
-	return false;
 	}
 
 algorithm::algorithm(exptree& tr_, iterator it_)

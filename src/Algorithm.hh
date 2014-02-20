@@ -30,8 +30,7 @@
 
 extern stopwatch      globaltime;
 
-/// Base class for objects which represent algorithms, i.e. which get
-/// expanded by the manipulator when they are encountered in the tree.
+/// Base class for objects which represent algorithms. 
 
 class active_node {
 	public:
@@ -42,20 +41,8 @@ class active_node {
 		active_node(exptree&, iterator);
 		virtual ~active_node() {};
 
-		// Helpers for iterating over or inspecting argument lists.
-		sibling_iterator args_begin() const;
-		sibling_iterator args_end() const;
-		unsigned int     number_of_args() const;
-		bool             has_argument(const std::string&) const;
-
-		iterator this_command;
-
 		bool interrupted=false;
 	protected:
-		exptree& tr;
-		mutable sibling_iterator args_begin_;
-		mutable sibling_iterator args_end_;
-		
 		// Return the number of elements in the first range for which an identical element
 		// is present in the second range.
 		template<class BinaryPredicate>
@@ -63,14 +50,9 @@ class active_node {
 													sibling_iterator, sibling_iterator, BinaryPredicate) const;
 };
 
-/// \brief Base class for all algorithms, containing generic routines and in particular
-///        the logic for index classification.
-///
-/// All commands in cadabra are classes which derive from the algorithm class. An object
-/// gets instantiated by the logic in the manipulator class, which then activates the
-/// algorithm.
-/// This base class contains various functions that are quite generic and often needed.
-/// In particular, all logic that deals with index classification is located here.
+/// Base class for all algorithms, containing generic routines and in
+/// particular the logic for index classification.
+
 class algorithm : public active_node {
 	public:
 		algorithm(exptree&, iterator);
