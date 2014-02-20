@@ -4,12 +4,12 @@
 #include "Exceptions.hh"
 #include <boost/python/implicit.hpp>
 #include <sstream>
+
+#include "properties/Distributable.hh"
 #include "algorithms/distribute.hh"
 
 Ex::Ex(const Ex& other)
 	{
-	// we cheat
-	ex="B_{m n}";
 	}
 
 std::string Ex::to_string() const
@@ -52,22 +52,6 @@ void Ex::append(std::string v)
 	ex+=v;
 	}
 
-Ex *Algo(Ex *ex, bool repeat) 
-	{
-//	if(repeat) std::cout << "true" << std::endl;
-//	else std::cout << "false" << std::endl;
-//	std::cout << ex->get() << std::endl;
-
-	return ex;
-	}
-
-Ex *Algo2(const std::string& ex, bool repeat)
-	{
-//	std::cout << "from string" << std::endl;
-	Ex *exobj = new Ex(ex);
-	return Algo(exobj, repeat);
-	}
-
 Ex *distribute_algo(Ex *ex, bool repeat)
 	{
 	distribute dst(ex->tree, ex->tree.begin());
@@ -83,11 +67,23 @@ Ex *distribute_algo(Ex *ex, bool repeat)
 	return ex;
 	}
 
+Ex *distribute_algoD(Ex *ex)
+	{
+	return distribute_algo(ex, true);
+	}
+
+
 Ex *distribute_algo2(const std::string& ex, bool repeat)
 	{
 	Ex *exobj = new Ex(ex);
 	return distribute_algo(exobj, repeat);
 	}
+
+Ex *distribute_algo2D(const std::string& ex)
+	{
+	return distribute_algo2(ex, true);
+	}
+
 
 PyObject *ParseExceptionType = NULL;
 
@@ -98,10 +94,6 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
-void bang(Ex& ex)
-	{
-	std::cout << "BANG! " << ex.get() << std::endl;
-	}
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
@@ -125,11 +117,10 @@ BOOST_PYTHON_MODULE(pcadabra)
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
-	def("Algo",  &Algo,  (arg("ex"),arg("repeat")), return_internal_reference<1>() );
-	def("Algo",  &Algo2, (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
-
 	def("distribute",  &distribute_algo,  (arg("ex"),arg("repeat")), return_internal_reference<1>() );
+	def("distribute",  &distribute_algoD, (arg("ex")),               return_internal_reference<1>() );
 	def("distribute",  &distribute_algo2, (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
+	def("distribute",  &distribute_algo2D,(arg("ex")),               return_value_policy<manage_new_object>() );
 
 
 	// How can we give a handle to the tree in python? And how can we give

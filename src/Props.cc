@@ -26,14 +26,9 @@
 #include <typeinfo>
 #include <iostream>
 
-properties::property_map_t            properties::props;
-properties::pattern_map_t             properties::pats;
-properties::registered_property_map_t properties::registered_properties;
-
-
-properties::registered_property_map_t::~registered_property_map_t()
+Properties::registered_property_map_t::~registered_property_map_t()
 	{
-	properties::clear();
+	Properties::clear();
 // 	internal_property_map_t::iterator it=store.begin();
 //	while(it!=store.end()) {
 //		delete (*it).second;
@@ -72,7 +67,7 @@ bool pattern::match(const exptree::iterator& it, bool ignore_parent_rel) const
 				seqarg.skip_children();
 				++seqarg;
 				}
-			ind=properties::get<Indices>(stt, true);
+			ind=Properties::get<Indices>(stt, true);
 			}
 		else seqarg=hmarg;
 
@@ -90,7 +85,7 @@ bool pattern::match(const exptree::iterator& it, bool ignore_parent_rel) const
 		if(ind!=0) {
 			exptree::sibling_iterator indit=it.begin();
 			while(indit!=it.end()) {
-				const Indices *gi=properties::get<Indices>(indit, true);
+				const Indices *gi=Properties::get<Indices>(indit, true);
 				if(gi!=ind) {
 					return false;
 					}
@@ -123,7 +118,7 @@ bool pattern::children_wildcard() const
 	return false;
 	}
 
-bool properties::has(const property_base *pb, exptree::iterator it) 
+bool Properties::has(const property_base *pb, exptree::iterator it) 
 	{
 	std::pair<property_map_t::iterator, property_map_t::iterator> pit=props.equal_range(it->name);
 	while(pit.first!=pit.second) {
@@ -138,7 +133,7 @@ bool properties::has(const property_base *pb, exptree::iterator it)
 	return false;
 	}
 
-void properties::clear() 
+void Properties::clear() 
 	{
 	// Clear and free the property lists. Since pointers to properties can
 	// be shared, we use the pats map and make sure that we only free each
@@ -157,7 +152,7 @@ void properties::clear()
 	pats.clear();
 	}
 
-void properties::register_property(property_base* (*fun)())
+void Properties::register_property(property_base* (*fun)())
 	{
 	property_base *tmp=fun(); // need a property object of this type temporarily to retrieve the name
 	registered_properties.store[tmp->name()]=fun;
@@ -298,7 +293,7 @@ bool operator<(const pattern& one, const pattern& two)
 //	  return one.obj==two.obj; // FIXME: handle dummy indices
 //	  }
 
-void properties::insert_prop(const exptree& et, const property *pr)
+void Properties::insert_prop(const exptree& et, const property *pr)
 	{
 //	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 
@@ -335,10 +330,10 @@ void properties::insert_prop(const exptree& et, const property *pr)
 		}
 
 	pats.insert(pattern_map_t::value_type(pr, pat));
-	properties::props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
+	Properties::props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 	}
 
-void properties::insert_list_prop(const std::vector<exptree>& its, const list_property *pr)
+void Properties::insert_list_prop(const std::vector<exptree>& its, const list_property *pr)
 	{
 	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 	assert(its.size()>0);
@@ -426,12 +421,12 @@ void properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 		// Now register the property.
 //		txtout << "registering " << *(pat->headnode) << std::endl;
 		pats.insert(pattern_map_t::value_type(pr, pat));
-		properties::props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
+		Properties::props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 		}
 	}
 
 
-int properties::serial_number(const property_base *listprop, const pattern *pat)
+int Properties::serial_number(const property_base *listprop, const pattern *pat)
 	{
 	int serialnum=0;
 
@@ -489,14 +484,14 @@ const Symbol *Symbol::get(exptree::iterator it, bool ignore_parent_rel)
 		exptree::sibling_iterator sib=it.begin();
 		const Symbol *s=0;
 		while(sib!=it.end()) {
-			s = properties::get<Symbol>(sib, ignore_parent_rel);
+			s = Properties::get<Symbol>(sib, ignore_parent_rel);
 			if(!s)
 				break;
 			++sib;
 			}
 		return s;
 		}
-	else return properties::get<Symbol>(it, ignore_parent_rel);
+	else return Properties::get<Symbol>(it, ignore_parent_rel);
 	}
 
 std::string Coordinate::name() const
