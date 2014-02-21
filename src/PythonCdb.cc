@@ -113,6 +113,9 @@ BOOST_PYTHON_MODULE(pcadabra)
 		.def("__repr__", &Ex::to_string);
 
 
+	// TODO: in order to be able to insert already defined objects into an existing tree,
+	// we need to use 'extract'. How does that work with extracting an Ex?
+
 //	implicitly_convertible<std::string, Ex>();
 
 	// You can call algorithms on objects like this. The parameters are

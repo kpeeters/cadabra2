@@ -4,9 +4,10 @@
 #include "Storage.hh"
 
 
-// Generic subtree comparison class, which determines whether two tensor
-// subtrees are equal in the sense of e.g. "SelfCommuting", that is
-// up to the names of indices. E.g.,
+// Generic subtree comparison class, which uses property information
+// from a kernel to determine whether two tensor subtrees are equal in
+// the sense of e.g. "SelfCommuting", that is up to the names of
+// indices. E.g.,
 //
 //   A_m                        equals  A_n
 //   \diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s

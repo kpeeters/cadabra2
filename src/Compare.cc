@@ -1,6 +1,10 @@
 
 #include "Compare.hh"
 
+#include "CoreProps.hh"
+//#include "properties/Indices.hh"
+//#include "properties/Coordinate.hh"
+
 int subtree_compare(exptree::iterator one, exptree::iterator two, 
 						  int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards) 
 	{
