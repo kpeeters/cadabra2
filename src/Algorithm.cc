@@ -28,36 +28,30 @@
 #include <typeinfo>
 #include <sstream>
 
-stopwatch algorithm::index_sw;
-stopwatch algorithm::get_dummy_sw;
 
-active_node::active_node(exptree& tr_, iterator it_)
-	: tr(tr_)
-	{
-	}
-
-algorithm::algorithm(exptree& tr_, iterator it_)
-	: active_node(tr_, it_),
-	  expression_modified(false), 
+Algorithm::Algorithm(Kernel& k, exptree& tr_)
+	: expression_modified(false), 
 	  equation_number(0), global_success(g_not_yet_started), 
 	  number_of_calls(0), number_of_modifications(0),
 	  suppress_normal_output(false),
-	  discard_command_node(false)
+	  discard_command_node(false),
+	  kernel(k),
+	  tr(tr_)
 	{
 	}
 
-algorithm::~algorithm()
+Algorithm::~Algorithm()
 	{
 	}
 
-bool algorithm::is_output_module() const
+bool Algorithm::is_output_module() const
 	{
 	return false;
 	}
 
 
 // The entry point called by manipulator.cc
-void algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool make_copy, int act_at_level, 
+void Algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool make_copy, int act_at_level, 
 							 bool called_by_manipulator)
 	{
 	if(called_by_manipulator) {
@@ -68,7 +62,6 @@ void algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool
 	last_used_equation_number=lue;
 	expression_modified=false;
 	iterator actold=tr.end();
-	iterator acton=tr.end();
 	subtree=tr.end();
 
 
@@ -92,9 +85,9 @@ void algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool
 			subtree=tr.begin(actold);
 			if(can_apply(subtree)) {
 				++number_of_calls;
-				report_progress((*this_command->name).substr(1,
-																			(*this_command->name).size()-2), 
-									 0,0,1);
+//				report_progress((*this_command->name).substr(1,
+//																			(*this_command->name).size()-2), 
+//									 0,0,1);
 				result_t res=apply(subtree);
 				if(expression_modified) {
 					++number_of_modifications;
@@ -128,9 +121,9 @@ void algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool
 	}
 
 
-// Returns whether the algorithm has applied at least once.
+// Returns whether the Algorithm has applied at least once.
 //
-bool algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_at_level, 
+bool Algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_at_level, 
 										  bool called_by_manipulator, bool until_nochange)
 	{
 	assert(tr.is_valid(st));
@@ -170,7 +163,7 @@ bool algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 		while(tr.is_valid(wit) && wit!=end) { // loop over the entire tree
 			bool change_st=false; 
 			iterator start=wit;
-         // If we are at the top node and the algorithm changes the iterator 'start',
+         // If we are at the top node and the Algorithm changes the iterator 'start',
 			// we have to propagate that change into 'st'.
 			if(start==st) change_st=true; 
 			if(can_apply(start)) {
@@ -187,9 +180,9 @@ bool algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 					// skips straight to the next sibling, not to the next child.
 					processed_number_of_nodes+=tr.size(nextone);
 					if(called_by_manipulator)
-						report_progress((*this_command->name).substr(1,
-																					(*this_command->name).size()-2), 
-											 total_number_of_nodes, processed_number_of_nodes, 1);
+//						report_progress((*this_command->name).substr(1,
+//																					(*this_command->name).size()-2), 
+//											 total_number_of_nodes, processed_number_of_nodes, 1);
 					++nextone;
 					}
 				else { 
@@ -309,7 +302,7 @@ bool algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 	if(getenv("CDB_PARANOID")) 
 		if(global_success==g_applied && check_cons) 
 			check_consistency(tr.named_parent(cit,"\\expression"));
-	//	txtout << "algorithm " << (this_command==tr.end()?"?":*this_command->name) << " worked " << worked 
+	//	txtout << "Algorithm " << (this_command==tr.end()?"?":*this_command->name) << " worked " << worked 
 	//			 << " failed " << failed << std::endl;
 
 //	tr.debug_verify_consistency();
@@ -318,7 +311,7 @@ bool algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 	return atleastoneglobal;
 	}
 
-bool algorithm::prepare_for_modification(bool make_copy)
+bool Algorithm::prepare_for_modification(bool make_copy)
 	{
 	// Collect iterators pointing to all selected nodes and copy the
 	// expression into a new \\expression node where the modifications
@@ -339,7 +332,7 @@ bool algorithm::prepare_for_modification(bool make_copy)
 	return true;
 	}
 
-void algorithm::copy_expression(exptree::iterator previous_expression) const
+void Algorithm::copy_expression(exptree::iterator previous_expression) const
 	{
 //	txtout << "*** copying expression" << std::endl;
 	assert(tr.is_valid(previous_expression));
@@ -347,7 +340,7 @@ void algorithm::copy_expression(exptree::iterator previous_expression) const
 //	txtout << "*** copying expression done" << std::endl;
 	}
 
-void algorithm::cancel_modification()
+void Algorithm::cancel_modification()
 	{
 	if(tr.is_valid(previous_expression)) {
 		iterator act=tr.active_expression(previous_expression);
@@ -355,7 +348,7 @@ void algorithm::cancel_modification()
 		}
 	}
 
-void algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnode)
+void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnode)
 	{
 	assert(*it->multiplier==0);
 	if(it==topnode) return;
@@ -364,7 +357,7 @@ void algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 	if(!tr.is_valid(walk)) 
 		return;
 
-	const Derivative *der=properties::get<Derivative>(walk);
+	const Derivative *der=kernel.properties.get<Derivative>(walk);
 	if(*walk->name=="\\prod" || der) {
 		if(der && it->is_index()) return;
 		walk->multiplier=rat_set.insert(0).first;
@@ -431,7 +424,7 @@ void algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 	return;
 	}
 
-void algorithm::pushup_multiplier(iterator it) 
+void Algorithm::pushup_multiplier(iterator it) 
 	{
 	if(!tr.is_valid(it)) return;
 	if(*it->multiplier!=1) {
@@ -456,7 +449,7 @@ void algorithm::pushup_multiplier(iterator it)
 //				iterator tmp=tr.parent(it);
 				// tmp not always valid?!? This one crashes hard with a loop!?!
 //				txtout << " of " << *tmp->name << std::endl;
-				const PropertyInherit *pin=properties::get<PropertyInherit>(tr.parent(it));
+				const PropertyInherit *pin=kernel.properties.get<PropertyInherit>(tr.parent(it));
 				if(pin || *(tr.parent(it)->name)=="\\prod") {
 					multiply(tr.parent(it)->multiplier, *it->multiplier);
 					::one(it->multiplier); // moved up, was at end of block, correct?
@@ -470,21 +463,21 @@ void algorithm::pushup_multiplier(iterator it)
 		}
 	}
 
-void algorithm::node_zero(iterator it)
+void Algorithm::node_zero(iterator it)
 	{
 	::zero(it->multiplier);
 	tr.erase_children(it);
 	it->name=name_set.insert("1").first;
 	}
 
-void algorithm::node_one(iterator it)
+void Algorithm::node_one(iterator it)
 	{
 	::one(it->multiplier);
 	tr.erase_children(it);
 	it->name=name_set.insert("1").first;
 	}
 
-void algorithm::node_integer(iterator it, int num)
+void Algorithm::node_integer(iterator it, int num)
 	{
 	::one(it->multiplier);
 	tr.erase_children(it);
@@ -492,7 +485,7 @@ void algorithm::node_integer(iterator it, int num)
 	::multiply(it->multiplier, num);
 	}
 
-int algorithm::index_parity(iterator it) const
+int Algorithm::index_parity(iterator it) const
 	{
 	sibling_iterator frst=tr.begin(tr.parent(it));
 	sibling_iterator fnd(it);
@@ -504,7 +497,7 @@ int algorithm::index_parity(iterator it) const
 	return sgn;
 	}
 
-bool algorithm::less_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
+bool Algorithm::less_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
 	{
 	std::string::const_iterator ch1=(*it1).begin();
 	std::string::const_iterator ch2=(*it2).begin();
@@ -525,7 +518,7 @@ bool algorithm::less_without_numbers(nset_t::iterator it1, nset_t::iterator it2)
 	return false;
 	}
 
-bool algorithm::equal_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
+bool Algorithm::equal_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
 	{
 	std::string::const_iterator ch1=(*it1).begin();
 	std::string::const_iterator ch2=(*it2).begin();
@@ -550,14 +543,168 @@ bool algorithm::equal_without_numbers(nset_t::iterator it1, nset_t::iterator it2
 	return false;	
 	}
 
-bool algorithm::check_index_consistency(iterator it) const 
+
+unsigned int Algorithm::number_of_indices(iterator it) 
+	{
+	unsigned int res=0;
+	index_iterator indit=begin_index(it);
+	while(indit!=end_index(it)) {
+		++res;
+		++indit;
+		}
+	return res;
+	}
+
+unsigned int Algorithm::number_of_direct_indices(iterator it) const
+	{
+	unsigned int res=0;
+	sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(sib->fl.parent_rel==str_node::p_sub || sib->fl.parent_rel==str_node::p_super)
+			++res;
+		++sib;
+		}
+	return res;
+	}
+
+Algorithm::index_iterator::index_iterator(const Kernel& k)
+	: iterator_base(), kernel(k)
+	{
+	}
+
+Algorithm::index_iterator Algorithm::index_iterator::create(const Kernel& k, const iterator_base& other)
+	{
+	index_iterator ret(k);
+	ret.node=other.node;
+	ret.halt=other;
+	ret.walk=other;
+	ret.roof=other;
+
+	ret.halt.skip_children();
+	++ret.halt;
+	ret.operator++(); 
+	return ret;
+	}
+
+Algorithm::index_iterator::index_iterator(const index_iterator& other) 
+	: iterator_base(other.node), halt(other.halt), walk(other.walk), roof(other.roof), kernel(other.kernel)
+	{
+	}
+
+bool Algorithm::index_iterator::operator!=(const index_iterator& other) const
+	{
+	if(other.node!=this->node) return true;
+	else return false;
+	}
+
+bool Algorithm::index_iterator::operator==(const index_iterator& other) const
+	{
+	if(other.node==this->node) return true;
+	else return false;
+	}
+
+// \bar{\prod{A}{B}} 's indices are undefined, as \bar inherits
+// the Product property of \prod. So the worst-case scenario is
+// of the type \bar{\hat{A_\mu}} in which the objects with Inherit
+// property are strictly nested. However, we can also have
+// things like \bar{\diff{\diff{A_\mu}_{\nu}}_{\rho}}, for which 
+// we have to collect indices at multiple levels.
+
+/*
+  \bar{?}::Accent.
+  \bar{\diff{\diff{A_\mu}_{\nu}}_{\rho}};
+  @indexlist(%);
+  \diff{\diff{A_{\mu}}_{\nu}}_{\rho};
+  @indexlist(%);
+  \diff{\diff{A}_{\nu}}_{\rho};
+  @indexlist(%);
+  \bar{\psi_{m}} * \Gamma_{q n p} * \psi_{m} * H_{n p q};
+  @indexlist(%);
+  q*A_{d c b a};
+  @indexlist(%);
+  A_{d c b a}*q;
+  @indexlist(%);
+  \diff{\phi}_s A_\mu \diff{\phi}_t;
+  @indexlist(%);
+  \Gamma_{a b c};
+  @indexlist(%);
+  \diff{\sin(x_\mu)}_{\nu};
+  @indexlist(%);
+  \equals{A_{i}}{B_{i j} Z_{j}};
+  @indexlist(%);
+
+*/
+Algorithm::index_iterator& Algorithm::index_iterator::operator+=(unsigned int num)
+	{
+	while(num != 0) {
+		--num;
+		operator++();
+		}
+	return *this;
+	}
+
+
+Algorithm::index_iterator& Algorithm::index_iterator::operator++()
+	{
+	assert(this->node!=0);
+	
+	// Increment the iterator. As long as we are at an inherit
+	// node, keep incrementing. As long as the parent does not inherit,
+   // and as long as we are not at the top node,
+	// skip children. As long as we are not at an index, keep incrementing.
+
+	const IndexInherit *this_inh=0, *parent_inh=0;
+	while(walk!=halt) {
+		this_inh=kernel.properties.get<IndexInherit>(walk);
+		
+		if(this_inh==0 && (walk!=roof && walk.node->parent!=0)) {
+			parent_inh=kernel.properties.get<IndexInherit>(walk.node->parent);
+			if(parent_inh==0)
+				walk.skip_children();
+			}
+		
+		++walk;
+
+//		txtout << "walking " << *walk->name << std::endl;
+		if(walk!=halt)
+			 if(walk->is_index()) 
+				  break;
+//		if(this_inh==false && walk->is_index())
+//			break;
+		}
+	if(walk==halt) {
+		this->node=0;
+		return *this;
+		}
+	else this->node=walk.node;
+
+	return *this;
+	}
+
+Algorithm::index_iterator Algorithm::begin_index(iterator it) const
+	{
+	return index_iterator::create(kernel, it);
+	}
+
+Algorithm::index_iterator Algorithm::end_index(iterator it) const
+	{
+	index_iterator tmp=index_iterator::create(kernel, it);
+	tmp.node=0;
+
+	return tmp;
+	}
+
+
+
+
+bool Algorithm::check_index_consistency(iterator it) const 
 	{
 	index_map_t ind_free, ind_dummy;
 	classify_indices(it,ind_free,ind_dummy);
 	return true;
 	}
 
-bool algorithm::check_consistency(iterator it) const
+bool Algorithm::check_consistency(iterator it) const
 	{
 	stopwatch w1;
 	w1.start();
@@ -641,7 +788,7 @@ bool algorithm::check_consistency(iterator it) const
 	return true;
 	}
 
-void algorithm::report_progress(const std::string& str, int todo, int done, int count) 
+void Algorithm::report_progress(const std::string& str, int todo, int done, int count) 
 	{
 	bool display=false;
 	if(count==2) display=true;
@@ -674,7 +821,7 @@ void algorithm::report_progress(const std::string& str, int todo, int done, int 
 //		}
 	}
 
-bool algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo) 
+bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo) 
 	{
 //	txtout << "full story " << *two->name << std::endl;
 //	print_classify_indices(tr.named_parent(one, "\\expression"));
@@ -705,7 +852,7 @@ bool algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 //				 << " (index appears " << must_be_empty.count((*it).first) 
 //				 << " times); renaming..." << std::endl;
 		exptree the_key=(*it).first;
-		const Indices *dums=properties::get<Indices>(it->second, true);
+		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
 			throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 //			txtout << "failed to find dummy property for " << *it->second->name << std::endl;
@@ -733,7 +880,7 @@ bool algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 //				 << " (index appears " << must_be_empty.count((*it).first) 
 //				 << " times); renaming..." << std::endl;
 		exptree the_key=(*it).first;
-		const Indices *dums=properties::get<Indices>(it->second, true);
+		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
 			 throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 		assert(dums);
@@ -756,7 +903,7 @@ bool algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 //				 << " (index appears " << must_be_empty.count((*it).first) 
 //				 << " times); renaming..." << std::endl;
 		exptree the_key=(*it).first;
-		const Indices *dums=properties::get<Indices>(it->second, true);
+		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
 			 throw ConsistencyException("Failed to find dummy property for $"+*it->second->name+"$ while renaming dummies.");
 		assert(dums);
@@ -772,7 +919,7 @@ bool algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	return true;
 	}
 
-int algorithm::max_numbered_name_one(const std::string& nm, const index_map_t * one) const
+int Algorithm::max_numbered_name_one(const std::string& nm, const index_map_t * one) const
 	{
 	assert(one);
 
@@ -793,7 +940,7 @@ int algorithm::max_numbered_name_one(const std::string& nm, const index_map_t * 
 	return themax;
 	}
 
-int algorithm::max_numbered_name(const std::string& nm, 
+int Algorithm::max_numbered_name(const std::string& nm, 
 											const index_map_t * one, 
 											const index_map_t * two,
 											const index_map_t * three,
@@ -819,15 +966,15 @@ int algorithm::max_numbered_name(const std::string& nm,
 	return themax;
 	}
 
-exptree algorithm::get_dummy(const list_property *dums,
+exptree Algorithm::get_dummy(const list_property *dums,
 												  const index_map_t * one, 
 												  const index_map_t * two,
 												  const index_map_t * three,
 												  const index_map_t * four,
 												  const index_map_t * five) const
 	{
-	std::pair<properties::pattern_map_t::iterator, properties::pattern_map_t::iterator>
-		pr=properties::pats.equal_range(dums);
+	std::pair<Properties::pattern_map_t::const_iterator, Properties::pattern_map_t::const_iterator>
+		pr=kernel.properties.pats.equal_range(dums);
 	
 	while(pr.first!=pr.second) {
 //		txtout << "trying " << std::endl;
@@ -861,7 +1008,7 @@ exptree algorithm::get_dummy(const list_property *dums,
 	throw ConsistencyException("Ran out of dummy indices for type \""+dd->set_name+"\".");
 	}
 
-exptree algorithm::get_dummy(const list_property *dums, iterator it) const
+exptree Algorithm::get_dummy(const list_property *dums, iterator it) const
 	{
 	index_map_t one, two, three, four, five;
 	classify_indices_up(it, one, two);
@@ -873,7 +1020,7 @@ exptree algorithm::get_dummy(const list_property *dums, iterator it) const
 // Find a dummy index of the type given in "nm", making sure that this index
 // name does not class with the object in it1 nor it2.
 
-exptree algorithm::get_dummy(const list_property *dums, iterator it1, iterator it2) const
+exptree Algorithm::get_dummy(const list_property *dums, iterator it1, iterator it2) const
 	{
 	index_map_t one, two, three, four, five;
 	classify_indices_up(it1, one, two);
@@ -885,7 +1032,7 @@ exptree algorithm::get_dummy(const list_property *dums, iterator it1, iterator i
 	}
 
 // FIXME: make print to a given stream
-void algorithm::print_classify_indices(iterator st) const
+void Algorithm::print_classify_indices(iterator st) const
 	{
 	index_map_t ind_free, ind_dummy;
 	classify_indices(st, ind_free, ind_dummy);
@@ -916,15 +1063,15 @@ void algorithm::print_classify_indices(iterator st) const
 // That is, the index 'd' has position '3' in A_{a b} C_{c} D_{d}.
 // WARNING: expensive operation.
 //
-void algorithm::fill_index_position_map(iterator prodnode, const index_map_t& im, index_position_map_t& ipm) const
+void Algorithm::fill_index_position_map(iterator prodnode, const index_map_t& im, index_position_map_t& ipm) const
 	{
 	ipm.clear();
 	index_map_t::const_iterator imit=im.begin();
 	while(imit!=im.end()) {
 		int current_pos=0;
 		bool found=false;
-		exptree::index_iterator indexit=tr.begin_index(prodnode);
-		while(indexit!=tr.end_index(prodnode)) {
+		index_iterator indexit=begin_index(prodnode);
+		while(indexit!=end_index(prodnode)) {
 			if(imit->second==(iterator)(indexit)) {
 				ipm.insert(index_position_map_t::value_type(imit->second, current_pos));
 				found=true;
@@ -940,7 +1087,7 @@ void algorithm::fill_index_position_map(iterator prodnode, const index_map_t& im
 		}
 	}
 
-void algorithm::fill_map(index_map_t& mp, sibling_iterator st, sibling_iterator nd) const
+void Algorithm::fill_map(index_map_t& mp, sibling_iterator st, sibling_iterator nd) const
 	{
 	while(st!=nd) {
 		mp.insert(index_map_t::value_type(exptree(st), iterator(st)));
@@ -955,11 +1102,11 @@ void algorithm::fill_map(index_map_t& mp, sibling_iterator st, sibling_iterator 
 //
 // One exception: numerical, coordinate and symbol indices are always kept in 'one'.
 //
-void algorithm::determine_intersection(index_map_t& one, index_map_t& two, index_map_t& target, bool move_out)  const
+void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index_map_t& target, bool move_out)  const
 	{
 	index_map_t::iterator it1=one.begin();
 	while(it1!=one.end()) {
-		const Coordinate *cdn=properties::get<Coordinate>(it1->second, true);
+		const Coordinate *cdn=kernel.properties.get<Coordinate>(it1->second, true);
 		const Symbol     *smb=Symbol::get(it1->second, true);
 		if(it1->second->is_integer()==false && !cdn && !smb) {
 			bool move_this_one=false;
@@ -1006,11 +1153,11 @@ void algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 // Directly add an index to the free/dummy sets, as appropriate (only add if this really is an 
 // index!)
 
-void algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
+void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
 	{
 	if((it->fl.parent_rel==str_node::p_sub || it->fl.parent_rel==str_node::p_super) &&
 		it->fl.bracket==str_node::b_none /* && it->is_integer()==false */) {
-		const Coordinate *cdn=properties::get<Coordinate>(it, true);
+		const Coordinate *cdn=kernel.properties.get<Coordinate>(it, true);
 		const Symbol     *smb=Symbol::get(it, true);
 		 if(it->is_integer() || cdn || smb)
 			  ind_free.insert(index_map_t::value_type(exptree(it), it));
@@ -1034,14 +1181,14 @@ void algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 // This classifies indices bottom-up, that is, given a node, it goes up the tree to find
 // all free and dummy indices in the product in which this node would end up if a full
 // distribute would be done on the entire expression. 
-void algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_map_t& ind_dummy)  const
+void Algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_map_t& ind_dummy)  const
 	{
 	loopie:
 	iterator par=exptree::parent(it);
 	if(tr.is_valid(par)==false || par==tr.end() || *par->name=="\\expression" || *par->name=="\\history") { // reached the top
 		return;
 		}
-	const IndexInherit *inh=properties::get<IndexInherit>(par);
+	const IndexInherit *inh=kernel.properties.get<IndexInherit>(par);
 
 //	txtout << "class: " << *par->name << std::endl;
 	if(*par->name=="\\sum" || *par->name=="\\equals") {
@@ -1131,7 +1278,7 @@ void algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_ma
 	ind_dummy.clear();
 	}
 
-void algorithm::dumpmap(std::ostream& str, const index_map_t& mp) const
+void Algorithm::dumpmap(std::ostream& str, const index_map_t& mp) const
 	{
 	index_map_t::const_iterator dpr=mp.begin();
 	while(dpr!=mp.end()) {
@@ -1143,11 +1290,11 @@ void algorithm::dumpmap(std::ostream& str, const index_map_t& mp) const
 
 // This classifies indices top-down, that is, finds the free indices and all dummy 
 // index pairs used in the full subtree below a given node.
-void algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
+void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
 	{
 	index_sw.start();
 //	debugout << "   " << *it->name << std::endl;
-	const IndexInherit *inh=properties::get<IndexInherit>(it);
+	const IndexInherit *inh=kernel.properties.get<IndexInherit>(it);
 	if(*it->name=="\\sum" || *it->name=="\\equals") {
 		index_map_t first_free;
 		sibling_iterator sit=it.begin();
@@ -1159,7 +1306,7 @@ void algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 				if(!is_first_term) {
 					index_map_t::iterator fri=first_free.begin();
 					while(fri!=first_free.end()) {
-						const Coordinate *cdn=properties::get_composite<Coordinate>(fri->second, true);
+						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
 						const Symbol     *smb=Symbol::get(fri->second, true);
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
@@ -1179,7 +1326,7 @@ void algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 						}
 					fri=term_free.begin();
 					while(fri!=term_free.end()) {
-						const Coordinate *cdn=properties::get_composite<Coordinate>(fri->second, true);
+						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
 						const Symbol     *smb=Symbol::get(fri->second, true);
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
@@ -1246,7 +1393,7 @@ void algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 				classify_add_index(sit, free_so_far, ind_dummy);
 				}
 			++sit;
-//			const Derivative *der=properties::get<Derivative>(it);
+//			const Derivative *der=kernel.properties.get<Derivative>(it);
 //			if(*it->name=="\\indexbracket" || der) { // the other children are indices themselves
 //				ind_free.insert(free_so_far.begin(), free_so_far.end());
 //				free_so_far.clear();
@@ -1282,7 +1429,7 @@ void algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) &&
 				sit->fl.bracket==str_node::b_none /* && sit->is_integer()==false */) {
 				if(*sit->name!="??") {
-					const Coordinate *cdn=properties::get<Coordinate>(sit, true);
+					const Coordinate *cdn=kernel.properties.get<Coordinate>(sit, true);
 					const Symbol     *smb=Symbol::get(sit, true);
 					// integer, coordinate or symbol indices always ok
 					if(sit->is_integer() || cdn || smb) {
@@ -1317,7 +1464,7 @@ void algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 	index_sw.stop();
 	}
 
-bool algorithm::contains(sibling_iterator from, sibling_iterator to, sibling_iterator arg)
+bool Algorithm::contains(sibling_iterator from, sibling_iterator to, sibling_iterator arg)
 	{
 	while(from!=to) {
 		if(from->name==arg->name) return true;
@@ -1326,7 +1473,7 @@ bool algorithm::contains(sibling_iterator from, sibling_iterator to, sibling_ite
 	return false;
 	}
 
-algorithm::range_vector_t::iterator algorithm::find_arg_superset(range_vector_t& ran, 
+Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t& ran, 
 																		 sibling_iterator it)
 	{
 	sibling_iterator nxt=it;
@@ -1334,23 +1481,23 @@ algorithm::range_vector_t::iterator algorithm::find_arg_superset(range_vector_t&
 	return find_arg_superset(ran, it, nxt);
 	}
 
-void algorithm::find_argument_lists(range_vector_t& ran, bool only_comma_lists) const
-	{
-	sibling_iterator argit=args_begin();
-	while(argit!=args_end()) {
-		if(*argit->name=="\\comma") {
-			ran.push_back(range_t(tr.begin(argit), tr.end(argit)));
-			}
-		else if(!only_comma_lists) {
-			sibling_iterator argnxt=argit; ++argnxt;
-			ran.push_back(range_t(argit, argnxt));
-			}
-		++argit;
-		}	
-	}
+//void Algorithm::find_argument_lists(range_vector_t& ran, bool only_comma_lists) const
+//	{
+//	sibling_iterator argit=args_begin();
+//	while(argit!=args_end()) {
+//		if(*argit->name=="\\comma") {
+//			ran.push_back(range_t(tr.begin(argit), tr.end(argit)));
+//			}
+//		else if(!only_comma_lists) {
+//			sibling_iterator argnxt=argit; ++argnxt;
+//			ran.push_back(range_t(argit, argnxt));
+//			}
+//		++argit;
+//		}	
+//	}
 
 template<class Iter>
-algorithm::range_vector_t::iterator algorithm::find_arg_superset(range_vector_t& ran, Iter st, Iter nd)
+Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t& ran, Iter st, Iter nd)
 	{
 	range_vector_t::iterator ranit=ran.begin();
 	while(ranit!=ran.end()) {
@@ -1371,7 +1518,7 @@ algorithm::range_vector_t::iterator algorithm::find_arg_superset(range_vector_t&
 	return ran.end();
 	}
 
-bool algorithm::is_termlike(iterator it)
+bool Algorithm::is_termlike(iterator it)
 	{
 	if(tr.is_valid(tr.parent(it))) {
 		if(*tr.parent(it)->name=="\\sum" || *tr.parent(it)->name=="\\expression" || tr.parent(it)->is_command() ) 
@@ -1380,7 +1527,7 @@ bool algorithm::is_termlike(iterator it)
 	return false;
 	}
 
-bool algorithm::is_factorlike(iterator it)
+bool Algorithm::is_factorlike(iterator it)
 	{
 	if(tr.is_valid(tr.parent(it))) {
 		if(*tr.parent(it)->name=="\\prod")
@@ -1389,7 +1536,7 @@ bool algorithm::is_factorlike(iterator it)
 	return false;
 	}
 
-bool algorithm::is_single_term(iterator it)
+bool Algorithm::is_single_term(iterator it)
 	{
 	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" 
 		&& *it->name!="\\equals" && *it->name!="\\arrow") {
@@ -1405,7 +1552,7 @@ bool algorithm::is_single_term(iterator it)
 	return false;
 	}
 
-bool algorithm::is_nonprod_factor_in_prod(iterator it)
+bool Algorithm::is_nonprod_factor_in_prod(iterator it)
 	{
 	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" 
 		&& *it->name!="\\equals") {
@@ -1418,7 +1565,7 @@ bool algorithm::is_nonprod_factor_in_prod(iterator it)
 	return false;
 	}
 
-bool algorithm::prod_wrap_single_term(iterator& it)
+bool Algorithm::prod_wrap_single_term(iterator& it)
 	{
 	if(is_single_term(it)) {
 		force_prod_wrap(it);
@@ -1427,7 +1574,7 @@ bool algorithm::prod_wrap_single_term(iterator& it)
 	else return false;
 	}
 
-void algorithm::force_prod_wrap(iterator& it)
+void Algorithm::force_prod_wrap(iterator& it)
 	{
 	iterator prodnode=tr.insert(it, str_node("\\prod"));
 	sibling_iterator fr=it, to=it;
@@ -1440,7 +1587,7 @@ void algorithm::force_prod_wrap(iterator& it)
 	it=prodnode;
 	}
 
-bool algorithm::prod_unwrap_single_term(iterator& it)
+bool Algorithm::prod_unwrap_single_term(iterator& it)
 	{
 	if((*it->name)=="\\prod") {
 		if(tr.number_of_children(it)==1) {
@@ -1455,7 +1602,7 @@ bool algorithm::prod_unwrap_single_term(iterator& it)
 	return false;
 	}
 
-bool algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check_dependence) const
+bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check_dependence) const
 	{
 	iterator lca = tr.lowest_common_ancestor(i1, i2);
 
@@ -1463,14 +1610,14 @@ bool algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 	// with which we do not commute.
 
 	struct {
-		bool operator()(exptree& tr, iterator walk, iterator lca, iterator check_dependence) {
+	  bool operator()(const Kernel& kr, exptree& tr, iterator walk, iterator lca, iterator check_dependence) {
 		   do {
 				walk=exptree::parent(walk);
 				if(walk == lca) break;
-				const Derivative *der=properties::get<Derivative>(walk);
+				const Derivative *der=kr.properties.get<Derivative>(walk);
 				if(der) {
 					if(tr.is_valid(check_dependence) ) {
-						const DependsBase *dep = properties::get_composite<DependsBase>(check_dependence);
+						const DependsBase *dep = kr.properties.get_composite<DependsBase>(check_dependence);
 						if(dep) {
 							exptree deps=dep->dependencies(check_dependence);
 							sibling_iterator depobjs=deps.begin(deps.begin());
@@ -1502,14 +1649,14 @@ bool algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 		   }
 	} one_run;
 	
-	if(one_run(tr, i1, lca, check_dependence)) return true;
-	if(one_run(tr, i2, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i1, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i2, lca, check_dependence)) return true;
 
 	return false;
 	}
 
 
-bool algorithm::cleanup_anomalous_products(exptree& tr, exptree::iterator& it)
+bool Algorithm::cleanup_anomalous_products(exptree& tr, exptree::iterator& it)
 	{
 	if(*(it->name)=="\\prod") {
 		 if(tr.number_of_children(it)==0) {

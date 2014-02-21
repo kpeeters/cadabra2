@@ -26,16 +26,6 @@
 #include <typeinfo>
 #include <iostream>
 
-Properties::registered_property_map_t::~registered_property_map_t()
-	{
-	Properties::clear();
-// 	internal_property_map_t::iterator it=store.begin();
-//	while(it!=store.end()) {
-//		delete (*it).second;
-//		++it;
-//		}
-	}
-
 pattern::pattern()
 	{
 	}
@@ -426,7 +416,7 @@ void Properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 	}
 
 
-int Properties::serial_number(const property_base *listprop, const pattern *pat)
+int Properties::serial_number(const property_base *listprop, const pattern *pat) const
 	{
 	int serialnum=0;
 
