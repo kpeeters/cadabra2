@@ -22,41 +22,30 @@
 
 #include "Stopwatch.hh"
 #include "Storage.hh"
+#include "Compare.hh"
 #include "Props.hh"
 #include "Exceptions.hh"
+#include "Kernel.hh"
 
 #include <map>
 #include <fstream>
 
-extern stopwatch      globaltime;
+// Base class for all algorithms, containing generic routines and in
+// particular the logic for index classification.
 
-/// Base class for objects which represent algorithms. 
-
-class active_node {
+class Algorithm {
 	public:
+		// Initialise the algorithm with a reference to the expression tree;
+		// does not do anything yet.
+		Algorithm(Kernel&, exptree&);
+
+		virtual ~Algorithm();
+
 		typedef exptree::iterator            iterator;
 		typedef exptree::post_order_iterator post_order_iterator;
 		typedef exptree::sibling_iterator    sibling_iterator;
 
-		active_node(exptree&, iterator);
-		virtual ~active_node() {};
-
 		bool interrupted=false;
-	protected:
-		// Return the number of elements in the first range for which an identical element
-		// is present in the second range.
-		template<class BinaryPredicate>
-		unsigned int intersection_number(sibling_iterator, sibling_iterator, 
-													sibling_iterator, sibling_iterator, BinaryPredicate) const;
-};
-
-/// Base class for all algorithms, containing generic routines and in
-/// particular the logic for index classification.
-
-class algorithm : public active_node {
-	public:
-		algorithm(exptree&, iterator);
-		virtual ~algorithm();
 
 		enum result_t {
 			l_no_action,
@@ -105,12 +94,49 @@ class algorithm : public active_node {
 		bool      check_consistency(iterator) const;
 		bool      check_index_consistency(iterator) const;
 
-		static stopwatch index_sw;
-		static stopwatch get_dummy_sw;
-
 		void report_progress(const std::string&, int todo, int done, int count=2);
-		stopwatch report_progress_stopwatch;
+
+		mutable stopwatch index_sw;
+		mutable stopwatch get_dummy_sw;
+		mutable stopwatch report_progress_stopwatch;
+
+		/// An iterator which iterates over indices even if they are at lower levels, 
+		/// i.e. taking into account the "Inherit" property of nodes. Needs access
+		/// to the Kernel in order to lookup properties of objects.
+		class index_iterator : public exptree::iterator_base {
+			public:
+				index_iterator(const Kernel&);
+				index_iterator(const index_iterator&);
+
+				static index_iterator create(const Kernel&, const iterator_base&);
+
+				bool    operator==(const index_iterator&) const;
+				bool    operator!=(const index_iterator&) const;
+				index_iterator&  operator++();
+				index_iterator   operator++(int);
+				index_iterator&  operator+=(unsigned int);
+
+				iterator halt, walk, roof;
+			private:
+				const Kernel& kernel;
+
+				bool is_index(iterator) const;
+		};
+
+		index_iterator begin_index(iterator it) const;
+		index_iterator end_index(iterator it) const;
+
+		// The number of indices of a node, taking into account IndexInherit-ance
+		unsigned int number_of_indices(iterator it);
+		
+		// The number of indices of a node, counting only the direct ones (i.e. not those
+		// inherited from child nodes).
+		unsigned int number_of_direct_indices(iterator it) const;
+
 	protected:
+		Kernel   kernel;
+		exptree& tr;
+
 		unsigned int last_used_equation_number; // FIXME: this is a hack, just to see this in 'eqn'.
 
 		std::vector<std::pair<sibling_iterator, sibling_iterator> > marks;
@@ -159,6 +185,12 @@ class algorithm : public active_node {
       // in the case of sums. 
 		// This never changes the tree structure, only the distribution of multipliers.
 		void     pushup_multiplier(iterator);
+
+		// Return the number of elements in the first range for which an identical element
+		// is present in the second range.
+		template<class BinaryPredicate>
+		unsigned int intersection_number(sibling_iterator, sibling_iterator, 
+													sibling_iterator, sibling_iterator, BinaryPredicate) const;
 
 		// Turn a node into a '1' or '0' node.
 		void     node_zero(iterator);
@@ -217,17 +249,17 @@ class algorithm : public active_node {
 
 
 template<class T>
-std::auto_ptr<algorithm> create(exptree& tr, exptree::iterator it)
+std::auto_ptr<Algorithm> create(exptree& tr, exptree::iterator it)
 	{
-	return std::auto_ptr<algorithm>(new T(tr, it));
+	return std::auto_ptr<Algorithm>(new T(tr, it));
 	}
 
 /// Determine the number of elements in the first range which also occur in the
 /// second range.
 template<class BinaryPredicate>
-unsigned int active_node::intersection_number(sibling_iterator from1, sibling_iterator to1,
-															 sibling_iterator from2, sibling_iterator to2,
-															 BinaryPredicate fun) const
+unsigned int Algorithm::intersection_number(sibling_iterator from1, sibling_iterator to1,
+														  sibling_iterator from2, sibling_iterator to2,
+														  BinaryPredicate fun) const
 	{
 	unsigned int ret=0;
 	sibling_iterator it1=from1;

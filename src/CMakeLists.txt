@@ -37,6 +37,8 @@ set(LOCAL_SRC_FILES
   Parser.cc
   PreProcessor.cc
   Storage.cc
+  Compare.cc
+  Kernel.cc
   Props.cc
   CoreProps.cc
   Numerical.cc
