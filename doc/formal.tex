@@ -60,6 +60,23 @@ whenever necessary, automatically.
 
 \item Calling algorithms from within C++. This should look as much as possible
 as the Python version.
+
+\item Making parameterised substitution rules, like 'replace riemann with metric' 
+which is parameterised over the name of the metric.
+\begin{lstlisting}
+riemann_to_metric := R_{m n p q} -> \partial_{m n}{\1_{p q}} + ...
+riemann_to_metric := R_{m n p q} -> \partial_{m n}{\g_{p q}} + ...
+riemann_to_metric := R_{m n p q} -> \partial_{m n}{\{g}_{p q}} + ...
+\end{lstlisting}
+This would then actually just be parameterised expressions, and you could do
+\begin{lstlisting}
+a := \{var}_{m n}
+b := @(a <- g) + @(a <- h)
+b := @(a(g)) + @(a(h))
+\end{lstlisting}
+
+\item Resolve the issue of: we want to assign properties to patterns, but those patterns can 
+depend on properties.
 \end{itemize}
 
 

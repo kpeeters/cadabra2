@@ -85,7 +85,7 @@ class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 		bool is_unsimplified_rational() const;
 		bool is_integer() const;
 		bool is_unsimplified_integer() const;
-		bool is_index() const;            // _ or ^ parent_rel
+		bool is_index() const;            // _ or ^ parent_rel (does not query properties)
 		bool is_quoted_string() const;
 		bool is_command() const;
 		bool is_inert_command() const;
