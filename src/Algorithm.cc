@@ -137,7 +137,7 @@ bool Algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 	int worked=0;
 	int failed=0;
 
-	long total_number_of_nodes=0;
+//	long total_number_of_nodes=0;
 	long processed_number_of_nodes=0;
 
 	do { // loop which keeps iterating until the expression no longer changes
@@ -148,7 +148,7 @@ bool Algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 			end=tr.end();
 			}
 		else {
-			total_number_of_nodes=tr.size(cit);
+//			total_number_of_nodes=tr.size(cit);
 			wit=cit;
 			end=wit;
 			wit.descend_all();
@@ -681,17 +681,27 @@ Algorithm::index_iterator& Algorithm::index_iterator::operator++()
 	return *this;
 	}
 
+Algorithm::index_iterator Algorithm::index_iterator::begin(const Kernel& kernel, const iterator_base& it) 
+	{
+	return index_iterator::create(kernel,it);
+	}
+
+Algorithm::index_iterator Algorithm::index_iterator::end(const Kernel& kernel, const iterator_base& it) 
+	{
+	index_iterator tmp=create(kernel, it);
+	tmp.node=0;
+
+	return tmp;
+	}
+
 Algorithm::index_iterator Algorithm::begin_index(iterator it) const
 	{
-	return index_iterator::create(kernel, it);
+	return index_iterator::begin(kernel, it);
 	}
 
 Algorithm::index_iterator Algorithm::end_index(iterator it) const
 	{
-	index_iterator tmp=index_iterator::create(kernel, it);
-	tmp.node=0;
-
-	return tmp;
+	return index_iterator::end(kernel, it);
 	}
 
 
@@ -710,7 +720,7 @@ bool Algorithm::check_consistency(iterator it) const
 	w1.start();
 //	debugout << "checking consistency ... " << std::flush;
 	assert(*it->name=="\\expression");
-	iterator entry=it;
+//	iterator entry=it;
 	iterator end=it;
 	end.skip_children();
 	++end;
@@ -865,7 +875,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			tr.replace_index((*it).second, relabel.begin());
 //			(*it).second->name=relabel;
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal((*it).first,the_key, 1, true, -2, true));
+			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel, (*it).first,the_key, 1, true, -2, true));
 		}
 								 
 	// Catch triple indices (two cases: dummy pair in replacement, free index elsewhere and 
@@ -891,7 +901,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			tr.replace_index((*it).second, relabel.begin());
 //			(*it).second->name=relabel;
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal((*it).first,the_key, 1, true, -2, true));
+			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	must_be_empty.clear();
@@ -913,7 +923,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		do {
 			tr.replace_index((*it).second, relabel.begin());
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal((*it).first,the_key, 1, true, -2, true));
+			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	return true;
@@ -1041,7 +1051,7 @@ void Algorithm::print_classify_indices(iterator st) const
 	index_map_t::iterator prev=ind_free.end();
 //	txtout << "free indices: " << std::endl;
 	while(it!=ind_free.end()) {
-		if(prev==ind_free.end() || tree_exact_equal((*it).first,(*prev).first,1,true,-2,true)==false)
+		if(prev==ind_free.end() || tree_exact_equal(&kernel, (*it).first,(*prev).first,1,true,-2,true)==false)
 //			txtout << *(*it).first.begin()->name << " (" << ind_free.count((*it).first) << ") ";
 		prev=it;
 		++it;
@@ -1051,7 +1061,7 @@ void Algorithm::print_classify_indices(iterator st) const
 	prev=ind_dummy.end();
 //	txtout << "dummy indices: ";
 	while(it!=ind_dummy.end()) {
-		if(prev==ind_dummy.end() || tree_exact_equal((*it).first,(*prev).first,1,true,-2,true)==false)
+		if(prev==ind_dummy.end() || tree_exact_equal(&kernel, (*it).first,(*prev).first,1,true,-2,true)==false)
 //			txtout << *(*it).first.begin()->name << " (" << ind_dummy.count((*it).first) << ") ";
 		prev=it;
 		++it;
@@ -1112,7 +1122,7 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 			bool move_this_one=false;
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
-				if(tree_exact_equal((*it1).first,(*it2).first,1,true,-2,true)) {
+				if(tree_exact_equal(&kernel, (*it1).first,(*it2).first,1,true,-2,true)) {
 					target.insert((*it2));
 					if(move_out) {
 						index_map_t::iterator nxt=it2;
@@ -1135,7 +1145,7 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 				}
 			else ++it1;
 			// skip all indices in two with the same name
-			while(it1!=one.end() && tree_exact_equal((*it1).first,the_key,1,true,-2,true)) {
+			while(it1!=one.end() && tree_exact_equal(&kernel, (*it1).first,the_key,1,true,-2,true)) {
 				if(move_this_one && move_out) {
 					index_map_t::iterator nxt=it1;
 					++nxt;
@@ -1630,7 +1640,7 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 									sibling_iterator indit=tr.begin(walk);
 									while(indit!=tr.end(walk)) {
 										if(indit->is_index()) {
-											if(subtree_exact_equal(indit, depobjs))
+											if(subtree_exact_equal(&kr, indit, depobjs))
 												return true;
 											}
 										++indit;

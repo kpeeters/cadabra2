@@ -24,7 +24,7 @@ find_package(GMPXX REQUIRED)
 find_package(PCRE REQUIRED)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  add_definitions("-Wall")
+  add_definitions("-Wall -Wno-unused-but-set-variable")
 endif()
 
 set(LOCAL_SRC_FILES 

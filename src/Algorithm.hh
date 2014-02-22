@@ -110,6 +110,9 @@ class Algorithm {
 
 				static index_iterator create(const Kernel&, const iterator_base&);
 
+				static index_iterator begin(const Kernel&, const iterator_base&);
+				static index_iterator end(const Kernel&, const iterator_base&);
+
 				bool    operator==(const index_iterator&) const;
 				bool    operator!=(const index_iterator&) const;
 				index_iterator&  operator++();
@@ -198,7 +201,7 @@ class Algorithm {
 		void     node_integer(iterator, int);
 
 		/// A map from a pattern to the position where it occurs in the tree. 
-		typedef std::multimap<exptree, exptree::iterator, tree_exact_less_no_wildcards_mod_prel_obj> index_map_t;
+		typedef std::multimap<exptree, exptree::iterator, tree_equal_for_indexmap_obj> index_map_t;
 		/// A map from the position of each index to the sequential index.
 		typedef std::map<exptree::iterator, int, exptree::iterator_base_less>    index_position_map_t;
 

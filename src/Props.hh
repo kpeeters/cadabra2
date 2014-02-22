@@ -361,12 +361,12 @@ const T* Properties::get_composite(exptree::iterator it1, exptree::iterator it2,
 	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit1=props.equal_range(it1->name);
 	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit2=props.equal_range(it2->name);
 
-	property_map_t::iterator walk1=pit1.first;
+	property_map_t::const_iterator walk1=pit1.first;
 	while(walk1!=pit1.second) {
 		if((*walk1).second.first->match(it1, ignore_parent_rel)) { // match for object 1 found
 			ret1=dynamic_cast<const T *>((*walk1).second.second);
 			if(ret1) { // property of the right type found for object 1
-				property_map_t::iterator walk2=pit2.first;
+				property_map_t::const_iterator walk2=pit2.first;
 				while(walk2!=pit2.second) {
 					if((*walk2).second.first->match(it2, ignore_parent_rel)) { // match for object 1 found
 						ret2=dynamic_cast<const T *>((*walk2).second.second);
