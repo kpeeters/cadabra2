@@ -3,9 +3,9 @@
 
 #include "Algorithm.hh"
 
-class flatten_product : public algorithm {
+class flatten_product : public Algorithm {
 	public:
-		flatten_product(exptree&, iterator);
+		flatten_product(Kernel&, exptree&);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

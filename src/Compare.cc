@@ -7,7 +7,7 @@
 //#include "properties/Indices.hh"
 //#include "properties/Coordinate.hh"
 
-int subtree_compare(const Kernel *kernel, 
+int subtree_compare(const Properties *properties, 
 						  exptree::iterator one, exptree::iterator two, 
 						  int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards) 
 	{
@@ -35,11 +35,11 @@ int subtree_compare(const Kernel *kernel,
 	if(one->is_index() && two->is_index() && one->is_rational() && two->is_rational()) mult=2;
 	Indices::position_t position_type=Indices::free;
 	if(one->is_index() && two->is_index()) {
-		if(checksets && kernel!=0) {
+		if(checksets && properties!=0) {
 			// Strip off the parent_rel because Indices properties are declared without
 			// those.
-			const Indices *ind1=kernel->properties.get<Indices>(one, true);
-			const Indices *ind2=kernel->properties.get<Indices>(two, true);
+			const Indices *ind1=properties->get<Indices>(one, true);
+			const Indices *ind2=properties->get<Indices>(two, true);
 			if(ind1!=ind2) { 
 				// It may still be that one set is a subset of the other, i.e that the
 				// parent argument of Indices has been used.
@@ -114,7 +114,7 @@ int subtree_compare(const Kernel *kernel,
 	else if(compare_multiplier>0)  --compare_multiplier;
 
 	while(sib1!=one.end()) {
-		int ret=subtree_compare(kernel, sib1,sib2, mod_prel, checksets, compare_multiplier, literal_wildcards);
+		int ret=subtree_compare(properties, sib1,sib2, mod_prel, checksets, compare_multiplier, literal_wildcards);
 		if(abs(ret)>1)
 			return ret/abs(ret)*mult;
 		if(ret!=0 && remember_ret==0) 
@@ -125,117 +125,117 @@ int subtree_compare(const Kernel *kernel,
 	return remember_ret;
 	}
 
-bool tree_less(const Kernel* kernel, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier)
+bool tree_less(const Properties* properties, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier)
 	{
-	return subtree_less(kernel, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier);
+	return subtree_less(properties, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier);
 	}
 
-bool tree_equal(const Kernel* kernel, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier)
+bool tree_equal(const Properties* properties, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier)
 	{
-	return subtree_equal(kernel, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier);
+	return subtree_equal(properties, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier);
 	}
 
-bool tree_exact_less(const Kernel* kernel, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
+bool tree_exact_less(const Properties* properties, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 	{
-	return subtree_exact_less(kernel, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier, literal_wildcards);
+	return subtree_exact_less(properties, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier, literal_wildcards);
 	}
 
-bool tree_exact_equal(const Kernel* kernel, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
+bool tree_exact_equal(const Properties* properties, const exptree& one, const exptree& two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 	{
-	return subtree_exact_equal(kernel, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier, literal_wildcards);
+	return subtree_exact_equal(properties, one.begin(), two.begin(), mod_prel, checksets, compare_multiplier, literal_wildcards);
 	}
 
-bool subtree_less(const Kernel* kernel, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier)
+bool subtree_less(const Properties* properties, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier)
 	{
-	int cmp=subtree_compare(kernel, one, two, mod_prel, checksets, compare_multiplier);
+	int cmp=subtree_compare(properties, one, two, mod_prel, checksets, compare_multiplier);
 	if(cmp==2) return true;
 	return false;
 	}
 
-bool subtree_equal(const Kernel* kernel, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier)
+bool subtree_equal(const Properties* properties, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier)
 	{
-	int cmp=subtree_compare(kernel, one, two, mod_prel, checksets, compare_multiplier);
+	int cmp=subtree_compare(properties, one, two, mod_prel, checksets, compare_multiplier);
 	if(abs(cmp)<=1) return true;
 	return false;
 	}
 
-bool subtree_exact_less(const Kernel* kernel, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
+bool subtree_exact_less(const Properties* properties, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 	{
-	int cmp=subtree_compare(kernel, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
+	int cmp=subtree_compare(properties, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
 	if(cmp>0) return true;
 	return false;
 	}
 
-bool subtree_exact_equal(const Kernel* kernel, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
+bool subtree_exact_equal(const Properties* properties, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 	{
-	int cmp=subtree_compare(kernel, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
+	int cmp=subtree_compare(properties, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
 	if(cmp==0) return true;
 	return false;
 	}
 
-tree_less_obj::tree_less_obj(const Kernel* k)
-   : kernel(k)
+tree_less_obj::tree_less_obj(const Properties* k)
+   : properties(k)
 	{
 	}
 
 bool tree_less_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_less(kernel, one, two);
+	return tree_less(properties, one, two);
 	}
 
-tree_less_modprel_obj::tree_less_modprel_obj(const Kernel* k)
-   : kernel(k)
+tree_less_modprel_obj::tree_less_modprel_obj(const Properties* k)
+   : properties(k)
 	{
 	}
 
 bool tree_less_modprel_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_less(kernel, one, two, 0);
+	return tree_less(properties, one, two, 0);
 	}
 
-tree_equal_obj::tree_equal_obj(const Kernel* k)
-   : kernel(k)
+tree_equal_obj::tree_equal_obj(const Properties* k)
+   : properties(k)
 	{
 	}
 
 bool tree_equal_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_equal(kernel, one, two);
+	return tree_equal(properties, one, two);
 	}
 
 bool tree_exact_less_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_exact_less(kernel, one, two);
+	return tree_exact_less(properties, one, two);
 	}
 
 tree_exact_less_no_wildcards_obj::tree_exact_less_no_wildcards_obj()
 	{
-	kernel=0;
+	properties=0;
 	}
 
 bool tree_exact_less_no_wildcards_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_exact_less(kernel, one, two, -2, true, 0, true);
+	return tree_exact_less(properties, one, two, -2, true, 0, true);
 	}
 
 bool tree_exact_less_no_wildcards_mod_prel_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_exact_less(kernel, one, two, 0, true, -2, true);
+	return tree_exact_less(properties, one, two, 0, true, -2, true);
 	}
 
 bool tree_exact_equal_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_exact_equal(kernel, one, two);
+	return tree_exact_equal(properties, one, two);
 	}
 
 bool tree_exact_less_mod_prel_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_exact_less(kernel, one, two, 0, true, -2, true);
+	return tree_exact_less(properties, one, two, 0, true, -2, true);
 	}
 
 bool tree_exact_equal_mod_prel_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_exact_equal(kernel, one, two, 0, true, -2, true);
+	return tree_exact_equal(properties, one, two, 0, true, -2, true);
 	}
 
 bool tree_equal_for_indexmap_obj::operator()(const exptree& one, const exptree& two) const
@@ -245,7 +245,7 @@ bool tree_equal_for_indexmap_obj::operator()(const exptree& one, const exptree& 
 
 //bool operator==(const exptree& first, const exptree& second)
 //	{
-//	return tree_exact_equal(kernel, first, second, 0, true, -2, true);
+//	return tree_exact_equal(properties, first, second, 0, true, -2, true);
 //	}
 //
 
@@ -291,8 +291,8 @@ exptree_comparator::match_t exptree_comparator::equal_subtree(exptree::iterator 
 	return subtree_match;
 	}
 
-exptree_comparator::exptree_comparator(const Kernel& k)
-	: kernel(k)
+exptree_comparator::exptree_comparator(const Properties& k)
+	: properties(k)
 	{
 	}
 
@@ -329,7 +329,7 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 	else if(one->is_object_wildcard())
 		objectpattern=true;
 	else if(is_index && one->is_integer()==false) {
-		const Coordinate *cdn1=kernel.properties.get<Coordinate>(one, true);
+		const Coordinate *cdn1=properties.get<Coordinate>(one, true);
 		if(cdn1==0)
 			implicit_pattern=true;
 		}
@@ -365,11 +365,11 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 			int cmp;
 
 			if(tested_full) 
-				cmp=subtree_compare(&kernel, (*loc).second.begin(), two, -2 /* KP: do not switch this to -2 (kk.cdb fails) */); 
+				cmp=subtree_compare(&properties, (*loc).second.begin(), two, -2 /* KP: do not switch this to -2 (kk.cdb fails) */); 
 			else {
 				exptree tmp2(two);
 				tmp2.erase_children(tmp2.begin());
-				cmp=subtree_compare(&kernel, (*loc).second.begin(), tmp2.begin(), -2 /* KP: see above */); 
+				cmp=subtree_compare(&properties, (*loc).second.begin(), tmp2.begin(), -2 /* KP: see above */); 
 				}
 //			std::cerr << " pattern " << *two->name
 //						 << " should be " << *((*loc).second.begin()->name)  
@@ -386,8 +386,8 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 
 //			std::cerr << "index check " << *one->name << " " << *two->name << std::endl;
 
-			const Indices *t1=kernel.properties.get<Indices>(one, true);
-			const Indices *t2=kernel.properties.get<Indices>(two, true);
+			const Indices *t1=properties.get<Indices>(one, true);
+			const Indices *t2=properties.get<Indices>(two, true);
 //			std::cerr << t1 << " " << t2 << std::endl;
 			if( (t1 || t2) && implicit_pattern ) {
 				if(t1 && t2) {
@@ -560,7 +560,7 @@ int exptree_comparator::can_move_adjacent(exptree::iterator prod,
 	int sign=1;
 	if(!onefirst) {
 		std::swap(one,two);
-		int es=subtree_compare(&kernel, one,two);
+		int es=subtree_compare(&properties, one,two);
 		sign*=can_swap(one,two,es);
 //		txtout << "swapping one and two: " << sign << std::endl;
 		}
@@ -571,7 +571,7 @@ int exptree_comparator::can_move_adjacent(exptree::iterator prod,
 		++probe;
 		while(probe!=two) {
 			assert(probe!=prod.end());
-			int es=subtree_compare(&kernel, one,probe);
+			int es=subtree_compare(&properties, one,probe);
 			sign*=can_swap(one,probe,es);
 			if(sign==0) break;
 			++probe;
@@ -592,8 +592,8 @@ bool exptree_comparator::should_swap(exptree::iterator obj, int subtree_comparis
 
 	// Find a SortOrder property which contains both one and two.
 	int num1, num2;
-	const SortOrder *so1=kernel.properties.get_composite<SortOrder>(one,num1);
-	const SortOrder *so2=kernel.properties.get_composite<SortOrder>(two,num2);
+	const SortOrder *so1=properties.get_composite<SortOrder>(one,num1);
+	const SortOrder *so2=properties.get_composite<SortOrder>(two,num2);
 
 //	std::cerr << so1 << " " << so2 << " " << subtree_comparison << std::endl;
 
@@ -626,14 +626,14 @@ int exptree_comparator::can_swap_prod_obj(exptree::iterator prod, exptree::itera
 	int sign=1;
 	exptree::sibling_iterator sib=prod.begin();
 	while(sib!=prod.end()) {
-		const Indices *ind1=kernel.properties.get_composite<Indices>(sib, true);
-		const Indices *ind2=kernel.properties.get_composite<Indices>(obj, true);
+		const Indices *ind1=properties.get_composite<Indices>(sib, true);
+		const Indices *ind2=properties.get_composite<Indices>(obj, true);
 		if(! (ind1!=0 && ind2!=0) ) { // If both objects are actually real indices, 
 			                           // then we do not include their commutativity property
 			                           // in the sign. This is because the routines that use
                                     // can_swap_prod_obj all test for such index-index 
                                     // swaps separately.
-			int es=subtree_compare(&kernel, sib, obj, 0);
+			int es=subtree_compare(&properties, sib, obj, 0);
 //			std::cout << "  " << *sib->name << " " << *obj->name << " " << es << std::endl;
 			sign*=can_swap(sib, obj, es, ignore_implicit_indices);
 			if(sign==0) break;
@@ -666,7 +666,7 @@ int exptree_comparator::can_swap_sum_obj(exptree::iterator sum, exptree::iterato
 	int sofar=2;
 	exptree::sibling_iterator sib=sum.begin();
 	while(sib!=sum.end()) {
-		int es=subtree_compare(&kernel, sib, obj);
+		int es=subtree_compare(&properties, sib, obj);
 		int thissign=can_swap(sib, obj, es, ignore_implicit_indices);
 		if(sofar==2) sofar=thissign;
 		else if(thissign!=sofar) {
@@ -685,7 +685,7 @@ int exptree_comparator::can_swap_prod_sum(exptree::iterator prod, exptree::itera
 	int sign=1;
 	exptree::sibling_iterator sib=prod.begin();
 	while(sib!=prod.end()) {
-//		const Indices *ind=kernel.properties.get_composite<Indices>(sib);
+//		const Indices *ind=kernel.properties->get_composite<Indices>(sib);
 //		if(ind==0) {
 		sign*=can_swap_sum_obj(sum, sib, ignore_implicit_indices);
 			if(sign==0) break;
@@ -716,16 +716,16 @@ int exptree_comparator::can_swap_ilist_ilist(exptree::iterator obj1, exptree::it
 	{
 	int sign=1;
 
-	Algorithm::index_iterator it1=Algorithm::index_iterator::begin(kernel, obj1);
-	while(it1!=Algorithm::index_iterator::end(kernel, obj1)) {
-		Algorithm::index_iterator it2=Algorithm::index_iterator::begin(kernel, obj2);
-		while(it2!=Algorithm::index_iterator::end(kernel, obj2)) {
+	Algorithm::index_iterator it1=Algorithm::index_iterator::begin(properties, obj1);
+	while(it1!=Algorithm::index_iterator::end(properties, obj1)) {
+		Algorithm::index_iterator it2=Algorithm::index_iterator::begin(properties, obj2);
+		while(it2!=Algorithm::index_iterator::end(properties, obj2)) {
 			// Only deal with real indices here, i.e. those carrying an Indices property.
-			const Indices *ind1=kernel.properties.get_composite<Indices>(it1, true);
-			const Indices *ind2=kernel.properties.get_composite<Indices>(it2, true);
+			const Indices *ind1=properties.get_composite<Indices>(it1, true);
+			const Indices *ind2=properties.get_composite<Indices>(it2, true);
 			if(ind1!=0 && ind2!=0) {
-				const CommutingBehaviour *com1 =kernel.properties.get_composite<CommutingBehaviour>(it1, true);
-				const CommutingBehaviour *com2 =kernel.properties.get_composite<CommutingBehaviour>(it2, true);
+				const CommutingBehaviour *com1 =properties.get_composite<CommutingBehaviour>(it1, true);
+				const CommutingBehaviour *com2 =properties.get_composite<CommutingBehaviour>(it2, true);
 				
 				if(com1!=0  &&  com1 == com2) 
 					sign *= com1->sign();
@@ -756,21 +756,21 @@ int exptree_comparator::can_swap(exptree::iterator one, exptree::iterator two, i
 	{
 //	std::cout << "can_swap " << *one->name << " " << *two->name << ignore_implicit_indices << std::endl;
 
-	const ImplicitIndex *ii1 = kernel.properties.get_composite<ImplicitIndex>(one);
-	const ImplicitIndex *ii2 = kernel.properties.get_composite<ImplicitIndex>(two);
+	const ImplicitIndex *ii1 = properties.get_composite<ImplicitIndex>(one);
+	const ImplicitIndex *ii2 = properties.get_composite<ImplicitIndex>(two);
 
 	// When both objects carry an implicit index but the index lines are not connected,
 	// we should not be using explicit commutation rules, as this would mess up the
 	// index lines and make the expression meaningless.
 	// FIXME: this would ideally make use of index and conjugate index lines.
 
-//	const DiracBar *db2 = kernel.properties.get_composite<DiracBar>(two);
+//	const DiracBar *db2 = kernel.properties->get_composite<DiracBar>(two);
 	if(! (ii1 && ii2 /* && db2 */) ) {
 
 		// First of all, check whether there is an explicit declaration for the commutativity 
 		// of these two symbols.
 //		std::cout << *one->name << " explicit " << *two->name << std::endl;
-		const CommutingBehaviour *com = kernel.properties.get_composite<CommutingBehaviour>(one, two, true);
+		const CommutingBehaviour *com = properties.get_composite<CommutingBehaviour>(one, two, true);
 		
 		if(com) {
 //			std::cout << "explicit " << com->sign() << std::endl;
@@ -793,8 +793,8 @@ int exptree_comparator::can_swap(exptree::iterator one, exptree::iterator two, i
 		}
 
 	// Do we need to use Self* properties?
-	const SelfCommutingBehaviour *sc1 =kernel.properties.get_composite<SelfCommutingBehaviour>(one, true);
-	const SelfCommutingBehaviour *sc2 =kernel.properties.get_composite<SelfCommutingBehaviour>(two, true);
+	const SelfCommutingBehaviour *sc1 =properties.get_composite<SelfCommutingBehaviour>(one, true);
+	const SelfCommutingBehaviour *sc2 =properties.get_composite<SelfCommutingBehaviour>(two, true);
 	if( (sc1!=0 && sc1==sc2) ) 
 		return sc1->sign();
 
@@ -810,10 +810,10 @@ int exptree_comparator::can_swap(exptree::iterator one, exptree::iterator two, i
 	// take into account all commutativity properties of explict with implicit indices,
 	// as well as hard-specified commutativity of factors.
 
-	const CommutingAsProduct *comap1 = kernel.properties.get_composite<CommutingAsProduct>(one);
-	const CommutingAsProduct *comap2 = kernel.properties.get_composite<CommutingAsProduct>(two);
-	const CommutingAsSum     *comas1 = kernel.properties.get_composite<CommutingAsSum>(one);
-	const CommutingAsSum     *comas2 = kernel.properties.get_composite<CommutingAsSum>(two);
+	const CommutingAsProduct *comap1 = properties.get_composite<CommutingAsProduct>(one);
+	const CommutingAsProduct *comap2 = properties.get_composite<CommutingAsProduct>(two);
+	const CommutingAsSum     *comas1 = properties.get_composite<CommutingAsSum>(one);
+	const CommutingAsSum     *comas2 = properties.get_composite<CommutingAsSum>(two);
 	
 	if(comap1 && comap2) return tmpsign*can_swap_prod_prod(one,two,ignore_implicit_indices);
 	if(comap1 && comas2) return tmpsign*can_swap_prod_sum(one,two,ignore_implicit_indices);
@@ -842,7 +842,7 @@ bool exptree_comparator::satisfies_conditions(exptree::iterator conditions, std:
 			if(replacement_map.find(exptree(lhs))==replacement_map.end() ||
 				replacement_map.find(exptree(rhs))==replacement_map.end()) return true;
 //			std::cerr << *lhs->name  << " !=?? " << *rhs->name << std::endl;
-			if(tree_exact_equal(&kernel, replacement_map[exptree(lhs)], replacement_map[exptree(rhs)])) {
+			if(tree_exact_equal(&properties, replacement_map[exptree(lhs)], replacement_map[exptree(rhs)])) {
 				return false;
 				}
 			}
@@ -853,7 +853,7 @@ bool exptree_comparator::satisfies_conditions(exptree::iterator conditions, std:
 				it2=it;
 				++it2;
 				while(it2!=replacement_map.end()) {
-					if(tree_exact_equal(&kernel, it->second, it2->second)) {
+					if(tree_exact_equal(&properties, it->second, it2->second)) {
 						++countpairs;
 						break;
 						}
@@ -883,8 +883,8 @@ bool exptree_comparator::satisfies_conditions(exptree::iterator conditions, std:
 //			exptree::sibling_iterator lhs=cond.begin();
 //			exptree::sibling_iterator rhs=lhs;
 //			++rhs;
-//			Properties::registered_property_map_t::iterator pit=kernel.properties.store.find(*rhs->name);
-//			if(pit==kernel.properties.store.end()) {
+//			Properties::registered_property_map_t::iterator pit=properties->store.find(*rhs->name);
+//			if(pit==properties->store.end()) {
 //				std::ostringstream str;
 //				str << "Property \"" << *rhs->name << "\" not registered." << std::endl;
 //				error=str.str();
@@ -905,9 +905,9 @@ bool exptree_comparator::satisfies_conditions(exptree::iterator conditions, std:
 //			
 //			bool ret=false;
 //			if(subfind==subtree_replacement_map.end()) 
-//				 ret=kernel.properties.has(aprop, (*patfind).second.begin());
+//				 ret=properties->has(aprop, (*patfind).second.begin());
 //			else
-//				 ret=kernel.properties.has(aprop, (*subfind).second);
+//				 ret=properties->has(aprop, (*subfind).second);
 //			delete aprop;
 //			return ret;
 //			}
@@ -921,26 +921,26 @@ bool exptree_comparator::satisfies_conditions(exptree::iterator conditions, std:
 	return true;
 	}
 
-exptree_is_equivalent::exptree_is_equivalent(const Kernel& k)
-	: kernel(k)
+exptree_is_equivalent::exptree_is_equivalent(const Properties& k)
+	: properties(k)
 	{
 	}
 
 bool exptree_is_equivalent::operator()(const exptree& one, const exptree& two)
 	{
-	int ret=subtree_compare(&kernel, one.begin(), two.begin());
+	int ret=subtree_compare(&properties, one.begin(), two.begin());
 	if(ret==0) return true;
 	else       return false;
 	}
 
-exptree_is_less::exptree_is_less(const Kernel& k)
-	: kernel(k)
+exptree_is_less::exptree_is_less(const Properties& k)
+	: properties(k)
 	{
 	}
 
 bool exptree_is_less::operator()(const exptree& one, const exptree& two)
 	{
-	int ret=subtree_compare(&kernel, one.begin(), two.begin());
+	int ret=subtree_compare(&properties, one.begin(), two.begin());
 	if(ret < 0) return true;
 	else        return false;
 	}

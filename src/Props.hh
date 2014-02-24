@@ -28,18 +28,20 @@
 #include <list>
 #include "Storage.hh"
 
+class Properties; 
+
 class pattern { 
 	public:
 		pattern();
 		pattern(const exptree&);
 
-		bool match(const exptree::iterator&, bool ignore_parent_rel=false) const;
+		bool match(const Properties&, const exptree::iterator&, bool ignore_parent_rel=false) const;
 		bool children_wildcard() const;
 
 		exptree obj;
 };
 
-bool operator<(const pattern& one, const pattern& two);
+//bool operator<(const pattern& one, const pattern& two);
 //bool operator==(const pattern& one, const pattern& two);
 
 class keyval_t {
@@ -180,7 +182,7 @@ class Properties {
 
 		// Get the outermost node which has the given property attached, i.e. go down through
 		// all (if any) nodes which have just inherited the property.
-		template<class T> exptree::iterator head(exptree::iterator, bool ignore_parent_rel=false);
+		template<class T> exptree::iterator head(exptree::iterator, bool ignore_parent_rel=false) const;
 
 		// Search through pointers
 		bool has(const property_base *, exptree::iterator);
@@ -229,7 +231,7 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 			if(wildcards==(*walk).second.first->children_wildcard()) {
 //				std::cout << "searching " << *it->name << std::endl;
 //				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
-				if((*walk).second.first->match(it, ignore_parent_rel)) { // match found
+				if((*walk).second.first->match(*this, it, ignore_parent_rel)) { // match found
 //					std::cout << "found match" << std::endl;
 					ret=dynamic_cast<const T *>((*walk).second.second);
 					if(ret) { // found! determine serial number
@@ -302,10 +304,10 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, const s
 	// for wildcard patterns.
 	bool wildcards=false;
 	for(;;) {
-		property_map_t::iterator walk=pit.first;
+		property_map_t::const_iterator walk=pit.first;
 		while(walk!=pit.second) {
 			if(wildcards==(*walk).second.first->children_wildcard()) {
-				if((*walk).second.first->match(it)) { // match found
+				if((*walk).second.first->match(*this, it)) { // match found
 					ret=dynamic_cast<const T *>((*walk).second.second);
 					if(ret) { // found! determine serial number
 						if(ret->label!=label && ret->label!="all") 
@@ -363,12 +365,12 @@ const T* Properties::get_composite(exptree::iterator it1, exptree::iterator it2,
 
 	property_map_t::const_iterator walk1=pit1.first;
 	while(walk1!=pit1.second) {
-		if((*walk1).second.first->match(it1, ignore_parent_rel)) { // match for object 1 found
+		if((*walk1).second.first->match(*this, it1, ignore_parent_rel)) { // match for object 1 found
 			ret1=dynamic_cast<const T *>((*walk1).second.second);
 			if(ret1) { // property of the right type found for object 1
 				property_map_t::const_iterator walk2=pit2.first;
 				while(walk2!=pit2.second) {
-					if((*walk2).second.first->match(it2, ignore_parent_rel)) { // match for object 1 found
+					if((*walk2).second.first->match(*this, it2, ignore_parent_rel)) { // match for object 1 found
 						ret2=dynamic_cast<const T *>((*walk2).second.second);
 						if(ret2) { // property of the right type found for object 2
 							if(ret1==ret2) { 
@@ -437,7 +439,7 @@ const T* Properties::get() const
 	}
 
 template<class T>
-exptree::iterator Properties::head(exptree::iterator it, bool ignore_parent_rel)
+exptree::iterator Properties::head(exptree::iterator it, bool ignore_parent_rel) const
 	{
 	exptree::iterator dn=it;
 	for(;;) {

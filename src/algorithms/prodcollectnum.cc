@@ -1,8 +1,8 @@
 
 #include "algorithms/prodcollectnum.hh"
 
-prodcollectnum::prodcollectnum(exptree& tr, iterator it)
-	: algorithm(tr, it)
+prodcollectnum::prodcollectnum(Kernel& k, exptree& tr)
+	: Algorithm(k, tr)
 	{
 	}
 
@@ -18,7 +18,7 @@ bool prodcollectnum::can_apply(iterator it)
 	return false;
 	}
 
-algorithm::result_t prodcollectnum::apply(iterator& it)
+Algorithm::result_t prodcollectnum::apply(iterator& it)
 	{
 	assert(*it->name=="\\prod");
 	sibling_iterator facs=tr.begin(it);

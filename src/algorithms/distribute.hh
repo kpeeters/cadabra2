@@ -3,9 +3,9 @@
 
 #include "Algorithm.hh"
 
-class distribute : public algorithm {
+class distribute : public Algorithm {
 	public:
-		distribute(exptree&, iterator);
+		distribute(Kernel&, exptree&);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

@@ -22,11 +22,13 @@
 
 #include "Exchange.hh"
 #include "Numerical.hh"
+#include "Compare.hh"
+#include "Algorithm.hh"
 #include "properties/DiracBar.hh"
 
 // Find groups of identical tensors. 
 //
-int exchange::collect_identical_tensors(exptree& tr, exptree::iterator it,
+int exchange::collect_identical_tensors(const Properties& properties, exptree& tr, exptree::iterator it,
 													  std::vector<identical_tensors_t>& idts) 
 	{
 	assert(*it->name=="\\prod");
@@ -35,30 +37,30 @@ int exchange::collect_identical_tensors(exptree& tr, exptree::iterator it,
 	exptree::sibling_iterator sib=it.begin();
 	while(sib!=it.end()) {
 		unsigned int i=0;
-		if(exptree::number_of_indices(sib)==0) {
+		if(Algorithm::number_of_indices(properties, sib)==0) {
 			++sib;
 			continue;
 			}
-		if(properties::get_composite<GammaMatrix>(sib)) {
-			total_number_of_indices+=tr.number_of_indices(sib);
+		if(properties.get_composite<GammaMatrix>(sib)) {
+			total_number_of_indices+=Algorithm::number_of_indices(properties, sib);
 			++sib;
 			continue;
 			}
 		
 		// In case of spinors, the name may be hidden inside a Dirac bar.
 		exptree::sibling_iterator truetensor=sib;
-		const DiracBar *db=properties::get_composite<DiracBar>(truetensor);
+		const DiracBar *db=properties.get_composite<DiracBar>(truetensor);
 		if(db) 
 			truetensor=tr.begin(truetensor);
 
 		// Compare the current tensor with all other tensors encountered so far.
 		for(; i<idts.size(); ++i) {
 			exptree::sibling_iterator truetensor2=idts[i].tensors[0];
-			const DiracBar *db2=properties::get_composite<DiracBar>(truetensor2);
+			const DiracBar *db2=properties.get_composite<DiracBar>(truetensor2);
 			if(db2) 
 				truetensor2=tr.begin(truetensor2);
 			
-			if(subtree_equal(truetensor2, truetensor)) {
+			if(subtree_equal(&properties, truetensor2, truetensor)) {
 				// If this is a spinor, check that it's connected to the one already stored
 				// by a Gamma matrix, or that it is connected directly.
 				if(idts[i].spino) {
@@ -68,8 +70,8 @@ int exchange::collect_identical_tensors(exptree& tr, exptree::iterator it,
 					// skip objects without spinor line
 					do { 
 						++tmpit;
-						gmnxt=properties::get_composite<GammaMatrix>(tmpit);
-						spnxt=properties::get_composite<Spinor>(tmpit);
+						gmnxt=properties.get_composite<GammaMatrix>(tmpit);
+						spnxt=properties.get_composite<Spinor>(tmpit);
 						} while(gmnxt==0 && spnxt==0);
 					if(tmpit==sib) {
 //						txtout << "using fermi exchange" << std::endl;
@@ -78,12 +80,12 @@ int exchange::collect_identical_tensors(exptree& tr, exptree::iterator it,
 						}
 					if(gmnxt) {
 //						txtout << "gamma next " << std::endl;
-						int numind=exptree::number_of_indices(tmpit);
+						int numind=Algorithm::number_of_indices(properties, tmpit);
 						// skip objects without spinor line
 						do {
 							++tmpit;
-							gmnxt=properties::get_composite<GammaMatrix>(tmpit);
-							spnxt=properties::get_composite<Spinor>(tmpit);
+							gmnxt=properties.get_composite<GammaMatrix>(tmpit);
+							spnxt=properties.get_composite<Spinor>(tmpit);
 							} while(gmnxt==0 && spnxt==0);
 						if(tmpit==sib) { // yes, it's a proper Majorana spinor pair.
 //							txtout << "using fermi exchange with gamma " << numind << std::endl;
@@ -98,13 +100,13 @@ int exchange::collect_identical_tensors(exptree& tr, exptree::iterator it,
 			}
 		if(i==idts.size()) {
 			identical_tensors_t ngr;
-			ngr.comm=properties::get_composite<SelfCommutingBehaviour>(sib, true);
-			ngr.spino=properties::get_composite<Spinor>(sib);
-			ngr.tab=properties::get_composite<TableauBase>(sib);
-			ngr.traceless=properties::get_composite<Traceless>(sib);
-			ngr.gammatraceless=properties::get_composite<GammaTraceless>(sib);
+			ngr.comm=properties.get_composite<SelfCommutingBehaviour>(sib, true);
+			ngr.spino=properties.get_composite<Spinor>(sib);
+			ngr.tab=properties.get_composite<TableauBase>(sib);
+			ngr.traceless=properties.get_composite<Traceless>(sib);
+			ngr.gammatraceless=properties.get_composite<GammaTraceless>(sib);
 			ngr.extra_sign=0;
-			ngr.number_of_indices=exptree::number_of_indices(truetensor);
+			ngr.number_of_indices=Algorithm::number_of_indices(properties, truetensor);
 			ngr.tensors.push_back(sib);
 			ngr.seq_numbers_of_first_indices.push_back(total_number_of_indices);
 			total_number_of_indices+=ngr.number_of_indices;
@@ -122,10 +124,10 @@ int exchange::collect_identical_tensors(exptree& tr, exptree::iterator it,
 	}
 
 
-bool exchange::get_node_gs(exptree& tr, exptree::iterator it, std::vector<std::vector<int> >& gs)
+bool exchange::get_node_gs(const Properties& properties, exptree& tr, exptree::iterator it, std::vector<std::vector<int> >& gs)
 	{
 	std::vector<identical_tensors_t> idts;
-	int total_number_of_indices=collect_identical_tensors(tr, it, idts);
+	int total_number_of_indices=collect_identical_tensors(properties, tr, it, idts);
 	if(idts.size()==0) return true; // no indices, so nothing to permute
 
 	// Make a strong generating set for the permutation of identical tensors.

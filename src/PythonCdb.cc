@@ -2,11 +2,14 @@
 #include "PythonCdb.hh"
 #include "Parser.hh"
 #include "Exceptions.hh"
+#include "Kernel.hh"
 #include <boost/python/implicit.hpp>
 #include <sstream>
 
 #include "properties/Distributable.hh"
 #include "algorithms/distribute.hh"
+
+Kernel kernel;
 
 Ex::Ex(const Ex& other)
 	{
@@ -54,7 +57,7 @@ void Ex::append(std::string v)
 
 Ex *distribute_algo(Ex *ex, bool repeat)
 	{
-	distribute dst(ex->tree, ex->tree.begin());
+	distribute dst(kernel, ex->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
 	if(dst.can_apply(it)) {

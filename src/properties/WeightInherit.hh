@@ -3,6 +3,7 @@
 
 #include "CoreProps.hh"
 #include "Exceptions.hh"
+#include "Props.hh"
 
 class WeightInherit : virtual public WeightBase {
 	public:
@@ -14,7 +15,7 @@ class WeightInherit : virtual public WeightBase {
 		};
 
 		virtual bool          parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
-		virtual multiplier_t  value(exptree::iterator, const std::string& forcedlabel) const;
+		virtual multiplier_t  value(const Properties&, exptree::iterator, const std::string& forcedlabel) const;
 		virtual std::string   unnamed_argument() const { return "type"; };
 		virtual std::string   name() const;
 		
