@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "Props.hh"
 
 class IndexInherit : virtual public property {
 	public: 

@@ -21,7 +21,6 @@
 #include <map>
 
 #include "Exchange.hh"
-#include "Numerical.hh"
 #include "Compare.hh"
 #include "Algorithm.hh"
 #include "properties/DiracBar.hh"

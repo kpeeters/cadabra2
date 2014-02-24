@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "Props.hh"
+
 class Indices : public list_property {
 	public:
 		Indices();

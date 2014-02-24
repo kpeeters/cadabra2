@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CoreProps.hh"
+#include "Props.hh"
 
 class Traceless : virtual public property  {
 	public:

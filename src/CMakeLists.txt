@@ -40,10 +40,8 @@ set(LOCAL_SRC_FILES
   Compare.cc
   Kernel.cc
   Props.cc
-  Numerical.cc
   Exchange.cc
   PythonCdb.cc
-#  modules/Algebra.cc
   properties/Accent.cc
   properties/AntiSymmetric.cc
   properties/CommutingAsProduct.cc
@@ -57,7 +55,9 @@ set(LOCAL_SRC_FILES
   properties/GammaTraceless.cc
   properties/ImplicitIndex.cc
   properties/Indices.cc
+  properties/Integer.cc
   properties/Matrix.cc
+  properties/NumericalFlat.cc
   properties/PartialDerivative.cc
   properties/SortOrder.cc
   properties/Spinor.cc

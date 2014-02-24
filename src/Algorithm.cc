@@ -23,6 +23,10 @@
 #include "Props.hh"
 
 #include "properties/Derivative.hh"
+#include "properties/Indices.hh"
+#include "properties/Coordinate.hh"
+#include "properties/Symbol.hh"
+#include "properties/DependsBase.hh"
 
 #include <typeinfo>
 #include <sstream>
@@ -1127,7 +1131,7 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 	index_map_t::iterator it1=one.begin();
 	while(it1!=one.end()) {
 		const Coordinate *cdn=kernel.properties.get<Coordinate>(it1->second, true);
-		const Symbol     *smb=Symbol::get(it1->second, true);
+		const Symbol     *smb=Symbol::get(kernel.properties, it1->second, true);
 		if(it1->second->is_integer()==false && !cdn && !smb) {
 			bool move_this_one=false;
 			index_map_t::iterator it2=two.begin();
@@ -1178,7 +1182,7 @@ void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 	if((it->fl.parent_rel==str_node::p_sub || it->fl.parent_rel==str_node::p_super) &&
 		it->fl.bracket==str_node::b_none /* && it->is_integer()==false */) {
 		const Coordinate *cdn=kernel.properties.get<Coordinate>(it, true);
-		const Symbol     *smb=Symbol::get(it, true);
+		const Symbol     *smb=Symbol::get(kernel.properties, it, true);
 		 if(it->is_integer() || cdn || smb)
 			  ind_free.insert(index_map_t::value_type(exptree(it), it));
 		 else {
@@ -1327,7 +1331,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					index_map_t::iterator fri=first_free.begin();
 					while(fri!=first_free.end()) {
 						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
-						const Symbol     *smb=Symbol::get(fri->second, true);
+						const Symbol     *smb=Symbol::get(kernel.properties, fri->second, true);
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(term_free.count((*fri).first)==0) {
@@ -1347,7 +1351,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					fri=term_free.begin();
 					while(fri!=term_free.end()) {
 						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
-						const Symbol     *smb=Symbol::get(fri->second, true);
+						const Symbol     *smb=Symbol::get(kernel.properties, fri->second, true);
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(first_free.count((*fri).first)==0) {
@@ -1450,7 +1454,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 				sit->fl.bracket==str_node::b_none /* && sit->is_integer()==false */) {
 				if(*sit->name!="??") {
 					const Coordinate *cdn=kernel.properties.get<Coordinate>(sit, true);
-					const Symbol     *smb=Symbol::get(sit, true);
+					const Symbol     *smb=Symbol::get(kernel.properties, sit, true);
 					// integer, coordinate or symbol indices always ok
 					if(sit->is_integer() || cdn || smb) {
 						item_free.insert(index_map_t::value_type(exptree(sit), iterator(sit)));

@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "CoreProps.hh"
 #include "Exceptions.hh"
-#include "Props.hh"
+#include "properties/WeightBase.hh"
+
 
 class WeightInherit : virtual public WeightBase {
 	public:

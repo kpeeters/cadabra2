@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CoreProps.hh"
+#include "properties/ImplicitIndex.hh"
 
 class Spinor : public ImplicitIndex, virtual public property {
 	public:

@@ -6,6 +6,7 @@
 #include "properties/WeightBase.hh"
 #include "properties/TableauBase.hh"
 #include "properties/Distributable.hh"
+#include "properties/IndexInherit.hh"
 
 class Derivative : public IndexInherit, 
 //                   public Inherit<DependsBase>,

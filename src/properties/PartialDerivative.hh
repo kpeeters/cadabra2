@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "CoreProps.hh"
 #include "properties/Derivative.hh"
 
 class PartialDerivative : public Derivative, virtual public property {

@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "Props.hh"
 
 class ImplicitIndex : virtual public property {
 	public:

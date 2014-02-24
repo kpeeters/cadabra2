@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CoreProps.hh"
+#include "properties/IndexInherit.hh"
 
 class Accent : public PropertyInherit, public IndexInherit, virtual public property {
 	public:

@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "CoreProps.hh"
 #include "properties/Matrix.hh"
 #include "properties/AntiSymmetric.hh"
 
