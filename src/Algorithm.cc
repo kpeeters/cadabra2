@@ -21,7 +21,6 @@
 #include "Algorithm.hh"
 #include "Storage.hh"
 #include "Props.hh"
-#include "CoreProps.hh"
 
 #include "properties/Derivative.hh"
 
