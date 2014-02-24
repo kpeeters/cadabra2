@@ -1,5 +1,6 @@
 
 #include "properties/Indices.hh"
+#include "Exceptions.hh"
 
 Indices::Indices()
 	: position_type(free)

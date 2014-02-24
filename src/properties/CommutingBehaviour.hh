@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "Props.hh"
+
 class CommutingBehaviour : virtual public list_property {
 	public:
 		virtual int sign() const=0;

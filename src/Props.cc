@@ -19,13 +19,12 @@
 */
 
 #include "Props.hh"
-#include "CoreProps.hh"
 #include "Exceptions.hh"
 #include "Compare.hh"
-//#include "modules/dummies.hh"
 #include <stdlib.h>
 #include <typeinfo>
 #include <iostream>
+#include "properties/Indices.hh"
 
 pattern::pattern()
 	{

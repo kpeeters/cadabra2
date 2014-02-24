@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "CoreProps.hh"
 #include "properties/Accent.hh"
 #include "properties/Distributable.hh"
 

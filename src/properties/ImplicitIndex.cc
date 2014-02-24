@@ -1,5 +1,6 @@
 
 #include "properties/ImplicitIndex.hh"
+#include "Exceptions.hh"
 
 std::string ImplicitIndex::name() const
 	{

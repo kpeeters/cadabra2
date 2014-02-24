@@ -1,8 +1,10 @@
 
 #pragma once
 
-#include "CoreProps.hh"
+
+#include "properties/TableauBase.hh"
 #include "properties/Traceless.hh"
+
 
 class AntiSymmetric : public TableauBase, public Traceless, virtual public property  {
 	public:

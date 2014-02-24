@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "CoreProps.hh"
+#include "properties/WeightBase.hh"
 
 class Weight : virtual public WeightBase {
 	public: 

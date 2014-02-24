@@ -1,11 +1,16 @@
 
 #include "Compare.hh"
 #include "Algorithm.hh" // FIXME: only needed because index_iterator is in there
-#include "CoreProps.hh"
 #include <sstream>
 #include "pcrecpp.h"
-//#include "properties/Indices.hh"
-//#include "properties/Coordinate.hh"
+#include "properties/Indices.hh"
+#include "properties/Coordinate.hh"
+#include "properties/ImplicitIndex.hh"
+#include "properties/SelfCommutingBehaviour.hh"
+#include "properties/CommutingAsSum.hh"
+#include "properties/CommutingAsProduct.hh"
+#include "properties/CommutingBehaviour.hh"
+#include "properties/SortOrder.hh"
 
 int subtree_compare(const Properties *properties, 
 						  exptree::iterator one, exptree::iterator two, 

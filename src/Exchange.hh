@@ -37,6 +37,8 @@
 #include "properties/Spinor.hh"
 #include "properties/Traceless.hh"
 #include "properties/GammaTraceless.hh"
+#include "properties/SelfCommutingBehaviour.hh"
+#include "properties/CommutingBehaviour.hh"
 
 class exchange {
 	public:
