@@ -7,8 +7,8 @@
 #include "algorithms/flatten_product.hh"
 #include "algorithms/prodcollectnum.hh"
 
-distribute::distribute(exptree& tr, iterator it)
-	: algorithm(tr, it)
+distribute::distribute(Kernel& k, exptree& tr)
+	: Algorithm(k, tr)
 	{
 	}
 
@@ -29,7 +29,7 @@ bool distribute::can_apply(iterator st)
 	return false;
 	}
 
-algorithm::result_t distribute::apply(iterator& prod)
+Algorithm::result_t distribute::apply(iterator& prod)
 	{
 	exptree rep;
 	rep.set_head(str_node("\\expression"));
@@ -108,10 +108,10 @@ algorithm::result_t distribute::apply(iterator& prod)
 //	iterator ret=tr.replace(prod, top);
 //	txtout << "calling cleanup on " << *ret->name << " " << *tr.begin(ret)->name << std::endl;
 
-	flatten_product pf(tr, tr.end());
+	flatten_product pf(kernel, tr);
 	pf.make_consistent_only=true;
 	pf.apply_recursive(ret, false);
-	prodcollectnum pc(tr, tr.end());
+	prodcollectnum pc(kernel, tr);
 	pc.apply_recursive(ret,false);
 //	cleanup_sums_products(tr, ret);
 //	txtout << "..." << *ret->name << std::endl;

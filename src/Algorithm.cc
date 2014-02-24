@@ -555,6 +555,17 @@ unsigned int Algorithm::number_of_indices(iterator it)
 	return res;
 	}
 
+unsigned int Algorithm::number_of_indices(const Properties& pr, iterator it) 
+	{
+	unsigned int res=0;
+	index_iterator indit=index_iterator::begin(pr, it);
+	while(indit!=index_iterator::end(pr, it)) {
+		++res;
+		++indit;
+		}
+	return res;
+	}
+
 unsigned int Algorithm::number_of_direct_indices(iterator it) const
 	{
 	unsigned int res=0;
@@ -567,12 +578,12 @@ unsigned int Algorithm::number_of_direct_indices(iterator it) const
 	return res;
 	}
 
-Algorithm::index_iterator::index_iterator(const Kernel& k)
-	: iterator_base(), kernel(k)
+Algorithm::index_iterator::index_iterator(const Properties& k)
+	: iterator_base(), properties(k)
 	{
 	}
 
-Algorithm::index_iterator Algorithm::index_iterator::create(const Kernel& k, const iterator_base& other)
+Algorithm::index_iterator Algorithm::index_iterator::create(const Properties& k, const iterator_base& other)
 	{
 	index_iterator ret(k);
 	ret.node=other.node;
@@ -587,7 +598,7 @@ Algorithm::index_iterator Algorithm::index_iterator::create(const Kernel& k, con
 	}
 
 Algorithm::index_iterator::index_iterator(const index_iterator& other) 
-	: iterator_base(other.node), halt(other.halt), walk(other.walk), roof(other.roof), kernel(other.kernel)
+	: iterator_base(other.node), halt(other.halt), walk(other.walk), roof(other.roof), properties(other.properties)
 	{
 	}
 
@@ -655,10 +666,10 @@ Algorithm::index_iterator& Algorithm::index_iterator::operator++()
 
 	const IndexInherit *this_inh=0, *parent_inh=0;
 	while(walk!=halt) {
-		this_inh=kernel.properties.get<IndexInherit>(walk);
+		this_inh=properties.get<IndexInherit>(walk);
 		
 		if(this_inh==0 && (walk!=roof && walk.node->parent!=0)) {
-			parent_inh=kernel.properties.get<IndexInherit>(walk.node->parent);
+			parent_inh=properties.get<IndexInherit>(walk.node->parent);
 			if(parent_inh==0)
 				walk.skip_children();
 			}
@@ -681,14 +692,14 @@ Algorithm::index_iterator& Algorithm::index_iterator::operator++()
 	return *this;
 	}
 
-Algorithm::index_iterator Algorithm::index_iterator::begin(const Kernel& kernel, const iterator_base& it) 
+Algorithm::index_iterator Algorithm::index_iterator::begin(const Properties& properties, const iterator_base& it) 
 	{
-	return index_iterator::create(kernel,it);
+	return index_iterator::create(properties,it);
 	}
 
-Algorithm::index_iterator Algorithm::index_iterator::end(const Kernel& kernel, const iterator_base& it) 
+Algorithm::index_iterator Algorithm::index_iterator::end(const Properties& properties, const iterator_base& it) 
 	{
-	index_iterator tmp=create(kernel, it);
+	index_iterator tmp=create(properties, it);
 	tmp.node=0;
 
 	return tmp;
@@ -696,12 +707,12 @@ Algorithm::index_iterator Algorithm::index_iterator::end(const Kernel& kernel, c
 
 Algorithm::index_iterator Algorithm::begin_index(iterator it) const
 	{
-	return index_iterator::begin(kernel, it);
+	return index_iterator::begin(kernel.properties, it);
 	}
 
 Algorithm::index_iterator Algorithm::end_index(iterator it) const
 	{
-	return index_iterator::end(kernel, it);
+	return index_iterator::end(kernel.properties, it);
 	}
 
 
@@ -875,7 +886,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			tr.replace_index((*it).second, relabel.begin());
 //			(*it).second->name=relabel;
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel, (*it).first,the_key, 1, true, -2, true));
+			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 								 
 	// Catch triple indices (two cases: dummy pair in replacement, free index elsewhere and 
@@ -901,7 +912,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			tr.replace_index((*it).second, relabel.begin());
 //			(*it).second->name=relabel;
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel, (*it).first,the_key, 1, true, -2, true));
+			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	must_be_empty.clear();
@@ -923,7 +934,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		do {
 			tr.replace_index((*it).second, relabel.begin());
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel, (*it).first,the_key, 1, true, -2, true));
+			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	return true;
@@ -1051,7 +1062,7 @@ void Algorithm::print_classify_indices(iterator st) const
 	index_map_t::iterator prev=ind_free.end();
 //	txtout << "free indices: " << std::endl;
 	while(it!=ind_free.end()) {
-		if(prev==ind_free.end() || tree_exact_equal(&kernel, (*it).first,(*prev).first,1,true,-2,true)==false)
+		if(prev==ind_free.end() || tree_exact_equal(&kernel.properties, (*it).first,(*prev).first,1,true,-2,true)==false)
 //			txtout << *(*it).first.begin()->name << " (" << ind_free.count((*it).first) << ") ";
 		prev=it;
 		++it;
@@ -1061,7 +1072,7 @@ void Algorithm::print_classify_indices(iterator st) const
 	prev=ind_dummy.end();
 //	txtout << "dummy indices: ";
 	while(it!=ind_dummy.end()) {
-		if(prev==ind_dummy.end() || tree_exact_equal(&kernel, (*it).first,(*prev).first,1,true,-2,true)==false)
+		if(prev==ind_dummy.end() || tree_exact_equal(&kernel.properties, (*it).first,(*prev).first,1,true,-2,true)==false)
 //			txtout << *(*it).first.begin()->name << " (" << ind_dummy.count((*it).first) << ") ";
 		prev=it;
 		++it;
@@ -1122,7 +1133,7 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 			bool move_this_one=false;
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
-				if(tree_exact_equal(&kernel, (*it1).first,(*it2).first,1,true,-2,true)) {
+				if(tree_exact_equal(&kernel.properties, (*it1).first,(*it2).first,1,true,-2,true)) {
 					target.insert((*it2));
 					if(move_out) {
 						index_map_t::iterator nxt=it2;
@@ -1145,7 +1156,7 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 				}
 			else ++it1;
 			// skip all indices in two with the same name
-			while(it1!=one.end() && tree_exact_equal(&kernel, (*it1).first,the_key,1,true,-2,true)) {
+			while(it1!=one.end() && tree_exact_equal(&kernel.properties, (*it1).first,the_key,1,true,-2,true)) {
 				if(move_this_one && move_out) {
 					index_map_t::iterator nxt=it1;
 					++nxt;
@@ -1620,14 +1631,14 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 	// with which we do not commute.
 
 	struct {
-	  bool operator()(const Kernel& kr, exptree& tr, iterator walk, iterator lca, iterator check_dependence) {
+	  bool operator()(const Properties& pr, exptree& tr, iterator walk, iterator lca, iterator check_dependence) {
 		   do {
 				walk=exptree::parent(walk);
 				if(walk == lca) break;
-				const Derivative *der=kr.properties.get<Derivative>(walk);
+				const Derivative *der=pr.get<Derivative>(walk);
 				if(der) {
 					if(tr.is_valid(check_dependence) ) {
-						const DependsBase *dep = kr.properties.get_composite<DependsBase>(check_dependence);
+						const DependsBase *dep = pr.get_composite<DependsBase>(check_dependence);
 						if(dep) {
 							exptree deps=dep->dependencies(check_dependence);
 							sibling_iterator depobjs=deps.begin(deps.begin());
@@ -1640,7 +1651,7 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 									sibling_iterator indit=tr.begin(walk);
 									while(indit!=tr.end(walk)) {
 										if(indit->is_index()) {
-											if(subtree_exact_equal(&kr, indit, depobjs))
+											if(subtree_exact_equal(&pr, indit, depobjs))
 												return true;
 											}
 										++indit;
@@ -1659,8 +1670,8 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 		   }
 	} one_run;
 	
-	if(one_run(kernel, tr, i1, lca, check_dependence)) return true;
-	if(one_run(kernel, tr, i2, lca, check_dependence)) return true;
+	if(one_run(kernel.properties, tr, i1, lca, check_dependence)) return true;
+	if(one_run(kernel.properties, tr, i2, lca, check_dependence)) return true;
 
 	return false;
 	}

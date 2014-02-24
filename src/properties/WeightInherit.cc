@@ -29,7 +29,7 @@ bool WeightInherit::parse(exptree& tr, exptree::iterator pat, exptree::iterator 
 	return true;
 	}
 
-multiplier_t WeightInherit::value(exptree::iterator it, const std::string& forcedlabel) const
+multiplier_t WeightInherit::value(const Properties& properties, exptree::iterator it, const std::string& forcedlabel) const
 	{
 	multiplier_t ret=0;
 	bool first_term=true;
@@ -39,7 +39,7 @@ multiplier_t WeightInherit::value(exptree::iterator it, const std::string& force
 	while(sib!=it.end()) {
 		 if(!sib->is_index()) {
 			  if(combination_type==multiplicative) {
-					const WeightBase *gnb=properties::get_composite<WeightBase>(sib, forcedlabel);
+					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 					if(gnb) {
 						 multiplier_t tmp=gnb->value(sib, forcedlabel);
 						 ret+=tmp;
@@ -47,7 +47,7 @@ multiplier_t WeightInherit::value(exptree::iterator it, const std::string& force
 					}
 			  else {
 					multiplier_t thisone=0;
-					const WeightBase *gnb=properties::get_composite<WeightBase>(sib, forcedlabel);
+					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 					if(gnb) thisone=gnb->value(sib, forcedlabel);
 					else    thisone=0;
 					if(first_term) {

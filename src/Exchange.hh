@@ -55,10 +55,10 @@ class exchange {
 
 		// Obtain index exchange symmetries under tensor permutation. Returns 'false' if 
 		// an identically zero expression is encountered.
-		static int          collect_identical_tensors(exptree& tr, exptree::iterator it,
+		static int          collect_identical_tensors(const Properties& pr, exptree& tr, exptree::iterator it,
 																	 std::vector<identical_tensors_t>& idts);
 		static unsigned int possible_singlets(exptree&, exptree::iterator);
-		static bool         get_node_gs(exptree&, exptree::iterator, std::vector<std::vector<int> >& );
+		static bool         get_node_gs(const Properties&, exptree&, exptree::iterator, std::vector<std::vector<int> >& );
 
 //		static void get_index_gs(exptree::iterator, std::vector<std::vector<int> >& );
 

@@ -105,13 +105,13 @@ class Algorithm {
 		/// to the Kernel in order to lookup properties of objects.
 		class index_iterator : public exptree::iterator_base {
 			public:
-				index_iterator(const Kernel&);
+				index_iterator(const Properties&);
 				index_iterator(const index_iterator&);
 
-				static index_iterator create(const Kernel&, const iterator_base&);
+				static index_iterator create(const Properties&, const iterator_base&);
 
-				static index_iterator begin(const Kernel&, const iterator_base&);
-				static index_iterator end(const Kernel&, const iterator_base&);
+				static index_iterator begin(const Properties&, const iterator_base&);
+				static index_iterator end(const Properties&, const iterator_base&);
 
 				bool    operator==(const index_iterator&) const;
 				bool    operator!=(const index_iterator&) const;
@@ -121,7 +121,7 @@ class Algorithm {
 
 				iterator halt, walk, roof;
 			private:
-				const Kernel& kernel;
+				const Properties& properties;
 
 				bool is_index(iterator) const;
 		};
@@ -131,6 +131,7 @@ class Algorithm {
 
 		// The number of indices of a node, taking into account IndexInherit-ance
 		unsigned int number_of_indices(iterator it);
+		static unsigned int number_of_indices(const Properties&, iterator it);
 		
 		// The number of indices of a node, counting only the direct ones (i.e. not those
 		// inherited from child nodes).

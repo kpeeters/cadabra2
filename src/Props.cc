@@ -21,6 +21,7 @@
 #include "Props.hh"
 #include "CoreProps.hh"
 #include "Exceptions.hh"
+#include "Compare.hh"
 //#include "modules/dummies.hh"
 #include <stdlib.h>
 #include <typeinfo>
@@ -35,7 +36,7 @@ pattern::pattern(const exptree& o)
 	{
 	}
 
-bool pattern::match(const exptree::iterator& it, bool ignore_parent_rel) const
+bool pattern::match(const Properties& properties, const exptree::iterator& it, bool ignore_parent_rel) const
 	{
 	// Special case for range wildcards.
 	// FIXME: move this to storage.cc (see the FIXME there)
@@ -57,7 +58,7 @@ bool pattern::match(const exptree::iterator& it, bool ignore_parent_rel) const
 				seqarg.skip_children();
 				++seqarg;
 				}
-			ind=Properties::get<Indices>(stt, true);
+			ind=properties.get<Indices>(stt, true);
 			}
 		else seqarg=hmarg;
 
@@ -75,7 +76,7 @@ bool pattern::match(const exptree::iterator& it, bool ignore_parent_rel) const
 		if(ind!=0) {
 			exptree::sibling_iterator indit=it.begin();
 			while(indit!=it.end()) {
-				const Indices *gi=Properties::get<Indices>(indit, true);
+				const Indices *gi=properties.get<Indices>(indit, true);
 				if(gi!=ind) {
 					return false;
 					}
@@ -90,7 +91,7 @@ bool pattern::match(const exptree::iterator& it, bool ignore_parent_rel) const
 //	txtout << "comparing " << *it->name << " " << *obj.begin()->name << std::endl;
 //	exptree::print_recursive_treeform(txtout, it);
 //	exptree::print_recursive_treeform(txtout, obj.begin());
-	int res=subtree_compare(it, obj.begin(), ignore_parent_rel?0:-2, true, 0);
+	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-2, true, 0);
 //	txtout << res << std::endl;
 	if(abs(res)<=1) {
 //		 txtout << "match!" << std::endl;
@@ -116,7 +117,7 @@ bool Properties::has(const property_base *pb, exptree::iterator it)
 //		txtout << typeid(pit.first->second.second).name() << " versus " 
 //				 << typeid(pb).name() << std::endl;
 		if(typeid(*(pit.first->second.second))==typeid(*pb) && 
-			pit.first->second.first->match(it))  // match found
+			pit.first->second.first->match(*this, it))  // match found
 			return true;
 		++pit.first;
 		}
@@ -271,12 +272,12 @@ bool labelled_property::core_parse(keyval_t& keyvals)
 		}
 	}
 	
-bool operator<(const pattern& one, const pattern& two)
-	{
-	return tree_less(one.obj, two.obj);
-//	if(*(one.obj.begin()->name)<*(two.obj.begin()->name)) return true;
-//	return false;
-	}
+//bool operator<(const pattern& one, const pattern& two)
+//	{
+//	return tree_less(one.obj, two.obj);
+////	if(*(one.obj.begin()->name)<*(two.obj.begin()->name)) return true;
+////	return false;
+//	}
 
 //bool operator==(const pattern& one, const pattern& two)
 //	  {
@@ -300,7 +301,7 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 			if((*pit.first).second.first->obj.begin().begin()->is_range_wildcard()) 
 				++first_nonpattern;
 			
-		if((*pit.first).second.first->match(et.begin())) { // match found
+		if((*pit.first).second.first->match(*this, et.begin())) { // match found
 			if(typeid(*pr)==typeid(*(*pit.first).second.second)) {
 				const labelled_property *lp   =dynamic_cast<const labelled_property *>(pr);
 				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
@@ -420,7 +421,7 @@ int Properties::serial_number(const property_base *listprop, const pattern *pat)
 	{
 	int serialnum=0;
 
-	std::pair<pattern_map_t::iterator, pattern_map_t::iterator> 
+	std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator> 
 		pm=pats.equal_range(listprop);
 	serialnum=0;
 	while(pm.first!=pm.second) { 
@@ -462,145 +463,6 @@ int Properties::serial_number(const property_base *listprop, const pattern *pat)
 
  */
 
-std::string Symbol::name() const
-	{
-	return "Symbol";
-	}
 
-const Symbol *Symbol::get(exptree::iterator it, bool ignore_parent_rel) 
-	{
-	if(*it->name=="\\sum") {
-		// Check whether all siblings have the Symbol property.
-		exptree::sibling_iterator sib=it.begin();
-		const Symbol *s=0;
-		while(sib!=it.end()) {
-			s = Properties::get<Symbol>(sib, ignore_parent_rel);
-			if(!s)
-				break;
-			++sib;
-			}
-		return s;
-		}
-	else return Properties::get<Symbol>(it, ignore_parent_rel);
-	}
 
-std::string Coordinate::name() const
-	{
-	return "Coordinate";
-	}
-
-Indices::Indices()
-	: position_type(free)
-	{
-	}
-
-std::string Indices::name() const
-	{
-	return "Indices";
-	}
-
-property_base::match_t Indices::equals(const property_base *other) const
-	{
-	const Indices *cast_other = dynamic_cast<const Indices *>(other);
-	if(cast_other) {
-		 if(set_name == cast_other->set_name) {
-			  if(parent_name == cast_other->parent_name && position_type == cast_other->position_type)
-					return exact_match;
-			  else
-					return id_match;
-			  }
-		 return no_match;
-		 }
-	return property_base::equals(other);
-	}
-
-bool Indices::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals)
-	{
-	keyval_t::const_iterator ki=keyvals.begin();
-	while(ki!=keyvals.end()) {
-		if(ki->first=="name") {
-			if(*ki->second->multiplier!=1) {
-				throw std::logic_error("Indices: use quotes to label names when they start with a number.");
-				}
-			set_name=*ki->second->name;
-			}
-		else if(ki->first=="parent") {
-			parent_name=*ki->second->name;
-			}
-		else if(ki->first=="position") {
-			if(*ki->second->name=="free")
-				position_type=free;
-			else if(*ki->second->name=="fixed")
-				position_type=fixed;
-			else if(*ki->second->name=="independent")
-				position_type=independent;
-			else throw ConsistencyException("Position type should be fixed, free or independent.");
-			}
-		else if(ki->first=="values") {
-			values=*ki->second;
-			if(*values.begin()->name!="\\comma") 
-				throw ConsistencyException("Key 'values' of property 'Indices' needs a list as value.");
-			}
-		else throw ConsistencyException("Property 'Indices' does not accept key '"+ki->first+"'.");
-		++ki;
-		}
-
-	return true;
-	}
-
-property_base::match_t SortOrder::equals(const property_base *) const
-	{
-	return no_match; // you can have as many of these as you like
-	}
-
-std::string SortOrder::name() const
-	{
-	return "SortOrder";
-	}
-
-std::string ImplicitIndex::name() const
-	{
-	return "ImplicitIndex";
-	}
-
-bool ImplicitIndex::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals)
-	{
-	keyval_t::const_iterator ki=keyvals.begin();
-	while(ki!=keyvals.end()) {
-		if(ki->first=="name") {
-			if(*ki->second->multiplier!=1) {
-				throw std::logic_error("ImplicitIndex: use quotes to label names when they start with a number.");
-				}
-			set_names.push_back(*ki->second->name);
-			}
-		else throw ConsistencyException("Property 'ImplicitIndex' does not accept key '"+ki->first+"'.");
-		++ki;
-		}
-
-	return true;
-	}
-
-void ImplicitIndex::display(std::ostream& str) const
-	{
-	property::display(str);
-	for(size_t n=0; n<set_names.size(); ++n) {
-		if(n>0) str << ", ";
-		str << set_names[n];
-		}
-	}
-
-std::string CommutingAsProduct::name() const
-	{
-	return "CommutingAsProduct";
-	}
-
-std::string CommutingAsSum::name() const
-	{
-	return "CommutingAsSum";
-	}
-
-property_base::match_t CommutingBehaviour::equals(const property_base *) const
-	{
-	return no_match; // you can have as many of these as you like
-	}
 

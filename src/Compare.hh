@@ -2,7 +2,7 @@
 #pragma once
 
 #include "Storage.hh"
-#include "Kernel.hh"
+#include "Props.hh"
 
 // Generic subtree comparison class, which uses property information
 // from a kernel to determine whether two tensor subtrees are equal in
@@ -26,7 +26,7 @@
 // Parameters:
 // literal_wildcards: if true, treat wildcard names as ordinary names.
 
-int subtree_compare(const Kernel*, 
+int subtree_compare(const Properties*, 
 						  exptree::iterator one, exptree::iterator two, 
 						  int mod_prel=-2, bool checksets=true, int compare_multiplier=-2, 
 						  bool literal_wildcards=false);
@@ -41,32 +41,32 @@ int subtree_compare(const Kernel*,
 ///
 /// Similar logic holds for the compare_multiplier parameter.
 //
-bool tree_less(const Kernel*, 
+bool tree_less(const Properties*, 
 					const exptree& one, const exptree& two, 
 					int mod_prel=-2, bool checksets=true, int compare_multiplier=-2);
-bool tree_equal(const Kernel*, 
+bool tree_equal(const Properties*, 
 					 const exptree& one, const exptree& two, 
 					 int mod_prel=-2, bool checksets=true, int compare_multiplier=-2);
-bool tree_exact_less(const Kernel*, 
+bool tree_exact_less(const Properties*, 
 							const exptree& one, const exptree& two, 
 							int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
 							bool literal_wildcards=false);
-bool tree_exact_equal(const Kernel*, 
+bool tree_exact_equal(const Properties*, 
 							 const exptree& one, const exptree& two,
 							 int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
 							 bool literal_wildcards=false);
 
-bool subtree_less(const Kernel*, 
+bool subtree_less(const Properties*, 
 						exptree::iterator one, exptree::iterator two,
 						int mod_prel=-2, bool checksets=true, int compare_multiplier=-2);
-bool subtree_equal(const Kernel*, 
+bool subtree_equal(const Properties*, 
 						 exptree::iterator one, exptree::iterator two,
 						 int mod_prel=-2, bool checksets=true, int compare_multiplier=-2);
-bool subtree_exact_less(const Kernel*, 
+bool subtree_exact_less(const Properties*, 
 								exptree::iterator one, exptree::iterator two,
 								int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
 								bool literal_wildcards=false);
-bool subtree_exact_equal(const Kernel*, 
+bool subtree_exact_equal(const Properties*, 
 								 exptree::iterator one, exptree::iterator two,
 								 int mod_prel=-2, bool checksets=true, int compare_multiplier=-2,
 								 bool literal_wildcards=false);
@@ -75,64 +75,64 @@ bool subtree_exact_equal(const Kernel*,
 //
 class tree_less_obj {
 	public:
-		tree_less_obj(const Kernel*);
+		tree_less_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 class tree_less_modprel_obj {
 	public:
-		tree_less_modprel_obj(const Kernel*);
+		tree_less_modprel_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 class tree_equal_obj {
 	public:
-		tree_equal_obj(const Kernel*);
+		tree_equal_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 /// Compare two trees exactly, i.e. including exact index names.
 //
 class tree_exact_less_obj {
 	public:
-		tree_exact_less_obj(const Kernel*);
+		tree_exact_less_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 class tree_exact_less_mod_prel_obj {
 	public:
-		tree_exact_less_mod_prel_obj(const Kernel*);
+		tree_exact_less_mod_prel_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 class tree_exact_equal_obj {
 	public:
-		tree_exact_equal_obj(const Kernel*);
+		tree_exact_equal_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 class tree_exact_equal_mod_prel_obj {
 	public:
-		tree_exact_equal_mod_prel_obj(const Kernel*);
+		tree_exact_equal_mod_prel_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 // Compare for indexmap_t. The only comparator object that does not use
-// kernel info to lookup properties.
+// properties info to lookup properties.
 
 class tree_equal_for_indexmap_obj {
 	public:
@@ -144,18 +144,18 @@ class tree_equal_for_indexmap_obj {
 class tree_exact_less_no_wildcards_obj {
 	public:
 		tree_exact_less_no_wildcards_obj(); // disables property handling
-		tree_exact_less_no_wildcards_obj(const Kernel*);
+		tree_exact_less_no_wildcards_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 class tree_exact_less_no_wildcards_mod_prel_obj {
 	public:
-		tree_exact_less_no_wildcards_mod_prel_obj(const Kernel*);
+		tree_exact_less_no_wildcards_mod_prel_obj(const Properties*);
 		bool operator()(const exptree& first, const exptree& second) const;
 	private:
-		const Kernel* kernel;
+		const Properties* properties;
 };
 
 
@@ -171,7 +171,7 @@ class tree_exact_less_no_wildcards_mod_prel_obj {
 
 class exptree_comparator {
 	public:
-		exptree_comparator(const Kernel&);
+		exptree_comparator(const Properties&);
 
 		enum match_t { node_match=0, subtree_match=1, no_match_less=2, no_match_greater=3 };
 
@@ -198,7 +198,7 @@ class exptree_comparator {
 
       // A set of routines to determine natural orders of factors in products.
 		// These used to be in exptree_ordering but were moved in v2 because these
-		// all need kernel info.
+		// all need properties info.
 
 		bool should_swap(exptree::iterator obj, int subtree_comparison) ;
 		int  can_swap_prod_obj(exptree::iterator prod, exptree::iterator obj, bool) ;
@@ -213,25 +213,25 @@ class exptree_comparator {
 									  exptree::sibling_iterator one, exptree::sibling_iterator two) ;
 
 	protected:
-		const Kernel& kernel;
+		const Properties& properties;
 		// Internal entry point. 
 		match_t compare(const exptree::iterator&, const exptree::iterator&, bool nobrackets=false);
 };
 
 class exptree_is_equivalent {
 	public:
-		exptree_is_equivalent(const Kernel&);
+		exptree_is_equivalent(const Properties&);
 		bool operator()(const exptree&, const exptree&);
 	private:
-		const Kernel& kernel;
+		const Properties& properties;
 };
 
 class exptree_is_less {
 	public:
-		exptree_is_less(const Kernel&);
+		exptree_is_less(const Properties&);
 		bool operator()(const exptree&, const exptree&);
 	private:
-		const Kernel& kernel;
+		const Properties& properties;
 };
 
 

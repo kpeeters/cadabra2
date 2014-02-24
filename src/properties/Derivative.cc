@@ -1,27 +1,28 @@
 
-#include "Derivative.hh"
+#include "properties/Derivative.hh"
+#include "Props.hh"
 
-unsigned int Derivative::size(exptree& tr, exptree::iterator it) const
+unsigned int Derivative::size(const Properties& properties, exptree& tr, exptree::iterator it) const
 	{
-	it=properties::head<Derivative>(it);
+	it=properties.head<Derivative>(it);
 
 	int ret=0;
 	exptree::sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end() && sib->is_index()) ++sib;
-	const TableauBase *tb=properties::get<TableauBase>(sib);
+	const TableauBase *tb=properties.get<TableauBase>(sib);
 	if(tb)
 		ret+=tb->size(tr,sib);
 	return ret;
 	}
 
-multiplier_t Derivative::value(exptree::iterator it, const std::string& forcedlabel) const
+multiplier_t Derivative::value(const Properties& properties, exptree::iterator it, const std::string& forcedlabel) const
 	{
 //	txtout << "!?!?" << std::endl;
 	multiplier_t ret=0;
 
 	exptree::sibling_iterator sib=it.begin();
 	while(sib!=it.end()) {
-		const WeightBase *gnb=properties::get_composite<WeightBase>(sib, forcedlabel);
+		const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 		if(gnb) {
 			multiplier_t tmp=gnb->value(sib, forcedlabel);
 			if(sib->is_index()) ret-=tmp;
@@ -33,9 +34,9 @@ multiplier_t Derivative::value(exptree::iterator it, const std::string& forcedla
 	return ret;
 	}
 
-TableauBase::tab_t Derivative::get_tab(exptree& tr, exptree::iterator it, unsigned int num) const
+TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr, exptree::iterator it, unsigned int num) const
 	{
-	it=properties::head<Derivative>(it);
+	it=properties.head<Derivative>(it);
 
 	bool indices_first=tr.begin(it)->is_index();
 	exptree::sibling_iterator argnode=tr.begin(it);
@@ -61,7 +62,7 @@ TableauBase::tab_t Derivative::get_tab(exptree& tr, exptree::iterator it, unsign
 
 //	txtout << *argnode->name << std::endl;
 
-	const TableauBase *tb=properties::get<TableauBase>(argnode);
+	const TableauBase *tb=properties.get<TableauBase>(argnode);
 	assert(tb);
 	unsigned int othertabs=tb->size(tr, argnode);
 	assert(num<othertabs);

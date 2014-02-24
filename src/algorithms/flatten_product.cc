@@ -3,8 +3,8 @@
 #include "properties/PartialDerivative.hh"
 
 
-flatten_product::flatten_product(exptree& tr, iterator it)
-	: algorithm(tr, it), make_consistent_only(false), is_diff(false)
+flatten_product::flatten_product(Kernel& k, exptree& tr)
+	: Algorithm(k, tr), make_consistent_only(false), is_diff(false)
 	{
 	}
 
@@ -23,7 +23,7 @@ bool flatten_product::can_apply(iterator it)
 	if(!is_diff && tr.number_of_children(it)==1) return true;
 	sibling_iterator facs=tr.begin(it);
 	while(facs!=tr.end(it)) {
-		const PartialDerivative *pd=properties::get<PartialDerivative>(facs);
+		const PartialDerivative *pd=kernel.properties.get<PartialDerivative>(facs);
 		if((is_diff && pd) || (!is_diff && *facs->name=="\\prod"))
 			return true;
 		if(is_diff) break;
@@ -32,7 +32,7 @@ bool flatten_product::can_apply(iterator it)
 	return false;
 	}
 
-algorithm::result_t flatten_product::apply(iterator& it)
+Algorithm::result_t flatten_product::apply(iterator& it)
 	{
 //	debugout << "acting with flatten_product at " << *it->name << std::endl;
 	if(!is_diff && tr.number_of_children(it)==1) {
@@ -47,7 +47,7 @@ algorithm::result_t flatten_product::apply(iterator& it)
 	sibling_iterator facs=tr.begin(it);
 	str_node::bracket_t btype=facs->fl.bracket;
 	while(facs!=tr.end(it)) {
-		const PartialDerivative *pd=properties::get<PartialDerivative>(facs);
+		const PartialDerivative *pd=kernel.properties.get<PartialDerivative>(facs);
 		if((is_diff && pd) || (!is_diff && *facs->name=="\\prod")) {
 			str_node::bracket_t cbtype=tr.begin(facs)->fl.bracket;
 			if(!make_consistent_only || cbtype==str_node::b_none || cbtype==str_node::b_no) {
