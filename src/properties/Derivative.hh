@@ -1,7 +1,10 @@
 
 #pragma once
 
-#include "CoreProps.hh"
+#include "properties/CommutingAsProduct.hh"
+#include "properties/NumericalFlat.hh"
+#include "properties/WeightBase.hh"
+#include "properties/TableauBase.hh"
 #include "properties/Distributable.hh"
 
 class Derivative : public IndexInherit, 
