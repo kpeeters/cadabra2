@@ -18,9 +18,8 @@
  
 */
 
-// Classes handling storage of property information. Actual property clases
-// are defined in CoreProps.hh. The implementation Props.cc makes use of
-// the information in CoreProps.hh, so these two bits are tightly coupled.
+// Classes handling storage of property information. Actual property
+// implementations are in the properties directory in separate files.
 
 #pragma once
 
@@ -41,6 +40,7 @@ class pattern {
 		exptree obj;
 };
 
+// FIXME: these are, I believe, no longer necessary, and would need access to properties anyway
 //bool operator<(const pattern& one, const pattern& two);
 //bool operator==(const pattern& one, const pattern& two);
 
@@ -64,11 +64,12 @@ class keyval_t {
 		kvlist_t keyvals;
 };
 
-/// Base class for all properties, handling argument parsing and defining the
-/// interface.
-class property_base {
+/// Base class for all properties, handling argument parsing and
+/// defining the interface.
+
+class property {
 	public:
-		virtual ~property_base() {};
+		virtual ~property() {};
 		virtual bool        core_parse(keyval_t&);
 		virtual bool        parse(exptree&, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals);
 		virtual std::string name() const=0;
@@ -83,15 +84,9 @@ class property_base {
 		//   id_match:    only one of these properties can be registered, but their data is not the same
 		//   exact_match: these properties are exactly identical
 		enum match_t { no_match, id_match, exact_match };
-		virtual match_t equals(const property_base *) const;
+		virtual match_t equals(const property *) const;
 	private:
 		bool                parse_one_argument(exptree::iterator arg, keyval_t& keyvals);
-};
-
-/// Placeholder.
-/// \bug Should be merged with property_base.
-class property : public property_base {
-	public:
 };
 
 class labelled_property : virtual public property {
@@ -100,21 +95,8 @@ class labelled_property : virtual public property {
 		std::string label;
 };
 
-class list_property : public property_base {
+class list_property : public property {
 	public:
-};
-
-
-
-// FIXME: The Inherit<...> template should be deprecated in favour of the 
-// [...]Base classes, which actually allow for a computation, instead of dumb
-// copying of the properties of the first child.
-
-template<class T>
-class Inherit {
-	public:
-		virtual ~Inherit() {};
-		virtual std::string name() const { return std::string("Stay Away"); };
 };
 
 class PropertyInherit : virtual public property {
@@ -123,7 +105,7 @@ class PropertyInherit : virtual public property {
 };
 
 template<class T>
-property_base *create_property()
+property *create_property()
 	{
 	return new T;
 	}
@@ -135,27 +117,27 @@ class Properties {
 			public:
 				~registered_property_map_t();
 
-				typedef std::map<std::string, property_base* (*)()> internal_property_map_t;
+				typedef std::map<std::string, property* (*)()> internal_property_map_t;
 				typedef internal_property_map_t::iterator iterator;
 
 				internal_property_map_t store;
 		};
 
-		void                          register_property(property_base* (*)());
+		void                          register_property(property* (*)());
 		void                          register_properties();
 		registered_property_map_t     registered_properties;
 
-		// Registering properties.
-		// When inserting a property or list_property, ownership of the
-		// property gets transferred to this singleton class.
-		typedef std::pair<pattern *, const property_base *>                     pat_prop_pair_t;
+		// Registering properties.  When inserting a property or
+		// list_property, ownership of the property gets transferred to
+		// this class.
+		typedef std::pair<pattern *, const property *>                     pat_prop_pair_t;
 
 		/// Pattern-property map indexed on the name_only part of the head of the pattern,
 		/// for rapid lookup.
 		typedef std::multimap<nset_t::iterator, pat_prop_pair_t, nset_it_less>  property_map_t;
 		/// FIXME: the above contains an iterator, which we now take to be pointing to an element
 		/// in the obj tree of the pattern of the pat_prop_pair_t. However, that is brittle...
-		typedef std::multimap<const property_base *, pattern *>                 pattern_map_t;
+		typedef std::multimap<const property *, pattern *>                 pattern_map_t;
 
 		void            insert_prop(const exptree&, const property *);
 		void            insert_list_prop(const std::vector<exptree>&, const list_property *);
@@ -185,9 +167,9 @@ class Properties {
 		template<class T> exptree::iterator head(exptree::iterator, bool ignore_parent_rel=false) const;
 
 		// Search through pointers
-		bool has(const property_base *, exptree::iterator);
+		bool has(const property *, exptree::iterator);
 		// Find serial number of a pattern in a given list property
-		int  serial_number(const property_base *, const pattern *) const;
+		int  serial_number(const property *, const pattern *) const;
 
 		// Inverse search: given a property type, get a pattern which has this property.
 		// When given an iterator, it starts to search in the property
@@ -229,13 +211,13 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 		property_map_t::const_iterator walk=pit.first;
 		while(walk!=pit.second) {
 			if(wildcards==(*walk).second.first->children_wildcard()) {
-//				std::cout << "searching " << *it->name << std::endl;
-//				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
+				std::cout << "searching " << *it->name << std::endl;
+				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
 				if((*walk).second.first->match(*this, it, ignore_parent_rel)) { // match found
-//					std::cout << "found match" << std::endl;
+					std::cout << "found match" << std::endl;
 					ret=dynamic_cast<const T *>((*walk).second.second);
 					if(ret) { // found! determine serial number
-//						std::cout << "found property" << std::endl;
+						std::cout << "found property" << std::endl;
 						if(doserial) {
 							std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator> 
 								pm=pats.equal_range((*walk).second.second);
@@ -249,28 +231,27 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 							}
 						break;
 						}
-//					else 						std::cout << "NOT found property" << std::endl;
+					else 						std::cout << "NOT found property" << std::endl;
 					if(dynamic_cast<const PropertyInherit *>((*walk).second.second)) 
 						inherits=true;
-					else if(dynamic_cast<const Inherit<T> *>((*walk).second.second)) 
-						inherits=true;
 					}
-//				else std::cout << "NOT found match" << std::endl;
+				else std::cout << "NOT found match" << std::endl;
 				}
 			++walk;
 			}
 		if(!wildcards && !ret) {
-//			std::cout << "not yet found, switching to wildcards" << std::endl;
+			std::cout << "not yet found, switching to wildcards" << std::endl;
 			wildcards=true;
 			}
 		else {
-//			std::cout << "found match" << std::endl;
+			std::cout << "all searches done" << std::endl;
 			break;
 			}
 		} 
 
 	// If no property was found, figure out whether a property is inherited from a child node.
 	if(!ret && inherits) {
+		std::cout << "no match but perhaps inheritance?" << std::endl;
 		exptree::sibling_iterator sib=it.begin();
 		while(sib!=it.end()) {
 			const T* tmp=get_composite<T>((exptree::iterator)(sib), serialnum, doserial);
@@ -282,6 +263,7 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 			}
 		}
 
+	std::cout << ret << std::endl;
 	return ret;
 	}
 
@@ -320,8 +302,8 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, const s
 						}
 					if(dynamic_cast<const PropertyInherit *>((*walk).second.second))
 						inherits=true;
-					else if(dynamic_cast<const Inherit<T> *>((*walk).second.second)) 
-						inherits=true;
+//					else if(dynamic_cast<const Inherit<T> *>((*walk).second.second)) 
+//						inherits=true;
 					}
 				}
 			++walk;

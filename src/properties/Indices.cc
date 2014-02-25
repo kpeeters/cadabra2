@@ -12,7 +12,7 @@ std::string Indices::name() const
 	return "Indices";
 	}
 
-property_base::match_t Indices::equals(const property_base *other) const
+property::match_t Indices::equals(const property *other) const
 	{
 	const Indices *cast_other = dynamic_cast<const Indices *>(other);
 	if(cast_other) {
@@ -24,7 +24,7 @@ property_base::match_t Indices::equals(const property_base *other) const
 			  }
 		 return no_match;
 		 }
-	return property_base::equals(other);
+	return property::equals(other);
 	}
 
 bool Indices::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals)

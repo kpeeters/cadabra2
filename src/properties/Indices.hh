@@ -9,7 +9,7 @@ class Indices : public list_property {
 		virtual bool parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
 		virtual std::string name() const;
 		virtual std::string unnamed_argument() const { return "name"; };
-		virtual match_t equals(const property_base *) const;
+		virtual match_t equals(const property *) const;
 		
 		std::string set_name, parent_name;
 		enum position_t { free, fixed, independent } position_type;

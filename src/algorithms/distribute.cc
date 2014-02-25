@@ -6,6 +6,7 @@
 
 #include "algorithms/flatten_product.hh"
 #include "algorithms/prodcollectnum.hh"
+#include "properties/Distributable.hh"
 
 distribute::distribute(Kernel& k, exptree& tr)
 	: Algorithm(k, tr)
@@ -14,10 +15,9 @@ distribute::distribute(Kernel& k, exptree& tr)
 
 bool distribute::can_apply(iterator st)
 	{
-	// V2 FIXME: re-enable
-//	const Distributable *db=properties::get<Distributable>(st);
-//	if(!db) 
-//		return false;
+	const Distributable *db=kernel.properties.get<Distributable>(st);
+	if(!db) 
+		return false;
 
 	sibling_iterator facs=tr.begin(st);
 	while(facs!=tr.end(st)) {
