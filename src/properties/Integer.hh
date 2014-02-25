@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "Props.hh"
+
 /// Property indicating that a symbolic object always takes integer values.
 /// Optionally takes a range over which it runs, which can be symbolic.
 
