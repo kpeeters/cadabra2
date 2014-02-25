@@ -108,7 +108,7 @@ bool pattern::children_wildcard() const
 	return false;
 	}
 
-bool Properties::has(const property_base *pb, exptree::iterator it) 
+bool Properties::has(const property *pb, exptree::iterator it) 
 	{
 	std::pair<property_map_t::iterator, property_map_t::iterator> pit=props.equal_range(it->name);
 	while(pit.first!=pit.second) {
@@ -129,7 +129,7 @@ void Properties::clear()
 	// be shared, we use the pats map and make sure that we only free each
 	// property* pointer once.
 	pattern_map_t::const_iterator it=pats.begin();
-	const property_base *previous=0;
+	const property *previous=0;
 	while(it!=pats.end()) {
 		 if(previous!=it->first) {
 			  previous=it->first;
@@ -147,9 +147,9 @@ Properties::registered_property_map_t::~registered_property_map_t()
 	// FIXME: V2
 	}
 
-void Properties::register_property(property_base* (*fun)())
+void Properties::register_property(property* (*fun)())
 	{
-	property_base *tmp=fun(); // need a property object of this type temporarily to retrieve the name
+	property *tmp=fun(); // need a property object of this type temporarily to retrieve the name
 	registered_properties.store[tmp->name()]=fun;
 	delete tmp; 
 	}
@@ -197,14 +197,14 @@ void keyval_t::erase(iterator it)
 	}
 
 
-bool property_base::parse(exptree& tr, exptree::iterator, exptree::iterator arg, keyval_t& keyvals)
+bool property::parse(exptree& tr, exptree::iterator, exptree::iterator arg, keyval_t& keyvals)
 	{
 	if(tr.number_of_children(arg)==0) return true;
 //	txtout << name() << ": should not have any arguments." << std::endl;
 	return false;
 	}
 
-bool property_base::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
+bool property::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
 	{
 	if(*arg->name=="\\equals") {
 		exptree::sibling_iterator key=arg.begin();
@@ -223,7 +223,7 @@ bool property_base::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
 	return true;
 	}
 
-bool property_base::preparse_arguments(exptree::iterator prop, keyval_t& keyvals) 
+bool property::preparse_arguments(exptree::iterator prop, keyval_t& keyvals) 
 	{
 	if(exptree::number_of_children(prop)==0) return true;
 	if(exptree::number_of_children(prop)>1) return false;
@@ -243,22 +243,22 @@ bool property_base::preparse_arguments(exptree::iterator prop, keyval_t& keyvals
 	}
 
 
-void property_base::display(std::ostream& str) const
+void property::display(std::ostream& str) const
 	{ 
 	str << name() << "(";
 	}
 
-std::string property_base::unnamed_argument() const
+std::string property::unnamed_argument() const
 	{
 	return "";
 	}
 
-bool property_base::core_parse(keyval_t& keyvals)
+bool property::core_parse(keyval_t& keyvals)
 	{
 	return true;
 	}
 
-property_base::match_t property_base::equals(const property_base *) const
+property::match_t property::equals(const property *) const
 	{
 	return exact_match;
 	}
@@ -312,7 +312,7 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 				if(!lp || !lpold || lp->label==lpold->label) {
 //					txtout << "Removing previously set property." << std::endl;
 					pattern  *oldpat=pit.first->second.first;
-					const property_base *oldprop=pit.first->second.second;
+					const property *oldprop=pit.first->second.second;
 					props.erase(pit.first);
 					pats.erase(oldprop);
 					delete oldpat;
@@ -338,7 +338,7 @@ void Properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 	pattern_map_t::iterator fit=pats.begin();
 	while(fit!=pats.end()) {
 		if(typeid(*(*fit).first)==typeid(*pr))
-			if(pr->equals((*fit).first)==property_base::exact_match) {
+			if(pr->equals((*fit).first)==property::exact_match) {
 				pr=static_cast<const list_property *>( (*fit).first );
 				break;
 				}
@@ -347,11 +347,11 @@ void Properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 	
 	// If 'pr' has id_match with an existing property, we need to remove all property assignments
 	// for the existing one, except when there is an exact_match.
-	const property_base *to_delete_property=0;
+	const property *to_delete_property=0;
 	pattern_map_t::iterator pit=pats.begin();
 	while(pit!=pats.end()) {
 		if(typeid(*(*pit).first)==typeid(*pr))
-			if(pr->equals((*pit).first)==property_base::id_match) {
+			if(pr->equals((*pit).first)==property::id_match) {
 				to_delete_property = (*pit).first;
 				break;
 				}
@@ -390,7 +390,7 @@ void Properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 ////						exptree::print_recursive_treeform(txtout, its[i]);
 //					
 //					pattern  *oldpat=pit.first->second.first;
-//					const property_base *oldprop=pit.first->second.second;
+//					const property *oldprop=pit.first->second.second;
 //					
 ////					props.erase(pit.first); THIS
 //					
@@ -421,7 +421,7 @@ void Properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 	}
 
 
-int Properties::serial_number(const property_base *listprop, const pattern *pat) const
+int Properties::serial_number(const property *listprop, const pattern *pat) const
 	{
 	int serialnum=0;
 

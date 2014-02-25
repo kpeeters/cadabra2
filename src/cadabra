@@ -41,7 +41,7 @@ class Shell(InteractiveConsole):
         # Detect Cadabra property declarations and rewrite to Python form.
         match = re.search('(.*?)[ ]*::([^;^(]*)[(]*([^;^)]*)[; ]*', line)
         if match:
-            rewrite = match.group(2)+"('"+match.group(1)+"'"
+            rewrite = match.group(2)+"(Ex('"+match.group(1)+"')"
             if len(match.group(3))>0:
                 rewrite = rewrite+", "+match.group(3);
             rewrite=rewrite+")"

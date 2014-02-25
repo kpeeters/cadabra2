@@ -97,6 +97,15 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
+// Properties. This should probably return a reference to a 'property' object
+// so we can query it from Python as well.
+// Fixme: we also had this kind of stuff in src/modules/properties.cc; can that all go?
+
+void attach_Distributable(Ex *ex) 
+	{
+	kernel.properties.insert_prop(ex->tree, new Distributable());
+	}
+
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
@@ -127,6 +136,8 @@ BOOST_PYTHON_MODULE(pcadabra)
 	def("distribute",  &distribute_algoD, (arg("ex")),               return_internal_reference<1>() );
 	def("distribute",  &distribute_algo2, (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
 	def("distribute",  &distribute_algo2D,(arg("ex")),               return_value_policy<manage_new_object>() );
+
+	def("Distributable",  &attach_Distributable, return_value_policy<manage_new_object>() );
 
 
 	// How can we give a handle to the tree in python? And how can we give

@@ -82,3 +82,10 @@ ex = keep_terms('a1 + a2 + a3 + a4 + a5 + a6 + a7', {2,4});
 tst1:= a3 + a4 + a5 - @(obj1);
 @collect_terms!(%);
 @assert(tst1);
+
+
+-----
+
+\prod{#}::Distributable
+a:=A*(B+C)
+distribute(a)
