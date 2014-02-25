@@ -142,6 +142,11 @@ void Properties::clear()
 	pats.clear();
 	}
 
+Properties::registered_property_map_t::~registered_property_map_t()
+	{
+	// FIXME: V2
+	}
+
 void Properties::register_property(property_base* (*fun)())
 	{
 	property_base *tmp=fun(); // need a property object of this type temporarily to retrieve the name
