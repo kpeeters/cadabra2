@@ -201,6 +201,8 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 	const T* ret=0;
 	bool inherits=false;
 
+//	std::cout << *it->name_only() << std::endl;
+//	std::cout << props.size() << std::endl;
 	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit=props.equal_range(it->name_only());
 	
 	// First look for properties of the node itself. Go through the loop twice:
@@ -210,14 +212,15 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 	for(;;) {
 		property_map_t::const_iterator walk=pit.first;
 		while(walk!=pit.second) {
+//			std::cout << "walk " << *((*walk).second.first->obj.begin()->name) << std::endl;
 			if(wildcards==(*walk).second.first->children_wildcard()) {
-				std::cout << "searching " << *it->name << std::endl;
-				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
+//				std::cout << "searching " << *it->name << std::endl;
+//				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
 				if((*walk).second.first->match(*this, it, ignore_parent_rel)) { // match found
-					std::cout << "found match" << std::endl;
+//					std::cout << "found match" << std::endl;
 					ret=dynamic_cast<const T *>((*walk).second.second);
 					if(ret) { // found! determine serial number
-						std::cout << "found property" << std::endl;
+//						std::cout << "found property" << std::endl;
 						if(doserial) {
 							std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator> 
 								pm=pats.equal_range((*walk).second.second);
@@ -231,27 +234,27 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 							}
 						break;
 						}
-					else 						std::cout << "NOT found property" << std::endl;
+//					else 						std::cout << "NOT found property" << std::endl;
 					if(dynamic_cast<const PropertyInherit *>((*walk).second.second)) 
 						inherits=true;
 					}
-				else std::cout << "NOT found match" << std::endl;
+//				else std::cout << "NOT found match" << std::endl;
 				}
 			++walk;
 			}
 		if(!wildcards && !ret) {
-			std::cout << "not yet found, switching to wildcards" << std::endl;
+//			std::cout << "not yet found, switching to wildcards" << std::endl;
 			wildcards=true;
 			}
 		else {
-			std::cout << "all searches done" << std::endl;
+//			std::cout << "all searches done" << std::endl;
 			break;
 			}
 		} 
 
 	// If no property was found, figure out whether a property is inherited from a child node.
 	if(!ret && inherits) {
-		std::cout << "no match but perhaps inheritance?" << std::endl;
+//		std::cout << "no match but perhaps inheritance?" << std::endl;
 		exptree::sibling_iterator sib=it.begin();
 		while(sib!=it.end()) {
 			const T* tmp=get_composite<T>((exptree::iterator)(sib), serialnum, doserial);
@@ -263,7 +266,7 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 			}
 		}
 
-	std::cout << ret << std::endl;
+//	std::cout << ret << std::endl;
 	return ret;
 	}
 

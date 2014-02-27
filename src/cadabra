@@ -5,6 +5,7 @@ from code import InteractiveConsole
 import re
 import readline
 import rlcompleter
+from pcadabra import *
 
 class FileCacher:
     "Cache the stdout text so we can analyze it before returning it"
@@ -26,6 +27,25 @@ class Shell(InteractiveConsole):
         InteractiveConsole.__init__(self)
         return
 
+    # If the object to be displayed is an Ex (add Property), print it
+    # using the human-readable str (FIXME: add other printers). If not,
+    # pass it on to the previously existing display hook.
+    def _displayhook(self, arg):
+        if isinstance(arg, Ex):
+            print(str(arg))
+        else:
+            self.remember_display_hook(arg)
+
+            
+    # Setup hooks for pretty printing.
+    def set_display(self):
+        self.remember_display_hook = sys.displayhook
+        sys.displayhook = self._displayhook
+
+    def unset_display(self):
+        sys.displayhook = self.remember_display_hook
+
+
     def get_output(self): sys.stdout = self.cache
     def return_output(self): sys.stdout = self.stdout
 
@@ -39,6 +59,9 @@ class Shell(InteractiveConsole):
             line=rewrite
 
         # Detect Cadabra property declarations and rewrite to Python form.
+        # todo: make ';' at the end result in an additional print (and
+        # make the print statement print property objects using their
+        # readable form; addresses one issue report).
         match = re.search('(.*?)[ ]*::([^;^(]*)[(]*([^;^)]*)[; ]*', line)
         if match:
             rewrite = match.group(2)+"(Ex('"+match.group(1)+"')"
@@ -62,4 +85,5 @@ if __name__ == '__main__':
      sys.ps1='> '
      sys.ps2='. '
      sh.runsource("from pcadabra import *")
+     sh.set_display()
      sh.interact(banner='Cadabra 2.0\nCopyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>\nInfo at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n')

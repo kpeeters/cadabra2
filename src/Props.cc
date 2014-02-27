@@ -325,7 +325,8 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 		}
 
 	pats.insert(pattern_map_t::value_type(pr, pat));
-	Properties::props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
+//	std::cout << "inserting for " << *(pat->obj.begin()->name_only()) << std::endl;
+	props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 	}
 
 void Properties::insert_list_prop(const std::vector<exptree>& its, const list_property *pr)

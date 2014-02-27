@@ -31,7 +31,8 @@ class Ex {
 		Ex(std::string);
 		std::string get() const;
 		void append(std::string);
-		std::string to_string() const;
+		std::string str_() const;
+		std::string repr_() const;
 
 		Ex& operator=(const Ex&);
 
