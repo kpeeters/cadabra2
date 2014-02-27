@@ -23,35 +23,39 @@ void DisplayTeX::output(std::ostream& str)
 
 void DisplayTeX::output(std::ostream& str, exptree::iterator it) 
 	{
-	if(*it->name!="\\expression") {
-		// print multiplier and object name
-		if(*it->multiplier!=1)
-			print_multiplier(str, it);
-		
-		if(*it->name=="1") {
-			if(*it->multiplier==1 || (*it->multiplier==-1)) // this would print nothing altogether.
-				str << "1";
-			return;
-			}
-		
-		const LaTeXForm *lf=properties.get<LaTeXForm>(it);
-		bool needs_extra_brackets=false;
-		const Accent *ac=properties.get<Accent>(it);
-		if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
-			exptree::sibling_iterator sib=tree.begin(it);
-			while(sib!=tree.end(it)) {
-				if(sib->is_index()) 
-					needs_extra_brackets=true;
-				++sib;
-				}
-			}
-		
-		if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-		if(lf) str << lf->latex;
-		else   str << texify(*it->name);
-		if(needs_extra_brackets) str << "}";
-//	else str << *it->name;
+	if(*it->name=="\\expression") {
+		dispatch(str, tree.begin(it));
+		return;
 		}
+
+	// print multiplier and object name
+	if(*it->multiplier!=1)
+		print_multiplier(str, it);
+	
+	if(*it->name=="1") {
+		if(*it->multiplier==1 || (*it->multiplier==-1)) // this would print nothing altogether.
+			str << "1";
+		return;
+		}
+	
+	const LaTeXForm *lf=properties.get<LaTeXForm>(it);
+	bool needs_extra_brackets=false;
+	const Accent *ac=properties.get<Accent>(it);
+	if(!ac && extra_brackets_for_symbols) { // accents should never get additional curly brackets, {\bar}{g} does not print.
+		exptree::sibling_iterator sib=tree.begin(it);
+		while(sib!=tree.end(it)) {
+			if(sib->is_index()) 
+				needs_extra_brackets=true;
+			++sib;
+			}
+		}
+	
+	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
+	if(lf) str << lf->latex;
+	else   str << texify(*it->name);
+	if(needs_extra_brackets) str << "}";
+//	else str << *it->name;
+
 	print_children(str, it);
 	}
 
@@ -89,11 +93,16 @@ void DisplayTeX::print_children(std::ostream& str, exptree::iterator it, int ski
 	while(ch!=tree.end(it)) {
 		current_bracket_   =(*ch).fl.bracket;
 		current_parent_rel_=(*ch).fl.parent_rel;
-//		const Accent *is_accent=properties.get<Accent>(it);
+		const Accent *is_accent=properties.get<Accent>(it);
 		
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
-			str << zwnbsp << "(" << zwnbsp;
+			if(is_accent==0) 
+				print_opening_bracket(str, (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ &&
+													 current_parent_rel_!=str_node::p_sub && 
+													 current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
+											 current_parent_rel_);
+			else str << "{";
 			}
 		
 		// print this child depending on its name or meaning
@@ -101,7 +110,12 @@ void DisplayTeX::print_children(std::ostream& str, exptree::iterator it, int ski
 
 		++ch;
 		if(ch==tree.end(it) || current_bracket_!=str_node::b_none || current_bracket_!=(*ch).fl.bracket || current_parent_rel_!=(*ch).fl.parent_rel) {
-			str << ")";
+			if(is_accent==0) 
+				print_closing_bracket(str,  (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ && 
+													  current_parent_rel_!=str_node::p_sub && 
+													  current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
+											 current_parent_rel_);
+			else str  << "}";
 			}
 		else str << nbsp;
 		
