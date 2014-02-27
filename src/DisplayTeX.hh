@@ -36,7 +36,8 @@ class DisplayTeX {
 		bool tight_plus=false;
 		bool utf8_output=false;
 		bool latex_spacing=true;
-		bool latex_linefeeds=true; // to prevent buffer overflows in TeX
+		bool latex_linefeeds=true;             // to prevent buffer overflows in TeX
+		bool extra_brackets_for_symbols=false; // wrap extra {} around symbols to ensure typesetting safety
 		
 		int bracket_level=0;
 

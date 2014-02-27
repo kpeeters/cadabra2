@@ -88,4 +88,4 @@ tst1:= a3 + a4 + a5 - @(obj1);
 
 \prod{#}::Distributable.
 a:=A*(B+C);
-distribute(a);
+distribute(a)

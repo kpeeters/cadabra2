@@ -7,6 +7,9 @@ import readline
 import rlcompleter
 from pcadabra import *
 
+sys.path.insert(0, '/home/kasper/Development/git.others/sympy')
+import sympy
+
 class FileCacher:
     "Cache the stdout text so we can analyze it before returning it"
     def __init__(self): self.reset()
@@ -52,13 +55,30 @@ class Shell(InteractiveConsole):
     def push(self,line):
         self.get_output()
 
-        # Detect Cadabra expression statements and rewrite to Python form.
-        match = re.search('(.*?)[ ]*:=[ ]*([^;^\.]*)([;\.]*)[ ]*', line)
-        if match:
-            rewrite = match.group(1)+" = "+"Ex('"+match.group(2)+"')"
-            if match.group(3)==';':
-                rewrite = rewrite + "; print " + match.group(1)
-            line=rewrite
+        # Detect Cadabra expression statements and rewrite to Python
+        # form. The logic is that any expression ending on ';' or '.' is not
+        # going to be a valid/recommended Python expression, so we turn it
+        # into a declaration of an Ex object.
+
+#        match = re.search('[ ]*(.*?)[ ]*:=[ ]*([a-zA-Z\*\/\(\)0-9\^\_ \{\}\(\)]*)([;\.])[ ]*', line)
+        line_stripped=line.rstrip().lstrip()
+        lastchar = line_stripped[-1:]
+        if lastchar=='.' or lastchar==';':
+            line_stripped=line_stripped[:-1]
+            found = line_stripped.find(':=')
+            if found>0:
+                rewrite = line_stripped[:found] + " = Ex('" + line_stripped[found+2:]+"')"
+                if lastchar==';':
+                    rewrite = rewrite + "; print " + line_stripped[:found]
+                line=rewrite
+        else:
+            # Ditto for expressions which have no name (temporaries).
+            match = re.search('[ ]*([a-zA-Z0-9\^\_ \{\}\(\)]*)([;\.])[ ]*', line)
+            if match:
+                rewrite = "__cdbtmp__= Ex('"+match.group(1)+"')"
+                if match.group(2)==';':
+                    rewrite = rewrite + "; print __cdbtmp__"
+                    line=rewrite
 
         # Detect Cadabra property declarations and rewrite to Python form.
         # todo: make ';' at the end result in an additional print (and
@@ -85,6 +105,6 @@ if __name__ == '__main__':
      sh = Shell()
      sys.ps1='> '
      sys.ps2='. '
-     sh.runsource("from pcadabra import *")
+     sh.runsource("from pcadabra import *; import sys; sys.path.insert(0,'/home/kasper/Development/git.others/sympy'); from sympy import *")
      sh.set_display()
-     sh.interact(banner='Cadabra 2.0\nCopyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>\nInfo at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n')
+     sh.interact(banner='Cadabra 2.0\nCopyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>\nInfo at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\nUsing sympy version '+sympy.__version__+"\n")

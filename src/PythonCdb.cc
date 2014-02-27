@@ -19,7 +19,6 @@ Ex::Ex(const Ex& other)
 std::string Ex::str_() const
 	{
 	std::ostringstream str;
-//	tree.print_entire_tree(str);
 	DisplayTeX dt(kernel.properties, tree);
 	dt.output(str);
 
@@ -28,7 +27,9 @@ std::string Ex::str_() const
 
 std::string Ex::repr_() const
 	{
-	return "repr";
+	std::ostringstream str;
+	tree.print_entire_tree(str);
+	return str.str();
 	}
 
 Ex& Ex::operator=(const Ex& other)
