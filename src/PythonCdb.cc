@@ -63,6 +63,42 @@ void Ex::append(std::string v)
 	ex+=v;
 	}
 
+template<class F>
+Ex *dispatch(Ex *ex, bool repeat)
+	{
+	F algo(kernel, ex->tree);
+
+	exptree::iterator it=ex->tree.begin().begin();
+	if(algo.can_apply(it)) {
+		algo.apply(it);
+		}
+	else {
+		std::cout << "cannot apply" << std::endl;
+		}
+
+	return ex;
+	}
+
+template<class F>
+Ex *dispatch_defaults(Ex *ex)
+	{
+	return dispatch<F>(ex, true);
+	}
+
+template<class F>
+Ex *dispatch_string(const std::string& ex, bool repeat)
+	{
+	Ex *exobj = new Ex(ex);
+	return dispatch<F>(exobj, repeat);
+	}
+
+template<class F>
+Ex *dispatch_string_defaults(const std::string& ex)
+	{
+	return dispatch_string<F>(ex, true);
+	}
+
+
 Ex *distribute_algo(Ex *ex, bool repeat)
 	{
 	distribute dst(kernel, ex->tree);
@@ -144,10 +180,10 @@ BOOST_PYTHON_MODULE(pcadabra)
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
-	def("distribute",  &distribute_algo,  (arg("ex"),arg("repeat")), return_internal_reference<1>() );
-	def("distribute",  &distribute_algoD, (arg("ex")),               return_internal_reference<1>() );
-	def("distribute",  &distribute_algo2, (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
-	def("distribute",  &distribute_algo2D,(arg("ex")),               return_value_policy<manage_new_object>() );
+	def("distribute",  &dispatch<distribute>,                 (arg("ex"),arg("repeat")), return_internal_reference<1>() );
+	def("distribute",  &dispatch_defaults<distribute>,        (arg("ex")),               return_internal_reference<1>() );
+	def("distribute",  &dispatch_string<distribute>,          (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
+	def("distribute",  &dispatch_string_defaults<distribute>, (arg("ex")),               return_value_policy<manage_new_object>() );
 
 	def("Distributable",  &attach_Distributable, return_value_policy<manage_new_object>() );
 
