@@ -63,6 +63,8 @@ void Ex::append(std::string v)
 	ex+=v;
 	}
 
+// Templates to dispatch function calls in Python to algorithms in C++.
+
 template<class F>
 Ex *dispatch(Ex *ex, bool repeat)
 	{
@@ -99,39 +101,7 @@ Ex *dispatch_string_defaults(const std::string& ex)
 	}
 
 
-Ex *distribute_algo(Ex *ex, bool repeat)
-	{
-	distribute dst(kernel, ex->tree);
-
-	exptree::iterator it=ex->tree.begin().begin();
-	if(dst.can_apply(it)) {
-		dst.apply(it);
-		}
-	else {
-		std::cout << "cannot apply" << std::endl;
-		}
-
-	return ex;
-	}
-
-Ex *distribute_algoD(Ex *ex)
-	{
-	return distribute_algo(ex, true);
-	}
-
-
-Ex *distribute_algo2(const std::string& ex, bool repeat)
-	{
-	Ex *exobj = new Ex(ex);
-	return distribute_algo(exobj, repeat);
-	}
-
-Ex *distribute_algo2D(const std::string& ex)
-	{
-	return distribute_algo2(ex, true);
-	}
-
-
+ 
 PyObject *ParseExceptionType = NULL;
 
 void translate_ParseException(const ParseException &e)
@@ -153,6 +123,16 @@ void attach_Distributable(Ex *ex)
 	kernel.properties.insert_prop(exptree(it), new Distributable());
 	}
 
+// Templates to attach properties to Ex objects.
+
+template<class Prop>
+void attach(Ex *ex)
+	{
+	exptree::iterator it=ex->tree.begin();
+	assert(*(it->name)=="\\expression");
+	it=ex->tree.begin(it);
+	kernel.properties.insert_prop(exptree(it), new Prop());
+	}
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
@@ -185,7 +165,7 @@ BOOST_PYTHON_MODULE(pcadabra)
 	def("distribute",  &dispatch_string<distribute>,          (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
 	def("distribute",  &dispatch_string_defaults<distribute>, (arg("ex")),               return_value_policy<manage_new_object>() );
 
-	def("Distributable",  &attach_Distributable, return_value_policy<manage_new_object>() );
+	def("Distributable",  &attach<Distributable>, return_value_policy<manage_new_object>() );
 
 
 	// How can we give a handle to the tree in python? And how can we give
