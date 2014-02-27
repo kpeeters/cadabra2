@@ -18,12 +18,10 @@
  
 */
 
-/* 
-   The storage.cc and props.cc files form one module which does not
-   depend on any other file in the system (except of course on the gmp
-   library).
-
-*/
+// Basic storage for expressions. The full meaning of an expression typically
+// requires knowledge about properties of patterns in it, which this header
+// does _not_ contain. All property dependent algorithms acting on exptree
+// objects are in Algorithm.hh.
 
 #pragma once
 

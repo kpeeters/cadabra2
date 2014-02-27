@@ -262,9 +262,9 @@ class tree {
 		/// Return breadth-first end iterator.
 		breadth_first_queued_iterator end_breadth_first() const;
 		/// Return sibling iterator to the first child of given node.
-		sibling_iterator     begin(const iterator_base&) const;
+		static sibling_iterator begin(const iterator_base&);
 		/// Return sibling end iterator for children of given node.
-		sibling_iterator     end(const iterator_base&) const;
+		static sibling_iterator end(const iterator_base&);
       /// Return leaf iterator to the first leaf of the tree.
       leaf_iterator   begin_leaf() const;
       /// Return leaf end iterator for entire tree.
@@ -713,7 +713,7 @@ typename tree<T, tree_node_allocator>::fixed_depth_iterator tree<T, tree_node_al
 	}
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::begin(const iterator_base& pos) const
+typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::begin(const iterator_base& pos) 
 	{
 	assert(pos.node!=0);
 	if(pos.node->first_child==0) {
@@ -723,7 +723,7 @@ typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_alloca
 	}
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::end(const iterator_base& pos) const
+typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::end(const iterator_base& pos) 
 	{
 	sibling_iterator ret(0);
 	ret.parent_=pos.node;
