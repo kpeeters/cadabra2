@@ -31,6 +31,7 @@ set(LOCAL_SRC_FILES
   Stopwatch.cc
   Exceptions.cc
   Algorithm.cc
+  DisplayTeX.cc
   Cleanup.cc
   Combinatorics.cc
   YoungTab.cc
@@ -56,6 +57,7 @@ set(LOCAL_SRC_FILES
   properties/ImplicitIndex.cc
   properties/Indices.cc
   properties/Integer.cc
+  properties/LaTeXForm.cc
   properties/Matrix.cc
   properties/NumericalFlat.cc
   properties/PartialDerivative.cc

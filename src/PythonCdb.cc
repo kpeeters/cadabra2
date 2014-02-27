@@ -3,6 +3,7 @@
 #include "Parser.hh"
 #include "Exceptions.hh"
 #include "Kernel.hh"
+#include "DisplayTeX.hh"
 #include <boost/python/implicit.hpp>
 #include <sstream>
 
@@ -15,12 +16,19 @@ Ex::Ex(const Ex& other)
 	{
 	}
 
-std::string Ex::to_string() const
+std::string Ex::str_() const
 	{
 	std::ostringstream str;
-	tree.print_entire_tree(str);
+//	tree.print_entire_tree(str);
+	DisplayTeX dt;
+	dt.output(str, tree);
 
 	return str.str();
+	}
+
+std::string Ex::repr_() const
+	{
+	return "repr";
 	}
 
 Ex& Ex::operator=(const Ex& other)
@@ -103,7 +111,10 @@ void translate_ParseException(const ParseException &e)
 
 void attach_Distributable(Ex *ex) 
 	{
-	kernel.properties.insert_prop(ex->tree, new Distributable());
+	exptree::iterator it=ex->tree.begin();
+	assert(*(it->name)=="\\expression");
+	it=ex->tree.begin(it);
+	kernel.properties.insert_prop(exptree(it), new Distributable());
 	}
 
 
@@ -122,7 +133,8 @@ BOOST_PYTHON_MODULE(pcadabra)
 	class_<Ex> pyEx("Ex", init<std::string>());
 	pyEx.def("get",     &Ex::get)
 		.def("append",   &Ex::append)
-		.def("__repr__", &Ex::to_string);
+		.def("__str__",  &Ex::str_)
+		.def("__repr__", &Ex::repr_);
 
 
 	// TODO: in order to be able to insert already defined objects into an existing tree,
