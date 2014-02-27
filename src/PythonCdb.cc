@@ -20,8 +20,8 @@ std::string Ex::str_() const
 	{
 	std::ostringstream str;
 //	tree.print_entire_tree(str);
-	DisplayTeX dt;
-	dt.output(str, tree);
+	DisplayTeX dt(kernel.properties, tree);
+	dt.output(str);
 
 	return str.str();
 	}

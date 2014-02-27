@@ -53,23 +53,24 @@ class Shell(InteractiveConsole):
         self.get_output()
 
         # Detect Cadabra expression statements and rewrite to Python form.
-        match = re.search('(.*?)[ ]*:=[ ]*([^;]*)[; ]*', line)
+        match = re.search('(.*?)[ ]*:=[ ]*([^;^\.]*)([;\.]*)[ ]*', line)
         if match:
             rewrite = match.group(1)+" = "+"Ex('"+match.group(2)+"')"
+            if match.group(3)==';':
+                rewrite = rewrite + "; print " + match.group(1)
             line=rewrite
 
         # Detect Cadabra property declarations and rewrite to Python form.
         # todo: make ';' at the end result in an additional print (and
         # make the print statement print property objects using their
         # readable form; addresses one issue report).
-        match = re.search('(.*?)[ ]*::([^;^(]*)[(]*([^;^)]*)[; ]*', line)
+        match = re.search('(.*?)[ ]*::([^;^(^\.]*)[(]*([^;^)^\.]*)[;\. ]*', line)
         if match:
             rewrite = match.group(2)+"(Ex('"+match.group(1)+"')"
             if len(match.group(3))>0:
                 rewrite = rewrite+", "+match.group(3);
             rewrite=rewrite+")"
             line=rewrite
-            print line
         
         ret=InteractiveConsole.push(self,line)
         self.return_output()

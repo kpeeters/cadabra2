@@ -7,11 +7,14 @@
 
 // Class to handle display of expressions using LaTeX notation.
 
+typedef uint32_t kunichar;
+
 class DisplayTeX {
 	public:
-		DisplayTeX(const Properties&, exptree&);
+		DisplayTeX(const Properties&, const exptree&);
 
 		void output(std::ostream&);
+		void output(std::ostream&, exptree::iterator);
 
 	private:
 		str_node::parent_rel_t previous_parent_rel_, current_parent_rel_;
@@ -25,6 +28,23 @@ class DisplayTeX {
 
 		std::string texify(const std::string&) const;
 
-		exptree&          tree;
+		const exptree&    tree;
 		const Properties& properties;
+
+		bool print_star=false;
+		bool tight_star=false;
+		bool tight_plus=false;
+		bool utf8_output=false;
+		bool latex_spacing=true;
+		bool latex_linefeeds=true; // to prevent buffer overflows in TeX
+		
+		int bracket_level=0;
+
+		void dispatch(std::ostream&, exptree::iterator);
+		void print_productlike(std::ostream&, exptree::iterator, const std::string& inbetween);
+		void print_sumlike(std::ostream&, exptree::iterator);
+
+		bool children_have_brackets(exptree::iterator ch) const;
 };
+
+const char *unichar(kunichar c);

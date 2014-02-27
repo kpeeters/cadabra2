@@ -569,11 +569,11 @@ unsigned int Algorithm::number_of_indices(const Properties& pr, iterator it)
 	return res;
 	}
 
-unsigned int Algorithm::number_of_direct_indices(iterator it) const
+unsigned int Algorithm::number_of_direct_indices(iterator it) 
 	{
 	unsigned int res=0;
-	sibling_iterator sib=tr.begin(it);
-	while(sib!=tr.end(it)) {
+	sibling_iterator sib=exptree::begin(it);
+	while(sib!=exptree::end(it)) {
 		if(sib->fl.parent_rel==str_node::p_sub || sib->fl.parent_rel==str_node::p_super)
 			++res;
 		++sib;

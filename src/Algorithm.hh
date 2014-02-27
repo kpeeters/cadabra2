@@ -31,7 +31,9 @@
 #include <fstream>
 
 // Base class for all algorithms, containing generic routines and in
-// particular the logic for index classification.
+// particular the logic for index classification. In particular also
+// contains static algorithms acting on exptree objects which require
+// property information and can therefore not be a member of exptree.
 
 class Algorithm {
 	public:
@@ -135,7 +137,7 @@ class Algorithm {
 		
 		// The number of indices of a node, counting only the direct ones (i.e. not those
 		// inherited from child nodes).
-		unsigned int number_of_direct_indices(iterator it) const;
+		static unsigned int number_of_direct_indices(iterator it);
 
 	protected:
 		Kernel   kernel;
