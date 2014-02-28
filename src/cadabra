@@ -59,39 +59,42 @@ class Shell(InteractiveConsole):
         # form. The logic is that any expression ending on ';' or '.' is not
         # going to be a valid/recommended Python expression, so we turn it
         # into a declaration of an Ex object.
+        # Detect Cadabra property declarations and rewrite to Python form.
+        # todo: make ';' at the end result in an additional print (and
+        # make the print statement print property objects using their
+        # readable form; addresses one issue report).
 
-#        match = re.search('[ ]*(.*?)[ ]*:=[ ]*([a-zA-Z\*\/\(\)0-9\^\_ \{\}\(\)]*)([;\.])[ ]*', line)
         line_stripped=line.rstrip().lstrip()
         lastchar = line_stripped[-1:]
         if lastchar=='.' or lastchar==';':
             line_stripped=line_stripped[:-1]
             found = line_stripped.find(':=')
             if found>0:
+                print "an expression"
                 rewrite = line_stripped[:found] + " = Ex('" + line_stripped[found+2:]+"')"
-                if lastchar==';':
-                    rewrite = rewrite + "; print " + line_stripped[:found]
-                line=rewrite
-        else:
-            # Ditto for expressions which have no name (temporaries).
-            match = re.search('[ ]*([a-zA-Z0-9\^\_ \{\}\(\)]*)([;\.])[ ]*', line)
-            if match:
-                rewrite = "__cdbtmp__= Ex('"+match.group(1)+"')"
-                if match.group(2)==';':
-                    rewrite = rewrite + "; print __cdbtmp__"
-                    line=rewrite
-
-        # Detect Cadabra property declarations and rewrite to Python form.
-        # todo: make ';' at the end result in an additional print (and
-        # make the print statement print property objects using their
-        # readable form; addresses one issue report).
-        match = re.search('(.*?)[ ]*::([^;^(^\.]*)[(]*([^;^)^\.]*)[;\. ]*', line)
-        if match:
-            rewrite = match.group(2)+"(Ex('"+match.group(1)+"')"
-            if len(match.group(3))>0:
-                rewrite = rewrite+", "+match.group(3);
-            rewrite=rewrite+")"
+                objname=line_stripped[:found]
+            else:
+                # Is it a property declaration?
+                found = line_stripped.find('::')
+                if found>0:
+                    print "a property"
+                    match = re.search('([a-zA-Z]*)(.*)', line_stripped[found+2:])
+                    if match:
+                        if len(match.group(2))>0: # declaration with arguments
+                            rewrite = "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), "+match.group(2)[1:-1]+")"
+                        else:
+                            rewrite = "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex('"+line_stripped[:found]+"'))"
+                        objname="__cdbtmp__"
+                    else:
+                        print "inconsistent"
+                else:
+                    rewrite = "__cdbtmp__= Ex('"+line_stripped+"')"
+            if lastchar==';':
+                rewrite = rewrite + "; print " + objname
             line=rewrite
-        
+
+        # Now feed the pre-parsed input to Python.
+
         ret=InteractiveConsole.push(self,line)
         self.return_output()
         output = self.cache.flush()
