@@ -231,10 +231,36 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 
 void DisplayTeX::dispatch(std::ostream& str, exptree::iterator it) 
 	{
-	if(*it->name=="\\prod")     print_productlike(str, it, " ");
-	else if(*it->name=="\\sum") print_sumlike(str, it);
+	if(*it->name=="\\prod")      print_productlike(str, it, " ");
+	else if(*it->name=="\\sum")  print_sumlike(str, it);
+	else if(*it->name=="\\frac") print_fraclike(str, it);
 	else
 		output(str, it);
+	}
+
+void DisplayTeX::print_fraclike(std::ostream& str, exptree::iterator it)
+	{
+	exptree::sibling_iterator num=tree.begin(it), den=num;
+	++den;
+
+	bool close_bracket=false;
+	if(*it->multiplier!=1) {
+		print_multiplier(str, it);
+		str << "(";
+		close_bracket=true;
+		}
+	str << "\\frac{";
+
+	dispatch(str, num);
+
+	str << "}{";
+//		 str << "/";
+	
+	dispatch(str, den);
+
+	str << "}";
+	if(close_bracket)
+		str << ")";
 	}
 
 void DisplayTeX::print_productlike(std::ostream& str, exptree::iterator it, const std::string& inbetween)
