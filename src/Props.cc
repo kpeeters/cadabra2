@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <typeinfo>
 #include <iostream>
+#include <sstream>
 #include "properties/Indices.hh"
 
 pattern::pattern()
@@ -469,5 +470,59 @@ int Properties::serial_number(const property *listprop, const pattern *pat) cons
  */
 
 
+std::string Properties::master_insert(exptree proptree, property *thepropbase)
+	{
+	// FIXME: handle parsing of arguments
 
+	std::ostringstream str;
 
+	exptree::sibling_iterator st=proptree.begin();
+	std::cout << *st->name << std::endl;
+
+	list_property *thelistprop=dynamic_cast<list_property *>(thepropbase);
+	if(thelistprop) { // a list property
+		std::vector<exptree> objs;
+		if(*st->name=="\\comma") {
+			exptree::sibling_iterator sib=proptree.begin(st);
+			str << "Assigning list property " << thepropbase->name() << " to $";
+			while(sib!=proptree.end(st)) {
+				if(sib->fl.parent_rel!=str_node::p_property) {
+					objs.push_back(exptree(sib));
+					str << *sib->name << " ";
+					}
+				++sib;
+				}
+			str << "$.";
+			}
+		if(objs.size()<2) 
+			throw ConsistencyException("A list property cannot be assigned to a single object.");
+		
+		insert_list_prop(objs, thelistprop);
+		}
+	else { // a normal property
+		property *theprop=dynamic_cast<property *>(thepropbase);
+		assert(theprop);
+		if(*st->name=="\\comma") {
+			exptree::sibling_iterator sib=proptree.begin(st);
+//			txtout << "Assigning property " << propname << " to ";
+			while(sib!=proptree.end(st)) {
+				if(theprop==0) { // create a new property for each object
+//					thepropbase=(*pit).second();
+//					thepropbase->parse(tr,st,proptree.begin(),keyvals);
+					theprop    =dynamic_cast<property *>(thepropbase);
+					assert(theprop);
+//					theprop->core_parse(keyvals);
+					}
+				if(sib->fl.parent_rel!=str_node::p_property) {
+					insert_prop(exptree(sib), theprop);
+					theprop=0;
+					}
+				++sib;
+				}				
+			}
+		else {
+			insert_prop(exptree(st), theprop);
+			}
+		}
+return str.str();
+}

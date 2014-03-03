@@ -91,3 +91,8 @@ a:=A*(B+C);
 distribute(a);
 b:=A_{m n} (B^{n p} + C^{n p});
 distribute(b);
+
+\prod{#}::IndexInherit.
+{a,b,c,d}::Indices;
+ex:=A_{c d} C^{d};
+rename_dummies(ex);

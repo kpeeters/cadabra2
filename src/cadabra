@@ -40,6 +40,8 @@ class Shell(InteractiveConsole):
     def _displayhook(self, arg):
         if isinstance(arg, Ex):
             print(str(arg))
+        elif isinstance(arg, Property):
+            print(str(arg))
         else:
             self.remember_display_hook(arg)
 

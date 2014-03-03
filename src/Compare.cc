@@ -60,6 +60,8 @@ int subtree_compare(const Properties *properties,
 		}
 	else mult=2;
 	
+//	std::cout << "mult for " << *one->name << " vs " << *two->name << " now " << mult << std::endl;
+
 	// Compare sub/superscript relations.
 	if((mod_prel==-2 && position_type!=Indices::free) && one->is_index() && two->is_index() ) {
 		if(one->fl.parent_rel!=two->fl.parent_rel) {
@@ -92,6 +94,8 @@ int subtree_compare(const Properties *properties,
 			else return -mult;
 			}
 		}
+
+//	std::cout << "update: mult for " << *one->name << " vs " << *two->name << " now " << mult << std::endl;
 
 	// Now turn to the child nodes. Before comparing them directly, first compare
 	// the number of children, taking into account range wildcards.
@@ -174,6 +178,7 @@ bool subtree_exact_less(const Properties* properties, exptree::iterator one, exp
 bool subtree_exact_equal(const Properties* properties, exptree::iterator one, exptree::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 	{
 	int cmp=subtree_compare(properties, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
+//	std::cout << *one->name << " == " << *two->name << " : " << cmp << std::endl;
 	if(cmp==0) return true;
 	return false;
 	}
@@ -243,9 +248,9 @@ bool tree_exact_equal_mod_prel_obj::operator()(const exptree& one, const exptree
 	return tree_exact_equal(properties, one, two, 0, true, -2, true);
 	}
 
-bool tree_equal_for_indexmap_obj::operator()(const exptree& one, const exptree& two) const
+bool tree_exact_less_for_indexmap_obj::operator()(const exptree& one, const exptree& two) const
 	{
-	return tree_exact_equal(0, one, two, 0, true, -2, true);
+	return tree_exact_less(0, one, two, 0, true, -2, true);
 	}
 
 //bool operator==(const exptree& first, const exptree& second)
