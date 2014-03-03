@@ -77,7 +77,7 @@ class Shell(InteractiveConsole):
         if found>0:
             rewrite = line_stripped[:found] + " = Ex('" + line_stripped[found+2:]+"')"
             objname=line_stripped[:found]
-            if lastchar==';':
+            if lastchar!='.':
                 rewrite = rewrite + "; print " + objname
             line=rewrite
         else:
@@ -91,7 +91,7 @@ class Shell(InteractiveConsole):
                     else:
                         rewrite = "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex('"+line_stripped[:found]+"'))"
                     objname="__cdbtmp__"
-                    if lastchar==';':
+                    if lastchar!='.':
                         rewrite = rewrite + "; print " + objname
                     line=rewrite
                 else:
