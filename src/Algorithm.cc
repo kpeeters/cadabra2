@@ -582,7 +582,7 @@ unsigned int Algorithm::number_of_direct_indices(iterator it)
 	}
 
 Algorithm::index_iterator::index_iterator(const Properties& k)
-	: iterator_base(), properties(k)
+	: iterator_base(), properties(&k)
 	{
 	}
 
@@ -669,17 +669,16 @@ Algorithm::index_iterator& Algorithm::index_iterator::operator++()
 
 	const IndexInherit *this_inh=0, *parent_inh=0;
 	while(walk!=halt) {
-		this_inh=properties.get<IndexInherit>(walk);
+		this_inh=properties->get<IndexInherit>(walk);
 		
 		if(this_inh==0 && (walk!=roof && walk.node->parent!=0)) {
-			parent_inh=properties.get<IndexInherit>(walk.node->parent);
+			parent_inh=properties->get<IndexInherit>(walk.node->parent);
 			if(parent_inh==0)
 				walk.skip_children();
 			}
 		
 		++walk;
 
-//		txtout << "walking " << *walk->name << std::endl;
 		if(walk!=halt)
 			 if(walk->is_index()) 
 				  break;
@@ -690,7 +689,9 @@ Algorithm::index_iterator& Algorithm::index_iterator::operator++()
 		this->node=0;
 		return *this;
 		}
-	else this->node=walk.node;
+	else {
+		this->node=walk.node;
+		}
 
 	return *this;
 	}
@@ -1055,32 +1056,31 @@ exptree Algorithm::get_dummy(const list_property *dums, iterator it1, iterator i
 	return get_dummy(dums, &one, &two, &three, &four, 0);
 	}
 
-// FIXME: make print to a given stream
-void Algorithm::print_classify_indices(iterator st) const
+void Algorithm::print_classify_indices(std::ostream& str, iterator st) const
 	{
 	index_map_t ind_free, ind_dummy;
 	classify_indices(st, ind_free, ind_dummy);
 	
 	index_map_t::iterator it=ind_free.begin();
 	index_map_t::iterator prev=ind_free.end();
-//	txtout << "free indices: " << std::endl;
+	str << "free indices: " << std::endl;
 	while(it!=ind_free.end()) {
 		if(prev==ind_free.end() || tree_exact_equal(&kernel.properties, (*it).first,(*prev).first,1,true,-2,true)==false)
-//			txtout << *(*it).first.begin()->name << " (" << ind_free.count((*it).first) << ") ";
+			str << *(*it).first.begin()->name << " (" << ind_free.count((*it).first) << ") ";
 		prev=it;
 		++it;
 		}
-//	txtout << std::endl;
+	str << std::endl;
 	it=ind_dummy.begin();
 	prev=ind_dummy.end();
-//	txtout << "dummy indices: ";
+	str << "dummy indices: ";
 	while(it!=ind_dummy.end()) {
 		if(prev==ind_dummy.end() || tree_exact_equal(&kernel.properties, (*it).first,(*prev).first,1,true,-2,true)==false)
-//			txtout << *(*it).first.begin()->name << " (" << ind_dummy.count((*it).first) << ") ";
+			str << *(*it).first.begin()->name << " (" << ind_dummy.count((*it).first) << ") ";
 		prev=it;
 		++it;
 		}
-//	txtout << std::endl;
+	str << std::endl;
 	}
 
 // For each iterator in the original map, find the sequential position of the index.
@@ -1214,7 +1214,6 @@ void Algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_ma
 		}
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(par);
 
-//	txtout << "class: " << *par->name << std::endl;
 	if(*par->name=="\\sum" || *par->name=="\\equals") {
 		// sums or equal signs are no problem since the other terms do not end up in our
 		// factor; therefore, just go up.
@@ -1408,7 +1407,6 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 				index_map_t new_dummy;
 				determine_intersection(factor_free, free_so_far, new_dummy, true);
 				free_so_far.insert(factor_free.begin(), factor_free.end());
-//			txtout << "free_so_far: " << free_so_far.size() << std::endl;
 				ind_dummy.insert(new_dummy.begin(), new_dummy.end());
 				}
 			else {
@@ -1444,12 +1442,11 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		// node gets replaced).
 		}
 	else {
-//		txtout << "classifying " << *it->name << std::endl;
 		sibling_iterator sit=it.begin();
 		index_map_t item_free;
 		index_map_t item_dummy;
 		while(sit!=it.end()) {
-//			txtout << *sit->name << std::endl;
+//			std::cout << *sit->name << std::endl;
 			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) &&
 				sit->fl.bracket==str_node::b_none /* && sit->is_integer()==false */) {
 				if(*sit->name!="??") {
@@ -1462,13 +1459,16 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					else {
 						index_map_t::iterator fnd=item_free.find(exptree(sit));
 						if(fnd!=item_free.end()) {
+//							std::cout << *sit->name << " already in free set" << std::endl;
 							if(item_dummy.find(exptree(sit))!=item_dummy.end())
 								throw ConsistencyException("Triple index " + *sit->name + " inside a single factor found.");
 							item_dummy.insert(*fnd);
 							item_free.erase(fnd);
 							item_dummy.insert(index_map_t::value_type(exptree(sit), iterator(sit)));
+//							std::cout << item_dummy.size() << " " << item_free.size() << std::endl;
 							}
 						else {
+//							std::cout << *sit->name << " is new" << std::endl;
 							item_free.insert(index_map_t::value_type(exptree(sit), iterator(sit)));
 							}
 						}
@@ -1482,8 +1482,8 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		ind_free.insert(item_free.begin(), item_free.end());
 		ind_dummy.insert(item_dummy.begin(), item_dummy.end());
 		}
-//	txtout << "ind_free: " << ind_free.size() << std::endl;
-//	txtout << "ind_dummy: " << ind_dummy.size() << std::endl;
+//	std::cout << "ind_free: " << ind_free.size() << std::endl;
+//	std::cout << "ind_dummy: " << ind_dummy.size() << std::endl;
 
 	index_sw.stop();
 	}
@@ -1701,3 +1701,12 @@ bool Algorithm::cleanup_anomalous_products(exptree& tr, exptree::iterator& it)
 	return false;
 	}
 
+Algorithm::index_iterator& Algorithm::index_iterator::operator=(const index_iterator& other)
+	{
+	iterator_base::operator=(other);
+	halt=other.halt;
+	walk=other.walk;
+	roof=other.roof;
+	properties=other.properties;
+	return *this;
+	}
