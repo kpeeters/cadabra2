@@ -10,8 +10,6 @@ from pcadabra import *
 sys.path.insert(0, '/home/kasper/Development/git.others/sympy')
 import sympy
 
-# FIXME: generate this list dynamically
-cdb_commands={"distribute", "keep_terms"}
 
 class FileCacher:
     "Cache the stdout text so we can analyze it before returning it"
@@ -97,6 +95,8 @@ class Shell(InteractiveConsole):
                 else:
                     print "inconsistent" # property names can only contain letters
 #            else:
+# FIXME: generate this list dynamically
+# cdb_commands={"distribute", "keep_terms"}
 # COULD STILL SEE IF there is unexpected indent, and use that as a cadabra signal.
                 # Now we dispatch based on whether the first name is defined as a cdb function
 #                 match = re.search('([a-zA-Z\_]*).*', line_stripped)
