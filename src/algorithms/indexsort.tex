@@ -1,0 +1,26 @@
+\cdbalgorithm{indexsort}{}
+
+Lexographically sorts indices of all tensors according to their Young
+tableau symmetries. This works in simple symmetric or anti-symmetric
+cases as expected:
+\begin{screen}{1,2}
+A_{m n}::AntiSymmetric.
+A_{n m};
+@indexsort!(%);
+(-1) A_{m n};
+\end{screen}
+It also sorts index groups in tensors with row exchange
+symmetries, such as the Riemann tensor,
+\begin{screen}{1,2}
+R_{a b c d}::RiemannTensor.
+R_{d c a b};
+@indexsort!(%);
+(-1) R_{a b c d};
+\end{screen}
+For more complicated canonicalisation algorithms,
+see \subscommand{canonicalise} as well as \subscommand{reduce}.
+
+\cdbseealgo{canonicalise}
+\cdbseealgo{reduce}
+\cdbseeprop{AntiSymmetric}
+\cdbseeprop{TableauSymmetry}

@@ -1,0 +1,23 @@
+\cdbalgorithm{split\_index}{}
+
+Replace a sum by a sum-of-sums, abstractly. Concretely, replaces all
+index contractions of a given type by a sum of two terms, each with
+indices of a different type. Useful for Kaluza-Klein reductions and
+the like. An example makes this more clear:
+\begin{screen}{1,2,3,4,5,7,8}
+{M,N,P,Q,R}::Indices(full).
+{m,n,p,q,r}::Indices(space1).
+{a,b,c,d,e}::Indices(space2).
+A_{M p} B_{M p};
+@split_index(%){M,m,a};
+A_{m p} B_{m p} + A_{a p} B_{a p};
+@pop(%);
+@split_index(%){M,m,4};
+A_{m p} B_{m p} + A_{4 p} B_{4 p};
+\end{screen}
+Note that the two index types into wich the original indices should be
+split can be either symbolic (as in the first case above) or numeric
+(as in the second case).
+
+\cdbseeprop{Indices}
+\cdbseealgo{rewrite_indices}

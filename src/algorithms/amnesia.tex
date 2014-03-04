@@ -1,0 +1,19 @@
+\cdbalgorithm{amnesia}{}
+
+Forget the history of the indicated expression, that is, remove all
+previous forms of the expression from memory. 
+\begin{screen}{1,2,4,5}
+A (B + C);
+@distribute!(%);
+A B + A C;
+@amnesia(%);
+@pop(%);
+@pop: not applicable.
+\end{screen}
+This is mainly useful to purge extremely long intermediate expressions
+from memory, while still retaining the option to use the expression
+history for other expressions (instead of switching expression
+histories off altogether with \subsprop{KeepHistory}).
+
+\cdbseealgo{pop}
+\cdbseeprop{KeepHistory}

@@ -1,0 +1,30 @@
+\cdbalgorithm{range}{}
+
+Replaces a two-element list of integers
+  with the elements in the range,
+\begin{screen}{1,2,4}
+{-3,2};
+@range(%);
+\{ -3,-2,-1,0,1,2 \}
+@range[{1,3}];
+\{ 1,2,3 \}
+\end{screen}
+When the list has three elements, the algorithm generates a list
+consisting of a number of copies of the third element of the given
+list,
+\begin{screen}{1}
+@range[{1,3,c}];
+{c,c,c};
+\end{screen}
+When the list contains four elements, the first one is used as a
+counter, and can appear in the fourth element to generate different
+list elements,
+\begin{screen}{1}
+@range[{i, 1, 5, c_{i} }];
+{ c_1, c_2, c_3, c_4, c_5 };
+\end{screen}
+~
+
+\cdbseealgo{inner}
+\cdbseealgo{length}
+\cdbseealgo{coefficients}

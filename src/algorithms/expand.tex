@@ -1,0 +1,41 @@
+\cdbalgorithm{expand}{}
+
+Write out products of matrices and vectors inside indexbrackets,
+inserting new dummy indices for the contraction. This requires that
+the objects inside the index bracket are properly declared to
+have \subsprop{Matrix} or \subsprop{ImplicitIndex} properties.  
+
+Here is an example with multiple matrices:
+\begin{screen}{1,2,3}
+{a,b,c,d,e}::Indices.
+{A,B,C,D}::Matrix.
+(A B C D)_{a b};
+@expand!(%);
+A_{a c} B_{c d} C_{d e} D_{e b};
+\end{screen}
+Compare the above to the following example, in which one of the
+objects inside the bracket is no longer a matrix:
+\begin{screen}{1,2,3}
+{a,b,c,d,e}::Indices.
+{A,B,D}::Matrix.
+(A B C D)_{a b};
+@expand!(%);
+A_{a c} B_{c d} C D_{d b};
+\end{screen}
+Finally, an example with matrices carrying additional labels, as well
+as a vector object:
+\begin{screen}{1,2}
+{\alpha,\beta}::Indices.
+\Gamma{#}::Matrix.
+v::ImplicitIndex.
+(\Gamma_{r} v)_{\alpha};
+@expand!(%);
+(\Gamma_{r})_{\alpha \beta} v_{\beta};
+\end{screen}
+Note that in all cases, the indices on the indexbracket have to be
+part of a large enough set so that the dummy indices can be generated.
+
+\cdbseeprop{Matrix}
+\cdbseeprop{ImplicitIndex}
+\cdbseeprop{Indices}
+\cdbseealgo{combine}

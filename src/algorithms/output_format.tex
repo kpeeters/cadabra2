@@ -1,0 +1,19 @@
+\cdbalgorithm{output\_format}{}
+
+Set the output format according to the argument given. It can take one
+of the three values This can take one of the values {\tt cadabra},
+{\tt mathematica}, {\tt reduce}, {\tt maple}, {\tt texmacs}, {\tt
+xcadabra}, {\tt mathml}. 
+\begin{screen}{1}
+@output_format{mathematica};
+A_{m n} B_{p q};
+Tensor[A, {m, n}] * Tensor[B, {p, q}];
+@output_format{reduce};
+A(m,n) * B(p,q);
+\end{screen}
+Not all of these output formats are fully functional and some are
+meant only as an internal format (e.g.~{\tt xcadabra} is used for
+communication with the graphical front-end).  
+
+\cdbseealgo{print}
+

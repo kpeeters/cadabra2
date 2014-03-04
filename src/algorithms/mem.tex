@@ -1,0 +1,18 @@
+\cdbalgorithm{mem}{}
+
+Displays an overview of the current memory usage, of the form
+\begin{screen}{1,2}
+# of names      : 32
+# of rationals  : 3
+# of nodes      : 22 (= 704 bytes)
+# of expressions: 2
+\end{screen}
+Memory consumption can be limited by disabling expression histories
+with the \subsprop{KeepHistory} property, or by
+using \subscommand{amnesia}.
+
+\cdbseeprop{KeepHistory}
+\cdbseealgo{amnesia}
+\cdbseealgo{tree}
+\cdbseealgo{timing}
+

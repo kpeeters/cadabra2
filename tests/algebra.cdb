@@ -91,8 +91,15 @@ a:=A*(B+C);
 distribute(a);
 b:=A_{m n} (B^{n p} + C^{n p});
 distribute(b);
+distribute('A_{m n} (B^{n p} + C^{n p})');
 
 \prod{#}::IndexInherit.
 {a,b,c,d}::Indices;
 ex:=A_{c d} C^{d};
 rename_dummies(ex);
+
+ex:=A B A D C;
+sort_product(ex)
+ex:=B
+rl:= B -> Q;
+substitute(ex, rl)

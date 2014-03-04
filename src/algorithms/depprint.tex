@@ -1,0 +1,15 @@
+\cdbalgorithm{depprint}{}
+
+Display an expression together with all 
+properties of the symbols that appear in this expression. This is a
+very useful command if you want to extract a result from a long
+calculation and write it in a separate file for further processing. 
+\begin{screen}{1,2}
+\Gamma{#}::GammaMatrix.
+{m,n,p,q}::Indices.
+\Gamma_{m n p};
+@depprint(%);
+\end{screen}
+~
+
+\cdbseealgo{print}

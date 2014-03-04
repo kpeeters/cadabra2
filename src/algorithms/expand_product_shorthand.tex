@@ -1,0 +1,19 @@
+\cdbalgorithm{expand\_product\_shorthand}{}
+
+Reverse of the \subscommand{product\_shorthand} algorithm. In addition
+to the two tensor names, it takes a number denoting the total number
+of indices.
+\begin{screen}{1,2,3,5}
+F_{m n p q}::Symmetric.
+G_{m n p q}::Symmetric.
+@product_shorthand![ F_{a b c d} G_{a b d f} ]{F}{G};
+F_{c} G_{f};
+@expand_product_shorthand!(%){F}{G}{4};
+F_{c a b d} G_{f a b d};
+\end{screen}
+Note that writing a product as a shorthand and then expanding again
+may re-order the indices, as in the example above.
+
+\cdbseealgo{product_shorthand}
+\cdbseeprop{Symmetric}
+\cdbseeprop{AntiSymmetric}

@@ -1,0 +1,27 @@
+\cdbalgorithm{rewrite\_diracbar}{}
+
+Rewrite the Dirac conjugate
+  of a product of spinors and gamma matrices as a product of Dirac
+  and hermitean conjugates. This uses
+  \begin{equation}
+    \bar\psi = i \psi^\dagger\Gamma^0\,,
+\end{equation}
+together with 
+\begin{equation}
+  \Gamma_m^{\dagger} = \Gamma_0\Gamma_m\Gamma_0 \,.
+\end{equation}
+For example,
+\begin{screen}{1,2,3,4,5}
+\bar{#}::DiracBar.
+\psi::Spinor(dimension=10).
+\Gamma{#}::GammaMatrix.
+\bar{\Gamma^{m n p} \psi};
+@rewrite_diracbar!(%);
+\bar{\psi} \Gamma^{m n p};
+\end{screen}
+~
+
+\cdbseealgo{spinorsort}
+\cdbseeprop{GammaMatrix}
+\cdbseeprop{DiracBar}
+\cdbseeprop{Spinor}

@@ -1,0 +1,22 @@
+\cdbalgorithm{eliminate\_metric}{}
+
+Eliminates metric and inverse metric objects.
+\begin{screen}{1,2,3,4,5,6,7,8,10}
+{m, n, p, q, r}::Indices(vector, position=fixed).
+{m, n, p, q, r}::Integer(0..9).
+g_{m n}::Metric.
+g^{m n}::InverseMetric.
+g_{m}^{n}::KroneckerDelta.
+g^{m}_{n}::KroneckerDelta.
+g_{m p} g^{p m};
+@eliminate_metric!(%);
+g^{p}_{p};
+@eliminate_kr!(%);
+10;
+\end{screen}
+Other elimination commands of a similar type are
+\subscommand{eliminate\_kr} for Kronecker delta symbols
+and \subscommand{eliminate\_vielbein} for vielbeine.
+
+\cdbseealgo{eliminate_kr}
+\cdbseealgo{eliminate_vielbein}

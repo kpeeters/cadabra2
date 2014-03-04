@@ -1,0 +1,25 @@
+\cdbalgorithm{all\_contractions}{}
+
+Construct all full contractions of the given tensors, taking into
+account mono-term symmetries. Example,
+\begin{screen}{1,2,3,4,5}
+A_{m n}::Symmetric.
+A_{m n}::Traceless.
+{m,n,p,q,r,s,t,u}::Indices(vector).
+{m,n,p,q,r,s,t,u}::Integer(0..9).
+obj14:= A_{m n} A_{p q} A_{r s} A_{t u};
+@all_contractions(%){2};
+A_{m n} A_{m n} A_{p q} A_{p q} + A_{m n} A_{m p} A_{n q} A_{p q};
+\end{screen}
+
+This command is not entirely correct at the moment: it determines the
+total number of singlets correctly, but does not generate parity-odd
+contractions (the ones involving an epsilon tensor). It also does not
+know about dimension-dependent identities. If this is a problem for
+your application, contact the author for an experimental version of
+cadabra.
+
+\cdbseeprop{Symmetric}
+\cdbseeprop{Traceless}
+\cdbseealgo{canonicalise}
+

@@ -1,0 +1,21 @@
+\cdbalgorithm{riemann\_index\_regroup}{}
+
+Given a set (or multiple sets) of indices in which to anti-symmetrise,
+this routine determines whether the indicated Riemann tensor has an
+index distribution with two of the anti-symmetrised indices on two
+different pairs. If so, it performs the substitution
+\begin{equation*}
+R_{m [p|\, n|q]} \rightarrow \frac{1}{2}R_{m n p q}\, ,
+\end{equation*}
+which is valid by virtue of the Riccy cyclic identity $R_{m [npq]}=0$.
+The example above translates to
+\begin{screen}{1,2,3,4}
+R_{m n p q}::RiemannTensor.
+A^{m n}::AntiSymmetric.
+R_{m p n q} A^{p q};
+@riemann_index_regroup!(%);
+ 1/2 R_{m n p q} A^{p q};
+\end{screen}
+Note that this also works on Weyl tensors.
+
+\cdbseealgo{young_project_tensor}

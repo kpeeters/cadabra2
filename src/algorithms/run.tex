@@ -1,0 +1,21 @@
+\cdbalgorithm{run}{}
+
+Run an external program on the input expression, replacing it with the
+standard output of the program. The expression is the first command
+line argument of the program to be called.
+
+Suppose we have a simple script {\tt test.sh} containing
+\begin{screen}{0}
+#!/bin/sh
+echo "$1" | sed -e 's/A/B/g' -e '/;/q'
+\end{screen}
+This script replaces 'A' with 'B' in the first command line argument,
+until it encounters a semi-colon.  We can then call this script by
+using e.g.
+\begin{screen}{1,2}
+A B C A D E;
+@run(%){"./test.sh"};
+B B C B D E;
+\end{screen}
+The external program should make sure that it produces valid cadabra
+input. 

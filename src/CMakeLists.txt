@@ -72,6 +72,8 @@ set(LOCAL_SRC_FILES
   algorithms/rename_dummies.cc
   algorithms/flatten_product.cc
   algorithms/prodcollectnum.cc
+  algorithms/sort_product.cc
+  algorithms/substitute.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh

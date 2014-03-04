@@ -1,0 +1,16 @@
+\cdbalgorithm{pop}{}
+
+Remove the last step of the indicated expression
+history. 
+\begin{screen}{1,2,4}
+A (B + C);
+@distribute!(%);
+A B + A C;
+@pop(%);
+A (B + C);
+\end{screen}
+This only works if history keeping was not turned off with
+the \subsprop{KeepHistory} property.
+
+\cdbseealgo{amnesia}
+\cdbseeprop{KeepHistory}

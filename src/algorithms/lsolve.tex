@@ -1,0 +1,13 @@
+\cdbalgorithm{lsolve}{}
+
+Solve a system of linear equations over integers. Example,
+\begin{screen}{1,2}
+{ a0+2*a2 + a3= 3, -a0 - a2 + a3= - (8/3) , a3 = 3};
+@lsolve(%){a0,a2,a3};
+{a0 = 34/3, a2 = (-17/3), a3 = 3};
+\end{screen}
+Underdetermined and inconsistent systems are handled as expected:
+either some coefficients are left unfixed or the system is returned
+and an error message is printed.
+
+\cdbseealgo{decompose}

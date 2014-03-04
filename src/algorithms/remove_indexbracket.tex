@@ -1,0 +1,26 @@
+\cdbalgorithm{remove\_indexbracket}{}
+
+When a single symbol-with-indices is entered as
+\begin{screen}{1}
+(A)_{\mu\nu};
+\end{screen}
+it gets wrapped in an \texcommand{indexbracket} node. In order to
+remove this node again, and produce
+\begin{screen}{1}
+A_{\mu\nu}
+\end{screen}
+again, use \subscommand{remove\_indexbracket}. 
+\begin{screen}{1,2}
+(A)_{\mu\nu};
+@remove_indexbracket!(%);
+A_{\mu\nu};
+\end{screen}
+
+This algorithm is also useful after the \subscommand{distribute}
+command has
+been called on an
+\texcommand{indexbracket} node which contained a sum; the
+\subscommand{remove\_indexbracket} will then remove the superfluous
+brackets around the single symbols.
+
+\cdbseealgo{distribute}

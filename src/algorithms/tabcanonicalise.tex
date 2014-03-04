@@ -1,0 +1,19 @@
+\cdbalgorithm{tabcanonicalise}{}
+
+Canonicalise a tableau, that is, sort equal-length columns and sort
+boxes within columns. This algorithm acts on objects with
+the \subsprop{FilledTableau} property.
+\begin{screen}{1,2,3}
+\tableau{#}::FilledTableau.
+\tableau{b,d}{c,a};
+@tabcanonicalise!(%);
+-\tableau{a,b}{d,c};
+\end{screen}
+This algorithm only uses mono-term symmetries of Young tableaux,
+i.e.~symmetries which relate the given tableau to one other
+tableau. Garnir symmetries (generalised Bianchi and Ricci identities)
+are not handled by \subscommand{tabcanonicalise} but require the use
+of \subscommand{tabstandardform}.
+
+\cdbseeprop{FilledTableau}
+\cdbseealgo{tabstandardform}

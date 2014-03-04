@@ -1,0 +1,9 @@
+\cdbalgorithm{unique\_indices}{}
+
+Make all open indices in a product of tensors unique, taking into
+account index set declarations.
+\begin{screen}{1,2}
+{m,n,p#}::Indices.
+{ A_{m n}, B_{m n},  C_{m n} };
+@unique_indices!(%);
+\end{screen}

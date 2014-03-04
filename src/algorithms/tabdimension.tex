@@ -1,0 +1,23 @@
+\cdbalgorithm{tabdimension}{}
+
+Compute the dimension of the representation corresponding to a tableau
+or filled tableau. This algorithm acts on objects with
+the \subsprop{Tableau} or \subsprop{FilledTableau} property, which
+should have the {\tt dimension} argument set.
+\begin{screen}{1,2,3,5,6,7}
+\tableau{#}::Tableau(dimension=10).
+\tableau{2}{2};
+@tabdimension!(%);
+825;
+\tableau{#}::Tableau(dimension=8).
+\tableau{2}{2};
+@tabdimension!(%);
+336;
+\end{screen}
+The computation uses the standard hook rule.
+
+\cdbseeprop{Tableau}
+\cdbseeprop{FilledTableau}
+\cdbseealgo{tabdimension}
+\cdbseealgo{decompose_product}
+\cdbseealgo{tabcanonicalise}

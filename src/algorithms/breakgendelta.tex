@@ -1,0 +1,17 @@
+\cdbalgorithm{breakgendelta}{}
+
+Convert generalised delta symbols to products of normal Kronecker
+delta symbols with two indices.
+\begin{screen}{1,2}
+\delta{#}::KroneckerDelta.
+\delta_{m}^{n}_{p}^{q};
+@breakgendelta!(%);
+1/2 \delta_{m}^{n} \delta_{p}^{q} - 1/2 \delta_{p}^{n} \delta_{m}^{q};
+\end{screen}
+(This is more efficient than projecting with the Young projector and
+then canonicalising).
+
+\cdbseealgo{reduce_gendelta}
+\cdbseeprop{KroneckerDelta}
+\cdbseealgo{young_project_tensor}
+
