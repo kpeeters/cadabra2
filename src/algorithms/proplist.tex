@@ -1,0 +1,22 @@
+\cdbalgorithm{proplist}{}
+
+Show all properties and the patterns to which they are
+associated. Note that this includes all default properties for objects
+like {\tt $\backslash prod$}.
+\begin{screen}{1,2}
+{A,B}::AntiCommuting.
+A_{m n}::Symmetric.
+@proplist;
+\sum{#}::CommutingAsSum
+\prod{#}::IndexInherit
+\prod{#}::Distributable
+...
+{A, B}::AntiCommuting
+A_{m n}::Symmetric
+\end{screen}
+A list of all available properties (not necessarily attached to any
+object) is instead obtained using \subscommand{properties}.
+
+\cdbseealgo{properties}
+
+

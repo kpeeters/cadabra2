@@ -1,0 +1,25 @@
+\cdbalgorithm{rewrite\_indices}{}
+
+Rewrite indices on an object by contracting it with a second object
+which contains indices of both the old and the new type (a vielbein,
+in other words, or a metric). A vielbein example is
+\begin{screen}{1,2,3,4}
+{m,n,p}::Indices(flat).
+{\mu,\nu,\rho}::Indices(curved).
+T_{m n p};
+@rewrite_indices!(%){ T_{\mu\nu\rho} }{ e_{\mu}^{n} };
+T_{\mu \nu \rho} e_{\mu}^{m} e_{\nu}^{n} e_{\rho}^{p};
+\end{screen}
+If you want to raise or lower an index with a metric, this can also be
+done with as an index rewriting command, as the following example shows:
+\begin{screen}{1,2,3}
+{m,n,p,q,r,s}::Indices(curved, position=fixed).
+H_{m n p};
+@rewrite_indices!(%){ H^{m n p} }{ g_{m n} };
+H^{q r s} g_{m q} g_{n r} g_{p s};
+\end{screen}
+As these examples show, the desired form of the tensor should be given
+as the first argument, and the conversion object (metric, vielbein) as
+the second object. 
+
+\cdbseealgo{split_index}

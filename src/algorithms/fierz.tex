@@ -1,0 +1,23 @@
+\cdbalgorithm{fierz}{}
+
+Perform a Fierz transformation on a product of four spinors. 
+\begin{screen}{1,2}
+{\theta,\chi,\psi,\lambda}::Spinor(dimension=4, type=Majorana).
+{m,n,p#}::Indices.
+{m,n,p}::Integer(0..3).
+\Gamma{#}::GammaMatrix.
+\bar{#}::DiracBar.
+\bar{\theta} \Gamma_{m} \chi \bar{\psi} \Gamma^{m} \lambda;
+@fierz!(%)(\theta, \lambda, \psi, \chi);
+\end{screen}
+The argument to \subscommand{fierz} is the required order of the
+fermions; note that this algorithm does not flip around Majorana
+spinors and \subscommand{spinorsort} should be used for that.  Also
+note that it is important to define not only the symbols representing
+the spinors, Dirac bar and gamma matrices, but also the range of the
+indices.
+
+\cdbseealgo{spinorsort}
+\cdbseeprop{GammaMatrix}
+\cdbseeprop{DiracBar}
+\cdbseeprop{Spinor}

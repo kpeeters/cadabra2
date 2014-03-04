@@ -1,0 +1,34 @@
+\cdbalgorithm{prodrule}{}
+
+Apply the product rule or ``Leibnitz
+  identity'' to an object which has the \subsprop{Derivative} property, i.e.
+\begin{equation}
+D(f\, g) = D(f)\, g + f\, D(g)\, .
+\end{equation}
+In terms of actual code this example would read
+\begin{screen}{1,2,3}
+D{#}::Derivative.
+D(f g);
+@prodrule!(%);
+D(f) g + f D(g);
+\end{screen}
+This of course also works for derivatives which explicitly mention
+indices or components, as well as for multiple derivatives, as in the example below.
+\begin{screen}{1,2,3,4,5}
+D{#}::Derivative.
+D_{m n}(f g);
+@prodrule!(%);
+@distribute!(%);
+@prodrule!(%);
+ D_{n}{D_{m}(f)} g + D_{m}(f) D_{n}{g} 
+             + D_{n}{f} D_{m}(g) + f D_{n}{D_{m}(g)};
+\end{screen}
+~
+
+% We may even do the one for generic n-th order derivatives, see
+%
+%    http://mathworld.wolfram.com/LeibnizIdentity.html
+%
+
+\cdbseeprop{Derivative}
+\cdbseealgo{distribute}

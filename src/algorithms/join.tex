@@ -1,0 +1,65 @@
+\cdbalgorithm{join}{}
+
+Join two fully anti-symmetrised gamma matrix
+products according to the expression
+\begin{equation}
+   \Gamma^{b_{1}\dots b_{n}}\Gamma_{a_{1}\dots a_{m}} =
+      \sum_{p=0}^{\text{min}(n,m)}\ \frac{n! m!}{(n-p)! (m-p)! p!}
+         \Gamma^{[b_{1}\ldots b_{n-p}}{}_{[a_{p+1}\ldots a_{m}}
+         \eta^{b_{n-p+1}\ldots b_{n}]}{}_{a_{1}\ldots a_{m-p}]} \, .
+\end{equation}
+This is the opposite of \subscommand{gammasplit}.
+
+Without further arguments, the anti-symmetrisations will be left
+implicit. The argument ``{\tt expand}'' instead performs the sum over
+all anti-symmetrisations, which may lead to an enormous number of
+terms if the number of indices on the gamma matrices is large. Compare
+\begin{screen}{1,2}
+\Gamma{#}::GammaMatrix(metric=g).
+\Gamma_{m n} \Gamma_{p};
+@join!(%);
+\Gamma_{m n p} + 2 \Gamma_{m} g_{n p};
+\end{screen}
+with
+\begin{screen}{1,2}
+\Gamma{#}::GammaMatrix(metric=g).
+\Gamma_{m n} \Gamma_{p};
+@join!(%){expand};
+\Gamma_{m n p} + \Gamma_{m} g_{n p} - \Gamma_{n} g_{m p};
+\end{screen}
+Note that the gamma matrices need to have a metric associated to them
+in order for this algorithm to work.
+
+In order to reduce the number somewhat, one can instruct the algorithm
+to make use of generalised Kronecker delta symbols in the result;
+these symbols are defined as
+\begin{equation}
+\delta^{r_1}{}_{s_1}{}^{r_2}{}_{s_2}\cdots{}^{r_n}{}_{s_n}
+= \delta^{[r_1}{}_{s_1}\delta^{r_2}{}_{s_2}\cdots {}^{r_n]}{}_{s_n}\, .
+\end{equation}
+Anti-symmetrisation is implied in the set of even-numbered
+indices. The use of these symbols is triggered by the ``{\tt
+gendelta}'' option,
+\begin{screen}{1,2}
+{m,n,p,q}::Indices(position=fixed).
+\Gamma{#}::GammaMatrix(metric=\delta).
+\Gamma_{m n} \Gamma^{p q};
+@join!(%){expand}{gendelta};
+ \Gamma_{m n}^{p q} + \Gamma_{m}^{q} \delta_{n}^{p} 
+    - \Gamma_{m}^{p} \delta_{n}^{q} - \Gamma_{n}^{q} \delta_{m}^{p} 
+    + \Gamma_{n}^{p} \delta_{m}^{q} + 2 \delta_{n}^{p}_{m}^{q};
+\end{screen}
+
+Finally, to select only a single term (for a given $p$) in this
+expansion, give the join an argument with the value of $p$. 
+\begin{screen}{1,2}
+\Gamma{#}::GammaMatrix(metric=g).
+\Gamma_{m n} \Gamma_{p};
+@join!(%){expand}{3};
+\Gamma_{m n p};
+\end{screen}
+This option can also be combined with {\tt gendelta} if required.
+
+\cdbseeprop{GammaMatrix}
+\cdbseeprop{KroneckerDelta}
+\cdbseealgo{gammasplit}

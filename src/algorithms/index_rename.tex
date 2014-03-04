@@ -1,0 +1,20 @@
+\cdbalgorithm{index\_rename}{}
+
+Replace index names. This should preferably be avoided, but can
+incidentally come in useful to relabel a large set of numbered indices
+in one go, as the following example shows.
+\begin{screen}{1,2}
+{m#,n#}::Indices(spacetime).
+A_{m1 m2 m3} B_{m4 m2};
+@index_rename!(%){m}{n}{true};
+A_{n1 m2 n3} B_{n4 m2};
+\end{screen}
+The {\tt true} argument to the algorithm indicates that numbered
+indices starting with the given index name should be relabelled too.
+
+Generically, it is a better practise to avoid renaming indices
+altogether, and try to set up calculations such that they do not
+depend on the names of indices.
+
+\cdbseealgo{substitute}
+

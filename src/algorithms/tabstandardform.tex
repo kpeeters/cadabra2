@@ -1,0 +1,20 @@
+\cdbalgorithm{tabstandardform}{}
+
+Bring a filled Young tableau to standard form, that is, to a form in
+which two horizontally adjacent boxes appear in sorted form. This
+requires the use of Garnir symmetries and generically produces a sum
+of tableaux. This algorithm acts on objects with
+the \subsprop{FilledTableau} property.
+\begin{screen}{1,2,3}
+\tableau{#}::FilledTableau.
+\tableau{b,d}{c,a};
+@tabstandardform!(%);
+\tableau{a,c}{b,d} - \tableau{a,b}{c,d};
+\end{screen}
+In the graphical interface this displays as
+\begin{equation}
+\ftableau{{a}{c},{b}{d}} - \ftableau{{a}{b},{c}{d}};
+\end{equation}
+
+\cdbseeprop{FilledTableau}
+\cdbseealgo{tabcanonicalise}

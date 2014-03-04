@@ -1,0 +1,17 @@
+\cdbalgorithm{listflatten}{}
+
+Turns nested lists into one list, as in
+\begin{equation}
+\{ a, b, \{ c, d \} \} \rightarrow \{ a, b, c, d \}\,.
+\end{equation}
+In terms of code this reads
+\begin{screen}{1,2}
+{a,b,{c,d}};
+@listflatten!(%);
+\{ a,b,c,d \};
+\end{screen}
+~
+
+\cdbseealgo{prodflatten}
+\cdbseealgo{listflatten}
+\cdbseealgo{distribute}

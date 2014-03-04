@@ -1,0 +1,22 @@
+\cdbalgorithm{print\_status}{}
+
+Toggles printing of status information. Status output is always
+enclosed inside easily distinguished \verb|<status>|
+and \verb|</status>| marks.
+\begin{screen}{1}
+@print_status{true};
+A_{m n};
+<status>
+last_used_equation_number=1
+</status>
+<eqno>
+1
+</eqno>
+<eq>
+A_{m n};
+</eq>
+\end{screen}
+This is mostly used for communication with the graphical front-end.
+
+\cdbseealgo{output_format}
+

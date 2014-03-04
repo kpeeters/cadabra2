@@ -1,0 +1,21 @@
+\cdbalgorithm{maxima}{}
+
+Feed an expression through the Maxima computer algebra system. This
+allows you to e.g.~do trigonometric simplification or other `scalar
+computer algebra' for which \cdb does not have any built-in support.
+\begin{screen}{1,2,4,5}
+trigsimp( sin(x)**2 + cos(x)**2 ):
+@maxima(%);
+1;
+integrate( \sin(x)**2, x ):
+@maxima(%);
+(1/2 * x - 1/4 * \sin(2 * x));
+\end{screen}
+Note that reserved names, like the \verb|\sin| above, get converted to
+Maxima notation automatically (and they get translated again when
+the result is read back into \cdb).
+
+This command is preliminary and not yet fully functional.
+
+\cdbseealgo{maple}
+

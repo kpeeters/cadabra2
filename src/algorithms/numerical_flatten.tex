@@ -1,0 +1,22 @@
+\cdbalgorithm{numerical\_flatten}{}
+
+Move numerical factors out of operators whenever possible. This is
+mostly useful in combination with derivative operators, as in the
+example below.
+\begin{screen}{1,2,3}
+\partial{#}::PartialDerivative.
+3 A \partial{4 B};
+@numerical_flatten!(%);
+12 A \partial{B};
+\end{screen}
+In contrast, the \subscommand{unwrap} algorithm moves non-numerical
+factors out of derivative operators.
+
+Objects to which this algorithm applies should carry
+the \subsprop{NumericalFlat} property (which the \subsprop{Derivative}
+objects inherit automatically).
+
+\cdbseeprop{NumericalFlat}
+\cdbseealgo{listflatten}
+\cdbseealgo{sumflatten}
+\cdbseealgo{unwrap}

@@ -1,0 +1,18 @@
+\cdbalgorithm{eliminateeps}{}
+
+%{\bf CONTAINS KNOWN BUGS}
+
+Given an epsilon tensor and a self-dual tensor contracted with it,
+rewrite the self-dual tensor as epsilon times itself.
+\begin{screen}{1,2}
+F_{m n p}::SelfDual.
+\eps_{m n p q r s}::EpsilonTensor.
+\eps_{m n p q r s} F_{q r s};
+@eliminateeps!(%){F_{m n p}};
+\end{screen}
+At a further stage one can then use the
+command \subscommand{epsprod2gendelta} to remove the epsilons
+altogether the arguments contain a list of all tensors for which
+self-duality can be applied). Uses the the tensor with the largest
+number of indices in common with the epsilon symbol (can be more than
+one, in which case more terms are generated).

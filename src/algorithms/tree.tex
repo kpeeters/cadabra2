@@ -1,0 +1,30 @@
+\cdbalgorithm{tree}{}
+
+Display the internal tree form of a given
+expression. Can be used on a single expression or on an entire tree:
+\begin{screen}{1,2,3,10}
+A_{m n}:
+B_{m n}:
+@tree(1);
+(1): \history  (0)
+  1:{\expression}  (1)
+  2:  {A}  (2)
+  3:    _{m}  (3)
+  4:    _{n}  (3)
+  5:  \asymimplicit  (2)
+@tree;
+(1): {\expression}  (1)
+  1:  {A}  (2)
+  2:    _{m}  (3)
+  3:    _{n}  (3)
+  4:  \asymimplicit  (2)
+
+(2): {\expression}  (1)
+  1:  {B}  (2)
+  2:    _{m}  (3)
+  3:    _{n}  (3)
+  4:  \asymimplicit  (2)
+\end{screen}
+Most expressions lead to extremely lengthy output, so it is useful to
+redirect it to a file using output redirection.
+

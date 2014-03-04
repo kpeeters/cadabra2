@@ -1,0 +1,25 @@
+\cdbalgorithm{reduce\_gendelta}{}
+
+Convert generalised delta symbols which contain contracted indices to
+deltas with fewer indices, according to the formula
+\begin{equation}
+n! \, \delta^{a_1\cdots a_n}_{b_1\cdots b_n}\, \delta^{b_1}_{a_1}
+\cdots \delta^{b_m}_{a_m} = 
+\Big[\prod_{i=1}^m \big( d-(n-i) \big) \Big]
+\, (n-m)!\, \delta^{a_{m+1}\cdots a_n}_{b_{m+1}\cdots b_n}\, .
+\end{equation}
+Here is an example
+\begin{screen}{1,2}
+\delta{#}::KroneckerDelta.
+{m,n,q}::Integer(0..3).
+\delta_{m}^{n}_{n}^{q};
+@reduce_gendelta!(%);
+(-3/2) \delta_{m}^{q};
+\end{screen}
+Note that this requires that the indices on the Kronecker
+delta symbol also carry an \subsprop{Integer} property to specify
+their range.
+
+\cdbseeprop{KroneckerDelta}
+\cdbseeprop{Integer}
+\cdbseeprop{Indices}

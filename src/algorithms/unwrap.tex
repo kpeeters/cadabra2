@@ -1,0 +1,56 @@
+\cdbalgorithm{unwrap}{}
+
+Move objects out of \subsprop{Derivative}s or \subsprop{Accent}s when
+they do not depend on these operators. 
+
+Accents will get removed from objects which do not depend on them, as
+in the following example:
+\begin{screen}{1,2,3,5,6,8}
+\hat{#}::Accent.
+\hat{#}::Distributable.
+B::Depends(\hat).
+
+\hat{A+B+C}:
+@distribute!(%);
+\hat{A} + \hat{B} + \hat{C};
+@unwrap!(%);
+A + \hat{B} + C;
+\end{screen}
+
+Derivatives will be set to zero if an object inside does not depend on
+it. All objects which are annihilated by the derivative operator are
+moved to the front (taking into account anti-commutativity if necessary),
+\begin{screen}{1,2,4,5}
+\partial{#}::PartialDerivative.
+{A,B,C,D}::AntiCommuting.
+x::Coordinate.
+{B,D}::Depends(\partial).
+
+\partial_{x}( A B C D ):
+@unwrap!(%);
+- A C \partial_{x}{B D};
+\end{screen}
+Note that a product remains inside the derivative; to expand that
+use \subscommand{prodrule}. 
+
+Here is another example
+\begin{screen}{1,2,3,4,6}
+\del{#}::Derivative.
+X::Depends(\del).
+\del{X*Y*Z}:
+@prodrule!(%);
+\del{X} * Y * Z + X * \del{Y} * Z + X * Y * \del{Z};
+@unwrap!(%);
+\del{X}*Y*Z;
+\end{screen}
+
+Note that all objects are by default constants for the action of
+\subsprop{Derivative} operators. If you want objects to stay inside
+derivative operators you have to explicitly declare that they depend
+on the derivative operator or on the coordinate with respect to which
+you take a derivative.
+
+\cdbseeprop{Accent}
+\cdbseeprop{Derivative}
+\cdbseeprop{PartialDerivative}
+\cdbseealgo{prodrule}

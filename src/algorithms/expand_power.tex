@@ -1,0 +1,27 @@
+\cdbalgorithm{expand\_power}{}
+
+Expand powers into repeated products, i.e.~do the opposite
+of \subscommand{collect\_factors}. For example,
+\begin{screen}{1,2,4,5,7}
+(A B)**3:
+@expand_power!(%);
+(A * B) * (A * B) * (A * B);
+@prodflatten!(%):
+@prodsort!(%);
+A A A B B B;
+@collect_factors!(%);
+A**3 * B**3;
+\end{screen}
+This command automatically takes care of index relabelling when
+necessary, as in the following example,
+\begin{screen}{1,2,3,4}
+{m,n,p,q,r}::Indices(vector).
+(A_m B_m)**3:
+@expand_power!(%):
+@prodflatten!(%);
+A_{m} * B_{m} * A_{n} * B_{n} * A_{p} * B_{p};
+\end{screen}
+~
+
+\cdbseealgo{collect_factors}
+

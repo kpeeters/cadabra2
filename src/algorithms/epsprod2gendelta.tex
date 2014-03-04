@@ -1,0 +1,65 @@
+\cdbalgorithm{epsprod2gendelta}{}
+
+Replace a product of two epsilon tensors with a generalised delta
+according to the expression
+\begin{equation}
+\epsilon^{r_1\cdots r_{d}} \epsilon_{s_1\cdots s_{d}} =
+\frac{1}{\sqrt{|g|}}\varepsilon^{r_1 \cdots r_{d}} \sqrt{|g|}\varepsilon_{s_1\cdots s_{d}}
+= \sgn g\, d!\, \delta^{r_1 \cdots r_{d}}_{s_1\cdots s_{d}}\, ,
+\end{equation}
+where~$\sgn g$ denotes the signature of the metric~$g$ used to
+raise/lower the indices (see \subsprop{EpsilonTensor} for conventions on the
+epsilon tensor). When the indices are not ocurring up/down as in this
+expression, and the index position is not free, metric objects will be
+generated instead.
+
+Here is an example:
+\begin{screen}{1,2,3,4,5,6}
+{a,b,c,d}::Indices.
+{a,b,c,d}::Integer(1..3).
+\delta{#}::KroneckerDelta.
+\epsilon_{a b c}::EpsilonTensor(delta=\delta).
+\epsilon_{a b c} \epsilon_{a b d};
+@epsprod2gendelta!(%);
+2 \delta_{c d};
+\end{screen}
+In order for this algorithm to work, you need to make sure that the
+epsilon symbols in your expression are declared
+as \subsprop{EpsilonTensor} \emph{and} that these declarations involve
+a specification of the {\tt delta} and/or {\tt metric} symbols.
+
+As you can see from this example, contracted indices inside the
+generalised delta are automatically eliminated, as the
+command \subscommand{reduce\_gendelta} is called automatically; if you
+do not want this use the optional argument ``\mbox{noreduce}''.
+
+Note that the results typically depend on the signature of the
+space-time, which can be introduced through the optional \verb|metric|
+argument of the \verb|EpsilonTensor| property. Compare the two
+examples below:
+\begin{screen}{1,2,3,4,6,7,8,11,12,13}
+{a,b,c,d}::Indices.
+{a,b,c,d}::Integer(1..3).
+\delta{#}::KroneckerDelta.
+\epsilon_{a b c}::EpsilonTensor(delta=\delta, metric=g_{a b}).
+
+g_{a b}::Metric(signature=-1).
+\epsilon_{a b c} \epsilon_{a b c};
+@epsprod2gendelta!(%);
+-6;
+
+g_{a b}::Metric(signature=+1).
+\epsilon_{a b c} \epsilon_{a b c};
+@epsprod2gendelta!(%);
+6;
+\end{screen}
+Note that you need to specify the full symbol for the metric,
+including the indices, whereas the Kronecker delta argument only
+requires the name without the indices (because a contraction can
+generate generalised Kronecker delta symbols with any number of indices).
+
+
+\cdbseeprop{EpsilonTensor}
+\cdbseeprop{Indices}
+\cdbseeprop{KroneckerDelta}
+\cdbseeprop{Integer}

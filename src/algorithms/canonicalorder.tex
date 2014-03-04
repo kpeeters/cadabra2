@@ -1,0 +1,22 @@
+\cdbalgorithm{canonicalorder}{}
+
+Orders the indicated objects in the expression in canonical order. On
+a simple product of objects it works as a partial product sort,
+\begin{screen}{1,2}
+C B E D A;
+@canonicalorder!(%)(A, B, E);
+C A B D E;
+\end{screen}
+It can, however, also be used to sort indices. Thereby, it facilitates
+imposing index symmetry on a tensor with open indices, as the
+following example illustrates.
+\begin{screen}{1,2}
+A^{m n p} B^{q r} + A^{q m} B^{n p r};
+@canonicalorder!(%)( ^{m}, ^{n}, ^{p}, ^{r}, ^{q} );
+A^{m n p} B^{r q} + A^{m n} B^{p r q};
+\end{screen}
+~
+
+\cdbseealgo{acanonicalorder}
+\cdbseealgo{prodsort}
+\cdbseealgo{canonicalise}
