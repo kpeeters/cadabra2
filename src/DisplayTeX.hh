@@ -44,6 +44,7 @@ class DisplayTeX {
 		void dispatch(std::ostream&, exptree::iterator);
 		void print_productlike(std::ostream&, exptree::iterator, const std::string& inbetween);
 		void print_sumlike(std::ostream&, exptree::iterator);
+		void print_fraclike(std::ostream&, exptree::iterator);
 
 		bool children_have_brackets(exptree::iterator ch) const;
 };

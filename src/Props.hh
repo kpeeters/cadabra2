@@ -139,8 +139,10 @@ class Properties {
 		/// in the obj tree of the pattern of the pat_prop_pair_t. However, that is brittle...
 		typedef std::multimap<const property *, pattern *>                 pattern_map_t;
 
-		void            insert_prop(const exptree&, const property *);
-		void            insert_list_prop(const std::vector<exptree>&, const list_property *);
+		// Register a property for the indicated exptree. Takes both normal and list
+		// properties and works out which insert calls to make.
+		std::string master_insert(exptree proptree, property *thepropbase);
+
 		void            clear();
 
 		/// The following two maps own the pointers to the properties and patterns stored 
@@ -180,6 +182,10 @@ class Properties {
 		// Equivalent search: given a node, get a pattern of equivalents.
 //		property_map_t::iterator      get_equivalent(exptree::iterator, 
 //																	  property_map_t::iterator=props.begin());		
+
+	private:
+		void insert_prop(const exptree&, const property *);
+		void insert_list_prop(const std::vector<exptree>&, const list_property *);
 };
 
 template<class T>
