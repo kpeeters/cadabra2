@@ -1,0 +1,41 @@
+\cdbalgorithm{spinorsort}{}
+
+Sorts Majorana spinor bilinears using the Majorana flip property,
+which for anti-commuting spinors takes the form
+\begin{equation}
+\bar\psi_1 \Gamma_{r_1\cdots r_n}\psi_2 = 
+  \alpha \beta^n (-)^{\frac{1}{2}n(n-1)}\, \bar\psi_1
+  \Gamma_{r_1\cdots r_n}\psi_2\, .
+\end{equation}
+Here $\alpha$ and $\beta$ determine the properties of the charge
+conjugation matrix,
+\begin{equation}
+{\cal C}^T = \alpha {\cal C}\,,\quad
+{\cal C}\Gamma_r {\cal C}^{-1} = \beta \Gamma_r^T\, .
+\end{equation}
+Here is an example.
+\begin{screen}{1,2,3,4,5,6,7}
+{\chi, \psi, \psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).
+{\chi, \psi, \psi_{m}}::AntiCommuting.
+\bar{#}::DiracBar.
+\Gamma{#}::GammaMatrix.
+{\psi_{m}, \psi, \chi}::SortOrder.
+\bar{\chi} \Gamma_{m n} \psi;
+@spinorsort!(%);
+(-1) \bar{\psi} \Gamma_{m n} \chi;
+\end{screen}
+~
+% These depend on dimension and are given by (some of these are choices)
+% \kcomment{KP}{signature dependence!}
+% \begin{equation}
+% \begin{matrix}
+%           & \alpha & \beta \\
+%   d=4     &   -    &   -   \\
+%   d=5     &   -    &   +   \\
+%   d=6,1   &   +    &   -   \\
+%   d=8     &   +    &   -   \\
+%   d=10,1  &   -    &   -   
+% \end{matrix}
+% \end{equation}
+
+\cdbseeprop{GammaMatrix}

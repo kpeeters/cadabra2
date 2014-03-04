@@ -1,0 +1,34 @@
+\cdbalgorithm{decompose\_product}{}
+
+Decompose a product of tensors by writing it out in terms of
+irreducible Young tableau representations, discarding the ones which
+vanish in the indicated dimension, and putting the results back
+together again. This algorithm can thus be used to equate terms which
+are identical only in certain dimensions.
+
+If there are no dimension-dependent identities playing a role in the
+product, then \subscommand{decompose\_product} returns the original
+expression,
+\begin{screen}{1,2,3,4,5,6,7}
+{ m, n, p, q }::Indices(vector).
+{ A_{m n p}, B_{m n p} }::AntiSymmetric.
+A_{m n p} B_{m n q} - A_{m n q} B_{m n p}.
+{ m, n, p, q }::Integer(1..4).
+@decompose_product!(%);
+@canonicalise!(%);
+@collect_terms!(%);
+A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
+\end{screen}
+However, in the present example, a Schouten identity makes the
+expression vanish identically in three dimensions,
+\begin{screen}{1,2,3,4}
+{ m, n, p, q }::Integer(1..3).
+@decompose_product!(%);
+@canonicalise!(%):
+@collect_terms!(%);
+0;
+\end{screen}
+
+Note that \subscommand{decompose\_product} is unfortunately
+computationally expensive, and is therefore not practical for large
+dimensions.

@@ -1,0 +1,28 @@
+\cdbalgorithm{gammasplit}{}
+
+The opposite of \subscommand{join}: splits off a gamma matrix from a
+totally anti-symmetrised product, e.g.
+\begin{equation}
+\Gamma^{mnp} = \Gamma^{mn}\Gamma^p - 2\,\Gamma^{[m} \eta^{n]}{}_p\, .
+\end{equation}
+In code this reads
+\begin{screen}{1,2}
+\Gamma{#}::GammaMatrix(metric=\eta).
+\Gamma^{m n p};
+@gammasplit(%);
+ \Gamma^{m n} \Gamma^{p} - \Gamma^{m} \eta^{n p} 
+                                  + \Gamma^{n} \eta^{m p};
+\end{screen}
+By default it splits of the one from the back, like in the example
+above, but with argument {\tt front} it will split from the front:
+\begin{screen}{1,2}
+\Gamma{#}::GammaMatrix(metric=\eta).
+\Gamma^{m n p};
+@gammasplit(%){front};
+\Gamma^{m} \Gamma^{n p} - \Gamma^{p} \eta^{m n} 
+                                  + \Gamma^{n} \eta^{m p};
+\end{screen}
+~
+
+\cdbseealgo{join}
+\cdbseeprop{GammaMatrix}

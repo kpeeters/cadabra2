@@ -1,0 +1,31 @@
+\cdbalgorithm{impose\_bianchi}{}
+
+Removes terms which are proportional to the (Garnir generalised)
+Bianchi identity. It removes all products for which a set of indices
+in Garnir hook form is contracted with an anti-symmetric set. Here is
+a simple example with a Riemann tensor,
+\begin{screen}{1,2,3,4}
+A^{m n p}::AntiSymmetric.
+R_{m n p q}::RiemannTensor.
+R_{m n p q} A^{m n p};
+@impose_bianchi!(%);
+0;
+\end{screen}
+Here is a more complicated one using a \subsprop{TableauSymmetry}
+property,
+\begin{screen}{1,2,3,4}
+\epsilon^{m n p q}::EpsilonTensor.
+B_{m n p}::TableauSymmetry(shape={2,1}, indices={0,1,2}).
+\epsilon^{m n p q} B_{m n p};
+@impose_bianchi!(%);
+0;
+\end{screen}
+An alternative way to obtain the same result is to project each tensor
+using the generic \subscommand{young\_project\_tensor} algorithm, and
+then use \subscommand{distribute} followed by \subscommand{canonicalise}, but that
+generically takes much more time.
+
+\cdbseeprop{RiemannTensor}
+\cdbseeprop{TableauSymmetry}
+\cdbseealgo{young_project_tensor}
+\cdbseealgo{canonicalise}

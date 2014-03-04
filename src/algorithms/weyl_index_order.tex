@@ -1,0 +1,15 @@
+\cdbalgorithm{weyl\_index\_order}{}
+
+Sorts the indices on a \deprecated 
+Riemann or Weyl tensor by first applying anti-symmetry in each pair,
+and subsequently sorting the pairs by using symmetry under pair
+exchange. This alphabetical sorting can be prohibited by giving a
+list of indices which is preferred to be in the first pair.
+\begin{screen}{1,2,4}
+R_{s2 s1 s3 r1};
+@weyl_index_order(%){s1};
+R_{s1 s2 r1 s3}
+@weyl_index_order(%);
+R_{r1 s3 s1 s2}
+\end{screen}
+~

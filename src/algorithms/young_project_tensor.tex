@@ -1,0 +1,37 @@
+\cdbalgorithm{young\_project\_tensor}{}
+
+Project tensors with their Young projection operator. This works for
+simple symmetric or anti-symmetric objects, as in
+\begin{screen}{1,2,3}
+A_{m n}::Symmetric.
+A_{m n} A_{m p};
+@young_project_tensor!(%);
+(1/2 A_{m n} + 1/2 A_{n m}) (1/2 A_{m p} + 1/2 A_{p m});
+\end{screen}
+but more generically works for any tensor which has
+a \subsprop{TableauSymmetry} property attached to it. 
+\begin{screen}{1,3}
+A_{m n p}::TableauSymmetry(shape={2,1}, indices={0,2,1}).
+A_{m n p};
+@young_project_tensor!(%);
+1/3 A_{m n p} + 1/3 A_{p n m} - 1/3 A_{n m p} - 1/3 A_{p m n};
+\end{screen}
+When the argument {\tt ModuloMonoterm} is added, the resulting
+expression will be simplified using the monoterm symmetries of the
+tensor,
+\begin{screen}{1,3}
+A_{m n p}::TableauSymmetry(shape={2,1}, indices={0,2,1}).
+A_{m n p};
+@young_project_tensor!(%){ModuloMonoterm};
+2/3 A_{m n p} - 1/3 A_{n p m} + 1/3 A_{m p n};
+\end{screen}
+(in this example, the tensor is anti-symmetric in the indices~0 and 1,
+hence the simplification compared to the previous example).
+
+\cdbseealgo{young_project}
+\cdbseealgo{young_project_product}
+\cdbseeprop{TableauSymmetry}
+\cdbseeprop{Symmetric}
+\cdbseeprop{AntiSymmetric}
+
+

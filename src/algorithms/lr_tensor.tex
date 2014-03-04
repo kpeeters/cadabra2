@@ -1,0 +1,36 @@
+\cdbalgorithm{lr\_tensor}{}
+
+Compute the tensor product of two tableaux or filled tableaux. The
+algorithm acts on objects which have the \subsprop{Tableau}
+or \subsprop{FilledTableau} property, through which it is possible to
+set the dimension. The standard Littlewoord-Richardson algorithm is
+used to construct the tableaux in the tensor product. An example
+with \subsprop{Tableau} objects is given below.
+\begin{screen}{1,2,3}
+\tableau{#}::Tableau(dimension=10).
+\tableau{2}{2} \tableau{2}{2};
+@lr_tensor!(%);
+\tableau{4 4} + \tableau{4 3 1} + \tableau{4 2 2} 
+     + \tableau{3 3 1 1} + \tableau{3 2 2 1} 
+     + \tableau{2 2 2 2};
+\end{screen}
+In the graphical interface the output will show up as proper Young tableaux,
+\begin{equation}
+\tableau{4 4} + \tableau{4 3 1} + \tableau{4 2 2} + \tableau{3 3 1 1} + \tableau{3 2 2 1} + \tableau{2 2 2 2};
+\end{equation}
+
+The same example, but now with \subsprop{FilledTableau} objects, is
+\begin{screen}{1,2,3}
+\tableau{#}::FilledTableau(dimension=10).
+\tableau{0,0}{1,1} \tableau{a,a}{b,b}:
+@lr_tensor!(%);
+\end{screen}
+This will again output a sum of \verb|\tableau| objects. In the graphical
+interface they will be typeset as
+\begin{equation}
+\ftableau{{0}{0}{a}{a},{1}{1}{b}{b}} + \ftableau{{0}{0}{a}{a},{1}{1}{b},{b}} + \ftableau{{0}{0}{a}{a},{1}{1},{b}{b}} + \ftableau{{0}{0}{a},{1}{1}{b},{a},{b}} + \ftableau{{0}{0}{a},{1}{1},{a}{b},{b}} + \ftableau{{0}{0},{1}{1},{a}{a},{b}{b}};
+\end{equation}
+
+\cdbseeprop{Tableau}
+\cdbseeprop{FilledTableau}
+

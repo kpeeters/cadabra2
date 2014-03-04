@@ -1,0 +1,36 @@
+\cdbalgorithm{distribute}{}
+
+Rewrite a product of sums as a sum of products, as in
+\begin{equation}
+a\,(b+c) \rightarrow a\,b + a\,c\, .
+\end{equation}
+This would read
+\begin{screen}{1,2}
+a (b+c);
+@distribute!(%);
+a b + a c;
+\end{screen}
+The algorithm in fact works on all objects which carry
+the \subsprop{Distributable} property, 
+\begin{screen}{1,2,3}
+Op{#}::Distributable.
+Op(A+B);
+@distribute!(%);
+Op(A) + Op(B);
+\end{screen}
+The primary example of a property which inherits
+the \subsprop{Distributable} property
+is \subsprop{PartialDerivative}. The \subscommand{distribute} algorithm
+thus also automatically writes out partial derivatives of sums as sums
+of partial derivatives,
+\begin{screen}{1,2,3}
+\partial{#}::PartialDerivative.
+\partial_{m}(A + B + C):
+@distribute!(%);
+\partial_{m}(A) + \partial_{m}(B) + \partial_{m}(C);
+\end{screen}
+~
+
+\cdbseeprop{Distributable}
+\cdbseeprop{PartialDerivative}
+

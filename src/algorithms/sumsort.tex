@@ -1,0 +1,21 @@
+\cdbalgorithm{sumsort}{}
+
+Sort terms in a sum, taking into account any \subsprop{SortOrder}
+properties, or else sorting lexographically. \label{loc_sumsort}
+This is often useful in case sums appear as exponents; in this case it
+is necessary to first sort the sums before terms can be collected, as
+the following example shows.
+\begin{screen}{1,2,4,5}
+a**(-1+d) - a**(d-1);
+@collect_terms!(%);
+a**(-1+d) - a**(d-1);
+@sumsort!(%):
+@collect_terms!(%);
+0;
+\end{screen}
+For more information on \subsprop{SortOrder} see the documentation
+of \subscommand{prodsort}.
+
+\cdbseealgo{prodsort}
+\cdbseeprop{SortOrder}
+

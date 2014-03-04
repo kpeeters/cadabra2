@@ -1,0 +1,47 @@
+\cdbalgorithm{prodsort}{}
+
+Sort factors in a product, taking into account
+any \subsprop{SortOrder} properties. Also takes into account
+commutativity properties, such as \subsprop{SelfCommuting}. If no sort
+order is given, it first does a lexographical sort based on the name
+of the factor, and if two names are identical, does a sort based on
+the number of children and (if this number is equal) a lexographical
+comparison of the names of the children.
+
+The simplest sort is illustrated below,
+\begin{screen}{1,2}
+C B A D;
+@prodsort!(%);
+A B C D;
+\end{screen}
+We can declare the objects to be anti-commuting, which then leads to
+\begin{screen}{1,2,3}
+{A, B, C, D}::AntiCommuting.
+C B A D;
+@prodsort!(%);
+(-1) A B C D;
+\end{screen}
+For indexed objects, the anti-commutativity of components is indicated
+using the \subsprop{SelfAntiCommuting} property,
+\begin{screen}{1,2,3}
+\psi_{m}::SelfAntiCommuting.
+\psi_{n} \psi_{m} \psi_{p};
+@prodsort!(%);
+(-1)  \psi_{m} \psi_{n} \psi_{p};
+\end{screen}
+Finally, the lexographical sort order can be overridden by using
+the \subsprop{SortOrder} property,
+\begin{screen}{1,2}
+{D, C, B, A}::SortOrder.
+{A, B, C, D}::AntiCommuting.
+C B A D;
+@prodsort!(%);
+(-1) D C B A;
+\end{screen}
+
+
+%\kcomment{KP}{Warning! Does not yet know about {$\backslash$pow}}
+
+\cdbseeprop{SortOrder}
+\cdbseeprop{Commuting}
+\cdbseeprop{AntiCommuting}

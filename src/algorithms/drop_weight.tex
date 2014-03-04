@@ -1,0 +1,43 @@
+\cdbalgorithm{drop\_weight}{}
+
+Drop those terms for which a product has the indicated
+weight. Weights are computed by making use of the \subsprop{Weight}
+property of symbols. This algorithm does the opposite
+of \subscommand{keep\_weight}.
+
+As an example, consider the simple case in which we want to drop all
+terms with 3~fields. This is done using
+\begin{screen}{1,2,3}
+{A,B}::Weight(label=field).
+A B B + A A A + A B + B:
+@drop_weight!(%){field}{3};
+A B + B;
+\end{screen}
+
+However, you can also do more complicated things by assigning non-unit
+weights to symbols, as in the example below,
+\begin{screen}{1,2,3,4}
+{A,B}::Weight(label=field).
+C::Weight(label=field, value=2).
+A B B + A A A + A B + A C + B:
+@drop_weight!(%){field}{3};
+A B + B;
+\end{screen}
+
+Weights can be ``inherited'' by operators by using
+the \subsprop{WeightInherit} property. Here is an example using
+partial derivatives,
+\begin{screen}{1,2,3,4,6}
+{\phi,\chi}::Weight(label=small, value=1).
+\partial{#}::PartialDerivative.
+\partial{#}::WeightInherit(label=all, type=Multiplicative).
+\phi \partial_{0}{\phi} + \partial_{0}{\lambda} 
+                                  + \lambda \partial_{3}{\chi}:
+@drop_weight!(%){small}{1};
+\phi \partial_{0}{\phi} + \partial_{0}{\lambda};
+\end{screen}
+~
+
+\cdbseealgo{keep_weight}
+\cdbseeprop{Weight}
+\cdbseeprop{WeightInherit}

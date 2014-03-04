@@ -1,0 +1,46 @@
+\cdbalgorithm{take\_match}{}
+
+Select a subset of terms in a sum or list which match the given
+pattern. 
+\begin{screen}{1,2}
+A + B D G + C D A;
+@take_match(%)( D Q?? );
+B D G + C D A;
+\end{screen}
+In particular, note that the
+{\tt Q??} is necessary to ensure that the pattern matches a product of
+{\tt D} with something else. However, the algorithm has selected the
+entire term, not just the part matched by the pattern; compare the
+similar
+\begin{screen}{1,2}
+A + B D G + C D A;
+@substitute!(%)( D Q?? -> 1);
+A + G + A;
+\end{screen}
+in which the replacement is done on the pattern, not on the entire
+term which contains the pattern.
+
+This algorithm is particularly useful in combination with a copy
+operation on the expression. It allows one to take out certain terms
+from an expression, do manipulations on it, and then substitute it
+back using \subscommand{replace\_match}.
+
+The following example shows how this works by taking out the term
+which contains a $\chi$ factor, doing a transformation on the $A_{m
+n}$ tensor in that term, and then substituting back
+using \subscommand{replace\_match}.
+\begin{screen}{1,2,4,5}
+expr:= A_{m n} \chi B^{m}_{p} + \psi A_{n p};
+@take_match[@(%)]( \chi Q?? );
+A_{m n} \chi B^{m}_{p};
+@substitute!(%)( A_{m n} -> C_{m n} );
+@replace_match!(expr)( \chi Q?? -> @(%) );
+C_{m n} \chi B^{m}_{p} + \psi A_{n p};
+\end{screen}
+The \subscommand{replace\_match} pattern matching rules are identical
+to those in \subscommand{take\_match}: a match always matches an entire
+term, not just a factor of it.
+
+\cdbseealgo{replace_match}
+\cdbseealgo{substitute}
+

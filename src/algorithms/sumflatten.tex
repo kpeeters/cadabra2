@@ -1,0 +1,19 @@
+\cdbalgorithm{sumflatten}{}
+
+Removes brackets in a sum, that is, makes changes of the type
+\begin{equation}
+a+(b+c) \rightarrow a+b+c\, .
+\end{equation}
+In terms of code this reads
+\begin{screen}{1,2}
+a + (b + c);
+@sumflatten!(%);
+a + b + c;
+\end{screen}
+The above is sometimes required because it is possible to write and
+keep nested sums with brackets, like in the example above, in order to
+improve readability of expressions.  
+
+\cdbseealgo{prodflatten}
+\cdbseealgo{listflatten}
+\cdbseealgo{distribute}

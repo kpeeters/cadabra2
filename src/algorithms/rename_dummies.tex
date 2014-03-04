@@ -1,0 +1,17 @@
+\cdbalgorithm{rename\_dummies}{}
+
+Rename the dummy indices in an expression. This can be necessary in
+order to make various terms in a sum use the same names for the
+indices, so that they can be collected.
+\begin{screen}{1,2,3,5}
+{m,n,p,q,r,s}::Indices(vector).
+A_{m n} B_{m n} - A_{p q} B_{p q};
+@rename_dummies!(%);
+A_{m n} B_{m n} - A_{m n} B_{m n};
+@collect_terms!(%);
+0;
+\end{screen}
+Note that the indices need to have been declared as being part of an
+index list, using the \subsprop{Indices} property.
+
+\cdbseeprop{Indices}

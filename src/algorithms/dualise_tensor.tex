@@ -1,0 +1,41 @@
+\cdbalgorithm{dualise\_tensor}{}
+
+Dualises tensors which have been declared \subsprop{SelfDual}
+  according to the formula
+\begin{equation}
+F_{\mu_{n+1}\cdots \mu_{d}}\;\; \rightarrow\;\; *F_{\mu_{n+1}\cdots \mu_{d}} = \frac{1}{n!}
+ \epsilon_{\mu_{n+1}\cdots\mu_d}{}^{\mu_1\cdots\mu_n} F_{\mu_1\cdots
+ \mu_n}\, .
+\end{equation}
+In order for this to work the indices on the tensor have to be
+declared with \subsprop{Indices} and their range should have been
+specified with \subsprop{Integer}.
+\begin{screen}{1,2,3,4,5}
+{m,n,p,q,r#}::Indices.
+{m,n,p,q,r#}::Integer(0..5).
+F_{m n p}::SelfDual.
+A_{q} F_{m n p} F_{m n p};
+@dualise_tensor!(%);
+1/36 A_{q} \epsilon_{m n p r1 r2 r3} F_{r1 r2 r3} 
+           \epsilon_{m n p r4 r5 r6} F_{r4 r5 r6};
+\end{screen}
+As indices are by default position-free, all indices on the epsilon
+tensors are generated as lower indices in the example above. Here is a
+modification which takes index positions into account:
+\begin{screen}{1,2,3,4,5}
+{m,n,p,q,r#}::Indices(position=fixed).
+{m,n,p,q,r#}::Integer(0..5).
+F_{m n p}::SelfDual.
+F^{m n p}::SelfDual.
+A_{q} F_{m n p} F^{m n p};
+@dualise_tensor!(%);
+1/36 A_{q} \epsilon_{m n p}^{r1 r2 r3} F_{r1 r2 r3} 
+           \epsilon^{m n p r4 r5 r6} F_{r4 r5 r6};
+\end{screen}
+Products of epsilon tensors can be expanded in terms of Kronecker
+delta symbols with \subscommand{epsprod2gendelta}.
+
+\cdbseeprop{SelfDual}
+\cdbseeprop{Indices}
+\cdbseeprop{Integer}
+\cdbseealgo{epsprod2gendelta}

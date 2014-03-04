@@ -12,6 +12,7 @@
 #include "properties/IndexInherit.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/rename_dummies.hh"
+#include "algorithms/substitute.hh"
 
 Kernel kernel;
 
@@ -67,7 +68,7 @@ void Ex::append(std::string v)
 // Templates to dispatch function calls in Python to algorithms in C++.
 
 template<class F>
-Ex *dispatch(Ex *ex, bool repeat)
+Ex *dispatch_1(Ex *ex, bool repeat)
 	{
 	F algo(kernel, ex->tree);
 
@@ -83,22 +84,57 @@ Ex *dispatch(Ex *ex, bool repeat)
 	}
 
 template<class F>
-Ex *dispatch_defaults(Ex *ex)
+Ex *dispatch_1_defaults(Ex *ex)
 	{
-	return dispatch<F>(ex, true);
+	return dispatch_1<F>(ex, true);
 	}
 
 template<class F>
-Ex *dispatch_string(const std::string& ex, bool repeat)
+Ex *dispatch_1_string(const std::string& ex, bool repeat)
 	{
 	Ex *exobj = new Ex(ex);
-	return dispatch<F>(exobj, repeat);
+	return dispatch_1<F>(exobj, repeat);
 	}
 
 template<class F>
-Ex *dispatch_string_defaults(const std::string& ex)
+Ex *dispatch_1_string_defaults(const std::string& ex)
 	{
-	return dispatch_string<F>(ex, true);
+	return dispatch_1_string<F>(ex, true);
+	}
+
+template<class F>
+Ex *dispatch_2(Ex *ex, Ex *args, bool repeat)
+	{
+	F algo(kernel, ex->tree, args->tree);
+
+	exptree::iterator it=ex->tree.begin().begin();
+	if(algo.can_apply(it)) {
+		algo.apply(it);
+		}
+	else {
+		std::cout << "cannot apply" << std::endl;
+		}
+
+	return ex;
+	}
+
+template<class F>
+Ex *dispatch_2_defaults(Ex *ex, Ex *args)
+	{
+	return dispatch_2<F>(ex, args, true);
+	}
+
+template<class F>
+Ex *dispatch_2_string(Ex *ex, const std::string& args, bool repeat)
+	{
+	Ex *argsobj = new Ex(args);
+	return dispatch_2<F>(ex, argsobj, repeat);
+	}
+
+template<class F>
+Ex *dispatch_2_string_defaults(Ex *ex, const std::string& args)
+	{
+	return dispatch_2_string<F>(ex, args, true);
 	}
 
 
@@ -155,16 +191,28 @@ std::string BaseProperty::repr_() const
 	}
 
 // Templated function which declares various forms of the algorithm entry points in one shot.
+// First the ones with no argument, just a repeat flag.
 
 template<class F>
-void def_algo(const std::string& name) 
+void def_algo_1(const std::string& name) 
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch<F>,                 (arg("ex"),arg("repeat")), return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_defaults<F>,        (arg("ex")),               return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_string<F>,          (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
-	def(name.c_str(),  &dispatch_string_defaults<F>, (arg("ex")),               return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_1<F>,                 (arg("ex"),arg("repeat")), return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_1_defaults<F>,        (arg("ex")),               return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_1_string<F>,          (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_1_string_defaults<F>, (arg("ex")),               return_value_policy<manage_new_object>() );
+	}
+
+template<class F>
+void def_algo_2(const std::string& name) 
+	{
+	using namespace boost::python;
+
+	def(name.c_str(),  &dispatch_2<F>,                 (arg("ex"),arg("args"),arg("repeat")), return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_2_defaults<F>,        (arg("ex"),arg("args")),               return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_2_string<F>,          (arg("ex"),arg("args"),arg("repeat")), return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_2_string_defaults<F>, (arg("ex"),arg("args")),               return_value_policy<manage_new_object>() );
 	}
 
 // Entry point for registration of the Cadabra Python module. 
@@ -193,8 +241,10 @@ BOOST_PYTHON_MODULE(pcadabra)
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
-	def_algo<distribute>("distribute");
-	def_algo<rename_dummies>("rename_dummies");
+	def_algo_1<distribute>("distribute");
+	def_algo_1<rename_dummies>("rename_dummies");
+	def_algo_1<sort_product>("sort_product");
+	def_algo_2<substitute>("substitute");
 
 	class_<BaseProperty> pyBaseProperty("Property", no_init);
 	pyBaseProperty.def("__str__", &BaseProperty::str_)

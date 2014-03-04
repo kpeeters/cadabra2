@@ -1,0 +1,20 @@
+\cdbalgorithm{reduce}{}
+
+{\bf NOT YET FUNCTIONAL}
+\bigskip
+
+Reduce a sum of tensor monomials of the same type, taking into account
+mono-term as well as multi-term symmetries. This does not aim for a
+canonical form, but rather for a form in which no monomials occur
+which can be expressed (using mono- and multi-term symmetries) as a
+linear combination of other monomials appearing in the sum. An example
+makes this more clear:
+\begin{screen}{0,1}
+{m,n,p,q}::Indices(vector).
+{m,n,p,q}::Integer(0..10).
+R_{m n p q}::RiemannTensor.
+
+R_{m n q p} R_{m n p q} + R_{m p n q} R_{m n p q};
+@reduce!(%);
+\end{screen}
+~
