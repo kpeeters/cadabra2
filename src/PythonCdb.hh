@@ -25,6 +25,8 @@
 #include <stdexcept>
 #include "Storage.hh"
 
+// Ex is essentially a wrapper around an exptree object.
+
 class Ex {
 	public:
 		Ex(const Ex&); 
@@ -41,3 +43,22 @@ class Ex {
 	private:
 		std::string ex;
 };
+
+// Property is a templated wrapper around a C++ property object.
+
+class BaseProperty {
+	public:
+		BaseProperty(const std::string&);
+		
+		std::string str_() const;
+		std::string repr_() const;
+
+		std::string creation_message;
+};
+
+template<class T>
+class Property : public BaseProperty {
+	public:
+		Property(Ex *);
+};
+

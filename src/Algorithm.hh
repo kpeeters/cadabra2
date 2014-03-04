@@ -115,6 +115,7 @@ class Algorithm {
 				static index_iterator begin(const Properties&, const iterator_base&);
 				static index_iterator end(const Properties&, const iterator_base&);
 
+				index_iterator& operator=(const index_iterator&);
 				bool    operator==(const index_iterator&) const;
 				bool    operator!=(const index_iterator&) const;
 				index_iterator&  operator++();
@@ -123,7 +124,7 @@ class Algorithm {
 
 				iterator halt, walk, roof;
 			private:
-				const Properties& properties;
+				const Properties *properties;
 
 				bool is_index(iterator) const;
 		};
@@ -204,7 +205,7 @@ class Algorithm {
 		void     node_integer(iterator, int);
 
 		/// A map from a pattern to the position where it occurs in the tree. 
-		typedef std::multimap<exptree, exptree::iterator, tree_equal_for_indexmap_obj> index_map_t;
+		typedef std::multimap<exptree, exptree::iterator, tree_exact_less_for_indexmap_obj> index_map_t;
 		/// A map from the position of each index to the sequential index.
 		typedef std::map<exptree::iterator, int, exptree::iterator_base_less>    index_position_map_t;
 
@@ -222,7 +223,7 @@ class Algorithm {
       /// Two
 		void     fill_map(index_map_t&, sibling_iterator, sibling_iterator) const;
 		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
-		void     print_classify_indices(iterator) const;
+		void     print_classify_indices(std::ostream&, iterator) const;
 		void     determine_intersection(index_map_t& one, index_map_t& two, index_map_t& target,
 										  bool move_out=false) const; 
 		void     classify_add_index(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const;

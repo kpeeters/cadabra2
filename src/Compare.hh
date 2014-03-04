@@ -134,7 +134,7 @@ class tree_exact_equal_mod_prel_obj {
 // Compare for indexmap_t. The only comparator object that does not use
 // properties info to lookup properties.
 
-class tree_equal_for_indexmap_obj {
+class tree_exact_less_for_indexmap_obj {
 	public:
 		bool operator()(const exptree& first, const exptree& second) const;
 };

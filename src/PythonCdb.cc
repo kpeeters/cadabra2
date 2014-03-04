@@ -8,13 +8,18 @@
 #include <sstream>
 
 #include "properties/Distributable.hh"
+#include "properties/Indices.hh"
+#include "properties/IndexInherit.hh"
 #include "algorithms/distribute.hh"
+#include "algorithms/rename_dummies.hh"
 
 Kernel kernel;
 
 Ex::Ex(const Ex& other)
 	{
 	}
+
+// Output routines for Ex objects.
 
 std::string Ex::str_() const
 	{
@@ -30,12 +35,6 @@ std::string Ex::repr_() const
 	std::ostringstream str;
 	tree.print_entire_tree(str);
 	return str.str();
-	}
-
-Ex& Ex::operator=(const Ex& other)
-	{
-	ex="C_{m n}";
-	return *this;
 	}
 
 Ex::Ex(std::string ex_) 
@@ -63,6 +62,7 @@ void Ex::append(std::string v)
 	{
 	ex+=v;
 	}
+
 
 // Templates to dispatch function calls in Python to algorithms in C++.
 
@@ -112,27 +112,59 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
-// Properties. This should probably return a reference to a 'property' object
-// so we can query it from Python as well.
-// Fixme: we also had this kind of stuff in src/modules/properties.cc; can that all go?
-
-void attach_Distributable(Ex *ex) 
-	{
-	exptree::iterator it=ex->tree.begin();
-	assert(*(it->name)=="\\expression");
-	it=ex->tree.begin(it);
-	kernel.properties.insert_prop(exptree(it), new Distributable());
-	}
 
 // Templates to attach properties to Ex objects.
+// FIXME: if we let Python manage the Property<> object, we need some
+// way in which we can sync removal of that object with the removal of the
+// C++ object.
 
 template<class Prop>
-void attach(Ex *ex)
+Property<Prop> *attach(Ex *ex)
 	{
 	exptree::iterator it=ex->tree.begin();
 	assert(*(it->name)=="\\expression");
 	it=ex->tree.begin(it);
-	kernel.properties.insert_prop(exptree(it), new Prop());
+	kernel.properties.master_insert(exptree(it), new Prop());
+
+	return new Property<Prop>("Assigned property to ...");
+	}
+
+BaseProperty::BaseProperty(const std::string& s)
+	: creation_message(s)
+	{
+	}
+
+template<class Prop>
+Property<Prop>::Property(Ex *ex) 
+   : BaseProperty("Assigned property to ...")
+	{
+	exptree::iterator it=ex->tree.begin();
+	assert(*(it->name)=="\\expression");
+	it=ex->tree.begin(it);
+	creation_message = kernel.properties.master_insert(exptree(it), new Prop());
+	}
+
+std::string BaseProperty::str_() const
+	{
+	return creation_message;
+	}
+
+std::string BaseProperty::repr_() const
+	{
+	return "Property::repr";
+	}
+
+// Templated function which declares various forms of the algorithm entry points in one shot.
+
+template<class F>
+void def_algo(const std::string& name) 
+	{
+	using namespace boost::python;
+
+	def(name.c_str(),  &dispatch<F>,                 (arg("ex"),arg("repeat")), return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_defaults<F>,        (arg("ex")),               return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_string<F>,          (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_string_defaults<F>, (arg("ex")),               return_value_policy<manage_new_object>() );
 	}
 
 // Entry point for registration of the Cadabra Python module. 
@@ -161,12 +193,16 @@ BOOST_PYTHON_MODULE(pcadabra)
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
-	def("distribute",  &dispatch<distribute>,                 (arg("ex"),arg("repeat")), return_internal_reference<1>() );
-	def("distribute",  &dispatch_defaults<distribute>,        (arg("ex")),               return_internal_reference<1>() );
-	def("distribute",  &dispatch_string<distribute>,          (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
-	def("distribute",  &dispatch_string_defaults<distribute>, (arg("ex")),               return_value_policy<manage_new_object>() );
+	def_algo<distribute>("distribute");
+	def_algo<rename_dummies>("rename_dummies");
 
-	def("Distributable",  &attach<Distributable>, return_value_policy<manage_new_object>() );
+	class_<BaseProperty> pyBaseProperty("Property", no_init);
+	pyBaseProperty.def("__str__", &BaseProperty::str_)
+		.def("__repr__", &BaseProperty::repr_);
+	
+	class_<Property<Distributable>, bases<BaseProperty> >("Distributable", init<Ex *>());
+	class_<Property<Indices>,       bases<BaseProperty> >("Indices", init<Ex *>());
+	class_<Property<IndexInherit>,  bases<BaseProperty> >("IndexInherit", init<Ex *>());
 
 
 	// How can we give a handle to the tree in python? And how can we give

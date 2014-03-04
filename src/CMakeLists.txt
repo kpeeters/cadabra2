@@ -24,7 +24,7 @@ find_package(GMPXX REQUIRED)
 find_package(PCRE REQUIRED)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  add_definitions("-Wall -Wno-unused-but-set-variable")
+  add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
 
 set(LOCAL_SRC_FILES 
@@ -69,6 +69,7 @@ set(LOCAL_SRC_FILES
   properties/WeightInherit.cc
   modules/xperm_new.c
   algorithms/distribute.cc
+  algorithms/rename_dummies.cc
   algorithms/flatten_product.cc
   algorithms/prodcollectnum.cc
 )
