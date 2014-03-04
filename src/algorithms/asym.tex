@@ -1,0 +1,25 @@
+\cdbalgorithm{asym}{}
+
+Anti-symmetrise a product or tensor in the indicated objects. This works
+both with normal objects, as in
+\begin{screen}{1,2}
+A B C;
+@asym!(%){A,B,C};
+1/6 A B C - 1/6 A C B - 1/6 B A C 
+          + 1/6 B C A + 1/6 C A B - 1/6 C B A;
+\end{screen}
+as well as with indices. When used with indices, remember to also
+indicate whether you want to symmetrise upper or lower indices, as in
+the example below.
+\begin{screen}{1,2}
+A_{m n} B_{p};
+@asym!(%){ _{m}, _{n}, _{p} };
+1/6 A_{m n} B_{p} - 1/6 A_{m p} B_{n} - 1/6 A_{n m} B_{p}
+     + 1/6 A_{n p} B_{m} + 1/6 A_{p m} B_{n} - 1/6 A_{p n} B_{m};
+\end{screen}
+Symmetrisation (i.e.~using plus signs for all terms) is handled by
+the \subscommand{sym} algorithm.  ~
+
+\cdbseealgo{sym}
+\cdbseealgo{young_project}
+\cdbseealgo{young_project_tensor}

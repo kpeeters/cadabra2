@@ -1,0 +1,22 @@
+\cdbalgorithm{replace\_match}{}
+
+Replaces a subset of terms in a sum or list which match the given
+pattern. This is like a substitute, but always acting on entire terms. 
+\begin{screen}{1,2}
+A + B D G + C D A;
+@replace_match!(%)( D Q?? -> 1);
+A + 1;
+\end{screen}
+Note the difference with \subscommand{substitute},
+\begin{screen}{1,2}
+A + B D G + C D A;
+@substitute!(%)( D Q?? -> 1);
+A + G + A;
+\end{screen}
+See \subscommand{take\_match} for further details on how to use this
+``select/modify/replace'' mechanism.
+
+
+\cdbseealgo{take_match}
+\cdbseealgo{substitute}
+

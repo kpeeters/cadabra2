@@ -1,0 +1,19 @@
+\cdbalgorithm{combine}{}
+
+Combine two consecutive objects with indexbrackets and consecutive
+contracted indices into one object with an indexbracket. An example
+with two contracted matrices:
+\begin{screen}{1,2}
+(\Gamma_r)_{\alpha\beta} (\Gamma_{s t u})_{\beta\gamma};
+@combine!(%);
+(\Gamma_r \Gamma_{s t u})_{\alpha\gamma};
+\end{screen}
+An example with a matrix and a vector:
+\begin{screen}{1,2}
+(\Gamma_r)_{\alpha\beta} v_{\beta};
+@combine!(%);
+(\Gamma_{r} v)_{\alpha};
+\end{screen}
+The inverse is done by \subscommand{expand}.
+
+\cdbseealgo{expand}

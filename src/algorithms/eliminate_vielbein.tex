@@ -1,0 +1,17 @@
+\cdbalgorithm{eliminate\_vielbein}{}
+
+Eliminates vielbein objects.
+\begin{screen}{1,2,3,4,5}
+{ m, n, p }::Indices(flat).
+{ \mu, \nu, \rho }::Indices(curved).
+e_{m \mu}::Vielbein.
+H_{m n p} e_{m \mu};
+@eliminate_vielbein!(%){H_{\mu\nu\rho}};
+H_{\mu n p};
+\end{screen}
+Other elimination commands of a similar type are
+\subscommand{eliminate\_kr} for Kronecker delta symbols
+and \subscommand{eliminate\_metric} for metric and inverse metric objects.
+
+\cdbseealgo{eliminate_kr}
+\cdbseealgo{eliminate_metric}

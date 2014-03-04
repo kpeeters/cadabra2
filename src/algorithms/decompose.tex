@@ -1,0 +1,22 @@
+\cdbalgorithm{decompose}{}
+
+Decompose a tensor monomial on a given basis of monomials. The basis
+should be given in the second argument. All tensor symmetries,
+including those implied by Young tableau Garnir symmetries, are taken
+into account. Example,
+\begin{screen}{0,1,2,3,5,6}
+{m,n,p,q}::Indices(vector).
+{m,n,p,q}::Integer(0..10).
+R_{m n p q}::RiemannTensor.
+
+R_{m n q p} R_{m p n q};
+@decompose!(%)( R_{m n p q} R_{m n p q} );
+{ -1/2 };
+\end{screen}
+Note that this algorithm does not yet take into account
+dimension-dependent identities, but it is nevertheless already
+required that the index range is specified.
+
+\cdbseealgo{young_project_tensor}
+\cdbseealgo{canonicalise}
+\cdbseeprop{TableauSymmetry}

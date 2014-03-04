@@ -1,0 +1,17 @@
+\cdbalgorithm{inner}{}
+
+Construct an inner product between two
+  lists appearing in a list,
+\begin{screen}{1,2,4}
+lst1:= {a_m, b_m ,c_m ,d_m ,e_m }:
+lst2:= @range[{1, @length[@(lst1)]}];
+\{ 1,2,3,4,5 \};
+@inner[ { @(lst1), @(lst2) } ];
+a_m + 2 b_m + 3 c_m + 4 d_m + 5 e_m;
+\end{screen}
+In order to generate a list of the sum of elements,
+use \subscommand{list\_sum} instead.
+
+\cdbseealgo{list_sum}
+\cdbseealgo{length}
+\cdbseealgo{range}

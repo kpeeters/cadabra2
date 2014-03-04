@@ -1,0 +1,14 @@
+\cdbalgorithm{collect\_terms}{}
+
+\label{loc_collect_terms}
+Collect terms in a sum that differ only by their numerical
+pre-factor. This is called automatically on all new input, and also by
+some algorithms (in which case it will be indicated in the description
+of the command), but in general has to be called by hand.
+
+Note that this command only collects terms which are identical, it
+does not collect terms which are different but mathematically
+equivalent. See~\subscommand{sumsort} for an example.
+
+\cdbseealgo{collect_factors}
+\cdbseealgo{sumsort}

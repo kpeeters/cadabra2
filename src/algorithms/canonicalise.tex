@@ -1,0 +1,51 @@
+\cdbalgorithm{canonicalise}{}
+
+\label{loc_canonicalise}
+Canonicalise a product of tensors, using the mono-term\index{mono-term
+symmetries} index symmetries of the individual tensors and the
+exchange symmetries of identical tensors. Tensor exchange takes into
+account commutativity properties of identical tensors.
+
+Note that this algorithm does not take into account multi-term
+symmetries such as the Ricci identity of the Riemann tensor; those
+canonicalisation procedures require the use
+of \subscommand{young\_project\_tensor}
+or \subscommand{young\_project\_product}. Similarly,
+dimension-dependent identities are not taken into account, use
+\subscommand{decompose\_product} for those.
+
+In order to specify symmetries of tensors you need to use symmetry
+properties such as \subsprop{Symmetric}, \subsprop{AntiSymmetric}
+or \subsprop{TableauSymmetry}. The following example illustrates this.
+\begin{screen}{1,2,3,4}
+A_{m n}::AntiSymmetric.
+B_{p q}::Symmetric.
+A_{m n} B_{m n};
+@canonicalise!(%);
+0;
+\end{screen}
+If the various terms in an expression use different index names, you
+may need an additional call to \subscommand{rename\_dummies}
+before \subscommand{collect\_terms} is able to collect all terms
+together:
+\begin{screen}{1,2,3,4,5,7,9}
+{m,n,p,q,r,s}::Indices.
+A_{m n}::AntiSymmetric.
+C_{p q r}::AntiSymmetric.
+A_{m n} C_{m n q} + A_{s r} C_{s q r};
+@canonicalise!(%);
+A_{m n} * C_{q m n} - A_{r s} * C_{q r s};
+@rename_dummies!(%);
+A_{m n} * C_{q m n} - A_{m n} * C_{q m n};
+@collect_terms!(%);
+0;
+\end{screen}
+
+If you have symmetric or anti-symmetric tensors with many indices, it
+sometimes pays off to sort them to the end of the expression (this may
+speed up the canonicalisation process considerably).
+
+\cdbseealgo{young_project_tensor}
+\cdbseealgo{decompose_product}
+\cdbseealgo{rename_dummies}
+\cdbseealgo{collect_terms}

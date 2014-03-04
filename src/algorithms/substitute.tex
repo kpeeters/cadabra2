@@ -1,0 +1,31 @@
+\cdbalgorithm{substitute}{}
+
+ \label{loc_substitute} Generic substitution command.
+Takes a rule or a set of rules according to which an expression
+should be modified. If more than one rule is given, it tries each rule
+in turn, until the first working one is encountered, after which it
+continues with the next node.
+\begin{screen}{1,2}
+G_{mu nu rho} + F_{mu nu rho};
+@substitute!(%)( F_{mu nu rho} -> A_{mu nu} B_{rho} );
+G_{mu nu rho} + A_{mu nu} B_{rho};
+\end{screen}
+\begin{screen}{1,2}
+A_{mu nu} B_{nu rho} C_{rho sigma};
+@substitute!(%)( A_{m n} C_{p q} -> D_{m q} );
+D_{mu sigma} B_{nu rho};
+\end{screen}
+This command takes full care of dummy index relabelling, as the
+following example shows:
+\begin{screen}{1,2,3}
+{m,n,q,d1,d2,d3,d4}::Indices(vector).
+a_{m} b_{n};
+@substitute!(%)( a_{q} -> c_{m n} d_{m n q} );
+c_{d1 d2} * d_{d1 d2 m} * b_{n};
+\end{screen}
+By postfixing a name with a question mark, it becomes a pattern.
+
+The substitution algorithm can do very complicated things; for more
+detailed information on substitution, see the manual.
+
+\cdbseealgo{vary}

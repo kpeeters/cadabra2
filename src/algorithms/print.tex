@@ -1,0 +1,16 @@
+\cdbalgorithm{print}{}
+
+Construct output from strings and 
+\cdb expressions. Here is an example:
+\begin{screen}{1,2}
+\Gamma{#}::GammaMatrix(metric=\delta).
+@print["The result is : " ~ @join[\Gamma^{a b}\Gamma_{c}] ~ ";"];
+The result is : (\Gamma^{a b}_{c} + 2 * \Gamma^{a} * \delta^{b}_{c});
+\end{screen}
+As you can see in this example, expressions are joined together into
+one printable string by using the tilde character.
+
+Note that \subscommand{print} completely overrides the normal output
+of expressions: there is no expression number for instance. Also note
+that all active nodes are (as usual) completely expanded before the
+print algorithm is called.

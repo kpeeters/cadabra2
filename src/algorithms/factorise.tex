@@ -1,0 +1,20 @@
+\cdbalgorithm{factorise}{}
+
+Given a list of symbols, this algorithm collects terms in a sum that
+only differ by pre-factors consisting of these given symbols. As an
+example,
+\begin{screen}{1,2}
+a b + a c + a d:
+@factorise!(%){b,c};
+(b + c) a + a d;
+\end{screen}
+This is like the {\tt antibracket} statement of FORM. A better name is
+probably {\tt factor\_in}.
+
+The algorithm of course also works with indexed objects, as in
+\begin{screen}{1,2}
+A_{m} B_{m} + C_{m} A_{m};
+@factorise!(%){B_{n},C_{n}};
+(B_{m} + C_{m}) A_{m};
+\end{screen}
+~

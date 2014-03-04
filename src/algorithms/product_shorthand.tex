@@ -1,0 +1,18 @@
+\cdbalgorithm{product\_shorthand}{}
+
+Rewrites the product of two fully symmetric or anti-symmetric tensors
+in a compact form by removing the contracting dummy indices.
+\begin{screen}{1,2,3}
+F_{m n p q}::Symmetric.
+G_{m n p q}::Symmetric.
+@product_shorthand![ F_{a b c d} G_{a b d f} ]{F}{G};
+F_{c} G_{f};
+\end{screen}
+The two arguments denote the tensors to which the algorithm should
+apply. Expanding the product again in terms of the full tensors can be
+done with the algorithm \subscommand{expand\_product\_shorthand}.
+
+\cdbseealgo{expand_product_shorthand}
+\cdbseeprop{Symmetric}
+\cdbseeprop{AntiSymmetric}
+

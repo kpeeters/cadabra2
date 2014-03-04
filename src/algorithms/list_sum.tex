@@ -1,0 +1,16 @@
+\cdbalgorithm{list\_sum}{}
+
+In an expression containing sums of identical-length lists, create one
+new list constructed by adding the elements at the same position in
+each list. Example,
+\begin{screen}{1,2,3}
+{a, b, 7 c + q, d, e} - {-f, g, h, i, j}:
+@list_sum!(%):
+@sumflatten!(%);
+\{ a + f, b - g, 7c + q - h, d - i, e - j \};
+\end{screen}
+To generate a list of the products of the elements,
+use \subscommand{inner} instead.
+
+\cdbseealgo{inner}
+\cdbseealgo{range}

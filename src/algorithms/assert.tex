@@ -1,0 +1,17 @@
+\cdbalgorithm{assert}{}
+
+Checks whether the indicated expression equals zero. If not, the
+program will be terminated. This command is used e.g.~in the test
+suite.
+\begin{screen}{1,2}
+1 - B B**(-1);
+@collect_factors!(%);
+@collect_terms!(%);
+@assert(%);
+Assert check passed.
+\end{screen}
+If the expression is not zero an error message will be produced, and
+the program will be terminated.
+
+\cdbseealgo{tree}
+

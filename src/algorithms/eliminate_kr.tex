@@ -1,0 +1,24 @@
+\cdbalgorithm{eliminate\_kr}{}
+
+Eliminates Kronecker delta symbols by performing index
+contractions. Also replaces contracted Kronecker delta symbols with
+the range over which the index runs, if known. 
+\begin{screen}{1,2,3}
+\delta_{m n}::KroneckerDelta.
+A_{m p} \delta_{p q} B_{q n};
+@eliminate_kr!(%);
+A_{m q} B_{q n};
+\end{screen}
+The index range is set as usual with \subsprop{Integer},
+\begin{screen}{1,2,3,4}
+{m,n,p,q}::Integer(0..d-1).
+\delta_{m n}::KroneckerDelta.
+\delta_{p q} \delta_{p q};
+@eliminate_kr!(%);
+d;
+\end{screen}
+In order to eliminate metric factors (i.e.~to `raise' and 'lower'
+indices) use the algorithm \subscommand{eliminate\_metric}.
+
+\cdbseeprop{Integer}
+\cdbseealgo{eliminate_metric}

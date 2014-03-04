@@ -1,0 +1,24 @@
+\cdbalgorithm{young\_project\_product}{}
+
+Project all tensors in a product with their Young tableau
+projector. Each factor is projected in turn, after which the product
+is distributed and then canonicalised. This is often faster and more
+memory-efficient than first projecting every factor and then
+distributing.
+
+Young projection can be used to find equalities between tensor
+polynomials which are due to multi-term symmetries, such as the Ricci
+identity in the example below.
+\begin{screen}{1,2,3,4,5,6}
+{a,b,c,d}::Indices.
+R_{a b c d}::RiemannTensor.
+2 R_{a b c d} R_{a c b d} - R_{a b c d} R_{a b c d};
+@young_project_product!(%);
+@sumflatten!(%);
+@collect_terms!(%);
+0;
+\end{screen}
+~
+
+\cdbseealgo{decompose}
+\cdbseealgo{young_project_tensor}

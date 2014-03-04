@@ -1,0 +1,28 @@
+\cdbalgorithm{projweyl}{}
+
+Projects an expression onto Weyl spinors of positive chirality (this
+algorithm only works in even dimensions). On such a subspace, we have
+\begin{equation}
+\label{e:g10toeps}
+\Gamma^{r_1 \cdots r_{d}}\Big|_{\text{Weyl}} = \frac{1}{\sqrt{-g}}\epsilon^{r_1\cdots
+r_{d}}
+\, ,\quad \epsilon^{0\cdots (d-1)} = +1\, ,
+\end{equation}
+and therefore all gamma matrices with more than $d/2$ indices can be
+converted to their ``dual'' gamma matrices. By repeated contraction
+of~\eqref{e:g10toeps} with gamma matrices on the left one deduces that
+\begin{equation}
+\Gamma^{r_1\cdots r_n}\Big|_{\text{Weyl}} = \frac{1}{\sqrt{-g}} \frac{(-1)^{\frac{1}{2}n(n+1)+1}}{(d-n)!}
+\Gamma_{s_1\cdots s_{d-n}}\Big|_{\text{Weyl}} \epsilon^{s_1\cdots s_{d-n} r_1\cdots r_n}\, .
+\end{equation}
+Here is an example:
+\begin{screen}{1,2}
+{m,n,p,q,r,s,t}::Indices.
+{m,n,p,q,r,s,t}::Integer(0..5).
+\Gamma{#}::GammaMatrix.
+\Gamma_{m n p q};
+@projweyl!(%);
+\end{screen}
+
+\cdbseeprop{GammaMatrix}
+\cdbseealgo{join}

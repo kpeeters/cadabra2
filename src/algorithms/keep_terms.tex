@@ -1,0 +1,12 @@
+\cdbalgorithm{keep\_terms}{}
+
+Keep the~$m$th to the~$n$th terms in a sum, dropping all others.
+\begin{screen}{1,2,3}
+A + B + C + D + E + F;
+@keep_terms!(%){3}{5};
+D + E + F;
+\end{screen}
+Note that counting starts from zero.
+
+\cdbseealgo{keep_weight}
+\cdbseealgo{take_match}

@@ -1,0 +1,24 @@
+\cdbalgorithm{einsteinify}{}
+
+In an expression containing dummy indices at the same position
+(i.e.~either both subscripts or both superscripts), raise one of the
+indices.
+\begin{screen}{1,2}
+A_{m} A_{m};
+@einsteinify!(%);
+A^{m} A_{m};
+\end{screen}
+If an additional argument is given to this command, it instead inserts
+``inverse metric'' objects, with the name as indicated by the
+additional argument.
+\begin{screen}{1,2}
+{m,n}::Indices.
+A_{m} A_{m};
+@einsteinify!(%){\eta};
+A_{m} A_{n} \eta^{m n};
+\end{screen}
+Note that the second form requires that there are enough dummy indices
+defined through the use of \subsprop{Indices}.
+
+\cdbseealgo{eliminate_kr}
+\cdbseeprop{Indices}
