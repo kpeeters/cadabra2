@@ -91,3 +91,4 @@ a:=A*(B+C);
 distribute(a);
 b:=A_{m n} (B^{n p} + C^{n p});
 distribute(b);
+distribute('A_{m n} (B^{n p} + C^{n p})');
