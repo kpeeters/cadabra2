@@ -34,7 +34,6 @@
 
 Algorithm::Algorithm(Kernel& k, exptree& tr_)
 	: expression_modified(false), 
-	  equation_number(0), global_success(g_not_yet_started), 
 	  number_of_calls(0), number_of_modifications(0),
 	  suppress_normal_output(false),
 	  discard_command_node(false),
@@ -47,84 +46,15 @@ Algorithm::~Algorithm()
 	{
 	}
 
-bool Algorithm::is_output_module() const
+bool Algorithm::apply_once(exptree::iterator& it)
 	{
+	if(can_apply(it)) 
+		if(apply(it)==l_applied)
+			return true;
 	return false;
 	}
 
-
-// The entry point called by manipulator.cc
-void Algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool make_copy, int act_at_level, 
-							 bool called_by_manipulator)
-	{
-	if(called_by_manipulator) {
-		report_progress_stopwatch.stop();
-		report_progress_stopwatch.reset();
-		}
-
-	last_used_equation_number=lue;
-	expression_modified=false;
-	iterator actold=tr.end();
-	subtree=tr.end();
-
-
-	// Depending on the outcome, different actions should be taken to copy the
-	// original tree and store the result.
-	
-	bool is_output_module=this->is_output_module(); //dynamic_cast<exptree_output *>(this);
-
-	if(actold!=tr.end()) { // act on an existing expression
-		previous_expression=tr.named_parent(tr.active_expression(actold), "\\expression");
-		if(!is_output_module && make_copy)
-			copy_expression(previous_expression);
-		actold=tr.active_expression(actold);
-		if(multiple) {
-//			 debugout << "acting with " << *(this_command->name) << " multiple." << std::endl;
-			subtree=actold;
-			apply_recursive(subtree, true, act_at_level, called_by_manipulator, until_nochange);
-			}
-		else {
-//			 debugout << "acting with " << *(this_command->name) << " single." << std::endl;
-			subtree=tr.begin(actold);
-			if(can_apply(subtree)) {
-				++number_of_calls;
-//				report_progress((*this_command->name).substr(1,
-//																			(*this_command->name).size()-2), 
-//									 0,0,1);
-				result_t res=apply(subtree);
-				if(expression_modified) {
-					++number_of_modifications;
-					global_success=g_applied;
-//					debugout << "**** " << std::endl;
-//					tr.print_recursive_treeform(debugout, tr.begin());
-//					debugout << "==== " << std::endl;
-					if(getenv("CDB_PARANOID")) 					
-						check_consistency(tr.named_parent(subtree,"\\expression"));
-					}
-				else if(is_output_module && res==l_applied)
-					global_success=g_applied;
-				if(res==l_error)
-					global_success=g_apply_failed;
-				}
-			}
-		if(!is_output_module) {
-			if(global_success==g_apply_failed) {
-				if(make_copy) {
-					cancel_modification();
-					}
-				subtree=previous_expression;
-				}
-			}
-		discard_command_node=true;
-		}
-
-	if(is_output_module) {
-		suppress_normal_output=true;
-		}
-	}
-
-
-bool Algorithm::apply_recursive_new(exptree::iterator& it) 
+bool Algorithm::apply_recursive(exptree::iterator& it) 
 	{
 	// This recursive algorithm walks the tree depth-first (parent-after-child). The algorithm is
 	// applied on each node if can_apply returns true. When the iterator goes up one level (i.e.
@@ -138,14 +68,14 @@ bool Algorithm::apply_recursive_new(exptree::iterator& it)
 	int deepest_action = -1;
 
 	for(;;) {
-		std::cout << "reached " << *current->name << std::endl;
+//		std::cout << "reached " << *current->name << std::endl;
 		if(deepest_action > tr.depth(current)) {
-			std::cout << "simplify" << std::endl;
+//			std::cout << "simplify" << std::endl;
 			deepest_action = -1;
 			}
 		
 		if(can_apply(current)) {
-			std::cout << "acting at " << *current->name << std::endl;
+//			std::cout << "acting at " << *current->name << std::endl;
 			iterator work=current;
 			result_t res = apply(work);
 			if(res==l_applied) {
@@ -158,237 +88,6 @@ bool Algorithm::apply_recursive_new(exptree::iterator& it)
 		}
 	
 	return false;
-	}
-
-// Returns whether the Algorithm has applied at least once.
-//
-
-
-bool Algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_at_level, 
-										  bool called_by_manipulator, bool until_nochange)
-	{
-	assert(tr.is_valid(st));
-	assert(st!=tr.end());
-	unsigned long count=0;
-	bool atleastone=false;
-	bool atleastoneglobal=false;
-	post_order_iterator cit=st;
-	post_order_iterator wit;
-	exptree::fixed_depth_iterator fdi; // used when iterating at fixed depth
-	int worked=0;
-	int failed=0;
-
-//	long total_number_of_nodes=0;
-	long processed_number_of_nodes=0;
-
-	do { // loop which keeps iterating until the expression no longer changes
-		post_order_iterator end;
-		if(act_at_level!=-1) {
-			fdi=tr.begin_fixed(st, act_at_level);
-			wit=fdi;
-			end=tr.end();
-			}
-		else {
-//			total_number_of_nodes=tr.size(cit);
-			wit=cit;
-			end=wit;
-			wit.descend_all();
-			++end;
-			}
-		atleastone=false;
-		int num=1;
-		int applied=0;
-
-//		std::cout << "entering loop... for " << typeid(*this).name()  << std::endl;
-//		exptree::print_recursive_treeform(debugout, tr.begin());
-		while(tr.is_valid(wit) && wit!=end) { // loop over the entire tree
-			bool change_st=false; 
-			iterator start=wit;
-         // If we are at the top node and the Algorithm changes the iterator 'start',
-			// we have to propagate that change into 'st'.
-			if(start==st) change_st=true; 
-			if(can_apply(start)) {
-//				debugout << "can apply, entry point:" << std::endl;
-//				exptree::print_recursive_treeform(debugout, start);
-				if(global_success<g_operand_determined)
-					global_success=g_operand_determined;
-				expression_modified=false;
-				dont_iterate=false;
-
-				post_order_iterator nextone=wit; 
-				if(act_at_level==-1) {
-					// Because nextone is a post_order_iterator, the increment that follows 
-					// skips straight to the next sibling, not to the next child.
-					processed_number_of_nodes+=tr.size(nextone);
-					if(called_by_manipulator)
-//						report_progress((*this_command->name).substr(1,
-//																					(*this_command->name).size()-2), 
-//											 total_number_of_nodes, processed_number_of_nodes, 1);
-					++nextone;
-					}
-				else { 
-					++fdi;
-					if(tr.is_valid(fdi)) nextone=fdi;
-					else                 nextone=end;
-					}
-				count++;
-				++number_of_calls;
-				std::string www=*wit->name;
-				std::cout << "going to apply" << std::endl;
-				result_t res=apply(start);
-				std::cout << "apply done" << std::endl;
-//				debugout << "after apply: " << *(start->multiplier) << std::endl;
-//				exptree::print_recursive_treeform(debugout, start);
-//				exptree::print_recursive_treeform(txtout, tr.begin());
-				wit=start; // this copying back and forth is needed because wit has different type
-				switch(res) {
-					case l_no_action:
-						++failed;
-						wit=nextone;
-						break;
-					case l_applied:
-						global_success=g_applied;
-						++applied;
-						if(change_st) 
-							st=start;
-						if(expression_modified) {
-							++worked;
-							++number_of_modifications;
-							atleastone=true;
-							atleastoneglobal=true;
-							}
-						// Handle zeroes and ones.
-//						debugout << "handling zeroes and ones." << std::endl;
-//						debugout << "start tree:" << std::endl;
-//						debugout << *start->multiplier << std::endl;
-//						exptree::print_recursive_treeform(debugout, start);
-						if(wit!=tr.end() && *wit->multiplier==0) { 
-							propagate_zeroes(wit,st);
-							if(*wit->multiplier==0) { // a top-level zero 
-								++wit;       
-								}
-							else if(act_at_level!=-1) wit=nextone; // do not follow post_order sequence
-							}
-						else if(wit!=tr.end() && wit->is_rational()) { // handle multipliers in products and identity powers
-							bool tryprod=false;
-							bool ispow=true;
-							sibling_iterator tmpact=wit;
-							if( *tr.parent(tmpact)->name=="\\pow" && wit->is_identity() ) {
-								iterator par=tr.parent(tmpact);
-								if( tmpact==tr.begin(par) ) { // 1**x = 1
-									node_one(par);
-									tmpact=par;
-									tryprod=true;
-									}
-								else { // x**1 = x
-									tr.erase(tmpact);
-									tr.flatten(par);
-									tr.erase(par);
-									wit=nextone;
-									}
-								}
-							else ispow=false;
-							
-							if( (!ispow || tryprod) && *tr.parent(tmpact)->name=="\\prod") {
-								iterator tmp=tr.parent(tmpact);
-								multiply(tmp->multiplier, *tmpact->multiplier);
-								tr.erase(tmpact); // may leave us with 0 or 1 children
-								cleanup_anomalous_products(tr,tmp);
-								if(tryprod) wit=tmp;
-								else        wit=nextone;
-								}
-							else {
-								if(tryprod) wit=tmpact;
-								else        wit=nextone;
-								}
-							}
-						else {
-							if(wit!=tr.end()) {
-//								txtout << "THEN HERE" << std::endl;
-								pushup_multiplier(wit); // Ensure a valid tree wrt. multipliers.
-//								txtout << "THEN HERE DONE" << std::endl;
-								}
-							wit=nextone;
-							}
-						break;
-					case l_error: 
-						global_success=g_apply_failed;
-						return atleastoneglobal;
-						break;
-					}
-				}
-			else {
-				if(act_at_level==-1) ++wit;
-				else {
-					++fdi;
-					if(tr.is_valid(fdi)) wit=fdi;
-					else wit=end;
-//					wit=tr.next_at_same_depth(wit);
-					}
-				}
-			
-			if(interrupted) 
-				throw InterruptionException("apply_recursive");
-
-			++num;
-			}
-		} while(until_nochange && atleastone); // enable this again at some point for repeatall type apply
-
-	// Completely top-level zeroes did not get handled above.
-	if(*st->name == "\\expression" && tr.begin(st)->is_zero()) {
-		 tr.erase_children(tr.begin(st));
-		 tr.begin(st)->name=name_set.insert("1").first;
-		 }
-//	tr.print_recursive_treeform(txtout, tr.begin());
-
-	// Check consistency of the tree if requested.
-	if(getenv("CDB_PARANOID")) 
-		if(global_success==g_applied && check_cons) 
-			check_consistency(tr.named_parent(cit,"\\expression"));
-	//	txtout << "Algorithm " << (this_command==tr.end()?"?":*this_command->name) << " worked " << worked 
-	//			 << " failed " << failed << std::endl;
-
-//	tr.debug_verify_consistency();
-//	exptree::print_recursive_treeform(txtout, tr.begin());
-
-	return atleastoneglobal;
-	}
-
-bool Algorithm::prepare_for_modification(bool make_copy)
-	{
-	// Collect iterators pointing to all selected nodes and copy the
-	// expression into a new \\expression node where the modifications
-	// can be made.
-	marks.clear();
-//	tr.marked_nodes(marks);
-
-	if(marks.size()==0) 
-		return false;
-
-//	previous_expression=tr.named_parent(marks[0], "\\expression");
-	if(make_copy)
-		copy_expression(previous_expression);
-//	for(unsigned int i=0; i<marks.size(); ++i) 
-//		tr.unselect(marks[i]);
-	marks.clear();
-//	tr.marked_nodes(marks);
-	return true;
-	}
-
-void Algorithm::copy_expression(exptree::iterator previous_expression) const
-	{
-//	txtout << "*** copying expression" << std::endl;
-	assert(tr.is_valid(previous_expression));
-	tr.append_child(tr.parent(previous_expression), previous_expression);
-//	txtout << "*** copying expression done" << std::endl;
-	}
-
-void Algorithm::cancel_modification()
-	{
-	if(tr.is_valid(previous_expression)) {
-		iterator act=tr.active_expression(previous_expression);
-		tr.erase(act);
-		}
 	}
 
 void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnode)
