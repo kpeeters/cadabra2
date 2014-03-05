@@ -77,6 +77,17 @@ b := @(a(g)) + @(a(h))
 
 \item Resolve the issue of: we want to assign properties to patterns, but those patterns can 
 depend on properties.
+
+\item For long and recursive operations, it makes sense to be able to specify a simplification
+algorithm to be called on every step, like Redberry does.
+
+  def simplify(ex):
+      sort_product(ex)
+      collect_terms(ex)
+     
+
+  substitute(ex, 'A->B', simplify)
+  
 \end{itemize}
 
 

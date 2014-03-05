@@ -98,8 +98,14 @@ distribute('A_{m n} (B^{n p} + C^{n p})');
 ex:=A_{c d} C^{d};
 rename_dummies(ex);
 
-ex:=A B A D C;
 sort_product(ex)
 ex:=B
+ex:=A B A D C;
 rl:= B -> Q;
-substitute(ex, rl)
+substitute(ex, rl, True)
+
+{m,n,p,a,b}::Indices.
+ex:=A_{m n} ( C^{n p} + D^{n p} );
+rl:= C^{a b} -> D^{a b};
+substitute(ex, rl, True)
+

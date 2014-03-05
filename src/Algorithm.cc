@@ -124,8 +124,46 @@ void Algorithm::apply(unsigned int lue, bool multiple, bool until_nochange, bool
 	}
 
 
+bool Algorithm::apply_recursive_new(exptree::iterator& it) 
+	{
+	// This recursive algorithm walks the tree depth-first (parent-after-child). The algorithm is
+	// applied on each node if can_apply returns true. When the iterator goes up one level (i.e.
+	// from a child to a parent), and any changes have been made so far at the lower level, cleanup
+	// and simplification routines will be called. The only nodes that can be removed from the tree
+	// are nodes at a lower level than the simplification node.
+
+	post_order_iterator current=it;
+	current.descend_all();
+	post_order_iterator last=it;
+	int deepest_action = -1;
+
+	for(;;) {
+		std::cout << "reached " << *current->name << std::endl;
+		if(deepest_action > tr.depth(current)) {
+			std::cout << "simplify" << std::endl;
+			deepest_action = -1;
+			}
+		
+		if(can_apply(current)) {
+			std::cout << "acting at " << *current->name << std::endl;
+			iterator work=current;
+			result_t res = apply(work);
+			if(res==l_applied) {
+				deepest_action=tr.depth(work);
+				}
+			}
+		if(current==last)
+			break;
+		++current;
+		}
+	
+	return false;
+	}
+
 // Returns whether the Algorithm has applied at least once.
 //
+
+
 bool Algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_at_level, 
 										  bool called_by_manipulator, bool until_nochange)
 	{
@@ -161,7 +199,7 @@ bool Algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 		int num=1;
 		int applied=0;
 
-//		debugout << "entering loop... for " << typeid(*this).name()  << std::endl;
+//		std::cout << "entering loop... for " << typeid(*this).name()  << std::endl;
 //		exptree::print_recursive_treeform(debugout, tr.begin());
 		while(tr.is_valid(wit) && wit!=end) { // loop over the entire tree
 			bool change_st=false; 
@@ -196,7 +234,9 @@ bool Algorithm::apply_recursive(exptree::iterator& st, bool check_cons, int act_
 				count++;
 				++number_of_calls;
 				std::string www=*wit->name;
+				std::cout << "going to apply" << std::endl;
 				result_t res=apply(start);
+				std::cout << "apply done" << std::endl;
 //				debugout << "after apply: " << *(start->multiplier) << std::endl;
 //				exptree::print_recursive_treeform(debugout, start);
 //				exptree::print_recursive_treeform(txtout, tr.begin());
