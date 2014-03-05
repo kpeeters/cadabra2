@@ -22,10 +22,14 @@
 #pragma once
 
 #include "Storage.hh"
+#include "Kernel.hh"
 
-// New cleanup. 
+// Central cleanup dispatch routine, which calls the other
+// cleanup functions defined later.
 
-cleanup_productlike(exptree&, iterator it);
+void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator it);
+
+void cleanup_productlike(Kernel& k, exptree&, exptree::iterator it);
 
 
 

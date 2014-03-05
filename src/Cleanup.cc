@@ -1,5 +1,23 @@
 
 #include "Cleanup.hh"
+#include "algorithms/prodcollectnum.hh"
+
+void cleanup_dispatch(Kernel& k, exptree& tr, exptree::iterator it)
+	{
+	if(*it->name=="\\prod") cleanup_productlike(k, tr, it);
+	}
+
+void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator it)
+	{
+	assert(*it->name=="\\prod");
+	std::cout << "cleanup_productlike" << std::endl;
+
+	// Remove children which are 1
+   // Collect all multipliers
+
+	prodcollectnum pc(k, tr);
+	pc.apply(it);
+	}
 
 void cleanup_expression(exptree& tr)
 	{

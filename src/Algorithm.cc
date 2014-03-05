@@ -21,6 +21,7 @@
 #include "Algorithm.hh"
 #include "Storage.hh"
 #include "Props.hh"
+#include "Cleanup.hh"
 
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
@@ -71,6 +72,7 @@ bool Algorithm::apply_recursive(exptree::iterator& it)
 //		std::cout << "reached " << *current->name << std::endl;
 		if(deepest_action > tr.depth(current)) {
 //			std::cout << "simplify" << std::endl;
+			cleanup_dispatch(kernel, tr, current);
 			deepest_action = -1;
 			}
 		
@@ -79,7 +81,9 @@ bool Algorithm::apply_recursive(exptree::iterator& it)
 			iterator work=current;
 			result_t res = apply(work);
 			if(res==l_applied) {
+				rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
+				current=work; // the algorithm may have replaced the 'work' node
 				}
 			}
 		if(current==last)
@@ -587,17 +591,17 @@ void Algorithm::report_progress(const std::string& str, int todo, int done, int 
 
 bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo) 
 	{
-//	txtout << "full story " << *two->name << std::endl;
-//	print_classify_indices(tr.named_parent(one, "\\expression"));
-//	txtout << "replacement" << std::endl;
+//	std::cout << "full story " << *two->name << std::endl;
 //	print_classify_indices(two);
+//	std::cout << "replacement" << std::endl;
+//	print_classify_indices(std::cout, two);
 
 	index_map_t ind_free, ind_dummy;
 	index_map_t ind_free_full, ind_dummy_full;
 
 	if(still_inside_algo) {
 		classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
-//		print_classify_indices(tr.parent(two));
+//		print_classify_indices(std::cout, tr.parent(two));
 		}
 	else {
 //		txtout << "classify indices up" << *(tr.parent(two)->name) << std::endl;
