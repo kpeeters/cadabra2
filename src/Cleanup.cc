@@ -10,7 +10,7 @@ void cleanup_dispatch(Kernel& k, exptree& tr, exptree::iterator it)
 void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator it)
 	{
 	assert(*it->name=="\\prod");
-	std::cout << "cleanup_productlike" << std::endl;
+//	std::cout << "cleanup_productlike" << std::endl;
 
 	// Remove children which are 1
    // Collect all multipliers

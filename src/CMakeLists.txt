@@ -43,6 +43,7 @@ set(LOCAL_SRC_FILES
   Props.cc
   Exchange.cc
   PythonCdb.cc
+  PreClean.cc
   properties/Accent.cc
   properties/AntiSymmetric.cc
   properties/CommutingAsProduct.cc

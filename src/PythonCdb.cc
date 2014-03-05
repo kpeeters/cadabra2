@@ -4,6 +4,7 @@
 #include "Exceptions.hh"
 #include "Kernel.hh"
 #include "DisplayTeX.hh"
+#include "PreClean.hh"
 #include <boost/python/implicit.hpp>
 #include <sstream>
 
@@ -52,6 +53,7 @@ Ex::Ex(std::string ex_)
 		}
 
 	tree=parser.tree;
+	pre_clean(kernel, tree, tree.begin());
 	}
 
 std::string Ex::get() const
