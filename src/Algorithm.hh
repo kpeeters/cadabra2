@@ -55,39 +55,19 @@ class Algorithm {
 			l_error
 		};
 
-		enum global_success_t {
-			g_not_yet_started=0,
-			g_arguments_accepted=1,
-			g_operand_determined=2,
-			g_applied=4,
-			g_apply_failed=6
-		};
 
-		virtual bool     is_output_module() const;
-
-		virtual bool     can_apply(iterator)=0;
-		// These return their result in the return value
-		virtual result_t apply(iterator&)=0;
-
-		// These give result in global_success.
-		bool             apply_recursive_new(iterator&);
-		bool             apply_recursive(iterator&, bool check_consistency=true, int act_at_level=-1,
-													bool called_by_manipulator=false, bool until_nochange=false);
-	   void             apply(unsigned int last_used_equation_number, bool multiple, bool until_nochange,
-									  bool make_copy, int act_at_level=-1, bool called_by_manipulator=false);
-
-
+		// The main entry points for running algorithms. 
+		bool apply_once(iterator&);
+		bool apply_recursive(iterator&);
 
 		// Per-call information
 		bool             expression_modified;
 		iterator         subtree;        // subtree to be displayed
-		unsigned int     equation_number;
 
 		// External handling of scalar expressions
 		
 
 		// Global information
-		global_success_t global_success;
 		unsigned int     number_of_calls;
 		unsigned int     number_of_modifications;
 		bool             suppress_normal_output;
@@ -145,11 +125,11 @@ class Algorithm {
 		Kernel   kernel;
 		exptree& tr;
 
-		unsigned int last_used_equation_number; // FIXME: this is a hack, just to see this in 'eqn'.
-
-		std::vector<std::pair<sibling_iterator, sibling_iterator> > marks;
-		iterator                       previous_expression;
-		bool                           dont_iterate;
+		// The main entry point which is used by the public entry points listed
+		// above. Override these in any subclass.
+		//
+		virtual bool can_apply(iterator)=0;
+		virtual result_t apply(iterator&)=0;
 
 		// Index stuff
 		int      index_parity(iterator) const;
@@ -176,6 +156,7 @@ class Algorithm {
 		bool     is_nonprod_factor_in_prod(iterator);
 		bool     prod_wrap_single_term(iterator&);
 		bool     prod_unwrap_single_term(iterator&);
+
 		/// Wrap a term in a product, irrespective of its parent (it usually makes
 		/// more sense to call the safer prod_wrap_single_term above).
 		void     force_prod_wrap(iterator&);
@@ -210,7 +191,7 @@ class Algorithm {
 		/// A map from the position of each index to the sequential index.
 		typedef std::map<exptree::iterator, int, exptree::iterator_base_less>    index_position_map_t;
 
-		/// @name Index manipulation and classification
+		/// Index manipulation and classification
 		///
 		/// Routines to find and classify all indices in an expression, taking into account
 		/// sums and products. Note that dummy indices do not always come in pairs, for 
@@ -218,10 +199,7 @@ class Algorithm {
 		///            a_{m n} ( b^{n p} + q^{n p} ) .
 		/// Similarly, free indices can appear multiple times, as in
 		///            a_{m} + b_{m} . 
-		//@{
-		/// One
 		void     fill_index_position_map(iterator, const index_map_t&, index_position_map_t&) const;
-      /// Two
 		void     fill_map(index_map_t&, sibling_iterator, sibling_iterator) const;
 		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 		void     print_classify_indices(std::ostream&, iterator) const;
@@ -237,12 +215,8 @@ class Algorithm {
 											const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const;
 		exptree get_dummy(const list_property *, iterator) const;
 		exptree get_dummy(const list_property *, iterator, iterator) const;
-      //@}
 
 	private:
-		void     cancel_modification();
-		void     copy_expression(exptree::iterator) const;
-		bool     prepare_for_modification(bool make_copy);
 		/// Given a node with zero multiplier, propagate this zero
 		/// upwards in the tree.  Changes the iterator so that it points
 		/// to the next node in a post_order traversal (post_order:
@@ -255,12 +229,6 @@ class Algorithm {
 		bool cleanup_anomalous_products(exptree& tr, exptree::iterator& it);
 };
 
-
-template<class T>
-std::auto_ptr<Algorithm> create(exptree& tr, exptree::iterator it)
-	{
-	return std::auto_ptr<Algorithm>(new T(tr, it));
-	}
 
 /// Determine the number of elements in the first range which also occur in the
 /// second range.

@@ -110,14 +110,11 @@ Ex *dispatch_2(Ex *ex, Ex *args, bool repeat)
 	exptree::iterator it=ex->tree.begin().begin();
 	if(repeat) {
 		std::cout << "applying on " << *it->name << " recursively" << std::endl;
-		algo.apply_recursive_new(it);
+		algo.apply_recursive(it);
 		}
 	else {
-		if(algo.can_apply(it)) 
-			algo.apply(it);
-		else {
-			std::cout << "cannot apply" << std::endl;
-			}
+		std::cout << "applying on " << *it->name << " once" << std::endl;
+		algo.apply_once(it);
 		}
 	return ex;
 	}
