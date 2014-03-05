@@ -23,6 +23,14 @@
 
 #include "Storage.hh"
 
+// New cleanup. 
+
+cleanup_productlike(exptree&, iterator it);
+
+
+
+
+// DEPRECATED:
 // Generic helper functions to cleanup expressions and bring them
 // to canonical form. These tend to make use of algorithms from the 
 // sub-modules and should hence not really be part of the core.
@@ -33,3 +41,4 @@ void cleanup_expression(exptree&, exptree::iterator&); // may change the pointer
 void cleanup_sums_products(exptree&, exptree::iterator&);
 void cleanup_nests(exptree&tr, exptree::iterator &it, bool ignore_bracket_types=false);
 void cleanup_nests_below(exptree&tr, exptree::iterator it, bool ignore_bracket_types=false);
+
