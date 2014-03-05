@@ -70,6 +70,7 @@ class Algorithm {
 		virtual result_t apply(iterator&)=0;
 
 		// These give result in global_success.
+		bool             apply_recursive_new(iterator&);
 		bool             apply_recursive(iterator&, bool check_consistency=true, int act_at_level=-1,
 													bool called_by_manipulator=false, bool until_nochange=false);
 	   void             apply(unsigned int last_used_equation_number, bool multiple, bool until_nochange,

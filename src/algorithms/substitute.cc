@@ -97,7 +97,7 @@ bool substitute::can_apply(iterator st)
 			}
 		else conditions=tr.end();
 		
-		std::cerr << *lhs->name << " - " << *st->name << std::endl;
+//		std::cerr << *lhs->name << " - " << *st->name << std::endl;
 
 		if(lhs->name!=st->name && !lhs->is_object_wildcard() && !lhs->is_name_wildcard() && lhs->name->size()>0) 
 			continue;
@@ -368,7 +368,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 //		start_reporting_outside=true;
 //		}
 //	debugout << "leaving with st=" << *st->name << std::endl;
-//	tr.print_recursive_treeform(txtout, tr.begin());
+	tr.print_recursive_treeform(std::cout, tr.begin());
 //	txtout << "======" << std::endl;
 
 	return l_applied;

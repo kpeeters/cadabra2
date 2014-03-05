@@ -108,13 +108,17 @@ Ex *dispatch_2(Ex *ex, Ex *args, bool repeat)
 	F algo(kernel, ex->tree, args->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
-	if(algo.can_apply(it)) {
-		algo.apply(it);
+	if(repeat) {
+		std::cout << "applying on " << *it->name << " recursively" << std::endl;
+		algo.apply_recursive_new(it);
 		}
 	else {
-		std::cout << "cannot apply" << std::endl;
+		if(algo.can_apply(it)) 
+			algo.apply(it);
+		else {
+			std::cout << "cannot apply" << std::endl;
+			}
 		}
-
 	return ex;
 	}
 
