@@ -104,8 +104,21 @@ ex:=A B A D C;
 rl:= B -> Q;
 substitute(ex, rl, True)
 
+\prod{#}::IndexInherit;
 {m,n,p,a,b}::Indices.
 ex:=A_{m n} ( C^{n p} + D^{n p} );
-rl:= C^{a b} -> D^{a b};
+rl:= C^{a b} -> M_{m} D^{m a b};
 substitute(ex, rl, True)
 
+from cadabra import *
+Indices(Ex('{m,n,p,a,b}'))
+ex=Ex('A_{m n} ( C^{n p} + D^{n p} )')
+rule=Ex('C^{a b} -> M_{m} D^{m a b}')
+substitute(ex, rule, True)
+
+substitute(ex, rl, True)
+
+
+ex:= B + A B A D C;
+rl:= B -> 2;
+substitute(ex, rl, True)

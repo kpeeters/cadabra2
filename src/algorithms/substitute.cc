@@ -368,7 +368,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 //		start_reporting_outside=true;
 //		}
 //	debugout << "leaving with st=" << *st->name << std::endl;
-	tr.print_recursive_treeform(std::cout, tr.begin());
+//	tr.print_recursive_treeform(std::cout, tr.begin());
 //	txtout << "======" << std::endl;
 
 	return l_applied;
