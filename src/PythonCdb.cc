@@ -25,6 +25,8 @@ Ex::Ex(const Ex& other)
 
 std::string Ex::str_() const
 	{
+	std::cout << "reached Ex::str_ " << std::endl;
+	std::cout << *(tree.begin()->name)<< std::endl;
 	std::ostringstream str;
 	DisplayTeX dt(kernel.properties, tree);
 	dt.output(str);
@@ -218,6 +220,13 @@ void def_algo_2(const std::string& name)
 	def(name.c_str(),  &dispatch_2_string_defaults<F>, (arg("ex"),arg("args")),               return_value_policy<manage_new_object>() );
 	}
 
+void callback(boost::python::object obj, Ex *ex) 
+	{
+	std::cout << "calling back to python" << std::endl;
+	std::cout << *(ex->tree.begin()->name) << std::endl;
+	obj(boost::ref(ex));
+	}
+
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
 // as the various algorithms that can act on these.
@@ -236,6 +245,8 @@ BOOST_PYTHON_MODULE(pcadabra)
 		.def("__str__",  &Ex::str_)
 		.def("__repr__", &Ex::repr_);
 
+	// test
+	def("callback", &callback);
 
 	// TODO: in order to be able to insert already defined objects into an existing tree,
 	// we need to use 'extract'. How does that work with extracting an Ex?

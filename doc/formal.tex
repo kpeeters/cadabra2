@@ -88,6 +88,11 @@ algorithm to be called on every step, like Redberry does.
 
   substitute(ex, 'A->B', simplify)
   
+\item How do we pass a Python function to the C++ core and then call that function
+on an expression from C++? It would be fast to not make the round-trip through Python,
+but that is probably premature optimisation because many people would want to 
+do more complicated things in the simplifier than just applying algorithms in turn.
+
 \end{itemize}
 
 
@@ -169,6 +174,19 @@ subset of mathematics. It is, unfortunately, not true in
 general. Tensor algebra in particular is just plain ugly and messy in
 this sort of notation.
 
+A good example of how difficult things become when you insist on 
+representing your mathematical expressions inside your programming language,
+is additional assumptions. How do you write an expression which has the
+additional hidden assumption that certain indices are symmetrised? 
+You cannot attach that kind of information to an equation object, because you may 
+want to attach it to any kind of expression. So you are forced to represent
+any expression as
+\begin{verbatim}
+  Expression[ A[m,n], assumptions={Symmetric[{m,n}]} ]
+\end{verbatim}
+or something like that. But now you \emph{have} to wrap any expression
+in some wrapper object to keep assumptions togeter. Why not then write
+the expression in a different language altogether?
 
 \subsection{Make algorithms accessible from multiple languages}
 
