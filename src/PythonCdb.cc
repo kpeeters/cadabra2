@@ -88,22 +88,10 @@ Ex *dispatch_1(Ex *ex, bool repeat)
 	}
 
 template<class F>
-Ex *dispatch_1_defaults(Ex *ex)
-	{
-	return dispatch_1<F>(ex, true);
-	}
-
-template<class F>
 Ex *dispatch_1_string(const std::string& ex, bool repeat)
 	{
 	Ex *exobj = new Ex(ex);
 	return dispatch_1<F>(exobj, repeat);
-	}
-
-template<class F>
-Ex *dispatch_1_string_defaults(const std::string& ex)
-	{
-	return dispatch_1_string<F>(ex, true);
 	}
 
 template<class F>
@@ -124,22 +112,10 @@ Ex *dispatch_2(Ex *ex, Ex *args, bool repeat)
 	}
 
 template<class F>
-Ex *dispatch_2_defaults(Ex *ex, Ex *args)
-	{
-	return dispatch_2<F>(ex, args, true);
-	}
-
-template<class F>
 Ex *dispatch_2_string(Ex *ex, const std::string& args, bool repeat)
 	{
 	Ex *argsobj = new Ex(args);
 	return dispatch_2<F>(ex, argsobj, repeat);
-	}
-
-template<class F>
-Ex *dispatch_2_string_defaults(Ex *ex, const std::string& args)
-	{
-	return dispatch_2_string<F>(ex, args, true);
 	}
 
 
@@ -152,7 +128,6 @@ void translate_ParseException(const ParseException &e)
 	boost::python::object pythonExceptionInstance(e);
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
-
 
 // Templates to attach properties to Ex objects.
 // FIXME: if we let Python manage the Property<> object, we need some
@@ -203,10 +178,8 @@ void def_algo_1(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_1<F>,                 (arg("ex"),arg("repeat")), return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_1_defaults<F>,        (arg("ex")),               return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_1_string<F>,          (arg("ex"),arg("repeat")), return_value_policy<manage_new_object>() );
-	def(name.c_str(),  &dispatch_1_string_defaults<F>, (arg("ex")),               return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_1<F>,                 (arg("ex"),arg("repeat")=true), return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_1_string<F>,          (arg("ex"),arg("repeat")=true), return_value_policy<manage_new_object>() );
 	}
 
 template<class F>
@@ -214,10 +187,8 @@ void def_algo_2(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_2<F>,                 (arg("ex"),arg("args"),arg("repeat")), return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_2_defaults<F>,        (arg("ex"),arg("args")),               return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_2_string<F>,          (arg("ex"),arg("args"),arg("repeat")), return_value_policy<manage_new_object>() );
-	def(name.c_str(),  &dispatch_2_string_defaults<F>, (arg("ex"),arg("args")),               return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_2<F>,                 (arg("ex"),arg("args"),arg("repeat")=true), return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_2_string<F>,          (arg("ex"),arg("args"),arg("repeat")=true), return_value_policy<manage_new_object>() );
 	}
 
 void callback(boost::python::object obj, Ex *ex) 
@@ -251,7 +222,11 @@ BOOST_PYTHON_MODULE(pcadabra)
 	// TODO: in order to be able to insert already defined objects into an existing tree,
 	// we need to use 'extract'. How does that work with extracting an Ex?
 
-//	implicitly_convertible<std::string, Ex>();
+	// You cannot use implicitly_convertible to convert a string parameter to an Ex object
+	// automatically: think about how that would work in C++. You would need to be able to
+	// pass a 'std::string' to a function that expects an 'Ex *'. That will never work.
+	//
+   //	implicitly_convertible<std::string, Ex>();
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.

@@ -108,7 +108,7 @@ substitute(ex, rl, True)
 {m,n,p,a,b}::Indices.
 ex:=A_{m n} ( C^{n p} + D^{n p} );
 rl:= C^{a b} -> M_{m} D^{m a b};
-substitute(ex, rl, True)
+substitute(ex, rl)
 
 from cadabra import *
 Indices(Ex('{m,n,p,a,b}'))
