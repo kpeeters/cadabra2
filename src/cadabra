@@ -123,8 +123,8 @@ class Shell(InteractiveConsole):
         output = self.cache.flush()
         # you can filter the output here by doing something like
         # output = filter(output)
-        if len(output)>0:
-            print output[0] # or do something else with it
+        for line in output:
+            sys.stdout.write(line)
         return ret
 
 if __name__ == '__main__':
