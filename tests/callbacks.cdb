@@ -1,0 +1,15 @@
+
+# Testing of calling back on Python routines from C++.
+
+def fun(e):
+    print("received:    "+str(e))
+    distribute(e, repeat=True)
+    print("turned into: "+str(e))
+
+\prod{#}::Distributable.
+a:=A*(B+C)
+
+callback(a)
+callback(a, fun)
+callback(callback=fun, ex=a)
+callback(a, callback=fun)
