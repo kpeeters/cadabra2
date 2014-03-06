@@ -25,8 +25,8 @@ Ex::Ex(const Ex& other)
 
 std::string Ex::str_() const
 	{
-	std::cout << "reached Ex::str_ " << std::endl;
-	std::cout << *(tree.begin()->name)<< std::endl;
+//	std::cout << "reached Ex::str_ " << std::endl;
+//	std::cout << *(tree.begin()->name)<< std::endl;
 	std::ostringstream str;
 	DisplayTeX dt(kernel.properties, tree);
 	dt.output(str);
