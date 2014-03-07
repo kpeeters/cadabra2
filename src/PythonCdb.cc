@@ -14,6 +14,7 @@
 #include "algorithms/distribute.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/substitute.hh"
+#include "algorithms/collect_terms.hh"
 
 Kernel kernel;
 
@@ -77,11 +78,13 @@ Ex *dispatch_1(Ex *ex, bool repeat)
 	F algo(kernel, ex->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
-	if(algo.can_apply(it)) {
-		algo.apply(it);
+	if(repeat) {
+		if(algo.apply_recursive(it)==false)
+			std::cout << "no change" << std::endl;
 		}
 	else {
-		std::cout << "cannot apply" << std::endl;
+		if(algo.apply_once(it)==false)
+			std::cout << "no change" << std::endl;
 		}
 
 	return ex;
@@ -101,12 +104,12 @@ Ex *dispatch_2(Ex *ex, Ex *args, bool repeat)
 
 	exptree::iterator it=ex->tree.begin().begin();
 	if(repeat) {
-//		std::cout << "applying on " << *it->name << " recursively" << std::endl;
-		algo.apply_recursive(it);
+		if(algo.apply_recursive(it)==false)
+			std::cout << "no change" << std::endl;
 		}
 	else {
-//		std::cout << "applying on " << *it->name << " once" << std::endl;
-		algo.apply_once(it);
+		if(algo.apply_once(it)==false)
+			std::cout << "no change" << std::endl;
 		}
 	return ex;
 	}
@@ -134,16 +137,16 @@ void translate_ParseException(const ParseException &e)
 // way in which we can sync removal of that object with the removal of the
 // C++ object.
 
-template<class Prop>
-Property<Prop> *attach(Ex *ex)
-	{
-	exptree::iterator it=ex->tree.begin();
-	assert(*(it->name)=="\\expression");
-	it=ex->tree.begin(it);
-	kernel.properties.master_insert(exptree(it), new Prop());
-
-	return new Property<Prop>("Assigned property to ...");
-	}
+//template<class Prop>
+//Property<Prop> *attach(Ex *ex)
+//	{
+//	exptree::iterator it=ex->tree.begin();
+//	assert(*(it->name)=="\\expression");
+//	it=ex->tree.begin(it);
+//	kernel.properties.master_insert(exptree(it), new Prop());
+//
+//	return new Property<Prop>("Assigned property to ...");
+//	}
 
 BaseProperty::BaseProperty(const std::string& s)
 	: creation_message(s)
@@ -157,7 +160,8 @@ Property<Prop>::Property(Ex *ex)
 	exptree::iterator it=ex->tree.begin();
 	assert(*(it->name)=="\\expression");
 	it=ex->tree.begin(it);
-	creation_message = kernel.properties.master_insert(exptree(it), new Prop());
+	creation_message = "";
+	kernel.properties.master_insert(exptree(it), new Prop());
 	}
 
 std::string BaseProperty::str_() const
@@ -234,11 +238,14 @@ BOOST_PYTHON_MODULE(pcadabra)
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
+	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_2<substitute>("substitute");
 
+	// All properties on the Python side derive from the C++ BaseProperty, which is
+	// called Property on the Python side.
 	class_<BaseProperty> pyBaseProperty("Property", no_init);
 	pyBaseProperty.def("__str__", &BaseProperty::str_)
 		.def("__repr__", &BaseProperty::repr_);
