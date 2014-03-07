@@ -25,7 +25,9 @@
 #include <stdexcept>
 #include "Storage.hh"
 
-// Ex is essentially a wrapper around an exptree object.
+// Ex is essentially a wrapper around an exptree object, with additional
+// functionality make it print nice in Python. It also contains logic
+// to replace '@(abc)' nodes in the tree with the Python 'abc' expression.
 
 class Ex {
 	public:
@@ -42,6 +44,9 @@ class Ex {
 
 	private:
 		std::string ex;
+
+		// Pull in any '@(...)' expressions from the Python side.
+		void pull_in();
 };
 
 // Property is a templated wrapper around a C++ property object.
