@@ -71,7 +71,7 @@ bool Algorithm::apply_recursive(exptree::iterator& it)
 	bool stop_after_this_one=false;
 
 	for(;;) {
-		std::cout << "reached " << *current->name << std::endl;
+//		std::cout << "reached " << *current->name << std::endl;
 
 		if(current==last)
 			stop_after_this_one=true;
@@ -85,7 +85,7 @@ bool Algorithm::apply_recursive(exptree::iterator& it)
 			}
 		
 		if(can_apply(current)) {
-			std::cout << "acting at " << *current->name << std::endl;
+//			std::cout << "acting at " << *current->name << std::endl;
 			iterator work=current;
 			result_t res = apply(work);
 			if(res==l_applied) {

@@ -206,6 +206,22 @@ void callback(Ex *ex, boost::python::object obj)
 		}
 	}
 
+void backdoor()
+	{
+	try {
+		boost::python::object obj = boost::python::eval("ab");
+		if(obj.is_none()) // We don't get here, an exception will have been thrown
+			std::cout << "object unknown" << std::endl;
+		else {
+			Ex *ex = boost::python::extract<Ex *>(obj);
+			std::cout << *(ex->tree.begin()->name) << std::endl;
+			}
+		}
+	catch(boost::python::error_already_set const &) {
+		std::cout << "exception" << std::endl;
+		}
+	}
+
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
 // as the various algorithms that can act on these.
@@ -226,6 +242,7 @@ BOOST_PYTHON_MODULE(pcadabra)
 
 	// test
 	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
+	def("backdoor", &backdoor);
 
 	// TODO: in order to be able to insert already defined objects into an existing tree,
 	// we need to use 'extract'. How does that work with extracting an Ex?
