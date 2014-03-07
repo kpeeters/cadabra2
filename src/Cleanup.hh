@@ -25,11 +25,14 @@
 #include "Kernel.hh"
 
 // Central cleanup dispatch routine, which calls the other
-// cleanup functions defined later.
+// cleanup functions defined later. 
+// IMPORTANT: as with any algorithms, the iterator pointing to
+// the starting node may be changed.
 
-void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator it);
+void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator& it);
 
-void cleanup_productlike(Kernel& k, exptree&, exptree::iterator it);
+void cleanup_productlike(Kernel& k, exptree&, exptree::iterator& it);
+void cleanup_sumlike(Kernel& k, exptree&, exptree::iterator& it);
 
 
 

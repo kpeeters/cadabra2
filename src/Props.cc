@@ -477,7 +477,7 @@ std::string Properties::master_insert(exptree proptree, property *thepropbase)
 	std::ostringstream str;
 
 	exptree::sibling_iterator st=proptree.begin();
-	std::cout << *st->name << std::endl;
+//	std::cout << *st->name << std::endl;
 
 	list_property *thelistprop=dynamic_cast<list_property *>(thepropbase);
 	if(thelistprop) { // a list property

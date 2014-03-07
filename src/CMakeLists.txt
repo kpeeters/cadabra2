@@ -69,6 +69,7 @@ set(LOCAL_SRC_FILES
   properties/Weight.cc
   properties/WeightInherit.cc
   modules/xperm_new.c
+  algorithms/collect_terms.cc
   algorithms/distribute.cc
   algorithms/rename_dummies.cc
   algorithms/flatten_product.cc

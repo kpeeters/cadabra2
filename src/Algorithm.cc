@@ -67,31 +67,43 @@ bool Algorithm::apply_recursive(exptree::iterator& it)
 	current.descend_all();
 	post_order_iterator last=it;
 	int deepest_action = -1;
+//	std::cout << "last = " << *it->name << std::endl;
+	bool stop_after_this_one=false;
 
 	for(;;) {
-//		std::cout << "reached " << *current->name << std::endl;
+		std::cout << "reached " << *current->name << std::endl;
+
+		if(current==last)
+			stop_after_this_one=true;
+
 		if(deepest_action > tr.depth(current)) {
 //			std::cout << "simplify" << std::endl;
-			cleanup_dispatch(kernel, tr, current);
-			deepest_action = -1;
+			iterator work=current;
+			cleanup_dispatch(kernel, tr, work);
+			current=work;
+			deepest_action = tr.depth(current); // needs to propagate upwards
 			}
 		
 		if(can_apply(current)) {
-//			std::cout << "acting at " << *current->name << std::endl;
+			std::cout << "acting at " << *current->name << std::endl;
 			iterator work=current;
 			result_t res = apply(work);
 			if(res==l_applied) {
 				rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
-				current=work; // the algorithm may have replaced the 'work' node
 				}
+			current=work; // the algorithm may have replaced the 'work' node
 			}
-		if(current==last)
+		if(stop_after_this_one)
 			break;
+		
 		++current;
 		}
-	
-	return false;
+
+//	std::cout << "recursive end **" << std::endl;
+
+	if(deepest_action!=-1) return true;
+	else                   return false;
 	}
 
 void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnode)

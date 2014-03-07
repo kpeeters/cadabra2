@@ -13,3 +13,8 @@ callback(a)
 callback(a, fun)
 callback(callback=fun, ex=a)
 callback(a, callback=fun)
+
+spl = split_terms(a)
+for t in spl:
+	 print "term "+str(t)
+

@@ -86,14 +86,12 @@ tst1:= a3 + a4 + a5 - @(obj1);
 
 -----
 
-\prod{#}::Distributable.
 a:=A*(B+C);
-distribute(a);
+distribute(a, repeat=True);
 b:=A_{m n} (B^{n p} + C^{n p});
 distribute(b);
 distribute('A_{m n} (B^{n p} + C^{n p})');
 
-\prod{#}::IndexInherit.
 {a,b,c,d}::Indices;
 ex:=A_{c d} C^{d};
 rename_dummies(ex);
@@ -104,7 +102,6 @@ ex:=A B A D C;
 rl:= B -> Q;
 substitute(ex, rl, True)
 
-\prod{#}::IndexInherit;
 {m,n,p,a,b}::Indices.
 ex:=A_{m n} ( C^{n p} + D^{n p} );
 rl:= C^{a b} -> M_{m} D^{m a b};
@@ -119,6 +116,17 @@ substitute(ex, rule, True)
 substitute(ex, rl, True)
 
 
-ex:= B + A B A D C;
+ex:= B + A B A D C + A A D C;
 rl:= B -> 2;
-substitute(ex, rl, True)
+substitute(ex, rl)
+rl2:= A A D C -> 9
+substitute(ex, rl2)
+ex:= B + A B A D C + A A D C;
+substitute(ex, rl)
+rl:= B -> 2;
+substitute(ex, rl2)
+
+{m,n,p,a,b}::Indices.
+ex:=A_{m n} ( C^{n p} + D^{n p} );
+rl:= C^{a b} -> D^{a b};
+substitute(ex, rl)

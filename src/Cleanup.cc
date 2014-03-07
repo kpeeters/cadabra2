@@ -1,13 +1,15 @@
 
 #include "Cleanup.hh"
 #include "algorithms/prodcollectnum.hh"
+#include "algorithms/collect_terms.hh"
 
-void cleanup_dispatch(Kernel& k, exptree& tr, exptree::iterator it)
+void cleanup_dispatch(Kernel& k, exptree& tr, exptree::iterator& it)
 	{
 	if(*it->name=="\\prod") cleanup_productlike(k, tr, it);
+	else if(*it->name=="\\sum") cleanup_sumlike(k, tr, it);
 	}
 
-void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator it)
+void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	{
 	assert(*it->name=="\\prod");
 //	std::cout << "cleanup_productlike" << std::endl;
@@ -17,6 +19,25 @@ void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator it)
 
 	prodcollectnum pc(k, tr);
 	pc.apply(it);
+	}
+
+void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
+	{
+	assert(*it->name=="\\sum");
+
+	// Remove children which are 0
+	exptree::sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(sib->is_zero())
+			sib=tr.erase(sib);
+		else
+			++sib;
+		}
+	
+
+   // Collect all equal terms.
+	collect_terms ct(k, tr);
+	ct.apply(it);
 	}
 
 void cleanup_expression(exptree& tr)
