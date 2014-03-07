@@ -118,7 +118,11 @@ class Shell(InteractiveConsole):
         # Now feed the pre-parsed input to Python.
 
         self.get_output()
+#        try:
         ret=InteractiveConsole.push(self,line)
+#        except NameError:
+#            ret=False
+            # print "uhoh"
         self.return_output()
         output = self.cache.flush()
         # you can filter the output here by doing something like

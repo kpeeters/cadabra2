@@ -5,6 +5,8 @@
 #include "Kernel.hh"
 #include "DisplayTeX.hh"
 #include "PreClean.hh"
+#include "PythonException.hh"
+
 #include <boost/python/implicit.hpp>
 #include <sstream>
 
@@ -218,7 +220,14 @@ void backdoor()
 			}
 		}
 	catch(boost::python::error_already_set const &) {
-		std::cout << "exception" << std::endl;
+		// In order to prevent the error from propagating, we have to read
+		// it out.
+		std::string err = parse_python_exception();
+		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
+			std::cout << "ab is not a cadabra expression" << std::endl;
+		else 
+			std::cout << "ab is not defined" << std::endl;
+//		std::cout << parse_python_exception() << std::endl;
 		}
 	}
 
