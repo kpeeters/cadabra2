@@ -59,7 +59,45 @@ Ex::Ex(std::string ex_)
 
 	tree=parser.tree;
 	pre_clean(kernel, tree, tree.begin());
+	pull_in();
 	}
+
+void Ex::pull_in()
+	{
+	exptree::iterator it=tree.begin();
+	while(it!=tree.end()) {
+		if(*it->name=="@") {
+			std::cout << "found python expression" << std::endl;
+			// FIXME:
+			std::string pobj = *(tr.begin(it)->name);
+			}
+		++it;
+		}
+
+	return;
+
+	try {
+		boost::python::object obj = boost::python::eval("ab");
+		if(obj.is_none()) // We don't get here, an exception will have been thrown
+			std::cout << "object unknown" << std::endl;
+		else {
+			Ex *ex = boost::python::extract<Ex *>(obj);
+			std::cout << *(ex->tree.begin()->name) << std::endl;
+			}
+		}
+	catch(boost::python::error_already_set const &) {
+		// In order to prevent the error from propagating, we have to read
+		// it out. And in any case, we want to give some feedback to the user.
+		std::string err = parse_python_exception();
+		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
+			std::cout << "ab is not a cadabra expression" << std::endl;
+		else 
+			std::cout << "ab is not defined" << std::endl;
+//		std::cout << parse_python_exception() << std::endl;
+		}
+	}
+
+
 
 std::string Ex::get() const
 	{ 
@@ -221,7 +259,7 @@ void backdoor()
 		}
 	catch(boost::python::error_already_set const &) {
 		// In order to prevent the error from propagating, we have to read
-		// it out.
+		// it out. And in any case, we want to give some feedback to the user.
 		std::string err = parse_python_exception();
 		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
 			std::cout << "ab is not a cadabra expression" << std::endl;
