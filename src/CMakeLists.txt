@@ -42,6 +42,7 @@ set(LOCAL_SRC_FILES
   Kernel.cc
   Props.cc
   Exchange.cc
+  PythonException.cc
   PythonCdb.cc
   PreClean.cc
   properties/Accent.cc
