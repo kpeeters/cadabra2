@@ -47,6 +47,7 @@ class Ex {
 
 		// Pull in any '@(...)' expressions from the Python side.
 		void pull_in();
+		Ex *fetch_from_python(std::string nm);
 };
 
 // Property is a templated wrapper around a C++ property object.
