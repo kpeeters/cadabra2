@@ -62,27 +62,16 @@ Ex::Ex(std::string ex_)
 	pull_in();
 	}
 
-void Ex::pull_in()
+Ex *Ex::fetch_from_python(const std::string nm)
 	{
-	exptree::iterator it=tree.begin();
-	while(it!=tree.end()) {
-		if(*it->name=="@") {
-			std::cout << "found python expression" << std::endl;
-			// FIXME:
-			std::string pobj = *(tr.begin(it)->name);
-			}
-		++it;
-		}
-
-	return;
-
 	try {
-		boost::python::object obj = boost::python::eval("ab");
+		boost::python::object obj = boost::python::eval(nm.c_str());
 		if(obj.is_none()) // We don't get here, an exception will have been thrown
 			std::cout << "object unknown" << std::endl;
 		else {
 			Ex *ex = boost::python::extract<Ex *>(obj);
-			std::cout << *(ex->tree.begin()->name) << std::endl;
+			return ex;
+//			std::cout << *(ex->tree.begin()->name) << std::endl;
 			}
 		}
 	catch(boost::python::error_already_set const &) {
@@ -95,8 +84,30 @@ void Ex::pull_in()
 			std::cout << "ab is not defined" << std::endl;
 //		std::cout << parse_python_exception() << std::endl;
 		}
+
+	return 0;
 	}
 
+
+void Ex::pull_in()
+	{
+	exptree::iterator it=tree.begin();
+	while(it!=tree.end()) {
+		if(*it->name=="@") {
+			if(tree.number_of_children(it)==1) {
+				std::cout << "found python expression" << std::endl;
+				std::string pobj = *(tree.begin(it)->name);
+				Ex *ex = fetch_from_python(pobj);
+				if(ex!=0) {
+					it=tree.replace(it, ex->tree.begin());
+					}
+				}
+			}
+		++it;
+		}
+
+	return;
+	}
 
 
 std::string Ex::get() const
@@ -162,6 +173,12 @@ Ex *dispatch_2_string(Ex *ex, const std::string& args, bool repeat)
 	}
 
 
+std::string print_tree(Ex *ex)
+	{
+	std::ostringstream str;
+	ex->tree.print_entire_tree(str);
+	return str.str();
+	}
  
 PyObject *ParseExceptionType = NULL;
 
@@ -290,6 +307,8 @@ BOOST_PYTHON_MODULE(pcadabra)
 	// test
 	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
 	def("backdoor", &backdoor);
+
+	def("tree", &print_tree);
 
 	// TODO: in order to be able to insert already defined objects into an existing tree,
 	// we need to use 'extract'. How does that work with extracting an Ex?
