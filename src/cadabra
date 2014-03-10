@@ -67,15 +67,20 @@ class Shell(InteractiveConsole):
         # make the print statement print property objects using their
         # readable form; addresses one issue report).
 
+        imatch = re.search('([\s]*)([^\s].*)', line)
+        if imatch:
+            indent_line=imatch.group(1)
+        else:
+            indent_line=""
         line_stripped=line.rstrip().lstrip()
         lastchar = line_stripped[-1:]
         if lastchar=='.' or lastchar==';':
             line_stripped=line_stripped[:-1]
         found = line_stripped.find(':=')
         if found>0:
-            rewrite = line_stripped[:found] + " = Ex('" + line_stripped[found+2:]+"')"
+            rewrite = indent_line + line_stripped[:found] + " = Ex('" + line_stripped[found+2:]+"')"
             objname=line_stripped[:found]
-            if lastchar!='.':
+            if lastchar!='.' and len(indent_line)==0:
                 rewrite = rewrite + "; print " + objname
             line=rewrite
         else:
@@ -85,48 +90,23 @@ class Shell(InteractiveConsole):
                 match = re.search('([a-zA-Z]*)(.*)', line_stripped[found+2:])
                 if match:
                     if len(match.group(2))>0: # declaration with arguments
-                        rewrite = "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), "+match.group(2)[1:-1]+")"
+                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), "+match.group(2)[1:-1]+")"
                     else:
-                        rewrite = "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex('"+line_stripped[:found]+"'))"
+                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex('"+line_stripped[:found]+"'))"
                     objname="__cdbtmp__"
-                    if lastchar!='.':
+                    # print the expression if we are at top level (not in a function) and the last char is not '.'
+                    if lastchar!='.' and len(indent_line)==0:
                         rewrite = rewrite + "; print " + objname
                     line=rewrite
                 else:
                     print "inconsistent" # property names can only contain letters
-#            else:
-# FIXME: generate this list dynamically
-# cdb_commands={"distribute", "keep_terms"}
-# COULD STILL SEE IF there is unexpected indent, and use that as a cadabra signal.
-                # Now we dispatch based on whether the first name is defined as a cdb function
-#                 match = re.search('([a-zA-Z\_]*).*', line_stripped)
-#                 if match:
-#                     cmd = match.group(1)
-#                     if (cmd in cdb_commands) == False:
-#                         # The input does not start with a cdb function, so let's assume this is an expression
-#                         rewrite = "__cdbtmp__= Ex('"+line_stripped+"')"
-#                         if lastchar==';':
-#                             rewrite = rewrite + "; print __cdbtmp__"
-#                         line=rewrite
-#                     else:
-#                         line=line.replace('%','__cdbtmp__')
-#                         print line
-#                 else:
-#                     print "weird input"
-
 #        print line
         # Now feed the pre-parsed input to Python.
 
         self.get_output()
-#        try:
         ret=InteractiveConsole.push(self,line)
-#        except NameError:
-#            ret=False
-            # print "uhoh"
         self.return_output()
         output = self.cache.flush()
-        # you can filter the output here by doing something like
-        # output = filter(output)
         for line in output:
             sys.stdout.write(line)
         return ret

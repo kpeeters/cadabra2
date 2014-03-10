@@ -10,6 +10,9 @@
 #include <boost/python/implicit.hpp>
 #include <sstream>
 
+#include "properties/AntiCommuting.hh"
+#include "properties/CommutingAsProduct.hh"
+#include "properties/CommutingAsSum.hh"
 #include "properties/Distributable.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
@@ -18,10 +21,11 @@
 #include "algorithms/substitute.hh"
 #include "algorithms/collect_terms.hh"
 
-Kernel kernel;
+Kernel *get_kernel_from_scope() ;
 
 Ex::Ex(const Ex& other)
 	{
+	std::cout << "Ex copy constructor" << std::endl;
 	}
 
 // Output routines for Ex objects.
@@ -31,7 +35,7 @@ std::string Ex::str_() const
 //	std::cout << "reached Ex::str_ " << std::endl;
 //	std::cout << *(tree.begin()->name)<< std::endl;
 	std::ostringstream str;
-	DisplayTeX dt(kernel.properties, tree);
+	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
 	dt.output(str);
 
 	return str.str();
@@ -58,7 +62,7 @@ Ex::Ex(std::string ex_)
 		}
 
 	tree=parser.tree;
-	pre_clean(kernel, tree, tree.begin());
+	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
 	pull_in();
 	}
 
@@ -126,7 +130,7 @@ void Ex::append(std::string v)
 template<class F>
 Ex *dispatch_1(Ex *ex, bool repeat)
 	{
-	F algo(kernel, ex->tree);
+	F algo(*get_kernel_from_scope(), ex->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
 	if(repeat) {
@@ -151,7 +155,7 @@ Ex *dispatch_1_string(const std::string& ex, bool repeat)
 template<class F>
 Ex *dispatch_2(Ex *ex, Ex *args, bool repeat)
 	{
-	F algo(kernel, ex->tree, args->tree);
+	F algo(*get_kernel_from_scope(), ex->tree, args->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
 	if(repeat) {
@@ -189,25 +193,28 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
-// Templates to attach properties to Ex objects.
-// FIXME: if we let Python manage the Property<> object, we need some
-// way in which we can sync removal of that object with the removal of the
-// C++ object.
-
-//template<class Prop>
-//Property<Prop> *attach(Ex *ex)
-//	{
-//	exptree::iterator it=ex->tree.begin();
-//	assert(*(it->name)=="\\expression");
-//	it=ex->tree.begin(it);
-//	kernel.properties.master_insert(exptree(it), new Prop());
-//
-//	return new Property<Prop>("Assigned property to ...");
-//	}
-
 BaseProperty::BaseProperty(const std::string& s)
 	: creation_message(s)
 	{
+	}
+
+Kernel *get_kernel_from_scope() 
+	{
+	// Lookup the properties object in the local scope. 
+	boost::python::object loc(boost::python::borrowed(PyEval_GetLocals()));
+	Kernel *kernel=0;
+	try {
+		boost::python::object obj = loc["cadabra_kernel"];
+		kernel = boost::python::extract<Kernel *>(obj);
+		}
+	catch(boost::python::error_already_set& err) {
+		std::cout << "no local kernel" << std::endl;
+		std::string err = parse_python_exception();
+		kernel = new Kernel();
+		std::cout << kernel << std::endl;
+		loc["cadabra_kernel"]=kernel;
+		}
+	return kernel;
 	}
 
 template<class Prop>
@@ -218,7 +225,9 @@ Property<Prop>::Property(Ex *ex)
 	assert(*(it->name)=="\\expression");
 	it=ex->tree.begin(it);
 	creation_message = "";
-	kernel.properties.master_insert(exptree(it), new Prop());
+
+	Kernel *kernel=get_kernel_from_scope();
+	kernel->properties.master_insert(exptree(it), new Prop());
 	}
 
 std::string BaseProperty::str_() const
@@ -286,6 +295,13 @@ void backdoor()
 		}
 	}
 
+void fun() 
+	{
+	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	locals["fik"] = 42;
+	locals["_fik"] = 43;
+	}
+
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
 // as the various algorithms that can act on these.
@@ -298,6 +314,8 @@ BOOST_PYTHON_MODULE(pcadabra)
 	class_<ParseException> pyParseException("ParseException", init<std::string>());
 	ParseExceptionType=pyParseException.ptr();
 
+	class_<Kernel> pyPr("Kernel", init<>());
+
 	class_<Ex> pyEx("Ex", init<std::string>());
 	pyEx.def("get",     &Ex::get)
 		.def("append",   &Ex::append)
@@ -307,17 +325,13 @@ BOOST_PYTHON_MODULE(pcadabra)
 	// test
 	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
 	def("backdoor", &backdoor);
+	def("fun", &fun);
 
 	def("tree", &print_tree);
-
-	// TODO: in order to be able to insert already defined objects into an existing tree,
-	// we need to use 'extract'. How does that work with extracting an Ex?
 
 	// You cannot use implicitly_convertible to convert a string parameter to an Ex object
 	// automatically: think about how that would work in C++. You would need to be able to
 	// pass a 'std::string' to a function that expects an 'Ex *'. That will never work.
-	//
-   //	implicitly_convertible<std::string, Ex>();
 
 	// You can call algorithms on objects like this. The parameters are
 	// labelled by names.
@@ -333,9 +347,12 @@ BOOST_PYTHON_MODULE(pcadabra)
 	pyBaseProperty.def("__str__", &BaseProperty::str_)
 		.def("__repr__", &BaseProperty::repr_);
 	
-	class_<Property<Distributable>, bases<BaseProperty> >("Distributable", init<Ex *>());
-	class_<Property<Indices>,       bases<BaseProperty> >("Indices", init<Ex *>());
-	class_<Property<IndexInherit>,  bases<BaseProperty> >("IndexInherit", init<Ex *>());
+	class_<Property<AntiCommuting>,      bases<BaseProperty> >("AntiCommuting", init<Ex *>());
+	class_<Property<CommutingAsProduct>, bases<BaseProperty> >("CommutingAsProduct", init<Ex *>());
+	class_<Property<CommutingAsSum>,     bases<BaseProperty> >("CommutingAsSum", init<Ex *>());
+	class_<Property<Distributable>,      bases<BaseProperty> >("Distributable", init<Ex *>());
+	class_<Property<Indices>,            bases<BaseProperty> >("Indices", init<Ex *>());
+	class_<Property<IndexInherit>,       bases<BaseProperty> >("IndexInherit", init<Ex *>());
 
 
 	// How can we give a handle to the tree in python? And how can we give

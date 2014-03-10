@@ -46,6 +46,7 @@ set(LOCAL_SRC_FILES
   PythonCdb.cc
   PreClean.cc
   properties/Accent.cc
+  properties/AntiCommuting.cc
   properties/AntiSymmetric.cc
   properties/CommutingAsProduct.cc
   properties/CommutingAsSum.cc
@@ -89,3 +90,7 @@ add_library(pcadabra SHARED ${LOCAL_SRC_FILES})
 set_target_properties(pcadabra PROPERTIES PREFIX "")
 set_target_properties(pcadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 target_link_libraries(pcadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
+
+add_library(example SHARED ptest.cc)
+set_target_properties(example PROPERTIES PREFIX "")
+target_link_libraries(example ${Boost_LIBRARIES})
