@@ -418,7 +418,7 @@ void Properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 		// Now register the property.
 //		txtout << "registering " << *(pat->headnode) << std::endl;
 		pats.insert(pattern_map_t::value_type(pr, pat));
-		Properties::props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
+		props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 		}
 	}
 

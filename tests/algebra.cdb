@@ -130,3 +130,26 @@ substitute(ex, rl2)
 ex:=A_{m n} ( C^{n p} + D^{n p} );
 rl:= C^{a b} -> D^{a b};
 substitute(ex, rl)
+
+def test():
+	 {m,n,p,a,b}::AntiCommuting.
+	 ex:=p m n a;
+	 sort_product(ex);
+	 print(ex);
+	 locals()['cadabra.properties'].append('hi');
+	 locals()['cadabra.properties'].append('there');
+	 ex2:= A*(B+C);
+	 distribute(ex2);	
+	 print(ex2)
+	 print locals()['cadabra.properties']
+
+globals()['cadabra.properties']=[]
+
+test()
+
+print locals()['cadabra.properties']
+
+# the problem now is that properties survive into global scope:
+# the test below still flips the sign
+ex3:=p m n a;
+sort_product(ex3);

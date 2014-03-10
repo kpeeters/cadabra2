@@ -1,11 +1,11 @@
 Distributable(Ex("\prod{#}"))
 IndexInherit(Ex("\prod{#}"))
-# \prod{#}::CommutingAsProduct.
+CommutingAsProduct(Ex("\prod{#}"))
 # \prod{#}::DependsInherit.
 # \prod{#}::WeightInherit(label=all, type=Multiplicative).
 # \prod{#}::NumericalFlat.
 # 
-# \sum{#}::CommutingAsSum.
+CommutingAsSum(Ex("\sum{#}"))
 # \sum{#}::DependsInherit.
 # \sum{#}::IndexInherit.
 # \sum{#}::WeightInherit(label=all, type=Additive).

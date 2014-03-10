@@ -120,6 +120,8 @@ Algorithm::result_t distribute::apply(iterator& prod)
 	cleanup_nests_below(tr, ret, false); // CHANGED  true to false in last argument
 	cleanup_nests(tr, ret, false); // CHANGED true to false in last argument
 
+//	tr.print_entire_tree(std::cerr);
+
 	// FIXME: if we had a flattened sum, does the apply_recursive now
 	// go and examine every sum that we have created? Should we better
 	// return an iterator to the last element in the sum?
