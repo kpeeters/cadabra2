@@ -3,7 +3,11 @@
 
 #include <boost/filesystem.hpp>
 #include "exec-stream.h"
+#include "lodepng.h"
+#include <fstream>
 #include <sstream>
+
+#define DEBUG
 
 // General tool to strip spaces from both ends
 std::string trim(const std::string& s) 
@@ -273,12 +277,13 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 #endif
 
 	// Run LaTeX on the .tex file.
-	exec_stream_t latex_proc("latex", "--interaction nonstopmode");
+	exec_stream_t latex_proc;
 	std::string result;
 	try {
+		latex_proc.start("latex", "--interaction nonstopmode "+nf);
  		std::string line; 
 		while( std::getline( latex_proc.out(), line ).good() ) 
-			result+=line;
+			result+=line+"\n";
 
 		erase_file(std::string(templ)+".tex");
 		erase_file(std::string(templ)+".aux");
@@ -339,7 +344,7 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 //	dvipng_proc << resspec.str() << std::string(templ)+".dvi";
 
 	try {
-		dvipng_proc.start("dvipng", "-T tight -bg Transparent -D "+resspec.str()+std::string(templ)+".dvi");
+		dvipng_proc.start("dvipng", "-T tight -bg Transparent -D "+resspec.str()+" "+std::string(templ)+".dvi");
 		std::string s, result;
 		while( std::getline( dvipng_proc.out(), s ).good() ) {
 			result+=s;
@@ -358,7 +363,7 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 				std::ostringstream pngname;
 				pngname << std::string(templ) << pagenum << ".png";
 				erase_file(pngname.str());
-				(*reqit)->pixbuf = Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, 1, 1);
+				(*reqit)->image.clear();
 				(*reqit)->needs_generating=true;
 				++pagenum;
 				}
@@ -382,7 +387,7 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 			pngname << std::string(templ) << pagenum << ".png";
 			std::ifstream tst(pngname.str().c_str());
 			if(tst.good()) {
-				(*reqit)->pixbuf = Gdk::Pixbuf::create_from_file(pngname.str());
+				unsigned error = lodepng::decode((*reqit)->image, (*reqit)->width, (*reqit)->height, pngname.str());
 				(*reqit)->needs_generating=false;
 				erase_file(pngname.str());
 				}

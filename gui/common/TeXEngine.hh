@@ -32,6 +32,7 @@ class TeXEngine {
 				std::string                start_wrap, end_wrap;
 				bool                       needs_generating;
 				std::vector<unsigned char> image;
+				unsigned                   width, height;
 		};
 		
 		TeXEngine();
