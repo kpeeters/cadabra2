@@ -34,7 +34,8 @@
 
 
 Algorithm::Algorithm(Kernel& k, exptree& tr_)
-	: expression_modified(false), 
+  : interrupted(false),
+    expression_modified(false), 
 	  number_of_calls(0), number_of_modifications(0),
 	  suppress_normal_output(false),
 	  discard_command_node(false),
