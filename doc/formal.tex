@@ -88,10 +88,14 @@ algorithm to be called on every step, like Redberry does.
 
   substitute(ex, 'A->B', simplify)
   
-\item How do we pass a Python function to the C++ core and then call that function
-on an expression from C++? It would be fast to not make the round-trip through Python,
-but that is probably premature optimisation because many people would want to 
-do more complicated things in the simplifier than just applying algorithms in turn.
+It would be fast to not make the round-trip through Python, but that
+is probably premature optimisation because many people would want to
+do more complicated things in the simplifier than just applying
+algorithms in turn.
+
+\item Make an inventory of all arguments passed to properties and algorithms.
+
+\item online notebook viewer (for SSI)
 
 \end{itemize}
 

@@ -21,7 +21,10 @@
 #include "algorithms/substitute.hh"
 #include "algorithms/collect_terms.hh"
 
-Kernel *get_kernel_from_scope() ;
+Kernel *get_kernel_from_scope(bool for_write=false) ;
+
+// TODO: when we stick objects into the locals or globals, does Python become the owner and manage them?
+//       where do the kernel copy constructor calls come from?
 
 Ex::Ex(const Ex& other)
 	{
@@ -32,9 +35,10 @@ Ex::Ex(const Ex& other)
 
 std::string Ex::str_() const
 	{
-//	std::cout << "reached Ex::str_ " << std::endl;
+	std::cout << "reached Ex::str_ " << std::endl;
 //	std::cout << *(tree.begin()->name)<< std::endl;
 	std::ostringstream str;
+
 	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
 	dt.output(str);
 
@@ -198,23 +202,66 @@ BaseProperty::BaseProperty(const std::string& s)
 	{
 	}
 
-Kernel *get_kernel_from_scope() 
+// Return the kernel in local scope if any, or the one in global scope if none is available
+// in local scope. However, if a request for a writeable kernel is made, and no local is
+// present, it will always be created (and filled with the content of the global one).
+
+Kernel *get_kernel_from_scope(bool for_write) 
 	{
 	// Lookup the properties object in the local scope. 
-	boost::python::object loc(boost::python::borrowed(PyEval_GetLocals()));
-	Kernel *kernel=0;
+	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+	Kernel *local_kernel=0;
+	Kernel *global_kernel=0;
 	try {
-		boost::python::object obj = loc["cadabra_kernel"];
-		kernel = boost::python::extract<Kernel *>(obj);
+		boost::python::object obj = locals["cadabra_kernel"];
+		local_kernel = boost::python::extract<Kernel *>(obj);
 		}
 	catch(boost::python::error_already_set& err) {
 		std::cout << "no local kernel" << std::endl;
 		std::string err = parse_python_exception();
-		kernel = new Kernel();
-		std::cout << kernel << std::endl;
-		loc["cadabra_kernel"]=kernel;
 		}
-	return kernel;
+	try {
+		boost::python::object obj = globals["cadabra_kernel"];
+		global_kernel = boost::python::extract<Kernel *>(obj);
+		}
+	catch(boost::python::error_already_set& err) {
+		std::cout << "no global kernel" << std::endl;
+		std::string err = parse_python_exception();
+		}
+	
+	if(for_write) {
+		// need the local kernel no matter what
+		if(local_kernel==0) {
+			local_kernel = new Kernel();
+			std::cout << "created local_kernel " << local_kernel << std::endl;
+			if(global_kernel) {
+				std::cout << "copying global kernel " << global_kernel << std::endl;
+				local_kernel->properties = global_kernel->properties; 
+				}
+			locals["cadabra_kernel"]=boost::ref(local_kernel);
+			// FIXME: copy global kernel if present
+			}
+		std::cout << "returning existing local_kernel " << local_kernel << std::endl;
+		return boost::ref(local_kernel);
+		}
+	else {
+		if(local_kernel) {
+			std::cout << "returning existing local_kernel " << local_kernel << " for read" << std::endl;
+			return local_kernel;
+			}
+		else if(global_kernel) {
+			std::cout << "returning existing global_kernel " << global_kernel << " for read" << std::endl;
+			return boost::ref(global_kernel);
+			}
+		else {
+			// On first call?
+			global_kernel = new Kernel();
+			std::cout << "creating global kernel " << global_kernel << std::endl;
+			globals["cadabra_kernel"]=boost::ref(global_kernel);
+			return boost::ref(global_kernel);
+			}
+		}
 	}
 
 template<class Prop>
@@ -226,8 +273,10 @@ Property<Prop>::Property(Ex *ex)
 	it=ex->tree.begin(it);
 	creation_message = "";
 
-	Kernel *kernel=get_kernel_from_scope();
-	kernel->properties.master_insert(exptree(it), new Prop());
+	Kernel *kernel=get_kernel_from_scope(true);
+	Prop *p=new Prop();
+	std::cout << "inserting " << p->name() << std::endl;
+	kernel->properties.master_insert(exptree(it), p);
 	}
 
 std::string BaseProperty::str_() const

@@ -23,6 +23,6 @@ endif()
 # Create library
 include_directories(".")
 add_library(texengine SHARED TeXEngine.cc lodepng.cc exec-stream.cc)
-target_link_libraries(texengine ${Boost_LIBRARIES})
+target_link_libraries(texengine ${Boost_LIBRARIES} pthread)
 add_executable(test test.cc)
 target_link_libraries(test texengine)

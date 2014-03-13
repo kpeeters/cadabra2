@@ -104,12 +104,6 @@ class PropertyInherit : virtual public property {
 		virtual std::string name() const { return std::string("PropertyInherit"); };
 };
 
-template<class T>
-property *create_property()
-	{
-	return new T;
-	}
-
 class Properties {
 	public:
 		// Registering property types.
@@ -135,15 +129,13 @@ class Properties {
 		/// Pattern-property map indexed on the name_only part of the head of the pattern,
 		/// for rapid lookup.
 		typedef std::multimap<nset_t::iterator, pat_prop_pair_t, nset_it_less>  property_map_t;
-		/// FIXME: the above contains an iterator, which we now take to be pointing to an element
-		/// in the obj tree of the pattern of the pat_prop_pair_t. However, that is brittle...
-		typedef std::multimap<const property *, pattern *>                 pattern_map_t;
+		typedef std::multimap<const property *, pattern *>                      pattern_map_t;
 
 		// Register a property for the indicated exptree. Takes both normal and list
 		// properties and works out which insert calls to make.
 		std::string master_insert(exptree proptree, property *thepropbase);
 
-		void            clear();
+		void        clear();
 
 		/// The following two maps own the pointers to the properties and patterns stored 
 		/// in them; use clear() to clean up. Note that pointers can sit in in more than one

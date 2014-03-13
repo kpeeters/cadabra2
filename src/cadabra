@@ -100,7 +100,7 @@ class Shell(InteractiveConsole):
                     line=rewrite
                 else:
                     print "inconsistent" # property names can only contain letters
-#        print line
+        print line
         # Now feed the pre-parsed input to Python.
 
         self.get_output()
@@ -115,6 +115,5 @@ if __name__ == '__main__':
     sh = Shell()
     sys.ps1='> '
     sys.ps2='. '
-    sh.runsource("from pcadabra import *; import sys; sys.path.insert(0,'/home/kasper/Development/git.others/sympy'); from sympy import *; execfile('../defaults.py')")
-    sh.set_display()
+    sh.runsource("execfile('../defaults.py')")
     sh.interact(banner='Cadabra 2.0\nCopyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>\nInfo at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\nUsing sympy version '+sympy.__version__+"\n")
