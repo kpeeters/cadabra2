@@ -70,7 +70,7 @@ set(LOCAL_SRC_FILES
   properties/Traceless.cc
   properties/Weight.cc
   properties/WeightInherit.cc
-  modules/xperm_new.c
+  modules/xperm_new.cc
   algorithms/collect_terms.cc
   algorithms/distribute.cc
   algorithms/rename_dummies.cc
