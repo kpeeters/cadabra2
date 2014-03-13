@@ -133,6 +133,7 @@ substitute(ex, rl)
 
 def test():
 	 {m,n,p,a,b}::AntiCommuting.
+	 print locals()['cadabra_kernel']
 	 ex:=p m n a;
 	 sort_product(ex);
 	 print(ex);
