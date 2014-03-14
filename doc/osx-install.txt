@@ -1,7 +1,12 @@
 
 - xcode
 - homebrew
+- mactex
 - brew install cmake
 - brew install boost
 - brew install pcre
 - brew install gmp (still needs cmake test!)
+
+
+- brew tap acornejo/quartz
+- brew install gtkmm
