@@ -219,7 +219,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 		}
 	catch(boost::python::error_already_set& err) {
 		std::cout << "no local kernel" << std::endl;
-		std::string err = parse_python_exception();
+		std::string err2 = parse_python_exception();
 		}
 	try {
 		boost::python::object obj = globals["cadabra_kernel"];
@@ -227,7 +227,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 		}
 	catch(boost::python::error_already_set& err) {
 		std::cout << "no global kernel" << std::endl;
-		std::string err = parse_python_exception();
+		std::string err2 = parse_python_exception();
 		}
 	
 	if(for_write) {
