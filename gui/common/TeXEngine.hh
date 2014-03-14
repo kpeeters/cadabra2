@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <vector>
 #include <set>
+#include <string>
 
 /// TeXEngine is a singleton which is used to convert LaTeX strings
 /// into Gdk::Pixbuf objects. This is a two-stage process: you first
