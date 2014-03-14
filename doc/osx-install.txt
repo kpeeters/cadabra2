@@ -1,0 +1,7 @@
+
+- xcode
+- homebrew
+- brew install cmake
+- brew install boost
+- brew install pcre
+- brew install gmp (still needs cmake test!)
