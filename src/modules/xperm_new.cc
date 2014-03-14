@@ -48,7 +48,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 #include "xperm_new.h"
+#include <iostream>
 
 /*********************************************************************
  *                             PROTOTYPES                            *
@@ -1692,6 +1694,7 @@ void SGSD(int *vds, int vdsl, int *dummies, int dl, int *mQ,
 class alphastruct {
 	public:
 		alphastruct();
+		alphastruct(const alphastruct&);
 		~alphastruct();
 		
 		void init(int n);
@@ -1704,12 +1707,26 @@ class alphastruct {
 		int *d;
 		int *o;
 		
+		int nn;
 };
 
 alphastruct::alphastruct() 
-	: L(0), s(0), d(0), o(0)
+	: L(0), Ll(0), s(0), d(0), o(0), nn(0)
 	{
 	}
+
+alphastruct::alphastruct(const alphastruct& other)
+	{
+	init(other.nn);
+	for(unsigned int i=0; i<nn; ++i) {
+		L[i]=other.L[i];
+		s[i]=other.s[i];
+		d[i]=other.d[i];
+		o[i]=other.o[i];
+		}
+	Ll=other.Ll;
+	}
+
 
 void alphastruct::init(int n)
 	{
@@ -1717,6 +1734,7 @@ void alphastruct::init(int n)
 	s = new int[n];
 	d = new int[n];
 	o = new int[n];
+	nn=n;
 	}
 
 alphastruct::~alphastruct()
@@ -1725,22 +1743,24 @@ alphastruct::~alphastruct()
 	if(s) delete [] s;
 	if(d) delete [] d;
 	if(o) delete [] o;
+	nn=0;
 	}
 
 
-void TAB(alphastruct *ALPHA, int *L, int Ll, int *s1, int *d1, int n) 
+void TAB(std::vector<alphastruct>& ALPHA, int *L, int Ll, int *s1, int *d1, int n) 
 	{
 	int i;
 	int l=0;
 	
    /* Search ALPHA for the l corresponding to L */
+//	std::cout << ALPHA.size() << ", " << Ll << std::endl;
 	for (i=0; i<Ll; i++) l=ALPHA[l].o[L[i]-1];
 	/* Copy permutations of element l */
 	copy_list(ALPHA[l].s, s1, n);
 	copy_list(ALPHA[l].d, d1, n);
 	}
 
-void F1(alphastruct *ALPHA, int *L, int Ll, int *g, int *list, int *listl, int n, int Deltabl, int *Deltab, int *DeltaD) 
+void F1(std::vector<alphastruct>& ALPHA, int *L, int Ll, int *g, int *list, int *listl, int n, int Deltabl, int *Deltab, int *DeltaD) 
 	{
 	int c, c1, c2;
 	int *sgd=  (int*)malloc(n*sizeof(int));
@@ -1903,33 +1923,35 @@ void double_coset_rep(int *g, int n, int *base, int bl, int *GS, int m,
 
 	/* Initialize ALPHA to {} and TAB to {id, id} */
 	ALPHAl= 1;
-	alphastruct *ALPHA= new alphastruct[1]; //(struct alphastruct*)malloc(sizeof(struct alphastruct));
+	std::vector<alphastruct> ALPHA(1);
+//	alphastruct *ALPHA= new alphastruct[1]; //(struct alphastruct*)malloc(sizeof(struct alphastruct));
 	ALPHA[0].init(n);
 	ALPHA[0].Ll=0;
+	Ll=0; // ?
 	range(ALPHA[0].s, n);
 	range(ALPHA[0].d, n);
 	ALPHAstep[0]=0;
 	ALPHAstep[1]=1;
 
-
-        /**************************************************************
-         *               CONSTRUCTION OF BASES
-         **************************************************************/
-
-        /* Join all drummies */
-        copy_list(dummies, drummies, dl);
-        copy_list(repes, drummies+dl, rl);
-        dril = dl + rl;
-
+	
+	/**************************************************************
+	 *               CONSTRUCTION OF BASES
+	 **************************************************************/
+	
+	/* Join all drummies */
+	copy_list(dummies, drummies, dl);
+	copy_list(repes, drummies+dl, rl);
+	dril = dl + rl;
+	
 	/* Slots of all those drummies */
-        inverse(g, ig, n);
+	inverse(g, ig, n);
 	for (i=0; i<dril; i++) {
 		drummyslots[i] = onpoints(drummies[i], ig, n);
-	}
-
+		}
+	
 	/* Initialize KS */
 	copy_list(GS, KS, m*n); KSl=m;
-
+	
 	/* Extend base to bS to cover all positions of drummies.
 	 * We assume that in the intersection we get bS=base really.
 	 * We sort the missing drummies, but not the given base  */
@@ -1972,208 +1994,211 @@ void double_coset_rep(int *g, int n, int *base, int bl, int *GS, int m,
 	printf("Base for sorting: bSsort: ");			/*PPC*/
 	print_list(bSsort, bSl, 1);				/*PPC*/
 #endif								/*PPC*/
-
-
-        /*******************/
+	
+	
+	/*******************/
 	/**** Main loop ****/
-        /*******************/
-
-        /* Note we use i=1..bSl instead of the usual i=0 ..(bSl-1) */
+	/*******************/
+	
+	/* Note we use i=1..bSl instead of the usual i=0 ..(bSl-1) */
 	for (i=1; i<=bSl; i++) {
 		int b=bS[i-1];
-
+		
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("\n************** Loop i=%d *************\n", i);/*PPC*/
-	printf("Analyzing slot bS[%d]=%d of tensor\n", i-1, b);	/*PPC*/
+		printf("\n************** Loop i=%d *************\n", i);/*PPC*/
+		printf("Analyzing slot bS[%d]=%d of tensor\n", i-1, b);	/*PPC*/
 #endif								/*PPC*/
-	    /* Schreier vector of S */
-	    schreier_vector(b, KS, KSl, n, nu, w);
-	    one_orbit(b, KS, KSl, n, Deltab, &Deltabl);
+		/* Schreier vector of S */
+		schreier_vector(b, KS, KSl, n, nu, w);
+		one_orbit(b, KS, KSl, n, Deltab, &Deltabl);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Under S, slot %d go to slots Deltab: ",b);	/*PPC*/
-	print_list(Deltab, Deltabl, 1);				/*PPC*/
+		printf("Under S, slot %d go to slots Deltab: ",b);	/*PPC*/
+		print_list(Deltab, Deltabl, 1);				/*PPC*/
 #endif								/*PPC*/
-            /* Compute SGS for group D. Do not rearrange drummies */
-            SGSD(vds, vdsl, dummies, dl, mQ,
-                 vrs, vrsl, repes, rl, n,
-                 0, KD, &KDl, bD, &bDl);
-	    /* Orbits of D */
-	    all_orbits(KD, KDl, n, DeltaD);
+		/* Compute SGS for group D. Do not rearrange drummies */
+		SGSD(vds, vdsl, dummies, dl, mQ,
+			  vrs, vrsl, repes, rl, n,
+			  0, KD, &KDl, bD, &bDl);
+		/* Orbits of D */
+		all_orbits(KD, KDl, n, DeltaD);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Orbits of indices: DeltaD: ");			/*PPC*/
-	print_list(DeltaD, n, 1);				/*PPC*/
+		printf("Orbits of indices: DeltaD: ");			/*PPC*/
+		print_list(DeltaD, n, 1);				/*PPC*/
 #endif								/*PPC*/
-	    /* Images of b under elements of S.g.D.
-               Deltab and DeltaD are used by F1 */
-	    IMAGESl=0;
-	    for (c=ALPHAstep[i-1]; c<ALPHAstep[i]; c++)
-			 F1(ALPHA, ALPHA[c].L, ALPHA[c].Ll, g, IMAGES, &IMAGESl, n, Deltabl, Deltab, DeltaD);
+		/* Images of b under elements of S.g.D.
+			Deltab and DeltaD are used by F1 */
+		IMAGESl=0;
+		for (c=ALPHAstep[i-1]; c<ALPHAstep[i]; c++)
+			F1(ALPHA, ALPHA[c].L, ALPHA[c].Ll, g, IMAGES, &IMAGESl, n, Deltabl, Deltab, DeltaD);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("At slot %d we can have indices IMAGES: ", b);	/*PPC*/
-	print_list(IMAGES, IMAGESl, 1);				/*PPC*/
-	printf("IMAGESl: %d\n", IMAGESl);			/*PPC*/
+		printf("At slot %d we can have indices IMAGES: ", b);	/*PPC*/
+		print_list(IMAGES, IMAGESl, 1);				/*PPC*/
+		printf("IMAGESl: %d\n", IMAGESl);			/*PPC*/
 #endif								/*PPC*/
-	    /* If there are no images we have finished */
-            if(IMAGESl==0) continue;
-
-            /* Find minimum index */
-	    sortB(IMAGES, IMAGESsorted, IMAGESl, bSsort, bSl);
-	    p[i-1] = IMAGESsorted[0];
+		/* If there are no images we have finished */
+		if(IMAGESl==0) continue;
+		
+		/* Find minimum index */
+		sortB(IMAGES, IMAGESsorted, IMAGESl, bSsort, bSl);
+		p[i-1] = IMAGESsorted[0];
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("The least of them is p[i-1]=%d\n", p[i-1]);	/*PPC*/
+		printf("The least of them is p[i-1]=%d\n", p[i-1]);	/*PPC*/
 #endif								/*PPC*/
-	    /* Recompute SGS of D */
-            if (dl>0 || rl>0) {
-            SGSD(vds, vdsl, dummies, dl, mQ,
-                 vrs, vrsl, repes, rl, n,
-                 p[i-1], KD, &KDl, bD, &bDl);
-	    } else { /* Do nothing */
+		/* Recompute SGS of D */
+		if (dl>0 || rl>0) {
+			SGSD(vds, vdsl, dummies, dl, mQ,
+				  vrs, vrsl, repes, rl, n,
+				  p[i-1], KD, &KDl, bD, &bDl);
+			} else { /* Do nothing */
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Rearrangement of base of D not required.\n");	/*PPC*/
+			printf("Rearrangement of base of D not required.\n");	/*PPC*/
 #endif								/*PPC*/
-	    }
-	    /* Schreier vector of D */
-	    schreier_vector(p[i-1], KD, KDl, n, nuD, wD);
-	    /* Orbit of p[i-1] under D */
-	    one_orbit(p[i-1], KD, KDl, n, Deltap, &Deltapl);
+			}
+		/* Schreier vector of D */
+		schreier_vector(p[i-1], KD, KDl, n, nuD, wD);
+		/* Orbit of p[i-1] under D */
+		one_orbit(p[i-1], KD, KDl, n, Deltap, &Deltapl);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("The orbit of index %d is Deltap: ", p[i-1]);	/*PPC*/
-	print_list(Deltap, Deltapl, 1);				/*PPC*/
-	printf("Looking for digs moving index %d to slot %d\n",	/*PPC*/
-		p[i-1], b);					/*PPC*/
+		printf("The orbit of index %d is Deltap: ", p[i-1]);	/*PPC*/
+		print_list(Deltap, Deltapl, 1);				/*PPC*/
+		printf("Looking for digs moving index %d to slot %d\n",	/*PPC*/
+				 p[i-1], b);					/*PPC*/
 #endif								/*PPC*/
-	    /* Calculate ALPHA and TAB */
-	    ALPHAstep[i+1]=ALPHAstep[i];
-	    for(l=ALPHAstep[i-1]; l<ALPHAstep[i]; l++) {
+		/* Calculate ALPHA and TAB */
+		ALPHAstep[i+1]=ALPHAstep[i];
+		for(l=ALPHAstep[i-1]; l<ALPHAstep[i]; l++) {
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Loop with l=%d\n", l);				/*PPC*/
+			printf("Loop with l=%d\n", l);				/*PPC*/
 #endif								/*PPC*/
-		Ll=ALPHA[l].Ll;
-		copy_list(ALPHA[l].L, L, Ll);
+			Ll=ALPHA[l].Ll;
+			copy_list(ALPHA[l].L, L, Ll);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("L: "); print_list(L, Ll, 1);			/*PPC*/
+			printf("L: "); print_list(L, Ll, 1);			/*PPC*/
 #endif								/*PPC*/
-		copy_list(ALPHA[l].s, s, n);
-		copy_list(ALPHA[l].d, d, n);
+			copy_list(ALPHA[l].s, s, n);
+			copy_list(ALPHA[l].d, d, n);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("TAB[L]={");					/*PPC*/
-	print_perm(s, n, 0);					/*PPC*/
-	printf(", ");						/*PPC*/
-	print_perm(d, n, 0);					/*PPC*/
-	printf("}\n");						/*PPC*/
+			printf("TAB[L]={");					/*PPC*/
+			print_perm(s, n, 0);					/*PPC*/
+			printf(", ");						/*PPC*/
+			print_perm(d, n, 0);					/*PPC*/
+			printf("}\n");						/*PPC*/
 #endif								/*PPC*/
-		list1l=Deltabl;
-		for (c=0; c<list1l; c++) 
-			list1[c]=onpoints(Deltab[c], s, n);
-                product(g, d, perm1, n);
-                inverse(perm1, perm2, n);
-		list2l=Deltapl;
-		for (c=0; c<list2l; c++) 
-			list2[c]=onpoints(Deltap[c], perm2, n);
+			list1l=Deltabl;
+			for (c=0; c<list1l; c++) 
+				list1[c]=onpoints(Deltab[c], s, n);
+			product(g, d, perm1, n);
+			inverse(perm1, perm2, n);
+			list2l=Deltapl;
+			for (c=0; c<list2l; c++) 
+				list2[c]=onpoints(Deltap[c], perm2, n);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("NEXT: intersection of sets of slots ");		/*PPC*/
-	print_list(list1, list1l, 0); printf(" and ");		/*PPC*/
-	print_list(list2, list2l, 1);				/*PPC*/
+			printf("NEXT: intersection of sets of slots ");		/*PPC*/
+			print_list(list1, list1l, 0); printf(" and ");		/*PPC*/
+			print_list(list2, list2l, 1);				/*PPC*/
 #endif								/*PPC*/
-		intersection(list1, list1l, list2, list2l,
-			NEXT, &NEXTl);
+			intersection(list1, list1l, list2, list2l,
+							 NEXT, &NEXTl);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Intermediate slots NEXT: ");			/*PPC*/
-	print_list(NEXT, NEXTl, 1);				/*PPC*/
+			printf("Intermediate slots NEXT: ");			/*PPC*/
+			print_list(NEXT, NEXTl, 1);				/*PPC*/
 #endif								/*PPC*/
-
-		for(jj=0; jj<NEXTl; jj++) {
-		    j = NEXT[jj];
-		    inverse(s, perm1, n);
-		    trace_schreier(onpoints(j,perm1,n), nu,w, perm2,n);
-		    product(perm2, s, s1, n);
+			
+			for(jj=0; jj<NEXTl; jj++) {
+				j = NEXT[jj];
+				inverse(s, perm1, n);
+				trace_schreier(onpoints(j,perm1,n), nu,w, perm2,n);
+				product(perm2, s, s1, n);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("From slot %d to interm. slot %d use s1: ",	/*PPC*/
-		b, j); print_perm(s1, n, 1);			/*PPC*/
+				printf("From slot %d to interm. slot %d use s1: ",	/*PPC*/
+						 b, j); print_perm(s1, n, 1);			/*PPC*/
 #endif								/*PPC*/
-		    product(g, d, perm2, n);
-		    trace_schreier(onpoints(j,perm2,n),nuD,wD,perm3,n);
-		    inverse(perm3, perm1, n);
-		    product(d, perm1, d1, n);
-		    copy_list(L, L1, Ll); L1l=Ll;
-		    L1[L1l++] = j;
+				product(g, d, perm2, n);
+				trace_schreier(onpoints(j,perm2,n),nuD,wD,perm3,n);
+				inverse(perm3, perm1, n);
+				product(d, perm1, d1, n);
+				copy_list(L, L1, Ll); L1l=Ll;
+				L1[L1l++] = j;
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("d1: "); print_perm(d1, n, 1);			/*PPC*/
-	printf("L1: "); print_list(L1, L1l, 1);			/*PPC*/
+				printf("d1: "); print_perm(d1, n, 1);			/*PPC*/
+				printf("L1: "); print_list(L1, L1l, 1);			/*PPC*/
 #endif								/*PPC*/
-
-		    kk=ALPHAstep[i+1];
-		    ALPHA[l].o[j-1] = kk;
-		    ALPHAl++;
-		    ALPHAstep[i+1]++;
-		    ALPHA = (struct alphastruct*)realloc(ALPHA, ALPHAl* sizeof(struct alphastruct));
-		    copy_list(L1, ALPHA[kk].L, L1l);
-		    ALPHA[kk].Ll = L1l;
-		    copy_list(s1, ALPHA[kk].s, n);
-		    copy_list(d1, ALPHA[kk].d, n);
-
-		    F2(s1, g, d1, perm1, n);
+				
+				kk=ALPHAstep[i+1];
+				ALPHA[l].o[j-1] = kk;
+				ALPHAl++;
+				ALPHAstep[i+1]++;
+//				std::cout << "resizing " << ALPHAl << std::endl;
+//				ALPHA = (struct alphastruct*)realloc(ALPHA, ALPHAl* sizeof(struct alphastruct));
+				ALPHA.resize(ALPHAl);
+				ALPHA.back().init(n);
+				copy_list(L1, ALPHA[kk].L, L1l);
+				ALPHA[kk].Ll = L1l;
+				copy_list(s1, ALPHA[kk].s, n);
+				copy_list(d1, ALPHA[kk].d, n);
+				
+				F2(s1, g, d1, perm1, n);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("This gives the new index configuration: ");	/*PPC*/
-	inverse(perm1, perm2, n);				/*PPC*/
-	print_perm(perm2, n, 1);				/*PPC*/
-	for(ii=0; ii<i; ii++) {					/*PPC*/
-		product(s1, g, perm2, n);			/*PPC*/
-		product(perm2, d1, perm3, n);			/*PPC*/
-		printf("Checking slot %d with point %d: ",	/*PPC*/
-			bS[ii], p[ii]);				/*PPC*/
-		if(onpoints(bS[ii], perm3, n)==p[ii])		/*PPC*/
-			printf("True\n");			/*PPC*/
-		else printf("*************FALSE************\n");/*PPC*/
-	}							/*PPC*/
+				printf("This gives the new index configuration: ");	/*PPC*/
+				inverse(perm1, perm2, n);				/*PPC*/
+				print_perm(perm2, n, 1);				/*PPC*/
+				for(ii=0; ii<i; ii++) {					/*PPC*/
+					product(s1, g, perm2, n);			/*PPC*/
+					product(perm2, d1, perm3, n);			/*PPC*/
+					printf("Checking slot %d with point %d: ",	/*PPC*/
+							 bS[ii], p[ii]);				/*PPC*/
+					if(onpoints(bS[ii], perm3, n)==p[ii])		/*PPC*/
+						printf("True\n");			/*PPC*/
+					else printf("*************FALSE************\n");/*PPC*/
+					}							/*PPC*/
 #endif								/*PPC*/
-		}
-	    }
-	    { /* Verify if there are 2 equal permutations
-	       of opposite sign in SgD */
-	        int *array= (int*)malloc(n*(ALPHAstep[i+1]-ALPHAstep[i])
-			     *sizeof(int));
-	        int arrayl= 0;
+				}
+			}
+		{ /* Verify if there are 2 equal permutations
+			  of opposite sign in SgD */
+			int *array= (int*)malloc(n*(ALPHAstep[i+1]-ALPHAstep[i])
+											 *sizeof(int));
+			int arrayl= 0;
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Astep[i-1]=%d, Astep[i]=%d, Astep[i+1]=%d\n",	/*PPC*/
-		ALPHAstep[i-1], ALPHAstep[i], ALPHAstep[i+1]);	/*PPC*/
+			printf("Astep[i-1]=%d, Astep[i]=%d, Astep[i+1]=%d\n",	/*PPC*/
+					 ALPHAstep[i-1], ALPHAstep[i], ALPHAstep[i+1]);	/*PPC*/
 #endif 								/*PPC*/
-	        for(l=ALPHAstep[i]; l<ALPHAstep[i+1]; l++) {
-		    F2(ALPHA[l].s, g, ALPHA[l].d, perm1, n);
-	            copy_list(perm1, array+(arrayl++)*n, n);
-	        }
+			for(l=ALPHAstep[i]; l<ALPHAstep[i+1]; l++) {
+				F2(ALPHA[l].s, g, ALPHA[l].d, perm1, n);
+				copy_list(perm1, array+(arrayl++)*n, n);
+				}
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Perform check.\n");				/*PPC*/
+			printf("Perform check.\n");				/*PPC*/
 #endif								/*PPC*/
-	        result= consistency(array, arrayl, n);
+			result= consistency(array, arrayl, n);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Result of check: %d\n", result);		/*PPC*/
+			printf("Result of check: %d\n", result);		/*PPC*/
 #endif								/*PPC*/
-	        free(array);
-	        if (!result) break;
-	    }
-	    /* Find the stabilizers S^(i+1) and D^(i+1) */
-	    stabilizer(&bS[i-1], 1, KS, KSl, n, KS, &KSl);
-            dropdummyset(p[i-1], vds, vdsl, dummies, &dl);
-            droprepeatedset(p[i-1], vrs, vrsl, repes, &rl);
+			free(array);
+			if (!result) break;
+			}
+		/* Find the stabilizers S^(i+1) and D^(i+1) */
+		stabilizer(&bS[i-1], 1, KS, KSl, n, KS, &KSl);
+		dropdummyset(p[i-1], vds, vdsl, dummies, &dl);
+		droprepeatedset(p[i-1], vrs, vrsl, repes, &rl);
 #ifdef VERBOSE_DOUBLE						/*PPC*/
-	printf("Remove perms of KS moving slot %d\n", b);	/*PPC*/
-	printf("Remove perms of KD moving index %d\n", p[i-1]);	/*PPC*/
+		printf("Remove perms of KS moving slot %d\n", b);	/*PPC*/
+		printf("Remove perms of KD moving index %d\n", p[i-1]);	/*PPC*/
 #endif								/*PPC*/
-
-	} /* End of main loop */
-
+		
+		} /* End of main loop */
+	
 	/* Result */
 	if (result==0) {
 		zeros(perm1, n);
-	} else {
+		} else {
 		l=ALPHAstep[i-1];
 		F2(ALPHA[l].s, g, ALPHA[l].d, perm1, n);
-	}
+		}
 	copy_list(perm1, dcr, n);
-
+	
 	/* Free allocated memory */
-	free(ALPHA);
+//	free(ALPHA);
 	free(ALPHAstep);
 	free(ig);
 	free(drummies);
@@ -2207,7 +2232,6 @@ void double_coset_rep(int *g, int n, int *base, int bl, int *GS, int m,
 	free(perm3);
 	free(s1);
 	free(d1);
-		
 }
 
 /**********************************************************************/
