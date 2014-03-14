@@ -47,7 +47,7 @@ class Algorithm {
 		typedef exptree::post_order_iterator post_order_iterator;
 		typedef exptree::sibling_iterator    sibling_iterator;
 
-		bool interrupted=false;
+  bool interrupted;
 
 		enum result_t {
 			l_no_action,

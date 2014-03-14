@@ -10,7 +10,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../../cmake/modules")
 
 # Locate Boost
-find_package(Boost 1.45.0 COMPONENTS filesystem)
+find_package(Boost 1.45.0 COMPONENTS system filesystem)
 include_directories("${Boost_INCLUDE_DIRS}")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)

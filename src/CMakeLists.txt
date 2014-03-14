@@ -6,6 +6,10 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+if(CMAKE_COMPILER_IS_CLANG)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-c++11-extensions")
+endif()
+
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
@@ -87,10 +91,10 @@ set(PUBLIC_HEADER_FILES
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
 add_library(pcadabra SHARED ${LOCAL_SRC_FILES})
-set_target_properties(pcadabra PROPERTIES PREFIX "")
+set_target_properties(pcadabra PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(pcadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
-target_link_libraries(pcadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
+target_link_libraries(pcadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES} python)
 
 add_library(example SHARED ptest.cc)
-set_target_properties(example PROPERTIES PREFIX "")
-target_link_libraries(example ${Boost_LIBRARIES})
+set_target_properties(example PROPERTIES PREFIX "" SUFFIX ".so")
+target_link_libraries(example ${Boost_LIBRARIES} python)
