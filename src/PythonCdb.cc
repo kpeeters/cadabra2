@@ -103,7 +103,6 @@ void Ex::pull_in()
 	while(it!=tree.end()) {
 		if(*it->name=="@") {
 			if(tree.number_of_children(it)==1) {
-				std::cout << "found python expression" << std::endl;
 				std::string pobj = *(tree.begin(it)->name);
 				Ex *ex = fetch_from_python(pobj);
 				if(ex!=0) {
@@ -218,7 +217,6 @@ Kernel *get_kernel_from_scope(bool for_write)
 		local_kernel = boost::python::extract<Kernel *>(obj);
 		}
 	catch(boost::python::error_already_set& err) {
-		std::cout << "no local kernel" << std::endl;
 		std::string err2 = parse_python_exception();
 		}
 	try {
@@ -226,7 +224,6 @@ Kernel *get_kernel_from_scope(bool for_write)
 		global_kernel = boost::python::extract<Kernel *>(obj);
 		}
 	catch(boost::python::error_already_set& err) {
-		std::cout << "no global kernel" << std::endl;
 		std::string err2 = parse_python_exception();
 		}
 	
@@ -234,32 +231,26 @@ Kernel *get_kernel_from_scope(bool for_write)
 		// need the local kernel no matter what
 		if(local_kernel==0) {
 			local_kernel = new Kernel();
-			std::cout << "created local_kernel " << local_kernel << std::endl;
 			if(global_kernel) {
-				std::cout << "copying global kernel " << global_kernel << std::endl;
 				local_kernel->properties = global_kernel->properties; 
 				}
 			locals["cadabra_kernel"]=boost::ref(local_kernel);
 			// FIXME: copy global kernel if present
 			}
-		std::cout << "returning existing local_kernel " << local_kernel << std::endl;
 		return boost::ref(local_kernel);
 		}
 	else {
 		if(local_kernel) {
-			std::cout << "returning existing local_kernel " << local_kernel << " for read" << std::endl;
 			return local_kernel;
 			}
 		else if(global_kernel) {
-			std::cout << "returning existing global_kernel " << global_kernel << " for read" << std::endl;
 			return boost::ref(global_kernel);
 			}
 		else {
 			// On first call?
 			global_kernel = new Kernel();
-			std::cout << "creating global kernel " << global_kernel << std::endl;
 			globals["cadabra_kernel"]=boost::ref(global_kernel);
-			return boost::ref(global_kernel);
+			return global_kernel; //boost::ref(global_kernel);
 			}
 		}
 	}
