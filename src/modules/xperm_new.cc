@@ -1718,7 +1718,7 @@ alphastruct::alphastruct()
 alphastruct::alphastruct(const alphastruct& other)
 	{
 	init(other.nn);
-	for(unsigned int i=0; i<nn; ++i) {
+	for(int i=0; i<nn; ++i) {
 		L[i]=other.L[i];
 		s[i]=other.s[i];
 		d[i]=other.d[i];

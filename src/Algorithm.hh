@@ -122,7 +122,7 @@ class Algorithm {
 		static unsigned int number_of_direct_indices(iterator it);
 
 	protected:
-		Kernel   kernel;
+		Kernel&  kernel;
 		exptree& tr;
 
 		// The main entry point which is used by the public entry points listed
