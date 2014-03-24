@@ -1,3 +1,18 @@
 
 
 Storage.hh
+
+
+
+\section{Library interface}
+
+A block is a combination of an input cell together with all output and
+other data that needs to be kept track of (?). 
+
+class Block {
+   public: 
+      std::string input;
+      
+};
+
+execute_block(Block block, callback);

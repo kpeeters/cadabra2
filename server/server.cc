@@ -5,7 +5,7 @@
 
 int main()
 	{
-	Server server("http://localhost:5555");
+	Server server;
 
 	server.run();
 	}

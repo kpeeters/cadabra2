@@ -1,0 +1,24 @@
+
+Structure of client/server.
+
+
+Gtkmm:
+  - main loop with gtkmm
+  - c++ thread cond_waiting for requests
+  - gui action putting request in queue
+  - thread sync-waiting
+  - on result, thread subclass onFinish updates gui using
+    gdk_thread_enter/leave.
+
+
+Cocoa:
+  - main loop with cocoa
+  - c++ thread cond_waiting for requests
+  - this thread is a subclass of something generic with onFinish callback
+  - gui action putting request in queue and notifying thread
+  - thread sync-waiting for network
+  - on result, thread calls onFinish, which in this particular
+    implementation sends the result data to the main thread using
+    GCD.
+
+ 
