@@ -8,7 +8,6 @@ import rlcompleter
 import os
 
 ourpath = os.path.abspath(os.path.dirname(sys.argv[0]))
-#sys.path.insert(0, '/home/kasper/Development/git.others/sympy')
 sys.path.insert(0, ourpath+'/build')
 sys.path.insert(0, ourpath+'/sympy')
 

@@ -8,9 +8,11 @@
 //
 // The server uses a ... 0mq socket to listen for incoming requests.
 
+#include <string>
 
 class Server {
 	public:
+		Server();
 		Server(const std::string& socket);
 
 		void run();
