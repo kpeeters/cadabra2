@@ -80,6 +80,7 @@ set(LOCAL_SRC_FILES
   algorithms/rename_dummies.cc
   algorithms/flatten_product.cc
   algorithms/prodcollectnum.cc
+  algorithms/reduce_sub.cc
   algorithms/sort_product.cc
   algorithms/substitute.cc
 )

@@ -133,8 +133,13 @@ void DisplayTeX::print_multiplier(std::ostream& str, exptree::iterator it)
 	if(*it->multiplier<0) {
 		if(*tree.parent(it)->name=="\\sum") { // sum takes care of minus sign
 			if(*it->multiplier!=-1) {
-				str << "\\frac{" << -(it->multiplier->get_num()) << "}{" 
-					 << it->multiplier->get_den() << "}";
+				if(denom!=1) {
+					str << "\\frac{" << -(it->multiplier->get_num()) << "}{" 
+						 << it->multiplier->get_den() << "}";
+					}
+				else {
+					str << -(*it->multiplier);
+					}
 				}
 			else                    turned_one=true;
 			}
