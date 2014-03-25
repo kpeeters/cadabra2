@@ -16,10 +16,11 @@
 #include "properties/Distributable.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
+#include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
+#include "algorithms/reduce_sub.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/substitute.hh"
-#include "algorithms/collect_terms.hh"
 
 Kernel *get_kernel_from_scope(bool for_write=false) ;
 
@@ -35,7 +36,7 @@ Ex::Ex(const Ex& other)
 
 std::string Ex::str_() const
 	{
-	std::cout << "reached Ex::str_ " << std::endl;
+//	std::cout << "reached Ex::str_ " << std::endl;
 //	std::cout << *(tree.begin()->name)<< std::endl;
 	std::ostringstream str;
 
@@ -378,6 +379,7 @@ BOOST_PYTHON_MODULE(pcadabra)
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<rename_dummies>("rename_dummies");
+	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_2<substitute>("substitute");
 
