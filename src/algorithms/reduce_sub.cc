@@ -38,6 +38,7 @@ Algorithm::result_t reduce_sub::apply(iterator& it)
 		sit=tr.begin(it);
 		sit->fl.parent_rel=it->fl.parent_rel;
 		sit->fl.bracket=it->fl.bracket;
+		multiply(sit->multiplier, *it->multiplier);
 		tr.flatten(it);
 		it=tr.erase(it);
 		}
