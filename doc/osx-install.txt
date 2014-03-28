@@ -13,4 +13,16 @@ server/client:
 
 gtkmm client:
 - brew tap acornejo/quartz
-- brew install gtkmm
+- brew install gtkmm-quartz
+
+to compile cadabra (v1.*), 
+
+ export PKG_CONFIG_PATH=/usr/local/opt/gtkmm-quartz/lib/pkgconfig:/usr/local/opt/gtk+-quartz/lib/pkgconfig:/usr/local/opt/pango-quartz/lib/pkgconfig:${PKG_CONFIG_PATH}
+ ./configure --disable-runtime-dependency-check
+
+ gtk+-quartz
+ pango-quartz
+ pangomm-quartz
+ gtkmm-quartz
+ cairo-quartz
+ cairomm-quartz
