@@ -22,7 +22,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
 
+# Create the server library
+add_library(cadabra_server SHARED Server.cc)
+target_link_libraries(cadabra_server ${ZEROMQ_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+
 # Create server binary
 include_directories(".")
-add_executable(test_server test_server.cc Server.cc)
-target_link_libraries(test_server ${ZEROMQ_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+add_executable(test_server test_server.cc)
+target_link_libraries(test_server cadabra_server ${ZEROMQ_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
