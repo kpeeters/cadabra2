@@ -3,9 +3,9 @@
 #include <string>
 #include <iostream>
 
-CadabraClient()
+Client::Client()
 	{
-	
+	add_cell();
 	}
 
 int CadabraClient::get_fd()

@@ -1,11 +1,15 @@
 
-// A test client to do some basic i/o with a cadabra server.
+// A test client to do some basic manipulation of a notebook and
+// some I/O with a cadabra server.
 
-#include "CadabraClient.hh"
+#include "Client.hh"
 
 int main(int, char **)
 	{
-	CadabraClient client;
+	cadabra::Client client;
 
-	client.run();
+	cadabra::Client::ActionAddCell action(doc.begin());
+	client.perform(action);
+
+	
 	}
