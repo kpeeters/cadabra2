@@ -1,11 +1,5 @@
 
-- Many classes depend for their implementation on other header files,
-  but those often contain a lot of mess which is unneeded. Separating
-  out classes into their own headers will clean this up. 
+- rename Client to Document ?
 
-- Register algorithms to Python in a unified way.
-
-- Algorithms should be able to act on 'Ex' objects or on strings,
-  the latter will then be converted automatically.
-
-- 
+- split Client into Document and Client; the latter should then be solely
+  responsible for talking over the net.

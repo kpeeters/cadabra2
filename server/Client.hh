@@ -13,16 +13,18 @@
 // Some of the functionality of this class is split off into Action classes 
 // in order to provide an undo stack.
 
+//FIX: do not use smart pointers, but instead address cells by iterators, and
+//just use the fact that iterators remain valid even when nodes get moved in and 
+//			  out of the tree. RemoveCell then just needs to keep track of the removed node.
+
 namespace cadabra {
 
 	class Client {
 		public:
+			Client();
 			
-			void add_cell();
-			void remove_cell();
-			void split_cell();
-			void execute_cell();
-			
+			void perform(ActionBase);
+
 			virtual void on_progress()=0;
 			virtual void on_tree_changed()=0;
 			
@@ -32,22 +34,23 @@ namespace cadabra {
 
 			class DataCell {
 				public:
-					enum cell_t { c_input, c_output, c_comment, c_texcomment, c_tex, c_error };
+					enum class CellType { input, output, comment, texcomment, tex, error };
 					
 					DataCell(cell_t, const std::string& str="", bool texhidden=false);
 					
 					cell_t                        cell_type;
-					Glib::RefPtr<Gtk::TextBuffer> textbuf;
-					Glib::RefPtr<TeXBuffer>       texbuf;
+					std::string                   textbuf;
 					std::string                   cdbbuf;             // c_output only: the output in cadabra input format
 					bool                          tex_hidden;         // c_tex only
 					bool                          sensitive;
 					bool                          running;
 			};
 			
-		private:
+			// Do not manipulate this tree directly; instead submit ActionBase classes
+			// so that an undo stack can be kept.
+
 			tree<DataCell> doc;
-	
+
 			// The Action object is used to pass user action instructions around
          // and store them in the undo/redo stacks. All references to cells is
          // in terms of smart pointers to DataCells. 
@@ -63,13 +66,15 @@ namespace cadabra {
 					virtual void execute(XCadabra&)=0;
 					virtual void revert(XCadabra&)=0;
 					
-					Glib::RefPtr<DataCell> cell;
+					tree<DataCell>::iterator cell;
 			};
 			
 
 			class ActionAddCell : public ActionBase {
 				public:
-					ActionAddCell(Glib::RefPtr<DataCell>, Glib::RefPtr<DataCell> ref_, bool before_);
+					enum class Position { before, after, child };
+
+					ActionAddCell(tree<DataCell>::iterator, tree<DataCell>::iterator ref_, Position pos_);
 					
 					/// Executing will also show the cell and grab its focus.
 					virtual void execute(XCadabra&);
@@ -78,14 +83,14 @@ namespace cadabra {
 				private:
 					// Keep track of the location where this cell is inserted into
 					// the notebook. 
-					Glib::RefPtr<DataCell> ref;
-					bool                   before;
-					std::vector<Glib::RefPtr<DataCell> > associated_cells; // output and comment cells
+
+					tree<DataCell>::iterator  ref;
+					Position                  position;
 			};
 			
 			class ActionRemoveCell : public ActionBase {
 				public:
-					ActionRemoveCell(Glib::RefPtr<DataCell>);
+					ActionRemoveCell(tree<DataCell>::iterator);
 					~ActionRemoveCell();
 					
 					virtual void execute(XCadabra&);
@@ -95,15 +100,13 @@ namespace cadabra {
 					// Keep track of the location where this cell was in the notebook. Since it is
 					// not possible to delete the first cell, it is safe to keep a reference to the
 					// cell just before the one we are deleting. 
-					// Note that since we keep a RefPtr to this datacell, that cell will stay alive
-					// even when a subsequent action will remove it. 
-					Glib::RefPtr<DataCell>               prev_cell; 
-					std::vector<Glib::RefPtr<DataCell> > associated_cells; // output and comment cells
+
+					tree<DataCell>::iterator             prev_cell;
 			};
 			
 			class ActionAddText : public ActionBase {
 				public:
-					ActionAddText(Glib::RefPtr<DataCell>, int, const std::string&);
+					ActionAddText(tree<DataCell>::iterator, int, const std::string&);
 					
 					virtual void execute(XCadabra&);
 					virtual void revert(XCadabra&);
@@ -114,7 +117,7 @@ namespace cadabra {
 			
 			class ActionRemoveText : public ActionBase {
 				public:
-					ActionRemoveText(Glib::RefPtr<DataCell>, int, int, const std::string&);
+					ActionRemoveText(tree<DataCell>::iterator, int, int, const std::string&);
 					
 					virtual void execute(XCadabra&);
 					virtual void revert(XCadabra&);
@@ -122,8 +125,12 @@ namespace cadabra {
 					int from_pos, to_pos;
 					std::string removed_text;
 			};
+
+			// todo: split cell, execute cell (or should the latter be a normal, non-undoable function?)
 			
-			typedef std::stack<Glib::RefPtr<ActionBase> > ActionStack;
+		private:
+	
+			typedef std::stack<std::unique_ptr<ActionBase> > ActionStack;
 			
 	};
 
