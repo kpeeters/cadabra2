@@ -1,12 +1,13 @@
 \documentclass[11pt]{article}
 \usepackage{geometry}
 \usepackage{listings}
-\usepackage{hyperref}
+\usepackage[colorlinks=true, citecolor=red, linkcolor=blue, urlcolor=red, plainpages=false, pdfpagelabels]{hyperref}
 \usepackage{xcolor}
 %\usepackage[T1]{fontenc}
 %\usepackage{fourier}
 %\usepackage{baskervald}
 \usepackage{charter}
+\usepackage{relsize}
 %\usepackage[urw-garamond]{mathdesign}
 %\usepackage[T1]{fontenc}
 %\usepackage[osf]{mathpazo}
@@ -25,88 +26,62 @@
         commentstyle=\color{gray!60},
         numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt
        }
+
 \begin{document}
-{\bf The design and implementation of Cadabra version 2}
+\pagestyle{empty}
+\begin{flushright}
+arxiv:xxxx.xxxx\\
+2014
+\end{flushright}
+\vskip 7ex
 
-\section{To resolve}
+\begin{center}
+\begin{minipage}{.95\textwidth}
+{\Large\larger\bf Cadabra II: a new tensor computer algebra system}\\[7ex]
+{\large\bf Kasper Peeters}\\[5ex]
+Department of Mathematical Sciences\\
+Durham University\\
+South Road\\
+Durham DH1 3LE\\
+United Kingdom\\[3ex]
+{\tt kasper.peeters@durham.ac.uk}
+\vskip 9ex
 
-\begin{itemize}
-\item scan through list of properties to see which ones should be
-native.
+{\bf Abstract:}\\[1ex] 
 
-\item It would make sense to be able to write
-\begin{lstlisting}
-  \conjugate{ \alpha_{n} \alpha_{m} }
-\end{lstlisting}
-and then apply the conjugation algorithm. Yes, this is precisely how
-things should work: the programming language should know about the
-algorithms, the data language should know about the operators. Systems
-like sympy would immediately work this out. The above would be
-declared as
-\begin{lstlisting}
-\dagger{#}::ConjugateTranspose.
-\dagger{#}::DisplayAsSuperscript.
-\end{lstlisting}
-\item We need better logic to handle functional dependence like
-\begin{lstlisting}
-A_\mu(x)  and  A(x)_{\mu} .
-\end{lstlisting}
-Do we want to enforce the order of arguments (e.g. first functional
-'indices', then vector space indices?).  
+\end{minipage}
 
-\item Get rid of different bracket types for grouping; this is rarely used and only
-makes the system more complicated. Brackets should be displayed
-whenever necessary, automatically. 
+\vfill\vfill
 
-\item Calling algorithms from within C++. This should look as much as possible
-as the Python version.
-
-\item Making parameterised substitution rules, like 'replace riemann with metric' 
-which is parameterised over the name of the metric.
-\begin{lstlisting}
-riemann_to_metric := R_{m n p q} -> \partial_{m n}{\1_{p q}} + ...
-riemann_to_metric := R_{m n p q} -> \partial_{m n}{\g_{p q}} + ...
-riemann_to_metric := R_{m n p q} -> \partial_{m n}{\{g}_{p q}} + ...
-\end{lstlisting}
-This would then actually just be parameterised expressions, and you could do
-\begin{lstlisting}
-a := \{var}_{m n}
-b := @(a <- g) + @(a <- h)
-b := @(a(g)) + @(a(h))
-\end{lstlisting}
-
-\item Resolve the issue of: we want to assign properties to patterns, but those patterns can 
-depend on properties.
-
-\item For long and recursive operations, it makes sense to be able to specify a simplification
-algorithm to be called on every step, like Redberry does.
-
-  def simplify(ex):
-      sort_product(ex)
-      collect_terms(ex)
-     
-
-  substitute(ex, 'A->B', simplify)
-  
-It would be fast to not make the round-trip through Python, but that
-is probably premature optimisation because many people would want to
-do more complicated things in the simplifier than just applying
-algorithms in turn.
-
-\item Make an inventory of all arguments passed to properties and algorithms.
-
-\item online notebook viewer (for SSI)
-
-\end{itemize}
+\begin{minipage}{0.95\textwidth}
+\noindent{\smaller\smaller This paper describes the capabilities of
+  the Cadabra~II computer algebra system; the software itself, including
+  source code, can be obtained from
+  \url{http://cadabra.phi-sci.com/} where further
+  documentation can also be found.}
+\end{minipage}
+\end{center}
+\eject
+\pagestyle{plain}
+\hrule
+\tableofcontents
+\vspace{4ex}
+\hrule
+\bigskip
 
 
-\section{Looking back}
 
+\section{System structure}
 
-A further change since the first public release is the increasing
-emphasis on web apps. Back in 2007 the idea of writing a user
-interface running in a web browser sounded ridiculous, but
-technologies have changed. 
+- Python module 'cadabra', accessible from normal Python and
+e.g. IPython.
+- Python shell with facility to use cadabra language together with
+python.
+- Server which can execute mixed cadabra/python code blobs and keep
+state.
+- Document library which forms basis of client.
+- GUI layer which displays the document objects.
+
 
 \section{Showcases: what you could not do before}
 
@@ -316,48 +291,16 @@ e.g.~for symmetric or anti-symmetric tensors. This should be improved.
 
 xExtras
 
-\section{IPython considerations}
-
-The notebook paradigm as implemented by IPython has a number of
-problems. First of all, it encourages coding without any structure, in
-the form of a long list of sequential commands and a polluted global
-namespace. Do you remember whether you already used variable
-'myresult' somewhere near the top when you are working 20 pages down
-the notebook? You should not have to, as this should be a local
-variable. The problem is of course that, in order to use results from
-one cell in the next, making everything global is the most trivial way
-to do it. If you want, current notebook interfaces allow you to
-declare local variables, but you have to do something special
-(e.g.~use 'Module' in Mathematica). Local should be the default.
-
-The second problem is that both IPython and Mathematica are very much
-tuned to a single programming and data language. Granted, IPython has
-'cell magic' which allows you to run things in other languages, but a
-mix-and-match using different languages is not well supported. It is
-especially problematic if you want to use the result of one cell as
-input for another cell.
-
-Another problem, which may be relatively easy to fix in ipython, but
-is a problem nevertheless, is the focus on a single view of the
-notebook. There is no way to open multiple views on different sections
-of your notebook. Mathematica has this problem as well.
 
 % http://www.pgbovine.net/ipython-notebook-first-impressions.htm
 
 %-------------------------------------------------------------------
-\section{Support}
-
-Stackoverflow cadabra?
-
-\section{Features that have disappeared}
-
-\begin{enumerate}
-\item Mixing active nodes into the expression tree. This is an ugly
-mix of programming and data language, which I want to avoid. 
-\end{enumerate}
+%\section{Support}
+%
+%Stackoverflow cadabra?
 
 %-------------------------------------------------------------------
-\section{Structure through Python}
+\section{Python interface}
 
 In earlier versions, Cadabra contained its own small (and extremely
 limited) programming language. In the design of version 2, a decision
@@ -373,6 +316,9 @@ it is perfectly fine. And it interfaces with C++ beautifully through
 boost.python. Of course, Python's variable assignment model is
 rubbish,
 \url{http://rg03.wordpress.com/2007/04/21/semantics-of-python-variable-names-from-a-c-perspective/}.
+
+Mixing active nodes into the expression tree has disappeared. This is
+an ugly mix of programming and data language, which I want to avoid.
 
 
 \subsection{Keeping expression input simple}
@@ -423,15 +369,43 @@ from sympy import *
 \end{lstlisting}
 
 
-\section{Migration from version 1 to 2}
+\subsection{IPython considerations}
 
-All version 1 notebooks can be converted easily to version 2 notebooks by 
-keeping the following guidelines in mind.
-\begin{enumerate}
-\item Some algorithms have changed their name to something more descriptive
-and less abbreviated, e.g.~{\tt prodflatten} now reads {\tt flatten\_product}.
-\item 
-\end{enumerate}
+The notebook paradigm as implemented by IPython has a number of
+problems. First of all, it encourages coding without any structure, in
+the form of a long list of sequential commands and a polluted global
+namespace. Do you remember whether you already used variable
+'myresult' somewhere near the top when you are working 20 pages down
+the notebook? You should not have to, as this should be a local
+variable. The problem is of course that, in order to use results from
+one cell in the next, making everything global is the most trivial way
+to do it. If you want, current notebook interfaces allow you to
+declare local variables, but you have to do something special
+(e.g.~use 'Module' in Mathematica). Local should be the default.
+
+The second problem is that both IPython and Mathematica are very much
+tuned to a single programming and data language. Granted, IPython has
+'cell magic' which allows you to run things in other languages, but a
+mix-and-match using different languages is not well supported. It is
+especially problematic if you want to use the result of one cell as
+input for another cell.
+
+Another problem, which may be relatively easy to fix in ipython, but
+is a problem nevertheless, is the focus on a single view of the
+notebook. There is no way to open multiple views on different sections
+of your notebook. Mathematica has this problem as well.
+
+Web interfaces require re-inventing the wheel.
+
+% \section{Migration from version 1 to 2}
+% 
+% All version 1 notebooks can be converted easily to version 2 notebooks by 
+% keeping the following guidelines in mind.
+% \begin{enumerate}
+% \item Some algorithms have changed their name to something more descriptive
+% and less abbreviated, e.g.~{\tt prodflatten} now reads {\tt flatten\_product}.
+% \item 
+% \end{enumerate}
 
 %-------------------------------------------------------------------
 
@@ -507,6 +481,77 @@ src/algorithms
 % 
 % The naive solution produce k[a] -> (p + 3q+42t)[a] that is not equal to 
 % p[a] + 3q[a]+42t[a].
+
+\section{To resolve}
+
+\begin{itemize}
+\item scan through list of properties to see which ones should be
+native.
+
+\item It would make sense to be able to write
+\begin{lstlisting}
+  \conjugate{ \alpha_{n} \alpha_{m} }
+\end{lstlisting}
+and then apply the conjugation algorithm. Yes, this is precisely how
+things should work: the programming language should know about the
+algorithms, the data language should know about the operators. Systems
+like sympy would immediately work this out. The above would be
+declared as
+\begin{lstlisting}
+\dagger{#}::ConjugateTranspose.
+\dagger{#}::DisplayAsSuperscript.
+\end{lstlisting}
+\item We need better logic to handle functional dependence like
+\begin{lstlisting}
+A_\mu(x)  and  A(x)_{\mu} .
+\end{lstlisting}
+Do we want to enforce the order of arguments (e.g. first functional
+'indices', then vector space indices?).  Probably yes.
+
+\item Get rid of different bracket types for grouping; this is rarely used and only
+makes the system more complicated. Brackets should be displayed
+whenever necessary, automatically. 
+
+\item Calling algorithms from within C++. This should look as much as possible
+as the Python version.
+
+\item Making parameterised substitution rules, like 'replace riemann with metric' 
+which is parameterised over the name of the metric.
+\begin{lstlisting}
+riemann_to_metric := R_{m n p q} -> \partial_{m n}{\1_{p q}} + ...
+riemann_to_metric := R_{m n p q} -> \partial_{m n}{\g_{p q}} + ...
+riemann_to_metric := R_{m n p q} -> \partial_{m n}{\{g}_{p q}} + ...
+\end{lstlisting}
+This would then actually just be parameterised expressions, and you could do
+\begin{lstlisting}
+a := \{var}_{m n}
+b := @(a <- g) + @(a <- h)
+b := @(a(g)) + @(a(h))
+\end{lstlisting}
+
+\item Resolve the issue of: we want to assign properties to patterns, but those patterns can 
+depend on properties.
+
+\item For long and recursive operations, it makes sense to be able to specify a simplification
+algorithm to be called on every step, like Redberry does.
+
+%   def simplify(ex):
+%       sort\_product(ex)
+%       collect\_terms(ex)
+%      
+% 
+%   substitute(ex, 'A->B', simplify)
+  
+It would be fast to not make the round-trip through Python, but that
+is probably premature optimisation because many people would want to
+do more complicated things in the simplifier than just applying
+algorithms in turn.
+
+\item Make an inventory of all arguments passed to properties and algorithms.
+
+\item online notebook viewer (for SSI)
+
+\end{itemize}
 
 
 \end{document}
