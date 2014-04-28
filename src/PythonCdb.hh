@@ -47,6 +47,8 @@ class Ex {
 
 		// Pull in any '@(...)' expressions from the Python side.
 		void pull_in();
+		// Set '_' equal to this object.
+		void register_as_last_expression();
 		Ex *fetch_from_python(std::string nm);
 };
 

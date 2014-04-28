@@ -1,7 +1,16 @@
-from pcadabra import *
+# This is a pure-python initialisation script to set the 
+# path to sympy, setup printing of cadabra expressions and
+# attach basic cadabra properties. 
+
 import sys
+sys.path.insert(0,'/home/kasper/git/cadabra2/src/build') 
+from cadabra import *
 sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 from sympy import *
+
+# Do not
+#import signal
+#signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 def _displayhook(arg):
     global remember_display_hook

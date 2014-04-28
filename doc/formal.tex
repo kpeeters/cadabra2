@@ -551,7 +551,32 @@ algorithms in turn.
 
 \item online notebook viewer (for SSI)
 
+\item component stuff is in general just: evaluate an expression
+  making use of object->value substitutions. 
+
+   ss_coords := \mu -> { t, r, \phi, \theta };
+   ss_metric := { g_{t t} -> -f(r), g_{r r} -> 1/f(r), ... };
+   ex := [e.g Riemann]
+   evaluate(ex, values=[ss_coords, ss_metric] );
+
+\item independent components from young symmetry?
+
 \end{itemize}
 
+
+Relation between Young tableaux and highest-weight representations,
+and also a discussion of tracelessness conditions, is in 
+
+@article{Barut:1986dd,
+      author         = "Barut, A.O. and Raczka, R.",
+      title          = "{THEORY OF GROUP REPRESENTATIONS AND APPLICATIONS}",
+      year           = "1986",
+      SLACcitation   = "%%CITATION = INSPIRE-239743;%%",
+}
+
+P_A P_B = 0 but P_B P_A not=0 :
+http://www.nbi.dk/~DasGroup/PUPress/120831Elvang.txt
+
+SEE *** : http://particle.thep.lu.se/pub/Preprints/13/lu_tp_13_26.pdf
 
 \end{document}
