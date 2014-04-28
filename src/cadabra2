@@ -8,7 +8,7 @@ import rlcompleter
 import os
 
 ourpath = os.path.abspath(os.path.dirname(sys.argv[0]))
-sys.path.insert(0, ourpath+'/build')
+#sys.path.insert(0, ourpath+'/build')
 sys.path.insert(0, ourpath+'/sympy')
 
 from cadabra2 import *
@@ -119,5 +119,5 @@ if __name__ == '__main__':
     sh = Shell()
     sys.ps1='> '
     sys.ps2='. '
-    sh.runsource("execfile('../defaults.py')")
+    sh.runsource("execfile('cadabra2_defaults.py')")
     sh.interact(banner='Cadabra 2.0 pre-release\nCopyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>\nInfo at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\nUsing sympy version '+sympy.__version__+"\n")

@@ -100,9 +100,16 @@ set(PUBLIC_HEADER_FILES
 # import site; print site.getsitepackages()[0]
 
 execute_process(COMMAND ${PYTHON} -c "import site; print site.getsitepackages()[0];" 
-  OUTPUT_VARIABLE python_site_path)
+  OUTPUT_VARIABLE python_site_path OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 message("-- Python site path at ${python_site_path}")
+install(FILES
+  "${PROJECT_BINARY_DIR}/cadabra2.so"
+  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${python_site_path}")
+
+#install(FILES
+#  "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION "${python_site_path}")
+
 
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
