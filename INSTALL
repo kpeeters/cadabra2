@@ -1,0 +1,38 @@
+
+Cadabra installation instructions
+---------------------------------
+
+The Cadabra source is distributed among several subdirectories, many of
+which can be built independently:
+
+   - src:     the main cadabra sources plus the logic to make it accessible
+              as a Python module 'cadabra'.
+
+   - server:  
+
+   - gui:
+
+
+A. Linux
+--------
+
+Building from source requires a number of packages. On Debian and
+derivatives they can all be installed with
+
+  sudo apt-get install libjsoncpp-dev
+
+
+
+B. OS X
+--------
+
+When building Cadabra from source on OS X, you need XCode (naturally)
+as well as a number of libraries which are readily available from
+Homebrew, http://brew.sh.  Before attempting to build Cadabra, make
+sure a basic Homebrew installation is present, and then do
+
+  brew install cmake boost pcre gmp json-cpp
+
+In order to run the Cadabra notebook interface succesfully, you also
+need a TeX installation such as MacTeX, http://tug.org/mactex/ .
+

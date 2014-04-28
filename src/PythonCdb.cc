@@ -69,6 +69,7 @@ Ex::Ex(std::string ex_)
 	tree=parser.tree;
 	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
 	pull_in();
+	register_as_last_expression();
 	}
 
 Ex *Ex::fetch_from_python(const std::string nm)
@@ -128,6 +129,11 @@ void Ex::append(std::string v)
 	ex+=v;
 	}
 
+void Ex::register_as_last_expression()
+	{
+	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	locals["_"]=boost::ref(this);
+	}
 
 // Templates to dispatch function calls in Python to algorithms in C++.
 
@@ -267,7 +273,7 @@ Property<Prop>::Property(Ex *ex)
 
 	Kernel *kernel=get_kernel_from_scope(true);
 	Prop *p=new Prop();
-	std::cout << "inserting " << p->name() << std::endl;
+//	std::cout << "inserting " << p->name() << std::endl;
 	kernel->properties.master_insert(exptree(it), p);
 	}
 
@@ -300,6 +306,20 @@ void def_algo_2(const std::string& name)
 
 	def(name.c_str(),  &dispatch_2<F>,                 (arg("ex"),arg("args"),arg("repeat")=true), return_internal_reference<1>() );
 	def(name.c_str(),  &dispatch_2_string<F>,          (arg("ex"),arg("args"),arg("repeat")=true), return_value_policy<manage_new_object>() );
+	}
+
+HERE:
+// Do we want to accept a vector of Ex objects or something less general?
+
+template<class F, class p1>
+void def_algo_new(const std::string& name)
+	{
+	using namespace boost::python;
+
+	def(name.c_str(),  &dispatch_2<F, p1>,        (arg("ex"),arg("args"),arg("repeat")=true), return_internal_reference<1>() );
+//	def(name.c_str(),  &dispatch_2_string<F, p1>, (arg("ex"),arg("args"),arg("repeat")=true), return_value_policy<manage_new_object>() );
+	
+//	boost::python::list& ns
 	}
 
 void callback(Ex *ex, boost::python::object obj) 
@@ -348,7 +368,7 @@ void fun()
 // as the various algorithms that can act on these.
 // http://stackoverflow.com/questions/6050996/boost-python-overloaded-functions-with-default-arguments-problem
 
-BOOST_PYTHON_MODULE(pcadabra)
+BOOST_PYTHON_MODULE(cadabra)
 	{
 	using namespace boost::python;
 
@@ -382,6 +402,7 @@ BOOST_PYTHON_MODULE(pcadabra)
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_2<substitute>("substitute");
+	def_algo_new<keep_terms, boost::python::list>("keep_terms");
 
 	// All properties on the Python side derive from the C++ BaseProperty, which is
 	// called Property on the Python side.

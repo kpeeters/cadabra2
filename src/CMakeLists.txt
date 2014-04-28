@@ -77,10 +77,11 @@ set(LOCAL_SRC_FILES
   modules/xperm_new.cc
   algorithms/collect_terms.cc
   algorithms/distribute.cc
-  algorithms/rename_dummies.cc
   algorithms/flatten_product.cc
+  algorithms/keep_terms.cc
   algorithms/prodcollectnum.cc
   algorithms/reduce_sub.cc
+  algorithms/rename_dummies.cc
   algorithms/sort_product.cc
   algorithms/substitute.cc
 )
@@ -91,14 +92,14 @@ set(PUBLIC_HEADER_FILES
 
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
-add_library(pcadabra SHARED ${LOCAL_SRC_FILES})
-set_target_properties(pcadabra PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
-set_target_properties(pcadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
+add_library(cadabra SHARED ${LOCAL_SRC_FILES})
+set_target_properties(cadabra PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
+set_target_properties(cadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
 if(CMAKE_COMPILER_IS_CLANG)
-  target_link_libraries(pcadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES} python)
+  target_link_libraries(cadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES} python)
 else()
-  target_link_libraries(pcadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
+  target_link_libraries(cadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
 endif()
 
 add_library(example SHARED ptest.cc)

@@ -1,0 +1,53 @@
+Project Title: Cadabra stage 2: symbolic computer algebra for tensor fields
+Name:          Dr. Kasper Peeters
+Department:    Mathematical Sciences
+University:    Durham University
+Email:         kasper.peeters@durham.ac.uk
+
+Potential Co-investigators: University of Southampton
+
+Summary:
+
+Tensor field theory is an area of mathematics required in a wide range
+of theoretical physics problems, from general relativity to high-energy
+particle physics and condensed matter theory. Symbolic computations in
+this field tend to be difficult if not impossible to do with computer
+algebra systems, as the notation and language used are far removed
+from those provided by mainstream tools, and the required algorithms
+are often simply not available.  The Cadabra software is an
+established and unique open source computer algebra system
+specifically written for the solution of tensor field theory
+problems. It enables researchers to manipulate Lagrangians, compute
+equations of motion, analyse symmetries and so on in an interactive
+notebook interface.  Originally written to solve problems in
+high-energy physics, it now has a proven track record (including
+around 100 citations in refereed papers) and a solid user
+base. However, feedback has highlighted concrete ways in which the
+software could be made useful for an even wider audience
+(e.g. researchers working on astrophysics or machine learning). The
+aim of this proposal is to refactor the code so it remains
+maintainable in the foreseeable future, add various new features
+requested by users, design and implement an API and the infrastructure
+to enable others to build extensions, and build a community portal to
+grow the user base.  The partnership with the Software Sustainability
+Institute will leverage their expertise in research software
+development and community building to assist in creating a sustainable
+future for the software.
+
+Objectives:
+
+- Make the existing C++ algorithms usable from Python to enable and 
+  encourage more users to contribute custom packages.
+- Implement several algorithms (some user-requested) related to component
+  computations, Young-tableau canonicalisation, interactive 
+  manipulation and group theory.
+- Build an interface to open source scalar computer algebra systems 
+  such as Maxima and Sympy.
+- Separate the algorithmic parts from the user interface and build 
+  native user interfaces for OS X and Windows.
+- Make the algorithms available through IPython and a custom kernel.
+- Move the source into a community-oriented public open source repository.
+- Build a community site with sample notebooks in order to promote the
+  software to a wider audience in fields such as condensed matter
+  physics and machine learning.
+
