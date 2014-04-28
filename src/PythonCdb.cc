@@ -308,7 +308,7 @@ void def_algo_2(const std::string& name)
 	def(name.c_str(),  &dispatch_2_string<F>,          (arg("ex"),arg("args"),arg("repeat")=true), return_value_policy<manage_new_object>() );
 	}
 
-HERE:
+//HERE:
 // Do we want to accept a vector of Ex objects or something less general?
 
 template<class F, class p1>
@@ -402,7 +402,7 @@ BOOST_PYTHON_MODULE(cadabra)
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_2<substitute>("substitute");
-	def_algo_new<keep_terms, boost::python::list>("keep_terms");
+//	def_algo_new<keep_terms, boost::python::list>("keep_terms");
 
 	// All properties on the Python side derive from the C++ BaseProperty, which is
 	// called Property on the Python side.

@@ -20,6 +20,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.45.0 COMPONENTS python)
+find_program(PYTHON "python" REQUIRED)
 
 # Locate gmpxx
 find_package(GMPXX REQUIRED)
@@ -78,7 +79,7 @@ set(LOCAL_SRC_FILES
   algorithms/collect_terms.cc
   algorithms/distribute.cc
   algorithms/flatten_product.cc
-  algorithms/keep_terms.cc
+#  algorithms/keep_terms.cc
   algorithms/prodcollectnum.cc
   algorithms/reduce_sub.cc
   algorithms/rename_dummies.cc
@@ -90,22 +91,28 @@ set(PUBLIC_HEADER_FILES
   Storage.hh
 )
 
+# Python installation logic.
+#set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
+#set(SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
+#configure_file(${SETUP_PY_IN} ${SETUP_PY})
+#install(CODE "execute_process(COMMAND ${PYTHON} ${SETUP_PY} install)")
+
+# import site; print site.getsitepackages()[0]
+
+execute_process(COMMAND ${PYTHON} -c "import site; print site.getsitepackages()[0];" 
+  OUTPUT_VARIABLE python_site_path)
+
+message("-- Python site path at ${python_site_path}")
+
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
-add_library(cadabra SHARED ${LOCAL_SRC_FILES})
-set_target_properties(cadabra PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
-set_target_properties(cadabra PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
+add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
+set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
+set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
 if(CMAKE_COMPILER_IS_CLANG)
-  target_link_libraries(cadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES} python)
+  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES} python)
 else()
-  target_link_libraries(cadabra ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
+  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
 endif()
 
-add_library(example SHARED ptest.cc)
-set_target_properties(example PROPERTIES PREFIX "" SUFFIX ".so")
-if(CMAKE_COMPILER_IS_CLANG)
-  target_link_libraries(example ${Boost_LIBRARIES} python)
-else()
-  target_link_libraries(example ${Boost_LIBRARIES})
-endif()
