@@ -4,7 +4,7 @@
 
 import sys
 sys.path.insert(0,'/home/kasper/git/cadabra2/src/build') 
-from cadabra import *
+from cadabra2 import *
 sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 from sympy import *
 
