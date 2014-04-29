@@ -49,7 +49,7 @@ bool Indices::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, 
 				position_type=independent;
 			else throw ConsistencyException("Position type should be fixed, free or independent.");
 			}
-		else if(ki->first=="values") {
+		else if(ki->first=="values") { // FIXME: not used?
 			values=*ki->second;
 			if(*values.begin()->name!="\\comma") 
 				throw ConsistencyException("Key 'values' of property 'Indices' needs a list as value.");

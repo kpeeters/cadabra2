@@ -420,9 +420,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 	class_<Property<Indices>,            bases<BaseProperty> >("Indices", init<Ex *>());
 	class_<Property<IndexInherit>,       bases<BaseProperty> >("IndexInherit", init<Ex *>());
 
+	// How can we add parameters to the constructor?
 
-	// How can we give a handle to the tree in python? And how can we give
-	// Python access to properties?
+	// How can we give Python access to properties?
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	}
