@@ -72,6 +72,8 @@ set(LOCAL_SRC_FILES
   properties/SortOrder.cc
   properties/Spinor.cc
   properties/Symbol.cc
+  properties/Symmetric.cc
+  properties/TableauBase.cc
   properties/Traceless.cc
   properties/Weight.cc
   properties/WeightInherit.cc
@@ -107,8 +109,8 @@ install(FILES
   "${PROJECT_BINARY_DIR}/cadabra2.so"
   "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${python_site_path}")
 
-#install(FILES
-#  "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION "${python_site_path}")
+install(PROGRAMS
+  "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
 
 
 # Create Python dynamic library 'cadabra' without lib prefix.
