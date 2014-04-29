@@ -1,3 +1,12 @@
+# Test 4:= dummy index relabelling upon @ substitution:
+#
+{m1,m2,m3,m4,m5}::Indices(vector).
+tmp1:= A_{m1 m2} + B_{m1 m2};
+tmp2:= C_{m3 m4} + D_{m3 m4};
+obj4:= @(tmp1) @(tmp2) g^{m1 m3} g^{m2 m4};
+
+
+
 # 
 # Test 1:= keep_terms
 
