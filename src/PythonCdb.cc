@@ -11,11 +11,13 @@
 #include <sstream>
 
 #include "properties/AntiCommuting.hh"
+#include "properties/AntiSymmetric.hh"
 #include "properties/CommutingAsProduct.hh"
 #include "properties/CommutingAsSum.hh"
 #include "properties/Distributable.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
+
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/reduce_sub.hh"
@@ -411,6 +413,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__repr__", &BaseProperty::repr_);
 	
 	class_<Property<AntiCommuting>,      bases<BaseProperty> >("AntiCommuting", init<Ex *>());
+	class_<Property<AntiSymmetric>,      bases<BaseProperty> >("AntiSymmetric", init<Ex *>());
 	class_<Property<CommutingAsProduct>, bases<BaseProperty> >("CommutingAsProduct", init<Ex *>());
 	class_<Property<CommutingAsSum>,     bases<BaseProperty> >("CommutingAsSum", init<Ex *>());
 	class_<Property<Distributable>,      bases<BaseProperty> >("Distributable", init<Ex *>());

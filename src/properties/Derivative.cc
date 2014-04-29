@@ -66,7 +66,7 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
 	assert(tb);
 	unsigned int othertabs=tb->size(tr, argnode);
 	assert(num<othertabs);
-	TableauBase::tab_t rettab=tb->get_tab(tr, argnode, num);
+	TableauBase::tab_t rettab=tb->get_tab(properties, tr, argnode, num);
 	if(indices_first) { // have to renumber the tableau
 		for(unsigned int rows=0; rows<rettab.number_of_rows(); ++rows)
 			for(unsigned int cols=0; cols<rettab.row_size(rows); ++cols) {

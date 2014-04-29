@@ -6,7 +6,7 @@ import sys
 sys.path.insert(0,'/home/kasper/git/cadabra2/src/build') 
 from cadabra2 import *
 sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
-from sympy import *
+import sympy
 
 # Do not
 #import signal
