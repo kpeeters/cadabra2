@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta name="verify-v1"
+		content="LkU+jobePpu3F8I4GPuTiOjrTukmo1qpWT+dT6SeAfk=" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Cadabra: a field-theory motivated approach to computer algebra</title>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css' />
+<link href="cadabra2.css" rel="stylesheet" type="text/css" />
+<link rel="icon" 
+      type="image/png" 
+      href="cadabra.png" />
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10899116-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+<body>
+<div id="head"><h1 class="shadow">Cadabra</h1>
+               <h1 class="intro">Cadabra</h1>
+               <h2 class="intro">A field-theory motivated approach to computer algebra</h2>
+					<h3 class="intro">Copyright &copy;
+					2001-2012  <a href="http://maths.dur.ac.uk/users/kasper.peeters">Kasper
+					Peeters</a></h3></div>
+
+<div id="navbar" >
+  <ul class="navbar">
+	 <li id="current"><a href="index.html">About</a></li>
+	 <li><a href="news.html">What's new?</a></li>
+	 <li><a href="download.html">Download</a></li>
+	 <li><a href="documentation.html">Documentation</a></li>
+	 <li><a href="papers.html">Papers&nbsp;using&nbsp;Cadabra</a></li>
+	 <li><a href="screenshots.html">Screenshots</a></li>
+	 <li><a href="examples.html">Sample&nbsp;notebooks</a></li>
+	 <li><a href="mlist.html">Mailing list</a></li>
+	 <li><a href="ideas.html">Future plans</a></li>
+	 <li><a href="bugs.html">Bugs</a></li>
+  </ul>
+<div id="footer">
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+sc_project=1732354; 
+sc_invisible=0; 
+sc_partition=16; 
+sc_security="0a9e55b3"; 
+sc_text=2; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter_xhtml.js"></script><noscript><div
+class="statcounter"><a title="website statistics"
+class="statcounter"
+href="http://www.statcounter.com/free_web_stats.html"><img
+class="statcounter"
+src="http://c17.statcounter.com/1732354/0/0a9e55b3/0/"
+alt="website statistics" /></a></div></noscript>&nbsp;visitors so far
+<!-- End of StatCounter Code -->
+<p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-html401"
+        alt="Valid HTML 4.01 Strict" height="31" width="88" /></a>
+  </p>
+</div>
+</div>
+
+<div id="content">
+
+  <h2>Your input needed!</h2>
+  <p>I am planning Cadabra version 2, and need <em>your</em> input!
+	 Please take a minute to fill out
+	 the <a href="https://www.surveymonkey.com/s/K5LTXGC">Cadabra
+	 survey</a>. Thanks!</p>
+
+  <p>For any feedback, please email <a href="mailto:cadabra@phi-sci.com">cadabra@phi-sci.com</a>.</p>
+
+  <h2>What is Cadabra?</h2>
+  <p id="news"><img class="middle" src="images/star.png" alt="*" />
+	 <a href="news.html">what's new?</a> (1.33 in MacPorts, July 16th 2013)</p>
+  
+  <p>Cadabra is a computer algebra system (CAS) designed specifically for
+			 the solution of problems encountered in field theory. It has
+	 extensive functionality for tensor computer algebra, 
+	 tensor polynomial simplification
+	 including multi-term symmetries, fermions and anti-commuting
+	 variables, Clifford algebras and Fierz transformations, implicit
+	 coordinate dependence, multiple index types and many more. The
+	 input format is a subset of TeX. Both a command-line and a
+	 graphical interface are available.</p>
+  
+  <p class="h4">Key features of Cadabra:</p>
+  <ul>
+	 <li>Input and output using TeX notation.</li>
+	 <li>Designed for field-theory problems, with handling of
+		anti-commuting and non-commuting objects without special notations
+		for their products, gamma matrix algebra, Fierz identities, Dirac
+		conjugation, vielbeine, flat and curved, covariant and
+		contravariant indices, implicit dependence of tensors on
+		coordinates, partial and covariant derivatives...</li>
+	 <li>Powerful tensor simplification algorithms, not just for
+		mono-term symmetries but also for multi-terms symmetries like
+		the Bianchi identity, or dimensionally-dependent symmetries like
+		the Schouten identity.</li>
+  </ul>
+  
+  <p class="h4">Technical highlights:</p>
+  <ul>
+	 <li>Internal graph data structure based on <a href="http://tree.phi-sci.com/">tree.hh</a></li>
+	 <li>A multiple-inheritance typing system using properties.</li>
+	 <li>Open source C++ code, with documentation on how to extend the
+		system with new algorithm modules.</li>
+  </ul>
+  
+  <p>All feedback is welcome (bugs reports, criticism, suggestions); please contact 
+	 <tt>kasper.peeters&nbsp;(at)&nbsp;durham.ac.uk</tt> or post to the 
+	 mailing list.</p>
+  
+  <h2>License</h2>
+  <p>If you use Cadabra or even just play with it, I would like
+	 to hear about it. Please send me an email so that I can get an
+	 idea of who is interested in this program. And remember:</p>
+  <p class="quote">
+	 <a href="http://axiom-wiki.newsynthesis.org/AxiomCommunity">The "rule of 3"</a>: It takes 1 unit of work to get something for
+	 yourself. It takes 3x1 units of work to make it so your office
+	 neighbor can use it. It takes 3x3x1 units of work so you can use it
+	 "in the department" and in courses. It takes 3x3x3x1 units of work to
+	 give it to the world for free without support. 
+  </p>
+  <p>So if you use Cadabra in your own work,
+	 please cite the papers "<em>Introducing Cadabra: a symbolic
+		computer algebra system for field-theory problems</em>" and
+    "<em>A field-theory motivated approach to symbolic computer
+		algebra</em>" (see <a
+									 href="documentation.html">documentation</a> for publication details)
+	 to keep the bean counters happy.</p>
+  <p>Cadabra is available under the conditions of the <a
+																			href="http://www.gnu.org/copyleft/gpl.html">GNU General
+		Public License</a> (version 2). </p>
+  
+  <h2>Acknowledgements</h2>
+  <p>Cadabra contains code taken from Jos&eacute;
+ 	 Martin-Garcia's <a
+ 							  href="http://www.xact.es/xPerm/index.html">xPerm</a>
+ 	 in order to canonicalise tensor expressions. Some of
+ 	 the algorithms rely on the <a
+ 											 href="http://young.sp2mi.univ-poitiers.fr/~marc/LiE/">LiE</a>
+ 	 software by Marc van Leeuwen, Arjeh Cohen and Bert Lisser. Thanks
+ 	 to James Allen for various patches to improve functionality.</p>
+  <p>Thanks to Greg Wright for helping to get Cadabra run
+	 on Mac OS X and for making it available through <a href="http://www.macports.org/">MacPorts</a>.</p>
+  <p>Thanks to Kevin Horton, Martin Costabel and Pierre-Henri
+    Lavigne for making Cadabra available for Mac OS X through <a
+																					  href="http://www.finkproject.org/">Fink</a>, and thanks to
+    Mukund Rangamani for testing it.</p>
+  <p>Thanks to Bernard Piette for providing me with access to a 
+    Fedora machine in order to build the RPM packages.</p>
+  <p>Thanks to Jeremy Michelson, Christian Stahn, Pierre
+	 Vanhove, Anders Westerberg, Boris Pioline, Clement Rousset,
+	 Robert McNees, Marcus Berg, Miguel Paulos, Karim Malik, Mike
+	 Mowbray, Leo Brewin and Mathieu Ehrhardt for comments,
+	 suggestions, bug reports and other useful feedback.</p>
+  <p>Finally, thanks go to
+	 the <a href="http://www.aei.mpg.de/">Albert-Einstein-Institute</a>
+	 for the excellent working atmosphere which enabled me to write
+	 Cadabra.</p>
+</div>
+
+
+</body>
+</html>
+

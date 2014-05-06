@@ -1,0 +1,366 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Cadabra: what's new?</title>
+<link href="cadabra2.css" rel="stylesheet" type="text/css" />
+<link rel="icon" 
+      type="image/png" 
+      href="cadabra.png" />
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10899116-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+<body>
+<div id="head"><h1 class="shadow">Cadabra</h1>
+               <h1 class="intro">Cadabra</h1>
+               <h2 class="intro">A field-theory motivated approach to computer algebra</h2>
+					<h3 class="intro">Copyright &copy;
+					2001-2012  <a href="http://maths.dur.ac.uk/users/kasper.peeters">Kasper
+					Peeters</a></h3></div>
+
+<div id="navbar">
+  <ul class="navbar">
+	 <li><a href="index.html">About</a></li>
+	 <li id="current"><a href="news.html">What's new?</a></li>
+	 <li><a href="download.html">Download</a></li>
+	 <li><a href="documentation.html">Documentation</a></li>
+	 <li><a href="papers.html">Papers&nbsp;using&nbsp;Cadabra</a></li>
+	 <li><a href="screenshots.html">Screenshots</a></li>
+	 <li><a href="examples.html">Sample&nbsp;notebooks</a></li>
+	 <li><a href="mlist.html">Mailing list</a></li>
+	 <li><a href="ideas.html">Future plans</a></li>
+	 <li><a href="bugs.html">Bugs</a></li>
+  </ul>
+<div id="footer">
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+sc_project=1732354; 
+sc_invisible=0; 
+sc_partition=16; 
+sc_security="0a9e55b3"; 
+sc_text=2; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter_xhtml.js"></script><noscript><div
+class="statcounter"><a title="website statistics"
+class="statcounter"
+href="http://www.statcounter.com/free_web_stats.html"><img
+class="statcounter"
+src="http://c17.statcounter.com/1732354/0/0a9e55b3/0/"
+alt="website statistics" /></a></div></noscript>&nbsp;visitors so far
+<!-- End of StatCounter Code -->
+<p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-html401"
+        alt="Valid HTML 4.01 Strict" height="31" width="88" /></a>
+  </p>
+</div>
+</div>
+
+<div id="content">
+
+   <h2>What's new?</h2>
+
+	<h3>Version 1.33 (July 16th 2013)</h3>
+	<p>Several things have been changed to make Cadabra work on OS X
+	  again. These changes have now propagated to MacPorts, please try
+	  a re-install from there if you had problems earlier.</p>
+
+	<h3>Version 1.27, 1.28, 1.29 (June 1st 2011)</h3>
+	<p>Various bug fixes, addition of 'self' attribute on
+	WeightInherit property to allow for easier dimension counting of
+	expressions containing derivatives.</p>
+
+	<h3>Version 1.26 (16 January 2011)</h3>
+	<p>Large number of bug fixes and a few new features:</p>
+	<ul>
+	  <li>Fixes to @factor_out supplied by James Allen (thanks!). Now
+	  correctly handles anti- and non-commuting factors and no longer
+	  messes up tensorial factors.</li>
+	  <li>Made @vary work on powers.</li>
+	  <li>Several bugs in the pattern matcher fixed, among which those
+	  which are relevant for substitution rules in which the right-hand
+	  side contains an object both as index and as normal object
+	  (relevant e.g. for computations with Lie algebras).</li>
+	  <li>Many many other minor bug fixes.</li>
+	</ul>
+
+	<h3>Version 1.25 (27 April 2010)</h3>
+	<p>More bug fixes.</p>
+
+	<h3>Version 1.23 (4 April 2010)</h3>
+	<p>Many bugfixes and some minor GUI enhancements.</p>
+
+	<h3>Version 1.21 (21 Mar 2010)</h3>
+	<p>Many bugfixes, in particular related to automatic index raising
+	and lowering.</p>
+
+	<h3>Version 1.16 (23 Aug 2009)</h3>
+	<p>Mainly a bugfix release for various small bugs. Version to be
+	included in upcoming Ubuntu release.</p>
+
+	<h3>Version 1.15 (18 Aug 2009)</h3>
+	<p>Mainly a bugfix release for various small bugs.</p>
+
+	<h3>Version 1.14 (18 Jul 2009)</h3>
+	<p>This version has much faster typesetting, which greatly improves
+   notebook loading speed, and also allows you to resize the notebook
+   window. Display of property assignments now looks much nicer, too.</p>
+
+   <p>In addition, a serious bug was fixed which
+   would mangle long input cells.</p>
+
+   <h3>Version 1.11 (31 May 2009)</h3>
+
+   <p>Various new features,</p>
+	<ul>
+	  <li>Handling of Grassmann derivatives and related topics.</li>
+	  <li>Experimental maxima and maple interfaces (use @maxima or
+	  @maple to feed output through these two external systems).</li>
+	  <li>Cell boundary markers in GUI</li>
+	  <li>LaTeX errors show up in scrollable window.</li>
+	</ul>
+	<p>plus many bug fixes (see Changelog)</p>
+
+
+   <h3>Version 1.08 (10 March 2009)</h3>
+
+   <p>This is mainly a bugfix release.</p>
+	<ul>
+   <li>Fixed bug in @unwrap and @pintegrate related to nested partial
+   derivatives.</li>
+   <li>Added '%' as a comment character.</li>
+   <li>Made @canonicalorder and @acanonicalorder act on single-factor
+        terms.</li>
+   <li>Fixed handling of (a+b)+(c+d) type expressions in
+        @drop/@keep_weight in which c &amp; d have different weight
+        (leading
+        to an undetermined weight for 'c+d').</li>
+	</ul>
+
+   <h3>Version 1.06 (23 January 2009)</h3>
+
+   <p>This is mainly a bugfix release.</p>
+
+   <h3>Version 1.0 (27 November 2008)</h3>
+
+   <p>It is time for some sane version numbers. So here it is,
+   finally, version 1.0.  New features and bug fixes will of course
+   continue to appear on a regular basis, and there are some major
+   changes planned, like an overhaul of the parser and more
+   programming features, component computations as well as an
+   interface to scalar computer algebra systems.</p>
+	<p>Changes in this release:</p>
+	<ul>
+	<li>Better handling of nested partial derivatives.</li>
+	<li>Various pattern matching bug fixes.</li>
+	<li>Added window icons.</li>
+	</ul>
+
+   <h3>Version 0.147 (22 September 2008)</h3>
+	<ul>
+	<li>Various pattern matching improvements and bug fixes.</li>
+	<li>Unlimited undo/redo in the GUI.</li>
+	</ul>
+
+   <h3>Version 0.141 (22 August 2008)</h3>
+   <p>
+   Apart from fixing a variety of bugs, this release has the first
+   version of a @factor_out command, requested by many.
+	</p>
+	<p>
+	New features in this release:
+	</p>
+	<ul>
+	  <li>@factor_out command implemented (still not quite fully
+	  functional for tensorial expressions).</li>
+     <li>Documentation for reserved node names.</li>
+     <li>Functionality for handling of commutators improved.</li>
+     <li>Source now visible through a <a href="http://repo.or.cz/w/cadabra.git">public GIT repository</a>.</li>
+	</ul>
+	<p>
+	Bug fixes:
+	</p>
+	<ul>
+	  <li>Several scrolling and key-handling bugs in the GUI
+	  fixed.</li>
+     <li>Bugs related to canonicalisation of expressions with pattern
+     indices fixed.</li>
+     <li>Various bugs related to handling of default rules fixed
+     (which would leave invalid expressions in the tree or simply make
+     them not work altogether).</li>
+     <li>And several others (see the ChangeLog for details).</li>
+	</ul>
+	<p>This version has also been submitted to Ubuntu, hopefully to appear
+	by default in the repositories soon.</p>
+
+   <h3>Version 0.136 (22 June 2008)</h3>
+   <p>
+     New features:</p>
+	  <ul>
+		 <li>New functionality for compact dot-product notation.</li>
+		 <li>The GUI now has auto-completion (with TAB) for properties,
+		 algorithms and greek characters.</li>
+		 <li>Input redirection now works in the GUI.</li>
+		 <li>Redeclaring list properties now works.</li>
+       <li>Substitution patterns <tt>A?^{\mu} -> A?</tt> were added
+       (allowing for removal of indices from objects).</li>
+	  </ul>
+     <p>Bug fixes:</p>
+     <ul>
+        <li>Cut-n-paste in the GUI now pastes at the correct location.</li>
+        <li>More robust kernel restarting.</li>
+        <li>Running a notebook now halts when a LaTeX error is encountered.</li>
+     </ul>
+
+   <h3>Version 0.132 (7 May 2008)</h3>
+   <p>
+     New features:</p>
+	  <ul>
+		 <li>Now compiles cleanly with gcc 4.3.x.</li>
+		 <li>Now compiles on Solaris 10.</li>
+		 <li>Ctrl-L in the notebook interface now centers the display.</li>
+	  </ul>
+     <p>Bug fixes:</p>
+     <ul>
+        <li>Various problems related to handling of numerical,
+            Coordinate and Symbol indices fixed.</li>
+        <li>A bug in the notebook interface which would corrupt the
+            notebook upon deleting cells is now fixed.</li>
+        <li>Problems with elimination of vielbeine fixed.</li>
+        <li>Problems with handling of "unit powers" and "one to arbitrary
+            powers" fixed.</li>
+     </ul>
+
+   <h3>Version 0.130 (21 Feb 2008)</h3>
+	  <ul>
+		 <li>Many bug fixes (see ChangeLog for details).</li>
+		 <li>Many updates to the documentation (now practically
+		 complete) plus improvements to the help system.</li>
+	  </ul>
+
+   <h3>Version 0.128 (28 Nov 2007)</h3>
+	<ul>
+	<li>Problems with compilation on OS X Leopard fixed.</li>
+	<li>Several memory leaks/errors fixed.</li>
+	<li>New "NumericalFlat" property introduced.</li>
+	<li>Various bug fixes (parser, pattern matching, @unwrap).</li>
+	</ul>
+
+   <h3>Version 0.123 (12 Oct 2007)</h3>
+	<ul>
+	<li>Context-sensitive help (in progress).</li>
+	<li>Better handling of LaTeX errors.</li>
+	<li>LaTeXForm property added, for custom typesetting of
+	symbols.</li>
+	<li>Font preferences are now saved.</li>
+	<li>Several bugs fixed (see the <a href="ChangeLog">ChangeLog</a>
+	file for details).</li>
+	</ul>
+
+   <h3>Version 0.119 for Mac OS X (28 Jun 2007)</h3>
+	<ul>
+	<li>Version 0.119 for OS X 10.4 now available through Fink.</li>
+	</ul>
+
+   <h3>Version 0.119 (20 Jun 2007)</h3>
+	<ul>
+   <li>Changed temporary file handing so that these now all go to /tmp.</li>
+	<li>Fixed the annoying "whitespace inside curly brackets
+	does not turn into a product" bug.</li>
+	<li>Switched @decompose to use @young_project_product.</li>
+	<li>Fixed a bug with "remove cell" in the GUI.</li>
+	</ul>
+
+   <h3>Version 0.118 (14 Jun 2007)</h3>
+	<ul>
+	<li>Replaced the hep-th paper with an updated version.</li>
+   <li>Fixed a bug in @decompose and a bug in @collect_factors.</li>
+   <li>Added several keyboard shortcuts to the GUI.</li>
+   <li>Fixed a bug in the printing routine of derivative operators
+   without indices.</li>
+   <li>Added a "!!" form of all commands, which runs until the result
+   no longer changes.</li>
+	<li>Fixed several bugs related to handling of derivative operators
+	without indices.</li>
+	<li>Added a @young_project_product algorithm,  which projects all
+	tensors in a product in turn, canonicalising at each step, so as
+	to save memory and time.</li>
+   <li>Made the Young tableau routines, in particular the
+   Littlewood-Richardson algorithm, available directly. New style
+   file tableaux.sty added to typeset tableaux. See the example in the
+   hep-th paper.</li>
+   </ul>
+
+   <h3>Version 0.115 (15 May 2007)</h3>
+	<ul>
+   <li>Various improvements to the GUI, including new cut-n-paste code
+	to allow for pasting of selected output.</li>
+	<li>Bug fixed in handling of NonCommuting property.</li>
+	</ul>
+
+   <h3>Version 0.113 (30 Apr 2007)</h3>
+	<ul>
+   <li>Added @sumsort.</li>
+	</ul>
+
+   <h3>Version 0.112 (27 Apr 2007)</h3>
+	<ul>
+   <li>Bugs fixed in @expand_power, @join, @sym/@asym, @proplist.</li>
+   <li>Font size of the GUI can now be changed.</li>
+   <li>Progress bars fixed.</li>
+   <li>Some more information dialogs added.</li>
+	<li>Many bugs fixed and several internal cleanups.</li>
+	</ul>
+
+   <h3>Version 0.107 (5 Apr 2007)</h3>
+	<ul>
+	<li>Many bugs fixed and several internal cleanups.</li>
+	</ul>
+
+   <h3>Version 0.104 (22 Mar 2007)</h3>
+	<ul>
+	<li>Added handling of selfdual/anti-selfdual tensors.</li>
+   <li>Extended algorithms dealing with epsilon tensors.</li>
+   <li>Bug fixed in scanning for properties with wildcards.</li>
+   <li>Fixed various compilation problems.</li>
+	</ul>
+
+   <h3>Version 0.100</h3>
+	<ul>
+	<li>Bug fixes related to PartialDerivative with numerical or
+	coordinate indices.</li>
+	<li>Parser errors now show up correctly in the GUI.</li>
+	<li>Fixed problem with --input in combination with the -F flag.</li>
+	</ul>
+
+   <h3>Version 0.99</h3>
+   <ul>
+   <li>The dependence on libexpect has been removed, so that it
+	compiles more easily on older Linux machines and OS X
+	machines.</li>
+   <li>Cadabra now compiles and runs on 64-bit systems.</li>
+	<li>Rudimentary cut-'n-paste of output expressions added to the GUI.</li>
+   </ul>
+
+   <h3>Version 0.98</h3>
+   <ul>
+   <li>The graphical user interface no longer spits out endless
+   debugging information.</li>
+   </ul>
+
+</div>
+
+
+</body>
+</html>
