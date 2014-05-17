@@ -377,8 +377,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	class_<ParseException> pyParseException("ParseException", init<std::string>());
 	ParseExceptionType=pyParseException.ptr();
 
-	class_<Kernel> pyPr("Kernel", init<>());
+	// Declare the Kernel object for Python so we can store it in the local Python context.
+	class_<Kernel> pyKernel("Kernel", init<>());
 
+	// Declare the Ex object to store expressions and manipulate on the Python side.
 	class_<Ex> pyEx("Ex", init<std::string>());
 	pyEx.def("get",     &Ex::get)
 		.def("append",   &Ex::append)
@@ -412,12 +414,23 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyBaseProperty.def("__str__", &BaseProperty::str_)
 		.def("__repr__", &BaseProperty::repr_);
 	
+	// Perhaps it is better and more logical to make property declarations through a function,
+	// so that we have Indices(ex=Ex('{a,b,c,}'), name='vector') being a function that takes
+   // one expression and a number of arguments. From the Python point of view this would be
+   // added to a map in the cadabra2.Kernel object.
+
 	class_<Property<AntiCommuting>,      bases<BaseProperty> >("AntiCommuting", init<Ex *>());
 	class_<Property<AntiSymmetric>,      bases<BaseProperty> >("AntiSymmetric", init<Ex *>());
 	class_<Property<CommutingAsProduct>, bases<BaseProperty> >("CommutingAsProduct", init<Ex *>());
 	class_<Property<CommutingAsSum>,     bases<BaseProperty> >("CommutingAsSum", init<Ex *>());
 	class_<Property<Distributable>,      bases<BaseProperty> >("Distributable", init<Ex *>());
-	class_<Property<Indices>,            bases<BaseProperty> >("Indices", init<Ex *>());
+//	class_<Property<Indices>,            bases<BaseProperty> >("Indices", init<Ex *>());
+
+	// http://stackoverflow.com/questions/18793952/boost-python-how-do-i-provide-a-custom-constructor-wrapper-function
+
+	class_<Property<Indices>, bases<BaseProperty> >("Indices", no_init)
+		.def("__init__", boost::python::make_constructor(&init_property<Indices>));
+
 	class_<Property<IndexInherit>,       bases<BaseProperty> >("IndexInherit", init<Ex *>());
 
 	// How can we add parameters to the constructor?
@@ -426,3 +439,5 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	}
+
+// {a,b,c,d}::Indices(name='vector').
