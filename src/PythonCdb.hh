@@ -70,3 +70,25 @@ class Property : public BaseProperty {
 		Property(Ex *);
 };
 
+template<class T>
+boost::shared_ptr<Property<T> > init_property(boost::python::object obj)
+	{
+//	Property<T>& self = boost::python::extract<Property<T>&>(obj);
+//	Ex *ex = boost::python::extract<Ex *>(args[0]);
+//
+//	boost::python::list keys = kwargs.keys();
+//	
+//	for(int i = 0; i < len(keys); ++i) {
+////		object curArg = kwargs[keys[i]];
+////		if(curArg) {
+////			outMap[extract<std::string>(keys[i])] = extract<double>(kwargs[keys[i]]);
+////			}               
+//		}
+////	self.SetParameters(outMap);
+//	
+	Ex *ex=0; // extract from t?
+	std::cout << "init prop" << std::endl;
+
+	return boost::shared_ptr<Property<T> >(new Property<T>(ex));
+	}
+

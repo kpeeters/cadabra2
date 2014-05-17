@@ -5,7 +5,7 @@
 
 class Indices : public list_property {
 	public:
-		Indices(const std::string& parent="");
+		Indices();
 		virtual bool parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
 		virtual std::string name() const;
 		virtual std::string unnamed_argument() const { return "name"; };
