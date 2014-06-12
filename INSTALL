@@ -19,7 +19,11 @@ A. Linux
 Building from source requires a number of packages. On Debian and
 derivatives they can all be installed with
 
-  sudo apt-get install libjsoncpp-dev
+  sudo apt-get install g++ libjsoncpp-dev 
+
+In addition one needs websocket++ from
+
+  http://www.zaphoyd.com/websocketpp
 
 
 
