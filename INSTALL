@@ -1,6 +1,6 @@
 
-Cadabra installation instructions
----------------------------------
+Cadabra building and installation instructions
+----------------------------------------------
 
 The Cadabra source is distributed among several subdirectories, many of
 which can be built independently:
@@ -19,9 +19,10 @@ A. Linux
 Building from source requires a number of packages. On Debian and
 derivatives they can all be installed with
 
-  sudo apt-get install g++ libjsoncpp-dev 
+  sudo apt-get install g++ libjsoncpp-dev libboost-all-dev libgmp-dev
 
-In addition one needs websocket++ from
+(you can get away with fewer parts of boost). In addition one needs
+websocket++ from
 
   http://www.zaphoyd.com/websocketpp
 

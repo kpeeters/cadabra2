@@ -282,6 +282,21 @@ On the other hand, it has often been annoying having to specify
 properties for objects both with their upper and lower indices,
 e.g.~for symmetric or anti-symmetric tensors. This should be improved.
 
+\subsection{Make the take/replace match logic more central}
+
+In v1 there are many commands which are like substitutions, and which
+would make sense in take/replace match, e.g. keep\_weight. 
+
+\subsection{Infer rules for tensors with different index positions}
+
+E.g. make \verb|g^{a b}::Depends(\partial).| when it has already been
+declared to depend on the derivative when it is written with lower
+indices. Ditto for symmetries. xAct has SeparateMetric which I think
+moves indices down in exchange for explicit inverse metrics? Their
+MakeRule makes rules for all possible index positions, no? See the
+samples in the xAct:1429 thread.
+
+
 
 \subsection{Aim for backward compatibility}
 
@@ -406,6 +421,19 @@ Web interfaces require re-inventing the wheel.
 % and less abbreviated, e.g.~{\tt prodflatten} now reads {\tt flatten\_product}.
 % \item 
 % \end{enumerate}
+
+\section{Symbolic expression library}
+
+
+\section{Physics changes}
+\subsection{Fourier transforms and integration by parts}
+
+Require integral, allow for easy conversion of derivatives.
+
+\subsection{Canonicalisation}
+
+Also think about integration by parts, decompose on basis logic.
+
 
 %-------------------------------------------------------------------
 
