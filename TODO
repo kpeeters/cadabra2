@@ -3,3 +3,10 @@
 
 - split Client into Document and Client; the latter should then be solely
   responsible for talking over the net.
+
+- Work out examples of tensor product decomposition with numerical index values to
+  see how it works. We do not seem to have a complete implementation yet, as the
+  VEST identities should be derivable, but they do not work yet (the free index 
+  stays free).
+
+  It is of course in the end all a generalisation of symm + antisymm.
