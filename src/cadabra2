@@ -88,7 +88,7 @@ class Shell(InteractiveConsole):
                 match = re.search('([a-zA-Z]*)(.*)', line_stripped[found+2:])
                 if match:
                     if len(match.group(2))>0: # declaration with arguments
-                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), "+match.group(2)[1:-1]+")"
+                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), {"+match.group(2)[1:-1]+"})"
                     else:
                         rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex('"+line_stripped[:found]+"'))"
                     objname="__cdbtmp__"
@@ -98,7 +98,7 @@ class Shell(InteractiveConsole):
                     line=rewrite
                 else:
                     print "inconsistent" # property names can only contain letters
-#        print line
+        print line
         # Now feed the pre-parsed input to Python.
 
         self.get_output()
