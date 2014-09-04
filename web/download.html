@@ -1,0 +1,470 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Cadabra: downloads</title>
+<link href="cadabra2.css" rel="stylesheet" type="text/css" />
+<link rel="icon" 
+      type="image/png" 
+      href="cadabra.png" />
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-10899116-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+<body>
+<div id="head"><h1 class="shadow">Cadabra</h1>
+               <h1 class="intro">Cadabra</h1>
+               <h2 class="intro">A field-theory motivated approach to computer algebra</h2>
+					<h3 class="intro">Copyright &copy;
+					2001-2012  <a href="http://maths.dur.ac.uk/users/kasper.peeters">Kasper
+					Peeters</a></h3></div>
+
+<div id="navbar" >
+  <ul class="navbar">
+	 <li><a href="index.html">About</a></li>
+	 <li><a href="news.html">What's new?</a></li>
+	 <li id="current"><a href="download.html">Download</a></li>
+	 <li><a href="documentation.html">Documentation</a></li>
+	 <li><a href="papers.html">Papers&nbsp;using&nbsp;Cadabra</a></li>
+	 <li><a href="screenshots.html">Screenshots</a></li>
+	 <li><a href="examples.html">Sample&nbsp;notebooks</a></li>
+	 <li><a href="mlist.html">Mailing list</a></li>
+	 <li><a href="ideas.html">Future plans</a></li>
+	 <li><a href="bugs.html">Bugs</a></li>
+  </ul>
+<div id="footer">
+<!-- Start of StatCounter Code -->
+<script type="text/javascript">
+sc_project=1732354; 
+sc_invisible=0; 
+sc_partition=16; 
+sc_security="0a9e55b3"; 
+sc_text=2; 
+</script>
+<script type="text/javascript"
+src="http://www.statcounter.com/counter/counter_xhtml.js"></script><noscript><div
+class="statcounter"><a title="website statistics"
+class="statcounter"
+href="http://www.statcounter.com/free_web_stats.html"><img
+class="statcounter"
+src="http://c17.statcounter.com/1732354/0/0a9e55b3/0/"
+alt="website statistics" /></a></div></noscript>&nbsp;visitors so far
+<!-- End of StatCounter Code -->
+<p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-html401"
+        alt="Valid HTML 4.01 Strict" height="31" width="88" /></a>
+  </p>
+</div>
+</div>
+
+<div id="content">
+
+ <h2>Download</h2>
+    <p>Binary packages
+ for <a href="#linux">Linux</a>, <a href="#osx">Mac OS X</a>
+ (and no longer for <a href="#windows">Windows</a>) can be found on these pages.  The
+ source code, available below, should compile on most Linux and Mac
+ systems. However, I only have limited
+ access to various distributions and versions of these operating
+ systems. If you try to compile it yourself and encounter problems,
+ please let me know.</p>
+ 
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end; on some systems there will also be an
+    entry for Cadabra in your Applications or Start menu.</p>
+
+   <a name="linux"></a>
+ <h2>Linux</h2>
+ <h3><a href="http://www.ubuntu.com"><img src="images/ubuntulogo.png" alt="Ubuntu"/></a></h3>
+    <p>Ubuntu distributions have Cadabra packages in the standard
+    repositories. Just install with</p>
+    <p class="literal">sudo apt-get install cadabra</p>
+	 <p>or use e.g.&nbsp;synaptic. If you want the latest version,
+	 add my PPA to your system, using</p>
+	 <p class="literal">sudo add-apt-repository ppa:kasper-peeters/ppa<br/>
+		sudo apt-get update</p>
+	 <p>Optionally, install
+	 the <a href="http://mirrors.ctan.org/fonts/cm/ps-type1/bakoma/ttf/cmtt12.ttf">cmtt12.ttf</a>
+	 font into your <tt>~/.fonts</tt> directory to improve the GUI
+	 display.</p>
+
+	 <p>If you encounter a LaTeX error related to breqn.sty, please do</p>
+	 <p class="literal">sudo apt-get install texlive-latex3</p> 
+	 <p>This is a broken dependency issue in the official repositories
+	 (which is fixed in the PPA version).</p>
+
+    <p>If you want to install the packages by hand (using e.g.&nbsp;gdebi
+    or dpkg), use
+    the <a href="http://ppa.launchpad.net/kasper-peeters/ubuntu/pool/main/m/modglue/">direct
+    link to the modglue packages</a> and the <a href="http://ppa.launchpad.net/kasper-peeters/ubuntu/pool/main/c/cadabra/">direct
+    link to the cadabra packages</a>. If you need Cadabra for an
+    older Ubuntu version, send me an email.</p>
+
+<!--    <p>Download and install the following <tt>.deb</tt> packages in
+    turn. If you need packages for a different version of Ubuntu, please drop
+    me an email.
+	 <table class="downloads">
+	 <tr><th>package</th><th>Hardy 8.04 or Intrepid 8.10 (32 bit)</th></tr>
+	 <tr><td>libmodglue</td>
+        <td><a
+    href="linux/hardy/modglue_1.13-1_i386.deb">modglue_1.13-1_i386.deb</a></td>
+        </tr> 
+	 <tr><td>Cadabra</td>
+        <td><a
+    href="linux/hardy/cadabra_1.0-0ubuntu1_i386.deb">cadabra_1.0-0ubuntu1_i386.deb</a></td></tr>
+<tr><td>extra font (optional)</td><td><a
+    href="http://www.ctan.org/get/fonts/cm/ps-type1/bakoma/ttf/cmtt12.ttf">cmtt12.ttf</a>
+    (from the Bakoma collection)</td></tr>
+	 </table>
+    <p>Store the font in the <tt>.fonts</tt> directory in your home
+    directory; this will improve the GUI display.</p>
+
+-->
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end (or choose <tt>cadabra</tt> from the
+    <tt>Applications/Education</tt> menu).</p>
+	 
+<!--    <div class="hackers">
+    <p>In case you want to compile this from the source package
+    (e.g.&nbsp;if you want a native 64 bit version), here are the
+    required files:</p>
+    <table class="downloads">
+    <tr><td><a href="linux/hardy/cadabra_1.0-0ubuntu1.dsc">cadabra_1.0-0ubuntu1.dsc</a></td></tr>
+    <tr><td><a href="linux/hardy/cadabra_1.0-0ubuntu1.diff.gz">cadabra_1.0-0ubuntu1.diff.gz</a></td></tr>
+    <tr><td><a
+    href="linux/hardy/cadabra_1.0-0ubuntu1_source.changes">cadabra_1.0-0ubuntu1_source.changes</a></td></tr>
+    <tr><td><a
+    href="linux/hardy/cadabra_1.0.orig.tar.gz">cadabra_1.0.orig.tar.gz</a></td></tr>
+    </table> 
+
+	 <p>If you want to just install modglue but compile cadabra
+        yourself from sources, you also need to install the headers
+        for modglue, available in (Hardy only)
+     <a
+        href="linux/hardy/modglue-dev_1.13-1_i386.deb">modglue-dev_1.13-1_i386.deb</a>.</p>
+    </div> -->
+
+ <h3><a href="http://www.debian.org"><img src="images/debian-logo.jpg"
+ alt="Debian"/></a></h3>
+    <p>Cadabra is now also part of Debian, and is <a href="http://packages.debian.org/source/unstable/cadabra">available in the
+    'sid (unstable)' branch</a>. 
+    Thanks to G&uuml;rkan Seng&uuml;n for making this
+    happen.</p>
+
+    <p>Packes for older Debian systems (Etch and Lenny) are available
+    thanks to the work of Burkhard Bunk. Please consult the
+    <a href="http://debian.physik.hu-berlin.de">Debian packages</a>
+    page at the physics department of Humboldt University
+    Berlin for instructions on how to install these. Note that their
+    repository does not have the latest Cadabra version.</p>
+
+ <h3><a href="http://www.fedoraproject.org"><img src="images/fedora-logo.png" alt="Fedora"/></a></h3>
+    <p>I have built packages for Fedora 16 and 17 using the OpenSUSE
+    build server. </p>
+	 <table class="downloads">
+		<tr><td><a href="http://download.opensuse.org/repositories/home:/kpghost/Fedora_16/i686/">Fedora 16 / 32 bits</a></td></tr>
+		<tr><td><a href="http://download.opensuse.org/repositories/home:/kpghost/Fedora_16/x86_64/">Fedora 16 / 64 bits</a></td></tr>
+	 </table>
+	 <p>You need to install all four packages (lie, breqn, modglue and
+	 cadabra, in this order) in order to get a working Cadabra
+	 installation.</p>
+
+	 <p>You may also want to install one extra font (optional), <a
+    href="http://mirrors.ctan.org/fonts/cm/ps-type1/bakoma/ttf/cmtt12.ttf">cmtt12.ttf</a>. Simply
+    place this in the <tt>~/.fonts</tt> directory in your home
+    directory; this will improve the GUI display.</p>
+
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end (or choose <tt>cadabra</tt> from the
+    <tt>Applications/Education</tt> menu).</p>
+
+ <h3><a href="http://www.scientificlinux.org"><img width="180px"
+ src="images/scientific_linux_logo.jpg" alt="Scientific Linux"/></a></h3>
+    <p>The packages below were created and tested on Scientific Linux 5.3, but
+	 work on more recent versions as well. These packages are
+	 relocatable. If you need packages for an older version of
+	 Scientific Linux, please drop me an email.</p>
+	 <table class="downloads">
+	 <tr><th>package</th><th>SL-5.3 RPM</th><th>SL-5.3 SRPM</th></tr>
+	 <tr><td>breqn</td>
+        <td><a
+	 href="linux/RPMS/i386/breqn-0.94-1.i386.rpm">breqn-0.94-1.i386.rpm</a></td><td><a
+	 href="linux/SRPMS/breqn-0.94-1.src.rpm">breqn-0.94-1.src.rpm</a></td></tr>
+    <tr><td>LiE</td>
+        <td><a href="linux/SL-5.3/RPMS/i386/lie-2.2.2-1.i386.rpm">lie-2.2.2-1.i386.rpm</a></td><td><a href="linux/SL-5.3/SRPMS/lie-2.2.2-1.src.rpm">lie-2.2.2-1.src.rpm</a></td></tr>
+	 <tr><td>libmodglue</td>
+        <td><a href="linux/SL-5.3/RPMS/i386/modglue-1.15-1.i386.rpm">modglue-1.15-1.i386.rpm</a></td><td><a href="linux/SL-5.3/SRPMS/modglue-1.15-1.src.rpm">modglue-1.15-1.src.rpm</a></td></tr>
+	 <tr><td>Cadabra</td>
+        <td><a href="linux/SL-5.3/RPMS/i386/cadabra-1.23-1.i386.rpm">cadabra-1.23-1.i386.rpm</a></td><td><a href="linux/SL-5.3/SRPMS/cadabra-1.23-1.src.rpm">cadabra-1.23-1.src.rpm</a></td></tr>
+<tr><td>extra font (optional)</td><td><a
+    href="http://mirrors.ctan.org/fonts/cm/ps-type1/bakoma/ttf/cmtt12.ttf">cmtt12.ttf</a></td></tr>
+	 </table>
+    <p>Store the font in the <tt>~/.fonts</tt> directory in your home
+    directory; this will improve the GUI display.</p>
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end (or choose <tt>cadabra</tt> from the
+    <tt>Applications/Edutainment</tt> menu).</p>
+
+ <h3><a href="http://www.opensuse.org"><img width="100px"
+ src="images/opensuse_logo.png" alt="openSUSE"/></a></h3>
+    <p>The packages below were created and tested on openSUSE 11.2, but
+	 hopefully work on more recent versions as well. These packages are
+	 relocatable. If you need packages for an older version of
+	 openSUSE, please drop me an email.</p>
+	 <table class="downloads">
+	 <tr><th>package</th><th>openSUSE 11.2 RPM</th><th>openSUSE 11.2 SRPM</th></tr>
+    <tr><td>LiE</td>
+        <td><a href="linux/SL-5.3/RPMS/i386/lie-2.2.2-1.i386.rpm">lie-2.2.2-1.i386.rpm</a></td><td><a href="linux/SL-5.3/SRPMS/lie-2.2.2-1.src.rpm">lie-2.2.2-1.src.rpm</a></td></tr>
+	 <tr><td>libmodglue</td>
+        <td><a href="linux/openSUSE/RPMS/i386/modglue-1.16-1.i386.rpm">modglue-1.16-1.i386.rpm</a></td><td><a href="linux/openSUSE/SRPMS/modglue-1.16-1.src.rpm">modglue-1.16-1.src.rpm</a></td></tr>
+	 <tr><td>Cadabra</td>
+        <td><a href="linux/openSUSE/RPMS/i386/cadabra-1.23-1.i386.rpm">cadabra-1.23-1.i386.rpm</a></td><td><a href="linux/openSUSE/SRPMS/cadabra-1.23-1.src.rpm">cadabra-1.23-1.src.rpm</a></td></tr>
+<tr><td>extra font (optional)</td><td><a
+    href="http://mirrors.ctan.org/fonts/cm/ps-type1/bakoma/ttf/cmtt12.ttf">cmtt12.ttf</a></td></tr>
+	 </table>
+    <p>Store the font in the <tt>~/.fonts</tt> directory in your home
+    directory; this will improve the GUI display.</p>
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end (or choose <tt>cadabra</tt> from the
+    <tt>More Applications/New applications</tt> menu).</p>
+
+ <h3><a href="http://www.gentoo.org"><img width="100px" src="images/gentoo_logo.jpg" alt="Gentoo"/></a></h3>
+    <p>Packages for Cadabra, modglue and LiE are available in the
+    science overlay of Gentoo.  Users can access the science overlay
+    using
+    the <a href="http://www.gentoo.org/proj/en/overlays/userguide.xml">layman
+    utility</a>:</p>
+    <ol>
+    <li>Type "<tt>layman -a science</tt>" to add the
+    science overlay,</li>
+    <li>add "sci-mathematics/lie", "sci-libs/modglue"
+    and "sci-mathematics/cadabra" to your package.keywords (in
+    /etc/portage)</li>
+    <li>Type "<tt>emerge cadabra</tt>" to install cadabra and its
+    dependencies.</li>
+    </ol>
+    <p>Thanks to Fran&ccedil;ois Bissey for making
+    this happen.</p>
+
+ <h3>Other Linux distributions</h3>
+    <p>If you need a package for a different Linux distribution,
+	 contact me by email or try to compile <a href="#source">from
+	 source</a>.</p>
+
+   <a name="osx"></a>
+ <h2>Mac OS X</h2>
+ <h3><a href="http://www.finkproject.org"><img src="images/fink-logo.png" alt="Fink"/></a></h3>
+   <p>The Fink version is outdated and known to lead to problems;
+	  if you would like to see it updated please contact me.</p>
+<!--
+	  Thanks to Kevin Horton, Martin Costabel and Pierre-Henri
+   Lavigne, you can now get cadabra through <a
+   href="http://www.finkproject.org/">Fink</a>, for Tiger (10.4) and
+   Leopard (10.5) systems on Intel and PPC. For more details see the
+   <a href="http://pdb.finkproject.org/pdb/package.php/cadabra">Fink
+   database record for cadabra</a>. The breqn, LiE and modglue
+   packages will be installed automatically.</p>
+
+   <p>Note: Installing through Fink can take quite a while, because
+   various libraries and other tools will have to be installed if you
+   do not have an up to date Fink installation already. Be patient, it
+   will complete eventually.</p>
+
+	<p>Follow these steps:</p>
+   <ol>
+   <li>Make sure that you have the Apple <a
+   href="http://developer.apple.com/tools/xcode/">XCode</a> tools
+   installed (this requires a free registration).</li>
+   <li>Install Fink and update the basic installation according to the
+   instructions on the Fink web site.</li>
+   <li>Enable unstable packages (there is an option in the Fink
+   Commander, or you can edit "<tt>/sw/etc/fink.conf</tt>" or run
+   "<tt>fink configure</tt>").</li>
+   <li>Make sure that the "<tt>SelfUpdateMethod</tt>" in
+   "<tt>/sw/etc/fink.conf</tt>" is set to "<tt>rsync</tt>".</li>
+   <li>Rebuild the fink index and package list with "<tt>fink
+   selfupdate; fink update-all</tt>"</li>
+   <li>Install cadabra with "<tt>fink install cadabra</tt>". When asked
+   about your TeX installation, choose option&nbsp;1. Do the same when
+   asked about ghostscript and giflib.</li>
+   <li>If you already have an installation of TeX, copy the newly
+   installed "<tt>breqn</tt>" style files to your style directory using
+   "<tt>cp&nbsp;-R&nbsp;/sw/share/texmf-local/tex/latex/breqn/&nbsp;~/Library/texmf/tex/latex/macros/</tt>".</li>
+   </ol>
+
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end. If it doesn't, send me an email.</p> -->
+
+    <h3><a href="http://www.macports.org"><img src="images/macports-logo.png"
+    alt="MacPorts"/></a></h3>
+
+	 <p>Important for Mavericks users: the Cadabra dependencies fail to
+	 build on Apple's latest OS. This is under investigation; if you
+	 have any insight please let me know.</p>
+	 <p>Thanks to Greg Wright, cadabra is available for Mac OS X users
+	 through <a
+	href="http://macports.org">MacPorts</a>; see the <a
+	href="http://www.macports.org/ports.php?by=name&amp;substr=cadabra">record
+	for cadabra</a> for details and the currently available version.</p><p>
+	Simply type "<tt class="cmd">sudo port install cadabra</tt>" and all
+	required software will be installed automatically (note: this may
+	install some software which you already have installed from other
+	sources). If you do not want the graphical user interface, add the 
+   <tt class="cmd">+no_gui</tt> option at the end.</p> 
+
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end.</p>
+
+<!--	 <p><tt>sudo port install xorg-libxcb</tt> and ditto for
+	 xorg-libX11, xrender, xorg-libXext needed to make gtkmm
+	 compile with quartz</p>
+
+	 <tt>tlmgr update --self</tt> <tt>tlmgr install dvipng</tt>
+    Then need to make symlinks from /usr/texbin to /usr/bin 
+    if you want this to be visible during macports configure.
+    
+
+	 <p>In order to make things look like a proper Mac program, do
+	 <tt>sudo port install gtk-theme-switch</tt> and gnome-themes,
+	 which is a command line tool to switch gtk themes. You can also
+	 use <tt>switch2</tt> which is a graphical tool to do the same
+	 thing.
+
+	 For a bit more information,
+	 see <a href="http://blog.e-shell.org/60">Changing GTK themes in
+	 OSx</a>.</p> -->
+
+   <a name="windows"></a>
+ <h2>Windows</h2>
+   <img src="images/windows_logo.png" width="80px" alt="Windows"/>
+   <p>
+	  I lack the time to continue the battle with the idiosyncrasy
+     of Windows. If you absolutely have to run this abomination,
+     your best option for getting Cadabra to work on it is to install
+     a virtual machine, install Ubuntu Linux in it, and then install
+     the Ubuntu packages listed above. This will automatically install
+     all required additional libraries, so it is a relatively painless
+     procedure (and it has the added benefit that you can also run
+     other Linux software from within Windows). This is easier than
+     you might think.
+	</p>
+
+   <p class="small">Virtual machines used by cadabra users
+   include <a href="http://www.virtualbox.org/">VirtualBox</a>
+   and <a href="http://www.vmware.com/">VMware</a>.</p>
+
+   <p class="small">If instead you want to install Ubuntu alongside a Windows
+   installation, this is a one-click procedure
+   with <a href="http://wubi-installer.org/">Wubi</a>.
+   </p>
+<!--
+   <p class="small">
+	  Still available: an old and outdated version of Cadabra, which
+	  probably will not work on your particular Windows flavour
+A new but still somewhat experimental Windows version is now
+   available (for XP; there is a problem on Vista which is being
+   worked on).
+   If you have tried to install the Windows version before, please try
+   again and let me know if things are any better now.
+   You will need to:</p>
+   <ul>
+   <li>Install TeX (tested with a full install of 
+         <a href="http://miktex.org">MikTeX</a> version 2.7)</li>
+   <li>Install Cadabra using
+   the <a href="cadabra_1.09s-2_installer.exe">installer</a> (latest
+   update: 8-Apr-2009).</li>
+   <li>Go to the MikTeX settings panel, click the 'Roots' tab and add
+   the path <tt>C:\Program&nbsp;Files\Cadabra\texinputs</tt> to the
+   list (you may have to adjust this if you installed cadabra in a
+   non-standard location).</li>
+   <li>Install the
+   font <a href="http://www.ctan.org/get/fonts/cm/ps-type1/bakoma/ttf/cmtt12.ttf">cmtt12.ttf</a>
+   (go to the control panel, click 'fonts', then 'install new font'
+   from the 'file' menu).</li>
+   </ul>
+   <p>I would appreciate if you can send me an email about your
+   experience with the Windows version, so I can get rid of any
+   remaining problems.
+   </p>
+
+   <p class="small"> 
+-->
+   
+ <h2>Source code</h2>
+ <a name="source"></a>
+			<p>Installing from source should be no harder than with any
+   		other well-behaved GNU tools, i.e.&nbsp;it should be as
+   		simple as configure/make/make install. However, you will need
+   		to have some additional libraries and tools installed before
+   		you can compile cadabra itself. In particular,</p>
+			<ul>
+         <li><a href="http://www.swox.com/gmp/">gmp</a> (configured
+   		with <tt>--enable-cxx</tt>) (on Debian, <tt>apt-get
+   		install libgmp3-dev libgmpxx3</tt>)</li>
+			<li><a href="http://www.pcre.org/">pcre</a> with C++ wrapper enabled (on Debian,
+   		<tt>apt-get install libpcre3-dev lib</tt>)</li>
+			<li><a
+   		href="http://young.sp2mi.univ-poitiers.fr/~marc/LiE/">LiE</a>
+   		(on Debian, <tt>apt-get install lie</tt>)</li>
+			</ul>
+			<p>In order to compile the graphical front-end (add the
+			--enable-gui flag to configure) you also need</p>
+			<ul>
+			<li><a href="http://www.gtk.org/">gtk+</a></li>
+			<li><a href="http://www.gtkmm.org/">gtkmm</a></li>
+			<li><a href="http://sourceforge.net/projects/dvipng/">dvipng</a></li>
+			<li>LaTeX</li>
+			<li>the <a href="http://www.ctan.org/pkg/breqn">breqn package for LaTeX</a></li>
+			</ul>
+			<p>Cadabra's configure
+			script will look for these libraries and programs, and tell
+			you when you need to install them. Consult the documentation
+			of these programs/libraries for installation
+			instructions.</p>
+			<p>You then need to compile and install my modglue library,
+			which is used to connect the various pieces of cadabra
+			together. Download this version here, since it's tuned to cadabra:</p>
+			<ul>
+			<li><a href="modglue-1.19.tar.gz">modglue-1.19.tar.gz</a></li>
+			</ul>
+			<p>This should be a matter of configure/make/make install. 
+			Finally, compile and install cadabra itself,</p>
+			<ul>
+			<li><a href="cadabra-1.33.tar.gz">cadabra-1.33.tar.gz</a></li>
+			</ul>
+			<p>Again, this should be a matter of configure/make/make
+			install. If compilation succeeds, you can also try "make
+			test" for some self-tests (which should all pass).</p>
+			<p>As always, please mail me if you need help.</p>
+    <p>After installation, the command <tt>cadabra</tt> will start the 
+    command line version and <tt>xcadabra</tt> will start the
+    graphical front-end.</p>
+ <h2>Development version</h2>
+ <a name="devel"></a>
+   <p>The latest version can always be obtained from the public GIT
+   repository at <tt><a href="http://repo.or.cz/w/cadabra.git">http://repo.or.cz/w/cadabra.git</a>.</tt></p>
+   <p>If you play with the development version and find any problems,
+   please let me know.</p>
+</div>
+
+
+</body>
+</html>
+
