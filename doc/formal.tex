@@ -37,7 +37,7 @@ arxiv:xxxx.xxxx\\
 
 \begin{center}
 \begin{minipage}{.95\textwidth}
-{\Large\larger\bf Cadabra II: a new tensor computer algebra system}\\[7ex]
+{\Large\larger\bf Cadabra II: tensor computer algebra reborn}\\[7ex]
 {\large\bf Kasper Peeters}\\[5ex]
 Department of Mathematical Sciences\\
 Durham University\\
@@ -71,7 +71,7 @@ United Kingdom\\[3ex]
 
 
 
-\section{System structure}
+\section{Philosophy of Cadabra and overview of the new version}
 
 - Python module 'cadabra', accessible from normal Python and
 e.g. IPython.
@@ -84,13 +84,13 @@ state.
 
 
 \section{Showcases: what you could not do before}
+\subsection{Advanced general relativity}
+\subsection{Machine vision}
+\subsection{Materials science}
 
-- some computer vision example
-- a materials science example
-
-
-\section{New design principles}
-\subsection{Integrate abstract index, form and component computations}
+\section{What's new}
+\subsection{End user visible changes}
+\subsubsection{Integrate abstract index, form and component computations}
 
 There are, in fact, very few systems that handle abstract and
 component computations equally well.
@@ -124,19 +124,19 @@ Exterior calculus \cite{xTerior}. Need to be able to use '$\wedge$'
 notation. Maybe a 'Form' property which carries a degree parameter.
 
 
-\subsection{Notebook \LaTeX{} customisation}
+\subsubsection{Notebook \LaTeX{} customisation}
 
 Enable inclusion of other packages and customisation of typesetting of expressions.
 
-\subsection{Community}
+\subsubsection{Community}
 
 Make it easier for 3rd party developers to add packages in the form of
 Python code. For this we would have to give the Python code access to
 the C++ tree. Can that be done safely? We also 
 
-\subsection{Rethink spinors}
+\subsubsection{Rethink spinors}
 
-\subsection{Separate the data language from the programming language}
+\subsubsection{Separate the data language from the programming language}
 
 When manipulating html, do you write your program in html as well?
 When manipulating images, do you draw your code as an image? These
@@ -167,23 +167,23 @@ or something like that. But now you \emph{have} to wrap any expression
 in some wrapper object to keep assumptions togeter. Why not then write
 the expression in a different language altogether?
 
-\subsection{Make algorithms accessible from multiple languages}
+\subsubsection{Make algorithms accessible from multiple languages}
 
 One advantage that single-language systems like described in the
 previous section have is that the algorithms used to manipulate the
 data are at the same time usable 'internally' in programs. An good
 example is the use of permutation groups -> lists.
 
-\subsection{Make algorithms explain what they do}
+\subsubsection{Make algorithms explain what they do}
 
 A clean logging channel which can be viewed and inspected for problems.
 
 
-\subsection{Provide a full-fledged programming language}
+\subsubsection{Provide a full-fledged programming language}
 
 
 
-\subsection{Rethink the notebook interface}
+\subsubsection{Rethink the notebook interface}
 
 Is the 'we can execute the notebook in any order' paradigm a good one?
 See the IPython discussion recently. Notebooks have not changed much;
@@ -195,7 +195,7 @@ two.
 
 Import notebook into another. 
 
-\subsection{Make progress update more central}
+\subsubsection{Make progress update more central}
 
 In an interactive environment it is extremely useful to have a
 progress indicator. It is also important that any long-running
@@ -209,18 +209,44 @@ a separate exptree object and then handing only that exptree object to
 the algorithm. Algorithms run in threads, so that the main kernel
 never blocks.
 
-\subsection{Make the backend cell-based}
+\subsubsection{Make the backend cell-based}
 
 The original version was driven by line-by-line input, 
 
+\subsubsection{More automatic simplification}
 
-\subsection{Use CMake}
+Cadabra was very conservative in the number of simplifications it made
+to its output. Even simple things like setting derivatives of
+numbers equal to zero, or collecting equal terms, had to be done
+manually or had to be added explicitly to the post-processing
+simplification rules.
+
+Post-processing is now a python function, and its default
+implementation has a larger number of simplifications based on user
+feedback. 
+
+% @unwrap constants
+% @collect terms
+% ...
+
+\subsection{Fourier transforms and integration by parts}
+
+Require integral, allow for easy conversion of derivatives.
+
+\subsection{Canonicalisation}
+
+Also think about integration by parts, decompose on basis logic.
+
+
+%-------------------------------------------------------------------
+\subsection{Internal changes}
+\subsubsection{Use CMake}
 
 This does not require much explanation: the original make + libtool
 solution is incredibly difficult to get right on all platforms, and
 CMake has grown into a nice and mature build system that just works.
 
-\subsection{Shy away from cross-platform GUI toolkits}
+\subsubsection{Shy away from cross-platform GUI toolkits}
 
 Cadabra's graphical notebook interface was written using Gtkmm, which
 was, and still is, an excellent choice on Linux. It turned out to be a
@@ -236,7 +262,9 @@ separately using the native toolkits.
 The main problem with not using a web interface is that more work is
 necessary for nice output. 
 
-\subsection{Retain the property type system}
+%------------------------------------------------------------------
+\subsection{Things intentionally kept unchanged}
+\subsubsection{Retain the property type system}
 
 Cadabra's type system is prototype-based, in contrast to the
 class-based approach followed by many other systems (e.g.~sympy). 
@@ -282,12 +310,12 @@ On the other hand, it has often been annoying having to specify
 properties for objects both with their upper and lower indices,
 e.g.~for symmetric or anti-symmetric tensors. This should be improved.
 
-\subsection{Make the take/replace match logic more central}
+\subsubsection{Make the take/replace match logic more central}
 
 In v1 there are many commands which are like substitutions, and which
 would make sense in take/replace match, e.g. keep\_weight. 
 
-\subsection{Infer rules for tensors with different index positions}
+\subsubsection{Infer rules for tensors with different index positions}
 
 E.g. make \verb|g^{a b}::Depends(\partial).| when it has already been
 declared to depend on the derivative when it is written with lower
@@ -298,14 +326,65 @@ samples in the xAct:1429 thread.
 
 
 
-\subsection{Aim for backward compatibility}
+\subsubsection{Aim for backward compatibility}
 
 
-\subsection{Keep it simple}
+\subsubsection{Keep it simple}
 
 
 xExtras
 
+\subsection{Structure of expressions}
+
+To note:
+\begin{itemize}
+\item For a variety of reasons it is make precise when a node is ``a
+  term in a sum'' or ``a factor in a product''; the reason being that
+  a node being zero only influences a single term in a sum but it
+  influences all factors in a product. 
+
+\item Related to the above: many structure-probing functions currently
+  use ``parent'' without taking proper care of the fact that the
+  parent may be a wrapping ``Accent'' or ``Derivative''. 
+
+\item This is captured by ``term-like'' and ``factor-like''. The main
+  complication here is to make precise how far up we should go in the
+  tree. Probably just one step. ``Accent'' nodes should handle their
+  zero coefficients themselves, not rely on their child nodes to do
+  it. Single terms in an expression (e.g.~an expression which is just
+  ``A'') should also classify as term-like.
+\end{itemize}
+
+\subsection{Source and documentation structure}
+
+The source tree follows the logic that files are either part of the
+small core, or they contain an algorithm, or they contain a property. 
+\begin{verbatim}
+src/properties
+src/algorithms
+\end{verbatim}
+
+\subsection{Localisation of algorithms}
+
+\begin{itemize}
+\item Many algorithms be in a situation in which the called
+  node is a sum which ends up having zero or one terms. The logic of
+  propagating this should always be: you can touch everything at or
+  below the node, but you cannot remove the node, only set its
+  coefficient to zero. 
+
+\item However, whether or not a node becomes zero may be a function of
+  the parent node (example: varying a term should keep it intact if
+  the parent is a product-like node, but should remove it if it is a
+  sum-like node. See above.
+
+\item All algorithms should always return a consistent
+  tree. Therefore, it is for instance not allowed to return with the
+  iterator pointing to a sum node with zero coefficients (sum node
+  with non-unit multiplier error), the algorithm has to change this to
+  something valid.
+
+\end{itemize}
 
 % http://www.pgbovine.net/ipython-notebook-first-impressions.htm
 
@@ -425,77 +504,8 @@ Web interfaces require re-inventing the wheel.
 \section{Symbolic expression library}
 
 
-\section{Physics changes}
-\subsection{Fourier transforms and integration by parts}
-
-Require integral, allow for easy conversion of derivatives.
-
-\subsection{Canonicalisation}
-
-Also think about integration by parts, decompose on basis logic.
-
 
 %-------------------------------------------------------------------
-
-\section{Version 2 notes}
-
-\subsection{Structure of expressions}
-
-To note:
-\begin{itemize}
-\item For a variety of reasons it is make precise when a node is ``a
-  term in a sum'' or ``a factor in a product''; the reason being that
-  a node being zero only influences a single term in a sum but it
-  influences all factors in a product. 
-
-\item Related to the above: many structure-probing functions currently
-  use ``parent'' without taking proper care of the fact that the
-  parent may be a wrapping ``Accent'' or ``Derivative''. 
-
-\item This is captured by ``term-like'' and ``factor-like''. The main
-  complication here is to make precise how far up we should go in the
-  tree. Probably just one step. ``Accent'' nodes should handle their
-  zero coefficients themselves, not rely on their child nodes to do
-  it. Single terms in an expression (e.g.~an expression which is just
-  ``A'') should also classify as term-like.
-\end{itemize}
-
-\subsection{Source and documentation structure}
-
-The source tree follows the logic that files are either part of the
-small core, or they contain an algorithm, or they contain a property. 
-\begin{verbatim}
-src/properties
-src/algorithms
-\end{verbatim}
-
-\subsection{Localisation of algorithms}
-
-\begin{itemize}
-\item Many algorithms be in a situation in which the called
-  node is a sum which ends up having zero or one terms. The logic of
-  propagating this should always be: you can touch everything at or
-  below the node, but you cannot remove the node, only set its
-  coefficient to zero. 
-
-\item However, whether or not a node becomes zero may be a function of
-  the parent node (example: varying a term should keep it intact if
-  the parent is a product-like node, but should remove it if it is a
-  sum-like node. See above.
-
-\item All algorithms should always return a consistent
-  tree. Therefore, it is for instance not allowed to return with the
-  iterator pointing to a sum node with zero coefficients (sum node
-  with non-unit multiplier error), the algorithm has to change this to
-  something valid.
-
-\end{itemize}
-
-
-\section{TODO}
-
-- split toolkit-independent parts off from the gui (the cell tree,
-  the manipulation of those cells, anything non-displaying)
 
 
 % I want to define a function of a vector (momenta)
@@ -513,6 +523,8 @@ src/algorithms
 \section{To resolve}
 
 \begin{itemize}
+\item  split toolkit-independent parts off from the gui (the cell tree,
+  the manipulation of those cells, anything non-displaying)
 \item scan through list of properties to see which ones should be
 native.
 
@@ -582,10 +594,12 @@ algorithms in turn.
 \item component stuff is in general just: evaluate an expression
   making use of object->value substitutions. 
 
+\begin{verbatim}
    ss_coords := \mu -> { t, r, \phi, \theta };
    ss_metric := { g_{t t} -> -f(r), g_{r r} -> 1/f(r), ... };
    ex := [e.g Riemann]
    evaluate(ex, values=[ss_coords, ss_metric] );
+\end{verbatim}
 
 \item independent components from young symmetry?
 
@@ -602,9 +616,11 @@ and also a discussion of tracelessness conditions, is in
       SLACcitation   = "%%CITATION = INSPIRE-239743;%%",
 }
 
+\begin{verbatim}
 P_A P_B = 0 but P_B P_A not=0 :
 http://www.nbi.dk/~DasGroup/PUPress/120831Elvang.txt
 
 SEE *** : http://particle.thep.lu.se/pub/Preprints/13/lu_tp_13_26.pdf
+\end{verbatim}
 
 \end{document}
