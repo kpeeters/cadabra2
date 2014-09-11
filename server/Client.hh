@@ -27,7 +27,7 @@
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
-typedef websocketpp::client<websocketpp::config::asio_client> wsclient;
+typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
 
 namespace cadabra {
@@ -35,6 +35,7 @@ namespace cadabra {
 	class Client {
 		public:
 			Client();
+			~Client();
 
 			// Main entry point, which will connect to the server and then start an
 			// event loop to handle communication with the server. Only exists when
@@ -174,10 +175,12 @@ namespace cadabra {
 		private:
 
 			// WebSocket++ callbacks.
-			void on_open(wsclient* c, websocketpp::connection_hdl hdl);
-			void on_fail(wsclient* c, websocketpp::connection_hdl hdl);
-			void on_close(wsclient* c, websocketpp::connection_hdl hdl);
-			void on_message(wsclient* c, websocketpp::connection_hdl hdl, message_ptr msg);
+			WSClient *wsclient;
+			websocketpp::connection_hdl our_connection_hdl;
+			void on_open(WSClient* c, websocketpp::connection_hdl hdl);
+			void on_fail(WSClient* c, websocketpp::connection_hdl hdl);
+			void on_close(WSClient* c, websocketpp::connection_hdl hdl);
+			void on_message(WSClient* c, websocketpp::connection_hdl hdl, message_ptr msg);
 
 			// The actual document and the action that led to it.
 			DTree doc;
