@@ -4,12 +4,14 @@
 
 #include "Client.hh"
 
+class MyClient : public cadabra::Client {
+	public:
+		
+};
+
 int main(int, char **)
 	{
-	cadabra::Client client;
+	MyClient client;
 
-	cadabra::Client::ActionAddCell action(doc.begin());
-	client.perform(action);
-
-	
+	client.run();
 	}

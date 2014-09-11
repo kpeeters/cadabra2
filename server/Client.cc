@@ -1,20 +1,22 @@
 
-#include <zmq.hpp>
 #include <string>
 #include <iostream>
 
+#include <websocketpp/client.hpp>
+#include <websocketpp/config/asio_no_tls_client.hpp>
+#include <websocketpp/common/functional.hpp>
+
+// Simple test program to talk to a cadabra server.
+
+using websocketpp::lib::placeholders::_1;
+using websocketpp::lib::placeholders::_2;
+using websocketpp::lib::bind;
+typedef websocketpp::client<websocketpp::config::asio_client> client;
+typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
+
 Client::Client()
 	{
-	add_cell();
-	}
-
-int CadabraClient::get_fd()
-	{
-	// http://stackoverflow.com/questions/6452131/how-to-use-zeromq-in-an-gtk-qt-clutter-application
-	int fd;
-	size_t sizeof_fd = sizeof(fd);
-	if(zmq_getsockopt(socket, ZMQ_FD, &fd, &sizeof_fd))
-      perror("retrieving zmq fd");
+//	add_cell();
 	}
 
 void CadabraClient::run()

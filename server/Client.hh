@@ -22,7 +22,8 @@ namespace cadabra {
 	class Client {
 		public:
 			Client();
-			
+
+			void run(); // runs websocket loop, how to start gtk loop? in a separate thread, see websocket++ docs
 			void perform(ActionBase);
 
 			virtual void on_progress()=0;
@@ -32,22 +33,22 @@ namespace cadabra {
 			// in a tree inside the client. A user interface should read these cells
 			// and construct corresponding graphical output for them.
 
-			class DataCell {
-				public:
-					enum class CellType { input, output, comment, texcomment, tex, error };
-					
-					DataCell(cell_t, const std::string& str="", bool texhidden=false);
-					
-					cell_t                        cell_type;
-					std::string                   textbuf;
-					std::string                   cdbbuf;             // c_output only: the output in cadabra input format
-					bool                          tex_hidden;         // c_tex only
-					bool                          sensitive;
-					bool                          running;
-			};
-			
-			// Do not manipulate this tree directly; instead submit ActionBase classes
-			// so that an undo stack can be kept.
+//			class DataCell {
+//				public:
+//					enum class CellType { input, output, comment, texcomment, tex, error };
+//					
+//					DataCell(cell_t, const std::string& str="", bool texhidden=false);
+//					
+//					cell_t                        cell_type;
+//					std::string                   textbuf;
+//					std::string                   cdbbuf;             // c_output only: the output in cadabra input format
+//					bool                          tex_hidden;         // c_tex only
+//					bool                          sensitive;
+//					bool                          running;
+//			};
+//			
+//			// Do not manipulate this tree directly; instead submit ActionBase classes
+//			// so that an undo stack can be kept.
 
 			tree<DataCell> doc;
 
@@ -70,63 +71,63 @@ namespace cadabra {
 			};
 			
 
-			class ActionAddCell : public ActionBase {
-				public:
-					enum class Position { before, after, child };
-
-					ActionAddCell(tree<DataCell>::iterator, tree<DataCell>::iterator ref_, Position pos_);
-					
-					/// Executing will also show the cell and grab its focus.
-					virtual void execute(XCadabra&);
-					virtual void revert(XCadabra&);
-					
-				private:
-					// Keep track of the location where this cell is inserted into
-					// the notebook. 
-
-					tree<DataCell>::iterator  ref;
-					Position                  position;
-			};
-			
-			class ActionRemoveCell : public ActionBase {
-				public:
-					ActionRemoveCell(tree<DataCell>::iterator);
-					~ActionRemoveCell();
-					
-					virtual void execute(XCadabra&);
-					virtual void revert(XCadabra&);
-					
-				private:
-					// Keep track of the location where this cell was in the notebook. Since it is
-					// not possible to delete the first cell, it is safe to keep a reference to the
-					// cell just before the one we are deleting. 
-
-					tree<DataCell>::iterator             prev_cell;
-			};
-			
-			class ActionAddText : public ActionBase {
-				public:
-					ActionAddText(tree<DataCell>::iterator, int, const std::string&);
-					
-					virtual void execute(XCadabra&);
-					virtual void revert(XCadabra&);
-					
-					int         insert_pos;
-					std::string text;
-			};
-			
-			class ActionRemoveText : public ActionBase {
-				public:
-					ActionRemoveText(tree<DataCell>::iterator, int, int, const std::string&);
-					
-					virtual void execute(XCadabra&);
-					virtual void revert(XCadabra&);
-					
-					int from_pos, to_pos;
-					std::string removed_text;
-			};
-
-			// todo: split cell, execute cell (or should the latter be a normal, non-undoable function?)
+//			class ActionAddCell : public ActionBase {
+//				public:
+//					enum class Position { before, after, child };
+//
+//					ActionAddCell(tree<DataCell>::iterator, tree<DataCell>::iterator ref_, Position pos_);
+//					
+//					/// Executing will also show the cell and grab its focus.
+//					virtual void execute(XCadabra&);
+//					virtual void revert(XCadabra&);
+//					
+//				private:
+//					// Keep track of the location where this cell is inserted into
+//					// the notebook. 
+//
+//					tree<DataCell>::iterator  ref;
+//					Position                  position;
+//			};
+//			
+//			class ActionRemoveCell : public ActionBase {
+//				public:
+//					ActionRemoveCell(tree<DataCell>::iterator);
+//					~ActionRemoveCell();
+//					
+//					virtual void execute(XCadabra&);
+//					virtual void revert(XCadabra&);
+//					
+//				private:
+//					// Keep track of the location where this cell was in the notebook. Since it is
+//					// not possible to delete the first cell, it is safe to keep a reference to the
+//					// cell just before the one we are deleting. 
+//
+//					tree<DataCell>::iterator             prev_cell;
+//			};
+//			
+//			class ActionAddText : public ActionBase {
+//				public:
+//					ActionAddText(tree<DataCell>::iterator, int, const std::string&);
+//					
+//					virtual void execute(XCadabra&);
+//					virtual void revert(XCadabra&);
+//					
+//					int         insert_pos;
+//					std::string text;
+//			};
+//			
+//			class ActionRemoveText : public ActionBase {
+//				public:
+//					ActionRemoveText(tree<DataCell>::iterator, int, int, const std::string&);
+//					
+//					virtual void execute(XCadabra&);
+//					virtual void revert(XCadabra&);
+//					
+//					int from_pos, to_pos;
+//					std::string removed_text;
+//			};
+//
+//			// todo: split cell, execute cell (or should the latter be a normal, non-undoable function?)
 			
 		private:
 	
