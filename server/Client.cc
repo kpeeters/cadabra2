@@ -6,39 +6,48 @@
 using namespace cadabra;
 
 Client::Client()
+	: wsclient(0)
 	{
 //	add_cell();
 	}
 
+Client::~Client()
+	{
+	if(wsclient)
+		delete wsclient;
+	}
+
 void Client::run()
 	{
-	wsclient c;
-	c.clear_access_channels(websocketpp::log::alevel::all);
-	c.clear_error_channels(websocketpp::log::elevel::all);
+	wsclient = new WSClient();
+
+	wsclient->clear_access_channels(websocketpp::log::alevel::all);
+	wsclient->clear_error_channels(websocketpp::log::elevel::all);
 
 	std::string uri = "ws://localhost:9002";
 	
-	c.init_asio();
-	c.set_open_handler(bind(&Client::on_open, this, &c, ::_1));
-	c.set_fail_handler(bind(&Client::on_fail, this, &c, ::_1));
-	c.set_close_handler(bind(&Client::on_close, this, &c, ::_1));
-	c.set_message_handler(bind(&Client::on_message, this, &c, ::_1, ::_2));
+	wsclient->init_asio();
+	wsclient->set_open_handler(bind(&Client::on_open, this, wsclient, ::_1));
+	wsclient->set_fail_handler(bind(&Client::on_fail, this, wsclient, ::_1));
+	wsclient->set_close_handler(bind(&Client::on_close, this, wsclient, ::_1));
+	wsclient->set_message_handler(bind(&Client::on_message, this, wsclient, ::_1, ::_2));
 	
 	websocketpp::lib::error_code ec;
-	wsclient::connection_ptr con = c.get_connection(uri, ec);
-	c.connect(con);
+	WSClient::connection_ptr con = wsclient->get_connection(uri, ec);
+	wsclient->connect(con);
 
 	// Start the ASIO io_service run loop
-	c.run();
+	wsclient->run();
 	}
 
-void Client::on_fail(wsclient* c, websocketpp::connection_hdl hdl) 
+void Client::on_fail(WSClient* c, websocketpp::connection_hdl hdl) 
 	{
 	on_network_error();
 	}
 
-void Client::on_open(wsclient* c, websocketpp::connection_hdl hdl) 
+void Client::on_open(WSClient* c, websocketpp::connection_hdl hdl) 
 	{
+	our_connection_hdl = hdl;
 	on_connect();
 
 //	// now it is safe to use the connection
@@ -61,7 +70,7 @@ void Client::on_open(wsclient* c, websocketpp::connection_hdl hdl)
 //	c->send(hdl, msg, websocketpp::frame::opcode::text);
 	}
 
-void Client::on_close(wsclient* c, websocketpp::connection_hdl hdl) 
+void Client::on_close(WSClient* c, websocketpp::connection_hdl hdl) 
 	{
 	on_disconnect();
 	}
@@ -71,14 +80,24 @@ const Client::DTree& Client::dtree()
 	return doc;
 	}
 
-void Client::on_message(wsclient* c, websocketpp::connection_hdl hdl, message_ptr msg) 
+void Client::on_message(WSClient* c, websocketpp::connection_hdl hdl, message_ptr msg) 
 	{
-	wsclient::connection_ptr con = c->get_con_from_hdl(hdl);
+	WSClient::connection_ptr con = c->get_con_from_hdl(hdl);
 	
 	std::cout << "received message on channel " << con->get_resource() << std::endl;
 	std::cout << msg->get_payload() << std::endl;
 	}
 
+
+void Client::perform(const ActionBase& ab) 
+	{
+	// FIXME: this is just a test action
+	std::string msg = 
+		"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
+		"  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
+		"}";
+	wsclient->send(our_connection_hdl, msg, websocketpp::frame::opcode::text);
+	}
 
 
 Client::DataCell::DataCell(CellType t, const std::string& str, bool texhidden) 

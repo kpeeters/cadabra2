@@ -7,6 +7,8 @@
 
 class MyClient : public cadabra::Client {
 	public:
+		MyClient();
+
 		void on_connect();
 		void on_disconnect();
 		void on_network_error();
@@ -19,6 +21,11 @@ class UI {
 	public:
 		void run();
 };
+
+MyClient::MyClient()
+	: Client()
+	{
+	}
 
 void MyClient::on_connect() 
 	{
