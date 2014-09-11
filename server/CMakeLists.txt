@@ -42,3 +42,4 @@ target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 # Create client test programs
 include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})
 add_executable(test_client test_client.cc)
+target_link_libraries(test_client cadabra_client ${Boost_LIBRARIES} -lpthread)

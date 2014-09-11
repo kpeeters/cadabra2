@@ -17,40 +17,82 @@
 //just use the fact that iterators remain valid even when nodes get moved in and 
 //			  out of the tree. RemoveCell then just needs to keep track of the removed node.
 
+#include "tree.hh"
+#include <stack>
+
+#include <websocketpp/client.hpp>
+#include <websocketpp/config/asio_no_tls_client.hpp>
+#include <websocketpp/common/functional.hpp>
+
+using websocketpp::lib::placeholders::_1;
+using websocketpp::lib::placeholders::_2;
+using websocketpp::lib::bind;
+typedef websocketpp::client<websocketpp::config::asio_client> wsclient;
+typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
+
 namespace cadabra {
 
 	class Client {
 		public:
 			Client();
 
-			void run(); // runs websocket loop, how to start gtk loop? in a separate thread, see websocket++ docs
-			void perform(ActionBase);
+			// Main entry point, which will connect to the server and then start an
+			// event loop to handle communication with the server. Only exists when
+			// the connection drops. Run your GUI on a different thread.
 
+			void run(); 
+
+			// Callback functions to inform the client of a changed state on the server.
+			// Implement these in your derived class.
+
+			virtual void on_connect()=0;
+			virtual void on_disconnect()=0;			
+			virtual void on_network_error()=0;
 			virtual void on_progress()=0;
-			virtual void on_tree_changed()=0;
-			
+
+			class ActionBase;
+
+			// The client is informed about any change to the document tree using the
+			// following callback. Events like deleting cells will be signalled before
+			// the change is made, others like adding cells will be signalled after the
+			// fact. Changes to the GUI should _only_ be made in response to these
+			// callbacks.
+
+			virtual void before_tree_change(ActionBase&)=0;
+			virtual void after_tree_change(ActionBase&)=0;
+
+			// All modifications to the document are done by calling 'perform' with an 
+			// action object. This enables us to implement an undo stack. 
+
+			void perform(const ActionBase&);
+
 			// DataCells are the basic building blocks for a document. They are stored 
 			// in a tree inside the client. A user interface should read these cells
 			// and construct corresponding graphical output for them.
 
-//			class DataCell {
-//				public:
-//					enum class CellType { input, output, comment, texcomment, tex, error };
-//					
-//					DataCell(cell_t, const std::string& str="", bool texhidden=false);
-//					
-//					cell_t                        cell_type;
-//					std::string                   textbuf;
-//					std::string                   cdbbuf;             // c_output only: the output in cadabra input format
-//					bool                          tex_hidden;         // c_tex only
-//					bool                          sensitive;
-//					bool                          running;
-//			};
-//			
-//			// Do not manipulate this tree directly; instead submit ActionBase classes
-//			// so that an undo stack can be kept.
+			class DataCell {
+				public:
+					enum class CellType { input, output, comment, texcomment, tex, error };
+					
+					DataCell(CellType t=CellType::input, const std::string& str="", bool texhidden=false);
+					
+					CellType                      cell_type;
+					std::string                   textbuf;
+					std::string                   cdbbuf;             // c_output only: the output in cadabra input format
+					bool                          tex_hidden;         // c_tex only
+					bool                          sensitive;
+					bool                          running;
+			};
+			
+			// The document is a tree of DataCells. A read-only version of this document
+			// is available from the 'dtree' function. All changes to the tree should be
+			// made by submitting ActionBase derived objects to the 'perform' function,
+			// so that an undo stack can be kept.
 
-			tree<DataCell> doc;
+			typedef tree<DataCell>           DTree;
+			typedef tree<DataCell>::iterator iterator;
+
+			const DTree& dtree();
 
 			// The Action object is used to pass user action instructions around
          // and store them in the undo/redo stacks. All references to cells is
@@ -62,12 +104,12 @@ namespace cadabra {
 
 			class ActionBase {
 				public:
-					ActionBase(Glib::RefPtr<DataCell>);
+					ActionBase(iterator);
 					
-					virtual void execute(XCadabra&)=0;
-					virtual void revert(XCadabra&)=0;
+					virtual void execute()=0;
+					virtual void revert()=0;
 					
-					tree<DataCell>::iterator cell;
+					iterator cell;
 			};
 			
 
@@ -130,9 +172,16 @@ namespace cadabra {
 //			// todo: split cell, execute cell (or should the latter be a normal, non-undoable function?)
 			
 		private:
-	
+
+			// WebSocket++ callbacks.
+			void on_open(wsclient* c, websocketpp::connection_hdl hdl);
+			void on_fail(wsclient* c, websocketpp::connection_hdl hdl);
+			void on_close(wsclient* c, websocketpp::connection_hdl hdl);
+			void on_message(wsclient* c, websocketpp::connection_hdl hdl, message_ptr msg);
+
+			// The actual document and the action that led to it.
+			DTree doc;
 			typedef std::stack<std::unique_ptr<ActionBase> > ActionStack;
-			
 	};
 
 }
