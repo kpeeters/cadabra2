@@ -81,9 +81,12 @@ void UI::run()
 
 int main(int, char **)
 	{
+//	client.init();
+	std::cout << "client connected" << std::endl;
+
 	try {
 		// Spawn two threads.
-		std::thread client_thread(&MyClient::run, client);
+		std::thread client_thread(&MyClient::run, std::ref(client));
 		std::thread ui_thread(&UI::run, ui);
 		
 		// Wait for all threads to finish.
