@@ -34,6 +34,7 @@ void Client::run()
 	
 	websocketpp::lib::error_code ec;
 	WSClient::connection_ptr con = wsclient->get_connection(uri, ec);
+	our_connection_hdl = con->get_handle();
 	wsclient->connect(con);
 
 	// Start the ASIO io_service run loop
@@ -47,7 +48,6 @@ void Client::on_fail(WSClient* c, websocketpp::connection_hdl hdl)
 
 void Client::on_open(WSClient* c, websocketpp::connection_hdl hdl) 
 	{
-	our_connection_hdl = hdl;
 	on_connect();
 
 //	// now it is safe to use the connection
@@ -91,6 +91,7 @@ void Client::on_message(WSClient* c, websocketpp::connection_hdl hdl, message_pt
 
 void Client::perform(const ActionBase& ab) 
 	{
+	WSClient tmpclient;
 	// FIXME: this is just a test action
 	std::string msg = 
 		"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
@@ -105,4 +106,23 @@ Client::DataCell::DataCell(CellType t, const std::string& str, bool texhidden)
 	cell_type = t;
 	textbuf = str;
 	tex_hidden = texhidden;
+	}
+
+
+Client::ActionBase::ActionBase(iterator pos)
+	: cell(pos)
+	{
+	}
+
+Client::ActionAddCell::ActionAddCell(iterator pos, iterator, Position) 
+	: ActionBase(pos)
+	{
+	}
+
+void Client::ActionAddCell::execute() 
+	{
+	}
+
+void Client::ActionAddCell::revert()
+	{
 	}
