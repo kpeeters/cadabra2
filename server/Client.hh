@@ -41,7 +41,6 @@ namespace cadabra {
 			// event loop to handle communication with the server. Only exists when
 			// the connection drops. Run your GUI on a different thread.
 
-			void init();
 			void run(); 
 
 			// Callback functions to inform the client of a changed state on the server.
@@ -170,13 +169,21 @@ namespace cadabra {
 //					std::string removed_text;
 //			};
 //
-//			// todo: split cell, execute cell (or should the latter be a normal, non-undoable function?)
+//			class ActionSplitCell
+//       class ActionMergeCells
 			
+			// Finally, the logic to execute code in cells. This is a normal function as it
+			// cannot be undone anyway so it is pointless to put it in the undo stack.
+			// If you want to undo an action, you need to restart the kernel on the server.
+
+			void execute(iterator);
+
 		private:
 
-			// WebSocket++ callbacks.
+			// WebSocket++ things.
 			WSClient wsclient;
 			websocketpp::connection_hdl our_connection_hdl;
+			void init();
 			void on_open(websocketpp::connection_hdl hdl);
 			void on_fail(websocketpp::connection_hdl hdl);
 			void on_close(websocketpp::connection_hdl hdl);

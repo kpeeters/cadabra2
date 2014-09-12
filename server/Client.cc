@@ -17,10 +17,7 @@ void Client::init()
 	{
 	// Setup the WebSockets client.
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
-//	wsclient.set_access_channels(websocketpp::log::alevel::connect);
-//	wsclient.set_access_channels(websocketpp::log::alevel::disconnect);
-//	wsclient.set_access_channels(websocketpp::log::alevel::app);
-//	wsclient.clear_error_channels(websocketpp::log::elevel::all);
+	wsclient.clear_error_channels(websocketpp::log::elevel::all);
 
 	wsclient.init_asio();
 
@@ -47,10 +44,8 @@ void Client::init()
 void Client::run()
 	{
 	init();
-//	assert(wsclient!=0);
 
 	// Start the ASIO io_service run loop
-	std::cout << "starting ws loop" << std::endl;
 	wsclient.run();
 	}
 
@@ -61,7 +56,6 @@ void Client::on_fail(websocketpp::connection_hdl hdl)
 
 void Client::on_open(websocketpp::connection_hdl hdl) 
 	{
-	std::cout << "on open called" << std::endl;
 	on_connect();
 
 //	// now it is safe to use the connection
