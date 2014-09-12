@@ -4,6 +4,7 @@
 
 #include "Client.hh"
 #include <thread>
+#include <system_error>
 
 class MyClient : public cadabra::Client {
 	public:
@@ -21,6 +22,10 @@ class UI {
 	public:
 		void run();
 };
+
+MyClient client;
+UI       ui;
+
 
 MyClient::MyClient()
 	: Client()
@@ -56,19 +61,37 @@ void MyClient::after_tree_change(ActionBase& ab)
 
 void UI::run() 
 	{
+	int i;
+	std::cin >> i;
+	
+	cadabra::Client::iterator it=client.dtree().begin();
+
+	cadabra::Client::ActionAddCell ac(it, it, cadabra::Client::ActionAddCell::Position::child);
+	try {
+		std::cout << "calling perform" << std::endl;
+		client.perform(ac);
+		}
+	catch(std::error_code& ex) {
+		std::cout << ex.message() << std::endl;
+		}
+	std::cout << "perform called" << std::endl;
+
 	sleep(10);
 	}
 
 int main(int, char **)
 	{
-	MyClient client;
-	UI       ui;
+	try {
+		// Spawn two threads.
+		std::thread client_thread(&MyClient::run, client);
+		std::thread ui_thread(&UI::run, ui);
+		
+		// Wait for all threads to finish.
+		client_thread.join();
+		ui_thread.join();
+		}
+	catch(std::error_code& ex) {
+		std::cout << ex.message() << std::endl;
+		}
 
-	// Spawn two threads.
-	std::thread client_thread(&MyClient::run, client);
-	std::thread ui_thread(&UI::run, ui);
-
-	// Wait for all threads to finish.
-	client_thread.join();
-	ui_thread.join();
 	}

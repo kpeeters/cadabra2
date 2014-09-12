@@ -20,7 +20,9 @@
 #include "tree.hh"
 #include <stack>
 
+#include <websocketpp/common/cpp11.hpp>
 #include <websocketpp/client.hpp>
+#include <websocketpp/common/thread.hpp>
 #include <websocketpp/config/asio_no_tls_client.hpp>
 #include <websocketpp/common/functional.hpp>
 
@@ -113,25 +115,24 @@ namespace cadabra {
 					iterator cell;
 			};
 			
-
-//			class ActionAddCell : public ActionBase {
-//				public:
-//					enum class Position { before, after, child };
-//
-//					ActionAddCell(tree<DataCell>::iterator, tree<DataCell>::iterator ref_, Position pos_);
-//					
-//					/// Executing will also show the cell and grab its focus.
-//					virtual void execute(XCadabra&);
-//					virtual void revert(XCadabra&);
-//					
-//				private:
-//					// Keep track of the location where this cell is inserted into
-//					// the notebook. 
-//
-//					tree<DataCell>::iterator  ref;
-//					Position                  position;
-//			};
-//			
+			
+			class ActionAddCell : public ActionBase {
+				public:
+					enum class Position { before, after, child };
+					
+					ActionAddCell(iterator, iterator ref_, Position pos_);
+					
+					virtual void execute();
+					virtual void revert();
+					
+				private:
+					// Keep track of the location where this cell is inserted into
+					// the notebook. 
+					
+					iterator    ref;
+					Position    position;
+			};
+			
 //			class ActionRemoveCell : public ActionBase {
 //				public:
 //					ActionRemoveCell(tree<DataCell>::iterator);
