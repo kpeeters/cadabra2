@@ -20,29 +20,28 @@
 #include "tree.hh"
 #include <stack>
 
-#include <websocketpp/common/cpp11.hpp>
+#include <websocketpp/config/asio_no_tls_client.hpp>
 #include <websocketpp/client.hpp>
 #include <websocketpp/common/thread.hpp>
-#include <websocketpp/config/asio_no_tls_client.hpp>
 #include <websocketpp/common/functional.hpp>
 
-using websocketpp::lib::placeholders::_1;
-using websocketpp::lib::placeholders::_2;
-using websocketpp::lib::bind;
 typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
+typedef websocketpp::lib::lock_guard<websocketpp::lib::mutex> scoped_lock;
 
 namespace cadabra {
 
 	class Client {
 		public:
 			Client();
+			Client(const Client& )=delete; // You cannot copy this object
 			~Client();
 
 			// Main entry point, which will connect to the server and then start an
 			// event loop to handle communication with the server. Only exists when
 			// the connection drops. Run your GUI on a different thread.
 
+			void init();
 			void run(); 
 
 			// Callback functions to inform the client of a changed state on the server.
@@ -176,12 +175,12 @@ namespace cadabra {
 		private:
 
 			// WebSocket++ callbacks.
-			WSClient *wsclient;
+			WSClient wsclient;
 			websocketpp::connection_hdl our_connection_hdl;
-			void on_open(WSClient* c, websocketpp::connection_hdl hdl);
-			void on_fail(WSClient* c, websocketpp::connection_hdl hdl);
-			void on_close(WSClient* c, websocketpp::connection_hdl hdl);
-			void on_message(WSClient* c, websocketpp::connection_hdl hdl, message_ptr msg);
+			void on_open(websocketpp::connection_hdl hdl);
+			void on_fail(websocketpp::connection_hdl hdl);
+			void on_close(websocketpp::connection_hdl hdl);
+			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
 
 			// The actual document and the action that led to it.
 			DTree doc;
