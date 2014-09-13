@@ -5,12 +5,13 @@ Cadabra building and installation instructions
 The Cadabra source is distributed among several subdirectories, many of
 which can be built independently:
 
-   - src:     the main cadabra sources plus the logic to make it accessible
-              as a Python module 'cadabra'.
+   - core:          The main cadabra sources plus the logic to make it accessible
+                    as a Python module 'cadabra'. These are all system-independent.
 
-   - server:  
-
-   - gui:
+   - client_server: GUI-independent classes for building a cadabra server and client.
+                     
+   - frontend:      Implementations of the front-end for various platforms, as well
+	                 as platform-independent support code for e.g. maths typesetting.
 
 
 A. Linux
@@ -40,4 +41,6 @@ sure a basic Homebrew installation is present, and then do
 
 In order to run the Cadabra notebook interface succesfully, you also
 need a TeX installation such as MacTeX, http://tug.org/mactex/ .
+Any TeX will do, as long as 'latex' and 'dvipng' are available, and
+the 'breqn' package is installed.
 
