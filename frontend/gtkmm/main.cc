@@ -1,5 +1,10 @@
 
 #include "Client.hh"
+#include "NotebookWindow.hh"
+#include <gtkmm/main.h>
+
+// Cadabra frontend with GTK+ interface (using gtkmm). 
+// Makes use of the client classes in the client_server directory.
 
 class CadabraGtk : public cadabra::Client {
 	public:
@@ -15,8 +20,11 @@ class CadabraGtk : public cadabra::Client {
 int main(int argc, char **argv)
 	{
 	CadabraGtk cdb;
+	Gtk::Main  kit(&argc, &argv);
 
 	std::thread client_thread(&CadabraGtk::run, std::ref(cdb));
-
+	cadabra::NotebookWindow nw;
+	
+	Gtk::Main::run();
 	client_thread.join();
 	}
