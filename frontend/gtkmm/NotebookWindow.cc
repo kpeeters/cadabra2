@@ -2,7 +2,8 @@
 #include "NotebookWindow.hh"
 
 cadabra::NotebookWindow::NotebookWindow()
-	: modified(false)
+	: b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO),
+	  modified(false)
 	{
 	actiongroup=Gtk::ActionGroup::create();
 	actiongroup->add( Gtk::Action::create("MenuFile", "_File") );
@@ -19,10 +20,36 @@ cadabra::NotebookWindow::NotebookWindow()
 	topbox.pack_start(statusbarbox, false, false);
 	supermainbox.pack_start(mainbox, true, true);
 
+	// Status bar
+	cdbstatus.set_alignment( 0.0, 0.5 );
+	kernelversion.set_alignment( 0.0, 0.5 );
+	cdbstatus.set_size_request(200,-1);
+	cdbstatus.set_justify(Gtk::JUSTIFY_LEFT);
+	kernelversion.set_justify(Gtk::JUSTIFY_LEFT);
+	statusbarbox.pack_start(cdbstatus);
+	statusbarbox.pack_start(kernelversion);
+	statusbarbox.pack_start(progressbar);
+	progressbar.set_size_request(200,-1);
+	progressbar.set_text("idle");
+	progressbar.set_show_text(true);
+
+	// Buttons
+	b_stop.set_sensitive(false);
+	b_run.set_label("Run all");
+	b_run_to.set_label("Run to cursor");
+	b_run_from.set_label("Run from cursor");
+	b_kill.set_label("Restart kernel");
+	buttonbox.pack_start(b_help, Gtk::PACK_SHRINK);
+	buttonbox.pack_start(b_run, Gtk::PACK_SHRINK);
+	buttonbox.pack_start(b_run_to, Gtk::PACK_SHRINK);
+	buttonbox.pack_start(b_run_from, Gtk::PACK_SHRINK);
+	buttonbox.pack_start(b_stop, Gtk::PACK_SHRINK);
+	buttonbox.pack_start(b_kill, Gtk::PACK_SHRINK);
+
 	// The three main widgets
 	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
-//	buttonbox.pack_start(statusbox, Gtk::PACK_EXPAND_WIDGET, 0);
 
+	set_size_request(800,800);
 	update_title();
 	show_all();
 	}
@@ -45,4 +72,12 @@ void cadabra::NotebookWindow::update_title()
 		else
 			set_title("Cadabra");
 		}
+	}
+
+void cadabra::NotebookWindow::on_connect()
+	{
+	// FIXME: this member is called from the network thread; what we should do
+	// instead is lock the string with the status, then use the glib dispatcher
+	// to inform the gui thread that something has changed.
+	kernelversion.set_text("connected");
 	}
