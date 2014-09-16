@@ -14,12 +14,16 @@ namespace cadabra {
 	class NotebookWindow;
 };
 
+HERE: it is not even clear that we still need Netbits. We can just pass a
+GUIBase pointer to the Client, and let the Client call the updating functions
+of the gui directly. Then just run the client in the thread.
+
 class Netbits : public cadabra::Client {
 	public:
 		Netbits(cadabra::NotebookWindow&);
 
 		virtual void on_connect();
-		virtual void on_disconnect() {};
+		virtual void on_disconnect();
 		virtual void on_network_error() {};
 		virtual void on_progress() {};
 

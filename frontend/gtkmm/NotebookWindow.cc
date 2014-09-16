@@ -1,10 +1,15 @@
 
+#include <iostream>
 #include "NotebookWindow.hh"
 
 cadabra::NotebookWindow::NotebookWindow()
 	: b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO),
 	  modified(false)
 	{
+	// Connect the dispatcher.
+	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::on_netbits_notification));
+
+	// Setup menu.
 	actiongroup=Gtk::ActionGroup::create();
 	actiongroup->add( Gtk::Action::create("MenuFile", "_File") );
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
@@ -74,10 +79,31 @@ void cadabra::NotebookWindow::update_title()
 		}
 	}
 
+void cadabra::NotebookWindow::on_netbits_notification() 
+	{
+	std::cout << "notified" << std::endl;
+	}
+
 void cadabra::NotebookWindow::on_connect()
 	{
+	// HERE: use locking and a 'todo' stack to tell the gui what has changed.
+
+	dispatcher.emit();
+
 	// FIXME: this member is called from the network thread; what we should do
 	// instead is lock the string with the status, then use the glib dispatcher
 	// to inform the gui thread that something has changed.
 	kernelversion.set_text("connected");
 	}
+
+void cadabra::NotebookWindow::on_disconnect()
+	{
+	dispatcher.emit();
+
+	kernelversion.set_text("not connected");
+	}
+
+//void cadabra::before_tree_change(cadabra::Client::ActionBase ab)
+//	{
+//	std::lock_guard<std::mutex> guard(todo_mutex);
+//	}
