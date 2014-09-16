@@ -31,6 +31,8 @@ typedef websocketpp::lib::lock_guard<websocketpp::lib::mutex> scoped_lock;
 
 namespace cadabra {
 
+	class GUIBase;
+
 	class Client {
 		public:
 			Client();
@@ -38,7 +40,7 @@ namespace cadabra {
 			~Client();
 
 			// Main entry point, which will connect to the server and then start an
-			// event loop to handle communication with the server. Only exists when
+			// event loop to handle communication with the server. Only terminates when
 			// the connection drops. Run your GUI on a different thread.
 
 			void run(); 
@@ -54,7 +56,7 @@ namespace cadabra {
 			class ActionBase;
 
 			// The client is informed about any change to the document tree using the
-			// following callback. Events like deleting cells will be signalled before
+			// following callbacks. Events like deleting cells will be signalled before
 			// the change is made, others like adding cells will be signalled after the
 			// fact. Changes to the GUI should _only_ be made in response to these
 			// callbacks.
@@ -63,9 +65,22 @@ namespace cadabra {
 			virtual void after_tree_change(ActionBase&)=0;
 
 			// All modifications to the document are done by calling 'perform' with an 
-			// action object. This enables us to implement an undo stack. 
+			// action object. This enables us to implement an undo stack. This method
+			// will take care of making the actual change to the DTree document, and
+			// call back on the 'change' methods above to inform the derived class
+			// that a change has been made. 
+			//
+			// Perform calls can be made both by the GUI (in response to user input)
+			// and by this Client itself (in response to server results coming back).
+			//
+			// The return value is true unless the action was refused (e.g. trying to
+			// delete a cell which is locked against deletion).
+			//
+			// The 'perform' method is synchronous and 'fast', in the sense
+			// that it can run on the UI thread. In contrast to
+			// 'run_cell', which is asynchronous and fast.
 
-			void perform(const ActionBase&);
+			bool perform(const ActionBase&);
 
 			// DataCells are the basic building blocks for a document. They are stored 
 			// in a tree inside the client. A user interface should read these cells
@@ -107,9 +122,11 @@ namespace cadabra {
 				public:
 					ActionBase(iterator);
 					
-					virtual void execute()=0;
-					virtual void revert()=0;
+					virtual void execute(DTree&)=0;
+					virtual void revert(DTree&)=0;
 					
+					virtual void update_gui(GUIBase&)=0;
+
 					iterator cell;
 			};
 			
@@ -120,9 +137,11 @@ namespace cadabra {
 					
 					ActionAddCell(iterator, iterator ref_, Position pos_);
 					
-					virtual void execute();
-					virtual void revert();
-					
+					virtual void execute(DTree&);
+					virtual void revert(DTree&);
+
+					virtual void update_gui(GUIBase&);
+
 				private:
 					// Keep track of the location where this cell is inserted into
 					// the notebook. 
@@ -131,6 +150,12 @@ namespace cadabra {
 					Position    position;
 			};
 			
+			// The command pattern implemented by the objects derived from ActionBase is
+			// acting on the DTree. Actions on the GUI elements (not present in Client but
+			// in a separate object deriving from GUIBase) is implemented by these objects
+			// calling methods in GUIBase, with the required parameters.
+
+
 //			class ActionRemoveCell : public ActionBase {
 //				public:
 //					ActionRemoveCell(tree<DataCell>::iterator);
@@ -172,11 +197,17 @@ namespace cadabra {
 //			class ActionSplitCell
 //       class ActionMergeCells
 			
-			// Finally, the logic to execute code in cells. This is a normal function as it
+			// Finally, the logic to run_cell code in cells. This is a normal function as it
 			// cannot be undone anyway so it is pointless to put it in the undo stack.
 			// If you want to undo an action, you need to restart the kernel on the server.
+			//
+			// Once run_cell is called on a cell, the cell is locked against deletion.
+			//
+			// This method returns as soon as the request has been put on the network queue.
+			// The result of the computation will be reported through one of the callback
+			// members (on_network_error, before_tree_change, ...) defined earlier.
 
-			void execute(iterator);
+			void run_cell(iterator);
 
 		private:
 

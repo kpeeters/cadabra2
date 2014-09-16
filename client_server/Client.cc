@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "Client.hh"
+#include "GUIBase.hh"
 
 using namespace cadabra;
 
@@ -97,7 +98,7 @@ void Client::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	}
 
 
-void Client::perform(const ActionBase& ab) 
+bool Client::perform(const ActionBase& ab) 
 	{
 	// FIXME: this is just a test action
 	std::string msg = 
@@ -107,8 +108,13 @@ void Client::perform(const ActionBase& ab)
 //	std::cout << "sending" << std::endl;
 	wsclient.send(our_connection_hdl, msg, websocketpp::frame::opcode::text);
 //	std::cout << "sending done" << std::endl;
+	return true;
 	}
 
+void Client::run_cell(iterator) 
+	{
+	
+	}
 
 Client::DataCell::DataCell(CellType t, const std::string& str, bool texhidden) 
 	{
@@ -128,10 +134,15 @@ Client::ActionAddCell::ActionAddCell(iterator pos, iterator, Position)
 	{
 	}
 
-void Client::ActionAddCell::execute() 
+void Client::ActionAddCell::execute(DTree&) 
 	{
 	}
 
-void Client::ActionAddCell::revert()
+void Client::ActionAddCell::revert(DTree&)
 	{
+	}
+
+void Client::ActionAddCell::update_gui(GUIBase& gb)
+	{
+	gb.add_cell(cell);
 	}

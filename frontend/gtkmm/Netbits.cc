@@ -12,3 +12,9 @@ void Netbits::on_connect()
 	std::cout << "connected" << std::endl;
 	nbw.on_connect();
 	}
+
+void Netbits::on_disconnect() 
+	{
+	std::cout << "disconnected" << std::endl;
+	nbw.on_disconnect();
+	}
