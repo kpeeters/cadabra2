@@ -6,7 +6,8 @@
 
 using namespace cadabra;
 
-Client::Client()
+Client::Client(GUIBase *g)
+	: gui(g)
 	{
 	}
 
@@ -108,6 +109,10 @@ bool Client::perform(const ActionBase& ab)
 //	std::cout << "sending" << std::endl;
 	wsclient.send(our_connection_hdl, msg, websocketpp::frame::opcode::text);
 //	std::cout << "sending done" << std::endl;
+
+	// Now update the gui:
+//	ab.update_gui(gui);
+
 	return true;
 	}
 
