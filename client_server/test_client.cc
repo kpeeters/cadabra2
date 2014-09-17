@@ -28,7 +28,7 @@ UI       ui;
 
 
 MyClient::MyClient()
-	: Client()
+	: Client(0)
 	{
 	}
 

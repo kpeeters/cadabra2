@@ -35,7 +35,10 @@ namespace cadabra {
 
 	class Client {
 		public:
-			Client();
+			// If the Client is constructed with a null pointer to the gui,
+			// there will be no gui updates, just DTree updates.
+
+			Client(GUIBase *);
 			Client(const Client& )=delete; // You cannot copy this object
 			~Client();
 
@@ -210,6 +213,7 @@ namespace cadabra {
 			void run_cell(iterator);
 
 		private:
+			GUIBase *gui;
 
 			// WebSocket++ things.
 			WSClient wsclient;
