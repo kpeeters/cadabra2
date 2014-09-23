@@ -97,30 +97,25 @@ namespace cadabra {
 
 			// The Action object is used to pass user action instructions around
          // and store them in the undo/redo stacks. All references to cells is
-         // in terms of smart pointers to DataCells. 
+         // in terms of iterators to DataCells. 
 
          // This requires that if we delete a cell, its data cell together
 			// with any TextBuffer and TeXBuffer objects should be kept in
 			// memory, so that the pointer remains valid.  We keep a RefPtr.
 
-			class ActionMethods {
+			class ActionBase {
 				public:
+					ActionBase(iterator);
+
 					virtual void execute(Client&)=0;
+
 					virtual void revert(Client&)=0;
 					virtual void update_gui(GUIBase&)=0;
-			};
 
-			class ActionData {
-				public:
 					iterator cell;
 			};
 
-			class ActionAddCellData : public ActionData {
-				public:
-					
-			};
-
-			class ActionAddCell : public ActionMethods {
+			class ActionAddCell : public ActionBase {
 				public:
 					enum class Position { before, after, child };
 					
@@ -185,6 +180,8 @@ namespace cadabra {
 //
 //			class ActionSplitCell
 //       class ActionMergeCells
+			
+
 			
 			// Finally, the logic to run_cell code in cells. This is a normal function as it
 			// cannot be undone anyway so it is pointless to put it in the undo stack.

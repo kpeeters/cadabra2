@@ -7,7 +7,7 @@ cadabra::NotebookWindow::NotebookWindow()
 	  modified(false)
 	{
 	// Connect the dispatcher.
-	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::on_client_notification));
+	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
 	// Setup menu.
 	actiongroup=Gtk::ActionGroup::create();
@@ -91,9 +91,20 @@ void cadabra::NotebookWindow::update_title()
 		}
 	}
 
-void cadabra::NotebookWindow::on_client_notification() 
+void cadabra::NotebookWindow::new_todo_notification() 
 	{
 	std::cout << "notified" << std::endl;
+	dispatcher.emit();
+	}
+
+void cadabra::NotebookWindow::process_todo_queue() 
+	{
+	std::cout << "processing todo queue" << std::endl;
+	std::lock_guard<std::mutex> guard(gui_todo_mutex);
+	while(gui_todo_deque.size()>0) {
+		std::cout << "need to process an action" << std::endl;
+		gui_todo_deque.pop_front();
+		}
 	}
 
 void cadabra::NotebookWindow::on_connect()
@@ -119,13 +130,6 @@ void cadabra::NotebookWindow::on_network_error()
 	{
 	}
 
-void cadabra::NotebookWindow::add_cell(Client::iterator)
-	{
-	}
-
-void cadabra::NotebookWindow::remove_cell(Client::iterator)
-	{
-	}
 
 //void cadabra::before_tree_change(cadabra::Client::ActionBase ab)
 //	{

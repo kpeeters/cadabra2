@@ -37,18 +37,10 @@ namespace cadabra {
 			// All actual GUI updates take place in the on_client_notification
 			// member, on the GUI thread.
 
-         void on_connect();
-         void on_disconnect();
-         void on_network_error();
-
-			// Implementations of the GUIBase interface for updating the document.
-         // Again, the Client calls these on the Client thread. These methods
-         // stick the data onto the todo_stack and then wake up the GUI thread
-         // to do the actual work.
-			
-			virtual void add_cell(Client::iterator);
-			virtual void remove_cell(Client::iterator);
-
+         virtual void on_connect() override;
+         virtual void on_disconnect() override;
+         virtual void on_network_error() override;
+			virtual void new_todo_notification() override;
 
       private:
          Client *client;
@@ -58,15 +50,6 @@ namespace cadabra {
 			// Runs on the GUI thread.
 
 			Glib::Dispatcher dispatcher;
-			void on_client_notification();
-
-			// Modifications which are not yet reflected in the GUI representation.
-			// These need to be processed before Client can be asked for a new
-			// change.
-
-			std::mutex                              todo_mutex;
-			std::deque<cadabra::Client::ActionBase> todo_stack;
-
 
 			// GUI elements.
 			
@@ -90,6 +73,9 @@ namespace cadabra {
 			void             update_title();
 			std::string      name;
 			bool             modified;
+
+			// Todo deque processing logic.
+			void process_todo_queue();
 	};
 
 };

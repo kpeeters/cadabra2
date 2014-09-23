@@ -29,7 +29,7 @@ add_library(cadabra_server SHARED Server.cc)
 target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
 # Create the client library. 
-add_library(cadabra_client SHARED Client.cc)
+add_library(cadabra_client SHARED Client.cc GUIBase.cc)
 target_link_libraries(cadabra_client ${Boost_LIBRARIES})
 
 # Create server binary
