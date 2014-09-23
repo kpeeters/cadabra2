@@ -103,20 +103,24 @@ namespace cadabra {
 			// with any TextBuffer and TeXBuffer objects should be kept in
 			// memory, so that the pointer remains valid.  We keep a RefPtr.
 
-			class ActionBase {
+			class ActionMethods {
 				public:
-					ActionBase(iterator);
-					
 					virtual void execute(Client&)=0;
 					virtual void revert(Client&)=0;
-					
 					virtual void update_gui(GUIBase&)=0;
+			};
 
+			class ActionData {
+				public:
 					iterator cell;
 			};
-			
-			
-			class ActionAddCell : public ActionBase {
+
+			class ActionAddCellData : public ActionData {
+				public:
+					
+			};
+
+			class ActionAddCell : public ActionMethods {
 				public:
 					enum class Position { before, after, child };
 					
