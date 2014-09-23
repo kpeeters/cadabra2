@@ -53,12 +53,14 @@ void Client::run()
 
 void Client::on_fail(websocketpp::connection_hdl hdl) 
 	{
-	on_network_error();
+	if(gui)
+		gui->on_network_error();
 	}
 
 void Client::on_open(websocketpp::connection_hdl hdl) 
 	{
-	on_connect();
+	if(gui)
+		gui->on_connect();
 
 //	// now it is safe to use the connection
 //	std::string msg;
@@ -82,7 +84,8 @@ void Client::on_open(websocketpp::connection_hdl hdl)
 
 void Client::on_close(websocketpp::connection_hdl hdl) 
 	{
-	on_disconnect();
+	if(gui)
+		gui->on_disconnect();
 	}
 
 const Client::DTree& Client::dtree() 
@@ -99,20 +102,25 @@ void Client::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	}
 
 
-bool Client::perform(const ActionBase& ab) 
+bool Client::perform(std::shared_ptr<ActionBase> ab) 
 	{
-	// FIXME: this is just a test action
-	std::string msg = 
-		"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
-		"  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
-		"}";
-//	std::cout << "sending" << std::endl;
-	wsclient.send(our_connection_hdl, msg, websocketpp::frame::opcode::text);
-//	std::cout << "sending done" << std::endl;
+//	// FIXME: this is just a test action
+//	std::string msg = 
+//		"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
+//		"  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
+//		"}";
+////	std::cout << "sending" << std::endl;
+//	wsclient.send(our_connection_hdl, msg, websocketpp::frame::opcode::text);
+////	std::cout << "sending done" << std::endl;
+//
+//	// Now update the gui:
+////	ab.update_gui(gui);
+//
 
-	// Now update the gui:
-//	ab.update_gui(gui);
-
+	// Put the ActionBase on the undo stack and execute it.
+	undo_stack.push(ab);
+	execute_undo_stack_top();
+	
 	return true;
 	}
 
@@ -128,6 +136,16 @@ Client::DataCell::DataCell(CellType t, const std::string& str, bool texhidden)
 	tex_hidden = texhidden;
 	}
 
+void Client::execute_undo_stack_top()
+	{
+	if(undo_stack.size()>0) {
+//		HERE
+		std::cout << "executing an action" << std::endl;
+		std::shared_ptr<ActionBase> act = undo_stack.top();
+		act->execute(*this);
+		}
+	}
+
 
 Client::ActionBase::ActionBase(iterator pos)
 	: cell(pos)
@@ -139,11 +157,15 @@ Client::ActionAddCell::ActionAddCell(iterator pos, iterator, Position)
 	{
 	}
 
-void Client::ActionAddCell::execute(DTree&) 
+void Client::ActionAddCell::execute(Client& cl)  
 	{
+	std::lock_guard<std::mutex> guard(cl.doc_mutex);
+
+	// add cell to doc.
+	// call gui to update
 	}
 
-void Client::ActionAddCell::revert(DTree&)
+void Client::ActionAddCell::revert(Client& cl)
 	{
 	}
 

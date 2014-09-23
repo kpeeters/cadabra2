@@ -48,25 +48,6 @@ namespace cadabra {
 
 			void run(); 
 
-			// Callback functions to inform the client of a changed state on the server.
-			// Implement these in your derived class.
-
-			virtual void on_connect()=0;
-			virtual void on_disconnect()=0;			
-			virtual void on_network_error()=0;
-			virtual void on_progress()=0;
-
-			class ActionBase;
-
-			// The client is informed about any change to the document tree using the
-			// following callbacks. Events like deleting cells will be signalled before
-			// the change is made, others like adding cells will be signalled after the
-			// fact. Changes to the GUI should _only_ be made in response to these
-			// callbacks.
-
-			virtual void before_tree_change(ActionBase&)=0;
-			virtual void after_tree_change(ActionBase&)=0;
-
 			// All modifications to the document are done by calling 'perform' with an 
 			// action object. This enables us to implement an undo stack. This method
 			// will take care of making the actual change to the DTree document, and
@@ -83,7 +64,8 @@ namespace cadabra {
 			// that it can run on the UI thread. In contrast to
 			// 'run_cell', which is asynchronous and fast.
 
-			bool perform(const ActionBase&);
+			class ActionBase;
+			bool perform(std::shared_ptr<ActionBase>);
 
 			// DataCells are the basic building blocks for a document. They are stored 
 			// in a tree inside the client. A user interface should read these cells
@@ -125,8 +107,8 @@ namespace cadabra {
 				public:
 					ActionBase(iterator);
 					
-					virtual void execute(DTree&)=0;
-					virtual void revert(DTree&)=0;
+					virtual void execute(Client&)=0;
+					virtual void revert(Client&)=0;
 					
 					virtual void update_gui(GUIBase&)=0;
 
@@ -140,8 +122,8 @@ namespace cadabra {
 					
 					ActionAddCell(iterator, iterator ref_, Position pos_);
 					
-					virtual void execute(DTree&);
-					virtual void revert(DTree&);
+					virtual void execute(Client&);
+					virtual void revert(Client&);
 
 					virtual void update_gui(GUIBase&);
 
@@ -224,9 +206,16 @@ namespace cadabra {
 			void on_close(websocketpp::connection_hdl hdl);
 			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
 
-			// The actual document and the action that led to it.
+			// The actual document, the actions that led to it, and mutexes for
+			// locking.
 			DTree doc;
-			typedef std::stack<std::unique_ptr<ActionBase> > ActionStack;
+
+			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;
+			ActionStack undo_stack, redo_stack;
+			std::mutex  doc_mutex;
+
+			// Execution logic.
+			void execute_undo_stack_top();
 	};
 
 }
