@@ -20,6 +20,8 @@ int main(int argc, char **argv)
 	cadabra::Client client(&nw);
 	std::thread client_thread(&cadabra::Client::run, std::ref(client));
 
+	nw.set_client(&client);
+	
 	// Start the ui in the main thread.
 	app->run(nw);
 	client_thread.join();

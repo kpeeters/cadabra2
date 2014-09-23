@@ -7,7 +7,7 @@ cadabra::NotebookWindow::NotebookWindow()
 	  modified(false)
 	{
 	// Connect the dispatcher.
-	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::on_netbits_notification));
+	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::on_client_notification));
 
 	// Setup menu.
 	actiongroup=Gtk::ActionGroup::create();
@@ -57,10 +57,22 @@ cadabra::NotebookWindow::NotebookWindow()
 	set_size_request(800,800);
 	update_title();
 	show_all();
+
 	}
 
 cadabra::NotebookWindow::~NotebookWindow()
 	{
+	}
+
+void cadabra::NotebookWindow::set_client(cadabra::Client *cl)
+	{
+	client=cl;
+
+	// Setup a single-cell document.
+	cadabra::Client::iterator it=client->dtree().begin();
+	auto ac = std::make_shared<cadabra::Client::ActionAddCell>(it, it, cadabra::Client::ActionAddCell::Position::child);
+
+	client->perform(ac);
 	}
 
 void cadabra::NotebookWindow::update_title()
@@ -101,6 +113,18 @@ void cadabra::NotebookWindow::on_disconnect()
 	dispatcher.emit();
 
 	kernelversion.set_text("not connected");
+	}
+
+void cadabra::NotebookWindow::on_network_error()
+	{
+	}
+
+void cadabra::NotebookWindow::add_cell(Client::iterator)
+	{
+	}
+
+void cadabra::NotebookWindow::remove_cell(Client::iterator)
+	{
 	}
 
 //void cadabra::before_tree_change(cadabra::Client::ActionBase ab)
