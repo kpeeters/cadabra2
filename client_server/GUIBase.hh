@@ -31,7 +31,7 @@ namespace cadabra {
 
          // After the Client updates the todo deque, it will call new_todo_notification to
          // inform the GUI about this. Typically the GUI would be made to wake up and
-         // process any remaining items on the todo deque.
+         // then process any remaining items on the todo deque.
 
 			virtual void new_todo_notification()=0;
 
