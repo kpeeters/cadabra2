@@ -139,10 +139,10 @@ Client::DataCell::DataCell(CellType t, const std::string& str, bool texhidden)
 void Client::execute_undo_stack_top()
 	{
 	if(undo_stack.size()>0) {
-//		HERE
 		std::cout << "executing an action" << std::endl;
 		std::shared_ptr<ActionBase> act = undo_stack.top();
 		act->execute(*this);
+		act->update_gui(*gui);
 		}
 	}
 
@@ -161,8 +161,8 @@ void Client::ActionAddCell::execute(Client& cl)
 	{
 	std::lock_guard<std::mutex> guard(cl.doc_mutex);
 
-	// add cell to doc.
-	// call gui to update
+// HERE, need to be able to create an empty document etc...
+	cl.doc.append_child(ref, cell);
 	}
 
 void Client::ActionAddCell::revert(Client& cl)
@@ -171,5 +171,9 @@ void Client::ActionAddCell::revert(Client& cl)
 
 void Client::ActionAddCell::update_gui(GUIBase& gb)
 	{
-	gb.add_cell(cell);
+	GUIBase::GUIAction action(GUIBase::GUIAction::Type::ADD, cell);
+
+	std::lock_guard<std::mutex> guard(gb.gui_todo_mutex);
+	gb.gui_todo_deque.push_back(action);
+	gb.new_todo_notification();
 	}
