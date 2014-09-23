@@ -1,16 +1,17 @@
 
-Cadabra installation instructions
----------------------------------
+Cadabra building and installation instructions
+----------------------------------------------
 
 The Cadabra source is distributed among several subdirectories, many of
 which can be built independently:
 
-   - src:     the main cadabra sources plus the logic to make it accessible
-              as a Python module 'cadabra'.
+   - core:          The main cadabra sources plus the logic to make it accessible
+                    as a Python module 'cadabra'. These are all system-independent.
 
-   - server:  
-
-   - gui:
+   - client_server: GUI-independent classes for building a cadabra server and client.
+                     
+   - frontend:      Implementations of the front-end for various platforms, as well
+	                 as platform-independent support code for e.g. maths typesetting.
 
 
 A. Linux
@@ -19,7 +20,12 @@ A. Linux
 Building from source requires a number of packages. On Debian and
 derivatives they can all be installed with
 
-  sudo apt-get install libjsoncpp-dev
+  sudo apt-get install g++ libjsoncpp-dev libboost-all-dev libgmp-dev
+
+(you can get away with fewer parts of boost). In addition one needs
+websocket++ from
+
+  http://www.zaphoyd.com/websocketpp
 
 
 
@@ -31,8 +37,12 @@ as well as a number of libraries which are readily available from
 Homebrew, http://brew.sh.  Before attempting to build Cadabra, make
 sure a basic Homebrew installation is present, and then do
 
-  brew install cmake boost pcre gmp json-cpp
+  brew install cmake boost pcre gmp jsonpp
+
+HERE: shall we just include websocketpp into the tree?
 
 In order to run the Cadabra notebook interface succesfully, you also
 need a TeX installation such as MacTeX, http://tug.org/mactex/ .
+Any TeX will do, as long as 'latex' and 'dvipng' are available, and
+the 'breqn' package is installed.
 

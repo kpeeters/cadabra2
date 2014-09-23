@@ -388,6 +388,8 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 			std::ifstream tst(pngname.str().c_str());
 			if(tst.good()) {
 				unsigned error = lodepng::decode((*reqit)->image, (*reqit)->width, (*reqit)->height, pngname.str());
+				if(error!=0)
+					throw TeXException("PNG conversion error");
 				(*reqit)->needs_generating=false;
 				erase_file(pngname.str());
 				}
