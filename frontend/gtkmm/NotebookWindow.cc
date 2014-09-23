@@ -91,7 +91,7 @@ void cadabra::NotebookWindow::update_title()
 		}
 	}
 
-void cadabra::NotebookWindow::on_netbits_notification() 
+void cadabra::NotebookWindow::on_client_notification() 
 	{
 	std::cout << "notified" << std::endl;
 	}
