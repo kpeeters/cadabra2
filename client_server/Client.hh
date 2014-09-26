@@ -90,9 +90,10 @@ namespace cadabra {
 			// made by submitting ActionBase derived objects to the 'perform' function,
 			// so that an undo stack can be kept.
 
-			typedef tree<DataCell>           DTree;
-			typedef tree<DataCell>::iterator iterator;
+			typedef tree<std::shared_ptr<DataCell> >  DTree;
+			typedef DTree::iterator                   iterator;
 
+			std::mutex   dtree_mutex;
 			const DTree& dtree();
 
 			// The Action object is used to pass user action instructions around
@@ -105,21 +106,19 @@ namespace cadabra {
 
 			class ActionBase {
 				public:
-					ActionBase(iterator);
+					ActionBase();
 
 					virtual void execute(Client&)=0;
 
 					virtual void revert(Client&)=0;
 					virtual void update_gui(GUIBase&)=0;
-
-					iterator cell;
 			};
 
 			class ActionAddCell : public ActionBase {
 				public:
 					enum class Position { before, after, child };
 					
-					ActionAddCell(iterator, iterator ref_, Position pos_);
+					ActionAddCell(std::shared_ptr<DataCell>, iterator ref_, Position pos_);
 					
 					virtual void execute(Client&);
 					virtual void revert(Client&);
@@ -129,9 +128,10 @@ namespace cadabra {
 				private:
 					// Keep track of the location where this cell is inserted into
 					// the notebook. 
-					
-					iterator    ref;
-					Position    position;
+
+					std::shared_ptr<DataCell>  datacell;
+					iterator                   ref, newcell;
+					Position                   pos;
 			};
 			
 			// The command pattern implemented by the objects derived from ActionBase is
@@ -213,7 +213,6 @@ namespace cadabra {
 
 			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;
 			ActionStack undo_stack, redo_stack;
-			std::mutex  doc_mutex;
 
 			// Execution logic.
 			void execute_undo_stack_top();

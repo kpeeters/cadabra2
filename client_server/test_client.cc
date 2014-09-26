@@ -65,7 +65,8 @@ void UI::run()
 	std::cin >> i;
 	
 	cadabra::Client::iterator it=client.dtree().begin();
-	auto ac = std::make_shared<cadabra::Client::ActionAddCell>(it, it, cadabra::Client::ActionAddCell::Position::child);
+	auto cell = std::make_shared<cadabra::Client::DataCell>();
+	auto ac = std::make_shared<cadabra::Client::ActionAddCell>(cell, it, cadabra::Client::ActionAddCell::Position::child);
 	
 	try {
 		std::cout << "calling perform" << std::endl;
