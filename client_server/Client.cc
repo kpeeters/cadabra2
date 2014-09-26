@@ -147,22 +147,21 @@ void Client::execute_undo_stack_top()
 	}
 
 
-Client::ActionBase::ActionBase(iterator pos)
-	: cell(pos)
+Client::ActionBase::ActionBase()
 	{
 	}
 
-Client::ActionAddCell::ActionAddCell(iterator pos, iterator, Position) 
-	: ActionBase(pos)
+Client::ActionAddCell::ActionAddCell(std::shared_ptr<DataCell> dc, iterator ref_, Position pos_) 
+	: datacell(dc), ref(ref_), pos(pos_)
 	{
 	}
 
 void Client::ActionAddCell::execute(Client& cl)  
 	{
-	std::lock_guard<std::mutex> guard(cl.doc_mutex);
+	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
 
 // HERE, need to be able to create an empty document etc...
-	cl.doc.append_child(ref, cell);
+	newcell = cl.doc.append_child(ref, datacell);
 	}
 
 void Client::ActionAddCell::revert(Client& cl)
@@ -171,7 +170,7 @@ void Client::ActionAddCell::revert(Client& cl)
 
 void Client::ActionAddCell::update_gui(GUIBase& gb)
 	{
-	GUIBase::GUIAction action(GUIBase::GUIAction::Type::ADD, cell);
+	GUIBase::GUIAction action(GUIBase::GUIAction::Type::ADD, newcell);
 
 	std::lock_guard<std::mutex> guard(gb.gui_todo_mutex);
 	gb.gui_todo_deque.push_back(action);

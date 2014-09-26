@@ -69,8 +69,13 @@ void cadabra::NotebookWindow::set_client(cadabra::Client *cl)
 	client=cl;
 
 	// Setup a single-cell document.
+	std::lock_guard<std::mutex> guard(client->dtree_mutex);
+
 	cadabra::Client::iterator it=client->dtree().begin();
-	auto ac = std::make_shared<cadabra::Client::ActionAddCell>(it, it, cadabra::Client::ActionAddCell::Position::child);
+	auto newcell = std::make_shared<cadabra::Client::DataCell>();
+	auto ac = std::make_shared<cadabra::Client::ActionAddCell>(newcell, 
+																				  it, 
+																				  cadabra::Client::ActionAddCell::Position::child);
 
 	client->perform(ac);
 	}
