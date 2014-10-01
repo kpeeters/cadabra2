@@ -2,7 +2,9 @@
 #include <iostream>
 #include "NotebookWindow.hh"
 
-cadabra::NotebookWindow::NotebookWindow()
+using namespace cadabra;
+
+NotebookWindow::NotebookWindow()
 	: b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO),
 	  modified(false)
 	{
@@ -60,27 +62,27 @@ cadabra::NotebookWindow::NotebookWindow()
 
 	}
 
-cadabra::NotebookWindow::~NotebookWindow()
+NotebookWindow::~NotebookWindow()
 	{
 	}
 
-void cadabra::NotebookWindow::set_client(cadabra::Client *cl)
+void NotebookWindow::set_client(ComputeThread *cl)
 	{
 	client=cl;
 
 	// Setup a single-cell document.
-	std::lock_guard<std::mutex> guard(client->dtree_mutex);
-
-	cadabra::Client::iterator it=client->dtree().begin();
-	auto newcell = std::make_shared<cadabra::Client::DataCell>();
-	auto ac = std::make_shared<cadabra::Client::ActionAddCell>(newcell, 
-																				  it, 
-																				  cadabra::Client::ActionAddCell::Position::child);
-
-	client->perform(ac);
+//	std::lock_guard<std::mutex> guard(client->dtree_mutex);
+//
+//	Client::iterator it=client->dtree().begin();
+//	auto newcell = std::make_shared<Client::DataCell>();
+//	auto ac = std::make_shared<Client::ActionAddCell>(newcell, 
+//																				  it, 
+//																				  ActionAddCell::Position::child);
+//
+//	client->perform(ac);
 	}
 
-void cadabra::NotebookWindow::update_title()
+void NotebookWindow::update_title()
 	{
 	if(name.size()>0) {
 		if(modified)
@@ -96,23 +98,14 @@ void cadabra::NotebookWindow::update_title()
 		}
 	}
 
-void cadabra::NotebookWindow::new_todo_notification() 
+void NotebookWindow::process_data() 
 	{
 	std::cout << "notified" << std::endl;
 	dispatcher.emit();
 	}
 
-void cadabra::NotebookWindow::process_todo_queue() 
-	{
-	std::cout << "processing todo queue" << std::endl;
-	std::lock_guard<std::mutex> guard(gui_todo_mutex);
-	while(gui_todo_deque.size()>0) {
-		std::cout << "need to process an action" << std::endl;
-		gui_todo_deque.pop_front();
-		}
-	}
 
-void cadabra::NotebookWindow::on_connect()
+void NotebookWindow::on_connect()
 	{
 	// HERE: use locking and a 'todo' stack to tell the gui what has changed.
 
@@ -124,19 +117,29 @@ void cadabra::NotebookWindow::on_connect()
 	kernelversion.set_text("connected");
 	}
 
-void cadabra::NotebookWindow::on_disconnect()
+void NotebookWindow::on_disconnect()
 	{
 	dispatcher.emit();
 
 	kernelversion.set_text("not connected");
 	}
 
-void cadabra::NotebookWindow::on_network_error()
+void NotebookWindow::on_network_error()
 	{
 	}
 
+void NotebookWindow::process_todo_queue()
+	{
+	}
 
-//void cadabra::before_tree_change(cadabra::Client::ActionBase ab)
-//	{
-//	std::lock_guard<std::mutex> guard(todo_mutex);
-//	}
+void NotebookWindow::add_cell(DTree::iterator)
+	{
+	}
+
+void NotebookWindow::remove_cell(DTree::iterator)
+	{
+	}
+
+void NotebookWindow::update_cell(DTree::iterator)
+	{
+	}

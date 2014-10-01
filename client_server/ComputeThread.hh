@@ -44,7 +44,7 @@ namespace cadabra {
 			// the computation will be reported by calling one of the members
 			// of the GUIBase abstract base class.
 
-			void execute_cell(std::shared_ptr<DataCell>);
+			void execute_cell(const DataCell&);
 
 		private:
 			GUIBase *gui;

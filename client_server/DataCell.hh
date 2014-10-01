@@ -2,6 +2,7 @@
 #pragma once
 
 #include <string>
+#include "tree.hh"
 
 namespace cadabra {
 
@@ -27,5 +28,7 @@ namespace cadabra {
 			// so that iterators pointing to it remain valid.
 			bool                          locked;
 	};
+
+	typedef tree<DataCell> DTree;
 	
 }

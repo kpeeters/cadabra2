@@ -13,18 +13,18 @@ namespace cadabra {
 	
 	class GUIBase {
 		public:
-			
 			// The basic manipulations that a GUI needs to implement are
 			// adding, removing and updating (refreshing the display of)
-			// a cell. The code in DocumentThread will call these to
-			// make the GUI update its display.
+			// a cell. The code in DocumentThread will call these to make
+			// the GUI update its display. Called on the document thread.
 
-			virtual void update_cell(std::shared_ptr<DataCell>)=0;
-			virtual void remove_cell(std::shared_ptr<DataCell>)=0;
-			virtual void add_cell(std::shared_ptr<DataCell>)=0;
+			virtual void update_cell(DTree::iterator)=0;
+			virtual void remove_cell(DTree::iterator)=0;
+			virtual void add_cell(DTree::iterator)=0;
 
 			// Network status is propagated from the ComputeThread to the
-         // GUI using the following methods.
+         // GUI using the following methods. These get called on the
+			// compute thread.
 
 			virtual void on_connect()=0;
 			virtual void on_disconnect()=0;
