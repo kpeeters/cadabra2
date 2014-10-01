@@ -1,0 +1,35 @@
+
+Can it ever happen that e.g. the user selects a cell, clicks delete, but before
+the Action can be 'perform'ed, the client has already removed it?
+
+
+The problem is that the user interface can fire off a Delete action and then happily
+request other things to that cell before the delete has happened. Or can it? With
+calling perform, you always run on the gui thread. This thread should just execute
+all actions immediately, all the way down to the gui update.
+
+ -> maybe the best is to make 'perform' execute all the way through, and make
+    a separate member, only accessible to the client, which does actions by
+    waking.
+
+    perform_sync();
+
+
+    perform_async();
+
+ -> No, let the GUI thread do all updates. The client can only request updates, the
+    gui thread executes them. Then it becomes easy to force the gui to first run the
+    outstanding requests before doing its own.
+
+    HOWEVER, in this case we have to worry about how the client stores ActionBase.
+    The GUIThread holds the action stack, but the NetThread can lock it and write
+    into it.
+
+
+Make sure to keep the GUIBase and Client classes separating the thread actions.
+Some stuff should probably move out from Client -> GUIBase. Also: rename to
+GUIThread and NetThread.  Or maybe add SharedData to separate it out even cleaner.
+
+
+* We are passing around all data in the form of shared ptrs, but that ignores
+  the tree structure. Perhaps change this?
