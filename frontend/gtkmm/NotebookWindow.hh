@@ -18,20 +18,14 @@
 
 namespace cadabra {
 
-// Each notebook has one main window which controls it. It has a menu bar, a
-// status pane and one or more panels that represent a view on the document.
+   // Each notebook has one main window which controls it. It has a menu bar, a
+   // status pane and one or more panels that represent a view on the document.
 
    class NotebookWindow : public Gtk::Window, public DocumentThread, public GUIBase {
       public:
          NotebookWindow();
          ~NotebookWindow();
         
-         // Let the notebook know about the ComputeThread so that it
-         // can send cells for evaluation. Notebook does not own this
-         // pointer.
-
-         void set_client(ComputeThread *);
-
          // Virtual functions from GUIBase.
 
          virtual void add_cell(DTree::iterator) override;
@@ -45,7 +39,6 @@ namespace cadabra {
 			virtual void process_data() override;
 
       private:
-         ComputeThread *client;
 
 			// Main handler which fires whenever the Client object signals 
 			// that the document is changing or the network status is modified.

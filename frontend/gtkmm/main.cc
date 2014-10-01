@@ -15,13 +15,13 @@ int main(int argc, char **argv)
 		Gtk::Application::create(argc, argv, "com.phi-sci.cadabra.cadabra-gtk");
   	cadabra::NotebookWindow nw;
 
-	// Create and start the network thread.
-	cadabra::ComputeThread client(&nw);
-	std::thread client_thread(&cadabra::ComputeThread::run, std::ref(client));
+	// Create and start the compute/network thread.
+	cadabra::ComputeThread compute(&nw);
+	std::thread compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
 
-	nw.set_client(&client);
+	nw.set_compute_thread(&compute);
 	
 	// Start the ui in the main thread.
 	app->run(nw);
-	client_thread.join();
+	compute_thread.join();
 	}

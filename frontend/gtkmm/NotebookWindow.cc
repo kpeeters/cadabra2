@@ -66,21 +66,6 @@ NotebookWindow::~NotebookWindow()
 	{
 	}
 
-void NotebookWindow::set_client(ComputeThread *cl)
-	{
-	client=cl;
-
-	// Setup a single-cell document.
-//	std::lock_guard<std::mutex> guard(client->dtree_mutex);
-//
-//	Client::iterator it=client->dtree().begin();
-//	auto newcell = std::make_shared<Client::DataCell>();
-//	auto ac = std::make_shared<Client::ActionAddCell>(newcell, 
-//																				  it, 
-//																				  ActionAddCell::Position::child);
-//
-//	client->perform(ac);
-	}
 
 void NotebookWindow::update_title()
 	{
