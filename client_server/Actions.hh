@@ -38,7 +38,7 @@ namespace cadabra {
 		public:
 			enum class Position { before, after, child };
 			
-			ActionAddCell(std::shared_ptr<DataCell>, DocumentThread::iterator ref_, Position pos_);
+			ActionAddCell(DTree::iterator, DTree::iterator ref_, Position pos_);
 			
 			virtual void execute(DocumentThread&);
 			virtual void revert(DocumentThread&);
@@ -48,9 +48,8 @@ namespace cadabra {
 			// Keep track of the location where this cell is inserted into
 			// the notebook. 
 			
-			std::shared_ptr<DataCell>  datacell;
-			DocumentThread::iterator   ref, newcell;
-			Position                   pos;
+			DTree::iterator   ref, newcell;
+			Position          pos;
 	};
 	
 }	

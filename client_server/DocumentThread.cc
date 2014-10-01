@@ -6,7 +6,7 @@
 using namespace cadabra;
 
 
-const DocumentThread::DTree& DocumentThread::dtree() 
+const DTree& DocumentThread::dtree() 
 	{
 	return doc;
 	}

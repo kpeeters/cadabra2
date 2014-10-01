@@ -1,7 +1,6 @@
 
-#include "Client.hh"
+#include "ComputeThread.hh"
 #include "NotebookWindow.hh"
-//#include "Netbits.hh"
 
 #include <gtkmm/application.h>
 
@@ -17,8 +16,8 @@ int main(int argc, char **argv)
   	cadabra::NotebookWindow nw;
 
 	// Create and start the network thread.
-	cadabra::Client client(&nw);
-	std::thread client_thread(&cadabra::Client::run, std::ref(client));
+	cadabra::ComputeThread client(&nw);
+	std::thread client_thread(&cadabra::ComputeThread::run, std::ref(client));
 
 	nw.set_client(&client);
 	

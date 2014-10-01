@@ -97,7 +97,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 //	std::cout << msg->get_payload() << std::endl;
 	}
 
-void ComputeThread::execute_cell(std::shared_ptr<DataCell>) 
+void ComputeThread::execute_cell(const DataCell&)
 	{
 	
 	}
