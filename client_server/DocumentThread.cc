@@ -5,6 +5,26 @@
 
 using namespace cadabra;
 
+DocumentThread::DocumentThread()
+	: compute(0)
+	{
+	}
+
+void DocumentThread::set_compute_thread(ComputeThread *cl)
+	{
+	compute = cl;
+
+	// Setup a single-cell document.
+//	std::lock_guard<std::mutex> guard(client->dtree_mutex);
+//
+//	Client::iterator it=client->dtree().begin();
+//	auto newcell = std::make_shared<Client::DataCell>();
+//	auto ac = std::make_shared<Client::ActionAddCell>(newcell, 
+//																				  it, 
+//																				  ActionAddCell::Position::child);
+//
+//	client->perform(ac);
+	}
 
 const DTree& DocumentThread::dtree() 
 	{

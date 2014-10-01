@@ -16,10 +16,18 @@ namespace cadabra {
 
    class ActionBase;
    class ActionAddCell;
+   class ComputeThread;
 
    class DocumentThread {
 		public:
-			
+         DocumentThread();
+
+         // Let the notebook know about the ComputeThread so that it
+         // can send cells for evaluation. Notebook does not own this
+         // pointer.
+
+         void set_compute_thread(ComputeThread *);
+
 			// The document is a tree of DataCells. All changes to the
 			// tree should be made by submitting ActionBase derived
 			// objects to the 'perform' function, so that an undo stack
@@ -33,6 +41,7 @@ namespace cadabra {
          friend ActionAddCell;
 	
 		protected:
+         ComputeThread *compute;
 			
 			// The actual document, the actions that led to it, and mutexes for
 			// locking.
