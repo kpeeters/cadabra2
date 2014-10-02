@@ -1,6 +1,8 @@
 
 #include "DocumentThread.hh"
 #include "Actions.hh"
+#include "GUIBase.hh"
+
 #include <iostream>
 
 using namespace cadabra;
@@ -17,18 +19,12 @@ void DocumentThread::set_compute_thread(ComputeThread *cl)
 
 void DocumentThread::new_document()
 	{
-	// Setup a single-cell document.
-	
+	// Setup a single-cell document. This operation itself cannot be undone,
+	// so we do it directly on the doc, not using Actions.
 
-//	std::lock_guard<std::mutex> guard(client->dtree_mutex);
-//
-//	Client::iterator it=client->dtree().begin();
-//	auto newcell = std::make_shared<Client::DataCell>();
-//	auto ac = std::make_shared<Client::ActionAddCell>(newcell, 
-//																				  it, 
-//																				  ActionAddCell::Position::child);
-//
-//	client->perform(ac);
+	DataCell top;
+	doc.set_head(top);
+	gui->add_cell(doc.begin());
 	}
 
 const DTree& DocumentThread::dtree() 

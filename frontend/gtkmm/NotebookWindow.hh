@@ -15,6 +15,7 @@
 #include "DocumentThread.hh"
 #include "ComputeThread.hh"
 #include "GUIBase.hh"
+#include "../common/TeXEngine.hh"
 
 namespace cadabra {
 
@@ -77,6 +78,9 @@ namespace cadabra {
 
 			// Todo deque processing logic.
 			void process_todo_queue();
+
+			// TeX stuff
+			TeXEngine        engine;
 	};
 
 };

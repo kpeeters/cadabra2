@@ -6,16 +6,14 @@
 #include <set>
 #include <string>
 
-/// TeXEngine is a singleton which is used to convert LaTeX strings
-/// into Gdk::Pixbuf objects. This is a two-stage process: you first
-/// 'check in' a string into the system, in exchange for a pointer to 
-/// a TeXRequest object. When you are ready to retrieve the image,
-/// call 'get_pixbuf'. 
-///
-/// If you need to generate images for more than one string, simply
-/// check them all in and then call 'convert_all' before retrieving
-/// the pixbufs. This requires only one round-trip through
-/// latex/dvipng.
+// TeXEngine is used to convert LaTeX strings into PNG images. This is
+// a two-stage process: you first 'check in' a string into the system,
+// in exchange for a pointer to a TeXRequest object. When you are
+// ready to retrieve the image, call 'get_pixbuf'.
+//
+// If you need to generate images for more than one string, simply
+// check them all in and then call 'convert_all' before retrieving the
+// pixbufs. This requires only one round-trip through latex/dvipng.
 
 class TeXEngine {
 	public:
@@ -39,12 +37,13 @@ class TeXEngine {
 		TeXEngine();
 		~TeXEngine();
 
-		/// Set the width and font size for all images to be generated.
+		// Set the width and font size for all images to be generated.
 		void set_geometry(int horizontal_pixels);
 		void set_font_size(int font_size);
 		std::vector<std::string> latex_packages;
 
-		/// All checkin/checkout conversion routines.
+		// All checkin/checkout conversion routines. The pointers which
+		// are returned here remain owned by the TeXEngine.
 		TeXRequest                *checkin(const std::string&,
 													  const std::string& startwrap, const std::string& endwrap);
 		TeXRequest                *modify(TeXRequest *, const std::string&);
