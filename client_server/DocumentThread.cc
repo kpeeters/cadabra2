@@ -5,16 +5,21 @@
 
 using namespace cadabra;
 
-DocumentThread::DocumentThread()
-	: compute(0)
+DocumentThread::DocumentThread(GUIBase* g)
+	: gui(g), compute(0)
 	{
 	}
 
 void DocumentThread::set_compute_thread(ComputeThread *cl)
 	{
 	compute = cl;
+	}
 
+void DocumentThread::new_document()
+	{
 	// Setup a single-cell document.
+	
+
 //	std::lock_guard<std::mutex> guard(client->dtree_mutex);
 //
 //	Client::iterator it=client->dtree().begin();
@@ -31,18 +36,14 @@ const DTree& DocumentThread::dtree()
 	return doc;
 	}
 
-void DocumentThread::execute_undo_stack_top()
+void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab) 
 	{
-	if(undo_stack.size()>0) {
-		std::cout << "executing an action" << std::endl;
-		std::shared_ptr<ActionBase> act = undo_stack.top();
-		act->execute(*this);
-		// FIXME: we do not know about gui here
-//		act->update_gui(*gui);
-		}
+	std::lock_guard<std::mutex> guard(stack_mutex);
+	pending_actions.push(ab);
 	}
 
-bool DocumentThread::perform(std::shared_ptr<ActionBase> ab) 
+
+void DocumentThread::process_action_queue()
 	{
 //	// FIXME: this is just a test action
 //	std::string msg = 
@@ -56,10 +57,13 @@ bool DocumentThread::perform(std::shared_ptr<ActionBase> ab)
 //	// Now update the gui:
 ////	ab.update_gui(gui);
 //
-
-	// Put the ActionBase on the undo stack and execute it.
-	undo_stack.push(ab);
-	execute_undo_stack_top();
 	
-	return true;
+	std::lock_guard<std::mutex> guard(stack_mutex);
+	while(pending_actions.size()>0) {
+		std::shared_ptr<ActionBase> ab = pending_actions.back();
+		ab->execute(*this);
+		ab->update_gui(*gui);
+		pending_actions.pop();
+		}
+	std::cout << "no more actions on pending queue" << std::endl;
 	}
