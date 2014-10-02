@@ -59,10 +59,16 @@ namespace cadabra {
          // Buttons
          Gtk::Button                    b_kill, b_run, b_run_to, b_run_from, b_help, b_stop, b_undo, b_redo;
 
-
 			// Status bar
 			Gtk::ProgressBar               progressbar;
-			Gtk::Label                     cdbstatus, kernelversion;
+			Gtk::Label                     status_label, kernel_label;
+
+			// GUI data which is the autoritative source for things displayed in
+			// the status bars declared above. These strings are filled on the
+			// compute thread and then updated into the gui on the gui thread.
+
+			std::mutex                     status_mutex;
+			std::string                    status_string, kernel_string;
 
 			// Name and modification data.
 			void             update_title();

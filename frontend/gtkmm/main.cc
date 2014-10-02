@@ -7,7 +7,6 @@
 // Cadabra frontend with GTK+ interface (using gtkmm). 
 // Makes use of the client classes in the client_server directory.
 
-
 int main(int argc, char **argv)
 	{
 	// Create the ui material.
@@ -17,8 +16,9 @@ int main(int argc, char **argv)
 
 	// Create and start the compute/network thread.
 	cadabra::ComputeThread compute(&nw);
-	std::thread compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
-
+	std::thread            compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
+	
+	// Connect the two threads.
 	nw.set_compute_thread(&compute);
 	
 	// Start the ui in the main thread.

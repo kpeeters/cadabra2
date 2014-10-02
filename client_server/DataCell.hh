@@ -2,6 +2,8 @@
 #pragma once
 
 #include <string>
+#include <mutex>
+
 #include "tree.hh"
 
 namespace cadabra {
@@ -15,6 +17,7 @@ namespace cadabra {
 			enum class CellType { input, output, comment, texcomment, tex, error };
 			
 			DataCell(CellType t=CellType::input, const std::string& str="", bool texhidden=false);
+			DataCell(const DataCell&);
 			
 			CellType                      cell_type;
 			std::string                   textbuf;
@@ -23,10 +26,16 @@ namespace cadabra {
 			bool                          sensitive;
 			bool                          running;
 			
+			// Each cell is identified by a serial number 'id' which is used
+			// to keep track of it across network calls.
+
+			long                          id() const;
+			
 		private:
-			// Cells can be locked against modification, in particular deletion,
-			// so that iterators pointing to it remain valid.
-			bool                          locked;
+
+			static std::mutex             serial_mutex;
+			long                          serial_number;
+			static long                   max_serial_number;
 	};
 
 	typedef tree<DataCell> DTree;

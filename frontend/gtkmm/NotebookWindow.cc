@@ -5,7 +5,8 @@
 using namespace cadabra;
 
 NotebookWindow::NotebookWindow()
-	: b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO),
+	: DocumentThread(this),
+	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO),
 	  modified(false)
 	{
 	// Connect the dispatcher.
@@ -28,13 +29,13 @@ NotebookWindow::NotebookWindow()
 	supermainbox.pack_start(mainbox, true, true);
 
 	// Status bar
-	cdbstatus.set_alignment( 0.0, 0.5 );
-	kernelversion.set_alignment( 0.0, 0.5 );
-	cdbstatus.set_size_request(200,-1);
-	cdbstatus.set_justify(Gtk::JUSTIFY_LEFT);
-	kernelversion.set_justify(Gtk::JUSTIFY_LEFT);
-	statusbarbox.pack_start(cdbstatus);
-	statusbarbox.pack_start(kernelversion);
+	status_label.set_alignment( 0.0, 0.5 );
+	kernel_label.set_alignment( 0.0, 0.5 );
+	status_label.set_size_request(200,-1);
+	status_label.set_justify(Gtk::JUSTIFY_LEFT);
+	kernel_label.set_justify(Gtk::JUSTIFY_LEFT);
+	statusbarbox.pack_start(status_label);
+	statusbarbox.pack_start(kernel_label);
 	statusbarbox.pack_start(progressbar);
 	progressbar.set_size_request(200,-1);
 	progressbar.set_text("idle");
@@ -92,29 +93,34 @@ void NotebookWindow::process_data()
 
 void NotebookWindow::on_connect()
 	{
-	// HERE: use locking and a 'todo' stack to tell the gui what has changed.
-
+	std::lock_guard<std::mutex> guard(status_mutex);
+	kernel_string = "connected";
 	dispatcher.emit();
-
-	// FIXME: this member is called from the network thread; what we should do
-	// instead is lock the string with the status, then use the glib dispatcher
-	// to inform the gui thread that something has changed.
-	kernelversion.set_text("connected");
 	}
 
 void NotebookWindow::on_disconnect()
 	{
+	std::lock_guard<std::mutex> guard(status_mutex);
+	kernel_string = "not connected";
 	dispatcher.emit();
-
-	kernelversion.set_text("not connected");
 	}
 
 void NotebookWindow::on_network_error()
 	{
+	std::lock_guard<std::mutex> guard(status_mutex);
+	kernel_string = "network error";
+	dispatcher.emit();
 	}
 
 void NotebookWindow::process_todo_queue()
 	{
+	// Update the status/kernel messages into the corresponding widgets.
+	std::lock_guard<std::mutex> guard(status_mutex);
+	kernel_label.set_text(kernel_string);
+	status_label.set_text(status_string);
+
+	// Perform any ActionBase actions.
+
 	}
 
 void NotebookWindow::add_cell(DTree::iterator)

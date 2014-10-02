@@ -17,46 +17,47 @@ namespace cadabra {
    class ActionBase;
    class ActionAddCell;
    class ComputeThread;
+   class GUIBase;
 
    class DocumentThread {
 		public:
-         DocumentThread();
+         DocumentThread(GUIBase *);
+         DocumentThread(const DocumentThread&)=delete;
 
          // Let the notebook know about the ComputeThread so that it
-         // can send cells for evaluation. Notebook does not own this
+         // can send cells for evaluation. Notebook does NOT own this
          // pointer.
 
          void set_compute_thread(ComputeThread *);
 
-			// The document is a tree of DataCells. All changes to the
-			// tree should be made by submitting ActionBase derived
-			// objects to the 'perform' function, so that an undo stack
-			// can be kept.
+			// All changes to the document should be made by submitting
+			// ActionBase derived objects to the 'queue_action' function,
+			// so that an undo stack can be kept. They are then processed
+			// by calling the 'process_action_queue' method (only
+			// available from this thread).
 			
 			std::mutex   dtree_mutex;
 			const DTree& dtree();
+         void         new_document();
 			
-			bool perform(std::shared_ptr<ActionBase>);
+			void queue_action(std::shared_ptr<ActionBase>);
 		
          friend ActionAddCell;
+         // add other actions.
 	
 		protected:
-         ComputeThread *compute;
-			
-			// The actual document, the actions that led to it, and mutexes for
-			// locking.
-			DTree doc;
-			
-			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;
-			ActionStack undo_stack, redo_stack;
-			
-			// Execution logic.
-			void execute_undo_stack_top();
 
-			// Actions which still have to be performed and then put on
-			// the undo_stack.
-			std::queue<std::shared_ptr<ActionBase> > pending_actions;
+         GUIBase       *gui;
+         ComputeThread *compute;
+			DTree          doc;
 			
+         // The action undo/redo/todo stacks and logic to execute them.
+
+         void                                             process_action_queue();
+         std::mutex                                       stack_mutex;
+			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;
+			ActionStack                                      undo_stack, redo_stack;
+			std::queue<std::shared_ptr<ActionBase> >         pending_actions;			
 	};
 	
 }
