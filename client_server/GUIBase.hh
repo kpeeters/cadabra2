@@ -20,6 +20,9 @@ namespace cadabra {
 
 			virtual void update_cell(DTree::iterator)=0;
 			virtual void remove_cell(DTree::iterator)=0;
+
+			// Add a GUI cell corresponding to the document cell at the
+			// iterator.
 			virtual void add_cell(DTree::iterator)=0;
 
 			// Network status is propagated from the ComputeThread to the

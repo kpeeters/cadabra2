@@ -15,6 +15,7 @@
 #include "DocumentThread.hh"
 #include "ComputeThread.hh"
 #include "GUIBase.hh"
+#include "NotebookCanvas.hh"
 #include "../common/TeXEngine.hh"
 
 namespace cadabra {
@@ -56,6 +57,10 @@ namespace cadabra {
 			Gtk::VBox                      mainbox;
 			Gtk::HBox                      buttonbox;
 			Gtk::HBox                      statusbarbox;
+
+			// All canvasses which are stored in the ...
+			// These pointers are managed by gtkmm.
+			std::vector<NotebookCanvas *>  canvasses;
 
          // Buttons
          Gtk::Button                    b_kill, b_run, b_run_to, b_run_from, b_help, b_stop, b_undo, b_redo;

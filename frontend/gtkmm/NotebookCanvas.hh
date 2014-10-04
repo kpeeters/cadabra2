@@ -1,0 +1,41 @@
+
+#pragma once
+
+#include <map>
+#include <gtkmm/paned.h>
+#include <gtkmm/scrolledwindow.h>
+#include <gtkmm/separator.h>
+#include <gtkmm/eventbox.h>
+
+// NotebookCanvas is an actual view on the document. There can be any
+// number of them active inside the NotebookWindow.
+
+#include "VisualCell.hh"
+
+namespace cadabra {
+
+	class NotebookWindow;
+	
+	class NotebookCanvas : public Gtk::VPaned {
+		public:
+			NotebookCanvas(NotebookWindow& doc);
+			~NotebookCanvas();
+			
+			bool handle_key_press_event(GdkEventKey*);
+
+			// Three members corresponding to the GUIBase callbacks.
+			void add_cell(DTree::iterator);
+
+		private:
+			NotebookWindow&  window;
+
+			std::map<DataCell *, VisualCell> visualcells;
+
+			Gtk::EventBox             ebox;
+			Gtk::ScrolledWindow       scroll;
+			Gtk::VBox                 scrollbox;
+			Gtk::HSeparator           bottomline;
+
+	};
+
+}

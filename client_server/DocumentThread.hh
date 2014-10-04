@@ -51,7 +51,9 @@ namespace cadabra {
          ComputeThread *compute;
 			DTree          doc;
 			
-         // The action undo/redo/todo stacks and logic to execute them.
+         // The action undo/redo/todo stacks and logic to execute
+			// them. These stacks can be accessed from both threads so
+			// need a mutex to access them.
 
          void                                             process_action_queue();
          std::mutex                                       stack_mutex;
