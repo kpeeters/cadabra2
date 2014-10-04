@@ -277,9 +277,9 @@ class tree {
 		/// Return iterator to the parent of a node.
 		template<typename	iter> static iter parent(iter);
 		/// Return iterator to the previous sibling of a node.
-		template<typename iter> iter previous_sibling(iter) const;
+		template<typename iter> static iter previous_sibling(iter);
 		/// Return iterator to the next sibling of a node.
-		template<typename iter> iter next_sibling(iter) const;
+		template<typename iter> static iter next_sibling(iter);
 		/// Return iterator to the next node at a given depth.
 		template<typename iter> iter next_at_same_depth(iter) const;
 
@@ -772,7 +772,7 @@ iter tree<T, tree_node_allocator>::parent(iter position)
 
 template <class T, class tree_node_allocator>
 template <typename iter>
-iter tree<T, tree_node_allocator>::previous_sibling(iter position) const
+iter tree<T, tree_node_allocator>::previous_sibling(iter position) 
 	{
 	assert(position.node!=0);
 	iter ret(position);
@@ -782,7 +782,7 @@ iter tree<T, tree_node_allocator>::previous_sibling(iter position) const
 
 template <class T, class tree_node_allocator>
 template <typename iter>
-iter tree<T, tree_node_allocator>::next_sibling(iter position) const
+iter tree<T, tree_node_allocator>::next_sibling(iter position) 
 	{
 	assert(position.node!=0);
 	iter ret(position);

@@ -57,10 +57,16 @@ NotebookWindow::NotebookWindow()
 	// The three main widgets
 	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
 
+	// We always have at least one canvas.
+	canvasses.push_back(manage( new NotebookCanvas(*this) ));
+	mainbox.pack_start(*canvasses.back(), Gtk::PACK_EXPAND_WIDGET, 0);
+
+	// Window size and title, and ready to go.
 	set_size_request(800,800);
 	update_title();
 	show_all();
 
+	new_document();
 	}
 
 NotebookWindow::~NotebookWindow()
@@ -123,14 +129,20 @@ void NotebookWindow::process_todo_queue()
 
 	}
 
-void NotebookWindow::add_cell(DTree::iterator)
+void NotebookWindow::add_cell(DTree::iterator it)
 	{
+	std::cout << "request to add gui cell" << std::endl;
+
+	for(unsigned int i=0; i<canvasses.size(); ++i) 
+		canvasses[i]->add_cell(it);
 	}
 
 void NotebookWindow::remove_cell(DTree::iterator)
 	{
+	std::cout << "request to remove gui cell" << std::endl;
 	}
 
 void NotebookWindow::update_cell(DTree::iterator)
 	{
+	std::cout << "request to update gui cell" << std::endl;
 	}
