@@ -3,6 +3,7 @@
 #include <gdkmm/general.h>
 #include <gtkmm/messagedialog.h>
 #include <gdk/gdkkeysyms.h>
+#include <iostream>
 
 using namespace cadabra;
 
@@ -25,19 +26,33 @@ CodeInput::exp_input_tv::exp_input_tv(Glib::RefPtr<Gtk::TextBuffer> tb)
 //	get_buffer()->signal_erase().connect(sigc::mem_fun(this, &exp_input_tv::on_my_erase), false);
 	}
 
-CodeInput::CodeInput(Glib::RefPtr<Gtk::TextBuffer> tb, const std::string& fontname, int hmargin)
-	: edit(tb)
+CodeInput::CodeInput()
+	: buffer(Gtk::TextBuffer::create()), edit(buffer)
 	{
+	init();
+	}
+
+CodeInput::CodeInput(Glib::RefPtr<Gtk::TextBuffer> tb)
+	: buffer(tb), edit(tb)
+	{
+	init();
+	}
+
+void CodeInput::init() 
+	{
+	std::cout << "init codeinput" << std::endl;
 //	scroll_.set_size_request(-1,200);
 //	scroll_.set_border_width(1);
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-	edit.override_font(Pango::FontDescription(fontname)); 
+//	edit.override_font(Pango::FontDescription(fontname)); 
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 	edit.override_color(Gdk::RGBA("blue"));
-//	edit.set_pixels_above_lines(Gtk::LINE_SPACING);
+	edit.set_pixels_above_lines(5);
 //	edit.set_pixels_below_lines(Gtk::LINE_SPACING);
 //	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
-	edit.set_left_margin(hmargin);
+	edit.set_left_margin(15);
+	// Need CSS tweaks for top margin
+//	edit.set_top_margin(15);
 	edit.set_accepts_tab(false);
 
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, 
@@ -51,6 +66,7 @@ CodeInput::CodeInput(Glib::RefPtr<Gtk::TextBuffer> tb, const std::string& fontna
 //	hbox.add(edit);
 	add(edit);
 //	set_border_width(3);
+	show_all();
 	}
 
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
@@ -140,17 +156,14 @@ bool CodeInput::handle_button_press(GdkEventButton* button)
 	return true;
 	}
 
-bool CodeInput::exp_input_tv::on_expose_event(GdkEventExpose *event)
+bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
 	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(Gtk::TEXT_WINDOW_TEXT);
 
-// FIXME: what does this do?
-//	bool ret=Gtk::TextView::on_expose_event(event);
+	bool ret=Gtk::TextView::on_draw(cr);
 
 	int w, h, x, y;
 	win->get_geometry(x,y,w,h);
-
-	Cairo::RefPtr<Cairo::Context> cr = win->create_cairo_context();
 
 	// paint the background
 	cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
@@ -166,6 +179,5 @@ bool CodeInput::exp_input_tv::on_expose_event(GdkEventExpose *event)
 	cr->line_to(8,h-3); 
 	cr->stroke();
 	
-   return true;
-//	return ret;
+	return ret;
 	}

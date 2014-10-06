@@ -6,6 +6,7 @@
 // representing the DataCell.
 
 #include "TeXView.hh"
+#include "CodeInput.hh"
 #include "DataCell.hh"
 
 namespace cadabra {
@@ -13,8 +14,8 @@ namespace cadabra {
 	class VisualCell {
 		public:
 			union {
-//					ExpressionInput *inbox;
-					TeXView         *outbox;
+					CodeInput    *inbox;
+					TeXView      *outbox;
 //					TeXInput        *texbox;
 			};
 	};
