@@ -1,5 +1,6 @@
 
 #include "TeXView.hh"
+#include <iostream>
 
 using namespace cadabra;
 
@@ -33,7 +34,15 @@ void TeXView::on_show()
 
 void TeXView::update_image()
 	{
-//	image.set(texbuf->get_pixbuf());
+	std::cerr << "update" << std::endl;
+	Glib::RefPtr<Gdk::Pixbuf> pixbuf = 
+		Gdk::Pixbuf::create_from_data(content->image().data(), Gdk::COLORSPACE_RGB, 
+												true,
+												8, 
+												content->width(), content->height(),
+												4*content->width());
+
+	image.set(pixbuf);
 	}
 
 
