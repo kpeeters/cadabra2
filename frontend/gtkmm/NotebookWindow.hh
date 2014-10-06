@@ -40,6 +40,9 @@ namespace cadabra {
 
 			virtual void process_data() override;
 
+			// TeX stuff
+			TeXEngine        engine;
+
       private:
 
 			// Main handler which fires whenever the Client object signals 
@@ -84,8 +87,6 @@ namespace cadabra {
 			// Todo deque processing logic.
 			void process_todo_queue();
 
-			// TeX stuff
-			TeXEngine        engine;
 	};
 
 };

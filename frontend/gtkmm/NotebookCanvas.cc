@@ -23,21 +23,28 @@ NotebookCanvas::~NotebookCanvas()
 
 void NotebookCanvas::add_cell(DTree::iterator it) 
 	{
-	std::cout << "adding cell to canvas" << std::endl;
 	// FIXME: handle other cell types.
-
 	VisualCell newcell;
+	newcell.outbox = manage( new TeXView(window.engine, "hello") );
 	visualcells[&(*it)]=newcell;
+
+	// Figure out where to store this new VisualCell in the GUI widget
+	// tree by exploring the DTree near the new DataCell.
 
 	DTree::iterator prev = DTree::previous_sibling(it);
 	if(window.dtree().is_valid(prev.node)==false) {
-		std::cout << "no previous sibling" << std::endl;
+		// no previous sibling
+		DTree::iterator parent = DTree::parent(it);
+		if(window.dtree().is_valid(parent)==false) {
+			// no parent either
+			scrollbox.add(*newcell.outbox);
+			} 
+		else {
+			// add as first child of parent
+			}
 		}
-	
-   // where do we store these VisualCells?
-	// If we would just keep a map from datacell to visualcell, then we
-	// could first move to the previous_sibling of this data cell, figure out
-	// its visualcell, then add 
+	else {
+		}
 
 //	Gtk::VBox::BoxList bl=scrollbox.children();
 //	bl.insert(where, newone);// HERE
