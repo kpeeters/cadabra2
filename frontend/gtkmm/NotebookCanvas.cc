@@ -25,7 +25,22 @@ void NotebookCanvas::add_cell(DTree::iterator it)
 	{
 	// FIXME: handle other cell types.
 	VisualCell newcell;
-	newcell.outbox = manage( new TeXView(window.engine, it->textbuf) );
+	Gtk::Widget *w=0;
+	switch(it->cell_type) {
+		case DataCell::CellType::output:
+			newcell.outbox = manage( new TeXView(window.engine, it->textbuf) );
+			w=newcell.outbox;
+			break;
+		case DataCell::CellType::input:
+			newcell.inbox = manage( new CodeInput() );
+			w=newcell.inbox;
+			// FIXME: connect signals so we can update the datacell on change
+			break;
+		default:
+			throw std::logic_error("Unimplemented datacell type");
+		}
+
+
 	visualcells[&(*it)]=newcell;
 
 	// Figure out where to store this new VisualCell in the GUI widget
@@ -37,7 +52,9 @@ void NotebookCanvas::add_cell(DTree::iterator it)
 		DTree::iterator parent = DTree::parent(it);
 		if(window.dtree().is_valid(parent)==false) {
 			// no parent either
-			scrollbox.add(*newcell.outbox);
+			scrollbox.add(*w);
+			w->set_vexpand_set(false);
+			// How to set PACK_SHRINK property on this one?
 			} 
 		else {
 			// add as first child of parent

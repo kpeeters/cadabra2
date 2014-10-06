@@ -12,24 +12,33 @@ namespace cadabra {
 
 	class CodeInput : public Gtk::VBox {
 		public:
-			CodeInput(Glib::RefPtr<Gtk::TextBuffer>, const std::string& fontname, int hmargin=25);
+			CodeInput();
+			CodeInput(Glib::RefPtr<Gtk::TextBuffer>);
 			
 			class exp_input_tv : public Gtk::TextView {
 				public:
 					exp_input_tv(Glib::RefPtr<Gtk::TextBuffer>);
-					virtual bool on_key_press_event(GdkEventKey*);
-					virtual bool on_expose_event(GdkEventExpose* event);
+					virtual bool on_key_press_event(GdkEventKey*) override;
+					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					
 					sigc::signal1<bool, std::string> emitter;
 					sigc::signal0<bool>              content_changed;
 			};
 			
 			bool handle_button_press(GdkEventButton *);
-			
-			
-			exp_input_tv               edit;
-			Gtk::HBox                  hbox;
-			Gtk::VSeparator            vsep;
+	
+			// We cannot edit the content of the DataCell directly,
+			// because Gtk needs a Gtk::TextBuffer. The CodeInput widgets
+			// corresponding to a single DataCell all share their 
+			// TextBuffer, however.
+			Glib::RefPtr<Gtk::TextBuffer> buffer;
+
+			exp_input_tv                  edit;
+			Gtk::HBox                     hbox;
+			Gtk::VSeparator               vsep;
+
+		private:
+			void init();
 	};
 
 }
