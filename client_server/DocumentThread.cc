@@ -22,7 +22,7 @@ void DocumentThread::new_document()
 	// Setup a single-cell document. This operation itself cannot be undone,
 	// so we do it directly on the doc, not using Actions.
 
-	DataCell top;
+	DataCell top(DataCell::CellType::output, "$\\displaystyle\\int_{-\\infty}^\\infty A_{\\mu\\nu}$");
 	doc.set_head(top);
 	gui->add_cell(doc.begin());
 	}

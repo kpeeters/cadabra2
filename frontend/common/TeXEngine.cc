@@ -7,7 +7,9 @@
 #include <fstream>
 #include <sstream>
 
-#define DEBUG
+//#define DEBUG
+
+using namespace cadabra;
 
 // General tool to strip spaces from both ends
 std::string trim(const std::string& s) 
@@ -26,6 +28,21 @@ double TeXEngine::millimeter_per_inch = 25.4;
 TeXEngine::TeXException::TeXException(const std::string& str)
 	: std::logic_error(str)
 	{
+	}
+
+unsigned TeXEngine::TeXRequest::width() const
+	{
+	return width_;
+	}
+
+unsigned TeXEngine::TeXRequest::height() const
+	{
+	return height_;
+	}
+
+const std::vector<unsigned char>& TeXEngine::TeXRequest::image() const
+	{
+	return image_;
 	}
 
 //Glib::RefPtr<Gdk::Pixbuf> TeXEngine::get_pixbuf(TeXEngine::TeXRequest *req)
@@ -363,7 +380,7 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 				std::ostringstream pngname;
 				pngname << std::string(templ) << pagenum << ".png";
 				erase_file(pngname.str());
-				(*reqit)->image.clear();
+				(*reqit)->image_.clear();
 				(*reqit)->needs_generating=true;
 				++pagenum;
 				}
@@ -387,7 +404,8 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 			pngname << std::string(templ) << pagenum << ".png";
 			std::ifstream tst(pngname.str().c_str());
 			if(tst.good()) {
-				unsigned error = lodepng::decode((*reqit)->image, (*reqit)->width, (*reqit)->height, pngname.str());
+				unsigned error = lodepng::decode((*reqit)->image_, (*reqit)->width_, 
+															(*reqit)->height_, pngname.str());
 				if(error!=0)
 					throw TeXException("PNG conversion error");
 				(*reqit)->needs_generating=false;

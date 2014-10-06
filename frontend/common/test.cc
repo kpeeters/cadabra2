@@ -1,6 +1,8 @@
 
 #include "TeXEngine.hh"
 
+using namespace cadabra;
+
 int main()
 	{
 	TeXEngine te;
