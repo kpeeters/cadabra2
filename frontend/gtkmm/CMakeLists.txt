@@ -15,6 +15,11 @@ add_definitions(${GTKMM3_CFLAGS_OTHER})
 
 include_directories("." "../../client_server")
 
-add_executable(cadabra-gtk main.cc NotebookWindow.cc NotebookCanvas.cc TeXView.cc ../common/TeXEngine.cc)
+add_executable(cadabra-gtk main.cc 
+  NotebookWindow.cc 
+  NotebookCanvas.cc 
+  TeXView.cc 
+  CodeInput.cc 
+  ../common/TeXEngine.cc)
 
 target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread )
