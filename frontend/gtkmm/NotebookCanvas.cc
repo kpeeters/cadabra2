@@ -14,7 +14,7 @@ NotebookCanvas::NotebookCanvas(NotebookWindow& w)
  	scroll.set_border_width(1);
 	scroll.add(ebox);
 	ebox.add(scrollbox);
-//	ebox.modify_bg(Gtk::STATE_NORMAL, Gdk::Color("white"));
+	ebox.override_background_color(Gdk::RGBA("white"));
 	}
 
 NotebookCanvas::~NotebookCanvas()
@@ -25,7 +25,7 @@ void NotebookCanvas::add_cell(DTree::iterator it)
 	{
 	// FIXME: handle other cell types.
 	VisualCell newcell;
-	newcell.outbox = manage( new TeXView(window.engine, "hello") );
+	newcell.outbox = manage( new TeXView(window.engine, it->textbuf) );
 	visualcells[&(*it)]=newcell;
 
 	// Figure out where to store this new VisualCell in the GUI widget

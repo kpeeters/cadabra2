@@ -26,6 +26,9 @@ namespace cadabra {
 			
 		protected:
 			virtual void on_show();
+
+		private:
+			TeXEngine& engine;
 	};
 
 }
