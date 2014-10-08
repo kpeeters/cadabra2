@@ -19,7 +19,7 @@ namespace cadabra {
 				public:
 					exp_input_tv(Glib::RefPtr<Gtk::TextBuffer>);
 					virtual bool on_key_press_event(GdkEventKey*) override;
-					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
+					//virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					
 					sigc::signal1<bool, std::string> emitter;
 					sigc::signal0<bool>              content_changed;
