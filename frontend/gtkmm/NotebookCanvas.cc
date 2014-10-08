@@ -53,7 +53,8 @@ void NotebookCanvas::add_cell(DTree::iterator it)
 		if(window.dtree().is_valid(parent)==false) {
 			// no parent either
 			scrollbox.add(*w);
-			w->set_vexpand_set(false);
+			scrollbox.set_vexpand(false);
+			w->set_vexpand(false);
 			// How to set PACK_SHRINK property on this one?
 			} 
 		else {
