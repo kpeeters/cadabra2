@@ -47,6 +47,7 @@ void CodeInput::init()
 //	edit.override_font(Pango::FontDescription(fontname)); 
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 	edit.override_color(Gdk::RGBA("blue"));
+	edit.override_background_color(Gdk::RGBA("white"));
 	edit.set_pixels_above_lines(5);
 //	edit.set_pixels_below_lines(Gtk::LINE_SPACING);
 //	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
@@ -65,8 +66,8 @@ void CodeInput::init()
 //	hbox.add(vsep);
 //	hbox.add(edit);
 	add(edit);
-//	edit.set_vexpand(false);
-//	set_vexpand(false);
+	edit.set_vexpand(false);
+	set_vexpand(false);
 //	set_border_width(3);
 	show_all();
 	}
@@ -104,9 +105,6 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		}
 	else {
 		bool retval=Gtk::TextView::on_key_press_event(event);
-//		while (gtk_events_pending ())
-//			gtk_main_iteration ();
-
 		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
 		// signal so that the cell can be scrolled into view if necessary.
 		// FIXME: I do not know how to do this correctly, check docs.
@@ -158,30 +156,28 @@ bool CodeInput::handle_button_press(GdkEventButton* button)
 	return true;
 	}
 
-//bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
-//	{
-////	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(Gtk::TEXT_WINDOW_TEXT);
-//
-//	bool ret=Gtk::TextView::on_draw(cr);
-//
-//	return ret;
-//
-////	int w, h, x, y;
-////	win->get_geometry(x,y,w,h);
-////
-////	// paint the background
-////	cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
-////	cr->rectangle(5,3,8,h-3);
-////	cr->fill();
-////
-////	cr->set_source_rgba(.2, .2, .7, 1.0);
-////	cr->set_line_width(1.0);
-////	cr->set_antialias(Cairo::ANTIALIAS_NONE);
-////	cr->move_to(8,3);
-////	cr->line_to(5,3);
-////	cr->line_to(5,h-3); 
-////	cr->line_to(8,h-3); 
-////	cr->stroke();
-////	
-////	return ret;
-//	}
+bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+	{
+	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(Gtk::TEXT_WINDOW_TEXT);
+
+	bool ret=Gtk::TextView::on_draw(cr);
+
+	int w, h, x, y;
+	win->get_geometry(x,y,w,h);
+
+	// paint the background
+	cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
+	cr->rectangle(5,3,8,h-3);
+	cr->fill();
+
+	cr->set_source_rgba(.2, .2, .7, 1.0);
+	cr->set_line_width(1.0);
+	cr->set_antialias(Cairo::ANTIALIAS_NONE);
+	cr->move_to(8,3);
+	cr->line_to(5,3);
+	cr->line_to(5,h-3); 
+	cr->line_to(8,h-3); 
+	cr->stroke();
+	
+	return ret;
+	}
