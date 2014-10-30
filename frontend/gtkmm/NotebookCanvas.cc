@@ -52,16 +52,18 @@ void NotebookCanvas::add_cell(DTree::iterator it)
 		DTree::iterator parent = DTree::parent(it);
 		if(window.dtree().is_valid(parent)==false) {
 			// no parent either
-			scrollbox.add(*w);
-			scrollbox.set_vexpand(false);
-			w->set_vexpand(false);
-			// How to set PACK_SHRINK property on this one?
+			scrollbox.pack_start(*w, false, false);
+//			scrollbox.set_vexpand(false);
+//			w->set_vexpand(false);
 			} 
 		else {
 			// add as first child of parent
+			scrollbox.pack_start(*w, false, false);
 			}
 		}
 	else {
+		// add as next sibling of existing cell
+		scrollbox.pack_start(*w, false, false);
 		}
 
 //	Gtk::VBox::BoxList bl=scrollbox.children();

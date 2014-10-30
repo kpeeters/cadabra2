@@ -22,10 +22,17 @@ void DocumentThread::new_document()
 	// Setup a single-cell document. This operation itself cannot be undone,
 	// so we do it directly on the doc, not using Actions.
 
-//	DataCell top(DataCell::CellType::output, "$\\displaystyle\\int_{-\\infty}^\\infty A_{\\mu\\nu}$");
 	DataCell top(DataCell::CellType::input, "");
-	doc.set_head(top);
-	gui->add_cell(doc.begin());
+	DTree::iterator top_it = doc.set_head(top);
+	gui->add_cell(top_it);
+
+	DataCell another(DataCell::CellType::input, "");
+	DTree::iterator another_it = doc.insert_after(top_it, another);
+	gui->add_cell(another_it);
+
+	DataCell out(DataCell::CellType::output, "$\\displaystyle\\int_{-\\infty}^\\infty A_{\\mu\\nu}$");
+	DTree::iterator out_it = doc.insert_after(top_it, out);
+	gui->add_cell(out_it);
 	}
 
 const DTree& DocumentThread::dtree() 

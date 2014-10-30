@@ -40,7 +40,6 @@ CodeInput::CodeInput(Glib::RefPtr<Gtk::TextBuffer> tb)
 
 void CodeInput::init() 
 	{
-	std::cout << "init codeinput" << std::endl;
 //	scroll_.set_size_request(-1,200);
 //	scroll_.set_border_width(1);
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
@@ -49,6 +48,7 @@ void CodeInput::init()
 	edit.override_color(Gdk::RGBA("blue"));
 	edit.override_background_color(Gdk::RGBA("white"));
 	edit.set_pixels_above_lines(5);
+	edit.set_pixels_below_lines(5);
 //	edit.set_pixels_below_lines(Gtk::LINE_SPACING);
 //	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
 	edit.set_left_margin(15);
@@ -66,8 +66,6 @@ void CodeInput::init()
 //	hbox.add(vsep);
 //	hbox.add(edit);
 	add(edit);
-	edit.set_vexpand(false);
-	set_vexpand(false);
 //	set_border_width(3);
 	show_all();
 	}
