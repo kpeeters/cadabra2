@@ -10,11 +10,13 @@ namespace cadabra {
 
 	// DataCells are the basic building blocks for a document. They are stored 
 	// in a tree inside the client. A user interface should read these cells
-	// and construct corresponding graphical output for them.
+	// and construct corresponding graphical output for them. All cell types are
+	// leaf nodes except for the section cell which generates a new nested structure.
 	
 	class DataCell {
 		public:
-			enum class CellType { input, output, comment, texcomment, tex, error };
+			enum class CellType { input, output, comment, texcomment, tex, error /* leaf nodes */,
+				section };
 			
 			DataCell(CellType t=CellType::input, const std::string& str="", bool texhidden=false);
 			DataCell(const DataCell&);

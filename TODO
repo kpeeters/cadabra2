@@ -1,12 +1,15 @@
 
-- rename Client to Document ?
-
-- split Client into Document and Client; the latter should then be solely
-  responsible for talking over the net.
-
 - Work out examples of tensor product decomposition with numerical index values to
   see how it works. We do not seem to have a complete implementation yet, as the
   VEST identities should be derivable, but they do not work yet (the free index 
   stays free).
 
   It is of course in the end all a generalisation of symm + antisymm.
+
+- make sure editing of a notebook cell goes into the right dtree node.
+
+- Current status: we either make property declaration a function call, so that there is no 
+  python object for C++ property objects. Or we keep objects on the python side, but then
+  we need a custom constructor. That starts working for 'Indices' in the current version,
+  but I have not yet figured out how to extract arguments (and in particular 'ex') in
+  init_property<...> (in PythonCdb.hh).
