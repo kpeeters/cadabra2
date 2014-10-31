@@ -36,6 +36,13 @@ Kernel *get_kernel_from_scope(bool for_write=false) ;
 //   where do the kernel copy constructor calls come from?
 //
 // - We do not use can_apply yet?
+//
+// - Make a list of useful things to pass to functions which are not Ex objects. 
+//   Then abstract a new def_algo from there.
+//
+//        keep_terms:  list of integers
+//        
+
 
 Ex::Ex(const Ex& other)
 	{
