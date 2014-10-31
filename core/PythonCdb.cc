@@ -94,8 +94,23 @@ Ex *Ex::fetch_from_python(const std::string nm)
 		if(obj.is_none()) // We never actually get here, an exception will have been thrown.
 			std::cout << "object unknown" << std::endl;
 		else {
-			Ex *ex = boost::python::extract<Ex *>(obj);
-			return ex;
+			// We can include this Python object into the expression only if it is an Ex object.
+			boost::python::extract<Ex *> extract_Ex(obj);
+			if(extract_Ex.check()) {
+				Ex *ex = extract_Ex();
+				return ex;
+				}
+			// getting python objects included is tricky because of memory management of the generated Ex.
+//			boost::python::extract<int> extract_int(obj);
+//			if(extract_int.check()) {
+//				int x = extract_int();
+//				std::ostringstream str;
+//				str << "Ex('" << x << "')" << std::ends;
+//				std::cout << "recursive for " << str.str() << std::endl;
+//				return fetch_from_python(str.str());
+//				}
+			std::cout << nm << " is not of type cadabra.Ex" << std::endl;
+			return 0;
 			}
 		}
 	catch(boost::python::error_already_set const &) {
@@ -103,15 +118,17 @@ Ex *Ex::fetch_from_python(const std::string nm)
 		// it out. And in any case, we want to give some feedback to the user.
 		std::string err = parse_python_exception();
 		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
-			std::cout << "ab is not a cadabra expression" << std::endl;
+			std::cout << nm << " is not of type cadabra.Ex." << std::endl;
 		else 
-			std::cout << "ab is not defined" << std::endl;
-      //		std::cout << parse_python_exception() << std::endl;
+			std::cout << nm << " is not defined." << std::endl;
+//		std::cout << parse_python_exception() << std::endl;
 		}
 
 	return 0;
 	}
 
+// Replace any objects of the form '@(...)' in the expression by the
+// python expression '...' if it exists.
 
 void Ex::pull_in()
 	{
@@ -120,6 +137,7 @@ void Ex::pull_in()
 		if(*it->name=="@") {
 			if(tree.number_of_children(it)==1) {
 				std::string pobj = *(tree.begin(it)->name);
+//				std::cerr << "fetching " <<  pobj << std::endl;
 				Ex *ex = fetch_from_python(pobj);
 				if(ex!=0) {
 					it=tree.replace(it, ex->tree.begin());

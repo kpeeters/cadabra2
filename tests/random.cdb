@@ -152,3 +152,7 @@ ex3:=p m n a;
 sort_product(ex3);
 print(ex3);
 
+
+
+a=3
+ex:= A_{m n} @(a)
