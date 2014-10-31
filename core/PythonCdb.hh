@@ -67,7 +67,7 @@ class BaseProperty {
 template<class T>
 class Property : public BaseProperty {
 	public:
-		Property(Ex *);
+		Property(Ex *obj, Ex *params=0);
 };
 
 template<class T>
@@ -86,7 +86,11 @@ boost::shared_ptr<Property<T> > init_property(boost::python::object obj)
 //		}
 ////	self.SetParameters(outMap);
 //	
-	Ex *ex=0; // extract from t?
+
+//	Ex *ex=0; // extract from t?
+
+	Ex *ex=boost::python::extract<Ex *>(obj);
+
 	std::cout << "init prop" << std::endl;
 
 	return boost::shared_ptr<Property<T> >(new Property<T>(ex));

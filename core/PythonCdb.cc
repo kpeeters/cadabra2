@@ -8,7 +8,15 @@
 #include "PythonException.hh"
 
 #include <boost/python/implicit.hpp>
+#include <boost/parameter/keyword.hpp>
+#include <boost/parameter/preprocessor.hpp>
+#include <boost/parameter/python.hpp>
+#include <boost/python.hpp>
+#include <boost/mpl/vector.hpp>
 #include <sstream>
+
+BOOST_PARAMETER_KEYWORD(tag, ex)
+
 
 #include "properties/AntiCommuting.hh"
 #include "properties/AntiSymmetric.hh"
@@ -265,7 +273,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 	}
 
 template<class Prop>
-Property<Prop>::Property(Ex *ex) 
+Property<Prop>::Property(Ex *ex, Ex *param) 
    : BaseProperty("Assigned property to ...")
 	{
 	exptree::iterator it=ex->tree.begin();
@@ -310,6 +318,14 @@ void def_algo_2(const std::string& name)
 	def(name.c_str(),  &dispatch_2_string<F>,          (arg("ex"),arg("args"),arg("repeat")=true), return_value_policy<manage_new_object>() );
 	}
 
+template<class P>
+void def_prop(const std::string& name)
+	{
+	using namespace boost::python;
+
+	class_<Property<P>, bases<BaseProperty> >(name.c_str(), init<Ex *, optional<Ex *> >());
+	}
+
 //HERE:
 // Do we want to accept a vector of Ex objects or something less general?
 
@@ -324,46 +340,46 @@ void def_algo_new(const std::string& name)
 //	boost::python::list& ns
 	}
 
-void callback(Ex *ex, boost::python::object obj) 
-	{
-	std::cout << "calling back to python" << std::endl;
-	if(obj.is_none()) {
-		std::cout << "no callback given, ignoring" << std::endl;
-		} 
-	else {
-		obj(boost::ref(ex));
-		}
-	}
+//void callback(Ex *ex, boost::python::object obj) 
+//	{
+//	std::cout << "calling back to python" << std::endl;
+//	if(obj.is_none()) {
+//		std::cout << "no callback given, ignoring" << std::endl;
+//		} 
+//	else {
+//		obj(boost::ref(ex));
+//		}
+//	}
 
-void backdoor()
-	{
-	try {
-		boost::python::object obj = boost::python::eval("ab");
-		if(obj.is_none()) // We don't get here, an exception will have been thrown
-			std::cout << "object unknown" << std::endl;
-		else {
-			Ex *ex = boost::python::extract<Ex *>(obj);
-			std::cout << *(ex->tree.begin()->name) << std::endl;
-			}
-		}
-	catch(boost::python::error_already_set const &) {
-		// In order to prevent the error from propagating, we have to read
-		// it out. And in any case, we want to give some feedback to the user.
-		std::string err = parse_python_exception();
-		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
-			std::cout << "ab is not a cadabra expression" << std::endl;
-		else 
-			std::cout << "ab is not defined" << std::endl;
-//		std::cout << parse_python_exception() << std::endl;
-		}
-	}
+// void backdoor()
+// 	{
+// 	try {
+// 		boost::python::object obj = boost::python::eval("ab");
+// 		if(obj.is_none()) // We don't get here, an exception will have been thrown
+// 			std::cout << "object unknown" << std::endl;
+// 		else {
+// 			Ex *ex = boost::python::extract<Ex *>(obj);
+// 			std::cout << *(ex->tree.begin()->name) << std::endl;
+// 			}
+// 		}
+// 	catch(boost::python::error_already_set const &) {
+// 		// In order to prevent the error from propagating, we have to read
+// 		// it out. And in any case, we want to give some feedback to the user.
+// 		std::string err = parse_python_exception();
+// 		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
+// 			std::cout << "ab is not a cadabra expression" << std::endl;
+// 		else 
+// 			std::cout << "ab is not defined" << std::endl;
+// //		std::cout << parse_python_exception() << std::endl;
+// 		}
+// 	}
 
-void fun() 
-	{
-	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	locals["fik"] = 42;
-	locals["_fik"] = 43;
-	}
+//void fun() 
+//	{
+//	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+//	locals["fik"] = 42;
+//	locals["_fik"] = 43;
+//	}
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
@@ -388,9 +404,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__repr__", &Ex::repr_);
 
 	// test
-	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
-	def("backdoor", &backdoor);
-	def("fun", &fun);
+//	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
+//	def("backdoor", &backdoor);
+//	def("fun", &fun);
 
 	def("tree", &print_tree);
 
@@ -419,19 +435,32 @@ BOOST_PYTHON_MODULE(cadabra2)
    // one expression and a number of arguments. From the Python point of view this would be
    // added to a map in the cadabra2.Kernel object.
 
-	class_<Property<AntiCommuting>,      bases<BaseProperty> >("AntiCommuting", init<Ex *>());
-	class_<Property<AntiSymmetric>,      bases<BaseProperty> >("AntiSymmetric", init<Ex *>());
-	class_<Property<CommutingAsProduct>, bases<BaseProperty> >("CommutingAsProduct", init<Ex *>());
-	class_<Property<CommutingAsSum>,     bases<BaseProperty> >("CommutingAsSum", init<Ex *>());
-	class_<Property<Distributable>,      bases<BaseProperty> >("Distributable", init<Ex *>());
+	def_prop<AntiCommuting>("AntiCommuting");
+	def_prop<AntiSymmetric>("AntiSymmetric");
+	def_prop<CommutingAsProduct>("CommutingAsProduct");
+	def_prop<CommutingAsSum>("CommutingAsSum");
+	def_prop<Distributable>("Distributable");
+	def_prop<IndexInherit>("IndexInherit");
+
+//	class_<Property<IndexInherit>,       bases<BaseProperty> >("IndexInherit", init<Ex *, optional<Ex *> >());
+
+//	class_<Property<AntiCommuting>,      bases<BaseProperty> >("AntiCommuting", init<Ex *, optional<Ex *> >());
+//	class_<Property<AntiSymmetric>,      bases<BaseProperty> >("AntiSymmetric", init<Ex *, optional<Ex *> >());
+//	class_<Property<CommutingAsProduct>, bases<BaseProperty> >("CommutingAsProduct", init<Ex *, optional<Ex *> >());
+//	class_<Property<CommutingAsSum>,     bases<BaseProperty> >("CommutingAsSum", init<Ex *, optional<Ex *> >());
+//	class_<Property<Distributable>,      bases<BaseProperty> >("Distributable", init<Ex *, optional<Ex *> >());
 //	class_<Property<Indices>,            bases<BaseProperty> >("Indices", init<Ex *>());
 
 	// http://stackoverflow.com/questions/18793952/boost-python-how-do-i-provide-a-custom-constructor-wrapper-function
 
-	class_<Property<Indices>, bases<BaseProperty> >("Indices", no_init)
-		.def("__init__", boost::python::make_constructor(&init_property<Indices>));
+//	class_<Property<Indices>, bases<BaseProperty> >("Indices", no_init)
+//		.def("__init__", boost::python::make_constructor(&init_property<Indices>));
 
-	class_<Property<IndexInherit>,       bases<BaseProperty> >("IndexInherit", init<Ex *>());
+//	class_<Property<Indices>, bases<BaseProperty> >("Indices", no_init)
+//		.def(boost::python::init<boost::mpl::vector<boost::python::tag::ex(Ex *)> >() );
+
+
+
 
 	// How can we add parameters to the constructor?
 
