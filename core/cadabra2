@@ -88,10 +88,10 @@ class Shell(InteractiveConsole):
                 match = re.search('([a-zA-Z]*)(.*)', line_stripped[found+2:])
                 if match:
                     if len(match.group(2))>0: # declaration with arguments
-                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), {"+match.group(2)[1:-1]+"})"
+                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), Ex('"+match.group(2)[1:-1]+"') )"
 #                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(ex=Ex('"+line_stripped[:found]+"'), "+match.group(2)[1:-1]+")"
                     else:
-                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(ex=Ex('"+line_stripped[:found]+"'))"
+                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex('"+line_stripped[:found]+"'))"
                     objname="__cdbtmp__"
                     # print the expression if we are at top level (not in a function) and the last char is not '.'
                     if lastchar!='.' and len(indent_line)==0:
