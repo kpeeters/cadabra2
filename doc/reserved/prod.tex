@@ -1,0 +1,19 @@
+\cdbreserved{prod}{}
+
+Denotes a generic product of objects. The parser translates objects
+separated by whitespace or by a ``\verb|*|'' symbol to products. 
+
+The default properties of \verb|\prod| are
+\begin{verbatim}
+\prod{#}::Distributable.
+\prod{#}::IndexInherit.
+\prod{#}::CommutingAsProduct.
+\prod{#}::DependsInherit.
+\prod{#}::WeightInherit(label=all, type=Multiplicative).
+\prod{#}::NumericalFlat.
+\end{verbatim}
+~
+
+\cdbseeprop{AntiCommuting}
+\cdbseeprop{NonCommuting}
+\cdbseealgo{prodsort}

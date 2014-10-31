@@ -8,15 +8,11 @@
 #include "PythonException.hh"
 
 #include <boost/python/implicit.hpp>
-#include <boost/parameter/keyword.hpp>
 #include <boost/parameter/preprocessor.hpp>
 #include <boost/parameter/python.hpp>
 #include <boost/python.hpp>
 #include <boost/mpl/vector.hpp>
 #include <sstream>
-
-BOOST_PARAMETER_KEYWORD(tag, ex)
-
 
 #include "properties/AntiCommuting.hh"
 #include "properties/AntiSymmetric.hh"
@@ -34,8 +30,12 @@ BOOST_PARAMETER_KEYWORD(tag, ex)
 
 Kernel *get_kernel_from_scope(bool for_write=false) ;
 
-// TODO: when we stick objects into the locals or globals, does Python become the owner and manage them?
-//       where do the kernel copy constructor calls come from?
+// TODO: 
+//
+// - When we stick objects into the locals or globals, does Python become the owner and manage them?
+//   where do the kernel copy constructor calls come from?
+//
+// - We do not use can_apply yet?
 
 Ex::Ex(const Ex& other)
 	{
@@ -46,8 +46,6 @@ Ex::Ex(const Ex& other)
 
 std::string Ex::str_() const
 	{
-//	std::cout << "reached Ex::str_ " << std::endl;
-//	std::cout << *(tree.begin()->name)<< std::endl;
 	std::ostringstream str;
 
 	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
@@ -86,12 +84,11 @@ Ex *Ex::fetch_from_python(const std::string nm)
 	{
 	try {
 		boost::python::object obj = boost::python::eval(nm.c_str());
-		if(obj.is_none()) // We don't get here, an exception will have been thrown
+		if(obj.is_none()) // We never actually get here, an exception will have been thrown.
 			std::cout << "object unknown" << std::endl;
 		else {
 			Ex *ex = boost::python::extract<Ex *>(obj);
 			return ex;
-//			std::cout << *(ex->tree.begin()->name) << std::endl;
 			}
 		}
 	catch(boost::python::error_already_set const &) {
@@ -102,7 +99,7 @@ Ex *Ex::fetch_from_python(const std::string nm)
 			std::cout << "ab is not a cadabra expression" << std::endl;
 		else 
 			std::cout << "ab is not defined" << std::endl;
-//		std::cout << parse_python_exception() << std::endl;
+      //		std::cout << parse_python_exception() << std::endl;
 		}
 
 	return 0;
@@ -305,8 +302,10 @@ void def_algo_1(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_1<F>,                 (arg("ex"),arg("repeat")=true), return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_1_string<F>,          (arg("ex"),arg("repeat")=true), return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_1<F>,        (arg("ex"),arg("repeat")=true), 
+		 return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("repeat")=true), 
+		 return_value_policy<manage_new_object>() );
 	}
 
 template<class F>
@@ -314,9 +313,17 @@ void def_algo_2(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_2<F>,                 (arg("ex"),arg("args"),arg("repeat")=true), return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_2_string<F>,          (arg("ex"),arg("args"),arg("repeat")=true), return_value_policy<manage_new_object>() );
+	def(name.c_str(),  &dispatch_2<F>,        (arg("ex"),arg("args"),arg("repeat")=true), 
+		 return_internal_reference<1>() );
+	def(name.c_str(),  &dispatch_2_string<F>, (arg("ex"),arg("args"),arg("repeat")=true), 
+		 return_value_policy<manage_new_object>() );
 	}
+
+// Declare a property. These take one Ex to which they will be attached, and
+// one optional additional Ex which is a list of parameters. The latter are thus always
+// Cadabra expressions, and cannot easily contain Python constructions (for the time
+// being this follows most closely the setup we had in Cadabra v1; if the need arises
+// we can make this more complicated later). 
 
 template<class P>
 void def_prop(const std::string& name)
@@ -383,7 +390,8 @@ void def_algo_new(const std::string& name)
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
-// as the various algorithms that can act on these.
+// as the various algorithms that can act on these and the properties that can
+// be attached to Cadabra patterns.
 // http://stackoverflow.com/questions/6050996/boost-python-overloaded-functions-with-default-arguments-problem
 
 BOOST_PYTHON_MODULE(cadabra2)
@@ -404,9 +412,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__repr__", &Ex::repr_);
 
 	// test
-//	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
-//	def("backdoor", &backdoor);
-//	def("fun", &fun);
+   //	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
+   //	def("backdoor", &backdoor);
+   //	def("fun", &fun);
 
 	def("tree", &print_tree);
 
@@ -414,26 +422,33 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// automatically: think about how that would work in C++. You would need to be able to
 	// pass a 'std::string' to a function that expects an 'Ex *'. That will never work.
 
-	// You can call algorithms on objects like this. The parameters are
-	// labelled by names.
+	// Algorithms with only the Ex as argument.
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
+
+	// Algorithms which take a second Ex as argument.
 	def_algo_2<substitute>("substitute");
-//	def_algo_new<keep_terms, boost::python::list>("keep_terms");
+   //	def_algo_new<keep_terms, boost::python::list>("keep_terms");
 
 	// All properties on the Python side derive from the C++ BaseProperty, which is
 	// called Property on the Python side.
 	class_<BaseProperty> pyBaseProperty("Property", no_init);
 	pyBaseProperty.def("__str__", &BaseProperty::str_)
 		.def("__repr__", &BaseProperty::repr_);
-	
-	// Perhaps it is better and more logical to make property declarations through a function,
+
+	// Properties are declared as objects on the Python side as well. They all take two
+	// Ex objects as constructor parameters: the first one is the object(s) to which the
+	// property is attached, the second one is the argument list (represented as an Ex).
+	// 
+	// It might have been more logical to make property declarations through a function,
 	// so that we have Indices(ex=Ex('{a,b,c,}'), name='vector') being a function that takes
    // one expression and a number of arguments. From the Python point of view this would be
-   // added to a map in the cadabra2.Kernel object.
+   // added to a map in the cadabra2.Kernel object. However, keeping control over an object 
+	// also has the advantage that we can refer to it again if necessary from the Python side,
+	// and keeps C++ and Python more in sync.
 
 	def_prop<AntiCommuting>("AntiCommuting");
 	def_prop<AntiSymmetric>("AntiSymmetric");
@@ -442,31 +457,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Distributable>("Distributable");
 	def_prop<IndexInherit>("IndexInherit");
 
-//	class_<Property<IndexInherit>,       bases<BaseProperty> >("IndexInherit", init<Ex *, optional<Ex *> >());
-
-//	class_<Property<AntiCommuting>,      bases<BaseProperty> >("AntiCommuting", init<Ex *, optional<Ex *> >());
-//	class_<Property<AntiSymmetric>,      bases<BaseProperty> >("AntiSymmetric", init<Ex *, optional<Ex *> >());
-//	class_<Property<CommutingAsProduct>, bases<BaseProperty> >("CommutingAsProduct", init<Ex *, optional<Ex *> >());
-//	class_<Property<CommutingAsSum>,     bases<BaseProperty> >("CommutingAsSum", init<Ex *, optional<Ex *> >());
-//	class_<Property<Distributable>,      bases<BaseProperty> >("Distributable", init<Ex *, optional<Ex *> >());
-//	class_<Property<Indices>,            bases<BaseProperty> >("Indices", init<Ex *>());
-
-	// http://stackoverflow.com/questions/18793952/boost-python-how-do-i-provide-a-custom-constructor-wrapper-function
-
-//	class_<Property<Indices>, bases<BaseProperty> >("Indices", no_init)
-//		.def("__init__", boost::python::make_constructor(&init_property<Indices>));
-
-//	class_<Property<Indices>, bases<BaseProperty> >("Indices", no_init)
-//		.def(boost::python::init<boost::mpl::vector<boost::python::tag::ex(Ex *)> >() );
-
-
-
-
-	// How can we add parameters to the constructor?
 
 	// How can we give Python access to properties?
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	}
-
-// {a,b,c,d}::Indices(name='vector').
