@@ -37,7 +37,7 @@ as well as a number of libraries which are readily available from
 Homebrew, http://brew.sh.  Before attempting to build Cadabra, make
 sure a basic Homebrew installation is present, and then do
 
-  brew install cmake boost pcre gmp jsonpp
+  brew install cmake boost boost-python pcre gmp jsonpp python
 
 HERE: shall we just include websocketpp into the tree?
 

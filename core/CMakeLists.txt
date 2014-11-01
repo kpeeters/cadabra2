@@ -6,8 +6,8 @@ if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
-if(CMAKE_COMPILER_IS_CLANG)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-c++11-extensions")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -I/usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework/Versions/2.7/include/python2.7")
 endif()
 
 # Set path to additional cmake files
@@ -23,7 +23,12 @@ find_package(Boost 1.45.0 COMPONENTS python)
 find_program(PYTHON "python" REQUIRED)
 
 # Locate gmpxx
-find_package(GMPXX REQUIRED)
+find_library(GMP_LIB gmp REQUIRED)
+find_library(GMPXX_LIB gmpxx REQUIRED)
+find_library(PYTHON python REQUIRED)
+message("-- Found gmp ${GMP_LIB}")
+message("-- Found gmpxx ${GMPXX_LIB}")
+message("-- Found python ${PYTHON_LIB}")
 
 # Locate pcre
 find_package(PCRE REQUIRED)
@@ -119,9 +124,9 @@ add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
-if(CMAKE_COMPILER_IS_CLANG)
-  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES} python)
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clangx")
+  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES} python)
 else()
-  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} gmp gmpxx ${Boost_LIBRARIES})
+  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
 endif()
 
