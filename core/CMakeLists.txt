@@ -25,10 +25,10 @@ find_program(PYTHON "python" REQUIRED)
 # Locate gmpxx
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)
-find_library(PYTHON python REQUIRED)
+FIND_PACKAGE(PythonLibs REQUIRED)
 message("-- Found gmp ${GMP_LIB}")
 message("-- Found gmpxx ${GMPXX_LIB}")
-message("-- Found python ${PYTHON_LIB}")
+message("-- Found python ${PYTHON_LIBRARIES}")
 
 # Locate pcre
 find_package(PCRE REQUIRED)
@@ -124,9 +124,11 @@ add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clangx")
-  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES} python)
-else()
-  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
-endif()
+#if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clangx")
+#  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES} python)
+#else()
+
+target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
+
+#endif()
 
