@@ -1,0 +1,413 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A7B0F7171A05663700FCC711 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7161A05663700FCC711 /* main.m */; };
+		A7B0F71A1A05663700FCC711 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7191A05663700FCC711 /* AppDelegate.m */; };
+		A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71B1A05663700FCC711 /* Images.xcassets */; };
+		A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71D1A05663700FCC711 /* MainMenu.xib */; };
+		A7B0F72B1A05663700FCC711 /* CadabraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F72A1A05663700FCC711 /* CadabraTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A7B0F7251A05663700FCC711 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A7B0F7091A05663700FCC711 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A7B0F7101A05663700FCC711;
+			remoteInfo = Cadabra;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		A7B0F7111A05663700FCC711 /* Cadabra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cadabra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7B0F7151A05663700FCC711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7B0F7161A05663700FCC711 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A7B0F7181A05663700FCC711 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		A7B0F7191A05663700FCC711 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A7B0F71B1A05663700FCC711 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A7B0F71E1A05663700FCC711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		A7B0F7241A05663700FCC711 /* CadabraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadabraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7B0F7291A05663700FCC711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7B0F72A1A05663700FCC711 /* CadabraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CadabraTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A7B0F70E1A05663700FCC711 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7B0F7211A05663700FCC711 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A7B0F7081A05663700FCC711 = {
+			isa = PBXGroup;
+			children = (
+				A7B0F7131A05663700FCC711 /* Cadabra */,
+				A7B0F7271A05663700FCC711 /* CadabraTests */,
+				A7B0F7121A05663700FCC711 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A7B0F7121A05663700FCC711 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A7B0F7111A05663700FCC711 /* Cadabra.app */,
+				A7B0F7241A05663700FCC711 /* CadabraTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A7B0F7131A05663700FCC711 /* Cadabra */ = {
+			isa = PBXGroup;
+			children = (
+				A7B0F7181A05663700FCC711 /* AppDelegate.h */,
+				A7B0F7191A05663700FCC711 /* AppDelegate.m */,
+				A7B0F71B1A05663700FCC711 /* Images.xcassets */,
+				A7B0F71D1A05663700FCC711 /* MainMenu.xib */,
+				A7B0F7141A05663700FCC711 /* Supporting Files */,
+			);
+			path = Cadabra;
+			sourceTree = "<group>";
+		};
+		A7B0F7141A05663700FCC711 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A7B0F7151A05663700FCC711 /* Info.plist */,
+				A7B0F7161A05663700FCC711 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A7B0F7271A05663700FCC711 /* CadabraTests */ = {
+			isa = PBXGroup;
+			children = (
+				A7B0F72A1A05663700FCC711 /* CadabraTests.m */,
+				A7B0F7281A05663700FCC711 /* Supporting Files */,
+			);
+			path = CadabraTests;
+			sourceTree = "<group>";
+		};
+		A7B0F7281A05663700FCC711 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				A7B0F7291A05663700FCC711 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A7B0F7101A05663700FCC711 /* Cadabra */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7B0F72E1A05663700FCC711 /* Build configuration list for PBXNativeTarget "Cadabra" */;
+			buildPhases = (
+				A7B0F70D1A05663700FCC711 /* Sources */,
+				A7B0F70E1A05663700FCC711 /* Frameworks */,
+				A7B0F70F1A05663700FCC711 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Cadabra;
+			productName = Cadabra;
+			productReference = A7B0F7111A05663700FCC711 /* Cadabra.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A7B0F7231A05663700FCC711 /* CadabraTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A7B0F7311A05663700FCC711 /* Build configuration list for PBXNativeTarget "CadabraTests" */;
+			buildPhases = (
+				A7B0F7201A05663700FCC711 /* Sources */,
+				A7B0F7211A05663700FCC711 /* Frameworks */,
+				A7B0F7221A05663700FCC711 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A7B0F7261A05663700FCC711 /* PBXTargetDependency */,
+			);
+			name = CadabraTests;
+			productName = CadabraTests;
+			productReference = A7B0F7241A05663700FCC711 /* CadabraTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A7B0F7091A05663700FCC711 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0600;
+				ORGANIZATIONNAME = "phi-sci";
+				TargetAttributes = {
+					A7B0F7101A05663700FCC711 = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+					A7B0F7231A05663700FCC711 = {
+						CreatedOnToolsVersion = 6.0.1;
+						TestTargetID = A7B0F7101A05663700FCC711;
+					};
+				};
+			};
+			buildConfigurationList = A7B0F70C1A05663700FCC711 /* Build configuration list for PBXProject "Cadabra" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A7B0F7081A05663700FCC711;
+			productRefGroup = A7B0F7121A05663700FCC711 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A7B0F7101A05663700FCC711 /* Cadabra */,
+				A7B0F7231A05663700FCC711 /* CadabraTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A7B0F70F1A05663700FCC711 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */,
+				A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7B0F7221A05663700FCC711 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A7B0F70D1A05663700FCC711 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7B0F71A1A05663700FCC711 /* AppDelegate.m in Sources */,
+				A7B0F7171A05663700FCC711 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A7B0F7201A05663700FCC711 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7B0F72B1A05663700FCC711 /* CadabraTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A7B0F7261A05663700FCC711 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A7B0F7101A05663700FCC711 /* Cadabra */;
+			targetProxy = A7B0F7251A05663700FCC711 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		A7B0F71D1A05663700FCC711 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A7B0F71E1A05663700FCC711 /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A7B0F72C1A05663700FCC711 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A7B0F72D1A05663700FCC711 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		A7B0F72F1A05663700FCC711 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Cadabra/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		A7B0F7301A05663700FCC711 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Cadabra/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		A7B0F7321A05663700FCC711 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CadabraTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadabra.app/Contents/MacOS/Cadabra";
+			};
+			name = Debug;
+		};
+		A7B0F7331A05663700FCC711 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = CadabraTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadabra.app/Contents/MacOS/Cadabra";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A7B0F70C1A05663700FCC711 /* Build configuration list for PBXProject "Cadabra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7B0F72C1A05663700FCC711 /* Debug */,
+				A7B0F72D1A05663700FCC711 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A7B0F72E1A05663700FCC711 /* Build configuration list for PBXNativeTarget "Cadabra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7B0F72F1A05663700FCC711 /* Debug */,
+				A7B0F7301A05663700FCC711 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		A7B0F7311A05663700FCC711 /* Build configuration list for PBXNativeTarget "CadabraTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A7B0F7321A05663700FCC711 /* Debug */,
+				A7B0F7331A05663700FCC711 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A7B0F7091A05663700FCC711 /* Project object */;
+}
