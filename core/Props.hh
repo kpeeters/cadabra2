@@ -411,7 +411,7 @@ const T* Properties::get() const
 	const T* ret=0;
 	// FIXME: hack
 	nset_t::iterator nit=name_set.insert(std::string("")).first;
-	std::pair<property_map_t::iterator, property_map_t::iterator> pit=
+	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit=
 		props.equal_range(nit);
 	while(pit.first!=pit.second) {
 		ret=dynamic_cast<const T *>((*pit.first).second.second);

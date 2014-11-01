@@ -164,7 +164,7 @@ void Ex::append(std::string v)
 void Ex::register_as_last_expression()
 	{
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	locals["_"]=boost::ref(this);
+	locals["_"]=boost::ref(*this);
 	}
 
 // Templates to dispatch function calls in Python to algorithms in C++.

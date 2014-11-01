@@ -109,7 +109,7 @@ int exchange::collect_identical_tensors(const Properties& properties, exptree& t
 			ngr.tensors.push_back(sib);
 			ngr.seq_numbers_of_first_indices.push_back(total_number_of_indices);
 			total_number_of_indices+=ngr.number_of_indices;
-			if(ngr.spino==false || ngr.spino->majorana==true)
+			if(ngr.spino==0 || ngr.spino->majorana==true)
 				idts.push_back(ngr);
 			}
 		else {
