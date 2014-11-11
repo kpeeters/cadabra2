@@ -4,6 +4,7 @@
 #include "Exceptions.hh"
 #include "Kernel.hh"
 #include "DisplayTeX.hh"
+#include "Cleanup.hh"
 #include "PreClean.hh"
 #include "PythonException.hh"
 
@@ -46,17 +47,23 @@ Kernel *get_kernel_from_scope(bool for_write=false) ;
 
 Ex::Ex(const Ex& other)
 	{
-	std::cout << "Ex copy constructor" << std::endl;
+//	std::cout << "Ex copy constructor" << std::endl;
+	}
+
+Ex::Ex(int val) 
+	{
+	tree.set_head(str_node("\\expression"));
+	exptree::iterator it = tree.append_child(tree.begin(), str_node("1"));
+	multiply(it->multiplier, val);
 	}
 
 Ex::~Ex()
 	{
-	std::cerr << "~Ex";
-	if(ex.begin()!=ex.end()) {
-		std::cerr << " " << *(tree.begin()->name);
-		}
-	std::cerr << std::endl;
-   // FIXME: See register_as_last_expression
+//	std::cerr << "~Ex";
+//	if(ex.begin()!=ex.end()) {
+//		std::cerr << " " << *(tree.begin()->name);
+//		}
+//	std::cerr << std::endl;
 	}
 
 // Output routines for Ex objects.
@@ -73,7 +80,7 @@ std::string Ex::str_() const
 
 std::string Ex::repr_() const
 	{
-	std::cerr << "Ex::repr_" << std::endl;
+//	std::cerr << "Ex::repr_" << std::endl;
 	exptree::iterator it = tree.begin();
 	std::ostringstream str;
 	tree.print_entire_tree(str);
@@ -96,13 +103,21 @@ Ex::Ex(std::string ex_)
 	tree=parser.tree;
 	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
 	pull_in();
-	register_as_last_expression();
+	exptree::iterator top = tree.begin();
+	cleanup_nests_below(tree, top);
+//	register_as_last_expression(); DISABLED, THIS IS A BAD IDEA
 	}
 
 Ex *Ex::fetch_from_python(const std::string nm)
 	{
+//	std::cerr << "fetching " << nm << std::endl;
 	try {
-		boost::python::object obj = boost::python::eval(nm.c_str());
+//		boost::python::object obj = boost::python::eval(nm.c_str());
+
+		boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+		boost::python::object obj = locals[nm];
+//		locals["_"]=boost::ref(*this);
+
 		if(obj.is_none()) // We never actually get here, an exception will have been thrown.
 			std::cout << "object unknown" << std::endl;
 		else {
@@ -152,7 +167,13 @@ void Ex::pull_in()
 //				std::cerr << "fetching " <<  pobj << std::endl;
 				Ex *ex = fetch_from_python(pobj);
 				if(ex!=0) {
-					it=tree.replace(it, ex->tree.begin());
+					// The top node is an \expression, so we need the first child of that.
+					// FIMXE: assert consistency.
+					exptree::iterator expression_it = ex->tree.begin();
+					exptree::iterator topnode_it    = ex->tree.begin(expression_it);
+					multiplier_t mult=*(it->multiplier);
+					it=tree.replace(it, topnode_it);
+					multiply(it->multiplier, mult);
 					}
 				}
 			}
@@ -182,6 +203,12 @@ void Ex::register_as_last_expression()
 	// Putting it on the local stack like this does not prevent the
 	// destructor from being called when the object goes out of scope...
 	}
+
+bool Ex::operator==(const Ex& other)
+	{
+	return tree_equal(&(get_kernel_from_scope()->properties), tree, other.tree);
+	}
+
 
 // Templates to dispatch function calls in Python to algorithms in C++.
 
@@ -236,7 +263,7 @@ Ex *dispatch_2_string(Ex *ex, const std::string& args, bool repeat)
 
 std::string print_status()
 	{
-	Kernel *kernel = get_kernel_from_scope();
+//	Kernel *kernel = get_kernel_from_scope();
 	return "hi";
 	}
 
@@ -267,7 +294,7 @@ BaseProperty::BaseProperty(const std::string& s)
 
 Kernel *get_kernel_from_scope(bool for_write) 
 	{
-	std::cerr << "get_kernel_from_scope " << (for_write?"for writing":"for reading") << std::endl;
+//	std::cerr << "get_kernel_from_scope " << (for_write?"for writing":"for reading") << std::endl;
 
 	// Lookup the properties object in the local scope. 
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
@@ -277,7 +304,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 	try {
 		boost::python::object obj = locals["cadabra_kernel"];
 		local_kernel = boost::python::extract<Kernel *>(obj);
-		std::cerr << "local kernel = " << local_kernel << std::endl;
+//		std::cerr << "local kernel = " << local_kernel << std::endl;
 		}
 	catch(boost::python::error_already_set& err) {
 		std::string err2 = parse_python_exception();
@@ -286,7 +313,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 	try {
 		boost::python::object obj = globals["cadabra_kernel"];
 		global_kernel = boost::python::extract<Kernel *>(obj);
-		std::cerr << "global kernel = " << global_kernel << std::endl;
+//		std::cerr << "global kernel = " << global_kernel << std::endl;
 		}
 	catch(boost::python::error_already_set& err) {
 		std::string err2 = parse_python_exception();
@@ -296,7 +323,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 	if(for_write) {
 		// need the local kernel no matter what
 		if(local_kernel==0) {
-			std::cerr << "creating new local kernel" << std::endl;
+//			std::cerr << "creating new local kernel" << std::endl;
 			local_kernel = new Kernel();
 			if(global_kernel) {
 				local_kernel->properties = global_kernel->properties; 
@@ -315,7 +342,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 			}
 		else {
 			// On first call?
-			std::cerr << "creating new global kernel" << std::endl;
+//			std::cerr << "creating new global kernel" << std::endl;
 			global_kernel = new Kernel();
 			globals["cadabra_kernel"]=boost::ref(global_kernel);
 			return global_kernel;
@@ -334,7 +361,7 @@ Property<Prop>::Property(Ex *ex, Ex *param)
 
 	Kernel *kernel=get_kernel_from_scope(true);
 	Prop *p=new Prop();
-	std::cout << "inserting " << p->name() << " into kernel " << kernel << std::endl;
+//	std::cout << "inserting " << p->name() << " into kernel " << kernel << std::endl;
 
 	// testing
 //	Ex tmp('A_{m n}');
@@ -471,10 +498,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	class_<Ex> pyEx("Ex", init<std::string>());
+	pyEx.def(init<int>());
 	pyEx.def("get",     &Ex::get)
 		.def("append",   &Ex::append)
 		.def("__str__",  &Ex::str_)
-		.def("__repr__", &Ex::repr_);
+		.def("__repr__", &Ex::repr_)
+		.def("__eq__",   &Ex::operator==);
 
 	// test
    //	def("callback", &callback, (arg("ex"), arg("callback")=object()) );

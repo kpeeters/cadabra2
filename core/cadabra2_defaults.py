@@ -25,15 +25,15 @@ remember_display_hook = sys.displayhook
 sys.displayhook = _displayhook
 
 Distributable(Ex("\prod{#}"))
-#IndexInherit(Ex("\prod{#}"))
-#CommutingAsProduct(Ex("\prod{#}"))
+IndexInherit(Ex("\prod{#}"))
+CommutingAsProduct(Ex("\prod{#}"))
 
 # \prod{#}::DependsInherit.
 # \prod{#}::WeightInherit(label=all, type=Multiplicative).
 # \prod{#}::NumericalFlat.
 # 
 
-#CommutingAsSum(Ex("\sum{#}"))
+CommutingAsSum(Ex("\sum{#}"))
 
 # \sum{#}::DependsInherit.
 # \sum{#}::IndexInherit.

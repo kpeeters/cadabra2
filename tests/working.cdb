@@ -1,0 +1,30 @@
+
+ex1=Ex(0)
+ex2=Ex('0')
+ex3=Ex('1')
+print ex1==ex2
+print ex2==ex3
+print ex1==Ex(0)
+
+def test():
+    {m,n,p,a,b}::AntiCommuting.
+    ex:=p m n a;
+    sort_product(ex);
+    print(ex);
+    ex2:= A*(B+C);
+    distribute(ex2);	
+    tst2:= A B + A C - @(ex2)
+    print(tst2)
+    collect_terms(tst2)
+    if tst2==Ex(0):
+        print 'ok'
+    else:
+        print 'not ok'
+
+test()
+
+# This does not see the property declared in test():
+ex3:=p m n a;
+sort_product(ex3);
+print(ex3);
+
