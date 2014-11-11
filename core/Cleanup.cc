@@ -101,27 +101,28 @@ void cleanup_sums_products(exptree& tr, exptree::iterator& it)
 
 void cleanup_nests_below(exptree&tr, exptree::iterator it, bool ignore_bracket_types)
 	{
-// 	if(!tr.is_valid(it)) return;
-// 	exptree::iterator now=it;
-// 	if(it==tr.end()) return;
-// 	exptree::iterator stop=now;
-// 	stop.skip_children();
-// 	++stop;
-// 	++now; // We are not allowed to touch the content at 'it', only content below it.
-// 
-// 	while(now!=stop) {
-// 		cleanup_nests(tr, now, ignore_bracket_types);
-// // Iterators should always be valid when we return here, so this test is not required.	  
-// //		if(tr.is_valid(now)==false)
-// //			break;
-// 		++now;
-// 		}
+ 	if(!tr.is_valid(it)) return;
+ 	exptree::iterator now=it;
+ 	if(it==tr.end()) return;
+ 	exptree::iterator stop=now;
+ 	stop.skip_children();
+ 	++stop;
+ 	++now; // We are not allowed to touch the content at 'it', only content below it.
+ 
+ 	while(now!=stop) {
+ 		cleanup_nests(tr, now, ignore_bracket_types);
+ // Iterators should always be valid when we return here, so this test is not required.	  
+ //		if(tr.is_valid(now)==false)
+ //			break;
+ 		++now;
+ 		}
 	}
 
 void cleanup_nests(exptree&tr, exptree::iterator &it, bool ignore_bracket_types)
 	{
-// 	if(!tr.is_valid(it)) return;
-// 	if(!tr.is_valid(tr.parent(it))) return;
+ 	if(!tr.is_valid(it)) return;
+ 	if(!tr.is_valid(tr.parent(it))) return;
+
 // //	tr.print_recursive_treeform(txtout, tr.begin());
 // 	if(*(it->name)=="\\prod") {
 // 		assert(tr.parent(it)!=tr.end());
@@ -135,27 +136,27 @@ void cleanup_nests(exptree&tr, exptree::iterator &it, bool ignore_bracket_types)
 //          }
 //       return;
 // 		}
-// 	if(*(it->name)=="\\sum") {
-// 		assert(tr.parent(it)!=tr.end());
-// //		txtout << "*** " << *tr.parent(it)->name << std::endl;
-// //		txtout << tr.begin(it)->fl.bracket << " " << it->fl.bracket << std::endl;
-// 		if(*(tr.parent(it)->name)=="\\sum" && (ignore_bracket_types || tr.begin(it)->fl.bracket==it->fl.bracket) ) {
-// 			// WARNING, this is a copy of code in sumflatten!
-// 			exptree::sibling_iterator facs=tr.begin(tr.parent(it));
-// 			str_node::bracket_t btype_par=facs->fl.bracket;
-// 			exptree::sibling_iterator terms=tr.begin(it);
-// 			while(terms!=tr.end(it)) {
-// 				multiplier_t tfac=(*terms->multiplier)*(*it->multiplier);
-// 				terms->multiplier=rat_set.insert(tfac).first;
-// 				terms->fl.bracket=btype_par;
-// 				++terms;
-// 				}
-// 			tr.flatten(it);
-// 			// FIXME: this is dangerous:
-// 			it=tr.parent(tr.erase(it));
-// 			}
-// 		return;
-// 		}
+ 	if(*(it->name)=="\\sum") {
+ 		assert(tr.parent(it)!=tr.end());
+		//		txtout << "*** " << *tr.parent(it)->name << std::endl;
+		//		txtout << tr.begin(it)->fl.bracket << " " << it->fl.bracket << std::endl;
+ 		if(*(tr.parent(it)->name)=="\\sum" && (ignore_bracket_types || tr.begin(it)->fl.bracket==it->fl.bracket) ) {
+ 			// WARNING, this is a copy of code in sumflatten!
+ 			exptree::sibling_iterator facs=tr.begin(tr.parent(it));
+ 			str_node::bracket_t btype_par=facs->fl.bracket;
+ 			exptree::sibling_iterator terms=tr.begin(it);
+ 			while(terms!=tr.end(it)) {
+ 				multiplier_t tfac=(*terms->multiplier)*(*it->multiplier);
+ 				terms->multiplier=rat_set.insert(tfac).first;
+ 				terms->fl.bracket=btype_par;
+				++terms;
+				}
+ 			tr.flatten(it);
+ 			// FIXME: this is dangerous:
+ 			it=tr.parent(tr.erase(it));
+ 			}
+ 		return;
+ 		}
 // 	const PartialDerivative *der=properties::get<PartialDerivative>(it);
 // 	if(der) {
 // 		// take constants outside

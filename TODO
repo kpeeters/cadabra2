@@ -13,3 +13,6 @@
   we need a custom constructor. That starts working for 'Indices' in the current version,
   but I have not yet figured out how to extract arguments (and in particular 'ex') in
   init_property<...> (in PythonCdb.hh).
+
+- Current status: operator== does not automatically upcast an integer to an Ex if necessary.
+  

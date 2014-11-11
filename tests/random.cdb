@@ -131,23 +131,32 @@ ex:=A_{m n} ( C^{n p} + D^{n p} );
 rl:= C^{a b} -> D^{a b};
 substitute(ex, rl)
 
+
+ex1=Ex(0)
+ex2=Ex('0')
+ex3=Ex('1')
+print ex1==ex2
+print ex2==ex3
+print ex1==Ex(0)
+
 def test():
-	 {m,n,p,a,b}::AntiCommuting.
-	 print locals()['cadabra_kernel']
-	 ex:=p m n a;
-	 sort_product(ex);
-	 print(ex);
-	 locals()['cadabra.properties'].append('hi');
-	 locals()['cadabra.properties'].append('there');
-	 ex2:= A*(B+C);
-	 distribute(ex2);	
-	 print(ex2)
-	 print locals()['cadabra.properties']
+	{m,n,p,a,b}::AntiCommuting.
+	ex:=p m n a;
+	sort_product(ex);
+	print(ex);
+	ex2:= A*(B+C);
+	distribute(ex2);	
+	tst2:= A B + A C - @(ex2)
+	print(tst2)
+	collect_terms(tst2)
+        if tst==Ex(0):
+       
+	print(tree(tst2))
+	print(tree(Ex(0))
 
 test()
 
 # This does not see the property declared in test():
-
 ex3:=p m n a;
 sort_product(ex3);
 print(ex3);

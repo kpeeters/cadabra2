@@ -15,7 +15,7 @@ distribute::distribute(Kernel& k, exptree& tr)
 
 bool distribute::can_apply(iterator st)
 	{
-	std::cout << *st->name << std::endl;
+//	std::cout << *st->name << std::endl;
 	const Distributable *db=kernel.properties.get<Distributable>(st);
 	if(!db) {
 		return false;
