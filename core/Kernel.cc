@@ -3,6 +3,12 @@
 
 Kernel::Kernel()
 	{
+	std::cerr << "Kernel() " << this << std::endl;
+	}
+
+Kernel::~Kernel()
+	{
+	std::cerr << "~Kernel() " << this << std::endl;
 	}
 
 Kernel::Kernel(const Kernel& other)

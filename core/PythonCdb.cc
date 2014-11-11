@@ -49,6 +49,16 @@ Ex::Ex(const Ex& other)
 	std::cout << "Ex copy constructor" << std::endl;
 	}
 
+Ex::~Ex()
+	{
+	std::cerr << "~Ex";
+	if(ex.begin()!=ex.end()) {
+		std::cerr << " " << *(tree.begin()->name);
+		}
+	std::cerr << std::endl;
+   // FIXME: See register_as_last_expression
+	}
+
 // Output routines for Ex objects.
 
 std::string Ex::str_() const
@@ -63,6 +73,8 @@ std::string Ex::str_() const
 
 std::string Ex::repr_() const
 	{
+	std::cerr << "Ex::repr_" << std::endl;
+	exptree::iterator it = tree.begin();
 	std::ostringstream str;
 	tree.print_entire_tree(str);
 	return str.str();
@@ -163,8 +175,12 @@ void Ex::append(std::string v)
 
 void Ex::register_as_last_expression()
 	{
+	std::cerr << "registering as _" << std::endl;
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
 	locals["_"]=boost::ref(*this);
+	// FIXME:
+	// Putting it on the local stack like this does not prevent the
+	// destructor from being called when the object goes out of scope...
 	}
 
 // Templates to dispatch function calls in Python to algorithms in C++.
@@ -218,6 +234,11 @@ Ex *dispatch_2_string(Ex *ex, const std::string& args, bool repeat)
 	return dispatch_2<F>(ex, argsobj, repeat);
 	}
 
+std::string print_status()
+	{
+	Kernel *kernel = get_kernel_from_scope();
+	return "hi";
+	}
 
 std::string print_tree(Ex *ex)
 	{
@@ -246,6 +267,8 @@ BaseProperty::BaseProperty(const std::string& s)
 
 Kernel *get_kernel_from_scope(bool for_write) 
 	{
+	std::cerr << "get_kernel_from_scope " << (for_write?"for writing":"for reading") << std::endl;
+
 	// Lookup the properties object in the local scope. 
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
 	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
@@ -254,21 +277,26 @@ Kernel *get_kernel_from_scope(bool for_write)
 	try {
 		boost::python::object obj = locals["cadabra_kernel"];
 		local_kernel = boost::python::extract<Kernel *>(obj);
+		std::cerr << "local kernel = " << local_kernel << std::endl;
 		}
 	catch(boost::python::error_already_set& err) {
 		std::string err2 = parse_python_exception();
+		local_kernel=0;
 		}
 	try {
 		boost::python::object obj = globals["cadabra_kernel"];
 		global_kernel = boost::python::extract<Kernel *>(obj);
+		std::cerr << "global kernel = " << global_kernel << std::endl;
 		}
 	catch(boost::python::error_already_set& err) {
 		std::string err2 = parse_python_exception();
+		global_kernel=0;
 		}
 	
 	if(for_write) {
 		// need the local kernel no matter what
 		if(local_kernel==0) {
+			std::cerr << "creating new local kernel" << std::endl;
 			local_kernel = new Kernel();
 			if(global_kernel) {
 				local_kernel->properties = global_kernel->properties; 
@@ -276,20 +304,21 @@ Kernel *get_kernel_from_scope(bool for_write)
 			locals["cadabra_kernel"]=boost::ref(local_kernel);
 			// FIXME: copy global kernel if present
 			}
-		return boost::ref(local_kernel);
+		return local_kernel;
 		}
 	else {
 		if(local_kernel) {
 			return local_kernel;
 			}
 		else if(global_kernel) {
-			return boost::ref(global_kernel);
+			return global_kernel;
 			}
 		else {
 			// On first call?
+			std::cerr << "creating new global kernel" << std::endl;
 			global_kernel = new Kernel();
 			globals["cadabra_kernel"]=boost::ref(global_kernel);
-			return global_kernel; //boost::ref(global_kernel);
+			return global_kernel;
 			}
 		}
 	}
@@ -305,8 +334,19 @@ Property<Prop>::Property(Ex *ex, Ex *param)
 
 	Kernel *kernel=get_kernel_from_scope(true);
 	Prop *p=new Prop();
-//	std::cout << "inserting " << p->name() << std::endl;
+	std::cout << "inserting " << p->name() << " into kernel " << kernel << std::endl;
+
+	// testing
+//	Ex tmp('A_{m n}');
+//	exptree tmp;
+//	tmp.set_head(str_node("xprs"));
+//	kernel->properties.master_insert(tmp, p);
+// Does the above make a copy of the tree?
+
 	kernel->properties.master_insert(exptree(it), p);
+
+//	HERE: something happens with the Ex pointer, as we are left with an uninitialised Ex
+//		object on the locals() stack.
 	}
 
 std::string BaseProperty::str_() const
@@ -442,6 +482,7 @@ BOOST_PYTHON_MODULE(cadabra2)
    //	def("fun", &fun);
 
 	def("tree", &print_tree);
+	def("cdb", &print_status);
 
 	// You cannot use implicitly_convertible to convert a string parameter to an Ex object
 	// automatically: think about how that would work in C++. You would need to be able to

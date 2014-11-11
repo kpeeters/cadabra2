@@ -33,6 +33,8 @@ class Ex {
 	public:
 		Ex(const Ex&); 
 		Ex(std::string);
+		~Ex();
+
 		std::string get() const;
 		void append(std::string);
 		std::string str_() const;

@@ -9,6 +9,7 @@ class Kernel {
 	public:
 		Kernel();
 		Kernel(const Kernel& other);
+		~Kernel();
 
 		Properties properties;
 		
