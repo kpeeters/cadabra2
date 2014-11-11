@@ -82,6 +82,7 @@
 \newcommand{\Cdb}{{Cadabra}\xspace}
 \newcommand{\cdbii}{{Cadabra II}\xspace}
 \newcommand{\Cdbii}{{Cadabra II}\xspace}
+\newcommand{\fixme}[1]{{#1}\marginpar{{\bf\smaller FIXME}}}
 \newcommand{\Cpp}{\leavevmode\rm{\hbox{C\hskip -0.1ex\raise 0.5ex\hbox{\tiny ++}}}\xspace}
 
 % Three macros to declare the main usage of a command, property or
@@ -3521,26 +3522,29 @@ exception.
 functionality of the algorithm on the {\tt txtout} stream. Do not
 add \verb|std::endl| newlines by hand, these will be inserted
 automatically.
-\item[\vbox{\hbox{\tt bool can\_apply(iterator)}
-            \hbox{\tt bool can\_apply(sibling\_iterator, sibling\_iterator)}}] 
+\item[\hbox{\tt bool can\_apply(iterator)}] 
 Determines whether the algorithm has a chance
 of acting on the given expression. This is an \emph{estimate} but is
 required to return {\tt true} if there is a possibility that the
-algorithm would yield a change.  
+algorithm would yield a change. It is allowed to return {\tt true}
+and then still not do anything when {\tt apply} is called.
 
-It takes two sibling\_iterators as arguments, which indicate a node or
-a range of nodes on which the algorithm is supposed to act.
+It takes an {\tt iterator} as argument, which indicates the node at
+which the algorithm is supposed to act.
 
 Since {\tt can\_apply} is guaranteed to be called before {\tt apply},
 it is allowed for the {\tt can\_apply} member to store results for later use in
-{\tt apply}. However, multiple calls to can be made to this combo, so
+{\tt apply}. However, multiple calls can be made to this combo, so
 any data stored should be erased upon each call to {\tt can\_apply}.
-\item[\vbox{\hbox{\tt apply\_result apply(iterator\&)}
-            \hbox{\tt apply\_result apply(sibling\_iterator\&,
-              sibling\_iterator\&)}}]
+\item[\hbox{\tt apply\_result apply(iterator\&)}]
 This is where the actual algorithm is applied. It is allowed to
 modify the iterator if necessary. No elements in the tree which sit
-above the entry point should ever be changed.
+above the entry point should ever be changed. 
+
+\fixme{It should also be disallowed that an algorithm unwraps the
+  single node which it has been given into multiple nodes, because
+  the returned iterator cannot propagate this information to the
+  caller. {\tt cleanup\_nests} does this wrong.}
 
 Before exiting this function, the member variable {\tt
 expression\_modified} has to be set according to whether or not the
@@ -3573,7 +3577,8 @@ touched, and the nodes should not be removed from the tree
 directly. If you want to remove nodes, this can be done by setting
 their multiplier field to zero; the core routines will take care of
 actually removing the nodes from the tree. It is allowed to inspect
-the tree above the given nodes, but this is discouraged.
+the tree above the given nodes, but this is discouraged. \fixme{What
+  does this mean?}
 
 Upon any exit from an algorithm module, the tree is required to be in
 a valid state. In many cases, it is useful to clean up modifications

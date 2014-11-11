@@ -78,7 +78,9 @@ class tree {
       class leaf_iterator;
 
 		tree();
+		// Construct a tree with a single element at the head.
 		tree(const T&);
+		// Construct tree with a copy of the tree pointed to by the iterator.
 		tree(const iterator_base&);
 		tree(const tree<T, tree_node_allocator>&);
 		~tree();

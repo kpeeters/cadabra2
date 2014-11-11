@@ -99,7 +99,7 @@ class Shell(InteractiveConsole):
                     line=rewrite
                 else:
                     print "inconsistent" # property names can only contain letters
-        print line
+        print 'executing: ', line
         # Now feed the pre-parsed input to Python.
 
         self.get_output()
