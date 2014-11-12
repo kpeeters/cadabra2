@@ -95,17 +95,24 @@ Ex::Ex(std::string ex_)
 
 	try {
 		str >> parser;
+		tree=parser.tree;
 		}
 	catch(std::exception& except) {
 		throw ParseException("Cannot parse");
 		}
 
-	tree=parser.tree;
-	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
+	// First pull in any expressions referred to with @(...) notation, because the
+	// full expression may not have consistent indices otherwise.
 	pull_in();
+	// FIXME: need to rename dummies; see original @(...) C++ code.
+
+	// Basic cleanup of rationals and subtractions, followed by
+   // cleanup of nested sums and products.
+	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
 	exptree::iterator top = tree.begin();
 	cleanup_nests_below(tree, top);
-//	register_as_last_expression(); DISABLED, THIS IS A BAD IDEA
+
+   //	register_as_last_expression(); DISABLED, THIS IS A BAD IDEA
 	}
 
 Ex *Ex::fetch_from_python(const std::string nm)
@@ -558,7 +565,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<CommutingAsSum>("CommutingAsSum");
 	def_prop<Distributable>("Distributable");
 	def_prop<IndexInherit>("IndexInherit");
-
+	def_prop<Indices>("Indices");
 
 	// How can we give Python access to properties?
 

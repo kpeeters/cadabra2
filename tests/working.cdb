@@ -6,28 +6,55 @@ print ex1==ex2
 print ex2==ex3
 print ex1==0
 
-# Status: the function below fails because substitution of @(ex2)
-# happens after the consistency check has failed.
+def defaults(ex):
+    collect_terms(ex)
+
 
 def test():
     {m,n,p,a,b}::AntiCommuting.
-    ex:=p m n a;
-    sort_product(ex);
-    print(ex);
-    ex2:= A_{m n}*(B_{m p}+C_{m p});
+    ex1:=p m n a;
+    sort_product(ex1);
+    print(ex1)
+    tst1:= - a m n p - @(ex1)
+    collect_terms(tst1)
+    if tst1==0:
+        print 'ex1 ok'
+    else:
+        print 'ex1 not ok'
+    ex2:= A_{m n} ( B_{m p}+C_{m p} );
     distribute(ex2);	
     tst2:= A_{m n} B_{m p} + A_{m n} C_{m p} - @(ex2)
     print(tst2)
-    collect_terms(tst2)
+    map(defaults, [tst2])
     if tst2==0:
-        print 'ok'
+        print 'ex2 ok'
     else:
-        print 'not ok'
+        print 'ex2 not ok'
 
 test()
 
 # This does not see the property declared in test():
 ex3:=p m n a;
 sort_product(ex3);
-print(ex3);
+tst3:= a m n p - @(ex3)
+collect_terms(tst3)
+if tst3==0:
+    print 'ex3 ok'
+else:
+    print 'ex3 not ok'
 
+
+# Test with scope, index relabelling and python calls.
+
+{m,n,p,q,r,s,t}::Indices.
+
+def test(inex):
+    ex:= A_{m n} ( B_{m p}+C_{m p} ) @(inex)
+    distribute(ex);
+    repl:= B_{m p} -> K_{m n} K_{n p}
+    substitute(ex, repl)
+    return ex
+
+myex:= D^{n q}
+print test(myex)
+ 
