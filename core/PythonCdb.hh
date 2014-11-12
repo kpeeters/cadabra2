@@ -42,7 +42,10 @@ class Ex {
 		std::string repr_() const;
 
 		Ex& operator=(const Ex&);
-		bool operator==(const Ex&);
+
+		// Comparison operators.
+		bool operator==(const Ex&) const;
+		bool __eq__int(int) const;
 
 		exptree     tree;
 

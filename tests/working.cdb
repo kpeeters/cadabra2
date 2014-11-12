@@ -4,19 +4,22 @@ ex2=Ex('0')
 ex3=Ex('1')
 print ex1==ex2
 print ex2==ex3
-print ex1==Ex(0)
+print ex1==0
+
+# Status: the function below fails because substitution of @(ex2)
+# happens after the consistency check has failed.
 
 def test():
     {m,n,p,a,b}::AntiCommuting.
     ex:=p m n a;
     sort_product(ex);
     print(ex);
-    ex2:= A*(B+C);
+    ex2:= A_{m n}*(B_{m p}+C_{m p});
     distribute(ex2);	
-    tst2:= A B + A C - @(ex2)
+    tst2:= A_{m n} B_{m p} + A_{m n} C_{m p} - @(ex2)
     print(tst2)
     collect_terms(tst2)
-    if tst2==Ex(0):
+    if tst2==0:
         print 'ok'
     else:
         print 'not ok'
