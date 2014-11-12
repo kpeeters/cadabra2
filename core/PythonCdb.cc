@@ -204,9 +204,15 @@ void Ex::register_as_last_expression()
 	// destructor from being called when the object goes out of scope...
 	}
 
-bool Ex::operator==(const Ex& other)
+bool Ex::operator==(const Ex& other) const
 	{
 	return tree_equal(&(get_kernel_from_scope()->properties), tree, other.tree);
+	}
+
+bool Ex::__eq__int(int other) const
+	{
+	Ex ex(other);
+	return (*this)==ex;
 	}
 
 
@@ -503,7 +509,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("append",   &Ex::append)
 		.def("__str__",  &Ex::str_)
 		.def("__repr__", &Ex::repr_)
-		.def("__eq__",   &Ex::operator==);
+		.def("__eq__",   &Ex::operator==)
+		.def("__eq__",   &Ex::__eq__int);
 
 	// test
    //	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
