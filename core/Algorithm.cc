@@ -619,6 +619,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	else {
 //		txtout << "classify indices up" << *(tr.parent(two)->name) << std::endl;
 		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
+//		print_classify_indices(std::cout, two);
 		}
 	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
 

@@ -121,6 +121,7 @@ class Algorithm {
 		// inherited from child nodes).
 		static unsigned int number_of_direct_indices(iterator it);
 
+		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 	protected:
 		Kernel&  kernel;
 		exptree& tr;
@@ -201,7 +202,6 @@ class Algorithm {
 		///            a_{m} + b_{m} . 
 		void     fill_index_position_map(iterator, const index_map_t&, index_position_map_t&) const;
 		void     fill_map(index_map_t&, sibling_iterator, sibling_iterator) const;
-		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 		void     print_classify_indices(std::ostream&, iterator) const;
 		void     determine_intersection(index_map_t& one, index_map_t& two, index_map_t& target,
 										  bool move_out=false) const; 

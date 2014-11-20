@@ -57,4 +57,12 @@ def test(inex):
 
 myex:= D^{n q}
 print test(myex)
- 
+
+# Automatic renaming of dummies upon using @(...).
+#
+{m,n,p,q}::Indices.
+ex:= A_{m n} B_{m n};
+ex2:= @(ex) @(ex);
+tst2:= A_{m n} B_{m n} A_{p q} B_{p q} - @(ex2);
+collect_terms(tst2)
+assert(tst2==0)
