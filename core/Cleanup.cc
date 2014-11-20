@@ -124,18 +124,18 @@ void cleanup_nests(exptree&tr, exptree::iterator &it, bool ignore_bracket_types)
  	if(!tr.is_valid(tr.parent(it))) return;
 
 // //	tr.print_recursive_treeform(txtout, tr.begin());
-// 	if(*(it->name)=="\\prod") {
-// 		assert(tr.parent(it)!=tr.end());
-// //		txtout << "*** " << *tr.parent(it)->name << std::endl;
-//       if(*(tr.parent(it)->name)=="\\prod" && (ignore_bracket_types || tr.begin(it)->fl.bracket==it->fl.bracket) ) {
-//          multiplier_t fac=*(tr.parent(it)->multiplier)*(*it->multiplier);
-//          tr.parent(it)->multiplier=rat_set.insert(fac).first;
-//          tr.flatten(it);
-// 			it=tr.erase(it);
-// //         it=tr.parent(tr.erase(it)); // CHECK: OK?
-//          }
-//       return;
-// 		}
+ 	if(*(it->name)=="\\prod") {
+ 		assert(tr.parent(it)!=tr.end());
+		if(*(tr.parent(it)->name)=="\\prod" && (ignore_bracket_types || tr.begin(it)->fl.bracket==it->fl.bracket) ) {
+			multiplier_t fac=*(tr.parent(it)->multiplier)*(*it->multiplier);
+			tr.parent(it)->multiplier=rat_set.insert(fac).first;
+			tr.flatten(it);
+ 			it=tr.erase(it);
+			//         it=tr.parent(tr.erase(it)); // CHECK: OK?
+			}
+		return;
+ 		}
+
  	if(*(it->name)=="\\sum") {
  		assert(tr.parent(it)!=tr.end());
 		//		txtout << "*** " << *tr.parent(it)->name << std::endl;

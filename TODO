@@ -14,5 +14,8 @@
   but I have not yet figured out how to extract arguments (and in particular 'ex') in
   init_property<...> (in PythonCdb.hh).
 
-- Current status: operator== does not automatically upcast an integer to an Ex if necessary.
+
+
+- cleanup_nests is not following the rule that nothing below the iterator
+  is allowed to change. 
   

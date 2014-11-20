@@ -161,26 +161,29 @@ Ex *Ex::fetch_from_python(const std::string nm)
 	return 0;
 	}
 
-// Replace any objects of the form '@(...)' in the expression by the
-// python expression '...' if it exists.
+// Replace any objects of the form '@(...)' in the expression tree by the
+// python expression '...' if it exists. Rename dummies to avoid clashes.
 
 void Ex::pull_in()
 	{
+	ratrewrite rr(*get_kernel_from_scope(), tree);
+	
 	exptree::iterator it=tree.begin();
 	while(it!=tree.end()) {
 		if(*it->name=="@") {
 			if(tree.number_of_children(it)==1) {
 				std::string pobj = *(tree.begin(it)->name);
-//				std::cerr << "fetching " <<  pobj << std::endl;
 				Ex *ex = fetch_from_python(pobj);
 				if(ex!=0) {
 					// The top node is an \expression, so we need the first child of that.
 					// FIMXE: assert consistency.
 					exptree::iterator expression_it = ex->tree.begin();
 					exptree::iterator topnode_it    = ex->tree.begin(expression_it);
+
 					multiplier_t mult=*(it->multiplier);
 					it=tree.replace(it, topnode_it);
 					multiply(it->multiplier, mult);
+					rr.rename_replacement_dummies(it, false);
 					}
 				}
 			}
