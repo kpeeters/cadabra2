@@ -18,4 +18,10 @@
 
 - cleanup_nests is not following the rule that nothing below the iterator
   is allowed to change. 
+
+- in order to pretty-print in ipython, need to
+   
+     from IPython.display import Math
+ 
+  and then wrap all output (which is now printing a tree) in a Math(str(..)).
   
