@@ -283,6 +283,12 @@ std::string print_status()
 	return "hi";
 	}
 
+std::string init_ipython()
+	{
+	boost::python::object obj = boost::python::exec("from IPython.display import Math");
+	return "Cadabra typeset output for IPython notebook initialised.";
+	}
+
 std::string print_tree(Ex *ex)
 	{
 	std::ostringstream str;
@@ -529,7 +535,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	def("tree", &print_tree);
 	def("cdb", &print_status);
-
+	def("init_ipython", &init_ipython);
+	
 	// You cannot use implicitly_convertible to convert a string parameter to an Ex object
 	// automatically: think about how that would work in C++. You would need to be able to
 	// pass a 'std::string' to a function that expects an 'Ex *'. That will never work.
