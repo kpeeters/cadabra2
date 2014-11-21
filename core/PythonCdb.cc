@@ -44,6 +44,14 @@ Kernel *get_kernel_from_scope(bool for_write=false) ;
 //        keep_terms:  list of integers
 //        
 
+class X {
+	public:
+		X() {};
+		X(const X& other) {};
+		std::string repr() { return "hi"; };
+};
+
+
 bool output_ipython=false;
 
 Ex::Ex(const Ex& other)
@@ -128,8 +136,6 @@ Ex::Ex(std::string ex_)
 	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
 	exptree::iterator top = tree.begin();
 	cleanup_nests_below(tree, top);
-
-	register_as_last_expression(); //DISABLED, THIS IS A BAD IDEA
 	}
 
 Ex *Ex::fetch_from_python(const std::string nm)
@@ -221,17 +227,6 @@ void Ex::append(std::string v)
 	ex+=v;
 	}
 
-void Ex::register_as_last_expression()
-	{
-	std::cerr << "registering as _" << std::endl;
-	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	boost::python::object me(this);
-	locals["_"]=me; //std::shared_ptr<Ex>(this); // me; //boost::ref(*this);
-	// FIXME:
-	// Putting it on the local stack like this does not prevent the
-	// destructor from being called when the object goes out of scope...
-	}
-
 bool Ex::operator==(const Ex& other) const
 	{
 	return tree_equal(&(get_kernel_from_scope()->properties), tree, other.tree);
@@ -243,6 +238,25 @@ bool Ex::__eq__int(int other) const
 	return (*this)==ex;
 	}
 
+// Functions to construct an Ex object and then create an additional
+// reference '_' on the local python stack that points to this object
+// as well.
+
+std::shared_ptr<Ex> make_Ex_from_string(const std::string& str) 
+	{
+	auto ptr = std::make_shared<Ex>(str);
+	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	locals["_"]=ptr;
+	return ptr;
+	}
+
+std::shared_ptr<Ex> make_Ex_from_int(int num)
+	{
+	auto ptr = std::make_shared<Ex>(num);
+	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	locals["_"]=ptr;
+	return ptr;
+	}
 
 // Templates to dispatch function calls in Python to algorithms in C++.
 
@@ -536,9 +550,16 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	class_<Kernel> pyKernel("Kernel", init<>());
 
+	// Test class
+	class_<X> pyX("X", init<>());
+	pyX.def("__repr__", &X::repr);
+
 	// Declare the Ex object to store expressions and manipulate on the Python side.
-	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", init<std::string>());
-	pyEx.def(init<int>());
+//	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", init<std::string>());
+	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
+	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_string));
+	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_int));
+//	pyEx.def(init<int>());
 	pyEx.def("get",     &Ex::get)
 		.def("append",   &Ex::append)
 		.def("__str__",  &Ex::str_)
