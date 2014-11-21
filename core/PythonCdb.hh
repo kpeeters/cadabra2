@@ -40,6 +40,8 @@ class Ex {
 		void append(std::string);
 		std::string str_() const;
 		std::string repr_() const;
+		std::string _repr_latex_() const;
+		std::string _repr_html_() const;
 
 		Ex& operator=(const Ex&);
 

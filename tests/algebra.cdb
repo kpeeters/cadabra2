@@ -1,19 +1,7 @@
-# Test 4:= dummy index relabelling upon @ substitution:
-#
-{m1,m2,m3,m4,m5}::Indices(vector).
-tmp1:= A_{m1 m2} + B_{m1 m2};
-tmp2:= C_{m3 m4} + D_{m3 m4};
-obj4:= @(tmp1) @(tmp2) g^{m1 m3} g^{m2 m4};
-
-
-
 # 
 # Test 1:= keep_terms
 
 obj1:= a1 + a2 + a3 + a4 + a5 + a6 + a7;
-keep_terms(_, [2,4])
-
-
 @keep_terms(%){2}{4};
 tst1:= a3 + a4 + a5 - @(obj1);
 @collect_terms!(%);
@@ -464,7 +452,6 @@ tst36:= - a b - @(obj36);
 @collect_terms!(%);
 @assert(tst36);
 
-
 # Test 37: weight inheritance
 #
 @reset.
@@ -474,3 +461,10 @@ D{#}::Derivative.
 D_{a}( b c ) + D_{c}( d e );
 @keep_weight!(%){grassmann}{3};
 
+# Test 38: stupid nested expression bug
+@reset.
+obj37:= A - ( B - ( C - ( D - E ) ) );
+@sumflatten!(%);
+tst38:= A - B + C - D + E - @(obj37);
+@collect_terms!(%);
+@assert(tst38);

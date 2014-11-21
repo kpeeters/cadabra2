@@ -44,6 +44,7 @@ Kernel *get_kernel_from_scope(bool for_write=false) ;
 //        keep_terms:  list of integers
 //        
 
+bool output_ipython=false;
 
 Ex::Ex(const Ex& other)
 	{
@@ -87,6 +88,22 @@ std::string Ex::repr_() const
 	return str.str();
 	}
 
+
+std::string Ex::_repr_latex_() const
+	{
+	std::ostringstream str;
+
+	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
+	dt.output(str);
+
+	return "$"+str.str()+"$";
+	}
+
+std::string Ex::_repr_html_() const
+	{
+	return "<strong>hi</strong>";
+	}
+
 Ex::Ex(std::string ex_) 
 	: ex(ex_)
 	{
@@ -112,7 +129,7 @@ Ex::Ex(std::string ex_)
 	exptree::iterator top = tree.begin();
 	cleanup_nests_below(tree, top);
 
-   //	register_as_last_expression(); DISABLED, THIS IS A BAD IDEA
+	register_as_last_expression(); //DISABLED, THIS IS A BAD IDEA
 	}
 
 Ex *Ex::fetch_from_python(const std::string nm)
@@ -208,7 +225,8 @@ void Ex::register_as_last_expression()
 	{
 	std::cerr << "registering as _" << std::endl;
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	locals["_"]=boost::ref(*this);
+	boost::python::object me(this);
+	locals["_"]=me; //std::shared_ptr<Ex>(this); // me; //boost::ref(*this);
 	// FIXME:
 	// Putting it on the local stack like this does not prevent the
 	// destructor from being called when the object goes out of scope...
@@ -519,11 +537,13 @@ BOOST_PYTHON_MODULE(cadabra2)
 	class_<Kernel> pyKernel("Kernel", init<>());
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
-	class_<Ex> pyEx("Ex", init<std::string>());
+	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", init<std::string>());
 	pyEx.def(init<int>());
 	pyEx.def("get",     &Ex::get)
 		.def("append",   &Ex::append)
 		.def("__str__",  &Ex::str_)
+		.def("_repr_latex_", &Ex::_repr_latex_)
+		.def("_repr_html_", &Ex::_repr_html_)
 		.def("__repr__", &Ex::repr_)
 		.def("__eq__",   &Ex::operator==)
 		.def("__eq__",   &Ex::__eq__int);
