@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include "Props.hh"
 
 class SelfCommutingBehaviour : virtual public property {
 	public:
