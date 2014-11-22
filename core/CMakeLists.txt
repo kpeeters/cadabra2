@@ -65,8 +65,10 @@ set(LOCAL_SRC_FILES
   properties/Integer.cc
   properties/LaTeXForm.cc
   properties/Matrix.cc
+  properties/NonCommuting.cc
   properties/NumericalFlat.cc
   properties/PartialDerivative.cc
+  properties/SelfAntiCommuting.cc
   properties/SortOrder.cc
   properties/Spinor.cc
   properties/Symbol.cc

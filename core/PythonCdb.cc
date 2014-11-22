@@ -16,12 +16,15 @@
 #include <sstream>
 
 #include "properties/AntiCommuting.hh"
+#include "properties/NonCommuting.hh"
 #include "properties/AntiSymmetric.hh"
 #include "properties/CommutingAsProduct.hh"
 #include "properties/CommutingAsSum.hh"
 #include "properties/Distributable.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
+#include "properties/SelfAntiCommuting.hh"
+#include "properties/SortOrder.hh"
 
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
@@ -118,6 +121,8 @@ Ex::Ex(std::string ex_)
 	Parser parser;
 	std::stringstream str(ex);
 
+//	std::cerr << ex_ << std::endl;
+
 	try {
 		str >> parser;
 		tree=parser.tree;
@@ -129,7 +134,6 @@ Ex::Ex(std::string ex_)
 	// First pull in any expressions referred to with @(...) notation, because the
 	// full expression may not have consistent indices otherwise.
 	pull_in();
-	// FIXME: need to rename dummies; see original @(...) C++ code.
 
 	// Basic cleanup of rationals and subtractions, followed by
    // cleanup of nested sums and products.
@@ -245,7 +249,13 @@ bool Ex::__eq__int(int other) const
 std::shared_ptr<Ex> make_Ex_from_string(const std::string& str) 
 	{
 	auto ptr = std::make_shared<Ex>(str);
-	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	// FIXME: very weird things happen if we store a ref on the locals
+	// stack.  It looks like a new frame is being created, or something
+	// like that.  Creating on the globals stack is not right, but the
+	// best we can do right now.
+
+//	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	boost::python::object locals(boost::python::borrowed(PyEval_GetGlobals()));
 	locals["_"]=ptr;
 	return ptr;
 	}
@@ -253,7 +263,8 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& str)
 std::shared_ptr<Ex> make_Ex_from_int(int num)
 	{
 	auto ptr = std::make_shared<Ex>(num);
-	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+//	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+	boost::python::object locals(boost::python::borrowed(PyEval_GetGlobals()));
 	locals["_"]=ptr;
 	return ptr;
 	}
@@ -266,6 +277,8 @@ Ex *dispatch_1(Ex *ex, bool repeat)
 	F algo(*get_kernel_from_scope(), ex->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
+//	std::cout << "applying at:";
+//	ex->tree.print_recursive_treeform(std::cout, it);
 	if(repeat) {
 		if(algo.apply_recursive(it)==false)
 			std::cout << "no change" << std::endl;
@@ -527,12 +540,6 @@ void def_algo_new(const std::string& name)
 // 		}
 // 	}
 
-//void fun() 
-//	{
-//	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-//	locals["fik"] = 42;
-//	locals["_fik"] = 43;
-//	}
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
@@ -555,11 +562,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyX.def("__repr__", &X::repr);
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
-//	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", init<std::string>());
 	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
 	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_string));
 	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_int));
-//	pyEx.def(init<int>());
 	pyEx.def("get",     &Ex::get)
 		.def("append",   &Ex::append)
 		.def("__str__",  &Ex::str_)
@@ -617,6 +622,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Distributable>("Distributable");
 	def_prop<IndexInherit>("IndexInherit");
 	def_prop<Indices>("Indices");
+	def_prop<NonCommuting>("NonCommuting");
+	def_prop<SelfAntiCommuting>("SelfAntiCommuting");
+	def_prop<SortOrder>("SortOrder");
 
 	// How can we give Python access to properties?
 

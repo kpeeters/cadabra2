@@ -36,40 +36,58 @@ tst5:= {a,b,c,d} - @(obj5);
 
 # Test 6 - 11:= prodsort
 #
-@reset;
-{X,G,Y,A,B}::SortOrder.
-{X,A}::AntiCommuting.
-obj6:= A*B*G*X*A*X:
-@prodsort(%);
-tst6:= X X G A A B + @(obj6);
-@collect_terms!(%);
-@assert(tst6);
+def test06():
+    {X,G,Y,A,B}::SortOrder.
+    {X,A}::AntiCommuting.
+    obj6:= A B G X A X
+    sort_product(obj6)
+    tst6:= X X G A A B + @(obj6);
+    collect_terms(_)
+    assert(tst6==0)
 
-@reset;
-{X,G,Y,A,B}::SortOrder.
-{X,A}::NonCommuting.
-obj7:= A*B*G*X*A*X:
-@prodsort(%);
-tst7:= G A X A X B - @(obj7);
-@collect_terms!(%);
-@assert(tst7);
+test06()
 
-@reset;
-{ W_{m n}, W_{m} }::SortOrder.
-{ W_{m n}, W_{m} }::AntiCommuting.
-obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
-@prodsort(%);
-tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
-@collect_terms!(%);
-@assert(tst8);
+def test07():
+    {X,G,Y,A,B}::SortOrder.
+    {X,A}::NonCommuting.
+    obj7:= A*B*G*X*A*X
+    sort_product(_)
+    tst7:= G A X A X B - @(obj7);
+    collect_terms(_)
+    assert(tst7==0)
 
-@reset;
-{ \theta_a, \theta_b }::SelfAntiCommuting.
-obj9:= \theta_c \theta_b \theta_a;
-@prodsort!(%);
-tst9:= \theta_a \theta_b \theta_c + @(obj9);
-@collect_terms!(%);
-@assert(tst9);
+test07()
+
+def test08():
+    { W_{m n}, W_{m} }::SortOrder.
+    { W_{m n}, W_{m} }::AntiCommuting.
+    obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
+    sort_product(_)
+    tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
+    collect_terms(_)
+    assert(tst8==0)
+
+test08()
+
+def test09():
+    { \theta_a, \theta_b }::SelfAntiCommuting.
+    obj9:= \theta_c \theta_b \theta_a;
+    sort_product(_)
+    tst9:= \theta_a \theta_b \theta_c + @(obj9);
+    collect_terms(_)
+    assert(tst9==0)
+
+test09()
+
+from cadabra2 import *
+SelfAntiCommuting(Ex(r'{ W_a, W_b }'))
+obj9=Ex(r'A B')
+print(obj9)
+
+obj9=Ex(r'W_c W_b W_a')
+print(obj9)
+
+
 
 @reset;
 { \theta_a, \chi_a }::SortOrder.

@@ -76,7 +76,7 @@ class Shell(InteractiveConsole):
             line_stripped=line_stripped[:-1]
         found = line_stripped.find(':=')
         if found>0:
-            rewrite = indent_line + line_stripped[:found] + " = Ex('" + line_stripped[found+2:]+"')"
+            rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:]+"')"
             objname=line_stripped[:found]
             if lastchar!='.' and len(indent_line)==0:
                 rewrite = rewrite + "; print " + objname
@@ -88,10 +88,10 @@ class Shell(InteractiveConsole):
                 match = re.search('([a-zA-Z]*)(.*)', line_stripped[found+2:])
                 if match:
                     if len(match.group(2))>0: # declaration with arguments
-                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex('"+line_stripped[:found]+"'), Ex('"+match.group(2)[1:-1]+"') )"
+                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex(r'"+line_stripped[:found]+"'), Ex('"+match.group(2)[1:-1]+"') )"
 #                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(ex=Ex('"+line_stripped[:found]+"'), "+match.group(2)[1:-1]+")"
                     else:
-                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex('"+line_stripped[:found]+"'))"
+                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex(r'"+line_stripped[:found]+"'))"
                     objname="__cdbtmp__"
                     # print the expression if we are at top level (not in a function) and the last char is not '.'
                     if lastchar!='.' and len(indent_line)==0:
@@ -99,7 +99,7 @@ class Shell(InteractiveConsole):
                     line=rewrite
                 else:
                     print "inconsistent" # property names can only contain letters
-#        print 'executing: ', line
+        print 'executing: ', line
         # Now feed the pre-parsed input to Python.
 
         self.get_output()
