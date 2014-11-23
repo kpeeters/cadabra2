@@ -14,6 +14,7 @@
 #include <boost/python.hpp>
 #include <boost/mpl/vector.hpp>
 #include <sstream>
+#include <memory>
 
 #include "properties/AntiCommuting.hh"
 #include "properties/NonCommuting.hh"
@@ -142,7 +143,7 @@ Ex::Ex(std::string ex_)
 	cleanup_nests_below(tree, top);
 	}
 
-Ex *Ex::fetch_from_python(const std::string nm)
+std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
 	{
 //	std::cerr << "fetching " << nm << std::endl;
 	try {
@@ -156,9 +157,9 @@ Ex *Ex::fetch_from_python(const std::string nm)
 			std::cout << "object unknown" << std::endl;
 		else {
 			// We can include this Python object into the expression only if it is an Ex object.
-			boost::python::extract<Ex *> extract_Ex(obj);
+			boost::python::extract<std::shared_ptr<Ex> > extract_Ex(obj);
 			if(extract_Ex.check()) {
-				Ex *ex = extract_Ex();
+				std::shared_ptr<Ex> ex = extract_Ex();
 				return ex;
 				}
 			// getting python objects included is tricky because of memory management of the generated Ex.
@@ -200,8 +201,8 @@ void Ex::pull_in()
 		if(*it->name=="@") {
 			if(tree.number_of_children(it)==1) {
 				std::string pobj = *(tree.begin(it)->name);
-				Ex *ex = fetch_from_python(pobj);
-				if(ex!=0) {
+				std::shared_ptr<Ex> ex = fetch_from_python(pobj);
+				if(ex) {
 					// The top node is an \expression, so we need the first child of that.
 					// FIMXE: assert consistency.
 					exptree::iterator expression_it = ex->tree.begin();
@@ -418,7 +419,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 	}
 
 template<class Prop>
-Property<Prop>::Property(Ex *ex, Ex *param) 
+Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
    : BaseProperty("Assigned property to ...")
 	{
 	exptree::iterator it=ex->tree.begin();
@@ -489,7 +490,9 @@ void def_prop(const std::string& name)
 	{
 	using namespace boost::python;
 
-	class_<Property<P>, bases<BaseProperty> >(name.c_str(), init<Ex *, optional<Ex *> >());
+	class_<Property<P>, bases<BaseProperty> >(name.c_str(), 
+															init<std::shared_ptr<Ex>, 
+															optional<std::shared_ptr<Ex> > >());
 	}
 
 //HERE:
