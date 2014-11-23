@@ -57,7 +57,7 @@ class Ex {
 		// Pull in any '@(...)' expressions from the Python side.
 		void pull_in();
 
-		Ex *fetch_from_python(std::string nm);
+		std::shared_ptr<Ex> fetch_from_python(std::string nm);
 };
 
 // Property is a templated wrapper around a C++ property object.
@@ -75,11 +75,12 @@ class BaseProperty {
 template<class T>
 class Property : public BaseProperty {
 	public:
-		Property(Ex *obj, Ex *params=0);
+//		Property(std::shared_ptr<Ex> obj);
+		Property(std::shared_ptr<Ex> obj, std::shared_ptr<Ex> params=0);
 };
 
 template<class T>
-boost::shared_ptr<Property<T> > init_property(boost::python::object obj)
+std::shared_ptr<Property<T> > init_property(boost::python::object obj)
 	{
 //	Property<T>& self = boost::python::extract<Property<T>&>(obj);
 //	Ex *ex = boost::python::extract<Ex *>(args[0]);
@@ -97,10 +98,10 @@ boost::shared_ptr<Property<T> > init_property(boost::python::object obj)
 
 //	Ex *ex=0; // extract from t?
 
-	Ex *ex=boost::python::extract<Ex *>(obj);
+	std::shared_ptr<Ex> ex=boost::python::extract<std::shared_ptr<Ex> >(obj);
 
 	std::cout << "init prop" << std::endl;
 
-	return boost::shared_ptr<Property<T> >(new Property<T>(ex));
+	return std::make_shared<Ex>(ex); //boost::shared_ptr<Property<T> >(new Property<T>(ex));
 	}
 

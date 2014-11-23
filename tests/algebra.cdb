@@ -80,6 +80,7 @@ def test09():
 test09()
 
 from cadabra2 import *
+AntiCommuting(Ex(r'{A, B}'))
 SelfAntiCommuting(Ex(r'{ W_a, W_b }'))
 obj9=Ex(r'A B')
 print(obj9)
