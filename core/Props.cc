@@ -311,9 +311,11 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 				const labelled_property *lp   =dynamic_cast<const labelled_property *>(pr);
 				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
 				if(!lp || !lpold || lp->label==lpold->label) {
+					std::cout << "removing previously set property on " << *(et.begin()->name) << std::endl;
 //					txtout << "Removing previously set property." << std::endl;
 					pattern  *oldpat=pit.first->second.first;
 					const property *oldprop=pit.first->second.second;
+					std::cout << oldprop << " versus " << pr << std::endl;
 					props.erase(pit.first);
 					pats.erase(oldprop);
 					delete oldpat;
@@ -500,22 +502,25 @@ std::string Properties::master_insert(exptree proptree, property *thepropbase)
 		insert_list_prop(objs, thelistprop);
 		}
 	else { // a normal property
-		property *theprop=dynamic_cast<property *>(thepropbase);
+		property *theprop=thepropbase;
 		assert(theprop);
 		if(*st->name=="\\comma") {
 			exptree::sibling_iterator sib=proptree.begin(st);
-//			txtout << "Assigning property " << propname << " to ";
 			while(sib!=proptree.end(st)) {
-				if(theprop==0) { // create a new property for each object
-//					thepropbase=(*pit).second();
-//					thepropbase->parse(tr,st,proptree.begin(),keyvals);
-					theprop    =dynamic_cast<property *>(thepropbase);
-					assert(theprop);
-//					theprop->core_parse(keyvals);
-					}
+//				if(theprop==0) { // create a new property for each object
+//
+//				FIXME: what is this doing? And why? 
+//
+////					thepropbase=(*pit).second();
+////					thepropbase->parse(tr,st,proptree.begin(),keyvals);
+//					theprop    =dynamic_cast<property *>(thepropbase);
+//					assert(theprop);
+////					theprop->core_parse(keyvals);
+//					}
 				if(sib->fl.parent_rel!=str_node::p_property) {
+					std::cerr << "inserting property for " << *sib->name << std::endl;
 					insert_prop(exptree(sib), theprop);
-					theprop=0;
+//					theprop=0;
 					}
 				++sib;
 				}				
