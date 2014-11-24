@@ -36,8 +36,6 @@ class Ex {
 		Ex(int);
 		~Ex();
 
-		std::string get() const;
-		void append(std::string);
 		std::string str_() const;
 		std::string repr_() const;
 		std::string _repr_latex_() const;
@@ -52,56 +50,37 @@ class Ex {
 		exptree     tree;
 
 	private:
-		std::string ex;
-
-		// Pull in any '@(...)' expressions from the Python side.
-		void pull_in();
-
+		// Functionality to pull in any '@(...)' expressions from the
+		// Python side into a C++ expression.
+		void                pull_in();
 		std::shared_ptr<Ex> fetch_from_python(std::string nm);
 };
 
-// Property is a templated wrapper around a C++ property object.
+
+// Property is a templated wrapper around a C++ property object. It 
+// provides it with __str__ and __repr__ methods. In order to have
+// a quick way to figure out in Python whether an object is a property,
+// we derive it from BaseProperty, which is an empty placeholder (in
+// Python this is called Property).
+
+// Cadabra properties cannot be proper Python properties, because we
+// need to give the latter names in order to prevent them from going
+// out of scope. So Cadabra keeps a list of 'anonymous property objects 
+// in the current scope'. 
+
+// The question is now what we do when Python keeps a pointer to these
+// objects, and let that pointer escape local scope (e.g. by returning
+// the Python property object). How do we keep it in scope?
 
 class BaseProperty {
-	public:
-		BaseProperty(const std::string&);
-		
-		std::string str_() const;
-		std::string repr_() const;
-
-		std::string creation_message;
 };
 
 template<class T>
 class Property : public BaseProperty {
 	public:
-//		Property(std::shared_ptr<Ex> obj);
 		Property(std::shared_ptr<Ex> obj, std::shared_ptr<Ex> params=0);
+
+		std::string str_() const;
+		std::string repr_() const;
 };
-
-template<class T>
-std::shared_ptr<Property<T> > init_property(boost::python::object obj)
-	{
-//	Property<T>& self = boost::python::extract<Property<T>&>(obj);
-//	Ex *ex = boost::python::extract<Ex *>(args[0]);
-//
-//	boost::python::list keys = kwargs.keys();
-//	
-//	for(int i = 0; i < len(keys); ++i) {
-////		object curArg = kwargs[keys[i]];
-////		if(curArg) {
-////			outMap[extract<std::string>(keys[i])] = extract<double>(kwargs[keys[i]]);
-////			}               
-//		}
-////	self.SetParameters(outMap);
-//	
-
-//	Ex *ex=0; // extract from t?
-
-	std::shared_ptr<Ex> ex=boost::python::extract<std::shared_ptr<Ex> >(obj);
-
-	std::cout << "init prop" << std::endl;
-
-	return std::make_shared<Ex>(ex); //boost::shared_ptr<Property<T> >(new Property<T>(ex));
-	}
 

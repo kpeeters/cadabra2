@@ -212,8 +212,8 @@ const T* Properties::get_composite(exptree::iterator it, int& serialnum, bool do
 		while(walk!=pit.second) {
 //			std::cout << "walk " << *((*walk).second.first->obj.begin()->name) << std::endl;
 			if(wildcards==(*walk).second.first->children_wildcard()) {
-				std::cout << "searching " << *it->name << std::endl;
-				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
+//				std::cout << "searching " << *it->name << std::endl;
+//				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
 				if((*walk).second.first->match(*this, it, ignore_parent_rel)) { // match found
 //					std::cout << "found match" << std::endl;
 					ret=dynamic_cast<const T *>((*walk).second.second);

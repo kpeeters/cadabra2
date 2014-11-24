@@ -93,7 +93,6 @@ std::string Ex::str_() const
 
 std::string Ex::repr_() const
 	{
-//	std::cerr << "Ex::repr_" << std::endl;
 	exptree::iterator it = tree.begin();
 	std::ostringstream str;
 	tree.print_entire_tree(str);
@@ -117,10 +116,10 @@ std::string Ex::_repr_html_() const
 	}
 
 Ex::Ex(std::string ex_) 
-	: ex(ex_)
+//	: ex(ex_)
 	{
 	Parser parser;
-	std::stringstream str(ex);
+	std::stringstream str(ex_);
 
 //	std::cerr << ex_ << std::endl;
 
@@ -145,13 +144,9 @@ Ex::Ex(std::string ex_)
 
 std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
 	{
-//	std::cerr << "fetching " << nm << std::endl;
 	try {
-//		boost::python::object obj = boost::python::eval(nm.c_str());
-
 		boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
 		boost::python::object obj = locals[nm];
-//		locals["_"]=boost::ref(*this);
 
 		if(obj.is_none()) // We never actually get here, an exception will have been thrown.
 			std::cout << "object unknown" << std::endl;
@@ -163,14 +158,14 @@ std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
 				return ex;
 				}
 			// getting python objects included is tricky because of memory management of the generated Ex.
-//			boost::python::extract<int> extract_int(obj);
-//			if(extract_int.check()) {
-//				int x = extract_int();
-//				std::ostringstream str;
-//				str << "Ex('" << x << "')" << std::ends;
-//				std::cout << "recursive for " << str.str() << std::endl;
-//				return fetch_from_python(str.str());
-//				}
+			//			boost::python::extract<int> extract_int(obj);
+			//			if(extract_int.check()) {
+			//				int x = extract_int();
+			//				std::ostringstream str;
+			//				str << "Ex('" << x << "')" << std::ends;
+			//				std::cout << "recursive for " << str.str() << std::endl;
+			//				return fetch_from_python(str.str());
+			//				}
 			std::cout << nm << " is not of type cadabra.Ex" << std::endl;
 			return 0;
 			}
@@ -183,7 +178,7 @@ std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
 			std::cout << nm << " is not of type cadabra.Ex." << std::endl;
 		else 
 			std::cout << nm << " is not defined." << std::endl;
-//		std::cout << parse_python_exception() << std::endl;
+      //		std::cout << parse_python_exception() << std::endl;
 		}
 
 	return 0;
@@ -221,16 +216,6 @@ void Ex::pull_in()
 	return;
 	}
 
-
-std::string Ex::get() const
-	{ 
-	return ex; 
-	}
-
-void Ex::append(std::string v) 
-	{
-	ex+=v;
-	}
 
 bool Ex::operator==(const Ex& other) const
 	{
@@ -351,11 +336,6 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
-BaseProperty::BaseProperty(const std::string& s)
-	: creation_message(s)
-	{
-	}
-
 // Return the kernel in local scope if any, or the one in global scope if none is available
 // in local scope. However, if a request for a writeable kernel is made, and no local is
 // present, it will always be created (and filled with the content of the global one).
@@ -420,36 +400,25 @@ Kernel *get_kernel_from_scope(bool for_write)
 
 template<class Prop>
 Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
-   : BaseProperty("Assigned property to ...")
 	{
 	exptree::iterator it=ex->tree.begin();
 	assert(*(it->name)=="\\expression");
 	it=ex->tree.begin(it);
-	creation_message = "";
 
 	Kernel *kernel=get_kernel_from_scope(true);
 	Prop *p=new Prop();
-//	std::cout << "inserting " << p->name() << " into kernel " << kernel << std::endl;
-
-	// testing
-//	Ex tmp('A_{m n}');
-//	exptree tmp;
-//	tmp.set_head(str_node("xprs"));
-//	kernel->properties.master_insert(tmp, p);
-// Does the above make a copy of the tree?
 
 	kernel->properties.master_insert(exptree(it), p);
-
-//	HERE: something happens with the Ex pointer, as we are left with an uninitialised Ex
-//		object on the locals() stack.
 	}
 
-std::string BaseProperty::str_() const
+template<class Prop>
+std::string Property<Prop>::str_() const
 	{
-	return creation_message;
+	return "property";
 	}
 
-std::string BaseProperty::repr_() const
+template<class Prop>
+std::string Property<Prop>::repr_() const
 	{
 	return "Property::repr";
 	}
@@ -490,13 +459,12 @@ void def_prop(const std::string& name)
 	{
 	using namespace boost::python;
 
-	class_<Property<P>, bases<BaseProperty> >(name.c_str(), 
-															init<std::shared_ptr<Ex>, 
-															optional<std::shared_ptr<Ex> > >());
+	class_<Property<P>, bases<BaseProperty> > pr(name.c_str(), init<std::shared_ptr<Ex>, optional<std::shared_ptr<Ex> > >());
+	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_);
 	}
 
-//HERE:
-// Do we want to accept a vector of Ex objects or something less general?
+// Experimental new way to define algorithms; intended to do something with algorithms which require
+// more arguments.
 
 template<class F, class p1>
 void def_algo_new(const std::string& name)
@@ -508,40 +476,6 @@ void def_algo_new(const std::string& name)
 	
 //	boost::python::list& ns
 	}
-
-//void callback(Ex *ex, boost::python::object obj) 
-//	{
-//	std::cout << "calling back to python" << std::endl;
-//	if(obj.is_none()) {
-//		std::cout << "no callback given, ignoring" << std::endl;
-//		} 
-//	else {
-//		obj(boost::ref(ex));
-//		}
-//	}
-
-// void backdoor()
-// 	{
-// 	try {
-// 		boost::python::object obj = boost::python::eval("ab");
-// 		if(obj.is_none()) // We don't get here, an exception will have been thrown
-// 			std::cout << "object unknown" << std::endl;
-// 		else {
-// 			Ex *ex = boost::python::extract<Ex *>(obj);
-// 			std::cout << *(ex->tree.begin()->name) << std::endl;
-// 			}
-// 		}
-// 	catch(boost::python::error_already_set const &) {
-// 		// In order to prevent the error from propagating, we have to read
-// 		// it out. And in any case, we want to give some feedback to the user.
-// 		std::string err = parse_python_exception();
-// 		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
-// 			std::cout << "ab is not a cadabra expression" << std::endl;
-// 		else 
-// 			std::cout << "ab is not defined" << std::endl;
-// //		std::cout << parse_python_exception() << std::endl;
-// 		}
-// 	}
 
 
 // Entry point for registration of the Cadabra Python module. 
@@ -568,19 +502,16 @@ BOOST_PYTHON_MODULE(cadabra2)
 	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
 	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_string));
 	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_int));
-	pyEx.def("get",     &Ex::get)
-		.def("append",   &Ex::append)
-		.def("__str__",  &Ex::str_)
+	pyEx.def("__str__",  &Ex::str_)
 		.def("_repr_latex_", &Ex::_repr_latex_)
 		.def("_repr_html_", &Ex::_repr_html_)
 		.def("__repr__", &Ex::repr_)
 		.def("__eq__",   &Ex::operator==)
 		.def("__eq__",   &Ex::__eq__int);
 
-	// test
-   //	def("callback", &callback, (arg("ex"), arg("callback")=object()) );
-   //	def("backdoor", &backdoor);
-   //	def("fun", &fun);
+
+	// Inspection algorithms and other global functions which do not fit into the C++
+   // framework anymore.
 
 	def("tree", &print_tree);
 	def("cdb", &print_status);
@@ -601,11 +532,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_2<substitute>("substitute");
    //	def_algo_new<keep_terms, boost::python::list>("keep_terms");
 
-	// All properties on the Python side derive from the C++ BaseProperty, which is
-	// called Property on the Python side.
-	class_<BaseProperty> pyBaseProperty("Property", no_init);
-	pyBaseProperty.def("__str__", &BaseProperty::str_)
-		.def("__repr__", &BaseProperty::repr_);
 
 	// Properties are declared as objects on the Python side as well. They all take two
 	// Ex objects as constructor parameters: the first one is the object(s) to which the
@@ -618,6 +544,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// also has the advantage that we can refer to it again if necessary from the Python side,
 	// and keeps C++ and Python more in sync.
 
+	class_<BaseProperty>("Property", no_init);
+
 	def_prop<AntiCommuting>("AntiCommuting");
 	def_prop<AntiSymmetric>("AntiSymmetric");
 	def_prop<CommutingAsProduct>("CommutingAsProduct");
@@ -629,7 +557,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SelfAntiCommuting>("SelfAntiCommuting");
 	def_prop<SortOrder>("SortOrder");
 
-	// How can we give Python access to properties?
-
 	register_exception_translator<ParseException>(&translate_ParseException);
+
+	// How can we give Python access to information stored in properties?
 	}
