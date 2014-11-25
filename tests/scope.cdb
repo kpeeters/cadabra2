@@ -22,25 +22,27 @@ sort_product(_)
 qg = 42
 
 def fun3():
-    # print(q)  this would not work
+    print('=== locals in fun3 scope ===')
+    # print(q) # this would not work
     print(qg)
     {K,L}::AntiCommuting.
     ex:= C B A
     sort_product(_)
     print(_)
-    ex2:= F E D
+    # This function does not see things declared in fun2,
+    # and it should not, because it does not see 'q' above either.
+    ex2:= F E D 
     sort_product(_)
     print(_)
-    print('=== locals in fun3 scope ===')
     print(locals())
 
 # FIXME: in this problem, even though three local kernels get created,
 # only two of them show up: in fun3 & fun4 the kernel is the same. 
-# More puzzling: the final result is correct...
 
 def fun2():
     q=3
     {D,E,F}::AntiCommuting.
+    print("fun2 scope "+str(properties()))
     ex:= C B A
     sort_product(_)
     print(_)
@@ -48,15 +50,26 @@ def fun2():
     sort_product(_)
     print(_)
     fun3()
+    __cdbkernel__ = Kernel()
+    print(__cdbkernel__)
     def fun4():
-        r=6 # force creation of local scope
-        {Q,R}::AntiCommuting.
         print('=== locals in fun4 scope ===')
-        print(locals())
+        print("fun4 scope "+str(properties()))
+        print(locals());
+        print q
+        # If you drop this print below, __cdbkernel__ will not be in locals above.
+        #print __cdbkernel__
+        {Q,R}::AntiCommuting.
         ex4:= R Q
         sort_product(_)
         print(_)
+        # This does not see the fun2 scope (but it does of course see
+        # the global scope). That's wrong...
+        ex5:= D E F
+        sort_product(_)
+        print(_)
     fun4()
+    print("fun2 scope "+str(properties()))
     ex3:= R Q
     sort_product(_)
     print(_)
