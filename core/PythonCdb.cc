@@ -369,15 +369,17 @@ Kernel *get_kernel_from_scope(bool for_write)
 		}
 	
 	if(for_write) {
-		// need the local kernel no matter what
+		// Need a local kernel because we want to write into it. Since 
+		// the C++ only handles one kernel, we copy the content of the
+		// global kernel into the current local one.
 		if(local_kernel==0) {
-//			std::cerr << "creating new local kernel" << std::endl;
 			local_kernel = new Kernel();
+			std::cerr << "creating new local kernel " << local_kernel << std::endl;
 			if(global_kernel) {
+				std::cerr << "copying global properties into kernel" << std::endl;
 				local_kernel->properties = global_kernel->properties; 
 				}
 			locals["cadabra_kernel"]=boost::ref(local_kernel);
-			// FIXME: copy global kernel if present
 			}
 		return local_kernel;
 		}
@@ -406,21 +408,21 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	it=ex->tree.begin(it);
 
 	Kernel *kernel=get_kernel_from_scope(true);
-	Prop *p=new Prop();
 
-	kernel->properties.master_insert(exptree(it), p);
+	prop=new Prop();
+	kernel->properties.master_insert(exptree(it), prop);
 	}
 
 template<class Prop>
 std::string Property<Prop>::str_() const
 	{
-	return "property";
+	return prop->name();
 	}
 
 template<class Prop>
 std::string Property<Prop>::repr_() const
 	{
-	return "Property::repr";
+	return "Property::repr: "+prop->name();
 	}
 
 // Templated function which declares various forms of the algorithm entry points in one shot.
