@@ -1,0 +1,73 @@
+
+# The following lets a property escape from local context without
+# being kept on the cadabra stack. This is undefined.
+
+def fun():
+    {A,B,C}::AntiCommuting.
+    ex:= C B A
+    sort_product(_)
+    print("inside fun")
+    print(_)
+    return __cdbtmp__
+
+prop=fun()
+print(prop)
+
+ex:= C B A
+sort_product(_)
+
+# Mixing properties from global and local scope.
+
+{A,B,C}::AntiCommuting.
+qg = 42
+
+def fun3():
+    # print(q)  this would not work
+    print(qg)
+    {K,L}::AntiCommuting.
+    ex:= C B A
+    sort_product(_)
+    print(_)
+    ex2:= F E D
+    sort_product(_)
+    print(_)
+    print('=== locals in fun3 scope ===')
+    print(locals())
+
+# FIXME: in this problem, even though three local kernels get created,
+# only two of them show up: in fun3 & fun4 the kernel is the same. 
+# More puzzling: the final result is correct...
+
+def fun2():
+    q=3
+    {D,E,F}::AntiCommuting.
+    ex:= C B A
+    sort_product(_)
+    print(_)
+    ex2:= F E D
+    sort_product(_)
+    print(_)
+    fun3()
+    def fun4():
+        r=6 # force creation of local scope
+        {Q,R}::AntiCommuting.
+        print('=== locals in fun4 scope ===')
+        print(locals())
+        ex4:= R Q
+        sort_product(_)
+        print(_)
+    fun4()
+    ex3:= R Q
+    sort_product(_)
+    print(_)
+    print('=== locals in fun2 scope ===')
+    print(locals())
+    # print('=== globals ===')
+    # print(globals())
+
+fun2()
+ex3:= F E D
+sort_product(_)
+print(_)
+
+

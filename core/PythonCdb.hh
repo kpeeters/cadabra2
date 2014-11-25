@@ -82,5 +82,15 @@ class Property : public BaseProperty {
 
 		std::string str_() const;
 		std::string repr_() const;
+
+	private:
+		// We keep a pointer to the C++ property, so it is possible to 
+		// query properties using the Python interface. However, this C++
+		// object is owned by the C++ kernel and does not get destroyed
+		// when the Python object goes out of scope.
+
+		// When the Python object survives the local scope, results are
+		// undefined. 
+		T *prop;
 };
 
