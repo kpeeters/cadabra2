@@ -320,6 +320,23 @@ std::string init_ipython()
 	return "Cadabra typeset output for IPython notebook initialised.";
 	}
 
+boost::python::list list_properties()
+	{
+	Kernel *kernel=get_kernel_from_scope(false);
+	Properties& props=kernel->properties;
+
+	boost::python::list ret;
+	for(auto it=props.props.begin(); it!=props.props.end(); ++it) {
+		std::string res;
+		res = *((*it).second.first->obj.begin()->name);
+		res += "::";
+		res +=(*it).second.second->name();
+		ret.append(res);
+		}
+
+	return ret;
+	}
+
 std::string print_tree(Ex *ex)
 	{
 	std::ostringstream str;
@@ -343,6 +360,9 @@ void translate_ParseException(const ParseException &e)
 Kernel *get_kernel_from_scope(bool for_write) 
 	{
 //	std::cerr << "get_kernel_from_scope " << (for_write?"for writing":"for reading") << std::endl;
+
+	// update locals
+//	boost::python::object
 
 	// Lookup the properties object in the local scope. 
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
@@ -391,8 +411,9 @@ Kernel *get_kernel_from_scope(bool for_write)
 			return global_kernel;
 			}
 		else {
-			// On first call?
-//			std::cerr << "creating new global kernel" << std::endl;
+			// At the start of a program there is no global kernel yet,
+			// so it has to be created.
+			std::cerr << "creating new global kernel" << std::endl;
 			global_kernel = new Kernel();
 			globals["cadabra_kernel"]=boost::ref(global_kernel);
 			return global_kernel;
@@ -518,7 +539,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("tree", &print_tree);
 	def("cdb", &print_status);
 	def("init_ipython", &init_ipython);
-	
+	def("properties", &list_properties);
+
 	// You cannot use implicitly_convertible to convert a string parameter to an Ex object
 	// automatically: think about how that would work in C++. You would need to be able to
 	// pass a 'std::string' to a function that expects an 'Ex *'. That will never work.
