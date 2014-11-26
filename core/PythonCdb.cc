@@ -362,7 +362,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 //	std::cerr << "get_kernel_from_scope " << (for_write?"for writing":"for reading") << std::endl;
 
 	// update locals
-//	boost::python::object
+	boost::python::object __cdbkernel__ = boost::python::eval("cadabra_kernel");
 
 	// Lookup the properties object in the local scope. 
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
