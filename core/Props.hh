@@ -130,6 +130,9 @@ class Properties {
 		// one from the property to the pattern. These are both multi-maps because 
 		// one pattern can have multiple properties assigned to it, and one property can
 		// be assigned to multiple properties.
+		//
+		// When we delete properties, we check the pats map to see if the reference count
+		// for that property has dropped to zero.
 		typedef std::multimap<nset_t::iterator, pat_prop_pair_t, nset_it_less>  property_map_t;
 		typedef std::multimap<const property *, pattern *>                      pattern_map_t;
 
