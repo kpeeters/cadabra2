@@ -17,6 +17,7 @@
 #include <memory>
 
 #include "properties/AntiCommuting.hh"
+#include "properties/Commuting.hh"
 #include "properties/NonCommuting.hh"
 #include "properties/AntiSymmetric.hh"
 #include "properties/CommutingAsProduct.hh"
@@ -362,7 +363,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 //	std::cerr << "get_kernel_from_scope " << (for_write?"for writing":"for reading") << std::endl;
 
 	// update locals
-	boost::python::object __cdbkernel__ = boost::python::eval("cadabra_kernel");
+//	boost::python::object __cdbkernel__ = boost::python::eval("cadabra_kernel");
 
 	// Lookup the properties object in the local scope. 
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
@@ -572,6 +573,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	def_prop<AntiCommuting>("AntiCommuting");
 	def_prop<AntiSymmetric>("AntiSymmetric");
+	def_prop<Commuting>("Commuting");
 	def_prop<CommutingAsProduct>("CommutingAsProduct");
 	def_prop<CommutingAsSum>("CommutingAsSum");
 	def_prop<Distributable>("Distributable");

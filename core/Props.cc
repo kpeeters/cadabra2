@@ -293,6 +293,8 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 	{
 //	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 
+	// FIXME: is it really necessary to store this by pointer? We are in any case
+	// not cleaning this up correctly yet.
 	pattern *pat=new pattern(et);
 
 	std::pair<property_map_t::iterator, property_map_t::iterator> pit=
@@ -306,26 +308,59 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 			if((*pit.first).second.first->obj.begin().begin()->is_range_wildcard()) 
 				++first_nonpattern;
 			
-		if((*pit.first).second.first->match(*this, et.begin())) { // match found
+		// A given pattern can only have one property of any given type. The following
+		// triggers on entries in the props map which match the pattern to be inserted.
+		if((*pit.first).second.first->match(*this, et.begin())) {
+
+			// Does this entry in props give a property of the same type as the one we
+			// are trying to insert?
 			if(typeid(*pr)==typeid(*(*pit.first).second.second)) {
+
+				// If this is a labelled property, is the label different from the one on the
+				// property we are trying to insert?
 				const labelled_property *lp   =dynamic_cast<const labelled_property *>(pr);
 				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
 				if(!lp || !lpold || lp->label==lpold->label) {
-					std::cout << "removing previously set property on " << *(et.begin()->name) << std::endl;
-					pattern  *oldpat=pit.first->second.first;
+
+					// The to-be-inserted property cannot co-exist on this pattern with the
+					// one that is currently associated to the pattern. Remove it.
+
+					pattern        *oldpat =pit.first->second.first;
 					const property *oldprop=pit.first->second.second;
 					
 					// If the new property instance is the same as the old one, we can stop
-					if(oldprop!=pr) {
-					WRONG: this erases all refs.
-						props.erase(pit.first);
-						pats.erase(oldprop);
-						delete oldpat;
-						// See if there are any other references to to this property; if not, 
-						// delete it.
-						
+					// (this happens if a pattern is accidentally repeated in a property assignment).
+					if(oldprop==pr) {
+						delete pat;
+						return;
+						}
+
+					// Erase the pattern->property entry, and delete the pattern. 
+					// FIXME: store pattern by value.
+					props.erase(pit.first);
+					delete oldpat;
+
+					// Remove the property->pattern entry. Only delete the property 
+					// if it is no longer associated to any other pattern.
+					// FIXME: 
+					//   {A, B}::SelfAntiCommuting.
+					//   {A}::SelfAntiCommuting.
+					//   {B}::SelfAntiCommuting.
+					// leads to two properties SelfAntiCommuting, which are identical.
+					// We need a way to compare properties and decide when they are
+					// identical, or when they can coexist, or something like that.
+					for(auto pi=pats.begin(); pi!=pats.end(); ++pi) {
+						if((*pi).first==oldprop && (*pi).second==oldpat) {
+							std::cerr << "found old entry, deleting" << std::endl;
+							pats.erase(pi);
+							break;
+							}
+						}
+					if(pats.find(oldprop)==pats.end()) {
+						std::cerr << "no other references" << std::endl;
 						delete oldprop;
 						}
+
 					break;
 					}
 				}
