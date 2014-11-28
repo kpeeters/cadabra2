@@ -73,33 +73,27 @@ def test09():
     { \theta_a, \theta_b }::SelfAntiCommuting.
     obj9:= \theta_c \theta_b \theta_a;
     sort_product(_)
+    print(_)
     tst9:= \theta_a \theta_b \theta_c + @(obj9);
     collect_terms(_)
     assert(tst9==0)
 
 test09()
 
-from cadabra2 import *
-AntiCommuting(Ex(r'{A, B}'))
-SelfAntiCommuting(Ex(r'{ W_a, W_b }'))
-obj9=Ex(r'W_c W_b W_a')
-print(obj9)
+def test10():
+    {a,b,c,d}::Indices.
+    { \theta_a, \chi_a }::SortOrder.
+    \theta_{a}::SelfAntiCommuting.
+    \chi_{a}::SelfAntiCommuting.
+    { \theta_a, \chi_a }::Commuting.
+    obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
+    sort_product(_);
+    print(_)
+    tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
+    collect_terms(_);
+    assert(tst10==0)
 
-print(obj9)
-
-
-
-@reset;
-{ \theta_a, \chi_a }::SortOrder.
-\theta_{a}::SelfAntiCommuting.
-\chi_{a}::SelfAntiCommuting.
-{ \theta_a, \chi_a }::Commuting.
-#
-obj10:= \theta_c \theta_b \chi_d \theta_a \chi_a;
-@prodsort!(%);
-tst10:= \theta_a \theta_b \theta_c \chi_a \chi_d - @(obj10);
-@collect_terms!(%);
-@assert(tst10);
+test10()
 
 @reset;
 \Gamma_{#}::GammaMatrix.

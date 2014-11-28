@@ -51,6 +51,7 @@ set(LOCAL_SRC_FILES
   properties/Accent.cc
   properties/AntiCommuting.cc
   properties/AntiSymmetric.cc
+  properties/Commuting.cc
   properties/CommutingAsProduct.cc
   properties/CommutingAsSum.cc
   properties/CommutingBehaviour.cc
