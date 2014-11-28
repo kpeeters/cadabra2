@@ -312,14 +312,20 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
 				if(!lp || !lpold || lp->label==lpold->label) {
 					std::cout << "removing previously set property on " << *(et.begin()->name) << std::endl;
-//					txtout << "Removing previously set property." << std::endl;
 					pattern  *oldpat=pit.first->second.first;
 					const property *oldprop=pit.first->second.second;
-					std::cout << oldprop << " versus " << pr << std::endl;
-					props.erase(pit.first);
-					pats.erase(oldprop);
-					delete oldpat;
-					delete oldprop;
+					
+					// If the new property instance is the same as the old one, we can stop
+					if(oldprop!=pr) {
+					WRONG: this erases all refs.
+						props.erase(pit.first);
+						pats.erase(oldprop);
+						delete oldpat;
+						// See if there are any other references to to this property; if not, 
+						// delete it.
+						
+						delete oldprop;
+						}
 					break;
 					}
 				}
