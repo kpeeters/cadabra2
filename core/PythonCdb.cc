@@ -419,9 +419,9 @@ Kernel *get_kernel_from_scope(bool for_write)
 		// global kernel into the current local one.
 		if(local_kernel==0) {
 			local_kernel = new Kernel();
-			std::cerr << "creating new local kernel " << local_kernel << std::endl;
+//			std::cerr << "creating new local kernel " << local_kernel << std::endl;
 			if(global_kernel) {
-				std::cerr << "copying global properties into kernel" << std::endl;
+//				std::cerr << "copying global properties into kernel" << std::endl;
 				local_kernel->properties = global_kernel->properties; 
 				}
 			locals["cadabra_kernel"]=boost::ref(local_kernel);
@@ -438,7 +438,7 @@ Kernel *get_kernel_from_scope(bool for_write)
 		else {
 			// At the start of a program there is no global kernel yet,
 			// so it has to be created.
-			std::cerr << "creating new global kernel" << std::endl;
+			// std::cerr << "creating new global kernel" << std::endl;
 			global_kernel = new Kernel();
 			globals["cadabra_kernel"]=boost::ref(global_kernel);
 			return global_kernel;
