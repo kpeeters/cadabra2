@@ -72,7 +72,7 @@ class Shell(InteractiveConsole):
             end_of_line=imatch.group(3)
         else:
             indent_line=""
-            end_of_line=""
+            end_of_line="\n"
         line_stripped=line.rstrip().lstrip()
         # print '='+line_stripped+"=="
         lastchar = line_stripped[-1:]
@@ -103,7 +103,7 @@ class Shell(InteractiveConsole):
                 else:
                     print "inconsistent" # property names can only contain letters
             else:
-                line=line_stripped
+                line=indent_line+line_stripped
         return line+end_of_line
 
     def push(self,line):
@@ -124,21 +124,16 @@ if __name__ == '__main__':
     sh = Shell()
     sys.ps1='> '
     sys.ps2='. '
-    sh.runsource("print 'Cadabra 2.0 pre-release'; print 'Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>'; import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py'); print 'Using sympy version '+sympy.__version__;")
 
     if len(sys.argv)>1:
+        sh2 = InteractiveConsole()
         with open(sys.argv[1]) as f:
             collect=""
             for line in f:
                 collect += sh.preprocess(line)
-                print "---\n"+collect+"===\n"
-                try:
-                    ret = code.compile_command(collect, sys.argv[1])
-                    if ret!=None:
-                        sh.runsource(collect)
-                        collect=""
-                except SyntaxError, err:
-                    print "***" 
-                    print err
+            #print "----\n"+collect+"----\n"
+            cmp = compile(collect, sys.argv[1], 'exec')
+            exec(cmp)
     else:
+        sh.runsource("print 'Cadabra 2.0 pre-release'; print 'Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>'; import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py'); print 'Using sympy version '+sympy.__version__;")
         sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n')
