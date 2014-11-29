@@ -86,6 +86,7 @@ def test10():
     \theta_{a}::SelfAntiCommuting.
     \chi_{a}::SelfAntiCommuting.
     { \theta_a, \chi_a }::Commuting.
+    print(properties())
     obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
     sort_product(_);
     print(_)

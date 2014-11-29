@@ -146,8 +146,8 @@ class Properties {
 		/// in them; use clear() to clean up. Note that pointers can sit in in more than one
 		/// entry in this map (when they are pointing to list_property objects, which are
 		/// shared between patterns). 
-		property_map_t  props;
-		pattern_map_t   pats;   // for list properties, objects are stored here in order
+		property_map_t  props;  // pattern -> property
+		pattern_map_t   pats;   // property -> pattern; for list properties, patterns are stored here in order
 
 		// Normal search: given a pattern, get its property if any.
 		template<class T> const T*  get(exptree::iterator, bool ignore_parent_rel=false) const; // Shorthand for get_composite

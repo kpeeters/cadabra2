@@ -327,12 +327,36 @@ boost::python::list list_properties()
 	Properties& props=kernel->properties;
 
 	boost::python::list ret;
-	for(auto it=props.props.begin(); it!=props.props.end(); ++it) {
-		std::string res;
-		res = *((*it).second.first->obj.begin()->name);
-		res += "::";
-		res +=(*it).second.second->name();
-		ret.append(res);
+	std::string res;
+	bool multi=false;
+	for(auto it=props.pats.begin(); it!=props.pats.end(); ++it) {
+		// print the property name if we are at the end or if the next entry is for
+		// a different property.
+		decltype(it) nxt=it;
+		++nxt;
+		if(res=="" && (nxt!=props.pats.end() && it->first==nxt->first)) {
+			res+="{";
+			multi=true;
+			}
+
+
+		DisplayTeX dt(get_kernel_from_scope()->properties, it->second->obj);
+		std::ostringstream str;
+		dt.output(str);
+		res += str.str(); //*((*it).second->obj.begin()->name);
+
+		if(nxt==props.pats.end() || it->first!=nxt->first) {
+			if(multi)
+				res+="}";
+			multi=false;
+			res += "::";
+			res +=(*it).first->name();
+			ret.append(res);
+			res="";
+			}
+		else {
+			res+=", ";
+			}
 		}
 
 	return ret;
