@@ -2,6 +2,7 @@
 
 import sys
 from code import InteractiveConsole
+import code
 import re
 import readline
 import rlcompleter
@@ -54,23 +55,26 @@ class Shell(InteractiveConsole):
     def get_output(self): sys.stdout = self.cache
     def return_output(self): sys.stdout = self.stdout
 
-    def push(self,line):
+    # Detect Cadabra expression statements and rewrite to Python
+    # form. The logic is that any expression ending on ';' or '.' is not
+    # going to be a valid/recommended Python expression, so we turn it
+    # into a declaration of an Ex object or property.
+    # Detect Cadabra property declarations and rewrite to Python form.
+    # todo: make ';' at the end result in an additional print (and
+    # make the print statement print property objects using their
+    # readable form; addresses one issue report).
 
-        # Detect Cadabra expression statements and rewrite to Python
-        # form. The logic is that any expression ending on ';' or '.' is not
-        # going to be a valid/recommended Python expression, so we turn it
-        # into a declaration of an Ex object or property.
-        # Detect Cadabra property declarations and rewrite to Python form.
-        # todo: make ';' at the end result in an additional print (and
-        # make the print statement print property objects using their
-        # readable form; addresses one issue report).
-
-        imatch = re.search('([\s]*)([^\s].*)', line)
+    def preprocess(self, line):
+        # print '='+line+"=="
+        imatch = re.search('([\s]*)([^\s].*)([\s]*)', line)
         if imatch:
             indent_line=imatch.group(1)
+            end_of_line=imatch.group(3)
         else:
             indent_line=""
+            end_of_line=""
         line_stripped=line.rstrip().lstrip()
+        # print '='+line_stripped+"=="
         lastchar = line_stripped[-1:]
         if lastchar=='.' or lastchar==';':
             line_stripped=line_stripped[:-1]
@@ -89,7 +93,6 @@ class Shell(InteractiveConsole):
                 if match:
                     if len(match.group(2))>0: # declaration with arguments
                         rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex(r'"+line_stripped[:found]+"'), Ex('"+match.group(2)[1:-1]+"') )"
-#                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(ex=Ex('"+line_stripped[:found]+"'), "+match.group(2)[1:-1]+")"
                     else:
                         rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex(r'"+line_stripped[:found]+"'))"
                     objname="__cdbtmp__"
@@ -99,9 +102,16 @@ class Shell(InteractiveConsole):
                     line=rewrite
                 else:
                     print "inconsistent" # property names can only contain letters
-        # print 'executing: ', line
-        # Now feed the pre-parsed input to Python.
+            else:
+                line=line_stripped
+        return line+end_of_line
 
+    def push(self,line):
+
+        line = self.preprocess(line)
+        # print 'executing: ', line
+
+        # Now feed the pre-parsed input to Python.
         self.get_output()
         ret=InteractiveConsole.push(self,line)
         self.return_output()
@@ -115,4 +125,20 @@ if __name__ == '__main__':
     sys.ps1='> '
     sys.ps2='. '
     sh.runsource("print 'Cadabra 2.0 pre-release'; print 'Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>'; import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py'); print 'Using sympy version '+sympy.__version__;")
-    sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n')
+
+    if len(sys.argv)>1:
+        with open(sys.argv[1]) as f:
+            collect=""
+            for line in f:
+                collect += sh.preprocess(line)
+                print "---\n"+collect+"===\n"
+                try:
+                    ret = code.compile_command(collect, sys.argv[1])
+                    if ret!=None:
+                        sh.runsource(collect)
+                        collect=""
+                except SyntaxError, err:
+                    print "***" 
+                    print err
+    else:
+        sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n')
