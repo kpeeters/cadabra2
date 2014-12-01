@@ -21,8 +21,8 @@ class Derivative : public IndexInherit,
       virtual ~Derivative() {};
       virtual std::string name() const;
 
-      virtual unsigned int size(const Properties&, exptree&, exptree::iterator) const;
-      virtual tab_t        get_tab(const Properties&, exptree&, exptree::iterator, unsigned int) const;
-      virtual multiplier_t value(const Properties&, exptree::iterator, const std::string& forcedlabel) const;
+      virtual unsigned int size(const Properties&, exptree&, exptree::iterator) const override;
+      virtual tab_t        get_tab(const Properties&, exptree&, exptree::iterator, unsigned int) const override;
+      virtual multiplier_t value(const Properties&, exptree::iterator, const std::string& forcedlabel) const override;
 };
 

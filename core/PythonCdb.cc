@@ -16,8 +16,11 @@
 #include <sstream>
 #include <memory>
 
+#include "properties/Accent.hh"
 #include "properties/AntiCommuting.hh"
 #include "properties/Commuting.hh"
+#include "properties/Derivative.hh"
+#include "properties/GammaMatrix.hh"
 #include "properties/NonCommuting.hh"
 #include "properties/AntiSymmetric.hh"
 #include "properties/CommutingAsProduct.hh"
@@ -27,6 +30,7 @@
 #include "properties/IndexInherit.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SortOrder.hh"
+#include "properties/Spinor.hh"
 
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
@@ -595,17 +599,21 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	class_<BaseProperty>("Property", no_init);
 
+	def_prop<Accent>("Accent");
 	def_prop<AntiCommuting>("AntiCommuting");
 	def_prop<AntiSymmetric>("AntiSymmetric");
 	def_prop<Commuting>("Commuting");
 	def_prop<CommutingAsProduct>("CommutingAsProduct");
 	def_prop<CommutingAsSum>("CommutingAsSum");
+	def_prop<Derivative>("Derivative");
 	def_prop<Distributable>("Distributable");
+	def_prop<GammaMatrix>("GammaMatrix");
 	def_prop<IndexInherit>("IndexInherit");
 	def_prop<Indices>("Indices");
 	def_prop<NonCommuting>("NonCommuting");
 	def_prop<SelfAntiCommuting>("SelfAntiCommuting");
 	def_prop<SortOrder>("SortOrder");
+	def_prop<Spinor>("Spinor");
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 

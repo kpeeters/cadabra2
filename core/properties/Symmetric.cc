@@ -1,7 +1,7 @@
 
 #include "properties/Symmetric.hh"
 
-unsigned int Symmetric::size(exptree&, exptree::iterator) const
+unsigned int Symmetric::size(const Properties&, exptree&, exptree::iterator) const
 	{
 	return 1;
 	}

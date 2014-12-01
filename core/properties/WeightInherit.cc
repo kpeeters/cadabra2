@@ -41,14 +41,14 @@ multiplier_t WeightInherit::value(const Properties& properties, exptree::iterato
 			  if(combination_type==multiplicative) {
 					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 					if(gnb) {
-						 multiplier_t tmp=gnb->value(sib, forcedlabel);
+						multiplier_t tmp=gnb->value(properties, sib, forcedlabel);
 						 ret+=tmp;
 						 }
 					}
 			  else {
 					multiplier_t thisone=0;
 					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
-					if(gnb) thisone=gnb->value(sib, forcedlabel);
+					if(gnb) thisone=gnb->value(properties, sib, forcedlabel);
 					else    thisone=0;
 					if(first_term) {
 						first_term=false;

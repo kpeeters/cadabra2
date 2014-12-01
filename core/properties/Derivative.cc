@@ -11,7 +11,7 @@ unsigned int Derivative::size(const Properties& properties, exptree& tr, exptree
 	while(sib!=tr.end() && sib->is_index()) ++sib;
 	const TableauBase *tb=properties.get<TableauBase>(sib);
 	if(tb)
-		ret+=tb->size(tr,sib);
+		ret+=tb->size(properties, tr,sib);
 	return ret;
 	}
 
@@ -24,7 +24,7 @@ multiplier_t Derivative::value(const Properties& properties, exptree::iterator i
 	while(sib!=it.end()) {
 		const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 		if(gnb) {
-			multiplier_t tmp=gnb->value(sib, forcedlabel);
+			multiplier_t tmp=gnb->value(properties, sib, forcedlabel);
 			if(sib->is_index()) ret-=tmp;
 			else                ret+=tmp;
 //			txtout << *sib->name << " = " << tmp << std::endl;
@@ -64,7 +64,7 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
 
 	const TableauBase *tb=properties.get<TableauBase>(argnode);
 	assert(tb);
-	unsigned int othertabs=tb->size(tr, argnode);
+	unsigned int othertabs=tb->size(properties, tr, argnode);
 	assert(num<othertabs);
 	TableauBase::tab_t rettab=tb->get_tab(properties, tr, argnode, num);
 	if(indices_first) { // have to renumber the tableau

@@ -361,7 +361,7 @@ const T* Properties::get_composite(exptree::iterator it1, exptree::iterator it2,
 					if((*walk2).second.first->match(*this, it2, ignore_parent_rel)) { // match for object 1 found
 						ret2=dynamic_cast<const T *>((*walk2).second.second);
 						if(ret2) { // property of the right type found for object 2
-							if(ret1==ret2) { 
+							if(ret1==ret2 && walk1!=walk2) { // accept if properties are the same and patterns are not
 								serialnum1=serial_number( (*walk1).second.second, (*walk1).second.first );
 								serialnum2=serial_number( (*walk2).second.second, (*walk2).second.first );
 								found=true;
