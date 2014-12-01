@@ -6,5 +6,5 @@
 class SelfAntiCommuting : virtual public SelfCommutingBehaviour {
 	public:
 		virtual std::string name() const;
-		virtual int sign() const { return -1; }
+		virtual int sign() const override;
 };

@@ -9,7 +9,7 @@ class TableauBase {
 		virtual ~TableauBase() {};
 		typedef yngtab::filled_tableau<unsigned int> tab_t;
 
-		virtual unsigned int size(exptree&, exptree::iterator) const=0;
+		virtual unsigned int size(const Properties&, exptree&, exptree::iterator) const=0;
 		virtual tab_t        get_tab(const Properties&, exptree&, exptree::iterator, unsigned int) const=0;
 
 		virtual bool         only_column_exchange() const { return false; };

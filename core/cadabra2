@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import site
 from code import InteractiveConsole
 import code
 import re
@@ -126,12 +127,13 @@ if __name__ == '__main__':
     sys.ps2='. '
 
     if len(sys.argv)>1:
+        execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
         sh2 = InteractiveConsole()
         with open(sys.argv[1]) as f:
             collect=""
             for line in f:
                 collect += sh.preprocess(line)
-            #print "----\n"+collect+"----\n"
+            print "----\n"+collect+"----\n"
             cmp = compile(collect, sys.argv[1], 'exec')
             exec(cmp)
     else:

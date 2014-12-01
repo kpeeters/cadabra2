@@ -36,11 +36,16 @@ Algorithm::result_t sort_product::apply(iterator& st)
 			if(compare.should_swap(one, es)) {
 				int canswap=compare.can_swap(one, two, es);
 				if(canswap!=0) {
-//					std::cout << "swapping " << *one->name << " with " << *two->name << std::endl;
+//					std::cout << "swapping ";
+//					tr.print_recursive_treeform(std::cout, one);
+//					std::cout << " with ";
+//					tr.print_recursive_treeform(std::cout, two);
 					tr.swap(one);
 					std::swap(one,two);  // put the iterators back in order
-					if(canswap==-1)
+					if(canswap==-1) {
+//						std::cout << "MINUS" << std::endl;
 						flip_sign(st->multiplier);
+						}
 					expression_modified=true;
 					}
 				}

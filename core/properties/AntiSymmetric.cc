@@ -12,7 +12,7 @@ bool AntiSymmetric::parse(exptree& tr, exptree::iterator st, exptree::iterator i
 	return property::parse(tr,st,it,kv);
 	}
 
-unsigned int AntiSymmetric::size(exptree&, exptree::iterator) const
+unsigned int AntiSymmetric::size(const Properties&, exptree&, exptree::iterator) const
 	{
 	return 1;
 	}

@@ -1,4 +1,6 @@
 
+#include <typeinfo>
+
 #include "Compare.hh"
 #include "Algorithm.hh" // FIXME: only needed because index_iterator is in there
 #include <sstream>
@@ -783,6 +785,7 @@ int exptree_comparator::can_swap(exptree::iterator one, exptree::iterator two, i
 		const CommutingBehaviour *com = properties.get_composite<CommutingBehaviour>(one, two, true);
 		
 		if(com) {
+//			std::cout << typeid(com).name() << std::endl;
 //			std::cout << "explicit " << com->sign() << std::endl;
 			return com->sign();
 			}

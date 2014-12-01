@@ -548,20 +548,9 @@ std::string Properties::master_insert(exptree proptree, property *thepropbase)
 		if(*st->name=="\\comma") {
 			exptree::sibling_iterator sib=proptree.begin(st);
 			while(sib!=proptree.end(st)) {
-//				if(theprop==0) { // create a new property for each object
-//
-//				FIXME: what is this doing? And why? 
-//
-////					thepropbase=(*pit).second();
-////					thepropbase->parse(tr,st,proptree.begin(),keyvals);
-//					theprop    =dynamic_cast<property *>(thepropbase);
-//					assert(theprop);
-////					theprop->core_parse(keyvals);
-//					}
 				if(sib->fl.parent_rel!=str_node::p_property) {
-					std::cerr << "inserting property for " << *sib->name << std::endl;
+//					std::cerr << "inserting property for " << *sib->name << std::endl;
 					insert_prop(exptree(sib), theprop);
-//					theprop=0;
 					}
 				++sib;
 				}				

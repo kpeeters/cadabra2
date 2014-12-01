@@ -12,7 +12,7 @@ class AntiSymmetric : public TableauBase, public Traceless, virtual public prope
 		virtual bool parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
 		virtual std::string name() const;
 
-		virtual unsigned int size(exptree&, exptree::iterator) const;
+		virtual unsigned int size(const Properties&, exptree&, exptree::iterator) const;
 		virtual tab_t        get_tab(const Properties&, exptree&, exptree::iterator, unsigned int) const;
 };
 
