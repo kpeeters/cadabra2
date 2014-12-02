@@ -1,0 +1,124 @@
+def test06():
+    {X,G,Y,A,B}::SortOrder.
+    {X,A}::AntiCommuting.
+    obj6:= A B G X A X
+    sort_product(obj6)
+    tst6:= X X G A A B + @(obj6);
+    collect_terms(_)
+    assert(tst6==0)
+    print 'test06 passed'
+
+test06()
+
+def test07():
+    {X,G,Y,A,B}::SortOrder.
+    {X,A}::NonCommuting.
+    obj7:= A*B*G*X*A*X
+    sort_product(_)
+    tst7:= G A X A X B - @(obj7);
+    collect_terms(_)
+    assert(tst7==0)
+    print 'test07 passed'
+
+test07()
+
+def test08():
+    { W_{m n}, W_{m} }::SortOrder.
+    { W_{m n}, W_{m} }::AntiCommuting.
+    obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
+    sort_product(_)
+    tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
+    collect_terms(_)
+    assert(tst8==0)
+    print 'test08 passed'
+
+test08()
+
+def test09():
+    { \theta_a, \theta_b }::SelfAntiCommuting.
+    obj9:= \theta_c \theta_b \theta_a;
+    sort_product(_)
+    tst9:= \theta_a \theta_b \theta_c + @(obj9);
+    collect_terms(_)
+    assert(tst9==0)
+    print 'test09 passed'
+
+test09()
+
+def test10():
+    {a,b,c,d}::Indices.
+    { \theta_a, \chi_a }::SortOrder.
+    { \theta_a, \chi_a }::Commuting.
+    {\theta_{a}, \theta_{b}}::SelfAntiCommuting.
+    {\chi_{a},\chi_{b}}::SelfAntiCommuting.
+    obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
+    sort_product(_);
+    tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
+    collect_terms(_);
+    assert(tst10==0)
+    print 'test10 passed'
+
+test10()
+
+def test12():
+    \bar{#}::Accent.
+    {D,K,B,A}::SortOrder.
+    obj12:= A \bar{B} \bar{K} D;
+    sort_product(_)
+    tst12:= D \bar{K} \bar{B} A - @(obj12);
+    collect_terms(_)
+    assert(tst12==0)
+    print 'test12 passed'
+
+test12()
+
+def test16():
+    {A_\mu, B_\mu}::AntiCommuting.
+    \diff{#}::Derivative.
+    obj16:= \diff{B_\mu}_{\nu} * \diff{A_\rho}_{\sigma};
+    sort_product(_)
+    tst16:= \diff{A_\rho}_{\sigma} * \diff{B_\mu}_{\nu} + @(obj16);
+    collect_terms(_)
+    assert(tst16==0)
+    print 'test16 passed'
+
+test16()
+
+def test17():
+    \Gamma{#}::GammaMatrix.
+    obj17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r};
+    sort_product(_)
+    tst17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r} - @(obj17a);
+    collect_terms(_)
+    assert(tst17a==0)
+    obj17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n});
+    sort_product(_)
+    tst17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n}) - @(obj17b);
+    collect_terms(_)
+    assert(tst17b==0)
+    print 'test17 passed'
+
+test17()
+
+def test18():
+    {\psi, \chi}::Spinor.
+    {\psi, \chi, \Gamma_{#}}::NonCommuting.
+    \Gamma_{#}::GammaMatrix.
+    {\chi,\psi}::SortOrder.
+    \bar{#}::Accent.
+    obj18:= \bar{\psi} \Gamma_{m n p} \chi;
+    sort_product(_)
+    tst18:= \bar{\psi} \Gamma_{m n p} \chi - @(obj18);
+    collect_terms(_)
+    assert(tst18==0)
+    print 'test18 passed'
+
+test18()
+
+def test22():
+    {\chi, \psi}::Weight(label=grassmann, value=1).
+    print(properties())
+    tst22a:= \chi \psi \chi;
+    #drop_weight(_, grassmann=3)
+
+test22()
