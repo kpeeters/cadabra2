@@ -198,11 +198,13 @@ void keyval_t::erase(iterator it)
 	}
 
 
-bool property::parse(exptree& tr, exptree::iterator, exptree::iterator arg, keyval_t& keyvals)
+bool property::parse(keyval_t& keyvals)
 	{
-	if(tr.number_of_children(arg)==0) return true;
+	return true;
+
+//	if(tr.number_of_children(arg)==0) return true;
 //	txtout << name() << ": should not have any arguments." << std::endl;
-	return false;
+//	return false;
 	}
 
 bool property::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
@@ -224,10 +226,13 @@ bool property::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
 	return true;
 	}
 
-bool property::preparse_arguments(exptree::iterator prop, keyval_t& keyvals) 
+bool property::parse_to_keyvals(const exptree& tr, keyval_t& keyvals) 
 	{
-	if(exptree::number_of_children(prop)==0) return true;
-	if(exptree::number_of_children(prop)>1) return false;
+	if(tr.number_of_children(tr.begin())==0) return true;
+	if(tr.number_of_children(tr.begin())>1)  return false;
+	iterator it=tr.begin();
+
+HERE
 	if(*prop.begin()->name!="\\comma") { // one argument
 		if(parse_one_argument(prop.begin(), keyvals)==false)
 			return false;
@@ -264,7 +269,7 @@ property::match_t property::equals(const property *) const
 	return exact_match;
 	}
 
-bool labelled_property::core_parse(keyval_t& keyvals)
+bool labelled_property::parse(const keyval_t& keyvals)
 	{
 	keyval_t::const_iterator lit=keyvals.find("label");
 	if(lit!=keyvals.end()) {
@@ -272,7 +277,7 @@ bool labelled_property::core_parse(keyval_t& keyvals)
 		return true;
 		}
 	else {
-//		txtout << "This property needs a label." << std::endl;
+		throw ArgumentException("Need a 'label' parameter for property.");
 		return false;
 		}
 	}

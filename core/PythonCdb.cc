@@ -31,6 +31,8 @@
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
+#include "properties/Weight.hh"
+#include "properties/WeightInherit.hh"
 
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
@@ -374,12 +376,20 @@ std::string print_tree(Ex *ex)
 	}
  
 PyObject *ParseExceptionType = NULL;
+PyObject *ArgumentExceptionType = NULL;
 
 void translate_ParseException(const ParseException &e)
 	{
 	assert(ParseExceptionType != NULL);
 	boost::python::object pythonExceptionInstance(e);
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
+	}
+
+void translate_ArgumentException(const ArgumentException &e)
+	{
+	assert(ParseExceptionType != NULL);
+	boost::python::object pythonExceptionInstance(e);
+	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
 	}
 
 // Return the kernel in local scope if any, or the one in global scope if none is available
@@ -460,6 +470,7 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	Kernel *kernel=get_kernel_from_scope(true);
 
 	prop=new Prop();
+//	prop->parse();
 	kernel->properties.master_insert(exptree(it), prop);
 	}
 
@@ -614,8 +625,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SelfAntiCommuting>("SelfAntiCommuting");
 	def_prop<SortOrder>("SortOrder");
 	def_prop<Spinor>("Spinor");
+	def_prop<Weight>("Weight");
+	def_prop<WeightInherit>("WeightInherit");
 
 	register_exception_translator<ParseException>(&translate_ParseException);
+	register_exception_translator<ArgumentException>(&translate_ArgumentException);
 
 	// How can we give Python access to information stored in properties?
 	}

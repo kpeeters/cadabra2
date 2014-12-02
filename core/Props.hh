@@ -64,17 +64,20 @@ class keyval_t {
 		kvlist_t keyvals;
 };
 
-/// Base class for all properties, handling argument parsing and
-/// defining the interface.
+// Base class for all properties, handling argument parsing and
+// defining the interface.
 
 class property {
 	public:
 		virtual ~property() {};
-		virtual bool        core_parse(keyval_t&);
-		virtual bool        parse(exptree&, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals);
+
+		// Parse the argument tree into key-value pairs. 
+		virtual bool        parse_to_keyvals(const exptree&, keyval_t&);
+
+		// Parse
+		virtual bool        parse(const keyval_t& keyvals);
 		virtual std::string name() const=0;
 		virtual void        display(std::ostream&) const;
-		bool                preparse_arguments(exptree::iterator prop, keyval_t& keyvals);
 		virtual std::string unnamed_argument() const;
 
 		// To compare properties we sometimes need to compare their variables, not only
@@ -91,7 +94,7 @@ class property {
 
 class labelled_property : virtual public property {
 	public:
-		virtual bool core_parse(keyval_t&);
+		virtual bool parse(const keyval_t&) override;
 		std::string label;
 };
 

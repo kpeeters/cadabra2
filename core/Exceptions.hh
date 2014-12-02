@@ -28,7 +28,7 @@ class InterruptionException : public CadabraException {
 		InterruptionException(std::string="");
 };
 
-// Exception thrown when arguments to an algorithm are not correct.
+// Exception thrown when arguments to an algorithm or property are not correct.
 
 class ArgumentException : public CadabraException {
 	public:
