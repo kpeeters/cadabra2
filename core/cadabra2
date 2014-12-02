@@ -110,7 +110,7 @@ class Shell(InteractiveConsole):
     def push(self,line):
 
         line = self.preprocess(line)
-        # print 'executing: ', line
+        print 'executing: ', line
 
         # Now feed the pre-parsed input to Python.
         self.get_output()
@@ -133,9 +133,12 @@ if __name__ == '__main__':
             collect=""
             for line in f:
                 collect += sh.preprocess(line)
-            print "----\n"+collect+"----\n"
+            # print "----\n"+collect+"----\n"
             cmp = compile(collect, sys.argv[1], 'exec')
             exec(cmp)
+            # would be nice to be able to continue from here on the command line, but that requires
+            # pulling in the right locals/globals
+#            sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
     else:
         sh.runsource("print 'Cadabra 2.0 pre-release'; print 'Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>'; import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py'); print 'Using sympy version '+sympy.__version__;")
         sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n')

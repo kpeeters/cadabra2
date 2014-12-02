@@ -81,6 +81,7 @@ set(LOCAL_SRC_FILES
   modules/xperm_new.cc
   algorithms/collect_terms.cc
   algorithms/distribute.cc
+#  algorithms/drop_weight.cc
   algorithms/flatten_product.cc
 #  algorithms/keep_terms.cc
   algorithms/prodcollectnum.cc

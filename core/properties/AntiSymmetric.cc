@@ -7,11 +7,6 @@ std::string AntiSymmetric::name() const
 	return "AntiSymmetric";
 	}
 
-bool AntiSymmetric::parse(exptree& tr, exptree::iterator st, exptree::iterator it, keyval_t& kv)
-	{
-	return property::parse(tr,st,it,kv);
-	}
-
 unsigned int AntiSymmetric::size(const Properties&, exptree&, exptree::iterator) const
 	{
 	return 1;

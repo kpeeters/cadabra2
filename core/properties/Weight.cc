@@ -15,7 +15,7 @@ bool Weight::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, k
 	return true;
 	}
 
-multiplier_t Weight::value(exptree::iterator, const std::string& forcedlabel) const
+multiplier_t Weight::value(const Properties& pr, exptree::iterator, const std::string& forcedlabel) const
 	{
 	if(forcedlabel!=label) return -1;
 	return value_;
