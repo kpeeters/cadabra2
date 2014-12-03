@@ -1,0 +1,14 @@
+
+\section{Properties}
+
+\subsection{Arguments}
+
+Properties can have arguments. These are not parsed by Python, but
+rather by the C++ side. There is a number of reasons for doing things
+this way. The most important of them is that this makes it a lot
+easier for Cadabra to provide useful feedback on parameters which are
+not valid.
+
+Parsing is done by implementing the virtual function `parse`. It takes
+an exptree representing a possibly comma-separated list of arguments.
+

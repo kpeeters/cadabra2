@@ -1,0 +1,50 @@
+
+\section{Cadabra property scoping in Python}
+
+When the decision was made to graft Cadabra onto Python, a choice had
+to be made about how Python variable scope would influence the
+visibility of Cadabra properties. It clearly makes sense to be able to
+declare properties which only hold inside a particular
+function. However Cadabra expressions and properties do not directly
+correspond to Python objects, so they do not naturally inherit
+Python's scoping rules. This is different from e.g.~SymPy, in which
+mathematical objects are always in one-to-one correspondence with a
+Python object.
+
+Question: for what kind of problems is scoping useful, and what would
+you need? Could you simply pass a cadabra object along in a function
+if you wanted to use its properties:
+
+cadabra = kernel()
+
+def fun(cadabra):
+    
+
+
+cadabra.AntiSymmetric('{A_{m n}, B_{p q}}');
+fun(cadabra)
+
+
+There are two main reasons why you would want to put Cadabra
+computations in a separate (function) scope. The first is when you
+want to take repetitive actions out of the main code. In this case you
+most likely want to simply inherit all properties of the main scope,
+and you may also want to add additional properties which you would
+like to not leak out into the main scope.
+
+The second reason is that you want to provide re-useable functionality
+in the form of e.g.~substitutions or conversions. In this case you
+most likely do not want to see any of the properties except those
+attached to symbols which you pass in explicitly.
+
+
+
+from cadabra2 import *
+
+cdb1 = kernel()
+
+cdb1.AntiSymmetric('{A_{m n}, B_{p q}}');
+
+def fun():
+   cdb2 = kernel(cdb1)
+   cdb2.sort_product(_) 
