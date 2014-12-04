@@ -118,14 +118,18 @@ install(PROGRAMS
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
 add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
+add_library(scopetest SHARED scopetest.cc)
 set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
+set_target_properties(scopetest PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 
 #if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clangx")
 #  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES} python)
 #else()
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
+
+target_link_libraries(scopetest ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
 #endif()
 
