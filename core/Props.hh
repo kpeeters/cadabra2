@@ -75,7 +75,7 @@ class property {
 		virtual bool        parse_to_keyvals(const exptree&, keyval_t&);
 
 		// Parse
-		virtual bool        parse(const keyval_t& keyvals);
+		virtual bool        parse(keyval_t& keyvals);
 		virtual std::string name() const=0;
 		virtual void        display(std::ostream&) const;
 		virtual std::string unnamed_argument() const;
@@ -94,7 +94,7 @@ class property {
 
 class labelled_property : virtual public property {
 	public:
-		virtual bool parse(const keyval_t&) override;
+		virtual bool parse(keyval_t&) override;
 		std::string label;
 };
 

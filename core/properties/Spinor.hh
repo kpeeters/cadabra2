@@ -9,7 +9,7 @@ class Spinor : public ImplicitIndex, virtual public property {
 		virtual ~Spinor() {};
 		virtual std::string name() const;
 //		virtual void        display(std::ostream&) const;
-		virtual bool        parse(exptree&, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals);
+		virtual bool        parse(keyval_t& keyvals) override;
 
 		int  dimension;
 		bool weyl;

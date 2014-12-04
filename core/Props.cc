@@ -230,16 +230,15 @@ bool property::parse_to_keyvals(const exptree& tr, keyval_t& keyvals)
 	{
 	if(tr.number_of_children(tr.begin())==0) return true;
 	if(tr.number_of_children(tr.begin())>1)  return false;
-	iterator it=tr.begin();
+	exptree::iterator it=tr.begin();
 
-HERE
-	if(*prop.begin()->name!="\\comma") { // one argument
-		if(parse_one_argument(prop.begin(), keyvals)==false)
+	if(*(tr.begin()->name)!="\\comma") { // one argument
+		if(parse_one_argument(tr.begin(), keyvals)==false)
 			return false;
 		}
 	else {
-		exptree::sibling_iterator sib=prop.begin().begin();
-		while(sib!=prop.begin().end()) {
+		exptree::sibling_iterator sib=tr.begin().begin();
+		while(sib!=tr.begin().end()) {
 			if(parse_one_argument(sib, keyvals)==false)
 				return false;
 			++sib;
@@ -259,17 +258,12 @@ std::string property::unnamed_argument() const
 	return "";
 	}
 
-bool property::core_parse(keyval_t& keyvals)
-	{
-	return true;
-	}
-
 property::match_t property::equals(const property *) const
 	{
 	return exact_match;
 	}
 
-bool labelled_property::parse(const keyval_t& keyvals)
+bool labelled_property::parse(keyval_t& keyvals)
 	{
 	keyval_t::const_iterator lit=keyvals.find("label");
 	if(lit!=keyvals.end()) {
