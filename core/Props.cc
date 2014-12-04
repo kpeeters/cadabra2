@@ -230,20 +230,25 @@ bool property::parse_to_keyvals(const exptree& tr, keyval_t& keyvals)
 	{
 	if(tr.number_of_children(tr.begin())==0) return true;
 	if(tr.number_of_children(tr.begin())>1)  return false;
-	exptree::iterator it=tr.begin();
 
-	if(*(tr.begin()->name)!="\\comma") { // one argument
-		if(parse_one_argument(tr.begin(), keyvals)==false)
+	auto it=tr.begin(tr.begin());
+
+	std::cout << "parsing to keyvals" << std::endl;
+	if(*(it)->name!="\\comma") { // one argument
+		if(parse_one_argument(it, keyvals)==false)
 			return false;
 		}
 	else {
-		exptree::sibling_iterator sib=tr.begin().begin();
-		while(sib!=tr.begin().end()) {
+		exptree::sibling_iterator sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
 			if(parse_one_argument(sib, keyvals)==false)
 				return false;
 			++sib;
 			}
 		}
+
+//	for(auto it=keyvals.begin(); it!=keyvals.end(); ++it)
+//		std::cout << (*it).first << " = " << *(*it).second->name << std::endl;
 	return true;
 	}
 
@@ -350,13 +355,13 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 					// identical, or when they can coexist, or something like that.
 					for(auto pi=pats.begin(); pi!=pats.end(); ++pi) {
 						if((*pi).first==oldprop && (*pi).second==oldpat) {
-							std::cerr << "found old entry, deleting" << std::endl;
+//							std::cerr << "found old entry, deleting" << std::endl;
 							pats.erase(pi);
 							break;
 							}
 						}
 					if(pats.find(oldprop)==pats.end()) {
-						std::cerr << "no other references" << std::endl;
+//						std::cerr << "no other references" << std::endl;
 						delete oldprop;
 						}
 
