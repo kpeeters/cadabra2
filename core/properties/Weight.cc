@@ -6,7 +6,7 @@ std::string Weight::name() const
 	return "Weight";
 	}
 
-bool Weight::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, keyval_t& kv)
+bool Weight::parse(keyval_t& kv)
 	{
 	keyval_t::const_iterator kvit=kv.find("value");
 	if(kvit!=kv.end()) value_=*kvit->second->multiplier;

@@ -11,7 +11,7 @@ void GammaMatrix::display(std::ostream& str) const
 	Matrix::display(str);
 	}
 
-bool GammaMatrix::parse(exptree&tr, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals)
+bool GammaMatrix::parse(keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("metric");
 	if(kv!=keyvals.end()) {
@@ -19,7 +19,7 @@ bool GammaMatrix::parse(exptree&tr, exptree::iterator pat, exptree::iterator pro
 		keyvals.erase(kv);
 		}
 
-	ImplicitIndex::parse(tr, pat, prop, keyvals);
+	ImplicitIndex::parse(keyvals);
 
 //	kv=keyvals.find("delta");
 //	if(kv!=keyvals.end()) delta=exptree(kv->second);

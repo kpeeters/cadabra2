@@ -27,7 +27,7 @@ property::match_t Indices::equals(const property *other) const
 	return property::equals(other);
 	}
 
-bool Indices::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals)
+bool Indices::parse(keyval_t& keyvals)
 	{
 	keyval_t::const_iterator ki=keyvals.begin();
 	while(ki!=keyvals.end()) {

@@ -470,7 +470,11 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	Kernel *kernel=get_kernel_from_scope(true);
 
 	prop=new Prop();
-//	prop->parse();
+	if(param) {
+		keyval_t keyvals;
+		prop->parse_to_keyvals(param->tree, keyvals);
+		prop->parse(keyvals);
+		}
 	kernel->properties.master_insert(exptree(it), prop);
 	}
 
