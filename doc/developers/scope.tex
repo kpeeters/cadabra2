@@ -37,6 +37,17 @@ in the form of e.g.~substitutions or conversions. In this case you
 most likely do not want to see any of the properties except those
 attached to symbols which you pass in explicitly.
 
+So you always want to have the option of adding additional properties
+which do not leak. You essentially also always need to be able to
+pull in properties of symbols which are passed in. Sometimes, but not
+very often, you want to pull in properties which are \emph{not}
+associated to passed symbols. The latter may be a stupid idea to
+implement.
+
+So either you pass properties in explicitly via the symbols that you
+pass in, or you define them afresh. This can all be handled with the
+current setup in which we inject into local.
+
 
 
 from cadabra2 import *
