@@ -2,7 +2,6 @@
 #include "PythonCdb.hh"
 #include "Parser.hh"
 #include "Exceptions.hh"
-#include "Kernel.hh"
 #include "DisplayTeX.hh"
 #include "Cleanup.hh"
 #include "PreClean.hh"
@@ -40,12 +39,9 @@
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/substitute.hh"
 
-Kernel *get_kernel_from_scope(bool for_write=false) ;
+
 
 // TODO: 
-//
-// - When we stick objects into the locals or globals, does Python become the owner and manage them?
-//   where do the kernel copy constructor calls come from?
 //
 // - We do not use can_apply yet?
 //
@@ -329,7 +325,8 @@ std::string init_ipython()
 
 boost::python::list list_properties()
 	{
-	Kernel *kernel=get_kernel_from_scope(false);
+//	std::cout << "listing properties" << std::endl;
+	Kernel *kernel=get_kernel_from_scope();
 	Properties& props=kernel->properties;
 
 	boost::python::list ret;
@@ -392,90 +389,115 @@ void translate_ArgumentException(const ArgumentException &e)
 	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
 	}
 
-// Return the kernel in local scope if any, or the one in global scope if none is available
-// in local scope. However, if a request for a writeable kernel is made, and no local is
-// present, it will always be created (and filled with the content of the global one).
+// Return the kernel (with symbol __cdbkernel__) in local scope if
+// any, or the one in global scope if none is available in local
+// scope.
 
-Kernel *get_kernel_from_scope(bool for_write) 
+Kernel *get_kernel_from_scope()
 	{
-//	std::cerr << "get_kernel_from_scope " << (for_write?"for writing":"for reading") << std::endl;
-
-	// update locals
-//	boost::python::object __cdbkernel__ = boost::python::eval("cadabra_kernel");
-
-	// Lookup the properties object in the local scope. 
+	// Lookup the kernel in the local/global scope. 
 	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
 	Kernel *local_kernel=0;
-	Kernel *global_kernel=0;
 	try {
-		boost::python::object obj = locals["cadabra_kernel"];
+		boost::python::object obj = locals["__cdbkernel__"];
 		local_kernel = boost::python::extract<Kernel *>(obj);
-//		std::cerr << "local kernel = " << local_kernel << std::endl;
 		}
 	catch(boost::python::error_already_set& err) {
 		std::string err2 = parse_python_exception();
 		local_kernel=0;
 		}
+	if(local_kernel!=0)  {
+//		std::cout << "returning local kernel" << std::endl;
+		return local_kernel;
+		}
+
+	// If there is no kernel in local scope, find one in global scope.
+
+ 	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+	Kernel *global_kernel=0;
 	try {
-		boost::python::object obj = globals["cadabra_kernel"];
+		boost::python::object obj = globals["__cdbkernel__"];
 		global_kernel = boost::python::extract<Kernel *>(obj);
-//		std::cerr << "global kernel = " << global_kernel << std::endl;
 		}
 	catch(boost::python::error_already_set& err) {
 		std::string err2 = parse_python_exception();
 		global_kernel=0;
 		}
 	
-	if(for_write) {
-		// Need a local kernel because we want to write into it. Since 
-		// the C++ only handles one kernel, we copy the content of the
-		// global kernel into the current local one.
-		if(local_kernel==0) {
-			local_kernel = new Kernel();
-//			std::cerr << "creating new local kernel " << local_kernel << std::endl;
-			if(global_kernel) {
-//				std::cerr << "copying global properties into kernel" << std::endl;
-				local_kernel->properties = global_kernel->properties; 
-				}
-			locals["cadabra_kernel"]=boost::ref(local_kernel);
-			}
-		return local_kernel;
+	if(global_kernel!=0) {
+//		std::cout << "returning global kernel" << std::endl;
+		return global_kernel;
 		}
-	else {
-		if(local_kernel) {
-			return local_kernel;
-			}
-		else if(global_kernel) {
-			return global_kernel;
-			}
-		else {
-			// At the start of a program there is no global kernel yet,
-			// so it has to be created.
-			// std::cerr << "creating new global kernel" << std::endl;
-			global_kernel = new Kernel();
-			globals["cadabra_kernel"]=boost::ref(global_kernel);
-			return global_kernel;
-			}
-		}
+
+	// If there is no kernel in global scope either, construct one.
+
+//	std::cout << "creating global kernel" << std::endl;
+	global_kernel = new Kernel();
+
+	// Store this as a Python object, making sure (using boost::ref) that the
+	// kernel Python refers to by __cdbkernel__ is the same object as the one
+	// we will return to our caller.
+	globals["__cdbkernel__"]=boost::ref(global_kernel);
+	inject_defaults(global_kernel);
+
+	return global_kernel;
 	}
 
-template<class Prop>
-Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
+// The following handle setup of local scope for Cadabra properties.
+
+Kernel *create_scope()
+	{
+	Kernel *k=create_empty_scope();
+	inject_defaults(k);
+	return k;
+	}
+
+Kernel *create_scope_from_global()
+	{
+	Kernel *k=create_empty_scope();
+	// FIXME: copy global properties
+	return k;
+	}
+
+Kernel *create_empty_scope()
+	{
+//	std::cout << "creating empty kernel" << std::endl;
+	Kernel *k = new Kernel();
+	return k;
+	}
+
+// Inject properties directly into the Kernel, even if it is not yet on the
+// Python stack.
+
+void inject_defaults(Kernel *k)
+	{
+//	std::cout << "injecting defaults" << std::endl;
+
+	inject_property(k, new Distributable(),      std::make_shared<Ex>("\\prod{#}"), 0);
+	inject_property(k, new IndexInherit(),       std::make_shared<Ex>("\\prod{#}"), 0);
+	inject_property(k, new CommutingAsProduct(), std::make_shared<Ex>("\\prod{#}"), 0);
+	inject_property(k, new CommutingAsSum(),     std::make_shared<Ex>("\\sum{#}"), 0);
+	}
+
+void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	{
 	exptree::iterator it=ex->tree.begin();
 	assert(*(it->name)=="\\expression");
 	it=ex->tree.begin(it);
 
-	Kernel *kernel=get_kernel_from_scope(true);
-
-	prop=new Prop();
 	if(param) {
 		keyval_t keyvals;
 		prop->parse_to_keyvals(param->tree, keyvals);
 		prop->parse(keyvals);
 		}
 	kernel->properties.master_insert(exptree(it), prop);
+	}
+
+template<class Prop>
+Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
+	{
+	Kernel *kernel=get_kernel_from_scope();
+	inject_property(kernel, new Prop(), ex, param);
 	}
 
 template<class Prop>
@@ -584,6 +606,13 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("cdb", &print_status);
 	def("init_ipython", &init_ipython);
 	def("properties", &list_properties);
+
+	def("create_scope", &create_scope, 
+		 return_value_policy<manage_new_object>() );
+	def("create_scope_from_global", &create_scope_from_global, 
+		 return_value_policy<manage_new_object>());
+	def("create_empty_scope", &create_empty_scope, 
+		 return_value_policy<manage_new_object>());
 
 	// You cannot use implicitly_convertible to convert a string parameter to an Ex object
 	// automatically: think about how that would work in C++. You would need to be able to

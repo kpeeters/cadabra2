@@ -1,4 +1,5 @@
 def test06():
+    __cdbkernel__=create_scope();
     {X,G,Y,A,B}::SortOrder.
     {X,A}::AntiCommuting.
     obj6:= A B G X A X
@@ -11,6 +12,7 @@ def test06():
 test06()
 
 def test07():
+    __cdbkernel__=create_scope();
     {X,G,Y,A,B}::SortOrder.
     {X,A}::NonCommuting.
     obj7:= A*B*G*X*A*X
@@ -23,6 +25,7 @@ def test07():
 test07()
 
 def test08():
+    __cdbkernel__=create_scope();
     { W_{m n}, W_{m} }::SortOrder.
     { W_{m n}, W_{m} }::AntiCommuting.
     obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
@@ -35,6 +38,7 @@ def test08():
 test08()
 
 def test09():
+    __cdbkernel__=create_scope();
     { \theta_a, \theta_b }::SelfAntiCommuting.
     obj9:= \theta_c \theta_b \theta_a;
     sort_product(_)
@@ -46,6 +50,7 @@ def test09():
 test09()
 
 def test10():
+    __cdbkernel__=create_scope();
     {a,b,c,d}::Indices.
     { \theta_a, \chi_a }::SortOrder.
     { \theta_a, \chi_a }::Commuting.
@@ -61,6 +66,7 @@ def test10():
 test10()
 
 def test12():
+    __cdbkernel__=create_scope();
     \bar{#}::Accent.
     {D,K,B,A}::SortOrder.
     obj12:= A \bar{B} \bar{K} D;
@@ -73,6 +79,7 @@ def test12():
 test12()
 
 def test16():
+    __cdbkernel__=create_scope();
     {A_\mu, B_\mu}::AntiCommuting.
     \diff{#}::Derivative.
     obj16:= \diff{B_\mu}_{\nu} * \diff{A_\rho}_{\sigma};
@@ -85,6 +92,7 @@ def test16():
 test16()
 
 def test17():
+    __cdbkernel__=create_scope()
     \Gamma{#}::GammaMatrix.
     obj17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r};
     sort_product(_)
@@ -101,6 +109,7 @@ def test17():
 test17()
 
 def test18():
+    __cdbkernel__=create_scope();
     {\psi, \chi}::Spinor.
     {\psi, \chi, \Gamma_{#}}::NonCommuting.
     \Gamma_{#}::GammaMatrix.
@@ -116,8 +125,8 @@ def test18():
 test18()
 
 def test22():
+    __cdbkernel__=create_scope();
     {\chi, \psi}::Weight(label=grassmann, value=1).
-    print(properties())
     tst22a:= \chi \psi \chi;
     #drop_weight(_, grassmann=3)
 
