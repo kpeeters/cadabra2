@@ -11,7 +11,6 @@ bool Weight::parse(keyval_t& kv)
 	keyval_t::const_iterator kvit=kv.find("value");
 	if(kvit!=kv.end()) value_=*kvit->second->multiplier;
 	else               value_=1;
-	std::cerr << value_ << std::endl;
 
 	return true;
 	}

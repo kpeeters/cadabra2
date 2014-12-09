@@ -24,6 +24,7 @@
 #include <boost/python.hpp>
 #include <stdexcept>
 #include "Storage.hh"
+#include "Kernel.hh"
 
 // Ex is essentially a wrapper around an exptree object, with additional
 // functionality make it print nice in Python. It also contains logic
@@ -94,3 +95,12 @@ class Property : public BaseProperty {
 		T *prop;
 };
 
+
+// Scope handling
+
+Kernel *create_scope();
+Kernel *create_scope_from_global();
+Kernel *create_empty_scope();
+void    inject_defaults(Kernel *);
+void    inject_property(Kernel *, property *, std::shared_ptr<Ex>, std::shared_ptr<Ex>);
+Kernel *get_kernel_from_scope();

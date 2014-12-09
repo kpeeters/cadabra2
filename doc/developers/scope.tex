@@ -6,56 +6,57 @@ to be made about how Python variable scope would influence the
 visibility of Cadabra properties. It clearly makes sense to be able to
 declare properties which only hold inside a particular
 function. However Cadabra expressions and properties do not directly
-correspond to Python objects, so they do not naturally inherit
-Python's scoping rules. This is different from e.g.~SymPy, in which
-mathematical objects are always in one-to-one correspondence with a
-Python object.
+correspond to Python objects. Rather, declaring a property is more
+like a function call into the Cadabra module, which leaves its imprint
+on the state of the C++ part but does not change anything on the
+Python side, as you typically do not assign the created property to a
+Python symbol. Therefore, properties do not naturally inherit Python's
+scoping rules.\footnote{This is different from e.g.~SymPy, in which
+  mathematical objects are always in one-to-one correspondence with a
+  Python object.} A more fundamental problem is that properties can be
+attached to patterns, and those patterns can involve more than just
+the symbols which one passes into a function.
 
-Question: for what kind of problems is scoping useful, and what would
-you need? Could you simply pass a cadabra object along in a function
-if you wanted to use its properties:
-
-cadabra = kernel()
-
-def fun(cadabra):
-    
-
-
-cadabra.AntiSymmetric('{A_{m n}, B_{p q}}');
-fun(cadabra)
-
-
-There are two main reasons why you would want to put Cadabra
-computations in a separate (function) scope. The first is when you
-want to take repetitive actions out of the main code. In this case you
-most likely want to simply inherit all properties of the main scope,
-and you may also want to add additional properties which you would
-like to not leak out into the main scope.
-
-The second reason is that you want to provide re-useable functionality
-in the form of e.g.~substitutions or conversions. In this case you
-most likely do not want to see any of the properties except those
-attached to symbols which you pass in explicitly.
-
-So you always want to have the option of adding additional properties
-which do not leak. You essentially also always need to be able to
-pull in properties of symbols which are passed in. Sometimes, but not
-very often, you want to pull in properties which are \emph{not}
-associated to passed symbols. The latter may be a stupid idea to
-implement.
-
-So either you pass properties in explicitly via the symbols that you
-pass in, or you define them afresh. This can all be handled with the
-current setup in which we inject into local.
-
-
-
-from cadabra2 import *
-
-cdb1 = kernel()
-
-cdb1.AntiSymmetric('{A_{m n}, B_{p q}}');
-
+In order to not burden the user, properties are therefore by default
+global variables, stored in a single global Cadabra object
+\verb|__cdbkernel__| which is initialised at import of the Cadabra module. 
+If you add new properties inside a function scope, these will go
+into this already existing \emph{global} property list by default.
+If you want to create a local scope for your computations, create a
+new \verb|__cdbkernel__| as in
+\begin{verbatim}
 def fun():
-   cdb2 = kernel(cdb1)
-   cdb2.sort_product(_) 
+   __cdbkernel__ = cadabra.create_scope();
+   [your code here]
+\end{verbatim}
+Now computations will not see the global properties at all. 
+If you want to import the global properties, use instead
+\begin{verbatim}
+def fun():
+   __cdbkernel__ = cadabra.create_scope_from_global()
+   [your code here]
+\end{verbatim}
+It is crucial that the
+\verb|__cdbkernel__| symbol is referenced from within Python and visible to the bytecompiler, because 
+it is not possible to create new variables on the local stack at runtime.
+Internally, the second version above fetches, at runtime, the
+\verb|__cdbkernel__| from the globals stack, copies all properties in there
+into a new kernel, and returns the latter. 
+
+Both versions above do populate the newly created kernel with
+Cadabra's default properties. If you want a completely clean slate
+(for e.g.~testing purposes, or because you really do not want default
+rules for sums and products), use
+\begin{verbatim}
+def fun():
+   __cdbkernel__ = cadabra.create_empty_scope()
+   [your code here]
+\end{verbatim}
+Note that in all these cases, changes to properties remain local and
+do not leak into the global property list.
+
+All Cadabra algorithms, when called from Python, will first look for a
+kernel on the locals stack (i.e.~what \verb|locals()| produces). If
+there is no kernel available locally, they will then revert to using
+the global kernel. 
+

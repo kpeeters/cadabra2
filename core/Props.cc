@@ -233,7 +233,7 @@ bool property::parse_to_keyvals(const exptree& tr, keyval_t& keyvals)
 
 	auto it=tr.begin(tr.begin());
 
-	std::cout << "parsing to keyvals" << std::endl;
+//	std::cout << "parsing to keyvals" << std::endl;
 	if(*(it)->name!="\\comma") { // one argument
 		if(parse_one_argument(it, keyvals)==false)
 			return false;
