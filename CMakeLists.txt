@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 project(Cadabra)
 
+enable_testing()
+
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
@@ -14,4 +16,4 @@ endif()
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-subdirs(core client_server frontend)
+subdirs(core client_server frontend tests)
