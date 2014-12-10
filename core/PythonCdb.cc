@@ -51,19 +51,13 @@
 //        keep_terms:  list of integers
 //        
 
-class X {
-	public:
-		X() {};
-		X(const X& other) {};
-		std::string repr() { return "hi"; };
-};
-
-
 bool output_ipython=false;
+
+// Expression constructor/destructor members.
 
 Ex::Ex(const Ex& other)
 	{
-//	std::cout << "Ex copy constructor" << std::endl;
+   //	std::cout << "Ex copy constructor" << std::endl;
 	}
 
 Ex::Ex(int val) 
@@ -75,14 +69,10 @@ Ex::Ex(int val)
 
 Ex::~Ex()
 	{
-//	std::cerr << "~Ex";
-//	if(ex.begin()!=ex.end()) {
-//		std::cerr << " " << *(tree.begin()->name);
-//		}
-//	std::cerr << std::endl;
 	}
 
-// Output routines for Ex objects.
+// Output routines in display, input, latex and html formats (the latter two
+// for use with IPython).
 
 std::string Ex::str_() const
 	{
@@ -101,7 +91,6 @@ std::string Ex::repr_() const
 	tree.print_entire_tree(str);
 	return str.str();
 	}
-
 
 std::string Ex::_repr_latex_() const
 	{
@@ -181,7 +170,6 @@ std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
 			std::cout << nm << " is not of type cadabra.Ex." << std::endl;
 		else 
 			std::cout << nm << " is not defined." << std::endl;
-      //		std::cout << parse_python_exception() << std::endl;
 		}
 
 	return 0;
@@ -232,29 +220,26 @@ bool Ex::__eq__int(int other) const
 	}
 
 // Functions to construct an Ex object and then create an additional
-// reference '_' on the local python stack that points to this object
+// reference '_' on the global python stack that points to this object
 // as well.
 
 std::shared_ptr<Ex> make_Ex_from_string(const std::string& str) 
 	{
 	auto ptr = std::make_shared<Ex>(str);
-	// FIXME: very weird things happen if we store a ref on the locals
-	// stack.  It looks like a new frame is being created, or something
-	// like that.  Creating on the globals stack is not right, but the
-	// best we can do right now.
 
-//	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	boost::python::object locals(boost::python::borrowed(PyEval_GetGlobals()));
-	locals["_"]=ptr;
+	// The local variable stack is not writeable so we cannot insert '_'
+	// as a local variable. Instead, we push it onto the global stack.
+
+	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+	globals["_"]=ptr;
 	return ptr;
 	}
 
 std::shared_ptr<Ex> make_Ex_from_int(int num)
 	{
 	auto ptr = std::make_shared<Ex>(num);
-//	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	boost::python::object locals(boost::python::borrowed(PyEval_GetGlobals()));
-	locals["_"]=ptr;
+	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+	globals["_"]=ptr;
 	return ptr;
 	}
 
@@ -266,8 +251,6 @@ Ex *dispatch_1(Ex *ex, bool repeat)
 	F algo(*get_kernel_from_scope(), ex->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
-//	std::cout << "applying at:";
-//	ex->tree.print_recursive_treeform(std::cout, it);
 	if(repeat) {
 		if(algo.apply_recursive(it)==false)
 			std::cout << "no change" << std::endl;
@@ -311,17 +294,16 @@ Ex *dispatch_2_string(Ex *ex, const std::string& args, bool repeat)
 	return dispatch_2<F>(ex, argsobj, repeat);
 	}
 
-std::string print_status()
-	{
-//	Kernel *kernel = get_kernel_from_scope();
-	return "hi";
-	}
+// Initialise mathematics typesetting for IPython.
 
 std::string init_ipython()
 	{
 	boost::python::object obj = boost::python::exec("from IPython.display import Math");
 	return "Cadabra typeset output for IPython notebook initialised.";
 	}
+
+// Generate a Python list of all properties declared in the current scope. These will
+// (FIXME: should be) displayed in input form, i.e. they can be fed back into Python.
 
 boost::python::list list_properties()
 	{
@@ -346,7 +328,7 @@ boost::python::list list_properties()
 		DisplayTeX dt(get_kernel_from_scope()->properties, it->second->obj);
 		std::ostringstream str;
 		dt.output(str);
-		res += str.str(); //*((*it).second->obj.begin()->name);
+		res += str.str();
 
 		if(nxt==props.pats.end() || it->first!=nxt->first) {
 			if(multi)
@@ -365,12 +347,16 @@ boost::python::list list_properties()
 	return ret;
 	}
 
+// Debug function to display an expression in tree form.
+
 std::string print_tree(Ex *ex)
 	{
 	std::ostringstream str;
 	ex->tree.print_entire_tree(str);
 	return str.str();
 	}
+
+// Setup logic to pass C++ exceptions down to Python properly.
  
 PyObject *ParseExceptionType = NULL;
 PyObject *ArgumentExceptionType = NULL;
@@ -407,7 +393,6 @@ Kernel *get_kernel_from_scope()
 		local_kernel=0;
 		}
 	if(local_kernel!=0)  {
-//		std::cout << "returning local kernel" << std::endl;
 		return local_kernel;
 		}
 
@@ -425,13 +410,11 @@ Kernel *get_kernel_from_scope()
 		}
 	
 	if(global_kernel!=0) {
-//		std::cout << "returning global kernel" << std::endl;
 		return global_kernel;
 		}
 
 	// If there is no kernel in global scope either, construct one.
 
-//	std::cout << "creating global kernel" << std::endl;
 	global_kernel = new Kernel();
 
 	// Store this as a Python object, making sure (using boost::ref) that the
@@ -461,18 +444,18 @@ Kernel *create_scope_from_global()
 
 Kernel *create_empty_scope()
 	{
-//	std::cout << "creating empty kernel" << std::endl;
 	Kernel *k = new Kernel();
 	return k;
 	}
 
-// Inject properties directly into the Kernel, even if it is not yet on the
-// Python stack.
+// Inject properties directly into the Kernel, even if the kernel is not yet
+// on the Python stack (needed when we create a new local scope: in this case we
+// create the kernel and pass it back to be turned into local __cdbkernel__ by
+// Python, but we want to populate the kernel with defaults before we hand it
+// back).
 
 void inject_defaults(Kernel *k)
 	{
-//	std::cout << "injecting defaults" << std::endl;
-
 	inject_property(k, new Distributable(),      std::make_shared<Ex>("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       std::make_shared<Ex>("\\prod{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), std::make_shared<Ex>("\\prod{#}"), 0);
@@ -492,6 +475,8 @@ void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std
 		}
 	kernel->properties.master_insert(exptree(it), prop);
 	}
+
+// Property constructor and display members for Python purposes.
 
 template<class Prop>
 Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
@@ -526,6 +511,8 @@ void def_algo_1(const std::string& name)
 		 return_value_policy<manage_new_object>() );
 	}
 
+// Then the ones which take an additional Ex argument (e.g. substitute).
+
 template<class F>
 void def_algo_2(const std::string& name) 
 	{
@@ -548,22 +535,10 @@ void def_prop(const std::string& name)
 	{
 	using namespace boost::python;
 
-	class_<Property<P>, bases<BaseProperty> > pr(name.c_str(), init<std::shared_ptr<Ex>, optional<std::shared_ptr<Ex> > >());
+	class_<Property<P>, bases<BaseProperty> > pr(name.c_str(), init<std::shared_ptr<Ex>, 
+																optional<std::shared_ptr<Ex> > >());
+
 	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_);
-	}
-
-// Experimental new way to define algorithms; intended to do something with algorithms which require
-// more arguments.
-
-template<class F, class p1>
-void def_algo_new(const std::string& name)
-	{
-	using namespace boost::python;
-
-	def(name.c_str(),  &dispatch_2<F, p1>,        (arg("ex"),arg("args"),arg("repeat")=true), return_internal_reference<1>() );
-//	def(name.c_str(),  &dispatch_2_string<F, p1>, (arg("ex"),arg("args"),arg("repeat")=true), return_value_policy<manage_new_object>() );
-	
-//	boost::python::list& ns
 	}
 
 
@@ -583,10 +558,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	class_<Kernel> pyKernel("Kernel", init<>());
 
-	// Test class
-	class_<X> pyX("X", init<>());
-	pyX.def("__repr__", &X::repr);
-
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
 	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_string));
@@ -603,7 +574,6 @@ BOOST_PYTHON_MODULE(cadabra2)
    // framework anymore.
 
 	def("tree", &print_tree);
-	def("cdb", &print_status);
 	def("init_ipython", &init_ipython);
 	def("properties", &list_properties);
 
