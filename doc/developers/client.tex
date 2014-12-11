@@ -1,0 +1,10 @@
+
+\section{Client architecture}
+
+All clients use two threads. One is the main thread and runs most of
+the logic in the {\tt DocumentThread} object. The other one is a
+thread which communicates with the server process; code for this
+thread is in the {\tt ComputeThread} object.  One typically subclasses
+the former into a full-fledged object driving the graphical user
+interface.
+

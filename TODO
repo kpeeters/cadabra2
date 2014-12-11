@@ -8,20 +8,9 @@
 
 - make sure editing of a notebook cell goes into the right dtree node.
 
-- Current status: we either make property declaration a function call, so that there is no 
-  python object for C++ property objects. Or we keep objects on the python side, but then
-  we need a custom constructor. That starts working for 'Indices' in the current version,
-  but I have not yet figured out how to extract arguments (and in particular 'ex') in
-  init_property<...> (in PythonCdb.hh).
-
-
-
 - cleanup_nests is not following the rule that nothing below the iterator
   is allowed to change. 
 
-- in order to pretty-print in ipython, need to
-   
-     from IPython.display import Math
- 
-  and then wrap all output (which is now printing a tree) in a Math(str(..)).
-  
+- core status: next: pass varying arguments to algorithms.
+
+- gui status: document logic

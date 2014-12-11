@@ -1,16 +1,24 @@
 # This is a pure-python initialisation script to set the 
-# path to sympy, setup printing of cadabra expressions and
-# attach basic cadabra properties. 
+# path to sympy and setup printing of cadabra expressions.
 
 import sys
-sys.path.insert(0,'/home/kasper/git/cadabra2/src/build') 
 from cadabra2 import *
 sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
-import sympy
 
-# Do not
-#import signal
-#signal.signal(signal.SIGINT, signal.SIG_DFL)
+# Attempt to import sympy; if not, setup logic so that the
+# shell does not fail later.
+
+try:
+    import sympy
+except:
+    class Sympy:
+        __version__="unavailable"
+
+    sympy = Sympy()
+
+
+# Set display hooks to catch certain objects and print them
+# differently. Should probably eventually be done cleaner.
 
 def _displayhook(arg):
     global remember_display_hook
@@ -24,22 +32,3 @@ def _displayhook(arg):
 remember_display_hook = sys.displayhook
 sys.displayhook = _displayhook
 
-
-# \prod{#}::DependsInherit.
-# \prod{#}::WeightInherit(label=all, type=Multiplicative).
-# \prod{#}::NumericalFlat.
-# 
-
-
-# \sum{#}::DependsInherit.
-# \sum{#}::IndexInherit.
-# \sum{#}::WeightInherit(label=all, type=Additive).
-# 
-# \pow{#}::DependsInherit.
-# 
-# \indexbracket{#}::Distributable.
-# \indexbracket{#}::IndexInherit.
-# \commutator{#}::IndexInherit.
-# \commutator{#}::Derivative.
-# \anticommutator{#}::IndexInherit.
-# \anticommutator{#}::Derivative.
