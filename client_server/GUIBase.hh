@@ -18,12 +18,14 @@ namespace cadabra {
 			// a cell. The code in DocumentThread will call these to make
 			// the GUI update its display. Called on the document thread.
 
-			virtual void update_cell(DTree::iterator)=0;
-			virtual void remove_cell(DTree::iterator)=0;
+			virtual void update_cell(DTree&, DTree::iterator)=0;
+			virtual void remove_cell(DTree&, DTree::iterator)=0;
 
 			// Add a GUI cell corresponding to the document cell at the
-			// iterator.
-			virtual void add_cell(DTree::iterator)=0;
+			// iterator. The GUI needs to figure out from the location of
+			// this cell in the DTree where to insert the cell in the visual
+			// display.
+			virtual void add_cell(DTree&, DTree::iterator)=0;
 
 			// Network status is propagated from the ComputeThread to the
          // GUI using the following methods. These get called on the

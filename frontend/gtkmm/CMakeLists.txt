@@ -23,3 +23,5 @@ add_executable(cadabra-gtk main.cc
   ../common/TeXEngine.cc)
 
 target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread )
+
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-gtk DESTINATION bin)

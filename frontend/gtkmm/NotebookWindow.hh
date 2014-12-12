@@ -30,9 +30,9 @@ namespace cadabra {
         
          // Virtual functions from GUIBase.
 
-         virtual void add_cell(DTree::iterator) override;
-         virtual void remove_cell(DTree::iterator) override;
-         virtual void update_cell(DTree::iterator) override;
+         virtual void add_cell(DTree&, DTree::iterator) override;
+         virtual void remove_cell(DTree&, DTree::iterator) override;
+         virtual void update_cell(DTree&, DTree::iterator) override;
 
          virtual void on_connect() override;
          virtual void on_disconnect() override;
