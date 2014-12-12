@@ -72,43 +72,30 @@ void CodeInput::init()
 
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
-//	std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
-	if(get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK)) {// shift-return
+	std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
+	if(get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK)) { // shift-return
 		Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
-		std::string tmp(trim(textbuf->get_text(get_buffer()->begin(), get_buffer()->end())));
-		// Determine whether this is a valid input cell: should end either on a delimiter or
-		// on a delimeter-space-quoted-file-name combination.
-		bool is_ok=false;
-		if(tmp.size()>0) {
-			 if(tmp[0]!='#' && tmp[tmp.size()-1]!=';' && tmp[tmp.size()-1]!=':' && tmp[tmp.size()-1]!='.' 
-				 && tmp[tmp.size()-1]!='\"') {
-				  is_ok=false;
-				  }
-			 else is_ok=true;
-			 }
-		if(!is_ok) {
-			 Gtk::MessageDialog md("Input error");
-			 md.set_secondary_text("This cell does not end with a delimiter (a \":\", \";\" or \".\")");
-			 md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-			 md.run();
-			 }
-		else {
-#ifdef DEBUG
-			 std::cerr << "sending: " << tmp << std::endl;
-#endif
-			 content_changed();
-			 emitter(tmp);
-			 }
+		// std::string tmp(trim(textbuf->get_text(get_buffer()->begin(), get_buffer()->end())));
+		std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
+		std::cerr << "sending: " << tmp << std::endl;
+		content_changed();
+		content_execute(tmp);
 		return true;
 		}
 	else {
+		// FIXME: including the line below is necessary to make the key show up, but it
+		// makes on_key_press_event fire twice for every key press?
+
 		bool retval=Gtk::TextView::on_key_press_event(event);
+
 		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
 		// signal so that the cell can be scrolled into view if necessary.
 		// FIXME: I do not know how to do this correctly, check docs.
 
+
 		if(event->keyval < 65000L)
 			 content_changed();
+
 		return retval;
 		}
 	}

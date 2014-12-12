@@ -129,20 +129,21 @@ void NotebookWindow::process_todo_queue()
 
 	}
 
-void NotebookWindow::add_cell(DTree::iterator it)
+void NotebookWindow::add_cell(DTree& tr, DTree::iterator it)
 	{
-	std::cout << "request to add gui cell" << std::endl;
+	// Add a visual cell corresponding to this document cell in 
+	// every canvas.
 
 	for(unsigned int i=0; i<canvasses.size(); ++i) 
-		canvasses[i]->add_cell(it);
+		canvasses[i]->add_cell(tr, it);
 	}
 
-void NotebookWindow::remove_cell(DTree::iterator)
+void NotebookWindow::remove_cell(DTree&, DTree::iterator)
 	{
 	std::cout << "request to remove gui cell" << std::endl;
 	}
 
-void NotebookWindow::update_cell(DTree::iterator)
+void NotebookWindow::update_cell(DTree&, DTree::iterator)
 	{
 	std::cout << "request to update gui cell" << std::endl;
 	}

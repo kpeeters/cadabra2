@@ -21,10 +21,12 @@ namespace cadabra {
 			NotebookCanvas(NotebookWindow& doc);
 			~NotebookCanvas();
 			
-			bool handle_key_press_event(GdkEventKey*);
+         //	bool handle_key_press_event(GdkEventKey*);
 
-			// Three members corresponding to the GUIBase callbacks.
-			void add_cell(DTree::iterator);
+			// Three members similar to those in GUIBase. They get called
+			// not from DocumentThread but from NotebookCanvas.
+
+			virtual void add_cell(DTree&, DTree::iterator);
 
 		private:
 			NotebookWindow&  window;
@@ -36,6 +38,11 @@ namespace cadabra {
 			Gtk::VBox                 scrollbox;
 			Gtk::HSeparator           bottomline;
 
+			// The following are handlers that get called when the content
+			// of a cell is changed or the user requests to run it (shift-enter).
+
+			bool cell_content_changed();
+			bool cell_content_execute(const std::string&);
 	};
 
 }
