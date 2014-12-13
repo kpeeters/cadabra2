@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "NotebookWindow.hh"
+#include <gtkmm/box.h>
 
 using namespace cadabra;
 
@@ -58,8 +59,10 @@ NotebookWindow::NotebookWindow()
 	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
 
 	// We always have at least one canvas.
-	canvasses.push_back(manage( new NotebookCanvas(*this) ));
-	mainbox.pack_start(*canvasses.back(), Gtk::PACK_EXPAND_WIDGET, 0);
+	canvasses.push_back(manage( new NotebookCanvas() ));
+	canvasses.push_back(manage( new NotebookCanvas() ));
+	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
+	mainbox.pack_start(*canvasses[1], Gtk::PACK_EXPAND_WIDGET, 0);
 
 	// Window size and title, and ready to go.
 	set_size_request(800,800);
@@ -133,9 +136,66 @@ void NotebookWindow::add_cell(DTree& tr, DTree::iterator it)
 	{
 	// Add a visual cell corresponding to this document cell in 
 	// every canvas.
+	
+	Glib::RefPtr<Gtk::TextBuffer> global_buffer;
 
-	for(unsigned int i=0; i<canvasses.size(); ++i) 
-		canvasses[i]->add_cell(tr, it);
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+
+		// Create a cell of the appropriate type.
+
+		VisualCell newcell;
+		Gtk::Widget *w=0;
+		switch(it->cell_type) {
+			case DataCell::CellType::output:
+				newcell.outbox = manage( new TeXView(engine, it->textbuf) );
+				w=newcell.outbox;
+				break;
+			case DataCell::CellType::input: {
+				CodeInput *ci;
+				// Ensure that all CodeInput cells share the same text buffer.
+				if(i==0) {
+					ci = new CodeInput();
+					global_buffer=ci->buffer;
+					}
+				else ci = new CodeInput(global_buffer);
+
+				ci->edit.content_changed.connect( sigc::mem_fun(this, &NotebookWindow::cell_content_changed) );
+				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute),
+																			 it ) );
+				newcell.inbox = manage( ci );
+				w=newcell.inbox;
+				break;
+				}
+			default:
+				throw std::logic_error("Unimplemented datacell type");
+			}
+		
+		
+		canvasses[i]->visualcells[&(*it)]=newcell;
+		
+		// Figure out where to store this new VisualCell in the GUI widget
+		// tree by exploring the DTree near the new DataCell.
+		
+		DTree::iterator prev = DTree::previous_sibling(it);
+		canvasses[i]->scrollbox.pack_start(*w, false, false);
+
+		if(tr.is_valid(prev.node)==false) {
+			// This node has no previous sibling.
+			DTree::iterator parent = DTree::parent(it);
+			if(tr.is_valid(parent)==false) {
+				// This node has no parent either, it is a top-level cell.
+				} 
+			else {
+				// Add as first child of parent.
+				canvasses[i]->scrollbox.reorder_child(*w, 0);
+				}
+			}
+		else {
+			// Add in an existing sibling range.
+			unsigned int index=tr.index(it);
+			canvasses[i]->scrollbox.reorder_child(*w, index);
+			}
+		}
 	}
 
 void NotebookWindow::remove_cell(DTree&, DTree::iterator)
@@ -147,3 +207,19 @@ void NotebookWindow::update_cell(DTree&, DTree::iterator)
 	{
 	std::cout << "request to update gui cell" << std::endl;
 	}
+
+bool NotebookWindow::cell_content_changed()
+	{
+	std::cerr << "canvas received content changed" << std::endl;
+	return false;
+	}
+
+bool NotebookWindow::cell_content_execute(std::string content, DTree::iterator it)
+	{
+	std::cerr << "canvas received content exec " << content << std::endl;
+
+	it->textbuf=content;
+
+	return true;
+	}
+
