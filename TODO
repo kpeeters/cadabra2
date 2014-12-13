@@ -15,4 +15,5 @@
 
 - gui status: document logic
 
-- save DTree into json
+- ActionAddCell now accepts a new DataCell, but the actual action has not been implemented yet.
+  ComputeThread sticks it on the stack already.

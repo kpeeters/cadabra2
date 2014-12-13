@@ -72,8 +72,12 @@ void CodeInput::init()
 
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
-	std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
-	bool retval=Gtk::TextView::on_key_press_event(event);
+	bool is_shift_return = 	get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
+	bool retval;
+	// std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
+	
+	if(!is_shift_return) 
+		retval=Gtk::TextView::on_key_press_event(event);
 
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));

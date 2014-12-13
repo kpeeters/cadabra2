@@ -21,13 +21,14 @@ typedef websocketpp::lib::lock_guard<websocketpp::lib::mutex> scoped_lock;
 namespace cadabra {
 	
 	class GUIBase;
+	class DocumentThread;
 	
 	class ComputeThread {
 		public:
 			// If the ComputeThread is constructed with a null pointer to the
 			// gui, there will be no gui updates, just DTree updates.
 			
-			ComputeThread(GUIBase *);
+			ComputeThread(GUIBase *, DocumentThread&);
 			ComputeThread(const ComputeThread& )=delete; // You cannot copy this object
 			~ComputeThread();
 			
@@ -40,14 +41,16 @@ namespace cadabra {
 			
 			// In order to execute code on the server, call the following
 			// from the GUI thread.  This method returns as soon as the
-			// request has been put on the network queue.  The result of
-			// the computation will be reported by calling one of the members
-			// of the GUIBase abstract base class.
+			// request has been put on the network queue.  The
+			// ComputeThread will report the result of the computation by
+			// adding actions to the DocumentThread owned pending_actions
+			// stack, by calling queue_action.
 
 			void execute_cell(const DataCell&);
 
 		private:
-			GUIBase *gui;
+			GUIBase        *gui;
+			DocumentThread& docthread;
 
 			// WebSocket++ things.
 			WSClient wsclient;

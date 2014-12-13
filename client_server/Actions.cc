@@ -9,8 +9,8 @@
 
 using namespace cadabra;
 
-ActionAddCell::ActionAddCell(DTree::iterator dc, DTree::iterator ref_, Position pos_) 
-	: ref(ref_), pos(pos_)
+ActionAddCell::ActionAddCell(DataCell cell, DTree::iterator ref_, Position pos_) 
+	: newcell(cell), ref(ref_), pos(pos_)
 	{
 	}
 

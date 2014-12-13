@@ -34,7 +34,8 @@ namespace cadabra {
 			// ActionBase derived objects to the 'queue_action' function,
 			// so that an undo stack can be kept. They are then processed
 			// by calling the 'process_action_queue' method (only
-			// available from this thread).
+			// available from this thread). Never directly modify the
+			// 'doc' Dtree object.
 			
 			std::mutex   dtree_mutex;
 			const DTree& dtree();
@@ -52,10 +53,12 @@ namespace cadabra {
 			DTree          doc;
 			
          // The action undo/redo/todo stacks and logic to execute
-			// them. These stacks can be accessed from both threads so
-			// need a mutex to access them.
+			// them. These stacks can be accessed from both the
+			// DocumentThread as well as the ComputeThread, so they need
+			// a mutex to access them.
 
          void                                             process_action_queue();
+
          std::mutex                                       stack_mutex;
 			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;
 			ActionStack                                      undo_stack, redo_stack;

@@ -231,7 +231,7 @@ void NotebookWindow::update_cell(DTree&, DTree::iterator)
 
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it)
 	{
-	std::cout << "received: " << content << std::endl;
+	// std::cout << "received: " << content << std::endl;
 	it->textbuf=content;
 
 	return false;
@@ -240,6 +240,8 @@ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::ite
 bool NotebookWindow::cell_content_execute(DTree::iterator it)
 	{
 	std::cerr << "canvas received content exec " << std::endl;
+
+	compute->execute_cell(*it);
 
 	return true;
 	}

@@ -1,13 +1,17 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 #include "ComputeThread.hh"
+#include "DocumentThread.hh"
 #include "GUIBase.hh"
+#include "Actions.hh"
 
 using namespace cadabra;
+typedef websocketpp::client<websocketpp::config::asio_client> client;
 
-ComputeThread::ComputeThread(GUIBase *g)
-	: gui(g)
+ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
+	: gui(g), docthread(dt)
 	{
 	}
 
@@ -29,7 +33,7 @@ void ComputeThread::init()
 	wsclient.set_open_handler(bind(&ComputeThread::on_open, this, ::_1));
 	wsclient.set_fail_handler(bind(&ComputeThread::on_fail, this, ::_1));
 	wsclient.set_close_handler(bind(&ComputeThread::on_close, this, ::_1));
-//	wsclient.set_message_handler(bind(&ComputeThread::on_message, this, ::_1, ::_2));
+	wsclient.set_message_handler(bind(&ComputeThread::on_message, this, ::_1, ::_2));
 	std::string uri = "ws://localhost:9002";
 	
 	websocketpp::lib::error_code ec;
@@ -91,13 +95,30 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg) 
 	{
-//	WSComputeThread::connection_ptr con = c->get_con_from_hdl(hdl);
-	
-//	std::cout << "received message on channel " << con->get_resource() << std::endl;
-//	std::cout << msg->get_payload() << std::endl;
+	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
+	std::cout << msg->get_payload() << std::endl;
+
+	// Stick an AddCell action onto the stack.
+	// FIXME: ActionAddCell is not yet complete
+	DataCell result(DataCell::CellType::output, msg->get_payload());
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionAddCell>(result, docthread.dtree().begin(), ActionAddCell::Position::after);
+	docthread.queue_action(action);
+	gui->process_data();
 	}
 
-void ComputeThread::execute_cell(const DataCell&)
+void ComputeThread::execute_cell(const DataCell& dc)
 	{
+	std::cout << "going to execute " << dc.textbuf << std::endl;
+
+	Json::Value req, header, content;
+	header["uuid"]="none";
+	header["msg_type"]="execute_request";
+	req["header"]=header;
+	content["code"]=dc.textbuf;
+	req["content"]=content;
+
+	std::ostringstream str;
+	str << req << std::endl;
 	
+	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	}
