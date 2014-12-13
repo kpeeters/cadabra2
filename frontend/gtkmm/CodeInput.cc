@@ -73,28 +73,23 @@ void CodeInput::init()
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
 	std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
+	bool retval=Gtk::TextView::on_key_press_event(event);
+
+	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
+	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
+	
 	if(get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK)) { // shift-return
-		Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
-		// std::string tmp(trim(textbuf->get_text(get_buffer()->begin(), get_buffer()->end())));
-		std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
-		std::cerr << "sending: " << tmp << std::endl;
-		content_changed();
-		content_execute(tmp);
+		content_changed(tmp);
+		content_execute();
 		return true;
 		}
 	else {
-		// FIXME: including the line below is necessary to make the key show up, but it
-		// makes on_key_press_event fire twice for every key press?
-
-		bool retval=Gtk::TextView::on_key_press_event(event);
-
 		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
 		// signal so that the cell can be scrolled into view if necessary.
 		// FIXME: I do not know how to do this correctly, check docs.
 
-
 		if(event->keyval < 65000L)
-			 content_changed();
+			 content_changed(tmp);
 
 		return retval;
 		}

@@ -14,3 +14,5 @@
 - core status: next: pass varying arguments to algorithms.
 
 - gui status: document logic
+
+- save DTree into json

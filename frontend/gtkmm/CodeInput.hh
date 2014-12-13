@@ -21,8 +21,8 @@ namespace cadabra {
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					
-					sigc::signal0<bool>              content_changed;
-					sigc::signal1<bool, std::string> content_execute;
+					sigc::signal0<bool>              content_execute;
+					sigc::signal1<bool, std::string> content_changed;
 			};
 			
 			bool handle_button_press(GdkEventButton *);

@@ -1,5 +1,6 @@
 
 #include "DataCell.hh"
+#include <sstream>
 
 using namespace cadabra;
 
@@ -25,4 +26,59 @@ DataCell::DataCell(const DataCell& other)
 	sensitive = other.sensitive;
 	running = other.running;
 	serial_number = other.serial_number;
+	}
+
+std::string cadabra::JSON_serialise(const DTree& doc)
+	{
+	Json::Value json;
+	json["description"]="Cadabra JSON notebook format";
+	json["version"]=1.0;
+	Json::Value cells;
+
+	auto sib=doc.begin();
+	while(sib!=doc.end()) {
+		Json::Value thiscell;
+		JSON_recurse(doc, sib, thiscell);
+		cells.append(thiscell);
+		++sib;
+		}
+	json["cells"]=cells;
+
+	std::ostringstream str;
+	str << json;
+
+	return str.str();
+	}
+
+void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& json)
+	{
+	json["textbuf"]  =it->textbuf;
+	switch(it->cell_type) {
+		case DataCell::CellType::input:
+			json["cell_type"]="input";
+			break;
+		case DataCell::CellType::output:
+			json["cell_type"]="output";
+			break;
+		case DataCell::CellType::comment:
+			json["cell_type"]="comment";
+			break;
+		case DataCell::CellType::texcomment:
+			json["cell_type"]="texcomment";
+			break;
+		case DataCell::CellType::tex:
+			json["cell_type"]="tex";
+			break;
+		case DataCell::CellType::error:
+			json["cell_type"]="error";
+			break;
+		case DataCell::CellType::section: {
+			// NOT YET FUNCTIONAL
+			json["cell_type"]="section";
+			Json::Value child;
+			child["content"]="test";
+			json.append(child);
+			break;
+			}
+		}
 	}

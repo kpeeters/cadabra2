@@ -1,34 +1,56 @@
 
 #include <iostream>
 #include "NotebookWindow.hh"
+#include "DataCell.hh"
 #include <gtkmm/box.h>
+#include <gtkmm/filechooserdialog.h>
+#include <fstream>
 
 using namespace cadabra;
 
 NotebookWindow::NotebookWindow()
 	: DocumentThread(this),
-	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO),
-	  modified(false)
+	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), modified(false)
 	{
-	// Connect the dispatcher.
+   // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
-
+	
 	// Setup menu.
-	actiongroup=Gtk::ActionGroup::create();
+	actiongroup = Gtk::ActionGroup::create();
 	actiongroup->add( Gtk::Action::create("MenuFile", "_File") );
-	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
-	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
-	actiongroup->add( Gtk::Action::create("MenuSettings", "_Settings") );
-	actiongroup->add( Gtk::Action::create("MenuTutorial", "_Tutorial") );
-	actiongroup->add( Gtk::Action::create("MenuFontSize", "Font size") );
-	actiongroup->add( Gtk::Action::create("MenuBrainWired", "Brain wired for") );
-	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
+	actiongroup->add( Gtk::Action::create("Save", Gtk::Stock::SAVE), Gtk::AccelKey("<control>S"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
+	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
+	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
+	uimanager = Gtk::UIManager::create();
+	uimanager->insert_action_group(actiongroup);
+	add_accel_group(uimanager->get_accel_group());
+	Glib::ustring ui_info =
+		"<ui>"
+		"  <menubar name='MenuBar'>"
+		"    <menu action='MenuFile'>"
+		"      <menuitem action='Save'/>"
+		"      <menuitem action='SaveAs'/>"
+		"      <separator/>"
+		"      <menuitem action='Quit'/>"
+		"    </menu>"
+		"  </menubar>"
+		"</ui>";
+
+	uimanager->add_ui_from_string(ui_info);
+	Gtk::Widget *menubar = uimanager->get_widget("/MenuBar");
+
+	// Main box structure dividing the window.
 	add(topbox);
+	topbox.pack_start(*menubar, Gtk::PACK_SHRINK);
 	topbox.pack_start(supermainbox, true, true);
 	topbox.pack_start(statusbarbox, false, false);
 	supermainbox.pack_start(mainbox, true, true);
 
+	
 	// Status bar
 	status_label.set_alignment( 0.0, 0.5 );
 	kernel_label.set_alignment( 0.0, 0.5 );
@@ -159,9 +181,8 @@ void NotebookWindow::add_cell(DTree& tr, DTree::iterator it)
 					}
 				else ci = new CodeInput(global_buffer);
 
-				ci->edit.content_changed.connect( sigc::mem_fun(this, &NotebookWindow::cell_content_changed) );
-				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute),
-																			 it ) );
+				ci->edit.content_changed.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), it ) );
+				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), it ) );
 				newcell.inbox = manage( ci );
 				w=newcell.inbox;
 				break;
@@ -208,18 +229,49 @@ void NotebookWindow::update_cell(DTree&, DTree::iterator)
 	std::cout << "request to update gui cell" << std::endl;
 	}
 
-bool NotebookWindow::cell_content_changed()
+bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it)
 	{
-	std::cerr << "canvas received content changed" << std::endl;
+	std::cout << "received: " << content << std::endl;
+	it->textbuf=content;
+
 	return false;
 	}
 
-bool NotebookWindow::cell_content_execute(std::string content, DTree::iterator it)
+bool NotebookWindow::cell_content_execute(DTree::iterator it)
 	{
-	std::cerr << "canvas received content exec " << content << std::endl;
-
-	it->textbuf=content;
+	std::cerr << "canvas received content exec " << std::endl;
 
 	return true;
 	}
 
+void NotebookWindow::on_file_save()
+	{
+	on_file_save_as();
+	}
+
+void NotebookWindow::on_file_save_as()
+	{
+	std::string out = JSON_serialise(doc);
+
+	Gtk::FileChooserDialog dialog("Please choose a file name",
+											Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+	dialog.set_transient_for(*this);
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+	int result=dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+			std::string filename = dialog.get_filename();			
+			std::ofstream file(filename);
+			file << out << std::endl;
+			break;
+			}
+		}
+	}
+
+void NotebookWindow::on_file_quit()
+	{
+	}
