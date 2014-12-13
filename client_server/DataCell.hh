@@ -5,6 +5,7 @@
 #include <mutex>
 
 #include "tree.hh"
+#include <jsoncpp/json/json.h>
 
 namespace cadabra {
 
@@ -41,5 +42,11 @@ namespace cadabra {
 	};
 
 	typedef tree<DataCell> DTree;
+
+	// Serialise a document into .cj format, which is a JSON version of
+	// the document tree.
+
+	std::string JSON_serialise(const DTree&);
+	void        JSON_recurse(const DTree&, DTree::iterator, Json::Value&);
 	
 }

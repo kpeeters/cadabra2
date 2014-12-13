@@ -7,6 +7,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/button.h>
+#include <gtkmm/uimanager.h>
 #include <glibmm/dispatcher.h>
 
 #include <thread>
@@ -54,6 +55,7 @@ namespace cadabra {
 			// GUI elements.
 			
 			Glib::RefPtr<Gtk::ActionGroup> actiongroup;
+			Glib::RefPtr<Gtk::UIManager>   uimanager;
 
 			Gtk::VBox                      topbox;
 			Gtk::HBox                      supermainbox;
@@ -84,14 +86,19 @@ namespace cadabra {
 			std::string      name;
 			bool             modified;
 
+			// Menu and button callbacks.
+			void on_file_save();
+			void on_file_save_as();
+			void on_file_quit();
+
 			// Todo deque processing logic.
 			void process_todo_queue();
 
 			// The following are handlers that get called when the content
 			// of a cell is changed or the user requests to run it (shift-enter).
 
-			bool cell_content_changed();
-			bool cell_content_execute(std::string, DTree::iterator);
+			bool cell_content_changed(const std::string&, DTree::iterator);
+			bool cell_content_execute(DTree::iterator);
 	};
 
 };
