@@ -21,8 +21,8 @@ namespace cadabra {
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					
-					sigc::signal1<bool, std::string> content_execute;
 					sigc::signal0<bool>              content_changed;
+					sigc::signal1<bool, std::string> content_execute;
 			};
 			
 			bool handle_button_press(GdkEventButton *);
@@ -31,6 +31,7 @@ namespace cadabra {
 			// because Gtk needs a Gtk::TextBuffer. The CodeInput widgets
 			// corresponding to a single DataCell all share their 
 			// TextBuffer, however.
+
 			Glib::RefPtr<Gtk::TextBuffer> buffer;
 
 			exp_input_tv                  edit;

@@ -87,6 +87,11 @@ namespace cadabra {
 			// Todo deque processing logic.
 			void process_todo_queue();
 
+			// The following are handlers that get called when the content
+			// of a cell is changed or the user requests to run it (shift-enter).
+
+			bool cell_content_changed();
+			bool cell_content_execute(std::string, DTree::iterator);
 	};
 
 };
