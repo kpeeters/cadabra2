@@ -7,3 +7,9 @@ thread which communicates with the server process; code for this
 thread is in the {\tt ComputeThread} object.  One typically subclasses
 the former into a full-fledged object driving the graphical user
 interface.
+
+All functionality that deals with GUI updates is isolated in {\tt
+  GUIBase}. A client should derive from this abstract base class and
+implement the methods there. Clients should also derive from {\tt
+  DocumentThread}, but there are no abstract virtual members to
+implemented from this base class.

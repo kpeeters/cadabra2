@@ -49,19 +49,6 @@ void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 
 void DocumentThread::process_action_queue()
 	{
-//	// FIXME: this is just a test action
-//	std::string msg = 
-//		"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
-//		"  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
-//		"}";
-////	std::cout << "sending" << std::endl;
-//	wsclient.send(our_connection_hdl, msg, websocketpp::frame::opcode::text);
-////	std::cout << "sending done" << std::endl;
-//
-//	// Now update the gui:
-////	ab.update_gui(gui);
-//
-	
 	std::lock_guard<std::mutex> guard(stack_mutex);
 	while(pending_actions.size()>0) {
 		std::shared_ptr<ActionBase> ab = pending_actions.back();

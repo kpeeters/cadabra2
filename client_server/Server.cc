@@ -199,6 +199,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 void Server::on_block_finished(Block blk)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);    
+	std::cout << "sending " << blk.output << std::endl;
 	wserver.send(blk.hdl, blk.output, websocketpp::frame::opcode::text);
 	}
 
