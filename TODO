@@ -20,4 +20,4 @@
 
 - need to start using DataCell ids so we can attach output to the right input cell.
 
-
+- catch error on trying to send to non-connected server
