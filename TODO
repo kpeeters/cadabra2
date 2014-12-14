@@ -15,5 +15,9 @@
 
 - gui status: document logic
 
-- ActionAddCell now accepts a new DataCell, but the actual action has not been implemented yet.
-  ComputeThread sticks it on the stack already.
+- response (output) cells should have the ability to remove previous output, or this
+  should already be done at execute. Link output to input by making them children?
+
+- need to start using DataCell ids so we can attach output to the right input cell.
+
+
