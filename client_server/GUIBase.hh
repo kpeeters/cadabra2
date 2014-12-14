@@ -25,7 +25,7 @@ namespace cadabra {
 			// iterator. The GUI needs to figure out from the location of
 			// this cell in the DTree where to insert the cell in the visual
 			// display.
-			virtual void add_cell(DTree&, DTree::iterator)=0;
+			virtual void add_cell(const DTree&, DTree::iterator)=0;
 
 			// Network status is propagated from the ComputeThread to the
          // GUI using the following methods. These get called on the

@@ -151,10 +151,10 @@ void NotebookWindow::process_todo_queue()
 	status_label.set_text(status_string);
 
 	// Perform any ActionBase actions.
-
+	process_action_queue();
 	}
 
-void NotebookWindow::add_cell(DTree& tr, DTree::iterator it)
+void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 	{
 	// Add a visual cell corresponding to this document cell in 
 	// every canvas.

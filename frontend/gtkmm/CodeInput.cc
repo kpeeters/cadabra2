@@ -43,7 +43,7 @@ void CodeInput::init()
 //	scroll_.set_size_request(-1,200);
 //	scroll_.set_border_width(1);
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-//	edit.override_font(Pango::FontDescription(fontname)); 
+	edit.override_font(Pango::FontDescription("monospace")); 
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 	edit.override_color(Gdk::RGBA("blue"));
 	edit.override_background_color(Gdk::RGBA("white"));
@@ -54,7 +54,8 @@ void CodeInput::init()
 	edit.set_left_margin(15);
 	// Need CSS tweaks for top margin
 //	edit.set_top_margin(15);
-	edit.set_accepts_tab(false);
+	edit.set_accepts_tab(true);
+//	Pango::TabArray
 
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, 
 																				&CodeInput::handle_button_press), 
