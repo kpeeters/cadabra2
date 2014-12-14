@@ -19,9 +19,13 @@ namespace cadabra {
 
 	class ActionBase {
 		public:
+			// Make the change to the DTree document.
 			virtual void execute(DocumentThread&)=0;
+			// Revert the change to the DTree document.
 			virtual void revert(DocumentThread&)=0;
-			virtual void update_gui(GUIBase&)=0;
+			// Make sure the GUI reflects the change.
+			// FIXME: do we need an exec/revert combo here too?
+			virtual void update_gui(const DTree&, GUIBase&)=0;
 	};
 	
 	// The Action object is used to pass user action instructions around
@@ -42,7 +46,7 @@ namespace cadabra {
 			
 			virtual void execute(DocumentThread&);
 			virtual void revert(DocumentThread&);
-			virtual void update_gui(GUIBase&);
+			virtual void update_gui(const DTree&, GUIBase&);
 			
 		private:
 			// Keep track of the location where this cell is inserted into
