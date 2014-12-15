@@ -35,7 +35,7 @@ std::string cadabra::JSON_serialise(const DTree& doc)
 	json["version"]=1.0;
 	Json::Value cells;
 
-	auto sib=doc.begin();
+	DTree::sibling_iterator sib=doc.begin();
 	while(sib!=doc.end()) {
 		Json::Value thiscell;
 		JSON_recurse(doc, sib, thiscell);
@@ -53,6 +53,7 @@ std::string cadabra::JSON_serialise(const DTree& doc)
 void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& json)
 	{
 	json["textbuf"]  =it->textbuf;
+	json["id"]       =(Json::UInt64)it->id();
 	switch(it->cell_type) {
 		case DataCell::CellType::input:
 			json["cell_type"]="input";
@@ -73,6 +74,7 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			json["cell_type"]="error";
 			break;
 		case DataCell::CellType::section: {
+			assert(1==0);
 			// NOT YET FUNCTIONAL
 			json["cell_type"]="section";
 			Json::Value child;
@@ -80,6 +82,17 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			json.append(child);
 			break;
 			}
+		}
+	if(doc.number_of_children(it)>0) {
+		Json::Value cells;
+		DTree::sibling_iterator sib=doc.begin(it);
+		while(sib!=doc.end(it)) {
+			Json::Value thiscell;
+			JSON_recurse(doc, sib, thiscell);
+			cells.append(thiscell);
+			++sib;
+			}
+		json["cells"]=cells;
 		}
 	}
 
