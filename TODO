@@ -6,8 +6,6 @@
 
   It is of course in the end all a generalisation of symm + antisymm.
 
-- make sure editing of a notebook cell goes into the right dtree node.
-
 - cleanup_nests is not following the rule that nothing below the iterator
   is allowed to change. 
 
@@ -15,11 +13,11 @@
 
 - gui status: document logic
 
-- response (output) cells should have the ability to remove previous output, or this
-  should already be done at execute. Link output to input by making them children?
-
-- need to start using DataCell ids so we can attach output to the right input cell.
-  Edit ComputeThread::on_message, which currently does not yet know which cell it 
-  gets a response about.
-
 - catch error on trying to send to non-connected server
+
+- server: do pre-parsing.
+- server: currently keeps python alive, restart?
+- server: also keep track of input cell id.
+
+- bug: declaring in one cell and printing in other produces one empty return.
+
