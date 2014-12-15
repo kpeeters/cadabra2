@@ -115,8 +115,21 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	// cell as a child of the corresponding input cell.
 	DataCell result(DataCell::CellType::output, output);
 
+	// Stupid way to find cell by id.
+	auto it=docthread.dtree().begin();
+	while(it!=docthread.dtree().end()) {
+		if((*it).id()==id)
+			break;
+		++it;
+		}
+	if(it==docthread.dtree().end()) {
+		std::cerr << "uhoh, cannot find cell" << std::endl;
+		return;
+		}
+
+	// Finally, the action.
 	std::shared_ptr<ActionBase> action = 
-		std::make_shared<ActionAddCell>(result, docthread.dtree().begin(), ActionAddCell::Position::child);
+		std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 
 	docthread.queue_action(action);
 	gui->process_data();
