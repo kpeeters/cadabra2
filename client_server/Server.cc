@@ -57,11 +57,9 @@ void Server::init()
 
 	run_string(stdOutErr);
 
-	std::ifstream f("/home/kasper/git/cadabra2/src/defaults.py");
-	std::stringstream str;
-	str << f.rdbuf();
+	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');";
 
-	run_string(str.str());
+	run_string(startup);
 	}
 
 std::string Server::run_string(const std::string& blk)

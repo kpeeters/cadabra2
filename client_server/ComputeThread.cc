@@ -109,7 +109,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	const Json::Value header  = root["header"];
 	const Json::Value content = root["content"];
 	uint64_t id = header["cell_id"].asUInt64();
-	std::string output = content["output"].asString();
+	std::string output = "$"+content["output"].asString()+"$";
+
+	if(output=="$$") return; // No data;
 
 	// Stick an AddCell action onto the stack. We instruct the action to add this result output
 	// cell as a child of the corresponding input cell.
