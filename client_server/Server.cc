@@ -146,8 +146,8 @@ void Server::stop_block()
 	PyGILState_Release(state);
 	}
 
-Server::Block::Block(websocketpp::connection_hdl h, const std::string& str)
-	: hdl(h), input(str)
+Server::Block::Block(websocketpp::connection_hdl h, const std::string& str, uint64_t id_)
+	: hdl(h), input(str), id(id_)
 	{
 	}
 
@@ -186,8 +186,9 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 
 	if(msg_type=="execute_request") {
 		std::string code = content.get("code","").asString();
+		uint64_t id = header.get("cell_id", 0).asUInt64();
 		std::unique_lock<std::mutex> lock(block_available_mutex);
-		block_queue.push(Block(hdl, code));
+		block_queue.push(Block(hdl, code, id));
 		block_available.notify_one();
 		}
 	else if(msg_type=="execute_interrupt") {
@@ -199,8 +200,21 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 void Server::on_block_finished(Block blk)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);    
-	std::cout << "sending " << blk.output << std::endl;
-	wserver.send(blk.hdl, blk.output, websocketpp::frame::opcode::text);
+	
+	// Make a JSON message.
+	Json::Value json, content, header;
+	
+	header["cell_id"]=(Json::Value::UInt64)blk.id;
+	content["output"]=blk.output;
+
+	json["header"]=header;
+	json["content"]=content;
+
+	std::ostringstream str;
+	str << json << std::endl;
+	std::cout << "sending " << str.str() << std::endl;
+
+	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
 
 void Server::run() 

@@ -96,12 +96,28 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg) 
 	{
 	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
-	std::cout << msg->get_payload() << std::endl;
+	std::cerr << msg->get_payload() << std::endl;
 
-	// Stick an AddCell action onto the stack.
-	// FIXME: ActionAddCell is not yet complete
-	DataCell result(DataCell::CellType::output, msg->get_payload());
-	std::shared_ptr<ActionBase> action = std::make_shared<ActionAddCell>(result, docthread.dtree().begin(), ActionAddCell::Position::after);
+	// Parse the JSON message.
+	Json::Value  root;
+	Json::Reader reader;
+	bool success = reader.parse( msg->get_payload(), root );
+	if ( !success ) {
+		std::cerr << "cannot parse message" << std::endl;
+		return;
+		}
+	const Json::Value header  = root["header"];
+	const Json::Value content = root["content"];
+	uint64_t id = header["cell_id"].asUInt64();
+	std::string output = content["output"].asString();
+
+	// Stick an AddCell action onto the stack. We instruct the action to add this result output
+	// cell as a child of the corresponding input cell.
+	DataCell result(DataCell::CellType::output, output);
+
+	std::shared_ptr<ActionBase> action = 
+		std::make_shared<ActionAddCell>(result, docthread.dtree().begin(), ActionAddCell::Position::child);
+
 	docthread.queue_action(action);
 	gui->process_data();
 	}
@@ -112,6 +128,7 @@ void ComputeThread::execute_cell(const DataCell& dc)
 
 	Json::Value req, header, content;
 	header["uuid"]="none";
+	header["cell_id"]=(Json::UInt64)dc.id();
 	header["msg_type"]="execute_request";
 	req["header"]=header;
 	content["code"]=dc.textbuf;
@@ -120,5 +137,7 @@ void ComputeThread::execute_cell(const DataCell& dc)
 	std::ostringstream str;
 	str << req << std::endl;
 	
+	std::cerr << str.str() << std::endl;
+
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	}
