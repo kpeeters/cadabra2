@@ -4,7 +4,7 @@
 
 using namespace cadabra;
 
-long DataCell::max_serial_number=0;
+uint64_t DataCell::max_serial_number=0;
 std::mutex DataCell::serial_mutex;
 
 DataCell::DataCell(CellType t, const std::string& str, bool texhidden) 
@@ -81,4 +81,9 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			break;
 			}
 		}
+	}
+
+uint64_t DataCell::id() const
+	{
+	return serial_number;
 	}

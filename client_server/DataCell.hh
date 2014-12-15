@@ -32,13 +32,13 @@ namespace cadabra {
 			// Each cell is identified by a serial number 'id' which is used
 			// to keep track of it across network calls.
 
-			long                          id() const;
+			uint64_t                      id() const;
 			
 		private:
 
 			static std::mutex             serial_mutex;
-			long                          serial_number;
-			static long                   max_serial_number;
+			uint64_t                      serial_number;
+			static uint64_t               max_serial_number;
 	};
 
 	typedef tree<DataCell> DTree;

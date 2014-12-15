@@ -72,10 +72,11 @@ class Server {
 		// Data and connection info for a single block of code.
 		class Block {
 			public:
-				Block(websocketpp::connection_hdl, const std::string&);
+				Block(websocketpp::connection_hdl, const std::string&, uint64_t id);
 				websocketpp::connection_hdl hdl; // FIXME: decouple from websocket?
 				std::string                 input;
 				std::string                 output;
+				uint64_t                    id;
 		};
 		std::queue<Block>        block_queue;
 

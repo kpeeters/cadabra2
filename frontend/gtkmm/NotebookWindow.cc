@@ -196,7 +196,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 		
 		// Figure out where to store this new VisualCell in the GUI widget
 		// tree by exploring the DTree near the new DataCell.
-		
+
 		DTree::iterator prev = DTree::previous_sibling(it);
 		canvasses[i]->scrollbox.pack_start(*w, false, false);
 

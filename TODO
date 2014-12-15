@@ -19,5 +19,7 @@
   should already be done at execute. Link output to input by making them children?
 
 - need to start using DataCell ids so we can attach output to the right input cell.
+  Edit ComputeThread::on_message, which currently does not yet know which cell it 
+  gets a response about.
 
 - catch error on trying to send to non-connected server
