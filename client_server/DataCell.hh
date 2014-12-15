@@ -16,8 +16,15 @@ namespace cadabra {
 	
 	class DataCell {
 		public:
-			enum class CellType { input, output, comment, texcomment, tex, error /* leaf nodes */,
-				section };
+			enum class CellType { 
+					document,   // head node, only one per document
+						input,   
+						output, 
+						comment, 
+						texcomment, 
+						tex, 
+						error,   
+						section };
 			
 			DataCell(CellType t=CellType::input, const std::string& str="", bool texhidden=false);
 			DataCell(const DataCell&);

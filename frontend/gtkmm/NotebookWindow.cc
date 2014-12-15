@@ -168,7 +168,12 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 		VisualCell newcell;
 		Gtk::Widget *w=0;
 		switch(it->cell_type) {
+			case DataCell::CellType::document:
+				newcell.document = manage( new Gtk::VBox() );
+				w=newcell.document;
+				break;
 			case DataCell::CellType::output:
+				// FIXME: would be good to share the output of TeXView too.
 				newcell.outbox = manage( new TeXView(engine, it->textbuf) );
 				w=newcell.outbox;
 				break;
@@ -194,34 +199,60 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 		
 		canvasses[i]->visualcells[&(*it)]=newcell;
 		
-		// Figure out where to store this new VisualCell in the GUI widget
-		// tree by exploring the DTree near the new DataCell.
+		// Document cells are easy; just add. They have no parent in the DTree.
 
-		DTree::iterator prev = DTree::previous_sibling(it);
-		canvasses[i]->scrollbox.pack_start(*w, false, false);
-
-		if(tr.is_valid(prev.node)==false) {
-			// This node has no previous sibling.
-			DTree::iterator parent = DTree::parent(it);
-			if(tr.is_valid(parent)==false) {
-				// This node has no parent either, it is a top-level cell.
-				} 
-			else {
-				// Add as first child of parent.
-				canvasses[i]->scrollbox.reorder_child(*w, 0);
-				}
+		if(it->cell_type==DataCell::CellType::document) {
+			canvasses[i]->ebox.add(*w);
+			w->show_all(); // FIXME: if you drop this, the whole document remains invisible
+			continue;
 			}
-		else {
-			// Add in an existing sibling range.
-			unsigned int index=tr.index(it);
-			canvasses[i]->scrollbox.reorder_child(*w, index);
+
+		// Figure out where to store this new VisualCell in the GUI widget
+		// tree by exploring the DTree near the new DataCell. 
+		// First determine the parent cell and the corresponding Gtk::Box
+		// so that we can determine where to pack_start this cell. At this
+		// stage, all cells have parents.
+
+		DTree::iterator parent = DTree::parent(it);
+		assert(tr.is_valid(parent));
+
+		VisualCell& parent_visual = canvasses[i]->visualcells[&(*parent)];
+		Gtk::VBox *parentbox=0;
+		if(parent->cell_type==DataCell::CellType::document)
+			parentbox=parent_visual.document;
+		else
+			parentbox=parent_visual.inbox;
+
+		parentbox->pack_start(*w, false, false);	
+		unsigned int index=tr.index(it);
+		unsigned int numch=tr.number_of_children(parent);
+		std::cout << "is index " << index << " vs " << numch << std::endl;
+		if(index!=numch-1) {
+			std::cout << "need to re-order" << std::endl;
+			parentbox->reorder_child(*w, index);
 			}
 		}
 	}
 
-void NotebookWindow::remove_cell(DTree&, DTree::iterator)
+void NotebookWindow::remove_cell(DTree& doc, DTree::iterator it)
 	{
 	std::cout << "request to remove gui cell" << std::endl;
+
+	// Can only remove cells which have a parent (i.e. not the top-level document cell).
+
+	DTree::iterator parent = DTree::parent(it);
+	assert(doc.is_valid(parent));
+
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		VisualCell& parent_visual = canvasses[i]->visualcells[&(*parent)];
+		Gtk::VBox *parentbox=0;
+		if(it->cell_type==DataCell::CellType::document)
+			parentbox=parent_visual.document;
+		else
+			parentbox=parent_visual.inbox;
+		VisualCell& actual = canvasses[i]->visualcells[&(*it)];
+		parentbox->remove(*actual.inbox);
+		}	
 	}
 
 void NotebookWindow::update_cell(DTree&, DTree::iterator)
@@ -241,6 +272,15 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it)
 	{
 	std::cerr << "canvas received content exec " << std::endl;
 
+	// Remove child nodes, if any.
+	// FIXME: use ActionRemoveCell so we can undo.
+	DTree::sibling_iterator sib=doc.begin(it);
+	while(sib!=doc.end(it)) {
+		remove_cell(doc, sib);
+		++sib;
+		}
+
+	// Execute
 	compute->execute_cell(*it);
 
 	return true;

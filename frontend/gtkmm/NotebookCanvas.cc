@@ -12,7 +12,6 @@ NotebookCanvas::NotebookCanvas()
  	scroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
  	scroll.set_border_width(1);
 	scroll.add(ebox);
-	ebox.add(scrollbox);
 	ebox.override_background_color(Gdk::RGBA("white"));
 	}
 
