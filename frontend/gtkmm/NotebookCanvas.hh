@@ -25,7 +25,6 @@ namespace cadabra {
 
 			Gtk::EventBox             ebox;
 			Gtk::ScrolledWindow       scroll;
-			Gtk::VBox                 scrollbox;
 			Gtk::HSeparator           bottomline;
 
 	};

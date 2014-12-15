@@ -31,18 +31,7 @@ DataCell::DataCell(const DataCell& other)
 std::string cadabra::JSON_serialise(const DTree& doc)
 	{
 	Json::Value json;
-	json["description"]="Cadabra JSON notebook format";
-	json["version"]=1.0;
-	Json::Value cells;
-
-	DTree::sibling_iterator sib=doc.begin();
-	while(sib!=doc.end()) {
-		Json::Value thiscell;
-		JSON_recurse(doc, sib, thiscell);
-		cells.append(thiscell);
-		++sib;
-		}
-	json["cells"]=cells;
+	JSON_recurse(doc, doc.begin(), json);
 
 	std::ostringstream str;
 	str << json;
@@ -52,9 +41,11 @@ std::string cadabra::JSON_serialise(const DTree& doc)
 
 void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& json)
 	{
-	json["textbuf"]  =it->textbuf;
-	json["id"]       =(Json::UInt64)it->id();
 	switch(it->cell_type) {
+		case DataCell::CellType::document:
+			json["description"]="Cadabra JSON notebook format";
+			json["version"]=1.0;
+			break;
 		case DataCell::CellType::input:
 			json["cell_type"]="input";
 			break;
@@ -83,6 +74,11 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			break;
 			}
 		}
+	if(it->cell_type!=DataCell::CellType::document) {
+		json["textbuf"]  =it->textbuf;
+		json["id"]       =(Json::UInt64)it->id();
+		}
+
 	if(doc.number_of_children(it)>0) {
 		Json::Value cells;
 		DTree::sibling_iterator sib=doc.begin(it);
