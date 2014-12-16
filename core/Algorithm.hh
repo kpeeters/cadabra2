@@ -29,6 +29,7 @@
 
 #include <map>
 #include <fstream>
+#include <cstddef>
 
 // Base class for all algorithms, containing generic routines and in
 // particular the logic for index classification. In particular also

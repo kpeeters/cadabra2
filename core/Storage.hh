@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <iostream>
 #include <gmpxx.h>
 #include <string>

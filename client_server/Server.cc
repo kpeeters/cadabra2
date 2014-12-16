@@ -38,6 +38,9 @@ void Server::init()
 	{
 	started=false;
 
+	pre_parse(" hello ");
+	pre_parse("   hello ");
+
 	Py_Initialize();
 	main_module = boost::python::import("__main__");
 	main_namespace = main_module.attr("__dict__");
@@ -67,11 +70,49 @@ std::string Server::pre_parse(const std::string& line)
 	{
 	std::string ret;
 
-	// 
-	std::regex imatch("([[:blank:]]*)([^[[:blank:]]].*)([[:space:]]*)");
-	if(std::regex_match(line, imatch)) {
+	try {
+		std::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
+		std::smatch mres;
+		std::string indent_line, end_of_line;
+		if(std::regex_match(line, mres, imatch)) {
+			indent_line=mres[1];
+			end_of_line=mres[3];
+			}
+
+		std::string line_stripped=mres[2];
+		size_t found = line_stripped.find(":=");
+		if(found!=std::string::npos) {
+			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
+				+ line_stripped.substr(found+2) + "')";
+			}
+		else {
+			found = line_stripped.find("::");
+			if(found!=std::string::npos) {
+				std::regex amatch("([a-zA-Z]*)(.*)");
+				std::smatch ares;
+				if(std::regex_match(line_stripped.substr(found+2), ares, amatch)) {
+					if(std::string(ares[2]).size()>0) {
+						ret = indent_line + "__cdbtmp__ = "+std::string(ares[1])
+							+"(Ex(r'"+line_stripped.substr(0,found)
+							+"'), Ex('"+std::string(ares[2]).substr(1,std::string(ares[2]).size()-2)+"') )";
+						}
+					else {
+						std::cerr << "no arguments" << std::endl;
+						ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
+							+ "(Ex(r'"+line_stripped.substr(0,found)+"'))";
+						}
+					}
+				else {
+					assert(1==0); // inconsistent
+					}
+				}
+			else {
+				ret = line;
+				}
+			}
 		}
-	else {
+	catch(std::regex_error& ex) {
+		std::cerr << ex.what() << " " << ex.code() << std::endl;
 		}
 
 	return ret;
@@ -86,7 +127,7 @@ std::string Server::run_string(const std::string& blk)
 	std::string line;
 	std::string newblk;
 	while(std::getline(str, line, '\n')) {
-		newblk += pre_parse(line);
+		newblk += pre_parse(line)+'\n';
 		}
 	std::cout << newblk << std::endl;
 
