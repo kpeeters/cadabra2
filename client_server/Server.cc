@@ -138,14 +138,15 @@ std::string Server::run_string(const std::string& blk)
 		boost::python::object catchobj = main_module.attr("catchOutErr");
 		boost::python::object valueobj = catchobj.attr("value");
 		result = boost::python::extract<std::string>(valueobj);
-//		std::cout << "output: " << outstr << std::endl;
 		catchobj.attr("clear")();
-//		std::cout << "cleared" << std::endl;
 		}
 	catch(boost::python::error_already_set& ex) {
 		std::cout << "python error" << std::endl;
 		PyErr_Print();
-//		std::cout << ex.what() << std::endl;
+
+		boost::python::object catchobj = main_module.attr("catchOutErr");
+		boost::python::object valueobj = catchobj.attr("value");
+//		std::cout << valueobj << std::endl;
 		}
 	return result;
 	}
