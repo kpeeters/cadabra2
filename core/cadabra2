@@ -67,7 +67,7 @@ class Shell(InteractiveConsole):
 
     def preprocess(self, line):
         # print '='+line+"=="
-        imatch = re.search('([\s]*)([^\s].*)([\s]*)', line)
+        imatch = re.search('([\s]*)([^\s].*[^\s])([\s]*)', line)
         if imatch:
             indent_line=imatch.group(1)
             end_of_line=imatch.group(3)
