@@ -6,6 +6,7 @@
 #include <thread>
 #include <future>
 #include <chrono>
+#include <regex>
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <jsoncpp/json/json.h>
@@ -62,12 +63,37 @@ void Server::init()
 	run_string(startup);
 	}
 
+std::string Server::pre_parse(const std::string& line)
+	{
+	std::string ret;
+
+	// 
+	std::regex imatch("([[:blank:]]*)([^[[:blank:]]].*)([[:space:]]*)");
+	if(std::regex_match(line, imatch)) {
+		}
+	else {
+		}
+
+	return ret;
+	}
+
 std::string Server::run_string(const std::string& blk)
 	{
 	std::string result;
+
+	// Preparse input block line-by-line.
+	std::stringstream str(blk);
+	std::string line;
+	std::string newblk;
+	while(std::getline(str, line, '\n')) {
+		newblk += pre_parse(line);
+		}
+	std::cout << newblk << std::endl;
+
+	// Run block.
 	try {
 //		std::cout << "running..." << std::endl;
-		boost::python::object ignored = boost::python::exec(blk.c_str(), main_namespace);
+		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
 		boost::python::object catchobj = main_module.attr("catchOutErr");
 		boost::python::object valueobj = catchobj.attr("value");
 		result = boost::python::extract<std::string>(valueobj);
