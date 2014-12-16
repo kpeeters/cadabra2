@@ -84,6 +84,10 @@ class Server {
 		// thread constructed by on_message().
 		std::string              run_string(const std::string&);
 
+		// Pre-parse a line of code to convert Cadabra notation into proper
+		// Python. Mimics the functionality in core/cadabra2.
+		std::string              pre_parse(const std::string&);
+
 		// Called by the run_block() thread upon completion of the task.
 		// Handles communication of the result back to the client.
 		void                     on_block_finished(Block);
