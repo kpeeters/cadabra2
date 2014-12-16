@@ -21,3 +21,7 @@
 
 - bug: declaring in one cell and printing in other produces one empty return.
 
+- make separate catching module for out and err, then use the latter to get
+  python error messages. output as error message to client.
+
+- make client error cell work.
