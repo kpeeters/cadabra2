@@ -76,6 +76,7 @@ class Server {
 				websocketpp::connection_hdl hdl; // FIXME: decouple from websocket?
 				std::string                 input;
 				std::string                 output;
+				std::string                 error;
 				uint64_t                    id;
 		};
 		std::queue<Block>        block_queue;
@@ -91,6 +92,7 @@ class Server {
 		// Called by the run_block() thread upon completion of the task.
 		// Handles communication of the result back to the client.
 		void                     on_block_finished(Block);
+		void                     on_block_error(Block);
 
 		// Halt the currently running block and prevent execution of any
 		// further blocks that may still be on the queue.
@@ -109,3 +111,4 @@ class Server {
 		boost::python::object main_namespace;
 
 };
+
