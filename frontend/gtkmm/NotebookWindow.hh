@@ -34,6 +34,7 @@ namespace cadabra {
          virtual void add_cell(const DTree&, DTree::iterator) override;
          virtual void remove_cell(DTree&, DTree::iterator) override;
          virtual void update_cell(DTree&, DTree::iterator) override;
+			virtual void position_cursor(const DTree&, DTree::iterator) override;
 
          virtual void on_connect() override;
          virtual void on_disconnect() override;
