@@ -290,7 +290,7 @@ void Server::on_block_finished(Block blk)
 
 	json["header"]=header;
 	json["content"]=content;
-	json["type"]="response";
+	json["msg_type"]="response";
 
 	std::ostringstream str;
 	str << json << std::endl;
@@ -311,7 +311,7 @@ void Server::on_block_error(Block blk)
 
 	json["header"]=header;
 	json["content"]=content;
-	json["type"]="error";
+	json["msg_type"]="error";
 
 	std::ostringstream str;
 	str << json << std::endl;
