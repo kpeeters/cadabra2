@@ -106,16 +106,10 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		std::cerr << "cannot parse message" << std::endl;
 		return;
 		}
-	const Json::Value header  = root["header"];
-	const Json::Value content = root["content"];
+	const Json::Value header   = root["header"];
+	const Json::Value content  = root["content"];
+	const Json::Value msg_type = root["msg_type"];
 	uint64_t id = header["cell_id"].asUInt64();
-	std::string output = "$"+content["output"].asString()+"$";
-
-	if(output=="$$") return; // No data;
-
-	// Stick an AddCell action onto the stack. We instruct the action to add this result output
-	// cell as a child of the corresponding input cell.
-	DataCell result(DataCell::CellType::output, output);
 
 	// Stupid way to find cell by id.
 	auto it=docthread.dtree().begin();
@@ -129,11 +123,33 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		return;
 		}
 
-	// Finally, the action.
-	std::shared_ptr<ActionBase> action = 
-		std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+	if(msg_type.asString()=="response") {
+		std::string output = "$"+content["output"].asString()+"$";
+		if(output=="$$") return; // No data;
 
-	docthread.queue_action(action);
+		// Stick an AddCell action onto the stack. We instruct the action to add this result output
+		// cell as a child of the corresponding input cell.
+		DataCell result(DataCell::CellType::output, output);
+		
+		// Finally, the action.
+		std::shared_ptr<ActionBase> action = 
+			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+		docthread.queue_action(action);
+		}
+	else {
+		std::string error = "\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}";
+
+		// Stick an AddCell action onto the stack. We instruct the action to add this result output
+		// cell as a child of the corresponding input cell.
+		DataCell result(DataCell::CellType::output, error);
+		
+		// Finally, the action.
+		std::shared_ptr<ActionBase> action = 
+			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+		docthread.queue_action(action);
+		}
+
+
 	gui->process_data();
 	}
 

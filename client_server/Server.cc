@@ -48,16 +48,24 @@ void Server::init()
 	// Python pre-amble to capture stdout and stderr into a string.
 	std::string stdOutErr =
 		"import sys\n"
-		"class CatchOutErr:\n"
+		"class CatchOut:\n"
 		"   def __init__(self):\n"
 		"      self.value = ''\n"
 		"   def write(self, txt):\n"
 		"      self.value += txt\n"
 		"   def clear(self):\n"
 		"      self.value = ''\n"
-		"catchOutErr = CatchOutErr()\n"
-		"sys.stdout = catchOutErr\n"
-		"sys.stderr = catchOutErr\n";
+		"catchOut = CatchOut()\n"
+		"sys.stdout = catchOut\n"
+		"class CatchErr:\n"
+		"   def __init__(self):\n"
+		"      self.value = ''\n"
+		"   def write(self, txt):\n"
+		"      self.value += txt\n"
+		"   def clear(self):\n"
+		"      self.value = ''\n"
+		"catchErr = CatchErr()\n"
+		"sys.stderr = catchErr\n";
 
 	run_string(stdOutErr);
 
@@ -131,22 +139,23 @@ std::string Server::run_string(const std::string& blk)
 		}
 	std::cout << newblk << std::endl;
 
-	// Run block.
+	// Run block. Catch output.
 	try {
-//		std::cout << "running..." << std::endl;
 		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
-		boost::python::object catchobj = main_module.attr("catchOutErr");
+		boost::python::object catchobj = main_module.attr("catchOut");
 		boost::python::object valueobj = catchobj.attr("value");
 		result = boost::python::extract<std::string>(valueobj);
 		catchobj.attr("clear")();
 		}
 	catch(boost::python::error_already_set& ex) {
-		std::cout << "python error" << std::endl;
+		// Make Python print error to stderr and catch it.
 		PyErr_Print();
-
-		boost::python::object catchobj = main_module.attr("catchOutErr");
+		boost::python::object catchobj = main_module.attr("catchErr");
 		boost::python::object valueobj = catchobj.attr("value");
-//		std::cout << valueobj << std::endl;
+		std::string err = boost::python::extract<std::string>(valueobj);
+		std::cerr << err << std::endl;
+		catchobj.attr("clear")();
+		throw std::runtime_error(err);
 		}
 	return result;
 	}
@@ -199,8 +208,14 @@ void Server::wait_for_job()
 			std::cout << "going to run: " << block_queue.front().input << std::endl;
 			Block block = block_queue.front();
 			block_queue.pop();
-			block.output = run_string(block.input);
-			on_block_finished(block);
+			try {
+				block.output = run_string(block.input);
+				on_block_finished(block);
+				}
+			catch(std::runtime_error& ex) {
+				block.error = ex.what();
+				on_block_error(block);
+				}
 			}
 		}
 	}
@@ -275,10 +290,32 @@ void Server::on_block_finished(Block blk)
 
 	json["header"]=header;
 	json["content"]=content;
+	json["msg_type"]="response";
 
 	std::ostringstream str;
 	str << json << std::endl;
 	std::cout << "sending " << str.str() << std::endl;
+
+	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
+	}
+
+void Server::on_block_error(Block blk)
+	{
+	std::lock_guard<std::mutex> lock(ws_mutex);    
+	
+	// Make a JSON message.
+	Json::Value json, content, header;
+	
+	header["cell_id"]=(Json::Value::UInt64)blk.id;
+	content["error"]=blk.error;
+
+	json["header"]=header;
+	json["content"]=content;
+	json["msg_type"]="error";
+
+	std::ostringstream str;
+	str << json << std::endl;
+	std::cout << "sending error: " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
