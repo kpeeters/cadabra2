@@ -223,6 +223,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 		else
 			parentbox=parent_visual.inbox;
 
+		std::cout << "adding cell to canvas " << i << std::endl;
 		parentbox->pack_start(*w, false, false);	
 		unsigned int index=tr.index(it);
 		unsigned int numch=tr.number_of_children(parent);
@@ -262,8 +263,11 @@ void NotebookWindow::update_cell(DTree&, DTree::iterator)
 
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
-	std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
-	// FIXME: implement
+	// std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
+
+	// FIXME: take care of current canvas!
+	VisualCell& target = canvasses[0]->visualcells[&(*it)];
+	target.inbox->edit.grab_focus();
 	}
 
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it)
@@ -276,8 +280,6 @@ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::ite
 
 bool NotebookWindow::cell_content_execute(DTree::iterator it)
 	{
-	std::cerr << "canvas received content exec " << std::endl;
-
 	// Remove child nodes, if any.
 	// FIXME: use ActionRemoveCell so we can undo.
 	DTree::sibling_iterator sib=doc.begin(it);

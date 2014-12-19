@@ -55,15 +55,12 @@ void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 
 void DocumentThread::process_action_queue()
 	{
-	std::cout << "Processing action queue" << std::endl;
-
 	std::lock_guard<std::mutex> guard(stack_mutex);
 	while(pending_actions.size()>0) {
 		std::cout << "Action!" << std::endl;
-		std::shared_ptr<ActionBase> ab = pending_actions.back();
+		std::shared_ptr<ActionBase> ab = pending_actions.front();
 		ab->execute(*this);
 		ab->update_gui(doc, *gui);
 		pending_actions.pop();
 		}
-	std::cout << "no more actions on pending queue" << std::endl;
 	}

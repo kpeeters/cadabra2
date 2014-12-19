@@ -71,6 +71,7 @@ namespace cadabra {
 			virtual void update_gui(const DTree&, GUIBase&) override;
 
 		private:
+			bool              needed_new_cell;
 			DTree::iterator   ref, newref;
 			Position          pos;
 	};
