@@ -108,7 +108,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		}
 	const Json::Value header   = root["header"];
 	const Json::Value content  = root["content"];
-	const Json::Value msg_type = root["type"];
+	const Json::Value msg_type = root["msg_type"];
 	uint64_t id = header["cell_id"].asUInt64();
 
 	// Stupid way to find cell by id.
@@ -137,7 +137,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		docthread.queue_action(action);
 		}
 	else {
-		std::string error = "\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}";
+		std::string error = "\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}";
 
 		// Stick an AddCell action onto the stack. We instruct the action to add this result output
 		// cell as a child of the corresponding input cell.
