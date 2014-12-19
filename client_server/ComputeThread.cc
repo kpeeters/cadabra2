@@ -131,10 +131,15 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		// cell as a child of the corresponding input cell.
 		DataCell result(DataCell::CellType::output, output);
 		
-		// Finally, the action.
+		// Finally, the actions. One to add the output cell, and another one to position the
+		// cursor in the next input cell, creating one if it does not exist.
 		std::shared_ptr<ActionBase> action = 
 			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 		docthread.queue_action(action);
+
+		std::shared_ptr<ActionBase> actionpos =
+			std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
+		docthread.queue_action(actionpos);
 		}
 	else {
 		std::string error = "\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}";

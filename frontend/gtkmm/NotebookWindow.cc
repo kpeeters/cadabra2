@@ -260,6 +260,12 @@ void NotebookWindow::update_cell(DTree&, DTree::iterator)
 	std::cout << "request to update gui cell" << std::endl;
 	}
 
+void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
+	{
+	std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
+	// FIXME: implement
+	}
+
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it)
 	{
 	// std::cout << "received: " << content << std::endl;

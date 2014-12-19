@@ -31,7 +31,7 @@ namespace cadabra {
 	// The Action object is used to pass user action instructions around
 	// and store them in the undo/redo stacks. 
 	
-	// This requires that if we delete a cell, its data cell together
+	// FIXME: This requires that if we delete a cell, its data cell together
 	// with any TextBuffer and TeXBuffer objects should be kept in
 	// memory, so that the pointer remains valid. We keep a shared_ptr.
 	
@@ -44,15 +44,33 @@ namespace cadabra {
 			
 			ActionAddCell(DataCell, DTree::iterator ref_, Position pos_);
 			
-			virtual void execute(DocumentThread&);
-			virtual void revert(DocumentThread&);
-			virtual void update_gui(const DTree&, GUIBase&);
+			virtual void execute(DocumentThread&) override;
+			virtual void revert(DocumentThread&) override;
+			virtual void update_gui(const DTree&, GUIBase&) override;
 			
 		private:
 			// Keep track of the location where this cell is inserted into
 			// the notebook. 
 			
 			DataCell          newcell;
+			DTree::iterator   ref, newref;
+			Position          pos;
+	};
+
+	// Position the cursor relative to the indicated cell. If position is 'next' and
+   // there is no input cell following the indicated one, create a new one.
+
+	class ActionPositionCursor : public ActionBase {
+		public:
+			enum class Position { in, next, previous };
+
+			ActionPositionCursor(DTree::iterator ref_, Position pos_);
+
+			virtual void execute(DocumentThread&) override;
+			virtual void revert(DocumentThread&) override;
+			virtual void update_gui(const DTree&, GUIBase&) override;
+
+		private:
 			DTree::iterator   ref, newref;
 			Position          pos;
 	};

@@ -16,6 +16,7 @@ namespace cadabra {
 
    class ActionBase;
    class ActionAddCell;
+	class ActionPositionCursor;
    class ComputeThread;
    class GUIBase;
 
@@ -44,7 +45,8 @@ namespace cadabra {
 			void queue_action(std::shared_ptr<ActionBase>);
 		
          friend ActionAddCell;
-         // add other actions.
+			friend ActionPositionCursor;
+         // FIXME: add other actions.
 	
 		protected:
 
