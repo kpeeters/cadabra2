@@ -61,7 +61,7 @@ void CodeInput::init()
 																				&CodeInput::handle_button_press), 
 															 false);
 //	edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::handle_changed));
-
+	edit.set_can_focus(true);
 
 //	add(hbox);
 //	hbox.add(vsep);
