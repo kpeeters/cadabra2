@@ -4,7 +4,7 @@ project(CadabraServer)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-        message(FATAL_ERROR "GCC version must be at least 4.9 for regex support!")
+        message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
     endif()
 endif()
 
@@ -41,6 +41,7 @@ target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB})
 include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})
 add_executable(test_server test_server.cc)
 add_executable(test_talk_to_server test_talk_to_server.cc)
+add_executable(regexp_tester regexp_tester.cc)
 target_link_libraries(test_server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB})
 target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
