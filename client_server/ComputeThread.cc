@@ -11,7 +11,7 @@ using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
-	: gui(g), docthread(dt)
+	: gui(g), docthread(dt), connection_is_open(false)
 	{
 	}
 
@@ -63,6 +63,7 @@ void ComputeThread::on_fail(websocketpp::connection_hdl hdl)
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
 	{
+	connection_is_open=true;
 	if(gui)
 		gui->on_connect();
 
@@ -88,6 +89,7 @@ void ComputeThread::on_open(websocketpp::connection_hdl hdl)
 
 void ComputeThread::on_close(websocketpp::connection_hdl hdl) 
 	{
+	connection_is_open=false;
 	if(gui)
 		gui->on_disconnect();
 	}
@@ -160,6 +162,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 
 void ComputeThread::execute_cell(const DataCell& dc)
 	{
+	if(connection_is_open==false)
+		return;
+
 	std::cout << "going to execute " << dc.textbuf << std::endl;
 
 	Json::Value req, header, content;

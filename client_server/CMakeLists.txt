@@ -39,11 +39,13 @@ target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB})
 
 # Create server binary
 include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})
-add_executable(test_server test_server.cc)
+add_executable(cadabra-server cadabra-server.cc)
 add_executable(test_talk_to_server test_talk_to_server.cc)
 add_executable(regexp_tester regexp_tester.cc)
-target_link_libraries(test_server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB})
+target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB})
 target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
+
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-server DESTINATION bin)
 
 # Create client test programs
 #include_directories("." ${WEBSOCKETPP_INCLUDE_DIR})
