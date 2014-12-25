@@ -57,6 +57,7 @@ namespace cadabra {
 			Position          pos;
 	};
 
+
 	// Position the cursor relative to the indicated cell. If position is 'next' and
    // there is no input cell following the indicated one, create a new one.
 
@@ -76,24 +77,33 @@ namespace cadabra {
 			Position          pos;
 	};
 	
-}	
-	
-//			class ActionRemoveCell : public ActionBase {
-//				public:
-//					ActionRemoveCell(tree<DataCell>::iterator);
-//					~ActionRemoveCell();
-//					
-//					virtual void execute(XCadabra&);
-//					virtual void revert(XCadabra&);
-//					
-//				private:
-//					// Keep track of the location where this cell was in the notebook. Since it is
-//					// not possible to delete the first cell, it is safe to keep a reference to the
-//					// cell just before the one we are deleting. 
-//
-//					tree<DataCell>::iterator             prev_cell;
-//			};
-//			
+
+	// Remove a cell and all its child cells from the document.
+
+	class ActionRemoveCell : public ActionBase {
+		public:
+			ActionRemoveCell(DTree::iterator ref_);
+			~ActionRemoveCell();
+			
+			virtual void execute(DocumentThread&) override;
+			virtual void revert(DocumentThread&) override;
+			virtual void update_gui(const DTree&, GUIBase&) override;
+			
+		private:
+			// Keep track of the location where this cell (and its child
+			// cells) was in the notebook.  We keep a reference to the
+			// previous sibling, or if that does not exist, to the parent
+			// node.
+
+			enum class Position { sibling_of, first_child_of };
+
+			DTree             removed_tree;
+			DTree::iterator   reference_cell;
+			Position          relation;
+	};
+
+}
+			
 //			class ActionAddText : public ActionBase {
 //				public:
 //					ActionAddText(tree<DataCell>::iterator, int, const std::string&);

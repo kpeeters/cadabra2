@@ -67,6 +67,7 @@ namespace cadabra {
 			// All canvasses which are stored in the ...
 			// These pointers are managed by gtkmm.
 			std::vector<NotebookCanvas *>  canvasses;
+			int                            current_canvas;
 
          // Buttons
          Gtk::Button                    b_kill, b_run, b_run_to, b_run_from, b_help, b_stop, b_undo, b_redo;

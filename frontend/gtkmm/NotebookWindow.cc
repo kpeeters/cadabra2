@@ -10,6 +10,7 @@ using namespace cadabra;
 
 NotebookWindow::NotebookWindow()
 	: DocumentThread(this),
+	  current_canvas(0),
 	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), modified(false)
 	{
    // Connect the dispatcher.
@@ -284,7 +285,12 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it)
 	// FIXME: use ActionRemoveCell so we can undo.
 	DTree::sibling_iterator sib=doc.begin(it);
 	while(sib!=doc.end(it)) {
-		remove_cell(doc, sib);
+		std::cout << "removing one output cell" << std::endl;
+
+		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib);
+		docthread.queue_action(action);
+		
+//		remove_cell(doc, sib);
 		++sib;
 		}
 

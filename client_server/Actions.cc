@@ -98,3 +98,38 @@ void ActionPositionCursor::update_gui(const DTree& tr, GUIBase& gb)
 	// std::cout << "positioning cursor" << std::endl;
 	gb.position_cursor(tr, newref);
 	}
+
+
+ActionRemoveCell::ActionRemoveCell(DataCell cell, DTree::iterator ref_, Position pos_) 
+	: newcell(cell), ref(ref_), pos(pos_)
+	{
+	}
+
+void ActionRemoveCell::execute(DocumentThread& cl)  
+	{
+	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+
+   // See .hh for explanation.
+
+	prev_cell=ref;
+	--prev_cell;
+	if(cl.doc.is_valid(prev_cell)) {
+		relation=Position::sibling_of;
+		}
+	else {
+		prev_cell=cl.doc.parent(ref);
+		relation=Position::first_child_of;
+		}
+
+	cl.doc.erase(ref);
+	}
+
+void ActionRemoveCell::revert(DocumentThread& cl)
+	{
+	}
+
+void ActionRemoveCell::update_gui(const DTree& tr, GUIBase& gb)
+	{
+	std::cout << "updating gui for ActionRemoveCell" << std::endl;
+	gb.remove_cell(tr, ref);
+	}
