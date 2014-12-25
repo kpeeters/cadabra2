@@ -11,17 +11,18 @@
 
 - core status: next: pass varying arguments to algorithms.
 
+- add kernel starting/restarting logic to ComputeThread
+
 - gui status: document logic
 
-- catch error on trying to send to non-connected server
-
-- server: do pre-parsing.
 - server: currently keeps python alive, restart?
-- server: also keep track of input cell id.
 
-- bug: declaring in one cell and printing in other produces one empty return.
+- For ActionRemoveCell we need to flip the order of remove gui and execute on doc,   
+  or not? Depends on whether we keep the cell floating alive outside the Doc or not.
 
-- make separate catching module for out and err, then use the latter to get
-  python error messages. output as error message to client.
+- bug: when trying to run a cell without connected kernel, the second run produces
+  a gtk warning.
 
-- make client error cell work.
+- client_server: implement move_out, move_in, move_in_below in tree.hh using move 
+  semantics and then continue with ActionRemoveCell.
+
