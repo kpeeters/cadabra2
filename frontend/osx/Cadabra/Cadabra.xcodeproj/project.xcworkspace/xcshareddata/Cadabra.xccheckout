@@ -12,6 +12,8 @@
 	<dict>
 		<key>132ED0CF11D1415DFD474AA74F8D590CB479F277</key>
 		<string>git:cadabra2</string>
+		<key>995AABD49A028E610D29FFC44D560D9DAC1EAC0B</key>
+		<string>https://github.com/zaphoyd/websocketpp.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>frontend/osx/Cadabra/Cadabra.xcodeproj</string>
@@ -19,6 +21,8 @@
 	<dict>
 		<key>132ED0CF11D1415DFD474AA74F8D590CB479F277</key>
 		<string>../../../../..</string>
+		<key>995AABD49A028E610D29FFC44D560D9DAC1EAC0B</key>
+		<string>../../../../../client_server/websocketpp/</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>git:cadabra2</string>
@@ -35,6 +39,14 @@
 			<string>132ED0CF11D1415DFD474AA74F8D590CB479F277</string>
 			<key>IDESourceControlWCCName</key>
 			<string>cadabra2</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>995AABD49A028E610D29FFC44D560D9DAC1EAC0B</string>
+			<key>IDESourceControlWCCName</key>
+			<string>websocketpp</string>
 		</dict>
 	</array>
 </dict>

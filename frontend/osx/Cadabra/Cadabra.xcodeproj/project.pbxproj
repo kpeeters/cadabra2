@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A7ACFC5A1A5B39F2003F01E2 /* client_server in Resources */ = {isa = PBXBuildFile; fileRef = A7ACFC591A5B39F2003F01E2 /* client_server */; };
+		A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */; };
 		A7B0F7171A05663700FCC711 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7161A05663700FCC711 /* main.m */; };
-		A7B0F71A1A05663700FCC711 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7191A05663700FCC711 /* AppDelegate.m */; };
+		A7B0F71A1A05663700FCC711 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7191A05663700FCC711 /* AppDelegate.mm */; };
 		A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71B1A05663700FCC711 /* Images.xcassets */; };
 		A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71D1A05663700FCC711 /* MainMenu.xib */; };
 		A7B0F72B1A05663700FCC711 /* CadabraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F72A1A05663700FCC711 /* CadabraTests.m */; };
@@ -25,11 +27,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A7ACFC591A5B39F2003F01E2 /* client_server */ = {isa = PBXFileReference; lastKnownFileType = folder; name = client_server; path = ../../../../client_server; sourceTree = "<group>"; };
+		A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotebookWindow.cc; sourceTree = "<group>"; };
+		A7ACFC5C1A5B3F2A003F01E2 /* NotebookWindow.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NotebookWindow.hh; sourceTree = "<group>"; };
 		A7B0F7111A05663700FCC711 /* Cadabra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cadabra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B0F7151A05663700FCC711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B0F7161A05663700FCC711 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A7B0F7181A05663700FCC711 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		A7B0F7191A05663700FCC711 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		A7B0F7191A05663700FCC711 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		A7B0F71B1A05663700FCC711 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A7B0F71E1A05663700FCC711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A7B0F7241A05663700FCC711 /* CadabraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadabraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,8 +81,11 @@
 		A7B0F7131A05663700FCC711 /* Cadabra */ = {
 			isa = PBXGroup;
 			children = (
+				A7ACFC591A5B39F2003F01E2 /* client_server */,
 				A7B0F7181A05663700FCC711 /* AppDelegate.h */,
-				A7B0F7191A05663700FCC711 /* AppDelegate.m */,
+				A7B0F7191A05663700FCC711 /* AppDelegate.mm */,
+				A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */,
+				A7ACFC5C1A5B3F2A003F01E2 /* NotebookWindow.hh */,
 				A7B0F71B1A05663700FCC711 /* Images.xcassets */,
 				A7B0F71D1A05663700FCC711 /* MainMenu.xib */,
 				A7B0F7141A05663700FCC711 /* Supporting Files */,
@@ -191,6 +199,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7ACFC5A1A5B39F2003F01E2 /* client_server in Resources */,
 				A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */,
 				A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */,
 			);
@@ -210,7 +219,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7B0F71A1A05663700FCC711 /* AppDelegate.m in Sources */,
+				A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.cc in Sources */,
+				A7B0F71A1A05663700FCC711 /* AppDelegate.mm in Sources */,
 				A7B0F7171A05663700FCC711 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,22 +334,36 @@
 		A7B0F72F1A05663700FCC711 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Cadabra/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
+					"$(OTHER_CFLAGS)",
+					"-D_WEBSOCKETPP_CPP11_STL_",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/";
 			};
 			name = Debug;
 		};
 		A7B0F7301A05663700FCC711 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = Cadabra/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
+					"$(OTHER_CFLAGS)",
+					"-D_WEBSOCKETPP_CPP11_STL_",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/";
 			};
 			name = Release;
 		};
@@ -398,6 +422,7 @@
 				A7B0F7301A05663700FCC711 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		A7B0F7311A05663700FCC711 /* Build configuration list for PBXNativeTarget "CadabraTests" */ = {
 			isa = XCConfigurationList;
@@ -406,6 +431,7 @@
 				A7B0F7331A05663700FCC711 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

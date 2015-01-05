@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#include "ComputeThread.hh"
+#include "NotebookWindow.hh"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,10 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
+    cadabra::NotebookWindow nw;
+    
+    cadabra::ComputeThread compute(&nw, nw);
+    std::thread            compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
