@@ -310,6 +310,7 @@ class tree {
 		/// Specialisation of previous member.
 		sibling_iterator insert(sibling_iterator position, const T& x);
 		/// Insert node (with children) pointed to by subtree as previous sibling of node pointed to by position.
+		/// Does not change the subtree itself (use move_in or move_in_below for that).
 		template<typename iter> iter insert_subtree(iter position, const iterator_base& subtree);
 		/// Insert node as next sibling of node pointed to by position.
 		template<typename iter> iter insert_after(iter position, const T& x);
@@ -343,12 +344,14 @@ class tree {
 		template<typename iter> iter move_ontop(iter target, iter source);
 
 		/// Extract the subtree starting at the indicated node, removing it from the original tree.
-		tree     move_out(iterator);
+		tree                         move_out(iterator);
 		/// Inverse of take_out: inserts the given tree as previous sibling of indicated node by a 
 		/// move operation, that is, the given tree becomes empty. Returns iterator to the top node.
-		iterator move_in(sibling_iterator, tree&);
+		template<typename iter> iter move_in(iter, tree&);
 		/// As above, but now make the tree a child of the indicated node.
-    	iterator move_in_below(iterator, tree&);
+		template<typename iter> iter move_in_below(iter, tree&);
+		/// As above, but now make the tree the nth child of the indicated node (if possible).
+		template<typename iter> iter move_in_as_nth_child(iter, size_t, tree&);
 
 		/// Merge with other tree, creating new branches and leaves only if they are not already present.
 		void     merge(sibling_iterator, sibling_iterator, sibling_iterator, sibling_iterator, 
@@ -1512,6 +1515,126 @@ template <typename iter> iter tree<T, tree_node_allocator>::move_ontop(iter targ
 	src->parent=b_parent;
 	return src;
 	}
+
+
+template <class T, class tree_node_allocator>
+tree<T, tree_node_allocator> tree<T, tree_node_allocator>::move_out(iterator source)
+	{
+	tree ret;
+
+	// Move source node into the 'ret' tree.
+	ret.head->next_sibling = source.node;
+	ret.feet->prev_sibling = source.node;
+	source.node->parent=0;
+
+	// Close the links in the current tree.
+	if(source.node->prev_sibling!=0) 
+		source.node->prev_sibling->next_sibling = source.node->next_sibling;
+
+	if(source.node->next_sibling!=0) 
+		source.node->next_sibling->prev_sibling = source.node->prev_sibling;
+
+	// Fix source prev/next links.
+	source.node->prev_sibling = ret.head;
+	source.node->next_sibling = ret.feet;
+
+	return ret; // A good compiler will move this, not copy.
+	}
+
+template <class T, class tree_node_allocator>
+template<typename iter> iter tree<T, tree_node_allocator>::move_in(iter loc, tree& other)
+	{
+	if(other.head->next_sibling==other.feet) return loc; // other tree is empty
+
+	tree_node *other_first_head = other.head->next_sibling;
+	tree_node *other_last_head  = other.feet->prev_sibling;
+
+	sibling_iterator prev(loc);
+	--prev;
+	
+	prev.node->next_sibling = other_first_head;
+	loc.node->prev_sibling  = other_last_head;
+	other_first_head->prev_sibling = prev.node;
+	other_last_head->next_sibling  = loc.node;
+
+	// Adjust parent pointers.
+	tree_node *walk=other_first_head;
+	while(true) {
+		walk->parent=loc.node->parent;
+		if(walk==other_last_head)
+			break;
+		walk=walk->next_sibling;
+		}
+
+	// Close other tree.
+	other.head->next_sibling=other.feet;
+	other.feet->prev_sibling=other.head;
+
+	return other_first_head;
+	}
+
+template <class T, class tree_node_allocator>
+template<typename iter> iter tree<T, tree_node_allocator>::move_in_as_nth_child(iter loc, size_t n, tree& other)
+	{
+	if(other.head->next_sibling==other.feet) return loc; // other tree is empty
+
+	tree_node *other_first_head = other.head->next_sibling;
+	tree_node *other_last_head  = other.feet->prev_sibling;
+
+	if(n==0) {
+		if(loc.node->first_child==0) {
+			loc.node->first_child=other_first_head;
+			loc.node->last_child=other_last_head;
+			other_last_head->next_sibling=0;
+			other_first_head->prev_sibling=0;
+			} 
+		else {
+			loc.node->first_child->prev_sibling=other_last_head;
+			other_last_head->next_sibling=loc.node->first_child;
+			loc.node->first_child=other_first_head;
+			other_first_head->prev_sibling=0;
+			}
+		}
+	else {
+		--n;
+		tree_node *walk = loc.node->first_child;
+		while(true) {
+			if(walk==0)
+				throw std::range_error("tree: move_in_as_nth_child position "
+											  +std::to_string(n+1)
+											  +" out of range; only "
+											  +std::to_string(number_of_children(loc))
+											  +" child nodes present");
+			if(n==0) 
+				break;
+			--n;
+			walk = walk->next_sibling;
+			}
+		if(walk->next_sibling==0) 
+			loc.node->last_child=other_last_head;
+		else 
+			walk->next_sibling->prev_sibling=other_last_head;
+		other_last_head->next_sibling=walk->next_sibling;
+		walk->next_sibling=other_first_head;
+		other_first_head->prev_sibling=walk;
+		}
+
+	// Adjust parent pointers.
+	tree_node *walk=other_first_head;
+	while(true) {
+		walk->parent=loc.node;
+		if(walk==other_last_head)
+			break;
+		walk=walk->next_sibling;
+		}
+
+	// Close other tree.
+	other.head->next_sibling=other.feet;
+	other.feet->prev_sibling=other.head;
+
+	return other_first_head;
+	}
+
 
 template <class T, class tree_node_allocator>
 void tree<T, tree_node_allocator>::merge(sibling_iterator to1,   sibling_iterator to2,

@@ -20,23 +20,20 @@ namespace cadabra {
 	class ActionBase {
 		public:
 			// Make the change to the DTree document.
-			virtual void execute(DocumentThread&)=0;
-			// Revert the change to the DTree document.
-			virtual void revert(DocumentThread&)=0;
+			virtual void pre_execute(DocumentThread&)=0;
 			// Make sure the GUI reflects the change.
 			// FIXME: do we need an exec/revert combo here too?
 			virtual void update_gui(const DTree&, GUIBase&)=0;
+			virtual void post_execute(DocumentThread&)=0;
+
+			// Revert the change to the DTree document.
+			virtual void revert(DocumentThread&)=0;
 	};
 	
-	// The Action object is used to pass user action instructions around
-	// and store them in the undo/redo stacks. 
-	
-	// FIXME: This requires that if we delete a cell, its data cell together
-	// with any TextBuffer and TeXBuffer objects should be kept in
-	// memory, so that the pointer remains valid. We keep a shared_ptr.
-	
-	// All actions run on the GUI thread.
-	
+	// The Action object is used to pass (user) action instructions around.
+	// They can be stored in undo/redo stacks.
+	// All actions run on the GUI thread. The update_gui members typically
+	// call members of the GUIBase class.
 	
 	class ActionAddCell : public ActionBase {
 		public:
@@ -44,9 +41,11 @@ namespace cadabra {
 			
 			ActionAddCell(DataCell, DTree::iterator ref_, Position pos_);
 			
-			virtual void execute(DocumentThread&) override;
-			virtual void revert(DocumentThread&) override;
+			virtual void pre_execute(DocumentThread&) override;
 			virtual void update_gui(const DTree&, GUIBase&) override;
+			virtual void post_execute(DocumentThread&) override;
+
+			virtual void revert(DocumentThread&) override;
 			
 		private:
 			// Keep track of the location where this cell is inserted into
@@ -67,9 +66,11 @@ namespace cadabra {
 
 			ActionPositionCursor(DTree::iterator ref_, Position pos_);
 
-			virtual void execute(DocumentThread&) override;
-			virtual void revert(DocumentThread&) override;
+			virtual void pre_execute(DocumentThread&) override;
 			virtual void update_gui(const DTree&, GUIBase&) override;
+			virtual void post_execute(DocumentThread&) override;
+
+			virtual void revert(DocumentThread&) override;
 
 		private:
 			bool              needed_new_cell;
@@ -85,21 +86,21 @@ namespace cadabra {
 			ActionRemoveCell(DTree::iterator ref_);
 			~ActionRemoveCell();
 			
-			virtual void execute(DocumentThread&) override;
-			virtual void revert(DocumentThread&) override;
+			virtual void pre_execute(DocumentThread&) override;
 			virtual void update_gui(const DTree&, GUIBase&) override;
-			
+			virtual void post_execute(DocumentThread&) override;
+
+			virtual void revert(DocumentThread&) override;
+
 		private:
 			// Keep track of the location where this cell (and its child
 			// cells) was in the notebook.  We keep a reference to the
-			// previous sibling, or if that does not exist, to the parent
-			// node.
-
-			enum class Position { sibling_of, first_child_of };
+			// parent cell and the index of the current cell as child of
+			// that parent.
 
 			DTree             removed_tree;
-			DTree::iterator   reference_cell;
-			Position          relation;
+			DTree::iterator   reference_parent_cell, this_cell;
+			size_t            reference_child_index;
 	};
 
 }

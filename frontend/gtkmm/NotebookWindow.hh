@@ -32,8 +32,8 @@ namespace cadabra {
          // Virtual functions from GUIBase.
 
          virtual void add_cell(const DTree&, DTree::iterator) override;
-         virtual void remove_cell(DTree&, DTree::iterator) override;
-         virtual void update_cell(DTree&, DTree::iterator) override;
+         virtual void remove_cell(const DTree&, DTree::iterator) override;
+         virtual void update_cell(const DTree&, DTree::iterator) override;
 			virtual void position_cursor(const DTree&, DTree::iterator) override;
 
          virtual void on_connect() override;
@@ -99,8 +99,8 @@ namespace cadabra {
 			// The following are handlers that get called when the content
 			// of a cell is changed or the user requests to run it (shift-enter).
 
-			bool cell_content_changed(const std::string&, DTree::iterator);
-			bool cell_content_execute(DTree::iterator);
+			bool cell_content_changed(const std::string&, DTree::iterator, int);
+			bool cell_content_execute(DTree::iterator, int);
 	};
 
 };

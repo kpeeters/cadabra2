@@ -110,7 +110,7 @@ class Shell(InteractiveConsole):
     def push(self,line):
 
         line = self.preprocess(line)
-        print 'executing: ', line
+        # print 'executing: ', line
 
         # Now feed the pre-parsed input to Python.
         self.get_output()

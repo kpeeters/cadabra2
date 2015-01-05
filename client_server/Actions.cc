@@ -14,7 +14,7 @@ ActionAddCell::ActionAddCell(DataCell cell, DTree::iterator ref_, Position pos_)
 	{
 	}
 
-void ActionAddCell::execute(DocumentThread& cl)  
+void ActionAddCell::pre_execute(DocumentThread& cl)  
 	{
 	// std::cout << "ActionAddCell::execute" << std::endl;
 
@@ -34,6 +34,10 @@ void ActionAddCell::execute(DocumentThread& cl)
 		}
 	}
 
+void ActionAddCell::post_execute(DocumentThread& cl)  
+	{
+	}
+
 void ActionAddCell::revert(DocumentThread& cl)
 	{
 	// FIXME: implement
@@ -51,7 +55,7 @@ ActionPositionCursor::ActionPositionCursor(DTree::iterator ref_, Position pos_)
 	{
 	}
 
-void ActionPositionCursor::execute(DocumentThread& cl)  
+void ActionPositionCursor::pre_execute(DocumentThread& cl)  
 	{
 	// std::cout << "ActionPositionCursor::execute" << std::endl;
 
@@ -84,6 +88,10 @@ void ActionPositionCursor::execute(DocumentThread& cl)
 		}
 	}
 
+void ActionPositionCursor::post_execute(DocumentThread& cl)  
+	{
+	}
+
 void ActionPositionCursor::revert(DocumentThread& cl)  
 	{
 	// FIXME: implement
@@ -100,36 +108,35 @@ void ActionPositionCursor::update_gui(const DTree& tr, GUIBase& gb)
 	}
 
 
-ActionRemoveCell::ActionRemoveCell(DataCell cell, DTree::iterator ref_, Position pos_) 
-	: newcell(cell), ref(ref_), pos(pos_)
+ActionRemoveCell::ActionRemoveCell(DTree::iterator ref_) 
+	: this_cell(ref_)
 	{
 	}
 
-void ActionRemoveCell::execute(DocumentThread& cl)  
+ActionRemoveCell::~ActionRemoveCell()
+	{
+	}
+
+void ActionRemoveCell::pre_execute(DocumentThread& cl)  
+	{
+	}
+
+void ActionRemoveCell::post_execute(DocumentThread& cl)  
 	{
 	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
 
-   // See .hh for explanation.
-
-	prev_cell=ref;
-	--prev_cell;
-	if(cl.doc.is_valid(prev_cell)) {
-		relation=Position::sibling_of;
-		}
-	else {
-		prev_cell=cl.doc.parent(ref);
-		relation=Position::first_child_of;
-		}
-
-	cl.doc.erase(ref);
+	reference_parent_cell = cl.doc.parent(this_cell);
+	reference_child_index = cl.doc.index(this_cell);
+	cl.doc.erase(this_cell);
 	}
 
 void ActionRemoveCell::revert(DocumentThread& cl)
 	{
+	// FIXME: implement
 	}
 
 void ActionRemoveCell::update_gui(const DTree& tr, GUIBase& gb)
 	{
 	std::cout << "updating gui for ActionRemoveCell" << std::endl;
-	gb.remove_cell(tr, ref);
+	gb.remove_cell(tr, this_cell);
 	}

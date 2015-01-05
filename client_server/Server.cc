@@ -96,7 +96,7 @@ std::string Server::pre_parse(const std::string& line)
 		else {
 			found = line_stripped.find("::");
 			if(found!=std::string::npos) {
-				std::regex amatch("([a-zA-Z]*)(\([.]*\))?");
+				std::regex amatch("([a-zA-Z]*)(\\([.]*\\))?");
 				std::smatch ares;
 				if(std::regex_match(line_stripped.substr(found+2), ares, amatch)) {
 					if(std::string(ares[2]).size()>0) {
@@ -142,6 +142,8 @@ std::string Server::run_string(const std::string& blk)
 	// Run block. Catch output.
 	try {
 		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
+		std::string object_classname = boost::python::extract<std::string>(ignored.attr("__class__").attr("__name__"));
+		std::cout << "exec returned a " << object_classname << std::endl;
 		boost::python::object catchobj = main_module.attr("catchOut");
 		boost::python::object valueobj = catchobj.attr("value");
 		result = boost::python::extract<std::string>(valueobj);
