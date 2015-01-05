@@ -1,6 +1,6 @@
 
-#include "DocumentThread.hh"
 #include "Actions.hh"
+#include "DocumentThread.hh"
 #include "GUIBase.hh"
 
 #include <iostream>
@@ -59,8 +59,9 @@ void DocumentThread::process_action_queue()
 	while(pending_actions.size()>0) {
 		std::cout << "Action!" << std::endl;
 		std::shared_ptr<ActionBase> ab = pending_actions.front();
-		ab->execute(*this);
+		ab->pre_execute(*this);
 		ab->update_gui(doc, *gui);
+		ab->post_execute(*this);
 		pending_actions.pop();
 		}
 	}

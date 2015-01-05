@@ -23,6 +23,44 @@
 - bug: when trying to run a cell without connected kernel, the second run produces
   a gtk warning.
 
-- client_server: implement move_out, move_in, move_in_below in tree.hh using move 
-  semantics and then continue with ActionRemoveCell.
+- client_server: we need to lock the tree during an entire loop of process_action_queue,
+  and not lock explicitly in Actions.
 
+
+- server: We want a cleaner description of the output type of a cell. This seems to 
+  require that we are able to split the input up into individual expressions, so that
+  we can then declare the output of a cell as a list, with each expression being one
+  element in that list. 
+  https://github.com/ipython/ipython/blob/master/IPython/core/inputsplitter.py
+
+  got it: print produces a 'text' output, other evaluations of objects produce their
+  respective data types. All go together into a list. Output of a cell can be suppressed
+  by a cell-local flag.
+
+  IPython does something similar, e.g. if you return a Math(...) object things get
+  displayed using a TeX typesetter. It also allows objects to define _repr_png_ and
+  _repr_latex_ methods that convert themselves to those data types. Those objects
+  seem to get put on the wire with a mime type followed by raw data.
+
+  In order to be language agnostic, these data types need to be defined without reference
+  to python. Every language kernel needs to be able to put objects of these types on
+  the wire, and also ** read them back in **. How do we do the latter with code segments?
+  How do we handle input into cells?
+
+  All cells should have inputs, outputs and a visual representation. IPython makes it 
+  needlessly complicated by pretending that widgets are somehow different from other cells.
+  Our CodeInput cells are simply cells with input being a python context, output being
+  the context plus our input, and visual representation being the editor with 'ctrl-enter' is
+  'feed output'.
+
+- test case: compute geodesic in ss as function of initial angle, and then do an 
+  interactive solve based on that initial angle. 
+
+- for comparison of sage and ipython:
+  http://blog.fperez.org/2012/01/ipython-notebook-historical.html
+
+
+- plots: https://github.com/jakevdp/mpld3 first lets matplotlib make a plot. It then
+  uses https://github.com/mpld3/mplexporter to convert the plot object to a json
+  representation, and feeds that to the browser. Once it is there, a d3.js based
+  viewer displays the json data in graphical form. Deep...

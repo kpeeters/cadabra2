@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include "Actions.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
 #include <gtkmm/box.h>
@@ -187,8 +188,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 					}
 				else ci = new CodeInput(global_buffer);
 
-				ci->edit.content_changed.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), it ) );
-				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), it ) );
+				ci->edit.content_changed.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), it, i ) );
+				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), it, i ) );
 				newcell.inbox = manage( ci );
 				w=newcell.inbox;
 				break;
@@ -236,7 +237,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 		}
 	}
 
-void NotebookWindow::remove_cell(DTree& doc, DTree::iterator it)
+void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 	{
 	std::cout << "request to remove gui cell" << std::endl;
 
@@ -257,7 +258,7 @@ void NotebookWindow::remove_cell(DTree& doc, DTree::iterator it)
 		}	
 	}
 
-void NotebookWindow::update_cell(DTree&, DTree::iterator)
+void NotebookWindow::update_cell(const DTree&, DTree::iterator)
 	{
 	std::cout << "request to update gui cell" << std::endl;
 	}
@@ -266,21 +267,22 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
 	// std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
 
-	// FIXME: take care of current canvas!
-	VisualCell& target = canvasses[0]->visualcells[&(*it)];
+	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 	target.inbox->edit.grab_focus();
 	}
 
-bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it)
+bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
 	{
+	current_canvas=canvas_number;
 	// std::cout << "received: " << content << std::endl;
 	it->textbuf=content;
 
 	return false;
 	}
 
-bool NotebookWindow::cell_content_execute(DTree::iterator it)
+bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	{
+	current_canvas=canvas_number;
 	// Remove child nodes, if any.
 	// FIXME: use ActionRemoveCell so we can undo.
 	DTree::sibling_iterator sib=doc.begin(it);
@@ -288,9 +290,8 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it)
 		std::cout << "removing one output cell" << std::endl;
 
 		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib);
-		docthread.queue_action(action);
-		
-//		remove_cell(doc, sib);
+		queue_action(action);
+
 		++sib;
 		}
 

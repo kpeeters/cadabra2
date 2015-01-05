@@ -17,6 +17,7 @@ namespace cadabra {
    class ActionBase;
    class ActionAddCell;
 	class ActionPositionCursor;
+	class ActionRemoveCell;
    class ComputeThread;
    class GUIBase;
 
@@ -46,6 +47,7 @@ namespace cadabra {
 		
          friend ActionAddCell;
 			friend ActionPositionCursor;
+			friend ActionRemoveCell;
          // FIXME: add other actions.
 	
 		protected:
