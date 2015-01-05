@@ -22,47 +22,62 @@ ComputeThread::~ComputeThread()
 void ComputeThread::init() 
 	{
 	// Setup the WebSockets client.
-	wsclient.clear_access_channels(websocketpp::log::alevel::all);
-	wsclient.clear_error_channels(websocketpp::log::elevel::all);
 
 	wsclient.init_asio();
+	wsclient.start_perpetual();
+	}
 
+void ComputeThread::try_connect()
+	{
 	using websocketpp::lib::placeholders::_1;
 	using websocketpp::lib::placeholders::_2;
 	using websocketpp::lib::bind;
+
+//	wsclient.clear_access_channels(websocketpp::log::alevel::all);
+//	wsclient.clear_error_channels(websocketpp::log::elevel::all);
+
 	wsclient.set_open_handler(bind(&ComputeThread::on_open, this, ::_1));
 	wsclient.set_fail_handler(bind(&ComputeThread::on_fail, this, ::_1));
 	wsclient.set_close_handler(bind(&ComputeThread::on_close, this, ::_1));
 	wsclient.set_message_handler(bind(&ComputeThread::on_message, this, ::_1, ::_2));
+
 	std::string uri = "ws://localhost:9002";
-	
 	websocketpp::lib::error_code ec;
-	WSClient::connection_ptr con = wsclient.get_connection(uri, ec);
+	connection = wsclient.get_connection(uri, ec);
 	if (ec) {
-		std::cout << "error: " << ec.message() << std::endl;
+		std::cerr << "error: " << ec.message() << std::endl;
 		return;
 		}
 
-	our_connection_hdl = con->get_handle();
-	wsclient.connect(con);
+	our_connection_hdl = connection->get_handle();
+	wsclient.connect(connection);
 	}
 
 void ComputeThread::run()
 	{
 	init();
+	try_connect();
 
-	// Start the ASIO io_service run loop
+	// Enter run loop, which will never terminate anymore. The on_fail and on_close
+	// handlers will re-try to establish connections when they go bad.
+
 	wsclient.run();
 	}
 
 void ComputeThread::on_fail(websocketpp::connection_hdl hdl) 
 	{
+	std::cerr << "connection failed" << std::endl;
+	connection_is_open=false;
 	if(gui)
 		gui->on_network_error();
+
+	sleep(1);
+	try_connect();
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
 	{
+	std::cerr << "connection open" << std::endl;
 	connection_is_open=true;
 	if(gui)
 		gui->on_connect();
@@ -89,9 +104,13 @@ void ComputeThread::on_open(websocketpp::connection_hdl hdl)
 
 void ComputeThread::on_close(websocketpp::connection_hdl hdl) 
 	{
+	std::cerr << "connection closed" << std::endl;
 	connection_is_open=false;
 	if(gui)
 		gui->on_disconnect();
+
+	sleep(1);
+	try_connect();
 	}
 
 
