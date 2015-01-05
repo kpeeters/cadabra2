@@ -141,7 +141,7 @@ void NotebookWindow::on_disconnect()
 void NotebookWindow::on_network_error()
 	{
 	std::lock_guard<std::mutex> guard(status_mutex);
-	kernel_string = "network error";
+	kernel_string = "cannot reach server, retrying...";
 	dispatcher.emit();
 	}
 

@@ -55,8 +55,10 @@ namespace cadabra {
 			// WebSocket++ things.
 			WSClient wsclient;
 			bool     connection_is_open;
+			WSClient::connection_ptr    connection;
 			websocketpp::connection_hdl our_connection_hdl;
 			void init();
+			void try_connect();
 			void on_open(websocketpp::connection_hdl hdl);
 			void on_fail(websocketpp::connection_hdl hdl);
 			void on_close(websocketpp::connection_hdl hdl);
