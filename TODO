@@ -64,3 +64,13 @@
   uses https://github.com/mpld3/mplexporter to convert the plot object to a json
   representation, and feeds that to the browser. Once it is there, a d3.js based
   viewer displays the json data in graphical form. Deep...
+
+
+NEXT: test websocketpp-0.4.0 on linux; on osx there is an issue with using an explicitly deleted thread function.
+
+
+OSX:
+====
+
+- build settings contains explicit ref to /usr/local/Cellar/1.56.0/boost/include/
+- websocketpp copied into tree, not yet checked in.
