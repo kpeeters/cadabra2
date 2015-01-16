@@ -1,0 +1,320 @@
+
+# Test gamma algebra manipulations. Implicitly tests the combinatorics
+# module too.
+
+def test01():
+    __cdbkernel__=create_scope();
+    \Gamma_{#}::GammaMatrix(metric=\delta).
+    obj1:= \Gamma^{a b}\Gamma_{c};
+    join_gamma(obj1)
+    tst1:= \Gamma^{a b}_{c} + \Gamma^{a} \delta^{b}_{c} - \Gamma^{b} \delta^{a}_{c} - @(obj1);
+    collect_terms(tst1)
+    assert(tst1==0)
+
+test01();
+
+
+obj2:= \Gamma_{I J}\Gamma_{K L} - \Gamma_{K L}\Gamma_{I J};
+@join!(%);
+
+obj3:= (\Gamma_{I J}\Gamma_{K L}) - (\Gamma_{K L}\Gamma_{I J});
+@join!(%);
+
+
+# Test of the join functionality which keeps anti-symmetry in certain
+# indicated indices implicit (obj3a) versus the full thing (obj3b).
+#
+# The logic is that if you _know_ that in the final result you are
+# going to acanonicalorder in a given set of indices that appear
+# on the gamma matrices that you start with, then you may as well
+# forget about all explicit anti-symmetrisations in those indices.
+#
+
+\delta_{m n}::KroneckerDelta.
+obj3a:= \Gamma_{c d}\Gamma_{m1 m2 m3}\Gamma_{n1 n2};
+obj3b:= @(obj3a);
+@join!(obj3a){expand}{m1,m2,m3}{n1,n2};
+@distribute!(%);
+@prodsort!(%);
+@join!(%){expand}{m1,m2,m3}{n1,n2};
+@distribute!(%);
+@acanonicalorder!(%){_{m1},_{m2},_{m3}};
+@acanonicalorder!(%){_{n1},_{n2}};
+@canonicalise!(%);
+@collect_terms!(%);
+
+@join!(obj3b){expand};
+@distribute!(%);
+@prodsort!(%);
+@join!(%){expand};
+@distribute!(%);
+@acanonicalorder!(obj3b){_{m1},_{m2},_{m3}};
+@acanonicalorder!(%){_{n1},_{n2}};
+@collect_terms!(%);
+
+tst3:= @(obj3a)-@(obj3b);
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(tst3);
+
+# Another one, weird.
+\Gamma_{m1 m2 m3 r1 r2 r3 r4 l} * \Gamma_{n1 n2 n3};
+@join!(%){5}{expand}{n1,n2,n3};
+
+\Gamma_{m1 m2 m3 r1 r2 r3 r4 l} * \Gamma_{n1 n2 n3};
+@join!(%){5}{expand};
+
+
+
+
+# This is one from the Abra help document. It's a bit more work here
+# because there are no default rules yet (if we make eliminate_kr, 
+# canonicalise, prodsort, asymprop and collect_terms default rules,
+# then things look a lot better). Anyhow, it does reproduce the 
+# correct result ;-) 
+
+@reset.
+\delta_{m n}::SelfCommuting.
+\delta_{m n}::KroneckerDelta.
+{m, n, p, q, r, a, b, c}::Indices(flat).
+{m, n, p, q, r, a, b, c}::Integer(1..10).
+
+\GAMMA^{#}::GammaMatrix(metric=\delta).
+
+one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+# - 2016 * \GAMMA^{a b c} - 2016 * \GAMMA^{a} * \delta^{b c} + 2016 * \GAMMA^{b} * \delta^{a c} + 18144 * \GAMMA^{c} * \delta^{a b};
+
+two:= \GAMMA^{a}*@(one);
+@distribute!(%):
+@join!(%){expand}:
+@distribute!(%):
+#@asymprop!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@collect_terms!(%);
+@assert(two);
+
+
+# Test 5:= brackets
+#
+@reset.
+\Gamma_{#}::GammaMatrix(metric=\delta).
+obj5:= (\Gamma_r \Gamma_s);
+@join!(%);
+tst5:= (\Gamma_{r s} + \delta_{r s}) - @(obj5);
+@sumflatten!(%);
+@collect_terms!(%);
+@assert(tst5);
+
+# Test 6:= taking care of dimensions
+#
+@reset;
+\Gamma_{#}::GammaMatrix(metric=\delta).
+{m,n,p,q,r,s,t}::Integer(0..3);
+obj6:= \Gamma_{m n p} \Gamma_{q r};
+@join!(%);
+tst6:= 6 * \Gamma_{m n r} * \delta_{p q}
+    + 6 * \Gamma_{m} * \delta_{p q} * \delta_{n r} - @(obj6);
+@collect_terms!(%);
+@assert(tst6);
+
+
+# Test 7:= back and front-split
+#
+@reset;
+\Gamma_{#}::GammaMatrix(metric=\delta).
+obj7:= \Gamma_{m n p q};
+@gammasplit(%);
+@join!(%){expand};
+@collect_terms!(%);
+tst7:= \Gamma_{m n p q} - @(obj7);
+@collect_terms!(%);
+@assert(tst7);
+
+@reset;
+\Gamma_{#}::GammaMatrix(metric=\delta).
+obj8:= \Gamma_{m n p q};
+@gammasplit(%){front};
+@join!(%){expand};
+@collect_terms!(%);
+tst8:= \Gamma_{m n p q} - @(obj8);
+@collect_terms!(%);
+@assert(tst8);
+
+
+@reset;
+\delta_{m n}::KroneckerDelta.
+\Gamma_{#}::GammaMatrix(metric=\delta).
+\psi_{m}::GammaTraceless.
+\psi_{m}::Spinor.
+obj9:= T_{a b} * ( A_{m n} \Gamma_{r s p t u v} \psi_{p} B_{q r}
+          + A_{m n} \psi_{p} \Gamma_{r s p t u v} B_{q r} );
+@remove_gamma_trace!(%);
+@distribute!(%);
+@prodsort!(%);
+tst9:= - A_{m n} * B_{q r} * T_{a b} * \Gamma_{r s t u} * \psi_{v}
+ + A_{m n} * B_{q r} * T_{a b} * \Gamma_{r s t v} * \psi_{u}
+ - A_{m n} * B_{q r} * T_{a b} * \Gamma_{r s u v} * \psi_{t}
+ + A_{m n} * B_{q r} * T_{a b} * \Gamma_{r t u v} * \psi_{s}
+ - A_{m n} * B_{q r} * T_{a b} * \Gamma_{s t u v} * \psi_{r}
+ - A_{m n} * B_{q r} * T_{a b} * \psi_{r} * \Gamma_{s t u v}
+ + A_{m n} * B_{q r} * T_{a b} * \psi_{v} * \Gamma_{s t u r}
+ - A_{m n} * B_{q r} * T_{a b} * \psi_{u} * \Gamma_{s t v r}
+ + A_{m n} * B_{q r} * T_{a b} * \psi_{t} * \Gamma_{s u v r}
+ - A_{m n} * B_{q r} * T_{a b} * \psi_{s} * \Gamma_{t u v r}
+ - @(obj9);
+@collect_terms!(%);
+@assert(tst9);
+
+# Test 10: Silly trivialities
+@reset.
+{m,n,p,q,r,s,t,m#}::Indices(flat).
+{m,n,p,q,r,s,t,m#}::Integer(0..3).
+\Gamma_{#{m}}::GammaMatrix(metric=\delta).
+\delta_{m n}::KroneckerDelta.
+\epsilon_{m n p q}::AntiSymmetric.
+obj10:= \epsilon_{m n p q} \Gamma_{m n p q} \Gamma_{r} \Gamma_{s t} \Gamma_{r};
+@join!(%){expand};
+@distribute!(%);
+@eliminate_kr!(%);
+@canonicalise!(%);
+@rename_dummies!(%);
+@collect_terms!(%);
+
+@join!(%){expand}{m,n,p,q};
+@distribute!(%);
+@eliminate_kr!(%);
+@canonicalise!(%);
+@rename_dummies!(%);
+@collect_terms!(%);
+
+@join!(%){expand};
+@distribute!(%);
+@eliminate_kr!(%);
+@canonicalise!(%);
+@rename_dummies!(%);
+@collect_terms!(%);
+# This one is a Schouten identity, so:
+@decompose_product!(%);
+@collect_terms!(%):
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(obj10);
+
+\epsilon_{m n p q}::AntiSymmetric.
+@asym[\epsilon_{s m n p} Q_{t}]{_{s},_{t},_{m},_{n},_{p}};
+
+obj10b:= \epsilon_{m n p q} G_{m n p q} \Gamma_{r} \Gamma_{s t} \Gamma_{r};
+@join!(%){expand};
+@distribute!(%);
+@eliminate_kr!(%);
+@canonicalise!(%);
+@rename_dummies!(%);
+@collect_terms!(%);
+
+@join!(%){expand}{m,n,p,q};
+@distribute!(%);
+@eliminate_kr!(%);
+@canonicalise!(%);
+@rename_dummies!(%);
+@collect_terms!(%);
+@assert(obj10b);
+
+# Test 3: numerical indices
+#
+@reset.
+\delta{#}::KroneckerDelta.
+\gamma{#}::GammaMatrix(metric=\delta).
+obj3:= \gamma_{1 2}\gamma_{1 2};
+@join!(%){expand};
+tst3:= \gamma_{1 2 1 2} 
+       + \gamma_{1 2} * \delta_{1 2} - \gamma_{1 1} * \delta_{2 2} 
+       - \gamma_{2 2} * \delta_{1 1} + \gamma_{2 1} * \delta_{1 2} 
+       + \delta_{1 2} * \delta_{1 2} - \delta_{1 1} * \delta_{2 2}
+       - @(obj3);
+@collect_terms!(%);
+@assert(tst3);
+
+# Test 4: keeping upper and lower indices 
+#
+@reset.
+{\mu,\nu,\rho,a,b,c,d}::Indices(vector, position=fixed).
+{\mu,\nu,\rho,a,b,c,d}::Integer(0..10).
+\Gamma{#}::GammaMatrix(metric=g).
+obj4:= \Gamma_{\mu c d} \Gamma^{\nu \rho a b c};
+@join!(%){expand};
+
+
+# Test 4: indices and sub-indices (bug reported 5-Apr-2009)
+#
+@reset.
+{a,b,c,d, e,f, g, h#}::Indices(group).
+{M, N, P, Q#}::Indices(flat).
+{M, N, P, Q#}::Integer(1..10).
+{I,J,K,L#}::Indices(orthogonal, parent=flat).
+{I,J,K,L#}::Integer(3..10).
+{\mu, \nu, \lambda, \sigma#}::Indices(worldvolume, parent=flat).
+{\mu, \nu, \lambda, \sigma#}::Integer(0..2).
+\delta{\mu \nu}::KroneckerDelta.
+\Gamma{#}::GammaMatrix(metric=\delta).
+obj1:=\Gamma_{I J K}\Gamma_{\mu};
+@join!(%){expand};
+tst1:= \Gamma_{I J K \mu} + \Gamma_{I J} * \delta_{K \mu} - \Gamma_{I K} * \delta_{J \mu} + \Gamma_{J K} * \delta_{I \mu}
+      - @(obj1);
+@collect_terms!(%);
+@assert(tst1);
+obj2:=\Gamma_{\mu}\Gamma_{I J K};
+@join!(%){expand};
+tst2:= \Gamma_{\mu I J K} + \Gamma_{J K} * \delta_{I \mu} - \Gamma_{J I} * \delta_{K \mu} + \Gamma_{K I} * \delta_{J \mu}
+      - @(obj2);
+@collect_terms!(%);
+@assert(tst2);
+
+# Test 5: multiple spinor lines
+#
+@reset.
+\gamma{#}::GammaMatrix(spacetime).
+\Gamma{#}::GammaMatrix(susy).
+{\psi,\lambda}::Spinor(spacetime, susy).
+obj5:= \psi \gamma \Gamma \lambda;
+@prodsort!(%);
+
