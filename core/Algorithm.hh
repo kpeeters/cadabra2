@@ -48,7 +48,7 @@ class Algorithm {
 		typedef exptree::post_order_iterator post_order_iterator;
 		typedef exptree::sibling_iterator    sibling_iterator;
 
-  bool interrupted;
+		bool interrupted;
 
 		enum result_t {
 			l_no_action,
@@ -57,9 +57,11 @@ class Algorithm {
 		};
 
 
-		// The main entry points for running algorithms. 
-		bool apply_once(iterator&);
-		bool apply_recursive(iterator&);
+		// The main entry points for running algorithms. The 'deep' flag indicates
+		// whether sub-expressions should be acted on too. The 'repeat' flag indicates
+		// whether the algorithm should be applied until the expression no longer 
+		// changes.
+		bool apply_generic(iterator&, bool deep, bool repeat);
 
 		// Per-call information
 		bool             expression_modified;
@@ -218,6 +220,10 @@ class Algorithm {
 		exptree get_dummy(const list_property *, iterator, iterator) const;
 
 	private:
+		// Single or deep-scan apply operations. Do not call directly.
+		bool apply_once(exptree::iterator& it);
+		bool apply_deep(exptree::iterator& it);
+
 		/// Given a node with zero multiplier, propagate this zero
 		/// upwards in the tree.  Changes the iterator so that it points
 		/// to the next node in a post_order traversal (post_order:

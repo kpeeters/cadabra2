@@ -173,6 +173,11 @@ class exptree : public tree<str_node> {
 		/// \prod{A} -> A. This algorithm takes care of the multiplier of the 
 		/// top node, i.e. it does 2\prod{A} -> 2 A.
 		iterator         flatten_and_erase(iterator position);
+
+      // Compare two exptree objects for exact equality; no dummy equivalence or other
+      // things that require property information.
+		
+		bool operator==(const exptree& other) const;
 };
 
 

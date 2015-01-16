@@ -48,6 +48,24 @@ Algorithm::~Algorithm()
 	{
 	}
 
+bool Algorithm::apply_generic(exptree::iterator& it, bool deep, bool repeat)
+	{
+	bool ret=false;
+
+	bool thisret;
+	do {
+		if(deep)
+			thisret = apply_deep(it);
+		else
+			thisret = apply_once(it);
+
+		if(thisret)
+			ret=true;
+		} while(repeat && thisret);
+
+	return ret;
+	}
+
 bool Algorithm::apply_once(exptree::iterator& it)
 	{
 	if(can_apply(it)) 
@@ -56,7 +74,7 @@ bool Algorithm::apply_once(exptree::iterator& it)
 	return false;
 	}
 
-bool Algorithm::apply_recursive(exptree::iterator& it) 
+bool Algorithm::apply_deep(exptree::iterator& it) 
 	{
 	// This recursive algorithm walks the tree depth-first (parent-after-child). The algorithm is
 	// applied on each node if can_apply returns true. When the iterator goes up one level (i.e.

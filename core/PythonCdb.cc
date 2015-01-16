@@ -38,7 +38,7 @@
 #include "algorithms/reduce_sub.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/substitute.hh"
-
+#include "algorithms/join_gamma.hh"
 
 
 // TODO: 
@@ -246,52 +246,43 @@ std::shared_ptr<Ex> make_Ex_from_int(int num)
 // Templates to dispatch function calls in Python to algorithms in C++.
 
 template<class F>
-Ex *dispatch_1(Ex *ex, bool repeat)
+Ex *dispatch_1(Ex *ex, bool deep, bool repeat)
 	{
 	F algo(*get_kernel_from_scope(), ex->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
-	if(repeat) {
-		if(algo.apply_recursive(it)==false)
-			std::cout << "no change" << std::endl;
-		}
-	else {
-		if(algo.apply_once(it)==false)
-			std::cout << "no change" << std::endl;
-		}
+	bool ret = algo.apply_generic(it, deep, repeat);
+	if(ret==false)
+		std::cout << "no change" << std::endl;
 
 	return ex;
 	}
 
 template<class F>
-Ex *dispatch_1_string(const std::string& ex, bool repeat)
+Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat)
 	{
 	Ex *exobj = new Ex(ex);
-	return dispatch_1<F>(exobj, repeat);
+	return dispatch_1<F>(exobj, deep, repeat);
 	}
 
 template<class F>
-Ex *dispatch_2(Ex *ex, Ex *args, bool repeat)
+Ex *dispatch_2(Ex *ex, Ex *args, bool deep, bool repeat)
 	{
 	F algo(*get_kernel_from_scope(), ex->tree, args->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
-	if(repeat) {
-		if(algo.apply_recursive(it)==false)
-			std::cout << "no change" << std::endl;
-		}
-	else {
-		if(algo.apply_once(it)==false)
-			std::cout << "no change" << std::endl;
-		}
+	bool ret = algo.apply_generic(it, deep, repeat);
+	if(ret==false)
+		std::cout << "no change" << std::endl;
+
 	return ex;
 	}
 
 template<class F>
-Ex *dispatch_2_string(Ex *ex, const std::string& args, bool repeat)
+Ex *dispatch_2_string(Ex *ex, const std::string& args, bool deep, bool repeat)
 	{
 	Ex *argsobj = new Ex(args);
-	return dispatch_2<F>(ex, argsobj, repeat);
+	return dispatch_2<F>(ex, argsobj, deep, repeat);
 	}
 
 // Initialise mathematics typesetting for IPython.
@@ -498,16 +489,16 @@ std::string Property<Prop>::repr_() const
 	}
 
 // Templated function which declares various forms of the algorithm entry points in one shot.
-// First the ones with no argument, just a repeat flag.
+// First the ones with no argument, just a deep flag.
 
 template<class F>
 void def_algo_1(const std::string& name) 
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_1<F>,        (arg("ex"),arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_1<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=true), 
 		 return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=true), 
 		 return_value_policy<manage_new_object>() );
 	}
 
@@ -518,9 +509,9 @@ void def_algo_2(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_2<F>,        (arg("ex"),arg("args"),arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_2<F>,        (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=true), 
 		 return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_2_string<F>, (arg("ex"),arg("args"),arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_2_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=true), 
 		 return_value_policy<manage_new_object>() );
 	}
 
@@ -594,6 +585,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
+	def_algo_1<join_gamma>("join_gamma");
+
+	def("join_gamma",  &dispatch_1<join_gamma>, (arg("ex"),arg("deep")=true,arg("repeat")=true,
+																arg("expand")=true,arg("use_gendelta")=false),
+		 return_internal_reference<1>() );
 
 	// Algorithms which take a second Ex as argument.
 	def_algo_2<substitute>("substitute");
