@@ -5,9 +5,9 @@
 void pre_clean(Kernel& k, exptree& ex, exptree::iterator it)
 	{
 	ratrewrite rr(k, ex);
-	rr.apply_recursive(it);
+	rr.apply_generic(it, true, false);
 	reduce_sub rsub(k, ex);
-	rsub.apply_recursive(it);
+	rsub.apply_generic(it, true, false);
 	}
 
 ratrewrite::ratrewrite(Kernel& k, exptree& tr)

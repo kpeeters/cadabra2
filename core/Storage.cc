@@ -599,6 +599,10 @@ std::string exptree::equation_number_or_name(iterator it, unsigned int last_used
 	return ss.str();
 	}
 
+bool exptree::operator==(const exptree& other) const
+	{
+	return equal_subtree(begin(), other.begin());
+	}
 
 str_node::str_node(void)
 	{

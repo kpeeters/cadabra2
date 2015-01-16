@@ -229,7 +229,7 @@ int ordersign(iterator1 b1, iterator1 e1, iterator2 b2, iterator2 e2, int stepsi
 		int otherpos=0;
 		iterator2 it=b2;
 		while(it!=e2) {
-			if((*it)==(*b1) && crossedoff[otherpos]==false) {
+			if( (*it)==(*b1) && crossedoff[otherpos]==false) {
 				crossedoff[otherpos]=true;
 				break;
 				}

@@ -83,6 +83,7 @@ set(LOCAL_SRC_FILES
   algorithms/distribute.cc
 #  algorithms/drop_weight.cc
   algorithms/flatten_product.cc
+  algorithms/join_gamma.cc
 #  algorithms/keep_terms.cc
   algorithms/prodcollectnum.cc
   algorithms/reduce_sub.cc
