@@ -115,20 +115,10 @@ bool join_gamma::can_apply(iterator st)
 				if(fc!=tr.end(st)) {
 					gm2=kernel.properties.get<GammaMatrix>(fc);
 					if(gm2) {
-						expand=false;
 						only_expand.clear();
-						// FIXME: handle arguments in the Python way now.
-//						sibling_iterator it=args_begin();
-//						while(it!=args_end()) {
-//							if(*it->name=="expand")
-//								expand=true;
-//							else if(*it->name=="gendelta") 
-//								use_generalised_delta_=true;
+// FIXME: handle only expansion into single term
 //							else if(it->is_rational()) {
 //								only_expand.push_back(to_long(*it->multiplier));
-//								}
-//							++it;
-//							}
 						return true;
 						}
 					}
