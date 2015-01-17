@@ -317,8 +317,6 @@ Its main characteristics are:
 \item[\ctri] A simple and documented way to add new algorithms in
   the form of \Cpp modules, which directly operate on the internal
   expression tree.
-\item[\ctri] A command line interface as well as a graphical one, and
-  a \TeX{}macs frontend.
 \end{itemize}
 
 % There is a certain (large) class of problems in high-energy physics,
@@ -1160,55 +1158,6 @@ Note that the TEXT format contains markup such as spacing commands
 which make it more useful for papers. This is the default format when
 the middle mouse button is pressed.
 
-\subsection{The \TeX{}macs frontend}
-\label{s:texmacs}
-
-The program also comes with a \TeX{}macs frontend (which is now no
-longer actively maintained because the native graphical frontend is in
-many ways easier to use and more adapted to \cdb). If everything is
-installed correctly, the ``Insert $\rightarrow$ Session'' submenu of
-\TeX{}macs should contain an entry for \Cdb.  A few sample \TeX{}macs
-files can be found in the {\tt texmacs} subdirectory of the source
-tarball.
-
-\Cdb sends its output more-or-less unchanged to the \TeX{}macs
-frontend. It is therefore useful to use tensor names which have a
-meaning in \TeX{}. For example, if you declare a derivative operator,
-you might be tempted to use
-\begin{screen}{1}
-\diff{#}::Derivative.
-\end{screen}
-(perhaps because you want to mimic Maple's notation). However, this
-will lead to ugly output since \texcommand{diff} is not a \TeX{}
-symbol and \TeX{}macs does not know what to do with it. A better
-choice would be
-\begin{screen}{1}
-\nabla{#}::Derivative.
-\end{screen}
-since \texcommand{nabla} actually prints as a nice symbol in
-\TeX{}macs.
-
-If you want to cut-and-paste formulas from a \TeX{} document into a
-\TeX{}macs notebook, you will encounter the problem that all
-backslashes get swallowed. To avoid this, choose the menu entry
-\begin{equation*}
-\text{Edit}\quad\rightarrow\quad
-\text{Paste from}\quad\rightarrow\quad
-\text{Verbatim}
-\end{equation*}
-which pastes text unmodified. You can make this the default for
-middle-button paste by choosing
-\begin{equation*}
-\text{Tools}\quad\rightarrow\quad
-\text{Selections}\quad\rightarrow\quad
-\text{Import}\quad\rightarrow\quad
-\text{Verbatim}
-\end{equation*}
-which will remain active during the current session.
-
-In order to make PDF output work, you have to have {\tt
-  pfbtops}\index{pfbtops} installed (it is usually part of the {\tt
-  groff} package).
 
 \vfill\eject
 \section{Reference guide}
@@ -3016,7 +2965,7 @@ matrices~$\tilde\Gamma$.
 \end{props}
 \bigskip
 \begin{algs}
-\input{algorithms/join.tex}
+\input{algorithms/join_gamma.tex}
 \input{algorithms/gammasplit.tex}
 \input{algorithms/rewrite_diracbar.tex}
 \input{algorithms/projweyl.tex}

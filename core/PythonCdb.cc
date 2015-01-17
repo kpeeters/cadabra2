@@ -245,10 +245,10 @@ std::shared_ptr<Ex> make_Ex_from_int(int num)
 
 // Templates to dispatch function calls in Python to algorithms in C++.
 
-template<class F>
-Ex *dispatch_1(Ex *ex, bool deep, bool repeat)
+template<class F, typename... Args>
+Ex *dispatch_1(Ex *ex, bool deep, bool repeat, Args... args)
 	{
-	F algo(*get_kernel_from_scope(), ex->tree);
+	F algo(*get_kernel_from_scope(), ex->tree, args...);
 
 	exptree::iterator it=ex->tree.begin().begin();
 	bool ret = algo.apply_generic(it, deep, repeat);
@@ -585,10 +585,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
-	def_algo_1<join_gamma>("join_gamma");
+//	def_algo_1<join_gamma>("join_gamma");
 
-	def("join_gamma",  &dispatch_1<join_gamma>, (arg("ex"),arg("deep")=true,arg("repeat")=true,
-																arg("expand")=true,arg("use_gendelta")=false),
+	def("join_gamma",  &dispatch_1<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=true,
+																				arg("expand")=true,arg("use_gendelta")=false),
 		 return_internal_reference<1>() );
 
 	// Algorithms which take a second Ex as argument.

@@ -1,7 +1,7 @@
-\cdbalgorithm{join}{}
+\cdbalgorithm{join}{expand=true, use\_gendelta=false}
 
-Join two fully anti-symmetrised gamma matrix
-products according to the expression
+Join two fully anti-symmetrised gamma matrix products according to the
+expression
 \begin{equation}
    \Gamma^{b_{1}\dots b_{n}}\Gamma_{a_{1}\dots a_{m}} =
       \sum_{p=0}^{\text{min}(n,m)}\ \frac{n! m!}{(n-p)! (m-p)! p!}
@@ -10,22 +10,21 @@ products according to the expression
 \end{equation}
 This is the opposite of \subscommand{gammasplit}.
 
-Without further arguments, the anti-symmetrisations will be left
-implicit. The argument ``{\tt expand}'' instead performs the sum over
-all anti-symmetrisations, which may lead to an enormous number of
-terms if the number of indices on the gamma matrices is large. Compare
+Without further arguments, the anti-symmetrisations will be worked out
+explicitly (changed from v1). The setting the flag ``{\tt expand}'' to
+false instead keeps them implicit. Compare
 \begin{screen}{1,2}
 \Gamma{#}::GammaMatrix(metric=g).
-\Gamma_{m n} \Gamma_{p};
-@join!(%);
-\Gamma_{m n p} + 2 \Gamma_{m} g_{n p};
+ex:= \Gamma_{m n} \Gamma_{p}
+join_gamma(ex, expand=false)
+\Gamma_{m n p} + 2 \Gamma_{m} g_{n p}
 \end{screen}
 with
 \begin{screen}{1,2}
 \Gamma{#}::GammaMatrix(metric=g).
-\Gamma_{m n} \Gamma_{p};
-@join!(%){expand};
-\Gamma_{m n p} + \Gamma_{m} g_{n p} - \Gamma_{n} g_{m p};
+ex:= \Gamma_{m n} \Gamma_{p}
+join_gamma(ex);
+\Gamma_{m n p} + \Gamma_{m} g_{n p} - \Gamma_{n} g_{m p}
 \end{screen}
 Note that the gamma matrices need to have a metric associated to them
 in order for this algorithm to work.
