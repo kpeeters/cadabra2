@@ -28,7 +28,7 @@ def test02():
     obj3a:= \Gamma_{c d}\Gamma_{m1 m2 m3}\Gamma_{n1 n2};
     join_gamma(obj3a)
     sort_product(obj3a)
-
+        # this hangs
 
 test02();
 
