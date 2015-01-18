@@ -13,14 +13,6 @@ def test01():
 
 test01();
 
-
-obj2:= \Gamma_{I J}\Gamma_{K L} - \Gamma_{K L}\Gamma_{I J};
-@join!(%);
-
-obj3:= (\Gamma_{I J}\Gamma_{K L}) - (\Gamma_{K L}\Gamma_{I J});
-@join!(%);
-
-
 # Test of the join functionality which keeps anti-symmetry in certain
 # indicated indices implicit (obj3a) versus the full thing (obj3b).
 #
@@ -28,11 +20,19 @@ obj3:= (\Gamma_{I J}\Gamma_{K L}) - (\Gamma_{K L}\Gamma_{I J});
 # going to acanonicalorder in a given set of indices that appear
 # on the gamma matrices that you start with, then you may as well
 # forget about all explicit anti-symmetrisations in those indices.
-#
 
-\delta_{m n}::KroneckerDelta.
-obj3a:= \Gamma_{c d}\Gamma_{m1 m2 m3}\Gamma_{n1 n2};
-obj3b:= @(obj3a);
+def test02():
+    __cdbkernel__=create_scope()
+    \delta_{m n}::KroneckerDelta.
+    \Gamma_{#}::GammaMatrix(metric=\delta).
+    obj3a:= \Gamma_{c d}\Gamma_{m1 m2 m3}\Gamma_{n1 n2};
+    join_gamma(obj3a)
+    sort_product(obj3a)
+
+
+test02();
+
+    obj3b:= @(obj3a);
 @join!(obj3a){expand}{m1,m2,m3}{n1,n2};
 @distribute!(%);
 @prodsort!(%);

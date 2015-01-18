@@ -64,6 +64,7 @@ set(LOCAL_SRC_FILES
   properties/ImplicitIndex.cc
   properties/Indices.cc
   properties/Integer.cc
+  properties/KroneckerDelta.cc
   properties/LaTeXForm.cc
   properties/Matrix.cc
   properties/NonCommuting.cc

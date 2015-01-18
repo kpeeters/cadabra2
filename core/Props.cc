@@ -148,11 +148,9 @@ Properties::registered_property_map_t::~registered_property_map_t()
 	// FIXME: V2
 	}
 
-void Properties::register_property(property* (*fun)())
+void Properties::register_property(property* (*fun)(), const std::string& name)
 	{
-	property *tmp=fun(); // need a property object of this type temporarily to retrieve the name
-	registered_properties.store[tmp->name()]=fun;
-	delete tmp; 
+	registered_properties.store[name]=fun;
 	}
 
 keyval_t::const_iterator keyval_t::find(const std::string& key) const
@@ -531,15 +529,12 @@ std::string Properties::master_insert(exptree proptree, property *thepropbase)
 		std::vector<exptree> objs;
 		if(*st->name=="\\comma") {
 			exptree::sibling_iterator sib=proptree.begin(st);
-			str << "Assigning list property " << thepropbase->name() << " to $";
 			while(sib!=proptree.end(st)) {
 				if(sib->fl.parent_rel!=str_node::p_property) {
 					objs.push_back(exptree(sib));
-					str << *sib->name << " ";
 					}
 				++sib;
 				}
-			str << "$.";
 			}
 		if(objs.size()<2) 
 			throw ConsistencyException("A list property cannot be assigned to a single object.");

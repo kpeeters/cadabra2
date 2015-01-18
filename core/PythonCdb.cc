@@ -27,6 +27,7 @@
 #include "properties/Distributable.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
+#include "properties/KroneckerDelta.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
@@ -295,6 +296,7 @@ std::string init_ipython()
 
 // Generate a Python list of all properties declared in the current scope. These will
 // (FIXME: should be) displayed in input form, i.e. they can be fed back into Python.
+// FIXME: most of this has nothing to do with Python, factor back into core.
 
 boost::python::list list_properties()
 	{
@@ -522,12 +524,15 @@ void def_algo_2(const std::string& name)
 // we can make this more complicated later). 
 
 template<class P>
-void def_prop(const std::string& name)
+void def_prop()
 	{
 	using namespace boost::python;
+	P *p = new P;
 
-	class_<Property<P>, bases<BaseProperty> > pr(name.c_str(), init<std::shared_ptr<Ex>, 
+	class_<Property<P>, bases<BaseProperty> > pr(p->name().c_str(), init<std::shared_ptr<Ex>, 
 																optional<std::shared_ptr<Ex> > >());
+
+	delete p;
 
 	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_);
 	}
@@ -609,23 +614,24 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	class_<BaseProperty>("Property", no_init);
 
-	def_prop<Accent>("Accent");
-	def_prop<AntiCommuting>("AntiCommuting");
-	def_prop<AntiSymmetric>("AntiSymmetric");
-	def_prop<Commuting>("Commuting");
-	def_prop<CommutingAsProduct>("CommutingAsProduct");
-	def_prop<CommutingAsSum>("CommutingAsSum");
-	def_prop<Derivative>("Derivative");
-	def_prop<Distributable>("Distributable");
-	def_prop<GammaMatrix>("GammaMatrix");
-	def_prop<IndexInherit>("IndexInherit");
-	def_prop<Indices>("Indices");
-	def_prop<NonCommuting>("NonCommuting");
-	def_prop<SelfAntiCommuting>("SelfAntiCommuting");
-	def_prop<SortOrder>("SortOrder");
-	def_prop<Spinor>("Spinor");
-	def_prop<Weight>("Weight");
-	def_prop<WeightInherit>("WeightInherit");
+	def_prop<Accent>();
+	def_prop<AntiCommuting>();
+	def_prop<AntiSymmetric>();
+	def_prop<Commuting>();
+	def_prop<CommutingAsProduct>();
+	def_prop<CommutingAsSum>();
+	def_prop<Derivative>();
+	def_prop<Distributable>();
+	def_prop<GammaMatrix>();
+	def_prop<IndexInherit>();
+	def_prop<Indices>();
+	def_prop<KroneckerDelta>();
+	def_prop<NonCommuting>();
+	def_prop<SelfAntiCommuting>();
+	def_prop<SortOrder>();
+	def_prop<Spinor>();
+	def_prop<Weight>();
+	def_prop<WeightInherit>();
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
