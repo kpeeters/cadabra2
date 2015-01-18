@@ -76,8 +76,8 @@ class property {
 
 		// Parse
 		virtual bool        parse(keyval_t& keyvals);
-		virtual std::string name() const=0;
 		virtual void        display(std::ostream&) const;
+		virtual std::string name() const=0;
 		virtual std::string unnamed_argument() const;
 
 		// To compare properties we sometimes need to compare their variables, not only
@@ -120,14 +120,13 @@ class Properties {
 				internal_property_map_t store;
 		};
 
-		void                          register_property(property* (*)());
-		void                          register_properties();
-		registered_property_map_t     registered_properties;
-
 		// Registering properties.  When inserting a property or
 		// list_property, ownership of the property gets transferred to
 		// this class.
-		typedef std::pair<pattern *, const property *>                     pat_prop_pair_t;
+
+		void                          register_property(property* (*)(), const std::string& name);
+		registered_property_map_t     registered_properties;
+		typedef std::pair<pattern *, const property *>  pat_prop_pair_t;
 
 		// We keep two multi-maps: one from the pattern to the property (roughly) and 
 		// one from the property to the pattern. These are both multi-maps because 
