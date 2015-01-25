@@ -149,7 +149,7 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 		}
 	if(gam1==tr.end(st)) {
 		st=tr.end();
-		return l_error;
+		return result_t::l_error;
 		}
 
 	gamma_bracket_=gam2->fl.bracket;
@@ -272,7 +272,7 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 //								 << "] terms." << std::endl;
 						interrupted=false;
 						st=tr.end();
-						return l_error;
+						return result_t::l_error;
 						}
 
 					int sgn=
@@ -290,10 +290,9 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 		}
 
 	// Finally, replace the old product by the new sum of products.
-	expression_modified=true;
 	if(rep.number_of_children(rep.begin())==0) {
 		multiply(st->multiplier,0);
-		return l_applied;
+		return result_t::l_applied;
 		}
 	else if(rep.number_of_children(rep.begin())==1) {
 		rep.flatten(rep.begin());
@@ -312,6 +311,6 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 
    cleanup_expression(tr, st);
    cleanup_nests(tr, st);
-	return l_applied;
+	return result_t::l_applied;
 	}
 

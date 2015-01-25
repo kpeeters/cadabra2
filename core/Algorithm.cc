@@ -35,7 +35,6 @@
 
 Algorithm::Algorithm(Kernel& k, exptree& tr_)
   : interrupted(false),
-    expression_modified(false), 
 	  number_of_calls(0), number_of_modifications(0),
 	  suppress_normal_output(false),
 	  discard_command_node(false),
@@ -48,33 +47,34 @@ Algorithm::~Algorithm()
 	{
 	}
 
-bool Algorithm::apply_generic(exptree::iterator& it, bool deep, bool repeat)
+Algorithm::result_t Algorithm::apply_generic(exptree::iterator& it, bool deep, bool repeat)
 	{
-	bool ret=false;
+	result_t ret=result_t::l_no_action;
 
-	bool thisret;
+	result_t thisret=result_t::l_no_action;
 	do {
 		if(deep)
 			thisret = apply_deep(it);
 		else
 			thisret = apply_once(it);
 
-		if(thisret)
-			ret=true;
-		} while(repeat && thisret);
+		// FIXME: handle l_error or remove
+		if(thisret==result_t::l_applied)
+			ret=result_t::l_applied;
+		} while(repeat && thisret==result_t::l_applied);
 
 	return ret;
 	}
 
-bool Algorithm::apply_once(exptree::iterator& it)
+Algorithm::result_t Algorithm::apply_once(exptree::iterator& it)
 	{
 	if(can_apply(it)) 
-		if(apply(it)==l_applied)
-			return true;
-	return false;
+		return apply(it);
+
+	return result_t::l_no_action;
 	}
 
-bool Algorithm::apply_deep(exptree::iterator& it) 
+Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it) 
 	{
 	// This recursive algorithm walks the tree depth-first (parent-after-child). The algorithm is
 	// applied on each node if can_apply returns true. When the iterator goes up one level (i.e.
@@ -82,24 +82,30 @@ bool Algorithm::apply_deep(exptree::iterator& it)
 	// and simplification routines will be called. The only nodes that can be removed from the tree
 	// are nodes at a lower level than the simplification node.
 
+//	std::cout << "=== apply_deep ===" << std::endl;
+//	tr.print_recursive_treeform(std::cout, it);
+
 	post_order_iterator current=it;
 	current.descend_all();
 	post_order_iterator last=it;
 	int deepest_action = -1;
-//	std::cout << "last = " << *it->name << std::endl;
+//	std::cout << "apply_deep: it = " << *it->name << std::endl;
 	bool stop_after_this_one=false;
+	result_t some_changes_somewhere=result_t::l_no_action;
 
 	for(;;) {
 //		std::cout << "reached " << *current->name << std::endl;
+//		std::cout << "apply_deep: current = " << *current->name << std::endl;
 
-		if(current==last)
+		if(current.node==last.node)
 			stop_after_this_one=true;
 
 		if(deepest_action > tr.depth(current)) {
-//			std::cout << "simplify" << std::endl;
+//			std::cout << "simplify; we are at " << *(current->name) << std::endl;
 			iterator work=current;
 			cleanup_dispatch(kernel, tr, work);
 			current=work;
+//			std::cout << "current now " << *(current->name) << std::endl;
 			deepest_action = tr.depth(current); // needs to propagate upwards
 			}
 		
@@ -107,7 +113,8 @@ bool Algorithm::apply_deep(exptree::iterator& it)
 //			std::cout << "acting at " << *current->name << std::endl;
 			iterator work=current;
 			result_t res = apply(work);
-			if(res==l_applied) {
+			if(res==Algorithm::result_t::l_applied) {
+				some_changes_somewhere=result_t::l_applied;
 				rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
 				}
@@ -121,8 +128,7 @@ bool Algorithm::apply_deep(exptree::iterator& it)
 
 //	std::cout << "recursive end **" << std::endl;
 
-	if(deepest_action!=-1) return true;
-	else                   return false;
+	return some_changes_somewhere;
 	}
 
 void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnode)

@@ -25,6 +25,7 @@
 #include <stdexcept>
 #include "Storage.hh"
 #include "Kernel.hh"
+#include "Algorithm.hh"
 
 // Ex is essentially a wrapper around an exptree object, with additional
 // functionality make it print nice in Python. It also contains logic
@@ -48,13 +49,25 @@ class Ex {
 		bool operator==(const Ex&) const;
 		bool __eq__int(int) const;
 
-		exptree     tree;
+		exptree tree;
+
+		// Keeping track of what algorithms did to the expression
+		// (corresponds to the return code of algorithms).
+		// FIXME: the following should implement a stack of states,
+		// so that it can be used with nested functions.
+		// FIXME: perhaps put in exptree so that we can use it to
+		// implement fixed-point logic there.
+		Algorithm::result_t state() const;
+		void                update_state(Algorithm::result_t);
+		void                reset_state();
 
 	private:
 		// Functionality to pull in any '@(...)' expressions from the
 		// Python side into a C++ expression.
 		void                pull_in();
 		std::shared_ptr<Ex> fetch_from_python(std::string nm);
+
+		Algorithm::result_t state_;
 };
 
 

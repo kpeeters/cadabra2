@@ -314,8 +314,6 @@ Algorithm::result_t substitute::apply(iterator& st)
 	if(ind_dummy.size()>0 && !rename_replacement_dummies_called) 
 		rename_replacement_dummies(st);
 
-	expression_modified=true;
-
 	// The replacement is done now.  What is left is to take into
 	// account any signs caused by moving factors through each other.
 	int totsign=1;
@@ -371,6 +369,6 @@ Algorithm::result_t substitute::apply(iterator& st)
 //	tr.print_recursive_treeform(std::cout, tr.begin());
 //	txtout << "======" << std::endl;
 
-	return l_applied;
+	return result_t::l_applied;
 	}
 

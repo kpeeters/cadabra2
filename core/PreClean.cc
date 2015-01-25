@@ -27,7 +27,6 @@ Algorithm::result_t ratrewrite::apply(exptree::iterator& st)
 	multiplier_t num(*st->name);
 	st->name=name_set.insert("1").first;
 	multiply(st->multiplier,num);
-	expression_modified=true;
-	return l_applied;
+	return result_t::l_applied;
 	}
 

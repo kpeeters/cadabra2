@@ -99,9 +99,8 @@ Algorithm::result_t distribute::apply(iterator& prod)
 		}
 	if(rep.number_of_children(top)==1) { // nothing happened, no sum was present
 //		prod->fl.mark=0; // handled
-		return l_applied;
+		return result_t::l_no_action;
 		}
-	expression_modified=true;
 
 // FIXME: why does this faster move lead to a crash in linear.cdb?
 	iterator ret=tr.move_ontop(prod, (iterator)top);
@@ -126,5 +125,5 @@ Algorithm::result_t distribute::apply(iterator& prod)
 	// go and examine every sum that we have created? Should we better
 	// return an iterator to the last element in the sum?
 	prod=ret;
-	return l_applied;
+	return result_t::l_applied;
 	}

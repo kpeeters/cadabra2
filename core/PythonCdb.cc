@@ -12,6 +12,10 @@
 #include <boost/parameter/python.hpp>
 #include <boost/python.hpp>
 #include <boost/mpl/vector.hpp>
+#include <boost/python/enum.hpp>
+#include <boost/python/def.hpp>
+#include <boost/python/module.hpp>
+
 #include <sstream>
 #include <memory>
 
@@ -57,11 +61,13 @@ bool output_ipython=false;
 // Expression constructor/destructor members.
 
 Ex::Ex(const Ex& other)
+	: state_(Algorithm::result_t::l_no_action)
 	{
    //	std::cout << "Ex copy constructor" << std::endl;
 	}
 
 Ex::Ex(int val) 
+	: state_(Algorithm::result_t::l_no_action)
 	{
 	tree.set_head(str_node("\\expression"));
 	exptree::iterator it = tree.append_child(tree.begin(), str_node("1"));
@@ -220,6 +226,31 @@ bool Ex::__eq__int(int other) const
 	return (*this)==ex;
 	}
 
+Algorithm::result_t Ex::state() const
+	{
+	return state_;
+	}
+
+void Ex::update_state(Algorithm::result_t newstate)
+	{
+	switch(newstate) {
+		case Algorithm::result_t::l_error:
+			state_=newstate;
+			break;
+		case Algorithm::result_t::l_applied:
+			if(state_!=Algorithm::result_t::l_error)
+				state_=newstate;
+			break;
+		default:
+			break;
+		}
+	}
+
+void Ex::reset_state() 
+	{
+	state_=Algorithm::result_t::l_no_action;
+	}
+
 // Functions to construct an Ex object and then create an additional
 // reference '_' on the global python stack that points to this object
 // as well.
@@ -252,10 +283,9 @@ Ex *dispatch_1(Ex *ex, bool deep, bool repeat, Args... args)
 	F algo(*get_kernel_from_scope(), ex->tree, args...);
 
 	exptree::iterator it=ex->tree.begin().begin();
-	bool ret = algo.apply_generic(it, deep, repeat);
-	if(ret==false)
-		std::cout << "no change" << std::endl;
 
+	ex->update_state(algo.apply_generic(it, deep, repeat));
+	
 	return ex;
 	}
 
@@ -272,10 +302,9 @@ Ex *dispatch_2(Ex *ex, Ex *args, bool deep, bool repeat)
 	F algo(*get_kernel_from_scope(), ex->tree, args->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
-	bool ret = algo.apply_generic(it, deep, repeat);
-	if(ret==false)
-		std::cout << "no change" << std::endl;
 
+	ex->update_state(algo.apply_generic(it, deep, repeat));
+	
 	return ex;
 	}
 
@@ -498,9 +527,9 @@ void def_algo_1(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_1<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_1<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false), 
 		 return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=false), 
 		 return_value_policy<manage_new_object>() );
 	}
 
@@ -511,9 +540,9 @@ void def_algo_2(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_2<F>,        (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_2<F>,        (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
 		 return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_2_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=true), 
+	def(name.c_str(),  &dispatch_2_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
 		 return_value_policy<manage_new_object>() );
 	}
 
@@ -565,6 +594,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__eq__",   &Ex::operator==)
 		.def("__eq__",   &Ex::__eq__int);
 
+	enum_<Algorithm::result_t>("result_t")
+		.value("changed", Algorithm::result_t::l_applied)
+		.value("unchanged", Algorithm::result_t::l_no_action)
+		.value("error", Algorithm::result_t::l_error)
+		.export_values()
+		;
 
 	// Inspection algorithms and other global functions which do not fit into the C++
    // framework anymore.
@@ -592,7 +627,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<sort_product>("sort_product");
 //	def_algo_1<join_gamma>("join_gamma");
 
-	def("join_gamma",  &dispatch_1<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=true,
+	def("join_gamma",  &dispatch_1<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=false,
 																				arg("expand")=true,arg("use_gendelta")=false),
 		 return_internal_reference<1>() );
 

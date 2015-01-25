@@ -41,9 +41,10 @@ Algorithm::result_t flatten_product::apply(iterator& it)
 		tr.flatten(it);
 		it=tr.erase(it);
 		pushup_multiplier(it);
-		expression_modified=true;
-		return l_applied;
+		return result_t::l_applied;
 		}
+
+	result_t ret=result_t::l_no_action;
 	sibling_iterator facs=tr.begin(it);
 	str_node::bracket_t btype=facs->fl.bracket;
 	while(facs!=tr.end(it)) {
@@ -62,13 +63,13 @@ Algorithm::result_t flatten_product::apply(iterator& it)
 				multiply(it->multiplier,*facs->multiplier);
 				tr.erase(facs);
 				pushup_multiplier(it);
-				expression_modified=true;
 				facs=tmp;
+				ret=result_t::l_applied;
 				}
 			else ++facs;
 			}
 		else ++facs;
 		if(is_diff) break;
 		}
-	return l_applied;
+	return ret;
 	}

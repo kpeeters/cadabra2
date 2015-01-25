@@ -50,10 +50,12 @@ class Algorithm {
 
 		bool interrupted;
 
-		enum result_t {
-			l_no_action,
-			l_applied,
-			l_error
+		// TODO: make these capitalised names.
+
+		enum class result_t {
+				l_no_action,  // algorithm has modified the expression
+				l_applied,    // algorithm left expression unchanged
+				l_error       // algorithm left expression inconsistent due to unrecoverable error
 		};
 
 
@@ -61,14 +63,7 @@ class Algorithm {
 		// whether sub-expressions should be acted on too. The 'repeat' flag indicates
 		// whether the algorithm should be applied until the expression no longer 
 		// changes.
-		bool apply_generic(iterator&, bool deep, bool repeat);
-
-		// Per-call information
-		bool             expression_modified;
-		iterator         subtree;        // subtree to be displayed
-
-		// External handling of scalar expressions
-		
+		result_t  apply_generic(iterator&, bool deep, bool repeat);
 
 		// Global information
 		unsigned int     number_of_calls;
@@ -221,8 +216,8 @@ class Algorithm {
 
 	private:
 		// Single or deep-scan apply operations. Do not call directly.
-		bool apply_once(exptree::iterator& it);
-		bool apply_deep(exptree::iterator& it);
+		result_t apply_once(exptree::iterator& it);
+		result_t apply_deep(exptree::iterator& it);
 
 		/// Given a node with zero multiplier, propagate this zero
 		/// upwards in the tree.  Changes the iterator so that it points
