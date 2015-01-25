@@ -49,6 +49,6 @@ Algorithm::result_t prodcollectnum::apply(iterator& it)
 	else if(tr.number_of_children(it)==0) { // i.e. from '3*4*7*9' 
 		it->name=name_set.insert("1").first;
 		}
-	return l_applied;
+	return result_t::l_applied;
 	}
 

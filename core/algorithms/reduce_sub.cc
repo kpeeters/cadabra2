@@ -43,7 +43,6 @@ Algorithm::result_t reduce_sub::apply(iterator& it)
 		it=tr.erase(it);
 		}
 
-	expression_modified=true;
-	return l_applied;
+	return result_t::l_applied;
 	}
 

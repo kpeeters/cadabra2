@@ -127,8 +127,12 @@ if __name__ == '__main__':
     sys.ps2='. '
 
     if len(sys.argv)>1:
-        if sys.argv[1]=='-d':
-            os.system("gdb -ex r --args python "+sys.argv[0])
+        if '-d' in sys.argv:
+            rs = "gdb -q -ex r --args python "+sys.argv[0];
+            for a in sys.argv[1:]:
+                if a!='-d':
+                    rs += " "+a
+            os.system(rs)
         else:
             execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
             sh2 = InteractiveConsole()

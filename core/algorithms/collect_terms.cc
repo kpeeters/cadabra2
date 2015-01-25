@@ -82,7 +82,7 @@ Algorithm::result_t collect_terms::apply(iterator& st)
 
 Algorithm::result_t collect_terms::collect_from_hash_map()
 	{
-	result_t res=l_no_action;
+	result_t res=result_t::l_no_action;
 	term_hash_iterator_t ht=term_hash.begin();
 	while(ht!=term_hash.end()) {
 		hashval_t curr=ht->first;  // hash value of the current set of terms
@@ -92,14 +92,13 @@ Algorithm::result_t collect_terms::collect_from_hash_map()
 			++thisbin2;
 			while(thisbin2!=term_hash.end() && thisbin2->first==curr) {
 				if(subtree_exact_equal(&kernel.properties, (*thisbin1).second, (*thisbin2).second, -2, true, 0, true)) {
-					res=l_applied;
+					res=result_t::l_applied;
 					add((*thisbin1).second->multiplier, *((*thisbin2).second->multiplier));
 					zero((*thisbin2).second->multiplier);
 					term_hash_iterator_t tmp=thisbin2;
 					++tmp;
 					term_hash.erase(thisbin2);
 					thisbin2=tmp;
-					expression_modified=true;
 					}
 				else ++thisbin2;
 				}

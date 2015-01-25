@@ -64,6 +64,5 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 
 	prod_unwrap_single_term(st);
 
-	expression_modified=true;
-	return l_applied;
+	return result_t::l_applied;
 	}
