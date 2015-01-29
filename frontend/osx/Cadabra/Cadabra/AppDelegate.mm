@@ -24,7 +24,7 @@
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+
     nw = new cadabra::NotebookWindow();
     
     compute        = new cadabra::ComputeThread(nw, *nw);
