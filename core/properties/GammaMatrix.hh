@@ -6,7 +6,7 @@
 
 class GammaMatrix : public AntiSymmetric, public Matrix, virtual public property {
 	public:
-		virtual std::string name() const;
+		virtual std::string name() const override;
 		virtual void        display(std::ostream&) const;
 		virtual bool        parse(keyval_t& keyvals);
 		exptree metric;

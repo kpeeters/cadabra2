@@ -504,7 +504,8 @@ template<class Prop>
 Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
 	{
 	Kernel *kernel=get_kernel_from_scope();
-	inject_property(kernel, new Prop(), ex, param);
+	prop = new Prop(); // we keep a pointer, but the kernel owns it.
+	inject_property(kernel, prop, ex, param);
 	}
 
 template<class Prop>
@@ -592,7 +593,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("_repr_html_", &Ex::_repr_html_)
 		.def("__repr__", &Ex::repr_)
 		.def("__eq__",   &Ex::operator==)
-		.def("__eq__",   &Ex::__eq__int);
+		.def("__eq__",   &Ex::__eq__int)
+		.def("state",    &Ex::state);
+	
 
 	enum_<Algorithm::result_t>("result_t")
 		.value("changed", Algorithm::result_t::l_applied)

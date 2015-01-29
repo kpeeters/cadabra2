@@ -22,7 +22,8 @@ test01();
 # forget about all explicit anti-symmetrisations in those indices.
 
 def fixed(fun, obj):
-    
+    while fun(obj, keep_state=True)==result_t.changed:
+        print "ran"
 
 def test02():
     __cdbkernel__=create_scope()
@@ -33,6 +34,14 @@ def test02():
     sort_product(obj3a, repeat=True)
 
 test02();
+
+\delta_{m n}::KroneckerDelta.
+\Gamma_{#}::GammaMatrix(metric=\delta)
+ex:=\Gamma_{a b c}\Gamma_{c d}\Gamma_{e}
+join_gamma(ex)
+distribute(ex)
+join_gamma(ex)
+# segfault
 
 # obj3b:= @(obj3a);
 # @join!(obj3a){expand}{m1,m2,m3}{n1,n2};
