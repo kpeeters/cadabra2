@@ -13,10 +13,10 @@ int main(int argc, char **argv)
 	Glib::RefPtr<Gtk::Application> app =
 		Gtk::Application::create(argc, argv, "com.phi-sci.cadabra.cadabra-gtk");
   	cadabra::NotebookWindow nw;
-
-	// Create and start the compute/network thread.
 	cadabra::ComputeThread compute(&nw, nw);
-	std::thread            compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
+														  
+	// Create and start the compute/network thread.
+	std::thread compute_thread([&compute] { compute.run(); });
 	
 	// Connect the two threads.
 	nw.set_compute_thread(&compute);
