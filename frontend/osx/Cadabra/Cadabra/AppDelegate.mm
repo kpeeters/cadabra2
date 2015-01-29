@@ -16,18 +16,21 @@
 @property (weak) IBOutlet NSWindow *window;
 @end
 
-@implementation AppDelegate
+@implementation AppDelegate {
+    
+    cadabra::NotebookWindow *nw;
+    cadabra::ComputeThread  *compute;
+    std::thread             *compute_thread;
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    cadabra::NotebookWindow nw;
+    nw = new cadabra::NotebookWindow();
     
-    cadabra::ComputeThread compute(&nw, nw);
-    std::thread            compute_thread(&cadabra::ComputeThread::run, std::move(compute));
-    //std::ref(compute));
+    compute        = new cadabra::ComputeThread(nw, *nw);
+    compute_thread = new std::thread([&] { compute->run(); });
 
-    nw.set_compute_thread(&compute);
-    compute_thread.join();
+    nw->set_compute_thread(compute);
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
