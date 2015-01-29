@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 phi-sci. All rights reserved.
 //
 
+#include <thread>
 #import "AppDelegate.h"
 #include "ComputeThread.hh"
 #include "NotebookWindow.hh"
@@ -22,7 +23,7 @@
     cadabra::NotebookWindow nw;
     
     cadabra::ComputeThread compute(&nw, nw);
-    std::thread            compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
+//    std::thread            compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
