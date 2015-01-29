@@ -558,5 +558,5 @@ std::string Properties::master_insert(exptree proptree, property *thepropbase)
 			insert_prop(exptree(st), theprop);
 			}
 		}
-return str.str();
-}
+	return str.str();
+	}
