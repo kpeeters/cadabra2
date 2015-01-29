@@ -7,13 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A7ACFC5A1A5B39F2003F01E2 /* client_server in Resources */ = {isa = PBXBuildFile; fileRef = A7ACFC591A5B39F2003F01E2 /* client_server */; };
 		A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */; };
 		A7B0F7171A05663700FCC711 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7161A05663700FCC711 /* main.m */; };
 		A7B0F71A1A05663700FCC711 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7191A05663700FCC711 /* AppDelegate.mm */; };
 		A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71B1A05663700FCC711 /* Images.xcassets */; };
 		A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71D1A05663700FCC711 /* MainMenu.xib */; };
 		A7B0F72B1A05663700FCC711 /* CadabraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F72A1A05663700FCC711 /* CadabraTests.m */; };
+		A7B39FD71A6AC137007FBB93 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B39FD61A6AC137007FBB93 /* libboost_system.a */; };
+		A7B39FE01A6AC194007FBB93 /* Actions.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FD81A6AC194007FBB93 /* Actions.cc */; };
+		A7B39FE11A6AC194007FBB93 /* Actions.hh in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FD91A6AC194007FBB93 /* Actions.hh */; };
+		A7B39FE21A6AC194007FBB93 /* ComputeThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDA1A6AC194007FBB93 /* ComputeThread.cc */; };
+		A7B39FE31A6AC194007FBB93 /* ComputeThread.hh in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDB1A6AC194007FBB93 /* ComputeThread.hh */; };
+		A7B39FE41A6AC194007FBB93 /* DocumentThread.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDC1A6AC194007FBB93 /* DocumentThread.cc */; };
+		A7B39FE51A6AC194007FBB93 /* DocumentThread.hh in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDD1A6AC194007FBB93 /* DocumentThread.hh */; };
+		A7B39FE61A6AC194007FBB93 /* Server.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDE1A6AC194007FBB93 /* Server.cc */; };
+		A7B39FE71A6AC194007FBB93 /* Server.hh in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDF1A6AC194007FBB93 /* Server.hh */; };
+		A7BAFC951A7AAD82008DEAED /* libjsoncpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BAFC941A7AAD82008DEAED /* libjsoncpp.a */; };
+		A7BAFC991A7AADD0008DEAED /* DataCell.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7BAFC961A7AADD0008DEAED /* DataCell.cc */; };
+		A7BAFC9C1A7AB29C008DEAED /* Python in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BAFC9B1A7AB29C008DEAED /* Python */; };
+		A7BAFC9E1A7AB2C2008DEAED /* libboost_python.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BAFC9D1A7AB2C2008DEAED /* libboost_python.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,7 +39,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A7ACFC591A5B39F2003F01E2 /* client_server */ = {isa = PBXFileReference; lastKnownFileType = folder; name = client_server; path = ../../../../client_server; sourceTree = "<group>"; };
 		A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotebookWindow.cc; sourceTree = "<group>"; };
 		A7ACFC5C1A5B3F2A003F01E2 /* NotebookWindow.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NotebookWindow.hh; sourceTree = "<group>"; };
 		A7B0F7111A05663700FCC711 /* Cadabra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cadabra.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -40,6 +51,23 @@
 		A7B0F7241A05663700FCC711 /* CadabraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadabraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B0F7291A05663700FCC711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B0F72A1A05663700FCC711 /* CadabraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CadabraTests.m; sourceTree = "<group>"; };
+		A7B39FD61A6AC137007FBB93 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../../../../../../usr/local/Cellar/boost/1.56.0/lib/libboost_system.a; sourceTree = "<group>"; };
+		A7B39FD81A6AC194007FBB93 /* Actions.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Actions.cc; path = ../../../../client_server/Actions.cc; sourceTree = "<group>"; };
+		A7B39FD91A6AC194007FBB93 /* Actions.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Actions.hh; path = ../../../../client_server/Actions.hh; sourceTree = "<group>"; };
+		A7B39FDA1A6AC194007FBB93 /* ComputeThread.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ComputeThread.cc; path = ../../../../client_server/ComputeThread.cc; sourceTree = "<group>"; };
+		A7B39FDB1A6AC194007FBB93 /* ComputeThread.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = ComputeThread.hh; path = ../../../../client_server/ComputeThread.hh; sourceTree = "<group>"; };
+		A7B39FDC1A6AC194007FBB93 /* DocumentThread.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DocumentThread.cc; path = ../../../../client_server/DocumentThread.cc; sourceTree = "<group>"; };
+		A7B39FDD1A6AC194007FBB93 /* DocumentThread.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = DocumentThread.hh; path = ../../../../client_server/DocumentThread.hh; sourceTree = "<group>"; };
+		A7B39FDE1A6AC194007FBB93 /* Server.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Server.cc; path = ../../../../client_server/Server.cc; sourceTree = "<group>"; };
+		A7B39FDF1A6AC194007FBB93 /* Server.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Server.hh; path = ../../../../client_server/Server.hh; sourceTree = "<group>"; };
+		A7B39FE91A6AC26B007FBB93 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../../../usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework; sourceTree = "<group>"; };
+		A7BAFC921A7AAD6B008DEAED /* jsoncpp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jsoncpp; path = ../../../../../../../usr/local/Cellar/jsoncpp; sourceTree = "<group>"; };
+		A7BAFC941A7AAD82008DEAED /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = "../../../../../../../usr/local/Cellar/jsoncpp/0.6.0-rc2/lib/libjsoncpp.a"; sourceTree = "<group>"; };
+		A7BAFC961A7AADD0008DEAED /* DataCell.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataCell.cc; path = ../../../../client_server/DataCell.cc; sourceTree = "<group>"; };
+		A7BAFC971A7AADD0008DEAED /* DataCell.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = DataCell.hh; path = ../../../../client_server/DataCell.hh; sourceTree = "<group>"; };
+		A7BAFC981A7AADD0008DEAED /* GUIBase.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GUIBase.hh; path = ../../../../client_server/GUIBase.hh; sourceTree = "<group>"; };
+		A7BAFC9B1A7AB29C008DEAED /* Python */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Python; path = ../../../../../../../usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework/Versions/2.7/Python; sourceTree = "<group>"; };
+		A7BAFC9D1A7AB2C2008DEAED /* libboost_python.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_python.dylib; path = "../../../../../../../usr/local/Cellar/boost-python/1.56.0/lib/libboost_python.dylib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +75,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7BAFC9E1A7AB2C2008DEAED /* libboost_python.dylib in Frameworks */,
+				A7BAFC9C1A7AB29C008DEAED /* Python in Frameworks */,
+				A7BAFC951A7AAD82008DEAED /* libjsoncpp.a in Frameworks */,
+				A7B39FD71A6AC137007FBB93 /* libboost_system.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +95,12 @@
 		A7B0F7081A05663700FCC711 = {
 			isa = PBXGroup;
 			children = (
+				A7BAFC9D1A7AB2C2008DEAED /* libboost_python.dylib */,
+				A7BAFC9B1A7AB29C008DEAED /* Python */,
+				A7BAFC941A7AAD82008DEAED /* libjsoncpp.a */,
+				A7BAFC921A7AAD6B008DEAED /* jsoncpp */,
+				A7B39FE91A6AC26B007FBB93 /* Python.framework */,
+				A7B39FD61A6AC137007FBB93 /* libboost_system.a */,
 				A7B0F7131A05663700FCC711 /* Cadabra */,
 				A7B0F7271A05663700FCC711 /* CadabraTests */,
 				A7B0F7121A05663700FCC711 /* Products */,
@@ -81,7 +119,7 @@
 		A7B0F7131A05663700FCC711 /* Cadabra */ = {
 			isa = PBXGroup;
 			children = (
-				A7ACFC591A5B39F2003F01E2 /* client_server */,
+				A7B39FE81A6AC1AD007FBB93 /* client_server */,
 				A7B0F7181A05663700FCC711 /* AppDelegate.h */,
 				A7B0F7191A05663700FCC711 /* AppDelegate.mm */,
 				A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */,
@@ -117,6 +155,24 @@
 				A7B0F7291A05663700FCC711 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		A7B39FE81A6AC1AD007FBB93 /* client_server */ = {
+			isa = PBXGroup;
+			children = (
+				A7BAFC961A7AADD0008DEAED /* DataCell.cc */,
+				A7BAFC971A7AADD0008DEAED /* DataCell.hh */,
+				A7BAFC981A7AADD0008DEAED /* GUIBase.hh */,
+				A7B39FD81A6AC194007FBB93 /* Actions.cc */,
+				A7B39FD91A6AC194007FBB93 /* Actions.hh */,
+				A7B39FDA1A6AC194007FBB93 /* ComputeThread.cc */,
+				A7B39FDB1A6AC194007FBB93 /* ComputeThread.hh */,
+				A7B39FDC1A6AC194007FBB93 /* DocumentThread.cc */,
+				A7B39FDD1A6AC194007FBB93 /* DocumentThread.hh */,
+				A7B39FDE1A6AC194007FBB93 /* Server.cc */,
+				A7B39FDF1A6AC194007FBB93 /* Server.hh */,
+			);
+			name = client_server;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,7 +255,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7ACFC5A1A5B39F2003F01E2 /* client_server in Resources */,
 				A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */,
 				A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */,
 			);
@@ -219,7 +274,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7B39FE01A6AC194007FBB93 /* Actions.cc in Sources */,
+				A7B39FE11A6AC194007FBB93 /* Actions.hh in Sources */,
+				A7B39FE21A6AC194007FBB93 /* ComputeThread.cc in Sources */,
+				A7B39FE31A6AC194007FBB93 /* ComputeThread.hh in Sources */,
+				A7B39FE41A6AC194007FBB93 /* DocumentThread.cc in Sources */,
+				A7B39FE51A6AC194007FBB93 /* DocumentThread.hh in Sources */,
+				A7B39FE61A6AC194007FBB93 /* Server.cc in Sources */,
+				A7B39FE71A6AC194007FBB93 /* Server.hh in Sources */,
 				A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.cc in Sources */,
+				A7BAFC991A7AADD0008DEAED /* DataCell.cc in Sources */,
 				A7B0F71A1A05663700FCC711 /* AppDelegate.mm in Sources */,
 				A7B0F7171A05663700FCC711 /* main.m in Sources */,
 			);
@@ -337,15 +401,26 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/python/2.7.8_2/Frameworks,
+				);
 				INFOPLIST_FILE = Cadabra/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/boost/1.56.0/lib,
+					"/usr/local/Cellar/jsoncpp/0.6.0-rc2/lib",
+					/usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework/Versions/2.7,
+					"/usr/local/Cellar/boost-python/1.56.0/lib",
+				);
 				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
 					"$(OTHER_CFLAGS)",
 					"-D_WEBSOCKETPP_CPP11_STL_",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/ /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7";
 			};
 			name = Debug;
 		};
@@ -355,15 +430,26 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/python/2.7.8_2/Frameworks,
+				);
 				INFOPLIST_FILE = Cadabra/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/usr/local/Cellar/boost/1.56.0/lib,
+					"/usr/local/Cellar/jsoncpp/0.6.0-rc2/lib",
+					/usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework/Versions/2.7,
+					"/usr/local/Cellar/boost-python/1.56.0/lib",
+				);
 				"OTHER_CPLUSPLUSFLAGS[arch=*]" = (
 					"$(OTHER_CFLAGS)",
 					"-D_WEBSOCKETPP_CPP11_STL_",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
-				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/";
+				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/ /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7";
 			};
 			name = Release;
 		};

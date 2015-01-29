@@ -1,0 +1,7 @@
+- edited in websocketspp to cast an std::toupper so that it picks out the
+version of locale, not ctypes.
+
+- hard-coded the include path for python (should be picking up pyconfig.h 
+from the included framework, but doesn't).
+
+- 
