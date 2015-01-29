@@ -23,7 +23,11 @@
     cadabra::NotebookWindow nw;
     
     cadabra::ComputeThread compute(&nw, nw);
-//    std::thread            compute_thread(&cadabra::ComputeThread::run, std::ref(compute));
+    std::thread            compute_thread(&cadabra::ComputeThread::run, std::move(compute));
+    //std::ref(compute));
+
+    nw.set_compute_thread(&compute);
+    compute_thread.join();
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

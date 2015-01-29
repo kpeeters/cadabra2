@@ -30,6 +30,7 @@ namespace cadabra {
 			
 			ComputeThread(GUIBase *, DocumentThread&);
 			ComputeThread(const ComputeThread& )=delete; // You cannot copy this object
+            ComputeThread(const ComputeThread&&);
 			~ComputeThread();
 			
 			// Main entry point, which will connect to the server and
