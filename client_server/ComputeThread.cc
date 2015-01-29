@@ -19,6 +19,11 @@ ComputeThread::~ComputeThread()
 	{
 	}
 
+ComputeThread::ComputeThread(const ComputeThread&& other)
+: gui(other.gui), docthread(other.docthread), wsclient(other.wsclient)
+{
+}
+
 void ComputeThread::init() 
 	{
 	// Setup the WebSockets client.
