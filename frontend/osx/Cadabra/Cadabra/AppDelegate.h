@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#include "NotebookController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 

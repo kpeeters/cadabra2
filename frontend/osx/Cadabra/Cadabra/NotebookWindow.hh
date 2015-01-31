@@ -12,12 +12,13 @@
 #include <stdio.h>
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
+#include "NotebookController.h"
 
 namespace cadabra {
 
 class NotebookWindow : public DocumentThread, public GUIBase {
     public:
-        NotebookWindow();
+        NotebookWindow(NotebookController *);
     
         virtual void add_cell(const DTree&, DTree::iterator) override;
         virtual void remove_cell(const DTree&, DTree::iterator) override;
@@ -29,6 +30,9 @@ class NotebookWindow : public DocumentThread, public GUIBase {
         virtual void on_network_error() override;
     
         virtual void process_data() override;
+    
+private:
+    NotebookController *controller;
 };
     
 };

@@ -6,35 +6,33 @@
 //  Copyright (c) 2014 phi-sci. All rights reserved.
 //
 
-#include <thread>
 #import "AppDelegate.h"
-#include "ComputeThread.hh"
-#include "NotebookWindow.hh"
 
-@interface AppDelegate ()
+@interface  AppDelegate()
 
 @property (weak) IBOutlet NSWindow *window;
+@property (nonatomic,strong) IBOutlet NotebookController *notebookController;
+
 @end
+
 
 @implementation AppDelegate {
     
-    cadabra::NotebookWindow *nw;
-    cadabra::ComputeThread  *compute;
-    std::thread             *compute_thread;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-
-    nw = new cadabra::NotebookWindow();
+    self.notebookController = [[NotebookController alloc] initWithNibName:@"Notebook" bundle:nil];
     
-    compute        = new cadabra::ComputeThread(nw, *nw);
-    compute_thread = new std::thread([&] { compute->run(); });
-
-    nw->set_compute_thread(compute);
+    // 2. Add the view controller to the Window's content view
+    [self.window.contentView addSubview:self.notebookController.view];
+    self.notebookController.view.frame = ((NSView*)self.window.contentView).bounds;
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
+}
+- (IBAction)menuAboutCadabra:(id)sender {
+    NSLog(@"About");
 }
 
 @end

@@ -27,7 +27,7 @@
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2014 phi-sci. All rights reserved.</string>
 	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
+	<string>Cadabra</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>

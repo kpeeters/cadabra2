@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6254" systemVersion="13F34" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6254"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NotebookController">
+            <connections>
+                <outlet property="status_label" destination="rqn-VV-TKi" id="cLY-U1-09v"/>
+                <outlet property="view" destination="c22-O7-iKe" id="OpU-VK-mr3"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="608" height="474"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rqn-VV-TKi">
+                    <rect key="frame" x="5" y="1" width="304" height="17"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="7t1-lJ-0By">
+                        <font key="font" metaFont="system"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <box autoresizesSubviews="NO" verticalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="8Wf-GJ-sS1">
+                    <rect key="frame" x="0.0" y="15" width="608" height="5"/>
+                    <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                    <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <font key="titleFont" metaFont="system"/>
+                </box>
+                <progressIndicator verticalHuggingPriority="1000" ambiguous="YES" misplaced="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="qKv-52-RZV">
+                    <rect key="frame" x="464" y="-1" width="144" height="20"/>
+                </progressIndicator>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="qKv-52-RZV" secondAttribute="bottom" id="2K2-t5-FJq"/>
+                <constraint firstAttribute="bottom" secondItem="rqn-VV-TKi" secondAttribute="bottom" constant="1" id="7zl-Zp-BwJ"/>
+                <constraint firstAttribute="trailing" secondItem="8Wf-GJ-sS1" secondAttribute="trailing" id="8LC-i1-cDy"/>
+                <constraint firstItem="rqn-VV-TKi" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="7" id="CnR-vY-ZMj"/>
+                <constraint firstItem="8Wf-GJ-sS1" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="DL2-TG-1oI"/>
+                <constraint firstAttribute="trailing" secondItem="qKv-52-RZV" secondAttribute="trailing" id="Hy6-mP-HUz"/>
+                <constraint firstAttribute="trailing" secondItem="qKv-52-RZV" secondAttribute="trailing" id="kvp-Us-SP7"/>
+                <constraint firstItem="qKv-52-RZV" firstAttribute="top" secondItem="8Wf-GJ-sS1" secondAttribute="bottom" constant="-1" id="nGY-cy-AfG"/>
+            </constraints>
+            <point key="canvasLocation" x="204" y="256"/>
+        </customView>
+    </objects>
+</document>
