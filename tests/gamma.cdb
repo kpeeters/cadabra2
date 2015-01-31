@@ -22,17 +22,26 @@ test01();
 # forget about all explicit anti-symmetrisations in those indices.
 
 def fixed(fun, obj):
-    while fun(obj, keep_state=True)==result_t.changed:
+    while fun(obj).state()==result_t.changed:
         print "ran"
+    return obj
+
+def runit(ex):
+    join_gamma(ex)
+    distribute(ex, keepstate=True)
+    sort_product(ex, keepstate=True)
+    print(ex)
+    return ex
 
 def test02():
-    __cdbkernel__=create_scope()
     \delta_{m n}::KroneckerDelta.
     \Gamma_{#}::GammaMatrix(metric=\delta).
     obj3a:= \Gamma_{c d}\Gamma_{m1 m2 m3}\Gamma_{n1 n2};
-    join_gamma(obj3a)
-    sort_product(obj3a, repeat=True)
+    return fixed(runit, obj3a)
+    #return runit(obj3a)
 
+# This runs too much because runit does not keep state 
+# from its ingredients.
 test02();
 
 \delta_{m n}::KroneckerDelta.
@@ -40,6 +49,7 @@ test02();
 ex:=\Gamma_{a b c}\Gamma_{c d}\Gamma_{e}
 join_gamma(ex)
 distribute(ex)
+sort_product(ex)
 join_gamma(ex)
 # segfault
 

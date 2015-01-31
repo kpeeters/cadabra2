@@ -112,18 +112,23 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 		if(can_apply(current)) {
 //			std::cout << "acting at " << *current->name << std::endl;
 			iterator work=current;
+			post_order_iterator next(current);
+			++next;
 			result_t res = apply(work);
 			if(res==Algorithm::result_t::l_applied) {
 				some_changes_somewhere=result_t::l_applied;
 				rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
 				}
-			current=work; // the algorithm may have replaced the 'work' node
+			current=next; // the algorithm may have replaced the 'work' node
+			} 
+		else {
+			if(stop_after_this_one)
+				break;
+
+			++current;
 			}
-		if(stop_after_this_one)
-			break;
-		
-		++current;
+
 		}
 
 //	std::cout << "recursive end **" << std::endl;
