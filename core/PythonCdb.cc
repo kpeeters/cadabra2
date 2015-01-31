@@ -85,6 +85,8 @@ std::string Ex::str_() const
 	{
 	std::ostringstream str;
 
+	if(state()==Algorithm::result_t::l_no_action)
+		str << "(unchanged)" << std::endl;
 	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
 	dt.output(str);
 
@@ -115,7 +117,7 @@ std::string Ex::_repr_html_() const
 	}
 
 Ex::Ex(std::string ex_) 
-//	: ex(ex_)
+	: state_(Algorithm::result_t::l_no_action)
 	{
 	Parser parser;
 	std::stringstream str(ex_);
@@ -284,6 +286,7 @@ Ex *dispatch_1(Ex *ex, bool deep, bool repeat, Args... args)
 
 	exptree::iterator it=ex->tree.begin().begin();
 
+	ex->reset_state();
 	ex->update_state(algo.apply_generic(it, deep, repeat));
 	
 	return ex;
@@ -303,6 +306,7 @@ Ex *dispatch_2(Ex *ex, Ex *args, bool deep, bool repeat)
 
 	exptree::iterator it=ex->tree.begin().begin();
 
+	ex->reset_state();
 	ex->update_state(algo.apply_generic(it, deep, repeat));
 	
 	return ex;
