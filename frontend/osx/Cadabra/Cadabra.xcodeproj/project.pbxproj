@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */; };
+		A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.mm */; };
 		A7B0F7171A05663700FCC711 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7161A05663700FCC711 /* main.m */; };
 		A7B0F71A1A05663700FCC711 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F7191A05663700FCC711 /* AppDelegate.mm */; };
 		A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71B1A05663700FCC711 /* Images.xcassets */; };
-		A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71D1A05663700FCC711 /* MainMenu.xib */; };
+		A7B0F71F1A05663700FCC711 /* Cadabra.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7B0F71D1A05663700FCC711 /* Cadabra.xib */; };
 		A7B0F72B1A05663700FCC711 /* CadabraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A7B0F72A1A05663700FCC711 /* CadabraTests.m */; };
 		A7B39FD71A6AC137007FBB93 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B39FD61A6AC137007FBB93 /* libboost_system.a */; };
 		A7B39FE01A6AC194007FBB93 /* Actions.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FD81A6AC194007FBB93 /* Actions.cc */; };
@@ -22,6 +22,8 @@
 		A7B39FE51A6AC194007FBB93 /* DocumentThread.hh in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDD1A6AC194007FBB93 /* DocumentThread.hh */; };
 		A7B39FE61A6AC194007FBB93 /* Server.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDE1A6AC194007FBB93 /* Server.cc */; };
 		A7B39FE71A6AC194007FBB93 /* Server.hh in Sources */ = {isa = PBXBuildFile; fileRef = A7B39FDF1A6AC194007FBB93 /* Server.hh */; };
+		A7B460951A7D40CD0081D96D /* NotebookController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A7B460931A7D40CD0081D96D /* NotebookController.mm */; };
+		A7B460991A7D49060081D96D /* Notebook.xib in Resources */ = {isa = PBXBuildFile; fileRef = A7B460981A7D49060081D96D /* Notebook.xib */; };
 		A7BAFC951A7AAD82008DEAED /* libjsoncpp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BAFC941A7AAD82008DEAED /* libjsoncpp.a */; };
 		A7BAFC991A7AADD0008DEAED /* DataCell.cc in Sources */ = {isa = PBXBuildFile; fileRef = A7BAFC961A7AADD0008DEAED /* DataCell.cc */; };
 		A7BAFC9C1A7AB29C008DEAED /* Python in Frameworks */ = {isa = PBXBuildFile; fileRef = A7BAFC9B1A7AB29C008DEAED /* Python */; };
@@ -39,7 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NotebookWindow.cc; sourceTree = "<group>"; };
+		A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NotebookWindow.mm; sourceTree = "<group>"; };
 		A7ACFC5C1A5B3F2A003F01E2 /* NotebookWindow.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NotebookWindow.hh; sourceTree = "<group>"; };
 		A7B0F7111A05663700FCC711 /* Cadabra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cadabra.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B0F7151A05663700FCC711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -47,7 +49,7 @@
 		A7B0F7181A05663700FCC711 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A7B0F7191A05663700FCC711 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		A7B0F71B1A05663700FCC711 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		A7B0F71E1A05663700FCC711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		A7B0F71E1A05663700FCC711 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Cadabra.xib; sourceTree = "<group>"; };
 		A7B0F7241A05663700FCC711 /* CadabraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CadabraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B0F7291A05663700FCC711 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B0F72A1A05663700FCC711 /* CadabraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CadabraTests.m; sourceTree = "<group>"; };
@@ -61,6 +63,9 @@
 		A7B39FDE1A6AC194007FBB93 /* Server.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Server.cc; path = ../../../../client_server/Server.cc; sourceTree = "<group>"; };
 		A7B39FDF1A6AC194007FBB93 /* Server.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Server.hh; path = ../../../../client_server/Server.hh; sourceTree = "<group>"; };
 		A7B39FE91A6AC26B007FBB93 /* Python.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Python.framework; path = ../../../../../../../usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework; sourceTree = "<group>"; };
+		A7B460921A7D40CD0081D96D /* NotebookController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotebookController.h; path = ../NotebookController.h; sourceTree = "<group>"; };
+		A7B460931A7D40CD0081D96D /* NotebookController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NotebookController.mm; path = ../NotebookController.mm; sourceTree = "<group>"; };
+		A7B460981A7D49060081D96D /* Notebook.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Notebook.xib; sourceTree = "<group>"; };
 		A7BAFC921A7AAD6B008DEAED /* jsoncpp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = jsoncpp; path = ../../../../../../../usr/local/Cellar/jsoncpp; sourceTree = "<group>"; };
 		A7BAFC941A7AAD82008DEAED /* libjsoncpp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjsoncpp.a; path = "../../../../../../../usr/local/Cellar/jsoncpp/0.6.0-rc2/lib/libjsoncpp.a"; sourceTree = "<group>"; };
 		A7BAFC961A7AADD0008DEAED /* DataCell.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = DataCell.cc; path = ../../../../client_server/DataCell.cc; sourceTree = "<group>"; };
@@ -122,10 +127,13 @@
 				A7B39FE81A6AC1AD007FBB93 /* client_server */,
 				A7B0F7181A05663700FCC711 /* AppDelegate.h */,
 				A7B0F7191A05663700FCC711 /* AppDelegate.mm */,
-				A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.cc */,
+				A7ACFC5B1A5B3F2A003F01E2 /* NotebookWindow.mm */,
 				A7ACFC5C1A5B3F2A003F01E2 /* NotebookWindow.hh */,
+				A7B460921A7D40CD0081D96D /* NotebookController.h */,
+				A7B460931A7D40CD0081D96D /* NotebookController.mm */,
+				A7B0F71D1A05663700FCC711 /* Cadabra.xib */,
+				A7B460981A7D49060081D96D /* Notebook.xib */,
 				A7B0F71B1A05663700FCC711 /* Images.xcassets */,
-				A7B0F71D1A05663700FCC711 /* MainMenu.xib */,
 				A7B0F7141A05663700FCC711 /* Supporting Files */,
 			);
 			path = Cadabra;
@@ -256,7 +264,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7B0F71C1A05663700FCC711 /* Images.xcassets in Resources */,
-				A7B0F71F1A05663700FCC711 /* MainMenu.xib in Resources */,
+				A7B460991A7D49060081D96D /* Notebook.xib in Resources */,
+				A7B0F71F1A05663700FCC711 /* Cadabra.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -275,6 +284,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7B39FE01A6AC194007FBB93 /* Actions.cc in Sources */,
+				A7B460951A7D40CD0081D96D /* NotebookController.mm in Sources */,
 				A7B39FE11A6AC194007FBB93 /* Actions.hh in Sources */,
 				A7B39FE21A6AC194007FBB93 /* ComputeThread.cc in Sources */,
 				A7B39FE31A6AC194007FBB93 /* ComputeThread.hh in Sources */,
@@ -282,7 +292,7 @@
 				A7B39FE51A6AC194007FBB93 /* DocumentThread.hh in Sources */,
 				A7B39FE61A6AC194007FBB93 /* Server.cc in Sources */,
 				A7B39FE71A6AC194007FBB93 /* Server.hh in Sources */,
-				A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.cc in Sources */,
+				A7ACFC5D1A5B3F2A003F01E2 /* NotebookWindow.mm in Sources */,
 				A7BAFC991A7AADD0008DEAED /* DataCell.cc in Sources */,
 				A7B0F71A1A05663700FCC711 /* AppDelegate.mm in Sources */,
 				A7B0F7171A05663700FCC711 /* main.m in Sources */,
@@ -308,12 +318,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A7B0F71D1A05663700FCC711 /* MainMenu.xib */ = {
+		A7B0F71D1A05663700FCC711 /* Cadabra.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A7B0F71E1A05663700FCC711 /* Base */,
 			);
-			name = MainMenu.xib;
+			name = Cadabra.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
