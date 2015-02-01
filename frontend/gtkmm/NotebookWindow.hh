@@ -45,6 +45,11 @@ namespace cadabra {
 			// TeX stuff
 			TeXEngine        engine;
 
+		protected:
+			virtual bool on_key_press_event(GdkEventKey*) override;
+
+			DTree::iterator current_cell;
+
       private:
 
 			// Main handler which fires whenever the Client object signals 
@@ -61,7 +66,7 @@ namespace cadabra {
 			Gtk::VBox                      topbox;
 			Gtk::HBox                      supermainbox;
 			Gtk::VBox                      mainbox;
-			Gtk::HBox                      buttonbox;
+//			Gtk::HBox                      buttonbox;
 			Gtk::HBox                      statusbarbox;
 
 			// All canvasses which are stored in the ...
@@ -70,7 +75,7 @@ namespace cadabra {
 			int                            current_canvas;
 
          // Buttons
-         Gtk::Button                    b_kill, b_run, b_run_to, b_run_from, b_help, b_stop, b_undo, b_redo;
+//         Gtk::Button                    b_kill, b_run, b_run_to, b_run_from, b_help, b_stop, b_undo, b_redo;
 
 			// Status bar
 			Gtk::ProgressBar               progressbar;
@@ -85,20 +90,34 @@ namespace cadabra {
 
 			// Name and modification data.
 			void             update_title();
+			void             set_stop_sensitive(bool);
 			std::string      name;
 			bool             modified;
 
 			// Menu and button callbacks.
+			void on_file_new();
+			void on_file_open();
 			void on_file_save();
 			void on_file_save_as();
 			void on_file_quit();
 
-			// Todo deque processing logic.
+			void on_edit_undo();
+
+			void on_run_runall();
+			void on_run_runtocursor();
+			void on_run_stop();
+
+			// Todo deque processing logic. This gets called by the dispatcher, but it
+			// is also allowed to call this from within NotebookWindow itself. The important
+			// thing is that it is run on the GUI thread.
 			void process_todo_queue();
 
-			// The following are handlers that get called when the content
-			// of a cell is changed or the user requests to run it (shift-enter).
+			// The following are handlers that get called when the cell
+			// gets focus, the content of a cell is changed, the user
+			// requests to run it (shift-enter). The last two parameters are
+			// always the cell in the DTree and the canvas number.
 
+			bool cell_got_focus(DTree::iterator, int);
 			bool cell_content_changed(const std::string&, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
 	};

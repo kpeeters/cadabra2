@@ -20,9 +20,11 @@ namespace cadabra {
 					exp_input_tv(Glib::RefPtr<Gtk::TextBuffer>);
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
+					virtual bool on_focus_in_event(GdkEventFocus *) override;
 					
 					sigc::signal0<bool>              content_execute;
 					sigc::signal1<bool, std::string> content_changed;
+					sigc::signal0<bool>              cell_got_focus;
 			};
 			
 			bool handle_button_press(GdkEventButton *);

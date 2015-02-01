@@ -131,6 +131,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	uint64_t id = header["cell_id"].asUInt64();
 
 	// Stupid way to find cell by id.
+	running_cells.erase(id);
 	auto it=docthread.dtree().begin();
 	while(it!=docthread.dtree().end()) {
 		if((*it).id()==id)
@@ -192,6 +193,30 @@ void ComputeThread::execute_cell(const DataCell& dc)
 	req["header"]=header;
 	content["code"]=dc.textbuf;
 	req["content"]=content;
+
+	std::ostringstream str;
+	str << req << std::endl;
+	
+	std::cerr << str.str() << std::endl;
+
+	running_cells.insert(dc.id());
+	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	}
+
+int ComputeThread::number_of_cells_running() const
+	{
+	return running_cells.size();
+	}
+
+void ComputeThread::stop()
+	{
+	if(connection_is_open==false)
+		return;
+
+	Json::Value req, header, content;
+	header["uuid"]="none";
+	header["msg_type"]="execute_interrupt";
+	req["header"]=header;
 
 	std::ostringstream str;
 	str << req << std::endl;

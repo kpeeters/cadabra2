@@ -48,9 +48,23 @@ namespace cadabra {
 
 			void execute_cell(const DataCell&);
 
+			// Stop the current cell execution on the server and remove
+			// all other cells from the run queue as well.
+
+			void stop();
+
+			// Determine if there are still cells running on the server.
+			// FIXME: this does not guarantee thread-safety but at the moment
+			// is only used for updating status bars etc.
+
+			int number_of_cells_running(void) const;
+			
 		private:
 			GUIBase        *gui;
 			DocumentThread& docthread;
+
+			// Keeping track of cells which are running on the server.
+			std::set<uint64_t> running_cells;
 
 			// WebSocket++ things.
 			WSClient wsclient;

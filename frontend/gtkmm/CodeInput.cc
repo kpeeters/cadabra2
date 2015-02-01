@@ -55,7 +55,12 @@ void CodeInput::init()
 	// Need CSS tweaks for top margin
 //	edit.set_top_margin(15);
 	edit.set_accepts_tab(true);
-//	Pango::TabArray
+	Pango::TabArray tabs(10);
+	// FIXME: use character width measured, instead of '8', or at least
+	// understand how Pango units are supposed to work.
+	for(int i=0; i<10; ++i) 
+		tabs.set_tab(i, Pango::TAB_LEFT, 4*8*i);
+	edit.set_tabs(tabs);
 
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, 
 																				&CodeInput::handle_button_press), 
@@ -73,7 +78,8 @@ void CodeInput::init()
 
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
-	bool is_shift_return = 	get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
+	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
+//	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
 	bool retval;
 	// std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
 	
@@ -83,7 +89,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 	
-	if(get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK)) { // shift-return
+	if(is_shift_return) {
 		content_changed(tmp);
 		content_execute();
 		return true;
@@ -165,4 +171,10 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	cr->stroke();
 	
 	return ret;
+	}
+
+bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event) 
+	{
+	cell_got_focus();
+	return Gtk::TextView::on_focus_in_event(event);
 	}

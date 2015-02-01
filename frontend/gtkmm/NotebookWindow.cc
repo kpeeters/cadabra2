@@ -12,7 +12,8 @@ using namespace cadabra;
 NotebookWindow::NotebookWindow()
 	: DocumentThread(this),
 	  current_canvas(0),
-	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), modified(false)
+//	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
+	  modified(false)
 	{
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
@@ -20,12 +21,26 @@ NotebookWindow::NotebookWindow()
 	// Setup menu.
 	actiongroup = Gtk::ActionGroup::create();
 	actiongroup->add( Gtk::Action::create("MenuFile", "_File") );
+	actiongroup->add( Gtk::Action::create("New", Gtk::Stock::NEW), Gtk::AccelKey("<control>N"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_new) );
+	actiongroup->add( Gtk::Action::create("Open", Gtk::Stock::OPEN), Gtk::AccelKey("<control>O"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_open) );
 	actiongroup->add( Gtk::Action::create("Save", Gtk::Stock::SAVE), Gtk::AccelKey("<control>S"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
 	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
 	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
+	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
+	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	actiongroup->add( Gtk::Action::create("MenuRun", "_Run") );
+	actiongroup->add( Gtk::Action::create("RunAll", Gtk::Stock::GO_FORWARD, "Run all"),
+							sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );
+	actiongroup->add( Gtk::Action::create("RunToCursor", Gtk::Stock::GOTO_LAST, "Run to cursor"),
+							sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );
+	actiongroup->add( Gtk::Action::create("RunStop", Gtk::Stock::STOP, "Stop"),
+							sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 
 	uimanager = Gtk::UIManager::create();
 	uimanager->insert_action_group(actiongroup);
@@ -34,20 +49,38 @@ NotebookWindow::NotebookWindow()
 		"<ui>"
 		"  <menubar name='MenuBar'>"
 		"    <menu action='MenuFile'>"
+		"      <menuitem action='New'/>"
+		"      <menuitem action='Open'/>"
+		"      <separator/>"
 		"      <menuitem action='Save'/>"
 		"      <menuitem action='SaveAs'/>"
 		"      <separator/>"
 		"      <menuitem action='Quit'/>"
 		"    </menu>"
+		"    <menu action='MenuEdit'>"
+		"      <menuitem action='EditUndo' />"
+		"    </menu>"
+		"    <menu action='MenuRun'>"
+		"      <menuitem action='RunAll' />"
+		"      <menuitem action='RunToCursor' />"
+		"      <menuitem action='RunStop' />"
+		"    </menu>"
 		"  </menubar>"
+		"  <toolbar name='ToolBar'>"
+		"    <toolitem action='Open' />"
+		"    <toolitem action='RunAll' name='run all'/>"
+		"    <toolitem action='RunStop' />"
+		"  </toolbar>"
 		"</ui>";
 
 	uimanager->add_ui_from_string(ui_info);
-	Gtk::Widget *menubar = uimanager->get_widget("/MenuBar");
 
 	// Main box structure dividing the window.
 	add(topbox);
+	Gtk::Widget *menubar = uimanager->get_widget("/MenuBar");
 	topbox.pack_start(*menubar, Gtk::PACK_SHRINK);
+	Gtk::Widget *toolbar = uimanager->get_widget("/ToolBar");
+	topbox.pack_start(*toolbar, Gtk::PACK_SHRINK);
 	topbox.pack_start(supermainbox, true, true);
 	topbox.pack_start(statusbarbox, false, false);
 	supermainbox.pack_start(mainbox, true, true);
@@ -67,26 +100,17 @@ NotebookWindow::NotebookWindow()
 	progressbar.set_show_text(true);
 
 	// Buttons
-	b_stop.set_sensitive(false);
-	b_run.set_label("Run all");
-	b_run_to.set_label("Run to cursor");
-	b_run_from.set_label("Run from cursor");
-	b_kill.set_label("Restart kernel");
-	buttonbox.pack_start(b_help, Gtk::PACK_SHRINK);
-	buttonbox.pack_start(b_run, Gtk::PACK_SHRINK);
-	buttonbox.pack_start(b_run_to, Gtk::PACK_SHRINK);
-	buttonbox.pack_start(b_run_from, Gtk::PACK_SHRINK);
-	buttonbox.pack_start(b_stop, Gtk::PACK_SHRINK);
-	buttonbox.pack_start(b_kill, Gtk::PACK_SHRINK);
+	set_stop_sensitive(false);
 
 	// The three main widgets
-	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
+//	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
 
 	// We always have at least one canvas.
 	canvasses.push_back(manage( new NotebookCanvas() ));
 	canvasses.push_back(manage( new NotebookCanvas() ));
 	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
 	mainbox.pack_start(*canvasses[1], Gtk::PACK_EXPAND_WIDGET, 0);
+
 
 	// Window size and title, and ready to go.
 	set_size_request(800,800);
@@ -115,6 +139,14 @@ void NotebookWindow::update_title()
 		else
 			set_title("Cadabra");
 		}
+	}
+
+void NotebookWindow::set_stop_sensitive(bool s)
+	{
+	Gtk::Widget *stop = uimanager->get_widget("/ToolBar/RunStop");
+	stop->set_sensitive(s);
+	stop = uimanager->get_widget("/MenuBar/MenuRun/RunStop");
+	stop->set_sensitive(s);	
 	}
 
 void NotebookWindow::process_data() 
@@ -156,10 +188,37 @@ void NotebookWindow::process_todo_queue()
 	process_action_queue();
 	}
 
+bool NotebookWindow::on_key_press_event(GdkEventKey* event)
+	{
+	bool is_ctrl_up    = event->keyval==GDK_KEY_Up   && (event->state&Gdk::CONTROL_MASK);	
+	bool is_ctrl_down  = event->keyval==GDK_KEY_Down && (event->state&Gdk::CONTROL_MASK);	
+
+	if(is_ctrl_up) {
+ 		std::shared_ptr<ActionBase> actionpos =
+			std::make_shared<ActionPositionCursor>(current_cell, ActionPositionCursor::Position::previous);
+		queue_action(actionpos);
+		process_todo_queue();
+		return true;
+		} 
+	else if(is_ctrl_down) {
+ 		std::shared_ptr<ActionBase> actionpos =
+			std::make_shared<ActionPositionCursor>(current_cell, ActionPositionCursor::Position::next);
+		queue_action(actionpos);
+		process_todo_queue();
+		return true;
+		}
+	else {
+		return Gtk::Window::on_key_press_event(event);
+		}
+	}
+
 void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 	{
 	// Add a visual cell corresponding to this document cell in 
 	// every canvas.
+
+	if(compute!=0)
+		set_stop_sensitive( compute->number_of_cells_running()>0 );
 	
 	Glib::RefPtr<Gtk::TextBuffer> global_buffer;
 
@@ -190,6 +249,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 
 				ci->edit.content_changed.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), it, i ) );
 				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), it, i ) );
+				ci->edit.cell_got_focus.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), it, i ) );
 				newcell.inbox = manage( ci );
 				w=newcell.inbox;
 				break;
@@ -265,10 +325,11 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator)
 
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
-	// std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
+	std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 	target.inbox->edit.grab_focus();
+	current_cell=it;
 	}
 
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
@@ -277,6 +338,13 @@ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::ite
 	// std::cout << "received: " << content << std::endl;
 	it->textbuf=content;
 
+	return false;
+	}
+
+bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
+	{
+	current_cell=it;
+	current_canvas=canvas_number;
 	return false;
 	}
 
@@ -296,9 +364,19 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 		}
 
 	// Execute
+	set_stop_sensitive(true);
 	compute->execute_cell(*it);
 
 	return true;
+	}
+
+void NotebookWindow::on_file_new()
+	{
+	}
+
+void NotebookWindow::on_file_open()
+	{
+	std::cout << "open" << std::endl;
 	}
 
 void NotebookWindow::on_file_save()
@@ -331,4 +409,21 @@ void NotebookWindow::on_file_save_as()
 
 void NotebookWindow::on_file_quit()
 	{
+	}
+
+void NotebookWindow::on_edit_undo()
+	{
+	}
+
+void NotebookWindow::on_run_runall()
+	{
+	}
+
+void NotebookWindow::on_run_runtocursor()
+	{
+	}
+
+void NotebookWindow::on_run_stop()
+	{
+	compute->stop();
 	}
