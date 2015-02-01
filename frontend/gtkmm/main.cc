@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 	cadabra::ComputeThread compute(&nw, nw);
 														  
 	// Create and start the compute/network thread.
-	std::thread compute_thread([&compute] { compute.run(); });
+	std::thread compute_thread(&cadabra::ComputeThread::run, &compute);
 	
 	// Connect the two threads.
 	nw.set_compute_thread(&compute);

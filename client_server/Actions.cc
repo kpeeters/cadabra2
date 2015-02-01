@@ -81,10 +81,18 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 			needed_new_cell=true;
 			break;
 			}
-		case Position::previous:
-			std::cerr << "previous" << std::endl;
-			// FIXME: implement
+		case Position::previous: {
+			std::cerr << "previous " << ref->textbuf << std::endl;
+			DTree::sibling_iterator sib=ref;
+			while(cl.doc.is_valid(--sib)) {
+				if(sib->cell_type==DataCell::CellType::input) {
+					newref=sib;
+					return;
+					}
+				}
+			newref=ref; // No previous sibling cell. FIXME: walk tree structure
 			break;
+			}
 		}
 	}
 

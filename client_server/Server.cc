@@ -155,7 +155,7 @@ std::string Server::run_string(const std::string& blk)
 		boost::python::object catchobj = main_module.attr("catchErr");
 		boost::python::object valueobj = catchobj.attr("value");
 		std::string err = boost::python::extract<std::string>(valueobj);
-		std::cerr << err << std::endl;
+		std::cerr << "ERROR: " << err << std::endl;
 		catchobj.attr("clear")();
 		throw std::runtime_error(err);
 		}
@@ -210,6 +210,9 @@ void Server::wait_for_job()
 			std::cout << "going to run: " << block_queue.front().input << std::endl;
 			Block block = block_queue.front();
 			block_queue.pop();
+			// We are done with the block_queue; release the lock so that the
+			// master thread can push new blocks onto it.
+			lock.unlock();
 			try {
 				block.output = run_string(block.input);
 				on_block_finished(block);

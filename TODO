@@ -20,9 +20,6 @@
 - For ActionRemoveCell we need to flip the order of remove gui and execute on doc,   
   or not? Depends on whether we keep the cell floating alive outside the Doc or not.
 
-- bug: when trying to run a cell without connected kernel, the second run produces
-  a gtk warning.
-
 - client_server: we need to lock the tree during an entire loop of process_action_queue,
   and not lock explicitly in Actions.
 
@@ -69,8 +66,13 @@
 NEXT: test websocketpp-0.4.0 on linux; on osx there is an issue with using an explicitly deleted thread function.
 
 
+- threading in server: sending two blocks in succession still does not run the second one.
+  test stop button when there are two blocks.
+
 OSX:
 ====
 
 - build settings contains explicit ref to /usr/local/Cellar/1.56.0/boost/include/
 - websocketpp copied into tree, not yet checked in.
+
+
