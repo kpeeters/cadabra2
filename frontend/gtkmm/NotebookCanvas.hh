@@ -16,14 +16,15 @@ namespace cadabra {
 
 	class NotebookWindow;
 	
-	class NotebookCanvas : public Gtk::VPaned {
+	class NotebookCanvas : public Gtk::VBox {
 		public:
 			NotebookCanvas();
 			~NotebookCanvas();
 			
 			std::map<DataCell *, VisualCell> visualcells;
 
-			Gtk::EventBox             ebox;
+//			Gtk::EventBox             ebox;
+//			Gtk::VBox                 ebox;
 			Gtk::ScrolledWindow       scroll;
 			Gtk::HSeparator           bottomline;
 

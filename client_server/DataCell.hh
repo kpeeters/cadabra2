@@ -55,5 +55,9 @@ namespace cadabra {
 
 	std::string JSON_serialise(const DTree&);
 	void        JSON_recurse(const DTree&, DTree::iterator, Json::Value&);
-	
+
+	// Load a document from .cj format, i.e. the inverse of the above.
+
+	void        JSON_deserialise(const std::string&, DTree&);
+	void        JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells);
 }

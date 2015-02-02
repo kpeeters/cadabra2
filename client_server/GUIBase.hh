@@ -21,12 +21,18 @@ namespace cadabra {
 			virtual void update_cell(const DTree&, DTree::iterator)=0;
 			virtual void remove_cell(const DTree&, DTree::iterator)=0;
 
+			// Remove all GUI cells from the display (used as a quick way
+			// to clear all before loading a new document).
+			
+			virtual void remove_all_cells()=0;
+
 			// Add a GUI cell corresponding to the document cell at the
 			// iterator. The GUI needs to figure out from the location of
 			// this cell in the DTree where to insert the cell in the visual
-			// display.
+			// display. If the 'visible' flag is false, hide the cell (this
+			// is only used when constructing a document on load time).
 
-			virtual void add_cell(const DTree&, DTree::iterator)=0;
+			virtual void add_cell(const DTree&, DTree::iterator, bool visible)=0;
 
 			// Position the cursor in the current canvas in the widget 
 			// corresponding to the indicated cell.

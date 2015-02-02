@@ -12,8 +12,15 @@ namespace cadabra {
 
 	class CodeInput : public Gtk::VBox {
 		public:
+			// Initialise with a new empty TextBuffer.
 			CodeInput();
+
+			// Initialise with existing TextBuffer.
 			CodeInput(Glib::RefPtr<Gtk::TextBuffer>);
+
+			// Initialise with a new TextBuffer, filling it with the content of the
+			// given string.
+			CodeInput(const std::string&);
 			
 			class exp_input_tv : public Gtk::TextView {
 				public:

@@ -46,7 +46,7 @@ void ActionAddCell::revert(DocumentThread& cl)
 void ActionAddCell::update_gui(const DTree& tr, GUIBase& gb)
 	{
 	std::cout << "updating gui for ActionAddCell" << std::endl;
-	gb.add_cell(tr, newref);
+	gb.add_cell(tr, newref, true);
 	}
 
 
@@ -109,7 +109,7 @@ void ActionPositionCursor::update_gui(const DTree& tr, GUIBase& gb)
 	{
 	if(needed_new_cell) {
 		// std::cout << "adding new visual cell" << std::endl;
-		gb.add_cell(tr, newref);
+		gb.add_cell(tr, newref, true);
 		}
 	// std::cout << "positioning cursor" << std::endl;
 	gb.position_cursor(tr, newref);

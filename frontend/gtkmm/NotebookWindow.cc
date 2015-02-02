@@ -212,7 +212,7 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		}
 	}
 
-void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
+void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	{
 	// Add a visual cell corresponding to this document cell in 
 	// every canvas.
@@ -242,7 +242,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput();
+					ci = new CodeInput(it->textbuf);
 					global_buffer=ci->buffer;
 					}
 				else ci = new CodeInput(global_buffer);
@@ -264,7 +264,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 		// Document cells are easy; just add. They have no parent in the DTree.
 
 		if(it->cell_type==DataCell::CellType::document) {
-			canvasses[i]->ebox.add(*w);
+			canvasses[i]->scroll.add(*w);
 			w->show_all(); // FIXME: if you drop this, the whole document remains invisible
 			continue;
 			}
@@ -280,26 +280,35 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it)
 
 		VisualCell& parent_visual = canvasses[i]->visualcells[&(*parent)];
 		Gtk::VBox *parentbox=0;
+		int offset=0;
 		if(parent->cell_type==DataCell::CellType::document)
 			parentbox=parent_visual.document;
-		else
+		else {
+			// FIXME: Since we are adding children of input cells to the vbox in which
+			// the exp_input_tv widget is the 0th cell, we have to offset. Would be
+			// cleaner to have a separate 'children' vbox in CodeInput (or in fact
+			// every widget that can potentially contain children).
+			offset=1;
 			parentbox=parent_visual.inbox;
+			}
 
-		std::cout << "adding cell to canvas " << i << std::endl;
+//		std::cout << "adding cell to canvas " << i << std::endl;
 		parentbox->pack_start(*w, false, false);	
-		unsigned int index=tr.index(it);
-		unsigned int numch=tr.number_of_children(parent);
-		std::cout << "is index " << index << " vs " << numch << std::endl;
-		if(index!=numch-1) {
-			std::cout << "need to re-order" << std::endl;
+		unsigned int index    =tr.index(it)+offset;
+		unsigned int index_gui=parentbox->get_children().size()-1;
+//		std::cout << "is index " << index << " vs " << index_gui << std::endl;
+		if(index!=index_gui) {
+//			std::cout << "need to re-order" << std::endl;
 			parentbox->reorder_child(*w, index);
 			}
+		if(visible)
+			w->show_all();
 		}
 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 	{
-	std::cout << "request to remove gui cell" << std::endl;
+//	std::cout << "request to remove gui cell" << std::endl;
 
 	// Can only remove cells which have a parent (i.e. not the top-level document cell).
 
@@ -315,7 +324,18 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 			parentbox=parent_visual.inbox;
 		VisualCell& actual = canvasses[i]->visualcells[&(*it)];
 		parentbox->remove(*actual.inbox);
+		canvasses[i]->visualcells.erase(&(*it));
 		}	
+	}
+
+void NotebookWindow::remove_all_cells()
+	{
+	// Simply removing the document cell should do the trick.
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		canvasses[i]->scroll.remove();
+		canvasses[i]->visualcells.clear();
+		}
+	engine.checkout_all();
 	}
 
 void NotebookWindow::update_cell(const DTree&, DTree::iterator)
@@ -377,6 +397,36 @@ void NotebookWindow::on_file_new()
 void NotebookWindow::on_file_open()
 	{
 	std::cout << "open" << std::endl;
+	
+	Gtk::FileChooserDialog dialog("Please choose a notebook to open",
+											Gtk::FILE_CHOOSER_ACTION_OPEN);
+
+	dialog.set_transient_for(*this);
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+	int result=dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+			std::string filename = dialog.get_filename();			
+			std::ifstream file(filename);
+			std::string content, line;
+			
+			while(std::getline(file, line)) 
+				content+=line;
+
+			doc.clear();
+			JSON_deserialise(content, doc);
+			remove_all_cells();
+			build_visual_representation();
+			engine.convert_all();
+			mainbox.show_all();
+			
+//			file << out << std::endl;
+			break;
+			}
+		}
 	}
 
 void NotebookWindow::on_file_save()
