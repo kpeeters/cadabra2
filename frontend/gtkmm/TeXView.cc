@@ -8,18 +8,18 @@ TeXView::TeXView(TeXEngine& eng, const std::string& texb, int hmargin)
 	: content(0), vbox(false, 10), hbox(false, hmargin), engine(eng)
 	{
 	content = engine.checkin(texb, "", "");
-	engine.convert_all();
 
 	add(vbox);
 	vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
 	hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
 //	set_state(Gtk::STATE_PRELIGHT);
 	override_background_color(Gdk::RGBA("white"));
-	show_all();
 	}
 
 void TeXView::on_show()
 	{
+	engine.convert_all();
+
 	Glib::RefPtr<Gdk::Pixbuf> pixbuf = 
 		Gdk::Pixbuf::create_from_data(content->image().data(), Gdk::COLORSPACE_RGB, 
 												true,

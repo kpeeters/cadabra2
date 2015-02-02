@@ -279,7 +279,11 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		block_available.notify_one();
 		}
 	else if(msg_type=="execute_interrupt") {
+		std::unique_lock<std::mutex> lock(block_available_mutex);
 		stop_block();
+		std::cout << "clearing block queue" << std::endl;
+		std::queue<Block> empty;
+		std::swap(block_queue, empty);
 		std::cout << "job stop requested" << std::endl;
 		}
 	}

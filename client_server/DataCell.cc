@@ -92,6 +92,50 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		}
 	}
 
+void cadabra::JSON_deserialise(const std::string& cj, DTree& doc) 
+	{
+	Json::Reader reader;
+	Json::Value  root;
+
+	bool ret = reader.parse( cj, root );
+	if ( !ret ) {
+		std::cerr << "cannot parse json file" << std::endl;
+		return;
+		}
+
+	// Setup main document.
+	DataCell top(DataCell::CellType::document);
+	DTree::iterator doc_it = doc.set_head(top);
+
+	// Scan through json file.
+	const Json::Value cells = root["cells"];
+	JSON_in_recurse(doc, doc_it, cells);
+	}
+
+void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells)
+	{
+	for(unsigned int c=0; c<cells.size(); ++c) {
+		const Json::Value celltype = cells[c]["cell_type"];
+		const Json::Value id       = cells[c]["id"];
+		const Json::Value textbuf  = cells[c]["textbuf"];
+		DTree::iterator last=doc.end();
+		if(celltype.asString()=="input") {
+			DataCell dc(cadabra::DataCell::CellType::input, textbuf.asString(), false);
+			last=doc.append_child(loc, dc);
+			}
+		else if(celltype.asString()=="output") {
+			DataCell dc(cadabra::DataCell::CellType::output, textbuf.asString(), false);
+			last=doc.append_child(loc, dc);
+			}
+		if(last!=doc.end()) {
+			if(cells[c].isMember("cells")) {
+				const Json::Value subcells = cells[c]["cells"];
+				JSON_in_recurse(doc, last, subcells);
+				}
+			}
+		}
+	}
+
 uint64_t DataCell::id() const
 	{
 	return serial_number;

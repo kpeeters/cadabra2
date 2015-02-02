@@ -38,6 +38,13 @@ CodeInput::CodeInput(Glib::RefPtr<Gtk::TextBuffer> tb)
 	init();
 	}
 
+CodeInput::CodeInput(const std::string& txt)
+	: buffer(Gtk::TextBuffer::create()), edit(buffer)
+	{
+	buffer->set_text(txt);
+	init();
+	}
+
 void CodeInput::init() 
 	{
 //	scroll_.set_size_request(-1,200);

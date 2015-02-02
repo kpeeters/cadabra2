@@ -42,6 +42,7 @@ namespace cadabra {
 			std::mutex   dtree_mutex;
 			const DTree& dtree();
          void         new_document();
+			void         build_visual_representation();
 			
 			void queue_action(std::shared_ptr<ActionBase>);
 		

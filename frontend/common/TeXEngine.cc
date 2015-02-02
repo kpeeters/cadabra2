@@ -156,6 +156,11 @@ void TeXEngine::checkout(TeXRequest *req)
 	requests.erase(it);
 	}
 
+void TeXEngine::checkout_all()
+	{
+	requests.clear();
+	}
+
 TeXEngine::TeXRequest *TeXEngine::modify(TeXRequest *req, const std::string& txt)
 	{
 	req->latex_string=txt;
@@ -165,8 +170,18 @@ TeXEngine::TeXRequest *TeXEngine::modify(TeXRequest *req, const std::string& txt
 
 void TeXEngine::convert_all()
 	{
-	if(requests.size()!=0) 
+	size_t need_generating=0;
+	auto it=requests.begin();
+	while(it!=requests.end()) {
+		if((*it)->needs_generating)
+			++need_generating;
+		++it;
+		}
+
+	if(need_generating!=0) {
+		std::cerr << "running TeX on " << requests.size() << " requests" << std::endl;
 		convert_set(requests);
+		}
 	}
 
 void TeXEngine::convert_one(TeXRequest *req)

@@ -58,6 +58,7 @@ namespace cadabra {
 			TeXRequest                *modify(TeXRequest *, const std::string&);
 			void                       convert_all();
 			void                       checkout(TeXRequest *);
+			void                       checkout_all();
 			
 		private:		
 			static double millimeter_per_inch;
