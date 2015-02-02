@@ -199,28 +199,29 @@ int quit(void *)
 void Server::wait_for_job()
 	{
 	// Infinite loop, waiting for the master thread to signal that a new block is
-   // available, and processing it.
+   // available, and processing it. Blocks are always processed sequentially
+	// even though new ones may come in before previous ones have finished.
 
 	std::cout << "waiting for blocks" << std::endl;
 
 	while(true) {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
-		block_available.wait(lock);
-		if(block_queue.size()>0) {
-			std::cout << "going to run: " << block_queue.front().input << std::endl;
-			Block block = block_queue.front();
-			block_queue.pop();
-			// We are done with the block_queue; release the lock so that the
-			// master thread can push new blocks onto it.
-			lock.unlock();
-			try {
-				block.output = run_string(block.input);
-				on_block_finished(block);
-				}
-			catch(std::runtime_error& ex) {
-				block.error = ex.what();
-				on_block_error(block);
-				}
+		while(block_queue.size()==0) 
+			block_available.wait(lock);
+
+		std::cout << "going to run: " << block_queue.front().input << std::endl;
+		Block block = block_queue.front();
+		block_queue.pop();
+		// We are done with the block_queue; release the lock so that the
+		// master thread can push new blocks onto it.
+		lock.unlock();
+		try {
+			block.output = run_string(block.input);
+			on_block_finished(block);
+			}
+		catch(std::runtime_error& ex) {
+			block.error = ex.what();
+			on_block_error(block);
 			}
 		}
 	}
