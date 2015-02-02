@@ -66,8 +66,9 @@
 NEXT: test websocketpp-0.4.0 on linux; on osx there is an issue with using an explicitly deleted thread function.
 
 
-- threading in server: sending two blocks in succession still does not run the second one.
+- threading in server: 
   test stop button when there are two blocks.
+  
 
 OSX:
 ====
