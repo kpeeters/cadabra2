@@ -19,6 +19,8 @@
 #include <sstream>
 #include <memory>
 
+// Properties.
+
 #include "properties/Accent.hh"
 #include "properties/AntiCommuting.hh"
 #include "properties/Commuting.hh"
@@ -31,24 +33,30 @@
 #include "properties/Distributable.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
+#include "properties/Integer.hh"
 #include "properties/KroneckerDelta.hh"
 #include "properties/SelfAntiCommuting.hh"
+#include "properties/SelfCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
 #include "properties/Weight.hh"
 #include "properties/WeightInherit.hh"
 
+// Algorithms.
+
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
-#include "algorithms/reduce_sub.hh"
+#include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/join_gamma.hh"
 
+// Helper algorithms, not for users.
+
+#include "algorithms/reduce_sub.hh"
+
 
 // TODO: 
-//
-// - We do not use can_apply yet?
 //
 // - Make a list of useful things to pass to functions which are not Ex objects. 
 //   Then abstract a new def_algo from there.
@@ -629,10 +637,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Algorithms with only the Ex as argument.
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
+	def_algo_1<eliminate_kronecker>("eliminate_konecker");
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
-//	def_algo_1<join_gamma>("join_gamma");
 
 	def("join_gamma",  &dispatch_1<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=false,
 																				arg("expand")=true,arg("use_gendelta")=false),
@@ -666,10 +674,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Distributable>();
 	def_prop<GammaMatrix>();
 	def_prop<IndexInherit>();
-	def_prop<Indices>();
+	def_prop<Indices>();	
+	def_prop<Integer>();
 	def_prop<KroneckerDelta>();
 	def_prop<NonCommuting>();
 	def_prop<SelfAntiCommuting>();
+	def_prop<SelfCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
 	def_prop<Weight>();

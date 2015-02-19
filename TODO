@@ -66,9 +66,6 @@
 NEXT: test websocketpp-0.4.0 on linux; on osx there is an issue with using an explicitly deleted thread function.
 
 
-- threading in server: 
-  test stop button when there are two blocks.
-  
 
 GTKMM:
 ======

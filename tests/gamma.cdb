@@ -21,27 +21,11 @@ test01();
 # on the gamma matrices that you start with, then you may as well
 # forget about all explicit anti-symmetrisations in those indices.
 
-def fixed(fun, obj):
-    while fun(obj).state()==result_t.changed:
-        print "ran"
-    return obj
-
-def runit(ex):
-    join_gamma(ex)
-    distribute(ex, keepstate=True)
-    sort_product(ex, keepstate=True)
-    print(ex)
-    return ex
-
 def test02():
     \delta_{m n}::KroneckerDelta.
     \Gamma_{#}::GammaMatrix(metric=\delta).
     obj3a:= \Gamma_{c d}\Gamma_{m1 m2 m3}\Gamma_{n1 n2};
-    return fixed(runit, obj3a)
-    #return runit(obj3a)
 
-# This runs too much because runit does not keep state 
-# from its ingredients.
 test02();
 
 \delta_{m n}::KroneckerDelta.
@@ -88,71 +72,78 @@ join_gamma(ex)
 # 
 # 
 # 
-# # This is one from the Abra help document. It's a bit more work here
-# # because there are no default rules yet (if we make eliminate_kr, 
-# # canonicalise, prodsort, asymprop and collect_terms default rules,
-# # then things look a lot better). Anyhow, it does reproduce the 
-# # correct result ;-) 
-# 
-# @reset.
-# \delta_{m n}::SelfCommuting.
-# \delta_{m n}::KroneckerDelta.
-# {m, n, p, q, r, a, b, c}::Indices(flat).
-# {m, n, p, q, r, a, b, c}::Integer(1..10).
-# 
-# \GAMMA^{#}::GammaMatrix(metric=\delta).
-# 
-# one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
-# @join!(%){expand}:
-# @distribute!(%):
-# @eliminate_kr!(%):
-# @canonicalise!(%):
-# @prodsort!(%):
-# #@asymprop!(%):
-# @collect_terms!(%):
-# 
-# @join!(%){expand}:
-# @distribute!(%):
-# @eliminate_kr!(%):
-# @canonicalise!(%):
-# @prodsort!(%):
-# #@asymprop!(%):
-# @collect_terms!(%):
-# 
-# @join!(%){expand}:
-# @distribute!(%):
-# @eliminate_kr!(%):
-# @canonicalise!(%):
-# @prodsort!(%):
-# #@asymprop!(%):
-# @collect_terms!(%):
-# 
-# @join!(%){expand}:
-# @distribute!(%):
-# @eliminate_kr!(%):
-# @canonicalise!(%):
-# @prodsort!(%):
-# #@asymprop!(%):
-# @collect_terms!(%):
-# 
-# @join!(%){expand}:
-# @distribute!(%):
-# @eliminate_kr!(%):
-# @canonicalise!(%):
-# @prodsort!(%):
-# #@asymprop!(%):
-# @collect_terms!(%):
-# # - 2016 * \GAMMA^{a b c} - 2016 * \GAMMA^{a} * \delta^{b c} + 2016 * \GAMMA^{b} * \delta^{a c} + 18144 * \GAMMA^{c} * \delta^{a b};
-# 
-# two:= \GAMMA^{a}*@(one);
-# @distribute!(%):
-# @join!(%){expand}:
-# @distribute!(%):
-# #@asymprop!(%):
-# @eliminate_kr!(%):
-# @canonicalise!(%):
-# @collect_terms!(%);
-# @assert(two);
+
+# This is one from the Abra help document. It's a bit more work here
+# because there are no default rules yet (if we make eliminate_kr, 
+# canonicalise, prodsort, asymprop and collect_terms default rules,
+# then things look a lot better). Anyhow, it does reproduce the 
+# correct result ;-) 
+
+def test03():
+    __cdbkernel__ = create_scope();
+\delta_{m n}::SelfCommuting.
+\delta_{m n}::KroneckerDelta.
+{m, n, p, q, r, a, b, c}::Indices(flat).
+{m, n, p, q, r, a, b, c}::Integer(1..10).
+\GAMMA^{#}::GammaMatrix(metric=\delta).
+one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
+join_gamma(one)
+distribute(one)
+
+test03()
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@prodsort!(%):
+#@asymprop!(%):
+@collect_terms!(%):
+# - 2016 * \GAMMA^{a b c} - 2016 * \GAMMA^{a} * \delta^{b c} + 2016 * \GAMMA^{b} * \delta^{a c} + 18144 * \GAMMA^{c} * \delta^{a b};
+
+two:= \GAMMA^{a}*@(one);
+@distribute!(%):
+@join!(%){expand}:
+@distribute!(%):
+#@asymprop!(%):
+@eliminate_kr!(%):
+@canonicalise!(%):
+@collect_terms!(%);
+@assert(two);
+
+
 # 
 # 
 # # Test 5:= brackets

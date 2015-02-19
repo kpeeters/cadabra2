@@ -71,6 +71,7 @@ set(LOCAL_SRC_FILES
   properties/NumericalFlat.cc
   properties/PartialDerivative.cc
   properties/SelfAntiCommuting.cc
+  properties/SelfCommuting.cc
   properties/SortOrder.cc
   properties/Spinor.cc
   properties/Symbol.cc
@@ -83,6 +84,7 @@ set(LOCAL_SRC_FILES
   algorithms/collect_terms.cc
   algorithms/distribute.cc
 #  algorithms/drop_weight.cc
+  algorithms/eliminate_kronecker.cc
   algorithms/flatten_product.cc
   algorithms/join_gamma.cc
 #  algorithms/keep_terms.cc
