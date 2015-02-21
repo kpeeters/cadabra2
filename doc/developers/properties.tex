@@ -9,6 +9,8 @@ this way. The most important of them is that this makes it a lot
 easier for Cadabra to provide useful feedback on parameters which are
 not valid.
 
-Parsing is done by implementing the virtual function `parse`. It takes
-an exptree representing a possibly comma-separated list of arguments.
+Parsing is done by implementing the virtual function
+`\verb|parse(keyval_t&)|'. The argument is a container class which
+represents the arguments passed to the property as key/value pairs
+(the \verb|keyval_t| type is defined in \verb|Props.hh|).
 

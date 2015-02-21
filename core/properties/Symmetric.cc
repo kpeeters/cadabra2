@@ -1,8 +1,31 @@
 
 #include "properties/Symmetric.hh"
 
+std::string Symmetric::name() const
+	{
+	return "Symmetric";
+	}
+
 unsigned int Symmetric::size(const Properties&, exptree&, exptree::iterator) const
 	{
 	return 1;
+	}
+
+TableauBase::tab_t Symmetric::get_tab(const Properties& pr, exptree& tr, exptree::iterator it, unsigned int num) const
+	{
+	assert(num==0);
+
+	const Symmetric *pd;
+	for(;;) {
+		pd=pr.get<Symmetric>(it);
+		if(!pd)
+			it=tr.begin(it);
+		else break;
+		} 
+
+	tab_t tab;
+	for(unsigned int i=0; i<tr.number_of_children(it); ++i)
+		tab.add_box(0,i);
+	return tab;
 	}
 

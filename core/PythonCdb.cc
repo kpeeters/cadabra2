@@ -39,11 +39,13 @@
 #include "properties/SelfCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
+#include "properties/Symmetric.hh"
 #include "properties/Weight.hh"
 #include "properties/WeightInherit.hh"
 
 // Algorithms.
 
+#include "algorithms/canonicalise.hh"
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
@@ -635,9 +637,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// pass a 'std::string' to a function that expects an 'Ex *'. That will never work.
 
 	// Algorithms with only the Ex as argument.
+	def_algo_1<canonicalise>("canonicalise");
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
-	def_algo_1<eliminate_kronecker>("eliminate_konecker");
+	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
@@ -682,6 +685,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SelfCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
+	def_prop<Symmetric>();
 	def_prop<Weight>();
 	def_prop<WeightInherit>();
 

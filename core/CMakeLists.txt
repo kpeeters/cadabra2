@@ -57,6 +57,7 @@ set(LOCAL_SRC_FILES
   properties/CommutingBehaviour.cc
   properties/Coordinate.cc
   properties/Derivative.cc
+  properties/Diagonal.cc
   properties/DiracBar.cc
   properties/Distributable.cc
   properties/GammaMatrix.cc
@@ -81,6 +82,7 @@ set(LOCAL_SRC_FILES
   properties/Weight.cc
   properties/WeightInherit.cc
   modules/xperm_new.cc
+  algorithms/canonicalise.cc
   algorithms/collect_terms.cc
   algorithms/distribute.cc
 #  algorithms/drop_weight.cc
