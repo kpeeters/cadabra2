@@ -1,0 +1,577 @@
+# Testing the automatic canonicalisation routines.
+
+# Simple tests with symmetric/anti-symmetric tensors, all 
+# expressions vanishing identically by symmetry arguments.
+#
+
+def test01:
+a_{#}::AntiSymmetric
+s_{#}::Symmetric
+tst1:= a_{m n} s_{m n}
+canonicalise(tst1)
+    assert(tst1==0)
+
+
+tst2:= a_{n m q} s_{m n};
+@canonicalise!(%);
+@assert(tst2);
+
+tst3:= a_{m m};
+@canonicalise!(%);
+@assert(tst3);
+
+@reset.
+a_{#}::AntiSymmetric.
+s_{#}::Symmetric.
+obj4:= s_{m n m n};
+@canonicalise!(%);
+tst4:= s_{m m n n}-@(obj4);
+@collect_terms!(%);
+@assert(tst4);
+
+
+# Riemann tensor symmetry tests:
+#
+s_{#}::Symmetric.
+R_{m n p q}::RiemannTensor.
+tst5:= R_{m n p q}*s_{p q}*t_{m n};
+@canonicalise!(%);
+@assert(tst5);
+
+# dW_{m n p q r s}::TableauSymmetry{2,2}{3,4,5,6}.
+# rtopen:= dW_{a b r3 r4 r1 r2}*q;
+# @canonicalise!(%);
+# rtopentest:= dW_{a b r1 r2 r3 r4}*q - @(rtopen);
+# @collect_terms!(%);
+# @assert(rtopentest);
+
+
+# Here, the fact that the 'second' field of the index contractions involving 'a'
+# are compared _before_ the one of the 'b' leads to a sorting in which the first
+# form is preferred:
+#
+a2_{#}::AntiSymmetric.
+obj6a:= R_{m n p q} a_{m n} a2_{p q};
+obj6b:= R_{m n p q} a_{p q} a2_{m n};
+@canonicalise!(obj6a);
+@canonicalise!(obj6b);
+tst6:= @(obj6a)-@(obj6b);
+@collect_terms!(%);
+@assert(tst6);
+
+# The key test that inspired it all:
+#
+F_{#}::AntiSymmetric.
+G_{#}::AntiSymmetric.
+R_{m n p q}::RiemannTensor.
+tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
+@canonicalise!(%);
+@assert(tst7);
+
+# A more complicated preferred-form case. The algorithm should be stable,
+# that is, it should give the same result independent of which representative
+# is chosen as input. 
+#
+H_{#}::Symmetric.
+F_{#}::AntiSymmetric.
+R_{m n p q}::RiemannTensor.
+obj8a:=   R_{d1 d2 d3 d4} R_{d6 d7 d4 d5} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
+obj8b:=   R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
+obj8c:= - R_{d1 d2 d3 d4} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
+obj8d:= - R_{d3 d4 d1 d2} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
+@canonicalise!(obj8a);
+@canonicalise!(obj8b);
+@canonicalise!(obj8c);
+@canonicalise!(obj8d);
+tst8b:= @(obj8a)-@(obj8b);
+@collect_terms!(%);
+@assert(tst8b);
+tst8c:= @(obj8a)-@(obj8c);
+@collect_terms!(%);
+@assert(tst8c);
+tst8d:= @(obj8a)-@(obj8d);
+@collect_terms!(%);
+@assert(tst8d);
+
+# Interchange with more than two identical objects:
+#
+obj9a:= A_{m n p} A_{m n p} A_{r s t} A_{r s t};
+obj9b:= A_{m n p} A_{r s t} A_{r s t} A_{m n p};
+tst9:= @(obj9a)-@(obj9b);
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(tst9);
+
+# This one works now too.
+#
+tst10:= K_{m n} * K_{m q} * K_{n q} - K_{m q} * K_{m n} * K_{n q};
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(tst10);
+
+# Portugal's examples involving Ricci cycling do not yet work:
+#
+R_{m n p q}::RiemannTensor.
+tst11a:= R_{a b c d} R_{e a c f} R_{f b d e} 
+  +  R_{a b e f} R_{c d a b} R_{c e d f}
+  +2 R_{a b c d} R_{e a f c} R_{f d b e};
+@riemann_index_regroup!(%);
+@canonicalise!(%);
+@collect_terms!(%);
+
+tst11b:= R_{a b c d} R_{e f a k} R_{h c k b} R_{d h e f}
+ +4 R_{a b c d} R_{e f k a} R_{h b c e} R_{d k f h}
+ -  R_{a b c d} R_{e f k a} R_{h b f e} R_{c d k h}
+ +4 R_{a b c d} R_{h k d f} R_{e f k a} R_{h b c e};
+@riemann_index_regroup!(%);
+@canonicalise!(%);
+@collect_terms!(%);
+
+# One other non-trivial one involving the cyclic identity.
+# This one is not handled because the anti-symmetrisation in the 
+# brackets is not recognised, and therefore the regroup function 
+# does not see that it can Ricci cycle.
+#
+W_{a b m n} W_{a b p q} - 2*(W_{a m b n} W_{a p b q} - W_{a m b n} W_{a q b p});
+#
+# Use this one to test the Young tableau idea. I think it should
+# handle this one, since it essentially boils down to the idea
+# that you write down the full Young symmetrised objects of all
+# terms, and then collect.
+
+# Portugal's non-trivial fifth-order zero:
+#
+R_{m n p q}::RiemannTensor.
+tst11:= R_{a b c d} R_{e f k h} R_{i a j e} R_{b c d i} R_{f k h j};
+@canonicalise!(%);
+@assert(tst11);
+
+
+zeta_{m n}::Symmetric:
+tst12:= k_a k_b zeta_{a b} - k_b k_a zeta_{a b};
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(tst12);
+
+
+# R^4 stuff:
+#
+#R_{m n p q}::RiemannTensor.
+#R_{d1 d2 d3 d4} * R_{d1 d2 d5 d6} * R_{d7 d8 d5 d6} * R_{d7 d8 d3 d4};
+#R_{r6 r3 s5 s3} * R_{r3 r7 s3 s7} * R_{r8 r6 s5 s8} * R_{r7 r8 s7 s8};
+#@canonicalise(%);
+
+
+# This one used to trigger a bug:
+#
+obj13:= A_{a} * A_{a} * A_{b};
+@canonicalise!(%);
+tst13:= A_{b} A_{a} A_{a} - @(obj13);
+@collect_terms!(%);
+@assert(tst13);
+
+# Another one which produced triple indices:
+#
+obj14:= C1_{d5} *k3_{d6} * k3_{d6} * k3_{d5};
+@canonicalise!(%);
+tst14:= C1_{d5} *k3_{d5} * k3_{d6} * k3_{d6} - @(obj14):
+@collect_terms!(%);
+@assert(tst14);
+
+# More complicated Young tableau symmetries:
+#
+A_{a b c d}::TableauSymmetry(shape={1,1}, indices={1,2}).
+obj15:= q*A_{d c b a};
+@canonicalise!(%);
+tst15:= q A_{d b c a} + @(obj15);
+@collect_terms!(%);
+@assert(tst15);
+
+# DAntiSymmetric
+#
+dF5_{a b c d e f}::DAntiSymmetric.
+obj16:= dF5_{m n p q r s} AA_{r n q m s p};
+@canonicalise!(%);
+tst16:= -dF5_{m n p q r s} * AA_{n p q m r s} - @(obj16);
+@collect_terms!(%);
+#@assert(tst16);
+# FIXME: this is dependent on the version of xperm
+
+dF5_{a b c d e f}::DAntiSymmetric.
+obj17:= dF5_{b1 a5 a4 a3 a2 a1} * q;
+@indexsort!(%);
+tst17:= dF5_{b1 a1 a2 a3 a4 a5} * q - @(obj17);
+@collect_terms!(%);
+@assert(tst17);
+
+# Multiple tableaux.
+#
+tt_{a b c d e f}::TableauSymmetry(shape={1,1,1,1}, indices={2,3,4,5}, shape={2}, indices={0,1}).
+obj18:= tt_{a2 a1 a7 a6 a4 a5}*a;
+@canonicalise!(%);
+tst18:= tt_{a1 a2 a4 a5 a6 a7}*a + @(obj18);
+@collect_terms!(%);
+@assert(tst18);
+
+# An old bug with KroneckerDelta; this could only be fixed properly
+# when the 'canonicalise' routine was rewritten to only use
+# TableauBase input (rather than hardcoded DAntiSymmetric and so on).
+#
+\delta_{a b}::KroneckerDelta.
+obj19:= a \delta_{c b};
+@canonicalise!(%);
+tst19:= a \delta_{b c} - @(obj19);
+@collect_terms!(%);
+@assert(tst19);
+
+# Test 20 - 23: \diff nodes
+#
+\diff{#}::PartialDerivative.
+B_{m n}::Symmetric.
+obj20:= \diff{A_{m}}_{n} B_{n m} - \diff{A_{m}}_{n} B_{m n};
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(obj20);
+
+@reset.
+\diff{#}::PartialDerivative.
+{m,n,p,q,r,s,t}::Indices(vector).
+obj21:= \diff{A_{m n p}}_{q r} C_{r q} - \diff{A_{m n p}}_{q r} C_{q r};
+@indexsort!(%);
+@canonicalise!(%);
+@rename_dummies!(%);
+@collect_terms!(%);
+@assert(obj21);
+
+# This one used to crash:
+#
+@reset.
+\diff{#}::PartialDerivative.
+g3_{m n}::Metric.
+obj22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n};
+@canonicalise!(%);
+tst22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n} - @(obj22);
+@collect_terms!(%);
+#@assert(tst22);
+# FIXME: order depends on xperm version
+
+# Including symmetries of the argument tensor:
+#
+\diff{#}::PartialDerivative.
+A_{\mu\nu}::AntiSymmetric.
+obj23:= q*\diff{A_{\mu\nu}}_{\mu\nu};
+@canonicalise!(%);
+@assert(obj23);
+
+@reset;
+\diff{#}::PartialDerivative.
+A_{\mu\nu}::AntiSymmetric.
+obj24:= \diff{A_{\mu\nu}}_{\rho\sigma} B^{\nu\mu};
+@canonicalise!(%);
+tst24:= - \diff{A_{\mu\nu}}_{\rho\sigma} B^{\mu\nu} - @(obj24);
+@collect_terms!(%);
+@assert(tst24);
+
+# Test 25 & 26: do not permute tensors with indices in different positions
+#
+@reset;
+\diff{#}::PartialDerivative.
+{m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector).
+obj25:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
+@canonicalise!(%);
+tst25:= \diff{g_{m n}}_{p} * \diff{g_{r s}}_{p} * T^{m n r s} - @(obj25);
+@rename_dummies!(%);
+@collect_terms!(%);
+@assert(tst25);
+
+obj26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
+@canonicalise!(%);
+tst26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{m n r s} - @(obj26);
+@rename_dummies!(%);
+@collect_terms!(%);
+@assert(tst26);
+
+# Test 27 & 28: spinors and anti-commuting objects
+#
+@reset.
+{m,n,p,q,r,s,t,u}::Indices(vector).
+psi10001_{m}::Spinor(type=Majorana, dimension=10).
+psi10001_{m}::SelfAntiCommuting.
+\Gamma_{#}::GammaMatrix.
+H_{m n p}::AntiSymmetric.
+obj27:= psi10001_{n} \Gamma_{s t u} psi10001_{m} H_{p q r};
+@canonicalise!(%);
+tst27:= psi10001_{m} \Gamma_{s t u} psi10001_{n} H_{p q r} -@(obj27);
+@collect_terms!(%);
+@assert(tst27);
+
+obj28:= psi10001_{n} \Gamma_{s} psi10001_{m} H_{p q r};
+@canonicalise!(%);
+tst28:= psi10001_{m} \Gamma_{s} psi10001_{n} H_{p q r} + @(obj28);
+@collect_terms!(%);
+@assert(tst28);
+
+@reset.
+{m,n,p,q,r,s,t,u}::Indices(vector).
+\psi_{m}::Spinor.
+\psi_{m}::SelfAntiCommuting.
+\bar{#}::DiracBar.
+\Gamma_{#}::GammaMatrix.
+obj28b:= \bar{\psi_{r}} A B \Gamma_{n p} C \psi_{m};
+@canonicalise!(%);
+tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b);
+@collect_terms!(%);
+@assert(tst28b);
+
+# Test 29: single-term expressions.
+#
+@reset;
+{m,n,p,q,r,s,t,u}::Indices(vector).
+dR_{m n p q r s}::TableauSymmetry(shape={4,2}, indices={2,3,0,1,4,5}).
+dR_{m n p q r s}::Traceless.
+tst29:= dR_{m n p q r r};
+@canonicalise!(%);
+@assert(tst29);
+
+# Test 30: extreme symmetries.
+{a,b,c,d,e,f,g,h,i,j,k,l,m}::Indices(vector).
+{a,b,c,d,e,f,g,h,i,j,k,l,m}::Integer(0..9).
+\eps_{a b c d e f g h i j}::AntiSymmetric.
+W_{a b c d}::WeylTensor.
+A_{k l}::AntiSymmetric.
+obj30:= W_{a b d c} W_{f e g h} W_{i j k l} \eps_{a b c d e f g h i j}
+       A_{l k};
+@canonicalise!(%);
+tst30:= W_{a b c d} * W_{e f g h} * W_{i j k l} * \eps_{a b c d e f g h i j} * A_{k l} + @(obj30);
+@collect_terms!(%);
+@assert(tst30);
+
+# Test 31: Inherited properties
+#
+@reset;
+{m,n,p,q,r}::Indices(vector).
+{m,n,p,q,r}::Integer(0..10);
+\bar{#}::DiracBar.
+\psi_{m}::Spinor.
+\psi_{m}::SelfAntiCommuting.
+H_{m n p}::AntiSymmetric.
+\Gamma_{#}::GammaMatrix.
+obj31:= \bar{\psi_{m}} \Gamma_{q n p} \psi_{m} H_{n p q};
+@canonicalise!(%);
+tst31:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{m} H_{n p q} - @(obj31);
+@collect_terms!(%);
+@assert(tst31);
+
+
+# Test 32: Indices in different sets should not be mixed up.
+@reset;
+{a,b,c,d,e,f,g#}::Indices(SUFive).
+{i,j,k,l,m,n#}::Indices(flavor).
+HppT_{j k x}::TableauSymmetry(shape={2}, indices={0,1}).
+\tenSp_{j a b}::TableauSymmetry(shape={1,1},indices={1,2}).
+obj32:= HppT_{i j x} * \tenSp_{i a b} * \fiveSp_{j a} ;
+@canonicalise!(%);
+tst32:= HppT_{i j x} * \tenSp_{i b a} * \fiveSp_{j a} + @(obj32);
+@collect_terms!(%);
+@assert(tst32);
+
+
+# Test 33: Complicated traceless property.
+@reset;
+{i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
+C_{m n p q}::WeylTensor.
+\nabla{#}::Derivative.
+\nabla_{r}{ C_{m n p q} }::SatisfiesBianchi.
+\nabla_{r}{ C_{m n p q} }::Traceless.
+\delta_{i j}::KroneckerDelta.
+
+#tst33:= Q*\nabla_{j}{\nabla_{q}{C_{m n p q}}};
+#@canonicalise!(%);
+#@assert(tst33);
+
+# Test 34: numerical indices
+@reset.
+A_{m? n?}::AntiSymmetric.
+tst34a:= A_{4 4};
+@indexlist(%);
+@canonicalise!(%);
+@assert(tst34a);
+
+R_{m? n? p? q?}::RiemannTensor.
+tst34b:= R_{4 4 2 3};
+@canonicalise!(%);
+@substitute!(%)( R_{m? m? n? p?} -> 0, R_{n? p? m? m?} -> 0 );
+@assert(tst34b);
+
+# Test 35: diagonal objects
+#
+@reset.
+\delta_{m n}::Diagonal.
+obj35:= \delta_{1 2} * \delta_{1 2} - \delta_{1 1} * \delta_{2 2};
+@canonicalise!(%);
+tst35:= - \delta_{1 1}\delta_{2 2} - @(obj35);
+@collect_terms!(%);
+@assert(tst35);
+
+# Test 36: canonicalisation with upper/lower indices.
+@reset.
+\Gamma{#}::GammaMatrix.
+{a,b,c,d,e}::Indices(vector, position=fixed).
+obj36:= \Gamma_{a c}^{b d};
+@canonicalise!(%);
+tst36:= \Gamma_{a}^{b}_{c}^{d} + @(obj36);
+@collect_terms!(%);
+@assert(tst36);
+
+@reset.
+{a,b,c,d,e}::Indices(vector, position=fixed).
+obj37:= B^{b} B_{b} A_{a} A^{a};
+@canonicalise!(%);
+tst37:= B^{a} B_{a} A^{b} A_{b} - @(obj37);
+@collect_terms!(%);
+@assert(tst37);
+
+# Test 38: mixed abstract & numerical indices.
+#
+# @reset.
+# {a,b,c,d,e}::Indices(group).
+# {i,j,k}::Indices(vector).
+# \delta{#}::KroneckerDelta.
+# \eta^{a}_{i j}::TableauSymmetry(shape={1,1}, indices={1,2}).
+# \epsilon^{a b c}::EpsilonTensor.
+# \partial{#}::Derivative.
+# obj38:= \epsilon^{a b c} \delta^{b 3} \epsilon^{c d e} \delta^{e 3} \eta^{d}_{i j} x^{i};
+# @canonicalise!(%);
+
+# Test 39: pattern indices
+#
+@reset.
+J_{\mu\nu}::AntiSymmetric.
+obj39:= \eta_{#1? #3?} J_{#2? #4?} - \eta_{#1? #4?} J_{#2? #3?} - \eta_{#2? #3?} J_{#1? #4?} + \eta_{#2? #4?} J_{#1? #3?};
+@canonicalise!(%);
+
+# Test 40: equality signs involved (used to crash)
+@reset.
+Y_{i j}::AntiSymmetric.
+obj40:= X_{i} = Y_{j i} Z_{j};
+@canonicalise!(%);
+
+# Test 41: upper/lower indices.
+#
+@reset.
+{m,n}::Indices.
+obj41:= R^{m}_{m} - R_{m}^{m};
+@canonicalise!(%);
+tst41:= 
+
+# Test 42: like in xAct
+#
+@reset.
+{a,b}::Indices(position=fixed).
+K^{a}_{a};
+@canonicalise!(%);
+
+K_{a}^{a};
+@canonicalise!(%);
+
+@reset.
+{a,b}::Indices(position=fixed).
+K_{a}^{a}_{b}^{b};
+@canonicalise!(%);
+
+K^{a}_{a}_{b}^{b};
+@canonicalise!(%);
+
+# Test 42: more upper/lower indices
+#
+@reset.
+{n,r}::Indices(position=fixed).
+\delta{#}::KroneckerDelta.
+\partial{#}::PartialDerivative.
+obj42:= \delta_{n}^{r} \partial_{r}{ u^{n} };
+@canonicalise!(%);
+tst42:= \delta^{n}_{r} * \partial_{n}{u^{r}} - @(obj42);
+@collect_terms!(%);
+@assert(tst42);
+
+# Test 43: prevent raising/lowering if there is a Derivative
+# in the way. For the time being we do not even allow this
+# if there is a full covariant derivative.
+@reset.
+{m,n,k}::Indices(position=fixed).
+\partial{#}::Derivative.
+obj43:= A_{m n} \partial_{k}{ B^{m n} };
+@canonicalise!(%);
+tst43:= A_{m n} \partial_{k}{ B^{m n} } - @(obj43);
+@collect_terms!(%);
+@assert(tst43);
+
+# Test 44: more complicated version
+#
+@reset.
+\partial{#}::Derivative.
+obj44:= \partial_{m}{ A_{p q} } F^{p} D_{a} E^{a};
+@canonicalise!(%);
+
+@reset.
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta,\chi#}::Indices(full, position=fixed).
+{m,n,p,q,r,s,t,u,v,m#}::Indices(subspace, position=fixed, parent=full).
+\partial{#}::PartialDerivative.
+g_{\mu? \nu?}::Symmetric.
+g^{\mu? \nu?}::Symmetric.
+
+obj45a:= \partial_{4 n}{ g_{p 4} } g_{m1 m} g^{m1 p};
+@canonicalise!(%);
+tst45a:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45a);
+@collect_terms!(%);
+@assert(tst45a);
+obj45b:= \partial_{4 n}{ g_{4 p} } g_{m1 m} g^{m1 p};
+@canonicalise!(%);
+tst45b:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45b);
+@collect_terms!(%);
+@assert(tst45b);
+
+obj45c:= \partial_{p}{g_{4 q}} \partial_{n}{ g_{4 4} } g^{4 p} g_{m r} g^{r q};
+@canonicalise!(%);
+# todo 
+
+obj45d:= A_{p} \partial_{n}{ g^{m1 p} } B_{m1};
+@canonicalise!(%);
+tst45d:= A_{m1} \partial_{n}{ g^{m1 p} } B_{p} - @(obj45d);
+@collect_terms!(%);
+@assert(tst45d);
+
+# Test 46: spinor indices
+#
+@reset.
+{a,b,c,d}::Indices.
+{a,b,c,d}::AntiCommuting.
+tst46:= \chi_{a} \psi^{a} + \chi^{a} \psi_{a};
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(tst46);
+
+# Test 47: regression in 1.21
+#
+@reset.
+B0:=B_{\alpha \mu} -> \Delta_{\mu \nu}*F_{\theta \alpha};
+@canonicalise!(%);
+
+# Test 48: derivatives without arguments
+#
+#@reset.
+#\nabla{#}::PartialDerivative.
+#A_{m} \nabla_{n} B_{k};
+#@canonicalise!(%);
+
+@reset.
+{q,r}::Indices(full).
+{i,j}::Indices("subspace1", parent=full).
+{A,B}::Indices("subspace2", parent=full).
+obj49:= X_{q r} Y_{q r};
+@split_index!!(%){q, i, A};
+@canonicalise!(%);
+tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49);
+@collect_terms!(%);
+@assert(tst49);
+
