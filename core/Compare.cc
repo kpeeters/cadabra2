@@ -240,6 +240,11 @@ bool tree_exact_equal_obj::operator()(const exptree& one, const exptree& two) co
 	return tree_exact_equal(properties, one, two);
 	}
 
+tree_exact_less_mod_prel_obj::tree_exact_less_mod_prel_obj(const Properties *p)
+	: properties(p)
+	{
+	}
+
 bool tree_exact_less_mod_prel_obj::operator()(const exptree& one, const exptree& two) const
 	{
 	return tree_exact_less(properties, one, two, 0, true, -2, true);

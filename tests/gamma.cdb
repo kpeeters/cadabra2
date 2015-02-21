@@ -89,6 +89,7 @@ def test03():
 one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
 join_gamma(one)
 distribute(one)
+eliminate_kronecker(one)
 
 test03()
 
