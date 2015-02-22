@@ -101,7 +101,7 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 			stop_after_this_one=true;
 
 		if(deepest_action > tr.depth(current)) {
-//			std::cout << "simplify; we are at " << *(current->name) << std::endl;
+			std::cout << "simplify; we are at " << *(current->name) << std::endl;
 			iterator work=current;
 			cleanup_dispatch(kernel, tr, work);
 			current=work;
@@ -110,7 +110,7 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 			}
 		
 		if(can_apply(current)) {
-//			std::cout << "acting at " << *current->name << std::endl;
+			std::cout << "acting at " << *current->name << std::endl;
 			iterator work=current;
 			post_order_iterator next(current);
 			++next;
@@ -1349,7 +1349,7 @@ bool Algorithm::is_factorlike(iterator it)
 bool Algorithm::is_single_term(iterator it)
 	{
 	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" 
-		&& *it->name!="\\equals" && *it->name!="\\arrow") {
+		&& *it->name!="\\equals" && *it->name!="\\arrow" && *it->name!="\\expression" ) {
 		if(tr.is_valid(tr.parent(it))) {
 			if(*tr.parent(it)->name=="\\sum" || *tr.parent(it)->name=="\\expression" || tr.parent(it)->is_command())
 				return true;
