@@ -5,8 +5,9 @@
 
 void cleanup_dispatch(Kernel& k, exptree& tr, exptree::iterator& it)
 	{
-	if(*it->name=="\\prod") cleanup_productlike(k, tr, it);
-	else if(*it->name=="\\sum") cleanup_sumlike(k, tr, it);
+	if(*it->name=="\\prod")            cleanup_productlike(k, tr, it);
+	else if(*it->name=="\\sum")        cleanup_sumlike(k, tr, it);
+	else if(*it->name=="\\expression") cleanup_expressionlike(k, tr, it);
 	}
 
 void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator& it)
@@ -39,6 +40,20 @@ void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	collect_terms ct(k, tr);
 	ct.apply(it);
 	}
+
+void cleanup_expressionlike(Kernel& k, exptree&tr, exptree::iterator& it)
+	{
+	assert(*it->name=="\\expression");
+
+	// Can only have one child which contains actual expression data;
+	// all others are meta-data like \asymimplicit. If this child has
+	// zero multiplier, simplify.
+
+	exptree::sibling_iterator sib=tr.begin(it);
+	if(sib->is_zero())
+		set_zero(sib);
+	}
+
 
 void cleanup_expression(exptree& tr)
 	{
