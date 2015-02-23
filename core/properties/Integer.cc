@@ -6,7 +6,7 @@ std::string Integer::name() const
 	return "Integer";
 	}
 
-bool Integer::parse(keyval_t& keyvals)
+bool Integer::parse(const Properties&, keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("range");
 	if(kv!=keyvals.end()) {

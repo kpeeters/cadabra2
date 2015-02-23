@@ -4,39 +4,40 @@
 # expressions vanishing identically by symmetry arguments.
 #
 
-def test01:
-a_{#}::AntiSymmetric
-s_{#}::Symmetric
-tst1:= a_{m n} s_{m n}
-canonicalise(tst1)
-    assert(tst1==0)
+def test01():
+   a_{#}::AntiSymmetric
+   s_{#}::Symmetric
+   tst1:= a_{m n} s_{m n}
+   canonicalise(tst1)
+   assert(tst1==0)
+   tst2:= a_{n m q} s_{m n}
+   canonicalise(tst2);
+   assert(tst2==0)
+   tst3:= a_{m m}
+   canonicalise(tst3)
+   assert(tst3==0)
 
+def test02():
+   a_{#}::AntiSymmetric
+   s_{#}::Symmetric
+   obj4:= s_{m n m n}
+   canonicalise(obj4)
+   tst4:= s_{m m n n}-@(obj4)
+   collect_terms(tst4)
+   assert(tst4==0)
 
-tst2:= a_{n m q} s_{m n};
-@canonicalise!(%);
-@assert(tst2);
+def test03():
+   # Riemann tensor symmetry tests:
+   #
+   s_{#}::Symmetric
+   R_{m n p q}::RiemannTensor
+   tst5:= R_{m n p q}*s_{p q}*t_{m n}
+   canonicalise(tst5)
+   assert(tst5==0)
 
-tst3:= a_{m m};
-@canonicalise!(%);
-@assert(tst3);
+test01()
+test02()
 
-@reset.
-a_{#}::AntiSymmetric.
-s_{#}::Symmetric.
-obj4:= s_{m n m n};
-@canonicalise!(%);
-tst4:= s_{m m n n}-@(obj4);
-@collect_terms!(%);
-@assert(tst4);
-
-
-# Riemann tensor symmetry tests:
-#
-s_{#}::Symmetric.
-R_{m n p q}::RiemannTensor.
-tst5:= R_{m n p q}*s_{p q}*t_{m n};
-@canonicalise!(%);
-@assert(tst5);
 
 # dW_{m n p q r s}::TableauSymmetry{2,2}{3,4,5,6}.
 # rtopen:= dW_{a b r3 r4 r1 r2}*q;

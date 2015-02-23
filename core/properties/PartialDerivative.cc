@@ -21,12 +21,12 @@ TableauBase::tab_t PartialDerivative::get_tab(const Properties& properties, expt
 	if(num==0) { // symmetry of the derivative indices
 		tab_t tab;
 		int i=0;
-		Algorithm::index_iterator indit=Algorithm::index_iterator::begin(properties, it);
+		index_iterator indit=index_iterator::begin(properties, it);
 		if(!indices_first) {
 			for(unsigned int k=0; k<arg_indices; ++k) ++indit;
 			i+=arg_indices;
 			}
-		while(indit!=Algorithm::index_iterator::end(properties, it)) {
+		while(indit!=index_iterator::end(properties, it)) {
 			if(tr.parent((exptree::iterator)indit)!=it) break;
 //			txtout << "T: " << i << " " << *indit->name << std::endl;
 			tab.add_box(0, i);

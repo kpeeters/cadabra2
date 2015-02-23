@@ -12,7 +12,7 @@ std::string Spinor::name() const
 	return "Spinor";
 	}
 
-bool Spinor::parse(keyval_t& keyvals)
+bool Spinor::parse(const Properties& properties, keyval_t& keyvals)
 	{
 	keyval_t::iterator ki=keyvals.find("dimension");
 	if(ki!=keyvals.end()) {
@@ -58,7 +58,7 @@ bool Spinor::parse(keyval_t& keyvals)
 		keyvals.erase(ki);
 		}
 
-	ImplicitIndex::parse(keyvals);
+	ImplicitIndex::parse(properties, keyvals);
 	
 	return true;
 	}

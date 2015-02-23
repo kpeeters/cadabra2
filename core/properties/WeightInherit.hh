@@ -14,7 +14,7 @@ class WeightInherit : virtual public WeightBase {
 				WeightException(const std::string&);
 		};
 
-		virtual bool          parse(keyval_t&) override;
+		virtual bool          parse(const Properties&, keyval_t&) override;
 		virtual multiplier_t  value(const Properties&, exptree::iterator, const std::string& forcedlabel) const;
 		virtual std::string   unnamed_argument() const { return "type"; };
 		virtual std::string   name() const;

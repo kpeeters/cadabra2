@@ -11,7 +11,7 @@ WeightInherit::WeightException::WeightException(const std::string& str)
 	{
 	}
 
-bool WeightInherit::parse(keyval_t& kv)
+bool WeightInherit::parse(const Properties&, keyval_t& kv)
 	{
 	keyval_t::const_iterator tpit=kv.find("type");
 	if(tpit!=kv.end()) {
