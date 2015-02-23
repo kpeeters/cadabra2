@@ -1,7 +1,7 @@
 
 \section{Properties}
 
-\subsection{Arguments}
+\subsection{Arguments and validation}
 
 Properties can have arguments. These are not parsed by Python, but
 rather by the C++ side. There is a number of reasons for doing things
@@ -10,7 +10,16 @@ easier for Cadabra to provide useful feedback on parameters which are
 not valid.
 
 Parsing is done by implementing the virtual function
-`\verb|parse(keyval_t&)|'. The argument is a container class which
-represents the arguments passed to the property as key/value pairs
-(the \verb|keyval_t| type is defined in \verb|Props.hh|).
+`\verb|parse(const Properties&, keyval_t&)|'. The argument is a
+container class which represents the arguments passed to the property
+as key/value pairs (the \verb|keyval_t| type is defined in
+\verb|Props.hh|).
 
+Properties will be asked to check that they can be associated to a
+given pattern through the virtual
+`\verb|validate(const Properties&, const exptree&)|' function. The
+default implementation returns true for any pattern.
+
+FIXME: the above two need to be merged, because parse may need access
+to the actual pattern tree, and once we are there, we may as well
+do checking.

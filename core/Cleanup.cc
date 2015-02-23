@@ -50,8 +50,11 @@ void cleanup_expressionlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	// zero multiplier, simplify.
 
 	exptree::sibling_iterator sib=tr.begin(it);
-	if(sib->is_zero())
-		set_zero(sib);
+	if(sib->is_zero()) {
+		// FIXME: duplicate of node_zero in Algorithm.
+		tr.erase_children(sib);
+		sib->name=name_set.insert("1").first;
+		}
 	}
 
 

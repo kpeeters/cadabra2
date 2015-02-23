@@ -33,7 +33,7 @@ void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator& it);
 
 void cleanup_productlike(Kernel& k, exptree&, exptree::iterator& it);
 void cleanup_sumlike(Kernel& k, exptree&, exptree::iterator& it);
-
+void cleanup_expressionlike(Kernel& k, exptree&, exptree::iterator& it);
 
 
 

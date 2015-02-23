@@ -26,6 +26,7 @@
 #include "Props.hh"
 #include "Exceptions.hh"
 #include "Kernel.hh"
+#include "IndexIterator.hh"
 
 #include <map>
 #include <fstream>
@@ -80,33 +81,6 @@ class Algorithm {
 		mutable stopwatch index_sw;
 		mutable stopwatch get_dummy_sw;
 		mutable stopwatch report_progress_stopwatch;
-
-		/// An iterator which iterates over indices even if they are at lower levels, 
-		/// i.e. taking into account the "Inherit" property of nodes. Needs access
-		/// to the Kernel in order to lookup properties of objects.
-		class index_iterator : public exptree::iterator_base {
-			public:
-				index_iterator(const Properties&);
-				index_iterator(const index_iterator&);
-
-				static index_iterator create(const Properties&, const iterator_base&);
-
-				static index_iterator begin(const Properties&, const iterator_base&);
-				static index_iterator end(const Properties&, const iterator_base&);
-
-				index_iterator& operator=(const index_iterator&);
-				bool    operator==(const index_iterator&) const;
-				bool    operator!=(const index_iterator&) const;
-				index_iterator&  operator++();
-				index_iterator   operator++(int);
-				index_iterator&  operator+=(unsigned int);
-
-				iterator halt, walk, roof;
-			private:
-				const Properties *properties;
-
-				bool is_index(iterator) const;
-		};
 
 		index_iterator begin_index(iterator it) const;
 		index_iterator end_index(iterator it) const;

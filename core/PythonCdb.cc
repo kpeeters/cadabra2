@@ -507,8 +507,9 @@ void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std
 	if(param) {
 		keyval_t keyvals;
 		prop->parse_to_keyvals(param->tree, keyvals);
-		prop->parse(keyvals);
+		prop->parse(kernel->properties, keyvals);
 		}
+	prop->validate(kernel->properties, exptree(it));
 	kernel->properties.master_insert(exptree(it), prop);
 	}
 

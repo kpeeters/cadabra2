@@ -31,23 +31,24 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 set(LOCAL_SRC_FILES 
-  Stopwatch.cc
-  Exceptions.cc
   Algorithm.cc
-  DisplayTeX.cc
   Cleanup.cc
   Combinatorics.cc
-  YoungTab.cc
-  Parser.cc
-  PreProcessor.cc
-  Storage.cc
   Compare.cc
-  Kernel.cc
-  Props.cc
+  DisplayTeX.cc
+  Exceptions.cc
   Exchange.cc
-  PythonException.cc
-  PythonCdb.cc
+  IndexIterator.cc
+  Kernel.cc
+  Parser.cc
   PreClean.cc
+  PreProcessor.cc
+  Props.cc
+  PythonCdb.cc
+  PythonException.cc
+  Stopwatch.cc
+  Storage.cc
+  YoungTab.cc
   properties/Accent.cc
   properties/AntiCommuting.cc
   properties/AntiSymmetric.cc
@@ -71,6 +72,7 @@ set(LOCAL_SRC_FILES
   properties/NonCommuting.cc
   properties/NumericalFlat.cc
   properties/PartialDerivative.cc
+  properties/RiemannTensor.cc
   properties/SelfAntiCommuting.cc
   properties/SelfCommuting.cc
   properties/SortOrder.cc
@@ -78,6 +80,7 @@ set(LOCAL_SRC_FILES
   properties/Symbol.cc
   properties/Symmetric.cc
   properties/TableauBase.cc
+  properties/TableauSymmetry.cc
   properties/Traceless.cc
   properties/Weight.cc
   properties/WeightInherit.cc

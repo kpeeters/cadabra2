@@ -733,10 +733,10 @@ int exptree_comparator::can_swap_ilist_ilist(exptree::iterator obj1, exptree::it
 	{
 	int sign=1;
 
-	Algorithm::index_iterator it1=Algorithm::index_iterator::begin(properties, obj1);
-	while(it1!=Algorithm::index_iterator::end(properties, obj1)) {
-		Algorithm::index_iterator it2=Algorithm::index_iterator::begin(properties, obj2);
-		while(it2!=Algorithm::index_iterator::end(properties, obj2)) {
+	index_iterator it1=index_iterator::begin(properties, obj1);
+	while(it1!=index_iterator::end(properties, obj1)) {
+		index_iterator it2=index_iterator::begin(properties, obj2);
+		while(it2!=index_iterator::end(properties, obj2)) {
 			// Only deal with real indices here, i.e. those carrying an Indices property.
 			const Indices *ind1=properties.get_composite<Indices>(it1, true);
 			const Indices *ind2=properties.get_composite<Indices>(it2, true);

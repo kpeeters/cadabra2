@@ -71,11 +71,20 @@ class property {
 	public:
 		virtual ~property() {};
 
-		// Parse the argument tree into key-value pairs. 
-		virtual bool        parse_to_keyvals(const exptree&, keyval_t&);
+		// Parse the argument tree into key-value pairs.
+		bool                parse_to_keyvals(const exptree&, keyval_t&);
 
-		// Parse
-		virtual bool        parse(keyval_t& keyvals);
+		// Use the pre-parsed arguments in key/value form to set parameters.
+		// Parses universal arguments by default. FIXME: failure to call
+		// into superclass may lead to problems for labelled properties.
+		virtual bool        parse(const Properties&, keyval_t& keyvals);
+
+		// Check whether the property can be associated with the pattern.
+		// Throw an error if validation fails. Needs access to all other
+		// declared properties so that it can understand what the pattern
+		// means (which objects are indices etc.).
+		virtual void        validate(const Properties&, const exptree&) const;
+
 		virtual void        display(std::ostream&) const;
 		virtual std::string name() const=0;
 		virtual std::string unnamed_argument() const;
@@ -88,13 +97,14 @@ class property {
 		//   exact_match: these properties are exactly identical
 		enum match_t { no_match, id_match, exact_match };
 		virtual match_t equals(const property *) const;
+
 	private:
 		bool                parse_one_argument(exptree::iterator arg, keyval_t& keyvals);
 };
 
 class labelled_property : virtual public property {
 	public:
-		virtual bool parse(keyval_t&) override;
+		virtual bool parse(const Properties&, keyval_t&) override;
 		std::string label;
 };
 

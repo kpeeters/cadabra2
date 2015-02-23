@@ -196,13 +196,17 @@ void keyval_t::erase(iterator it)
 	}
 
 
-bool property::parse(keyval_t& keyvals)
+bool property::parse(const Properties&, keyval_t& keyvals)
 	{
 	return true;
 
 //	if(tr.number_of_children(arg)==0) return true;
 //	txtout << name() << ": should not have any arguments." << std::endl;
 //	return false;
+	}
+
+void property::validate(const Properties&, const exptree&) const
+	{
 	}
 
 bool property::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
@@ -266,7 +270,7 @@ property::match_t property::equals(const property *) const
 	return exact_match;
 	}
 
-bool labelled_property::parse(keyval_t& keyvals)
+bool labelled_property::parse(const Properties&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator lit=keyvals.find("label");
 	if(lit!=keyvals.end()) {
