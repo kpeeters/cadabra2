@@ -23,3 +23,13 @@ default implementation returns true for any pattern.
 FIXME: the above two need to be merged, because parse may need access
 to the actual pattern tree, and once we are there, we may as well
 do checking.
+HOWEVER: in TableauSymmetry.cc:
+			 // FIXME: we get the wrong pattern in case of a list! We should have
+			 // been fed each individual item in the list, not the list itself.
+
+
+This suggests that we should be calling once for every pattern, but 
+that is wasteful in case we are just parsing arguments. Can we really
+avoid calling parse for every pattern?
+
+{ A_{m n}, A_{m n p} }::AntiSymmetric.
