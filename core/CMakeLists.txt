@@ -84,6 +84,7 @@ set(LOCAL_SRC_FILES
   properties/Traceless.cc
   properties/Weight.cc
   properties/WeightInherit.cc
+  properties/WeylTensor.cc
   modules/xperm_new.cc
   algorithms/canonicalise.cc
   algorithms/collect_terms.cc

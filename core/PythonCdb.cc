@@ -42,8 +42,10 @@
 #include "properties/Spinor.hh"
 #include "properties/Symmetric.hh"
 #include "properties/TableauSymmetry.hh"
+#include "properties/Traceless.hh"
 #include "properties/Weight.hh"
 #include "properties/WeightInherit.hh"
+#include "properties/WeylTensor.hh"
 
 // Algorithms.
 
@@ -692,8 +694,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Spinor>();
 	def_prop<Symmetric>();
 	def_prop<TableauSymmetry>();
+	def_prop<Traceless>();
 	def_prop<Weight>();
 	def_prop<WeightInherit>();
+	def_prop<WeylTensor>();
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
