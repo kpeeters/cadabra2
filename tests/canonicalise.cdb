@@ -225,12 +225,15 @@ assert(tst18)
 # when the 'canonicalise' routine was rewritten to only use
 # TableauBase input (rather than hardcoded DAntiSymmetric and so on).
 #
-\delta_{a b}::KroneckerDelta.
-obj19:= a \delta_{c b};
-canonicalise(_)
-tst19:= a \delta_{b c} - @(obj19)
-collect_terms(_)
-assert(tst19)
+def test19():
+   \delta_{a b}::KroneckerDelta.
+   obj19:= a \delta_{c b};
+   canonicalise(_)
+   tst19:= a \delta_{b c} - @(obj19)
+   collect_terms(_)
+   assert(tst19)
+
+test19()
 
 # Test 20 - 23: \diff nodes
 #
@@ -331,28 +334,33 @@ tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b)
 collect_terms(_)
 assert(tst28b)
 
-# Test 29: single-term expressions.
-#
-@reset;
-{m,n,p,q,r,s,t,u}::Indices(vector).
-dR_{m n p q r s}::TableauSymmetry(shape={4,2}, indices={2,3,0,1,4,5}).
-dR_{m n p q r s}::Traceless.
-tst29:= dR_{m n p q r r};
-canonicalise(_)
-assert(tst29)
+# Single-term expressions.
 
-# Test 30: extreme symmetries.
-{a,b,c,d,e,f,g,h,i,j,k,l,m}::Indices(vector).
-{a,b,c,d,e,f,g,h,i,j,k,l,m}::Integer(0..9).
-\eps_{a b c d e f g h i j}::AntiSymmetric.
-W_{a b c d}::WeylTensor.
-A_{k l}::AntiSymmetric.
-obj30:= W_{a b d c} W_{f e g h} W_{i j k l} \eps_{a b c d e f g h i j}
-       A_{l k};
-canonicalise(_)
-tst30:= W_{a b c d} * W_{e f g h} * W_{i j k l} * \eps_{a b c d e f g h i j} * A_{k l} + @(obj30)
-collect_terms(_)
-assert(tst30)
+def test29():
+   {m,n,p,q,r,s,t,u}::Indices(vector).
+   dR_{m n p q r s}::TableauSymmetry(shape={4,2}, indices={2,3,0,1,4,5}).
+   dR_{m n p q r s}::Traceless.
+   tst29:= dR_{m n p q r r};
+   canonicalise(_)
+   assert(tst29)
+
+test29()
+
+# Extreme symmetries.
+
+def test30():
+   {a,b,c,d,e,f,g,h,i,j,k,l,m}::Indices(vector).
+   {a,b,c,d,e,f,g,h,i,j,k,l,m}::Integer(0..9).
+   \eps_{a b c d e f g h i j}::AntiSymmetric.
+   W_{a b c d}::WeylTensor.
+   A_{k l}::AntiSymmetric.
+   obj30:= W_{a b d c} W_{f e g h} W_{i j k l} \eps_{a b c d e f g h i j} A_{l k};
+   canonicalise(_)
+   tst30:= W_{a b c d} * W_{e f g h} * W_{i j k l} * \eps_{a b c d e f g h i j} * A_{k l} + @(obj30)
+   collect_terms(_)
+   assert(tst30)
+
+test30()
 
 # Test 31: Inherited properties
 #
@@ -371,39 +379,44 @@ collect_terms(_)
 assert(tst31)
 
 
-# Test 32: Indices in different sets should not be mixed up.
-@reset;
-{a,b,c,d,e,f,g#}::Indices(SUFive).
-{i,j,k,l,m,n#}::Indices(flavor).
-HppT_{j k x}::TableauSymmetry(shape={2}, indices={0,1}).
-\tenSp_{j a b}::TableauSymmetry(shape={1,1},indices={1,2}).
-obj32:= HppT_{i j x} * \tenSp_{i a b} * \fiveSp_{j a} ;
-canonicalise(_)
-tst32:= HppT_{i j x} * \tenSp_{i b a} * \fiveSp_{j a} + @(obj32)
-collect_terms(_)
-assert(tst32)
+# Indices in different sets should not be mixed up.
+
+def test32():
+   {a,b,c,d,e,f,g#}::Indices(SUFive)
+   {i,j,k,l,m,n#}::Indices(flavor)
+   HppT_{j k x}::TableauSymmetry(shape={2}, indices={0,1})
+   \tenSp_{j a b}::TableauSymmetry(shape={1,1},indices={1,2})
+   obj32:= HppT_{i j x} * \tenSp_{i a b} * \fiveSp_{j a} 
+   canonicalise(_)
+   tst32:= HppT_{i j x} * \tenSp_{i b a} * \fiveSp_{j a} + @(obj32)
+   collect_terms(_)
+   assert(tst32)
+
+test32()
 
 
-# Test 33: Complicated traceless property.
+# Complicated traceless property.
 @reset;
-{i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
-C_{m n p q}::WeylTensor.
-\nabla{#}::Derivative.
-\nabla_{r}{ C_{m n p q} }::SatisfiesBianchi.
-\nabla_{r}{ C_{m n p q} }::Traceless.
-\delta_{i j}::KroneckerDelta.
+{i,j,m,n,k,p,q,l,r,r#}::Indices(vector)
+C_{m n p q}::WeylTensor
+\nabla{#}::Derivative
+\nabla_{r}{ C_{m n p q} }::SatisfiesBianchi
+\nabla_{r}{ C_{m n p q} }::Traceless
+\delta_{i j}::KroneckerDelta
 
 #tst33:= Q*\nabla_{j}{\nabla_{q}{C_{m n p q}}};
 #canonicalise(_)
 #assert(tst33)
 
 # Test 34: numerical indices
-@reset.
-A_{m? n?}::AntiSymmetric.
-tst34a:= A_{4 4};
-@indexlist(%)
-canonicalise(_)
-assert(tst34a)
+
+def test34():
+   A_{m? n?}::AntiSymmetric.
+   tst34a:= A_{4 4};
+   canonicalise(_)
+   assert(tst34a)
+
+test34()
 
 R_{m? n? p? q?}::RiemannTensor.
 tst34b:= R_{4 4 2 3};

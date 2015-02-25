@@ -1,4 +1,6 @@
 
+#include "IndexIterator.hh"
+#include "Exceptions.hh"
 #include "properties/RiemannTensor.hh"
 
 RiemannTensor::RiemannTensor()
@@ -16,9 +18,9 @@ std::string RiemannTensor::name() const
 	return "RiemannTensor";
 	}
 
-void RiemannTensor::validate(const Properties&, const exptree& pat) const
+void RiemannTensor::validate(const Properties& props, const exptree& pat) const
 	{
-//	if(pat.number_of_indices(pat.begin())!=4) 
-//		throw std::consistency_error("RiemannTensor: need exactly 4 indices.");
+	if(number_of_indices(props, pat.begin())!=4) 
+		throw ConsistencyException("RiemannTensor: need exactly 4 indices.");
 	}
 

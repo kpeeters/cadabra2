@@ -30,11 +30,12 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 			indices=kvit->second;
 			}
 		
-		// Make sure the shape and indices lists have a \comma node.
-//			 tr.list_wrap_single_element(shape);
-//			 tr.list_wrap_single_element(indices);
-//			 
 		if(gotshape && gotindices) {
+			exptree help;
+			// Make sure the shape and indices lists have a \comma node.
+			help.list_wrap_single_element(shape);
+			help.list_wrap_single_element(indices);
+			
 			exptree::sibling_iterator si=shape.begin();
 			exptree::sibling_iterator ii=indices.begin();
 			
@@ -71,9 +72,9 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 				}
 			tabs.push_back(tab);
 			
-//			 tr.list_unwrap_single_element(shape);
-//			 tr.list_unwrap_single_element(indices);
-//
+			help.list_unwrap_single_element(shape);
+			help.list_unwrap_single_element(indices);
+
 			gotshape=false;
 			gotindices=false;
 			}
