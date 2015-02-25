@@ -16,10 +16,6 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 	exptree::iterator shape;
 
 	while(kvit!=keyvals.end()) {
-		 // wrap value
-		 if(kvit->first!="\\comma") 
-			 exptree::wrap(kvit->second, str_node("\\comma"));
-
 		 if(kvit->first=="shape") 
 			  shape=kvit->second;
 		 if(kvit->first=="indices") 
@@ -27,9 +23,9 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 
 		 if(shape!=tr.end() && indices!=tr.end()) {
 			 // Make sure the shape and indices lists have a \comma node.
-			 tr.list_wrap_single_element(shape);
-			 tr.list_wrap_single_element(indices);
-			 
+//			 tr.list_wrap_single_element(shape);
+//			 tr.list_wrap_single_element(indices);
+//			 
 			 exptree::sibling_iterator si=shape.begin();
 			 exptree::sibling_iterator ii=indices.begin();
 			 
@@ -46,12 +42,15 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 			 
 			 int rowind=0;
 			 unsigned int tabdown=to_long(*si->multiplier);
-			 unsigned int numindices=number_of_indices(properties, pat);
+//			 unsigned int numindices=number_of_indices(properties, pat);
 			 // FIXME: we get the wrong pattern in case of a list! We should have
 			 // been fed each individual item in the list, not the list itself.
 //			  std::cout << numindices << " " << *pat->name << std::endl;
 			 while(ii!=indices.end()) {
-				 if(tabdown+1 > numindices) return false;
+				 // FIXME: we cannot verify this at parse level, since we do not
+				 // get passed the pattern at that stage.
+				 // if(tabdown+1 > numindices) return false;
+
 				 if(si==shape.end()) return false;
 				 tab.add_box(rowind, to_long(*ii->multiplier));
 				 ++ii;
@@ -63,9 +62,9 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 				 }
 			 tabs.push_back(tab);
 
-			 tr.list_unwrap_single_element(shape);
-			 tr.list_unwrap_single_element(indices);
-
+//			 tr.list_unwrap_single_element(shape);
+//			 tr.list_unwrap_single_element(indices);
+//
 			 shape=tr.end();
 			 indices=tr.end();
 			 }
