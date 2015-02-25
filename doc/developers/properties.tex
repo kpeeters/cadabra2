@@ -37,3 +37,7 @@ avoid calling parse for every pattern?
 leads to a problem, because the property needs to setup its internal
 structures but also verify that these can match all objects in the
 same way. 
+
+
+Make all identical properties point to the same property object, so
+that normal and list properties become pretty much identical.

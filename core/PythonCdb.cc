@@ -26,7 +26,6 @@
 #include "properties/Commuting.hh"
 #include "properties/Derivative.hh"
 #include "properties/GammaMatrix.hh"
-#include "properties/NonCommuting.hh"
 #include "properties/AntiSymmetric.hh"
 #include "properties/CommutingAsProduct.hh"
 #include "properties/CommutingAsSum.hh"
@@ -34,12 +33,15 @@
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
 #include "properties/Integer.hh"
+#include "properties/NonCommuting.hh"
 #include "properties/KroneckerDelta.hh"
+#include "properties/RiemannTensor.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SelfCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
 #include "properties/Symmetric.hh"
+#include "properties/TableauSymmetry.hh"
 #include "properties/Weight.hh"
 #include "properties/WeightInherit.hh"
 
@@ -683,11 +685,13 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Integer>();
 	def_prop<KroneckerDelta>();
 	def_prop<NonCommuting>();
+	def_prop<RiemannTensor>();
 	def_prop<SelfAntiCommuting>();
 	def_prop<SelfCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
 	def_prop<Symmetric>();
+	def_prop<TableauSymmetry>();
 	def_prop<Weight>();
 	def_prop<WeightInherit>();
 

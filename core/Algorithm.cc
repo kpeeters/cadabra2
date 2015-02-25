@@ -101,7 +101,7 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 			stop_after_this_one=true;
 
 		if(deepest_action > tr.depth(current)) {
-			// std::cout << "simplify; we are at " << *(current->name) << std::endl;
+//			std::cout << "simplify; we are at " << *(current->name) << std::endl;
 			iterator work=current;
 			cleanup_dispatch(kernel, tr, work);
 			current=work;
