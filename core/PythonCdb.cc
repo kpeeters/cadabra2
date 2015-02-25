@@ -492,6 +492,7 @@ Kernel *create_empty_scope()
 
 void inject_defaults(Kernel *k)
 	{
+	// Create and inject properties; these then get owned by the kernel.
 	inject_property(k, new Distributable(),      std::make_shared<Ex>("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       std::make_shared<Ex>("\\prod{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), std::make_shared<Ex>("\\prod{#}"), 0);

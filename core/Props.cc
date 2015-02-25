@@ -519,10 +519,11 @@ int Properties::serial_number(const property *listprop, const pattern *pat) cons
  */
 
 
+// Insert a property for the given pattern exptree. Determines whether the property
+// is a list property or a normal one, and dispatches accordingly.
+
 std::string Properties::master_insert(exptree proptree, property *thepropbase)
 	{
-	// FIXME: handle parsing of arguments
-
 	std::ostringstream str;
 
 	exptree::sibling_iterator st=proptree.begin();

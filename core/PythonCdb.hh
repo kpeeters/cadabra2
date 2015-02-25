@@ -109,11 +109,18 @@ class Property : public BaseProperty {
 };
 
 
-// Scope handling
+// Setup of kernels in current scope, callable from Python.
 
 Kernel *create_scope();
 Kernel *create_scope_from_global();
 Kernel *create_empty_scope();
+
+// Setup default properties for the given kernel.
 void    inject_defaults(Kernel *);
+
+// Inject a property into the kernel in current scope. The property is
+// then owned by the kernel.
 void    inject_property(Kernel *, property *, std::shared_ptr<Ex>, std::shared_ptr<Ex>);
+
+// Get a pointer to the currently visible kernel.
 Kernel *get_kernel_from_scope();

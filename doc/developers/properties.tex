@@ -32,4 +32,8 @@ This suggests that we should be calling once for every pattern, but
 that is wasteful in case we are just parsing arguments. Can we really
 avoid calling parse for every pattern?
 
-{ A_{m n}, A_{m n p} }::AntiSymmetric.
+{A_{m n}, A_{m n p}, A_{m n p q}}::TableauSymmetry(shape={2,1}, indices={0,1,2}).
+
+leads to a problem, because the property needs to setup its internal
+structures but also verify that these can match all objects in the
+same way. 

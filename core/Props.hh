@@ -75,7 +75,10 @@ class property {
 		bool                parse_to_keyvals(const exptree&, keyval_t&);
 
 		// Use the pre-parsed arguments in key/value form to set parameters.
-		// Parses universal arguments by default. FIXME: failure to call
+		// Parses universal arguments by default. Will be called once for
+		// every property; assigning a non-list property to multiple patterns
+		// still calls this only once.
+		// FIXME: failure to call
 		// into superclass may lead to problems for labelled properties.
 		virtual bool        parse(const Properties&, keyval_t& keyvals);
 
@@ -149,7 +152,8 @@ class Properties {
 		typedef std::multimap<const property *, pattern *>                      pattern_map_t;
 
 		// Register a property for the indicated exptree. Takes both normal and list
-		// properties and works out which insert calls to make.
+		// properties and works out which insert calls to make. The property ownership
+		// is transferred to us on using this call.
 		std::string master_insert(exptree proptree, property *thepropbase);
 
 		void        clear();
