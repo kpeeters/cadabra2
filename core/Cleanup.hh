@@ -27,7 +27,8 @@
 // Central cleanup dispatch routine, which calls the other
 // cleanup functions defined later. 
 // IMPORTANT: as with any algorithms, the iterator pointing to
-// the starting node may be changed.
+// the starting node may be changed, but these functions are not
+// allowed to modify anything except the node and nodes below.
 
 void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator& it);
 

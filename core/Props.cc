@@ -249,8 +249,8 @@ bool property::parse_to_keyvals(const exptree& tr, keyval_t& keyvals)
 			}
 		}
 
-	for(auto it=keyvals.begin(); it!=keyvals.end(); ++it)
-		std::cout << (*it).first << " = " << *(*it).second->name << std::endl;
+//	for(auto it=keyvals.begin(); it!=keyvals.end(); ++it)
+//		std::cout << (*it).first << " = " << *(*it).second->name << std::endl;
 	return true;
 	}
 

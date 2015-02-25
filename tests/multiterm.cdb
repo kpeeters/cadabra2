@@ -1,0 +1,31 @@
+# Portugal's examples involving Ricci cycling do not yet work:
+#
+R_{m n p q}::RiemannTensor.
+tst11a:= R_{a b c d} R_{e a c f} R_{f b d e} 
+  +  R_{a b e f} R_{c d a b} R_{c e d f}
+  +2 R_{a b c d} R_{e a f c} R_{f d b e};
+@riemann_index_regroup!(%);
+@canonicalise!(%);
+@collect_terms!(%);
+
+tst11b:= R_{a b c d} R_{e f a k} R_{h c k b} R_{d h e f}
+ +4 R_{a b c d} R_{e f k a} R_{h b c e} R_{d k f h}
+ -  R_{a b c d} R_{e f k a} R_{h b f e} R_{c d k h}
+ +4 R_{a b c d} R_{h k d f} R_{e f k a} R_{h b c e};
+@riemann_index_regroup!(%);
+@canonicalise!(%);
+@collect_terms!(%);
+
+
+
+# One other non-trivial one involving the cyclic identity.
+# This one is not handled because the anti-symmetrisation in the 
+# brackets is not recognised, and therefore the regroup function 
+# does not see that it can Ricci cycle.
+#
+W_{a b m n} W_{a b p q} - 2*(W_{a m b n} W_{a p b q} - W_{a m b n} W_{a q b p});
+#
+# Use this one to test the Young tableau idea. I think it should
+# handle this one, since it essentially boils down to the idea
+# that you write down the full Young symmetrised objects of all
+# terms, and then collect.

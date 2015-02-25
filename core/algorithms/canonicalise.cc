@@ -618,7 +618,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		delete [] perm;
 		}
 	
-	cleanup_expression(tr, it);
+	cleanup_dispatch(kernel, tr, it);
 
 	delete [] free_indices;
 
