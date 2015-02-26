@@ -29,12 +29,15 @@
 #include "properties/AntiSymmetric.hh"
 #include "properties/CommutingAsProduct.hh"
 #include "properties/CommutingAsSum.hh"
+#include "properties/DAntiSymmetric.hh"
+#include "properties/Diagonal.hh"
 #include "properties/Distributable.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
 #include "properties/Integer.hh"
-#include "properties/NonCommuting.hh"
 #include "properties/KroneckerDelta.hh"
+#include "properties/NonCommuting.hh"
+#include "properties/PartialDerivative.hh"
 #include "properties/RiemannTensor.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SelfCommuting.hh"
@@ -679,7 +682,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Commuting>();
 	def_prop<CommutingAsProduct>();
 	def_prop<CommutingAsSum>();
+	def_prop<DAntiSymmetric>();
 	def_prop<Derivative>();
+	def_prop<Diagonal>();
 	def_prop<Distributable>();
 	def_prop<GammaMatrix>();
 	def_prop<IndexInherit>();
@@ -687,6 +692,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Integer>();
 	def_prop<KroneckerDelta>();
 	def_prop<NonCommuting>();
+	def_prop<PartialDerivative>();
 	def_prop<RiemannTensor>();
 	def_prop<SelfAntiCommuting>();
 	def_prop<SelfCommuting>();
