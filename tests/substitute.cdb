@@ -1,0 +1,17 @@
+
+# Substituting requires many dummy index relabelling. 
+#
+# Test 1: 'm' relabelling is triggered by a_{m} outside
+#         'n' relabelling in second term ditto
+#         'n' relabelling in first term because c_{pmn} -> c_{nmn} .
+
+{d1,d2,d3,d4,m,n,p,r}::Indices(vector).
+obj1:= a_{m}*b_{n} + c_r b_r d_{m n};
+substitute(_, "b_{p} -> c_{p m n} A^{m n} + c_{p}" );
+distribute(_);
+tst1:= a_{m} * c_{n d2 d1} * A^{d2 d1}
+    + a_{m} * c_{n}
+    + c_{r} * c_{r d1 d2} * A^{d1 d2} * d_{m n}
+    + c_{r} * c_{r} * d_{m n} - @(obj1);
+@collect_terms!(%);
+@assert(tst1);
