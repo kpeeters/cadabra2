@@ -9,6 +9,8 @@ class CadabraException : public std::logic_error {
 		CadabraException(std::string);
 };
 
+// Exception thrown when an inconsist expression or argument is encountered.
+
 class ConsistencyException : public CadabraException {
 	public:
 		ConsistencyException(std::string);

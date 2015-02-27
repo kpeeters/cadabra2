@@ -56,9 +56,10 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
-#include "algorithms/rename_dummies.hh"
-#include "algorithms/substitute.hh"
 #include "algorithms/join_gamma.hh"
+#include "algorithms/rename_dummies.hh"
+#include "algorithms/split_index.hh"
+#include "algorithms/substitute.hh"
 
 // Helper algorithms, not for users.
 
@@ -323,10 +324,15 @@ Ex *dispatch_2(Ex *ex, Ex *args, bool deep, bool repeat)
 
 	exptree::iterator it=ex->tree.begin().begin();
 
+	std::cout << "reset state" << std::endl;
 	ex->reset_state();
+	std::cout << "update" << std::endl;
 	ex->update_state(algo.apply_generic(it, deep, repeat));
+	std::cout << "return" << std::endl;
 	
-	return ex;
+	return ex; FIXME: this returns the wrong pointer; we assume elsewhere that the return 
+																		  value of dispatch_2 is newly managed, but that
+should in fact be the args Ex. Cleanup
 	}
 
 template<class F>
