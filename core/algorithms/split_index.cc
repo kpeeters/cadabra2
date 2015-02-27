@@ -2,7 +2,7 @@
 #include "algorithms/split_index.hh"
 #include "properties/Indices.hh"
 
-split_index::split_index(Kernel& k, exptree& tr)
+split_index::split_index(Kernel& k, exptree& tr, exptree& triple)
 	: Algorithm(k, tr), part1_is_number(false), part2_is_number(false)
 	{
 	if(number_of_args()==1)
@@ -45,7 +45,7 @@ bool split_index::can_apply(iterator it)
 	return false;
 	}
 
-algorithm::result_t split_index::apply(iterator& it)
+Algorithm::result_t split_index::apply(iterator& it)
 	{
 	exptree rep;
 	rep.set_head(str_node("\\sum"));

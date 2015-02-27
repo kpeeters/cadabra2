@@ -5,7 +5,7 @@
 
 class split_index : public Algorithm {
 	public:
-		split_index(Kernel&, exptree&);
+		split_index(Kernel&, exptree&, exptree&);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);
