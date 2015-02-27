@@ -26,6 +26,10 @@ void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	{
 	assert(*it->name=="\\sum");
 
+	// Flatten sums which are supposed to be flat.
+
+HERE
+
 	// Remove children which are 0
 	exptree::sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -34,7 +38,6 @@ void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
 		else
 			++sib;
 		}
-	
 
    // Collect all equal terms.
 	collect_terms ct(k, tr);

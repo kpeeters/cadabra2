@@ -53,7 +53,7 @@ Algorithm::result_t Algorithm::apply_generic(exptree::iterator& it, bool deep, b
 
 	result_t thisret=result_t::l_no_action;
 	do {
-		if(deep)
+		if(deep) 
 			thisret = apply_deep(it);
 		else
 			thisret = apply_once(it);
@@ -114,13 +114,21 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 			iterator work=current;
 			post_order_iterator next(current);
 			++next;
+			bool work_is_topnode=(work==it);
 			result_t res = apply(work);
 			if(res==Algorithm::result_t::l_applied) {
 				some_changes_somewhere=result_t::l_applied;
 				rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
+				// The 'work' iterator can now point to a new node. If we were acting at the
+				// top node, we need to propagate the change in 'work' to 'it' so the caller
+				// knows where the new top node is.
+				if(work_is_topnode)
+					it=work;
 				}
-			current=next; // the algorithm may have replaced the 'work' node
+         // The algorithm may have replaced the 'work' node, so instead of walking from
+			// there, we continue at the node which was next in line before we called 'apply'.
+			current=next; 
 			} 
 		else {
 			if(stop_after_this_one)
