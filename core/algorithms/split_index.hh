@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Algorithm.hh"
+#include "properties/Indices.hh"
 
 class split_index : public Algorithm {
 	public:

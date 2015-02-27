@@ -1,52 +1,49 @@
 
 #include "algorithms/split_index.hh"
-#include "properties/Indices.hh"
 
 split_index::split_index(Kernel& k, exptree& tr, exptree& triple)
 	: Algorithm(k, tr), part1_is_number(false), part2_is_number(false)
 	{
-	if(number_of_args()==1)
-		if(*(args_begin()->name)=="\\comma") 
-			if(tr.number_of_children(args_begin())==3) {
-				iterator trip=args_begin();
-				sibling_iterator iname=tr.begin(trip);
-				full_class=properties::get<Indices>(iname, true);
-				++iname;
-				if(iname->is_integer()) {
-					part1_is_number=true;
-					num1=to_long(*(iname->multiplier));
-					}
-				else part1_class=properties::get<Indices>(iname, true);
-				++iname;
-				if(iname->is_integer()) {
-					part2_is_number=true;
-					num2=to_long(*(iname->multiplier));
-					}
-				else part2_class=properties::get<Indices>(iname, true);
-				if(full_class && (part1_is_number || part1_class) && (part2_is_number || part2_class) )
-					return;
-				txtout << "The index types of (some of) these indices are not known." << std::endl;
-				}
-	throw algorithm::constructor_error();
-	}
+	iterator top=triple.begin(triple.begin());
+	if(*(top->name)!="\\comma") {
+		std::cout << "not comma" << std::endl;		
+		throw ArgumentException("split_index: Need a list of three index names.");
+		}
+	else if(triple.number_of_children(top)!=3) {
+		std::cout << "not 3" << std::endl;
+		throw ArgumentException("split_index: Need a list of three (no more, no less) index names.");
+		}
 
-void split_index::description() const
-	{
-	txtout << "Split a dummy index into two." << std::endl;
+	sibling_iterator iname=triple.begin(top);
+	full_class=kernel.properties.get<Indices>(iname, true);
+	++iname;
+	if(iname->is_integer()) {
+		part1_is_number=true;
+		num1=to_long(*(iname->multiplier));
+		}
+	else part1_class=kernel.properties.get<Indices>(iname, true);
+	++iname;
+	if(iname->is_integer()) {
+		part2_is_number=true;
+		num2=to_long(*(iname->multiplier));
+		}
+	else part2_class=kernel.properties.get<Indices>(iname, true);
+	if(full_class && (part1_is_number || part1_class) && (part2_is_number || part2_class) )
+		return;
+	
+	std::cout << "no type" << std::endl;
+	throw ArgumentException("split_index: The index types of (some of) these indices are not known.");
 	}
 
 bool split_index::can_apply(iterator it)
 	{
-	// act on a single term in a sum, or on an isolated expression at the top node.
-	if(*(it->name)!="\\sum") 
-		if(*(tr.parent(it)->name)=="\\sum" || 
-			( *(tr.parent(it)->name)=="\\expression" && !(*(it->name)=="\\asymimplicit"))) return true;
-
-	return false;
+	return is_termlike(it);
 	}
 
 Algorithm::result_t split_index::apply(iterator& it)
 	{
+	result_t ret=result_t::l_no_action;
+
 	exptree rep;
 	rep.set_head(str_node("\\sum"));
 	exptree workcopy(it); // so we can make changes without spoiling the big tree
@@ -61,14 +58,14 @@ Algorithm::result_t split_index::apply(iterator& it)
 
 	index_map_t::iterator prs=ind_dummy.begin();
 	while(prs!=ind_dummy.end()) {
-		const Indices *tcl=properties::get<Indices>((*prs).second, true);
+		const Indices *tcl=kernel.properties.get<Indices>((*prs).second, true);
 		if(tcl) {
 			if((*tcl).set_name==(*full_class).set_name) {
 				exptree dum1,dum2;
 				if(!part1_is_number)
 					dum1=get_dummy(part1_class, it);
 				index_map_t::iterator current=prs;
-				while(current!=ind_dummy.end() && tree_exact_equal((*prs).first,(*current).first,true)) {
+				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part1_is_number) {
 						node_integer(current->second, num1);
 //						(*prs).second->name=name_set.insert(to_string(num1)).first;
@@ -85,7 +82,7 @@ Algorithm::result_t split_index::apply(iterator& it)
 				current=prs;
 				if(!part2_is_number) 
 					dum2=get_dummy(part2_class, it);
-				while(current!=ind_dummy.end() && tree_exact_equal((*prs).first,(*current).first,true)) {
+				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part2_is_number) {
 						node_integer(current->second, num2);
 //						(*prs).second->name=name_set.insert(to_string(num2)).first;
@@ -99,17 +96,20 @@ Algorithm::result_t split_index::apply(iterator& it)
 //				txtout << "cleaning up" << std::endl;
 //				rep.print_recursive_treeform(txtout, rep.begin());
 				it=tr.replace(it, rep.begin());
-				cleanup_nests(tr, it);
-				expression_modified=true;
+
+				// FIXME: need to cleanup nests
+
+//				cleanup_nests(tr, it);
+
+				ret=result_t::l_applied;
 				break;
 				}
 			}
 		// skip other occurrances of this index
 		index_map_t::iterator current=prs;
-		while(prs!=ind_dummy.end() && tree_exact_equal((*prs).first,(*current).first,false))
+		while(prs!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,false))
 			++prs;
 		}
 
-	if(expression_modified) return l_applied;
-	else                    return l_no_action;
+	return ret;
 	}
