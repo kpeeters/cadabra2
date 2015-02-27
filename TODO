@@ -63,6 +63,9 @@
   viewer displays the json data in graphical form. Deep...
 
 
+- expressions spread over multiple lines should be pre-parsed. Should we require that expressions end on
+  a semi-colon? 
+
 NEXT: test websocketpp-0.4.0 on linux; on osx there is an issue with using an explicitly deleted thread function.
 
 

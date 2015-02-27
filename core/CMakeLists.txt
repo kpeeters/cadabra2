@@ -99,7 +99,7 @@ set(LOCAL_SRC_FILES
   algorithms/reduce_sub.cc
   algorithms/rename_dummies.cc
   algorithms/sort_product.cc
-#  algorithms/split_index.cc
+  algorithms/split_index.cc
   algorithms/substitute.cc
 )
 set(PUBLIC_HEADER_FILES

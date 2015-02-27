@@ -103,8 +103,8 @@ std::string Ex::str_() const
 	{
 	std::ostringstream str;
 
-	if(state()==Algorithm::result_t::l_no_action)
-		str << "(unchanged)" << std::endl;
+//	if(state()==Algorithm::result_t::l_no_action)
+//		str << "(unchanged)" << std::endl;
 	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
 	dt.output(str);
 
@@ -295,52 +295,6 @@ std::shared_ptr<Ex> make_Ex_from_int(int num)
 	return ptr;
 	}
 
-// Templates to dispatch function calls in Python to algorithms in C++.
-
-template<class F, typename... Args>
-Ex *dispatch_1(Ex *ex, bool deep, bool repeat, Args... args)
-	{
-	F algo(*get_kernel_from_scope(), ex->tree, args...);
-
-	exptree::iterator it=ex->tree.begin().begin();
-
-	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat));
-	
-	return ex;
-	}
-
-template<class F>
-Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat)
-	{
-	Ex *exobj = new Ex(ex);
-	return dispatch_1<F>(exobj, deep, repeat);
-	}
-
-template<class F>
-Ex *dispatch_2(Ex *ex, Ex *args, bool deep, bool repeat)
-	{
-	F algo(*get_kernel_from_scope(), ex->tree, args->tree);
-
-	exptree::iterator it=ex->tree.begin().begin();
-
-	std::cout << "reset state" << std::endl;
-	ex->reset_state();
-	std::cout << "update" << std::endl;
-	ex->update_state(algo.apply_generic(it, deep, repeat));
-	std::cout << "return" << std::endl;
-	
-	return ex; FIXME: this returns the wrong pointer; we assume elsewhere that the return 
-																		  value of dispatch_2 is newly managed, but that
-should in fact be the args Ex. Cleanup
-	}
-
-template<class F>
-Ex *dispatch_2_string(Ex *ex, const std::string& args, bool deep, bool repeat)
-	{
-	Ex *argsobj = new Ex(args);
-	return dispatch_2<F>(ex, argsobj, deep, repeat);
-	}
 
 // Initialise mathematics typesetting for IPython.
 
@@ -549,6 +503,62 @@ std::string Property<Prop>::repr_() const
 	return "Property::repr: "+prop->name();
 	}
 
+// Templates to dispatch function calls in Python to algorithms in
+// C++.  The number attached to each name indicates the number of Ex
+// arguments that the algorithm takes. All algorithms take the 'deep'
+// and 'repeat' boolean arguments, plus an arbitrary list of
+// additional boolean arguments indicated by 'args' (see the
+// declaration of 'join_gamma' below for an example of how to declare
+// those additional arguments).
+
+template<class F, typename... Args>
+Ex *dispatch_1_ex(Ex *ex, bool deep, bool repeat, Args... args)
+	{
+	F algo(*get_kernel_from_scope(), ex->tree, args...);
+
+	exptree::iterator it=ex->tree.begin().begin();
+
+	ex->reset_state();
+	ex->update_state(algo.apply_generic(it, deep, repeat));
+	
+	return ex;
+	}
+
+template<class F>
+Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat)
+	{
+	Ex *exobj = new Ex(ex);
+	return dispatch_1_ex<F>(exobj, deep, repeat);
+	}
+
+template<class F>
+Ex *dispatch_2_ex_ex(Ex *ex, Ex *args, bool deep, bool repeat)
+	{
+	F algo(*get_kernel_from_scope(), ex->tree, args->tree);
+
+	exptree::iterator it=ex->tree.begin().begin();
+
+	ex->reset_state();
+	ex->update_state(algo.apply_generic(it, deep, repeat));
+	
+	return ex;
+	}
+
+template<class F>
+Ex *dispatch_2_ex_string(Ex *ex, const std::string& args, bool deep, bool repeat)
+	{
+	Ex *argsobj = new Ex(args);
+	return dispatch_2_ex_ex<F>(ex, argsobj, deep, repeat);
+	}
+
+template<class F>
+Ex *dispatch_2_string_string(const std::string& ex, const std::string& args, bool deep, bool repeat)
+	{
+	Ex *exobj   = new Ex(ex);
+	Ex *argsobj = new Ex(args);
+	return dispatch_2_ex_ex<F>(exobj, argsobj, deep, repeat);
+	}
+
 // Templated function which declares various forms of the algorithm entry points in one shot.
 // First the ones with no argument, just a deep flag.
 
@@ -557,7 +567,7 @@ void def_algo_1(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_1<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false), 
+	def(name.c_str(),  &dispatch_1_ex<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false), 
 		 return_internal_reference<1>() );
 	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=false), 
 		 return_value_policy<manage_new_object>() );
@@ -570,9 +580,20 @@ void def_algo_2(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_2<F>,        (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
+	def(name.c_str(),  &dispatch_2_ex_ex<F>,     (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
 		 return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_2_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
+	
+	// The algorithm returns a pointer to the 'ex' argument, which for the 'ex_string' version of the
+	// algorithm is something that was already present on the python side. Hence return_internal_reference,
+	// not manage_new_object.
+
+	def(name.c_str(),  &dispatch_2_ex_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
+		 return_internal_reference<1>() );
+
+	// The following does lead to a new object being created from the string, and this new object needs
+	// to be managed.
+
+	def(name.c_str(),  &dispatch_2_string_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
 		 return_value_policy<manage_new_object>() );
 	}
 
@@ -660,12 +681,13 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 
-	def("join_gamma",  &dispatch_1<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=false,
-																				arg("expand")=true,arg("use_gendelta")=false),
+	def("join_gamma",  &dispatch_1_ex<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=false,
+																					arg("expand")=true,arg("use_gendelta")=false),
 		 return_internal_reference<1>() );
 
 	// Algorithms which take a second Ex as argument.
 	def_algo_2<substitute>("substitute");
+	def_algo_2<split_index>("split_index");
    //	def_algo_new<keep_terms, boost::python::list>("keep_terms");
 
 
