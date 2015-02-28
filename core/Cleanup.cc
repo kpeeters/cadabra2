@@ -2,6 +2,7 @@
 #include "Cleanup.hh"
 #include "algorithms/prodcollectnum.hh"
 #include "algorithms/collect_terms.hh"
+#include "algorithms/flatten_sum.hh"
 
 void cleanup_dispatch(Kernel& k, exptree& tr, exptree::iterator& it)
 	{
@@ -27,8 +28,8 @@ void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	assert(*it->name=="\\sum");
 
 	// Flatten sums which are supposed to be flat.
-
-HERE
+	flatten_sum fs(k,tr);
+	fs.apply(it);
 
 	// Remove children which are 0
 	exptree::sibling_iterator sib=tr.begin(it);

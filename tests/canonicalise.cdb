@@ -749,13 +749,14 @@ test47()
 #canonicalise(_)
 
 def test48():
-{q,r}::Indices(full).
-{i,j}::Indices("subspace1", parent=full).
-{A,B}::Indices("subspace2", parent=full).
-obj49:= X_{q r} Y_{q r};
-split_index(_, "{q, i, A}", repeat=True)
-canonicalise(_)
-tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49)
-collect_terms(_)
-assert(tst49)
+   {q,r}::Indices(full).
+   {i,j}::Indices("subspace1", parent=full).
+   {A,B}::Indices("subspace2", parent=full).
+   obj49:= X_{q r} Y_{q r};
+   split_index(_, "{q, i, A}", repeat=True)
+   canonicalise(_)
+   tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49)
+   collect_terms(_)
+   assert(tst49)
 
+test48()

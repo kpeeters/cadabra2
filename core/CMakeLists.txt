@@ -93,6 +93,7 @@ set(LOCAL_SRC_FILES
 #  algorithms/drop_weight.cc
   algorithms/eliminate_kronecker.cc
   algorithms/flatten_product.cc
+  algorithms/flatten_sum.cc
   algorithms/join_gamma.cc
 #  algorithms/keep_terms.cc
   algorithms/prodcollectnum.cc
