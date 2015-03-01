@@ -139,7 +139,9 @@ if __name__ == '__main__':
             with open(sys.argv[1]) as f:
                 collect=""
                 for line in f:
-                    collect += sh.preprocess(line)
+                    sline=line.strip()
+                    if len(sline)>0 and sline[0]!='#':
+                        collect += sh.preprocess(line)
                 # print "----\n"+collect+"----\n"
                 cmp = compile(collect, sys.argv[1], 'exec')
                 exec(cmp)
