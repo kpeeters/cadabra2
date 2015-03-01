@@ -70,6 +70,7 @@ set(LOCAL_SRC_FILES
   properties/KroneckerDelta.cc
   properties/LaTeXForm.cc
   properties/Matrix.cc
+  properties/Metric.cc
   properties/NonCommuting.cc
   properties/NumericalFlat.cc
   properties/PartialDerivative.cc
