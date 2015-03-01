@@ -98,6 +98,7 @@ set(LOCAL_SRC_FILES
   algorithms/join_gamma.cc
 #  algorithms/keep_terms.cc
   algorithms/prodcollectnum.cc
+  algorithms/product_rule.cc
   algorithms/reduce_sub.cc
   algorithms/rename_dummies.cc
   algorithms/sort_product.cc
