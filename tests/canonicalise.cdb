@@ -127,7 +127,7 @@ def test08():
    collect_terms(_)
    assert(tst9)
 
-test09
+test08()
 
 # Another one along the lines of the above.
 
@@ -145,9 +145,9 @@ def test10():
    canonicalise(tst3)
    assert(tst3==0)
 
-test01()
+test10()
 
-def test02():
+def test11():
    __cdbkernel__=create_scope()
    a_{#}::AntiSymmetric
    s_{#}::Symmetric
@@ -157,101 +157,23 @@ def test02():
    collect_terms(tst4)
    assert(tst4==0)
 
-test02()
+test11()
 
-# Tests with more complicated tableau symmetries.
-
-def test03():
-   __cdbkernel__=create_scope()
-   s_{#}::Symmetric
-   R_{m n p q}::RiemannTensor
-   tst5:= R_{m n p q}*s_{p q}*t_{m n}
-   canonicalise(tst5)
-   assert(tst5==0)
-
-test03()
-
-def test04():
-   __cdbkernel__=create_scope()
-   dW_{m n p q r s}::TableauSymmetry(shape={2,2}, indices={2,3,4,5}).
-   rtopen:= dW_{a b r3 r4 r1 r2}*q
-   canonicalise(rtopen)
-   rtopentest:= dW_{a b r1 r2 r3 r4}*q - @(rtopen)
-   collect_terms(rtopentest)
-   assert(rtopentest==0)
-
-test04()
-
-# Here, the fact that the 'second' field of the index contractions involving 'a'
-# are compared _before_ the one of the 'b' leads to a sorting in which the first
-# form is preferred:
-
-def test05():
-   __cdbkernel__=create_scope()
-   a2_{#}::AntiSymmetric
-   R_{m n p q}::RiemannTensor
-   obj6a:= R_{m n p q} a_{m n} a2_{p q}
-   obj6b:= R_{m n p q} a_{p q} a2_{m n}
-   canonicalise(obj6a)
-   canonicalise(obj6b)
-   tst6:= @(obj6a)-@(obj6b)
-   collect_terms(tst6)
-   assert(tst6==0)
-
-test05()
-
-# The key test that inspired it all:
-
-def test06():
-   __cdbkernel__=create_scope()
-   F_{#}::AntiSymmetric
-   G_{#}::AntiSymmetric
-   R_{m n p q}::RiemannTensor
-   tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5}
-   canonicalise(tst7)
-   assert(tst7)
-
-test06()
-
-# A more complicated preferred-form case. The algorithm should be stable,
-# that is, it should give the same result independent of which representative
-# is chosen as input. 
-
-def test07():
-   __cdbkernel__=create_scope()
-   H_{#}::Symmetric
-   F_{#}::AntiSymmetric
-   R_{m n p q}::RiemannTensor
-   obj8a:=   R_{d1 d2 d3 d4} R_{d6 d7 d4 d5} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
-   obj8b:=   R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
-   obj8c:= - R_{d1 d2 d3 d4} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
-   obj8d:= - R_{d3 d4 d1 d2} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
-   canonicalise(obj8a)
-   canonicalise(obj8b)
-   canonicalise(obj8c)
-   canonicalise(obj8d)
-   tst8b:= @(obj8a)-@(obj8b)
-   tst10:= K_{m n} * K_{m q} * K_{n q} - K_{m q} * K_{m n} * K_{n q}
-   canonicalise(_)
-   collect_terms(_)
-   assert(tst10)
-
-test10()
 
 # Portugal's non-trivial fifth-order zero:
 
-def test11():
+def test12():
    __cdbkernel__=create_scope()
    R_{m n p q}::RiemannTensor.
    tst11:= R_{a b c d} R_{e f k h} R_{i a j e} R_{b c d i} R_{f k h j}
    canonicalise(_)
    assert(tst11)
 
-test11()
+test12()
 
 # Further tests of the same.
 
-def test12():
+def test13():
    __cdbkernel__=create_scope()
    zeta_{m n}::Symmetric
    tst12:= k_a k_b zeta_{a b} - k_b k_a zeta_{a b}
@@ -259,11 +181,11 @@ def test12():
    collect_terms(_)
    assert(tst12)
 
-test12()
+test13()
 
 # This one used to trigger a bug with triple indices.
 
-def test13():
+def test13b():
    __cdbkernel__=create_scope()
    obj13:= A_{a} * A_{a} * A_{b}
    canonicalise(_)
@@ -271,7 +193,7 @@ def test13():
    collect_terms(_)
    assert(tst13)
 
-test13()
+test13b()
 
 # Another one which at one time produced triple indices.
 
@@ -331,6 +253,8 @@ def test18():
    tst18:= tt_{a1 a2 a4 a5 a6 a7}*a + @(obj18)
    collect_terms(_)
    assert(tst18)
+
+test18()
 
 # An old bug with KroneckerDelta; this could only be fixed properly
 # when the 'canonicalise' routine was rewritten to only use
@@ -467,22 +391,24 @@ def test28():
 
 test28()
 
-def test29()
+def test29():
+   __cdbkernel__=create_scope()
+   {m,n,p,q,r,s,t,u}::Indices(vector).
+   \psi_{m}::Spinor.
+   \psi_{m}::SelfAntiCommuting.
+   \bar{#}::DiracBar.
+   \Gamma_{#}::GammaMatrix.
+   obj28b:= \bar{\psi_{r}} A B \Gamma_{n p} C \psi_{m};
+   canonicalise(_)
+   tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b)
+   collect_terms(_)
+   assert(tst28b)
 
-{m,n,p,q,r,s,t,u}::Indices(vector).
-\psi_{m}::Spinor.
-\psi_{m}::SelfAntiCommuting.
-\bar{#}::DiracBar.
-\Gamma_{#}::GammaMatrix.
-obj28b:= \bar{\psi_{r}} A B \Gamma_{n p} C \psi_{m};
-canonicalise(_)
-tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b)
-collect_terms(_)
-assert(tst28b)
+test29()
 
 # Single-term expressions.
 
-def test29():
+def test29b():
    __cdbkernel__=create_scope()
    {m,n,p,q,r,s,t,u}::Indices(vector).
    dR_{m n p q r s}::TableauSymmetry(shape={4,2}, indices={2,3,0,1,4,5}).
@@ -491,7 +417,7 @@ def test29():
    canonicalise(_)
    assert(tst29)
 
-test29()
+test29b()
 
 # Extreme symmetries.
 
@@ -510,21 +436,24 @@ def test30():
 
 test30()
 
-# Test 31: Inherited properties
-#
-@reset;
-{m,n,p,q,r}::Indices(vector).
-{m,n,p,q,r}::Integer(0..10)
-\bar{#}::DiracBar.
-\psi_{m}::Spinor.
-\psi_{m}::SelfAntiCommuting.
-H_{m n p}::AntiSymmetric.
-\Gamma_{#}::GammaMatrix.
-obj31:= \bar{\psi_{m}} \Gamma_{q n p} \psi_{m} H_{n p q};
-canonicalise(_)
-tst31:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{m} H_{n p q} - @(obj31)
-collect_terms(_)
-assert(tst31)
+# Inherited properties
+
+def test31():
+   __cdbkernel__=create_scope()
+   {m,n,p,q,r}::Indices(vector).
+   {m,n,p,q,r}::Integer(0..10)
+   \bar{#}::DiracBar.
+   \psi_{m}::Spinor.
+   \psi_{m}::SelfAntiCommuting.
+   H_{m n p}::AntiSymmetric.
+   \Gamma_{#}::GammaMatrix.
+   obj31:= \bar{\psi_{m}} \Gamma_{q n p} \psi_{m} H_{n p q};
+   canonicalise(_)
+   tst31:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{m} H_{n p q} - @(obj31)
+   collect_terms(_)
+   assert(tst31)
+
+test31()
 
 
 # Indices in different sets should not be mixed up.
@@ -568,7 +497,7 @@ def test34():
 
 test34()
 
-def test35():
+def test34b():
    __cdbkernel__=create_scope()
    R_{m? n? p? q?}::RiemannTensor.
    tst34b:= R_{4 4 2 3};
@@ -581,7 +510,7 @@ test34b()
 
 # Diagonal objects
 
-def test35():
+def test35b():
    __cdbkernel__=create_scope()
    \delta_{m n}::Diagonal.
    obj35:= \delta_{1 2} * \delta_{1 2} - \delta_{1 1} * \delta_{2 2};
@@ -590,7 +519,7 @@ def test35():
    collect_terms(_)
    assert(tst35)
 
-test35()
+test35b()
 
 # Canonicalisation with upper/lower indices.
 
@@ -671,6 +600,7 @@ test37()
 # More upper/lower indices
 
 def test42():
+   __cdbkernel__=create_scope()
    {n,r}::Indices(position=fixed).
    \delta{#}::KroneckerDelta.
    \partial{#}::PartialDerivative.
@@ -687,6 +617,7 @@ test42()
 # covariant derivative.
 
 def test43():
+   __cdbkernel__=create_scope()
    {m,n,k}::Indices(position=fixed).
    \partial{#}::Derivative.
    obj43:= A_{m n} \partial_{k}{ B^{m n} };
@@ -698,6 +629,7 @@ def test43():
 test43()
 
 def test45():
+   __cdbkernel__=create_scope()
    {\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta,\chi#}::Indices(full, position=fixed).
    {m,n,p,q,r,s,t,u,v,m#}::Indices(subspace, position=fixed, parent=full).
    \partial{#}::PartialDerivative.
@@ -724,6 +656,7 @@ test45()
 # Spinor indices
 
 def test46():
+   __cdbkernel__=create_scope()
    {a,b,c,d}::Indices.
    {a,b,c,d}::AntiCommuting.
    tst46:= \chi_{a} \psi^{a} + \chi^{a} \psi_{a};
@@ -736,6 +669,7 @@ test46()
 # Regression in 1.21
 
 def test47():
+   __cdbkernel__=create_scope()
    B0:=B_{\alpha \mu} -> \Delta_{\mu \nu}*F_{\theta \alpha};
    canonicalise(_)
 
@@ -749,6 +683,7 @@ test47()
 #canonicalise(_)
 
 def test48():
+   __cdbkernel__=create_scope()
    {q,r}::Indices(full).
    {i,j}::Indices("subspace1", parent=full).
    {A,B}::Indices("subspace2", parent=full).
