@@ -1,0 +1,346 @@
+
+# Derivatives are generic objects satisfying the product rule
+# in one or more of their arguments. Commutators are examples of
+# such objects.
+
+def test01():
+    D(#)::Derivative.
+    obj1:= a*b*D(c*d*e)*f*g;
+    product_rule(_)
+    tst1:= a*b*(D(c)*d*e+c*D(d)*e+c*d*D(e))*f*g-@(obj1);
+    collect_terms(_)
+    assert(tst1)
+
+test01()
+
+def test02():
+    D(a??)(b??)(c??)::Derivative.
+    obj2:= a*b*D(c*d*e)(h1)(h2)*f*g;
+    product_rule(_)
+    tst2:= a*b*(D(c)(h1)(h2)*d*e+c*D(d)(h1)(h2)*e+c*d*D(e)(h1)(h2))*f*g-@(obj2);
+    collect_terms(_)
+    assert(tst2)
+
+test02()
+
+# Using the properties of \diff.
+
+def test03():
+    \diff{#}::PartialDerivative.
+    obj5:= \diff{A*B}_\mu;
+    product_rule(_)
+    tst5:= \diff{A}_\mu * B + A * \diff{B}_\mu - @(obj5);
+    collect_terms(_)
+    assert(tst5==0)
+
+test03()
+
+def test04():
+obj6:= \diff{g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho}}_{\sigma};
+product_rule(_);
+tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
+     +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
+collect_terms(_);
+assert(tst6);
+
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta}::Indices(spacetime).
+obj7:= g^{\eta \kappa} * \diff{\eta_{\nu \sigma}}_{\kappa} * g^{\mu \lambda} * \diff{eta_{\lambda \eta}}_{\rho};
+substitute(_)( \diff{\eta_{\mu\nu}}_{\rho} -> 0 );
+assert(obj7);
+
+# Test 8:= \delta in combination with \diff
+#
+\delta_{n q}::KroneckerDelta.
+\diff{#}::Derivative.
+obj8:= \diff{A_{m n}}_{p} \delta_{n q} \delta_{p t};
+eliminate_kr(_);
+tst8:= \diff{A_{m q}}_{t} - @(obj8);
+collect_terms(_);
+assert(tst8);
+
+# Test9:= multiple derivatives and the product rule
+#
+reset;
+\diff{#}::PartialDerivative.
+obj9:= 3 \diff{4*A*B}_{m n};
+product_rule(_);
+distribute(_);
+product_rule(_);
+sumflatten(_);
+tst9:= 12 \diff{A}_{m n} B + 12 \diff{A}_m \diff{B}_n + 12 \diff{A}_n \diff{B}_m + 12 A \diff{B}_{m n} - @(obj9);
+collect_terms(_);
+assert(tst9);
+
+# Test 10: Order of child nodes on PartialDerivative.
+#
+reset;
+{a,b,c,d}::Indices(vector).
+\partial{#}::PartialDerivative.
+A_{a b}::AntiSymmetric.
+obj10:= \partial_{b a}{ A_{d c} };
+indexlist(_);
+canonicalise(_);
+tst10:= \partial_{a b}{ A_{c d} } + @(obj10);
+collect_terms(_);
+assert(tst10);
+
+reset;
+{a,b,c,d}::Indices(vector).
+\partial{#}::PartialDerivative.
+A_{a b}::AntiSymmetric.
+obj10b:= \partial{ A_{d c} }_{b a};
+indexlist(_);
+canonicalise(_);
+tst10b:= \partial{ A_{c d} }_{a b} + @(obj10b);
+collect_terms(_);
+assert(tst10b);
+
+# Test 11: multiple derivatives again
+#
+reset;
+\partial{#}::PartialDerivative.
+obj11a:= \partial(A B C)_{a b};
+product_rule(_);
+tst11a:= \partial{\partial(A)_{a} * B * C + A * \partial(B)_{a} * C + A * B * \partial(C)_{a}}_{b} - @(obj11a);
+collect_terms(_);
+assert(tst11a);
+
+obj11b:= \partial_{a b}(A B C);
+product_rule(_);
+tst11b:= \partial_{b}{\partial_{a}(A) * B * C + A * \partial_{a}(B) * C + A * B * \partial_{a}(C)} - @(obj11b);
+collect_terms(_);
+assert(tst11b);
+
+# Test 12: more tricky derivatives
+reset;
+\Omega{#}::Derivative.
+{A,B,C,D}::Depends(\Omega).
+obj12:= \Omega_{a}(A B)(C D);
+product_rule(_);
+product_rule(_);
+distribute(_);
+tst12:= \Omega_{a}(A)(C) * D * B + C * \Omega_{a}(A)(D) * B + A * \Omega_{a}(B)(C) * D + A * C * \Omega_{a}(B)(D)
+       -@(obj12);
+collect_terms(_);
+assert(tst12);
+
+# Test 13: Inheritance
+#
+reset.
+\nabla{#}::Derivative.
+A_{m n}::Traceless.
+obj13:= \nabla_{m}{A_{p p}}*Q_{m};
+canonicalise(_);
+
+# Test 14: product_rule on powers
+#
+reset.
+\partial{#}::PartialDerivative.
+obj14a:= \partial_{m n}{A**2};
+product_rule(_);
+tst14a:= \partial_{n}(2*A*\partial_{m}{A}) - @(obj14a);
+collect_terms(_);
+assert(tst14a);
+
+reset.
+\partial{#}::PartialDerivative.
+obj14b:= \partial_{m n}{A**3};
+product_rule(_);
+tst14b:= \partial_{n}(3*A**2*\partial_{m}{A}) - @(obj14b);
+collect_terms(_);
+assert(tst14b);
+
+reset.
+\partial{#}::PartialDerivative.
+obj14c:= \partial_{m n}{A**(d+1)};
+product_rule(_);
+# FIXME
+
+reset.
+\partial{#}::PartialDerivative.
+obj14d:= \partial_{m n}{A**d};
+product_rule(_);
+tst14d:= \partial_{n}(d * A**(d - 1) * \partial_{m}{A}) - @(obj14d);
+collect_terms(_);
+assert(tst14d);
+
+reset.
+\partial{#}::PartialDerivative.
+\partial{A**2};
+product_rule(_);
+obj14f:= \partial{A*\partial{A}};
+product_rule(_);
+tst14f:= \partial{A} * \partial{A} + A * \partial{\partial{A}} - @(obj14f);
+collect_terms(_);
+assert(tst14f);
+
+reset.
+\partial{#}::PartialDerivative.
+obj15:= \partial{-a**2};
+product_rule(_);
+tst15:= 2 a \partial{a} + @(obj15);
+collect_terms(_);
+assert(tst15);
+
+obj16:= \partial{-a**3};
+product_rule(_);
+tst16:= 3 a**2 \partial{a} + @(obj16);
+collect_terms(_);
+assert(tst15);
+
+# Test 17: Flattening
+#
+reset.
+\partial{#}::PartialDerivative.
+obj17:= \partial_{a}{\partial_{b c}{F}};
+tst17:= \partial_{a b c}{F} - @(obj17);
+collect_terms(_);
+assert(tst17);
+
+# Test 18: more flattening
+#
+reset.
+\partial{#}::PartialDerivative.
+\nabla{#}::Derivative.
+obj18:= \nabla_{a}{\nabla_{b}{F}};
+substitute!(_)( \nabla_{a}{A??} -> \partial_{a}{A??} );
+tst18:= \partial_{a b}{F} - @(obj18);
+collect_terms(_);
+assert(tst18);
+
+
+# Test 19: Grassman derivatives
+#
+reset.
+{\alpha,\beta,\gamma}::Indices(spinor).
+\theta^{\alpha}::Coordinate.
+\theta^{\alpha}::SelfAntiCommuting.
+D{#}::Derivative.
+obj19a:= D_{\theta^{\alpha}}{\theta^\beta \theta^\gamma};
+product_rule(_);
+tst19a:= D_{\theta^{\alpha}}{\theta^{\beta}} \theta^{\gamma}  
+      - \theta^{\beta} D_{\theta^{\alpha}}{\theta^{\gamma}} - @(obj19a);
+collect_terms(_);
+assert(tst19a);
+
+reset.
+{\alpha,\beta,\gamma}::Indices(spinor).
+{\alpha,\beta,\gamma}::AntiCommuting.
+\theta^{\alpha}::Coordinate.
+D{#}::Derivative.
+obj19b:= D_{\alpha}{\theta^\beta \theta^\gamma};
+product_rule(_);
+tst19b:= D_{\alpha}{\theta^{\beta}} \theta^{\gamma}  
+      - \theta^{\beta} D_{\alpha}{\theta^{\gamma}} - @(obj19b);
+collect_terms(_);
+assert(tst19b);
+
+reset.
+{\alpha,\beta,\gamma}::Indices(spinor).
+{\alpha,\beta,\gamma}::AntiCommuting.
+D{#}::Derivative.
+obj19c:= D^{\alpha}{ D_{\alpha}{T^{\beta} S^{\gamma}}};
+product_rule(_);
+distribute(_);
+product_rule(_);
+sumflatten(_);
+tst19c:= D^{\alpha}{D_{\alpha}{T^{\beta}}} * S^{\gamma} 
+       + D_{\alpha}{T^{\beta}} * D^{\alpha}{S^{\gamma}} 
+       - D^{\alpha}{T^{\beta}} * D_{\alpha}{S^{\gamma}}
+       + T^{\beta} * D^{\alpha}{D_{\alpha}{S^{\gamma}}} - @(obj19c);
+collect_terms(_);
+assert(tst19c);
+
+reset.
+{\alpha,\beta,\gamma}::Indices(spinor).
+{\alpha,\beta,\gamma}::AntiCommuting.
+D{#}::Derivative.
+{b, c}::SelfAntiCommuting.
+{b, c}::ImplicitIndex(spinor).
+obj19d:= D^{\alpha}{D_{\alpha}{b*c}};
+product_rule(_);
+distribute(_);
+product_rule(_);
+distribute(_);
+sumflatten(_);
+tst19d:= D^{\alpha}{D_{\alpha}{b}} c
+       + D_{\alpha}{b} D^{\alpha}{c}
+       - D^{\alpha}{b} D_{\alpha}{c}
+       + b D^{\alpha}{D_{\alpha}{c}} - @(obj19d);
+collect_terms(_);
+assert(tst19d);
+
+
+# Test 20: anti-commuting indices.
+#
+reset.
+\dot{#}::Accent.
+{a,b,c,d}::Indices(spinor).
+{\dot{a},\dot{b},\dot{c},\dot{d}}::Indices(dspinor).
+{a,b,c,d,\dot{a},\dot{b},\dot{c},\dot{d}}::AntiCommuting.
+D{#}::Derivative.
+obj20:= D_{a}{D_{\dot{a}}{f g}};
+product_rule(_);
+distribute(_);
+product_rule(_);
+sumflatten(_);
+tst20:= D_{a}{D_{\dot{a}}{f}} * g 
+      - D_{\dot{a}}{f} * D_{a}{g} 
+      + D_{a}{f} * D_{\dot{a}}{g} 
+      + f * D_{a}{D_{\dot{a}}{g}} - @(obj20);
+collect_terms(_);
+assert(tst20);
+
+
+# Test 21: two index sets, anti-commuting
+#
+reset.
+{\alpha,\beta,\gamma}::Indices(Spinor).
+{\dalpha,\dbeta,\dgamma}::Indices(DottedSpinor).
+{\alpha,\beta,\gamma,\dalpha,\dbeta,\dgamma,b,c}::AntiCommuting.
+{\bD{#}, D{#}}::Derivative.
+obj21:= D_{\alpha}{\bD_{\dalpha}{b*c}};
+product_rule(_);
+distribute(_);
+product_rule(_);
+distribute(_);
+sumflatten(_);
+tst21:= D_{\alpha}{\bD_{\dalpha}{b}} * c 
+      + \bD_{\dalpha}{b} * D_{\alpha}{c} 
+      - D_{\alpha}{b} * \bD_{\dalpha}{c} 
+      + b * D_{\alpha}{\bD_{\dalpha}{c}} - @(obj21);
+collect_terms(_);
+assert(tst21);
+
+
+# Test 22: explicit and implicit indices
+#
+reset.
+{\alpha,\beta,\gamma}::Indices(spinor).
+{\theta,\lambda}::ImplicitIndex(spinor).
+{\alpha,\beta,\gamma,\theta,\lambda}::AntiCommuting.
+D{#}::Derivative.
+obj22:= D_{\alpha}{\theta \lambda};
+product_rule(_);
+tst22:= D_{\alpha}{\theta} \lambda - \theta D_{\alpha}{\lambda} - @(obj22);
+collect_terms(_);
+assert(tst22);
+
+# Test 23: multiple indices on tensors.
+#
+reset.
+{a,b,c,d,e}::Indices.
+{a,b,c,d,e}::AntiCommuting.
+D{#}::Derivative.
+obj23:= D_{a}{A^{b} T^{c d} C^{e}}; 
+product_rule(_);
+tst23:= D_{a}{A^{b}} * T^{c d} * C^{e} - A^{b} * D_{a}{T^{c d}} * C^{e} - A^{b} * T^{c d} * D_{a}{C^{e}}
+         - @(obj23);
+collect_terms(_);
+assert(tst23);
+
+# Test 24: implicit indices
+#
+#reset.
+#{ D{#}, bD{#} }::Derivative.
+#obj24:= D{ 

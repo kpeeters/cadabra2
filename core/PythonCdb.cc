@@ -59,6 +59,7 @@
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/join_gamma.hh"
+#include "algorithms/product_rule.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
@@ -679,6 +680,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
+	def_algo_1<product_rule>("product_rule");
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
