@@ -10,6 +10,8 @@ TeXView::TeXView(TeXEngine& eng, const std::string& texb, int hmargin)
 	content = engine.checkin(texb, "", "");
 
 	add(vbox);
+	vbox.set_margin_top(10);
+	vbox.set_margin_bottom(0);
 	vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
 	hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
 //	set_state(Gtk::STATE_PRELIGHT);

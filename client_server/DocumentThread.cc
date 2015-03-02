@@ -19,7 +19,6 @@ void DocumentThread::set_compute_thread(ComputeThread *cl)
 
 void DocumentThread::new_document()
 	{
-	return;
 	// Setup a single-cell document. This operation itself cannot be undone,
 	// so we do it directly on the doc, not using Actions.
 

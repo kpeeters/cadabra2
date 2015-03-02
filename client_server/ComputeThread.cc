@@ -6,6 +6,7 @@
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
 #include "Actions.hh"
+#include "spawn.h"
 
 using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
@@ -70,8 +71,21 @@ void ComputeThread::on_fail(websocketpp::connection_hdl hdl)
 	if(gui)
 		gui->on_network_error();
 
+	try_spawn_server();
 	sleep(1);
 	try_connect();
+	}
+
+void ComputeThread::try_spawn_server()
+	{
+	// Startup the server. First generate a UUID, pass this to the
+	// starting server, then use this UUID to get access to the server
+	// port.
+
+	pid_t pid;
+	char * const sargv[] = {"sh", "-c", "cadabra-server", NULL};
+	int status;
+	status = posix_spawn(&pid, "/bin/sh", NULL, NULL, sargv, environ);
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 

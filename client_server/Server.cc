@@ -345,6 +345,7 @@ void Server::run()
 	wserver.listen(9002);
 	wserver.start_accept();
 
+	std::cout << "spawning thread" << std::endl;
 	runner = std::thread(std::bind(&Server::wait_for_job, this));
 	
 	wserver.run();

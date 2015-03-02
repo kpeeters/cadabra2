@@ -73,6 +73,7 @@ namespace cadabra {
 			websocketpp::connection_hdl our_connection_hdl;
 			void init();
 			void try_connect();
+			void try_spawn_server();
 			void on_open(websocketpp::connection_hdl hdl);
 			void on_fail(websocketpp::connection_hdl hdl);
 			void on_close(websocketpp::connection_hdl hdl);

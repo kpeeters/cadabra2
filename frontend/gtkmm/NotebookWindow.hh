@@ -8,6 +8,7 @@
 #include <gtkmm/stock.h>
 #include <gtkmm/button.h>
 #include <gtkmm/uimanager.h>
+#include <gtkmm/cssprovider.h>
 #include <glibmm/dispatcher.h>
 
 #include <thread>
@@ -121,6 +122,10 @@ namespace cadabra {
 			bool cell_got_focus(DTree::iterator, int);
 			bool cell_content_changed(const std::string&, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
+
+			// Styling through CSS
+			void                           setup_css_provider();
+			Glib::RefPtr<Gtk::CssProvider> css_provider;
 	};
 
 };
