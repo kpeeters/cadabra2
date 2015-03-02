@@ -12,7 +12,7 @@ using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
-	: gui(g), docthread(dt), connection_is_open(false)
+	: gui(g), docthread(dt), connection_is_open(false), server_pid(0)
 	{
 	}
 
@@ -68,7 +68,7 @@ void ComputeThread::run()
 void ComputeThread::on_fail(websocketpp::connection_hdl hdl) 
 	{
 	connection_is_open=false;
-	if(gui)
+	if(gui && server_pid!=0)
 		gui->on_network_error();
 
 	try_spawn_server();
@@ -82,10 +82,9 @@ void ComputeThread::try_spawn_server()
 	// starting server, then use this UUID to get access to the server
 	// port.
 
-	pid_t pid;
 	char * const sargv[] = {"sh", "-c", "cadabra-server", NULL};
 	int status;
-	status = posix_spawn(&pid, "/bin/sh", NULL, NULL, sargv, environ);
+	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, sargv, environ);
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
@@ -230,6 +229,25 @@ void ComputeThread::stop()
 	Json::Value req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="execute_interrupt";
+	req["header"]=header;
+
+	std::ostringstream str;
+	str << req << std::endl;
+	
+	std::cerr << str.str() << std::endl;
+
+	server_pid=0;
+	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	}
+
+void ComputeThread::restart_kernel()
+	{
+	if(connection_is_open==false)
+		return;
+
+	Json::Value req, header, content;
+	header["uuid"]="none";
+	header["msg_type"]="exit";
 	req["header"]=header;
 
 	std::ostringstream str;

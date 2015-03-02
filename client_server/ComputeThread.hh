@@ -53,6 +53,10 @@ namespace cadabra {
 
 			void stop();
 
+			// Restart the kernel.
+
+			void restart_kernel();
+
 			// Determine if there are still cells running on the server.
 			// FIXME: this does not guarantee thread-safety but at the moment
 			// is only used for updating status bars etc.
@@ -78,6 +82,9 @@ namespace cadabra {
 			void on_fail(websocketpp::connection_hdl hdl);
 			void on_close(websocketpp::connection_hdl hdl);
 			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
+
+			// Self-started server
+			pid_t server_pid;
 	};
 
 }

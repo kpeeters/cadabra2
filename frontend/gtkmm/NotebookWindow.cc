@@ -5,6 +5,7 @@
 #include "DataCell.hh"
 #include <gtkmm/box.h>
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/messagedialog.h>
 #include <fstream>
 
 using namespace cadabra;
@@ -50,6 +51,9 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );
 	actiongroup->add( Gtk::Action::create("RunStop", Gtk::Stock::STOP, "Stop"),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
+	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
+	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"),
+							sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
 
 	uimanager = Gtk::UIManager::create();
 	uimanager->insert_action_group(actiongroup);
@@ -73,6 +77,9 @@ NotebookWindow::NotebookWindow()
 		"      <menuitem action='RunAll' />"
 		"      <menuitem action='RunToCursor' />"
 		"      <menuitem action='RunStop' />"
+		"    </menu>"
+		"    <menu action='MenuKernel'>"
+		"      <menuitem action='KernelRestart' />"
 		"    </menu>"
 		"  </menubar>"
 		"  <toolbar name='ToolBar'>"
@@ -230,6 +237,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		set_stop_sensitive( compute->number_of_cells_running()>0 );
 	
 	Glib::RefPtr<Gtk::TextBuffer> global_buffer;
+	
 
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 
@@ -245,6 +253,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::output:
 				// FIXME: would be good to share the output of TeXView too.
 				newcell.outbox = manage( new TeXView(engine, it->textbuf) );
+				newcell.outbox->tex_error.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
 				w=newcell.outbox;
 				break;
 			case DataCell::CellType::input: {
@@ -356,6 +365,7 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator)
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
 	std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
+	set_stop_sensitive( compute->number_of_cells_running()>0 );
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 	target.inbox->edit.grab_focus();
@@ -397,6 +407,16 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	set_stop_sensitive(true);
 	compute->execute_cell(*it);
 
+	return true;
+	}
+
+bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
+	{
+	Gtk::MessageDialog md("TeX error", false, Gtk::MESSAGE_WARNING, 
+								 Gtk::BUTTONS_OK, true);
+	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+	md.set_secondary_text(str);
+	md.run();
 	return true;
 	}
 
@@ -486,4 +506,11 @@ void NotebookWindow::on_run_runtocursor()
 void NotebookWindow::on_run_stop()
 	{
 	compute->stop();
+	}
+
+void NotebookWindow::on_kernel_restart()
+	{
+	// FIXME: add warnings
+
+	compute->restart_kernel();
 	}
