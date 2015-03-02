@@ -81,6 +81,8 @@ class Shell(InteractiveConsole):
             line_stripped=line_stripped[:-1]
         found = line_stripped.find(':=')
         if found>0:
+            # This is problematic: we will wrap only the current line in an Ex, even if it continues onto
+            # the next line...
             rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:]+"')"
             objname=line_stripped[:found]
             if lastchar!='.' and len(indent_line)==0:
