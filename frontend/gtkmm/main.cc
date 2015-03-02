@@ -9,6 +9,10 @@
 
 int main(int argc, char **argv)
 	{
+	// Startup the server.
+	HERE: generate a UUID, pass this to the starting server, then use this
+		UUID to get access to the server port.
+
 	// Create the ui material.
 	Glib::RefPtr<Gtk::Application> app =
 		Gtk::Application::create(argc, argv, "com.phi-sci.cadabra.cadabra-gtk");
