@@ -109,6 +109,8 @@ namespace cadabra {
 			void on_run_runtocursor();
 			void on_run_stop();
 
+			void on_kernel_restart();
+
 			// Todo deque processing logic. This gets called by the dispatcher, but it
 			// is also allowed to call this from within NotebookWindow itself. The important
 			// thing is that it is run on the GUI thread.
@@ -122,6 +124,10 @@ namespace cadabra {
 			bool cell_got_focus(DTree::iterator, int);
 			bool cell_content_changed(const std::string&, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
+			
+			// Handler for callbacks from TeXView cells.
+
+			bool on_tex_error(const std::string&, DTree::iterator);
 
 			// Styling through CSS
 			void                           setup_css_provider();

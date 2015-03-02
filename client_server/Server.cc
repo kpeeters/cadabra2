@@ -286,6 +286,9 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		std::swap(block_queue, empty);
 		std::cout << "job stop requested" << std::endl;
 		}
+	else if(msg_type=="exit") {
+		exit(-1);
+		}
 	}
 
 void Server::on_block_finished(Block blk)
