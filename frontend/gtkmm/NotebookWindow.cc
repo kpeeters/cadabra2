@@ -17,6 +17,15 @@ NotebookWindow::NotebookWindow()
 	{
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
+
+	// Setup styling.
+	css_provider = Gtk::CssProvider::create();
+	Glib::ustring data = "GtkTextView { color: blue; margin-left: 15px; margin-top: 20px; margin-bottom: 0px; padding: 20px; padding-bottom: 0px; }";
+	if(!css_provider->load_from_data(data)) {
+		std::cerr << "Failed to parse widget css information." << std::endl;
+		}
+	auto screen = Gdk::Screen::get_default();
+	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 	
 	// Setup menu.
 	actiongroup = Gtk::ActionGroup::create();
@@ -246,6 +255,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					global_buffer=ci->buffer;
 					}
 				else ci = new CodeInput(global_buffer);
+				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 				ci->edit.content_changed.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), it, i ) );
 				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), it, i ) );

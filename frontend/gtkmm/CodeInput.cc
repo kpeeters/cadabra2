@@ -52,15 +52,15 @@ void CodeInput::init()
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
 	edit.override_font(Pango::FontDescription("monospace")); 
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
-	edit.override_color(Gdk::RGBA("blue"));
+//	edit.override_color(Gdk::RGBA("blue"));
 	edit.override_background_color(Gdk::RGBA("white"));
-	edit.set_pixels_above_lines(5);
-	edit.set_pixels_below_lines(5);
+	edit.set_pixels_above_lines(1);
+	edit.set_pixels_below_lines(1);
+	set_margin_top(10);
+	set_margin_bottom(10);
 //	edit.set_pixels_below_lines(Gtk::LINE_SPACING);
 //	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
 	edit.set_left_margin(15);
-	// Need CSS tweaks for top margin
-//	edit.set_top_margin(15);
 	edit.set_accepts_tab(true);
 	Pango::TabArray tabs(10);
 	// FIXME: use character width measured, instead of '8', or at least
@@ -165,16 +165,16 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 
 	// paint the background
 	cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
-	cr->rectangle(5,3,8,h-3);
-	cr->fill();
+//	cr->rectangle(5,3,8,h-3);
+//	cr->fill();
 
 	cr->set_source_rgba(.2, .2, .7, 1.0);
 	cr->set_line_width(1.0);
 	cr->set_antialias(Cairo::ANTIALIAS_NONE);
-	cr->move_to(8,3);
-	cr->line_to(5,3);
-	cr->line_to(5,h-3); 
-	cr->line_to(8,h-3); 
+	cr->move_to(8,1);
+	cr->line_to(5,1);
+	cr->line_to(5,h); 
+	cr->line_to(8,h); 
 	cr->stroke();
 	
 	return ret;
