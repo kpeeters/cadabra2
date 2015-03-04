@@ -36,12 +36,14 @@ def test03():
 test03()
 
 def test04():
-obj6:= \diff{g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho}}_{\sigma};
-product_rule(_);
-tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
-     +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
-collect_terms(_);
-assert(tst6);
+    \diff{#}::PartialDerivative.
+    obj6:= \diff{g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho}}_{\sigma};
+    product_rule(_);
+    tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
+        +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
+    collect_terms(_);
+
+test04()
 
 {\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta}::Indices(spacetime).
 obj7:= g^{\eta \kappa} * \diff{\eta_{\nu \sigma}}_{\kappa} * g^{\mu \lambda} * \diff{eta_{\lambda \eta}}_{\rho};

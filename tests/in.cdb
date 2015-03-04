@@ -2,7 +2,7 @@ def test06():
     __cdbkernel__=create_scope();
     {X,G,Y,A,B}::SortOrder.
     {X,A}::AntiCommuting.
-    obj6:= A B G X A X
+    obj6:= A B G X A X;
     sort_product(obj6)
     tst6:= X X G A A B + @(obj6);
     collect_terms(_)
@@ -15,7 +15,7 @@ def test07():
     __cdbkernel__=create_scope();
     {X,G,Y,A,B}::SortOrder.
     {X,A}::NonCommuting.
-    obj7:= A*B*G*X*A*X
+    obj7:= A*B*G*X*A*X;
     sort_product(_)
     tst7:= G A X A X B - @(obj7);
     collect_terms(_)

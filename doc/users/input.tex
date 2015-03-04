@@ -1,0 +1,24 @@
+\section{Input format}
+
+The input format of Cadabra~II follows the Python language
+specification, with the following additional rules:
+\begin{enumerate}
+\item A line containing a \verb|:=| token is interpreted as a Cadabra
+  expression declaration. If the line does not end with a semi-colon
+  \verb|;| following lines are added until a line is found which does
+  end with a semi-colon. The newlines between these lines are replaced
+  with a single space character.
+
+  [example]
+
+  This is translated to the following expression before it is being
+  handed to the Python interpreter.
+
+  [translation]
+
+\item A line containing a \verb|::| token is interpreted as a Cadabra
+  property declaration. The same rule for line continuation is used.
+\end{enumerate}
+The interactive shell \verb|cadabra2| will indicate Cadabra line
+continuations by showing a `|' symbol as prompt (instead of the
+`\verb|>|' shown for new lines.

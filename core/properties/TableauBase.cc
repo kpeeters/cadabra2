@@ -10,7 +10,7 @@ int TableauBase::get_indexgroup(const Properties& pr, exptree& tr, exptree::iter
 			it=tr.begin(it);
 		else break;
 		} 
-//	txtout << "now at " << *it->name << std::endl;
+//	std::cout << "now at " << *it->name << std::endl;
 
 	unsigned int siz=size(pr, tr, it);
 	assert(siz==1); // FIXME: does not work yet for multi-tab symmetries
