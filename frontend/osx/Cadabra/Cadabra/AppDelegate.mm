@@ -23,8 +23,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     self.notebookController = [[NotebookController alloc] initWithNibName:@"Notebook" bundle:nil];
     
-    // 2. Add the view controller to the Window's content view
     [self.window.contentView addSubview:self.notebookController.view];
+    [self.notebookController.view setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
     self.notebookController.view.frame = ((NSView*)self.window.contentView).bounds;
 }
 

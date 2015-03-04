@@ -84,7 +84,7 @@ void ComputeThread::try_spawn_server()
 
 	char * const sargv[] = {"sh", "-c", "cadabra-server", NULL};
 	int status;
-	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, sargv, environ);
+	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, sargv, NULL); //environ);
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 

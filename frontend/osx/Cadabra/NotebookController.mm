@@ -12,7 +12,6 @@
 #include "NotebookWindow.hh"
 
 @interface NotebookController ()
-@property (weak) IBOutlet NSTextField *status_label;
 
 @end
 
@@ -22,11 +21,6 @@
     cadabra::ComputeThread  *compute;
     std::thread             *compute_thread;
 }
-
--(void)setKernelStatus:(NSString *)status
-{
-    [_status_label setStringValue:status];
- }
 
 - (void)loadView {
     BOOL ownImp = ![NSViewController instancesRespondToSelector:@selector(readySetGo)];

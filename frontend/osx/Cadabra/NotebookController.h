@@ -9,9 +9,9 @@
 #import <Cocoa/Cocoa.h>
 
 @interface NotebookController : NSViewController {
-    
 }
 
--(void)setKernelStatus:(NSString *)status;
+@property (weak) IBOutlet NSTextField  *status_label;
+@property (weak) IBOutlet NSScrollView *scrollbox;
 
 @end

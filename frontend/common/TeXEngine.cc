@@ -179,7 +179,7 @@ void TeXEngine::convert_all()
 		}
 
 	if(need_generating!=0) {
-		std::cerr << "running TeX on " << requests.size() << " requests" << std::endl;
+	  //		std::cerr << "running TeX on " << requests.size() << " requests" << std::endl;
 		convert_set(requests);
 		}
 	}

@@ -13,6 +13,7 @@
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
 #include "NotebookController.h"
+#include "NotebookCanvas.hh"
 
 namespace cadabra {
 
@@ -20,10 +21,11 @@ class NotebookWindow : public DocumentThread, public GUIBase {
     public:
         NotebookWindow(NotebookController *);
     
-        virtual void add_cell(const DTree&, DTree::iterator) override;
+        virtual void add_cell(const DTree&, DTree::iterator, bool visible) override;
         virtual void remove_cell(const DTree&, DTree::iterator) override;
         virtual void update_cell(const DTree&, DTree::iterator) override;
         virtual void position_cursor(const DTree&, DTree::iterator) override;
+        virtual void remove_all_cells() override;
     
         virtual void on_connect() override;
         virtual void on_disconnect() override;
@@ -31,8 +33,11 @@ class NotebookWindow : public DocumentThread, public GUIBase {
     
         virtual void process_data() override;
     
-private:
-    NotebookController *controller;
+    private:
+        NotebookController *controller;
+
+        std::vector<NotebookCanvas *> canvasses;
+        int                           current_canvas;
 };
     
 };
