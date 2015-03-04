@@ -7,7 +7,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NotebookController">
             <connections>
-                <outlet property="status_label" destination="rqn-VV-TKi" id="cLY-U1-09v"/>
+                <outlet property="scrollbox" destination="2yl-Je-0GT" id="C7M-4e-HqK"/>
+                <outlet property="status_label" destination="rqn-VV-TKi" id="tWb-JJ-ow8"/>
                 <outlet property="view" destination="c22-O7-iKe" id="OpU-VK-mr3"/>
             </connections>
         </customObject>
@@ -34,18 +35,56 @@
                 <progressIndicator verticalHuggingPriority="1000" ambiguous="YES" misplaced="YES" maxValue="100" indeterminate="YES" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="qKv-52-RZV">
                     <rect key="frame" x="464" y="-1" width="144" height="20"/>
                 </progressIndicator>
+                <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2yl-Je-0GT">
+                    <rect key="frame" x="0.0" y="18" width="608" height="456"/>
+                    <clipView key="contentView" id="wGw-d2-scB">
+                        <rect key="frame" x="1" y="1" width="181" height="94"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="10M-bc-rrx">
+                                <rect key="frame" x="0.0" y="0.0" width="181" height="94"/>
+                            </view>
+                        </subviews>
+                    </clipView>
+                    <scroller key="horizontalScroller" verticalHuggingPriority="750" horizontal="YES" id="kMP-op-Mc0">
+                        <rect key="frame" x="1" y="79" width="181" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="2T2-rH-Yts">
+                        <rect key="frame" x="166" y="1" width="16" height="94"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
             </subviews>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="2yl-Je-0GT" secondAttribute="trailing" id="0Cp-HW-4en"/>
                 <constraint firstAttribute="bottom" secondItem="qKv-52-RZV" secondAttribute="bottom" id="2K2-t5-FJq"/>
                 <constraint firstAttribute="bottom" secondItem="rqn-VV-TKi" secondAttribute="bottom" constant="1" id="7zl-Zp-BwJ"/>
                 <constraint firstAttribute="trailing" secondItem="8Wf-GJ-sS1" secondAttribute="trailing" id="8LC-i1-cDy"/>
                 <constraint firstItem="rqn-VV-TKi" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="7" id="CnR-vY-ZMj"/>
                 <constraint firstItem="8Wf-GJ-sS1" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="DL2-TG-1oI"/>
+                <constraint firstItem="rqn-VV-TKi" firstAttribute="top" secondItem="2yl-Je-0GT" secondAttribute="bottom" id="Hvt-lC-9Wl"/>
                 <constraint firstAttribute="trailing" secondItem="qKv-52-RZV" secondAttribute="trailing" id="Hy6-mP-HUz"/>
+                <constraint firstItem="2yl-Je-0GT" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="eDC-0O-idk"/>
                 <constraint firstAttribute="trailing" secondItem="qKv-52-RZV" secondAttribute="trailing" id="kvp-Us-SP7"/>
                 <constraint firstItem="qKv-52-RZV" firstAttribute="top" secondItem="8Wf-GJ-sS1" secondAttribute="bottom" constant="-1" id="nGY-cy-AfG"/>
+                <constraint firstItem="2yl-Je-0GT" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="nQO-aF-VjH"/>
             </constraints>
             <point key="canvasLocation" x="204" y="256"/>
+        </customView>
+        <button verticalHuggingPriority="750" id="PKi-ii-Hwl">
+            <rect key="frame" x="0.0" y="0.0" width="82" height="32"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <buttonCell key="cell" type="push" title="Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jch-6q-adH">
+                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                <font key="font" metaFont="system"/>
+            </buttonCell>
+            <point key="canvasLocation" x="646" y="361.5"/>
+        </button>
+        <customView id="ROT-Jv-Ghy">
+            <rect key="frame" x="0.0" y="0.0" width="163" height="96"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <point key="canvasLocation" x="608.5" y="396"/>
         </customView>
     </objects>
 </document>
