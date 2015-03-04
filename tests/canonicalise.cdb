@@ -5,15 +5,15 @@
 
 def test01():
    __cdbkernel__=create_scope()
-   a_{#}::AntiSymmetric
-   s_{#}::Symmetric
-   tst1:= a_{m n} s_{m n}
+   a_{#}::AntiSymmetric;
+   s_{#}::Symmetric;
+   tst1:= a_{m n} s_{m n};
    canonicalise(tst1)
    assert(tst1==0)
-   tst2:= a_{n m q} s_{m n}
+   tst2:= a_{n m q} s_{m n};
    canonicalise(tst2)
    assert(tst2==0)
-   tst3:= a_{m m}
+   tst3:= a_{m m};
    canonicalise(tst3)
    assert(tst3==0)
 
@@ -21,11 +21,11 @@ test01()
 
 def test02():
    __cdbkernel__=create_scope()
-   a_{#}::AntiSymmetric
-   s_{#}::Symmetric
-   obj4:= s_{m n m n}
+   a_{#}::AntiSymmetric;
+   s_{#}::Symmetric;
+   obj4:= s_{m n m n};
    canonicalise(obj4)
-   tst4:= s_{m m n n}-@(obj4)
+   tst4:= s_{m m n n}-@(obj4);
    collect_terms(tst4)
    assert(tst4==0)
 
@@ -35,9 +35,9 @@ test02()
 
 def test03():
    __cdbkernel__=create_scope()
-   s_{#}::Symmetric
-   R_{m n p q}::RiemannTensor
-   tst5:= R_{m n p q}*s_{p q}*t_{m n}
+   s_{#}::Symmetric;
+   R_{m n p q}::RiemannTensor;
+   tst5:= R_{m n p q}*s_{p q}*t_{m n};
    canonicalise(tst5)
    assert(tst5==0)
 
@@ -46,9 +46,9 @@ test03()
 def test04():
    __cdbkernel__=create_scope()
    dW_{m n p q r s}::TableauSymmetry(shape={2,2}, indices={2,3,4,5}).
-   rtopen:= dW_{a b r3 r4 r1 r2}*q
+   rtopen:= dW_{a b r3 r4 r1 r2}*q;
    canonicalise(rtopen)
-   rtopentest:= dW_{a b r1 r2 r3 r4}*q - @(rtopen)
+   rtopentest:= dW_{a b r1 r2 r3 r4}*q - @(rtopen);
    collect_terms(rtopentest)
    assert(rtopentest==0)
 
@@ -60,13 +60,13 @@ test04()
 
 def test05():
    __cdbkernel__=create_scope()
-   a2_{#}::AntiSymmetric
-   R_{m n p q}::RiemannTensor
-   obj6a:= R_{m n p q} a_{m n} a2_{p q}
-   obj6b:= R_{m n p q} a_{p q} a2_{m n}
+   a2_{#}::AntiSymmetric;
+   R_{m n p q}::RiemannTensor;
+   obj6a:= R_{m n p q} a_{m n} a2_{p q};
+   obj6b:= R_{m n p q} a_{p q} a2_{m n};
    canonicalise(obj6a)
    canonicalise(obj6b)
-   tst6:= @(obj6a)-@(obj6b)
+   tst6:= @(obj6a)-@(obj6b);
    collect_terms(tst6)
    assert(tst6==0)
 
@@ -76,10 +76,10 @@ test05()
 
 def test06():
    __cdbkernel__=create_scope()
-   F_{#}::AntiSymmetric
-   G_{#}::AntiSymmetric
-   R_{m n p q}::RiemannTensor
-   tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5}
+   F_{#}::AntiSymmetric;
+   G_{#}::AntiSymmetric;
+   R_{m n p q}::RiemannTensor;
+   tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
    canonicalise(tst7)
    assert(tst7)
 
@@ -91,24 +91,24 @@ test06()
 
 def test07():
    __cdbkernel__=create_scope()
-   H_{#}::Symmetric
-   F_{#}::AntiSymmetric
-   R_{m n p q}::RiemannTensor
-   obj8a:=   R_{d1 d2 d3 d4} R_{d6 d7 d4 d5} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
-   obj8b:=   R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
-   obj8c:= - R_{d1 d2 d3 d4} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
-   obj8d:= - R_{d3 d4 d1 d2} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5}
+   H_{#}::Symmetric;
+   F_{#}::AntiSymmetric;
+   R_{m n p q}::RiemannTensor;
+   obj8a:=   R_{d1 d2 d3 d4} R_{d6 d7 d4 d5} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
+   obj8b:=   R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
+   obj8c:= - R_{d1 d2 d3 d4} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
+   obj8d:= - R_{d3 d4 d1 d2} R_{d5 d4 d6 d7} F_{d1 d2 d6 d7} H_{d3 d5 r5 s5};
    canonicalise(obj8a)
    canonicalise(obj8b)
    canonicalise(obj8c)
    canonicalise(obj8d)
-   tst8b:= @(obj8a)-@(obj8b)
+   tst8b:= @(obj8a)-@(obj8b);
    collect_terms(_)
    assert(tst8b==0)
-   tst8c:= @(obj8a)-@(obj8c)
+   tst8c:= @(obj8a)-@(obj8c);
    collect_terms(_)
    assert(tst8c)
-   tst8d:= @(obj8a)-@(obj8d)
+   tst8d:= @(obj8a)-@(obj8d);
    collect_terms(_)
    assert(tst8d)
 
@@ -120,9 +120,9 @@ test07()
 
 def test08():
    __cdbkernel__=create_scope()
-   obj9a:= A_{m n p} A_{m n p} A_{r s t} A_{r s t}
-   obj9b:= A_{m n p} A_{r s t} A_{r s t} A_{m n p}
-   tst9:= @(obj9a)-@(obj9b)
+   obj9a:= A_{m n p} A_{m n p} A_{r s t} A_{r s t};
+   obj9b:= A_{m n p} A_{r s t} A_{r s t} A_{m n p};
+   tst9:= @(obj9a)-@(obj9b);
    canonicalise(_)
    collect_terms(_)
    assert(tst9)
@@ -133,15 +133,15 @@ test08()
 
 def test10():
    __cdbkernel__=create_scope()
-   a_{#}::AntiSymmetric
-   s_{#}::Symmetric
-   tst1:= a_{m n} s_{m n}
+   a_{#}::AntiSymmetric;
+   s_{#}::Symmetric;
+   tst1:= a_{m n} s_{m n};
    canonicalise(tst1)
    assert(tst1==0)
-   tst2:= a_{n m q} s_{m n}
+   tst2:= a_{n m q} s_{m n};
    canonicalise(tst2)
    assert(tst2==0)
-   tst3:= a_{m m}
+   tst3:= a_{m m};
    canonicalise(tst3)
    assert(tst3==0)
 
@@ -149,11 +149,11 @@ test10()
 
 def test11():
    __cdbkernel__=create_scope()
-   a_{#}::AntiSymmetric
-   s_{#}::Symmetric
-   obj4:= s_{m n m n}
-   canonicalise(obj4)
-   tst4:= s_{m m n n}-@(obj4)
+   a_{#}::AntiSymmetric;
+   s_{#}::Symmetric;
+   obj4:= s_{m n m n};
+   canonicalise(obj4);
+   tst4:= s_{m m n n}-@(obj4);
    collect_terms(tst4)
    assert(tst4==0)
 
@@ -165,7 +165,7 @@ test11()
 def test12():
    __cdbkernel__=create_scope()
    R_{m n p q}::RiemannTensor.
-   tst11:= R_{a b c d} R_{e f k h} R_{i a j e} R_{b c d i} R_{f k h j}
+   tst11:= R_{a b c d} R_{e f k h} R_{i a j e} R_{b c d i} R_{f k h j};
    canonicalise(_)
    assert(tst11)
 
@@ -175,8 +175,8 @@ test12()
 
 def test13():
    __cdbkernel__=create_scope()
-   zeta_{m n}::Symmetric
-   tst12:= k_a k_b zeta_{a b} - k_b k_a zeta_{a b}
+   zeta_{m n}::Symmetric;
+   tst12:= k_a k_b zeta_{a b} - k_b k_a zeta_{a b};
    canonicalise(_)
    collect_terms(_)
    assert(tst12)
@@ -187,9 +187,9 @@ test13()
 
 def test13b():
    __cdbkernel__=create_scope()
-   obj13:= A_{a} * A_{a} * A_{b}
+   obj13:= A_{a} * A_{a} * A_{b};
    canonicalise(_)
-   tst13:= A_{b} A_{a} A_{a} - @(obj13)
+   tst13:= A_{b} A_{a} A_{a} - @(obj13);
    collect_terms(_)
    assert(tst13)
 
@@ -199,9 +199,9 @@ test13b()
 
 def test14():
    __cdbkernel__=create_scope()
-   obj14:= C1_{d5} *k3_{d6} * k3_{d6} * k3_{d5}
+   obj14:= C1_{d5} *k3_{d6} * k3_{d6} * k3_{d5};
    canonicalise(_)
-   tst14:= C1_{d5} *k3_{d5} * k3_{d6} * k3_{d6} - @(obj14)
+   tst14:= C1_{d5} *k3_{d5} * k3_{d6} * k3_{d6} - @(obj14);
    collect_terms(_)
    assert(tst14)
 
@@ -211,10 +211,10 @@ test14()
 
 def test15():
    __cdbkernel__=create_scope()
-   A_{a b c d}::TableauSymmetry(shape={1,1}, indices={1,2})
-   obj15:= q*A_{d c b a}
+   A_{a b c d}::TableauSymmetry(shape={1,1}, indices={1,2});
+   obj15:= q*A_{d c b a};
    canonicalise(_)
-   tst15:= q A_{d b c a} + @(obj15)
+   tst15:= q A_{d b c a} + @(obj15);
    collect_terms(_)
    assert(tst15)
 
@@ -228,7 +228,7 @@ def test16():
    dF5_{a b c d e f}::DAntiSymmetric.
    obj16:= dF5_{m n p q r s} AA_{r n q m s p};
    canonicalise(_)
-   tst16:= -dF5_{m n p q r s} * AA_{n p q m r s} - @(obj16)
+   tst16:= -dF5_{m n p q r s} * AA_{n p q m r s} - @(obj16);
    collect_terms(_)
    assert(tst16)
 
@@ -250,7 +250,7 @@ def test18():
    tt_{a b c d e f}::TableauSymmetry(shape={1,1,1,1}, indices={2,3,4,5}, shape={2}, indices={0,1}).
    obj18:= tt_{a2 a1 a7 a6 a4 a5}*a;
    canonicalise(_)
-   tst18:= tt_{a1 a2 a4 a5 a6 a7}*a + @(obj18)
+   tst18:= tt_{a1 a2 a4 a5 a6 a7}*a + @(obj18);
    collect_terms(_)
    assert(tst18)
 
@@ -265,7 +265,7 @@ def test19():
    \delta_{a b}::KroneckerDelta.
    obj19:= a \delta_{c b};
    canonicalise(_)
-   tst19:= a \delta_{b c} - @(obj19)
+   tst19:= a \delta_{b c} - @(obj19);
    collect_terms(_)
    assert(tst19)
 
@@ -301,7 +301,7 @@ def test22():
    g3_{m n}::Metric.
    obj22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n};
    canonicalise(_)
-   tst22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n} - @(obj22)
+   tst22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n} - @(obj22);
    collect_terms(_)
    assert(tst22)
 
@@ -325,7 +325,7 @@ def test24():
    A_{\mu\nu}::AntiSymmetric.
    obj24:= \diff{A_{\mu\nu}}_{\rho\sigma} B^{\nu\mu};
    canonicalise(_)
-   tst24:= - \diff{A_{\mu\nu}}_{\rho\sigma} B^{\mu\nu} - @(obj24)
+   tst24:= - \diff{A_{\mu\nu}}_{\rho\sigma} B^{\mu\nu} - @(obj24);
    collect_terms(_)
    assert(tst24)
 
@@ -340,7 +340,7 @@ def test25():
    {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector).
    obj25:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
    canonicalise(_)
-   tst25:= \diff{g_{m n}}_{p} * \diff{g_{r s}}_{p} * T^{m n r s} - @(obj25)
+   tst25:= \diff{g_{m n}}_{p} * \diff{g_{r s}}_{p} * T^{m n r s} - @(obj25);
    rename_dummies(_)
    collect_terms(_)
    assert(tst25)
@@ -353,7 +353,7 @@ def test26():
    {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector).
    obj26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
    canonicalise(_)
-   tst26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{m n r s} - @(obj26)
+   tst26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{m n r s} - @(obj26);
    rename_dummies(_)
    collect_terms(_)
    assert(tst26)
@@ -371,7 +371,7 @@ def test27():
    H_{m n p}::AntiSymmetric.
    obj27:= psi10001_{n} \Gamma_{s t u} psi10001_{m} H_{p q r};
    canonicalise(_)
-   tst27:= psi10001_{m} \Gamma_{s t u} psi10001_{n} H_{p q r} -@(obj27)
+   tst27:= psi10001_{m} \Gamma_{s t u} psi10001_{n} H_{p q r} -@(obj27);
    collect_terms(_)
    assert(tst27)
 
@@ -385,7 +385,7 @@ def test28():
    \Gamma_{#}::GammaMatrix.
    obj28:= psi10001_{n} \Gamma_{s} psi10001_{m} H_{p q r};
    canonicalise(_)
-   tst28:= psi10001_{m} \Gamma_{s} psi10001_{n} H_{p q r} + @(obj28)
+   tst28:= psi10001_{m} \Gamma_{s} psi10001_{n} H_{p q r} + @(obj28);
    collect_terms(_)
    assert(tst28)
 
@@ -400,7 +400,7 @@ def test29():
    \Gamma_{#}::GammaMatrix.
    obj28b:= \bar{\psi_{r}} A B \Gamma_{n p} C \psi_{m};
    canonicalise(_)
-   tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b)
+   tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b);
    collect_terms(_)
    assert(tst28b)
 
@@ -430,7 +430,7 @@ def test30():
    A_{k l}::AntiSymmetric.
    obj30:= W_{a b d c} W_{f e g h} W_{i j k l} \eps_{a b c d e f g h i j} A_{l k};
    canonicalise(_)
-   tst30:= W_{a b c d} * W_{e f g h} * W_{i j k l} * \eps_{a b c d e f g h i j} * A_{k l} + @(obj30)
+   tst30:= W_{a b c d} * W_{e f g h} * W_{i j k l} * \eps_{a b c d e f g h i j} * A_{k l} + @(obj30);
    collect_terms(_)
    assert(tst30)
 
@@ -449,7 +449,7 @@ def test31():
    \Gamma_{#}::GammaMatrix.
    obj31:= \bar{\psi_{m}} \Gamma_{q n p} \psi_{m} H_{n p q};
    canonicalise(_)
-   tst31:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{m} H_{n p q} - @(obj31)
+   tst31:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{m} H_{n p q} - @(obj31);
    collect_terms(_)
    assert(tst31)
 
@@ -460,13 +460,13 @@ test31()
 
 def test32():
    __cdbkernel__=create_scope()
-   {a,b,c,d,e,f,g#}::Indices(SUFive)
-   {i,j,k,l,m,n#}::Indices(flavor)
-   HppT_{j k x}::TableauSymmetry(shape={2}, indices={0,1})
-   \tenSp_{j a b}::TableauSymmetry(shape={1,1},indices={1,2})
-   obj32:= HppT_{i j x} * \tenSp_{i a b} * \fiveSp_{j a} 
+   {a,b,c,d,e,f,g#}::Indices(SUFive);
+   {i,j,k,l,m,n#}::Indices(flavor);
+   HppT_{j k x}::TableauSymmetry(shape={2}, indices={0,1});
+   \tenSp_{j a b}::TableauSymmetry(shape={1,1},indices={1,2});
+   obj32:= HppT_{i j x} * \tenSp_{i a b} * \fiveSp_{j a} ;
    canonicalise(_)
-   tst32:= HppT_{i j x} * \tenSp_{i b a} * \fiveSp_{j a} + @(obj32)
+   tst32:= HppT_{i j x} * \tenSp_{i b a} * \fiveSp_{j a} + @(obj32);
    collect_terms(_)
    assert(tst32)
 
@@ -502,7 +502,7 @@ def test34b():
    R_{m? n? p? q?}::RiemannTensor.
    tst34b:= R_{4 4 2 3};
    canonicalise(_)
-   rl:={ R_{m? m? n? p?} -> 0, R_{n? p? m? m?} -> 0 }
+   rl:={ R_{m? m? n? p?} -> 0, R_{n? p? m? m?} -> 0 };
    substitute(tst34b, rl)
    assert(tst34b)
 
@@ -515,7 +515,7 @@ def test35b():
    \delta_{m n}::Diagonal.
    obj35:= \delta_{1 2} * \delta_{1 2} - \delta_{1 1} * \delta_{2 2};
    canonicalise(_)
-   tst35:= - \delta_{1 1}\delta_{2 2} - @(obj35)
+   tst35:= - \delta_{1 1}\delta_{2 2} - @(obj35);
    collect_terms(_)
    assert(tst35)
 
@@ -529,7 +529,7 @@ def test36():
    {a,b,c,d,e}::Indices(vector, position=fixed).
    obj36:= \Gamma_{a c}^{b d};
    canonicalise(_)
-   tst36:= \Gamma_{a}^{b}_{c}^{d} + @(obj36)
+   tst36:= \Gamma_{a}^{b}_{c}^{d} + @(obj36);
    collect_terms(_)
    assert(tst36)
 
@@ -540,7 +540,7 @@ def test37():
    {a,b,c,d,e}::Indices(vector, position=fixed).
    obj37:= B^{b} B_{b} A_{a} A^{a};
    canonicalise(_)
-   tst37:= B^{a} B_{a} A^{b} A_{b} - @(obj37)
+   tst37:= B^{a} B_{a} A^{b} A_{b} - @(obj37);
    collect_terms(_)
    assert(tst37)
 
@@ -606,7 +606,7 @@ def test42():
    \partial{#}::PartialDerivative.
    obj42:= \delta_{n}^{r} \partial_{r}{ u^{n} };
    canonicalise(_)
-   tst42:= \delta^{n}_{r} * \partial_{n}{u^{r}} - @(obj42)
+   tst42:= \delta^{n}_{r} * \partial_{n}{u^{r}} - @(obj42);
    collect_terms(_)
    assert(tst42)
 
@@ -622,7 +622,7 @@ def test43():
    \partial{#}::Derivative.
    obj43:= A_{m n} \partial_{k}{ B^{m n} };
    canonicalise(_)
-   tst43:= A_{m n} \partial_{k}{ B^{m n} } - @(obj43)
+   tst43:= A_{m n} \partial_{k}{ B^{m n} } - @(obj43);
    collect_terms(_)
    assert(tst43)
 
@@ -637,17 +637,17 @@ def test45():
    g^{\mu? \nu?}::Symmetric.
    obj45a:= \partial_{4 n}{ g_{p 4} } g_{m1 m} g^{m1 p};
    canonicalise(_)
-   tst45a:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45a)
+   tst45a:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45a);
    collect_terms(_)
    assert(tst45a)
    obj45b:= \partial_{4 n}{ g_{4 p} } g_{m1 m} g^{m1 p};
    canonicalise(_)
-   tst45b:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45b)
+   tst45b:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45b);
    collect_terms(_)
    assert(tst45b)
    obj45d:= A_{p} \partial_{n}{ g^{m1 p} } B_{m1};
    canonicalise(_)
-   tst45d:= A_{m1} \partial_{n}{ g^{m1 p} } B_{p} - @(obj45d)
+   tst45d:= A_{m1} \partial_{n}{ g^{m1 p} } B_{p} - @(obj45d);
    collect_terms(_)
    assert(tst45d)
 
@@ -690,7 +690,7 @@ def test48():
    obj49:= X_{q r} Y_{q r};
    split_index(_, "{q, i, A}", repeat=True)
    canonicalise(_)
-   tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49)
+   tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49);
    collect_terms(_)
    assert(tst49)
 

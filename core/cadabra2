@@ -28,6 +28,11 @@ class Shell(InteractiveConsole):
     def __init__(self):
         self.stdout = sys.stdout
         self.cache = FileCacher()
+        # Variables to keep track of multi-line parsing info.
+        self.indent   = "";
+        self.lhs      = "";
+        self.rhs      = "";
+        self.operator = "";
 #        readline.set_completer(rlcompleter.Completer(vars).complete)
         InteractiveConsole.__init__(self)
         return
@@ -56,14 +61,17 @@ class Shell(InteractiveConsole):
     def get_output(self): sys.stdout = self.cache
     def return_output(self): sys.stdout = self.stdout
 
-    # Detect Cadabra expression statements and rewrite to Python
-    # form. The logic is that any expression ending on ';' or '.' is not
-    # going to be a valid/recommended Python expression, so we turn it
-    # into a declaration of an Ex object or property.
-    # Detect Cadabra property declarations and rewrite to Python form.
-    # todo: make ';' at the end result in an additional print (and
-    # make the print statement print property objects using their
-    # readable form; addresses one issue report).
+    # Detect Cadabra expression statements and rewrite to Python form.
+    #  
+    # Lines containing ':=' are interpreted as expression declarations.
+    # Lines containing '::' are interpreted as property declarations.
+    # 
+    # These need to end on '.', ':' or ';'. If not, keep track of the
+    # input so far and store that in self.lhs, self.operator, self.rhs, and
+    # then return an empty string.
+    #
+    # TODO: make ';' at the end of '::' line result the print statement printing 
+    # property objects using their readable form; addresses one issue report).
 
     def preprocess(self, line):
         # print '='+line+"=="
@@ -77,17 +85,40 @@ class Shell(InteractiveConsole):
         line_stripped=line.rstrip().lstrip()
         # print '='+line_stripped+"=="
         lastchar = line_stripped[-1:]
-        if lastchar=='.' or lastchar==';':
-            line_stripped=line_stripped[:-1]
+        if lastchar=='.' or lastchar==';' or lastchar==':':
+            if self.lhs!="":
+                line_stripped=line_stripped[:-1]
+                self.rhs += line_stripped
+                rewrite = self.indent + self.lhs + " = Ex(r'" + self.rhs+"')"
+                if lastchar==';':
+                    rewrite += "; print("+self.lhs+")\n"
+                self.indent=""
+                self.lhs=""
+                self.operator=""
+                self.rhs=""
+                return rewrite
+        else:
+            # If we are a Cadabra continuation, add to the rhs without further processing
+            # and return an empty line immediately.
+            if self.lhs!="":
+                self.rhs += line_stripped
+                return ""
+
         found = line_stripped.find(':=')
         if found>0:
-            # This is problematic: we will wrap only the current line in an Ex, even if it continues onto
-            # the next line...
-            rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:]+"')"
-            objname=line_stripped[:found]
-            if lastchar!='.' and len(indent_line)==0:
-                rewrite = rewrite + "; print " + objname
-            line=rewrite
+            # If the last character is not a Cadabra terminator, start a capture process.
+            if lastchar!='.' and lastchar!=';' and lastchar!=':':
+                self.indent = indent_line
+                self.lhs = line_stripped[:found]
+                self.operator = ':='
+                self.rhs = line_stripped[found+2:]
+                return ""
+            else:
+                rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:-1]+"')"
+                objname=line_stripped[:found]
+                if lastchar!='.' and len(indent_line)==0:
+                    rewrite = rewrite + "; print(" + objname+")"
+                line=rewrite
         else:
             # Is it a property declaration?
             found = line_stripped.find('::')
@@ -112,16 +143,25 @@ class Shell(InteractiveConsole):
     def push(self,line):
 
         line = self.preprocess(line)
-        # print 'executing: ', line
+        if self.lhs == "":
+            print 'executing: ', line
 
-        # Now feed the pre-parsed input to Python.
-        self.get_output()
-        ret=InteractiveConsole.push(self,line)
-        self.return_output()
-        output = self.cache.flush()
-        for line in output:
-            sys.stdout.write(line)
-        return ret
+            # Now feed the pre-parsed input to Python.
+            self.get_output()
+            sys.ps1='> '
+            ret=InteractiveConsole.push(self,line)
+            self.return_output()
+            output = self.cache.flush()
+            for line in output:
+                sys.stdout.write(line)
+
+            return ret
+        else:
+            # Preprocessing has detected an unfinished Cadabra line;
+            # switch the prompt to indicate Cadabra continuation, and
+            # do not feed the line to Python yet.
+            sys.ps1='| '
+            return ""
 
 if __name__ == '__main__':
     sh = Shell()
@@ -144,7 +184,7 @@ if __name__ == '__main__':
                     sline=line.strip()
                     if len(sline)>0 and sline[0]!='#':
                         collect += sh.preprocess(line)
-                # print "----\n"+collect+"----\n"
+                print "----\n"+collect+"----\n"
                 cmp = compile(collect, sys.argv[1], 'exec')
                 exec(cmp)
                 # would be nice to be able to continue from here on the command line, but that requires

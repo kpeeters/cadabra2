@@ -632,7 +632,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	using namespace boost::python;
 
 	class_<ParseException> pyParseException("ParseException", init<std::string>());
+	pyParseException.def("__str__", &ParseException::what);
 	ParseExceptionType=pyParseException.ptr();
+
+	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
+	pyArgumentException.def("__str__", &ArgumentException::what);
+	ArgumentExceptionType=pyArgumentException.ptr();
 
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	class_<Kernel> pyKernel("Kernel", init<>());
