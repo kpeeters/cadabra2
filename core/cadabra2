@@ -91,7 +91,7 @@ class Shell(InteractiveConsole):
                 self.rhs += line_stripped
                 rewrite = self.indent + self.lhs + " = Ex(r'" + self.rhs+"')"
                 if lastchar==';':
-                    rewrite += "; print("+self.lhs+")\n"
+                    rewrite += "; print("+self.lhs+")"
                 self.indent=""
                 self.lhs=""
                 self.operator=""
@@ -144,7 +144,8 @@ class Shell(InteractiveConsole):
 
         line = self.preprocess(line)
         if self.lhs == "":
-            print 'executing: ', line
+            # print 'executing: '
+            # print line
 
             # Now feed the pre-parsed input to Python.
             self.get_output()

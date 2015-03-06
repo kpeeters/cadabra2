@@ -236,11 +236,38 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 
 void DisplayTeX::dispatch(std::ostream& str, exptree::iterator it) 
 	{
-	if(*it->name=="\\prod")      print_productlike(str, it, " ");
-	else if(*it->name=="\\sum")  print_sumlike(str, it);
-	else if(*it->name=="\\frac") print_fraclike(str, it);
+	if(*it->name=="\\prod")       print_productlike(str, it, " ");
+	else if(*it->name=="\\sum")   print_sumlike(str, it);
+	else if(*it->name=="\\frac")  print_fraclike(str, it);
+	else if(*it->name=="\\comma") print_commalike(str, it);
+	else if(*it->name=="\\arrow") print_arrowlike(str, it);
 	else
 		output(str, it);
+	}
+
+void DisplayTeX::print_commalike(std::ostream& str, exptree::iterator it) 
+	{
+	exptree::sibling_iterator sib=tree.begin(it);
+	bool first=true;
+	print_opening_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	while(sib!=tree.end(it)) {
+		if(first)
+			first=false;
+		else
+			str << ", ";
+		dispatch(str, sib);
+		++sib;
+		}
+	print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	}
+
+void DisplayTeX::print_arrowlike(std::ostream& str, exptree::iterator it) 
+	{
+	exptree::sibling_iterator sib=tree.begin(it);
+	dispatch(str, sib);
+	str << " -> ";
+	++sib;
+	dispatch(str, sib);
 	}
 
 void DisplayTeX::print_fraclike(std::ostream& str, exptree::iterator it)

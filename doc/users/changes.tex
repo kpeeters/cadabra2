@@ -25,5 +25,8 @@ what is now called `deep' mode. This is equivalent to using the old
 \verb|prodsort!(%)|. If you want to only act at the top level, use
 \verb|sort_product(_, deep=False)|.
 
-- 
-
+- Property declarations need to sit on a separate line, i.e.~they can
+  no longer be added directly inside an expression. As a result, the
+  line delimiter \verb|.| does the same thing as the line
+  delimiter \verb|;| for properties (you can still use this delimiter
+  if you want).
