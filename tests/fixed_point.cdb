@@ -1,7 +1,7 @@
 
 # Test functionality that enables user-defined procedures to be applied
 # to an expression until it no longer changes (the user-defined analogue
-# of the 'repeat=true' option).
+# of the 'repeat=True' option).
 
 
 def fixed(fun, obj):

@@ -136,6 +136,10 @@ a sparse map from all values of the free indices at that level to the
 value of the tensor components. Store this map associated to the
 node. Iterate over the tree.
 
+All product nodes and all single-factor nodes with self-contractions
+need to be expanded into sums of these. But we do not want to write
+this expression out. Instead first collect pointers to these nodes.
+
 Exterior calculus \cite{xTerior}. Need to be able to use '$\wedge$'
 notation. Maybe a 'Form' property which carries a degree parameter.
 

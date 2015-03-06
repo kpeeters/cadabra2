@@ -278,7 +278,11 @@ bool labelled_property::parse(const Properties&, keyval_t& keyvals)
 		return true;
 		}
 	else {
-		throw ArgumentException("Need a 'label' parameter for property.");
+		// FIXME: not all labelled properties have an actual label, e.g.
+		// Derivative derives from WeightBase but not all derivatives need
+		// a label. If we throw an exception here, those properties fail
+		// to run.
+//		throw ArgumentException("Need a 'label' parameter for property.");
 		return false;
 		}
 	}

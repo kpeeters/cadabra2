@@ -36,39 +36,46 @@ def test03():
 test03()
 
 def test04():
-    \diff{#}::PartialDerivative.
+    \diff{#}::PartialDerivative;
     obj6:= \diff{g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho}}_{\sigma};
-    product_rule(_);
+    product_rule(_)
     tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
         +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
-    collect_terms(_);
+    collect_terms(_)
 
 test04()
 
-{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta}::Indices(spacetime).
-obj7:= g^{\eta \kappa} * \diff{\eta_{\nu \sigma}}_{\kappa} * g^{\mu \lambda} * \diff{eta_{\lambda \eta}}_{\rho};
-substitute(_)( \diff{\eta_{\mu\nu}}_{\rho} -> 0 );
-assert(obj7);
+def test07():
+    \diff{#}::PartialDerivative;
+    {\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta}::Indices(spacetime);
+    obj7:= g^{\eta \kappa} * \diff{\eta_{\nu \sigma}}_{\kappa} * g^{\mu \lambda} * \diff{eta_{\lambda \eta}}_{\rho};
+    rl:=\diff{\eta_{\mu\nu}}_{\rho} -> 0
+    substitute(_, rl)
+    assert(obj7)
 
-# Test 8:= \delta in combination with \diff
-#
-\delta_{n q}::KroneckerDelta.
-\diff{#}::Derivative.
-obj8:= \diff{A_{m n}}_{p} \delta_{n q} \delta_{p t};
-eliminate_kr(_);
-tst8:= \diff{A_{m q}}_{t} - @(obj8);
-collect_terms(_);
-assert(tst8);
+test07();
 
-# Test9:= multiple derivatives and the product rule
+# \delta in combination with \diff
 #
-reset;
+def test08():
+    \delta_{n q}::KroneckerDelta;
+    \diff{#}::Derivative;
+    obj8:= \diff{A_{m n}}_{p} \delta_{n q} \delta_{p t};
+    eliminate_kronecker(_)
+    tst8:= \diff{A_{m q}}_{t} - @(obj8);
+    collect_terms(_)
+    assert(tst8==0)
+
+test08()
+
+# Multiple derivatives and the product rule
+#
 \diff{#}::PartialDerivative.
 obj9:= 3 \diff{4*A*B}_{m n};
 product_rule(_);
 distribute(_);
 product_rule(_);
-sumflatten(_);
+flatten_sum(_);
 tst9:= 12 \diff{A}_{m n} B + 12 \diff{A}_m \diff{B}_n + 12 \diff{A}_n \diff{B}_m + 12 A \diff{B}_{m n} - @(obj9);
 collect_terms(_);
 assert(tst9);
