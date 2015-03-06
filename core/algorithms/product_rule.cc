@@ -1,5 +1,6 @@
 
 #include "Compare.hh"
+#include "Cleanup.hh"
 #include "algorithms/product_rule.hh"
 #include "properties/Derivative.hh"
 
@@ -198,7 +199,12 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			  // Avoid \partial_{a}{\partial_{b} ...} constructions in 
 			  // case this child is a \partial-like too.
 			  iterator repchi=repch;
-			  //cleanup_nests(tr, repchi);
+
+			  // The 'dummy' iterator points to the \prod node.
+			  std::cout << *dummy->name << std::endl;
+			  std::cout << *theD->name << std::endl;
+			  cleanup_dispatch(kernel, tr, theD);
+			  cleanup_dispatch(kernel, tr, dummy);
 			  
 			  ++chl;
 			  ++num;

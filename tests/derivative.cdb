@@ -9,7 +9,7 @@ def test01():
     product_rule(_)
     tst1:= a*b*(D(c)*d*e+c*D(d)*e+c*d*D(e))*f*g-@(obj1);
     collect_terms(_)
-    assert(tst1)
+    assert(tst1==0)
 
 test01()
 
@@ -19,7 +19,7 @@ def test02():
     product_rule(_)
     tst2:= a*b*(D(c)(h1)(h2)*d*e+c*D(d)(h1)(h2)*e+c*d*D(e)(h1)(h2))*f*g-@(obj2);
     collect_terms(_)
-    assert(tst2)
+    assert(tst2==0)
 
 test02()
 
@@ -42,6 +42,7 @@ def test04():
     tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
         +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
     collect_terms(_)
+    assert(tst6==0)
 
 test04()
 
@@ -51,7 +52,7 @@ def test07():
     obj7:= g^{\eta \kappa} * \diff{\eta_{\nu \sigma}}_{\kappa} * g^{\mu \lambda} * \diff{eta_{\lambda \eta}}_{\rho};
     rl:=\diff{\eta_{\mu\nu}}_{\rho} -> 0
     substitute(_, rl)
-    assert(obj7)
+    assert(obj7==0)
 
 test07();
 
@@ -69,101 +70,118 @@ def test08():
 test08()
 
 # Multiple derivatives and the product rule
-#
+
+def test09():
 \diff{#}::PartialDerivative.
 obj9:= 3 \diff{4*A*B}_{m n};
 product_rule(_);
 distribute(_);
-product_rule(_);
-flatten_sum(_);
+product_rule(_)
 tst9:= 12 \diff{A}_{m n} B + 12 \diff{A}_m \diff{B}_n + 12 \diff{A}_n \diff{B}_m + 12 A \diff{B}_{m n} - @(obj9);
 collect_terms(_);
-assert(tst9);
+assert(tst9==0)
 
-# Test 10: Order of child nodes on PartialDerivative.
+test09()
+
+# Order of child nodes on PartialDerivative.
+
+def test10():
+    {a,b,c,d}::Indices(vector).
+    \partial{#}::PartialDerivative.
+    A_{a b}::AntiSymmetric.
+    obj10:= \partial_{b a}{ A_{d c} };
+    canonicalise(_);
+    tst10:= \partial_{a b}{ A_{c d} } + @(obj10);
+    collect_terms(_)
+    assert(tst10==0)
+
+test10()
+
+def test10b():
+    {a,b,c,d}::Indices(vector).
+    \partial{#}::PartialDerivative.
+    A_{a b}::AntiSymmetric.
+    obj10b:= \partial{ A_{d c} }_{b a};
+    canonicalise(_);
+    tst10b:= \partial{ A_{c d} }_{a b} + @(obj10b);
+    collect_terms(_)
+    assert(tst10b==0)
+
+test10b()
+
+# Multiple derivatives again
 #
-reset;
-{a,b,c,d}::Indices(vector).
-\partial{#}::PartialDerivative.
-A_{a b}::AntiSymmetric.
-obj10:= \partial_{b a}{ A_{d c} };
-indexlist(_);
-canonicalise(_);
-tst10:= \partial_{a b}{ A_{c d} } + @(obj10);
-collect_terms(_);
-assert(tst10);
 
-reset;
-{a,b,c,d}::Indices(vector).
-\partial{#}::PartialDerivative.
-A_{a b}::AntiSymmetric.
-obj10b:= \partial{ A_{d c} }_{b a};
-indexlist(_);
-canonicalise(_);
-tst10b:= \partial{ A_{c d} }_{a b} + @(obj10b);
-collect_terms(_);
-assert(tst10b);
+def test11():
+    \partial{#}::PartialDerivative.
+    obj11a:= \partial(A B C)_{a b};
+    product_rule(_)
+    tst11a:= \partial{\partial(A)_{a} * B * C + A * \partial(B)_{a} * C + A * B * \partial(C)_{a}}_{b} - @(obj11a);
+    collect_terms(_)
+    assert(tst11a==0)
 
-# Test 11: multiple derivatives again
-#
-reset;
-\partial{#}::PartialDerivative.
-obj11a:= \partial(A B C)_{a b};
-product_rule(_);
-tst11a:= \partial{\partial(A)_{a} * B * C + A * \partial(B)_{a} * C + A * B * \partial(C)_{a}}_{b} - @(obj11a);
-collect_terms(_);
-assert(tst11a);
+test11()
 
-obj11b:= \partial_{a b}(A B C);
-product_rule(_);
-tst11b:= \partial_{b}{\partial_{a}(A) * B * C + A * \partial_{a}(B) * C + A * B * \partial_{a}(C)} - @(obj11b);
-collect_terms(_);
-assert(tst11b);
+def test11b():
+    \partial{#}::PartialDerivative.
+    obj11b:= \partial_{a b}(A B C);
+    product_rule(_)
+    tst11b:= \partial_{b}{\partial_{a}(A) * B * C + A * \partial_{a}(B) * C + A * B * \partial_{a}(C)} - @(obj11b);
+    collect_terms(_)
+    assert(tst11b==0)
 
-# Test 12: more tricky derivatives
-reset;
-\Omega{#}::Derivative.
-{A,B,C,D}::Depends(\Omega).
-obj12:= \Omega_{a}(A B)(C D);
-product_rule(_);
-product_rule(_);
-distribute(_);
-tst12:= \Omega_{a}(A)(C) * D * B + C * \Omega_{a}(A)(D) * B + A * \Omega_{a}(B)(C) * D + A * C * \Omega_{a}(B)(D)
-       -@(obj12);
-collect_terms(_);
-assert(tst12);
+test11b()
+
+# More tricky derivatives
+def test12():
+    \Omega{#}::Derivative.
+    {A,B,C,D}::Depends(\Omega).
+    obj12:= \Omega_{a}(A B)(C D);
+    product_rule(_)
+    product_rule(_)
+    distribute(_)
+    tst12:= \Omega_{a}(A)(C) * D * B + C * \Omega_{a}(A)(D) * B + A * \Omega_{a}(B)(C) * D + A * C * \Omega_{a}(B)(D)
+        -@(obj12);
+    collect_terms(_)
+    assert(tst12==0)
+
+test12()
 
 # Test 13: Inheritance
 #
-reset.
-\nabla{#}::Derivative.
-A_{m n}::Traceless.
-obj13:= \nabla_{m}{A_{p p}}*Q_{m};
-canonicalise(_);
+# reset.
+# \nabla{#}::Derivative.
+# A_{m n}::Traceless.
+# obj13:= \nabla_{m}{A_{p p}}*Q_{m};
+# canonicalise(_);
 
-# Test 14: product_rule on powers
-#
-reset.
-\partial{#}::PartialDerivative.
-obj14a:= \partial_{m n}{A**2};
-product_rule(_);
-tst14a:= \partial_{n}(2*A*\partial_{m}{A}) - @(obj14a);
-collect_terms(_);
-assert(tst14a);
+# Product_rule on powers
 
-reset.
-\partial{#}::PartialDerivative.
-obj14b:= \partial_{m n}{A**3};
-product_rule(_);
-tst14b:= \partial_{n}(3*A**2*\partial_{m}{A}) - @(obj14b);
-collect_terms(_);
-assert(tst14b);
+def test14():
+    \partial{#}::PartialDerivative.
+    obj14a:= \partial_{m n}{A**2};
+    product_rule(_)
+    tst14a:= \partial_{n}(2*A*\partial_{m}{A}) - @(obj14a);
+    collect_terms(_)
+    assert(tst14a==0)
 
-reset.
-\partial{#}::PartialDerivative.
-obj14c:= \partial_{m n}{A**(d+1)};
-product_rule(_);
-# FIXME
+test14()
+
+def test14b():
+    \partial{#}::PartialDerivative.
+    obj14b:= \partial_{m n}{A**3};
+    product_rule(_)
+    tst14b:= \partial_{n}(3*A**2*\partial_{m}{A}) - @(obj14b);
+    collect_terms(_)
+    assert(tst14b==0)
+
+test14b()
+
+# reset.
+# \partial{#}::PartialDerivative.
+# obj14c:= \partial_{m n}{A**(d+1)};
+# product_rule(_);
+# # FIXME
 
 reset.
 \partial{#}::PartialDerivative.

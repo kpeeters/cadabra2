@@ -1,24 +1,27 @@
 
 #include "Cleanup.hh"
+#include "Algorithm.hh"
 #include "algorithms/prodcollectnum.hh"
 #include "algorithms/collect_terms.hh"
 #include "algorithms/flatten_sum.hh"
+#include "properties/Derivative.hh"
 
-void cleanup_dispatch(Kernel& k, exptree& tr, exptree::iterator& it)
+void cleanup_dispatch(Kernel& kernel, exptree& tr, exptree::iterator& it)
 	{
-	if(*it->name=="\\prod")            cleanup_productlike(k, tr, it);
-	else if(*it->name=="\\sum")        cleanup_sumlike(k, tr, it);
-	else if(*it->name=="\\expression") cleanup_expressionlike(k, tr, it);
+	if(*it->name=="\\prod")            cleanup_productlike(kernel, tr, it);
+	else if(*it->name=="\\sum")        cleanup_sumlike(kernel, tr, it);
+	else if(*it->name=="\\expression") cleanup_expressionlike(kernel, tr, it);
+
+	const Derivative *der = kernel.properties.get<Derivative>(it);
+	if(der) cleanup_derivative(kernel, tr, it);
 	}
 
 void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	{
 	assert(*it->name=="\\prod");
-//	std::cout << "cleanup_productlike" << std::endl;
 
 	// Remove children which are 1
    // Collect all multipliers
-
 	prodcollectnum pc(k, tr);
 	pc.apply(it);
 	}
@@ -61,6 +64,19 @@ void cleanup_expressionlike(Kernel& k, exptree&tr, exptree::iterator& it)
 		}
 	}
 
+void cleanup_derivative(Kernel& k, exptree& tr, exptree::iterator& it)
+	{
+	// Nested derivatives with the same name should be flattened.
+std::cout << "cleanup_derivative" << std::endl;
+
+if(tr.number_of_children(it)- Algorithm::number_of_indices(k.properties, it)==1) {
+std::cout << "==1 " << *it->name << " " << *tr.begin(it)->name << std::endl;
+		if(it->name == tr.begin(it)->name) {
+			std::cout << "should flatten derivative" << std::endl;
+			}
+		}
+	
+	}
 
 void cleanup_expression(exptree& tr)
 	{
