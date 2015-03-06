@@ -76,11 +76,14 @@ Algorithm::result_t Algorithm::apply_once(exptree::iterator& it)
 
 Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it) 
 	{
-	// This recursive algorithm walks the tree depth-first (parent-after-child). The algorithm is
-	// applied on each node if can_apply returns true. When the iterator goes up one level (i.e.
-	// from a child to a parent), and any changes have been made so far at the lower level, cleanup
-	// and simplification routines will be called. The only nodes that can be removed from the tree
-	// are nodes at a lower level than the simplification node.
+	// This recursive algorithm walks the tree depth-first
+	// (parent-after-child). The algorithm is applied on each node if
+	// can_apply returns true. When the iterator goes up one level
+	// (i.e. from a child to a parent), and any changes have been made
+	// so far at the child level level, cleanup and simplification
+	// routines will be called. The only nodes that can be removed from
+	// the tree are nodes at a lower level than the simplification
+	// node.
 
 //	std::cout << "=== apply_deep ===" << std::endl;
 //	tr.print_recursive_treeform(std::cout, it);
