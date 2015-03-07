@@ -85,7 +85,9 @@ class Algorithm {
 		index_iterator begin_index(iterator it) const;
 		index_iterator end_index(iterator it) const;
 
-		// The number of indices of a node, taking into account IndexInherit-ance
+		// The number of indices of a node, taking into account IndexInherit-ance. These
+		// indices do therefore not all have to be direct child nodes of 'it', they can
+		// sit deeper down the tree.
 		unsigned int number_of_indices(iterator it);
 		static unsigned int number_of_indices(const Properties&, iterator it);
 		

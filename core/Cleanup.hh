@@ -24,11 +24,14 @@
 #include "Storage.hh"
 #include "Kernel.hh"
 
-// Central cleanup dispatch routine, which calls the other
-// cleanup functions defined later. 
-// IMPORTANT: as with any algorithms, the iterator pointing to
-// the starting node may be changed, but these functions are not
-// allowed to modify anything except the node and nodes below.
+// Central cleanup dispatch routine, which calls the other cleanup
+// functions defined later. These algorithms clean up the tree at the
+// current node and the first layer of child nodes, but do not descend
+// deeper down the tree.
+
+// IMPORTANT: as with any algorithms, the iterator pointing to the
+// starting node may be changed, but these functions are not allowed
+// to modify anything except the node and nodes below.
 
 void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator& it);
 
@@ -37,6 +40,11 @@ void cleanup_sumlike(Kernel& k, exptree&, exptree::iterator& it);
 void cleanup_expressionlike(Kernel& k, exptree&, exptree::iterator& it);
 void cleanup_derivative(Kernel& k, exptree&, exptree::iterator& it);
 
+
+// Walk depth-first along the entire tree and call cleanup_dispatch at
+// every node.
+
+void cleanup_dispatch_deep(Kernel& k, exptree&);
 
 
 // DEPRECATED:

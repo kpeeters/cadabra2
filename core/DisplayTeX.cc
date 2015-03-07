@@ -241,6 +241,7 @@ void DisplayTeX::dispatch(std::ostream& str, exptree::iterator it)
 	else if(*it->name=="\\frac")  print_fraclike(str, it);
 	else if(*it->name=="\\comma") print_commalike(str, it);
 	else if(*it->name=="\\arrow") print_arrowlike(str, it);
+	else if(*it->name=="\\pow")   print_powlike(str, it);
 	else
 		output(str, it);
 	}
@@ -434,6 +435,16 @@ void DisplayTeX::print_sumlike(std::ostream& str, exptree::iterator it)
 
 	if(close_bracket) str << ")";
 	str << std::flush;
+	}
+
+void DisplayTeX::print_powlike(std::ostream& str, exptree::iterator it)
+	{
+	exptree::iterator sib=tree.begin(it);
+	dispatch(str, sib);
+	str << "**{";
+	++sib;
+	dispatch(str, sib);
+	str << "}";
 	}
 
 bool DisplayTeX::children_have_brackets(exptree::iterator ch) const

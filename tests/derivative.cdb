@@ -8,7 +8,6 @@ def test01():
     obj1:= a*b*D(c*d*e)*f*g;
     product_rule(_)
     tst1:= a*b*(D(c)*d*e+c*D(d)*e+c*d*D(e))*f*g-@(obj1);
-    collect_terms(_)
     assert(tst1==0)
 
 test01()
@@ -18,7 +17,6 @@ def test02():
     obj2:= a*b*D(c*d*e)(h1)(h2)*f*g;
     product_rule(_)
     tst2:= a*b*(D(c)(h1)(h2)*d*e+c*D(d)(h1)(h2)*e+c*d*D(e)(h1)(h2))*f*g-@(obj2);
-    collect_terms(_)
     assert(tst2==0)
 
 test02()
@@ -30,7 +28,6 @@ def test03():
     obj5:= \diff{A*B}_\mu;
     product_rule(_)
     tst5:= \diff{A}_\mu * B + A * \diff{B}_\mu - @(obj5);
-    collect_terms(_)
     assert(tst5==0)
 
 test03()
@@ -41,7 +38,6 @@ def test04():
     product_rule(_)
     tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
         +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
-    collect_terms(_)
     assert(tst6==0)
 
 test04()
@@ -50,8 +46,8 @@ def test07():
     \diff{#}::PartialDerivative;
     {\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta}::Indices(spacetime);
     obj7:= g^{\eta \kappa} * \diff{\eta_{\nu \sigma}}_{\kappa} * g^{\mu \lambda} * \diff{eta_{\lambda \eta}}_{\rho};
-    rl:=\diff{\eta_{\mu\nu}}_{\rho} -> 0
-    substitute(_, rl)
+    rl:=\diff{\eta_{\mu\nu}}_{\rho} -> 0;
+    substitute(obj7, rl)
     assert(obj7==0)
 
 test07();
@@ -64,7 +60,6 @@ def test08():
     obj8:= \diff{A_{m n}}_{p} \delta_{n q} \delta_{p t};
     eliminate_kronecker(_)
     tst8:= \diff{A_{m q}}_{t} - @(obj8);
-    collect_terms(_)
     assert(tst8==0)
 
 test08()
@@ -72,14 +67,13 @@ test08()
 # Multiple derivatives and the product rule
 
 def test09():
-\diff{#}::PartialDerivative.
-obj9:= 3 \diff{4*A*B}_{m n};
-product_rule(_);
-distribute(_);
-product_rule(_)
-tst9:= 12 \diff{A}_{m n} B + 12 \diff{A}_m \diff{B}_n + 12 \diff{A}_n \diff{B}_m + 12 A \diff{B}_{m n} - @(obj9);
-collect_terms(_);
-assert(tst9==0)
+    \diff{#}::PartialDerivative.
+    obj9:= 3 \diff{4*A*B}_{m n};
+    product_rule(_);
+    distribute(_);
+    product_rule(_)
+    tst9:= 12 \diff{A}_{m n} B + 12 \diff{A}_m \diff{B}_n + 12 \diff{A}_n \diff{B}_m + 12 A \diff{B}_{m n} - @(obj9);
+    assert(tst9==0)
 
 test09()
 
@@ -104,7 +98,6 @@ def test10b():
     obj10b:= \partial{ A_{d c} }_{b a};
     canonicalise(_);
     tst10b:= \partial{ A_{c d} }_{a b} + @(obj10b);
-    collect_terms(_)
     assert(tst10b==0)
 
 test10b()
@@ -183,54 +176,62 @@ test14b()
 # product_rule(_);
 # # FIXME
 
-reset.
-\partial{#}::PartialDerivative.
-obj14d:= \partial_{m n}{A**d};
-product_rule(_);
-tst14d:= \partial_{n}(d * A**(d - 1) * \partial_{m}{A}) - @(obj14d);
-collect_terms(_);
-assert(tst14d);
+def test14d():
+    \partial{#}::PartialDerivative.
+    obj14d:= \partial_{m n}{A**d};
+    product_rule(_)
+    tst14d:= \partial_{n}(d * A**(d - 1) * \partial_{m}{A}) - @(obj14d);
+    collect_terms(_)
+    assert(tst14d==0)
 
-reset.
-\partial{#}::PartialDerivative.
-\partial{A**2};
-product_rule(_);
-obj14f:= \partial{A*\partial{A}};
-product_rule(_);
-tst14f:= \partial{A} * \partial{A} + A * \partial{\partial{A}} - @(obj14f);
-collect_terms(_);
-assert(tst14f);
+test14d()
 
-reset.
-\partial{#}::PartialDerivative.
-obj15:= \partial{-a**2};
-product_rule(_);
-tst15:= 2 a \partial{a} + @(obj15);
-collect_terms(_);
-assert(tst15);
+def test14f():
+    \partial{#}::PartialDerivative.
+    obj14f:= \partial{A*\partial{A}};
+    product_rule(_)
+    tst14f:= \partial{A} * \partial{A} + A * \partial{\partial{A}} - @(obj14f);
+    collect_terms(_)
+    assert(tst14f==0)
 
-obj16:= \partial{-a**3};
-product_rule(_);
-tst16:= 3 a**2 \partial{a} + @(obj16);
-collect_terms(_);
-assert(tst15);
+test14f()
 
-# Test 17: Flattening
+def test15():
+    \partial{#}::PartialDerivative.
+    obj15:= \partial{-a**2};
+    product_rule(_)
+    tst15:= 2 a \partial{a} + @(obj15);
+    collect_terms(_)
+    assert(tst15==0)
+
+test15()
+
+def test16():
+    \partial{#}::PartialDerivative.
+    obj16:= \partial{-a**3};
+    product_rule(_)
+    tst16:= 3 a**2 \partial{a} + @(obj16);
+    collect_terms(_)
+    assert(tst15==0)
+
+test16()
+
+# Flattening
 #
-reset.
-\partial{#}::PartialDerivative.
-obj17:= \partial_{a}{\partial_{b c}{F}};
-tst17:= \partial_{a b c}{F} - @(obj17);
-collect_terms(_);
-assert(tst17);
+def test17():
+    \partial{#}::PartialDerivative.
+    obj17:= \partial_{a}{\partial_{b c}{F}};
+    tst17:= \partial_{a b c}{F} - @(obj17);
+    assert(tst17==0);
+
+test17()
 
 # Test 18: more flattening
 #
-reset.
 \partial{#}::PartialDerivative.
 \nabla{#}::Derivative.
 obj18:= \nabla_{a}{\nabla_{b}{F}};
-substitute!(_)( \nabla_{a}{A??} -> \partial_{a}{A??} );
+substitute(_, "\nabla_{a}{A??} -> \partial_{a}{A??}" );
 tst18:= \partial_{a b}{F} - @(obj18);
 collect_terms(_);
 assert(tst18);
@@ -238,32 +239,31 @@ assert(tst18);
 
 # Test 19: Grassman derivatives
 #
-reset.
-{\alpha,\beta,\gamma}::Indices(spinor).
-\theta^{\alpha}::Coordinate.
-\theta^{\alpha}::SelfAntiCommuting.
-D{#}::Derivative.
-obj19a:= D_{\theta^{\alpha}}{\theta^\beta \theta^\gamma};
-product_rule(_);
-tst19a:= D_{\theta^{\alpha}}{\theta^{\beta}} \theta^{\gamma}  
-      - \theta^{\beta} D_{\theta^{\alpha}}{\theta^{\gamma}} - @(obj19a);
-collect_terms(_);
-assert(tst19a);
+def test19():
+    {\alpha,\beta,\gamma}::Indices(spinor).
+    \theta^{\alpha}::Coordinate.
+    \theta^{\alpha}::SelfAntiCommuting.
+    D{#}::Derivative.
+    obj19a:= D_{\theta^{\alpha}}{\theta^\beta \theta^\gamma};
+    product_rule(_);
+    tst19a:= D_{\theta^{\alpha}}{\theta^{\beta}} \theta^{\gamma}  
+             - \theta^{\beta} D_{\theta^{\alpha}}{\theta^{\gamma}} - @(obj19a);
+        assert(tst19a==0)
 
-reset.
-{\alpha,\beta,\gamma}::Indices(spinor).
-{\alpha,\beta,\gamma}::AntiCommuting.
-\theta^{\alpha}::Coordinate.
-D{#}::Derivative.
-obj19b:= D_{\alpha}{\theta^\beta \theta^\gamma};
-product_rule(_);
-tst19b:= D_{\alpha}{\theta^{\beta}} \theta^{\gamma}  
-      - \theta^{\beta} D_{\alpha}{\theta^{\gamma}} - @(obj19b);
-collect_terms(_);
-assert(tst19b);
+test19()
 
-reset.
-{\alpha,\beta,\gamma}::Indices(spinor).
+def test19b():
+    {\alpha,\beta,\gamma}::Indices(spinor).
+    {\alpha,\beta,\gamma}::AntiCommuting.
+    \theta^{\alpha}::Coordinate.
+    D{#}::Derivative.
+    obj19b:= D_{\alpha}{\theta^\beta \theta^\gamma};
+    product_rule(_);
+    tst19b:= D_{\alpha}{\theta^{\beta}} \theta^{\gamma}  
+             - \theta^{\beta} D_{\alpha}{\theta^{\gamma}} - @(obj19b);
+    assert(tst19b==0)
+
+{\alpha,\beta,\gamma}::Indices(spinor, position=fixed).
 {\alpha,\beta,\gamma}::AntiCommuting.
 D{#}::Derivative.
 obj19c:= D^{\alpha}{ D_{\alpha}{T^{\beta} S^{\gamma}}};
