@@ -41,8 +41,9 @@ Algorithm::result_t product_rule::apply(iterator& it)
 	exptree rep; // the subtree storing the result
 	iterator sm; // the sum node inside 'rep'
 
-	// If we are distributing a multiple derivative, take out all indices except one,
-	// and wrap things in a new derivative node which has these indices as child nodes.
+	// If we are distributing a multiple derivative, take out all
+	// indices except the last one, and wrap things in a new derivative
+	// node which has these indices as child nodes.
 	bool indices_at_front=true;
 	if(number_of_indices>1) {
 		rep.set_head(str_node(it->name));
@@ -53,6 +54,9 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			++sib;  // find first index
 			}
 		++sib;
+
+	HERE: should find _last_ index to act with, not the first.
+
 		while(sib!=tr.end(it)) { // move all other indices away FIXME: wrong order
 			if(sib->is_index()) {
 				sibling_iterator nxt=sib;
@@ -126,6 +130,9 @@ Algorithm::result_t product_rule::apply(iterator& it)
 					multiply(tmp->multiplier, -1);
 					}
 			  }
+
+		 iterator top=rep.begin();
+		 cleanup_dispatch(kernel, tr, top);
 		 }
 	else {
 		 // replace the '\diff' with a '\sum' of diffs.
@@ -201,8 +208,6 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			  iterator repchi=repch;
 
 			  // The 'dummy' iterator points to the \prod node.
-			  std::cout << *dummy->name << std::endl;
-			  std::cout << *theD->name << std::endl;
 			  cleanup_dispatch(kernel, tr, theD);
 			  cleanup_dispatch(kernel, tr, dummy);
 			  

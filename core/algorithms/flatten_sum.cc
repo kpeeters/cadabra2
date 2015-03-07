@@ -26,7 +26,7 @@ Algorithm::result_t flatten_sum::apply(iterator &it)
 	assert(*it->name=="\\sum");
 	
 	long num=tr.number_of_children(it);
-	if(num==1) {
+	if(num==1 && ! tr.begin(it)->is_range_wildcard() ) {
 		multiply(tr.begin(it)->multiplier, *it->multiplier);
 		tr.flatten(it);
 		it=tr.erase(it);

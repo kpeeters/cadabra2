@@ -72,7 +72,7 @@ substitute::substitute(Kernel& k, exptree& tr, exptree& args_)
 				}
 			}
 		catch(std::exception& er) {
-			throw ArgumentException("Index error in replacement rule.");
+			throw ArgumentException(std::string("Index error in replacement rule. ")+er.what());
 // " << i+1 << "." << std::endl;
 //			txtout << er.what() << std::endl;
 			}
@@ -349,14 +349,14 @@ Algorithm::result_t substitute::apply(iterator& st)
 				::one(ip->multiplier);
 				}
 			}
-		cleanup_nests(tr, ip);
+		cleanup_dispatch(kernel, tr, ip);
 		}
 
 //	tr.print_recursive_treeform(txtout, st);
 	
 //	prod_unwrap_single_term(st);
 
-	cleanup_nests(tr, st);
+	cleanup_dispatch(kernel, tr, st);
 
 //	tr.print_recursive_treeform(txtout, tr.begin());
 //	prodcollectnum pc(tr, tr.end());

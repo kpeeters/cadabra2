@@ -47,6 +47,7 @@ class DisplayTeX {
 		void print_fraclike(std::ostream&, exptree::iterator);
 		void print_commalike(std::ostream&, exptree::iterator);
 		void print_arrowlike(std::ostream&, exptree::iterator);
+		void print_powlike(std::ostream&, exptree::iterator);
 
 		bool children_have_brackets(exptree::iterator ch) const;
 };

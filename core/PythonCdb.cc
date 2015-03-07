@@ -160,6 +160,7 @@ Ex::Ex(std::string ex_)
 	// Basic cleanup of rationals and subtractions, followed by
    // cleanup of nested sums and products.
 	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
+	cleanup_dispatch_deep(*get_kernel_from_scope(), tree);
 	exptree::iterator top = tree.begin();
 	cleanup_nests_below(tree, top);
 	}
