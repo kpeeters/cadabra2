@@ -49,16 +49,12 @@ Algorithm::result_t product_rule::apply(iterator& it)
 		rep.set_head(str_node(it->name));
 		sm=rep.append_child(rep.begin(),str_node("\\sum"));
 		sibling_iterator sib=tr.begin(it);
-		while(sib->is_index()==false) {
+		if(sib->is_index()==false)
 			indices_at_front=false;
-			++sib;  // find first index
-			}
-		++sib;
-
-	HERE: should find _last_ index to act with, not the first.
-
-		while(sib!=tr.end(it)) { // move all other indices away FIXME: wrong order
+		int todo=number_of_indices-1;
+		while(todo>0) { // Move all indices except the last one away.
 			if(sib->is_index()) {
+				--todo;
 				sibling_iterator nxt=sib;
 				++nxt;
 				if(indices_at_front) rep.move_before(sm, (iterator)sib);
@@ -66,6 +62,8 @@ Algorithm::result_t product_rule::apply(iterator& it)
 				sib=nxt;
 				}
 			else ++sib;
+			if(sib==tr.end(it))
+				throw ConsistencyException("product_rule: Error isolating derivative indices.");
 			}
 		}
 	else {

@@ -263,20 +263,21 @@ def test19b():
              - \theta^{\beta} D_{\alpha}{\theta^{\gamma}} - @(obj19b);
     assert(tst19b==0)
 
-{\alpha,\beta,\gamma}::Indices(spinor, position=fixed).
-{\alpha,\beta,\gamma}::AntiCommuting.
-D{#}::Derivative.
-obj19c:= D^{\alpha}{ D_{\alpha}{T^{\beta} S^{\gamma}}};
-product_rule(_);
-distribute(_);
-product_rule(_);
-sumflatten(_);
-tst19c:= D^{\alpha}{D_{\alpha}{T^{\beta}}} * S^{\gamma} 
-       + D_{\alpha}{T^{\beta}} * D^{\alpha}{S^{\gamma}} 
-       - D^{\alpha}{T^{\beta}} * D_{\alpha}{S^{\gamma}}
-       + T^{\beta} * D^{\alpha}{D_{\alpha}{S^{\gamma}}} - @(obj19c);
-collect_terms(_);
-assert(tst19c);
+def test19c():
+    {\alpha,\beta,\gamma}::Indices(spinor, position=fixed).
+    {\alpha,\beta,\gamma}::AntiCommuting.
+    D{#}::Derivative.
+    obj19c:= D^{\alpha}{ D_{\alpha}{T^{\beta} S^{\gamma}}};
+    product_rule(_)
+    distribute(_)
+    product_rule(_)
+    tst19c:= D^{\alpha}{D_{\alpha}{T^{\beta}}} * S^{\gamma} 
+              + D_{\alpha}{T^{\beta}} * D^{\alpha}{S^{\gamma}} 
+              - D^{\alpha}{T^{\beta}} * D_{\alpha}{S^{\gamma}}
+              + T^{\beta} * D^{\alpha}{D_{\alpha}{S^{\gamma}}} - @(obj19c);
+    assert(tst19c==0)
+
+test19c()
 
 reset.
 {\alpha,\beta,\gamma}::Indices(spinor).
@@ -298,26 +299,25 @@ collect_terms(_);
 assert(tst19d);
 
 
-# Test 20: anti-commuting indices.
-#
-reset.
-\dot{#}::Accent.
-{a,b,c,d}::Indices(spinor).
-{\dot{a},\dot{b},\dot{c},\dot{d}}::Indices(dspinor).
-{a,b,c,d,\dot{a},\dot{b},\dot{c},\dot{d}}::AntiCommuting.
-D{#}::Derivative.
-obj20:= D_{a}{D_{\dot{a}}{f g}};
-product_rule(_);
-distribute(_);
-product_rule(_);
-sumflatten(_);
-tst20:= D_{a}{D_{\dot{a}}{f}} * g 
-      - D_{\dot{a}}{f} * D_{a}{g} 
-      + D_{a}{f} * D_{\dot{a}}{g} 
-      + f * D_{a}{D_{\dot{a}}{g}} - @(obj20);
-collect_terms(_);
-assert(tst20);
+# Anti-commuting indices.
 
+def test20():
+    \dot{#}::Accent.
+    {a,b,c,d}::Indices(spinor).
+    {\dot{a},\dot{b},\dot{c},\dot{d}}::Indices(dspinor).
+    {a,b,c,d,\dot{a},\dot{b},\dot{c},\dot{d}}::AntiCommuting.
+    D{#}::Derivative.
+    obj20:= D_{a}{D_{\dot{a}}{f g}};
+    product_rule(_)
+    distribute(_)
+    product_rule(_)
+    tst20:= D_{a}{D_{\dot{a}}{f}} * g 
+            - D_{\dot{a}}{f} * D_{a}{g} 
+            + D_{a}{f} * D_{\dot{a}}{g} 
+            + f * D_{a}{D_{\dot{a}}{g}} - @(obj20);
+    assert(tst20==0)
+
+test20()
 
 # Test 21: two index sets, anti-commuting
 #
