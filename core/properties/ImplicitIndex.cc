@@ -11,6 +11,7 @@ bool ImplicitIndex::parse(const Properties&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator ki=keyvals.begin();
 	while(ki!=keyvals.end()) {
+//		std::cout << "ImplicitIndex: " << ki->first << " = " << *ki->second->name << std::endl;
 		if(ki->first=="name") {
 			if(*ki->second->multiplier!=1) {
 				throw std::logic_error("ImplicitIndex: use quotes to label names when they start with a number.");

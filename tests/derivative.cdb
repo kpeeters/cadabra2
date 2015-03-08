@@ -4,6 +4,7 @@
 # such objects.
 
 def test01():
+    __cdbkernel__=create_scope()
     D(#)::Derivative.
     obj1:= a*b*D(c*d*e)*f*g;
     product_rule(_)
@@ -13,6 +14,7 @@ def test01():
 test01()
 
 def test02():
+    __cdbkernel__=create_scope()
     D(a??)(b??)(c??)::Derivative.
     obj2:= a*b*D(c*d*e)(h1)(h2)*f*g;
     product_rule(_)
@@ -24,6 +26,7 @@ test02()
 # Using the properties of \diff.
 
 def test03():
+    __cdbkernel__=create_scope()
     \diff{#}::PartialDerivative.
     obj5:= \diff{A*B}_\mu;
     product_rule(_)
@@ -33,6 +36,7 @@ def test03():
 test03()
 
 def test04():
+    __cdbkernel__=create_scope()
     \diff{#}::PartialDerivative;
     obj6:= \diff{g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho}}_{\sigma};
     product_rule(_)
@@ -43,6 +47,7 @@ def test04():
 test04()
 
 def test07():
+    __cdbkernel__=create_scope()
     \diff{#}::PartialDerivative;
     {\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta}::Indices(spacetime);
     obj7:= g^{\eta \kappa} * \diff{\eta_{\nu \sigma}}_{\kappa} * g^{\mu \lambda} * \diff{eta_{\lambda \eta}}_{\rho};
@@ -55,6 +60,7 @@ test07();
 # \delta in combination with \diff
 #
 def test08():
+    __cdbkernel__=create_scope()
     \delta_{n q}::KroneckerDelta;
     \diff{#}::Derivative;
     obj8:= \diff{A_{m n}}_{p} \delta_{n q} \delta_{p t};
@@ -67,6 +73,7 @@ test08()
 # Multiple derivatives and the product rule
 
 def test09():
+    __cdbkernel__=create_scope()
     \diff{#}::PartialDerivative.
     obj9:= 3 \diff{4*A*B}_{m n};
     product_rule(_);
@@ -80,6 +87,7 @@ test09()
 # Order of child nodes on PartialDerivative.
 
 def test10():
+    __cdbkernel__=create_scope()
     {a,b,c,d}::Indices(vector).
     \partial{#}::PartialDerivative.
     A_{a b}::AntiSymmetric.
@@ -92,6 +100,7 @@ def test10():
 test10()
 
 def test10b():
+    __cdbkernel__=create_scope()
     {a,b,c,d}::Indices(vector).
     \partial{#}::PartialDerivative.
     A_{a b}::AntiSymmetric.
@@ -106,6 +115,7 @@ test10b()
 #
 
 def test11():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj11a:= \partial(A B C)_{a b};
     product_rule(_)
@@ -116,6 +126,7 @@ def test11():
 test11()
 
 def test11b():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj11b:= \partial_{a b}(A B C);
     product_rule(_)
@@ -127,6 +138,7 @@ test11b()
 
 # More tricky derivatives
 def test12():
+    __cdbkernel__=create_scope()
     \Omega{#}::Derivative.
     {A,B,C,D}::Depends(\Omega).
     obj12:= \Omega_{a}(A B)(C D);
@@ -151,6 +163,7 @@ test12()
 # Product_rule on powers
 
 def test14():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj14a:= \partial_{m n}{A**2};
     product_rule(_)
@@ -161,6 +174,7 @@ def test14():
 test14()
 
 def test14b():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj14b:= \partial_{m n}{A**3};
     product_rule(_)
@@ -177,6 +191,7 @@ test14b()
 # # FIXME
 
 def test14d():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj14d:= \partial_{m n}{A**d};
     product_rule(_)
@@ -187,6 +202,7 @@ def test14d():
 test14d()
 
 def test14f():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj14f:= \partial{A*\partial{A}};
     product_rule(_)
@@ -197,6 +213,7 @@ def test14f():
 test14f()
 
 def test15():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj15:= \partial{-a**2};
     product_rule(_)
@@ -207,6 +224,7 @@ def test15():
 test15()
 
 def test16():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj16:= \partial{-a**3};
     product_rule(_)
@@ -219,6 +237,7 @@ test16()
 # Flattening
 #
 def test17():
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj17:= \partial_{a}{\partial_{b c}{F}};
     tst17:= \partial_{a b c}{F} - @(obj17);
@@ -226,20 +245,23 @@ def test17():
 
 test17()
 
-# Test 18: more flattening
-#
-\partial{#}::PartialDerivative.
-\nabla{#}::Derivative.
-obj18:= \nabla_{a}{\nabla_{b}{F}};
-substitute(_, "\nabla_{a}{A??} -> \partial_{a}{A??}" );
-tst18:= \partial_{a b}{F} - @(obj18);
-collect_terms(_);
-assert(tst18);
-
+# # Test 18: more flattening
+# #
+# # FIXME: Because multi-derivatives get collected, we would now need
+# # to have a notation like \nabla_{a??.. b}{A??} -> 
+# \partial{#}::PartialDerivative.
+# \nabla{#}::Derivative.
+# obj18:= \nabla_{a}{\nabla_{b}{F}};
+# substitute(_, "\nabla_{a}{A??} -> \partial_{a}{A??}" );
+# tst18:= \partial_{a b}{F} - @(obj18);
+# collect_terms(_);
+# assert(tst18);
+# 
 
 # Test 19: Grassman derivatives
 #
 def test19():
+    __cdbkernel__=create_scope()
     {\alpha,\beta,\gamma}::Indices(spinor).
     \theta^{\alpha}::Coordinate.
     \theta^{\alpha}::SelfAntiCommuting.
@@ -253,6 +275,7 @@ def test19():
 test19()
 
 def test19b():
+    __cdbkernel__=create_scope()
     {\alpha,\beta,\gamma}::Indices(spinor).
     {\alpha,\beta,\gamma}::AntiCommuting.
     \theta^{\alpha}::Coordinate.
@@ -264,6 +287,7 @@ def test19b():
     assert(tst19b==0)
 
 def test19c():
+    __cdbkernel__=create_scope()
     {\alpha,\beta,\gamma}::Indices(spinor, position=fixed).
     {\alpha,\beta,\gamma}::AntiCommuting.
     D{#}::Derivative.
@@ -279,29 +303,34 @@ def test19c():
 
 test19c()
 
-reset.
-{\alpha,\beta,\gamma}::Indices(spinor).
-{\alpha,\beta,\gamma}::AntiCommuting.
-D{#}::Derivative.
-{b, c}::SelfAntiCommuting.
-{b, c}::ImplicitIndex(spinor).
-obj19d:= D^{\alpha}{D_{\alpha}{b*c}};
-product_rule(_);
-distribute(_);
-product_rule(_);
-distribute(_);
-sumflatten(_);
-tst19d:= D^{\alpha}{D_{\alpha}{b}} c
-       + D_{\alpha}{b} D^{\alpha}{c}
-       - D^{\alpha}{b} D_{\alpha}{c}
-       + b D^{\alpha}{D_{\alpha}{c}} - @(obj19d);
-collect_terms(_);
-assert(tst19d);
+# In the following test, the objects 'b' and 'c' carry an implicit
+# spinor index, and the derivative 'D' carries an explicit spinor
+# index. Moving a 'D_\alpha' through 'b' should pick up a minus sign.
 
+# def test19d():
+# {\alpha,\beta,\gamma}::Indices(spinor, position=fixed).
+# {\alpha,\beta,\gamma}::AntiCommuting.
+# D{#}::Derivative.
+# {b, c}::SelfAntiCommuting.
+# {b, c}::ImplicitIndex(spinor).
+# obj19d:= D^{\alpha}{D_{\alpha}{b*c}};
+# product_rule(_);
+# distribute(_);
+# product_rule(_);
+# distribute(_);
+# tst19d:= D^{\alpha}{D_{\alpha}{b}} c
+# - D_{\alpha}{b} D^{\alpha}{c}
+# + D^{\alpha}{b} D_{\alpha}{c}
+# + b D^{\alpha}{D_{\alpha}{c}} - @(obj19d);
+# collect_terms(_);
+# assert(tst19d==0)
+# 
+# test19d()
 
 # Anti-commuting indices.
 
 def test20():
+    __cdbkernel__=create_scope()
     \dot{#}::Accent.
     {a,b,c,d}::Indices(spinor).
     {\dot{a},\dot{b},\dot{c},\dot{d}}::Indices(dspinor).
@@ -312,62 +341,65 @@ def test20():
     distribute(_)
     product_rule(_)
     tst20:= D_{a}{D_{\dot{a}}{f}} * g 
-            - D_{\dot{a}}{f} * D_{a}{g} 
-            + D_{a}{f} * D_{\dot{a}}{g} 
-            + f * D_{a}{D_{\dot{a}}{g}} - @(obj20);
+        - D_{\dot{a}}{f} * D_{a}{g} 
+        + D_{a}{f} * D_{\dot{a}}{g} 
+        + f * D_{a}{D_{\dot{a}}{g}} - @(obj20);
+    collect_terms(_)
     assert(tst20==0)
 
 test20()
 
-# Test 21: two index sets, anti-commuting
-#
-reset.
-{\alpha,\beta,\gamma}::Indices(Spinor).
-{\dalpha,\dbeta,\dgamma}::Indices(DottedSpinor).
-{\alpha,\beta,\gamma,\dalpha,\dbeta,\dgamma,b,c}::AntiCommuting.
-{\bD{#}, D{#}}::Derivative.
-obj21:= D_{\alpha}{\bD_{\dalpha}{b*c}};
-product_rule(_);
-distribute(_);
-product_rule(_);
-distribute(_);
-sumflatten(_);
-tst21:= D_{\alpha}{\bD_{\dalpha}{b}} * c 
-      + \bD_{\dalpha}{b} * D_{\alpha}{c} 
-      - D_{\alpha}{b} * \bD_{\dalpha}{c} 
-      + b * D_{\alpha}{\bD_{\dalpha}{c}} - @(obj21);
-collect_terms(_);
-assert(tst21);
+# Two index sets, anti-commuting
+
+def test21():
+    __cdbkernel__=create_scope()
+    {\alpha,\beta,\gamma}::Indices(Spinor).
+    {\dalpha,\dbeta,\dgamma}::Indices(DottedSpinor).
+    {\alpha,\beta,\gamma,\dalpha,\dbeta,\dgamma,b,c}::AntiCommuting.
+    {\bD{#}, D{#}}::Derivative.
+    obj21:= D_{\alpha}{\bD_{\dalpha}{b*c}};
+    product_rule(_)
+    distribute(_)
+    product_rule(_)
+    distribute(_)
+    tst21:= D_{\alpha}{\bD_{\dalpha}{b}} * c 
+        + \bD_{\dalpha}{b} * D_{\alpha}{c} 
+        - D_{\alpha}{b} * \bD_{\dalpha}{c} 
+        + b * D_{\alpha}{\bD_{\dalpha}{c}} - @(obj21);
+    collect_terms(_)
+    assert(tst21==0)
+
+test21()
 
 
-# Test 22: explicit and implicit indices
-#
-reset.
-{\alpha,\beta,\gamma}::Indices(spinor).
-{\theta,\lambda}::ImplicitIndex(spinor).
-{\alpha,\beta,\gamma,\theta,\lambda}::AntiCommuting.
-D{#}::Derivative.
-obj22:= D_{\alpha}{\theta \lambda};
-product_rule(_);
-tst22:= D_{\alpha}{\theta} \lambda - \theta D_{\alpha}{\lambda} - @(obj22);
-collect_terms(_);
-assert(tst22);
+# Explicit and implicit indices
 
-# Test 23: multiple indices on tensors.
-#
-reset.
-{a,b,c,d,e}::Indices.
-{a,b,c,d,e}::AntiCommuting.
-D{#}::Derivative.
-obj23:= D_{a}{A^{b} T^{c d} C^{e}}; 
-product_rule(_);
-tst23:= D_{a}{A^{b}} * T^{c d} * C^{e} - A^{b} * D_{a}{T^{c d}} * C^{e} - A^{b} * T^{c d} * D_{a}{C^{e}}
-         - @(obj23);
-collect_terms(_);
-assert(tst23);
+def test22():
+    __cdbkernel__=create_scope()
+    {\alpha,\beta,\gamma}::Indices(spinor).
+    {\theta,\lambda}::ImplicitIndex(spinor).
+    {\alpha,\beta,\gamma,\theta,\lambda}::AntiCommuting.
+    D{#}::Derivative.
+    obj22:= D_{\alpha}{\theta \lambda};
+    product_rule(_)
+    tst22:= D_{\alpha}{\theta} \lambda - \theta D_{\alpha}{\lambda} - @(obj22);
+    collect_terms(_)
+    assert(tst22==0)
 
-# Test 24: implicit indices
-#
-#reset.
-#{ D{#}, bD{#} }::Derivative.
-#obj24:= D{ 
+test22()
+
+# Multiple indices on tensors.
+
+def test23():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e}::Indices.
+    {a,b,c,d,e}::AntiCommuting.
+    D{#}::Derivative.
+    obj23:= D_{a}{A^{b} T^{c d} C^{e}}; 
+    product_rule(_)
+    tst23:= D_{a}{A^{b}} * T^{c d} * C^{e} - A^{b} * D_{a}{T^{c d}} * C^{e} - A^{b} * T^{c d} * D_{a}{C^{e}}
+        - @(obj23);
+    collect_terms(_)
+    assert(tst23==0)
+
+test23()

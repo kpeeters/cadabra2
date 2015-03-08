@@ -33,6 +33,7 @@
 #include "properties/DAntiSymmetric.hh"
 #include "properties/Diagonal.hh"
 #include "properties/Distributable.hh"
+#include "properties/ImplicitIndex.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
 #include "properties/Integer.hh"
@@ -726,6 +727,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Distributable>();
 	def_prop<DiracBar>();
 	def_prop<GammaMatrix>();
+	def_prop<ImplicitIndex>();	
 	def_prop<IndexInherit>();
 	def_prop<Indices>();	
 	def_prop<Integer>();
