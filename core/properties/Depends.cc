@@ -1,0 +1,36 @@
+
+#include "properties/Depends.hh"
+#include "properties/Indices.hh"
+#include "properties/Coordinate.hh"
+#include "properties/Derivative.hh"
+#include "properties/Accent.hh"
+#include "Exceptions.hh"
+
+std::string Depends::name() const
+	{
+	return "Depends";
+	}
+
+bool Depends::parse(const Properties& pr, keyval_t& kv)
+	{
+	keyval_t::const_iterator it=kv.begin();
+	while(it!=kv.end()) {
+		const Indices    *dum=pr.get<Indices>(it->second, true);
+		const Coordinate *crd=pr.get<Coordinate>(it->second);
+		const Derivative *der=pr.get<Derivative>(it->second);
+		const Accent     *acc=pr.get<Accent>(it->second);
+		if(dum==0 && crd==0 && der==0 && acc==0) {
+			throw ArgumentException(std::string("Depends: ")+*it->second->name
+											+" lacks property Coordinate, Derivative, Accent or Indices.");
+			}
+		++it;
+		}
+//	dependencies_=exptree(frstarg);
+
+	return true;
+	}
+
+exptree Depends::dependencies(exptree::iterator) const
+	{
+	return dependencies_;
+	}

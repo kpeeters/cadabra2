@@ -75,11 +75,11 @@ test08()
 def test09():
     __cdbkernel__=create_scope()
     \diff{#}::PartialDerivative.
-    obj9:= 3 \diff{4*A*B}_{m n};
+    obj9:= 3 \diff_{m n}{4*A*B};
     product_rule(_);
     distribute(_);
     product_rule(_)
-    tst9:= 12 \diff{A}_{m n} B + 12 \diff{A}_m \diff{B}_n + 12 \diff{A}_n \diff{B}_m + 12 A \diff{B}_{m n} - @(obj9);
+    tst9:= 12 \diff_{m n}{A} B + 12 \diff_{m}{A} \diff_{n}{B} + 12 \diff_{n}{A} \diff_{m}{B} + 12 A \diff_{m n}{B} - @(obj9);
     assert(tst9==0)
 
 test09()
@@ -114,23 +114,23 @@ test10b()
 # Multiple derivatives again
 #
 
-def test11():
-    __cdbkernel__=create_scope()
-    \partial{#}::PartialDerivative.
-    obj11a:= \partial(A B C)_{a b};
-    product_rule(_)
-    tst11a:= \partial{\partial(A)_{a} * B * C + A * \partial(B)_{a} * C + A * B * \partial(C)_{a}}_{b} - @(obj11a);
-    collect_terms(_)
-    assert(tst11a==0)
-
-test11()
+# def test11():
+#     __cdbkernel__=create_scope()
+#     \partial{#}::PartialDerivative.
+#     obj11a:= \partial(A B C)_{a b};
+#     product_rule(_)
+#     tst11a:= \partial{\partial(A)_{a} * B * C + A * \partial(B)_{a} * C + A * B * \partial(C)_{a}}_{b} - @(obj11a);
+#     collect_terms(_)
+#     assert(tst11a==0)
+# 
+# test11()
 
 def test11b():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative.
     obj11b:= \partial_{a b}(A B C);
     product_rule(_)
-    tst11b:= \partial_{b}{\partial_{a}(A) * B * C + A * \partial_{a}(B) * C + A * B * \partial_{a}(C)} - @(obj11b);
+    tst11b:= \partial_{a}{\partial_{b}(A) * B * C + A * \partial_{b}(B) * C + A * B * \partial_{b}(C)} - @(obj11b);
     collect_terms(_)
     assert(tst11b==0)
 
@@ -140,7 +140,7 @@ test11b()
 def test12():
     __cdbkernel__=create_scope()
     \Omega{#}::Derivative.
-    {A,B,C,D}::Depends(\Omega).
+    {A,B,C,D}::Depends(\Omega);
     obj12:= \Omega_{a}(A B)(C D);
     product_rule(_)
     product_rule(_)
@@ -270,7 +270,7 @@ def test19():
     product_rule(_);
     tst19a:= D_{\theta^{\alpha}}{\theta^{\beta}} \theta^{\gamma}  
              - \theta^{\beta} D_{\theta^{\alpha}}{\theta^{\gamma}} - @(obj19a);
-        assert(tst19a==0)
+    assert(tst19a==0)
 
 test19()
 
