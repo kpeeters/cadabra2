@@ -58,6 +58,7 @@ set(LOCAL_SRC_FILES
   properties/CommutingBehaviour.cc
   properties/Coordinate.cc
   properties/DAntiSymmetric.cc
+  properties/Depends.cc
   properties/Derivative.cc
   properties/Diagonal.cc
   properties/DiracBar.cc

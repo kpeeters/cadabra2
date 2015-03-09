@@ -92,10 +92,14 @@ void cleanup_derivative(Kernel& k, exptree& tr, exptree::iterator& it)
 	// Find first non-index child.
 
 	exptree::sibling_iterator sib=tr.begin(it);
+	if(sib==tr.end(it)) return;
+
 	while(sib->is_index()) {
 		++sib;
 		if(sib==tr.end(it))
 			throw ConsistencyException("Encountered Derivative object without argument on which to act.");
+		// FIXME: the above is not correct when a derivative is declared without argument,
+		// like in \Omega::Derivative; A::Depends(\Omega).
 		}
 
 	// FIXME: this ignores that derivatives can have functional child
