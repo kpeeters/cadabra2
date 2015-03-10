@@ -1,0 +1,11 @@
+
+#include "Algorithm.hh"
+
+class unwrap : public Algorithm {
+	public:
+		unwrap(Kernel&, exptree&);
+		
+		virtual bool     can_apply(iterator) override;
+		virtual result_t apply(iterator&) override;
+};
+

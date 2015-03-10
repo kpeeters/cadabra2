@@ -1,0 +1,264 @@
+# All examples from the paper, converted to version 2 format.
+
+#-------
+
+def test01():
+    { a, b, c, d }::Indices.
+    obj:= A_{a b} B_{b c};
+    substitute(_, "B_{a b} ->  C_{a b c} D_{c}" )
+    tst:= A_{a b}  C_{b c d} D_{d} - @(obj);
+    collect_terms(_)
+    assert(tst==0)
+
+test01()
+
+#-------
+
+def test02():
+    A_{\dot{a} \dot{b}}::AntiSymmetric.
+    obj:= A_{\dot{b} \dot{a}}:
+    canonicalise(_)
+    tst:= A_{\dot{a} \dot{b}} + @(obj);
+    assert(tst==0)
+
+test02()
+
+#-------
+
+def test03():
+    { a_{1}, a_{2}, a_{3}, a_{4} }::Indices(vector).
+    obj:= V_{a_{1}} W_{a_{1}}:
+    substitute(_, "V_{a_{2}} -> M_{a_{2} a_{1}} N_{a_{1}}" )
+    tst:= M_{a_{1} a_{2}}  N_{a_{2}}  W_{a_{1}} - @(obj);
+    collect_terms(_)
+    assert(tst==0)
+
+test03()
+
+#-------
+
+def test04():
+    R_{a b c d}::TableauSymmetry(shape={2,2}, indices={0,2,1,3}).
+    obj:= R_{a b c d} R_{d c a b}:
+    canonicalise(_)
+    tst:= (-1) R_{a b c d} R_{a b c d} - @(obj);
+    collect_terms(_)
+    assert(tst==0)
+
+test04()
+
+#-------
+
+def test05():
+\nabla{#}::Derivative.
+\partial{#}::PartialDerivative.
+A_{m n}::AntiSymmetric.
+V_{m}::Depends(\nabla).
+obj:= \partial_{m p}( A_{q r} V_{n} ) A^{p m};
+canonicalise(_)
+assert(obj==0)
+obj:= \nabla_{m p}( A_{q r} V_{n} ) A^{p m};
+canonicalise(_)
+tst:= (-1) \nabla_{m p}( A_{q r} V_{n} ) A^{m p} - @(obj);
+collect_terms(_)
+assert(tst==0)
+unwrap(obj)
+tst:= (-1) A_{q r} \nabla_{m p}{ V_{n} } A^{m p} - @(obj);
+collect_terms!(%);
+@assert(tst);
+
+#-------
+
+@reset.
+{m,n,p,q,r,s,t#}::Indices(vector).
+\nabla{#}::Derivative.
+R_{m n p q}::RiemannTensor.
+\nabla_{m}{R_{p q r s}}::SatisfiesBianchi.
+obj:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:
+@young_project_tensor!2(%){ModuloMonoterm}:
+@collect_terms!(%);
+@assert(obj);
+
+#-------
+
+@reset.
+{ m, n, p, q }::Indices(vector).
+{ A_{m n p}, B_{m n p} }::AntiSymmetric.
+
+obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
+{ m, n, p, q }::Integer(1..4).
+@decompose_product!(%):
+@canonicalise!(%):
+@collect_terms!(%);
+tst:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p} - @(obj);
+@canonicalise!(%);
+@collect_terms!(%);
+@assert(tst);
+
+{ m, n, p, q }::Integer(1..3).
+@decompose_product!(obj):
+@canonicalise!(%):
+@collect_terms!(%);
+@assert(obj);
+
+#-------
+
+@reset.
+{i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
+C_{m n p q}::WeylTensor.
+\nabla{#}::Derivative.
+\nabla_{r}{ C_{m n p q} }::SatisfiesBianchi.
+\delta_{i j}::KroneckerDelta.
+
+Eij:=- C_{i m k l} C_{j p k q} C_{l p m q} + 1/4 C_{i m k l} C_{j m p q} C_{k l p q}
+     - 1/2 C_{i k j l} C_{k m p q} C_{l m p q}:
+
+E:=  C_{j m n k} C_{m p q n} C_{p j k q} + 1/2 C_{j k m n} C_{p q m n} C_{j k p q}:
+
+exp:= \nabla_{i}{\nabla_{j}{ @(Eij) }} - 1/6 \nabla_{i}{\nabla_{i}{ @(E) }};
+
+@distribute!(%): @prodrule!(%):
+@distribute!(%): @prodrule!(%):
+
+@prodsort!(%): @canonicalise!(%): @rename_dummies!(%): 
+@sumflatten!(%):
+@collect_terms!(%);
+
+@substitute!(%)( \nabla_{i}{C_{k i l m}} -> 0, \nabla_{i}{C_{k m l i}} -> 0 );
+
+@young_project_product!(%):
+@sumflatten!(%):
+@collect_terms!(%);
+@assert(exp);
+
+# @young_project_tensor!3(%){ModuloMonoterm};
+# @distribute!(%):
+# @prodsort!(%):
+# @canonicalise!(%):
+# @rename_dummies!(%):
+# @collect_terms!(%);
+
+# # testing
+# a:= 3 C_{i j m n} * C_{i k m p} * \nabla_{q}{\nabla_{j}{C_{n k p q}}}
+#   - 2 C_{i j m p} * C_{i k m n} * \nabla_{q}{\nabla_{j}{C_{n k p q}}};
+# @young_project_tensor!3(%){ModuloMonoterm};
+# @distribute!(%):
+# @prodsort!(%):
+# @canonicalise!(%):
+# @rename_dummies!(%):
+# @collect_terms!(%);
+# 
+# b:= 3 C_{i j m n} * C_{i k m p} * \nabla_{q}{\nabla_{j}{C_{n k p q}}}
+#   - 2 C_{i j m p} * C_{i k m n} * \nabla_{q}{\nabla_{j}{C_{n k p q}}};
+# @young_project_product!(%):
+# @prodsort!(%):
+# @canonicalise!(%):
+# @rename_dummies!(%):
+# @collect_terms!(%);
+# 
+# @(a) - @(b):
+# @collect_terms!(%);
+# end testing
+
+
+#-------
+
+@reset.
+def test99():
+    {M, N, P}::Indices(space).
+    {m, n, p}::Indices(subspace1).
+    {a, b, c}::Indices(subspace2).
+    obj:= A_{M N} B_{N P};
+    split_index(_, "{M, m, a}")
+    tst:= A_{M m}  B_{m P} + A_{M a} B_{a P} - @(obj);
+    assert(tst==0)
+
+#-------
+
+@reset.
+::PostDefaultRules( @@prodsort!(%), @@eliminate_kr!(%),  
+                                    @@canonicalise!(%), @@collect_terms!(%) ).
+{s,r,l,k,m,n}::Indices(vector).
+{s,r,l,k,m,n}::Integer(0..d-1).
+\Gamma_{#}::GammaMatrix(metric=\delta).
+\delta_{m n}::KroneckerDelta.
+obj:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s}:
+join_gamma(_)
+join_gamma(_)
+distribute(_)
+join_gamma(_)
+@distribute!(%);
+@factorise!(%){d};
+@collect_factors!(%);
+tst:= \Gamma_{k l} (12 - 18 d + 8 d**2 - d**3) + \delta_{k l} ( - 3 + 6 d - 4 d**2 + d**3) - @(obj);
+@assert(tst);
+
+#-------
+
+@reset.
+{a,b,c,d#}::Indices(spinor).
+\Gamma_{#}::GammaMatrix(metric=\delta).
+obj:=(\Gamma_{m n})_{a b} (\Gamma_{n p})_{b c};
+@combine!(%);
+@join!(%){expand}:
+@canonicalise!(%);
+tst:= (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} 
++ \delta_{m p} \delta_{n n} - \delta_{m n} \delta_{n p})_{a c} - @(obj);
+@collect_terms!(%);
+@assert(tst);
+@distribute!(obj);
+@expand!(%);
+tst:= (\Gamma_{m p})_{a c} \delta_{n n} - (\Gamma_{m n})_{a c} \delta_{n p} 
++ (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{m p} \delta_{n n})_{a c} 
+- (\delta_{m n} \delta_{n p})_{a c} - @(obj);
+@collect_terms!(%);
+#@assert(tst);
+# FIXME!!!
+
+#-------
+
+@reset.
+{\mu,\nu,\rho}::Indices(curved, position=fixed).
+{m,n,p,q,r,s,t#}::Indices(flat).
+{m,n,p,q,r,s,t#}::Integer(0..10).
+T^{#{\mu}}::AntiSymmetric.
+\psi_{\mu}::SelfAntiCommuting.
+\psi_{\mu}::Spinor(dimension=11, type=Majorana).
+\theta::Spinor(dimension=11, type=Majorana).
+\epsilon::Spinor(dimension=11, type=Majorana).
+{\theta,\epsilon,\psi_{\mu}}::AntiCommuting
+\bar{#}::DiracBar.
+\delta^{m n}::KroneckerDelta.
+\Gamma^{#{m}}::GammaMatrix(metric=\delta).
+
+obj:= T^{\mu\nu\rho} e_{\nu}^{s}
+     \bar{\theta} \Gamma^{r s} \psi_{\rho}
+     \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
+
+@fierz!(%)( \theta, \epsilon, \psi_{\mu}, \psi_{\nu} );
+
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@join!(%){expand}:
+@distribute!(%):
+@eliminate_kr!(%):
+@collect_terms!(%):
+@canonicalise!(%): 
+@rename_dummies!(%):
+@collect_terms!(%);
+
+tst:=1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n}
+\epsilon \bar{\psi_{\nu}} \Gamma_{n} \psi_{\rho} 
++ 5/16 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \epsilon
+\bar{\psi_{\nu}} \Gamma_{m} \psi_{\rho} 
++ 3/32 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n p} \epsilon
+\bar{\psi_{\nu}} \Gamma_{n p} \psi_{\rho} 
++ 1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{n}
+\epsilon \bar{\psi_{\nu}} \Gamma_{m n} \psi_{\rho} 
++ 1/384 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta}
+\Gamma^{n p q r} \epsilon \bar{\psi_{\nu}} \Gamma_{m n p q r} \psi_{\rho}
+- @(obj);
+@collect_terms!(%);
+@assert(tst);
+
