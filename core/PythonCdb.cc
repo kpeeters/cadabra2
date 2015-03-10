@@ -66,6 +66,7 @@
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
+#include "algorithms/unwrap.hh"
 
 // Helper algorithms, not for users.
 
@@ -693,6 +694,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
+	def_algo_1<unwrap>("unwrap");
 
 	def("join_gamma",  &dispatch_1_ex<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=false,
 																					arg("expand")=true,arg("use_gendelta")=false),

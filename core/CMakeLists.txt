@@ -105,6 +105,7 @@ set(LOCAL_SRC_FILES
   algorithms/sort_product.cc
   algorithms/split_index.cc
   algorithms/substitute.cc
+  algorithms/unwrap.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh
