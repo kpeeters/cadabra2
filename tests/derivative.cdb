@@ -167,7 +167,7 @@ def test14():
     \partial{#}::PartialDerivative.
     obj14a:= \partial_{m n}{A**2};
     product_rule(_)
-    tst14a:= \partial_{n}(2*A*\partial_{m}{A}) - @(obj14a);
+    tst14a:= \partial_{m}(2*A*\partial_{n}{A}) - @(obj14a);
     collect_terms(_)
     assert(tst14a==0)
 
@@ -178,7 +178,7 @@ def test14b():
     \partial{#}::PartialDerivative.
     obj14b:= \partial_{m n}{A**3};
     product_rule(_)
-    tst14b:= \partial_{n}(3*A**2*\partial_{m}{A}) - @(obj14b);
+    tst14b:= \partial_{m}(3*A**2*\partial_{n}{A}) - @(obj14b);
     collect_terms(_)
     assert(tst14b==0)
 
@@ -195,7 +195,7 @@ def test14d():
     \partial{#}::PartialDerivative.
     obj14d:= \partial_{m n}{A**d};
     product_rule(_)
-    tst14d:= \partial_{n}(d * A**(d - 1) * \partial_{m}{A}) - @(obj14d);
+    tst14d:= \partial_{m}(d * A**(d - 1) * \partial_{n}{A}) - @(obj14d);
     collect_terms(_)
     assert(tst14d==0)
 
@@ -230,7 +230,7 @@ def test16():
     product_rule(_)
     tst16:= 3 a**2 \partial{a} + @(obj16);
     collect_terms(_)
-    assert(tst15==0)
+    assert(tst16==0)
 
 test16()
 
