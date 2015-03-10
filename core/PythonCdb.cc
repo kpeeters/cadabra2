@@ -25,6 +25,7 @@
 #include "properties/AntiCommuting.hh"
 #include "properties/AntiSymmetric.hh"
 #include "properties/Commuting.hh"
+#include "properties/Coordinate.hh"
 #include "properties/Depends.hh"
 #include "properties/Derivative.hh"
 #include "properties/DiracBar.hh"
@@ -719,6 +720,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Accent>();
 	def_prop<AntiCommuting>();
 	def_prop<AntiSymmetric>();
+	def_prop<Coordinate>();
 	def_prop<Commuting>();
 	def_prop<CommutingAsProduct>();
 	def_prop<CommutingAsSum>();
