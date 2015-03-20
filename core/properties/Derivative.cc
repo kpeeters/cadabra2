@@ -40,8 +40,12 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
 
 	bool indices_first=tr.begin(it)->is_index();
 	exptree::sibling_iterator argnode=tr.begin(it);
-	unsigned int number_of_indices=0;
-	while(argnode->is_index()) { ++argnode; ++number_of_indices; }
+	unsigned int number_of_indices=0; // number of indices before the argument
+	while(argnode->is_index()) { 
+		std::cout << *argnode->name << std::endl;
+		++argnode; 
+		++number_of_indices; 
+		}
 
 	// Right now we only propagate information of a child node if it does
 	// not contain a sum or product. FIXME: should handle more general info?
@@ -60,7 +64,7 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
    // symmetry of the argument on which \diff acts
 //		txtout << "computing rettab" << std::endl;
 
-//	txtout << *argnode->name << std::endl;
+	std::cout << *argnode->name << std::endl;
 
 	const TableauBase *tb=properties.get<TableauBase>(argnode);
 	assert(tb);

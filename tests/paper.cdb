@@ -50,22 +50,23 @@ test04()
 #-------
 
 def test05():
-\nabla{#}::Derivative.
-\partial{#}::PartialDerivative.
-A_{m n}::AntiSymmetric.
-V_{m}::Depends(\nabla).
-obj:= \partial_{m p}( A_{q r} V_{n} ) A^{p m};
-canonicalise(_)
-assert(obj==0)
-obj:= \nabla_{m p}( A_{q r} V_{n} ) A^{p m};
-canonicalise(_)
-tst:= (-1) \nabla_{m p}( A_{q r} V_{n} ) A^{m p} - @(obj);
-collect_terms(_)
-assert(tst==0)
-unwrap(obj)
-tst:= (-1) A_{q r} \nabla_{m p}{ V_{n} } A^{m p} - @(obj);
-collect_terms!(%);
-@assert(tst);
+    \nabla{#}::Derivative.
+    \partial{#}::PartialDerivative.
+    A_{m n}::AntiSymmetric.
+    V_{m}::Depends(\nabla).
+    obj:= \partial_{m p}( A_{q r} V_{n} ) A^{p m};
+    canonicalise(_)
+    assert(obj==0)
+    obj:= \nabla_{m p}( A_{q r} V_{n} ) A^{p m};
+    canonicalise(_)
+    tst:= (-1) \nabla_{m p}( A_{q r} V_{n} ) A^{m p} - @(obj);
+    assert(tst==0)
+    unwrap(obj)
+    tst:= (-1) A_{q r} \nabla_{m p}{ V_{n} } A^{m p} - @(obj);
+    collect_terms(_)
+    assert(tst==0)
+
+test05()
 
 #-------
 
@@ -75,9 +76,9 @@ collect_terms!(%);
 R_{m n p q}::RiemannTensor.
 \nabla_{m}{R_{p q r s}}::SatisfiesBianchi.
 obj:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:
-@young_project_tensor!2(%){ModuloMonoterm}:
-@collect_terms!(%);
-@assert(obj);
+young_project_tensor(_, modulo_monoterm=True);
+collect_terms(_)
+assert(obj==0)
 
 #-------
 

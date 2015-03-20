@@ -80,7 +80,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					exptree deps=dep->dependencies(factor /* it */);
 					sibling_iterator depobjs=deps.begin(deps.begin());
 					while(depobjs!=deps.end(deps.begin())) {
-//						txtout << "?" << *it->name << " == " << *depobjs->name << std::endl;
+//						std::cout << "?" << *it->name << " == " << *depobjs->name << std::endl;
 //						if(subtree_exact_equal(it, depobjs)) { WRONG! Depends(\del) should work
 // without having any arguments in \del. Otherwise we would need to write this as Depends(\del{#})
 						if(it->name == depobjs->name) {

@@ -16,7 +16,7 @@ class index_iterator : public exptree::iterator_base {
 		
 		static index_iterator create(const Properties&, const iterator_base&);
 		
-		static index_iterator begin(const Properties&, const iterator_base&);
+		static index_iterator begin(const Properties&, const iterator_base&, int offset=0);
 		static index_iterator end(const Properties&, const iterator_base&);
 		
 		index_iterator& operator=(const index_iterator&);

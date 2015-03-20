@@ -40,9 +40,7 @@ class pattern {
 		exptree obj;
 };
 
-// FIXME: these are, I believe, no longer necessary, and would need access to properties anyway
-//bool operator<(const pattern& one, const pattern& two);
-//bool operator==(const pattern& one, const pattern& two);
+// Arguments to properties get parsed into a keyval_t structure.
 
 class keyval_t {
 	public:
