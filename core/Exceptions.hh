@@ -35,5 +35,7 @@ class InterruptionException : public CadabraException {
 class ArgumentException : public CadabraException {
 	public:
 		ArgumentException(std::string="");
+
+		std::string py_what() const;
 };
 

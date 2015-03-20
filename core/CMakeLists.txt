@@ -76,6 +76,7 @@ set(LOCAL_SRC_FILES
   properties/NumericalFlat.cc
   properties/PartialDerivative.cc
   properties/RiemannTensor.cc
+  properties/SatisfiesBianchi.cc
   properties/SelfAntiCommuting.cc
   properties/SelfCommuting.cc
   properties/SortOrder.cc
@@ -96,6 +97,7 @@ set(LOCAL_SRC_FILES
   algorithms/eliminate_kronecker.cc
   algorithms/flatten_product.cc
   algorithms/flatten_sum.cc
+  algorithms/indexsort.cc
   algorithms/join_gamma.cc
 #  algorithms/keep_terms.cc
   algorithms/prodcollectnum.cc
@@ -106,6 +108,7 @@ set(LOCAL_SRC_FILES
   algorithms/split_index.cc
   algorithms/substitute.cc
   algorithms/unwrap.cc
+  algorithms/young_project_tensor.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh

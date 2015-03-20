@@ -133,7 +133,7 @@ class Shell(InteractiveConsole):
                         last = match.group(2)[1:-1]
                         if len(last)>0 and last[-1]==')':
                             last=last[:-1]
-                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex(r'"+line_stripped[:found]+"'), Ex('"+last+"') )"
+                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex(r'"+line_stripped[:found]+"'), Ex(r'"+last+"') )"
                     else:
                         rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex(r'"+line_stripped[:found]+"'))"
                     objname="__cdbtmp__"

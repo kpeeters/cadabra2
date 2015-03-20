@@ -117,9 +117,12 @@ index_iterator& index_iterator::operator++()
 	return *this;
 	}
 
-index_iterator index_iterator::begin(const Properties& properties, const iterator_base& it) 
+index_iterator index_iterator::begin(const Properties& properties, const iterator_base& it, int offset) 
 	{
-	return index_iterator::create(properties,it);
+	index_iterator ret=index_iterator::create(properties,it);
+	if(offset>0)
+		ret+=offset;
+	return ret;
 	}
 
 index_iterator index_iterator::end(const Properties& properties, const iterator_base& it) 

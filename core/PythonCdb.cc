@@ -44,6 +44,7 @@
 #include "properties/NonCommuting.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/RiemannTensor.hh"
+#include "properties/SatisfiesBianchi.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SelfCommuting.hh"
 #include "properties/SortOrder.hh"
@@ -61,12 +62,14 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
+#include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
 #include "algorithms/product_rule.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/unwrap.hh"
+#include "algorithms/young_project_tensor.hh"
 
 // Helper algorithms, not for users.
 
@@ -641,7 +644,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	ParseExceptionType=pyParseException.ptr();
 
 	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
-	pyArgumentException.def("__str__", &ArgumentException::what);
+	pyArgumentException.def("__str__", &ArgumentException::py_what);
 	ArgumentExceptionType=pyArgumentException.ptr();
 
 	// Declare the Kernel object for Python so we can store it in the local Python context.
@@ -690,14 +693,21 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
+	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
 	def_algo_1<rename_dummies>("rename_dummies");
 	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<unwrap>("unwrap");
 
-	def("join_gamma",  &dispatch_1_ex<join_gamma, bool, bool>, (arg("ex"),arg("deep")=true,arg("repeat")=false,
-																					arg("expand")=true,arg("use_gendelta")=false),
+	def("young_project_tensor", &dispatch_1_ex<young_project_tensor, bool>, 
+		 (arg("ex"),arg("deep")=true,arg("repeat")=false,
+		  arg("modulo_monoterm")=false),
+		 return_internal_reference<1>() );
+
+	def("join_gamma",  &dispatch_1_ex<join_gamma, bool, bool>, 
+		 (arg("ex"),arg("deep")=true,arg("repeat")=false,
+		  arg("expand")=true,arg("use_gendelta")=false),
 		 return_internal_reference<1>() );
 
 	// Algorithms which take a second Ex as argument.
@@ -742,6 +752,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<NonCommuting>();
 	def_prop<PartialDerivative>();
 	def_prop<RiemannTensor>();
+	def_prop<SatisfiesBianchi>();
 	def_prop<SelfAntiCommuting>();
 	def_prop<SelfCommuting>();
 	def_prop<SortOrder>();

@@ -1,5 +1,6 @@
 
 #include "Exceptions.hh"
+#include <iostream>
 
 CadabraException::CadabraException(std::string s)
 	: std::logic_error(s)
@@ -24,4 +25,10 @@ InterruptionException::InterruptionException(std::string s)
 ArgumentException::ArgumentException(std::string s)
 	: CadabraException(s)
 	{
+	}
+
+std::string ArgumentException::py_what() const
+	{
+	std::cerr << what() << std::endl;
+	return what();
 	}
