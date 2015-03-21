@@ -111,9 +111,9 @@ Algorithm::result_t distribute::apply(iterator& prod)
 
 	flatten_product pf(kernel, tr);
 	pf.make_consistent_only=true;
-	pf.apply_generic(ret, true, false);
+	pf.apply_generic(ret, true, false, 0);
 	prodcollectnum pc(kernel, tr);
-	pc.apply_generic(ret, true, false);
+	pc.apply_generic(ret, true, false, 0);
 //	cleanup_sums_products(tr, ret);
 //	txtout << "..." << *ret->name << std::endl;
 	cleanup_nests_below(tr, ret, false); // CHANGED  true to false in last argument

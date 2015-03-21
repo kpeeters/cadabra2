@@ -62,6 +62,7 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
+#include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
 #include "algorithms/product_rule.hh"
@@ -523,51 +524,51 @@ std::string Property<Prop>::repr_() const
 // those additional arguments).
 
 template<class F, typename... Args>
-Ex *dispatch_1_ex(Ex *ex, bool deep, bool repeat, Args... args)
+Ex *dispatch_1_ex(Ex *ex, bool deep, bool repeat, unsigned int depth, Args... args)
 	{
 	F algo(*get_kernel_from_scope(), ex->tree, args...);
 
 	exptree::iterator it=ex->tree.begin().begin();
-
+	
 	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat));
+	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
 	
 	return ex;
 	}
 
 template<class F>
-Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat)
+Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex *exobj = new Ex(ex);
-	return dispatch_1_ex<F>(exobj, deep, repeat);
+	return dispatch_1_ex<F>(exobj, deep, repeat, depth);
 	}
 
 template<class F>
-Ex *dispatch_2_ex_ex(Ex *ex, Ex *args, bool deep, bool repeat)
+Ex *dispatch_2_ex_ex(Ex *ex, Ex *args, bool deep, bool repeat, unsigned int depth)
 	{
 	F algo(*get_kernel_from_scope(), ex->tree, args->tree);
 
 	exptree::iterator it=ex->tree.begin().begin();
 
 	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat));
+	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
 	
 	return ex;
 	}
 
 template<class F>
-Ex *dispatch_2_ex_string(Ex *ex, const std::string& args, bool deep, bool repeat)
+Ex *dispatch_2_ex_string(Ex *ex, const std::string& args, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex *argsobj = new Ex(args);
-	return dispatch_2_ex_ex<F>(ex, argsobj, deep, repeat);
+	return dispatch_2_ex_ex<F>(ex, argsobj, deep, repeat, depth);
 	}
 
 template<class F>
-Ex *dispatch_2_string_string(const std::string& ex, const std::string& args, bool deep, bool repeat)
+Ex *dispatch_2_string_string(const std::string& ex, const std::string& args, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex *exobj   = new Ex(ex);
 	Ex *argsobj = new Ex(args);
-	return dispatch_2_ex_ex<F>(exobj, argsobj, deep, repeat);
+	return dispatch_2_ex_ex<F>(exobj, argsobj, deep, repeat, depth);
 	}
 
 // Templated function which declares various forms of the algorithm entry points in one shot.
@@ -578,9 +579,9 @@ void def_algo_1(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_1_ex<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false), 
+	def(name.c_str(),  &dispatch_1_ex<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
 		 return_internal_reference<1>() );
-	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=false), 
+	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
 		 return_value_policy<manage_new_object>() );
 	}
 
@@ -591,20 +592,20 @@ void def_algo_2(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_2_ex_ex<F>,     (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
+	def(name.c_str(),  &dispatch_2_ex_ex<F>,     (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
 		 return_internal_reference<1>() );
 	
 	// The algorithm returns a pointer to the 'ex' argument, which for the 'ex_string' version of the
 	// algorithm is something that was already present on the python side. Hence return_internal_reference,
 	// not manage_new_object.
 
-	def(name.c_str(),  &dispatch_2_ex_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
+	def(name.c_str(),  &dispatch_2_ex_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
 		 return_internal_reference<1>() );
 
 	// The following does lead to a new object being created from the string, and this new object needs
 	// to be managed.
 
-	def(name.c_str(),  &dispatch_2_string_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false), 
+	def(name.c_str(),  &dispatch_2_string_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
 		 return_value_policy<manage_new_object>() );
 	}
 
@@ -693,6 +694,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
+	def_algo_1<flatten_sum>("flatten_sum");
 	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
 	def_algo_1<rename_dummies>("rename_dummies");
@@ -701,12 +703,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<unwrap>("unwrap");
 
 	def("young_project_tensor", &dispatch_1_ex<young_project_tensor, bool>, 
-		 (arg("ex"),arg("deep")=true,arg("repeat")=false,
+		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
 		  arg("modulo_monoterm")=false),
 		 return_internal_reference<1>() );
 
 	def("join_gamma",  &dispatch_1_ex<join_gamma, bool, bool>, 
-		 (arg("ex"),arg("deep")=true,arg("repeat")=false,
+		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
 		  arg("expand")=true,arg("use_gendelta")=false),
 		 return_internal_reference<1>() );
 

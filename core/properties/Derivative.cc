@@ -38,11 +38,15 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
 	{
 	it=properties.head<Derivative>(it);
 
+
+	std::cout << *it->name << " is Derivative" << std::endl;
+	tr.print_recursive_treeform(std::cout, it);
+
 	bool indices_first=tr.begin(it)->is_index();
 	exptree::sibling_iterator argnode=tr.begin(it);
 	unsigned int number_of_indices=0; // number of indices before the argument
 	while(argnode->is_index()) { 
-		std::cout << *argnode->name << std::endl;
+//		std::cout << *argnode->name << std::endl;
 		++argnode; 
 		++number_of_indices; 
 		}
@@ -64,7 +68,7 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
    // symmetry of the argument on which \diff acts
 //		txtout << "computing rettab" << std::endl;
 
-	std::cout << *argnode->name << std::endl;
+//	std::cout << *argnode->name << std::endl;
 
 	const TableauBase *tb=properties.get<TableauBase>(argnode);
 	assert(tb);
