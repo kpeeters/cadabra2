@@ -63,8 +63,10 @@ class Algorithm {
 		// The main entry points for running algorithms. The 'deep' flag indicates
 		// whether sub-expressions should be acted on too. The 'repeat' flag indicates
 		// whether the algorithm should be applied until the expression no longer 
-		// changes.
-		result_t  apply_generic(iterator&, bool deep, bool repeat);
+		// changes. The 'depth' flag, if not equal to -1, indicates the depth in the tree
+		// where the algorithm should start applying.
+
+		result_t  apply_generic(iterator&, bool deep, bool repeat, unsigned int depth);
 
 		// Global information
 		unsigned int     number_of_calls;

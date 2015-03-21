@@ -47,22 +47,33 @@ Algorithm::~Algorithm()
 	{
 	}
 
-Algorithm::result_t Algorithm::apply_generic(exptree::iterator& it, bool deep, bool repeat)
+Algorithm::result_t Algorithm::apply_generic(exptree::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
 	result_t ret=result_t::l_no_action;
 
-	result_t thisret=result_t::l_no_action;
-	do {
-		if(deep) 
-			thisret = apply_deep(it);
-		else
-			thisret = apply_once(it);
+	exptree::fixed_depth_iterator start=tr.begin_fixed(it, depth);
+	while(tr.is_valid(start)) {
+		result_t thisret=result_t::l_no_action;
+		exptree::iterator enter(start);
+		exptree::fixed_depth_iterator next(start);
+		++next;
+		do {
+			std::cout << "apply at " << *enter->name << std::endl;
+			if(deep && depth==0) 
+				thisret = apply_deep(enter);
+			else
+				thisret = apply_once(enter);
+			
+			// FIXME: handle l_error or remove
+			if(thisret==result_t::l_applied)
+				ret=result_t::l_applied;
+			} while(depth==0 && repeat && thisret==result_t::l_applied);
 
-		// FIXME: handle l_error or remove
-		if(thisret==result_t::l_applied)
-			ret=result_t::l_applied;
-		} while(repeat && thisret==result_t::l_applied);
-
+		if(depth==0) 
+			break;
+		start=next;
+		} 
+	
 	return ret;
 	}
 
@@ -97,11 +108,13 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 	result_t some_changes_somewhere=result_t::l_no_action;
 
 	for(;;) {
-//		std::cout << "reached " << *current->name << std::endl;
+		std::cout << "reached " << *current->name << std::endl;
 //		std::cout << "apply_deep: current = " << *current->name << std::endl;
 
-		if(current.node==last.node)
+		if(current.node==last.node) {
+			std::cout << "stop after this one" << std::endl;
 			stop_after_this_one=true;
+			}
 
 		if(deepest_action > tr.depth(current)) {
 //			std::cout << "simplify; we are at " << *(current->name) << std::endl;
@@ -134,11 +147,11 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 			current=next; 
 			} 
 		else {
-			if(stop_after_this_one)
-				break;
-
 			++current;
 			}
+
+		if(stop_after_this_one)
+			break;
 
 		}
 

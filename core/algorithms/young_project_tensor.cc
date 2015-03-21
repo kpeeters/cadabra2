@@ -24,6 +24,7 @@ bool young_project_tensor::can_apply(iterator it)
 
 Algorithm::result_t young_project_tensor::apply(iterator& it)
 	{
+	std::cout << "at " << *it->name << std::endl;
 	assert(tb);
 //	txtout << typeid(*tb).name() << std::endl;
 	TableauBase::tab_t tab=tb->get_tab(kernel.properties, tr, it, 0);
