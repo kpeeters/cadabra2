@@ -60,6 +60,7 @@
 
 #include "algorithms/canonicalise.hh"
 #include "algorithms/collect_terms.hh"
+#include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/flatten_sum.hh"
@@ -83,6 +84,7 @@
 //   Then abstract a new def_algo from there.
 //
 //        keep_terms:  list of integers
+//        young_project: one list of integers describing tableau shape, one list of integers indicating indices.
 //        
 
 bool output_ipython=false;
@@ -692,6 +694,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Algorithms with only the Ex as argument.
 	def_algo_1<canonicalise>("canonicalise");
 	def_algo_1<collect_terms>("collect_terms");
+	def_algo_1<decompose_product>("decompose_product");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
 	def_algo_1<flatten_sum>("flatten_sum");

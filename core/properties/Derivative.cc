@@ -38,9 +38,8 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
 	{
 	it=properties.head<Derivative>(it);
 
-
-	std::cout << *it->name << " is Derivative" << std::endl;
-	tr.print_recursive_treeform(std::cout, it);
+//	std::cout << *it->name << " is Derivative" << std::endl;
+//	tr.print_recursive_treeform(std::cout, it);
 
 	bool indices_first=tr.begin(it)->is_index();
 	exptree::sibling_iterator argnode=tr.begin(it);

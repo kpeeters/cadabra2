@@ -26,12 +26,13 @@
 
 // Central cleanup dispatch routine, which calls the other cleanup
 // functions defined later. These algorithms clean up the tree at the
-// current node and the first layer of child nodes, but do not descend
+// current node and the first layer of child nodes, but do NOT descend
 // deeper down the tree.
 
 // IMPORTANT: as with any algorithms, the iterator pointing to the
 // starting node may be changed, but these functions are not allowed
-// to modify anything except the node and nodes below.
+// to modify anything except the node and nodes below (in particular,
+// they will leave sibling nodes untouched).
 
 void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator& it);
 
