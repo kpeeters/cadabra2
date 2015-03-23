@@ -70,15 +70,16 @@ test05()
 
 #-------
 
-@reset.
-{m,n,p,q,r,s,t#}::Indices(vector).
-\nabla{#}::Derivative.
-R_{m n p q}::RiemannTensor.
-\nabla_{m}{R_{p q r s}}::SatisfiesBianchi.
-obj:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:
-young_project_tensor(_, depth=1, modulo_monoterm=True);
-collect_terms(_)
-assert(obj==0)
+def test06():
+    {m,n,p,q,r,s,t#}::Indices(vector).
+    \nabla{#}::Derivative.
+    R_{m n p q}::RiemannTensor.
+    \nabla_{m}{R_{p q r s}}::SatisfiesBianchi.
+    obj:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:
+    young_project_tensor(_, depth=1, modulo_monoterm=True);
+    assert(obj==0)
+
+test06()
 
 #-------
 

@@ -58,7 +58,7 @@ Algorithm::result_t Algorithm::apply_generic(exptree::iterator& it, bool deep, b
 		exptree::fixed_depth_iterator next(start);
 		++next;
 		do {
-			std::cout << "apply at " << *enter->name << std::endl;
+//			std::cout << "apply at " << *enter->name << std::endl;
 			if(deep && depth==0) 
 				thisret = apply_deep(enter);
 			else
@@ -69,11 +69,22 @@ Algorithm::result_t Algorithm::apply_generic(exptree::iterator& it, bool deep, b
 				ret=result_t::l_applied;
 			} while(depth==0 && repeat && thisret==result_t::l_applied);
 
-		if(depth==0) 
+		if(depth==0)  
 			break;
 		start=next;
 		} 
-	
+
+	// If we are acting at fixed depth, we will not have gone up in the
+	// tree, so missed one cleanup action. Do it now.
+	if(depth>0) {
+		exptree::fixed_depth_iterator start=tr.begin_fixed(it, depth-1);
+		while(tr.is_valid(start)) {
+			exptree::iterator work=start;
+			++start;
+			cleanup_dispatch(kernel, tr, work);
+			}
+		}
+
 	return ret;
 	}
 

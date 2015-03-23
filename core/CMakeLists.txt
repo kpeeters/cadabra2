@@ -44,7 +44,6 @@ set(LOCAL_SRC_FILES
   PreClean.cc
   PreProcessor.cc
   Props.cc
-  PythonCdb.cc
   PythonException.cc
   Stopwatch.cc
   Storage.cc
@@ -92,6 +91,7 @@ set(LOCAL_SRC_FILES
   modules/xperm_new.cc
   algorithms/canonicalise.cc
   algorithms/collect_terms.cc
+  algorithms/decompose_product.cc
   algorithms/distribute.cc
 #  algorithms/drop_weight.cc
   algorithms/eliminate_kronecker.cc
@@ -108,7 +108,9 @@ set(LOCAL_SRC_FILES
   algorithms/split_index.cc
   algorithms/substitute.cc
   algorithms/unwrap.cc
+  algorithms/young_project.cc
   algorithms/young_project_tensor.cc
+  PythonCdb.cc
 )
 set(PUBLIC_HEADER_FILES
   Parser.hh
