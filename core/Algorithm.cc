@@ -108,11 +108,11 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 	result_t some_changes_somewhere=result_t::l_no_action;
 
 	for(;;) {
-		std::cout << "reached " << *current->name << std::endl;
+//		std::cout << "reached " << *current->name << std::endl;
 //		std::cout << "apply_deep: current = " << *current->name << std::endl;
 
 		if(current.node==last.node) {
-			std::cout << "stop after this one" << std::endl;
+//			std::cout << "stop after this one" << std::endl;
 			stop_after_this_one=true;
 			}
 
