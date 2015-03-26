@@ -1,52 +1,35 @@
 
+#include "Cleanup.hh"
 #include "algorithms/keep_terms.hh"
 
-keep_terms::keep_terms(Kernel& k, exptree& tr)
-	: Algorithm(k, tr)
+keep_terms::keep_terms(Kernel& k, exptree& tr, const std::vector<int>& terms)
+	: Algorithm(k, tr), terms_(terms)
 	{
 	}
 
 bool keep_terms::can_apply(iterator it)
 	{
 	if(*it->name!="\\sum") return false;
-	if(number_of_args()!=1 && number_of_args()!=2) return false;
 	return true;
 	}
 
 Algorithm::result_t keep_terms::apply(iterator& it)
 	{
-	sibling_iterator argit=args_begin();
-	unsigned long firstnode=to_long(*argit->multiplier);
-	long lastnode=-2;
-	if(number_of_args()==2) {
-		++argit;
-		lastnode=to_long(*argit->multiplier);
-		}
-	sibling_iterator cut1=tr.begin(it);
-	assert(firstnode<tr.number_of_children(it));
+	result_t res=result_t::l_no_action;
 
-	assert(firstnode>=0);
-	while(firstnode>0) {
-		expression_modified=true;
-		cut1=tr.erase(cut1);
-		--firstnode;
-		--lastnode;
-		}
-	++lastnode;
-	if(lastnode>0) {
-		while(lastnode>0) {
-			if(cut1==tr.end()) 
-				break;
-			++cut1;
-			--lastnode;
+	int count=0;
+	sibling_iterator walk=tr.begin(it);
+	while(walk!=tr.end(it)) {
+		if(std::find(terms_.begin(), terms_.end(), count)==terms_.end()) {
+			node_zero(walk);
+			res=result_t::l_applied;
 			}
-		while(cut1!=tr.end(it)) {
-			expression_modified=true;
-			cut1=tr.erase(cut1);
-			}
+		++count;
+		++walk;
 		}
-	
-	cleanup_sums_products(tr,it);
-	return l_applied;
+
+	cleanup_dispatch(kernel, tr, it);
+
+	return res;
 	}
 

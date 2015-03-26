@@ -15,6 +15,9 @@
 #include <boost/python/enum.hpp>
 #include <boost/python/def.hpp>
 #include <boost/python/module.hpp>
+#include <boost/python/stl_iterator.hpp>
+#include <boost/python/slice.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 #include <sstream>
 #include <memory>
@@ -66,11 +69,13 @@
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
+#include "algorithms/keep_terms.hh"
 #include "algorithms/product_rule.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/unwrap.hh"
+#include "algorithms/young_project.hh"
 #include "algorithms/young_project_tensor.hh"
 
 // Helper algorithms, not for users.
@@ -86,6 +91,13 @@
 //        keep_terms:  list of integers
 //        young_project: one list of integers describing tableau shape, one list of integers indicating indices.
 //        
+
+template<typename T>
+std::vector<T> to_std_vector(const boost::python::list& iterable )
+	{
+	return std::vector<T>( boost::python::stl_input_iterator< T >( iterable ),
+								  boost::python::stl_input_iterator< T >( ) );
+	}
 
 bool output_ipython=false;
 
@@ -520,10 +532,10 @@ std::string Property<Prop>::repr_() const
 // Templates to dispatch function calls in Python to algorithms in
 // C++.  The number attached to each name indicates the number of Ex
 // arguments that the algorithm takes. All algorithms take the 'deep'
-// and 'repeat' boolean arguments, plus an arbitrary list of
-// additional boolean arguments indicated by 'args' (see the
-// declaration of 'join_gamma' below for an example of how to declare
-// those additional arguments).
+// and 'repeat' boolean arguments, the 'depth' integer argument, plus
+// an arbitrary list of additional arguments (of any type) indicated
+// by 'args' (see the declaration of 'join_gamma' below for an example
+// of how to declare those additional arguments).
 
 template<class F, typename... Args>
 Ex *dispatch_1_ex(Ex *ex, bool deep, bool repeat, unsigned int depth, Args... args)
@@ -705,6 +717,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<unwrap>("unwrap");
 
+	def("young_project", &dispatch_1_ex<young_project, std::vector<int>, std::vector<int> >, 
+		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
+		  arg("shape"), arg("indices") ),
+		 return_internal_reference<1>() );
+
 	def("young_project_tensor", &dispatch_1_ex<young_project_tensor, bool>, 
 		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
 		  arg("modulo_monoterm")=false),
@@ -715,11 +732,15 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("expand")=true,arg("use_gendelta")=false),
 		 return_internal_reference<1>() );
 
+	def("keep_terms", &dispatch_1_ex<keep_terms, boost::python::slice>,
+		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
+		  arg("terms")),
+		 return_internal_reference<1>() );
+
 	// Algorithms which take a second Ex as argument.
 	def_algo_2<substitute>("substitute");
 	def_algo_2<split_index>("split_index");
-   //	def_algo_new<keep_terms, boost::python::list>("keep_terms");
-
+   
 
 	// Properties are declared as objects on the Python side as well. They all take two
 	// Ex objects as constructor parameters: the first one is the object(s) to which the

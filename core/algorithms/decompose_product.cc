@@ -250,6 +250,8 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 //	sf.apply_recursive(it, false);
 //	txtout << "done" << std::endl;
 
+	tr.print_recursive_treeform(std::cout, it);
+
 	cleanup_dispatch(kernel, tr, it);
 
 	return result_t::l_applied;
