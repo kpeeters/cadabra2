@@ -7,6 +7,7 @@
 class young_project : public Algorithm {
 	public:
 		young_project(Kernel&, exptree&);
+		young_project(Kernel&, exptree&, const std::vector<int>& shape, const std::vector<int>& indices);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);		

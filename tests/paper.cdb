@@ -86,10 +86,10 @@ test06()
 @reset.
 { m, n, p, q }::Indices(vector).
 { A_{m n p}, B_{m n p} }::AntiSymmetric.
-
-obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
 { m, n, p, q }::Integer(1..4).
-@decompose_product!(%):
+obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
+decompose_product(_)
+
 @canonicalise!(%):
 @collect_terms!(%);
 tst:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p} - @(obj);
