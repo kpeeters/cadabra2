@@ -13,33 +13,13 @@ young_project::young_project(Kernel& k, exptree& tr,
 									  const std::vector<int>& indices)
 	: Algorithm(k,tr), remove_traces(false)
 	{
-	// FIXME: fill tableau
-
-	assert(1==0);
-
-//	sibling_iterator arg=args_begin();
-//	sibling_iterator ycb=tr.begin(arg), yce=tr.end(arg);
-//	++arg;
-//	sibling_iterator icb=tr.begin(arg), ice=tr.end(arg);
-//	unsigned int rownum=0;
-//	while(ycb!=yce) {
-//		for(unsigned int r=0; r<*ycb->multiplier; ++r) {
-//			if(icb==ice) 
-//				throw consistency_error("out of range");
-//			if(icb->is_rational()) { // index given by position
-//				if(*icb->multiplier<0)
-//					throw consistency_error("index labels out of range");
-//				tab.add_box(rownum,to_long(*icb->multiplier));
-//				}
-//			else { // index given by name; store in the other tableau
-//				nametab.add_box(rownum, icb);
-//				}
-//			++icb;
-//			}
-//		++rownum;
-//		++ycb;
-//		}
-
+	int count=0;
+	for(unsigned int row=0; row<shape.size(); ++row) {
+		for(int col=0; col<shape[row]; ++col) {
+			tab.add_box(row, indices[count]);
+			++count;
+			}
+		}
 	}
 
 bool young_project::can_apply(iterator it)

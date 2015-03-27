@@ -150,7 +150,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 	// Make the tensor product tableaux.
 
 	yngtab::LR_tensor(m1, m2, dim, prod.get_back_insert_iterator(), true);
-	
+
 	// The tableaux in 'prod' contain in their boxes iterators to
 	// the indices in the original expression. We convert these to
 	// numerical positions so they can be applied to copies of the
@@ -184,7 +184,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 	// Now create a Young projector sum of terms with the indices
 	// distributed according to the tensor product tableaux.
 
-// 	txtout << numprod << std::endl;
+ 	std::cout << numprod << std::endl;
 
 	exptree rep;
 	rep.set_head(str_node("\\tmp"));  // not \sum to prevent auto flattening
