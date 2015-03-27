@@ -1046,6 +1046,7 @@ void LR_tensor(const Tab& tab1, const Tab& tab2, unsigned int maxrows,
 template<class T, class OutputIterator>
 void LR_tensor(const tableaux<T>&, bool symmetric, unsigned int maxrows, OutputIterator outit)
 	{
+	assert(1==0);
 	}
 
 

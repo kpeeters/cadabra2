@@ -1,0 +1,107 @@
+# Testing the young tableau routines by determining the projection
+# of the square of a four-component tensor onto the 2x4 tableau.
+
+W_{a b c d}::WeylTensor.
+
+WWa:= W_{r1 r2 s1 s2} W_{r3 r4 s3 s4};
+WWb:= 16/5*@(WWa):
+
+# Note: the 16/5 normalisation was computed separately.
+
+# The direct route:
+#
+young_project(WWa, shape=[2,2,2,2], indices=[0,2,1,3,4,6,5,7])
+indexsort(WWa)
+order(WWa, '_{r1},_{r2},_{r3},_{r4}')
+order(WWa, '_{s1},_{s2},_{s3},_{s4}')
+
+
+# Doing it by hand:
+#
+@sym!(WWb){_{r1},_{s1}}:
+@sym!(%){_{r2},_{s2}}:
+@sym!(%){_{r3},_{s3}}:
+@sym!(%){_{r4},_{s4}}:
+@asym!(%){_{r1},_{r2},_{r3},_{r4}}:
+@asym!(%){_{s1},_{s2},_{s3},_{s4}}:
+@indexsort!(%):
+@acanonicalorder!(%){_{r1},_{r2},_{r3},_{r4}}:
+@acanonicalorder!(%){_{s1},_{s2},_{s3},_{s4}}:
+@collect_terms!(%);
+
+tst1:= @(WWa)-@(WWb);
+@collect_terms!(%);
+@assert(tst1);
+
+
+# Test 27: The example from the paper with Michael and Christian:
+#
+@reset;
+R_{m n p q}::RiemannTensor.
+{m,n,p,q,r,s,t,u}::Indices(vector).
+term1:= R_{m n p q} R_{m n p q};
+@young_project_tensor!(%){ModuloMonoterm}:
+@distribute!(%):
+@canonicalise!(%):
+@rename_dummies!(%):
+@collect_terms!(%);
+#
+term2:= R_{m n p q} R_{m p n q};
+@young_project_tensor!(%){ModuloMonoterm}:
+@distribute!(%):
+@canonicalise!(%):
+@rename_dummies!(%):
+@collect_terms!(%);
+#
+tst27:= 2*@(term2) - @(term1);
+@collect_terms!(%);
+@assert(tst27);
+
+# Test 27b: The same as above, but now using young_project_product.
+#
+@reset;
+R_{m n p q}::RiemannTensor.
+{m,n,p,q,r,s,t,u}::Indices(vector).
+term1:= R_{m n p q} R_{m n p q};
+@young_project_product!(%);
+#
+term2:= R_{m n p q} R_{m p n q};
+@young_project_product!(%);
+#
+tst27b:= 2*@(term2) - @(term1);
+@collect_terms!(%);
+@assert(tst27b);
+
+# Test 28: Simple Bianchi.
+#
+@reset.
+{m,n,p,q,r,s,t#}::Indices(vector).
+\nabla{#}::Derivative.
+R_{m n p q}::RiemannTensor.
+\nabla_{m}{R_{p q r s}}::SatisfiesBianchi.
+obj28:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:
+@young_project_tensor!2(%){ModuloMonoterm};
+@collect_terms!(%);
+@assert(obj28);
+
+
+# Test 30: SatisfiesBianchi
+#
+@reset.
+{r,m,n,p,q,s,k,j}::Indices(vector).
+dC_{r m n p q}::TableauSymmetry(shape={3,2}, indices={1,3,0,2,4}).
+C_{m n p q}::WeylTensor.
+\nabla{#}::Derivative.
+\nabla_{r}{ C_{m n p q} }::SatisfiesBianchi.
+
+pl1:= dC_{r m n p q};
+@young_project_tensor!(%){ModuloMonoterm};
+
+pl2:= \nabla_{s}{\nabla_{r}{C_{m n p q}}};
+@young_project_tensor!1(%){ModuloMonoterm};
+
+@substitute!(pl1)( dC_{r m n p q} -> \nabla_{s}{\nabla_{r}{C_{m n p q}}} );
+tst:= @(pl1) - @(pl2);
+@collect_terms!(%);
+@assert(tst);
+

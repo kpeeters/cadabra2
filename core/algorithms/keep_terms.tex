@@ -1,10 +1,10 @@
-\cdbalgorithm{keep\_terms}{}
+\cdbalgorithm{keep\_terms}{\it terms=[{\sf list of term numbers}]}
 
-Keep the~$m$th to the~$n$th terms in a sum, dropping all others.
+Keep the terms indicated by the list, dropping all others.
 \begin{screen}{1,2,3}
-A + B + C + D + E + F;
-@keep_terms!(%){3}{5};
-D + E + F;
+ex:= A + B + C + D + E + F;
+keep_terms(_, [2,4])
+C + E
 \end{screen}
 Note that counting starts from zero.
 

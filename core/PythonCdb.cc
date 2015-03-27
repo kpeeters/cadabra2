@@ -563,6 +563,19 @@ Ex *dispatch_1_ex_new(Ex *ex, Args args, bool deep, bool repeat, unsigned int de
 	return ex;
 	}
 
+template<class F, typename Arg1, typename Arg2>
+Ex *dispatch_1_ex_new(Ex *ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), ex->tree, arg1, arg2);
+
+	exptree::iterator it=ex->tree.begin().begin();
+	
+	ex->reset_state();
+	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+	
+	return ex;
+	}
+
 template<class F>
 Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat, unsigned int depth)
 	{
@@ -705,11 +718,6 @@ class iterable_converter {
 			}
 };
 
-std::string ctest(std::vector<int> vec) 
-	{
-	return "yes";
-	}
-
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
 // as the various algorithms that can act on these and the properties that can
@@ -783,11 +791,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<unwrap>("unwrap");
 
-	def("young_project", &dispatch_1_ex<young_project, std::vector<int>, std::vector<int> >, 
-		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
-		  arg("shape"), arg("indices") ),
-		 return_internal_reference<1>() );
-
 	def("young_project_tensor", &dispatch_1_ex<young_project_tensor, bool>, 
 		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
 		  arg("modulo_monoterm")=false),
@@ -801,12 +804,18 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Automatically convert Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
-	def("ctest", &ctest);
- 
 	def("keep_terms", &dispatch_1_ex_new<keep_terms, std::vector<int> >,
 		 (arg("ex"), 
-		  arg("terms"),arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		  arg("terms"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
+
+	def("young_project", &dispatch_1_ex_new<young_project, std::vector<int>, std::vector<int> >, 
+		 (arg("ex"),
+		  arg("shape"), arg("indices"), 
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
 
 	// Algorithms which take a second Ex as argument.
 	def_algo_2<substitute>("substitute");
