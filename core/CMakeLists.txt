@@ -6,6 +6,9 @@ project(Cadabra)
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
+# Speedup compilation using cotire.
+include(cotire)
+
 # Locate Boost and Boost.Python.
 find_package(Boost 1.45.0)
 include_directories("${Boost_INCLUDE_DIRS}" "/usr/include/python2.7")
@@ -144,6 +147,9 @@ add_library(scopetest SHARED scopetest.cc)
 set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 set_target_properties(scopetest PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
+
+# Activate cotire for the entire library. This takes _a lot_ of disk space.
+cotire(cadabra2)
 
 #if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clangx")
 #  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES} python)

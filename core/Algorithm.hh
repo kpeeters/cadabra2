@@ -98,6 +98,8 @@ class Algorithm {
 		static unsigned int number_of_direct_indices(iterator it);
 
 		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
+
+
 	protected:
 		Kernel&  kernel;
 		exptree& tr;
@@ -122,6 +124,17 @@ class Algorithm {
 		template<class Iter>
 		range_vector_t::iterator find_arg_superset(range_vector_t&, Iter st, Iter nd);
 		range_vector_t::iterator find_arg_superset(range_vector_t&, sibling_iterator it);
+
+		// Locate objects inside the tree (formerly in the 'locate' algorithm).
+		unsigned int locate_single_object_(exptree::iterator obj_to_find, 
+													  exptree::iterator st, exptree::iterator nd,
+													  std::vector<unsigned int>& store);
+		bool         locate_object_set_(exptree::iterator set_parent,
+												  exptree::iterator st, exptree::iterator nd,
+												  std::vector<unsigned int>& store);
+		bool         locate_(sibling_iterator st, sibling_iterator nd, std::vector<unsigned int>&);
+		static bool  compare_(const str_node&, const str_node&);
+		
 
 		/// Determine structure (version-2)
 		bool     is_termlike(iterator);

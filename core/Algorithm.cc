@@ -1395,3 +1395,58 @@ bool Algorithm::cleanup_anomalous_products(exptree& tr, exptree::iterator& it)
 	return false;
 	}
 
+
+unsigned int Algorithm::locate_single_object_(exptree::iterator obj_to_find, 
+															 exptree::iterator st, exptree::iterator nd,
+															 std::vector<unsigned int>& store)
+	{
+	unsigned int count=0;
+	unsigned int index=0;
+	while(st!=nd) {
+		exptree::iterator it1=st; it1.skip_children(); ++it1;
+		if(tr.equal(st, it1, obj_to_find, Algorithm::compare_)) {
+			++count;
+			store.push_back(index);
+			}
+		++st;
+		++index;
+		}
+	return count;
+	}
+
+bool Algorithm::locate_object_set_(exptree::iterator set_parent,
+											  exptree::iterator st, exptree::iterator nd,
+											  std::vector<unsigned int>& store)
+	{
+	exptree::sibling_iterator fst=tr.begin(set_parent);
+	exptree::sibling_iterator fnd=tr.end(set_parent);
+	while(fst!=fnd) {
+		exptree::iterator aim=fst;
+		if((*aim->name)=="\\comma") {
+			if(locate_object_set_(aim, st, nd, store)==false)
+				return false;
+			}
+		else {
+			if((*aim->name).size()==0 && tr.number_of_children(aim)==1)
+				aim=tr.begin(aim);
+			if(locate_single_object_(aim, st, nd, store)!=1)
+				return false;
+			}
+		++fst;
+		}
+	return true;
+	}
+
+bool Algorithm::locate_(exptree::sibling_iterator st, exptree::sibling_iterator nd,
+								std::vector<unsigned int>& storage)
+	{
+	// Locate the objects in which to symmetrise. We use an integer
+	// index (offset wrt. 'st') rather than an iterator because the
+	// latter only apply to a single tree, not to its copies.
+
+	exptree::iterator it=st;
+	exptree::iterator end=nd;
+
+	return locate_object_set_(args_begin(), it, end, storage);
+	}
+
