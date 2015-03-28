@@ -577,17 +577,27 @@ Ex *dispatch_1_ex_new(Ex *ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsi
 	return ex;
 	}
 
+template<class F>
+Ex *dispatch_generic(F& algo, Ex *ex, bool deep, bool repeat, unsigned int depth)
+	{
+	exptree::iterator it=ex->tree.begin().begin();
+	ex->reset_state();
+	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+	return ex;
+	}
+
 template<class F, typename Arg1>
 Ex *dispatch_2_ex_ex_new(Ex *ex, Ex *exarg, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
 	{
 	F algo(*get_kernel_from_scope(), ex->tree, exarg->tree, arg1);
+	return dispatch_generic(algo, ex, deep, repeat, depth);
+	}
 
-	exptree::iterator it=ex->tree.begin().begin();
-	
-	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
-	
-	return ex;
+template<class F, typename Arg1>
+Ex *dispatch_2_ex_string_new(Ex *ex, const std::string& args, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
+	{
+	Ex *argsobj = new Ex(args);
+	return dispatch_2_ex_ex_new<F, Arg1>(ex, argsobj, arg1, deep, repeat, depth);
 	}
 
 template<class F>
@@ -831,6 +841,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_internal_reference<1>() );
 
 	def("order", &dispatch_2_ex_ex_new<order, bool>, 
+		 (arg("ex"),
+		  arg("factors"), arg("anticommuting")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("order", &dispatch_2_ex_string_new<order, bool>, 
 		 (arg("ex"),
 		  arg("factors"), arg("anticommuting")=false,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
