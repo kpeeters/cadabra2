@@ -126,13 +126,12 @@ class Algorithm {
 		range_vector_t::iterator find_arg_superset(range_vector_t&, sibling_iterator it);
 
 		// Locate objects inside the tree (formerly in the 'locate' algorithm).
-		unsigned int locate_single_object_(exptree::iterator obj_to_find, 
+		unsigned int locate_single_object(exptree::iterator obj_to_find, 
 													  exptree::iterator st, exptree::iterator nd,
 													  std::vector<unsigned int>& store);
-		bool         locate_object_set_(exptree::iterator set_parent,
+		bool         locate_object_set(const exptree& objs,
 												  exptree::iterator st, exptree::iterator nd,
 												  std::vector<unsigned int>& store);
-		bool         locate_(sibling_iterator st, sibling_iterator nd, std::vector<unsigned int>&);
 		static bool  compare_(const str_node&, const str_node&);
 		
 

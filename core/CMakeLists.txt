@@ -104,6 +104,7 @@ set(LOCAL_SRC_FILES
   algorithms/indexsort.cc
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
+  algorithms/order.cc
   algorithms/prodcollectnum.cc
   algorithms/product_rule.cc
   algorithms/reduce_sub.cc

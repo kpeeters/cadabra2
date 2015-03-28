@@ -1,16 +1,17 @@
 
 #pragma once
 
-class order : virtual public algorithm, virtual public locate {
+#include "Algorithm.hh"
+
+class order : virtual public Algorithm {
 	public:
-		order(Kernel&, exptree&, bool anticommuting);
+		order(Kernel&, exptree&, exptree& objs, bool ac);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
 
 	protected:
-		result_t doit(iterator&, bool sign);
-
-		bool anticomm;
+		exptree objects;
+		bool    anticomm;
 };
 
