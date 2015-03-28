@@ -70,6 +70,7 @@
 #include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
+#include "algorithms/order.hh"
 #include "algorithms/product_rule.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
@@ -576,6 +577,19 @@ Ex *dispatch_1_ex_new(Ex *ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsi
 	return ex;
 	}
 
+template<class F, typename Arg1>
+Ex *dispatch_2_ex_ex_new(Ex *ex, Ex *exarg, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), ex->tree, exarg->tree, arg1);
+
+	exptree::iterator it=ex->tree.begin().begin();
+	
+	ex->reset_state();
+	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+	
+	return ex;
+	}
+
 template<class F>
 Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat, unsigned int depth)
 	{
@@ -816,8 +830,14 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
+	def("order", &dispatch_2_ex_ex_new<order, bool>, 
+		 (arg("ex"),
+		  arg("factors"), arg("anticommuting")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
 
 	// Algorithms which take a second Ex as argument.
+//	def_algo_2<order>("order");
 	def_algo_2<substitute>("substitute");
 	def_algo_2<split_index>("split_index");
    

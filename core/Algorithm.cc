@@ -1,7 +1,7 @@
 /* 
 
 	Cadabra: a field-theory motivated computer algebra system.
-	Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>
+	Copyright (C) 2001-2015  Kasper Peeters <kasper.peeters@phi-sci.com>
 
    This program is free software: you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -1396,9 +1396,9 @@ bool Algorithm::cleanup_anomalous_products(exptree& tr, exptree::iterator& it)
 	}
 
 
-unsigned int Algorithm::locate_single_object_(exptree::iterator obj_to_find, 
-															 exptree::iterator st, exptree::iterator nd,
-															 std::vector<unsigned int>& store)
+unsigned int Algorithm::locate_single_object(exptree::iterator obj_to_find, 
+															exptree::iterator st, exptree::iterator nd,
+															std::vector<unsigned int>& store)
 	{
 	unsigned int count=0;
 	unsigned int index=0;
@@ -1414,22 +1414,29 @@ unsigned int Algorithm::locate_single_object_(exptree::iterator obj_to_find,
 	return count;
 	}
 
-bool Algorithm::locate_object_set_(exptree::iterator set_parent,
-											  exptree::iterator st, exptree::iterator nd,
-											  std::vector<unsigned int>& store)
+bool Algorithm::locate_object_set(const exptree& objs, 
+											 exptree::iterator st, exptree::iterator nd,
+											 std::vector<unsigned int>& store)
 	{
-	exptree::sibling_iterator fst=tr.begin(set_parent);
-	exptree::sibling_iterator fnd=tr.end(set_parent);
+	// Locate the objects in which to symmetrise. We use an integer
+	// index (offset wrt. 'st') rather than an iterator because the
+	// latter only apply to a single tree, not to its copies.
+
+	exptree::iterator top=objs.begin(objs.begin());
+	assert(*top->name=="\\comma");
+
+	exptree::sibling_iterator fst=objs.begin(top);
+	exptree::sibling_iterator fnd=objs.end(top);
 	while(fst!=fnd) {
 		exptree::iterator aim=fst;
 		if((*aim->name)=="\\comma") {
-			if(locate_object_set_(aim, st, nd, store)==false)
+			if(locate_object_set(aim, st, nd, store)==false)
 				return false;
 			}
 		else {
 			if((*aim->name).size()==0 && tr.number_of_children(aim)==1)
 				aim=tr.begin(aim);
-			if(locate_single_object_(aim, st, nd, store)!=1)
+			if(locate_single_object(aim, st, nd, store)!=1)
 				return false;
 			}
 		++fst;
@@ -1437,16 +1444,19 @@ bool Algorithm::locate_object_set_(exptree::iterator set_parent,
 	return true;
 	}
 
-bool Algorithm::locate_(exptree::sibling_iterator st, exptree::sibling_iterator nd,
-								std::vector<unsigned int>& storage)
+bool Algorithm::compare_(const str_node& one, const str_node& two)
 	{
-	// Locate the objects in which to symmetrise. We use an integer
-	// index (offset wrt. 'st') rather than an iterator because the
-	// latter only apply to a single tree, not to its copies.
+	// If the obj->name is empty, this means that we look for a tree with
+	// anything as root, but the required index structure in obj.  This
+	// requires a slightly different 'equal_to' (one that always matches
+	// an empty node with a non-empty node).
 
-	exptree::iterator it=st;
-	exptree::iterator end=nd;
+	if(/* one.fl.bracket!=two.fl.bracket || */ one.fl.parent_rel!=two.fl.parent_rel)
+		return false;
 
-	return locate_object_set_(args_begin(), it, end, storage);
+	if((*two.name).size()==0)
+		return true;
+	else if(one.name==two.name)
+		return true;
+	return false;
 	}
-

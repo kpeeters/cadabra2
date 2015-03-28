@@ -1,8 +1,9 @@
 
 #include "algorithms/order.hh"
+#include "Combinatorics.hh"
 
-order::order(Kernel& k, exptree& tr, iterator it, bool ac)
-	: algorithm(k, tr), anticomm(ac)
+order::order(Kernel& k, exptree& tr, exptree& objs, bool ac)
+	: Algorithm(k, tr), objects(objs), anticomm(ac)
 	{
 	}
 
@@ -20,8 +21,9 @@ Algorithm::result_t order::apply(iterator& st)
 	prod_wrap_single_term(st);
 
 	std::vector<unsigned int> locs;
-	if(locate_(tr.begin(st), tr.end(st), locs)) {
-		if(!(::is_sorted(locs.begin(), locs.end()))) {
+	if(locate_object_set(objects, tr.begin(st), tr.end(st), locs)) {
+
+		if(!(std::is_sorted(locs.begin(), locs.end()))) {
 			res=result_t::l_applied;
 
 			std::vector<unsigned int> ordered(locs);
@@ -33,20 +35,22 @@ Algorithm::result_t order::apply(iterator& st)
 					}
 				}
 			
-			iterator orig_st=tr.begin(args_begin());
+			// \expression{\comma{A}{B}}
+			sibling_iterator orig_st=objects.begin(objects.begin(objects.begin()));
+
 			for(unsigned int i=0; i<ordered.size(); ++i) {
 				iterator dest_st=tr.begin(st);
 				for(unsigned int k=0; k<ordered[i]; ++k)
 					++dest_st;
-//				txtout << "replacing " << *dest_st->name << " with " << *orig_st->name << std::endl;
 				if((*orig_st->name).size()==0)
 					tr.replace(dest_st, tr.begin(orig_st));
 				else
 					tr.replace(dest_st, orig_st);
-				expression_modified=true;
-				orig_st.skip_children();
+
 				++orig_st;
 				}
+
+			res=result_t::l_applied;
 			}
 		}
 	prod_unwrap_single_term(st);
