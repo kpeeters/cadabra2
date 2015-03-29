@@ -80,7 +80,5 @@ OSX:
 
 
 
-
 LAST:
-- see symmetry.cdb first test: sometimes collect_terms does not get called.
 - symmetrising in index sets, not individual indices, does not work yet.

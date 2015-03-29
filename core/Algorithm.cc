@@ -1422,7 +1422,12 @@ bool Algorithm::locate_object_set(const exptree& objs,
 	// index (offset wrt. 'st') rather than an iterator because the
 	// latter only apply to a single tree, not to its copies.
 
-	exptree::iterator top=objs.begin(objs.begin());
+	// We accept either a tree with a \comma node at the top, or
+	// a tree which is \expression{\comma{...}}.
+	exptree::iterator top=objs.begin();
+	if(*top->name!="\\comma") 
+		top = objs.begin(objs.begin());
+
 	assert(*top->name=="\\comma");
 
 	exptree::sibling_iterator fst=objs.begin(top);
@@ -1430,6 +1435,8 @@ bool Algorithm::locate_object_set(const exptree& objs,
 	while(fst!=fnd) {
 		exptree::iterator aim=fst;
 		if((*aim->name)=="\\comma") {
+			// Objects can themselves be lists of other objects (for instance
+         // when we want to symmetrise in index pairs).
 			if(locate_object_set(aim, st, nd, store)==false)
 				return false;
 			}
