@@ -22,17 +22,18 @@ bool sym::can_apply(iterator it)
 Algorithm::result_t sym::apply(iterator& it)
 	{
 	prod_wrap_single_term(it);
-	sibling_iterator st=tr.begin(it);
-	sibling_iterator nd=tr.end(it);
-	result_t res=doit(st,nd,sign);
-	if(res==result_t::l_applied)
-		it=tr.parent(st);
+	result_t res=doit(it,sign);
+//	if(res==result_t::l_applied)
+//		it=tr.parent(st);
+
+//IS DOIT not doing that right?
+
 	return res;
 	}
 
-Algorithm::result_t sym::doit(sibling_iterator st, sibling_iterator nd, bool sign)
+Algorithm::result_t sym::doit(iterator& it, bool sign)
 	{
-	assert(*tr.parent(st)->name=="\\prod");
+	assert(*it->name=="\\prod");
 
 	// Setup combinations class. First construct original and block length.
 	sibling_iterator fst=objects.begin(objects.begin(objects.begin()));
@@ -112,14 +113,14 @@ Algorithm::result_t sym::doit(sibling_iterator st, sibling_iterator nd, bool sig
 	sibling_iterator dummy=rep.append_child(top, str_node("dummy"));
 
 	for(unsigned int i=0; i<raw_ints.size(); ++i) {
-		exptree copytree(tr.parent(st));// CORRECT?
+		exptree copytree(it);// CORRECT?
 		copytree.begin()->fl.bracket=str_node::b_none;
 		copytree.begin()->fl.parent_rel=str_node::p_none;
 		
 		std::map<iterator, iterator, exptree::iterator_base_less> replacement_map;
 		
 		for(unsigned int j=0; j<raw_ints[i].size(); ++j) {
-			iterator repl=copytree.begin(), orig=tr.parent(st); // CORRECT?
+			iterator repl=copytree.begin(), orig=it; // CORRECT?
 			++repl; ++orig;
 			for(unsigned int k=0; k<argloc_2_treeloc[raw_ints[i][j]]; ++k)
 				++orig;
@@ -172,12 +173,10 @@ Algorithm::result_t sym::doit(sibling_iterator st, sibling_iterator nd, bool sig
 //	eo.print_infix(rep.begin());
 //	txtout << std::endl;
 
-	iterator reploc=tr.replace(tr.parent(st), rep.begin());
-	if(*(tr.parent(reploc)->name)=="\\sum") {
-		tr.flatten(reploc);
-		reploc=tr.erase(reploc);
-		}
-	st=tr.begin(reploc);
-	nd=tr.end(reploc);
+	it=tr.replace(it, rep.begin());
+//	if(*(tr.parent(reploc)->name)=="\\sum") {
+//		tr.flatten(reploc);
+//		reploc=tr.erase(reploc);
+//		}
 	return result_t::l_applied;
 	}

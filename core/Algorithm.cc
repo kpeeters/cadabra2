@@ -145,6 +145,7 @@ Algorithm::result_t Algorithm::apply_deep(exptree::iterator& it)
 			result_t res = apply(work);
 			if(res==Algorithm::result_t::l_applied) {
 				some_changes_somewhere=result_t::l_applied;
+//				tr.print_recursive_treeform(std::cout, tr.begin());
 				rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
 				// The 'work' iterator can now point to a new node. If we were acting at the
