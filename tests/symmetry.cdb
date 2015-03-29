@@ -6,12 +6,12 @@
 # is defined by:
 #
 def test01():
+    __cdbkernel__=create_scope()
     obj1:= b*a^{i j k};
     sym(_, '^{i},^{k}')
     asym(_, '^{i},^{j}')
     tst1:= b/4*( a^{i j k} + a^{k j i} - a^{j i k} - a^{k i j} ) - @(obj1);
     distribute(_)
-    collect_terms(_)
     assert(tst1==0)
 
 test01()
@@ -28,54 +28,53 @@ test01()
 # @assert(tst2);
 
 # Symmetrising in sets:
-#
-obj3:= A_{i k l m}*q;
-asym(_, '{_{i},_{k}}, {_{l},_{m}} }')
-tst3:= (1/2) * A_{i k l m}*q - (1/2) * A_{l m i k}*q - @(obj3);
-@collect_terms!(%);
-@assert(tst3);
 
-R_{a b c d}::WeylTensor.
-obj4:= R_{r1 r2 r3 r4}*q;
-asym(_, '_{r1}, _{r2}')
-asym(_, '_{r3}, _{r4}')
-sym(_,  '{_{r1},_{r2}}, {_{r3},_{r4}}')
-tst4:= R_{r1 r2 r3 r4}*q - @(obj4);
-@indexsort!(%):
-@collect_terms!(%);
-@assert(tst4);
+def test03():
+    __cdbkernel__=create_scope()
+    obj3:= A_{i k l m}*q;
+    asym(_, '{_{i},_{k}}, {_{l},_{m}} }')
+    tst3:= (1/2) * A_{i k l m}*q - (1/2) * A_{l m i k}*q - @(obj3);
+    assert(tst3==0)
 
-obj5:= R_{r1 r2 r4 r3}*q;
-@asym!(%){ {_{r1},_{r2}}, {_{r3},_{r4}} };
-tst5:= (1/2) * R_{r1 r2 r4 r3}*q - (1/2) * R_{r4 r3 r1 r2}*q - @(obj5);
-@collect_terms!(%);
-@assert(tst5);
+test03()
+
+def test04():
+    __cdbkernel__=create_scope()
+    R_{a b c d}::WeylTensor.
+    obj4:= R_{r1 r2 r3 r4}*q;
+    asym(_, '_{r1}, _{r2}')
+    asym(_, '_{r3}, _{r4}')
+    sym(_,  '{_{r1},_{r2}}, {_{r3},_{r4}}')
+    tst4:= R_{r1 r2 r3 r4}*q - @(obj4);
+    indexsort(_)
+    assert(tst4==0)
+
+test04()
+
+def test05():
+    __cdbkernel__=create_scope()
+    R_{a b c d}::WeylTensor.
+    obj5:= R_{r1 r2 r4 r3}*q;
+    asym(_, '{_{r1},_{r2}}, {_{r3},_{r4}}')
+    tst5:= (1/2) * R_{r1 r2 r4 r3}*q - (1/2) * R_{r4 r3 r1 r2}*q - @(obj5);
+    assert(tst5==0)
+
+test05()
 
 # Generating subsets of permutations, in order to split up
-# very large ones:
+# very large ones (no longer possible in v2)
 #
-obj6:= q*A_{a b c d};
-@sym!(%){_{a},_{b},_{c},_{d}}{Start:>2}{End:>4};
-tst6:= q/24 A_{a c b d} + q/24 A_{a c d b} - @(obj6);
-@collect_terms!(%);
-@assert(tst6);
-
-# Test 7:= sym/asym on single terms.
-#
-obj7a:= @asym[R_{m n p q}]{_{m},_{n}};
-tst7a:= 1/2 R_{m n p q} - 1/2 R_{n m p q} - @(obj7a);
-@collect_terms!(%);
-@assert(tst7a);
-
-obj7b:= @sym[R_{m n p q}]{_{m},_{n}};
-tst7b:= 1/2 R_{m n p q} + 1/2 R_{n m p q} - @(obj7b);
-@collect_terms!(%);
-@assert(tst7b);
+# obj6:= q*A_{a b c d};
+# @sym!(%){_{a},_{b},_{c},_{d}}{Start:>2}{End:>4};
+# tst6:= q/24 A_{a c b d} + q/24 A_{a c d b} - @(obj6);
+# @collect_terms!(%);
+# @assert(tst6);
 
 
 # Test 8: sym/asym on whole tensors, with different index lengths
 
 def test08():
+    __cdbkernel__=create_scope()
     obj8:=A_{a b} B_{c};
     sym(_, 'A_{a b}, B_{c}')
     tst8:=1/2 A_{a b} B_{c} + 1/2 B_{c} A_{a b} - @(obj8);
