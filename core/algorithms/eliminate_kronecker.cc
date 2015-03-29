@@ -123,7 +123,8 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 			st=tr.erase(st);
 			}
 		}
-	cleanup_sums_products(tr, st);
+	cleanup_dispatch(kernel, tr, st);
+//	cleanup_sums_products(tr, st);
 //	txtout << "looped " << looping << std::endl;
 
 	return ret;

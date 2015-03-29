@@ -116,8 +116,12 @@ Algorithm::result_t distribute::apply(iterator& prod)
 	pc.apply_generic(ret, true, false, 0);
 //	cleanup_sums_products(tr, ret);
 //	txtout << "..." << *ret->name << std::endl;
-	cleanup_nests_below(tr, ret, false); // CHANGED  true to false in last argument
-	cleanup_nests(tr, ret, false); // CHANGED true to false in last argument
+
+
+	cleanup_dispatch(kernel, tr, ret);
+
+//	cleanup_nests_below(tr, ret, false); // CHANGED  true to false in last argument
+//	cleanup_nests(tr, ret, false); // CHANGED true to false in last argument
 
 //	tr.print_entire_tree(std::cerr);
 

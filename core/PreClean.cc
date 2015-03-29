@@ -1,7 +1,6 @@
 
 #include "PreClean.hh"
 #include "Cleanup.hh"
-#include "algorithms/reduce_sub.hh"
 
 void pre_clean_dispatch(Kernel& kernel, exptree& ex, exptree::iterator& it)
 	{
