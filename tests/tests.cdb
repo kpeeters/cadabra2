@@ -1,0 +1,27 @@
+
+tst1:= (b/4)*(a^{i} + a^{j} - a^{j} );
+
+
+
+ex:= C B A D;
+order(ex, 'A, B, C, D', anticommuting=True)
+
+ex:= A B C D;
+sym(ex, 'A, B, D')
+
+ex:=     
+
+
+def test04():
+    \diff{#}::PartialDerivative.
+    obj6:= \diff{g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho}}_{\sigma};
+    product_rule(_)
+    tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
+        +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
+    collect_terms(_);
+
+test04()
+
+ctest([1,2,3])
+ex:=a+b+c+d;
+keep_terms(_, [1,2,3])

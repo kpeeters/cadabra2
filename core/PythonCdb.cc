@@ -75,13 +75,14 @@
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
+#include "algorithms/sym.hh"
 #include "algorithms/unwrap.hh"
 #include "algorithms/young_project.hh"
 #include "algorithms/young_project_tensor.hh"
 
 // Helper algorithms, not for users.
 
-#include "algorithms/reduce_sub.hh"
+//#include "algorithms/reduce_sub.hh"
 
 
 // TODO: 
@@ -180,9 +181,15 @@ Ex::Ex(std::string ex_)
 	// full expression may not have consistent indices otherwise.
 	pull_in();
 
+//	tree.print_recursive_treeform(std::cout, tree.begin());
+
 	// Basic cleanup of rationals and subtractions, followed by
    // cleanup of nested sums and products.
-	pre_clean(*get_kernel_from_scope(), tree, tree.begin());
+	pre_clean_dispatch_deep(*get_kernel_from_scope(), tree);
+
+//	tree.print_recursive_treeform(std::cout, tree.begin());
+
+
 	cleanup_dispatch_deep(*get_kernel_from_scope(), tree);
 	exptree::iterator top = tree.begin();
 	cleanup_nests_below(tree, top);
@@ -234,7 +241,7 @@ std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
 
 void Ex::pull_in()
 	{
-	ratrewrite rr(*get_kernel_from_scope(), tree);
+	collect_terms rr(*get_kernel_from_scope(), tree);
 	
 	exptree::iterator it=tree.begin();
 	while(it!=tree.end()) {
@@ -489,6 +496,7 @@ void inject_defaults(Kernel *k)
 	// Create and inject properties; these then get owned by the kernel.
 	inject_property(k, new Distributable(),      std::make_shared<Ex>("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       std::make_shared<Ex>("\\prod{#}"), 0);
+	inject_property(k, new IndexInherit(),       std::make_shared<Ex>("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), std::make_shared<Ex>("\\prod{#}"), 0);
 	inject_property(k, new CommutingAsSum(),     std::make_shared<Ex>("\\sum{#}"), 0);
 	}
@@ -811,7 +819,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
 	def_algo_1<rename_dummies>("rename_dummies");
-	def_algo_1<reduce_sub>("reduce_sub");
+//	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<unwrap>("unwrap");
 
@@ -848,6 +856,19 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("order", &dispatch_2_ex_string_new<order, bool>, 
 		 (arg("ex"),
 		  arg("factors"), arg("anticommuting")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+
+	def("sym", &dispatch_2_ex_string_new<sym, bool>, 
+		 (arg("ex"),
+		  arg("items"), arg("anticommuting")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("asym", &dispatch_2_ex_string_new<sym, bool>, 
+		 (arg("ex"),
+		  arg("items"), arg("anticommuting")=true,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 

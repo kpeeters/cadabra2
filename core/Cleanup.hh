@@ -45,7 +45,9 @@ void cleanup_derivative(Kernel& k, exptree&, exptree::iterator& it);
 // Walk depth-first along the entire tree and call cleanup_dispatch at
 // every node.
 
-void cleanup_dispatch_deep(Kernel& k, exptree&);
+typedef void (*dispatcher_t)(Kernel& k, exptree&, exptree::iterator& it);
+
+void cleanup_dispatch_deep(Kernel& k, exptree&, dispatcher_t disp=&cleanup_dispatch);
 
 
 // DEPRECATED:
