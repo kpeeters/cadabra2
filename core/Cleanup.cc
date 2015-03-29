@@ -8,7 +8,13 @@
 
 void cleanup_dispatch(Kernel& kernel, exptree& tr, exptree::iterator& it)
 	{
-	if(*it->name=="\\prod")            cleanup_productlike(kernel, tr, it);
+//	std::cout << "dispatch at " << *it->name << "\n";
+	if(it->is_zero())  {
+		::zero(it->multiplier);
+		tr.erase_children(it);
+		it->name=name_set.insert("1").first;
+		}
+	else if(*it->name=="\\prod")       cleanup_productlike(kernel, tr, it);
 	else if(*it->name=="\\sum")        cleanup_sumlike(kernel, tr, it);
 	else if(*it->name=="\\expression") cleanup_expressionlike(kernel, tr, it);
 
@@ -114,8 +120,11 @@ void cleanup_derivative(Kernel& k, exptree& tr, exptree::iterator& it)
 		}
 	}
 
-void cleanup_dispatch_deep(Kernel& k, exptree& tr)
+void cleanup_dispatch_deep(Kernel& k, exptree& tr, dispatcher_t dispatch)
 	{
+	// Cleanup the entire tree starting from the deepest nodes and
+	// working upwards. 
+
 	// This duplicates work of Algorithm::apply, but we want to have an
 	// independent cleanup unit which does not rely on things we may
 	// want to change in Algorithm::apply in the future, and we do not
@@ -129,7 +138,7 @@ void cleanup_dispatch_deep(Kernel& k, exptree& tr)
 		exptree::post_order_iterator next=it;
 		++next;
 		exptree::iterator tmp=it;
-		cleanup_dispatch(k, tr, tmp);
+		dispatch(k, tr, tmp);
 		it=next;
 		}
 	}

@@ -1,0 +1,78 @@
+# The Young tableau
+#
+#   i k
+#   j
+# 
+# is defined by:
+#
+obj1:= b*a^{i j k};
+sym(_, '^{i},^{k}')
+asym(_, '^{i},^{j}')
+tst1:= b/4*( a^{i j k} + a^{k j i} - a^{j i k} - a^{k i j} ) - @(obj1);
+distribute(_)
+
+# It is possible to (anti)symmetrise modulo implicit
+# (anti)symmetrisations:
+#
+obj2:= A_{m n p} B_{q r s};
+@asym!(%){_{m},_{n},_{q}}{0,1};
+tst2:= 1/3 * A_{m n p} * B_{q r s}
+    - 1/3 * A_{m q p} * B_{n r s}
+    + 1/3 * A_{q m p} * B_{n r s} - @(obj2);
+@collect_terms!(%);
+@assert(tst2);
+
+# Symmetrising in sets:
+#
+obj3:= A_{i k l m}*q;
+@asym!(%){ {_{i},_{k}}, {_{l},_{m}} };
+tst3:= (1/2) * A_{i k l m}*q - (1/2) * A_{l m i k}*q - @(obj3);
+@collect_terms!(%);
+@assert(tst3);
+
+R_{a b c d}::WeylTensor.
+obj4:= R_{r1 r2 r3 r4}*q;
+@asym!(%){ _{r1}, _{r2} };
+@asym!(%){ _{r3}, _{r4} };
+@sym!(%){ {_{r1},_{r2}}, {_{r3},_{r4}} };
+@collect_terms!(%);
+tst4:= R_{r1 r2 r3 r4}*q - @(obj4);
+@indexsort!(%):
+@collect_terms!(%);
+@assert(tst4);
+
+obj5:= R_{r1 r2 r4 r3}*q;
+@asym!(%){ {_{r1},_{r2}}, {_{r3},_{r4}} };
+tst5:= (1/2) * R_{r1 r2 r4 r3}*q - (1/2) * R_{r4 r3 r1 r2}*q - @(obj5);
+@collect_terms!(%);
+@assert(tst5);
+
+# Generating subsets of permutations, in order to split up
+# very large ones:
+#
+obj6:= q*A_{a b c d};
+@sym!(%){_{a},_{b},_{c},_{d}}{Start:>2}{End:>4};
+tst6:= q/24 A_{a c b d} + q/24 A_{a c d b} - @(obj6);
+@collect_terms!(%);
+@assert(tst6);
+
+# Test 7:= sym/asym on single terms.
+#
+obj7a:= @asym[R_{m n p q}]{_{m},_{n}};
+tst7a:= 1/2 R_{m n p q} - 1/2 R_{n m p q} - @(obj7a);
+@collect_terms!(%);
+@assert(tst7a);
+
+obj7b:= @sym[R_{m n p q}]{_{m},_{n}};
+tst7b:= 1/2 R_{m n p q} + 1/2 R_{n m p q} - @(obj7b);
+@collect_terms!(%);
+@assert(tst7b);
+
+# Test 8: sym/asym on whole tensors, with different index lengths
+#
+obj8:=A_{a b} B_{c};
+@sym!(%){A_{a b}, B_{c}};
+tst8:=1/2 A_{a b} B_{c} + 1/2 B_{c} A_{a b} - @(obj8);
+@collect_terms!(%);
+@assert(tst8);
+			 

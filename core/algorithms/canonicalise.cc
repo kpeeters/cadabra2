@@ -128,12 +128,16 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	totalsw.start();
 	prod_wrap_single_term(it);
 	
-	if(remove_traceless_traces(it)) 
+	if(remove_traceless_traces(it)) {
+		cleanup_dispatch(kernel, tr, it);
 		return result_t::l_applied;
+		}
 
-	if(remove_vanishing_numericals(it)) 
+	if(remove_vanishing_numericals(it)) {
+		cleanup_dispatch(kernel, tr, it);
 		return result_t::l_applied;
-
+		}
+	
 
 	// Now the real thing...
 	index_map_t ind_free, ind_dummy;

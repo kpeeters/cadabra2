@@ -8,18 +8,16 @@
 // Defines a number of algorithms which are not needed during any later
 // stages of the manipulation of an expression.
 
+
 #include "Algorithm.hh"
 
 // Handle the entire preclean stage.
 
-void pre_clean(Kernel&, exptree&, exptree::iterator);
+void pre_clean_dispatch(Kernel& k, exptree&, exptree::iterator& it);
+void pre_clean_dispatch_deep(Kernel& k, exptree&);
 
-class ratrewrite : public Algorithm {
-	public:
-		ratrewrite(Kernel&, exptree&);
+// Cleanup for individual node types.
 
-		virtual bool     can_apply(iterator);
-		virtual result_t apply(iterator&);		
-};
-
-
+void cleanup_rational(Kernel& k, exptree&, exptree::iterator& it);
+void cleanup_frac(Kernel& k, exptree&, exptree::iterator& it);
+void cleanup_sub(Kernel& k, exptree&, exptree::iterator& it);

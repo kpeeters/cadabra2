@@ -107,11 +107,12 @@ set(LOCAL_SRC_FILES
   algorithms/order.cc
   algorithms/prodcollectnum.cc
   algorithms/product_rule.cc
-  algorithms/reduce_sub.cc
+#  algorithms/reduce_sub.cc
   algorithms/rename_dummies.cc
   algorithms/sort_product.cc
   algorithms/split_index.cc
   algorithms/substitute.cc
+  algorithms/sym.cc
   algorithms/unwrap.cc
   algorithms/young_project.cc
   algorithms/young_project_tensor.cc
