@@ -1,0 +1,22 @@
+
+\section{Command line interface}
+\subsection{Options}
+
+\begin{tabularx}{.8\textwidth}{lX}
+\verb|-d| & Run in debug mode, in which a Cadabra crash will land you in gdb
+            from which you can inspect stack traces and so on (only useful for
+            developers).
+\end{tabularx}
+
+
+
+\subsection{Editing facilities}
+
+When entering a Cadabra expression, that is, when a line contains a
+\verb|:=| or \verb|::| token indicating an expression or property
+declaration respectively, Cadabra enters a multi-line input mode which
+is somewhat different from the Python editing mode. As long as the
+input does not end on a colon \verb|:| or semi-colon \verb|;| new
+lines will be requested, and this is indicated by the prompt becoming
+a vertical bar. Multi-line input is strung together as one line before
+being fed to the Cadabra parser.
