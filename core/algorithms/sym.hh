@@ -17,5 +17,5 @@ class sym : virtual public Algorithm {
 		std::vector<unsigned int>  argloc_2_treeloc;
 		combin::combinations<unsigned int> raw_ints;
 
-		result_t doit(sibling_iterator, sibling_iterator, bool);
+		result_t doit(iterator&, bool);
 };
