@@ -18,21 +18,19 @@ order(WWa, '_{s1},_{s2},_{s3},_{s4}', anticommuting=True)
 
 # Doing it by hand:
 #
-sym(WWB, '_{r1},_{s1}')
-sym(WWB, '_{r2},_{s2}')
-sym(WWB, '_{r3},_{s3}')
-sym(WWB, '_{r4},_{s4}')
+sym(WWb, '_{r1},_{s1}')
+sym(WWb, '_{r2},_{s2}')
+sym(WWb, '_{r3},_{s3}')
+sym(WWb, '_{r4},_{s4}')
 
-@asym!(%){_{r1},_{r2},_{r3},_{r4}}:
-@asym!(%){_{s1},_{s2},_{s3},_{s4}}:
-@indexsort!(%):
-@acanonicalorder!(%){_{r1},_{r2},_{r3},_{r4}}:
-@acanonicalorder!(%){_{s1},_{s2},_{s3},_{s4}}:
-@collect_terms!(%);
+asym(WWb, '_{r1},_{r2},_{r3},_{r4}')
+asym(WWb, '_{s1},_{s2},_{s3},_{s4}')
+indexsort(WWb)
+order(WWb, '_{r1},_{r2},_{r3},_{r4}', anticommuting=True)
+order(WWb, '_{s1},_{s2},_{s3},_{s4}', anticommuting=True)
 
 tst1:= @(WWa)-@(WWb);
-@collect_terms!(%);
-@assert(tst1);
+assert(tst1==0)
 
 
 # Test 27: The example from the paper with Michael and Christian:
