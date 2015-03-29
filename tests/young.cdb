@@ -28,26 +28,22 @@ test01()
 
 # Test 27: The example from the paper with Michael and Christian:
 #
-@reset;
-R_{m n p q}::RiemannTensor.
-{m,n,p,q,r,s,t,u}::Indices(vector).
-term1:= R_{m n p q} R_{m n p q};
-@young_project_tensor!(%){ModuloMonoterm}:
-@distribute!(%):
-@canonicalise!(%):
-@rename_dummies!(%):
-@collect_terms!(%);
-#
-term2:= R_{m n p q} R_{m p n q};
-@young_project_tensor!(%){ModuloMonoterm}:
-@distribute!(%):
-@canonicalise!(%):
-@rename_dummies!(%):
-@collect_terms!(%);
-#
-tst27:= 2*@(term2) - @(term1);
-@collect_terms!(%);
-@assert(tst27);
+
+def test27():
+    R_{m n p q}::RiemannTensor.
+    {m,n,p,q,r,s,t,u}::Indices(vector).
+    term1:= R_{m n p q} R_{m n p q};
+    young_project_tensor(_)
+    distribute(_)
+    canonicalise(_)
+    term2:= R_{m n p q} R_{m p n q};
+    young_project_tensor(_)
+    distribute(_)
+    canonicalise(_)
+    tst27:= 2*@(term2) - @(term1);
+    assert(tst27==0)
+
+test27()
 
 # Test 27b: The same as above, but now using young_project_product.
 #

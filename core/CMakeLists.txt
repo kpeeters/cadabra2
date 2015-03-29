@@ -115,6 +115,7 @@ set(LOCAL_SRC_FILES
   algorithms/sym.cc
   algorithms/unwrap.cc
   algorithms/young_project.cc
+  algorithms/young_project_product.cc
   algorithms/young_project_tensor.cc
 )
 set(PUBLIC_HEADER_FILES

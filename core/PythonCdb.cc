@@ -78,6 +78,7 @@
 #include "algorithms/sym.hh"
 #include "algorithms/unwrap.hh"
 #include "algorithms/young_project.hh"
+#include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
 
 // Helper algorithms, not for users.
@@ -822,6 +823,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 //	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<unwrap>("unwrap");
+	def_algo_1<young_project_product>("young_project_product");
 
 	def("young_project_tensor", &dispatch_1_ex<young_project_tensor, bool>, 
 		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
