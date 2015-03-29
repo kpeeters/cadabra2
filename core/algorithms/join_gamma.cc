@@ -309,8 +309,9 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 		st = tr.replace(st, rep.begin());
 		}
 
-   cleanup_expression(tr, st);
-   cleanup_nests(tr, st);
+	cleanup_dispatch(kernel, tr, st);
+//   cleanup_expression(tr, st);
+//   cleanup_nests(tr, st);
 	return result_t::l_applied;
 	}
 

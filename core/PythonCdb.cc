@@ -191,8 +191,8 @@ Ex::Ex(std::string ex_)
 
 
 	cleanup_dispatch_deep(*get_kernel_from_scope(), tree);
-	exptree::iterator top = tree.begin();
-	cleanup_nests_below(tree, top);
+//	exptree::iterator top = tree.begin();
+//	cleanup_nests_below(tree, top);
 	}
 
 std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
