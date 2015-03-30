@@ -105,6 +105,19 @@ tst:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p} - @(obj);
 
 #-------
 
+def testtmp()
+\nabla{#}::Derivative.
+{i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
+ex:=C_{i j m n} \nabla_{k}{C_{i j k p}} \nabla_{q}{C_{m n p q}};
+rl:=\nabla_{i}{C_{k m l i}} -> 0;
+# This one does NOT work
+substitute(ex, '\nabla_{i}{C_{k m l i}} -> 0')
+# but this one does
+substitute(ex, rl)
+assert(ex==0)
+
+
+
 @reset.
 {i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
 C_{m n p q}::WeylTensor.
@@ -119,16 +132,20 @@ E:=  C_{j m n k} C_{m p q n} C_{p j k q} + 1/2 C_{j k m n} C_{p q m n} C_{j k p 
 
 exp:= \nabla_{i}{\nabla_{j}{ @(Eij) }} - 1/6 \nabla_{i}{\nabla_{i}{ @(E) }};
 
-@distribute!(%): @prodrule!(%):
-@distribute!(%): @prodrule!(%):
+distribute(_)
+product_rule(_)
+distribute(_)
+product_rule(_)
 
-@prodsort!(%): @canonicalise!(%): @rename_dummies!(%): 
-@sumflatten!(%):
-@collect_terms!(%);
+sort_product(_)
+canonicalise(_)
+rename_dummies(_)
+flatten_sum(_)
 
-@substitute!(%)( \nabla_{i}{C_{k i l m}} -> 0, \nabla_{i}{C_{k m l i}} -> 0 );
+substitute(_, '\nabla_{i}{C_{k i l m}} -> 0, \nabla_{i}{C_{k m i l}} -> 0' )
 
-@young_project_product!(%):
+young_project_product(_)
+
 @sumflatten!(%):
 @collect_terms!(%);
 @assert(exp);
@@ -165,7 +182,6 @@ exp:= \nabla_{i}{\nabla_{j}{ @(Eij) }} - 1/6 \nabla_{i}{\nabla_{i}{ @(E) }};
 
 #-------
 
-@reset.
 def test99():
     {M, N, P}::Indices(space).
     {m, n, p}::Indices(subspace1).
@@ -174,6 +190,8 @@ def test99():
     split_index(_, "{M, m, a}")
     tst:= A_{M m}  B_{m P} + A_{M a} B_{a P} - @(obj);
     assert(tst==0)
+
+test99()
 
 #-------
 

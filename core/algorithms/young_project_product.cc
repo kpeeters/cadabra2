@@ -1,6 +1,10 @@
 
+#include "Cleanup.hh"
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
+#include "algorithms/distribute.hh"
+#include "algorithms/collect_terms.hh"
+#include "algorithms/canonicalise.hh"
 
 young_project_product::young_project_product(Kernel& k, exptree& tr)
 	: Algorithm(k, tr)
@@ -15,6 +19,8 @@ bool young_project_product::can_apply(iterator it)
 
 Algorithm::result_t young_project_product::apply(iterator& it)
 	{
+	result_t res=result_t::l_no_action;
+
 	exptree rep;
 	iterator topsum = rep.set_head(str_node("\\sum"));
 
@@ -31,7 +37,7 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 			  if(*ii->name!="\\sum") 
 					ii=tr.wrap(ii, str_node("\\sum"));
 
-			  expression_modified=true;
+			  res=result_t::l_applied;
 			  if(first) {
 					// Add a new \prod node to rep for each term in the projected factor.
 					first=false;
@@ -62,7 +68,7 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 							  rep.replace(put, ii);
 							  
 							  // Distribute the product.
-							  distribute   dis(work, work.end());
+							  distribute   dis(kernel, work);
 							  if(dis.can_apply(workit)) 
 									dis.apply(workit);
 							  }
@@ -70,9 +76,9 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 //						 work.print_recursive_treeform(txtout, work.begin());
 
 						 // Canonicalise all new products.
-						 canonicalise can(work, work.end());
+						 canonicalise can(kernel, work);
 //						 txtout << *workit->name << " " << *put->name << std::endl;
-						 can.apply_recursive(workit, false);
+                   can.apply_generic(workit, true, false, 0);
 						 if(*work.begin()->multiplier!=0) {
 							  // The upcoming move wants to see a sum, even if there is only one term
 							  if(*work.begin()->name!="\\sum")
@@ -91,7 +97,7 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 						 
 						 trm=nxttrm;
 						 }
-					collect_terms coll(rep, rep.end());
+               collect_terms coll(kernel, rep);
 					if(coll.can_apply(topsum)) 
 						 coll.apply(topsum);
 
@@ -123,16 +129,16 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 		 sib=nxt;
 		 }
 	
-	if(expression_modified) {
+	if(res==result_t::l_applied) {
 		 it=tr.replace(it, rep.begin());
-		 expression_modified=true;
 		 // FIXME: this canonicalise should really not be necessary
 //		 txtout << "WHOOAAH " << *it->name << std::endl;
 //		 tr.print_recursive_treeform(txtout, it);
 //		 canonicalise can(tr, tr.end());
 //		 can.apply_recursive(it, false);
-		 cleanup_sums_products(tr, it);
-		 return l_applied;
+		 
+		 cleanup_dispatch(kernel, tr, it);
 		 }
-	else return l_no_action;
+
+	return res;
 	}
