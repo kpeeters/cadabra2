@@ -37,9 +37,7 @@ as well as a number of libraries which are readily available from
 Homebrew, http://brew.sh.  Before attempting to build Cadabra, make
 sure a basic Homebrew installation is present, and then do
 
-  brew install cmake boost boost-python pcre gmp jsonpp python pkgconfig
-
-HERE: shall we just include websocketpp into the tree?
+  brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig
 
 In order to run the Cadabra notebook interface succesfully, you also
 need a TeX installation such as MacTeX, http://tug.org/mactex/ .
