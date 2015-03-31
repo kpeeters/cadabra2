@@ -12,6 +12,8 @@ substitute::substitute(Kernel& k, exptree& tr, exptree& args_)
 //		throw constructor_error();
 //		}
 
+//	args.print_recursive_treeform(std::cout, args.begin());
+
 	sibling_iterator subslist=args.begin().begin();
 	for(unsigned int i=0; i<args.arg_size(subslist); ++i) {
 		iterator arrow=tr.arg(subslist, i);
