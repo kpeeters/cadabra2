@@ -61,7 +61,7 @@ struct my_equal {
      *         to uppercase using the given locale.
      */
     bool operator()(charT ch1, charT ch2) {
-        return (charT (*)(charT, std::locale const &))(std::toupper)(ch1, m_loc) == (charT (*)(charT, std::locale const &))(std::toupper)(ch2, m_loc);
+        return std::toupper(ch1, m_loc) == std::toupper(ch2, m_loc);
     }
 private:
     std::locale const & m_loc;
