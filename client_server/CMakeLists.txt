@@ -19,7 +19,7 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(PkgConfig REQUIRED)
 find_package(PythonLibs 2.7 REQUIRED)
-find_package(websocketpp REQUIRED)            # from github
+#find_package(websocketpp REQUIRED)            # from github
 #pkg_check_modules(JSONCPP jsoncpp REQUIRED)   # libjsoncpp-dev
 find_library(JSONCPP_LIB jsoncpp REQUIRED)
 message("-- Found JSONCPP ${JSONCPP_LIB}")
@@ -38,7 +38,8 @@ add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc
 target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB})
 
 # Create server binary
-include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})
+#include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})
+include_directories("." "./websocketpp" ${JSONCPP_INCLUDE_DIR})
 add_executable(cadabra-server cadabra-server.cc)
 add_executable(test_talk_to_server test_talk_to_server.cc)
 add_executable(regexp_tester regexp_tester.cc)

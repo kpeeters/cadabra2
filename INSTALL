@@ -37,7 +37,7 @@ as well as a number of libraries which are readily available from
 Homebrew, http://brew.sh.  Before attempting to build Cadabra, make
 sure a basic Homebrew installation is present, and then do
 
-  brew install cmake boost boost-python pcre gmp jsonpp python
+  brew install cmake boost boost-python pcre gmp jsonpp python pkgconfig
 
 HERE: shall we just include websocketpp into the tree?
 
@@ -45,4 +45,30 @@ In order to run the Cadabra notebook interface succesfully, you also
 need a TeX installation such as MacTeX, http://tug.org/mactex/ .
 Any TeX will do, as long as 'latex' and 'dvipng' are available, and
 the 'breqn' package is installed.
+
+Then do the following to configure Cadabra:
+
+   cd cadabra2
+   mkdir build
+   cd build
+   cmake ..
+
+This configures the system and will warn you about missing dependencies. 
+Build and install using
+
+   make
+   sudo make install
+
+You can then run the self-tests using
+
+   make check
+
+(these tests currently require that you have done 'sudo make install' 
+first). The command line version is started with
+
+   cadabra2
+
+and the (not yet functional) GUI is started (from the build directory) with
+
+   ../frontend/osx/Cadabra/build/Release/Cadabra.app/Contents/MacOS/Cadabra
 

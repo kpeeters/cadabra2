@@ -26,7 +26,7 @@ void NotebookWindow::add_cell(const DTree &tr, DTree::iterator it, bool visible)
     NSSize contentSize = [controller.scrollbox contentSize];
 
     NSView *container = [[NSView alloc] initWithFrame:CGRectMake(0,0,contentSize.width,contentSize.height)];
-    [container setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+    //[container setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     
     NSTextView *label = [[NSTextView alloc] initWithFrame:CGRectMake(0,0,contentSize.width,100)];
     [[label.textStorage mutableString] setString:@"hello world"];
@@ -40,18 +40,21 @@ void NotebookWindow::add_cell(const DTree &tr, DTree::iterator it, bool visible)
     [[label2 textContainer] setContainerSize:NSMakeSize(contentSize.width, FLT_MAX)];
     [[label2 textContainer] setWidthTracksTextView:YES];
 
-    NSLayoutConstraint *c1=[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeBottom
+    //[label  setTranslatesAutoresizingMaskIntoConstraints:NO];
+    //[label2 setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    NSLayoutConstraint *c3=[NSLayoutConstraint constraintWithItem:label attribute:NSLayoutAttributeBottom
                                                           relatedBy:NSLayoutRelationEqual toItem:label2
                                                         attribute:NSLayoutAttributeTop multiplier:1.0 constant:0];
     
-    [container addConstraint:c1];
+  //  [container addConstraint:c3];
     
     canvasses[current_canvas]->visualcells[&(*it)]=label;
 
     [container addSubview:label];
     [container addSubview:label2];
     [controller.scrollbox setHasVerticalScroller:YES];
-    [controller.scrollbox setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
+    //[controller.scrollbox setAutoresizingMask:NSViewWidthSizable|NSViewHeightSizable];
     [controller.scrollbox setDocumentView:container];
     [controller.scrollbox setNeedsDisplay:YES];
 }

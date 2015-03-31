@@ -143,6 +143,8 @@ class filled_tableau : public tableau {
 				in_column_iterator& operator-=(unsigned int);
 				bool                operator<(const in_column_iterator& other) const;
 				bool                operator>(const in_column_iterator& other) const;
+				bool                operator<=(const in_column_iterator& other) const;
+				bool                operator>=(const in_column_iterator& other) const;
 				ptrdiff_t           operator-(const in_column_iterator&) const;
 				bool                operator==(const in_column_iterator&) const;
 				bool                operator!=(const in_column_iterator&) const;
@@ -467,6 +469,20 @@ bool filled_tableau<T>::in_column_iterator::operator==(const in_column_iterator&
 	{
 	if(tab==other.tab && row_number==other.row_number && column_number==other.column_number)
 		return true;
+	return false;
+	}
+
+template<class T>
+bool filled_tableau<T>::in_column_iterator::operator<=(const in_column_iterator& other) const
+	{
+	if(row_number<=other.row_number) return true;
+	return false;
+	}
+
+template<class T>
+bool filled_tableau<T>::in_column_iterator::operator>=(const in_column_iterator& other) const
+	{
+	if(row_number>=other.row_number) return true;
 	return false;
 	}
 
