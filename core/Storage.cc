@@ -755,6 +755,15 @@ bool str_node::is_range_wildcard() const
 	return false;
 	}
 
+bool str_node::is_siblings_wildcard() const
+	{
+	if(name->size()>0) {
+		if((*name)[name->size()-1]=='@')
+			return true;
+		}
+	return false;
+	}
+
 bool str_node::is_autodeclare_wildcard() const
 	{
 	if(name->size()>0)

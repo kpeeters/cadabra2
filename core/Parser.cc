@@ -128,6 +128,8 @@ bool Parser::string2tree(const std::string& inp)
 	ss2 << pp;
 	str="  "+ss2.str()+"  "; // for lookahead
 
+//	std::cout << str << std::endl;
+
 	// Initialise the parser.
 	unsigned int i=0; 
 	current_mode.push_back(m_initialgroup);

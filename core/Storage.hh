@@ -91,6 +91,7 @@ class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 		bool is_name_wildcard() const;    //  ?
 		bool is_object_wildcard() const;  //  ??
 		bool is_range_wildcard() const;   //  #{..}
+		bool is_siblings_wildcard() const; // a...
 		bool is_autodeclare_wildcard() const; // m#
 		bool is_indexstar_wildcard() const; // ?* in sub/super
 		bool is_indexplus_wildcard() const; // ?+ in sub/super
