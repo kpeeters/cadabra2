@@ -1,7 +1,7 @@
 /* 
 
 	Cadabra: a field-theory motivated computer algebra system.
-	Copyright (C) 2001-2011  Kasper Peeters <kasper.peeters@aei.mpg.de>
+	Copyright (C) 2001-2015  Kasper Peeters <cadabra@phi-sci.com>
 
    This program is free software: you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -22,7 +22,8 @@
 	
    Bugs: - This code is ugly. Then again, this is only because human
 			  beings cannot be bothered to type in prefix notation. Since
-			  it ain't broke, I won't fix it.
+			  it ain't broke, I won't fix it. Should really be replaced by
+			  a parser written using ANTLR or Bisonc++ or something like that.
 
    Remember: we want brackets around infix operators to be around every child,
 	          not around the operator itself. 
@@ -38,7 +39,8 @@ const unsigned char preprocessor::orders[]     ={ '!', tok_pow, '/', '*', tok_we
 																  '-', '+', tok_sequence, '=', tok_unequals, 
 																  '<', '>', '|', tok_arrow, tok_set_option, 
 																  tok_declare, ',', '~', 0 };
-const char * const  preprocessor::order_names[]={ "\\factorial", "\\pow", "\\frac", "\\prod", "\\wedge", 
+const char * const  preprocessor::order_names[]={ "\\factorial", 
+																  "\\pow", "\\frac", "\\prod", "\\wedge", 
 																  "\\sub", "\\sum", "\\sequence", 
 																  "\\equals", "\\unequals", "\\less",
 																  "\\greater", "\\conditional", 
@@ -121,7 +123,7 @@ bool preprocessor::default_is_product_() const
 	{
 	if(cur.order==order_prod || cur.order==order_frac || cur.order==order_arrow || cur.order==order_comma ||
 		cur.order==order_minus || cur.order==order_plus || cur.order==order_equals ||
-		cur.order==order_unequals) 
+		cur.order==order_unequals ) 
 		return true; // spaces in comma-separated lists/products are stars
 	int n=current_bracket_(true);
 	return (n==2 || n==3 || n==0 || (n==1 && cur.is_index==false) );
@@ -177,6 +179,9 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 	// operators, yet these can also just denote spaces by themselves if 
    // followed by an explicit operator, the loop below iterates until a
 	// non-space character is found. 
+
+//	std::cout << "cur char=" << cur_str[cur_pos] << "\n";
+
 	if(verbatim_) {
 		return cur_str[cur_pos];
 		}
@@ -229,13 +234,25 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 		if(c=='.') {
 			if(cur_str[cur_pos+1]=='.') {
 				++cur_pos;
-				cur_str[cur_pos]=tok_sequence;
-				c=tok_sequence; // FIXME: Another hack... (sequence)
+				if(cur_str[cur_pos+1]=='.') {
+					cur_str[cur_pos]=tok_siblings;
+					cur_str[cur_pos+1]=tok_siblings;
+					++cur_pos;
+					c=tok_siblings;
+					return '@'; // FIXME: worst hack of them all, we're running out of tricks...
+					}
+				else {
+					cur_str[cur_pos]=tok_sequence;
+					c=tok_sequence; // FIXME: Another hack... (sequence)
+					}
 				}
 			else return c;
 			}
+		
+//	HERE: how do we force get_token to return a '*' for the space separating .... and b ?
 
 		if(isblank(c)) {
+//			std::cout << "blank " << (int)(c) << "\n";
 			if(candidate==0) candidate=' ';
 			++cur_pos;
 			continue;
@@ -265,9 +282,10 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 			c=cur_str[cur_pos]+128;
 			}
 		if(candidate!=0) {
+//			std::cout << "candidate " << (int)candidate << "\n";
 			--cur_pos;
 			if(candidate==' ' && default_is_product_()) return '*';
-			else return candidate;
+			return candidate;
 			}
 		else {
 			std::string acplusone=cur.accu + (char)(c);
@@ -525,6 +543,7 @@ void preprocessor::parse_internal_()
 					cur.parts.push_back(cur.accu);
 					cur.accu.erase();
 					cur.head_is_generated=false;
+//					print_stack();
 					}
 				else if(onum<cur.order) {
 					std::string tmp=cur.accu;
@@ -591,6 +610,7 @@ void preprocessor::parse_internal_()
 //			cur.is_index=false; // TEST
 			}
 		else if(c==' ') {
+//			std::cout << "space\n";
 			if(cur.accu.size()>0) {
 				cur.parts.push_back(cur.accu);
 				cur.accu.erase();

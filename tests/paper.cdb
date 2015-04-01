@@ -142,7 +142,10 @@ canonicalise(_)
 rename_dummies(_)
 flatten_sum(_)
 
-substitute(_, r'\nabla_{i}{C_{k i l m}} -> 0, \nabla_{i}{C_{k m i l}} -> 0' )
+ex:= \nabla_{a... i}{C_{k i l m}};
+ex:= a... b c;
+
+substitute(_, r'\nabla_{... i}{C_{k i l m}} -> 0, \nabla_{... i}{C_{k m i l}} -> 0' )
 
 young_project_product(_)
 

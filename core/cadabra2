@@ -182,6 +182,7 @@ if __name__ == '__main__':
             for a in sys.argv[1:]:
                 if a!='-d':
                     rs += " "+a
+            print('executing '+rs)
             os.system(rs)
         else:
             execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
