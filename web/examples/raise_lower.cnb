@@ -1,0 +1,98 @@
+% Cadabra notebook version 1.1
+\documentclass[11pt]{article}
+\usepackage[textwidth=460pt, textheight=660pt]{geometry}
+\usepackage[usenames]{color}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{breqn}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\begin{document}
+{\color[named]{Blue}\begin{verbatim}
+{a,b,c}::Indices(position=fixed).
+g_{a b}::Metric.
+g^{a b}::InverseMetric.
+\end{verbatim}}
+% Begin TeX comment
+Assigning list property Indices to $\{a,\; b,\; c\}$.
+\\
+% End TeX comment
+% Begin TeX comment
+Assigning property Metric to ${g}_{a b}$.
+\\
+% End TeX comment
+% Begin TeX comment
+Assigning property InverseMetric to ${g}^{a b}$.
+\\
+% End TeX comment
+{\color[named]{Blue}\begin{verbatim}
+A_{a} B^{a} - A^{a} B_{a};
+\end{verbatim}}
+% orig
+% A_{a} B^{a} - A^{a} B_{a}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+1\specialcolon{}= {A}_{a} {B}^{a} - {A}^{a} {B}_{a};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@canonicalise!(%):
+@collect_terms!(%);
+\end{verbatim}}
+% orig
+% 0
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+1\specialcolon{}= 0;
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+{a,b,c,d,e}::Indices(position=independent).
+\end{verbatim}}
+% Begin TeX comment
+Assigning list property Indices to $\{a,\; b,\; c,\; d,\; e\}$.
+\\
+% End TeX comment
+{\color[named]{Blue}\begin{verbatim}
+A_{a c d} B^{a} - A^{a}_{c d} B_{a};
+\end{verbatim}}
+% orig
+% A_{a c d} B^{a} - A^{a}_{c d} B_{a}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+4\specialcolon{}= {A}_{a c d} {B}^{a} - {A}^{a}\,_{c d} {B}_{a};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@rewrite_indices!(%){ A_{a c d} }{ g^{a b} };
+@rewrite_indices!(%){ B_{a} }{ g^{a b} };
+\end{verbatim}}
+% orig
+% A_{a c d} B^{a} - A_{b c d} B_{a} g^{a b}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+4\specialcolon{}= {A}_{a c d} {B}^{a} - {A}_{b c d} {B}_{a} {g}^{a b};
+\end{dmath*}
+% orig
+% A_{a c d} B_{b} g^{a b} - A_{b c d} B_{a} g^{a b}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+4\specialcolon{}= {A}_{a c d} {B}_{b} {g}^{a b} - {A}_{b c d} {B}_{a} {g}^{a b};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@canonicalise!(%);
+\end{verbatim}}
+% orig
+% A_{a c d} B_{b} g^{a b} - A_{a c d} B_{b} g^{a b}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+4\specialcolon{}= {A}_{a c d} {B}_{b} {g}^{a b} - {A}_{a c d} {B}_{b} {g}^{a b};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@collect_terms!(%);
+\end{verbatim}}
+% orig
+% 0
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+4\specialcolon{}= 0;
+\end{dmath*}
+\end{document}

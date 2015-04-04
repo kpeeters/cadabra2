@@ -1,0 +1,257 @@
+% Cadabra notebook version 1.2
+\documentclass[11pt]{article}
+\usepackage[textwidth=460pt, textheight=660pt]{geometry}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{breqn}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\begin{document}
+% Begin TeX cell closed
+\section*{Commutator algebra}
+
+An often asked question is how to handle commutator algebra with Cadabra. This requires a
+few steps which are perhaps not entirely transparent to a new user, hence the following
+simple example. 
+
+In this notebook, we will verify the invariance of the two quadratic Casimirs of the 
+Poincar\'e algebra. That is, we will verify that 
+\begin{equation}
+[ J_{\mu\nu}, P^2 ] = 0\,,\quad{\rm and}\quad
+[ J_{\mu\nu}, W^2 ] = 0\,,
+\end{equation}
+where~$P^2 = P_\mu P_\mu$ is the momentum squared and $W^2 = W_\mu W_\mu$ is the square of 
+\begin{equation}
+W_\mu = \epsilon_{\mu\nu\rho\sigma} P_{\nu} J_{\rho\sigma}\,.
+\end{equation}
+
+We first make some straightforward property assignments: declaration of indices, declaration 
+of the operators~$P_\mu$ and $J_{\mu\nu}$ and the fact that they do not commute, and so on.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+{\mu,\nu,\rho,\sigma,\lambda,\kappa,\alpha,\beta,\gamma,\xi}::Indices
+{\mu,\nu,\rho,\sigma,\lambda,\kappa,\alpha,\beta,\gamma,\xi}::Integer(0..3).
+\eta_{\mu\nu}::Metric.
+\delta{#}::KroneckerDelta.
+e_{\mu\nu\lambda\rho}::EpsilonTensor(delta=\delta).
+J_{\mu\nu}::AntiSymmetric.
+J_{\mu\nu}::SelfNonCommuting.
+{ J_{\mu\nu}, P_{\mu} }::NonCommuting.
+\end{verbatim}}
+\begin{verbatim}
+Assigning property Integer to \mu, \nu, \rho, \sigma, \lambda, \kappa, \alpha, \beta, \gamma, \xi.
+Assigning list property Indices to \mu, \nu, \rho, \sigma, \lambda, \kappa, \alpha, \beta, \gamma, \xi, {, \comma.
+Assigning property Metric to \eta.
+Assigning property KroneckerDelta to \delta.
+Assigning property EpsilonTensor to e.
+Assigning property AntiSymmetric to J.
+Assigning property SelfNonCommuting to J.
+Assigning list property NonCommuting to J, P.
+\end{verbatim}
+% Begin TeX cell closed
+We also need one more somewhat non-intuitive property. This one tells the program that the 
+operators~$P_\mu$ and $J_{\mu\nu}$ are
+to be kept inside commutators (they cannot be factored out). Cadabra does not (yet) deduce
+this from the {\tt NonCommuting} property information, so you have to add this by hand.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+{J_{\mu\nu}, P_{\mu}}::Depends(\commutator).
+\end{verbatim}}
+\begin{verbatim}
+Assigning property Depends to J, P.
+\end{verbatim}
+% Begin TeX cell closed
+In order to simplify expressions automatically, we set up a few default rules which are
+to be executed after each command. These simply get rid of metric and Kronecker delta 
+factors, canonicalise the indices and collect equal terms.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+::PostDefaultRules( @@eliminate_metric!(%), @@eliminate_kr!(%),
+                    @@canonicalise!(%), @@rename_dummies!(%), @@collect_terms!(%) ).
+\end{verbatim}}
+\begin{verbatim}
+Assigning property PostDefaultRules to .
+\end{verbatim}
+% Begin TeX cell closed
+\subsection*{The Poincar\'e algebra}
+
+We now input the rules which define the Poincar\'e algebra. 
+These are simply substitution rules, to be used later in explicit substition commands.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+poincare:= { \commutator{J_{\mu\nu}}{P_{\rho}}
+                        -> \eta_{\mu\rho} P_{\nu} - \eta_{\nu\rho} P_{\mu},
+             \commutator{J_{\mu\nu}}{J_{\rho\sigma}}
+                        -> \eta_{\mu\rho} J_{\nu\sigma} 
+                                             - \eta_{\mu\sigma} J_{\nu\rho}
+                                             - \eta_{\nu\rho} J_{\mu\sigma}
+                                             + \eta_{\nu\sigma} J_{\mu\rho} };
+\end{verbatim}}
+% orig
+% \{[J_{\mu \nu}, P_{\rho}] -> (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu}), [J_{\mu \nu}, J_{\rho \sigma}] -> (\eta_{\mu \rho} J_{\nu \sigma} - \eta_{\mu \sigma} J_{\nu \rho} - \eta_{\nu \rho} J_{\mu \sigma} + \eta_{\nu \sigma} J_{\mu \rho})\};
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+poincare\specialcolon{}= \{[J_{\mu \nu}, P_{\rho}] \rightarrow (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu}),\quad [J_{\mu \nu}, J_{\rho \sigma}] \rightarrow (\eta_{\mu \rho} J_{\nu \sigma} - \eta_{\mu \sigma} J_{\nu \rho} - \eta_{\nu \rho} J_{\mu \sigma} + \eta_{\nu \sigma} J_{\mu \rho})\};
+\end{dmath*}
+% Begin TeX cell closed
+\subsection*{The $P^2$ Casimir}
+% End TeX cell
+% Begin TeX cell closed
+We know that $P^2$ is a Casimir, so the following should vanish:
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+\commutator{J_{\mu\nu}}{ P_{\rho}P_{\rho} };
+\end{verbatim}}
+% orig
+% [J_{\mu \nu}, P_{\rho} P_{\rho}];
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+2\specialcolon{}= [J_{\mu \nu}, P_{\rho} P_{\rho}];
+\end{dmath*}
+% Begin TeX cell closed
+Write out the commutator of products as a sum of commutators (this works because we have declared \verb|\commutator| as a \verb|Derivative|).
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+@prodrule!(%);
+\end{verbatim}}
+% orig
+% [J_{\mu \nu}, P_{\rho}] P_{\rho} + P_{\rho} [J_{\mu \nu}, P_{\rho}];
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+2\specialcolon{}= [J_{\mu \nu}, P_{\rho}] P_{\rho} + P_{\rho} [J_{\mu \nu}, P_{\rho}];
+\end{dmath*}
+% Begin TeX cell closed
+We can now rewrite the commutators, distribute the products and eliminate the metric to obtain the desired result:
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(%)( @(poincare) );
+\end{verbatim}}
+% orig
+% (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu}) P_{\rho} + P_{\rho} (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu});
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+2\specialcolon{}= (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu}) P_{\rho} + P_{\rho} (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu});
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@distribute!(%);
+\end{verbatim}}
+% orig
+% 0;
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+2\specialcolon{}= 0;
+\end{dmath*}
+% Begin TeX cell closed
+\subsection*{The $W^2$ Casimir}
+% End TeX cell
+% Begin TeX cell closed
+Now we do the same thing with $W^2$, the other Poincar\'e Casimir\ldots
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+\commutator{J_{\mu\nu}}{W_\mu W_\mu};
+\end{verbatim}}
+% orig
+% [J_{\mu \nu}, W_{\rho} W_{\rho}];
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}= [J_{\mu \nu}, W_{\rho} W_{\rho}];
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(%)( W_\mu -> e_{\mu\nu\lambda\rho} P_\nu J_{\lambda\rho} );
+\end{verbatim}}
+% orig
+% [J_{\mu \nu}, (-1) e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma}];
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}= [J_{\mu \nu}, (-1)\, e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma}];
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@prodrule!(%);
+\end{verbatim}}
+% orig
+%  - [J_{\mu \nu}, e_{\rho \sigma \lambda \kappa}] P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} [J_{\mu \nu}, P_{\rho}] J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} [J_{\mu \nu}, J_{\sigma \lambda}] e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} [J_{\mu \nu}, e_{\kappa \alpha \beta \gamma}] P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} [J_{\mu \nu}, P_{\alpha}] J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} [J_{\mu \nu}, J_{\beta \gamma}];
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}=  - [J_{\mu \nu}, e_{\rho \sigma \lambda \kappa}] P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} [J_{\mu \nu}, P_{\rho}] J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} [J_{\mu \nu}, J_{\sigma \lambda}] e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} [J_{\mu \nu}, e_{\kappa \alpha \beta \gamma}] P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} [J_{\mu \nu}, P_{\alpha}] J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} [J_{\mu \nu}, J_{\beta \gamma}];
+\end{dmath*}
+% Begin TeX cell closed
+We get rid of the vanishing commutators by using:
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+@unwrap!(%);
+\end{verbatim}}
+% orig
+%  - e_{\rho \sigma \lambda \kappa} [J_{\mu \nu}, P_{\rho}] J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} [J_{\mu \nu}, J_{\sigma \lambda}] e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} [J_{\mu \nu}, P_{\alpha}] J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} [J_{\mu \nu}, J_{\beta \gamma}];
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}=  - e_{\rho \sigma \lambda \kappa} [J_{\mu \nu}, P_{\rho}] J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} [J_{\mu \nu}, J_{\sigma \lambda}] e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} [J_{\mu \nu}, P_{\alpha}] J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} [J_{\mu \nu}, J_{\beta \gamma}];
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(%)( @(poincare) );
+\end{verbatim}}
+% orig
+%  - e_{\rho \sigma \lambda \kappa} (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu}) J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} ( - \eta_{\mu \sigma} J_{\lambda \nu} - \eta_{\lambda \mu} J_{\nu \sigma} + \eta_{\nu \sigma} J_{\lambda \mu} + \eta_{\lambda \nu} J_{\mu \sigma}) e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} (\eta_{\alpha \mu} P_{\nu} - \eta_{\alpha \nu} P_{\mu}) J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} ( - \eta_{\beta \mu} J_{\gamma \nu} + \eta_{\gamma \mu} J_{\beta \nu} + \eta_{\beta \nu} J_{\gamma \mu} - \eta_{\gamma \nu} J_{\beta \mu});
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}=  - e_{\rho \sigma \lambda \kappa} (\eta_{\mu \rho} P_{\nu} - \eta_{\nu \rho} P_{\mu}) J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} ( - \eta_{\mu \sigma} J_{\lambda \nu} - \eta_{\lambda \mu} J_{\nu \sigma} + \eta_{\nu \sigma} J_{\lambda \mu} + \eta_{\lambda \nu} J_{\mu \sigma}) e_{\kappa \alpha \beta \gamma} P_{\alpha} J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} (\eta_{\alpha \mu} P_{\nu} - \eta_{\alpha \nu} P_{\mu}) J_{\beta \gamma} - e_{\rho \sigma \lambda \kappa} P_{\rho} J_{\sigma \lambda} e_{\kappa \alpha \beta \gamma} P_{\alpha} ( - \eta_{\beta \mu} J_{\gamma \nu} + \eta_{\gamma \mu} J_{\beta \nu} + \eta_{\beta \nu} J_{\gamma \mu} - \eta_{\gamma \nu} J_{\beta \mu});
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@distribute!(%);
+\end{verbatim}}
+% orig
+%  - e_{\mu \rho \sigma \lambda} P_{\nu} J_{\rho \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} + e_{\nu \rho \sigma \lambda} P_{\mu} J_{\rho \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} + 2 e_{\mu \rho \sigma \lambda} P_{\rho} J_{\nu \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} - 2 e_{\nu \rho \sigma \lambda} P_{\rho} J_{\mu \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} - e_{\mu \rho \sigma \lambda} P_{\nu} J_{\kappa \alpha} e_{\rho \kappa \alpha \beta} P_{\beta} J_{\sigma \lambda} + e_{\nu \rho \sigma \lambda} P_{\mu} J_{\kappa \alpha} e_{\rho \kappa \alpha \beta} P_{\beta} J_{\sigma \lambda} - 2 e_{\mu \rho \sigma \lambda} P_{\rho} J_{\kappa \alpha} e_{\sigma \kappa \alpha \beta} P_{\beta} J_{\nu \lambda} + 2 e_{\nu \rho \sigma \lambda} P_{\rho} J_{\kappa \alpha} e_{\sigma \kappa \alpha \beta} P_{\beta} J_{\mu \lambda};
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}=  - e_{\mu \rho \sigma \lambda} P_{\nu} J_{\rho \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} + e_{\nu \rho \sigma \lambda} P_{\mu} J_{\rho \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} + 2\, e_{\mu \rho \sigma \lambda} P_{\rho} J_{\nu \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} - 2\, e_{\nu \rho \sigma \lambda} P_{\rho} J_{\mu \sigma} e_{\lambda \kappa \alpha \beta} P_{\kappa} J_{\alpha \beta} - e_{\mu \rho \sigma \lambda} P_{\nu} J_{\kappa \alpha} e_{\rho \kappa \alpha \beta} P_{\beta} J_{\sigma \lambda} + e_{\nu \rho \sigma \lambda} P_{\mu} J_{\kappa \alpha} e_{\rho \kappa \alpha \beta} P_{\beta} J_{\sigma \lambda} - 2\, e_{\mu \rho \sigma \lambda} P_{\rho} J_{\kappa \alpha} e_{\sigma \kappa \alpha \beta} P_{\beta} J_{\nu \lambda} + 2\, e_{\nu \rho \sigma \lambda} P_{\rho} J_{\kappa \alpha} e_{\sigma \kappa \alpha \beta} P_{\beta} J_{\mu \lambda};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@epsprod2gendelta!(%);
+\end{verbatim}}
+% orig
+% 6 P_{\nu} J_{\rho \sigma} \delta_{\mu \lambda \rho \kappa \sigma \alpha} P_{\lambda} J_{\kappa \alpha} - 6 P_{\mu} J_{\rho \sigma} \delta_{\nu \lambda \rho \kappa \sigma \alpha} P_{\lambda} J_{\kappa \alpha} + 12 P_{\rho} J_{\nu \sigma} \delta_{\mu \rho \sigma \lambda \kappa \alpha} P_{\kappa} J_{\lambda \alpha} - 12 P_{\rho} J_{\mu \sigma} \delta_{\nu \rho \sigma \lambda \kappa \alpha} P_{\kappa} J_{\lambda \alpha} + 6 P_{\nu} J_{\rho \sigma} \delta_{\mu \rho \lambda \sigma \kappa \alpha} P_{\alpha} J_{\lambda \kappa} - 6 P_{\mu} J_{\rho \sigma} \delta_{\nu \rho \lambda \sigma \kappa \alpha} P_{\alpha} J_{\lambda \kappa} - 12 P_{\rho} J_{\sigma \lambda} \delta_{\mu \rho \kappa \sigma \alpha \lambda} P_{\kappa} J_{\nu \alpha} + 12 P_{\rho} J_{\sigma \lambda} \delta_{\nu \rho \kappa \sigma \alpha \lambda} P_{\kappa} J_{\mu \alpha};
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}= 6\, P_{\nu} J_{\rho \sigma} \delta_{\mu \lambda \rho \kappa \sigma \alpha} P_{\lambda} J_{\kappa \alpha} - 6\, P_{\mu} J_{\rho \sigma} \delta_{\nu \lambda \rho \kappa \sigma \alpha} P_{\lambda} J_{\kappa \alpha} + 12\, P_{\rho} J_{\nu \sigma} \delta_{\mu \rho \sigma \lambda \kappa \alpha} P_{\kappa} J_{\lambda \alpha} - 12\, P_{\rho} J_{\mu \sigma} \delta_{\nu \rho \sigma \lambda \kappa \alpha} P_{\kappa} J_{\lambda \alpha} + 6\, P_{\nu} J_{\rho \sigma} \delta_{\mu \rho \lambda \sigma \kappa \alpha} P_{\alpha} J_{\lambda \kappa} - 6\, P_{\mu} J_{\rho \sigma} \delta_{\nu \rho \lambda \sigma \kappa \alpha} P_{\alpha} J_{\lambda \kappa} - 12\, P_{\rho} J_{\sigma \lambda} \delta_{\mu \rho \kappa \sigma \alpha \lambda} P_{\kappa} J_{\nu \alpha} + 12\, P_{\rho} J_{\sigma \lambda} \delta_{\nu \rho \kappa \sigma \alpha \lambda} P_{\kappa} J_{\mu \alpha};
+\end{dmath*}
+% Begin TeX cell closed
+The Kronecker delta with more than two indices is a generalised one; we break it up into
+normal ones by using:
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+@breakgendelta!(%);
+\end{verbatim}}
+% orig
+% 6 P_{\nu} J_{\rho \sigma} (1/3 \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \mu} - 1/3 \delta_{\lambda \sigma} \delta_{\kappa \mu} \delta_{\alpha \rho} + 1/3 \delta_{\lambda \mu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\alpha} J_{\kappa \lambda} - 6 P_{\mu} J_{\rho \sigma} (1/3 \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \nu} - 1/3 \delta_{\lambda \sigma} \delta_{\kappa \nu} \delta_{\alpha \rho} + 1/3 \delta_{\lambda \nu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\alpha} J_{\kappa \lambda} + 12 P_{\rho} J_{\nu \sigma} (1/3 \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\mu \rho} - 1/3 \delta_{\lambda \kappa} \delta_{\alpha \mu} \delta_{\rho \sigma} + 1/3 \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \mu}) P_{\kappa} J_{\alpha \lambda} - 12 P_{\rho} J_{\mu \sigma} (1/3 \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\nu \rho} - 1/3 \delta_{\lambda \kappa} \delta_{\alpha \nu} \delta_{\rho \sigma} + 1/3 \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \nu}) P_{\kappa} J_{\alpha \lambda} + 6 P_{\nu} J_{\rho \sigma} (1/3 \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\mu \rho} - 1/3 \delta_{\lambda \kappa} \delta_{\alpha \rho} \delta_{\mu \sigma} + 1/3 \delta_{\lambda \mu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\lambda} J_{\alpha \kappa} - 6 P_{\mu} J_{\rho \sigma} (1/3 \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\nu \rho} - 1/3 \delta_{\lambda \kappa} \delta_{\alpha \rho} \delta_{\nu \sigma} + 1/3 \delta_{\lambda \nu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\lambda} J_{\alpha \kappa} - 12 P_{\rho} J_{\sigma \lambda} (1/3 \delta_{\kappa \lambda} \delta_{\alpha \sigma} \delta_{\mu \rho} - 1/3 \delta_{\kappa \lambda} \delta_{\alpha \rho} \delta_{\mu \sigma} + 1/3 \delta_{\kappa \rho} \delta_{\alpha \lambda} \delta_{\mu \sigma}) P_{\alpha} J_{\nu \kappa} + 12 P_{\rho} J_{\sigma \lambda} (1/3 \delta_{\kappa \lambda} \delta_{\alpha \sigma} \delta_{\nu \rho} - 1/3 \delta_{\kappa \lambda} \delta_{\alpha \rho} \delta_{\nu \sigma} + 1/3 \delta_{\kappa \rho} \delta_{\alpha \lambda} \delta_{\nu \sigma}) P_{\alpha} J_{\mu \kappa};
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}= 6\, P_{\nu} J_{\rho \sigma} (\frac{1}{3}\, \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \mu} - \frac{1}{3}\, \delta_{\lambda \sigma} \delta_{\kappa \mu} \delta_{\alpha \rho} + \frac{1}{3}\, \delta_{\lambda \mu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\alpha} J_{\kappa \lambda} - 6\, P_{\mu} J_{\rho \sigma} (\frac{1}{3}\, \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \nu} - \frac{1}{3}\, \delta_{\lambda \sigma} \delta_{\kappa \nu} \delta_{\alpha \rho} + \frac{1}{3}\, \delta_{\lambda \nu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\alpha} J_{\kappa \lambda} + 12\, P_{\rho} J_{\nu \sigma} (\frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\mu \rho} - \frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \mu} \delta_{\rho \sigma} + \frac{1}{3}\, \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \mu}) P_{\kappa} J_{\alpha \lambda} - 12\, P_{\rho} J_{\mu \sigma} (\frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\nu \rho} - \frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \nu} \delta_{\rho \sigma} + \frac{1}{3}\, \delta_{\lambda \sigma} \delta_{\kappa \rho} \delta_{\alpha \nu}) P_{\kappa} J_{\alpha \lambda} + 6\, P_{\nu} J_{\rho \sigma} (\frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\mu \rho} - \frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \rho} \delta_{\mu \sigma} + \frac{1}{3}\, \delta_{\lambda \mu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\lambda} J_{\alpha \kappa} - 6\, P_{\mu} J_{\rho \sigma} (\frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \sigma} \delta_{\nu \rho} - \frac{1}{3}\, \delta_{\lambda \kappa} \delta_{\alpha \rho} \delta_{\nu \sigma} + \frac{1}{3}\, \delta_{\lambda \nu} \delta_{\kappa \sigma} \delta_{\alpha \rho}) P_{\lambda} J_{\alpha \kappa} - 12\, P_{\rho} J_{\sigma \lambda} (\frac{1}{3}\, \delta_{\kappa \lambda} \delta_{\alpha \sigma} \delta_{\mu \rho} - \frac{1}{3}\, \delta_{\kappa \lambda} \delta_{\alpha \rho} \delta_{\mu \sigma} + \frac{1}{3}\, \delta_{\kappa \rho} \delta_{\alpha \lambda} \delta_{\mu \sigma}) P_{\alpha} J_{\nu \kappa} + 12\, P_{\rho} J_{\sigma \lambda} (\frac{1}{3}\, \delta_{\kappa \lambda} \delta_{\alpha \sigma} \delta_{\nu \rho} - \frac{1}{3}\, \delta_{\kappa \lambda} \delta_{\alpha \rho} \delta_{\nu \sigma} + \frac{1}{3}\, \delta_{\kappa \rho} \delta_{\alpha \lambda} \delta_{\nu \sigma}) P_{\alpha} J_{\mu \kappa};
+\end{dmath*}
+% Begin TeX cell closed
+The rest is straightforward. Note that it works only because of all the {\tt PostDefaultRules}.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+@distribute!(%);
+\end{verbatim}}
+% orig
+% 0;
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+3\specialcolon{}= 0;
+\end{dmath*}
+\end{document}

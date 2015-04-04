@@ -1,0 +1,212 @@
+% Cadabra notebook version 1.2
+\documentclass[11pt]{article}
+\usepackage[textwidth=460pt, textheight=660pt]{geometry}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{breqn}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\begin{document}
+% Begin TeX cell closed
+\section*{Instantons and self-duality}
+
+This simple notebook shows a simple calculation related to the 't~Hooft ansatz for 
+instanton solutions in Yang-Mills theory. It will show you how to compute the constraint
+on the function~$H(r)$ which appears in this ansatz, by imposing self-duality of the 
+field strength. 
+
+It mainly illustrates the way in which partial derivatives and substitution commands work.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+{i,j,k,l,m,n,q,r#}::Indices(vector).
+{i,j,k,l,m,n,q,r#}::Integer(1..4).
+{a,b,c,d,e,f,g}::Indices(group).
+{a,b,c,d,e,f,g}::Integer(1..3).
+\eta^{a}_{i j}::TableauSymmetry(shape={1,1},indices={1,2}).
+\partial{#}::PartialDerivative.
+\epsilon^{a b c}::EpsilonTensor.
+\epsilon_{i j k l}::EpsilonTensor.
+\log{H}::Depends(\partial).
+\delta_{i j}::KroneckerDelta.
+\end{verbatim}}
+\begin{verbatim}
+Assigning list property Indices to i, j, k, l, m, n, q, r#.
+Assigning property Integer to i, j, k, l, m, n, q, r#.
+Assigning list property Indices to a, b, c, d, e, f, g.
+Assigning property Integer to a, b, c, d, e, f, g.
+Assigning property TableauSymmetry to \eta.
+Assigning property PartialDerivative to \partial.
+Assigning property EpsilonTensor to \epsilon.
+Assigning property EpsilonTensor to \epsilon.
+Assigning property Depends to \log.
+Assigning property KroneckerDelta to \delta.
+\end{verbatim}
+% Begin TeX cell closed
+First define the field strength in terms of the gauge potential:
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+F:=\partial_{i}{A_{j}^{a}} - \partial_{j}{A_{i}^{a}} 
+                              + \epsilon^{a b c} A_{i}^{b} A_{j}^{c};
+\end{verbatim}}
+% orig
+% \partial_{i}{A_{j}^{a}} - \partial_{j}{A_{i}^{a}} + \epsilon^{a b c} A_{i}^{b} A_{j}^{c};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+F\specialcolon{}= \partial_{i}{A_{j}\,^{a}} - \partial_{j}{A_{i}\,^{a}} + \epsilon^{a b c} A_{i}\,^{b} A_{j}\,^{c};
+\end{dmath*}
+% Begin TeX cell closed
+Now insert the 't~Hooft ansatz in terms of the 't~Hooft symbols~$\eta^{a}_{ij}$:
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(%)( A_{i}^{a} -> \eta^{a}_{i j} \partial_{j}{\log{H}} );
+\end{verbatim}}
+% orig
+% \partial_{i}(\eta^{a}_{j k} \partial_{k}{\log{H}}) - \partial_{j}(\eta^{a}_{i k} \partial_{k}{\log{H}}) + \epsilon^{a b c} \eta^{b}_{i k} \partial_{k}{\log{H}} \eta^{c}_{j l} \partial_{l}{\log{H}};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+F\specialcolon{}= \partial_{i}(\eta^{a}\,_{j k} \partial_{k}{\log{H}}) - \partial_{j}(\eta^{a}\,_{i k} \partial_{k}{\log{H}}) + \epsilon^{a b c} \eta^{b}\,_{i k} \partial_{k}{\log{H}} \eta^{c}\,_{j l} \partial_{l}{\log{H}};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@prodrule!(%):
+@unwrap!(%);
+\end{verbatim}}
+% orig
+% \eta^{a}_{j k} \partial_{i k}{\log{H}} - \eta^{a}_{i k} \partial_{j k}{\log{H}} + \epsilon^{a b c} \eta^{b}_{i k} \partial_{k}{\log{H}} \eta^{c}_{j l} \partial_{l}{\log{H}};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+F\specialcolon{}= \eta^{a}\,_{j k} \partial_{i k}{\log{H}} - \eta^{a}\,_{i k} \partial_{j k}{\log{H}} + \epsilon^{a b c} \eta^{b}\,_{i k} \partial_{k}{\log{H}} \eta^{c}\,_{j l} \partial_{l}{\log{H}};
+\end{dmath*}
+% Begin TeX cell closed
+The 't Hooft symbols $\eta^{a}_{i j}$ satisfy several rules which can be used to 
+simplify products of them (see e.g. {\tt hep-th/0012016} and Rajaraman's book):
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+etarules:= { \eta^{a}_{i j} \eta^{a}_{k l} -> 
+                  \delta_{i k} \delta_{j l} - \delta_{i l} \delta_{k j}
+                  + \epsilon_{i j k l},
+             \epsilon^{a b c} \eta^{b}_{i k} \eta^{c}_{j l} ->
+                  -\delta_{i j} \eta^{a}_{k l} - \delta_{k l} \eta^{a}_{i j}
+                  + \delta_{i l} \eta^{a}_{k j} + \delta_{k j} \eta^{a}_{i l},
+             \eta^{a}_{i k} \eta^{b}_{k j} ->
+                  -\delta^{a b} \delta_{i j} + \epsilon^{a b c} \eta^{c}_{i j},
+             \epsilon_{i j l k} \eta^{a}_{l m} -> 
+                  - \delta_{i m} \eta^{a}_{j k} - \delta_{j m} \eta^{a}_{k i}
+                  - \delta_{k m} \eta^{a}_{i j},
+             \epsilon_{i j k l} \eta^{a}_{k l} -> 
+                  - 2 \eta^{a}_{i j} };
+\end{verbatim}}
+% orig
+% \{\eta^{a}_{i j} \eta^{a}_{k l} -> (\delta_{i k} \delta_{j l} - \delta_{i l} \delta_{k j} + \epsilon_{i j k l}), \epsilon^{a b c} \eta^{b}_{i k} \eta^{c}_{j l} -> ( - \delta_{i j} \eta^{a}_{k l} - \delta_{k l} \eta^{a}_{i j} + \delta_{i l} \eta^{a}_{k j} + \delta_{k j} \eta^{a}_{i l}), \eta^{a}_{i k} \eta^{b}_{k j} -> ( - \delta^{a b} \delta_{i j} + \epsilon^{a b c} \eta^{c}_{i j}), \epsilon_{i j l k} \eta^{a}_{l m} -> ( - \delta_{i m} \eta^{a}_{j k} - \delta_{j m} \eta^{a}_{k i} - \delta_{k m} \eta^{a}_{i j}), \epsilon_{i j k l} \eta^{a}_{k l} -> (-2) \eta^{a}_{i j}\};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+etarules\specialcolon{}= \{\eta^{a}\,_{i j} \eta^{a}\,_{k l} \rightarrow (\delta_{i k} \delta_{j l} - \delta_{i l} \delta_{k j} + \epsilon_{i j k l}),\quad \epsilon^{a b c} \eta^{b}\,_{i k} \eta^{c}\,_{j l} \rightarrow ( - \delta_{i j} \eta^{a}\,_{k l} - \delta_{k l} \eta^{a}\,_{i j} + \delta_{i l} \eta^{a}\,_{k j} + \delta_{k j} \eta^{a}\,_{i l}),\quad \eta^{a}\,_{i k} \eta^{b}\,_{k j} \rightarrow ( - \delta^{a b} \delta_{i j} + \epsilon^{a b c} \eta^{c}\,_{i j}),\quad \epsilon_{i j l k} \eta^{a}\,_{l m} \rightarrow ( - \delta_{i m} \eta^{a}\,_{j k} - \delta_{j m} \eta^{a}\,_{k i} - \delta_{k m} \eta^{a}\,_{i j}),\quad \epsilon_{i j k l} \eta^{a}\,_{k l} \rightarrow (-2)\, \eta^{a}\,_{i j}\};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(F)( @(etarules) ):
+@distribute!(%):
+@eliminate_kr!(%):
+@prodsort!(%):
+@canonicalise!(%):
+@rename_dummies!(%);
+\end{verbatim}}
+% orig
+% \eta^{a}_{j k} \partial_{i k}{\log{H}} - \eta^{a}_{i k} \partial_{j k}{\log{H}} - \eta^{a}_{i j} \partial_{k}{\log{H}} \partial_{k}{\log{H}} - \eta^{a}_{j k} \partial_{i}{\log{H}} \partial_{k}{\log{H}} + \eta^{a}_{i k} \partial_{j}{\log{H}} \partial_{k}{\log{H}};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+F\specialcolon{}= \eta^{a}\,_{j k} \partial_{i k}{\log{H}} - \eta^{a}\,_{i k} \partial_{j k}{\log{H}} - \eta^{a}\,_{i j} \partial_{k}{\log{H}} \partial_{k}{\log{H}} - \eta^{a}\,_{j k} \partial_{i}{\log{H}} \partial_{k}{\log{H}} + \eta^{a}\,_{i k} \partial_{j}{\log{H}} \partial_{k}{\log{H}};
+\end{dmath*}
+% Begin TeX cell closed
+Let us now define the dual field strength:
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+Fd := 1/2 \epsilon_{i j k l} F_{k l};
+\end{verbatim}}
+% orig
+% 1/2 \epsilon_{i j k l} F_{k l};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+Fd\specialcolon{}= \frac{1}{2}\, \epsilon_{i j k l} F_{k l};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(Fd)( F_{i j} -> @(F) ):
+@distribute!(%);
+\end{verbatim}}
+% orig
+% 1/2 \epsilon_{i j k l} \eta^{a}_{l m} \partial_{k m}{\log{H}} - 1/2 \epsilon_{i j k l} \eta^{a}_{k m} \partial_{l m}{\log{H}} - 1/2 \epsilon_{i j k l} \eta^{a}_{k l} \partial_{m}{\log{H}} \partial_{m}{\log{H}} - 1/2 \epsilon_{i j k l} \eta^{a}_{l m} \partial_{k}{\log{H}} \partial_{m}{\log{H}} + 1/2 \epsilon_{i j k l} \eta^{a}_{k m} \partial_{l}{\log{H}} \partial_{m}{\log{H}};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+Fd\specialcolon{}= \frac{1}{2}\, \epsilon_{i j k l} \eta^{a}\,_{l m} \partial_{k m}{\log{H}} - \frac{1}{2}\, \epsilon_{i j k l} \eta^{a}\,_{k m} \partial_{l m}{\log{H}} - \frac{1}{2}\, \epsilon_{i j k l} \eta^{a}\,_{k l} \partial_{m}{\log{H}} \partial_{m}{\log{H}} - \frac{1}{2}\, \epsilon_{i j k l} \eta^{a}\,_{l m} \partial_{k}{\log{H}} \partial_{m}{\log{H}} + \frac{1}{2}\, \epsilon_{i j k l} \eta^{a}\,_{k m} \partial_{l}{\log{H}} \partial_{m}{\log{H}};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@canonicalise!(%):
+@substitute!!(%)( @(etarules) ):
+@distribute!(%):
+@eliminate_kr!(%);
+\end{verbatim}}
+% orig
+% 1/2 \eta^{a}_{j l} \partial_{l i}{\log{H}} + 1/2 \eta^{a}_{l i} \partial_{l j}{\log{H}} + 1/2 \eta^{a}_{i j} \partial_{m m}{\log{H}} + 1/2 \eta^{a}_{j l} \partial_{l i}{\log{H}} + 1/2 \eta^{a}_{l i} \partial_{l j}{\log{H}} + 1/2 \eta^{a}_{i j} \partial_{m m}{\log{H}} + 1/2 \eta^{a}_{j i} \partial_{m}{\log{H}} \partial_{m}{\log{H}} + 1/2 \eta^{a}_{j i} \partial_{m}{\log{H}} \partial_{m}{\log{H}} + 2 \eta^{a}_{i j} \partial_{m}{\log{H}} \partial_{m}{\log{H}} - 1/2 \eta^{a}_{j l} \partial_{l}{\log{H}} \partial_{i}{\log{H}} - 1/2 \eta^{a}_{l i} \partial_{l}{\log{H}} \partial_{j}{\log{H}} - 1/2 \eta^{a}_{i j} \partial_{m}{\log{H}} \partial_{m}{\log{H}} - 1/2 \eta^{a}_{j l} \partial_{l}{\log{H}} \partial_{i}{\log{H}} - 1/2 \eta^{a}_{l i} \partial_{l}{\log{H}} \partial_{j}{\log{H}} - 1/2 \eta^{a}_{i j} \partial_{m}{\log{H}} \partial_{m}{\log{H}};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+Fd\specialcolon{}= \frac{1}{2}\, \eta^{a}\,_{j l} \partial_{l i}{\log{H}} + \frac{1}{2}\, \eta^{a}\,_{l i} \partial_{l j}{\log{H}} + \frac{1}{2}\, \eta^{a}\,_{i j} \partial_{m m}{\log{H}} + \frac{1}{2}\, \eta^{a}\,_{j l} \partial_{l i}{\log{H}} + \frac{1}{2}\, \eta^{a}\,_{l i} \partial_{l j}{\log{H}} + \frac{1}{2}\, \eta^{a}\,_{i j} \partial_{m m}{\log{H}} + \frac{1}{2}\, \eta^{a}\,_{j i} \partial_{m}{\log{H}} \partial_{m}{\log{H}} + \frac{1}{2}\, \eta^{a}\,_{j i} \partial_{m}{\log{H}} \partial_{m}{\log{H}} + 2\, \eta^{a}\,_{i j} \partial_{m}{\log{H}} \partial_{m}{\log{H}} - \frac{1}{2}\, \eta^{a}\,_{j l} \partial_{l}{\log{H}} \partial_{i}{\log{H}} - \frac{1}{2}\, \eta^{a}\,_{l i} \partial_{l}{\log{H}} \partial_{j}{\log{H}} - \frac{1}{2}\, \eta^{a}\,_{i j} \partial_{m}{\log{H}} \partial_{m}{\log{H}} - \frac{1}{2}\, \eta^{a}\,_{j l} \partial_{l}{\log{H}} \partial_{i}{\log{H}} - \frac{1}{2}\, \eta^{a}\,_{l i} \partial_{l}{\log{H}} \partial_{j}{\log{H}} - \frac{1}{2}\, \eta^{a}\,_{i j} \partial_{m}{\log{H}} \partial_{m}{\log{H}};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@prodsort!(%):
+@canonicalise!(%):
+@rename_dummies!(%):
+@collect_terms!(%);
+\end{verbatim}}
+% orig
+% \eta^{a}_{j k} \partial_{i k}{\log{H}} - \eta^{a}_{i k} \partial_{j k}{\log{H}} + \eta^{a}_{i j} \partial_{k k}{\log{H}} - \eta^{a}_{j k} \partial_{i}{\log{H}} \partial_{k}{\log{H}} + \eta^{a}_{i k} \partial_{j}{\log{H}} \partial_{k}{\log{H}};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+Fd\specialcolon{}= \eta^{a}\,_{j k} \partial_{i k}{\log{H}} - \eta^{a}\,_{i k} \partial_{j k}{\log{H}} + \eta^{a}\,_{i j} \partial_{k k}{\log{H}} - \eta^{a}\,_{j k} \partial_{i}{\log{H}} \partial_{k}{\log{H}} + \eta^{a}\,_{i k} \partial_{j}{\log{H}} \partial_{k}{\log{H}};
+\end{dmath*}
+% Begin TeX cell closed
+The condition that the configuration is self-dual, i.e.~$F = {}^* F$, now reduces to
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+eq:= @(F) - @(Fd):
+@collect_terms!(%);
+\end{verbatim}}
+% orig
+%  - \eta^{a}_{i j} \partial_{k}{\log{H}} \partial_{k}{\log{H}} - \eta^{a}_{i j} \partial_{k k}{\log{H}};
+
+
+
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+eq\specialcolon{}=  - \eta^{a}\,_{i j} \partial_{k}{\log{H}} \partial_{k}{\log{H}} - \eta^{a}\,_{i j} \partial_{k k}{\log{H}};
+\end{dmath*}
+% Begin TeX cell closed
+This is precisely the condition found in Rajaraman's book, equation (4.60b).
+% End TeX cell
+\end{document}
