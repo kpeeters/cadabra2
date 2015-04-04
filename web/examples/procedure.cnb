@@ -1,0 +1,56 @@
+% Cadabra notebook version 1.1
+\documentclass[11pt]{article}
+\usepackage[textwidth=460pt, textheight=660pt]{geometry}
+\usepackage[usenames]{color}
+\usepackage[parfill]{parskip}
+\usepackage{breqn}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\begin{document}
+{\color[named]{Blue}\begin{verbatim}
+@procedure{ExpandAndCollect};
+@distribute!(%);
+@substitute!(%)( A C -> Q );
+@collect_terms!(%);
+@procedure_end;
+\end{verbatim}}
+\begin{verbatim}
+reading procedure ExpandAndCollect...
+procedure ExpandAndCollect read.
+\end{verbatim}
+{\color[named]{Blue}\begin{verbatim}
+(A+C)*(B+C+A) + C*(E+A);
+\end{verbatim}}
+% orig
+% (A + C) (B + C + A) + C (E + A);
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+1\specialcolon{}= (A + C) (B + C + A) + C (E + A);
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@call{ExpandAndCollect};
+\end{verbatim}}
+% orig
+% A B + 2 Q + A A + C B + C C + C E + Q;
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+1\specialcolon{}= A B + 2\, Q + A A + C B + C C + C E + Q;
+\end{dmath*}
+\begin{verbatim}
+running line 1
+running line 2
+running line 3
+term 1 of 2 remains 0 min
+running line 1
+running line 2
+running line 3
+@collect_terms: not applicable.
+term 2 of 2 remains 0 min
+line 0 total 0 sec and 0 microsec
+line 1 total 0 sec and 470 microsec
+line 2 total 0 sec and 512 microsec
+line 3 total 0 sec and 83370 microsec
+procedure completed.
+\end{verbatim}
+\end{document}

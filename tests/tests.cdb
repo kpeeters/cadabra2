@@ -1,6 +1,18 @@
 
 tst1:= (b/4)*(a^{i} + a^{j} - a^{j} );
 
+# The Redberry authors claim we cannot do the following:
+
+def testRB():
+    ex:= K_a (A^{a b} - A^{b a});
+    rl:= K_c (A^{c d} - A^{d c}) -> F^{d};
+    substitute(ex, rl)
+    tst:= F^{b} - @(ex);
+    assert(tst==0)
+
+testRB()
+
+
 
 
 ex:= C B A D;

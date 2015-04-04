@@ -165,9 +165,10 @@ class tree_exact_less_no_wildcards_mod_prel_obj {
 //bool operator==(const exptree& first, const exptree& second);
 
 
-/// A generic tree comparison class which will take into account index
-/// contractions and will also keep track of a replacement list for
-/// all types of cadabra wildcards.
+// A generic tree comparison class which will take into account index
+// contractions and will also keep track of a replacement list for
+// all types of cadabra wildcards. The entry point is typically 
+// 'equal_subtree' or 'match_subproduct'. 
 
 class exptree_comparator {
 	public:

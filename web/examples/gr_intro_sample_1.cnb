@@ -1,0 +1,103 @@
+% Cadabra notebook version 1.1
+\documentclass[11pt]{article}
+\usepackage[textwidth=460pt, textheight=660pt]{geometry}
+\usepackage[usenames]{color}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{breqn}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\begin{document}
+% Begin TeX cell closed
+Example 1 (section 3) `metric connection' in arxiv:0903.2085 by Leo Brewin.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u#}::Indices.
+g_{a b}::Metric.
+g_{a}^{b}::KroneckerDelta.
+\partial_{#}::PartialDerivative.
+\end{verbatim}}
+% Begin TeX comment
+Assigning list property Indices to $\{a,\; b,\; c,\; d,\; e,\; f,\; g,\; h,\; i,\; j,\; k,\; l,\; m,\; n,\; o,\; p,\; q,\; r,\; s,\; t,\; u\#\}$.
+\\
+% End TeX comment
+% Begin TeX comment
+Assigning property Metric to ${g}_{a b}$.
+\\
+% End TeX comment
+% Begin TeX comment
+Assigning property KroneckerDelta to ${g}_{a}\,^{b}$.
+\\
+% End TeX comment
+% Begin TeX comment
+Assigning property PartialDerivative to ${\partial}_{\#}\, $.
+\\
+% End TeX comment
+{\color[named]{Blue}\begin{verbatim}
+cderiv:=\partial_{c}{g_{a b}} - g_{a d}\Gamma^{d}_{b c} - g_{d b}\Gamma^{d}_{a c};
+\end{verbatim}}
+% orig
+% \partial_{c}{g_{a b}} - g_{a d} \Gamma^{d}_{b c} - g_{d b} \Gamma^{d}_{a c}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+cderiv\specialcolon{}= {\partial}_{c}{{g}_{a b}}\,  - {g}_{a d} {\Gamma}^{d}\,_{b c} - {g}_{d b} {\Gamma}^{d}\,_{a c};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+Gamma:=\Gamma^{a}_{b c} -> (1/2) g^{a d} (\partial_{b}{g_{d c}}
+                                        + \partial_{c}{g_{b d}} 
+                                        - \partial_{d}{g_{b c}} );
+\end{verbatim}}
+% orig
+% \Gamma^{a}_{b c} -> 1/2 g^{a d} (\partial_{b}{g_{d c}} + \partial_{c}{g_{b d}} - \partial_{d}{g_{b c}})
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+Gamma\specialcolon{}= {\Gamma}^{a}\,_{b c} \rightarrow \frac{1}{2}\, {g}^{a d} ({\partial}_{b}{{g}_{d c}}\,  + {\partial}_{c}{{g}_{b d}}\,  - {\partial}_{d}{{g}_{b c}}\, );
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(cderiv)(@(Gamma));
+\end{verbatim}}
+% orig
+% \partial_{c}{g_{a b}} - 1/2 g_{a d} g^{d e} (\partial_{b}{g_{e c}} + \partial_{c}{g_{b e}} - \partial_{e}{g_{b c}}) - 1/2 g_{d b} g^{d e} (\partial_{a}{g_{e c}} + \partial_{c}{g_{a e}} - \partial_{e}{g_{a c}})
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+cderiv\specialcolon{}= {\partial}_{c}{{g}_{a b}}\,  - \frac{1}{2}\, {g}_{a d} {g}^{d e} ({\partial}_{b}{{g}_{e c}}\,  + {\partial}_{c}{{g}_{b e}}\,  - {\partial}_{e}{{g}_{b c}}\, ) - \frac{1}{2}\, {g}_{d b} {g}^{d e} ({\partial}_{a}{{g}_{e c}}\,  + {\partial}_{c}{{g}_{a e}}\,  - {\partial}_{e}{{g}_{a c}}\, );
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@distribute!(%);
+@eliminate_metric!(%);
+@eliminate_kr!(%);
+@canonicalise!(%);
+@collect_terms!(%);
+\end{verbatim}}
+% orig
+% \partial_{c}{g_{a b}} - 1/2 g_{a d} g^{d e} \partial_{b}{g_{e c}} - 1/2 g_{a d} g^{d e} \partial_{c}{g_{b e}} + 1/2 g_{a d} g^{d e} \partial_{e}{g_{b c}} - 1/2 g_{d b} g^{d e} \partial_{a}{g_{e c}} - 1/2 g_{d b} g^{d e} \partial_{c}{g_{a e}} + 1/2 g_{d b} g^{d e} \partial_{e}{g_{a c}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+cderiv\specialcolon{}= {\partial}_{c}{{g}_{a b}}\,  - \frac{1}{2}\, {g}_{a d} {g}^{d e} {\partial}_{b}{{g}_{e c}}\,  - \frac{1}{2}\, {g}_{a d} {g}^{d e} {\partial}_{c}{{g}_{b e}}\,  + \frac{1}{2}\, {g}_{a d} {g}^{d e} {\partial}_{e}{{g}_{b c}}\,  - \frac{1}{2}\, {g}_{d b} {g}^{d e} {\partial}_{a}{{g}_{e c}}\,  - \frac{1}{2}\, {g}_{d b} {g}^{d e} {\partial}_{c}{{g}_{a e}}\,  + \frac{1}{2}\, {g}_{d b} {g}^{d e} {\partial}_{e}{{g}_{a c}}\, ;
+\end{dmath*}
+% orig
+% \partial_{c}{g_{a b}} - 1/2 g_{a}^{e} \partial_{b}{g_{e c}} - 1/2 g_{a}^{e} \partial_{c}{g_{b e}} + 1/2 g_{a}^{e} \partial_{e}{g_{b c}} - 1/2 g_{b}^{e} \partial_{a}{g_{e c}} - 1/2 g_{b}^{e} \partial_{c}{g_{a e}} + 1/2 g_{b}^{e} \partial_{e}{g_{a c}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+cderiv\specialcolon{}= {\partial}_{c}{{g}_{a b}}\,  - \frac{1}{2}\, {g}_{a}\,^{e} {\partial}_{b}{{g}_{e c}}\,  - \frac{1}{2}\, {g}_{a}\,^{e} {\partial}_{c}{{g}_{b e}}\,  + \frac{1}{2}\, {g}_{a}\,^{e} {\partial}_{e}{{g}_{b c}}\,  - \frac{1}{2}\, {g}_{b}\,^{e} {\partial}_{a}{{g}_{e c}}\,  - \frac{1}{2}\, {g}_{b}\,^{e} {\partial}_{c}{{g}_{a e}}\,  + \frac{1}{2}\, {g}_{b}\,^{e} {\partial}_{e}{{g}_{a c}}\, ;
+\end{dmath*}
+% orig
+% \partial_{c}{g_{a b}} - 1/2 \partial_{b}{g_{a c}} - 1/2 \partial_{c}{g_{b a}} + 1/2 \partial_{a}{g_{b c}} - 1/2 \partial_{a}{g_{b c}} - 1/2 \partial_{c}{g_{a b}} + 1/2 \partial_{b}{g_{a c}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+cderiv\specialcolon{}= {\partial}_{c}{{g}_{a b}}\,  - \frac{1}{2}\, {\partial}_{b}{{g}_{a c}}\,  - \frac{1}{2}\, {\partial}_{c}{{g}_{b a}}\,  + \frac{1}{2}\, {\partial}_{a}{{g}_{b c}}\,  - \frac{1}{2}\, {\partial}_{a}{{g}_{b c}}\,  - \frac{1}{2}\, {\partial}_{c}{{g}_{a b}}\,  + \frac{1}{2}\, {\partial}_{b}{{g}_{a c}}\, ;
+\end{dmath*}
+% orig
+% \partial_{c}{g_{a b}} - 1/2 \partial_{b}{g_{a c}} - 1/2 \partial_{c}{g_{a b}} + 1/2 \partial_{a}{g_{b c}} - 1/2 \partial_{a}{g_{b c}} - 1/2 \partial_{c}{g_{a b}} + 1/2 \partial_{b}{g_{a c}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+cderiv\specialcolon{}= {\partial}_{c}{{g}_{a b}}\,  - \frac{1}{2}\, {\partial}_{b}{{g}_{a c}}\,  - \frac{1}{2}\, {\partial}_{c}{{g}_{a b}}\,  + \frac{1}{2}\, {\partial}_{a}{{g}_{b c}}\,  - \frac{1}{2}\, {\partial}_{a}{{g}_{b c}}\,  - \frac{1}{2}\, {\partial}_{c}{{g}_{a b}}\,  + \frac{1}{2}\, {\partial}_{b}{{g}_{a c}}\, ;
+\end{dmath*}
+% orig
+% 0
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+cderiv\specialcolon{}= 0;
+\end{dmath*}
+\end{document}

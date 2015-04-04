@@ -297,10 +297,13 @@ exptree_comparator::match_t exptree_comparator::equal_subtree(exptree::iterator 
 				break;
 				}
 			case subtree_match:
+				// If a match of the entire subtrees at i1 and i2 has been found,
+				// we do not need to go down the child nodes of i1 and i2 anymore.
 				i1.skip_children();
 				i2.skip_children();
 				break;
 			}
+		// Continue walking the tree downwards. 
 		++i1;
 		++i2;
 		}
@@ -338,6 +341,7 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 	bool objectpattern=false;
 	bool implicit_pattern=false;
 	bool is_index=false;
+	bool is_sibling_pattern=false;
 	
 	if(one->fl.bracket==str_node::b_none && one->is_index() ) 
 		is_index=true;
@@ -345,6 +349,8 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 		pattern=true;
 	else if(one->is_object_wildcard())
 		objectpattern=true;
+	else if(one->is_sibling_wildcard())
+		is_sibling_pattern=true;
 	else if(is_index && one->is_integer()==false) {
 		const Coordinate *cdn1=properties.get<Coordinate>(one, true);
 		if(cdn1==0)

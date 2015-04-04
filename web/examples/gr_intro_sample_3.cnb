@@ -1,0 +1,130 @@
+% Cadabra notebook version 1.1
+\documentclass[11pt]{article}
+\usepackage[textwidth=460pt, textheight=660pt]{geometry}
+\usepackage[usenames]{color}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{breqn}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\begin{document}
+% Begin TeX cell closed
+Example 3 (section 5) `Covariant differentation and the Riemann tensor' of arxiv:0903.2085 by Leo Brewin.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u#}::Indices(position=independent).
+\partial_{#}::PartialDerivative.
+\end{verbatim}}
+% Begin TeX comment
+Assigning list property Indices to $\{a,\; b,\; c,\; d,\; e,\; f,\; g,\; h,\; i,\; j,\; k,\; l,\; m,\; n,\; o,\; p,\; q,\; r,\; s,\; t,\; u\#\}$.
+\\
+% End TeX comment
+% Begin TeX comment
+Assigning property PartialDerivative to ${\partial}_{\#}\, $.
+\\
+% End TeX comment
+{\color[named]{Blue}\begin{verbatim}
+\Gamma^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+\end{verbatim}}
+% Begin TeX comment
+Assigning property TableauSymmetry to ${\Gamma}^{a}\,_{b c}$.
+\\
+% End TeX comment
+{\color[named]{Blue}\begin{verbatim}
+scalar:=v_{a} A^{a};
+\end{verbatim}}
+% orig
+% v_{a} A^{a}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+scalar\specialcolon{}= {v}_{a} {A}^{a};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+derivD:=D^{c}\partial_{c}{@(scalar)}:
+@prodrule!(%):
+@distribute!(%);
+\end{verbatim}}
+% orig
+% D^{c} \partial_{c}{v_{a}} A^{a} + D^{c} v_{a} \partial_{c}{A^{a}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {D}^{c} {\partial}_{c}{{v}_{a}}\,  {A}^{a} + {D}^{c} {v}_{a} {\partial}_{c}{{A}^{a}}\, ;
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(%)(D^{a}\partial_{a}{A^{b}} -> -\Gamma^{b}_{a c}A^{a}D^{c}):
+@prodsort!(%):
+@rename_dummies!(%):
+@canonicalise!(%);
+\end{verbatim}}
+% Begin TeX comment
+@canonicalise: not applicable.
+% End TeX comment
+% orig
+% A^{a} D^{b} \partial_{b}{v_{a}} - A^{a} D^{b} \Gamma^{c}_{a b} v_{c}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {A}^{a} {D}^{b} {\partial}_{b}{{v}_{a}}\,  - {A}^{a} {D}^{b} {\Gamma}^{c}\,_{a b} {v}_{c};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+derivDE:=E^{c}\partial_{c}{@(derivD)}:
+@distribute!(%):
+@prodrule!(%):
+@distribute!(%):
+@substitute!(%)(E^{a}\partial_{a}{A^{b}} -> -\Gamma^{b}_{a c}A^{a}E^{c}):
+@substitute!(%)(E^{a}\partial_{a}{D^{b}} -> -\Gamma^{b}_{a c}D^{a}E^{c}):
+@prodsort!(%):
+@rename_dummies!(%):
+@canonicalise!(%);
+\end{verbatim}}
+% orig
+%  - A^{a} D^{b} E^{c} \Gamma^{d}_{a c} \partial_{b}{v_{d}} - A^{a} D^{b} E^{c} \Gamma^{d}_{b c} \partial_{d}{v_{a}} + A^{a} D^{b} E^{c} \partial_{b c}{v_{a}} + A^{a} D^{b} E^{c} \Gamma^{d}_{a c} \Gamma^{e}_{b d} v_{e} + A^{a} D^{b} E^{c} \Gamma^{d}_{a e} \Gamma^{e}_{b c} v_{d} - A^{a} D^{b} E^{c} \partial_{c}{\Gamma^{d}_{a b}} v_{d} - A^{a} D^{b} E^{c} \Gamma^{d}_{a b} \partial_{c}{v_{d}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivDE\specialcolon{}=  - {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a c} {\partial}_{b}{{v}_{d}}\,  - {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{b c} {\partial}_{d}{{v}_{a}}\,  + {A}^{a} {D}^{b} {E}^{c} {\partial}_{b c}{{v}_{a}}\,  + {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a c} {\Gamma}^{e}\,_{b d} {v}_{e} + {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a e} {\Gamma}^{e}\,_{b c} {v}_{d} - {A}^{a} {D}^{b} {E}^{c} {\partial}_{c}{{\Gamma}^{d}\,_{a b}}\,  {v}_{d} - {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a b} {\partial}_{c}{{v}_{d}}\, ;
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+derivED:=@(derivDE):
+@substitute!(%)(E^{a} -> F^{a}):
+@substitute!(%)(D^{a} -> E^{a}):
+@substitute!(%)(F^{a} -> D^{a});
+\end{verbatim}}
+% orig
+%  - A^{a} E^{b} D^{c} \Gamma^{d}_{a c} \partial_{b}{v_{d}} - A^{a} E^{b} D^{c} \Gamma^{d}_{b c} \partial_{d}{v_{a}} + A^{a} E^{b} D^{c} \partial_{b c}{v_{a}} + A^{a} E^{b} D^{c} \Gamma^{d}_{a c} \Gamma^{e}_{b d} v_{e} + A^{a} E^{b} D^{c} \Gamma^{d}_{a e} \Gamma^{e}_{b c} v_{d} - A^{a} E^{b} D^{c} \partial_{c}{\Gamma^{d}_{a b}} v_{d} - A^{a} E^{b} D^{c} \Gamma^{d}_{a b} \partial_{c}{v_{d}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivED\specialcolon{}=  - {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a c} {\partial}_{b}{{v}_{d}}\,  - {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{b c} {\partial}_{d}{{v}_{a}}\,  + {A}^{a} {E}^{b} {D}^{c} {\partial}_{b c}{{v}_{a}}\,  + {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a c} {\Gamma}^{e}\,_{b d} {v}_{e} + {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a e} {\Gamma}^{e}\,_{b c} {v}_{d} - {A}^{a} {E}^{b} {D}^{c} {\partial}_{c}{{\Gamma}^{d}\,_{a b}}\,  {v}_{d} - {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a b} {\partial}_{c}{{v}_{d}}\, ;
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+diff:=@(derivDE) - @(derivED);
+\end{verbatim}}
+% orig
+%  - A^{a} D^{b} E^{c} \Gamma^{d}_{a c} \partial_{b}{v_{d}} - A^{a} D^{b} E^{c} \Gamma^{d}_{b c} \partial_{d}{v_{a}} + A^{a} D^{b} E^{c} \partial_{b c}{v_{a}} + A^{a} D^{b} E^{c} \Gamma^{d}_{a c} \Gamma^{e}_{b d} v_{e} + A^{a} D^{b} E^{c} \Gamma^{d}_{a e} \Gamma^{e}_{b c} v_{d} - A^{a} D^{b} E^{c} \partial_{c}{\Gamma^{d}_{a b}} v_{d} - A^{a} D^{b} E^{c} \Gamma^{d}_{a b} \partial_{c}{v_{d}} + A^{a} E^{b} D^{c} \Gamma^{d}_{a c} \partial_{b}{v_{d}} + A^{a} E^{b} D^{c} \Gamma^{d}_{b c} \partial_{d}{v_{a}} - A^{a} E^{b} D^{c} \partial_{b c}{v_{a}} - A^{a} E^{b} D^{c} \Gamma^{d}_{a c} \Gamma^{e}_{b d} v_{e} - A^{a} E^{b} D^{c} \Gamma^{d}_{a e} \Gamma^{e}_{b c} v_{d} + A^{a} E^{b} D^{c} \partial_{c}{\Gamma^{d}_{a b}} v_{d} + A^{a} E^{b} D^{c} \Gamma^{d}_{a b} \partial_{c}{v_{d}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+diff\specialcolon{}=  - {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a c} {\partial}_{b}{{v}_{d}}\,  - {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{b c} {\partial}_{d}{{v}_{a}}\,  + {A}^{a} {D}^{b} {E}^{c} {\partial}_{b c}{{v}_{a}}\,  + {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a c} {\Gamma}^{e}\,_{b d} {v}_{e} + {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a e} {\Gamma}^{e}\,_{b c} {v}_{d} - {A}^{a} {D}^{b} {E}^{c} {\partial}_{c}{{\Gamma}^{d}\,_{a b}}\,  {v}_{d} - {A}^{a} {D}^{b} {E}^{c} {\Gamma}^{d}\,_{a b} {\partial}_{c}{{v}_{d}}\,  + {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a c} {\partial}_{b}{{v}_{d}}\,  + {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{b c} {\partial}_{d}{{v}_{a}}\,  - {A}^{a} {E}^{b} {D}^{c} {\partial}_{b c}{{v}_{a}}\,  - {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a c} {\Gamma}^{e}\,_{b d} {v}_{e} - {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a e} {\Gamma}^{e}\,_{b c} {v}_{d} + {A}^{a} {E}^{b} {D}^{c} {\partial}_{c}{{\Gamma}^{d}\,_{a b}}\,  {v}_{d} + {A}^{a} {E}^{b} {D}^{c} {\Gamma}^{d}\,_{a b} {\partial}_{c}{{v}_{d}}\, ;
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+{A^{a},D^{a},E^{a},v_{a},\Gamma^{a}_{b c}}::SortOrder.
+\end{verbatim}}
+% Begin TeX comment
+Assigning list property SortOrder to $\{{A}^{a},\; {D}^{a},\; {E}^{a},\; {v}_{a},\; {\Gamma}^{a}\,_{b c}\}$.
+\\
+% End TeX comment
+{\color[named]{Blue}\begin{verbatim}
+@prodsort!(%):
+@rename_dummies!(%):
+@canonicalise!(%):
+@collect_terms!(%):
+@factor_out!(%){A^{a}}:
+@factor_out!(%){D^{a}}:
+@factor_out!(%){E^{a}}:
+@factor_out!(%){v_{a}};
+\end{verbatim}}
+% orig
+% A^{a} D^{b} E^{c} v_{d} (\Gamma^{d}_{b e} \Gamma^{e}_{a c} - \partial_{c}{\Gamma^{d}_{a b}} - \Gamma^{d}_{c e} \Gamma^{e}_{a b} + \partial_{b}{\Gamma^{d}_{a c}})
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+diff\specialcolon{}= {A}^{a} {D}^{b} {E}^{c} {v}_{d} ({\Gamma}^{d}\,_{b e} {\Gamma}^{e}\,_{a c} - {\partial}_{c}{{\Gamma}^{d}\,_{a b}}\,  - {\Gamma}^{d}\,_{c e} {\Gamma}^{e}\,_{a b} + {\partial}_{b}{{\Gamma}^{d}\,_{a c}}\, );
+\end{dmath*}
+\end{document}

@@ -1,0 +1,114 @@
+% Cadabra notebook version 1.1
+\documentclass[11pt]{article}
+\usepackage[textwidth=460pt, textheight=660pt]{geometry}
+\usepackage[usenames]{color}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{breqn}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\begin{document}
+% Begin TeX cell closed
+Example 2 (section 4) `Covariant differentation' of arxiv:0903.2085 by Leo Brewin.
+% End TeX cell
+{\color[named]{Blue}\begin{verbatim}
+{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u#}::Indices.
+\partial_{#}::PartialDerivative.
+\end{verbatim}}
+% Begin TeX comment
+Assigning list property Indices to $\{a,\; b,\; c,\; d,\; e,\; f,\; g,\; h,\; i,\; j,\; k,\; l,\; m,\; n,\; o,\; p,\; q,\; r,\; s,\; t,\; u\#\}$.
+\\
+% End TeX comment
+% Begin TeX comment
+Assigning property PartialDerivative to ${\partial}_{\#}\, $.
+\\
+% End TeX comment
+{\color[named]{Blue}\begin{verbatim}
+scalar:=v_{a} A^{a};
+\end{verbatim}}
+% orig
+% v_{a} A^{a}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+scalar\specialcolon{}= {v}_{a} {A}^{a};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+derivD:=D^{c}\partial_{c}{@(scalar)};
+\end{verbatim}}
+% orig
+% D^{c} \partial_{c}{(v_{a} A^{a})}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {D}^{c} {\partial}_{c}{({v}_{a} {A}^{a})}\, ;
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@prodrule!(%);
+\end{verbatim}}
+% orig
+% D^{c} (\partial_{c}{v_{a}} A^{a} + v_{a} \partial_{c}{A^{a}})
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {D}^{c} ({\partial}_{c}{{v}_{a}}\,  {A}^{a} + {v}_{a} {\partial}_{c}{{A}^{a}}\, );
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@distribute!(%);
+\end{verbatim}}
+% orig
+% D^{c} \partial_{c}{v_{a}} A^{a} + D^{c} v_{a} \partial_{c}{A^{a}}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {D}^{c} {\partial}_{c}{{v}_{a}}\,  {A}^{a} + {D}^{c} {v}_{a} {\partial}_{c}{{A}^{a}}\, ;
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@substitute!(%)(D^{a}\partial_{a}{A^{b}} -> -\Gamma^{b}_{a c}A^{a}D^{c}):
+@substitute!(%)(D^{a}\partial_{a}{D^{b}} -> -\Gamma^{b}_{a c}D^{a}D^{c});
+\end{verbatim}}
+% Begin TeX comment
+@substitute: not applicable.
+% End TeX comment
+% orig
+% D^{c} \partial_{c}{v_{a}} A^{a} - \Gamma^{a}_{c b} A^{c} D^{b} v_{a}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {D}^{c} {\partial}_{c}{{v}_{a}}\,  {A}^{a} - {\Gamma}^{a}\,_{c b} {A}^{c} {D}^{b} {v}_{a};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@prodsort!(%);
+\end{verbatim}}
+% orig
+% A^{a} D^{c} \partial_{c}{v_{a}} - A^{c} D^{b} \Gamma^{a}_{c b} v_{a}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {A}^{a} {D}^{c} {\partial}_{c}{{v}_{a}}\,  - {A}^{c} {D}^{b} {\Gamma}^{a}\,_{c b} {v}_{a};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@rename_dummies!(%);
+@canonicalise!(%);
+\end{verbatim}}
+% orig
+% A^{a} D^{b} \partial_{b}{v_{a}} - A^{a} D^{b} \Gamma^{c}_{a b} v_{c}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {A}^{a} {D}^{b} {\partial}_{b}{{v}_{a}}\,  - {A}^{a} {D}^{b} {\Gamma}^{c}\,_{a b} {v}_{c};
+\end{dmath*}
+% Begin TeX comment
+@canonicalise: not applicable.
+% End TeX comment
+% orig
+% A^{a} D^{b} \partial_{b}{v_{a}} - A^{a} D^{b} \Gamma^{c}_{a b} v_{c}
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {A}^{a} {D}^{b} {\partial}_{b}{{v}_{a}}\,  - {A}^{a} {D}^{b} {\Gamma}^{c}\,_{a b} {v}_{c};
+\end{dmath*}
+{\color[named]{Blue}\begin{verbatim}
+@factor_out!(derivD){A^{a}}:
+@factor_out!(derivD){D^{a}};
+\end{verbatim}}
+% orig
+% A^{a} D^{b} (\partial_{b}{v_{a}} - \Gamma^{c}_{a b} v_{c})
+% end_orig
+\begin{dmath*}[compact, spread=2pt]
+derivD\specialcolon{}= {A}^{a} {D}^{b} ({\partial}_{b}{{v}_{a}}\,  - {\Gamma}^{c}\,_{a b} {v}_{c});
+\end{dmath*}
+\end{document}
