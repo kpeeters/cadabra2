@@ -39,6 +39,16 @@ sure a basic Homebrew installation is present, and then do
 
   brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig
 
+Make sure that the Homebrew Python is first in your path (_not_ the 
+system-provided python) by putting /usr/local/bin as the first path
+in /etc/paths, so that the file /etc/paths looks something like
+
+   /usr/local/bin
+   /usr/bin
+   /bin
+   /usr/sbin
+   /sbin
+
 In order to run the Cadabra notebook interface succesfully, you also
 need a TeX installation such as MacTeX, http://tug.org/mactex/ .
 Any TeX will do, as long as 'latex' and 'dvipng' are available, and
