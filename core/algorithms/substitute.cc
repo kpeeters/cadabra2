@@ -106,6 +106,16 @@ bool substitute::can_apply(iterator st)
 
 		exptree_comparator::match_t ret;
 		comparator.lhs_contains_dummies=lhs_contains_dummies[i];
+
+      //	HERE: we need to have one entry point for matching, which dispatches depending 
+		// on whether we have a normal node, a product, a sum or a sibling range with
+		// sibling wildcards. We also need a simple notation (and an exception at top
+		// level for plus and prod).
+//						> ex:=A+B+C+D;
+// A + B + C + D
+// > substitute(_, r'B+C -> Q')
+													 
+
 		if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
 		else                     ret=comparator.equal_subtree(lhs, st);
 

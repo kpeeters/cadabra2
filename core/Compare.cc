@@ -349,7 +349,7 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 		pattern=true;
 	else if(one->is_object_wildcard())
 		objectpattern=true;
-	else if(one->is_sibling_wildcard())
+	else if(one->is_siblings_wildcard())
 		is_sibling_pattern=true;
 	else if(is_index && one->is_integer()==false) {
 		const Coordinate *cdn1=properties.get<Coordinate>(one, true);
@@ -507,13 +507,18 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 // Once 'tofind' is found, this routine calls itself to find the next factor in
 // 'lhs'. If the next factor cannot be found, we backtrack and try to find the
 // previous factor again (it may have appeared multiple times).
-//
+
 exptree_comparator::match_t exptree_comparator::match_subproduct(exptree::sibling_iterator lhs, 
 																					  exptree::sibling_iterator tofind, 
 																					  exptree::sibling_iterator st)
 	{
 	replacement_map_t         backup_replacements(replacement_map);
 	subtree_replacement_map_t backup_subtree_replacements(subtree_replacement_map);
+
+	// 'Start' iterates over all factors, trying to find 'tofind'. It may happen that the
+	// first match is such that the entire subproduct matches, but it may be that we have
+	// to iterate 'start' over more factors (typically when non-commutative objects are
+	// concerned).
 
 	exptree::sibling_iterator start=st.begin();
 	while(start!=st.end()) {
