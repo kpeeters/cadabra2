@@ -13,12 +13,12 @@
 // locks the socket_mutex and calls on_block_finished().
 
 #include <string>
-#include <boost/python.hpp>
 #include <boost/uuid/uuid.hpp>
 #include <websocketpp/server.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/common/functional.hpp>
 #include <future>
+#include <boost/python.hpp>
 
 class Server {
 	public:
