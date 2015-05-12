@@ -8,8 +8,8 @@ using namespace cadabra;
 
 NotebookCanvas::NotebookCanvas()
 	{
-//	pack1(scroll, true, true);
-	pack_start(scroll);
+	// Pack the scroll widget with all document cells into the top pane.
+	pack1(scroll, true, true);
  	scroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
  	scroll.set_border_width(1);
 //	scroll.add(ebox);
