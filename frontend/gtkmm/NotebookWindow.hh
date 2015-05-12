@@ -105,6 +105,9 @@ namespace cadabra {
 
 			void on_edit_undo();
 
+			void on_view_split();
+			void on_view_close();
+
 			void on_run_runall();
 			void on_run_runtocursor();
 			void on_run_stop();
