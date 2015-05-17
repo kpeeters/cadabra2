@@ -234,7 +234,7 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 	if(fd == -1) 
 		 throw TeXException("Failed to create temporary file in /tmp.");
 
-	total << "\\documentclass[11pt]{article}\n"
+	total << "\\documentclass[12pt]{article}\n"
 			<< "\\usepackage[dvips,verbose,voffset=0pt,hoffset=0pt,textwidth="
 			<< horizontal_mm << "mm,textheight="
 			<< vertical_mm << "mm]{geometry}\n"
