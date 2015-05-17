@@ -6,6 +6,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/main.h>
 #include <fstream>
 
 using namespace cadabra;
@@ -41,9 +42,14 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
 	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
+
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
 	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
+	actiongroup->add( Gtk::Action::create("EditMakeCellInput", "Cell is Python"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
 
 	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
 	actiongroup->add( Gtk::Action::create("ViewSplit", "Split view"),
@@ -151,6 +157,20 @@ NotebookWindow::~NotebookWindow()
 	{
 	}
 
+bool NotebookWindow::on_delete_event(GdkEventAny* event)
+	{
+//	if(quit_safeguard()) {
+//		// cdb.terminate();
+//		// Ensure that the kernel is really gone, not just stuck in a loop.
+//  		if(cdb.get_pid()!=0) 
+//			if(kill(cdb.get_pid(), 0)==0)
+//				kill(cdb.get_pid(), SIGKILL);
+	return Gtk::Window::on_delete_event(event);
+//	return false;
+//		}
+//	else 
+	return true;
+	}
 
 void NotebookWindow::update_title()
 	{
@@ -513,6 +533,14 @@ void NotebookWindow::on_file_quit()
 	}
 
 void NotebookWindow::on_edit_undo()
+	{
+	}
+
+void NotebookWindow::on_edit_cell_is_python()
+	{
+	}
+
+void NotebookWindow::on_edit_cell_is_latex()
 	{
 	}
 

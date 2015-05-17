@@ -88,10 +88,22 @@ std::string Server::pre_parse(const std::string& line)
 			}
 
 		std::string line_stripped=mres[2];
+		// 'lastchar' is either a Cadabra termination character, or empty.
+		// 'line_stripped' will have that character stripped, if present.
+		std::string lastchar = line_stripped.substr(line_stripped.size()-1,1);
+		if(lastchar!="." && lastchar!=";" && lastchar!=":")
+			lastchar="";
+		else 
+			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
+
 		size_t found = line_stripped.find(":=");
 		if(found!=std::string::npos) {
 			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
 				+ line_stripped.substr(found+2) + "')";
+			// FIXME: add cadabra line continuations
+			std::string objname = line_stripped.substr(0,found);
+			if(lastchar!="." && indent_line.size()==0)
+				ret = ret + "; print("+objname+")";
 			}
 		else {
 			found = line_stripped.find("::");

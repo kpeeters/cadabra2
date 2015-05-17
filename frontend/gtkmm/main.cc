@@ -24,6 +24,10 @@ int main(int argc, char **argv)
 		
 		// Start the ui in the main thread.
 		app->run(nw);
+
+		// The window has been closed; stop the compute logic and join
+		// that thread waiting for it to complete.
+		compute.terminate();
 		compute_thread.join();
 		}
 	catch(Glib::Error& er) {
