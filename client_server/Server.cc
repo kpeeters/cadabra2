@@ -96,9 +96,12 @@ std::string Server::pre_parse(const std::string& line)
 		else {
 			found = line_stripped.find("::");
 			if(found!=std::string::npos) {
-				std::regex amatch("([a-zA-Z]*)(\\([.]*\\))?");
+				std::cerr << "prop token found" << std::endl;
+//				std::regex amatch("([a-zA-Z]*)(\\([.]*\\))?");
+				std::regex amatch("([a-zA-Z]*)(.*)[;\\.:]*");
 				std::smatch ares;
 				if(std::regex_match(line_stripped.substr(found+2), ares, amatch)) {
+					std::cerr << "match prop" << std::endl;
 					if(std::string(ares[2]).size()>0) {
 						ret = indent_line + "__cdbtmp__ = "+std::string(ares[1])
 							+"(Ex(r'"+line_stripped.substr(0,found)
@@ -111,10 +114,12 @@ std::string Server::pre_parse(const std::string& line)
 						}
 					}
 				else {
+					std::cerr << "inconsistent" << std::endl;
 					ret = line; // inconsistent; you are asking for trouble.
 					}
 				}
 			else {
+				std::cerr << "no preparse" << std::endl;
 				ret = line;
 				}
 			}
@@ -128,6 +133,8 @@ std::string Server::pre_parse(const std::string& line)
 
 std::string Server::run_string(const std::string& blk)
 	{
+	std::cerr << "RUN_STRING" << std::endl;
+
 	std::string result;
 
 	// Preparse input block line-by-line.
@@ -137,7 +144,7 @@ std::string Server::run_string(const std::string& blk)
 	while(std::getline(str, line, '\n')) {
 		newblk += pre_parse(line)+'\n';
 		}
-	std::cout << newblk << std::endl;
+	std::cerr << "PREPARSED: " << newblk << std::endl;
 
 	// Run block. Catch output.
 	try {
@@ -209,7 +216,7 @@ void Server::wait_for_job()
 		while(block_queue.size()==0) 
 			block_available.wait(lock);
 
-		std::cout << "going to run: " << block_queue.front().input << std::endl;
+		std::cout << "going to RUN: " << block_queue.front().input << std::endl;
 		Block block = block_queue.front();
 		block_queue.pop();
 		// We are done with the block_queue; release the lock so that the

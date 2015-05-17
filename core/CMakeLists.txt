@@ -66,6 +66,7 @@ set(LOCAL_SRC_FILES
   properties/Diagonal.cc
   properties/DiracBar.cc
   properties/Distributable.cc
+  properties/FilledTableau.cc
   properties/GammaMatrix.cc
   properties/GammaTraceless.cc
   properties/ImplicitIndex.cc
@@ -86,6 +87,7 @@ set(LOCAL_SRC_FILES
   properties/Spinor.cc
   properties/Symbol.cc
   properties/Symmetric.cc
+  properties/Tableau.cc
   properties/TableauBase.cc
   properties/TableauSymmetry.cc
   properties/Traceless.cc
@@ -104,6 +106,7 @@ set(LOCAL_SRC_FILES
   algorithms/indexsort.cc
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
+  algorithms/lr_tensor.cc
   algorithms/order.cc
   algorithms/prodcollectnum.cc
   algorithms/product_rule.cc
@@ -113,6 +116,7 @@ set(LOCAL_SRC_FILES
   algorithms/split_index.cc
   algorithms/substitute.cc
   algorithms/sym.cc
+  algorithms/tab_basics.cc
   algorithms/unwrap.cc
   algorithms/young_project.cc
   algorithms/young_project_product.cc
