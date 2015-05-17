@@ -215,6 +215,11 @@ bool tree_equal_obj::operator()(const exptree& one, const exptree& two) const
 	return tree_equal(properties, one, two);
 	}
 
+tree_exact_less_obj::tree_exact_less_obj(const Properties *p)
+	: properties(p)
+	{
+	}
+
 bool tree_exact_less_obj::operator()(const exptree& one, const exptree& two) const
 	{
 	return tree_exact_less(properties, one, two);
