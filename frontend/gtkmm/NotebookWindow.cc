@@ -528,6 +528,13 @@ void NotebookWindow::on_view_split()
 
 void NotebookWindow::on_view_close()
 	{
+	// FIXME: this always removes the last canvas, not the current one.
+	if(canvasses.size()>1) {
+		canvasses[canvasses.size()-2]->remove(*canvasses.back());
+		NotebookCanvas *oldcanvas = canvasses.back();
+		canvasses.pop_back();
+		delete oldcanvas;
+		}
 	}
 
 void NotebookWindow::on_run_runall()
