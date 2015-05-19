@@ -5,6 +5,7 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <memory>
 
 // TeXEngine is used to convert LaTeX strings into PNG images. This is
 // a two-stage process: you first 'check in' a string into the system,
@@ -49,28 +50,35 @@ namespace cadabra {
 			void set_font_size(int font_size);
 			std::vector<std::string> latex_packages;
 			
-			// All checkin/checkout conversion routines. The pointers which
-			// are returned here remain owned by the TeXEngine, so make sure
-			// the TeXEngine outlives all users of these pointers.
+			// All checkin/checkout conversion routines. TeXEngine keeps
+			// track of all TeXRequests in order to be able to convert
+			// all of them in one shot (with one LaTeX run), which you can
+			// do with 'convert_all'.
+
+			// You can share the result in a TeXRequest in multiple
+			// widgets, but you need to call checkout if a widget no
+			// longer needs it. TeXEngine will then run a cleanup on all
+			// TeXRequests that are no longer referenced except by
+			// itself.
 			
-			TeXRequest                *checkin(const std::string&,
+			std::shared_ptr<TeXRequest> checkin(const std::string&,
 														  const std::string& startwrap, const std::string& endwrap);
-			TeXRequest                *modify(TeXRequest *, const std::string&);
-			void                       convert_all();
-			void                       checkout(TeXRequest *);
-			void                       checkout_all();
+			std::shared_ptr<TeXRequest> modify(std::shared_ptr<TeXRequest>, const std::string&);
+			void                        convert_all();
+			void                        checkout(std::shared_ptr<TeXRequest>);
+			void                        checkout_all();
 			
 		private:		
 			static double millimeter_per_inch;
 
-			std::set<TeXRequest *> requests;
+			std::set<std::shared_ptr<TeXRequest> > requests;
 			
 			int                    horizontal_pixels_;
 			int                    font_size_;
 			
 			void erase_file(const std::string&) const;
-			void convert_one(TeXRequest*);
-			void convert_set(std::set<TeXRequest *>&);
+			void convert_one(std::shared_ptr<TeXRequest>);
+			void convert_set(std::set<std::shared_ptr<TeXRequest> >&);
 			
 			std::string handle_latex_errors(const std::string&) const;
 	};
