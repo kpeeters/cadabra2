@@ -19,6 +19,7 @@ add_executable(cadabra-gtk main.cc
   NotebookWindow.cc 
   NotebookCanvas.cc 
   TeXView.cc 
+#  TeXEdit.cc 
   CodeInput.cc 
   ../common/TeXEngine.cc)
 

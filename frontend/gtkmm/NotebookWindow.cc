@@ -161,15 +161,8 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 	{
 //	if(quit_safeguard()) {
 //		// cdb.terminate();
-//		// Ensure that the kernel is really gone, not just stuck in a loop.
-//  		if(cdb.get_pid()!=0) 
-//			if(kill(cdb.get_pid(), 0)==0)
-//				kill(cdb.get_pid(), SIGKILL);
+
 	return Gtk::Window::on_delete_event(event);
-//	return false;
-//		}
-//	else 
-	return true;
 	}
 
 void NotebookWindow::update_title()
@@ -267,7 +260,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	if(compute!=0)
 		set_stop_sensitive( compute->number_of_cells_running()>0 );
 	
-	Glib::RefPtr<Gtk::TextBuffer> global_buffer;
+	Glib::RefPtr<Gtk::TextBuffer>          global_buffer;
+	std::shared_ptr<TeXEngine::TeXRequest> global_texrequest;
 	
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 
