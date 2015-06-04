@@ -524,6 +524,7 @@ void NotebookWindow::on_file_save_as()
 
 void NotebookWindow::on_file_quit()
 	{
+	close();
 	}
 
 void NotebookWindow::on_edit_undo()

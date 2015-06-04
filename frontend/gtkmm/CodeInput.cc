@@ -87,7 +87,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
 	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
 //	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
-	bool retval;
+	bool retval=false;
 	// std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
 	
 	if(!is_shift_return) 
