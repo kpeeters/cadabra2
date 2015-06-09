@@ -34,16 +34,6 @@ const std::vector<unsigned char>& TeXEngine::TeXRequest::image() const
 	return image_;
 	}
 
-//Glib::RefPtr<Gdk::Pixbuf> TeXEngine::get_pixbuf(TeXEngine::TeXRequest *req)
-//	{
-//	if(req==0) // return empty pixbuf
-//		return Gdk::Pixbuf::create(Gdk::COLORSPACE_RGB, false, 8, 1, 1);
-//
-//	if(req->needs_generating)
-//		convert_one(req);
-//	return req->pixbuf;
-//	}
-
 void TeXEngine::erase_file(const std::string& nm) const
 	{
 	boost::filesystem::remove(nm);
@@ -93,12 +83,6 @@ std::string TeXEngine::handle_latex_errors(const std::string& result) const
 
 TeXEngine::~TeXEngine()
 	{
-	// Delete all requests.
-	std::set<TeXRequest *>::iterator it=requests.begin();
-	while(it!=requests.end()) {
-		delete (*it);
-		++it;
-		}
 	}
 
 TeXEngine::TeXEngine()
@@ -110,7 +94,7 @@ void TeXEngine::set_geometry(int horpix)
 	{
 	if(horizontal_pixels_!=horpix) {
 		// flag all requests as requiring an update
-		std::set<TeXRequest *>::iterator reqit=requests.begin();
+		std::set<std::shared_ptr<TeXRequest> >::iterator reqit=requests.begin();
 		while(reqit!=requests.end()) {
 			(*reqit)->needs_generating=true;
 			++reqit;
@@ -123,7 +107,7 @@ void TeXEngine::set_font_size(int fontsize)
 	{
 	if(font_size_!=fontsize) {
 		// flag all requests as requiring an update
-		std::set<TeXRequest *>::iterator reqit=requests.begin();
+		std::set<std::shared_ptr<TeXRequest> >::iterator reqit=requests.begin();
 		while(reqit!=requests.end()) {
 			(*reqit)->needs_generating=true;
 			++reqit;
@@ -137,10 +121,10 @@ TeXEngine::TeXRequest::TeXRequest()
 	{
 	}
 
-TeXEngine::TeXRequest *TeXEngine::checkin(const std::string& txt,
-																const std::string& startwrap, const std::string& endwrap)
+std::shared_ptr<TeXEngine::TeXRequest> TeXEngine::checkin(const std::string& txt,
+																			 const std::string& startwrap, const std::string& endwrap)
 	{
-	TeXRequest *req = new TeXRequest;
+	auto req = std::make_shared<TeXRequest>();
 	req->latex_string=txt;
 	req->start_wrap=startwrap;
 	req->end_wrap=endwrap;
@@ -149,9 +133,9 @@ TeXEngine::TeXRequest *TeXEngine::checkin(const std::string& txt,
 	return req;
 	}
 
-void TeXEngine::checkout(TeXRequest *req)
+void TeXEngine::checkout(std::shared_ptr<TeXRequest> req)
 	{
-	std::set<TeXRequest *>::iterator it=requests.find(req);
+	std::set<std::shared_ptr<TeXRequest> >::iterator it=requests.find(req);
 	assert(it!=requests.end());
 	requests.erase(it);
 	}
@@ -161,7 +145,7 @@ void TeXEngine::checkout_all()
 	requests.clear();
 	}
 
-TeXEngine::TeXRequest *TeXEngine::modify(TeXRequest *req, const std::string& txt)
+std::shared_ptr<TeXEngine::TeXRequest> TeXEngine::modify(std::shared_ptr<TeXRequest> req, const std::string& txt)
 	{
 	req->latex_string=txt;
 	req->needs_generating=true;
@@ -184,14 +168,14 @@ void TeXEngine::convert_all()
 		}
 	}
 
-void TeXEngine::convert_one(TeXRequest *req)
+void TeXEngine::convert_one(std::shared_ptr<TeXRequest> req)
 	{
-	std::set<TeXRequest *> reqset;
+	std::set<std::shared_ptr<TeXRequest> > reqset;
 	reqset.insert(req);
 	convert_set(reqset);
 	}
 
-void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
+void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	{
 	// We now follow
 	// 
@@ -239,6 +223,7 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 			<< horizontal_mm << "mm,textheight="
 			<< vertical_mm << "mm]{geometry}\n"
 //			<< "\\usepackage{inconsolata}\n"
+			<< "\\usepackage{amsmath}\n"
 			<< "\\usepackage{color}\\usepackage{amssymb}\n"
 			<< "\\usepackage[parfill]{parskip}\n\\usepackage{tableaux}\n";
 
@@ -247,9 +232,10 @@ void TeXEngine::convert_set(std::set<TeXRequest *>& reqs)
 
 	total	<< "\\def\\specialcolon{\\mathrel{\\mathop{:}}\\hspace{-.5em}}\n"
 			<< "\\renewcommand{\\bar}[1]{\\overline{#1}}\n"
-			<< "\\begin{document}\n\\pagestyle{empty}\n";
+			<< "\\begin{document}\n\\pagestyle{empty}\n"
+			<< "\\renewcommand{\\arraystretch}{1.2}\n";
 
-	std::set<TeXRequest *>::iterator reqit=reqs.begin();
+	std::set<std::shared_ptr<TeXRequest> >::iterator reqit=reqs.begin();
 	while(reqit!=reqs.end()) {
 		if((*reqit)->needs_generating) {
 			if((*reqit)->latex_string.size()>100000)

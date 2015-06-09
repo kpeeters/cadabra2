@@ -42,6 +42,12 @@ namespace cadabra {
 			std::mutex   dtree_mutex;
 			const DTree& dtree();
          void         new_document();
+
+			// Ensure that the gui has an up-to-date representation of the
+			// dtree. Traverses the entire tree so is expensive to run and
+			// should only be used when loading new documents or creating
+			// a new canvas view.
+
 			void         build_visual_representation();
 			
 			void queue_action(std::shared_ptr<ActionBase>);

@@ -40,7 +40,7 @@ class Ex {
 
 		std::string str_() const;
 		std::string repr_() const;
-		std::string _repr_latex_() const;
+		std::string _latex(boost::python::object) const;
 		std::string _repr_html_() const;
 
 		Ex& operator=(const Ex&);
@@ -106,6 +106,11 @@ class Property : public BaseProperty {
 		// When the Python object survives the local scope, results are
 		// undefined. 
 		T *prop;
+
+		// We also keep a shared pointer to the expression for which we
+		// have defined this property, so that we can print sensible 
+		// information.
+		std::shared_ptr<Ex> for_obj;
 };
 
 

@@ -16,7 +16,7 @@ namespace cadabra {
 
 	class NotebookWindow;
 	
-	class NotebookCanvas : public Gtk::VBox {
+	class NotebookCanvas : public Gtk::VPaned {
 		public:
 			NotebookCanvas();
 			~NotebookCanvas();
