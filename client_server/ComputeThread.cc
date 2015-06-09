@@ -65,6 +65,19 @@ void ComputeThread::run()
 	wsclient.run();
 	}
 
+void ComputeThread::terminate()
+	{
+	wsclient.stop();
+
+	// If we have started the server ourselves, stop it now so we do 
+	// not leave mess behind.
+	// http://riccomini.name/posts/linux/2012-09-25-kill-subprocesses-linux-bash/
+
+	if(server_pid!=0) {
+		kill(server_pid, SIGKILL);
+		}
+	}
+
 void ComputeThread::on_fail(websocketpp::connection_hdl hdl) 
 	{
 	connection_is_open=false;
@@ -82,7 +95,7 @@ void ComputeThread::try_spawn_server()
 	// starting server, then use this UUID to get access to the server
 	// port.
 
-	char * const sargv[] = {"sh", "-c", "cadabra-server", NULL};
+	char * const sargv[] = {"sh", "-c", "exec cadabra-server", NULL};
 	int status;
 	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, sargv, NULL); //environ);
 	}
@@ -157,8 +170,8 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		}
 
 	if(msg_type.asString()=="response") {
-		std::string output = "$"+content["output"].asString()+"$";
-		if(output!="$$") {
+		std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
+		if(output!="\\begin{equation*}\\end{equation*}") {
 
 			// Stick an AddCell action onto the stack. We instruct the action to add this result output
 			// cell as a child of the corresponding input cell.

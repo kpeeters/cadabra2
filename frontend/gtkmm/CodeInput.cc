@@ -53,7 +53,8 @@ void CodeInput::init()
 	edit.override_font(Pango::FontDescription("monospace")); 
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 //	edit.override_color(Gdk::RGBA("blue"));
-	edit.override_background_color(Gdk::RGBA("white"));
+
+	edit.override_background_color(Gdk::RGBA("white"), Gtk::STATE_FLAG_ACTIVE);
 	edit.set_pixels_above_lines(1);
 	edit.set_pixels_below_lines(1);
 	set_margin_top(10);
@@ -87,7 +88,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
 	bool is_shift_return = get_editable() && event->keyval==GDK_KEY_Return && (event->state&Gdk::SHIFT_MASK);
 //	bool is_shift_tab    = get_editable() && event->keyval==GDK_KEY_Tab && (event->state&Gdk::SHIFT_MASK);
-	bool retval;
+	bool retval=false;
 	// std::cerr << event->keyval << ", " << event->state << " pressed" << std::endl;
 	
 	if(!is_shift_return) 

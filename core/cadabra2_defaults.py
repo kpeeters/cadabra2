@@ -9,7 +9,7 @@ sys.path.insert(0,'/home/kasper/Development/git.others/sympy')
 # shell does not fail later.
 
 try:
-    import sympy
+    from sympy import *
 except:
     class Sympy:
         __version__="unavailable"

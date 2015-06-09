@@ -49,6 +49,7 @@ namespace cadabra {
 
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;
+			virtual bool on_delete_event(GdkEventAny*) override;
 
 			DTree::iterator current_cell;
 
@@ -104,6 +105,11 @@ namespace cadabra {
 			void on_file_quit();
 
 			void on_edit_undo();
+			void on_edit_cell_is_latex();
+			void on_edit_cell_is_python();
+
+			void on_view_split();
+			void on_view_close();
 
 			void on_run_runall();
 			void on_run_runtocursor();

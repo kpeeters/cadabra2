@@ -6,10 +6,13 @@
 #include <thread>
 #include <future>
 #include <chrono>
-#include <regex>
+//#include <regex>
+#include <boost/regex.hpp>
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <jsoncpp/json/json.h>
+#include <boost/shared_ptr.hpp>
+#include <boost/make_shared.hpp>
 
 #include "Server.hh"
 
@@ -34,43 +37,70 @@ Server::~Server()
 	
 	}
 
+Server::CatchOutput::CatchOutput()
+	{
+	std::cerr << "CONSTRUCTOR\n";
+	}
+
+Server::CatchOutput::CatchOutput(const CatchOutput&)
+	{
+	std::cerr << "COPY CONSTRUCTOR\n";
+	}
+
+void Server::CatchOutput::write(const std::string& str)
+	{
+	std::cout << "Python wrote: " << str << std::endl;
+	collect+=str;
+   }
+
+void Server::CatchOutput::clear()
+	{
+	std::cout << "Python clear" << std::endl;
+	collect="";
+   }
+
+std::string Server::CatchOutput::str() const
+	{
+	return collect;
+	}
+
 void Server::init()
 	{
 	started=false;
-
-	pre_parse(" hello ");
-	pre_parse("   hello ");
 
 	Py_Initialize();
 	main_module = boost::python::import("__main__");
 	main_namespace = main_module.attr("__dict__");
 
-	// Python pre-amble to capture stdout and stderr into a string.
+	// Make the C++ CatchOutput class visible on the Python side.
+
+   boost::python::class_<Server::CatchOutput>("CatchOutput")
+	   .def("write", &Server::CatchOutput::write)
+	   .def("clear", &Server::CatchOutput::clear)
+    	;
+
 	std::string stdOutErr =
 		"import sys\n"
-		"class CatchOut:\n"
-		"   def __init__(self):\n"
-		"      self.value = ''\n"
-		"   def write(self, txt):\n"
-		"      self.value += txt\n"
-		"   def clear(self):\n"
-		"      self.value = ''\n"
-		"catchOut = CatchOut()\n"
-		"sys.stdout = catchOut\n"
-		"class CatchErr:\n"
-		"   def __init__(self):\n"
-		"      self.value = ''\n"
-		"   def write(self, txt):\n"
-		"      self.value += txt\n"
-		"   def clear(self):\n"
-		"      self.value = ''\n"
-		"catchErr = CatchErr()\n"
-		"sys.stderr = catchErr\n";
+		"def setup_catch(cO, cE):\n"
+		"   sys.stdout=cO\n"
+		"   sys.stderr=cE\n";
+	run_string(stdOutErr, false);
 
-	run_string(stdOutErr);
+	// Setup the C++ output catching objects and setup the Python side to
+	// use these as stdout and stderr streams.
 
-	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');";
+	boost::python::object setup_catch = main_module.attr("setup_catch");
+	try {
+		setup_catch(boost::ref(catchOut), boost::ref(catchErr));
+		}
+	catch(boost::python::error_already_set& ex) {
+		PyErr_Print();
+		throw;
+		}
 
+	// Call the Cadabra default initialisation script.
+
+	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py')";
 	run_string(startup);
 	}
 
@@ -78,56 +108,85 @@ std::string Server::pre_parse(const std::string& line)
 	{
 	std::string ret;
 
-	try {
-		std::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
-		std::smatch mres;
+	/*	try */{
+//		std::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
+//		std::smatch mres;
+		boost::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
+		boost::cmatch mres;
+
 		std::string indent_line, end_of_line;
-		if(std::regex_match(line, mres, imatch)) {
-			indent_line=mres[1];
-			end_of_line=mres[3];
+		if(boost::regex_match(line.c_str(), mres, imatch)) {
+			indent_line=std::string(mres[1].first, mres[1].second);
+			end_of_line=std::string(mres[3].first, mres[3].second);
 			}
 
-		std::string line_stripped=mres[2];
+		std::string line_stripped=std::string(mres[2].first, mres[2].second);
+
+		// 'lastchar' is either a Cadabra termination character, or empty.
+		// 'line_stripped' will have that character stripped, if present.
+		std::string lastchar = line_stripped.substr(line_stripped.size()-1,1);
+		if(lastchar!="." && lastchar!=";" && lastchar!=":")
+			lastchar="";
+		else 
+			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
+
 		size_t found = line_stripped.find(":=");
 		if(found!=std::string::npos) {
 			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
 				+ line_stripped.substr(found+2) + "')";
+			// FIXME: add cadabra line continuations
+			std::string objname = line_stripped.substr(0,found);
+			if(lastchar!="." && indent_line.size()==0)
+				ret = ret + "; print("+objname+")";
 			}
 		else {
 			found = line_stripped.find("::");
 			if(found!=std::string::npos) {
-				std::regex amatch("([a-zA-Z]*)(\\([.]*\\))?");
-				std::smatch ares;
-				if(std::regex_match(line_stripped.substr(found+2), ares, amatch)) {
-					if(std::string(ares[2]).size()>0) {
-						ret = indent_line + "__cdbtmp__ = "+std::string(ares[1])
+				std::cerr << "prop token found" << std::endl;
+//				std::regex amatch("([a-zA-Z]*)(\\([.]*\\))?");
+				boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
+				boost::cmatch ares;
+				if(boost::regex_match(line_stripped.substr(found+2).c_str(), ares, amatch)) {
+					auto propname = std::string(ares[1].first, ares[1].second);
+					if(ares[2].second>ares[2].first+1) {
+						auto argument = std::string(ares[2].first+1, ares[2].second-1);
+						ret = indent_line + "__cdbtmp__ = "+propname
 							+"(Ex(r'"+line_stripped.substr(0,found)
-							+"'), Ex('"+std::string(ares[2]).substr(1,std::string(ares[2]).size()-2)+"') )";
+							+"'), Ex('" +argument + "') )";
 						}
 					else {
 						std::cerr << "no arguments" << std::endl;
-						ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
+						ret = indent_line + "_ = " + line_stripped.substr(found+2) 
 							+ "(Ex(r'"+line_stripped.substr(0,found)+"'))";
 						}
+					if(lastchar==";") 
+						ret += "; print(latex(_))";
 					}
 				else {
+					std::cerr << "inconsistent" << std::endl;
 					ret = line; // inconsistent; you are asking for trouble.
 					}
 				}
 			else {
-				ret = line;
+				std::cerr << "no preparse" << std::endl;
+				if(lastchar==";") 
+					ret = indent_line + "_ = " + line_stripped + "; print(latex(_))";
+				else
+					ret = line;
 				}
 			}
 		}
-	catch(std::regex_error& ex) {
-		std::cerr << ex.what() << " " << ex.code() << std::endl;
-		}
+//	catch(std::regex_error& ex) {
+//		std::cerr << ex.what() << " " << ex.code() << std::endl;
+//		}
 
 	return ret;
 	}
 
-std::string Server::run_string(const std::string& blk)
+std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
+	std::cerr << "RUN_STRING" << std::endl;
+
 	std::string result;
 
 	// Preparse input block line-by-line.
@@ -137,28 +196,43 @@ std::string Server::run_string(const std::string& blk)
 	while(std::getline(str, line, '\n')) {
 		newblk += pre_parse(line)+'\n';
 		}
-	std::cout << newblk << std::endl;
+	std::cerr << "PREPARSED: " << newblk << std::endl;
 
 	// Run block. Catch output.
 	try {
 		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
 		std::string object_classname = boost::python::extract<std::string>(ignored.attr("__class__").attr("__name__"));
 		std::cout << "exec returned a " << object_classname << std::endl;
+		/*
 		boost::python::object catchobj = main_module.attr("catchOut");
 		boost::python::object valueobj = catchobj.attr("value");
 		result = boost::python::extract<std::string>(valueobj);
 		catchobj.attr("clear")();
+		*/
+
+		if(handle_output) {
+			result = catchOut.str();
+			catchOut.clear();
+			}
 		}
 	catch(boost::python::error_already_set& ex) {
 		// Make Python print error to stderr and catch it.
 		PyErr_Print();
-		boost::python::object catchobj = main_module.attr("catchErr");
-		boost::python::object valueobj = catchobj.attr("value");
-		std::string err = boost::python::extract<std::string>(valueobj);
-		std::cerr << "ERROR: " << err << std::endl;
-		catchobj.attr("clear")();
+		/*
+		  boost::python::object catchobj = main_module.attr("catchErr");
+		  boost::python::object valueobj = catchobj.attr("value");
+		  std::string err = boost::python::extract<std::string>(valueobj);
+		*/
+		std::string err;
+		if(handle_output) {
+			err = catchErr.str();
+			catchErr.clear();
+			std::cerr << "ERROR: " << err << std::endl;
+//		catchobj.attr("clear")();
+			}
 		throw std::runtime_error(err);
 		}
+	std::cerr << "------------" << std::endl;
 	return result;
 	}
 
@@ -209,7 +283,7 @@ void Server::wait_for_job()
 		while(block_queue.size()==0) 
 			block_available.wait(lock);
 
-		std::cout << "going to run: " << block_queue.front().input << std::endl;
+		std::cout << "going to RUN: " << block_queue.front().input << std::endl;
 		Block block = block_queue.front();
 		block_queue.pop();
 		// We are done with the block_queue; release the lock so that the

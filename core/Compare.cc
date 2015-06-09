@@ -215,6 +215,11 @@ bool tree_equal_obj::operator()(const exptree& one, const exptree& two) const
 	return tree_equal(properties, one, two);
 	}
 
+tree_exact_less_obj::tree_exact_less_obj(const Properties *p)
+	: properties(p)
+	{
+	}
+
 bool tree_exact_less_obj::operator()(const exptree& one, const exptree& two) const
 	{
 	return tree_exact_less(properties, one, two);
@@ -292,6 +297,27 @@ exptree_comparator::match_t exptree_comparator::equal_subtree(exptree::iterator 
 			case node_match: {
 				size_t num1=exptree::number_of_children(i1);
 				size_t num2=exptree::number_of_children(i2);
+
+				// TODO: this is where we should decide what to do with
+				// nodes which have sibling wildcards. Make a
+				// 'compare_siblings'. We also need a
+				// siblings_replacement_map in which we can store a
+				// sibling range for a given sibling wildcard symbol,
+				// e.g. a... -> i j k.  This matching routine should walk
+				// to the first non-range object in the pattern, and match
+				// that. Once it is matched, it should store the resulting
+				// map for any range object to the left. Then continue,
+				// recursively, finding the second non-range object, and
+				// again storing the range object map.  Once a no-match
+				// comes back, pop the match objects from the stack and 
+				// try to find the non-range object to the right of the match
+				// reported earlier.
+
+				// This slightly oversearches (we could keep track of how
+				// many non-range objects are still to be matched in order
+				// to restrict how far to the right a search should go), but in 
+				// practise this is probably not relevant (and can always be added).
+
 				if(num1 < num2)      return no_match_less;
 				else if(num1 > num2) return no_match_greater;
 				break;
@@ -383,35 +409,38 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 			}
 
 		if(loc!=replacement_map.end()) {
-//			std::cerr << "found!" << std::endl;
-			// If this is an index/pattern, try to match the whole index/pattern.
+			// We constructed a replacement rule for this node already at an earlier
+			// stage. Need to make sure that that rule is consistent with what we
+			// found now.
+
 			int cmp;
 
+			// If this is an index/pattern, try to match the whole index/pattern.
 			if(tested_full) 
-				cmp=subtree_compare(&properties, (*loc).second.begin(), two, -2 /* KP: do not switch this to -2 (kk.cdb fails) */); 
+				cmp=subtree_compare(&properties, (*loc).second.begin(), two, -2 /* KP: don't switch to -2 (kk.cdb fails) */); 
 			else {
 				exptree tmp2(two);
 				tmp2.erase_children(tmp2.begin());
 				cmp=subtree_compare(&properties, (*loc).second.begin(), tmp2.begin(), -2 /* KP: see above */); 
 				}
-//			std::cerr << " pattern " << *two->name
-//						 << " should be " << *((*loc).second.begin()->name)  
-//						 << " because that's what " << *one->name 
-//						 << " was set to previously; result " << cmp << std::endl;
+         //			std::cerr << " pattern " << *two->name
+         //						 << " should be " << *((*loc).second.begin()->name)  
+         //						 << " because that's what " << *one->name 
+         //						 << " was set to previously; result " << cmp << std::endl;
 
 			if(cmp==0)      return subtree_match;
 			else if(cmp>0)  return no_match_less;
 			else            return no_match_greater;
 			}
 		else {
-			// This index/pattern was not encountered earlier. Check that the index types in pattern
-			// and object agree (if known, otherwise assume they match)
+			// This index/pattern was not encountered earlier. If this node is an index, 
+			// check that the index types in pattern and object agree (if known, otherwise assume they match)
 
-//			std::cerr << "index check " << *one->name << " " << *two->name << std::endl;
+         //			std::cerr << "index check " << *one->name << " " << *two->name << std::endl;
 
 			const Indices *t1=properties.get<Indices>(one, true);
 			const Indices *t2=properties.get<Indices>(two, true);
-//			std::cerr << t1 << " " << t2 << std::endl;
+         //			std::cerr << t1 << " " << t2 << std::endl;
 			if( (t1 || t2) && implicit_pattern ) {
 				if(t1 && t2) {
 					if((*t1).set_name != (*t2).set_name) {
@@ -522,10 +551,20 @@ exptree_comparator::match_t exptree_comparator::match_subproduct(exptree::siblin
 
 	exptree::sibling_iterator start=st.begin();
 	while(start!=st.end()) {
+
+		// The factor 'tofind' can only be matched against a factor in the subproduct if we 
+		// have not already previously matched part of the lhs to this factor. We check that first.
+
 		if(std::find(factor_locations.begin(), factor_locations.end(), start)==factor_locations.end()) {  
+
+			// Compare this factor with 'tofind'. 
+
 			if(equal_subtree(tofind, start)==subtree_match) { // found factor
-				// If a previous factor was found, verify that the factor found now can be
-				// moved next to the previous factor (nontrivial if factors do not commute).
+
+				// Verify that the factor found now can be moved next to
+				// the previous factor, if applicable (nontrivial if
+				// factors do not commute).
+
 				int sign=1;
 				if(factor_locations.size()>0) {
 					sign=can_move_adjacent(st, factor_locations.back(), start);

@@ -62,6 +62,11 @@ namespace cadabra {
 			// is only used for updating status bars etc.
 
 			int number_of_cells_running(void) const;
+
+			// Terminate the compute thread, in preparation for shutting
+			// down the client altogether.
+
+			void terminate();
 			
 		private:
 			GUIBase        *gui;

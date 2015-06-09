@@ -31,6 +31,26 @@ class Server {
 		// been shut down.
 		void run();
 
+
+		// Python output catching. We implement this in a C++ class
+		// because we want to be able to catch each line of output
+		// separately, and perhaps add additional functionality to send
+		// out-of-band messages to the client later.
+
+		class CatchOutput {
+			public:
+				CatchOutput();
+				CatchOutput(const CatchOutput&);
+
+				void        write(const std::string& txt);
+				void        clear();
+				std::string str() const;
+			private:
+				std::string collect;
+		};
+
+		CatchOutput catchOut, catchErr;		
+
 	private:
 		void init();
 
@@ -83,7 +103,7 @@ class Server {
 
 		// Run a piece of Python code. This is called from a separate
 		// thread constructed by on_message().
-		std::string              run_string(const std::string&);
+		std::string              run_string(const std::string&, bool handle_output=true);
 
 		// Pre-parse a line of code to convert Cadabra notation into proper
 		// Python. Mimics the functionality in core/cadabra2.
