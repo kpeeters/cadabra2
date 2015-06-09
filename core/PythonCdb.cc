@@ -150,14 +150,14 @@ std::string Ex::repr_() const
 	return str.str();
 	}
 
-std::string Ex::_repr_latex_() const
+std::string Ex::_latex(boost::python::object obj) const
 	{
 	std::ostringstream str;
 
 	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
 	dt.output(str);
 
-	return "$"+str.str()+"$";
+	return str.str();
 	}
 
 std::string Ex::_repr_html_() const
@@ -525,6 +525,7 @@ void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std
 template<class Prop>
 Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
 	{
+	for_obj = ex;
 	Kernel *kernel=get_kernel_from_scope();
 	prop = new Prop(); // we keep a pointer, but the kernel owns it.
 	inject_property(kernel, prop, ex, param);
@@ -533,7 +534,7 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 template<class Prop>
 std::string Property<Prop>::str_() const
 	{
-	return prop->name();
+	return "\\text{Attached property "+prop->name()+" to~}"+for_obj->str_()+".";
 	}
 
 template<class Prop>
@@ -780,7 +781,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_string));
 	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_int));
 	pyEx.def("__str__",  &Ex::str_)
-		.def("_repr_latex_", &Ex::_repr_latex_)
+		.def("_latex", &Ex::_latex)
 		.def("_repr_html_", &Ex::_repr_html_)
 		.def("__repr__", &Ex::repr_)
 		.def("__eq__",   &Ex::operator==)

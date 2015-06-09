@@ -218,11 +218,12 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	if(fd == -1) 
 		 throw TeXException("Failed to create temporary file in /tmp.");
 
-	total << "\\documentclass[12pt]{article}\n"
+	total << "\\documentclass[11pt]{article}\n"
 			<< "\\usepackage[dvips,verbose,voffset=0pt,hoffset=0pt,textwidth="
 			<< horizontal_mm << "mm,textheight="
 			<< vertical_mm << "mm]{geometry}\n"
 //			<< "\\usepackage{inconsolata}\n"
+			<< "\\usepackage{amsmath}\n"
 			<< "\\usepackage{color}\\usepackage{amssymb}\n"
 			<< "\\usepackage[parfill]{parskip}\n\\usepackage{tableaux}\n";
 
@@ -231,7 +232,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	total	<< "\\def\\specialcolon{\\mathrel{\\mathop{:}}\\hspace{-.5em}}\n"
 			<< "\\renewcommand{\\bar}[1]{\\overline{#1}}\n"
-			<< "\\begin{document}\n\\pagestyle{empty}\n";
+			<< "\\begin{document}\n\\pagestyle{empty}\n"
+			<< "\\renewcommand{\\arraystretch}{1.2}\n";
 
 	std::set<std::shared_ptr<TeXRequest> >::iterator reqit=reqs.begin();
 	while(reqit!=reqs.end()) {
