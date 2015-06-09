@@ -170,8 +170,8 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		}
 
 	if(msg_type.asString()=="response") {
-		std::string output = "$"+content["output"].asString()+"$";
-		if(output!="$$") {
+		std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
+		if(output!="\\begin{equation*}\\end{equation*}") {
 
 			// Stick an AddCell action onto the stack. We instruct the action to add this result output
 			// cell as a child of the corresponding input cell.

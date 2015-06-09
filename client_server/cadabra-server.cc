@@ -5,6 +5,8 @@
 
 int main()
 	{
+	std::cout << "Starting Cadabra server..." << std::endl;
+
 	Server server;
 
 	server.run();
