@@ -52,9 +52,17 @@ void CodeInput::init()
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
 	edit.override_font(Pango::FontDescription("monospace")); 
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
-//	edit.override_color(Gdk::RGBA("blue"));
 
-	edit.override_background_color(Gdk::RGBA("white"), Gtk::STATE_FLAG_ACTIVE);
+//	edit.override_background_color(Gdk::RGBA("white"), Gtk::STATE_FLAG_ACTIVE);
+
+//	edit.set_name("mywidget");
+//	gtk_rc_parse_string("style \"mywidget\"\n"
+//							  "{\n"
+//							  "  bg[NORMAL] = white\n"
+//							  "}\n"
+//							  "widget \"*.mywidget\" style \"mywidget\"");	
+//
+	
 	edit.set_pixels_above_lines(1);
 	edit.set_pixels_below_lines(1);
 	set_margin_top(10);

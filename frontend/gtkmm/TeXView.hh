@@ -26,6 +26,10 @@ namespace cadabra {
 			// among
 			Glib::RefPtr<Gdk::Pixbuf> pixbuf;
 			
+			// Update the visible image from the pixbuf. Call this in order to propagate
+			// changes to the pixbuf (e.g. from re-running the TeXRequest) to the 
+			// visible widget itself.
+
 			void update_image();
 			
 			sigc::signal1<bool, std::string> tex_error;

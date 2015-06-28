@@ -152,7 +152,7 @@ class Shell(InteractiveConsole):
         line = self.preprocess(line)
         if self.lhs == "":
             # print 'executing: '
-            # print line
+            print line
 
             # Now feed the pre-parsed input to Python.
             self.get_output()

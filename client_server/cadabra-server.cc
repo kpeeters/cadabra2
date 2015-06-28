@@ -5,9 +5,10 @@
 
 int main()
 	{
-	std::cout << "Starting Cadabra server..." << std::endl;
+	std::cerr << "cadabra-server: starting" << std::endl;
 
 	Server server;
-
 	server.run();
+
+	std::cerr << "cadabra-server: terminating" << std::endl;
 	}
