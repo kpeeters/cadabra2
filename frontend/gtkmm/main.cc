@@ -3,6 +3,8 @@
 #include "NotebookWindow.hh"
 
 #include <gtkmm/application.h>
+#include <gtkmm/cssprovider.h>
+#include <gtkmm/label.h>
 
 #include <signal.h>
 
@@ -24,9 +26,21 @@ int main(int argc, char **argv)
 		// Create the ui material.
 		Glib::RefPtr<Gtk::Application> app =
 			Gtk::Application::create(argc, argv, "com.phi-sci.cadabra.cadabra-gtk");
+
+		// Setup windows.
 		cadabra::NotebookWindow nw;
 		cadabra::ComputeThread compute(&nw, nw);
 
+		// Setup Gtk styles. Still does not work properly... Sigh... 
+		Glib::ustring data = "GtkTextView { background: red; }";
+		auto css = Gtk::CssProvider::create();
+		if(not css->load_from_data(data)) {
+			std::cerr << "Failed to load css\n";
+			std::exit(1);
+			}
+		auto screen = Gdk::Screen::get_default();
+//		Gtk::StyleContext::add_provider_for_screen(screen, css, GTK_STYLE_PROVIDER_PRIORITY_USER);
+ 
 		// Create and start the compute/network thread.
 		std::thread compute_thread(&cadabra::ComputeThread::run, &compute);
 		

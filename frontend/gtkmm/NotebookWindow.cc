@@ -20,6 +20,16 @@ NotebookWindow::NotebookWindow()
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
+	// Query high-dpi settings. First cinnamon.
+	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
+	double scale = settings->get_double("text-scaling-factor");
+	std::cout << "scale = " << scale << std::endl;
+	engine.set_scale(scale);
+
+	settings->signal_changed().connect(
+		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
+
+
 	// Setup styling.
 	css_provider = Gtk::CssProvider::create();
 	Glib::ustring data = "GtkTextView { color: blue; margin-left: 15px; margin-top: 20px; margin-bottom: 0px; padding: 20px; padding-bottom: 0px; }";
@@ -413,6 +423,9 @@ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::ite
 	// std::cout << "received: " << content << std::endl;
 	it->textbuf=content;
 
+	modified=true;
+	update_title();
+
 	return false;
 	}
 
@@ -474,8 +487,8 @@ void NotebookWindow::on_file_open()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			std::string filename = dialog.get_filename();			
-			std::ifstream file(filename);
+			name = dialog.get_filename();			
+			std::ifstream file(name);
 			std::string content, line;
 			
 			while(std::getline(file, line)) 
@@ -487,8 +500,9 @@ void NotebookWindow::on_file_open()
 			build_visual_representation();
 			engine.convert_all();
 			mainbox.show_all();
+			modified=false;
+			update_title();
 			
-//			file << out << std::endl;
 			break;
 			}
 		}
@@ -496,13 +510,25 @@ void NotebookWindow::on_file_open()
 
 void NotebookWindow::on_file_save()
 	{
-	on_file_save_as();
+	// check if name known, otherwise call save_as
+	if(name.size()>0) {
+		std::string res=save(name);
+		if(res.size()>0) {
+			Gtk::MessageDialog md("Error saving document "+name);
+			md.set_secondary_text(res);
+			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+			md.run();
+			}
+		else {
+			modified=false;
+			update_title();
+			}
+		}
+	else on_file_save_as();
 	}
 
 void NotebookWindow::on_file_save_as()
 	{
-	std::string out = JSON_serialise(doc);
-
 	Gtk::FileChooserDialog dialog("Please choose a file name",
 											Gtk::FILE_CHOOSER_ACTION_SAVE);
 
@@ -514,12 +540,49 @@ void NotebookWindow::on_file_save_as()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			std::string filename = dialog.get_filename();			
-			std::ofstream file(filename);
-			file << out << std::endl;
+			name = dialog.get_filename();			
+			std::string res=save(name);
+			if(res.size()>0) {
+				Gtk::MessageDialog md("Error saving document "+name);
+				md.set_secondary_text(res);
+				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+				md.run();
+				}
+			else {
+				modified=false;
+				update_title();
+				}
 			break;
 			}
 		}
+	}
+
+
+// FIXME: this logic can go into DocumentThread to be system independent.
+
+std::string NotebookWindow::save(const std::string& fn) const
+	{
+	// Make a backup first, just in case things go wrong.
+	std::ifstream old(fn.c_str());
+	std::ofstream temp(std::string(fn+"~").c_str());
+
+	if(old) { // only backup if there is something to backup
+		if(temp) {
+			std::string ln;
+			while(std::getline(old, ln)) {
+				temp << ln << "\n";
+				if(!temp) return "Error writing backup file";
+				}
+			}
+		else {
+			return "Failed to create backup file";
+			}
+		}
+
+	std::string out = JSON_serialise(doc);
+	std::ofstream file(fn);
+	file << out << std::endl;
+	return "";
 	}
 
 void NotebookWindow::on_file_quit()
@@ -578,4 +641,22 @@ void NotebookWindow::on_kernel_restart()
 	// FIXME: add warnings
 
 	compute->restart_kernel();
+	}
+
+void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
+	{
+	if(key=="text-scaling-factor") {
+		double scale = settings->get_double("text-scaling-factor");
+		std::cout << "cadabra-client: text-scaling-factor = " << scale << std::endl;
+		engine.set_scale(scale);
+		engine.invalidate_all();
+		engine.convert_all();
+
+		std::cerr << "cadabra-client: refreshing all canvasses" << std::endl;
+		auto it=canvasses.begin();
+		while(it!=canvasses.end()) {
+			(*it)->refresh_all();
+			++it;
+			}
+		}
 	}

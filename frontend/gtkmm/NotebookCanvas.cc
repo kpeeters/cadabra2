@@ -21,3 +21,13 @@ NotebookCanvas::~NotebookCanvas()
 	{
 	}
 
+void NotebookCanvas::refresh_all()
+	{
+	auto it=visualcells.begin();
+	while(it!=visualcells.end()) {
+		if(it->first->cell_type==DataCell::CellType::output) {
+			it->second.outbox->update_image();
+			}
+		++it;
+		}
+	}

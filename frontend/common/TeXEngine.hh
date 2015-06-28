@@ -47,6 +47,7 @@ namespace cadabra {
 			
 			// Set the width and font size for all images to be generated.
 			void set_geometry(int horizontal_pixels);
+			void set_scale(double);
 			void set_font_size(int font_size);
 			std::vector<std::string> latex_packages;
 			
@@ -65,6 +66,11 @@ namespace cadabra {
 														  const std::string& startwrap, const std::string& endwrap);
 			std::shared_ptr<TeXRequest> modify(std::shared_ptr<TeXRequest>, const std::string&);
 			void                        convert_all();
+
+			// Mark all TeXRequests as needing re-generating. Use this e.g. when changing font
+			// size for the entire notebook.
+			void                        invalidate_all();
+
 			void                        checkout(std::shared_ptr<TeXRequest>);
 			void                        checkout_all();
 			
@@ -75,6 +81,7 @@ namespace cadabra {
 			
 			int                    horizontal_pixels_;
 			int                    font_size_;
+			double                 scale_;
 			
 			void erase_file(const std::string&) const;
 			void convert_one(std::shared_ptr<TeXRequest>);

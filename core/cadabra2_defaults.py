@@ -9,13 +9,22 @@ sys.path.insert(0,'/home/kasper/Development/git.others/sympy')
 # shell does not fail later.
 
 try:
-    from sympy import *
+    import sympy
 except:
     class Sympy:
         __version__="unavailable"
 
     sympy = Sympy()
 
+if sympy.__version__ != "unavailable":
+    from sympy import factor
+    from sympy import integrate
+    from sympy import diff
+    from sympy import expand
+    from sympy import symbols
+    from sympy import latex
+    from sympy import sin, cos, tan, trigsimp
+    from sympy import Matrix
 
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

@@ -1,0 +1,4 @@
+- running without network connection throws an asio exception, 
+  probably because there is no route at all, or because none of
+  the regular interfaces are up. 
+

@@ -28,6 +28,8 @@ namespace cadabra {
 			Gtk::ScrolledWindow       scroll;
 			Gtk::HSeparator           bottomline;
 
+			void refresh_all();
+
 	};
 
 }

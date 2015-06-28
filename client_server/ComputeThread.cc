@@ -34,7 +34,14 @@ void ComputeThread::try_connect()
 	using websocketpp::lib::placeholders::_2;
 	using websocketpp::lib::bind;
 
-    wsclient.clear_access_channels(websocketpp::log::alevel::all);
+	// Make the resolver work when there is no network up at all, only localhost.
+	// https://svn.boost.org/trac/boost/ticket/2456
+	// Not sure why this works here, as the compiler claims this statement does
+	// not have any effect.
+
+	boost::asio::ip::resolver_query_base::flags(0);
+
+	wsclient.clear_access_channels(websocketpp::log::alevel::all);
 	wsclient.clear_error_channels(websocketpp::log::elevel::all);
 
 	wsclient.set_open_handler(bind(&ComputeThread::on_open, this, ::_1));
@@ -46,12 +53,13 @@ void ComputeThread::try_connect()
 	websocketpp::lib::error_code ec;
 	connection = wsclient.get_connection(uri, ec);
 	if (ec) {
-		std::cerr << "error: " << ec.message() << std::endl;
+		std::cerr << "cadabra-client: websocket connection error " << ec.message() << std::endl;
 		return;
 		}
 
 	our_connection_hdl = connection->get_handle();
 	wsclient.connect(connection);
+	std::cerr << "cadabra-client: connect done" << std::endl;
 	}
 
 void ComputeThread::run()
@@ -74,12 +82,14 @@ void ComputeThread::terminate()
 	// http://riccomini.name/posts/linux/2012-09-25-kill-subprocesses-linux-bash/
 
 	if(server_pid!=0) {
+		std::cerr << "cadabra-client: killing server" << std::endl;
 		kill(server_pid, SIGKILL);
 		}
 	}
 
 void ComputeThread::on_fail(websocketpp::connection_hdl hdl) 
 	{
+	std::cerr << "cadabra-client: connection failed" << std::endl;
 	connection_is_open=false;
 	if(gui && server_pid!=0)
 		gui->on_network_error();
@@ -95,6 +105,7 @@ void ComputeThread::try_spawn_server()
 	// starting server, then use this UUID to get access to the server
 	// port.
 
+	std::cerr << "cadabra-client: spawning server" << std::endl;
 	char * const sargv[] = {"sh", "-c", "exec cadabra-server", NULL};
 	int status;
 	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, sargv, NULL); //environ);
@@ -189,7 +200,8 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		docthread.queue_action(actionpos);
 		}
 	else {
-		std::string error = "\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}";
+		std::cout << "Generating ERROR cell" << std::endl;
+		std::string error = "{\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}}";
 
 		// Stick an AddCell action onto the stack. We instruct the action to add this result output
 		// cell as a child of the corresponding input cell.
@@ -258,6 +270,7 @@ void ComputeThread::restart_kernel()
 	if(connection_is_open==false)
 		return;
 
+	std::cerr << "cadabra-client: restarting kernel" << std::endl;
 	Json::Value req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="exit";

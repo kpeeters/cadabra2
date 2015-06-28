@@ -22,7 +22,8 @@ using websocketpp::lib::bind;
 
 Server::Server()
 	{
-	socket_name="tcp://*:5454";
+	// FIXME: we do not actually do anything with this.
+	socket_name="tcp://localhost:5454";
 	init();
 	}
 
@@ -39,23 +40,21 @@ Server::~Server()
 
 Server::CatchOutput::CatchOutput()
 	{
-	std::cerr << "CONSTRUCTOR\n";
 	}
 
 Server::CatchOutput::CatchOutput(const CatchOutput&)
 	{
-	std::cerr << "COPY CONSTRUCTOR\n";
 	}
 
 void Server::CatchOutput::write(const std::string& str)
 	{
-	std::cout << "Python wrote: " << str << std::endl;
+//	std::cout << "Python wrote: " << str << std::endl;
 	collect+=str;
    }
 
 void Server::CatchOutput::clear()
 	{
-	std::cout << "Python clear" << std::endl;
+//	std::cout << "Python clear" << std::endl;
 	collect="";
    }
 
@@ -168,7 +167,7 @@ std::string Server::pre_parse(const std::string& line)
 					}
 				}
 			else {
-				std::cerr << "no preparse" << std::endl;
+				// std::cerr << "no preparse" << std::endl;
 				if(lastchar==";") 
 					ret = indent_line + "_ = " + line_stripped + "; print(latex(_))";
 				else
@@ -185,7 +184,7 @@ std::string Server::pre_parse(const std::string& line)
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
-	std::cerr << "RUN_STRING" << std::endl;
+//	std::cerr << "RUN_STRING" << std::endl;
 
 	std::string result;
 
@@ -196,13 +195,13 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	while(std::getline(str, line, '\n')) {
 		newblk += pre_parse(line)+'\n';
 		}
-	std::cerr << "PREPARSED: " << newblk << std::endl;
+//	std::cerr << "PREPARSED: " << newblk << std::endl;
 
 	// Run block. Catch output.
 	try {
 		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
 		std::string object_classname = boost::python::extract<std::string>(ignored.attr("__class__").attr("__name__"));
-		std::cout << "exec returned a " << object_classname << std::endl;
+//		std::cout << "exec returned a " << object_classname << std::endl;
 		/*
 		boost::python::object catchobj = main_module.attr("catchOut");
 		boost::python::object valueobj = catchobj.attr("value");
@@ -232,7 +231,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			}
 		throw std::runtime_error(err);
 		}
-	std::cerr << "------------" << std::endl;
+   //	std::cerr << "------------" << std::endl;
 	return result;
 	}
 
@@ -252,7 +251,7 @@ void Server::on_open(websocketpp::connection_hdl hdl)
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	Connection con;
 	con.hdl=hdl;
- 	std::cout << "connection " << con.uuid << " open" << std::endl;
+ 	std::cerr << "cadabra-server: connection " << con.uuid << " open" << std::endl;
 	connections[hdl]=con;
 	}
 
@@ -260,7 +259,7 @@ void Server::on_close(websocketpp::connection_hdl hdl)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	auto it = connections.find(hdl);
-	std::cout << "connection " << it->second.uuid << " closed" << std::endl;	
+	std::cout << "cadabra-server: connection " << it->second.uuid << " closed" << std::endl;	
 	connections.erase(hdl);
 	}
 
@@ -276,14 +275,14 @@ void Server::wait_for_job()
    // available, and processing it. Blocks are always processed sequentially
 	// even though new ones may come in before previous ones have finished.
 
-	std::cout << "waiting for blocks" << std::endl;
+	std::cout << "cadabra-server: waiting for blocks" << std::endl;
 
 	while(true) {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		while(block_queue.size()==0) 
 			block_available.wait(lock);
 
-		std::cout << "going to RUN: " << block_queue.front().input << std::endl;
+		std::cout << "cadabra-server: going to run " << block_queue.front().input << std::endl;
 		Block block = block_queue.front();
 		block_queue.pop();
 		// We are done with the block_queue; release the lock so that the
@@ -409,21 +408,28 @@ void Server::on_block_error(Block blk)
 
 void Server::run() 
 	{
-	wserver.clear_access_channels(websocketpp::log::alevel::all);
-	wserver.clear_error_channels(websocketpp::log::elevel::all);
-
-	wserver.set_socket_init_handler(bind(&Server::on_socket_init, this, ::_1,::_2));
-	wserver.set_message_handler(bind(&Server::on_message, this, ::_1, ::_2));
-   wserver.set_open_handler(bind(&Server::on_open,this,::_1));
-	wserver.set_close_handler(bind(&Server::on_close,this,::_1));
-	
-	wserver.init_asio();
-	wserver.set_reuse_addr(true);
-	wserver.listen(9002);
-	wserver.start_accept();
-
-	std::cout << "spawning thread" << std::endl;
-	runner = std::thread(std::bind(&Server::wait_for_job, this));
-	
-	wserver.run();
+	try {
+		wserver.clear_access_channels(websocketpp::log::alevel::all);
+		wserver.clear_error_channels(websocketpp::log::elevel::all);
+		
+		wserver.set_socket_init_handler(bind(&Server::on_socket_init, this, ::_1,::_2));
+		wserver.set_message_handler(bind(&Server::on_message, this, ::_1, ::_2));
+		wserver.set_open_handler(bind(&Server::on_open,this,::_1));
+		wserver.set_close_handler(bind(&Server::on_close,this,::_1));
+		
+		wserver.init_asio();
+		wserver.set_reuse_addr(true);
+		wserver.listen(9002);
+		wserver.start_accept();
+		
+		std::cerr << "cadabra-server: spawning job thread" << std::endl;
+		runner = std::thread(std::bind(&Server::wait_for_job, this));
+		
+		std::cerr << "cadabra-server: starting websocket server" << std::endl;
+		wserver.run();
+		std::cerr << "cadabra-server: websocket server terminated" << std::endl;
+		}
+	catch(websocketpp::exception& ex) {
+		std::cerr << "cadabra-server: websocket exception " << ex.code() << " " << ex.what() << std::endl;
+		}
 	}

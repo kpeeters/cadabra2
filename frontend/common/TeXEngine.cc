@@ -86,7 +86,7 @@ TeXEngine::~TeXEngine()
 	}
 
 TeXEngine::TeXEngine()
-	: horizontal_pixels_(800), font_size_(12)
+	: horizontal_pixels_(800), font_size_(12), scale_(1.0)
 	{
 	}
 
@@ -114,6 +114,19 @@ void TeXEngine::set_font_size(int fontsize)
 			}
 		}
 	font_size_=fontsize;
+	}
+
+void TeXEngine::set_scale(double scale)
+	{
+	if(scale_!=scale) {
+		// flag all requests as requiring an update
+		std::set<std::shared_ptr<TeXRequest> >::iterator reqit=requests.begin();
+		while(reqit!=requests.end()) {
+			(*reqit)->needs_generating=true;
+			++reqit;
+			}
+		}
+	scale_=scale;
 	}
 
 TeXEngine::TeXRequest::TeXRequest()
@@ -145,6 +158,15 @@ void TeXEngine::checkout_all()
 	requests.clear();
 	}
 
+void TeXEngine::invalidate_all()
+	{
+	auto it=requests.begin();
+	while(it!=requests.end()) {
+		(*it)->needs_generating=true;
+		++it;
+		}
+	}
+
 std::shared_ptr<TeXEngine::TeXRequest> TeXEngine::modify(std::shared_ptr<TeXRequest> req, const std::string& txt)
 	{
 	req->latex_string=txt;
@@ -163,7 +185,7 @@ void TeXEngine::convert_all()
 		}
 
 	if(need_generating!=0) {
-	  //		std::cerr << "running TeX on " << requests.size() << " requests" << std::endl;
+//		std::cerr << "cadabra-client: running TeX on " << requests.size() << " requests" << std::endl;
 		convert_set(requests);
 		}
 	}
@@ -294,6 +316,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			result+=line+"\n";
 
 		erase_file(std::string(templ)+".tex");
+//		std::cout << "TeX file in " << std::string(templ)+".tex" << std::endl;
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
 #ifdef DEBUG		
@@ -339,7 +362,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Convert the entire dvi file to png files.
 	//
 	std::ostringstream resspec;
-	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch;
+	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch*scale_;
 	exec_stream_t dvipng_proc;
 //	dvipng_proc << "-T" << "tight" << "-bg" << "Transparent"; // << "-fg";
 //	rgbspec << "\"rgb "
@@ -395,6 +418,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			pngname << std::string(templ) << pagenum << ".png";
 			std::ifstream tst(pngname.str().c_str());
 			if(tst.good()) {
+				(*reqit)->image_.clear();
 				unsigned error = lodepng::decode((*reqit)->image_, (*reqit)->width_, 
 															(*reqit)->height_, pngname.str());
 				if(error!=0)
