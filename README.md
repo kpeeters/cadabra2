@@ -3,3 +3,4 @@
 
 This repository holds the 2.x series of the Cadabra computer
 algebra system. It is not yet ready for public consumption.
+Use at your own risk.
