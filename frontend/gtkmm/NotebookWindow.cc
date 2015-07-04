@@ -201,7 +201,7 @@ void NotebookWindow::set_stop_sensitive(bool s)
 
 void NotebookWindow::process_data() 
 	{
-	std::cout << "notified" << std::endl;
+	std::cerr << "cadabra-client: notified by ComputeThread to start processing actions" << std::endl;
 	dispatcher.emit();
 	}
 
@@ -235,6 +235,9 @@ void NotebookWindow::process_todo_queue()
 	status_label.set_text(status_string);
 
 	// Perform any ActionBase actions.
+
+	HERE: I think we call this recursively, or something like that.
+
 	process_action_queue();
 	}
 
@@ -267,8 +270,10 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	// Add a visual cell corresponding to this document cell in 
 	// every canvas.
 
+	std::cerr << "cadabra-client: adding cell" << std::endl;
+
 	if(compute!=0)
-		set_stop_sensitive( compute->number_of_cells_running()>0 );
+		set_stop_sensitive( compute->number_of_cells_executing()>0 );
 	
 	Glib::RefPtr<Gtk::TextBuffer>          global_buffer;
 	std::shared_ptr<TeXEngine::TeXRequest> global_texrequest;
@@ -365,8 +370,14 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 //			std::cout << "need to re-order" << std::endl;
 			parentbox->reorder_child(*w, index);
 			}
-		if(visible)
+		if(visible) {
+			std::cerr << "cadabra-client: ensuring that widget is visible" << std::endl;
 			w->show_all();
+			w->show_now();
+//			while( Gtk::Main::events_pending() )
+//				Gtk::Main::iteration();			
+			}
+		
 		}
 	}
 
@@ -409,10 +420,26 @@ void NotebookWindow::update_cell(const DTree&, DTree::iterator)
 
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
-	std::cout << "positioning cursor at cell " << it->textbuf << std::endl;
-	set_stop_sensitive( compute->number_of_cells_running()>0 );
+	std::cout << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
+	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
+	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end())
+		std::cerr << "cadabra-client: cannot find cell to position cursor!" << std::endl;
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
+
+	// Ensure that the widget is visibile and realised. This is necessary because Gtk only
+	// allocates the widget dimensions once it has gone through the main loop, and we may 
+	// not have been there since the widget got added to the document. We need show_now()
+	// here instead of show_all() because the latter for some reason does not allocate
+	// here (it gets deferred).
+
+	target.inbox->show_now();
+	while( Gtk::Main::events_pending() )
+		Gtk::Main::iteration();			
+
+	Gtk::Allocation alloc=target.inbox->get_allocation();
+	std::cerr << "cadabra-client: widget to grab is at y=" << alloc.get_y() << std::endl;
+
 	target.inbox->edit.grab_focus();
 	current_cell=it;
 	}
@@ -438,12 +465,17 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 
 bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	{
+	// First ensure that this cell is not already running, otherwise all hell
+	// will break loose when we try to double-remove the existing output cell etc.
+
+	if(compute->is_executing(*it)) return true;
+
 	current_canvas=canvas_number;
 	// Remove child nodes, if any.
 	// FIXME: use ActionRemoveCell so we can undo.
 	DTree::sibling_iterator sib=doc.begin(it);
 	while(sib!=doc.end(it)) {
-		std::cout << "removing one output cell" << std::endl;
+		std::cout << "cadabra-client: removing one output cell" << std::endl;
 
 		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib);
 		queue_action(action);
@@ -452,8 +484,10 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 		}
 
 	// Execute
+	std::cerr << "cadabra-client: output cell removed, executing input" << std::endl;
 	set_stop_sensitive(true);
 	compute->execute_cell(*it);
+	std::cerr << "cadabra-client: execution queued, returning" << std::endl;
 
 	return true;
 	}

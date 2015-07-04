@@ -47,6 +47,7 @@ namespace cadabra {
 			// stack, by calling queue_action.
 
 			void execute_cell(const DataCell&);
+			bool is_executing(const DataCell&) const;
 
 			// Stop the current cell execution on the server and remove
 			// all other cells from the run queue as well.
@@ -61,7 +62,7 @@ namespace cadabra {
 			// FIXME: this does not guarantee thread-safety but at the moment
 			// is only used for updating status bars etc.
 
-			int number_of_cells_running(void) const;
+			int number_of_cells_executing(void) const;
 
 			// Terminate the compute thread, in preparation for shutting
 			// down the client altogether.

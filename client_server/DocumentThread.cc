@@ -68,13 +68,20 @@ void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 
 void DocumentThread::process_action_queue()
 	{
-	std::lock_guard<std::mutex> guard(stack_mutex);
+	// FIXME: we certainly do not want any two threads to run this at the same time,
+	// but that is not guaranteed.
+
+	stack_mutex.lock();
 	while(pending_actions.size()>0) {
-//		std::cout << "Action!" << std::endl;
 		std::shared_ptr<ActionBase> ab = pending_actions.front();
+		// Unlock the queue while we are processing this particular action.
+		stack_mutex.unlock();
 		ab->pre_execute(*this);
 		ab->update_gui(doc, *gui);
 		ab->post_execute(*this);
+		// Lock the queue to remove the running action.
+		stack_mutex.lock();
 		pending_actions.pop();
 		}
+	stack_mutex.unlock();
 	}
