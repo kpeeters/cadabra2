@@ -24,7 +24,6 @@ DataCell::DataCell(const DataCell& other)
 	cdbbuf = other.cdbbuf;
 	tex_hidden = other.tex_hidden;
 	sensitive = other.sensitive;
-	running = other.running;
 	serial_number = other.serial_number;
 	}
 

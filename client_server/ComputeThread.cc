@@ -188,13 +188,14 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 			// cell as a child of the corresponding input cell.
 			DataCell result(DataCell::CellType::output, output);
 			
-			// Finally, the actions. One to add the output cell, and another one to position the
-			// cursor in the next input cell, creating one if it does not exist.
+			// Finally, the actions. One to add the output cell...
 			std::shared_ptr<ActionBase> action = 
 				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 			docthread.queue_action(action);
 			}
 		
+		// ... and another one to position the cursor in the next input
+		// cell, creating one if it does not exist.
 		std::shared_ptr<ActionBase> actionpos =
 			std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
 		docthread.queue_action(actionpos);
@@ -241,7 +242,13 @@ void ComputeThread::execute_cell(const DataCell& dc)
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	}
 
-int ComputeThread::number_of_cells_running() const
+bool ComputeThread::is_executing(const DataCell& dc) const
+	{
+	if(running_cells.find(dc.id())!=running_cells.end()) return true;
+	else return false;
+	}
+
+int ComputeThread::number_of_cells_executing() const
 	{
 	return running_cells.size();
 	}

@@ -34,7 +34,6 @@ namespace cadabra {
 			std::string                   cdbbuf;       // c_output only: the output in cadabra input format
 			bool                          tex_hidden;   // c_tex only
 			bool                          sensitive;
-			bool                          running;
 			
 			// Each cell is identified by a serial number 'id' which is used
 			// to keep track of it across network calls.

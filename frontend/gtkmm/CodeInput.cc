@@ -65,6 +65,7 @@ void CodeInput::init()
 	
 	edit.set_pixels_above_lines(1);
 	edit.set_pixels_below_lines(1);
+	edit.set_pixels_inside_wrap(1);
 	set_margin_top(10);
 	set_margin_bottom(10);
 //	edit.set_pixels_below_lines(Gtk::LINE_SPACING);

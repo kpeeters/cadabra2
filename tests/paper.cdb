@@ -112,7 +112,7 @@ ex:=C_{i j m n} \nabla_{k}{C_{i j k p}} \nabla_{q}{C_{m n p q}};
 rl:=\nabla_{i}{C_{k m l i}} -> 0;
 # This one does works, beware of the r!
 substitute(ex, r'\nabla_{i}{C_{k m l i}} -> 0')
-# but this one does
+# and this one does too.
 substitute(ex, rl)
 assert(ex==0)
 

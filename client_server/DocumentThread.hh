@@ -68,12 +68,15 @@ namespace cadabra {
 			// DocumentThread as well as the ComputeThread, so they need
 			// a mutex to access them.
 
-         void                                             process_action_queue();
-
          std::mutex                                       stack_mutex;
 			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;
 			ActionStack                                      undo_stack, redo_stack;
 			std::queue<std::shared_ptr<ActionBase> >         pending_actions;			
+
+			// Process the action queue. It is allowed to call queue_action() above
+			// while this is running. So a running action can add more actions.
+
+         void                                             process_action_queue();
 	};
 	
 }
