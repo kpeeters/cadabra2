@@ -108,10 +108,10 @@ void ActionPositionCursor::revert(DocumentThread& cl)
 void ActionPositionCursor::update_gui(const DTree& tr, GUIBase& gb)
 	{
 	if(needed_new_cell) {
-		// std::cout << "adding new visual cell" << std::endl;
+		std::cerr << "cadabra-client: adding new visual cell before positioning cursor" << std::endl;
 		gb.add_cell(tr, newref, true);
 		}
-	// std::cout << "positioning cursor" << std::endl;
+	std::cerr << "cadabra-client: positioning cursor" << std::endl;
 	gb.position_cursor(tr, newref);
 	}
 

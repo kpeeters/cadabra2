@@ -139,7 +139,7 @@ void ComputeThread::on_open(websocketpp::connection_hdl hdl)
 
 void ComputeThread::on_close(websocketpp::connection_hdl hdl) 
 	{
-	std::cerr << "connection closed" << std::endl;
+	std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
 	if(gui)
 		gui->on_disconnect();
@@ -152,14 +152,14 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg) 
 	{
 	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
-	std::cerr << msg->get_payload() << std::endl;
+//	std::cerr << msg->get_payload() << std::endl;
 
 	// Parse the JSON message.
 	Json::Value  root;
 	Json::Reader reader;
 	bool success = reader.parse( msg->get_payload(), root );
 	if ( !success ) {
-		std::cerr << "cannot parse message" << std::endl;
+		std::cerr << "cadabra-client: cannot parse message" << std::endl;
 		return;
 		}
 	const Json::Value header   = root["header"];
@@ -183,6 +183,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	if(msg_type.asString()=="response") {
 		std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
 		if(output!="\\begin{equation*}\\end{equation*}") {
+			std::cerr << "cadabra-client: ComputeThread received response from server" << std::endl;
 
 			// Stick an AddCell action onto the stack. We instruct the action to add this result output
 			// cell as a child of the corresponding input cell.
@@ -223,7 +224,7 @@ void ComputeThread::execute_cell(const DataCell& dc)
 	if(connection_is_open==false)
 		return;
 
-	std::cout << "going to execute " << dc.textbuf << std::endl;
+	std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
 
 	Json::Value req, header, content;
 	header["uuid"]="none";
@@ -236,7 +237,7 @@ void ComputeThread::execute_cell(const DataCell& dc)
 	std::ostringstream str;
 	str << req << std::endl;
 	
-	std::cerr << str.str() << std::endl;
+//	std::cerr << str.str() << std::endl;
 
 	running_cells.insert(dc.id());
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
@@ -266,7 +267,7 @@ void ComputeThread::stop()
 	std::ostringstream str;
 	str << req << std::endl;
 	
-	std::cerr << str.str() << std::endl;
+//	std::cerr << str.str() << std::endl;
 
 	server_pid=0;
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
@@ -286,7 +287,7 @@ void ComputeThread::restart_kernel()
 	std::ostringstream str;
 	str << req << std::endl;
 	
-	std::cerr << str.str() << std::endl;
+//	std::cerr << str.str() << std::endl;
 
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	}

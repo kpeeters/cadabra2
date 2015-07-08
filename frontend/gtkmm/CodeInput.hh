@@ -33,9 +33,9 @@ namespace cadabra {
 					sigc::signal1<bool, std::string> content_changed;
 					sigc::signal0<bool>              cell_got_focus;
 			};
-			
+
 			bool handle_button_press(GdkEventButton *);
-	
+
 			// We cannot edit the content of the DataCell directly,
 			// because Gtk needs a Gtk::TextBuffer. The CodeInput widgets
 			// corresponding to a single DataCell all share their 

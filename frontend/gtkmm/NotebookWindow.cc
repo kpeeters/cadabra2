@@ -230,13 +230,15 @@ void NotebookWindow::on_network_error()
 void NotebookWindow::process_todo_queue()
 	{
 	// Update the status/kernel messages into the corresponding widgets.
+	{
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_label.set_text(kernel_string);
 	status_label.set_text(status_string);
+		}
 
 	// Perform any ActionBase actions.
 
-	HERE: I think we call this recursively, or something like that.
+//	HERE: I think we call this recursively, or something like that.
 
 	process_action_queue();
 	}
@@ -427,21 +429,28 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 		std::cerr << "cadabra-client: cannot find cell to position cursor!" << std::endl;
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 
-	// Ensure that the widget is visibile and realised. This is necessary because Gtk only
-	// allocates the widget dimensions once it has gone through the main loop, and we may 
-	// not have been there since the widget got added to the document. We need show_now()
-	// here instead of show_all() because the latter for some reason does not allocate
-	// here (it gets deferred).
-
-	target.inbox->show_now();
-	while( Gtk::Main::events_pending() )
-		Gtk::Main::iteration();			
+	// Grab widgets focus, which will scroll it into view. If the widget has not yet
+	// had its size and position allocated, we need to setup a signal handler which
+	// gets fires as soon as size/position allocation happens.
 
 	Gtk::Allocation alloc=target.inbox->get_allocation();
-	std::cerr << "cadabra-client: widget to grab is at y=" << alloc.get_y() << std::endl;
-
-	target.inbox->edit.grab_focus();
+	if(alloc.get_y()!=-1)
+		target.inbox->edit.grab_focus();
+	else {
+		grab_connection = target.inbox->signal_size_allocate().connect(
+			sigc::bind(
+				sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
+				&(target.inbox->edit)
+						  ));
+		}
+	
 	current_cell=it;
+	}
+
+void NotebookWindow::on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w)
+	{
+	grab_connection.disconnect();
+	w->grab_focus();
 	}
 
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
@@ -468,23 +477,25 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	// First ensure that this cell is not already running, otherwise all hell
 	// will break loose when we try to double-remove the existing output cell etc.
 
-	if(compute->is_executing(*it)) return true;
+	std::cerr << "cadabra-client: request to execute cell" << std::endl;
+	if(compute->is_executing(*it)) {
+		std::cerr << "cadabra-client: cell already executing" << std::endl;
+		return true;
+		}
 
 	current_canvas=canvas_number;
+
 	// Remove child nodes, if any.
-	// FIXME: use ActionRemoveCell so we can undo.
 	DTree::sibling_iterator sib=doc.begin(it);
 	while(sib!=doc.end(it)) {
-		std::cout << "cadabra-client: removing one output cell" << std::endl;
-
+		std::cout << "cadabra-client: scheduling output cell for removal" << std::endl;
 		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib);
 		queue_action(action);
-
 		++sib;
 		}
 
 	// Execute
-	std::cerr << "cadabra-client: output cell removed, executing input" << std::endl;
+	std::cerr << "cadabra-client: scheduling input exec" << std::endl;
 	set_stop_sensitive(true);
 	compute->execute_cell(*it);
 	std::cerr << "cadabra-client: execution queued, returning" << std::endl;
