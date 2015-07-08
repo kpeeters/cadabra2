@@ -20,7 +20,6 @@ TeXView::TeXView(TeXEngine& eng, const std::string& texb, int hmargin)
 
 void TeXView::on_show()
 	{
-	std::cout << "on show" << std::endl;
 	try {
 		// Ensure that all TeX cells have been rendered by TeX. This will do nothing
 		// if no TeX cells need (re-)rendering. When adding many cells in one go, do so

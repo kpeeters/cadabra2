@@ -48,6 +48,10 @@ namespace cadabra {
 			// TeX stuff
 			TeXEngine        engine;
 
+			// For grabbing focus of widgets which are not yet allocated.
+			void on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w);
+			sigc::connection grab_connection;
+
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;
 			virtual bool on_delete_event(GdkEventAny*) override;

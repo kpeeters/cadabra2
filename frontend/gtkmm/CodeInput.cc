@@ -22,6 +22,7 @@ std::string trim(const std::string& s)
 CodeInput::exp_input_tv::exp_input_tv(Glib::RefPtr<Gtk::TextBuffer> tb)
 	: Gtk::TextView(tb)
 	{
+	set_events(Gdk::STRUCTURE_MASK);
 //	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
 //	get_buffer()->signal_erase().connect(sigc::mem_fun(this, &exp_input_tv::on_my_erase), false);
 	}

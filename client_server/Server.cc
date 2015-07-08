@@ -259,7 +259,7 @@ void Server::on_close(websocketpp::connection_hdl hdl)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	auto it = connections.find(hdl);
-	std::cout << "cadabra-server: connection " << it->second.uuid << " closed" << std::endl;	
+	std::cerr << "cadabra-server: connection " << it->second.uuid << " closed" << std::endl;	
 	connections.erase(hdl);
 	}
 
@@ -321,14 +321,14 @@ void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::messag
 		return;
 		}
 
-	std::cout << "Message from " << it->second.uuid << std::endl;
+//	std::cout << "Message from " << it->second.uuid << std::endl;
 	
 	dispatch_message(hdl, msg->get_payload());
 	}
 
 void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string& json_msg)
 	{
-	std::cout << json_msg << std::endl;
+//	std::cout << json_msg << std::endl;
 
 	Json::Value  root;   // will contains the root value after parsing.
 	Json::Reader reader;
@@ -340,9 +340,8 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 
 	const Json::Value content = root["content"];
 	const Json::Value header  = root["header"];
-	std::cout << "got header" << std::endl;
 	std::string msg_type = header["msg_type"].asString();
-	std::cout << "received msg_type |" << msg_type << "|" << std::endl;
+//	std::cout << "received msg_type |" << msg_type << "|" << std::endl;
 
 	if(msg_type=="execute_request") {
 		std::string code = content.get("code","").asString();
@@ -354,10 +353,10 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 	else if(msg_type=="execute_interrupt") {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		stop_block();
-		std::cout << "clearing block queue" << std::endl;
+//		std::cout << "clearing block queue" << std::endl;
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
-		std::cout << "job stop requested" << std::endl;
+		std::cout << "cadabra-server: job stop requested" << std::endl;
 		}
 	else if(msg_type=="exit") {
 		exit(-1);
@@ -380,7 +379,7 @@ void Server::on_block_finished(Block blk)
 
 	std::ostringstream str;
 	str << json << std::endl;
-	std::cout << "sending " << str.str() << std::endl;
+//	std::cout << "sending " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
@@ -401,7 +400,7 @@ void Server::on_block_error(Block blk)
 
 	std::ostringstream str;
 	str << json << std::endl;
-	std::cout << "sending error: " << str.str() << std::endl;
+	std::cerr << "cadabra-server: sending error, " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
