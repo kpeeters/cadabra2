@@ -46,6 +46,7 @@ namespace cadabra {
 			virtual void on_connect()=0;
 			virtual void on_disconnect()=0;
 			virtual void on_network_error()=0;
+			virtual void on_kernel_runstatus(bool)=0;
 
 			// When the ComputeThread needs to modify the document, it
 			// stores an ActionBase object on the stack (see the

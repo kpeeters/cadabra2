@@ -75,7 +75,8 @@ class Server {
 				websocketpp::connection_hdl hdl;
 				boost::uuids::uuid          uuid;
 		};
-		typedef std::map<websocketpp::connection_hdl, Connection, std::owner_less<websocketpp::connection_hdl>> ConnectionMap;
+		typedef std::map<websocketpp::connection_hdl, Connection, 
+							  std::owner_less<websocketpp::connection_hdl>> ConnectionMap;
 		ConnectionMap connections;
 
 		// Mutex to be able to use the websocket layer from both the
@@ -113,6 +114,7 @@ class Server {
 		// Handles communication of the result back to the client.
 		void                     on_block_finished(Block);
 		void                     on_block_error(Block);
+		void                     on_kernel_fault(Block);
 
 		// Halt the currently running block and prevent execution of any
 		// further blocks that may still be on the queue.
