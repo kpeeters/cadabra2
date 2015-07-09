@@ -120,6 +120,7 @@ std::string Server::pre_parse(const std::string& line)
 			}
 
 		std::string line_stripped=std::string(mres[2].first, mres[2].second);
+		if(line_stripped.size()==0) return "";
 
 		// 'lastchar' is either a Cadabra termination character, or empty.
 		// 'line_stripped' will have that character stripped, if present.
@@ -193,6 +194,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	std::string line;
 	std::string newblk;
 	while(std::getline(str, line, '\n')) {
+		std::cerr << "preparsing " + line << std::endl;
 		newblk += pre_parse(line)+'\n';
 		}
 //	std::cerr << "PREPARSED: " << newblk << std::endl;
@@ -285,16 +287,30 @@ void Server::wait_for_job()
 		std::cout << "cadabra-server: going to run " << block_queue.front().input << std::endl;
 		Block block = block_queue.front();
 		block_queue.pop();
-		// We are done with the block_queue; release the lock so that the
-		// master thread can push new blocks onto it.
 		lock.unlock();
 		try {
+			// We are done with the block_queue; release the lock so that the
+			// master thread can push new blocks onto it.
 			block.output = run_string(block.input);
 			on_block_finished(block);
 			}
 		catch(std::runtime_error& ex) {
+			// On error we remove all other blocks from the queue.
+			lock.lock();
+			std::queue<Block> empty;
+			std::swap(block_queue, empty);
+			lock.unlock();
 			block.error = ex.what();
 			on_block_error(block);
+			}
+		catch(std::exception& ex) {
+			lock.lock();
+			std::queue<Block> empty;
+			std::swap(block_queue, empty);
+			lock.unlock();
+			block.error=ex.what();
+			on_kernel_fault(block);
+			// Keep running
 			}
 		}
 	}
@@ -401,6 +417,27 @@ void Server::on_block_error(Block blk)
 	std::ostringstream str;
 	str << json << std::endl;
 	std::cerr << "cadabra-server: sending error, " << str.str() << std::endl;
+
+	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
+	}
+
+void Server::on_kernel_fault(Block blk)
+	{
+	std::lock_guard<std::mutex> lock(ws_mutex);    
+	
+	// Make a JSON message.
+	Json::Value json, content, header;
+	
+	header["cell_id"]=(Json::Value::UInt64)blk.id;
+	content["error"]=blk.error;
+
+	json["header"]=header;
+	json["content"]=content;
+	json["msg_type"]="fault";
+
+	std::ostringstream str;
+	str << json << std::endl;
+	std::cerr << "cadabra-server: sending kernel crash report, " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}

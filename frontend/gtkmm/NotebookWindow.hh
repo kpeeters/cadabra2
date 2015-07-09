@@ -4,6 +4,7 @@
 #include <gtkmm/window.h>
 #include <gtkmm/box.h>
 #include <gtkmm/progressbar.h>
+#include <gtkmm/spinner.h>
 #include <gtkmm/label.h>
 #include <gtkmm/stock.h>
 #include <gtkmm/button.h>
@@ -42,6 +43,7 @@ namespace cadabra {
          virtual void on_connect() override;
          virtual void on_disconnect() override;
          virtual void on_network_error() override;
+			virtual void on_kernel_runstatus(bool) override;
 
 			virtual void process_data() override;
 
@@ -87,6 +89,8 @@ namespace cadabra {
 
 			// Status bar
 			Gtk::ProgressBar               progressbar;
+			Gtk::Spinner                   kernel_spinner;
+			bool                           kernel_spinner_status;
 			Gtk::Label                     status_label, kernel_label;
 
 			// GUI data which is the autoritative source for things displayed in
@@ -119,6 +123,8 @@ namespace cadabra {
 			void on_run_runall();
 			void on_run_runtocursor();
 			void on_run_stop();
+
+			void on_help_about();
 
 			void on_kernel_restart();
 

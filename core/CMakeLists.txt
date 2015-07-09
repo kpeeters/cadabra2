@@ -126,6 +126,9 @@ set(PUBLIC_HEADER_FILES
   Parser.hh
   Storage.hh
 )
+set(IMAGES
+  ../images/cadabra.png
+)
 
 # Python installation logic.
 #set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
@@ -145,6 +148,10 @@ install(FILES
 
 install(PROGRAMS
   "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
+
+# FIXME: sort out how to install auxiliary files in a system-independent way
+install(FILES
+  "${PROJECT_SOURCE_DIR}/../images/cadabra.png" DESTINATION share/cadabra2/images)
 
 
 # Create Python dynamic library 'cadabra' without lib prefix.

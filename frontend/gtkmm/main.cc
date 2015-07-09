@@ -1,4 +1,5 @@
 
+#include "Log.hh"
 #include "ComputeThread.hh"
 #include "NotebookWindow.hh"
 

@@ -1,12 +1,13 @@
 
 #include <iostream>
+#include "Log.hh"
 #include "Actions.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
 #include <gtkmm/box.h>
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/main.h>
+#include <gtkmm/aboutdialog.h>
 #include <fstream>
 
 using namespace cadabra;
@@ -15,17 +16,18 @@ NotebookWindow::NotebookWindow()
 	: DocumentThread(this),
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
+	  kernel_spinner_status(false),
 	  modified(false)
 	{
+	clog << "starting notebookwindow";
+
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
-	// Query high-dpi settings. First cinnamon.
+	// Query high-dpi settings. For now only for cinnamon.
 	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
 	double scale = settings->get_double("text-scaling-factor");
-	std::cout << "scale = " << scale << std::endl;
 	engine.set_scale(scale);
-
 	settings->signal_changed().connect(
 		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
 
@@ -78,6 +80,11 @@ NotebookWindow::NotebookWindow()
 	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"),
 							sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
 
+	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
+	actiongroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::HELP, "About Cadabra"),
+							sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
+
+
 	uimanager = Gtk::UIManager::create();
 	uimanager->insert_action_group(actiongroup);
 	add_accel_group(uimanager->get_accel_group());
@@ -108,6 +115,9 @@ NotebookWindow::NotebookWindow()
 		"    <menu action='MenuKernel'>"
 		"      <menuitem action='KernelRestart' />"
 		"    </menu>"
+		"    <menu action='MenuHelp'>"
+		"      <menuitem action='HelpAbout' />"
+		"    </menu>"
 		"  </menubar>"
 		"  <toolbar name='ToolBar'>"
 		"    <toolitem action='Open' />"
@@ -137,6 +147,7 @@ NotebookWindow::NotebookWindow()
 	kernel_label.set_justify(Gtk::JUSTIFY_LEFT);
 	statusbarbox.pack_start(status_label);
 	statusbarbox.pack_start(kernel_label);
+	statusbarbox.pack_start(kernel_spinner);
 	statusbarbox.pack_start(progressbar);
 	progressbar.set_size_request(200,-1);
 	progressbar.set_text("idle");
@@ -156,9 +167,10 @@ NotebookWindow::NotebookWindow()
 
 
 	// Window size and title, and ready to go.
-	set_size_request(800,800);
+	set_size_request(screen->get_width()/2, screen->get_height()*0.8);
 	update_title();
 	show_all();
+	kernel_spinner.hide();
 
 	new_document();
 	}
@@ -227,6 +239,13 @@ void NotebookWindow::on_network_error()
 	dispatcher.emit();
 	}
 
+void NotebookWindow::on_kernel_runstatus(bool running)
+	{
+	std::lock_guard<std::mutex> guard(status_mutex);
+	kernel_spinner_status=running;
+	dispatcher.emit();
+	}
+
 void NotebookWindow::process_todo_queue()
 	{
 	// Update the status/kernel messages into the corresponding widgets.
@@ -234,12 +253,17 @@ void NotebookWindow::process_todo_queue()
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_label.set_text(kernel_string);
 	status_label.set_text(status_string);
+	if(kernel_spinner_status) { 
+		kernel_spinner.show();
+		kernel_spinner.start();
+		}
+	else {
+		kernel_spinner.stop();
+		kernel_spinner.hide();
+		}
 		}
 
 	// Perform any ActionBase actions.
-
-//	HERE: I think we call this recursively, or something like that.
-
 	process_action_queue();
 	}
 
@@ -272,7 +296,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	// Add a visual cell corresponding to this document cell in 
 	// every canvas.
 
-	std::cerr << "cadabra-client: adding cell" << std::endl;
+//	std::cerr << "cadabra-client: adding cell" << std::endl;
 
 	if(compute!=0)
 		set_stop_sensitive( compute->number_of_cells_executing()>0 );
@@ -376,8 +400,6 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			std::cerr << "cadabra-client: ensuring that widget is visible" << std::endl;
 			w->show_all();
 			w->show_now();
-//			while( Gtk::Main::events_pending() )
-//				Gtk::Main::iteration();			
 			}
 		
 		}
@@ -483,9 +505,16 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 		return true;
 		}
 
+	// Ensure this cell is not empty either.
+
+	if(it->textbuf.size()==0) return true;
+
 	current_canvas=canvas_number;
 
-	// Remove child nodes, if any.
+	// Remove child nodes, if any.  
+	// FIXME: Does it make more sense to do this only after the
+	// execution result comes back from the server?
+
 	DTree::sibling_iterator sib=doc.begin(it);
 	while(sib!=doc.end(it)) {
 		std::cout << "cadabra-client: scheduling output cell for removal" << std::endl;
@@ -494,7 +523,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 		++sib;
 		}
 
-	// Execute
+	// Execute the cell.
 	std::cerr << "cadabra-client: scheduling input exec" << std::endl;
 	set_stop_sensitive(true);
 	compute->execute_cell(*it);
@@ -686,6 +715,25 @@ void NotebookWindow::on_kernel_restart()
 	// FIXME: add warnings
 
 	compute->restart_kernel();
+	}
+
+void NotebookWindow::on_help_about()
+	{
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file("/usr/local/share/cadabra2/images/cadabra.png");
+
+	Gtk::AboutDialog about;
+	about.set_program_name("Cadabra");
+	about.set_comments("A field-theory motivated approach to computer algebra");
+	about.set_version("Version 2.0 (preview release)");
+	std::vector<Glib::ustring> authors;
+	authors.push_back("Kasper Peeters");
+	about.set_authors(authors);
+	about.set_copyright("\xC2\xA9 2006-2015 Kasper Peeters");
+	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
+	about.set_website("http://cadabra.phi-sci.com");
+	about.set_website_label("cadabra.phi-sci.com");
+	about.set_logo(logo);
+	about.run();
 	}
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)

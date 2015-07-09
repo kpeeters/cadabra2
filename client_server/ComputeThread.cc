@@ -148,6 +148,20 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 	try_connect();
 	}
 
+DTree::iterator ComputeThread::find_cell_by_id(uint64_t id) const
+	{
+	// Stupid way to find cell by id.
+	auto it=docthread.dtree().begin();
+	while(it!=docthread.dtree().end()) {
+		if((*it).id()==id)
+			break;
+		++it;
+		}
+	if(it==docthread.dtree().end()) {
+		throw std::logic_error("Cannot find cell by id");
+		}
+	return it;
+	}
 
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg) 
 	{
@@ -167,18 +181,8 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	const Json::Value msg_type = root["msg_type"];
 	uint64_t id = header["cell_id"].asUInt64();
 
-	// Stupid way to find cell by id.
 	running_cells.erase(id);
-	auto it=docthread.dtree().begin();
-	while(it!=docthread.dtree().end()) {
-		if((*it).id()==id)
-			break;
-		++it;
-		}
-	if(it==docthread.dtree().end()) {
-		std::cerr << "uhoh, cannot find cell" << std::endl;
-		return;
-		}
+	auto it = find_cell_by_id(id);
 
 	if(msg_type.asString()=="response") {
 		std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
@@ -189,21 +193,18 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 			// cell as a child of the corresponding input cell.
 			DataCell result(DataCell::CellType::output, output);
 			
-			// Finally, the actions. One to add the output cell...
+			// Finally, the action to add the output cell.
 			std::shared_ptr<ActionBase> action = 
 				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 			docthread.queue_action(action);
 			}
-		
-		// ... and another one to position the cursor in the next input
-		// cell, creating one if it does not exist.
-		std::shared_ptr<ActionBase> actionpos =
-			std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
-		docthread.queue_action(actionpos);
 		}
 	else {
 		std::cout << "Generating ERROR cell" << std::endl;
 		std::string error = "{\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}}";
+		if(msg_type.asString()=="fault") {
+			error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
+			}
 
 		// Stick an AddCell action onto the stack. We instruct the action to add this result output
 		// cell as a child of the corresponding input cell.
@@ -213,8 +214,19 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		std::shared_ptr<ActionBase> action = 
 			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 		docthread.queue_action(action);
-		}
 
+		// Position the cursor in the cell that generated the error. All other cells on 
+		// the execute queue have been cancelled by the server.
+		std::shared_ptr<ActionBase> actionpos =
+			std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::in);
+		docthread.queue_action(actionpos);
+
+		running_cells.clear();
+		}
+	if(running_cells.size()>0)
+		gui->on_kernel_runstatus(true);
+	else
+		gui->on_kernel_runstatus(false);
 
 	gui->process_data();
 	}
@@ -240,7 +252,18 @@ void ComputeThread::execute_cell(const DataCell& dc)
 //	std::cerr << str.str() << std::endl;
 
 	running_cells.insert(dc.id());
+
+	// Position the cursor in the next cell so this one will not 
+	// accidentally get executed twice.
+	auto it=find_cell_by_id(dc.id());
+	std::shared_ptr<ActionBase> actionpos =
+		std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
+	docthread.queue_action(actionpos);
+	gui->process_data();
+	
+	// Then send the cell to the server.
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	gui->on_kernel_runstatus(true);
 	}
 
 bool ComputeThread::is_executing(const DataCell& dc) const
@@ -277,6 +300,11 @@ void ComputeThread::restart_kernel()
 	{
 	if(connection_is_open==false)
 		return;
+
+	// Restarting the kernel means all previously running blocks have stopped running.
+	// Inform the GUI about this.
+	running_cells.clear();
+	gui->on_kernel_runstatus(false);
 
 	std::cerr << "cadabra-client: restarting kernel" << std::endl;
 	Json::Value req, header, content;

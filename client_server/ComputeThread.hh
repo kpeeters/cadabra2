@@ -89,6 +89,8 @@ namespace cadabra {
 			void on_close(websocketpp::connection_hdl hdl);
 			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
 
+			DTree::iterator find_cell_by_id(uint64_t) const;
+
 			// Self-started server
 			pid_t server_pid;
 	};
