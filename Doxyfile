@@ -743,7 +743,9 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = core client_server \
+INPUT                  = README.md \	  
+							    core \
+                         client_server \
                          frontend/common frontend/gtkmm frontend/osx/Cadabra
 
 # This tag can be used to specify the character encoding of the source files
