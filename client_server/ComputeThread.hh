@@ -1,16 +1,11 @@
 
 #pragma once
 
-// ComputeThread is the base class which takes care of doing actual
-// computations with the cells in a document. It handles talking to
-// the server backend. It knows how to pass cells to the server and
-// ask them to be executed. Results are reported back to the GUI by
-// putting ActionBase objects onto its todo stack.
-
 #include <websocketpp/config/asio_no_tls_client.hpp>
 #include <websocketpp/client.hpp>
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/functional.hpp>
+#include <thread>
 
 typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
@@ -22,6 +17,17 @@ namespace cadabra {
 	
 	class GUIBase;
 	class DocumentThread;
+
+	/// \ingroup clientserver
+	///
+	/// Base class which talks to the server and sends Action objects back to the 
+	/// DocumentThread.
+	///
+   /// ComputeThread is the base class which takes care of doing actual
+   /// computations with the cells in a document. It handles talking to
+   /// the server backend. It knows how to pass cells to the server and
+   /// ask them to be executed. Results are reported back to the GUI by
+   /// putting ActionBase objects onto its todo stack.
 	
 	class ComputeThread {
 		public:
@@ -46,8 +52,7 @@ namespace cadabra {
 			// adding actions to the DocumentThread owned pending_actions
 			// stack, by calling queue_action.
 
-			void execute_cell(const DataCell&);
-			bool is_executing(const DataCell&) const;
+			void execute_cell(DTree::iterator);
 
 			// Stop the current cell execution on the server and remove
 			// all other cells from the run queue as well.
@@ -73,8 +78,12 @@ namespace cadabra {
 			GUIBase        *gui;
 			DocumentThread& docthread;
 
+			// For debugging purposes, we keep record of the main thread id,
+			// so that we can flag when code runs on the wrong thread.
+			std::thread::id  main_thread_id; 
+
 			// Keeping track of cells which are running on the server.
-			std::set<uint64_t> running_cells;
+//			std::set<uint64_t> running_cells;
 
 			// WebSocket++ things.
 			WSClient wsclient;

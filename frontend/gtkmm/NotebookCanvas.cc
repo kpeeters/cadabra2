@@ -14,6 +14,7 @@ NotebookCanvas::NotebookCanvas()
  	scroll.set_border_width(1);
 //	scroll.add(ebox);
 //	ebox.override_background_color(Gdk::RGBA("white"));
+
 	scroll.override_background_color(Gdk::RGBA("white"));
 	}
 

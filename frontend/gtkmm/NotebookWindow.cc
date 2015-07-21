@@ -35,12 +35,14 @@ NotebookWindow::NotebookWindow()
 	// Setup styling.
 	css_provider = Gtk::CssProvider::create();
 	Glib::ustring data = "GtkTextView { color: blue; margin-left: 15px; margin-top: 20px; margin-bottom: 0px; padding: 20px; padding-bottom: 0px; }";
+	data += "GtkTextView { background: white; }\nGtkTextView:selected { background: grey; }";
+
 	if(!css_provider->load_from_data(data)) {
 		std::cerr << "Failed to parse widget css information." << std::endl;
 		}
 	auto screen = Gdk::Screen::get_default();
 	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-	
+
 	// Setup menu.
 	actiongroup = Gtk::ActionGroup::create();
 	actiongroup->add( Gtk::Action::create("MenuFile", "_File") );
@@ -329,22 +331,27 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::output:
 				// FIXME: would be good to share the output of TeXView too.
 				newcell.outbox = manage( new TeXView(engine, it->textbuf) );
-				newcell.outbox->tex_error.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
+				newcell.outbox->tex_error.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
 				w=newcell.outbox;
 				break;
 			case DataCell::CellType::input: {
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it->textbuf);
+					ci = new CodeInput(it, it->textbuf);
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(global_buffer);
+				else ci = new CodeInput(it, global_buffer);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-				ci->edit.content_changed.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), it, i ) );
-				ci->edit.content_execute.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), it, i ) );
-				ci->edit.cell_got_focus.connect( sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), it, i ) );
+				ci->edit.content_changed.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+				ci->edit.content_execute.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
+				ci->edit.cell_got_focus.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
+
 				newcell.inbox = manage( ci );
 				w=newcell.inbox;
 				break;
@@ -496,11 +503,14 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 
 bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	{
+	// This callback runs on the GUI thread. The cell pointed to by 'it' is
+	// guaranteed to be valid.
+
 	// First ensure that this cell is not already running, otherwise all hell
 	// will break loose when we try to double-remove the existing output cell etc.
 
 	std::cerr << "cadabra-client: request to execute cell" << std::endl;
-	if(compute->is_executing(*it)) {
+	if(it->running) {
 		std::cerr << "cadabra-client: cell already executing" << std::endl;
 		return true;
 		}
@@ -526,7 +536,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	// Execute the cell.
 	std::cerr << "cadabra-client: scheduling input exec" << std::endl;
 	set_stop_sensitive(true);
-	compute->execute_cell(*it);
+	compute->execute_cell(it);
 	std::cerr << "cadabra-client: execution queued, returning" << std::endl;
 
 	return true;

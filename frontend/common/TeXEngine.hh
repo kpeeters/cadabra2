@@ -7,16 +7,21 @@
 #include <string>
 #include <memory>
 
-// TeXEngine is used to convert LaTeX strings into PNG images. This is
-// a two-stage process: you first 'check in' a string into the system,
-// in exchange for a pointer to a TeXRequest object. When you are
-// ready to retrieve the image, call 'get_pixbuf'.
-//
-// If you need to generate images for more than one string, simply
-// check them all in and then call 'convert_all' before retrieving the
-// pixbufs. This requires only one round-trip through latex/dvipng.
+/// \defgroup frontend Front-end
+/// All code which implements graphical front-end notebook interfaces.
 
 namespace cadabra {
+
+	/// \ingroup frontend
+	///
+   /// TeXEngine is used to convert LaTeX strings into PNG images. This is
+   /// a two-stage process: you first 'check in' a string into the system,
+   /// in exchange for a pointer to a TeXRequest object. When you are
+   /// ready to retrieve the image, call 'get_pixbuf'.
+   ///
+   /// If you need to generate images for more than one string, simply
+   /// check them all in and then call 'convert_all' before retrieving the
+   /// pixbufs. This requires only one round-trip through latex/dvipng.
 
 	class TeXEngine {
 		public:
