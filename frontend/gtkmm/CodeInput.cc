@@ -19,28 +19,28 @@ std::string trim(const std::string& s)
 	return std::string(s, b, e - b + 1);
 	}
 
-CodeInput::exp_input_tv::exp_input_tv(Glib::RefPtr<Gtk::TextBuffer> tb)
-	: Gtk::TextView(tb)
+CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb)
+	: Gtk::TextView(tb), datacell(it)
 	{
 	set_events(Gdk::STRUCTURE_MASK);
 //	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
 //	get_buffer()->signal_erase().connect(sigc::mem_fun(this, &exp_input_tv::on_my_erase), false);
 	}
 
-CodeInput::CodeInput()
-	: buffer(Gtk::TextBuffer::create()), edit(buffer)
+//CodeInput::CodeInput()
+//	: buffer(Gtk::TextBuffer::create()), edit(buffer)
+//	{
+//	init();
+//	}
+
+CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb)
+	: buffer(tb), edit(it, tb)
 	{
 	init();
 	}
 
-CodeInput::CodeInput(Glib::RefPtr<Gtk::TextBuffer> tb)
-	: buffer(tb), edit(tb)
-	{
-	init();
-	}
-
-CodeInput::CodeInput(const std::string& txt)
-	: buffer(Gtk::TextBuffer::create()), edit(buffer)
+CodeInput::CodeInput(DTree::iterator it, const std::string& txt)
+	: buffer(Gtk::TextBuffer::create()), edit(it, buffer)
 	{
 	buffer->set_text(txt);
 	init();
@@ -71,7 +71,7 @@ void CodeInput::init()
 	set_margin_bottom(10);
 //	edit.set_pixels_below_lines(Gtk::LINE_SPACING);
 //	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
-	edit.set_left_margin(30);
+	edit.set_left_margin(20);
 	edit.set_accepts_tab(true);
 	Pango::TabArray tabs(10);
 	// FIXME: use character width measured, instead of '8', or at least
@@ -86,9 +86,6 @@ void CodeInput::init()
 //	edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::handle_changed));
 	edit.set_can_focus(true);
 
-//	add(hbox);
-//	hbox.add(vsep);
-//	hbox.add(edit);
 	add(edit);
 //	set_border_width(3);
 	show_all();
@@ -108,8 +105,8 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 	
 	if(is_shift_return) {
-		content_changed(tmp);
-		content_execute();
+		content_changed(tmp, datacell);
+		content_execute(datacell);
 		return true;
 		}
 	else {
@@ -118,7 +115,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		// FIXME: I do not know how to do this correctly, check docs.
 
 		if(event->keyval < 65000L)
-			 content_changed(tmp);
+			content_changed(tmp, datacell);
 
 		return retval;
 		}
@@ -180,19 +177,32 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 //	cr->fill();
 
 	cr->set_source_rgba(.2, .2, .7, 1.0);
-	cr->set_line_width(1.0);
+	double line_width=2.0;
+	cr->set_line_width(line_width);
 	cr->set_antialias(Cairo::ANTIALIAS_NONE);
-	cr->move_to(8,1);
-	cr->line_to(5,1);
-	cr->line_to(5,h); 
-	cr->line_to(8,h); 
+	int hor=5;
+	cr->move_to(5+hor,line_width);
+	cr->line_to(5,line_width);
+	cr->line_to(5,h-line_width); 
+	cr->line_to(5+hor,h-line_width); 
 	cr->stroke();
+
+	// Mark whether cell is executing.
+//	cr->set_source_rgba(.8, .2, .2, 1.0);
+	cr->set_source_rgba(.2, .2, .7, 0.5);
+	int rem=hor-line_width;
+	cr->set_line_width(2*rem);
+	cr->set_antialias(Cairo::ANTIALIAS_NONE);
+	cr->move_to(5+rem,  rem);
+	cr->line_to(5+rem,  h-rem);
+	cr->stroke();
+
 	
 	return ret;
 	}
 
 bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event) 
 	{
-	cell_got_focus();
+	cell_got_focus(datacell);
 	return Gtk::TextView::on_focus_in_event(event);
 	}

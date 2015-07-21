@@ -13,3 +13,8 @@ All functionality that deals with GUI updates is isolated in {\tt
 implement the methods there. Clients should also derive from {\tt
   DocumentThread}, but there are no abstract virtual members to
 implemented from this base class.
+
+All actual updates to the document stored in the \verb|dtree| member
+of \verb|DocumentThread| are made on the GUI thread as well. The
+compute thread merely puts requests to change the document onto a
+stack, and then requests that the GUI updates the document.

@@ -5,12 +5,14 @@
 
 #include "DataCell.hh"
 
-// Abstract base class with methods that need to be implemented
-// by any GUI. You need to derive from this class as well as from
-// the DocumentThread class.
-
 namespace cadabra {
 	
+	/// \ingroup clientserver
+	///
+   /// Abstract base class with methods that need to be implemented
+   /// by any GUI. You need to derive from this class as well as from
+   /// the DocumentThread class.
+
 	class GUIBase {
 		public:
 			// The basic manipulations that a GUI needs to implement are

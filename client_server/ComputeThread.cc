@@ -14,6 +14,10 @@ typedef websocketpp::client<websocketpp::config::asio_client> client;
 ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
 	: gui(g), docthread(dt), connection_is_open(false), server_pid(0)
 	{
+   // The ComputeThread constructor is always run on the main thread,
+	// so we can grab the main thread id here.
+
+	main_thread_id=std::this_thread::get_id();
 	}
 
 ComputeThread::~ComputeThread()
@@ -181,16 +185,17 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	const Json::Value msg_type = root["msg_type"];
 	uint64_t id = header["cell_id"].asUInt64();
 
-	running_cells.erase(id);
 	auto it = find_cell_by_id(id);
+	it->running=false;
 
 	if(msg_type.asString()=="response") {
 		std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
 		if(output!="\\begin{equation*}\\end{equation*}") {
 			std::cerr << "cadabra-client: ComputeThread received response from server" << std::endl;
 
-			// Stick an AddCell action onto the stack. We instruct the action to add this result output
-			// cell as a child of the corresponding input cell.
+			// Stick an AddCell action onto the stack. We instruct the
+			// action to add this result output cell as a child of the
+			// corresponding input cell.
 			DataCell result(DataCell::CellType::output, output);
 			
 			// Finally, the action to add the output cell.
@@ -206,8 +211,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 			error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
 			}
 
-		// Stick an AddCell action onto the stack. We instruct the action to add this result output
-		// cell as a child of the corresponding input cell.
+		// Stick an AddCell action onto the stack. We instruct the
+		// action to add this result output cell as a child of the
+		// corresponding input cell.
 		DataCell result(DataCell::CellType::output, error);
 		
 		// Finally, the action.
@@ -221,20 +227,27 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 			std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::in);
 		docthread.queue_action(actionpos);
 
-		running_cells.clear();
+		// FIXME: iterate over all cells and set the running flag to false.
 		}
-	if(running_cells.size()>0)
-		gui->on_kernel_runstatus(true);
-	else
-		gui->on_kernel_runstatus(false);
+	// Count running cells.
+//	if(running_cells.size()>0)
+//		gui->on_kernel_runstatus(true);
+//	else
+//		gui->on_kernel_runstatus(false);
 
 	gui->process_data();
+
 	}
 
-void ComputeThread::execute_cell(const DataCell& dc)
+void ComputeThread::execute_cell(DTree::iterator it)
 	{
+	// This absolutely has to be run on the main GUI thread.
+	assert(main_thread_id==std::this_thread::get_id());
+
 	if(connection_is_open==false)
 		return;
+
+	const DataCell& dc=(*it);
 
 	std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
 
@@ -251,11 +264,10 @@ void ComputeThread::execute_cell(const DataCell& dc)
 	
 //	std::cerr << str.str() << std::endl;
 
-	running_cells.insert(dc.id());
+	it->running=true;
 
 	// Position the cursor in the next cell so this one will not 
 	// accidentally get executed twice.
-	auto it=find_cell_by_id(dc.id());
 	std::shared_ptr<ActionBase> actionpos =
 		std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
 	docthread.queue_action(actionpos);
@@ -266,15 +278,9 @@ void ComputeThread::execute_cell(const DataCell& dc)
 	gui->on_kernel_runstatus(true);
 	}
 
-bool ComputeThread::is_executing(const DataCell& dc) const
-	{
-	if(running_cells.find(dc.id())!=running_cells.end()) return true;
-	else return false;
-	}
-
 int ComputeThread::number_of_cells_executing() const
 	{
-	return running_cells.size();
+	return 0; // FIXME: count running_cells.size();
 	}
 
 void ComputeThread::stop()
@@ -303,7 +309,7 @@ void ComputeThread::restart_kernel()
 
 	// Restarting the kernel means all previously running blocks have stopped running.
 	// Inform the GUI about this.
-	running_cells.clear();
+	// FIXME: set all running flags to false
 	gui->on_kernel_runstatus(false);
 
 	std::cerr << "cadabra-client: restarting kernel" << std::endl;

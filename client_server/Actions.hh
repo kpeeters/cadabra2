@@ -17,23 +17,31 @@ namespace cadabra {
 	class DocumentThread;
 	class GUIBase;
 
+	/// All actions derive from the ActionBase object, which defines
+	/// the interface they need to implement. These objects are used to
+	/// pass (user) action instructions around.  They can be stored in
+	/// undo/redo stacks. All actions run on the GUI thread. The
+	/// update_gui members typically call members of the GUIBase class.
+
 	class ActionBase {
 		public:
-			// Make the change to the DTree document.
+			/// Execute changes to the DTree document which need to be made
+			/// before the GUI is updated.
 			virtual void pre_execute(DocumentThread&)=0;
-			// Make sure the GUI reflects the change.
-			// FIXME: do we need an exec/revert combo here too?
+
+			/// Make sure the GUI reflects the change.
+			/// FIXME: do we need an exec/revert combo here too?
 			virtual void update_gui(const DTree&, GUIBase&)=0;
+
+			/// Execute changes to the DTree document which need to be made
+			/// after the GUI has been updated.
 			virtual void post_execute(DocumentThread&)=0;
 
-			// Revert the change to the DTree document.
+			/// Revert the change to the DTree document.
 			virtual void revert(DocumentThread&)=0;
 	};
 	
-	// The Action object is used to pass (user) action instructions around.
-	// They can be stored in undo/redo stacks.
-	// All actions run on the GUI thread. The update_gui members typically
-	// call members of the GUIBase class.
+	/// Add a cell to the notebook.
 	
 	class ActionAddCell : public ActionBase {
 		public:

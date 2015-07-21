@@ -63,6 +63,19 @@
   viewer displays the json data in graphical form. Deep...
 
 
+- Change ComputeThread so that it does not need access to anything but isolated DataCells.
+  Perhaps not let it change them either, and pass everything by const ref. However, that 
+  makes it impossible to set the 'running' flag.
+
+NEXT:
+
+  CodeInput needs a ref to the DataCell it represents. Then we can leave that out of the
+  callback bindings. CodeInput is not allowed to change this cell directly.
+
+  ComputeThread needs a ref to the DataCell it computes. ComputeThread is allowed to change
+  the running flag of this cell.
+
+
 NEXT: test websocketpp-0.4.0 on linux; on osx there is an issue with using an explicitly deleted thread function.
 
 

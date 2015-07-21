@@ -12,6 +12,7 @@ DataCell::DataCell(CellType t, const std::string& str, bool texhidden)
 	cell_type = t;
 	textbuf = str;
 	tex_hidden = texhidden;
+	running=false;
 	
 	std::lock_guard<std::mutex> guard(serial_mutex);
 	serial_number = max_serial_number++;
