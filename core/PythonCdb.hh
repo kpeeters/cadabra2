@@ -18,32 +18,6 @@
  
 */
 
-/**
-  \mainpage Cadabra
-  \author   Kasper Peeters
-  \see      http://cadabra.phi-sci.com/
-  \version  2.0
-
-  This is series 2 of the Cadabra computer algebra system. Cadabra
-  was designed specifically for the solution of problems encountered in
-  field theory. It has extensive functionality for tensor computer
-  algebra, tensor polynomial simplification including multi-term
-  symmetries, fermions and anti-commuting variables, Clifford algebras
-  and Fierz transformations, implicit coordinate dependence, multiple
-  index types and many more. The input format is a subset of TeX. Both
-  a command-line and a graphical interface are available.
-
-  The source is split into the following modules:
-
-  \ref core
-
-  \ref clientserver 
-
-  \ref frontend
-
- */
-
-
 #pragma once
 
 #include <boost/python.hpp>
