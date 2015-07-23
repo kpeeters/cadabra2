@@ -15,7 +15,12 @@
 #include "NotebookController.h"
 #include "NotebookCanvas.hh"
 
-namespace cadabra {
+namespace cadabra_osx {
+
+/// \ingroup osx
+///
+/// Objective-C++ class implementing DocumentThread and providing an OS-X
+/// notebook interface.
 
 class NotebookWindow : public DocumentThread, public GUIBase {
     public:

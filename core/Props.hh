@@ -62,8 +62,44 @@ class keyval_t {
 		kvlist_t keyvals;
 };
 
-// Base class for all properties, handling argument parsing and
-// defining the interface.
+/// \ingroup core
+///
+/// Base class for all properties, handling argument parsing and
+/// defining the interface.
+///
+/// Properties can have arguments. Parsing of these is done in the
+/// properties object itself, with the use of some helper functions.
+/// Parsing is done by implementing the virtual function
+/// property::parse(const Properties&, keyval_t&). The argument is a
+/// container class which represents the arguments passed to the
+/// property as key/value pairs keyval_t type.
+///
+/// Properties will be asked to check that they can be associated to a
+/// given pattern through the virtual property::validate(const
+/// Properties&, const exptree&) function. The
+// default implementation returns true for any pattern.
+///
+/// FIXME: the above two need to be merged, because parse may need access
+/// to the actual pattern tree, and once we are there, we may as well
+/// do checking.
+/// HOWEVER: in TableauSymmetry.cc: 
+/// FIXME: we get the wrong pattern in case of a list! We should have
+/// been fed each individual item in the list, not the list itself.
+/// 
+/// This suggests that we should be calling once for every pattern, but 
+/// that is wasteful in case we are just parsing arguments. Can we really
+/// avoid calling parse for every pattern?
+/// 
+/// {A_{m n}, A_{m n p}, A_{m n p q}}::TableauSymmetry(shape={2,1}, indices={0,1,2}).
+/// 
+/// leads to a problem, because the property needs to setup its internal
+/// structures but also verify that these can match all objects in the
+/// same way. 
+/// 
+/// 
+/// Make all identical properties point to the same property object, so
+/// that normal and list properties become pretty much identical.
+
 
 class property {
 	public:
@@ -118,6 +154,16 @@ class PropertyInherit : virtual public property {
 		virtual std::string name() const { return std::string("PropertyInherit"); };
 };
 
+/// \ingroup core
+///
+/// Class holding a collection of properties attached to expressions.
+/// Symbols and expressions do not have a default meaning in
+/// Cadabra. They get their meaning by attaching properties to
+/// them. When the core manipulator calls an algorithm object, it
+/// passes an instance of the Properties class along with the
+/// expression tree on which to act, so that the algorithm can figure
+/// out what the symbols in the expression tree mean.
+
 class Properties {
 	public:
 		// Registering property types.
@@ -131,27 +177,27 @@ class Properties {
 				internal_property_map_t store;
 		};
 
-		// Registering properties.  When inserting a property or
-		// list_property, ownership of the property gets transferred to
-		// this class.
+		/// Registering properties.  When inserting a property or
+		/// list_property, ownership of the property gets transferred to
+		/// this class.
 
 		void                          register_property(property* (*)(), const std::string& name);
 		registered_property_map_t     registered_properties;
 		typedef std::pair<pattern *, const property *>  pat_prop_pair_t;
 
-		// We keep two multi-maps: one from the pattern to the property (roughly) and 
-		// one from the property to the pattern. These are both multi-maps because 
-		// one pattern can have multiple properties assigned to it, and one property can
-		// be assigned to multiple properties.
-		//
-		// When we delete properties, we check the pats map to see if the reference count
-		// for that property has dropped to zero.
+		/// We keep two multi-maps: one from the pattern to the property (roughly) and 
+		/// one from the property to the pattern. These are both multi-maps because 
+		/// one pattern can have multiple properties assigned to it, and one property can
+		/// be assigned to multiple properties.
+		///
+		/// When we delete properties, we check the pats map to see if the reference count
+		/// for that property has dropped to zero.
 		typedef std::multimap<nset_t::iterator, pat_prop_pair_t, nset_it_less>  property_map_t;
 		typedef std::multimap<const property *, pattern *>                      pattern_map_t;
 
-		// Register a property for the indicated exptree. Takes both normal and list
-		// properties and works out which insert calls to make. The property ownership
-		// is transferred to us on using this call.
+		/// Register a property for the indicated exptree. Takes both normal and list
+		/// properties and works out which insert calls to make. The property ownership
+		/// is transferred to us on using this call.
 		std::string master_insert(exptree proptree, property *thepropbase);
 
 		void        clear();

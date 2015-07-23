@@ -1,0 +1,20 @@
+/// \defgroup core Core
+/// All computer algebra functionality in the form of C++ classes.
+///
+/// \defgroup pythoncore Python Core
+/// \ingroup core
+/// Python wrapper around the C++ core module, making the entire 
+/// functionality of Cadabra accessible from Python.
+///
+/// \defgroup scalar Scalar algebra
+/// \ingroup core
+/// Functionality to make Cadabra interface with the SymPy computer
+/// algebra system.
+///
+/// \defgroup algorithms Algorithms
+/// \ingroup core
+/// Containing all algorithms acting on symbolic expression trees.
+///
+/// \defgroup properties Properties
+/// \ingroup core
+/// Containing all properties that can be attached to symbolic expressions.

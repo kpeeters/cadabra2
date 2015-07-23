@@ -3,6 +3,10 @@
 #include "properties/Indices.hh"
 #include <vector>
 
+/// \ingroup algorithms
+///
+/// Canonicalise the index structure of a tensorial expression.
+
 class canonicalise : public Algorithm {
 	public:
 		canonicalise(Kernel&, exptree&);

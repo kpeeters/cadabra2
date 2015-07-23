@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+#
+# \ingroup pythoncore
+#
+# \file 
+# Command line interpreter for Cadabra, written in Python.
 
 import sys
 import site

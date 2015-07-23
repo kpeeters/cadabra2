@@ -32,15 +32,30 @@
 #include <fstream>
 #include <cstddef>
 
-// Base class for all algorithms, containing generic routines and in
-// particular the logic for index classification. In particular also
-// contains static algorithms acting on exptree objects which require
-// property information and can therefore not be a member of exptree.
+/// \ingroup core
+///
+/// Base class for all algorithms, containing generic routines and in
+/// particular the logic for index classification. Also contains static
+/// algorithms acting on exptree objects which require property
+/// information and can therefore not be a member of exptree.
+///
+/// In order to implement a new algorithm, subclass Algorithm and
+/// implement the abstract members Algorithm::can_apply and
+/// Algorithm::apply (see there for further documentation).  The
+/// general logic is that the implementation of
+/// Algorithm::apply(iterator&) is not allowed to make the node pointed
+/// at by the iterator invalid. If the algorithm makes the node vanish,
+/// it should indicate so by setting its multiplier to zero; the
+/// calling logic will then take care of cleaning up the subtree
+/// at the node.
+///
+/// The algorithm is, however, allowed to change the node itself or
+/// replace it with another one, as long as it updates the iterator.
 
 class Algorithm {
 	public:
-		// Initialise the algorithm with a reference to the expression tree;
-		// does not do anything yet.
+		/// Initialise the algorithm with a reference to the expression
+		/// tree, but do not yet do anything with this tree.
 		Algorithm(Kernel&, exptree&);
 
 		virtual ~Algorithm();

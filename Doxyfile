@@ -744,10 +744,11 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = README.md \	  
-							    core \
+							    core core/cadabra2 doc/modules.dox \
 								 core/algorithms core/properties \
                          client_server \
-                         frontend/common frontend/gtkmm frontend/osx/Cadabra
+                         frontend/common frontend/gtkmm frontend/osx/Cadabra \
+                    		 frontend/osx/Cadabra/Cadabra
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

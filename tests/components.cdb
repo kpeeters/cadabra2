@@ -1,0 +1,14 @@
+
+ex:= A_{m n} A_{m n};
+crds:= m -> { t, r, \phi, \theta };
+vals:= { A_{t t} -> r, A_{r r} -> r**2, A_{t \phi} -> t };
+evaluate(ex, crds, vals);
+tst:= r*r + r**2 * r**2 + t*t - @(ex);
+assert(tst)
+
+ex:= A_{p m n} ( A_{m n} + B_{m n} );
+crds:= m -> { t, r };
+vals:= { A_{t t t} -> r, A_{t r r} -> r**2, A_{t t} -> r, A_{r r} -> r**2, B_{t t} -> 1 };
+evaluate(ex, crds, vals);
+tst:= r * ( r + 1 ) + r**2 * r**2 - @(ex);
+assert(tst)
