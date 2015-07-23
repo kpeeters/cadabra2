@@ -4,10 +4,12 @@
 #include "Storage.hh"
 #include "Props.hh"
 
-// An iterator which iterates over indices even if they are at lower
-// levels, i.e. taking into account the "Inherit" property of
-// nodes. Needs access to Properties in the current scole in order to
-// determine which objects are indices.
+/// \ingroup core
+///
+/// An iterator which iterates over indices even if they are at lower
+/// levels, i.e. taking into account the "Inherit" property of
+/// nodes. Needs access to Properties in the current scole in order to
+/// determine which objects are indices.
 
 class index_iterator : public exptree::iterator_base {
 	public:

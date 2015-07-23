@@ -3,6 +3,10 @@
 
 #include "Algorithm.hh"
 
+/// \ingroup algorithms
+///
+/// Collect symbolically equal terms in a sum.
+
 class collect_terms : public Algorithm {
 	public:
 		collect_terms(Kernel&, exptree&);

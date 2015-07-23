@@ -1,0 +1,17 @@
+/**
+
+\class distribute
+
+Rewrite a product of sums as a sum of products, as in
+
+\f[
+    a\,(b+c) \rightarrow a\,b + a\,c\, .
+\f]
+
+This would read
+
+    > a (b+c);
+    > @distribute!(%);
+    a b + a c;
+
+**/

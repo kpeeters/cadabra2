@@ -24,7 +24,8 @@ namespace cadabra {
 	/**
 		\defgroup clientserver Client-Server 
 
-      Base classes to write Cadabra clients and servers.
+      Base classes (independent of any GUI toolkit) to write Cadabra
+      clients and servers.
 
 		All clients use two threads. One is the main thread and runs
 		most of the logic in the DocumentThread object. The other one is

@@ -9,7 +9,7 @@
 #include "NotebookWindow.hh"
 #import <Cocoa/Cocoa.h>
 
-using namespace cadabra;
+using namespace cadabra_osx;
 
 NotebookWindow::NotebookWindow(NotebookController *nc)
 : DocumentThread(this), controller(nc)
