@@ -34,24 +34,28 @@ void ComputeThread::init()
 
 void ComputeThread::try_connect()
 	{
-	using websocketpp::lib::placeholders::_1;
-	using websocketpp::lib::placeholders::_2;
 	using websocketpp::lib::bind;
 
 	// Make the resolver work when there is no network up at all, only localhost.
 	// https://svn.boost.org/trac/boost/ticket/2456
 	// Not sure why this works here, as the compiler claims this statement does
 	// not have any effect.
-
-	boost::asio::ip::resolver_query_base::flags(0);
+   // No longer necessary with websocketpp-0.6.0.
+	//
+   //	boost::asio::ip::resolver_query_base::flags(0);
 
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
 	wsclient.clear_error_channels(websocketpp::log::elevel::all);
 
-	wsclient.set_open_handler(bind(&ComputeThread::on_open, this, ::_1));
-	wsclient.set_fail_handler(bind(&ComputeThread::on_fail, this, ::_1));
-	wsclient.set_close_handler(bind(&ComputeThread::on_close, this, ::_1));
-	wsclient.set_message_handler(bind(&ComputeThread::on_message, this, ::_1, ::_2));
+	wsclient.set_open_handler(bind(&ComputeThread::on_open, 
+											 this, websocketpp::lib::placeholders::_1));
+	wsclient.set_fail_handler(bind(&ComputeThread::on_fail, 
+											 this, websocketpp::lib::placeholders::_1));
+	wsclient.set_close_handler(bind(&ComputeThread::on_close, 
+											  this, websocketpp::lib::placeholders::_1));
+	wsclient.set_message_handler(bind(&ComputeThread::on_message, this, 
+												 websocketpp::lib::placeholders::_1,
+												 websocketpp::lib::placeholders::_2));
 
 	std::string uri = "ws://localhost:9002";
 	websocketpp::lib::error_code ec;
@@ -110,9 +114,10 @@ void ComputeThread::try_spawn_server()
 	// port.
 
 	std::cerr << "cadabra-client: spawning server" << std::endl;
-	char * const sargv[] = {"sh", "-c", "exec cadabra-server", NULL};
+	const char * const sargv[] = {"sh", "-c", "exec cadabra-server", NULL};
 	int status;
-	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, sargv, NULL); //environ);
+	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, 
+								const_cast<char * const *>(sargv), NULL); //environ);
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
