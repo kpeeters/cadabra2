@@ -529,14 +529,6 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 	}
 
 
-// Find a subproduct in a product. The 'lhs' iterator points to the product which
-// we want to find, the 'tofind' iterator to the current factor which we are looking
-// for. The product in which to search is pointed to by 'st'.
-//
-// Once 'tofind' is found, this routine calls itself to find the next factor in
-// 'lhs'. If the next factor cannot be found, we backtrack and try to find the
-// previous factor again (it may have appeared multiple times).
-
 exptree_comparator::match_t exptree_comparator::match_subproduct(exptree::sibling_iterator lhs, 
 																					  exptree::sibling_iterator tofind, 
 																					  exptree::sibling_iterator st)
@@ -808,16 +800,6 @@ int exptree_comparator::can_swap_ilist_ilist(exptree::iterator obj1, exptree::it
 	return sign;
 	}
 
-// Can obj and obj+1 be exchanged? If yes, return the sign,
-// if no return zero. This is the general entry point for 
-// two arbitrary nodes (which may be a product or sum). 
-// Do not call the functions above directly!
-//
-// The last flag ('ignore_implicit_indices') is used to disable 
-// all checks dealing with implicit indices (this is useful for
-// algorithms which re-order objects with implicit indices, which would
-// otherwise always receive a 0 from this function).
-//
 int exptree_comparator::can_swap(exptree::iterator one, exptree::iterator two, int subtree_comparison,
 										 bool ignore_implicit_indices) 
 	{

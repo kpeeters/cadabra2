@@ -101,6 +101,7 @@ set(LOCAL_SRC_FILES
   algorithms/distribute.cc
 #  algorithms/drop_weight.cc
   algorithms/eliminate_kronecker.cc
+  algorithms/evaluate.cc
   algorithms/flatten_product.cc
   algorithms/flatten_sum.cc
   algorithms/indexsort.cc

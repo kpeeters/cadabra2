@@ -45,8 +45,28 @@
 
      For each such index value set, lookup replacement rules.
 
-     KEY: quick way to lookup, for a given set of index values on a pattern,
-     whether and what is the value of the pattern.
+     KEY: quick way to lookup, for a given set of index values on a
+     (found) pattern/pattern pointed to by iterator, whether and what is the
+     value of the pattern.
      
 
  */
+
+#include "Algorithm.hh"
+#include "properties/Indices.hh"
+
+class evaluate : public Algorithm {
+	public:
+		evaluate(Kernel&, exptree&, const exptree& index_values, const exptree& component_values);
+
+		virtual bool     can_apply(iterator) override;
+		virtual result_t apply(iterator&) override;
+		
+	private:
+		void collect_index_values(const exptree& ind_values);
+		std::map<const Indices *, exptree> index_values;
+		void prepare_replacement_rules(const exptree&);
+
+		void handle_sum(iterator it);
+		void handle_prod(iterator it);
+}; 

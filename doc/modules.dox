@@ -1,6 +1,14 @@
 /// \defgroup core Core
 /// All computer algebra functionality in the form of C++ classes.
 ///
+/// \defgroup compare Expression comparison
+/// \ingroup core
+/// Functions to compare and match expressions stored in exptree objects. 
+/// These can involve wildcards and dummy indices, and matching may depend on 
+/// the properties attached to symbols.
+/// This is an important bit of functionality used widely throughout the Cadabra core.
+/// All substitution and component evaluation logic depends on this module.
+///
 /// \defgroup pythoncore Python Core
 /// \ingroup core
 /// Python wrapper around the C++ core module, making the entire 
