@@ -2,17 +2,6 @@
 Cadabra building and installation instructions
 ----------------------------------------------
 
-The Cadabra source is distributed among several subdirectories, many of
-which can be built independently:
-
-   - core:          The main cadabra sources plus the logic to make it accessible
-                    as a Python module 'cadabra'. These are all system-independent.
-
-   - client_server: GUI-independent classes for building a cadabra server and client.
-                     
-   - frontend:      Implementations of the front-end for various platforms, as well
-	                 as platform-independent support code for e.g. maths typesetting.
-
 
 A. Linux
 --------
@@ -22,10 +11,7 @@ derivatives they can all be installed with
 
   sudo apt-get install g++ libjsoncpp-dev libboost-all-dev libgmp-dev
 
-(you can get away with fewer parts of boost). In addition one needs
-websocket++ from
-
-  http://www.zaphoyd.com/websocketpp
+(you can get away with fewer parts of boost). 
 
 
 

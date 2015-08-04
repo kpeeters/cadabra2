@@ -68,6 +68,7 @@
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
+#include "algorithms/evaluate.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
@@ -613,6 +614,17 @@ Ex *dispatch_2_ex_string_new(Ex *ex, const std::string& args, Arg1 arg1, bool de
 	return dispatch_2_ex_ex_new<F, Arg1>(ex, argsobj, arg1, deep, repeat, depth);
 	}
 
+// FIXME: if we move all extra python functionality of Ex into standalone functions or
+// into the exptree class, we can make exptree accessible from Python directly and
+// avoid the exarg->tree mess below. This will make the dispatch functions simpler.
+
+template<class F>
+Ex *dispatch_3_ex_ex_ex(Ex *ex, Ex *exarg, Ex *arg1, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), ex->tree, exarg->tree, arg1->tree);
+	return dispatch_generic(algo, ex, deep, repeat, depth);
+	}
+
 template<class F>
 Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat, unsigned int depth)
 	{
@@ -842,6 +854,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Automatically convert Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
+	def("evaluate", &dispatch_3_ex_ex_ex<evaluate>,
+		 (arg("ex"), arg("index_values"), arg("components"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+		  
 	def("keep_terms", &dispatch_1_ex_new<keep_terms, std::vector<int> >,
 		 (arg("ex"), 
 		  arg("terms"),

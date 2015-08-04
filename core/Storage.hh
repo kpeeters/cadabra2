@@ -18,11 +18,6 @@
  
 */
 
-// Basic storage for expressions. The full meaning of an expression typically
-// requires knowledge about properties of patterns in it, which this header
-// does _not_ contain. All property dependent algorithms acting on exptree
-// objects are in Algorithm.hh.
-
 #pragma once
 
 #include <cstddef>
@@ -48,6 +43,12 @@ std::string to_string(long);
 extern nset_t name_set;
 extern rset_t rat_set;
 
+/// \ingroup core
+///
+/// Elementary building block for a mathematical expression. Contains information about the
+/// way in which the node is related to the parent node, and iterators into the global
+/// list of names and rationals.
+
 class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 	public:
 		enum bracket_t     { b_round=0, b_square=1, b_curly=2, b_pointy=3, b_none=4, b_no=5, b_invalid=6 };
@@ -60,8 +61,6 @@ class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 		bool operator==(const str_node&) const;
 		bool operator<(const str_node&) const;
 
-		// FIXME: In upcoming gcc, these can no longer be packed. So change these
-		// to POD types and save a few bytes as well.
 		nset_t::iterator name;
 		rset_t::iterator multiplier;
 
@@ -104,13 +103,21 @@ class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 		static bool compare_name_inverse_par(const str_node&, const str_node&);
 }; 
 
-// Helper functions for manipulation of multipliers
+/// Helper functions for manipulation of multipliers
 void     multiply(rset_t::iterator&, multiplier_t);
 void     add(rset_t::iterator&, multiplier_t);
 void     zero(rset_t::iterator&);
 void     one(rset_t::iterator&);
 void     flip_sign(rset_t::iterator&);
 void     half(rset_t::iterator&);
+
+/// \ingroup core
+///
+/// Basic storage class for symbolic mathemematical expressions. The
+/// full meaning of an expression typically requires knowledge about
+/// properties of patterns in it, which this class does _not_
+/// contain. All property dependent algorithms acting on exptree
+/// objects are in Algorithm.hh.
 
 class exptree : public tree<str_node> {
 	public:

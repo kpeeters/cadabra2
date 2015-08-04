@@ -4,27 +4,26 @@
 #include "Storage.hh"
 #include "Props.hh"
 
-// Generic subtree comparison class, which uses property information
-// from a kernel to determine whether two tensor subtrees are equal in
-// the sense of e.g. "SelfCommuting", that is up to the names of
-// indices. E.g.,
-//
-//   A_m                        equals  A_n
-//   \diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s
-//
-//  0: structure equal, and all indices the same name
-//  1: structure equal, index names of one < two
-// -1: structure equal, index names of one > two
-//  2: structure different, one < two
-// -2: structure different, one > two
-//
-// Note that this routine does not handle the more complicated case in
-// which there are dummy indices inside the subtrees; for those cases
-// you need to use "exptree_compare" (which in turn uses subtree_compare
-// to do the simpler cases).
-//
-// Parameters:
-// literal_wildcards: if true, treat wildcard names as ordinary names.
+/// \ingroup compare
+///
+/// Basic building block subtree comparison function for tensors
+/// without dummy indices, which uses property information from a
+/// kernel to determine whether two tensor subtrees are equal in the
+/// sense of for instance the SelfCommuting property, that is, up to
+/// the names of indices. Examples:
+///
+///     A_m                        equals  A_n
+///     \diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s
+///
+///  return | meaning
+///  -------|-----------------------------------------------
+///  0      | structure equal, and all indices the same name
+///  1      | structure equal, index names of one < two
+/// -1      | structure equal, index names of one > two
+///  2      | structure different, one < two
+/// -2      | structure different, one > two
+///
+/// @param literal_wildcards whether to treat wildcard names as ordinary names.
 
 int subtree_compare(const Properties*, 
 						  exptree::iterator one, exptree::iterator two, 
@@ -159,16 +158,12 @@ class tree_exact_less_no_wildcards_mod_prel_obj {
 };
 
 
-/// This operator does an exact comparison, with no symbols interpreted
-/// as wildcards or patterns.
-
-//bool operator==(const exptree& first, const exptree& second);
-
-
-// A generic tree comparison class which will take into account index
-// contractions and will also keep track of a replacement list for
-// all types of cadabra wildcards. The entry point is typically 
-// 'equal_subtree' or 'match_subproduct'. 
+/// \ingroup compare
+///
+/// A generic tree comparison class which will take into account index
+/// contractions and will also keep track of a replacement list for
+/// all types of cadabra wildcards. The entry point is typically 
+/// 'equal_subtree' or 'match_subproduct'. 
 
 class exptree_comparator {
 	public:
@@ -176,20 +171,35 @@ class exptree_comparator {
 
 		enum match_t { node_match=0, subtree_match=1, no_match_less=2, no_match_greater=3 };
 
+		/// Reset the object for a new match.
+
 		void    clear();
 
-		// Subtree and subproduct match; return subtree_match or one of the no_match results.
-		// You need to fill lhs_contains_dummies before calling!
+		/// Match two subtrees taking into account symbol
+		/// properties. Return subtree_match or one of the no_match
+		/// results.  You need to fill lhs_contains_dummies before
+		/// calling!
+
 		match_t equal_subtree(exptree::iterator i1, exptree::iterator i2);
+
+      /// Find a subproduct in a product. The 'lhs' iterator points to the product which
+      /// we want to find, the 'tofind' iterator to the current factor which we are looking
+      /// for. The product in which to search is pointed to by 'st'.
+      /// Once 'tofind' is found, this routine calls itself to find the next factor in
+      /// 'lhs'. If the next factor cannot be found, we backtrack and try to find the
+      /// previous factor again (it may have appeared multiple times).
+
 		match_t match_subproduct(exptree::sibling_iterator lhs, exptree::sibling_iterator tofind, 
 										 exptree::sibling_iterator st);
+
 		bool    satisfies_conditions(exptree::iterator conditions, std::string& error);
 
-		// Maps for replacement of nodes (indices, patterns) and subtrees (object patterns) respectively.
+		/// Map for the replacement of nodes (indices, patterns).
 		typedef std::map<exptree, exptree, tree_exact_less_no_wildcards_obj>  replacement_map_t;
-		typedef std::map<nset_t::iterator, exptree::iterator, nset_it_less>   subtree_replacement_map_t;
-
 		replacement_map_t                      replacement_map;
+
+		/// Map for the replacement of entire subtrees (object patterns).
+		typedef std::map<nset_t::iterator, exptree::iterator, nset_it_less>   subtree_replacement_map_t;
 		subtree_replacement_map_t              subtree_replacement_map;
 
 		std::vector<exptree::sibling_iterator> factor_locations;
@@ -197,17 +207,21 @@ class exptree_comparator {
 
 		bool lhs_contains_dummies;
 
-      // A set of routines to determine natural orders of factors in products.
-		// These used to be in exptree_ordering but were moved in v2 because these
-		// all need properties info.
+      /// Determine whether two objects should be swapped according to
+      /// the available SortOrder properties.
 
 		bool should_swap(exptree::iterator obj, int subtree_comparison) ;
-		int  can_swap_prod_obj(exptree::iterator prod, exptree::iterator obj, bool) ;
-		int  can_swap_prod_prod(exptree::iterator prod1, exptree::iterator prod2, bool) ;
-		int  can_swap_sum_obj(exptree::iterator sum, exptree::iterator obj, bool) ;
-		int  can_swap_prod_sum(exptree::iterator prod, exptree::iterator sum, bool) ;
-		int  can_swap_sum_sum(exptree::iterator sum1, exptree::iterator sum2, bool) ;
-		int  can_swap_ilist_ilist(exptree::iterator obj1, exptree::iterator obj2);
+
+      /// Determine whether obj and obj+1 be exchanged? If yes, return
+      /// the sign, if no return zero. This is the general entry point
+      /// for two arbitrary nodes (which may be a product or sum).
+      ///
+      /// The last flag ('ignore_implicit_indices') is used to disable
+      /// all checks dealing with implicit indices (this is useful for
+      /// algorithms which re-order objects with implicit indices,
+      /// which would otherwise always receive a 0 from this
+      /// function).
+
 		int  can_swap(exptree::iterator one, exptree::iterator two, int subtree_comparison,
 						  bool ignore_implicit_indices=false);
 		int  can_move_adjacent(exptree::iterator prod, 
@@ -217,6 +231,14 @@ class exptree_comparator {
 		const Properties& properties;
 		// Internal entry point. 
 		match_t compare(const exptree::iterator&, const exptree::iterator&, bool nobrackets=false);
+
+      // Internal functions used by can_swap.
+		int  can_swap_prod_obj(exptree::iterator prod, exptree::iterator obj, bool) ;
+		int  can_swap_prod_prod(exptree::iterator prod1, exptree::iterator prod2, bool) ;
+		int  can_swap_sum_obj(exptree::iterator sum, exptree::iterator obj, bool) ;
+		int  can_swap_prod_sum(exptree::iterator prod, exptree::iterator sum, bool) ;
+		int  can_swap_sum_sum(exptree::iterator sum1, exptree::iterator sum2, bool) ;
+		int  can_swap_ilist_ilist(exptree::iterator obj1, exptree::iterator obj2);
 };
 
 class exptree_is_equivalent {

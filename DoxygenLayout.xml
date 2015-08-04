@@ -137,8 +137,8 @@
 
   <!-- Layout definition for a group page -->
   <group>
-    <briefdescription visible="yes"/>
-    <detaileddescription title=""/>
+    <briefdescription visible="no"/>
+    <detaileddescription title="Module Description"/>
     <groupgraph visible="$GROUP_GRAPHS"/>
     <memberdecl>
       <nestedgroups visible="yes" title=""/>

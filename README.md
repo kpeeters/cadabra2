@@ -17,6 +17,8 @@ algebras and Fierz transformations, implicit coordinate dependence,
 multiple index types and many more. The input format is a subset of
 TeX. Both a command-line and a graphical interface are available.
 
+To get started with the source code documentation, navigate to the
+\ref modules overview.
 
 ## Installation instructions
 
@@ -27,19 +29,10 @@ Run
     cmake ..
     make
 
-to build the code, and 
+to build all binaries relevant for your platform. You will get 
+warned when dependencies are missing. Use
 
     make install
 
-to install it. 
+to install the software.
 
-
-## Documentation overview
-
-The source is split into the following modules:
-
-  \ref core
-
-  \ref clientserver 
-
-  \ref frontend
