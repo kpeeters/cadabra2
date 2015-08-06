@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "Compare.hh"
+
 /// \ingroup algorithms
 ///
 /// Evaluate a tensorial expression to components, performing all
@@ -63,8 +65,11 @@ class evaluate : public Algorithm {
 		virtual result_t apply(iterator&) override;
 		
 	private:
+		/// Create a map from Indices properties to an exptree list of possible values
+		/// of that index type.
 		void collect_index_values(const exptree& ind_values);
-		std::map<const Indices *, exptree> index_values;
+		exptree_comparator::index_value_map_t index_values;
+
 		void prepare_replacement_rules(const exptree&);
 
 		void handle_sum(iterator it);

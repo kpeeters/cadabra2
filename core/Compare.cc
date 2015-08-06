@@ -365,9 +365,10 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 	// Determine whether we are dealing with one of the pattern types.
 	bool pattern=false;
 	bool objectpattern=false;
-	bool implicit_pattern=false;
+	bool implicit_pattern=false; // anything in _{..} or ^{..} that is not an integer or coordinate
 	bool is_index=false;
 	bool is_sibling_pattern=false;
+	bool is_coordinate=false;
 	
 	if(one->fl.bracket==str_node::b_none && one->is_index() ) 
 		is_index=true;
@@ -381,8 +382,16 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 		const Coordinate *cdn1=properties.get<Coordinate>(one, true);
 		if(cdn1==0)
 			implicit_pattern=true;
+		else
+			is_coordinate=true;
 		}
 		
+	// Various cases to be distinguished now:
+	//   - match index pattern to object
+   //   - match object pattern to object
+   //   - match coordinate to index
+	//   - everything else, which does not involve patterns/wildcards
+
 	if(pattern || (implicit_pattern && two->is_integer()==false)) { 
 		// The above is to ensure that we never match integers to implicit patterns.
 
@@ -436,7 +445,7 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 			// This index/pattern was not encountered earlier. If this node is an index, 
 			// check that the index types in pattern and object agree (if known, otherwise assume they match)
 
-         //			std::cerr << "index check " << *one->name << " " << *two->name << std::endl;
+			//std::cerr << "index check " << *one->name << " " << *two->name << std::endl;
 
 			const Indices *t1=properties.get<Indices>(one, true);
 			const Indices *t2=properties.get<Indices>(two, true);
@@ -504,7 +513,20 @@ exptree_comparator::match_t exptree_comparator::compare(const exptree::iterator&
 		
 		return subtree_match;
 		}
-	else { // object is not dummy
+	else if(is_coordinate) { // FIXME: check if coordinate can come from index
+		const Indices *t2=properties.get<Indices>(two, true);
+		if(t2) {
+			std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
+			auto ivals = index_values.find(t2);
+			if(ivals!=index_values.end()) {
+				
+				}
+			else return no_match_less;
+			}
+		else return no_match_less;
+		}
+	else { // object is not dummy nor objectpattern nor coordinate
+
 		if(one->is_rational() && two->is_rational() && one->multiplier!=two->multiplier) {
 			if(*one->multiplier < *two->multiplier) return no_match_less;
 			else                                    return no_match_greater;

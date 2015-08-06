@@ -3,6 +3,7 @@
 
 #include "Storage.hh"
 #include "Props.hh"
+#include "properties/Indices.hh"
 
 /// \ingroup compare
 ///
@@ -192,15 +193,24 @@ class exptree_comparator {
 		match_t match_subproduct(exptree::sibling_iterator lhs, exptree::sibling_iterator tofind, 
 										 exptree::sibling_iterator st);
 
+
+		/// Check whether the a match found by calling equal_subtree or match_subproduct 
+		/// satisfies the conditions as stated.
+		/// FIXME: document possible conditions.
 		bool    satisfies_conditions(exptree::iterator conditions, std::string& error);
 
 		/// Map for the replacement of nodes (indices, patterns).
 		typedef std::map<exptree, exptree, tree_exact_less_no_wildcards_obj>  replacement_map_t;
-		replacement_map_t                      replacement_map;
+		replacement_map_t                                                     replacement_map;
 
 		/// Map for the replacement of entire subtrees (object patterns).
 		typedef std::map<nset_t::iterator, exptree::iterator, nset_it_less>   subtree_replacement_map_t;
-		subtree_replacement_map_t              subtree_replacement_map;
+		subtree_replacement_map_t                                             subtree_replacement_map;
+
+		/// Map for the association of indices with their values.
+		typedef std::map<const Indices *, exptree> index_value_map_t;
+		index_value_map_t                          index_values;
+
 
 		std::vector<exptree::sibling_iterator> factor_locations;
 		std::vector<int>                       factor_moving_signs;
