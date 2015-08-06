@@ -1,4 +1,5 @@
 
+#include "Functional.hh"
 #include "algorithms/evaluate.hh"
 #include <functional>
 
@@ -33,43 +34,6 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	return res;
 	}
 
-namespace cadabra {
-
-// Apply the function on every element of a list, or if 'it' does not point to a list, only
-// on that single element. Handles lists wrapped in an \expression node as well.
-
-void do_list(const exptree& tr, exptree::iterator it, std::function<void(exptree::iterator)> f)
-	{
-	if(*it->name=="\\expression")
-		it=tr.begin(it);
-
-   if(*it->name=="\\comma") {
-		exptree::sibling_iterator sib=tr.begin(it);
-		while(sib!=tr.end(it)) {
-			f(sib);
-			++sib;
-			}
-      }
-	else {
-		f(it);
-		}
-	}
-
-// Ensure that the tree is a list, even if it contains only a single element.
-
-exptree make_list(exptree el)
-	{
-	auto it=el.begin();
-	if(*it->name=="\\expression") 
-		it=el.begin(it);
-
-	if(*it->name!="\\comma")
-		el.wrap(it, str_node("\\comma"));
-
-	return el;
-	}
-
-};
 
 void evaluate::collect_index_values(const exptree& ind_values)
 	{

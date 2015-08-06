@@ -41,6 +41,7 @@ set(LOCAL_SRC_FILES
   DisplayTeX.cc
   Exceptions.cc
   Exchange.cc
+  Functional.cc
   IndexIterator.cc
   Kernel.cc
   Parser.cc

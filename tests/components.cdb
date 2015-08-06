@@ -1,4 +1,16 @@
 
+# Testing a substitution rule in which an abstract index in the 
+# expression is matched against a coordinate in the pattern.
+{m,n,p}::Indices.
+{r,t}::Coordinate.
+ex:= A_{m n};
+rl:= A_{t t} -> 3;
+cr:= m -> {t, r};
+substitute(ex, rl, cr)
+#substitute(ex, rl, index_values=cr)
+
+
+
 ex:= A_{m n} A_{m n};
 crds:= m -> { t, r, \phi, \theta };
 vals:= { A_{t t} -> r, A_{r r} -> r**2, A_{t \phi} -> t };
