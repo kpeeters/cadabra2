@@ -24,19 +24,19 @@
 #include "Storage.hh"
 #include "Kernel.hh"
 
-typedef void (*dispatcher_t)(Kernel& k, exptree&, exptree::iterator& it);
+typedef void (*dispatcher_t)(Kernel& k, Ex&, Ex::iterator& it);
 
 // Central cleanup dispatch routine, which calls the other cleanup
 // functions defined later. These algorithms clean up the tree at the
 // current node and the first layer of child nodes, but do NOT descend
 // deeper down the tree. Sibling nodes of 'it' remain untouched as well.
 
-void cleanup_dispatch(Kernel& k, exptree&, exptree::iterator& it);
+void cleanup_dispatch(Kernel& k, Ex&, Ex::iterator& it);
 
 // More general cleanup of an entire tree. Walks depth-first along the
 // entire tree and call cleanup_dispatch at every node.
 
-void cleanup_dispatch_deep(Kernel& k, exptree&, dispatcher_t disp=&cleanup_dispatch);
+void cleanup_dispatch_deep(Kernel& k, Ex&, dispatcher_t disp=&cleanup_dispatch);
 
 // Individual node cleanup routines. Once more, these algorithms clean
 // up the tree at the current node and the first layer of child nodes,
@@ -46,10 +46,10 @@ void cleanup_dispatch_deep(Kernel& k, exptree&, dispatcher_t disp=&cleanup_dispa
 // anything except the node and nodes below (in particular, they will
 // leave sibling nodes untouched).
 
-void cleanup_productlike(Kernel& k, exptree&, exptree::iterator& it);
-void cleanup_sumlike(Kernel& k, exptree&, exptree::iterator& it);
-void cleanup_expressionlike(Kernel& k, exptree&, exptree::iterator& it);
-void cleanup_derivative(Kernel& k, exptree&, exptree::iterator& it);
+void cleanup_productlike(Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_sumlike(Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_expressionlike(Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_derivative(Kernel& k, Ex&, Ex::iterator& it);
 
 
 

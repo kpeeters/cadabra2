@@ -9,19 +9,19 @@
 #define zwnbsp ""
 //(( parent.utf8_output?(unichar(0xfeff)):""))
 
-DisplayTeX::DisplayTeX(const Properties& p, const exptree& e)
+DisplayTeX::DisplayTeX(const Properties& p, const Ex& e)
 	: tree(e), properties(p)
 	{
 	}
 
 void DisplayTeX::output(std::ostream& str) 
 	{
-	exptree::iterator it=tree.begin();
+	Ex::iterator it=tree.begin();
 
 	output(str, it);
 	}
 
-void DisplayTeX::output(std::ostream& str, exptree::iterator it) 
+void DisplayTeX::output(std::ostream& str, Ex::iterator it) 
 	{
 	if(*it->name=="\\expression") {
 		dispatch(str, tree.begin(it));
@@ -42,7 +42,7 @@ void DisplayTeX::output(std::ostream& str, exptree::iterator it)
 	bool needs_extra_brackets=false;
 	const Accent *ac=properties.get<Accent>(it);
 	if(!ac && extra_brackets_for_symbols) { // accents should never get additional curly brackets, {\bar}{g} does not print.
-		exptree::sibling_iterator sib=tree.begin(it);
+		Ex::sibling_iterator sib=tree.begin(it);
 		while(sib!=tree.end(it)) {
 			if(sib->is_index()) 
 				needs_extra_brackets=true;
@@ -69,14 +69,14 @@ std::string DisplayTeX::texify(const std::string& str) const
    return res;
 	}
 
-void DisplayTeX::print_children(std::ostream& str, exptree::iterator it, int skip) 
+void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
 	previous_bracket_   =str_node::b_invalid;
 	previous_parent_rel_=str_node::p_none;
 
 	int number_of_nonindex_children=0;
 	int number_of_index_children=0;
-	exptree::sibling_iterator ch=tree.begin(it);
+	Ex::sibling_iterator ch=tree.begin(it);
 	while(ch!=tree.end(it)) {
 		if(ch->is_index()==false) {
 			++number_of_nonindex_children;
@@ -125,7 +125,7 @@ void DisplayTeX::print_children(std::ostream& str, exptree::iterator it, int ski
 		}
 	}
 
-void DisplayTeX::print_multiplier(std::ostream& str, exptree::iterator it)
+void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it)
 	{
 	bool turned_one=false;
 	mpz_class denom=it->multiplier->get_den();
@@ -188,7 +188,7 @@ void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br
 	switch(br) {
 		case str_node::b_none: 
 			str << "{";
-//			if(parent.output_format==exptree_output::out_xcadabra && pr==str_node::p_none) str << "(";  
+//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << "(";  
 //			else                                                                           str << "{";
 			break;
 		case str_node::b_pointy: str << "\\<"; break;
@@ -205,7 +205,7 @@ void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 	switch(br) {
 		case str_node::b_none:   
 			str << "}";
-//			if(parent.output_format==exptree_output::out_xcadabra && pr==str_node::p_none) str << ")";  
+//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << ")";  
 //			else                                                                           str << "}";
 			break;
 		case str_node::b_pointy: str << "\\>"; break;
@@ -234,7 +234,7 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 	str << zwnbsp;
 	}
 
-void DisplayTeX::dispatch(std::ostream& str, exptree::iterator it) 
+void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it) 
 	{
 	if(*it->name=="\\prod")       print_productlike(str, it, " ");
 	else if(*it->name=="\\sum")   print_sumlike(str, it);
@@ -246,9 +246,9 @@ void DisplayTeX::dispatch(std::ostream& str, exptree::iterator it)
 		output(str, it);
 	}
 
-void DisplayTeX::print_commalike(std::ostream& str, exptree::iterator it) 
+void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it) 
 	{
-	exptree::sibling_iterator sib=tree.begin(it);
+	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
 	print_opening_bracket(str, (*it).fl.bracket, str_node::p_none);	
 	while(sib!=tree.end(it)) {
@@ -262,18 +262,18 @@ void DisplayTeX::print_commalike(std::ostream& str, exptree::iterator it)
 	print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
 	}
 
-void DisplayTeX::print_arrowlike(std::ostream& str, exptree::iterator it) 
+void DisplayTeX::print_arrowlike(std::ostream& str, Ex::iterator it) 
 	{
-	exptree::sibling_iterator sib=tree.begin(it);
+	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	str << " -> ";
 	++sib;
 	dispatch(str, sib);
 	}
 
-void DisplayTeX::print_fraclike(std::ostream& str, exptree::iterator it)
+void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 	{
-	exptree::sibling_iterator num=tree.begin(it), den=num;
+	Ex::sibling_iterator num=tree.begin(it), den=num;
 	++den;
 
 	bool close_bracket=false;
@@ -296,12 +296,12 @@ void DisplayTeX::print_fraclike(std::ostream& str, exptree::iterator it)
 		str << ")";
 	}
 
-void DisplayTeX::print_productlike(std::ostream& str, exptree::iterator it, const std::string& inbetween)
+void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
 //	bool close_bracket=false;
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-		exptree::sibling_iterator st=tree.begin(it);
+		Ex::sibling_iterator st=tree.begin(it);
 //		while(st!=tr.end(it)) {
 //			if(*st->name=="\\sum") {
 //				str << "(";
@@ -319,7 +319,7 @@ void DisplayTeX::print_productlike(std::ostream& str, exptree::iterator it, cons
 	
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;
 	bool beginning_of_group=true;
-	exptree::sibling_iterator ch=tree.begin(it);
+	Ex::sibling_iterator ch=tree.begin(it);
 	while(ch!=tree.end(it)) {
 		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
 		if(previous_bracket_!=current_bracket_) {
@@ -344,7 +344,7 @@ void DisplayTeX::print_productlike(std::ostream& str, exptree::iterator it, cons
 				else str << " " << inbetween << " ";
 				}
 			else {
-//				 if(output_format==exptree_output::out_texmacs) str << "\\,";
+//				 if(output_format==Ex_output::out_texmacs) str << "\\,";
 //				 else 
 				str << " ";
 				 }
@@ -355,13 +355,13 @@ void DisplayTeX::print_productlike(std::ostream& str, exptree::iterator it, cons
 //	if(close_bracket) str << ")";
 	}
 
-void DisplayTeX::print_sumlike(std::ostream& str, exptree::iterator it) 
+void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it) 
 	{
 	bool close_bracket=false;
 	if(*it->multiplier!=1) 
 		print_multiplier(str, it);
 
-	exptree::iterator par=tree.parent(it);
+	Ex::iterator par=tree.parent(it);
 	if(tree.number_of_children(par) - Algorithm::number_of_direct_indices(par)>1) { 
       // for a single argument, the parent already takes care of the brackets
 		if(*it->multiplier!=1 || (tree.is_valid(par) && *par->name!="\\expression")) {
@@ -375,7 +375,7 @@ void DisplayTeX::print_sumlike(std::ostream& str, exptree::iterator it)
 	unsigned int steps=0;
 
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;
-	exptree::sibling_iterator ch=tree.begin(it);
+	Ex::sibling_iterator ch=tree.begin(it);
 	bool beginning_of_group=true;
 	bool mathematica_postponed_endl=false;
 	while(ch!=tree.end(it)) {
@@ -437,9 +437,9 @@ void DisplayTeX::print_sumlike(std::ostream& str, exptree::iterator it)
 	str << std::flush;
 	}
 
-void DisplayTeX::print_powlike(std::ostream& str, exptree::iterator it)
+void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 	{
-	exptree::iterator sib=tree.begin(it);
+	Ex::iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	str << "**{";
 	++sib;
@@ -447,9 +447,9 @@ void DisplayTeX::print_powlike(std::ostream& str, exptree::iterator it)
 	str << "}";
 	}
 
-bool DisplayTeX::children_have_brackets(exptree::iterator ch) const
+bool DisplayTeX::children_have_brackets(Ex::iterator ch) const
 	{
-	exptree::sibling_iterator chlds=tree.begin(ch);
+	Ex::sibling_iterator chlds=tree.begin(ch);
 	str_node::bracket_t childbr=chlds->fl.bracket;
 	if(childbr==str_node::b_none || childbr==str_node::b_no)
 		return false;

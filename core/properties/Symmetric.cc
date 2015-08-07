@@ -6,12 +6,12 @@ std::string Symmetric::name() const
 	return "Symmetric";
 	}
 
-unsigned int Symmetric::size(const Properties&, exptree&, exptree::iterator) const
+unsigned int Symmetric::size(const Properties&, Ex&, Ex::iterator) const
 	{
 	return 1;
 	}
 
-TableauBase::tab_t Symmetric::get_tab(const Properties& pr, exptree& tr, exptree::iterator it, unsigned int num) const
+TableauBase::tab_t Symmetric::get_tab(const Properties& pr, Ex& tr, Ex::iterator it, unsigned int num) const
 	{
 	assert(num==0);
 

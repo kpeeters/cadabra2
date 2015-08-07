@@ -27,13 +27,13 @@
 
 // Find groups of identical tensors. 
 //
-int exchange::collect_identical_tensors(const Properties& properties, exptree& tr, exptree::iterator it,
+int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex::iterator it,
 													  std::vector<identical_tensors_t>& idts) 
 	{
 	assert(*it->name=="\\prod");
 
 	int total_number_of_indices=0; // refers to number of indices on gamma matrices
-	exptree::sibling_iterator sib=it.begin();
+	Ex::sibling_iterator sib=it.begin();
 	while(sib!=it.end()) {
 		unsigned int i=0;
 		if(Algorithm::number_of_indices(properties, sib)==0) {
@@ -47,14 +47,14 @@ int exchange::collect_identical_tensors(const Properties& properties, exptree& t
 			}
 		
 		// In case of spinors, the name may be hidden inside a Dirac bar.
-		exptree::sibling_iterator truetensor=sib;
+		Ex::sibling_iterator truetensor=sib;
 		const DiracBar *db=properties.get_composite<DiracBar>(truetensor);
 		if(db) 
 			truetensor=tr.begin(truetensor);
 
 		// Compare the current tensor with all other tensors encountered so far.
 		for(; i<idts.size(); ++i) {
-			exptree::sibling_iterator truetensor2=idts[i].tensors[0];
+			Ex::sibling_iterator truetensor2=idts[i].tensors[0];
 			const DiracBar *db2=properties.get_composite<DiracBar>(truetensor2);
 			if(db2) 
 				truetensor2=tr.begin(truetensor2);
@@ -63,7 +63,7 @@ int exchange::collect_identical_tensors(const Properties& properties, exptree& t
 				// If this is a spinor, check that it's connected to the one already stored
 				// by a Gamma matrix, or that it is connected directly.
 				if(idts[i].spino) {
-					exptree::sibling_iterator tmpit=idts[i].tensors[0];
+					Ex::sibling_iterator tmpit=idts[i].tensors[0];
 					const GammaMatrix *gmnxt=0;
 					const Spinor      *spnxt=0;
 					// skip objects without spinor line
@@ -123,7 +123,7 @@ int exchange::collect_identical_tensors(const Properties& properties, exptree& t
 	}
 
 
-bool exchange::get_node_gs(const Properties& properties, exptree& tr, exptree::iterator it, std::vector<std::vector<int> >& gs)
+bool exchange::get_node_gs(const Properties& properties, Ex& tr, Ex::iterator it, std::vector<std::vector<int> >& gs)
 	{
 	std::vector<identical_tensors_t> idts;
 	int total_number_of_indices=collect_identical_tensors(properties, tr, it, idts);

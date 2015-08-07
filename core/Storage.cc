@@ -39,28 +39,69 @@ std::string to_string(long num)
 	return str.str();
 	}
 
-exptree::exptree()
-	: tree<str_node>()
+// Expression constructor/destructor members.
+
+Ex::Ex()
+	: tree<str_node>(), state_(result_t::l_no_action)
 	{
 	}
 
-exptree::exptree(tree<str_node>::iterator it)
-	: tree<str_node>(it)
+Ex::Ex(tree<str_node>::iterator it)
+	: tree<str_node>(it), state_(result_t::l_no_action)
 	{
 	}
 
-exptree::exptree(const str_node& x)
-	: tree<str_node>(x)
+Ex::Ex(const str_node& x)
+	: tree<str_node>(x), state_(result_t::l_no_action)
 	{
 	}
 
-std::ostream& exptree::print_recursive_treeform(std::ostream& str, exptree::iterator it) 
+Ex::Ex(const Ex& other)
+	: tree<str_node>(other), state_(result_t::l_no_action)
+	{
+   //	std::cout << "Ex copy constructor" << std::endl;
+	}
+
+Ex::Ex(int val) 
+	: state_(result_t::l_no_action)
+	{
+	set_head(str_node("\\expression"));
+	Ex::iterator it = append_child(begin(), str_node("1"));
+	multiply(it->multiplier, val);
+	}
+
+Ex::result_t Ex::state() const
+	{
+	return state_;
+	}
+
+void Ex::update_state(Ex::result_t newstate)
+	{
+	switch(newstate) {
+		case Ex::result_t::l_error:
+			state_=newstate;
+			break;
+		case Ex::result_t::l_applied:
+			if(state_!=Ex::result_t::l_error)
+				state_=newstate;
+			break;
+		default:
+			break;
+		}
+	}
+
+void Ex::reset_state() 
+	{
+	state_=Ex::result_t::l_no_action;
+	}
+
+std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it) 
 	{
 	unsigned int num=1;
 	return print_recursive_treeform(str, it, num);
 	}
 
-std::ostream& exptree::print_entire_tree(std::ostream& str) const
+std::ostream& Ex::print_entire_tree(std::ostream& str) const
 	{
 	sibling_iterator sib=begin();
 	unsigned int num=1;
@@ -72,12 +113,12 @@ std::ostream& exptree::print_entire_tree(std::ostream& str) const
 	return str;
 	}
 
-std::ostream& exptree::print_recursive_treeform(std::ostream& str, exptree::iterator it, unsigned int& num)
+std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it, unsigned int& num)
 	{
 	bool compact_tree=getenv("CDB_COMPACTTREE");
 
-	exptree::sibling_iterator beg=it.begin();
-	exptree::sibling_iterator fin=it.end();
+	Ex::sibling_iterator beg=it.begin();
+	Ex::sibling_iterator fin=it.end();
 
 	if((*it).fl.bracket   ==str_node::b_round)       str << "(";
 	else if((*it).fl.bracket   ==str_node::b_square) str << "[";
@@ -128,10 +169,10 @@ std::ostream& exptree::print_recursive_treeform(std::ostream& str, exptree::iter
 	}
 
 
-// std::ostream& operator<<(std::ostream& str, const exptree& tr)
+// std::ostream& operator<<(std::ostream& str, const Ex& tr)
 // 	{
 // 	unsigned int number=1;
-// 	exptree::iterator it=tr.begin();
+// 	Ex::iterator it=tr.begin();
 // 	while(it!=tr.end()) {
 // 		tr.print_recursive_infix(str, it, number, true);
 // 		it.skip_children();
@@ -142,7 +183,7 @@ std::ostream& exptree::print_recursive_treeform(std::ostream& str, exptree::iter
 // 	return str;
 // 	}
 
-exptree::iterator exptree::named_parent(exptree::iterator it, const std::string& nm) const
+Ex::iterator Ex::named_parent(Ex::iterator it, const std::string& nm) const
 	{
 //	std::cout << "!!" << *it->name << std::endl << std::flush;
 	assert(is_valid(it));
@@ -155,13 +196,13 @@ exptree::iterator exptree::named_parent(exptree::iterator it, const std::string&
 	return it;
 	}
 
-exptree::iterator exptree::erase_expression(exptree::iterator it) 
+Ex::iterator Ex::erase_expression(Ex::iterator it) 
 	{
 	it=named_parent(it, "\\history");
 	return erase(it);
 	}
 
-exptree::iterator exptree::keep_only_last(exptree::iterator it)
+Ex::iterator Ex::keep_only_last(Ex::iterator it)
 	{
 	it=named_parent(it, "\\history");
 	if(begin(it)==end(it)) return it;
@@ -188,7 +229,7 @@ exptree::iterator exptree::keep_only_last(exptree::iterator it)
 	return it;
 	}
 
-hashval_t exptree::calc_hash(iterator it) const
+hashval_t Ex::calc_hash(iterator it) const
 	{
 	// Hash values do not contain info about the multiplier field,
 	// nor do they know about the type of the links (FIXME: is the latter
@@ -209,22 +250,22 @@ hashval_t exptree::calc_hash(iterator it) const
 	return ret;
 	}
 
-exptree::sibling_iterator exptree::arg(iterator it, unsigned int num) 
+Ex::sibling_iterator Ex::arg(iterator it, unsigned int num) 
 	{
 	if(*it->name=="\\comma") {
-		assert(exptree::number_of_children(it)>num);
-		return exptree::child(it,num);
+		assert(Ex::number_of_children(it)>num);
+		return Ex::child(it,num);
 		}
 	else return it;
 	}
 
-unsigned int exptree::arg_size(sibling_iterator sib) 
+unsigned int Ex::arg_size(sibling_iterator sib) 
 	{
-	if(*sib->name=="\\comma") return exptree::number_of_children(sib);
+	if(*sib->name=="\\comma") return Ex::number_of_children(sib);
 	else return 1;
 	}
 
-multiplier_t exptree::arg_to_num(sibling_iterator sib, unsigned int num) const
+multiplier_t Ex::arg_to_num(sibling_iterator sib, unsigned int num) const
 	{
 	sibling_iterator nod;
 	if(*sib->name=="\\comma") nod=child(sib,num);
@@ -232,7 +273,7 @@ multiplier_t exptree::arg_to_num(sibling_iterator sib, unsigned int num) const
 	return *nod->multiplier;
 	}
 
-//exptree::sibling_iterator exptree::tensor_index(const iterator_base& position, unsigned int num) const
+//Ex::sibling_iterator Ex::tensor_index(const iterator_base& position, unsigned int num) const
 //	{
 //	index_iterator ret=begin_index(position);
 //	while(num-- > 0)
@@ -251,15 +292,15 @@ multiplier_t exptree::arg_to_num(sibling_iterator sib, unsigned int num) const
 // Given an iterator somewhere inside an expression (can be the
 // \\history node), this member returns an iterator pointing to the
 // \expression node of the active expression. 
-exptree::iterator exptree::active_expression(exptree::iterator it) const
+Ex::iterator Ex::active_expression(Ex::iterator it) const
 	{
 	it=named_parent(it, "\\history");
-	exptree::sibling_iterator sube=end(it);
+	Ex::sibling_iterator sube=end(it);
 	--sube;
 	return sube;
 	}
 
-/*unsigned int exptree::number_of_steps(exptree::iterator it) const
+/*unsigned int Ex::number_of_steps(Ex::iterator it) const
 	{
 	it=named_parent(it, "\\expression");
 	sibling_iterator sib=begin(it);
@@ -273,7 +314,7 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 	}
 */
 
-//void exptree::select(unsigned int node, unsigned int mark)
+//void Ex::select(unsigned int node, unsigned int mark)
 //	{
 //	iterator it=begin();
 //	unsigned int here=1;
@@ -295,7 +336,7 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 //		}
 //	}
 
-//void exptree::select(iterator it, unsigned int mark)
+//void Ex::select(iterator it, unsigned int mark)
 //	{
 //	it->fl.mark=mark;
 //	  iterator nd=it;
@@ -307,12 +348,12 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 //		  }
 //	}
 
-//void exptree::unselect(unsigned int node)
+//void Ex::unselect(unsigned int node)
 //	{
 //	select(node, 0);
 //	}
 
-//void exptree::unselect(iterator it, bool deep)
+//void Ex::unselect(iterator it, bool deep)
 //	{
 //	select(it, 0);
 //	if(deep) {
@@ -327,7 +368,7 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 //		}
 //	}
 
-//void exptree::select_all(unsigned int mark)
+//void Ex::select_all(unsigned int mark)
 //	{
 //	iterator it=begin();
 //	while(it!=end()) {
@@ -336,7 +377,7 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 //		}
 //	}
 //
-//void exptree::unselect_all(unsigned int mark)
+//void Ex::unselect_all(unsigned int mark)
 //	{
 //	iterator it=begin();
 //	while(it!=end()) {
@@ -346,7 +387,7 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 //		}
 //	}
 //
-//void exptree::unselect_all()
+//void Ex::unselect_all()
 //	{
 //	iterator it=begin();
 //	while(it!=end()) {
@@ -355,7 +396,7 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 //		}
 //	}
 
-//void exptree::marked_nodes(std::vector<iterator>& v) const
+//void Ex::marked_nodes(std::vector<iterator>& v) const
 //	{
 //	iterator it=begin();
 //	while(it!=end()) {
@@ -367,7 +408,7 @@ exptree::iterator exptree::active_expression(exptree::iterator it) const
 //		}
 //	}
 
-unsigned int exptree::equation_number(exptree::iterator it) const
+unsigned int Ex::equation_number(Ex::iterator it) const
 	{
 	iterator historynode=named_parent(it, "\\history");
 	unsigned int num=0;
@@ -388,7 +429,7 @@ unsigned int exptree::equation_number(exptree::iterator it) const
 	return 0;
 	}
 
-nset_t::iterator exptree::equation_label(exptree::iterator it) const
+nset_t::iterator Ex::equation_label(Ex::iterator it) const
 	{
 	nset_t::iterator ret=name_set.end();
 
@@ -425,7 +466,7 @@ nset_t::iterator exptree::equation_label(exptree::iterator it) const
 	}
 
 // Always returns the \\history node of the equation (i.e. the top node).
-exptree::iterator exptree::equation_by_number(unsigned int i) const
+Ex::iterator Ex::equation_by_number(unsigned int i) const
 	{
 	iterator it=begin();
 	unsigned int num=1;
@@ -443,13 +484,13 @@ exptree::iterator exptree::equation_by_number(unsigned int i) const
 //	return it;
 	}
 
-exptree::iterator exptree::equation_by_name(nset_t::iterator nit) const
+Ex::iterator Ex::equation_by_name(nset_t::iterator nit) const
 	{
 	unsigned int tmp;
 	return equation_by_name(nit, tmp);
 	}
 
-exptree::iterator exptree::equation_by_name(nset_t::iterator nit, unsigned int& tmp) const
+Ex::iterator Ex::equation_by_name(nset_t::iterator nit, unsigned int& tmp) const
 	{
 	unsigned int num=0;
 	iterator it=begin();
@@ -473,7 +514,7 @@ exptree::iterator exptree::equation_by_name(nset_t::iterator nit, unsigned int& 
 	return end();
 	}
 
-exptree::iterator exptree::procedure_by_name(nset_t::iterator nit) const
+Ex::iterator Ex::procedure_by_name(nset_t::iterator nit) const
 	{
 	iterator it=begin();
 	while(it!=end()) {
@@ -493,7 +534,7 @@ exptree::iterator exptree::procedure_by_name(nset_t::iterator nit) const
 	return end();
 	}
 
-exptree::iterator exptree::replace_index(iterator pos, const iterator& from)
+Ex::iterator Ex::replace_index(iterator pos, const iterator& from)
 	{
 //	assert(pos->fl.parent_rel==str_node::p_sub || pos->fl.parent_rel==str_node::p_super);
 	str_node::bracket_t    bt=pos->fl.bracket;
@@ -504,7 +545,7 @@ exptree::iterator exptree::replace_index(iterator pos, const iterator& from)
 	return ret;
 	}
 
-exptree::iterator exptree::move_index(iterator pos, const iterator& from)
+Ex::iterator Ex::move_index(iterator pos, const iterator& from)
 	{
 //	assert(pos->fl.parent_rel==str_node::p_sub || pos->fl.parent_rel==str_node::p_super);
 	str_node::bracket_t    bt=pos->fl.bracket;
@@ -515,7 +556,7 @@ exptree::iterator exptree::move_index(iterator pos, const iterator& from)
 	return from;
 	}
 
-void exptree::list_wrap_single_element(iterator& it)
+void Ex::list_wrap_single_element(iterator& it)
 	{
 	if(*it->name!="\\comma") {
 		iterator commanode=insert(it, str_node("\\comma"));
@@ -526,7 +567,7 @@ void exptree::list_wrap_single_element(iterator& it)
 		}
 	}
 
-void exptree::list_unwrap_single_element(iterator& it)
+void Ex::list_unwrap_single_element(iterator& it)
 	{
 	if(*it->name=="\\comma") {
 		if(number_of_children(it)==1) {
@@ -536,7 +577,7 @@ void exptree::list_unwrap_single_element(iterator& it)
 		}
 	}
 
-exptree::iterator exptree::flatten_and_erase(iterator pos)
+Ex::iterator Ex::flatten_and_erase(iterator pos)
 	{
 	multiplier_t tmp=*pos->multiplier;
 	flatten(pos);
@@ -545,7 +586,7 @@ exptree::iterator exptree::flatten_and_erase(iterator pos)
 	return pos;
 	}
 
-unsigned int exptree::number_of_equations() const
+unsigned int Ex::number_of_equations() const
 	{
 	unsigned int last_eq=0;
 	iterator eq=begin();
@@ -558,7 +599,7 @@ unsigned int exptree::number_of_equations() const
 	return last_eq;
 	}
 
-exptree::iterator exptree::equation_by_number_or_name(iterator it, unsigned int last_used_equation, 
+Ex::iterator Ex::equation_by_number_or_name(iterator it, unsigned int last_used_equation, 
 																		unsigned int& real_eqno) const
 	{
 	iterator ret;
@@ -579,13 +620,13 @@ exptree::iterator exptree::equation_by_number_or_name(iterator it, unsigned int 
 	return ret;
 	}
 
-exptree::iterator exptree::equation_by_number_or_name(iterator it, unsigned int last_used_equation) const
+Ex::iterator Ex::equation_by_number_or_name(iterator it, unsigned int last_used_equation) const
 	{
 	unsigned int tmp;
 	return equation_by_number_or_name(it, last_used_equation, tmp);
 	}
 
-std::string exptree::equation_number_or_name(iterator it, unsigned int last_used_equation) const
+std::string Ex::equation_number_or_name(iterator it, unsigned int last_used_equation) const
 	{
 	std::stringstream ss;
 	if(it->is_rational()) {
@@ -599,7 +640,7 @@ std::string exptree::equation_number_or_name(iterator it, unsigned int last_used
 	return ss.str();
 	}
 
-bool exptree::operator==(const exptree& other) const
+bool Ex::operator==(const Ex& other) const
 	{
 	return equal_subtree(begin(), other.begin());
 	}

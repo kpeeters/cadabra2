@@ -5,13 +5,13 @@
 
 class order : virtual public Algorithm {
 	public:
-		order(Kernel&, exptree&, exptree& objs, bool ac);
+		order(Kernel&, Ex&, Ex& objs, bool ac);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
 
 	protected:
-		exptree objects;
+		Ex objects;
 		bool    anticomm;
 };
 

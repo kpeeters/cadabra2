@@ -18,7 +18,7 @@ std::string RiemannTensor::name() const
 	return "RiemannTensor";
 	}
 
-void RiemannTensor::validate(const Properties& props, const exptree& pat) const
+void RiemannTensor::validate(const Properties& props, const Ex& pat) const
 	{
 	if(number_of_indices(props, pat.begin())!=4) 
 		throw ConsistencyException("RiemannTensor: need exactly 4 indices.");

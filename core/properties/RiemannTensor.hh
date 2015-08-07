@@ -5,5 +5,5 @@ class RiemannTensor : public TableauSymmetry, virtual public property {
 	public:
 		RiemannTensor();
 		virtual std::string name() const override;
-		virtual void        validate(const Properties&, const exptree&) const override;
+		virtual void        validate(const Properties&, const Ex&) const override;
 };

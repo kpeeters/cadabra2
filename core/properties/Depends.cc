@@ -15,8 +15,8 @@ bool Depends::parse(const Properties& pr, keyval_t& kv)
 	{
 	keyval_t::const_iterator it=kv.begin();
 	dependencies_.set_head(str_node("\\comma"));
-	exptree::iterator comma = dependencies_.begin();
-//	exptree::iterator comma = dependencies_.append_child(dependencies_.begin(), str_node("\\comma"));
+	Ex::iterator comma = dependencies_.begin();
+//	Ex::iterator comma = dependencies_.append_child(dependencies_.begin(), str_node("\\comma"));
 	while(it!=kv.end()) {
 		if(it->first=="dependants") {
 			const Indices    *dum=pr.get<Indices>(it->second, true);
@@ -36,7 +36,7 @@ bool Depends::parse(const Properties& pr, keyval_t& kv)
 	return true;
 	}
 
-exptree Depends::dependencies(exptree::iterator) const
+Ex Depends::dependencies(Ex::iterator) const
 	{
 	return dependencies_;
 	}

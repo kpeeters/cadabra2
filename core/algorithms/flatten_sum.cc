@@ -1,7 +1,7 @@
 
 #include "algorithms/flatten_sum.hh"
 
-flatten_sum::flatten_sum(Kernel& k, exptree& tr)
+flatten_sum::flatten_sum(Kernel& k, Ex& tr)
 	: Algorithm(k, tr), make_consistent_only(false)
 	{
 	}

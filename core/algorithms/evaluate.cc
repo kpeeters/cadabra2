@@ -3,7 +3,7 @@
 #include "algorithms/evaluate.hh"
 #include <functional>
 
-evaluate::evaluate(Kernel& k, exptree& tr, const exptree& ind_values, const exptree& components)
+evaluate::evaluate(Kernel& k, Ex& tr, const Ex& ind_values, const Ex& components)
 	: Algorithm(k, tr)
 	{
 	// Preparse the arguments.
@@ -21,7 +21,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	result_t res=result_t::l_no_action;
 
 	// Descend down the tree.
-	exptree::post_order_iterator walk=it;
+	Ex::post_order_iterator walk=it;
 	walk.descend_all();
 
 	do {
@@ -35,11 +35,11 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	}
 
 
-void evaluate::collect_index_values(const exptree& ind_values)
+void evaluate::collect_index_values(const Ex& ind_values)
 	{
 	auto it=ind_values.begin(ind_values.begin());
 
-	cadabra::do_list(ind_values, it, [&](exptree::iterator ind) {
+	cadabra::do_list(ind_values, it, [&](Ex::iterator ind) {
 			auto name=ind_values.begin(ind);
 			sibling_iterator vals=name;
 			++vals;
@@ -47,11 +47,11 @@ void evaluate::collect_index_values(const exptree& ind_values)
 			if(indprop==0)
 				throw ArgumentException("evaluate: Index "+ *(name->name) + " does not have an Indices property");
 			
-			index_values[indprop]=cadabra::make_list(exptree(vals));
+			index_values[indprop]=cadabra::make_list(Ex(vals));
 			});
 	}
 
-void evaluate::prepare_replacement_rules(const exptree& components)
+void evaluate::prepare_replacement_rules(const Ex& components)
 	{
 	// We need to be able to match A_{t t} to A_{m n} knowing that m,n
 	// take values including t. In order to do this, we look at the
@@ -61,9 +61,9 @@ void evaluate::prepare_replacement_rules(const exptree& components)
 	// one index set) this gives multiple options from the index value to
 	// the index that can take this value.
 
-	std::map<exptree, const Indices *> index_candidates;
+	std::map<Ex, const Indices *> index_candidates;
 	
-	cadabra::do_list(components, components.begin(), [&](exptree::iterator c) {
+	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			index_map_t ind_free, ind_dummy;
 			auto pat = components.begin(c);
 			classify_indices(pat, ind_free, ind_dummy);

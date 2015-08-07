@@ -1,7 +1,7 @@
 
 #include "algorithms/prodcollectnum.hh"
 
-prodcollectnum::prodcollectnum(Kernel& k, exptree& tr)
+prodcollectnum::prodcollectnum(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

@@ -31,27 +31,27 @@ pattern::pattern()
 	{
 	}
 
-pattern::pattern(const exptree& o)
+pattern::pattern(const Ex& o)
 	: obj(o)
 	{
 	}
 
-bool pattern::match(const Properties& properties, const exptree::iterator& it, bool ignore_parent_rel) const
+bool pattern::match(const Properties& properties, const Ex::iterator& it, bool ignore_parent_rel) const
 	{
 	// Special case for range wildcards.
 	// FIXME: move this to storage.cc (see the FIXME there)
 
 	if(it->name==obj.begin()->name && children_wildcard()) {
-		exptree::iterator hm=obj.begin(obj.begin());
-		if(exptree::number_of_children(hm)==0) {
+		Ex::iterator hm=obj.begin(obj.begin());
+		if(Ex::number_of_children(hm)==0) {
 			return true; // # without arguments
 			}
-		exptree::iterator hmarg=hm.begin();
-		exptree::iterator seqarg=hm; 
+		Ex::iterator hmarg=hm.begin();
+		Ex::iterator seqarg=hm; 
 		const Indices *ind=0;
 
 		if(*hmarg->name=="\\comma" || *hmarg->name!="\\sequence") {
-			exptree::iterator stt=hmarg;
+			Ex::iterator stt=hmarg;
 			if(*hmarg->name=="\\comma") {
 				stt=hmarg.begin();
 				seqarg=hmarg.begin();
@@ -63,18 +63,18 @@ bool pattern::match(const Properties& properties, const exptree::iterator& it, b
 		else seqarg=hmarg;
 
 		if(seqarg!=hm) {
-			exptree::sibling_iterator seqit=seqarg.begin();
+			Ex::sibling_iterator seqit=seqarg.begin();
 			unsigned int from=to_long(*seqit->multiplier);
 			++seqit;
 			unsigned int to  =to_long(*seqit->multiplier);
 
-			if(exptree::number_of_children(it)<from ||
-				exptree::number_of_children(it)>to ) 
+			if(Ex::number_of_children(it)<from ||
+				Ex::number_of_children(it)>to ) 
 				return false;
 			}
 		
 		if(ind!=0) {
-			exptree::sibling_iterator indit=it.begin();
+			Ex::sibling_iterator indit=it.begin();
 			while(indit!=it.end()) {
 				const Indices *gi=properties.get<Indices>(indit, true);
 				if(gi!=ind) {
@@ -89,8 +89,8 @@ bool pattern::match(const Properties& properties, const exptree::iterator& it, b
 
 	// Cases without range wildcard.
 //	txtout << "comparing " << *it->name << " " << *obj.begin()->name << std::endl;
-//	exptree::print_recursive_treeform(txtout, it);
-//	exptree::print_recursive_treeform(txtout, obj.begin());
+//	Ex::print_recursive_treeform(txtout, it);
+//	Ex::print_recursive_treeform(txtout, obj.begin());
 	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-2, true, 0);
 //	txtout << res << std::endl;
 	if(abs(res)<=1) {
@@ -103,13 +103,13 @@ bool pattern::match(const Properties& properties, const exptree::iterator& it, b
 
 bool pattern::children_wildcard() const	
 	{
-	if(exptree::number_of_children(obj.begin())==1) 
+	if(Ex::number_of_children(obj.begin())==1) 
 		if(obj.begin(obj.begin())->is_range_wildcard())
 			return true;
 	return false;
 	}
 
-bool Properties::has(const property *pb, exptree::iterator it) 
+bool Properties::has(const property *pb, Ex::iterator it) 
 	{
 	std::pair<property_map_t::iterator, property_map_t::iterator> pit=props.equal_range(it->name);
 	while(pit.first!=pit.second) {
@@ -205,16 +205,16 @@ bool property::parse(const Properties&, keyval_t& keyvals)
 //	return false;
 	}
 
-void property::validate(const Properties&, const exptree&) const
+void property::validate(const Properties&, const Ex&) const
 	{
 	}
 
-bool property::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
+bool property::parse_one_argument(Ex::iterator arg, keyval_t& keyvals)
 	{
 	if(*arg->name=="\\equals") {
-		exptree::sibling_iterator key=arg.begin();
+		Ex::sibling_iterator key=arg.begin();
 		if(key==arg.end()) return false;
-		exptree::sibling_iterator val=key;
+		Ex::sibling_iterator val=key;
 		++val;
 		if(val==arg.end()) return false;
 		keyvals.push_back(keyval_t::value_type(*arg.begin()->name, val));
@@ -228,7 +228,7 @@ bool property::parse_one_argument(exptree::iterator arg, keyval_t& keyvals)
 	return true;
 	}
 
-bool property::parse_to_keyvals(const exptree& tr, keyval_t& keyvals) 
+bool property::parse_to_keyvals(const Ex& tr, keyval_t& keyvals) 
 	{
 	if(tr.number_of_children(tr.begin())==0) return true;
 	if(tr.number_of_children(tr.begin())>1)  return false;
@@ -241,7 +241,7 @@ bool property::parse_to_keyvals(const exptree& tr, keyval_t& keyvals)
 			return false;
 		}
 	else {
-		exptree::sibling_iterator sib=tr.begin(it);
+		Ex::sibling_iterator sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
 			if(parse_one_argument(sib, keyvals)==false)
 				return false;
@@ -299,7 +299,7 @@ bool labelled_property::parse(const Properties&, keyval_t& keyvals)
 //	  return one.obj==two.obj; // FIXME: handle dummy indices
 //	  }
 
-void Properties::insert_prop(const exptree& et, const property *pr)
+void Properties::insert_prop(const Ex& et, const property *pr)
 	{
 //	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 
@@ -314,7 +314,7 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 
 	while(pit.first!=pit.second) {
 		// keep track of the first non-pattern element
-		if(exptree::number_of_children((*pit.first).second.first->obj.begin())==1) 
+		if(Ex::number_of_children((*pit.first).second.first->obj.begin())==1) 
 			if((*pit.first).second.first->obj.begin().begin()->is_range_wildcard()) 
 				++first_nonpattern;
 			
@@ -383,7 +383,7 @@ void Properties::insert_prop(const exptree& et, const property *pr)
 	props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 	}
 
-void Properties::insert_list_prop(const std::vector<exptree>& its, const list_property *pr)
+void Properties::insert_list_prop(const std::vector<Ex>& its, const list_property *pr)
 	{
 	assert(pats.find(pr)==pats.end()); // identical properties have to be assigned through insert_list_prop
 	assert(its.size()>0);
@@ -442,7 +442,7 @@ void Properties::insert_list_prop(const std::vector<exptree>& its, const list_pr
 //			if((*pit.first).second.first->match(its[i])) { // found the pattern 'its[i]' in the property list
 //				if(typeid(*pr)==typeid(*(*pit.first).second.second)) {
 ////						txtout << "found a property for " << *(its[i]->name) << std::endl;
-////						exptree::print_recursive_treeform(txtout, its[i]);
+////						Ex::print_recursive_treeform(txtout, its[i]);
 //					
 //					pattern  *oldpat=pit.first->second.first;
 //					const property *oldprop=pit.first->second.second;
@@ -523,24 +523,23 @@ int Properties::serial_number(const property *listprop, const pattern *pat) cons
  */
 
 
-// Insert a property for the given pattern exptree. Determines whether the property
+// Insert a property for the given pattern Ex. Determines whether the property
 // is a list property or a normal one, and dispatches accordingly.
 
-std::string Properties::master_insert(exptree proptree, property *thepropbase)
+std::string Properties::master_insert(Ex proptree, property *thepropbase)
 	{
 	std::ostringstream str;
 
-	exptree::sibling_iterator st=proptree.begin();
-//	std::cout << *st->name << std::endl;
+	Ex::sibling_iterator st=proptree.begin();
 
 	list_property *thelistprop=dynamic_cast<list_property *>(thepropbase);
 	if(thelistprop) { // a list property
-		std::vector<exptree> objs;
+		std::vector<Ex> objs;
 		if(*st->name=="\\comma") {
-			exptree::sibling_iterator sib=proptree.begin(st);
+			Ex::sibling_iterator sib=proptree.begin(st);
 			while(sib!=proptree.end(st)) {
 				if(sib->fl.parent_rel!=str_node::p_property) {
-					objs.push_back(exptree(sib));
+					objs.push_back(Ex(sib));
 					}
 				++sib;
 				}
@@ -554,17 +553,17 @@ std::string Properties::master_insert(exptree proptree, property *thepropbase)
 		property *theprop=thepropbase;
 		assert(theprop);
 		if(*st->name=="\\comma") {
-			exptree::sibling_iterator sib=proptree.begin(st);
+			Ex::sibling_iterator sib=proptree.begin(st);
 			while(sib!=proptree.end(st)) {
 				if(sib->fl.parent_rel!=str_node::p_property) {
 //					std::cerr << "inserting property for " << *sib->name << std::endl;
-					insert_prop(exptree(sib), theprop);
+					insert_prop(Ex(sib), theprop);
 					}
 				++sib;
 				}				
 			}
 		else {
-			insert_prop(exptree(st), theprop);
+			insert_prop(Ex(st), theprop);
 			}
 		}
 	return str.str();

@@ -143,7 +143,7 @@ index_iterator& index_iterator::operator=(const index_iterator& other)
 	return *this;
 	}
 
-size_t number_of_indices(const Properties& pr, exptree::iterator it)
+size_t number_of_indices(const Properties& pr, Ex::iterator it)
 	{
 	unsigned int res=0;
 	index_iterator indit=index_iterator::begin(pr, it);

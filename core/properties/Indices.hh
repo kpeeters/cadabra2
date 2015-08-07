@@ -13,5 +13,5 @@ class Indices : public list_property {
 		
 		std::string set_name, parent_name;
 		enum position_t { free, fixed, independent } position_type;
-		exptree     values;
+		Ex     values;
 };

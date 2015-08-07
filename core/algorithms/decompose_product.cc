@@ -5,7 +5,7 @@
 #include "algorithms/decompose_product.hh"
 #include "properties/Integer.hh"
 
-decompose_product::decompose_product(Kernel& k, exptree&tr)
+decompose_product::decompose_product(Kernel& k, Ex&tr)
 	: Algorithm(k, tr), t1(0), t2(0)
 	{
 	}
@@ -49,7 +49,7 @@ bool decompose_product::can_apply(iterator it)
 							if(ind2 && ind1==ind2) {
 								// Strip off the parent rel because Integer properties are
 								// declared as {m,n,p}::Integer, not {_m, _n, _p}::Integer.
-								exptree index(index_iterator::begin(kernel.properties, fc));
+								Ex index(index_iterator::begin(kernel.properties, fc));
 								index.begin()->fl.parent_rel=str_node::p_none;
 								const Integer *itg=
 									kernel.properties.get<Integer>( index.begin(), true );
@@ -188,7 +188,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
  	std::cout << numprod << std::endl;
 
-	exptree rep;
+	Ex rep;
 	rep.set_head(str_node("\\tmp"));  // not \sum to prevent auto flattening
 
 	numtabs_t::tableau_container_t::iterator ntt=numprod.storage.begin();
@@ -260,7 +260,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 	}
 
 
-void decompose_product::project_onto_initial_symmetries(exptree& rep, iterator rr, young_project& yp,
+void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, young_project& yp,
 																		  const TableauBase *tt, iterator ff, 
 																		  int ioffset, const TableauBase::tab_t& thetab,
 																		  bool remove_traces)

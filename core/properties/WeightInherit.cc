@@ -29,13 +29,13 @@ bool WeightInherit::parse(const Properties&, keyval_t& kv)
 	return true;
 	}
 
-multiplier_t WeightInherit::value(const Properties& properties, exptree::iterator it, const std::string& forcedlabel) const
+multiplier_t WeightInherit::value(const Properties& properties, Ex::iterator it, const std::string& forcedlabel) const
 	{
 	multiplier_t ret=0;
 	bool first_term=true;
 
 //	txtout << "calling inherit on " << *it->name << " " << &(*it) << " " << forcedlabel << std::endl;
-	exptree::sibling_iterator sib=it.begin();
+	Ex::sibling_iterator sib=it.begin();
 	while(sib!=it.end()) {
 		 if(!sib->is_index()) {
 			  if(combination_type==multiplicative) {

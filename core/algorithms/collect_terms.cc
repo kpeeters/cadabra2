@@ -1,7 +1,7 @@
 
 #include "algorithms/collect_terms.hh"
 
-collect_terms::collect_terms(Kernel& k, exptree& tr)
+collect_terms::collect_terms(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

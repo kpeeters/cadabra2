@@ -4,7 +4,7 @@
 #include "algorithms/prodcollectnum.hh"
 #include "properties/Indices.hh"
 
-substitute::substitute(Kernel& k, exptree& tr, exptree& args_)
+substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 	: Algorithm(k, tr), args(args_), comparator(k.properties), sort_product_(k, tr)
 	{
 //	if(number_of_args()==0) {
@@ -104,7 +104,7 @@ bool substitute::can_apply(iterator st)
 		if(lhs->name!=st->name && !lhs->is_object_wildcard() && !lhs->is_name_wildcard() && lhs->name->size()>0) 
 			continue;
 
-		exptree_comparator::match_t ret;
+		Ex_comparator::match_t ret;
 		comparator.lhs_contains_dummies=lhs_contains_dummies[i];
 
       //	HERE: we need to have one entry point for matching, which dispatches depending 
@@ -119,7 +119,7 @@ bool substitute::can_apply(iterator st)
 		if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
 		else                     ret=comparator.equal_subtree(lhs, st);
 
-		if(ret == exptree_comparator::subtree_match) {
+		if(ret == Ex_comparator::subtree_match) {
 			if(conditions==tr.end()) return true;
 			std::string error;
 			if(comparator.satisfies_conditions(conditions, error))
@@ -145,7 +145,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// We construct a new tree 'repl' which is a copy of the rhs of the
 	// replacement rule, and then replace nodes and subtrees in there
 	// based on how the pattern matching went.
-   exptree repl(rhs);
+   Ex repl(rhs);
 
 	repl.wrap(repl.begin(), str_node("\\expression"));
 	// First activate the inert '@(...)' commands present on the rhs.
@@ -178,8 +178,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// Keep track of all indices which _have_ to stay what they are, in ind_forced.
 	// Keep track of insertion points of subtrees.
 	iterator it=repl.begin();
-	exptree_comparator::replacement_map_t::iterator loc;
-	exptree_comparator::subtree_replacement_map_t::iterator sloc;
+	Ex_comparator::replacement_map_t::iterator loc;
+	Ex_comparator::subtree_replacement_map_t::iterator sloc;
 	std::vector<iterator> subtree_insertion_points;
 	while(it!=repl.end()) { 
 		bool is_stripped=false;
@@ -188,9 +188,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 //		For some reason 'a?' is not found!?! Well, that's presumably because _{a?} does not
 //      match ^{a?}. (though this does match when we write 'i' instead of a?. 
 
-		loc=comparator.replacement_map.find(exptree(it));
+		loc=comparator.replacement_map.find(Ex(it));
 		if(loc==comparator.replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
-			 exptree tmp(it);
+			 Ex tmp(it);
 			 tmp.erase_children(tmp.begin());
 			 loc=comparator.replacement_map.find(tmp);
 			 is_stripped=true;
@@ -212,7 +212,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			// This is easy, because we can just throw out all indices
 			// with the original name.
 
-			ind_dummy.erase(exptree(it));
+			ind_dummy.erase(Ex(it));
 
 			str_node::bracket_t remember_br=it->fl.bracket;
 			if(is_stripped || (it->is_name_wildcard() && !it->is_index()) ) { 
@@ -232,7 +232,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 				}
 			it->fl.bracket=remember_br;
 			if(rhs_contains_dummies[use_rule])
-				ind_forced.insert(index_map_t::value_type(exptree(it), it));
+				ind_forced.insert(index_map_t::value_type(Ex(it), it));
 			++it;
 
 			}
@@ -270,11 +270,11 @@ Algorithm::result_t substitute::apply(iterator& st)
 		index_map_t added_dummies;
 //		txtout << must_be_empty.size() << " dummies have to be relabelled" << std::endl;
 		while(indit!=must_be_empty.end()) {
-			exptree the_key=indit->first;
+			Ex the_key=indit->first;
 			const Indices *dums=kernel.properties.get<Indices>(indit->second, true);
 			if(dums==0)
 				throw ConsistencyException("Need to know an index set for "); // V2: fix + *indit->second->name +".");
-			exptree relabel=get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
+			Ex relabel=get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
 			added_dummies.insert(index_map_t::value_type(relabel,(*indit).second));
 			do {
 //				txtout << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
@@ -339,10 +339,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// things are taken care of by the algorithm class itself).
 	if(*st->name=="\\prod") {
 //		 debugout << "calling prodcollectnum" << std::endl;
-//		 exptree::print_recursive_treeform(debugout, st);
+//		 Ex::print_recursive_treeform(debugout, st);
 		prodcollectnum pc(kernel, tr);
 		pc.apply(st);
-//		 exptree::print_recursive_treeform(debugout, st);
+//		 Ex::print_recursive_treeform(debugout, st);
 		}
 
 //	tr.print_recursive_treeform(txtout, tr.begin());

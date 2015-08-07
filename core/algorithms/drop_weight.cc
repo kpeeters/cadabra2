@@ -1,7 +1,7 @@
 
 #include "algorithms/drop_weight.hh"
 
-drop_keep_weight::drop_keep_weight(Kernel& k, exptree& tr)
+drop_keep_weight::drop_keep_weight(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

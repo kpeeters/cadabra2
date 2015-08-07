@@ -39,7 +39,7 @@ std::istream& operator>>(std::istream& str, Parser& pa)
 
 //std::ostream& operator<<(std::ostream& str, Parser& pa)
 //	{
-//	exptree_output eo(pa.tree);
+//	Ex_output eo(pa.tree);
 //	eo.print_infix(str, pa.tree.begin());
 //	return str;
 //	}
@@ -75,16 +75,25 @@ str_node::parent_rel_t Parser::is_link(const unsigned char& ln) const
 
 Parser::Parser()
 	{
-	tree.set_head(str_node("\\expression", str_node::b_none, str_node::p_none));
-	parts=tree.begin();
+	tree = std::make_shared<Ex>();
+	tree->set_head(str_node("\\expression", str_node::b_none, str_node::p_none));
+	parts=tree->begin();
+	}
+
+Parser::Parser(std::shared_ptr<Ex> t)
+	: tree(t)
+	{
+	tree->clear();
+	tree->set_head(str_node("\\expression", str_node::b_none, str_node::p_none));
+	parts=tree->begin();
 	}
 
 void Parser::erase()
 	{
 	str.clear();
-	tree.clear();
-	tree.insert(tree.begin(), str_node("\\expression", str_node::b_none, str_node::p_none));
-	parts=tree.begin();
+	tree->clear();
+	tree->insert(tree->begin(), str_node("\\expression", str_node::b_none, str_node::p_none));
+	parts=tree->begin();
 	current_mode.clear();
 	current_bracket.clear();
 	current_parent_rel.clear();
@@ -92,11 +101,11 @@ void Parser::erase()
 
 void Parser::remove_empty_nodes() 
 	{
-	exptree::iterator it=tree.begin();
-	while(it!=tree.end()) {
+	Ex::iterator it=tree->begin();
+	while(it!=tree->end()) {
 		if((*it->name).size()==0) {
-			tree.flatten(it);
-			it=tree.erase(it);
+			tree->flatten(it);
+			it=tree->erase(it);
 			}
 		++it;
 		}
@@ -138,7 +147,7 @@ bool Parser::string2tree(const std::string& inp)
 	std::string tmp;  // buffer for object name
 //	str_node ss;
 
-	exptree::iterator current_parent=parts;
+	Ex::iterator current_parent=parts;
 
 	while(i<str.size()) {
 		if(current_mode.size()==0) {
@@ -157,7 +166,7 @@ bool Parser::string2tree(const std::string& inp)
 					( is_link(c)!=str_node::p_none && ( tmp.size()==0 || 
 																	!(tmp[0]=='@' || (tmp[0]=='\\' && tmp[1]=='@'))) )) {
 					// std::cerr << "appending " << tmp << " as child of " << *current_parent->name << std::endl;
-					current_parent=tree.append_child(current_parent,str_node(tmp, 
+					current_parent=tree->append_child(current_parent,str_node(tmp, 
 																								current_bracket.back(),
 																								current_parent_rel.back()));
 					current_mode.push_back(m_findchildren);
@@ -166,7 +175,7 @@ bool Parser::string2tree(const std::string& inp)
 					}
 				if(is_closing_bracket(c)!=str_node::b_no) {
 					if(tmp.size()>0) {
-						tree.append_child(current_parent,str_node(tmp,
+						tree->append_child(current_parent,str_node(tmp,
 																				current_bracket.back(),
 																				current_parent_rel.back()));
 						tmp="";
@@ -176,7 +185,7 @@ bool Parser::string2tree(const std::string& inp)
 					}
 				if(tmp.size()>0) {
 					if(c=='+' || c=='-' || c=='*' || c=='/' || c=='\\' || c==' ' || c=='\n') {
-						tree.append_child(current_parent,str_node(tmp,
+						tree->append_child(current_parent,str_node(tmp,
 																				current_bracket.back(),
 																				current_parent_rel.back()));
 						tmp="";
@@ -188,7 +197,7 @@ bool Parser::string2tree(const std::string& inp)
 					}
 				if(c=='+' || c=='-' || c=='*' || c=='/') {
 					tmp+=c;
-					tree.append_child(current_parent,str_node(tmp,
+					tree->append_child(current_parent,str_node(tmp,
 																				current_bracket.back(),
 																				current_parent_rel.back()));
 					tmp="";
@@ -238,7 +247,7 @@ bool Parser::string2tree(const std::string& inp)
 					else {
 						current_mode.pop_back();
 						current_mode.push_back(m_skipwhite);
-						current_parent=tree.parent(current_parent);
+						current_parent=tree->parent(current_parent);
 //				 		advance(i);
 						break;
 						}
@@ -258,7 +267,7 @@ bool Parser::string2tree(const std::string& inp)
 					break;
 					}
 				else {
-					tree.append_child(current_parent,str_node(tmp,
+					tree->append_child(current_parent,str_node(tmp,
 																			str_node::b_none, /* current_bracket.back(), */
 																			 current_parent_rel.back()));
 					advance(i);
@@ -273,11 +282,11 @@ bool Parser::string2tree(const std::string& inp)
 					current_mode.pop_back();
 					current_bracket.pop_back();
 					current_parent_rel.pop_back();
-					current_parent=tree.parent(current_parent);
+					current_parent=tree->parent(current_parent);
 					}
 				else if(is_opening_bracket(c)) {
 					if(tmp.size()>0) {
-						current_parent=tree.append_child(current_parent,str_node(tmp, 
+						current_parent=tree->append_child(current_parent,str_node(tmp, 
 																									current_bracket.back(),
 																									current_parent_rel.back()));
 						}
@@ -297,7 +306,7 @@ bool Parser::string2tree(const std::string& inp)
 				if(c==' ' || c=='\n' || c=='\\' || is_link(c)!=str_node::p_none 
 					|| is_closing_bracket(c)!=str_node::b_no) {
 					current_mode.pop_back();
-					tree.append_child(current_parent,str_node(tmp,
+					tree->append_child(current_parent,str_node(tmp,
 																			 current_bracket.back(),
 																			 current_parent_rel.back()));
 					tmp="";

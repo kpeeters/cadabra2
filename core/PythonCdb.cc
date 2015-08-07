@@ -108,99 +108,33 @@ std::vector<T> to_std_vector(const boost::python::list& iterable )
 
 bool output_ipython=false;
 
-// Expression constructor/destructor members.
-
-Ex::Ex(const Ex& other)
-	: state_(Algorithm::result_t::l_no_action)
-	{
-   //	std::cout << "Ex copy constructor" << std::endl;
-	}
-
-Ex::Ex(int val) 
-	: state_(Algorithm::result_t::l_no_action)
-	{
-	tree.set_head(str_node("\\expression"));
-	exptree::iterator it = tree.append_child(tree.begin(), str_node("1"));
-	multiply(it->multiplier, val);
-	}
-
-Ex::~Ex()
-	{
-	}
 
 // Output routines in display, input, latex and html formats (the latter two
 // for use with IPython).
 
-std::string Ex::str_() const
+std::string Ex_str_(std::shared_ptr<Ex> ex) 
 	{
 	std::ostringstream str;
 
 //	if(state()==Algorithm::result_t::l_no_action)
 //		str << "(unchanged)" << std::endl;
-	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
+	DisplayTeX dt(get_kernel_from_scope()->properties, *ex);
 	dt.output(str);
 
 	return str.str();
 	}
 
-std::string Ex::repr_() const
+std::string Ex_repr_(std::shared_ptr<Ex> ex) 
 	{
-	exptree::iterator it = tree.begin();
+	Ex::iterator it = ex->begin();
 	std::ostringstream str;
-	tree.print_entire_tree(str);
+	ex->print_entire_tree(str);
 	return str.str();
 	}
 
-std::string Ex::_latex(boost::python::object obj) const
-	{
-	std::ostringstream str;
+// Fetch objects from the Python side using their Python identifier.
 
-	DisplayTeX dt(get_kernel_from_scope()->properties, tree);
-	dt.output(str);
-
-	return str.str();
-	}
-
-std::string Ex::_repr_html_() const
-	{
-	return "<strong>hi</strong>";
-	}
-
-Ex::Ex(std::string ex_) 
-	: state_(Algorithm::result_t::l_no_action)
-	{
-	Parser parser;
-	std::stringstream str(ex_);
-
-//	std::cerr << ex_ << std::endl;
-
-	try {
-		str >> parser;
-		tree=parser.tree;
-		}
-	catch(std::exception& except) {
-		throw ParseException("Cannot parse");
-		}
-
-	// First pull in any expressions referred to with @(...) notation, because the
-	// full expression may not have consistent indices otherwise.
-	pull_in();
-
-//	tree.print_recursive_treeform(std::cout, tree.begin());
-
-	// Basic cleanup of rationals and subtractions, followed by
-   // cleanup of nested sums and products.
-	pre_clean_dispatch_deep(*get_kernel_from_scope(), tree);
-
-//	tree.print_recursive_treeform(std::cout, tree.begin());
-
-
-	cleanup_dispatch_deep(*get_kernel_from_scope(), tree);
-//	exptree::iterator top = tree.begin();
-//	cleanup_nests_below(tree, top);
-	}
-
-std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
+std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 	{
 	try {
 		boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
@@ -241,27 +175,25 @@ std::shared_ptr<Ex> Ex::fetch_from_python(const std::string nm)
 	return 0;
 	}
 
-// Replace any objects of the form '@(...)' in the expression tree by the
-// python expression '...' if it exists. Rename dummies to avoid clashes.
 
-void Ex::pull_in()
+void pull_in(std::shared_ptr<Ex> ex)
 	{
-	collect_terms rr(*get_kernel_from_scope(), tree);
+	collect_terms rr(*get_kernel_from_scope(), *ex);
 	
-	exptree::iterator it=tree.begin();
-	while(it!=tree.end()) {
+	Ex::iterator it=ex->begin();
+	while(it!=ex->end()) {
 		if(*it->name=="@") {
-			if(tree.number_of_children(it)==1) {
-				std::string pobj = *(tree.begin(it)->name);
+			if(ex->number_of_children(it)==1) {
+				std::string pobj = *(ex->begin(it)->name);
 				std::shared_ptr<Ex> ex = fetch_from_python(pobj);
 				if(ex) {
 					// The top node is an \expression, so we need the first child of that.
 					// FIMXE: assert consistency.
-					exptree::iterator expression_it = ex->tree.begin();
-					exptree::iterator topnode_it    = ex->tree.begin(expression_it);
+					Ex::iterator expression_it = ex->begin();
+					Ex::iterator topnode_it    = ex->begin(expression_it);
 
 					multiplier_t mult=*(it->multiplier);
-					it=tree.replace(it, topnode_it);
+					it=ex->replace(it, topnode_it);
 					multiply(it->multiplier, mult);
 					rr.rename_replacement_dummies(it, false);
 					}
@@ -274,64 +206,80 @@ void Ex::pull_in()
 	}
 
 
-bool Ex::operator==(const Ex& other) const
+bool __eq__Ex_Ex(const Ex& one, const Ex& other) 
 	{
-	return tree_equal(&(get_kernel_from_scope()->properties), tree, other.tree);
+	return tree_equal(&(get_kernel_from_scope()->properties), one, other);
 	}
 
-bool Ex::__eq__int(int other) const
+bool __eq__Ex_int(const Ex& one, int other) 
 	{
 	Ex ex(other);
-	return (*this)==ex;
+	return __eq__Ex_Ex(one, ex);
 	}
 
-Algorithm::result_t Ex::state() const
-	{
-	return state_;
-	}
-
-void Ex::update_state(Algorithm::result_t newstate)
-	{
-	switch(newstate) {
-		case Algorithm::result_t::l_error:
-			state_=newstate;
-			break;
-		case Algorithm::result_t::l_applied:
-			if(state_!=Algorithm::result_t::l_error)
-				state_=newstate;
-			break;
-		default:
-			break;
-		}
-	}
-
-void Ex::reset_state() 
-	{
-	state_=Algorithm::result_t::l_no_action;
-	}
 
 // Functions to construct an Ex object and then create an additional
 // reference '_' on the global python stack that points to this object
-// as well.
+// as well. We disable automatic constructor generation in the declaration
+// of Ex on the Python side, so all creation of Ex objects in Python goes
+// through these two functions.
 
-std::shared_ptr<Ex> make_Ex_from_string(const std::string& str) 
+std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=true) 
 	{
-	auto ptr = std::make_shared<Ex>(str);
+	auto ptr = std::make_shared<Ex>();
+
+	// Parse the string expression.
+
+	Parser parser(ptr);
+	std::stringstream str(ex_);
+
+	try {
+		str >> parser;
+//		Ex::print_recursive_treeform(std::cout, ptr->begin());
+		}
+	catch(std::exception& except) {
+		throw ParseException("Cannot parse");
+		}
+
+	// First pull in any expressions referred to with @(...) notation, because the
+	// full expression may not have consistent indices otherwise.
+	pull_in(ptr);
+   
+//	Ex::print_recursive_treeform(std::cout, ptr->begin());
+
+	// Basic cleanup of rationals and subtractions, followed by
+   // cleanup of nested sums and products.
+	pre_clean_dispatch_deep(*get_kernel_from_scope(), *ptr);
+	cleanup_dispatch_deep(*get_kernel_from_scope(), *ptr);
 
 	// The local variable stack is not writeable so we cannot insert '_'
 	// as a local variable. Instead, we push it onto the global stack.
-
-	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-	globals["_"]=ptr;
+	
+	if(make_ref) {
+		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+		globals["_"]=ptr;
+		}
 	return ptr;
 	}
 
-std::shared_ptr<Ex> make_Ex_from_int(int num)
+std::shared_ptr<Ex> construct_Ex_from_string(const std::string& ex_) 
+	{
+	return make_Ex_from_string(ex_, true);
+	}
+
+std::shared_ptr<Ex> make_Ex_from_int(int num, bool make_ref=true)
 	{
 	auto ptr = std::make_shared<Ex>(num);
-	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-	globals["_"]=ptr;
+	if(make_ref) {
+		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+		globals["_"]=ptr;
+		}
 	return ptr;
+	}
+
+std::shared_ptr<Ex> construct_Ex_from_int(int num)
+	{
+	return make_Ex_from_int(num, true);
 	}
 
 
@@ -394,7 +342,7 @@ boost::python::list list_properties()
 std::string print_tree(Ex *ex)
 	{
 	std::ostringstream str;
-	ex->tree.print_entire_tree(str);
+	ex->print_entire_tree(str);
 	return str.str();
 	}
 
@@ -490,35 +438,29 @@ Kernel *create_empty_scope()
 	return k;
 	}
 
-// Inject properties directly into the Kernel, even if the kernel is not yet
-// on the Python stack (needed when we create a new local scope: in this case we
-// create the kernel and pass it back to be turned into local __cdbkernel__ by
-// Python, but we want to populate the kernel with defaults before we hand it
-// back).
-
 void inject_defaults(Kernel *k)
 	{
 	// Create and inject properties; these then get owned by the kernel.
-	inject_property(k, new Distributable(),      std::make_shared<Ex>("\\prod{#}"), 0);
-	inject_property(k, new IndexInherit(),       std::make_shared<Ex>("\\prod{#}"), 0);
-	inject_property(k, new IndexInherit(),       std::make_shared<Ex>("\\sum{#}"), 0);
-	inject_property(k, new CommutingAsProduct(), std::make_shared<Ex>("\\prod{#}"), 0);
-	inject_property(k, new CommutingAsSum(),     std::make_shared<Ex>("\\sum{#}"), 0);
+	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
+	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}"), 0);
 	}
 
 void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	{
-	exptree::iterator it=ex->tree.begin();
+	Ex::iterator it=ex->begin();
 	assert(*(it->name)=="\\expression");
-	it=ex->tree.begin(it);
+	it=ex->begin(it);
 
 	if(param) {
 		keyval_t keyvals;
-		prop->parse_to_keyvals(param->tree, keyvals);
+		prop->parse_to_keyvals(*param, keyvals);
 		prop->parse(kernel->properties, keyvals);
 		}
-	prop->validate(kernel->properties, exptree(it));
-	kernel->properties.master_insert(exptree(it), prop);
+	prop->validate(kernel->properties, Ex(it));
+	kernel->properties.master_insert(Ex(it), prop);
 	}
 
 // Property constructor and display members for Python purposes.
@@ -535,7 +477,7 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 template<class Prop>
 std::string Property<Prop>::str_() const
 	{
-	return "\\text{Attached property "+prop->name()+" to~}"+for_obj->str_()+".";
+	return "\\text{Attached property "+prop->name()+" to~}"+Ex_str_(for_obj)+".";
 	}
 
 template<class Prop>
@@ -552,112 +494,115 @@ std::string Property<Prop>::repr_() const
 // by 'args' (see the declaration of 'join_gamma' below for an example
 // of how to declare those additional arguments).
 
-template<class F, typename... Args>
-Ex *dispatch_1_ex(Ex *ex, bool deep, bool repeat, unsigned int depth, Args... args)
-	{
-	F algo(*get_kernel_from_scope(), ex->tree, args...);
+// Run an already initialised algorithm object using the deep/repeat/depth flags,
+// and update the state information in the Ex object on which it acts.
 
-	exptree::iterator it=ex->tree.begin().begin();
+template<class F>
+Ex* dispatch_generic(F& algo, Ex& ex, bool deep, bool repeat, unsigned int depth)
+	{
+	Ex::iterator it=ex.begin().begin();
+	ex.reset_state();
+	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+	return &ex;
+	}
+
+// FIXME: we pass all trees by pointer but the rest by
+// value/reference; this makes things more messy than necessary
+// because the C++ side expects everything by value/reference.
+
+template<class F, typename... Args>
+Ex* dispatch_1_ex(Ex& ex, bool deep, bool repeat, unsigned int depth, Args... args)
+	{
+	F algo(*get_kernel_from_scope(), ex, args...);
+
+	Ex::iterator it=ex.begin().begin();
 	
-	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+	ex.reset_state();
+	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 	
-	return ex;
+	return &ex;
 	}
 
 template<class F, typename Args>
-Ex *dispatch_1_ex_new(Ex *ex, Args args, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_1_ex_new(Ex& ex, Args args, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex->tree, args);
+	F algo(*get_kernel_from_scope(), ex, args);
 
-	exptree::iterator it=ex->tree.begin().begin();
+	Ex::iterator it=ex.begin().begin();
 	
-	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+	ex.reset_state();
+	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 	
-	return ex;
+	return &ex;
 	}
 
 template<class F, typename Arg1, typename Arg2>
-Ex *dispatch_1_ex_new(Ex *ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_1_ex_new(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex->tree, arg1, arg2);
+	F algo(*get_kernel_from_scope(), ex, arg1, arg2);
 
-	exptree::iterator it=ex->tree.begin().begin();
+	Ex::iterator it=ex.begin().begin();
 	
-	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+	ex.reset_state();
+	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 	
-	return ex;
-	}
-
-template<class F>
-Ex *dispatch_generic(F& algo, Ex *ex, bool deep, bool repeat, unsigned int depth)
-	{
-	exptree::iterator it=ex->tree.begin().begin();
-	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
-	return ex;
+	return &ex;
 	}
 
 template<class F, typename Arg1>
-Ex *dispatch_2_ex_ex_new(Ex *ex, Ex *exarg, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_2_ex_ex_new(Ex& ex, Ex& exarg, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex->tree, exarg->tree, arg1);
+	F algo(*get_kernel_from_scope(), ex, exarg, arg1);
 	return dispatch_generic(algo, ex, deep, repeat, depth);
 	}
 
 template<class F, typename Arg1>
-Ex *dispatch_2_ex_string_new(Ex *ex, const std::string& args, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_2_ex_string_new(Ex& ex, const std::string& args, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
 	{
-	Ex *argsobj = new Ex(args);
-	return dispatch_2_ex_ex_new<F, Arg1>(ex, argsobj, arg1, deep, repeat, depth);
+	auto argsobj = make_Ex_from_string(args, false);
+	return dispatch_2_ex_ex_new<F, Arg1>(ex, *argsobj, arg1, deep, repeat, depth);
 	}
 
-// FIXME: if we move all extra python functionality of Ex into standalone functions or
-// into the exptree class, we can make exptree accessible from Python directly and
-// avoid the exarg->tree mess below. This will make the dispatch functions simpler.
-
 template<class F>
-Ex *dispatch_3_ex_ex_ex(Ex *ex, Ex *exarg, Ex *arg1, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_3_ex_ex_ex(Ex& ex, Ex& exarg, Ex& arg1, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex->tree, exarg->tree, arg1->tree);
+	F algo(*get_kernel_from_scope(), ex, exarg, arg1);
 	return dispatch_generic(algo, ex, deep, repeat, depth);
 	}
 
 template<class F>
-Ex *dispatch_1_string(const std::string& ex, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_1_string(const std::string& ex, bool deep, bool repeat, unsigned int depth)
 	{
-	Ex *exobj = new Ex(ex);
-	return dispatch_1_ex<F>(exobj, deep, repeat, depth);
+	auto exobj = make_Ex_from_string(ex, false);
+	return dispatch_1_ex<F>(*exobj, deep, repeat, depth);
 	}
 
 template<class F>
-Ex *dispatch_2_ex_ex(Ex *ex, Ex *args, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_2_ex_ex(Ex& ex, Ex& args, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex->tree, args->tree);
+	F algo(*get_kernel_from_scope(), ex, args);
 
-	exptree::iterator it=ex->tree.begin().begin();
+	Ex::iterator it=ex.begin().begin();
 
-	ex->reset_state();
-	ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+	ex.reset_state();
+	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 	
-	return ex;
+	return &ex;
 	}
 
 template<class F>
-Ex *dispatch_2_ex_string(Ex *ex, const std::string& args, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_2_ex_string(Ex& ex, const std::string& args, bool deep, bool repeat, unsigned int depth)
 	{
-	Ex *argsobj = new Ex(args);
-	return dispatch_2_ex_ex<F>(ex, argsobj, deep, repeat, depth);
+	auto argsobj = make_Ex_from_string(args, false);
+	return dispatch_2_ex_ex<F>(ex, *argsobj, deep, repeat, depth);
 	}
 
 template<class F>
-Ex *dispatch_2_string_string(const std::string& ex, const std::string& args, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_2_string_string(const std::string& ex, const std::string& args, bool deep, bool repeat, unsigned int depth)
 	{
-	Ex *exobj   = new Ex(ex);
-	Ex *argsobj = new Ex(args);
-	return dispatch_2_ex_ex<F>(exobj, argsobj, deep, repeat, depth);
+	auto exobj   = make_Ex_from_string(ex);
+	auto argsobj = make_Ex_from_string(args, false);
+	return dispatch_2_ex_ex<F>(*exobj, *argsobj, deep, repeat, depth);
 	}
 
 // Templated function which declares various forms of the algorithm entry points in one shot.
@@ -789,15 +734,18 @@ BOOST_PYTHON_MODULE(cadabra2)
 	class_<Kernel> pyKernel("Kernel", init<>());
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
+	// We do not allow initialisation/construction except through the two 
+	// make_Ex_from_... functions, which take care of creating a '_' reference
+   // on the Python side as well.
+
 	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
-	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_string));
-	pyEx.def("__init__", boost::python::make_constructor(&make_Ex_from_int));
-	pyEx.def("__str__",  &Ex::str_)
-		.def("_latex", &Ex::_latex)
-		.def("_repr_html_", &Ex::_repr_html_)
-		.def("__repr__", &Ex::repr_)
-		.def("__eq__",   &Ex::operator==)
-		.def("__eq__",   &Ex::__eq__int)
+	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_string));
+	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_int));
+	pyEx.def("__str__",  &Ex_str_)
+//		.def("_latex",  &Ex_latex)
+		.def("__repr__", &Ex_repr_)
+		.def("__eq__",   &__eq__Ex_Ex)
+		.def("__eq__",   &__eq__Ex_int)
 		.def("state",    &Ex::state);
 	
 

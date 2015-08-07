@@ -2,13 +2,13 @@
 #include "IndexIterator.hh"
 #include "algorithms/young_project.hh"
 
-young_project::young_project(Kernel& k, exptree& tr)
+young_project::young_project(Kernel& k, Ex& tr)
 	: Algorithm(k,tr), remove_traces(false)
 	{
 	// For internal use in which one fills the young tableau structures directly.
 	}
 
-young_project::young_project(Kernel& k, exptree& tr, 
+young_project::young_project(Kernel& k, Ex& tr, 
 									  const std::vector<int>& shape,
 									  const std::vector<int>& indices)
 	: Algorithm(k,tr), remove_traces(false)
@@ -59,9 +59,9 @@ bool young_project::can_apply(iterator it)
 	return true;
 	}
 
-exptree::iterator young_project::nth_index_node(iterator it, unsigned int num)
+Ex::iterator young_project::nth_index_node(iterator it, unsigned int num)
 	{
-	exptree::fixed_depth_iterator indname=tr.begin_fixed(it, 2);
+	Ex::fixed_depth_iterator indname=tr.begin_fixed(it, 2);
 	indname+=num;
 	return indname;
 	}
@@ -102,11 +102,11 @@ Algorithm::result_t young_project::apply(iterator& it)
 	// locations which belong to the same asym set. This could actually
 	// be done in combinatorics already.
 
-	exptree rep;
+	Ex rep;
 	rep.set_head(str_node("\\sum"));
 	for(unsigned int i=0; i<sym.size(); ++i) {
 		// Generate the term.
-		exptree repfac(it);
+		Ex repfac(it);
 		for(unsigned int j=0; j<sym[i].size(); ++j) {
 			index_iterator src_fd=index_iterator::begin(kernel.properties, it);
 			index_iterator dst_fd=index_iterator::begin(kernel.properties, repfac.begin());

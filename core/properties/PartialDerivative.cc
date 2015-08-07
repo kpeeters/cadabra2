@@ -2,18 +2,18 @@
 #include "Algorithm.hh"
 #include "properties/PartialDerivative.hh"
 
-unsigned int PartialDerivative::size(const Properties& properties, exptree& tr, exptree::iterator it) const
+unsigned int PartialDerivative::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
 	return Derivative::size(properties, tr, it)+1;
 	}
 
 
-TableauBase::tab_t PartialDerivative::get_tab(const Properties& properties, exptree& tr, exptree::iterator it, unsigned int num) const
+TableauBase::tab_t PartialDerivative::get_tab(const Properties& properties, Ex& tr, Ex::iterator it, unsigned int num) const
 	{
 	it=properties.head<PartialDerivative>(it);
 
 	bool indices_first=tr.begin(it)->is_index();
-	exptree::sibling_iterator argnode=tr.begin(it);
+	Ex::sibling_iterator argnode=tr.begin(it);
 	unsigned int number_of_indices=0;
 	while(argnode->is_index()) { ++argnode; ++number_of_indices; }
 	unsigned int arg_indices=tr.number_of_children(argnode);
@@ -27,7 +27,7 @@ TableauBase::tab_t PartialDerivative::get_tab(const Properties& properties, expt
 			i+=arg_indices;
 			}
 		while(indit!=index_iterator::end(properties, it)) {
-			if(tr.parent((exptree::iterator)indit)!=it) break;
+			if(tr.parent((Ex::iterator)indit)!=it) break;
 //			txtout << "T: " << i << " " << *indit->name << std::endl;
 			tab.add_box(0, i);
 			++i;

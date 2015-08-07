@@ -7,9 +7,9 @@ std::string SatisfiesBianchi::name() const
 	return "SatisfiesBianchi";
 	}
 
-unsigned int SatisfiesBianchi::size(const Properties& properties, exptree& tr, exptree::iterator it) const
+unsigned int SatisfiesBianchi::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
-	exptree::sibling_iterator chld=tr.begin(it);
+	Ex::sibling_iterator chld=tr.begin(it);
 	bool indexfirst=false;
 	if(chld->fl.parent_rel!=str_node::p_none) {
 		indexfirst=true;
@@ -25,14 +25,14 @@ unsigned int SatisfiesBianchi::size(const Properties& properties, exptree& tr, e
 	return 1;
 	}
 
-TableauBase::tab_t SatisfiesBianchi::get_tab(const Properties& properties, exptree& tr, exptree::iterator it, unsigned int num) const
+TableauBase::tab_t SatisfiesBianchi::get_tab(const Properties& properties, Ex& tr, Ex::iterator it, unsigned int num) const
 	{
 	// Take the tableau of the child, increase all indices by 
 	// one if the derivative index sits on the first position,
 	// and then add a box on the first row corresponding to the
 	// derivative.
 
-	exptree::sibling_iterator chld=tr.begin(it);
+	Ex::sibling_iterator chld=tr.begin(it);
 	bool indexfirst=false;
 	if(chld->fl.parent_rel!=str_node::p_none) {
 		indexfirst=true;

@@ -7,12 +7,12 @@ std::string KroneckerDelta::name() const
 	return "KroneckerDelta";
 	}
 
-unsigned int KroneckerDelta::size(const Properties&, exptree&, exptree::iterator) const
+unsigned int KroneckerDelta::size(const Properties&, Ex&, Ex::iterator) const
 	{
 	return 1;
 	}
 
-TableauBase::tab_t KroneckerDelta::get_tab(const Properties& properties, exptree& tr, exptree::iterator it, unsigned int num) const
+TableauBase::tab_t KroneckerDelta::get_tab(const Properties& properties, Ex& tr, Ex::iterator it, unsigned int num) const
 	{
 	assert(num==0);
 

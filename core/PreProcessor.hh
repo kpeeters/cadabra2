@@ -26,6 +26,13 @@
 
 enum { tok_arrow=0xac, tok_unequals=0xad, tok_wedge=0xae, tok_pow=0xaf, tok_set_option=0xb0, tok_declare=0xb1, tok_sequence=0xb2, tok_siblings=0xb3 };
 
+/// \ingroup core
+///
+/// Preprocessing class which takes infix mathematical notation with all sorts of
+/// maths shortcuts and transforms it into a string which is properly formatted
+/// in prefix notation. Use the Parser class to turn this string into an Ex expression
+/// tree.
+
 class preprocessor {
 	public:
 		preprocessor();

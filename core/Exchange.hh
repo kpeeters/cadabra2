@@ -44,7 +44,7 @@ class exchange {
 	public:
 		struct identical_tensors_t {
 				unsigned int                           number_of_indices;
-				std::vector<exptree::sibling_iterator> tensors;
+				std::vector<Ex::sibling_iterator> tensors;
 				std::vector<int>                       seq_numbers_of_first_indices;
 
 				const SelfCommutingBehaviour *comm;
@@ -57,12 +57,12 @@ class exchange {
 
 		// Obtain index exchange symmetries under tensor permutation. Returns 'false' if 
 		// an identically zero expression is encountered.
-		static int          collect_identical_tensors(const Properties& pr, exptree& tr, exptree::iterator it,
+		static int          collect_identical_tensors(const Properties& pr, Ex& tr, Ex::iterator it,
 																	 std::vector<identical_tensors_t>& idts);
-		static unsigned int possible_singlets(exptree&, exptree::iterator);
-		static bool         get_node_gs(const Properties&, exptree&, exptree::iterator, std::vector<std::vector<int> >& );
+		static unsigned int possible_singlets(Ex&, Ex::iterator);
+		static bool         get_node_gs(const Properties&, Ex&, Ex::iterator, std::vector<std::vector<int> >& );
 
-//		static void get_index_gs(exptree::iterator, std::vector<std::vector<int> >& );
+//		static void get_index_gs(Ex::iterator, std::vector<std::vector<int> >& );
 
 		struct tensor_type_t {
 				nset_t::iterator name;

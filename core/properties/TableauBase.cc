@@ -1,7 +1,7 @@
 
 #include "properties/TableauBase.hh"
 
-int TableauBase::get_indexgroup(const Properties& pr, exptree& tr, exptree::iterator it, int indexnum) const
+int TableauBase::get_indexgroup(const Properties& pr, Ex& tr, Ex::iterator it, int indexnum) const
 	{
 	const TableauBase *pd;
 	for(;;) {
@@ -24,7 +24,7 @@ int TableauBase::get_indexgroup(const Properties& pr, exptree& tr, exptree::iter
 	return loc.second;
 	}
 
-bool TableauBase::is_simple_symmetry(const Properties& pr, exptree& tr, exptree::iterator it) const
+bool TableauBase::is_simple_symmetry(const Properties& pr, Ex& tr, Ex::iterator it) const
 	{
 	const TableauBase *pd;
 	for(;;) {

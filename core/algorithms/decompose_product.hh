@@ -7,7 +7,7 @@
 
 class decompose_product : public Algorithm {
 	public:
-		decompose_product(Kernel&, exptree& tr);
+		decompose_product(Kernel&, Ex& tr);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
@@ -20,7 +20,7 @@ class decompose_product : public Algorithm {
 
 		const Indices *indices_equivalent(iterator it) const;
 		void fill_asym_ranges(TableauBase::tab_t& tab, int offset, combin::range_vector_t&);
-		void project_onto_initial_symmetries(exptree& rep, iterator rr, young_project& yp,
+		void project_onto_initial_symmetries(Ex& rep, iterator rr, young_project& yp,
 														 const TableauBase *tt, iterator ff, 
 														 int offset, const TableauBase::tab_t& thetab,
 														 bool remove_traces);
