@@ -52,8 +52,8 @@ void pull_in(std::shared_ptr<Ex>);
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm);
 
 /// Generate the Python str() representation of the Ex object.
-std::string Ex_str_(std::shared_ptr<Ex>);
-std::string Ex_repr_(std::shared_ptr<Ex>);
+std::string Ex_str_(const Ex&);
+std::string Ex_repr_(const Ex&);
 //std::string Ex_latex_(std::shared_ptr<Ex>);
 
 /// \ingroup pythoncore
