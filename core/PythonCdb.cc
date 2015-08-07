@@ -112,23 +112,23 @@ bool output_ipython=false;
 // Output routines in display, input, latex and html formats (the latter two
 // for use with IPython).
 
-std::string Ex_str_(std::shared_ptr<Ex> ex) 
+std::string Ex_str_(const Ex& ex) 
 	{
 	std::ostringstream str;
 
 //	if(state()==Algorithm::result_t::l_no_action)
 //		str << "(unchanged)" << std::endl;
-	DisplayTeX dt(get_kernel_from_scope()->properties, *ex);
+	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
 
 	return str.str();
 	}
 
-std::string Ex_repr_(std::shared_ptr<Ex> ex) 
+std::string Ex_repr_(const Ex& ex) 
 	{
-	Ex::iterator it = ex->begin();
+	Ex::iterator it = ex.begin();
 	std::ostringstream str;
-	ex->print_entire_tree(str);
+	ex.print_entire_tree(str);
 	return str.str();
 	}
 
@@ -477,7 +477,7 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 template<class Prop>
 std::string Property<Prop>::str_() const
 	{
-	return "\\text{Attached property "+prop->name()+" to~}"+Ex_str_(for_obj)+".";
+	return "\\text{Attached property "+prop->name()+" to~}"+Ex_str_(*for_obj)+".";
 	}
 
 template<class Prop>
@@ -511,7 +511,7 @@ Ex* dispatch_generic(F& algo, Ex& ex, bool deep, bool repeat, unsigned int depth
 // because the C++ side expects everything by value/reference.
 
 template<class F, typename... Args>
-Ex* dispatch_1_ex(Ex& ex, bool deep, bool repeat, unsigned int depth, Args... args)
+Ex* dispatch_1_ex_new(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth)
 	{
 	F algo(*get_kernel_from_scope(), ex, args...);
 
@@ -523,31 +523,13 @@ Ex* dispatch_1_ex(Ex& ex, bool deep, bool repeat, unsigned int depth, Args... ar
 	return &ex;
 	}
 
-template<class F, typename Args>
-Ex* dispatch_1_ex_new(Ex& ex, Args args, bool deep, bool repeat, unsigned int depth)
+template<class F, typename... Args>
+Ex* dispatch_1_string(const std::string& ex, Args... args, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex, args);
-
-	Ex::iterator it=ex.begin().begin();
-	
-	ex.reset_state();
-	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-	
-	return &ex;
+	auto exobj = make_Ex_from_string(ex, false);
+	return dispatch_1_ex_new<F, Args...>(*exobj, args..., deep, repeat, depth);
 	}
 
-template<class F, typename Arg1, typename Arg2>
-Ex* dispatch_1_ex_new(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
-	{
-	F algo(*get_kernel_from_scope(), ex, arg1, arg2);
-
-	Ex::iterator it=ex.begin().begin();
-	
-	ex.reset_state();
-	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-	
-	return &ex;
-	}
 
 template<class F, typename Arg1>
 Ex* dispatch_2_ex_ex_new(Ex& ex, Ex& exarg, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
@@ -561,20 +543,6 @@ Ex* dispatch_2_ex_string_new(Ex& ex, const std::string& args, Arg1 arg1, bool de
 	{
 	auto argsobj = make_Ex_from_string(args, false);
 	return dispatch_2_ex_ex_new<F, Arg1>(ex, *argsobj, arg1, deep, repeat, depth);
-	}
-
-template<class F>
-Ex* dispatch_3_ex_ex_ex(Ex& ex, Ex& exarg, Ex& arg1, bool deep, bool repeat, unsigned int depth)
-	{
-	F algo(*get_kernel_from_scope(), ex, exarg, arg1);
-	return dispatch_generic(algo, ex, deep, repeat, depth);
-	}
-
-template<class F>
-Ex* dispatch_1_string(const std::string& ex, bool deep, bool repeat, unsigned int depth)
-	{
-	auto exobj = make_Ex_from_string(ex, false);
-	return dispatch_1_ex<F>(*exobj, deep, repeat, depth);
 	}
 
 template<class F>
@@ -613,7 +581,7 @@ void def_algo_1(const std::string& name)
 	{
 	using namespace boost::python;
 
-	def(name.c_str(),  &dispatch_1_ex<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
+	def(name.c_str(),  &dispatch_1_ex_new<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
 		 return_internal_reference<1>() );
 	def(name.c_str(),  &dispatch_1_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
 		 return_value_policy<manage_new_object>() );
@@ -748,7 +716,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__eq__",   &__eq__Ex_int)
 		.def("state",    &Ex::state);
 	
-
 	enum_<Algorithm::result_t>("result_t")
 		.value("changed", Algorithm::result_t::l_applied)
 		.value("unchanged", Algorithm::result_t::l_no_action)
@@ -789,20 +756,20 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<unwrap>("unwrap");
 	def_algo_1<young_project_product>("young_project_product");
 
-	def("young_project_tensor", &dispatch_1_ex<young_project_tensor, bool>, 
-		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
-		  arg("modulo_monoterm")=false),
+	def("young_project_tensor", &dispatch_1_ex_new<young_project_tensor, bool>, 
+		 (arg("ex"),arg("modulo_monoterm")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
-	def("join_gamma",  &dispatch_1_ex<join_gamma, bool, bool>, 
-		 (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0,
-		  arg("expand")=true,arg("use_gendelta")=false),
+	def("join_gamma",  &dispatch_1_ex_new<join_gamma, bool, bool>, 
+		 (arg("ex"),arg("expand")=true,arg("use_gendelta")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
 	// Automatically convert Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
-	def("evaluate", &dispatch_3_ex_ex_ex<evaluate>,
+	def("evaluate", &dispatch_1_ex_new<evaluate, Ex&, Ex&>,
 		 (arg("ex"), arg("index_values"), arg("components"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
@@ -819,17 +786,17 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
-	def("order", &dispatch_2_ex_ex_new<order, bool>, 
-		 (arg("ex"),
-		  arg("factors"), arg("anticommuting")=false,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("order", &dispatch_2_ex_string_new<order, bool>, 
+	def("order", &dispatch_1_ex_new<order, Ex&, bool>, 
 		 (arg("ex"),
 		  arg("factors"), arg("anticommuting")=false,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
+	def("order", &dispatch_2_ex_string_new<order, bool>, 
+		 (arg("ex"),
+		  arg("factors"), arg("anticommuting")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
 
 	def("sym", &dispatch_2_ex_string_new<sym, bool>, 
 		 (arg("ex"),
@@ -844,7 +811,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_internal_reference<1>() );
 
 	// Algorithms which take a second Ex as argument.
-//	def_algo_2<order>("order");
 	def_algo_1<lr_tensor>("lr_tensor");
 	def_algo_2<substitute>("substitute");
 	def_algo_2<split_index>("split_index");
