@@ -5,13 +5,13 @@
 
 class sym : virtual public Algorithm {
 	public:
-		sym(Kernel&, exptree&, exptree&, bool sign);
+		sym(Kernel&, Ex&, Ex&, bool sign);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator& it) override;
 
 	protected:
-		exptree objects;
+		Ex objects;
 		bool    sign;
 
 		std::vector<unsigned int>  argloc_2_treeloc;

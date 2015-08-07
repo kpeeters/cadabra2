@@ -5,13 +5,13 @@
 #include "Cleanup.hh"
 #include "properties/Integer.hh"
 
-join_gamma::join_gamma(Kernel& kernel, exptree& tr_, bool e, bool g)
+join_gamma::join_gamma(Kernel& kernel, Ex& tr_, bool e, bool g)
 	: Algorithm(kernel, tr_), expand(e), use_generalised_delta_(g)
 	{
 	}
 
 void join_gamma::regroup_indices_(sibling_iterator gam1, sibling_iterator gam2,
-									 unsigned int i, std::vector<exptree>& r1, std::vector<exptree>& r2) 
+									 unsigned int i, std::vector<Ex>& r1, std::vector<Ex>& r2) 
 	{
 	unsigned int num1=tr.number_of_children(gam1);
 		
@@ -44,11 +44,11 @@ void join_gamma::regroup_indices_(sibling_iterator gam1, sibling_iterator gam2,
 		}
 	}
 
-void join_gamma::append_prod_(const std::vector<exptree>& r1, const std::vector<exptree>& r2, 
+void join_gamma::append_prod_(const std::vector<Ex>& r1, const std::vector<Ex>& r2, 
 								unsigned int num1, unsigned int num2, unsigned int i, multiplier_t mult,
-								exptree& rep, iterator loc)
+								Ex& rep, iterator loc)
 	{
-	exptree::iterator gamma;
+	Ex::iterator gamma;
 
 	bool hasgamma     =(num1-i>0 || num2-i>0);
 	bool hasdelta     =(i>0);
@@ -71,7 +71,7 @@ void join_gamma::append_prod_(const std::vector<exptree>& r1, const std::vector<
 			gamma->multiplier=rat_set.insert(mult).first;
 		}
 	
-	exptree::iterator delt;
+	Ex::iterator delt;
 	if(use_generalised_delta_ && i>0) {
 		if(gm1->metric.size()==0)
 			throw ConsistencyException("The gamma matrix property does not contain metric information.");
@@ -154,7 +154,7 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 
 	gamma_bracket_=gam2->fl.bracket;
 
-	exptree rep;
+	Ex rep;
 	sibling_iterator top=rep.set_head(str_node("\\sum"));
 	
 	// Figure out the dimension of the gamma matrix.
@@ -207,7 +207,7 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 				continue;
 			}
 
-		std::vector<exptree> r1, r2;
+		std::vector<Ex> r1, r2;
 		regroup_indices_(gam1, gam2, i, r1, r2);
 
 		multiplier_t mult=(combin::fact(multiplier_t(num1))*combin::fact(multiplier_t(num2)))/
@@ -218,8 +218,8 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 			append_prod_(r1, r2, num1, num2, i, mult, rep, top);
 			}
 		else {
-			combin::combinations<exptree> c1(r1);
-			combin::combinations<exptree> c2(r2);
+			combin::combinations<Ex> c1(r1);
+			combin::combinations<Ex> c2(r2);
 			if(num1-i>0)
 				c1.sublengths.push_back(num1-i);
 			if(num2-i>0) 

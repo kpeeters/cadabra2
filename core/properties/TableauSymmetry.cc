@@ -16,8 +16,8 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
    // Scan for the tableaux.
 	keyval_t::const_iterator kvit=keyvals.begin();
 
-	exptree::iterator indices;
-	exptree::iterator shape;
+	Ex::iterator indices;
+	Ex::iterator shape;
 	bool gotshape=false, gotindices=false;
 
 	while(kvit!=keyvals.end()) {
@@ -31,13 +31,13 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 			}
 		
 		if(gotshape && gotindices) {
-			exptree help;
+			Ex help;
 			// Make sure the shape and indices lists have a \comma node.
 			help.list_wrap_single_element(shape);
 			help.list_wrap_single_element(indices);
 			
-			exptree::sibling_iterator si=shape.begin();
-			exptree::sibling_iterator ii=indices.begin();
+			Ex::sibling_iterator si=shape.begin();
+			Ex::sibling_iterator ii=indices.begin();
 			
 			tab_t tab;
 			
@@ -90,12 +90,12 @@ void TableauSymmetry::display(std::ostream& str) const
 		str << tabs[i] << std::endl;
 	}
 
-unsigned int TableauSymmetry::size(const Properties&, exptree&, exptree::iterator) const
+unsigned int TableauSymmetry::size(const Properties&, Ex&, Ex::iterator) const
 	{
 	return tabs.size();
 	}
 
-TableauBase::tab_t TableauSymmetry::get_tab(const Properties&, exptree&, exptree::iterator, unsigned int num) const
+TableauBase::tab_t TableauSymmetry::get_tab(const Properties&, Ex&, Ex::iterator, unsigned int num) const
 	{
 	assert(num<tabs.size());
 	return tabs[num];

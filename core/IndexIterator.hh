@@ -11,7 +11,7 @@
 /// nodes. Needs access to Properties in the current scole in order to
 /// determine which objects are indices.
 
-class index_iterator : public exptree::iterator_base {
+class index_iterator : public Ex::iterator_base {
 	public:
 		index_iterator(const Properties&);
 		index_iterator(const index_iterator&);
@@ -28,11 +28,11 @@ class index_iterator : public exptree::iterator_base {
 		index_iterator   operator++(int);
 		index_iterator&  operator+=(unsigned int);
 		
-		exptree::iterator halt, walk, roof;
+		Ex::iterator halt, walk, roof;
 	private:
 		const Properties *properties;
 		
-		bool is_index(exptree::iterator) const;
+		bool is_index(Ex::iterator) const;
 };
 
-size_t number_of_indices(const Properties&, exptree::iterator);
+size_t number_of_indices(const Properties&, Ex::iterator);

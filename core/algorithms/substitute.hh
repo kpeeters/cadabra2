@@ -6,18 +6,18 @@
 
 class substitute : public Algorithm {
 	public:
-		substitute(Kernel&, exptree& tr, exptree& args);
+		substitute(Kernel&, Ex& tr, Ex& args);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);
 	private:
-		exptree&        args;
+		Ex&        args;
 
 		unsigned int    use_rule;
 
 		iterator        conditions;
 
-		exptree_comparator comparator;
+		Ex_comparator comparator;
 		std::vector<bool>  lhs_contains_dummies, rhs_contains_dummies;
 
 		// For object swap testing routines:

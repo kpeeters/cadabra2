@@ -1,7 +1,7 @@
 
 #include "algorithms/sym.hh"
 
-sym::sym(Kernel& k, exptree& tr, exptree& objs, bool s)
+sym::sym(Kernel& k, Ex& tr, Ex& objs, bool s)
 	: Algorithm(k, tr), objects(objs), sign(s)
 	{
 	}
@@ -108,16 +108,16 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 	raw_ints.permute(start_, end_);
 
 	// Build replacement tree.
-	exptree rep;
+	Ex rep;
 	sibling_iterator top=rep.set_head(str_node("\\sum"));
 	sibling_iterator dummy=rep.append_child(top, str_node("dummy"));
 
 	for(unsigned int i=0; i<raw_ints.size(); ++i) {
-		exptree copytree(it);// CORRECT?
+		Ex copytree(it);// CORRECT?
 		copytree.begin()->fl.bracket=str_node::b_none;
 		copytree.begin()->fl.parent_rel=str_node::p_none;
 		
-		std::map<iterator, iterator, exptree::iterator_base_less> replacement_map;
+		std::map<iterator, iterator, Ex::iterator_base_less> replacement_map;
 		
 		for(unsigned int j=0; j<raw_ints[i].size(); ++j) {
 			iterator repl=copytree.begin(), orig=it; // CORRECT?

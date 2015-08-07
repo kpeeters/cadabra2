@@ -7,7 +7,7 @@
 #include "properties/DependsBase.hh"
 #include "algorithms/prodcollectnum.hh"
 
-unwrap::unwrap(Kernel& k, exptree& tr)
+unwrap::unwrap(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}
@@ -77,7 +77,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
 				if(dep!=0) {
 //					txtout << *factor->name << " depends" << std::endl;
-					exptree deps=dep->dependencies(factor /* it */);
+					Ex deps=dep->dependencies(factor /* it */);
 					sibling_iterator depobjs=deps.begin(deps.begin());
 					while(depobjs!=deps.end(deps.begin())) {
 //						std::cout << "?" << *it->name << " == " << *depobjs->name << std::endl;
@@ -131,7 +131,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					// commutativity property of the index wrt. the derivative is taken.
 					int sign=1;
 					if(factor!=tr.begin(derarg)) {
-						exptree_comparator compare(kernel.properties);
+						Ex_comparator compare(kernel.properties);
 						sign=compare.can_swap(tr.begin(derarg),factor,2);
 						}
 					

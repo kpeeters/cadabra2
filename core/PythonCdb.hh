@@ -28,50 +28,38 @@
 
 /// \ingroup pythoncore
 ///
-/// Ex is a wrapper around an exptree object, with additional
-/// functionality make it print nice in Python. It also contains logic
-/// to replace '@(abc)' nodes in the tree with the Python 'abc'
-/// expression.
+/// Comparison operator for Ex objects in Python. Since comparison operators
+/// need a Properties object, we cannot have such operator== things in C++,
+/// but we can in Python since we can get the kernel in the current scope.
 
-class Ex {
-	public:
-		Ex(const Ex&); 
-		Ex(std::string);
-		Ex(int);
-		~Ex();
+bool __eq__Ex_Ex(const Ex&, const Ex&);
 
-		std::string str_() const;
-		std::string repr_() const;
-		std::string _latex(boost::python::object) const;
-		std::string _repr_html_() const;
+/// \ingroup pythoncore
+///
+/// Comparison operator for Ex objects in Python. See __eq__Ex_Ex for more.
 
-		Ex& operator=(const Ex&);
+bool __eq__Ex_int(const Ex&, int);
 
-		// Comparison operators.
-		bool operator==(const Ex&) const;
-		bool __eq__int(int) const;
+/// \ingroup pythoncore
+///
+/// Replace any objects of the form '@(...)' in the expression tree by the
+/// python expression '...' if it exists. Rename dummies to avoid clashes.
 
-		exptree tree;
+void pull_in(std::shared_ptr<Ex>);
 
-		// Keeping track of what algorithms did to the expression
-		// (corresponds to the return code of algorithms).
-		// FIXME: the following should implement a stack of states,
-		// so that it can be used with nested functions.
-		// FIXME: perhaps put in exptree so that we can use it to
-		// implement fixed-point logic there.
-		Algorithm::result_t state() const;
-		void                update_state(Algorithm::result_t);
-		void                reset_state();
+/// Fetch an Ex object from the Python side using its Python identifier.
 
-	private:
-		// Functionality to pull in any '@(...)' expressions from the
-		// Python side into a C++ expression.
-		void                pull_in();
-		std::shared_ptr<Ex> fetch_from_python(std::string nm);
+std::shared_ptr<Ex> fetch_from_python(const std::string& nm);
 
-		Algorithm::result_t state_;
-};
+/// Generate the Python str() representation of the Ex object.
+std::string Ex_str_(std::shared_ptr<Ex>);
+std::string Ex_repr_(std::shared_ptr<Ex>);
+//std::string Ex_latex_(std::shared_ptr<Ex>);
 
+/// \ingroup pythoncore
+///
+/// Helper class to ensure that all Python property objects derive from the
+/// same base class.
 
 class BaseProperty {
 };
@@ -190,12 +178,24 @@ Kernel *create_scope();
 Kernel *create_scope_from_global();
 Kernel *create_empty_scope();
 
-/// Setup default properties for the given kernel.
+/// \ingroup pythoncore
+///
+/// Inject properties directly into the Kernel, even if the kernel is not yet
+/// on the Python stack (needed when we create a new local scope: in this case we
+/// create the kernel and pass it back to be turned into local __cdbkernel__ by
+/// Python, but we want to populate the kernel with defaults before we hand it
+/// back).
+
 void    inject_defaults(Kernel *);
 
+/// \ingroup pythoncore
+///
 /// Inject a property into the kernel in current scope. The property is
 /// then owned by the kernel.
+
 void    inject_property(Kernel *, property *, std::shared_ptr<Ex>, std::shared_ptr<Ex>);
 
+/// \ingroup pythoncore
+///
 /// Get a pointer to the currently visible kernel.
 Kernel *get_kernel_from_scope();

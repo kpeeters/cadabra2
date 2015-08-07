@@ -24,7 +24,7 @@ bool Metric::parse(const Properties&, keyval_t& keyvals)
 	return true;
 	}
 
-void Metric::validate(const Properties& props, const exptree& tr) const
+void Metric::validate(const Properties& props, const Ex& tr) const
 	{
 	if(tr.number_of_children(tr.begin())!=2) 
 		throw ArgumentException("Metric: needs exactly 2 indices.");

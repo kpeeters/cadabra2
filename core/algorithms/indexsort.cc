@@ -3,7 +3,7 @@
 #include "properties/TableauSymmetry.hh"
 #include "algorithms/indexsort.hh"
 
-indexsort::indexsort(Kernel& k, exptree& tr) 
+indexsort::indexsort(Kernel& k, Ex& tr) 
 	: Algorithm(k, tr), tb(0)
 	{
 	}
@@ -16,7 +16,7 @@ bool indexsort::can_apply(iterator st)
 	return false;
 	}
 
-indexsort::less_indexed_treenode::less_indexed_treenode(Kernel& k, exptree& t, iterator i)
+indexsort::less_indexed_treenode::less_indexed_treenode(Kernel& k, Ex& t, iterator i)
 	: kernel(k), tr(t), it(i)
 	{
 	}
@@ -34,7 +34,7 @@ Algorithm::result_t indexsort::apply(iterator& st)
 //	txtout << properties::get<TableauBase>(st) << std::endl;
 	
 	result_t res=result_t::l_no_action;
-	exptree backup(st);
+	Ex backup(st);
 
 	for(unsigned int i=0; i<tb->size(kernel.properties, tr, st); ++i) {
 		TableauSymmetry::tab_t tmptab(tb->get_tab(kernel.properties, tr, st, i));

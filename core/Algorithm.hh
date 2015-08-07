@@ -36,8 +36,8 @@
 ///
 /// Base class for all algorithms, containing generic routines and in
 /// particular the logic for index classification. Also contains static
-/// algorithms acting on exptree objects which require property
-/// information and can therefore not be a member of exptree.
+/// algorithms acting on Ex objects which require property
+/// information and can therefore not be a member of Ex.
 ///
 /// In order to implement a new algorithm, subclass Algorithm and
 /// implement the abstract members Algorithm::can_apply and
@@ -56,24 +56,16 @@ class Algorithm {
 	public:
 		/// Initialise the algorithm with a reference to the expression
 		/// tree, but do not yet do anything with this tree.
-		Algorithm(Kernel&, exptree&);
+		Algorithm(Kernel&, Ex&);
 
 		virtual ~Algorithm();
 
-		typedef exptree::iterator            iterator;
-		typedef exptree::post_order_iterator post_order_iterator;
-		typedef exptree::sibling_iterator    sibling_iterator;
+		typedef Ex::iterator            iterator;
+		typedef Ex::post_order_iterator post_order_iterator;
+		typedef Ex::sibling_iterator    sibling_iterator;
+		typedef Ex::result_t            result_t;
 
 		bool interrupted;
-
-		// TODO: make these capitalised names.
-
-		enum class result_t {
-				l_no_action,  // algorithm has modified the expression
-				l_applied,    // algorithm left expression unchanged
-				l_error       // algorithm left expression inconsistent due to unrecoverable error
-		};
-
 
 		// The main entry points for running algorithms. The 'deep' flag indicates
 		// whether sub-expressions should be acted on too. The 'repeat' flag indicates
@@ -117,7 +109,7 @@ class Algorithm {
 
 	protected:
 		Kernel&  kernel;
-		exptree& tr;
+		Ex& tr;
 
 		// The main entry point which is used by the public entry points listed
 		// above. Override these in any subclass.
@@ -141,11 +133,11 @@ class Algorithm {
 		range_vector_t::iterator find_arg_superset(range_vector_t&, sibling_iterator it);
 
 		// Locate objects inside the tree (formerly in the 'locate' algorithm).
-		unsigned int locate_single_object(exptree::iterator obj_to_find, 
-													  exptree::iterator st, exptree::iterator nd,
+		unsigned int locate_single_object(Ex::iterator obj_to_find, 
+													  Ex::iterator st, Ex::iterator nd,
 													  std::vector<unsigned int>& store);
-		bool         locate_object_set(const exptree& objs,
-												  exptree::iterator st, exptree::iterator nd,
+		bool         locate_object_set(const Ex& objs,
+												  Ex::iterator st, Ex::iterator nd,
 												  std::vector<unsigned int>& store);
 		static bool  compare_(const str_node&, const str_node&);
 		
@@ -166,7 +158,7 @@ class Algorithm {
 		void     force_prod_wrap(iterator&);
 
 		/// Figure out whether two objects (commonly indices) are separated by a derivative
-		/// operator, as in \partial_{a}{A_{b}} C^{b}.
+		/// operator, as in \f[ \partial_{a}{A_{b}} C^{b} \f].
 		/// If the last iterator is pointing to a valid node, check whether it is
 		/// independent of the derivative (using the Depends property).
 		bool     separated_by_derivative(iterator, iterator, iterator check_dependence) const;
@@ -191,9 +183,9 @@ class Algorithm {
 		void     node_integer(iterator, int);
 
 		/// A map from a pattern to the position where it occurs in the tree. 
-		typedef std::multimap<exptree, exptree::iterator, tree_exact_less_for_indexmap_obj> index_map_t;
+		typedef std::multimap<Ex, Ex::iterator, tree_exact_less_for_indexmap_obj> index_map_t;
 		/// A map from the position of each index to the sequential index.
-		typedef std::map<exptree::iterator, int, exptree::iterator_base_less>    index_position_map_t;
+		typedef std::map<Ex::iterator, int, Ex::iterator_base_less>    index_position_map_t;
 
 		/// Index manipulation and classification
 		///
@@ -214,15 +206,15 @@ class Algorithm {
 		int      max_numbered_name_one(const std::string& nm, const index_map_t * one) const;
 		int      max_numbered_name(const std::string&, const index_map_t *m1, const index_map_t *m2=0,
 											const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const;
-		exptree get_dummy(const list_property *, const index_map_t *m1, const index_map_t *m2=0,
+		Ex get_dummy(const list_property *, const index_map_t *m1, const index_map_t *m2=0,
 											const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const;
-		exptree get_dummy(const list_property *, iterator) const;
-		exptree get_dummy(const list_property *, iterator, iterator) const;
+		Ex get_dummy(const list_property *, iterator) const;
+		Ex get_dummy(const list_property *, iterator, iterator) const;
 
 	private:
 		// Single or deep-scan apply operations. Do not call directly.
-		result_t apply_once(exptree::iterator& it);
-		result_t apply_deep(exptree::iterator& it);
+		result_t apply_once(Ex::iterator& it);
+		result_t apply_deep(Ex::iterator& it);
 
 		/// Given a node with zero multiplier, propagate this zero
 		/// upwards in the tree.  Changes the iterator so that it points
@@ -233,7 +225,7 @@ class Algorithm {
 		void     propagate_zeroes(post_order_iterator&, const iterator&);
 		void     dumpmap(std::ostream&, const index_map_t&) const;
 
-		bool cleanup_anomalous_products(exptree& tr, exptree::iterator& it);
+		bool cleanup_anomalous_products(Ex& tr, Ex::iterator& it);
 };
 
 

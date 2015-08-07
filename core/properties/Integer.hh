@@ -11,11 +11,11 @@ class Integer : public property {
 		virtual ~Integer() {};
 		virtual std::string name() const;
 		virtual bool        parse(const Properties&, keyval_t& keyvals) override;
-//		virtual bool parse(exptree&, exptree::iterator, exptree::iterator, keyval_t&);
+//		virtual bool parse(Ex&, Ex::iterator, Ex::iterator, keyval_t&);
 		virtual void display(std::ostream&) const;
 		virtual std::string unnamed_argument() const { return "range"; };
 		
-		exptree from, to, difference;
+		Ex from, to, difference;
 };
 
 

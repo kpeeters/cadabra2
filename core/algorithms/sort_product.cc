@@ -1,7 +1,7 @@
 
 #include "algorithms/sort_product.hh"
 
-sort_product::sort_product(Kernel&k, exptree& tr)
+sort_product::sort_product(Kernel&k, Ex& tr)
 	: Algorithm(k, tr), ignore_numbers_(false)
 	{
 //	if(has_argument("IgnoreNumbers")) {
@@ -25,8 +25,8 @@ Algorithm::result_t sort_product::apply(iterator& st)
 
 	result_t ret=result_t::l_no_action;
 
-	exptree::sibling_iterator one, two;
-	exptree_comparator compare(kernel.properties);
+	Ex::sibling_iterator one, two;
+	Ex_comparator compare(kernel.properties);
 
 //	std::cout << "entering sort" << std::endl;
 //	tr.print_recursive_treeform(std::cout, st);

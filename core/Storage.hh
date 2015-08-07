@@ -116,28 +116,41 @@ void     half(rset_t::iterator&);
 /// Basic storage class for symbolic mathemematical expressions. The
 /// full meaning of an expression typically requires knowledge about
 /// properties of patterns in it, which this class does _not_
-/// contain. All property dependent algorithms acting on exptree
+/// contain. All property dependent algorithms acting on Ex
 /// objects are in Algorithm.hh.
 
-class exptree : public tree<str_node> {
+class Ex : public tree<str_node> {
 	public:
-		exptree();
-		exptree(tree<str_node>::iterator);
-		exptree(const str_node&);
+		Ex();
+		Ex(tree<str_node>::iterator);
+		Ex(const str_node&);
+		Ex(const Ex&);
+//		Ex(const std::string&);
+		Ex(int);
 
+		/// Keeping track of what algorithms have done to this expression.
+      /// FIXME: the following should implement a stack of states,
+      /// so that it can be used with nested functions.
+
+		enum result_t { l_no_action, l_applied, l_error };
+		result_t state() const;
+ 		void     update_state(result_t);
+ 		void     reset_state();
+
+		/// Output helpers mainly for debugging purposes.
 		std::ostream& print_entire_tree(std::ostream& str) const;
-		static std::ostream& print_recursive_treeform(std::ostream& str, exptree::iterator it);
-		static std::ostream& print_recursive_treeform(std::ostream& str, exptree::iterator it, unsigned int& number);
+		static std::ostream& print_recursive_treeform(std::ostream& str, Ex::iterator it);
+		static std::ostream& print_recursive_treeform(std::ostream& str, Ex::iterator it, unsigned int& number);
 
-		// Step up until matching node is found (if current node matches, do nothing)
+		/// Step up until matching node is found (if current node matches, do nothing)
 		iterator     named_parent(iterator it, const std::string&) const;
 		iterator     erase_expression(iterator it);
 		iterator     keep_only_last(iterator it);
 
-		// Calculate the hash value for the subtree starting at 'it'
+		/// Calculate the hash value for the subtree starting at 'it'
 		hashval_t    calc_hash(iterator it) const;
 
-		// Quick access to arguments or argument lists for A(B)(C,D) type nodes.
+		/// Quick access to arguments or argument lists for A(B)(C,D) type nodes.
 		static sibling_iterator arg(iterator, unsigned int);
 		static unsigned int     arg_size(sibling_iterator);
 
@@ -165,27 +178,30 @@ class exptree : public tree<str_node> {
 
 		/// Replace the object, keeping the original bracket and parent_rel (originally intended
 		/// to replace indices only, but now used also for e.g. normal function arguments, as in
-		/// \partial_{z}{ A(z) } with a replacement of z).
+		/// \f[ \partial_{z}{ A(z) } \f] with a replacement of z).
 		iterator         replace_index(iterator position, const iterator& from);
 
       /// As in replace_index, but moves the index rather than making a copy (so that iterators
 		/// pointing to the original remain valid).
 		iterator         move_index(iterator position, const iterator& from);
 
-		/// Make sure that the node pointed to is a \comma object, i.e. wrap the node if not already
-		/// inside such a \comma.
+		/// Make sure that the node pointed to is a \\comma object, i.e. wrap the node if not already
+		/// inside such a \\comma.
 		void             list_wrap_single_element(iterator&);
 		void             list_unwrap_single_element(iterator&);
 
 		/// Replace the node with the only child of the node, useful for e.g.
-		/// \prod{A} -> A. This algorithm takes care of the multiplier of the 
-		/// top node, i.e. it does 2\prod{A} -> 2 A.
+		/// \\prod{A} -> A. This algorithm takes care of the multiplier of the 
+		/// top node, i.e. it does 2\\prod{A} -> 2 A.
 		iterator         flatten_and_erase(iterator position);
 
-      // Compare two exptree objects for exact equality; no dummy equivalence or other
-      // things that require property information.
+      /// Compare two Ex objects for exact equality; no dummy equivalence or other
+      /// things that require property information.
 		
-		bool operator==(const exptree& other) const;
+		bool operator==(const Ex& other) const;
+
+	private:
+		result_t state_;
 };
 
 

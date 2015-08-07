@@ -11,12 +11,12 @@ namespace cadabra {
    /// point to a list, only on that single element. Handles lists
    /// wrapped in an \expression node as well.
 	
-	void do_list(const exptree& tr, exptree::iterator it, std::function<void(exptree::iterator)> f);
+	void do_list(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f);
 	
    /// \ingroup core
    ///
    /// Ensure that the tree is a list, even if it contains only a single element.
 	
-	exptree make_list(exptree el);
+	Ex make_list(Ex el);
 
 };

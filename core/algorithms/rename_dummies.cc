@@ -3,7 +3,7 @@
 #include "properties/Indices.hh"
 #include "Exceptions.hh"
 
-rename_dummies::rename_dummies(Kernel& k, exptree& tr)
+rename_dummies::rename_dummies(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}
@@ -31,21 +31,21 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	// find the index type and get a new dummy. If the index already
 	// occurs in repmap, reuse the new dummy stored there.
 	//
-	typedef std::map<exptree, exptree, tree_exact_less_for_indexmap_obj> repmap_t;
+	typedef std::map<Ex, Ex, tree_exact_less_for_indexmap_obj> repmap_t;
 	repmap_t    repmap;
 	index_map_t added_dummies;
 
 	index_iterator ii=begin_index(st);
 	while(ii!=end_index(st)) {
-		if(ind_dummy.find(exptree(ii))!=ind_dummy.end()) {
-			repmap_t::iterator rmi=repmap.find(exptree(ii));
+		if(ind_dummy.find(Ex(ii))!=ind_dummy.end()) {
+			repmap_t::iterator rmi=repmap.find(Ex(ii));
 			if(rmi==repmap.end()) {
 				const Indices *dums=kernel.properties.get<Indices>(ii, true);
 				if(!dums)
 					throw ConsistencyException("No index set for index "+*ii->name+" known.");
 
-				exptree relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
-				repmap.insert(repmap_t::value_type(exptree(ii),relabel));
+				Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
+				repmap.insert(repmap_t::value_type(Ex(ii),relabel));
 				added_dummies.insert(index_map_t::value_type(relabel, ii));
 				index_iterator tmp(ii);
 				++tmp;

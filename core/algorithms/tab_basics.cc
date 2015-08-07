@@ -1,12 +1,12 @@
 
 #include "algorithms/tab_basics.hh"
 
-tab_basics::tab_basics(Kernel& k, exptree& tr) 
+tab_basics::tab_basics(Kernel& k, Ex& tr) 
 	: Algorithm(k, tr)
 	{
 	}
 
-unsigned int tab_basics::find_obj(const exptree& other)
+unsigned int tab_basics::find_obj(const Ex& other)
 	{
 	for(unsigned int i=0; i<num_to_it.size(); ++i) {
 		if(tree_exact_equal(&kernel.properties, num_to_it[i], other))
@@ -36,7 +36,7 @@ void tab_basics::tree_to_numerical_tab(iterator tab1, uinttab_t& one)
 		 }
 
 	tree_exact_less_obj cmp(&kernel.properties);
-	std::vector<exptree::iterator>::iterator startit=num_to_it.begin();
+	std::vector<Ex::iterator>::iterator startit=num_to_it.begin();
 	startit+=prevsize;
 	std::sort(startit, num_to_it.end(), cmp);
 	
@@ -47,12 +47,12 @@ void tab_basics::tree_to_numerical_tab(iterator tab1, uinttab_t& one)
 		if(*sib->name=="\\comma") {
 			sibling_iterator sib2=tr.begin(sib);
 			while(sib2!=tr.end(sib)) {
-				 one.add_box(currow, find_obj(exptree(sib2)) );
+				 one.add_box(currow, find_obj(Ex(sib2)) );
 				 ++sib2;
 				}
 			}
 		else {
-			 one.add_box(currow, find_obj(exptree(sib)) );
+			 one.add_box(currow, find_obj(Ex(sib)) );
 			 }
 		++sib;
 		++currow;

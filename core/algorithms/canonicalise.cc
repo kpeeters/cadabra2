@@ -8,7 +8,7 @@
 #include "properties/Derivative.hh"
 #include "properties/AntiCommuting.hh"
 
-canonicalise::canonicalise(Kernel& k, exptree& tr)
+canonicalise::canonicalise(Kernel& k, Ex& tr)
 	: Algorithm(k, tr), reuse_generating_set(false) 
 	{
 	}
@@ -35,11 +35,11 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 		const Traceless *trl=kernel.properties.get_composite<Traceless>(facit);
 		if(trl) {
 			tree_exact_less_mod_prel_obj comp(&kernel.properties);
-			std::set<exptree, tree_exact_less_mod_prel_obj> countmap(comp);
+			std::set<Ex, tree_exact_less_mod_prel_obj> countmap(comp);
 			index_iterator indit=begin_index(facit);
 			while(indit!=end_index(facit)) {
-				if(countmap.find(exptree(indit))==countmap.end()) {
-					countmap.insert(exptree(indit));
+				if(countmap.find(Ex(indit))==countmap.end()) {
+					countmap.insert(Ex(indit));
 					++indit;
 					}
 				else {
@@ -165,10 +165,10 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// We need two arrays: one which maps from the order in which slots appear in 
 	//	the tensor to the corresponding iterator (this is provided by the standard
 	// index routines already), and one which maps from the order in which the indices 
-	// appear in the base map to an exptree object (so that we can replace).
+	// appear in the base map to an Ex object (so that we can replace).
 
-	std::vector<exptree::iterator> num_to_it_map(total_number_of_indices);
-	std::vector<exptree>           num_to_tree_map;
+	std::vector<Ex::iterator> num_to_it_map(total_number_of_indices);
+	std::vector<Ex>           num_to_tree_map;
 
 	// Handle free indices.
 	
@@ -177,7 +177,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	while(sorted_it!=ind_free.end()) {
 		index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
 		num_to_it_map[ii->second]=ii->first;
-		num_to_tree_map.push_back(exptree(ii->first));
+		num_to_tree_map.push_back(Ex(ii->first));
 		free_indices[curr_index++]=ii->second+1;
 		vec_perm.push_back(ii->second+1);
 		
@@ -217,15 +217,15 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			case str_node::p_none:
 //				vec_perm.push_back(ii->second+1);
 //				vec_perm.push_back(i2->second+1);
-//				num_to_tree_map.push_back(exptree(ii->first));
-//				num_to_tree_map.push_back(exptree(i2->first));
+//				num_to_tree_map.push_back(Ex(ii->first));
+//				num_to_tree_map.push_back(Ex(i2->first));
 				break;
 			case str_node::p_sub:
 				std::swap(ii, i2);
 //				vec_perm.push_back(i2->second+1);
 //				vec_perm.push_back(ii->second+1);
-//				num_to_tree_map.push_back(exptree(i2->first));
-//				num_to_tree_map.push_back(exptree(ii->first));
+//				num_to_tree_map.push_back(Ex(i2->first));
+//				num_to_tree_map.push_back(Ex(ii->first));
 				break;
 			default:
 				break;
@@ -233,8 +233,8 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 		vec_perm.push_back(ii->second+1);
 		vec_perm.push_back(i2->second+1);
-		num_to_tree_map.push_back(exptree(ii->first));
-		num_to_tree_map.push_back(exptree(i2->first));
+		num_to_tree_map.push_back(Ex(ii->first));
+		num_to_tree_map.push_back(Ex(i2->first));
 
 		num_to_it_map[ii->second]=ii->first;
 		num_to_it_map[i2->second]=i2->first;

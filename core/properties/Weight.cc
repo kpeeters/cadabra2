@@ -15,7 +15,7 @@ bool Weight::parse(const Properties&, keyval_t& kv)
 	return true;
 	}
 
-multiplier_t Weight::value(const Properties& pr, exptree::iterator, const std::string& forcedlabel) const
+multiplier_t Weight::value(const Properties& pr, Ex::iterator, const std::string& forcedlabel) const
 	{
 	if(forcedlabel!=label) return -1;
 	return value_;

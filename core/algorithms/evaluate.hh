@@ -59,18 +59,18 @@
 
 class evaluate : public Algorithm {
 	public:
-		evaluate(Kernel&, exptree&, const exptree& index_values, const exptree& component_values);
+		evaluate(Kernel&, Ex&, const Ex& index_values, const Ex& component_values);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
 		
 	private:
-		/// Create a map from Indices properties to an exptree list of possible values
+		/// Create a map from Indices properties to an Ex list of possible values
 		/// of that index type.
-		void collect_index_values(const exptree& ind_values);
-		exptree_comparator::index_value_map_t index_values;
+		void collect_index_values(const Ex& ind_values);
+		Ex_comparator::index_value_map_t index_values;
 
-		void prepare_replacement_rules(const exptree&);
+		void prepare_replacement_rules(const Ex&);
 
 		void handle_sum(iterator it);
 		void handle_prod(iterator it);

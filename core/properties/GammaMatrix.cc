@@ -15,14 +15,14 @@ bool GammaMatrix::parse(const Properties& properties, keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("metric");
 	if(kv!=keyvals.end()) {
-		metric=exptree(kv->second);
+		metric=Ex(kv->second);
 		keyvals.erase(kv);
 		}
 
 	ImplicitIndex::parse(properties, keyvals);
 
 //	kv=keyvals.find("delta");
-//	if(kv!=keyvals.end()) delta=exptree(kv->second);
+//	if(kv!=keyvals.end()) delta=Ex(kv->second);
 //
 	return true;
 	}

@@ -4,7 +4,7 @@
 #include "properties/Tableau.hh"
 #include "properties/FilledTableau.hh"
 
-lr_tensor::lr_tensor(Kernel& k, exptree& tr)
+lr_tensor::lr_tensor(Kernel& k, Ex& tr)
 	: tab_basics(k, tr)
 	{
 	}
@@ -71,7 +71,7 @@ void lr_tensor::do_filledtableau(iterator& it)
 	uinttab_t one, two;
 
 	// For efficiency we store integers in the tableaux, not the actual
-	// exptree objects.
+	// Ex objects.
 	uinttabs_t prod;
 
 	num_to_it.clear();
@@ -80,7 +80,7 @@ void lr_tensor::do_filledtableau(iterator& it)
 
 	yngtab::LR_tensor(one,two,999,prod.get_back_insert_iterator());
 
-	exptree rep;
+	Ex rep;
 	iterator top=rep.set_head(str_node("\\sum"));
 
 	if(singlet_rules) tabs_to_singlet_rules(prod, top);
@@ -119,7 +119,7 @@ void lr_tensor::do_tableau(iterator& it)
 		}
 	yngtab::LR_tensor(one,two,999,prod.get_back_insert_iterator());
 
-	exptree rep;
+	Ex rep;
 	iterator top=rep.set_head(str_node("\\sum"));
 	yngtab::tableaux<yngtab::tableau>::tableau_container_t::iterator tabit=prod.storage.begin();
 	while(tabit!=prod.storage.end()) {

@@ -18,7 +18,7 @@ std::string WeylTensor::name() const
 	return "WeylTensor";
 	}
 
-void WeylTensor::validate(const Properties& props, const exptree& pat) const
+void WeylTensor::validate(const Properties& props, const Ex& pat) const
 	{
 	if(number_of_indices(props, pat.begin())!=4) 
 		throw ConsistencyException("WeylTensor: need exactly 4 indices.");

@@ -6,7 +6,7 @@
 #include "algorithms/flatten_sum.hh"
 #include "properties/Derivative.hh"
 
-void cleanup_dispatch(Kernel& kernel, exptree& tr, exptree::iterator& it)
+void cleanup_dispatch(Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
 //	std::cout << "dispatch at " << *it->name << "\n";
 	if(it->is_zero())  {
@@ -22,7 +22,7 @@ void cleanup_dispatch(Kernel& kernel, exptree& tr, exptree::iterator& it)
 	if(der) cleanup_derivative(kernel, tr, it);
 	}
 
-void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator& it)
+void cleanup_productlike(Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\prod");
 
@@ -44,7 +44,7 @@ void cleanup_productlike(Kernel& k, exptree&tr, exptree::iterator& it)
 		}
 	}
 
-void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
+void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\sum");
 
@@ -59,7 +59,7 @@ void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	fs.apply(it);
 
 	// Remove children which are 0
-	exptree::sibling_iterator sib=tr.begin(it);
+	Ex::sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
 		if(sib->is_zero())
 			sib=tr.erase(sib);
@@ -72,7 +72,7 @@ void cleanup_sumlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	ct.apply(it);
 	}
 
-void cleanup_expressionlike(Kernel& k, exptree&tr, exptree::iterator& it)
+void cleanup_expressionlike(Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\expression");
 
@@ -80,7 +80,7 @@ void cleanup_expressionlike(Kernel& k, exptree&tr, exptree::iterator& it)
 	// all others are meta-data like \asymimplicit. If this child has
 	// zero multiplier, simplify.
 
-	exptree::sibling_iterator sib=tr.begin(it);
+	Ex::sibling_iterator sib=tr.begin(it);
 	if(sib==tr.end(it)) return;
 	if(sib->is_zero()) {
 		// FIXME: duplicate of node_zero in Algorithm.
@@ -89,7 +89,7 @@ void cleanup_expressionlike(Kernel& k, exptree&tr, exptree::iterator& it)
 		}
 	}
 
-void cleanup_derivative(Kernel& k, exptree& tr, exptree::iterator& it)
+void cleanup_derivative(Kernel& k, Ex& tr, Ex::iterator& it)
 	{
 	// Nested derivatives with the same name should be flattened, but
 	// only if both the outer derivative and the inner derivative have
@@ -97,7 +97,7 @@ void cleanup_derivative(Kernel& k, exptree& tr, exptree::iterator& it)
 
 	// Find first non-index child.
 
-	exptree::sibling_iterator sib=tr.begin(it);
+	Ex::sibling_iterator sib=tr.begin(it);
 	if(sib==tr.end(it)) return;
 
 	while(sib->is_index()) {
@@ -120,7 +120,7 @@ void cleanup_derivative(Kernel& k, exptree& tr, exptree::iterator& it)
 		}
 	}
 
-void cleanup_dispatch_deep(Kernel& k, exptree& tr, dispatcher_t dispatch)
+void cleanup_dispatch_deep(Kernel& k, Ex& tr, dispatcher_t dispatch)
 	{
 	// Cleanup the entire tree starting from the deepest nodes and
 	// working upwards. 
@@ -131,13 +131,13 @@ void cleanup_dispatch_deep(Kernel& k, exptree& tr, dispatcher_t dispatch)
 	// want to make recursive calls into that function either. And it is
 	// simple enough anyway.
 
-	exptree::post_order_iterator it=tr.begin();
+	Ex::post_order_iterator it=tr.begin();
 	it.descend_all();
-	exptree::post_order_iterator last=tr.begin();
+	Ex::post_order_iterator last=tr.begin();
 	while(it!=last) {
-		exptree::post_order_iterator next=it;
+		Ex::post_order_iterator next=it;
 		++next;
-		exptree::iterator tmp=it;
+		Ex::iterator tmp=it;
 		dispatch(k, tr, tmp);
 		it=next;
 		}

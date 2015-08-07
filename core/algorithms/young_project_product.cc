@@ -6,7 +6,7 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/canonicalise.hh"
 
-young_project_product::young_project_product(Kernel& k, exptree& tr)
+young_project_product::young_project_product(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}
@@ -21,7 +21,7 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
-	exptree rep;
+	Ex rep;
 	iterator topsum = rep.set_head(str_node("\\sum"));
 
 	sibling_iterator sib=tr.begin(it);
@@ -59,7 +59,7 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 						 ++nxttrm;
 
 						 // Copy this term out of the sum and append projected factor.
-						 exptree work(trm);
+						 Ex work(trm);
 						 iterator workit=work.begin();
 						 iterator put=rep.append_child(work.begin(), str_node());
 						 if(tr.number_of_children(ii)==1)

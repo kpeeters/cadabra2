@@ -2,12 +2,12 @@
 #include "properties/Derivative.hh"
 #include "Props.hh"
 
-unsigned int Derivative::size(const Properties& properties, exptree& tr, exptree::iterator it) const
+unsigned int Derivative::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
 	it=properties.head<Derivative>(it);
 
 	int ret=0;
-	exptree::sibling_iterator sib=tr.begin(it);
+	Ex::sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end() && sib->is_index()) ++sib;
 	const TableauBase *tb=properties.get<TableauBase>(sib);
 	if(tb)
@@ -15,12 +15,12 @@ unsigned int Derivative::size(const Properties& properties, exptree& tr, exptree
 	return ret;
 	}
 
-multiplier_t Derivative::value(const Properties& properties, exptree::iterator it, const std::string& forcedlabel) const
+multiplier_t Derivative::value(const Properties& properties, Ex::iterator it, const std::string& forcedlabel) const
 	{
 //	txtout << "!?!?" << std::endl;
 	multiplier_t ret=0;
 
-	exptree::sibling_iterator sib=it.begin();
+	Ex::sibling_iterator sib=it.begin();
 	while(sib!=it.end()) {
 		const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 		if(gnb) {
@@ -34,7 +34,7 @@ multiplier_t Derivative::value(const Properties& properties, exptree::iterator i
 	return ret;
 	}
 
-TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr, exptree::iterator it, unsigned int num) const
+TableauBase::tab_t Derivative::get_tab(const Properties& properties, Ex& tr, Ex::iterator it, unsigned int num) const
 	{
 	it=properties.head<Derivative>(it);
 
@@ -42,7 +42,7 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, exptree& tr
 //	tr.print_recursive_treeform(std::cout, it);
 
 	bool indices_first=tr.begin(it)->is_index();
-	exptree::sibling_iterator argnode=tr.begin(it);
+	Ex::sibling_iterator argnode=tr.begin(it);
 	unsigned int number_of_indices=0; // number of indices before the argument
 	while(argnode->is_index()) { 
 //		std::cout << *argnode->name << std::endl;

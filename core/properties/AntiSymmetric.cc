@@ -7,12 +7,12 @@ std::string AntiSymmetric::name() const
 	return "AntiSymmetric";
 	}
 
-unsigned int AntiSymmetric::size(const Properties&, exptree&, exptree::iterator) const
+unsigned int AntiSymmetric::size(const Properties&, Ex&, Ex::iterator) const
 	{
 	return 1;
 	}
 
-TableauBase::tab_t AntiSymmetric::get_tab(const Properties& pr, exptree& tr, exptree::iterator it, unsigned int num) const
+TableauBase::tab_t AntiSymmetric::get_tab(const Properties& pr, Ex& tr, Ex::iterator it, unsigned int num) const
 	{
 	assert(num==0);
 
@@ -25,7 +25,7 @@ TableauBase::tab_t AntiSymmetric::get_tab(const Properties& pr, exptree& tr, exp
 		} 
 
 	tab_t tab;
-	for(unsigned int i=0; i<exptree::number_of_children(it); ++i)
+	for(unsigned int i=0; i<Ex::number_of_children(it); ++i)
 		tab.add_box(i,i);
 	return tab;
 	}

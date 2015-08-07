@@ -8,7 +8,7 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/indexsort.hh"
 
-young_project_tensor::young_project_tensor(Kernel& k, exptree& tr, bool modmono)
+young_project_tensor::young_project_tensor(Kernel& k, Ex& tr, bool modmono)
 	: Algorithm(k, tr), modulo_monoterm(modmono)
 	{
 	}
@@ -38,7 +38,7 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 		}
 
 	// For non-trivial tableau shapes, apply the Young projector.
-	exptree rep;
+	Ex rep;
 	rep.set_head(str_node("\\sum"));
 	if(tab.row_size(0)>0) {
 		sym.clear();
@@ -46,7 +46,7 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 	
 //		txtout << sym.size() << std::endl;
 		for(unsigned int i=0; i<sym.size(); ++i) {
-			exptree repfac(it);
+			Ex repfac(it);
 			for(unsigned int j=0; j<sym[i].size(); ++j) {
 				index_iterator src_fd=index_iterator::begin(kernel.properties, it);
 				index_iterator dst_fd=index_iterator::begin(kernel.properties, repfac.begin());
@@ -101,7 +101,7 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 		// Step through all generated terms and give each one an epsilon partner term.
 		sibling_iterator tt=rep.begin(rep.begin());
 		while(tt!=rep.end(rep.begin())) {
-			exptree repfac(tt);
+			Ex repfac(tt);
 			iterator prodit=repfac.wrap(repfac.begin(), str_node("\\prod"));
 			iterator tensit=repfac.begin(prodit);
          // FIXME: take care of Euclidean signature cases.
@@ -124,7 +124,7 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 				while(subtree_exact_equal(&kernel.properties, iit, iit_orig)==false) 
 					++iit;
 				
-				exptree dum=get_dummy(ind, &one, &two, &three, &four, &added_dummies);
+				Ex dum=get_dummy(ind, &one, &two, &three, &four, &added_dummies);
 				repfac.append_child(epsit, iterator(iit)); // move index to eps
 				iterator repind=rep.replace_index(iterator(iit), dum.begin()); // replace index on tens
 				added_dummies.insert(index_map_t::value_type(dum, repind));

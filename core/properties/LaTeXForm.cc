@@ -11,7 +11,7 @@ std::string LaTeXForm::unnamed_argument() const
 	return "latex";
 	}
 
-bool LaTeXForm::parse(exptree& tr, exptree::iterator pat, exptree::iterator prop, keyval_t& keyvals)
+bool LaTeXForm::parse(Ex& tr, Ex::iterator pat, Ex::iterator prop, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator kv=keyvals.find("latex");
 	if(kv!=keyvals.end()) latex=*(kv->second->name);

@@ -18,14 +18,6 @@
  
 */
 
-/** 
-
-  Parser module, which takes the string output of the preprocessor.hh module
-  and turns it into a tree. The output of preprocessor.hh is assumed to be
-  valid and consistent, so the code here is rather simple.
-
-*/
-
 #pragma once
 
 #include <string>
@@ -34,9 +26,17 @@
 
 #include "Storage.hh"
 
+/// \ingroup core
+///
+/// Parser module, which takes the string output of the
+/// preprocessor.hh module and turns it into an Ex expression
+/// tree. The output of preprocessor.hh is assumed to be
+/// valid and consistent, so the code here is rather simple.
+
 class Parser { 
 	public:
 		Parser();
+		Parser(std::shared_ptr<Ex>);
 	  
 		void erase();
 
@@ -45,9 +45,9 @@ class Parser {
 
 		void remove_empty_nodes();
 
-		exptree tree;
+		std::shared_ptr<Ex> tree;
 	private:
-		exptree::iterator parts;
+		Ex::iterator parts;
 		std::string       str;
 
 		enum mode_t { m_skipwhite, m_name, m_findchildren, 

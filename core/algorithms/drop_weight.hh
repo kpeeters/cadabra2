@@ -8,7 +8,7 @@
 
 class drop_keep_weight : public Algorithm {
 	public:
-		drop_keep_weight(Kernel&, exptree&);
+		drop_keep_weight(Kernel&, Ex&);
 
 		virtual bool can_apply(iterator);
 		result_t     do_apply(iterator&, bool keepthem);
@@ -22,7 +22,7 @@ class drop_keep_weight : public Algorithm {
 
 class drop_weight : public drop_keep_weight {
 	public:
-		drop_weight(exptree&, iterator);
+		drop_weight(Ex&, iterator);
 
 		virtual result_t apply(iterator&);		
 };

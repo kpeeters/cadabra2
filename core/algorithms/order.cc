@@ -2,7 +2,7 @@
 #include "algorithms/order.hh"
 #include "Combinatorics.hh"
 
-order::order(Kernel& k, exptree& tr, exptree& objs, bool ac)
+order::order(Kernel& k, Ex& tr, Ex& objs, bool ac)
 	: Algorithm(k, tr), objects(objs), anticomm(ac)
 	{
 	}

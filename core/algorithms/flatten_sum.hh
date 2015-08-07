@@ -3,7 +3,7 @@
 
 class flatten_sum : public Algorithm {
 	public:
-		flatten_sum(Kernel&, exptree&);
+		flatten_sum(Kernel&, Ex&);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

@@ -4,7 +4,7 @@
 #include "algorithms/product_rule.hh"
 #include "properties/Derivative.hh"
 
-product_rule::product_rule(Kernel& k, exptree& tr)
+product_rule::product_rule(Kernel& k, Ex& tr)
 	: Algorithm(k, tr), number_of_indices(0)
 	{
 	}
@@ -38,7 +38,7 @@ bool product_rule::can_apply(iterator it)
 
 Algorithm::result_t product_rule::apply(iterator& it)
 	{
-	exptree rep; // the subtree storing the result
+	Ex rep; // the subtree storing the result
 	iterator sm; // the sum node inside 'rep'
 
 	// If we are distributing a multiple derivative, take out all
@@ -151,7 +151,7 @@ Algorithm::result_t product_rule::apply(iterator& it)
 		 //    D{ A B }                             not yet handled (problem is to give scalar anti-commutativity
        //                                            property to D, A, B).
 
-		 exptree_comparator comp(kernel.properties);
+		 Ex_comparator comp(kernel.properties);
 
 		 while(chl!=tr.end(prodnode)) { // iterate over all factors in the product
 			  // Add the whole product node to the replacement sum.
@@ -181,9 +181,9 @@ Algorithm::result_t product_rule::apply(iterator& it)
 
 			  // Handle signs for anti-commuting derivatives.
 			  multiply(dummy->multiplier, sign);
-			  // Update the sign. First create an exptree containing the derivative _without_
+			  // Update the sign. First create an Ex containing the derivative _without_
 			  // the object on which it acts.
-			  exptree emptyD(theD);
+			  Ex emptyD(theD);
 			  sibling_iterator theDargs=emptyD.begin(emptyD.begin());
 			  while(theDargs!=emptyD.end(emptyD.begin())) {
 				  if(theDargs->is_index()==false) 

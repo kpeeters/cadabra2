@@ -8,7 +8,7 @@
 #include "algorithms/prodcollectnum.hh"
 #include "properties/Distributable.hh"
 
-distribute::distribute(Kernel& k, exptree& tr)
+distribute::distribute(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}
@@ -33,7 +33,7 @@ bool distribute::can_apply(iterator st)
 
 Algorithm::result_t distribute::apply(iterator& prod)
 	{
-	exptree rep;
+	Ex rep;
 	rep.set_head(str_node("\\expression"));
 	sibling_iterator top=rep.append_child(rep.begin(), str_node("\\sum", prod->fl.bracket, prod->fl.parent_rel));
 	// add
@@ -55,7 +55,7 @@ Algorithm::result_t distribute::apply(iterator& prod)
 				if(interrupted) 
 					throw InterruptionException();
 
-				exptree termrep;
+				Ex termrep;
 				termrep.set_head(str_node());
 				sibling_iterator sumch=tr.begin(facs);
 				while(sumch!=tr.end(facs)) {

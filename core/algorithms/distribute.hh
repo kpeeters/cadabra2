@@ -11,7 +11,7 @@
 
 class distribute : public Algorithm {
 	public:
-		distribute(Kernel&, exptree&);
+		distribute(Kernel&, Ex&);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

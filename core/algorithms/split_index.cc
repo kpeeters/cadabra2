@@ -1,7 +1,7 @@
 
 #include "algorithms/split_index.hh"
 
-split_index::split_index(Kernel& k, exptree& tr, exptree& triple)
+split_index::split_index(Kernel& k, Ex& tr, Ex& triple)
 	: Algorithm(k, tr), part1_is_number(false), part2_is_number(false)
 	{
 	iterator top=triple.begin(triple.begin());
@@ -44,9 +44,9 @@ Algorithm::result_t split_index::apply(iterator& it)
 	{
 	result_t ret=result_t::l_no_action;
 
-	exptree rep;
+	Ex rep;
 	rep.set_head(str_node("\\sum"));
-	exptree workcopy(it); // so we can make changes without spoiling the big tree
+	Ex workcopy(it); // so we can make changes without spoiling the big tree
 //	assert(*it->multiplier==1); // see if this made a difference
 
 //	txtout << "split index acting at " << *(it->name) << std::endl;
@@ -61,7 +61,7 @@ Algorithm::result_t split_index::apply(iterator& it)
 		const Indices *tcl=kernel.properties.get<Indices>((*prs).second, true);
 		if(tcl) {
 			if((*tcl).set_name==(*full_class).set_name) {
-				exptree dum1,dum2;
+				Ex dum1,dum2;
 				if(!part1_is_number)
 					dum1=get_dummy(part1_class, it);
 				index_map_t::iterator current=prs;
