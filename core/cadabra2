@@ -118,6 +118,8 @@ class Shell(InteractiveConsole):
                 self.rhs += line_stripped
                 return ""
 
+        line_stripped=re.sub(r'\$([^\$]*)\$', r'Ex("\1", False)', line_stripped)
+                
         found = line_stripped.find(':=')
         if found>0:
             # If the last character is not a Cadabra terminator, start a capture process.
@@ -129,6 +131,7 @@ class Shell(InteractiveConsole):
                 return ""
             else:
                 rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:-1]+"')"
+
                 objname=line_stripped[:found]
                 if lastchar!='.' and len(indent_line)==0:
                     rewrite = rewrite + "; print(" + objname+")"
@@ -203,7 +206,7 @@ if __name__ == '__main__':
                     sline=line.strip()
 #                    if len(sline)>0 and sline[0]!='#':
                     collect += sh.preprocess(line)
-                print "----\n"+collect+"----\n"
+                #print "----\n"+collect+"----\n"
                 cmp = compile(collect, sys.argv[1], 'exec')
                 exec(cmp)
                 # would be nice to be able to continue from here on the command line, but that requires

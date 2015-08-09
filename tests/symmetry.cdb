@@ -8,11 +8,14 @@
 def test01():
     __cdbkernel__=create_scope()
     obj1:= b*a^{i j k};
-    sym(_, '^{i},^{k}')
-    asym(_, '^{i},^{j}')
+    sym(_, $^{i},^{k} $)
+    # FIXME: if you put a space in front of the ^ operator, it turns into a wedge, and asym fails.
+    asym(_, $^{i},^{j} $)
+    print(obj1)
     tst1:= b/4*( a^{i j k} + a^{k j i} - a^{j i k} - a^{k i j} ) - @(obj1);
     distribute(_)
     assert(tst1==0)
+    print('Test 01 passed')
 
 test01()
 
@@ -32,9 +35,10 @@ test01()
 def test03():
     __cdbkernel__=create_scope()
     obj3:= A_{i k l m}*q;
-    asym(_, '{_{i},_{k}}, {_{l},_{m}} }')
+    asym(_, $ {_{i},_{k}}, {_{l},_{m}} } $)
     tst3:= (1/2) * A_{i k l m}*q - (1/2) * A_{l m i k}*q - @(obj3);
     assert(tst3==0)
+    print('Test 03 passed')
 
 test03()
 
@@ -42,12 +46,13 @@ def test04():
     __cdbkernel__=create_scope()
     R_{a b c d}::WeylTensor.
     obj4:= R_{r1 r2 r3 r4}*q;
-    asym(_, '_{r1}, _{r2}')
-    asym(_, '_{r3}, _{r4}')
-    sym(_,  '{_{r1},_{r2}}, {_{r3},_{r4}}')
+    asym(_, $ _{r1}, _{r2} $)
+    asym(_, $ _{r3}, _{r4} $)
+    sym(_,  $ {_{r1},_{r2}}, {_{r3},_{r4}} $)
     tst4:= R_{r1 r2 r3 r4}*q - @(obj4);
     indexsort(_)
     assert(tst4==0)
+    print('Test 04 passed')
 
 test04()
 
@@ -55,9 +60,10 @@ def test05():
     __cdbkernel__=create_scope()
     R_{a b c d}::WeylTensor.
     obj5:= R_{r1 r2 r4 r3}*q;
-    asym(_, '{_{r1},_{r2}}, {_{r3},_{r4}}')
+    asym(_, $ {_{r1},_{r2}}, {_{r3},_{r4}} $)
     tst5:= (1/2) * R_{r1 r2 r4 r3}*q - (1/2) * R_{r4 r3 r1 r2}*q - @(obj5);
     assert(tst5==0)
+    print('Test 05 passed')
 
 test05()
 
@@ -76,8 +82,9 @@ test05()
 def test08():
     __cdbkernel__=create_scope()
     obj8:=A_{a b} B_{c};
-    sym(_, 'A_{a b}, B_{c}')
+    sym(_, $ A_{a b}, B_{c} $)
     tst8:=1/2 A_{a b} B_{c} + 1/2 B_{c} A_{a b} - @(obj8);
     assert(tst8==0)
+    print('Test 08 passed')
 		
 test08()	 
