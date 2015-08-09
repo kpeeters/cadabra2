@@ -18,6 +18,10 @@ specification, with the following additional rules:
 
 \item A line containing a \verb|::| token is interpreted as a Cadabra
   property declaration. The same rule for line continuation is used.
+
+\item Anything inbetween two dollar symbols is interpreted as a
+  Cadabra expression (just like \TeX{} handles mathematical
+  expressions).
 \end{enumerate}
 The interactive shell \verb|cadabra2| will indicate Cadabra line
 continuations by showing a `|' symbol as prompt (instead of the

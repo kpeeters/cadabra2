@@ -10,20 +10,21 @@ def test01():
     # The direct route:
     young_project(WWa, shape=[2,2,2,2], indices=[0,2,1,3,4,6,5,7])
     indexsort(WWa)
-    order(WWa, '_{r1},_{r2},_{r3},_{r4}', anticommuting=True)
-    order(WWa, '_{s1},_{s2},_{s3},_{s4}', anticommuting=True)
+    order(WWa, $_{r1},_{r2},_{r3},_{r4}$, anticommuting=True)
+    order(WWa, $_{s1},_{s2},_{s3},_{s4}$, anticommuting=True)
     # Doing it by hand:
-    sym(WWb, '_{r1},_{s1}')
-    sym(WWb, '_{r2},_{s2}')
-    sym(WWb, '_{r3},_{s3}')
-    sym(WWb, '_{r4},_{s4}')
-    asym(WWb, '_{r1},_{r2},_{r3},_{r4}')
-    asym(WWb, '_{s1},_{s2},_{s3},_{s4}')
+    sym(WWb, $_{r1},_{s1}$)
+    sym(WWb, $_{r2},_{s2}$)
+    sym(WWb, $_{r3},_{s3}$)
+    sym(WWb, $_{r4},_{s4}$)
+    asym(WWb, $_{r1},_{r2},_{r3},_{r4}$)
+    asym(WWb, $_{s1},_{s2},_{s3},_{s4}$)
     indexsort(WWb)
-    order(WWb, '_{r1},_{r2},_{r3},_{r4}', anticommuting=True)
-    order(WWb, '_{s1},_{s2},_{s3},_{s4}', anticommuting=True)
+    order(WWb, $_{r1},_{r2},_{r3},_{r4}$, anticommuting=True)
+    order(WWb, $_{s1},_{s2},_{s3},_{s4}$, anticommuting=True)
     tst1:= @(WWa)-@(WWb);
     assert(tst1==0)
+    print('Test 01 passed')
 
 test01()
 
@@ -44,6 +45,7 @@ def test27():
     canonicalise(_)
     tst27:= 2*@(term2) - @(term1);
     assert(tst27==0)
+    print('Test 27 passed')
 
 test27()
 
@@ -59,6 +61,7 @@ def test27b():
     young_project_product(_)
     tst27b:= 2*@(term2) - @(term1);
     assert(tst27b==0)
+    print('Test 27b passed')
 
 test27b()
 
@@ -73,6 +76,7 @@ def test28():
     obj28:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:
     young_project_tensor(_, deep=False, depth=1)
     assert(obj28==0)
+    print('Test 28 passed')
 
 test28()
 
