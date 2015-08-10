@@ -723,11 +723,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("create_empty_scope", &create_empty_scope, 
 		 return_value_policy<manage_new_object>());
 
-	// You cannot use implicitly_convertible to convert a string parameter to an Ex object
-	// automatically: think about how that would work in C++. You would need to be able to
-	// pass a 'std::string' to a function that expects an 'Ex *'. That will never work.
-
-	implicitly_convertible<std::string, Ex>();
+	// We do not use implicitly_convertible to convert a string
+	// parameter to an Ex object automatically (it never
+	// worked). However, we wouldn't want to do this either, because we
+	// now use a clear construction: the cadabra python modifications
+	// interpret $...$ as a mathematical expression and turn it into an
+	// Ex declaration.
 
 	// Algorithms with only the Ex as argument.
 	def_algo_1<canonicalise>("canonicalise");
@@ -743,12 +744,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<unwrap>("unwrap");
 	def_algo_1<young_project_product>("young_project_product");
-
-//	template<class Obj, typename Args...>
-//		KDEF(const std::string& name, arglist
-//
-//
-//	KDEF<young_project_tensor, bool>("young_project_tensor", arg("modulo_monoterm")=false);
 
 	def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 
 		 (arg("ex"),arg("modulo_monoterm")=false,
