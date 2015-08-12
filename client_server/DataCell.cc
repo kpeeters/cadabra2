@@ -7,11 +7,11 @@ using namespace cadabra;
 uint64_t DataCell::max_serial_number=0;
 std::mutex DataCell::serial_mutex;
 
-DataCell::DataCell(CellType t, const std::string& str, bool texhidden) 
+DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden) 
 	{
 	cell_type = t;
 	textbuf = str;
-	tex_hidden = texhidden;
+	hidden = cell_hidden;
 	running=false;
 	
 	std::lock_guard<std::mutex> guard(serial_mutex);
@@ -22,8 +22,7 @@ DataCell::DataCell(const DataCell& other)
 	{
 	cell_type = other.cell_type;
 	textbuf = other.textbuf;
-	cdbbuf = other.cdbbuf;
-	tex_hidden = other.tex_hidden;
+	hidden = other.hidden;
 	sensitive = other.sensitive;
 	serial_number = other.serial_number;
 	}
@@ -46,7 +45,7 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			json["description"]="Cadabra JSON notebook format";
 			json["version"]=1.0;
 			break;
-		case DataCell::CellType::input:
+		case DataCell::CellType::python:
 			json["cell_type"]="input";
 			break;
 		case DataCell::CellType::output:
@@ -120,7 +119,7 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 		const Json::Value textbuf  = cells[c]["textbuf"];
 		DTree::iterator last=doc.end();
 		if(celltype.asString()=="input") {
-			DataCell dc(cadabra::DataCell::CellType::input, textbuf.asString(), false);
+			DataCell dc(cadabra::DataCell::CellType::python, textbuf.asString(), false);
 			last=doc.append_child(loc, dc);
 			}
 		else if(celltype.asString()=="output") {

@@ -26,19 +26,11 @@ void DocumentThread::new_document()
 	DTree::iterator doc_it = doc.set_head(top);
 	gui->add_cell(doc, doc_it, false);
 
-	// Three cells in the doc.
+	// One Python input cell in the empty document.
 
-	DataCell one(DataCell::CellType::input, "");
+	DataCell one(DataCell::CellType::python, "");
 	DTree::iterator one_it = doc.append_child(doc_it, one);
 	gui->add_cell(doc, one_it, false);
-
-//	DataCell another(DataCell::CellType::input, "");
-//	DTree::iterator another_it = doc.insert_after(one_it, another);
-//	gui->add_cell(doc, another_it);
-//
-//	DataCell out(DataCell::CellType::output, "$\\displaystyle\\int_{-\\infty}^\\infty A_{\\mu\\nu}$");
-//	DTree::iterator out_it = doc.insert_after(one_it, out);
-//	gui->add_cell(doc, out_it);
 	}
 
 void DocumentThread::build_visual_representation()

@@ -18,9 +18,14 @@ namespace cadabra {
 	
 	class DataCell {
 		public:
+			
+			/// Cells are labelled with the data type of its contents, which is 
+			/// stored in a textural representation but may need processing for
+			/// proper display.
+			
 			enum class CellType { 
 					   document,   ///< head node, only one per document
-						input,      ///< code input in verbatim form
+						python,     ///< code input in verbatim form
 						output,     ///< latex-parseable output
 						//						comment, 
 						//						texcomment, 
@@ -29,13 +34,12 @@ namespace cadabra {
 						// section
 						};
 			
-			DataCell(CellType t=CellType::input, const std::string& str="", bool texhidden=false);
+			DataCell(CellType t=CellType::python, const std::string& str="", bool hidden=false);
 			DataCell(const DataCell&);
 			
 			CellType                      cell_type;
-			std::string                   textbuf;
-			std::string                   cdbbuf;       // output only: the output in cadabra input format
-			bool                          tex_hidden;   // tex only
+			std::string                   textbuf;    //< textual representation of cell content
+			bool                          hidden;
 			bool                          sensitive;
 			bool                          running;
 

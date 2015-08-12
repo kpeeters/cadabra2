@@ -47,10 +47,12 @@ namespace cadabra {
 			
 			// In order to execute code on the server, call the following
 			// from the GUI thread.  This method returns as soon as the
-			// request has been put on the network queue.  The
-			// ComputeThread will report the result of the computation by
-			// adding actions to the DocumentThread owned pending_actions
-			// stack, by calling queue_action.
+			// request has been put on the network queue. If no
+			// communication with the server is necessary, this returns
+			// immediately. The ComputeThread will report the result of
+			// the computation/processing by adding actions to the
+			// DocumentThread owned pending_actions stack, by calling
+			// queue_action.
 
 			void execute_cell(DTree::iterator);
 

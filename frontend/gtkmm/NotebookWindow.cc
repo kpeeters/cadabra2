@@ -315,7 +315,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		// buffer from existing cells.
 
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
-			if(i==0 && it->cell_type==DataCell::CellType::input) {
+			if(i==0 && it->cell_type==DataCell::CellType::python) {
 				global_buffer = canvasses[i]->visualcells[&(*it)].inbox->buffer;
 				}
 			continue;
@@ -340,7 +340,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				w=newcell.outbox;
 				break;
 
-			case DataCell::CellType::input: {
+			case DataCell::CellType::python:
+			case DataCell::CellType::latex: {
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
@@ -362,30 +363,6 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				break;
 				}
 
-			case DataCell::CellType::latex: {
-				TeXEdit *ci;
-				// Ensure that all TeXEdit cells representing the same
-				// DataCell share the same text buffer.
-				if(i==0) {
-					ci = new TeXEdit(it, it->textbuf, engine);
-					global_buffer=ci->buffer;
-					}
-				else ci = new TeXEdit(it, global_buffer, engine);
-				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-//				ci->edit.content_changed.connect( 
-//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
-//				ci->edit.content_execute.connect( 
-//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
-//				ci->edit.cell_got_focus.connect( 
-//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
-
-				newcell.latexbox = manage( ci );
-				newcell.outbox->tex_error.connect( 
-					sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
-				w=newcell.latexbox;
-				break;
-				}
 			default:
 				throw std::logic_error("Unimplemented datacell type");
 			}
@@ -710,10 +687,14 @@ void NotebookWindow::on_edit_undo()
 
 void NotebookWindow::on_edit_cell_is_python()
 	{
+	if(current_cell->cell_type==DataCell::CellType::latex)
+		current_cell->cell_type = DataCell::CellType::python;
 	}
 
 void NotebookWindow::on_edit_cell_is_latex()
 	{
+	if(current_cell->cell_type==DataCell::CellType::python)
+		current_cell->cell_type = DataCell::CellType::latex;
 	}
 
 void NotebookWindow::on_view_split()
