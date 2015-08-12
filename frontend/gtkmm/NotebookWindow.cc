@@ -62,7 +62,7 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
-	actiongroup->add( Gtk::Action::create("EditMakeCellInput", "Cell is Python"),
+	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Python"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
 
 	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
@@ -104,6 +104,8 @@ NotebookWindow::NotebookWindow()
 		"    </menu>"
 		"    <menu action='MenuEdit'>"
 		"      <menuitem action='EditUndo' />"
+		"      <menuitem action='EditMakeCellTeX' />"
+		"      <menuitem action='EditMakeCellPython' />"
 		"    </menu>"
 		"    <menu action='MenuView'>"
 		"      <menuitem action='ViewSplit' />"
@@ -328,13 +330,16 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.document = manage( new Gtk::VBox() );
 				w=newcell.document;
 				break;
+
 			case DataCell::CellType::output:
-				// FIXME: would be good to share the output of TeXView too.
+				// FIXME: would be good to share the input and output of TeXView too.
+				// Right now nothing is shared...
 				newcell.outbox = manage( new TeXView(engine, it->textbuf) );
 				newcell.outbox->tex_error.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
 				w=newcell.outbox;
 				break;
+
 			case DataCell::CellType::input: {
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
@@ -354,6 +359,31 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 				newcell.inbox = manage( ci );
 				w=newcell.inbox;
+				break;
+				}
+
+			case DataCell::CellType::latex: {
+				TeXEdit *ci;
+				// Ensure that all TeXEdit cells representing the same
+				// DataCell share the same text buffer.
+				if(i==0) {
+					ci = new TeXEdit(it, it->textbuf, engine);
+					global_buffer=ci->buffer;
+					}
+				else ci = new TeXEdit(it, global_buffer, engine);
+				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+//				ci->edit.content_changed.connect( 
+//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+//				ci->edit.content_execute.connect( 
+//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
+//				ci->edit.cell_got_focus.connect( 
+//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
+
+				newcell.latexbox = manage( ci );
+				newcell.outbox->tex_error.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
+				w=newcell.latexbox;
 				break;
 				}
 			default:

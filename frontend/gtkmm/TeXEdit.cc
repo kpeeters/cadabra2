@@ -4,33 +4,44 @@
 
 using namespace cadabra;
 
-TeXEdit::exp_input_tv::exp_input_tv(Glib::RefPtr<Gtk::TextBuffer> tb)
-	: Gtk::TextView(tb), is_modified(false), folded_away(false)
+TeXEdit::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb)
+	: Gtk::TextView(tb), datacell(it), is_modified(false), folded_away(false)
 	{
 	}
 
-TeXEdit::TeXEdit(Glib::RefPtr<Gtk::TextBuffer> tb, Glib::RefPtr<TeXBuffer> texb, const std::string& fontname)
-	: edit(tb), texview(texb, 10)
+TeXEdit::TeXEdit(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> textbuf, TeXEngine& engine)
+	: buffer(textbuf), edit(it, textbuf), texview(engine, "")
 	{
-//	scroll_.set_size_request(-1,200);
-//	scroll_.set_border_width(1);
-//	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-	edit.modify_font(Pango::FontDescription(fontname));
-	edit.set_wrap_mode(Gtk::WRAP_WORD);
-	edit.modify_text(Gtk::STATE_NORMAL, Gdk::Color("darkgray"));
-	edit.set_pixels_above_lines(LINE_SPACING);
-	edit.set_pixels_below_lines(LINE_SPACING);
-	edit.set_pixels_inside_wrap(2*LINE_SPACING);
-	edit.set_left_margin(10);
+	init();
+	}
 
-	set_spacing(10);
+void TeXEdit::init()
+	{
+	edit.override_font(Pango::FontDescription("monospace")); 
+	edit.set_wrap_mode(Gtk::WRAP_NONE);
+	edit.set_pixels_above_lines(1);
+	edit.set_pixels_below_lines(1);
+	edit.set_pixels_inside_wrap(1);
+	set_margin_top(10);
+	set_margin_bottom(10);
+	edit.set_left_margin(20);
+	edit.set_accepts_tab(true);
+	Pango::TabArray tabs(10);
+	// FIXME: use character width measured, instead of '8', or at least
+	// understand how Pango units are supposed to work.
+	for(int i=0; i<10; ++i) 
+		tabs.set_tab(i, Pango::TAB_LEFT, 4*8*i);
+	edit.set_tabs(tabs);
 
-//	add(expander);
-//	expander.set_label_widget(texview);
-//	expander.add(edit);
-//	expander.set_expanded();
 	pack_start(edit);
 	pack_start(texview);
+	}
+
+TeXEdit::TeXEdit(DTree::iterator it, const std::string& str, TeXEngine& engine)
+	: buffer(Gtk::TextBuffer::create()), edit(it, buffer), texview(engine, "")
+	{
+	buffer->set_text(str);
+	init();
 	}
 
 bool TeXEdit::is_folded() const
@@ -52,25 +63,19 @@ void TeXEdit::set_folded(bool onoff)
 		}
 	}
 
+bool TeXEdit::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+	{
+	bool ret=Gtk::TextView::on_draw(cr);
+	return ret;
+	}
+
 bool TeXEdit::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{
-	if(get_editable() && event->keyval==GDK_Return && (event->state&Gdk::SHIFT_MASK)) {// shift-return
-//		std::cerr << "activate!!" << std::endl;
-		Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
-//		std::cerr << textbuf->get_text(textbuf->get_start_iter(), textbuf->get_end_iter()) << std::endl;
-		std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
-#ifdef DEBUG
-		std::cerr << "running: " << tmp << std::endl;
-#endif
-		emitter(tmp);
-		is_modified=false;
-//		set_editable(false);
-//		textbuf->set_text("");
-		return true;
-		}
-	else {
-		is_modified=true;
-		bool retval=Gtk::TextView::on_key_press_event(event);
-		return retval;
-		}
+	return true;
+	}
+
+bool TeXEdit::exp_input_tv::on_focus_in_event(GdkEventFocus *event) 
+	{
+	cell_got_focus(datacell);
+	return Gtk::TextView::on_focus_in_event(event);
 	}
