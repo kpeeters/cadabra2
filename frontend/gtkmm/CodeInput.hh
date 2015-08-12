@@ -13,15 +13,13 @@ namespace cadabra {
 
 	class CodeInput : public Gtk::VBox {
 		public:
-			// Initialise with a new empty TextBuffer.
-//			CodeInput();
-
 			// Initialise with existing TextBuffer and a pointer to the Datacell
 			// corresponding to this CodeInput widget.
 			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>);
 
-			// Initialise with a new TextBuffer, filling it with the content of the
-			// given string.
+			// Initialise with a new TextBuffer (to be created by
+			// CodeInput), filling it with the content of the given
+			// string.
 			CodeInput(DTree::iterator, const std::string&);
 			
 			class exp_input_tv : public Gtk::TextView {
@@ -42,9 +40,9 @@ namespace cadabra {
 			bool handle_button_press(GdkEventButton *);
 
 			// We cannot edit the content of the DataCell directly,
-			// because Gtk needs a Gtk::TextBuffer. The CodeInput widgets
-			// corresponding to a single DataCell all share their 
-			// TextBuffer, however.
+			// because Gtk needs a Gtk::TextBuffer. However, the
+			// CodeInput widgets corresponding to a single DataCell all
+			// share their TextBuffer.
 
 			Glib::RefPtr<Gtk::TextBuffer> buffer;
 

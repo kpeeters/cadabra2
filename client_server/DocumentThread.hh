@@ -21,32 +21,6 @@ namespace cadabra {
    class ComputeThread;
    class GUIBase;
 
-	/**
-		\defgroup clientserver Client-Server 
-
-      Base classes (independent of any GUI toolkit) to write Cadabra
-      clients and servers.
-
-		All clients use two threads. One is the main thread and runs
-		most of the logic in the DocumentThread object. The other one is
-		a thread which communicates with the server process; code for
-		this thread is in the ComputeThread object.  One typically
-		subclasses the former into a full-fledged object driving the
-		graphical user interface.
-		
-		All functionality that deals with GUI updates is isolated in
-		GUIBase. A client should derive from this abstract base class
-		and implement the methods there. Clients should also derive from
-		DocumentThread, but there are no abstract virtual members
-		to implemented from this base class.
-		
-		All actual updates to the document stored in the
-		DocumentThread::dtree member are made on the GUI thread as
-		well. The compute thread merely puts requests to change the
-		document onto a stack, and then requests that the GUI updates
-		the document.
-	*/
-
 	/// \ingroup clientserver
 	///
 	/// Base class which manipulates the document tree.

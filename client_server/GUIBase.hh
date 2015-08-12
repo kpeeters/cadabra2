@@ -15,47 +15,54 @@ namespace cadabra {
 
 	class GUIBase {
 		public:
-			// The basic manipulations that a GUI needs to implement are
-			// adding, removing and updating (refreshing the display of)
-			// a cell. The code in DocumentThread will call these to make
-			// the GUI update its display. Called on the document thread.
+			/// The basic manipulations that a GUI needs to implement are
+			/// adding, removing and updating (refreshing the display of)
+			/// a cell. The code in DocumentThread will call these to make
+			/// the GUI update its display. Called on the document thread.
 
 			virtual void update_cell(const DTree&, DTree::iterator)=0;
+
+			/// Remove a cell.
+
 			virtual void remove_cell(const DTree&, DTree::iterator)=0;
 
-			// Remove all GUI cells from the display (used as a quick way
-			// to clear all before loading a new document).
+			/// Remove all GUI cells from the display (used as a quick way
+			/// to clear all before loading a new document).
 			
 			virtual void remove_all_cells()=0;
 
-			// Add a GUI cell corresponding to the document cell at the
-			// iterator. The GUI needs to figure out from the location of
-			// this cell in the DTree where to insert the cell in the visual
-			// display. If the 'visible' flag is false, hide the cell (this
-			// is only used when constructing a document on load time).
+			/// Add a GUI cell corresponding to the document cell at the
+			/// iterator. The GUI needs to figure out from the location of
+			/// this cell in the DTree where to insert the cell in the visual
+			/// display. If the 'visible' flag is false, hide the cell (this
+			/// is only used when constructing a document on load time).
 
 			virtual void add_cell(const DTree&, DTree::iterator, bool visible)=0;
 
-			// Position the cursor in the current canvas in the widget 
-			// corresponding to the indicated cell.
+			/// Position the cursor in the current canvas in the widget 
+			/// corresponding to the indicated cell.
 
 			virtual void position_cursor(const DTree&, DTree::iterator)=0;
 
-			// Network status is propagated from the ComputeThread to the
-         // GUI using the following methods. These get called on the
-			// compute thread.
+			/// Network status is propagated from the ComputeThread to the
+         /// GUI using the following methods. These get called on the
+			/// compute thread.
+
+			//@{
 
 			virtual void on_connect()=0;
 			virtual void on_disconnect()=0;
 			virtual void on_network_error()=0;
 			virtual void on_kernel_runstatus(bool)=0;
 
-			// When the ComputeThread needs to modify the document, it
-			// stores an ActionBase object on the stack (see the
-			// DocumenThread class) and then wakes up the GUI thread
-			// signalling it to process this action. The following member
-			// should wake up the GUI thread and make it enter the 
-			// processing part.
+			//@}
+
+			/// When the ComputeThread needs to modify the document, it
+			/// stores an ActionBase object on the stack (see the
+			/// DocumenThread class) and then wakes up the GUI thread
+			/// signalling it to process this action. The following member
+			/// should wake up the GUI thread and make it enter the 
+			/// processing part.
 
 			virtual void process_data()=0;
 

@@ -22,8 +22,10 @@ namespace cadabra {
 			Gtk::HBox                 hbox;
 			Gtk::Image                image;
 			
-			// The actual image is stored in the pixbuf below. This pointer is shared
-			// among
+			// The actual image is stored in the pixbuf below. 
+			// FIXME: This pointer is not yet shared among instances which show the
+			// same content.
+
 			Glib::RefPtr<Gdk::Pixbuf> pixbuf;
 			
 			// Update the visible image from the pixbuf. Call this in order to propagate
