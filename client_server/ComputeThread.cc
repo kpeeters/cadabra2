@@ -253,23 +253,10 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		return;
 
 	const DataCell& dc=(*it);
+	it->running=true;
 
 	std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
 
-	Json::Value req, header, content;
-	header["uuid"]="none";
-	header["cell_id"]=(Json::UInt64)dc.id();
-	header["msg_type"]="execute_request";
-	req["header"]=header;
-	content["code"]=dc.textbuf;
-	req["content"]=content;
-
-	std::ostringstream str;
-	str << req << std::endl;
-	
-//	std::cerr << str.str() << std::endl;
-
-	it->running=true;
 
 	// Position the cursor in the next cell so this one will not 
 	// accidentally get executed twice.
@@ -278,9 +265,34 @@ void ComputeThread::execute_cell(DTree::iterator it)
 	docthread.queue_action(actionpos);
 	gui->process_data();
 	
-	// Then send the cell to the server.
-	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
-	gui->on_kernel_runstatus(true);
+	// For a code cell, construct a server request message and then
+	// send the cell to the server.
+	if(it->cell_type==DataCell::CellType::python) {
+		Json::Value req, header, content;
+		header["uuid"]="none";
+		header["cell_id"]=(Json::UInt64)dc.id();
+		header["msg_type"]="execute_request";
+		req["header"]=header;
+		content["code"]=dc.textbuf;
+		req["content"]=content;
+
+		std::ostringstream str;
+		str << req << std::endl;
+		wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+		gui->on_kernel_runstatus(true);
+		}
+
+	// For a LaTeX cell, immediately request a new latex output cell to be displayed.
+	if(it->cell_type==DataCell::CellType::latex) {
+		// Stick an AddCell action onto the stack. We instruct the
+		// action to add this result output cell as a child of the
+		// corresponding input cell.
+		DataCell result(DataCell::CellType::output, it->textbuf);
+		
+		std::shared_ptr<ActionBase> action = 
+			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+		docthread.queue_action(action);
+		}
 	}
 
 int ComputeThread::number_of_cells_executing() const

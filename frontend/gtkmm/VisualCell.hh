@@ -27,7 +27,6 @@ namespace cadabra {
 					Gtk::VBox    *document; // top-level cell; only one ever occurs in a document
 					CodeInput    *inbox;
 					TeXView      *outbox;
-					TeXEdit      *latexbox;
 			};
 	};
 	

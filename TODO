@@ -1,4 +1,9 @@
 
+- Make datacells share textual content by referring to a different cell id.
+  Otherwise latex output cells duplicate latex input cells.
+
+- Make cursor navigation find latex cells too (Actions.cc)
+
 - Work out examples of tensor product decomposition with numerical index values to
   see how it works. We do not seem to have a complete implementation yet, as the
   VEST identities should be derivable, but they do not work yet (the free index 

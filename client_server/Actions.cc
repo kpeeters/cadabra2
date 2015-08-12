@@ -69,14 +69,14 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 		case Position::next: {
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(++sib)) {
-				if(sib->cell_type==DataCell::CellType::input) {
+				if(sib->cell_type==DataCell::CellType::python) {
 					// std::cout << "found input cell " << sib->textbuf << std::endl;
 					newref=sib;
 					return;
 					}
 				}
 			// std::cout << "no input cell available, adding new" << std::endl;
-			DataCell newcell(DataCell::CellType::input, "");
+			DataCell newcell(DataCell::CellType::python, "");
 			newref = cl.doc.insert(sib, newcell);
 			needed_new_cell=true;
 			break;
@@ -85,7 +85,7 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 			std::cerr << "previous " << ref->textbuf << std::endl;
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(--sib)) {
-				if(sib->cell_type==DataCell::CellType::input) {
+				if(sib->cell_type==DataCell::CellType::python) {
 					newref=sib;
 					return;
 					}
