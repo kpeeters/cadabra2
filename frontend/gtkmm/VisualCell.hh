@@ -6,7 +6,6 @@
 // representing the DataCell.
 
 #include "TeXView.hh"
-#include "TeXEdit.hh"
 #include "CodeInput.hh"
 #include "DataCell.hh"
 

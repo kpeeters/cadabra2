@@ -1,9 +1,4 @@
 
-- Make datacells share textual content by referring to a different cell id.
-  Otherwise latex output cells duplicate latex input cells.
-
-- Make cursor navigation find latex cells too (Actions.cc)
-
 - Give tree a const_iterator so that we can pass an iterator to
   ComputeThread and are assured that the cell is never modified there.
 

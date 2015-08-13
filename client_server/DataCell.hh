@@ -38,7 +38,19 @@ namespace cadabra {
 			DataCell(const DataCell&);
 			
 			CellType                      cell_type;
-			std::string                   textbuf;    //< textual representation of cell content
+
+			/// Textual representation of the cell content. For e.g. latex cells it is a bit of a
+			/// waste to store this representation both in the input and in the output cell.
+			/// However, this gives us the flexibility to do manipulations on the input (e.g. 
+			/// resolving equation references) before feeding it to LaTeX. 
+
+			std::string                   textbuf; 
+
+			/// Flag indicating whether this cell should be hidden from
+			/// view. The GUI should have a way to bring the cells back
+			/// into view, typically by clicking on the output cell
+			/// corresponding to the input cell. 
+
 			bool                          hidden;
 			bool                          sensitive;
 

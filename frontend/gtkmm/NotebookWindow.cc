@@ -451,9 +451,16 @@ void NotebookWindow::remove_all_cells()
 	engine.checkout_all();
 	}
 
-void NotebookWindow::update_cell(const DTree&, DTree::iterator)
+void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 	{
-	std::cout << "request to update gui cell" << std::endl;
+	// We just do a redraw for now, but this may require more work later.
+
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		VisualCell& vc = canvasses[i]->visualcells[&(*it)];
+		if(it->cell_type==DataCell::CellType::python) 
+			vc.inbox->queue_draw();
+		}
+	
 	}
 
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)

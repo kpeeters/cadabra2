@@ -176,7 +176,10 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 //	cr->rectangle(5,3,8,h-3);
 //	cr->fill();
 
-	cr->set_source_rgba(.2, .2, .7, 1.0);
+	if(datacell->cell_type==DataCell::CellType::latex) 
+		cr->set_source_rgba(.2, .7, .2, 1.0);
+	else
+		cr->set_source_rgba(.2, .2, .7, 1.0);
 	double line_width=2.0;
 	cr->set_line_width(line_width);
 	cr->set_antialias(Cairo::ANTIALIAS_NONE);
