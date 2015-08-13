@@ -46,10 +46,10 @@ void DocumentThread::build_visual_representation()
 		}
 	}
 
-const DTree& DocumentThread::dtree() 
-	{
-	return doc;
-	}
+//const DTree& DocumentThread::dtree() 
+//	{
+//	return doc;
+//	}
 
 void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab) 
 	{

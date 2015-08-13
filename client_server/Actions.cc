@@ -18,7 +18,7 @@ void ActionAddCell::pre_execute(DocumentThread& cl)
 	{
 	// std::cout << "ActionAddCell::execute" << std::endl;
 
-	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
 
 	// Insert this DataCell into the DTree document.
 	switch(pos) {
@@ -59,7 +59,7 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 	{
 	// std::cout << "ActionPositionCursor::execute" << std::endl;
 
-	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
 
 	switch(pos) {
 		case Position::in:
@@ -131,7 +131,7 @@ void ActionRemoveCell::pre_execute(DocumentThread& cl)
 
 void ActionRemoveCell::post_execute(DocumentThread& cl)  
 	{
-	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
 
 	reference_parent_cell = cl.doc.parent(this_cell);
 	reference_child_index = cl.doc.index(this_cell);

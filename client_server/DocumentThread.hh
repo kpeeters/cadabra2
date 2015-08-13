@@ -47,17 +47,17 @@ namespace cadabra {
 			/// ActionBase derived objects to the 'queue_action' function,
 			/// so that an undo stack can be kept. They are then processed
 			/// by calling the 'process_action_queue' method (only
-			/// available from this thread). Never directly modify the
-			/// 'doc' Dtree object.
+			/// available from this thread). 
 			
 			void queue_action(std::shared_ptr<ActionBase>);
 
+			/// Setup an empty new document with a single Python input cell.
 
-			/// Blah
-			std::mutex   dtree_mutex;
-			const DTree& dtree();
          void         new_document();
 
+			/// Action objects are allowed to modify the DTree document doc,
+			/// since they essentially contain code which is part of the 
+			/// DocumentThread object.
 
          friend ActionAddCell;
 			friend ActionPositionCursor;
@@ -65,15 +65,22 @@ namespace cadabra {
          // FIXME: add other actions.
 	
 		protected:
-
          GUIBase       *gui;
          ComputeThread *compute;
+
+			/// The actual document tree. This object is only modified on
+			/// the GUI thread, either directly by code in
+			/// DocumentThread, or by code in the various objects derived
+			/// from ActionBase. In particular, ComputeThread cannot
+			/// access this tree directly.
+
 			DTree          doc;
 			
          /// The action undo/redo/todo stacks and logic to execute
 			/// them. These stacks can be accessed from both the
-			/// DocumentThread as well as the ComputeThread, so they need
-			/// a mutex to access them.
+			/// DocumentThread as well as the ComputeThread (the latter
+			/// does it through the DocumentThread::queue_action method),
+			/// so they need a mutex to access them.
 
          std::mutex                                       stack_mutex;
 			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;

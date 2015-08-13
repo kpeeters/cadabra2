@@ -188,14 +188,16 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	cr->stroke();
 
 	// Mark whether cell is executing.
+	if(datacell->running) {
 //	cr->set_source_rgba(.8, .2, .2, 1.0);
-	cr->set_source_rgba(.2, .2, .7, 0.5);
-	int rem=hor-line_width;
-	cr->set_line_width(2*rem);
-	cr->set_antialias(Cairo::ANTIALIAS_NONE);
-	cr->move_to(5+rem,  rem);
-	cr->line_to(5+rem,  h-rem);
-	cr->stroke();
+		cr->set_source_rgba(.2, .2, .7, 0.5);
+		int rem=hor-line_width;
+		cr->set_line_width(2*rem);
+		cr->set_antialias(Cairo::ANTIALIAS_NONE);
+		cr->move_to(5+rem,  rem);
+		cr->line_to(5+rem,  h-rem);
+		cr->stroke();
+		}
 
 	
 	return ret;
