@@ -96,19 +96,20 @@ namespace cadabra {
 	///
 	/// Update the running status of the indicated cell.
 
-//	class ActionSetRunStatus : public ActionBase {
-//		public:
-//			ActionSetRunStatus(DTree::iterator ref_, bool running);
-//
-//			virtual void pre_execute(DocumentThread&) override;
-//			virtual void update_gui(const DTree&, GUIBase&) override;
-//			virtual void post_execute(DocumentThread&) override;
-//
-//			virtual void revert(DocumentThread&) override;
-//
-//		private:
-//			bool was_running_, new_running_;
-//	};
+	class ActionSetRunStatus : public ActionBase {
+		public:
+			ActionSetRunStatus(DTree::iterator ref_, bool running);
+
+			virtual void pre_execute(DocumentThread&) override;
+			virtual void update_gui(const DTree&, GUIBase&) override;
+			virtual void post_execute(DocumentThread&) override;
+
+			virtual void revert(DocumentThread&) override;
+
+		private:
+			DTree::iterator this_cell;
+			bool            was_running_, new_running_;
+	};
 	
 
 	/// \ingroup clientserver

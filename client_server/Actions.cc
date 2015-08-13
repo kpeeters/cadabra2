@@ -69,7 +69,7 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 		case Position::next: {
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(++sib)) {
-				if(sib->cell_type==DataCell::CellType::python) {
+				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
 					// std::cout << "found input cell " << sib->textbuf << std::endl;
 					newref=sib;
 					return;
@@ -85,7 +85,7 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 			std::cerr << "previous " << ref->textbuf << std::endl;
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(--sib)) {
-				if(sib->cell_type==DataCell::CellType::python) {
+				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
 					newref=sib;
 					return;
 					}
@@ -147,4 +147,30 @@ void ActionRemoveCell::update_gui(const DTree& tr, GUIBase& gb)
 	{
 	std::cout << "updating gui for ActionRemoveCell" << std::endl;
 	gb.remove_cell(tr, this_cell);
+	}
+
+
+
+ActionSetRunStatus::ActionSetRunStatus(DTree::iterator ref_, bool running) 
+	: this_cell(ref_), new_running_(running)
+	{
+	}
+
+void ActionSetRunStatus::pre_execute(DocumentThread& cl)  
+	{
+	}
+
+void ActionSetRunStatus::post_execute(DocumentThread& cl)  
+	{
+	was_running_=this_cell->running;
+	this_cell->running=new_running_;
+	}
+
+void ActionSetRunStatus::revert(DocumentThread& cl)
+	{
+	}
+
+void ActionSetRunStatus::update_gui(const DTree& tr, GUIBase& gb)
+	{
+	gb.update_cell(tr, this_cell);
 	}

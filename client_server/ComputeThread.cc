@@ -189,7 +189,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	uint64_t id = header["cell_id"].asUInt64();
 
 	auto it = find_cell_by_id(id, true);
-	it->running=false;
+	std::shared_ptr<ActionBase> rs_action = 
+		std::make_shared<ActionSetRunStatus>(it, false);
+	docthread.queue_action(rs_action);
 
 	if(msg_type.asString()=="response") {
 		std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
@@ -253,10 +255,6 @@ void ComputeThread::execute_cell(DTree::iterator it)
 
 	const DataCell& dc=(*it);
 
-	// FIXME: this is not allowed, use an Action, otherwise the GUI cannot
-	// update the running status (it will never know something has changed).
-	it->running=true;
-
 	std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
 
 
@@ -271,6 +269,11 @@ void ComputeThread::execute_cell(DTree::iterator it)
 	// send the cell to the server.
 	if(it->cell_type==DataCell::CellType::python) {
 		running_cells[dc.id()]=it;
+
+		// Schedule an action to update the running status of this cell.
+		std::shared_ptr<ActionBase> rs_action = 
+			std::make_shared<ActionSetRunStatus>(it, true);
+		docthread.queue_action(rs_action);
 
 		Json::Value req, header, content;
 		header["uuid"]="none";
@@ -291,7 +294,6 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		// Stick an AddCell action onto the stack. We instruct the
 		// action to add this result output cell as a child of the
 		// corresponding input cell.
-		it->running=false;
 		DataCell result(DataCell::CellType::output, it->textbuf);
 		
 		std::shared_ptr<ActionBase> action = 
