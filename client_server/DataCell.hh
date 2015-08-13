@@ -41,10 +41,14 @@ namespace cadabra {
 			std::string                   textbuf;    //< textual representation of cell content
 			bool                          hidden;
 			bool                          sensitive;
-			bool                          running;
 
-			// Each cell is identified by a serial number 'id' which is used
-			// to keep track of it across network calls.
+			/// Indicator whether this cell is currently being evaluated by the server.
+			/// The ComputeThread sets and clears this flag. 
+
+			bool                          running;   
+
+			/// Each cell is identified by a serial number 'id' which is used
+			/// to keep track of it across network calls.
 
 			uint64_t                      id() const;
 			

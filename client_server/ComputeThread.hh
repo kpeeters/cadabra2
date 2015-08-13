@@ -27,52 +27,56 @@ namespace cadabra {
    /// computations with the cells in a document. It handles talking to
    /// the server backend. It knows how to pass cells to the server and
    /// ask them to be executed. Results are reported back to the GUI by
-   /// putting ActionBase objects onto its todo stack.
+   /// putting ActionBase objects onto its todo stack. ComputeThread never
+	/// directly modifies the document tree.
 	
 	class ComputeThread {
 		public:
-			// If the ComputeThread is constructed with a null pointer to the
-			// gui, there will be no gui updates, just DTree updates.
+			/// If the ComputeThread is constructed with a null pointer to the
+			/// gui, there will be no gui updates, just DTree updates.
 			
 			ComputeThread(GUIBase *, DocumentThread&);
 			ComputeThread(const ComputeThread& )=delete; // You cannot copy this object
 			~ComputeThread();
 			
-			// Main entry point, which will connect to the server and
-			// then start an event loop to handle communication with the
-			// server. Only terminates when the connection drops, so run
-			// your GUI on a different thread.
+			/// Main entry point, which will connect to the server and
+			/// then start an event loop to handle communication with the
+			/// server. Only terminates when the connection drops, so run
+			/// your GUI on a different thread.
 
 			void run(); 
 			
-			// In order to execute code on the server, call the following
-			// from the GUI thread.  This method returns as soon as the
-			// request has been put on the network queue. If no
-			// communication with the server is necessary, this returns
-			// immediately. The ComputeThread will report the result of
-			// the computation/processing by adding actions to the
-			// DocumentThread owned pending_actions stack, by calling
-			// queue_action.
+			/// In order to execute code on the server, call the
+			/// following from the GUI thread.  This method returns as
+			/// soon as the request has been put on the network queue. If
+			/// no communication with the server is necessary, this
+			/// returns immediately. The ComputeThread will report the
+			/// result of the computation/processing by adding actions to
+			/// the DocumentThread owned pending_actions stack, by
+			/// calling queue_action. It will never modify the cell
+			/// directly, and will also never modify any other cells in
+			/// the document tree.
 
 			void execute_cell(DTree::iterator);
 
-			// Stop the current cell execution on the server and remove
-			// all other cells from the run queue as well.
+			/// Stop the current cell execution on the server and remove
+			/// all other cells from the run queue as well.
 
 			void stop();
 
-			// Restart the kernel.
+			/// Restart the kernel.
 
 			void restart_kernel();
 
 			// Determine if there are still cells running on the server.
 			// FIXME: this does not guarantee thread-safety but at the moment
 			// is only used for updating status bars etc.
+			// FIXME: can be moved to DocumentThread.
 
 			int number_of_cells_executing(void) const;
 
-			// Terminate the compute thread, in preparation for shutting
-			// down the client altogether.
+			/// Terminate the compute thread, in preparation for shutting
+			/// down the client altogether.
 
 			void terminate();
 			
@@ -84,8 +88,11 @@ namespace cadabra {
 			// so that we can flag when code runs on the wrong thread.
 			std::thread::id  main_thread_id; 
 
-			// Keeping track of cells which are running on the server.
-//			std::set<uint64_t> running_cells;
+			// Keeping track of cells which are running on the server, in
+			// a form which allows us to look them up quickly based only
+			// on the id (which is all that the server knows about). 
+
+			std::map<uint64_t, DTree::iterator> running_cells;
 
 			// WebSocket++ things.
 			WSClient wsclient;
@@ -100,7 +107,7 @@ namespace cadabra {
 			void on_close(websocketpp::connection_hdl hdl);
 			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
 
-			DTree::iterator find_cell_by_id(uint64_t) const;
+			DTree::iterator find_cell_by_id(uint64_t, bool remove);
 
 			// Self-started server
 			pid_t server_pid;

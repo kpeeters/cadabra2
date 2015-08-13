@@ -22,7 +22,7 @@ namespace cadabra {
 
 			virtual void update_cell(const DTree&, DTree::iterator)=0;
 
-			/// Remove a cell.
+			/// Remove a single cell.
 
 			virtual void remove_cell(const DTree&, DTree::iterator)=0;
 

@@ -20,6 +20,7 @@ DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden)
 
 DataCell::DataCell(const DataCell& other)
 	{
+	running = other.running;
 	cell_type = other.cell_type;
 	textbuf = other.textbuf;
 	hidden = other.hidden;

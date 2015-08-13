@@ -157,19 +157,17 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 	try_connect();
 	}
 
-DTree::iterator ComputeThread::find_cell_by_id(uint64_t id) const
+DTree::iterator ComputeThread::find_cell_by_id(uint64_t id, bool remove) 
 	{
-	// Stupid way to find cell by id.
-	auto it=docthread.dtree().begin();
-	while(it!=docthread.dtree().end()) {
-		if((*it).id()==id)
-			break;
-		++it;
-		}
-	if(it==docthread.dtree().end()) {
+	auto it=running_cells.find(id);
+	if(it==running_cells.end())
 		throw std::logic_error("Cannot find cell by id");
-		}
-	return it;
+
+	DTree::iterator ret = (*it).second;
+	if(remove)
+		running_cells.erase(it);
+
+	return ret;
 	}
 
 void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg) 
@@ -190,7 +188,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	const Json::Value msg_type = root["msg_type"];
 	uint64_t id = header["cell_id"].asUInt64();
 
-	auto it = find_cell_by_id(id);
+	auto it = find_cell_by_id(id, true);
 	it->running=false;
 
 	if(msg_type.asString()=="response") {
@@ -234,11 +232,12 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 
 		// FIXME: iterate over all cells and set the running flag to false.
 		}
-	// Count running cells.
-//	if(running_cells.size()>0)
-//		gui->on_kernel_runstatus(true);
-//	else
-//		gui->on_kernel_runstatus(false);
+
+	// Update kernel busy indicator depending on number of running cells.
+	if(number_of_cells_executing()>0)
+		gui->on_kernel_runstatus(true);
+	else
+		gui->on_kernel_runstatus(false);
 
 	gui->process_data();
 
@@ -253,6 +252,9 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		return;
 
 	const DataCell& dc=(*it);
+
+	// FIXME: this is not allowed, use an Action, otherwise the GUI cannot
+	// update the running status (it will never know something has changed).
 	it->running=true;
 
 	std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
@@ -268,6 +270,8 @@ void ComputeThread::execute_cell(DTree::iterator it)
 	// For a code cell, construct a server request message and then
 	// send the cell to the server.
 	if(it->cell_type==DataCell::CellType::python) {
+		running_cells[dc.id()]=it;
+
 		Json::Value req, header, content;
 		header["uuid"]="none";
 		header["cell_id"]=(Json::UInt64)dc.id();
@@ -287,6 +291,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		// Stick an AddCell action onto the stack. We instruct the
 		// action to add this result output cell as a child of the
 		// corresponding input cell.
+		it->running=false;
 		DataCell result(DataCell::CellType::output, it->textbuf);
 		
 		std::shared_ptr<ActionBase> action = 
@@ -297,7 +302,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 
 int ComputeThread::number_of_cells_executing() const
 	{
-	return 0; // FIXME: count running_cells.size();
+	return running_cells.size();
 	}
 
 void ComputeThread::stop()

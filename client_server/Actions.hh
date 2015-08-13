@@ -17,6 +17,8 @@ namespace cadabra {
 	class DocumentThread;
 	class GUIBase;
 
+	/// \ingroup clientserver
+	///
 	/// All actions derive from the ActionBase object, which defines
 	/// the interface they need to implement. These objects are used to
 	/// pass (user) action instructions around.  They can be stored in
@@ -41,6 +43,8 @@ namespace cadabra {
 			virtual void revert(DocumentThread&)=0;
 	};
 	
+	/// \ingroup clientserver
+	///
 	/// Add a cell to the notebook.
 	
 	class ActionAddCell : public ActionBase {
@@ -65,8 +69,10 @@ namespace cadabra {
 	};
 
 
-	// Position the cursor relative to the indicated cell. If position is 'next' and
-   // there is no input cell following the indicated one, create a new one.
+	/// \ingroup clientserver
+	///
+	/// Position the cursor relative to the indicated cell. If position is 'next' and
+   /// there is no input cell following the indicated one, create a new one.
 
 	class ActionPositionCursor : public ActionBase {
 		public:
@@ -85,9 +91,29 @@ namespace cadabra {
 			DTree::iterator   ref, newref;
 			Position          pos;
 	};
+
+	/// \ingroup clientserver
+	///
+	/// Update the running status of the indicated cell.
+
+//	class ActionSetRunStatus : public ActionBase {
+//		public:
+//			ActionSetRunStatus(DTree::iterator ref_, bool running);
+//
+//			virtual void pre_execute(DocumentThread&) override;
+//			virtual void update_gui(const DTree&, GUIBase&) override;
+//			virtual void post_execute(DocumentThread&) override;
+//
+//			virtual void revert(DocumentThread&) override;
+//
+//		private:
+//			bool was_running_, new_running_;
+//	};
 	
 
-	// Remove a cell and all its child cells from the document.
+	/// \ingroup clientserver
+	///
+	/// Remove a cell and all its child cells from the document.
 
 	class ActionRemoveCell : public ActionBase {
 		public:
@@ -138,4 +164,5 @@ namespace cadabra {
 //			class ActionSplitCell
 //       class ActionMergeCells
 			
+
 
