@@ -50,7 +50,7 @@
   All cells should have inputs, outputs and a visual representation. IPython makes it 
   needlessly complicated by pretending that widgets are somehow different from other cells.
   Our CodeInput cells are simply cells with input being a python context, output being
-  the context plus our input, and visual representation being the editor with 'ctrl-enter' is
+  the context plus our input, and visual representation being the editor where 'ctrl-enter' is
   'feed output'.
 
 - test case: compute geodesic in ss as function of initial angle, and then do an 
@@ -66,21 +66,18 @@
   viewer displays the json data in graphical form. Deep...
 
 
+- IPython's QtConsole has the logic that everything that you want to
+  output needs to be wrapped in a 'display' call. We do something similar already, but
+  with 'print' (nothing reaches the output channel automatically). Using 'display' or
+  perhaps 'cadabra.display' to be unambiguous has some advantages because we can 
+  ensure that we output a proper mime type like identifier with the output.
+
+- Sometimes the kernel remains running, should we issue a warning if
+  the kernel is already running when a new client is started?
+
 - Change ComputeThread so that it does not need access to anything but isolated DataCells.
   Perhaps not let it change them either, and pass everything by const ref. However, that 
   makes it impossible to set the 'running' flag.
-
-NEXT:
-
-  CodeInput needs a ref to the DataCell it represents. Then we can leave that out of the
-  callback bindings. CodeInput is not allowed to change this cell directly.
-
-  ComputeThread needs a ref to the DataCell it computes. ComputeThread is allowed to change
-  the running flag of this cell.
-
-
-NEXT: test websocketpp-0.4.0 on linux; on osx there is an issue with using an explicitly deleted thread function.
-
 
 
 GTKMM:

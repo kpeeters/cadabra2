@@ -22,6 +22,10 @@ specification, with the following additional rules:
 \item Anything inbetween two dollar symbols is interpreted as a
   Cadabra expression (just like \TeX{} handles mathematical
   expressions).
+
+\item A line ending with a semi-colon \verb|;| will lead to the output
+  of the last-used expression being printed. To be precise, it will
+  insert a \verb|print(latex(_))| into the input.
 \end{enumerate}
 The interactive shell \verb|cadabra2| will indicate Cadabra line
 continuations by showing a `|' symbol as prompt (instead of the

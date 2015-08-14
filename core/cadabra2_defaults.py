@@ -3,7 +3,7 @@
 
 import sys
 from cadabra2 import *
-sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
+#sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 
 # Attempt to import sympy; if not, setup logic so that the
 # shell does not fail later.
@@ -26,6 +26,10 @@ if sympy.__version__ != "unavailable":
     from sympy import sin, cos, tan, trigsimp
     from sympy import Matrix
 
+# Import matplotlib
+import matplotlib
+matplotlib.use('Agg')
+    
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.
 

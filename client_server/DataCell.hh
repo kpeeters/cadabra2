@@ -11,10 +11,17 @@ namespace cadabra {
 
 	/// \ingroup clientserver
 	///
-	/// DataCells are the basic building blocks for a document. They are stored 
-	/// in a tree inside the client. A user interface should read these cells
-	/// and construct corresponding graphical output for them. All cell types are
-	/// leaf nodes except for the section cell which generates a new nested structure.
+	/// DataCells are the basic building blocks for a document. They
+	/// are stored in a tree inside the client, and can be transmitted
+	/// over the wire between server and client in JSON format (see the
+	/// documentation of the cadabra::JSON_serialise and cadabra::JSON_deserialise
+	/// methods below for details on this representation). The notebook
+	/// user interface reads these cells and construct corresponding
+	/// graphical output for them.
+	///
+	/// The cadabra.display method of the cadabra python library knows
+	/// how to turn various Python objects into the corresponding JSON
+	/// representation of a DataCell.
 	
 	class DataCell {
 		public:
@@ -25,12 +32,11 @@ namespace cadabra {
 			
 			enum class CellType { 
 					   document,   ///< head node, only one per document
-						python,     ///< code input in verbatim form
-						output,     ///< latex-parseable output
-						//						comment, 
-						//						texcomment, 
-						latex,      ///< user-entered LaTeX text
-						error,      ///< latex-parseable error text
+						python,     ///< Code input in verbatim textual form
+						output,     ///< LaTeX formula
+						latex,      ///< LaTeX text
+						image_png,  ///< Base64 encoded PNG image
+						error,      ///< LaTeX text for errors
 						// section
 						};
 			
@@ -55,7 +61,8 @@ namespace cadabra {
 			bool                          sensitive;
 
 			/// Indicator whether this cell is currently being evaluated by the server.
-			/// The ComputeThread sets and clears this flag. 
+			/// Currently only has a meaning for cells of type 'python'.
+			/// This flag is set/reset using the ActionSetRunStatus action.
 
 			bool                          running;   
 
