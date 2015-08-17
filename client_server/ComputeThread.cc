@@ -188,51 +188,56 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	const Json::Value msg_type = root["msg_type"];
 	uint64_t id = header["cell_id"].asUInt64();
 
-	auto it = find_cell_by_id(id, true);
-	std::shared_ptr<ActionBase> rs_action = 
-		std::make_shared<ActionSetRunStatus>(it, false);
-	docthread.queue_action(rs_action);
-
-	if(msg_type.asString()=="response") {
-		std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
-		if(output!="\\begin{equation*}\\end{equation*}") {
-			std::cerr << "cadabra-client: ComputeThread received response from server" << std::endl;
-
+	try {
+		auto it = find_cell_by_id(id, true);
+		std::shared_ptr<ActionBase> rs_action = 
+			std::make_shared<ActionSetRunStatus>(it, false);
+		docthread.queue_action(rs_action);
+		
+		if(msg_type.asString()=="output") {
+			std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
+			if(output!="\\begin{equation*}\\end{equation*}") {
+				std::cerr << "cadabra-client: ComputeThread received response from server" << std::endl;
+				
+				// Stick an AddCell action onto the stack. We instruct the
+				// action to add this result output cell as a child of the
+				// corresponding input cell.
+				DataCell result(DataCell::CellType::output, output);
+				
+				// Finally, the action to add the output cell.
+				std::shared_ptr<ActionBase> action = 
+					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+				docthread.queue_action(action);
+				}
+			}
+		else if(msg_type.asString()=="error") {
+			std::cout << "Generating ERROR cell" << std::endl;
+			std::string error = "{\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}}";
+			if(msg_type.asString()=="fault") {
+				error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
+				}
+			
 			// Stick an AddCell action onto the stack. We instruct the
 			// action to add this result output cell as a child of the
 			// corresponding input cell.
-			DataCell result(DataCell::CellType::output, output);
+			DataCell result(DataCell::CellType::output, error);
 			
-			// Finally, the action to add the output cell.
+			// Finally, the action.
 			std::shared_ptr<ActionBase> action = 
 				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 			docthread.queue_action(action);
+			
+			// Position the cursor in the cell that generated the error. All other cells on 
+			// the execute queue have been cancelled by the server.
+			std::shared_ptr<ActionBase> actionpos =
+				std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::in);
+			docthread.queue_action(actionpos);
+			
+			// FIXME: iterate over all cells and set the running flag to false.
 			}
 		}
-	else {
-		std::cout << "Generating ERROR cell" << std::endl;
-		std::string error = "{\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}}";
-		if(msg_type.asString()=="fault") {
-			error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
-			}
-
-		// Stick an AddCell action onto the stack. We instruct the
-		// action to add this result output cell as a child of the
-		// corresponding input cell.
-		DataCell result(DataCell::CellType::output, error);
-		
-		// Finally, the action.
-		std::shared_ptr<ActionBase> action = 
-			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-		docthread.queue_action(action);
-
-		// Position the cursor in the cell that generated the error. All other cells on 
-		// the execute queue have been cancelled by the server.
-		std::shared_ptr<ActionBase> actionpos =
-			std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::in);
-		docthread.queue_action(actionpos);
-
-		// FIXME: iterate over all cells and set the running flag to false.
+	catch(std::logic_error& ex) {
+		std::cerr << "cadabra-client: cannot find parent cell for response from server" << std::endl;
 		}
 
 	// Update kernel busy indicator depending on number of running cells.

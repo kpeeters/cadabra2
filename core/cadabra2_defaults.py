@@ -1,5 +1,7 @@
-# This is a pure-python initialisation script to set the 
-# path to sympy and setup printing of cadabra expressions.
+# This is a pure-python initialisation script to set the  path to
+# sympy and setup printing of Cadabra expressions.  This script is
+# called both by the command line interface 'cadabra2' as well as by
+# the GUI backend server 'cadabra-server'.
 
 import sys
 from cadabra2 import *
@@ -26,9 +28,37 @@ if sympy.__version__ != "unavailable":
     from sympy import sin, cos, tan, trigsimp
     from sympy import Matrix
 
-# Import matplotlib
+# Import matplotlib and setup functions to prepare its output
+# for sending as base64 to the client. Example use:
+#
+#   import matplotlib.pyplot as plt
+#   p = plt.plot([1,2,3],[1,2,5],'-o')
+#   display(p[0])
+#
 import matplotlib
+import matplotlib.artist
+import StringIO
+import base64
 matplotlib.use('Agg')
+
+# FIXME: it is not a good idea to have this pollute the global namespace.
+#
+# Generate a JSON object for sending to the client. This function
+# does different things depending on the object type it is being
+# fed.
+
+def display(obj):
+    if isinstance(obj, matplotlib.artist.Artist):
+        f = obj.get_figure()
+        imgstring = StringIO.StringIO()
+        f.savefig(imgstring,format='png')
+        imgstring.seek(0)
+        b64 = base64.b64encode(imgstring.getvalue())
+        send_message(b64)
+
+    if isinstance(obj, Ex):
+        send_message('hello Ex:'+str(Ex))
+
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

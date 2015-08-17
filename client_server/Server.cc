@@ -78,11 +78,17 @@ void Server::init()
 	   .def("clear", &Server::CatchOutput::clear)
     	;
 
+	boost::python::class_<Server, boost::noncopyable>("Server")
+		.def("send_message", &Server::send_message);
+
 	std::string stdOutErr =
 		"import sys\n"
-		"def setup_catch(cO, cE):\n"
+		"server=0\n"
+		"def setup_catch(cO, cE, sE):\n"
+		"   global server\n"
 		"   sys.stdout=cO\n"
-		"   sys.stderr=cE\n";
+		"   sys.stderr=cE\n"
+		"   server=sE\n";
 	run_string(stdOutErr, false);
 
 	// Setup the C++ output catching objects and setup the Python side to
@@ -90,12 +96,14 @@ void Server::init()
 
 	boost::python::object setup_catch = main_module.attr("setup_catch");
 	try {
-		setup_catch(boost::ref(catchOut), boost::ref(catchErr));
+		setup_catch(boost::ref(catchOut), boost::ref(catchErr), boost::ref(*this));
 		}
 	catch(boost::python::error_already_set& ex) {
+		std::cerr << "cadabra-server: failed to initialise Python bridge" << std::endl;
 		PyErr_Print();
 		throw;
 		}
+
 
 	// Call the Cadabra default initialisation script.
 
@@ -291,6 +299,8 @@ void Server::wait_for_job()
 		try {
 			// We are done with the block_queue; release the lock so that the
 			// master thread can push new blocks onto it.
+			current_hdl=block.hdl;
+			current_id =block.id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
 			}
@@ -381,23 +391,32 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 
 void Server::on_block_finished(Block blk)
 	{
-	std::lock_guard<std::mutex> lock(ws_mutex);    
-	
+	send_message(blk.output, "output");
+	}
+
+void Server::send_message(const std::string& output, const std::string& msg_type)
+	{
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
-	header["cell_id"]=(Json::Value::UInt64)blk.id;
-	content["output"]=blk.output;
+	header["cell_id"]=(Json::Value::UInt64)current_id;
+	content["output"]=output;
 
 	json["header"]=header;
 	json["content"]=content;
-	json["msg_type"]="response";
-
+	json["msg_type"]=msg_type;
+	
 	std::ostringstream str;
 	str << json << std::endl;
-//	std::cout << "sending " << str.str() << std::endl;
 
-	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
+	send_json_message(str.str());
+	}
+
+void Server::send_json_message(const std::string& msg)
+	{
+	std::cerr << "*** sending message " << msg << std::endl;
+	std::lock_guard<std::mutex> lock(ws_mutex);    
+	wserver.send(current_hdl, msg, websocketpp::frame::opcode::text);
 	}
 
 void Server::on_block_error(Block blk)
