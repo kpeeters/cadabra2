@@ -79,7 +79,7 @@ void Server::init()
     	;
 
 	boost::python::class_<Server, boost::noncopyable>("Server")
-		.def("send_message", &Server::send_message);
+		.def("send", &Server::send);
 
 	std::string stdOutErr =
 		"import sys\n"
@@ -300,7 +300,7 @@ void Server::wait_for_job()
 			// We are done with the block_queue; release the lock so that the
 			// master thread can push new blocks onto it.
 			current_hdl=block.hdl;
-			current_id =block.id;
+			current_id =block.cell_id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
 			}
@@ -333,7 +333,7 @@ void Server::stop_block()
 	}
 
 Server::Block::Block(websocketpp::connection_hdl h, const std::string& str, uint64_t id_)
-	: hdl(h), input(str), id(id_)
+	: hdl(h), input(str), cell_id(id_)
 	{
 	}
 
@@ -384,6 +384,14 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		std::swap(block_queue, empty);
 		std::cout << "cadabra-server: job stop requested" << std::endl;
 		}
+	else if(msg_type=="init") {
+		// Stop any running blocks.
+		std::unique_lock<std::mutex> lock(block_available_mutex);
+		stop_block();
+		std::queue<Block> empty;
+		std::swap(block_queue, empty);
+		
+		}
 	else if(msg_type=="exit") {
 		exit(-1);
 		}
@@ -391,15 +399,18 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 
 void Server::on_block_finished(Block blk)
 	{
-	send_message(blk.output, "output");
+	send(blk.output, "output");
 	}
 
-void Server::send_message(const std::string& output, const std::string& msg_type)
+void Server::send(const std::string& output, const std::string& msg_type)
 	{
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
-	header["cell_id"]=(Json::Value::UInt64)current_id;
+	header["parent_id"]=(Json::Value::UInt64)current_id;
+	header["parent_origin"]="client";
+	header["cell_id"]=1; //FIXME
+	header["cell_origin"]="server";
 	content["output"]=output;
 
 	json["header"]=header;
@@ -409,10 +420,10 @@ void Server::send_message(const std::string& output, const std::string& msg_type
 	std::ostringstream str;
 	str << json << std::endl;
 
-	send_json_message(str.str());
+	send_json(str.str());
 	}
 
-void Server::send_json_message(const std::string& msg)
+void Server::send_json(const std::string& msg)
 	{
 	std::cerr << "*** sending message " << msg << std::endl;
 	std::lock_guard<std::mutex> lock(ws_mutex);    
@@ -426,7 +437,10 @@ void Server::on_block_error(Block blk)
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
-	header["cell_id"]=(Json::Value::UInt64)blk.id;
+	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
+	header["parent_origin"]="client";
+	header["cell_id"]=1; // FIXME;
+	header["cell_origin"]="server";
 	content["error"]=blk.error;
 
 	json["header"]=header;
@@ -447,7 +461,10 @@ void Server::on_kernel_fault(Block blk)
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
-	header["cell_id"]=(Json::Value::UInt64)blk.id;
+	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
+	header["parent_origin"]="client";
+	header["cell_id"]=1; // FIXME
+	header["cell_origin"]="server";
 	content["error"]=blk.error;
 
 	json["header"]=header;

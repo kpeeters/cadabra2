@@ -1,15 +1,17 @@
 
 #pragma once
 
-// CodeInput is essentially a TextView with some
-// additional i/o logic.
-
 #include "DataCell.hh"
 #include <gtkmm/box.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/separator.h>
 
 namespace cadabra {
+
+	/// \ingroup gtkmm
+	///
+	/// A text cell editor widget with support for editing Python and LaTeX.
+   /// CodeInput is essentially a TextView with some additional i/o logic.
 
 	class CodeInput : public Gtk::VBox {
 		public:

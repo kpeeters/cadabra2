@@ -362,6 +362,9 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				w=newcell.inbox;
 				break;
 				}
+			case DataCell::CellType::image_png: {
+				std::cerr << "cadabra-client: displaying image!" << std::endl;
+				}
 
 			default:
 				throw std::logic_error("Unimplemented datacell type");

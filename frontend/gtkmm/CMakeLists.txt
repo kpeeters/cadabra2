@@ -21,6 +21,7 @@ add_executable(cadabra-gtk main.cc
   NotebookCanvas.cc 
   TeXView.cc 
   CodeInput.cc 
+  ImageView.cc
   ../common/TeXEngine.cc)
 
 target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread )

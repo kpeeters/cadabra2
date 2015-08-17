@@ -33,14 +33,36 @@ namespace cadabra {
 			enum class CellType { 
 					   document,   ///< head node, only one per document
 						python,     ///< Code input in verbatim textual form
-						output,     ///< LaTeX formula
-						latex,      ///< LaTeX text
+						output,     ///< Python output, to be displayed verbatim
+						latex,      ///< LaTeX text, to be displayed using a LaTeX formatter
 						image_png,  ///< Base64 encoded PNG image
 						error,      ///< LaTeX text for errors
 						// section
 						};
 			
+			/// Each cell is identified by a serial number 'id' which is used
+			/// to keep track of it across network calls, and a bool indicating
+			/// whether the client or the server has created this cell.
+
+			class id_t {
+				public:
+					uint64_t  id;
+					bool      created_by_client;
+
+					bool operator<(const id_t& other) const;
+			};
+
+			/// Standard constructor, generates a new unique id for this DataCell.
+
 			DataCell(CellType t=CellType::python, const std::string& str="", bool hidden=false);
+
+			/// Initialise a cell with an already determined id (it is the caller's responsibility
+			/// to ensure that this id does not clash with any other DataCell's id).
+
+			DataCell(id_t, CellType t=CellType::python, const std::string& str="", bool hidden=false);
+
+			/// Copy constructor; preserves all information including id.
+
 			DataCell(const DataCell&);
 			
 			CellType                      cell_type;
@@ -66,16 +88,13 @@ namespace cadabra {
 
 			bool                          running;   
 
-			/// Each cell is identified by a serial number 'id' which is used
-			/// to keep track of it across network calls.
-
-			uint64_t                      id() const;
+			id_t                          id() const;
 			
 		private:
 
 			static std::mutex             serial_mutex;
-			uint64_t                      serial_number;
-			static uint64_t               max_serial_number;
+			id_t                          serial_number;
+			static uint64_t               max_serial_number; // on the client, server keeps track separately.
 	};
 
 	typedef tree<DataCell> DTree;

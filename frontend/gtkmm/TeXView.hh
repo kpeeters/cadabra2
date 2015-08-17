@@ -9,8 +9,8 @@
 
 namespace cadabra {
 
-	// TeXView is a widget which knows how to turn a string into
-	// a LaTeX-rendered image and display that. 
+	/// TeXView is a widget which knows how to turn a string into
+	/// a LaTeX-rendered image and display that. 
 
 	class TeXView : public Gtk::EventBox {
 		public:

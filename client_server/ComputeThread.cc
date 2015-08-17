@@ -157,7 +157,7 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 	try_connect();
 	}
 
-DTree::iterator ComputeThread::find_cell_by_id(uint64_t id, bool remove) 
+DTree::iterator ComputeThread::find_cell_by_id(DataCell::id_t id, bool remove) 
 	{
 	auto it=running_cells.find(id);
 	if(it==running_cells.end())
@@ -186,13 +186,31 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	const Json::Value header   = root["header"];
 	const Json::Value content  = root["content"];
 	const Json::Value msg_type = root["msg_type"];
-	uint64_t id = header["cell_id"].asUInt64();
+	DataCell::id_t parent_id;
+	parent_id.id = header["parent_id"].asUInt64();
+	if(header["parent_origin"].asString()=="client")
+		parent_id.created_by_client=true;
+	else
+		parent_id.created_by_client=false;
+	DataCell::id_t cell_id;
+	cell_id.id = header["cell_id"].asUInt64();
+	if(header["cell_origin"].asString()=="client")
+		cell_id.created_by_client=true;
+	else
+		cell_id.created_by_client=false;
 
 	try {
-		auto it = find_cell_by_id(id, true);
-		std::shared_ptr<ActionBase> rs_action = 
-			std::make_shared<ActionSetRunStatus>(it, false);
-		docthread.queue_action(rs_action);
+		// If this is the stdout or stderr of the block, it has finished execution.
+		// All other output cells are generated while the cell is executing, and 
+		// do not yet mean that execution is finished.
+		bool finished=(msg_type.asString()=="output" || msg_type.asString()=="error");
+
+		auto it = find_cell_by_id(parent_id, finished);
+		if(finished) {
+			std::shared_ptr<ActionBase> rs_action = 
+				std::make_shared<ActionSetRunStatus>(it, false);
+			docthread.queue_action(rs_action);
+			}
 		
 		if(msg_type.asString()=="output") {
 			std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
@@ -202,13 +220,19 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				// Stick an AddCell action onto the stack. We instruct the
 				// action to add this result output cell as a child of the
 				// corresponding input cell.
-				DataCell result(DataCell::CellType::output, output);
+				DataCell result(cell_id, DataCell::CellType::output, output);
 				
 				// Finally, the action to add the output cell.
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 				docthread.queue_action(action);
 				}
+			}
+		else if(msg_type.asString()=="latex") {
+			DataCell result(cell_id, DataCell::CellType::output, content["output"].asString());
+			std::shared_ptr<ActionBase> action = 
+				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+			docthread.queue_action(action);
 			}
 		else if(msg_type.asString()=="error") {
 			std::cout << "Generating ERROR cell" << std::endl;
@@ -220,7 +244,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 			// Stick an AddCell action onto the stack. We instruct the
 			// action to add this result output cell as a child of the
 			// corresponding input cell.
-			DataCell result(DataCell::CellType::output, error);
+			DataCell result(cell_id, DataCell::CellType::output, error);
 			
 			// Finally, the action.
 			std::shared_ptr<ActionBase> action = 
@@ -234,6 +258,12 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 			docthread.queue_action(actionpos);
 			
 			// FIXME: iterate over all cells and set the running flag to false.
+			}
+		else if(msg_type.asString()=="image_png") {
+			DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
+			std::shared_ptr<ActionBase> action = 
+				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+			docthread.queue_action(action);
 			}
 		}
 	catch(std::logic_error& ex) {
@@ -282,7 +312,11 @@ void ComputeThread::execute_cell(DTree::iterator it)
 
 		Json::Value req, header, content;
 		header["uuid"]="none";
-		header["cell_id"]=(Json::UInt64)dc.id();
+		header["cell_id"]=(Json::UInt64)dc.id().id;
+		if(dc.id().created_by_client)
+			header["cell_origin"]="client";
+		else
+			header["cell_origin"]="server";
 		header["msg_type"]="execute_request";
 		req["header"]=header;
 		content["code"]=dc.textbuf;

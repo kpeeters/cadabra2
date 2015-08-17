@@ -7,6 +7,13 @@ using namespace cadabra;
 uint64_t DataCell::max_serial_number=0;
 std::mutex DataCell::serial_mutex;
 
+bool DataCell::id_t::operator<(const DataCell::id_t& other) const
+	{
+	if(created_by_client != other.created_by_client) return created_by_client;
+
+	return (id < other.id);
+	}
+
 DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden) 
 	{
 	cell_type = t;
@@ -15,7 +22,17 @@ DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden)
 	running=false;
 	
 	std::lock_guard<std::mutex> guard(serial_mutex);
-	serial_number = max_serial_number++;
+	serial_number.id = max_serial_number++;
+	serial_number.created_by_client = true;
+	}
+
+DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidden) 
+	{
+	cell_type = t;
+	textbuf = str;
+	hidden = cell_hidden;
+	running=false;
+	serial_number=id_;
 	}
 
 DataCell::DataCell(const DataCell& other)
@@ -76,7 +93,11 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		}
 	if(it->cell_type!=DataCell::CellType::document) {
 		json["textbuf"]  =it->textbuf;
-		json["id"]       =(Json::UInt64)it->id();
+		if(it->id().created_by_client)
+			json["cell_origin"] = "client";
+		else
+			json["cell_origin"] = "server";
+		json["cell_id"]       =(Json::UInt64)it->id().id;
 		}
 
 	if(doc.number_of_children(it)>0) {
@@ -115,20 +136,28 @@ void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells)
 	{
 	for(unsigned int c=0; c<cells.size(); ++c) {
-		const Json::Value celltype = cells[c]["cell_type"];
-		const Json::Value id       = cells[c]["id"];
-		const Json::Value textbuf  = cells[c]["textbuf"];
+		const Json::Value celltype    = cells[c]["cell_type"];
+		const Json::Value cell_id     = cells[c]["cell_id"];
+		const Json::Value cell_origin = cells[c]["cell_origin"];
+		const Json::Value textbuf     = cells[c]["textbuf"];
 		DTree::iterator last=doc.end();
+		DataCell::id_t id;
+		id.id=cell_id.asUInt64();
+		if(cell_origin=="client")
+			id.created_by_client=true;
+		else
+			id.created_by_client=false;
+
 		if(celltype.asString()=="input") {
-			DataCell dc(cadabra::DataCell::CellType::python, textbuf.asString(), false);
+			DataCell dc(id, cadabra::DataCell::CellType::python, textbuf.asString(), false);
 			last=doc.append_child(loc, dc);
 			}
 		else if(celltype.asString()=="output") {
-			DataCell dc(cadabra::DataCell::CellType::output, textbuf.asString(), false);
+			DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), false);
 			last=doc.append_child(loc, dc);
 			}
 		else if(celltype.asString()=="latex") {
-			DataCell dc(cadabra::DataCell::CellType::latex, textbuf.asString(), false);
+			DataCell dc(id, cadabra::DataCell::CellType::latex, textbuf.asString(), false);
 			last=doc.append_child(loc, dc);
 			}
 		if(last!=doc.end()) {
@@ -140,7 +169,7 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 		}
 	}
 
-uint64_t DataCell::id() const
+DataCell::id_t DataCell::id() const
 	{
 	return serial_number;
 	}
