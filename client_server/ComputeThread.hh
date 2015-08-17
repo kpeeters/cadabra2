@@ -92,7 +92,7 @@ namespace cadabra {
 			// a form which allows us to look them up quickly based only
 			// on the id (which is all that the server knows about). 
 
-			std::map<uint64_t, DTree::iterator> running_cells;
+			std::map<DataCell::id_t, DTree::iterator> running_cells;
 
 			// WebSocket++ things.
 			WSClient wsclient;
@@ -107,7 +107,7 @@ namespace cadabra {
 			void on_close(websocketpp::connection_hdl hdl);
 			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
 
-			DTree::iterator find_cell_by_id(uint64_t, bool remove);
+			DTree::iterator find_cell_by_id(DataCell::id_t, bool remove);
 
 			// Self-started server
 			pid_t server_pid;

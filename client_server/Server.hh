@@ -104,7 +104,7 @@ class Server {
 				std::string                 input;
 				std::string                 output;
 				std::string                 error;
-				uint64_t                    id;
+				uint64_t                    cell_id;
 		};
 		std::queue<Block>           block_queue;
 		websocketpp::connection_hdl current_hdl;
@@ -122,7 +122,11 @@ class Server {
 		/// task.  Handles communication of the result back to the
 		/// client in JSON format. This is always of the form
 		///
-		///      { "header":   { "cell_id": "..." },
+		///      { "header":   { "parent_id":     "...",
+		///                      "parent_origin": "client" | "server", 
+		///                      "cell_id":       "...", 
+		///                      "cell_origin":   "client" | "server"
+      ///                    },
       ///        "content":  { "output":  "..." },
       ///        "msg_type": "..." 
       ///      }
@@ -136,8 +140,8 @@ class Server {
 
 		/// Raw code to send a string (which must be JSON formatted) as
 		/// a message to the client.
-		void                     send_message(const std::string& output, const std::string& msg_type);
-		void                     send_json_message(const std::string&);
+		void                     send(const std::string& output, const std::string& msg_type);
+		void                     send_json(const std::string&);
 
 		/// Halt the currently running block and prevent execution of any
 		/// further blocks that may still be on the queue.
