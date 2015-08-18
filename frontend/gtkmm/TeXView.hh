@@ -15,6 +15,7 @@ namespace cadabra {
 	class TeXView : public Gtk::EventBox {
 		public:
          TeXView(TeXEngine&, const std::string&, int hmargin=25);
+			virtual ~TeXView();
 			
 			std::shared_ptr<TeXEngine::TeXRequest> content;
 			

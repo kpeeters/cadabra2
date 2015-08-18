@@ -60,6 +60,12 @@ NotebookWindow::NotebookWindow()
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
 	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
+	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
+	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Python"),
@@ -104,6 +110,9 @@ NotebookWindow::NotebookWindow()
 		"    </menu>"
 		"    <menu action='MenuEdit'>"
 		"      <menuitem action='EditUndo' />"
+		"      <menuitem action='EditInsertAbove' />"
+		"      <menuitem action='EditInsertBelow' />"
+		"      <menuitem action='EditDelete' />"
 		"      <menuitem action='EditMakeCellTeX' />"
 		"      <menuitem action='EditMakeCellPython' />"
 		"    </menu>"
@@ -300,8 +309,6 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 	// Add a visual cell corresponding to this document cell in 
 	// every canvas.
 
-//	std::cerr << "cadabra-client: adding cell" << std::endl;
-
 	if(compute!=0)
 		set_stop_sensitive( compute->number_of_cells_executing()>0 );
 	
@@ -363,7 +370,14 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				break;
 				}
 			case DataCell::CellType::image_png: {
+				// FIXME: horribly memory inefficient
 				std::cerr << "cadabra-client: displaying image!" << std::endl;
+				ImageView *iv=new ImageView();
+		
+				iv->set_image_from_base64(it->textbuf);
+				newcell.imagebox = manage( iv );
+				w=newcell.imagebox;
+				break;
 				}
 
 			default:
@@ -424,10 +438,18 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 	{
-//	std::cout << "request to remove gui cell" << std::endl;
+	// Remember: this member should only remove the visual cell; the
+	// document tree will be updated by the ActionRemove that led to this
+	// member being called. However, we should ensure that any references
+	// to the visual cell are removed as well; in particular, if 
+	// current_cell is pointing to this cell, we need to unset it.
 
-	// Can only remove cells which have a parent (i.e. not the top-level document cell).
+	// Can only remove cells which have a parent (i.e. not the
+	// top-level document cell).
 
+	if(current_cell==it)
+		current_cell=doc.end();
+	
 	DTree::iterator parent = DTree::parent(it);
 	assert(doc.is_valid(parent));
 
@@ -439,7 +461,12 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		else
 			parentbox=parent_visual.inbox;
 		VisualCell& actual = canvasses[i]->visualcells[&(*it)];
-		parentbox->remove(*actual.inbox);
+		// The pointers are all in a union, and Gtkmm does not care
+		// about the precise type, so we just remove imagebox, knowing
+		// that it may actually be an inbox or outbox.
+		// FIXME: this does not seem to delete the Gtk widget, despite
+		// having been wrapped in manage at construction.
+		parentbox->remove(*actual.imagebox);
 		canvasses[i]->visualcells.erase(&(*it));
 		}	
 	}
@@ -695,14 +722,50 @@ void NotebookWindow::on_edit_undo()
 	{
 	}
 
+void NotebookWindow::on_edit_insert_above()
+	{
+	if(current_cell==doc.end()) return;
+
+	DataCell newcell(DataCell::CellType::python, "");
+	std::shared_ptr<ActionBase> action = 
+		std::make_shared<ActionAddCell>(newcell, current_cell, ActionAddCell::Position::before);
+	queue_action(action);
+	process_data();
+	}
+
+void NotebookWindow::on_edit_insert_below()
+	{
+	if(current_cell==doc.end()) return;
+
+	DataCell newcell(DataCell::CellType::python, "");
+	std::shared_ptr<ActionBase> action = 
+		std::make_shared<ActionAddCell>(newcell, current_cell, ActionAddCell::Position::after);
+	queue_action(action);
+	process_data();
+	}
+
+void NotebookWindow::on_edit_delete()
+	{
+	if(current_cell==doc.end()) return;
+
+	std::shared_ptr<ActionBase> action = 
+		std::make_shared<ActionRemoveCell>(current_cell);
+	queue_action(action);
+	process_data();
+	}
+
 void NotebookWindow::on_edit_cell_is_python()
 	{
+	if(current_cell==doc.end()) return;
+
 	if(current_cell->cell_type==DataCell::CellType::latex)
 		current_cell->cell_type = DataCell::CellType::python;
 	}
 
 void NotebookWindow::on_edit_cell_is_latex()
 	{
+	if(current_cell==doc.end()) return;
+
 	if(current_cell->cell_type==DataCell::CellType::python)
 		current_cell->cell_type = DataCell::CellType::latex;
 	}

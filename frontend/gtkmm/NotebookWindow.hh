@@ -120,6 +120,9 @@ namespace cadabra {
 			void on_file_quit();
 
 			void on_edit_undo();
+			void on_edit_insert_above();
+			void on_edit_insert_below();
+			void on_edit_delete();
 			void on_edit_cell_is_latex();
 			void on_edit_cell_is_python();
 

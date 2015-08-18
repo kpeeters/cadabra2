@@ -69,17 +69,14 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		case DataCell::CellType::output:
 			json["cell_type"]="output";
 			break;
-//		case DataCell::CellType::comment:
-//			json["cell_type"]="comment";
-//			break;
-//		case DataCell::CellType::texcomment:
-//			json["cell_type"]="texcomment";
-//			break;
 		case DataCell::CellType::latex:
 			json["cell_type"]="tex";
 			break;
 		case DataCell::CellType::error:
 			json["cell_type"]="error";
+			break;
+		case DataCell::CellType::image_png:
+			json["cell_type"]="image_png";
 			break;
 //		case DataCell::CellType::section: {
 //			assert(1==0);
@@ -158,6 +155,10 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 			}
 		else if(celltype.asString()=="latex") {
 			DataCell dc(id, cadabra::DataCell::CellType::latex, textbuf.asString(), false);
+			last=doc.append_child(loc, dc);
+			}
+		else if(celltype.asString()=="image_png") {
+			DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.asString(), false);
 			last=doc.append_child(loc, dc);
 			}
 		if(last!=doc.end()) {

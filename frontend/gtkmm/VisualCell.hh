@@ -6,6 +6,7 @@
 // representing the DataCell.
 
 #include "TeXView.hh"
+#include "ImageView.hh"
 #include "CodeInput.hh"
 #include "DataCell.hh"
 
@@ -26,6 +27,7 @@ namespace cadabra {
 					Gtk::VBox    *document; // top-level cell; only one ever occurs in a document
 					CodeInput    *inbox;
 					TeXView      *outbox;
+					ImageView    *imagebox;
 			};
 	};
 	

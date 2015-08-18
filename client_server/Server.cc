@@ -202,7 +202,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	std::string line;
 	std::string newblk;
 	while(std::getline(str, line, '\n')) {
-		std::cerr << "preparsing " + line << std::endl;
+		// std::cerr << "preparsing " + line << std::endl;
 		newblk += pre_parse(line)+'\n';
 		}
 //	std::cerr << "PREPARSED: " << newblk << std::endl;
@@ -425,7 +425,7 @@ void Server::send(const std::string& output, const std::string& msg_type)
 
 void Server::send_json(const std::string& msg)
 	{
-	std::cerr << "*** sending message " << msg << std::endl;
+	//	std::cerr << "*** sending message " << msg << std::endl;
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	wserver.send(current_hdl, msg, websocketpp::frame::opcode::text);
 	}
