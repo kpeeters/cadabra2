@@ -1,6 +1,15 @@
 
-- Create global 'client' object on the server Python box with methods
-  'display_image', 'display_latex' which generates JSON and puts it on the wire.
+- ImageView (and probably TeXView too) does not get released when a response cell
+  is erased from the visual tree. The 'manage' wrapper should have taken care of
+  this, but it hasn't. The docs for manage state that the object will be deleted
+  when the parent container gets deleted, but makes no statement about what 
+  will happen if the object is removed from the container but the container lives
+  on. 
+
+- When current_cell is set/unset, update the menu so that actions acting on 
+  the current cell are enabled/disabled.
+
+- Add code to split/merge input cells.
 
 - Work out examples of tensor product decomposition with numerical index values to
   see how it works. We do not seem to have a complete implementation yet, as the

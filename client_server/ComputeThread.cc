@@ -277,7 +277,6 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		gui->on_kernel_runstatus(false);
 
 	gui->process_data();
-
 	}
 
 void ComputeThread::execute_cell(DTree::iterator it)

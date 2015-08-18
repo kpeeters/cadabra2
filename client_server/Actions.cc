@@ -45,7 +45,7 @@ void ActionAddCell::revert(DocumentThread& cl)
 
 void ActionAddCell::update_gui(const DTree& tr, GUIBase& gb)
 	{
-	std::cout << "updating gui for ActionAddCell" << std::endl;
+	// std::cout << "updating gui for ActionAddCell" << std::endl;
 	gb.add_cell(tr, newref, true);
 	}
 
@@ -145,7 +145,7 @@ void ActionRemoveCell::revert(DocumentThread& cl)
 
 void ActionRemoveCell::update_gui(const DTree& tr, GUIBase& gb)
 	{
-	std::cout << "updating gui for ActionRemoveCell" << std::endl;
+	// std::cout << "updating gui for ActionRemoveCell" << std::endl;
 	gb.remove_cell(tr, this_cell);
 	}
 

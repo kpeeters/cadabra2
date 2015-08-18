@@ -18,6 +18,11 @@ TeXView::TeXView(TeXEngine& eng, const std::string& texb, int hmargin)
 	override_background_color(Gdk::RGBA("white"));
 	}
 
+TeXView::~TeXView()
+	{
+	std::cerr << "**** ~TeXView" << std::endl;
+	}
+
 void TeXView::on_show()
 	{
 	try {
