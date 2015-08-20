@@ -4,10 +4,10 @@
 
 using namespace cadabra;
 
-TeXView::TeXView(TeXEngine& eng, const std::string& texb, int hmargin)
-	: content(0), vbox(false, 10), hbox(false, hmargin), engine(eng)
+TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
+	: content(0), datacell(it), vbox(false, 10), hbox(false, hmargin), engine(eng)
 	{
-	content = engine.checkin(texb, "", "");
+	content = engine.checkin(datacell->textbuf, "", "");
 
 	add(vbox);
 	vbox.set_margin_top(10);
@@ -49,6 +49,13 @@ void TeXView::on_show()
 	catch(TeXEngine::TeXException& ex) {
 		tex_error.emit(ex.what());
 		}
+	}
+
+bool TeXView::on_button_release_event(GdkEventButton *ev)
+	{
+	std::cerr << "TeXView clicked" << std::endl;
+	show_hide_requested.emit(datacell);
+	return true;
 	}
 
 void TeXView::update_image()

@@ -213,9 +213,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 			}
 		
 		if(msg_type.asString()=="output") {
-			std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
-			if(output!="\\begin{equation*}\\end{equation*}") {
-				std::cerr << "cadabra-client: ComputeThread received response from server" << std::endl;
+//			std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
+//			if(output!="\\begin{equation*}\\end{equation*}") {
+			std::string output = "\\begin{verbatim}"+content["output"].asString()+"\\end{verbatim}";
 				
 				// Stick an AddCell action onto the stack. We instruct the
 				// action to add this result output cell as a child of the
@@ -226,7 +226,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 				docthread.queue_action(action);
-				}
+//				}
 			}
 		else if(msg_type.asString()=="latex") {
 			DataCell result(cell_id, DataCell::CellType::output, content["output"].asString());

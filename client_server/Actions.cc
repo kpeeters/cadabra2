@@ -70,9 +70,11 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(++sib)) {
 				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
-					// std::cout << "found input cell " << sib->textbuf << std::endl;
-					newref=sib;
-					return;
+					if(!sib->hidden) {
+						// std::cout << "found input cell " << sib->textbuf << std::endl;
+						newref=sib;
+						return;
+						}
 					}
 				}
 			// std::cout << "no input cell available, adding new" << std::endl;

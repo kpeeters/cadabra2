@@ -34,8 +34,11 @@ namespace cadabra {
 			/// Add a GUI cell corresponding to the document cell at the
 			/// iterator. The GUI needs to figure out from the location of
 			/// this cell in the DTree where to insert the cell in the visual
-			/// display. If the 'visible' flag is false, hide the cell (this
-			/// is only used when constructing a document on load time).
+			/// display. If the 'visible' flag is false, hide the cell from
+			/// view independent of whether its hidden flag is set (this
+			/// is only used when constructing a document on load time and
+			/// we do not want to show cells until they have all been added
+			/// to the document).
 
 			virtual void add_cell(const DTree&, DTree::iterator, bool visible)=0;
 

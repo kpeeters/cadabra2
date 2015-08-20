@@ -70,7 +70,7 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			json["cell_type"]="output";
 			break;
 		case DataCell::CellType::latex:
-			json["cell_type"]="tex";
+			json["cell_type"]="latex";
 			break;
 		case DataCell::CellType::error:
 			json["cell_type"]="error";
@@ -88,6 +88,9 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 //			break;
 //			}
 		}
+	if(it->hidden)
+		json["hidden"]=true;
+
 	if(it->cell_type!=DataCell::CellType::document) {
 		json["textbuf"]  =it->textbuf;
 		if(it->id().created_by_client)
@@ -137,6 +140,8 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 		const Json::Value cell_id     = cells[c]["cell_id"];
 		const Json::Value cell_origin = cells[c]["cell_origin"];
 		const Json::Value textbuf     = cells[c]["textbuf"];
+		const Json::Value hidden      = cells[c]["hidden"];
+
 		DTree::iterator last=doc.end();
 		DataCell::id_t id;
 		id.id=cell_id.asUInt64();
@@ -145,22 +150,31 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 		else
 			id.created_by_client=false;
 
+		bool hide=false;
+		if(hidden.asBool()) 
+			hide=true;
+
 		if(celltype.asString()=="input") {
-			DataCell dc(id, cadabra::DataCell::CellType::python, textbuf.asString(), false);
+			DataCell dc(id, cadabra::DataCell::CellType::python, textbuf.asString(), hide);
 			last=doc.append_child(loc, dc);
 			}
 		else if(celltype.asString()=="output") {
-			DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), false);
+			DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), hide);
 			last=doc.append_child(loc, dc);
 			}
 		else if(celltype.asString()=="latex") {
-			DataCell dc(id, cadabra::DataCell::CellType::latex, textbuf.asString(), false);
+			DataCell dc(id, cadabra::DataCell::CellType::latex, textbuf.asString(), hide);
 			last=doc.append_child(loc, dc);
 			}
 		else if(celltype.asString()=="image_png") {
-			DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.asString(), false);
+			DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.asString(), hide);
 			last=doc.append_child(loc, dc);
 			}
+		else {
+			std::cerr << "cadabra-client: found unknown cell type '"+celltype.asString()+"', ignoring";
+			continue;
+			}
+
 		if(last!=doc.end()) {
 			if(cells[c].isMember("cells")) {
 				const Json::Value subcells = cells[c]["cells"];
