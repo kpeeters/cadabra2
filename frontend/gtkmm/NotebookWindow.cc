@@ -28,6 +28,7 @@ NotebookWindow::NotebookWindow()
 	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
 	double scale = settings->get_double("text-scaling-factor");
 	engine.set_scale(scale);
+
 	settings->signal_changed().connect(
 		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
 
@@ -35,7 +36,7 @@ NotebookWindow::NotebookWindow()
 	// Setup styling.
 	css_provider = Gtk::CssProvider::create();
 	Glib::ustring data = "GtkTextView { color: blue; margin-left: 15px; margin-top: 20px; margin-bottom: 0px; padding: 20px; padding-bottom: 0px; }";
-	data += "GtkTextView { background: white; }\nGtkTextView:selected { background: grey; }";
+	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.1; }\nGtkTextView:selected { background: grey; }";
 
 	if(!css_provider->load_from_data(data)) {
 		std::cerr << "Failed to parse widget css information." << std::endl;
@@ -181,6 +182,9 @@ NotebookWindow::NotebookWindow()
 
 	// Window size and title, and ready to go.
 	set_size_request(screen->get_width()/2, screen->get_height()*0.8);
+	// FIXME: the subtraction for the margin and scrollbar made below
+	// is estimated but should be computed.
+	engine.set_geometry(screen->get_width()/2 - 2*30);
 	update_title();
 	show_all();
 	kernel_spinner.hide();
@@ -341,9 +345,13 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::output:
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
-				newcell.outbox = manage( new TeXView(engine, it->textbuf) );
+				newcell.outbox = manage( new TeXView(engine, it) );
 				newcell.outbox->tex_error.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
+
+				newcell.outbox->show_hide_requested.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
+
 				w=newcell.outbox;
 				break;
 
@@ -524,6 +532,34 @@ void NotebookWindow::on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w)
 	{
 	grab_connection.disconnect();
 	w->grab_focus();
+	}
+
+bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_number)
+	{
+	// Find the parent node. If that one is a latex cell, toggle visibility of
+	// the CodeInput widget (but not anything else in its vbox).
+
+	auto parent=DTree::parent(it);
+	if(parent->cell_type==DataCell::CellType::latex) {
+		// FIXME: we are not allowed to do this directly, all should go through
+		// actions.
+		parent->hidden = !parent->hidden;
+		for(unsigned int i=0; i<canvasses.size(); ++i) {
+			auto vis = canvasses[i]->visualcells.find(&(*parent));
+			if(vis==canvasses[i]->visualcells.end()) {
+				std::cerr << "cannot find visual cell" << std::endl;
+				}
+			else {
+				if(parent->hidden) {
+					(*vis).second.inbox->edit.hide();
+					}
+				else
+					(*vis).second.inbox->edit.show();
+				}
+			}
+		}
+
+	return false;
 	}
 
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)

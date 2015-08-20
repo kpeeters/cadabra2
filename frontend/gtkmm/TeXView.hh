@@ -5,6 +5,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
 
+#include "DataCell.hh"
 #include "../common/TeXEngine.hh"
 
 namespace cadabra {
@@ -14,31 +15,35 @@ namespace cadabra {
 
 	class TeXView : public Gtk::EventBox {
 		public:
-         TeXView(TeXEngine&, const std::string&, int hmargin=25);
+         TeXView(TeXEngine&, DTree::iterator, int hmargin=25);
 			virtual ~TeXView();
 			
 			std::shared_ptr<TeXEngine::TeXRequest> content;
+
+			sigc::signal1<bool, DTree::iterator>   show_hide_requested;
 			
+			DTree::iterator           datacell;
 			Gtk::VBox                 vbox;
 			Gtk::HBox                 hbox;
 			Gtk::Image                image;
 			
-			// The actual image is stored in the pixbuf below. 
-			// FIXME: This pointer is not yet shared among instances which show the
-			// same content.
+			/// The actual image is stored in the image referenced by pixbuf.
+			/// FIXME: This pointer is not yet shared among instances which show the
+			/// same content.
 
 			Glib::RefPtr<Gdk::Pixbuf> pixbuf;
 			
-			// Update the visible image from the pixbuf. Call this in order to propagate
-			// changes to the pixbuf (e.g. from re-running the TeXRequest) to the 
-			// visible widget itself.
+			/// Update the visible image from the pixbuf. Call this in order to propagate
+			/// changes to the pixbuf (e.g. from re-running the TeXRequest) to the 
+			/// visible widget itself.
 
 			void update_image();
 			
 			sigc::signal1<bool, std::string> tex_error;
 
 		protected:
-			virtual void on_show();
+			virtual bool on_button_release_event(GdkEventButton *) override;
+			virtual void on_show() override;
 
 		private:
 			TeXEngine& engine;

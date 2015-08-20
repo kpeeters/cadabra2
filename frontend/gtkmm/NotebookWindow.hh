@@ -151,6 +151,7 @@ namespace cadabra {
 			// always the cell in the DTree and the canvas number.
 
 			bool cell_got_focus(DTree::iterator, int);
+			bool cell_toggle_visibility(DTree::iterator it, int);
 			bool cell_content_changed(const std::string&, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
 			

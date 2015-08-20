@@ -220,8 +220,11 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// width using horizontal_pixels/(horizontal_size/millimeter_per_inch) dots per inch.
 	// The appropriate horizontal size in mm is determined by trial and error, 
 	// and of course scales with the number of horizontal pixels.
+	
+	// Note: the number here has no effect on the size in pixels of the generated 
+	// PDF. That is set with the -D parameter of dvipng.
 
-	const double horizontal_mm=horizontal_pixels_*(12.0/font_size_)/3.94;
+	const double horizontal_mm=horizontal_pixels_*(12.0/font_size_)/3.94/scale_;
 //#ifdef DEBUG
 //	std::cerr << "tex_it: font_size " << font_size << std::endl
 //				 << "        pixels    " << horizontal_pixels_ << std::endl
@@ -362,7 +365,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Convert the entire dvi file to png files.
 	//
 	std::ostringstream resspec;
-	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch*scale_;
+	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch; 
 	exec_stream_t dvipng_proc;
 //	dvipng_proc << "-T" << "tight" << "-bg" << "Transparent"; // << "-fg";
 //	rgbspec << "\"rgb "

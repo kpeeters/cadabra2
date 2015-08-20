@@ -56,6 +56,15 @@ def display(obj):
         b64 = base64.b64encode(imgstring.getvalue())
         server.send(b64,"image_png")
 
+    if hasattr(obj,'_backend'):
+        if hasattr(obj._backend,'fig'):
+            f = obj._backend.fig
+            imgstring = StringIO.StringIO()
+            f.savefig(imgstring,format='png')
+            imgstring.seek(0)
+            b64 = base64.b64encode(imgstring.getvalue())
+            server.send(b64,"image_png")
+
     if isinstance(obj, Ex):
         send_message('hello Ex:'+str(Ex))
 

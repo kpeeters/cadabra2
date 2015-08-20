@@ -211,3 +211,9 @@ bool CodeInput::exp_input_tv::on_focus_in_event(GdkEventFocus *event)
 	cell_got_focus(datacell);
 	return Gtk::TextView::on_focus_in_event(event);
 	}
+
+void CodeInput::exp_input_tv::on_show() 
+	{
+	if(!datacell->hidden)
+		Gtk::TextView::on_show();
+	}

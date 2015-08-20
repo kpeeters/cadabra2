@@ -1,4 +1,21 @@
 
+- Write in docs that the only way to get output is to either just print things
+  and get them displayed verbatim, or to call 'display' on an object and let the
+  smart display routines figure out how to encode the object in a JSON message.
+  The ';' shorthand should then add a 'display' wrapping the entire line?
+
+    ex:=A_{m n}; 
+
+  turns into
+
+    ex=Ex('A_{m n}'); display(ex=Ex('A_{m n}'))
+
+  Maybe take everything up to a (not necessarily present) equals sign.
+
+- When a large output cell gets generated, we need to make sure that after the
+  output is inserted, we scroll the document such that the cursor is at the
+  same screen position.
+
 - ImageView (and probably TeXView too) does not get released when a response cell
   is erased from the visual tree. The 'manage' wrapper should have taken care of
   this, but it hasn't. The docs for manage state that the object will be deleted
@@ -10,6 +27,8 @@
   the current cell are enabled/disabled.
 
 - Add code to split/merge input cells.
+
+- TeXEngine generates output which is too wide.
 
 - Work out examples of tensor product decomposition with numerical index values to
   see how it works. We do not seem to have a complete implementation yet, as the
