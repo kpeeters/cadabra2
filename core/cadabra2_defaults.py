@@ -48,7 +48,14 @@ matplotlib.use('Agg')
 # fed.
 
 def display(obj):
-    if isinstance(obj, matplotlib.artist.Artist):
+    if isinstance(obj, matplotlib.figure.Figure):
+        imgstring = StringIO.StringIO()
+        obj.savefig(imgstring,format='png')
+        imgstring.seek(0)
+        b64 = base64.b64encode(imgstring.getvalue())
+        server.send(b64, "image_png")
+
+    elif isinstance(obj, matplotlib.artist.Artist):
         f = obj.get_figure()
         imgstring = StringIO.StringIO()
         f.savefig(imgstring,format='png')
@@ -56,7 +63,7 @@ def display(obj):
         b64 = base64.b64encode(imgstring.getvalue())
         server.send(b64, "image_png")
 
-    if hasattr(obj,'_backend'):
+    elif hasattr(obj,'_backend'):
         if hasattr(obj._backend,'fig'):
             f = obj._backend.fig
             imgstring = StringIO.StringIO()
@@ -65,12 +72,14 @@ def display(obj):
             b64 = base64.b64encode(imgstring.getvalue())
             server.send(b64, "image_png")
 
-    if isinstance(obj, Ex):
+    elif isinstance(obj, Ex):
         server.send("$$"+str(obj)+"$$", "latex")
 
-    if isinstance(obj, Property):
+    elif isinstance(obj, Property):
         server.send("$$"+str(obj)+"$$", "latex")
 
+    else:
+        server.send("display: do not know how to display object of type " + type(obj), "output");
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

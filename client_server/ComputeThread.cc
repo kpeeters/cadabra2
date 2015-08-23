@@ -235,7 +235,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				}
 			else if(msg_type.asString()=="error") {
 				std::cout << "Generating ERROR cell" << std::endl;
-				std::string error = "{\\color{red}{\\begin{verbatim}"+content["error"].asString()
+				std::string error = "{\\color{red}{\\begin{verbatim}"+content["output"].asString()
 					+"\\end{verbatim}}}";
 				if(msg_type.asString()=="fault") {
 					error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
