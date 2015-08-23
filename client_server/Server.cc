@@ -441,7 +441,7 @@ void Server::on_block_error(Block blk)
 	header["parent_origin"]="client";
 	header["cell_id"]=1; // FIXME;
 	header["cell_origin"]="server";
-	content["error"]=blk.error;
+	content["output"]=blk.error;
 
 	json["header"]=header;
 	json["content"]=content;
@@ -465,7 +465,7 @@ void Server::on_kernel_fault(Block blk)
 	header["parent_origin"]="client";
 	header["cell_id"]=1; // FIXME
 	header["cell_origin"]="server";
-	content["error"]=blk.error;
+	content["output"]=blk.error;
 
 	json["header"]=header;
 	json["content"]=content;
