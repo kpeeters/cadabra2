@@ -20,7 +20,6 @@ TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
 
 TeXView::~TeXView()
 	{
-	std::cerr << "**** ~TeXView" << std::endl;
 	}
 
 void TeXView::on_show()

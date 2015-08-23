@@ -23,6 +23,8 @@ void signal_handler(int signal)
 
 int main(int argc, char **argv)
 	{
+	boost::log::add_common_attributes();
+
 	try {
 		// Create the ui material.
 		Glib::RefPtr<Gtk::Application> app =
