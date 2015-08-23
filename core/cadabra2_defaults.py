@@ -54,7 +54,7 @@ def display(obj):
         f.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64,"image_png")
+        server.send(b64, "image_png")
 
     if hasattr(obj,'_backend'):
         if hasattr(obj._backend,'fig'):
@@ -63,10 +63,13 @@ def display(obj):
             f.savefig(imgstring,format='png')
             imgstring.seek(0)
             b64 = base64.b64encode(imgstring.getvalue())
-            server.send(b64,"image_png")
+            server.send(b64, "image_png")
 
     if isinstance(obj, Ex):
-        send_message('hello Ex:'+str(Ex))
+        server.send("$$"+str(obj)+"$$", "latex")
+
+    if isinstance(obj, Property):
+        server.send("$$"+str(obj)+"$$", "latex")
 
     
 # Set display hooks to catch certain objects and print them

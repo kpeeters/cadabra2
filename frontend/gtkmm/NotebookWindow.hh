@@ -63,7 +63,8 @@ namespace cadabra {
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;
 			virtual bool on_delete_event(GdkEventAny*) override;
-
+			virtual bool on_configure_event(GdkEventConfigure *cfg) override;
+				
 			DTree::iterator current_cell;
 
       private:
@@ -164,6 +165,8 @@ namespace cadabra {
 			Glib::RefPtr<Gtk::CssProvider> css_provider;
 			Glib::RefPtr<Gio::Settings>    settings;
 			void on_text_scaling_factor_changed(const std::string& key);
+
+			int last_configure_width;
 	};
 
 };

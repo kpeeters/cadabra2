@@ -145,7 +145,7 @@ std::string Server::pre_parse(const std::string& line)
 			// FIXME: add cadabra line continuations
 			std::string objname = line_stripped.substr(0,found);
 			if(lastchar!="." && indent_line.size()==0)
-				ret = ret + "; print("+objname+")";
+				ret = ret + "; display("+objname+")";
 			}
 		else {
 			found = line_stripped.find("::");
@@ -164,11 +164,11 @@ std::string Server::pre_parse(const std::string& line)
 						}
 					else {
 						std::cerr << "no arguments" << std::endl;
-						ret = indent_line + "_ = " + line_stripped.substr(found+2) 
+						ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
 							+ "(Ex(r'"+line_stripped.substr(0,found)+"'))";
 						}
 					if(lastchar==";") 
-						ret += "; print(latex(_))";
+						ret += "; display(__cdbtmp__)";
 					}
 				else {
 					std::cerr << "inconsistent" << std::endl;
@@ -178,7 +178,7 @@ std::string Server::pre_parse(const std::string& line)
 			else {
 				// std::cerr << "no preparse" << std::endl;
 				if(lastchar==";") 
-					ret = indent_line + "_ = " + line_stripped + "; print(latex(_))";
+					ret = indent_line + "_ = " + line_stripped + "; display(_)";
 				else
 					ret = line;
 				}
@@ -205,7 +205,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		// std::cerr << "preparsing " + line << std::endl;
 		newblk += pre_parse(line)+'\n';
 		}
-//	std::cerr << "PREPARSED: " << newblk << std::endl;
+	std::cerr << "PREPARSED: " << newblk << std::endl;
 
 	// Run block. Catch output.
 	try {

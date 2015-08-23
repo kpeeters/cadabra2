@@ -36,7 +36,8 @@ NotebookWindow::NotebookWindow()
 	// Setup styling.
 	css_provider = Gtk::CssProvider::create();
 	Glib::ustring data = "GtkTextView { color: blue; margin-left: 15px; margin-top: 20px; margin-bottom: 0px; padding: 20px; padding-bottom: 0px; }";
-	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.1; }\nGtkTextView:selected { background: grey; }";
+	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.1; }\nGtkTextView:selected { background: grey; }\n";
+	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n#ImageView:hover { background: red; }\n";
 
 	if(!css_provider->load_from_data(data)) {
 		std::cerr << "Failed to parse widget css information." << std::endl;
@@ -203,6 +204,29 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 
 	return Gtk::Window::on_delete_event(event);
 	}
+
+bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
+	{
+	if(cfg->width != last_configure_width) 
+		engine.set_geometry(cfg->width-2*30);
+
+	bool ret=Gtk::Window::on_configure_event(cfg);
+	
+	if(cfg->width != last_configure_width) {
+		std::cout << "reconfigure " << cfg->width << std::endl;
+		last_configure_width = cfg->width;
+		try {
+			engine.convert_all();
+			}
+		catch(TeXEngine::TeXException& ex) {
+			}
+		for(unsigned int i=0; i<canvasses.size(); ++i) 
+			canvasses[i]->refresh_all();
+		}
+
+	return ret;
+	}
+
 
 void NotebookWindow::update_title()
 	{
@@ -472,9 +496,12 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		// The pointers are all in a union, and Gtkmm does not care
 		// about the precise type, so we just remove imagebox, knowing
 		// that it may actually be an inbox or outbox.
-		// FIXME: this does not seem to delete the Gtk widget, despite
-		// having been wrapped in manage at construction.
 		parentbox->remove(*actual.imagebox);
+		// The above does not delete the Gtk widget, despite having been
+		// wrapped in manage at construction. So we have to delete it 
+		// ourselves. Fortunately the container does not try to delete
+		// it again in its destructor.
+		delete actual.imagebox;
 		canvasses[i]->visualcells.erase(&(*it));
 		}	
 	}

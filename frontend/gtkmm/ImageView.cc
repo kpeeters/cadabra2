@@ -10,12 +10,13 @@ using namespace cadabra;
 ImageView::ImageView()
 	{
 	add(image);
+	set_events(Gdk::ENTER_NOTIFY_MASK|Gdk::LEAVE_NOTIFY_MASK);
+	set_name("ImageView");
 	show_all();
 	}
 
 ImageView::~ImageView()
 	{
-	std::cerr << "*** ~ImageView" << std::endl;
 	}
  
 void ImageView::set_image_from_base64(const std::string& b64)

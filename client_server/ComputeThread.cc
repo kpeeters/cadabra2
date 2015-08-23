@@ -211,11 +211,10 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				std::make_shared<ActionSetRunStatus>(it, false);
 			docthread.queue_action(rs_action);
 			}
-		
-		if(msg_type.asString()=="output") {
-//			std::string output = "\\begin{equation*}"+content["output"].asString()+"\\end{equation*}";
-//			if(output!="\\begin{equation*}\\end{equation*}") {
-			std::string output = "\\begin{verbatim}"+content["output"].asString()+"\\end{verbatim}";
+
+		if(content["output"].asString().size()>0) {
+			if(msg_type.asString()=="output") {
+				std::string output = "\\begin{verbatim}"+content["output"].asString()+"\\end{verbatim}";
 				
 				// Stick an AddCell action onto the stack. We instruct the
 				// action to add this result output cell as a child of the
@@ -226,44 +225,46 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 				docthread.queue_action(action);
-//				}
-			}
-		else if(msg_type.asString()=="latex") {
-			DataCell result(cell_id, DataCell::CellType::output, content["output"].asString());
-			std::shared_ptr<ActionBase> action = 
-				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-			docthread.queue_action(action);
-			}
-		else if(msg_type.asString()=="error") {
-			std::cout << "Generating ERROR cell" << std::endl;
-			std::string error = "{\\color{red}{\\begin{verbatim}"+content["error"].asString()+"\\end{verbatim}}}";
-			if(msg_type.asString()=="fault") {
-				error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
 				}
-			
-			// Stick an AddCell action onto the stack. We instruct the
-			// action to add this result output cell as a child of the
-			// corresponding input cell.
-			DataCell result(cell_id, DataCell::CellType::output, error);
-			
-			// Finally, the action.
-			std::shared_ptr<ActionBase> action = 
-				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-			docthread.queue_action(action);
-			
-			// Position the cursor in the cell that generated the error. All other cells on 
-			// the execute queue have been cancelled by the server.
-			std::shared_ptr<ActionBase> actionpos =
-				std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::in);
-			docthread.queue_action(actionpos);
-			
-			// FIXME: iterate over all cells and set the running flag to false.
-			}
-		else if(msg_type.asString()=="image_png") {
-			DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
-			std::shared_ptr<ActionBase> action = 
-				std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-			docthread.queue_action(action);
+			else if(msg_type.asString()=="latex") {
+				std::cerr << "received latex cell " << content["output"].asString() << std::endl;
+				DataCell result(cell_id, DataCell::CellType::output, content["output"].asString());
+				std::shared_ptr<ActionBase> action = 
+					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+				docthread.queue_action(action);
+				}
+			else if(msg_type.asString()=="error") {
+				std::cout << "Generating ERROR cell" << std::endl;
+				std::string error = "{\\color{red}{\\begin{verbatim}"+content["error"].asString()
+					+"\\end{verbatim}}}";
+				if(msg_type.asString()=="fault") {
+					error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
+					}
+				
+				// Stick an AddCell action onto the stack. We instruct the
+				// action to add this result output cell as a child of the
+				// corresponding input cell.
+				DataCell result(cell_id, DataCell::CellType::output, error);
+				
+				// Finally, the action.
+				std::shared_ptr<ActionBase> action = 
+					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+				docthread.queue_action(action);
+				
+				// Position the cursor in the cell that generated the error. All other cells on 
+				// the execute queue have been cancelled by the server.
+				std::shared_ptr<ActionBase> actionpos =
+					std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::in);
+				docthread.queue_action(actionpos);
+				
+				// FIXME: iterate over all cells and set the running flag to false.
+				}
+			else if(msg_type.asString()=="image_png") {
+				DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
+				std::shared_ptr<ActionBase> action = 
+					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+				docthread.queue_action(action);
+				}
 			}
 		}
 	catch(std::logic_error& ex) {
