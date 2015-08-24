@@ -37,6 +37,7 @@ if sympy.__version__ != "unavailable":
 #
 import matplotlib
 import matplotlib.artist
+import matplotlib.figure
 import StringIO
 import base64
 matplotlib.use('Agg')
@@ -79,7 +80,9 @@ def display(obj):
         server.send("$$"+str(obj)+"$$", "latex")
 
     else:
-        server.send("display: do not know how to display object of type " + type(obj), "output");
+        # Failing all else, just dump a latex representation generated
+        # by sympy to the notebook.
+        server.send("$$"+latex(obj)+"$$", "latex")
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

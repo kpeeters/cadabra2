@@ -66,7 +66,7 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
 	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
-	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"),
+	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
