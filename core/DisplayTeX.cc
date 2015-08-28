@@ -71,8 +71,8 @@ std::string DisplayTeX::texify(const std::string& str) const
 
 void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
-	previous_bracket_   =str_node::b_invalid;
-	previous_parent_rel_=str_node::p_none;
+	str_node::bracket_t    previous_bracket_   =str_node::b_invalid;
+	str_node::parent_rel_t previous_parent_rel_=str_node::p_none;
 
 	int number_of_nonindex_children=0;
 	int number_of_index_children=0;
@@ -91,8 +91,8 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 	ch+=skip;
 	unsigned int chnum=0;
 	while(ch!=tree.end(it)) {
-		current_bracket_   =(*ch).fl.bracket;
-		current_parent_rel_=(*ch).fl.parent_rel;
+		str_node::bracket_t    current_bracket_   =(*ch).fl.bracket;
+		str_node::parent_rel_t current_parent_rel_=(*ch).fl.parent_rel;
 		const Accent *is_accent=properties.get<Accent>(it);
 		
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
@@ -266,7 +266,7 @@ void DisplayTeX::print_arrowlike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << " -> ";
+	str << " \\rightarrow ";
 	++sib;
 	dispatch(str, sib);
 	}
