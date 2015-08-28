@@ -17,9 +17,6 @@ class DisplayTeX {
 		void output(std::ostream&, Ex::iterator);
 
 	private:
-		str_node::parent_rel_t previous_parent_rel_, current_parent_rel_;
-		str_node::bracket_t    previous_bracket_, current_bracket_;
-
 		void print_multiplier(std::ostream&, Ex::iterator);
 		void print_opening_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
 		void print_closing_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
