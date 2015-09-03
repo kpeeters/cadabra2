@@ -61,6 +61,9 @@ namespace cadabra {
 			void on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w);
 			sigc::connection grab_connection;
 
+			void load_file(const std::string& notebook_contents);
+
+
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;
 			virtual bool on_delete_event(GdkEventAny*) override;
@@ -142,7 +145,6 @@ namespace cadabra {
 
 			// FIXME: move to DocumentThread
 			std::string save(const std::string& fn) const;
-			void load_file(const std::string& filename);
 
 			// Todo deque processing logic. This gets called by the dispatcher, but it
 			// is also allowed to call this from within NotebookWindow itself. The important

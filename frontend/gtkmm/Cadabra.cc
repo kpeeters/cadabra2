@@ -18,7 +18,8 @@ Glib::RefPtr<Cadabra> Cadabra::create()
 	}
 
 Cadabra::Cadabra()
-	: compute(&nw, nw), compute_thread(&cadabra::ComputeThread::run, &compute)
+	: Gtk::Application("com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN),
+	  compute(&nw, nw), compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
 	// Connect the two threads.
 	nw.set_compute_thread(&compute);
@@ -32,10 +33,31 @@ Cadabra::Cadabra()
 void Cadabra::on_activate()
 	{
 	add_window(nw);
+	nw.show();
 	}
 
 void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)
 	{
-	nw.load_file(files[0]);
+	on_activate();
+	// Load the first file into a string.
+	char* contents = nullptr;
+	gsize length = 0;
+	std::string text;
+	try {
+		if(files[0]->load_contents(contents, length)) {
+			if(contents && length) {
+				text=std::string(contents);
+				}
+			g_free(contents);
+			}
+		}
+	catch (const Glib::Error& ex) {
+		std::cerr << ex.what() << std::endl;
+		return;
+		}
+
+	// Tell the window to open the notebook stored in the string.
+	nw.load_file(text);
 	Gtk::Application::on_open(files, hint);
 	}
+
