@@ -30,6 +30,14 @@ Cadabra::Cadabra()
 	signal(SIGINT, signal_handler);
 	}
 
+Cadabra::~Cadabra()
+	{
+   // The app is going away; stop the compute logic and join that
+	// thread waiting for it to complete.
+	compute.terminate();
+	compute_thread.join();
+	}
+
 void Cadabra::on_activate()
 	{
 	add_window(nw);
