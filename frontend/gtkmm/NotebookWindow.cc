@@ -679,22 +679,22 @@ void NotebookWindow::on_file_open()
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
 			name = dialog.get_filename();			
-			load_file(name);
+			std::ifstream file(name);
+			std::string content, line;
+			
+			while(std::getline(file, line)) 
+				content+=line;
+
+			load_file(content);
 			break;
 			}
 		}
 	}
 
-void NotebookWindow::load_file(const std::string& filename)
+void NotebookWindow::load_file(const std::string& notebook_contents)
 	{
-	std::ifstream file(name);
-	std::string content, line;
-	
-	while(std::getline(file, line)) 
-		content+=line;
-	
 	doc.clear();
-	JSON_deserialise(content, doc);
+	JSON_deserialise(notebook_contents, doc);
 	remove_all_cells();
 	build_visual_representation();
 	engine.convert_all();
