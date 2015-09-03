@@ -13,6 +13,7 @@ class Cadabra : public Gtk::Application {
 
 	protected:
 		Cadabra();
+		virtual ~Cadabra();
 
 		void on_activate() override;
 		void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
