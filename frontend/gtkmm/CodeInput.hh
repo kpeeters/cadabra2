@@ -19,18 +19,19 @@ namespace cadabra {
 			/// corresponding to this CodeInput widget. CodeInput is not allowed
 			/// to modify this DataCell directly, but can read properties from
 			/// it (e.g. in order to know when to display a 'busy' indicator).
+			/// The scale parameter refers to hdpi scaling.
 
-			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>);
+			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale);
 
 			// Initialise with a new TextBuffer (to be created by
 			// CodeInput), filling it with the content of the given
 			// string.
 
-			CodeInput(DTree::iterator, const std::string&);
+			CodeInput(DTree::iterator, const std::string&, double scale);
 			
 			class exp_input_tv : public Gtk::TextView {
 				public:
-					exp_input_tv(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>);
+					exp_input_tv(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale);
 					virtual bool on_key_press_event(GdkEventKey*) override;
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					virtual bool on_focus_in_event(GdkEventFocus *) override;
@@ -41,6 +42,7 @@ namespace cadabra {
 					sigc::signal1<bool, DTree::iterator>              cell_got_focus;
 
 				private:
+					double scale_;
 					DTree::iterator datacell;
 			};
 

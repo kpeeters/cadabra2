@@ -55,6 +55,7 @@ namespace cadabra {
 
 			// TeX stuff
 			TeXEngine        engine;
+			double           scale; // highdpi scale
 
 			// For grabbing focus of widgets which are not yet allocated.
 			void on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w);
@@ -119,6 +120,7 @@ namespace cadabra {
 			void on_file_save();
 			void on_file_save_as();
 			void on_file_quit();
+			bool quit_safeguard(bool quit);
 
 			void on_edit_undo();
 			void on_edit_insert_above();

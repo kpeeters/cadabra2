@@ -19,8 +19,8 @@ std::string trim(const std::string& s)
 	return std::string(s, b, e - b + 1);
 	}
 
-CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb)
-	: Gtk::TextView(tb), datacell(it)
+CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double scale)
+	: Gtk::TextView(tb), scale_(scale), datacell(it)
 	{
 	set_events(Gdk::STRUCTURE_MASK);
 //	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
@@ -33,14 +33,14 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 //	init();
 //	}
 
-CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb)
-	: buffer(tb), edit(it, tb)
+CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s)
+	: buffer(tb), edit(it, tb, s)
 	{
 	init();
 	}
 
-CodeInput::CodeInput(DTree::iterator it, const std::string& txt)
-	: buffer(Gtk::TextBuffer::create()), edit(it, buffer)
+CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s)
+	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s)
 	{
 	buffer->set_text(txt);
 	init();
@@ -180,7 +180,7 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 		cr->set_source_rgba(.2, .7, .2, 1.0);
 	else
 		cr->set_source_rgba(.2, .2, .7, 1.0);
-	double line_width=2.0;
+	double line_width=2.0/1.6*scale_;
 	cr->set_line_width(line_width);
 	cr->set_antialias(Cairo::ANTIALIAS_NONE);
 	int hor=5;

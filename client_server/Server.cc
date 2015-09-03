@@ -6,7 +6,6 @@
 #include <thread>
 #include <future>
 #include <chrono>
-//#include <regex>
 #include <boost/regex.hpp>
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.

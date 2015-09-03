@@ -1,4 +1,6 @@
 
+- Reset kernel on loading a new notebook.
+
 - Write in docs that the only way to get output is to either just print things
   and get them displayed verbatim, or to call 'display' on an object and let the
   smart display routines figure out how to encode the object in a JSON message.
