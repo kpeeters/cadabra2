@@ -26,7 +26,7 @@ NotebookWindow::NotebookWindow()
 
 	// Query high-dpi settings. For now only for cinnamon.
 	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
-	double scale = settings->get_double("text-scaling-factor");
+	scale = settings->get_double("text-scaling-factor");
 	engine.set_scale(scale);
 
 	settings->signal_changed().connect(
@@ -199,10 +199,11 @@ NotebookWindow::~NotebookWindow()
 
 bool NotebookWindow::on_delete_event(GdkEventAny* event)
 	{
-//	if(quit_safeguard()) {
-//		// cdb.terminate();
-
-	return Gtk::Window::on_delete_event(event);
+	if(quit_safeguard(true)) {
+		return Gtk::Window::on_delete_event(event);
+		}
+	else
+		return false;
 	}
 
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
@@ -384,10 +385,10 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf);
+					ci = new CodeInput(it, it->textbuf,scale);
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer);
+				else ci = new CodeInput(it, global_buffer,scale);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 				ci->edit.content_changed.connect( 
@@ -776,6 +777,43 @@ std::string NotebookWindow::save(const std::string& fn) const
 	return "";
 	}
 
+bool NotebookWindow::quit_safeguard(bool quit)
+	{
+	if(modified) {
+		std::string mes;
+		if(quit) {
+			if(name.size()>0) mes="Save changes to "+name+" before closing?";
+			else              mes="Save changes before closing?";
+			}
+		else {
+			if(name.size()>0) mes="Save changes to "+name+" before continuing?";
+			else              mes="Save changes before continuing?";
+			}
+		Gtk::MessageDialog md(mes, false, Gtk::MESSAGE_WARNING, 
+									 Gtk::BUTTONS_NONE, true);
+		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		md.add_button(Gtk::Stock::SAVE,1);
+		md.add_button(Gtk::Stock::CANCEL,2);
+		if(quit)
+			md.add_button(Gtk::Stock::QUIT,3);
+		else 
+			md.add_button(Gtk::Stock::NO, 3);
+		int action=md.run();
+		switch(action) {
+			case 1: 
+				on_file_save();
+				return true;
+			case 2:
+				break;
+			case 3:
+				return true;
+			}
+		}
+	else return true;
+
+	return false;
+	}
+
 void NotebookWindow::on_file_quit()
 	{
 	close();
@@ -896,7 +934,7 @@ void NotebookWindow::on_help_about()
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{
 	if(key=="text-scaling-factor") {
-		double scale = settings->get_double("text-scaling-factor");
+		scale = settings->get_double("text-scaling-factor");
 		std::cout << "cadabra-client: text-scaling-factor = " << scale << std::endl;
 		engine.set_scale(scale);
 		engine.invalidate_all();

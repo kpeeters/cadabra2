@@ -1,0 +1,61 @@
+body {
+	 font-family: "Lato";
+	 font-weight: 300;
+}
+div#logobar {
+	 margin-left: 40px;
+	 margin-right: 40px;
+	 padding-bottom: 20px;
+	 border-bottom: 1px solid green;
+}
+div#logobar #cadabra {
+	 color: green;
+	 font: 400 60px/1.3 "Bree Serif";
+	 font-size: 48px;
+}
+div#logobar #subtext {
+	 font: 400 60px/1.3 "Bree Serif";
+	 font-style: italic;
+	 font-size: 12px;
+	 padding-left: 5px;
+}
+div#logobar #author {
+	 margin-top: 20px;
+	 font: 400 14px "Bree Serif";
+}
+div#menubar {
+	 margin-top: 10px;
+	 float: left;
+}
+div#menubar ul {
+	 list-style-type: none;
+}
+div#menubar ul li {
+	 cursor: pointer;
+	 margin-bottom: 5px;
+}
+div#menubar ul li:hover {
+	 background: yellow;
+}
+div#main {
+	 margin-top: 20px;
+	 margin-left: 20px;
+	 width: 60%;
+	 float: left;
+}
+div#main p {
+	 margin-bottom: 20px;
+}
+h1 {
+	 margin-top: 0px;
+	 font: 400 60px/1.3 "Bree Serif";
+	 color: green;
+	 font-size: 24px;
+}
+h1 span.date {
+	 margin-top: 10px;
+	 float: right;
+	 font-size: 10px;
+	 font-family: sans;
+	 font-weight: normal;
+}

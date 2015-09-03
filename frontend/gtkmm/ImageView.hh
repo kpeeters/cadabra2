@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <gtkmm/eventbox.h>
+#include <gtkmm/box.h>
 #include <gtkmm/image.h>
 
 namespace cadabra {
@@ -10,7 +10,7 @@ namespace cadabra {
    ///
    /// An image viewing widget.
 
-	class ImageView : public Gtk::EventBox {
+	class ImageView : public Gtk::VBox {
 		public:
 			ImageView();
 			virtual ~ImageView();
