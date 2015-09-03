@@ -228,7 +228,6 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	return ret;
 	}
 
-
 void NotebookWindow::update_title()
 	{
 	if(name.size()>0) {
@@ -680,24 +679,28 @@ void NotebookWindow::on_file_open()
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
 			name = dialog.get_filename();			
-			std::ifstream file(name);
-			std::string content, line;
-			
-			while(std::getline(file, line)) 
-				content+=line;
-
-			doc.clear();
-			JSON_deserialise(content, doc);
-			remove_all_cells();
-			build_visual_representation();
-			engine.convert_all();
-			mainbox.show_all();
-			modified=false;
-			update_title();
-			
+			load_file(name);
 			break;
 			}
 		}
+	}
+
+void NotebookWindow::load_file(const std::string& filename)
+	{
+	std::ifstream file(name);
+	std::string content, line;
+	
+	while(std::getline(file, line)) 
+		content+=line;
+	
+	doc.clear();
+	JSON_deserialise(content, doc);
+	remove_all_cells();
+	build_visual_representation();
+	engine.convert_all();
+	mainbox.show_all();
+	modified=false;
+	update_title();
 	}
 
 void NotebookWindow::on_file_save()
