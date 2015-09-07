@@ -691,6 +691,12 @@ void NotebookWindow::on_file_open()
 		}
 	}
 
+void NotebookWindow::set_name(const std::string& n)
+	{
+	name=n;
+	update_title();
+	}
+
 void NotebookWindow::load_file(const std::string& notebook_contents)
 	{
 	doc.clear();
