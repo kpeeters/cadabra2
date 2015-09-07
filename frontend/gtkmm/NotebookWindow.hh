@@ -61,6 +61,7 @@ namespace cadabra {
 			void on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w);
 			sigc::connection grab_connection;
 
+			void set_name(const std::string&);
 			void load_file(const std::string& notebook_contents);
 
 
