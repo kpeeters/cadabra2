@@ -9,9 +9,24 @@ A. Linux
 Building from source requires a number of packages. On Debian and
 derivatives they can all be installed with
 
-  sudo apt-get install g++ libjsoncpp-dev libboost-all-dev libgmp-dev
+  sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
+  sudo apt-get install libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev
 
-(you can get away with fewer parts of boost). 
+In order to actually be able to run the Cadabra notebook frontend, you then also need
+
+  sudo apt-get install texlive python-matplotlib
+
+but most likely you have a TeX installation already. 
+
+In order to build the documentation you also need
+
+  sudo apt-get install doxygen libjs-mathjax
+
+
+Build and install using
+
+   make
+   sudo make install
 
 
 
