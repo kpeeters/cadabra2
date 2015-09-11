@@ -65,6 +65,7 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 		}
 
 	// Tell the window to open the notebook stored in the string.
+	nw.set_name(files[0]->get_path());
 	nw.load_file(text);
 	Gtk::Application::on_open(files, hint);
 	}
