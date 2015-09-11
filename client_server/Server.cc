@@ -248,6 +248,8 @@ void Server::on_socket_init(websocketpp::connection_hdl hdl, boost::asio::ip::tc
 	{
 	boost::asio::ip::tcp::no_delay option(true);
 	s.set_option(option);
+	auto p = s.local_endpoint();
+	std::cerr << "cadabra-server: listening on port " << p << std::endl;
 	}
 
 Server::Connection::Connection()
