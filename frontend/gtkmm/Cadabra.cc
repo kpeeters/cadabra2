@@ -18,7 +18,7 @@ Glib::RefPtr<Cadabra> Cadabra::create()
 	}
 
 Cadabra::Cadabra()
-	: Gtk::Application("com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN),
+	: Gtk::Application("com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
 	  compute(&nw, nw), compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
 	// Connect the two threads.
