@@ -14,7 +14,7 @@ derivatives they can all be installed with
 
 In order to actually be able to run the Cadabra notebook frontend, you then also need
 
-  sudo apt-get install texlive python-matplotlib
+  sudo apt-get install texlive python-matplotlib python-mpmath
 
 but most likely you have a TeX installation already. 
 

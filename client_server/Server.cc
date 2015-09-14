@@ -210,6 +210,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	try {
 		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
 		std::string object_classname = boost::python::extract<std::string>(ignored.attr("__class__").attr("__name__"));
+		snoop::log("info") << "Run finished" << snoop::flush;
 //		std::cout << "exec returned a " << object_classname << std::endl;
 		/*
 		boost::python::object catchobj = main_module.attr("catchOut");
@@ -297,12 +298,14 @@ void Server::wait_for_job()
 		try {
 			// We are done with the block_queue; release the lock so that the
 			// master thread can push new blocks onto it.
+			snoop::log(snoop::info) << "Block finished running" << snoop::flush;
 			current_hdl=block.hdl;
 			current_id =block.cell_id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
 			}
 		catch(std::runtime_error& ex) {
+			snoop::log(snoop::info) << "Python runtime exception" << snoop::flush;
 			// On error we remove all other blocks from the queue.
 			lock.lock();
 			std::queue<Block> empty;
@@ -312,6 +315,7 @@ void Server::wait_for_job()
 			on_block_error(block);
 			}
 		catch(std::exception& ex) {
+			snoop::log(snoop::info) << "System exception exception" << snoop::flush;
 			lock.lock();
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);

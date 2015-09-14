@@ -145,10 +145,10 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 		DTree::iterator last=doc.end();
 		DataCell::id_t id;
 		id.id=cell_id.asUInt64();
-		if(cell_origin=="client")
-			id.created_by_client=true;
-		else
+		if(cell_origin=="server")
 			id.created_by_client=false;
+		else
+			id.created_by_client=true;
 
 		bool hide=false;
 		if(hidden.asBool()) 

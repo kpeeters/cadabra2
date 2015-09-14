@@ -4,203 +4,272 @@
 	[
 		
 		{
+			"cell_id" : 5,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 64,
-					"textbuf" : "\\begin{equation*}2\\, (x + y) (x - y)\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}2\\, (x + y) (x - y)\\end{dmath*}"
 				}
 			],
-			"id" : 5,
 			"textbuf" : "x,y=symbols('x,y')\nex:= (x+y) (x-y) 2;"
 		},
 		
 		{
+			"cell_id" : 7,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 37,
-					"textbuf" : "\\begin{equation*}x x - x y + y x - y y\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}2\\, x x - 2\\, x y + 2\\, y x - 2\\, y y\\end{dmath*}"
 				}
 			],
-			"id" : 7,
 			"textbuf" : "distribute(ex);"
 		},
 		
 		{
+			"cell_id" : 9,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 40,
-					"textbuf" : "\\begin{equation*}\\left(x - y\\right) \\left(x + y\\right)\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\left(x - y\\right) \\left(x + y\\right)\\end{dmath*}"
 				}
 			],
-			"id" : 9,
 			"textbuf" : "factor( x**2 - y**2 );"
 		},
 		
 		{
+			"cell_id" : 11,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 43,
-					"textbuf" : "\\begin{equation*}\\frac{y}{2} - \\frac{1}{2} \\sin{\\left (y \\right )} \\cos{\\left (y \\right )}\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\frac{y}{2} - \\frac{1}{2} \\sin{\\left (y \\right )} \\cos{\\left (y \\right )}\\end{dmath*}"
 				}
 			],
-			"id" : 11,
 			"textbuf" : "integrate( sin(y)**2, y );"
 		},
 		
 		{
+			"cell_id" : 13,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 46,
-					"textbuf" : "\\begin{equation*}\\frac{1}{2} \\sin^{2}{\\left (y \\right )} - \\frac{1}{2} \\cos^{2}{\\left (y \\right )} + \\frac{1}{2}\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\frac{1}{2} \\sin^{2}{\\left (y \\right )} - \\frac{1}{2} \\cos^{2}{\\left (y \\right )} + \\frac{1}{2}\\end{dmath*}"
 				}
 			],
-			"id" : 13,
 			"textbuf" : "diff(_, y);"
 		},
 		
 		{
+			"cell_id" : 15,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 49,
-					"textbuf" : "\\begin{equation*}\\sin^{2}{\\left (y \\right )}\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\sin^{2}{\\left (y \\right )}\\end{dmath*}"
 				}
 			],
-			"id" : 15,
 			"textbuf" : "trigsimp(_);"
 		},
 		
 		{
+			"cell_id" : 17,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 52,
-					"textbuf" : "\\begin{equation*}2 \\sin{\\left (y \\right )} \\cos{\\left (y \\right )} + 2 \\cos^{2}{\\left (y \\right )} - 1\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}2 \\sin{\\left (y \\right )} \\cos{\\left (y \\right )} + 2 \\cos^{2}{\\left (y \\right )} - 1\\end{dmath*}"
 				}
 			],
-			"id" : 17,
 			"textbuf" : "expand( 'cos(2 *y) + sin(2* y)', trig=True );"
 		},
 		
 		{
+			"cell_id" : 19,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 55,
-					"textbuf" : "\\begin{equation*}\\sqrt{2} \\sin{\\left (2 y + \\frac{\\pi}{4} \\right )}\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\sqrt{2} \\sin{\\left (2 y + \\frac{\\pi}{4} \\right )}\\end{dmath*}"
 				}
 			],
-			"id" : 19,
 			"textbuf" : "trigsimp(_);"
 		},
 		
 		{
+			"cell_id" : 21,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 58,
-					"textbuf" : "\\begin{equation*}\\left[\\begin{matrix}1 & 2 & 6\\\\4 & 8 & 7.5\\\\4 & 3 & 5\\end{matrix}\\right]\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}1 & 2 & 6\\\\4 & 8 & 7.5\\\\4 & 3 & 5\\end{matrix}\\right]\\end{dmath*}"
 				}
 			],
-			"id" : 21,
 			"textbuf" : "M=Matrix(3,3,[1,2,6,4,8,7.5,4,3,5]);"
 		},
 		
 		{
+			"cell_id" : 23,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 61,
-					"textbuf" : "\\begin{equation*}\\left[\\begin{matrix}1.0 & -5.55111512312578 \\cdot 10^{-17} & 0\\\\1.33226762955019 \\cdot 10^{-15} & 1.0 & 0\\\\6.66133814775094 \\cdot 10^{-16} & -5.55111512312578 \\cdot 10^{-17} & 1\\end{matrix}\\right]\n\\\\\n\\text{matrix}\n\\left[\\begin{matrix}0.999999999999993 & 2.0 & 6\\\\3.99999999999998 & 8.0 & 7.5\\\\3.99999999999999 & 3.0 & 5\\end{matrix}\\right]\n\\\\\n\\text{matrix}\n\\left[\\begin{matrix}1.01704545454545 & 0.0113636363636359 & 3.01173227771041 \\cdot 10^{-15}\\\\0.0681818181818168 & 1.04545454545454 & 7.42840132840103 \\cdot 10^{-15}\\\\0.0871212121212113 & 0.0250946969696966 & 1.0\\end{matrix}\\right]\n\\\\\n\\text{matrix}\n\\left[\\begin{matrix}0.350935828877016 & 1.76520721925134 & 5.99999999999996\\\\2.79161096256687 & 7.44180314171124 & 7.49999999999991\\\\3.32274955436722 & 2.71343025846703 & 4.99999999999995\\end{matrix}\\right]\n\\\\\n\\text{matrix}\n\\left[\\begin{matrix}0.825929752066128 & -0.00733471074380393 & 0.219886363636361\\\\-0.341167355371869 & 1.01469524793388 & 0.387357954545447\\\\-0.187499999999984 & 0.00208333333333027 & 1.221875\\end{matrix}\\right]\n\\\\\n\\text{matrix}\n\\left[\\begin{matrix}2.88447982498768 & 1.98416079241617 & 3.76238302139043\\\\8.59440325717022 & 7.94200747447746 & 2.07370487967927\\\\6.52849011505407 & 2.99970679387461 & 1.96625167112306\\end{matrix}\\right]\n\\\\\n\\text{matrix}\n\\left[\\begin{matrix}1.97995241672923 & 0.0591337966441061 & -0.799473140495793\\\\2.38022633358367 & 1.15049351990979 & -1.95351756198329\\\\1.32449338425573 & 0.0725018261123359 & -0.0679459366390209\\end{matrix}\\right]\n\\\\\n\\text{matrix}\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}1.0 & -5.55111512312578 \\cdot 10^{-17} & 0\\\\1.33226762955019 \\cdot 10^{-15} & 1.0 & 0\\\\6.66133814775094 \\cdot 10^{-16} & -5.55111512312578 \\cdot 10^{-17} & 1\\end{matrix}\\right]\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}0.999999999999993 & 2.0 & 6\\\\3.99999999999998 & 8.0 & 7.5\\\\3.99999999999999 & 3.0 & 5\\end{matrix}\\right]\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}1.01704545454545 & 0.0113636363636359 & 3.01173227771041 \\cdot 10^{-15}\\\\0.0681818181818168 & 1.04545454545454 & 7.42840132840103 \\cdot 10^{-15}\\\\0.0871212121212113 & 0.0250946969696966 & 1.0\\end{matrix}\\right]\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}0.350935828877016 & 1.76520721925134 & 5.99999999999996\\\\2.79161096256687 & 7.44180314171124 & 7.49999999999991\\\\3.32274955436722 & 2.71343025846703 & 4.99999999999995\\end{matrix}\\right]\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}0.825929752066128 & -0.00733471074380393 & 0.219886363636361\\\\-0.341167355371869 & 1.01469524793388 & 0.387357954545447\\\\-0.187499999999984 & 0.00208333333333027 & 1.221875\\end{matrix}\\right]\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}2.88447982498768 & 1.98416079241617 & 3.76238302139043\\\\8.59440325717022 & 7.94200747447746 & 2.07370487967927\\\\6.52849011505407 & 2.99970679387461 & 1.96625167112306\\end{matrix}\\right]\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"textbuf" : "\\begin{dmath*}{}\\left[\\begin{matrix}1.97995241672923 & 0.0591337966441061 & -0.799473140495793\\\\2.38022633358367 & 1.15049351990979 & -1.95351756198329\\\\1.32449338425573 & 0.0725018261123359 & -0.0679459366390209\\end{matrix}\\right]\\end{dmath*}"
 				}
 			],
-			"id" : 23,
-			"textbuf" : "N=M\nfor i in xrange(7):\n\tN=M*N.inv(); print(latex(N)); print('\\\\\\\\')\n\tprint(r\"\\text{matrix}\")"
+			"textbuf" : "N=M\nfor i in xrange(7):\n\tN=M*N.inv();"
 		},
 		
 		{
+			"cell_id" : 25,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 26,
-					"textbuf" : "\\begin{equation*}\\sin^{2}{\\left (z \\right )} + \\cos^{2}{\\left (z \\right )}\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\sin^{2}{\\left (z \\right )} + \\cos^{2}{\\left (z \\right )}\\end{dmath*}"
 				}
 			],
-			"id" : 25,
 			"textbuf" : "from sympy.parsing.sympy_parser import parse_expr\nxx=parse_expr( 'cos(z)**2 + sin(z)**2' );"
 		},
 		
 		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 28,
-					"textbuf" : "\\begin{equation*}sin(z)**2 + cos(z)**2\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}\\sin^{2}{\\left (z \\right )} + \\cos^{2}{\\left (z \\right )}\\end{dmath*}"
 				}
 			],
-			"id" : 27,
-			"textbuf" : "print(xx)"
+			"textbuf" : "xx;"
 		},
 		
 		{
+			"cell_id" : 29,
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
 					"cell_type" : "output",
-					"id" : 30,
-					"textbuf" : "\\begin{equation*}1\n\\end{equation*}"
+					"textbuf" : "\\begin{dmath*}{}1\\end{dmath*}"
 				}
 			],
-			"id" : 29,
 			"textbuf" : "trigsimp(xx);"
 		},
 		
 		{
+			"cell_id" : 31,
+			"cell_origin" : "client",
 			"cell_type" : "input",
-			"id" : 31,
 			"textbuf" : ""
 		}
 	],
