@@ -5,7 +5,7 @@
 
 import sys
 from cadabra2 import *
-#sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
+sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 
 # Attempt to import sympy; if not, setup logic so that the
 # shell does not fail later.
@@ -74,15 +74,15 @@ def display(obj):
             server.send(b64, "image_png")
 
     elif isinstance(obj, Ex):
-        server.send("$$"+str(obj)+"$$", "latex")
+        server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Property):
-        server.send("$$"+str(obj)+"$$", "latex")
+        server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
 
     else:
         # Failing all else, just dump a latex representation generated
         # by sympy to the notebook.
-        server.send("$$"+latex(obj)+"$$", "latex")
+        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex")
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

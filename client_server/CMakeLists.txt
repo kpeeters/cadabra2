@@ -54,6 +54,8 @@ add_executable(regexp_tester regexp_tester.cc)
 target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB})
 target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
+set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-server DESTINATION bin)
+install(TARGETS cadabra_client LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
 
 

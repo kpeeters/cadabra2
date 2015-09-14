@@ -24,6 +24,7 @@ NotebookWindow::NotebookWindow()
 	// Query high-dpi settings. For now only for cinnamon.
 	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
 	scale = settings->get_double("text-scaling-factor");
+	engine.latex_packages.push_back("breqn");
 	engine.set_scale(scale);
 
 	settings->signal_changed().connect(
@@ -652,6 +653,14 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 
 void NotebookWindow::on_file_new()
 	{
+	if(quit_safeguard(false)) {	
+		doc.clear();
+		remove_all_cells();
+		new_document();
+		position_cursor(doc, doc.begin(doc.begin()));
+		name="";
+		update_title();
+		}
 	}
 
 void NotebookWindow::on_file_open()
@@ -721,7 +730,7 @@ void NotebookWindow::on_file_save()
 
 void NotebookWindow::on_file_save_as()
 	{
-	Gtk::FileChooserDialog dialog("Please choose a file name",
+	Gtk::FileChooserDialog dialog("Please choose a file name to save this notebook",
 											Gtk::FILE_CHOOSER_ACTION_SAVE);
 
 	dialog.set_transient_for(*this);
@@ -792,12 +801,12 @@ bool NotebookWindow::quit_safeguard(bool quit)
 		Gtk::MessageDialog md(mes, false, Gtk::MESSAGE_WARNING, 
 									 Gtk::BUTTONS_NONE, true);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-		md.add_button(Gtk::Stock::SAVE,1);
-		md.add_button(Gtk::Stock::CANCEL,2);
+		md.add_button("Save before continuing",1);
+		md.add_button("Cancel",2);
 		if(quit)
-			md.add_button(Gtk::Stock::QUIT,3);
+			md.add_button("No need to save, quit now",3);
 		else 
-			md.add_button(Gtk::Stock::NO, 3);
+			md.add_button("No need to save", 3);
 		int action=md.run();
 		switch(action) {
 			case 1: 
