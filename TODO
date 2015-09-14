@@ -1,4 +1,9 @@
 
+- handle the popen file pointer more gracefully.
+
+- If a kernel which was started by the client notices that the client
+  goes away because the socket was closed, terminate the kernel.
+
 - Reset kernel on loading a new notebook.
 
 - Write in docs that the only way to get output is to either just print things

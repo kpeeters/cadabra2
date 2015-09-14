@@ -1,6 +1,10 @@
+html {
+	 height: 100%;
+}
 body {
 	 font-family: "Lato";
 	 font-weight: 300;
+	 height: 100%;
 }
 div#logobar {
 	 margin-left: 40px;
@@ -58,4 +62,45 @@ h1 span.date {
 	 font-size: 10px;
 	 font-family: sans;
 	 font-weight: normal;
+}
+
+
+div.icon_background {
+	 position: relative;
+	 width: 130px;
+	 height: 40px;
+/* 	 background: #D56203;/* #36a750;  */
+	 background: green;
+	 cursor: pointer;
+}
+div.icon_background path {
+/* 	 fill: #fa6; */
+	 fill: #cfc;
+	 transition-duration: 0.5s;  
+}	 
+div.icon_background svg {
+	 transition-duration: 0.5s;  
+	 height: 80%;
+}
+div.icon_background div.icon_text {
+	 position: absolute;
+	 bottom: 5px;
+	 right: 10px;
+	 font-size: 14px;
+	 color: white;
+	 font-family: "Bree Serif";
+	 font-weight: 400;
+	 transition-duration: 0.5s;  
+}
+div.icon_background:hover div.icon_text {
+	 font-size: 15px;
+	 transition-duration: 0.5s;  
+}
+div.icon_background:hover svg {
+	 transition-duration: 0.5s;  
+	 height: 100%;
+}
+div.icon_background:hover svg path {
+	 transition-duration: 0.5s;  
+	 fill: white;
 }
