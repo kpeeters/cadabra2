@@ -13,6 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
+#include <snoop/Snoop.hh>
 #include "Server.hh"
 
 using websocketpp::lib::placeholders::_1;
@@ -98,7 +99,7 @@ void Server::init()
 		setup_catch(boost::ref(catchOut), boost::ref(catchErr), boost::ref(*this));
 		}
 	catch(boost::python::error_already_set& ex) {
-		std::cerr << "cadabra-server: failed to initialise Python bridge" << std::endl;
+		snoop::log(snoop::fatal) << "Failed to initialise Python bridge." << snoop::flush;
 		PyErr_Print();
 		throw;
 		}
@@ -149,7 +150,6 @@ std::string Server::pre_parse(const std::string& line)
 		else {
 			found = line_stripped.find("::");
 			if(found!=std::string::npos) {
-				std::cerr << "prop token found" << std::endl;
 //				std::regex amatch("([a-zA-Z]*)(\\([.]*\\))?");
 				boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
 				boost::cmatch ares;
@@ -162,7 +162,7 @@ std::string Server::pre_parse(const std::string& line)
 							+"'), Ex('" +argument + "') )";
 						}
 					else {
-						std::cerr << "no arguments" << std::endl;
+						// no arguments
 						ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
 							+ "(Ex(r'"+line_stripped.substr(0,found)+"'))";
 						}
@@ -170,12 +170,11 @@ std::string Server::pre_parse(const std::string& line)
 						ret += "; display(__cdbtmp__)";
 					}
 				else {
-					std::cerr << "inconsistent" << std::endl;
+					// inconsistent, who knows what will happen...
 					ret = line; // inconsistent; you are asking for trouble.
 					}
 				}
 			else {
-				// std::cerr << "no preparse" << std::endl;
 				if(lastchar==";") 
 					ret = indent_line + "_ = " + line_stripped + "; display(_)";
 				else
@@ -193,6 +192,7 @@ std::string Server::pre_parse(const std::string& line)
 std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
 //	std::cerr << "RUN_STRING" << std::endl;
+	snoop::log("run") << blk << snoop::flush;
 
 	std::string result;
 
@@ -204,7 +204,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		// std::cerr << "preparsing " + line << std::endl;
 		newblk += pre_parse(line)+'\n';
 		}
-	std::cerr << "PREPARSED: " << newblk << std::endl;
+	// std::cerr << "PREPARSED: " << newblk << std::endl;
 
 	// Run block. Catch output.
 	try {
@@ -235,7 +235,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		if(handle_output) {
 			err = catchErr.str();
 			catchErr.clear();
-			std::cerr << "ERROR: " << err << std::endl;
+			// std::cerr << "ERROR: " << err << std::endl;
 //		catchobj.attr("clear")();
 			}
 		throw std::runtime_error(err);
@@ -248,8 +248,6 @@ void Server::on_socket_init(websocketpp::connection_hdl hdl, boost::asio::ip::tc
 	{
 	boost::asio::ip::tcp::no_delay option(true);
 	s.set_option(option);
-	auto p = s.local_endpoint();
-	std::cerr << "cadabra-server: listening on port " << p << std::endl;
 	}
 
 Server::Connection::Connection()
@@ -262,7 +260,7 @@ void Server::on_open(websocketpp::connection_hdl hdl)
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	Connection con;
 	con.hdl=hdl;
- 	std::cerr << "cadabra-server: connection " << con.uuid << " open" << std::endl;
+	snoop::log(snoop::info) << "Connection " << con.uuid << " open." << snoop::flush;
 	connections[hdl]=con;
 	}
 
@@ -270,7 +268,7 @@ void Server::on_close(websocketpp::connection_hdl hdl)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	auto it = connections.find(hdl);
-	std::cerr << "cadabra-server: connection " << it->second.uuid << " closed" << std::endl;	
+	snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
 	connections.erase(hdl);
 	}
 
@@ -286,14 +284,13 @@ void Server::wait_for_job()
    // available, and processing it. Blocks are always processed sequentially
 	// even though new ones may come in before previous ones have finished.
 
-	std::cout << "cadabra-server: waiting for blocks" << std::endl;
+	snoop::log(snoop::info) << "Waiting for blocks" << snoop::flush;
 
 	while(true) {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		while(block_queue.size()==0) 
 			block_available.wait(lock);
 
-		std::cout << "cadabra-server: going to run " << block_queue.front().input << std::endl;
 		Block block = block_queue.front();
 		block_queue.pop();
 		lock.unlock();
@@ -344,7 +341,7 @@ void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::messag
 
 	auto it = connections.find(hdl);
 	if(it==connections.end()) {
-		std::cout << "Message from unknown connection" << std::endl;
+		snoop::log(snoop::warn) << "Message from unknown connection." << snoop::flush;
 		return;
 		}
 
@@ -361,7 +358,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 	Json::Reader reader;
 	bool parsingSuccessful = reader.parse( json_msg, root );
 	if ( !parsingSuccessful ) {
-		std::cout << "cannot parse message" << std::endl;
+		snoop::log(snoop::error) << "Cannot parse message " << json_msg << snoop::flush;
 		return;
 		}
 
@@ -383,7 +380,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 //		std::cout << "clearing block queue" << std::endl;
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
-		std::cout << "cadabra-server: job stop requested" << std::endl;
+		snoop::log(snoop::warn) << "Job stop requested." << snoop::flush;
 		}
 	else if(msg_type=="init") {
 		// Stop any running blocks.
@@ -450,7 +447,7 @@ void Server::on_block_error(Block blk)
 
 	std::ostringstream str;
 	str << json << std::endl;
-	std::cerr << "cadabra-server: sending error, " << str.str() << std::endl;
+	// std::cerr << "cadabra-server: sending error, " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
@@ -474,7 +471,7 @@ void Server::on_kernel_fault(Block blk)
 
 	std::ostringstream str;
 	str << json << std::endl;
-	std::cerr << "cadabra-server: sending kernel crash report, " << str.str() << std::endl;
+	// std::cerr << "cadabra-server: sending kernel crash report, " << str.str() << std::endl;
 
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
@@ -492,15 +489,15 @@ void Server::run()
 		
 		wserver.init_asio();
 		wserver.set_reuse_addr(true);
-		wserver.listen(9002);
+		wserver.listen(0);
 		wserver.start_accept();
+		auto p = wserver.get_acceptor()->local_endpoint();
+		std::cout << p.port()  << std::endl;
 		
-		std::cerr << "cadabra-server: spawning job thread" << std::endl;
+		// std::cerr << "cadabra-server: spawning job thread "  << std::endl;
 		runner = std::thread(std::bind(&Server::wait_for_job, this));
 		
-		std::cerr << "cadabra-server: starting websocket server" << std::endl;
 		wserver.run();
-		std::cerr << "cadabra-server: websocket server terminated" << std::endl;
 		}
 	catch(websocketpp::exception& ex) {
 		std::cerr << "cadabra-server: websocket exception " << ex.code() << " " << ex.what() << std::endl;

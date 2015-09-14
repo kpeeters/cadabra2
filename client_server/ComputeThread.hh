@@ -110,7 +110,9 @@ namespace cadabra {
 			DTree::iterator find_cell_by_id(DataCell::id_t, bool remove);
 
 			// Self-started server
-			pid_t server_pid;
+			pid_t           server_pid;
+			FILE           *server_stdout;
+			unsigned short  port;
 	};
 
 }

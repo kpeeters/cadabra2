@@ -1,6 +1,5 @@
 
 #include <iostream>
-#include "Log.hh"
 #include "Actions.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
@@ -19,8 +18,6 @@ NotebookWindow::NotebookWindow()
 	  kernel_spinner_status(false),
 	  modified(false)
 	{
-	clog << "starting notebookwindow";
-
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
@@ -40,7 +37,7 @@ NotebookWindow::NotebookWindow()
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n#ImageView:hover { background: red; }\n";
 
 	if(!css_provider->load_from_data(data)) {
-		std::cerr << "Failed to parse widget css information." << std::endl;
+		throw std::logic_error("Failed to parse widget CSS information.");
 		}
 	auto screen = Gdk::Screen::get_default();
 	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -214,7 +211,7 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	bool ret=Gtk::Window::on_configure_event(cfg);
 	
 	if(cfg->width != last_configure_width) {
-		std::cout << "reconfigure " << cfg->width << std::endl;
+		// std::cout << "reconfigure " << cfg->width << std::endl;
 		last_configure_width = cfg->width;
 		try {
 			engine.convert_all();
@@ -254,7 +251,6 @@ void NotebookWindow::set_stop_sensitive(bool s)
 
 void NotebookWindow::process_data() 
 	{
-	std::cerr << "cadabra-client: notified by ComputeThread to start processing actions" << std::endl;
 	dispatcher.emit();
 	}
 
@@ -403,7 +399,6 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				}
 			case DataCell::CellType::image_png: {
 				// FIXME: horribly memory inefficient
-				std::cerr << "cadabra-client: displaying image!" << std::endl;
 				ImageView *iv=new ImageView();
 		
 				iv->set_image_from_base64(it->textbuf);
@@ -460,7 +455,6 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			parentbox->reorder_child(*w, index);
 			}
 		if(visible) {
-			std::cerr << "cadabra-client: ensuring that widget is visible" << std::endl;
 			w->show_all();
 			w->show_now();
 			}
@@ -534,7 +528,8 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end())
-		std::cerr << "cadabra-client: cannot find cell to position cursor!" << std::endl;
+		throw std::logic_error("Cannot find cell to position cursor.");
+
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 
 	// Grab widgets focus, which will scroll it into view. If the widget has not yet
@@ -574,7 +569,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 		for(unsigned int i=0; i<canvasses.size(); ++i) {
 			auto vis = canvasses[i]->visualcells.find(&(*parent));
 			if(vis==canvasses[i]->visualcells.end()) {
-				std::cerr << "cannot find visual cell" << std::endl;
+				throw std::logic_error("Cannot find visual cell.");
 				}
 			else {
 				if(parent->hidden) {
@@ -616,9 +611,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	// First ensure that this cell is not already running, otherwise all hell
 	// will break loose when we try to double-remove the existing output cell etc.
 
-	std::cerr << "cadabra-client: request to execute cell" << std::endl;
 	if(it->running) {
-		std::cerr << "cadabra-client: cell already executing" << std::endl;
 		return true;
 		}
 
@@ -641,10 +634,8 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 		}
 
 	// Execute the cell.
-	std::cerr << "cadabra-client: scheduling input exec" << std::endl;
 	set_stop_sensitive(true);
 	compute->execute_cell(it);
-	std::cerr << "cadabra-client: execution queued, returning" << std::endl;
 
 	return true;
 	}
@@ -667,7 +658,7 @@ void NotebookWindow::on_file_open()
 	{
 	std::cout << "open" << std::endl;
 	
-	Gtk::FileChooserDialog dialog("Please choose a notebook to open",
+	Gtk::FileChooserDialog dialog("Please choose a Cadabra notebook (.cnb file) to open",
 											Gtk::FILE_CHOOSER_ACTION_OPEN);
 
 	dialog.set_transient_for(*this);
@@ -715,7 +706,7 @@ void NotebookWindow::on_file_save()
 	if(name.size()>0) {
 		std::string res=save(name);
 		if(res.size()>0) {
-			Gtk::MessageDialog md("Error saving document "+name);
+			Gtk::MessageDialog md("Error saving notebook "+name);
 			md.set_secondary_text(res);
 			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 			md.run();
@@ -744,7 +735,7 @@ void NotebookWindow::on_file_save_as()
 			name = dialog.get_filename();			
 			std::string res=save(name);
 			if(res.size()>0) {
-				Gtk::MessageDialog md("Error saving document "+name);
+				Gtk::MessageDialog md("Error saving notebook "+name);
 				md.set_secondary_text(res);
 				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 				md.run();
@@ -949,7 +940,6 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 		engine.invalidate_all();
 		engine.convert_all();
 
-		std::cerr << "cadabra-client: refreshing all canvasses" << std::endl;
 		auto it=canvasses.begin();
 		while(it!=canvasses.end()) {
 			(*it)->refresh_all();

@@ -6,13 +6,13 @@
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
 #include "Actions.hh"
-#include "spawn.h"
+#include "popen2.hh"
 
 using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
-	: gui(g), docthread(dt), connection_is_open(false), server_pid(0)
+	: gui(g), docthread(dt), connection_is_open(false), server_pid(0), server_stdout(0)
 	{
    // The ComputeThread constructor is always run on the main thread,
 	// so we can grab the main thread id here.
@@ -57,9 +57,10 @@ void ComputeThread::try_connect()
 												 websocketpp::lib::placeholders::_1,
 												 websocketpp::lib::placeholders::_2));
 
-	std::string uri = "ws://localhost:9002";
+	std::ostringstream uristr;
+	uristr << "ws://localhost:" << port;
 	websocketpp::lib::error_code ec;
-	connection = wsclient.get_connection(uri, ec);
+	connection = wsclient.get_connection(uristr.str(), ec);
 	if (ec) {
 		std::cerr << "cadabra-client: websocket connection error " << ec.message() << std::endl;
 		return;
@@ -73,6 +74,7 @@ void ComputeThread::try_connect()
 void ComputeThread::run()
 	{
 	init();
+	try_spawn_server();
 	try_connect();
 
 	// Enter run loop, which will never terminate anymore. The on_fail and on_close
@@ -92,6 +94,8 @@ void ComputeThread::terminate()
 	if(server_pid!=0) {
 		std::cerr << "cadabra-client: killing server" << std::endl;
 		kill(server_pid, SIGKILL);
+		if(server_stdout)
+			pclose2(server_stdout, server_pid); 
 		}
 	}
 
@@ -103,7 +107,6 @@ void ComputeThread::on_fail(websocketpp::connection_hdl hdl)
 		gui->on_network_error();
 
 	try_spawn_server();
-	sleep(1);
 	try_connect();
 	}
 
@@ -114,10 +117,15 @@ void ComputeThread::try_spawn_server()
 	// port.
 
 	std::cerr << "cadabra-client: spawning server" << std::endl;
-	const char * const sargv[] = {"sh", "-c", "exec cadabra-server", NULL};
-	int status;
-	status = posix_spawn(&server_pid, "/bin/sh", NULL, NULL, 
-								const_cast<char * const *>(sargv), NULL); //environ);
+
+	server_stdout = popen2("exec cadabra-server", "r", server_pid);
+	char buffer[100];
+	if(fscanf(server_stdout, "%100s", buffer)!=1) {
+		throw std::logic_error("Failed to read port from server.");
+		}
+	port = atoi(buffer);
+
+	std::cerr << "read from popen: " << buffer << std::endl;
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
@@ -153,7 +161,7 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 	if(gui)
 		gui->on_disconnect();
 
-	sleep(1);
+	sleep(1); // do not cause a torrent...
 	try_connect();
 	}
 

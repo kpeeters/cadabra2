@@ -1,14 +1,18 @@
 
+#include <snoop/Snoop.hh>
 #include "Server.hh"
 
 // Run a simple Cadabra server on a local port.
 
 int main()
 	{
-	std::cerr << "cadabra-server: starting" << std::endl;
+	snoop::log.init("CadabraServer", "2.0", "/tmp/cadabra.sql", "localhost:8083");
+	snoop::log.set_sync_immediately(true);
+	snoop::log(snoop::info) << "Starting" << snoop::flush;
 
 	Server server;
 	server.run();
 
-	std::cerr << "cadabra-server: terminating" << std::endl;
+	snoop::log(snoop::info) << "Terminating" << snoop::flush;
+	snoop::log.sync_with_server();
 	}

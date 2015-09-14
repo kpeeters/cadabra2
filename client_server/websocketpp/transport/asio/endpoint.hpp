@@ -737,6 +737,11 @@ public:
         async_accept(tcon,callback,ec);
         if (ec) { throw exception(ec); }
     }
+
+		acceptor_ptr get_acceptor() {
+		return m_acceptor;
+		}
+
 protected:
     /// Initialize logging
     /**

@@ -13,7 +13,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules
 
 # Locate Boost
 find_package(Boost 1.45.0 COMPONENTS python system regex log)
-include_directories("${Boost_INCLUDE_DIRS}" "/usr/include/python2.7")
+include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR})
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -24,6 +24,9 @@ find_package(PythonLibs 2.7 REQUIRED)
 find_library(JSONCPP_LIB jsoncpp REQUIRED)
 message("-- Found JSONCPP ${JSONCPP_LIB}")
 
+# Snoop for logging
+find_package(Snoop REQUIRED)
+
 if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
@@ -31,10 +34,10 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_")
 
 # Create the server library
 add_library(cadabra_server SHARED Server.cc)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB})
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB} ${SNOOP_LIBRARIES} uuid)
 
 # Create the client library. 
-add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc)
+add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc)
 target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB})
 
 # Create server binary
@@ -48,8 +51,4 @@ target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-server DESTINATION bin)
 
-# Create client test programs
-#include_directories("." ${WEBSOCKETPP_INCLUDE_DIR})
-#add_executable(test_client test_client.cc)
-#target_link_libraries(test_client cadabra_client -lpthread)
 
