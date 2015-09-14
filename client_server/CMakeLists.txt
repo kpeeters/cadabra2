@@ -24,8 +24,13 @@ find_package(PythonLibs 2.7 REQUIRED)
 find_library(JSONCPP_LIB jsoncpp REQUIRED)
 message("-- Found JSONCPP ${JSONCPP_LIB}")
 
-# Snoop for logging
-find_package(Snoop REQUIRED)
+# Snoop for logging. At the moment the required Snoop.cc|.hh are included
+# in the Cadabra sources so we do not need to look for this. However, we
+# do need to find sqlite3 for this to work.
+
+# find_package(Snoop REQUIRED)
+find_library(sqlite3 sqlite3 required)
+
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
@@ -33,12 +38,12 @@ endif()
 add_definitions("-D_WEBSOCKETPP_CPP11_STL_")
 
 # Create the server library
-add_library(cadabra_server SHARED Server.cc)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB} ${SNOOP_LIBRARIES} uuid)
+add_library(cadabra_server SHARED Server.cc Snoop.cc)
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB} ${SNOOP_LIBRARIES} sqlite3 uuid)
 
 # Create the client library. 
-add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB})
+add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc)
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB} sqlite3 uuid)
 
 # Create server binary
 #include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})

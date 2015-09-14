@@ -72,12 +72,20 @@ div.icon_background {
 /* 	 background: #D56203;/* #36a750;  */
 	 background: green;
 	 cursor: pointer;
+	 margin-bottom: 10px;
 }
 div.icon_background path {
 /* 	 fill: #fa6; */
 	 fill: #cfc;
 	 transition-duration: 0.5s;  
 }	 
+div.icon_background img {
+	 transition-duration: 0.5s;  
+	 height: 70%;
+	 margin-left: 3px;
+	 margin-top: 3px;
+	 opacity: 0.6;
+}
 div.icon_background svg {
 	 transition-duration: 0.5s;  
 	 height: 80%;
@@ -95,6 +103,11 @@ div.icon_background div.icon_text {
 div.icon_background:hover div.icon_text {
 	 font-size: 15px;
 	 transition-duration: 0.5s;  
+}
+div.icon_background:hover img {
+	 transition-duration: 0.5s;  
+	 opacity: 1.0;
+	 height: 85%;
 }
 div.icon_background:hover svg {
 	 transition-duration: 0.5s;  
