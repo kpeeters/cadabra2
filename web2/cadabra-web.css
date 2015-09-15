@@ -6,11 +6,23 @@ body {
 	 font-weight: 300;
 	 height: 100%;
 }
+hr {
+    border: 0;
+    height: 1px;
+    background: #ccc;
+	 margin-top: 20px;
+	 margin-bottom: 20px;
+}
+hr#below_logo {
+	 margin-left: 40px;
+	 margin-right: 40px;
+	 margin-top: 0px;
+	 margin-bottom: 0px;
+}
 div#logobar {
 	 margin-left: 40px;
 	 margin-right: 40px;
 	 padding-bottom: 20px;
-	 border-bottom: 1px solid green;
 }
 div#logobar #cadabra {
 	 color: green;
@@ -18,17 +30,19 @@ div#logobar #cadabra {
 	 font-size: 48px;
 }
 div#logobar #subtext {
-	 font: 400 60px/1.3 "Bree Serif";
-	 font-style: italic;
-	 font-size: 12px;
+	 font-family: "Bree Serif";
+	 font-size: 14px;
+	 font-weight: 300;
 	 padding-left: 5px;
 }
 div#logobar #author {
+	 float: right;
 	 margin-top: 20px;
 	 font: 400 14px "Bree Serif";
 }
 div#menubar {
-	 margin-top: 10px;
+	 margin-left: 40px;
+	 margin-top: 30px;
 	 float: left;
 }
 div#menubar ul {
@@ -85,6 +99,7 @@ div.icon_background img {
 	 margin-left: 3px;
 	 margin-top: 3px;
 	 opacity: 0.6;
+	 outline: 1px solid transparent;
 }
 div.icon_background svg {
 	 transition-duration: 0.5s;  
@@ -100,9 +115,14 @@ div.icon_background div.icon_text {
 	 font-weight: 400;
 	 transition-duration: 0.5s;  
 }
-div.icon_background:hover div.icon_text {
+/* div.icon_background:hover div.icon_text {
 	 font-size: 15px;
 	 transition-duration: 0.5s;  
+} */
+div.icon_background:hover {
+/* 	 background: #292;*/
+	 border-bottom: 2px solid #3a3;
+	 height: 38px;
 }
 div.icon_background:hover img {
 	 transition-duration: 0.5s;  

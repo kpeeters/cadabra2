@@ -665,7 +665,8 @@ void NotebookWindow::on_file_new()
 
 void NotebookWindow::on_file_open()
 	{
-	std::cout << "open" << std::endl;
+	if(quit_safeguard(true)==false)
+		return;
 	
 	Gtk::FileChooserDialog dialog("Please choose a Cadabra notebook (.cnb file) to open",
 											Gtk::FILE_CHOOSER_ACTION_OPEN);
