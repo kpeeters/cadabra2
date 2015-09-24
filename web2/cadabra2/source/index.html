@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block title %}Cadabra: a field theory motivated approach to computer algebra{% endblock %}
+
+{% block head %}{%- endblock %}
+
+{% block main %}
+<h1>What is Cadabra?</h1>
+<p>
+  Cadabra is a symbolic computer algebra system (CAS) designed
+  specifically for the solution of problems encountered in field
+  theory. It has extensive functionality for tensor computer
+  algebra, tensor polynomial simplification including multi-term
+  symmetries, fermions and anti-commuting variables, Clifford
+  algebras and Fierz transformations, implicit coordinate
+  dependence, multiple index types and many more. The input
+  format is a subset of TeX. Both a command-line and a graphical
+  interface are available.
+  <ul>
+	 <li>
+		Designed for field-theory problems, with handling of
+		anti-commuting and non-commuting objects without special notations
+		for their products, gamma matrix algebra, Fierz identities, Dirac
+		conjugation, vielbeine, flat and curved, covariant and
+		contravariant indices, implicit dependence of tensors on
+		coordinates, partial and covariant derivatives...
+	 </li>
+	 <li>
+		Powerful tensor simplification algorithms, not just for
+		mono-term symmetries but also for multi-terms symmetries like
+		the Bianchi identity, or dimensionally-dependent symmetries like
+		the Schouten identity.
+	 </li>
+	 <li>
+		A standalone graphical notebook interface <a href="jupyter.html">compatible
+		with IPython/Jupyter notebooks</a>.
+	 </li>
+	 <li>
+		Input and output using a subset of LaTeX notation.
+	 </li>
+  </ul>
+</ul>
+  
+</p>
+<br/>
+<h1>New features in version 2</h1>
+<p>
+  Over the span of 2014 and 2015 a large part of Cadabra was
+  rewritten from scratch, in order to accommodate many changes
+  requested by users. The most visible changes include the
+  following:
+  <ul>
+	 <li>
+		Cadabra manipulations can now programmed using Python. The
+		input format is a combination of Cadabra's old TeX-based
+		format mixed with standard Python. 
+	 </li>
+	 <li>
+		Component computations are now possible. You can
+		manipulate 
+	 </li>
+  </ul>
+</p>
+<br/>
+<!-- http://iconmonstr.com/ -->
+{%- endblock %}
+
+{% block sidebar %}
+
+<div class="news_entry">
+  <h1>Version 2.0 alpha</h1>
+  <p>
+  </p>
+</div>
+
+{%- endblock %}
