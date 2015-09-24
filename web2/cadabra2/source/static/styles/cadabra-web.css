@@ -6,6 +6,16 @@ body {
 	 font-weight: 300;
 	 height: 100%;
 }
+a {
+  color: #209020;
+  background-color: transparent;	
+  text-decoration: none;
+  }
+
+a:hover {
+  color: #209020;
+  background-color: #e0e0e0;
+  }
 hr {
     border: 0;
     height: 1px;
@@ -78,6 +88,14 @@ div#main h1 {
 	 color: green;
 	 font-size: 24px;
 	 border-bottom: 1px solid grey;
+}
+div#main h2 {
+	 margin-top: 4px;
+	 font-family: "Bree Serif";
+	 font-weight: normal;
+	 color: green;
+	 font-size: 20px;
+	 border-bottom: 1px solid #ccc;
 }
 div#main h1 span.date {
 	 margin-top: 10px;

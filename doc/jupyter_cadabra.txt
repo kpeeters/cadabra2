@@ -1,0 +1,15 @@
+
+cell_type:
+
+  our "input"    their "code"
+      "latex"          "?"
+
+our "textbuf"   their "source"
+our "hidden"    their "collapsed"
+
+- they do not have "cell_id"; we should auto-generate cell-ids if not
+  present.
+- they may have a 'worksheets' wrapper
+- they have "markdown" cells.
+- we have input and output latex cells; we could have input markdown
+  and output latex.
