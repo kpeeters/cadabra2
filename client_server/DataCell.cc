@@ -92,7 +92,7 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		json["hidden"]=true;
 
 	if(it->cell_type!=DataCell::CellType::document) {
-		json["textbuf"]  =it->textbuf;
+		json["source"]  =it->textbuf;
 		if(it->id().created_by_client)
 			json["cell_origin"] = "client";
 		else
@@ -135,52 +135,83 @@ void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 
 void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells)
 	{
-	for(unsigned int c=0; c<cells.size(); ++c) {
-		const Json::Value celltype    = cells[c]["cell_type"];
-		const Json::Value cell_id     = cells[c]["cell_id"];
-		const Json::Value cell_origin = cells[c]["cell_origin"];
-		const Json::Value textbuf     = cells[c]["textbuf"];
-		const Json::Value hidden      = cells[c]["hidden"];
+	try {
+		for(unsigned int c=0; c<cells.size(); ++c) {
+			const Json::Value celltype    = cells[c]["cell_type"];
+			const Json::Value cell_id     = cells[c]["cell_id"];
+			const Json::Value cell_origin = cells[c]["cell_origin"];
+			const Json::Value textbuf     = cells[c]["source"];
+			const Json::Value hidden      = cells[c]["hidden"];
+			
+			DTree::iterator last=doc.end();
+			DataCell::id_t id;
+			id.id=cell_id.asUInt64();
+			if(cell_origin=="server")
+				id.created_by_client=false;
+			else
+				id.created_by_client=true;
+			
+			bool hide=false;
+			if(hidden.asBool()) 
+				hide=true;
+			
+			if(celltype.asString()=="input" || celltype.asString()=="code") {
+				std::string res;
+				if(textbuf.isArray()) {
+					for(auto& el: textbuf) 
+						res+=el.asString();
+					}
+				else {
+					res=textbuf.asString();
+					}
+				DataCell dc(id, cadabra::DataCell::CellType::python, res, hide);
+				last=doc.append_child(loc, dc);
+				}
+			else if(celltype.asString()=="output") {
+				DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), hide);
+				last=doc.append_child(loc, dc);
+				}
+			else if(celltype.asString()=="latex" || celltype.asString()=="markdown") {
+				std::string res;
+				if(textbuf.isArray()) {
+					for(auto& el: textbuf) 
+						res+=el.asString();
+					}
+				else {
+					res=textbuf.asString();
+					}
+				bool hide_jupyter=hide;
+				if(cells[c].isMember("cells")==false) hide_jupyter=true;
 
-		DTree::iterator last=doc.end();
-		DataCell::id_t id;
-		id.id=cell_id.asUInt64();
-		if(cell_origin=="server")
-			id.created_by_client=false;
-		else
-			id.created_by_client=true;
-
-		bool hide=false;
-		if(hidden.asBool()) 
-			hide=true;
-
-		if(celltype.asString()=="input") {
-			DataCell dc(id, cadabra::DataCell::CellType::python, textbuf.asString(), hide);
-			last=doc.append_child(loc, dc);
-			}
-		else if(celltype.asString()=="output") {
-			DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), hide);
-			last=doc.append_child(loc, dc);
-			}
-		else if(celltype.asString()=="latex") {
-			DataCell dc(id, cadabra::DataCell::CellType::latex, textbuf.asString(), hide);
-			last=doc.append_child(loc, dc);
-			}
-		else if(celltype.asString()=="image_png") {
-			DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.asString(), hide);
-			last=doc.append_child(loc, dc);
-			}
-		else {
-			std::cerr << "cadabra-client: found unknown cell type '"+celltype.asString()+"', ignoring";
-			continue;
-			}
-
-		if(last!=doc.end()) {
-			if(cells[c].isMember("cells")) {
-				const Json::Value subcells = cells[c]["cells"];
-				JSON_in_recurse(doc, last, subcells);
+				DataCell dc(id, cadabra::DataCell::CellType::latex, res, hide_jupyter);
+				last=doc.append_child(loc, dc);
+				
+				// IPython/Jupyter notebooks only have the input LaTeX cell, not the output cell,
+				// which we need. 
+				if(cells[c].isMember("cells")==false) {
+					DataCell dc(id, cadabra::DataCell::CellType::output, res, hide);
+					doc.append_child(last, dc);
+					}
+				}
+			else if(celltype.asString()=="image_png") {
+				DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.asString(), hide);
+				last=doc.append_child(loc, dc);
+				}
+			else {
+				std::cerr << "cadabra-client: found unknown cell type '"+celltype.asString()+"', ignoring" << std::endl;
+				continue;
+				}
+			
+			if(last!=doc.end()) {
+				if(cells[c].isMember("cells")) {
+					const Json::Value subcells = cells[c]["cells"];
+					JSON_in_recurse(doc, last, subcells);
+					}
 				}
 			}
+		}
+	catch(std::exception& ex) {
+		std::cerr << "cadabra-client: exception reading notebook: " << ex.what() << std::endl;
 		}
 	}
 
