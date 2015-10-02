@@ -11,11 +11,11 @@
 				{
 					"cell_type" : "output",
 					"id" : 10,
-					"textbuf" : "$A_{m n} B_{m n}\n$"
+					"source" : "$A_{m n} B_{m n}\n$"
 				}
 			],
 			"id" : 3,
-			"textbuf" : "A_{m n}::Symmetric.\nB_{m n}::AntiSymmetric.\nex:=A_{m n} B_{m n};"
+			"source" : "A_{m n}::Symmetric.\nB_{m n}::AntiSymmetric.\nex:=A_{m n} B_{m n};"
 		},
 		
 		{
@@ -26,17 +26,17 @@
 				{
 					"cell_type" : "output",
 					"id" : 13,
-					"textbuf" : "$0\n$"
+					"source" : "$0\n$"
 				}
 			],
 			"id" : 5,
-			"textbuf" : "canonicalise(_);"
+			"source" : "canonicalise(_);"
 		},
 		
 		{
 			"cell_type" : "input",
 			"id" : 6,
-			"textbuf" : ""
+			"source" : ""
 		}
 	],
 	"description" : "Cadabra JSON notebook format",

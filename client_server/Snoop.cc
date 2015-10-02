@@ -9,6 +9,7 @@
 #include <uuid/uuid.h>
 #include <chrono>
 #include <ctime>
+#include <sys/utsname.h>
 #include <stdint.h>
 #include <jsoncpp/json/json.h>
 
@@ -59,6 +60,12 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		this_app_.app_name=app_name;
 		this_app_.app_version=app_version;
 		this_app_.pid = getpid();
+		struct utsname buf;
+		if(uname(&buf)==0) {
+			this_app_.machine_id = std::string(buf.sysname)
+				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine+", "+buf.domainname;
+			}
+
 		auto duration =  std::chrono::high_resolution_clock::now().time_since_epoch();
 		this_app_.create_millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 		
@@ -682,39 +689,44 @@ Snoop::LogEntry::LogEntry(int log_id_, int client_log_id_, int c1, const std::st
 
 std::string Snoop::LogEntry::to_json(bool human_readable) const
 	{
-	std::ostringstream str;
-	str << "{ \"log_id\": " << log_id
-		 << ", \"client_log_id\": " << client_log_id
-		 << ", \"id\": " << id
-		 << ", \"uuid\": \"" << uuid << "\"";
+	Json::Value json;
+	
+	json["log_id"]=log_id;
+	json["client_log_id"]=client_log_id;
+	json["id"]=id;
+	json["uuid"]=uuid;
 	if(human_readable) {	
 		time_t tt = std::chrono::system_clock::to_time_t(u64_to_time(create_millis));
 		tm utc_tm = *localtime(&tt);
-		str << ", \"time\": \"" 
-			 << std::setfill('0') 
+		std::ostringstream str;
+		str << std::setfill('0') 
 			 << std::setw(2) << utc_tm.tm_hour << ":" 
 			 << std::setw(2) << utc_tm.tm_min << ":" 
-			 << std::setw(2) << utc_tm.tm_sec << "\""
-			 << ", \"date\": \""
-			 << std::setw(2) << utc_tm.tm_mday << "/" 
+			 << std::setw(2) << utc_tm.tm_sec;
+		json["time"]=str.str();
+		str.str("");
+		str << std::setw(2) << utc_tm.tm_mday << "/" 
 			 << std::setw(2) << utc_tm.tm_mon+1 << "/" 
-			 << std::setw(4) << utc_tm.tm_year+1900
-			 << "\"";
+			 << std::setw(4) << utc_tm.tm_year+1900;
+		json["date"]=str.str();
 		}
-	str << ", \"create_millis\": " << create_millis
-		 << ", \"receive_millis\": " << receive_millis
-		 << ", \"loc_file\": \"" << loc_file << "\""
-		 << ", \"loc_line\": " << loc_line
-		 << ", \"loc_method\": \"" << loc_method << "\""
-		 << ", \"type\": \"" << type << "\""
-		 << ", \"message\": \"" << message << "\""
-		 << ", \"server_status\": " << server_status 
-		  << "}";
+	json["create_millis"]=(Json::UInt64)create_millis;
+	json["receive_millis"]=(Json::UInt64)receive_millis;
+	json["loc_file"]=loc_file;
+	json["loc_line"]=loc_line;
+	json["loc_method"]=loc_method;
+	json["type"]=type;
+	json["message"]=message;
+	json["server_status"]=server_status;
+
+	std::ostringstream str;
+	str << json;
+
 	return str.str();
 	}
 
 Snoop::AppEntry::AppEntry()
-	: id(0), create_millis(0), receive_millis(0), pid(0), server_status(0)
+	: id(0), create_millis(0), receive_millis(0), pid(0), server_status(0), connected(false)
 	{
 	}
 
@@ -754,6 +766,7 @@ std::string Snoop::AppEntry::to_json(bool human_readable) const
 		 << ", \"app_name\": \"" << app_name << "\""
 		 << ", \"app_version\": \"" << app_version << "\""
 		 << ", \"server_status\": " << server_status
+		 << ", \"connected\": " << connected
 		 << "}";
 
 	return str.str();

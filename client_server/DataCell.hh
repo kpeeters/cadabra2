@@ -109,4 +109,14 @@ namespace cadabra {
 
 	void        JSON_deserialise(const std::string&, DTree&);
 	void        JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells);
+
+	/// Export a document to a single self-contained HTML file.
+
+	std::string export_as_HTML(const DTree& doc);
+	void        HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str);
+
+	/// Convert various LaTeX constructions to HTML-with-Mathjax, e.g. \section{...}, 
+	/// \begin{verbatim}...\end{verbatim}, \verb.
+
+	std::string latex_to_html(const std::string&);
 }

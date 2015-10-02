@@ -73,6 +73,10 @@ def display(obj):
             b64 = base64.b64encode(imgstring.getvalue())
             server.send(b64, "image_png")
 
+    elif 'vtk' in sys.modules and isinstance(obj, vtk.vtkRenderer):
+        # Vtk renderer, see http://nbviewer.ipython.org/urls/bitbucket.org/somada141/pyscience/raw/master/20140917_RayTracing/Material/PythonRayTracingEarthSun.ipynb
+        pass
+                    
     elif isinstance(obj, Ex):
         server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
 
