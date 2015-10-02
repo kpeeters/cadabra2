@@ -123,6 +123,7 @@ namespace cadabra {
 			void on_file_open();
 			void on_file_save();
 			void on_file_save_as();
+			void on_file_export_html();
 			void on_file_quit();
 			bool quit_safeguard(bool quit);
 

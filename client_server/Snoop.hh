@@ -101,6 +101,7 @@ namespace snoop {
 					std::string app_name;
 					std::string app_version;
 					int         server_status; // 1: synced, 0 and negative: number of attempts at syncing made
+					bool        connected;
 			};
 
 			/// C++ representation of a log entry.

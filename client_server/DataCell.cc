@@ -45,6 +45,86 @@ DataCell::DataCell(const DataCell& other)
 	serial_number = other.serial_number;
 	}
 
+std::string cadabra::export_as_HTML(const DTree& doc)
+	{
+	std::ostringstream str;
+	HTML_recurse(doc, doc.begin(), str);
+
+	return str.str();
+	}
+
+std::string cadabra::latex_to_html(const std::string& str)
+	{
+	
+	}
+
+void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str)
+	{
+	switch(it->cell_type) {
+		case DataCell::CellType::document:
+			str << "<html>\n";
+			str << "<head>\n";
+			str << "<style>\n";
+			str << "div.latex div.output { display: none; }\n div.image_png { width: 400px; }\n"
+				 << "div.output { font-family: monospace; }\n"
+				 << "div.latex { font-family: 'STIXGENERAL'; padding-left: 10px; margin-bottom: 10px; }\n"
+				 << "div.image_png img { width: 100%; }\n"
+				 << "div.python { font-family: monospace; padding-left: 10px; margin-bottom: 10px; margin-top: 10px; white-space: pre; color: blue; }\n";
+			str << "</style>\n";
+			str << "</head>\n";
+			str << "<body>\n";
+			break;
+		case DataCell::CellType::python:
+			str << "<div class='python'>";
+			break;
+		case DataCell::CellType::output:
+			str << "<div class='output'>";
+			break;
+		case DataCell::CellType::latex:
+			str << "<div class='latex'>";
+			break;
+		case DataCell::CellType::error:
+			str << "<div class='error'>";
+			break;
+		case DataCell::CellType::image_png:
+			str << "<div class='image_png'><img src='data:image/png;base64,";
+			break;
+		}	
+
+	if(it->cell_type!=DataCell::CellType::document) 
+		str << it->textbuf;
+
+	if(doc.number_of_children(it)>0) {
+		DTree::sibling_iterator sib=doc.begin(it);
+		while(sib!=doc.end(it)) {
+			HTML_recurse(doc, sib, str);
+			++sib;
+			}
+		}
+
+	switch(it->cell_type) {
+		case DataCell::CellType::document:
+			str << "</body>\n";
+			str << "</html>\n";
+			break;
+		case DataCell::CellType::python:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::output:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::latex:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::error:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::image_png:
+			str << "' /></div>\n";
+			break;
+		}	
+	}
+
 std::string cadabra::JSON_serialise(const DTree& doc)
 	{
 	Json::Value json;

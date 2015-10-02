@@ -54,6 +54,8 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
 	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
+	actiongroup->add( Gtk::Action::create("ExportHtml", "Export to HTML"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_export_html) );
 	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
@@ -105,6 +107,7 @@ NotebookWindow::NotebookWindow()
 		"      <separator/>"
 		"      <menuitem action='Save'/>"
 		"      <menuitem action='SaveAs'/>"
+		"      <menuitem action='ExportHtml'/>"
 		"      <separator/>"
 		"      <menuitem action='Quit'/>"
 		"    </menu>"
@@ -665,7 +668,7 @@ void NotebookWindow::on_file_new()
 
 void NotebookWindow::on_file_open()
 	{
-	if(quit_safeguard(true)==false)
+	if(quit_safeguard(false)==false)
 		return;
 	
 	Gtk::FileChooserDialog dialog("Please choose a Cadabra notebook (.cnb file) to open",
@@ -759,6 +762,25 @@ void NotebookWindow::on_file_save_as()
 		}
 	}
 
+void NotebookWindow::on_file_export_html()
+	{
+	Gtk::FileChooserDialog dialog("Please enter a file name for the HTML document",
+											Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+	dialog.set_transient_for(*this);
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+	int result=dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+			name = dialog.get_filename();			
+			std::ofstream temp(name);
+			temp << export_as_HTML(doc);
+			}
+		}
+	}
 
 // FIXME: this logic can go into DocumentThread to be system independent.
 
