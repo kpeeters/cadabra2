@@ -45,10 +45,10 @@ DataCell::DataCell(const DataCell& other)
 	serial_number = other.serial_number;
 	}
 
-std::string cadabra::export_as_HTML(const DTree& doc)
+std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding)
 	{
 	std::ostringstream str;
-	HTML_recurse(doc, doc.begin(), str);
+	HTML_recurse(doc, doc.begin(), str, for_embedding);
 
 	return str.str();
 	}
@@ -58,21 +58,23 @@ std::string cadabra::latex_to_html(const std::string& str)
 	
 	}
 
-void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str)
+void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, bool for_embedding)
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
-			str << "<html>\n";
-			str << "<head>\n";
-			str << "<style>\n";
-			str << "div.latex div.output { display: none; }\n div.image_png { width: 400px; }\n"
-				 << "div.output { font-family: monospace; }\n"
-				 << "div.latex { font-family: 'STIXGENERAL'; padding-left: 10px; margin-bottom: 10px; }\n"
-				 << "div.image_png img { width: 100%; }\n"
-				 << "div.python { font-family: monospace; padding-left: 10px; margin-bottom: 10px; margin-top: 10px; white-space: pre; color: blue; }\n";
-			str << "</style>\n";
-			str << "</head>\n";
-			str << "<body>\n";
+			if(!for_embedding) {
+				str << "<html>\n";
+				str << "<head>\n";
+				str << "<style>\n";
+				str << "div.latex div.output { display: none; }\n div.image_png { width: 400px; }\n"
+					 << "div.output { font-family: monospace; }\n"
+					 << "div.latex { font-family: 'STIXGENERAL'; padding-left: 10px; margin-bottom: 10px; }\n"
+					 << "div.image_png img { width: 100%; }\n"
+					 << "div.python { font-family: monospace; padding-left: 10px; margin-bottom: 10px; margin-top: 10px; white-space: pre; color: blue; }\n";
+				str << "</style>\n";
+				str << "</head>\n";
+				str << "<body>\n";
+				}
 			break;
 		case DataCell::CellType::python:
 			str << "<div class='python'>";
@@ -104,8 +106,10 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
-			str << "</body>\n";
-			str << "</html>\n";
+			if(!for_embedding) {
+				str << "</body>\n";
+				str << "</html>\n";
+				}
 			break;
 		case DataCell::CellType::python:
 			str << "</div>\n";
