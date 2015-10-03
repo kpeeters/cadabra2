@@ -1,6 +1,7 @@
 
 #include "DataCell.hh"
 #include <sstream>
+#include <regex>
 
 using namespace cadabra;
 
@@ -55,7 +56,21 @@ std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding)
 
 std::string cadabra::latex_to_html(const std::string& str)
 	{
-	
+	std::regex section(R"(\\section\*\{(.*)\})");
+	std::regex subsection(R"(\\subsection\*\{(.*)\})");
+	std::regex verb(R"(\\verb\|(.*)\|)");
+	std::regex url(R"(\\url\{(.*)\})");
+	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
+
+	std::string res;
+
+	res = std::regex_replace(str, section, "<h1>$1</h1>");
+	res = std::regex_replace(res, subsection, "<h2>$1</h2>");
+	res = std::regex_replace(res, verb, "<code>$1</code>");
+	res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
+	res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
+
+	return res;
 	}
 
 void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, bool for_embedding)
@@ -94,7 +109,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		}	
 
 	if(it->cell_type!=DataCell::CellType::document) 
-		str << it->textbuf;
+		str << latex_to_html(it->textbuf);
 
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);

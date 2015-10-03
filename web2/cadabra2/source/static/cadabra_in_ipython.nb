@@ -1,0 +1,206 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Cadabra inside IPython/Jupyter\n",
+    "=================\n",
+    "\n",
+    "This is a short and simple Jupyter notebook shows how to use Cadabra functionality from with Jupyter. The first thing to do is to import the cadabra2 module. To save typing, we will import everything into the global namespace."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "from cadabra2 import *\n",
+    "from IPython.display import display, Math, Latex"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Expressions are declared by typing them as standard LaTeX, and feeding that into the Ex object. The result is a standard Python object."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [],
+   "source": [
+    "ex=Ex(r\"A_{m n} B^{m n}\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Printing is still a bit messy in IPython/Jupyter, but you can get the nicely typeset form of the expression using the following:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/latex": [
+       "$$A_{m n} B^{m n}$$"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Math object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "display(Math(str(ex)))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Properties get assigned to symbols or patterns by using their Cadabra name,"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "Property::repr: AntiSymmetric"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Symmetric(Ex(r\"A_{m n}\"))\n",
+    "AntiSymmetric(Ex(r\"B_{m n\"))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Cadabra algorithms are ordinary python functions. They always act on the expression that you pass it, and modify it in-place. Here's an example: the contraction of an antisymmetric and a symmetric tensor is zero:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/latex": [
+       "$$C_{m}\\,^{p} D_{p n} B^{m n}$$"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Math object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "display(Math(str(canonicalise(ex))))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's do another example, with substitution. Note how indices get relabelled automatically."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+    "collapsed": false
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/latex": [
+       "$$D_{m r} D^{r}\\,_{n} B^{m p} C_{p q}$$"
+      ],
+      "text/plain": [
+       "<IPython.core.display.Math object>"
+      ]
+     },
+     "metadata": {},
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "Indices(Ex(r\"{m,n,p,q,r,s,t}\"))\n",
+    "ex=Ex(r\"A_{m n} B^{m p} C_{p q}\")\n",
+    "display(Math(str(substitute(ex, Ex(r\"A_{m n} -> D_{m q} D^{q}_{n}\")))))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "If you are interested in more of this, get in touch by emailing me at info@cadabra.science !"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 2",
+   "language": "python",
+   "name": "python2"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 2
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython2",
+   "version": "2.7.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 0
+}
