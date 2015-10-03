@@ -76,6 +76,10 @@ div#main p {
 	 margin-bottom: 20px;
 	 margin-left: 40px;
 }
+div#main blockquote {
+	 margin-top: -5px;
+	 margin-left: 60px;
+}
 div#main ul {
 	 margin-top: 0px;
 	 margin-left: 40px;
@@ -180,4 +184,32 @@ div#sidebar h1 {
 	 font-family: "Bree Serif";
 	 font-weight: normal;
 	 color: green;
+}
+
+/* Notebooks */
+
+div.latex div.output { 
+	 display: none; 
+}
+div.image_png { 
+	 width: 400px; 
+}
+div.output { 
+	 font-family: monospace;
+}
+div.latex { 
+/* 	 font-family: 'STIXGENERAL';  */
+	 padding-left: 10px; 
+	 margin-bottom: 10px; 
+}
+div.image_png img { 
+	 width: 100%; 
+}
+div.python { 
+	 font-family: monospace; 
+	 padding-left: 10px; 
+	 margin-bottom: 10px; 
+	 margin-top: 10px;
+	 white-space: pre; 
+	 color: blue; 
 }

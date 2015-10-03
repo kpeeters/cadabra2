@@ -1,0 +1,33 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_id" : 6,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 7,
+					"cell_origin" : "client",
+					"cell_type" : "output",
+					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} ."
+				}
+			],
+			"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} ."
+		},
+		
+		{
+			"cell_id" : 8,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -16,4 +16,4 @@ endif()
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-subdirs(core client_server frontend tests)
+subdirs(core client_server frontend tests web2)
