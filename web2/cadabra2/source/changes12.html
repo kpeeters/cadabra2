@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}Cadabra: changes from version 1 to 2{% endblock %}
+
+{% block head %}{%- endblock %}
+
+{% block main %}
+
+<h1>Changes from version 1 to 2</h1>
+<p>
+  A number of algorithms (and a few properties) have changed name or
+  behaviour while going from version 1 to version 2. This was done
+  mostly to make naming more consistent and to avoid weird acronyms in
+  algorithm names. 
+</p>
+
+<h2>Algorithms</h2>
+<p>
+  In general, all algorithms now have names of the form 'action' or
+  'action_object'. 
+  <table>
+	 <tr>
+		<th>old name</th>
+		<th>new name</th>
+		<th>notes</th>
+	 </tr>
+	 <tr>
+		<td>prodflatten</td>
+		<td>flatten_product</td>
+		<td>to avoid abbreviations</td>
+	 </tr>
+  </table>
+</p>
+
+<h2>Properties</h2>
+<p>
+</p>
+
+
+{%- endblock %}
