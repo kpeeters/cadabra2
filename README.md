@@ -3,7 +3,7 @@ Cadabra documentation                                  {#mainpage}
 
 \author  Kasper Peeters
 \version 2.x
-\see     http://cadabra.phi-sci.com
+\see     http://cadabra.science
 
 
 This repository holds the 2.x series of the Cadabra computer
