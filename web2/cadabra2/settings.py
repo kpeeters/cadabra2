@@ -10,6 +10,7 @@ FILTER = [
     'webassets-cache/*',
     '.webassets-cache',
     'layout.html',
+    '*.nb.html'
 ]
 
 ## When building, force the inclusion of all the HTML partials listed here.

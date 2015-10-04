@@ -95,7 +95,7 @@ div#main h1 {
 	 border-bottom: 1px solid grey;
 }
 div#main h2 {
-	 margin-top: 4px;
+	 margin-top: 24px;
 	 font-family: "Bree Serif";
 	 font-weight: normal;
 	 color: green;
@@ -212,4 +212,18 @@ div.python {
 	 margin-top: 10px;
 	 white-space: pre; 
 	 color: blue; 
+}
+div.view_options {
+	 margin-left: 20px;
+	 margin-bottom: 20px;
+}
+div.download_options {
+	 margin-left: 50px;
+	 margin-bottom: 20px;
+}
+div.view_options a {
+	 margin-left: 20px;
+}
+pre {
+	 margin-left: 30px;
 }
