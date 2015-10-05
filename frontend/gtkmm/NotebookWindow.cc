@@ -70,9 +70,9 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
 	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
-	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"),
+	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
-	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Python"),
+	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Python"), Gtk::AccelKey("<control><shift>P"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
 
 	actiongroup->add( Gtk::Action::create("MenuView", "_View") );
@@ -523,7 +523,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		VisualCell& vc = canvasses[i]->visualcells[&(*it)];
-		if(it->cell_type==DataCell::CellType::python) 
+		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) 
 			vc.inbox->queue_draw();
 		}
 	
@@ -915,16 +915,20 @@ void NotebookWindow::on_edit_cell_is_python()
 	{
 	if(current_cell==doc.end()) return;
 
-	if(current_cell->cell_type==DataCell::CellType::latex)
+	if(current_cell->cell_type==DataCell::CellType::latex) {
 		current_cell->cell_type = DataCell::CellType::python;
+		update_cell(doc, current_cell);
+		}
 	}
 
 void NotebookWindow::on_edit_cell_is_latex()
 	{
 	if(current_cell==doc.end()) return;
 
-	if(current_cell->cell_type==DataCell::CellType::python)
+	if(current_cell->cell_type==DataCell::CellType::python) {
 		current_cell->cell_type = DataCell::CellType::latex;
+		update_cell(doc, current_cell);
+		}
 	}
 
 void NotebookWindow::on_view_split()
