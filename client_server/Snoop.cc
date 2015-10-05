@@ -188,10 +188,10 @@ bool SnoopImpl::store_app_entry(Snoop::AppEntry& app)
 bool SnoopImpl::store_app_entry_without_lock(Snoop::AppEntry& app)
 	{
 	sqlite3_stmt *statement=0;
-	int res = sqlite3_prepare(db, "insert into apps (uuid, create_millis, receive_millis, pid, ip_address, "
+	int res = sqlite3_prepare(db, "insert into apps (uuid, create_millis, receive_millis, pid, ip_address, machine_id, "
 									  "app_name, app_version, server_status) "
 									  "values "
-									  "(?, ?, ?, ?, ?, ?, ?, ?)", 
+									  "(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 									  -1, &statement, NULL);
 	
 	if(res==SQLITE_OK) {
@@ -200,9 +200,10 @@ bool SnoopImpl::store_app_entry_without_lock(Snoop::AppEntry& app)
 		sqlite3_bind_int64(statement,  3, app.receive_millis);
 		sqlite3_bind_int64(statement,  4, app.pid);
 		sqlite3_bind_text(statement,   5, app.ip_address.c_str(), app.ip_address.size(), 0);
-		sqlite3_bind_text(statement,   6, app.app_name.c_str(), app.app_name.size(), 0);
-		sqlite3_bind_text(statement,   7, app.app_version.c_str(), app.app_version.size(), 0);
-		sqlite3_bind_int(statement,    8, app.server_status);
+		sqlite3_bind_text(statement,   6, app.machine_id.c_str(), app.machine_id.size(), 0);
+		sqlite3_bind_text(statement,   7, app.app_name.c_str(), app.app_name.size(), 0);
+		sqlite3_bind_text(statement,   8, app.app_version.c_str(), app.app_version.size(), 0);
+		sqlite3_bind_int(statement,    9, app.server_status);
 		
 		sqlite3_step(statement);
 		sqlite3_finalize(statement);
@@ -608,8 +609,10 @@ Snoop::~Snoop()
 
 SnoopImpl::~SnoopImpl()
    {
-	wsclient.stop();
-	wsclient_thread.join();
+	if(db!=0) { // If the database is not open the wsclient won't be running either
+		wsclient.stop();
+		wsclient_thread.join();
+		}
 
 	if(insert_statement!=0) {
 		sqlite3_finalize(insert_statement);
