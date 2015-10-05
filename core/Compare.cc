@@ -347,7 +347,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 																		  bool nobrackets) 
 	{
 	// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
-	// one is the substitute pattern, two the expression under consideration
+	// 'one' is the substitute pattern, 'two' the expression under consideration.
 	
 //	std::cerr << "matching " << *one->name << " to " << *two->name << std::endl;
 
@@ -513,13 +513,13 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		
 		return subtree_match;
 		}
-	else if(is_coordinate) { // FIXME: check if coordinate can come from index
+	else if(is_coordinate) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
 		const Indices *t2=properties.get<Indices>(two, true);
 		if(t2) {
 			std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
 			auto ivals = index_values.find(t2);
 			if(ivals!=index_values.end()) {
-				
+				// FIXME:
 				}
 			else return no_match_less;
 			}

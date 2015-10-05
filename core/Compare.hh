@@ -207,7 +207,11 @@ class Ex_comparator {
 		typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less>   subtree_replacement_map_t;
 		subtree_replacement_map_t                                             subtree_replacement_map;
 
-		/// Map for the association of indices with their values.
+		/// Map for the association of indices with their values, in order to be able
+		/// to match a pattern with component values, e.g. A_{t r}, to an expression containing
+		/// an abstract tensor, e.g. A_{m n}. Is used in the compare method around the
+		/// 'Check if the coordinate can come from an index' comment. Used for component
+		/// evaluations.
 		typedef std::map<const Indices *, Ex> index_value_map_t;
 		index_value_map_t                          index_values;
 

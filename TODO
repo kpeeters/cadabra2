@@ -1,4 +1,7 @@
 
+- Components: finish the substitute compare method so it can match
+  A_{t r} to the expression A_{m n} and then return the so-matched set.
+
 - handle the popen file pointer more gracefully.
 
 - If a kernel which was started by the client notices that the client
@@ -46,8 +49,6 @@
 - add kernel starting/restarting logic to ComputeThread
 
 - gui status: document logic
-
-- server: currently keeps python alive, restart?
 
 - For ActionRemoveCell we need to flip the order of remove gui and execute on doc,   
   or not? Depends on whether we keep the cell floating alive outside the Doc or not.
@@ -100,9 +101,6 @@
   with 'print' (nothing reaches the output channel automatically). Using 'display' or
   perhaps 'cadabra.display' to be unambiguous has some advantages because we can 
   ensure that we output a proper mime type like identifier with the output.
-
-- Sometimes the kernel remains running, should we issue a warning if
-  the kernel is already running when a new client is started?
 
 - Change ComputeThread so that it does not need access to anything but isolated DataCells.
   Perhaps not let it change them either, and pass everything by const ref. However, that 

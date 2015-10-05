@@ -140,6 +140,8 @@ NotebookWindow::NotebookWindow()
 		"  </menubar>"
 		"  <toolbar name='ToolBar'>"
 		"    <toolitem action='Open' />"
+//		"       <property name='tooltip_text' translatable='yes'>Open existing notebook</property>"
+//		"    </toolitem>"
 		"    <toolitem action='RunAll' name='run all'/>"
 		"    <toolitem action='RunStop' />"
 		"  </toolbar>"
