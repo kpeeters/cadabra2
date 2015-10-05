@@ -61,6 +61,10 @@ void evaluate::prepare_replacement_rules(const Ex& components)
 	// one index set) this gives multiple options from the index value to
 	// the index that can take this value.
 
+	// FIXME: has this now been superceded by the logic in Compare.cc which
+	// takes into account the index_values map there and can match component
+	// A_{t r} in the rule to abstract tensor A_{m n} in the expression?
+
 	std::map<Ex, const Indices *> index_candidates;
 	
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {

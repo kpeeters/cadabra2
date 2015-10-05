@@ -66,7 +66,11 @@ class evaluate : public Algorithm {
 		
 	private:
 		/// Create a map from Indices properties to an Ex list of possible values
-		/// of that index type.
+		/// of that index type. That is, it takes an expression of the form
+		///      m -> { t, r, \phi, \theta };
+		/// and constructs a map from the index property attached to m to the
+		/// four Ex expressions containing the coordinates t,r,\phi and \theta.
+
 		void collect_index_values(const Ex& ind_values);
 		Ex_comparator::index_value_map_t index_values;
 
