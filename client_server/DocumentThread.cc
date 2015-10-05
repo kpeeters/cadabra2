@@ -31,6 +31,13 @@ void DocumentThread::new_document()
 	DataCell one(DataCell::CellType::python, "");
 	DTree::iterator one_it = doc.append_child(doc_it, one);
 	gui->add_cell(doc, one_it, false);
+
+	// Put a 'position cursor' action on the stack to be executed as
+	// soon as the GUI is up.
+
+	std::shared_ptr<ActionBase> actionpos =
+		std::make_shared<ActionPositionCursor>(one_it, ActionPositionCursor::Position::in);
+	queue_action(actionpos);
 	}
 
 void DocumentThread::build_visual_representation()

@@ -27,4 +27,17 @@ add_executable(cadabra-gtk main.cc
 
 target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread )
 
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-gtk DESTINATION bin)
+# Create installation directories with correct permissions.
+set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
+set(INSTALL_IMAGES_DIR       share/cadabra2/images  CACHE PATH "Installation directory for image files.")
+install(DIRECTORY DESTINATION ${INSTALL_SHARE_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_IMAGES_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+
+# Install programs.
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-gtk     DESTINATION bin)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra.png DESTINATION ${INSTALL_IMAGES_DIR})
+

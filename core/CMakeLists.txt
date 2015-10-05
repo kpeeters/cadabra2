@@ -151,10 +151,6 @@ install(FILES
 install(PROGRAMS
   "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
 
-# FIXME: sort out how to install auxiliary files in a system-independent way
-install(FILES
-  "${PROJECT_SOURCE_DIR}/../images/cadabra.png" DESTINATION share/cadabra2/images)
-
 
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")

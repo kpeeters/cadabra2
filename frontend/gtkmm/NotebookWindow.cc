@@ -981,8 +981,8 @@ void NotebookWindow::on_help_about()
 	about.set_authors(authors);
 	about.set_copyright("\xC2\xA9 2006-2015 Kasper Peeters");
 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
-	about.set_website("http://cadabra.phi-sci.com");
-	about.set_website_label("cadabra.phi-sci.com");
+	about.set_website("http://cadabra.science");
+	about.set_website_label("cadabra.science");
 	about.set_logo(logo);
 	about.run();
 	}
