@@ -1,4 +1,6 @@
 
+- Catch TeXEngine exceptions in the frontend.
+
 - Components: finish the substitute compare method so it can match
   A_{t r} to the expression A_{m n} and then return the so-matched set.
 

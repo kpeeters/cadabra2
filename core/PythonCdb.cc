@@ -456,6 +456,7 @@ void inject_defaults(Kernel *k)
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}"), 0);
+//	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}"), 0);
 	}
 
 void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
@@ -487,12 +488,27 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 template<class Prop>
 std::string Property<Prop>::str_() const
 	{
-	return "\\text{Attached property "+prop->name()+" to~}"+Ex_str_(*for_obj)+".";
+	std::ostringstream str;
+	str << "Attached property ";
+	prop->latex(str); // FIXME: this should call 'str' on the property, which does not exist yet
+	str << " to "+Ex_str_(*for_obj)+".";
+	return str.str();
+	}
+
+template<class Prop>
+std::string Property<Prop>::latex_() const
+	{
+	std::ostringstream str;
+	str << "\\text{Attached property ";
+	prop->latex(str);
+	str << " to~}"+Ex_str_(*for_obj)+".";
+	return str.str();
 	}
 
 template<class Prop>
 std::string Property<Prop>::repr_() const
 	{
+	// FIXME: this needs work, it does not output things which can be fed back into python.
 	return "Property::repr: "+prop->name();
 	}
 
@@ -612,7 +628,7 @@ void def_prop()
 
 	delete p;
 
-	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_);
+	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_).def("_latex", &Property<P>::latex_);
 	}
 
 

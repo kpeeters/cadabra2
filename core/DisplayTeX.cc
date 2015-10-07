@@ -236,12 +236,14 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 
 void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it) 
 	{
-	if(*it->name=="\\prod")       print_productlike(str, it, " ");
-	else if(*it->name=="\\sum")   print_sumlike(str, it);
-	else if(*it->name=="\\frac")  print_fraclike(str, it);
-	else if(*it->name=="\\comma") print_commalike(str, it);
-	else if(*it->name=="\\arrow") print_arrowlike(str, it);
-	else if(*it->name=="\\pow")   print_powlike(str, it);
+	if(*it->name=="\\prod")        print_productlike(str, it, " ");
+	else if(*it->name=="\\sum")    print_sumlike(str, it);
+	else if(*it->name=="\\frac")   print_fraclike(str, it);
+	else if(*it->name=="\\comma")  print_commalike(str, it);
+	else if(*it->name=="\\arrow")  print_arrowlike(str, it);
+	else if(*it->name=="\\pow")    print_powlike(str, it);
+	else if(*it->name=="\\int")    print_intlike(str, it);
+	else if(*it->name=="\\equals") print_equalitylike(str, it);
 	else
 		output(str, it);
 	}
@@ -445,6 +447,27 @@ void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 	++sib;
 	dispatch(str, sib);
 	str << "}";
+	}
+
+void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
+	{
+	if(*it->multiplier!=1)
+		print_multiplier(str, it);
+	str << *it->name << "{}"; // FIXME: add limits
+	Ex::sibling_iterator sib=tree.begin(it);
+	dispatch(str, sib);
+	++sib;
+	str << "\\, {\\rm d}";
+	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
+	{
+	Ex::sibling_iterator sib=tree.begin(it);
+	dispatch(str, sib);
+	str << " = ";
+	++sib;
+	dispatch(str, sib);
 	}
 
 bool DisplayTeX::children_have_brackets(Ex::iterator ch) const
