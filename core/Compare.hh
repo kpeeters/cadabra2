@@ -216,9 +216,14 @@ class Ex_comparator {
 		index_value_map_t                          index_values;
 
 
+		/// Information to keep track of where individual factors in a sub-product were
+		/// found, and whether moving them into the searched-for order leads to sign flips.
 		std::vector<Ex::sibling_iterator> factor_locations;
-		std::vector<int>                       factor_moving_signs;
+		std::vector<int>                  factor_moving_signs;
 
+		/// Flag to indicate whether additional care must be taken to handle dummies in the 
+		/// lhs of the pattern.
+		/// FIXME: would be better if this were automatic.
 		bool lhs_contains_dummies;
 
       /// Determine whether two objects should be swapped according to
