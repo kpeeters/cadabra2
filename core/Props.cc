@@ -255,9 +255,9 @@ bool property::parse_to_keyvals(const Ex& tr, keyval_t& keyvals)
 	}
 
 
-void property::display(std::ostream& str) const
+void property::latex(std::ostream& str) const
 	{ 
-	str << name() << "(";
+	str << name();
 	}
 
 std::string property::unnamed_argument() const

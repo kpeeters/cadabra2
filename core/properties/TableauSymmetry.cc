@@ -84,7 +84,7 @@ bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
 	return true;
 	}
 
-void TableauSymmetry::display(std::ostream& str) const
+void TableauSymmetry::latex(std::ostream& str) const
 	{
 	for(unsigned int i=0; i<tabs.size(); ++i)
 		str << tabs[i] << std::endl;

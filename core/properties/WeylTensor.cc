@@ -24,9 +24,9 @@ void WeylTensor::validate(const Properties& props, const Ex& pat) const
 		throw ConsistencyException("WeylTensor: need exactly 4 indices.");
 	}
 
-void WeylTensor::display(std::ostream& str) const
+void WeylTensor::latex(std::ostream& str) const
 	{
-	TableauSymmetry::display(str);
-	Traceless::display(str);
+	TableauSymmetry::latex(str);
+	Traceless::latex(str);
 	}
 

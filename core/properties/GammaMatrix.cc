@@ -6,9 +6,9 @@ std::string GammaMatrix::name() const
 	return "GammaMatrix";
 	}
 
-void GammaMatrix::display(std::ostream& str) const
+void GammaMatrix::latex(std::ostream& str) const
 	{
-	Matrix::display(str);
+	Matrix::latex(str);
 	}
 
 bool GammaMatrix::parse(const Properties& properties, keyval_t& keyvals)

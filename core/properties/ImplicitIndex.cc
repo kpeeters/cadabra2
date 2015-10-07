@@ -25,9 +25,9 @@ bool ImplicitIndex::parse(const Properties&, keyval_t& keyvals)
 	return true;
 	}
 
-void ImplicitIndex::display(std::ostream& str) const
+void ImplicitIndex::latex(std::ostream& str) const
 	{
-	property::display(str);
+	property::latex(str);
 	for(size_t n=0; n<set_names.size(); ++n) {
 		if(n>0) str << ", ";
 		str << set_names[n];

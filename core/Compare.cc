@@ -357,6 +357,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 //	std::cerr << "one passed" << std::endl;
 
 	// FIXME: this needs to be relaxed for position-free indices
+HERE
 	if(one->fl.parent_rel != two->fl.parent_rel)                
 		return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
 

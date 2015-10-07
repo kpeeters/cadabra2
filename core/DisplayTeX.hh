@@ -5,7 +5,13 @@
 #include "Storage.hh"
 #include <ostream>
 
-// Class to handle display of expressions using LaTeX notation.
+/// \ingroup core
+///
+/// Class to handle display of expressions using LaTeX notation. This
+/// is a very non-local bit of logic, in the sense that it will try to
+/// look around the property assignments in order to figure out the
+/// best way to print any given object. See the DisplayTeX::dispatch
+/// method to see how this works in more detail.
 
 typedef uint32_t kunichar;
 
@@ -38,13 +44,29 @@ class DisplayTeX {
 		
 		int bracket_level=0;
 
+		/// For every object encountered, dispatch will figure out the
+		/// most appropriate way to convert it into a LaTeX
+		/// expression. This may be done by simply looking at the
+		/// object's name (e.g. \prod will print as a product) but may
+		/// also involve looking up properties and deciding on the best
+		/// course of action based on the attached properties.
+
 		void dispatch(std::ostream&, Ex::iterator);
+
+		/// Printing members for various standard constructions,
+		/// e.g. print as a list, or as a decorated symbol with
+		/// super/subscripts etc. The names reflect the structure of the
+		/// output, not necessarily the meaning or name of the object
+		/// that is being printed.
+
 		void print_productlike(std::ostream&, Ex::iterator, const std::string& inbetween);
 		void print_sumlike(std::ostream&, Ex::iterator);
 		void print_fraclike(std::ostream&, Ex::iterator);
 		void print_commalike(std::ostream&, Ex::iterator);
 		void print_arrowlike(std::ostream&, Ex::iterator);
 		void print_powlike(std::ostream&, Ex::iterator);
+		void print_intlike(std::ostream&, Ex::iterator);
+		void print_equalitylike(std::ostream&, Ex::iterator);
 
 		bool children_have_brackets(Ex::iterator ch) const;
 };

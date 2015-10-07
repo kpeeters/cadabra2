@@ -81,7 +81,7 @@ def display(obj):
         server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Property):
-        server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
+        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex")
 
     else:
         # Failing all else, just dump a latex representation generated

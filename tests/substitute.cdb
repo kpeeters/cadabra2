@@ -15,3 +15,13 @@ def test01():
     assert(tst1)
 
 test01()
+
+def test02():
+{m,n,p}::Indices(position=free).
+ex:= F_{m n} F^{m n};
+rl:= F_{m n} -> G_{m n};
+substitute(ex, rl)
+tst2:= G_{m n} G^{m n} - @(ex);
+assert(tst2==0)
+
+test02()

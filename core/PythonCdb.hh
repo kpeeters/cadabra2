@@ -66,11 +66,11 @@ class BaseProperty {
 
 /// \ingroup pythoncore
 ///
-/// Property is a templated wrapper around a C++ property object. It 
-/// provides it with __str__ and __repr__ methods. In order to have
-/// a quick way to figure out in Python whether an object is a property,
-/// we derive it from BaseProperty, which is an empty placeholder (in
-/// Python this is called Property).
+/// Property is a templated wrapper around a C++ property object. It
+/// provides it with _latex, __str__ and __repr__ methods. In order to
+/// have a quick way to figure out in Python whether an object is a
+/// property, we derive it from BaseProperty, which is an empty
+/// placeholder (in Python this is called Property).
 ///
 /// Properties can have arguments. These are not parsed by Python, but
 /// rather by the C++ side. There is a number of reasons for doing
@@ -92,8 +92,15 @@ class Property : public BaseProperty {
 	public:
 		Property(std::shared_ptr<Ex> obj, std::shared_ptr<Ex> params=0);
 
+		/// Human-readable form in text, i.e. no special formatting.
 		std::string str_() const;
+
+		/// Human-readable form using LaTeX markup.
+		std::string latex_() const;
+
+		/// Python-parseable form. FIXME: not correct right now.
 		std::string repr_() const;
+
 
 	private:
 		// We keep a pointer to the C++ property, so it is possible to 

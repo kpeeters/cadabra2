@@ -122,7 +122,13 @@ class property {
 		// means (which objects are indices etc.).
 		virtual void        validate(const Properties&, const Ex&) const;
 
-		virtual void        display(std::ostream&) const;
+		/// Display the property on the stream
+//		virtual void        display(std::ostream&) const;
+
+		/// Generate a LaTeX representation of the property, assuming LaTeX
+		/// is in text mode (so it needs dollar symbols to switch to maths).
+		virtual void        latex(std::ostream&) const;
+
 		virtual std::string name() const=0;
 		virtual std::string unnamed_argument() const;
 

@@ -25,6 +25,7 @@ NotebookWindow::NotebookWindow()
 	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
 	scale = settings->get_double("text-scaling-factor");
 	engine.latex_packages.push_back("breqn");
+	engine.latex_packages.push_back("hyperref");
 	engine.set_scale(scale);
 
 	settings->signal_changed().connect(
@@ -712,7 +713,12 @@ void NotebookWindow::load_file(const std::string& notebook_contents)
 	JSON_deserialise(notebook_contents, doc);
 	remove_all_cells();
 	build_visual_representation();
-	engine.convert_all();
+	try {
+		engine.convert_all();
+		}
+	catch(TeXEngine::TeXException& ex) {
+		std::cerr << "uhoh" << std::endl;
+		}
 	mainbox.show_all();
 	modified=false;
 	update_title();

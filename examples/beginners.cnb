@@ -11,17 +11,104 @@
 			[
 				
 				{
-					"cell_id" : 7,
+					"cell_id" : 8,
 					"cell_origin" : "client",
 					"cell_type" : "output",
-					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} ."
+					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} .\n\nThe first thing we will do is enter some tensorial expressions. "
 				}
 			],
-			"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} ."
+			"hidden" : true,
+			"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} .\n\nThe first thing we will do is enter some tensorial expressions. "
 		},
 		
 		{
 			"cell_id" : 8,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{dmath*}{}(\\frac{-1}{4})\\, \\int{}F_{\\mu \\nu} F^{\\mu \\nu}\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "{\\mu,\\nu,\\rho}::Indices(position=free).\nx::Coordinate.\n\\partial{#}::PartialDerivative.\n\nF_{\\mu\\nu}::Depends(x).\nA_{\\mu}::Depends(x,\\partial).\n\nS:= -1/4 \\int{ F_{\\mu\\nu} F^{\\mu\\nu} }{x};"
+		},
+		
+		{
+			"cell_id" : 17,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "{\\color{red}{\\begin{verbatim}  File \"<string>\", line 1\n    rewrite_indices( \n                    ^\nSyntaxError: unexpected EOF while parsing\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "rewrite_indices( "
+		},
+		
+		{
+			"cell_id" : 9,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = (\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}})\\end{dmath*}"
+				}
+			],
+			"source" : "rl:= F_{\\mu\\nu} = \\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}};"
+		},
+		
+		{
+			"cell_id" : 9,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{dmath*}{}(\\frac{-1}{4})\\, \\int{}(\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}}) F^{\\mu \\nu}\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(S, rl);"
+		},
+		
+		{
+			"cell_id" : 10,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 16,
+					"cell_origin" : "client",
+					"cell_type" : "output",
+					"source" : "Why does this not yet replace $F^{\\mu\\nu}$?"
+				}
+			],
+			"hidden" : true,
+			"source" : "Why does this not yet replace $F^{\\mu\\nu}$?"
+		},
+		
+		{
+			"cell_id" : 17,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
