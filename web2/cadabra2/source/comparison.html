@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}Cadabra: comparison with other systems{% endblock %}
+
+{% block head %}{%- endblock %}
+
+{% block main %}
+<h1>Comparison of Cadabra with other systems</h1>
+<p>
+  In order to understand whether Cadabra is useful for you, a
+  comparison to other system may help. Without going too much into
+  detail, here are some notable differences and similarities with
+  other systems.
+</p>
+
+<h2>Patterns versus maths</h2>
+<p>
+  Cadabra is predominantly a 'field theory aware notebook'. What this
+  means is that is is designed to be useful for the manipulations of
+  patterns which occur in the description of field theory problems. It
+  knows about patterns more than it knows about the mathematical
+  meaning of those patterns. 
+</p>
+<p>
+  Other programs in this class are FORM and its predecessor
+  Schoonship, which both know relatively little about the maths of
+  physics which people do with them, but primarily provide a cleverly
+  thought-out toolbox of algorithms to manipulate expressions. Just
+  like when you compute things with pen and paper, you can do things
+  with these programs which are manifest mathematical nonsense.
+</p>
+<p>
+  Programs like Sage (with SageManifolds) and xAct tend to be much
+  more strict in how you define your problem: they know a lot about
+  the mathematical meaning of symbols, and 
+</p>
+<p>
+  Neither of these approaches is best, they are just different.
+</p>
+
+<h2>Targetted versus comprehensive</h2>
+<p>
+  Cadabra is intentionally not designed to cover 'as much of
+  mathematics as we can implement'. It is specifically meant to help
+  solving a particular class of problems which occur in field
+  theory. This is in part because of its roots (it originally was just
+  a simple tool to help write research papers), and in part because
+  I do not believe that a 'megalomanic' approach can work. 
+</p>
+<p>
+  Programs like Mathematica, Maple and Sage have a different
+  philosophy. They try to target, not always with success, a very
+  large audience, by aiming to cover 'all of maths'. 
+</p>
+
+
+
+
+{%- endblock %}
+
