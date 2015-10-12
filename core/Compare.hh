@@ -248,7 +248,12 @@ class Ex_comparator {
 
 	protected:
 		const Properties& properties;
-		// Internal entry point. 
+
+		/// Internal entry point. This comparison function tries to match
+		/// a single node in the tree, except when the node is an
+		/// index. Indices are considered to be leaf-nodes, and for these
+		/// a full subtree match will be attempted (using subtree_compare).
+
 		match_t compare(const Ex::iterator&, const Ex::iterator&, bool nobrackets=false);
 
       // Internal functions used by can_swap.
