@@ -357,9 +357,9 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 //	std::cerr << "one passed" << std::endl;
 
 	// FIXME: this needs to be relaxed for position-free indices
-HERE
-	if(one->fl.parent_rel != two->fl.parent_rel)                
-		return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
+//HERE
+//	if(one->fl.parent_rel != two->fl.parent_rel)                
+//		return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
 
 //	std::cerr << "two passed" << std::endl;
 
@@ -380,6 +380,7 @@ HERE
 	else if(one->is_siblings_wildcard())
 		is_sibling_pattern=true;
 	else if(is_index && one->is_integer()==false) {
+		// Things in _{..} or ^{..} are either indices (implicit patterns) or coordinates.
 		const Coordinate *cdn1=properties.get<Coordinate>(one, true);
 		if(cdn1==0)
 			implicit_pattern=true;
@@ -448,8 +449,16 @@ HERE
 
 			//std::cerr << "index check " << *one->name << " " << *two->name << std::endl;
 
-			const Indices *t1=properties.get<Indices>(one, true);
+ 			const Indices *t1=properties.get<Indices>(one, true);
 			const Indices *t2=properties.get<Indices>(two, true);
+
+			// Check parent rel if it matters.
+			// FIXME: we match _ to ^ if it doesn't, but we should not replace _ with ^; original parent_rel should stay.
+HERE
+			if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
+				if(one->fl.parent_rel != two->fl.parent_rel)                
+					return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
+
          //			std::cerr << t1 << " " << t2 << std::endl;
 			if( (t1 || t2) && implicit_pattern ) {
 				if(t1 && t2) {
