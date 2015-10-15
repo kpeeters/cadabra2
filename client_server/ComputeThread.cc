@@ -42,7 +42,7 @@ void ComputeThread::try_connect()
 	// not have any effect.
    // No longer necessary with websocketpp-0.6.0.
 	//
-   boost::asio::ip::resolver_query_base::flags(0);
+	// boost::asio::ip::resolver_query_base::flags(0);
 
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
 	wsclient.clear_error_channels(websocketpp::log::elevel::all);
@@ -238,7 +238,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				docthread.queue_action(action);
 				}
 			else if(msg_type.asString()=="latex") {
-				std::cerr << "received latex cell " << content["output"].asString() << std::endl;
+				// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
 				DataCell result(cell_id, DataCell::CellType::output, content["output"].asString());
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
@@ -301,7 +301,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 
 	const DataCell& dc=(*it);
 
-	std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
+	// std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
 
 
 	// Position the cursor in the next cell so this one will not 

@@ -36,6 +36,8 @@ namespace cadabra {
 					virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 					virtual bool on_focus_in_event(GdkEventFocus *) override;
 					virtual void on_show() override;
+
+					void         shift_enter_pressed();
 					
 					sigc::signal1<bool, DTree::iterator>              content_execute;
 					sigc::signal2<bool, std::string, DTree::iterator> content_changed;

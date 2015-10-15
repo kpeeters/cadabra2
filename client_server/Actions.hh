@@ -138,6 +138,22 @@ namespace cadabra {
 			size_t            reference_child_index;
 	};
 
+	/// \ingroup clientserver
+	///
+	/// Split a cell into two separate cells, at the point of the cursor.
+
+	class ActionSplitCell : public ActionBase {
+		public:
+			ActionSplitCell(DTree::iterator ref_);
+			~ActionSplitCell();
+
+			virtual void pre_execute(DocumentThread&) override;
+			virtual void update_gui(const DTree&, GUIBase&) override;
+			virtual void post_execute(DocumentThread&) override;
+
+			virtual void revert(DocumentThread&) override;
+	};
+
 }
 			
 //			class ActionAddText : public ActionBase {
@@ -162,7 +178,6 @@ namespace cadabra {
 //					std::string removed_text;
 //			};
 //
-//			class ActionSplitCell
 //       class ActionMergeCells
 			
 
