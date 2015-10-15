@@ -1,5 +1,19 @@
 
+- if on_failed is called in the client, we need to take down the server even
+  if we think it is already down, just to avoid spawning multiple ones.
+  We also need to produce a useful error message; see docs of websocket.
+
+- connections to localhost without active net are still broken.
+
+- Plots need to scale with hiDPI settings. Minimal size of window should do the same.
+
+- large output of arrays makes latex barf.
+
+- If we match a ^ index to a _ pattern, we need to setup a replacement
+  rule such that the ^ index get replaced by a ^ one. See "HERE" in Compare.cc
+
 - Catch TeXEngine exceptions in the frontend.
+
 
 - Components: finish the substitute compare method so it can match
   A_{t r} to the expression A_{m n} and then return the so-matched set.
