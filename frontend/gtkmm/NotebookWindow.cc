@@ -87,7 +87,7 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );
 	actiongroup->add( Gtk::Action::create("RunToCursor", Gtk::Stock::GOTO_LAST, "Run to cursor"),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );
-	actiongroup->add( Gtk::Action::create("RunStop", Gtk::Stock::STOP, "Stop"),
+	actiongroup->add( Gtk::Action::create("RunStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
 	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"),
@@ -970,6 +970,7 @@ void NotebookWindow::on_run_runtocursor()
 
 void NotebookWindow::on_run_stop()
 	{
+	std::cerr << "stop?" << std::endl;
 	compute->stop();
 	}
 

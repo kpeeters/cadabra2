@@ -42,7 +42,7 @@ void ComputeThread::try_connect()
 	// not have any effect.
    // No longer necessary with websocketpp-0.6.0.
 	//
-   //	boost::asio::ip::resolver_query_base::flags(0);
+   boost::asio::ip::resolver_query_base::flags(0);
 
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
 	wsclient.clear_error_channels(websocketpp::log::elevel::all);
@@ -58,7 +58,7 @@ void ComputeThread::try_connect()
 												 websocketpp::lib::placeholders::_2));
 
 	std::ostringstream uristr;
-	uristr << "ws://localhost:" << port;
+	uristr << "ws://127.0.0.1:" << port;
 	websocketpp::lib::error_code ec;
 	connection = wsclient.get_connection(uristr.str(), ec);
 	if (ec) {
@@ -103,8 +103,11 @@ void ComputeThread::on_fail(websocketpp::connection_hdl hdl)
 	{
 	std::cerr << "cadabra-client: connection failed" << std::endl;
 	connection_is_open=false;
-	if(gui && server_pid!=0)
+	if(gui && server_pid!=0) {
+		kill(server_pid, SIGKILL);
+		server_pid=0;
 		gui->on_network_error();
+		}
 
 	try_spawn_server();
 	try_connect();

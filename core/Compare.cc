@@ -454,7 +454,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 
 			// Check parent rel if it matters.
 			// FIXME: we match _ to ^ if it doesn't, but we should not replace _ with ^; original parent_rel should stay.
-HERE
+//HERE
 			if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
 				if(one->fl.parent_rel != two->fl.parent_rel)                
 					return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
