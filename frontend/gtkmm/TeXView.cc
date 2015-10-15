@@ -52,7 +52,6 @@ void TeXView::on_show()
 
 bool TeXView::on_button_release_event(GdkEventButton *ev)
 	{
-	std::cerr << "TeXView clicked" << std::endl;
 	show_hide_requested.emit(datacell);
 	return true;
 	}

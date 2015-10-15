@@ -82,18 +82,22 @@ NotebookWindow::NotebookWindow()
 	actiongroup->add( Gtk::Action::create("ViewClose", "Close view"),
 							sigc::mem_fun(*this, &NotebookWindow::on_view_close) );
 
-	actiongroup->add( Gtk::Action::create("MenuRun", "_Run") );
-	actiongroup->add( Gtk::Action::create("RunAll", Gtk::Stock::GO_FORWARD, "Run all"),
+	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
+ 	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
+							sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
+ 	actiongroup->add( Gtk::Action::create("EvaluateAll", Gtk::Stock::GO_FORWARD, "Evaluate all"),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_runall) );
-	actiongroup->add( Gtk::Action::create("RunToCursor", Gtk::Stock::GOTO_LAST, "Run to cursor"),
+	actiongroup->add( Gtk::Action::create("EvaluateToCursor", Gtk::Stock::GOTO_LAST, "Evaluate to cursor"),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_runtocursor) );
-	actiongroup->add( Gtk::Action::create("RunStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
+	actiongroup->add( Gtk::Action::create("EvaluateStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
 	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"),
 							sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
 
 	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
+//	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
+//							sigc::mem_fun(*this, &NotebookWindow::on_help_notebook) );
 	actiongroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::HELP, "About Cadabra"),
 							sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
 
@@ -117,9 +121,11 @@ NotebookWindow::NotebookWindow()
 		"    </menu>"
 		"    <menu action='MenuEdit'>"
 		"      <menuitem action='EditUndo' />"
+		"      <separator/>"
 		"      <menuitem action='EditInsertAbove' />"
 		"      <menuitem action='EditInsertBelow' />"
 		"      <menuitem action='EditDelete' />"
+		"      <separator/>"
 		"      <menuitem action='EditMakeCellTeX' />"
 		"      <menuitem action='EditMakeCellPython' />"
 		"    </menu>"
@@ -127,15 +133,18 @@ NotebookWindow::NotebookWindow()
 		"      <menuitem action='ViewSplit' />"
 		"      <menuitem action='ViewClose' />"
 		"    </menu>"
-		"    <menu action='MenuRun'>"
-		"      <menuitem action='RunAll' />"
-		"      <menuitem action='RunToCursor' />"
-		"      <menuitem action='RunStop' />"
+		"    <menu action='MenuEvaluate'>"
+		"      <menuitem action='EvaluateCell' />"
+		"      <menuitem action='EvaluateAll' />"
+		"      <menuitem action='EvaluateToCursor' />"
+		"      <separator/>"
+		"      <menuitem action='EvaluateStop' />"
 		"    </menu>"
 		"    <menu action='MenuKernel'>"
 		"      <menuitem action='KernelRestart' />"
 		"    </menu>"
 		"    <menu action='MenuHelp'>"
+//		"      <menuitem action='HelpNotebook' />"
 		"      <menuitem action='HelpAbout' />"
 		"    </menu>"
 		"  </menubar>"
@@ -143,8 +152,8 @@ NotebookWindow::NotebookWindow()
 		"    <toolitem action='Open' />"
 //		"       <property name='tooltip_text' translatable='yes'>Open existing notebook</property>"
 //		"    </toolitem>"
-		"    <toolitem action='RunAll' name='run all'/>"
-		"    <toolitem action='RunStop' />"
+		"    <toolitem action='EvaluateAll' name='run all'/>"
+		"    <toolitem action='EvaluateStop' />"
 		"  </toolbar>"
 		"</ui>";
 
@@ -253,9 +262,9 @@ void NotebookWindow::update_title()
 
 void NotebookWindow::set_stop_sensitive(bool s)
 	{
-	Gtk::Widget *stop = uimanager->get_widget("/ToolBar/RunStop");
+	Gtk::Widget *stop = uimanager->get_widget("/ToolBar/EvaluateStop");
 	stop->set_sensitive(s);
-	stop = uimanager->get_widget("/MenuBar/MenuRun/RunStop");
+	stop = uimanager->get_widget("/MenuBar/MenuEvaluate/EvaluateStop");
 	stop->set_sensitive(s);	
 	}
 
@@ -399,7 +408,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				ci->edit.content_changed.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
 				ci->edit.content_execute.connect( 
-					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
+				sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
 				ci->edit.cell_got_focus.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
 
@@ -534,11 +543,13 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
-	std::cout << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
+	// std::cout << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
 	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
-	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end())
-		throw std::logic_error("Cannot find cell to position cursor.");
+	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
+		std::cerr << "cadabra-client: Cannot find cell to position cursor." << std::endl;
+		return;
+		}
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 
@@ -637,7 +648,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 
 	DTree::sibling_iterator sib=doc.begin(it);
 	while(sib!=doc.end(it)) {
-		std::cout << "cadabra-client: scheduling output cell for removal" << std::endl;
+		// std::cout << "cadabra-client: scheduling output cell for removal" << std::endl;
 		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib);
 		queue_action(action);
 		++sib;
@@ -960,8 +971,27 @@ void NotebookWindow::on_view_close()
 		}
 	}
 
+void NotebookWindow::on_run_cell()
+	{
+	// This is actually handled by the CodeInput widget, which ensures that the
+	// DTree is up to date and then calls execute.
+	
+	VisualCell& actual = canvasses[current_canvas]->visualcells[&(*current_cell)];
+	actual.inbox->edit.shift_enter_pressed();
+
+//	cell_content_execute(current_cell, current_canvas);
+	}
+
 void NotebookWindow::on_run_runall()
 	{
+	// FIXME: move to DocumentThread
+
+	DTree::sibling_iterator sib=doc.begin(doc.begin());
+	while(sib!=doc.end(doc.begin())) {
+		if(sib->cell_type==DataCell::CellType::python) 
+			cell_content_execute(DTree::iterator(sib), current_canvas);
+		++sib;
+		}
 	}
 
 void NotebookWindow::on_run_runtocursor()
@@ -970,7 +1000,6 @@ void NotebookWindow::on_run_runtocursor()
 
 void NotebookWindow::on_run_stop()
 	{
-	std::cerr << "stop?" << std::endl;
 	compute->stop();
 	}
 
@@ -999,6 +1028,27 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	about.run();
 	}
+
+// void NotebookWindow::on_help_notebook()
+// 	{
+// 	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file("/usr/local/share/cadabra2/images/cadabra.png");
+// 
+// 	Gtk::MessageDialog notebook;
+// 	notebook.set_image(logo);
+// 	notebook.set_message("In order to evaluate a cell, press CTRL-Enter\n
+// 	about.set_program_name("Cadabra");
+// 	about.set_comments("A field-theory motivated approach to computer algebra");
+// 	about.set_version("Version 2.0 (preview release)");
+// 	std::vector<Glib::ustring> authors;
+// 	authors.push_back("Kasper Peeters");
+// 	about.set_authors(authors);
+// 	about.set_copyright("\xC2\xA9 2006-2015 Kasper Peeters");
+// 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
+// 	about.set_website("http://cadabra.science");
+// 	about.set_website_label("cadabra.science");
+// 	about.set_logo(logo);
+// 	about.run();
+// 	}
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{

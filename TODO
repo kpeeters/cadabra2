@@ -1,9 +1,20 @@
 
-- if on_failed is called in the client, we need to take down the server even
-  if we think it is already down, just to avoid spawning multiple ones.
-  We also need to produce a useful error message; see docs of websocket.
+- on average, using sympy's latex representation of python objects is silly;
+  e.g. lists or numpy.array's come out ugly and would look much better in
+  tt font anyway. So the default for display should be to use str().
+  The main problem is that ascii pretty printing of things like lists is
+  a mess. Numpy.array prints nice.
 
-- connections to localhost without active net are still broken.
+- compute->stop() does stop, but the notebook does not update the cell
+  status, and it does not set cells to 'not evaluating'.
+
+- Stop button does not always get greyed out.
+
+- if on_failed is called in the client, we need to produce a useful
+  error message; see docs of websocket.
+
+- connections to localhost with networking enabled but without active
+  net connection are still broken.
 
 - Plots need to scale with hiDPI settings. Minimal size of window should do the same.
 

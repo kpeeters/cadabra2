@@ -121,6 +121,15 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		}
 	}
 
+void CodeInput::exp_input_tv::shift_enter_pressed()
+	{
+	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
+	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
+
+	content_changed(tmp, datacell);
+	content_execute(datacell);
+	}
+
 bool CodeInput::handle_button_press(GdkEventButton* button)
 	{
 	if(button->button!=2) return false;

@@ -27,6 +27,7 @@ if sympy.__version__ != "unavailable":
     from sympy import latex
     from sympy import sin, cos, tan, trigsimp
     from sympy import Matrix
+#    sympy.init_printing()
 
 # Import matplotlib and setup functions to prepare its output
 # for sending as base64 to the client. Example use:
@@ -77,6 +78,9 @@ def display(obj):
         # Vtk renderer, see http://nbviewer.ipython.org/urls/bitbucket.org/somada141/pyscience/raw/master/20140917_RayTracing/Material/PythonRayTracingEarthSun.ipynb
         pass
                     
+#    elif isinstance(obj, numpy.ndarray):
+#        server.send("\\begin{dmath*}{}"+str(obj.to_list())+"\\end{dmath*}", "latex")
+
     elif isinstance(obj, Ex):
         server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
 
@@ -86,7 +90,8 @@ def display(obj):
     else:
         # Failing all else, just dump a latex representation generated
         # by sympy to the notebook.
-        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex")
+        # server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
+        server.send(str(obj), "output")
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.
