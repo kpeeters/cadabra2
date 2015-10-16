@@ -1,0 +1,174 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_id" : 10,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 70,
+					"cell_origin" : "client",
+					"cell_type" : "output",
+					"source" : "\\section*{Cadabra for loyal users}\n\nThis notebook explains various aspects of Cadabra 2 for users of earlier versions. But even if \nyou have never used Cadabra before, this is probably a useful notebook to read through.\n\nUnder the hood, many things have changed, most notably the fact that you can now freely\nmix mathematical expressions with proper Python code to manipulate them. But let's get\nstarted at the beginning. Just like in the old Cadabra, you enter expressions by using\nthe \\verb|:=| assignment operator. "
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Cadabra for loyal users}\n\nThis notebook explains various aspects of Cadabra 2 for users of earlier versions. But even if \nyou have never used Cadabra before, this is probably a useful notebook to read through.\n\nUnder the hood, many things have changed, most notably the fact that you can now freely\nmix mathematical expressions with proper Python code to manipulate them. But let's get\nstarted at the beginning. Just like in the old Cadabra, you enter expressions by using\nthe \\verb|:=| assignment operator. "
+		},
+		
+		{
+			"cell_id" : 19,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{dmath*}{}A_{m n} B^{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex := A_{m n} B^{m n};"
+		},
+		
+		{
+			"cell_id" : 12,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 36,
+					"cell_origin" : "client",
+					"cell_type" : "output",
+					"source" : "Here `\\verb|ex|' is, as before, the label that will be assigned to this expression.\nCadabra's default has always been to display every line that ends in a semi-colon, `\\verb|;|',\nand that rule has not changed. The difference is how things are implemented now. While \n`\\verb|ex|' used to be simply a label, in Cadabra 2 it is a full-fledged Python object. You \ncan see this by e.g.~asking for its type:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Here `\\verb|ex|' is, as before, the label that will be assigned to this expression.\nCadabra's default has always been to display every line that ends in a semi-colon, `\\verb|;|',\nand that rule has not changed. The difference is how things are implemented now. While \n`\\verb|ex|' used to be simply a label, in Cadabra 2 it is a full-fledged Python object. You \ncan see this by e.g.~asking for its type:"
+		},
+		
+		{
+			"cell_id" : 20,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}<class 'cadabra2.Ex'>\\end{verbatim}"
+				}
+			],
+			"source" : "type(ex);"
+		},
+		
+		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 45,
+					"cell_origin" : "client",
+					"cell_type" : "output",
+					"source" : "Note how we again used the `\\verb|;|' line ending to instruct Cadabra to display the result. \nIf you had left it off, you would get no output (try it!). Note how you have used a bit of Python\n(the \\verb|type| function call) without telling Cadabra that this was actually Python, not a \nCadabra expression. How that works will become clear in a minute.\n\nProperties of mathematical symbols can, as before, be entered by using the `\\verb|::|' operator, \nas the following shows."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note how we again used the `\\verb|;|' line ending to instruct Cadabra to display the result. \nIf you had left it off, you would get no output (try it!). Note how you have used a bit of Python\n(the \\verb|type| function call) without telling Cadabra that this was actually Python, not a \nCadabra expression. How that works will become clear in a minute.\n\nProperties of mathematical symbols can, as before, be entered by using the `\\verb|::|' operator, \nas the following shows."
+		},
+		
+		{
+			"cell_id" : 42,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Symmetric to~}A_{m n}.\\end{dmath*}"
+				}
+			],
+			"source" : "A_{m n}::Symmetric;\nB_{m n}::AntiSymmetric."
+		},
+		
+		{
+			"cell_id" : 46,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 64,
+					"cell_origin" : "client",
+					"cell_type" : "output",
+					"source" : "Notice how we suppressed printing of the property assignment on the second line, by using a period instead of a semi-colon.\nThe main notational difference with respect to the old Cadabra comes when running algorithms on expressions. \nAlgorithms have become Python functions, and the somewhat esoteric algorithm calling convention of the old Cadabra\n(with an ampersand, like in `\\verb|@canonicalise!(%)|' is now replaced by a cleaner looking Pythonesque form:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Notice how we suppressed printing of the property assignment on the second line, by using a period instead of a semi-colon.\nThe main notational difference with respect to the old Cadabra comes when running algorithms on expressions. \nAlgorithms have become Python functions, and the somewhat esoteric algorithm calling convention of the old Cadabra\n(with an ampersand, like in `\\verb|@canonicalise!(%)|' is now replaced by a cleaner looking Pythonesque form:"
+		},
+		
+		{
+			"cell_id" : 60,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(ex);"
+		},
+		
+		{
+			"cell_id" : 61,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 78,
+					"cell_origin" : "client",
+					"cell_type" : "output",
+					"source" : "As you can see, simply call the function and pass in the Python object corresponding to the mathematical expression\nyou want to act on. "
+				}
+			],
+			"hidden" : true,
+			"source" : "As you can see, simply call the function and pass in the Python object corresponding to the mathematical expression\nyou want to act on. "
+		},
+		
+		{
+			"cell_id" : 72,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
