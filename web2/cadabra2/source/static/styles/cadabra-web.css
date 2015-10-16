@@ -196,6 +196,8 @@ div.image_png {
 }
 div.output { 
 	 font-family: monospace;
+	 color: black;
+	 font-size: 12px;
 }
 div.latex { 
 /* 	 font-family: 'STIXGENERAL';  */
