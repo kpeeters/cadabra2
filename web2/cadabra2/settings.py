@@ -12,7 +12,11 @@ FILTER = [
     'layout.html',
     '*.nb.html',
     'README.txt',
-    'static/*'
+    'static/*',
+    'notebooks/README*',
+    'notebooks/.gitignore',
+    'notebooks/*~',
+    '*~'
 ]
 
 ## When building, force the inclusion of all the HTML partials listed here.
