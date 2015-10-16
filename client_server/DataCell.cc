@@ -63,6 +63,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
 	std::regex begin_verbatim(R"(\\begin\{verbatim\})");
 	std::regex end_verbatim(R"(\\end\{verbatim\})");
+	std::regex begin_dmath(R"(\\begin\{dmath\*\})");
+	std::regex end_dmath(R"(\\end\{dmath\*\})");
+	std::regex tilde("~");
 
 	std::string res;
 
@@ -73,6 +76,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 	res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
 	res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
 	res = std::regex_replace(res, end_verbatim, "</pre>");
+	res = std::regex_replace(res, begin_dmath, "\\[");
+	res = std::regex_replace(res, end_dmath, "\\]");
+	res = std::regex_replace(res, tilde, " ");
 
 	return res;
 	}
@@ -89,7 +95,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << "div.latex div.output { display: none; }\n div.image_png { width: 400px; }\n"
 					 << "div.output { font-family: monospace; }\n"
 					 << "h1, h2, h3 { font-family: 'STIXGENERAL'; }\n"
-					 << "div.latex { font-family: 'STIXGENERAL'; font-size: 17px; line-height: 23px; margin-left: 40px; margin-right: 40px; padding-left: 10px; margin-bottom: 10px; }\n"
+					 << "div.latex { font-family: 'STIXGENERAL'; color: black; font-size: 16px; line-height: 23px; margin-left: 40px; margin-right: 40px; padding-left: 10px; margin-bottom: 10px; }\n"
 					 << "div.image_png img { width: 100%; }\n"
 					 << "div.python { font-family: monospace; padding-left: 10px; margin-left: 40px; margin-right; 40px; margin-bottom: 10px; margin-top: 10px; white-space: pre; color: blue; }\n"
 					 << "pre.output { color: black; }\n";
