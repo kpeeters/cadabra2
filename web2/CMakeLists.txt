@@ -13,6 +13,14 @@ add_custom_command(OUTPUT  ${HTMLOUTDIR}/plotting_segment.html
                    ARGS    --segment ${CNBDIR}/plotting.cnb ${HTMLOUTDIR}/plotting_segment.html 
                    COMMENT "Creating plotting_segment.html")
 
+add_custom_command(OUTPUT  ${HTMLOUTDIR}/for_previous_users_segment.html 
+                   DEPENDS ${CNBDIR}/for_previous_users.cnb 
+                   COMMAND cadabra2html 
+                   ARGS    --segment ${CNBDIR}/for_previous_users.cnb ${HTMLOUTDIR}/for_previous_users_segment.html 
+                   COMMENT "Creating for_previous_users.html")
+
 add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting_segment.html
                                            ${HTMLOUTDIR}/beginners_segment.html
+                                           ${HTMLOUTDIR}/for_previous_users_segment.html
                  )
+
