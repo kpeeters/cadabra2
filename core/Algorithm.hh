@@ -107,6 +107,12 @@ class Algorithm {
 		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 
 
+		/// A map from a pattern to the position where it occurs in the tree. 
+		typedef std::multimap<Ex, Ex::iterator, tree_exact_less_for_indexmap_obj> index_map_t;
+		/// A map from the position of each index to the sequential index.
+		typedef std::map<Ex::iterator, int, Ex::iterator_base_less>    index_position_map_t;
+
+
 	protected:
 		Kernel&  kernel;
 		Ex& tr;
@@ -181,11 +187,6 @@ class Algorithm {
 		void     node_zero(iterator);
 		void     node_one(iterator);
 		void     node_integer(iterator, int);
-
-		/// A map from a pattern to the position where it occurs in the tree. 
-		typedef std::multimap<Ex, Ex::iterator, tree_exact_less_for_indexmap_obj> index_map_t;
-		/// A map from the position of each index to the sequential index.
-		typedef std::map<Ex::iterator, int, Ex::iterator_base_less>    index_position_map_t;
 
 		/// Index manipulation and classification
 		///

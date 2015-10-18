@@ -39,6 +39,7 @@ set(LOCAL_SRC_FILES
   Combinatorics.cc
   Compare.cc
   DisplayTeX.cc
+  DisplaySympy.cc
   Exceptions.cc
   Exchange.cc
   Functional.cc

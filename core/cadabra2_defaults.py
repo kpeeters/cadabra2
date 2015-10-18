@@ -82,16 +82,19 @@ def display(obj):
 #        server.send("\\begin{dmath*}{}"+str(obj.to_list())+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Ex):
-        server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
+        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
 
     elif isinstance(obj, Property):
-        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex")
+        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
 
+    elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
+        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
+        
     else:
-        # Failing all else, just dump a latex representation generated
-        # by sympy to the notebook.
+        # Failing all else, just dump a str representation to the notebook, asking
+        # it to display this verbatim.
         # server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
-        server.send(str(obj), "output")
+        server.send(str(obj), "verbatim")
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

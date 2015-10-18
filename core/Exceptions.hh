@@ -30,11 +30,21 @@ class InterruptionException : public CadabraException {
 		InterruptionException(std::string="");
 };
 
-// Exception thrown when arguments to an algorithm or property are not correct.
+/// Exception thrown when arguments to an algorithm or property are not correct.
 
 class ArgumentException : public CadabraException {
 	public:
 		ArgumentException(std::string="");
+
+		std::string py_what() const;
+};
+
+/// Exception thrown when something requires that an expression is a pure scalar
+/// (i.e. no free indices and no dummy indices), but isn't.
+
+class NonScalarException : public CadabraException {
+	public:
+		NonScalarException(std::string="");
 
 		std::string py_what() const;
 };

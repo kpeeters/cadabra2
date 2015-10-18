@@ -1,0 +1,50 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_id" : 49,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{(sin(x) - x)}{x^{3}}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= (sin(x)-x)/x**3;"
+		},
+		
+		{
+			"cell_id" : 50,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nAttributeError: 'Ex' object has no attribute 'toEq'\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "ex.toEq();"
+		},
+		
+		{
+			"cell_id" : 53,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

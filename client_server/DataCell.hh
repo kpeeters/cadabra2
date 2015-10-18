@@ -12,6 +12,7 @@ namespace cadabra {
 	/// \ingroup clientserver
 	///
 	/// DataCells are the basic building blocks for a document. They
+	/// represent visual units in the notebook interface. They
 	/// are stored in a tree inside the client, and can be transmitted
 	/// over the wire between server and client in JSON format (see the
 	/// documentation of the cadabra::JSON_serialise and cadabra::JSON_deserialise
@@ -32,11 +33,13 @@ namespace cadabra {
 			
 			enum class CellType { 
 					   document,   ///< head node, only one per document
-						python,     ///< Code input in verbatim textual form
-						output,     ///< Python output, to be displayed verbatim
-						latex,      ///< LaTeX text, to be displayed using a LaTeX formatter
-						image_png,  ///< Base64 encoded PNG image
-						error,      ///< LaTeX text for errors
+						python,     ///< input : editor cell for code in python
+						latex,      ///< input : editor cell for code in latex
+						output,     ///< output: cell showing python stdout, verbatim
+						verbatim,   ///< output: cell showing other verbatim output
+						latex_view, ///< output: cell showing LaTeX text formatted using a LaTeX
+						image_png,  ///< output: cell showing a base64 encoded PNG image
+						error,      ///< output: cell showing LaTeX text for errors
 						// section
 						};
 			

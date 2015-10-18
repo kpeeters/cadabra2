@@ -382,6 +382,14 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				break;
 
 			case DataCell::CellType::output:
+			case DataCell::CellType::verbatim: {
+				// FIXME: would be good to share the input and output of TeXView too.
+				// Right now nothing is shared...
+				newcell.outbox = manage( new TeXView(engine, it) );
+				w=newcell.outbox;
+				break;
+				}
+			case DataCell::CellType::latex_view:
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
 				newcell.outbox = manage( new TeXView(engine, it) );

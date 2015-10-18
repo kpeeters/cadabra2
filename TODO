@@ -5,6 +5,8 @@
   The main problem is that ascii pretty printing of things like lists is
   a mess. Numpy.array prints nice.
 
+- Ex_to_Sympy should be finished.
+
 - compute->stop() does stop, but the notebook does not update the cell
   status, and it does not set cells to 'not evaluating'.
 

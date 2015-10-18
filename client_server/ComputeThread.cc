@@ -216,6 +216,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		// do not yet mean that execution is finished.
 		bool finished=(msg_type.asString()=="output" || msg_type.asString()=="error");
 
+		//std::cerr << "cadabra-client: find " << (long)parent_id.id << " for " << msg_type.asString() << std::endl;
 		auto it = find_cell_by_id(parent_id, finished);
 		if(finished) {
 			std::shared_ptr<ActionBase> rs_action = 
@@ -237,9 +238,22 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 				docthread.queue_action(action);
 				}
-			else if(msg_type.asString()=="latex") {
+			else if(msg_type.asString()=="verbatim") {
+				std::string output = "\\begin{verbatim}"+content["output"].asString()+"\\end{verbatim}";
+				
+				// Stick an AddCell action onto the stack. We instruct the
+				// action to add this result output cell as a child of the
+				// corresponding input cell.
+				DataCell result(cell_id, DataCell::CellType::verbatim, output);
+				
+				// Finally, the action to add the output cell.
+				std::shared_ptr<ActionBase> action = 
+					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
+				docthread.queue_action(action);
+				}
+			else if(msg_type.asString()=="latex_view") {
 				// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
-				DataCell result(cell_id, DataCell::CellType::output, content["output"].asString());
+				DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 				docthread.queue_action(action);
@@ -276,10 +290,15 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
 				docthread.queue_action(action);
 				}
+			else {
+				std::cerr << "cadabra-client: received cell we did not expect: " 
+							 << msg_type.asString() << std::endl;
+				}
 			}
 		}
 	catch(std::logic_error& ex) {
-		std::cerr << "cadabra-client: cannot find parent cell for response from server" << std::endl;
+		// WARNING: if the server sends
+		std::cerr << "cadabra-client: trouble processing server response: " << ex.what() << std::endl;
 		}
 
 	// Update kernel busy indicator depending on number of running cells.
@@ -344,7 +363,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		// Stick an AddCell action onto the stack. We instruct the
 		// action to add this result output cell as a child of the
 		// corresponding input cell.
-		DataCell result(DataCell::CellType::output, it->textbuf);
+		DataCell result(DataCell::CellType::latex_view, it->textbuf);
 		
 		std::shared_ptr<ActionBase> action = 
 			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
