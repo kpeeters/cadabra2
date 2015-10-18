@@ -110,8 +110,14 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::output:
 			str << "<div class='output'>";
 			break;
+		case DataCell::CellType::verbatim:
+			str << "<div class='verbatim'>";
+			break;
 		case DataCell::CellType::latex:
 			str << "<div class='latex'>";
+			break;
+		case DataCell::CellType::latex_view:
+			str << "<div class='latex_view'>";
 			break;
 		case DataCell::CellType::error:
 			str << "<div class='error'>";
@@ -145,7 +151,13 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::output:
 			str << "</div>\n";
 			break;
+		case DataCell::CellType::verbatim:
+			str << "</div>\n";
+			break;
 		case DataCell::CellType::latex:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::latex_view:
 			str << "</div>\n";
 			break;
 		case DataCell::CellType::error:
@@ -181,8 +193,14 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		case DataCell::CellType::output:
 			json["cell_type"]="output";
 			break;
+		case DataCell::CellType::verbatim:
+			json["cell_type"]="verbatim";
+			break;
 		case DataCell::CellType::latex:
 			json["cell_type"]="latex";
+			break;
+		case DataCell::CellType::latex_view:
+			json["cell_type"]="latex_view";
 			break;
 		case DataCell::CellType::error:
 			json["cell_type"]="error";
@@ -283,6 +301,22 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 				DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
 				}
+			else if(celltype.asString()=="verbatim") {
+				DataCell dc(id, cadabra::DataCell::CellType::verbatim, textbuf.asString(), hide);
+				last=doc.append_child(loc, dc);
+				}
+			else if(celltype.asString()=="latex_view") {
+				std::string res;
+				if(textbuf.isArray()) {
+					for(auto& el: textbuf) 
+						res+=el.asString();
+					}
+				else {
+					res=textbuf.asString();
+					}
+				DataCell dc(id, cadabra::DataCell::CellType::latex_view, res, false);
+				last=doc.append_child(loc, dc);
+				}
 			else if(celltype.asString()=="latex" || celltype.asString()=="markdown") {
 				std::string res;
 				if(textbuf.isArray()) {
@@ -301,7 +335,7 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 				// IPython/Jupyter notebooks only have the input LaTeX cell, not the output cell,
 				// which we need. 
 				if(cells[c].isMember("cells")==false) {
-					DataCell dc(id, cadabra::DataCell::CellType::output, res, hide);
+					DataCell dc(id, cadabra::DataCell::CellType::latex_view, res, hide);
 					doc.append_child(last, dc);
 					}
 				}

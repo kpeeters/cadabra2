@@ -1,27 +1,21 @@
 
-#include "DisplayTeX.hh"
 #include "Algorithm.hh"
-#include "properties/LaTeXForm.hh"
+#include "DisplaySympy.hh"
 #include "properties/Accent.hh"
 
-#define nbsp   " "
-//(( parent.utf8_output?(unichar(0x00a0)):" "))
-#define zwnbsp ""
-//(( parent.utf8_output?(unichar(0xfeff)):""))
-
-DisplayTeX::DisplayTeX(const Properties& p, const Ex& e)
+DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 	: tree(e), properties(p)
 	{
 	}
 
-void DisplayTeX::output(std::ostream& str) 
+void DisplaySympy::output(std::ostream& str) 
 	{
 	Ex::iterator it=tree.begin();
 
 	output(str, it);
 	}
 
-void DisplayTeX::output(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::output(std::ostream& str, Ex::iterator it) 
 	{
 	if(*it->name=="\\expression") {
 		dispatch(str, tree.begin(it));
@@ -38,10 +32,9 @@ void DisplayTeX::output(std::ostream& str, Ex::iterator it)
 		return;
 		}
 	
-	const LaTeXForm *lf=properties.get<LaTeXForm>(it);
 	bool needs_extra_brackets=false;
 	const Accent *ac=properties.get<Accent>(it);
-	if(!ac && extra_brackets_for_symbols) { // accents should never get additional curly brackets, {\bar}{g} does not print.
+	if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
 		Ex::sibling_iterator sib=tree.begin(it);
 		while(sib!=tree.end(it)) {
 			if(sib->is_index()) 
@@ -51,25 +44,13 @@ void DisplayTeX::output(std::ostream& str, Ex::iterator it)
 		}
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-	if(lf) str << lf->latex;
-	else   str << texify(*it->name);
+	str << *it->name;
 	if(needs_extra_brackets) str << "}";
-//	else str << *it->name;
 
 	print_children(str, it);
 	}
 
-std::string DisplayTeX::texify(const std::string& str) const
-	{
-	std::string res;
-   for(unsigned int i=0; i<str.size(); ++i) {
-		 if(str[i]=='#') res+="\\#";
-		 else res+=str[i];
-      }
-   return res;
-	}
-
-void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip) 
+void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
 	str_node::bracket_t    previous_bracket_   =str_node::b_invalid;
 	str_node::parent_rel_t previous_parent_rel_=str_node::p_none;
@@ -117,7 +98,6 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 											 current_parent_rel_);
 			else str  << "}";
 			}
-		else str << nbsp;
 		
 		previous_bracket_=current_bracket_;
 		previous_parent_rel_=current_parent_rel_;
@@ -125,7 +105,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		}
 	}
 
-void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it)
+void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 	{
 	bool turned_one=false;
 	mpz_class denom=it->multiplier->get_den();
@@ -166,24 +146,11 @@ void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it)
 			str << *it->multiplier;
 		}
 
-	if(!turned_one && !(*it->name=="1")) {
-		if(print_star) {
-			if(tight_star) str << "*";
-// 			else if(utf8_output)
-//				str << unichar(0x00a0) << "*" << unichar(0x00a0);
-			else
-				str << " * ";
-			}
-		else {
-			if(!tight_star) {
-				if(latex_spacing) str << "\\, ";
-				else              str << " ";
-				}
-			} 
-		}
+	if(!turned_one && !(*it->name=="1"))
+		str << "*";
 	}
 
-void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
+void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
 		case str_node::b_none: 
@@ -200,7 +167,7 @@ void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br
 	++(bracket_level);
 	}
 
-void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
+void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
 		case str_node::b_none:   
@@ -217,24 +184,20 @@ void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 	--(bracket_level);
 	}
 
-void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
+void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
 	{
 	switch(pr) {
 		case str_node::p_super:    
-			if(!first && latex_spacing) str << "\\,";
 			str << "^"; break;
 		case str_node::p_sub:
-			if(!first && latex_spacing) str << "\\,";
 			str << "_"; break;
 		case str_node::p_property: str << "$"; break;
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
 		}
-	// Prevent line break after this character.
-	str << zwnbsp;
 	}
 
-void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it) 
 	{
 	if(*it->name=="\\prod")        print_productlike(str, it, " ");
 	else if(*it->name=="\\sum")    print_sumlike(str, it);
@@ -248,7 +211,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 		output(str, it);
 	}
 
-void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it) 
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
@@ -264,7 +227,7 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 	print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
 	}
 
-void DisplayTeX::print_arrowlike(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::print_arrowlike(std::ostream& str, Ex::iterator it) 
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
@@ -273,7 +236,7 @@ void DisplayTeX::print_arrowlike(std::ostream& str, Ex::iterator it)
 	dispatch(str, sib);
 	}
 
-void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
+void DisplaySympy::print_fraclike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator num=tree.begin(it), den=num;
 	++den;
@@ -284,34 +247,24 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 		str << "(";
 		close_bracket=true;
 		}
-	str << "\\frac{";
+	str << "(";
 
 	dispatch(str, num);
 
-	str << "}{";
-//		 str << "/";
+	str << ")/(";
 	
 	dispatch(str, den);
 
-	str << "}";
+	str << ")";
 	if(close_bracket)
 		str << ")";
 	}
 
-void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
+void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
-//	bool close_bracket=false;
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
 		Ex::sibling_iterator st=tree.begin(it);
-//		while(st!=tr.end(it)) {
-//			if(*st->name=="\\sum") {
-//				str << "(";
-//				close_bracket=true;
-//				break;
-//				}
-//			++st;
-//			}
 		}
 
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
@@ -338,18 +291,7 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 			}
 
 		if(ch!=tree.end(it)) {
-			 if(print_star) {
-				if(tight_star) str << inbetween;
-//				else if(utf8_output) {
-//					str << unichar(0x00a0) << inbetween << unichar(0x00a0);
-//					}
-				else str << " " << inbetween << " ";
-				}
-			else {
-//				 if(output_format==Ex_output::out_texmacs) str << "\\,";
-//				 else 
-				str << " ";
-				 }
+			str << inbetween;
 			}
 		previous_bracket_=current_bracket_;
 		}
@@ -357,7 +299,7 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 //	if(close_bracket) str << ")";
 	}
 
-void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it) 
 	{
 	bool close_bracket=false;
 	if(*it->multiplier!=1) 
@@ -379,20 +321,15 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;
 	Ex::sibling_iterator ch=tree.begin(it);
 	bool beginning_of_group=true;
-	bool mathematica_postponed_endl=false;
 	while(ch!=tree.end(it)) {
 		if(++steps==20) {
-			if(latex_linefeeds)
-				str << "%\n" << std::flush; // prevent LaTeX overflow
 			steps=0;
 			}
 		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
 		if(previous_bracket_!=current_bracket_)
 			if(current_bracket_!=str_node::b_none) {
 				if(ch!=tree.begin(it)) {
-					if(tight_plus) str << "+";
-					else if(utf8_output) str << " +" << unichar(0x00a0);
-					else                        str << " + ";
+					str << "+";
 					}
 				print_opening_bracket(str, current_bracket_, str_node::p_none);
 				beginning_of_group=true;
@@ -400,27 +337,16 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 		if(beginning_of_group) {
 			beginning_of_group=false;
 			if(*ch->multiplier<0) {
-				if(tight_plus) str << "-";
-				else if(utf8_output) str << " -" << unichar(0x00a0);
-				else                        str << " - ";
-					
+				str << "-";
 				}
 			}
 		else {
 			if(*ch->multiplier<0) {
-				if(tight_plus)       str << "-";
-				else if(utf8_output) str << " -" << unichar(0x00a0);
-				else                        str << " - ";
+				str << "-";
 				}
 			else {
-				if(tight_plus) str << "+";
-				else if(utf8_output) str << " +" << unichar(0x00a0);
-				else                        str << " + ";
+				str << "+";
 				}
-			}
-		if(mathematica_postponed_endl) {
-			str << std::endl;
-			mathematica_postponed_endl=false;
 			}
 		if(*ch->name=="1" && (*ch->multiplier==1 || *ch->multiplier==-1)) 
 			str << "1"; // special case numerical constant
@@ -439,17 +365,17 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	str << std::flush;
 	}
 
-void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
+void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << "^{";
+	str << "**(";
 	++sib;
 	dispatch(str, sib);
-	str << "}";
+	str << ")";
 	}
 
-void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
+void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
@@ -461,7 +387,7 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 	dispatch(str, sib);
 	}
 
-void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
+void DisplaySympy::print_equalitylike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
@@ -470,59 +396,11 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 	dispatch(str, sib);
 	}
 
-bool DisplayTeX::children_have_brackets(Ex::iterator ch) const
+bool DisplaySympy::children_have_brackets(Ex::iterator ch) const
 	{
 	Ex::sibling_iterator chlds=tree.begin(ch);
 	str_node::bracket_t childbr=chlds->fl.bracket;
 	if(childbr==str_node::b_none || childbr==str_node::b_no)
 		return false;
 	else return true;
-	}
-
-
-// Thanks to Behdad Esfahbod
-int k_unichar_to_utf8(kunichar c, char *buf) 
-	{
-	buf[0]=(c) < 0x00000080 ?   (c)                  :
-      (c) < 0x00000800 ?  ((c) >>  6)         | 0xC0 :
-      (c) < 0x00010000 ?  ((c) >> 12)         | 0xE0 :
-      (c) < 0x00200000 ?  ((c) >> 18)         | 0xF0 :
-      (c) < 0x04000000 ?  ((c) >> 24)         | 0xF8 :
-		((c) >> 30)         | 0xFC;
-
-	buf[1]=(c) < 0x00000080 ?    0 /* null-terminator */     : 
-      (c) < 0x00000800 ?  ((c)        & 0x3F) | 0x80 :         
-      (c) < 0x00010000 ? (((c) >>  6) & 0x3F) | 0x80 :         
-      (c) < 0x00200000 ? (((c) >> 12) & 0x3F) | 0x80 :         
-      (c) < 0x04000000 ? (((c) >> 18) & 0x3F) | 0x80 :         
-                            (((c) >> 24) & 0x3F) | 0x80;
-
-	buf[2]=(c) < 0x00000800 ?    0 /* null-terminator */     : 
-      (c) < 0x00010000 ?  ((c)        & 0x3F) | 0x80 :         
-      (c) < 0x00200000 ? (((c) >>  6) & 0x3F) | 0x80 :         
-      (c) < 0x04000000 ? (((c) >> 12) & 0x3F) | 0x80 :         
-		(((c) >> 18) & 0x3F) | 0x80;
-
-	buf[3]=(c) < 0x00010000 ?    0 /* null-terminator */     : 
-      (c) < 0x00200000 ?  ((c)        & 0x3F) | 0x80 :         
-      (c) < 0x04000000 ? (((c) >>  6) & 0x3F) | 0x80 :         
-		(((c) >> 12) & 0x3F) | 0x80;
-
-	buf[4]=(c) < 0x00200000 ?    0 /* null-terminator */     : 
-      (c) < 0x04000000 ?  ((c)        & 0x3F) | 0x80 :         
-		(((c) >>  6) & 0x3F) | 0x80;
-
-	buf[5]=(c) < 0x04000000 ?    0 /* null-terminator */     : 
-                             ((c)        & 0x3F) | 0x80;
-
-	buf[6]=0;
-	return 6;
-	}
-
-const char *unichar(kunichar c)
-	{
-	static char buffer[7];
-	int pos=k_unichar_to_utf8(c, buffer);
-	buffer[pos]=0;
-	return buffer;
 	}

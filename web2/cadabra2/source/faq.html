@@ -1,5 +1,31 @@
 
 <dl>
+  <dt>Why not build the tensor functionality into Sympy, and wedge
+	 into Sympy's expression parser in <code>sympy.parsing.sympy_parser</code>?
+  </dt>
+  <dd>
+	 Cadabra uses the philosophy that expressions should be represented
+	 in their own language, not Python. However, one can do something
+	 like that in Sympy, by only feeding expressions in string form to
+	 the logic in <code>sympy.parsing.sympy_parser</code>. So in a
+	 sense Sympy supports this Cadabraesque mode of working, even
+	 though the tutorials and examples do not emphasise it.
+
+	 The reason why Cadabra nevertheless uses its own parser, and its
+	 own tree representation of expressions, is simply that an enormous
+	 amount of work would have to be done to rewrite the lot so that it
+	 fits into the Sympy framework. Moreover, little would be gained by
+	 doing this: almost all functionality which is in Sympy and which
+	 would make sense when applied to tensors (think of taking
+	 derivatives, or pattern matching) would require a lot of extra
+	 Sympy code to extend it beyond scalars.
+
+	 The way things are now the separation is clean, localised, and
+	 relatively easy to maintain. If you would ever rewrite
+	 Cadabra+Sympy from scratch you might take a different approach,
+	 but that's not going to happen soon.
+  </dd>
+
   <dt>Why an independent notebook interface instead of building on
 	 IPython?
   </dt>

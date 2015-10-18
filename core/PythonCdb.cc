@@ -3,6 +3,7 @@
 #include "Parser.hh"
 #include "Exceptions.hh"
 #include "DisplayTeX.hh"
+#include "DisplaySympy.hh"
 #include "Cleanup.hh"
 #include "PreClean.hh"
 #include "PythonException.hh"
@@ -114,13 +115,23 @@ bool output_ipython=false;
 
 std::string Ex_str_(const Ex& ex) 
 	{
-	std::ostringstream str;
+ 	std::ostringstream str;
+// 
+// //	if(state()==Algorithm::result_t::l_no_action)
+// //		str << "(unchanged)" << std::endl;
+// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
-//	if(state()==Algorithm::result_t::l_no_action)
-//		str << "(unchanged)" << std::endl;
-	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
 
+	return str.str();
+	}
+
+std::string Ex_latex_(const Ex& ex) 
+	{
+ 	std::ostringstream str;
+	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+	dt.output(str);
 	return str.str();
 	}
 
@@ -130,6 +141,28 @@ std::string Ex_repr_(const Ex& ex)
 	std::ostringstream str;
 	ex.print_entire_tree(str);
 	return str.str();
+	}
+
+boost::python::object Ex_to_Sympy(const Ex& ex)
+	{
+	// Check to see if the expression is a scalar without dummy indices.
+//	Algorithm::index_map_t ind_free, ind_dummy;
+//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
+//	if(ind_dummy.size()>0) 
+//		throw NonScalarException("Expression contains dummy indices.");
+//	if(ind_free.size()>0) 
+//		throw NonScalarException("Expression contains free indices.");
+
+	// Call sympify on our textual representation.
+	auto module = boost::python::import("sympy.parsing.sympy_parser");
+	auto parse  = module.attr("parse_expr");
+	std::ostringstream str;
+	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
+	dt.output(str);
+
+	boost::python::object ret=parse(str.str());
+
+	return ret;
 	}
 
 // Fetch objects from the Python side using their Python identifier.
@@ -360,6 +393,7 @@ std::string print_tree(Ex *ex)
  
 PyObject *ParseExceptionType = NULL;
 PyObject *ArgumentExceptionType = NULL;
+PyObject *NonScalarExceptionType = NULL;
 
 void translate_ParseException(const ParseException &e)
 	{
@@ -370,9 +404,16 @@ void translate_ParseException(const ParseException &e)
 
 void translate_ArgumentException(const ArgumentException &e)
 	{
-	assert(ParseExceptionType != NULL);
+	assert(ArgumentExceptionType != NULL);
 	boost::python::object pythonExceptionInstance(e);
 	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
+	}
+
+void translate_NonScalarException(const NonScalarException &e)
+	{
+	assert(NonScalarExceptionType != NULL);
+	boost::python::object pythonExceptionInstance(e);
+	PyErr_SetObject(NonScalarExceptionType, pythonExceptionInstance.ptr());
 	}
 
 // Return the kernel (with symbol __cdbkernel__) in local scope if
@@ -698,6 +739,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyArgumentException.def("__str__", &ArgumentException::py_what);
 	ArgumentExceptionType=pyArgumentException.ptr();
 
+	class_<NonScalarException> pyNonScalarException("NonScalarException", init<std::string>());
+	pyNonScalarException.def("__str__", &NonScalarException::py_what);
+	NonScalarExceptionType=pyNonScalarException.ptr();
+
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	class_<Kernel> pyKernel("Kernel", init<>());
 
@@ -712,10 +757,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_int));
 	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_int_2));
 	pyEx.def("__str__",  &Ex_str_)
-//		.def("_latex",  &Ex_latex)
+		.def("_latex",   &Ex_latex_)
 		.def("__repr__", &Ex_repr_)
 		.def("__eq__",   &__eq__Ex_Ex)
 		.def("__eq__",   &__eq__Ex_int)
+		.def("toSympy",  &Ex_to_Sympy)
 		.def("state",    &Ex::state);
 	
 	enum_<Algorithm::result_t>("result_t")
@@ -882,6 +928,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	register_exception_translator<ParseException>(&translate_ParseException);
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
+	register_exception_translator<NonScalarException>(&translate_NonScalarException);
 
 	// How can we give Python access to information stored in properties?
 	}

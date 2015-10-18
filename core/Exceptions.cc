@@ -32,3 +32,14 @@ std::string ArgumentException::py_what() const
 	std::cerr << what() << std::endl;
 	return what();
 	}
+
+NonScalarException::NonScalarException(std::string s)
+	: CadabraException(s)
+	{
+	}
+
+std::string NonScalarException::py_what() const
+	{
+	std::cerr << what() << std::endl;
+	return what();
+	}

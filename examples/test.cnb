@@ -1,0 +1,153 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_id" : 3,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{(\\sin(x)^{2} + \\cos(x)^{2})}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "x::Coordinate.\nex:=(\\sin(x)**2 + \\cos(x)**2)/x;"
+		},
+		
+		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 15,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "You can directly call Sympy algorithms on these Cadabra expressions."
+				}
+			],
+			"hidden" : true,
+			"source" : "You can directly call Sympy algorithms on these Cadabra expressions."
+		},
+		
+		{
+			"cell_id" : 4,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/home/kasper/Development/git.others/sympy/sympy/utilities/decorator.py\", line 29, in threaded_func\n    expr = sympify(expr)\n  File \"/home/kasper/Development/git.others/sympy/sympy/core/sympify.py\", line 324, in sympify\n    raise SympifyError('could not parse %r' % a, exc)\nsympy.core.sympify.SympifyError: Sympify of expression 'could not parse u'((\\\\sin(x)**(2)+\\\\cos(x)**(2)))/(x)'' failed, because of exception being raised:\nSyntaxError: unexpected character after line continuation character (<string>, line 1)\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "sympy.integrate(ex);"
+		},
+		
+		{
+			"cell_id" : 14,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "sympy.simplify(ex);"
+		},
+		
+		{
+			"cell_id" : 31,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "ex;"
+		},
+		
+		{
+			"cell_id" : 20,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "ex=sympy.simplify(ex);"
+		},
+		
+		{
+			"cell_id" : 21,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int{}sin(x)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "ex2:= \\int{sin(x)}{x};"
+		},
+		
+		{
+			"cell_id" : 22,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/home/kasper/Development/git.others/sympy/sympy/utilities/decorator.py\", line 29, in threaded_func\n    expr = sympify(expr)\n  File \"/home/kasper/Development/git.others/sympy/sympy/core/sympify.py\", line 324, in sympify\n    raise SympifyError('could not parse %r' % a, exc)\nsympy.core.sympify.SympifyError: Sympify of expression 'could not parse u'\\\\int{}sin(x)\\\\, {\\\\rm d}x'' failed, because of exception being raised:\nSyntaxError: unexpected character after line continuation character (<string>, line 1)\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "sympy.integrate(ex2);"
+		},
+		
+		{
+			"cell_id" : 23,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

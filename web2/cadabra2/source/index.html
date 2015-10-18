@@ -48,9 +48,38 @@
 	 </li>
   </ul>
 </ul>
-  
 </p>
 <br/>
+
+<h1>Cadabra's design philosophy</h1>
+<p>
+  Cadabra is built around the fact that many computations do not have
+  one single and unique path between the starting point and the end
+  result. When we do computations on paper, we often taken bits of an
+  expression apart, do some manipulations on them, stick them back
+  into the main expression, and so on. Often, the manipulations that
+  we do are far from uniquely determined by the problem, and often
+  there is no way even in principle for a computer to figure out what
+  is 'the best' thing to do. 
+</p>
+<p>
+  What we need the computer to do, in such a case, is to be good at
+  performing simple but tedious steps, without enforcing on the user
+  how to do a particular computation. In other words, we want the
+  computer algebra system to be a scratchpad, leaving us in control of
+  which steps to take, not forcing us to return to a 'canonical'
+  expression at every stage.
+</p>
+<p>
+  Most existing computer algebra systems allow for this kind of work
+  flow only by requiring to stick clumsy 'inert' or 'hold' arguments
+  onto expressions, by default always 'simplifying' every input to
+  some form they think is best. Cadabra starts from the other end of
+  the spectrum, and as a general rule keeps your expression untouched, 
+  unless you explicitly ask for something to be done to it.
+</p>
+<br/>
+
 <h1>Status of version 2</h1>
 <p>
   Over the span of 2014 and 2015 a large part of Cadabra was

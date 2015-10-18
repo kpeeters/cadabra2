@@ -1,0 +1,580 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_id" : 14,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 18,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This page gives quick examples of common symbolic calculations in SymPy. Print it and keep it under your pillow!\n\n\\section*{Elementary operations}"
+				}
+			],
+			"hidden" : true,
+			"source" : "This page gives quick examples of common symbolic calculations in SymPy. Print it and keep it under your pillow!\n\n\\section*{Elementary operations}"
+		},
+		
+		{
+			"cell_id" : 26,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "from sympy import *\n\nx, y, z, t = symbols('x y z t')\nk, m, n = symbols('k m n', integer=True)\nf, g, h = map(Function, 'fgh')"
+		},
+		
+		{
+			"cell_id" : 19,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 20,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Construct a symbolic expression."
+				}
+			],
+			"hidden" : true,
+			"source" : "Construct a symbolic expression."
+		},
+		
+		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{3 \\pi}{2} + \\frac{e^{i x}}{x^{2} + y}\\end{dmath*}"
+				}
+			],
+			"source" : "ex=Rational(3,2)*pi + exp(I*x) / (x**2 + y);"
+		},
+		
+		{
+			"cell_id" : 21,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-1.0\\end{dmath*}"
+				}
+			],
+			"source" : "exp(I*x).subs(x,pi).evalf();"
+		},
+		
+		{
+			"cell_id" : 28,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 29,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Deconstruct an expression."
+				}
+			],
+			"hidden" : true,
+			"source" : "Deconstruct an expression."
+		},
+		
+		{
+			"cell_id" : 22,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
+				}
+			],
+			"source" : "expr = x + 2*y\nprint(expr.__class__)"
+		},
+		
+		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}(x, 2*y)\\end{verbatim}"
+				}
+			],
+			"source" : "expr.args;"
+		},
+		
+		{
+			"cell_id" : 9,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}262537412640768743.99999999999925007259719818568888\\end{dmath*}"
+				}
+			],
+			"source" : "exp(pi * sqrt(163)).evalf(50);"
+		},
+		
+		{
+			"cell_id" : 30,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 33,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Algebra}\n\nExpand products and powers."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Algebra}\n\nExpand products and powers."
+		},
+		
+		{
+			"cell_id" : 11,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}x^{3} + 2 x^{2} y + x^{2} + x y^{2} + 2 x y + y^{2}\\end{dmath*}"
+				}
+			],
+			"source" : "((x+y)**2 * (x+1)).expand();"
+		},
+		
+		{
+			"cell_id" : 40,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 41,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Simplify a formula."
+				}
+			],
+			"hidden" : true,
+			"source" : "Simplify a formula."
+		},
+		
+		{
+			"cell_id" : 12,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{x} \\left(x \\sin{\\left (x \\right )} - 1\\right) + \\frac{1}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "a = 1/x + (x*sin(x) - 1)/x;"
+		},
+		
+		{
+			"cell_id" : 10,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\sin{\\left (x \\right )}\\end{dmath*}"
+				}
+			],
+			"source" : "simplify(_);"
+		},
+		
+		{
+			"cell_id" : 11,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}[-2, -2*I, 2*I]\\end{verbatim}"
+				}
+			],
+			"source" : "solve(Eq(x**3 + 2*x**2 + 4*x + 8, 0), x);"
+		},
+		
+		{
+			"cell_id" : 12,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}[-2, -2*I, 2*I]\\end{verbatim}"
+				}
+			],
+			"source" : "solve(x**3 + 2*x**2 + 4*x + 8, x);"
+		},
+		
+		{
+			"cell_id" : 17,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}{x: -3, y: 1}\\end{verbatim}"
+				}
+			],
+			"source" : "solve([Eq(x + 5*y, 2), Eq(-3*x + 6*y, 15)], [x, y]);"
+		},
+		
+		{
+			"cell_id" : 18,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}{x: -3, y: 1}\\end{verbatim}"
+				}
+			],
+			"source" : "solve([x + 5*y - 2, -3*x + 6*y - 15], [x, y]);"
+		},
+		
+		{
+			"cell_id" : 19,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\sum_{n=a}^{b} \\left(2^{n} + 6 n^{2}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "a, b = symbols('a b')\ns = Sum(6*n**2 + 2**n, (n, a, b));"
+		},
+		
+		{
+			"cell_id" : 20,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}- 2^{a} + 2^{b + 1} - 2 a^{3} + 3 a^{2} - a + 2 b^{3} + 3 b^{2} + b\\end{dmath*}"
+				}
+			],
+			"source" : "s.doit();"
+		},
+		
+		{
+			"cell_id" : 21,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}{2}^{\\left(b\\right)} b!\\end{dmath*}"
+				}
+			],
+			"source" : "product(n*(n+1), (n, 1, b));"
+		},
+		
+		{
+			"cell_id" : 22,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}f{\\left (\\frac{1}{2} \\right )} - 3 f{\\left (2 \\right )} = 2\\end{dmath*}"
+				}
+			],
+			"source" : "f=Function('f')\nex=Eq(f(1/x)-3*f(x),x)\nex.subs(x,2);"
+		},
+		
+		{
+			"cell_id" : 23,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}- 3 f{\\left (\\frac{1}{2} \\right )} + f{\\left (2 \\right )} = \\frac{1}{2}\\end{dmath*}"
+				}
+			],
+			"source" : "ex.subs(x,Rational(1,2));"
+		},
+		
+		{
+			"cell_id" : 24,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}[{f(2): -13/16, f(1/2): -7/16}]\\end{verbatim}"
+				}
+			],
+			"source" : "solve([f(Rational(1,2))-3*f(2)-2,-3*f(Rational(1,2))+f(2)-Rational(1,2)]);"
+		},
+		
+		{
+			"cell_id" : 25,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}- \\frac{1}{6}\\end{dmath*}"
+				}
+			],
+			"source" : "limit((sin(x)-x)/x**3, x, 0);"
+		},
+		
+		{
+			"cell_id" : 26,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}1 + \\frac{x^{2}}{2} + \\frac{5 x^{4}}{24} + \\mathcal{O}\\left(x^{6}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "(1/cos(x)).series(x, 0, 6);"
+		},
+		
+		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}- \\frac{4 x \\cos{\\left (x^{2} \\right )}}{x + 1} \\sin{\\left (x^{2} \\right )} - \\frac{\\cos^{2}{\\left (x^{2} \\right )}}{\\left(x + 1\\right)^{2}}\\end{dmath*}"
+				}
+			],
+			"source" : "diff(cos(x**2)**2 / (1+x), x);"
+		},
+		
+		{
+			"cell_id" : 28,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}x^{2} \\sin{\\left (x \\right )} + 2 x \\cos{\\left (x \\right )} - 2 \\sin{\\left (x \\right )}\\end{dmath*}"
+				}
+			],
+			"source" : "integrate(x**2 * cos(x), x);"
+		},
+		
+		{
+			"cell_id" : 29,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-2 + \\frac{\\pi^{2}}{4}\\end{dmath*}"
+				}
+			],
+			"source" : "integrate(x**2 * cos(x), (x, 0, pi/2));"
+		},
+		
+		{
+			"cell_id" : 30,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 13,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Solve an ordinary differential equation."
+				}
+			],
+			"hidden" : true,
+			"source" : "Solve an ordinary differential equation."
+		},
+		
+		{
+			"cell_id" : 31,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}9 f{\\left (x \\right )} + \\frac{d^{2}}{d x^{2}}  f{\\left (x \\right )} = 1\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}f{\\left (x \\right )} = C_{1} \\sin{\\left (3 x \\right )} + C_{2} \\cos{\\left (3 x \\right )} + \\frac{1}{9}\\end{dmath*}"
+				}
+			],
+			"source" : "f = Function('f')\neq = Eq(Derivative(f(x),x,x) + 9*f(x), 1);\ndsolve(eq, f(x));"
+		},
+		
+		{
+			"cell_id" : 19,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}9 f{\\left (x \\right )} + \\frac{d^{2}}{d x^{2}}  f{\\left (x \\right )} = 1\\end{dmath*}"
+				}
+			],
+			"source" : "Eq(f(x).diff(x, x) + 9*f(x), 1);"
+		},
+		
+		{
+			"cell_id" : 20,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}f{\\left (x \\right )} = C_{1} \\sin{\\left (3 x \\right )} + C_{2} \\cos{\\left (3 x \\right )} + \\frac{1}{9}\\end{dmath*}"
+				}
+			],
+			"source" : "dsolve(_, f(x));"
+		},
+		
+		{
+			"cell_id" : 21,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

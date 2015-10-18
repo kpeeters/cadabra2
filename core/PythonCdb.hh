@@ -54,7 +54,14 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm);
 /// Generate the Python str() representation of the Ex object.
 std::string Ex_str_(const Ex&);
 std::string Ex_repr_(const Ex&);
-//std::string Ex_latex_(std::shared_ptr<Ex>);
+std::string Ex_latex_(const Ex&);
+
+/// Convert a Cadabra 'Ex' to a Sympy expression. This first converts the
+/// Cadabra expression to a string, and then reads that back in by calling
+/// sympy.parsing.sympy_parser.parse_expr.
+
+boost::python::object Ex_to_Sympy(const Ex&);
+
 
 /// \ingroup pythoncore
 ///
