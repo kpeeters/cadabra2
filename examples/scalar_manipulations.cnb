@@ -35,7 +35,7 @@
 					"source" : "\\begin{dmath*}{}\\frac{(\\sin(x)^{2} + \\cos(x)^{2})}{x}\\end{dmath*}"
 				}
 			],
-			"source" : "x::Coordinate.\nex:=(\\sin(x)**2 + \\cos(x)**2)/x;"
+			"source" : "ex:=(\\sin(x)**2 + \\cos(x)**2)/x;"
 		},
 		
 		{
