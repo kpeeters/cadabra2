@@ -1,0 +1,389 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_id" : 44,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 74,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors).\n\nCadabra allows you to enter mathematical expressions without a lot of declarations, and even without wrapping \nthem in strings. Simply do the following:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors).\n\nCadabra allows you to enter mathematical expressions without a lot of declarations, and even without wrapping \nthem in strings. Simply do the following:"
+		},
+		
+		{
+			"cell_id" : 3,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{(\\sin(x)^{2} + \\cos(x)^{2})}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "x::Coordinate.\nex:=(\\sin(x)**2 + \\cos(x)**2)/x;"
+		},
+		
+		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 48,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note the use of \\LaTeX{} notation for things like trigonometric functions.\nYou can then directly call Sympy algorithms on these Cadabra expressions:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note the use of \\LaTeX{} notation for things like trigonometric functions.\nYou can then directly call Sympy algorithms on these Cadabra expressions:"
+		},
+		
+		{
+			"cell_id" : 4,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\log{\\left (x \\right )}\\end{dmath*}"
+				}
+			],
+			"source" : "sympy.integrate(ex);"
+		},
+		
+		{
+			"cell_id" : 14,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "sympy.simplify(ex);"
+		},
+		
+		{
+			"cell_id" : 13,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 16,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that for the time being this does not change the original Cadabra expression:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that for the time being this does not change the original Cadabra expression:"
+		},
+		
+		{
+			"cell_id" : 31,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{(\\sin(x)^{2} + \\cos(x)^{2})}{x}\\end{dmath*}"
+				}
+			],
+			"source" : "ex;"
+		},
+		
+		{
+			"cell_id" : 17,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 51,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then converted to Sympy, after which the\nintegrals are evaluated by calling \\verb|doit()| on the Sympy expression. Again note the use of \nstandard \\LaTeX{}-like constructions to write down integrals."
+				}
+			],
+			"hidden" : true,
+			"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then converted to Sympy, after which the\nintegrals are evaluated by calling \\verb|doit()| on the Sympy expression. Again note the use of \nstandard \\LaTeX{}-like constructions to write down integrals."
+		},
+		
+		{
+			"cell_id" : 21,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int{}\\sin(x) \\cos(x)\\, {\\rm d}x + \\int{}x^{2}\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "ex2:= \\int{\\sin(x) \\cos(x)}{x} + \\int{ x**2 }{x};"
+		},
+		
+		{
+			"cell_id" : 52,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 53,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "You can print this in a Sympy-parseable form by using Python's \\verb|str|:"
+				}
+			],
+			"hidden" : true,
+			"source" : "You can print this in a Sympy-parseable form by using Python's \\verb|str|:"
+		},
+		
+		{
+			"cell_id" : 17,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}Integral(sin(x)*cos(x), x)+Integral(x**(2), x)\n\\end{verbatim}"
+				}
+			],
+			"source" : "print(str(ex2))"
+		},
+		
+		{
+			"cell_id" : 60,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 61,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Alternatively, convert to a Sympy expression using:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Alternatively, convert to a Sympy expression using:"
+		},
+		
+		{
+			"cell_id" : 17,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int x^{2}\\, dx + \\int \\sin{\\left (x \\right )} \\cos{\\left (x \\right )}\\, dx\\end{dmath*}"
+				},
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
+				}
+			],
+			"source" : "ex2.toSympy();\nprint(type(ex2.toSympy()))"
+		},
+		
+		{
+			"cell_id" : 22,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{x^{3}}{3} + \\frac{1}{2} \\sin^{2}{\\left (x \\right )}\\end{dmath*}"
+				}
+			],
+			"source" : "ex2.toSympy().doit();"
+		},
+		
+		{
+			"cell_id" : 5,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 12,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Here's another example, of similar nature (still needs some tweaks to make it display nice):"
+				}
+			],
+			"hidden" : true,
+			"source" : "Here's another example, of similar nature (still needs some tweaks to make it display nice):"
+		},
+		
+		{
+			"cell_id" : 7,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}x^{2} - 3\\end{dmath*}"
+				}
+			],
+			"source" : "ex4:= x**2 - 3;"
+		},
+		
+		{
+			"cell_id" : 9,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}[-sqrt(3), sqrt(3)]\\end{verbatim}"
+				}
+			],
+			"source" : "sympy.solve(ex4);"
+		},
+		
+		{
+			"cell_id" : 27,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 43,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Of course, if you do not like or need Cadabra's input format, then you can happily use Sympy in the way\nyou have always used it, but taking advantage of the display logic of the Cadabra notebook:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Of course, if you do not like or need Cadabra's input format, then you can happily use Sympy in the way\nyou have always used it, but taking advantage of the display logic of the Cadabra notebook:"
+		},
+		
+		{
+			"cell_id" : 29,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int_{0}^{2} \\sin{\\left (x \\right )}\\, dx\\end{dmath*}"
+				}
+			],
+			"source" : "from sympy import *\nx,y=var('x,y')\nIntegral(sin(x),(x,0,2));"
+		},
+		
+		{
+			"cell_id" : 15,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}- \\cos{\\left (2 \\right )} + 1\\end{dmath*}"
+				}
+			],
+			"source" : "_.doit();"
+		},
+		
+		{
+			"cell_id" : 10,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 70,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Hope this has triggered your interest; as usual, any feedback to \\url{mailto:info@cadabra.science} is greatly appreciated."
+				}
+			],
+			"hidden" : true,
+			"source" : "Hope this has triggered your interest; as usual, any feedback to \\url{mailto:info@cadabra.science} is greatly appreciated."
+		},
+		
+		{
+			"cell_id" : 71,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
