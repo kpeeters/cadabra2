@@ -49,7 +49,8 @@ namespace cadabra {
 
 			/// Network status is propagated from the ComputeThread to the
          /// GUI using the following methods. These get called on the
-			/// compute thread.
+			/// compute thread (as opposed to the functions above, which get
+			/// called on the gui thread).
 
 			//@{
 
