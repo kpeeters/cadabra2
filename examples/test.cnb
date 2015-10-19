@@ -100,10 +100,10 @@
 					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int{}\\sin(x) \\cos(x)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\int{}\\sin(x) \\cos(x)\\, {\\rm d}x + \\int{}x^{2}\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "ex2:= \\int{\\sin(x) \\cos(x)}{x};"
+			"source" : "ex2:= \\int{\\sin(x) \\cos(x)}{x} + \\int{ x**2 }{x};"
 		},
 		
 		{
@@ -117,7 +117,7 @@
 					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "output",
-					"source" : "\\begin{verbatim}Integral(sin(x)*cos(x), x)\n\\end{verbatim}"
+					"source" : "\\begin{verbatim}Integral(sin(x)*cos(x), x)+Integral(x**(2), x)\n\\end{verbatim}"
 				}
 			],
 			"source" : "print(str(ex2))"
@@ -134,7 +134,7 @@
 					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int \\sin{\\left (x \\right )} \\cos{\\left (x \\right )}\\, dx\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\int x^{2}\\, dx + \\int \\sin{\\left (x \\right )} \\cos{\\left (x \\right )}\\, dx\\end{dmath*}"
 				}
 			],
 			"source" : "ex2.toSympy();"
@@ -151,7 +151,7 @@
 					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{2} \\sin^{2}{\\left (x \\right )}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{x^{3}}{3} + \\frac{1}{2} \\sin^{2}{\\left (x \\right )}\\end{dmath*}"
 				}
 			],
 			"source" : "ex2.toSympy().doit();"
@@ -176,6 +176,74 @@
 		
 		{
 			"cell_id" : 21,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}diff(y(t)) + p(t) y(t) - q(t)\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=diff(y(t)) + p(t) y(t) - q(t);"
+		},
+		
+		{
+			"cell_id" : 5,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}p{\\left (t \\right )} y{\\left (t \\right )} - q{\\left (t \\right )} + \\frac{d}{d t} y{\\left (t \\right )}\\end{dmath*}"
+				}
+			],
+			"source" : "ex.toSympy();"
+		},
+		
+		{
+			"cell_id" : 6,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{t}{y(t)}\\end{dmath*}"
+				}
+			],
+			"source" : "ex3:=\\partial_{t}{ y(t) };"
+		},
+		
+		{
+			"cell_id" : 7,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_id" : 1,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial{y(t)}\\,_{t}\\end{dmath*}"
+				}
+			],
+			"source" : "ex4:=\\partial{ y(t) }_{t};"
+		},
+		
+		{
+			"cell_id" : 10,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""

@@ -1,11 +1,10 @@
 
-- on average, using sympy's latex representation of python objects is silly;
-  e.g. lists or numpy.array's come out ugly and would look much better in
-  tt font anyway. So the default for display should be to use str().
-  The main problem is that ascii pretty printing of things like lists is
-  a mess. Numpy.array prints nice.
+- Need a better way to pretty-print lists, as the default str() does not
+  look nice when fed through \begin{verbatim}...\end{verbatim}.
 
-- Ex_to_Sympy should be finished.
+- Ex_to_Sympy should be finished: no free/dummy index check.
+
+- Replace \prod -> \mult and \sum -> \add ?  Makes sense from LaTeX perspective.
 
 - compute->stop() does stop, but the notebook does not update the cell
   status, and it does not set cells to 'not evaluating'.
