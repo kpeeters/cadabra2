@@ -6,6 +6,13 @@
 DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 	: tree(e), properties(p)
 	{
+	symmap = {
+		{"\\cos", "cos"},
+		{"\\sin", "sin"},
+		{"\\tan", "tan"},
+		{"\\int", "Integral" },
+		{"\\sum", "Sum" }
+		};
 	}
 
 void DisplaySympy::output(std::ostream& str) 
@@ -44,7 +51,11 @@ void DisplaySympy::output(std::ostream& str, Ex::iterator it)
 		}
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-	str << *it->name;
+	auto rn = symmap.find(*it->name);
+	if(rn!=symmap.end())
+		str << rn->second;
+	else
+		str << *it->name;
 	if(needs_extra_brackets) str << "}";
 
 	print_children(str, it);
@@ -199,13 +210,14 @@ void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr
 
 void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it) 
 	{
-	if(*it->name=="\\prod")        print_productlike(str, it, " ");
+	if(*it->name=="\\prod")        print_productlike(str, it, "*");
 	else if(*it->name=="\\sum")    print_sumlike(str, it);
 	else if(*it->name=="\\frac")   print_fraclike(str, it);
 	else if(*it->name=="\\comma")  print_commalike(str, it);
 	else if(*it->name=="\\arrow")  print_arrowlike(str, it);
 	else if(*it->name=="\\pow")    print_powlike(str, it);
 	else if(*it->name=="\\int")    print_intlike(str, it);
+	else if(*it->name=="\\sum")    print_intlike(str, it);
 	else if(*it->name=="\\equals") print_equalitylike(str, it);
 	else
 		output(str, it);
@@ -379,12 +391,13 @@ void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	str << *it->name << "{}"; // FIXME: add limits
+	str << symmap[*it->name] << "(";
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
+	str << ", ";
 	++sib;
-	str << "\\, {\\rm d}";
 	dispatch(str, sib);
+	str << ")";
 	}
 
 void DisplaySympy::print_equalitylike(std::ostream& str, Ex::iterator it)
