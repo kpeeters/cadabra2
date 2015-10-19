@@ -259,7 +259,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				docthread.queue_action(action);
 				}
 			else if(msg_type.asString()=="error") {
-				std::cout << "Generating ERROR cell" << std::endl;
+				// std::cout << "Generating ERROR cell" << std::endl;
 				std::string error = "{\\color{red}{\\begin{verbatim}"+content["output"].asString()
 					+"\\end{verbatim}}}";
 				if(msg_type.asString()=="fault") {
