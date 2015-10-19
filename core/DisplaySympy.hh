@@ -4,6 +4,7 @@
 #include "Props.hh"
 #include "Storage.hh"
 #include <ostream>
+#include <map>
 
 /// \ingroup core
 ///
@@ -55,6 +56,8 @@ class DisplaySympy {
 		void print_equalitylike(std::ostream&, Ex::iterator);
 
 		bool children_have_brackets(Ex::iterator ch) const;
+
+		std::map<std::string, std::string> symmap;
 };
 
 const char *unichar(kunichar c);
