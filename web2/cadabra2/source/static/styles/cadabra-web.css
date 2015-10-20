@@ -199,10 +199,27 @@ div.output {
 	 color: black;
 	 font-size: 12px;
 }
+div.verbatim {
+	 color: black;
+}
 div.latex { 
 /* 	 font-family: 'STIXGENERAL';  */
 	 padding-left: 10px; 
 	 margin-bottom: 10px; 
+}
+div.latex_view { 
+	 color: black;
+ 	 font-family: 'STIXGENERAL';  
+	 padding-left: 10px; 
+	 margin-bottom: 0px; 
+}
+div.latex div.latex_view {
+	 display: none;
+}
+div.MathJax_Display {
+    text-align: left !important;	 
+	 margin-bottom: 0px !important;
+	 padding-bottom: 0px !important;
 }
 div.image_png img { 
 	 width: 100%; 
@@ -211,9 +228,11 @@ div.python {
 	 font-family: monospace; 
 	 padding-left: 10px; 
 	 margin-bottom: 10px; 
+	 padding-bottom: 0px;
 	 margin-top: 10px;
 	 white-space: pre; 
 	 color: blue; 
+	 border-left: 1px solid blue;
 }
 div.view_options {
 	 margin-left: 20px;

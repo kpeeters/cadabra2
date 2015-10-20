@@ -66,19 +66,25 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex begin_dmath(R"(\\begin\{dmath\*\})");
 	std::regex end_dmath(R"(\\end\{dmath\*\})");
 	std::regex tilde("~");
+	std::regex less("<");
+	std::regex greater(">");
+	std::regex latex("\\LaTeX{}");
 
 	std::string res;
 
-	res = std::regex_replace(str, section, "<h1>$1</h1>");
+	res = std::regex_replace(str, begin_dmath, "\\[");
+	res = std::regex_replace(res, end_dmath, "\\]");
+	res = std::regex_replace(res, tilde, " ");
+	res = std::regex_replace(res, less, "&lt;");
+	res = std::regex_replace(res, tilde, "&gt;");
+	res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
+	res = std::regex_replace(res, end_verbatim, "</pre>");
+	res = std::regex_replace(res, section, "<h1>$1</h1>");
 	res = std::regex_replace(res, subsection, "<h2>$1</h2>");
 	res = std::regex_replace(res, verb, "<code>$1</code>");
 	res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 	res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-	res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
-	res = std::regex_replace(res, end_verbatim, "</pre>");
-	res = std::regex_replace(res, begin_dmath, "\\[");
-	res = std::regex_replace(res, end_dmath, "\\]");
-	res = std::regex_replace(res, tilde, " ");
+	res = std::regex_replace(res, latex, "LaTeX");
 
 	return res;
 	}
@@ -102,6 +108,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << "</style>\n";
 				str << "</head>\n";
 				str << "<body>\n";
+				}
+			else {
+				str << "{% raw %}\n";
 				}
 			break;
 		case DataCell::CellType::python:
@@ -143,6 +152,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			if(!for_embedding) {
 				str << "</body>\n";
 				str << "</html>\n";
+				}
+			else {
+				str << "{% endraw %}\n";
 				}
 			break;
 		case DataCell::CellType::python:

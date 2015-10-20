@@ -20,8 +20,15 @@ add_custom_command(OUTPUT  ${HTMLOUTDIR}/for_previous_users_segment.html
                    ARGS    --segment ${CNBDIR}/for_previous_users.cnb ${HTMLOUTDIR}/for_previous_users_segment.html 
                    COMMENT "Creating for_previous_users.html")
 
+add_custom_command(OUTPUT  ${HTMLOUTDIR}/scalar_manipulations_segment.html 
+                   DEPENDS ${CNBDIR}/scalar_manipulations.cnb ${DC}
+                   COMMAND cadabra2html 
+                   ARGS    --segment ${CNBDIR}/scalar_manipulations.cnb ${HTMLOUTDIR}/scalar_manipulations_segment.html 
+                   COMMENT "Creating scalar_manipulations.html")
+
 add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting_segment.html
                                            ${HTMLOUTDIR}/beginners_segment.html
                                            ${HTMLOUTDIR}/for_previous_users_segment.html
+                                           ${HTMLOUTDIR}/scalar_manipulations_segment.html
                  )
 
