@@ -16,6 +16,7 @@ FILTER = [
     'notebooks/README*',
     'notebooks/.gitignore',
     'notebooks/*~',
+    'notebooks/*segment.html',
     '*~'
 ]
 

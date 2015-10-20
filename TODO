@@ -6,6 +6,10 @@
 
 - Replace \prod -> \mult and \sum -> \add ?  Makes sense from LaTeX perspective.
 
+- notebook->html creates incorrect html for error cells, which trips clay/jinja2 
+  with TemplateSyntaxError: Missing end of comment tag
+
+
 - compute->stop() does stop, but the notebook does not update the cell
   status, and it does not set cells to 'not evaluating'.
 
