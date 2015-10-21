@@ -2,8 +2,12 @@ html {
 	 height: 100%;
 }
 body {
-	 font-family: "Lato";
-	 font-weight: 300;
+/* 	 font-family: "Lato"; 
+	 font-weight: 300;*/
+/*	 font-family: "Computer Modern Serif"; */
+	 font-family: "Computer Modern Bright"; 
+/*	 font-weight: 300; */
+	 font-size: 17px;
 	 height: 100%;
 	 background: white;
 }
@@ -72,7 +76,7 @@ div#main {
 	 width: 60%;
 	 float: left;
 }
-div#main p {
+div#main > p {
 	 margin-bottom: 20px;
 	 margin-left: 40px;
 }
@@ -93,6 +97,7 @@ div#main h1 {
 	 color: green;
 	 font-size: 24px;
 	 border-bottom: 1px solid grey;
+	 margin-bottom: 20px;
 }
 div#main h2 {
 	 margin-top: 24px;
@@ -100,7 +105,7 @@ div#main h2 {
 	 font-weight: normal;
 	 color: green;
 	 font-size: 20px;
-	 border-bottom: 1px solid #ccc;
+	 border-bottom: 1px solid grey; /* #ccc; */
 }
 div#main h1 span.date {
 	 margin-top: 10px;
@@ -195,11 +200,17 @@ div.image_png {
 	 width: 400px; 
 }
 div.output { 
+	 padding-left: 40px;
 	 font-family: monospace;
 	 color: black;
-	 font-size: 12px;
+	 font-size: 14px;
+}
+code {
+	 font-size: 14px;
 }
 div.verbatim {
+	 padding-left: 40px;
+	 font-size: 14px;
 	 color: black;
 }
 div.latex { 
@@ -209,8 +220,8 @@ div.latex {
 }
 div.latex_view { 
 	 color: black;
- 	 font-family: 'STIXGENERAL';  
-	 padding-left: 10px; 
+	 font-size: 16px;
+	 padding-left: 40px; 
 	 margin-bottom: 0px; 
 }
 div.latex div.latex_view {
@@ -224,19 +235,24 @@ div.MathJax_Display {
 div.image_png img { 
 	 width: 100%; 
 }
-div.python { 
-	 font-family: monospace; 
+div.python > p { 
+	 font-family: "Inconsolata", monospace; 
+	 font-size: 16px;
 	 padding-left: 10px; 
 	 margin-bottom: 10px; 
 	 padding-bottom: 0px;
 	 margin-top: 10px;
 	 white-space: pre; 
+	 line-height: 20px;
 	 color: blue; 
+	 margin-left: 0px;
 	 border-left: 1px solid blue;
 }
+
 div.view_options {
 	 margin-left: 20px;
-	 margin-bottom: 20px;
+	 margin-top: -10px;
+	 margin-bottom: 40px;
 }
 div.download_options {
 	 margin-left: 50px;
@@ -246,7 +262,7 @@ div.view_options a {
 	 margin-left: 20px;
 }
 pre {
-	 margin-left: 30px;
+	 margin-left: 0px;
 }
 div#main table {
 	 margin-left: 50px;
