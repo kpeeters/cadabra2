@@ -71,7 +71,7 @@ div#menubar ul li:hover {
 	 background: yellow;
 }
 div#main {
-	 margin-top: 10px;
+	 margin-top: 20px;
 	 margin-left: 40px;
 	 width: 70%;
 	 float: left;
@@ -179,9 +179,13 @@ div.icon_background:hover svg path {
 
 div#sidebar {
 	 margin-top: 25px;
-	 margin-left: 20px;
-	 width: 20%;
+	 margin-left: 0px;
+	 margin-right: 60px;
 	 float: right;
+	 width: 60px;
+}
+div#sidebar img {
+	 width: 50%;
 }
 
 div#sidebar h1 {
@@ -221,7 +225,7 @@ div.latex_view {
 	 color: black;
 	 font-size: 16px;
 	 padding-left: 40px; 
-	 margin-bottom: 0px; 
+	 margin-bottom: 15px; 
 }
 div.latex div.latex_view {
 	 display: none;
@@ -241,7 +245,7 @@ div.MathJax_Display {
 div.image_png img { 
 	 width: 100%; 
 }
-div.python > p { 
+div.python > div.source { 
 	 font-family: "Inconsolata", monospace; 
 	 font-size: 15.8px;
 	 padding-left: 10px; 
@@ -277,4 +281,34 @@ pre.output {
 }
 div#main table {
 	 margin-left: 50px;
+}
+
+/* Tooltips */
+
+.tooltip {
+	 position: relative;
+}
+
+.tooltip:hover:after{
+    background: rgba(0,100,0,0.8);
+    border-radius: 5px;
+    bottom: 26px;
+    color: #fff;
+    content: attr(tiptext);
+    left: -120px;
+	 font-size: smaller;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 160px;
+}
+.tooltip:hover:before{
+    border: solid;
+    border-color: rgba(0,100,0,0.8) transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 14%;
+    position: absolute;
+    z-index: 99;
 }
