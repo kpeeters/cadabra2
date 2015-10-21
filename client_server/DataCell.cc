@@ -68,23 +68,28 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex tilde("~");
 	std::regex less("<");
 	std::regex greater(">");
-	std::regex latex("\\LaTeX{}");
+	std::regex latex(R"(\\LaTeX\{\})");
 
 	std::string res;
 
-	res = std::regex_replace(str, begin_dmath, "\\[");
-	res = std::regex_replace(res, end_dmath, "\\]");
-	res = std::regex_replace(res, tilde, " ");
-	res = std::regex_replace(res, less, "&lt;");
-	res = std::regex_replace(res, tilde, "&gt;");
-	res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
-	res = std::regex_replace(res, end_verbatim, "</pre>");
-	res = std::regex_replace(res, section, "<h1>$1</h1>");
-	res = std::regex_replace(res, subsection, "<h2>$1</h2>");
-	res = std::regex_replace(res, verb, "<code>$1</code>");
-	res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
-	res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-	res = std::regex_replace(res, latex, "LaTeX");
+	try {
+		res = std::regex_replace(str, begin_dmath, "\\[");
+		res = std::regex_replace(res, end_dmath, "\\]");
+		res = std::regex_replace(res, tilde, " ");
+		res = std::regex_replace(res, less, "&lt;");
+		res = std::regex_replace(res, tilde, "&gt;");
+		res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
+		res = std::regex_replace(res, end_verbatim, "</pre>");
+		res = std::regex_replace(res, section, "<h1>$1</h1>");
+		res = std::regex_replace(res, subsection, "<h2>$1</h2>");
+		res = std::regex_replace(res, verb, "<code>$1</code>");
+		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
+		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
+		res = std::regex_replace(res, latex, "LaTeX");
+		}
+	catch(std::regex_error& ex) {
+		std::cerr << "regex error on " << str << std::endl;
+		}
 
 	return res;
 	}
@@ -136,8 +141,16 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			break;
 		}	
 
-	if(it->cell_type!=DataCell::CellType::document) 
-		str << latex_to_html(it->textbuf);
+	try {
+		if(it->cell_type==DataCell::CellType::image_png)
+			str << it->textbuf;
+		else if(it->cell_type!=DataCell::CellType::document) 
+			str << "<p>"+latex_to_html(it->textbuf)+"</p>";
+		}
+	catch(std::regex_error& ex) {
+		std::cerr << "regex error doing latex_to_html on " << it->textbuf << std::endl;
+		throw;
+		}
 
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
