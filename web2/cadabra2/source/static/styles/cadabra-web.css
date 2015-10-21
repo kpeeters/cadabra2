@@ -45,7 +45,7 @@ div#logobar #cadabra {
 	 font-size: 48px;
 }
 div#logobar #subtext {
-	 font-family: "Bree Serif";
+	 font-family: "Computer Modern Bright";
 	 font-size: 14px;
 	 font-weight: 300;
 	 padding-left: 5px;
@@ -71,9 +71,9 @@ div#menubar ul li:hover {
 	 background: yellow;
 }
 div#main {
-	 margin-top: 20px;
-	 margin-left: 20px;
-	 width: 60%;
+	 margin-top: 10px;
+	 margin-left: 40px;
+	 width: 70%;
 	 float: left;
 }
 div#main > p {
@@ -96,7 +96,7 @@ div#main h1 {
 	 font: 400 60px/1.3 "Bree Serif";
 	 color: green;
 	 font-size: 24px;
-	 border-bottom: 1px solid grey;
+	 border-bottom: 1px solid #bbb;
 	 margin-bottom: 20px;
 }
 div#main h2 {
@@ -105,7 +105,7 @@ div#main h2 {
 	 font-weight: normal;
 	 color: green;
 	 font-size: 20px;
-	 border-bottom: 1px solid grey; /* #ccc; */
+	 border-bottom: 1px solid #bbb; 
 }
 div#main h1 span.date {
 	 margin-top: 10px;
@@ -203,7 +203,6 @@ div.output {
 	 padding-left: 40px;
 	 font-family: monospace;
 	 color: black;
-	 font-size: 14px;
 }
 code {
 	 font-size: 14px;
@@ -237,7 +236,7 @@ div.image_png img {
 }
 div.python > p { 
 	 font-family: "Inconsolata", monospace; 
-	 font-size: 16px;
+	 font-size: 15.8px;
 	 padding-left: 10px; 
 	 margin-bottom: 10px; 
 	 padding-bottom: 0px;
@@ -262,7 +261,12 @@ div.view_options a {
 	 margin-left: 20px;
 }
 pre {
+	 margin-left: 30px;
+	 font-size: 14px;
+}
+pre.output {
 	 margin-left: 0px;
+	 font-size: 14px;
 }
 div#main table {
 	 margin-left: 50px;
