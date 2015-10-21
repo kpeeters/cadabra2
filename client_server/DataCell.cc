@@ -142,10 +142,15 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		}	
 
 	try {
-		if(it->cell_type==DataCell::CellType::image_png)
-			str << it->textbuf;
-		else if(it->cell_type!=DataCell::CellType::document) 
-			str << "<p>"+latex_to_html(it->textbuf)+"</p>";
+		if(it->textbuf.size()>0) {
+			if(it->cell_type==DataCell::CellType::image_png)
+				str << it->textbuf;
+			else if(it->cell_type!=DataCell::CellType::document) {
+				std::string out=latex_to_html(it->textbuf);
+				if(out.size()>0)
+					str << "<div class=\"source\">"+out+"</div>";
+				}
+			}
 		}
 	catch(std::regex_error& ex) {
 		std::cerr << "regex error doing latex_to_html on " << it->textbuf << std::endl;
