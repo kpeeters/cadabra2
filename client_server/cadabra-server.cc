@@ -1,5 +1,5 @@
 
-#include <snoop/Snoop.hh>
+#include "Snoop.hh"
 #include "Server.hh"
 
 // Run a simple Cadabra server on a local port.

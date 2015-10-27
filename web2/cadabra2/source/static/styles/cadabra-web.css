@@ -257,6 +257,7 @@ div.python > div.source {
 	 color: blue; 
 	 margin-left: 0px;
 	 border-left: 1px solid blue;
+	 tab-size: 3;
 }
 
 div.view_options {

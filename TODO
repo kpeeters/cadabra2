@@ -1,4 +1,10 @@
 
+- LaTeXForm needs cleaning up and catching errors.
+
+- Property initialisation from Python, and in particular how the
+  key/val pairs get set, should be documented, fixed and fed through to e.g. LaTeXForm.
+  Right now we do not do any of that, correct?
+
 - Need a better way to pretty-print lists, as the default str() does not
   look nice when fed through \begin{verbatim}...\end{verbatim}.
 
