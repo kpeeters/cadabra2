@@ -45,6 +45,7 @@
 #include "properties/IndexInherit.hh"
 #include "properties/Integer.hh"
 #include "properties/KroneckerDelta.hh"
+#include "properties/LaTeXForm.hh"
 #include "properties/Metric.hh"
 #include "properties/NonCommuting.hh"
 #include "properties/PartialDerivative.hh"
@@ -909,6 +910,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Indices>();	
 	def_prop<Integer>();
 	def_prop<KroneckerDelta>();
+	def_prop<LaTeXForm>();
 	def_prop<Metric>();
 	def_prop<NonCommuting>();
 	def_prop<PartialDerivative>();

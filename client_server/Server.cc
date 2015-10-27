@@ -13,7 +13,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
 
-#include <snoop/Snoop.hh>
+#include "Snoop.hh"
 #include "Server.hh"
 
 using websocketpp::lib::placeholders::_1;
