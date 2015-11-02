@@ -221,7 +221,7 @@ bool property::parse_one_argument(Ex::iterator arg, keyval_t& keyvals)
 		}
 	else {
 		if(unnamed_argument()!="") {
-			std::cerr << unnamed_argument() << " unnamed " << *arg->name << std::endl;
+			// std::cerr << unnamed_argument() << " unnamed " << *arg->name << std::endl;
 			keyvals.push_back(keyval_t::value_type(unnamed_argument(), arg));
 			}
 		else return false;
@@ -250,8 +250,8 @@ bool property::parse_to_keyvals(const Ex& tr, keyval_t& keyvals)
 			}
 		}
 
-	for(auto it=keyvals.begin(); it!=keyvals.end(); ++it)
-		std::cerr << (*it).first << " = " << *(*it).second->name << std::endl;
+	// for(auto it=keyvals.begin(); it!=keyvals.end(); ++it)
+	//   	std::cerr << (*it).first << " = " << *(*it).second->name << std::endl;
 	return true;
 	}
 
