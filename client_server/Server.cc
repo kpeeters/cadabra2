@@ -159,7 +159,7 @@ std::string Server::pre_parse(const std::string& line)
 						auto argument = std::string(ares[2].first+1, ares[2].second-1);
 						ret = indent_line + "__cdbtmp__ = "+propname
 							+"(Ex(r'"+line_stripped.substr(0,found)
-							+"'), Ex('" +argument + "') )";
+							+"'), Ex(r'" +argument + "') )";
 						}
 					else {
 						// no arguments
@@ -205,6 +205,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		newblk += pre_parse(line)+'\n';
 		}
 	// std::cerr << "PREPARSED: " << newblk << std::endl;
+	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
 	try {

@@ -51,7 +51,10 @@ void DisplayTeX::output(std::ostream& str, Ex::iterator it)
 		}
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-	if(lf) str << lf->latex_form();
+	if(lf) {
+		str << lf->latex_form();
+		std::cerr << "output " << lf->latex_form() << std::endl;
+		}
 	else   str << texify(*it->name);
 	if(needs_extra_brackets) str << "}";
 //	else str << *it->name;
