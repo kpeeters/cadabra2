@@ -4,14 +4,14 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
-#include <future>
-#include <chrono>
+//#include <future>
+//#include <chrono>
 #include <boost/regex.hpp>
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <jsoncpp/json/json.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
+//#include <boost/shared_ptr.hpp>
+//#include <boost/make_shared.hpp>
 
 #include "Snoop.hh"
 #include "Server.hh"

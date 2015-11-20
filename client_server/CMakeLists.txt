@@ -35,7 +35,7 @@ find_library(sqlite3 sqlite3 required)
 if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
-add_definitions("-D_WEBSOCKETPP_CPP11_STL_")
+add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 
 # Create the server library
 add_library(cadabra_server SHARED Server.cc Snoop.cc)
@@ -43,18 +43,18 @@ target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JS
 
 # Create the client library. 
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB} sqlite3 uuid)
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIB} sqlite3 uuid ${PYTHON_LIBRARIES})
 
 # Create server binary
 #include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})
 include_directories("." "./websocketpp" ${JSONCPP_INCLUDE_DIR})
 add_executable(cadabra-server cadabra-server.cc)
 add_executable(cadabra2html cadabra2html.cc DataCell.cc)
-add_executable(test_talk_to_server test_talk_to_server.cc)
+#add_executable(test_talk_to_server test_talk_to_server.cc)
 add_executable(regexp_tester regexp_tester.cc)
 target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIB})
 target_link_libraries(cadabra2html ${JSONCPP_LIB})
-target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
+#target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-server DESTINATION bin)

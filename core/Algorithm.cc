@@ -18,6 +18,7 @@
  
 */
 
+#include <stddef.h>
 #include "Algorithm.hh"
 #include "Storage.hh"
 #include "Props.hh"
