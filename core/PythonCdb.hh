@@ -77,13 +77,16 @@ class BaseProperty {
 /// provides it with _latex, __str__ and __repr__ methods. In order to
 /// have a quick way to figure out in Python whether an object is a
 /// property, we derive it from BaseProperty, which is an empty
-/// placeholder (in Python this is called Property).
+/// placeholder (in Python BaseProperty is called Property).
 ///
 /// Properties can have arguments. These are not parsed by Python, but
 /// rather by the C++ side. There is a number of reasons for doing
 /// things this way. The most important of them is that this makes it
 /// a lot easier for Cadabra to provide useful feedback on parameters
-/// which are not valid.
+/// which are not valid. So all properties get initialised with two
+/// Cadabra Ex objects: the 1st is the pattern to which the property
+/// should be attached, the 2nd is the argument of the property,
+/// interpreted as a Cadabra expression.
 ///
 /// Cadabra properties cannot be proper Python properties, because we
 /// need to give the latter names in order to prevent them from going

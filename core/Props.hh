@@ -40,7 +40,7 @@ class pattern {
 		Ex obj;
 };
 
-// Arguments to properties get parsed into a keyval_t structure.
+/// Arguments to properties get parsed into a keyval_t structure.
 
 class keyval_t {
 	public:

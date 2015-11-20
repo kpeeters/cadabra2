@@ -18,6 +18,12 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.45.0 COMPONENTS python)
 find_program(PYTHON "python" REQUIRED)
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
+        message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
+    endif()
+endif()
+
 # Locate gmpxx
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)

@@ -541,7 +541,7 @@ Ex::iterator Ex::replace_index(iterator pos, const iterator& from)
 	str_node::parent_rel_t pr=pos->fl.parent_rel;
 	iterator ret=replace(pos, from);
 	ret->fl.bracket=bt;
-	ret->fl.parent_rel=pr;
+//	ret->fl.parent_rel=pr;
 	return ret;
 	}
 

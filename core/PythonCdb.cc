@@ -1,5 +1,17 @@
 
 #include "PythonCdb.hh"
+
+// make boost::python understand std::shared_ptr.
+// http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
+
+//namespace boost {
+	template<typename T>
+	T *get_pointer(std::shared_ptr<T> p)
+		{
+		return p.get();
+		}
+//}
+
 #include "Parser.hh"
 #include "Exceptions.hh"
 #include "DisplayTeX.hh"
@@ -561,6 +573,8 @@ std::string Property<Prop>::repr_() const
 // declaration of 'join_gamma' below for an example of how to declare
 // those additional arguments).
 
+#ifndef __clang__
+
 template<class F, typename... Args>
 Ex* dispatch_ex(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth)
 	{
@@ -571,6 +585,40 @@ Ex* dispatch_ex(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth
 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 	return &ex;
 	}
+
+#else
+
+template<class F>
+Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
+	{
+	Ex::iterator it=ex.begin().begin();
+	ex.reset_state();
+	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+	return &ex;
+	}
+
+template<class F>
+Ex* dispatch_ex(Ex& ex, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), ex);
+	return dispatch_base(ex, algo, deep, repeat, depth);
+	}
+
+template<class F, typename Arg1>
+Ex* dispatch_ex(Ex& ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), ex, arg);
+	return dispatch_base(ex, algo, deep, repeat, depth);
+	}
+
+template<class F, typename Arg1, typename Arg2>
+Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), ex, arg1, arg2);
+	return dispatch_base(ex, algo, deep, repeat, depth);
+	}
+
+#endif
 
 template<class F, typename... Args>
 Ex* dispatch_string(const std::string& ex, Args... args, bool deep, bool repeat, unsigned int depth)
@@ -752,12 +800,13 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// make_Ex_from_... functions, which take care of creating a '_' reference
    // on the Python side as well.
 
-	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
-	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_string));
-	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_string_2));
-	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_int));
-	pyEx.def("__init__", boost::python::make_constructor(&construct_Ex_from_int_2));
-	pyEx.def("__str__",  &Ex_str_)
+//	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
+	class_<Ex, std::shared_ptr<Ex> >("Ex", boost::python::no_init)
+		.def("__init__", boost::python::make_constructor(&construct_Ex_from_string))
+	   .def("__init__", boost::python::make_constructor(&construct_Ex_from_string_2))
+		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int))
+		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int_2))
+		.def("__str__",  &Ex_str_)
 		.def("_latex",   &Ex_latex_)
 		.def("__repr__", &Ex_repr_)
 		.def("__eq__",   &__eq__Ex_Ex)
@@ -875,7 +924,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("rules"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
-   
+
 
 	// Properties are declared as objects on the Python side as well. They all take two
 	// Ex objects as constructor parameters: the first one is the object(s) to which the

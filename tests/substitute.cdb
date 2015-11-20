@@ -17,17 +17,26 @@ def test01():
 test01()
 
 def test02():
-{m,n,p}::Indices(position=fixed).
-ex:= F_{m n} F^{m n};
-rl:= F_{m n} -> G_{m n};
-substitute(ex, rl)
-
-{m,n,p}::Indices(position=free).
-ex:= F_{m n} F^{m n};
-rl:= F_{m n} -> G_{m n};
-substitute(ex, rl)
-
-    tst2:= G_{m n} G^{m n} - @(ex);
-assert(tst2==0)
+    {m,n,p}::Indices(position=fixed).
+    ex:= F_{m n} F^{m n};
+    rl:= F_{m n} -> G_{m n};
+    substitute(ex, rl)
+    tst:= G_{m n} F^{m n} - @(ex);
+    assert(tst)
 
 test02()
+    
+def test03():
+    # This is a tricky replacment. A rule will be generated for all objects
+    # matched on the lhs. So _m and _n to something. But on the rhs, that would
+    # not normally match. Best to disallow these rules.
+    #rl:= F_{m n} -> G_{m n} + H^{m n};
+    {m,n,p,q}::Indices(position=free).
+    ex:= F_{p q} F^{p q};
+    rl:= F_{m n} -> G_{m n};
+    substitute(ex, rl)
+    print(ex)
+    tst2:= G_{m n} G^{m n} - @(ex);
+    assert(tst2==0)
+
+#test03()
