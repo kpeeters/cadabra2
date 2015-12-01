@@ -21,8 +21,9 @@ find_package(PkgConfig REQUIRED)
 find_package(PythonLibs 2.7 REQUIRED)
 #find_package(websocketpp REQUIRED)            # from github
 #pkg_check_modules(JSONCPP jsoncpp REQUIRED)   # libjsoncpp-dev
-find_library(JSONCPP_LIB jsoncpp REQUIRED)
-message("-- Found JSONCPP ${JSONCPP_LIB}")
+#find_library(JSONCPP_LIB jsoncpp REQUIRED)
+find_package(jsoncpp REQUIRED)
+#message("-- Found JSONCPP ${JSONCPP_LIB}")
 
 # Snoop for logging. At the moment the required Snoop.cc|.hh are included
 # in the Cadabra sources so we do not need to look for this. However, we
