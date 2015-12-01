@@ -176,9 +176,17 @@ class Ex : public tree<str_node> {
 		std::string      equation_number_or_name(iterator it, unsigned int last_used_equation) const;
 		iterator         procedure_by_name(nset_t::iterator it) const;
 
-		/// Replace the object, keeping the original bracket and parent_rel (originally intended
-		/// to replace indices only, but now used also for e.g. normal function arguments, as in
-		/// \f[ \partial_{z}{ A(z) } \f] with a replacement of z).
+		/// Replace the index-like object (originally intended to
+		/// replace indices only, but now used also for e.g. normal
+		/// function arguments, as in \f[ \partial_{z}{ A(z) } \f] with
+		/// a replacement of z).
+		///
+		/// Note: this originally kept the bracket and parent_rel, but
+		/// that is not a good idea, because it prevents us from
+		/// changing those. If we want to use a _{z} pattern replacing a
+		/// A(z) index, it is better to make a rule that matches (z) and
+		/// at the time we find and match _{z}. So this should be
+		/// handled by the replacement_map logic in Compare.cc.
 		iterator         replace_index(iterator position, const iterator& from);
 
       /// As in replace_index, but moves the index rather than making a copy (so that iterators

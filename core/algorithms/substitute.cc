@@ -111,10 +111,10 @@ bool substitute::can_apply(iterator st)
 		// on whether we have a normal node, a product, a sum or a sibling range with
 		// sibling wildcards. We also need a simple notation (and an exception at top
 		// level for plus and prod).
-//						> ex:=A+B+C+D;
-// A + B + C + D
-// > substitute(_, r'B+C -> Q')
-													 
+		//
+      //	> ex:=A+B+C+D;
+      // A + B + C + D
+      // > substitute(_, r'B+C -> Q')
 
 		if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
 		else                     ret=comparator.equal_subtree(lhs, st);
@@ -132,6 +132,7 @@ bool substitute::can_apply(iterator st)
 
 Algorithm::result_t substitute::apply(iterator& st)
 	{
+	std::cerr << "substitute::apply" << std::endl;
 //	prod_wrap_single_term(st);
 
    sibling_iterator arrow=tr.arg(args.begin().begin(), use_rule);
@@ -197,12 +198,11 @@ Algorithm::result_t substitute::apply(iterator& st)
 			 }
 
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
-//			if((*loc).first.begin()->fl.parent_rel==str_node::p_sub)
-//				std::cerr << "_";
-//			std::cerr << "rule : " << *((*loc).first.begin()->name) << " -> " 
-//						 << *((*loc).second.begin()->name) << std::endl;
-//			std::cerr << it->fl.parent_rel << " ";
-//			std::cerr << "going to replace " << *it->name << " with " << *((*loc).second.begin()->name) << std::endl;
+			std::cerr << "rule : " 
+						 << (*loc).first.begin()->fl.parent_rel 
+						 << *((*loc).first.begin()->name) << " -> " 
+						 << (*loc).second.begin()->fl.parent_rel 
+						 << *((*loc).second.begin()->name) << std::endl;
 
 			// When a replacement is made here, and the index is actually
 			// a dummy in the replacement, we screw up the ind_dummy

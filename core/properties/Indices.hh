@@ -7,9 +7,9 @@ class Indices : public list_property {
 	public:
 		Indices(); //const std::string& parent="");
 		virtual bool parse(const Properties&, keyval_t&) override;
-		virtual std::string name() const;
-		virtual std::string unnamed_argument() const { return "name"; };
-		virtual match_t equals(const property *) const;
+		virtual std::string name() const override;
+		virtual std::string unnamed_argument() const override { return "name"; };
+		virtual match_t equals(const property *) const override;
 		
 //		virtual void display(std::ostream&) const override; 
 		virtual void latex(std::ostream&) const override; 
