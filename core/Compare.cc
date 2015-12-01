@@ -453,8 +453,6 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			const Indices *t2=properties.get<Indices>(two, true);
 
 			// Check parent rel if it matters.
-			// FIXME: we match _ to ^ if it doesn't, but we should not replace _ with ^; original parent_rel should stay.
-//HERE
 			if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
 				if(one->fl.parent_rel != two->fl.parent_rel)                
 					return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
@@ -472,26 +470,25 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 					else   return no_match_greater;
 					}
 				}
-			// The index types match, so register this replacement rule.
-//			std::cerr << "registering ";
-//			if(one->fl.parent_rel==str_node::p_super) std::cerr << "^";
-//			if(one->fl.parent_rel==str_node::p_sub)   std::cerr << "_";
-//			std::cerr << *one->name << " ";
-//			if(two->fl.parent_rel==str_node::p_super) std::cerr << "^";
-//			if(two->fl.parent_rel==str_node::p_sub)   std::cerr << "_";
-//			std::cerr << *two->name << std::endl;
 
+			// See the documentation of substitute::can_apply for details about 
+			// how the replacement_map is supposed to work. In general, if we want
+			// that e.g a found _{z} also leads to a replacement rule for (z), or 
+			// if we want that a found _{z} also leads to a replacement for ^{z},
+			// this needs to be added to the replacement map explicitly.
+
+			//std::cerr << "storing " << one->fl.parent_rel << " -> " << two->fl.parent_rel << std::endl;
 			replacement_map[one]=two;
 			
-			// if this is an index, also store the pattern with the parent_rel flipped
-			if(one->is_index()) {
-				Ex cmptree1(one);
-				Ex cmptree2(two);
-				cmptree1.begin()->flip_parent_rel();
-				if(two->is_index())
-					cmptree2.begin()->flip_parent_rel();
+ 			// if this is an index, also store the pattern with the parent_rel flipped
+ 			if(one->is_index()) {
+ 				Ex cmptree1(one);
+ 				Ex cmptree2(two);
+ 				cmptree1.begin()->flip_parent_rel();
+ 				if(two->is_index())
+ 					cmptree2.begin()->flip_parent_rel();
 				replacement_map[cmptree1]=cmptree2;
-				}
+ 				}
 			
 			// if this is a pattern and the pattern has a non-zero number of children,
 			// also add the pattern without the children

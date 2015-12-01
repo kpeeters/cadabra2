@@ -24,6 +24,8 @@
 ///  2      | structure different, one < two
 /// -2      | structure different, one > two
 ///
+/// @param mod_prel          
+/// @param checksets         if properties!=0, indices match when they sit in the same set.
 /// @param literal_wildcards whether to treat wildcard names as ordinary names.
 
 int subtree_compare(const Properties*, 
@@ -201,11 +203,11 @@ class Ex_comparator {
 
 		/// Map for the replacement of nodes (indices, patterns).
 		typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>  replacement_map_t;
-		replacement_map_t                                                     replacement_map;
+		replacement_map_t                                           replacement_map;
 
 		/// Map for the replacement of entire subtrees (object patterns).
-		typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less>   subtree_replacement_map_t;
-		subtree_replacement_map_t                                             subtree_replacement_map;
+		typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less> subtree_replacement_map_t;
+		subtree_replacement_map_t                                      subtree_replacement_map;
 
 		/// Map for the association of indices with their values, in order to be able
 		/// to match a pattern with component values, e.g. A_{t r}, to an expression containing
