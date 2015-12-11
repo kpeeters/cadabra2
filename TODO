@@ -1,4 +1,9 @@
 
+- The replacement_map should only match exact expressions (not modulo
+  parent rel, because we stick that in explicitly). However, the
+  subtree_compare does not have an option to turn mod_prel off. We
+  turned it off now, but this may break other things.
+
 - LaTeXForm needs cleaning up and catching errors.
 
 - Property initialisation from Python, and in particular how the
