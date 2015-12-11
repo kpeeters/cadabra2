@@ -65,7 +65,7 @@ int subtree_compare(const Properties *properties,
 //	std::cout << "mult for " << *one->name << " vs " << *two->name << " now " << mult << std::endl;
 
 	// Compare sub/superscript relations.
-	if((mod_prel==-2 && position_type!=Indices::free) && one->is_index() && two->is_index() ) {
+	if((mod_prel==-2 /* && position_type!=Indices::free */) && one->is_index() && two->is_index() ) {
 		if(one->fl.parent_rel!=two->fl.parent_rel) {
 			if(one->fl.parent_rel==str_node::p_sub) return 2;
 			else return -2;
@@ -481,6 +481,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
+
  			if(one->is_index()) {
  				Ex cmptree1(one);
  				Ex cmptree2(two);

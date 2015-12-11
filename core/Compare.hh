@@ -37,7 +37,7 @@ int subtree_compare(const Properties*,
 /// The mod_prel variable determines whether parent relations are taken into
 /// account when comparing:
 ///
-///        -2: require that parent relations match (or that indices are position-free)
+///        -2: require that parent relations match (even when indexpos = free)
 ///        -1: do not require that parent relations match
 ///       >=0: do not require parent relations to match up to and including this level
 ///

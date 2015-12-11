@@ -132,7 +132,7 @@ bool substitute::can_apply(iterator st)
 
 Algorithm::result_t substitute::apply(iterator& st)
 	{
-	std::cerr << "substitute::apply" << std::endl;
+	//std::cerr << "substitute::apply at " << *st->name << std::endl;
 //	prod_wrap_single_term(st);
 
    sibling_iterator arrow=tr.arg(args.begin().begin(), use_rule);
@@ -198,11 +198,11 @@ Algorithm::result_t substitute::apply(iterator& st)
 			 }
 
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
-			std::cerr << "rule : " 
-						 << (*loc).first.begin()->fl.parent_rel 
-						 << *((*loc).first.begin()->name) << " -> " 
-						 << (*loc).second.begin()->fl.parent_rel 
-						 << *((*loc).second.begin()->name) << std::endl;
+			// std::cerr << "rule : " 
+			// 			 << (*loc).first.begin()->fl.parent_rel 
+			// 			 << *((*loc).first.begin()->name) << " -> " 
+			// 			 << (*loc).second.begin()->fl.parent_rel 
+			// 			 << *((*loc).second.begin()->name) << std::endl;
 
 			// When a replacement is made here, and the index is actually
 			// a dummy in the replacement, we screw up the ind_dummy
