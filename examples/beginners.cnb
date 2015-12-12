@@ -11,14 +11,14 @@
 			[
 				
 				{
-					"cell_id" : 8,
+					"cell_id" : 19,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} .\n\nThe first thing we will do is enter some tensorial expressions. "
+					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/}.\n\nThe first thing we will do is enter some tensorial expressions. "
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/} .\n\nThe first thing we will do is enter some tensorial expressions. "
+			"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/}.\n\nThe first thing we will do is enter some tensorial expressions. "
 		},
 		
 		{
@@ -66,7 +66,7 @@
 					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(\\frac{-1}{4})\\, \\int{}(\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}}) (\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}})\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}(\\frac{-1}{4})\\, \\int{}(\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}}) (\\partial^{\\mu}{A^{\\nu}} - \\partial^{\\nu}{A^{\\mu}})\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(S, rl);"
@@ -80,14 +80,14 @@
 			[
 				
 				{
-					"cell_id" : 13,
+					"cell_id" : 16,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "(Does not yet replace $F^{\\mu\\nu}$ correctly)."
+					"source" : "Note how this has automatically replaced the field strength with upper as well as\nlower indices, by virtue of the fact that the index position was declared `free'.\n\nWe can now compute a variational derivative of this object with respect to $A_\\mu$."
 				}
 			],
 			"hidden" : true,
-			"source" : "(Does not yet replace $F^{\\mu\\nu}$ correctly)."
+			"source" : "Note how this has automatically replaced the field strength with upper as well as\nlower indices, by virtue of the fact that the index position was declared `free'.\n\nWe can now compute a variational derivative of this object with respect to $A_\\mu$."
 		},
 		
 		{
