@@ -27,12 +27,35 @@ def test02():
     assert(tst)
 
 test02()
+
+def test02b():
+    # Product substitutions.
+    __cdbkernel__=create_scope()
+    {d1,d2,d3,d4,m,n,p,r,s,t,a,b}::Indices(vector).
+    obj2:= a_{m n} * q * e * b_{m p} * o + d_{n p};
+    substitute(obj2, $a_{r s} b_{r t} -> c_{s t}$ )
+    tst2:= c_{n p} q e o + d_{n p} - @(obj2);
+    assert(tst2)
+
+test02b()
+
+def test02c():
+    # Reducing to zero
+    __cdbkernel__=create_scope()
+    obj3:= A_{m n} B_{m n} k1_{a} k1_{a} k2_{b};
+    substitute(_,  $k1_a k1_a -> 0$ )
+    assert(obj3)
+
+test02c()
     
 def test03():
-    # This is a tricky replacment. A rule will be generated for all objects
+    # Upper and lower indices replaced automagically.
+    #
+    # Side note: the replacement
+    #    rl:= F_{m n} -> G_{m n} + H^{m n};
+    # is tricky. A rule will be generated for all objects
     # matched on the lhs. So _m and _n to something. But on the rhs, that would
     # not normally match. Best to disallow these rules.
-    #rl:= F_{m n} -> G_{m n} + H^{m n};
     __cdbkernel__=create_scope()
     {m,n,p,q}::Indices(position=free).
     ex:= F_{p q} F^{p q};
@@ -53,6 +76,17 @@ def test04():
     assert(tst43)
 
 test04()
+
+def test04b():
+    # Indices in the pattern.
+    __cdbkernel__=create_scope()
+    obj4:= A_m A_n + B_m C_n + D_{m n} A_p A_p;
+    substitute(_, $A_a A_a -> q$ )
+    tst4:= A_m A_n + B_m C_n + D_{m n} q - @(obj4);
+    assert(tst4)
+
+test04b()
+
 
 def test05():
     # Variational derivative under Accents.
@@ -91,3 +125,21 @@ def test07():
 
 test07()
 
+def test17():
+    # Test 17: Object wildcards
+    obj17:= [ A B, C];
+    substitute(_, $[ M? N?, P? ] -> P? M? N?$ );
+    tst17:= @(obj17) - C A B;
+    assert(tst17)
+
+test17()
+
+def test84():
+    # Bug reported Sun, 9 Nov 2014 15:51:05 +0800
+	\partial{#}::PartialDerivative.
+	yy:= a+ a*A;
+	vary(yy, $A->\delta{A}$ )
+	tst84:= a \delta{A} - @(yy);
+	assert(tst84)
+
+test84()
