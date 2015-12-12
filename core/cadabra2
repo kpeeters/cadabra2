@@ -118,7 +118,7 @@ class Shell(InteractiveConsole):
                 self.rhs += line_stripped
                 return ""
 
-        line_stripped=re.sub(r'\$([^\$]*)\$', r'Ex("\1", False)', line_stripped)
+        line_stripped=re.sub(r'\$([^\$]*)\$', r'Ex(r"\1", False)', line_stripped)
                 
         found = line_stripped.find(':=')
         if found>0:

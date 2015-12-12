@@ -95,6 +95,7 @@
 #include "algorithms/substitute.hh"
 #include "algorithms/sym.hh"
 #include "algorithms/unwrap.hh"
+#include "algorithms/vary.hh"
 #include "algorithms/young_project.hh"
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
@@ -918,6 +919,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 (arg("ex"),
 		  arg("rules"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("vary", &dispatch_ex<vary, Ex&>, 
+		 (arg("ex"),
+		  arg("rules"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("split_index", &dispatch_ex<split_index, Ex&>, 
 		 (arg("ex"),
