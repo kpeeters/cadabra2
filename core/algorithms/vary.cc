@@ -40,6 +40,7 @@ bool vary::can_apply(iterator it)
 	if(*it->name=="\\prod") return true;
 	if(*it->name=="\\sum") return true;
 	if(*it->name=="\\pow") return true;
+	if(*it->name=="\\int") return true;
 	if(is_single_term(it)) return true;
 	if(is_nonprod_factor_in_prod(it)) return true;
 	const Derivative *der = kernel.properties.get<Derivative>(it);
@@ -155,6 +156,15 @@ Algorithm::result_t vary::apply(iterator& it)
 			}
 
 		cleanup_dispatch(kernel, tr, it);
+		return res;
+		}
+
+	if(*it->name=="\\int") { // call vary on first argument
+		vary vry(kernel, tr, args);
+
+		iterator sib=tr.begin(it);
+		if(vry.can_apply(sib))
+			res=vry.apply(sib);
 		return res;
 		}
 

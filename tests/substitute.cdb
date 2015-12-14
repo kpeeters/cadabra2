@@ -143,3 +143,9 @@ def test84():
 	assert(tst84)
 
 test84()
+
+def test100():
+    {\mu,\nu,\rho}::Indices(position=free).
+    \partial{#}::PartialDerivative.
+    ex:= \int{\partial_{\mu}{A_{\nu}} - \partial_{\nu}{A_{\mu}}}{x};
+    vary(ex, $A_{\mu} -> \delta{A_{\mu}}$)
