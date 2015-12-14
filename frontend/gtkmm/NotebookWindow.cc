@@ -932,9 +932,15 @@ void NotebookWindow::on_edit_delete()
 	{
 	if(current_cell==doc.end()) return;
 
+	DTree::sibling_iterator nxt=doc.next_sibling(current_cell);
+	if(current_cell->textbuf=="" && doc.is_valid(nxt)==false) return; // Do not delete last cell if it is empty.
+
 	std::shared_ptr<ActionBase> action = 
-		std::make_shared<ActionRemoveCell>(current_cell);
+		std::make_shared<ActionPositionCursor>(current_cell, ActionPositionCursor::Position::next);
 	queue_action(action);
+	std::shared_ptr<ActionBase> action2 = 
+		std::make_shared<ActionRemoveCell>(current_cell);
+	queue_action(action2);
 	process_data();
 	}
 

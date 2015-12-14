@@ -15,16 +15,19 @@ bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	return (id < other.id);
 	}
 
+DataCell::id_t::id_t()
+	{
+	std::lock_guard<std::mutex> guard(serial_mutex);
+	id=max_serial_number++;
+	created_by_client=true;
+	}
+
 DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden) 
 	{
 	cell_type = t;
 	textbuf = str;
 	hidden = cell_hidden;
 	running=false;
-	
-	std::lock_guard<std::mutex> guard(serial_mutex);
-	serial_number.id = max_serial_number++;
-	serial_number.created_by_client = true;
 	}
 
 DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidden) 
@@ -257,7 +260,7 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			json["cell_origin"] = "client";
 		else
 			json["cell_origin"] = "server";
-		json["cell_id"]       =(Json::UInt64)it->id().id;
+		//json["cell_id"]       =(Json::UInt64)it->id().id;
 		}
 
 	if(doc.number_of_children(it)>0) {
@@ -298,14 +301,14 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 	try {
 		for(unsigned int c=0; c<cells.size(); ++c) {
 			const Json::Value celltype    = cells[c]["cell_type"];
-			const Json::Value cell_id     = cells[c]["cell_id"];
+			//const Json::Value cell_id     = cells[c]["cell_id"];
 			const Json::Value cell_origin = cells[c]["cell_origin"];
 			const Json::Value textbuf     = cells[c]["source"];
 			const Json::Value hidden      = cells[c]["hidden"];
 			
 			DTree::iterator last=doc.end();
 			DataCell::id_t id;
-			id.id=cell_id.asUInt64();
+			//id.id=cell_id.asUInt64();
 			if(cell_origin=="server")
 				id.created_by_client=false;
 			else

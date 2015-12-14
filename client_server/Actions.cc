@@ -78,9 +78,11 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 					}
 				}
 			// std::cout << "no input cell available, adding new" << std::endl;
-			DataCell newcell(DataCell::CellType::python, "");
-			newref = cl.doc.insert(sib, newcell);
-			needed_new_cell=true;
+			if(ref->textbuf!="") { // If the last cell is empty, stay where we are.
+				DataCell newcell(DataCell::CellType::python, "");
+				newref = cl.doc.insert(sib, newcell);
+				needed_new_cell=true;
+				}
 			break;
 			}
 		case Position::previous: {
@@ -88,8 +90,10 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(--sib)) {
 				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
-					newref=sib;
-					return;
+					if(!sib->hidden) {
+						newref=sib;
+						return;
+						}
 					}
 				}
 			newref=ref; // No previous sibling cell. FIXME: walk tree structure
