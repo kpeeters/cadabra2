@@ -5,11 +5,14 @@
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
 //namespace boost {
+/*
 	template<typename T>
 	T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
+
+*/
 //}
 
 #include "Parser.hh"

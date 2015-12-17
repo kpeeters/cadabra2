@@ -1,7 +1,7 @@
 
 # Testing a substitution rule in which an abstract index in the 
 # expression is matched against a coordinate in the pattern.
-{m,n,p}::Indices.
+{m,n,p}::Indices(values={t,r}).
 {r,t}::Coordinate.
 ex:= A_{m n};
 rl:= A_{t t} = 3;

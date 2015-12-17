@@ -525,11 +525,27 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		const Indices *t2=properties.get<Indices>(two, true);
 		if(t2) {
 			std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
-			auto ivals = index_values.find(t2);
-			if(ivals!=index_values.end()) {
-				// FIXME:
+			// Look through values attribute of Indices object to see if the 'two' index
+			// can take the 'one' value.
+			
+			for(auto& ex: t2->values) {
+				std::cerr << *(ex.begin()->name) << std::endl;
 				}
-			else return no_match_less;
+			Ex_is_less comp(properties, 0);
+			auto ivals = std::find_if(t2->values.begin(), t2->values.end(), 
+											  [&](auto a, auto b) {
+												  if(subtree_compare(&properties, a, b, 0)==0) return true;
+												  else return false;
+											  });
+			if(ivals!=t2->values.end()) {
+				std::cerr << " can take this value" << std::endl;
+				// FIXME:
+				} 
+			else {
+				std::cerr << " cannot take this value" << std::endl;
+				return no_match_less;
+				}
+			return no_match_less;
 			}
 		else return no_match_less;
 		}
@@ -1013,14 +1029,14 @@ bool Ex_is_equivalent::operator()(const Ex& one, const Ex& two)
 	else       return false;
 	}
 
-Ex_is_less::Ex_is_less(const Properties& k)
-	: properties(k)
+Ex_is_less::Ex_is_less(const Properties& k, int mp)
+	: properties(k), mod_prel(mp)
 	{
 	}
 
 bool Ex_is_less::operator()(const Ex& one, const Ex& two)
 	{
-	int ret=subtree_compare(&properties, one.begin(), two.begin());
+	int ret=subtree_compare(&properties, one.begin(), two.begin(), mod_prel);
 	if(ret < 0) return true;
 	else        return false;
 	}
