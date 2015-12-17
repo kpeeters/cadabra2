@@ -1,19 +1,16 @@
 
 #include "PythonCdb.hh"
 
-// make boost::python understand std::shared_ptr.
+// make boost::python understand std::shared_ptr when compiled with clang.
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
-//namespace boost {
-/*
+#if defined(__clang__)
 	template<typename T>
 	T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
-
-*/
-//}
+#endif
 
 #include "Parser.hh"
 #include "Exceptions.hh"
