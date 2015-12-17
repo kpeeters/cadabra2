@@ -16,5 +16,13 @@ class Indices : public list_property {
 		
 		std::string set_name, parent_name;
 		enum position_t { free, fixed, independent } position_type;
-		Ex     values;
+
+		// List of possible values that indices of this type can take.
+		std::vector<Ex> values;
+
+	private:
+		/// Given the right-hand side of a 'values={...}' node, generate
+		/// a list of all index values in index_values.
+
+		void collect_index_values(Ex::iterator ind_values);
 };
