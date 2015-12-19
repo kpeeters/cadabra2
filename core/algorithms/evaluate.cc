@@ -3,7 +3,7 @@
 #include "algorithms/evaluate.hh"
 #include <functional>
 
-evaluate::evaluate(Kernel& k, Ex& tr, const Ex& ind_values, const Ex& components)
+evaluate::evaluate(Kernel& k, Ex& tr, const Ex& components)
 	: Algorithm(k, tr)
 	{
 	// Preparse the arguments.
