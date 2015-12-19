@@ -38,9 +38,6 @@
 
 - large output of arrays makes latex barf.
 
-- If we match a ^ index to a _ pattern, we need to setup a replacement
-  rule such that the ^ index get replaced by a ^ one. See "HERE" in Compare.cc
-
 - Catch TeXEngine exceptions in the frontend.
 
 

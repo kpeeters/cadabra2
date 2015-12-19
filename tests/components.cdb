@@ -4,11 +4,14 @@
 {m,n,p}::Indices(values={t,r}).
 {r,t}::Coordinate.
 ex:= A_{m n};
-rl:= A_{t t} = 3;
-cr:= m -> {t, r};
+rl:= A_{t r} = 3;
 substitute(ex, rl)
-substitute(ex, rl, cr)
-#substitute(ex, rl, index_values=cr)
+
+{m,n,p}::Indices(values={t,r}).
+{r,t}::Coordinate.
+ex:= A_{m n} A_{m n};
+rl:= A_{t r} = 3;
+evaluate(ex, rl)
 
 
 {m,n,p}::Indices.

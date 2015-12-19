@@ -531,21 +531,19 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			for(auto& ex: t2->values) {
 				std::cerr << *(ex.begin()->name) << std::endl;
 				}
-			Ex_is_less comp(properties, 0);
 			auto ivals = std::find_if(t2->values.begin(), t2->values.end(), 
-											  [&](auto a, auto b) {
-												  if(subtree_compare(&properties, a, b, 0)==0) return true;
+											  [&](const Ex& a) {
+												  if(subtree_compare(&properties, a.begin(), one, 0)==0) return true;
 												  else return false;
 											  });
 			if(ivals!=t2->values.end()) {
 				std::cerr << " can take this value" << std::endl;
-				// FIXME:
+				return node_match;
 				} 
 			else {
 				std::cerr << " cannot take this value" << std::endl;
 				return no_match_less;
 				}
-			return no_match_less;
 			}
 		else return no_match_less;
 		}

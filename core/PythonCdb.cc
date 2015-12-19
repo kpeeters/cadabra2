@@ -871,8 +871,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Automatically convert Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
-	def("evaluate", &dispatch_ex<evaluate, Ex&, Ex&>,
-		 (arg("ex"), arg("index_values"), arg("components"),
+	def("evaluate", &dispatch_ex<evaluate, Ex&>,
+		 (arg("ex"), arg("components"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  
