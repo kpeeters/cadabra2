@@ -49,6 +49,8 @@ namespace cadabra {
 
 			class id_t {
 				public:
+					id_t();
+
 					uint64_t  id;
 					bool      created_by_client;
 

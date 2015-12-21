@@ -37,7 +37,7 @@ int subtree_compare(const Properties*,
 /// The mod_prel variable determines whether parent relations are taken into
 /// account when comparing:
 ///
-///        -2: require that parent relations match (or that indices are position-free)
+///        -2: require that parent relations match (even when indexpos = free)
 ///        -1: do not require that parent relations match
 ///       >=0: do not require parent relations to match up to and including this level
 ///
@@ -209,15 +209,6 @@ class Ex_comparator {
 		typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less> subtree_replacement_map_t;
 		subtree_replacement_map_t                                      subtree_replacement_map;
 
-		/// Map for the association of indices with their values, in order to be able
-		/// to match a pattern with component values, e.g. A_{t r}, to an expression containing
-		/// an abstract tensor, e.g. A_{m n}. Is used in the compare method around the
-		/// 'Check if the coordinate can come from an index' comment. Used for component
-		/// evaluations.
-		typedef std::map<const Indices *, Ex> index_value_map_t;
-		index_value_map_t                          index_values;
-
-
 		/// Information to keep track of where individual factors in a sub-product were
 		/// found, and whether moving them into the searched-for order leads to sign flips.
 		std::vector<Ex::sibling_iterator> factor_locations;
@@ -277,10 +268,11 @@ class Ex_is_equivalent {
 
 class Ex_is_less {
 	public:
-		Ex_is_less(const Properties&);
+		Ex_is_less(const Properties&, int mod_prel);
 		bool operator()(const Ex&, const Ex&);
 	private:
 		const Properties& properties;
+		int mod_prel;
 };
 
 

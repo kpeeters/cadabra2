@@ -3,11 +3,11 @@
 #include "algorithms/evaluate.hh"
 #include <functional>
 
-evaluate::evaluate(Kernel& k, Ex& tr, const Ex& ind_values, const Ex& components)
+evaluate::evaluate(Kernel& k, Ex& tr, const Ex& components)
 	: Algorithm(k, tr)
 	{
 	// Preparse the arguments.
-	collect_index_values(ind_values);	
+//	collect_index_values(ind_values);	
 	prepare_replacement_rules(components);
 	}
 
@@ -34,22 +34,6 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	return res;
 	}
 
-
-void evaluate::collect_index_values(const Ex& ind_values)
-	{
-	auto it=ind_values.begin(ind_values.begin());
-
-	cadabra::do_list(ind_values, it, [&](Ex::iterator ind) {
-			auto name=ind_values.begin(ind);
-			sibling_iterator vals=name;
-			++vals;
-			const Indices *indprop = kernel.properties.get<Indices>(name);
-			if(indprop==0)
-				throw ArgumentException("evaluate: Index "+ *(name->name) + " does not have an Indices property");
-			
-			index_values[indprop]=cadabra::make_list(Ex(vals));
-			});
-	}
 
 void evaluate::prepare_replacement_rules(const Ex& components)
 	{
@@ -89,17 +73,17 @@ void evaluate::handle_sum(iterator it)
 		if(prop==0)
 			throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property");
 
-		auto rep=index_values.find(prop);
-		if(rep==index_values.end())
-			throw ArgumentException("evaluate: No values for index "+*(i.second->name)+" given");
+//		auto rep=index_values.find(prop);
+//		if(rep==index_values.end())
+//			throw ArgumentException("evaluate: No values for index "+*(i.second->name)+" given");
 
-		std::cerr << "index " << *(i.second->name) << " takes values ";
-		auto listnode = rep->second.begin();
-		sibling_iterator sib = rep->second.begin(listnode);
-		while(sib!=rep->second.end(listnode)) {
-			std::cerr << *sib->name << ", ";
-			++sib;
-			}
+//		std::cerr << "index " << *(i.second->name) << " takes values ";
+//		auto listnode = rep->second.begin();
+//		sibling_iterator sib = rep->second.begin(listnode);
+//		while(sib!=rep->second.end(listnode)) {
+//			std::cerr << *sib->name << ", ";
+//			++sib;
+//			}
 		std::cerr << std::endl;
 		}
 	

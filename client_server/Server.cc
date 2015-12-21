@@ -138,6 +138,10 @@ std::string Server::pre_parse(const std::string& line)
 		else 
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 
+		// Replace $...$ with Ex(...).
+		boost::regex dollarmatch(R"(\$([^\$]*)\$)");
+		line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'$1'\\)", boost::match_default | boost::format_all);
+
 		size_t found = line_stripped.find(":=");
 		if(found!=std::string::npos) {
 			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
@@ -178,7 +182,7 @@ std::string Server::pre_parse(const std::string& line)
 				if(lastchar==";") 
 					ret = indent_line + "_ = " + line_stripped + "; display(_)";
 				else
-					ret = line;
+					ret = indent_line + line_stripped + lastchar + end_of_line;
 				}
 			}
 		}
@@ -204,7 +208,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		// std::cerr << "preparsing " + line << std::endl;
 		newblk += pre_parse(line)+'\n';
 		}
-	// std::cerr << "PREPARSED: " << newblk << std::endl;
+	//std::cerr << "PREPARSED: " << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.

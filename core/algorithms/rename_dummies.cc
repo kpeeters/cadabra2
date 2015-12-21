@@ -49,13 +49,13 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 				added_dummies.insert(index_map_t::value_type(relabel, ii));
 				index_iterator tmp(ii);
 				++tmp;
-				tr.replace_index(ii, relabel.begin());
+				tr.replace_index(ii, relabel.begin(), true);
 				ii=tmp;
 				}
 			else {
 				index_iterator tmp(ii);
 				++tmp;
-				tr.replace_index(ii, (*rmi).second.begin());
+				tr.replace_index(ii, (*rmi).second.begin(), true);
 				ii=tmp;
 				}
 			}

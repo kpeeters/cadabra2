@@ -65,7 +65,7 @@ int subtree_compare(const Properties *properties,
 //	std::cout << "mult for " << *one->name << " vs " << *two->name << " now " << mult << std::endl;
 
 	// Compare sub/superscript relations.
-	if((mod_prel==-2 && position_type!=Indices::free) && one->is_index() && two->is_index() ) {
+	if((mod_prel==-2 /* && position_type!=Indices::free */) && one->is_index() && two->is_index() ) {
 		if(one->fl.parent_rel!=two->fl.parent_rel) {
 			if(one->fl.parent_rel==str_node::p_sub) return 2;
 			else return -2;
@@ -481,6 +481,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
+
  			if(one->is_index()) {
  				Ex cmptree1(one);
  				Ex cmptree2(two);
@@ -524,11 +525,25 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		const Indices *t2=properties.get<Indices>(two, true);
 		if(t2) {
 			std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
-			auto ivals = index_values.find(t2);
-			if(ivals!=index_values.end()) {
-				// FIXME:
+			// Look through values attribute of Indices object to see if the 'two' index
+			// can take the 'one' value.
+			
+			for(auto& ex: t2->values) {
+				std::cerr << *(ex.begin()->name) << std::endl;
 				}
-			else return no_match_less;
+			auto ivals = std::find_if(t2->values.begin(), t2->values.end(), 
+											  [&](const Ex& a) {
+												  if(subtree_compare(&properties, a.begin(), one, 0)==0) return true;
+												  else return false;
+											  });
+			if(ivals!=t2->values.end()) {
+				std::cerr << " can take this value" << std::endl;
+				return node_match;
+				} 
+			else {
+				std::cerr << " cannot take this value" << std::endl;
+				return no_match_less;
+				}
 			}
 		else return no_match_less;
 		}
@@ -1012,14 +1027,14 @@ bool Ex_is_equivalent::operator()(const Ex& one, const Ex& two)
 	else       return false;
 	}
 
-Ex_is_less::Ex_is_less(const Properties& k)
-	: properties(k)
+Ex_is_less::Ex_is_less(const Properties& k, int mp)
+	: properties(k), mod_prel(mp)
 	{
 	}
 
 bool Ex_is_less::operator()(const Ex& one, const Ex& two)
 	{
-	int ret=subtree_compare(&properties, one.begin(), two.begin());
+	int ret=subtree_compare(&properties, one.begin(), two.begin(), mod_prel);
 	if(ret < 0) return true;
 	else        return false;
 	}

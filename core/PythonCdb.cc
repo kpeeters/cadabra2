@@ -1,16 +1,16 @@
 
 #include "PythonCdb.hh"
 
-// make boost::python understand std::shared_ptr.
+// make boost::python understand std::shared_ptr when compiled with clang.
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
-//namespace boost {
+#if defined(__clang__)
 	template<typename T>
 	T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
-//}
+#endif
 
 #include "Parser.hh"
 #include "Exceptions.hh"
@@ -95,6 +95,7 @@
 #include "algorithms/substitute.hh"
 #include "algorithms/sym.hh"
 #include "algorithms/unwrap.hh"
+#include "algorithms/vary.hh"
 #include "algorithms/young_project.hh"
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
@@ -870,8 +871,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Automatically convert Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
-	def("evaluate", &dispatch_ex<evaluate, Ex&, Ex&>,
-		 (arg("ex"), arg("index_values"), arg("components"),
+	def("evaluate", &dispatch_ex<evaluate, Ex&>,
+		 (arg("ex"), arg("components"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  
@@ -918,6 +919,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 (arg("ex"),
 		  arg("rules"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("vary", &dispatch_ex<vary, Ex&>, 
+		 (arg("ex"),
+		  arg("rules"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("split_index", &dispatch_ex<split_index, Ex&>, 
 		 (arg("ex"),

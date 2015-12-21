@@ -172,7 +172,7 @@ DTree::iterator ComputeThread::find_cell_by_id(DataCell::id_t id, bool remove)
 	{
 	auto it=running_cells.find(id);
 	if(it==running_cells.end())
-		throw std::logic_error("Cannot find cell by id");
+		throw std::logic_error("Cannot find cell with id = "+std::to_string(id.id));
 
 	DTree::iterator ret = (*it).second;
 	if(remove)

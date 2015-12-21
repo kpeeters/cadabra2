@@ -1,6 +1,7 @@
 
 #include "properties/Indices.hh"
 #include "Exceptions.hh"
+#include "Functional.hh"
 
 Indices::Indices()
 	: position_type(free)
@@ -49,10 +50,9 @@ bool Indices::parse(const Properties&, keyval_t& keyvals)
 				position_type=independent;
 			else throw ConsistencyException("Position type should be fixed, free or independent.");
 			}
-		else if(ki->first=="values") { // FIXME: not used?
-			values=*ki->second;
-			if(*values.begin()->name!="\\comma") 
-				throw ConsistencyException("Key 'values' of property 'Indices' needs a list as value.");
+		else if(ki->first=="values") { 
+			std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
+			collect_index_values(ki->second);
 			}
 		else throw ConsistencyException("Property 'Indices' does not accept key '"+ki->first+"'.");
 		++ki;
@@ -76,3 +76,17 @@ void Indices::latex(std::ostream& str) const
 			break;
 		}
 	}
+
+void Indices::collect_index_values(Ex::iterator ind_values)
+	{
+	Ex tmp;
+	cadabra::do_list(tmp, ind_values, [&](Ex::iterator ind) {
+			std::cerr << "found index value " << *(ind->name) << std::endl;
+			values.push_back(Ex(ind));
+//			auto name=ind_values.begin(ind);
+//			sibling_iterator vals=name;
+//			++vals;
+//			index_values[indprop]=cadabra::make_list(Ex(vals));
+			});
+	}
+

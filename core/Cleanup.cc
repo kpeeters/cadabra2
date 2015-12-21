@@ -55,9 +55,11 @@ void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
 	// Flatten sums which are supposed to be flat.
 	// FIXME: this does too much and we should not be using Algorithm
 	// objects here anyway.
+//	std::cerr << *it->name << std::endl;
 	flatten_sum fs(k,tr);
-	fs.apply(it);
-
+	if(fs.can_apply(it)) {
+		fs.apply(it);
+		}
 	// Remove children which are 0
 	Ex::sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -67,9 +69,13 @@ void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
 			++sib;
 		}
 
+
+//	std::cerr << *it->name << std::endl;
+//	tr.print_recursive_treeform(std::cerr, tr.begin());
    // Collect all equal terms.
 	collect_terms ct(k, tr);
-	ct.apply(it);
+	if(ct.can_apply(it))
+		ct.apply(it);
 	}
 
 void cleanup_expressionlike(Kernel& k, Ex&tr, Ex::iterator& it)

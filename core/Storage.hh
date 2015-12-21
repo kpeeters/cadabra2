@@ -187,7 +187,7 @@ class Ex : public tree<str_node> {
 		/// A(z) index, it is better to make a rule that matches (z) and
 		/// at the time we find and match _{z}. So this should be
 		/// handled by the replacement_map logic in Compare.cc.
-		iterator         replace_index(iterator position, const iterator& from);
+		iterator         replace_index(iterator position, const iterator& from, bool keep_parent_rel=false);
 
       /// As in replace_index, but moves the index rather than making a copy (so that iterators
 		/// pointing to the original remain valid).

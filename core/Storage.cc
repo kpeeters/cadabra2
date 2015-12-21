@@ -534,14 +534,15 @@ Ex::iterator Ex::procedure_by_name(nset_t::iterator nit) const
 	return end();
 	}
 
-Ex::iterator Ex::replace_index(iterator pos, const iterator& from)
+Ex::iterator Ex::replace_index(iterator pos, const iterator& from, bool keep_parent_rel)
 	{
 //	assert(pos->fl.parent_rel==str_node::p_sub || pos->fl.parent_rel==str_node::p_super);
 	str_node::bracket_t    bt=pos->fl.bracket;
 	str_node::parent_rel_t pr=pos->fl.parent_rel;
 	iterator ret=replace(pos, from);
 	ret->fl.bracket=bt;
-//	ret->fl.parent_rel=pr;
+	if(keep_parent_rel)
+		ret->fl.parent_rel=pr;
 	return ret;
 	}
 
