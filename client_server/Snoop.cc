@@ -11,7 +11,6 @@
 #include <ctime>
 #include <sys/utsname.h>
 #include <stdint.h>
-#include <jsoncpp/json/json.h>
 
 #define BOOST_SPIRIT_THREADSAFE
 #include <boost/property_tree/ptree.hpp>
@@ -62,8 +61,13 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		this_app_.pid = getpid();
 		struct utsname buf;
 		if(uname(&buf)==0) {
+#ifdef __APPLE__
+			this_app_.machine_id = std::string(buf.sysname)
+				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine;
+#else
 			this_app_.machine_id = std::string(buf.sysname)
 				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine+", "+buf.domainname;
+#endif
 			}
 
 		auto duration =  std::chrono::high_resolution_clock::now().time_since_epoch();

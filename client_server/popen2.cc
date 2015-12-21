@@ -3,8 +3,10 @@
 
 #include "popen2.hh"
 #include <unistd.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <stdlib.h>
 #include <stdexcept>
 
 #define READ   0

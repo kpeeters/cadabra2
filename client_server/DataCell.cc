@@ -2,6 +2,7 @@
 #include "DataCell.hh"
 #include <sstream>
 #include <regex>
+#include <iostream>
 
 using namespace cadabra;
 

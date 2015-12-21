@@ -35,20 +35,27 @@ B. OS X
 
 When building Cadabra from source on OS X, you need XCode (naturally)
 as well as a number of libraries which are readily available from
-Homebrew, http://brew.sh.  Before attempting to build Cadabra, make
-sure a basic Homebrew installation is present, and then do
+Homebrew, http://brew.sh.  
 
-  brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig
+The main thing to get right is to have a version of CMake which deals
+properly with a Homebrew-installed python. Do 
 
-Make sure that the Homebrew Python is first in your path (_not_ the 
-system-provided python) by putting /usr/local/bin as the first path
-in /etc/paths, so that the file /etc/paths looks something like
+  brew uninstall cmake
+  brew install nikolausdemmel/homebrew-devel/cmake
 
-   /usr/local/bin
-   /usr/bin
-   /bin
-   /usr/sbin
-   /sbin
+You then also need to install the following: 
+
+  brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig ossp-uuid
+
+// Make sure that the Homebrew Python is first in your path (_not_ the 
+// system-provided python) by putting /usr/local/bin as the first path
+// in /etc/paths, so that the file /etc/paths looks something like
+// 
+//    /usr/local/bin
+//    /usr/bin
+//    /bin
+//    /usr/sbin
+//    /sbin
 
 In order to run the Cadabra notebook interface succesfully, you also
 need a TeX installation such as MacTeX, http://tug.org/mactex/ .

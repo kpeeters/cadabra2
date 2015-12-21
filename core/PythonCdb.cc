@@ -4,13 +4,13 @@
 // make boost::python understand std::shared_ptr when compiled with clang.
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
-#if defined(__clang__)
-	template<typename T>
-	T *get_pointer(std::shared_ptr<T> p)
-		{
-		return p.get();
-		}
-#endif
+// #if defined(__clang__)
+// 	template<typename T>
+// 	T *get_pointer(std::shared_ptr<T> p)
+// 		{
+// 		return p.get();
+// 		}
+// #endif
 
 #include "Parser.hh"
 #include "Exceptions.hh"

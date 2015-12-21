@@ -1,4 +1,5 @@
 #include <fstream>
+#include <iostream>
 #include "DataCell.hh"
 
 int main(int argc, char **argv)
