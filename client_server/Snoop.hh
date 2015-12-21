@@ -17,7 +17,8 @@
 #include <sqlite3.h>
 #include <stdint.h>
 #include <mutex>
-#include <jsoncpp/json/json.h>
+//#include <jsoncpp/json/json.h> // Linux?
+#include <json/json.h>
 
 namespace snoop {
 

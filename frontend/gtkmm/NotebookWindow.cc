@@ -22,15 +22,20 @@ NotebookWindow::NotebookWindow()
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
 	// Query high-dpi settings. For now only for cinnamon.
+#ifdef __APPLE__
+	scale = 1.0;
+#else
 	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
 	scale = settings->get_double("text-scaling-factor");
+#endif
 	engine.latex_packages.push_back("breqn");
 	engine.latex_packages.push_back("hyperref");
 	engine.set_scale(scale);
 
+#ifndef __APPLE__
 	settings->signal_changed().connect(
 		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
-
+#endif
 
 	// Setup styling.
 	css_provider = Gtk::CssProvider::create();

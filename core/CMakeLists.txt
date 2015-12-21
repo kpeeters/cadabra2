@@ -6,12 +6,13 @@ project(Cadabra)
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
+cmake_policy(SET CMP0042 NEW)
+
 # Speedup compilation using cotire.
 # include(cotire)
 
 # Locate Boost and Boost.Python.
 find_package(Boost 1.45.0)
-include_directories("${Boost_INCLUDE_DIRS}" "/usr/include/python2.7")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -32,6 +33,8 @@ FIND_PACKAGE(PythonLibs REQUIRED)
 message("-- Found gmp ${GMP_LIB}")
 message("-- Found gmpxx ${GMPXX_LIB}")
 message("-- Found python ${PYTHON_LIBRARIES}")
+include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIRS})
+message("-- Python include dirs: ${PYTHON_INCLUDE_DIRS}")
 
 # Locate pcre
 find_package(PCRE REQUIRED)

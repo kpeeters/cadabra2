@@ -13,6 +13,16 @@ pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
 include_directories(${GTKMM3_INCLUDE_DIRS})
 link_directories(${GTKMM3_LIBRARY_DIRS})
 add_definitions(${GTKMM3_CFLAGS_OTHER})
+pkg_check_modules(JSONCPP jsoncpp REQUIRED)   # libjsoncpp-dev
+include_directories("${JSONCPP_INCLUDE_DIRS}")
+link_directories(${JSONCPP_LIBRARY_DIRS})
+find_package(Boost 1.45.0 COMPONENTS system)
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+include_directories("${Boost_INCLUDE_DIRS}")
+pkg_check_modules(UUID uuid REQUIRED)
+link_directories(${UUID_LIBRARY_DIRS})
 
 include_directories("." "../../client_server")
 
@@ -25,7 +35,7 @@ add_executable(cadabra-gtk main.cc
   Cadabra.cc
   ../common/TeXEngine.cc)
 
-target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread )
+target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread ${JSON_CPP_LIBRARIES}  ${UUID_LIBRARIES})
 
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")

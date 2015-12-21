@@ -9,7 +9,8 @@
 #include <boost/regex.hpp>
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
-#include <jsoncpp/json/json.h>
+//#include <jsoncpp/json/json.h> // Needed on linux?
+#include <json/json.h>  // Definitely the right thing with Homebrew
 //#include <boost/shared_ptr.hpp>
 //#include <boost/make_shared.hpp>
 
