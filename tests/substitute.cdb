@@ -6,6 +6,7 @@
 #         'n' relabelling in first term because c_{pmn} -> c_{nmn} .
 
 def test01():
+    __cdbkernel__=create_scope()
     {d1,d2,d3,d4,m,n,p,r}::Indices(vector).
     obj1:= a_{m}*b_{n} + c_r b_r d_{m n};
     substitute(_, $b_{p} -> c_{p m n} A^{m n} + c_{p}$ );
@@ -17,6 +18,7 @@ def test01():
 test01()
 
 def test02():
+    __cdbkernel__=create_scope()
     {m,n,p}::Indices(position=fixed).
     ex:= F_{m n} F^{m n};
     rl:= F_{m n} -> G_{m n};
@@ -25,18 +27,125 @@ def test02():
     assert(tst)
 
 test02()
+
+def test02b():
+    # Product substitutions.
+    __cdbkernel__=create_scope()
+    {d1,d2,d3,d4,m,n,p,r,s,t,a,b}::Indices(vector).
+    obj2:= a_{m n} * q * e * b_{m p} * o + d_{n p};
+    substitute(obj2, $a_{r s} b_{r t} -> c_{s t}$ )
+    tst2:= c_{n p} q e o + d_{n p} - @(obj2);
+    assert(tst2)
+
+test02b()
+
+def test02c():
+    # Reducing to zero
+    __cdbkernel__=create_scope()
+    obj3:= A_{m n} B_{m n} k1_{a} k1_{a} k2_{b};
+    substitute(_,  $k1_a k1_a -> 0$ )
+    assert(obj3)
+
+test02c()
     
 def test03():
-    # This is a tricky replacment. A rule will be generated for all objects
+    # Upper and lower indices replaced automagically.
+    #
+    # Side note: the replacement
+    #    rl:= F_{m n} -> G_{m n} + H^{m n};
+    # is tricky. A rule will be generated for all objects
     # matched on the lhs. So _m and _n to something. But on the rhs, that would
     # not normally match. Best to disallow these rules.
-    #rl:= F_{m n} -> G_{m n} + H^{m n};
+    __cdbkernel__=create_scope()
     {m,n,p,q}::Indices(position=free).
     ex:= F_{p q} F^{p q};
     rl:= F_{m n} -> G_{m n};
     substitute(ex, rl)
-    print(ex)
+    rename_dummies(ex)
     tst2:= G_{m n} G^{m n} - @(ex);
     assert(tst2==0)
 
-#test03()
+test03()
+
+def test04():
+    # Basic test of variational derivative.
+    __cdbkernel__=create_scope()
+    obj43:= A*B*A + D*E;
+    vary(obj43, $A->C$)
+    tst43:= C*B*A + A*B*C - @(obj43);
+    assert(tst43)
+
+test04()
+
+def test04b():
+    # Indices in the pattern.
+    __cdbkernel__=create_scope()
+    obj4:= A_m A_n + B_m C_n + D_{m n} A_p A_p;
+    substitute(_, $A_a A_a -> q$ )
+    tst4:= A_m A_n + B_m C_n + D_{m n} q - @(obj4);
+    assert(tst4)
+
+test04b()
+
+
+def test05():
+    # Variational derivative under Accents.
+    __cdbkernel__=create_scope()
+    \bar{?}::Accent.
+    obj45:= \bar{A}*B*A;
+    vary(obj45, $A -> C$)
+    tst45:= \bar{C}*B*A + \bar{A}*B*C - @(obj45);
+    assert(tst45)
+
+test05()
+
+def test06():
+    # Nested substitutes.
+    __cdbkernel__=create_scope()
+    {a,b,c,d}::Indices.
+    { \partial{#}, \partialp{#} }::PartialDerivative.
+    A::Depends(\partial).
+    B::Depends(\partialp).
+    \Omega{#}::Derivative.
+    obj46:= \Omega( \partial_{a}{A} )( \partialp_{b}{B} );
+    rl:= \Omega( \partial_{a}{A??} )( B?? ) -> \partial_{a}{ \Omega(A??)(B??) };
+    substitute(obj46, rl)
+    tst46:= \partial_{a}{ \Omega(A)(\partialp_{b}{B}) } - @(obj46);
+    assert(tst46)
+
+test06()
+
+def test07():
+    # Vary multiple terms and single-factor terms.
+    __cdbkernel__=create_scope()
+    obj70:= A + B Q;
+    vary(_, $A -> Q, B -> Z$ )
+    tst70:= Q + Z Q - @(obj70);
+    assert(tst70)
+
+test07()
+
+def test17():
+    # Test 17: Object wildcards
+    obj17:= [ A B, C];
+    substitute(_, $[ M? N?, P? ] -> P? M? N?$ );
+    tst17:= @(obj17) - C A B;
+    assert(tst17)
+
+test17()
+
+def test84():
+    # Bug reported Sun, 9 Nov 2014 15:51:05 +0800
+	\partial{#}::PartialDerivative.
+	yy:= a+ a*A;
+	vary(yy, $A->\delta{A}$ )
+	tst84:= a \delta{A} - @(yy);
+	assert(tst84)
+
+test84()
+
+def test100():
+    {\mu,\nu,\rho}::Indices(position=free).
+    \partial{#}::PartialDerivative.
+    ex:= \int{\partial_{\mu}{A_{\nu}} - \partial_{\nu}{A_{\mu}}}{x};
+    vary(ex, $A_{\mu} -> \delta{A_{\mu}}$)

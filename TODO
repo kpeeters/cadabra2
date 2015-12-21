@@ -1,4 +1,11 @@
 
+- replace_index has changed logic; do a grep to see if this requires changes.
+
+- The replacement_map should only match exact expressions (not modulo
+  parent rel, because we stick that in explicitly). However, the
+  subtree_compare does not have an option to turn mod_prel off. We
+  turned it off now, but this may break other things.
+
 - LaTeXForm needs cleaning up and catching errors.
 
 - Property initialisation from Python, and in particular how the
@@ -30,9 +37,6 @@
 - Plots need to scale with hiDPI settings. Minimal size of window should do the same.
 
 - large output of arrays makes latex barf.
-
-- If we match a ^ index to a _ pattern, we need to setup a replacement
-  rule such that the ^ index get replaced by a ^ one. See "HERE" in Compare.cc
 
 - Catch TeXEngine exceptions in the frontend.
 

@@ -22,6 +22,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
         message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
     endif()
+	 add_definitions("-Wno-potentially-evaluated-expression")
 endif()
 
 # Locate gmpxx
@@ -127,6 +128,7 @@ set(LOCAL_SRC_FILES
   algorithms/sym.cc
   algorithms/tab_basics.cc
   algorithms/unwrap.cc
+  algorithms/vary.cc
   algorithms/young_project.cc
   algorithms/young_project_product.cc
   algorithms/young_project_tensor.cc
