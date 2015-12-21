@@ -2,7 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(CadabraServer)
 
-cmake_policy(SET CMP0042 NEW)
+if (POLICY CMP0042)
+  cmake_policy(SET CMP0042 NEW)
+endif(POLICY CMP0042)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
