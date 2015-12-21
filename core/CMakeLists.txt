@@ -6,7 +6,9 @@ project(Cadabra)
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
-cmake_policy(SET CMP0042 NEW)
+if (POLICY CMP0042)
+  cmake_policy(SET CMP0042 NEW)
+endif(POLICY CMP0042)
 
 # Speedup compilation using cotire.
 # include(cotire)
