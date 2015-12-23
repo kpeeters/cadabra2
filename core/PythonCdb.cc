@@ -4,7 +4,7 @@
 // make boost::python understand std::shared_ptr when compiled with clang.
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
-#if not defined(get_pointer)
+#ifndef __APPLE__
 template<typename T>
 T *get_pointer(std::shared_ptr<T> p)
 		{

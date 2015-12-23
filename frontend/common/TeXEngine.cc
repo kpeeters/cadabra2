@@ -247,10 +247,16 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			<< "\\usepackage[dvips,verbose,voffset=0pt,hoffset=0pt,textwidth="
 			<< horizontal_mm << "mm,textheight="
 			<< vertical_mm << "mm]{geometry}\n"
+#ifndef __APPLE__
 			<< "\\usepackage{inconsolata}\n"
+#endif
 			<< "\\usepackage{amsmath}\n"
 			<< "\\usepackage{color}\\usepackage{amssymb}\n"
-			<< "\\usepackage[parfill]{parskip}\n\\usepackage{tableaux}\n";
+	      << "\\usepackage[parfill]{parskip}\n"
+#ifndef __APPLE__
+	      << "\\usepackage{tableaux}"
+#endif
+	      << "\n";
 
 	for(size_t i=0; i<latex_packages.size(); ++i)
 		total << "\\usepackage{" << latex_packages[i] << "}\n";
