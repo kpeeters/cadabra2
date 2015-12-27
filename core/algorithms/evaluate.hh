@@ -65,7 +65,9 @@ class evaluate : public Algorithm {
 		virtual result_t apply(iterator&) override;
 		
 	private:
-		void prepare_replacement_rules(const Ex&);
+		const Ex& components;
+
+		void prepare_replacement_rules();
 
 		void handle_sum(iterator it);
 		void handle_prod(iterator it);

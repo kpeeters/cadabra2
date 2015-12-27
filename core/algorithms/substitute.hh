@@ -31,12 +31,11 @@ class substitute : public Algorithm {
 	private:
 		Ex&        args;
 
-		unsigned int    use_rule;
-
-		iterator        conditions;
+		iterator      use_rule;
+		iterator      conditions;
 
 		Ex_comparator comparator;
-		std::vector<bool>  lhs_contains_dummies, rhs_contains_dummies;
+		std::map<iterator, bool> lhs_contains_dummies, rhs_contains_dummies;
 
 		// For object swap testing routines:
 		sort_product    sort_product_;

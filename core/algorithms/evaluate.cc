@@ -1,14 +1,15 @@
 
 #include "Functional.hh"
 #include "algorithms/evaluate.hh"
+#include "algorithms/substitute.hh"
 #include <functional>
 
-evaluate::evaluate(Kernel& k, Ex& tr, const Ex& components)
-	: Algorithm(k, tr)
+evaluate::evaluate(Kernel& k, Ex& tr, const Ex& c)
+	: Algorithm(k, tr), components(c)
 	{
 	// Preparse the arguments.
 //	collect_index_values(ind_values);	
-	prepare_replacement_rules(components);
+//	prepare_replacement_rules(components);
 	}
 
 bool evaluate::can_apply(iterator) 
@@ -35,7 +36,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	}
 
 
-void evaluate::prepare_replacement_rules(const Ex& components)
+void evaluate::prepare_replacement_rules()
 	{
 	// We need to be able to match A_{t t} to A_{m n} knowing that m,n
 	// take values including t. In order to do this, we look at the
@@ -64,6 +65,8 @@ void evaluate::prepare_replacement_rules(const Ex& components)
 
 void evaluate::handle_sum(iterator it)
 	{
+	std::cerr << "evaluate::sum" << std::endl;
+
 	index_map_t ind_free, ind_dummy;
 
 	// First find the values that all indices will need to take.
@@ -71,21 +74,54 @@ void evaluate::handle_sum(iterator it)
 	for(auto i: ind_free) {
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
 		if(prop==0)
-			throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property");
+			throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property.");
 
-//		auto rep=index_values.find(prop);
-//		if(rep==index_values.end())
-//			throw ArgumentException("evaluate: No values for index "+*(i.second->name)+" given");
-
-//		std::cerr << "index " << *(i.second->name) << " takes values ";
-//		auto listnode = rep->second.begin();
-//		sibling_iterator sib = rep->second.begin(listnode);
-//		while(sib!=rep->second.end(listnode)) {
-//			std::cerr << *sib->name << ", ";
-//			++sib;
-//			}
-		std::cerr << std::endl;
+		if(prop->values.size()==0)
+			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
+
+	// Iterate over all terms in the sum. These should be of three types: \component nodes,
+	// nodes with only free indices, and nodes with internal contractions (e.g. A_{m}^{m}). 
+	// The first type can, at this stage, be ignored. The second type needs to be converted
+	// into a \component node using the component evaluation rules. The last type needs 
+	// separate treatment, and is handled by handle_internal_contraction.
+
+	sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(*sib->name=="\\components") continue;
+
+		// Internal contractions.
+		index_map_t ind_free, ind_dummy;
+		classify_indices(it, ind_free, ind_dummy);
+		if(ind_dummy.size()>0) {
+			std::cerr << "Internal contractions, not yet handled" << std::endl;
+			continue;
+			}
+
+		// Attempt to apply each component substitution rule.
+		cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
+				Ex rule(c);
+				Ex obj(sib);
+				obj.begin()->fl.bracket=str_node::b_none;
+				obj.print_entire_tree(std::cerr);
+				rule.print_entire_tree(std::cerr);
+				substitute subs(kernel, obj, rule);
+				iterator oit=obj.begin();
+				if(subs.can_apply(oit)) {
+					std::cerr << "can apply rule " << std::endl;
+					subs.apply(oit);
+					obj.print_entire_tree(std::cerr);
+					}
+				});
+
+		++sib;
+		}
+
+
+	// Now all terms are \component nodes. We need to merge these together into a single
+	// node.
+
+
 	
 	// Then determine the component values of all terms. Instead of
 	// looping over all possible index value sets, we look straight at
@@ -101,4 +137,7 @@ void evaluate::handle_sum(iterator it)
 
 void evaluate::handle_prod(iterator it)
 	{
+	index_map_t ind_free, ind_dummy;
+	classify_indices(it, ind_free, ind_dummy);
+	
 	}

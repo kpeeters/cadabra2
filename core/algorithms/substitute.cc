@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "Functional.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/prodcollectnum.hh"
 #include "properties/Indices.hh"
@@ -14,120 +15,104 @@ substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 
 //	args.print_recursive_treeform(std::cout, args.begin());
 
-	sibling_iterator subslist=args.begin().begin();
-	for(unsigned int i=0; i<args.arg_size(subslist); ++i) {
-		iterator arrow=tr.arg(subslist, i);
-		iterator lhs, rhs=tr.end();
-		if(*arrow->name!="\\arrow" && *arrow->name!="\\equals") {
-			lhs=arrow;
-			throw ArgumentException("Argument is neither a replacement rule nor an equality");
-			}
-		else {
-			lhs=args.begin(arrow);
-			rhs=lhs;
+	cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {
+			if(*arrow->name!="\\arrow" && *arrow->name!="\\equals") 
+				throw ArgumentException("substitute: Argument is neither a replacement rule nor an equality");
+
+			sibling_iterator lhs=args.begin(arrow);
+			sibling_iterator rhs=lhs;
 			rhs.skip_children();
 			++rhs;
-			}
-		try {
-			if(*lhs->multiplier!=1) {
-				throw ArgumentException("No numerical pre-factors allowed on lhs of replacement rule.");
-				}
-			// test validity of lhs and rhs
-			iterator lhsit=lhs, stopit=lhs;
-			stopit.skip_children();
-			++stopit;
-			while(lhsit!=stopit) {
-				if(lhsit->is_object_wildcard()) {
-					if(tr.number_of_children(lhsit)>0) {
-						throw ArgumentException("Object wildcards cannot have child nodes.");
-						}
-					}
-				++lhsit;
-				}
-			lhsit=rhs;
-			stopit=rhs;
-			stopit.skip_children();
-			++stopit;
-			while(lhsit!=stopit) {
-				if(lhsit->is_object_wildcard()) {
-					if(tr.number_of_children(lhsit)>0) {
-						throw ArgumentException("Object wildcards cannot have child nodes.");
-						}
-					}
-				++lhsit;
-				}
 
-			// check whether there are dummies.
-			index_map_t ind_free, ind_dummy;
-			classify_indices(lhs, ind_free, ind_dummy);
-			if(ind_dummy.size()>0)
-				lhs_contains_dummies.push_back(true);
-			else
-				lhs_contains_dummies.push_back(false);
-			ind_free.clear(); ind_dummy.clear();
-			if(rhs!=tr.end()) {
-				classify_indices(rhs, ind_free, ind_dummy);
-				if(ind_dummy.size()>0)
-					rhs_contains_dummies.push_back(true);
-				else
-					rhs_contains_dummies.push_back(false);
+			try {
+				if(*lhs->multiplier!=1) {
+					throw ArgumentException("No numerical pre-factors allowed on lhs of replacement rule.");
+					}
+				// test validity of lhs and rhs
+				iterator lhsit=lhs, stopit=lhs;
+				stopit.skip_children();
+				++stopit;
+				while(lhsit!=stopit) {
+					if(lhsit->is_object_wildcard()) {
+						if(tr.number_of_children(lhsit)>0) {
+							throw ArgumentException("Object wildcards cannot have child nodes.");
+							}
+						}
+					++lhsit;
+					}
+				lhsit=rhs;
+				stopit=rhs;
+				stopit.skip_children();
+				++stopit;
+				while(lhsit!=stopit) {
+					if(lhsit->is_object_wildcard()) {
+						if(tr.number_of_children(lhsit)>0) {
+							throw ArgumentException("Object wildcards cannot have child nodes.");
+							}
+						}
+					++lhsit;
+					}
+				
+				// check whether there are dummies.
+				index_map_t ind_free, ind_dummy;
+				classify_indices(lhs, ind_free, ind_dummy);
+				lhs_contains_dummies[arrow]= ind_dummy.size()>0;
+				ind_free.clear(); ind_dummy.clear();
+				if(rhs!=tr.end()) {
+					classify_indices(rhs, ind_free, ind_dummy);
+					rhs_contains_dummies[arrow]=ind_dummy.size()>0;
+					}
 				}
-			}
-		catch(std::exception& er) {
-			throw ArgumentException(std::string("Index error in replacement rule. ")+er.what());
-// " << i+1 << "." << std::endl;
-//			txtout << er.what() << std::endl;
-			}
-		}
+			catch(std::exception& er) {
+				throw ArgumentException(std::string("Index error in replacement rule. ")+er.what());
+				}
+			});
 	}
 
 bool substitute::can_apply(iterator st)
 	{
-	sibling_iterator subslist=args.begin().begin();
-	for(unsigned int i=0; i<tr.arg_size(subslist); ++i) {
-		use_rule=i;
+	Ex::iterator found = cadabra::find_in_list(args, args.begin(), [&](Ex::iterator arrow) {
+			comparator.clear();
+			iterator lhs=tr.begin(arrow);
+			if(*lhs->name=="\\conditional") {
+				lhs=tr.begin(lhs); 
+				conditions=lhs;
+				conditions.skip_children();
+				++conditions;
+				}
+			else conditions=tr.end();
+			
+			if(lhs->name!=st->name && !lhs->is_object_wildcard() && !lhs->is_name_wildcard() && lhs->name->size()>0) 
+				return args.end();
+			
+			Ex_comparator::match_t ret;
+			comparator.lhs_contains_dummies=lhs_contains_dummies[arrow];
+			
+			//	HERE: we need to have one entry point for matching, which dispatches depending 
+			// on whether we have a normal node, a product, a sum or a sibling range with
+			// sibling wildcards. We also need a simple notation (and an exception at top
+			// level for plus and prod).
+			//
+			//	> ex:=A+B+C+D;
+			// A + B + C + D
+			// > substitute(_, r'B+C -> Q')
+			
+			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
+			else                     ret=comparator.equal_subtree(lhs, st);
+			
+			if(ret == Ex_comparator::subtree_match) {
+				use_rule=arrow;
+				if(conditions==tr.end()) return arrow;
+				std::string error;
+				if(comparator.satisfies_conditions(conditions, error)) 
+					return arrow;
+				else throw ArgumentException(error);
+				}
 
-		comparator.clear();
-
-		iterator arrow=tr.arg(subslist, i);
-		iterator lhs=tr.begin(arrow);
-		if(*lhs->name=="\\conditional") {
-			lhs=tr.begin(lhs); 
-			conditions=lhs;
-			conditions.skip_children();
-			++conditions;
-			}
-		else conditions=tr.end();
-		
-//		std::cerr << *lhs->name << " - " << *st->name << std::endl;
-
-		if(lhs->name!=st->name && !lhs->is_object_wildcard() && !lhs->is_name_wildcard() && lhs->name->size()>0) 
-			continue;
-
-		Ex_comparator::match_t ret;
-		comparator.lhs_contains_dummies=lhs_contains_dummies[i];
-
-      //	HERE: we need to have one entry point for matching, which dispatches depending 
-		// on whether we have a normal node, a product, a sum or a sibling range with
-		// sibling wildcards. We also need a simple notation (and an exception at top
-		// level for plus and prod).
-		//
-      //	> ex:=A+B+C+D;
-      // A + B + C + D
-      // > substitute(_, r'B+C -> Q')
-
-		if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
-		else                     ret=comparator.equal_subtree(lhs, st);
-
-		if(ret == Ex_comparator::subtree_match) {
-			if(conditions==tr.end()) return true;
-			std::string error;
-			if(comparator.satisfies_conditions(conditions, error))
-				return true;
-			else throw ArgumentException(error);
-			}
-		}
- 	return false;
+			return args.end();
+		});
+	
+	return found!=args.end();
 	}
 
 Algorithm::result_t substitute::apply(iterator& st)
@@ -135,7 +120,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	//std::cerr << "substitute::apply at " << *st->name << std::endl;
 //	prod_wrap_single_term(st);
 
-   sibling_iterator arrow=tr.arg(args.begin().begin(), use_rule);
+   sibling_iterator arrow=use_rule;
    iterator lhs=tr.begin(arrow);
    iterator rhs=lhs;
    rhs.skip_children();

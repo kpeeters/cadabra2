@@ -379,7 +379,6 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;
 	Ex::sibling_iterator ch=tree.begin(it);
 	bool beginning_of_group=true;
-	bool mathematica_postponed_endl=false;
 	while(ch!=tree.end(it)) {
 		if(++steps==20) {
 			if(latex_linefeeds)
@@ -417,10 +416,6 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 				else if(utf8_output) str << " +" << unichar(0x00a0);
 				else                        str << " + ";
 				}
-			}
-		if(mathematica_postponed_endl) {
-			str << std::endl;
-			mathematica_postponed_endl=false;
 			}
 		if(*ch->name=="1" && (*ch->multiplier==1 || *ch->multiplier==-1)) 
 			str << "1"; // special case numerical constant

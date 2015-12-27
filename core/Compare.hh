@@ -258,6 +258,12 @@ class Ex_comparator {
 		int  can_swap_ilist_ilist(Ex::iterator obj1, Ex::iterator obj2);
 };
 
+/// \ingroup core
+///
+/// Basic comparison operator for tree iterators, so we can use them as keys in maps.
+
+bool operator<(const Ex::iterator&, const Ex::iterator&);
+
 class Ex_is_equivalent {
 	public:
 		Ex_is_equivalent(const Properties&);

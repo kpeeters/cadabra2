@@ -1,4 +1,8 @@
 
+- substitute needs a flag to determine whether or not components can be matched to abstract indices.
+
+- check_index_consistency is not called when an Ex is created.
+
 - replace_index has changed logic; do a grep to see if this requires changes.
 
 - The replacement_map should only match exact expressions (not modulo
@@ -7,6 +11,13 @@
   turned it off now, but this may break other things.
 
 - LaTeXForm needs cleaning up and catching errors.
+
+- Exceptions should have a way to print Ex objects without knowing what the backend is, so
+  we can print error messages in an appropriate way. 
+
+- substitute handles sums on the lhs, but these need to match to full
+  sums in the pattern, not partial sums. For products we can match
+  sub-products, so we should have a match for sub-sums as well.
 
 - Property initialisation from Python, and in particular how the
   key/val pairs get set, should be documented, fixed and fed through to e.g. LaTeXForm.
