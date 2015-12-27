@@ -3,16 +3,75 @@
 # expression is matched against a coordinate in the pattern.
 {m,n,p}::Indices(values={t,r}).
 {r,t}::Coordinate.
-ex:= A_{m n};
-rl:= A_{t r} = 3;
+ex:= A_{m n} + B_{m n};
+rl:= A_{t r} + B_{t r} = 3;
 substitute(ex, rl)
 
-{m,n,p}::Indices(values={t,r}).
 {r,t}::Coordinate.
-ex:= A_{m n} A_{m n};
-rl:= A_{t r} = 3;
+{m,n,p}::Indices(values={t,r}).
+\partial{#}::PartialDerivative.
+C::Depends(r,t).
+#ex:= A_{m n} B_{m n p} ( \partial_{p}{C} + \partial_{p}{E(t)} + D_{p} );
+ex:= A_{m n} B_{m n p} ( C_{p} + D_{p} );
+#rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t} + D_{t} = 1 ];
+rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t} = 1, D_{t} = 4 ];
 evaluate(ex, rl)
 
+substitute(ex, rl);
+# should give 3*2*1+3*5*(C_{r}+D_{r}).
+
+Simple single-pass:
+
+  at node A_{m n} -> return { { Ex("m"), Ex("n") }, { { Ex("t"), Ex("r"), Ex("3") } , ... } }
+  at node B_{m n} -> return
+
+  This is expensive, and does not take into account that many index value sets do not match other factors.
+
+Prod and sum-based: start from deepest sum or product (not from any arbitrary node).
+
+  prod:  
+   
+    returns: { list of free indices as Ex objects }
+             { list of list of values of those Ex objects for which there is a value }
+             { list of values of the expression for the above index values }
+  
+    match every substitution rule on every factor, keeping lists of which rule can
+    be used where, and which index maps are used.
+    
+    vector<int> rstart(factors.size(), 0);
+    while() {
+        for(int f=0; f<factors.size(); ++f) {
+            attempt substitute(rstart(f))
+            rstart[f]++; 
+            }
+        }
+    
+
+  
+  at node A_{m n} -> {
+
+
+- Store components as
+
+    \components_{m}^{n p}(r,t){{r,t,t}={r**2},{...}}
+
+    A_{m n}(r,t)[ {r,r}=r**2, {r,t}=r*t ]
+
+  At a sum node, we then have terms which are either \components nodes (from lower levels)
+  or tensors which still have to be replaced. E.g.
+
+    A_{m n} + C_{m p} D_{p n}
+
+    A_{m n} + \components_{m n}< {r,r}=r**2 + sin(r), {r,t}=r*cos(r) >
+    
+
+- First make depends logic, returning a list of Ex objects on which another Ex depends.
+  Needed to determine which components of \partial_{\mu}{...} to keep.
+
+- Also need substitute patterns ot automatically generate patterns for objects related by
+  symmetry.
+
+#---
 
 {m,n,p}::Indices.
 {r,t}::Coordinate.

@@ -52,7 +52,10 @@ extern rset_t rat_set;
 class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 	public:
 		enum bracket_t     { b_round=0, b_square=1, b_curly=2, b_pointy=3, b_none=4, b_no=5, b_invalid=6 };
-		enum parent_rel_t  { p_sub=0, p_super=1, p_none=2, p_property=3, p_exponent=4 };
+
+		/// Child nodes are related to their parent node by a so-called parent relation, which can
+		/// be one of these values. 
+		enum parent_rel_t  { p_sub=0, p_super=1, p_none=2, p_property=3, p_exponent=4, p_components=5 };
 
 		str_node(void);
 		str_node(nset_t::iterator name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
@@ -103,7 +106,9 @@ class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 		static bool compare_name_inverse_par(const str_node&, const str_node&);
 }; 
 
-/// Helper functions for manipulation of multipliers
+/// \ingroup core
+///
+/// Helper functions for manipulation of multipliers.
 void     multiply(rset_t::iterator&, multiplier_t);
 void     add(rset_t::iterator&, multiplier_t);
 void     zero(rset_t::iterator&);
@@ -213,8 +218,24 @@ class Ex : public tree<str_node> {
 };
 
 
+/// \ingroup core
+///
+/// Storage for components of expressions. This is a sparse tensor value object,
+/// with the special property that both index and component values are symbolic.
 
-// Compare two nset iterators by comparing the strings to which they point.
+class Components {
+	public:
+		Ex                          ex;
+		std::vector<Ex>             index_names;
+		typedef std::vector<Ex>     index_values_t;
+		std::vector<index_values_t> index_values;
+		std::vector<Ex>             ex_values;
+};
+
+
+/// \ingroup core
+///
+/// Compare two nset iterators by comparing the strings to which they point.
 
 class nset_it_less {
 	public:

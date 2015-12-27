@@ -4,13 +4,14 @@
 // make boost::python understand std::shared_ptr when compiled with clang.
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
-#ifndef __APPLE__
-template<typename T>
-T *get_pointer(std::shared_ptr<T> p)
-		{
-		return p.get();
-		}
-#endif
+// This now works on both Linux and OS X El Capitan, but your mileage may vary. 
+//
+// template<typename T>
+// T *get_pointer(std::shared_ptr<T> p)
+// 		{
+// 		return p.get();
+// 		}
+// #endif
 
 #include "Parser.hh"
 #include "Exceptions.hh"
@@ -298,7 +299,7 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
    // cleanup of nested sums and products.
 	pre_clean_dispatch_deep(*get_kernel_from_scope(), *ptr);
 	cleanup_dispatch_deep(*get_kernel_from_scope(), *ptr);
-
+	
 	// The local variable stack is not writeable so we cannot insert '_'
 	// as a local variable. Instead, we push it onto the global stack.
 	

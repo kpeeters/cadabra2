@@ -528,20 +528,20 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// Look through values attribute of Indices object to see if the 'two' index
 			// can take the 'one' value.
 			
-			for(auto& ex: t2->values) {
-				std::cerr << *(ex.begin()->name) << std::endl;
-				}
+			//for(auto& ex: t2->values) {
+				//std::cerr << *(ex.begin()->name) << std::endl;
+			//	}
 			auto ivals = std::find_if(t2->values.begin(), t2->values.end(), 
 											  [&](const Ex& a) {
 												  if(subtree_compare(&properties, a.begin(), one, 0)==0) return true;
 												  else return false;
 											  });
 			if(ivals!=t2->values.end()) {
-				std::cerr << " can take this value" << std::endl;
+				//std::cerr << " can take this value" << std::endl;
 				return node_match;
 				} 
 			else {
-				std::cerr << " cannot take this value" << std::endl;
+				//std::cerr << " cannot take this value" << std::endl;
 				return no_match_less;
 				}
 			}
@@ -1037,4 +1037,10 @@ bool Ex_is_less::operator()(const Ex& one, const Ex& two)
 	int ret=subtree_compare(&properties, one.begin(), two.begin(), mod_prel);
 	if(ret < 0) return true;
 	else        return false;
+	}
+
+
+bool operator<(const Ex::iterator& i1, const Ex::iterator& i2)
+	{
+	return i1.node < i2.node;
 	}
