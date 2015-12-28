@@ -202,12 +202,15 @@ class Ex_comparator {
 		bool    satisfies_conditions(Ex::iterator conditions, std::string& error);
 
 		/// Map for the replacement of nodes (indices, patterns).
-		typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>  replacement_map_t;
-		replacement_map_t                                           replacement_map;
+		typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
+		replacement_map_t                                              replacement_map;
 
 		/// Map for the replacement of entire subtrees (object patterns).
 		typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less> subtree_replacement_map_t;
 		subtree_replacement_map_t                                      subtree_replacement_map;
+
+		/// Map for matching of index values to index names.
+		replacement_map_t                                              index_value_map;
 
 		/// Information to keep track of where individual factors in a sub-product were
 		/// found, and whether moving them into the searched-for order leads to sign flips.

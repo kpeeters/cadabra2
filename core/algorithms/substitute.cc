@@ -6,16 +6,10 @@
 #include "properties/Indices.hh"
 
 substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
-	: Algorithm(k, tr), args(args_), comparator(k.properties), sort_product_(k, tr)
+	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr)
 	{
-//	if(number_of_args()==0) {
-//		txtout << "substitute: need (list of) replacement rules." << std::endl;
-//		throw constructor_error();
-//		}
-
-//	args.print_recursive_treeform(std::cout, args.begin());
-
 	cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {
+			//args.print_recursive_treeform(std::cerr, arrow);
 			if(*arrow->name!="\\arrow" && *arrow->name!="\\equals") 
 				throw ArgumentException("substitute: Argument is neither a replacement rule nor an equality");
 
@@ -26,7 +20,7 @@ substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 
 			try {
 				if(*lhs->multiplier!=1) {
-					throw ArgumentException("No numerical pre-factors allowed on lhs of replacement rule.");
+					throw ArgumentException("substitute: No numerical pre-factors allowed on lhs of replacement rule.");
 					}
 				// test validity of lhs and rhs
 				iterator lhsit=lhs, stopit=lhs;
@@ -35,7 +29,7 @@ substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 				while(lhsit!=stopit) {
 					if(lhsit->is_object_wildcard()) {
 						if(tr.number_of_children(lhsit)>0) {
-							throw ArgumentException("Object wildcards cannot have child nodes.");
+							throw ArgumentException("substitute: Object wildcards cannot have child nodes.");
 							}
 						}
 					++lhsit;
@@ -47,7 +41,7 @@ substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 				while(lhsit!=stopit) {
 					if(lhsit->is_object_wildcard()) {
 						if(tr.number_of_children(lhsit)>0) {
-							throw ArgumentException("Object wildcards cannot have child nodes.");
+							throw ArgumentException("substitute: Object wildcards cannot have child nodes.");
 							}
 						}
 					++lhsit;
@@ -64,7 +58,7 @@ substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 					}
 				}
 			catch(std::exception& er) {
-				throw ArgumentException(std::string("Index error in replacement rule. ")+er.what());
+				throw ArgumentException(std::string("substitute: Index error in replacement rule. ")+er.what());
 				}
 			});
 	}
@@ -95,7 +89,7 @@ bool substitute::can_apply(iterator st)
 			//
 			//	> ex:=A+B+C+D;
 			// A + B + C + D
-			// > substitute(_, r'B+C -> Q')
+			// > substitute(_, $B+C -> Q$)
 			
 			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
 			else                     ret=comparator.equal_subtree(lhs, st);

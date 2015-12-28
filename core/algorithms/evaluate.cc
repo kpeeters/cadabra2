@@ -67,11 +67,11 @@ void evaluate::handle_sum(iterator it)
 	{
 	std::cerr << "evaluate::sum" << std::endl;
 
-	index_map_t ind_free, ind_dummy;
+	index_map_t full_ind_free, full_ind_dummy;
 
 	// First find the values that all indices will need to take.
-	classify_indices(it, ind_free, ind_dummy);
-	for(auto i: ind_free) {
+	classify_indices(it, full_ind_free, full_ind_dummy);
+	for(auto i: full_ind_free) {
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
 		if(prop==0)
 			throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property.");
@@ -92,35 +92,62 @@ void evaluate::handle_sum(iterator it)
 
 		// Internal contractions.
 		index_map_t ind_free, ind_dummy;
-		classify_indices(it, ind_free, ind_dummy);
+		classify_indices(sib, ind_free, ind_dummy);
 		if(ind_dummy.size()>0) {
 			std::cerr << "Internal contractions, not yet handled" << std::endl;
 			continue;
 			}
 
-		// Attempt to apply each component substitution rule.
+		// Attempt to apply each component substitution rule on this term.
+		Ex repl("\\components");
+		for(auto& ind: ind_free) 
+			repl.append_child(repl.begin(), ind.second);
+		auto vl = repl.append_child(repl.begin(), str_node("\\comma"));
 		cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 				Ex rule(c);
 				Ex obj(sib);
-				obj.begin()->fl.bracket=str_node::b_none;
-				obj.print_entire_tree(std::cerr);
-				rule.print_entire_tree(std::cerr);
 				substitute subs(kernel, obj, rule);
 				iterator oit=obj.begin();
 				if(subs.can_apply(oit)) {
-					std::cerr << "can apply rule " << std::endl;
+					auto el = repl.append_child(vl, str_node("\\equals"));
+					auto il = repl.append_child(el, str_node("\\comma"));
+					auto fi = full_ind_free.begin();
+					while(fi!=full_ind_free.end()) {
+						for(auto& r: subs.comparator.index_value_map) {
+							if(fi->first == r.second) {
+								repl.append_child(il, r.first.begin()); 
+								break;
+								}
+							}
+						auto fiold(fi);
+						while(fi!=full_ind_free.end() && fiold->first==fi->first)
+							++fi;
+						}
 					subs.apply(oit);
-					obj.print_entire_tree(std::cerr);
+					repl.append_child(el, obj.begin());
+					// FIXME: this wastes time, as we could now simply exit do_list,
+					// but there is no mechanism for that.
 					}
 				});
 
-		++sib;
+		sibling_iterator nxt=sib;
+		++nxt;
+
+		tr.move_ontop(iterator(sib), repl.begin());
+		sib=nxt;
 		}
 
 
 	// Now all terms are \component nodes. We need to merge these together into a single
 	// node.
-
+	auto sib1=tr.begin(it);
+	auto sib2=sib1;
+	++sib2;
+	while(sib2!=tr.end(it)) {
+		merge_components(sib1, sib2);
+		// remove sib2
+		++sib2;
+		}
 
 	
 	// Then determine the component values of all terms. Instead of
@@ -133,6 +160,18 @@ void evaluate::handle_sum(iterator it)
 	// that the rules for A_{t t} and A_{r r} match this tensor.
 	
 	
+	}
+
+void evaluate::merge_components(iterator it1, iterator it2)
+	{
+	sibling_iterator sib1=tr.end(it1);
+	--sib1;
+	sibling_iterator sib2=tr.end(it2);
+	--sib2;
+
+	cadabra::do_list(tr, sib1, [&](Ex::iterator it) {
+			std::cerr << *it->name << std::endl;
+			});
 	}
 
 void evaluate::handle_prod(iterator it)

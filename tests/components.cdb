@@ -8,13 +8,13 @@ rl:= A_{t r} + B_{t r} = 3;
 substitute(ex, rl)
 
 {r,t}::Coordinate.
-{m,n,p}::Indices(values={t,r}).
+{m,n,p,s}::Indices(values={t,r}).
 \partial{#}::PartialDerivative.
 C::Depends(r,t).
 #ex:= A_{m n} B_{m n p} ( \partial_{p}{C} + \partial_{p}{E(t)} + D_{p} );
-ex:= A_{m n} B_{m n p} ( C_{p} + D_{p} );
+ex:= A_{m n} B_{m n p} ( C_{p s} + D_{s p} );
 #rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t} + D_{t} = 1 ];
-rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t} = 1, D_{t} = 4 ];
+rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{t r} = r**2*t ];
 evaluate(ex, rl)
 
 substitute(ex, rl);

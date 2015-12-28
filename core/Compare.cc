@@ -275,6 +275,7 @@ void Ex_comparator::clear()
 	{
 	replacement_map.clear();
 	subtree_replacement_map.clear();
+	index_value_map.clear();
 	factor_locations.clear();
 	factor_moving_signs.clear();
 	}
@@ -524,7 +525,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	else if(is_coordinate) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
 		const Indices *t2=properties.get<Indices>(two, true);
 		if(t2) {
-			std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
+			// std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
 			// Look through values attribute of Indices object to see if the 'two' index
 			// can take the 'one' value.
 			
@@ -537,6 +538,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 												  else return false;
 											  });
 			if(ivals!=t2->values.end()) {
+				index_value_map[one]=two;
 				//std::cerr << " can take this value" << std::endl;
 				return node_match;
 				} 
