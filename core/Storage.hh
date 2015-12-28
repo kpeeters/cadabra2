@@ -130,7 +130,8 @@ class Ex : public tree<str_node> {
 		Ex(tree<str_node>::iterator);
 		Ex(const str_node&);
 		Ex(const Ex&);
-//		Ex(const std::string&);
+		/// Initialise with given string as head node (does not parse this string).
+		Ex(const std::string&);
 		Ex(int);
 
 		/// Keeping track of what algorithms have done to this expression.

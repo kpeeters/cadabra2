@@ -71,4 +71,8 @@ class evaluate : public Algorithm {
 
 		void handle_sum(iterator it);
 		void handle_prod(iterator it);
+
+		/// Merge the information in two 'components' nodes, moving all out of
+		/// the second one into the first one.
+		void merge_components(iterator it1, iterator it2);
 }; 

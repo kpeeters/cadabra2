@@ -62,6 +62,12 @@ Ex::Ex(const Ex& other)
    //	std::cout << "Ex copy constructor" << std::endl;
 	}
 
+Ex::Ex(const std::string& str) 
+	: state_(result_t::l_no_action)
+	{
+	set_head(str_node(str));
+	}
+
 Ex::Ex(int val) 
 	: state_(result_t::l_no_action)
 	{

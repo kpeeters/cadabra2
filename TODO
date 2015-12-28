@@ -29,6 +29,7 @@
 - Ex_to_Sympy should be finished: no free/dummy index check.
 
 - Replace \prod -> \mult and \sum -> \add ?  Makes sense from LaTeX perspective.
+  Also \comma -> \list ?
 
 - notebook->html creates incorrect html for error cells, which trips clay/jinja2 
   with TemplateSyntaxError: Missing end of comment tag

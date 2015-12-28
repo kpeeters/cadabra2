@@ -28,13 +28,14 @@ class substitute : public Algorithm {
 		virtual bool     can_apply(iterator st);
 
 		virtual result_t apply(iterator&);
+
+		Ex_comparator comparator;
 	private:
 		Ex&        args;
 
 		iterator      use_rule;
 		iterator      conditions;
 
-		Ex_comparator comparator;
 		std::map<iterator, bool> lhs_contains_dummies, rhs_contains_dummies;
 
 		// For object swap testing routines:
