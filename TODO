@@ -31,6 +31,11 @@
 - Replace \prod -> \mult and \sum -> \add ?  Makes sense from LaTeX perspective.
   Also \comma -> \list ?
 
+- Need a matcher in substitute which indicates that an object was matched but with indices
+  in the wrong position, and which then automatically inserts a metric by looking at the
+  metric=g type of attribute on Indices. How do we do this for component values to be most
+  efficient?
+
 - notebook->html creates incorrect html for error cells, which trips clay/jinja2 
   with TemplateSyntaxError: Missing end of comment tag
 

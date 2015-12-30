@@ -538,7 +538,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 												  else return false;
 											  });
 			if(ivals!=t2->values.end()) {
-				index_value_map[one]=two;
+				index_value_map[two]=one;
 				//std::cerr << " can take this value" << std::endl;
 				return node_match;
 				} 
