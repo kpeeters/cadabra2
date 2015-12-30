@@ -209,7 +209,8 @@ class Ex_comparator {
 		typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less> subtree_replacement_map_t;
 		subtree_replacement_map_t                                      subtree_replacement_map;
 
-		/// Map for matching of index values to index names.
+		/// Map for matching of index names to index values. Note: this is in the opposite order
+		/// from replacement_map!
 		replacement_map_t                                              index_value_map;
 
 		/// Information to keep track of where individual factors in a sub-product were

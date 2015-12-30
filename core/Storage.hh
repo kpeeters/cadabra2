@@ -201,6 +201,7 @@ class Ex : public tree<str_node> {
 
 		/// Make sure that the node pointed to is a \\comma object, i.e. wrap the node if not already
 		/// inside such a \\comma.
+		/// DEPRECATED: in favour of 'do_list' in Functional.hh.
 		void             list_wrap_single_element(iterator&);
 		void             list_unwrap_single_element(iterator&);
 

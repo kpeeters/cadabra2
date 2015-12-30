@@ -67,10 +67,10 @@ class evaluate : public Algorithm {
 	private:
 		const Ex& components;
 
-		void prepare_replacement_rules();
-
 		void handle_sum(iterator it);
 		void handle_prod(iterator it);
+
+		void handle_factor(sibling_iterator sib, const index_map_t& full_ind_free);
 
 		/// Merge the information in two 'components' nodes, moving all out of
 		/// the second one into the first one.
