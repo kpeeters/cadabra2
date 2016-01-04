@@ -9,8 +9,10 @@ void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<void(Ex::iter
    if(*it->name=="\\comma") {
 		Ex::sibling_iterator sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
+			Ex::sibling_iterator nxt=sib;
+			++nxt;
 			f(sib);
-			++sib;
+			sib=nxt;
 			}
       }
 	else {

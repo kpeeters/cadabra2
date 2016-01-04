@@ -219,12 +219,76 @@ void evaluate::handle_prod(iterator it)
 	// to a sum.
 	while(di!=ind_dummy.end()) {
 		std::cerr << *(di->first.begin()->name) << std::endl;
-		// Figure out which values this index can take
+		auto di2=di;
+		++di2;
+		int num1 = tr.index(di->second);
+		int num2 = tr.index(di2->second);
+		std::cerr << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
 
 		// three cases:
 		//    two factors, single index in common. Merge is simple.
 		//    two factors, more than one index in common. After merging this turns into:
 		//    single factor, self-contraction
-		++di;
+
+		auto cit1 = tr.parent(di->second);
+		auto cit2 = tr.parent(di2->second);
+		if(cit1 != cit2) {
+			std::cerr << "different tensors" << std::endl;
+
+			// Walk through all components of the first tensor, and for each check whether
+			// any of the components of the second tensor matches the value for this dummy
+			// index.
+			sibling_iterator sib1=tr.end(cit1);
+			--sib1;
+			sibling_iterator sib2=tr.end(cit2);
+			--sib2;
+
+			// Move all indices of the second tensor to be indices of the first.
+			sibling_iterator mv=tr.begin(cit2);
+			while(mv!=sib2) {
+				sibling_iterator nxt=mv;
+				++nxt;
+				tr.move_before(sib1, mv);
+				mv=nxt;
+				}
+
+			cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
+					assert(*it1->name=="\\equals");
+					auto lhs1 = tr.begin(it1);
+					auto ivalue1 = tr.begin(lhs1);
+					ivalue1 += num1;
+					cadabra::do_list(tr, sib2, [&](Ex::iterator it2) {
+							assert(*it2->name=="\\equals");
+							auto lhs2 = tr.begin(it2);
+							auto ivalue2 = tr.begin(lhs2);
+							ivalue2 += num2;
+
+							std::cerr << "comparing " << *ivalue1->name << " with " << *ivalue2->name << std::endl;
+							if(tr.equal_subtree(ivalue1,ivalue2)) {
+								std::cerr << "match" << std::endl;
+								// Create new merged index set
+								// TODO
+								sibling_iterator mv=tr.begin(lhs2);
+								sibling_iterator to=tr.end(lhs1);
+								--to;
+								while(mv!=tr.end(lhs2)) {
+									sibling_iterator nxt=mv;
+									++nxt;
+									tr.move_after(to, mv);
+									mv=nxt;
+									}
+								}
+							});
+					// Erase this index set; any match will have generated a merged index set.
+					tr.erase(sib1);
+					});
+			// Remove the dummy indices from the index set of tensor 1.
+			tr.erase(di->second);
+			tr.erase(di2->second);
+			tr.print_recursive_treeform(std::cerr, tr.begin());
+			// tensor 2 can now be removed from the product.
+			}
+
+		++di; ++di;
 		}
 	}
