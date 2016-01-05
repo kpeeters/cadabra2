@@ -232,6 +232,8 @@ void evaluate::handle_prod(iterator it)
 
 		auto cit1 = tr.parent(di->second);
 		auto cit2 = tr.parent(di2->second);
+
+		// Are the components objects cit1, cit2 on which these indices sit the same one?
 		if(cit1 != cit2) {
 			std::cerr << "different tensors" << std::endl;
 
@@ -263,31 +265,84 @@ void evaluate::handle_prod(iterator it)
 							auto ivalue2 = tr.begin(lhs2);
 							ivalue2 += num2;
 
-							std::cerr << "comparing " << *ivalue1->name << " with " << *ivalue2->name << std::endl;
+							// Compare the two index values in the two tensors, only continue if
+							// these are the same.
+							std::cerr << "comparing value " << *ivalue1->name << " with " << *ivalue2->name << std::endl;
+							std::cerr << "                " << &(*ivalue1) << " vs " << &(*ivalue2) << std::endl;
 							if(tr.equal_subtree(ivalue1,ivalue2)) {
-								std::cerr << "match" << std::endl;
-								// Create new merged index set
-								// TODO
-								sibling_iterator mv=tr.begin(lhs2);
-								sibling_iterator to=tr.end(lhs1);
-								--to;
-								while(mv!=tr.end(lhs2)) {
-									sibling_iterator nxt=mv;
-									++nxt;
-									tr.move_after(to, mv);
-									mv=nxt;
+								// Create new merged index value set.
+								Ex ivs("\\equals");
+								auto ivs_lhs = tr.append_child(ivs.begin(), str_node("\\comma"));
+								auto ivs_rhs = tr.append_child(ivs.begin(), str_node("\\prod"));
+								auto ci = tr.begin(lhs1);
+								int n=0;
+								while(ci!=tr.end(lhs1)) {
+									if(n!=num1)
+										ivs.append_child(ivs_lhs, iterator(ci));
+									++ci; ++n;
 									}
+								ci = ivs.begin(lhs2);
+								n=0;
+								while(ci!=ivs.end(lhs2)) {
+									if(n!=num2) 
+										ivs.append_child(ivs_lhs, iterator(ci));
+									++ci; ++n;
+									}
+								auto rhs1=lhs1;
+								++rhs1;
+								ivs.append_child(ivs_rhs, iterator(rhs1));
+								auto rhs2=lhs2;
+								++rhs2;
+								ivs.append_child(ivs_rhs, iterator(rhs2));								
+								cleanup_dispatch(kernel, ivs, ivs_rhs);
+								// Insert this new index value set before sib1, so that it will not get used
+								// inside the outer loop.
+								tr.move_before(it1, ivs.begin());
 								}
 							});
-					// Erase this index set; any match will have generated a merged index set.
-					tr.erase(sib1);
+					// This index value set can now be erased as all
+					// possible combinations have been considered.
+					tr.erase(it1);
 					});
 			// Remove the dummy indices from the index set of tensor 1.
 			tr.erase(di->second);
 			tr.erase(di2->second);
+			// Tensor 2 can now be removed from the product as well, as all information is now
+			// part of tensor 1.
+			tr.erase(cit2);
 			tr.print_recursive_treeform(std::cerr, tr.begin());
-			// tensor 2 can now be removed from the product.
 			}
+
+		else {
+			// Components objects cit1 and cit2 are actually the same. We just need to
+			// do a single loop now, going over all index value sets and keeping those
+			// for which the num1-th and num2-th value are identical.
+
+			sibling_iterator sib1=tr.end(cit1);
+			--sib1;
+
+			cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
+					assert(*it1->name=="\\equals");
+					auto lhs = tr.begin(it1);
+					auto ivalue1 = tr.begin(lhs);
+					auto ivalue2 = ivalue1;
+					ivalue1 += num1;
+					ivalue2 += num2;
+					if(tr.equal_subtree(ivalue1,ivalue2)) {
+						std::cerr << "keeping " << std::endl;
+						tr.erase(ivalue1);
+						tr.erase(ivalue2);
+						}
+					else {
+						std::cerr << "discarding " << std::endl;
+						tr.erase(it1);
+						}
+					}
+				);
+			tr.erase(di->second);
+			tr.erase(di2->second);
+			tr.print_recursive_treeform(std::cerr, tr.begin());
+			}			
 
 		++di; ++di;
 		}
