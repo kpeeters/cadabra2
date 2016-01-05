@@ -437,6 +437,8 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
+	if(*it->multiplier!=1)
+		print_multiplier(str, it);
 	dispatch(str, sib);
 	str << "^{";
 	++sib;

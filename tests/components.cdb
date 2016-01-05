@@ -17,6 +17,8 @@ ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
 rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];
 evaluate(ex, rl)
 
+# Now a Christoffel example, i.e. with derivatives.
+
 
 
 {\components}_{mn}{{{t, r} = 3}}*{\components}_{mnp}{{{t, r, t} = 2, {t, r, r} = 5}}
