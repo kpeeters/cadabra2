@@ -20,6 +20,23 @@ void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<void(Ex::iter
 		}
 	}
 
+void cadabra::do_subtree(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f)
+	{
+	Ex::post_order_iterator walk=it, last=it;
+	++last;
+	walk.descend_all();
+	
+	do {
+		auto nxt=walk;
+		++nxt;
+
+		f(walk);
+
+		walk=nxt;
+		} while(walk!=last);
+	}
+
+
 Ex::iterator cadabra::find_in_list(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f)
 	{
 	if(*it->name=="\\expression")

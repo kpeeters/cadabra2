@@ -8,7 +8,7 @@
 ///
 /// An iterator which iterates over indices even if they are at lower
 /// levels, i.e. taking into account the "Inherit" property of
-/// nodes. Needs access to Properties in the current scole in order to
+/// nodes. Needs access to Properties in the current scope in order to
 /// determine which objects are indices.
 
 class index_iterator : public Ex::iterator_base {

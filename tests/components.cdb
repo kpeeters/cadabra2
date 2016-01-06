@@ -19,7 +19,20 @@ evaluate(ex, rl)
 
 # Now a Christoffel example, i.e. with derivatives.
 
+{r,t,\phi,\theta}::Coordinate.
+{\mu,\nu,\rho,\sigma}::Indices(values={t,r,\phi,\theta}).
+\partial{#}::PartialDerivative.
+         
+ex:= \Gamma^{\mu}_{\nu\rho};
+rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma}( \partial_{\rho}{g_{\nu\sigma}}
+                                                +\partial_{\nu}{g_{\rho\sigma}}
+                                                -\partial_{\sigma}{g_{\nu\rho}} );
 
+ss:= { g_{t t} = f(r), g_{r r} = 1/f(r), g_{\phi\phi}=r**2, g_{\theta\theta}=r**2 \sin(\phi)**2 };
+substitute(ex, rl);
+evaluate(ex, ss);
+
+                                                                    
 
 {\components}_{mn}{{{t, r} = 3}}*{\components}_{mnp}{{{t, r, t} = 2, {t, r, r} = 5}}
   V

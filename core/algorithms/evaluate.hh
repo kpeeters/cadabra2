@@ -69,10 +69,19 @@ class evaluate : public Algorithm {
 
 		void handle_sum(iterator it);
 		void handle_prod(iterator it);
+		void handle_derivative(iterator it);
 
-		void handle_factor(sibling_iterator sib, const index_map_t& full_ind_free);
+		/// Replace a single factor with a 'components' ...
+		/// The full_ind_free argument can contain a list of indices in the order
+		/// in which values should be stored in index value sets.
+
+		void handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free);
 
 		/// Merge the information in two 'components' nodes, moving all out of
 		/// the second one into the first one.
 		void merge_components(iterator it1, iterator it2);
+
+		/// Determine all the Coordinate dependencies of the object at 'it'. For the
+		/// time being this can only be a 'components' node.
+		std::set<Ex, tree_exact_less_obj> dependencies(iterator it);
 }; 

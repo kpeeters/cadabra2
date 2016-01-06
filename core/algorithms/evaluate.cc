@@ -3,6 +3,8 @@
 #include "Cleanup.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/substitute.hh"
+#include "properties/PartialDerivative.hh"
+#include "properties/Coordinate.hh"
 #include <functional>
 
 evaluate::evaluate(Kernel& k, Ex& tr, const Ex& c)
@@ -35,20 +37,14 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// In the example, we see A_{m n} in the expression, and we see
 	// that the rules for A_{t t} and A_{r r} match this tensor.
 	
-	
-	Ex::post_order_iterator walk=it, last=it;
-	++last;
-	walk.descend_all();
-
-	do {
-		auto nxt=walk;
-		++nxt;
-
-		if(*(walk->name)=="\\sum")       handle_sum(walk);
-		else if(*(walk->name)=="\\prod") handle_prod(walk);
-
-		walk=nxt;
-		} while(walk!=last);
+	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
+			if(*(walk->name)=="\\sum")       handle_sum(walk);
+			else if(*(walk->name)=="\\prod") handle_prod(walk);
+			
+			const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
+			if(pd) handle_derivative(walk);
+			}
+		);
 
 	return res;
 	}
@@ -100,7 +96,7 @@ void evaluate::handle_sum(iterator it)
 	tr.flatten_and_erase(it);
 	}
 
-void evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
+void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free)
 	{
 	if(*sib->name=="\\components") return;
 	
@@ -151,7 +147,7 @@ void evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_f
 			});
 
 
-	tr.move_ontop(iterator(sib), repl.begin());
+	sib = tr.move_ontop(iterator(sib), repl.begin());
 	}
 
 void evaluate::merge_components(iterator it1, iterator it2)
@@ -187,6 +183,82 @@ void evaluate::merge_components(iterator it1, iterator it2)
 				tr.append_child(iterator(sib1), it2);
 				}
 			});
+	}
+
+void evaluate::handle_derivative(iterator it)
+	{
+	// In order to figure out which components to keep, we need to do two things:
+	// expand into components the argument of the derivative, and then
+	// figure out the dependence of that argument on the various coordinates.
+	// There may be other orders (for e.g. situations where we want to keep entire
+	// components unevaluated), but that's for later when we have practical use cases.
+	
+	sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(sib->is_index()==false) {
+			index_map_t empty;
+			handle_factor(sib, empty);
+			break;
+			}
+		++sib;
+		}
+	assert(sib!=tr.end(it));
+	
+	tr.print_recursive_treeform(std::cerr, tr.begin());
+	
+
+	// Walk all the index value sets of the \components node inside the
+	// argument.  For each, determine the dependencies, and generate
+	// one element for each dependence.
+
+	sibling_iterator ivalues = tr.end(sib);
+	--ivalues;
+
+	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
+			sibling_iterator rhs = tr.begin(iv);
+			++rhs;
+			auto deps=dependencies(rhs);
+
+			// FIXME: all indices on \partial can take any of the values of the 
+			// dependencies. Need all permutations. 
+			assert(number_of_direct_indices(it)==1);
+
+			std::cerr << *iv->name << " depends on \n";
+			for(auto& obj: deps) {
+				obj.print_recursive_treeform(std::cerr, obj.begin());
+				Ex eqcopy(iv);
+				auto lhs=eqcopy.begin(eqcopy.begin());
+				assert(*lhs->name=="\\comma");
+				eqcopy.append_child(iterator(lhs), obj.begin());
+				++lhs;
+				eqcopy.wrap(lhs, str_node("\\partial"));
+				tr.move_before(ivalues, eqcopy.begin());
+				}
+			tr.erase(iv);
+			});
+
+	tr.print_recursive_treeform(std::cerr, tr.begin());
+	
+	}
+
+std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
+	{
+	tree_exact_less_obj comp(&kernel.properties);
+	std::set<Ex, tree_exact_less_obj> ret(comp);
+
+	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) {
+			// FIXME: this does not yet take into account implicit dependence through
+			// the Depends property.
+			const Coordinate *cd = kernel.properties.get<Coordinate>(nd);
+			if(cd) {
+				Ex cpy(nd);
+				cpy.begin()->fl.bracket=str_node::b_none;
+				cpy.begin()->fl.parent_rel=str_node::p_none;
+				ret.insert(cpy);
+				}
+			});
+
+	return ret;
 	}
 
 void evaluate::handle_prod(iterator it)

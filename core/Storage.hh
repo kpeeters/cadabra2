@@ -222,21 +222,6 @@ class Ex : public tree<str_node> {
 
 /// \ingroup core
 ///
-/// Storage for components of expressions. This is a sparse tensor value object,
-/// with the special property that both index and component values are symbolic.
-
-class Components {
-	public:
-		Ex                          ex;
-		std::vector<Ex>             index_names;
-		typedef std::vector<Ex>     index_values_t;
-		std::vector<index_values_t> index_values;
-		std::vector<Ex>             ex_values;
-};
-
-
-/// \ingroup core
-///
 /// Compare two nset iterators by comparing the strings to which they point.
 
 class nset_it_less {
