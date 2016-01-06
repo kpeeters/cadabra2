@@ -586,6 +586,8 @@ void Ex::list_unwrap_single_element(iterator& it)
 
 Ex::iterator Ex::flatten_and_erase(iterator pos)
 	{
+	assert(number_of_children(pos)==1);
+
 	multiplier_t tmp=*pos->multiplier;
 	flatten(pos);
 	pos=erase(pos);

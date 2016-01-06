@@ -124,13 +124,13 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 				auto fi = full_ind_free.begin();
 				if(fi==full_ind_free.end()) {
 					for(auto& r: subs.comparator.index_value_map) 
-						repl.append_child(il, r.second.begin()); 
+						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
 					}
 				else {
 					while(fi!=full_ind_free.end()) {
 						for(auto& r: subs.comparator.index_value_map) {
 							if(fi->first == r.first) {
-								repl.append_child(il, r.second.begin()); 
+								repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
 								break;
 								}
 							}
@@ -160,11 +160,16 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	cadabra::do_list(tr, sib2, [&](Ex::iterator it2) {
 			assert(*it2->name=="\\equals");
 
-			// We can now directly compare the lhs of this equals node with the lhs
-			// of the equals node of the other components node.
+			// We cannot directly compare the lhs of this equals node with the lhs
+			// of the equals node of the other components node, because the index
+			// order on the two components nodes may be different.
 
 			auto lhs2 = tr.begin(it2);
 			auto found = cadabra::find_in_list(tr, sib1, [&](Ex::iterator it1) {
+
+					// First determine the permutation needed to put the indices on
+					// it2 in the order of it1.
+
 					auto lhs1 = tr.begin(it1);
 					if(tr.equal_subtree(lhs1, lhs2)) {
 						auto sum1=lhs1;
@@ -204,9 +209,6 @@ void evaluate::handle_derivative(iterator it)
 		}
 	assert(sib!=tr.end(it));
 	
-	tr.print_recursive_treeform(std::cerr, tr.begin());
-	
-
 	// Walk all the index value sets of the \components node inside the
 	// argument.  For each, determine the dependencies, and generate
 	// one element for each dependence.
@@ -223,22 +225,36 @@ void evaluate::handle_derivative(iterator it)
 			// dependencies. Need all permutations. 
 			assert(number_of_direct_indices(it)==1);
 
-			std::cerr << *iv->name << " depends on \n";
 			for(auto& obj: deps) {
-				obj.print_recursive_treeform(std::cerr, obj.begin());
 				Ex eqcopy(iv);
 				auto lhs=eqcopy.begin(eqcopy.begin());
 				assert(*lhs->name=="\\comma");
 				eqcopy.append_child(iterator(lhs), obj.begin());
 				++lhs;
-				eqcopy.wrap(lhs, str_node("\\partial"));
-				tr.move_before(ivalues, eqcopy.begin());
+				lhs=eqcopy.wrap(lhs, str_node("\\partial"));
+				auto pch=tr.begin(it);
+				auto arg=tr.begin(lhs);
+				// FIXME: as above: need all permutations.
+				while(pch!=tr.end(it)) {
+					if(pch->is_index()) 
+						eqcopy.insert_subtree(arg, obj.begin())->fl.parent_rel=str_node::p_sub;
+					++pch;
+					}
+				tr.move_before(tr.begin(ivalues), eqcopy.begin());
 				}
 			tr.erase(iv);
 			});
 
+	// Now move the partial indices to the components node, and then unwrap the
+	// partial node.
+	auto pch=tr.begin(it);
+	while(pch!=tr.end(it)) {
+		tr.move_before(ivalues, pch);
+		++pch;
+		}
+	it=tr.flatten_and_erase(it);
+
 	tr.print_recursive_treeform(std::cerr, tr.begin());
-	
 	}
 
 std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
