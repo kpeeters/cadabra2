@@ -16,6 +16,12 @@ namespace cadabra {
 	
 	/// \ingroup core
 	///
+   /// Apply a function on every node in the tree below the given node, depth-first.
+	
+	void do_subtree(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f);
+
+	/// \ingroup core
+	///
 	/// Returns an iterator to the first element for which 'f' does not return tr.end().
 
 	Ex::iterator find_in_list(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f);
