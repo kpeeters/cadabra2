@@ -81,6 +81,9 @@ class evaluate : public Algorithm {
 		/// the second one into the first one.
 		void merge_components(iterator it1, iterator it2);
 
+		/// Cleanup all components in a 'components' node.
+		void cleanup_components(iterator it1);
+
 		/// Determine all the Coordinate dependencies of the object at 'it'. For the
 		/// time being this can only be a 'components' node.
 		std::set<Ex, tree_exact_less_obj> dependencies(iterator it);

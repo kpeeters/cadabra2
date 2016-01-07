@@ -54,6 +54,7 @@ class DisplaySympy {
 		void print_powlike(std::ostream&, Ex::iterator);
 		void print_intlike(std::ostream&, Ex::iterator);
 		void print_equalitylike(std::ostream&, Ex::iterator);
+		void print_components(std::ostream&, Ex::iterator);
 
 		bool children_have_brackets(Ex::iterator ch) const;
 

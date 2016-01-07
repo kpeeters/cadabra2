@@ -1,6 +1,7 @@
 
 #include "Functional.hh"
 #include "Cleanup.hh"
+#include "Permutations.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/substitute.hh"
 #include "properties/PartialDerivative.hh"
@@ -93,6 +94,7 @@ void evaluate::handle_sum(iterator it)
 		merge_components(sib1, sib2);
 		sib2=tr.erase(sib2);
 		}
+	cleanup_components(sib1);
 	tr.flatten_and_erase(it);
 	}
 
@@ -157,18 +159,30 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	sibling_iterator sib2=tr.end(it2);
 	--sib2;
 
+	// We cannot directly compare the lhs of this equals node with the lhs
+	// of the equals node of the other components node, because the index
+	// order on the two components nodes may be different. Find the 
+
+	Perm perm;
+	perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
+
+	//perm.apply(tr.begin(it2), sib2);
+	//std::cerr << "after permutation" << std::endl;
+	//tr.print_recursive_treeform(std::cerr, tr.begin());
+
+	cadabra::do_list(tr, sib2, [&](Ex::iterator it2) {
+			auto lhs2 = tr.begin(it2);
+			perm.apply(tr.begin(lhs2), tr.end(lhs2));
+			});
+
+
+	// Now all index orders match and we can simply compare index value sets.
+
 	cadabra::do_list(tr, sib2, [&](Ex::iterator it2) {
 			assert(*it2->name=="\\equals");
 
-			// We cannot directly compare the lhs of this equals node with the lhs
-			// of the equals node of the other components node, because the index
-			// order on the two components nodes may be different.
-
 			auto lhs2 = tr.begin(it2);
 			auto found = cadabra::find_in_list(tr, sib1, [&](Ex::iterator it1) {
-
-					// First determine the permutation needed to put the indices on
-					// it2 in the order of it1.
 
 					auto lhs1 = tr.begin(it1);
 					if(tr.equal_subtree(lhs1, lhs2)) {
@@ -187,6 +201,19 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			if(found==tr.end()) {
 				tr.append_child(iterator(sib1), it2);
 				}
+			});
+	}
+
+void evaluate::cleanup_components(iterator it) 
+	{
+	sibling_iterator sib=tr.end(it);
+	--sib;
+
+	cadabra::do_list(tr, sib, [&](Ex::iterator nd) {
+			auto iv=tr.begin(nd);
+			++iv;
+			iterator p=iv;
+			cleanup_dispatch(kernel, tr, p);
 			});
 	}
 
@@ -231,7 +258,11 @@ void evaluate::handle_derivative(iterator it)
 				assert(*lhs->name=="\\comma");
 				eqcopy.append_child(iterator(lhs), obj.begin());
 				++lhs;
+				multiplier_t mult=*lhs->multiplier;
+				one(lhs->multiplier);
 				lhs=eqcopy.wrap(lhs, str_node("\\partial"));
+				multiply(lhs->multiplier, mult);
+				multiply(lhs->multiplier, *it->multiplier);
 				auto pch=tr.begin(it);
 				auto arg=tr.begin(lhs);
 				// FIXME: as above: need all permutations.
@@ -253,8 +284,6 @@ void evaluate::handle_derivative(iterator it)
 		++pch;
 		}
 	it=tr.flatten_and_erase(it);
-
-	tr.print_recursive_treeform(std::cerr, tr.begin());
 	}
 
 std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
@@ -398,7 +427,6 @@ void evaluate::handle_prod(iterator it)
 			// Tensor 2 can now be removed from the product as well, as all information is now
 			// part of tensor 1.
 			tr.erase(cit2);
-			tr.print_recursive_treeform(std::cerr, tr.begin());
 			}
 
 		else {
@@ -417,19 +445,16 @@ void evaluate::handle_prod(iterator it)
 					ivalue1 += num1;
 					ivalue2 += num2;
 					if(tr.equal_subtree(ivalue1,ivalue2)) {
-						std::cerr << "keeping " << std::endl;
 						tr.erase(ivalue1);
 						tr.erase(ivalue2);
 						}
 					else {
-						std::cerr << "discarding " << std::endl;
 						tr.erase(it1);
 						}
 					}
 				);
 			tr.erase(di->second);
 			tr.erase(di2->second);
-			tr.print_recursive_treeform(std::cerr, tr.begin());
 			}			
 
 		++di; ++di;
