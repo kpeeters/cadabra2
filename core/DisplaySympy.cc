@@ -219,6 +219,7 @@ void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\int")    print_intlike(str, it);
 	else if(*it->name=="\\sum")    print_intlike(str, it);
 	else if(*it->name=="\\equals") print_equalitylike(str, it);
+	else if(*it->name=="\\components") print_components(str, it);
 	else
 		output(str, it);
 	}
@@ -409,6 +410,26 @@ void DisplaySympy::print_equalitylike(std::ostream& str, Ex::iterator it)
 	str << " = ";
 	++sib;
 	dispatch(str, sib);
+	}
+
+void DisplaySympy::print_components(std::ostream& str, Ex::iterator it)
+	{
+	str << *it->name;
+	auto sib=tree.begin(it);
+	auto end=tree.end(it);
+	--end;
+	while(sib!=end) {
+		dispatch(str, sib);
+		++sib;
+		}
+	str << "\n";
+	sib=tree.begin(end);
+	while(sib!=tree.end(end)) {
+		str << "    ";
+		dispatch(str, sib);
+		str << "\n";
+		++sib;
+		}
 	}
 
 bool DisplaySympy::children_have_brackets(Ex::iterator ch) const
