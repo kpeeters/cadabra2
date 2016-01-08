@@ -526,12 +526,16 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		const Indices *t2=properties.get<Indices>(two, true);
 		if(t2) {
 			// std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
-			// Look through values attribute of Indices object to see if the 'two' index
-			// can take the 'one' value.
+			// If the 'two' index type is fixed or independent, ensure
+			// that the parent relation matches!
+
+			if(t2->position_type==Indices::fixed || t2->position_type==Indices::independent) 
+				if(one->fl.parent_rel != two->fl.parent_rel)
+					return no_match_less;
 			
-			//for(auto& ex: t2->values) {
-				//std::cerr << *(ex.begin()->name) << std::endl;
-			//	}
+			// Look through values attribute of Indices object to see if the 'two' index
+			// can take the 'one' value. 
+
 			auto ivals = std::find_if(t2->values.begin(), t2->values.end(), 
 											  [&](const Ex& a) {
 												  if(subtree_compare(&properties, a.begin(), one, 0)==0) return true;
@@ -539,11 +543,9 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 											  });
 			if(ivals!=t2->values.end()) {
 				index_value_map[two]=one;
-				//std::cerr << " can take this value" << std::endl;
 				return node_match;
 				} 
 			else {
-				//std::cerr << " cannot take this value" << std::endl;
 				return no_match_less;
 				}
 			}

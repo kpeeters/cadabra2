@@ -17,6 +17,7 @@
 #include "Exceptions.hh"
 #include "DisplayTeX.hh"
 #include "DisplaySympy.hh"
+#include "DisplayTerminal.hh"
 #include "Cleanup.hh"
 #include "PreClean.hh"
 #include "PythonException.hh"
@@ -136,7 +137,7 @@ std::string Ex_str_(const Ex& ex)
 // //		str << "(unchanged)" << std::endl;
 // 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
-	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
+	DisplayTerminal dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
 
 	return str.str();
@@ -813,7 +814,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__repr__", &Ex_repr_)
 		.def("__eq__",   &__eq__Ex_Ex)
 		.def("__eq__",   &__eq__Ex_int)
-		.def("toSympy",  &Ex_to_Sympy)
+		.def("__sympy__",  &Ex_to_Sympy)
 		.def("state",    &Ex::state);
 	
 	enum_<Algorithm::result_t>("result_t")

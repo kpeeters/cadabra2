@@ -10,14 +10,18 @@ typedef uint32_t kunichar;
 
 /// \ingroup display
 ///
-/// Class to display expressions in a format that Sympy can parse. Will throw an exception
-/// if a Cadabra Ex object cannot be understood by Sympy. This class contains the printing
-/// logic that you see in action when you call the '__sympy__' method on an Ex object.
+/// Class to display expressions to the terminal. This is used in the
+/// PythonCdb bridge to provide 'str' type python printing for Ex
+/// objects. The cadabra2 command line application uses this class for
+/// all its output. This class does not necessarily produce output which
+/// is readable by sympy; for that, use the DisplaySympy class (as an 
+/// example, partial derivatives will display using a LaTeX notation using
+/// the present class, but be printed as 'sympy.diff' by the DisplaySympy
+/// class).
 
-
-class DisplaySympy {
+class DisplayTerminal {
 	public:
-		DisplaySympy(const Properties&, const Ex&);
+		DisplayTerminal(const Properties&, const Ex&);
 
 		void output(std::ostream&);
 		void output(std::ostream&, Ex::iterator);
@@ -58,8 +62,6 @@ class DisplaySympy {
 		void print_intlike(std::ostream&, Ex::iterator);
 		void print_equalitylike(std::ostream&, Ex::iterator);
 		void print_components(std::ostream&, Ex::iterator);
-		void print_partial(std::ostream& str, Ex::iterator it);
-		void print_other(std::ostream& str, Ex::iterator it);
 
 		bool children_have_brackets(Ex::iterator ch) const;
 
