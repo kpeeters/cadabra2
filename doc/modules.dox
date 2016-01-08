@@ -1,6 +1,14 @@
 /// \defgroup core Core
 /// All computer algebra functionality in the form of C++ classes.
 ///
+/// \defgroup display Expression display/printing
+/// \ingroup core
+/// Classes to handle printing of expressions in various formats. There
+/// are several different requirements for printing, depending on whether
+/// output is to the console, the graphical notebook, or to a different
+/// computer algebra system. 
+///
+///
 /// \defgroup compare Expression comparison
 /// \ingroup core
 /// Functions to compare and match expressions stored in exptree objects. 

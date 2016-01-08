@@ -52,6 +52,7 @@ set(LOCAL_SRC_FILES
   Compare.cc
   DisplayTeX.cc
   DisplaySympy.cc
+  DisplayTerminal.cc
   Exceptions.cc
   Exchange.cc
   Functional.cc
@@ -65,6 +66,7 @@ set(LOCAL_SRC_FILES
   PythonException.cc
   Stopwatch.cc
   Storage.cc
+  SympyCdb.cc
   YoungTab.cc
   properties/Accent.cc
   properties/AntiCommuting.cc

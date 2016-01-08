@@ -1,4 +1,10 @@
 
+- ex:=Derivative(f(r), r);
+
+  does not print correctly: it leads to 
+
+  Derivative((f(r), r))
+
 - substitute needs a flag to determine whether or not components can be matched to abstract indices.
 
 - check_index_consistency is not called when an Ex is created.

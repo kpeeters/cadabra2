@@ -2,6 +2,7 @@
 #include "Functional.hh"
 #include "Cleanup.hh"
 #include "Permutations.hh"
+#include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/substitute.hh"
 #include "properties/PartialDerivative.hh"
@@ -202,6 +203,16 @@ void evaluate::merge_components(iterator it1, iterator it2)
 				tr.append_child(iterator(sib1), it2);
 				}
 			});
+
+	// Simplify the component by calling sympy.
+
+	cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
+			assert(*it1->name=="\\equals");
+			auto rhs1 = tr.begin(it1);
+			++rhs1;
+			iterator nd=rhs1;
+			apply_sympy(kernel, tr, nd, "", "");
+			});
 	}
 
 void evaluate::cleanup_components(iterator it) 
@@ -308,8 +319,6 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 
 void evaluate::handle_prod(iterator it)
 	{
-	std::cerr << "evaluate::prod" << std::endl;
-	
 	// All factors are either \component nodes or nodes which still need replacing.
 
 	sibling_iterator sib=tr.begin(it);
@@ -325,7 +334,7 @@ void evaluate::handle_prod(iterator it)
 	
 	// Now everything is a \component node; the thing is effectively a
 	// large sparse tensor product. We need to do the sums over the dummy
-	// indices.
+	// indices, turning this into a single \component node.
 	
 	index_map_t ind_free, ind_dummy;
 	classify_indices(it, ind_free, ind_dummy);
@@ -335,12 +344,12 @@ void evaluate::handle_prod(iterator it)
 	// there is no need to account for anything more tricky. Every pair leads
 	// to a sum.
 	while(di!=ind_dummy.end()) {
-		std::cerr << *(di->first.begin()->name) << std::endl;
 		auto di2=di;
 		++di2;
 		int num1 = tr.index(di->second);
 		int num2 = tr.index(di2->second);
-		std::cerr << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
+		// std::cerr << *(di->first.begin()->name) 
+		//           << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
 
 		// three cases:
 		//    two factors, single index in common. Merge is simple.
@@ -352,8 +361,6 @@ void evaluate::handle_prod(iterator it)
 
 		// Are the components objects cit1, cit2 on which these indices sit the same one?
 		if(cit1 != cit2) {
-			std::cerr << "different tensors" << std::endl;
-
 			// Walk through all components of the first tensor, and for each check whether
 			// any of the components of the second tensor matches the value for this dummy
 			// index.
@@ -384,8 +391,8 @@ void evaluate::handle_prod(iterator it)
 
 							// Compare the two index values in the two tensors, only continue if
 							// these are the same.
-							std::cerr << "comparing value " << *ivalue1->name << " with " << *ivalue2->name << std::endl;
-							std::cerr << "                " << &(*ivalue1) << " vs " << &(*ivalue2) << std::endl;
+							// std::cerr << "comparing value " << *ivalue1->name << " with " << *ivalue2->name << std::endl;
+							// std::cerr << "                " << &(*ivalue1) << " vs " << &(*ivalue2) << std::endl;
 							if(tr.equal_subtree(ivalue1,ivalue2)) {
 								// Create new merged index value set.
 								Ex ivs("\\equals");
@@ -459,4 +466,23 @@ void evaluate::handle_prod(iterator it)
 
 		++di; ++di;
 		}
+
+	cleanup_dispatch(kernel, tr, it);
+	// FIXME: should push multipler of component into components.
+
+	// Simplify the components of the now single \component node by calling sympy.
+
+	std::cerr << "top of product now " << *it->name << std::endl;
+
+	assert(*it->name=="\\components");
+	sibling_iterator lst = tr.end(it);
+	--lst;
+	
+	cadabra::do_list(tr, lst, [&](Ex::iterator eqs) {
+			assert(*eqs->name=="\\equals");
+			auto rhs1 = tr.begin(eqs);
+			++rhs1;
+			iterator nd=rhs1;
+			apply_sympy(kernel, tr, nd, "", "");
+			});
 	}

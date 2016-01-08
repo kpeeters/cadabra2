@@ -5,15 +5,15 @@
 #include "Storage.hh"
 #include <ostream>
 
-/// \ingroup core
+typedef uint32_t kunichar;
+
+/// \ingroup display
 ///
 /// Class to handle display of expressions using LaTeX notation. This
 /// is a very non-local bit of logic, in the sense that it will try to
 /// look around the property assignments in order to figure out the
 /// best way to print any given object. See the DisplayTeX::dispatch
 /// method to see how this works in more detail.
-
-typedef uint32_t kunichar;
 
 class DisplayTeX {
 	public:
