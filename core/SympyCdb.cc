@@ -27,6 +27,8 @@ Ex::iterator apply_sympy(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::st
 
 	// We then execute the expression in Python.
 
+	ex.print_recursive_treeform(std::cerr, it);
+
 	std::cerr << "feeding " << str.str() << std::endl;
 
 	auto module = boost::python::import("sympy.parsing.sympy_parser");

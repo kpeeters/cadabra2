@@ -36,6 +36,9 @@ void DisplaySympy::output(std::ostream& str, Ex::iterator it)
 
 void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 	{
+	if(needs_brackets(it))
+		str << "(";
+
 	// print multiplier and object name
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
@@ -43,6 +46,9 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 	if(*it->name=="1") {
 		if(*it->multiplier==1 || (*it->multiplier==-1)) // this would print nothing altogether.
 			str << "1";
+
+		if(needs_brackets(it))
+			str << ")";
 		return;
 		}
 	
@@ -66,10 +72,17 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 	if(needs_extra_brackets) str << "}";
 
 	print_children(str, it);
+
+	if(needs_brackets(it))
+		str << ")";
 	}
 
 void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
+	// Sympy has no notion of children with different parent relations; it's all 
+	// functions of functions kind of stuff. The code below does not do that right;
+	// it fails to convert _ and ^ characters and so on.
+
 	str_node::bracket_t    previous_bracket_   =str_node::b_invalid;
 	str_node::parent_rel_t previous_parent_rel_=str_node::p_none;
 
@@ -99,8 +112,7 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 			if(is_accent==0) 
 				print_opening_bracket(str, (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ &&
 													 current_parent_rel_!=str_node::p_sub && 
-													 current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
-											 current_parent_rel_);
+													 current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_));
 			else str << "{";
 			}
 		
@@ -112,8 +124,7 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 			if(is_accent==0) 
 				print_closing_bracket(str,  (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ && 
 													  current_parent_rel_!=str_node::p_sub && 
-													  current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
-											 current_parent_rel_);
+													  current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_));
 			else str  << "}";
 			}
 		
@@ -125,57 +136,32 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 
 void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 	{
-	bool turned_one=false;
+	bool suppress_star=false;
 	mpz_class denom=it->multiplier->get_den();
 
-	if(*it->multiplier<0) {
-		if(*tree.parent(it)->name=="\\sum") { // sum takes care of minus sign
-			if(*it->multiplier!=-1) {
-				if(denom!=1) {
-					str << "\\frac{" << -(it->multiplier->get_num()) << "}{" 
-						 << it->multiplier->get_den() << "}";
-					}
-				else {
-					str << -(*it->multiplier);
-					}
-				}
-			else                    turned_one=true;
-			}
-		else	{
-			if(denom!=1) {
-				str << "(\\frac{" << it->multiplier->get_num() << "}{" 
-					 << it->multiplier->get_den() << "})";
-				}
-			else if(*it->multiplier==-1) {
-				str << "-";
-				turned_one=true;
-				}
-			else {
-				str << "(" << *it->multiplier << ")";
-				}
-			}
+	if(denom!=1) {
+		if(false && it->multiplier->get_num()<0)
+			str << "(" << it->multiplier->get_num() << ")";
+		else 
+			str << it->multiplier->get_num();
+		str << "/" << it->multiplier->get_den();
+		}
+	else if(*it->multiplier==-1) {
+		str << "-";
+		suppress_star=true;
 		}
 	else {
-		if(denom!=1) {
-			str << "\\frac{" << it->multiplier->get_num() << "}{" 
-				 << it->multiplier->get_den() << "}";
-			}
-		else
-			str << *it->multiplier;
+		str << *it->multiplier;
 		}
-
-	if(!turned_one && !(*it->name=="1"))
+	
+	if(!suppress_star && !(*it->name=="1"))
 		str << "*";
 	}
 
-void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
+void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none: 
-			str << "{";
-//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << "(";  
-//			else                                                                           str << "{";
-			break;
+		case str_node::b_none:   str << "{";   break;
 		case str_node::b_pointy: str << "\\<"; break;
 		case str_node::b_curly:  str << "\\{"; break;
 		case str_node::b_round:  str << "(";   break;
@@ -185,14 +171,10 @@ void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t 
 	++(bracket_level);
 	}
 
-void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
+void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   
-			str << "}";
-//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << ")";  
-//			else                                                                           str << "}";
-			break;
+		case str_node::b_none:   str << "}";   break;
 		case str_node::b_pointy: str << "\\>"; break;
 		case str_node::b_curly:  str << "\\}"; break;
 		case str_node::b_round:  str << ")";   break;
@@ -205,10 +187,8 @@ void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t 
 void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
 	{
 	switch(pr) {
-		case str_node::p_super:    
-			str << "^"; break;
-		case str_node::p_sub:
-			str << "_"; break;
+		case str_node::p_super:    str << "^"; break;
+		case str_node::p_sub:      str << "_"; break;
 		case str_node::p_property: str << "$"; break;
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
@@ -235,7 +215,6 @@ void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
-	print_opening_bracket(str, (*it).fl.bracket, str_node::p_none);	
 	while(sib!=tree.end(it)) {
 		if(first)
 			first=false;
@@ -244,16 +223,18 @@ void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 		dispatch(str, sib);
 		++sib;
 		}
-	print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	//print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
 	}
 
 void DisplaySympy::print_arrowlike(std::ostream& str, Ex::iterator it) 
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
+	str << "rule(";
 	dispatch(str, sib);
-	str << " \\rightarrow ";
+	str << ", ";
 	++sib;
 	dispatch(str, sib);
+	str << ")";
 	}
 
 void DisplaySympy::print_fraclike(std::ostream& str, Ex::iterator it)
@@ -264,20 +245,12 @@ void DisplaySympy::print_fraclike(std::ostream& str, Ex::iterator it)
 	bool close_bracket=false;
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-		str << "(";
-		close_bracket=true;
 		}
-	str << "(";
-
 	dispatch(str, num);
 
-	str << ")/(";
+	str << "/";
 	
 	dispatch(str, den);
-
-	str << ")";
-	if(close_bracket)
-		str << ")";
 	}
 
 void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
@@ -299,7 +272,7 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
 		if(previous_bracket_!=current_bracket_) {
 			if(current_bracket_!=str_node::b_none) {
-				print_opening_bracket(str, current_bracket_, str_node::p_none);
+				print_opening_bracket(str, current_bracket_);
 				beginning_of_group=true;
 				}
 			}
@@ -307,7 +280,7 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 		++ch;
 		if(ch==tree.end(it)) {
 			if(current_bracket_!=str_node::b_none) 
-				print_closing_bracket(str, current_bracket_, str_node::p_none);
+				print_closing_bracket(str, current_bracket_);
 			}
 
 		if(ch!=tree.end(it)) {
@@ -319,69 +292,48 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 //	if(close_bracket) str << ")";
 	}
 
+bool DisplaySympy::needs_brackets(Ex::iterator it) 
+	{
+	// FIXME: this can go to a base class.
+	// FIXME: may need looking at properties
+
+	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
+		if(*it->name=="\\sum") return true;
+		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
+		}
+	else if(it->fl.parent_rel==str_node::p_none) {
+		if(*it->name=="\\sum") return false;
+		}
+	else {
+		if(*it->name=="\\sum")  return true;
+		if(*it->name=="\\prod") return true;
+		}
+	return false;
+	}
+
 void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it) 
 	{
-	bool close_bracket=false;
-	if(*it->multiplier!=1) 
-		print_multiplier(str, it);
+	assert(*it->multiplier==1);
 
-	Ex::iterator par=tree.parent(it);
-	if(tree.number_of_children(par) - Algorithm::number_of_direct_indices(par)>1) { 
-      // for a single argument, the parent already takes care of the brackets
-		if(*it->multiplier!=1 || (tree.is_valid(par) && *par->name!="\\expression")) {
-			// test whether we need extra brackets
-			close_bracket=!children_have_brackets(it);
-			if(close_bracket)
-				str << "(";
-			}
-		}
+	if(needs_brackets(it)) 
+		str << "(";
 
 	unsigned int steps=0;
 
-	str_node::bracket_t previous_bracket_=str_node::b_invalid;
 	Ex::sibling_iterator ch=tree.begin(it);
-	bool beginning_of_group=true;
 	while(ch!=tree.end(it)) {
 		if(++steps==20) {
 			steps=0;
 			}
-		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
-		if(previous_bracket_!=current_bracket_)
-			if(current_bracket_!=str_node::b_none) {
-				if(ch!=tree.begin(it)) {
-					str << "+";
-					}
-				print_opening_bracket(str, current_bracket_, str_node::p_none);
-				beginning_of_group=true;
-				}
-		if(beginning_of_group) {
-			beginning_of_group=false;
-			if(*ch->multiplier<0) {
-				str << "-";
-				}
-			}
-		else {
-			if(*ch->multiplier<0) {
-				str << "-";
-				}
-			else {
-				str << "+";
-				}
-			}
-		if(*ch->name=="1" && (*ch->multiplier==1 || *ch->multiplier==-1)) 
-			str << "1"; // special case numerical constant
-		else 
-			dispatch(str, ch);
-		++ch;
-		if(ch==tree.end(it)) {
-			if(current_bracket_!=str_node::b_none)
-				print_closing_bracket(str, current_bracket_, str_node::p_none);
-			}
+		if(*ch->multiplier>0 && ch!=tree.begin(it))
+			str << "+"; 
 
-		previous_bracket_=current_bracket_;
+		dispatch(str, ch);
+		++ch;
 		}
 
-	if(close_bracket) str << ")";
+	if(needs_brackets(it)) 
+		str << ")";
 	str << std::flush;
 	}
 
@@ -391,10 +343,9 @@ void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	dispatch(str, sib);
-	str << "**(";
+	str << "**";
 	++sib;
 	dispatch(str, sib);
-	str << ")";
 	}
 
 void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
@@ -441,6 +392,9 @@ void DisplaySympy::print_components(std::ostream& str, Ex::iterator it)
 
 void DisplaySympy::print_partial(std::ostream& str, Ex::iterator it)
 	{
+	if(*it->multiplier!=1)
+		print_multiplier(str, it);
+
 	str << "diff(";
 	Ex::sibling_iterator sib=tree.begin(it);
 	while(sib!=tree.end(it)) {

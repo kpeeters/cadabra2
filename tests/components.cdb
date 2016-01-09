@@ -34,10 +34,17 @@ rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
 
 #rl:=  \Gamma_{\sigma\nu\rho} =  \partial_{\rho}{g_{\nu\sigma}};
                               
-ss:= { g_{t t} = -f(r), g_{r r} = 1/f(r), g_{\theta\theta} = r**2, g_{\phi\phi}=r**2 \sin(\theta)**2,
-       g^{t t} = 1/f(r), g^{r r} = f(r), g^{\theta\theta}  = r**(-2), g^{\phi\phi}=r**(-2) \sin(\theta)**(-2) };
+ss:= { g_{t t} = -(1-2 M/r), g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2, g_{\phi\phi}=r**2 \sin(\theta)**2,
+       g^{t t} = -1/(1-2 M/r), g^{r r} = 1-2 M/r, g^{\theta\theta}  = r**(-2), g^{\phi\phi}=r**(-2) \sin(\theta)**(-2) };
+#ss:= { g_{t t} = -f(r), g_{r r} = 1/f(r), g_{\theta\theta} = r**2, g_{\phi\phi}=r**2 \sin(\theta)**2,
+#       g^{t t} = 1/f(r), g^{r r} = f(r), g^{\theta\theta}  = r**(-2), g^{\phi\phi}=r**(-2) \sin(\theta)**(-2) };
 substitute(ex, rl);
 evaluate(ex, ss);
+
+
+ex:=1-2 M/r;
+ex.__sympy__();
+
 
 # The above does not yet figure out that the expression is symmetric in nu and rho.
                                            

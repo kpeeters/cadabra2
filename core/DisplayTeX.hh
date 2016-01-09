@@ -15,7 +15,7 @@ typedef uint32_t kunichar;
 /// best way to print any given object. See the DisplayTeX::dispatch
 /// method to see how this works in more detail.
 
-class DisplayTeX {
+class DisplayTeX  {
 	public:
 		DisplayTeX(const Properties&, const Ex&);
 
