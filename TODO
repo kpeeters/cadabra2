@@ -37,8 +37,11 @@
 - Replace \prod -> \mult and \sum -> \add ?  Makes sense from LaTeX perspective.
   Also \comma -> \list ?
 
-- Need to document the allowed structure of reserved nodes, i.e. that
-  derivatives have at most one non-index node.
+- Need to document the allowed structure of reserved nodes
+  
+    PartialDerivative: at most one non-index node.
+    \sum:  has to have unit multiplier.
+    \prod: all children have to have unit multiplier.
 
 - Might want to introduce a cache for evaluate, so that when we see a pattern, 
   we know what \components node to replace it with.

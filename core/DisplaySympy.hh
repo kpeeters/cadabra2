@@ -23,9 +23,13 @@ class DisplaySympy {
 		void output(std::ostream&, Ex::iterator);
 
 	private:
+		/// Determine if a node needs extra brackets around it. Uses context from the
+		/// parent node if necessary.
+		bool needs_brackets(Ex::iterator it);
+
 		void print_multiplier(std::ostream&, Ex::iterator);
-		void print_opening_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
-		void print_closing_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
+		void print_opening_bracket(std::ostream&, str_node::bracket_t);
+		void print_closing_bracket(std::ostream&, str_node::bracket_t);
 		void print_parent_rel(std::ostream&, str_node::parent_rel_t, bool first);
 		void print_children(std::ostream&, Ex::iterator, int skip=0);
 

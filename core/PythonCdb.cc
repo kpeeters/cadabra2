@@ -6,12 +6,15 @@
 
 // This now works on both Linux and OS X El Capitan, but your mileage may vary. 
 //
-// template<typename T>
-// T *get_pointer(std::shared_ptr<T> p)
-// 		{
-// 		return p.get();
-// 		}
-// #endif
+#ifdef __clang__
+  #ifdef __linux__
+template<typename T>
+T *get_pointer(std::shared_ptr<T> p)
+		{
+		return p.get();
+		}
+  #endif
+#endif
 
 #include "Parser.hh"
 #include "Exceptions.hh"
@@ -175,6 +178,7 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	std::ostringstream str;
 	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
+	std::cerr << str.str() << std::endl;
 
 	boost::python::object ret=parse(str.str());
 
