@@ -38,9 +38,10 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
 			if(*(walk->name)=="\\sum")       handle_sum(walk);
 			else if(*(walk->name)=="\\prod") handle_prod(walk);
-			
-			const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
-			if(pd) handle_derivative(walk);
+			else {
+				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
+				if(pd) handle_derivative(walk);
+				}
 			}
 		);
 
@@ -419,8 +420,8 @@ void evaluate::handle_prod(iterator it)
 								ivs.append_child(ivs_rhs, iterator(rhs1));
 								auto rhs2=lhs2;
 								++rhs2;
-								ivs.append_child(ivs_rhs, iterator(rhs2));								
-								cleanup_dispatch(kernel, ivs, ivs_rhs);
+								ivs.append_child(ivs_rhs, iterator(rhs2));			
+								cleanup_dispatch_deep(kernel, ivs);
 								// Insert this new index value set before sib1, so that it will not get used
 								// inside the outer loop.
 								tr.move_before(it1, ivs.begin());

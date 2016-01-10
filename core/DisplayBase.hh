@@ -1,6 +1,9 @@
 
 #pragma once
 
+#include "Props.hh"
+#include "Storage.hh"
+
 /// \ingroup display
 ///
 /// Base class for all display classes.  A key difficulty with
@@ -12,6 +15,14 @@
 
 class DisplayBase {
 	public:
+		DisplayBase(const Properties&, const Ex&);
 
+	protected:
+		/// Determine if a node needs extra brackets around it. Uses context from the
+		/// parent node if necessary.
+		bool needs_brackets(Ex::iterator it);
+
+		const Ex&    tree;
+		const Properties& properties;
 
 };

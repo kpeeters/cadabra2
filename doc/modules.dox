@@ -1,7 +1,12 @@
 /// \defgroup core Core
 /// All computer algebra functionality in the form of C++ classes.
 ///
-/// \defgroup display Expression display/printing
+/// \defgroup display Cleanup
+/// \ingroup core
+/// Functionality to clean up expressions so that they satisfy the requirements
+/// of a consistent expression tree.
+///
+/// \defgroup display Expression display
 /// \ingroup core
 /// Classes to handle printing of expressions in various formats. There
 /// are several different requirements for printing, depending on whether

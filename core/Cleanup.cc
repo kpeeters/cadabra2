@@ -9,7 +9,6 @@
 
 void cleanup_dispatch(Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
-//	std::cout << "dispatch at " << *it->name << "\n";
 	if(it->is_zero())  {
 		::zero(it->multiplier);
 		tr.erase_children(it);
@@ -89,10 +88,13 @@ void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
 
 	Ex::sibling_iterator sib=tr.end(it);
 	--sib;
+	// Examine all index value sets and push the multiplier
+	// in there.
 	cadabra::do_list(tr, sib, [&](Ex::iterator nd) {
 			Ex::sibling_iterator val=tr.begin(nd);
 			++val;
 			multiply(val->multiplier, mult);
+			cleanup_dispatch(k, tr, nd);
 			return true;
 			});
 
