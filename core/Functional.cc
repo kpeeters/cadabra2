@@ -1,7 +1,7 @@
 
 #include "Functional.hh"
 
-void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f)
+void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f)
 	{
 	if(*it->name=="\\expression")
 		it=tr.begin(it);
@@ -11,7 +11,8 @@ void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<void(Ex::iter
 		while(sib!=tr.end(it)) {
 			Ex::sibling_iterator nxt=sib;
 			++nxt;
-			f(sib);
+			if(f(sib)==false)
+				return;
 			sib=nxt;
 			}
       }

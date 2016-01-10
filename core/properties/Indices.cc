@@ -81,12 +81,12 @@ void Indices::collect_index_values(Ex::iterator ind_values)
 	{
 	Ex tmp;
 	cadabra::do_list(tmp, ind_values, [&](Ex::iterator ind) {
-			std::cerr << "found index value " << *(ind->name) << std::endl;
 			values.push_back(Ex(ind));
 //			auto name=ind_values.begin(ind);
 //			sibling_iterator vals=name;
 //			++vals;
 //			index_values[indprop]=cadabra::make_list(Ex(vals));
+			return true;
 			});
 	}
 

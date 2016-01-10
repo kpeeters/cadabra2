@@ -27,9 +27,8 @@ Ex::iterator apply_sympy(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::st
 
 	// We then execute the expression in Python.
 
-	ex.print_recursive_treeform(std::cerr, it);
-
-	std::cerr << "feeding " << str.str() << std::endl;
+	//ex.print_recursive_treeform(std::cerr, it);
+	//std::cerr << "feeding " << str.str() << std::endl;
 
 	auto module = boost::python::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
@@ -38,7 +37,7 @@ Ex::iterator apply_sympy(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::st
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-	std::cerr << result << std::endl;
+	//std::cerr << result << std::endl;
 	
 
    // After that, we construct a new sub-expression from this string by using our
@@ -52,7 +51,7 @@ Ex::iterator apply_sympy(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::st
 	pre_clean_dispatch_deep(kernel, *parser.tree);
    cleanup_dispatch_deep(kernel, *parser.tree);
 
-	parser.tree->print_recursive_treeform(std::cerr, parser.tree->begin());
+	//parser.tree->print_recursive_treeform(std::cerr, parser.tree->begin());
 
 	Ex::iterator first=parser.tree->begin(parser.tree->begin());
    it = ex.move_ontop(it, first);

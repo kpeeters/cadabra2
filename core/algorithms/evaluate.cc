@@ -25,19 +25,15 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
-	// Descend down the tree. FIXME: docs outdated.
-	// Then determine the component values of all terms. Instead of
-	// looping over all possible index value sets, we look straight at
-	// the substitution rules, and check that these are required for
-	// some index values (this is where symmetry arguments should come
-	// in as well).
+	// Descend down the tree. The general logic of the routines this
+	// calls is that, instead of looping over all possible index value
+	// sets, we look straight at the substitution rules, and check that
+	// these are required for some index values (this is where symmetry
+	// arguments should come in as well).
    //
-	// FIXME: has this now been superceded by the logic in Compare.cc which
-	// takes into account the index_values map there and can match component
-	// A_{t r} in the rule to abstract tensor A_{m n} in the expression?
-	//
-	// In the example, we see A_{m n} in the expression, and we see
-	// that the rules for A_{t t} and A_{r r} match this tensor.
+	// The logic in Compare.cc helps us by matching component A_{t r}
+	// in the rule to an abstract tensor A_{m n} in the expression, storing
+	// the index name -> index value map.
 	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
 			if(*(walk->name)=="\\sum")       handle_sum(walk);
@@ -54,11 +50,12 @@ Algorithm::result_t evaluate::apply(iterator& it)
 
 void evaluate::handle_sum(iterator it)
 	{
-	std::cerr << "evaluate::sum" << std::endl;
-
 	index_map_t full_ind_free, full_ind_dummy;
 
-	// First find the values that all indices will need to take.
+	// First find the values that all indices will need to take. We do not loop over
+	// them, but we need them in order to figure out which patterns in the rule can
+	// match to patterns in the expression.
+
 	classify_indices(it, full_ind_free, full_ind_dummy);
 	for(auto i: full_ind_free) {
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
@@ -72,22 +69,20 @@ void evaluate::handle_sum(iterator it)
 	// Iterate over all terms in the sum. These should be of three types: \component nodes,
 	// nodes with only free indices, and nodes with internal contractions (e.g. A_{m}^{m}). 
 	// The first type can, at this stage, be ignored. The second type needs to be converted
-	// into a \component node using the component evaluation rules. The last type needs 
-	// separate treatment, and is handled by handle_internal_contraction.
+	// into a \component node using the component evaluation rules. The last type 
+	// separate treatment, and is currently not handled yet; see the beginning of handle_factor.
 
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
 		sibling_iterator nxt=sib;
 		++nxt;
-
 		handle_factor(sib, full_ind_free);
-
 		sib=nxt;
 		}
 
+	// Now all terms are \component nodes. We need to merge these
+	// together into a single node.
 
-	// Now all terms are \component nodes. We need to merge these together into a single
-	// node.
 	auto sib1=tr.begin(it);
 	auto sib2=sib1;
 	++sib2;
@@ -104,6 +99,7 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	if(*sib->name=="\\components") return;
 	
 	// Internal contractions.
+	// FIXME: not yet handled.
 	index_map_t ind_free, ind_dummy;
 	classify_indices(sib, ind_free, ind_dummy);
 	if(ind_dummy.size()>0) {
@@ -144,9 +140,10 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 					}
 				subs.apply(oit);
 				repl.append_child(el, obj.begin());
-				// FIXME: this wastes time, as we could now simply exit do_list,
-				// but there is no mechanism for that.
+
+				return true; // Cannot yet abort the do_list loop.
 				}
+			return true;
 			});
 
 
@@ -174,6 +171,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	cadabra::do_list(tr, sib2, [&](Ex::iterator it2) {
 			auto lhs2 = tr.begin(it2);
 			perm.apply(tr.begin(lhs2), tr.end(lhs2));
+			return true;
 			});
 
 
@@ -202,6 +200,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			if(found==tr.end()) {
 				tr.append_child(iterator(sib1), it2);
 				}
+			return true;
 			});
 
 	// Simplify the component by calling sympy.
@@ -212,6 +211,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			++rhs1;
 			iterator nd=rhs1;
 			apply_sympy(kernel, tr, nd, "", "");
+			return true;
 			});
 	}
 
@@ -225,6 +225,7 @@ void evaluate::cleanup_components(iterator it)
 			++iv;
 			iterator p=iv;
 			cleanup_dispatch(kernel, tr, p);
+			return true;
 			});
 	}
 
@@ -285,6 +286,7 @@ void evaluate::handle_derivative(iterator it)
 				tr.move_before(tr.begin(ivalues), eqcopy.begin());
 				}
 			tr.erase(iv);
+			return true;
 			});
 
 	// Now move the partial indices to the components node, and then unwrap the
@@ -423,10 +425,12 @@ void evaluate::handle_prod(iterator it)
 								// inside the outer loop.
 								tr.move_before(it1, ivs.begin());
 								}
+							return true;
 							});
 					// This index value set can now be erased as all
 					// possible combinations have been considered.
 					tr.erase(it1);
+					return true;
 					});
 			// Remove the dummy indices from the index set of tensor 1.
 			tr.erase(di->second);
@@ -458,6 +462,7 @@ void evaluate::handle_prod(iterator it)
 					else {
 						tr.erase(it1);
 						}
+					return true;
 					}
 				);
 			tr.erase(di->second);
@@ -468,11 +473,9 @@ void evaluate::handle_prod(iterator it)
 		}
 
 	cleanup_dispatch(kernel, tr, it);
-	// FIXME: should push multipler of component into components.
+	cleanup_dispatch(kernel, tr, it);
 
 	// Simplify the components of the now single \component node by calling sympy.
-
-	std::cerr << "top of product now " << *it->name << std::endl;
 
 	assert(*it->name=="\\components");
 	sibling_iterator lst = tr.end(it);
@@ -484,5 +487,6 @@ void evaluate::handle_prod(iterator it)
 			++rhs1;
 			iterator nd=rhs1;
 			apply_sympy(kernel, tr, nd, "", "");
+			return true;
 			});
 	}
