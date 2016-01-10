@@ -26,25 +26,33 @@
 
 typedef void (*dispatcher_t)(Kernel& k, Ex&, Ex::iterator& it);
 
-// Central cleanup dispatch routine, which calls the other cleanup
-// functions defined later. These algorithms clean up the tree at the
-// current node and the first layer of child nodes, but do NOT descend
-// deeper down the tree. Sibling nodes of 'it' remain untouched as well.
+/// \ingroup cleanup
+///
+/// Central cleanup dispatch routine, which calls the other cleanup
+/// functions defined later. These algorithms clean up the tree at the
+/// current node and the first layer of child nodes, but do NOT descend
+/// deeper down the tree, UNLESS that would leave the tree in an 
+/// inconsistent state. An example is acting at the top node of
+/// \prod{4}{\sum{a}{b}}, which would push the 4 to the multiplier of the
+/// sum, but that is not allowed, so it needs to go further down.
+/// Sibling nodes of 'it' remain untouched as well.
 
 void cleanup_dispatch(Kernel& k, Ex&, Ex::iterator& it);
 
-// More general cleanup of an entire tree. Walks depth-first along the
-// entire tree and call cleanup_dispatch at every node.
+/// \ingroup cleanup
+///
+/// More general cleanup of an entire tree. Walks depth-first along the
+/// entire tree and call cleanup_dispatch at every node.
 
 void cleanup_dispatch_deep(Kernel& k, Ex&, dispatcher_t disp=&cleanup_dispatch);
 
-// Individual node cleanup routines. Once more, these algorithms clean
-// up the tree at the current node and the first layer of child nodes,
-// but do NOT descend deeper down the tree.
-// As with any algorithms, the iterator pointing to the starting node
-// may be changed, but these functions are not allowed to modify
-// anything except the node and nodes below (in particular, they will
-// leave sibling nodes untouched).
+/// Individual node cleanup routines. Once more, these algorithms clean
+/// up the tree at the current node and the first layer of child nodes,
+/// but do NOT descend deeper down the tree.
+/// As with any algorithms, the iterator pointing to the starting node
+/// may be changed, but these functions are not allowed to modify
+/// anything except the node and nodes below (in particular, they will
+/// leave sibling nodes untouched).
 
 void cleanup_productlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_sumlike(Kernel& k, Ex&, Ex::iterator& it);

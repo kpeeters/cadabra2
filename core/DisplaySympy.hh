@@ -1,8 +1,7 @@
 
 #pragma once
 
-#include "Props.hh"
-#include "Storage.hh"
+#include "DisplayBase.hh"
 #include <ostream>
 #include <map>
 
@@ -15,7 +14,7 @@ typedef uint32_t kunichar;
 /// logic that you see in action when you call the '__sympy__' method on an Ex object.
 
 
-class DisplaySympy {
+class DisplaySympy : public DisplayBase {
 	public:
 		DisplaySympy(const Properties&, const Ex&);
 
@@ -23,20 +22,12 @@ class DisplaySympy {
 		void output(std::ostream&, Ex::iterator);
 
 	private:
-		/// Determine if a node needs extra brackets around it. Uses context from the
-		/// parent node if necessary.
-		bool needs_brackets(Ex::iterator it);
-
 		void print_multiplier(std::ostream&, Ex::iterator);
 		void print_opening_bracket(std::ostream&, str_node::bracket_t);
 		void print_closing_bracket(std::ostream&, str_node::bracket_t);
 		void print_parent_rel(std::ostream&, str_node::parent_rel_t, bool first);
 		void print_children(std::ostream&, Ex::iterator, int skip=0);
 
-		const Ex&    tree;
-		const Properties& properties;
-
-		int bracket_level=0;
 
 		/// For every object encountered, dispatch will figure out the
 		/// most appropriate way to convert it into a LaTeX

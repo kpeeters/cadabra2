@@ -50,6 +50,7 @@ set(LOCAL_SRC_FILES
   Cleanup.cc
   Combinatorics.cc
   Compare.cc
+  DisplayBase.cc
   DisplayTeX.cc
   DisplaySympy.cc
   DisplayTerminal.cc

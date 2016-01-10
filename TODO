@@ -1,6 +1,18 @@
 
 - Having access to an index accessor for Ex would be useful for debugging; e.g. ex[3][1] and so on.
 
+- Sympy can invert matrices so automatically generate rules for an inverse metric. We
+  could trigger generation of an inverse matrix as soon as someone specifies the components
+  of a metric and the expression contains its inverse (or the other way around).
+
+- To show the original expression when evaluating components, we could let evaluate make a 
+  copy of the original, do substitute and eval on the copy, then add the result as a components
+  child to the original.
+
+- Does it make sense, instead of pulling e.g. sympy.simplify into simplify, to instead make
+  'simplify' act on the existing expression and simplify in-place, like the other cadabra
+  algorithms?
+
 - ex:=Derivative(f(r), r);
 
   does not print correctly: it leads to 

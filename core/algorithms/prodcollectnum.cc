@@ -45,6 +45,14 @@ Algorithm::result_t prodcollectnum::apply(iterator& it)
 		tr.begin(it)->multiplier=it->multiplier;
 		tr.flatten(it);
 		it=tr.erase(it);
+		if(*it->name=="\\sum" && *it->multiplier!=1) { // FIXME: there may be other nodes which cannot have non-unit multiplier.
+			sibling_iterator sib=tr.begin(it);
+			while(sib!=tr.end(it)) {
+				multiply(sib->multiplier, *it->multiplier);
+				++sib;
+				}
+			one(it->multiplier);
+			}
 		}
 	else if(tr.number_of_children(it)==0) { // i.e. from '3*4*7*9' 
 		it->name=name_set.insert("1").first;

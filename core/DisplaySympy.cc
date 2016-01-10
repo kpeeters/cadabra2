@@ -4,7 +4,7 @@
 #include "properties/Accent.hh"
 
 DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
-	: tree(e), properties(p)
+	: DisplayBase(p, e)
 	{
 	symmap = {
 		{"\\cos", "cos"},
@@ -168,7 +168,6 @@ void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t 
 		case str_node::b_square: str << "[";   break;
 		default :	return;
 		}
-	++(bracket_level);
 	}
 
 void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
@@ -181,7 +180,6 @@ void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t 
 		case str_node::b_square: str << "]";   break;
 		default :	return;
 		}
-	--(bracket_level);
 	}
 
 void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
@@ -290,25 +288,6 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 		}
 
 //	if(close_bracket) str << ")";
-	}
-
-bool DisplaySympy::needs_brackets(Ex::iterator it) 
-	{
-	// FIXME: this can go to a base class.
-	// FIXME: may need looking at properties
-
-	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
-		if(*it->name=="\\sum") return true;
-		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
-		}
-	else if(it->fl.parent_rel==str_node::p_none) {
-		if(*it->name=="\\sum") return false;
-		}
-	else {
-		if(*it->name=="\\sum")  return true;
-		if(*it->name=="\\prod") return true;
-		}
-	return false;
 	}
 
 void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it) 
