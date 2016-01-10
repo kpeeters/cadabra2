@@ -50,6 +50,7 @@ void cleanup_productlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_sumlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_expressionlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_derivative(Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_components(Kernel& k, Ex&, Ex::iterator& it);
 
 
 

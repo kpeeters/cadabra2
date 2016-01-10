@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "Functional.hh"
 #include "Algorithm.hh"
 #include "algorithms/prodcollectnum.hh"
 #include "algorithms/collect_terms.hh"
@@ -17,6 +18,7 @@ void cleanup_dispatch(Kernel& kernel, Ex& tr, Ex::iterator& it)
 	else if(*it->name=="\\prod")       cleanup_productlike(kernel, tr, it);
 	else if(*it->name=="\\sum")        cleanup_sumlike(kernel, tr, it);
 	else if(*it->name=="\\expression") cleanup_expressionlike(kernel, tr, it);
+	else if(*it->name=="\\components") cleanup_components(kernel, tr, it);
 
 	const Derivative *der = kernel.properties.get<Derivative>(it);
 	if(der) cleanup_derivative(kernel, tr, it);
@@ -76,6 +78,25 @@ void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
 	collect_terms ct(k, tr);
 	if(ct.can_apply(it))
 		ct.apply(it);
+	}
+
+void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
+	{
+	assert(*it->name=="\\components");
+
+	multiplier_t mult = *it->multiplier;
+	if(mult==1) return;
+
+	Ex::sibling_iterator sib=tr.end(it);
+	--sib;
+	cadabra::do_list(tr, sib, [&](Ex::iterator nd) {
+			Ex::sibling_iterator val=tr.begin(nd);
+			++val;
+			multiply(val->multiplier, mult);
+			return true;
+			});
+
+	one(it->multiplier);
 	}
 
 void cleanup_expressionlike(Kernel& k, Ex&tr, Ex::iterator& it)

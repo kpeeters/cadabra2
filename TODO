@@ -1,4 +1,6 @@
 
+- Having access to an index accessor for Ex would be useful for debugging; e.g. ex[3][1] and so on.
+
 - ex:=Derivative(f(r), r);
 
   does not print correctly: it leads to 
@@ -42,6 +44,7 @@
     PartialDerivative: at most one non-index node.
     \sum:  has to have unit multiplier.
     \prod: all children have to have unit multiplier.
+	 \components: has to have unit multiplier.
 
 - Might want to introduce a cache for evaluate, so that when we see a pattern, 
   we know what \components node to replace it with.

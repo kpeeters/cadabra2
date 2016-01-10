@@ -11,8 +11,9 @@ namespace cadabra {
    /// 'it' does not point to a list, only on that single
    /// element. Handles lists wrapped in an \expression node as well.
 	/// It is safe to remove the node pointed to by 'it' in 'f'.
+	/// If your 'f' returns false, the loop is aborted immediately.
 	
-	void do_list(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f);
+	void do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f);
 	
 	/// \ingroup core
 	///

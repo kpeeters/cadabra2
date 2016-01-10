@@ -60,6 +60,7 @@ substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 			catch(std::exception& er) {
 				throw ArgumentException(std::string("substitute: Index error in replacement rule. ")+er.what());
 				}
+			return true;
 			});
 	}
 
