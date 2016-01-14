@@ -80,6 +80,7 @@ void Perm::apply(iterator start, iterator end)
 		++it;
 		}
 
+	std::cerr << orig.size() << ", " << perm.size() << std::endl;
 	assert(orig.size()==perm.size());
 
 	for(unsigned int i=0; i<orig.size(); ++i) {

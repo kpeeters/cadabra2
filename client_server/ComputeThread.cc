@@ -99,10 +99,23 @@ void ComputeThread::terminate()
 		}
 	}
 
+void ComputeThread::all_cells_nonrunning()
+	{
+	for(auto it: running_cells) {
+		std::shared_ptr<ActionBase> rs_action = 
+			std::make_shared<ActionSetRunStatus>(it.second, false);
+		docthread.queue_action(rs_action);
+		}
+	gui->process_data();
+	gui->on_kernel_runstatus(false);
+	running_cells.clear();
+	}
+
 void ComputeThread::on_fail(websocketpp::connection_hdl hdl) 
 	{
 	std::cerr << "cadabra-client: connection failed" << std::endl;
 	connection_is_open=false;
+	all_cells_nonrunning();
 	if(gui && server_pid!=0) {
 		kill(server_pid, SIGKILL);
 		server_pid=0;

@@ -53,8 +53,11 @@ Ex::iterator apply_sympy(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::st
 
 	//parser.tree->print_recursive_treeform(std::cerr, parser.tree->begin());
 
+	ds.import(*parser.tree);
+
 	Ex::iterator first=parser.tree->begin(parser.tree->begin());
    it = ex.move_ontop(it, first);
 
 	return it;
 	}
+

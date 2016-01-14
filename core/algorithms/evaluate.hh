@@ -77,8 +77,9 @@ class evaluate : public Algorithm {
 
 		void handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free);
 
-		/// Merge the information in two 'components' nodes, moving all out of
-		/// the second one into the first one.
+		/// Merge the information in two 'components' nodes at the given
+		/// iterators, moving all out of the second one into the first
+		/// one.
 		void merge_components(iterator it1, iterator it2);
 
 		/// Cleanup all components in a 'components' node.

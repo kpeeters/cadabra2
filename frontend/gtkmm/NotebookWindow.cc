@@ -1040,7 +1040,7 @@ void NotebookWindow::on_help_about()
 	std::vector<Glib::ustring> authors;
 	authors.push_back("Kasper Peeters");
 	about.set_authors(authors);
-	about.set_copyright("\xC2\xA9 2006-2015 Kasper Peeters");
+	about.set_copyright("\xC2\xA9 2006-2016 Kasper Peeters");
 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
 	about.set_website("http://cadabra.science");
 	about.set_website_label("cadabra.science");
@@ -1061,7 +1061,7 @@ void NotebookWindow::on_help_about()
 // 	std::vector<Glib::ustring> authors;
 // 	authors.push_back("Kasper Peeters");
 // 	about.set_authors(authors);
-// 	about.set_copyright("\xC2\xA9 2006-2015 Kasper Peeters");
+// 	about.set_copyright("\xC2\xA9 2006-2016 Kasper Peeters");
 // 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
 // 	about.set_website("http://cadabra.science");
 // 	about.set_website_label("cadabra.science");
