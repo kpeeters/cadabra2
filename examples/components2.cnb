@@ -1,0 +1,81 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{n m} B_{m n p} (C_{p s} + D_{s p})\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}{A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r^{2} t, D_{t r} = t^{2}}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}s = \\left\\{\\begin{aligned}{r}: & (6\\, r^{2} t + 6)\\\\\n{t}: & 15\\, t^{2}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "{r,t}::Coordinate.\n{m,n,p,s}::Indices(values={t,r}).\n\\partial{#}::PartialDerivative.\nC::Depends(r,t).\n#ex:= A_{m n} B_{m n p} ( \\partial_{p}{C} + \\partial_{p}{E(t)} + D_{p} );\nex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );\n#rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t} + D_{t} = 1 ];\nrl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];\nevaluate(ex, rl);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}\\, g^{\\mu \\sigma} (\\partial_{\\rho}{g_{\\nu \\sigma}} + \\partial_{\\nu}{g_{\\rho \\sigma}} - \\partial_{\\sigma}{g_{\\nu \\rho}})\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}{g_{t t} = -(1 - 2\\, (\\frac{M}{r})), g_{r r} = \\frac{1}{(1 - 2\\, (\\frac{M}{r}))}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}, g^{t t} = -(\\frac{1}{(1 - 2\\, (\\frac{M}{r}))}), g^{r r} = (1 - 2\\, (\\frac{M}{r})), g^{\\theta \\theta} = r^{(-2)}, g^{\\phi \\phi} = r^{(-2)} \\sin(\\theta)^{(-2)}}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\, g^{\\mu \\sigma} (\\partial_{\\rho}{g_{\\nu \\sigma}} + \\partial_{\\nu}{g_{\\rho \\sigma}} - \\partial_{\\sigma}{g_{\\nu \\rho}})\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\mu\\nu\\rho = \\left\\{\\begin{aligned}{t, t, r}: & \\frac{M}{(r^{2} ( - 2\\, (\\frac{M}{r}) + 1))}\\\\\n{t, r, t}: & \\frac{M}{(r^{2} ( - 2\\, (\\frac{M}{r}) + 1))}\\\\\n{r, r, r}: & M \\frac{(2\\, (\\frac{M}{r}) - 1)}{(r^{2} ( - 2\\, (\\frac{M}{r}) + 1)^{2})}\\\\\n{r, \\phi, \\phi}: & r (2\\, (\\frac{M}{r}) - 1) \\sin(\\theta)^{2}\\\\\n{r, \\theta, \\theta}: & r (2\\, (\\frac{M}{r}) - 1)\\\\\n{r, t, t}: & M \\frac{( - 2\\, (\\frac{M}{r}) + 1)}{r^{2}}\\\\\n{\\theta, \\theta, r}: & \\frac{1}{r}\\\\\n{\\theta, r, \\theta}: & \\frac{1}{r}\\\\\n{\\theta, \\phi, \\phi}: & -\\sin(\\theta) \\cos(\\theta)\\\\\n{\\phi, \\phi, r}: & \\frac{1}{r}\\\\\n{\\phi, \\phi, \\theta}: & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n{\\phi, r, \\phi}: & \\frac{1}{r}\\\\\n{\\phi, \\theta, \\phi}: & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\n         \nex:= \\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} );\n\n                              \nss:= { g_{t t} = -(1-2 M/r), g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,g^{t t} = -1/(1-2 M/r), g^{r r} = 1-2 M/r, g^{\\theta\\theta}  = r**(-2), g^{\\phi\\phi}=r**(-2) \\sin(\\theta)**(-2) };\nsubstitute(ex, rl);\nevaluate(ex, ss);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
