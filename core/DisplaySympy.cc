@@ -1,5 +1,6 @@
 
 #include "Algorithm.hh"
+#include "Functional.hh"
 #include "DisplaySympy.hh"
 #include "properties/Accent.hh"
 
@@ -401,4 +402,16 @@ bool DisplaySympy::children_have_brackets(Ex::iterator ch) const
 	if(childbr==str_node::b_none || childbr==str_node::b_no)
 		return false;
 	else return true;
+	}
+
+void DisplaySympy::import(Ex& ex)
+	{
+	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) {
+			for(auto& m: symmap) {
+				if(m.second==*it->name) {
+					it->name=name_set.insert(m.first).first;
+					break;
+					}
+				}
+			});
 	}

@@ -122,6 +122,10 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 				auto el = repl.append_child(vl, str_node("\\equals"));
 				auto il = repl.append_child(el, str_node("\\comma"));
 				auto fi = full_ind_free.begin();
+				// FIXME: need to do something sensible with indices on the lhs 
+				// of rules which are not coordinates. You can have A_{m n} as expression,
+				// A_{0 0} -> r, A_{i j} -> \delta_{i j} as rule, but at the moment the
+				// second rule does not do the right thing.
 				if(fi==full_ind_free.end()) {
 					for(auto& r: subs.comparator.index_value_map) 
 						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
@@ -153,10 +157,14 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 
 void evaluate::merge_components(iterator it1, iterator it2)
 	{
+	assert(*it1->name=="\\components");
+	assert(*it2->name=="\\components");
 	sibling_iterator sib1=tr.end(it1);
 	--sib1;
 	sibling_iterator sib2=tr.end(it2);
 	--sib2;
+
+	tr.print_recursive_treeform(std::cerr, tr.begin());
 
 	// We cannot directly compare the lhs of this equals node with the lhs
 	// of the equals node of the other components node, because the index
@@ -164,6 +172,9 @@ void evaluate::merge_components(iterator it1, iterator it2)
 
 	Perm perm;
 	perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
+	for(auto p: perm.perm)
+		std::cerr << p << " ";
+	std::cerr << std::endl;
 
 	//perm.apply(tr.begin(it2), sib2);
 	//std::cerr << "after permutation" << std::endl;

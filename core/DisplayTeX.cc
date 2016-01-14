@@ -244,6 +244,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\pow")    print_powlike(str, it);
 	else if(*it->name=="\\int")    print_intlike(str, it);
 	else if(*it->name=="\\equals") print_equalitylike(str, it);
+	else if(*it->name=="\\components") print_components(str, it);
 	else
 		output(str, it);
 	}
@@ -465,6 +466,30 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 	str << " = ";
 	++sib;
 	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
+	{
+	std::cerr << "printing components" << std::endl;
+	auto sib=tree.begin(it);
+	auto end=tree.end(it);
+	--end;
+	while(sib!=end) {
+		dispatch(str, sib);
+		++sib;
+		}
+	str << " = \\left\\{\\begin{aligned}";
+	sib=tree.begin(end);
+	while(sib!=tree.end(end)) {
+		Ex::sibling_iterator c=tree.begin(sib);
+		dispatch(str, c);
+		str << ": & ";
+		++c;
+		dispatch(str, c);
+		str << "\\\\\n";
+		++sib;
+		}
+	str << "\\end{aligned}\\right.\n";
 	}
 
 bool DisplayTeX::children_have_brackets(Ex::iterator ch) const

@@ -15,7 +15,7 @@ C::Depends(r,t).
 ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
 #rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t} + D_{t} = 1 ];
 rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];
-evaluate(ex, rl)
+evaluate(ex, rl);
 
 # Now a Christoffel example, i.e. with derivatives.
 
@@ -40,8 +40,37 @@ ss:= { g_{t t} = -(1-2 M/r), g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2, g_{
 #       g^{t t} = 1/f(r), g^{r r} = f(r), g^{\theta\theta}  = r**(-2), g^{\phi\phi}=r**(-2) \sin(\theta)**(-2) };
 substitute(ex, rl);
 evaluate(ex, ss);
-
 # Schutz (11.117) has an error in \Gamma^{\theta}_{\phi\phi}.
+
+
+
+{r,t}::Coordinate.
+{m,n}::Indices(values={r,t}).
+ex:= A_{m n}+A_{n m};
+ss:= { A_{m n} -> C_{m n} };
+rl:= { C_{r r}=3 };
+# Note: 
+evaluate(ex, ss, rl);
+
+
+{r,t}::Coordinate.
+{m,n}::Indices("full",values={r,t}).
+{i,j}::Indices("3d", parent="full").
+ex:= A_{m n}+A_{n m};
+rl:= { A_{t t} -> 3, A_{i j} -> \delta_{i j} };
+evaluate(ex, rl);
+
+
+{\mu,\nu,\rho,\sigma}::Indices(position=fixed).
+\partial{#}::PartialDerivative.
+ex:= R^{\mu}_{\nu\rho\sigma};
+rl:= { R^{\mu}_{\nu\rho\sigma} -> \partial_{\rho}{\Gamma^{\mu}_{\nu\sigma}},
+        \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
+                                                 +\partial_{\nu}{g_{\rho\sigma}}
+                                                 -\partial_{\sigma}{g_{\nu\rho}} )
+                                                  };
+substitute(ex, rl, repeat=True);                                                  
+       
 
 
 # The above does not yet figure out that the expression is symmetric in nu and rho.

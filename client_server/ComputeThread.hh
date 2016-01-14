@@ -108,6 +108,11 @@ namespace cadabra {
 			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
 
 			DTree::iterator find_cell_by_id(DataCell::id_t, bool remove);
+			
+			/// Set all cells to be non-running (e.g. after a kernel failure) and
+			/// report the status of each cell to the GUI.
+			void all_cells_nonrunning();
+
 
 			// Self-started server
 			pid_t           server_pid;

@@ -9,17 +9,32 @@ typedef uint32_t kunichar;
 
 /// \ingroup display
 ///
-/// Class to display expressions in a format that Sympy can parse. Will throw an exception
-/// if a Cadabra Ex object cannot be understood by Sympy. This class contains the printing
-/// logic that you see in action when you call the '__sympy__' method on an Ex object.
+/// Class to display expressions in a format that Sympy can
+/// parse. Will throw an exception if a Cadabra Ex object cannot be
+/// understood by Sympy. Can also convert expressions back to Cadabra
+/// notation. This class contains the printing logic that you see in
+/// action when you call the '__sympy__' method on an Ex object.
 
 
 class DisplaySympy : public DisplayBase {
 	public:
 		DisplaySympy(const Properties&, const Ex&);
 
+		/// Output the expression to a sympy-readable form. For symbols
+		/// which cannot be parsed by sympy, this can convert to an
+		/// alternative, Such rewrites can then be undone by the
+		/// 'import' member below.
+
 		void output(std::ostream&);
 		void output(std::ostream&, Ex::iterator);
+
+      /// Rewrite the output of sympy back into a notation used by
+      /// Cadabra. This in particular involves converting 'sin' and
+      /// friends to '\sin' and so on, as well as converting all the
+      /// greek symbols.  Currently only acts node-by-node, does not
+      /// do anything complicated with trees.
+
+		void import(Ex&);
 
 	private:
 		void print_multiplier(std::ostream&, Ex::iterator);
@@ -58,6 +73,7 @@ class DisplaySympy : public DisplayBase {
 
 		bool children_have_brackets(Ex::iterator ch) const;
 
+		/// Map from Cadabra symbols to Sympy symbols.
 		std::map<std::string, std::string> symmap;
 };
 
