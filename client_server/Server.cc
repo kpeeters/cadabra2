@@ -116,82 +116,105 @@ std::string Server::pre_parse(const std::string& line)
 	{
 	std::string ret;
 
-	/*	try */{
-//		std::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
-//		std::smatch mres;
-		boost::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
-		boost::cmatch mres;
-
-		std::string indent_line, end_of_line;
-		if(boost::regex_match(line.c_str(), mres, imatch)) {
-			indent_line=std::string(mres[1].first, mres[1].second);
-			end_of_line=std::string(mres[3].first, mres[3].second);
-			}
-
-		std::string line_stripped=std::string(mres[2].first, mres[2].second);
-		if(line_stripped.size()==0) return "";
-
-		// 'lastchar' is either a Cadabra termination character, or empty.
-		// 'line_stripped' will have that character stripped, if present.
-		std::string lastchar = line_stripped.substr(line_stripped.size()-1,1);
-		if(lastchar!="." && lastchar!=";" && lastchar!=":")
-			lastchar="";
-		else 
+	boost::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
+	boost::cmatch mres;
+	
+	std::string indent_line, end_of_line;
+	if(boost::regex_match(line.c_str(), mres, imatch)) {
+		indent_line=std::string(mres[1].first, mres[1].second);
+		end_of_line=std::string(mres[3].first, mres[3].second);
+		}
+	else {
+		indent_line="";
+		end_of_line="\n";
+		}
+	
+	std::string line_stripped=std::string(mres[2].first, mres[2].second);
+	if(line_stripped.size()==0) return "";
+	// Do not do anything with comment lines.
+	if(line_stripped[0]=='#') return line; 
+	
+	// 'lastchar' is either a Cadabra termination character, or empty.
+	// 'line_stripped' will have that character stripped, if present.
+	std::string lastchar = line_stripped.substr(line_stripped.size()-1,1);
+	if(lastchar=="." || lastchar==";" || lastchar==":") {
+		if(lhs!="") {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
-
-		// Replace $...$ with Ex(...).
-		boost::regex dollarmatch(R"(\$([^\$]*)\$)");
-		line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'$1'\\)", boost::match_default | boost::format_all);
-
-		size_t found = line_stripped.find(":=");
-		if(found!=std::string::npos) {
-			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
-				+ line_stripped.substr(found+2) + "')";
-			// FIXME: add cadabra line continuations
+			rhs += line_stripped;
+			ret = indent + lhs + " = Ex(r'" + rhs + "')";
+			if(lastchar!="." && indent.size()==0) 
+				ret += "\n";
+			indent="";
+			lhs="";
+			rhs="";
+			return ret;
+			}
+		}
+	else { 
+		// If we are a Cadabra continuation, add to the rhs without further processing
+		// and return an empty line immediately.
+		if(lhs!="") {
+			rhs += line_stripped+" ";
+			return "";
+			}
+		}
+	
+	// Replace $...$ with Ex(...).
+	boost::regex dollarmatch(R"(\$([^\$]*)\$)");
+	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'$1'\\)", boost::match_default | boost::format_all);
+	
+	size_t found = line_stripped.find(":=");
+	if(found!=std::string::npos) {
+		// If the last character is not a Cadabra terminator, start a capture process.
+		if(lastchar!="." && lastchar!=";" && lastchar!=":") {
+			indent=indent_line;
+			lhs=line_stripped.substr(0,found);
+			rhs=line_stripped.substr(found+2);
+			return "";
+			}
+		else {
+			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
+			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" + line_stripped.substr(found+2) + "')";
 			std::string objname = line_stripped.substr(0,found);
 			if(lastchar!="." && indent_line.size()==0)
 				ret = ret + "; display("+objname+")";
 			}
-		else {
-			found = line_stripped.find("::");
-			if(found!=std::string::npos) {
-//				std::regex amatch("([a-zA-Z]*)(\\([.]*\\))?");
-				boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
-				boost::cmatch ares;
-				if(boost::regex_match(line_stripped.substr(found+2).c_str(), ares, amatch)) {
-					auto propname = std::string(ares[1].first, ares[1].second);
-					if(ares[2].second>ares[2].first+1) {
-						auto argument = std::string(ares[2].first+1, ares[2].second-1);
-						ret = indent_line + "__cdbtmp__ = "+propname
-							+"(Ex(r'"+line_stripped.substr(0,found)
-							+"'), Ex(r'" +argument + "') )";
-						}
-					else {
-						// no arguments
-						ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
-							+ "(Ex(r'"+line_stripped.substr(0,found)+"'))";
-						}
-					if(lastchar==";") 
-						ret += "; display(__cdbtmp__)";
+		}
+	else {
+		found = line_stripped.find("::");
+		if(found!=std::string::npos) {
+			boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
+			boost::cmatch ares;
+			if(boost::regex_match(line_stripped.substr(found+2).c_str(), ares, amatch)) {
+				auto propname = std::string(ares[1].first, ares[1].second);
+				if(ares[2].second>ares[2].first+1) { // declaration with arguments
+					auto argument = std::string(ares[2].first+1, ares[2].second-1);
+					ret = indent_line + "__cdbtmp__ = "+propname
+						+"(Ex(r'"+line_stripped.substr(0,found)
+						+"'), Ex(r'" +argument + "') )";
 					}
 				else {
-					// inconsistent, who knows what will happen...
-					ret = line; // inconsistent; you are asking for trouble.
+					// no arguments
+					line_stripped=line_stripped.substr(0,line_stripped.size()-1);
+					ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
+						+ "(Ex(r'"+line_stripped.substr(0,found)+"'))";
 					}
+				if(lastchar==";") 
+					ret += "; display(__cdbtmp__)";
 				}
 			else {
-				if(lastchar==";") 
-					ret = indent_line + "_ = " + line_stripped + "; display(_)";
-				else
-					ret = indent_line + line_stripped + lastchar + end_of_line;
+				// inconsistent, who knows what will happen...
+				ret = line; // inconsistent; you are asking for trouble.
 				}
 			}
+		else {
+			if(lastchar==";") 
+				ret = indent_line + "_ = " + line_stripped + " display(_)";
+			else
+				ret = indent_line + line_stripped;
+			}
 		}
-//	catch(std::regex_error& ex) {
-//		std::cerr << ex.what() << " " << ex.code() << std::endl;
-//		}
-
-	return ret;
+	return ret+end_of_line;
 	}
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
@@ -336,6 +359,7 @@ void Server::wait_for_job()
 void Server::stop_block() 
 	{
 	PyGILState_STATE state = PyGILState_Ensure();
+//	PyThreadState_SetAsyncExc ?
 	Py_AddPendingCall(&quit, NULL);
 	PyGILState_Release(state);
 	}
