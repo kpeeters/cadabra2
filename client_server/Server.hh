@@ -118,6 +118,8 @@ class Server {
 		// Python. Mimics the functionality in core/cadabra2.
 		std::string              pre_parse(const std::string&);
 
+		std::string indent, lhs, rhs;
+
 		/// Called by the run_block() thread upon completion of the
 		/// task.  Handles communication of the result back to the
 		/// client in JSON format. This is always of the form
