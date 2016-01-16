@@ -20,9 +20,6 @@ class DisplayTeX : public DisplayBase {
 	public:
 		DisplayTeX(const Properties&, const Ex&);
 
-		void output(std::ostream&);
-		void output(std::ostream&, Ex::iterator);
-
 	private:
 		void print_multiplier(std::ostream&, Ex::iterator);
 		void print_opening_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
@@ -31,9 +28,6 @@ class DisplayTeX : public DisplayBase {
 		void print_children(std::ostream&, Ex::iterator, int skip=0);
 
 		std::string texify(const std::string&) const;
-
-		const Ex&    tree;
-		const Properties& properties;
 
 		bool print_star=false;
 		bool tight_star=false;
