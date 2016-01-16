@@ -17,7 +17,7 @@ DisplayTeX::DisplayTeX(const Properties& p, const Ex& e)
 void DisplayTeX::print_other(std::ostream& str, Ex::iterator it) 
 	{
 	if(needs_brackets(it))
-		str << "(";
+		str << "\\left(";
 
 	// print multiplier and object name
 	if(*it->multiplier!=1)
@@ -51,7 +51,7 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 
 
 	if(needs_brackets(it))
-		str << ")";
+		str << "\\right)";
 	}
 
 std::string DisplayTeX::texify(const std::string& str) const
@@ -122,59 +122,16 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 
 void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it)
 	{
-	bool turned_one=false;
 	mpz_class denom=it->multiplier->get_den();
 
-	if(*it->multiplier<0) {
-		if(*tree.parent(it)->name=="\\sum") { // sum takes care of minus sign
-			if(*it->multiplier!=-1) {
-				if(denom!=1) {
-					str << "\\frac{" << -(it->multiplier->get_num()) << "}{" 
-						 << it->multiplier->get_den() << "}";
-					}
-				else {
-					str << -(*it->multiplier);
-					}
-				}
-			else                    turned_one=true;
-			}
-		else	{
-			if(denom!=1) {
-				str << "(\\frac{" << it->multiplier->get_num() << "}{" 
-					 << it->multiplier->get_den() << "})";
-				}
-			else if(*it->multiplier==-1) {
-				str << "-";
-				turned_one=true;
-				}
-			else {
-				str << "(" << *it->multiplier << ")";
-				}
-			}
+	if(denom!=1) {
+		str << "\\frac{" << it->multiplier->get_num() << "}{" << it->multiplier->get_den() << "}";
+		}
+	else if(*it->multiplier==-1) {
+		str << "-";
 		}
 	else {
-		if(denom!=1) {
-			str << "\\frac{" << it->multiplier->get_num() << "}{" 
-				 << it->multiplier->get_den() << "}";
-			}
-		else
-			str << *it->multiplier;
-		}
-
-	if(!turned_one && !(*it->name=="1")) {
-		if(print_star) {
-			if(tight_star) str << "*";
-// 			else if(utf8_output)
-//				str << unichar(0x00a0) << "*" << unichar(0x00a0);
-			else
-				str << " * ";
-			}
-		else {
-			if(!tight_star) {
-				if(latex_spacing) str << "\\, ";
-				else              str << " ";
-				}
-			} 
+		str << *it->multiplier;
 		}
 	}
 
@@ -240,8 +197,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\int")    print_intlike(str, it);
 	else if(*it->name=="\\equals") print_equalitylike(str, it);
 	else if(*it->name=="\\components") print_components(str, it);
-	else
-		output(str, it);
+	else                           print_other(str, it);
 	}
 
 void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it) 
@@ -275,23 +231,18 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 	++den;
 
 	bool close_bracket=false;
+	str << "\\frac{";
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-		str << "(";
-		close_bracket=true;
 		}
-	str << "\\frac{";
 
 	dispatch(str, num);
 
 	str << "}{";
-//		 str << "/";
 	
 	dispatch(str, den);
 
 	str << "}";
-	if(close_bracket)
-		str << ")";
 	}
 
 void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
@@ -358,9 +309,7 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 	assert(*it->multiplier==1);
 
 	if(needs_brackets(it)) 
-		str << "(";
-
-	unsigned int steps=0;
+		str << "\\left(";
 
 	unsigned int steps=0;
 
@@ -378,7 +327,7 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 		}
 
 	if(needs_brackets(it)) 
-		str << ")";
+		str << "\\right)";
 	str << std::flush;
 	}
 
