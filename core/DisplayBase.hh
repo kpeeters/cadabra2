@@ -17,6 +17,11 @@ class DisplayBase {
 	public:
 		DisplayBase(const Properties&, const Ex&);
 
+		void output(std::ostream&);
+		void output(std::ostream&, Ex::iterator);
+
+		virtual void dispatch(std::ostream&, Ex::iterator)=0;
+
 	protected:
 		/// Determine if a node needs extra brackets around it. Uses context from the
 		/// parent node if necessary.

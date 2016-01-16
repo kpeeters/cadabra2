@@ -18,23 +18,6 @@ DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 		};
 	}
 
-void DisplaySympy::output(std::ostream& str) 
-	{
-	Ex::iterator it=tree.begin();
-
-	output(str, it);
-	}
-
-void DisplaySympy::output(std::ostream& str, Ex::iterator it) 
-	{
-	if(*it->name=="\\expression") {
-		dispatch(str, tree.begin(it));
-		return;
-		}
-
-	dispatch(str, it);
-	}
-
 void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 	{
 	if(needs_brackets(it))

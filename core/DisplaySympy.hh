@@ -20,14 +20,6 @@ class DisplaySympy : public DisplayBase {
 	public:
 		DisplaySympy(const Properties&, const Ex&);
 
-		/// Output the expression to a sympy-readable form. For symbols
-		/// which cannot be parsed by sympy, this can convert to an
-		/// alternative, Such rewrites can then be undone by the
-		/// 'import' member below.
-
-		void output(std::ostream&);
-		void output(std::ostream&, Ex::iterator);
-
       /// Rewrite the output of sympy back into a notation used by
       /// Cadabra. This in particular involves converting 'sin' and
       /// friends to '\sin' and so on, as well as converting all the
@@ -37,6 +29,11 @@ class DisplaySympy : public DisplayBase {
 		void import(Ex&);
 
 	private:
+		/// Output the expression to a sympy-readable form. For symbols
+		/// which cannot be parsed by sympy, this can convert to an
+		/// alternative, Such rewrites can then be undone by the
+		/// 'import' member above.
+
 		void print_multiplier(std::ostream&, Ex::iterator);
 		void print_opening_bracket(std::ostream&, str_node::bracket_t);
 		void print_closing_bracket(std::ostream&, str_node::bracket_t);
@@ -51,7 +48,7 @@ class DisplaySympy : public DisplayBase {
 		/// also involve looking up properties and deciding on the best
 		/// course of action based on the attached properties.
 
-		void dispatch(std::ostream&, Ex::iterator);
+		virtual void dispatch(std::ostream&, Ex::iterator) override;
 
 		/// Printing members for various standard constructions,
 		/// e.g. print as a list, or as a decorated symbol with
