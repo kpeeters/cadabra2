@@ -3,6 +3,7 @@
 
 #include "Props.hh"
 #include "Storage.hh"
+#include "DisplayBase.hh"
 #include <ostream>
 
 typedef uint32_t kunichar;
@@ -15,7 +16,7 @@ typedef uint32_t kunichar;
 /// best way to print any given object. See the DisplayTeX::dispatch
 /// method to see how this works in more detail.
 
-class DisplayTeX  {
+class DisplayTeX : public DisplayBase {
 	public:
 		DisplayTeX(const Properties&, const Ex&);
 
@@ -51,7 +52,7 @@ class DisplayTeX  {
 		/// also involve looking up properties and deciding on the best
 		/// course of action based on the attached properties.
 
-		void dispatch(std::ostream&, Ex::iterator);
+		virtual void dispatch(std::ostream&, Ex::iterator) override;
 
 		/// Printing members for various standard constructions,
 		/// e.g. print as a list, or as a decorated symbol with
@@ -68,6 +69,7 @@ class DisplayTeX  {
 		void print_intlike(std::ostream&, Ex::iterator);
 		void print_equalitylike(std::ostream&, Ex::iterator);
 		void print_components(std::ostream&, Ex::iterator);
+		void print_other(std::ostream& str, Ex::iterator it);
 
 		bool children_have_brackets(Ex::iterator ch) const;
 };

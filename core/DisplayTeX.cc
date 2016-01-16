@@ -10,23 +10,14 @@
 //(( parent.utf8_output?(unichar(0xfeff)):""))
 
 DisplayTeX::DisplayTeX(const Properties& p, const Ex& e)
-	: tree(e), properties(p)
+	: DisplayBase(p, e)
 	{
 	}
 
-void DisplayTeX::output(std::ostream& str) 
+void DisplayTeX::print_other(std::ostream& str, Ex::iterator it) 
 	{
-	Ex::iterator it=tree.begin();
-
-	output(str, it);
-	}
-
-void DisplayTeX::output(std::ostream& str, Ex::iterator it) 
-	{
-	if(*it->name=="\\expression") {
-		dispatch(str, tree.begin(it));
-		return;
-		}
+	if(needs_brackets(it))
+		str << "(";
 
 	// print multiplier and object name
 	if(*it->multiplier!=1)
@@ -57,6 +48,10 @@ void DisplayTeX::output(std::ostream& str, Ex::iterator it)
 //	else str << *it->name;
 
 	print_children(str, it);
+
+
+	if(needs_brackets(it))
+		str << ")";
 	}
 
 std::string DisplayTeX::texify(const std::string& str) const
@@ -360,78 +355,30 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 
 void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it) 
 	{
-	bool close_bracket=false;
-	if(*it->multiplier!=1) 
-		print_multiplier(str, it);
+	assert(*it->multiplier==1);
 
-	Ex::iterator par=tree.parent(it);
-	if(tree.number_of_children(par) - Algorithm::number_of_direct_indices(par)>1) { 
-      // for a single argument, the parent already takes care of the brackets
-		if(*it->multiplier!=1 || (tree.is_valid(par) && *par->name!="\\expression")) {
-			// test whether we need extra brackets
-			close_bracket=!children_have_brackets(it);
-			if(close_bracket)
-				str << "(";
-			}
-		}
+	if(needs_brackets(it)) 
+		str << "(";
 
 	unsigned int steps=0;
 
-	str_node::bracket_t previous_bracket_=str_node::b_invalid;
+	unsigned int steps=0;
+
 	Ex::sibling_iterator ch=tree.begin(it);
-	bool beginning_of_group=true;
 	while(ch!=tree.end(it)) {
 		if(++steps==20) {
-			if(latex_linefeeds)
-				str << "%\n" << std::flush; // prevent LaTeX overflow
 			steps=0;
+			str << "%\n"; // prevent LaTeX overflow.
 			}
-		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
-		if(previous_bracket_!=current_bracket_)
-			if(current_bracket_!=str_node::b_none) {
-				if(ch!=tree.begin(it)) {
-					if(tight_plus) str << "+";
-					else if(utf8_output) str << " +" << unichar(0x00a0);
-					else                        str << " + ";
-					}
-				print_opening_bracket(str, current_bracket_, str_node::p_none);
-				beginning_of_group=true;
-				}
-		if(beginning_of_group) {
-			beginning_of_group=false;
-			if(*ch->multiplier<0) {
-				if(tight_plus) str << "-";
-				else if(utf8_output) str << " -" << unichar(0x00a0);
-				else                        str << " - ";
-					
-				}
-			}
-		else {
-			if(*ch->multiplier<0) {
-				if(tight_plus)       str << "-";
-				else if(utf8_output) str << " -" << unichar(0x00a0);
-				else                        str << " - ";
-				}
-			else {
-				if(tight_plus) str << "+";
-				else if(utf8_output) str << " +" << unichar(0x00a0);
-				else                        str << " + ";
-				}
-			}
-		if(*ch->name=="1" && (*ch->multiplier==1 || *ch->multiplier==-1)) 
-			str << "1"; // special case numerical constant
-		else 
-			dispatch(str, ch);
-		++ch;
-		if(ch==tree.end(it)) {
-			if(current_bracket_!=str_node::b_none)
-				print_closing_bracket(str, current_bracket_, str_node::p_none);
-			}
+		if(*ch->multiplier>0 && ch!=tree.begin(it))
+			str << "+"; 
 
-		previous_bracket_=current_bracket_;
+		dispatch(str, ch);
+		++ch;
 		}
 
-	if(close_bracket) str << ")";
+	if(needs_brackets(it)) 
+		str << ")";
 	str << std::flush;
 	}
 
