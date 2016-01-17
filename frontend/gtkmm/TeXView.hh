@@ -38,6 +38,11 @@ namespace cadabra {
 			/// visible widget itself.
 
 			void update_image();
+
+			/// Dim the output to indicate that the result is no longer guaranteed to
+			/// be correlated with the input cell from which it was derived.
+
+			void dim(bool);
 			
 			sigc::signal1<bool, std::string> tex_error;
 

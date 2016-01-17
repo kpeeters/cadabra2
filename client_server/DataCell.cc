@@ -103,14 +103,16 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
 			if(!for_embedding) {
+				// FIXME: this needs to be read from a text file.
 				str << "<html>\n";
 				str << "<head>\n";
-				str << "<link rel=\"stylesheet\" href=\"fonts/Serif/cmun-serif.css\"></link>\n";
+				str << "<link rel=\"stylesheet\" href=\"http://cadabra.science/static/fonts/Serif/cmun-serif.css\"></link>\n";
+				str << "<script type=\"text/javascript\" src=\"http://beta.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>\n";
 				str << "<style>\n";
-				str << "div.latex div.output { display: none; }\n div.image_png { width: 400px; }\n"
+				str << "div.image_png { width: 400px; }\n"
 					 << "div.output { font-family: monospace; }\n"
 					 << "h1, h2, h3 { font-family: 'STIXGENERAL'; }\n"
-					 << "div.latex { font-family: 'STIXGENERAL'; color: black; font-size: 16px; line-height: 23px; margin-left: 40px; margin-right: 40px; padding-left: 10px; margin-bottom: 10px; }\n"
+					 << "div.latex_view { font-family: 'STIXGENERAL'; color: black; font-size: 16px; line-height: 23px; margin-left: 40px; margin-right: 40px; padding-left: 10px; margin-bottom: 10px; }\n"
 					 << "div.image_png img { width: 100%; }\n"
 					 << "div.python { font-family: monospace; padding-left: 10px; margin-left: 40px; margin-right; 40px; margin-bottom: 10px; margin-top: 10px; white-space: pre; color: blue; }\n"
 					 << "pre.output { color: black; }\n";
@@ -149,7 +151,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		if(it->textbuf.size()>0) {
 			if(it->cell_type==DataCell::CellType::image_png)
 				str << it->textbuf;
-			else if(it->cell_type!=DataCell::CellType::document) {
+			else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
 				std::string out=latex_to_html(it->textbuf);
 				if(out.size()>0)
 					str << "<div class=\"source\">"+out+"</div>";

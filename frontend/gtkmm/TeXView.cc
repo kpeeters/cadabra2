@@ -50,6 +50,12 @@ void TeXView::on_show()
 		}
 	}
 
+void TeXView::dim(bool d)
+	{
+	if(d) image.set_opacity(0.3);
+	else  image.set_opacity(1.0);
+	}
+
 bool TeXView::on_button_release_event(GdkEventButton *ev)
 	{
 	show_hide_requested.emit(datacell);

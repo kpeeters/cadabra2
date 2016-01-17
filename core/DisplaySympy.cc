@@ -18,6 +18,26 @@ DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 		};
 	}
 
+bool DisplaySympy::needs_brackets(Ex::iterator it)
+	{
+	// FIXME: may need looking at properties
+	// FIXME: write as individual parent/current tests
+
+	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
+		if(*it->name=="\\sum") return true;
+		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
+		}
+	else if(it->fl.parent_rel==str_node::p_none) {
+		if(*it->name=="\\sum") return false;
+		}
+	else {
+		if(*it->name=="\\sum")  return true;
+		if(*it->name=="\\prod") return true;
+		}
+	return false;
+	}
+
+
 void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 	{
 	if(needs_brackets(it))

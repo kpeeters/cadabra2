@@ -1,0 +1,64 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{The Schwarzschild spacetime}\n\nThis notebook shows how you can do component computations in Cadabra. It illustrates this by computing\nproperties of the Schwarzschild spacetime.\n\nThe first thing we always need to do is to declare the coordinates used, and the names of the indices."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{The Schwarzschild spacetime}\n\nThis notebook shows how you can do component computations in Cadabra. It illustrates this by computing\nproperties of the Schwarzschild spacetime.\n\nThe first thing we always need to do is to declare the coordinates used, and the names of the indices."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\mu\\nu\\rho = \\left\\{\\begin{aligned}{t, t, r}: & \\frac{M}{(r^{2} \\left(\\frac{-2M}{r}+1\\right))}\\\\\n{t, r, t}: & \\frac{M}{(r^{2} \\left(\\frac{-2M}{r}+1\\right))}\\\\\n{r, r, r}: & M \\frac{\\frac{2M}{r}-1}{(r^{2} \\left(\\frac{-2M}{r}+1\\right)^{2})}\\\\\n{r, \\phi, \\phi}: & r \\left(\\frac{2M}{r}-1\\right) \\sin(\\theta)^{2}\\\\\n{r, \\theta, \\theta}: & r \\left(\\frac{2M}{r}-1\\right)\\\\\n{r, t, t}: & M \\frac{\\frac{-2M}{r}+1}{r^{2}}\\\\\n{\\theta, \\theta, r}: & \\frac{1}{r}\\\\\n{\\theta, r, \\theta}: & \\frac{1}{r}\\\\\n{\\theta, \\phi, \\phi}: & -\\sin(\\theta) \\cos(\\theta)\\\\\n{\\phi, \\phi, r}: & \\frac{1}{r}\\\\\n{\\phi, \\phi, \\theta}: & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n{\\phi, r, \\phi}: & \\frac{1}{r}\\\\\n{\\phi, \\theta, \\phi}: & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\n         \nex:= \\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} );\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2,    g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       g^{t t} = -1/(1-2 M/r), g^{r r} = 1-2 M/r,     g^{\\theta\\theta} = r**(-2), g^{\\phi\\phi}=r**(-2) \\sin(\\theta)**(-2) };\nsubstitute(ex, rl);\nevaluate(ex, ss);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

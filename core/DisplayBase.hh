@@ -24,8 +24,12 @@ class DisplayBase {
 
 	protected:
 		/// Determine if a node needs extra brackets around it. Uses context from the
-		/// parent node if necessary.
-		bool needs_brackets(Ex::iterator it);
+		/// parent node if necessary. Has to be implemented in a derived class, because
+      /// the answer depends on the printing method (e.g. (a+b)/c needs brackets
+		/// when printed like this, but does not need brackets when printed as
+		/// \frac{a+b}{c}).
+
+		virtual bool needs_brackets(Ex::iterator it)=0;
 
 		const Ex&    tree;
 		const Properties& properties;

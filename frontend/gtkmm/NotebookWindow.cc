@@ -624,6 +624,19 @@ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::ite
 	// std::cout << "received: " << content << std::endl;
 	it->textbuf=content;
 
+	// Dim the corresponding output cell, if any.
+	auto ch=doc.begin(it);
+	while(ch!=doc.end(it)) {
+		if(ch->cell_type==DataCell::CellType::latex_view) {
+			for(unsigned int i=0; i<canvasses.size(); ++i) {
+				auto vc = canvasses[i]->visualcells.find(&(*ch));
+				if(vc!=canvasses[i]->visualcells.end()) 
+					vc->second.outbox->dim(true);
+				}
+			}
+		++ch;
+		}
+
 	modified=true;
 	update_title();
 

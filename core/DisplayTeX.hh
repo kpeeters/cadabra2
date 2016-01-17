@@ -20,6 +20,9 @@ class DisplayTeX : public DisplayBase {
 	public:
 		DisplayTeX(const Properties&, const Ex&);
 
+	protected:
+		virtual bool needs_brackets(Ex::iterator it) override;
+
 	private:
 		void print_multiplier(std::ostream&, Ex::iterator);
 		void print_opening_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
