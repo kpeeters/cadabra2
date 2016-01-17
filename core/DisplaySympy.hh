@@ -28,6 +28,9 @@ class DisplaySympy : public DisplayBase {
 
 		void import(Ex&);
 
+	protected:
+		virtual bool needs_brackets(Ex::iterator it) override;
+
 	private:
 		/// Output the expression to a sympy-readable form. For symbols
 		/// which cannot be parsed by sympy, this can convert to an

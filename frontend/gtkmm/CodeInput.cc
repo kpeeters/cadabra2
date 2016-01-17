@@ -85,7 +85,7 @@ void CodeInput::init()
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, 
 																				&CodeInput::handle_button_press), 
 															 false);
-//	edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::handle_changed));
+	edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::handle_changed));
 	edit.set_can_focus(true);
 
 	add(edit);
@@ -111,16 +111,20 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 		content_execute(datacell);
 		return true;
 		}
-	else {
-		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
-		// signal so that the cell can be scrolled into view if necessary.
-		// FIXME: I do not know how to do this correctly, check docs.
+//	else {
+//		// If this was a real key press (i.e. not just SHIFT or ALT or similar), emit a
+//		// signal so that the cell can be scrolled into view if necessary.
+//		// FIXME: I do not know how to do this correctly, check docs.
+//		// FIXME: this should be done by monitoring the buffer for changes, see
+//		// http://stackoverflow.com/questions/9250238/detecting-text-view-change-in-gtk-and-mono
+//
+//		if(event->keyval < 65000L)
+//			content_changed(tmp, datacell);
+//
+//		return retval;
+//		}
 
-		if(event->keyval < 65000L)
-			content_changed(tmp, datacell);
-
-		return retval;
-		}
+	return retval;
 	}
 
 void CodeInput::exp_input_tv::shift_enter_pressed()
@@ -227,4 +231,11 @@ void CodeInput::exp_input_tv::on_show()
 	{
 	if(!datacell->hidden)
 		Gtk::TextView::on_show();
+	}
+
+void CodeInput::handle_changed()
+	{
+	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
+	std::string tmp(textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end()));
+	edit.content_changed(tmp, edit.datacell);
 	}

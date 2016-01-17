@@ -1,4 +1,13 @@
 
+- Need to get rid of fl.bracket field; bracket types for grouping
+  should always be converted to round and determined by printing
+  routines. This avoids 1/{A*B} not being 1/(A*B).
+
+- CodeInput changes should be monitored by monitoring the change of the buffer. This is also
+  necessary because cut-n-paste does not induce keypresses.
+
+- Need split cell urgently.
+
 - Having access to an index accessor for Ex would be useful for debugging; e.g. ex[3][1] and so on.
 
 - Sympy can invert matrices so automatically generate rules for an inverse metric. We
@@ -13,11 +22,23 @@
   'simplify' act on the existing expression and simplify in-place, like the other cadabra
   algorithms?
 
-- ex:=Derivative(f(r), r);
+- ex:=A(f(r), r);
 
   does not print correctly: it leads to 
 
-  Derivative((f(r), r))
+  A((f(r), r))
+
+  This is not easy to get right, because the tree is
+  
+    A
+     \comma
+        f 
+         (r)
+        r
+
+  and this could mean both A(f(r),r) or A({f(r),r}).
+
+- Display of component tensors in matrix or nested matrix form.
 
 - substitute needs a flag to determine whether or not components can be matched to abstract indices.
 

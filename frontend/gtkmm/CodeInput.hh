@@ -43,12 +43,15 @@ namespace cadabra {
 					sigc::signal2<bool, std::string, DTree::iterator> content_changed;
 					sigc::signal1<bool, DTree::iterator>              cell_got_focus;
 
+					friend CodeInput;
+
 				private:
 					double scale_;
 					DTree::iterator datacell;
 			};
 
 			bool handle_button_press(GdkEventButton *);
+			void handle_changed();
 
 			/// We cannot edit the content of the DataCell directly,
 			/// because Gtk needs a Gtk::TextBuffer. However, the
