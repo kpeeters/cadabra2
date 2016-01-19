@@ -588,6 +588,8 @@ Ex* dispatch_ex(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth
 	F algo(*get_kernel_from_scope(), ex, args...);
 
 	Ex::iterator it=ex.begin().begin();
+	if(*it->name=="\\equals") 
+		it=ex.child(it,1);
 	ex.reset_state();
 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 	return &ex;
@@ -599,6 +601,8 @@ template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin().begin();
+	if(*it->name=="\\equals") 
+		it=ex.child(it,1);
 	ex.reset_state();
 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 	return &ex;

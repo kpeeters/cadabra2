@@ -385,14 +385,13 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 
 void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 	{
-	std::cerr << "printing components" << std::endl;
 	auto sib=tree.begin(it);
 	auto end=tree.end(it);
 	--end;
-	while(sib!=end) {
-		dispatch(str, sib);
-		++sib;
-		}
+//	while(sib!=end) {
+//		dispatch(str, sib);
+//		++sib;
+//		}
 	str << " = \\left\\{\\begin{aligned}";
 	sib=tree.begin(end);
 	while(sib!=tree.end(end)) {
