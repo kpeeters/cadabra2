@@ -16,7 +16,7 @@ endif()
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
 # Locate Boost
-find_package(Boost 1.45.0 COMPONENTS python system regex log)
+find_package(Boost 1.45.0 COMPONENTS python system regex log program_options)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)

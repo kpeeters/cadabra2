@@ -1,4 +1,6 @@
 
+- need registration and logging before going public
+
 - substitute should by default, when it encounters an \equal top node, only act
   on the right hand side. It should also, when encountering an object without an
   \equal top node, construct an \equal node with the original expression on the

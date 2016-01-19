@@ -6,7 +6,7 @@
 
 int main()
 	{
-	snoop::log.init("CadabraServer", "2.0", "/tmp/cadabra.sql", "localhost:8083");
+	snoop::log.init("CadabraServer", "2.0", "/tmp/cadabra_server.sql", "http://log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
 	snoop::log(snoop::info) << "Starting" << snoop::flush;
 
