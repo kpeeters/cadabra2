@@ -308,7 +308,7 @@ void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it)
 		if(++steps==20) {
 			steps=0;
 			}
-		if(*ch->multiplier>0 && ch!=tree.begin(it))
+		if(*ch->multiplier>=0 && ch!=tree.begin(it))
 			str << "+"; 
 
 		dispatch(str, ch);
