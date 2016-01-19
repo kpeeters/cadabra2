@@ -20,6 +20,10 @@
   However this does get clumsy when you act on a longish expression and do not
   want to see it constantly printed in its original form. 
 
+- For the example notebooks we need default rules back.
+
+- GammaMatrix with two identical indices does not canonicalise to zero.
+
 - Export to LaTeX and then once that works, to PDF.
 
 - Need to get rid of fl.bracket field; bracket types for grouping
