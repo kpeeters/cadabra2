@@ -64,6 +64,8 @@ namespace cadabra {
 			friend ActionRemoveCell;
          // FIXME: add other actions.
 	
+			bool is_registered() const;
+			void set_email(const std::string&);
 		protected:
          GUIBase       *gui;
          ComputeThread *compute;
@@ -91,6 +93,10 @@ namespace cadabra {
 			/// while this is running. So a running action can add more actions.
 
          void                                             process_action_queue();
+
+
+			/// Configuration options read from ~/.config/cadabra.conf.
+			bool  registered;
 	};
 	
 }

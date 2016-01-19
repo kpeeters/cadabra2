@@ -83,6 +83,7 @@ T *get_pointer(std::shared_ptr<T> p)
 // Algorithms.
 
 #include "algorithms/canonicalise.hh"
+#include "algorithms/collect_factors.hh"
 #include "algorithms/collect_terms.hh"
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
@@ -855,6 +856,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	// Algorithms with only the Ex as argument.
 	def_algo_1<canonicalise>("canonicalise");
+	def_algo_1<collect_factors>("collect_factors");
 	def_algo_1<collect_terms>("collect_terms");
 	def_algo_1<decompose_product>("decompose_product");
 	def_algo_1<distribute>("distribute");

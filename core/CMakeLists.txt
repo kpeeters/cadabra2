@@ -113,6 +113,7 @@ set(LOCAL_SRC_FILES
   properties/WeylTensor.cc
   modules/xperm_new.cc
   algorithms/canonicalise.cc
+  algorithms/collect_factors.cc
   algorithms/collect_terms.cc
   algorithms/decompose_product.cc
   algorithms/distribute.cc

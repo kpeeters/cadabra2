@@ -1,7 +1,8 @@
 
 #include "Cadabra.hh"
 #include <signal.h>
-
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/entry.h>
 
 // Signal handler for ctrl-C
 
@@ -42,6 +43,40 @@ void Cadabra::on_activate()
 	{
 	add_window(nw);
 	nw.show();
+
+	if(!nw.is_registered()) {
+		Gtk::Dialog md("Welcome to Cadabra!", nw, Gtk::MESSAGE_WARNING);
+		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		Gtk::Box *box = md.get_content_area();
+		Gtk::Label txt;
+		txt.set_text("Writing this software takes an incredible amount of spare time. Please help guarantee future development by registering your email address, so I can convince the bean-counters that this software is of interest.\n\nWe will only use this address to email you, roughly once every half a year, with a bit of news about Cadabra. Many thanks for your support!");
+		txt.set_line_wrap();
+		txt.set_margin_top(10);
+		txt.set_margin_left(10);
+		txt.set_margin_right(10);
+		txt.set_margin_bottom(10);
+		box->pack_start(txt, Gtk::PACK_EXPAND_WIDGET);
+		Gtk::HBox  email_box;
+		Gtk::Label email_label("Email address:");
+		Gtk::Entry email;
+		box->pack_start(email_box, Gtk::PACK_EXPAND_WIDGET, 10);
+		email_box.pack_start(email_label, Gtk::PACK_SHRINK, 15);
+		email_box.pack_end(email, Gtk::PACK_EXPAND_WIDGET, 10);
+		Gtk::HBox hbox;
+		box->pack_end(hbox, Gtk::PACK_SHRINK);
+		Gtk::Button reg("Register"), nothanks("No thanks");
+		hbox.pack_end(reg, Gtk::PACK_SHRINK, 10);
+		hbox.pack_start(nothanks, Gtk::PACK_SHRINK,10);
+		reg.signal_clicked().connect([&]() {
+				nw.set_email(email.get_text());
+				md.hide();
+				});
+		nothanks.signal_clicked().connect([&]() {
+				md.hide();
+				});
+		box->show_all();
+		md.run();
+		}
 	}
 
 void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint)

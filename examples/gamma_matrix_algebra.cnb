@@ -285,7 +285,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-18\\Gamma_{k l} d+8\\Gamma_{k l} d d+12\\Gamma_{k l}-3\\delta_{k l}+6\\delta_{k l} d-4\\delta_{k l} d d-\\Gamma_{k l} d d d+\\delta_{k l} d d d\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-12\\Gamma_{k l} d+6\\Gamma_{k l} d d+8\\Gamma_{k l}-4\\Gamma_{l k}+6\\Gamma_{l k} d-4\\delta_{l k}+4\\delta_{k l} d-4\\delta_{k l} d d-\\Gamma_{k l} d d d-2\\Gamma_{l k} d d+2\\delta_{l k} d+\\delta_{k l} d d d+\\delta_{k l}\\end{dmath*}"
 				},
 				
 				{
