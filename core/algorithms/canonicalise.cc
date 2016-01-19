@@ -20,8 +20,17 @@ bool canonicalise::can_apply(iterator it)
 	
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
-		if(*sib->name=="\\sum" || *sib->name=="\\prod" )
-			return false;
+		// If a factor is a sum or a product, we can only canonicalise
+		// if those are scalars, i.e. carry no indices. 
+		// FIXME: For the time being, we even forbid dummy indices.
+		if(*sib->name=="\\sum" || *sib->name=="\\prod" ) {
+			index_map_t ind_dummy, ind_free;
+			classify_indices(sib, ind_free, ind_dummy);
+			if(ind_free.size()+ind_dummy.size()>0)
+				return false;
+			else 
+				return true;
+			}
 		++sib;
 		}
 	return true;

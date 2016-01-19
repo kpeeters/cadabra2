@@ -19,6 +19,11 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	// FIXME: may need looking at properties
 	// FIXME: write as individual parent/current tests
 
+	std::string parent=*tree.parent(it)->name;
+	std::string child =*it->name;
+
+	if(parent=="\\partial" && child=="\\sum") return true;
+
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
 		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
@@ -338,7 +343,7 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 			steps=0;
 			str << "%\n"; // prevent LaTeX overflow.
 			}
-		if(*ch->multiplier>0 && ch!=tree.begin(it))
+		if(*ch->multiplier>=0 && ch!=tree.begin(it))
 			str << "+"; 
 
 		dispatch(str, ch);
