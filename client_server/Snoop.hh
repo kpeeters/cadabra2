@@ -17,7 +17,6 @@
 #include <sqlite3.h>
 #include <stdint.h>
 #include <mutex>
-//#include <jsoncpp/json/json.h> // Linux?
 #include <json/json.h>
 
 namespace snoop {
@@ -146,6 +145,7 @@ namespace snoop {
 	const char warn[] ="warning";
 	const char error[]="error";
 	const char fatal[]="fatal";
+	const char email[]="email";
 }
 
 #define LOC __FILE__, __LINE__, __func__

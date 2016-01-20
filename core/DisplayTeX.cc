@@ -254,18 +254,14 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator num=tree.begin(it), den=num;
 	++den;
 
-	bool close_bracket=false;
 	str << "\\frac{";
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
 		}
 
 	dispatch(str, num);
-
 	str << "}{";
-	
 	dispatch(str, den);
-
 	str << "}";
 	}
 

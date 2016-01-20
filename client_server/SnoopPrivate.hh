@@ -5,6 +5,7 @@
 #include <websocketpp/client.hpp>
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/functional.hpp>
+#include <mutex>
 
 typedef websocketpp::client<websocketpp::config::asio_client> WebsocketClient;
 typedef websocketpp::config::asio_client::message_type::ptr   message_ptr;
@@ -27,7 +28,8 @@ namespace snoop {
 
 			/// Operator to initialise a logging entry with the type of
 			/// the log message as well as (optionally) the file, line
-			/// number and method.
+			/// number and method. Thread-safe: can be called from different
+			/// threads at the same time.
 
 			Snoop& operator()(const std::string& type, std::string fl="", int loc=-1, std::string method="");
 
@@ -108,5 +110,8 @@ namespace snoop {
 			void on_client_fail(websocketpp::connection_hdl hdl);
 			void on_client_close(websocketpp::connection_hdl hdl);
 			void on_client_message(websocketpp::connection_hdl hdl, message_ptr msg);
+
+		private:
+			std::mutex   call_mutex;
 	};
 }
