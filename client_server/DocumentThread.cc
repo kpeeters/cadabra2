@@ -26,7 +26,7 @@ DocumentThread::DocumentThread(GUIBase* g)
 	// Setup logging.
 	snoop::log.init("Cadabra", "2.00", "/tmp/cadabra_log.sql", "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
-	snoop::log(snoop::warn) << "Program started" << snoop::flush;	
+	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 
 	struct passwd *pw = getpwuid(getuid());
 	const char *homedir = pw->pw_dir;
