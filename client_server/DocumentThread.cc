@@ -24,9 +24,9 @@ DocumentThread::DocumentThread(GUIBase* g)
 	: gui(g), compute(0)
 	{
 	// Setup logging.
-	snoop::log.init("Cadabra", "2.00", "log.cadabra.science");
+	snoop::log.init("Cadabra", "2.0", "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
-	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
+//	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 
 	struct passwd *pw = getpwuid(getuid());
 	const char *homedir = pw->pw_dir;
@@ -135,6 +135,11 @@ bool DocumentThread::is_registered() const
 
 void DocumentThread::set_email(const std::string& email) 
 	{
-	std::cerr << "Received email " << email << std::endl;
-	snoop::log(snoop::info) << email << snoop::flush;	
+	snoop::log("email") << email << snoop::flush;	
+
+	// FIXME: make this a generic function to write all our config data.
+	struct passwd *pw = getpwuid(getuid());
+	const char *homedir = pw->pw_dir;
+	std::ofstream config(homedir + std::string("/.config/cadabra.conf"));
+	config << "registered=true" << std::endl;
 	}
