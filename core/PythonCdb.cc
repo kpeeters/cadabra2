@@ -128,7 +128,7 @@ std::vector<T> to_std_vector(const boost::python::list& iterable )
 	}
 
 bool output_ipython=false;
-
+bool post_process_enabled=true;
 
 // Output routines in display, input, latex and html formats (the latter two
 // for use with IPython).
@@ -581,22 +581,29 @@ std::string Property<Prop>::repr_() const
 // declaration of 'join_gamma' below for an example of how to declare
 // those additional arguments).
 
-#ifndef __clang__
-
-template<class F, typename... Args>
-Ex* dispatch_ex(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth)
-	{
-	F algo(*get_kernel_from_scope(), ex, args...);
-
-	Ex::iterator it=ex.begin().begin();
-	if(*it->name=="\\equals") 
-		it=ex.child(it,1);
-	ex.reset_state();
-	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-	return &ex;
-	}
-
-#else
+// #ifndef __clang__
+// 
+// template<class F, typename... Args>
+// Ex* dispatch_ex(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth)
+// 	{
+// 	F algo(*get_kernel_from_scope(), ex, args...);
+// 
+// 	Ex::iterator it=ex.begin().begin();
+// 	if(*it->name=="\\equals") 
+// 		it=ex.child(it,1);
+// 	ex.reset_state();
+// 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+// 
+// 	// FIXME: find the 'post_process' function, and if found, turn off
+// 	// post-processing, then call the function on the current Ex.
+// 	auto module = boost::python::import("__main__");
+// 	auto post_process = module.attr("post_process");
+// 	post_process();
+// 
+// 	return &ex;
+// 	}
+// 
+// #else
 
 template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
@@ -606,6 +613,24 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 		it=ex.child(it,1);
 	ex.reset_state();
 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+
+	// Find the 'post_process' function, and if found, turn off
+	// post-processing, then call the function on the current Ex.
+	if(post_process_enabled) {
+		post_process_enabled=false;
+		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+		boost::python::object post_process = globals["post_process"];
+		try {
+			post_process(boost::ref(ex));
+			}
+		catch(boost::python::error_already_set const &) {
+			// In order to prevent the error from propagating, we have to read it out. 
+			std::string err = parse_python_exception();
+			std::cerr  << err << std::endl;
+			}
+		post_process_enabled=true;
+		}
+
 	return &ex;
 	}
 
@@ -630,7 +655,7 @@ Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned i
 	return dispatch_base(ex, algo, deep, repeat, depth);
 	}
 
-#endif
+//#endif
 
 template<class F, typename... Args>
 Ex* dispatch_string(const std::string& ex, Args... args, bool deep, bool repeat, unsigned int depth)
