@@ -24,7 +24,12 @@ namespace snoop {
          /// causing problems.
 
 			void init(const std::string& app_name, const std::string& app_version, 
-						 const std::string& local_file, std::string server="");
+						 std::string server="", std::string local_log_file="");
+
+			/// Get a string which uniquely identifies the current user. This is
+			/// stored in ~/.config/snoop/appname.conf.
+
+			std::string get_user_uuid(const std::string& app_name);
 
 			/// Operator to initialise a logging entry with the type of
 			/// the log message as well as (optionally) the file, line
@@ -40,9 +45,9 @@ namespace snoop {
 
 			void sync_with_server(bool from_wsthread=false);
 			
-			/// As above, but only for app entries. 
+			/// As above, but only for run entries. 
 
-			void sync_apps_with_server(bool from_wsthread=false);
+			void sync_runs_with_server(bool from_wsthread=false);
 			
 			/// As above, but only for log entries. 
 

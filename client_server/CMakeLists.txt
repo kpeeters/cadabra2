@@ -28,6 +28,7 @@ pkg_check_modules(JSONCPP jsoncpp REQUIRED)   # libjsoncpp-dev
 #find_package(jsoncpp REQUIRED)
 message("-- Found JSONCPP include dir: ${JSONCPP_INCLUDE_DIRS}")
 message("-- Found JSONCPP library dir: ${JSONCPP_LIBRARY_DIRS}")
+message("-- Found JSONCPP libraries  : ${JSONCPP_LIBRARIES}")
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR})
 include_directories("${JSONCPP_INCLUDE_DIRS}")
 pkg_check_modules(UUID uuid REQUIRED)

@@ -9,8 +9,7 @@
 #include <boost/regex.hpp>
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
-//#include <jsoncpp/json/json.h> // Needed on linux?
-#include <json/json.h>  // Definitely the right thing with Homebrew
+#include <json/json.h>  
 //#include <boost/shared_ptr.hpp>
 //#include <boost/make_shared.hpp>
 
@@ -220,7 +219,7 @@ std::string Server::pre_parse(const std::string& line)
 std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
 //	std::cerr << "RUN_STRING" << std::endl;
-	snoop::log("run") << blk << snoop::flush;
+	// snoop::log("run") << blk << snoop::flush;
 
 	std::string result;
 
@@ -239,7 +238,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	try {
 		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
 		std::string object_classname = boost::python::extract<std::string>(ignored.attr("__class__").attr("__name__"));
-		snoop::log("info") << "Run finished" << snoop::flush;
+		// snoop::log("info") << "Run finished" << snoop::flush;
 //		std::cout << "exec returned a " << object_classname << std::endl;
 		/*
 		boost::python::object catchobj = main_module.attr("catchOut");
@@ -290,7 +289,7 @@ void Server::on_open(websocketpp::connection_hdl hdl)
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	Connection con;
 	con.hdl=hdl;
-	snoop::log(snoop::info) << "Connection " << con.uuid << " open." << snoop::flush;
+	// snoop::log(snoop::info) << "Connection " << con.uuid << " open." << snoop::flush;
 	connections[hdl]=con;
 	}
 
@@ -298,7 +297,7 @@ void Server::on_close(websocketpp::connection_hdl hdl)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);    
 	auto it = connections.find(hdl);
-	snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
+	// snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
 	connections.erase(hdl);
 	}
 
@@ -314,7 +313,7 @@ void Server::wait_for_job()
    // available, and processing it. Blocks are always processed sequentially
 	// even though new ones may come in before previous ones have finished.
 
-	snoop::log(snoop::info) << "Waiting for blocks" << snoop::flush;
+	// snoop::log(snoop::info) << "Waiting for blocks" << snoop::flush;
 
 	while(true) {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
@@ -327,7 +326,7 @@ void Server::wait_for_job()
 		try {
 			// We are done with the block_queue; release the lock so that the
 			// master thread can push new blocks onto it.
-			snoop::log(snoop::info) << "Block finished running" << snoop::flush;
+			// snoop::log(snoop::info) << "Block finished running" << snoop::flush;
 			current_hdl=block.hdl;
 			current_id =block.cell_id;
 			block.output = run_string(block.input);
@@ -344,7 +343,7 @@ void Server::wait_for_job()
 			on_block_error(block);
 			}
 		catch(std::exception& ex) {
-			snoop::log(snoop::info) << "System exception exception" << snoop::flush;
+			snoop::log(snoop::info) << "System exception" << snoop::flush;
 			lock.lock();
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);

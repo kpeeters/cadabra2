@@ -11,10 +11,21 @@
 #include <ctime>
 #include <sys/utsname.h>
 #include <stdint.h>
+#include <jsoncpp/json/json.h>
+#include <set>
+
+
+
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 #define BOOST_SPIRIT_THREADSAFE
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
+#include <boost/config.hpp>
+#include <boost/program_options/detail/config_file.hpp>
+#include <boost/program_options/parsers.hpp>
 
 using namespace snoop;
 
@@ -45,12 +56,12 @@ SnoopImpl::SnoopImpl(Snoop *s)
    {
    }
 
-void Snoop::init(const std::string& app_name, const std::string& app_version, const std::string& dbname, std::string server)
+void Snoop::init(const std::string& app_name, const std::string& app_version, std::string server, std::string dbname)
    {
-	impl->init(app_name, app_version, dbname, server);
+	impl->init(app_name, app_version, server, dbname);
 	}
 
-void SnoopImpl::init(const std::string& app_name, const std::string& app_version, const std::string& dbname, std::string server)
+void SnoopImpl::init(const std::string& app_name, const std::string& app_version, std::string server, std::string dbname)
    {
 	assert(app_name.size()>0);
 	
@@ -61,20 +72,26 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		this_app_.pid = getpid();
 		struct utsname buf;
 		if(uname(&buf)==0) {
-#ifdef __APPLE__
-			this_app_.machine_id = std::string(buf.sysname)
-				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine;
-#else
 			this_app_.machine_id = std::string(buf.sysname)
 				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine+", "+buf.domainname;
-#endif
 			}
+
+		this_app_.user_id = get_user_uuid(app_name);
 
 		auto duration =  std::chrono::high_resolution_clock::now().time_since_epoch();
 		this_app_.create_millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 		
 		server_=server;
 
+		if(dbname.size()==0) {
+			struct passwd *pw = getpwuid(getuid());
+			const char *homedir = pw->pw_dir;
+			std::string logdir = homedir+std::string("/.log");
+			mkdir(logdir.c_str(), 0700);
+			std::cerr << logdir << std::endl;
+			dbname=logdir+"/"+app_name+".sql";
+			}
+		
 		int ret = sqlite3_open_v2(dbname.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 		if(ret) {
 			throw std::logic_error("Cannot open database");
@@ -101,6 +118,56 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		}
    }
 
+std::string Snoop::get_user_uuid(const std::string& appname) 
+	{
+	return impl->get_user_uuid(appname);
+	}
+
+std::string SnoopImpl::get_user_uuid(const std::string& appname) 
+	{
+	struct passwd *pw = getpwuid(getuid());
+	const char *homedir = pw->pw_dir;
+	std::string user_uuid="";
+
+	std::string configpath=homedir + std::string("/.config/snoop/"+appname+".conf");
+	std::ifstream config(configpath);
+	bool need_to_write=true;
+	if(config) {
+		std::set<std::string> options;
+		options.insert("user");
+
+		for(boost::program_options::detail::config_file_iterator i(config, options), e ; i != e; ++i) {
+			// FIXME: http://stackoverflow.com/questions/24701547/how-to-parse-boolean-option-in-config-file
+			if(i->string_key=="user") {
+				user_uuid=i->value[0];
+				need_to_write=false;
+				}
+			}
+		}
+	if(need_to_write) {
+		// First time run; create config file.
+		std::string confbase = homedir+std::string("/.config");
+		mkdir(confbase.c_str(), 0700);
+		std::string confdir = homedir+std::string("/.config/snoop");
+		mkdir(confdir.c_str(), 0700);
+		
+		std::ofstream config(configpath);
+		if(config) {
+			uuid_t nid;
+			uuid_generate(nid);
+			char *uuid_string = new char[100];
+			uuid_unparse(nid, uuid_string);
+			user_uuid=uuid_string;
+
+			config << "user = " << user_uuid << std::endl;
+			}
+		else {
+			std::cerr << "Snoop: cannot write " << configpath << std::endl;
+			}
+		}
+	return user_uuid;
+	}
+
 void Snoop::set_sync_immediately(bool s)
 	{
 	sync_immediately_=s;
@@ -113,7 +180,7 @@ void SnoopImpl::create_tables()
 	std::lock_guard<std::mutex> lock(sqlite_mutex);
 
 	char *errmsg;
-	if(sqlite3_exec(db, "create table if not exists apps ("
+	if(sqlite3_exec(db, "create table if not exists runs ("
 						 "id              integer primary key autoincrement,"
 						 "uuid            text,"
 						 "create_millis   unsigned big int,"
@@ -123,10 +190,11 @@ void SnoopImpl::create_tables()
 						 "machine_id      text,"
 						 "app_name        text,"
 						 "app_version     text,"
+						 "user_id         text,"
 						 "server_status   int);"
 						 , NULL, NULL, &errmsg) != SQLITE_OK) {
 		sqlite3_free(errmsg);
-		throw std::logic_error("Failed to create table apps");
+		throw std::logic_error("Failed to create table runs");
 		}
 	if(sqlite3_exec(db, "create table if not exists logs ("
 						 "log_id          integer primary key autoincrement,"
@@ -154,7 +222,8 @@ void SnoopImpl::obtain_uuid()
 
 	sqlite3_stmt *statement=0;
 	std::ostringstream ss;
-	ss << "select uuid from apps where pid=" << getpid() << " order by create_millis desc limit 1";
+//	ss << "select uuid from runs where pid=" << getpid() << " order by create_millis desc limit 1";
+	ss << "select uuid from runs where id=" << getpid() << " order by create_millis desc limit 1";
 	
 	int res = sqlite3_prepare(db, ss.str().c_str(), -1, &statement, NULL);
 	if(res==SQLITE_OK) {
@@ -192,10 +261,10 @@ bool SnoopImpl::store_app_entry(Snoop::AppEntry& app)
 bool SnoopImpl::store_app_entry_without_lock(Snoop::AppEntry& app)
 	{
 	sqlite3_stmt *statement=0;
-	int res = sqlite3_prepare(db, "insert into apps (uuid, create_millis, receive_millis, pid, ip_address, machine_id, "
-									  "app_name, app_version, server_status) "
+	int res = sqlite3_prepare(db, "insert into runs (uuid, create_millis, receive_millis, pid, ip_address, machine_id, "
+									  "app_name, app_version, user_id, server_status) "
 									  "values "
-									  "(?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+									  "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 									  -1, &statement, NULL);
 	
 	if(res==SQLITE_OK) {
@@ -207,7 +276,8 @@ bool SnoopImpl::store_app_entry_without_lock(Snoop::AppEntry& app)
 		sqlite3_bind_text(statement,   6, app.machine_id.c_str(), app.machine_id.size(), 0);
 		sqlite3_bind_text(statement,   7, app.app_name.c_str(), app.app_name.size(), 0);
 		sqlite3_bind_text(statement,   8, app.app_version.c_str(), app.app_version.size(), 0);
-		sqlite3_bind_int(statement,    9, app.server_status);
+		sqlite3_bind_text(statement,   9, app.user_id.c_str(), app.user_id.size(), 0);
+		sqlite3_bind_int(statement,   10, app.server_status);
 		
 		sqlite3_step(statement);
 		sqlite3_finalize(statement);
@@ -282,7 +352,7 @@ void SnoopImpl::start_websocket_client()
 	websocketpp::lib::error_code ec;
 	connection = wsclient.get_connection(uri, ec);
 	if (ec) {
-		// std::cerr << "Snoop: websocket connection error " << ec.message() << std::endl;
+		 std::cerr << "Snoop: websocket connection error " << ec.message() << std::endl;
 		return;
 		}
 
@@ -305,16 +375,16 @@ void SnoopImpl::sync_with_server(bool from_wsthread)
 		if(!connection_is_open) 
 			return;
 
-	sync_apps_with_server(from_wsthread);
+	sync_runs_with_server(from_wsthread);
 	sync_logs_with_server(from_wsthread);
 	}
 
-void Snoop::sync_apps_with_server(bool from_wsthread)
+void Snoop::sync_runs_with_server(bool from_wsthread)
 	{
-	impl->sync_apps_with_server(from_wsthread);
+	impl->sync_runs_with_server(from_wsthread);
 	}
 
-void SnoopImpl::sync_apps_with_server(bool from_wsthread)
+void SnoopImpl::sync_runs_with_server(bool from_wsthread)
 	{
 	if(!from_wsthread)
 		if(!connection_is_open) 
@@ -328,9 +398,9 @@ void SnoopImpl::sync_apps_with_server(bool from_wsthread)
 	sqlite3_stmt *statement=0;
 	std::ostringstream ssc;
 	std::ostringstream pack;
-	pack << "{ \"app\": [";
-	ssc << "select id, uuid, create_millis, receive_millis, pid, ip_address, machine_id, app_name, app_version, server_status "
-		 << "from apps where server_status=0";
+	pack << "{ \"run\": [";
+	ssc << "select id, uuid, create_millis, receive_millis, pid, ip_address, machine_id, app_name, app_version, user_id, server_status "
+		 << "from runs where server_status=0";
 
 	int sres = sqlite3_prepare(db, ssc.str().c_str(), -1, &statement, NULL);
 	if(sres==SQLITE_OK) {
@@ -340,24 +410,25 @@ void SnoopImpl::sync_apps_with_server(bool from_wsthread)
 			int ret = sqlite3_step(statement);
 			switch(ret) {
 				case SQLITE_BUSY: 
-					throw std::logic_error("Unexpected SQLITE_BUSY in sync_apps_with_server");
+					throw std::logic_error("Unexpected SQLITE_BUSY in sync_runs_with_server");
 					break;
 				case SQLITE_ROW: {
-					Snoop::AppEntry le;
+					Snoop::AppEntry ae;
 					// FIXME: isolate this in a separate function so we can fetch individual records more easily
-					le.id               = sqlite3_column_int(statement, 0);
-					le.uuid             = safestring(sqlite3_column_text(statement, 1));
-					le.create_millis    = sqlite3_column_int64(statement, 2);
-					le.receive_millis   = sqlite3_column_int64(statement, 3);
-					le.pid              = sqlite3_column_int(statement, 4);
-					le.ip_address       = safestring(sqlite3_column_text(statement, 5));
-					le.machine_id       = safestring(sqlite3_column_text(statement, 6));
-					le.app_name         = safestring(sqlite3_column_text(statement, 7));
-					le.app_version      = safestring(sqlite3_column_text(statement, 8));
-					le.server_status    = sqlite3_column_int(statement, 9);
+					ae.id               = sqlite3_column_int(statement, 0);
+					ae.uuid             = safestring(sqlite3_column_text(statement, 1));
+					ae.create_millis    = sqlite3_column_int64(statement, 2);
+					ae.receive_millis   = sqlite3_column_int64(statement, 3);
+					ae.pid              = sqlite3_column_int(statement, 4);
+					ae.ip_address       = safestring(sqlite3_column_text(statement, 5));
+					ae.machine_id       = safestring(sqlite3_column_text(statement, 6));
+					ae.app_name         = safestring(sqlite3_column_text(statement, 7));
+					ae.app_version      = safestring(sqlite3_column_text(statement, 8));
+					ae.user_id          = safestring(sqlite3_column_text(statement, 9));
+					ae.server_status    = sqlite3_column_int(statement, 10);
 					if(!first) pack << ", \n";
 					else       first=false;
-					pack << le.to_json(false);
+					pack << ae.to_json(false);
 					break;
 					}
 				case SQLITE_DONE: {
@@ -375,7 +446,7 @@ void SnoopImpl::sync_apps_with_server(bool from_wsthread)
 	// to the server.
 
 	ssc.str("");
-	ssc << "update apps set server_status=server_status-1 where server_status=0";
+	ssc << "update runs set server_status=server_status-1 where server_status=0";
 	sres = sqlite3_prepare(db, ssc.str().c_str(), -1, &statement, NULL);
 	if(sres==SQLITE_OK) {
 		sqlite3_step(statement);
@@ -421,7 +492,7 @@ void SnoopImpl::sync_logs_with_server(bool from_wsthread)
 			int ret = sqlite3_step(statement);
 			switch(ret) {
 				case SQLITE_BUSY: 
-					throw std::logic_error("Unexpected SQLITE_BUSY in sync_apps_with_server");
+					throw std::logic_error("Unexpected SQLITE_BUSY in sync_runs_with_server");
 					break;
 				case SQLITE_ROW: {
 					Snoop::LogEntry le;
@@ -480,7 +551,7 @@ std::vector<Snoop::AppEntry> SnoopImpl::get_app_registrations(std::string uuid_f
 
 	std::ostringstream ssc;
 	ssc << "select id, uuid, create_millis, receive_millis, pid, ip_address, machine_id, "
-		"app_name, app_version, server_status from apps";
+		"app_name, app_version, user_id, server_status from runs";
 	if(uuid_filter.size()>0) 
 		ssc << " where uuid=?";
 
@@ -505,7 +576,8 @@ std::vector<Snoop::AppEntry> SnoopImpl::get_app_registrations(std::string uuid_f
 					ae.machine_id       = safestring(sqlite3_column_text(statement, 6));
 					ae.app_name         = safestring(sqlite3_column_text(statement, 7));
 					ae.app_version      = safestring(sqlite3_column_text(statement, 8));
-					ae.server_status    = sqlite3_column_int(statement, 9);
+					ae.user_id          = safestring(sqlite3_column_text(statement, 9));
+					ae.server_status    = sqlite3_column_int(statement, 10);
 					entries.push_back(ae);
 					break;
 					}
@@ -587,7 +659,7 @@ void SnoopImpl::on_client_message(websocketpp::connection_hdl, WebsocketClient::
 
 		sqlite3_stmt *statement=0;
 		std::ostringstream ssc;
-		ssc << "update apps set server_status=1 where id=?";
+		ssc << "update runs set server_status=1 where id=?";
 		int ret = sqlite3_prepare(db, ssc.str().c_str(), -1, &statement, NULL);
 		if(ret!=SQLITE_OK) 
 			throw std::logic_error("Failed to prepare statement for on_client_message");
@@ -638,6 +710,8 @@ Snoop& Snoop::operator()(const std::string& type, std::string fl, int loc, std::
 
 Snoop& SnoopImpl::operator()(const std::string& type, std::string fl, int loc, std::string method) 
 	{
+	std::lock_guard<std::mutex> lock(call_mutex);
+
 	assert(this_app_.app_name.size()>0);
 
 	this_log_.type=type;
@@ -655,6 +729,8 @@ Snoop& Snoop::operator<<(const Flush& f)
 
 Snoop& SnoopImpl::operator<<(const Flush&)
    {
+	std::lock_guard<std::mutex> lock(call_mutex);
+
 	assert(this_app_.app_name.size()>0);
 
 	// Fill in the remaining fields of the LogEntry to be stored/sent.
@@ -740,9 +816,11 @@ Snoop::AppEntry::AppEntry()
 Snoop::AppEntry::AppEntry(const std::string& uuid_, uint64_t create_millis_, uint64_t receive_millis_, pid_t pid_, 
 								  const std::string& ip_address_, const std::string& machine_id_, 
 								  const std::string& app_name_,   const std::string& app_version_,
+								  const std::string& user_id_,
 								  int server_status_)
 	: uuid(uuid_), create_millis(create_millis_), receive_millis(receive_millis_), pid(pid_), ip_address(ip_address_),
-	  machine_id(machine_id_), app_name(app_name_), app_version(app_version_), server_status(server_status_)
+	  machine_id(machine_id_), app_name(app_name_), app_version(app_version_), 
+			 user_id(user_id_), server_status(server_status_)
 	{
 	}
 
@@ -772,6 +850,7 @@ std::string Snoop::AppEntry::to_json(bool human_readable) const
 		 << ", \"machine_id\": \"" << machine_id << "\""
 		 << ", \"app_name\": \"" << app_name << "\""
 		 << ", \"app_version\": \"" << app_version << "\""
+		 << ", \"user_id\": \"" << user_id << "\""
 		 << ", \"server_status\": " << server_status
 		 << ", \"connected\": " << connected
 		 << "}";
@@ -805,5 +884,6 @@ void Snoop::AppEntry::from_json(const Json::Value& entry)
 	machine_id    = entry["machine_id"].asString();
 	app_name      = entry["app_name"].asString();
 	app_version   = entry["app_version"].asString();
+	user_id       = entry["user_id"].asString();
 	server_status = entry["server_status"].asInt();
 	}
