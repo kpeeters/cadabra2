@@ -16,7 +16,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 
-#include <snoop/Snoop.hh>
+#include "Snoop.hh"
 
 using namespace cadabra;
 
@@ -24,7 +24,7 @@ DocumentThread::DocumentThread(GUIBase* g)
 	: gui(g), compute(0)
 	{
 	// Setup logging.
-	snoop::log.init("Cadabra", "2.00", "/tmp/cadabra_log.sql", "log.cadabra.science");
+	snoop::log.init("Cadabra", "2.00", "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
 	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 

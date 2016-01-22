@@ -1,8 +1,8 @@
 
 /*
 
-   Snoop v1.0 
-   Copyright (C) 2015  Kasper Peeters
+   Snoop
+   Copyright (C) 2015-2016  Kasper Peeters
    Available under the terms of the GPL v3.
 
    Snoop is a lightweight logging library which stores its log entries in
@@ -38,7 +38,11 @@ namespace snoop {
          /// causing problems.
 
 			void init(const std::string& app_name, const std::string& app_version, 
-						 const std::string& local_file, std::string server="");
+						 std::string server="", std::string local_log_file="");
+
+			/// Get a string which uniquely identifies the current user. This is
+			/// stored in ~/.config/snoop/appname.conf.
+			std::string get_user_uuid(const std::string& app_name);
 
 			/// Operator to initialise a logging entry with the type of
 			/// the log message as well as (optionally) the file, line
@@ -69,9 +73,9 @@ namespace snoop {
 
 			void sync_with_server(bool from_wsthread=false);
 			
-			/// As above, but only for app entries. 
+			/// As above, but only for run entries. 
 
-			void sync_apps_with_server(bool from_wsthread=false);
+			void sync_runs_with_server(bool from_wsthread=false);
 			
 			/// As above, but only for log entries. 
 
@@ -86,6 +90,7 @@ namespace snoop {
 					AppEntry(const std::string& uuid_, uint64_t create_millis_, uint64_t receive_millis_, pid_t pid_, 
 								const std::string& ip_address_, const std::string& machine_id_, 
 								const std::string& app_name_,   const std::string& app_version_,
+								const std::string& user_id_,
 								int server_status_);
 
 					std::string to_json(bool human_readable) const;
@@ -100,6 +105,7 @@ namespace snoop {
 					std::string machine_id;
 					std::string app_name;
 					std::string app_version;
+					std::string user_id;
 					int         server_status; // 1: synced, 0 and negative: number of attempts at syncing made
 					bool        connected;
 			};
@@ -147,6 +153,9 @@ namespace snoop {
 	const char fatal[]="fatal";
 	const char email[]="email";
 }
+
+// set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__FILENAME__='\"$(subst
+//  ${CMAKE_SOURCE_DIR}/,,$(abspath $<))\"'")
 
 #define LOC __FILE__, __LINE__, __func__
 
