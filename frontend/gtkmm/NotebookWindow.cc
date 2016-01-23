@@ -624,6 +624,16 @@ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::ite
 	// std::cout << "received: " << content << std::endl;
 	it->textbuf=content;
 
+	dim_output_cells(it);
+
+	modified=true;
+	update_title();
+
+	return false;
+	}
+
+void NotebookWindow::dim_output_cells(DTree::iterator it)
+	{
 	// Dim the corresponding output cell, if any.
 	auto ch=doc.begin(it);
 	while(ch!=doc.end(it)) {
@@ -637,10 +647,6 @@ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::ite
 		++ch;
 		}
 
-	modified=true;
-	update_title();
-
-	return false;
 	}
 
 bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
@@ -673,6 +679,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 	// execution result comes back from the server?
 
 	DTree::sibling_iterator sib=doc.begin(it);
+	dim_output_cells(it);
 	while(sib!=doc.end(it)) {
 		// std::cout << "cadabra-client: scheduling output cell for removal" << std::endl;
 		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib);

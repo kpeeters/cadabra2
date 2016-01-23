@@ -165,6 +165,8 @@ namespace cadabra {
 			bool cell_content_changed(const std::string&, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
 			
+			void dim_output_cells(DTree::iterator it);
+
 			// Handler for callbacks from TeXView cells.
 
 			bool on_tex_error(const std::string&, DTree::iterator);

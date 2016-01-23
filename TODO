@@ -1,5 +1,7 @@
 
-- need registration and logging before going public
+- declaring an Ex does not call post_process
+
+- output cells should dim when input cells go into the run queue.
 
 - substitute should by default, when it encounters an \equal top node, only act
   on the right hand side. It should also, when encountering an object without an
