@@ -1,0 +1,67 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Post-processing expressions}\n\nIn the old Cadabra, one could use the property \\verb|::PostDefaultRules| to automatically call\na number of algorithms to clean up expressions after each processing step. In the new Cadabra,\nthis is more flexible. If you define a function \\verb|post_process| which takes an \\verb|Ex| \nobject as argument, this function will be called as a cleanup function after every algorithm\nhas finished. \n\nThis is much more flexible, because you can now decide to e.g. call a cleanup function only\nwhen an expression reaches a certain size. \n\nThe basics are shown in the example below."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Post-processing expressions}\n\nIn the old Cadabra, one could use the property \\verb|::PostDefaultRules| to automatically call\na number of algorithms to clean up expressions after each processing step. In the new Cadabra,\nthis is more flexible. If you define a function \\verb|post_process| which takes an \\verb|Ex| \nobject as argument, this function will be called as a cleanup function after every algorithm\nhas finished. \n\nThis is much more flexible, because you can now decide to e.g. call a cleanup function only\nwhen an expression reaches a certain size. \n\nThe basics are shown in the example below."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n\tsubstitute(ex, $A->B$)"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}B+C+D\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=B+C+D;"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2B+D\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(ex,$C->A$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
