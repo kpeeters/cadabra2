@@ -57,6 +57,22 @@
 		
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "When writing a \\verb|post_process| function, remember that all Cadabra algorithms change expressions in-place. That is \nthe reason why you do not have to do \\verb|ex = substitute(ex, $A->B$)| in the example above, and why you do not\nneed to \\verb|return ex| at the end of that function."
+				}
+			],
+			"hidden" : true,
+			"source" : "When writing a \\verb|post_process| function, remember that all Cadabra algorithms change expressions in-place. That is \nthe reason why you do not have to do \\verb|ex = substitute(ex, $A->B$)| in the example above, and why you do not\nneed to \\verb|return ex| at the end of that function."
+		},
+		
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
 		}
