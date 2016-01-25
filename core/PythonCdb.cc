@@ -89,6 +89,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/evaluate.hh"
+#include "algorithms/expand_diracbar.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
@@ -619,14 +620,14 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	if(post_process_enabled) {
 		post_process_enabled=false;
 		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-		boost::python::object post_process = globals["post_process"];
 		try {
+			boost::python::object post_process = globals["post_process"];
 			post_process(boost::ref(ex));
 			}
 		catch(boost::python::error_already_set const &) {
 			// In order to prevent the error from propagating, we have to read it out. 
 			std::string err = parse_python_exception();
-			std::cerr  << err << std::endl;
+			//std::cerr  << err << std::endl;
 			}
 		post_process_enabled=true;
 		}
@@ -886,6 +887,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<decompose_product>("decompose_product");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
+	def_algo_1<expand_diracbar>("expand_diracbar");
 	def_algo_1<flatten_sum>("flatten_sum");
 	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
