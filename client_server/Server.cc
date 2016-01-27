@@ -141,8 +141,8 @@ std::string Server::pre_parse(const std::string& line)
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 			rhs += line_stripped;
 			ret = indent + lhs + " = Ex(r'" + rhs + "')";
-			if(lastchar!="." && indent.size()==0) 
-				ret += "\n";
+			if(lastchar!=".")
+				ret = ret + "; display("+lhs+")";
 			indent="";
 			lhs="";
 			rhs="";
@@ -231,7 +231,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		// std::cerr << "preparsing " + line << std::endl;
 		newblk += pre_parse(line)+'\n';
 		}
-	//std::cerr << "PREPARSED: " << newblk << std::endl;
+	std::cerr << "PREPARSED: " << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
