@@ -1,0 +1,42 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}{t, r, \\theta, \\phi}.\\end{dmath*}"
+				}
+			],
+			"source" : "{t,r,\\theta,\\phi}::Coordinate;"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "kerr:= { g_{t t}            = - (1 - rs r / \\Sigma),\n         g_{t \\phi}         = - rs a r \\sin(\\theta)**2 / \\Sigma,\n         g_{\\phi t}         = - rs a r \\sin(\\theta)**2 / \\Sigma,\n         g_{r r}            = \\Sigma / \\Delta,\n         g_{\\theta \\theta } = \\Sigma,\n         g_{\\phi \\phi}      = ( r**2 + a**2 + rs a**2 r \\sin(\\theta)**2 / \\Sigma ) \\sin(\\theta)**2 };"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "display(kerr)"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
