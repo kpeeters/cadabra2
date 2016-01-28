@@ -2,6 +2,8 @@
 - Cleanup should not use algorithms to prevent recursion and (more importantly) to 
   make clear in one place what the algorithms do.
 
+- Could we flip CodeInput cells to produce Python previews with formulas LaTeX typeset?
+
 - declaring an Ex does not call post_process
 
 - output cells should dim when input cells go into the run queue.
