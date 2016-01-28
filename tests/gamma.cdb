@@ -29,19 +29,54 @@ def test02():
 test02();
 
 def test02b():
-\bar{#}::DiracBar;
-\psi::Spinor(dimension=10);
-\Gamma{#}::GammaMatrix;
-ex:=\bar{\Gamma^{m n p} \psi};
-expand_diracbar(ex);
+    \bar{#}::DiracBar;
+    \psi::Spinor(dimension=10);
+    \Gamma{#}::GammaMatrix;
+    ex:=\bar{\Gamma^{m n p} \psi};
+    expand_diracbar(ex);
     tst:=\bar{\psi} \Gamma^{m n p} - @(ex);
     assert(tst);
 
 test02b();
 
+{m, n, p, q, r, a, b, c}::Indices(flat, position=free);
+{m, n, p, q, r, a, b, c}::Integer(1..10);
+\delta_{m n}::KroneckerDelta;
+ex:=\delta^{q q};
+eliminate_kronecker(ex);
+
+{m, n, p, q, r, a, b, c}::Indices(flat, position=fixed);
+ex:=\delta_{q r};
+substitute(ex, $\delta^{q r} -> K^{q r}$)
+{m, n, p, q, r, a, b, c}::Indices(flat, position=free);
+substitute(ex, $\delta^{q r} -> K^{q r}$)
+
+
+
+
+\delta_{m n}::SelfCommuting;
+\delta_{m n}::KroneckerDelta;
+{m, n, p, q, r, a, b, c}::Indices(flat, position=free);
+{m, n, p, q, r, a, b, c}::Integer(1..10);
+
+\GAMMA^{#}::GammaMatrix(metric=\delta).
+one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
+join_gamma(_);
+distribute(_);
+eliminate_kronecker(_);
+canonicalise(_);
+sort_product(_);
+
+join_gamma(_);
+distribute(_);
+eliminate_kronecker(_);
+canonicalise(_);
+sort_product(_);
+
+
 \delta_{m n}::KroneckerDelta.
 \Gamma_{#}::GammaMatrix(metric=\delta)
-ex:=\Gamma_{a b c}\Gamma_{c d}\Gamma_{e}
+ex:=\Gamma_{a b c}\Gamma_{c d}\Gamma_{e};
 join_gamma(ex)
 distribute(ex)
 sort_product(ex)
