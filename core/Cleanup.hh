@@ -46,21 +46,22 @@ void cleanup_dispatch(Kernel& k, Ex&, Ex::iterator& it);
 
 void cleanup_dispatch_deep(Kernel& k, Ex&, dispatcher_t disp=&cleanup_dispatch);
 
-/// Individual node cleanup routines. Once more, these algorithms clean
-/// up the tree at the current node and the first layer of child nodes,
-/// but do NOT descend deeper down the tree.
-/// As with any algorithms, the iterator pointing to the starting node
-/// may be changed, but these functions are not allowed to modify
-/// anything except the node and nodes below (in particular, they will
-/// leave sibling nodes untouched).
+/// Individual node cleanup routines. Do not call these yourself. 
+///
+/// Once more, these algorithms clean up the tree at the current node
+/// and the first layer of child nodes, but do NOT descend deeper down
+/// the tree, except when that is necessary to ensure that the tree
+/// remains consistent.  As with any algorithms, the iterator pointing
+/// to the starting node may be changed, but these functions are not
+/// allowed to modify anything except the node and nodes below (in
+/// particular, they will leave sibling nodes untouched).
 
 void cleanup_productlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_sumlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_expressionlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_derivative(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_components(Kernel& k, Ex&, Ex::iterator& it);
-
-
+void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it);
 
 
 
