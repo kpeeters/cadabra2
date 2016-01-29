@@ -175,6 +175,10 @@ class Algorithm {
 		// in case a child is a sum as well. Note that 'pushup' is actually 'pushdown'
       // in the case of sums. 
 		// This never changes the tree structure, only the distribution of multipliers.
+
+		// FIXME: this is now superseded by code in Cleanup.cc, and the generic way
+		// to make a tree consistent is to call cleanup_dispatch, not pick-and-match from
+		// the various algorithms.
 		void     pushup_multiplier(iterator);
 
 		// Return the number of elements in the first range for which an identical element

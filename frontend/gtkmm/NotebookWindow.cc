@@ -314,6 +314,7 @@ void NotebookWindow::process_todo_queue()
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_label.set_text(kernel_string);
 	status_label.set_text(status_string);
+
 	if(kernel_spinner_status) { 
 		kernel_spinner.show();
 		kernel_spinner.start();
@@ -326,6 +327,13 @@ void NotebookWindow::process_todo_queue()
 
 	// Perform any ActionBase actions.
 	process_action_queue();
+
+	if(kernel_string=="not connected") {
+		Gtk::MessageDialog md("Kernel crashed", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
+		md.run();
+		}
 	}
 
 bool NotebookWindow::on_key_press_event(GdkEventKey* event)

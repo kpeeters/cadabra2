@@ -18,6 +18,8 @@ DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 		};
 	}
 
+TODO: complete this list (take from Sympy)
+
 bool DisplaySympy::needs_brackets(Ex::iterator it)
 	{
 	// FIXME: may need looking at properties

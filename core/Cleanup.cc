@@ -77,6 +77,23 @@ void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
 	collect_terms ct(k, tr);
 	if(ct.can_apply(it))
 		ct.apply(it);
+
+
+	push_down_multiplier(k, tr, it);
+	}
+
+void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it)
+	{
+	auto mult=*it->multiplier;
+	if(*it->name=="\\sum" && mult!=1) {
+		auto sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
+			multiply(sib->multiplier, mult);
+			push_down_multiplier(k, tr, sib);
+			++sib;
+			}
+		one(it->multiplier);
+		}
 	}
 
 void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
