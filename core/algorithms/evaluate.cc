@@ -7,13 +7,12 @@
 #include "algorithms/substitute.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/Coordinate.hh"
+#include "properties/Depends.hh"
 #include <functional>
 
 evaluate::evaluate(Kernel& k, Ex& tr, const Ex& c)
 	: Algorithm(k, tr), components(c)
 	{
-	// Preparse the arguments.
-//	collect_index_values(ind_values);	
 	}
 
 bool evaluate::can_apply(iterator) 
@@ -164,7 +163,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	sibling_iterator sib2=tr.end(it2);
 	--sib2;
 
-	tr.print_recursive_treeform(std::cerr, tr.begin());
+	// tr.print_recursive_treeform(std::cerr, tr.begin());
 
 	// We cannot directly compare the lhs of this equals node with the lhs
 	// of the equals node of the other components node, because the index
@@ -172,9 +171,9 @@ void evaluate::merge_components(iterator it1, iterator it2)
 
 	Perm perm;
 	perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
-	for(auto p: perm.perm)
-		std::cerr << p << " ";
-	std::cerr << std::endl;
+//	for(auto p: perm.perm)
+//		std::cerr << p << " ";
+//	std::cerr << std::endl;
 
 	//perm.apply(tr.begin(it2), sib2);
 	//std::cerr << "after permutation" << std::endl;
@@ -222,7 +221,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			auto rhs1 = tr.begin(it1);
 			++rhs1;
 			iterator nd=rhs1;
-			apply_sympy(kernel, tr, nd, "", "");
+			sympy::apply(kernel, tr, nd, "", "");
 			return true;
 			});
 	}
@@ -316,9 +315,8 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	tree_exact_less_obj comp(&kernel.properties);
 	std::set<Ex, tree_exact_less_obj> ret(comp);
 
+	// Determine explicit dependence on Coordinates.
 	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) {
-			// FIXME: this does not yet take into account implicit dependence through
-			// the Depends property.
 			const Coordinate *cd = kernel.properties.get<Coordinate>(nd);
 			if(cd) {
 				Ex cpy(nd);
@@ -327,6 +325,19 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 				ret.insert(cpy);
 				}
 			});
+
+	// Determine implicit dependence via Depends.
+	const Depends *dep = kernel.properties.get<Depends>(it);
+	if(dep) {
+		Ex deps(dep->dependencies(it));
+		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
+				Ex cpy(nd);
+				cpy.begin()->fl.bracket=str_node::b_none;
+				cpy.begin()->fl.parent_rel=str_node::p_none;
+				ret.insert(cpy);
+				return true;
+				});
+		}
 
 	return ret;
 	}
@@ -498,7 +509,7 @@ void evaluate::handle_prod(iterator it)
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
-			apply_sympy(kernel, tr, nd, "", "");
+			sympy::apply(kernel, tr, nd, "", "");
 			return true;
 			});
 	}

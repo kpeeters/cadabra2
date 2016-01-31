@@ -39,7 +39,7 @@ void TeXEngine::erase_file(const std::string& nm) const
 	boost::filesystem::remove(nm);
 	}
 
-std::string TeXEngine::handle_latex_errors(const std::string& result) const
+std::string TeXEngine::handle_latex_errors(const std::string& result, int exit_code) const
 	{
 	std::string::size_type pos=result.find("! LaTeX Error");
 	if(pos != std::string::npos) {
@@ -77,6 +77,10 @@ std::string TeXEngine::handle_latex_errors(const std::string& result) const
 		 std::string undefd=result.substr(backslashpos-1,undefpos-pos-30);
 		 return "Undefined control sequence:\n\n" +undefd+"\nNote that all symbols which you use in cadabra have to be valid LaTeX expressions. If they are not, you can still use the LaTeXForm property to make them print correctly; see the manual for more information.";
 		 }
+
+	if(exit_code!=0) {
+		return "Generic typesetting error; LaTeX failed. Please report a bug.\n\n" + result;
+		}
 
 	return "";
 	}
@@ -320,10 +324,13 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	exec_stream_t latex_proc;
 	std::string result;
 	try {
-		latex_proc.start("latex", "--interaction nonstopmode "+nf);
+//		latex_proc.start("latex", "--interaction nonstopmode "+nf);
+		latex_proc.start("latex", "-halt-on-error "+nf);
  		std::string line; 
 		while( std::getline( latex_proc.out(), line ).good() ) 
 			result+=line+"\n";
+
+		latex_proc.close();
 
 		erase_file(std::string(templ)+".tex");
 //		std::cout << "TeX file in " << std::string(templ)+".tex" << std::endl;
@@ -333,7 +340,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		std::cerr << result << std::endl;
 #endif
 
-		std::string err=handle_latex_errors(result);
+		std::string err=handle_latex_errors(result, latex_proc.exit_code());
 
 		if(err.size()>0) {
 			reqit=reqs.begin();
@@ -351,7 +358,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
 		
-		std::string latex_err=handle_latex_errors(result);
+		std::string latex_err=handle_latex_errors(result, latex_proc.exit_code());
 		reqit=reqs.begin();
 		while(reqit!=reqs.end()) 
 			(*reqit++)->needs_generating=false;

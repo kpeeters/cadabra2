@@ -1,4 +1,11 @@
 
+- Need some general logic to compute one object from another (inverse metric from metric being
+  the prime example).
+
+- Remove all asserts and replace with exceptions.
+
+- DisplaySympy::import should strip implicit dependencies from objects.
+
 - Cleanup should not use algorithms to prevent recursion and (more importantly) to 
   make clear in one place what the algorithms do.
 
@@ -37,7 +44,9 @@
 
 - Need to get rid of fl.bracket field; bracket types for grouping
   should always be converted to round and determined by printing
-  routines. This avoids 1/{A*B} not being 1/(A*B).
+  routines. This avoids 1/{A*B} not being 1/(A*B). We can fix this easily in the
+  parser by replacing b_round -> b_none, but then the printing routines should
+  be so clever to output round brackets for function arguments.
 
 - CodeInput changes should be monitored by monitoring the change of the buffer. This is also
   necessary because cut-n-paste does not induce keypresses.

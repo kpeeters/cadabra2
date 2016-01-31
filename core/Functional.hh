@@ -14,6 +14,13 @@ namespace cadabra {
 	/// If your 'f' returns false, the loop is aborted immediately.
 	
 	void do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f);
+
+	/// \ingroup
+	///
+	/// For lists as defined above for 'do_list', return their size (in case you
+	/// really need to know the size before iterating over the elements).
+
+	int list_size(const Ex& tr, Ex::iterator it);
 	
 	/// \ingroup core
 	///

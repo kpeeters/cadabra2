@@ -92,7 +92,7 @@ namespace cadabra {
 			void convert_one(std::shared_ptr<TeXRequest>);
 			void convert_set(std::set<std::shared_ptr<TeXRequest> >&);
 			
-			std::string handle_latex_errors(const std::string&) const;
+			std::string handle_latex_errors(const std::string&, int exit_code) const;
 	};
 	
 }

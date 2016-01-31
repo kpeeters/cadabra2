@@ -21,6 +21,17 @@ void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iter
 		}
 	}
 
+int cadabra::list_size(const Ex& tr, Ex::iterator it)
+	{
+	if(*it->name=="\\expression")
+		it=tr.begin(it);
+
+   if(*it->name=="\\comma") 
+		return tr.number_of_children(it);
+	else 
+		return 1;
+	}
+
 void cadabra::do_subtree(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f)
 	{
 	Ex::post_order_iterator walk=it, last=it;

@@ -61,6 +61,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
 #include "properties/Integer.hh"
+#include "properties/InverseMetric.hh"
 #include "properties/KroneckerDelta.hh"
 #include "properties/LaTeXForm.hh"
 #include "properties/Metric.hh"
@@ -85,6 +86,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/canonicalise.hh"
 #include "algorithms/collect_factors.hh"
 #include "algorithms/collect_terms.hh"
+#include "algorithms/complete.hh"
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
@@ -180,7 +182,6 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	std::ostringstream str;
 	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
-	std::cerr << str.str() << std::endl;
 
 	boost::python::object ret=parse(str.str());
 
@@ -897,6 +898,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<unwrap>("unwrap");
 	def_algo_1<young_project_product>("young_project_product");
 
+	def("complete", &dispatch_ex<complete, Ex&>, 
+		 (arg("ex"),arg("add"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
 	def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 
 		 (arg("ex"),arg("modulo_monoterm")=false,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
@@ -1003,6 +1009,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<IndexInherit>();
 	def_prop<Indices>();	
 	def_prop<Integer>();
+	def_prop<InverseMetric>();
 	def_prop<KroneckerDelta>();
 	def_prop<LaTeXForm>();
 	def_prop<Metric>();

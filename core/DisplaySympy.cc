@@ -2,6 +2,7 @@
 #include "Algorithm.hh"
 #include "Functional.hh"
 #include "DisplaySympy.hh"
+#include "properties/Depends.hh"
 #include "properties/Accent.hh"
 
 DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
@@ -14,11 +15,12 @@ DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 		{"\\int", "Integral" },
 		{"\\sum", "Sum" },
 		{"\\theta", "theta"},
+		{"\\Sigma", "Sigma"},
 		{"\\partial", "Derivative"}
 		};
 	}
 
-TODO: complete this list (take from Sympy)
+//TODO: complete this list (take from Sympy)
 
 bool DisplaySympy::needs_brackets(Ex::iterator it)
 	{
@@ -58,24 +60,21 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 		return;
 		}
 	
-	bool needs_extra_brackets=false;
-	const Accent *ac=properties.get<Accent>(it);
-	if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
-		Ex::sibling_iterator sib=tree.begin(it);
-		while(sib!=tree.end(it)) {
-			if(sib->is_index()) 
-				needs_extra_brackets=true;
-			++sib;
-			}
-		}
+//	const Accent *ac=properties.get<Accent>(it);
+//	if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
+//		Ex::sibling_iterator sib=tree.begin(it);
+//		while(sib!=tree.end(it)) {
+//			if(sib->is_index()) 
+//				needs_extra_brackets=true;
+//			++sib;
+//			}
+//		}
 	
-	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
 	auto rn = symmap.find(*it->name);
 	if(rn!=symmap.end())
 		str << rn->second;
 	else
 		str << *it->name;
-	if(needs_extra_brackets) str << "}";
 
 	print_children(str, it);
 
@@ -86,57 +85,30 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
 	// Sympy has no notion of children with different parent relations; it's all 
-	// functions of functions kind of stuff. The code below does not do that right;
-	// it fails to convert _ and ^ characters and so on.
+	// functions of functions kind of stuff. 
 
-	str_node::bracket_t    previous_bracket_   =str_node::b_invalid;
-	str_node::parent_rel_t previous_parent_rel_=str_node::p_none;
+	// We need to know if the symbol has implicit dependence on other symbols,
+	// as this needs to be made explicit for sympy.
 
-	int number_of_nonindex_children=0;
-	int number_of_index_children=0;
+	const Depends *dep=properties.get<Depends>(it);
+
 	Ex::sibling_iterator ch=tree.begin(it);
-	while(ch!=tree.end(it)) {
-		if(ch->is_index()==false) {
-			++number_of_nonindex_children;
-			if(*ch->name=="\\prod")
-				++number_of_nonindex_children;
+	if(ch!=tree.end(it) || dep!=0) {
+		str << "(";
+		bool first=true;
+		while(ch!=tree.end(it)) {
+			if(first) first=false;
+			else      str << ", ";
+			dispatch(str, ch);
+			++ch;
 			}
-		else ++number_of_index_children;
-		++ch;
-		}
-	
-	ch=tree.begin(it);
-	ch+=skip;
-	unsigned int chnum=0;
-	while(ch!=tree.end(it)) {
-		str_node::bracket_t    current_bracket_   =(*ch).fl.bracket;
-		str_node::parent_rel_t current_parent_rel_=(*ch).fl.parent_rel;
-		const Accent *is_accent=properties.get<Accent>(it);
-		
-		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
-			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
-			if(is_accent==0) 
-				print_opening_bracket(str, (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ &&
-													 current_parent_rel_!=str_node::p_sub && 
-													 current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_));
-			else str << "{";
+		if(dep) {
+			if(!first) str << ", ";
+			Ex deplist=dep->dependencies(it);
+			DisplaySympy ds(properties, deplist);
+			ds.output(str);
 			}
-		
-		// print this child depending on its name or meaning
-		dispatch(str, ch);
-
-		++ch;
-		if(ch==tree.end(it) || current_bracket_!=str_node::b_none || current_bracket_!=(*ch).fl.bracket || current_parent_rel_!=(*ch).fl.parent_rel) {
-			if(is_accent==0) 
-				print_closing_bracket(str,  (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ && 
-													  current_parent_rel_!=str_node::p_sub && 
-													  current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_));
-			else str  << "}";
-			}
-		
-		previous_bracket_=current_bracket_;
-		previous_parent_rel_=current_parent_rel_;
-		++chnum;
+		str << ")";
 		}
 	}
 
