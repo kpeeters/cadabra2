@@ -23,7 +23,6 @@ Algorithm::result_t complete::apply(iterator& it)
 
 	const InverseMetric *invmetric = kernel.properties.get<InverseMetric>(bg);
 	if(invmetric) {
-		std::cerr << "inverse metric found " << std::endl;
 		Ex metric(bg);
       sympy::invert_matrix(kernel, metric, tr);
 		res = result_t::l_applied;
