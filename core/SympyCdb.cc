@@ -7,6 +7,7 @@
 #include "Parser.hh"
 #include "Kernel.hh"
 #include "DisplaySympy.hh"
+#include "algorithms/substitute.hh"
 
 Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args)
 	{
@@ -72,6 +73,10 @@ Ex sympy::invert_matrix(Kernel& kernel, Ex& ex, Ex& rules)
 	Ex::iterator ind1=ex.child(ex.begin(), 0);
 	Ex::iterator ind2=ex.child(ex.begin(), 1);
 
+	str_node::parent_rel_t prel;
+	if(ind1->fl.parent_rel==str_node::p_sub)   prel=str_node::p_super;
+	if(ind1->fl.parent_rel==str_node::p_super) prel=str_node::p_sub;
+
 	Ex ret;
 
 	// Get Indices property and from there Coordinates.
@@ -83,16 +88,41 @@ Ex sympy::invert_matrix(Kernel& kernel, Ex& ex, Ex& rules)
 		throw ConsistencyException("Need the indices of object to be declared with Indices property.");
 
 	// Run over all values of Coordinates, construct matrix.
-	std::cerr << "number of coordinates: " << prop1->values.size()  << std::endl;
 
 	std::ostringstream str;
-	str << "Matrix(";
-	for(int c1=0; c1<prop1->values.size(); ++c1) {
-		for(int c2=0; c2<prop1->values.size(); ++c2) {
-			
+	str << "sympy.Matrix([";
+	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
+		if(c1>0) str << ", ";
+		str << "[";
+		for(unsigned c2=0; c2<prop1->values.size(); ++c2) {
+			if(c2>0) str << ", ";
+
+			// Generate an expression with this component, apply substitution, then stick 
+			// the result into the string that will go to sympy.
+
+			Ex c(ex.begin());
+			Ex::iterator cit1=c.child(c.begin(), 0);
+			Ex::iterator cit2=c.child(c.begin(), 1);
+			cit1=c.replace(cit1, prop1->values[c1].begin());
+			cit2=c.replace(cit2, prop1->values[c2].begin());
+			cit1->fl.parent_rel=prel;
+			cit2->fl.parent_rel=prel;
+
+			Ex::iterator cit=c.begin();
+			substitute subs(kernel, c, rules);
+			if(subs.can_apply(cit)) {
+				// FIXME: this never gets run; for some reason can_apply fails to match?
+				std::cerr << "applying" << std::endl;
+				subs.apply(cit);
+				}
+			c.print_recursive_treeform(std::cerr, c.begin());
+
+			str << "0";
 			}
+		str << "]";
 		}
-	str << ")";
+	str << "])";
+	std::cerr << str.str() << std::endl;
 
 	return ret;
 	}
