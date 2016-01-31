@@ -1,0 +1,4 @@
+{r,t}::Coordinate;
+f::Depends(r,t);
+ex:=f*A;
+ex.__sympy__()

@@ -1,5 +1,6 @@
 
 #include <boost/python.hpp>
+#include "Functional.hh"
 #include "SympyCdb.hh"
 #include "PreClean.hh"
 #include "Cleanup.hh"
@@ -7,7 +8,7 @@
 #include "Kernel.hh"
 #include "DisplaySympy.hh"
 
-Ex::iterator apply_sympy(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args)
+Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args)
 	{
 	// We first need to print the sub-expression using DisplaySympy,
 	// optionally with the head wrapped around it and the args added
@@ -61,3 +62,37 @@ Ex::iterator apply_sympy(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::st
 	return it;
 	}
 
+Ex sympy::invert_matrix(Kernel& kernel, Ex& ex, Ex& rules)
+	{
+	// check that object has two children only.
+	if(ex.number_of_children(ex.begin())!=2) {
+		throw ConsistencyException("Object should have exactly two indices.");
+		}
+
+	Ex::iterator ind1=ex.child(ex.begin(), 0);
+	Ex::iterator ind2=ex.child(ex.begin(), 1);
+
+	Ex ret;
+
+	// Get Indices property and from there Coordinates.
+
+	const Indices *prop1 = kernel.properties.get<Indices>(ind1);
+	const Indices *prop2 = kernel.properties.get<Indices>(ind2);
+	
+	if(prop1!=prop2 || prop1==0) 
+		throw ConsistencyException("Need the indices of object to be declared with Indices property.");
+
+	// Run over all values of Coordinates, construct matrix.
+	std::cerr << "number of coordinates: " << prop1->values.size()  << std::endl;
+
+	std::ostringstream str;
+	str << "Matrix(";
+	for(int c1=0; c1<prop1->values.size(); ++c1) {
+		for(int c2=0; c2<prop1->values.size(); ++c2) {
+			
+			}
+		}
+	str << ")";
+
+	return ret;
+	}

@@ -24,7 +24,8 @@ class DisplayTeX : public DisplayBase {
 		virtual bool needs_brackets(Ex::iterator it) override;
 
 	private:
-		void print_multiplier(std::ostream&, Ex::iterator);
+		// FIXME: just make this take the multiplier, instead of the node. Then mult can go away.
+		void print_multiplier(std::ostream&, Ex::iterator, int mult=1);
 		void print_opening_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
 		void print_closing_bracket(std::ostream&, str_node::bracket_t, str_node::parent_rel_t);
 		void print_parent_rel(std::ostream&, str_node::parent_rel_t, bool first);

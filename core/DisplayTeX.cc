@@ -26,7 +26,7 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
-		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
+//		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) { // function argument
 		if(*it->name=="\\sum") return false;
@@ -144,18 +144,18 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		}
 	}
 
-void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it)
+void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 	{
 	mpz_class denom=it->multiplier->get_den();
 
 	if(denom!=1) {
-		str << "\\frac{" << it->multiplier->get_num() << "}{" << it->multiplier->get_den() << "}";
+		str << "\\frac{" << mult * it->multiplier->get_num() << "}{" << it->multiplier->get_den() << "}";
 		}
-	else if(*it->multiplier==-1) {
+	else if(mult * (*it->multiplier)==-1) {
 		str << "-";
 		}
 	else {
-		str << *it->multiplier;
+		str << mult * (*it->multiplier);
 		}
 	}
 
@@ -254,9 +254,14 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator num=tree.begin(it), den=num;
 	++den;
 
+	int mult=1;
+	if(*it->multiplier<0) {
+		str << " - ";
+		mult=-1;
+		}
 	str << "\\frac{";
-	if(*it->multiplier!=1) {
-		print_multiplier(str, it);
+	if(mult * (*it->multiplier)!=1) {
+		print_multiplier(str, it, mult);
 		}
 
 	dispatch(str, num);
@@ -267,18 +272,8 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 
 void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
-//	bool close_bracket=false;
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-		Ex::sibling_iterator st=tree.begin(it);
-//		while(st!=tr.end(it)) {
-//			if(*st->name=="\\sum") {
-//				str << "(";
-//				close_bracket=true;
-//				break;
-//				}
-//			++st;
-//			}
 		}
 
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
@@ -307,21 +302,14 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 		if(ch!=tree.end(it)) {
 			 if(print_star) {
 				if(tight_star) str << inbetween;
-//				else if(utf8_output) {
-//					str << unichar(0x00a0) << inbetween << unichar(0x00a0);
-//					}
 				else str << " " << inbetween << " ";
 				}
 			else {
-//				 if(output_format==Ex_output::out_texmacs) str << "\\,";
-//				 else 
 				str << " ";
-				 }
+				}
 			}
 		previous_bracket_=current_bracket_;
 		}
-
-//	if(close_bracket) str << ")";
 	}
 
 void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it) 

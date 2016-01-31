@@ -42,6 +42,21 @@ substitute(ex, rl);
 evaluate(ex, ss);
 # Schutz (11.117) has an error in \Gamma^{\theta}_{\phi\phi}.
 
+----------------------------------------
+
+invert($g_{\mu\nu}$, ss);
+
+{r,t,\theta,\phi}::Coordinate.
+{m,n,p,q}::Indices(position=fixed,values={t,r,\theta,\phi}).
+g_{m n}::Metric.
+g^{m n}::InverseMetric.
+# Need to be able to match g_{t t} to g_{m n} in property searching.
+ss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,    g_{\phi\phi}=r**2 \sin(\theta)**2};
+complete(ss, $g^{m n}$);
+
+
+
+-------------------------------------------
 
 
 {r,t}::Coordinate.

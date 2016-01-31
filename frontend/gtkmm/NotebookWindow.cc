@@ -239,11 +239,12 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 		last_configure_width = cfg->width;
 		try {
 			engine.convert_all();
+			for(unsigned int i=0; i<canvasses.size(); ++i) 
+				canvasses[i]->refresh_all();
 			}
 		catch(TeXEngine::TeXException& ex) {
+			std::cerr << "TeX exception" << std::endl;
 			}
-		for(unsigned int i=0; i<canvasses.size(); ++i) 
-			canvasses[i]->refresh_all();
 		}
 
 	return ret;
@@ -309,6 +310,12 @@ void NotebookWindow::on_kernel_runstatus(bool running)
 
 void NotebookWindow::process_todo_queue()
 	{
+	static bool running=false;
+
+	// Prevent from re-entering this from the process_action_queue entered below.
+	if(running) return;
+	running=true;
+
 	// Update the status/kernel messages into the corresponding widgets.
 	{
 	std::lock_guard<std::mutex> guard(status_mutex);
@@ -334,6 +341,8 @@ void NotebookWindow::process_todo_queue()
 		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
 		md.run();
 		}
+
+	running=false;
 	}
 
 bool NotebookWindow::on_key_press_event(GdkEventKey* event)
