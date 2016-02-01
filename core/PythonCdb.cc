@@ -183,6 +183,8 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
 
+	//std::cerr << str.str() << std::endl;
+
 	boost::python::object ret=parse(str.str());
 
 	return ret;

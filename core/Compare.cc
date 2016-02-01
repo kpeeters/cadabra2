@@ -549,7 +549,14 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				return no_match_less;
 				}
 			}
-		else return no_match_less;
+		else {
+			// What's left is the possibility that both indices are Coordinates, in which case they
+			// need to match exactly.
+			int cmp=subtree_compare(&properties, one, two, -2);
+			if(cmp==0)      return subtree_match;
+			else if(cmp>0)  return no_match_less;
+			else            return no_match_greater;
+			}
 		}
 	else { // object is not dummy nor objectpattern nor coordinate
 

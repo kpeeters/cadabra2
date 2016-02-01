@@ -9,7 +9,8 @@
 #include "DisplaySympy.hh"
 #include "algorithms/substitute.hh"
 
-Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args)
+Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args, 
+								  const std::string& method)
 	{
 	// We first need to print the sub-expression using DisplaySympy,
 	// optionally with the head wrapped around it and the args added
@@ -26,6 +27,7 @@ Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::s
 	if(head.size()>0)
 		if(args.size()>0) 
 			str << ", " << args << ")";
+	str << method;
 
 	// We then execute the expression in Python.
 
@@ -39,7 +41,7 @@ Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::s
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-	//std::cerr << result << std::endl;
+	std::cerr << result << std::endl;
 	
 
    // After that, we construct a new sub-expression from this string by using our
@@ -89,14 +91,11 @@ Ex sympy::invert_matrix(Kernel& kernel, Ex& ex, Ex& rules)
 
 	// Run over all values of Coordinates, construct matrix.
 
-	std::ostringstream str;
-	str << "sympy.Matrix([";
+	Ex matrix("\\matrix");
+	auto cols=matrix.append_child(matrix.begin(), str_node("\\comma"));
 	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
-		if(c1>0) str << ", ";
-		str << "[";
+		auto row=matrix.append_child(cols, str_node("\\comma"));
 		for(unsigned c2=0; c2<prop1->values.size(); ++c2) {
-			if(c2>0) str << ", ";
-
 			// Generate an expression with this component, apply substitution, then stick 
 			// the result into the string that will go to sympy.
 
@@ -111,18 +110,38 @@ Ex sympy::invert_matrix(Kernel& kernel, Ex& ex, Ex& rules)
 			Ex::iterator cit=c.begin();
 			substitute subs(kernel, c, rules);
 			if(subs.can_apply(cit)) {
-				// FIXME: this never gets run; for some reason can_apply fails to match?
-				std::cerr << "applying" << std::endl;
 				subs.apply(cit);
+				matrix.append_child(row, cit);
 				}
-			c.print_recursive_treeform(std::cerr, c.begin());
-
-			str << "0";
+			else {
+				zero( matrix.append_child(row, str_node("1"))->multiplier );
+				}
 			}
-		str << "]";
 		}
-	str << "])";
-	std::cerr << str.str() << std::endl;
+	
+	auto top=matrix.begin();
+	sympy::apply(kernel, matrix, top, "", "", ".inv()");
+	//matrix.print_recursive_treeform(std::cerr, top);
+
+	// Now we need to iterate over the components again and construct sparse rules.
+	cols=matrix.begin(matrix.begin());
+	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
+		auto row=matrix.begin(cols);
+		auto el =matrix.begin(row);
+		for(unsigned c2=0; c2<prop2->values.size(); ++c2) {
+			if(el->is_zero()==false) {
+				Ex rule("\\equals");
+				auto rit  = rule.append_child(rule.begin(), ex.begin());
+				auto cvit = rule.append_child(rule.begin(), Ex::iterator(el));
+				auto i = rule.begin(rit);
+				i = rule.replace(i, prop1->values[c1].begin());
+				++i;
+				rule.replace(i, prop2->values[c2].begin());
+				rule.print_recursive_treeform(std::cerr, rule.begin());
+				}
+			++el;
+			}
+		}
 
 	return ret;
 	}
