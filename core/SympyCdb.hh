@@ -14,7 +14,15 @@ namespace sympy {
    /// logic in PythonCdb.hh, in particular make_Ex_from_string, but it is best to
    /// keep these two completely separate.
 
-	Ex::iterator apply(Kernel&, Ex&, Ex::iterator&, const std::string& head, const std::string& args);
+	Ex::iterator apply(Kernel&, Ex&, Ex::iterator&, const std::string& head, const std::string& args, const std::string& method);
+
+//    /// \ingroup scalar
+//    ///
+//    /// Low-level function to feed a string to Python and read the result back in 
+// 	/// as a Cadabra Ex. As compared to 'apply' above, this starts from a string rather
+// 	/// than an Ex, and hence gives more flexibility in constructing input.
+// 
+// 	Ex python(Kernel&, Ex&, Ex::iterator&, const std::string& head, const std::string& args);
 
 
    /// \ingroup scalar

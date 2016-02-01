@@ -18,6 +18,7 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	{
 	// FIXME: may need looking at properties
 	// FIXME: write as individual parent/current tests
+	if(tree.is_valid(tree.parent(it))==false) return false;
 
 	std::string parent=*tree.parent(it)->name;
 	std::string child =*it->name;

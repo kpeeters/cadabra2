@@ -221,7 +221,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			auto rhs1 = tr.begin(it1);
 			++rhs1;
 			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "", "");
+			sympy::apply(kernel, tr, nd, "", "", "");
 			return true;
 			});
 	}
@@ -509,7 +509,7 @@ void evaluate::handle_prod(iterator it)
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "", "");
+			sympy::apply(kernel, tr, nd, "", "", "");
 			return true;
 			});
 	}

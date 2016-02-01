@@ -13,6 +13,7 @@ DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 		{"\\sin", "sin"},
 		{"\\tan", "tan"},
 		{"\\int", "Integral" },
+		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },
 		{"\\theta", "theta"},
 		{"\\Sigma", "Sigma"},
@@ -26,6 +27,7 @@ bool DisplaySympy::needs_brackets(Ex::iterator it)
 	{
 	// FIXME: may need looking at properties
 	// FIXME: write as individual parent/current tests
+	if(tree.is_valid(tree.parent(it))==false) return false;
 
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*it->name=="\\sum") return true;
@@ -173,6 +175,8 @@ void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr
 
 void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it) 
 	{
+	// The node names below should only be reserved node names; all others
+	// should be looked up using properties. FIXME
 	if(*it->name=="\\prod")        print_productlike(str, it, "*");
 	else if(*it->name=="\\sum")    print_sumlike(str, it);
 	else if(*it->name=="\\frac")   print_fraclike(str, it);
@@ -184,6 +188,7 @@ void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\equals") print_equalitylike(str, it);
 	else if(*it->name=="\\components") print_components(str, it);
 	else if(*it->name=="\\partial") print_partial(str, it);
+	else if(*it->name=="\\matrix") print_matrix(str, it);
 	else                           print_other(str, it);
 	}
 
@@ -370,6 +375,26 @@ void DisplaySympy::print_partial(std::ostream& str, Ex::iterator it)
 		++sib;
 		}
 	str << ")";
+	}
+
+void DisplaySympy::print_matrix(std::ostream& str, Ex::iterator it)
+	{
+	str << "Matrix([";
+	auto comma=tree.begin(it);
+	Ex::sibling_iterator row_it = tree.begin(comma);
+	while(row_it!=tree.end(comma)) {
+		if(row_it!=tree.begin(comma)) str << ", ";
+		Ex::sibling_iterator col_it = tree.begin(row_it);
+		str << "[";
+		while(col_it!=tree.end(row_it)) {
+			if(col_it!=tree.begin(row_it)) str << ", ";
+			dispatch(str, col_it);
+			++col_it;
+			}
+		str << "]";
+		++row_it;
+		}
+	str << "])";
 	}
 
 bool DisplaySympy::children_have_brackets(Ex::iterator ch) const

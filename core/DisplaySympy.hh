@@ -69,6 +69,7 @@ class DisplaySympy : public DisplayBase {
 		void print_equalitylike(std::ostream&, Ex::iterator);
 		void print_components(std::ostream&, Ex::iterator);
 		void print_partial(std::ostream& str, Ex::iterator it);
+		void print_matrix(std::ostream& str, Ex::iterator it);
 		void print_other(std::ostream& str, Ex::iterator it);
 
 		bool children_have_brackets(Ex::iterator ch) const;

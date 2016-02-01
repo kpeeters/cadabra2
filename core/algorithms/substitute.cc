@@ -76,7 +76,7 @@ bool substitute::can_apply(iterator st)
 				++conditions;
 				}
 			else conditions=tr.end();
-			
+
 			if(lhs->name!=st->name && !lhs->is_object_wildcard() && !lhs->is_name_wildcard() && lhs->name->size()>0) 
 				return args.end();
 			
@@ -95,7 +95,12 @@ bool substitute::can_apply(iterator st)
 			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
 			else                     ret=comparator.equal_subtree(lhs, st);
 			
+			// tr.print_recursive_treeform(std::cerr, st);
+			// std::cerr << "versus" << std::endl;
+			// tr.print_recursive_treeform(std::cerr, lhs);
+
 			if(ret == Ex_comparator::subtree_match) {
+				// std::cerr << "match" << std::endl;
 				use_rule=arrow;
 				if(conditions==tr.end()) return arrow;
 				std::string error;
@@ -103,6 +108,7 @@ bool substitute::can_apply(iterator st)
 					return arrow;
 				else throw ArgumentException(error);
 				}
+			// else std::cerr << "no match" << std::endl;
 
 			return args.end();
 		});
