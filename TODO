@@ -1,4 +1,6 @@
 
+- installation needs to run texhash to pickup tableaux.sty
+
 - Need some general logic to compute one object from another (inverse metric from metric being
   the prime example).
 

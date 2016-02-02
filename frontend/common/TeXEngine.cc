@@ -351,8 +351,10 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 				 throw TeXException(err+" (and cannot chdir back to original "+olddir+")");
 			 throw TeXException(err); 
 			 }
-		}
-	catch(std::logic_error& err) {
+	}
+	catch(std::exception& err) {
+		latex_proc.close();
+
 		erase_file(std::string(templ)+".tex");
 		erase_file(std::string(templ)+".dvi");
 		erase_file(std::string(templ)+".aux");
