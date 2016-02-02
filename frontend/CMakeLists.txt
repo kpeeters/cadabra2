@@ -18,3 +18,9 @@ endif(GTKMM3_FOUND)
 # else(APPLE)
 #    message("-- Not building native OSX interface")
 # endif(APPLE)
+
+set(INSTALL_LATEX_DIR     share/texmf/tex/latex/cadabra CACHE PATH "Installation directory for LaTeX packages.")
+install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(FILES    ${PROJECT_SOURCE_DIR}/latex/tableaux.sty DESTINATION ${INSTALL_LATEX_DIR})

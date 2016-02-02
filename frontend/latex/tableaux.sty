@@ -1,0 +1,100 @@
+%
+% tableaux.sty  version 1.0
+% Copyright (C) 2007  by Kasper Peeters
+%
+% A LaTeX style file for drawing Young diagrams and Young tableaux.
+%
+% This file is part of the Cadabra computer algebra system,
+%
+%   http://www.aei.mpg.de/~peekas/cadabra/
+%
+% but may be distributed /or modified under the conditions of the
+% LaTeX Project Public License, either version 1.3 of this license or
+% (at your option) any later version. The latest version of this
+% license is in
+%
+%   http://www.latex-project.org/lppl.txt
+%
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% The current maintainer of this work is Kasper Peeters.
+%
+
+\def\@tabforc#1#2#3{\expandafter\tabf@rc\expandafter#1{#2 \^}{#3}}
+\def\tabf@@rc#1#2#3\tabf@@rc#4{\def#1{#2}#4\tabf@rc#1{#3}{#4}}
+\long\def\ReturnAfterFi#1\fi{\fi#1}
+    \def\tabf@rc#1#2#3{%
+      \def\temp@ty{#2}%
+      \ifx\@empty\temp@ty
+      \else
+        \ReturnAfterFi{%
+          \tabf@@rc#1#2\tabf@@rc{#3}%
+        }%
+      \fi
+    }%
+
+% Sorry, some global registers...
+\newdimen\ytsize\ytsize=2mm
+\newdimen\ytfsize\ytfsize=4mm
+\newcount\repcnt
+\newdimen\acchspace
+\newdimen\accvspace
+\newdimen\raiseh
+\newdimen\maxw
+
+\newcommand\phrule[1]{\hbox{\vbox to0pt{\hrule height .2pt width#1\vss}}}
+%\newcommand\pvrule{\vbox{\hbox to0pt{\vrule width .2pt height\ytsize\hss}}}
+
+\newcommand\ftableau[1]{%
+\def\ctest{,}
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\vbox{\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to
+		 0pt{\vrule height \ytfsize\hss}}}\kern\acchspace\kern-\maxw}
+ \else\ifx\thisel\ctest
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to 0pt{\vrule height \ytfsize\hss}}}%
+     \kern\acchspace\acchspace=0ex
+	  \advance\accvspace by -\ytfsize
+ \else
+     \setbox3=\hbox{$\thisel$}%
+	  \raiseh=\ytfsize%
+	  \advance\raiseh by -1ex%
+	  \divide\raiseh by 2%
+     \advance\acchspace by-\ytfsize%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hrule\hbox to%
+        \ytfsize{\vrule height \ytfsize\hskip.5ex%
+         \raisebox{\raiseh}{\tiny$\thisel$}\hss}\vss\phrule{\ytfsize}}}%
+ \fi\fi}}}}
+
+\newcommand\tableau[1]{%
+\def\stest{ }
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{}
+ \else
+     \repcnt=\thisel%
+     \loop{}%
+     \advance\acchspace by-\ytsize%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hrule \hbox to%
+			\ytsize{\vrule height \ytsize\hss}\vss\phrule{\ytsize}}}%
+     \advance\repcnt by -1\ifnum\repcnt>1{}\repeat%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hbox to 0pt{\vrule height \ytsize\hss}}}%
+     \kern\acchspace\acchspace=0ex%
+	  \advance\accvspace by -\ytsize%
+ \fi}\kern-\maxw}}
+
+
