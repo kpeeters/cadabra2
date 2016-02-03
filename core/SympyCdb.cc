@@ -41,7 +41,7 @@ Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::s
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-	std::cerr << result << std::endl;
+//	std::cerr << result << std::endl;
 	
 
    // After that, we construct a new sub-expression from this string by using our
@@ -123,24 +123,31 @@ Ex sympy::invert_matrix(Kernel& kernel, Ex& ex, Ex& rules)
 	sympy::apply(kernel, matrix, top, "", "", ".inv()");
 	//matrix.print_recursive_treeform(std::cerr, top);
 
+	Ex::iterator ruleslist=rules.begin(rules.begin());
+
 	// Now we need to iterate over the components again and construct sparse rules.
-	cols=matrix.begin(matrix.begin());
+	cols=matrix.begin(matrix.begin()); // outer comma
+	auto row=matrix.begin(cols); // first inner comma
 	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
-		auto row=matrix.begin(cols);
-		auto el =matrix.begin(row);
+		auto el =matrix.begin(row);  // first element of first inner comma
 		for(unsigned c2=0; c2<prop2->values.size(); ++c2) {
 			if(el->is_zero()==false) {
 				Ex rule("\\equals");
 				auto rit  = rule.append_child(rule.begin(), ex.begin());
 				auto cvit = rule.append_child(rule.begin(), Ex::iterator(el));
 				auto i = rule.begin(rit);
+				//std::cerr << c1 << ", " << c2 << std::endl;
 				i = rule.replace(i, prop1->values[c1].begin());
+				i->fl.parent_rel=ind1->fl.parent_rel;
 				++i;
-				rule.replace(i, prop2->values[c2].begin());
-				rule.print_recursive_treeform(std::cerr, rule.begin());
+				i = rule.replace(i, prop1->values[c2].begin());
+				i->fl.parent_rel=ind1->fl.parent_rel;
+				rules.append_child(ruleslist, rule.begin());
+				//rule.print_recursive_treeform(std::cerr, rule.begin());
 				}
 			++el;
 			}
+		++row;
 		}
 
 	return ret;
