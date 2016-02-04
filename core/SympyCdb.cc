@@ -29,6 +29,9 @@ Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::s
 			str << ", " << args << ")";
 	str << method;
 
+	if(head.size()>0)
+		str << ")";
+
 	// We then execute the expression in Python.
 
 	//ex.print_recursive_treeform(std::cerr, it);
@@ -41,7 +44,7 @@ Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::s
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-//	std::cerr << result << std::endl;
+	std::cerr << result << std::endl;
 	
 
    // After that, we construct a new sub-expression from this string by using our

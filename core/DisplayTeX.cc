@@ -150,6 +150,10 @@ void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 	mpz_class denom=it->multiplier->get_den();
 
 	if(denom!=1) {
+		if(mult*it->multiplier->get_num()<0) {
+			str << " - ";
+			mult *= -1;
+			}
 		str << "\\frac{" << mult * it->multiplier->get_num() << "}{" << it->multiplier->get_den() << "}";
 		}
 	else if(mult * (*it->multiplier)==-1) {

@@ -337,6 +337,10 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 				DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
 				}
+			else if(celltype.asString()=="error") {
+				DataCell dc(id, cadabra::DataCell::CellType::error, textbuf.asString(), hide);
+				last=doc.append_child(loc, dc);
+				}
 			else if(celltype.asString()=="verbatim") {
 				DataCell dc(id, cadabra::DataCell::CellType::verbatim, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
@@ -400,4 +404,87 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 DataCell::id_t DataCell::id() const
 	{
 	return serial_number;
+	}
+
+std::string cadabra::export_as_LaTeX(const DTree& doc)
+	{
+	std::ostringstream str;
+	LaTeX_recurse(doc, doc.begin(), str);
+
+	return str.str();
+	}
+
+void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str)
+	{
+	switch(it->cell_type) {
+		case DataCell::CellType::document:
+			str << "\\documentclass[11pt]{article}\n"
+				 << "\\usepackage{amsmath}\n"
+				 << "\\usepackage{breqn}\n"
+				 << "\\begin{document}\n";
+			break;
+		case DataCell::CellType::python:
+			str << "\\begin{verbatim}\n";
+			break;
+		case DataCell::CellType::output:
+			str << "\\begin{verbatim}\n";
+			break;
+		case DataCell::CellType::verbatim:
+			str << "\\begin{verbatim}\n";
+			break;
+		case DataCell::CellType::latex:
+			break;
+		case DataCell::CellType::latex_view:
+			break;
+		case DataCell::CellType::error:
+			break;
+		case DataCell::CellType::image_png:
+			str << "(image)";
+			break;
+		}	
+
+	if(it->textbuf.size()>0) {
+		if(it->cell_type==DataCell::CellType::image_png)
+			str << it->textbuf;
+		else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
+			str << it->textbuf << "\n";
+			}
+		}
+
+	switch(it->cell_type) {
+		case DataCell::CellType::python:
+		case DataCell::CellType::output:
+		case DataCell::CellType::verbatim:
+			str << "\\end{verbatim}\n";
+			break;
+		case DataCell::CellType::document:
+		case DataCell::CellType::latex:
+		case DataCell::CellType::latex_view:
+		case DataCell::CellType::error:
+		case DataCell::CellType::image_png:
+			break;
+		}	
+
+	if(doc.number_of_children(it)>0) {
+		DTree::sibling_iterator sib=doc.begin(it);
+		while(sib!=doc.end(it)) {
+			LaTeX_recurse(doc, sib, str);
+			++sib;
+			}
+		}
+
+	switch(it->cell_type) {
+		case DataCell::CellType::document:
+			str << "\\end{document}\n";
+			break;
+		case DataCell::CellType::python:
+		case DataCell::CellType::output:
+		case DataCell::CellType::verbatim:
+		case DataCell::CellType::latex:
+		case DataCell::CellType::latex_view:
+		case DataCell::CellType::error:
+		case DataCell::CellType::image_png:
+			break;
+		}	
+
 	}

@@ -51,7 +51,7 @@ bool Indices::parse(const Properties&, keyval_t& keyvals)
 			else throw ConsistencyException("Position type should be fixed, free or independent.");
 			}
 		else if(ki->first=="values") { 
-			std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
+			//std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
 			collect_index_values(ki->second);
 			}
 		else throw ConsistencyException("Property 'Indices' does not accept key '"+ki->first+"'.");

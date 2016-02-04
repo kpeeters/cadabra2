@@ -54,6 +54,14 @@ g^{m n}::InverseMetric.
 ss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,    g_{\phi\phi}=r**2 \sin(\theta)**2};
 complete(ss, $g^{m n}$);
 
+-------------------------------------------
+
+{r,t,\theta,\phi}::Coordinate.
+{m,n,p,q}::Indices(position=fixed,values={t,r,\theta,\phi}).
+rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
+ex:= g_{m n} X^{n};
+evaluate(ex, rl);
+
 
 
 -------------------------------------------

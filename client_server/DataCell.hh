@@ -115,7 +115,7 @@ namespace cadabra {
 	void        JSON_deserialise(const std::string&, DTree&);
 	void        JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value& cells);
 
-	/// Export a document to a single self-contained HTML file.
+	/// Export a document to a single self-contained HTML file containing inline CSS.
 
 	std::string export_as_HTML(const DTree& doc, bool for_embedding=false);
 	void        HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, bool for_embedding=false);
@@ -124,4 +124,9 @@ namespace cadabra {
 	/// \begin{verbatim}...\end{verbatim}, \verb.
 
 	std::string latex_to_html(const std::string&);
+
+	/// Export a document to a single self-contained LaTeX file.
+
+	std::string export_as_LaTeX(const DTree& doc);
+	void        LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str);
 }

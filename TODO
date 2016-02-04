@@ -1,8 +1,18 @@
 
+- substitute(_, $\dot{t} -> A$) does not work? (SS)
+
 - installation needs to run texhash to pickup tableaux.sty
 
-- Need some general logic to compute one object from another (inverse metric from metric being
-  the prime example).
+- Declaring Accent for a LaTeX operator leads to problems in output; make
+  it actually act on something before displaying.
+
+- Join lists of substitution rules. This is an algorithm which does _not_ modify an expression
+  but insteads spits out a new one; need some general logic on how this fits in with the
+  standard cdb algorithms.
+
+- For some tensors we would like to indicate to evaluate that it should keep all components. 
+
+- Declaring ::Metric should declare InverseMetric.
 
 - Remove all asserts and replace with exceptions.
 
@@ -10,6 +20,9 @@
 
 - Cleanup should not use algorithms to prevent recursion and (more importantly) to 
   make clear in one place what the algorithms do.
+
+- ComputeThread should not insert \color and probably also not \verbatim, as that
+  is dependent on the output mode.
 
 - Could we flip CodeInput cells to produce Python previews with formulas LaTeX typeset?
 

@@ -40,13 +40,13 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}{g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta}\\end{dmath*}"
 				},
 				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}, g^{t t} = \\frac{r}{2M-r}, g^{r r} = \\frac{-2M+r}{r}, g^{\\phi \\phi} = \\frac{1}{(r^{2} \\sin(\\theta)^{2})}, g^{\\theta \\theta} = r^{-2}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}{g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta, g^{t t} = \\frac{r}{2M-r}, g^{r r} = \\frac{-2M+r}{r}, g^{\\phi \\phi} = \\frac{1}{(r^{2} \\sin(\\theta)^{2})}, g^{\\theta \\theta} = r^{-2}}\\end{dmath*}"
 				},
 				
 				{
@@ -58,10 +58,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} =  = \\left\\{\\begin{aligned}{t, t, r}: &  - \\frac{M}{(r \\left(2M-r\\right))}\\\\\n{t, r, t}: &  - \\frac{M}{(r \\left(2M-r\\right))}\\\\\n{r, r, r}: & M \\frac{2M-r}{(r^{3} \\left( - \\frac{2M}{r}+1\\right)^{2})}\\\\\n{r, \\phi, \\phi}: & \\left(2M-r\\right) \\sin(\\theta)^{2}\\\\\n{r, \\theta, \\theta}: & 2M-r\\\\\n{r, t, t}: & M \\frac{-2M+r}{r^{3}}\\\\\n{\\phi, \\phi, r}: & \\frac{1}{r}\\\\\n{\\phi, \\phi, \\theta}: & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n{\\phi, r, \\phi}: & \\frac{1}{r}\\\\\n{\\phi, \\theta, \\phi}: & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n{\\theta, \\theta, r}: & \\frac{1}{r}\\\\\n{\\theta, r, \\theta}: & \\frac{1}{r}\\\\\n{\\theta, \\phi, \\phi}: & -\\sin(\\theta) \\cos(\\theta)\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} =  = \\left\\{\\begin{aligned}{t, t, r}: &  - \\frac{M}{(r \\left(2M-r\\right))}\\\\\n{t, r, t}: &  - \\frac{M}{(r \\left(2M-r\\right))}\\\\\n{r, r, r}: & \\frac{M}{(r \\left(2M-r\\right))}\\\\\n{r, \\phi, \\phi}: & \\left(2M-r\\right) \\sin(\\theta)^{2}\\\\\n{r, \\theta, \\theta}: & 2M-r\\\\\n{r, t, t}: & M \\frac{-2M+r}{r^{3}}\\\\\n{\\phi, \\phi, r}: & \\frac{1}{r}\\\\\n{\\phi, \\phi, \\theta}: & \\frac{\\sin(2\\theta)}{2\\sin(\\theta)^{2}}\\\\\n{\\phi, r, \\phi}: & \\frac{1}{r}\\\\\n{\\phi, \\theta, \\phi}: & \\frac{\\sin(2\\theta)}{2\\sin(\\theta)^{2}}\\\\\n{\\theta, \\theta, r}: & \\frac{1}{r}\\\\\n{\\theta, r, \\theta}: & \\frac{1}{r}\\\\\n{\\theta, \\phi, \\phi}: &  - \\frac{1}{2}\\sin(2\\theta)\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric.\n\n#equation_mode(True);         \nex:= \\Gamma^{\\mu}_{\\nu\\rho}=\\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2,    g_{\\phi\\phi}=r**2 \\sin(\\theta)**2 };\ncomplete(ss, $g^{\\mu\\nu}$);\nsubstitute(ex, rl);\nevaluate(ex, ss);"
+			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric.\n\n#equation_mode(True);         \nex:= \\Gamma^{\\mu}_{\\nu\\rho}=\\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       X^t = t, X^r = r, X^\\theta=\\theta\n     };\ncomplete(ss, $g^{\\mu\\nu}$);\nsubstitute(ex, rl);\nevaluate(ex, ss);"
 		},
 		
 		{
@@ -73,10 +73,106 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}, g^{t t} = \\frac{r}{2M-r}, g^{r r} = \\frac{-2M+r}{r}, g^{\\phi \\phi} = \\frac{1}{(r^{2} \\sin(\\theta)^{2})}, g^{\\theta \\theta} = r^{-2}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}{X^{t} = T, X^{r} = R, X^{\\theta} = \\Theta, X^{\\phi} = \\Phi}\\end{dmath*}"
 				}
 			],
-			"source" : "ss;"
+			"source" : "\\ddot{#}::Accent.\n\\dot{#}::Accent.\nXrl:= { X^t = T, X^r = R, X^\\theta=\\Theta, X^\\phi = \\Phi };"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\ddot{X^{\\mu}}+\\Gamma^{\\mu}\\,_{\\nu \\rho} \\dot{X^{\\nu}} \\dot{X^{\\rho}}\\end{dmath*}"
+				}
+			],
+			"source" : "eom:= \\ddot{X^\\mu} + \\Gamma^{\\mu}_{\\nu\\rho} \\dot{X^\\nu}\\dot{X^\\rho};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\ddot{X^{\\mu}}+\\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right) \\dot{X^{\\nu}} \\dot{X^{\\rho}}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(eom,rl);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} = \\left\\{\\begin{aligned}{t}: & \\frac{-2M \\dot{r} \\dot{t}+r \\left(2M-r\\right) \\ddot{t}}{(r \\left(2M-r\\right))}\\\\\n{r}: & \\frac{M r^{2} \\dot{r}^{2}-M \\left(2M-r\\right)^{2} \\dot{t}^{2}+r^{3} \\left(2M-r\\right) \\left(\\left(2M-r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\right)}{(r^{3} \\left(2M-r\\right))}\\\\\n{\\theta}: & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(eom,ss);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} = \\left\\{\\begin{aligned}{t}: & \\frac{-2M \\dot{r} \\dot{t}+r \\left(2M-r\\right) \\ddot{t}}{(r \\left(2M-r\\right))}\\\\\n{r}: & \\frac{M r^{2} \\dot{r}^{2}-M \\left(2M-r\\right)^{2} \\dot{t}^{2}+r^{3} \\left(2M-r\\right) \\left(\\left(2M-r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\right)}{(r^{3} \\left(2M-r\\right))}\\\\\n{\\theta}: & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(eom, $\\dot{t} -> (E/(1-2M/r))$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "r=sympy.var('r')\ns=sympy.var('s')\nt=sympy.var('t')\ntd=sympy.var('td')"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{d}{d s} \\operatorname{td}{\\left (s \\right )} - \\frac{2 \\operatorname{td}{\\left (s \\right )} \\frac{d}{d s} r{\\left (s \\right )}}{\\left(- r{\\left (s \\right )} + 2\\right) r{\\left (s \\right )}}\\end{dmath*}"
+				}
+			],
+			"source" : "eq= diff(td(s),s) - 2*diff(r(s),s)*td(s)/r(s)/(2-r(s));"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/home/kasper/Development/git.others/sympy/sympy/solvers/pde.py\", line 169, in pdsolve\n    hint=hint, simplify=True, type='pde', **kwargs)\n  File \"/home/kasper/Development/git.others/sympy/sympy/solvers/deutils.py\", line 205, in _desolve\n    n=terms, x0=x0, prep=prep)\n  File \"/home/kasper/Development/git.others/sympy/sympy/solvers/pde.py\", line 269, in classify_pde\n    raise NotImplementedError(\"Right now only partial \"\nNotImplementedError: Right now only partial differential equations of two variables are supported\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "sympy.pdsolve(eq,t(s));"
 		},
 		
 		{

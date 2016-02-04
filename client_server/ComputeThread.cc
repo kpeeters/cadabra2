@@ -272,7 +272,6 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				docthread.queue_action(action);
 				}
 			else if(msg_type.asString()=="error") {
-				// std::cout << "Generating ERROR cell" << std::endl;
 				std::string error = "{\\color{red}{\\begin{verbatim}"+content["output"].asString()
 					+"\\end{verbatim}}}";
 				if(msg_type.asString()=="fault") {
@@ -282,7 +281,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				// Stick an AddCell action onto the stack. We instruct the
 				// action to add this result output cell as a child of the
 				// corresponding input cell.
-				DataCell result(cell_id, DataCell::CellType::output, error);
+				DataCell result(cell_id, DataCell::CellType::error, error);
 				
 				// Finally, the action.
 				std::shared_ptr<ActionBase> action = 
