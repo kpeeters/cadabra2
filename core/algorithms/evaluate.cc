@@ -8,6 +8,7 @@
 #include "properties/PartialDerivative.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Depends.hh"
+#include "properties/Accent.hh"
 #include <functional>
 
 evaluate::evaluate(Kernel& k, Ex& tr, const Ex& c)
@@ -97,6 +98,27 @@ void evaluate::handle_sum(iterator it)
 void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free)
 	{
 	if(*sib->name=="\\components") return;
+
+	// If this factor is an accent at the top level, descent further.
+	const Accent *acc = kernel.properties.get<Accent>(sib);
+	if(acc) {
+		auto deeper=tr.begin(sib);
+		handle_factor(deeper, full_ind_free);
+		// Put the accent on each of the components.
+		sibling_iterator cl = tr.end(deeper);
+		--cl;
+		cadabra::do_list(tr, cl, [&](Ex::iterator c) {
+				auto towrap = tr.child(c, 1);
+				tr.wrap(towrap, *sib);
+				return true;
+				});
+		tr.print_recursive_treeform(std::cerr, sib);
+		// Move the component node up, outside the accent.
+		sib=tr.flatten(sib);
+		sib=tr.erase(sib);
+		tr.print_recursive_treeform(std::cerr, sib);
+		return;
+		}
 	
 	// Internal contractions.
 	// FIXME: not yet handled.
@@ -221,7 +243,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			auto rhs1 = tr.begin(it1);
 			++rhs1;
 			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "", "", "");
+			sympy::apply(kernel, tr, nd, "simplify", "", "");
 			return true;
 			});
 	}

@@ -64,6 +64,8 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_file_export_html) );
 	actiongroup->add( Gtk::Action::create("ExportHtmlSegment", "Export to HTML segment"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_export_html_segment) );
+	actiongroup->add( Gtk::Action::create("ExportLaTeX", "Export to standalone LaTeX"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_export_latex) );
 	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
@@ -121,6 +123,7 @@ NotebookWindow::NotebookWindow()
 		"      <menuitem action='SaveAs'/>"
 		"      <menuitem action='ExportHtml'/>"
 		"      <menuitem action='ExportHtmlSegment'/>"
+		"      <menuitem action='ExportLaTeX'/>"
 		"      <separator/>"
 		"      <menuitem action='Quit'/>"
 		"    </menu>"
@@ -404,9 +407,12 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				break;
 
 			case DataCell::CellType::output:
+			case DataCell::CellType::error:
 			case DataCell::CellType::verbatim: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
+				if(it->cell_type==DataCell::CellType::error) 
+					std::cerr << "error cell" << std::endl;
 				newcell.outbox = manage( new TeXView(engine, it) );
 				w=newcell.outbox;
 				break;
@@ -850,6 +856,26 @@ void NotebookWindow::on_file_export_html()
 			name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc);
+			}
+		}
+	}
+
+void NotebookWindow::on_file_export_latex()
+	{
+	Gtk::FileChooserDialog dialog("Please enter a file name for the LaTeX document",
+											Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+	dialog.set_transient_for(*this);
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+	int result=dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+			name = dialog.get_filename();			
+			std::ofstream temp(name);
+			temp << export_as_LaTeX(doc);
 			}
 		}
 	}

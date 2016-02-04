@@ -16,8 +16,12 @@ DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
 		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },
 		{"\\theta", "theta"},
+		{"\\Theta", "Theta"},
+		{"\\Phi", "Phi"},
 		{"\\Sigma", "Sigma"},
-		{"\\partial", "Derivative"}
+		{"\\partial", "Derivative"},
+		{"\\dot", "dot"},
+		{"\\ddot", "ddot"}
 		};
 	}
 
@@ -229,13 +233,18 @@ void DisplaySympy::print_fraclike(std::ostream& str, Ex::iterator it)
 		}
 	dispatch(str, num);
 
-	str << "/";
+	str << "/(";
 	
 	dispatch(str, den);
+
+	str << ")";
 	}
 
 void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
+	if(needs_brackets(it)) 
+		str << "(";
+
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
 		Ex::sibling_iterator st=tree.begin(it);
@@ -270,6 +279,8 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 		previous_bracket_=current_bracket_;
 		}
 
+	if(needs_brackets(it)) 
+		str << ")";
 //	if(close_bracket) str << ")";
 	}
 
