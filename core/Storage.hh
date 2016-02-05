@@ -229,3 +229,12 @@ class nset_it_less {
 		bool operator()(nset_t::iterator first, nset_t::iterator second) const;
 };
 
+/// \ingroup core
+///
+/// Bare output operator for Ex objects, mainly to provide a simple
+/// way to generate debugging output. Does not do any fancy
+/// formatting; just prints a nested list representation.  For more
+/// fancy output, look at DisplayTeX, DisplaySympy and
+/// DisplayTerminal.
+
+std::ostream& operator<<(std::ostream&, const Ex&);

@@ -116,6 +116,18 @@ void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
 			});
 
 	one(it->multiplier);
+
+	// If this component node has no free indices, get rid of all
+	// the baggage and turn into a normal expression.
+
+	auto comma=tr.begin(it);
+	if(*comma->name=="\\comma") {
+		tr.flatten(it); // unwrap comma
+		it=tr.erase(it);
+		tr.flatten(it); // unwrap equals
+		it=tr.erase(it);
+		it=tr.erase(it); // remove empty comma for index values
+		}
 	}
 
 void cleanup_expressionlike(Kernel& k, Ex&tr, Ex::iterator& it)
