@@ -46,7 +46,7 @@ std::istream& operator>>(std::istream& str, Parser& pa)
 
 str_node::bracket_t Parser::is_closing_bracket(const unsigned char& br) const
 	{
-	if(br==')')     return str_node::b_round;
+	if(br==')')     return str_node::b_none;
 	if(br==']')     return str_node::b_square;
 	if(br=='}')     return str_node::b_none;
 	if(br=='}'+128) return str_node::b_curly;
@@ -56,7 +56,7 @@ str_node::bracket_t Parser::is_closing_bracket(const unsigned char& br) const
 
 str_node::bracket_t Parser::is_opening_bracket(const unsigned char& br) const
 	{
-	if(br=='(')     return str_node::b_round;
+	if(br=='(')     return str_node::b_none;
 	if(br=='[')     return str_node::b_square;
 	if(br=='{')     return str_node::b_none;
 	if(br=='{'+128) return str_node::b_curly;

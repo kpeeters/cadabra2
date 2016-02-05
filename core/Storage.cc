@@ -951,5 +951,8 @@ void half(rset_t::iterator& num)
 	num=rat_set.insert((*num)/2).first;
 	}
 
-
-
+std::ostream& operator<<(std::ostream& str, const Ex& ex) 
+	{
+	ex.print_recursive_treeform(str, ex.begin());
+	return str;
+	}

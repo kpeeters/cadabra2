@@ -82,7 +82,12 @@ class evaluate : public Algorithm {
 		/// one.
 		void merge_components(iterator it1, iterator it2);
 
-		/// Cleanup all components in a 'components' node.
+		/// Merge entries in a single 'components' node when they are for the
+		/// same index value(s).
+		void merge_component_children(iterator it);
+
+		/// Cleanup all components in a 'components' node; that is, call the 
+		/// cleanup_dispatch function on them.
 		void cleanup_components(iterator it1);
 
 		/// Determine all the Coordinate dependencies of the object at 'it'. For the

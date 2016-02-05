@@ -66,6 +66,8 @@ substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
 
 bool substitute::can_apply(iterator st)
 	{
+	//std::cerr << "attempting to match at " << Ex(st) << std::endl;
+
 	Ex::iterator found = cadabra::find_in_list(args, args.begin(), [&](Ex::iterator arrow) {
 			comparator.clear();
 			iterator lhs=tr.begin(arrow);

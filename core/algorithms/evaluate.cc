@@ -42,6 +42,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) handle_derivative(walk);
 				}
+			cleanup_dispatch(kernel, tr, walk);
 			}
 		);
 
@@ -81,10 +82,12 @@ void evaluate::handle_sum(iterator it)
 		sib=nxt;
 		}
 
-	// Now all terms are \component nodes. We need to merge these
-	// together into a single node.
+	// Now all terms in the sum (which has its top node at 'it') are
+	// \component nodes. We need to merge these together into a single
+	// node.
 
 	auto sib1=tr.begin(it);
+//	merge_component_children(sib1);
 	auto sib2=sib1;
 	++sib2;
 	while(sib2!=tr.end(it)) {
@@ -112,11 +115,11 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 				tr.wrap(towrap, *sib);
 				return true;
 				});
-		tr.print_recursive_treeform(std::cerr, sib);
+		//tr.print_recursive_treeform(std::cerr, sib);
 		// Move the component node up, outside the accent.
 		sib=tr.flatten(sib);
 		sib=tr.erase(sib);
-		tr.print_recursive_treeform(std::cerr, sib);
+		//tr.print_recursive_treeform(std::cerr, sib);
 		return;
 		}
 	
@@ -133,6 +136,8 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	Ex repl("\\components");
 	for(auto& ind: ind_free) 
 		repl.append_child(repl.begin(), ind.second);
+	// If there are no free indices, add an empty first child anyway,
+	// otherwise we need special cases in various other places.
 	auto vl = repl.append_child(repl.begin(), str_node("\\comma"));
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			Ex rule(c);
@@ -176,8 +181,45 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	sib = tr.move_ontop(iterator(sib), repl.begin());
 	}
 
+void evaluate::merge_component_children(iterator it)
+	{
+	// Scan the entries of a single \components node for those
+	// which carry the same index value for the free indices.
+	// Such things can arise from e.g. A_{m} A_{m n} and the
+	// rule { A_{r}=3, A_{t}=5, A_{r t}=1, A_{t t}=2 }, which
+	// leads to two entries for the free index n=t.
+
+	auto comma=tr.end(it);
+	--comma;
+	auto cv1=tr.begin(comma);
+	while(cv1!=tr.end(comma)) {
+		auto iv1=tr.begin(cv1); // index values \comma
+		auto cv2=cv1;
+		++cv2;
+		while(cv2!=tr.end(comma)) {
+			auto iv2=tr.begin(cv2); // index values \comma
+			if(tr.equal_subtree(iv1, iv2)) {
+				Ex::sibling_iterator tv1=iv1; // tensor component value
+				++tv1;
+				Ex::sibling_iterator tv2=iv2;
+				++tv2;
+				// std::cerr << "need to merge" << std::endl;
+				tv1=tr.wrap(tv1, str_node("\\sum"));
+				tr.append_child(tv1, tv2);
+				cv2=tr.erase(cv2);
+				}
+			else ++cv2;
+			}
+		++cv1;
+		}
+	}
+
 void evaluate::merge_components(iterator it1, iterator it2)
 	{
+	// Merge two component nodes which come from two terms in a sum (so that
+	// we can be assured that the free indices match; they just may not be
+	// in the same order).
+
 	assert(*it1->name=="\\components");
 	assert(*it2->name=="\\components");
 	sibling_iterator sib1=tr.end(it1);
@@ -189,23 +231,29 @@ void evaluate::merge_components(iterator it1, iterator it2)
 
 	// We cannot directly compare the lhs of this equals node with the lhs
 	// of the equals node of the other components node, because the index
-	// order on the two components nodes may be different. Find the 
+	// order on the two components nodes may be different. We first
+	// have to ensure that the orders are the same (but only, of course)
+	// if we have anything to permutate in the first place.
 
-	Perm perm;
-	perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
+	if(*tr.begin(it1)->name!="\\comma") {
+		std::cerr << "merging for " << *tr.begin(it1)->name << std::endl;
+		Perm perm;
+		perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
 //	for(auto p: perm.perm)
 //		std::cerr << p << " ";
 //	std::cerr << std::endl;
-
-	//perm.apply(tr.begin(it2), sib2);
-	//std::cerr << "after permutation" << std::endl;
-	//tr.print_recursive_treeform(std::cerr, tr.begin());
-
-	cadabra::do_list(tr, sib2, [&](Ex::iterator it2) {
-			auto lhs2 = tr.begin(it2);
-			perm.apply(tr.begin(lhs2), tr.end(lhs2));
-			return true;
-			});
+		
+		//perm.apply(tr.begin(it2), sib2);
+		//std::cerr << "after permutation" << std::endl;
+		//tr.print_recursive_treeform(std::cerr, tr.begin());
+		
+		cadabra::do_list(tr, sib2, [&](Ex::iterator nd) {
+				auto lhs2 = tr.begin(nd);
+				perm.apply(tr.begin(lhs2), tr.end(lhs2));
+				return true;
+				});
+		}
+//	else std::cerr << "merging scalars" << std::endl;
 
 
 	// Now all index orders match and we can simply compare index value sets.
@@ -217,6 +265,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			auto found = cadabra::find_in_list(tr, sib1, [&](Ex::iterator it1) {
 
 					auto lhs1 = tr.begin(it1);
+					std::cerr << "comparing " << *lhs1->name << " with " << *lhs2->name << std::endl;
 					if(tr.equal_subtree(lhs1, lhs2)) {
 						auto sum1=lhs1;
 						++sum1;
@@ -520,9 +569,11 @@ void evaluate::handle_prod(iterator it)
 	cleanup_dispatch(kernel, tr, it);
 	cleanup_dispatch(kernel, tr, it);
 
-	// Simplify the components of the now single \component node by calling sympy.
-
+	// We may have duplicate index value entries; merge them.
 	assert(*it->name=="\\components");
+	merge_component_children(it);
+
+	// Simplify the components of the now single \component node by calling sympy.
 	sibling_iterator lst = tr.end(it);
 	--lst;
 	

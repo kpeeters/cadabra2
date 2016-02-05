@@ -1,5 +1,4 @@
-
-- substitute(_, $\dot{t} -> A$) does not work? (SS)
+- Move all doc/developers/* to doxygen.
 
 - installation needs to run texhash to pickup tableaux.sty
 

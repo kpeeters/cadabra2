@@ -167,8 +167,9 @@ void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-		case str_node::b_none: 
-			str << "{";
+		case str_node::b_none:
+			if(pr==str_node::p_none) str << "(";
+			else                     str << "{";
 //			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << "(";  
 //			else                                                                           str << "{";
 			break;
@@ -185,7 +186,8 @@ void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 	{
 	switch(br) {
 		case str_node::b_none:   
-			str << "}";
+			if(pr==str_node::p_none) str << ")";
+			else                     str << "}";
 //			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << ")";  
 //			else                                                                           str << "}";
 			break;

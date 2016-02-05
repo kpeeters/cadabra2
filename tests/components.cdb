@@ -61,8 +61,19 @@ complete(ss, $g^{m n}$);
 rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
 ex:= g_{m n} X^{n};
 evaluate(ex, rl);
+print(tree(ex))
+
+----------------------
+
+{r,t}::Coordinate.
+{m,n,p}::Indices(values={r,t}).
+ex:= A_{m n}*A_{m n p};
+ss:= { A_{r r} -> a+b, A_{r t} -> b, A_{t t} -> c, A_{r r t}->3, A_{t t t}->c };
+evaluate(ex, ss);
+print(tree(ex))
 
 
+------------------------
 
 -------------------------------------------
 
