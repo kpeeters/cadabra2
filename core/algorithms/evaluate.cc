@@ -131,6 +131,18 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		std::cerr << "Internal contractions, not yet handled" << std::endl;
 		return;
 		}
+
+	// Pure scalar nodes need to be wrapped in a \component node to make life
+	// easier for the rest of the algorithm.
+	if(ind_free.size()==0 && ind_dummy.size()==0) {
+		// FIXME: would be good if we could write this in a more readable form.
+		auto eq=tr.wrap(sib, str_node("\\equals"));
+		tr.prepend_child(eq, str_node("\\comma"));
+		eq=tr.wrap(eq, str_node("\\comma"));
+		sib=tr.wrap(eq, str_node("\\components"));
+		//std::cerr << tr << std::endl;
+		return;
+		}
 	
 	// Attempt to apply each component substitution rule on this term.
 	Ex repl("\\components");
@@ -415,7 +427,8 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 
 void evaluate::handle_prod(iterator it)
 	{
-	// All factors are either \component nodes or nodes which still need replacing.
+	// All factors are either \component nodes, pure scalar nodes, or nodes which still need replacing.
+	// The handle_factor function takes care of the latter two.
 
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -428,9 +441,9 @@ void evaluate::handle_prod(iterator it)
 		sib=nxt;
 		}
 	
-	// Now everything is a \component node; the thing is effectively a
-	// large sparse tensor product. We need to do the sums over the dummy
-	// indices, turning this into a single \component node.
+	// Now everything is a \component node.  The thing is effectively a
+	// large sparse tensor product. We need to do the sums over the
+	// dummy indices, turning this into a single \component node.
 	
 	index_map_t ind_free, ind_dummy;
 	classify_indices(it, ind_free, ind_dummy);
@@ -566,11 +579,57 @@ void evaluate::handle_prod(iterator it)
 		++di; ++di;
 		}
 
+	// FIXME: At this stage we have one or more components nodes in the product.
+	// We need to do an outer multiplication, merging all index names into
+	// one, and computing tensor component values for all possible index values.
+
+	int n=tr.number_of_children(it);
+	std::cerr << Ex(it) << std::endl;
+	if(n>1) {
+		auto first=tr.begin(it); // component node
+		auto other=first;
+		++other;
+		auto fi=tr.end(first);
+		--fi;
+		// Add the free indices of 'other' to 'first'.
+		while(other!=tr.end(it)) {
+			auto oi=tr.begin(other);
+			while(oi!=tr.end(other)) {
+				if(oi->is_index()==false)
+					break;
+				tr.insert_subtree(fi, oi);
+				++oi;
+				}
+			++other;
+			}
+
+		// Now do an outer combination of all possible indexvalue/componentvalue 
+		// in the various component nodes.
+		other=first;
+		++other;
+		while(other!=tr.end(it)) {
+			auto v1=tr.begin(first);
+			while(v1!=tr.end(first)) {
+				auto v2=tr.begin(other);
+				while(v2!=tr.end(other)) {
+					
+					++v2;
+					}
+				++v1;
+				}
+			other=tr.erase(other);
+			}
+		}
+	std::cerr << Ex(it) << std::endl;
+
+	// At this stage, there should be only one factor in the product, which 
+	// should be a \components node. We do a cleanup, after which it should be
+	// at the 'it' node.
 	cleanup_dispatch(kernel, tr, it);
 	cleanup_dispatch(kernel, tr, it);
+	assert(*it->name=="\\components");
 
 	// We may have duplicate index value entries; merge them.
-	assert(*it->name=="\\components");
 	merge_component_children(it);
 
 	// Simplify the components of the now single \component node by calling sympy.
