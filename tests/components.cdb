@@ -67,13 +67,30 @@ print(tree(ex))
 
 {r,t}::Coordinate.
 {m,n,p}::Indices(values={r,t}).
-ex:= A_{m n}*A_{m n p};
+ex:= A_{m n}*A_{m n};
 ss:= { A_{r r} -> a+b, A_{r t} -> b, A_{t t} -> c, A_{r r t}->3, A_{t t t}->c };
 evaluate(ex, ss);
 print(tree(ex))
 
 
 ------------------------
+
+# The following test components of tensor outer products. The first one
+# leads to a scalar multiplying the components tensor.
+
+{r,t}::Coordinate.
+{m,n}::Indices(values={t,r}).
+ex:= g_{m n} X^{n} A;
+rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
+evaluate(ex,rl);
+
+# The second one is manifestly an outer product.
+
+{r,t}::Coordinate.
+{m,n,p}::Indices(values={t,r}).
+ex:= X^{n} X^{m} X^{p};
+rl:= { X^{t} -> T, X^{r} -> R };
+evaluate(ex,rl);
 
 -------------------------------------------
 

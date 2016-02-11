@@ -9,6 +9,7 @@
 
 void cleanup_dispatch(Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
+	//std::cerr << "cleanup at " << *it->name << std::endl;
 	if(it->is_zero())  {
 		::zero(it->multiplier);
 		tr.erase_children(it);
@@ -101,32 +102,35 @@ void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
 	assert(*it->name=="\\components");
 
 	multiplier_t mult = *it->multiplier;
-	if(mult==1) return;
-
-	Ex::sibling_iterator sib=tr.end(it);
-	--sib;
-	// Examine all index value sets and push the multiplier
-	// in there.
-	cadabra::do_list(tr, sib, [&](Ex::iterator nd) {
-			Ex::sibling_iterator val=tr.begin(nd);
-			++val;
-			multiply(val->multiplier, mult);
-			cleanup_dispatch(k, tr, nd);
-			return true;
-			});
-
-	one(it->multiplier);
+	if(mult!=1) {
+		Ex::sibling_iterator sib=tr.end(it);
+		--sib;
+		// Examine all index value sets and push the multiplier
+		// in there.
+		cadabra::do_list(tr, sib, [&](Ex::iterator nd) {
+				Ex::sibling_iterator val=tr.begin(nd);
+				++val;
+				multiply(val->multiplier, mult);
+				cleanup_dispatch(k, tr, nd);
+				return true;
+				});
+		
+		one(it->multiplier);
+		}
 
 	// If this component node has no free indices, get rid of all
 	// the baggage and turn into a normal expression.
 
+	//std::cerr << "components cleanup: " << Ex(it) << std::endl;
+
 	auto comma=tr.begin(it);
 	if(*comma->name=="\\comma") {
+		std::cerr << "components node for a scalar" << std::endl;
 		tr.flatten(it); // unwrap comma
 		it=tr.erase(it);
-		tr.flatten(it); // unwrap equals
-		it=tr.erase(it);
-		it=tr.erase(it); // remove empty comma for index values
+//		tr.flatten(it); // unwrap equals
+//		it=tr.erase(it);
+//		it=tr.erase(it); // remove empty comma for index values
 		}
 	}
 
