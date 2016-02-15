@@ -7,6 +7,7 @@ ex:= A_{m n} + B_{m n};
 rl:= A_{t r} + B_{t r} = 3;
 substitute(ex, rl)
 
+def test02():
 {r,t}::Coordinate.
 {m,n,p,s}::Indices(values={t,r}).
 \partial{#}::PartialDerivative.
@@ -16,13 +17,17 @@ ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
 #rl:= [ A_{t r} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t} + D_{t} = 1 ];
 rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];
 evaluate(ex, rl);
+tst:= \components_{s}({r}=16 r**2 t + 6, {t}=15 t**2) - @(ex);
+
+
 
 # Now a Christoffel example, i.e. with derivatives.
 
 {r,t,\phi,\theta}::Coordinate.
 {\mu,\nu,\rho,\sigma}::Indices(values={t,r,\phi,\theta}, position=fixed).
 \partial{#}::PartialDerivative.
-         
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.         
 ex:= \Gamma^{\mu}_{\nu\rho};
 rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
                                                  +\partial_{\nu}{g_{\rho\sigma}}
@@ -34,8 +39,8 @@ rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
 
 #rl:=  \Gamma_{\sigma\nu\rho} =  \partial_{\rho}{g_{\nu\sigma}};
                               
-ss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,    g_{\phi\phi}=r**2 \sin(\theta)**2,
-       g^{t t} = -1/(1-2 M/r), g^{r r} = 1-2 M/r,     g^{\theta\theta} = r**(-2), g^{\phi\phi}=r**(-2) \sin(\theta)**(-2) };
+ss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,    g_{\phi\phi}=r**2 \sin(\theta)**2 };
+complete(ss, $g^{\mu\nu}$)
 #ss:= { g_{t t} = -f(r), g_{r r} = 1/f(r), g_{\theta\theta} = r**2, g_{\phi\phi}=r**2 \sin(\theta)**2,
 #       g^{t t} = 1/f(r), g^{r r} = f(r), g^{\theta\theta}  = r**(-2), g^{\phi\phi}=r**(-2) \sin(\theta)**(-2) };
 substitute(ex, rl);
