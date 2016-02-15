@@ -42,7 +42,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) handle_derivative(walk);
 				}
-			cleanup_dispatch(kernel, tr, walk);
+//			cleanup_dispatch(kernel, tr, walk);
 			}
 		);
 
@@ -248,7 +248,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	// if we have anything to permutate in the first place.
 
 	if(*tr.begin(it1)->name!="\\comma") {
-		std::cerr << "merging for " << *tr.begin(it1)->name << std::endl;
+		//std::cerr << "merging for " << *tr.begin(it1)->name << std::endl;
 		Perm perm;
 		perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
 //	for(auto p: perm.perm)
@@ -277,7 +277,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			auto found = cadabra::find_in_list(tr, sib1, [&](Ex::iterator it1) {
 
 					auto lhs1 = tr.begin(it1);
-					std::cerr << "comparing " << *lhs1->name << " with " << *lhs2->name << std::endl;
+					//std::cerr << "comparing " << *lhs1->name << " with " << *lhs2->name << std::endl;
 					if(tr.equal_subtree(lhs1, lhs2)) {
 						auto sum1=lhs1;
 						++sum1;
@@ -304,7 +304,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			auto rhs1 = tr.begin(it1);
 			++rhs1;
 			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "simplify", "", "");
+			sympy::apply(kernel, tr, nd, "", "", "");
 			return true;
 			});
 	}
@@ -584,8 +584,9 @@ void evaluate::handle_prod(iterator it)
 	// one, and computing tensor component values for all possible index values.
 
 	int n=tr.number_of_children(it);
-	std::cerr << Ex(it) << std::endl;
+	//std::cerr << Ex(it) << std::endl;
 	if(n>1) {
+		//std::cerr << "merging" << std::endl;
 		auto first=tr.begin(it); // component node
 		auto other=first;
 		++other;
@@ -605,27 +606,58 @@ void evaluate::handle_prod(iterator it)
 
 		// Now do an outer combination of all possible indexvalue/componentvalue 
 		// in the various component nodes.
+		auto comma1=tr.end(first);
+		--comma1;
 		other=first;
 		++other;
 		while(other!=tr.end(it)) {
-			auto v1=tr.begin(first);
-			while(v1!=tr.end(first)) {
-				auto v2=tr.begin(other);
-				while(v2!=tr.end(other)) {
-					
-					++v2;
+			Ex newcomma("\\comma"); // List of index value combinations and associated component values
+			auto comma2=tr.end(other);
+			--comma2;
+			assert(*comma1->name=="\\comma");
+			assert(*comma2->name=="\\comma");
+			auto eq1=tr.begin(comma1);    // The \equals node
+			while(eq1!=tr.end(comma1)) {
+				auto eq2=tr.begin(comma2);
+				while(eq2!=tr.end(comma2)) {
+					// Collect all index values.
+					auto neq = newcomma.append_child(newcomma.begin(), str_node("\\equals"));
+					auto ncm = newcomma.append_child(neq, str_node("\\comma")); // List of index values
+					auto iv=tr.begin(tr.begin(eq1));
+					while(iv!=tr.end(tr.begin(eq1))) {
+						newcomma.append_child(ncm, iterator(iv));
+						++iv;
+						}
+					iv=tr.begin(tr.begin(eq2));
+					while(iv!=tr.end(tr.begin(eq2))) {
+						newcomma.append_child(ncm, iterator(iv));
+						++iv;
+						}
+					// Multiply component values.
+					Ex prod("\\prod");
+					iv=tr.end(eq1);
+					--iv;
+					prod.append_child(prod.begin(), iterator(iv));
+					iv=tr.end(eq2);
+					--iv;
+					prod.append_child(prod.begin(), iterator(iv));
+					cleanup_dispatch_deep(kernel, prod);
+					newcomma.append_child(neq, prod.begin());
+					++eq2;
 					}
-				++v1;
+				++eq1;
 				}
+			// Now replace the original comma1 node with newcomma, and re-iterate if there
+			// are further factors in the tensor product.
+			comma1 = tr.move_ontop(iterator(comma1), newcomma.begin());
 			other=tr.erase(other);
 			}
+//		std::cerr << Ex(it) << std::endl;
 		}
-	std::cerr << Ex(it) << std::endl;
 
 	// At this stage, there should be only one factor in the product, which 
 	// should be a \components node. We do a cleanup, after which it should be
 	// at the 'it' node.
-	cleanup_dispatch(kernel, tr, it);
 	cleanup_dispatch(kernel, tr, it);
 	assert(*it->name=="\\components");
 

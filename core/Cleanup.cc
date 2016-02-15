@@ -28,6 +28,17 @@ void cleanup_productlike(Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\prod");
 
+	// Flatten prod children inside this prod node.
+	auto sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(*sib->name=="\\prod") {
+			multiply(it->multiplier, *sib->multiplier);
+			tr.flatten(sib); 
+			sib=tr.erase(sib);
+			}
+		else ++sib;
+		}
+
 	if(tr.number_of_children(it)==1)
 		if(tr.begin(it)->is_range_wildcard())
 			return;
@@ -44,6 +55,7 @@ void cleanup_productlike(Kernel& k, Ex&tr, Ex::iterator& it)
 		tr.erase_children(it);
 		it->name=name_set.insert("1").first;
 		}
+
 	}
 
 void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
@@ -195,8 +207,7 @@ void cleanup_dispatch_deep(Kernel& k, Ex& tr, dispatcher_t dispatch)
 
 	Ex::post_order_iterator it=tr.begin();
 	it.descend_all();
-	Ex::post_order_iterator last=tr.begin();
-	while(it!=last) {
+	while(it!=tr.end()) {
 		Ex::post_order_iterator next=it;
 		++next;
 		Ex::iterator tmp=it;
