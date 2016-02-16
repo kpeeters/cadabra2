@@ -33,12 +33,6 @@ rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
                                                  +\partial_{\nu}{g_{\rho\sigma}}
                                                  -\partial_{\sigma}{g_{\nu\rho}} );
 
-#rl:= \Gamma_{\sigma\nu\rho} =  \partial_{\rho}{g_{\nu\sigma}}
-#                               +\partial_{\nu}{g_{\rho\sigma}}
-#                               -\partial_{\sigma}{g_{\nu\rho}};
-
-#rl:=  \Gamma_{\sigma\nu\rho} =  \partial_{\rho}{g_{\nu\sigma}};
-                              
 ss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,    g_{\phi\phi}=r**2 \sin(\theta)**2 };
 complete(ss, $g^{\mu\nu}$)
 #ss:= { g_{t t} = -f(r), g_{r r} = 1/f(r), g_{\theta\theta} = r**2, g_{\phi\phi}=r**2 \sin(\theta)**2,

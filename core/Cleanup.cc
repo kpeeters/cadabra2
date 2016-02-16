@@ -115,6 +115,7 @@ void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
 
 	multiplier_t mult = *it->multiplier;
 	if(mult!=1) {
+		// FIXME: move this to push_down_multiplier
 		Ex::sibling_iterator sib=tr.end(it);
 		--sib;
 		// Examine all index value sets and push the multiplier

@@ -1,3 +1,6 @@
+
+- Decide on how to output \components so we can start writing tests.
+
 - Move all doc/developers/* to doxygen.
 
 - installation needs to run texhash to pickup tableaux.sty
