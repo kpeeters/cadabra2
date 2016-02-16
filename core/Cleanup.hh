@@ -61,6 +61,16 @@ void cleanup_sumlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_expressionlike(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_derivative(Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_components(Kernel& k, Ex&, Ex::iterator& it);
+
+/// Given a node with a non-unit multiplier, push this multiplier
+/// down the tree if the node is not allowed to have a non-unit
+/// multiplier. This is a recursive procedure as the node onto
+/// which the multiplier gets pushed may itself not allow for
+/// a non-unit multiplier.
+/// Note that some nodes disallow non-unit multipliers on their
+/// children, but that should be handled individually (see cleanup
+/// of product nodes for an example).
+
 void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it);
 
 
