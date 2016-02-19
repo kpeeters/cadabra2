@@ -1,5 +1,9 @@
+- Reset kernel on loading a new notebook: fix reporting of kernel run status.
 
 - Decide on how to output \components so we can start writing tests.
+
+- We have two ways to represent tensor components: as rules, and as \component nodes.
+  These should ideally be merged into one. Or not?
 
 - Move all doc/developers/* to doxygen.
 
@@ -10,7 +14,7 @@
 
 - Join lists of substitution rules. This is an algorithm which does _not_ modify an expression
   but insteads spits out a new one; need some general logic on how this fits in with the
-  standard cdb algorithms.
+  standard cdb algorithms. It is a bit like joining \components nodes; see above.
 
 - For some tensors we would like to indicate to evaluate that it should keep all components. 
 
@@ -59,22 +63,12 @@
 
 - Export to LaTeX and then once that works, to PDF.
 
-- Need to get rid of fl.bracket field; bracket types for grouping
-  should always be converted to round and determined by printing
-  routines. This avoids 1/{A*B} not being 1/(A*B). We can fix this easily in the
-  parser by replacing b_round -> b_none, but then the printing routines should
-  be so clever to output round brackets for function arguments.
-
 - CodeInput changes should be monitored by monitoring the change of the buffer. This is also
   necessary because cut-n-paste does not induce keypresses.
 
 - Need split cell urgently.
 
 - Having access to an index accessor for Ex would be useful for debugging; e.g. ex[3][1] and so on.
-
-- Sympy can invert matrices so automatically generate rules for an inverse metric. We
-  could trigger generation of an inverse matrix as soon as someone specifies the components
-  of a metric and the expression contains its inverse (or the other way around).
 
 - To show the original expression when evaluating components, we could let evaluate make a 
   copy of the original, do substitute and eval on the copy, then add the result as a components
@@ -98,7 +92,16 @@
          (r)
         r
 
-  and this could mean both A(f(r),r) or A({f(r),r}).
+  and this could mean both A(f(r),r) or A({f(r),r}). NO THAT's not true; in my tree,
+  A(f(r),r) SHOULD BE (but the parser gets this wrong)
+
+    A
+      f
+        r
+      r
+
+  without the comma, because separate arguments become separate children of the main node.
+  So we can ALWAYS drop the round brackets.
 
 - Display of component tensors in matrix or nested matrix form.
 
@@ -168,18 +171,10 @@
 
 - large output of arrays makes latex barf.
 
-- Catch TeXEngine exceptions in the frontend.
-
-
-- Components: finish the substitute compare method so it can match
-  A_{t r} to the expression A_{m n} and then return the so-matched set.
-
 - handle the popen file pointer more gracefully.
 
 - If a kernel which was started by the client notices that the client
   goes away because the socket was closed, terminate the kernel.
-
-- Reset kernel on loading a new notebook.
 
 - Write in docs that the only way to get output is to either just print things
   and get them displayed verbatim, or to call 'display' on an object and let the

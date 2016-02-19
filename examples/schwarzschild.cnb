@@ -28,7 +28,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\Gamma^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
 				},
 				
 				{
@@ -52,16 +52,16 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}(g_{\\nu \\sigma})+\\partial_{\\nu}(g_{\\rho \\sigma})-\\partial_{\\sigma}(g_{\\nu \\rho})\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}(g_{\\nu \\sigma})+\\partial_{\\nu}(g_{\\rho \\sigma})-\\partial_{\\sigma}(g_{\\nu \\rho})\\right)\\end{dmath*}"
 				},
 				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} =  = \\left\\{\\begin{aligned}(t, t, r): &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n(t, r, t): &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n(r, r, r): & \\frac{M}{r \\left(2M-r\\right)}\\\\\n(r, \\phi, \\phi): & \\left(2M-r\\right) \\sin(\\theta)^{2}\\\\\n(r, \\theta, \\theta): & 2M-r\\\\\n(r, t, t): & M \\frac{-2M+r}{r^{3}}\\\\\n(\\phi, \\phi, r): & \\frac{1}{r}\\\\\n(\\phi, \\phi, \\theta): & \\frac{\\sin(2\\theta)}{2\\sin(\\theta)^{2}}\\\\\n(\\phi, r, \\phi): & \\frac{1}{r}\\\\\n(\\phi, \\theta, \\phi): & \\frac{\\sin(2\\theta)}{2\\sin(\\theta)^{2}}\\\\\n(\\theta, \\theta, r): & \\frac{1}{r}\\\\\n(\\theta, r, \\theta): & \\frac{1}{r}\\\\\n(\\theta, \\phi, \\phi): &  - \\frac{1}{2}\\sin(2\\theta)\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}{}_{t}{}_{r}= &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}^{t}{}_{r}{}_{t}= &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}^{r}{}_{r}{}_{r}= & M \\frac{2M-r}{r^{3} \\left( - \\frac{2M}{r}+1\\right)^{2}}\\\\\n\\square{}^{r}{}_{\\phi}{}_{\\phi}= & \\left(2M-r\\right) \\sin(\\theta)^{2}\\\\\n\\square{}^{r}{}_{\\theta}{}_{\\theta}= & 2M-r\\\\\n\\square{}^{r}{}_{t}{}_{t}= & M \\frac{-2M+r}{r^{3}}\\\\\n\\square{}^{\\phi}{}_{\\phi}{}_{r}= & \\frac{1}{r}\\\\\n\\square{}^{\\phi}{}_{\\phi}{}_{\\theta}= & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n\\square{}^{\\phi}{}_{r}{}_{\\phi}= & \\frac{1}{r}\\\\\n\\square{}^{\\phi}{}_{\\theta}{}_{\\phi}= & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n\\square{}^{\\theta}{}_{\\theta}{}_{r}= & \\frac{1}{r}\\\\\n\\square{}^{\\theta}{}_{r}{}_{\\theta}= & \\frac{1}{r}\\\\\n\\square{}^{\\theta}{}_{\\phi}{}_{\\phi}= & -\\sin(\\theta) \\cos(\\theta)\\\\\n\\end{aligned}\n\\end{dmath*}"
 				}
 			],
-			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric.\n\n#equation_mode(True);         \nex:= \\Gamma^{\\mu}_{\\nu\\rho}=\\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       X^t = t, X^r = r, X^\\theta=\\theta\n     };\ncomplete(ss, $g^{\\mu\\nu}$);\nsubstitute(ex, rl);\nevaluate(ex, ss);"
+			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric.\n\n#equation_mode(True);         \nex:= \\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       X^t = t, X^r = r, X^\\theta=\\theta\n     };\ncomplete(ss, $g^{\\mu\\nu}$);\nsubstitute(ex, rl);\nevaluate(ex, ss);"
 		},
 		
 		{
@@ -118,7 +118,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} = \\left\\{\\begin{aligned}(t): & \\frac{-2M \\dot{r} \\dot{t}+r \\left(2M-r\\right) \\ddot{t}}{r \\left(2M-r\\right)}\\\\\n(r): & \\frac{M r^{2} \\dot{r}^{2}-M \\left(2M-r\\right)^{2} \\dot{t}^{2}+r^{3} \\left(2M-r\\right) \\left(\\left(2M-r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\right)}{r^{3} \\left(2M-r\\right)}\\\\\n(\\theta): & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}= & -2M \\dot{r} \\frac{\\dot{t}}{r \\left(2M-r\\right)}+\\ddot{t}\\\\\n\\square{}^{r}= & M \\left(-2M+r\\right) \\frac{\\dot{t}^{2}}{r^{3}}+M \\left(2M-r\\right) \\frac{\\dot{r}^{2}}{r^{3} \\left( - \\frac{2M}{r}+1\\right)^{2}}-\\left(-2M+r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\\\\n\\square{}^{\\theta}= & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\n\\end{dmath*}"
 				}
 			],
 			"source" : "evaluate(eom,ss);"
@@ -133,7 +133,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} = \\left\\{\\begin{aligned}(t): & \\frac{-2M \\dot{r} \\frac{E}{1 - \\frac{2M}{r}}+r \\left(2M-r\\right) \\ddot{t}}{r \\left(2M-r\\right)}\\\\\n(r): & \\frac{M r^{2} \\dot{r}^{2}-M \\left(2M-r\\right)^{2} \\frac{E}{1 - \\frac{2M}{r}}^{2}+r^{3} \\left(2M-r\\right) \\left(\\left(2M-r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\right)}{r^{3} \\left(2M-r\\right)}\\\\\n(\\theta): & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}= & -2M \\dot{r} \\frac{\\frac{E}{1 - \\frac{2M}{r}}}{r \\left(2M-r\\right)}+\\ddot{t}\\\\\n\\square{}^{r}= & M \\left(-2M+r\\right) \\frac{\\frac{E}{1 - \\frac{2M}{r}}^{2}}{r^{3}}+M \\left(2M-r\\right) \\frac{\\dot{r}^{2}}{r^{3} \\left( - \\frac{2M}{r}+1\\right)^{2}}-\\left(-2M+r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\\\\n\\square{}^{\\theta}= & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\n\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(eom, $\\dot{t} -> (E/(1-2M/r))$);"
@@ -163,7 +163,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} = \\left\\{\\begin{aligned}(): & r^{2} \\dot{\\theta}^{2}+\\left(\\frac{2M}{r}-1\\right) \\dot{t}^{2}+\\frac{\\dot{r}^{2}}{ - \\frac{2M}{r}+1}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square= & r^{2} \\dot{\\theta}^{2}+\\left(\\frac{2M}{r}-1\\right) \\dot{t}^{2}+\\frac{\\dot{r}^{2}}{ - \\frac{2M}{r}+1}\\\\\n\\end{aligned}\n\\end{dmath*}"
 				}
 			],
 			"source" : "evaluate(fv, ss);"
@@ -178,7 +178,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} = \\left\\{\\begin{aligned}(): & r^{2} \\dot{\\theta}^{2}+\\left(\\frac{2M}{r}-1\\right) \\dot{t}^{2}+\\frac{\\dot{r}^{2}}{ - \\frac{2M}{r}+1}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}(() = r^{2} \\dot{\\theta}^{2}+\\left(\\frac{2M}{r}-1\\right) \\dot{t}^{2}+\\frac{\\dot{r}^{2}}{ - \\frac{2M}{r}+1})\\end{dmath*}"
 				}
 			],
 			"source" : "tst:=@(fv)+@(fv);"

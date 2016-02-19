@@ -5,7 +5,7 @@
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
 #include "properties/DependsBase.hh"
-#include "algorithms/prodcollectnum.hh"
+//#include "algorithms/prodcollectnum.hh"
 
 unwrap::unwrap(Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
@@ -174,9 +174,10 @@ Algorithm::result_t unwrap::apply(iterator& it)
 		else {
 			 // Moving factors around has potentially led to a top-level product
 			 // which contains children with non-unit multiplier.
-			prodcollectnum pc(kernel, tr);
-			if(pc.can_apply(prodwrap))
-				pc.apply(prodwrap);
+			cleanup_dispatch(kernel, tr, prodwrap);
+//			prodcollectnum pc(kernel, tr);
+//			if(pc.can_apply(prodwrap))
+//				pc.apply(prodwrap);
 			
 			
 			// If the derivative acts on another derivative, we need

@@ -2,7 +2,6 @@
 #include "Cleanup.hh"
 #include "Functional.hh"
 #include "Algorithm.hh"
-#include "algorithms/prodcollectnum.hh"
 #include "algorithms/collect_terms.hh"
 #include "algorithms/flatten_sum.hh"
 #include "properties/Derivative.hh"
@@ -43,13 +42,41 @@ void cleanup_productlike(Kernel& k, Ex&tr, Ex::iterator& it)
 		if(tr.begin(it)->is_range_wildcard())
 			return;
 
-	// Remove children which are 1
-   // Collect all multipliers
-	prodcollectnum pc(k, tr);
-	pc.apply(it);
+	// Collect all multipliers and remove resulting '1' nodes.
+	auto facs=tr.begin(it);
+	multiplier_t factor=1;
+	while(facs!=tr.end(it)) {
+		factor*=*facs->multiplier;
+		if(facs->is_rational()) {
+			multiplier_t tmp; // FIXME: there is a bug in gmp which means we have to put init on next line.
+			tmp=(*facs->name).c_str();
+			factor*=tmp;
+		   facs=tr.erase(facs);
+			if(facs==tr.end())
+				facs=tr.end(it);
+			}
+		else {
+			one(facs->multiplier);
+			++facs;
+			}
+		}
+	multiply(it->multiplier,factor);
 
-	// FIXME: why does prodcollectnum not find the 0?
-	// FIXME: do not call algorithms here to avoid recursion
+	// Handle edge cases where the product should collapse to a single node,
+	// e.g. when we have just a single factor, or when the product vanishes.
+
+	if(tr.number_of_children(it)==1) { // i.e. from '3*4*7*a*9'
+		tr.begin(it)->fl.bracket=it->fl.bracket;
+		tr.begin(it)->fl.parent_rel=it->fl.parent_rel;
+		tr.begin(it)->multiplier=it->multiplier;
+		tr.flatten(it);
+		it=tr.erase(it);
+		push_down_multiplier(k, tr, it);
+		}
+	else if(tr.number_of_children(it)==0) { // i.e. from '3*4*7*9' 
+		it->name=name_set.insert("1").first;
+		}
+
 	if(it->is_zero()) {
 		::zero(it->multiplier);
 		tr.erase_children(it);
@@ -98,7 +125,9 @@ void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
 void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it)
 	{
 	auto mult=*it->multiplier;
-	if(*it->name=="\\sum" && mult!=1) {
+	if(mult==1) return;
+
+	if(*it->name=="\\sum") {
 		auto sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
 			multiply(sib->multiplier, mult);
@@ -107,15 +136,7 @@ void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it)
 			}
 		one(it->multiplier);
 		}
-	}
-
-void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
-	{
-	assert(*it->name=="\\components");
-
-	multiplier_t mult = *it->multiplier;
-	if(mult!=1) {
-		// FIXME: move this to push_down_multiplier
+	else if(*it->name=="\\components") {
 		Ex::sibling_iterator sib=tr.end(it);
 		--sib;
 		// Examine all index value sets and push the multiplier
@@ -124,12 +145,19 @@ void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
 				Ex::sibling_iterator val=tr.begin(nd);
 				++val;
 				multiply(val->multiplier, mult);
-				cleanup_dispatch(k, tr, nd);
+				push_down_multiplier(k, tr, val);
 				return true;
 				});
 		
 		one(it->multiplier);
 		}
+	}
+
+void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
+	{
+	assert(*it->name=="\\components");
+
+	push_down_multiplier(k, tr, it);
 
 	// If this component node has no free indices, get rid of all
 	// the baggage and turn into a normal expression.

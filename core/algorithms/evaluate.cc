@@ -665,6 +665,7 @@ void evaluate::handle_prod(iterator it)
 	merge_component_children(it);
 
 	// Simplify the components of the now single \component node by calling sympy.
+	// We just feed it the input; we do not call 'simplify'.
 	sibling_iterator lst = tr.end(it);
 	--lst;
 	

@@ -381,25 +381,34 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 
 void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 	{
-	auto sib=tree.begin(it);
-	auto end=tree.end(it);
-	--end;
-//	while(sib!=end) {
-//		dispatch(str, sib);
-//		++sib;
-//		}
-	str << " = \\left\\{\\begin{aligned}";
-	sib=tree.begin(end);
-	while(sib!=tree.end(end)) {
+	assert(*it->multiplier==1);
+
+	auto ind_names=tree.begin(it);
+	auto ind_values=tree.end(it);
+	--ind_values;
+
+	str << "\\begin{aligned}";
+	auto sib=tree.begin(ind_values);
+	while(sib!=tree.end(ind_values)) {
 		Ex::sibling_iterator c=tree.begin(sib);
-		dispatch(str, c);
-		str << ": & ";
+		auto iv = tree.begin(c);
+		auto in = ind_names;
+		str << "\\square";
+		while(iv!=tree.end(c)) {
+			if(in->fl.parent_rel==str_node::p_sub)   str << "{}_{";
+			if(in->fl.parent_rel==str_node::p_super) str << "{}^{";
+			dispatch(str, iv);
+			str << "}";
+			++in;
+			++iv;
+			}
+		str << "= & ";
 		++c;
 		dispatch(str, c);
 		str << "\\\\\n";
 		++sib;
 		}
-	str << "\\end{aligned}\\right.\n";
+	str << "\\end{aligned}\n";
 	}
 
 bool DisplayTeX::children_have_brackets(Ex::iterator ch) const
