@@ -6,8 +6,54 @@
 
 {% block main %}
 
-<h1>Changes from version 1 to 2</h1>
+<h1>New in version 2</h1>
 <p>
+  Many things changed/improved in version 2 with respect to version 1:
+</p>
+<ul>
+  <li>Cadabra manipulations can now programmed using Python. The
+  input format is a combination of Cadabra's old LaTeX-based
+  format mixed with standard Python, so you still get all the
+  benefits of LaTeX-style input.</li>
+
+  <li>You can now do both abstract tensor computations as well as
+  component computations. This means that you can manipulate tensorial
+  expressions as you did before, and then plug in values for their
+  components.</li>
+  
+  <li>The notebook interface now also has facilities for displaying
+  plots and other graphical output. You can thus explore the results of
+  component computations graphically.</li>
+
+  <li>The user interface now takes into account text scaling settings
+  on high-dpi screens, so it the font size in LaTeX output cells
+  matches that of the input cells.</li>
+
+  <li>Cadabra now relies solely on libraries which are rather common,
+  and is easier to build as it now uses CMake instead of GNU autotools.
+  </li>
+
+</ul>
+	 
+  </dl>
+</p>
+
+
+<h1>Algorithm name changes from version 1 to 2</h1>
+<p>
+  The main change with respect to algorithm names is that the '@'
+  prefix for algorithms is no longer necessary. Algorithms are now
+  standard Python functions. They take an expression as their first
+  argument, and (optionally) further arguments to determine what to
+  do. You can use an underscore to refer to the last entered
+  expression, so you can write <code>collect_factors(_)</code> where
+  you would previously write <code>@collect_factors(%)</code>.
+
+  Where you would previously use an exclamation mark to act at any
+  level, you now add the <code>deep=True</code> argument to a
+  function. This is the default for many algorithms where that makes
+  sense, so you often do not have to add it at all. 
+
   A number of algorithms (and a few properties) have changed name or
   behaviour while going from version 1 to version 2. This was done
   mostly to make naming more consistent and to avoid weird acronyms in

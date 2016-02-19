@@ -293,6 +293,8 @@ void NotebookWindow::on_connect()
 void NotebookWindow::on_disconnect()
 	{
 	std::lock_guard<std::mutex> guard(status_mutex);
+	// FIXME: the string should be set by ComputeThread, as disconnects can be because
+	// of a kernel restart explicitly requested.
 	kernel_string = "not connected";
 	dispatcher.emit();
 	}
@@ -733,6 +735,7 @@ void NotebookWindow::on_file_new()
 		doc.clear();
 		remove_all_cells();
 		new_document();
+		compute->restart_kernel();
 		position_cursor(doc, doc.begin(doc.begin()));
 		name="";
 		update_title();
@@ -762,6 +765,7 @@ void NotebookWindow::on_file_open()
 			while(std::getline(file, line)) 
 				content+=line;
 
+			compute->restart_kernel();
 			load_file(content);
 			break;
 			}

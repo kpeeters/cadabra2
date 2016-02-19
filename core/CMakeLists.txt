@@ -130,7 +130,6 @@ set(LOCAL_SRC_FILES
   algorithms/keep_terms.cc
   algorithms/lr_tensor.cc
   algorithms/order.cc
-  algorithms/prodcollectnum.cc
   algorithms/product_rule.cc
 #  algorithms/reduce_sub.cc
   algorithms/rename_dummies.cc

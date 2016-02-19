@@ -5,7 +5,6 @@
 #include "properties/Distributable.hh"
 
 #include "algorithms/flatten_product.hh"
-#include "algorithms/prodcollectnum.hh"
 #include "properties/Distributable.hh"
 
 distribute::distribute(Kernel& k, Ex& tr)
@@ -109,11 +108,11 @@ Algorithm::result_t distribute::apply(iterator& prod)
 //	iterator ret=tr.replace(prod, top);
 //	txtout << "calling cleanup on " << *ret->name << " " << *tr.begin(ret)->name << std::endl;
 
-	flatten_product pf(kernel, tr);
-	pf.make_consistent_only=true;
-	pf.apply_generic(ret, true, false, 0);
-	prodcollectnum pc(kernel, tr);
-	pc.apply_generic(ret, true, false, 0);
+///	flatten_product pf(kernel, tr);
+///	pf.make_consistent_only=true;
+///	pf.apply_generic(ret, true, false, 0);
+///	prodcollectnum pc(kernel, tr);
+///	pc.apply_generic(ret, true, false, 0);
 //	cleanup_sums_products(tr, ret);
 //	txtout << "..." << *ret->name << std::endl;
 
