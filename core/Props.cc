@@ -88,8 +88,8 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 		}
 
 	// Cases without range wildcard.
-	if(obj.number_of_children(obj.begin())>0)
-		std::cerr << "comparing: " << ignore_parent_rel << "\n" << Ex(it) << " " << obj << std::endl;
+//	if(obj.number_of_children(obj.begin())>0)
+//		std::cerr << "comparing: " << ignore_parent_rel << "\n" << Ex(it) << " " << obj << std::endl;
 //	Ex::print_recursive_treeform(txtout, it);
 //	Ex::print_recursive_treeform(txtout, obj.begin());
 
@@ -105,8 +105,8 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 
 	//txtout << res << std::endl;
 	if(abs(res)<=1) {
-		if(obj.number_of_children(obj.begin())>0)
-			std::cerr << "match!" << std::endl;
+//		if(obj.number_of_children(obj.begin())>0)
+//			std::cerr << "match!" << std::endl;
 		return true;
 		}
 
