@@ -64,8 +64,8 @@ int subtree_compare(const Properties *properties,
 	
 //	std::cout << "mult for " << *one->name << " vs " << *two->name << " now " << mult << std::endl;
 
-	// Compare sub/superscript relations.
-	if((mod_prel==-2 /* && position_type!=Indices::free */) && one->is_index() && two->is_index() ) {
+	// Compare sub/superscript relations. DOC
+	if((mod_prel==-2 || (mod_prel==-3 && position_type!=Indices::free)) && one->is_index() && two->is_index() ) {
 		if(one->fl.parent_rel!=two->fl.parent_rel) {
 			if(one->fl.parent_rel==str_node::p_sub) return 2;
 			else return -2;
@@ -453,7 +453,9 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
  			const Indices *t1=properties.get<Indices>(one, true);
 			const Indices *t2=properties.get<Indices>(two, true);
 
-			// Check parent rel if it matters.
+			// Check parent rel if a) there is no Indices property for the indices, b) the index positions
+			// are not free. Effectively this means that indices without property info get treated as
+			// fixed-position indices.
 			if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
 				if(one->fl.parent_rel != two->fl.parent_rel)                
 					return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;

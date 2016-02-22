@@ -1,5 +1,7 @@
 set(HTMLOUTDIR ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/notebooks)
+set(MANOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/manual)
 set(CNBDIR     ${CMAKE_SOURCE_DIR}/examples)
+set(ALGODIR    ${CMAKE_SOURCE_DIR}/core/algorithms)
 set(DC         ${CMAKE_SOURCE_DIR}/client_server/DataCell.hh ${CMAKE_SOURCE_DIR}/client_server/DataCell.cc)
 
 add_custom_command(OUTPUT  ${HTMLOUTDIR}/beginners_segment.html 
@@ -26,9 +28,19 @@ add_custom_command(OUTPUT  ${HTMLOUTDIR}/scalar_manipulations_segment.html
                    ARGS    --segment ${CNBDIR}/scalar_manipulations.cnb ${HTMLOUTDIR}/scalar_manipulations_segment.html 
                    COMMENT "Creating scalar_manipulations.html")
 
+
+# Manual.
+
+add_custom_command(OUTPUT  ${HTMLOUTDIR}/canonicalise_segment.html 
+                   DEPENDS ${ALGODIR}/canonicalise.cnb ${DC}
+                   COMMAND cadabra2html 
+                   ARGS    --segment ${ALGODIR}/canonicalise.cnb ${MANOUTDIR}/canonicalise_segment.html 
+                   COMMENT "Creating canonicalise.html")
+
 add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting_segment.html
                                            ${HTMLOUTDIR}/beginners_segment.html
                                            ${HTMLOUTDIR}/for_previous_users_segment.html
+                                           ${HTMLOUTDIR}/canonicalise_segment.html
                                            ${HTMLOUTDIR}/scalar_manipulations_segment.html
                  )
 

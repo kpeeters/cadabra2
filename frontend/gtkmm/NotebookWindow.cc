@@ -206,7 +206,7 @@ NotebookWindow::NotebookWindow()
 
 
 	// Window size and title, and ready to go.
-	set_size_request(screen->get_width()/2, screen->get_height()*0.8);
+	set_default_size(screen->get_width()/2, screen->get_height()*0.8);
 	// FIXME: the subtraction for the margin and scrollbar made below
 	// is estimated but should be computed.
 	engine.set_geometry(screen->get_width()/2 - 2*30);
@@ -788,7 +788,7 @@ void NotebookWindow::load_file(const std::string& notebook_contents)
 		engine.convert_all();
 		}
 	catch(TeXEngine::TeXException& ex) {
-		std::cerr << "uhoh" << std::endl;
+		std::cerr << "TeX exception: " << ex.what() << std::endl;
 		}
 	mainbox.show_all();
 	modified=false;

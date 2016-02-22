@@ -1,5 +1,12 @@
 - Reset kernel on loading a new notebook: fix reporting of kernel run status.
 
+- A_{m n} property does not match A^{m n} object in expression even
+  when index positions are free.
+
+- Resizing window does not relayout TeX cells (garbage images result).
+
+- Copy mathjax to local.
+
 - Decide on how to output \components so we can start writing tests.
 
 - We have two ways to represent tensor components: as rules, and as \component nodes.
