@@ -215,7 +215,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 				// without taking into account the top-level multiplier. So keep the multiplier
 				// of the thing we are replacing.
 				multiplier_t mt=*it->multiplier;
-				it=tr.replace_index(it, (*loc).second.begin(), true);
+				it=tr.replace_index(it, (*loc).second.begin()); //, true);
 				multiply(it->multiplier, mt);
 				}
 			it->fl.bracket=remember_br;
@@ -266,7 +266,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			added_dummies.insert(index_map_t::value_type(relabel,(*indit).second));
 			do {
 //				txtout << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
-				tr.replace_index(indit->second,relabel.begin(), true);
+				tr.replace_index(indit->second,relabel.begin()); //, true);
 				++indit;
 //				txtout << *(indit->first.begin()->name) << " vs " << *(the_key.begin()->name) << std::endl;
 				} while(indit!=must_be_empty.end() && tree_exact_equal(&kernel.properties, indit->first,the_key,-1));
