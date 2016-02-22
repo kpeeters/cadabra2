@@ -8,10 +8,17 @@
 /// \ingroup compare
 ///
 /// Basic building block subtree comparison function for tensors
-/// without dummy indices, which uses property information from a
-/// kernel to determine whether two tensor subtrees are equal in the
-/// sense of for instance the SelfCommuting property, that is, up to
-/// the names of indices. Examples:
+/// without dummy indices, which determines whether two tensor
+/// subtrees are equal up to the names of indices. This only uses
+/// Indices property information, and can hence be called from within
+/// properties.get<...> algorithms. 
+///
+/// In most cases, the use of Ex_comparator below is recommended 
+/// instead, as it can do much more complicated matching and will
+/// also keep track of the relation between symbols in the pattern
+/// and symbols in the object to be matched.
+///
+/// Examples:
 ///
 ///     A_m                        equals  A_n
 ///     \diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s
@@ -24,9 +31,19 @@
 ///  2      | structure different, one < two
 /// -2      | structure different, one > two
 ///
-/// @param mod_prel          
-/// @param checksets         if properties!=0, indices match when they sit in the same set.
-/// @param literal_wildcards whether to treat wildcard names as ordinary names.
+/// @param mod_prel            see below
+/// @param checksets           if properties!=0, indices match when they sit in the same set.
+/// @param literal_wildcards   whether to treat wildcard names as ordinary names.
+///
+/// The mod_prel variable determines whether parent relations are taken into
+/// account when comparing:
+///
+///        -3: require that parent relations match, unless indexpos=free.
+///        -2: require that parent relations match (even when indexpos = free)
+///        -1: do not require that parent relations match
+///       >=0: do not require parent relations to match up to and including this level
+///
+/// Similar logic holds for the compare_multiplier parameter.
 
 int subtree_compare(const Properties*, 
 						  Ex::iterator one, Ex::iterator two, 
@@ -34,15 +51,7 @@ int subtree_compare(const Properties*,
 						  bool literal_wildcards=false);
 
 /// Various comparison functions, some exact, some with pattern logic.
-/// The mod_prel variable determines whether parent relations are taken into
-/// account when comparing:
-///
-///        -2: require that parent relations match (even when indexpos = free)
-///        -1: do not require that parent relations match
-///       >=0: do not require parent relations to match up to and including this level
-///
-/// Similar logic holds for the compare_multiplier parameter.
-//
+
 bool tree_less(const Properties*, 
 					const Ex& one, const Ex& two, 
 					int mod_prel=-2, bool checksets=true, int compare_multiplier=-2);

@@ -221,14 +221,14 @@ div.latex {
 	 padding-left: 10px; 
 	 margin-bottom: 10px; 
 }
+div.latex_view h1 { 
+	 margin-left: -20px;
+}
 div.latex_view { 
 	 color: black;
 	 font-size: 16px;
-	 padding-left: 40px; 
+	 padding-left: 20px; 
 	 margin-bottom: 15px; 
-}
-div.latex div.latex_view {
-	 display: none;
 }
 div.MathJax_Display {
     text-align: left !important;	 
@@ -244,6 +244,9 @@ div.MathJax_Display {
 }
 div.image_png img { 
 	 width: 100%; 
+}
+div.python {
+	 margin-left: 40px;
 }
 div.python > div.source { 
 	 font-family: "Inconsolata", monospace; 
