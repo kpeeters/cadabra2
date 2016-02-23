@@ -40,7 +40,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}{\\Gamma}_{#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}{\\Gamma}_{\\#}.\\end{dmath*}"
 				},
 				
 				{
@@ -129,7 +129,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma_{l m} \\Gamma_{k s} \\Gamma_{m s} d-2\\Gamma_{l m} \\Gamma_{k s} \\Gamma_{m s}-\\Gamma_{k m} \\Gamma_{l m} d+\\Gamma_{k m} \\Gamma_{l m}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma_{l m} d \\Gamma_{k s} \\Gamma_{m s}-2\\Gamma_{l m} \\Gamma_{k s} \\Gamma_{m s}+\\Gamma_{k m} \\Gamma_{m s} \\delta_{l s} d+\\Gamma_{k m} \\Gamma_{l m}\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(ex);"
@@ -144,7 +144,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(\\Gamma_{k l m s}+\\Gamma_{l s} \\delta_{k m}+\\Gamma_{k l} \\delta_{m s}-\\Gamma_{m s} \\delta_{k l}-\\Gamma_{k m} \\delta_{l s}+\\delta_{k m} \\delta_{l s}-\\delta_{k l} \\delta_{m s}\\right) \\Gamma_{m s} d-2\\left(\\Gamma_{k l m s}+\\Gamma_{l s} \\delta_{k m}+\\Gamma_{k l} \\delta_{m s}-\\Gamma_{m s} \\delta_{k l}-\\Gamma_{k m} \\delta_{l s}+\\delta_{k m} \\delta_{l s}-\\delta_{k l} \\delta_{m s}\\right) \\Gamma_{m s}-\\left(2\\Gamma_{k l}-\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\right) d+2\\Gamma_{k l}-\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma_{l m} \\left(2\\Gamma_{k m}-\\Gamma_{k m} d+\\delta_{k m}-\\delta_{k m} d\\right) d-2\\left(\\Gamma_{k l m s}+\\Gamma_{l s} \\delta_{k m}+\\Gamma_{k l} \\delta_{m s}-\\Gamma_{m s} \\delta_{k l}-\\Gamma_{k m} \\delta_{l s}+\\delta_{k m} \\delta_{l s}-\\delta_{k l} \\delta_{m s}\\right) \\Gamma_{m s}+\\left(\\Gamma_{k l} d-2\\Gamma_{k l}+\\delta_{k l} d-\\delta_{k l}\\right) d+2\\Gamma_{k l}-\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\end{dmath*}"
 				}
 			],
 			"source" : "join_gamma(ex);"
@@ -159,7 +159,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma_{k l m s} \\Gamma_{m s} d+\\Gamma_{l s} \\Gamma_{k s} d-\\Gamma_{m s} \\Gamma_{m s} \\delta_{k l} d+\\Gamma_{k m} \\Gamma_{l m} d-2\\Gamma_{k l} d-2\\Gamma_{k l m s} \\Gamma_{m s}-2\\Gamma_{l s} \\Gamma_{k s}+2\\Gamma_{m s} \\Gamma_{m s} \\delta_{k l}-2\\Gamma_{k m} \\Gamma_{l m}+\\Gamma_{k l} d d-2\\delta_{k l} d+\\delta_{k l} d d+\\delta_{k l}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2\\Gamma_{l m} \\Gamma_{k m} d-\\Gamma_{l m} \\Gamma_{k m} d d-4\\Gamma_{k l} d-\\Gamma_{l m} \\delta_{k m} d d-2\\Gamma_{k l m s} \\Gamma_{m s}+2\\Gamma_{l m} \\delta_{k s} \\Gamma_{m s}+2\\Gamma_{m s} \\delta_{k l} \\Gamma_{m s}+2\\Gamma_{k m} \\delta_{l s} \\Gamma_{m s}-2\\Gamma_{m s} \\delta_{k m} \\delta_{l s}+\\Gamma_{k l} d d+\\delta_{k l} d d-2\\delta_{k l} d+2\\Gamma_{k l}+\\delta_{k l}\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(ex);"
@@ -174,7 +174,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(5\\Gamma_{k l} d-\\Gamma_{k l} d d-6\\Gamma_{k l}\\right) d+\\left(-2\\Gamma_{k l}+\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\right) d-\\delta_{k l} \\left(d-d d\\right) d+\\left(2\\Gamma_{k l}-\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\right) d-12\\Gamma_{k l} d+3\\Gamma_{k l} d d+12\\Gamma_{k l}-3\\delta_{k l}+2\\delta_{k l} d+2\\delta_{k l} \\left(d-d d\\right)+\\delta_{k l} d d\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2\\left(-2\\Gamma_{k l}+\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\right) d-\\left(-2\\Gamma_{k l}+\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\right) d d-14\\Gamma_{k l} d+4\\Gamma_{k l} d d+12\\Gamma_{k l}-2\\Gamma_{l m} \\Gamma_{k m}+2\\Gamma_{m s} \\Gamma_{m s} \\delta_{k l}-2\\Gamma_{k m} \\Gamma_{l m}+\\delta_{k l} d d-2\\delta_{k l} d+\\delta_{k l}\\end{dmath*}"
 				}
 			],
 			"source" : "join_gamma(ex);"
@@ -189,7 +189,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}8\\Gamma_{k l} d d-\\Gamma_{k l} d d d-18\\Gamma_{k l} d+6\\delta_{k l} d-4\\delta_{k l} d d+\\delta_{k l} d d d+12\\Gamma_{k l}-3\\delta_{k l}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-18\\Gamma_{k l} d+8\\Gamma_{k l} d d-2\\delta_{k l} d d-\\Gamma_{k l} d d d+\\delta_{k l} d d d+12\\Gamma_{k l}-2\\Gamma_{l m} \\Gamma_{k m}+2\\Gamma_{m s} \\Gamma_{m s} \\delta_{k l}-2\\Gamma_{k m} \\Gamma_{l m}+\\delta_{k l}\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(ex);"

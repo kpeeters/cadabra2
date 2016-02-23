@@ -5,6 +5,10 @@
 #include "properties/TableauBase.hh"
 #include "properties/Indices.hh"
 
+/// \ingroup algorithms
+///
+/// Decompose a product of tensors by applying Young projectors.
+
 class decompose_product : public Algorithm {
 	public:
 		decompose_product(Kernel&, Ex& tr);
@@ -18,7 +22,10 @@ class decompose_product : public Algorithm {
 		typedef young_project::pos_tab_t   numtab_t;
 		typedef yngtab::tableaux<numtab_t> numtabs_t;
 
+		/// Test that all indices on the product are equivalent, that is, have
+		/// the same Indices property attached to them. Return this property.
 		const Indices *indices_equivalent(iterator it) const;
+
 		void fill_asym_ranges(TableauBase::tab_t& tab, int offset, combin::range_vector_t&);
 		void project_onto_initial_symmetries(Ex& rep, iterator rr, young_project& yp,
 														 const TableauBase *tt, iterator ff, 

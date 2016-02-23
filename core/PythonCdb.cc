@@ -36,6 +36,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include <boost/python/stl_iterator.hpp>
 #include <boost/python/slice.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <boost/algorithm/string/replace.hpp>
 
 #include <sstream>
 #include <memory>
@@ -567,7 +568,9 @@ std::string Property<Prop>::latex_() const
 	std::ostringstream str;
 	str << "\\text{Attached property ";
 	prop->latex(str);
-	str << " to~}"+Ex_str_(*for_obj)+".";
+	std::string bare=Ex_str_(*for_obj);
+	boost::replace_all(bare, "#", "\\#");
+	str << " to~}"+bare+".";
 	return str.str();
 	}
 

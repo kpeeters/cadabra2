@@ -96,11 +96,11 @@ test06()
 
 
 # def test07():
-# { m, n, p, q }::Indices(vector).
-# { A_{m n p}, B_{m n p} }::AntiSymmetric.
-# { m, n, p, q }::Integer(1..4).
-# obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
-# decompose_product(_)
+{ m, n, p, q }::Indices(vector).
+{ A_{m n p}, B_{m n p} }::AntiSymmetric.
+{ m, n, p, q }::Integer(1..4).
+obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
+decompose_product(_)
 
 #-------
 
