@@ -1,53 +1,61 @@
 # All examples from the hep-th paper, converted to version 2 format.
 
 def test01():
-{ a, b, c, d }::Indices.
-obj:= A_{a b} B_{b c};
-substitute(_, $B_{a b} ->  C_{a b c} D_{c}$ )
-tst:= A_{a b}  C_{b c d} D_{d} - @(obj);
-collect_terms(_)
-assert(tst==0)
+    __cdbkernel__=create_scope()
+    { a, b, c, d }::Indices.
+    obj:= A_{a b} B_{b c};
+    substitute(_, $B_{a b} ->  C_{a b c} D_{c}$ )
+    tst:= A_{a b}  C_{b c d} D_{d} - @(obj);
+    assert(tst==0)
+    print('Test 01 passed')
 
 test01()
 
 #-------
 
 def test02():
+    __cdbkernel__=create_scope()
     A_{\dot{a} \dot{b}}::AntiSymmetric.
     obj:= A_{\dot{b} \dot{a}}:
     canonicalise(_)
     tst:= A_{\dot{a} \dot{b}} + @(obj);
     assert(tst==0)
+    print('Test 02 passed')
 
 test02()
 
 #-------
 
 def test03():
+    __cdbkernel__=create_scope()
     { a_{1}, a_{2}, a_{3}, a_{4} }::Indices(vector).
     obj:= V_{a_{1}} W_{a_{1}}:
     substitute(_, $V_{a_{2}} -> M_{a_{2} a_{1}} N_{a_{1}}$ )
     tst:= M_{a_{1} a_{2}}  N_{a_{2}}  W_{a_{1}} - @(obj);
     collect_terms(_)
     assert(tst==0)
+    print('Test 03 passed')
 
 test03()
 
 #-------
 
 def test04():
+    __cdbkernel__=create_scope()
     R_{a b c d}::TableauSymmetry(shape={2,2}, indices={0,2,1,3}).
     obj:= R_{a b c d} R_{d c a b}:
     canonicalise(_)
     tst:= (-1) R_{a b c d} R_{a b c d} - @(obj);
     collect_terms(_)
     assert(tst==0)
+    print('Test 04 passed')
 
 test04()
 
 #-------
 
 def test05():
+    __cdbkernel__=create_scope()
     {m,n,p,q}::Indices(position=free).
     \nabla{#}::Derivative.
     \partial{#}::PartialDerivative.
@@ -56,21 +64,25 @@ def test05():
     obj:= \partial_{m p}( A_{q r} V_{n} ) A^{p m};
     canonicalise(_)
     assert(obj==0)
+    print('Test 05a passed')
     obj:= \nabla_{m p}( A_{q r} V_{n} ) A^{p m};
     canonicalise(_)
     tst:= (-1) \nabla_{m p}( A_{q r} V_{n} ) A^{m p} - @(obj);
     canonicalise(_)
     assert(tst==0)
+    print('Test 05b passed')
     unwrap(obj)
     tst:= (-1) A_{q r} \nabla_{m p}{ V_{n} } A^{m p} - @(obj);
     canonicalise(_)
     assert(tst==0)
+    print('Test 05c passed')
 
 test05()
 
 #-------
 
 def test06():
+    __cdbkernel__=create_scope()
     {m,n,p,q,r,s,t#}::Indices(vector).
     \nabla{#}::Derivative.
     R_{m n p q}::RiemannTensor.
@@ -78,12 +90,10 @@ def test06():
     obj:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:
     young_project_tensor(_, depth=1, modulo_monoterm=True);
     assert(obj==0)
+    print('Test 06 passed')
 
 test06()
 
-#-------
-
-quit()
 
 # def test07():
 # { m, n, p, q }::Indices(vector).
@@ -91,6 +101,11 @@ quit()
 # { m, n, p, q }::Integer(1..4).
 # obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
 # decompose_product(_)
+
+#-------
+
+quit()
+
 # 
 # @canonicalise!(%):
 # @collect_terms!(%);

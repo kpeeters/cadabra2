@@ -583,7 +583,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		newly_generated.insert(index_map_t::value_type(Ex(relabel),(*it).second));
 //		txtout << " renamed to " << *relabel << std::endl;
 		do {
-			tr.replace_index((*it).second, relabel.begin());
+			tr.replace_index((*it).second, relabel.begin(), true);
 //			(*it).second->name=relabel;
 			++it;
 			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
@@ -609,7 +609,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
             =get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
 		newly_generated.insert(index_map_t::value_type(relabel,(*it).second));
 		do {
-			tr.replace_index((*it).second, relabel.begin());
+			tr.replace_index((*it).second, relabel.begin(), true);
 //			(*it).second->name=relabel;
 			++it;
 			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
@@ -632,7 +632,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
             =get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
 		newly_generated.insert(index_map_t::value_type(relabel,(*it).second));
 		do {
-			tr.replace_index((*it).second, relabel.begin());
+			tr.replace_index((*it).second, relabel.begin(), true);
 			++it;
 			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
