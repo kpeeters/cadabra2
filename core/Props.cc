@@ -96,7 +96,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 
 	// This does not work, because it does not flip parent rels (disabled for a reason?)
 	// FIXME: fix logic for subtree/Ex_compare usage.
-	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-2, true, 0);
+	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, true, 0);
 
 	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
 	// because Ex_comparator tries to fetch property information which then gets back here.
