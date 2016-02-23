@@ -186,11 +186,11 @@ Algorithm::result_t substitute::apply(iterator& st)
 			 }
 
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
-			 std::cerr << "rule : " 
-			 			 << (*loc).first.begin()->fl.parent_rel 
-			 			 << *((*loc).first.begin()->name) << " -> " 
-			 			 << (*loc).second.begin()->fl.parent_rel 
-			 			 << *((*loc).second.begin()->name) << std::endl;
+			// std::cerr << "rule : " 
+			//  			 << (*loc).first.begin()->fl.parent_rel 
+			//  			 << *((*loc).first.begin()->name) << " -> " 
+			//  			 << (*loc).second.begin()->fl.parent_rel 
+			//  			 << *((*loc).second.begin()->name) << std::endl;
 
 			// When a replacement is made here, and the index is actually
 			// a dummy in the replacement, we screw up the ind_dummy
@@ -265,8 +265,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 			Ex relabel=get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
 			added_dummies.insert(index_map_t::value_type(relabel,(*indit).second));
 			do {
-//				txtout << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
-				tr.replace_index(indit->second,relabel.begin(), true);HERE
+				//std::cerr << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
+				tr.replace_index(indit->second,relabel.begin(), true);
 				++indit;
 //				txtout << *(indit->first.begin()->name) << " vs " << *(the_key.begin()->name) << std::endl;
 				} while(indit!=must_be_empty.end() && tree_exact_equal(&kernel.properties, indit->first,the_key,-1));
