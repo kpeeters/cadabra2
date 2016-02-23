@@ -151,7 +151,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
 	yngtab::LR_tensor(m1, m2, dim, prod.get_back_insert_iterator(), true);
 
-	std::cout << prod.storage.size() << std::endl;
+//	std::cout << prod.storage.size() << std::endl;
 
 	// The tableaux in 'prod' contain in their boxes iterators to
 	// the indices in the original expression. We convert these to
@@ -186,7 +186,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 	// Now create a Young projector sum of terms with the indices
 	// distributed according to the tensor product tableaux.
 
- 	std::cout << numprod << std::endl;
+// 	std::cout << numprod << std::endl;
 
 	Ex rep;
 	rep.set_head(str_node("\\tmp"));  // not \sum to prevent auto flattening
@@ -252,7 +252,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 //	sf.apply_recursive(it, false);
 //	txtout << "done" << std::endl;
 
-	tr.print_recursive_treeform(std::cout, it);
+//	tr.print_recursive_treeform(std::cout, it);
 
 	cleanup_dispatch(kernel, tr, it);
 
