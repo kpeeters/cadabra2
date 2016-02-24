@@ -860,7 +860,7 @@ int Ex_comparator::can_swap_ilist_ilist(Ex::iterator obj1, Ex::iterator obj2)
 int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, int subtree_comparison,
 										 bool ignore_implicit_indices) 
 	{
-//	std::cout << "can_swap " << *one->name << " " << *two->name << ignore_implicit_indices << std::endl;
+	//std::cout << "can_swap " << *one->name << " " << *two->name << ignore_implicit_indices << std::endl;
 
 	const ImplicitIndex *ii1 = properties.get_composite<ImplicitIndex>(one);
 	const ImplicitIndex *ii2 = properties.get_composite<ImplicitIndex>(two);

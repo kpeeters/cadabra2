@@ -93,16 +93,14 @@ test16()
 
 def test17():
     __cdbkernel__=create_scope()
-\Gamma{#}::GammaMatrix.
-obj17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r};
-sort_product(_)
-tst17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r} - @(obj17a);
-collect_terms(_)
-assert(tst17a==0)
-obj17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n});
-sort_product(_)
-tst17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n}) - @(obj17b);
-    collect_terms(_)
+    \Gamma{#}::GammaMatrix.
+    obj17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r};
+    sort_product(_)
+    tst17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r} - @(obj17a);
+    assert(tst17a==0)
+    obj17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n});
+    sort_product(_)
+    tst17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n}) - @(obj17b);
     assert(tst17b==0)
     print 'test17 passed'
 
