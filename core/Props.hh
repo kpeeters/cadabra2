@@ -28,6 +28,7 @@
 #include "Storage.hh"
 
 class Properties; 
+class Kernel;
 
 class pattern { 
 	public:
@@ -70,7 +71,7 @@ class keyval_t {
 /// Properties can have arguments. Parsing of these is done in the
 /// properties object itself, with the use of some helper functions.
 /// Parsing is done by implementing the virtual function
-/// property::parse(const Properties&, keyval_t&). The argument is a
+/// property::parse(const Kernel&, keyval_t&). The argument is a
 /// container class which represents the arguments passed to the
 /// property as key/value pairs keyval_t type.
 ///
@@ -114,13 +115,13 @@ class property {
 		// still calls this only once.
 		// FIXME: failure to call
 		// into superclass may lead to problems for labelled properties.
-		virtual bool        parse(const Properties&, keyval_t& keyvals);
+		virtual bool        parse(const Kernel&, keyval_t& keyvals);
 
 		// Check whether the property can be associated with the pattern.
 		// Throw an error if validation fails. Needs access to all other
 		// declared properties so that it can understand what the pattern
 		// means (which objects are indices etc.).
-		virtual void        validate(const Properties&, const Ex&) const;
+		virtual void        validate(const Kernel&, const Ex&) const;
 
 		/// Display the property on the stream
 //		virtual void        display(std::ostream&) const;
@@ -147,7 +148,7 @@ class property {
 
 class labelled_property : virtual public property {
 	public:
-		virtual bool parse(const Properties&, keyval_t&) override;
+		virtual bool parse(const Kernel&, keyval_t&) override;
 		std::string label;
 };
 

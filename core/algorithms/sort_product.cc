@@ -1,7 +1,7 @@
 
 #include "algorithms/sort_product.hh"
 
-sort_product::sort_product(Kernel&k, Ex& tr)
+sort_product::sort_product(const Kernel&k, Ex& tr)
 	: Algorithm(k, tr), ignore_numbers_(false)
 	{
 //	if(has_argument("IgnoreNumbers")) {
@@ -40,14 +40,11 @@ Algorithm::result_t sort_product::apply(iterator& st)
 			int es=subtree_compare(&kernel.properties, one, two, -2);
 //			std::cerr << "hi " << es << std::endl;
 			if(compare.should_swap(one, es)) {
-//				std::cout << "should swap " << *(one->name) << " with " << *(two->name) << std::endl;
+				std::cerr << "should swap " << *(one->name) << " with " << *(two->name) << std::endl;
 				int canswap=compare.can_swap(one, two, es);
-//				std::cout << "can swap? " << *(one->name) << " with " << *(two->name) << std::endl;
+				std::cerr << "can swap? " << *(one->name) << " with " << *(two->name) << std::endl;
 				if(canswap!=0) {
-//					std::cout << "swapping ";
-//					tr.print_recursive_treeform(std::cout, one);
-//					std::cout << " with ";
-//					tr.print_recursive_treeform(std::cout, two);
+					std::cerr << "swapping " << Ex(one) << " with " << Ex(two) << std::endl;
 					tr.swap(one);
 					std::swap(one,two);  // put the iterators back in order
 					if(canswap==-1) {

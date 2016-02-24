@@ -8,8 +8,8 @@ class Metric : public TableauSymmetry, virtual public property {
 	public:
 		Metric();
 		virtual std::string name() const override;
-		virtual bool        parse(const Properties&, keyval_t&) override;
-		virtual void        validate(const Properties&, const Ex&) const override;
+		virtual bool        parse(const Kernel&, keyval_t&) override;
+		virtual void        validate(const Kernel&, const Ex&) const override;
 
 		int signature;
 };

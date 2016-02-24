@@ -15,7 +15,7 @@ std::string Metric::name() const
 	return "Metric";
 	}
 
-bool Metric::parse(const Properties&, keyval_t& keyvals) 
+bool Metric::parse(const Kernel&, keyval_t& keyvals) 
 	{
 	keyval_t::const_iterator kv=keyvals.find("signature");
 	signature=1;
@@ -24,7 +24,7 @@ bool Metric::parse(const Properties&, keyval_t& keyvals)
 	return true;
 	}
 
-void Metric::validate(const Properties& props, const Ex& tr) const
+void Metric::validate(const Kernel&, const Ex& tr) const
 	{
 	if(tr.number_of_children(tr.begin())!=2) 
 		throw ArgumentException("Metric: needs exactly 2 indices.");

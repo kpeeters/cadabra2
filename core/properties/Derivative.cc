@@ -1,6 +1,7 @@
 
 #include "properties/Derivative.hh"
 #include "Props.hh"
+#include "Kernel.hh"
 
 unsigned int Derivative::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
@@ -15,8 +16,9 @@ unsigned int Derivative::size(const Properties& properties, Ex& tr, Ex::iterator
 	return ret;
 	}
 
-multiplier_t Derivative::value(const Properties& properties, Ex::iterator it, const std::string& forcedlabel) const
+multiplier_t Derivative::value(const Kernel& kernel, Ex::iterator it, const std::string& forcedlabel) const
 	{
+	const Properties& properties=kernel.properties;
 //	txtout << "!?!?" << std::endl;
 	multiplier_t ret=0;
 
@@ -24,7 +26,7 @@ multiplier_t Derivative::value(const Properties& properties, Ex::iterator it, co
 	while(sib!=it.end()) {
 		const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 		if(gnb) {
-			multiplier_t tmp=gnb->value(properties, sib, forcedlabel);
+			multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
 			if(sib->is_index()) ret-=tmp;
 			else                ret+=tmp;
 //			txtout << *sib->name << " = " << tmp << std::endl;

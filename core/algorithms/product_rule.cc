@@ -4,7 +4,7 @@
 #include "algorithms/product_rule.hh"
 #include "properties/Derivative.hh"
 
-product_rule::product_rule(Kernel& k, Ex& tr)
+product_rule::product_rule(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), number_of_indices(0)
 	{
 	}

@@ -5,7 +5,7 @@
 #include "properties/InverseMetric.hh"
 #include "SympyCdb.hh"
 
-complete::complete(Kernel& k, Ex& e, Ex& g)
+complete::complete(const Kernel& k, Ex& e, Ex& g)
 	: Algorithm(k, e), goal(g)
 	{
 	}

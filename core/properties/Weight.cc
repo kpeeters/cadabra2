@@ -6,7 +6,7 @@ std::string Weight::name() const
 	return "Weight";
 	}
 
-bool Weight::parse(const Properties&, keyval_t& kv)
+bool Weight::parse(const Kernel&, keyval_t& kv)
 	{
 	keyval_t::const_iterator kvit=kv.find("value");
 	if(kvit!=kv.end()) value_=*kvit->second->multiplier;
@@ -15,7 +15,7 @@ bool Weight::parse(const Properties&, keyval_t& kv)
 	return true;
 	}
 
-multiplier_t Weight::value(const Properties& pr, Ex::iterator, const std::string& forcedlabel) const
+multiplier_t Weight::value(const Kernel& pr, Ex::iterator, const std::string& forcedlabel) const
 	{
 	if(forcedlabel!=label) return -1;
 	return value_;

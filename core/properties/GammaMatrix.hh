@@ -8,7 +8,7 @@ class GammaMatrix : public AntiSymmetric, public Matrix, virtual public property
 	public:
 		virtual std::string name() const override;
 		virtual void        latex(std::ostream&) const override;
-		virtual bool        parse(const Properties&, keyval_t& keyvals) override;
+		virtual bool        parse(const Kernel&, keyval_t& keyvals) override;
 		Ex metric;
 };
 

@@ -4,7 +4,7 @@
 
 class lr_tensor : public tab_basics  {
 	public:
-		lr_tensor(Kernel&, Ex&);
+		lr_tensor(const Kernel&, Ex&);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;

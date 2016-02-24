@@ -4,7 +4,7 @@
 #include "properties/KroneckerDelta.hh"
 #include "properties/Integer.hh"
 
-eliminate_kronecker::eliminate_kronecker(Kernel& k, Ex& tr)
+eliminate_kronecker::eliminate_kronecker(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

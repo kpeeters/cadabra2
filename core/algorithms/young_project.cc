@@ -2,13 +2,13 @@
 #include "IndexIterator.hh"
 #include "algorithms/young_project.hh"
 
-young_project::young_project(Kernel& k, Ex& tr)
+young_project::young_project(const Kernel& k, Ex& tr)
 	: Algorithm(k,tr), remove_traces(false)
 	{
 	// For internal use in which one fills the young tableau structures directly.
 	}
 
-young_project::young_project(Kernel& k, Ex& tr, 
+young_project::young_project(const Kernel& k, Ex& tr, 
 									  const std::vector<int>& shape,
 									  const std::vector<int>& indices)
 	: Algorithm(k,tr), remove_traces(false)

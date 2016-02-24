@@ -2,7 +2,7 @@
 #include "Cleanup.hh"
 #include "algorithms/keep_terms.hh"
 
-keep_terms::keep_terms(Kernel& k, Ex& tr, std::vector<int> terms)
+keep_terms::keep_terms(const Kernel& k, Ex& tr, std::vector<int> terms)
 	: Algorithm(k, tr), terms_(terms)
 	{
 	}

@@ -6,7 +6,7 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/canonicalise.hh"
 
-young_project_product::young_project_product(Kernel& k, Ex& tr)
+young_project_product::young_project_product(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

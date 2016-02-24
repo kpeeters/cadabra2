@@ -2,7 +2,7 @@
 #include "PreClean.hh"
 #include "Cleanup.hh"
 
-void pre_clean_dispatch(Kernel& kernel, Ex& ex, Ex::iterator& it)
+void pre_clean_dispatch(const Kernel& kernel, Ex& ex, Ex::iterator& it)
 	{
 	if(*it->name!="1" && it->is_unsimplified_rational()) cleanup_rational(kernel, ex, it);
 	
@@ -10,19 +10,19 @@ void pre_clean_dispatch(Kernel& kernel, Ex& ex, Ex::iterator& it)
 	else if(*it->name=="\\sub") cleanup_sub(kernel, ex, it);
 	}
 
-void pre_clean_dispatch_deep(Kernel& k, Ex& tr)
+void pre_clean_dispatch_deep(const Kernel& k, Ex& tr)
 	{
 	return cleanup_dispatch_deep(k, tr, &pre_clean_dispatch);
 	}
 
-void cleanup_rational(Kernel& k, Ex& tr, Ex::iterator& st)
+void cleanup_rational(const Kernel& k, Ex& tr, Ex::iterator& st)
 	{
 	multiplier_t num(*st->name);
 	st->name=name_set.insert("1").first;
 	multiply(st->multiplier,num);
 	}
 
-void cleanup_frac(Kernel& k, Ex& tr, Ex::iterator& st)
+void cleanup_frac(const Kernel& k, Ex& tr, Ex::iterator& st)
 	{
 	// Catch \frac{} nodes with one argument; those are supposed to be read as 1/(...).
 	if(tr.number_of_children(st)==1) {
@@ -76,7 +76,7 @@ void cleanup_frac(Kernel& k, Ex& tr, Ex::iterator& st)
 //	return l_applied;
 	}
 
-void cleanup_sub(Kernel& k, Ex& tr, Ex::iterator& it)
+void cleanup_sub(const Kernel& k, Ex& tr, Ex::iterator& it)
 	{
 	assert(tr.number_of_children(it)>1); // To guarantee that we have really cleaned up that old stuff.
 

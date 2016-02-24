@@ -1,5 +1,6 @@
 
 #include "GammaMatrix.hh"
+#include "Kernel.hh"
 
 std::string GammaMatrix::name() const
 	{
@@ -11,7 +12,7 @@ void GammaMatrix::latex(std::ostream& str) const
 	Matrix::latex(str);
 	}
 
-bool GammaMatrix::parse(const Properties& properties, keyval_t& keyvals)
+bool GammaMatrix::parse(const Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("metric");
 	if(kv!=keyvals.end()) {
@@ -19,7 +20,7 @@ bool GammaMatrix::parse(const Properties& properties, keyval_t& keyvals)
 		keyvals.erase(kv);
 		}
 
-	ImplicitIndex::parse(properties, keyvals);
+	ImplicitIndex::parse(kernel, keyvals);
 
 //	kv=keyvals.find("delta");
 //	if(kv!=keyvals.end()) delta=Ex(kv->second);

@@ -59,7 +59,7 @@
 
 class evaluate : public Algorithm {
 	public:
-		evaluate(Kernel&, Ex&, const Ex& component_values);
+		evaluate(const Kernel&, Ex&, const Ex& component_values);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;

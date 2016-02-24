@@ -1,5 +1,6 @@
 
 #include "WeightInherit.hh"
+#include "Kernel.hh"
 
 std::string WeightInherit::name() const 
 	{
@@ -11,7 +12,7 @@ WeightInherit::WeightException::WeightException(const std::string& str)
 	{
 	}
 
-bool WeightInherit::parse(const Properties&, keyval_t& kv)
+bool WeightInherit::parse(const Kernel&, keyval_t& kv)
 	{
 	keyval_t::const_iterator tpit=kv.find("type");
 	if(tpit!=kv.end()) {
@@ -29,8 +30,10 @@ bool WeightInherit::parse(const Properties&, keyval_t& kv)
 	return true;
 	}
 
-multiplier_t WeightInherit::value(const Properties& properties, Ex::iterator it, const std::string& forcedlabel) const
+multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const std::string& forcedlabel) const
 	{
+	const Properties& properties=kernel.properties;
+
 	multiplier_t ret=0;
 	bool first_term=true;
 
@@ -41,14 +44,14 @@ multiplier_t WeightInherit::value(const Properties& properties, Ex::iterator it,
 			  if(combination_type==multiplicative) {
 					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
 					if(gnb) {
-						multiplier_t tmp=gnb->value(properties, sib, forcedlabel);
+						multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
 						 ret+=tmp;
 						 }
 					}
 			  else {
 					multiplier_t thisone=0;
 					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
-					if(gnb) thisone=gnb->value(properties, sib, forcedlabel);
+					if(gnb) thisone=gnb->value(kernel, sib, forcedlabel);
 					else    thisone=0;
 					if(first_term) {
 						first_term=false;

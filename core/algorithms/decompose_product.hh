@@ -11,7 +11,7 @@
 
 class decompose_product : public Algorithm {
 	public:
-		decompose_product(Kernel&, Ex& tr);
+		decompose_product(const Kernel&, Ex& tr);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;

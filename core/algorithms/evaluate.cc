@@ -11,7 +11,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-evaluate::evaluate(Kernel& k, Ex& tr, const Ex& c)
+evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c)
 	: Algorithm(k, tr), components(c)
 	{
 	}

@@ -6,7 +6,7 @@
 #include "algorithms/collect_terms.hh"
 #include "properties/Symbol.hh"
 
-collect_factors::collect_factors(Kernel& k, Ex& e)
+collect_factors::collect_factors(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{
 	}

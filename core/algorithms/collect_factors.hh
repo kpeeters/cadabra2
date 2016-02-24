@@ -9,7 +9,7 @@
 
 class collect_factors : public Algorithm {
 	public:
-		collect_factors(Kernel&, Ex&);
+		collect_factors(const Kernel&, Ex&);
 		
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

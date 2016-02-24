@@ -208,7 +208,7 @@ void keyval_t::erase(iterator it)
 	}
 
 
-bool property::parse(const Properties&, keyval_t& keyvals)
+bool property::parse(const Kernel&, keyval_t& keyvals)
 	{
 	return true;
 
@@ -217,7 +217,7 @@ bool property::parse(const Properties&, keyval_t& keyvals)
 //	return false;
 	}
 
-void property::validate(const Properties&, const Ex&) const
+void property::validate(const Kernel&, const Ex&) const
 	{
 	}
 
@@ -283,7 +283,7 @@ property::match_t property::equals(const property *) const
 	return exact_match;
 	}
 
-bool labelled_property::parse(const Properties&, keyval_t& keyvals)
+bool labelled_property::parse(const Kernel&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator lit=keyvals.find("label");
 	if(lit!=keyvals.end()) {

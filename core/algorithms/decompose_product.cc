@@ -5,7 +5,7 @@
 #include "algorithms/decompose_product.hh"
 #include "properties/Integer.hh"
 
-decompose_product::decompose_product(Kernel& k, Ex&tr)
+decompose_product::decompose_product(const Kernel& k, Ex&tr)
 	: Algorithm(k, tr), t1(0), t2(0)
 	{
 	}
@@ -151,7 +151,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
 	yngtab::LR_tensor(m1, m2, dim, prod.get_back_insert_iterator(), true);
 
-//	std::cout << prod.storage.size() << std::endl;
+	std::cout << "dim=" << dim << ", size=" << prod.storage.size() << std::endl;
 
 	// The tableaux in 'prod' contain in their boxes iterators to
 	// the indices in the original expression. We convert these to

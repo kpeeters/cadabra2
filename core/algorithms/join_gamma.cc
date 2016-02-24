@@ -5,7 +5,7 @@
 #include "Cleanup.hh"
 #include "properties/Integer.hh"
 
-join_gamma::join_gamma(Kernel& kernel, Ex& tr_, bool e, bool g)
+join_gamma::join_gamma(const Kernel& kernel, Ex& tr_, bool e, bool g)
 	: Algorithm(kernel, tr_), expand(e), use_generalised_delta_(g)
 	{
 	}

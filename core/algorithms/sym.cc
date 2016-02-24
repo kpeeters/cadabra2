@@ -1,7 +1,7 @@
 
 #include "algorithms/sym.hh"
 
-sym::sym(Kernel& k, Ex& tr, Ex& objs, bool s)
+sym::sym(const Kernel& k, Ex& tr, Ex& objs, bool s)
 	: Algorithm(k, tr), objects(objs), sign(s)
 	{
 	}

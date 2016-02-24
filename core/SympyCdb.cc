@@ -9,7 +9,7 @@
 #include "DisplaySympy.hh"
 #include "algorithms/substitute.hh"
 
-Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args, 
+Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args, 
 								  const std::string& method)
 	{
 	// We first need to print the sub-expression using DisplaySympy,
@@ -68,7 +68,7 @@ Ex::iterator sympy::apply(Kernel& kernel, Ex& ex, Ex::iterator& it, const std::s
 	return it;
 	}
 
-Ex sympy::invert_matrix(Kernel& kernel, Ex& ex, Ex& rules)
+Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 	{
 	// check that object has two children only.
 	if(ex.number_of_children(ex.begin())!=2) {

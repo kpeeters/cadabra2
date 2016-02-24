@@ -1,7 +1,7 @@
 
 #include "algorithms/split_index.hh"
 
-split_index::split_index(Kernel& k, Ex& tr, Ex& triple)
+split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	: Algorithm(k, tr), part1_is_number(false), part2_is_number(false)
 	{
 	iterator top=triple.begin(triple.begin());

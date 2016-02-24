@@ -55,8 +55,11 @@
 class Algorithm {
 	public:
 		/// Initialise the algorithm with a reference to the expression
-		/// tree, but do not yet do anything with this tree.
-		Algorithm(Kernel&, Ex&);
+		/// tree, but do not yet do anything with this tree. Algorithms
+		/// are not typically allowed to mess with the settings in the
+		/// Kernel, so it is passed const.
+
+		Algorithm(const Kernel&, Ex&);
 
 		virtual ~Algorithm();
 
@@ -114,7 +117,7 @@ class Algorithm {
 
 
 	protected:
-		Kernel&  kernel;
+		const Kernel&  kernel;
 		Ex& tr;
 
 		// The main entry point which is used by the public entry points listed

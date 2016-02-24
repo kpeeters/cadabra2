@@ -11,7 +11,7 @@
 
 class complete : public Algorithm {
 	public:
-		complete(Kernel&, Ex&, Ex&);
+		complete(const Kernel&, Ex&, Ex&);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;

@@ -1,6 +1,7 @@
 
 #include "Spinor.hh"
 #include "Exceptions.hh"
+#include "Kernel.hh"
 
 Spinor::Spinor()
 	: dimension(10), weyl(true), chirality(positive), majorana(true)
@@ -12,7 +13,7 @@ std::string Spinor::name() const
 	return "Spinor";
 	}
 
-bool Spinor::parse(const Properties& properties, keyval_t& keyvals)
+bool Spinor::parse(const Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::iterator ki=keyvals.find("dimension");
 	if(ki!=keyvals.end()) {
@@ -58,7 +59,7 @@ bool Spinor::parse(const Properties& properties, keyval_t& keyvals)
 		keyvals.erase(ki);
 		}
 
-	ImplicitIndex::parse(properties, keyvals);
+	ImplicitIndex::parse(kernel, keyvals);
 	
 	return true;
 	}

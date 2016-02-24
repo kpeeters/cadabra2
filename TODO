@@ -1,3 +1,5 @@
+- Have taken collect_terms out of cleanup; should move this into a default post_process.
+
 - Reset kernel on loading a new notebook: fix reporting of kernel run status.
 
 - A_{m n} property does not match A^{m n} object in expression even

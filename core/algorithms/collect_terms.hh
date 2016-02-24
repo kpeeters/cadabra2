@@ -9,7 +9,7 @@
 
 class collect_terms : public Algorithm {
 	public:
-		collect_terms(Kernel&, Ex&);
+		collect_terms(const Kernel&, Ex&);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

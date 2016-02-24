@@ -34,7 +34,7 @@
 #include <sstream>
 
 
-Algorithm::Algorithm(Kernel& k, Ex& tr_)
+Algorithm::Algorithm(const Kernel& k, Ex& tr_)
   : interrupted(false),
 	  number_of_calls(0), number_of_modifications(0),
 	  suppress_normal_output(false),

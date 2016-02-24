@@ -3,7 +3,7 @@
 #include "properties/PartialDerivative.hh"
 
 
-flatten_product::flatten_product(Kernel& k, Ex& tr)
+flatten_product::flatten_product(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), make_consistent_only(false), is_diff(false)
 	{
 	}

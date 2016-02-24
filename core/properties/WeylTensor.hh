@@ -8,6 +8,6 @@ class WeylTensor : public TableauSymmetry, public Traceless, virtual public prop
 	public:
 		WeylTensor();
 		virtual std::string name() const override;
-		virtual void        validate(const Properties&, const Ex&) const override;
+		virtual void        validate(const Kernel&, const Ex&) const override;
 		virtual void        latex(std::ostream&) const override;
 };

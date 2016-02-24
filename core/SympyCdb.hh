@@ -14,7 +14,7 @@ namespace sympy {
    /// logic in PythonCdb.hh, in particular make_Ex_from_string, but it is best to
    /// keep these two completely separate.
 
-	Ex::iterator apply(Kernel&, Ex&, Ex::iterator&, const std::string& head, const std::string& args, const std::string& method);
+	Ex::iterator apply(const Kernel&, Ex&, Ex::iterator&, const std::string& head, const std::string& args, const std::string& method);
 
 //    /// \ingroup scalar
 //    ///
@@ -31,6 +31,6 @@ namespace sympy {
    /// sparse components. Will return a set of Cadabra rules for the
    /// inverse matrix.
 
-	Ex invert_matrix(Kernel&, Ex& ex, Ex& rules);
+	Ex invert_matrix(const Kernel&, Ex& ex, Ex& rules);
 	
 };
