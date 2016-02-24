@@ -304,8 +304,6 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
 	// full expression may not have consistent indices otherwise.
 	pull_in(ptr);
    
-//	Ex::print_recursive_treeform(std::cout, ptr->begin());
-
 	// Basic cleanup of rationals and subtractions, followed by
    // cleanup of nested sums and products.
 	pre_clean_dispatch_deep(*get_kernel_from_scope(), *ptr);
@@ -519,11 +517,13 @@ Kernel *create_empty_scope()
 void inject_defaults(Kernel *k)
 	{
 	// Create and inject properties; these then get owned by the kernel.
+	post_process_enabled=false;
 	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}"), 0);
+	post_process_enabled=true;
 //	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}"), 0);
 	}
 
