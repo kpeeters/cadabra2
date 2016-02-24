@@ -6,7 +6,7 @@
 class Indices : public list_property {
 	public:
 		Indices(); //const std::string& parent="");
-		virtual bool parse(const Properties&, keyval_t&) override;
+		virtual bool parse(const Kernel&, keyval_t&) override;
 		virtual std::string name() const override;
 		virtual std::string unnamed_argument() const override { return "name"; };
 		virtual match_t equals(const property *) const override;

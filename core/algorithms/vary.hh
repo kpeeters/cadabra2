@@ -10,7 +10,7 @@
 
 class vary : public Algorithm {
 	public:
-		vary(Kernel&, Ex& tr, Ex& args);
+		vary(const Kernel&, Ex& tr, Ex& args);
 
 		virtual bool     can_apply(iterator st) override;
 		virtual result_t apply(iterator&) override;

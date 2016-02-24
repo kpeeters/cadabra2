@@ -1,12 +1,15 @@
 
 #include "properties/Integer.hh"
+#include "Cleanup.hh"
+#include "Kernel.hh"
+#include "algorithms/collect_terms.hh"
 
 std::string Integer::name() const
 	{
 	return "Integer";
 	}
 
-bool Integer::parse(const Properties&, keyval_t& keyvals)
+bool Integer::parse(const Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("range");
 	if(kv!=keyvals.end()) {
@@ -23,7 +26,7 @@ bool Integer::parse(const Properties&, keyval_t& keyvals)
 		flip_sign(term2->multiplier);
 		term2->fl.bracket=str_node::b_round;
 		difference.append_child(sm,str_node("1"))->fl.bracket=str_node::b_round;
-		
+
 		Ex::sibling_iterator sib=difference.begin(sm);
 		while(sib!=difference.end(sm)) {
 			if(*sib->name=="\\sum") {
@@ -32,11 +35,13 @@ bool Integer::parse(const Properties&, keyval_t& keyvals)
 				}
 			else ++sib;
 			}
+
+		collect_terms ct(kernel, difference);
+		ct.apply(sm);
 		}
 
-// V2: is this handled by the core?
-//	collect_terms ct(difference, difference.end());
-//	ct.apply(sm);
+//	Ex::iterator top=difference.begin();
+//	cleanup_dispatch(kernel, difference, top);
 
 	return true;
 	}

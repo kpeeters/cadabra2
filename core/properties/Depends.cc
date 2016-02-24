@@ -5,14 +5,17 @@
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
 #include "Exceptions.hh"
+#include "Kernel.hh"
 
 std::string Depends::name() const
 	{
 	return "Depends";
 	}
 
-bool Depends::parse(const Properties& pr, keyval_t& kv)
+bool Depends::parse(const Kernel& kernel, keyval_t& kv)
 	{
+	const Properties& pr=kernel.properties;
+
 	keyval_t::const_iterator it=kv.begin();
 	dependencies_.set_head(str_node("\\comma"));
 	Ex::iterator comma = dependencies_.begin();

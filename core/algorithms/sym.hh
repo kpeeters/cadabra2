@@ -5,7 +5,7 @@
 
 class sym : virtual public Algorithm {
 	public:
-		sym(Kernel&, Ex&, Ex&, bool sign);
+		sym(const Kernel&, Ex&, Ex&, bool sign);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator& it) override;

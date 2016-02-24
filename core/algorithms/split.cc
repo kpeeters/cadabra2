@@ -1,7 +1,7 @@
 
 #include "split.hh"
 
-split::split(Kernel& k, Ex& tr)
+split::split(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

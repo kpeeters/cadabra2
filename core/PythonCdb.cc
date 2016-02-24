@@ -310,7 +310,8 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
    // cleanup of nested sums and products.
 	pre_clean_dispatch_deep(*get_kernel_from_scope(), *ptr);
 	cleanup_dispatch_deep(*get_kernel_from_scope(), *ptr);
-	
+	call_post_process(*ptr);
+
 	// The local variable stack is not writeable so we cannot insert '_'
 	// as a local variable. Instead, we push it onto the global stack.
 	
@@ -535,9 +536,9 @@ void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std
 	if(param) {
 		keyval_t keyvals;
 		prop->parse_to_keyvals(*param, keyvals);
-		prop->parse(kernel->properties, keyvals);
+		prop->parse(*kernel, keyvals);
 		}
-	prop->validate(kernel->properties, Ex(it));
+	prop->validate(*kernel, Ex(it));
 	kernel->properties.master_insert(Ex(it), prop);
 	}
 
@@ -620,10 +621,18 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 		it=ex.child(it,1);
 	ex.reset_state();
 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+	call_post_process(ex);
+	return &ex;
+	}
 
+void call_post_process(Ex& ex) 
+	{
 	// Find the 'post_process' function, and if found, turn off
 	// post-processing, then call the function on the current Ex.
 	if(post_process_enabled) {
+		if(ex.number_of_children(ex.begin())==0)
+			return;
+
 		post_process_enabled=false;
 		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
 		try {
@@ -637,8 +646,6 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 			}
 		post_process_enabled=true;
 		}
-
-	return &ex;
 	}
 
 template<class F>

@@ -1,6 +1,7 @@
 
 #include "properties/TableauSymmetry.hh"
 #include "IndexIterator.hh"
+#include "Kernel.hh"
 
 TableauSymmetry::~TableauSymmetry()
 	{
@@ -11,7 +12,7 @@ std::string TableauSymmetry::name() const
 	return "TableauSymmetry";
 	}
 
-bool TableauSymmetry::parse(const Properties& properties, keyval_t& keyvals)
+bool TableauSymmetry::parse(const Kernel& kernel, keyval_t& keyvals)
 	{
    // Scan for the tableaux.
 	keyval_t::const_iterator kvit=keyvals.begin();

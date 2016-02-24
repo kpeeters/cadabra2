@@ -9,7 +9,7 @@
 
 class canonicalise : public Algorithm {
 	public:
-		canonicalise(Kernel&, Ex&);
+		canonicalise(const Kernel&, Ex&);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);		

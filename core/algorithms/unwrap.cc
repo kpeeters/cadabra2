@@ -7,7 +7,7 @@
 #include "properties/DependsBase.hh"
 //#include "algorithms/prodcollectnum.hh"
 
-unwrap::unwrap(Kernel& k, Ex& tr)
+unwrap::unwrap(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

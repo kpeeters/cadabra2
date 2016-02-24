@@ -95,31 +95,33 @@ def test06():
 test06()
 
 
-# def test07():
-{ m, n, p, q }::Indices(vector).
-{ A_{m n p}, B_{m n p} }::AntiSymmetric.
-{ m, n, p, q }::Integer(1..4).
-obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
-decompose_product(_)
+def test07():
+    __cdbkernel__=create_scope()
+    { m, n, p, q }::Indices(vector).
+    { A_{m n p}, B_{m n p} }::AntiSymmetric.
+    { m, n, p, q }::Integer(1..4).
+    obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
+    decompose_product(_)
+    canonicalise(_)
+    tst:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p} - @(obj);
+    canonicalise(_)
+    assert(tst==0)
+    print('Test 07 passed')
 
-#-------
+test07()
 
-quit()
+def test08():
+    { m, n, p, q }::Indices(vector).
+    { A_{m n p}, B_{m n p} }::AntiSymmetric.
+    { m, n, p, q }::Integer(1..3).
+    obj:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};
+    decompose_product(_)
+    canonicalise(_)
+    assert(obj==0)
 
-# 
-# @canonicalise!(%):
-# @collect_terms!(%);
-# tst:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p} - @(obj);
-# @canonicalise!(%);
-# @collect_terms!(%);
-# @assert(tst);
-# 
-# { m, n, p, q }::Integer(1..3).
-# @decompose_product!(obj):
-# @canonicalise!(%):
-# @collect_terms!(%);
-# @assert(obj);
-# 
+test08()
+
+
 # #-------
 # 
 # def testtmp()

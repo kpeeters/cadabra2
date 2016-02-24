@@ -8,7 +8,7 @@
 
 class drop_keep_weight : public Algorithm {
 	public:
-		drop_keep_weight(Kernel&, Ex&);
+		drop_keep_weight(const Kernel&, Ex&);
 
 		virtual bool can_apply(iterator);
 		result_t     do_apply(iterator&, bool keepthem);

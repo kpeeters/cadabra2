@@ -10,7 +10,7 @@
 
 class substitute : public Algorithm {
 	public:
-		substitute(Kernel&, Ex& tr, Ex& args);
+		substitute(const Kernel&, Ex& tr, Ex& args);
 
 		/// Match the lhs of the replacement rule to the subtree 'st' under consideration.
       /// This will fill the replacement_map giving a map from objects appearing in the

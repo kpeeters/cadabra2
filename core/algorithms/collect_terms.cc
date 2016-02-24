@@ -1,7 +1,7 @@
 
 #include "algorithms/collect_terms.hh"
 
-collect_terms::collect_terms(Kernel& k, Ex& tr)
+collect_terms::collect_terms(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}
@@ -46,15 +46,6 @@ void collect_terms::remove_zeroed_terms(sibling_iterator from, sibling_iterator 
 		else ++one;
 		}
 	}
-
-//algorithm::result_t collect_terms::apply(sibling_iterator& from, sibling_iterator& to)
-//	{
-//	assert(*tr.parent(from)->name=="\\sum");
-//	fill_hash_map(from, to);
-//	result_t res=collect_from_hash_map();
-//	remove_zeroed_terms(from, to);
-//	return res;
-//	}
 
 Algorithm::result_t collect_terms::apply(iterator& st)
 	{

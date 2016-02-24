@@ -5,7 +5,7 @@
 //#include "algorithms/prodcollectnum.hh"
 #include "properties/Indices.hh"
 
-substitute::substitute(Kernel& k, Ex& tr, Ex& args_)
+substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
 	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr)
 	{
 	cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {

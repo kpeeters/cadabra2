@@ -1,7 +1,7 @@
 
 #include "algorithms/tab_basics.hh"
 
-tab_basics::tab_basics(Kernel& k, Ex& tr) 
+tab_basics::tab_basics(const Kernel& k, Ex& tr) 
 	: Algorithm(k, tr)
 	{
 	}

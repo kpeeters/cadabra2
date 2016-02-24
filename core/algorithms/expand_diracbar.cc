@@ -5,7 +5,7 @@
 #include "properties/Spinor.hh"
 #include "properties/GammaMatrix.hh"
 
-expand_diracbar::expand_diracbar(Kernel& k, Ex& e)
+expand_diracbar::expand_diracbar(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{
 	}

@@ -216,3 +216,9 @@ void    inject_property(Kernel *, property *, std::shared_ptr<Ex>, std::shared_p
 ///
 /// Get a pointer to the currently visible kernel.
 Kernel *get_kernel_from_scope();
+
+/// \ingroup pythoncore
+///
+/// Run the post-process Python function (if defined) on the given expression.
+
+void call_post_process(Ex& ex);

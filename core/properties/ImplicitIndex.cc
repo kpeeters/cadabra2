@@ -7,7 +7,7 @@ std::string ImplicitIndex::name() const
 	return "ImplicitIndex";
 	}
 
-bool ImplicitIndex::parse(const Properties&, keyval_t& keyvals)
+bool ImplicitIndex::parse(const Kernel&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator ki=keyvals.begin();
 	while(ki!=keyvals.end()) {

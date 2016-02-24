@@ -24,7 +24,7 @@
 #include "Storage.hh"
 #include "Kernel.hh"
 
-typedef void (*dispatcher_t)(Kernel& k, Ex&, Ex::iterator& it);
+typedef void (*dispatcher_t)(const Kernel& k, Ex&, Ex::iterator& it);
 
 /// \ingroup cleanup
 ///
@@ -37,14 +37,14 @@ typedef void (*dispatcher_t)(Kernel& k, Ex&, Ex::iterator& it);
 /// sum, but that is not allowed, so it needs to go further down.
 /// Sibling nodes of 'it' remain untouched as well.
 
-void cleanup_dispatch(Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_dispatch(const Kernel& k, Ex&, Ex::iterator& it);
 
 /// \ingroup cleanup
 ///
 /// More general cleanup of an entire tree. Walks depth-first along the
 /// entire tree and call cleanup_dispatch at every node.
 
-void cleanup_dispatch_deep(Kernel& k, Ex&, dispatcher_t disp=&cleanup_dispatch);
+void cleanup_dispatch_deep(const Kernel& k, Ex&, dispatcher_t disp=&cleanup_dispatch);
 
 /// Individual node cleanup routines. Do not call these yourself. 
 ///
@@ -56,11 +56,11 @@ void cleanup_dispatch_deep(Kernel& k, Ex&, dispatcher_t disp=&cleanup_dispatch);
 /// allowed to modify anything except the node and nodes below (in
 /// particular, they will leave sibling nodes untouched).
 
-void cleanup_productlike(Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_sumlike(Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_expressionlike(Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_derivative(Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_components(Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_productlike(const Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_sumlike(const Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_expressionlike(const Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_derivative(const Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_components(const Kernel& k, Ex&, Ex::iterator& it);
 
 /// Given a node with a non-unit multiplier, push this multiplier
 /// down the tree if the node is not allowed to have a non-unit
@@ -71,7 +71,7 @@ void cleanup_components(Kernel& k, Ex&, Ex::iterator& it);
 /// children, but that should be handled individually (see cleanup
 /// of product nodes for an example).
 
-void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it);
+void push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it);
 
 
 

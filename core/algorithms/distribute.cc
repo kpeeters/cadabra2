@@ -7,7 +7,7 @@
 #include "algorithms/flatten_product.hh"
 #include "properties/Distributable.hh"
 
-distribute::distribute(Kernel& k, Ex& tr)
+distribute::distribute(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

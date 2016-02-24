@@ -5,7 +5,7 @@
 
 class join_gamma : public Algorithm {
 	public:
-		join_gamma(Kernel&, Ex&, bool expand, bool use_gendelta);
+		join_gamma(const Kernel&, Ex&, bool expand, bool use_gendelta);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);

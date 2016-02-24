@@ -4,7 +4,7 @@
 
 class tab_basics : public Algorithm {
 	public:
-		tab_basics(Kernel&, Ex&);
+		tab_basics(const Kernel&, Ex&);
 
 		typedef yngtab::filled_tableau<unsigned int> uinttab_t;
 		typedef yngtab::tableaux<uinttab_t>          uinttabs_t;

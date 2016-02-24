@@ -4,7 +4,7 @@
 #include "properties/Tableau.hh"
 #include "properties/FilledTableau.hh"
 
-lr_tensor::lr_tensor(Kernel& k, Ex& tr)
+lr_tensor::lr_tensor(const Kernel& k, Ex& tr)
 	: tab_basics(k, tr)
 	{
 	}

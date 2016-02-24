@@ -3,7 +3,7 @@
 #include "properties/Indices.hh"
 #include "Exceptions.hh"
 
-rename_dummies::rename_dummies(Kernel& k, Ex& tr)
+rename_dummies::rename_dummies(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{
 	}

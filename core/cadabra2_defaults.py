@@ -111,3 +111,8 @@ def _displayhook(arg):
 remember_display_hook = sys.displayhook
 sys.displayhook = _displayhook
 
+# Default post-processing algorithms.
+
+def post_process(ex):
+    collect_terms(ex)
+

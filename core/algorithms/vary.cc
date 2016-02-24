@@ -30,7 +30,7 @@
     For all 
  */
 
-vary::vary(Kernel& k, Ex& tr, Ex& args_)
+vary::vary(const Kernel& k, Ex& tr, Ex& args_)
 	: Algorithm(k, tr), args(args_)
 	{
 	}

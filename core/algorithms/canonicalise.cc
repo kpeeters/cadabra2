@@ -8,7 +8,7 @@
 #include "properties/Derivative.hh"
 #include "properties/AntiCommuting.hh"
 
-canonicalise::canonicalise(Kernel& k, Ex& tr)
+canonicalise::canonicalise(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), reuse_generating_set(false) 
 	{
 	}

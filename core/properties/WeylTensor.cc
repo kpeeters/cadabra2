@@ -1,6 +1,7 @@
 
 #include "IndexIterator.hh"
 #include "Exceptions.hh"
+#include "Kernel.hh"
 #include "properties/WeylTensor.hh"
 
 WeylTensor::WeylTensor()
@@ -18,9 +19,9 @@ std::string WeylTensor::name() const
 	return "WeylTensor";
 	}
 
-void WeylTensor::validate(const Properties& props, const Ex& pat) const
+void WeylTensor::validate(const Kernel& kernel, const Ex& pat) const
 	{
-	if(number_of_indices(props, pat.begin())!=4) 
+	if(number_of_indices(kernel.properties, pat.begin())!=4) 
 		throw ConsistencyException("WeylTensor: need exactly 4 indices.");
 	}
 

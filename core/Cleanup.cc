@@ -3,10 +3,9 @@
 #include "Functional.hh"
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
-#include "algorithms/flatten_sum.hh"
 #include "properties/Derivative.hh"
 
-void cleanup_dispatch(Kernel& kernel, Ex& tr, Ex::iterator& it)
+void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
 	//std::cerr << "cleanup at " << *it->name << std::endl;
 	if(it->is_zero())  {
@@ -23,7 +22,7 @@ void cleanup_dispatch(Kernel& kernel, Ex& tr, Ex::iterator& it)
 	if(der) cleanup_derivative(kernel, tr, it);
 	}
 
-void cleanup_productlike(Kernel& k, Ex&tr, Ex::iterator& it)
+void cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\prod");
 
@@ -85,22 +84,47 @@ void cleanup_productlike(Kernel& k, Ex&tr, Ex::iterator& it)
 
 	}
 
-void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
+void cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\sum");
 
-	if(tr.number_of_children(it)==1)
+	// Flatten sums which are supposed to be flat.
+	long num=tr.number_of_children(it);
+	if(num==1) {
 		if(tr.begin(it)->is_range_wildcard())
 			return;
 
-	// Flatten sums which are supposed to be flat.
-	// FIXME: this does too much and we should not be using Algorithm
-	// objects here anyway.
-//	std::cerr << *it->name << std::endl;
-	flatten_sum fs(k,tr);
-	if(fs.can_apply(it)) {
-		fs.apply(it);
+		multiply(tr.begin(it)->multiplier, *it->multiplier);
+		tr.flatten(it);
+		it=tr.erase(it);
 		}
+	else {
+		auto facs=tr.begin(it);
+		str_node::bracket_t btype_par=facs->fl.bracket;
+		while(facs!=tr.end(it)) {
+			if(facs->fl.bracket!=str_node::b_none)
+				btype_par=facs->fl.bracket;
+			++facs;
+			}
+		facs=tr.begin(it);
+		while(facs!=tr.end(it)) {
+			if(*facs->name=="\\sum") {
+				auto terms=tr.begin(facs);
+				auto tmp=facs;
+				++tmp;
+				while(terms!=tr.end(facs)) {
+					multiply(terms->multiplier,*facs->multiplier);
+					terms->fl.bracket=btype_par;
+					++terms;
+					}
+				tr.flatten(facs);
+				tr.erase(facs);
+				facs=tmp;
+				}
+			else ++facs;
+			}
+		}
+
 	// Remove children which are 0
 	Ex::sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -114,15 +138,16 @@ void cleanup_sumlike(Kernel& k, Ex&tr, Ex::iterator& it)
 //	std::cerr << *it->name << std::endl;
 //	tr.print_recursive_treeform(std::cerr, tr.begin());
    // Collect all equal terms.
-	collect_terms ct(k, tr);
-	if(ct.can_apply(it))
-		ct.apply(it);
+
+//	collect_terms ct(k, tr);
+//	if(ct.can_apply(it))
+//		ct.apply(it);
 
 
 	push_down_multiplier(k, tr, it);
 	}
 
-void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it)
+void push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it)
 	{
 	auto mult=*it->multiplier;
 	if(mult==1) return;
@@ -153,7 +178,7 @@ void push_down_multiplier(Kernel& k, Ex& tr, Ex::iterator it)
 		}
 	}
 
-void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
+void cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\components");
 
@@ -175,7 +200,7 @@ void cleanup_components(Kernel& k, Ex&tr, Ex::iterator& it)
 		}
 	}
 
-void cleanup_expressionlike(Kernel& k, Ex&tr, Ex::iterator& it)
+void cleanup_expressionlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\expression");
 
@@ -192,7 +217,7 @@ void cleanup_expressionlike(Kernel& k, Ex&tr, Ex::iterator& it)
 		}
 	}
 
-void cleanup_derivative(Kernel& k, Ex& tr, Ex::iterator& it)
+void cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 	{
 	// Nested derivatives with the same name should be flattened, but
 	// only if both the outer derivative and the inner derivative have
@@ -223,7 +248,7 @@ void cleanup_derivative(Kernel& k, Ex& tr, Ex::iterator& it)
 		}
 	}
 
-void cleanup_dispatch_deep(Kernel& k, Ex& tr, dispatcher_t dispatch)
+void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	{
 	// Cleanup the entire tree starting from the deepest nodes and
 	// working upwards. 
