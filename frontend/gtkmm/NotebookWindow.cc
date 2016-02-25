@@ -25,7 +25,7 @@ NotebookWindow::NotebookWindow()
 #ifdef __APPLE__
 	scale = 1.0;
 #else
-	settings = Gio::Settings::create("org.cinnamon.desktop.interface");
+	settings = Gio::Settings::create("org.gnome.desktop.interface");
 	scale = settings->get_double("text-scaling-factor");
 #endif
 	engine.latex_packages.push_back("breqn");
