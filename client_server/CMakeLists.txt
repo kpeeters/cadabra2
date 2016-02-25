@@ -30,7 +30,9 @@ message("-- Found JSONCPP include dir: ${JSONCPP_INCLUDE_DIRS}")
 message("-- Found JSONCPP library dir: ${JSONCPP_LIBRARY_DIRS}")
 message("-- Found JSONCPP libraries  : ${JSONCPP_LIBRARIES}")
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR})
+if(JSONCPP_INCLUDE_DIRS)
 include_directories("${JSONCPP_INCLUDE_DIRS}")
+endif(JSONCPP_INCLUDE_DIRS)
 pkg_check_modules(UUID uuid REQUIRED)
 include_directories("${UUID_INCLUDE_DIRS}")
 
@@ -71,5 +73,6 @@ set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for lib
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-server DESTINATION bin)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra2html DESTINATION bin)
 install(TARGETS cadabra_client LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
+install(TARGETS cadabra_server LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
 
 

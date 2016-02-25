@@ -19,7 +19,8 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.45.0 COMPONENTS python)
-find_program(PYTHON "python" REQUIRED)
+set(Python_ADDITIONAL_VERSIONS 2.7)
+find_package(PythonInterp REQUIRED)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
@@ -156,11 +157,11 @@ set(IMAGES
 #set(SETUP_PY_IN "${CMAKE_CURRENT_SOURCE_DIR}/setup.py.in")
 #set(SETUP_PY    "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
 #configure_file(${SETUP_PY_IN} ${SETUP_PY})
-#install(CODE "execute_process(COMMAND ${PYTHON} ${SETUP_PY} install)")
+#install(CODE "execute_process(COMMAND ${PYTHON_EXECUTABLE} ${SETUP_PY} install)")
 
 # import site; print site.getsitepackages()[0]
 
-execute_process(COMMAND ${PYTHON} -c "import site; print site.getsitepackages()[0];" 
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print site.getsitepackages()[0];"
   OUTPUT_VARIABLE python_site_path OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 message("-- Python site path at ${python_site_path}")
