@@ -13,7 +13,8 @@ int main(int argc, char **argv)
 	try {
 		std::regex match(argv[1]);
 		std::smatch res;
-		if(std::regex_search(std::string(argv[2]), res, match)) {
+		std::string arg = argv[2];
+		if(std::regex_search(arg, res, match)) {
 			for(unsigned int i=0; i<res.size(); ++i) {
 				std::cout << i << ":\t |" << res[i] << "|" << std::endl;
 				}
