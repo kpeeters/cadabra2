@@ -16,6 +16,7 @@ NotebookCanvas::NotebookCanvas()
 //	ebox.override_background_color(Gdk::RGBA("white"));
 
 	scroll.override_background_color(Gdk::RGBA("white"));
+//	scroll.set_overlay_scrolling(false);
 	}
 
 NotebookCanvas::~NotebookCanvas()

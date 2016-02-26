@@ -159,14 +159,19 @@ def test09():
 
 test09()
 
-# def test99():
-#     {M, N, P}::Indices(space).
-#     {m, n, p}::Indices(subspace1).
-#     {a, b, c}::Indices(subspace2).
-#     obj:= A_{M N} B_{N P};
-#     split_index(_, "{M, m, a}")
-#     tst:= A_{M m}  B_{m P} + A_{M a} B_{a P} - @(obj);
-#     assert(tst==0)
+def test10():
+    {M, N, P}::Indices(space).
+    {m, n, p}::Indices(subspace1).
+    {a, b, c}::Indices(subspace2).
+    obj:= A_{M N} B_{N P};
+    split_index(_, $M, m, a$)
+    tst:= A_{M m}  B_{m P} + A_{M a} B_{a P} - @(obj);
+    assert(tst==0)
+    print('Test 10 passed')
+
+test10()
+
+
 # 
 # test99()
 # 

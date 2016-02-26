@@ -115,6 +115,7 @@ namespace cadabra {
 			// Name and modification data.
 			void             update_title();
 			void             set_stop_sensitive(bool);
+			void             scroll_into_view(DTree::iterator);
 			std::string      name;
 			bool             modified;
 
