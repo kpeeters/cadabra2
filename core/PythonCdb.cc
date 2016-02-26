@@ -621,11 +621,13 @@ template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin().begin();
-	if(*it->name=="\\equals") 
-		it=ex.child(it,1);
-	ex.reset_state();
-	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-	call_post_process(ex);
+	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
+		if(*it->name=="\\equals") 
+			it=ex.child(it,1);
+		ex.reset_state();
+		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+		call_post_process(ex);
+		}
 	return &ex;
 	}
 
