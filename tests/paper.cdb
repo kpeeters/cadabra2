@@ -114,6 +114,7 @@ test07()
 #-------
 
 def test08():
+    __cdbkernel__=create_scope()
     { m, n, p, q }::Indices(vector).
     { A_{m n p}, B_{m n p} }::AntiSymmetric.
     { m, n, p, q }::Integer(1..3).
@@ -128,6 +129,7 @@ test08()
 #-------
 
 def test09():
+    __cdbkernel__=create_scope()
     {i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
     C_{m n p q}::WeylTensor.
     \nabla{#}::Derivative.
@@ -160,6 +162,7 @@ def test09():
 test09()
 
 def test10():
+    __cdbkernel__=create_scope()
     {M, N, P}::Indices(space).
     {m, n, p}::Indices(subspace1).
     {a, b, c}::Indices(subspace2).
@@ -171,25 +174,25 @@ def test10():
 
 test10()
 
+def post_process(ex):
+    sort_product(ex)
+    eliminate_kronecker(ex)
+    canonicalise(ex)
+    collect_terms(ex)
 
-# 
-# test99()
-# 
-# #-------
-# 
-# @reset.
-# ::PostDefaultRules( @@prodsort!(%), @@eliminate_kr!(%),  
-#                                     @@canonicalise!(%), @@collect_terms!(%) ).
-# {s,r,l,k,m,n}::Indices(vector).
-# {s,r,l,k,m,n}::Integer(0..d-1).
-# \Gamma_{#}::GammaMatrix(metric=\delta).
-# \delta_{m n}::KroneckerDelta.
-# obj:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s}:
-# join_gamma(_)
-# join_gamma(_)
-# distribute(_)
-# join_gamma(_)
-# @distribute!(%);
+{s,r,l,k,m,n}::Indices(vector).
+{s,r,l,k,m,n}::Integer(0..d-1).
+\Gamma_{#}::GammaMatrix(metric=\delta).
+\delta_{m n}::KroneckerDelta.
+obj:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s};
+join_gamma(_)
+distribute(_)
+join_gamma(_)
+distribute(_)
+join_gamma(_)
+distribute(_)
+collect_factors(_)
+
 # @factorise!(%){d};
 # @collect_factors!(%);
 # tst:= \Gamma_{k l} (12 - 18 d + 8 d**2 - d**3) + \delta_{k l} ( - 3 + 6 d - 4 d**2 + d**3) - @(obj);
