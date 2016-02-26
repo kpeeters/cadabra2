@@ -73,7 +73,7 @@ void CodeInput::init()
 	set_margin_bottom(10);
 //	edit.set_pixels_below_lines(Gtk::LINE_SPACING);
 //	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
-	edit.set_left_margin(20);
+//	edit.set_left_margin(20);
 	edit.set_accepts_tab(true);
 	Pango::TabArray tabs(10);
 	// FIXME: use character width measured, instead of '8', or at least

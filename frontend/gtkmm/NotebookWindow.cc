@@ -37,9 +37,11 @@ NotebookWindow::NotebookWindow()
 		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
 #endif
 
-	// Setup styling.
+	// Setup styling. Note that 'margin-left' and so on do not work; you need
+	// to use 'padding'. However, 'padding-top' fails because it does not make the
+   // widget larger enough... So we still do that with set_margin_top(...).
 	css_provider = Gtk::CssProvider::create();
-	Glib::ustring data = "GtkTextView { color: blue; margin-left: 15px; margin-top: 20px; margin-bottom: 0px; padding: 20px; padding-bottom: 0px; }";
+	Glib::ustring data = "GtkTextView { color: blue; padding-left: 20px; }\n";
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.1; }\nGtkTextView:selected { background: grey; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n#ImageView:hover { background: red; }\n";
 
@@ -517,6 +519,9 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			}
 		
 		}
+
+	if(current_cell!=doc.end()) 
+		scroll_into_view(current_cell);
 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
@@ -607,6 +612,35 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 		}
 	
 	current_cell=it;
+	}
+
+void NotebookWindow::scroll_into_view(DTree::iterator it)
+	{
+	if(current_canvas<0 || current_canvas>=(int)canvasses.size()) return;
+	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
+		std::cerr << "cadabra-client: Cannot find cell to scroll into view." << std::endl;
+		return;
+		}
+
+	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
+	std::cerr << "Scrolling into view " << it->textbuf << std::endl;
+
+	// Grab widgets focus, which will scroll it into view. If the widget has not yet
+	// had its size and position allocated, we need to setup a signal handler which
+	// gets fires as soon as size/position allocation happens.
+
+	Gtk::Allocation alloc=target.inbox->get_allocation();
+	if(alloc.get_y()!=-1) {
+		std::cerr << "grabbing focus" << std::endl;
+		target.inbox->edit.grab_focus();
+		}
+	else {
+		grab_connection = target.inbox->signal_size_allocate().connect(
+			sigc::bind(
+				sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
+				&(target.inbox->edit)
+						  ));
+		}
 	}
 
 void NotebookWindow::on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w)

@@ -1,4 +1,4 @@
-- Have taken collect_terms out of cleanup; should move this into a default post_process.
+- set_overlays_scrolling: disable if present (requires recompiling gtkmm)
 
 - Reset kernel on loading a new notebook: fix reporting of kernel run status.
 
