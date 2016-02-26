@@ -129,3 +129,12 @@ def test22():
     #drop_weight(_, grassmann=3)
 
 test22()
+
+def test23():
+    __cdbkernel__=create_scope()
+    \nabla{#}::Derivative.
+    ex:=\nabla_{i}{ C D E };
+    substitute(_, $D->0$)
+    assert(ex==0)
+
+test23()

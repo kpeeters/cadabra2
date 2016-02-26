@@ -233,7 +233,7 @@ class Algorithm {
 		void     propagate_zeroes(post_order_iterator&, const iterator&);
 		void     dumpmap(std::ostream&, const index_map_t&) const;
 
-		bool cleanup_anomalous_products(Ex& tr, Ex::iterator& it);
+//		bool cleanup_anomalous_products(Ex& tr, Ex::iterator& it);
 };
 
 
