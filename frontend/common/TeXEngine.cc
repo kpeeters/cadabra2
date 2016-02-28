@@ -267,8 +267,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	total	<< "\\def\\specialcolon{\\mathrel{\\mathop{:}}\\hspace{-.5em}}\n"
 			<< "\\renewcommand{\\bar}[1]{\\overline{#1}}\n"
-			<< "\\newcommand{\\algorithm}[1]{\\section*{#1}}\n"
-			<< "\\newcommand{\\property}[1]{\\section*{#1}}\n"
+			<< "\\newcommand{\\algorithm}[2]{{\\tt\\Large#1}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
+			<< "\\newcommand{\\property}[2]{\\section*{#1}\n{\\bf #2}\\\\[1ex]\n}"
 			<< "\\newcommand{\\algo}[1]{{\\tt #1}}\n"
 			<< "\\newcommand{\\prop}[1]{{\\tt #1}}\n"
 			<< "\\begin{document}\n\\pagestyle{empty}\n"
