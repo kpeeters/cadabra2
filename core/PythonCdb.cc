@@ -114,10 +114,6 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
 
-// Helper algorithms, not for users.
-
-//#include "algorithms/reduce_sub.hh"
-
 
 // TODO: 
 //

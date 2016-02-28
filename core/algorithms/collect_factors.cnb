@@ -1,0 +1,123 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{collect\\_factors}\n\nCollect factors in a product that differ only by their exponent. Note\nthat factors containing sub- or superscripted indices do not get\ncollected (i.e.~$A_m A^m$ does not get reduced to $(A_m)^2$)."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{collect\\_factors}\n\nCollect factors in a product that differ only by their exponent. Note\nthat factors containing sub- or superscripted indices do not get\ncollected (i.e.~$A_m A^m$ does not get reduced to $(A_m)^2$)."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A B A B A\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A A B A B A;"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A^{4} B^{2}\\end{dmath*}"
+				}
+			],
+			"source" : "collect_factors(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Arbitrary powers can be collected this way,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Arbitrary powers can be collected this way,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}X X^{-1} X^{-4}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=X X**(-1) X**(-4);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}X^{-4}\\end{dmath*}"
+				}
+			],
+			"source" : "collect_factors(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The exponent notation can be expanded again \nusing \\algo{expand_power}."
+				}
+			],
+			"hidden" : true,
+			"source" : "The exponent notation can be expanded again \nusing \\algo{expand_power}."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

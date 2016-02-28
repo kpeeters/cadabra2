@@ -1,0 +1,31 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{collect\\_terms}\n\nCollect terms in a sum that differ only by their numerical\npre-factor. This is part of the default \\verb|post_process| function, so \ndoes not need to be called by hand.\n\nNote that this command only collects terms which are identical, it\ndoes not collect terms which are different but mathematically\nequivalent. See \\algo{sort_sum} for an example."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{collect\\_terms}\n\nCollect terms in a sum that differ only by their numerical\npre-factor. This is part of the default \\verb|post_process| function, so \ndoes not need to be called by hand.\n\nNote that this command only collects terms which are identical, it\ndoes not collect terms which are different but mathematically\nequivalent. See \\algo{sort_sum} for an example."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

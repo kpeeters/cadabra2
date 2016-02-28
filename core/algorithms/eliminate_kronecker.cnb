@@ -1,0 +1,105 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{eliminate\\_kronecker}\n\nEliminates Kronecker delta symbols by performing index\ncontractions. Also replaces contracted Kronecker delta symbols with\nthe range over which the index runs, if known. "
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{eliminate\\_kronecker}\n\nEliminates Kronecker delta symbols by performing index\ncontractions. Also replaces contracted Kronecker delta symbols with\nthe range over which the index runs, if known. "
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m p} \\delta_{p q} B_{q n}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m q} B_{q n}\\end{dmath*}"
+				}
+			],
+			"source" : "\\delta_{m n}::KroneckerDelta.\nex:=A_{m p} \\delta_{p q} B_{q n};\neliminate_kronecker(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The index range is set as usual with \\prop{Integer},"
+				}
+			],
+			"hidden" : true,
+			"source" : "The index range is set as usual with \\prop{Integer},"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta_{p q} \\delta_{p q}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}d\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q}::Integer(0..d-1).\n\\delta_{m n}::KroneckerDelta.\nex:=\\delta_{p q} \\delta_{p q};\neliminate_kronecker(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In order to eliminate metric factors (i.e.~to `raise' and 'lower'\nindices) use the algorithm \\algo{eliminate_metric}."
+				}
+			],
+			"hidden" : true,
+			"source" : "In order to eliminate metric factors (i.e.~to `raise' and 'lower'\nindices) use the algorithm \\algo{eliminate_metric}."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
