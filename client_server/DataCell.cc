@@ -73,6 +73,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex less("<");
 	std::regex greater(">");
 	std::regex latex(R"(\\LaTeX\{\})");
+	std::regex tex(R"(\\TeX\{\})");
+	std::regex algorithm(R"(\\algorithm\{([^\}]*)\})");
+	std::regex property(R"(\\property\{([^\}]*)\})");
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
 	std::regex underscore(R"(\\_)");
@@ -92,10 +95,13 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
+		res = std::regex_replace(res, algorithm, "<h1>$1</h1>");
+		res = std::regex_replace(res, property, "<h1>$1</h1>");
 		res = std::regex_replace(res, algo, "<a href=\"$1.cnb\"><code>$1</code></a>");
 		res = std::regex_replace(res, prop, "<a href=\"$1.cnb\"><code>$1</code></a>");
 		res = std::regex_replace(res, underscore, "_");
 		res = std::regex_replace(res, latex, "LaTeX");
+		res = std::regex_replace(res, tex, "TeX");
 		}
 	catch(std::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;
@@ -161,7 +167,11 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			if(it->cell_type==DataCell::CellType::image_png)
 				str << it->textbuf;
 			else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
-				std::string out=latex_to_html(it->textbuf);
+				std::string out;
+				if(it->cell_type==DataCell::CellType::python)
+					out=it->textbuf;
+				else
+					out=latex_to_html(it->textbuf);
 				if(out.size()>0)
 					str << "<div class=\"source\">"+out+"</div>";
 				}

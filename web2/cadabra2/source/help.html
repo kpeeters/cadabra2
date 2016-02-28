@@ -7,9 +7,48 @@
 {% block main %}
 <h1>Help</h1>
 
-<h2>Manual</h2>
+<h2>Manual pages</h2>
+<p>
+  Every algorithm and every property has a manual page with examples,
+  which you can view online:
+</p>
+<h3>Algorithms</h3>
+  <table>
+	 <tr><td>C</td><td><a href="manual/canonicalise.html">canonicalise</a></td><td>Bring
+	 a tensorial expression to canonical form by re-ordering indices.</tr>
+	 <tr><td></td> <td><a href="manual/collect_factors.html">collect_factors</a></td><td>Collect
+	 identical factors in a product.</tr>
+	 <tr><td></td> <td><a href="manual/collect_terms.html">collect_terms</a></td><td>Collect
+	 identical terms in a sum.</td></tr>
+	 <tr><td></td> <td><a href="manual/complete.html">complete</a></td><td>Complete
+	 a set of substitution rules to cover related objects.</td></tr>
+	 <tr><td>D</td><td><a href="manual/decompose_product.html">decompose_product</a></td><td>Decompose
+	 a product of tensors by using Young projectors.</td></tr>
+	 <tr><td></td><td><a href="manual/distribute.html">distribute</a></td><td>Rewrite
+	 a product of sums as a sum of products.</td></tr>
+	 <tr><td>E</td><td><a href="manual/eliminate_kronecker.html">eliminate_kronecker</a></td><td>Eliminate
+	 Kronecker delta symbols by performing index contractions.</td></tr>
+	 <tr><td></td><td><a href="manual/evaluate.html">evaluate</a></td><td>Evaluate
+	 components of a tensorial expression.</td></tr>
+	 <tr><td></td><td><a href="manual/expand_diracbar.html">expand_diracbar</a></td><td>Rewrite
+	 a Dirac bar of a composite spinor expression in simpler form.</td></tr>
+	 <tr><td>F</td><td><a href="manual/flatten_sum.html">flatten_sum</a></td><td>Flatten
+	 an expression containing nested sums.</td></tr>
+	 <tr><td>J</td><td><a href="manual/join_gamma.html">join_gamma</a></td><td>Join
+	 the product of two generalised gamma matrices into a sum of single ones.</td></tr>
+	 <tr><td>K</td><td><a href="manual/keep_terms.html">keep_terms</a></td><td>Keep
+	 terms which satisfy a constraint on their weights.</td></tr>
+  </table>
 
-	<p>An extensive reference manual of the program, with a description
+<h3>Properties</h3>
+  <table>
+	 <tr><td>C</td><td><a href=".html"></a></td></tr>
+  </table>
+
+
+<h2>Reference guide</h2>
+
+	<p>An extensive reference guide of version 1.x of the program, with a description
 	of the input language, the algorithms and technical details on how
 	to extend it by adding new C++ modules, is available as</p>
 	<blockquote class="reference">
@@ -18,6 +57,8 @@
 	<div class="pubinfo">preprint AEI-2006-038</div>
 	<div class="pubinfo">last version: November 2nd, 2012</div>
 	</blockquote>
+	<p>
+	  An update is planned as soon as version 2.x reaches a stable state.</p>
 
 <h2>Forum</h2>
 

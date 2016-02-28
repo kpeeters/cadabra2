@@ -107,6 +107,14 @@ div#main h2 {
 	 font-size: 20px;
 	 border-bottom: 1px solid #bbb; 
 }
+div#main h3 {
+	 margin-top: 24px;
+	 margin-left: 40px;
+	 font-family: "Bree Serif";
+	 font-weight: normal;
+	 color: green;
+	 font-size: 16px;
+}
 div#main h1 span.date {
 	 margin-top: 10px;
 	 float: right;
