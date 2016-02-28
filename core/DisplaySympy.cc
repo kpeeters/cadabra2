@@ -145,7 +145,7 @@ void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << "{";   break;
+		case str_node::b_none:   str << ")";   break;
 		case str_node::b_pointy: str << "\\<"; break;
 		case str_node::b_curly:  str << "\\{"; break;
 		case str_node::b_round:  str << "(";   break;
@@ -157,7 +157,7 @@ void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t 
 void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << "}";   break;
+		case str_node::b_none:   str << ")";   break;
 		case str_node::b_pointy: str << "\\>"; break;
 		case str_node::b_curly:  str << "\\}"; break;
 		case str_node::b_round:  str << ")";   break;
