@@ -1,5 +1,11 @@
 - set_overlays_scrolling: disable if present (requires recompiling gtkmm)
 
+- positioning cursor does the wrong thing when there is an error cell (jumps to after the error cell).
+
+- include examples of car56.pdf
+
+- display should work on the command line as well; it refers to server which then breaks.
+
 - Reset kernel on loading a new notebook: fix reporting of kernel run status.
 
 - A_{m n} property does not match A^{m n} object in expression even

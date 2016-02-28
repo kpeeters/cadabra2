@@ -164,11 +164,7 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it)
 void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-		case str_node::b_none: 
-			str << "{";
-//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << "(";  
-//			else                                                                           str << "{";
-			break;
+		case str_node::b_none: str << "(";     break;
 		case str_node::b_pointy: str << "\\<"; break;
 		case str_node::b_curly:  str << "\\{"; break;
 		case str_node::b_round:  str << "(";   break;
@@ -181,11 +177,7 @@ void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket
 void DisplayTerminal::print_closing_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-		case str_node::b_none:   
-			str << "}";
-//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << ")";  
-//			else                                                                           str << "}";
-			break;
+		case str_node::b_none:   str << ")";   break;
 		case str_node::b_pointy: str << "\\>"; break;
 		case str_node::b_curly:  str << "\\}"; break;
 		case str_node::b_round:  str << ")";   break;

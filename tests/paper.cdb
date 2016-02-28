@@ -176,6 +176,7 @@ test10()
 
 def post_process(ex):
     sort_product(ex)
+    display(ex)
     eliminate_kronecker(ex)
     canonicalise(ex)
     collect_terms(ex)

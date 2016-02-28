@@ -188,7 +188,7 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
 
-	//std::cerr << str.str() << std::endl;
+	std::cerr << "feeding " << str.str() << std::endl;
 
 	boost::python::object ret=parse(str.str());
 
@@ -645,10 +645,10 @@ void call_post_process(Ex& ex)
 			boost::python::object post_process = globals["post_process"];
 			post_process(boost::ref(ex));
 			}
-		catch(boost::python::error_already_set const &) {
+		catch(boost::python::error_already_set const &exc) {
 			// In order to prevent the error from propagating, we have to read it out. 
 			std::string err = parse_python_exception();
-			//std::cerr  << err << std::endl;
+			throw;
 			}
 		post_process_enabled=true;
 		}

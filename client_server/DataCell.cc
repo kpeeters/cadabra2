@@ -127,7 +127,10 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << "<body>\n";
 				}
 			else {
-				str << "{% raw %}\n";
+				str << "{% extends \"notebook_layout.html\" %}\n"
+					 << "{% block head %}{%- endblock %}\n"
+					 << "{% block main %}\n"
+					 << "{% raw %}\n";
 				}
 			break;
 		case DataCell::CellType::python:
@@ -184,7 +187,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << "</html>\n";
 				}
 			else {
-				str << "{% endraw %}\n";
+				str << "{% endraw %}\n"
+					 << "{%- endblock %}\n"
+					 << "{% block title %}Cadabra manual{% endblock %}\n";
 				}
 			break;
 		case DataCell::CellType::python:
