@@ -28,25 +28,25 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}{s, r, l, k, m, n}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(s, r, l, k, m, n).\\end{dmath*}"
 				},
 				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}{s, r, l, k, m, n}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}(s, r, l, k, m, n).\\end{dmath*}"
 				},
 				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}{\\Gamma}_{\\#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}{\\Gamma}_(\\#).\\end{dmath*}"
 				},
 				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property KroneckerDelta to~}{\\delta}_{mn}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property KroneckerDelta to~}{\\delta}_(mn).\\end{dmath*}"
 				}
 			],
 			"source" : "{s,r,l,k,m,n}::Indices(vector);\n{s,r,l,k,m,n}::Integer(0..d-1);\n\\Gamma_{#}::GammaMatrix(metric=\\delta);\n\\delta_{m n}::KroneckerDelta;"
@@ -107,17 +107,18 @@
 		
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
+			"cell_type" : "latex",
 			"cells" : 
 			[
 				
 				{
-					"cell_origin" : "server",
+					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-\\left(2\\Gamma_{l r}-\\Gamma_{l r} d+\\delta_{l r} d-\\delta_{l r}\\right) \\Gamma_{k s} \\Gamma_{r s}\\end{dmath*}"
+					"source" : "We need to join and distribute three times to merge all gamma matrices, so"
 				}
 			],
-			"source" : "join_gamma(ex);"
+			"hidden" : true,
+			"source" : "We need to join and distribute three times to merge all gamma matrices, so"
 		},
 		
 		{
@@ -129,10 +130,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-2\\Gamma_{l r} \\Gamma_{k s} \\Gamma_{r s}+\\Gamma_{l r} d \\Gamma_{k s} \\Gamma_{r s}+\\Gamma_{k r} \\Gamma_{r s} \\delta_{l s} d+\\Gamma_{k s} \\Gamma_{l s}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma_{k l} \\left(-18d+8(d d)+12-(d d d)\\right)+\\delta_{k l} \\left(-3+6d-4(d d)+(d d d)\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(ex);"
+			"source" : "for i in range(3):\n\tjoin_gamma(_)\n\tdistribute(_)\nfactor_in(_, $d$);"
 		},
 		
 		{
@@ -144,67 +145,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-2\\left(\\Gamma_{k l r s}+\\Gamma_{l s} \\delta_{k r}+\\Gamma_{k l} \\delta_{r s}-\\Gamma_{r s} \\delta_{k l}-\\Gamma_{k r} \\delta_{l s}+\\delta_{k r} \\delta_{l s}-\\delta_{k l} \\delta_{r s}\\right) \\Gamma_{r s}+\\Gamma_{l r} \\left(2\\Gamma_{k r}-\\Gamma_{k r} d+\\delta_{k r}-\\delta_{k r} d\\right) d+\\left(\\Gamma_{k l} d-2\\Gamma_{k l}+\\delta_{k l} d-\\delta_{k l}\\right) d+2\\Gamma_{k l}-\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\end{dmath*}"
-				}
-			],
-			"source" : "join_gamma(ex);"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-2\\Gamma_{k l r s} \\Gamma_{r s}+2\\Gamma_{l r} \\delta_{k s} \\Gamma_{r s}+2\\Gamma_{r s} \\delta_{k l} \\Gamma_{r s}+2\\Gamma_{k r} \\delta_{l s} \\Gamma_{r s}-2\\Gamma_{r s} \\delta_{k r} \\delta_{l s}+2\\Gamma_{l r} \\Gamma_{k r} d-\\Gamma_{l r} \\Gamma_{k r} d d-4\\Gamma_{k l} d-\\Gamma_{l r} \\delta_{k r} d d+\\Gamma_{k l} d d+\\delta_{k l} d d-2\\delta_{k l} d+2\\Gamma_{k l}+\\delta_{k l}\\end{dmath*}"
-				}
-			],
-			"source" : "distribute(ex);"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-14\\Gamma_{k l} d+4\\Gamma_{k l} d d+12\\Gamma_{k l}-2\\Gamma_{l r} \\Gamma_{k r}+2\\Gamma_{r s} \\Gamma_{r s} \\delta_{k l}-2\\Gamma_{k r} \\Gamma_{l r}+2\\left(-2\\Gamma_{k l}+\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\right) d-\\left(-2\\Gamma_{k l}+\\Gamma_{k l} d+\\delta_{k l}-\\delta_{k l} d\\right) d d+\\delta_{k l} d d-2\\delta_{k l} d+\\delta_{k l}\\end{dmath*}"
-				}
-			],
-			"source" : "join_gamma(ex);"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-18\\Gamma_{k l} d+8\\Gamma_{k l} d d+12\\Gamma_{k l}-2\\Gamma_{l r} \\Gamma_{k r}+2\\Gamma_{r s} \\Gamma_{r s} \\delta_{k l}-2\\Gamma_{k r} \\Gamma_{l r}-2\\delta_{k l} d d-\\Gamma_{k l} d d d+\\delta_{k l} d d d+\\delta_{k l}\\end{dmath*}"
-				}
-			],
-			"source" : "distribute(ex);"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-18\\Gamma_{k l} d+8\\Gamma_{k l} d^{2}+12\\Gamma_{k l}-2\\Gamma_{l r} \\Gamma_{k r}+2\\Gamma_{r s} \\Gamma_{r s} \\delta_{k l}-2\\Gamma_{k r} \\Gamma_{l r}-2\\delta_{k l} d^{2}-\\Gamma_{k l} d^{3}+\\delta_{k l} d^{3}+\\delta_{k l}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma_{k l} \\left(-18d+8d^{2}+12-d^{3}\\right)+\\delta_{k l} \\left(-3+6d-4d^{2}+d^{3}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "collect_factors(ex);"

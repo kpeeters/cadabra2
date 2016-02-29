@@ -138,3 +138,16 @@ def test23():
     assert(ex==0)
 
 test23()
+
+def test24():
+
+{s,r,l,k,m,n}::Indices(vector).
+{s,r,l,k,m,n}::Integer(0..d-1).
+\Gamma{#}::GammaMatrix(metric=\delta).
+\delta_{m n}::KroneckerDelta.
+obj:= \Gamma_{l r} \Gamma_{k s} q \Gamma_{r s} + \Gamma_{l r} d \Gamma_{k s} \Gamma_{r s};
+sort_product(_);
+
+
+ex:=(a*d+b)*c;
+distribute(_);

@@ -1,0 +1,30 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 5, in <module>\nNameError: name 'EpsilonTensor' is not defined\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\alpha,\\beta,\\gamma,\\xi}::Indices.\n{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\alpha,\\beta,\\gamma,\\xi}::Integer(0..3).\n\\eta_{\\mu\\nu}::Metric.\n\\delta{#}::KroneckerDelta.\ne_{\\mu\\nu\\lambda\\rho}::EpsilonTensor(delta=\\delta).\nJ_{\\mu\\nu}::AntiSymmetric.\nJ_{\\mu\\nu}::SelfNonCommuting.\n{ J_{\\mu\\nu}, P_{\\mu} }::NonCommuting."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

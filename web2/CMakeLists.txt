@@ -31,6 +31,16 @@ add_custom_command(OUTPUT  ${HTMLOUTDIR}/scalar_manipulations.html
 
 # Manual.
 
+set(ALGOS
+  ${ALGODIR}/collect_factors.cnb
+  ${ALGODIR}/canonicalise.cnb
+)
+
+foreach(ALGO ${ALGOS})
+   message(${ALGO})
+endforeach()
+message('hi------------------')
+
 add_custom_command(OUTPUT  ${MANOUTDIR}/canonicalise.html 
                    DEPENDS ${ALGODIR}/canonicalise.cnb ${DC}
                    COMMAND cadabra2html 
