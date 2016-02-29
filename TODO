@@ -1,3 +1,5 @@
+- maybe pass a python list of objects to factor_in ?
+
 - set_overlays_scrolling: disable if present (requires recompiling gtkmm)
 
 - positioning cursor does the wrong thing when there is an error cell (jumps to after the error cell).

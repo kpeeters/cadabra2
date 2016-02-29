@@ -12,11 +12,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{canonicalise}\n\nCanonicalise a product of tensors, using the mono-term \nindex symmetries of the individual tensors and the\nexchange symmetries of identical tensors. Tensor exchange takes into\naccount commutativity properties of identical tensors.\n\n\nNote that this algorithm does not take into account multi-term\nsymmetries such as the Ricci identity of the Riemann tensor; those\ncanonicalisation procedures require the use\nof \\algo{young\\_project\\_tensor}\nor \\algo{young\\_project\\_product}. Similarly,\ndimension-dependent identities are not taken into account, use\n\\algo{decompose_product} for those.\n\n\nIn order to specify symmetries of tensors you need to use symmetry\nproperties such as \\prop{Symmetric}, \\prop{AntiSymmetric}\nor \\prop{TableauSymmetry}. The following example illustrates this."
+					"source" : "\\algorithm{canonicalise}{Bring a tensorial expression to canonical form by re-ordering indices.}\n\nCanonicalise a product of tensors, using the mono-term \nindex symmetries of the individual tensors and the\nexchange symmetries of identical tensors. Tensor exchange takes into\naccount commutativity properties of identical tensors.\n\n\nNote that this algorithm does not take into account multi-term\nsymmetries such as the Ricci identity of the Riemann tensor; those\ncanonicalisation procedures require the use\nof \\algo{young\\_project\\_tensor}\nor \\algo{young\\_project\\_product}. Similarly,\ndimension-dependent identities are not taken into account, use\n\\algo{decompose_product} for those.\n\n\nIn order to specify symmetries of tensors you need to use symmetry\nproperties such as \\prop{Symmetric}, \\prop{AntiSymmetric}\nor \\prop{TableauSymmetry}. The following example illustrates this."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{canonicalise}\n\nCanonicalise a product of tensors, using the mono-term \nindex symmetries of the individual tensors and the\nexchange symmetries of identical tensors. Tensor exchange takes into\naccount commutativity properties of identical tensors.\n\n\nNote that this algorithm does not take into account multi-term\nsymmetries such as the Ricci identity of the Riemann tensor; those\ncanonicalisation procedures require the use\nof \\algo{young\\_project\\_tensor}\nor \\algo{young\\_project\\_product}. Similarly,\ndimension-dependent identities are not taken into account, use\n\\algo{decompose_product} for those.\n\n\nIn order to specify symmetries of tensors you need to use symmetry\nproperties such as \\prop{Symmetric}, \\prop{AntiSymmetric}\nor \\prop{TableauSymmetry}. The following example illustrates this."
+			"source" : "\\algorithm{canonicalise}{Bring a tensorial expression to canonical form by re-ordering indices.}\n\nCanonicalise a product of tensors, using the mono-term \nindex symmetries of the individual tensors and the\nexchange symmetries of identical tensors. Tensor exchange takes into\naccount commutativity properties of identical tensors.\n\n\nNote that this algorithm does not take into account multi-term\nsymmetries such as the Ricci identity of the Riemann tensor; those\ncanonicalisation procedures require the use\nof \\algo{young\\_project\\_tensor}\nor \\algo{young\\_project\\_product}. Similarly,\ndimension-dependent identities are not taken into account, use\n\\algo{decompose_product} for those.\n\n\nIn order to specify symmetries of tensors you need to use symmetry\nproperties such as \\prop{Symmetric}, \\prop{AntiSymmetric}\nor \\prop{TableauSymmetry}. The following example illustrates this."
 		},
 		
 		{
@@ -49,9 +49,10 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "If the various terms in an expression use different index names, you\nmay need an additional call to \\algo{rename\\_dummies}\nbefore \\algo{collect\\_terms} is able to collect all terms\ntogether:"
+					"source" : "If the various terms in an expression use different index names, you\nmay need an additional call to \\algo{rename\\_dummies}\nbefore the terms get collected together:"
 				}
 			],
+			"hidden" : true,
 			"source" : "If the various terms in an expression use different index names, you\nmay need an additional call to \\algo{rename\\_dummies}\nbefore the terms get collected together:"
 		},
 		

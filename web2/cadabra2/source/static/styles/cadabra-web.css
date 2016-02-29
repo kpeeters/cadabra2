@@ -276,6 +276,13 @@ div.view_options {
 	 margin-top: -10px;
 	 margin-bottom: 40px;
 }
+div.view_options span {
+	 display: inline-block;
+	 margin-left: 20px;
+	 font-style: italic;
+	 min-width: 200px;
+	 width: 200px;
+}
 div.download_options {
 	 margin-left: 50px;
 	 margin-bottom: 20px;

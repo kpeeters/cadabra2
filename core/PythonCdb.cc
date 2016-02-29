@@ -97,6 +97,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/expand_diracbar.hh"
+#include "algorithms/factor_in.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
@@ -183,8 +184,6 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	std::ostringstream str;
 	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
 	dt.output(str);
-
-	std::cerr << "feeding " << str.str() << std::endl;
 
 	boost::python::object ret=parse(str.str());
 
@@ -589,30 +588,6 @@ std::string Property<Prop>::repr_() const
 // declaration of 'join_gamma' below for an example of how to declare
 // those additional arguments).
 
-// #ifndef __clang__
-// 
-// template<class F, typename... Args>
-// Ex* dispatch_ex(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth)
-// 	{
-// 	F algo(*get_kernel_from_scope(), ex, args...);
-// 
-// 	Ex::iterator it=ex.begin().begin();
-// 	if(*it->name=="\\equals") 
-// 		it=ex.child(it,1);
-// 	ex.reset_state();
-// 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-// 
-// 	// FIXME: find the 'post_process' function, and if found, turn off
-// 	// post-processing, then call the function on the current Ex.
-// 	auto module = boost::python::import("__main__");
-// 	auto post_process = module.attr("post_process");
-// 	post_process();
-// 
-// 	return &ex;
-// 	}
-// 
-// #else
-
 template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
@@ -670,8 +645,6 @@ Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned i
 	F algo(*get_kernel_from_scope(), ex, arg1, arg2);
 	return dispatch_base(ex, algo, deep, repeat, depth);
 	}
-
-//#endif
 
 template<class F, typename... Args>
 Ex* dispatch_string(const std::string& ex, Args... args, bool deep, bool repeat, unsigned int depth)
@@ -974,6 +947,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Algorithms which take a second Ex as argument.
 	def_algo_1<lr_tensor>("lr_tensor");
 
+	def("factor_in", &dispatch_ex<factor_in, Ex&>, 
+		 (arg("ex"),
+		  arg("factors"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
 	def("substitute", &dispatch_ex<substitute, Ex&>, 
 		 (arg("ex"),
 		  arg("rules"),

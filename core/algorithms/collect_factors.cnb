@@ -12,11 +12,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{collect\\_factors}{Collect identical factors in a product}\n\nCollect factors in a product that differ only by their exponent. Note\nthat factors containing sub- or superscripted indices do not get\ncollected (i.e.~$A_m A^m$ does not get reduced to $(A_m)^2$)."
+					"source" : "\\algorithm{collect_factors}{Collect identical factors in a product.}\n\nCollect factors in a product that differ only by their exponent. Note\nthat factors containing sub- or superscripted indices do not get\ncollected (i.e.~$A_m A^m$ does not get reduced to $(A_m)^2$)."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{collect\\_factors}{Collect identical factors in a product}\n\nCollect factors in a product that differ only by their exponent. Note\nthat factors containing sub- or superscripted indices do not get\ncollected (i.e.~$A_m A^m$ does not get reduced to $(A_m)^2$)."
+			"source" : "\\algorithm{collect_factors}{Collect identical factors in a product.}\n\nCollect factors in a product that differ only by their exponent. Note\nthat factors containing sub- or superscripted indices do not get\ncollected (i.e.~$A_m A^m$ does not get reduced to $(A_m)^2$)."
 		},
 		
 		{
