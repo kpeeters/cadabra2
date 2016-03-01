@@ -12,11 +12,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{complete}\n\nComplete a set of substitution rules with additional rules based on the properties of\nthe objects appearing in the rules. \n\nThis can for instance be used to generate rules for the inverse components of the metric\ngiven the rules for the metric components themselves, as in the example below.\n\nNote that the argument itself gets modified (amended) with the additional rules."
+					"source" : "\\algorithm{complete}{Complete a set of substitution rules to cover related objects.}\n\nComplete a set of substitution rules with additional rules based on the properties of\nthe objects appearing in the rules. \n\nThis can for instance be used to generate rules for the inverse components of the metric\ngiven the rules for the metric components themselves, as in the example below.\n\nNote that the argument itself gets modified (amended) with the additional rules."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{complete}\n\nComplete a set of substitution rules with additional rules based on the properties of\nthe objects appearing in the rules. \n\nThis can for instance be used to generate rules for the inverse components of the metric\ngiven the rules for the metric components themselves, as in the example below.\n\nNote that the argument itself gets modified (amended) with the additional rules."
+			"source" : "\\algorithm{complete}{Complete a set of substitution rules to cover related objects.}\n\nComplete a set of substitution rules with additional rules based on the properties of\nthe objects appearing in the rules. \n\nThis can for instance be used to generate rules for the inverse components of the metric\ngiven the rules for the metric components themselves, as in the example below.\n\nNote that the argument itself gets modified (amended) with the additional rules."
 		},
 		
 		{
@@ -34,10 +34,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(g_{t t} \\rightarrow r, g_{t r} \\rightarrow \\frac{r^{2}}{a}, g_{r t} \\rightarrow \\frac{r^{2}}{a}, g_{r r} \\rightarrow 1)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}(g_{t t} = r, g_{t r} = \\frac{r^{2}}{a}, g_{r t} = \\frac{r^{2}}{a}, g_{r r} = 1)\\end{dmath*}"
 				}
 			],
-			"source" : "rl:={ g_{t t} -> r, g_{t r} -> r**2/a, g_{r t} -> r**2/a, g_{r r}->1 };"
+			"source" : "rl:={ g_{t t} = r, g_{t r} = r**2/a, g_{r t} = r**2/a, g_{r r} = 1 };"
 		},
 		
 		{
@@ -49,7 +49,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(g_{t t} \\rightarrow r, g_{t r} \\rightarrow \\frac{r^{2}}{a}, g_{r t} \\rightarrow \\frac{r^{2}}{a}, g_{r r} \\rightarrow 1, g^{r r} = 1+\\frac{r^{4}}{a^{2} \\left(r - \\frac{r^{4}}{a^{2}}\\right)}, g^{r t} =  - \\frac{r^{2}}{a \\left(r - \\frac{r^{4}}{a^{2}}\\right)}, g^{t r} =  - \\frac{r^{2}}{a \\left(r - \\frac{r^{4}}{a^{2}}\\right)}, g^{t t} = \\frac{1}{r - \\frac{r^{4}}{a^{2}}})\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}(g_{t t} = r, g_{t r} = \\frac{r^{2}}{a}, g_{r t} = \\frac{r^{2}}{a}, g_{r r} = 1, g^{r r} = 1+\\frac{r^{4}}{a^{2} \\left(r - \\frac{r^{4}}{a^{2}}\\right)}, g^{r t} =  - \\frac{r^{2}}{a \\left(r - \\frac{r^{4}}{a^{2}}\\right)}, g^{t r} =  - \\frac{r^{2}}{a \\left(r - \\frac{r^{4}}{a^{2}}\\right)}, g^{t t} = \\frac{1}{r - \\frac{r^{4}}{a^{2}}})\\end{dmath*}"
 				}
 			],
 			"source" : "complete(rl, $g^{m n}$);"

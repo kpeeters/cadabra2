@@ -1,7 +1,9 @@
 set(HTMLOUTDIR ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/notebooks)
+set(TOCOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/)
 set(MANOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/manual)
 set(CNBDIR     ${CMAKE_SOURCE_DIR}/examples)
 set(ALGODIR    ${CMAKE_SOURCE_DIR}/core/algorithms)
+set(PROPDIR    ${CMAKE_SOURCE_DIR}/core/properties)
 set(DC         ${CMAKE_SOURCE_DIR}/client_server/DataCell.hh ${CMAKE_SOURCE_DIR}/client_server/DataCell.cc)
 
 add_custom_command(OUTPUT  ${HTMLOUTDIR}/beginners.html 
@@ -29,63 +31,45 @@ add_custom_command(OUTPUT  ${HTMLOUTDIR}/scalar_manipulations.html
                    COMMENT "Creating scalar_manipulations.html")
 
 
-# Manual.
+# Manual pages; just add the algorithm or property name to the lists below
+# and the rest will be taken care of automatically.
 
 set(ALGOS
-  ${ALGODIR}/collect_factors.cnb
-  ${ALGODIR}/canonicalise.cnb
+  collect_factors
+  canonicalise
+  complete
+  decompose_product
+  distribute
+  eliminate_kronecker
+  evaluate
+  expand_diracbar
+  factor_in
+  join_gamma
+  
 )
 
+set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)
+
+#add_custom_command(
+#add_custom_target(algo_toc ALL echo -n DEPENDS ${TOCOUTDIR}/algo_toc.html ${SCAN})
+add_custom_target(algo_toc ALL 
+                  COMMAND ${SCAN} ${ALGODIR} ${ALGOS} > ${TOCOUTDIR}/algo_toc.html
+                  COMMENT "Creating algorithm table-of-contents...")
+
 foreach(ALGO ${ALGOS})
-   message(${ALGO})
+   add_custom_command(OUTPUT  ${MANOUTDIR}/${ALGO}.html
+	                   DEPENDS ${ALGODIR}/${ALGO}.cnb ${DC}
+                      COMMAND cadabra2html
+                      ARGS    --segment ${ALGODIR}/${ALGO}.cnb ${MANOUTDIR}/${ALGO}.html
+                      COMMENT "Creating ${ALGO} manual page...")
+   add_custom_target("${ALGO} manual" ALL echo -n DEPENDS ${MANOUTDIR}/${ALGO}.html)
+#   add_dependencies(algo_toc ${ALGODIR}/${ALGO}.cnb)
 endforeach()
-message('hi------------------')
 
-add_custom_command(OUTPUT  ${MANOUTDIR}/canonicalise.html 
-                   DEPENDS ${ALGODIR}/canonicalise.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${ALGODIR}/canonicalise.cnb ${MANOUTDIR}/canonicalise.html 
-                   COMMENT "Creating canonicalise.html")
-
-add_custom_command(OUTPUT  ${MANOUTDIR}/collect_factors.html 
-                   DEPENDS ${ALGODIR}/collect_factors.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${ALGODIR}/collect_factors.cnb ${MANOUTDIR}/collect_factors.html 
-                   COMMENT "Creating collect_factors.html")
-
-add_custom_command(OUTPUT  ${MANOUTDIR}/complete.html 
-                   DEPENDS ${ALGODIR}/complete.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${ALGODIR}/complete.cnb ${MANOUTDIR}/complete.html 
-                   COMMENT "Creating complete.html")
-
-add_custom_command(OUTPUT  ${MANOUTDIR}/decompose_product.html 
-                   DEPENDS ${ALGODIR}/decompose_product.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${ALGODIR}/decompose_product.cnb ${MANOUTDIR}/decompose_product.html 
-                   COMMENT "Creating decompose_product.html")
-
-add_custom_command(OUTPUT  ${MANOUTDIR}/distribute.html 
-                   DEPENDS ${ALGODIR}/distribute.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${ALGODIR}/distribute.cnb ${MANOUTDIR}/distribute.html 
-                   COMMENT "Creating distribute.html")
-
-add_custom_command(OUTPUT  ${MANOUTDIR}/eliminate_kronecker.html 
-                   DEPENDS ${ALGODIR}/eliminate_kronecker.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${ALGODIR}/eliminate_kronecker.cnb ${MANOUTDIR}/eliminate_kronecker.html 
-                   COMMENT "Creating eliminate_kronecker.html")
 
 add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting.html
                                            ${HTMLOUTDIR}/beginners.html
                                            ${HTMLOUTDIR}/for_previous_users.html
                                            ${HTMLOUTDIR}/scalar_manipulations.html
-                                           ${MANOUTDIR}/canonicalise.html
-                                           ${MANOUTDIR}/collect_factors.html
-                                           ${MANOUTDIR}/complete.html
-                                           ${MANOUTDIR}/decompose_product.html
-                                           ${MANOUTDIR}/distribute.html
-                                           ${MANOUTDIR}/eliminate_kronecker.html
                  )
 

@@ -1,0 +1,114 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{factor_in}{Collect terms in a sum that differ only by given pre-factors.}\n\nGiven a list of symbols, this algorithm collects terms in a sum that\nonly differ by pre-factors consisting of these given symbols. As an\nexample,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{factor_in}{Collect terms in a sum that differ only by given pre-factors.}\n\nGiven a list of symbols, this algorithm collects terms in a sum that\nonly differ by pre-factors consisting of these given symbols. As an\nexample,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}a b+a c+a d\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=a b + a c + a d;"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(b+c\\right) a+a d\\end{dmath*}"
+				}
+			],
+			"source" : "factor_in(_, $b,c$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The name is perhaps most easily understood by thinking of it as a\ncomplement to \\algo{factor_out}. Or in case you are familiar with\nFORM, \\algo{factor_in} is like its \\verb|antibracket| statement.\n\nThe algorithm of course also works with indexed objects, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "The name is perhaps most easily understood by thinking of it as a\ncomplement to \\algo{factor_out}. Or in case you are familiar with\nFORM, \\algo{factor_in} is like its \\verb|antibracket| statement.\n\nThe algorithm of course also works with indexed objects, as in"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m} B_{m}+C_{m} A_{m}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m} B_{m}+C_{m} A_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A_{m} B_{m} + C_{m} A_{m};\nfactor_in(_, $B_{n}, C_{n}$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "(not yet finished)"
+				}
+			],
+			"hidden" : true,
+			"source" : "(not yet finished)"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

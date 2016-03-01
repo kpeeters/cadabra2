@@ -3,6 +3,7 @@
 import json
 import os
 import re
+import sys
 
 # Scan one Cadabra notebook file for an \algorithm{...}{...}
 # or \property{...}{...} command and use this to output HTML
@@ -23,22 +24,23 @@ def scan_file(prevcat, dir, filename, ext):
                 cat=''
             else:
                 prevcat=cat
-            print('<tr>'+cat+'<td></td><td><a href="manual/"'+filename+ext+'">"'+algo+'</a></td>')
-            print('<td>'+desc+'</td>')
+            print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
+            print('<td>'+desc+'</td></tr>')
 
     return prevcat
 
 
 # Scan all manual pages for algorithms.
 
-dir='../core/algorithms/'
-lst=set()
-for file in os.listdir(dir):
-    filename, ext = os.path.splitext(file)
-    if ext=='.cnb':
-        lst.add( filename )
+#lst=set()
+#for file in os.listdir(dir):
+#    filename, ext = os.path.splitext(file)
+#    if ext=='.cnb':
+#        lst.add( filename )
+
+algodir=sys.argv[1]+"/"
 cat=''
-for nb in sorted(lst):
-    cat=scan_file(cat, dir, nb, '.cnb')
+for nb in sorted(sys.argv[2:]):
+    cat=scan_file(cat, algodir, nb, '.cnb')
 
 
