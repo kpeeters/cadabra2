@@ -114,11 +114,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "We need to join and distribute three times to merge all gamma matrices, so"
+					"source" : "We need to join and distribute three times to merge all four generalised gamma matrices, so"
 				}
 			],
 			"hidden" : true,
-			"source" : "We need to join and distribute three times to merge all gamma matrices, so"
+			"source" : "We need to join and distribute three times to merge all four generalised gamma matrices, so"
 		},
 		
 		{
@@ -149,6 +149,22 @@
 				}
 			],
 			"source" : "collect_factors(ex);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "That's the answer we wanted to compute, much easier than by hand."
+				}
+			],
+			"hidden" : true,
+			"source" : "That's the answer we wanted to compute, much easier than by hand."
 		},
 		
 		{
