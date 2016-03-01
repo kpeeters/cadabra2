@@ -12,11 +12,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{distribute}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation}\nThis would read"
+					"source" : "\\algorithm{distribute}{Distribute factors over sums.}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation}\nThis would read"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{distribute}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation}\nThis would read"
+			"source" : "\\algorithm{distribute}{Distribute factors over sums.}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation}\nThis would read"
 		},
 		
 		{

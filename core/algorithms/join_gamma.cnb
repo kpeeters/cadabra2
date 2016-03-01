@@ -1,0 +1,142 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{join_gamma}{Work out the product of two generalised Dirac gamma matrices.}\n\nJoin two fully anti-symmetrised gamma matrix products according to the\nexpression\n\\begin{equation}\n   \\Gamma^{b_{1}\\dots b_{n}}\\Gamma_{a_{1}\\dots a_{m}} =\n      \\sum_{p=0}^{\\text{min}(n,m)}\\ \\frac{n! m!}{(n-p)! (m-p)! p!}\n         \\Gamma^{[b_{1}\\ldots b_{n-p}}{}_{[a_{p+1}\\ldots a_{m}}\n         \\eta^{b_{n-p+1}\\ldots b_{n}]}{}_{a_{1}\\ldots a_{m-p}]} \\, .\n\\end{equation}\nThis is the opposite of \\algo{split_gamma}.\n\nWithout further arguments, the anti-symmetrisations will be worked out\nexplicitly (changed from v1). The setting the flag ``{\\tt expand}'' to\nfalse instead keeps them implicit. Compare"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{join_gamma}{Work out the product of two generalised Dirac gamma matrices.}\n\nJoin two fully anti-symmetrised gamma matrix products according to the\nexpression\n\\begin{equation}\n   \\Gamma^{b_{1}\\dots b_{n}}\\Gamma_{a_{1}\\dots a_{m}} =\n      \\sum_{p=0}^{\\text{min}(n,m)}\\ \\frac{n! m!}{(n-p)! (m-p)! p!}\n         \\Gamma^{[b_{1}\\ldots b_{n-p}}{}_{[a_{p+1}\\ldots a_{m}}\n         \\eta^{b_{n-p+1}\\ldots b_{n}]}{}_{a_{1}\\ldots a_{m-p}]} \\, .\n\\end{equation}\nThis is the opposite of \\algo{split_gamma}.\n\nWithout further arguments, the anti-symmetrisations will be worked out\nexplicitly (changed from v1). The setting the flag ``{\\tt expand}'' to\nfalse instead keeps them implicit. Compare"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma_{m n} \\Gamma_{p}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma_{m n p}+2\\Gamma_{m} g_{n p}\\end{dmath*}"
+				}
+			],
+			"source" : "\\Gamma{#}::GammaMatrix(metric=g).\nex:= \\Gamma_{m n} \\Gamma_{p};\njoin_gamma(ex, expand=False);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "with"
+				}
+			],
+			"hidden" : true,
+			"source" : "with"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma_{m n} \\Gamma_{p}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma_{m n p}+\\Gamma_{m} g_{n p}-\\Gamma_{n} g_{m p}\\end{dmath*}"
+				}
+			],
+			"source" : "\\Gamma{#}::GammaMatrix(metric=g).\nex:= \\Gamma_{m n} \\Gamma_{p};\njoin_gamma(ex, expand=True);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that the gamma matrices need to have a metric associated to them\nin order for this algorithm to work."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that the gamma matrices need to have a metric associated to them\nin order for this algorithm to work."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In order to reduce the number of terms somewhat, one can instruct the algorithm\nto make use of generalised Kronecker delta symbols in the result;\nthese symbols are defined as\n\\begin{equation}\n\\delta^{r_1}{}_{s_1}{}^{r_2}{}_{s_2}\\cdots{}^{r_n}{}_{s_n}\n= \\delta^{[r_1}{}_{s_1}\\delta^{r_2}{}_{s_2}\\cdots {}^{r_n]}{}_{s_n}\\, .\n\\end{equation}\nAnti-symmetrisation is implied in the set of even-numbered\nindices. The use of these symbols is triggered by the ``{\\tt\nuse_gendelta}'' option,"
+				}
+			],
+			"hidden" : true,
+			"source" : "In order to reduce the number of terms somewhat, one can instruct the algorithm\nto make use of generalised Kronecker delta symbols in the result;\nthese symbols are defined as\n\\begin{equation}\n\\delta^{r_1}{}_{s_1}{}^{r_2}{}_{s_2}\\cdots{}^{r_n}{}_{s_n}\n= \\delta^{[r_1}{}_{s_1}\\delta^{r_2}{}_{s_2}\\cdots {}^{r_n]}{}_{s_n}\\, .\n\\end{equation}\nAnti-symmetrisation is implied in the set of even-numbered\nindices. The use of these symbols is triggered by the ``{\\tt\nuse_gendelta}'' option,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma_{m n} \\Gamma^{p q}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma_{m n}\\,^{p q}+\\Gamma_{m}\\,^{q} \\delta_{n}\\,^{p}-\\Gamma_{m}\\,^{p} \\delta_{n}\\,^{q}-\\Gamma_{n}\\,^{q} \\delta_{m}\\,^{p}+\\Gamma_{n}\\,^{p} \\delta_{m}\\,^{q}+2\\delta_{n}\\,^{p}\\,_{m}\\,^{q}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q}::Indices(position=fixed).\n\\Gamma{#}::GammaMatrix(metric=\\delta).\nex:=\\Gamma_{m n} \\Gamma^{p q};\njoin_gamma(_, use_gendelta=True);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

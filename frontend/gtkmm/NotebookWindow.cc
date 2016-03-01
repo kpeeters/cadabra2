@@ -525,8 +525,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		
 		}
 
-	if(current_cell!=doc.end()) 
-		scroll_into_view(current_cell);
+//	if(current_cell!=doc.end()) 
+//		scroll_into_view(current_cell);
 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)

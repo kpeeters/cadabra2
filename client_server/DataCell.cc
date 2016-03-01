@@ -74,8 +74,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex greater(">");
 	std::regex latex(R"(\\LaTeX\{\})");
 	std::regex tex(R"(\\TeX\{\})");
-	std::regex algorithm(R"(\\algorithm\{([^\}]*)\})");
-	std::regex property(R"(\\property\{([^\}]*)\})");
+	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
+	std::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
 	std::regex underscore(R"(\\_)");
@@ -95,10 +95,10 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-		res = std::regex_replace(res, algorithm, "<h1>$1</h1>");
-		res = std::regex_replace(res, property, "<h1>$1</h1>");
-		res = std::regex_replace(res, algo, "<a href=\"$1.cnb\"><code>$1</code></a>");
-		res = std::regex_replace(res, prop, "<a href=\"$1.cnb\"><code>$1</code></a>");
+		res = std::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, algo, "<a href=\"$1.html\"><code>$1</code></a>");
+		res = std::regex_replace(res, prop, "<a href=\"$1.html\"><code>$1</code></a>");
 		res = std::regex_replace(res, underscore, "_");
 		res = std::regex_replace(res, latex, "LaTeX");
 		res = std::regex_replace(res, tex, "TeX");

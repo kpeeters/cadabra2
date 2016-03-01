@@ -99,6 +99,11 @@ div#main h1 {
 	 border-bottom: 1px solid #bbb;
 	 margin-bottom: 20px;
 }
+div.summary {
+	 font-style: italic;
+	 margin-bottom: 20px;
+	 margin-top: 0px;
+}
 div#main h2 {
 	 margin-top: 24px;
 	 font-family: "Bree Serif";

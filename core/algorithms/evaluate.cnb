@@ -1,0 +1,108 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{evaluate}{Evaluate components of a tensor expression.}\n\nGiven an abstract tensor expression and a set of rules for the components of tensors occurring in this\nexpression, evaluate the components of the full expression. \n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{evaluate}{Evaluate components of a tensor expression.}\n\nGiven an abstract tensor expression and a set of rules for the components of tensors occurring in this\nexpression, evaluate the components of the full expression. \n\nThe minimal information needed for this to work is a declaration of the indices used, and a declaration\nof the values that those indices use:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{n m} B_{m n p} \\left(C_{p s}+D_{s p}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "{r,t}::Coordinate.\n{m,n,p,s}::Indices(values={t,r}).\nex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities"
+				}
+			],
+			"hidden" : true,
+			"source" : "The list of component values should be given just like the list of rules for the \\algo{substitute} algorithm,\nthat is, as equalities"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}(A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r^{2} t, D_{t r} = t^{2})\\end{dmath*}"
+				}
+			],
+			"source" : "rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The \\algo{evaluate} algorithm then works out the values of the components of the \\verb|ex| expression,\nwhich will be denoted with a $\\square$ in its output,"
+				}
+			],
+			"hidden" : true,
+			"source" : "The \\algo{evaluate} algorithm then works out the values of the components of the \\verb|ex| expression,\nwhich will be denoted with a $\\square$ in its output,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}_{r}= & 6r^{2} t+6\\\\\n\\square{}_{t}= & 15t^{2}\\\\\n\\end{aligned}\n\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(ex, rl);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
