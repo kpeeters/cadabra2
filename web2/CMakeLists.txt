@@ -45,7 +45,10 @@ set(ALGOS
   expand_diracbar
   factor_in
   join_gamma
-  
+)
+set(PROPS
+  Accent
+  Indices
 )
 
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)
@@ -54,7 +57,10 @@ set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)
 #add_custom_target(algo_toc ALL echo -n DEPENDS ${TOCOUTDIR}/algo_toc.html ${SCAN})
 add_custom_target(algo_toc ALL 
                   COMMAND ${SCAN} ${ALGODIR} ${ALGOS} > ${TOCOUTDIR}/algo_toc.html
-                  COMMENT "Creating algorithm table-of-contents...")
+                  COMMENT "Creating algorithms table-of-contents...")
+add_custom_target(prop_toc ALL 
+                  COMMAND ${SCAN} ${PROPDIR} ${PROPS} > ${TOCOUTDIR}/prop_toc.html
+                  COMMENT "Creating properties table-of-contents...")
 
 foreach(ALGO ${ALGOS})
    add_custom_command(OUTPUT  ${MANOUTDIR}/${ALGO}.html
@@ -64,6 +70,15 @@ foreach(ALGO ${ALGOS})
                       COMMENT "Creating ${ALGO} manual page...")
    add_custom_target("${ALGO} manual" ALL echo -n DEPENDS ${MANOUTDIR}/${ALGO}.html)
 #   add_dependencies(algo_toc ${ALGODIR}/${ALGO}.cnb)
+endforeach()
+
+foreach(PROP ${PROPS})
+   add_custom_command(OUTPUT  ${MANOUTDIR}/${PROP}.html
+	                   DEPENDS ${PROPDIR}/${PROP}.cnb ${DC}
+                      COMMAND cadabra2html
+                      ARGS    --segment ${PROPDIR}/${PROP}.cnb ${MANOUTDIR}/${PROP}.html
+                      COMMENT "Creating ${PROP} manual page...")
+   add_custom_target("${PROP} manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PROP}.html)
 endforeach()
 
 

@@ -26,6 +26,17 @@ def scan_file(prevcat, dir, filename, ext):
                 prevcat=cat
             print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
             print('<td>'+desc+'</td></tr>')
+        m = re.search('\\\\property{(.*)}{(.*)}', src)
+        if m:
+            algo=m.group(1)
+            desc=m.group(2)
+            cat=algo[0].upper()
+            if cat==prevcat:
+                cat=''
+            else:
+                prevcat=cat
+            print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
+            print('<td>'+desc+'</td></tr>')
 
     return prevcat
 
