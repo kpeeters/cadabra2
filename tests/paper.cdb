@@ -154,7 +154,7 @@ def test09():
     
     rl:={ \nabla_{i}{C_{k i l m}} -> 0, \nabla_{i}{C_{k m l i}} -> 0 };
     substitute(exp, rl)
-    
+
     young_project_product(exp)
     assert(exp==0)
     print('Test 09 passed')

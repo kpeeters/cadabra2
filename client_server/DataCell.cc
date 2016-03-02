@@ -79,6 +79,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
 	std::regex underscore(R"(\\_)");
+	std::regex e_aigu(R"(\\'e)");
 
 	std::string res;
 
@@ -102,6 +103,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, underscore, "_");
 		res = std::regex_replace(res, latex, "LaTeX");
 		res = std::regex_replace(res, tex, "TeX");
+		res = std::regex_replace(res, e_aigu, "é");
 		}
 	catch(std::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;

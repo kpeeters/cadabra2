@@ -61,6 +61,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/DAntiSymmetric.hh"
 #include "properties/Diagonal.hh"
 #include "properties/Distributable.hh"
+#include "properties/EpsilonTensor.hh"
 #include "properties/FilledTableau.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/Indices.hh"
@@ -76,6 +77,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/SatisfiesBianchi.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SelfCommuting.hh"
+#include "properties/SelfNonCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
 #include "properties/Symmetric.hh"
@@ -95,7 +97,9 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
+#include "algorithms/epsilon_to_delta.hh"
 #include "algorithms/evaluate.hh"
+#include "algorithms/expand_delta.hh"
 #include "algorithms/expand_diracbar.hh"
 #include "algorithms/factor_in.hh"
 #include "algorithms/flatten_sum.hh"
@@ -517,11 +521,25 @@ void inject_defaults(Kernel *k)
 	{
 	// Create and inject properties; these then get owned by the kernel.
 	post_process_enabled=false;
+
 	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}"), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
+//	inject_property(k, new DependsInherit(), make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\prod{#}"), 0);
+
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}"), 0);
+
+	inject_property(k, new Derivative(),         make_Ex_from_string("\\commutator{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\commutator{#}"), 0);
+
+	inject_property(k, new Derivative(),         make_Ex_from_string("\\anticommutator{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}"), 0);
+
+	inject_property(k, new Distributable(),      make_Ex_from_string("\\indexbracket{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}"), 0);
+
 	post_process_enabled=true;
 //	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}"), 0);
 	}
@@ -619,7 +637,7 @@ void call_post_process(Ex& ex)
 		catch(boost::python::error_already_set const &exc) {
 			// In order to prevent the error from propagating, we have to read it out. 
 			std::string err = parse_python_exception();
-			throw;
+//			throw;
 			}
 		post_process_enabled=true;
 		}
@@ -875,6 +893,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<decompose_product>("decompose_product");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
+	def_algo_1<epsilon_to_delta>("epsilon_to_delta");
+	def_algo_1<expand_delta>("expand_delta");
 	def_algo_1<expand_diracbar>("expand_diracbar");
 	def_algo_1<flatten_sum>("flatten_sum");
 	def_algo_1<indexsort>("indexsort");
@@ -995,6 +1015,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Diagonal>();
 	def_prop<Distributable>();
 	def_prop<DiracBar>();
+	def_prop<EpsilonTensor>();
 	def_prop<FilledTableau>();
 	def_prop<GammaMatrix>();
 	def_prop<ImplicitIndex>();	
@@ -1011,6 +1032,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SatisfiesBianchi>();
 	def_prop<SelfAntiCommuting>();
 	def_prop<SelfCommuting>();
+	def_prop<SelfNonCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
 	def_prop<Symmetric>();

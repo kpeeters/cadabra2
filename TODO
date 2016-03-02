@@ -1,3 +1,9 @@
+- Manual pages need <title>
+
+- expand_delta does not yet do things as clever as it could.
+
+- OS X autolayout: http://blog.bjhomer.com/2014/08/nsscrollview-and-autolayout.html
+
 - maybe pass a python list of objects to factor_in ?
 
 - set_overlays_scrolling: disable if present (requires recompiling gtkmm)

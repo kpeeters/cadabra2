@@ -6,6 +6,7 @@ message("-- Configuring self-tests")
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
+add_test(field_theory   cadabra2 ${CMAKE_SOURCE_DIR}/tests/field_theory.cdb)
 add_test(paper          cadabra2 ${CMAKE_SOURCE_DIR}/tests/paper.cdb)
 add_test(basic          cadabra2 ${CMAKE_SOURCE_DIR}/tests/basic.cdb)
 add_test(substitute     cadabra2 ${CMAKE_SOURCE_DIR}/tests/substitute.cdb)
