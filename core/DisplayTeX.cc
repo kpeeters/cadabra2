@@ -219,16 +219,18 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 
 void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it) 
 	{
-	if(*it->name=="\\prod")        print_productlike(str, it, " ");
-	else if(*it->name=="\\sum")    print_sumlike(str, it);
-	else if(*it->name=="\\frac")   print_fraclike(str, it);
-	else if(*it->name=="\\comma")  print_commalike(str, it);
-	else if(*it->name=="\\arrow")  print_arrowlike(str, it);
-	else if(*it->name=="\\pow")    print_powlike(str, it);
-	else if(*it->name=="\\int")    print_intlike(str, it);
-	else if(*it->name=="\\equals") print_equalitylike(str, it);
-	else if(*it->name=="\\components") print_components(str, it);
-	else                           print_other(str, it);
+	if(*it->name=="\\prod")                print_productlike(str, it, " ");
+	else if(*it->name=="\\sum")            print_sumlike(str, it);
+	else if(*it->name=="\\frac")           print_fraclike(str, it);
+	else if(*it->name=="\\comma")          print_commalike(str, it);
+	else if(*it->name=="\\arrow")          print_arrowlike(str, it);
+	else if(*it->name=="\\pow")            print_powlike(str, it);
+	else if(*it->name=="\\int")            print_intlike(str, it);
+	else if(*it->name=="\\equals")         print_equalitylike(str, it);
+	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
+	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
+	else if(*it->name=="\\components")     print_components(str, it);
+	else                                   print_other(str, it);
 	}
 
 void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it) 
@@ -377,6 +379,22 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 	str << " = ";
 	++sib;
 	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_commutator(std::ostream& str, Ex::iterator it, bool comm)
+	{
+	if(comm) str << "{}\\left[";
+	else     str << "{}\\left\\{";
+	auto sib=tree.begin(it);
+	bool first=true;
+	while(sib!=tree.end(it)) {
+		if(!first) str << ", ";
+		else       first=false;
+		dispatch(str, sib);
+		++sib;
+		}
+	if(comm) str << "\\right]{}";
+	else     str << "\\right\\}{}";
 	}
 
 void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)

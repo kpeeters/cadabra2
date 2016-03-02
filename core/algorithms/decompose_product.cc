@@ -151,7 +151,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
 	yngtab::LR_tensor(m1, m2, dim, prod.get_back_insert_iterator(), true);
 
-	std::cout << "dim=" << dim << ", size=" << prod.storage.size() << std::endl;
+	//std::cerr << "dim=" << dim << ", size=" << prod.storage.size() << std::endl;
 
 	// The tableaux in 'prod' contain in their boxes iterators to
 	// the indices in the original expression. We convert these to

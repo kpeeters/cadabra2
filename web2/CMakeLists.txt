@@ -24,11 +24,23 @@ add_custom_command(OUTPUT  ${HTMLOUTDIR}/for_previous_users.html
                    ARGS    --segment ${CNBDIR}/for_previous_users.cnb ${HTMLOUTDIR}/for_previous_users.html 
                    COMMENT "Creating for_previous_users.html")
 
-add_custom_command(OUTPUT  ${HTMLOUTDIR}/scalar_manipulations.html 
-                   DEPENDS ${CNBDIR}/scalar_manipulations.cnb ${DC}
+add_custom_command(OUTPUT  ${HTMLOUTDIR}/schwarzschild.html 
+                   DEPENDS ${CNBDIR}/schwarzschild.cnb ${DC}
                    COMMAND cadabra2html 
-                   ARGS    --segment ${CNBDIR}/scalar_manipulations.cnb ${HTMLOUTDIR}/scalar_manipulations.html 
-                   COMMENT "Creating scalar_manipulations.html")
+                   ARGS    --segment ${CNBDIR}/schwarzschild.cnb ${HTMLOUTDIR}/schwarzschild.html 
+                   COMMENT "Creating schwarzschild.html")
+
+add_custom_command(OUTPUT  ${HTMLOUTDIR}/gamma_matrix_algebra.html 
+                   DEPENDS ${CNBDIR}/gamma_matrix_algebra.cnb ${DC}
+                   COMMAND cadabra2html 
+                   ARGS    --segment ${CNBDIR}/gamma_matrix_algebra.cnb ${HTMLOUTDIR}/gamma_matrix_algebra.html 
+                   COMMENT "Creating gamma_matrix_algebra.html")
+
+add_custom_command(OUTPUT  ${HTMLOUTDIR}/poincare_algebra.html 
+                   DEPENDS ${CNBDIR}/poincare_algebra.cnb ${DC}
+                   COMMAND cadabra2html 
+                   ARGS    --segment ${CNBDIR}/poincare_algebra.cnb ${HTMLOUTDIR}/poincare_algebra.html 
+                   COMMENT "Creating poincare_algebra.html")
 
 
 # Manual pages; just add the algorithm or property name to the lists below
@@ -86,5 +98,8 @@ add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting.html
                                            ${HTMLOUTDIR}/beginners.html
                                            ${HTMLOUTDIR}/for_previous_users.html
                                            ${HTMLOUTDIR}/scalar_manipulations.html
+                                           ${HTMLOUTDIR}/schwarzschild.html
+                                           ${HTMLOUTDIR}/gamma_matrix_algebra.html
+                                           ${HTMLOUTDIR}/poincare_algebra.html
                  )
 

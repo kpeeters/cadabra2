@@ -28,7 +28,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 	Ex::sibling_iterator one, two;
 	Ex_comparator compare(kernel.properties);
 
-	std::cerr << "sorting\n" << Ex(st) << std::endl;
+//	std::cerr << "sorting\n" << Ex(st) << std::endl;
 //	std::cout << "entering sort" << std::endl;
 //	tr.print_recursive_treeform(std::cout, st);
 

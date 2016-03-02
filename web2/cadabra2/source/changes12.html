@@ -18,7 +18,7 @@
   version&nbsp;1.x around.
 </p>
 <p>
-  The other changes include:
+  The other user-visible changes include:
 </p>
 <ul>
   <li>Cadabra manipulations can now programmed using Python. The
@@ -44,18 +44,32 @@
   on high-dpi screens, so it the font size in LaTeX output cells
   matches that of the input cells.</li>
 
-  <li>Cadabra now relies solely on libraries which are rather common,
-  and is easier to build as it now uses CMake instead of GNU autotools.
-  </li>
-
   <li>Where version 1.x used to write notebook files in a
   LaTeX-compatible form, the notebook files for 2.x are JSON
   files. This allows for more flexibility, and also enables easier
   conversion to other formats, for instance to show notebooks on the
   web.</li>
-
 </ul>
+
+<p>
+  There are also many changes under the hood:
 </p>
+<ul>
+  <li>All algorithms and all properties now live in their own
+  \verb|.hh/.cc| files, making it easier to find and debug them.
+  </li>
+  
+  <li>Cadabra now relies solely on libraries which are rather common
+  (certainly more common than the old stumbling block \verb|modglue|),
+  and is easier to build as it now uses CMake instead of GNU
+  autotools.
+  </li>
+
+  <li>The user interface code is now cleanly separated into a
+  system-independent base and a very thin layer, making
+  it <em>much</em> easier to write one for e.g.&nbsp;OS&nbsp;X or for
+  a different GUI toolkit like Qt.
+</ul>
 
 
 <h1>Algorithm name changes from version 1 to 2</h1>
@@ -107,6 +121,11 @@
 		<td>@rewrite_diracbar</td>
 		<td>expand_diracbar</td>
 		<td>make meaning more clear</td>
+	 </tr>
+	 <tr>
+		<td>@epsprod2gendelta</td>
+		<td>epsilon_to_delta</td>
+		<td>avoid obscure names</td>
 	 </tr>
   </table>
 </p>

@@ -75,6 +75,7 @@ div#main {
 	 margin-left: 40px;
 	 width: 70%;
 	 float: left;
+	 margin-bottom: 40px;
 }
 div#main > p {
 	 margin-bottom: 20px;
@@ -279,11 +280,11 @@ div.python > div.source {
 div.view_options {
 	 margin-left: 20px;
 	 margin-top: -10px;
-	 margin-bottom: 40px;
+	 margin-bottom: 10px;
 }
 div.view_options span {
 	 display: inline-block;
-	 margin-left: 20px;
+	 margin-left: 40px;
 	 font-style: italic;
 	 min-width: 200px;
 	 width: 200px;
@@ -335,4 +336,22 @@ div#main table {
     left: 14%;
     position: absolute;
     z-index: 99;
+}
+
+div#bottombar {
+	 clear: both;
+	 margin-top: 80px;
+	 padding-top: 5px;
+	 margin-left: 40px;
+	 margin-right: 40px;
+	 border-top: 1px solid #bbb;
+	 font-size: small;
+}
+div#bottomleft {
+	 float:left;
+	 padding-bottom: 10px;
+}
+div#bottomright {
+	 float:right;
+	 padding-bottom: 10px;
 }
