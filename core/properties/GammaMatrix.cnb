@@ -1,0 +1,31 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{GammaMatrix}{A generalised generator of a Clifford algebra.}\n\nA generalised generator of a Clifford algebra. With one vector index,\n  it satisfies\n\\begin{equation}\n\\{ \\Gamma^m, \\Gamma^n \\} = 2\\,\\eta^{mn}\\,.\n\\end{equation}\nThe objects with more vector indices are defined as\n\\begin{equation}\n\\Gamma^{m_1\\ldots m_n} = \\Gamma^{[m_1}\\cdots \\Gamma^{m_n]}\\,,\n\\end{equation}\nwhere the anti-symmetrisation includes a division by~$n!$.\nIf you intend to use the \\algo{join_gamma} algorithm, you have to add a\nkey/value pair \\verb|metric| to set the name of the tensor which acts\nas the unit element in the Clifford algebra.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{GammaMatrix}{A generalised generator of a Clifford algebra.}\n\nA generalised generator of a Clifford algebra. With one vector index,\n  it satisfies\n\\begin{equation}\n\\{ \\Gamma^m, \\Gamma^n \\} = 2\\,\\eta^{mn}\\,.\n\\end{equation}\nThe objects with more vector indices are defined as\n\\begin{equation}\n\\Gamma^{m_1\\ldots m_n} = \\Gamma^{[m_1}\\cdots \\Gamma^{m_n]}\\,,\n\\end{equation}\nwhere the anti-symmetrisation includes a division by~$n!$.\nIf you intend to use the \\algo{join_gamma} algorithm, you have to add a\nkey/value pair \\verb|metric| to set the name of the tensor which acts\nas the unit element in the Clifford algebra.\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
