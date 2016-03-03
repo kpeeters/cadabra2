@@ -1,0 +1,67 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Diagonal}{Declares a tensor to only have non-zero diagonal entries.}\n\nIndicates that the object to which the property is attached only has\nnon-zero components on the diagonal, i.e.~when all indices take the\nsame value. "
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Diagonal}{Declares a tensor to only have non-zero diagonal entries.}\n\nIndicates that the object to which the property is attached only has\nnon-zero components on the diagonal, i.e.~when all indices take the\nsame value. "
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Diagonal to~}{\\delta}_(mn).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta_{1 2} \\delta_{1 2}-\\delta_{1 1} \\delta_{2 2}\\end{dmath*}"
+				}
+			],
+			"source" : "\\delta_{m n}::Diagonal;\nex:= \\delta_{1 2} \\delta_{1 2} - \\delta_{1 1} \\delta_{2 2};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\delta_{1 1} \\delta_{2 2}\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -60,6 +60,17 @@ set(ALGOS
 )
 set(PROPS
   Accent
+  AntiCommuting
+  Commuting
+  CommutingAsProduct
+  CommutingAsSum
+  Coordinate
+  DAntiSymmetric
+  Depends
+  Derivative
+  Diagonal
+  DiracBar
+  GammaMatrix
   Indices
 )
 

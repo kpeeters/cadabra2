@@ -1,3 +1,12 @@
+- spinorsort missing
+  Coordinate man page needs better help
+  Depends does not behave as stated in the manual page (and Depends(\partial) leads to a crash).
+  CommutingAsProduct should be written with comma-separated arguments and the parser should then
+    convert that to individual children.
+  DAntiSymmetric man page requires impose_bianchi.
+
+- CTRL-delete is a bad way to delete a cell (coincides with emacs delete word)
+
 - Manual pages need <title>
 
 - expand_delta does not yet do things as clever as it could.
