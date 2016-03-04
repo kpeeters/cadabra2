@@ -1,0 +1,82 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{SatisfiesBianchi}{Make an object satisfy the generalised Bianchi identity.}\n\nIndicates that an object satisfies a (generalised) Bianchi\nidentity. This is often used to link a derivative operator to a\ncurvature tensor, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{SatisfiesBianchi}{Make an object satisfy the generalised Bianchi identity.}\n\nIndicates that an object satisfies a (generalised) Bianchi\nidentity. This is often used to link a derivative operator to a\ncurvature tensor, as in"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D_{m}(R_{n p q r}) A^{m n p q}\\end{dmath*}"
+				}
+			],
+			"source" : "R_{m n p q}::RiemannTensor.\nD{#}::Derivative.\nD_{m}{ R_{n p q r} }::SatisfiesBianchi.\nA^{m n p q}::AntiSymmetric.\nex:= D_{m}{ R_{n p q r} } A^{m n p q};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-D^{m}(R_{r}\\,^{n p q}) A_{m n p q}\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nNameError: name 'impose_bianchi' is not defined\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "impose_bianchi(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "young_project_tensor(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

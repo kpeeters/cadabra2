@@ -1,0 +1,74 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Integer}{Indicates that an object takes integer values.}\n\nIndicates that the object takes values in the integers. An optional\nrange can be specified,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Integer}{Indicates that an object takes integer values.}\n\nIndicates that the object takes values in the integers. An optional\nrange can be specified,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}p.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}m.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}n.\\end{dmath*}"
+				}
+			],
+			"source" : "p::Integer;\nm::Integer(1..10);\nn::Integer(1..d-p);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This property is often used in combination with the \\prop{Indices}\nproperty to indicate the range of numbers over which indices run.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "This property is often used in combination with the \\prop{Indices}\nproperty to indicate the range of numbers over which indices run.\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

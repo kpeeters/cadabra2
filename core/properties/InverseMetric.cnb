@@ -1,0 +1,76 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{InverseMetric}{Make a two-tensor an inverse metric.}\n\nThis property is the partner of \\prop{Metric}. It makes the\nassociated two-tensor symmetric and also indicates that it can be used\nto raise or lower indices."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{InverseMetric}{Make a two-tensor an inverse metric.}\n\nThis property is the partner of \\prop{Metric}. It makes the\nassociated two-tensor symmetric and also indicates that it can be used\nto raise or lower indices."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}g_{m q} g^{m n} A_{n p}\\end{dmath*}"
+				}
+			],
+			"source" : "g^{m n}::InverseMetric.\ng_{m n}::Metric.\nex:=g_{m q} g^{m n} A_{n p};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nNameError: name 'eliminate_metric' is not defined\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "eliminate_metric(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "For more information, see \\prop{Metric}."
+				}
+			],
+			"source" : "For more information, see \\prop{Metric}."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

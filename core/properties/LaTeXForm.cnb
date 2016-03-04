@@ -1,0 +1,62 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{LaTeXForm}{Changes the way in which symbols are displayed.}\n\nChanges the way in which symbols are displayed in the graphical\ninterface. Example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{LaTeXForm}{Changes the way in which symbols are displayed.}\n\nChanges the way in which symbols are displayed in the graphical\ninterface. Example:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{m}(A)\\end{dmath*}"
+				}
+			],
+			"source" : "\\del{#}::LaTeXForm(\"\\partial\").\nex:=\\del_{m}(A);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This prints $\\partial_{m}(A);$ in the notebook, despite the fact\nthat \\verb|\\del| is not a \\LaTeX{} command.\n\nIf you use this property to make a symbol printable, make sure to\ndeclare it \\emph{before} any other properties are declared, otherwise\nthe notebook will not know how to display the symbol and produce an\nerror message.\n\nNote that the property is attached to a pattern (\\verb|\\del{#}| in\nthis case) which matches the expression in which the replacement has\nto be made. If the pattern matches, the replacement will be done on\nthe head symbol (\\verb|\\del| in this case). A pattern \\verb|\\del|\nwithout the argument wildcard \\verb|#| would only replace\nwhen \\verb|\\del| occurs without any arguments (as in \ne.g.~\\verb|\\del + A|).\n\nThese settings have no effect in the command-line version."
+				}
+			],
+			"hidden" : true,
+			"source" : "This prints $\\partial_{m}(A);$ in the notebook, despite the fact\nthat \\verb|\\del| is not a \\LaTeX{} command.\n\nIf you use this property to make a symbol printable, make sure to\ndeclare it \\emph{before} any other properties are declared, otherwise\nthe notebook will not know how to display the symbol and produce an\nerror message.\n\nNote that the property is attached to a pattern (\\verb|\\del{#}| in\nthis case) which matches the expression in which the replacement has\nto be made. If the pattern matches, the replacement will be done on\nthe head symbol (\\verb|\\del| in this case). A pattern \\verb|\\del|\nwithout the argument wildcard \\verb|#| would only replace\nwhen \\verb|\\del| occurs without any arguments (as in \ne.g.~\\verb|\\del + A|).\n\nThese settings have no effect in the command-line version."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

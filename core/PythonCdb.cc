@@ -540,6 +540,12 @@ void inject_defaults(Kernel *k)
 	inject_property(k, new Distributable(),      make_Ex_from_string("\\indexbracket{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}"), 0);
 
+	// Accents, necessary for proper display.
+	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}"), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\bar{#}"), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\overline{#}"), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\tilde{#}"), 0);
+
 	post_process_enabled=true;
 //	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}"), 0);
 	}

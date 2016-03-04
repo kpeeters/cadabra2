@@ -4,6 +4,16 @@
   CommutingAsProduct should be written with comma-separated arguments and the parser should then
     convert that to individual children.
   DAntiSymmetric man page requires impose_bianchi.
+  Accent should be cleaned up. It is questionable whether one should make a blanket PropertyInherit
+    instead of doing things one-by-one; it is too likely to go wrong somewhere. But what does Accent
+    then do more than IndexInherit? It _IS_ important for typesetting, \hat{A} should not turn
+    to \hat(A). Accent also occurs in PythonCdb.cc 
+  FilledTableau cannot be typeset online.
+  KroneckerDelta does not have an example (and eliminate_kronecker should be eliminate_delta).
+  SatisfiesBianchi example crashes.
+
+
+- check_index_consistency is not called when an Ex is created. Fix IndexInherit.cnb after fixing this.
 
 - CTRL-delete is a bad way to delete a cell (coincides with emacs delete word)
 
@@ -138,8 +148,6 @@
 - Display of component tensors in matrix or nested matrix form.
 
 - substitute needs a flag to determine whether or not components can be matched to abstract indices.
-
-- check_index_consistency is not called when an Ex is created.
 
 - replace_index has changed logic; do a grep to see if this requires changes.
 

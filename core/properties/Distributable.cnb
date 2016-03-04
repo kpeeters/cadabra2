@@ -1,0 +1,67 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Distributable}{Make an operator distributable over its arguments.}\n\n Makes an operator distributable over its arguments, in the sense that when\n  the object has a sum as argument, it can be distributed over the\n  terms with \\algo{distribute}, as in\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Distributable}{Make an operator distributable over its arguments.}\n\n Makes an operator distributable over its arguments, in the sense that when\n  the object has a sum as argument, it can be distributed over the\n  terms with \\algo{distribute}, as in\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Distributable to~}\\overline{\\#}.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\overline{A+B+C D}\\end{dmath*}"
+				}
+			],
+			"source" : "\\overline{#}::Distributable;\nex:= \\overline{A+B+C D};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\overline{A}+\\overline{B}+\\overline{C D}\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -1,0 +1,52 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{SelfNonCommuting}{Make tensor components non-commuting.}\n\nUsed to make objects with indices non-commuting when their index\nvalues are different. See \\prop{SelfAntiCommuting} for more\ninformation."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{SelfNonCommuting}{Make tensor components non-commuting.}\n\nUsed to make objects with indices non-commuting when their index\nvalues are different. See \\prop{SelfAntiCommuting} for more\ninformation."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{n} A_{a} A_{m}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{n} A_{a} A_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "A_{m}::SelfNonCommuting.\nex:= A_{n} A_{a} A_{m};\nsort_product(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

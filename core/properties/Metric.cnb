@@ -1,0 +1,68 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Metric}{Makes a two-tensor a metric.}\n\nLabels the object as a symmetric tensor, and optionally gives it the\nindicated signature through the {\\tt signature} parameter."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Metric}{Makes a two-tensor a metric.}\n\nLabels the object as a symmetric tensor, and optionally gives it the\nindicated signature through the {\\tt signature} parameter."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}g_{m n} A^{n p}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 3, in <module>\nNameError: name 'eliminate_metric' is not defined\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "g_{m n}::Metric(signature=1).\nex:= g_{m n} A^{n p};\neliminate_metric(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Objects declared as \\prop{Metric} can be used to automatically\nraise or lower indices using the\n\\algo{eliminate_metric} algorithm, as above.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "Objects declared as \\prop{Metric} can be used to automatically\nraise or lower indices using the\n\\algo{eliminate_metric} algorithm, as above.\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
