@@ -163,3 +163,11 @@ def test25():
 
 test25()
 
+# def test26():
+#     __cdbkernel__=create_scope()
+# {m,n}::Integer.
+# {m,n}::Symbol.
+# rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
+# ex:= a_{1} a_{0} a_{-1};
+# substitute(ex, rl);
+    
