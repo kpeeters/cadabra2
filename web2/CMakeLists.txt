@@ -70,8 +70,25 @@ set(PROPS
   Derivative
   Diagonal
   DiracBar
+  EpsilonTensor
+  FilledTableau
   GammaMatrix
+  ImplicitIndex
   Indices
+  Integer
+  InverseMetric
+  KroneckerDelta
+  LaTeXForm
+  Metric
+  NonCommuting
+  PartialDerivative
+  RiemannTensor
+  SatisfiesBianchi
+  SelfAntiCommuting
+  SelfCommuting
+  SelfNonCommuting
+  SortOrder
+  Spinor
 )
 
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)

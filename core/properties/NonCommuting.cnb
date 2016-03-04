@@ -1,0 +1,31 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{NonCommuting}{Makes components non-commuting.}\n\nMakes components non-commuting. See \\prop{AntiCommuting} for more\ninformation on commutativity properties."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{NonCommuting}{Makes components non-commuting.}\n\nMakes components non-commuting. See \\prop{AntiCommuting} for more\ninformation on commutativity properties."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -1,0 +1,90 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{ImplicitIndex}{Indicates that an object carries indices which are not written out.}\n\nIndicates that the object carries implicit indices, e.g.~for objects\nrepresenting matrices or vectors. Such objects will not be moved\nthrough each other, i.e.~they are mutually noncommuting."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{ImplicitIndex}{Indicates that an object carries indices which are not written out.}\n\nIndicates that the object carries implicit indices, e.g.~for objects\nrepresenting matrices or vectors. Such objects will not be moved\nthrough each other, i.e.~they are mutually noncommuting."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ImplicitIndex to~}(M, A).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}M A\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}M A\\end{dmath*}"
+				}
+			],
+			"source" : "{M,A}::ImplicitIndex;\nex:=M A;\nsort_product(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Without the \\prop{ImplicitIndex} property, \\algo{sort_product}\nwould have freely moved the objects through each other.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "Without the \\prop{ImplicitIndex} property, \\algo{sort_product}\nwould have freely moved the objects through each other.\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "For more information on how to use matrices and vectors with implicit\nindices, see \\algo{expand}."
+				}
+			],
+			"hidden" : true,
+			"source" : "For more information on how to use matrices and vectors with implicit\nindices, see \\algo{expand}."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

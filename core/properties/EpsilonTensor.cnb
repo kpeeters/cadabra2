@@ -1,0 +1,31 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{EpsilonTensor}{A fully anti-symmetric tensor with constant components.}\n\nA fully anti-symmetric tensor, defined by\n\\begin{equation}\n\\epsilon_{m_1\\ldots m_k} := \\varepsilon_{m_1\\ldots m_k}\\,\\sqrt{|g|}\\,,\n\\end{equation}\nwhere the components of~$\\varepsilon_{m_1\\ldots m_k}$ are 0, $+1$ or $-1$\nand~$\\varepsilon_{01\\cdots k}=1$,\nindependent of the basis, and~$g$ denotes the metric\ndeterminant. \n\nThis property optionally takes a tensor which indicates the symbol\nwhich should be used as a \\prop{KroneckerDelta} symbol when\nwriting out the product of two epsilon tensors. Additionally, it takes\na tensor which is the associated metric, from which the signature can\nbe extracted. See the documentation of \\algo{epsilon_to_delta}\nfor more information on the use of these optional arguments.\n\nWhen the indices are in different positions it is understood that they\nare simply raised with the metric. This in particular implies\n\\begin{equation}\n\\epsilon^{m_1\\ldots m_k} := g^{m_1 n_1} \\cdots g^{m_k n_k} \n\\epsilon_{n_1\\ldots n_k} = \\frac{\\varepsilon^{m_1\\ldots m_k}}{\\sqrt{|g|}}\\,,\n\\end{equation}\nagain with~$\\varepsilon^{m_1\\ldots m_k}$ taking values 0, $+1$ or $-1$\nand $\\varepsilon^{01\\cdots k}=\\pm 1$ depending on the signature of the\nmetric."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{EpsilonTensor}{A fully anti-symmetric tensor with constant components.}\n\nA fully anti-symmetric tensor, defined by\n\\begin{equation}\n\\epsilon_{m_1\\ldots m_k} := \\varepsilon_{m_1\\ldots m_k}\\,\\sqrt{|g|}\\,,\n\\end{equation}\nwhere the components of~$\\varepsilon_{m_1\\ldots m_k}$ are 0, $+1$ or $-1$\nand~$\\varepsilon_{01\\cdots k}=1$,\nindependent of the basis, and~$g$ denotes the metric\ndeterminant. \n\nThis property optionally takes a tensor which indicates the symbol\nwhich should be used as a \\prop{KroneckerDelta} symbol when\nwriting out the product of two epsilon tensors. Additionally, it takes\na tensor which is the associated metric, from which the signature can\nbe extracted. See the documentation of \\algo{epsilon_to_delta}\nfor more information on the use of these optional arguments.\n\nWhen the indices are in different positions it is understood that they\nare simply raised with the metric. This in particular implies\n\\begin{equation}\n\\epsilon^{m_1\\ldots m_k} := g^{m_1 n_1} \\cdots g^{m_k n_k} \n\\epsilon_{n_1\\ldots n_k} = \\frac{\\varepsilon^{m_1\\ldots m_k}}{\\sqrt{|g|}}\\,,\n\\end{equation}\nagain with~$\\varepsilon^{m_1\\ldots m_k}$ taking values 0, $+1$ or $-1$\nand $\\varepsilon^{01\\cdots k}=\\pm 1$ depending on the signature of the\nmetric."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
