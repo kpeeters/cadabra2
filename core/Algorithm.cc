@@ -1157,8 +1157,9 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					const Symbol     *smb=Symbol::get(kernel.properties, sit, true);
 					// integer, coordinate or symbol indices always ok
 					if(sit->is_integer() || cdn || smb) {
-						if(sit->is_integer()==false) // do not store integers as indices, ever.
-							item_free.insert(index_map_t::value_type(Ex(sit), iterator(sit)));
+						// Note: even integers need to be stored as indices, because we expect e.g. canonicalise
+						// to re-order even numerical indices. They should just never be flagged as dummies.
+						item_free.insert(index_map_t::value_type(Ex(sit), iterator(sit)));
 						}
 					else {
 						index_map_t::iterator fnd=item_free.find(Ex(sit));
