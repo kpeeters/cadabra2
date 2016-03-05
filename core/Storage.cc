@@ -104,6 +104,13 @@ void Ex::reset_state()
 std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it) 
 	{
 	unsigned int num=1;
+	switch((*it).fl.parent_rel) {
+		case str_node::p_super: str << "^"; break;
+		case str_node::p_sub:   str << "_"; break;
+		case str_node::p_property: str << "$"; break;
+		case str_node::p_exponent: str << "&"; break;
+		default: break;
+		}
 	return print_recursive_treeform(str, it, num);
 	}
 

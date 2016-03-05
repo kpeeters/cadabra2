@@ -6,42 +6,18 @@ set(ALGODIR    ${CMAKE_SOURCE_DIR}/core/algorithms)
 set(PROPDIR    ${CMAKE_SOURCE_DIR}/core/properties)
 set(DC         ${CMAKE_SOURCE_DIR}/client_server/DataCell.hh ${CMAKE_SOURCE_DIR}/client_server/DataCell.cc)
 
-add_custom_command(OUTPUT  ${HTMLOUTDIR}/beginners.html 
-                   DEPENDS ${CNBDIR}/beginners.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${CNBDIR}/beginners.cnb ${HTMLOUTDIR}/beginners.html 
-                   COMMENT "Creating beginners.html")
 
-add_custom_command(OUTPUT  ${HTMLOUTDIR}/plotting.html 
-                   DEPENDS ${CNBDIR}/plotting.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${CNBDIR}/plotting.cnb ${HTMLOUTDIR}/plotting.html 
-                   COMMENT "Creating plotting.html")
+# Sample/tutorial notebooks.
 
-add_custom_command(OUTPUT  ${HTMLOUTDIR}/for_previous_users.html 
-                   DEPENDS ${CNBDIR}/for_previous_users.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${CNBDIR}/for_previous_users.cnb ${HTMLOUTDIR}/for_previous_users.html 
-                   COMMENT "Creating for_previous_users.html")
-
-add_custom_command(OUTPUT  ${HTMLOUTDIR}/schwarzschild.html 
-                   DEPENDS ${CNBDIR}/schwarzschild.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${CNBDIR}/schwarzschild.cnb ${HTMLOUTDIR}/schwarzschild.html 
-                   COMMENT "Creating schwarzschild.html")
-
-add_custom_command(OUTPUT  ${HTMLOUTDIR}/gamma_matrix_algebra.html 
-                   DEPENDS ${CNBDIR}/gamma_matrix_algebra.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${CNBDIR}/gamma_matrix_algebra.cnb ${HTMLOUTDIR}/gamma_matrix_algebra.html 
-                   COMMENT "Creating gamma_matrix_algebra.html")
-
-add_custom_command(OUTPUT  ${HTMLOUTDIR}/poincare_algebra.html 
-                   DEPENDS ${CNBDIR}/poincare_algebra.cnb ${DC}
-                   COMMAND cadabra2html 
-                   ARGS    --segment ${CNBDIR}/poincare_algebra.cnb ${HTMLOUTDIR}/poincare_algebra.html 
-                   COMMENT "Creating poincare_algebra.html")
-
+set(TUTORIALS
+  beginners
+  plotting
+  for_previous_users
+  schwarzschild
+  gamma_matrix_algebra
+  poincare_algebra
+  string_states
+)
 
 # Manual pages; just add the algorithm or property name to the lists below
 # and the rest will be taken care of automatically.
@@ -121,13 +97,18 @@ foreach(PROP ${PROPS})
    add_custom_target("${PROP} manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PROP}.html)
 endforeach()
 
-
-add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting.html
-                                           ${HTMLOUTDIR}/beginners.html
-                                           ${HTMLOUTDIR}/for_previous_users.html
-                                           ${HTMLOUTDIR}/scalar_manipulations.html
-                                           ${HTMLOUTDIR}/schwarzschild.html
-                                           ${HTMLOUTDIR}/gamma_matrix_algebra.html
-                                           ${HTMLOUTDIR}/poincare_algebra.html
-                 )
+foreach(TUT ${TUTORIALS})
+  add_custom_command(OUTPUT  ${HTMLOUTDIR}/${TUT}.html
+                     DEPENDS ${CNBDIR}/${TUT}.cnb ${DC}
+                     COMMAND cadabra2html 
+                     ARGS    --segment ${CNBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.html 
+                     COMMENT "Creating ${TUT}.html")
+  add_custom_target("${TUT} html" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html)		
+  add_custom_command(OUTPUT  ${HTMLOUTDIR}/${TUT}.cnb
+                     DEPENDS ${CNBDIR}/${TUT}.cnb 
+                     COMMAND cp
+                     ARGS    ${CNBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.cnb
+                     COMMENT "Creating ${TUT}.cnb")
+  add_custom_target("${TUT} cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )		
+endforeach()
 

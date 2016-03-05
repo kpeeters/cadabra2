@@ -12,6 +12,9 @@
   KroneckerDelta does not have an example (and eliminate_kronecker should be eliminate_delta).
   SatisfiesBianchi example crashes.
 
+  Indices: add 'Indices are symbols attached to other symbols by a
+  sub- or superscript relation. They can carry a numerical coefficient
+  as well, so $A_{-n}$ contains an index '$-n$'. 
 
 - check_index_consistency is not called when an Ex is created. Fix IndexInherit.cnb after fixing this.
 
