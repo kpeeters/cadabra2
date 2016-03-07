@@ -215,6 +215,12 @@ class Ex : public tree<str_node> {
 		
 		bool operator==(const Ex& other) const;
 
+		/// Push a copy of the current state of the expression onto the history stack.
+		void push_history();
+
+		/// Pop the most recent state of the expression off the history stack.
+		void pop_history();
+
 	private:
 		result_t state_;
 
