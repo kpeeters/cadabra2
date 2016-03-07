@@ -654,6 +654,21 @@ bool Ex::operator==(const Ex& other) const
 	return equal_subtree(begin(), other.begin());
 	}
 
+void Ex::push_history(Ex selector)
+	{
+	history.push_back(*this);
+	selectors.push_back(selector);
+	}
+
+Ex Ex::pop_history()
+	{
+	tree<str_node>::operator=(history.back());
+	history.pop_back();
+	Ex ret(selectors.back().begin());
+	selectors.pop_back();
+	return ret;
+	}
+
 str_node::str_node(void)
 	{
 	multiplier=rat_set.insert(1).first;
