@@ -77,7 +77,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
 				if(dep!=0) {
 //					txtout << *factor->name << " depends" << std::endl;
-					Ex deps=dep->dependencies(factor /* it */);
+					Ex deps=dep->dependencies(kernel, factor /* it */);
 					sibling_iterator depobjs=deps.begin(deps.begin());
 					while(depobjs!=deps.end(deps.begin())) {
 //						std::cout << "?" << *it->name << " == " << *depobjs->name << std::endl;

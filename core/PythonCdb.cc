@@ -53,6 +53,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/Commuting.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Depends.hh"
+#include "properties/DependsInherit.hh"
 #include "properties/Derivative.hh"
 #include "properties/DiracBar.hh"
 #include "properties/GammaMatrix.hh"
@@ -150,7 +151,7 @@ std::string Ex_str_(const Ex& ex)
 // //		str << "(unchanged)" << std::endl;
 // 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
-	DisplayTerminal dt(get_kernel_from_scope()->properties, ex);
+	DisplayTerminal dt(*get_kernel_from_scope(), ex);
 	dt.output(str);
 
 	return str.str();
@@ -159,7 +160,7 @@ std::string Ex_str_(const Ex& ex)
 std::string Ex_latex_(const Ex& ex) 
 	{
  	std::ostringstream str;
-	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+	DisplayTeX dt(*get_kernel_from_scope(), ex);
 	dt.output(str);
 	return str.str();
 	}
@@ -186,7 +187,7 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	auto module = boost::python::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
 	std::ostringstream str;
-	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
+	DisplaySympy dt(*get_kernel_from_scope(), ex);
 	dt.output(str);
 
 	boost::python::object ret=parse(str.str());
@@ -386,7 +387,7 @@ boost::python::list list_properties()
 			}
 
 
-		DisplayTeX dt(get_kernel_from_scope()->properties, it->second->obj);
+		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
 		std::ostringstream str;
 		dt.output(str);
 		res += str.str();
@@ -525,7 +526,7 @@ void inject_defaults(Kernel *k)
 	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
-//	inject_property(k, new DependsInherit(), make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\prod{#}"), 0);
 
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
@@ -539,6 +540,8 @@ void inject_defaults(Kernel *k)
 
 	inject_property(k, new Distributable(),      make_Ex_from_string("\\indexbracket{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}"), 0);
+
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}"), 0);
 
 	// Accents, necessary for proper display.
 	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}"), 0);

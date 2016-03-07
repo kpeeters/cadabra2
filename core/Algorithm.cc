@@ -1338,7 +1338,8 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 	// with which we do not commute.
 
 	struct {
-	  bool operator()(const Properties& pr, Ex& tr, iterator walk, iterator lca, iterator check_dependence) {
+	  bool operator()(const Kernel& kernel, Ex& tr, iterator walk, iterator lca, iterator check_dependence) {
+	      const Properties& pr=kernel.properties;
 		   do {
 				walk=Ex::parent(walk);
 				if(walk == lca) break;
@@ -1347,7 +1348,7 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 					if(tr.is_valid(check_dependence) ) {
 						const DependsBase *dep = pr.get_composite<DependsBase>(check_dependence);
 						if(dep) {
-							Ex deps=dep->dependencies(check_dependence);
+							Ex deps=dep->dependencies(kernel, check_dependence);
 							sibling_iterator depobjs=deps.begin(deps.begin());
 							while(depobjs!=deps.end(deps.begin())) {
 								if(walk->name == depobjs->name) {
@@ -1377,8 +1378,8 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 		   }
 	} one_run;
 	
-	if(one_run(kernel.properties, tr, i1, lca, check_dependence)) return true;
-	if(one_run(kernel.properties, tr, i2, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i1, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i2, lca, check_dependence)) return true;
 
 	return false;
 	}

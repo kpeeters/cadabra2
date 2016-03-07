@@ -21,7 +21,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	if(head.size()>0)
 		str << head << "(";
 
-	DisplaySympy ds(kernel.properties, ex);
+	DisplaySympy ds(kernel, ex);
 	ds.output(str, it);
 
 	if(head.size()>0)
