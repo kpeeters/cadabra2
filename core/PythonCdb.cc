@@ -114,6 +114,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/sym.hh"
+#include "algorithms/take_match.hh"
 #include "algorithms/unwrap.hh"
 #include "algorithms/vary.hh"
 #include "algorithms/young_project.hh"
@@ -982,6 +983,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("substitute", &dispatch_ex<substitute, Ex&>, 
+		 (arg("ex"),
+		  arg("rules"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("take_match", &dispatch_ex<take_match, Ex&>, 
 		 (arg("ex"),
 		  arg("rules"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
