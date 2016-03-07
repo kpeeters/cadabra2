@@ -217,6 +217,8 @@ class Ex : public tree<str_node> {
 
 	private:
 		result_t state_;
+
+		std::vector<tree<str_node> > history;
 };
 
 
