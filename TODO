@@ -1,3 +1,6 @@
+- replace_match and take_match are still rough around the edges; need to be forced to work only
+  at top level, or we need to store the replacement points more cleverly, or...
+
 - spinorsort missing
   Coordinate man page needs better help
   Depends does not behave as stated in the manual page (and Depends(\partial) leads to a crash).

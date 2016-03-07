@@ -1,11 +1,11 @@
 
+#include "Cleanup.hh"
 #include "algorithms/replace_match.hh"
+#include "algorithms/substitute.hh"
 
-replace_match::replace_match(exptree& tr, iterator it)
-	: algorithm(tr, it)
+replace_match::replace_match(const Kernel& k, Ex& e)
+	: Algorithm(k, e)
 	{
-	if(*args_begin()->name!="\\arrow") 
-		throw constructor_error();
 	}
 
 bool replace_match::can_apply(iterator it) 
@@ -14,33 +14,41 @@ bool replace_match::can_apply(iterator it)
 	return false;
 	}
 
-algorithm::result_t replace_match::apply(iterator& it)
+Algorithm::result_t replace_match::apply(iterator& it)
 	{
-	substitute subs(tr, this_command);
+	Ex current(tr);
+	Ex rules=tr.pop_history();
 
-	sibling_iterator sib=tr.begin(it);
-//	int i=0;
+//	std::cerr << "rules: " << rules << std::endl;
+//	std::cerr << "current: " << current << std::endl;
+//	std::cerr << "old: " << tr << std::endl;
+//
+	it=tr.begin();
+	substitute subs(kernel, tr, rules);
+
+	auto sumnode=tr.begin(it);
+	sibling_iterator sib=tr.begin(sumnode);
 	bool replaced=false;
-	while(sib!=tr.end(it)) {
+	while(sib!=tr.end(sumnode)) {
 		if(subs.can_apply(sib)) {
+			// std::cerr << "applying" << std::endl;
 			sib=tr.erase(sib);
 			if(!replaced) {
 				replaced=true;
-				iterator lhs=tr.begin(args_begin());
-				iterator rhs=lhs;
-				rhs.skip_children();
-				++rhs;
-				
-				tr.insert_subtree(sib, rhs);
-				expression_modified=true;
+				iterator ci = tr.insert_subtree(sib, current.begin(current.begin()));
+				cleanup_dispatch(kernel, tr, ci);
 				}
 			}
 		else ++sib;
 		}
-	if(expression_modified)
-		cleanup_sums_products(tr, it);
 
-	if(expression_modified) return l_applied;
-	else return l_no_action;
+	// std::cerr << tr << std::endl;
+
+	cleanup_dispatch_deep(kernel, tr);
+	it=tr.begin();
+	
+//	std::cerr << tr << std::endl;
+
+	return result_t::l_applied;
 	}
 

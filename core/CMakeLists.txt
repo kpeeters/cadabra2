@@ -146,6 +146,7 @@ set(LOCAL_SRC_FILES
   algorithms/sym.cc
   algorithms/tab_basics.cc
   algorithms/take_match.cc
+  algorithms/replace_match.cc
   algorithms/unwrap.cc
   algorithms/vary.cc
   algorithms/young_project.cc
