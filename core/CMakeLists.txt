@@ -80,6 +80,7 @@ set(LOCAL_SRC_FILES
   properties/Coordinate.cc
   properties/DAntiSymmetric.cc
   properties/Depends.cc
+  properties/DependsInherit.cc
   properties/Derivative.cc
   properties/Diagonal.cc
   properties/DiracBar.cc

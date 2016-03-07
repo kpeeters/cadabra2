@@ -15,7 +15,7 @@
 
 class DisplayBase {
 	public:
-		DisplayBase(const Properties&, const Ex&);
+		DisplayBase(const Kernel&, const Ex&);
 
 		void output(std::ostream&);
 		void output(std::ostream&, Ex::iterator);
@@ -31,7 +31,7 @@ class DisplayBase {
 
 		virtual bool needs_brackets(Ex::iterator it)=0;
 
-		const Ex&    tree;
-		const Properties& properties;
+		const Ex&     tree;
+		const Kernel& kernel;
 
 };

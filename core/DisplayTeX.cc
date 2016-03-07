@@ -9,8 +9,8 @@
 #define zwnbsp ""
 //(( parent.utf8_output?(unichar(0xfeff)):""))
 
-DisplayTeX::DisplayTeX(const Properties& p, const Ex& e)
-	: DisplayBase(p, e)
+DisplayTeX::DisplayTeX(const Kernel& k, const Ex& e)
+	: DisplayBase(k, e)
 	{
 	}
 
@@ -54,9 +54,9 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		return;
 		}
 	
-	const LaTeXForm *lf=properties.get<LaTeXForm>(it);
+	const LaTeXForm *lf=kernel.properties.get<LaTeXForm>(it);
 	bool needs_extra_brackets=false;
-	const Accent *ac=properties.get<Accent>(it);
+	const Accent *ac=kernel.properties.get<Accent>(it);
 	if(!ac && extra_brackets_for_symbols) { // accents should never get additional curly brackets, {\bar}{g} does not print.
 		Ex::sibling_iterator sib=tree.begin(it);
 		while(sib!=tree.end(it)) {
@@ -113,7 +113,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 	while(ch!=tree.end(it)) {
 		str_node::bracket_t    current_bracket_   =(*ch).fl.bracket;
 		str_node::parent_rel_t current_parent_rel_=(*ch).fl.parent_rel;
-		const Accent *is_accent=properties.get<Accent>(it);
+		const Accent *is_accent=kernel.properties.get<Accent>(it);
 		
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
