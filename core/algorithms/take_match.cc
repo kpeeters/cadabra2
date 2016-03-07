@@ -17,11 +17,11 @@ bool take_match::can_apply(iterator it)
 Algorithm::result_t take_match::apply(iterator& it)
 	{
 	// Push a copy of the expression onto the history stack.
-	tree.
 
 	auto wrap = rules.wrap(rules.begin(rules.begin()), str_node("\\arrow"));
 	rules.append_child(wrap, str_node("dummy"));
-	std::cerr << rules << std::endl;
+
+	tr.push_history(rules);
 
 	substitute subs(kernel, tr, rules);
 

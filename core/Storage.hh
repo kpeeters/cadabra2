@@ -127,6 +127,7 @@ void     half(rset_t::iterator&);
 class Ex : public tree<str_node> {
 	public:
 		Ex();
+//		Ex(const tree<str_node>&);
 		Ex(tree<str_node>::iterator);
 		Ex(const str_node&);
 		Ex(const Ex&);
@@ -216,15 +217,17 @@ class Ex : public tree<str_node> {
 		bool operator==(const Ex& other) const;
 
 		/// Push a copy of the current state of the expression onto the history stack.
-		void push_history();
+		void push_history(Ex selector);
 
-		/// Pop the most recent state of the expression off the history stack.
-		void pop_history();
+		/// Pop the most recent state of the expression off the history stack; returns
+		/// the selector that got us there.
+		Ex   pop_history();
 
 	private:
 		result_t state_;
 
 		std::vector<tree<str_node> > history;
+		std::vector<tree<str_node> > selectors; // patterns which describe how to get from one history step to the next
 };
 
 

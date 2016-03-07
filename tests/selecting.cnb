@@ -1,4 +1,0 @@
-ex:=A + B D G + C D A;
-take_match(_, $D Q??$);
-substitute(_, $A = Q$);
-replace_match(_);
