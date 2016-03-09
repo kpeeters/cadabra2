@@ -25,20 +25,15 @@ NotebookWindow::NotebookWindow()
 #ifdef __APPLE__
 	scale = 1.0;
 #else
-	settings_gnome    = Gio::Settings::create("org.gnome.desktop.interface");
-	settings_cinnamon = Gio::Settings::create("org.cinnamon.desktop.interface");
-	double scale_gnome    = settings_gnome->get_double("text-scaling-factor");
-	double scale_cinnamon = settings_cinnamon->get_double("text-scaling-factor");
-	scale = std::max(scale_gnome, scale_cinnamon);
+	settings = Gio::Settings::create((strcmp(std::getenv("DESKTOP_SESSION"), "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
+	scale = settings->get_double("text-scaling-factor");
 #endif
 	engine.latex_packages.push_back("breqn");
 	engine.latex_packages.push_back("hyperref");
 	engine.set_scale(scale);
 
 #ifndef __APPLE__
-	settings_gnome->signal_changed().connect(
-		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
-	settings_cinnamon->signal_changed().connect(
+	settings->signal_changed().connect(
 		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
 #endif
 
@@ -1178,9 +1173,7 @@ void NotebookWindow::on_help_about()
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{
 	if(key=="text-scaling-factor") {
-		double scale_gnome    = settings_gnome->get_double("text-scaling-factor");
-		double scale_cinnamon = settings_cinnamon->get_double("text-scaling-factor");
-		scale = std::max(scale_gnome, scale_cinnamon);
+		scale = settings->get_double("text-scaling-factor");
 		std::cout << "cadabra-client: text-scaling-factor = " << scale << std::endl;
 		engine.set_scale(scale);
 		engine.invalidate_all();
