@@ -96,7 +96,7 @@ namespace cadabra {
 
 			// WebSocket++ things.
 			WSClient wsclient;
-			bool     connection_is_open;
+			bool     connection_is_open, restarting_kernel;
 			WSClient::connection_ptr    connection;
 			websocketpp::connection_hdl our_connection_hdl;
 			void init();

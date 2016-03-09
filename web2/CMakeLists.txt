@@ -57,6 +57,7 @@ set(ALGOS
   expand_diracbar
   factor_in
   join_gamma
+  young_project_tensor
 )
 set(PROPS
   Accent
@@ -129,5 +130,6 @@ add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting.html
                                            ${HTMLOUTDIR}/schwarzschild.html
                                            ${HTMLOUTDIR}/gamma_matrix_algebra.html
                                            ${HTMLOUTDIR}/poincare_algebra.html
+                                           ${HTMLOUTDIR}/tensor_monomials.html
                  )
 
