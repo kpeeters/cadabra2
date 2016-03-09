@@ -1,0 +1,169 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{young_project_tensor}{Project tensors with their Young projector.}\n\nProject tensors with their Young projection operator. This works for\nsimple symmetric or anti-symmetric objects, as in\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{young_project_tensor}{Project tensors with their Young projector.}\n\nProject tensors with their Young projection operator. This works for\nsimple symmetric or anti-symmetric objects, as in\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n} A_{m p}\\end{dmath*}"
+				}
+			],
+			"source" : "A_{m n}::Symmetric.\nex:= A_{m n} A_{m p};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(\\frac{1}{2}A_{m n}+\\frac{1}{2}A_{n m}\\right) \\left(\\frac{1}{2}A_{m p}+\\frac{1}{2}A_{p m}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "young_project_tensor(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "but more generically works for any tensor which has\na \\prop{TableauSymmetry} property attached to it. "
+				}
+			],
+			"hidden" : true,
+			"source" : "but more generically works for any tensor which has\na \\prop{TableauSymmetry} property attached to it. "
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n p}\\end{dmath*}"
+				}
+			],
+			"source" : "A_{m n p}::TableauSymmetry(shape={2,1}, indices={0,2,1}).\nex:= A_{m n p};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{3}A_{m n p}+\\frac{1}{3}A_{p n m} - \\frac{1}{3}A_{n m p} - \\frac{1}{3}A_{p m n}\\end{dmath*}"
+				}
+			],
+			"source" : "young_project_tensor(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "When the parameters \\verb|modulo_monoterm| is set to \\verb|True|, the resulting\nexpression will be simplified using the monoterm symmetries of the\ntensor,"
+				}
+			],
+			"hidden" : true,
+			"source" : "When the parameters \\verb|modulo_monoterm| is set to \\verb|True|, the resulting\nexpression will be simplified using the monoterm symmetries of the\ntensor,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n p}\\end{dmath*}"
+				}
+			],
+			"source" : "A_{m n p}::TableauSymmetry(shape={2,1}, indices={0,2,1}).\nex:= A_{m n p};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{2}{3}A_{m n p} - \\frac{1}{3}A_{n p m}+\\frac{1}{3}A_{m p n}\\end{dmath*}"
+				}
+			],
+			"source" : "young_project_tensor(_, modulo_monoterm=True);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "(in this example, the tensor is anti-symmetric in the indices~0 and 1,\nhence the simplification compared to the previous example)."
+				}
+			],
+			"hidden" : true,
+			"source" : "(in this example, the tensor is anti-symmetric in the indices~0 and 1,\nhence the simplification compared to the previous example)."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
