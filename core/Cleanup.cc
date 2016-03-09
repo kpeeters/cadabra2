@@ -20,6 +20,9 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 
 	const PartialDerivative *der = kernel.properties.get<PartialDerivative>(it);
 	if(der) cleanup_derivative(kernel, tr, it);
+
+	const NumericalFlat *nf = kernel.properties.get<NumericalFlat>(it);
+	if(nf)  cleanup_numericalflat(kernel, tr, it);
 	}
 
 void cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
@@ -41,25 +44,7 @@ void cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 		if(tr.begin(it)->is_range_wildcard())
 			return;
 
-	// Collect all multipliers and remove resulting '1' nodes.
-	auto facs=tr.begin(it);
-	multiplier_t factor=1;
-	while(facs!=tr.end(it)) {
-		factor*=*facs->multiplier;
-		if(facs->is_rational()) {
-			multiplier_t tmp; // FIXME: there is a bug in gmp which means we have to put init on next line.
-			tmp=(*facs->name).c_str();
-			factor*=tmp;
-		   facs=tr.erase(facs);
-			if(facs==tr.end())
-				facs=tr.end(it);
-			}
-		else {
-			one(facs->multiplier);
-			++facs;
-			}
-		}
-	multiply(it->multiplier,factor);
+	cleanup_numericalflat(k, tr, it);
 
 	// Handle edge cases where the product should collapse to a single node,
 	// e.g. when we have just a single factor, or when the product vanishes.
@@ -247,6 +232,31 @@ void cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 			}
 		}
 	}
+
+void cleanup_numericalflat(const Kernel& k, Ex& tr, Ex::iterator& it)
+	{
+	// Collect all multipliers and remove resulting '1' nodes.
+	auto facs=tr.begin(it);
+	multiplier_t factor=1;
+	while(facs!=tr.end(it)) {
+		factor*=*facs->multiplier;
+		if(facs->is_rational()) {
+			multiplier_t tmp; // FIXME: there is a bug in gmp which means we have to put init on next line.
+			tmp=(*facs->name).c_str();
+			factor*=tmp;
+		   facs=tr.erase(facs);
+			if(facs==tr.end())
+				facs=tr.end(it);
+			}
+		else {
+			one(facs->multiplier);
+			++facs;
+			}
+		}
+	multiply(it->multiplier,factor);
+
+	}
+
 
 void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	{
