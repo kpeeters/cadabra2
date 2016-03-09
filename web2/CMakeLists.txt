@@ -130,6 +130,5 @@ add_custom_target(html ALL echo -n DEPENDS ${HTMLOUTDIR}/plotting.html
                                            ${HTMLOUTDIR}/schwarzschild.html
                                            ${HTMLOUTDIR}/gamma_matrix_algebra.html
                                            ${HTMLOUTDIR}/poincare_algebra.html
-                                           ${HTMLOUTDIR}/tensor_monomials.html
                  )
 
