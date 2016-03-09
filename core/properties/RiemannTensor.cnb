@@ -1,0 +1,58 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{RiemannTensor}{Make an object a Riemann curvature tensor.}\n\nGives an object the symmetry properties of a Riemann tensor. This has implications for various\nsimplification algorithms such as \\algo{canonicalise} or \\algo{impose_bianchi}."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{RiemannTensor}{Make an object a Riemann curvature tensor.}\n\nGives an object the symmetry properties of a Riemann tensor. This has implications for various\nsimplification algorithms such as \\algo{canonicalise} or \\algo{impose_bianchi}."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property 02  825\n13 (1)\n\n to~}{R}_(mnpq).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A^{m n p} R_{m n p q}\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 4, in <module>\nNameError: name 'impose_bianchi' is not defined\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "R_{m n p q}::RiemannTensor;\nA^{m n p}::AntiSymmetric;\nex:= A^{m n p} R_{m n p q};\nimpose_bianchi(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -103,26 +103,17 @@ Algorithm::result_t distribute::apply(iterator& prod)
 
 // FIXME: why does this faster move lead to a crash in linear.cdb?
 	iterator ret=tr.move_ontop(prod, (iterator)top);
-//	assert(rep.begin()==rep.end());
 
-//	iterator ret=tr.replace(prod, top);
-//	txtout << "calling cleanup on " << *ret->name << " " << *tr.begin(ret)->name << std::endl;
-
-///	flatten_product pf(kernel, tr);
-///	pf.make_consistent_only=true;
-///	pf.apply_generic(ret, true, false, 0);
-///	prodcollectnum pc(kernel, tr);
-///	pc.apply_generic(ret, true, false, 0);
-//	cleanup_sums_products(tr, ret);
-//	txtout << "..." << *ret->name << std::endl;
-
-
+	// std::cerr << "cleaning up at " << Ex(ret) << std::endl;
+	auto sib=tr.begin(ret);
+	while(sib!=tr.end(ret)) {
+		iterator ii=sib;
+		++sib;
+		cleanup_dispatch(kernel, tr, ii);
+		}
 	cleanup_dispatch(kernel, tr, ret);
+	// std::cerr << "cleaned up at " << Ex(ret) << std::endl;
 
-//	cleanup_nests_below(tr, ret, false); // CHANGED  true to false in last argument
-//	cleanup_nests(tr, ret, false); // CHANGED true to false in last argument
-
-//	tr.print_entire_tree(std::cerr);
 
 	// FIXME: if we had a flattened sum, does the apply_recursive now
 	// go and examine every sum that we have created? Should we better

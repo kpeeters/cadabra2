@@ -6,9 +6,19 @@
 
 {% block main %}
 
-<h1>New in version 2</h1>
+<h1>New in version 2.x</h1>
 <p>
-  Many things changed/improved in version 2 with respect to version 1:
+  Many things changed/improved in version&nbsp;2.x with respect to
+  version&nbsp;1.x. The key change is probably that old&nbsp;1.x
+  notebooks are <em>not</em> compatible with the&nbsp;2.x
+  software. This was done intentionally in order to give maximal
+  flexibility to improve the system. It is conceivable that at some
+  point an automatic converter will be written, but for the time being
+  you will either need to convert the notebook by hand or keep
+  version&nbsp;1.x around.
+</p>
+<p>
+  The other user-visible changes include:
 </p>
 <ul>
   <li>Cadabra manipulations can now programmed using Python. The
@@ -23,7 +33,7 @@
 
   <li>Various simplification algorithms are now part of the set of
   default rules to apply at every manipulation stage (collecting equal
-  temrs, for instance). This makes a lot of manipulations look shorter
+  terms, for instance). This makes a lot of manipulations look shorter
   and more natural.</li>
   
   <li>The notebook interface now also has facilities for displaying
@@ -34,14 +44,32 @@
   on high-dpi screens, so it the font size in LaTeX output cells
   matches that of the input cells.</li>
 
-  <li>Cadabra now relies solely on libraries which are rather common,
-  and is easier to build as it now uses CMake instead of GNU autotools.
+  <li>Where version 1.x used to write notebook files in a
+  LaTeX-compatible form, the notebook files for 2.x are JSON
+  files. This allows for more flexibility, and also enables easier
+  conversion to other formats, for instance to show notebooks on the
+  web.</li>
+</ul>
+
+<p>
+  There are also many changes under the hood:
+</p>
+<ul>
+  <li>All algorithms and all properties now live in their own
+  \verb|.hh/.cc| files, making it easier to find and debug them.
+  </li>
+  
+  <li>Cadabra now relies solely on libraries which are rather common
+  (certainly more common than the old stumbling block \verb|modglue|),
+  and is easier to build as it now uses CMake instead of GNU
+  autotools.
   </li>
 
+  <li>The user interface code is now cleanly separated into a
+  system-independent base and a very thin layer, making
+  it <em>much</em> easier to write one for e.g.&nbsp;OS&nbsp;X or for
+  a different GUI toolkit like Qt.
 </ul>
-	 
-  </dl>
-</p>
 
 
 <h1>Algorithm name changes from version 1 to 2</h1>
@@ -53,12 +81,16 @@
   do. You can use an underscore to refer to the last entered
   expression, so you can write <code>collect_factors(_)</code> where
   you would previously write <code>@collect_factors(%)</code>.
+</p>
 
+<p>
   Where you would previously use an exclamation mark to act at any
   level, you now add the <code>deep=True</code> argument to a
   function. This is the default for many algorithms where that makes
   sense, so you often do not have to add it at all. 
+</p>
 
+<p>
   A number of algorithms (and a few properties) have changed name or
   behaviour while going from version 1 to version 2. This was done
   mostly to make naming more consistent and to avoid weird acronyms in
@@ -89,6 +121,11 @@
 		<td>@rewrite_diracbar</td>
 		<td>expand_diracbar</td>
 		<td>make meaning more clear</td>
+	 </tr>
+	 <tr>
+		<td>@epsprod2gendelta</td>
+		<td>epsilon_to_delta</td>
+		<td>avoid obscure names</td>
 	 </tr>
   </table>
 </p>

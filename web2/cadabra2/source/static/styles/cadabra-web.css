@@ -75,6 +75,7 @@ div#main {
 	 margin-left: 40px;
 	 width: 70%;
 	 float: left;
+	 margin-bottom: 40px;
 }
 div#main > p {
 	 margin-bottom: 20px;
@@ -99,6 +100,11 @@ div#main h1 {
 	 border-bottom: 1px solid #bbb;
 	 margin-bottom: 20px;
 }
+div.summary {
+	 font-style: italic;
+	 margin-bottom: 20px;
+	 margin-top: 0px;
+}
 div#main h2 {
 	 margin-top: 24px;
 	 font-family: "Bree Serif";
@@ -106,6 +112,14 @@ div#main h2 {
 	 color: green;
 	 font-size: 20px;
 	 border-bottom: 1px solid #bbb; 
+}
+div#main h3 {
+	 margin-top: 24px;
+	 margin-left: 40px;
+	 font-family: "Bree Serif";
+	 font-weight: normal;
+	 color: green;
+	 font-size: 16px;
 }
 div#main h1 span.date {
 	 margin-top: 10px;
@@ -266,7 +280,14 @@ div.python > div.source {
 div.view_options {
 	 margin-left: 20px;
 	 margin-top: -10px;
-	 margin-bottom: 40px;
+	 margin-bottom: 10px;
+}
+div.view_options span {
+	 display: inline-block;
+	 margin-left: 40px;
+	 font-style: italic;
+	 min-width: 200px;
+	 width: 200px;
 }
 div.download_options {
 	 margin-left: 50px;
@@ -315,4 +336,22 @@ div#main table {
     left: 14%;
     position: absolute;
     z-index: 99;
+}
+
+div#bottombar {
+	 clear: both;
+	 margin-top: 80px;
+	 padding-top: 5px;
+	 margin-left: 40px;
+	 margin-right: 40px;
+	 border-top: 1px solid #bbb;
+	 font-size: small;
+}
+div#bottomleft {
+	 float:left;
+	 padding-bottom: 10px;
+}
+div#bottomright {
+	 float:right;
+	 padding-bottom: 10px;
 }

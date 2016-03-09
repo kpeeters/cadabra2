@@ -9,7 +9,11 @@
 <p>
   The tutorials listed below are produced from actual Cadabra
   notebooks. Instead of reading them on-line, you can also download
-  the notebooks and play with them inside Cadabra.
+  the notebooks and play with them inside Cadabra. These notebooks all
+  require the new 2.x version of the software and will not work with
+  the old version 1.x. If you have a nice notebook that you think
+  would help others to learn Cadabra,
+  please <a href="mailto:info@cadabra.science">get in touch</a>.
 </p>
 
 <h2>Absolute beginners</h2>
@@ -17,9 +21,11 @@
 <p>
   This notebook explains how to enter expressions, how to do simple
   substitutions on them, how to use wildcards. It also explains how the
-  new Python functionality works. 
+  new Python functionality works. If you have never used Cadabra
+  before, start here. 
 </p>
 <div class="view_options">
+  <span>Beginners tutorial:</span>
   <a href="notebooks/beginners.html">read online</a>
   <a href="notebooks/beginners.cnb">download notebook</a>
 </div>
@@ -28,30 +34,80 @@
   give the following notebook a shot.
 </p>
 <div class="view_options">
+  <span>Tutorial for 1.x users:</span>
   <a href="notebooks/for_previous_users.html">read online</a>
   <a href="notebooks/for_previous_users.cnb">download notebook</a>
 </div>
 
-<h2>Sympy users</h2>
+<h2>SymPy users</h2>
 <p>
-  Cadabra relies on Sympy for all scalar computer algebra, that is,
-  for all algebra on expressions which do not involve indices. Here is
-  a simple notebook to illustrate the basic concepts. This may also be
-  a useful read if you want to use the Cadabra notebook interface just
-  to work with Sympy.
+  Cadabra relies on <a href="http://www.sympy.org">SymPy</a> for all
+  scalar computer algebra, that is, for all algebra on expressions
+  which do not involve indices. Here is a simple notebook to
+  illustrate the basic concepts. This may also be a useful read if you
+  want to use the Cadabra notebook interface just to work with Sympy.
 </p>
 <div class="view_options">
+  <span>SymPy inside Cadabra:</span>
   <a href="notebooks/scalar_manipulations.html">read online</a>
   <a href="notebooks/scalar_manipulations.cnb">download notebook</a>
 </div>
 
 
-<h2>Variational derivatives, equations of motion</h2>
+<h2>Actions, equations of motion, variational derivatives</h2>
 <p>
   
 </p>
 
+<h2>Quantum mechanics, groups and algebras</h2>
+<p>
+  Dirac gamma matrix algebra is very simple with Cadabra, and it can
+  handle them in arbitrary dimensions.
+</p>
+<div class="view_options">
+  <span>Gamma matrix algebra:</span>
+  <a href="notebooks/gamma_matrix_algebra.html">read online</a>
+  <a href="notebooks/gamma_matrix_algebra.cnb">download notebook</a>
+</div>
+<p>
+  An frequently asked question is how to do commutator algebra with
+  Cadabra. The following notebook shows how this works by verifying
+  the invariance of the two quadratic Casimirs of the Poincaré
+  algebra. It shows how to make good use of <code>post_process</code> to
+  simplify expressions automatically.
+</p>
+<div class="view_options">
+  <span>Poincaré algebra Casimirs:</span>
+  <a href="notebooks/poincare_algebra.html">read online</a>
+  <a href="notebooks/poincare_algebra.cnb">download notebook</a>
+</div>
+<p>
+  Because of fact that you can use natural LaTeX notation and because
+  Cadabra understand non-commuting objects, many tedious operator
+  algebra computations in quantum mechanics become relatively
+  simple. Here is an example from string theory, in which we verify
+  that certain states satisfy the quantum string constraints.
+</p>
+<div class="view_options">
+  <span>String states:</span>
+  <a href="notebooks/string_states.html">read online</a>
+  <a href="notebooks/string_states.cnb">download notebook</a>
+</div>
+
 <h2>Component computations</h2>
+<p>
+  From version 2.x you can do abstract as well as component
+  computations with Cadabra. The logic is very simple and based on a
+  few key ideas rooted in Cadabra's substitution engine. Examples of
+  varying difficulty are available below. The first one computes
+  Christoffel symbols and related for the Schwarzschild metric;
+  definitely a frequently requested feature...
+</p>
+<div class="view_options">
+  <span>Schwarzschild spacetime:</span>
+  <a href="notebooks/schwarzschild.html">read online</a>
+  <a href="notebooks/schwarzschild.cnb">download notebook</a>
+</div>
 <p>
   
 </p>
@@ -61,12 +117,14 @@
 
 <p>
   Because most Cadabra functionality is now accessible as a Python
-  module, you can easily use Cadabra from IPython/Jupyter notebooks
-  with a Python kernel. This notebook shows some of the absolute
+  module, you can easily use Cadabra
+  from <a href="http://jupyter.org">IPython/Jupyter</a> notebooks with
+  a Python kernel. This notebook shows some of the absolute
   basics. Note that this is different from using IPython/Jupyter
   notebooks inside the Cadabra GUI.
 </p>
 <div class="view_options">
+  <span>Cadabra inside Jupyter:</span>
   <a href="static/cadabra_in_ipython.nb.html">read online</a>
   <a href="static/cadabra_in_ipython.nb">download notebook</a>
 </div>
@@ -78,6 +136,7 @@
   sources; see the notebook below for some basic examples.
 </p>
 <div class="view_options">
+  <span>Plotting tutorial:</span>
   <a href="notebooks/plotting.html">read online</a>
   <a href="notebooks/plotting.cnb">download notebook</a>
 </div>

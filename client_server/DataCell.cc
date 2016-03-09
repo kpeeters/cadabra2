@@ -73,9 +73,13 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex less("<");
 	std::regex greater(">");
 	std::regex latex(R"(\\LaTeX\{\})");
+	std::regex tex(R"(\\TeX\{\})");
+	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
+	std::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
 	std::regex underscore(R"(\\_)");
+	std::regex e_aigu(R"(\\'e)");
 
 	std::string res;
 
@@ -92,10 +96,14 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-		res = std::regex_replace(res, algo, "<a href=\"$1.cnb\"><code>$1</code></a>");
-		res = std::regex_replace(res, prop, "<a href=\"$1.cnb\"><code>$1</code></a>");
+		res = std::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, algo, "<a href=\"$1.html\"><code>$1</code></a>");
+		res = std::regex_replace(res, prop, "<a href=\"$1.html\"><code>$1</code></a>");
 		res = std::regex_replace(res, underscore, "_");
 		res = std::regex_replace(res, latex, "LaTeX");
+		res = std::regex_replace(res, tex, "TeX");
+		res = std::regex_replace(res, e_aigu, "é");
 		}
 	catch(std::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;
@@ -127,7 +135,10 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << "<body>\n";
 				}
 			else {
-				str << "{% raw %}\n";
+				str << "{% extends \"notebook_layout.html\" %}\n"
+					 << "{% block head %}{%- endblock %}\n"
+					 << "{% block main %}\n"
+					 << "{% raw %}\n";
 				}
 			break;
 		case DataCell::CellType::python:
@@ -158,7 +169,11 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			if(it->cell_type==DataCell::CellType::image_png)
 				str << it->textbuf;
 			else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
-				std::string out=latex_to_html(it->textbuf);
+				std::string out;
+				if(it->cell_type==DataCell::CellType::python)
+					out=it->textbuf;
+				else
+					out=latex_to_html(it->textbuf);
 				if(out.size()>0)
 					str << "<div class=\"source\">"+out+"</div>";
 				}
@@ -184,7 +199,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				str << "</html>\n";
 				}
 			else {
-				str << "{% endraw %}\n";
+				str << "{% endraw %}\n"
+					 << "{%- endblock %}\n"
+					 << "{% block title %}Cadabra manual{% endblock %}\n";
 				}
 			break;
 		case DataCell::CellType::python:

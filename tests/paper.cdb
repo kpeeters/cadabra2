@@ -94,6 +94,7 @@ def test06():
 
 test06()
 
+#-------
 
 def test07():
     __cdbkernel__=create_scope()
@@ -110,7 +111,10 @@ def test07():
 
 test07()
 
+#-------
+
 def test08():
+    __cdbkernel__=create_scope()
     { m, n, p, q }::Indices(vector).
     { A_{m n p}, B_{m n p} }::AntiSymmetric.
     { m, n, p, q }::Integer(1..3).
@@ -118,115 +122,77 @@ def test08():
     decompose_product(_)
     canonicalise(_)
     assert(obj==0)
+    print('Test 08 passed')
 
 test08()
 
+#-------
 
-# #-------
-# 
-# def testtmp()
-# \nabla{#}::Derivative.
-# {i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
-# ex:=C_{i j m n} \nabla_{k}{C_{i j k p}} \nabla_{q}{C_{m n p q}};
-# rl:=\nabla_{i}{C_{k m l i}} -> 0;
-# substitute(ex, rl)
-# assert(ex==0)
-# 
-# 
-# 
-# @reset.
-# {i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
-# C_{m n p q}::WeylTensor.
-# \nabla{#}::Derivative.
-# \nabla_{r}{ C_{m n p q} }::SatisfiesBianchi.
-# \delta_{i j}::KroneckerDelta.
-# 
-# Eij:=- C_{i m k l} C_{j p k q} C_{l p m q} + 1/4 C_{i m k l} C_{j m p q} C_{k l p q}
-#      - 1/2 C_{i k j l} C_{k m p q} C_{l m p q}:
-# 
-# E:=  C_{j m n k} C_{m p q n} C_{p j k q} + 1/2 C_{j k m n} C_{p q m n} C_{j k p q}:
-# 
-# exp:= \nabla_{i}{\nabla_{j}{ @(Eij) }} - 1/6 \nabla_{i}{\nabla_{i}{ @(E) }};
-# 
-# distribute(_)
-# product_rule(_)
-# distribute(_)
-# product_rule(_)
-# 
-# sort_product(_)
-# canonicalise(_)
-# rename_dummies(_)
-# flatten_sum(_)
-# 
-# ex:= \nabla_{a... i}{C_{k i l m}};
-# ex:= a... b c;
-# 
-# substitute(_, r'\nabla_{... i}{C_{k i l m}} -> 0, \nabla_{... i}{C_{k m i l}} -> 0' )
-# 
-# young_project_product(_)
-# 
-# @sumflatten!(%):
-# @collect_terms!(%);
-# @assert(exp);
-# 
-# # @young_project_tensor!3(%){ModuloMonoterm};
-# # @distribute!(%):
-# # @prodsort!(%):
-# # @canonicalise!(%):
-# # @rename_dummies!(%):
-# # @collect_terms!(%);
-# 
-# # # testing
-# # a:= 3 C_{i j m n} * C_{i k m p} * \nabla_{q}{\nabla_{j}{C_{n k p q}}}
-# #   - 2 C_{i j m p} * C_{i k m n} * \nabla_{q}{\nabla_{j}{C_{n k p q}}};
-# # @young_project_tensor!3(%){ModuloMonoterm};
-# # @distribute!(%):
-# # @prodsort!(%):
-# # @canonicalise!(%):
-# # @rename_dummies!(%):
-# # @collect_terms!(%);
-# # 
-# # b:= 3 C_{i j m n} * C_{i k m p} * \nabla_{q}{\nabla_{j}{C_{n k p q}}}
-# #   - 2 C_{i j m p} * C_{i k m n} * \nabla_{q}{\nabla_{j}{C_{n k p q}}};
-# # @young_project_product!(%):
-# # @prodsort!(%):
-# # @canonicalise!(%):
-# # @rename_dummies!(%):
-# # @collect_terms!(%);
-# # 
-# # @(a) - @(b):
-# # @collect_terms!(%);
-# # end testing
-# 
-# 
-# #-------
-# 
-# def test99():
-#     {M, N, P}::Indices(space).
-#     {m, n, p}::Indices(subspace1).
-#     {a, b, c}::Indices(subspace2).
-#     obj:= A_{M N} B_{N P};
-#     split_index(_, "{M, m, a}")
-#     tst:= A_{M m}  B_{m P} + A_{M a} B_{a P} - @(obj);
-#     assert(tst==0)
-# 
-# test99()
-# 
-# #-------
-# 
-# @reset.
-# ::PostDefaultRules( @@prodsort!(%), @@eliminate_kr!(%),  
-#                                     @@canonicalise!(%), @@collect_terms!(%) ).
-# {s,r,l,k,m,n}::Indices(vector).
-# {s,r,l,k,m,n}::Integer(0..d-1).
-# \Gamma_{#}::GammaMatrix(metric=\delta).
-# \delta_{m n}::KroneckerDelta.
-# obj:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s}:
-# join_gamma(_)
-# join_gamma(_)
-# distribute(_)
-# join_gamma(_)
-# @distribute!(%);
+def test09():
+    __cdbkernel__=create_scope()
+    {i,j,m,n,k,p,q,l,r,r#}::Indices(vector).
+    C_{m n p q}::WeylTensor.
+    \nabla{#}::Derivative.
+    \nabla_{r}{ C_{m n p q} }::SatisfiesBianchi.
+    \delta_{i j}::KroneckerDelta.
+    
+    Eij:=- C_{i m k l} C_{j p k q} C_{l p m q} + 1/4 C_{i m k l} C_{j m p q} C_{k l p q}
+         - 1/2 C_{i k j l} C_{k m p q} C_{l m p q};
+    
+    E:=  C_{j m n k} C_{m p q n} C_{p j k q} + 1/2 C_{j k m n} C_{p q m n} C_{j k p q};
+    
+    exp:= \nabla_{i}{\nabla_{j}{ @(Eij) }} - 1/6 \nabla_{i}{\nabla_{i}{ @(E) }};
+    
+    distribute(_)
+    product_rule(_)
+    distribute(_)
+    product_rule(_)
+    
+    sort_product(_)
+    canonicalise(_)
+    rename_dummies(_)
+    
+    rl:={ \nabla_{i}{C_{k i l m}} -> 0, \nabla_{i}{C_{k m l i}} -> 0 };
+    substitute(exp, rl)
+
+    young_project_product(exp)
+    assert(exp==0)
+    print('Test 09 passed')
+
+test09()
+
+def test10():
+    __cdbkernel__=create_scope()
+    {M, N, P}::Indices(space).
+    {m, n, p}::Indices(subspace1).
+    {a, b, c}::Indices(subspace2).
+    obj:= A_{M N} B_{N P};
+    split_index(_, $M, m, a$)
+    tst:= A_{M m}  B_{m P} + A_{M a} B_{a P} - @(obj);
+    assert(tst==0)
+    print('Test 10 passed')
+
+test10()
+
+def post_process(ex):
+    sort_product(ex)
+    eliminate_kronecker(ex)
+    canonicalise(ex)
+    collect_terms(ex)
+
+{s,r,l,k,m,n}::Indices(vector).
+{s,r,l,k,m,n}::Integer(0..d-1).
+\Gamma_{#}::GammaMatrix(metric=\delta).
+\delta_{m n}::KroneckerDelta.
+obj:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s};
+join_gamma(_)
+distribute(_)
+join_gamma(_)
+distribute(_)
+join_gamma(_)
+distribute(_)
+collect_factors(_)
+
 # @factorise!(%){d};
 # @collect_factors!(%);
 # tst:= \Gamma_{k l} (12 - 18 d + 8 d**2 - d**3) + \delta_{k l} ( - 3 + 6 d - 4 d**2 + d**3) - @(obj);

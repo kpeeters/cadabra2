@@ -18,7 +18,7 @@ typedef uint32_t kunichar;
 
 class DisplaySympy : public DisplayBase {
 	public:
-		DisplaySympy(const Properties&, const Ex&);
+		DisplaySympy(const Kernel&, const Ex&);
 
       /// Rewrite the output of sympy back into a notation used by
       /// Cadabra. This in particular involves converting 'sin' and

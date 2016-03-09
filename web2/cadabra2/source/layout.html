@@ -21,14 +21,21 @@
 		tex2jax: {
 		inlineMath: [['$','$'], ['\\(','\\)']],
 		processEscapes: true,
-		displayAlign: "left"
+		displayAlign: "left",
+		ignoreClass: "python",
+		processClass: "latex_view",
+      linebreaks: { automatic: true }
 		},
 		"HTML-CSS": {
 		scale: 105,
 		preferredFont: "TeX",
 		webFont: "TeX",
 		mtextFontInherit: false,
-		matchFontHeight: false
+		matchFontHeight: false,
+      linebreaks: { automatic: true }
+		},
+		"SVG": {
+      linebreaks: { automatic: true }
 		}
 		});
 	 </script>
@@ -46,10 +53,10 @@
 		<div id="subtext">
 		  a field theory motivated approach to computer algebra
 		</div>
-<!--		<div id="author">
-		  Kasper Peeters<br/>
-		  cadabra@phi-sci.com
-		</div> -->
+		<!--		<div id="author">
+					Kasper Peeters<br/>
+					cadabra@phi-sci.com
+					</div> -->
 	 </div>
 	 <hr id="below_logo"/>
 	 <div id="menubar">
@@ -86,19 +93,19 @@
 			 </div>
 		  </div>
 		</a>
+		<a href="/help.html">
+		  <div class="icon_background" >
+			 <img src="/static/icons/help.png" />
+			 <div class="icon_text">
+				Help/manual
+			 </div>
+		  </div>
+		</a>
 		<a href="/papers.html">
 		  <div class="icon_background" >
 			 <img src="/static/icons/paper.png" />
 			 <div class="icon_text">
 				Papers
-			 </div>
-		  </div>
-		</a>
-		<a href="/help.html">
-		  <div class="icon_background" >
-			 <img src="/static/icons/help.png" />
-			 <div class="icon_text">
-				Help
 			 </div>
 		  </div>
 		</a>
@@ -129,13 +136,18 @@
 		  </div>
 		</a>
 	 </div>
-
+	 
 	 <div id="main">
 		{% block main %}{% endblock %}
 	 </div>
 	 
 	 <div id="sidebar">
 		{% block sidebar %}{% endblock %}
+	 </div>
+	 
+	 <div id="bottombar">
+		<div id="bottomleft">Copyright &copy; 2016 Kasper Peeters</div>
+		<div id="bottomright">Questions? <a href="info@cadabra.science">info@cadabra.science</a></div>
 	 </div>
 	 
   </body>

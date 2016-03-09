@@ -1,8 +1,8 @@
 
 #include "DisplayBase.hh"
 
-DisplayBase::DisplayBase(const Properties& p, const Ex& e)
-	: tree(e), properties(p)
+DisplayBase::DisplayBase(const Kernel& k, const Ex& e)
+	: tree(e), kernel(k)
 	{
 	}
 

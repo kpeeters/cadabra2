@@ -1,0 +1,62 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{FilledTableau}{A Young tableau with labelled boxes.}\n\nIndicates that the object is a Young\n  tableau with labelled boxes. The arguments\n  of a \\prop{Tableau} property denote the contents, given as lists,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{FilledTableau}{A Young tableau with labelled boxes.}\n\nIndicates that the object is a Young\n  tableau with labelled boxes. The arguments\n  of a \\prop{Tableau} property denote the contents, given as lists,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\ftab((a, b, c) (d, e) f)\\end{dmath*}"
+				}
+			],
+			"source" : "\\ftab{#}::FilledTableau.\nex:=\\ftab{a,b,c}{d,e}{f};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "See \\prop{Tableau} for information about adding the dimension of the permutation group."
+				}
+			],
+			"hidden" : true,
+			"source" : "See \\prop{Tableau} for information about adding the dimension of the permutation group."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -3,7 +3,7 @@
 #include "Functional.hh"
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
-#include "properties/Derivative.hh"
+#include "properties/PartialDerivative.hh"
 
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
@@ -18,7 +18,7 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	else if(*it->name=="\\expression") cleanup_expressionlike(kernel, tr, it);
 	else if(*it->name=="\\components") cleanup_components(kernel, tr, it);
 
-	const Derivative *der = kernel.properties.get<Derivative>(it);
+	const PartialDerivative *der = kernel.properties.get<PartialDerivative>(it);
 	if(der) cleanup_derivative(kernel, tr, it);
 	}
 

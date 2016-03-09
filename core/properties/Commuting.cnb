@@ -1,0 +1,31 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Commuting}{Make components commuting.}\n\nMakes components commuting. This is completely analogous\nto \\prop{AntiCommuting} and in fact the default for all objects,\nso usually does not need to be specified."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Commuting}{Make components commuting.}\n\nMakes components commuting. This is completely analogous\nto \\prop{AntiCommuting} and in fact the default for all objects,\nso usually does not need to be specified."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

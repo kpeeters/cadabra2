@@ -1,0 +1,133 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Derivative}{Declare an operator to satisfy the Leibnitz rule.}\n\nThis property representes an generic derivative object, satisfying the Leibnitz rule. These\ngeneric derivatives do not have to commute"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Derivative}{Declare an operator to satisfy the Leibnitz rule.}\n\nThis property representes an generic derivative object, satisfying the Leibnitz rule. These\ngeneric derivatives do not have to commute"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}D(\\#).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D(A B C)\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D(A) B C+A D(B) C+A B D(C)\\end{dmath*}"
+				}
+			],
+			"source" : "D{#}::Derivative;\nex:= D(A B C);\nproduct_rule(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Refer to the documentation of \\prop{PartialDerivative} on how to\nwrite derivatives with respect to coordinate indices or coordinates."
+				}
+			],
+			"hidden" : true,
+			"source" : "Refer to the documentation of \\prop{PartialDerivative} on how to\nwrite derivatives with respect to coordinate indices or coordinates."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Make sure to declare the derivative either using the ``with any arguments''\nnotation as used above (using the hash mark), or by giving an\nappropriate pattern. The following does not work:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Make sure to declare the derivative either using the ``with any arguments''\nnotation as used above (using the hash mark), or by giving an\nappropriate pattern. The following does not work:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}D.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D(A B C)\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D(A B C)\\end{dmath*}"
+				}
+			],
+			"source" : "D::Derivative;\nex:=D(A B C);\nproduct_rule(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The pattern \\verb|D| above does not match the expression \\verb|D(A B C)| \nand hence the algorithm does not know that \\verb|D(A B C)| is a\nderivative acting on the product of three objects."
+				}
+			],
+			"hidden" : true,
+			"source" : "The pattern \\verb|D| above does not match the expression \\verb|D(A B C)| \nand hence the algorithm does not know that \\verb|D(A B C)| is a\nderivative acting on the product of three objects."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -7,9 +7,36 @@
 {% block main %}
 <h1>Help</h1>
 
-<h2>Manual</h2>
+<h2>Manual pages</h2>
+<p>
+  Every algorithm and every property has a manual page with examples,
+  which you can view online:
+</p>
+<h3>Algorithms</h3>
+  <table>
+	 {% include "algo_toc.html" %}
+  </table>
 
-	<p>An extensive reference manual of the program, with a description
+<h3>Properties</h3>
+  <table>
+	 {% include "prop_toc.html" %}
+  </table>
+
+
+<h2>Forum</h2>
+
+<p>All questions about using Cadabra can be posted on
+  the <a href="http://cadabra.science/qa">Cadabra Q&amp;A</a> forum. The forum accepts LaTeX
+  formulas and is fully searchable. 
+</p>
+
+<p>The old mailing list has been closed as it does not offer as much
+  functionality as the new forum.</p>
+
+
+<h2>Reference guide</h2>
+
+	<p>An extensive reference guide of version 1.x of the program, with a description
 	of the input language, the algorithms and technical details on how
 	to extend it by adding new C++ modules, is available as</p>
 	<blockquote class="reference">
@@ -18,15 +45,7 @@
 	<div class="pubinfo">preprint AEI-2006-038</div>
 	<div class="pubinfo">last version: November 2nd, 2012</div>
 	</blockquote>
-
-<h2>Forum</h2>
-
-<p>All questions about using Cadabra can be posted on
-  the <a href="/qa">Cadabra Q&amp;A</a> forum. The forum accepts LaTeX
-  formulas and is fully searchable. 
-</p>
-
-<p>The old mailing list has been closed as it does not offer as much
-  functionality as the new forum.</p>
+	<p>
+	  An update is planned as soon as version 2.x reaches a stable state.</p>
 
 {%- endblock %}
