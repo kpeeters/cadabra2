@@ -1,0 +1,187 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Depends}{Makes an object implicitly dependent on other objects.}\n\nMakes an object implicitly dependent on other objects, i.e.~assumes\nthat the indicated object is a function of the arguments of the\nproperty. For example"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Depends}{Makes an object implicitly dependent on other objects.}\n\nMakes an object implicitly dependent on other objects, i.e.~assumes\nthat the indicated object is a function of the arguments of the\nproperty. For example"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+				}
+			],
+			"source" : "x::Coordinate;\n\\phi::Depends(x);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "makes $\\phi$ an implicit function of $x$. Instead of indicating the\ncoordinate on which the object depends, it is also possible to\nindicate which derivatives would yield a non-zero answer, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "makes $\\phi$ an implicit function of $x$. Instead of indicating the\ncoordinate on which the object depends, it is also possible to\nindicate which derivatives would yield a non-zero answer, as in"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla(\\#).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+				}
+			],
+			"source" : "\\nabla{#}::Derivative;\n\\phi::Depends(\\nabla);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Finally, it is possible to use an index name to indicate on which\ncoordinates a field depends,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Finally, it is possible to use an index name to indicate on which\ncoordinates a field depends,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(m, n, p, q).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q}::Indices(vector);\n\\phi::Depends(m);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Taking objects out of derivatives (because they do not depend on them)\nis handled using the \\algo{unwrap} algorithm.\n\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+				}
+			],
+			"hidden" : true,
+			"source" : "Taking objects out of derivatives (because they do not depend on them)\nis handled using the \\algo{unwrap} algorithm.\n\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\hat{\\#}.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}(x, y).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial(\\#).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}A.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}A.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\hat{A}\\end{dmath*}"
+				}
+			],
+			"source" : "\\hat{#}::Accent;\n{x,y}::Coordinate;\n\\partial{#}::PartialDerivative;\nA::Depends(\\hat);\nA::Depends(x);\nex:=\\hat{A};\nunwrap(ex);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -1,0 +1,123 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{decompose_product}{Decompose a product of tensors by using Young projectors.}\n\nDecompose a product of tensors by writing it out in terms of\nirreducible Young tableau representations, discarding the ones which\nvanish in the indicated dimension, and putting the results back\ntogether again. This algorithm can thus be used to equate terms which\nare identical only in certain dimensions.\n\nIf there are no dimension-dependent identities playing a role in the\nproduct, then \\algo{decompose_product} returns the original\nexpression,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{decompose_product}{Decompose a product of tensors by using Young projectors.}\n\nDecompose a product of tensors by writing it out in terms of\nirreducible Young tableau representations, discarding the ones which\nvanish in the indicated dimension, and putting the results back\ntogether again. This algorithm can thus be used to equate terms which\nare identical only in certain dimensions.\n\nIf there are no dimension-dependent identities playing a role in the\nproduct, then \\algo{decompose_product} returns the original\nexpression,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(m, n, p, q).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}(m, n, p, q).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}({A}_(mnp), {B}_(mnp)).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n p} B_{m n q}-A_{m n q} B_{m n p}\\end{dmath*}"
+				}
+			],
+			"source" : "{ m, n, p, q }::Indices(vector);\n{ m, n, p, q }::Integer(1..4);\n{ A_{m n p}, B_{m n p} }::AntiSymmetric;\nex:= A_{m n p} B_{m n q} - A_{m n q} B_{m n p};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "decompose_product(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "However, in the present example, a Schouten identity makes the\nexpression vanish identically in three dimensions,"
+				}
+			],
+			"hidden" : true,
+			"source" : "However, in the present example, a Schouten identity makes the\nexpression vanish identically in three dimensions,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}(m, n, p, q).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 2, in <module>\nNameError: name 'ex' is not defined\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "{ m, n, p, q }::Integer(1..3);\ndecompose_product(ex);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that \\algo{decompose_product} is unfortunately\ncomputationally expensive, and is therefore not practical for large\ndimensions."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that \\algo{decompose_product} is unfortunately\ncomputationally expensive, and is therefore not practical for large\ndimensions."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

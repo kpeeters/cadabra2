@@ -1,0 +1,27 @@
+
+def test01():
+    \delta{#}::KroneckerDelta.
+    obj1:= 2*a*\delta^{i1 j1 i2 j2};
+    expand_delta(_);
+    distribute(_);
+    tst1:= a*\delta^{i1 j1}\delta^{i2 j2}-a*\delta^{i2 j1}\delta^{i1 j2}-@(obj1);
+    assert(tst1==0);
+    print('Test 01 passed')
+
+test01()
+    
+def test02():
+    n::Integer(0..d).
+    obj2:= a*\delta_{n n};
+    eliminate_kronecker(_)
+    tst2:= a*(d+1) - @(obj2);
+    assert(tst2==0)
+
+test02()
+
+\delta{#}::KroneckerDelta.
+\eps_{#}::EpsilonTensor(delta=\delta).
+F_{q r s a b c}::TableauSymmetry(shape={1,1}, indices={0,1}, shape={1,1,1}, indices={3,4,5}).
+obj6:= \eps_{m n q} \eps_{r s t} F_{b1 b2 b3 m n q};
+epsilon_to_delta(_);
+expand_delta(_);

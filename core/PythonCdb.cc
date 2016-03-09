@@ -53,6 +53,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/Commuting.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Depends.hh"
+#include "properties/DependsInherit.hh"
 #include "properties/Derivative.hh"
 #include "properties/DiracBar.hh"
 #include "properties/GammaMatrix.hh"
@@ -61,6 +62,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/DAntiSymmetric.hh"
 #include "properties/Diagonal.hh"
 #include "properties/Distributable.hh"
+#include "properties/EpsilonTensor.hh"
 #include "properties/FilledTableau.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/Indices.hh"
@@ -76,6 +78,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/SatisfiesBianchi.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/SelfCommuting.hh"
+#include "properties/SelfNonCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
 #include "properties/Symmetric.hh"
@@ -95,8 +98,11 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/eliminate_kronecker.hh"
+#include "algorithms/epsilon_to_delta.hh"
 #include "algorithms/evaluate.hh"
+#include "algorithms/expand_delta.hh"
 #include "algorithms/expand_diracbar.hh"
+#include "algorithms/factor_in.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/join_gamma.hh"
@@ -113,10 +119,6 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/young_project.hh"
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
-
-// Helper algorithms, not for users.
-
-//#include "algorithms/reduce_sub.hh"
 
 
 // TODO: 
@@ -149,7 +151,7 @@ std::string Ex_str_(const Ex& ex)
 // //		str << "(unchanged)" << std::endl;
 // 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
-	DisplayTerminal dt(get_kernel_from_scope()->properties, ex);
+	DisplayTerminal dt(*get_kernel_from_scope(), ex);
 	dt.output(str);
 
 	return str.str();
@@ -158,7 +160,7 @@ std::string Ex_str_(const Ex& ex)
 std::string Ex_latex_(const Ex& ex) 
 	{
  	std::ostringstream str;
-	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+	DisplayTeX dt(*get_kernel_from_scope(), ex);
 	dt.output(str);
 	return str.str();
 	}
@@ -185,10 +187,8 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	auto module = boost::python::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
 	std::ostringstream str;
-	DisplaySympy dt(get_kernel_from_scope()->properties, ex);
+	DisplaySympy dt(*get_kernel_from_scope(), ex);
 	dt.output(str);
-
-	//std::cerr << str.str() << std::endl;
 
 	boost::python::object ret=parse(str.str());
 
@@ -387,7 +387,7 @@ boost::python::list list_properties()
 			}
 
 
-		DisplayTeX dt(get_kernel_from_scope()->properties, it->second->obj);
+		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
 		std::ostringstream str;
 		dt.output(str);
 		res += str.str();
@@ -522,11 +522,33 @@ void inject_defaults(Kernel *k)
 	{
 	// Create and inject properties; these then get owned by the kernel.
 	post_process_enabled=false;
+
 	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}"), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\prod{#}"), 0);
+
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}"), 0);
+
+	inject_property(k, new Derivative(),         make_Ex_from_string("\\commutator{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\commutator{#}"), 0);
+
+	inject_property(k, new Derivative(),         make_Ex_from_string("\\anticommutator{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}"), 0);
+
+	inject_property(k, new Distributable(),      make_Ex_from_string("\\indexbracket{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}"), 0);
+
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}"), 0);
+
+	// Accents, necessary for proper display.
+	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}"), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\bar{#}"), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\overline{#}"), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\tilde{#}"), 0);
+
 	post_process_enabled=true;
 //	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}"), 0);
 	}
@@ -593,39 +615,17 @@ std::string Property<Prop>::repr_() const
 // declaration of 'join_gamma' below for an example of how to declare
 // those additional arguments).
 
-// #ifndef __clang__
-// 
-// template<class F, typename... Args>
-// Ex* dispatch_ex(Ex& ex, Args... args, bool deep, bool repeat, unsigned int depth)
-// 	{
-// 	F algo(*get_kernel_from_scope(), ex, args...);
-// 
-// 	Ex::iterator it=ex.begin().begin();
-// 	if(*it->name=="\\equals") 
-// 		it=ex.child(it,1);
-// 	ex.reset_state();
-// 	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-// 
-// 	// FIXME: find the 'post_process' function, and if found, turn off
-// 	// post-processing, then call the function on the current Ex.
-// 	auto module = boost::python::import("__main__");
-// 	auto post_process = module.attr("post_process");
-// 	post_process();
-// 
-// 	return &ex;
-// 	}
-// 
-// #else
-
 template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin().begin();
-	if(*it->name=="\\equals") 
-		it=ex.child(it,1);
-	ex.reset_state();
-	ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-	call_post_process(ex);
+	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
+		if(*it->name=="\\equals") 
+			it=ex.child(it,1);
+		ex.reset_state();
+		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+		call_post_process(ex);
+		}
 	return &ex;
 	}
 
@@ -643,10 +643,10 @@ void call_post_process(Ex& ex)
 			boost::python::object post_process = globals["post_process"];
 			post_process(boost::ref(ex));
 			}
-		catch(boost::python::error_already_set const &) {
+		catch(boost::python::error_already_set const &exc) {
 			// In order to prevent the error from propagating, we have to read it out. 
 			std::string err = parse_python_exception();
-			//std::cerr  << err << std::endl;
+//			throw;
 			}
 		post_process_enabled=true;
 		}
@@ -672,8 +672,6 @@ Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned i
 	F algo(*get_kernel_from_scope(), ex, arg1, arg2);
 	return dispatch_base(ex, algo, deep, repeat, depth);
 	}
-
-//#endif
 
 template<class F, typename... Args>
 Ex* dispatch_string(const std::string& ex, Args... args, bool deep, bool repeat, unsigned int depth)
@@ -904,6 +902,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<decompose_product>("decompose_product");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
+	def_algo_1<epsilon_to_delta>("epsilon_to_delta");
+	def_algo_1<expand_delta>("expand_delta");
 	def_algo_1<expand_diracbar>("expand_diracbar");
 	def_algo_1<flatten_sum>("flatten_sum");
 	def_algo_1<indexsort>("indexsort");
@@ -976,6 +976,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Algorithms which take a second Ex as argument.
 	def_algo_1<lr_tensor>("lr_tensor");
 
+	def("factor_in", &dispatch_ex<factor_in, Ex&>, 
+		 (arg("ex"),
+		  arg("factors"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
 	def("substitute", &dispatch_ex<substitute, Ex&>, 
 		 (arg("ex"),
 		  arg("rules"),
@@ -1019,6 +1024,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Diagonal>();
 	def_prop<Distributable>();
 	def_prop<DiracBar>();
+	def_prop<EpsilonTensor>();
 	def_prop<FilledTableau>();
 	def_prop<GammaMatrix>();
 	def_prop<ImplicitIndex>();	
@@ -1035,6 +1041,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SatisfiesBianchi>();
 	def_prop<SelfAntiCommuting>();
 	def_prop<SelfCommuting>();
+	def_prop<SelfNonCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
 	def_prop<Symmetric>();

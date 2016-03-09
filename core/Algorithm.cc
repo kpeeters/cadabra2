@@ -146,9 +146,17 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 			result_t res = apply(work);
 			if(res==Algorithm::result_t::l_applied) {
 				some_changes_somewhere=result_t::l_applied;
-//				tr.print_recursive_treeform(std::cout, tr.begin());
 				rename_replacement_dummies(work, true);
 				deepest_action=tr.depth(work);
+				// If we got a zero at 'work', we need to propagate this up the tree and
+				// then restart our post-order traversal such that everything that has
+				// been removed from the tree by this zero will no longer be considered.
+				if(*work->multiplier==0) {
+					post_order_iterator moved_next=work;
+					propagate_zeroes(moved_next, it);
+					next=moved_next;
+					}
+
 				// The 'work' iterator can now point to a new node. If we were acting at the
 				// top node, we need to propagate the change in 'work' to 'it' so the caller
 				// knows where the new top node is.
@@ -1330,7 +1338,8 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 	// with which we do not commute.
 
 	struct {
-	  bool operator()(const Properties& pr, Ex& tr, iterator walk, iterator lca, iterator check_dependence) {
+	  bool operator()(const Kernel& kernel, Ex& tr, iterator walk, iterator lca, iterator check_dependence) {
+	      const Properties& pr=kernel.properties;
 		   do {
 				walk=Ex::parent(walk);
 				if(walk == lca) break;
@@ -1339,7 +1348,7 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 					if(tr.is_valid(check_dependence) ) {
 						const DependsBase *dep = pr.get_composite<DependsBase>(check_dependence);
 						if(dep) {
-							Ex deps=dep->dependencies(check_dependence);
+							Ex deps=dep->dependencies(kernel, check_dependence);
 							sibling_iterator depobjs=deps.begin(deps.begin());
 							while(depobjs!=deps.end(deps.begin())) {
 								if(walk->name == depobjs->name) {
@@ -1369,34 +1378,34 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 		   }
 	} one_run;
 	
-	if(one_run(kernel.properties, tr, i1, lca, check_dependence)) return true;
-	if(one_run(kernel.properties, tr, i2, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i1, lca, check_dependence)) return true;
+	if(one_run(kernel, tr, i2, lca, check_dependence)) return true;
 
 	return false;
 	}
 
 
-bool Algorithm::cleanup_anomalous_products(Ex& tr, Ex::iterator& it)
-	{
-	if(*(it->name)=="\\prod") {
-		 if(tr.number_of_children(it)==0) {
-			  it->name=name_set.insert("1").first;
-			  return true;
-			  }
-		 else if(tr.number_of_children(it)==1) {
-			  tr.begin(it)->fl.bracket=it->fl.bracket;
-			  tr.begin(it)->multiplier=it->multiplier;
-			  tr.flatten(it);
-			  Ex::iterator tmp=tr.erase(it);
-//			  txtout << "HERRE?" << std::endl;
-			  pushup_multiplier(tmp);
-			  it=tmp;
-			  return true;
-			  }
-		 }
-	return false;
-	}
-
+// bool Algorithm::cleanup_anomalous_products(Ex& tr, Ex::iterator& it)
+// 	{
+// 	if(*(it->name)=="\\prod") {
+// 		 if(tr.number_of_children(it)==0) {
+// 			  it->name=name_set.insert("1").first;
+// 			  return true;
+// 			  }
+// 		 else if(tr.number_of_children(it)==1) {
+// 			  tr.begin(it)->fl.bracket=it->fl.bracket;
+// 			  tr.begin(it)->multiplier=it->multiplier;
+// 			  tr.flatten(it);
+// 			  Ex::iterator tmp=tr.erase(it);
+// //			  txtout << "HERRE?" << std::endl;
+// 			  pushup_multiplier(tmp);
+// 			  it=tmp;
+// 			  return true;
+// 			  }
+// 		 }
+// 	return false;
+// 	}
+// 
 
 unsigned int Algorithm::locate_single_object(Ex::iterator obj_to_find, 
 															Ex::iterator st, Ex::iterator nd,

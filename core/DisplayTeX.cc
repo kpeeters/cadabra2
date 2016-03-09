@@ -9,8 +9,8 @@
 #define zwnbsp ""
 //(( parent.utf8_output?(unichar(0xfeff)):""))
 
-DisplayTeX::DisplayTeX(const Properties& p, const Ex& e)
-	: DisplayBase(p, e)
+DisplayTeX::DisplayTeX(const Kernel& k, const Ex& e)
+	: DisplayBase(k, e)
 	{
 	}
 
@@ -54,9 +54,9 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		return;
 		}
 	
-	const LaTeXForm *lf=properties.get<LaTeXForm>(it);
+	const LaTeXForm *lf=kernel.properties.get<LaTeXForm>(it);
 	bool needs_extra_brackets=false;
-	const Accent *ac=properties.get<Accent>(it);
+	const Accent *ac=kernel.properties.get<Accent>(it);
 	if(!ac && extra_brackets_for_symbols) { // accents should never get additional curly brackets, {\bar}{g} does not print.
 		Ex::sibling_iterator sib=tree.begin(it);
 		while(sib!=tree.end(it)) {
@@ -113,7 +113,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 	while(ch!=tree.end(it)) {
 		str_node::bracket_t    current_bracket_   =(*ch).fl.bracket;
 		str_node::parent_rel_t current_parent_rel_=(*ch).fl.parent_rel;
-		const Accent *is_accent=properties.get<Accent>(it);
+		const Accent *is_accent=kernel.properties.get<Accent>(it);
 		
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
@@ -168,10 +168,8 @@ void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br
 	{
 	switch(br) {
 		case str_node::b_none:
-			if(pr==str_node::p_none) str << "(";
-			else                     str << "{";
-//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << "(";  
-//			else                                                                           str << "{";
+			if(pr==str_node::p_none)     str << "(";
+			else                         str << "{";
 			break;
 		case str_node::b_pointy: str << "\\<"; break;
 		case str_node::b_curly:  str << "\\{"; break;
@@ -186,10 +184,8 @@ void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 	{
 	switch(br) {
 		case str_node::b_none:   
-			if(pr==str_node::p_none) str << ")";
-			else                     str << "}";
-//			if(parent.output_format==Ex_output::out_xcadabra && pr==str_node::p_none) str << ")";  
-//			else                                                                           str << "}";
+			if(pr==str_node::p_none)     str << ")";
+			else                         str << "}";
 			break;
 		case str_node::b_pointy: str << "\\>"; break;
 		case str_node::b_curly:  str << "\\}"; break;
@@ -219,16 +215,18 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 
 void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it) 
 	{
-	if(*it->name=="\\prod")        print_productlike(str, it, " ");
-	else if(*it->name=="\\sum")    print_sumlike(str, it);
-	else if(*it->name=="\\frac")   print_fraclike(str, it);
-	else if(*it->name=="\\comma")  print_commalike(str, it);
-	else if(*it->name=="\\arrow")  print_arrowlike(str, it);
-	else if(*it->name=="\\pow")    print_powlike(str, it);
-	else if(*it->name=="\\int")    print_intlike(str, it);
-	else if(*it->name=="\\equals") print_equalitylike(str, it);
-	else if(*it->name=="\\components") print_components(str, it);
-	else                           print_other(str, it);
+	if(*it->name=="\\prod")                print_productlike(str, it, " ");
+	else if(*it->name=="\\sum")            print_sumlike(str, it);
+	else if(*it->name=="\\frac")           print_fraclike(str, it);
+	else if(*it->name=="\\comma")          print_commalike(str, it);
+	else if(*it->name=="\\arrow")          print_arrowlike(str, it);
+	else if(*it->name=="\\pow")            print_powlike(str, it);
+	else if(*it->name=="\\int")            print_intlike(str, it);
+	else if(*it->name=="\\equals")         print_equalitylike(str, it);
+	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
+	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
+	else if(*it->name=="\\components")     print_components(str, it);
+	else                                   print_other(str, it);
 	}
 
 void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it) 
@@ -377,6 +375,22 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 	str << " = ";
 	++sib;
 	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_commutator(std::ostream& str, Ex::iterator it, bool comm)
+	{
+	if(comm) str << "{}\\left[";
+	else     str << "{}\\left\\{";
+	auto sib=tree.begin(it);
+	bool first=true;
+	while(sib!=tree.end(it)) {
+		if(!first) str << ", ";
+		else       first=false;
+		dispatch(str, sib);
+		++sib;
+		}
+	if(comm) str << "\\right]{}";
+	else     str << "\\right\\}{}";
 	}
 
 void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)

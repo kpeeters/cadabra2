@@ -5,8 +5,8 @@
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
 
-DisplaySympy::DisplaySympy(const Properties& p, const Ex& e)
-	: DisplayBase(p, e)
+DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
+	: DisplayBase(kernel, e)
 	{
 	symmap = {
 		{"\\cos", "cos"},
@@ -96,7 +96,7 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 	// We need to know if the symbol has implicit dependence on other symbols,
 	// as this needs to be made explicit for sympy.
 
-	const Depends *dep=properties.get<Depends>(it);
+	const Depends *dep=kernel.properties.get<Depends>(it);
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	if(ch!=tree.end(it) || dep!=0) {
@@ -110,8 +110,8 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 			}
 		if(dep) {
 			if(!first) str << ", ";
-			Ex deplist=dep->dependencies(it);
-			DisplaySympy ds(properties, deplist);
+			Ex deplist=dep->dependencies(kernel, it);
+			DisplaySympy ds(kernel, deplist);
 			ds.output(str);
 			}
 		str << ")";
@@ -145,7 +145,7 @@ void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << "{";   break;
+		case str_node::b_none:   str << ")";   break;
 		case str_node::b_pointy: str << "\\<"; break;
 		case str_node::b_curly:  str << "\\{"; break;
 		case str_node::b_round:  str << "(";   break;
@@ -157,7 +157,7 @@ void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t 
 void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << "}";   break;
+		case str_node::b_none:   str << ")";   break;
 		case str_node::b_pointy: str << "\\>"; break;
 		case str_node::b_curly:  str << "\\}"; break;
 		case str_node::b_round:  str << ")";   break;

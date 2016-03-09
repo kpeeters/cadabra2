@@ -1,0 +1,61 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{expand_diracbar}{Simplify the Dirac bar of a composite object.}\n\nRewrite the Dirac conjugate of a product of spinors and gamma matrices\nas a product of Dirac and hermitean conjugates. This uses\n\\begin{equation} \n\\bar\\psi = i \\psi^\\dagger\\Gamma^0\\,,\n\\end{equation}\ntogether with \n\\begin{equation}\n\\Gamma_m^{\\dagger} = \\Gamma_0\\Gamma_m\\Gamma_0 \\,.\n\\end{equation}\nFor example,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{expand_diracbar}{Simplify the Dirac bar of a composite object.}\n\nRewrite the Dirac conjugate of a product of spinors and gamma matrices\nas a product of Dirac and hermitean conjugates. This uses\n\\begin{equation} \n\\bar\\psi = i \\psi^\\dagger\\Gamma^0\\,,\n\\end{equation}\ntogether with \n\\begin{equation}\n\\Gamma_m^{\\dagger} = \\Gamma_0\\Gamma_m\\Gamma_0 \\,.\n\\end{equation}\nFor example,"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\bar{\\Gamma^{m n p} \\psi}\\end{dmath*}"
+				}
+			],
+			"source" : "\\bar{#}::DiracBar.\n\\psi::Spinor(dimension=10).\n\\Gamma{#}::GammaMatrix.\nex:=\\bar{\\Gamma^{m n p} \\psi};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\bar{\\psi} \\Gamma^{m n p}\\end{dmath*}"
+				}
+			],
+			"source" : "expand_diracbar(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -1,0 +1,138 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{PartialDerivative}{Makes an object a partial derivative.}\n\nMakes an object a partial derivative, i.e.~a derivative which\ncommutes. The object on which it acts has to be a non-sub/superscript\nchild, while all the sub- or superscript child nodes are interpreted\nto be the variables with respect to which the derivative is taken."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{PartialDerivative}{Makes an object a partial derivative.}\n\nMakes an object a partial derivative, i.e.~a derivative which\ncommutes. The object on which it acts has to be a non-sub/superscript\nchild, while all the sub- or superscript child nodes are interpreted\nto be the variables with respect to which the derivative is taken."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\nu}(A_{\\mu} B_{\\rho})\\end{dmath*}"
+				}
+			],
+			"source" : "\\partial{#}::PartialDerivative.\nA_{\\mu}::Depends(\\partial).\nex:= \\partial_{\\nu}{A_{\\mu} B_{\\rho}};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\nu}(A_{\\mu}) B_{\\rho}+A_{\\mu} \\partial_{\\nu}(B_{\\rho})\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\nu}(A_{\\mu}) B_{\\rho}\\end{dmath*}"
+				}
+			],
+			"source" : "unwrap(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that derivative objects do not necessarily need to have a sub- or\nsuperscript child, they can be abstract derivatives as in\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that derivative objects do not necessarily need to have a sub- or\nsuperscript child, they can be abstract derivatives as in\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D(c d e)\\end{dmath*}"
+				}
+			],
+			"source" : "D{#}::PartialDerivative.\nex:= D(c d e);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D(c) d e+c D(d) e+c d D(e)\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "If you want to write a derivative with respect to a coordinate (instead\nof with respect to an index, as in the first example above), refer to\nthe \\prop{Coordinate} property."
+				}
+			],
+			"hidden" : true,
+			"source" : "If you want to write a derivative with respect to a coordinate (instead\nof with respect to an index, as in the first example above), refer to\nthe \\prop{Coordinate} property."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

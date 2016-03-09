@@ -87,6 +87,19 @@ def display(obj):
     elif isinstance(obj, Property):
         server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
 
+    elif type(obj)==list:
+#        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
+         out="\\begin{dmath*}{}"
+         first=True
+         for elm in obj:
+             if first==False:
+                 out+=", "
+             else:
+                 first=False
+             out+=latex(obj)
+         out+="\\end{dmath*}"
+         server.send(out, "latex_view")
+        
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
         server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
         

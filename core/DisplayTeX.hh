@@ -18,7 +18,7 @@ typedef uint32_t kunichar;
 
 class DisplayTeX : public DisplayBase {
 	public:
-		DisplayTeX(const Properties&, const Ex&);
+		DisplayTeX(const Kernel&, const Ex&);
 
 	protected:
 		virtual bool needs_brackets(Ex::iterator it) override;
@@ -66,6 +66,7 @@ class DisplayTeX : public DisplayBase {
 		void print_powlike(std::ostream&, Ex::iterator);
 		void print_intlike(std::ostream&, Ex::iterator);
 		void print_equalitylike(std::ostream&, Ex::iterator);
+		void print_commutator(std::ostream& str, Ex::iterator it, bool comm);
 		void print_components(std::ostream&, Ex::iterator);
 		void print_other(std::ostream& str, Ex::iterator it);
 

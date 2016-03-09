@@ -1,0 +1,31 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{KroneckerDelta}{Turns an object into a generalised Kronecker delta symbol.}\n\nDenotes a generalised Kronecker\n  delta symbol. When the symbol carries two indices, it is the usual\n  Kronecker delta. When the number of indices is larger, the meaning\n  is\n\\begin{equation}\n\\delta_{m_1}{}^{n_1}{}_{m_2}{}^{n_2}{}_{\\ldots m_k}{}^{n_k} =\n\\delta_{[m 1}{}^{n_1} \\delta_{m_2}{}^{n_2} \\cdots \\delta_{m_k]}{}^{n_k} \\,,\n\\end{equation}\nwith unit weight anti-symmetrisation.  \n\nA symbol which is declared as a\nKronecker delta has the property that it can be taken in and out of\nderivatives. The algorithm \\algo{eliminate_kronecker} eliminates\nnormal Kronecker deltas by appropriately renaming indices (in order to\neliminate Kronecker deltas with more than two indices, first\nuse \\algo{expand_delta})."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{KroneckerDelta}{Turns an object into a generalised Kronecker delta symbol.}\n\nDenotes a generalised Kronecker\n  delta symbol. When the symbol carries two indices, it is the usual\n  Kronecker delta. When the number of indices is larger, the meaning\n  is\n\\begin{equation}\n\\delta_{m_1}{}^{n_1}{}_{m_2}{}^{n_2}{}_{\\ldots m_k}{}^{n_k} =\n\\delta_{[m 1}{}^{n_1} \\delta_{m_2}{}^{n_2} \\cdots \\delta_{m_k]}{}^{n_k} \\,,\n\\end{equation}\nwith unit weight anti-symmetrisation.  \n\nA symbol which is declared as a\nKronecker delta has the property that it can be taken in and out of\nderivatives. The algorithm \\algo{eliminate_kronecker} eliminates\nnormal Kronecker deltas by appropriately renaming indices (in order to\neliminate Kronecker deltas with more than two indices, first\nuse \\algo{expand_delta})."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

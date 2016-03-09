@@ -1,0 +1,31 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{SelfCommuting}{Make tensor components commute.}\n\nUsed to make objects with indices commuting when their index values\nare different. This is the default, so usually not\nneeded. See \\prop{SelfAntiCommuting} for more information.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{SelfCommuting}{Make tensor components commute.}\n\nUsed to make objects with indices commuting when their index values\nare different. This is the default, so usually not\nneeded. See \\prop{SelfAntiCommuting} for more information.\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

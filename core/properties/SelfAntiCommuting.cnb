@@ -1,0 +1,107 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{SelfAntiCommuting}{Make components of tensors anti-commute.}\n\nUsed to make objects with indices anti-commuting when their index\nvalues are different. Example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{SelfAntiCommuting}{Make components of tensors anti-commute.}\n\nUsed to make objects with indices anti-commuting when their index\nvalues are different. Example:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\psi^{\\nu} \\psi^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "\\psi^{\\mu}::SelfAntiCommuting.\nex:= \\psi^{\\nu} \\psi^{\\mu};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\psi^{\\mu} \\psi^{\\nu}\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\psi^{\\mu} \\psi^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= \\psi^{\\mu} \\psi^{\\mu};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This could not be handled with \\prop{AntiCommuting} because that\nproperty handles the behaviour of \\emph{different} expression patterns."
+				}
+			],
+			"hidden" : true,
+			"source" : "This could not be handled with \\prop{AntiCommuting} because that\nproperty handles the behaviour of \\emph{different} expression patterns."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

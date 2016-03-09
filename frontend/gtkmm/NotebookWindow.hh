@@ -115,6 +115,7 @@ namespace cadabra {
 			// Name and modification data.
 			void             update_title();
 			void             set_stop_sensitive(bool);
+			void             scroll_into_view(DTree::iterator);
 			std::string      name;
 			bool             modified;
 
@@ -175,7 +176,7 @@ namespace cadabra {
 			// Styling through CSS
 			void                           setup_css_provider();
 			Glib::RefPtr<Gtk::CssProvider> css_provider;
-			Glib::RefPtr<Gio::Settings>    settings;
+			Glib::RefPtr<Gio::Settings>    settings_gnome, settings_cinnamon;
 			void on_text_scaling_factor_changed(const std::string& key);
 
 			int last_configure_width;

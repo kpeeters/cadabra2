@@ -80,10 +80,12 @@ set(LOCAL_SRC_FILES
   properties/Coordinate.cc
   properties/DAntiSymmetric.cc
   properties/Depends.cc
+  properties/DependsInherit.cc
   properties/Derivative.cc
   properties/Diagonal.cc
   properties/DiracBar.cc
   properties/Distributable.cc
+  properties/EpsilonTensor.cc
   properties/FilledTableau.cc
   properties/GammaMatrix.cc
   properties/GammaTraceless.cc
@@ -102,6 +104,7 @@ set(LOCAL_SRC_FILES
   properties/SatisfiesBianchi.cc
   properties/SelfAntiCommuting.cc
   properties/SelfCommuting.cc
+  properties/SelfNonCommuting.cc
   properties/SortOrder.cc
   properties/Spinor.cc
   properties/Symbol.cc
@@ -122,8 +125,11 @@ set(LOCAL_SRC_FILES
   algorithms/distribute.cc
 #  algorithms/drop_weight.cc
   algorithms/eliminate_kronecker.cc
+  algorithms/epsilon_to_delta.cc
   algorithms/evaluate.cc
+  algorithms/expand_delta.cc
   algorithms/expand_diracbar.cc
+  algorithms/factor_in.cc
   algorithms/flatten_product.cc
   algorithms/flatten_sum.cc
   algorithms/indexsort.cc

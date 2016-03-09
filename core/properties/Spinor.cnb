@@ -1,0 +1,62 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Spinor}{Declares an object to transform as a spinor.}\n\nDeclares an object to be a spinor, i.e.~transforming in one of the\nspinor representations of the orthogonal or Lorentz group. The\ndeclaration should involve an indication of the dimension, as in the\nexample below. It can optionally have type indicators (these should be\n{\\tt Majorana}, {\\tt Weyl} or {\\tt MajoranaWeyl}) and chirality\nindicators for Weyl spinors ({\\tt Positive} or {\\tt Negative},\nindicating the eigenvalue with respect to the generalised~$\\gamma_5$\nmatrix). Here is an example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Spinor}{Declares an object to transform as a spinor.}\n\nDeclares an object to be a spinor, i.e.~transforming in one of the\nspinor representations of the orthogonal or Lorentz group. The\ndeclaration should involve an indication of the dimension, as in the\nexample below. It can optionally have type indicators (these should be\n{\\tt Majorana}, {\\tt Weyl} or {\\tt MajoranaWeyl}) and chirality\nindicators for Weyl spinors ({\\tt Positive} or {\\tt Negative},\nindicating the eigenvalue with respect to the generalised~$\\gamma_5$\nmatrix). Here is an example:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Spinor to~}\\psi.\\end{dmath*}"
+				}
+			],
+			"source" : "\\psi::Spinor(dimension=11, type=Majorana);\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This property is taken into account by various algorithms such\nas \\algo{fierz} and \\algo{sort_spinors}."
+				}
+			],
+			"hidden" : true,
+			"source" : "This property is taken into account by various algorithms such\nas \\algo{fierz} and \\algo{sort_spinors}."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

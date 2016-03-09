@@ -1,0 +1,89 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{DAntiSymmetric}{Gives object the symmetries of the derivative of a fully antisymmetric tensor.}\n\nDeclares an object to have the symmetries of the derivative of a fully\nanti-symmetric tensor, i.e.~to have a \\prop{TableauSymmetry}\ncorresponding to a hook-shape Young tableau."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{DAntiSymmetric}{Gives object the symmetries of the derivative of a fully antisymmetric tensor.}\n\nDeclares an object to have the symmetries of the derivative of a fully\nanti-symmetric tensor, i.e.~to have a \\prop{TableauSymmetry}\ncorresponding to a hook-shape Young tableau."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DAntiSymmetric to~}{DF}_(mnpq).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}{A}_(mnpq).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}DF_{m n p q} A^{m n p q}\\end{dmath*}"
+				}
+			],
+			"source" : "DF_{m n p q}::DAntiSymmetric;\nA_{m n p q}::AntiSymmetric;\nex:=DF_{m n p q} A^{m n p q};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}DF^{m n p q} A_{m n p q}\\end{dmath*}"
+				}
+			],
+			"source" : ""
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The symmetries can also be declared directly\nusing \\prop{TableauSymmetry} but it is usually easier to read the\n\\prop{DAntiSymmetric} form.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "The symmetries can also be declared directly\nusing \\prop{TableauSymmetry} but it is usually easier to read the\n\\prop{DAntiSymmetric} form.\n"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

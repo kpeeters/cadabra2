@@ -39,7 +39,7 @@ bool Depends::parse(const Kernel& kernel, keyval_t& kv)
 	return true;
 	}
 
-Ex Depends::dependencies(Ex::iterator) const
+Ex Depends::dependencies(const Kernel&, Ex::iterator) const
 	{
 	return dependencies_;
 	}

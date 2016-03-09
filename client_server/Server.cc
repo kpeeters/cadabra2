@@ -175,7 +175,7 @@ std::string Server::pre_parse(const std::string& line)
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" + line_stripped.substr(found+2) + "')";
 			std::string objname = line_stripped.substr(0,found);
-			if(lastchar!="." && indent_line.size()==0)
+			if(lastchar==";" && indent_line.size()==0)
 				ret = ret + "; display("+objname+")";
 			}
 		}

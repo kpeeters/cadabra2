@@ -412,7 +412,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	// Determine implicit dependence via Depends.
 	const Depends *dep = kernel.properties.get<Depends>(it);
 	if(dep) {
-		Ex deps(dep->dependencies(it));
+		Ex deps(dep->dependencies(kernel, it));
 		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
 				Ex cpy(nd);
 				cpy.begin()->fl.bracket=str_node::b_none;

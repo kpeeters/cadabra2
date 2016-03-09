@@ -3,6 +3,7 @@
 
 #include "Props.hh"
 #include "Storage.hh"
+#include "DisplayBase.hh"
 #include <ostream>
 #include <map>
 
@@ -19,12 +20,13 @@ typedef uint32_t kunichar;
 /// the present class, but be printed as 'sympy.diff' by the DisplaySympy
 /// class).
 
-class DisplayTerminal {
+class DisplayTerminal : public DisplayBase {
 	public:
-		DisplayTerminal(const Properties&, const Ex&);
+		DisplayTerminal(const Kernel&, const Ex&);
 
-		void output(std::ostream&);
-		void output(std::ostream&, Ex::iterator);
+	protected:
+		virtual void dispatch(std::ostream&, Ex::iterator) override;
+		virtual bool needs_brackets(Ex::iterator it) override;
 
 	private:
 		void print_multiplier(std::ostream&, Ex::iterator);
@@ -33,19 +35,7 @@ class DisplayTerminal {
 		void print_parent_rel(std::ostream&, str_node::parent_rel_t, bool first);
 		void print_children(std::ostream&, Ex::iterator, int skip=0);
 
-		const Ex&    tree;
-		const Properties& properties;
-
 		int bracket_level=0;
-
-		/// For every object encountered, dispatch will figure out the
-		/// most appropriate way to convert it into a LaTeX
-		/// expression. This may be done by simply looking at the
-		/// object's name (e.g. \prod will print as a product) but may
-		/// also involve looking up properties and deciding on the best
-		/// course of action based on the attached properties.
-
-		void dispatch(std::ostream&, Ex::iterator);
 
 		/// Printing members for various standard constructions,
 		/// e.g. print as a list, or as a decorated symbol with
@@ -62,6 +52,7 @@ class DisplayTerminal {
 		void print_intlike(std::ostream&, Ex::iterator);
 		void print_equalitylike(std::ostream&, Ex::iterator);
 		void print_components(std::ostream&, Ex::iterator);
+		void print_other(std::ostream&, Ex::iterator);
 
 		bool children_have_brackets(Ex::iterator ch) const;
 
