@@ -73,6 +73,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/LaTeXForm.hh"
 #include "properties/Metric.hh"
 #include "properties/NonCommuting.hh"
+#include "properties/NumericalFlat.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/RiemannTensor.hh"
 #include "properties/SatisfiesBianchi.hh"
@@ -1047,6 +1048,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<LaTeXForm>();
 	def_prop<Metric>();
 	def_prop<NonCommuting>();
+	def_prop<NumericalFlat>();
 	def_prop<PartialDerivative>();
 	def_prop<RiemannTensor>();
 	def_prop<SatisfiesBianchi>();
