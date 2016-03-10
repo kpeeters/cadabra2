@@ -184,11 +184,10 @@ std::string Server::pre_parse(const std::string& line)
 		if(found!=std::string::npos) {
 			boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
 			boost::smatch ares;
-			if(boost::regex_match(line_stripped.substr(found+2), ares, amatch)) {
-				auto propname = std::string(ares[1].first, ares[1].second);
-				auto argument = std::string(ares[2].first, ares[2].second); //.first, ares[2].second);
-				std::cerr << propname << std::endl;
-				std::cerr << argument << std::endl;
+			std::string subline=line_stripped.substr(found+2); // need to store the copy, not feed it straight into regex_match!
+			if(boost::regex_match(subline, ares, amatch)) {
+				auto propname = std::string(ares[1]);
+				auto argument = std::string(ares[2]);
 				if(argument.size()>0) { // declaration with arguments
 					argument=argument.substr(1,argument.size()-2);
 					std::cerr << argument << std::endl;
