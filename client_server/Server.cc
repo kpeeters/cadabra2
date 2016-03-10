@@ -179,15 +179,19 @@ std::string Server::pre_parse(const std::string& line)
 				ret = ret + "; display("+objname+")";
 			}
 		}
-	else {
+	else { // {a,b,c}::Indices(real, parent=holo);
 		found = line_stripped.find("::");
 		if(found!=std::string::npos) {
 			boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
-			boost::cmatch ares;
-			if(boost::regex_match(line_stripped.substr(found+2).c_str(), ares, amatch)) {
+			boost::smatch ares;
+			if(boost::regex_match(line_stripped.substr(found+2), ares, amatch)) {
 				auto propname = std::string(ares[1].first, ares[1].second);
-				if(ares[2].second>ares[2].first+1) { // declaration with arguments
-					auto argument = std::string(ares[2].first+1, ares[2].second-1);
+				auto argument = std::string(ares[2].first, ares[2].second); //.first, ares[2].second);
+				std::cerr << propname << std::endl;
+				std::cerr << argument << std::endl;
+				if(argument.size()>0) { // declaration with arguments
+					argument=argument.substr(1,argument.size()-2);
+					std::cerr << argument << std::endl;
 					ret = indent_line + "__cdbtmp__ = "+propname
 						+"(Ex(r'"+line_stripped.substr(0,found)
 						+"'), Ex(r'" +argument + "') )";
