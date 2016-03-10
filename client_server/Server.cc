@@ -190,7 +190,6 @@ std::string Server::pre_parse(const std::string& line)
 				auto argument = std::string(ares[2]);
 				if(argument.size()>0) { // declaration with arguments
 					argument=argument.substr(1,argument.size()-2);
-					std::cerr << argument << std::endl;
 					ret = indent_line + "__cdbtmp__ = "+propname
 						+"(Ex(r'"+line_stripped.substr(0,found)
 						+"'), Ex(r'" +argument + "') )";
