@@ -1,7 +1,8 @@
 
 #include "DataCell.hh"
 #include <sstream>
-#include <regex>
+#include <boost/regex.hpp>
+//#include <regex>
 #include <iostream>
 
 using namespace cadabra;
@@ -60,52 +61,52 @@ std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding)
 
 std::string cadabra::latex_to_html(const std::string& str)
 	{
-	std::regex section(R"(\\section\*\{(.*)\})");
-	std::regex subsection(R"(\\subsection\*\{(.*)\})");
-	std::regex verb(R"(\\verb\|(.*)\|)");
-	std::regex url(R"(\\url\{(.*)\})");
-	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
-	std::regex begin_verbatim(R"(\\begin\{verbatim\})");
-	std::regex end_verbatim(R"(\\end\{verbatim\})");
-	std::regex begin_dmath(R"(\\begin\{dmath\*\})");
-	std::regex end_dmath(R"(\\end\{dmath\*\})");
-	std::regex tilde("~");
-	std::regex less("<");
-	std::regex greater(">");
-	std::regex latex(R"(\\LaTeX\{\})");
-	std::regex tex(R"(\\TeX\{\})");
-	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
-	std::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
-	std::regex algo(R"(\\algo\{([^\}]*)\})");
-	std::regex prop(R"(\\prop\{([^\}]*)\})");
-	std::regex underscore(R"(\\_)");
-	std::regex e_aigu(R"(\\'e)");
+	boost::regex section(R"(\\section\*\{(.*)\})");
+	boost::regex subsection(R"(\\subsection\*\{(.*)\})");
+	boost::regex verb(R"(\\verb\|(.*)\|)");
+	boost::regex url(R"(\\url\{(.*)\})");
+	boost::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
+	boost::regex begin_verbatim(R"(\\begin\{verbatim\})");
+	boost::regex end_verbatim(R"(\\end\{verbatim\})");
+	boost::regex begin_dmath(R"(\\begin\{dmath\*\})");
+	boost::regex end_dmath(R"(\\end\{dmath\*\})");
+	boost::regex tilde("~");
+	boost::regex less("<");
+	boost::regex greater(">");
+	boost::regex latex(R"(\\LaTeX\{\})");
+	boost::regex tex(R"(\\TeX\{\})");
+	boost::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
+	boost::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
+	boost::regex algo(R"(\\algo\{([^\}]*)\})");
+	boost::regex prop(R"(\\prop\{([^\}]*)\})");
+	boost::regex underscore(R"(\\_)");
+	boost::regex e_aigu(R"(\\'e)");
 
 	std::string res;
 
 	try {
-		res = std::regex_replace(str, begin_dmath, "\\[");
-		res = std::regex_replace(res, end_dmath, "\\]");
-		res = std::regex_replace(res, tilde, " ");
-		res = std::regex_replace(res, less, "&lt;");
-		res = std::regex_replace(res, tilde, "&gt;");
-		res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
-		res = std::regex_replace(res, end_verbatim, "</pre>");
-		res = std::regex_replace(res, section, "<h1>$1</h1>");
-		res = std::regex_replace(res, subsection, "<h2>$1</h2>");
-		res = std::regex_replace(res, verb, "<code>$1</code>");
-		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
-		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-		res = std::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
-		res = std::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
-		res = std::regex_replace(res, algo, "<a href=\"$1.html\"><code>$1</code></a>");
-		res = std::regex_replace(res, prop, "<a href=\"$1.html\"><code>$1</code></a>");
-		res = std::regex_replace(res, underscore, "_");
-		res = std::regex_replace(res, latex, "LaTeX");
-		res = std::regex_replace(res, tex, "TeX");
-		res = std::regex_replace(res, e_aigu, "é");
+		res = boost::regex_replace(str, begin_dmath, "\\[");
+		res = boost::regex_replace(res, end_dmath, "\\]");
+		res = boost::regex_replace(res, tilde, " ");
+		res = boost::regex_replace(res, less, "&lt;");
+		res = boost::regex_replace(res, tilde, "&gt;");
+		res = boost::regex_replace(res, begin_verbatim, "<pre class='output'>");
+		res = boost::regex_replace(res, end_verbatim, "</pre>");
+		res = boost::regex_replace(res, section, "<h1>$1</h1>");
+		res = boost::regex_replace(res, subsection, "<h2>$1</h2>");
+		res = boost::regex_replace(res, verb, "<code>$1</code>");
+		res = boost::regex_replace(res, url, "<a href=\"$1\">$1</a>");
+		res = boost::regex_replace(res, href, "<a href=\"$1\">$2</a>");
+		res = boost::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = boost::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = boost::regex_replace(res, algo, "<a href=\"$1.html\"><code>$1</code></a>");
+		res = boost::regex_replace(res, prop, "<a href=\"$1.html\"><code>$1</code></a>");
+		res = boost::regex_replace(res, underscore, "_");
+		res = boost::regex_replace(res, latex, "LaTeX");
+		res = boost::regex_replace(res, tex, "TeX");
+		res = boost::regex_replace(res, e_aigu, "é");
 		}
-	catch(std::regex_error& ex) {
+	catch(boost::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;
 		}
 
@@ -179,7 +180,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				}
 			}
 		}
-	catch(std::regex_error& ex) {
+	catch(boost::regex_error& ex) {
 		std::cerr << "regex error doing latex_to_html on " << it->textbuf << std::endl;
 		throw;
 		}
