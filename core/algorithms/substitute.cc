@@ -1,4 +1,5 @@
 
+#include <sstream>
 #include "Cleanup.hh"
 #include "Functional.hh"
 #include "algorithms/substitute.hh"
@@ -121,7 +122,9 @@ bool substitute::can_apply(iterator st)
 Algorithm::result_t substitute::apply(iterator& st)
 	{
 	//std::cerr << "substitute::apply at " << *st->name << std::endl;
-//	prod_wrap_single_term(st);
+
+	// for(auto& rule: comparator.replacement_map) 
+   //	std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
 
    sibling_iterator arrow=use_rule;
    iterator lhs=tr.begin(arrow);
@@ -135,29 +138,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement rule, and then replace nodes and subtrees in there
 	// based on how the pattern matching went.
    Ex repl(rhs);
-
 	repl.wrap(repl.begin(), str_node("\\expression"));
-	// First activate the inert '@(...)' commands present on the rhs.
-	// FIXME: this is a hack, it should be much easier to activate inert commands
-	// inside algorithm modules.
-	bool replacer_found=false;
-	iterator rit=repl.begin();
-	while(rit!=repl.end()) {
-		if(*rit->name=="@@") {
-			replacer_found=true;
-			// V2: fixme
-//			eqn replacer(tr, tr.end());
-//			iterator num=repl.begin(rit);
-//			replacer.apply(num);
-			iterator newrit=rit;
-			newrit.skip_children();
-			++newrit;
-			repl.flatten(rit);
-			repl.erase(rit);
-			rit=newrit;
-			}
-		else ++rit;
-		}
    index_map_t ind_free, ind_dummy, ind_forced;
 
 	if(rhs_contains_dummies[use_rule])
@@ -172,10 +153,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 	std::vector<iterator> subtree_insertion_points;
 	while(it!=repl.end()) { 
 		bool is_stripped=false;
-//		tr.print_recursive_treeform(std::cerr, repl.begin());
 
-//		For some reason 'a?' is not found!?! Well, that's presumably because _{a?} does not
-//      match ^{a?}. (though this does match when we write 'i' instead of a?. 
+      // For some reason 'a?' is not found!?! Well, that's presumably because _{a?} does not
+      // match ^{a?}. (though this does match when we write 'i' instead of a?. 
 
 		loc=comparator.replacement_map.find(Ex(it));
 		if(loc==comparator.replacement_map.end() && it->is_name_wildcard() && tr.number_of_children(it)!=0) {
@@ -186,11 +166,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			 }
 
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
-			// std::cerr << "rule : " 
-			//  			 << (*loc).first.begin()->fl.parent_rel 
-			//  			 << *((*loc).first.begin()->name) << " -> " 
-			//  			 << (*loc).second.begin()->fl.parent_rel 
-			//  			 << *((*loc).second.begin()->name) << std::endl;
+			// std::cerr << "rule: " << Ex(loc->first) << " -> " << Ex(loc->second) << std::endl;
 
 			// When a replacement is made here, and the index is actually
 			// a dummy in the replacement, we screw up the ind_dummy
@@ -260,8 +236,11 @@ Algorithm::result_t substitute::apply(iterator& st)
 		while(indit!=must_be_empty.end()) {
 			Ex the_key=indit->first;
 			const Indices *dums=kernel.properties.get<Indices>(indit->second, true);
-			if(dums==0)
-				throw ConsistencyException("Need to know an index set for "); // V2: fix + *indit->second->name +".");
+			if(dums==0) {
+				std::ostringstream str;
+				str << "Need to know an index set for " << Ex(*indit->second) << ".";
+				throw ConsistencyException(str.str());
+				}
 			Ex relabel=get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
 			added_dummies.insert(index_map_t::value_type(relabel,(*indit).second));
 			do {

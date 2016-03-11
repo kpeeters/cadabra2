@@ -1151,19 +1151,20 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		index_map_t item_dummy;
 		while(sit!=it.end()) {
 //			std::cout << *sit->name << std::endl;
-			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) &&
-				sit->fl.bracket==str_node::b_none /* && sit->is_integer()==false */) {
+			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) && sit->fl.bracket==str_node::b_none) {
 				if(*sit->name!="??") {
 					const Coordinate *cdn=kernel.properties.get<Coordinate>(sit, true);
 					const Symbol     *smb=Symbol::get(kernel.properties, sit, true);
 					// integer, coordinate or symbol indices always ok
 					if(sit->is_integer() || cdn || smb) {
+						// Note: even integers need to be stored as indices, because we expect e.g. canonicalise
+						// to re-order even numerical indices. They should just never be flagged as dummies.
 						item_free.insert(index_map_t::value_type(Ex(sit), iterator(sit)));
 						}
 					else {
 						index_map_t::iterator fnd=item_free.find(Ex(sit));
 						if(fnd!=item_free.end()) {
-//							std::cout << *sit->name << " already in free set" << std::endl;
+//							std::cerr << *sit->name << " already in free set" << std::endl;
 							if(item_dummy.find(Ex(sit))!=item_dummy.end())
 								throw ConsistencyException("Triple index " + *sit->name + " inside a single factor found.");
 							item_dummy.insert(*fnd);
@@ -1172,7 +1173,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 //							std::cout << item_dummy.size() << " " << item_free.size() << std::endl;
 							}
 						else {
-//							std::cout << *sit->name << " is new" << std::endl;
+//							std::cerr << *sit->name << " is new" << std::endl;
 							item_free.insert(index_map_t::value_type(Ex(sit), iterator(sit)));
 							}
 						}
