@@ -355,3 +355,11 @@ div#bottomright {
 	 float:right;
 	 padding-bottom: 10px;
 }
+
+div.literal {
+	 font-family: "Inconsolata", monospace; 
+	 font-size: 15.8px;
+	 color: blue; 
+	 line-height: 20px;
+	 margin-left: 50px;
+}
