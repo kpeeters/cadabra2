@@ -189,9 +189,6 @@ add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
-# Activate cotire for the entire library. This takes _a lot_ of disk space.
-# cotire(cadabra2)
-
 #if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clangx")
 #  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES} python)
 #else()

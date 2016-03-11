@@ -392,7 +392,9 @@ boost::python::list list_properties()
 
 		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
 		std::ostringstream str;
+		// std::cerr << "displaying" << std::endl;
 		dt.output(str);
+		// std::cerr << "displayed " << str.str() << std::endl;
 		res += str.str();
 
 		if(nxt==props.pats.end() || it->first!=nxt->first) {

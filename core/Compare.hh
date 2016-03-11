@@ -142,8 +142,12 @@ class tree_exact_equal_mod_prel_obj {
 		const Properties* properties;
 };
 
-// Compare for indexmap_t. The only comparator object that does not use
-// properties info to lookup properties.
+/// Compare for indexmap_t. The only comparator object that does not use
+/// properties info to lookup properties. This one compares exactly (it cannot
+/// do any matching which requires knowledge about index sets because it does
+/// not know about properties). It requires parent relations to match including
+/// at top level. It requires multipliers to match _except_ at top level. 
+/// Names with '?' or '??' suffixes are matched literally, not as patterns.
 
 class tree_exact_less_for_indexmap_obj {
 	public:
