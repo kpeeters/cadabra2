@@ -61,10 +61,10 @@ std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding)
 
 std::string cadabra::latex_to_html(const std::string& str)
 	{
-	boost::regex section(R"(\\section\*\{(.*)\})");
-	boost::regex subsection(R"(\\subsection\*\{(.*)\})");
-	boost::regex verb(R"(\\verb\|(.*)\|)");
-	boost::regex url(R"(\\url\{(.*)\})");
+	boost::regex section(R"(\\section\*\{([^\}]*)\})");
+	boost::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
+	boost::regex verb(R"(\\verb\|([^\|]*)\|)");
+	boost::regex url(R"(\\url\{([^\}]*)\})");
 	boost::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
 	boost::regex begin_verbatim(R"(\\begin\{verbatim\})");
 	boost::regex end_verbatim(R"(\\end\{verbatim\})");
@@ -85,8 +85,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::string res;
 
 	try {
-		res = boost::regex_replace(str, begin_dmath, "\\[");
-		res = boost::regex_replace(res, end_dmath, "\\]");
+		res = boost::regex_replace(str, begin_dmath, R"(\\[)");
+		res = boost::regex_replace(res, end_dmath, R"(\\])");
 		res = boost::regex_replace(res, tilde, " ");
 		res = boost::regex_replace(res, less, "&lt;");
 		res = boost::regex_replace(res, tilde, "&gt;");
