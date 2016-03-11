@@ -107,7 +107,8 @@ void Server::init()
 
 	// Call the Cadabra default initialisation script.
 
-	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py')";
+	std::string startup = "import imp; execfile(imp.find_module('cadabra2_defaults')[1])";
+//	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py')";
 	run_string(startup);
 	}
 
