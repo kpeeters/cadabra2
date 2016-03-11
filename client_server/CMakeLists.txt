@@ -6,11 +6,13 @@ if (POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
 endif(POLICY CMP0042)
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-        message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
-    endif()
-endif()
+# Now using boost::regex, so we can get away with gcc 4.8.
+#
+# if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+#     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
+#         message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
+#     endif()
+# endif()
 
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
@@ -64,9 +66,9 @@ include_directories("." "./websocketpp" ${JSONCPP_INCLUDE_DIR})
 add_executable(cadabra-server cadabra-server.cc)
 add_executable(cadabra2html cadabra2html.cc DataCell.cc)
 #add_executable(test_talk_to_server test_talk_to_server.cc)
-add_executable(regexp_tester regexp_tester.cc)
+#add_executable(regexp_tester regexp_tester.cc)
 target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIBRARIES})
-target_link_libraries(cadabra2html ${JSONCPP_LIBRARIES})
+target_link_libraries(cadabra2html ${JSONCPP_LIBRARIES} ${Boost_LIBRARIES} )
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
