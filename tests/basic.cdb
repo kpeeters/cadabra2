@@ -165,14 +165,17 @@ test25()
 
 def test26():
     __cdbkernel__=create_scope()
-{m,n}::Integer.
-rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
-ex:= a_{1} a_{0} a_{-1};
-substitute(ex, rl);
+    # FIXME: This won't work yet because we do not want to match
+    # indices to numbers
+    # rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
+    {m,n}::Integer.
+    ex:= a_{1} a_{0} a_{-1};
+    rl:= a_{n?} a_{m?} = a_{m?} a_{n?} + m? \delta_{m?}_{-n?};
+    substitute(ex, rl);
+    # FIXME: should not be necessary if the m?=0 would have removed the 2nd term.
+    distribute(ex);
+    tst:= a_{0} a_{1} a_{-1} - @(ex);
+    assert(tst==0)
 
+test26()
 
-{m,n}::Integer.
-rl:= a_{n?} a_{m?} = a_{m?} a_{n?} + m? \delta_{m?}_{-n?};
-ex:= a_{1} a_{0} a_{-1};
-substitute(ex, rl);
-    
