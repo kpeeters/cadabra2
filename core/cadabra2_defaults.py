@@ -5,7 +5,7 @@
 
 import sys
 from cadabra2 import *
-sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
+#sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 
 # Attempt to import sympy; if not, setup logic so that the
 # shell does not fail later.
