@@ -169,13 +169,15 @@ set(IMAGES
 
 # import site; print site.getsitepackages()[0]
 
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print site.getsitepackages()[0];"
-  OUTPUT_VARIABLE python_site_path OUTPUT_STRIP_TRAILING_WHITESPACE)
+if("${PYTHON_SITE_PATH}" STREQUAL "")
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print site.getsitepackages()[0];"
+                  OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
 
-message("-- Python site path at ${python_site_path}")
+message("-- Python site path at ${PYTHON_SITE_PATH}")
 install(FILES
   "${PROJECT_BINARY_DIR}/cadabra2.so"
-  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${python_site_path}")
+  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${PYTHON_SITE_PATH}")
 
 install(PROGRAMS
   "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
@@ -200,7 +202,7 @@ install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE O
                                                         GROUP_READ GROUP_EXECUTE 
                                                         WORLD_READ WORLD_EXECUTE)
 
-install(DIRECTORY DESTINATION ${python_site_path} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                         GROUP_READ GROUP_EXECUTE 
                                                         WORLD_READ WORLD_EXECUTE)
 
