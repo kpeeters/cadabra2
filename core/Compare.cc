@@ -175,6 +175,7 @@ bool subtree_equal(const Properties* properties, Ex::iterator one, Ex::iterator 
 bool subtree_exact_less(const Properties* properties, Ex::iterator one, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 	{
 	int cmp=subtree_compare(properties, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
+	//std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " = " << cmp << std::endl;
 	if(cmp>0) return true;
 	return false;
 	}
@@ -399,6 +400,9 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 
 	if(pattern || (implicit_pattern && two->is_integer()==false)) { 
 		// The above is to ensure that we never match integers to implicit patterns.
+		// FIXME: this is wrong: we should only not match integers to implicit patterns
+		// if we know that the implicit pattern can never take the particular numerical value.
+		// This prevents basic.cdb/test26 from working without '?' characters.
 
 		// We want to search the replacement map for replacement rules which we have
 		// constructed earlier, and discard the current match if it conflicts those 
@@ -482,7 +486,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// if we want that a found _{z} also leads to a replacement for ^{z},
 			// this needs to be added to the replacement map explicitly.
 
-			// std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
+			//std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
@@ -493,6 +497,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
  				cmptree1.begin()->flip_parent_rel();
  				if(two->is_index())
  					cmptree2.begin()->flip_parent_rel();
+				//std::cerr << "storing " << Ex(cmptree1) << " -> " << Ex(cmptree2) << std::endl;
 				replacement_map[cmptree1]=cmptree2;
  				}
 			
@@ -503,15 +508,22 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				tmp1.erase_children(tmp1.begin());
 				tmp2.erase_children(tmp2.begin());
 				replacement_map[tmp1]=tmp2;
+				//std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 				}
 			// and if this is a pattern also insert the one without the parent_rel
 			if(one->is_name_wildcard()) {
-				std::cerr << "storing pattern without pattern rel" << std::endl;
+				//std::cerr << "storing pattern without pattern rel " << replacement_map.size() << std::endl;
 				Ex tmp1(one), tmp2(two);
 				tmp1.begin()->fl.parent_rel=str_node::p_none;
 				tmp2.begin()->fl.parent_rel=str_node::p_none;
 				// We do not want this pattern to be present already.
-				assert(replacement_map.find(tmp1)!=replacement_map.end());
+				auto fnd=replacement_map.find(tmp1);
+				if(fnd!=replacement_map.end()) {
+					std::cerr << "already have " << fnd->first << " -> " << fnd->second << std::endl;
+					assert(1==0);
+					}
+//				assert(replacement_map.find(tmp1)!=replacement_map.end());
+				// std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 				replacement_map[tmp1]=tmp2;
 				}
 			}
