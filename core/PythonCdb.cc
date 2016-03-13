@@ -428,6 +428,7 @@ std::string print_tree(Ex *ex)
 PyObject *ParseExceptionType = NULL;
 PyObject *ArgumentExceptionType = NULL;
 PyObject *NonScalarExceptionType = NULL;
+PyObject *InternalErrorType = NULL;
 
 void translate_ParseException(const ParseException &e)
 	{
@@ -448,6 +449,13 @@ void translate_NonScalarException(const NonScalarException &e)
 	assert(NonScalarExceptionType != NULL);
 	boost::python::object pythonExceptionInstance(e);
 	PyErr_SetObject(NonScalarExceptionType, pythonExceptionInstance.ptr());
+	}
+
+void translate_InternalError(const InternalError &e)
+	{
+	assert(InternalErrorType != NULL);
+	boost::python::object pythonExceptionInstance(e);
+	PyErr_SetObject(InternalErrorType, pythonExceptionInstance.ptr());
 	}
 
 // Return the kernel (with symbol __cdbkernel__) in local scope if
@@ -600,9 +608,21 @@ std::string Property<Prop>::latex_() const
 	std::ostringstream str;
 	str << "\\text{Attached property ";
 	prop->latex(str);
-	std::string bare=Ex_str_(*for_obj);
+	std::string bare=Ex_latex_(*for_obj);
 	boost::replace_all(bare, "#", "\\#");
 	str << " to~}"+bare+".";
+	return str.str();
+	}
+
+template<>
+std::string Property<LaTeXForm>::latex_() const
+	{
+	std::ostringstream str;
+	str << "\\text{Attached property ";
+	prop->latex(str);
+	std::string bare=Ex_str_(*for_obj);
+	boost::replace_all(bare, "\\", "$\\backslash{}$}");
+	str << " to {\\tt "+bare+"}.";
 	return str.str();
 	}
 
@@ -850,6 +870,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyNonScalarException.def("__str__", &NonScalarException::py_what);
 	NonScalarExceptionType=pyNonScalarException.ptr();
 
+	class_<InternalError> pyInternalError("InternalError", init<std::string>());
+	pyInternalError.def("__str__", &InternalError::py_what);
+	InternalErrorType=pyInternalError.ptr();
+
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	class_<Kernel> pyKernel("Kernel", init<>());
 
@@ -1070,6 +1094,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	register_exception_translator<ParseException>(&translate_ParseException);
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
 	register_exception_translator<NonScalarException>(&translate_NonScalarException);
+	register_exception_translator<InternalError>(&translate_InternalError);
 
 	// How can we give Python access to information stored in properties?
 	}

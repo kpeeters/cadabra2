@@ -11,11 +11,11 @@ def test01():
 test01()
     
 def test02():
-\delta{#}::KroneckerDelta.
-n::Integer(0..d).
-obj2:= a*\delta_{n n};
-eliminate_kronecker(_)
-tst2:= a*(d+1) - @(obj2);
+    \delta{#}::KroneckerDelta.
+    n::Integer(0..d).
+    obj2:= a*\delta_{n n};
+    eliminate_kronecker(_)
+    tst2:= a*(d+1) - @(obj2);
     assert(tst2==0)
     print('Test 02 passed')
 

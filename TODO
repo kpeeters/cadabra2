@@ -1,3 +1,9 @@
+
+- Several display functions assume that they never get called on \operator{#} type 
+  expressions, and then segfault. \pow has been fixed, sort-of, but this needs looking into.
+
+- Document DOCME in Props.cc, about how Indices properties get stored.
+
 - replace_match and take_match are still rough around the edges; need to be forced to work only
   at top level, or we need to store the replacement points more cleverly, or...
 

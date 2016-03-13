@@ -224,6 +224,8 @@ class Algorithm {
 		Ex get_dummy(const list_property *, iterator) const;
 		Ex get_dummy(const list_property *, iterator, iterator) const;
 
+		bool index_in_set(Ex, const index_map_t *) const;
+
 	private:
 		// Single or deep-scan apply operations. Do not call directly.
 		result_t apply_once(Ex::iterator& it);
