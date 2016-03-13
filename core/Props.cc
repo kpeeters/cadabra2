@@ -98,6 +98,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 	// FIXME: fix logic for subtree/Ex_compare usage.
 	//std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
 	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
+	//std::cerr << res << std::endl;
 
 	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
 	// because Ex_comparator tries to fetch property information which then gets back here.
@@ -564,6 +565,7 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 		// FIXME: we special-case Indices, as those pass a list of objects with parent_rel==p_none,
 		// but we need the patterns to have parent_rel set to p_sub and p_super in order to avoid
 		// special cases in the pattern matcher later. 
+		// DOCME: the above
 		if(dynamic_cast<Indices *>(thelistprop)) {
 			std::vector<Ex> objs2;
 			for(auto& obj: objs) {

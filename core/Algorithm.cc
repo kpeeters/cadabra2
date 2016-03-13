@@ -577,9 +577,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	determine_intersection(ind_dummy_full, ind_dummy, must_be_empty);
 	index_map_t::iterator it=must_be_empty.begin();
 	while(it!=must_be_empty.end()) {
-//		txtout << "double index pair " << *((*it).first.begin()->name) 
-//				 << " (index appears " << must_be_empty.count((*it).first) 
-//				 << " times); renaming..." << std::endl;
+		// std::cerr << "double index pair" << std::endl;
 		Ex the_key=(*it).first;
 		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
@@ -603,11 +601,12 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 //	newly_generated.clear(); // DO NOT ERASE, IDIOT!
 
 	determine_intersection(ind_free_full, ind_dummy, must_be_empty);
+	//for(auto& ii: must_be_empty) {
+	//	std::cerr << ii.first << std::endl;
+	//	}
 	it=must_be_empty.begin();
 	while(it!=must_be_empty.end()) {
-//		txtout << "triple index " << *((*it).first) 
-//				 << " (index appears " << must_be_empty.count((*it).first) 
-//				 << " times); renaming..." << std::endl;
+		//std::cerr << "triple index pair " << it->first << std::endl;
 		Ex the_key=(*it).first;
 		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
@@ -615,22 +614,20 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		assert(dums);
 		Ex relabel
             =get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
+		relabel.begin()->fl.parent_rel=it->second->fl.parent_rel;
 		newly_generated.insert(index_map_t::value_type(relabel,(*it).second));
 		do {
 			tr.replace_index((*it).second, relabel.begin(), true);
-//			(*it).second->name=relabel;
 			++it;
 			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	must_be_empty.clear();
-//	newly_generated.clear();
+   //	newly_generated.clear();
 	determine_intersection(ind_free, ind_dummy_full, must_be_empty);
 	it=must_be_empty.begin();
 	while(it!=must_be_empty.end()) {
-//		txtout << "triple index " << *((*it).first) 
-//				 << " (index appears " << must_be_empty.count((*it).first) 
-//				 << " times); renaming..." << std::endl;
+		// std::cerr << "triple index pair 2" << std::endl;
 		Ex the_key=(*it).first;
 		const Indices *dums=kernel.properties.get<Indices>(it->second, true);
 		if(!dums)
@@ -638,6 +635,7 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		assert(dums);
 		Ex relabel
             =get_dummy(dums, &ind_dummy_full, &ind_dummy, &ind_free_full, &ind_free, &newly_generated);
+		relabel.begin()->fl.parent_rel=it->second->fl.parent_rel;
 		newly_generated.insert(index_map_t::value_type(relabel,(*it).second));
 		do {
 			tr.replace_index((*it).second, relabel.begin(), true);
@@ -695,6 +693,25 @@ int Algorithm::max_numbered_name(const std::string& nm,
 	return themax;
 	}
 
+bool Algorithm::index_in_set(Ex ex, const index_map_t *im) const
+	{
+	if(im==0) return false;
+
+	if(im->count(ex)>0) return true;
+
+	if(ex.begin()->fl.parent_rel==str_node::p_super) {
+		ex.begin()->fl.parent_rel=str_node::p_sub;
+		int c=im->count(ex);
+		if(c>0) return true;
+		}
+	if(ex.begin()->fl.parent_rel==str_node::p_sub) {
+		ex.begin()->fl.parent_rel=str_node::p_super;
+		int c=im->count(ex);
+		if(c>0) return true;
+		}
+	return false;
+	}
+
 Ex Algorithm::get_dummy(const list_property *dums,
 												  const index_map_t * one, 
 												  const index_map_t * two,
@@ -704,10 +721,26 @@ Ex Algorithm::get_dummy(const list_property *dums,
 	{
 	std::pair<Properties::pattern_map_t::const_iterator, Properties::pattern_map_t::const_iterator>
 		pr=kernel.properties.pats.equal_range(dums);
+
+	// std::cerr << "finding index not in: " << std::endl;
+	// if(one)
+	// 	for(auto& i: *one)
+	// 		std::cerr << i.first << std::endl;
+	// if(two)
+	// 	for(auto& i: *two)
+	// 		std::cerr << i.first << std::endl;
+	// if(three)
+	// 	for(auto& i: *three)
+	// 		std::cerr << i.first << std::endl;
+	// if(four)
+	// 	for(auto& i: *four)
+	// 		std::cerr << i.first << std::endl;
+	// if(five)
+	// 	for(auto& i: *five)
+	// 		std::cerr << i.first << std::endl;
 	
 	while(pr.first!=pr.second) {
-//		txtout << "trying " << std::endl;
-//		tr.print_recursive_treeform(txtout, (*pr.first).second->obj.begin());
+		// std::cerr << "trying " << pr.first->second->obj << std::endl;
 		if(pr.first->second->obj.begin()->is_autodeclare_wildcard()) {
 			std::string base=*pr.first->second->obj.begin()->name_only();
 			int used=max_numbered_name(base, one, two, three, four, five);
@@ -721,13 +754,16 @@ Ex Algorithm::get_dummy(const list_property *dums,
 			}
 		else {
 			const Ex& inm=(*pr.first).second->obj;
-			if(!one || one->count(inm)==0)
-				if(!two || two->count(inm)==0)
-					if(!three || three->count(inm)==0) 
-						if(!four || four->count(inm)==0) 
-							if(!five || five->count(inm)==0) {
-								return inm;
-								}
+			// BUG: even if only _{a} is in the used map, we should not
+			// accept ^{a}. But since ...
+			if(index_in_set(inm, one)==false   &&
+				index_in_set(inm, two)==false   &&
+				index_in_set(inm, three)==false &&
+				index_in_set(inm, four)==false  &&
+				index_in_set(inm, five)==false) {
+				// std::cerr << "ok to use " << inm << std::endl;
+				return inm;
+				}
 			}
 		++pr.first;
 		}

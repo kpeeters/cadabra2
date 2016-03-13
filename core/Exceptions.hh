@@ -49,3 +49,11 @@ class NonScalarException : public CadabraException {
 		std::string py_what() const;
 };
 
+
+class InternalError : public CadabraException {
+	public:
+		InternalError(std::string="");
+
+		std::string py_what() const;
+};
+

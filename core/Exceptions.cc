@@ -43,3 +43,15 @@ std::string NonScalarException::py_what() const
 	std::cerr << what() << std::endl;
 	return what();
 	}
+
+InternalError::InternalError(std::string s)
+	: CadabraException(s)
+	{
+	}
+
+std::string InternalError::py_what() const
+	{
+	std::cerr << "Internal error: " << what() << "Please report a bug to info@cadabra.science." << std::endl;
+	return what();
+	}
+

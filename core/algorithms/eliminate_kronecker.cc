@@ -36,7 +36,6 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 			sibling_iterator ii1=tr.begin(it);
 			sibling_iterator ii2=ii1; ++ii2;
 			if(subtree_compare(&kernel.properties, ii1, ii2, 1, false, true)==0) { // a self-contracted Kronecker delta
-				// std::cerr << "SC" << std::endl;
 				const Integer *itg1=kernel.properties.get<Integer>(ii1, true);
 				const Integer *itg2=kernel.properties.get<Integer>(ii2, true);
 				if(itg1 && itg2 && ii1->is_rational()==false && ii2->is_rational()==false) {

@@ -64,17 +64,6 @@ int subtree_compare(const Properties *properties,
 		}
 	else mult=2;
 
-	// Compare parent relations.
-	if(mod_prel<=0) {
-		str_node::parent_rel_t p1=one->fl.parent_rel;
-		str_node::parent_rel_t p2=two->fl.parent_rel;
-		if(position_type==Indices::free && mod_prel==-3) {
-			if(p1==str_node::p_super) p1=str_node::p_sub; // for comparison, treat super as sub
-			if(p2==str_node::p_super) p2=str_node::p_sub;
-			}
-		if(p1!=p2) return (p1<p2)?2:-2;
-		}
-
 
 	// Handle object wildcards and comparison
 	if(!literal_wildcards) {
@@ -99,6 +88,17 @@ int subtree_compare(const Properties *properties,
 			if(*one->name < *two->name) return mult;
 			else return -mult;
 			}
+		}
+
+	// Compare parent relations.
+	if(mod_prel<=-2) {
+		str_node::parent_rel_t p1=one->fl.parent_rel;
+		str_node::parent_rel_t p2=two->fl.parent_rel;
+		if(position_type==Indices::free && mod_prel==-3) {
+			if(p1==str_node::p_super) p1=str_node::p_sub; // for comparison, treat super as sub
+			if(p2==str_node::p_super) p2=str_node::p_sub;
+			}
+		if(p1!=p2) return (p1<p2)?2:-2;
 		}
 
 	// Now turn to the child nodes. Before comparing them directly, first compare
@@ -486,7 +486,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// if we want that a found _{z} also leads to a replacement for ^{z},
 			// this needs to be added to the replacement map explicitly.
 
-			//std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
+			std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
@@ -511,7 +511,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				//std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 				}
 			// and if this is a pattern also insert the one without the parent_rel
-			if(one->is_name_wildcard()) {
+			if(one->is_name_wildcard() && one->is_index()) {
 				//std::cerr << "storing pattern without pattern rel " << replacement_map.size() << std::endl;
 				Ex tmp1(one), tmp2(two);
 				tmp1.begin()->fl.parent_rel=str_node::p_none;
@@ -519,8 +519,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				// We do not want this pattern to be present already.
 				auto fnd=replacement_map.find(tmp1);
 				if(fnd!=replacement_map.end()) {
-					std::cerr << "already have " << fnd->first << " -> " << fnd->second << std::endl;
-					assert(1==0);
+					throw InternalError("Attempting to duplicate replacement rule.");
 					}
 //				assert(replacement_map.find(tmp1)!=replacement_map.end());
 				// std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
