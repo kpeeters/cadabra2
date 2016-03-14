@@ -82,6 +82,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/SelfNonCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
+#include "properties/Symbol.hh"
 #include "properties/Symmetric.hh"
 #include "properties/Tableau.hh"
 #include "properties/TableauSymmetry.hh"
@@ -1083,6 +1084,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SelfNonCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
+	def_prop<Symbol>();
 	def_prop<Symmetric>();
 	def_prop<Tableau>();
 	def_prop<TableauSymmetry>();

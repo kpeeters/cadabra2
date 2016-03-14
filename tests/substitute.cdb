@@ -168,6 +168,21 @@ ex:= A_{3} A_{2} A_{1} A_{0} + A_{0} A_{1};
 rl:= A_{m?} A_{n?} | m? > n? -> Q;
 substitute(ex, rl, repeat=True);
 
-# fails
-rl:= A_{m?} A_{n?} | m? > n? -> A_{n?} A_{m?} Q;
+# Note: declaring 'm' to be a symbol then matches this property to 'm?'; why?
+{m,n,p}::Symbol;
+ex:= A_{3} A_{2} A_{1} A_{0} + A_{0} A_{1};
+# We need 'm?' etc here because we do not yet match _{m} to an integer, not even
+# when 'm' is a symbol.
+rl:= A_{m?} A_{n?} | m? > n? -> A_{n?} A_{m?} + Q;
 
+while True:
+    substitute(ex, rl);
+    distribute(ex);
+    if ex.state()==result_t.unchanged:
+        break
+
+
+while ex.changing():
+   dostuff
+
+Could work if the first call sets some flag, then next...
