@@ -1,8 +1,16 @@
 
+- expression ordering needs to keep equal objects with different parent rels next to each
+  other, but doesn't yet (Compare.cc; child comparison should move up). This will break
+  index relabeling with composite dummies.
+
 - Several display functions assume that they never get called on \operator{#} type 
   expressions, and then segfault. \pow has been fixed, sort-of, but this needs looking into.
 
 - Document DOCME in Props.cc, about how Indices properties get stored.
+
+- \conditional and -> have the right relative priority, but \conditional and = do not.  Although
+  we probably want to keep it that way, because otherwise you cannot write m=n in a conditional,
+  and have to do things like m==n.
 
 - replace_match and take_match are still rough around the edges; need to be forced to work only
   at top level, or we need to store the replacement points more cleverly, or...

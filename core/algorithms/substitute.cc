@@ -98,10 +98,6 @@ bool substitute::can_apply(iterator st)
 			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
 			else                     ret=comparator.equal_subtree(lhs, st);
 			
-			// tr.print_recursive_treeform(std::cerr, st);
-			// std::cerr << "versus" << std::endl;
-			// tr.print_recursive_treeform(std::cerr, lhs);
-
 			if(ret == Ex_comparator::subtree_match) {
 				// std::cerr << "match" << std::endl;
 				use_rule=arrow;
@@ -109,7 +105,7 @@ bool substitute::can_apply(iterator st)
 				std::string error;
 				if(comparator.satisfies_conditions(conditions, error)) 
 					return arrow;
-				else throw ArgumentException(error);
+//				else throw ArgumentException("?" + error);
 				}
 			// else std::cerr << "no match" << std::endl;
 
