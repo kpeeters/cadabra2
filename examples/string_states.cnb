@@ -158,8 +158,8 @@
 				
 				{
 					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n<class 'cadabra2.ArgumentException'>\n\\end{verbatim}}}"
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\delta_{1 0} d \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(L1c,rl);"
