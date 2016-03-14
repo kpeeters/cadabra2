@@ -486,7 +486,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// if we want that a found _{z} also leads to a replacement for ^{z},
 			// this needs to be added to the replacement map explicitly.
 
-			std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
+			// std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
@@ -968,6 +968,53 @@ bool Ex_comparator::satisfies_conditions(Ex::iterator conditions, std::string& e
 			if(tree_exact_equal(&properties, replacement_map[Ex(lhs)], replacement_map[Ex(rhs)])) {
 				return false;
 				}
+			}
+		else if(*cond->name=="\\greater" || *cond->name=="\\less") {
+			Ex::sibling_iterator lhs=cond.begin();
+			Ex::sibling_iterator rhs=lhs;
+			++rhs;
+
+			multiplier_t mlhs;
+			if(lhs->is_rational()==false) {
+				auto fnd=replacement_map.find(Ex(lhs));
+				if(fnd!=replacement_map.end()) {
+					auto tn=fnd->second.begin();
+					if(tn->is_rational())
+						mlhs=*tn->multiplier;
+					else {
+						error="Replacement not numerical.";
+						return false;
+						}
+					}
+				else { 
+					error="Can only compare objects which evaluate to numbers.";
+					return false;
+					}
+				}
+			else mlhs=*lhs->multiplier;
+
+			// FIXME: abstract into Storage
+			multiplier_t mrhs;
+			if(rhs->is_rational()==false) {
+				auto fnd=replacement_map.find(Ex(rhs));
+				if(fnd!=replacement_map.end()) {
+					auto tn=fnd->second.begin();
+					if(tn->is_rational())
+						mrhs=*tn->multiplier;
+					else { 
+						error="Replacement not numerical.";
+						return false;
+						}
+					}
+				else { 
+					error="Can only compare objects which evaluate to numbers.";
+					return false;
+					}
+				}
+			else mrhs=*rhs->multiplier;
+
+			if(*cond->name=="\\greater" && mlhs <= mrhs) return false;
+			if(*cond->name=="\\less"    && mlhs >= mrhs) return false;
 			}
 		else if(*cond->name=="\\indexpairs") {
 			int countpairs=0;
