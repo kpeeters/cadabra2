@@ -107,7 +107,8 @@ void Server::init()
 
 	// Call the Cadabra default initialisation script.
 
-	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py')";
+	std::string startup = "import imp; execfile(imp.find_module('cadabra2_defaults')[1])";
+//	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py')";
 	run_string(startup);
 	}
 
@@ -179,15 +180,17 @@ std::string Server::pre_parse(const std::string& line)
 				ret = ret + "; display("+objname+")";
 			}
 		}
-	else {
+	else { // {a,b,c}::Indices(real, parent=holo);
 		found = line_stripped.find("::");
 		if(found!=std::string::npos) {
 			boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
-			boost::cmatch ares;
-			if(boost::regex_match(line_stripped.substr(found+2).c_str(), ares, amatch)) {
-				auto propname = std::string(ares[1].first, ares[1].second);
-				if(ares[2].second>ares[2].first+1) { // declaration with arguments
-					auto argument = std::string(ares[2].first+1, ares[2].second-1);
+			boost::smatch ares;
+			std::string subline=line_stripped.substr(found+2); // need to store the copy, not feed it straight into regex_match!
+			if(boost::regex_match(subline, ares, amatch)) {
+				auto propname = std::string(ares[1]);
+				auto argument = std::string(ares[2]);
+				if(argument.size()>0) { // declaration with arguments
+					argument=argument.substr(1,argument.size()-2);
 					ret = indent_line + "__cdbtmp__ = "+propname
 						+"(Ex(r'"+line_stripped.substr(0,found)
 						+"'), Ex(r'" +argument + "') )";

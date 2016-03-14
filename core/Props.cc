@@ -96,7 +96,9 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 
 	// This does not work, because it does not flip parent rels (disabled for a reason?)
 	// FIXME: fix logic for subtree/Ex_compare usage.
-	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, true, 0);
+	//std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
+	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
+	//std::cerr << res << std::endl;
 
 	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
 	// because Ex_comparator tries to fetch property information which then gets back here.
@@ -560,7 +562,27 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 		if(objs.size()<2) 
 			throw ConsistencyException("A list property cannot be assigned to a single object.");
 		
-		insert_list_prop(objs, thelistprop);
+		// FIXME: we special-case Indices, as those pass a list of objects with parent_rel==p_none,
+		// but we need the patterns to have parent_rel set to p_sub and p_super in order to avoid
+		// special cases in the pattern matcher later. 
+		// DOCME: the above
+		if(dynamic_cast<Indices *>(thelistprop)) {
+			std::vector<Ex> objs2;
+			for(auto& obj: objs) {
+				Ex obj2(obj);
+				obj2.begin()->fl.parent_rel=str_node::p_super;
+				objs2.push_back(obj2);
+				}
+			for(auto& obj: objs) {
+				Ex obj2(obj);
+				obj2.begin()->fl.parent_rel=str_node::p_sub;
+				objs2.push_back(obj2);
+				}
+			insert_list_prop(objs2, thelistprop);
+			}
+		else {
+			insert_list_prop(objs, thelistprop);
+			}
 		}
 	else { // a normal property
 		property *theprop=thepropbase;
@@ -569,7 +591,7 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 			Ex::sibling_iterator sib=proptree.begin(st);
 			while(sib!=proptree.end(st)) {
 				if(sib->fl.parent_rel!=str_node::p_property) {
-//					std::cerr << "inserting property for " << *sib->name << std::endl;
+               //	std::cerr << "inserting property for " << Ex(sib) << std::endl;
 					insert_prop(Ex(sib), theprop);
 					}
 				++sib;

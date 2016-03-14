@@ -1,0 +1,129 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "{\\del{#}, \\delbar{#}}::Derivative.\n{\\Psi_\\mu, \\Psibar_\\mu, \\eps, \\epsbar}::AntiCommuting.\n{\\Psi_\\mu, \\Psibar_\\mu, \\eps, \\epsbar}::SelfAntiCommuting.\n{\\Psi_\\mu, \\Psibar_\\mu, X_\\mu}::Depends(\\del,\\delbar).\n{\\Psi_\\mu, \\Psibar_\\mu, \\eps, \\epsbar, X_\\mu, i}::SortOrder."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "\\del{#}::LaTeXForm(\"\\partial\").\n\\delbar{#}::LaTeXForm(\"\\bar{\\partial}\").\n\\eps::LaTeXForm(\"\\epsilon\").\n\\epsbar::LaTeXForm(\"\\bar{\\epsilon}\").\n\\Psibar{#}::LaTeXForm(\"\\bar{\\Psi}\")."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial(X_{\\mu}) \\bar{\\partial}(X_{\\mu})+i \\Psi_{\\mu} \\bar{\\partial}(\\Psi_{\\mu})+i \\bar{\\Psi}_{\\mu} \\partial(\\bar{\\Psi}_{\\mu})\\end{dmath*}"
+				}
+			],
+			"source" : "action:= \\del{X_\\mu} \\delbar{X_\\mu}\n           + i \\Psi_\\mu \\delbar{\\Psi_\\mu} + i \\Psibar_\\mu \\del{\\Psibar_\\mu};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}(X_{\\mu} \\rightarrow i \\bar{\\epsilon} \\Psi_{\\mu}+i \\epsilon \\bar{\\Psi}_{\\mu}, \\Psi_{\\mu} \\rightarrow -\\bar{\\epsilon} \\partial(X_{\\mu}), \\bar{\\Psi}_{\\mu} \\rightarrow -\\epsilon \\bar{\\partial}(X_{\\mu}))\\end{dmath*}"
+				}
+			],
+			"source" : "rls:= X_\\mu    -> i \\epsbar \\Psi_\\mu + i \\eps \\Psibar_\\mu,\n      \\Psi_\\mu -> - \\epsbar \\del{X_\\mu},\n      \\Psibar_\\mu -> - \\eps \\delbar{X_\\mu};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial(i \\bar{\\epsilon} \\Psi_{\\mu}+i \\epsilon \\bar{\\Psi}_{\\mu}) \\bar{\\partial}(X_{\\mu})+\\partial(X_{\\mu}) \\bar{\\partial}(i \\bar{\\epsilon} \\Psi_{\\mu}+i \\epsilon \\bar{\\Psi}_{\\mu})+i -\\bar{\\epsilon} \\partial(X_{\\mu}) \\bar{\\partial}(\\Psi_{\\mu})+i \\Psi_{\\mu} \\bar{\\partial}(-\\bar{\\epsilon} \\partial(X_{\\mu}))+i -\\epsilon \\bar{\\partial}(X_{\\mu}) \\partial(\\bar{\\Psi}_{\\mu})+i \\bar{\\Psi}_{\\mu} \\partial(-\\epsilon \\bar{\\partial}(X_{\\mu}))\\end{dmath*}"
+				}
+			],
+			"source" : "vary(action, rls);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial(i \\bar{\\epsilon} \\Psi_{\\mu}) \\bar{\\partial}(X_{\\mu})+\\partial(i \\epsilon \\bar{\\Psi}_{\\mu}) \\bar{\\partial}(X_{\\mu})+\\partial(X_{\\mu}) \\bar{\\partial}(i \\bar{\\epsilon} \\Psi_{\\mu})+\\partial(X_{\\mu}) \\bar{\\partial}(i \\epsilon \\bar{\\Psi}_{\\mu})+i -\\bar{\\epsilon} \\partial(X_{\\mu}) \\bar{\\partial}(\\Psi_{\\mu})+i \\Psi_{\\mu} \\bar{\\partial}(-\\bar{\\epsilon} \\partial(X_{\\mu}))+i -\\epsilon \\bar{\\partial}(X_{\\mu}) \\partial(\\bar{\\Psi}_{\\mu})+i \\bar{\\Psi}_{\\mu} \\partial(-\\epsilon \\bar{\\partial}(X_{\\mu}))\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(\\partial(i) \\bar{\\epsilon} \\Psi_{\\mu}+i \\partial(\\bar{\\epsilon}) \\Psi_{\\mu}+i \\bar{\\epsilon} \\partial(\\Psi_{\\mu})\\right) \\bar{\\partial}(X_{\\mu})+\\left(\\partial(i) \\epsilon \\bar{\\Psi}_{\\mu}+i \\partial(\\epsilon) \\bar{\\Psi}_{\\mu}+i \\epsilon \\partial(\\bar{\\Psi}_{\\mu})\\right) \\bar{\\partial}(X_{\\mu})+\\partial(X_{\\mu}) \\left(\\bar{\\partial}(i) \\bar{\\epsilon} \\Psi_{\\mu}+i \\bar{\\partial}(\\bar{\\epsilon}) \\Psi_{\\mu}+i \\bar{\\epsilon} \\bar{\\partial}(\\Psi_{\\mu})\\right)+\\partial(X_{\\mu}) \\left(\\bar{\\partial}(i) \\epsilon \\bar{\\Psi}_{\\mu}+i \\bar{\\partial}(\\epsilon) \\bar{\\Psi}_{\\mu}+i \\epsilon \\bar{\\partial}(\\bar{\\Psi}_{\\mu})\\right)+i -\\bar{\\epsilon} \\partial(X_{\\mu}) \\bar{\\partial}(\\Psi_{\\mu})+i \\Psi_{\\mu} \\left(-\\bar{\\partial}(\\bar{\\epsilon}) \\partial(X_{\\mu})-\\bar{\\epsilon} \\bar{\\partial}(\\partial(X_{\\mu}))\\right)+i -\\epsilon \\bar{\\partial}(X_{\\mu}) \\partial(\\bar{\\Psi}_{\\mu})+i \\bar{\\Psi}_{\\mu} \\left(-\\partial(\\epsilon) \\bar{\\partial}(X_{\\mu})-\\epsilon \\partial(\\bar{\\partial}(X_{\\mu}))\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial(i) \\bar{\\epsilon} \\Psi_{\\mu} \\bar{\\partial}(X_{\\mu})+i \\partial(\\bar{\\epsilon}) \\Psi_{\\mu} \\bar{\\partial}(X_{\\mu})+i \\bar{\\epsilon} \\partial(\\Psi_{\\mu}) \\bar{\\partial}(X_{\\mu})+\\partial(i) \\epsilon \\bar{\\Psi}_{\\mu} \\bar{\\partial}(X_{\\mu})+i \\partial(\\epsilon) \\bar{\\Psi}_{\\mu} \\bar{\\partial}(X_{\\mu})+i \\epsilon \\partial(\\bar{\\Psi}_{\\mu}) \\bar{\\partial}(X_{\\mu})+\\partial(X_{\\mu}) \\bar{\\partial}(i) \\bar{\\epsilon} \\Psi_{\\mu}+\\partial(X_{\\mu}) i \\bar{\\partial}(\\bar{\\epsilon}) \\Psi_{\\mu}+\\partial(X_{\\mu}) i \\bar{\\epsilon} \\bar{\\partial}(\\Psi_{\\mu})+\\partial(X_{\\mu}) \\bar{\\partial}(i) \\epsilon \\bar{\\Psi}_{\\mu}+\\partial(X_{\\mu}) i \\bar{\\partial}(\\epsilon) \\bar{\\Psi}_{\\mu}+\\partial(X_{\\mu}) i \\epsilon \\bar{\\partial}(\\bar{\\Psi}_{\\mu})+i -\\bar{\\epsilon} \\partial(X_{\\mu}) \\bar{\\partial}(\\Psi_{\\mu})-i \\Psi_{\\mu} \\bar{\\partial}(\\bar{\\epsilon}) \\partial(X_{\\mu})-i \\Psi_{\\mu} \\bar{\\epsilon} \\bar{\\partial}(\\partial(X_{\\mu}))+i -\\epsilon \\bar{\\partial}(X_{\\mu}) \\partial(\\bar{\\Psi}_{\\mu})-i \\bar{\\Psi}_{\\mu} \\partial(\\epsilon) \\bar{\\partial}(X_{\\mu})-i \\bar{\\Psi}_{\\mu} \\epsilon \\partial(\\bar{\\partial}(X_{\\mu}))\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}i \\bar{\\epsilon} \\partial(\\Psi_{\\mu}) \\bar{\\partial}(X_{\\mu})+i \\epsilon \\partial(\\bar{\\Psi}_{\\mu}) \\bar{\\partial}(X_{\\mu})+\\partial(X_{\\mu}) i \\bar{\\epsilon} \\bar{\\partial}(\\Psi_{\\mu})+\\partial(X_{\\mu}) i \\epsilon \\bar{\\partial}(\\bar{\\Psi}_{\\mu})+i -\\bar{\\epsilon} \\partial(X_{\\mu}) \\bar{\\partial}(\\Psi_{\\mu})-i \\epsilon \\bar{\\partial}(X_{\\mu}) \\partial(\\bar{\\Psi}_{\\mu})\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\partial(\\Psi_{\\mu}) \\bar{\\partial}(X_{\\mu}) \\bar{\\epsilon} i-\\partial(X_{\\mu}) \\bar{\\partial}(\\bar{\\Psi}_{\\mu}) \\epsilon i\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);\nunwrap(_);\nsort_product(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "should be done cleaner in v2."
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

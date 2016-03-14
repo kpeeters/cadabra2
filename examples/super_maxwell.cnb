@@ -1,0 +1,207 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "{ a,b,c,d,e }::Indices(vector).\n\\bar{#}::DiracBar.\n\\partial{#}::PartialDerivative.\n{ A_{a}, f_{a b} }::Depends(\\partial).\n{ \\epsilon, \\gamma_{#} }::Depends(\\bar).\n\\lambda::Depends(\\bar, \\partial)."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "{ \\lambda, \\gamma_{#} }::NonCommuting.\n{ \\lambda, \\epsilon }::Spinor(dimension=4, type=Majorana).\n{ \\epsilon, \\lambda }::SortOrder.\n{ \\epsilon, \\lambda }::AntiCommuting.\n\\lambda::SelfAntiCommuting.\n\\gamma_{#}::GammaMatrix(metric=\\delta).\n\\delta{#}::Accent.\nf_{a b}::AntiSymmetric.\n\\delta_{a b}::KroneckerDelta."
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}(\\delta{A_{a}} = \\bar{\\epsilon} \\gamma_{a} \\lambda, \\delta{\\lambda} =  - \\frac{1}{2}\\gamma_{a b} \\epsilon f_{a b})\\end{dmath*}"
+				}
+			],
+			"source" : "susy:= { \\delta{A_{a}}   = \\bar{\\epsilon} \\gamma_{a} \\lambda,\n         \\delta{\\lambda} = -(1/2) \\gamma_{a b} \\epsilon f_{a b} };"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}f_{a b} f_{a b} - \\frac{1}{2}\\bar{\\lambda} \\gamma_{a} \\partial_{a}(\\lambda)\\end{dmath*}"
+				}
+			],
+			"source" : "S:= -(1/4) f_{a b} f_{a b}- (1/2) \\bar{\\lambda} \\gamma_{a} \\partial_{a}{\\lambda};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}(f_{a b} \\rightarrow \\partial_{a}(\\delta{A_{b}})-\\partial_{b}(\\delta{A_{a}}), \\lambda \\rightarrow \\delta{\\lambda})\\end{dmath*}"
+				}
+			],
+			"source" : "rls:= f_{a b} -> \\partial_{a}{\\delta{A_{b}}}- \\partial_{b}{\\delta{A_{a}}},\n      \\lambda -> \\delta{\\lambda} ;"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\left(\\partial_{a}(\\delta{A_{b}})-\\partial_{b}(\\delta{A_{a}})\\right) f_{a b} - \\frac{1}{4}f_{a b} \\left(\\partial_{a}(\\delta{A_{b}})-\\partial_{b}(\\delta{A_{a}})\\right) - \\frac{1}{2}\\bar{\\delta{\\lambda}} \\gamma_{a} \\partial_{a}(\\lambda) - \\frac{1}{2}\\bar{\\lambda} \\gamma_{a} \\partial_{a}(\\delta{\\lambda})\\end{dmath*}"
+				}
+			],
+			"source" : "vary(S,rls);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\partial_{a}(\\delta{A_{b}}) f_{a b}+\\frac{1}{4}\\partial_{b}(\\delta{A_{a}}) f_{a b} - \\frac{1}{4}f_{a b} \\partial_{a}(\\delta{A_{b}})+\\frac{1}{4}f_{a b} \\partial_{b}(\\delta{A_{a}}) - \\frac{1}{2}\\bar{\\delta{\\lambda}} \\gamma_{a} \\partial_{a}(\\lambda) - \\frac{1}{2}\\bar{\\lambda} \\gamma_{a} \\partial_{a}(\\delta{\\lambda})\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\partial_{a}(\\bar{\\epsilon} \\gamma_{b} \\lambda) f_{a b}+\\frac{1}{4}\\partial_{b}(\\bar{\\epsilon} \\gamma_{a} \\lambda) f_{a b} - \\frac{1}{4}f_{a b} \\partial_{a}(\\bar{\\epsilon} \\gamma_{b} \\lambda)+\\frac{1}{4}f_{a b} \\partial_{b}(\\bar{\\epsilon} \\gamma_{a} \\lambda)+\\frac{1}{4}\\bar{\\gamma_{c b} \\epsilon f_{c b}} \\gamma_{a} \\partial_{a}(\\lambda)+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\partial_{a}(\\gamma_{c b} \\epsilon f_{c b})\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, susy);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\left(\\partial_{a}(\\bar{\\epsilon}) \\gamma_{b} \\lambda+\\bar{\\epsilon} \\partial_{a}(\\gamma_{b}) \\lambda+\\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda)\\right) f_{a b}+\\frac{1}{4}\\left(\\partial_{b}(\\bar{\\epsilon}) \\gamma_{a} \\lambda+\\bar{\\epsilon} \\partial_{b}(\\gamma_{a}) \\lambda+\\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda)\\right) f_{a b} - \\frac{1}{4}f_{a b} \\left(\\partial_{a}(\\bar{\\epsilon}) \\gamma_{b} \\lambda+\\bar{\\epsilon} \\partial_{a}(\\gamma_{b}) \\lambda+\\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda)\\right)+\\frac{1}{4}f_{a b} \\left(\\partial_{b}(\\bar{\\epsilon}) \\gamma_{a} \\lambda+\\bar{\\epsilon} \\partial_{b}(\\gamma_{a}) \\lambda+\\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda)\\right)+\\frac{1}{4}\\bar{\\gamma_{c b} \\epsilon f_{c b}} \\gamma_{a} \\partial_{a}(\\lambda)+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\left(\\partial_{a}(\\gamma_{c b}) \\epsilon f_{c b}+\\gamma_{c b} \\partial_{a}(\\epsilon) f_{c b}+\\gamma_{c b} \\epsilon \\partial_{a}(f_{c b})\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\partial_{a}(\\bar{\\epsilon}) \\gamma_{b} \\lambda f_{a b} - \\frac{1}{4}\\bar{\\epsilon} \\partial_{a}(\\gamma_{b}) \\lambda f_{a b} - \\frac{1}{4}\\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda) f_{a b}+\\frac{1}{4}\\partial_{b}(\\bar{\\epsilon}) \\gamma_{a} \\lambda f_{a b}+\\frac{1}{4}\\bar{\\epsilon} \\partial_{b}(\\gamma_{a}) \\lambda f_{a b}+\\frac{1}{4}\\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda) f_{a b} - \\frac{1}{4}f_{a b} \\partial_{a}(\\bar{\\epsilon}) \\gamma_{b} \\lambda - \\frac{1}{4}f_{a b} \\bar{\\epsilon} \\partial_{a}(\\gamma_{b}) \\lambda - \\frac{1}{4}f_{a b} \\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda)+\\frac{1}{4}f_{a b} \\partial_{b}(\\bar{\\epsilon}) \\gamma_{a} \\lambda+\\frac{1}{4}f_{a b} \\bar{\\epsilon} \\partial_{b}(\\gamma_{a}) \\lambda+\\frac{1}{4}f_{a b} \\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda)+\\frac{1}{4}\\bar{\\gamma_{c b} \\epsilon f_{c b}} \\gamma_{a} \\partial_{a}(\\lambda)+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\partial_{a}(\\gamma_{c b}) \\epsilon f_{c b}+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\gamma_{c b} \\partial_{a}(\\epsilon) f_{c b}+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\gamma_{c b} \\epsilon \\partial_{a}(f_{c b})\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda) f_{a b}+\\frac{1}{4}\\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda) f_{a b} - \\frac{1}{4}f_{a b} \\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda)+\\frac{1}{4}f_{a b} \\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda)+\\frac{1}{4}f_{c b} \\bar{\\gamma_{c b} \\epsilon} \\gamma_{a} \\partial_{a}(\\lambda)+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\gamma_{c b} \\epsilon \\partial_{a}(f_{c b})\\end{dmath*}"
+				}
+			],
+			"source" : "unwrap(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda) f_{a b}+\\frac{1}{4}\\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda) f_{a b} - \\frac{1}{4}f_{a b} \\bar{\\epsilon} \\gamma_{b} \\partial_{a}(\\lambda)+\\frac{1}{4}f_{a b} \\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda) - \\frac{1}{4}f_{c b} \\bar{\\epsilon} \\gamma_{c b} \\gamma_{a} \\partial_{a}(\\lambda)+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\gamma_{c b} \\epsilon \\partial_{a}(f_{c b})\\end{dmath*}"
+				}
+			],
+			"source" : "expand_diracbar(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda) f_{a b}+\\frac{1}{2}f_{a b} \\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda) - \\frac{1}{4}f_{a b} \\bar{\\epsilon} \\gamma_{a b} \\gamma_{c} \\partial_{c}(\\lambda)+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\gamma_{b c} \\epsilon \\partial_{a}(f_{b c})\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\bar{\\epsilon} \\gamma_{a} \\partial_{b}(\\lambda) f_{a b} - \\frac{1}{4}\\bar{\\epsilon} \\gamma_{a b} \\gamma_{c} \\partial_{c}(\\lambda) f_{a b}+\\frac{1}{4}\\bar{\\lambda} \\gamma_{a} \\gamma_{b c} \\epsilon \\partial_{a}(f_{b c})\\end{dmath*}"
+				}
+			],
+			"source" : "sort_product(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

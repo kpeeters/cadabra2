@@ -55,7 +55,7 @@ namespace cadabra {
 			//@{
 
 			virtual void on_connect()=0;
-			virtual void on_disconnect()=0;
+			virtual void on_disconnect(const std::string& reason)=0;
 			virtual void on_network_error()=0;
 			virtual void on_kernel_runstatus(bool)=0;
 

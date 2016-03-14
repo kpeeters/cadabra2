@@ -292,12 +292,10 @@ void NotebookWindow::on_connect()
 	dispatcher.emit();
 	}
 
-void NotebookWindow::on_disconnect()
+void NotebookWindow::on_disconnect(const std::string& reason)
 	{
 	std::lock_guard<std::mutex> guard(status_mutex);
-	// FIXME: the string should be set by ComputeThread, as disconnects can be because
-	// of a kernel restart explicitly requested.
-	kernel_string = "not connected";
+	kernel_string = reason;
 	dispatcher.emit();
 	}
 

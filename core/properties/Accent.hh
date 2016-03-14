@@ -2,6 +2,7 @@
 #pragma once
 
 #include "properties/IndexInherit.hh"
+#include "properties/NumericalFlat.hh"
 
 /**
  \ingroup properties
@@ -22,7 +23,7 @@
  completely independent object, unrelated to \verb|A|.
 */
 
-class Accent : public PropertyInherit, public IndexInherit, virtual public property {
+class Accent : public PropertyInherit, public IndexInherit, public NumericalFlat, virtual public property {
 	public:
 		virtual std::string name() const;
 };

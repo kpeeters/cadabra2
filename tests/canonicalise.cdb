@@ -16,6 +16,7 @@ def test01():
    tst3:= a_{m m};
    canonicalise(tst3)
    assert(tst3==0)
+   print('Test 01 passed')
 
 test01()
 
@@ -28,7 +29,8 @@ def test02():
    tst4:= s_{m m n n}-@(obj4);
    collect_terms(tst4)
    assert(tst4==0)
-
+   print('Test 02 passed')
+   
 test02()
 
 # Tests with more complicated tableau symmetries.
@@ -40,7 +42,8 @@ def test03():
    tst5:= R_{m n p q}*s_{p q}*t_{m n};
    canonicalise(tst5)
    assert(tst5==0)
-
+   print('Test 03 passed')
+   
 test03()
 
 def test04():
@@ -51,7 +54,8 @@ def test04():
    rtopentest:= dW_{a b r1 r2 r3 r4}*q - @(rtopen);
    collect_terms(rtopentest)
    assert(rtopentest==0)
-
+   print('Test 04 passed')
+   
 test04()
 
 # Here, the fact that the 'second' field of the index contractions involving 'a'
@@ -69,7 +73,8 @@ def test05():
    tst6:= @(obj6a)-@(obj6b);
    collect_terms(tst6)
    assert(tst6==0)
-
+   print('Test 05 passed')
+   
 test05()
 
 # The key test that inspired it all:
@@ -82,6 +87,7 @@ def test06():
    tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
    canonicalise(tst7)
    assert(tst7)
+   print('Test 06 passed')
 
 test06()
 
@@ -111,7 +117,8 @@ def test07():
    tst8d:= @(obj8a)-@(obj8d);
    collect_terms(_)
    assert(tst8d)
-
+   print('Test 07 passed')
+   
 test07()
 
 
@@ -126,7 +133,8 @@ def test08():
    canonicalise(_)
    collect_terms(_)
    assert(tst9)
-
+   print('Test 08 passed')
+   
 test08()
 
 # Another one along the lines of the above.
@@ -144,7 +152,8 @@ def test10():
    tst3:= a_{m m};
    canonicalise(tst3)
    assert(tst3==0)
-
+   print('Test 10 passed')
+   
 test10()
 
 def test11():
@@ -156,7 +165,8 @@ def test11():
    tst4:= s_{m m n n}-@(obj4);
    collect_terms(tst4)
    assert(tst4==0)
-
+   print('Test 11 passed')
+   
 test11()
 
 
@@ -168,7 +178,8 @@ def test12():
    tst11:= R_{a b c d} R_{e f k h} R_{i a j e} R_{b c d i} R_{f k h j};
    canonicalise(_)
    assert(tst11)
-
+   print('Test 12 passed')
+   
 test12()
 
 # Further tests of the same.
@@ -180,7 +191,8 @@ def test13():
    canonicalise(_)
    collect_terms(_)
    assert(tst12)
-
+   print('Test 13 passed')
+   
 test13()
 
 # This one used to trigger a bug with triple indices.
@@ -192,7 +204,8 @@ def test13b():
    tst13:= A_{b} A_{a} A_{a} - @(obj13);
    collect_terms(_)
    assert(tst13)
-
+   print('Test 13b passed')
+   
 test13b()
 
 # Another one which at one time produced triple indices.
@@ -204,7 +217,8 @@ def test14():
    tst14:= C1_{d5} *k3_{d5} * k3_{d6} * k3_{d6} - @(obj14);
    collect_terms(_)
    assert(tst14)
-
+   print('Test 14 passed')
+   
 test14()
 
 # More complicated Young tableau symmetries.
@@ -217,7 +231,8 @@ def test15():
    tst15:= q A_{d b c a} + @(obj15);
    collect_terms(_)
    assert(tst15)
-
+   print('Test 15 passed')
+   
 test15()
 
 # DAntiSymmetric is of course just a special case of TableauSymmetry
@@ -231,7 +246,8 @@ def test16():
    tst16:= -dF5_{m n p q r s} * AA_{n p q m r s} - @(obj16);
    collect_terms(_)
    assert(tst16)
-
+   print('Test 16 passed')
+   
 test16()
 
 # def test17():
@@ -253,7 +269,8 @@ def test18():
    tst18:= tt_{a1 a2 a4 a5 a6 a7}*a + @(obj18);
    collect_terms(_)
    assert(tst18)
-
+   print('Test 18 passed')
+   
 test18()
 
 # An old bug with KroneckerDelta; this could only be fixed properly
@@ -268,7 +285,8 @@ def test19():
    tst19:= a \delta_{b c} - @(obj19);
    collect_terms(_)
    assert(tst19)
-
+   print('Test 19 passed')
+   
 test19()
 
 # Partial derivatives next.
@@ -281,6 +299,7 @@ def test20():
    canonicalise(_)
    collect_terms(_)
    assert(obj20)
+   print('Test 20 passed')
 
 test20()
 
@@ -304,7 +323,8 @@ def test22():
    tst22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n} - @(obj22);
    collect_terms(_)
    assert(tst22)
-
+   print('Test 22 passed')
+   
 test22()
 
 # Including symmetries of the argument tensor:
@@ -316,7 +336,8 @@ def test23():
    obj23:= q*\diff{A_{\mu\nu}}_{\mu\nu};
    canonicalise(_)
    assert(obj23)
-
+   print('Test 23 passed')
+   
 test23()
 
 def test24():
@@ -328,7 +349,8 @@ def test24():
    tst24:= - \diff{A_{\mu\nu}}_{\rho\sigma} B^{\mu\nu} - @(obj24);
    collect_terms(_)
    assert(tst24)
-
+   print('Test 24 passed')
+   
 test24()
 
 # Do not permute tensors with indices in different positions.
@@ -344,7 +366,8 @@ def test25():
    rename_dummies(_)
    collect_terms(_)
    assert(tst25)
-
+   print('Test 25 passed')
+   
 test25()
 
 def test26():
@@ -357,7 +380,8 @@ def test26():
    rename_dummies(_)
    collect_terms(_)
    assert(tst26)
-
+   print('Test 26 passed')
+   
 test26()
 
 # Test 27 & 28: spinors and anti-commuting objects
@@ -374,7 +398,8 @@ def test27():
    tst27:= psi10001_{m} \Gamma_{s t u} psi10001_{n} H_{p q r} -@(obj27);
    collect_terms(_)
    assert(tst27)
-
+   print('Test 27 passed')
+   
 test27()
 
 def test28():
@@ -388,7 +413,8 @@ def test28():
    tst28:= psi10001_{m} \Gamma_{s} psi10001_{n} H_{p q r} + @(obj28);
    collect_terms(_)
    assert(tst28)
-
+   print('Test 28 passed')
+   
 test28()
 
 def test29():
@@ -403,7 +429,8 @@ def test29():
    tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b);
    collect_terms(_)
    assert(tst28b)
-
+   print('Test 28b passed')
+   
 test29()
 
 # Single-term expressions.
@@ -416,7 +443,8 @@ def test29b():
    tst29:= dR_{m n p q r r};
    canonicalise(_)
    assert(tst29)
-
+   print('Test 29b passed')
+   
 test29b()
 
 # Extreme symmetries.
@@ -433,7 +461,8 @@ def test30():
    tst30:= W_{a b c d} * W_{e f g h} * W_{i j k l} * \eps_{a b c d e f g h i j} * A_{k l} + @(obj30);
    collect_terms(_)
    assert(tst30)
-
+   print('Test 30 passed')
+   
 test30()
 
 # Inherited properties
@@ -452,7 +481,8 @@ def test31():
    tst31:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{m} H_{n p q} - @(obj31);
    collect_terms(_)
    assert(tst31)
-
+   print('Test 31 passed')
+   
 test31()
 
 
@@ -469,7 +499,8 @@ def test32():
    tst32:= HppT_{i j x} * \tenSp_{i b a} * \fiveSp_{j a} + @(obj32);
    collect_terms(_)
    assert(tst32)
-
+   print('Test 32 passed')
+   
 test32()
 
 
@@ -494,7 +525,8 @@ def test34():
    tst34a:= A_{4 4};
    canonicalise(_)
    assert(tst34a)
-
+   print('Test 34 passed')
+   
 test34()
 
 def test34b():
@@ -505,7 +537,8 @@ def test34b():
    rl:={ R_{m? m? n? p?} -> 0, R_{n? p? m? m?} -> 0 };
    substitute(tst34b, rl)
    assert(tst34b)
-
+   print('Test 34b passed')
+   
 test34b()
 
 # Diagonal objects
@@ -518,7 +551,8 @@ def test35b():
    tst35:= - \delta_{1 1}\delta_{2 2} - @(obj35);
    collect_terms(_)
    assert(tst35)
-
+   print('Test 35 passed')
+   
 test35b()
 
 # Canonicalisation with upper/lower indices.
@@ -532,7 +566,8 @@ def test36():
    tst36:= \Gamma_{a}^{b}_{c}^{d} + @(obj36);
    collect_terms(_)
    assert(tst36)
-
+   print('Test 36 passed')
+   
 test36()
 
 def test37():
@@ -543,7 +578,8 @@ def test37():
    tst37:= B^{a} B_{a} A^{b} A_{b} - @(obj37);
    collect_terms(_)
    assert(tst37)
-
+   print('Test 37 passed')
+   
 test37()
 
 # Mixed abstract & numerical indices.
@@ -609,7 +645,8 @@ def test42():
    tst42:= \delta^{n}_{r} * \partial_{n}{u^{r}} - @(obj42);
    collect_terms(_)
    assert(tst42)
-
+   print('Test 42 passed')
+   
 test42()
 
 # Prevent raising/lowering if there is a Derivative in the way. For
@@ -625,7 +662,8 @@ def test43():
    tst43:= A_{m n} \partial_{k}{ B^{m n} } - @(obj43);
    collect_terms(_)
    assert(tst43)
-
+   print('Test 43 passed')
+   
 test43()
 
 def test45():
@@ -650,7 +688,8 @@ def test45():
    tst45d:= A_{m1} \partial_{n}{ g^{m1 p} } B_{p} - @(obj45d);
    collect_terms(_)
    assert(tst45d)
-
+   print('Test 45d passed')
+   
 test45()
 
 # Spinor indices
@@ -663,7 +702,8 @@ def test46():
    canonicalise(_)
    collect_terms(_)
    assert(tst46)
-
+   print('Test 46 passed')
+   
 test46()
 
 # Regression in 1.21
@@ -672,7 +712,8 @@ def test47():
    __cdbkernel__=create_scope()
    B0:=B_{\alpha \mu} -> \Delta_{\mu \nu}*F_{\theta \alpha};
    canonicalise(_)
-
+   print('Test 47 passed')
+   
 test47()
 
 # Test 48: derivatives without arguments
@@ -693,5 +734,6 @@ def test48():
    tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49);
    collect_terms(_)
    assert(tst49)
-
+   print('Test 48 passed')
+   
 test48()
