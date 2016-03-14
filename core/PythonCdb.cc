@@ -73,6 +73,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/LaTeXForm.hh"
 #include "properties/Metric.hh"
 #include "properties/NonCommuting.hh"
+#include "properties/NumericalFlat.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/RiemannTensor.hh"
 #include "properties/SatisfiesBianchi.hh"
@@ -114,6 +115,8 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/sym.hh"
+#include "algorithms/take_match.hh"
+#include "algorithms/replace_match.hh"
 #include "algorithms/unwrap.hh"
 #include "algorithms/vary.hh"
 #include "algorithms/young_project.hh"
@@ -389,7 +392,9 @@ boost::python::list list_properties()
 
 		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
 		std::ostringstream str;
+		// std::cerr << "displaying" << std::endl;
 		dt.output(str);
+		// std::cerr << "displayed " << str.str() << std::endl;
 		res += str.str();
 
 		if(nxt==props.pats.end() || it->first!=nxt->first) {
@@ -423,6 +428,7 @@ std::string print_tree(Ex *ex)
 PyObject *ParseExceptionType = NULL;
 PyObject *ArgumentExceptionType = NULL;
 PyObject *NonScalarExceptionType = NULL;
+PyObject *InternalErrorType = NULL;
 
 void translate_ParseException(const ParseException &e)
 	{
@@ -443,6 +449,13 @@ void translate_NonScalarException(const NonScalarException &e)
 	assert(NonScalarExceptionType != NULL);
 	boost::python::object pythonExceptionInstance(e);
 	PyErr_SetObject(NonScalarExceptionType, pythonExceptionInstance.ptr());
+	}
+
+void translate_InternalError(const InternalError &e)
+	{
+	assert(InternalErrorType != NULL);
+	boost::python::object pythonExceptionInstance(e);
+	PyErr_SetObject(InternalErrorType, pythonExceptionInstance.ptr());
 	}
 
 // Return the kernel (with symbol __cdbkernel__) in local scope if
@@ -595,9 +608,21 @@ std::string Property<Prop>::latex_() const
 	std::ostringstream str;
 	str << "\\text{Attached property ";
 	prop->latex(str);
-	std::string bare=Ex_str_(*for_obj);
+	std::string bare=Ex_latex_(*for_obj);
 	boost::replace_all(bare, "#", "\\#");
 	str << " to~}"+bare+".";
+	return str.str();
+	}
+
+template<>
+std::string Property<LaTeXForm>::latex_() const
+	{
+	std::ostringstream str;
+	str << "\\text{Attached property ";
+	prop->latex(str);
+	std::string bare=Ex_str_(*for_obj);
+	boost::replace_all(bare, "\\", "$\\backslash{}$}");
+	str << " to {\\tt "+bare+"}.";
 	return str.str();
 	}
 
@@ -845,6 +870,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyNonScalarException.def("__str__", &NonScalarException::py_what);
 	NonScalarExceptionType=pyNonScalarException.ptr();
 
+	class_<InternalError> pyInternalError("InternalError", init<std::string>());
+	pyInternalError.def("__str__", &InternalError::py_what);
+	InternalErrorType=pyInternalError.ptr();
+
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	class_<Kernel> pyKernel("Kernel", init<>());
 
@@ -986,6 +1015,15 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("rules"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
+	def("take_match", &dispatch_ex<take_match, Ex&>, 
+		 (arg("ex"),
+		  arg("rules"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("replace_match", &dispatch_ex<replace_match>, 
+		 (arg("ex"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
 	def("vary", &dispatch_ex<vary, Ex&>, 
 		 (arg("ex"),
 		  arg("rules"),
@@ -1036,6 +1074,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<LaTeXForm>();
 	def_prop<Metric>();
 	def_prop<NonCommuting>();
+	def_prop<NumericalFlat>();
 	def_prop<PartialDerivative>();
 	def_prop<RiemannTensor>();
 	def_prop<SatisfiesBianchi>();
@@ -1055,6 +1094,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	register_exception_translator<ParseException>(&translate_ParseException);
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
 	register_exception_translator<NonScalarException>(&translate_NonScalarException);
+	register_exception_translator<InternalError>(&translate_InternalError);
 
 	// How can we give Python access to information stored in properties?
 	}

@@ -47,7 +47,7 @@ namespace cadabra {
 			virtual void position_cursor(const DTree&, DTree::iterator) override;
 
          virtual void on_connect() override;
-         virtual void on_disconnect() override;
+         virtual void on_disconnect(const std::string&) override;
          virtual void on_network_error() override;
 			virtual void on_kernel_runstatus(bool) override;
 

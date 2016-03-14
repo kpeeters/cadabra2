@@ -38,8 +38,18 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	index_iterator ii=begin_index(st);
 	while(ii!=end_index(st)) {
 		if(ind_dummy.find(Ex(ii))!=ind_dummy.end()) {
+			// std::cerr << Ex(ii) << " is dummy " << std::endl;
 			repmap_t::iterator rmi=repmap.find(Ex(ii));
 			if(rmi==repmap.end()) {
+				Ex other_parent_rel(ii);
+				if(other_parent_rel.begin()->fl.parent_rel==str_node::p_super) 
+					other_parent_rel.begin()->fl.parent_rel=str_node::p_sub;
+				else
+					other_parent_rel.begin()->fl.parent_rel=str_node::p_super;
+				rmi=repmap.find(other_parent_rel);
+				}
+			if(rmi==repmap.end()) {
+				// std::cerr << " not found yet " << std::endl;
 				const Indices *dums=kernel.properties.get<Indices>(ii, true);
 				if(!dums)
 					throw ConsistencyException("No index set for index "+*ii->name+" known.");
@@ -53,6 +63,7 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 				ii=tmp;
 				}
 			else {
+				// std::cerr << "already encountered => " << rmi->second << std::endl;
 				index_iterator tmp(ii);
 				++tmp;
 				tr.replace_index(ii, (*rmi).second.begin(), true);

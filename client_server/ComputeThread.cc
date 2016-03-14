@@ -12,7 +12,7 @@ using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
-	: gui(g), docthread(dt), connection_is_open(false), server_pid(0), server_stdout(0)
+	: gui(g), docthread(dt), connection_is_open(false), restarting_kernel(false), server_pid(0), server_stdout(0)
 	{
    // The ComputeThread constructor is always run on the main thread,
 	// so we can grab the main thread id here.
@@ -147,6 +147,7 @@ void ComputeThread::try_spawn_server()
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
 	{
 	connection_is_open=true;
+	restarting_kernel=false;
 	if(gui)
 		gui->on_connect();
 
@@ -174,8 +175,10 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 	{
 	std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
-	if(gui)
-		gui->on_disconnect();
+	if(gui) {
+		if(restarting_kernel) gui->on_disconnect("restarting kernel");
+		else                  gui->on_disconnect("not connected");
+		}
 
 	sleep(1); // do not cause a torrent...
 	try_connect();
@@ -411,6 +414,8 @@ void ComputeThread::restart_kernel()
 	{
 	if(connection_is_open==false)
 		return;
+
+	restarting_kernel=true;
 
 	// Restarting the kernel means all previously running blocks have stopped running.
 	// Inform the GUI about this.

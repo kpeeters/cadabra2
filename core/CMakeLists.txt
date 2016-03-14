@@ -145,6 +145,8 @@ set(LOCAL_SRC_FILES
   algorithms/substitute.cc
   algorithms/sym.cc
   algorithms/tab_basics.cc
+  algorithms/take_match.cc
+  algorithms/replace_match.cc
   algorithms/unwrap.cc
   algorithms/vary.cc
   algorithms/young_project.cc
@@ -167,13 +169,15 @@ set(IMAGES
 
 # import site; print site.getsitepackages()[0]
 
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print site.getsitepackages()[0];"
-  OUTPUT_VARIABLE python_site_path OUTPUT_STRIP_TRAILING_WHITESPACE)
+if("${PYTHON_SITE_PATH}" STREQUAL "")
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print site.getsitepackages()[0];"
+                  OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
 
-message("-- Python site path at ${python_site_path}")
+message("-- Python site path at ${PYTHON_SITE_PATH}")
 install(FILES
   "${PROJECT_BINARY_DIR}/cadabra2.so"
-  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${python_site_path}")
+  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${PYTHON_SITE_PATH}")
 
 install(PROGRAMS
   "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
@@ -185,14 +189,19 @@ add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
-# Activate cotire for the entire library. This takes _a lot_ of disk space.
-# cotire(cadabra2)
-
 #if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clangx")
 #  target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES} python)
 #else()
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
+
+install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                        GROUP_READ GROUP_EXECUTE 
+                                                        WORLD_READ WORLD_EXECUTE)
+
+install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                        GROUP_READ GROUP_EXECUTE 
+                                                        WORLD_READ WORLD_EXECUTE)
 
 #endif()
 

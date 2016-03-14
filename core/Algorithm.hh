@@ -110,8 +110,13 @@ class Algorithm {
 		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 
 
-		/// A map from a pattern to the position where it occurs in the tree. 
+		/// A map from a pattern to the position where it occurs in the tree. The comparator
+		/// is such that we store indices apart exactly, apart from their multiplicative factor.
+		/// This means that the index in A_{n} and in A_{-n} are stored in the same way,
+		/// and one needs to lookup the expression in the tree to find this multiplier.
+		/// See basic.cdb test 26 for an example that uses this.
 		typedef std::multimap<Ex, Ex::iterator, tree_exact_less_for_indexmap_obj> index_map_t;
+
 		/// A map from the position of each index to the sequential index.
 		typedef std::map<Ex::iterator, int, Ex::iterator_base_less>    index_position_map_t;
 
@@ -218,6 +223,8 @@ class Algorithm {
 											const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const;
 		Ex get_dummy(const list_property *, iterator) const;
 		Ex get_dummy(const list_property *, iterator, iterator) const;
+
+		bool index_in_set(Ex, const index_map_t *) const;
 
 	private:
 		// Single or deep-scan apply operations. Do not call directly.

@@ -104,6 +104,13 @@ void Ex::reset_state()
 std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it) 
 	{
 	unsigned int num=1;
+	switch((*it).fl.parent_rel) {
+		case str_node::p_super: str << "^"; break;
+		case str_node::p_sub:   str << "_"; break;
+		case str_node::p_property: str << "$"; break;
+		case str_node::p_exponent: str << "&"; break;
+		default: break;
+		}
 	return print_recursive_treeform(str, it, num);
 	}
 
@@ -652,6 +659,21 @@ std::string Ex::equation_number_or_name(iterator it, unsigned int last_used_equa
 bool Ex::operator==(const Ex& other) const
 	{
 	return equal_subtree(begin(), other.begin());
+	}
+
+void Ex::push_history(Ex selector)
+	{
+	history.push_back(*this);
+	selectors.push_back(selector);
+	}
+
+Ex Ex::pop_history()
+	{
+	tree<str_node>::operator=(history.back());
+	history.pop_back();
+	Ex ret(selectors.back().begin());
+	selectors.pop_back();
+	return ret;
 	}
 
 str_node::str_node(void)

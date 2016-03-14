@@ -12,10 +12,16 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property SelfNonCommuting to~}{\\alpha}_(n)^(\\mu).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property SelfNonCommuting to~}\\alpha_{n}\\,^{\\mu}.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property LaTeXForm to {\\tt $\\backslash{}$}vac}.\\end{dmath*}"
 				}
 			],
-			"source" : "\\alpha_{n}^{\\mu}::SelfNonCommuting;"
+			"source" : "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n\\vac::LaTeXForm(\"|0\\rangle\");"
 		},
 		
 		{
@@ -27,10 +33,16 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}(\\alpha_{n}\\,^{\\mu}, |0\\rangle).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "\\vac::LaTeXForm(\"|0\\rangle\").\n{\\mu,\\nu,\\rho}::Indices.\n{m,n,p}::Integer(0..d-1).\nchi:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;"
+			"source" : "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n\\delta{#}::KroneckerDelta.\nchi:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;"
 		},
 		
 		{
@@ -72,10 +84,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{m?}\\,^{\\mu} \\alpha_{n?}\\,^{\\nu} = \\alpha_{n?}\\,^{\\nu} \\alpha_{m?}\\,^{\\mu}+\\delta_{m? n?} \\delta^{\\mu \\nu}\\end{dmath*}"
 				}
 			],
-			"source" : "sort_product(_);"
+			"source" : "rl:= \\alpha_{m?}^{\\mu} \\alpha_{n?}^{\\nu} = \\alpha_{n?}^{\\nu} \\alpha_{m?}^{\\mu} +  \\delta_{m? n?} \\delta^{\\mu\\nu};"
 		},
 		
 		{
@@ -87,22 +99,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{m}\\,^{\\mu} \\alpha_{n}\\,^{\\nu} = \\alpha_{n}\\,^{\\nu} \\alpha_{m}\\,^{\\mu}+m \\delta_{m -n} \\eta^{\\mu \\nu}\\end{dmath*}"
-				}
-			],
-			"source" : "rl:= \\alpha_{m}^{\\mu} \\alpha_{n}^{\\nu} = \\alpha_{n}^{\\nu} \\alpha_{m}^{\\mu} + m \\delta_{m}_{-n} \\eta^{\\mu\\nu};"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n<class 'cadabra2.ArgumentException'>: substitute: Index error in replacement rule. Free indices in different terms in a sum do not match.\n\\end{verbatim}}}"
+					"source" : "\\begin{dmath*}{}\\left(\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\delta_{1 0} \\delta^{\\mu \\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(L1c, rl);"
@@ -116,11 +113,41 @@
 				
 				{
 					"cell_origin" : "server",
-					"cell_type" : "output",
-					"source" : "\\begin{verbatim}{\\expression}  (0x7f3de0007d78)\n  1:{\\equals}  (0x7f3de00082e8)\n  2:  {\\prod}  (0x7f3de0000fb8)\n  3:    {\\alpha}  (0x7f3de0001b88)\n  4:      _{m}  (0x7f3de0008518)\n  5:      ^{\\mu}  (0x7f3de0008688)\n  6:    {\\alpha}  (0x7f3de00086d8)\n  7:      _{n}  (0x7f3de000a138)\n  8:      ^{\\nu}  (0x7f3de000a188)\n  9:  {\\sum}  (0x7f3de000a1d8)\n 10:    {\\prod}  (0x7f3de0002598)\n 11:      {\\alpha}  (0x7f3de00025e8)\n 12:        _{n}  (0x7f3de0002638)\n 13:        ^{\\nu}  (0x7f3de0002688)\n 14:      {\\alpha}  (0x7f3de00026d8)\n 15:        _{m}  (0x7f3de0007f98)\n 16:        ^{\\mu}  (0x7f3de0007fe8)\n 17:    {\\prod}  (0x7f3de0008038)\n 18:      {m}  (0x7f3de0008088)\n 19:      {\\delta}  (0x7f3de00080d8)\n 20:        _{m}  (0x7f3de0008128)\n 21:        _{n}  -1  (0x7f3de000a608)\n 22:      {\\eta}  (0x7f3de000a658)\n 23:        ^{\\mu}  (0x7f3de000a6a8)\n 24:        ^{\\nu}  (0x7f3de000a6f8)\n\n\\end{verbatim}"
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\delta_{1 0} \\delta^{\\mu \\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "print(tree(rl))"
+			"source" : "distribute(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\delta_{1 0} \\delta^{\\mu \\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\delta_{1 0} d \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "eliminate_kronecker(_);"
 		},
 		
 		{

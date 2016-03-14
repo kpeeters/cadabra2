@@ -72,7 +72,7 @@ Algorithm::result_t split_index::apply(iterator& it)
 						}
 					else {
 //						txtout << "going to replace" << std::endl;
-						(*current).second=tr.replace_index((*current).second, dum1.begin());
+						(*current).second=tr.replace_index((*current).second, dum1.begin(), true);
 //						txtout << "replaced" << std::endl;
 						}
 					// Important: restoring (*prs).second in the line above.
@@ -87,7 +87,7 @@ Algorithm::result_t split_index::apply(iterator& it)
 						node_integer(current->second, num2);
 //						(*prs).second->name=name_set.insert(to_string(num2)).first;
 						}
-					else tr.replace_index((*current).second,dum2.begin());
+					else tr.replace_index((*current).second,dum2.begin(), true);
 					++current;
 					}
 				rep.append_child(rep.begin(), workcopy.begin());

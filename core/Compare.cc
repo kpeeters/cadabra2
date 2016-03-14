@@ -45,8 +45,10 @@ int subtree_compare(const Properties *properties,
 		if(checksets && properties!=0) {
 			// Strip off the parent_rel because Indices properties are declared without
 			// those.
-			const Indices *ind1=properties->get<Indices>(one, true);
-			const Indices *ind2=properties->get<Indices>(two, true);
+			//std::cerr << "getting indices for " << Ex(one) << std::endl;
+			//std::cerr << "and getting indices for " << Ex(two) << std::endl;
+			const Indices *ind1=properties->get<Indices>(one);
+			const Indices *ind2=properties->get<Indices>(two);
 			if(ind1!=ind2) { 
 				// It may still be that one set is a subset of the other, i.e that the
 				// parent argument of Indices has been used.
@@ -61,16 +63,7 @@ int subtree_compare(const Properties *properties,
 			}
 		}
 	else mult=2;
-	
-//	std::cout << "mult for " << *one->name << " vs " << *two->name << " now " << mult << std::endl;
 
-	// Compare sub/superscript relations. DOC
-	if((mod_prel==-2 || (mod_prel==-3 && position_type!=Indices::free)) && one->is_index() && two->is_index() ) {
-		if(one->fl.parent_rel!=two->fl.parent_rel) {
-			if(one->fl.parent_rel==str_node::p_sub) return 2;
-			else return -2;
-			}
-		}
 
 	// Handle object wildcards and comparison
 	if(!literal_wildcards) {
@@ -97,7 +90,16 @@ int subtree_compare(const Properties *properties,
 			}
 		}
 
-//	std::cout << "update: mult for " << *one->name << " vs " << *two->name << " now " << mult << std::endl;
+	// Compare parent relations.
+	if(mod_prel<=-2) {
+		str_node::parent_rel_t p1=one->fl.parent_rel;
+		str_node::parent_rel_t p2=two->fl.parent_rel;
+		if(position_type==Indices::free && mod_prel==-3) {
+			if(p1==str_node::p_super) p1=str_node::p_sub; // for comparison, treat super as sub
+			if(p2==str_node::p_super) p2=str_node::p_sub;
+			}
+		if(p1!=p2) return (p1<p2)?2:-2;
+		}
 
 	// Now turn to the child nodes. Before comparing them directly, first compare
 	// the number of children, taking into account range wildcards.
@@ -173,6 +175,7 @@ bool subtree_equal(const Properties* properties, Ex::iterator one, Ex::iterator 
 bool subtree_exact_less(const Properties* properties, Ex::iterator one, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)
 	{
 	int cmp=subtree_compare(properties, one, two, mod_prel, checksets, compare_multiplier, literal_wildcards);
+	//std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " = " << cmp << std::endl;
 	if(cmp>0) return true;
 	return false;
 	}
@@ -262,7 +265,7 @@ bool tree_exact_equal_mod_prel_obj::operator()(const Ex& one, const Ex& two) con
 
 bool tree_exact_less_for_indexmap_obj::operator()(const Ex& one, const Ex& two) const
 	{
-	return tree_exact_less(0, one, two, 0, true, -2, true);
+	return tree_exact_less(0, one, two, -2 /* mod_prel, was 0 */, true, 0 /* compare_multiplier, was -2 */, true); 
 	}
 
 //bool operator==(const Ex& first, const Ex& second)
@@ -397,6 +400,9 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 
 	if(pattern || (implicit_pattern && two->is_integer()==false)) { 
 		// The above is to ensure that we never match integers to implicit patterns.
+		// FIXME: this is wrong: we should only not match integers to implicit patterns
+		// if we know that the implicit pattern can never take the particular numerical value.
+		// This prevents basic.cdb/test26 from working without '?' characters.
 
 		// We want to search the replacement map for replacement rules which we have
 		// constructed earlier, and discard the current match if it conflicts those 
@@ -480,7 +486,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// if we want that a found _{z} also leads to a replacement for ^{z},
 			// this needs to be added to the replacement map explicitly.
 
-			//std::cerr << "storing " << one->fl.parent_rel << " -> " << two->fl.parent_rel << std::endl;
+			std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
@@ -491,6 +497,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
  				cmptree1.begin()->flip_parent_rel();
  				if(two->is_index())
  					cmptree2.begin()->flip_parent_rel();
+				//std::cerr << "storing " << Ex(cmptree1) << " -> " << Ex(cmptree2) << std::endl;
 				replacement_map[cmptree1]=cmptree2;
  				}
 			
@@ -501,12 +508,21 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				tmp1.erase_children(tmp1.begin());
 				tmp2.erase_children(tmp2.begin());
 				replacement_map[tmp1]=tmp2;
+				//std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 				}
 			// and if this is a pattern also insert the one without the parent_rel
-			if(one->is_name_wildcard()) {
+			if(one->is_name_wildcard() && one->is_index()) {
+				//std::cerr << "storing pattern without pattern rel " << replacement_map.size() << std::endl;
 				Ex tmp1(one), tmp2(two);
 				tmp1.begin()->fl.parent_rel=str_node::p_none;
 				tmp2.begin()->fl.parent_rel=str_node::p_none;
+				// We do not want this pattern to be present already.
+				auto fnd=replacement_map.find(tmp1);
+				if(fnd!=replacement_map.end()) {
+					throw InternalError("Attempting to duplicate replacement rule.");
+					}
+//				assert(replacement_map.find(tmp1)!=replacement_map.end());
+				// std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 				replacement_map[tmp1]=tmp2;
 				}
 			}

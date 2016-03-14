@@ -11,6 +11,7 @@
 # one can generate back traces etc.
 
 import sys
+import imp
 import site
 from code import InteractiveConsole
 import code
@@ -166,7 +167,7 @@ class Shell(InteractiveConsole):
         line = self.preprocess(line)
         if self.lhs == "":
             # print 'executing: '
-            print line
+            # print line
 
             # Now feed the pre-parsed input to Python.
             self.get_output()
@@ -196,10 +197,11 @@ if __name__ == '__main__':
             for a in sys.argv[1:]:
                 if a!='-d':
                     rs += " "+a
-            print('executing '+rs)
+            #print('executing '+rs)
             os.system(rs)
         else:
-            execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
+#           execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
+            execfile(imp.find_module('cadabra2_defaults')[1])
             sh2 = InteractiveConsole()
             with open(sys.argv[1]) as f:
                 collect=""
@@ -214,5 +216,5 @@ if __name__ == '__main__':
                 # pulling in the right locals/globals
                 #            sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
     else:
-        sh.runsource("print 'Cadabra 2.0 pre-release'; print 'Copyright (C) 2001-2016  Kasper Peeters <kasper.peeters@phi-sci.com>'; import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py'); print 'Using sympy version '+sympy.__version__;")
+        sh.runsource("print 'Cadabra 2.0 pre-release'; print 'Copyright (C) 2001-2016  Kasper Peeters <kasper.peeters@phi-sci.com>'; import imp; execfile(imp.find_module('cadabra2_defaults')[1]); print 'Using SymPy version '+sympy.__version__;")
         sh.interact(banner='Info at http://cadabra.science/\nAvailable under the terms of the GNU General Public License v3\n')

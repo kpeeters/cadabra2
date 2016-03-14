@@ -18,6 +18,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\theta", "theta"},
 		{"\\Theta", "Theta"},
 		{"\\Phi", "Phi"},
+		{"\\phi", "phi"},
 		{"\\Sigma", "Sigma"},
 		{"\\partial", "Derivative"},
 		{"\\dot", "dot"},

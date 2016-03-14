@@ -117,7 +117,7 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 		
 		// print this child depending on its name or meaning
 		dispatch(str, ch);
-
+		
 		++ch;
 		if(ch==tree.end(it) || current_bracket_!=str_node::b_none || current_bracket_!=(*ch).fl.bracket || current_parent_rel_!=(*ch).fl.parent_rel) {
 			if(is_accent==0) 
@@ -127,6 +127,7 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 											 current_parent_rel_);
 			else str  << "}";
 			}
+		else str << " ";
 		
 		previous_bracket_=current_bracket_;
 		previous_parent_rel_=current_parent_rel_;

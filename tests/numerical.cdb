@@ -1,0 +1,7 @@
+
+A{#}::NumericalFlat.
+ex:= A{3}{B}{D};
+
+\bar{#}::DiracBar;
+ex:= \bar{4 \psi};
+
