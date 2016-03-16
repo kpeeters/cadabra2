@@ -179,9 +179,22 @@ while True:
     ex.reset()
     substitute(ex, rl);
     distribute(ex);
-    if ex.state()==result_t.unchanged:
+    if ex.unchanged():
         break
 
+converge(ex):
+    substitute(_, rl)
+    distribute(_)
+
+This translates to
+
+ex.reset()
+while ex.changing():
+
+and the 'ex.changing()' method returns true either at the
+first call after 'reset', or when ex.state()==changed. It
+sets ex.state to unchanged.
+        
 
 while ex.changing():
    dostuff

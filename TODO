@@ -1,4 +1,6 @@
 
+- state: from checkpointed -> unchanged -> changed / error. Rename.
+
 - expression ordering needs to keep equal objects with different parent rels next to each
   other, but doesn't yet (Compare.cc; child comparison should move up). This will break
   index relabeling with composite dummies.
