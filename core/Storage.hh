@@ -135,7 +135,11 @@ class Ex : public tree<str_node> {
 		Ex(const std::string&);
 		Ex(int);
 
-		/// Keeping track of what algorithms have done to this expression.
+		/// Keeping track of what algorithms have done to this expression. 
+		/// After a reset_state (or at initialisation), the expression sits
+		/// in the 'checkpointed' state. When an algorithm acts, it can then
+		/// move to 'no_action' (unchanged), 'applied' (changed) or 'error'.
+		/// Once it is in 'error', it will stay there until the next 'reset'.
       /// FIXME: the following should implement a stack of states,
       /// so that it can be used with nested functions.
 
@@ -143,6 +147,12 @@ class Ex : public tree<str_node> {
 		result_t state() const;
  		void     update_state(result_t);
  		void     reset_state();
+
+		/// A status query method mainly to implement a simple method to 
+		/// apply algorithms until they converge. Returns true when the
+		/// expression is in 'checkpointed' or 'applied' state. Will
+		/// set the state to 'no_action'.
+		bool     changed_state(); 
 
 		/// Output helpers mainly for debugging purposes.
 		std::ostream& print_entire_tree(std::ostream& str) const;

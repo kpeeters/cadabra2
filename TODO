@@ -1,4 +1,7 @@
 
+- Checking conditions needs to be part of match_subproduct, because it will
+  otherwise only attempt the first two factors if the condition fails there.
+
 - state: from checkpointed -> unchanged -> changed / error. Rename.
 
 - expression ordering needs to keep equal objects with different parent rels next to each

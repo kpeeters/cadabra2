@@ -216,6 +216,7 @@ void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t
 		case str_node::p_property: str << "$"; break;
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
+		case str_node::p_components: break;
 		}
 	}
 
