@@ -610,7 +610,6 @@ std::string Property<Prop>::latex_() const
 	str << "\\text{Attached property ";
 	prop->latex(str);
 	std::string bare=Ex_latex_(*for_obj);
-	boost::replace_all(bare, "#", "\\#");
 	str << " to~}"+bare+".";
 	return str.str();
 	}
