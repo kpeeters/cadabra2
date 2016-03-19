@@ -602,9 +602,11 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	}
 
 
-Ex_comparator::match_t Ex_comparator::match_subproduct(Ex::sibling_iterator lhs, 
-																					  Ex::sibling_iterator tofind, 
-																					  Ex::sibling_iterator st)
+Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr, 
+																		 Ex::sibling_iterator lhs, 
+																		 Ex::sibling_iterator tofind, 
+																		 Ex::sibling_iterator st,
+																		 Ex::iterator conditions)
 	{
 	replacement_map_t         backup_replacements(replacement_map);
 	subtree_replacement_map_t backup_subtree_replacements(subtree_replacement_map);
@@ -645,7 +647,7 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(Ex::sibling_iterator lhs,
 					Ex::sibling_iterator nxt=tofind; 
 					++nxt;
 					if(nxt!=lhs.end()) {
-						match_t res=match_subproduct(lhs, nxt, st);
+						match_t res=match_subproduct(tr, lhs, nxt, st, conditions);
 						if(res==subtree_match) return res;
 						else {
 //						txtout << tofind.node << "found factor useless " << start.node << std::endl;
@@ -655,7 +657,23 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(Ex::sibling_iterator lhs,
 							subtree_replacement_map=backup_subtree_replacements;
 							}
 						}
-					else return subtree_match;
+					else {
+						// Found all factors in sub-product, now check the conditions.
+						std::string error;
+						if(conditions==tr.end()) return subtree_match;
+						std::cerr << "checking conditions" << std::endl;
+						if(satisfies_conditions(conditions, error)) {
+							std::cerr << "conditions satisfied" << std::endl;
+							return subtree_match;
+							}
+						else {
+							std::cerr << "backtracking" << std::endl;
+							factor_locations.pop_back();
+							factor_moving_signs.pop_back();
+							replacement_map=backup_replacements;
+							subtree_replacement_map=backup_subtree_replacements;
+							}
+						}
 					}
 				}
 			else {

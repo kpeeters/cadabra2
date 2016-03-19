@@ -95,16 +95,17 @@ bool substitute::can_apply(iterator st)
 			// A + B + C + D
 			// > substitute(_, $B+C -> Q$)
 			
-			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(lhs, tr.begin(lhs), st);
+			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
 			else                     ret=comparator.equal_subtree(lhs, st);
 			
 			if(ret == Ex_comparator::subtree_match) {
-				// std::cerr << "match" << std::endl;
+				std::cerr << "match" << std::endl;
 				use_rule=arrow;
-				if(conditions==tr.end()) return arrow;
-				std::string error;
-				if(comparator.satisfies_conditions(conditions, error)) 
-					return arrow;
+				return arrow;
+// 				if(conditions==tr.end()) return arrow;
+// 				std::string error;
+// 				if(comparator.satisfies_conditions(conditions, error)) 
+// 					return arrow;
 //				else throw ArgumentException("?" + error);
 				}
 			// else std::cerr << "no match" << std::endl;
@@ -117,7 +118,7 @@ bool substitute::can_apply(iterator st)
 
 Algorithm::result_t substitute::apply(iterator& st)
 	{
-	//std::cerr << "substitute::apply at " << *st->name << std::endl;
+	std::cerr << "substitute::apply at " << Ex(st) << std::endl;
 
 	// for(auto& rule: comparator.replacement_map) 
    //	std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
