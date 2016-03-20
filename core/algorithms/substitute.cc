@@ -99,16 +99,9 @@ bool substitute::can_apply(iterator st)
 			else                     ret=comparator.equal_subtree(lhs, st);
 			
 			if(ret == Ex_comparator::subtree_match) {
-				std::cerr << "match" << std::endl;
 				use_rule=arrow;
 				return arrow;
-// 				if(conditions==tr.end()) return arrow;
-// 				std::string error;
-// 				if(comparator.satisfies_conditions(conditions, error)) 
-// 					return arrow;
-//				else throw ArgumentException("?" + error);
 				}
-			// else std::cerr << "no match" << std::endl;
 
 			return args.end();
 		});
@@ -118,7 +111,7 @@ bool substitute::can_apply(iterator st)
 
 Algorithm::result_t substitute::apply(iterator& st)
 	{
-	std::cerr << "substitute::apply at " << Ex(st) << std::endl;
+	// std::cerr << "substitute::apply at " << Ex(st) << std::endl;
 
 	// for(auto& rule: comparator.replacement_map) 
    //	std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
@@ -216,7 +209,6 @@ Algorithm::result_t substitute::apply(iterator& st)
 			}
 		else ++it;
 		}
-//	tr.print_recursive_treeform(std::cerr, repl.begin());
 
 	// If the replacement contains dummies, avoid clashes introduced when
 	// free indices in the replacement (induced from the original expression)
