@@ -1,0 +1,6 @@
+language: c++
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy
+  - sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev
+
