@@ -85,7 +85,7 @@ foreach(ALGO ${ALGOS})
                       COMMAND cadabra2html
                       ARGS    --segment ${ALGODIR}/${ALGO}.cnb ${MANOUTDIR}/${ALGO}.html
                       COMMENT "Creating ${ALGO} manual page...")
-   add_custom_target("${ALGO} manual" ALL echo -n DEPENDS ${MANOUTDIR}/${ALGO}.html)
+   add_custom_target("${ALGO}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${ALGO}.html)
 #   add_dependencies(algo_toc ${ALGODIR}/${ALGO}.cnb)
 endforeach()
 
@@ -95,7 +95,7 @@ foreach(PROP ${PROPS})
                       COMMAND cadabra2html
                       ARGS    --segment ${PROPDIR}/${PROP}.cnb ${MANOUTDIR}/${PROP}.html
                       COMMENT "Creating ${PROP} manual page...")
-   add_custom_target("${PROP} manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PROP}.html)
+   add_custom_target("${PROP}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PROP}.html)
 endforeach()
 
 foreach(TUT ${TUTORIALS})
@@ -104,12 +104,12 @@ foreach(TUT ${TUTORIALS})
                      COMMAND cadabra2html 
                      ARGS    --segment ${CNBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.html 
                      COMMENT "Creating ${TUT}.html")
-  add_custom_target("${TUT} html" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html)		
+  add_custom_target("${TUT}_html" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html)		
   add_custom_command(OUTPUT  ${HTMLOUTDIR}/${TUT}.cnb
                      DEPENDS ${CNBDIR}/${TUT}.cnb 
                      COMMAND cp
                      ARGS    ${CNBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.cnb
                      COMMENT "Creating ${TUT}.cnb")
-  add_custom_target("${TUT} cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )		
+  add_custom_target("${TUT}_cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )		
 endforeach()
 
