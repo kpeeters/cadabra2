@@ -170,18 +170,21 @@ substitute(ex, rl, repeat=True);
 
 # Note: declaring 'm' to be a symbol then matches this property to 'm?'; why?
 {m,n,p}::Symbol;
+A_{m}::SelfNonCommuting;
 ex:= A_{3} A_{2} A_{1} A_{0} + A_{0} A_{1};
 ex:= A_{2} A_{3} A_{1} A_{0} + A_{0} A_{1};
 # We need 'm?' etc here because we do not yet match _{m} to an integer, not even
 # when 'm' is a symbol.
 rl:= A_{m?} A_{n?} | m? > n? -> A_{n?} A_{m?} + Q;
+distribute(ex);
 substitute(ex, rl);
 
 ex.reset()
 while ex.changed():
     print('loop')
-    substitute(ex, rl);
-    distribute(ex);
+    substitute(ex, rl)
+    distribute(ex)
+    sort_product(ex)
 
 converge(ex):
     substitute(_, rl)

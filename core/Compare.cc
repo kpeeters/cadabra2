@@ -661,13 +661,10 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 						// Found all factors in sub-product, now check the conditions.
 						std::string error;
 						if(conditions==tr.end()) return subtree_match;
-						std::cerr << "checking conditions" << std::endl;
 						if(satisfies_conditions(conditions, error)) {
-							std::cerr << "conditions satisfied" << std::endl;
 							return subtree_match;
 							}
 						else {
-							std::cerr << "backtracking" << std::endl;
 							factor_locations.pop_back();
 							factor_moving_signs.pop_back();
 							replacement_map=backup_replacements;
