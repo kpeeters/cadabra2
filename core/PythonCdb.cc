@@ -15,9 +15,9 @@ T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
-#ifdef __GNUG__
+//#ifdef __GNUG__
 }
-  #endif
+//  #endif
 #endif
 
 #include "Parser.hh"
