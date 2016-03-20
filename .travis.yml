@@ -9,6 +9,8 @@ before_script:
   - mkdir build
   - cd build
   - cmake ..
+script:
+  - cmake --build .
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy
