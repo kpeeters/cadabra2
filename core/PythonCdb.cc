@@ -7,17 +7,13 @@
 // This now works on both Linux and OS X El Capitan, but your mileage may vary. 
 //
 #if (defined(__clang__) && defined(__linux__)) || defined(__GNUG__)
-#ifdef __GNUG__
 namespace boost {
-#endif
 template<typename T>
 T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
-#ifdef __GNUG__
 }
-  #endif
 #endif
 
 #include "Parser.hh"

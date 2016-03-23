@@ -8,6 +8,9 @@
   other, but doesn't yet (Compare.cc; child comparison should move up). This will break
   index relabeling with composite dummies.
 
+- Should cleanup be localised inside properties, so that we can avoid the dispatch
+  table based on properties currently in cleanup_dispatch?
+
 - Several display functions assume that they never get called on \operator{#} type 
   expressions, and then segfault. \pow has been fixed, sort-of, but this needs looking into.
 
