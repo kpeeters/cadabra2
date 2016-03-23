@@ -241,6 +241,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 			}
 		}
 
+	// After all replacements have been done, we need to cleanup the 
+	// replacement tree.
+	cleanup_dispatch_deep(kernel, repl);
+
 	// Remove the wrapping "\expression" node, not needed anymore.
 	repl.flatten(repl.begin());
 	repl.erase(repl.begin());
@@ -295,16 +299,6 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// things are taken care of by the algorithm class itself).
 	// FIXME: still needed?
 	cleanup_dispatch(kernel, tr, st);
-//	if(*st->name=="\\prod") {
-//		 debugout << "calling prodcollectnum" << std::endl;
-//		 Ex::print_recursive_treeform(debugout, st);
-//		prodcollectnum pc(kernel, tr);
-//		pc.apply(st);
-//		 Ex::print_recursive_treeform(debugout, st);
-//		}
-
-//	tr.print_recursive_treeform(txtout, tr.begin());
-//	txtout << "-----" << std::endl;
 
 	// Cleanup nests on all insertion points and on the top node.
 	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {
@@ -322,22 +316,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 		cleanup_dispatch(kernel, tr, ip);
 		}
 
-//	tr.print_recursive_treeform(txtout, st);
-	
-//	prod_unwrap_single_term(st);
-
 	cleanup_dispatch(kernel, tr, st);
-
-//	tr.print_recursive_treeform(txtout, tr.begin());
-//	prodcollectnum pc(tr, tr.end());
-//	pc.apply(st);
-//	if(replacer_found) {
-//		txtout << "replacement took " << tmr << std::endl;
-//		start_reporting_outside=true;
-//		}
-//	debugout << "leaving with st=" << *st->name << std::endl;
-//	tr.print_recursive_treeform(std::cout, tr.begin());
-//	txtout << "======" << std::endl;
 
 	return result_t::l_applied;
 	}
