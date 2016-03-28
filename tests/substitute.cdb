@@ -176,40 +176,21 @@ test101()
 
 def test102():
 # Note: declaring 'm' to be a symbol then matches this property to 'm?'; why?
-{m,n,p}::Symbol;
-A_{m}::SelfNonCommuting;
-ex:= A_{2} A_{3} A_{1} A_{0} + A_{1} A_{0};
-# We need 'm?' etc here because we do not yet match _{m} to an integer, not even
-# when 'm' is a symbol.
-rl:= A_{m?} A_{n?} | m? > n? -> A_{n?} A_{m?} + Q;
-ex.reset()
-while ex.changed():
-    distribute(ex)
-    substitute(ex, rl)
-    sort_product(ex)
+    {m,n,p}::Symbol;
+    A_{m}::SelfNonCommuting;
+    ex:= A_{2} A_{3} A_{1} + A_{1} A_{0};
+    # We need 'm?' etc here because we do not yet match _{m} to an integer, not even
+    # when 'm' is a symbol.
+    rl:= A_{m?} A_{n?} | m? > n? -> A_{n?} A_{m?} + Q;
+    ex.reset()
+    while ex.changed():
+        distribute(ex)
+        substitute(ex, rl)
+        sort_product(ex)
+    
+    tst:= A_{1} A_{2} A_{3} + A_{3} Q + A_{2} Q + A_{0} A_{1} + Q - @(ex);
+    assert(tst)
+    print('Test 102 passed')
 
-ex.reset()
-while ex.changed():
-    print('loop')
-    substitute(ex, rl)
-    distribute(ex)
-    sort_product(ex)
-
-converge(ex):
-    substitute(_, rl)
-    distribute(_)
-
-This translates to
-
-ex.reset()
-while ex.changing():
-
-and the 'ex.changing()' method returns true either at the
-first call after 'reset', or when ex.state()==changed. It
-sets ex.state to unchanged.
-        
-
-while ex.changing():
-   dostuff
-
-Could work if the first call sets some flag, then next...
+test102()
+    

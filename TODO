@@ -1,4 +1,22 @@
 
+- See test102 of substitute.cdb: declaring 'm' to be a symbol then
+  matches this property to 'm?' later; why?
+
+- Convergence should work as
+
+     ex.reset()
+     while ex.changed():
+         print('loop')
+         substitute(ex, rl)
+         distribute(ex)
+         sort_product(ex)
+     
+  This needs a short-hand, e.g.:
+
+     converge(ex):
+         substitute(_, rl)
+         distribute(_)
+     
 - Checking conditions needs to be part of match_subproduct, because it will
   otherwise only attempt the first two factors if the condition fails there.
 
