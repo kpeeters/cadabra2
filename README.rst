@@ -27,7 +27,7 @@ Installation instructions
 -------------------------
 
 Run
-    
+::
     mkdir build
     cd build
     cmake ..
@@ -35,7 +35,7 @@ Run
 
 to build all binaries relevant for your platform. You will get 
 warned when dependencies are missing. Use
-
+::
     make install
 
 to install the software.
