@@ -1070,15 +1070,12 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					index_map_t::iterator fri=first_free.begin();
 					while(fri!=first_free.end()) {
 						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
-						const Symbol     *smb=Symbol::get(kernel.properties, fri->second, true);
+						const Symbol     *smb=kernel.properties.get_composite<Symbol>(fri->second, true); //Symbol::get(kernel.properties, fri->second, true);
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(term_free.count((*fri).first)==0) {
-//								debugout << "check 1" << std::endl;
-//								debugout << "free indices elsewhere: ";
-//								dumpmap(debugout, first_free);
-//								debugout << "free indices here     : ";
-//								dumpmap(debugout, term_free);
+								std::cerr << (*fri).first << std::endl;
+								std::cerr << "did not find Symbol for " << fri->second << std::endl;
 								if(*it->name=="\\sum") 
 									throw ConsistencyException("Free indices in different terms in a sum do not match.");
 								else
@@ -1090,17 +1087,12 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					fri=term_free.begin();
 					while(fri!=term_free.end()) {
 						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
-						const Symbol     *smb=Symbol::get(kernel.properties, fri->second, true);
+						const Symbol     *smb=kernel.properties.get_composite<Symbol>(fri->second, true); //Symbol::get(kernel.properties, fri->second, true);
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(first_free.count((*fri).first)==0) {
-//								debugout << "check 2" << std::endl;
-//								debugout << "free indices elsewhere: ";
-//								dumpmap(debugout, first_free);
-//								debugout << "free indices here     : ";
-//								dumpmap(debugout, term_free);
 								if(*it->name=="\\sum")
-									throw ConsistencyException("Free indices in different terms in a sum do not match.");
+									throw ConsistencyException("Free indices in different terms in a sum do not match 2.");
 								else
 									throw ConsistencyException("Free indices on lhs and rhs do not match.");
 								}
@@ -1190,7 +1182,8 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) && sit->fl.bracket==str_node::b_none) {
 				if(*sit->name!="??") {
 					const Coordinate *cdn=kernel.properties.get<Coordinate>(sit, true);
-					const Symbol     *smb=Symbol::get(kernel.properties, sit, true);
+//					const Symbol     *smb=Symbol::get(kernel.properties, sit, true);
+					const Symbol     *smb=kernel.properties.get<Symbol>(sit, true); //Symbol::get(kernel.properties, sit, true);
 					// integer, coordinate or symbol indices always ok
 					if(sit->is_integer() || cdn || smb) {
 						// Note: even integers need to be stored as indices, because we expect e.g. canonicalise

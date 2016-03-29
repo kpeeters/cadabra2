@@ -42,7 +42,7 @@
 					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n\\delta{#}::KroneckerDelta.\nchi:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;"
+			"source" : "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal.\nchi:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;"
 		},
 		
 		{
@@ -84,10 +84,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{m?}\\,^{\\mu} \\alpha_{n?}\\,^{\\nu} = \\alpha_{n?}\\,^{\\nu} \\alpha_{m?}\\,^{\\mu}+\\delta_{m? n?} \\delta^{\\mu \\nu}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{m?}\\,^{\\mu} \\alpha_{n?}\\,^{\\nu}\\quad\\text{with}\\quad{}m? > 0 \\rightarrow \\alpha_{n?}\\,^{\\nu} \\alpha_{m?}\\,^{\\mu}+\\delta_{m? n?} \\delta^{\\mu \\nu}\\end{dmath*}"
 				}
 			],
-			"source" : "rl:= \\alpha_{m?}^{\\mu} \\alpha_{n?}^{\\nu} = \\alpha_{n?}^{\\nu} \\alpha_{m?}^{\\mu} +  \\delta_{m? n?} \\delta^{\\mu\\nu};"
+			"source" : "rl:= \\alpha_{m?}^{\\mu} \\alpha_{n?}^{\\nu} | m? > 0 -> \\alpha_{n?}^{\\nu} \\alpha_{m?}^{\\mu} +  \\delta_{m? n?} \\delta^{\\mu\\nu};"
 		},
 		
 		{
@@ -99,7 +99,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\delta_{1 0} \\delta^{\\mu \\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(L1c, rl);"
@@ -114,10 +114,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\delta_{1 0} \\delta^{\\mu \\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(_);"
+			"source" : "substitute(L1c, rl);"
 		},
 		
 		{
@@ -129,10 +129,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\delta_{1 0} \\delta^{\\mu \\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "canonicalise(_);"
+			"source" : "substitute(L1c,rl);"
 		},
 		
 		{
@@ -143,11 +143,11 @@
 				
 				{
 					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\delta_{1 0} d \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}{\\expression}  (0x7fa374000d88)\n  1:{\\prod}  (0x7fa374003398)\n  2:  {\\prod}  (0x7fa37400c888)\n  3:    {\\alpha}  (0x7fa37400c838)\n  4:      _{1}  0  (0x7fa37400b388)\n  5:      ^{\\mu}  (0x7fa37400c978)\n  6:    {\\alpha}  (0x7fa37400ba58)\n  7:      _{1}  (0x7fa374009b28)\n  8:      ^{\\mu}  (0x7fa37400bd98)\n  9:  {\\alpha}  (0x7fa374002818)\n 10:    _{1}  -1  (0x7fa374007048)\n 11:    ^{\\nu}  (0x7fa37400ad68)\n 12:  {\\alpha}  (0x7fa374000a38)\n 13:    _{1}  -1  (0x7fa374009bf8)\n 14:    ^{\\nu}  (0x7fa3740095c8)\n 15:  {\\vac}  (0x7fa374009a88)\n\n\\end{verbatim}"
 				}
 			],
-			"source" : "eliminate_kronecker(_);"
+			"source" : "print(tree(L1c))"
 		},
 		
 		{
