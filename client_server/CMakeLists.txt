@@ -68,7 +68,7 @@ add_executable(cadabra2html cadabra2html.cc DataCell.cc)
 #add_executable(test_talk_to_server test_talk_to_server.cc)
 #add_executable(regexp_tester regexp_tester.cc)
 target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIBRARIES})
-target_link_libraries(cadabra2html ${JSONCPP_LIBRARIES} ${Boost_LIBRARIES} )
+target_link_libraries(cadabra2html ${JSONCPP_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
