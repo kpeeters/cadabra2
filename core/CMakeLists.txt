@@ -47,6 +47,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 set(LOCAL_SRC_FILES 
+  PythonCdb.cc
   Algorithm.cc
   Cleanup.cc
   Combinatorics.cc
@@ -64,7 +65,6 @@ set(LOCAL_SRC_FILES
   PreClean.cc
   PreProcessor.cc
   Props.cc
-  PythonCdb.cc
   PythonException.cc
   Stopwatch.cc
   Storage.cc

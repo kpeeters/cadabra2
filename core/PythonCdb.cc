@@ -1,24 +1,22 @@
 
-#include "PythonCdb.hh"
+#include <memory>
 
 // make boost::python understand std::shared_ptr when compiled with clang.
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
 // This now works on both Linux and OS X El Capitan, but your mileage may vary. 
 //
-#if (defined(__clang__) && defined(__linux__)) || defined(__GNUG__)
-#ifdef __GNUG__
+#if (defined(__clang__) && defined(__linux__)) 
 namespace boost {
-#endif
-template<typename T>
-T *get_pointer(std::shared_ptr<T> p)
+   template<typename T>
+   T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
-#ifdef __GNUG__
-}
+   }
 #endif
-#endif
+
+#include "PythonCdb.hh"
 
 #include "Parser.hh"
 #include "Exceptions.hh"
