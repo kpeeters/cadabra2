@@ -23,20 +23,41 @@ algebras and Fierz transformations, implicit coordinate dependence,
 multiple index types and many more. The input format is a subset of
 TeX. Both a command-line and a graphical interface are available.
 
+Prerequisites
+-------------
+
+The configuration script will warn you if dependencies are missing. On
+Debian/Ubuntu you can install all that is needed with
+::
+    sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
+    sudo apt-get install libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev
+    sudo apt-get install texlive python-matplotlib python-mpmath
+    sudo apt-get install doxygen libjs-mathjax  
+    sudo apt-get install libsqlite3-dev uuid-dev
+
 Installation instructions
 -------------------------
 
-Run
+Once you have the required prerequisites installed, you can build 
+Cadabra using the standard
 ::
     mkdir build
     cd build
     cmake ..
     make
 
-to build all binaries relevant for your platform. You will get 
+This will build all binaries relevant for your platform. You will get 
 warned when dependencies are missing. Use
 ::
     make install
 
 to install the software.
+
+Tutorials and other help
+------------------------
+
+Please consult http://cadabra.science/ for tutorial-style notebooks
+and all other documentation.
+
+
 
