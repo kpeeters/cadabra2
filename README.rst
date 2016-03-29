@@ -51,7 +51,13 @@ warned when dependencies are missing. Use
 ::
     make install
 
-to install the software.
+to install the software. The notebook interface is started with
+::
+    cadabra-gtk
+
+while the command-line version is called
+::
+    cadabra2
 
 Tutorials and other help
 ------------------------
