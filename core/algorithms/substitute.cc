@@ -243,7 +243,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 	// After all replacements have been done, we need to cleanup the 
 	// replacement tree.
+	std::cerr << "repl before: \n" << repl << std::endl;
 	cleanup_dispatch_deep(kernel, repl);
+	std::cerr << "repl after: \n" << repl << std::endl;
 
 	// Remove the wrapping "\expression" node, not needed anymore.
 	repl.flatten(repl.begin());
@@ -293,30 +295,39 @@ Algorithm::result_t substitute::apply(iterator& st)
 		totsign*=comparator.factor_moving_signs[i];
 	multiply(st->multiplier, totsign);
 
-	// Get rid of numerical '1' factors inside products (this will not clean up
-	// '1's from a 'q -> 1' type replacement, since in this case 'st' points to the 'q'
-   // node and we are not allowed to touch the tree above the entry point; these
-	// things are taken care of by the algorithm class itself).
-	// FIXME: still needed?
-	cleanup_dispatch(kernel, tr, st);
+//	// Get rid of numerical '1' factors inside products (this will not clean up
+//	// '1's from a 'q -> 1' type replacement, since in this case 'st' points to the 'q'
+//   // node and we are not allowed to touch the tree above the entry point; these
+//	// things are taken care of by the algorithm class itself).
+//	// FIXME: still needed?
+//	cleanup_dispatch(kernel, tr, st);
+
+	std::cerr << tr << std::endl;
 
 	// Cleanup nests on all insertion points and on the top node.
 	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {
 		iterator ip=subtree_insertion_points[i];
-		if(*ip->name=="\\sum") { // FIXME: is also in algorithm.cc, and should be factored out
-			if(*ip->multiplier!=1) {
-				sibling_iterator sib=tr.begin(ip);
-				while(sib!=tr.end(ip)) {
-					multiply(sib->multiplier, *ip->multiplier);
-					++sib;
-					}
-				::one(ip->multiplier);
-				}
-			}
+		std::cerr << *ip->name << std::endl;
+//		
+//		if(*ip->name=="\\sum") { // FIXME: is also in algorithm.cc, and should be factored out
+//			if(*ip->multiplier!=1) {
+//				sibling_iterator sib=tr.begin(ip);
+//				while(sib!=tr.end(ip)) {
+//					multiply(sib->multiplier, *ip->multiplier);
+//					++sib;
+//					}
+//				::one(ip->multiplier);
+//				}
+//			}
 		cleanup_dispatch(kernel, tr, ip);
 		}
 
+	std::cerr << tr << std::endl;
+
 	cleanup_dispatch(kernel, tr, st);
+
+	std::cerr << tr << std::endl;
+	std::cerr << Ex(st) << std::endl;
 
 	return result_t::l_applied;
 	}
