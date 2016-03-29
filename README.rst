@@ -23,7 +23,8 @@ algebras and Fierz transformations, implicit coordinate dependence,
 multiple index types and many more. The input format is a subset of
 TeX. Both a command-line and a graphical interface are available.
 
-## Installation instructions
+Installation instructions
+-------------------------
 
 Run
 
