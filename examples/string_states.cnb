@@ -77,6 +77,22 @@
 		
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that in the rule below, you need to write the indices on $\\delta_{m, -n}$ using two separate subscripts, otherwise\nyou get $m-n$ as index."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that in the rule below, you need to write the indices on $\\delta_{m, -n}$ using two separate subscripts, otherwise\nyou get $m-n$ as index."
+		},
+		
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
@@ -84,10 +100,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{m?}\\,^{\\mu} \\alpha_{n?}\\,^{\\nu}\\quad\\text{with}\\quad{}m? > 0 \\rightarrow \\alpha_{n?}\\,^{\\nu} \\alpha_{m?}\\,^{\\mu}+\\delta_{m? n?} \\delta^{\\mu \\nu}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}(\\alpha_{m?}\\,^{\\mu} \\alpha_{n?}\\,^{\\nu}\\quad\\text{with}\\quad{}m? > 0 \\rightarrow \\alpha_{n?}\\,^{\\nu} \\alpha_{m?}\\,^{\\mu}+\\delta_{m? -n?} \\delta^{\\mu \\nu}, \\alpha_{m?}\\,^{\\mu} |0\\rangle\\quad\\text{with}\\quad{}m? > 0 \\rightarrow 0)\\end{dmath*}"
 				}
 			],
-			"source" : "rl:= \\alpha_{m?}^{\\mu} \\alpha_{n?}^{\\nu} | m? > 0 -> \\alpha_{n?}^{\\nu} \\alpha_{m?}^{\\mu} +  \\delta_{m? n?} \\delta^{\\mu\\nu};"
+			"source" : "rl:= { \\alpha_{m?}^{\\mu} \\alpha_{n?}^{\\nu} | m? > 0 -> \\alpha_{n?}^{\\nu} \\alpha_{m?}^{\\mu} +  \\delta_{m?}_{-n?} \\delta^{\\mu\\nu},\n       \\alpha_{m?}^{\\mu} \\vac | m? > 0 -> 0 };"
 		},
 		
 		{
@@ -114,7 +130,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\left(\\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu}+\\delta_{1 1} \\delta^{\\mu \\nu}\\right) \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(L1c, rl);"
@@ -129,10 +145,16 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta_{1 1} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\left(\\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu}+\\delta_{1 1} \\delta^{\\mu \\nu}\\right) |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta_{1 1} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(L1c,rl);"
+			"source" : "distribute(L1c);\nsubstitute(L1c,rl);"
 		},
 		
 		{
@@ -143,11 +165,26 @@
 				
 				{
 					"cell_origin" : "server",
-					"cell_type" : "output",
-					"source" : "\\begin{verbatim}{\\expression}  (0x7fa374000d88)\n  1:{\\prod}  (0x7fa374003398)\n  2:  {\\prod}  (0x7fa37400c888)\n  3:    {\\alpha}  (0x7fa37400c838)\n  4:      _{1}  0  (0x7fa37400b388)\n  5:      ^{\\mu}  (0x7fa37400c978)\n  6:    {\\alpha}  (0x7fa37400ba58)\n  7:      _{1}  (0x7fa374009b28)\n  8:      ^{\\mu}  (0x7fa37400bd98)\n  9:  {\\alpha}  (0x7fa374002818)\n 10:    _{1}  -1  (0x7fa374007048)\n 11:    ^{\\nu}  (0x7fa37400ad68)\n 12:  {\\alpha}  (0x7fa374000a38)\n 13:    _{1}  -1  (0x7fa374009bf8)\n 14:    ^{\\nu}  (0x7fa3740095c8)\n 15:  {\\vac}  (0x7fa374009a88)\n\n\\end{verbatim}"
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\delta_{1 1} \\delta^{\\mu \\nu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta_{1 1} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "print(tree(L1c))"
+			"source" : "distribute(L1c);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\delta_{1 1} \\delta^{\\mu \\nu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta_{1 1} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(L1c, rl);"
 		},
 		
 		{
