@@ -4,6 +4,8 @@
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/PartialDerivative.hh"
+#include "properties/NumericalFlat.hh"
+#include "properties/Diagonal.hh"
 
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
@@ -23,6 +25,9 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 
 	const NumericalFlat *nf = kernel.properties.get<NumericalFlat>(it);
 	if(nf)  cleanup_numericalflat(kernel, tr, it);
+
+	const Diagonal *diag = kernel.properties.get<Diagonal>(it);
+	if(diag) cleanup_diagonal(kernel, tr, it);
 	}
 
 void cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
@@ -257,6 +262,18 @@ void cleanup_numericalflat(const Kernel& k, Ex& tr, Ex::iterator& it)
 
 	}
 
+void cleanup_diagonal(const Kernel& k, Ex& tr, Ex::iterator& it)
+	{
+	if(tr.number_of_children(it)!=2) return;
+
+	auto c1=tr.begin(it);
+	auto c2(c1);
+	++c2;
+
+	if(c1->is_rational() && c2->is_rational())
+		if(c1->multiplier != c2->multiplier)
+			zero(it->multiplier);
+	}
 
 void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	{

@@ -7,17 +7,17 @@
 // This now works on both Linux and OS X El Capitan, but your mileage may vary. 
 //
 #if (defined(__clang__) && defined(__linux__)) || defined(__GNUG__)
-//#ifdef __GNUG__
+#ifdef __GNUG__
 namespace boost {
-//#endif
+#endif
 template<typename T>
 T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
-//#ifdef __GNUG__
+#ifdef __GNUG__
 }
-//  #endif
+#endif
 #endif
 
 #include "Parser.hh"
@@ -82,6 +82,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/SelfNonCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
+#include "properties/Symbol.hh"
 #include "properties/Symmetric.hh"
 #include "properties/Tableau.hh"
 #include "properties/TableauSymmetry.hh"
@@ -646,7 +647,6 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
 		if(*it->name=="\\equals") 
 			it=ex.child(it,1);
-		ex.reset_state();
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 		call_post_process(ex);
 		}
@@ -893,9 +893,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__eq__",   &__eq__Ex_Ex)
 		.def("__eq__",   &__eq__Ex_int)
 		.def("__sympy__",  &Ex_to_Sympy)
-		.def("state",    &Ex::state);
+		.def("state",    &Ex::state)
+		.def("reset",    &Ex::reset_state)
+		.def("changed",  &Ex::changed_state);
 	
 	enum_<Algorithm::result_t>("result_t")
+		.value("checkpointed", Algorithm::result_t::l_checkpointed)
 		.value("changed", Algorithm::result_t::l_applied)
 		.value("unchanged", Algorithm::result_t::l_no_action)
 		.value("error", Algorithm::result_t::l_error)
@@ -1082,6 +1085,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SelfNonCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
+	def_prop<Symbol>();
 	def_prop<Symmetric>();
 	def_prop<Tableau>();
 	def_prop<TableauSymmetry>();

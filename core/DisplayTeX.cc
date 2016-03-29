@@ -208,6 +208,7 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 		case str_node::p_property: str << "$"; break;
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
+		case str_node::p_components: break;
 		}
 	// Prevent line break after this character.
 	str << zwnbsp;
@@ -226,6 +227,8 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\components")     print_components(str, it);
+	else if(*it->name=="\\conditional")    print_conditional(str, it);
+	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else                                   print_other(str, it);
 	}
 
@@ -428,6 +431,25 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 		++sib;
 		}
 	str << "\\end{aligned}\n";
+	}
+
+void DisplayTeX::print_conditional(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	dispatch(str, sib);
+	str << "\\quad\\text{with}\\quad{}";
+	++sib;
+	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_relation(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	dispatch(str, sib);
+	if(*it->name=="\\greater") str << " > ";
+	if(*it->name=="\\less")    str << " < ";
+	++sib;
+	dispatch(str, sib);
 	}
 
 bool DisplayTeX::children_have_brackets(Ex::iterator ch) const
