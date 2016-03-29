@@ -27,7 +27,7 @@ Installation instructions
 -------------------------
 
 Run
-
+    
     mkdir build
     cd build
     cmake ..
