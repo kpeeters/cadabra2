@@ -1,5 +1,5 @@
-Cadabra documentation
-=====================
+Cadabra
+=======
 
 |Build status|
 
