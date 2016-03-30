@@ -1,9 +1,24 @@
-sudo: required
-dist: trusty
+os:
+  - linux
+  - osx
+matrix:
+  include:
+     - os: linux
+       sudo: required
+       dist: trusty
+       compiler:
+          - clang
+          - gcc
+       before_install:
+          - sudo apt-get -qq update
+          - sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy
+          - sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev
+     - os: osx
+       before_install:
+          - brew update
+          - brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig ossp-uuid gtkmm3 gnome-icon-theme
+
 language: cpp
-compiler:
-  - clang
-  - gcc
 script: cmake
 before_script:
   - mkdir build
@@ -11,8 +26,5 @@ before_script:
   - cmake ..
 script:
   - cmake --build .
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy
-  - sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev
+
 
