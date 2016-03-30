@@ -73,7 +73,10 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		struct utsname buf;
 		if(uname(&buf)==0) {
 			this_app_.machine_id = std::string(buf.sysname)
-				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine+", "+buf.domainname;
+				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine;
+#ifdef __linux__
+			this_app_.machine_id += ", "+buf.domainname;
+#endif
 			}
 
 		this_app_.user_id = get_user_uuid(app_name);
