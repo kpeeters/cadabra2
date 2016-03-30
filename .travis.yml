@@ -22,6 +22,7 @@ matrix:
        compiler: clang
   exclude:
      - os: linux
+       sudo: required
        dist: precise
        compiler: gcc
      - os: osx
