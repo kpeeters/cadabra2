@@ -28,6 +28,9 @@ script:
   - cmake --build .
   - ctest -V .
 
+virtualenv:
+  system_site_packages: true
+
 before_install:
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy; fi
