@@ -8,23 +8,25 @@ compiler:
 
 language: cpp
 
+sudo: required
+
 matrix:
   include:
      - os: linux
-       sudo: required
        dist: trusty
        compiler: gcc
      - os: linux
-       sudo: required
        dist: trusty
        compiler: clang
      - os: osx
        compiler: clang
   exclude:
      - os: linux
-       sudo: required
        dist: precise
        compiler: gcc
+     - os: linux
+       dist: precise
+       compiler: clang
      - os: osx
        compiler: gcc
 
