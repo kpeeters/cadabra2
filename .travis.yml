@@ -1,6 +1,7 @@
 os:
   - linux
   - osx
+
 matrix:
   include:
      - os: linux
@@ -9,22 +10,24 @@ matrix:
        compiler:
           - clang
           - gcc
-       before_install:
-          - sudo apt-get -qq update
-          - sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy
-          - sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev
      - os: osx
-       before_install:
-          - brew update
-          - brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig ossp-uuid gtkmm3 gnome-icon-theme
 
 language: cpp
+
 script: cmake
+
 before_script:
   - mkdir build
   - cd build
   - cmake ..
+
 script:
   - cmake --build .
 
+before_install:
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy; fi
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
 
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig ossp-uuid gtkmm3 gnome-icon-theme; fi
