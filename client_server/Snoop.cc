@@ -75,7 +75,7 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			this_app_.machine_id = std::string(buf.sysname)
 				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine;
 #ifdef __linux__
-			this_app_.machine_id += ", "+buf.domainname;
+			this_app_.machine_id += std::string(", ")+buf.domainname;
 #endif
 			}
 
