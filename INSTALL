@@ -2,40 +2,18 @@
 Cadabra building and installation instructions
 ----------------------------------------------
 
+Moved to README.rst.
 
-A. Linux
---------
 
-Building from source requires a number of packages. On Debian and
-derivatives they can all be installed with
-
-  sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy
-  sudo apt-get install libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev
-
-In order to actually be able to run the Cadabra notebook frontend, you then also need
-
-  sudo apt-get install texlive texlive-latex-extra python-matplotlib python-mpmath dvipng
-
-but most likely you have a TeX installation already. 
 
 In order to build the documentation you also need
 
   sudo apt-get install doxygen libjs-mathjax
 
 
-Build and install using
-
-   make
-   sudo make install
-
-
 
 B. OS X
 --------
-
-When building Cadabra from source on OS X, you need XCode (naturally)
-as well as a number of libraries which are readily available from
-Homebrew, http://brew.sh.  
 
 The main thing to get right is to have a version of CMake which deals
 properly with a Homebrew-installed python. Do 
@@ -43,24 +21,6 @@ properly with a Homebrew-installed python. Do
   brew uninstall cmake
   brew install nikolausdemmel/homebrew-devel/cmake
 
-You then also need to install the following: 
-
-  brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig ossp-uuid gtkmm3 gnome-icon-theme
-
-// Make sure that the Homebrew Python is first in your path (_not_ the 
-// system-provided python) by putting /usr/local/bin as the first path
-// in /etc/paths, so that the file /etc/paths looks something like
-// 
-//    /usr/local/bin
-//    /usr/bin
-//    /bin
-//    /usr/sbin
-//    /sbin
-
-In order to run the Cadabra notebook interface succesfully, you also
-need a TeX installation such as MacTeX, http://tug.org/mactex/ .
-Any TeX will do, as long as 'latex' and 'dvipng' are available, and
-the 'breqn' package is installed.
 
 Then do the following to configure Cadabra:
 
@@ -68,21 +28,6 @@ Then do the following to configure Cadabra:
    mkdir build
    cd build
    cmake ..
-
-This configures the system and will warn you about missing dependencies. 
-Build and install using
-
-   make
-   sudo make install
-
-You can then run the self-tests using
-
-   make check
-
-(these tests currently require that you have done 'sudo make install' 
-first). The command line version is started with
-
-   cadabra2
 
 and the (not yet functional) GUI is started (from the build directory) with
 

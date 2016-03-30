@@ -33,4 +33,14 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
 
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cmake boost boost-python pcre gmp jsoncpp python pkgconfig ossp-uuid gtkmm3 gnome-icon-theme; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated cmake || brew upgrade cmake; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated boost || brew upgrade boost; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated boost-python || brew upgrade boost-python; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pcre || brew upgrade pcre; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gmp || brew upgrade gmp; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated jsoncpp || brew upgrade jsoncpp; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated python || brew upgrade python; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pkgconfig || brew upgrade pkgconfig; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated ossp-uuid || brew upgrade ossp-uuid; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gtkmm3 || brew upgrade gtkmm3; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gnome-icon-theme || brew upgrade gnome-icon-theme; fi
