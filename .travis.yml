@@ -23,6 +23,7 @@ matrix:
   exclude:
      - os: linux
        dist: precise
+       compiler: gcc
      - os: osx
        compiler: gcc
 
