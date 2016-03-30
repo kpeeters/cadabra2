@@ -78,6 +78,15 @@ void cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\sum");
 
+	// Remove children which are 0
+	Ex::sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(sib->is_zero())
+			sib=tr.erase(sib);
+		else
+			++sib;
+		}
+
 	// Flatten sums which are supposed to be flat.
 	long num=tr.number_of_children(it);
 	if(num==1) {
@@ -114,25 +123,6 @@ void cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 			else ++facs;
 			}
 		}
-
-	// Remove children which are 0
-	Ex::sibling_iterator sib=tr.begin(it);
-	while(sib!=tr.end(it)) {
-		if(sib->is_zero())
-			sib=tr.erase(sib);
-		else
-			++sib;
-		}
-
-
-//	std::cerr << *it->name << std::endl;
-//	tr.print_recursive_treeform(std::cerr, tr.begin());
-   // Collect all equal terms.
-
-//	collect_terms ct(k, tr);
-//	if(ct.can_apply(it))
-//		ct.apply(it);
-
 
 	push_down_multiplier(k, tr, it);
 	}
