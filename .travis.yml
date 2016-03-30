@@ -28,12 +28,6 @@ script:
   - cmake --build .
   - ctest -V .
 
-virtualenv:
-  system_site_packages: true
-
-python:
-  - "2.7_with_system_site_packages"
-
 before_install:
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy; fi
@@ -46,3 +40,6 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gmp || brew upgrade gmp; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pkgconfig || brew upgrade pkgconfig; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python pcre jsoncpp python ossp-uuid gtkmm3 gnome-icon-theme; fi
+
+install: 
+   - sudo pip install matplotlib
