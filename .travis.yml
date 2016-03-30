@@ -42,4 +42,4 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python pcre jsoncpp python ossp-uuid gtkmm3 gnome-icon-theme; fi
 
 install: 
-   - sudo pip install matplotlib
+   - pip install --user matplotlib
