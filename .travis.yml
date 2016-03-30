@@ -13,10 +13,13 @@ matrix:
      - os: linux
        sudo: required
        dist: trusty
-     - os: osx
-  exclude:
-     - os: osx
        compiler: gcc
+     - os: linux
+       sudo: required
+       dist: trusty
+       compiler: clang
+     - os: osx
+       compiler: clang
 
 script: cmake
 
