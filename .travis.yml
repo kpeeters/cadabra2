@@ -2,17 +2,21 @@ os:
   - linux
   - osx
 
+compiler:
+  - clang
+  - gcc
+
+language: cpp
+
 matrix:
   include:
      - os: linux
        sudo: required
        dist: trusty
-       compiler:
-          - clang
-          - gcc
      - os: osx
-
-language: cpp
+  exclude:
+     - os: osx
+       compiler: gcc
 
 script: cmake
 
