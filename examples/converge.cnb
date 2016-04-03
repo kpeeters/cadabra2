@@ -1,0 +1,193 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Applying operations until convergence}\n\nIt often happens that you want to perform a series of operations on an expression, until\nthe expression no longer changes. If it is just a single operation, you can use the \\verb|repeat=True|\nparameter to the algorithm. Let us have a look at a simple example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Applying operations until convergence}\n\nIt often happens that you want to perform a series of operations on an expression, until\nthe expression no longer changes. If it is just a single operation, you can use the \\verb|repeat=True|\nparameter to the algorithm. Let us have a look at a simple example:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=Q Q Q Q Q Q;\nsubstitute(ex, $Q->A+B, A->3, B->5$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Here the \\verb|A->3| and \\verb|B->5| bits of the substitution rule did not get applied because substitute\nonly ran once. By adding the \\verb|repeat=True| flag you get the expected result:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Here the \\verb|A->3| and \\verb|B->5| bits of the substitution rule did not get applied because substitute\nonly ran once. By adding the \\verb|repeat=True| flag you get the expected result:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}262144\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=Q Q Q Q Q Q;\nsubstitute(ex, $Q->A+B, A->3, B->5$, repeat=True);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "However, this only works if you have a single algorithm to work with. If you want to apply a series of \nalgorithms, you need to use the Cadabra specific \\verb|converge| construction (which is an extension of Python). \nIt works very similar to a \\verb|while| loop, and will run until the indicated expression no longer changes. Here is an example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "However, this only works if you have a single algorithm to work with. If you want to apply a series of \nalgorithms, you need to use the Cadabra specific \\verb|converge| construction (which is an extension of Python). \nIt works very similar to a \\verb|while| loop, and will run until the indicated expression no longer changes. Here is an example:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right)\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A A A A A+A A A A A B+A A A A B A+A A A A B B+A A A B A A+A A A B A B+A A A B B A+A A A B B B+A A B A A A+A A B A A B+A A B A B A+A A B A B B+A A B B A A+A A B B A B+A A B B B A+A A B B B B+A B A A A A+A B A A A B+A B A A B A%\n+A B A A B B+A B A B A A+A B A B A B+A B A B B A+A B A B B B+A B B A A A+A B B A A B+A B B A B A+A B B A B B+A B B B A A+A B B B A B+A B B B B A+A B B B B B+B A A A A A+B A A A A B+B A A A B A+B A A A B B+B A A B A A+B A A B A B+B A A B B A%\n+B A A B B B+B A B A A A+B A B A A B+B A B A B A+B A B A B B+B A B B A A+B A B B A B+B A B B B A+B A B B B B+B B A A A A+B B A A A B+B B A A B A+B B A A B B+B B A B A A+B B A B A B+B B A B B A+B B A B B B+B B B A A A+B B B A A B+B B B A B A%\n+B B B A B B+B B B B A A+B B B B A B+B B B B B A+B B B B B B\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A A A A A+18A A A A+135A A+540+135B B+18B B B B+B B B B B B\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A A A A A+18A A A A+135A A+540+135B B+18B B B B+B B B B B B\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A A A A A+18A A A A+135A A+540+135B B+18B B B B+B B B B B B\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A A A A A+18A A A A+135A A+540+135B B+18B B B B+B B B B B B\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(ex, $Q->A+B, A B->3$, repeat=True);\n\tdistribute(ex);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We have added semicolons to every line in order to show precisely what happens: in the first iteration, the substitution \nexpands $Q$ to $A+B$. This gives an expression in which there are no $AB$ factors yet. Those arise only once\nthe \\verb|distribute| algorithm is called. At the second iteration, the substitution algorithm then replaces the~$AB$ product with~$3$.\n\nNormally one would suppress the printing and only print at the end, as in:"
+				}
+			],
+			"hidden" : true,
+			"source" : "We have added semicolons to every line in order to show precisely what happens: in the first iteration, the substitution \nexpands $Q$ to $A+B$. This gives an expression in which there are no $AB$ factors yet. Those arise only once\nthe \\verb|distribute| algorithm is called. At the second iteration, the substitution algorithm then replaces the~$AB$ product with~$3$.\n\nNormally one would suppress the printing and only print at the end, as in:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A A A A A+18A A A A+135A A+540+135B B+18B B B B+B B B B B B\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(ex, $Q->A+B, A B->3$, repeat=True)\n\tdistribute(ex)\n\ndisplay(ex)"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+
