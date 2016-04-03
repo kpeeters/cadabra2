@@ -163,6 +163,16 @@ std::string Server::pre_parse(const std::string& line)
 	boost::regex dollarmatch(R"(\$([^\$]*)\$)");
 	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'$1'\\)", boost::match_default | boost::format_all);
 	
+	// Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
+	boost::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
+	boost::smatch converge_res;
+	if(boost::regex_match(line_stripped, converge_res, converge_match)) {
+		ret = std::string(converge_res[1])+std::string(converge_res[2])+".reset()\n"
+			+ std::string(converge_res[1])+"while "+std::string(converge_res[2])+".changed():";
+		std::cerr << ret << std::endl;
+		return ret;
+		}
+	
 	size_t found = line_stripped.find(":=");
 	if(found!=std::string::npos) {
 		// If the last character is not a Cadabra terminator, start a capture process.

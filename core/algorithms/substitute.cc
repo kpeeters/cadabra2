@@ -243,9 +243,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 	// After all replacements have been done, we need to cleanup the 
 	// replacement tree.
-	std::cerr << "repl before: \n" << repl << std::endl;
+	//std::cerr << "repl before: \n" << repl << std::endl;
 	cleanup_dispatch_deep(kernel, repl);
-	std::cerr << "repl after: \n" << repl << std::endl;
+	//std::cerr << "repl after: \n" << repl << std::endl;
 
 	// Remove the wrapping "\expression" node, not needed anymore.
 	repl.flatten(repl.begin());
@@ -302,32 +302,16 @@ Algorithm::result_t substitute::apply(iterator& st)
 //	// FIXME: still needed?
 //	cleanup_dispatch(kernel, tr, st);
 
-	std::cerr << tr << std::endl;
+	//std::cerr << tr << std::endl;
 
 	// Cleanup nests on all insertion points and on the top node.
 	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {
 		iterator ip=subtree_insertion_points[i];
-		std::cerr << *ip->name << std::endl;
-//		
-//		if(*ip->name=="\\sum") { // FIXME: is also in algorithm.cc, and should be factored out
-//			if(*ip->multiplier!=1) {
-//				sibling_iterator sib=tr.begin(ip);
-//				while(sib!=tr.end(ip)) {
-//					multiply(sib->multiplier, *ip->multiplier);
-//					++sib;
-//					}
-//				::one(ip->multiplier);
-//				}
-//			}
+		//std::cerr << *ip->name << std::endl;
 		cleanup_dispatch(kernel, tr, ip);
 		}
 
-	std::cerr << tr << std::endl;
-
 	cleanup_dispatch(kernel, tr, st);
-
-	std::cerr << tr << std::endl;
-	std::cerr << Ex(st) << std::endl;
 
 	return result_t::l_applied;
 	}
