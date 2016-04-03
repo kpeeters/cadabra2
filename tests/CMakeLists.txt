@@ -9,7 +9,7 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 set(PYTHONPATH ${CMAKE_BINARY_DIR}/core)
 message("-- Set PYTHONPATH for testing to ${PYTHONPATH}:$ENV{PYTHONPATH}")
 
-#add_test(comparison     test_comparison)
+add_test(comparison     test_comparison)
 add_test(field_theory   ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/field_theory.cdb)
 add_test(selecting      ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/selecting.cdb)
 add_test(paper          ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/paper.cdb)
@@ -30,9 +30,11 @@ set_tests_properties(derivative   PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPAT
 set_tests_properties(symmetry     PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")
 set_tests_properties(young        PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")
 
+# This does not work properly, and on OSX it fails because we do not use any other include
+# settings.
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)
 
-#include_directories(${CMAKE_SOURCE_DIR}/core ${GMPXX_INCLUDE_DIRS})
-#add_executable(test_comparison test_comparison.cc)
-#target_link_libraries(test_comparison cadabra2)
+include_directories(${CMAKE_SOURCE_DIR}/core ${GMPXX_LIB_INCLUDE_DIRS})
+add_executable(test_comparison test_comparison.cc)
+target_link_libraries(test_comparison cadabra2)
