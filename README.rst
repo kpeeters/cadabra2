@@ -10,10 +10,13 @@ A field-theory motivated approach to computer algebra.
 
 Kasper Peeters
 
-http://cadabra.science/
+end user documentation: http://cadabra.science/
+
+source code documentation: http://kpeeters.github.io/cadabra2
 
 This repository holds the 2.x series of the Cadabra computer
-algebra system. It is not yet ready for public consumption.
+algebra system. It is slowly getting ready for public consumption, but 
+expect some rough edges.
 
 Cadabra was designed specifically for the solution of problems
 encountered in field theory. It has extensive functionality for tensor
