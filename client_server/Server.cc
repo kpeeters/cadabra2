@@ -115,25 +115,32 @@ void Server::init()
 std::string Server::pre_parse(const std::string& line)
 	{
 	std::string ret;
-
+	
 	boost::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
 	boost::cmatch mres;
 	
-	std::string indent_line, end_of_line;
+	std::string indent_line, end_of_line, line_stripped;
 	if(boost::regex_match(line.c_str(), mres, imatch)) {
 		indent_line=std::string(mres[1].first, mres[1].second);
 		end_of_line=std::string(mres[3].first, mres[3].second);
+		line_stripped=std::string(mres[2]);
 		}
 	else {
 		indent_line="";
 		end_of_line="\n";
+		line_stripped=line;
 		}
 	
-	std::string line_stripped=std::string(mres[2].first, mres[2].second);
-	if(line_stripped.size()==0) return "";
+	if(line_stripped.size()==0) {
+		return "";
+		}
+
 	// Do not do anything with comment lines.
 	if(line_stripped[0]=='#') return line; 
 	
+	// Bare ';' gets replaced with 'display(_)'.
+	if(line_stripped==";") return indent_line+"display(_)";
+
 	// 'lastchar' is either a Cadabra termination character, or empty.
 	// 'line_stripped' will have that character stripped, if present.
 	std::string lastchar = line_stripped.substr(line_stripped.size()-1,1);
@@ -161,7 +168,16 @@ std::string Server::pre_parse(const std::string& line)
 	
 	// Replace $...$ with Ex(...).
 	boost::regex dollarmatch(R"(\$([^\$]*)\$)");
-	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'$1'\\)", boost::match_default | boost::format_all);
+	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'$1', False\\)", boost::match_default | boost::format_all);
+	
+	// Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
+	boost::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
+	boost::smatch converge_res;
+	if(boost::regex_match(line_stripped, converge_res, converge_match)) {
+		ret = std::string(converge_res[1])+std::string(converge_res[2])+".reset(); _="+std::string(converge_res[2])+"\n"
+			+ std::string(converge_res[1])+"while "+std::string(converge_res[2])+".changed():";
+		return ret;
+		}
 	
 	size_t found = line_stripped.find(":=");
 	if(found!=std::string::npos) {
