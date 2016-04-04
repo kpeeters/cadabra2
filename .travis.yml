@@ -29,6 +29,9 @@ script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ctest -V . ; fi
 
 before_install:
+   - openssl aes-256-cbc -K $encrypted_dc9ab2986818_key -iv $encrypted_dc9ab2986818_iv -in  config/travisci_rsa.enc -out config/travisci_rsa -d
+   - chmod 0600 config/travisci_rsa
+   - cp config/travisci_rsa ~/.ssh/id_rsa 
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
@@ -45,5 +48,5 @@ install:
    - pip install --user matplotlib
 
 after_success:
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; sudo apt-get install --yes doxygen graphviz; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; ./config/publish-doxygen; fi
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --yes doxygen graphviz; fi
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./config/publish-doxygen; fi
