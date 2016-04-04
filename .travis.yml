@@ -16,10 +16,6 @@ matrix:
    exclude:
      - os: osx
        compiler: gcc
-   include:
-     - os: linux
-       compiler: gcc
-       env: BUILD_DOXYGEN=true
 script:
    - cmake --build .
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ctest -V . ; fi
