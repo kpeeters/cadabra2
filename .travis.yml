@@ -41,8 +41,7 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gmp || brew upgrade gmp; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pkgconfig || brew upgrade pkgconfig; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python pcre jsoncpp python ossp-uuid gtkmm3 gnome-icon-theme; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" -a "`${CC} --version |grep gcc`" != "" ]]; then sudo apt-get install --yes doxygen graphviz; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" -a "`${CC} --version |grep gcc`" != "" ]]; then ./config/publish-doxygen; fi
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [[ "`${CC} --version |grep gcc`" != "" ]]; then sudo apt-get install --yes doxygen graphviz; ./config/publish-doxygen; fi; fi
 
 install:
    - pip install --user matplotlib
