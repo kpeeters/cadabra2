@@ -43,3 +43,7 @@ before_install:
 
 install: 
    - pip install --user matplotlib
+
+after_success:
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; sudo apt-get install --yes doxygen graphviz; fi
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; ./config/publish-doxygen; fi
