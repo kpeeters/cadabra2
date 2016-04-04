@@ -19,8 +19,7 @@ before_script:
 - cd build
 - cmake ..
 before_install:
-- openssl aes-256-cbc -K $encrypted_0c0fd3a7dbd0_key -iv $encrypted_0c0fd3a7dbd0_iv
-  -in travisci_rsa.enc -out config/travisci_rsa -d
+- openssl aes-256-cbc -K $encrypted_0c0fd3a7dbd0_key -iv $encrypted_0c0fd3a7dbd0_iv -in config/travisci_rsa.enc -out config/travisci_rsa -d
 - chmod 0600 config/travisci_rsa
 - cp config/travisci_rsa ~/.ssh/id_rsa
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
