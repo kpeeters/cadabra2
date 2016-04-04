@@ -6,13 +6,13 @@ Cadabra
 .. |Build status| image:: https://secure.travis-ci.org/kpeeters/cadabra2.svg?branch=master
    :target: http://travis-ci.org/kpeeters/cadabra2
 
-A field-theory motivated approach to computer algebra.
+*A field-theory motivated approach to computer algebra.*
 
 Kasper Peeters
 
-end user documentation: http://cadabra.science/
+**end user documentation**: http://cadabra.science/
 
-source code documentation: http://kpeeters.github.io/cadabra2
+**source code documentation**: http://kpeeters.github.io/cadabra2
 
 This repository holds the 2.x series of the Cadabra computer
 algebra system. It is slowly getting ready for public consumption, but 
