@@ -141,7 +141,7 @@
 					"source" : "\\begin{dmath*}{}A A A A A A+18A A A A+135A A+540+135B B+18B B B B+B B B B B B\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(ex, $Q->A+B, A B->3$, repeat=True);\n\tdistribute(ex);"
+			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(_, $Q->A+B, A B->3$, repeat=True);\n\tdistribute(_);"
 		},
 		
 		{
@@ -178,7 +178,23 @@
 					"source" : "\\begin{dmath*}{}A A A A A A+18A A A A+135A A+540+135B B+18B B B B+B B B B B B\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(ex, $Q->A+B, A B->3$, repeat=True)\n\tdistribute(ex)\n\ndisplay(ex)"
+			"source" : "ex:=Q Q Q Q Q Q;\n\nconverge(ex):\n\tsubstitute(_, $Q->A+B, A B->3$, repeat=True)\n\tdistribute(_)\n;"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note the semi-colon \\verb|;| at the very end of the \\verb|converge| block, which triggers printing of the final result."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note the semi-colon \\verb|;| at the very end of the \\verb|converge| block, which triggers printing of the final result."
 		},
 		
 		{
