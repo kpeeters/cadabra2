@@ -19,12 +19,13 @@ algebra system. It is slowly getting ready for public consumption, but
 expect some rough edges.
 
 Cadabra was designed specifically for the solution of problems
-encountered in field theory. It has extensive functionality for tensor
-computer algebra, tensor polynomial simplification including
-multi-term symmetries, fermions and anti-commuting variables, Clifford
-algebras and Fierz transformations, implicit coordinate dependence,
-multiple index types and many more. The input format is a subset of
-TeX. Both a command-line and a graphical interface are available.
+encountered in quantum and classical field theory. It has extensive
+functionality for tensor computer algebra, tensor polynomial
+simplification including multi-term symmetries, fermions and
+anti-commuting variables, Clifford algebras and Fierz transformations,
+implicit coordinate dependence, multiple index types and many
+more. The input format is a subset of TeX. Both a command-line and a
+graphical interface are available.
 
 Prerequisites
 -------------
