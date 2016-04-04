@@ -4,7 +4,7 @@
 
 # Settings
 REPO_PATH=git@github.com:kpeeters/cadabra2.git
-HTML_PATH=doc/html
+HTML_PATH=doxygen/html
 COMMIT_USER="Documentation Builder"
 COMMIT_EMAIL="kasper.peeters@phi-sci.com"
 CHANGESET=$(git rev-parse --verify HEAD)
