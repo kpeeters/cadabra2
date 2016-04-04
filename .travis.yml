@@ -16,6 +16,10 @@ matrix:
    exclude:
      - os: osx
        compiler: gcc
+   include:
+     - os: linux
+       compiler: gcc
+       env: BUILD_DOXYGEN=true
 script:
    - cmake --build .
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ctest -V . ; fi
@@ -46,5 +50,5 @@ install:
    - pip install --user matplotlib
 
 after_success:
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --yes doxygen graphviz; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./config/publish-doxygen; fi
+   - if [[ "$BUILD_DOXYGEN" == true ]]; then sudo apt-get install --yes doxygen graphviz; fi
+   - if [[ "$BUILD_DOXYGEN" == true ]]; then ./config/publish-doxygen; fi
