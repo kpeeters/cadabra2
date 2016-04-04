@@ -1,45 +1,51 @@
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 compiler:
-  - clang
-  - gcc
-
+- clang
+- gcc
 language: cpp
-
 sudo: required
-
 dist: trusty
-
 matrix:
   exclude:
-     - os: osx
-       compiler: gcc
-
-script: cmake
-
-before_script:
-  - mkdir build
-  - cd build
-  - cmake ..
-
+  - os: osx
+    compiler: gcc
 script:
-  - cmake --build .
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ctest -V . ; fi
-
+- cmake --build .
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ctest -V . ; fi
+before_script:
+- mkdir build
+- cd build
+- cmake ..
 before_install:
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y python-matplotlib python-mpmath; fi
-
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew unlink json-c; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated cmake || brew upgrade cmake; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated boost || brew upgrade boost; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gmp || brew upgrade gmp; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pkgconfig || brew upgrade pkgconfig; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python pcre jsoncpp python ossp-uuid gtkmm3 gnome-icon-theme; fi
-
-install: 
-   - pip install --user matplotlib
+- openssl aes-256-cbc -K $encrypted_0c0fd3a7dbd0_key -iv $encrypted_0c0fd3a7dbd0_iv
+  -in travisci_rsa.enc -out config/travisci_rsa -d
+- openssl aes-256-cbc -K $encrypted_dc9ab2986818_key -iv $encrypted_dc9ab2986818_iv
+  -in  config/travisci_rsa.enc -out config/travisci_rsa -d
+- chmod 0600 config/travisci_rsa
+- cp config/travisci_rsa ~/.ssh/id_rsa
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python-dev
+  g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev
+  libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y python-matplotlib
+  python-mpmath; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew unlink json-c; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated cmake || brew upgrade cmake;
+  fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated boost || brew upgrade boost;
+  fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gmp || brew upgrade gmp;
+  fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pkgconfig || brew upgrade
+  pkgconfig; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python pcre jsoncpp
+  python ossp-uuid gtkmm3 gnome-icon-theme; fi
+install:
+- pip install --user matplotlib
+after_success:
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --yes doxygen graphviz;
+  fi
+- if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./config/publish-doxygen; fi
