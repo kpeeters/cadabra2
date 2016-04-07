@@ -33,6 +33,7 @@ set(ALGOS
   expand_diracbar
   factor_in
   join_gamma
+  vary
   young_project_tensor
 )
 set(PROPS

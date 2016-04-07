@@ -1,0 +1,88 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{expand}{Write out products of objects with implicit indices.}\n\nWrite out products of matrices and vectors inside indexbrackets,\ninserting new dummy indices for the contraction. This requires that\nthe objects inside the index bracket are properly declared to\nhave \\prop{Matrix} or \\prop{ImplicitIndex} properties.  \n\nHere is an example with multiple matrices:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{expand}{Write out products of objects with implicit indices.}\n\nWrite out products of matrices and vectors inside indexbrackets,\ninserting new dummy indices for the contraction. This requires that\nthe objects inside the index bracket are properly declared to\nhave \\prop{Matrix} or \\prop{ImplicitIndex} properties.  \n\nHere is an example with multiple matrices:"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(a, b, c, d, e).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Matrix to~}(A, B, C, D).\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B C D a b\\end{dmath*}"
+				}
+			],
+			"source" : "{a,b,c,d,e}::Indices;\n{A,B,C,D}::Matrix;\n\nex:= (A B C D)_{a "
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}{\\expression}  (0x7f20fc003368)\n  1:{\\prod}  (0x7f20fc007d88)\n  2:  {A}  (0x7f20fc0082c8)\n  3:  {B}  (0x7f20fc006e98)\n  4:  {C}  (0x7f20fc003628)\n  5:  {D}  (0x7f20fc000ab8)\n  6:  _{a}  (0x7f20fc002cc8)\n  7:  _{b}  (0x7f20fc004d18)\n\n\\end{verbatim}"
+				}
+			],
+			"source" : "print(tree(ex))"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B C D a b\\end{dmath*}"
+				}
+			],
+			"source" : "expand(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

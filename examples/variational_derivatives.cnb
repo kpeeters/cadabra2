@@ -1,0 +1,63 @@
+
+{
+	"cells" : 
+	[
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\delta{\\phi}.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}F(\\phi) = \\frac{1}{2}\\int{}\\partial_{\\mu}(\\phi) \\partial^{\\mu}(\\phi)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "x::Coordinate;\n\\phi::Depends(x);\n\\delta{\\phi}::Depends(x);\n\nex:= F(\\phi) = 1/2 \\int{\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi}}{x};"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}F(\\phi) = \\frac{1}{2}\\int{}0\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "vary(_, $\\phi -> \\delta{\\phi}$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1.0
+}
+

@@ -26,7 +26,7 @@ if sympy.__version__ != "unavailable":
     from sympy import symbols
     from sympy import latex
     from sympy import sin, cos, tan, trigsimp
-    from sympy import Matrix
+    from sympy import Matrix as sMatrix
 #    sympy.init_printing()
 
 # Import matplotlib and setup functions to prepare its output
