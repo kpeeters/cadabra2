@@ -1,0 +1,5 @@
+
+x::Coordinate;
+\phi::Depends(x);
+
+ex:= F(\phi) = 1/2 \int{\partial_{\mu}{\phi} \partial^{\mu}{\phi}}{x};

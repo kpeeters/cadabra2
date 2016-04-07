@@ -444,6 +444,10 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::document:
 			str << "\\documentclass[11pt]{article}\n"
 				 << "\\usepackage{amsmath}\n"
+				 << "\\usepackage{amssymb}\n"
+				 << "\\usepackage{inconsolata}\n"
+				 << "\\usepackage{color}\n"
+				 << "\\usepackage{tableaux}\n"
 				 << "\\usepackage{breqn}\n"
 				 << "\\begin{document}\n";
 			break;

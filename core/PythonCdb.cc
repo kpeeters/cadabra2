@@ -69,6 +69,7 @@ namespace boost {
 #include "properties/InverseMetric.hh"
 #include "properties/KroneckerDelta.hh"
 #include "properties/LaTeXForm.hh"
+#include "properties/Matrix.hh"
 #include "properties/Metric.hh"
 #include "properties/NonCommuting.hh"
 #include "properties/NumericalFlat.hh"
@@ -105,6 +106,7 @@ namespace boost {
 #include "algorithms/factor_in.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
+#include "algorithms/integrate_by_parts.hh"
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
 #include "algorithms/lr_tensor.hh"
@@ -948,6 +950,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
+	def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex&>, 
+		 (arg("ex"),arg("derivative"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
 	def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 
 		 (arg("ex"),arg("modulo_monoterm")=false,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
@@ -1072,6 +1079,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<InverseMetric>();
 	def_prop<KroneckerDelta>();
 	def_prop<LaTeXForm>();
+	def_prop<Matrix>();
 	def_prop<Metric>();
 	def_prop<NonCommuting>();
 	def_prop<NumericalFlat>();

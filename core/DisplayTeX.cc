@@ -372,8 +372,10 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
-	str << "\\, {\\rm d}";
-	dispatch(str, sib);
+	if(tree.is_valid(sib)) {
+		str << "\\, {\\rm d}";
+		dispatch(str, sib);
+		}
 	}
 
 void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)

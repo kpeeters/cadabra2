@@ -133,6 +133,7 @@ set(LOCAL_SRC_FILES
   algorithms/flatten_product.cc
   algorithms/flatten_sum.cc
   algorithms/indexsort.cc
+  algorithms/integrate_by_parts.cc
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
   algorithms/lr_tensor.cc
