@@ -1,4 +1,20 @@
 
+x^{\mu}::Coordinate;
+x::Coordinate;
+#x::Implicit(x^{\mu});
+\phi::Depends(x);
+\partial{#}::PartialDerivative;
+ex:= \int{ \partial_{\mu}{ \epsilon^{\mu} \phi } }{x};
+integrate_by_parts(ex, $\epsilon$);
+assert(ex==0)
+
+\delta{\phi}::Depends(x);
+ex:= \int{ \partial_{\mu}{ \delta{\phi} } \phi }{x};
+integrate_by_parts(ex, $\epsilon$);
+assert(ex==0)
+
+
+
 x::Coordinate;
 \phi::Depends(x);
 

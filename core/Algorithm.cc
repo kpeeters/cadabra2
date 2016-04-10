@@ -91,8 +91,13 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 
 Algorithm::result_t Algorithm::apply_once(Ex::iterator& it)
 	{
-	if(can_apply(it)) 
-		return apply(it);
+	if(can_apply(it)) {
+		result_t res=apply(it);
+		if(res==result_t::l_applied) {
+			cleanup_dispatch(kernel, tr, it);
+			return res;
+			}
+		}
 
 	return result_t::l_no_action;
 	}
