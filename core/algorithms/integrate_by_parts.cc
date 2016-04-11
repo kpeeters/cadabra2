@@ -1,4 +1,5 @@
 
+#include <boost/utility.hpp>
 #include "algorithms/integrate_by_parts.hh"
 #include "properties/Derivative.hh"
 #include "Cleanup.hh"
@@ -79,14 +80,32 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 				// (if present).
 				// FIXME: this does not take anti-commutativity into account.
 
-				Ex sum("\\sum");
-				auto ofac=tr.begin(it);
-				while(ofac!=tr.end(it)) {
-					if(ofac!=fac) {
-						Ex prod(it);
-						
+				if(fac==tr.begin(it) || boost::next(fac)==tr.end(it)) {
+					// Only one term. First move all other factors (if more
+					// than one) into their own product node. Then take the
+					// derivative head and move it to the newly created product
+					// node. Flip sign, job done.
+
+					/* 
+						Needed in tree.hh: exchange two subtrees. We could
+						then first wrap a range of factor nodes into a new
+						\prod parent, and then swap the derivative argument
+						with this \prod node.
+
+					 */
+
+					}
+				else {
+					// Two terms needed.
+					Ex sum("\\sum");
+					auto ofac=tr.begin(it);
+					while(ofac!=tr.end(it)) {
+						if(ofac!=fac) {
+							Ex prod(it);
+							
+							}
+						++ofac;
 						}
-					++ofac;
 					}
 
 //				for(auto& pat: kernel.properties.pats) {
@@ -104,5 +123,5 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 
 Ex integrate_by_parts::wrap(iterator prod, sibling_iterator from, sibling_iterator to) const
 	{
-
+	return Ex("");
 	}
