@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.4
-    \date     23-Jan-2016
+    \version  3.5
+    \date     12-Apr-2017
     \see      http://tree.phi-sci.com/
     \see      http://tree.phi-sci.com/ChangeLog
 
@@ -269,9 +269,9 @@ class tree {
 		/// Return breadth-first end iterator.
 		breadth_first_queued_iterator end_breadth_first() const;
 		/// Return sibling iterator to the first child of given node.
-		sibling_iterator     begin(const iterator_base&) const;
+		static sibling_iterator     begin(const iterator_base&);
 		/// Return sibling end iterator for children of given node.
-		sibling_iterator     end(const iterator_base&) const;
+		static sibling_iterator     end(const iterator_base&);
       /// Return leaf iterator to the first leaf of the tree.
       leaf_iterator   begin_leaf() const;
       /// Return leaf end iterator for entire tree.
@@ -348,8 +348,10 @@ class tree {
 		/// Move all child nodes of 'from' to be children of 'position'.
 		template<typename iter> iter reparent(iter position, iter from);
 
-		/// Replace node with a new node, making the old node a child of the new node.
+		/// Replace node with a new node, making the old node (plus subtree) a child of the new node.
 		template<typename iter> iter wrap(iter position, const T& x);
+		/// Replace the range of sibling nodes (plus subtrees), making these children of the new node.
+		template<typename iter> iter wrap(iter from, iter to, const T& x);
 
 		/// Move 'source' node (plus its children) to become the next sibling of 'target'.
 		template<typename iter> iter move_after(iter target, iter source);
@@ -390,7 +392,8 @@ class tree {
 		void     subtree(tree&, sibling_iterator from, sibling_iterator to) const;
 		/// Exchange the node (plus subtree) with its sibling node (do nothing if no sibling present).
 		void     swap(sibling_iterator it);
-		/// Exchange two nodes (plus subtrees)
+		/// Exchange two nodes (plus subtrees). The iterators will remain valid and keep 
+		/// pointing to the same nodes, which now sit at different locations in the tree.
 	   void     swap(iterator, iterator);
 		
 		/// Count the total number of nodes.
@@ -810,7 +813,7 @@ typename tree<T, tree_node_allocator>::fixed_depth_iterator tree<T, tree_node_al
 	}
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::begin(const iterator_base& pos) const
+typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::begin(const iterator_base& pos) 
 	{
 	assert(pos.node!=0);
 	if(pos.node->first_child==0) {
@@ -820,7 +823,7 @@ typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_alloca
 	}
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::end(const iterator_base& pos) const
+typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::end(const iterator_base& pos) 
 	{
 	sibling_iterator ret(0);
 	ret.parent_=pos.node;
@@ -1557,6 +1560,15 @@ template <typename iter> iter tree<T, tree_node_allocator>::wrap(iter position, 
 	++to;
 	iter ret = insert(position, x);
 	reparent(ret, fr, to);
+	return ret;
+	}
+
+template <class T, class tree_node_allocator>
+template <typename iter> iter tree<T, tree_node_allocator>::wrap(iter from, iter to, const T& x)
+	{
+	assert(from.node!=0);
+	iter ret = insert(from, x);
+	reparent(ret, from, to);
 	return ret;
 	}
 

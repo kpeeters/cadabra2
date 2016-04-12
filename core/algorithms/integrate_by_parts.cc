@@ -4,8 +4,8 @@
 #include "properties/Derivative.hh"
 #include "Cleanup.hh"
 
-integrate_by_parts::integrate_by_parts(const Kernel& k, Ex& tr, Ex& derivative)
-	: Algorithm(k, tr)
+integrate_by_parts::integrate_by_parts(const Kernel& k, Ex& tr, Ex& af)
+	: Algorithm(k, tr), away_from(af)
 	{
 	}
 
@@ -54,6 +54,22 @@ bool integrate_by_parts::int_and_derivative_related(iterator int_it, iterator de
 	return true;
 	}
 
+bool integrate_by_parts::derivative_acting_on_arg(iterator der_it) const
+	{
+	auto stop=der_it;
+	stop.skip_children();
+	++stop;
+	
+	++der_it;
+	Ex_comparator comp(kernel.properties);
+	auto top=away_from.begin(away_from.begin());
+	while(der_it!=stop) {
+		if( comp.equal_subtree(der_it, top)==Ex_comparator::match_t::subtree_match) return true;
+		++der_it;
+		}
+	return false;
+	}
+
 Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& it)
 	{
 	// Either this is a Derivative node, in which case it is a total derivative.
@@ -73,27 +89,39 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 	while(fac!=tr.end(it)) {
 		const Derivative *der=kernel.properties.get<Derivative>(fac);
 		if(der) {
-			if(int_and_derivative_related(int_it, fac)) {
-				// Generate one term with the derivative acting on all factors
-				// which come before the derivative node (if present). 
-				// Generate another one for those factors coming after the derivative
-				// (if present).
-				// FIXME: this does not take anti-commutativity into account.
+			if(int_and_derivative_related(int_it, fac) && derivative_acting_on_arg(fac) ) {
+				// Generate one term with the derivative acting on all
+				// factors which come before the derivative node (if
+				// present).  Generate another one for those factors
+				// coming after the derivative (if present).  
+
+				// FIXME: this does not yet take anti-commutativity of the
+				// derivative itself into account.
 
 				if(fac==tr.begin(it) || boost::next(fac)==tr.end(it)) {
-					// Only one term. First move all other factors (if more
-					// than one) into their own product node. Then take the
-					// derivative head and move it to the newly created product
-					// node. Flip sign, job done.
+					// Derivative is first or last factor in product; generate one term only.
+					
+					sibling_iterator from, to;
+					if(fac==tr.begin(it)) {
+						from=fac;
+						++from;
+						to=tr.end(it);
+						}
+					else {
+						from=tr.begin(it);
+						to=fac;
+						}
+					if(boost::next(from)!=to)
+						from = tr.wrap(from, to, str_node("\\prod"));
 
-					/* 
-						Needed in tree.hh: exchange two subtrees. We could
-						then first wrap a range of factor nodes into a new
-						\prod parent, and then swap the derivative argument
-						with this \prod node.
-
-					 */
-
+					auto der_arg = tr.begin(fac);
+					while(der_arg->is_index() && der_arg!=tr.end(fac))
+						++der_arg;
+					if(der_arg==tr.end(fac)) return result_t::l_no_action; // no idea what to do here
+					tr.swap(der_arg, from);
+					tr.swap(fac, der_arg);
+					multiply(it->multiplier, -1);
+					return result_t::l_applied;
 					}
 				else {
 					// Two terms needed.

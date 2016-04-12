@@ -9,8 +9,16 @@ integrate_by_parts(ex, $\epsilon$);
 assert(ex==0)
 
 \delta{\phi}::Depends(x);
-ex:= \int{ \partial_{\mu}{ \delta{\phi} } \phi }{x};
+ex:= \int{ \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
 integrate_by_parts(ex, $\epsilon$);
+integrate_by_parts(ex, $\delta{\phi}$, repeat=True);
+
+ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } }{x};
+integrate_by_parts(ex, $\delta{\phi}$);
+
+ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } + \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
+integrate_by_parts(ex, $\delta{\phi}$);
+
 assert(ex==0)
 
 

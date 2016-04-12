@@ -953,7 +953,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_internal_reference<1>() );
 
 	def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex&>, 
-		 (arg("ex"),arg("derivative"),
+		 (arg("ex"),arg("away_from"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 

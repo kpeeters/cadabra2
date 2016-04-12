@@ -28,5 +28,12 @@ class integrate_by_parts : public Algorithm {
 		// Wrap the indicated range of factor nodes inside the product node in 
       // the derivative.
 		Ex wrap(iterator, sibling_iterator, sibling_iterator) const;
+
+		// Determine whether the indicated derivative acts on the 'away_from'
+		// expression.
+		bool derivative_acting_on_arg(iterator der_it) const;
+
+		// Expression to move derivative away from.
+		Ex away_from;
 };
 

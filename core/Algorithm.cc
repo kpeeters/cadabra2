@@ -93,6 +93,7 @@ Algorithm::result_t Algorithm::apply_once(Ex::iterator& it)
 	{
 	if(can_apply(it)) {
 		result_t res=apply(it);
+		// std::cerr << "apply algorithm at " << *it->name << std::endl;
 		if(res==result_t::l_applied) {
 			cleanup_dispatch(kernel, tr, it);
 			return res;
