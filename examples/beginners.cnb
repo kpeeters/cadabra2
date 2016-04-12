@@ -4,14 +4,12 @@
 	[
 		
 		{
-			"cell_id" : 6,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				
 				{
-					"cell_id" : 19,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/}.\n\nThe first thing we will do is enter some tensorial expressions. "
@@ -22,65 +20,63 @@
 		},
 		
 		{
-			"cell_id" : 8,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
-					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(\\frac{-1}{4})\\, \\int{}F_{\\mu \\nu} F^{\\mu \\nu}\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\delta{\\#}.\\end{dmath*}"
+				},
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}F_{\\mu \\nu} F^{\\mu \\nu}\\, {\\rm d}x^{\\mu}\\end{dmath*}"
 				}
 			],
-			"source" : "{\\mu,\\nu,\\rho}::Indices(position=free).\nx::Coordinate.\n\\partial{#}::PartialDerivative.\n\nF_{\\mu\\nu}::Depends(x).\nA_{\\mu}::Depends(x,\\partial).\n\nS:= -1/4 \\int{ F_{\\mu\\nu} F^{\\mu\\nu} }{x^\\mu};"
+			"source" : "{\\mu,\\nu,\\rho}::Indices(position=free).\nx::Coordinate.\n\\partial{#}::PartialDerivative.\n\nF_{\\mu\\nu}::Depends(x).\nA_{\\mu}::Depends(x,\\partial).\n\\delta{#}::Accent;\n\nS:= S = -1/4 \\int{ F_{\\mu\\nu} F^{\\mu\\nu} }{x^\\mu};"
 		},
 		
 		{
-			"cell_id" : 9,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
-					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = (\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}})\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = \\partial_{\\mu}(A_{\\nu})-\\partial_{\\nu}(A_{\\mu})\\end{dmath*}"
 				}
 			],
 			"source" : "rl:= F_{\\mu\\nu} = \\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}};"
 		},
 		
 		{
-			"cell_id" : 9,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
-					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(\\frac{-1}{4})\\, \\int{}(\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}}) (\\partial^{\\mu}{A^{\\nu}} - \\partial^{\\nu}{A^{\\mu}})\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}(A_{\\nu})-\\partial_{\\nu}(A_{\\mu})\\right) \\left(\\partial^{\\mu}(A^{\\nu})-\\partial^{\\nu}(A^{\\mu})\\right)\\, {\\rm d}x^{\\mu}\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(S, rl);"
 		},
 		
 		{
-			"cell_id" : 10,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				
 				{
-					"cell_id" : 16,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note how this has automatically replaced the field strength with upper as well as\nlower indices, by virtue of the fact that the index position was declared `free'.\n\nWe can now compute a variational derivative of this object with respect to $A_\\mu$.\nNote the use of inline formulas using the standard \\TeX{} \\$\\ldots\\$ construction."
@@ -91,31 +87,27 @@
 		},
 		
 		{
-			"cell_id" : 17,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				
 				{
-					"cell_id" : 1,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(\\frac{-1}{4})\\, \\int{}((\\partial_{\\mu}{\\delta{A_{\\nu}}} - \\partial_{\\nu}{\\delta{A_{\\mu}}}) (\\partial^{\\mu}{A^{\\nu}} - \\partial^{\\nu}{A^{\\mu}}) + (\\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}}) (\\partial^{\\mu}{\\delta{A^{\\nu}}} - \\partial^{\\nu}{\\delta{A^{\\mu}}}))\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}(\\delta{A_{\\nu}})-\\partial_{\\nu}(\\delta{A_{\\mu}})\\right) \\left(\\partial^{\\mu}(A^{\\nu})-\\partial^{\\nu}(A^{\\mu})\\right)+\\left(\\partial_{\\mu}(A_{\\nu})-\\partial_{\\nu}(A_{\\mu})\\right) \\left(\\partial^{\\mu}(\\delta{A^{\\nu}})-\\partial^{\\nu}(\\delta{A^{\\mu}})\\right)\\, {\\rm d}x^{\\mu}\\end{dmath*}"
 				}
 			],
 			"source" : "vary(S, $A_{\\mu} -> \\delta{A_{\\mu}}$);"
 		},
 		
 		{
-			"cell_id" : 15,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				
 				{
-					"cell_id" : 17,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "This now needs to be integrated by parts in order to get to an equation of motion."
@@ -126,10 +118,129 @@
 		},
 		
 		{
-			"cell_id" : 18,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "integrate_by_parts(S, "
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\partial_{\\mu}(\\delta{A_{\\nu}}) \\partial^{\\mu}(A^{\\nu})-\\partial_{\\mu}(\\delta{A_{\\nu}}) \\partial^{\\nu}(A^{\\mu})-\\partial_{\\nu}(\\delta{A_{\\mu}}) \\partial^{\\mu}(A^{\\nu})+\\partial_{\\nu}(\\delta{A_{\\mu}}) \\partial^{\\nu}(A^{\\mu})+\\partial_{\\mu}(A_{\\nu}) \\partial^{\\mu}(\\delta{A^{\\nu}})-\\partial_{\\mu}(A_{\\nu}) \\partial^{\\nu}(\\delta{A^{\\mu}})-\\partial_{\\nu}(A_{\\mu}) \\partial^{\\mu}(\\delta{A^{\\nu}})+\\partial_{\\nu}(A_{\\mu}) \\partial^{\\nu}(\\delta{A^{\\mu}})\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-\\delta{A_{\\nu}} \\partial_{\\mu}(\\partial^{\\mu}(A^{\\nu}))+\\delta{A_{\\nu}} \\partial_{\\mu}(\\partial^{\\nu}(A^{\\mu}))+\\delta{A_{\\mu}} \\partial_{\\nu}(\\partial^{\\mu}(A^{\\nu}))-\\delta{A_{\\mu}} \\partial_{\\nu}(\\partial^{\\nu}(A^{\\mu}))-\\partial^{\\mu}(\\partial_{\\mu}(A_{\\nu})) \\delta{A^{\\nu}}+\\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu})) \\delta{A^{\\mu}}+\\partial^{\\mu}(\\partial_{\\nu}(A_{\\mu})) \\delta{A^{\\nu}}-\\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu})) \\delta{A^{\\mu}}\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "integrate_by_parts(_, $\\delta{A_{\\mu}}$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-\\delta{A_{\\nu}} \\partial_{\\mu}(\\partial^{\\mu}(A^{\\nu}))+\\delta{A_{\\nu}} \\partial_{\\mu}(\\partial^{\\nu}(A^{\\mu}))+\\delta{A_{\\mu}} \\partial_{\\nu}(\\partial^{\\mu}(A^{\\nu}))-\\delta{A_{\\mu}} \\partial_{\\nu}(\\partial^{\\nu}(A^{\\mu}))-\\delta{A^{\\nu}} \\partial^{\\mu}(\\partial_{\\mu}(A_{\\nu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))+\\delta{A^{\\nu}} \\partial^{\\mu}(\\partial_{\\nu}(A_{\\mu}))-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "sort_product(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(F_{\\nu \\mu}+\\partial_{\\mu}(A_{\\nu})\\right))+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(F_{\\mu \\nu}+\\partial_{\\nu}(A_{\\mu})\\right))\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\partial_{\\mu}{A_{\\nu}} -> F_{\\mu\\nu} + \\partial_{\\nu}{A_{\\mu}}$);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}{\\expression}  (0x7f53f8000eb8)\n  1:{\\equals}  (0x7f53f8005168)\n  2:  {S}  (0x7f53f8003ee8)\n  3:  {\\int}  -1/4  (0x7f53f800b898)\n  4:    {\\sum}  (0x7f53f800e438)\n  5:      {\\prod}  -4  (0x7f53f8009968)\n  6:        {\\delta}  (0x7f53f800e838)\n  7:          {A}  (0x7f53f800ed78)\n  8:            ^{\\mu}  (0x7f53f8009c28)\n  9:        {\\partial}  (0x7f53f80035a8)\n 10:          ^{\\nu}  (0x7f53f80029d8)\n 11:          {\\sum}  (0x7f53f8000af8)\n 12:            {F}  (0x7f53f800b7e8)\n 13:              _{\\nu}  (0x7f53f8007d08)\n 14:              _{\\mu}  (0x7f53f800e958)\n 15:            {\\partial}  (0x7f53f800a708)\n 16:              _{\\mu}  (0x7f53f8007cb8)\n 17:              {A}  (0x7f53f800a7f8)\n 18:                _{\\nu}  (0x7f53f8000aa8)\n 19:      {\\prod}  4  (0x7f53f8002e78)\n 20:        {\\delta}  (0x7f53f8002468)\n 21:          {A}  (0x7f53f800b228)\n 22:            ^{\\mu}  (0x7f53f800e678)\n 23:        {\\partial}  (0x7f53f8002e28)\n 24:          ^{\\nu}  (0x7f53f8009ce8)\n 25:          {\\sum}  (0x7f53f80088e8)\n 26:            {F}  (0x7f53f8009458)\n 27:              _{\\mu}  (0x7f53f8008988)\n 28:              _{\\nu}  (0x7f53f8008898)\n 29:            {\\partial}  (0x7f53f800ea88)\n 30:              _{\\nu}  (0x7f53f800ed08)\n 31:              {A}  (0x7f53f800ec68)\n 32:                _{\\mu}  (0x7f53f800a758)\n 33:    {x}  (0x7f53f800aaa8)\n 34:      ^{\\mu}  (0x7f53f800aaf8)\n\n\\end{verbatim}"
+				}
+			],
+			"source" : "print(tree(S))"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(F_{\\nu \\mu}+\\partial_{\\mu}(A_{\\nu})\\right))+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(F_{\\mu \\nu}+\\partial_{\\nu}(A_{\\mu})\\right))\\, {\\rm d}x^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}{\\expression}  (0x7f53f8008de8)\n  1:{\\equals}  (0x7f53f8008f88)\n  2:  {S}  (0x7f53f8007788)\n  3:  {\\int}  -1/4  (0x7f53f8009b38)\n  4:    {\\sum}  (0x7f53f8007c18)\n  5:      {\\sum}  (0x7f53f800afa8)\n  6:        {\\prod}  -4  (0x7f53f800b2e8)\n  7:          {\\delta}  (0x7f53f800b4c8)\n  8:            {A}  (0x7f53f8003048)\n  9:              ^{\\mu}  (0x7f53f8009328)\n 10:          {\\partial}  (0x7f53f800a3f8)\n 11:            ^{\\nu}  (0x7f53f8009cc8)\n 12:            {F}  (0x7f53f800ab48)\n 13:              _{\\nu}  (0x7f53f800b478)\n 14:              _{\\mu}  (0x7f53f800a4c8)\n 15:        {\\prod}  -4  (0x7f53f80008e8)\n 16:          {\\delta}  (0x7f53f80035a8)\n 17:            {A}  (0x7f53f8009d18)\n 18:              ^{\\mu}  (0x7f53f800aaf8)\n 19:          {\\partial}  (0x7f53f80099b8)\n 20:            ^{\\nu}  (0x7f53f800ac88)\n 21:            _{\\mu}  (0x7f53f8009c28)\n 22:            {A}  (0x7f53f800aa58)\n 23:              _{\\nu}  (0x7f53f8009f38)\n 24:      {\\prod}  4  (0x7f53f80009d8)\n 25:        {\\delta}  (0x7f53f8009918)\n 26:          {A}  (0x7f53f8009968)\n 27:            ^{\\mu}  (0x7f53f8008e88)\n 28:        {\\sum}  (0x7f53f800b228)\n 29:          {\\partial}  (0x7f53f800abe8)\n 30:            ^{\\nu}  (0x7f53f800ad28)\n 31:            {F}  (0x7f53f8009b88)\n 32:              _{\\mu}  (0x7f53f800aeb8)\n 33:              _{\\nu}  (0x7f53f800a0f8)\n 34:          {\\partial}  (0x7f53f8009ee8)\n 35:            ^{\\nu}  (0x7f53f800acd8)\n 36:            _{\\nu}  (0x7f53f800a148)\n 37:            {A}  (0x7f53f8009a58)\n 38:              _{\\mu}  (0x7f53f8000938)\n 39:    {x}  (0x7f53f8009df8)\n 40:      ^{\\mu}  (0x7f53f8009e48)\n\n\\end{verbatim}"
+				}
+			],
+			"source" : "print(tree(_))"
+		},
+		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
