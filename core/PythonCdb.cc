@@ -415,6 +415,11 @@ boost::python::list list_properties()
 	return ret;
 	}
 
+//boost::python::list indices() 
+//	{
+//	Kernel *kernel=get_kernel_from_scope();
+//	}
+
 // Debug function to display an expression in tree form.
 
 std::string print_tree(Ex *ex)

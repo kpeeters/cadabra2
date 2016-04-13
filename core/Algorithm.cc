@@ -804,6 +804,7 @@ Ex Algorithm::get_dummy(const list_property *dums, iterator it1, iterator it2) c
 
 void Algorithm::print_classify_indices(std::ostream& str, iterator st) const
 	{
+	str << "for node " << Ex(st) << std::endl;
 	index_map_t ind_free, ind_dummy;
 	classify_indices(st, ind_free, ind_dummy);
 	
@@ -826,7 +827,7 @@ void Algorithm::print_classify_indices(std::ostream& str, iterator st) const
 		prev=it;
 		++it;
 		}
-	str << std::endl;
+	str << "---" << std::endl;
 	}
 
 // For each iterator in the original map, find the sequential position of the index.
@@ -920,6 +921,18 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 		}
 	}
 
+Algorithm::index_map_t::iterator Algorithm::find_modulo_parent_rel(iterator it, index_map_t& imap)  const
+	{
+	auto fnd=imap.find(it);
+	if(fnd==imap.end()) {
+		it->flip_parent_rel();
+		fnd=imap.find(it);
+		it->flip_parent_rel();
+		return fnd;
+		}
+	return fnd;
+	}
+
 // Directly add an index to the free/dummy sets, as appropriate (only add if this really is an 
 // index!)
 
@@ -932,19 +945,23 @@ void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 		 if(it->is_integer() || cdn || smb)
 			  ind_free.insert(index_map_t::value_type(Ex(it), it));
 		 else {
-			  index_map_t::iterator fnd=ind_free.find(it);
-			  if(fnd!=ind_free.end()) {
-					if(ind_dummy.count(it)>0) {
-						throw ConsistencyException("Triple index occurred.");
-						 }
-					ind_dummy.insert(*fnd);
-					ind_dummy.insert(index_map_t::value_type(Ex(it), it));
-					ind_free.erase(fnd);
-					}
-			  else {
-					ind_free.insert(index_map_t::value_type(Ex(it), it));
-					}
-			  }
+			 index_map_t::iterator fnd=find_modulo_parent_rel(it, ind_free);
+			 if(fnd!=ind_free.end()) {
+				 // std::cerr << "found in free indices" << std::endl;
+				 if(ind_dummy.count(it)>0) {
+					 throw ConsistencyException("Triple index occurred.");
+					 }
+				 ind_dummy.insert(*fnd);
+				 ind_dummy.insert(index_map_t::value_type(Ex(it), it));
+				 ind_free.erase(fnd);
+				 }
+			 else {
+				 // std::cerr << "not yet found; after insertion" << std::endl;
+				 ind_free.insert(index_map_t::value_type(Ex(it), it));
+				 // for(auto& n: ind_free)
+				 //	 std::cerr << n.first << std::endl;
+				 }
+			 }
 		 }
 	}
 
@@ -1071,6 +1088,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		while(sit!=it.end()) {
 			if(*sit->multiplier!=0) { // zeroes are always ok
 				index_map_t term_free, term_dummy;
+				// print_classify_indices(std::cerr, sit);
 				classify_indices(sit, term_free, term_dummy);
 				if(!is_first_term) {
 					index_map_t::iterator fri=first_free.begin();
@@ -1080,8 +1098,8 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(term_free.count((*fri).first)==0) {
-								std::cerr << (*fri).first << std::endl;
-								std::cerr << "did not find Symbol for " << fri->second << std::endl;
+								// std::cerr << (*fri).first << std::endl;
+								// std::cerr << "did not find Symbol for " << fri->second << std::endl;
 								if(*it->name=="\\sum") 
 									throw ConsistencyException("Free indices in different terms in a sum do not match.");
 								else
@@ -1097,8 +1115,11 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(first_free.count((*fri).first)==0) {
-								if(*it->name=="\\sum")
-									throw ConsistencyException("Free indices in different terms in a sum do not match 2.");
+								if(*it->name=="\\sum") {
+									// std::cerr << (*fri).first << " not in first term" << std::endl;
+									// std::cerr << Ex(it) << std::endl;
+									throw ConsistencyException("Free ind in different terms in a sum do not match 2.");
+									}
 								else
 									throw ConsistencyException("Free indices on lhs and rhs do not match.");
 								}
@@ -1150,6 +1171,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			else {
 //				ind_free.insert(free_so_far.begin(), free_so_far.end());
 //				free_so_far.clear();
+				//std::cerr << "adding index " << Ex(sit) << std::endl;
 				classify_add_index(sit, free_so_far, ind_dummy);
 				}
 			++sit;
@@ -1197,10 +1219,12 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 						item_free.insert(index_map_t::value_type(Ex(sit), iterator(sit)));
 						}
 					else {
-						index_map_t::iterator fnd=item_free.find(Ex(sit));
+						index_map_t::iterator fnd=find_modulo_parent_rel(sit, item_free);
+//						index_map_t::iterator fnd=item_free.find(Ex(sit));
 						if(fnd!=item_free.end()) {
 //							std::cerr << *sit->name << " already in free set" << std::endl;
-							if(item_dummy.find(Ex(sit))!=item_dummy.end())
+//							if(item_dummy.find(Ex(sit))!=item_dummy.end())
+							if(find_modulo_parent_rel(sit, item_dummy)!=item_dummy.end())
 								throw ConsistencyException("Triple index " + *sit->name + " inside a single factor found.");
 							item_dummy.insert(*fnd);
 							item_free.erase(fnd);
