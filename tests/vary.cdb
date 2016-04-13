@@ -1,29 +1,54 @@
 
-x^{\mu}::Coordinate;
-x::Coordinate;
-#x::Implicit(x^{\mu});
-\phi::Depends(x);
-\partial{#}::PartialDerivative;
-ex:= \int{ \partial_{\mu}{ \epsilon^{\mu} \phi } }{x};
-integrate_by_parts(ex, $\epsilon$);
-assert(ex==0)
+def test01():
+    __cdbkernel__=create_scope();
+    x^{\mu}::Coordinate;
+    x::Coordinate;
+    #x::Implicit(x^{\mu});
+    \phi::Depends(x);
+    \partial{#}::PartialDerivative;
+    ex:= \int{ \partial_{\mu}{ \epsilon^{\mu} \phi } }{x};
+    integrate_by_parts(ex, $\epsilon$);
+    assert(ex==0)
 
-\delta{\phi}::Depends(x);
-ex:= \int{ \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
-integrate_by_parts(ex, $\epsilon$);
-integrate_by_parts(ex, $\delta{\phi}$, repeat=True);
+test01()
 
-ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } }{x};
-integrate_by_parts(ex, $\delta{\phi}$);
+def test02():
+    __cdbkernel__=create_scope();
+    \partial{#}::PartialDerivative;
+    ex:= \int{ \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
+    integrate_by_parts(ex, $\epsilon$);
+    integrate_by_parts(ex, $\delta{\phi}$, repeat=True);
+    tst:= \int{ \delta{\phi} \partial_{\mu}{  \phi \chi } }{x} + @(ex);
+    assert(tst==0)
 
-ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } + \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
-integrate_by_parts(ex, $\delta{\phi}$);
+test02()
+    
+def test03():
+    __cdbkernel__=create_scope();
+    \partial{#}::PartialDerivative;
+    ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } }{x};
+    integrate_by_parts(ex, $\delta{\phi}$);
+    tst:= \int{ \partial_{\mu}{\phi \chi}  \delta{\phi} }{x} + @(ex);
+    assert(tst==0)
 
-assert(ex==0)
+test03()
+    
+def test04():
+    __cdbkernel__=create_scope();
+    \partial{#}::PartialDerivative;
+    ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } + \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
+    integrate_by_parts(ex, $\delta{\phi}$);
+    tst:= \int{ -\partial_{\mu}{ \phi \chi } \delta{\phi} - \delta{\phi} \partial_{\mu}{ \phi \chi } }{x} - @(ex);
+    assert(tst==0)
 
+test04()
 
+def test05():
+    __cdbkernel__=create_scope();
+    \partial{#}::PartialDerivative;
+    ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } \Phi \Chi }{x};
+    integrate_by_parts(ex, $\delta{\phi}$);
+    tst:=\int{ -\partial_{\mu}{ \phi \chi } \delta{\phi} \Phi \Chi - \phi \chi \delta{\phi} \partial_{\mu}{ \Phi \Chi} }{x} - @(ex);
+    assert(tst==0)
 
-x::Coordinate;
-\phi::Depends(x);
-
-ex:= F(\phi) = 1/2 \int{\partial_{\mu}{\phi} \partial^{\mu}{\phi}}{x};
+test05()
