@@ -86,6 +86,7 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 
 	assert(*it->name=="\\prod");
 	auto fac=tr.begin(it);
+	int pos=0;
 	while(fac!=tr.end(it)) {
 		const Derivative *der=kernel.properties.get<Derivative>(fac);
 		if(der) {
@@ -117,7 +118,10 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					auto der_arg = tr.begin(fac);
 					while(der_arg->is_index() && der_arg!=tr.end(fac))
 						++der_arg;
-					if(der_arg==tr.end(fac)) return result_t::l_no_action; // no idea what to do here
+
+					if(der_arg==tr.end(fac)) 
+						throw ConsistencyException("integrate_by_parts: Derivative without argument encountered.");
+
 					tr.swap(der_arg, from);
 					tr.swap(fac, der_arg);
 					multiply(it->multiplier, -1);
@@ -126,14 +130,51 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 				else {
 					// Two terms needed.
 					Ex sum("\\sum");
-					auto ofac=tr.begin(it);
-					while(ofac!=tr.end(it)) {
-						if(ofac!=fac) {
-							Ex prod(it);
-							
-							}
-						++ofac;
-						}
+					auto t1prod = sum.append_child(sum.begin(), it);
+					auto t2prod = sum.append_child(sum.begin(), it);
+
+					// First term.
+					sibling_iterator from=sum.begin(t1prod);
+					sibling_iterator to  =from;
+					to+=pos;
+					if(boost::next(from)!=to)
+						from = tr.wrap(from, to, str_node("\\prod"));
+
+					auto der_arg = tr.begin(to);
+					while(der_arg->is_index() && der_arg!=tr.end(to))
+						++der_arg;
+
+					if(der_arg==tr.end(to)) 
+						throw ConsistencyException("integrate_by_parts: Derivative without argument encountered.");
+
+					tr.swap(der_arg, from);
+					tr.swap(to, der_arg);
+					multiply(t1prod->multiplier, -1);
+					
+					// Second term.
+					from=sum.begin(t2prod);
+					from+=pos;
+					auto der=from;
+					++from;
+					to  =sum.end(t2prod);
+					if(boost::next(from)!=to)
+						from = tr.wrap(from, to, str_node("\\prod"));
+
+					der_arg = tr.begin(der);
+					while(der_arg->is_index() && der_arg!=tr.end(der))
+						++der_arg;
+
+					if(der_arg==tr.end(der)) 
+						throw ConsistencyException("integrate_by_parts: Derivative without argument encountered.");
+
+					tr.swap(der_arg, from);
+					tr.swap(der, der_arg);
+					multiply(t2prod->multiplier, -1);
+
+					// Replace the original with the sum.
+					it=tr.move_ontop(it, sum.begin());
+
+					return result_t::l_applied;
 					}
 
 //				for(auto& pat: kernel.properties.pats) {
@@ -144,6 +185,7 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 				}
 			}
 		++fac;
+		++pos;
 		}
 
 	return result_t::l_no_action;
