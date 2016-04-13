@@ -117,8 +117,9 @@ namespace cadabra {
 
 	/// Export a document to a single self-contained HTML file containing inline CSS.
 
-	std::string export_as_HTML(const DTree& doc, bool for_embedding=false);
-	void        HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, bool for_embedding=false);
+	std::string export_as_HTML(const DTree& doc, bool for_embedding=false, std::string title="");
+	void        HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, 
+									 bool for_embedding=false, std::string title="");
 
 	/// Convert various LaTeX constructions to HTML-with-Mathjax, e.g. \section{...}, 
 	/// \begin{verbatim}...\end{verbatim}, \verb.

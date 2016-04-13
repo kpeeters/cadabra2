@@ -4,7 +4,7 @@ set(MANOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/manual)
 set(CNBDIR     ${CMAKE_SOURCE_DIR}/examples)
 set(ALGODIR    ${CMAKE_SOURCE_DIR}/core/algorithms)
 set(PROPDIR    ${CMAKE_SOURCE_DIR}/core/properties)
-set(DC         ${CMAKE_SOURCE_DIR}/client_server/DataCell.hh ${CMAKE_SOURCE_DIR}/client_server/DataCell.cc)
+set(DC         ${CMAKE_SOURCE_DIR}/client_server/cadabra2html.cc ${CMAKE_SOURCE_DIR}/client_server/DataCell.hh ${CMAKE_SOURCE_DIR}/client_server/DataCell.cc)
 
 
 # Sample/tutorial notebooks.
