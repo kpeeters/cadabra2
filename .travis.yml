@@ -18,7 +18,7 @@ matrix:
        compiler: gcc
 script:
    - cmake --build .
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ctest -V . ; fi
+   - ctest -V .
 
 before_script:
    - mkdir build
