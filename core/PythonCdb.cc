@@ -1096,6 +1096,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
 	register_exception_translator<NonScalarException>(&translate_NonScalarException);
 	register_exception_translator<InternalError>(&translate_InternalError);
+	
+
+#if BOOST_VERSION >= 106000
+	boost::python::register_ptr_to_python<std::shared_ptr<Ex> >();
+	//	boost::python::register_ptr_to_python<std::shared_ptr<Property> >();
+#endif	
 
 	// How can we give Python access to information stored in properties?
 	}
