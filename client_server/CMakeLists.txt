@@ -33,8 +33,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules
 #   set(PYTHON_INCLUDE_DIRS ${python_prefix}/include/python2.7)
 # endif()
 
-find_package(PythonLibs 2.7 REQUIRED)
-set(Python_ADDITIONAL_VERSIONS 2.7)
+if(APPLE)
+   find_package(PythonLibsOSX 2.7 REQUIRED)
+else()
+   find_package(PythonLibs 2.7 REQUIRED)
+endif()
+#set(Python_ADDITIONAL_VERSIONS 2.7)
 find_package(PythonInterp REQUIRED)
 
 # Locate Boost

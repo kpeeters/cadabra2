@@ -31,7 +31,12 @@ endif(POLICY CMP0042)
 # endif()
 
 #set(Python_ADDITIONAL_VERSIONS 2.7)
-find_package(PythonLibs 2.7 REQUIRED)
+
+if(APPLE)
+   find_package(PythonLibsOSX 2.7 REQUIRED)
+else()
+   find_package(PythonLibs 2.7 REQUIRED)
+endif()
 find_package(PythonInterp REQUIRED)
 
 
