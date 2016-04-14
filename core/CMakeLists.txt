@@ -13,14 +13,34 @@ endif(POLICY CMP0042)
 # Speedup compilation using cotire.
 # include(cotire)
 
+# Locate python
+
+# if(APPLE)
+#   find_program(PYTHON_CONFIG_EXECUTABLE python-config)
+#   if (NOT PYTHON_CONFIG_EXECUTABLE)
+#     message(SEND_ERROR "python-config executable not found, but python is required.")
+#   endif()
+#   # using "python-config --prefix" so that cmake always uses the python that is
+#   # in the user's path, this is a fix for homebrew on Mac:
+#   # https://github.com/Homebrew/homebrew/issues/25118 [^]
+#   execute_process(COMMAND ${PYTHON_CONFIG_EXECUTABLE} --prefix OUTPUT_VARIABLE python_prefix OUTPUT_STRIP_TRAILING_WHITESPACE)
+#   set(PYTHON_INCLUDE_DIR ${python_prefix}/include/python2.7)
+#   set(PYTHON_LIBRARY ${python_prefix}/lib/libpython2.7${CMAKE_SHARED_LIBRARY_SUFFIX})
+#   set(PYTHON_INCLUDE_DIRS ${python_prefix}/include/python2.7)
+#   set(PYTHON_LIBRARIES ${python_prefix}/lib/libpython2.7${CMAKE_SHARED_LIBRARY_SUFFIX})
+# endif()
+
+#set(Python_ADDITIONAL_VERSIONS 2.7)
+find_package(PythonLibs 2.7 REQUIRED)
+find_package(PythonInterp REQUIRED)
+
+
 # Locate Boost and Boost.Python.
 find_package(Boost 1.45.0)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.45.0 COMPONENTS python)
-set(Python_ADDITIONAL_VERSIONS 2.7)
-find_package(PythonInterp REQUIRED)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
