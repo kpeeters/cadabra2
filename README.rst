@@ -57,12 +57,13 @@ beginning of a native notebook interface, this does **not** work
 yet. You can build the Gtk notebook interface, but this is suboptimal.
 The command line version is fully functional.
 
-In order to build on OS X, you of course need to install XCode. You
-also need a number of packages from Homebrew (see http://brew.sh). 
-Install these packages with:: 
+In order to build on OS X you need a number of packages from Homebrew
+(see http://brew.sh).  Install these packages with::
 
     brew install cmake boost boost-python pcre gmp jsoncpp python 
     brew install pkgconfig ossp-uuid gtkmm3 gnome-icon-theme
+
+If this prompts you to install XCode, go ahead and let it do that.
 
 In order to run the Cadabra notebook interface succesfully, you also
 need a TeX installation such as MacTeX, http://tug.org/mactex/ .
