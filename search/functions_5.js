@@ -36,6 +36,6 @@ var searchData=
   ['exp_5finput_5ftv',['exp_input_tv',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#afe51d7e8f84dea16f0da967bcfb29dcb',1,'cadabra::CodeInput::exp_input_tv']]],
   ['expand_5fdelta',['expand_delta',['../classexpand__delta.html#af4b894ba57ae06c1b39ef6368d0727bb',1,'expand_delta']]],
   ['expand_5fdiracbar',['expand_diracbar',['../classexpand__diracbar.html#aa9d8ddef704a9d3b140ed26472fdcb34',1,'expand_diracbar']]],
-  ['export_5fas_5fhtml',['export_as_HTML',['../namespacecadabra.html#a2a8b303560d2be9400e1d48faff61e08',1,'cadabra']]],
+  ['export_5fas_5fhtml',['export_as_HTML',['../namespacecadabra.html#a9da1f5667a79f57423e77d7316b2dce3',1,'cadabra']]],
   ['export_5fas_5flatex',['export_as_LaTeX',['../namespacecadabra.html#a6f28b80b2747d0677e2faa23e3c1a0d7',1,'cadabra']]]
 ];

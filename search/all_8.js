@@ -27,5 +27,5 @@ var searchData=
   ['hook_5flength',['hook_length',['../classyngtab_1_1tableau__base.html#a5651ffe242108b6bcf98d186b2002bc5',1,'yngtab::tableau_base']]],
   ['hook_5flength_5fprod',['hook_length_prod',['../classyngtab_1_1tableau__base.html#a01e44666a566fa3701923ba0f78ea551',1,'yngtab::tableau_base']]],
   ['horizontal_5fpixels_5f',['horizontal_pixels_',['../classcadabra_1_1TeXEngine.html#a729497d3cb3dd6a546227a7f0c883f39',1,'cadabra::TeXEngine']]],
-  ['html_5frecurse',['HTML_recurse',['../namespacecadabra.html#aeda3576dcf1e0acc754195578bf96f05',1,'cadabra']]]
+  ['html_5frecurse',['HTML_recurse',['../namespacecadabra.html#a04d45844128be92d43f4bcc3b83c64de',1,'cadabra']]]
 ];

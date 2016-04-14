@@ -73,7 +73,7 @@ var searchData=
   ['expand_5fdiracbar',['expand_diracbar',['../classexpand__diracbar.html',1,'expand_diracbar'],['../classexpand__diracbar.html#aa9d8ddef704a9d3b140ed26472fdcb34',1,'expand_diracbar::expand_diracbar()']]],
   ['expand_5fdiracbar_2ecc',['expand_diracbar.cc',['../expand__diracbar_8cc.html',1,'']]],
   ['expand_5fdiracbar_2ehh',['expand_diracbar.hh',['../expand__diracbar_8hh.html',1,'']]],
-  ['export_5fas_5fhtml',['export_as_HTML',['../namespacecadabra.html#a2a8b303560d2be9400e1d48faff61e08',1,'cadabra']]],
+  ['export_5fas_5fhtml',['export_as_HTML',['../namespacecadabra.html#a9da1f5667a79f57423e77d7316b2dce3',1,'cadabra']]],
   ['export_5fas_5flatex',['export_as_LaTeX',['../namespacecadabra.html#a6f28b80b2747d0677e2faa23e3c1a0d7',1,'cadabra']]],
   ['extra_5fbrackets_5ffor_5fsymbols',['extra_brackets_for_symbols',['../classDisplayTeX.html#a892ee92c9403f1f879dfbd9f69759a5e',1,'DisplayTeX']]],
   ['extra_5fsign',['extra_sign',['../structexchange_1_1identical__tensors__t.html#ab16d5a2e206f04420d4c277b9e1bb6a3',1,'exchange::identical_tensors_t']]]
