@@ -22,7 +22,7 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def post_process(ex):\n\tsort_product(ex)\n\tcanonicalise(ex)"
+			"source" : "def post_process(ex):\n\tsort_product(ex)\n\tcanonicalise(ex)\n\tcollect_terms(ex)"
 		},
 		
 		{
@@ -43,7 +43,7 @@
 					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}F^{\\mu \\nu} F_{\\mu \\nu}\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "{\\mu,\\nu,\\rho}::Indices(position=free).\nx::Coordinate.\n\\partial{#}::PartialDerivative.\n\nF_{\\mu\\nu}::AntiSymmetric.\nF_{\\mu\\nu}::Depends(x).\nA_{\\mu}::Depends(x,\\partial).\n\\delta{#}::Accent;\n\nS:= S = -1/4 \\int{ F_{\\mu\\nu} F^{\\mu\\nu} }{x};"
+			"source" : "{\\mu,\\nu,\\rho}::Indices(position=free).\nx::Coordinate.\n\\partial{#}::Derivative.\n\nF_{\\mu\\nu}::AntiSymmetric.\nF_{\\mu\\nu}::Depends(x).\nA_{\\mu}::Depends(x,\\partial).\n\\delta{#}::Accent;\n\nS:= S = -1/4 \\int{ F_{\\mu\\nu} F^{\\mu\\nu} }{x};"
 		},
 		
 		{
@@ -55,7 +55,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = \\partial_{\\mu}(A_{\\nu})-\\partial_{\\nu}(A_{\\mu})\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = \\partial_{\\mu}{A_{\\nu}}-\\partial_{\\nu}{A_{\\mu}}\\end{dmath*}"
 				}
 			],
 			"source" : "rl:= F_{\\mu\\nu} = \\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}};"
@@ -70,7 +70,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}(A_{\\nu})-\\partial_{\\nu}(A_{\\mu})\\right) \\left(\\partial^{\\mu}(A^{\\nu})-\\partial^{\\nu}(A^{\\mu})\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}{A_{\\nu}}-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}{A^{\\nu}}-\\partial^{\\nu}{A^{\\mu}}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(S, rl);"
@@ -101,7 +101,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}(\\delta{A_{\\nu}})-\\partial_{\\nu}(\\delta{A_{\\mu}})\\right) \\left(\\partial^{\\mu}(A^{\\nu})-\\partial^{\\nu}(A^{\\mu})\\right)+\\left(\\partial_{\\mu}(A_{\\nu})-\\partial_{\\nu}(A_{\\mu})\\right) \\left(\\partial^{\\mu}(\\delta{A^{\\nu}})-\\partial^{\\nu}(\\delta{A^{\\mu}})\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}(\\delta{A_{\\nu}})-\\partial_{\\nu}(\\delta{A_{\\mu}})\\right) \\left(\\partial^{\\mu}{A^{\\nu}}-\\partial^{\\nu}{A^{\\mu}}\\right)+\\left(\\partial_{\\mu}{A_{\\nu}}-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}(\\delta{A^{\\nu}})-\\partial^{\\nu}(\\delta{A^{\\mu}})\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "vary(S, $A_{\\mu} -> \\delta{A_{\\mu}}$);"
@@ -132,7 +132,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\partial^{\\mu}(\\delta{A^{\\nu}}) \\partial_{\\mu}(A_{\\nu})-\\partial^{\\mu}(A^{\\nu}) \\partial_{\\nu}(\\delta{A_{\\mu}})-\\partial^{\\mu}(A^{\\nu}) \\partial_{\\nu}(\\delta{A_{\\mu}})+\\partial^{\\mu}(\\delta{A^{\\nu}}) \\partial_{\\mu}(A_{\\nu})+\\partial^{\\mu}(A^{\\nu}) \\partial_{\\mu}(\\delta{A_{\\nu}})-\\partial^{\\mu}(A^{\\nu}) \\partial_{\\nu}(\\delta{A_{\\mu}})-\\partial^{\\mu}(A^{\\nu}) \\partial_{\\nu}(\\delta{A_{\\mu}})+\\partial^{\\mu}(A^{\\nu}) \\partial_{\\mu}(\\delta{A_{\\nu}})\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}2\\partial^{\\mu}(\\delta{A^{\\nu}}) \\partial_{\\mu}{A_{\\nu}}-4\\partial^{\\mu}{A^{\\nu}} \\partial_{\\nu}(\\delta{A_{\\mu}})+2\\partial^{\\mu}{A^{\\nu}} \\partial_{\\mu}(\\delta{A_{\\nu}})\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(_);"
@@ -147,7 +147,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}{A_{\\mu}})+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}{A_{\\nu}})\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "integrate_by_parts(_, $\\delta{A_{\\mu}}$);"
@@ -156,16 +156,7 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"cells" : 
-			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))+\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}(A_{\\nu}))-\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}(A_{\\mu}))\\, {\\rm d}x\\end{dmath*}"
-				}
-			],
-			"source" : "canonicalise(_);"
+			"source" : "def post_process(ex):\n\tcollect_terms(ex)"
 		},
 		
 		{
@@ -177,7 +168,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(\\frac{1}{2}\\partial_{\\nu}(A_{\\mu})+\\frac{1}{2}F_{\\nu \\mu}+\\frac{1}{2}\\partial_{\\mu}(A_{\\nu})\\right))+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(\\frac{1}{2}\\partial_{\\mu}(A_{\\nu})+\\frac{1}{2}F_{\\mu \\nu}+\\frac{1}{2}\\partial_{\\nu}(A_{\\mu})\\right))\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}}+\\frac{1}{2}F_{\\nu \\mu}+\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}\\right))+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}+\\frac{1}{2}F_{\\mu \\nu}+\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}}\\right))\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(_, $\\partial_{\\mu}{A_{\\nu}} -> 1/2 \\partial_{\\mu}{A_{\\nu}} + 1/2 F_{\\mu\\nu} + 1/2 \\partial_{\\nu}{A_{\\mu}}$);"
@@ -192,25 +183,26 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-2\\delta{A^{\\mu}} \\partial^{\\nu}(F_{\\nu \\mu})+2\\delta{A^{\\mu}} \\partial^{\\nu}(F_{\\mu \\nu})\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A_{\\mu}} \\partial^{\\mu}(\\left(\\frac{1}{2}\\partial_{\\nu}{A^{\\nu}} - \\frac{1}{2}F_{\\nu \\nu}+\\frac{1}{2}\\partial_{\\mu}{A_{\\mu}}\\right))+4\\delta{A_{\\mu}} \\partial^{\\mu}(\\left(\\frac{1}{2}\\partial_{\\nu}{A^{\\nu}}+\\frac{1}{2}F_{\\nu \\nu}+\\frac{1}{2}\\partial_{\\mu}{A_{\\mu}}\\right))\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(_);"
+			"source" : "canonicalise(_);"
 		},
 		
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
+			"cell_type" : "latex",
 			"cells" : 
 			[
 				
 				{
-					"cell_origin" : "server",
+					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S = -\\int{}\\delta{A^{\\mu}} \\partial^{\\nu}(F_{\\mu \\nu})\\, {\\rm d}x\\end{dmath*}"
+					"source" : "The above is {\\color[named]{Red} DEFINITELY} wrong."
 				}
 			],
-			"source" : "canonicalise(_);"
+			"hidden" : true,
+			"source" : "The above is {\\color[named]{Red} DEFINITELY} wrong."
 		},
 		
 		{
