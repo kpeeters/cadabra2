@@ -125,6 +125,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					tr.swap(der_arg, from);
 					tr.swap(fac, der_arg);
 					multiply(it->multiplier, -1);
+					iterator tmp(fac);
+					cleanup_dispatch(kernel, tr, tmp);
 					return result_t::l_applied;
 					}
 				else {
@@ -150,6 +152,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					tr.swap(der_arg, from);
 					tr.swap(to, der_arg);
 					multiply(t1prod->multiplier, -1);
+					iterator tmp(to);
+					cleanup_dispatch(kernel, tr, tmp);
 					
 					// Second term.
 					from=sum.begin(t2prod);
@@ -170,6 +174,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					tr.swap(der_arg, from);
 					tr.swap(der, der_arg);
 					multiply(t2prod->multiplier, -1);
+					tmp=der;
+					cleanup_dispatch(kernel, tr, tmp);
 
 					// Replace the original with the sum.
 					it=tr.move_ontop(it, sum.begin());

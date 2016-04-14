@@ -2,6 +2,7 @@
 #include "DisplayTeX.hh"
 #include "Algorithm.hh"
 #include "properties/LaTeXForm.hh"
+#include "properties/Derivative.hh"
 #include "properties/Accent.hh"
 
 #define nbsp   " "
@@ -35,6 +36,17 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	else {
 		if(*it->name=="\\sum")  return true;
 		if(*it->name=="\\prod") return true;
+		}
+	return false;
+	}
+
+bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
+	{
+	const Derivative *der=kernel.properties.get<Derivative>(obj);
+	if(der) {
+		// FIXME: this needs fine-tuning; there are more cases where
+		// no brackets are needed.
+		if((*arg->name).size()==1) return true;
 		}
 	return false;
 	}
@@ -115,9 +127,14 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		str_node::parent_rel_t current_parent_rel_=(*ch).fl.parent_rel;
 		const Accent *is_accent=kernel.properties.get<Accent>(it);
 		
+		bool function_bracket_needed=true;
+		if(current_bracket_==str_node::b_none)
+			function_bracket_needed=!reads_as_operator(it, ch);
+
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
-			if(is_accent==0) 
+
+			if(is_accent==0 && function_bracket_needed) 
 				print_opening_bracket(str, (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ &&
 													 current_parent_rel_!=str_node::p_sub && 
 													 current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
@@ -130,7 +147,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 
 		++ch;
 		if(ch==tree.end(it) || current_bracket_!=str_node::b_none || current_bracket_!=(*ch).fl.bracket || current_parent_rel_!=(*ch).fl.parent_rel) {
-			if(is_accent==0) 
+			if(is_accent==0 && function_bracket_needed) 
 				print_closing_bracket(str,  (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ && 
 													  current_parent_rel_!=str_node::p_sub && 
 													  current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
