@@ -10,6 +10,11 @@
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
 	//std::cerr << "cleanup at " << *it->name << std::endl;
+
+	// FIXME: any of these can lead to expressions which need another
+	// application at this level. So we should run this as long as things
+	// change. Right now, we just do things as they seemed required by tests.
+
 	if(it->is_zero())  {
 		::zero(it->multiplier);
 		tr.erase_children(it);
@@ -28,6 +33,12 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 
 	const Diagonal *diag = kernel.properties.get<Diagonal>(it);
 	if(diag) cleanup_diagonal(kernel, tr, it);
+
+	if(it->is_zero())  {
+		::zero(it->multiplier);
+		tr.erase_children(it);
+		it->name=name_set.insert("1").first;
+		}
 	}
 
 void cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
