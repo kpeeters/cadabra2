@@ -240,9 +240,9 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	bool ret=Gtk::Window::on_configure_event(cfg);
 	
 	if(cfg->width != last_configure_width) {
-		// std::cout << "reconfigure " << cfg->width << std::endl;
 		last_configure_width = cfg->width;
 		try {
+			engine.invalidate_all();
 			engine.convert_all();
 			for(unsigned int i=0; i<canvasses.size(); ++i) 
 				canvasses[i]->refresh_all();

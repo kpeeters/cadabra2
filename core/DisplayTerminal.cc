@@ -408,9 +408,11 @@ void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)
 	str << symmap[*it->name] << "(";
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << ", ";
 	++sib;
-	dispatch(str, sib);
+	if(tree.is_valid(sib)) {
+		str << ", ";
+		dispatch(str, sib);
+		}
 	str << ")";
 	}
 
