@@ -12,6 +12,7 @@ var searchData=
   ['indices',['Indices',['../classIndices.html',1,'']]],
   ['integer',['Integer',['../classInteger.html',1,'']]],
   ['integral',['Integral',['../classIntegral.html',1,'']]],
+  ['integrate_5fby_5fparts',['integrate_by_parts',['../classintegrate__by__parts.html',1,'']]],
   ['internalerror',['InternalError',['../classInternalError.html',1,'']]],
   ['interruptionexception',['InterruptionException',['../classInterruptionException.html',1,'']]],
   ['inversemetric',['InverseMetric',['../classInverseMetric.html',1,'']]],

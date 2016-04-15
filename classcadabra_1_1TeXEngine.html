@@ -139,10 +139,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af7eb73026298e43772aa5425302c67ba"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1TeXEngine_1_1TeXRequest.html">TeXRequest</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TeXEngine.html#af7eb73026298e43772aa5425302c67ba">modify</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1TeXEngine_1_1TeXRequest.html">TeXRequest</a> &gt;, const std::string &amp;)</td></tr>
 <tr class="separator:af7eb73026298e43772aa5425302c67ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61f749382c4c2951289beddd88bbcb3d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TeXEngine.html#a61f749382c4c2951289beddd88bbcb3d">convert_all</a> ()</td></tr>
+<tr class="memdesc:a61f749382c4c2951289beddd88bbcb3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate images for all TeXRequests which are labelled as needing conversion.  <a href="#a61f749382c4c2951289beddd88bbcb3d">More...</a><br/></td></tr>
 <tr class="separator:a61f749382c4c2951289beddd88bbcb3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4031bef45177f7e82e481d6df8a6ca03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TeXEngine.html#a4031bef45177f7e82e481d6df8a6ca03">invalidate_all</a> ()</td></tr>
+<tr class="memdesc:a4031bef45177f7e82e481d6df8a6ca03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark all TeXRequests as needing re-generating.  <a href="#a4031bef45177f7e82e481d6df8a6ca03">More...</a><br/></td></tr>
 <tr class="separator:a4031bef45177f7e82e481d6df8a6ca03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ab25e7e8d79c3b328d6e97cc8b21473"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TeXEngine.html#a8ab25e7e8d79c3b328d6e97cc8b21473">checkout</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1TeXEngine_1_1TeXRequest.html">TeXRequest</a> &gt;)</td></tr>
+<tr class="memdesc:a8ab25e7e8d79c3b328d6e97cc8b21473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mark a <a class="el" href="classcadabra_1_1TeXEngine_1_1TeXRequest.html">TeXRequest</a> as no longer being needed.  <a href="#a8ab25e7e8d79c3b328d6e97cc8b21473">More...</a><br/></td></tr>
 <tr class="separator:a8ab25e7e8d79c3b328d6e97cc8b21473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a3a81114a06637f1e24dbafeee9bbe2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TeXEngine.html#a6a3a81114a06637f1e24dbafeee9bbe2">checkout_all</a> ()</td></tr>
 <tr class="separator:a6a3a81114a06637f1e24dbafeee9bbe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -258,6 +261,8 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Mark a <a class="el" href="classcadabra_1_1TeXEngine_1_1TeXRequest.html">TeXRequest</a> as no longer being needed. </p>
+
 </div>
 </div>
 <a class="anchor" id="a6a3a81114a06637f1e24dbafeee9bbe2"></a>
@@ -287,6 +292,8 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Generate images for all TeXRequests which are labelled as needing conversion. </p>
 
 </div>
 </div>
@@ -408,6 +415,9 @@ Static Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Mark all TeXRequests as needing re-generating. </p>
+<p>Use this e.g. when changing font size for the entire notebook: first invalidate_all, then convert_all. </p>
 
 </div>
 </div>
@@ -605,7 +615,7 @@ Static Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 14 2016 13:26:26 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 15 2016 15:31:42 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

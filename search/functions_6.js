@@ -14,6 +14,7 @@ var searchData=
   ['find_5fargument_5flists',['find_argument_lists',['../classAlgorithm.html#a97938ec1a7dd3f5466855ebbf7e1b076',1,'Algorithm']]],
   ['find_5fcell_5fby_5fid',['find_cell_by_id',['../classcadabra_1_1ComputeThread.html#aa8a01997c2f427ef7908a4a4f65491ca',1,'cadabra::ComputeThread']]],
   ['find_5fin_5flist',['find_in_list',['../group__core.html#ga3a2ae6b908d34ea0490114559107ede5',1,'cadabra']]],
+  ['find_5fmodulo_5fparent_5frel',['find_modulo_parent_rel',['../classAlgorithm.html#a39bacf6cbd4dbf4e14debef1680f2a7e',1,'Algorithm']]],
   ['find_5fobj',['find_obj',['../classtab__basics.html#aed077016b0088028035d4853717cba75',1,'tab_basics']]],
   ['flatten_5fand_5ferase',['flatten_and_erase',['../classEx.html#a88051d00c2850121dbe147c013688ed6',1,'Ex']]],
   ['flatten_5fproduct',['flatten_product',['../classflatten__product.html#a209d8a3ce40b2ca365e4f6cf8f30133e',1,'flatten_product']]],

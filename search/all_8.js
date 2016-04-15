@@ -9,6 +9,7 @@ var searchData=
   ['handle_5flatex_5ferrors',['handle_latex_errors',['../classcadabra_1_1TeXEngine.html#a71a9c9979a45edaf26ed5f11f3fa2739',1,'cadabra::TeXEngine']]],
   ['handle_5fprod',['handle_prod',['../classevaluate.html#a6a91d21dffa786668ce4fd48aaf783cf',1,'evaluate']]],
   ['handle_5fsum',['handle_sum',['../classevaluate.html#ae61ff223a4d165f2e8f8f84384b761ce',1,'evaluate']]],
+  ['handle_5fterm',['handle_term',['../classintegrate__by__parts.html#a2ab129c107a30879fd0af1acda1236de',1,'integrate_by_parts']]],
   ['has',['has',['../classProperties.html#a66afc11eecdec069c1ed52609873c9a5',1,'Properties']]],
   ['has_5fnullifying_5ftrace',['has_nullifying_trace',['../classyngtab_1_1filled__tableau.html#aa5cbabfbfe327b3080b76d0d6f6dd559',1,'yngtab::filled_tableau']]],
   ['hash',['hash',['../namespacecombin.html#ad93edf3cab15d465e8fea289d4b99580',1,'combin']]],

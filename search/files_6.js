@@ -14,6 +14,8 @@ var searchData=
   ['integer_2ecc',['Integer.cc',['../Integer_8cc.html',1,'']]],
   ['integer_2ehh',['Integer.hh',['../Integer_8hh.html',1,'']]],
   ['integral_2ehh',['Integral.hh',['../Integral_8hh.html',1,'']]],
+  ['integrate_5fby_5fparts_2ecc',['integrate_by_parts.cc',['../integrate__by__parts_8cc.html',1,'']]],
+  ['integrate_5fby_5fparts_2ehh',['integrate_by_parts.hh',['../integrate__by__parts_8hh.html',1,'']]],
   ['inversemetric_2ecc',['InverseMetric.cc',['../InverseMetric_8cc.html',1,'']]],
   ['inversemetric_2ehh',['InverseMetric.hh',['../InverseMetric_8hh.html',1,'']]]
 ];

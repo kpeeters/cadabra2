@@ -181,6 +181,9 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ac51e787a0014810385cdd36e646776d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23df574403a8810016b8d89ccf6a4a14"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a23df574403a8810016b8d89ccf6a4a14">children_have_brackets</a> (Ex::iterator ch) const </td></tr>
 <tr class="separator:a23df574403a8810016b8d89ccf6a4a14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74bdd19ede9390123da4473c8ed279ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a74bdd19ede9390123da4473c8ed279ba">reads_as_operator</a> (Ex::iterator obj, Ex::iterator <a class="el" href="cadabra2.html#a884c086498b431ab9107c0c838f16261">arg</a>) const </td></tr>
+<tr class="memdesc:a74bdd19ede9390123da4473c8ed279ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether the indicated object 'obj', when acting on the single argument 'arg', reads as an operator, and therefore 'arg' does not need to be wrapped in brackets.  <a href="#a74bdd19ede9390123da4473c8ed279ba">More...</a><br/></td></tr>
+<tr class="separator:a74bdd19ede9390123da4473c8ed279ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -986,6 +989,43 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a74bdd19ede9390123da4473c8ed279ba"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DisplayTeX::reads_as_operator </td>
+          <td>(</td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>obj</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>arg</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Determine whether the indicated object 'obj', when acting on the single argument 'arg', reads as an operator, and therefore 'arg' does not need to be wrapped in brackets. </p>
+<p>Example: the tree {A} can be displayed as ' A' instead of '(A)'. </p>
+
+</div>
+</div>
 <a class="anchor" id="a40287a7e3d5579f00cba31a529caeb89"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1178,7 +1218,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 14 2016 13:26:15 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 15 2016 15:31:31 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

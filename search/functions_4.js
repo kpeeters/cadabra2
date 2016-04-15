@@ -6,6 +6,7 @@ var searchData=
   ['def_5fprop',['def_prop',['../PythonCdb_8cc.html#a51cbb86696b71c4d6112a4b5a1f4af6a',1,'PythonCdb.cc']]],
   ['default_5fis_5fproduct_5f',['default_is_product_',['../classpreprocessor.html#a7509e9a6e41aa6439e3b98fff1d517db',1,'preprocessor']]],
   ['dependencies',['dependencies',['../classevaluate.html#a456195867eb2108861791aee40fb1067',1,'evaluate::dependencies()'],['../classDepends.html#ad9676ce9164018ddbc38309842f297f7',1,'Depends::dependencies()'],['../classDependsBase.html#a04ef9242e972c4bef930be26ce80253d',1,'DependsBase::dependencies()'],['../classDependsInherit.html#a855af072e78370ce5dd8044afc12da81',1,'DependsInherit::dependencies()']]],
+  ['derivative_5facting_5fon_5farg',['derivative_acting_on_arg',['../classintegrate__by__parts.html#aa9225659577d3f0e02b89dd32d4f01de',1,'integrate_by_parts']]],
   ['determine_5fintersection',['determine_intersection',['../classAlgorithm.html#ae996e070814cff9c47b1cddedd6a2ab5',1,'Algorithm']]],
   ['determine_5fintersection_5franges',['determine_intersection_ranges',['../namespacecombin.html#a77709dca4c517da4ff6dc77e3a411384',1,'combin']]],
   ['dim',['dim',['../classcadabra_1_1TeXView.html#a20370fe70d1703ed1d750fe402136853',1,'cadabra::TeXView']]],

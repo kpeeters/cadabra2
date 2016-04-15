@@ -13,5 +13,6 @@ var searchData=
   ['argloc_5f2_5ftreeloc',['argloc_2_treeloc',['../classsym.html#a7f5cfe205a26cc13e15ac608627d74ce',1,'sym']]],
   ['args',['args',['../classsubstitute.html#a5eff11b4a98fee2f377448ec81754d07',1,'substitute::args()'],['../classvary.html#a418215fccd6814821aa46fba256a09ef',1,'vary::args()']]],
   ['argumentexceptiontype',['ArgumentExceptionType',['../PythonCdb_8cc.html#a15be08e78140330ba2d8df78b4b035c2',1,'PythonCdb.cc']]],
-  ['asym_5franges',['asym_ranges',['../classdecompose__product.html#a4e8273015edabf7b98545678ac1f4823',1,'decompose_product::asym_ranges()'],['../classyoung__project.html#acf699297c3e873cb6569bc194418c70c',1,'young_project::asym_ranges()']]]
+  ['asym_5franges',['asym_ranges',['../classdecompose__product.html#a4e8273015edabf7b98545678ac1f4823',1,'decompose_product::asym_ranges()'],['../classyoung__project.html#acf699297c3e873cb6569bc194418c70c',1,'young_project::asym_ranges()']]],
+  ['away_5ffrom',['away_from',['../classintegrate__by__parts.html#acb602facf434da8264144a4cd5afbd67',1,'integrate_by_parts']]]
 ];

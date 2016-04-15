@@ -33,6 +33,7 @@ var searchData=
   ['find_5fargument_5flists',['find_argument_lists',['../classAlgorithm.html#a97938ec1a7dd3f5466855ebbf7e1b076',1,'Algorithm']]],
   ['find_5fcell_5fby_5fid',['find_cell_by_id',['../classcadabra_1_1ComputeThread.html#aa8a01997c2f427ef7908a4a4f65491ca',1,'cadabra::ComputeThread']]],
   ['find_5fin_5flist',['find_in_list',['../group__core.html#ga3a2ae6b908d34ea0490114559107ede5',1,'cadabra']]],
+  ['find_5fmodulo_5fparent_5frel',['find_modulo_parent_rel',['../classAlgorithm.html#a39bacf6cbd4dbf4e14debef1680f2a7e',1,'Algorithm']]],
   ['find_5fobj',['find_obj',['../classtab__basics.html#aed077016b0088028035d4853717cba75',1,'tab_basics']]],
   ['first_5fone',['first_one',['../classcombin_1_1symm__helper.html#a5ac6adfe04debc9a8c1ba1ddede6d388',1,'combin::symm_helper::first_one()'],['../classcombin_1_1symm__val__helper.html#aa2eb0a120cceae834bed7f69debded1e',1,'combin::symm_val_helper::first_one()']]],
   ['fixed',['fixed',['../classIndices.html#a71b77c1b27423f9547a155c7e977e630afa06a6f947b8baa9786edf8659b1fe00',1,'Indices']]],

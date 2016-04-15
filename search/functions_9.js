@@ -19,6 +19,8 @@ var searchData=
   ['inject_5fproperty',['inject_property',['../group__pythoncore.html#gad847e80193c6d138c6ad1cdb4d0f0a4a',1,'inject_property(Kernel *kernel, property *prop, std::shared_ptr&lt; Ex &gt; ex, std::shared_ptr&lt; Ex &gt; param):&#160;PythonCdb.cc'],['../group__pythoncore.html#gad847e80193c6d138c6ad1cdb4d0f0a4a',1,'inject_property(Kernel *, property *, std::shared_ptr&lt; Ex &gt;, std::shared_ptr&lt; Ex &gt;):&#160;PythonCdb.cc']]],
   ['insert_5flist_5fprop',['insert_list_prop',['../classProperties.html#a0962742c657cc3338a043d49323cf71a',1,'Properties']]],
   ['insert_5fprop',['insert_prop',['../classProperties.html#abb652c37ad7935df155e924832266d82',1,'Properties']]],
+  ['int_5fand_5fderivative_5frelated',['int_and_derivative_related',['../classintegrate__by__parts.html#a9f031112520dbf6def7092341c841bbb',1,'integrate_by_parts']]],
+  ['integrate_5fby_5fparts',['integrate_by_parts',['../classintegrate__by__parts.html#a6b03d857c504ac632a4f4e321e4bc583',1,'integrate_by_parts']]],
   ['internalerror',['InternalError',['../classInternalError.html#ac7f68ccea6c0934c86f88eb70df296fc',1,'InternalError']]],
   ['interruptionexception',['InterruptionException',['../classInterruptionException.html#ac883ce80e617007985dfc38699081fa3',1,'InterruptionException']]],
   ['intersection_5fnumber',['intersection_number',['../classAlgorithm.html#aed056dd485d3ebf1e43dcf701ce0f07c',1,'Algorithm']]],

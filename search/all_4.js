@@ -27,6 +27,7 @@ var searchData=
   ['derivative',['Derivative',['../classDerivative.html',1,'']]],
   ['derivative_2ecc',['Derivative.cc',['../Derivative_8cc.html',1,'']]],
   ['derivative_2ehh',['Derivative.hh',['../Derivative_8hh.html',1,'']]],
+  ['derivative_5facting_5fon_5farg',['derivative_acting_on_arg',['../classintegrate__by__parts.html#aa9225659577d3f0e02b89dd32d4f01de',1,'integrate_by_parts']]],
   ['determine_5fintersection',['determine_intersection',['../classAlgorithm.html#ae996e070814cff9c47b1cddedd6a2ab5',1,'Algorithm']]],
   ['determine_5fintersection_5franges',['determine_intersection_ranges',['../namespacecombin.html#a77709dca4c517da4ff6dc77e3a411384',1,'combin']]],
   ['diagonal',['Diagonal',['../classDiagonal.html',1,'']]],
