@@ -3,6 +3,9 @@
 #include <signal.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/entry.h>
+#if GTKMM_MINOR_VERSION < 10
+#include <gtkmm/main.h>
+#endif
 
 // Signal handler for ctrl-C
 
@@ -10,7 +13,11 @@ cadabra::NotebookWindow *signal_window;
 
 void signal_handler(int signal)
 	{
+#if GTKMM_MINOR_VERSION >= 10
 	signal_window->close();
+#else
+	Gtk::Main::quit();
+#endif
 	}
 
 Glib::RefPtr<Cadabra> Cadabra::create()
