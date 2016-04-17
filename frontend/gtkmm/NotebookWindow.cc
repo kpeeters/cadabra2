@@ -8,6 +8,9 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/aboutdialog.h>
 #include <fstream>
+#if GTKMM_MINOR_VERSION < 10
+#include <gtkmm/main.h>
+#endif
 
 using namespace cadabra;
 
@@ -1003,7 +1006,11 @@ bool NotebookWindow::quit_safeguard(bool quit)
 
 void NotebookWindow::on_file_quit()
 	{
-	close();
+#if GTKMM_MINOR_VERSION >= 10
+	  (*this).close();
+#else
+	  Gtk::Main::quit();
+#endif
 	}
 
 void NotebookWindow::on_edit_undo()

@@ -42,7 +42,7 @@ endif()
 find_package(PythonInterp REQUIRED)
 
 # Locate Boost
-find_package(Boost 1.45.0 COMPONENTS python system regex log program_options)
+find_package(Boost 1.45.0 COMPONENTS python system regex program_options REQUIRED)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -77,7 +77,7 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 # Create the server library
 link_directories(${UUID_LIBRARY_DIRS} ${JSONCPP_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES})
+target_link_libraries(cadabra_server ${JSONCPP_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
 
 # Create the client library. 
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc)
