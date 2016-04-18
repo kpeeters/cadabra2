@@ -41,10 +41,12 @@ On Debian/Ubuntu you can install all that is needed with::
     sudo apt-get install texlive texlive-latex-extra python-matplotlib python-mpmath dvipng
 
 The configuration script will warn you if dependencies are missing. 
-
 To build the documentation locally, you need::
 
     sudo apt-get install doxygen libjs-mathjax  
+
+This is the development platform and issues are typically first fixed
+here.
 
 
 Linux (Fedora/CentOS/Scientific Linux)
@@ -57,7 +59,8 @@ On Fedora/CentOS/Scientific Linux you can install the dependencies with::
     sudo yum install gtkmm30-devel boost-devel 
 	 sudo yum install texlive python-matplotlib
 
-
+This platform receives less testing so please get in touch if you
+run into any issues.
 
 
 OS X
