@@ -30,8 +30,8 @@ graphical interface are available.
 Prerequisites
 -------------
 
-Linux
-~~~~~
+Linux (Debian/Ubuntu/Mint)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On Debian/Ubuntu you can install all that is needed with::
 
@@ -48,6 +48,25 @@ then also need::
     sudo apt-get install texlive texlive-latex-extra python-matplotlib python-mpmath dvipng
 
 but most likely you have a TeX installation already. 
+
+
+Linux (Fedora/CentOS/Scientific Linux)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On Scientific Linux you can install the dependencies with::
+
+    sudo yum install cmake gcc-c++ python-devel pcre-devel gmp-devel
+    sudo yum install libuuid-devel sqlite-devel
+    sudo yum install gtkmm30-devel boost-devel
+
+You also need to install jsconcpp-devel, which is not in the standard
+repositories. Find an appropriate package for your distribution at
+http://www.rpmfind.net/ and install that (either version 0.6.0 or 0.10.5
+will do).
+
+At present there is a problem running the notebook interface on
+Scientific Linux.
+
 
 OS X
 ~~~~

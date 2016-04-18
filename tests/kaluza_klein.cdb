@@ -1,0 +1,86 @@
+
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\eta,\chi#}::Indices(full, position=independent).
+{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Indices(subspace, position=independent, parent=full).
+\partial{#}::PartialDerivative.
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.
+g_{\mu? \nu?}::Symmetric.
+g^{\mu? \nu?}::Symmetric.
+h_{m n}::Metric.
+h^{m n}::InverseMetric.
+\delta^{\mu?}_{\nu?}::KroneckerDelta.
+\delta_{\mu?}^{\nu?}::KroneckerDelta.
+F_{m n}::AntiSymmetric.
+
+RtoG:= R^{\lambda?}_{\mu?\nu?\kappa?} -> 
+ - \partial_{\kappa?}{ \Gamma^{\lambda?}_{\mu?\nu?} }
+ + \partial_{\nu?}{ \Gamma^{\lambda?}_{\mu?\kappa?} }
+ - \Gamma^{\eta}_{\mu?\nu?} \Gamma^{\lambda?}_{\kappa?\eta}
+ + \Gamma^{\eta}_{\mu?\kappa?} \Gamma^{\lambda?}_{\nu?\eta};
+
+Gtog:= \Gamma^{\lambda?}_{\mu?\nu?} ->
+  (1/2) * g^{\lambda?\kappa} ( 
+        \partial_{\nu?}{ g_{\kappa\mu?} } + \partial_{\mu?}{ g_{\kappa\nu?} } - \partial_{\kappa}{ g_{\mu?\nu?} } );
+
+
+todo:= g_{m1 m} R^{m1}_{4 n 4} + g_{4 m} R^{4}_{4 n 4};
+
+substitute(_, RtoG)
+substitute(_, Gtog)
+distribute(_)
+product_rule(_)
+distribute(_)
+sort_product(_);
+
+
+
+
+@split_index!!(%){\mu,m1,4};
+@canonicalise!(%):
+@substitute!(%)( \partial_{4}{A??} -> 0 );
+@substitute!(%)( \partial_{4 m?}{A??} -> 0 );
+
+@substitute!(%)( g_{4 4} -> \phi ):
+@substitute!(%)( g_{4 m} -> \phi A_{m} ):
+@substitute!(%)( g_{m n} -> \phi**{-1} h_{m n} + \phi A_{m} A_{n} );
+@substitute!(%)( g^{4 4} -> \phi**{-1} + \phi A_{m} h^{m n} A_{n} ):
+@substitute!(%)( g^{4 m} -> - \phi h^{m n} A_{n} ):
+@substitute!(%)( g^{m n} -> \phi h^{m n} ):
+@distribute!(%):
+@prodrule!(%):
+@distribute!(%):
+@prodrule!(%);
+@distribute!(%);
+@canonicalise!(%);
+
+@substitute!!(%)( h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3} ):
+@eliminate_kr!(%):
+
+@substitute!(%)( \partial_{m}{\phi**{-1}} -> -\phi**{-2} \partial_{m}{\phi} );
+@collect_factors!(%);
+@prodsort!(%);
+@substitute!(%)( \partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m} );
+@canonicalise!(%):
+
+# goes wrong:
+#  h^{m1 p} * h_{m r} * h^{q r};
+# @substitute!(%)( h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3} );
+
+@substitute!!(%)( h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3} );
+@eliminate_kr!(%);
+
+@substitute!(%)( \partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} 
+                                                  + 1/2*\partial_{m}{A_{n}} ):
+@distribute!(%):
+@prodsort!(%):
+@canonicalise!(%):
+@rename_dummies!(%):
+@collect_terms!(%);
+
+tst:= - 1/4 * \partial_{m}{\phi} * \partial_{n}{\phi} * \phi**(-1) + 1/4 * \partial_{p}{\phi} * \partial_{n}{h_{m q}} * h^{p q} - 1/2 * \partial_{m n}{\phi} + 1/4 * F_{m p} * F_{n q} * \phi**3 * h^{p q} + 1/4 * \partial_{p}{\phi} * \partial_{q}{\phi} * \phi**(-1) * h_{m n} * h^{p q} - 1/4 * \partial_{p}{\phi} * \partial_{q}{h_{m n}} * h^{p q} + 1/4 * \partial_{p}{\phi} * \partial_{m}{h_{n q}} * h^{p q} - @(todo);
+@collect_terms!(%);
+@assert(tst);
+
+# 1/2 * \partial_{n}{\phi} * \partial^{p}{\phi} * \phi**(-2) * g_{m}^{q} * h_{p q}
+# versus
+# 

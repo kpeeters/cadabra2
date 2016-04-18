@@ -245,19 +245,22 @@ void cleanup_numericalflat(const Kernel& k, Ex& tr, Ex::iterator& it)
 	auto facs=tr.begin(it);
 	multiplier_t factor=1;
 	while(facs!=tr.end(it)) {
-		factor*=*facs->multiplier;
-		if(facs->is_rational()) {
-			multiplier_t tmp; // FIXME: there is a bug in gmp which means we have to put init on next line.
-			tmp=(*facs->name).c_str();
-			factor*=tmp;
-		   facs=tr.erase(facs);
-			if(facs==tr.end())
-				facs=tr.end(it);
+		if(facs->is_index()==false) { // Do not collect the number in e.g. \partial_{4}{A}.
+			factor*=*facs->multiplier;
+			if(facs->is_rational()) {
+				multiplier_t tmp; // FIXME: there is a bug in gmp which means we have to put init on next line.
+				tmp=(*facs->name).c_str();
+				factor*=tmp;
+				facs=tr.erase(facs);
+				if(facs==tr.end())
+					facs=tr.end(it);
+				}
+			else {
+				one(facs->multiplier);
+				++facs;
+				}
 			}
-		else {
-			one(facs->multiplier);
-			++facs;
-			}
+		else ++facs;
 		}
 	multiply(it->multiplier,factor);
 

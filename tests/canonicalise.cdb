@@ -737,3 +737,9 @@ def test48():
    print('Test 48 passed')
    
 test48()
+
+def test49():
+A_{m? n?}::AntiSymmetric.
+ex:=A_{4 m} + A_{m 4};
+canonicalise(_);
+

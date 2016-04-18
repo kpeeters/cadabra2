@@ -93,6 +93,7 @@ set(LOCAL_SRC_FILES
   PythonException.cc
   Stopwatch.cc
   Storage.cc
+  Symbols.cc
   SympyCdb.cc
   YoungTab.cc
   properties/Accent.cc

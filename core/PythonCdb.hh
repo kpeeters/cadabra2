@@ -51,9 +51,22 @@ void pull_in(std::shared_ptr<Ex>);
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm);
 
-/// Generate the Python str() representation of the Ex object.
+/// \ingroup pythoncore
+///
+/// Generate the Python str() and repr() representation of the Ex object.
+
 std::string Ex_str_(const Ex&);
 std::string Ex_repr_(const Ex&);
+
+/// \ingroup pythoncore
+///
+/// The Python 'print' function always calls the 'str' member on
+/// objects to be printed. This one is required to produce output
+/// which looks readable but is also still valid input. In order to
+/// produce proper LaTeX output, this is therefore not the right
+/// function to use. Hence the last output function: Ex_latex_.
+/// It internally uses DisplayTeX to do the actual printing.
+
 std::string Ex_latex_(const Ex&);
 
 /// Convert a Cadabra 'Ex' to a Sympy expression. This first converts the
