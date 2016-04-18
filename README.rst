@@ -35,19 +35,16 @@ Linux (Debian/Ubuntu/Mint)
 
 On Debian/Ubuntu you can install all that is needed with::
 
-    sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev
-    sudo apt-get install libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev
-    sudo apt-get install python-sympy libsqlite3-dev texlive python-matplotlib python-mpmath
-    sudo apt-get install doxygen libjs-mathjax  
-    sudo apt-get install libsqlite3-dev uuid-dev
-
-The configuration script will warn you if dependencies are missing. 
-In order to actually be able to run the Cadabra notebook frontend, you
-then also need::
-
+    sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
+    sudo apt-get install libgtkmm-3.0-dev libboost-all-dev libgmp-dev
+    sudo apt-get install python-sympy libsqlite3-dev uuid-dev
     sudo apt-get install texlive texlive-latex-extra python-matplotlib python-mpmath dvipng
 
-but most likely you have a TeX installation already. 
+The configuration script will warn you if dependencies are missing. 
+
+To build the documentation locally, you need::
+
+    sudo apt-get install doxygen libjs-mathjax  
 
 
 Linux (Fedora/CentOS/Scientific Linux)
@@ -57,7 +54,8 @@ On Fedora/CentOS/Scientific Linux you can install the dependencies with::
 
     sudo yum install cmake gcc-c++ python-devel pcre-devel gmp-devel
     sudo yum install libuuid-devel sqlite-devel
-    sudo yum install gtkmm30-devel boost-devel
+    sudo yum install gtkmm30-devel boost-devel 
+	 sudo yum install texlive python-matplotlib
 
 
 
