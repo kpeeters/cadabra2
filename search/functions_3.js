@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['cadabra',['Cadabra',['../classCadabra.html#a653a0523e9e65155592198830ea6b83b',1,'Cadabra']]],
+  ['cadabra',['Cadabra',['../classCadabra.html#abe0ca1728c37a2340b4fe3680d43983f',1,'Cadabra']]],
   ['cadabraexception',['CadabraException',['../classCadabraException.html#ae78170a8dc0ea2abf0b9e394ab4dbe49',1,'CadabraException']]],
   ['calc_5fhash',['calc_hash',['../classEx.html#afec7b4f5d43ebdd90533dcf41111b2dc',1,'Ex']]],
   ['calc_5frestricted_5fhash',['calc_restricted_hash',['../classfactor__in.html#ab284300d21494b79a4cfe95f38bc7f74',1,'factor_in']]],
@@ -83,7 +83,7 @@ var searchData=
   ['convert_5fset',['convert_set',['../classcadabra_1_1TeXEngine.html#a4ece0fc924df7af9b8432f99d4832817',1,'cadabra::TeXEngine']]],
   ['convertible',['convertible',['../classiterable__converter.html#a44e6b44da994735ed9c15747f8e7835a',1,'iterable_converter']]],
   ['copy_5fshape',['copy_shape',['../classyngtab_1_1filled__tableau.html#a92f75d6a075926d7156c2099aaaa15b1',1,'yngtab::filled_tableau']]],
-  ['create',['create',['../classindex__iterator.html#aa3a2aea814375e1a9078f61f922a63c1',1,'index_iterator::create()'],['../classCadabra.html#a75541ae7b8f7f0ab5bbd4ff25ce24fe1',1,'Cadabra::create()']]],
+  ['create',['create',['../classindex__iterator.html#aa3a2aea814375e1a9078f61f922a63c1',1,'index_iterator::create()'],['../classCadabra.html#a909a00f8033ee15d1377db0a382becbb',1,'Cadabra::create()']]],
   ['create_5fempty_5fscope',['create_empty_scope',['../PythonCdb_8cc.html#aa215e1d096d957db1dd11217ca72a235',1,'create_empty_scope():&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#aa215e1d096d957db1dd11217ca72a235',1,'create_empty_scope():&#160;PythonCdb.cc']]],
   ['create_5fscope',['create_scope',['../group__pythoncore.html#gab651e8cd08d38f318645947b17129d1f',1,'create_scope():&#160;PythonCdb.cc'],['../group__pythoncore.html#gab651e8cd08d38f318645947b17129d1f',1,'create_scope():&#160;PythonCdb.cc']]],
   ['create_5fscope_5ffrom_5fglobal',['create_scope_from_global',['../PythonCdb_8cc.html#a9932cf275f573915c926239303b89d7c',1,'create_scope_from_global():&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#a9932cf275f573915c926239303b89d7c',1,'create_scope_from_global():&#160;PythonCdb.cc']]],

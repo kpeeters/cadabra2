@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['cadabra',['Cadabra',['../classCadabra.html',1,'Cadabra'],['../namespacecadabra.html',1,'cadabra'],['../classCadabra.html#a653a0523e9e65155592198830ea6b83b',1,'Cadabra::Cadabra()']]],
+  ['cadabra',['Cadabra',['../classCadabra.html',1,'Cadabra'],['../namespacecadabra.html',1,'cadabra'],['../classCadabra.html#abe0ca1728c37a2340b4fe3680d43983f',1,'Cadabra::Cadabra()']]],
   ['cadabra_2dserver_2ecc',['cadabra-server.cc',['../cadabra-server_8cc.html',1,'']]],
   ['cadabra_2ecc',['Cadabra.cc',['../Cadabra_8cc.html',1,'']]],
   ['cadabra_2ehh',['Cadabra.hh',['../Cadabra_8hh.html',1,'']]],
@@ -165,7 +165,7 @@ var searchData=
   ['coordinate_2ehh',['Coordinate.hh',['../Coordinate_8hh.html',1,'']]],
   ['copy_5fshape',['copy_shape',['../classyngtab_1_1filled__tableau.html#a92f75d6a075926d7156c2099aaaa15b1',1,'yngtab::filled_tableau']]],
   ['core',['Core',['../group__core.html',1,'']]],
-  ['create',['create',['../classindex__iterator.html#aa3a2aea814375e1a9078f61f922a63c1',1,'index_iterator::create()'],['../classCadabra.html#a75541ae7b8f7f0ab5bbd4ff25ce24fe1',1,'Cadabra::create()']]],
+  ['create',['create',['../classindex__iterator.html#aa3a2aea814375e1a9078f61f922a63c1',1,'index_iterator::create()'],['../classCadabra.html#a909a00f8033ee15d1377db0a382becbb',1,'Cadabra::create()']]],
   ['create_5fempty_5fscope',['create_empty_scope',['../PythonCdb_8cc.html#aa215e1d096d957db1dd11217ca72a235',1,'create_empty_scope():&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#aa215e1d096d957db1dd11217ca72a235',1,'create_empty_scope():&#160;PythonCdb.cc']]],
   ['create_5fmillis',['create_millis',['../classsnoop_1_1Snoop_1_1AppEntry.html#a2899e5c5c8c31b15bc5b29859a01967b',1,'snoop::Snoop::AppEntry::create_millis()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#adbd89470dbed1daad7de74893f50eb2d',1,'snoop::Snoop::LogEntry::create_millis()']]],
   ['create_5fscope',['create_scope',['../group__pythoncore.html#gab651e8cd08d38f318645947b17129d1f',1,'create_scope():&#160;PythonCdb.cc'],['../group__pythoncore.html#gab651e8cd08d38f318645947b17129d1f',1,'create_scope():&#160;PythonCdb.cc']]],
