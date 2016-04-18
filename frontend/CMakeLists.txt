@@ -24,3 +24,4 @@ install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_R
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
 install(FILES    ${PROJECT_SOURCE_DIR}/latex/tableaux.sty DESTINATION ${INSTALL_LATEX_DIR})
+install(SCRIPT   ${PROJECT_SOURCE_DIR}/latex/install.cmake)
