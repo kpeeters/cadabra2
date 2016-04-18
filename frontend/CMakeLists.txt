@@ -19,7 +19,8 @@ endif(GTKMM3_FOUND)
 #    message("-- Not building native OSX interface")
 # endif(APPLE)
 
-set(INSTALL_LATEX_DIR     share/texmf/tex/latex/cadabra2 CACHE PATH "Installation directory for LaTeX packages.")
+execute_process(COMMAND kpsewhich -var-value=TEXMFLOCAL OUTPUT_VARIABLE INSTALL_LATEX_DIR)
+message("-- Installing LaTeX style files in ${INSTALL_LATEX_DIR}")
 install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
