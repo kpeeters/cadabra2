@@ -252,14 +252,12 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			<< horizontal_mm << "mm,textheight="
 			<< vertical_mm << "mm]{geometry}\n"
 #ifndef __APPLE__
-			<< "\\usepackage{inconsolata}\n"
+	  //			<< "\\usepackage{inconsolata}\n"
 #endif
 			<< "\\usepackage{amsmath}\n"
 			<< "\\usepackage{color}\\usepackage{amssymb}\n"
 	      << "\\usepackage[parfill]{parskip}\n"
-#ifndef __APPLE__
-	      << "\\usepackage{tableaux}"
-#endif
+  	      << "\\usepackage{tableaux}"
 	      << "\n";
 
 	for(size_t i=0; i<latex_packages.size(); ++i)
