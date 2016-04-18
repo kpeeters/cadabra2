@@ -20,8 +20,8 @@ endif(GTKMM3_FOUND)
 # endif(APPLE)
 
 execute_process(COMMAND kpsewhich -var-value=TEXMFLOCAL OUTPUT_VARIABLE INSTALL_LATEX_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-message("-- Installing LaTeX style files in ${INSTALL_LATEX_DIR}")
-install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+message("-- Installing LaTeX style files in ${INSTALL_LATEX_DIR}/cadabra2")
+install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR}/cadabra2 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
 install(FILES    ${PROJECT_SOURCE_DIR}/latex/tableaux.sty DESTINATION ${INSTALL_LATEX_DIR})
