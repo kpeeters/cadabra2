@@ -20,13 +20,13 @@ void signal_handler(int signal)
 #endif
 	}
 
-Glib::RefPtr<Cadabra> Cadabra::create()
+Glib::RefPtr<Cadabra> Cadabra::create(int argc, char **argv)
 	{
-	return Glib::RefPtr<Cadabra>( new Cadabra() );
+	return Glib::RefPtr<Cadabra>( new Cadabra(argc, argv) );
 	}
 
-Cadabra::Cadabra()
-	: Gtk::Application("com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
+Cadabra::Cadabra(int argc, char **argv)
+	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
 	  compute(&nw, nw), compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
 	// Connect the two threads.

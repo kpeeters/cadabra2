@@ -9,10 +9,10 @@
 
 class Cadabra : public Gtk::Application {
 	public:
-		static Glib::RefPtr<Cadabra> create();
+		static Glib::RefPtr<Cadabra> create(int, char **);
 
 	protected:
-		Cadabra();
+		Cadabra(int, char**);
 		virtual ~Cadabra();
 
 		void on_activate() override;
