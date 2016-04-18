@@ -44,7 +44,8 @@ NotebookWindow::NotebookWindow()
 	// to use 'padding'. However, 'padding-top' fails because it does not make the
    // widget larger enough... So we still do that with set_margin_top(...).
 	css_provider = Gtk::CssProvider::create();
-	Glib::ustring data = "GtkTextView { color: blue; padding-left: 20px; }\n";
+	// padding-left: 20px; does not work on some versions of gtk, so we use margin in CodeInput
+	Glib::ustring data = "GtkTextView { color: blue;  }\n";
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.1; }\nGtkTextView:selected { background: grey; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n#ImageView:hover { background: red; }\n";
 
