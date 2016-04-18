@@ -175,6 +175,7 @@ def test101():
 test101()
 
 def test102():
+    __cdbkernel__=create_scope()
     {m,n,p}::Symbol;
     A_{m}::SelfNonCommuting;
     ex:= A_{2} A_{3} A_{1} + A_{1} A_{0};
@@ -193,3 +194,24 @@ def test102():
 
 test102()
     
+def test103():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    rl:= A_{m? n?} -> \partial_{m?}{B_{n?}};
+    ex:= A_{4 k} A_{k 4};
+    substitute(ex, rl)
+    tst:= \partial_{4}{B_{k}} \partial_{k}{B_{4}} - @(ex);
+    assert(tst==0)
+
+test103()
+
+
+test104():
+{m,n,p}::Indices(position=independent);
+ex:= g^{4};
+rl:= g_{4} -> A;
+# How is this thing supposed to know that 4 is in the {m,n,p} set?
+substitute(ex, rl);
+tst:= g^{4} - @(ex);
+assert(tst==0)
+

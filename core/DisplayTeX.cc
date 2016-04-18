@@ -1,4 +1,5 @@
 
+#include "Symbols.hh"
 #include "DisplayTeX.hh"
 #include "Algorithm.hh"
 #include "properties/LaTeXForm.hh"
@@ -46,7 +47,7 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 	if(der) {
 		// FIXME: this needs fine-tuning; there are more cases where
 		// no brackets are needed.
-		if((*arg->name).size()==1) return true;
+      if((*arg->name).size()==1 || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
 	return false;
 	}
