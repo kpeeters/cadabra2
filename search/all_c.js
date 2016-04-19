@@ -38,6 +38,7 @@ var searchData=
   ['list_5funwrap_5fsingle_5felement',['list_unwrap_single_element',['../classEx.html#a2e95d0ecb14088e7ff3b8e88ae9abe32',1,'Ex']]],
   ['list_5fwrap_5fsingle_5felement',['list_wrap_single_element',['../classEx.html#a1727476722d33bbc45c2f7ea704fb439',1,'Ex']]],
   ['load_5ffile',['load_file',['../classcadabra_1_1NotebookWindow.html#a403932b5f2214315bc59fa8c06a5c5e4',1,'cadabra::NotebookWindow']]],
+  ['load_5ffrom_5fstring',['load_from_string',['../classcadabra_1_1DocumentThread.html#a3cc5626ccf2e0966ffabd7a438704f78',1,'cadabra::DocumentThread']]],
   ['loc',['LOC',['../Snoop_8hh.html#a0fee446a4a4ef6536664bc1ff47ff694',1,'Snoop.hh']]],
   ['loc_5ffile',['loc_file',['../classsnoop_1_1Snoop_1_1LogEntry.html#a0377e9e3eb1523ad58cce906ec0f7c2a',1,'snoop::Snoop::LogEntry']]],
   ['loc_5fline',['loc_line',['../classsnoop_1_1Snoop_1_1LogEntry.html#a18ccd8da175d285efbc52822de332e2e',1,'snoop::Snoop::LogEntry']]],

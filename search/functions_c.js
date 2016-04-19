@@ -13,6 +13,7 @@ var searchData=
   ['list_5funwrap_5fsingle_5felement',['list_unwrap_single_element',['../classEx.html#a2e95d0ecb14088e7ff3b8e88ae9abe32',1,'Ex']]],
   ['list_5fwrap_5fsingle_5felement',['list_wrap_single_element',['../classEx.html#a1727476722d33bbc45c2f7ea704fb439',1,'Ex']]],
   ['load_5ffile',['load_file',['../classcadabra_1_1NotebookWindow.html#a403932b5f2214315bc59fa8c06a5c5e4',1,'cadabra::NotebookWindow']]],
+  ['load_5ffrom_5fstring',['load_from_string',['../classcadabra_1_1DocumentThread.html#a3cc5626ccf2e0966ffabd7a438704f78',1,'cadabra::DocumentThread']]],
   ['locate_5fobject_5fset',['locate_object_set',['../classAlgorithm.html#a61af7c4a1da120e106d83618cb1c23f5',1,'Algorithm']]],
   ['locate_5fsingle_5fobject',['locate_single_object',['../classAlgorithm.html#a069c212b18a3ba8203fdc6b4e6197d69',1,'Algorithm']]],
   ['logentry',['LogEntry',['../classsnoop_1_1Snoop_1_1LogEntry.html#accb5273de0a46dd22d4843a203bcd759',1,'snoop::Snoop::LogEntry::LogEntry()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#a1cd34309b20464a1e6d15a4472cf0d6d',1,'snoop::Snoop::LogEntry::LogEntry(int log_id_, int client_log_id_, int id_, const std::string &amp;, uint64_t, uint64_t, const std::string &amp;, int, const std::string &amp;, const std::string &amp;, const std::string &amp;, int status)']]],
