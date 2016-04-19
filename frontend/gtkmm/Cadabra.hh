@@ -2,6 +2,7 @@
 #pragma once
 
 #include <gtkmm/application.h>
+#include <gtkmm/grid.h>
 #include "NotebookWindow.hh"
 #include "ComputeThread.hh"
 

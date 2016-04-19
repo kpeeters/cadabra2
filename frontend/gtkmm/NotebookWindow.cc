@@ -417,8 +417,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::verbatim: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
-				if(it->cell_type==DataCell::CellType::error) 
-					std::cerr << "error cell" << std::endl;
+				//if(it->cell_type==DataCell::CellType::error) 
+				//   std::cerr << "error cell" << std::endl;
 				newcell.outbox = manage( new TeXView(engine, it) );
 				w=newcell.outbox;
 				break;
@@ -588,7 +588,8 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
-	// std::cout << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
+//	if(it==doc.end()) return;
+//	std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
 	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
@@ -625,7 +626,7 @@ void NotebookWindow::scroll_into_view(DTree::iterator it)
 		}
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
-	std::cerr << "Scrolling into view " << it->textbuf << std::endl;
+	// std::cerr << "Scrolling into view " << it->textbuf << std::endl;
 
 	// Grab widgets focus, which will scroll it into view. If the widget has not yet
 	// had its size and position allocated, we need to setup a signal handler which
@@ -633,7 +634,7 @@ void NotebookWindow::scroll_into_view(DTree::iterator it)
 
 	Gtk::Allocation alloc=target.inbox->get_allocation();
 	if(alloc.get_y()!=-1) {
-		std::cerr << "grabbing focus" << std::endl;
+		// std::cerr << "grabbing focus" << std::endl;
 		target.inbox->edit.grab_focus();
 		}
 	else {
@@ -818,10 +819,8 @@ void NotebookWindow::set_name(const std::string& n)
 
 void NotebookWindow::load_file(const std::string& notebook_contents)
 	{
-	doc.clear();
-	JSON_deserialise(notebook_contents, doc);
-	remove_all_cells();
-	build_visual_representation();
+	load_from_string(notebook_contents);
+
 	try {
 		engine.convert_all();
 		}
@@ -1013,15 +1012,11 @@ bool NotebookWindow::quit_safeguard(bool quit)
 void NotebookWindow::on_file_quit()
 	{
 	hide();
-// #if GTKMM_MINOR_VERSION >= 10
-// 	  (*this).close();
-// #else
-// 	  Gtk::Main::quit();
-// #endif
 	}
 
 void NotebookWindow::on_edit_undo()
 	{
+	// FIXME: to be implemented
 	}
 
 void NotebookWindow::on_edit_insert_above()

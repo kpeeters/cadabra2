@@ -33,7 +33,7 @@ DocumentThread::DocumentThread(GUIBase* g)
 
 	std::ifstream config(homedir + std::string("/.config/cadabra.conf"));
 	if(config) {
-		std::cerr << "cadabra-client: reading config file" << std::endl;
+		// std::cerr << "cadabra-client: reading config file" << std::endl;
 		std::set<std::string> options;
 		options.insert("registered");
 
@@ -50,7 +50,7 @@ DocumentThread::DocumentThread(GUIBase* g)
 			// config file written.
 			}
 		else {
-			std::cerr << "cadabra-client: cannot write ~/.config/cadabra.conf" << std::endl;
+			throw std::logic_error("cadabra-client: Cannot write ~/.config/cadabra.conf");
 			}
 		}
 	}
@@ -81,6 +81,16 @@ void DocumentThread::new_document()
 	std::shared_ptr<ActionBase> actionpos =
 		std::make_shared<ActionPositionCursor>(one_it, ActionPositionCursor::Position::in);
 	queue_action(actionpos);
+	}
+
+void DocumentThread::load_from_string(const std::string& json)
+	{
+	std::lock_guard<std::mutex> guard(stack_mutex);
+	pending_actions=std::queue<std::shared_ptr<ActionBase> >(); // clear queue
+	doc.clear();
+	JSON_deserialise(json, doc);
+	gui->remove_all_cells();
+	build_visual_representation();
 	}
 
 void DocumentThread::build_visual_representation()
@@ -133,9 +143,11 @@ bool DocumentThread::is_registered() const
 	return registered;
 	}
 
-void DocumentThread::set_email(const std::string& email) 
+void DocumentThread::set_user_details(const std::string& name, const std::string& email, const std::string& affiliation) 
 	{
+	snoop::log("name") << name << snoop::flush;	
 	snoop::log("email") << email << snoop::flush;	
+	snoop::log("affiliation") << affiliation << snoop::flush;	
 
 	// FIXME: make this a generic function to write all our config data.
 	struct passwd *pw = getpwuid(getuid());
