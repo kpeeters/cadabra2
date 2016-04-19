@@ -92,6 +92,8 @@ TeXEngine::~TeXEngine()
 TeXEngine::TeXEngine()
 	: horizontal_pixels_(800), font_size_(12), scale_(1.0)
 	{
+	latex_packages.push_back("breqn");
+	latex_packages.push_back("hyperref");
 	}
 
 void TeXEngine::set_geometry(int horpix)

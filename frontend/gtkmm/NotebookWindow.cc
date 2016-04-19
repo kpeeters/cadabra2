@@ -31,8 +31,6 @@ NotebookWindow::NotebookWindow()
 	settings = Gio::Settings::create((strcmp(std::getenv("DESKTOP_SESSION"), "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
 	scale = settings->get_double("text-scaling-factor");
 #endif
-	engine.latex_packages.push_back("breqn");
-	engine.latex_packages.push_back("hyperref");
 	engine.set_scale(scale);
 
 #ifndef __APPLE__
@@ -46,8 +44,9 @@ NotebookWindow::NotebookWindow()
 	css_provider = Gtk::CssProvider::create();
 	// padding-left: 20px; does not work on some versions of gtk, so we use margin in CodeInput
 	Glib::ustring data = "GtkTextView { color: blue;  }\n";
-	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.1; }\nGtkTextView:selected { background: grey; }\n";
-	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n#ImageView:hover { background: red; }\n";
+	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "*:focused { background-color: #eee; }\n";
+	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
 
 	if(!css_provider->load_from_data(data)) {
 		throw std::logic_error("Failed to parse widget CSS information.");
@@ -714,6 +713,7 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	{
 	current_cell=it;
 	current_canvas=canvas_number;
+
 	return false;
 	}
 
@@ -1007,11 +1007,12 @@ bool NotebookWindow::quit_safeguard(bool quit)
 
 void NotebookWindow::on_file_quit()
 	{
-#if GTKMM_MINOR_VERSION >= 10
-	  (*this).close();
-#else
-	  Gtk::Main::quit();
-#endif
+	hide();
+// #if GTKMM_MINOR_VERSION >= 10
+// 	  (*this).close();
+// #else
+// 	  Gtk::Main::quit();
+// #endif
 	}
 
 void NotebookWindow::on_edit_undo()
@@ -1154,27 +1155,6 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	about.run();
 	}
-
-// void NotebookWindow::on_help_notebook()
-// 	{
-// 	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file("/usr/local/share/cadabra2/images/cadabra.png");
-// 
-// 	Gtk::MessageDialog notebook;
-// 	notebook.set_image(logo);
-// 	notebook.set_message("In order to evaluate a cell, press CTRL-Enter\n
-// 	about.set_program_name("Cadabra");
-// 	about.set_comments("A field-theory motivated approach to computer algebra");
-// 	about.set_version("Version 2.0 (preview release)");
-// 	std::vector<Glib::ustring> authors;
-// 	authors.push_back("Kasper Peeters");
-// 	about.set_authors(authors);
-// 	about.set_copyright("\xC2\xA9 2006-2016 Kasper Peeters");
-// 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
-// 	about.set_website("http://cadabra.science");
-// 	about.set_website_label("cadabra.science");
-// 	about.set_logo(logo);
-// 	about.run();
-// 	}
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{
