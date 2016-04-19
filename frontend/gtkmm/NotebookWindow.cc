@@ -345,6 +345,7 @@ void NotebookWindow::process_todo_queue()
 
 	if(kernel_string=="not connected") {
 		Gtk::MessageDialog md("Kernel crashed", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+		md.set_transient_for(*this);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
 		md.run();
@@ -759,6 +760,7 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 	{
 	Gtk::MessageDialog md("TeX error", false, Gtk::MESSAGE_WARNING, 
 								 Gtk::BUTTONS_OK, true);
+	md.set_transient_for(*this);
 	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 	md.set_secondary_text(str);
 	md.run();
@@ -838,6 +840,7 @@ void NotebookWindow::on_file_save()
 		std::string res=save(name);
 		if(res.size()>0) {
 			Gtk::MessageDialog md("Error saving notebook "+name);
+			md.set_transient_for(*this);
 			md.set_secondary_text(res);
 			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 			md.run();
@@ -867,6 +870,7 @@ void NotebookWindow::on_file_save_as()
 			std::string res=save(name);
 			if(res.size()>0) {
 				Gtk::MessageDialog md("Error saving notebook "+name);
+				md.set_transient_for(*this);
 				md.set_secondary_text(res);
 				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 				md.run();
@@ -982,6 +986,7 @@ bool NotebookWindow::quit_safeguard(bool quit)
 			}
 		Gtk::MessageDialog md(mes, false, Gtk::MESSAGE_WARNING, 
 									 Gtk::BUTTONS_NONE, true);
+		md.set_transient_for(*this);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.add_button("Save before continuing",1);
 		md.add_button("Cancel",2);
@@ -1142,6 +1147,7 @@ void NotebookWindow::on_help_about()
 	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file("/usr/local/share/cadabra2/images/cadabra.png");
 
 	Gtk::AboutDialog about;
+	about.set_transient_for(*this);
 	about.set_program_name("Cadabra");
 	about.set_comments("A field-theory motivated approach to computer algebra");
 	about.set_version("Version 2.0 (preview release)");

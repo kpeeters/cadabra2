@@ -53,10 +53,11 @@ void Cadabra::on_activate()
 
 	if(!nw.is_registered()) {
 		Gtk::Dialog md("Welcome to Cadabra!", nw, Gtk::MESSAGE_WARNING);
+		md.set_transient_for(nw);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		Gtk::Box *box = md.get_content_area();
 		Gtk::Label txt;
-		txt.set_text("Writing this software takes an incredible amount of spare time. Please help guarantee future development by registering your email address, so I can convince the bean-counters that this software is of interest.\n\nWe will only use this address to email you, roughly once every half a year, with a bit of news about Cadabra. Many thanks for your support!");
+		txt.set_text("Writing this software takes an incredible amount of spare time.\nPlease help guarantee future development by registering your email address,\nso I can convince the bean-counters that this software is of interest.\n\nI will only use this address to email you, roughly once\nevery half a year, with a bit of news about Cadabra.\n\nMany thanks for your support!");
 		txt.set_line_wrap();
 		txt.set_margin_top(10);
 		txt.set_margin_left(10);
