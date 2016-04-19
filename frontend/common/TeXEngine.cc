@@ -340,6 +340,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 //		std::cout << "TeX file in " << std::string(templ)+".tex" << std::endl;
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
+		erase_file(std::string(templ)+".out");
 #ifdef DEBUG		
 		std::cerr << result << std::endl;
 #endif
@@ -363,6 +364,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		erase_file(std::string(templ)+".dvi");
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
+		erase_file(std::string(templ)+".out");
 		
 		std::string latex_err=handle_latex_errors(result, latex_proc.exit_code());
 		reqit=reqs.begin();
