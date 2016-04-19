@@ -66,31 +66,37 @@ run into any issues.
 OS X
 ~~~~
 
-Support for OS X is experimental right now, and while there is a
-beginning of a native notebook interface, this does **not** work
-yet. You can build the Gtk notebook interface, but this is suboptimal.
-The command line version is fully functional.
-
 In order to build on OS X you need a number of packages from Homebrew
 (see http://brew.sh).  Install these packages with::
 
     brew install cmake boost boost-python pcre gmp python 
-    brew install pkgconfig ossp-uuid gtkmm3 gnome-icon-theme
+    brew install pkgconfig ossp-uuid 
+    brew install gtkmm3 gnome-icon-theme adwaita-icon-theme
 
 If this prompts you to install XCode, go ahead and let it do that.
 
-In order to run the Cadabra notebook interface succesfully, you also
-need a TeX installation such as MacTeX, http://tug.org/mactex/ .
-*Any* TeX will do, as long as 'latex' and 'dvipng' are available, and
-the 'breqn' package is installed. 
+You also need a TeX installation such as MacTeX,
+http://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and
+'dvipng' are available, and the 'breqn' package is installed. Make
+sure to *install TeX* before attempting to build Cadabra, otherwise
+the Cadabra style files will not be installed in the appropriate
+place. Make sure 'latex' works from the terminal in which you will
+build Cadabra.
 
+With the above packages, you will build the Gtk interface for Cadabra.
+I am still planning a native OS X interface, but because building the
+Gtk interface is so easy and the result looks relatively decent, this
+may take a while (definitely until after 2.0 has been released).
+
+Feedback from OS X users is *very* welcome because this is not my main
+development platform.
 
 
 Installation instructions
 -------------------------
 
 Once you have the required prerequisites installed, you can build 
-Cadabra using the standard::
+Cadabra, on all supported platforms, using the standard::
 
     mkdir build
     cd build
@@ -100,7 +106,7 @@ Cadabra using the standard::
 This will build all binaries relevant for your platform. You will get 
 warned when dependencies are missing. Use::
 
-    make install
+    sudo make install
 
 to install the software. The notebook interface is started with::
 
