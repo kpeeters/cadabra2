@@ -36,7 +36,8 @@ target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${
 
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
-set(INSTALL_IMAGES_DIR       share/cadabra2/images  CACHE PATH "Installation directory for image files.")
+set(INSTALL_IMAGES_DIR    share/cadabra2/images  CACHE PATH "Installation directory for image files.")
+
 install(DIRECTORY DESTINATION ${INSTALL_SHARE_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)

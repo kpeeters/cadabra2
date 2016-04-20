@@ -1,0 +1,12 @@
+
+#pragma once
+
+/// This file contains settings which are imported from the CMake
+/// configuration (installation path and version numbers)
+
+#define CMAKE_INSTALL_PREFIX "@CMAKE_INSTALL_PREFIX@"
+
+#define CADABRA_VERSION_MAJOR @CADABRA_VERSION_MAJOR@
+#define CADABRA_VERSION_MINOR @CADABRA_VERSION_MINOR@
+#define CADABRA_VERSION_BUILD "@CADABRA_VERSION_BUILD@"
+#define COPYRIGHT_YEARS       "@COPYRIGHT_YEARS@"
