@@ -179,7 +179,10 @@ install(FILES
   "${PROJECT_BINARY_DIR}/cadabra2.so"
   "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${PYTHON_SITE_PATH}")
 
-configure_file("${PROJECT_SOURCE_DIR}/cadabra2.in" "${PROJECT_BINARY_DIR}/cadabra2")
+# Create the 'variable-substituted' cadabra2 inside the source tree so that we can
+# run the tests and pick up cadabra2_defaults.py from there.
+
+configure_file("${PROJECT_SOURCE_DIR}/cadabra2.in"             "${PROJECT_SOURCE_DIR}/cadabra2")
 
 install(PROGRAMS "${PROJECT_BINARY_DIR}/cadabra2" DESTINATION bin)
 
