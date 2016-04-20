@@ -57,7 +57,7 @@ On Fedora/CentOS/Scientific Linux you can install the dependencies with::
     sudo yum install cmake gcc-c++ python-devel pcre-devel gmp-devel
     sudo yum install libuuid-devel sqlite-devel
     sudo yum install gtkmm30-devel boost-devel 
-	 sudo yum install texlive python-matplotlib
+    sudo yum install texlive python-matplotlib
 
 This platform receives less testing so please get in touch if you
 run into any issues.
