@@ -184,7 +184,7 @@ install(FILES
 
 configure_file("${PROJECT_SOURCE_DIR}/cadabra2.in"             "${PROJECT_SOURCE_DIR}/cadabra2")
 
-install(PROGRAMS "${PROJECT_BINARY_DIR}/cadabra2" DESTINATION bin)
+install(PROGRAMS "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
 
 
 # Create Python dynamic library 'cadabra' without lib prefix.
