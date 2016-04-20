@@ -24,6 +24,11 @@ int main(int argc, char **argv)
 		++n;
 		}
 
+	auto from=cdb_file.find_last_of("/");
+	++from;
+	auto to  =cdb_file.find_last_of(".");
+	std::string title="Cadabra manual: "+cdb_file.substr(from, to-from);
+
 	std::ifstream file(cdb_file);
 	std::string content, line;
 	while(std::getline(file, line)) 
@@ -31,7 +36,7 @@ int main(int argc, char **argv)
 
 	cadabra::DTree doc;
 	JSON_deserialise(content, doc);
-	std::string html = export_as_HTML(doc, segment_only);
+	std::string html = export_as_HTML(doc, segment_only, title);
 
 	if(html_file!="") {
 		std::ofstream htmlfile(html_file);

@@ -175,6 +175,7 @@ void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr
 		case str_node::p_property: str << "$"; break;
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
+		case str_node::p_components: break;
 		}
 	}
 
@@ -228,7 +229,6 @@ void DisplaySympy::print_fraclike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator num=tree.begin(it), den=num;
 	++den;
 
-	bool close_bracket=false;
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
 		}
@@ -329,9 +329,11 @@ void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
 	str << symmap[*it->name] << "(";
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << ", ";
 	++sib;
-	dispatch(str, sib);
+	if(tree.is_valid(sib)) {	
+		str << ", ";
+		dispatch(str, sib);
+		}
 	str << ")";
 	}
 

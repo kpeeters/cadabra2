@@ -127,11 +127,12 @@ bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const
 
 Algorithm::result_t canonicalise::apply(iterator& it)
 	{
-#ifdef XPERM_DEBUG
-	txtout << "canonicalising the following expression:" << std::endl;
-	tr.print_recursive_treeform(txtout, it);
-	txtout << is_single_term(it) << std::endl;
-#endif
+//	std::cerr << "canonicalise at " << Ex(it) << std::endl;
+//	std::cerr << is_single_term(it) << std::endl;
+//	if(is_single_term(it)==false) {
+//		std::cerr << "not acting" << std::endl;
+//		return result_t::l_no_action;
+//		}
 
 	stopwatch totalsw;
 	totalsw.start();
@@ -161,6 +162,23 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		prod_unwrap_single_term(it);
 		return result_t::l_no_action;
 		}
+
+	// We currently do not handle situations in which one of the
+	// factors in a product is a sum. To be precise, we do not handle
+	// situations in which one or both of the indices in a dummy
+	// pair appear multiple times (in the different terms of the sum).
+	// Ditto for free indices; these need to sit in one particular
+	// place in the tree, not in multiple. For these situations, we
+	// will bail out here, but the user can always distribute and then
+	// canonicalise.
+
+	for(auto& dummy: ind_dummy)
+		if(ind_dummy.count(dummy.first)>2)
+			return result_t::l_no_action;
+
+	for(auto& free: ind_free)
+		if(ind_free.count(free.first)>1)
+			return result_t::l_no_action;
 
 	result_t res=result_t::l_no_action;
 

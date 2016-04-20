@@ -205,8 +205,9 @@ class Ex_comparator {
       /// 'lhs'. If the next factor cannot be found, we backtrack and try to find the
       /// previous factor again (it may have appeared multiple times).
 
-		match_t match_subproduct(Ex::sibling_iterator lhs, Ex::sibling_iterator tofind, 
-										 Ex::sibling_iterator st);
+		match_t match_subproduct(const Ex&, 
+										 Ex::sibling_iterator lhs, Ex::sibling_iterator tofind, 
+										 Ex::sibling_iterator st, Ex::iterator conditions);
 
 
 		/// Check whether the a match found by calling equal_subtree or match_subproduct 

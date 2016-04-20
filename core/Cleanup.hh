@@ -62,6 +62,7 @@ void cleanup_expressionlike(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_derivative(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_components(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_numericalflat(const Kernel& k, Ex&, Ex::iterator& it);
+void cleanup_diagonal(const Kernel& k, Ex&, Ex::iterator& it);
 
 /// Given a node with a non-unit multiplier, push this multiplier
 /// down the tree if the node is not allowed to have a non-unit

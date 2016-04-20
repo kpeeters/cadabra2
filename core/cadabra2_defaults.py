@@ -26,7 +26,7 @@ if sympy.__version__ != "unavailable":
     from sympy import symbols
     from sympy import latex
     from sympy import sin, cos, tan, trigsimp
-    from sympy import Matrix
+    from sympy import Matrix as sMatrix
 #    sympy.init_printing()
 
 # Import matplotlib and setup functions to prepare its output
@@ -36,12 +36,18 @@ if sympy.__version__ != "unavailable":
 #   p = plt.plot([1,2,3],[1,2,5],'-o')
 #   display(p[0])
 #
-import matplotlib
-import matplotlib.artist
-import matplotlib.figure
+
+have_matplotlib=True
+try:
+    import matplotlib
+    import matplotlib.artist
+    import matplotlib.figure
+    matplotlib.use('Agg')
+except ImportError:
+    have_matplotlib=False
+
 import StringIO
 import base64
-matplotlib.use('Agg')
 
 # FIXME: it is not a good idea to have this pollute the global namespace.
 #
@@ -50,14 +56,14 @@ matplotlib.use('Agg')
 # fed.
 
 def display(obj):
-    if isinstance(obj, matplotlib.figure.Figure):
+    if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
         imgstring = StringIO.StringIO()
         obj.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
         server.send(b64, "image_png")
 
-    elif isinstance(obj, matplotlib.artist.Artist):
+    elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
         f = obj.get_figure()
         imgstring = StringIO.StringIO()
         f.savefig(imgstring,format='png')

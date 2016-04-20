@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang=en>
   <head>
 	 <meta charset="utf-8">
 	 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,6 +10,7 @@
 		      src="http://beta.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 	 </script>
 	 <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
+	 <link href='https://fonts.googleapis.com/css?family=Lato:300,:400' rel='stylesheet' type='text/css'>
 	 <link href="http://fonts.googleapis.com/css?family=Bree+Serif" rel="stylesheet" type="text/css">
 	 <link rel="stylesheet" href="/static/fonts/Bright/cmun-bright.css">
 	 <script>
@@ -137,14 +138,14 @@
 		{% block main %}{% endblock %}
 	 </div>
 	 
-	 <div id="sidebar">
-		{% block sidebar %}{% endblock %}
-	 </div>
-	 
 	 <div id="bottombar">
-		<div id="bottomleft">Copyright &copy; 2016 Kasper Peeters</div>
+		<div id="bottomleft">Copyright &copy; 2001-2016 Kasper Peeters</div>
 		<div id="bottomright">Questions? <a href="info@cadabra.science">info@cadabra.science</a></div>
 	 </div>
 	 
+	 <script src="/static/scripts/hyphenator.js">
+<script type="text/javascript">
+        Hyphenator.run();
+</script>
   </body>
 </html>

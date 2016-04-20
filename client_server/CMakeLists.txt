@@ -17,24 +17,37 @@ endif(POLICY CMP0042)
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
+# Locate python
+
+# if(APPLE)
+#   find_program(PYTHON_CONFIG_EXECUTABLE python-config)
+#   if (NOT PYTHON_CONFIG_EXECUTABLE)
+#     message(SEND_ERROR "python-config executable not found, but python is required.")
+#   endif()
+#   # using "python-config --prefix" so that cmake always uses the python that is
+#   # in the user's path, this is a fix for homebrew on Mac:
+#   # https://github.com/Homebrew/homebrew/issues/25118 [^]
+#   execute_process(COMMAND ${PYTHON_CONFIG_EXECUTABLE} --prefix OUTPUT_VARIABLE python_prefix OUTPUT_STRIP_TRAILING_WHITESPACE)
+#   set(PYTHON_INCLUDE_DIR ${python_prefix}/include/python2.7)
+#   set(PYTHON_LIBRARY ${python_prefix}/lib/libpython2.7${CMAKE_SHARED_LIBRARY_SUFFIX})
+#   set(PYTHON_INCLUDE_DIRS ${python_prefix}/include/python2.7)
+# endif()
+
+if(APPLE)
+   find_package(PythonLibsOSX 2.7 REQUIRED)
+else()
+   find_package(PythonLibs 2.7 REQUIRED)
+endif()
+#set(Python_ADDITIONAL_VERSIONS 2.7)
+find_package(PythonInterp REQUIRED)
+
 # Locate Boost
-find_package(Boost 1.45.0 COMPONENTS python system regex log program_options)
+find_package(Boost 1.45.0 COMPONENTS python system regex program_options REQUIRED)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(PkgConfig REQUIRED)
-find_package(PythonLibs 2.7 REQUIRED)
-#find_package(websocketpp REQUIRED)            # from github
-pkg_check_modules(JSONCPP jsoncpp REQUIRED)   # libjsoncpp-dev
-#find_library(JSONCPP_LIB jsoncpp REQUIRED)
-#find_package(jsoncpp REQUIRED)
-message("-- Found JSONCPP include dir: ${JSONCPP_INCLUDE_DIRS}")
-message("-- Found JSONCPP library dir: ${JSONCPP_LIBRARY_DIRS}")
-message("-- Found JSONCPP libraries  : ${JSONCPP_LIBRARIES}")
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR})
-if(JSONCPP_INCLUDE_DIRS)
-include_directories("${JSONCPP_INCLUDE_DIRS}")
-endif(JSONCPP_INCLUDE_DIRS)
 pkg_check_modules(UUID uuid REQUIRED)
 include_directories("${UUID_INCLUDE_DIRS}")
 
@@ -52,23 +65,22 @@ endif()
 add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 
 # Create the server library
-link_directories(${UUID_LIBRARY_DIRS} ${JSONCPP_LIBRARY_DIRS})
-add_library(cadabra_server SHARED Server.cc Snoop.cc)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES})
+link_directories(${UUID_LIBRARY_DIRS})
+add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
+target_link_libraries(cadabra_server ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
 
 # Create the client library. 
-add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${JSONCPP_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${PYTHON_LIBRARIES})
+add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc jsoncpp/jsoncpp.cpp)
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${PYTHON_LIBRARIES})
 
 # Create server binary
-#include_directories("." ${WEBSOCKETPP_INCLUDE_DIR} ${JSONCPP_INCLUDE_DIR})
-include_directories("." "./websocketpp" ${JSONCPP_INCLUDE_DIR})
+include_directories("." "./websocketpp" "./jsoncpp")
 add_executable(cadabra-server cadabra-server.cc)
 add_executable(cadabra2html cadabra2html.cc DataCell.cc)
 #add_executable(test_talk_to_server test_talk_to_server.cc)
 #add_executable(regexp_tester regexp_tester.cc)
-target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${JSONCPP_LIBRARIES})
-target_link_libraries(cadabra2html ${JSONCPP_LIBRARIES} ${Boost_LIBRARIES} )
+target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+target_link_libraries(cadabra2html cadabra_client ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")

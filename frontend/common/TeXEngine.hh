@@ -70,12 +70,15 @@ namespace cadabra {
 			std::shared_ptr<TeXRequest> checkin(const std::string&,
 														  const std::string& startwrap, const std::string& endwrap);
 			std::shared_ptr<TeXRequest> modify(std::shared_ptr<TeXRequest>, const std::string&);
+
+			/// Generate images for all TeXRequests which are labelled as needing conversion.
 			void                        convert_all();
 
-			// Mark all TeXRequests as needing re-generating. Use this e.g. when changing font
-			// size for the entire notebook.
+			/// Mark all TeXRequests as needing re-generating. Use this e.g. when changing font
+			/// size for the entire notebook: first invalidate_all, then convert_all.
 			void                        invalidate_all();
 
+			/// Mark a TeXRequest as no longer being needed.
 			void                        checkout(std::shared_ptr<TeXRequest>);
 			void                        checkout_all();
 			

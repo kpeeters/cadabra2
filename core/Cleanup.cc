@@ -4,10 +4,17 @@
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/PartialDerivative.hh"
+#include "properties/NumericalFlat.hh"
+#include "properties/Diagonal.hh"
 
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
 	//std::cerr << "cleanup at " << *it->name << std::endl;
+
+	// FIXME: any of these can lead to expressions which need another
+	// application at this level. So we should run this as long as things
+	// change. Right now, we just do things as they seemed required by tests.
+
 	if(it->is_zero())  {
 		::zero(it->multiplier);
 		tr.erase_children(it);
@@ -23,6 +30,15 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 
 	const NumericalFlat *nf = kernel.properties.get<NumericalFlat>(it);
 	if(nf)  cleanup_numericalflat(kernel, tr, it);
+
+	const Diagonal *diag = kernel.properties.get<Diagonal>(it);
+	if(diag) cleanup_diagonal(kernel, tr, it);
+
+	if(it->is_zero())  {
+		::zero(it->multiplier);
+		tr.erase_children(it);
+		it->name=name_set.insert("1").first;
+		}
 	}
 
 void cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
@@ -73,6 +89,15 @@ void cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\sum");
 
+	// Remove children which are 0
+	Ex::sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(sib->is_zero())
+			sib=tr.erase(sib);
+		else
+			++sib;
+		}
+
 	// Flatten sums which are supposed to be flat.
 	long num=tr.number_of_children(it);
 	if(num==1) {
@@ -109,25 +134,6 @@ void cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 			else ++facs;
 			}
 		}
-
-	// Remove children which are 0
-	Ex::sibling_iterator sib=tr.begin(it);
-	while(sib!=tr.end(it)) {
-		if(sib->is_zero())
-			sib=tr.erase(sib);
-		else
-			++sib;
-		}
-
-
-//	std::cerr << *it->name << std::endl;
-//	tr.print_recursive_treeform(std::cerr, tr.begin());
-   // Collect all equal terms.
-
-//	collect_terms ct(k, tr);
-//	if(ct.can_apply(it))
-//		ct.apply(it);
-
 
 	push_down_multiplier(k, tr, it);
 	}
@@ -257,6 +263,18 @@ void cleanup_numericalflat(const Kernel& k, Ex& tr, Ex::iterator& it)
 
 	}
 
+void cleanup_diagonal(const Kernel& k, Ex& tr, Ex::iterator& it)
+	{
+	if(tr.number_of_children(it)!=2) return;
+
+	auto c1=tr.begin(it);
+	auto c2(c1);
+	++c2;
+
+	if(c1->is_rational() && c2->is_rational())
+		if(c1->multiplier != c2->multiplier)
+			zero(it->multiplier);
+	}
 
 void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	{

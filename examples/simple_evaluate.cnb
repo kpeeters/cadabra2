@@ -12,13 +12,13 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}{t, r}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}(t, r).\\end{dmath*}"
 				},
 				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}{\\mu, \\nu}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}(\\mu, \\nu).\\end{dmath*}"
 				}
 			],
 			"source" : "\\dot{#}::Accent.\n{t,r}::Coordinate;\n{\\mu,\\nu}::Indices(values={r,t});"
@@ -48,7 +48,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{X^{t} = T, X^{r} = R, A^{r} = 3, A^{t} = 2}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}(X^{t} = T, X^{r} = R, A^{r} = 3, A^{t} = 2)\\end{dmath*}"
 				}
 			],
 			"source" : "rl:= { X^{t} = T, X^{r} = R, A^{r} = 3, A^{t} = 2 };"
@@ -63,7 +63,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} = \\left\\{\\begin{aligned}{t}: & \\dot{T}+2\\\\\n{r}: & \\dot{R}+3\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}= & \\dot{T}+2\\\\\n\\square{}^{r}= & \\dot{R}+3\\\\\n\\end{aligned}\n\\end{dmath*}"
 				}
 			],
 			"source" : "evaluate(ex, rl);"
