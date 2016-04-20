@@ -18,6 +18,8 @@ int subtree_compare(const Properties *properties,
 						  Ex::iterator one, Ex::iterator two, 
 						  int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards) 
 	{
+	// std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << std::endl;
+
 	// The logic is to compare successive aspects of the two objects, returning a
 	// no-match code if a difference is found at a particular level, or continuing
 	// further down the line if there still is a match.
@@ -39,8 +41,13 @@ int subtree_compare(const Properties *properties,
 	// other cases get mult=2. 
 
 	int  mult=1;
-	if(one->is_index() && two->is_index() && one->is_rational() && two->is_rational()) mult=2;
 	Indices::position_t position_type=Indices::free;
+	if(one->is_index() && two->is_index() && one->is_rational() && two->is_rational()) {
+		mult=2;
+		// For a purely numerical index we cannot determine in which bundle it lives.
+		// The only thing we can do is disallow automatic index raising/lowering.
+		position_type=Indices::fixed;
+		}
 	if(one->is_index() && two->is_index()) {
 		if(checksets && properties!=0) {
 			// Strip off the parent_rel because Indices properties are declared without
@@ -578,9 +585,18 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		}
 	else { // object is not dummy nor objectpattern nor coordinate
 
-		if(one->is_rational() && two->is_rational() && one->multiplier!=two->multiplier) {
-			if(*one->multiplier < *two->multiplier) return no_match_less;
-			else                                    return no_match_greater;
+		if(one->is_rational() && two->is_rational()) {
+			if(one->multiplier!=two->multiplier) {
+				if(*one->multiplier < *two->multiplier) return no_match_less;
+				else                                    return no_match_greater;
+				}
+			else {
+				// Equal numerical factors with different parent rel _never_ match, because
+				// we cannot determine if index raising/lowering is allowed if we do not
+				// know the bundle type.
+				if(one->fl.parent_rel != two->fl.parent_rel)                
+					return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
+				}
 			}
 		
 		if(one->name==two->name) {

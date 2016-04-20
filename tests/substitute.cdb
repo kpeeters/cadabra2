@@ -205,13 +205,14 @@ def test103():
 
 test103()
 
+def test104():
+    __cdbkernel__=create_scope()
+    {m,n,p}::Indices(position=independent);
+    ex:= g^{4};
+    rl:= g_{4} -> A;
+    # How is this thing supposed to know that 4 is in the {m,n,p} set?
+    substitute(ex, rl);
+    tst:= g^{4} - @(ex);
+    assert(tst==0)
 
-test104():
-{m,n,p}::Indices(position=independent);
-ex:= g^{4};
-rl:= g_{4} -> A;
-# How is this thing supposed to know that 4 is in the {m,n,p} set?
-substitute(ex, rl);
-tst:= g^{4} - @(ex);
-assert(tst==0)
-
+test104()
