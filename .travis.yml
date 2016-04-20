@@ -48,3 +48,9 @@ install:
    - pip install --user matplotlib
 
 
+notifications:
+  email:
+    recipients:
+      - kasper.peeters@phi-sci.com
+    on_success: always
+    on_failure: always
