@@ -16,7 +16,6 @@ var searchData=
   ['imageview',['ImageView',['../classcadabra_1_1ImageView.html#a8382a8ee74d8ff437f0be6cffc2ba957',1,'cadabra::ImageView']]],
   ['imageview_2ecc',['ImageView.cc',['../ImageView_8cc.html',1,'']]],
   ['imageview_2ehh',['ImageView.hh',['../ImageView_8hh.html',1,'']]],
-  ['imatch',['imatch',['../cadabra2.html#a97acc23a791409ba37ed746f381e9cc2',1,'cadabra2']]],
   ['impl',['impl',['../classsnoop_1_1Snoop.html#a9233b9fadd3ead6273dd86889b723f7e',1,'snoop::Snoop']]],
   ['impl_5fcpp',['IMPL_CPP',['../exec-stream_8cc.html#a355002e653208aea919b3ce2bf4c88d1',1,'exec-stream.cc']]],
   ['impl_5ft',['impl_t',['../classexec__stream__t.html#a7f55892b181a9d5fa313f4d3588980d4',1,'exec_stream_t']]],
@@ -122,8 +121,8 @@ var searchData=
   ['is_5fzero',['is_zero',['../classstr__node.html#aeb383a4110dcbcaaa0dd2c71d0758db6',1,'str_node']]],
   ['it',['it',['../classindexsort_1_1less__indexed__treenode.html#ad3b58a3e25e7583b5ee6108ce92c38e0',1,'indexsort::less_indexed_treenode']]],
   ['iterable_5fconverter',['iterable_converter',['../classiterable__converter.html',1,'']]],
-  ['iterator',['iterator',['../classAlgorithm.html#a238645043dc3b992ce92ebcd66389217',1,'Algorithm::iterator()'],['../classkeyval__t.html#a6beadd7be2de48f55c36010a17ef6632',1,'keyval_t::iterator()'],['../classProperties_1_1registered__property__map__t.html#af9593dd913eabd0379c4473b5022cdf5',1,'Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
   ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
+  ['iterator',['iterator',['../classAlgorithm.html#a238645043dc3b992ce92ebcd66389217',1,'Algorithm::iterator()'],['../classkeyval__t.html#a6beadd7be2de48f55c36010a17ef6632',1,'keyval_t::iterator()'],['../classProperties_1_1registered__property__map__t.html#af9593dd913eabd0379c4473b5022cdf5',1,'Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
   ['iterator_5fbase',['iterator_base',['../classyngtab_1_1filled__tableau_1_1iterator__base.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fcategory',['iterator_category',['../classyngtab_1_1filled__tableau_1_1iterator__base.html#ab11be0dad33e55a845b007ff4130c974',1,'yngtab::filled_tableau::iterator_base']]]
 ];

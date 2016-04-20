@@ -3,7 +3,6 @@ var searchData=
   ['cadabra_2dserver_2ecc',['cadabra-server.cc',['../cadabra-server_8cc.html',1,'']]],
   ['cadabra_2ecc',['Cadabra.cc',['../Cadabra_8cc.html',1,'']]],
   ['cadabra_2ehh',['Cadabra.hh',['../Cadabra_8hh.html',1,'']]],
-  ['cadabra2',['cadabra2',['../cadabra2.html',1,'']]],
   ['cadabra2_5fdefaults_2epy',['cadabra2_defaults.py',['../cadabra2__defaults_8py.html',1,'']]],
   ['cadabra2html_2ecc',['cadabra2html.cc',['../cadabra2html_8cc.html',1,'']]],
   ['canonicalise_2ecc',['canonicalise.cc',['../canonicalise_8cc.html',1,'']]],

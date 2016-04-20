@@ -18,7 +18,7 @@ var searchData=
   ['requests',['requests',['../classcadabra_1_1TeXEngine.html#a1688559da0a69f50dba5478c5643c2c4',1,'cadabra::TeXEngine']]],
   ['restarting_5fkernel',['restarting_kernel',['../classcadabra_1_1ComputeThread.html#a7fb3fbb68e1aa23cd8af885061cb1fee',1,'cadabra::ComputeThread']]],
   ['reuse_5fgenerating_5fset',['reuse_generating_set',['../classcanonicalise.html#a9925d090a02c10494f5c73b8f0fb0aae',1,'canonicalise']]],
-  ['rhs',['rhs',['../classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd',1,'Server::rhs()'],['../cadabra2.html#ae7b15a0517c776a0d87bfffb48fe5a6b',1,'rhs():&#160;cadabra2']]],
+  ['rhs',['rhs',['../classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd',1,'Server']]],
   ['rhs_5fcontains_5fdummies',['rhs_contains_dummies',['../classsubstitute.html#a3d6f2d675aedd99fd08e9b657a4d7b3e',1,'substitute']]],
   ['roof',['roof',['../classindex__iterator.html#a9de2d516ea67bd10e8a38b9ab88cc6c7',1,'index_iterator']]],
   ['row_5fnumber',['row_number',['../classyngtab_1_1filled__tableau_1_1in__column__iterator.html#a8c0edac65fbef444c086225237f033a2',1,'yngtab::filled_tableau::in_column_iterator::row_number()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ad55408a35119697d1238aa4916ae0373',1,'yngtab::filled_tableau::iterator::row_number()']]],

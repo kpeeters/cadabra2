@@ -157,7 +157,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classDisplayTeX.html#a23df574403a8810016b8d89ccf6a4a14">children_have_brackets</a>(Ex::iterator ch) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classDisplayTeX.html#a74bdd19ede9390123da4473c8ed279ba">reads_as_operator</a>(Ex::iterator obj, Ex::iterator <a class="code" href="cadabra2.html#a884c086498b431ab9107c0c838f16261">arg</a>) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classDisplayTeX.html#a74bdd19ede9390123da4473c8ed279ba">reads_as_operator</a>(Ex::iterator obj, Ex::iterator arg) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;};</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="keyword">const</span> <span class="keywordtype">char</span> *<a class="code" href="DisplayTeX_8hh.html#a9e0f9533ee5c00996a54dc14e2cc7c96">unichar</a>(<a class="code" href="DisplaySympy_8hh.html#a0da26994377a47c9c53069f9dfb9e670">kunichar</a> c);</div>
@@ -175,7 +175,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classDisplayTeX_html_a9f7af02da7fa651262d2105b4986e6b5"><div class="ttname"><a href="classDisplayTeX.html#a9f7af02da7fa651262d2105b4986e6b5">DisplayTeX::print_star</a></div><div class="ttdeci">bool print_star</div><div class="ttdef"><b>Definition:</b> DisplayTeX.hh:36</div></div>
 <div class="ttc" id="classDisplayTeX_html_afecc5ef5b52335a65509d4226d64d103"><div class="ttname"><a href="classDisplayTeX.html#afecc5ef5b52335a65509d4226d64d103">DisplayTeX::print_parent_rel</a></div><div class="ttdeci">void print_parent_rel(std::ostream &amp;, str_node::parent_rel_t, bool first)</div><div class="ttdef"><b>Definition:</b> DisplayTeX.cc:216</div></div>
 <div class="ttc" id="classDisplayTeX_html_a7b5852b8baaac555ecbe6f8f9fb11625"><div class="ttname"><a href="classDisplayTeX.html#a7b5852b8baaac555ecbe6f8f9fb11625">DisplayTeX::print_commalike</a></div><div class="ttdeci">void print_commalike(std::ostream &amp;, Ex::iterator)</div><div class="ttdef"><b>Definition:</b> DisplayTeX.cc:252</div></div>
-<div class="ttc" id="cadabra2_html_a884c086498b431ab9107c0c838f16261"><div class="ttname"><a href="cadabra2.html#a884c086498b431ab9107c0c838f16261">arg</a></div><div class="ttdeci">InteractiveConsole arg</div><div class="ttdef"><b>Definition:</b> cadabra2:50</div></div>
 <div class="ttc" id="classDisplayTeX_html_a757528485c7d21f1d52bf1e789bed97a"><div class="ttname"><a href="classDisplayTeX.html#a757528485c7d21f1d52bf1e789bed97a">DisplayTeX::print_fraclike</a></div><div class="ttdeci">void print_fraclike(std::ostream &amp;, Ex::iterator)</div><div class="ttdef"><b>Definition:</b> DisplayTeX.cc:277</div></div>
 <div class="ttc" id="classDisplayTeX_html_a74bdd19ede9390123da4473c8ed279ba"><div class="ttname"><a href="classDisplayTeX.html#a74bdd19ede9390123da4473c8ed279ba">DisplayTeX::reads_as_operator</a></div><div class="ttdeci">bool reads_as_operator(Ex::iterator obj, Ex::iterator arg) const </div><div class="ttdoc">Determine whether the indicated object &#39;obj&#39;, when acting on the single argument &#39;arg&#39;, reads as an operator, and therefore &#39;arg&#39; does not need to be wrapped in brackets. </div><div class="ttdef"><b>Definition:</b> DisplayTeX.cc:43</div></div>
 <div class="ttc" id="classDisplayTeX_html_ac51e787a0014810385cdd36e646776d2"><div class="ttname"><a href="classDisplayTeX.html#ac51e787a0014810385cdd36e646776d2">DisplayTeX::print_other</a></div><div class="ttdeci">void print_other(std::ostream &amp;str, Ex::iterator it)</div><div class="ttdef"><b>Definition:</b> DisplayTeX.cc:54</div></div>
@@ -209,7 +208,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 19 2016 18:15:20 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Apr 20 2016 11:08:50 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

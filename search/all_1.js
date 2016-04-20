@@ -58,7 +58,7 @@ var searchData=
   ['apply_5fgeneric',['apply_generic',['../classAlgorithm.html#a065db0550af7fea605455674639019ea',1,'Algorithm']]],
   ['apply_5fonce',['apply_once',['../classAlgorithm.html#ad07fb4dffc23db25ae7fe305a40f608c',1,'Algorithm']]],
   ['apply_5fsymmetry',['apply_symmetry',['../classcombin_1_1symmetriser.html#a35d9889eda23897efdeee1a7d276dd7c',1,'combin::symmetriser']]],
-  ['arg',['arg',['../classEx.html#a2f2a561cba1bc595407611598bcbf2f9',1,'Ex::arg()'],['../cadabra2.html#a884c086498b431ab9107c0c838f16261',1,'arg():&#160;cadabra2']]],
+  ['arg',['arg',['../classEx.html#a2f2a561cba1bc595407611598bcbf2f9',1,'Ex']]],
   ['arg_5fsize',['arg_size',['../classEx.html#a7735667df8e6ac0e2fa912526cde4be6',1,'Ex']]],
   ['arg_5fto_5fnum',['arg_to_num',['../classEx.html#aa128603552c5d60f2394b5cb194c2abd',1,'Ex']]],
   ['argloc_5f2_5ftreeloc',['argloc_2_treeloc',['../classsym.html#a7f5cfe205a26cc13e15ac608627d74ce',1,'sym']]],

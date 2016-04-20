@@ -7,7 +7,6 @@ var searchData=
   ['image_5f',['image_',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#ad7007487ab58bf9f9b75cff964a1caa0',1,'cadabra::TeXEngine::TeXRequest']]],
   ['imagebox',['imagebox',['../classcadabra_1_1VisualCell.html#a717fe9171d205f35c64714562352824b',1,'cadabra::VisualCell']]],
   ['images',['images',['../classImages.html#a0b3404f21331e1b1cf6127a7fcd80165',1,'Images']]],
-  ['imatch',['imatch',['../cadabra2.html#a97acc23a791409ba37ed746f381e9cc2',1,'cadabra2']]],
   ['impl',['impl',['../classsnoop_1_1Snoop.html#a9233b9fadd3ead6273dd86889b723f7e',1,'snoop::Snoop']]],
   ['implementation',['implementation',['../classechokernel_1_1EchoKernel.html#a9587c41efd23b374a9f04b01564750c5',1,'echokernel::EchoKernel']]],
   ['implementation_5fversion',['implementation_version',['../classechokernel_1_1EchoKernel.html#aa81263b1fc2366ee32f0e6a05752b1ba',1,'echokernel::EchoKernel']]],

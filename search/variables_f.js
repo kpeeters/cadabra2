@@ -5,7 +5,6 @@ var searchData=
   ['only_5fcol_5f',['only_col_',['../classTableauSymmetry.html#ac7b7b5d773e175bbcd691ac474dc4a8f',1,'TableauSymmetry']]],
   ['only_5fexpand',['only_expand',['../classjoin__gamma.html#a05c1b9c8fc54b3c1ad9785c168edcb67',1,'join_gamma']]],
   ['open_5fbrackets',['open_brackets',['../classpreprocessor.html#ae2efdf802b9ca6b6a73aa16bf82fb25d',1,'preprocessor']]],
-  ['operator_3d_22_22',['operator=&quot;&quot;',['../cadabra2.html#a324a573a831d2bccea62f23fd19d1105',1,'cadabra2']]],
   ['order',['order',['../classpreprocessor_1_1accu__t.html#a49c4e009bd138180b98e54272f40b4bb',1,'preprocessor::accu_t']]],
   ['order_5fnames',['order_names',['../classpreprocessor.html#af766465cec05c1127edef3bdb0256589',1,'preprocessor']]],
   ['orders',['orders',['../classpreprocessor.html#a56cfaf12b80234f3abe5b310e8aa97aa',1,'preprocessor']]],

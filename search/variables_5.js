@@ -8,7 +8,6 @@ var searchData=
   ['engine',['engine',['../classcadabra_1_1NotebookWindow.html#a97bf0c613a7577307ee7dc9110041289',1,'cadabra::NotebookWindow::engine()'],['../classcadabra_1_1TeXView.html#a1252e0712500364f489b196ab608e4e6',1,'cadabra::TeXView::engine()']]],
   ['epsilons',['epsilons',['../classepsilon__to__delta.html#aaa0beba16d069990fdbe935bb8970d9c',1,'epsilon_to_delta']]],
   ['error',['error',['../classServer_1_1Block.html#ae59e1457b887dcdaacbac13d73974057',1,'Server::Block::error()'],['../namespacesnoop.html#afed6cad118b299290114f820ecf4e2e5',1,'snoop::error()']]],
-  ['ex',['Ex',['../cadabra2.html#a57a71423bc7131bece6feb568034fc76',1,'cadabra2']]],
   ['expand',['expand',['../classjoin__gamma.html#ae05a00a9cfdf4e8b3fb820e358265b5c',1,'join_gamma']]],
   ['extra_5fbrackets_5ffor_5fsymbols',['extra_brackets_for_symbols',['../classDisplayTeX.html#a892ee92c9403f1f879dfbd9f69759a5e',1,'DisplayTeX']]],
   ['extra_5fsign',['extra_sign',['../structexchange_1_1identical__tensors__t.html#ab16d5a2e206f04420d4c277b9e1bb6a3',1,'exchange::identical_tensors_t']]]

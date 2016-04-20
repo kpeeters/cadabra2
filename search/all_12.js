@@ -54,7 +54,7 @@ var searchData=
   ['result_5ft',['result_t',['../classEx.html#a2b752a88144e6ad7bee2ff30bd671811',1,'Ex::result_t()'],['../classAlgorithm.html#ae99aae1610c636bdeb7618b80c46c94b',1,'Algorithm::result_t()']]],
   ['reuse_5fgenerating_5fset',['reuse_generating_set',['../classcanonicalise.html#a9925d090a02c10494f5c73b8f0fb0aae',1,'canonicalise']]],
   ['revert',['revert',['../classcadabra_1_1ActionBase.html#aa83435da34231c3b9b7986e3d0cc88a5',1,'cadabra::ActionBase::revert()'],['../classcadabra_1_1ActionAddCell.html#ab59ef147114cb380d0427d90acde8dc8',1,'cadabra::ActionAddCell::revert()'],['../classcadabra_1_1ActionPositionCursor.html#acc5386fd684cb3ea6cf8c23e801491e0',1,'cadabra::ActionPositionCursor::revert()'],['../classcadabra_1_1ActionSetRunStatus.html#a41822da887d3b6dccfd27307c7ce419c',1,'cadabra::ActionSetRunStatus::revert()'],['../classcadabra_1_1ActionRemoveCell.html#af701f7932c44fdd789f3cc0cd8fb68d6',1,'cadabra::ActionRemoveCell::revert()'],['../classcadabra_1_1ActionSplitCell.html#a81abadc5a3863aac7dedbc6d775f501d',1,'cadabra::ActionSplitCell::revert()']]],
-  ['rhs',['rhs',['../classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd',1,'Server::rhs()'],['../cadabra2.html#ae7b15a0517c776a0d87bfffb48fe5a6b',1,'rhs():&#160;cadabra2']]],
+  ['rhs',['rhs',['../classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd',1,'Server']]],
   ['rhs_5fcontains_5fdummies',['rhs_contains_dummies',['../classsubstitute.html#a3d6f2d675aedd99fd08e9b657a4d7b3e',1,'substitute']]],
   ['riemanntensor',['RiemannTensor',['../classRiemannTensor.html',1,'RiemannTensor'],['../classRiemannTensor.html#a0fc927d13a399efa0d81c84471aa2055',1,'RiemannTensor::RiemannTensor()']]],
   ['riemanntensor_2ecc',['RiemannTensor.cc',['../RiemannTensor_8cc.html',1,'']]],
