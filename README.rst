@@ -46,7 +46,7 @@ To build the documentation locally, you need::
     sudo apt-get install doxygen libjs-mathjax  
 
 This is the development platform and issues are typically first fixed
-here.
+here. You can use either g++ or the clang++ compiler.
 
 
 Linux (Fedora/CentOS/Scientific Linux)
@@ -59,8 +59,8 @@ On Fedora/CentOS/Scientific Linux you can install the dependencies with::
     sudo yum install gtkmm30-devel boost-devel 
     sudo yum install texlive python-matplotlib
 
-This platform receives less testing so please get in touch if you
-run into any issues.
+This platform receives less testing so please get in touch if you run
+into any issues. You can use either g++ or the clang++ compiler.
 
 
 OS X
@@ -73,7 +73,8 @@ In order to build on OS X you need a number of packages from Homebrew
     brew install pkgconfig ossp-uuid 
     brew install gtkmm3 adwaita-icon-theme
 
-If this prompts you to install XCode, go ahead and let it do that.
+If this prompts you to install XCode, go ahead and let it do
+that. Cadabra builds with the standard Apple compiler.
 
 You also need a TeX installation such as MacTeX,
 http://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and
@@ -115,6 +116,8 @@ to install the software. The notebook interface is started with::
 while the command-line version is called::
 
     cadabra2
+
+
 
 Tutorials and other help
 ------------------------
