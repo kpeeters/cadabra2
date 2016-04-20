@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "Actions.hh"
+#include "Config.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
 #include <gtkmm/box.h>
@@ -1139,21 +1140,25 @@ void NotebookWindow::on_kernel_restart()
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file("/usr/local/share/cadabra2/images/cadabra.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);
 	about.set_program_name("Cadabra");
 	about.set_comments("A field-theory motivated approach to computer algebra");
-	about.set_version("Version 2.0 (preview release)");
+	about.set_version("Version "+std::to_string(CADABRA_VERSION_MAJOR)+"."+std::to_string(CADABRA_VERSION_MINOR)
+							+" (build "+std::string(CADABRA_VERSION_BUILD)+")");
 	std::vector<Glib::ustring> authors;
 	authors.push_back("Kasper Peeters");
 	about.set_authors(authors);
-	about.set_copyright("\xC2\xA9 2006-2016 Kasper Peeters");
+	about.set_copyright(std::string("\xC2\xA9 ")+COPYRIGHT_YEARS+std::string(" Kasper Peeters"));
 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
 	about.set_website("http://cadabra.science");
 	about.set_website_label("cadabra.science");
 	about.set_logo(logo);
+	std::vector<Glib::ustring> special;
+	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
+	about.add_credit_section("Special thanks", special);
 	about.run();
 	}
 
