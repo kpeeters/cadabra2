@@ -27,7 +27,8 @@ void NotebookCanvas::refresh_all()
 	{
 	auto it=visualcells.begin();
 	while(it!=visualcells.end()) {
-		if(it->first->cell_type==DataCell::CellType::output) {
+		auto ct=it->first->cell_type;
+		if(ct==DataCell::CellType::output || ct==DataCell::CellType::latex_view) {
 			it->second.outbox->update_image();
 			}
 		++it;

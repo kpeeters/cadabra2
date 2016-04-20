@@ -75,8 +75,8 @@ void CodeInput::init()
 //	edit.set_pixels_inside_wrap(2*Gtk::LINE_SPACING);
 	
 	// Padding using CSS does not work on earlier Gtk versions, so we use set_left_margin there.
-	if(gtk_get_minor_version()<11)
-		edit.set_left_margin(20);
+	edit.set_left_margin(20);
+//	if(gtk_get_minor_version()<11 || gtk_get_minor_version()>=14)
 
 	edit.set_accepts_tab(true);
 	Pango::TabArray tabs(10);

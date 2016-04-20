@@ -141,7 +141,7 @@ void ComputeThread::try_spawn_server()
 		}
 	port = atoi(buffer);
 
-	std::cerr << "read from popen: " << buffer << std::endl;
+	// std::cerr << "read from popen: " << buffer << std::endl;
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 

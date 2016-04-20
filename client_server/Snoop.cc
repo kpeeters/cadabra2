@@ -73,7 +73,10 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		struct utsname buf;
 		if(uname(&buf)==0) {
 			this_app_.machine_id = std::string(buf.sysname)
-				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine+", "+buf.domainname;
+				+", "+buf.nodename+", "+buf.release+", "+buf.version+", "+buf.machine;
+#ifdef __linux__
+			this_app_.machine_id += std::string(", ")+buf.domainname;
+#endif
 			}
 
 		this_app_.user_id = get_user_uuid(app_name);
@@ -88,7 +91,6 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			const char *homedir = pw->pw_dir;
 			std::string logdir = homedir+std::string("/.log");
 			mkdir(logdir.c_str(), 0700);
-			std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
 			}
 		

@@ -6,7 +6,7 @@
 
 {% block main %}
 <h1>Warning</h1>
-<p>
+<p  class="hyphenate">
   This is a pre-alpha version of the new Cadabra web site, describing
   the pre-alpha version of the new Cadabra software. If you actually
   want to get work done, you probably want to visit
@@ -18,7 +18,7 @@
 </p>
 
 <h1>What is Cadabra?</h1>
-<p>
+<p  class="hyphenate">
   Cadabra is a symbolic computer algebra system (CAS) designed
   specifically for the solution of problems encountered in field
   theory. It has extensive functionality for tensor computer
@@ -28,6 +28,9 @@
   dependence, multiple index types and many more. The input
   format is a subset of TeX. Both a command-line and a graphical
   interface are available.
+  <div class="splash_image">
+	 <img src="/static/images/screenshot.png" />
+  </div>
   <ul>
 	 <li>
 		Designed for field-theory problems, with handling of
@@ -56,7 +59,7 @@
 <br/>
 
 <h1>Cadabra's design philosophy</h1>
-<p>
+<p  class="hyphenate">
   Cadabra is built around the fact that many computations do not have
   one single and unique path between the starting point and the end
   result. When we do computations on paper, we often taken bits of an
@@ -66,7 +69,7 @@
   there is no way even in principle for a computer to figure out what
   is 'the best' thing to do. 
 </p>
-<p>
+<p  class="hyphenate">
   What we need the computer to do, in such a case, is to be good at
   performing simple but tedious steps, without enforcing on the user
   how to do a particular computation. In other words, we want the
@@ -74,7 +77,7 @@
   which steps to take, not forcing us to return to a 'canonical'
   expression at every stage.
 </p>
-<p>
+<p  class="hyphenate">
   Most existing computer algebra systems allow for this kind of work
   flow only by requiring to stick clumsy 'inert' or 'hold' arguments
   onto expressions, by default always 'simplifying' every input to

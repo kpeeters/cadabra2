@@ -1,0 +1,32 @@
+#!/bin/bash -e
+#
+# Courtesy of http://blog.gockelhut.com/2014/09/automatic-documentation-publishing-with.html
+
+# Settings
+REPO_PATH=git@github.com:kpeeters/cadabra2.git
+HTML_PATH=doxygen/html
+COMMIT_USER="Documentation Builder"
+COMMIT_EMAIL="kasper.peeters@phi-sci.com"
+CHANGESET=$(git rev-parse --verify HEAD)
+
+# Get a clean version of the HTML documentation repo.
+rm -rf ${HTML_PATH}
+mkdir -p ${HTML_PATH}
+git clone -b gh-pages "${REPO_PATH}" --single-branch ${HTML_PATH}
+
+# rm all the files through git to prevent stale files.
+cd ${HTML_PATH}
+git rm -rf .
+cd -
+
+# Generate the HTML documentation.
+doxygen
+
+# Create and commit the documentation repo.
+cd ${HTML_PATH}
+git add .
+git config user.name "${COMMIT_USER}"
+git config user.email "${COMMIT_EMAIL}"
+git commit -m "Automated documentation build for changeset ${CHANGESET}."
+git push origin gh-pages
+cd -

@@ -68,9 +68,19 @@ class DisplayTeX : public DisplayBase {
 		void print_equalitylike(std::ostream&, Ex::iterator);
 		void print_commutator(std::ostream& str, Ex::iterator it, bool comm);
 		void print_components(std::ostream&, Ex::iterator);
+		void print_conditional(std::ostream&, Ex::iterator);
+		void print_relation(std::ostream&, Ex::iterator);
 		void print_other(std::ostream& str, Ex::iterator it);
 
 		bool children_have_brackets(Ex::iterator ch) const;
+
+		/// Determine whether the indicated object 'obj', when acting on
+		/// the single argument 'arg', reads as an operator, and therefore
+		/// 'arg' does not need to be wrapped in brackets. 
+		/// Example: the tree \partial{A} can be displayed as '\partial A'
+		/// instead of '\partial(A)'. 
+	  
+		bool reads_as_operator(Ex::iterator obj, Ex::iterator arg) const;
 };
 
 const char *unichar(kunichar c);

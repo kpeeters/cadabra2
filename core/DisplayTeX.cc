@@ -2,6 +2,7 @@
 #include "DisplayTeX.hh"
 #include "Algorithm.hh"
 #include "properties/LaTeXForm.hh"
+#include "properties/Derivative.hh"
 #include "properties/Accent.hh"
 
 #define nbsp   " "
@@ -35,6 +36,17 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	else {
 		if(*it->name=="\\sum")  return true;
 		if(*it->name=="\\prod") return true;
+		}
+	return false;
+	}
+
+bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
+	{
+	const Derivative *der=kernel.properties.get<Derivative>(obj);
+	if(der) {
+		// FIXME: this needs fine-tuning; there are more cases where
+		// no brackets are needed.
+		if((*arg->name).size()==1) return true;
 		}
 	return false;
 	}
@@ -115,9 +127,14 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		str_node::parent_rel_t current_parent_rel_=(*ch).fl.parent_rel;
 		const Accent *is_accent=kernel.properties.get<Accent>(it);
 		
+		bool function_bracket_needed=true;
+		if(current_bracket_==str_node::b_none)
+			function_bracket_needed=!reads_as_operator(it, ch);
+
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
-			if(is_accent==0) 
+
+			if(is_accent==0 && function_bracket_needed) 
 				print_opening_bracket(str, (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ &&
 													 current_parent_rel_!=str_node::p_sub && 
 													 current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
@@ -130,7 +147,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 
 		++ch;
 		if(ch==tree.end(it) || current_bracket_!=str_node::b_none || current_bracket_!=(*ch).fl.bracket || current_parent_rel_!=(*ch).fl.parent_rel) {
-			if(is_accent==0) 
+			if(is_accent==0 && function_bracket_needed) 
 				print_closing_bracket(str,  (number_of_nonindex_children>1 /* &&number_of_index_children>0 */ && 
 													  current_parent_rel_!=str_node::p_sub && 
 													  current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_), 
@@ -208,6 +225,7 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 		case str_node::p_property: str << "$"; break;
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
+		case str_node::p_components: break;
 		}
 	// Prevent line break after this character.
 	str << zwnbsp;
@@ -226,6 +244,8 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\components")     print_components(str, it);
+	else if(*it->name=="\\conditional")    print_conditional(str, it);
+	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else                                   print_other(str, it);
 	}
 
@@ -369,8 +389,10 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
-	str << "\\, {\\rm d}";
-	dispatch(str, sib);
+	if(tree.is_valid(sib)) {
+		str << "\\, {\\rm d}";
+		dispatch(str, sib);
+		}
 	}
 
 void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
@@ -428,6 +450,25 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 		++sib;
 		}
 	str << "\\end{aligned}\n";
+	}
+
+void DisplayTeX::print_conditional(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	dispatch(str, sib);
+	str << "\\quad\\text{with}\\quad{}";
+	++sib;
+	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_relation(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	dispatch(str, sib);
+	if(*it->name=="\\greater") str << " > ";
+	if(*it->name=="\\less")    str << " < ";
+	++sib;
+	dispatch(str, sib);
 	}
 
 bool DisplayTeX::children_have_brackets(Ex::iterator ch) const

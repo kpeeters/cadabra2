@@ -51,10 +51,10 @@ DataCell::DataCell(const DataCell& other)
 	serial_number = other.serial_number;
 	}
 
-std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding)
+std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::string title)
 	{
 	std::ostringstream str;
-	HTML_recurse(doc, doc.begin(), str, for_embedding);
+	HTML_recurse(doc, doc.begin(), str, for_embedding, title);
 
 	return str.str();
 	}
@@ -113,7 +113,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 	return res;
 	}
 
-void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, bool for_embedding)
+void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, bool for_embedding,
+									std::string title)
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
@@ -202,7 +203,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			else {
 				str << "{% endraw %}\n"
 					 << "{%- endblock %}\n"
-					 << "{% block title %}Cadabra manual{% endblock %}\n";
+					 << "{% block title %}" << title << "{% endblock %}\n";
 				}
 			break;
 		case DataCell::CellType::python:
@@ -444,6 +445,10 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::document:
 			str << "\\documentclass[11pt]{article}\n"
 				 << "\\usepackage{amsmath}\n"
+				 << "\\usepackage{amssymb}\n"
+				 << "\\usepackage{inconsolata}\n"
+				 << "\\usepackage{color}\n"
+				 << "\\usepackage{tableaux}\n"
 				 << "\\usepackage{breqn}\n"
 				 << "\\begin{document}\n";
 			break;

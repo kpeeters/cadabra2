@@ -1,24 +1,22 @@
 
-#include "PythonCdb.hh"
+#include <memory>
 
 // make boost::python understand std::shared_ptr when compiled with clang.
 // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
 
 // This now works on both Linux and OS X El Capitan, but your mileage may vary. 
 //
-#if (defined(__clang__) && defined(__linux__)) || defined(__GNUG__)
-#ifdef __GNUG__
+#if (defined(__clang__) && defined(__linux__)) 
 namespace boost {
-#endif
-template<typename T>
-T *get_pointer(std::shared_ptr<T> p)
+   template<typename T>
+   T *get_pointer(std::shared_ptr<T> p)
 		{
 		return p.get();
 		}
-#ifdef __GNUG__
-}
-  #endif
+   }
 #endif
+
+#include "PythonCdb.hh"
 
 #include "Parser.hh"
 #include "Exceptions.hh"
@@ -71,6 +69,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/InverseMetric.hh"
 #include "properties/KroneckerDelta.hh"
 #include "properties/LaTeXForm.hh"
+#include "properties/Matrix.hh"
 #include "properties/Metric.hh"
 #include "properties/NonCommuting.hh"
 #include "properties/NumericalFlat.hh"
@@ -82,6 +81,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "properties/SelfNonCommuting.hh"
 #include "properties/SortOrder.hh"
 #include "properties/Spinor.hh"
+#include "properties/Symbol.hh"
 #include "properties/Symmetric.hh"
 #include "properties/Tableau.hh"
 #include "properties/TableauSymmetry.hh"
@@ -106,6 +106,7 @@ T *get_pointer(std::shared_ptr<T> p)
 #include "algorithms/factor_in.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
+#include "algorithms/integrate_by_parts.hh"
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
 #include "algorithms/lr_tensor.hh"
@@ -414,6 +415,11 @@ boost::python::list list_properties()
 	return ret;
 	}
 
+//boost::python::list indices() 
+//	{
+//	Kernel *kernel=get_kernel_from_scope();
+//	}
+
 // Debug function to display an expression in tree form.
 
 std::string print_tree(Ex *ex)
@@ -556,6 +562,8 @@ void inject_defaults(Kernel *k)
 
 	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}"), 0);
 
+	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\int{#}"), 0);
+
 	// Accents, necessary for proper display.
 	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}"), 0);
 	inject_property(k, new Accent(),             make_Ex_from_string("\\bar{#}"), 0);
@@ -646,7 +654,6 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
 		if(*it->name=="\\equals") 
 			it=ex.child(it,1);
-		ex.reset_state();
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 		call_post_process(ex);
 		}
@@ -893,9 +900,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__eq__",   &__eq__Ex_Ex)
 		.def("__eq__",   &__eq__Ex_int)
 		.def("__sympy__",  &Ex_to_Sympy)
-		.def("state",    &Ex::state);
+		.def("state",    &Ex::state)
+		.def("reset",    &Ex::reset_state)
+		.def("changed",  &Ex::changed_state);
 	
 	enum_<Algorithm::result_t>("result_t")
+		.value("checkpointed", Algorithm::result_t::l_checkpointed)
 		.value("changed", Algorithm::result_t::l_applied)
 		.value("unchanged", Algorithm::result_t::l_no_action)
 		.value("error", Algorithm::result_t::l_error)
@@ -944,6 +954,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	def("complete", &dispatch_ex<complete, Ex&>, 
 		 (arg("ex"),arg("add"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex&>, 
+		 (arg("ex"),arg("away_from"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
@@ -1071,6 +1086,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<InverseMetric>();
 	def_prop<KroneckerDelta>();
 	def_prop<LaTeXForm>();
+	def_prop<Matrix>();
 	def_prop<Metric>();
 	def_prop<NonCommuting>();
 	def_prop<NumericalFlat>();
@@ -1082,6 +1098,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<SelfNonCommuting>();
 	def_prop<SortOrder>();
 	def_prop<Spinor>();
+	def_prop<Symbol>();
 	def_prop<Symmetric>();
 	def_prop<Tableau>();
 	def_prop<TableauSymmetry>();
@@ -1094,6 +1111,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
 	register_exception_translator<NonScalarException>(&translate_NonScalarException);
 	register_exception_translator<InternalError>(&translate_InternalError);
+	
+
+#if BOOST_VERSION >= 106000
+	boost::python::register_ptr_to_python<std::shared_ptr<Ex> >();
+	//	boost::python::register_ptr_to_python<std::shared_ptr<Property> >();
+#endif	
 
 	// How can we give Python access to information stored in properties?
 	}

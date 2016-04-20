@@ -98,7 +98,15 @@ void Ex::update_state(Ex::result_t newstate)
 
 void Ex::reset_state() 
 	{
-	state_=Ex::result_t::l_no_action;
+	state_=Ex::result_t::l_checkpointed;
+	}
+
+bool Ex::changed_state()
+	{
+	bool ret=false;
+	if(state_==result_t::l_checkpointed || state_==result_t::l_applied) ret=true;
+	state_=result_t::l_no_action;
+	return ret;
 	}
 
 std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it) 

@@ -486,7 +486,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// if we want that a found _{z} also leads to a replacement for ^{z},
 			// this needs to be added to the replacement map explicitly.
 
-			std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
+			// std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
@@ -602,9 +602,11 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	}
 
 
-Ex_comparator::match_t Ex_comparator::match_subproduct(Ex::sibling_iterator lhs, 
-																					  Ex::sibling_iterator tofind, 
-																					  Ex::sibling_iterator st)
+Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr, 
+																		 Ex::sibling_iterator lhs, 
+																		 Ex::sibling_iterator tofind, 
+																		 Ex::sibling_iterator st,
+																		 Ex::iterator conditions)
 	{
 	replacement_map_t         backup_replacements(replacement_map);
 	subtree_replacement_map_t backup_subtree_replacements(subtree_replacement_map);
@@ -645,7 +647,7 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(Ex::sibling_iterator lhs,
 					Ex::sibling_iterator nxt=tofind; 
 					++nxt;
 					if(nxt!=lhs.end()) {
-						match_t res=match_subproduct(lhs, nxt, st);
+						match_t res=match_subproduct(tr, lhs, nxt, st, conditions);
 						if(res==subtree_match) return res;
 						else {
 //						txtout << tofind.node << "found factor useless " << start.node << std::endl;
@@ -655,7 +657,20 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(Ex::sibling_iterator lhs,
 							subtree_replacement_map=backup_subtree_replacements;
 							}
 						}
-					else return subtree_match;
+					else {
+						// Found all factors in sub-product, now check the conditions.
+						std::string error;
+						if(conditions==tr.end()) return subtree_match;
+						if(satisfies_conditions(conditions, error)) {
+							return subtree_match;
+							}
+						else {
+							factor_locations.pop_back();
+							factor_moving_signs.pop_back();
+							replacement_map=backup_replacements;
+							subtree_replacement_map=backup_subtree_replacements;
+							}
+						}
 					}
 				}
 			else {
@@ -968,6 +983,53 @@ bool Ex_comparator::satisfies_conditions(Ex::iterator conditions, std::string& e
 			if(tree_exact_equal(&properties, replacement_map[Ex(lhs)], replacement_map[Ex(rhs)])) {
 				return false;
 				}
+			}
+		else if(*cond->name=="\\greater" || *cond->name=="\\less") {
+			Ex::sibling_iterator lhs=cond.begin();
+			Ex::sibling_iterator rhs=lhs;
+			++rhs;
+
+			multiplier_t mlhs;
+			if(lhs->is_rational()==false) {
+				auto fnd=replacement_map.find(Ex(lhs));
+				if(fnd!=replacement_map.end()) {
+					auto tn=fnd->second.begin();
+					if(tn->is_rational())
+						mlhs=*tn->multiplier;
+					else {
+						error="Replacement not numerical.";
+						return false;
+						}
+					}
+				else { 
+					error="Can only compare objects which evaluate to numbers.";
+					return false;
+					}
+				}
+			else mlhs=*lhs->multiplier;
+
+			// FIXME: abstract into Storage
+			multiplier_t mrhs;
+			if(rhs->is_rational()==false) {
+				auto fnd=replacement_map.find(Ex(rhs));
+				if(fnd!=replacement_map.end()) {
+					auto tn=fnd->second.begin();
+					if(tn->is_rational())
+						mrhs=*tn->multiplier;
+					else { 
+						error="Replacement not numerical.";
+						return false;
+						}
+					}
+				else { 
+					error="Can only compare objects which evaluate to numbers.";
+					return false;
+					}
+				}
+			else mrhs=*rhs->multiplier;
+
+			if(*cond->name=="\\greater" && mlhs <= mrhs) return false;
+			if(*cond->name=="\\less"    && mlhs >= mrhs) return false;
 			}
 		else if(*cond->name=="\\indexpairs") {
 			int countpairs=0;
