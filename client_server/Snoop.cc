@@ -91,7 +91,6 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			const char *homedir = pw->pw_dir;
 			std::string logdir = homedir+std::string("/.log");
 			mkdir(logdir.c_str(), 0700);
-			std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
 			}
 		

@@ -53,7 +53,13 @@ namespace cadabra {
 
 			/// Setup an empty new document with a single Python input cell.
 
-         void         new_document();
+         void new_document();
+
+			/// Load a new notebook from a JSON string. Should only be called
+			/// from the GUI thread. Will cancel any pending operations on the
+			/// existing notebook (if present) first.
+
+			void load_from_string(const std::string&);
 
 			/// Action objects are allowed to modify the DTree document doc,
 			/// since they essentially contain code which is part of the 
@@ -65,7 +71,7 @@ namespace cadabra {
          // FIXME: add other actions.
 	
 			bool is_registered() const;
-			void set_email(const std::string&);
+			void set_user_details(const std::string&, const std::string&, const std::string&);
 		protected:
          GUIBase       *gui;
          ComputeThread *compute;

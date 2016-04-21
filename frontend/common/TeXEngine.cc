@@ -92,6 +92,8 @@ TeXEngine::~TeXEngine()
 TeXEngine::TeXEngine()
 	: horizontal_pixels_(800), font_size_(12), scale_(1.0)
 	{
+	latex_packages.push_back("breqn");
+	latex_packages.push_back("hyperref");
 	}
 
 void TeXEngine::set_geometry(int horpix)
@@ -252,14 +254,12 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			<< horizontal_mm << "mm,textheight="
 			<< vertical_mm << "mm]{geometry}\n"
 #ifndef __APPLE__
-			<< "\\usepackage{inconsolata}\n"
+	  //			<< "\\usepackage{inconsolata}\n"
 #endif
 			<< "\\usepackage{amsmath}\n"
 			<< "\\usepackage{color}\\usepackage{amssymb}\n"
 	      << "\\usepackage[parfill]{parskip}\n"
-#ifndef __APPLE__
-	      << "\\usepackage{tableaux}"
-#endif
+  	      << "\\usepackage{tableaux}"
 	      << "\n";
 
 	for(size_t i=0; i<latex_packages.size(); ++i)
@@ -340,6 +340,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 //		std::cout << "TeX file in " << std::string(templ)+".tex" << std::endl;
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
+		erase_file(std::string(templ)+".out");
 #ifdef DEBUG		
 		std::cerr << result << std::endl;
 #endif
@@ -363,6 +364,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		erase_file(std::string(templ)+".dvi");
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
+		erase_file(std::string(templ)+".out");
 		
 		std::string latex_err=handle_latex_errors(result, latex_proc.exit_code());
 		reqit=reqs.begin();
