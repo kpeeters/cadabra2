@@ -739,7 +739,12 @@ def test48():
 test48()
 
 def test49():
-A_{m? n?}::AntiSymmetric.
-ex:=A_{4 m} + A_{m 4};
-canonicalise(_);
+   __cdbkernel__=create_scope()
+   A_{m? n?}::AntiSymmetric.
+   ex:=A_{4 m} + A_{m 4};
+   canonicalise(_);
+   assert(ex==0)
+
+test49()
+
 
