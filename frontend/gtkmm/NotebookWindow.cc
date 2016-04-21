@@ -246,13 +246,14 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	if(cfg->width != last_configure_width) {
 		last_configure_width = cfg->width;
 		try {
+			std::cerr << "running TeX" << std::endl;
 			engine.invalidate_all();
 			engine.convert_all();
 			for(unsigned int i=0; i<canvasses.size(); ++i) 
 				canvasses[i]->refresh_all();
 			}
 		catch(TeXEngine::TeXException& ex) {
-			std::cerr << "TeX exception" << std::endl;
+			on_tex_error(ex.what(), doc.end());
 			}
 		}
 
@@ -822,12 +823,6 @@ void NotebookWindow::load_file(const std::string& notebook_contents)
 	{
 	load_from_string(notebook_contents);
 
-	try {
-		engine.convert_all();
-		}
-	catch(TeXEngine::TeXException& ex) {
-		std::cerr << "TeX exception: " << ex.what() << std::endl;
-		}
 	mainbox.show_all();
 	modified=false;
 	update_title();

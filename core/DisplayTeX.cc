@@ -349,10 +349,12 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	while(ch!=tree.end(it)) {
-		if(++steps==20) {
-			steps=0;
+		if(ch!=tree.begin(it))
 			str << "%\n"; // prevent LaTeX overflow.
-			}
+//		if(++steps==5) {
+//			steps=0;
+//			str << "%\n"; // prevent LaTeX overflow.
+//			}
 		if(*ch->multiplier>=0 && ch!=tree.begin(it))
 			str << "+"; 
 
