@@ -5,7 +5,7 @@
 #include <mutex>
 
 #include "tree.hh"
-#include <json/json.h>
+#include "json/json.h"
 
 namespace cadabra {
 
