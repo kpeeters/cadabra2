@@ -51,6 +51,11 @@ std::string TeXEngine::handle_latex_errors(const std::string& result, int exit_c
 		 return "Output cell too large (TeX capacity exceeded), output suppressed.";
 		 }
 	
+	pos=result.find("! Dimension too large");
+	if(pos != std::string::npos) {
+		 return "Output cell too large (breqn dimension too large), output suppressed.";
+		 }
+	
 	pos=result.find("! Double superscript.");
 	if(pos != std::string::npos) {
 		return "Internal typesetting error: double superscript. Please report a bug.\n\n" + result;
@@ -293,7 +298,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		}
 	total << "\\end{document}\n";
 
-
 	// Now write the 'total' buffer to the .tex file
 
 //	std::cerr << total.str() << std::endl;
@@ -336,8 +340,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 		latex_proc.close();
 
-		erase_file(std::string(templ)+".tex");
-//		std::cout << "TeX file in " << std::string(templ)+".tex" << std::endl;
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
 		erase_file(std::string(templ)+".out");
@@ -353,14 +355,18 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 				(*reqit++)->needs_generating=false;
 			 erase_file(std::string(templ)+".dvi");
 			 if(chdir(olddir)==-1)
-				 throw TeXException(err+" (and cannot chdir back to original "+olddir+")");
+				 throw TeXException(err+" (and cannot chdir back to original "+olddir+").");
+			 else err+=".";
+			 err += " See "+std::string(templ)+".tex to debug this.";
 			 throw TeXException(err); 
-			 }
-	}
+			}
+		erase_file(std::string(templ)+".tex");
+		}
 	catch(std::exception& err) {
+		std::cerr << "cadabra-client: Exception running LaTeX." << std::endl;
 		latex_proc.close();
 
-		erase_file(std::string(templ)+".tex");
+		// erase_file(std::string(templ)+".tex");
 		erase_file(std::string(templ)+".dvi");
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
@@ -373,7 +379,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 		if(latex_err.size()>0) {
 			 if(chdir(olddir)==-1)
-				 throw TeXException(latex_err+" (and cannot chdir back to original "+olddir+")");
+				 throw TeXException(latex_err+" (and cannot chdir back to original "+olddir+"). ");
+			 latex_err += " See "+std::string(templ)+".tex to debug this.";
 			 throw TeXException(latex_err); 
 			 }
 
