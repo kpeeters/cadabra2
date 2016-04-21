@@ -10,7 +10,7 @@
 /** \mainpage tree.hh
     \author   Kasper Peeters
     \version  3.5
-    \date     12-Apr-2017
+    \date     12-Apr-2016
     \see      http://tree.phi-sci.com/
     \see      http://tree.phi-sci.com/ChangeLog
 

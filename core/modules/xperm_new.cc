@@ -1037,7 +1037,7 @@ void schreier_sims_step(int *base, int bl, int *GS, int m, int n,
 
 	/* Declarations */
 	/* Counters */
-	int c, j, jj, level;
+	int c, j=0, jj, level;
 	/* Intermediate permutations */
 	int *p=   (int*)malloc(n*sizeof(int));
 	int *ip=  (int*)malloc(n*sizeof(int));
