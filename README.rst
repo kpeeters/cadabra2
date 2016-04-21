@@ -35,19 +35,33 @@ Linux (Debian/Ubuntu/Mint)
 
 On Debian/Ubuntu you can install all that is needed with::
 
-    sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev
-    sudo apt-get install libgtkmm-3.0-dev libjsoncpp-dev libboost-all-dev libgmp-dev
-    sudo apt-get install python-sympy libsqlite3-dev texlive python-matplotlib python-mpmath
-    sudo apt-get install doxygen libjs-mathjax  
-    sudo apt-get install libsqlite3-dev uuid-dev
-
-The configuration script will warn you if dependencies are missing. 
-In order to actually be able to run the Cadabra notebook frontend, you
-then also need::
-
+    sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
+    sudo apt-get install libgtkmm-3.0-dev libboost-all-dev libgmp-dev
+    sudo apt-get install python-sympy libsqlite3-dev uuid-dev
     sudo apt-get install texlive texlive-latex-extra python-matplotlib python-mpmath dvipng
 
-but most likely you have a TeX installation already. 
+The configuration script will warn you if dependencies are missing. 
+To build the documentation locally, you need::
+
+    sudo apt-get install doxygen libjs-mathjax  
+
+This is the development platform and issues are typically first fixed
+here. You can use either g++ or the clang++ compiler.
+
+
+Linux (Fedora/CentOS/Scientific Linux)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+On Fedora/CentOS/Scientific Linux you can install the dependencies with::
+
+    sudo yum install cmake gcc-c++ python-devel pcre-devel gmp-devel
+    sudo yum install libuuid-devel sqlite-devel
+    sudo yum install gtkmm30-devel boost-devel 
+    sudo yum install texlive python-matplotlib
+
+This platform receives less testing so please get in touch if you run
+into any issues. You can use either g++ or the clang++ compiler.
+
 
 
 Linux (Fedora/CentOS/Scientific Linux)
@@ -71,31 +85,38 @@ Scientific Linux.
 OS X
 ~~~~
 
-Support for OS X is experimental right now, and while there is a
-beginning of a native notebook interface, this does **not** work
-yet. You can build the Gtk notebook interface, but this is suboptimal.
-The command line version is fully functional.
-
 In order to build on OS X you need a number of packages from Homebrew
 (see http://brew.sh).  Install these packages with::
 
-    brew install cmake boost boost-python pcre gmp jsoncpp python 
-    brew install pkgconfig ossp-uuid gtkmm3 gnome-icon-theme
+    brew install cmake boost boost-python pcre gmp python 
+    brew install pkgconfig ossp-uuid 
+    brew install gtkmm3 adwaita-icon-theme
 
-If this prompts you to install XCode, go ahead and let it do that.
+If this prompts you to install XCode, go ahead and let it do
+that. Cadabra builds with the standard Apple compiler.
 
-In order to run the Cadabra notebook interface succesfully, you also
-need a TeX installation such as MacTeX, http://tug.org/mactex/ .
-*Any* TeX will do, as long as 'latex' and 'dvipng' are available, and
-the 'breqn' package is installed. 
+You also need a TeX installation such as MacTeX,
+http://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and
+'dvipng' are available, and the 'breqn' package is installed. Make
+sure to *install TeX* before attempting to build Cadabra, otherwise
+the Cadabra style files will not be installed in the appropriate
+place. Make sure 'latex' works from the terminal in which you will
+build Cadabra.
 
+With the above packages, you will build the Gtk interface for Cadabra.
+I am still planning a native OS X interface, but because building the
+Gtk interface is so easy and the result looks relatively decent, this
+may take a while (definitely until after 2.0 has been released).
+
+Feedback from OS X users is *very* welcome because this is not my main
+development platform.
 
 
 Installation instructions
 -------------------------
 
 Once you have the required prerequisites installed, you can build 
-Cadabra using the standard::
+Cadabra, on all supported platforms, using the standard::
 
     mkdir build
     cd build
@@ -105,7 +126,7 @@ Cadabra using the standard::
 This will build all binaries relevant for your platform. You will get 
 warned when dependencies are missing. Use::
 
-    make install
+    sudo make install
 
 to install the software. The notebook interface is started with::
 
@@ -114,6 +135,8 @@ to install the software. The notebook interface is started with::
 while the command-line version is called::
 
     cadabra2
+
+
 
 Tutorials and other help
 ------------------------

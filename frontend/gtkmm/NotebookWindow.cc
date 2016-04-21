@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "Actions.hh"
+#include "Config.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
 #include <gtkmm/box.h>
@@ -8,6 +9,9 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/aboutdialog.h>
 #include <fstream>
+#if GTKMM_MINOR_VERSION < 10
+#include <gtkmm/main.h>
+#endif
 
 using namespace cadabra;
 
@@ -28,8 +32,6 @@ NotebookWindow::NotebookWindow()
 	settings = Gio::Settings::create((strcmp(std::getenv("DESKTOP_SESSION"), "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
 	scale = settings->get_double("text-scaling-factor");
 #endif
-	engine.latex_packages.push_back("breqn");
-	engine.latex_packages.push_back("hyperref");
 	engine.set_scale(scale);
 
 #ifndef __APPLE__
@@ -41,9 +43,11 @@ NotebookWindow::NotebookWindow()
 	// to use 'padding'. However, 'padding-top' fails because it does not make the
    // widget larger enough... So we still do that with set_margin_top(...).
 	css_provider = Gtk::CssProvider::create();
-	Glib::ustring data = "GtkTextView { color: blue; padding-left: 20px; }\n";
-	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.1; }\nGtkTextView:selected { background: grey; }\n";
-	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n#ImageView:hover { background: red; }\n";
+	// padding-left: 20px; does not work on some versions of gtk, so we use margin in CodeInput
+	Glib::ustring data = "GtkTextView { color: blue;  }\n";
+	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "*:focused { background-color: #eee; }\n";
+	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
 
 	if(!css_provider->load_from_data(data)) {
 		throw std::logic_error("Failed to parse widget CSS information.");
@@ -342,6 +346,7 @@ void NotebookWindow::process_todo_queue()
 
 	if(kernel_string=="not connected") {
 		Gtk::MessageDialog md("Kernel crashed", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+		md.set_transient_for(*this);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
 		md.run();
@@ -413,8 +418,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			case DataCell::CellType::verbatim: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
-				if(it->cell_type==DataCell::CellType::error) 
-					std::cerr << "error cell" << std::endl;
+				//if(it->cell_type==DataCell::CellType::error) 
+				//   std::cerr << "error cell" << std::endl;
 				newcell.outbox = manage( new TeXView(engine, it) );
 				w=newcell.outbox;
 				break;
@@ -584,7 +589,8 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
-	// std::cout << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
+//	if(it==doc.end()) return;
+//	std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
 	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
@@ -621,7 +627,7 @@ void NotebookWindow::scroll_into_view(DTree::iterator it)
 		}
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
-	std::cerr << "Scrolling into view " << it->textbuf << std::endl;
+	// std::cerr << "Scrolling into view " << it->textbuf << std::endl;
 
 	// Grab widgets focus, which will scroll it into view. If the widget has not yet
 	// had its size and position allocated, we need to setup a signal handler which
@@ -629,7 +635,7 @@ void NotebookWindow::scroll_into_view(DTree::iterator it)
 
 	Gtk::Allocation alloc=target.inbox->get_allocation();
 	if(alloc.get_y()!=-1) {
-		std::cerr << "grabbing focus" << std::endl;
+		// std::cerr << "grabbing focus" << std::endl;
 		target.inbox->edit.grab_focus();
 		}
 	else {
@@ -710,6 +716,7 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	{
 	current_cell=it;
 	current_canvas=canvas_number;
+
 	return false;
 	}
 
@@ -755,6 +762,7 @@ bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 	{
 	Gtk::MessageDialog md("TeX error", false, Gtk::MESSAGE_WARNING, 
 								 Gtk::BUTTONS_OK, true);
+	md.set_transient_for(*this);
 	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 	md.set_secondary_text(str);
 	md.run();
@@ -812,10 +820,8 @@ void NotebookWindow::set_name(const std::string& n)
 
 void NotebookWindow::load_file(const std::string& notebook_contents)
 	{
-	doc.clear();
-	JSON_deserialise(notebook_contents, doc);
-	remove_all_cells();
-	build_visual_representation();
+	load_from_string(notebook_contents);
+
 	try {
 		engine.convert_all();
 		}
@@ -834,6 +840,7 @@ void NotebookWindow::on_file_save()
 		std::string res=save(name);
 		if(res.size()>0) {
 			Gtk::MessageDialog md("Error saving notebook "+name);
+			md.set_transient_for(*this);
 			md.set_secondary_text(res);
 			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 			md.run();
@@ -863,6 +870,7 @@ void NotebookWindow::on_file_save_as()
 			std::string res=save(name);
 			if(res.size()>0) {
 				Gtk::MessageDialog md("Error saving notebook "+name);
+				md.set_transient_for(*this);
 				md.set_secondary_text(res);
 				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 				md.run();
@@ -978,6 +986,7 @@ bool NotebookWindow::quit_safeguard(bool quit)
 			}
 		Gtk::MessageDialog md(mes, false, Gtk::MESSAGE_WARNING, 
 									 Gtk::BUTTONS_NONE, true);
+		md.set_transient_for(*this);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.add_button("Save before continuing",1);
 		md.add_button("Cancel",2);
@@ -1003,11 +1012,12 @@ bool NotebookWindow::quit_safeguard(bool quit)
 
 void NotebookWindow::on_file_quit()
 	{
-	close();
+	hide();
 	}
 
 void NotebookWindow::on_edit_undo()
 	{
+	// FIXME: to be implemented
 	}
 
 void NotebookWindow::on_edit_insert_above()
@@ -1130,43 +1140,27 @@ void NotebookWindow::on_kernel_restart()
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file("/usr/local/share/cadabra2/images/cadabra.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra.png");
 
 	Gtk::AboutDialog about;
+	about.set_transient_for(*this);
 	about.set_program_name("Cadabra");
 	about.set_comments("A field-theory motivated approach to computer algebra");
-	about.set_version("Version 2.0 (preview release)");
+	about.set_version("Version "+std::to_string(CADABRA_VERSION_MAJOR)+"."+std::to_string(CADABRA_VERSION_MINOR)
+							+" (build "+std::string(CADABRA_VERSION_BUILD)+")");
 	std::vector<Glib::ustring> authors;
 	authors.push_back("Kasper Peeters");
 	about.set_authors(authors);
-	about.set_copyright("\xC2\xA9 2006-2016 Kasper Peeters");
+	about.set_copyright(std::string("\xC2\xA9 ")+COPYRIGHT_YEARS+std::string(" Kasper Peeters"));
 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
 	about.set_website("http://cadabra.science");
 	about.set_website_label("cadabra.science");
 	about.set_logo(logo);
+	std::vector<Glib::ustring> special;
+	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
+	about.add_credit_section("Special thanks", special);
 	about.run();
 	}
-
-// void NotebookWindow::on_help_notebook()
-// 	{
-// 	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file("/usr/local/share/cadabra2/images/cadabra.png");
-// 
-// 	Gtk::MessageDialog notebook;
-// 	notebook.set_image(logo);
-// 	notebook.set_message("In order to evaluate a cell, press CTRL-Enter\n
-// 	about.set_program_name("Cadabra");
-// 	about.set_comments("A field-theory motivated approach to computer algebra");
-// 	about.set_version("Version 2.0 (preview release)");
-// 	std::vector<Glib::ustring> authors;
-// 	authors.push_back("Kasper Peeters");
-// 	about.set_authors(authors);
-// 	about.set_copyright("\xC2\xA9 2006-2016 Kasper Peeters");
-// 	about.set_license_type(Gtk::License::LICENSE_GPL_3_0);
-// 	about.set_website("http://cadabra.science");
-// 	about.set_website_label("cadabra.science");
-// 	about.set_logo(logo);
-// 	about.run();
-// 	}
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{

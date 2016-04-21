@@ -25,7 +25,7 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	std::string parent=*tree.parent(it)->name;
 	std::string child =*it->name;
 
-	if(parent=="\\partial" && child=="\\sum") return true;
+	if(parent=="\\partial" && child=="\\sum") return false; // Always handled by the functional argument. Was: true;
 
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
@@ -186,13 +186,13 @@ void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br
 	{
 	switch(br) {
 		case str_node::b_none:
-			if(pr==str_node::p_none)     str << "(";
+			if(pr==str_node::p_none)     str << "\\left(";
 			else                         str << "{";
 			break;
 		case str_node::b_pointy: str << "\\<"; break;
-		case str_node::b_curly:  str << "\\{"; break;
-		case str_node::b_round:  str << "(";   break;
-		case str_node::b_square: str << "[";   break;
+		case str_node::b_curly:  str << "\\left\\{"; break;
+		case str_node::b_round:  str << "\\left(";   break;
+		case str_node::b_square: str << "\\left[";   break;
 		default :	return;
 		}
 	++(bracket_level);
@@ -202,13 +202,13 @@ void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 	{
 	switch(br) {
 		case str_node::b_none:   
-			if(pr==str_node::p_none)     str << ")";
+			if(pr==str_node::p_none)     str << "\\right)";
 			else                         str << "}";
 			break;
 		case str_node::b_pointy: str << "\\>"; break;
-		case str_node::b_curly:  str << "\\}"; break;
-		case str_node::b_round:  str << ")";   break;
-		case str_node::b_square: str << "]";   break;
+		case str_node::b_curly:  str << "\\right\\}"; break;
+		case str_node::b_round:  str << "\\right)";   break;
+		case str_node::b_square: str << "\\right]";   break;
 		default :	return;
 		}
 	--(bracket_level);
