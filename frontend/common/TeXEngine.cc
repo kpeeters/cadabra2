@@ -1,6 +1,7 @@
 
 #include "TeXEngine.hh"
 
+#include <iostream>
 #include <boost/filesystem.hpp>
 #include "exec-stream.h"
 #include "lodepng.h"
