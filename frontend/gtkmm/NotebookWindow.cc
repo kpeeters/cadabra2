@@ -893,7 +893,7 @@ void NotebookWindow::on_file_export_html()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			name = dialog.get_filename();			
+			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc);
 			}
@@ -913,7 +913,7 @@ void NotebookWindow::on_file_export_latex()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			name = dialog.get_filename();			
+			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_LaTeX(doc);
 			}
@@ -934,7 +934,7 @@ void NotebookWindow::on_file_export_html_segment()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			name = dialog.get_filename();			
+			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc, true);
 			}
