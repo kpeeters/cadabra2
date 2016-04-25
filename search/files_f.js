@@ -34,6 +34,8 @@ var searchData=
   ['sym_2ehh',['sym.hh',['../sym_8hh.html',1,'']]],
   ['symbol_2ecc',['Symbol.cc',['../Symbol_8cc.html',1,'']]],
   ['symbol_2ehh',['Symbol.hh',['../Symbol_8hh.html',1,'']]],
+  ['symbols_2ecc',['Symbols.cc',['../Symbols_8cc.html',1,'']]],
+  ['symbols_2ehh',['Symbols.hh',['../Symbols_8hh.html',1,'']]],
   ['symmetric_2ecc',['Symmetric.cc',['../Symmetric_8cc.html',1,'']]],
   ['symmetric_2ehh',['Symmetric.hh',['../Symmetric_8hh.html',1,'']]],
   ['sympycdb_2ecc',['SympyCdb.cc',['../SympyCdb_8cc.html',1,'']]],

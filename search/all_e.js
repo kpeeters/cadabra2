@@ -35,8 +35,8 @@ var searchData=
   ['nonscalarexception',['NonScalarException',['../classNonScalarException.html',1,'NonScalarException'],['../classNonScalarException.html#a687a9e17be3536776b24639da3dcee03',1,'NonScalarException::NonScalarException()']]],
   ['nonscalarexceptiontype',['NonScalarExceptionType',['../PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b',1,'PythonCdb.cc']]],
   ['nonstandard_5floc',['nonstandard_loc',['../classyngtab_1_1filled__tableau.html#aa3caf7d2ec239278add64b836c39c995',1,'yngtab::filled_tableau']]],
-  ['notebookcanvas',['NotebookCanvas',['../classcadabra_1_1NotebookCanvas.html',1,'cadabra']]],
   ['notebookcanvas',['NotebookCanvas',['../classcadabra_1_1NotebookCanvas.html#a0169f785f06e4cc377f7d9096bcd1826',1,'cadabra::NotebookCanvas']]],
+  ['notebookcanvas',['NotebookCanvas',['../classcadabra_1_1NotebookCanvas.html',1,'cadabra']]],
   ['notebookcanvas_2ecc',['NotebookCanvas.cc',['../NotebookCanvas_8cc.html',1,'']]],
   ['notebookcanvas_2ehh',['NotebookCanvas.hh',['../gtkmm_2NotebookCanvas_8hh.html',1,'']]],
   ['notebookcanvas_2ehh',['NotebookCanvas.hh',['../osx_2Cadabra_2Cadabra_2NotebookCanvas_8hh.html',1,'']]],
@@ -57,6 +57,7 @@ var searchData=
   ['nt1',['nt1',['../classdecompose__product.html#a3c82e36a8f45df98cc447195595b033e',1,'decompose_product']]],
   ['nt2',['nt2',['../classdecompose__product.html#a803cd8262ff8afda443e3e5d57bc51f8',1,'decompose_product']]],
   ['nth_5findex_5fnode',['nth_index_node',['../classyoung__project.html#a9f176f49aa34f4217f981cfb23a32fcd',1,'young_project']]],
+  ['nu',['Nu',['../Symbols_8cc.html#aa6b24b60f7fb3bbe69179d6cde8d4dcf',1,'Nu():&#160;Symbols.cc'],['../Symbols_8cc.html#a361de67e57dcc9db7ff4b22eb7eed895',1,'nu():&#160;Symbols.cc']]],
   ['num1',['num1',['../classsplit__index.html#a801c0668f4809ed89ea0a38fd886cfaa',1,'split_index']]],
   ['num2',['num2',['../classsplit__index.html#afed1d4133e168ec2c9091cd44cbc806e',1,'split_index']]],
   ['num_5fto_5fit',['num_to_it',['../classtab__basics.html#a0517bf5085c01e6c6f969450d6676c3c',1,'tab_basics']]],
@@ -73,5 +74,5 @@ var searchData=
   ['numericalflat_2ehh',['NumericalFlat.hh',['../NumericalFlat_8hh.html',1,'']]],
   ['numtab_5ft',['numtab_t',['../classdecompose__product.html#a56e8d94bcadaed90d171395c769122a7',1,'decompose_product']]],
   ['numtabs_5ft',['numtabs_t',['../classdecompose__product.html#a718f954b04d33d445888a17984b16cf4',1,'decompose_product']]],
-  ['nw',['nw',['../classCadabra.html#ae95a91a3f53259d4d031207e32f725a2',1,'Cadabra::nw()'],['../NotebookController_8mm.html#afa6d29aef4b1129445a04c29350a17d5',1,'nw():&#160;NotebookController.mm']]]
+  ['nw',['nw',['../classCadabra.html#ae95a91a3f53259d4d031207e32f725a2',1,'Cadabra']]]
 ];

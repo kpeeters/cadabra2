@@ -211,11 +211,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a64a5521d7ebd2cc0ad62bb167898746b">to_std_vector</a> (const boost::python::list &amp;iterable)</td></tr>
 <tr class="separator:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86bfaf24d5885916ad8ccfe7fa848a8e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a86bfaf24d5885916ad8ccfe7fa848a8e">Ex_str_</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
-<tr class="memdesc:a86bfaf24d5885916ad8ccfe7fa848a8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() representation of the <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object.  <a href="#a86bfaf24d5885916ad8ccfe7fa848a8e">More...</a><br/></td></tr>
-<tr class="separator:a86bfaf24d5885916ad8ccfe7fa848a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1bc9eebc9b625fedbec0f6bb3b196db"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ad1bc9eebc9b625fedbec0f6bb3b196db">Ex_latex_</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
-<tr class="separator:ad1bc9eebc9b625fedbec0f6bb3b196db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaac8ee218579ca3faa6c1cec2c7d3c69"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69">Ex_str_</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:gaaac8ee218579ca3faa6c1cec2c7d3c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() and repr() representation of the <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object.  <a href="group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69">More...</a><br/></td></tr>
+<tr class="separator:gaaac8ee218579ca3faa6c1cec2c7d3c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab572cc13efaa1f95af984b68ed478b12"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gab572cc13efaa1f95af984b68ed478b12">Ex_latex_</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:gab572cc13efaa1f95af984b68ed478b12"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Python 'print' function always calls the 'str' member on objects to be printed.  <a href="group__pythoncore.html#gab572cc13efaa1f95af984b68ed478b12">More...</a><br/></td></tr>
+<tr class="separator:gab572cc13efaa1f95af984b68ed478b12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa7280e0886f1ca4a1e7b9ea8149df36"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#afa7280e0886f1ca4a1e7b9ea8149df36">Ex_repr_</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
 <tr class="separator:afa7280e0886f1ca4a1e7b9ea8149df36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0960e91acaead99009ef7754dea30c9"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af0960e91acaead99009ef7754dea30c9">Ex_to_Sympy</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
@@ -713,22 +714,6 @@ template&lt;class F , typename... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad1bc9eebc9b625fedbec0f6bb3b196db"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Ex_latex_ </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>ex</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="afa7280e0886f1ca4a1e7b9ea8149df36"></a>
 <div class="memitem">
 <div class="memproto">
@@ -742,24 +727,6 @@ template&lt;class F , typename... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a86bfaf24d5885916ad8ccfe7fa848a8e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Ex_str_ </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>ex</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Generate the Python str() representation of the <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object. </p>
 
 </div>
 </div>
@@ -1056,7 +1023,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 21 2016 08:39:09 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Apr 25 2016 12:04:59 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

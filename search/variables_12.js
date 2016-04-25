@@ -18,6 +18,7 @@ var searchData=
   ['settings',['settings',['../classcadabra_1_1NotebookWindow.html#aec3e22d7901442003088a2e9f2a4c022',1,'cadabra::NotebookWindow']]],
   ['sh_5f',['sh_',['../classcombin_1_1symmetriser.html#a69c91829e3a1271dd1552cc2068994a1',1,'combin::symmetriser']]],
   ['show_5fhide_5frequested',['show_hide_requested',['../classcadabra_1_1TeXView.html#afab333d2a75b26586a8800074f872239',1,'cadabra::TeXView']]],
+  ['sigma',['sigma',['../Symbols_8cc.html#affc6d77f4c3b06c4a5736ae5fe2442fb',1,'sigma():&#160;Symbols.cc'],['../Symbols_8cc.html#a21f4a8dded771b8d4f3369996219f29c',1,'Sigma():&#160;Symbols.cc']]],
   ['sign',['sign',['../classsym.html#af65dfcdc7546e644fdbc439932818138',1,'sym']]],
   ['signal_5fwindow',['signal_window',['../Cadabra_8cc.html#a0616c791404c9966d3dcfb08e124376d',1,'Cadabra.cc']]],
   ['signature',['signature',['../classepsilon__to__delta.html#a641603bb919c2d3625e55f0d0b39f7c8',1,'epsilon_to_delta::signature()'],['../classInverseMetric.html#a429cc22b51774bbe3cad6af0aa2d47d3',1,'InverseMetric::signature()'],['../classMetric.html#aff34937849b8ca9d16e94ef14d7dd639',1,'Metric::signature()']]],

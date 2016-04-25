@@ -1,6 +1,7 @@
 var searchData=
 [
   ['k',['k',['../passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9',1,'passing.cc']]],
+  ['kappa',['Kappa',['../Symbols_8cc.html#a716787dafa0c18cd8de7e47e0c16855b',1,'Kappa():&#160;Symbols.cc'],['../Symbols_8cc.html#a53e114df0344d27442892fa07f8a3520',1,'kappa():&#160;Symbols.cc']]],
   ['keep_5fafter_5feval',['keep_after_eval',['../structstr__node_1_1flag__t.html#ab0bc9d5cfe540243349f5849d4fbce8c',1,'str_node::flag_t']]],
   ['kernel',['kernel',['../classAlgorithm.html#afd406affe9523cd45c702ac8b300eff8',1,'Algorithm::kernel()'],['../classDisplayBase.html#a5949681ce4ab0e05a08a611d09912cd9',1,'DisplayBase::kernel()'],['../classindexsort_1_1less__indexed__treenode.html#a667bb1ff45ab605b97215cea226309d0',1,'indexsort::less_indexed_treenode::kernel()']]],
   ['kernel_5flabel',['kernel_label',['../classcadabra_1_1NotebookWindow.html#a1033c2e9a567675e905d7c2c45e7465b',1,'cadabra::NotebookWindow']]],

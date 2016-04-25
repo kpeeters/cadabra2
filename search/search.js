@@ -12,7 +12,7 @@ var indexSectionsWithContent =
   2: "cesy",
   3: "acdefgijklmnoprstuvwy",
   4: "_abcdefghijklmnopqrstuvwyz~",
-  5: "_abcdefghijklmnoprstuvw",
+  5: "_abcdefghijklmnoprstuvwxz",
   6: "abcdefhikmnprstuvwy",
   7: "bcmoprsw",
   8: "abcdefilmnopstvw",

@@ -6,6 +6,7 @@ var searchData=
   ['actiongroup',['actiongroup',['../classcadabra_1_1NotebookWindow.html#af9a19947728a89151cf3922d6d109019',1,'cadabra::NotebookWindow']]],
   ['actionpositioncursor',['ActionPositionCursor',['../classcadabra_1_1DocumentThread.html#a653683b9882f455539df970a4f5a1698',1,'cadabra::DocumentThread']]],
   ['actionremovecell',['ActionRemoveCell',['../classcadabra_1_1DocumentThread.html#a79a7e9b8f7b23a244f816f3276b8ad83',1,'cadabra::DocumentThread']]],
+  ['alpha',['Alpha',['../Symbols_8cc.html#a25f5b9f61f6132e1e46c2859efe1cd90',1,'Alpha():&#160;Symbols.cc'],['../Symbols_8cc.html#af9760ca31a32b75163d32402eab4ece8',1,'alpha():&#160;Symbols.cc']]],
   ['anticomm',['anticomm',['../classorder.html#a4589707811f88460f56f2987ab1498b4',1,'order']]],
   ['app_5fname',['app_name',['../classsnoop_1_1Snoop_1_1AppEntry.html#afc18a25ba37504ac2f17b72ad5b08563',1,'snoop::Snoop::AppEntry']]],
   ['app_5fversion',['app_version',['../classsnoop_1_1Snoop_1_1AppEntry.html#aa50d4dc55d41c29429d931c3dc9dd125',1,'snoop::Snoop::AppEntry']]],

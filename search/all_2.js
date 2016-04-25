@@ -15,6 +15,7 @@ var searchData=
   ['begin',['begin',['../classindex__iterator.html#ab3599e1ec3408dc71bdffec77a59b89f',1,'index_iterator::begin()'],['../classkeyval__t.html#a53f79371d52c5173a767547db4b6e621',1,'keyval_t::begin()'],['../classyngtab_1_1filled__tableau.html#a2add517829e6336df6ddb30e5842d821',1,'yngtab::filled_tableau::begin()']]],
   ['begin_5fcolumn',['begin_column',['../classyngtab_1_1filled__tableau.html#a7b8e36a3d19d7040b503b00e180c7c71',1,'yngtab::filled_tableau']]],
   ['begin_5findex',['begin_index',['../classAlgorithm.html#ad68a0d802b88156b7f1b59ba64765101',1,'Algorithm']]],
+  ['beta',['Beta',['../Symbols_8cc.html#a60b19d333f6846fadc0f3ad25539dcbc',1,'Beta():&#160;Symbols.cc'],['../Symbols_8cc.html#a0eb89214dfd36a6e0459c4ac0c311c81',1,'beta():&#160;Symbols.cc']]],
   ['block',['Block',['../classServer_1_1Block.html',1,'Server']]],
   ['block',['Block',['../classServer_1_1Block.html#a74d144ff8fa17b5c2248a60232bede7b',1,'Server::Block']]],
   ['block_5favailable',['block_available',['../classServer.html#ade8da0024bd6a181acaac6b43b0b4dc7',1,'Server']]],

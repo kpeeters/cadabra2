@@ -3,6 +3,8 @@ var searchData=
   ['obj',['obj',['../classpattern.html#a85be6e9a06af01600a4cc8c018fee961',1,'pattern']]],
   ['objects',['objects',['../classorder.html#a42840c8b4f1043004964e543d70c473d',1,'order::objects()'],['../classsym.html#a9ef8f27313e140a1125a4355e0930f26',1,'sym::objects()']]],
   ['obtain_5fuuid',['obtain_uuid',['../classsnoop_1_1SnoopImpl.html#ab4bad0c81a938751465113f6c629ab1c',1,'snoop::SnoopImpl']]],
+  ['omega',['omega',['../Symbols_8cc.html#acc4d3c53bcc625e6823139f6351f94d6',1,'omega():&#160;Symbols.cc'],['../Symbols_8cc.html#a9132de613a1de42d0ec7673cde2090ec',1,'Omega():&#160;Symbols.cc']]],
+  ['omicron',['Omicron',['../Symbols_8cc.html#a9f794583a16b9879d5f798e1d010e630',1,'Omicron():&#160;Symbols.cc'],['../Symbols_8cc.html#a88d1d874e01611a5e3328d4e3da00094',1,'omicron():&#160;Symbols.cc']]],
   ['on_5factivate',['on_activate',['../classCadabra.html#a8e9a54af1034ca5072239a452fd799e2',1,'Cadabra']]],
   ['on_5fblock_5ferror',['on_block_error',['../classServer.html#a1ff5021636b2dc73c615a33c59f6a848',1,'Server']]],
   ['on_5fblock_5ffinished',['on_block_finished',['../classServer.html#a22fb31480cad49b1ad5d00cd24914494',1,'Server']]],

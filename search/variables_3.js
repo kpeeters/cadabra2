@@ -7,6 +7,7 @@ var searchData=
   ['cell_5fgot_5ffocus',['cell_got_focus',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#ad8e3a0fcdc1b1f15281bb57dc184ac2b',1,'cadabra::CodeInput::exp_input_tv']]],
   ['cell_5fid',['cell_id',['../classServer_1_1Block.html#a289fdbb8ab64e345c28bbf9bd28a485d',1,'Server::Block']]],
   ['cell_5ftype',['cell_type',['../classcadabra_1_1DataCell.html#a11fa696a6f554b5c8d2395564bcb9a01',1,'cadabra::DataCell']]],
+  ['chi',['chi',['../Symbols_8cc.html#a0e0353d863498a4c98efb2b5ed38f9fc',1,'chi():&#160;Symbols.cc'],['../Symbols_8cc.html#a000bb23c54a1419bdf305fc562bdc2ef',1,'Chi():&#160;Symbols.cc']]],
   ['chirality',['chirality',['../classSpinor.html#a85824cb20fb1dff19c695c4e7785b2d0',1,'Spinor']]],
   ['client',['client',['../test__client_8cc.html#aaaccf49040d6c5e022a6bb79711c697b',1,'test_client.cc']]],
   ['client_5flog_5fid',['client_log_id',['../classsnoop_1_1Snoop_1_1LogEntry.html#a26f89b5c2351b415b828025d5f888a3b',1,'snoop::Snoop::LogEntry']]],

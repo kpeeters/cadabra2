@@ -44,6 +44,7 @@ var searchData=
   ['checkout',['checkout',['../classcadabra_1_1TeXEngine.html#a8ab25e7e8d79c3b328d6e97cc8b21473',1,'cadabra::TeXEngine']]],
   ['checkout_5fall',['checkout_all',['../classcadabra_1_1TeXEngine.html#a6a3a81114a06637f1e24dbafeee9bbe2',1,'cadabra::TeXEngine']]],
   ['checkpoint_5f',['checkpoint_',['../classstopwatch.html#a1a5b9ba9fd1293be7298c4a5e7912ce0',1,'stopwatch']]],
+  ['chi',['chi',['../Symbols_8cc.html#a0e0353d863498a4c98efb2b5ed38f9fc',1,'chi():&#160;Symbols.cc'],['../Symbols_8cc.html#a000bb23c54a1419bdf305fc562bdc2ef',1,'Chi():&#160;Symbols.cc']]],
   ['child',['child',['../classcadabra_1_1ActionAddCell.html#ad6b469653c850b1ee245e46accbca2c1a1b7d5726533ab525a8760351e9b5e415',1,'cadabra::ActionAddCell']]],
   ['children_5fhave_5fbrackets',['children_have_brackets',['../classDisplaySympy.html#a6818f35031e81a0e3a10f3b5c2a733ca',1,'DisplaySympy::children_have_brackets()'],['../classDisplayTerminal.html#a98a8f0e5aa223ab9cec2b04bbaeb3263',1,'DisplayTerminal::children_have_brackets()'],['../classDisplayTeX.html#a23df574403a8810016b8d89ccf6a4a14',1,'DisplayTeX::children_have_brackets()']]],
   ['children_5fwildcard',['children_wildcard',['../classpattern.html#ac803fe6337846ba7c35fc392aed8539b',1,'pattern']]],
@@ -73,8 +74,8 @@ var searchData=
   ['close',['close',['../classexec__stream__t.html#a9188d8034c27711b959987c4973c37ed',1,'exec_stream_t']]],
   ['close_5fbrackets',['close_brackets',['../classpreprocessor.html#a8da08ed608991d82797a2422fe1a5a91',1,'preprocessor']]],
   ['close_5fin',['close_in',['../classexec__stream__t.html#a9f67532a41f54711270448c86e7e2b8a',1,'exec_stream_t']]],
-  ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a348fb769c5ee5d4d3f311bceca0414e2',1,'cadabra::CodeInput::exp_input_tv::CodeInput()'],['../classcadabra_1_1CodeInput.html#ab5dc3e61371b0a932269dbd35e2875f6',1,'cadabra::CodeInput::CodeInput(DTree::iterator, Glib::RefPtr&lt; Gtk::TextBuffer &gt;, double scale)'],['../classcadabra_1_1CodeInput.html#a1d1700de20cdf584edd357df36b6cb43',1,'cadabra::CodeInput::CodeInput(DTree::iterator, const std::string &amp;, double scale)']]],
   ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput.html',1,'cadabra']]],
+  ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a348fb769c5ee5d4d3f311bceca0414e2',1,'cadabra::CodeInput::exp_input_tv::CodeInput()'],['../classcadabra_1_1CodeInput.html#ab5dc3e61371b0a932269dbd35e2875f6',1,'cadabra::CodeInput::CodeInput(DTree::iterator, Glib::RefPtr&lt; Gtk::TextBuffer &gt;, double scale)'],['../classcadabra_1_1CodeInput.html#a1d1700de20cdf584edd357df36b6cb43',1,'cadabra::CodeInput::CodeInput(DTree::iterator, const std::string &amp;, double scale)']]],
   ['codeinput_2ecc',['CodeInput.cc',['../CodeInput_8cc.html',1,'']]],
   ['codeinput_2ehh',['CodeInput.hh',['../CodeInput_8hh.html',1,'']]],
   ['collect',['collect',['../classServer_1_1CatchOutput.html#a74c6d5f0e84f6c5657873b7cb36a5e77',1,'Server::CatchOutput::collect()'],['../classcombin_1_1symmetriser.html#ad3a1ccb0b2d32fcd254bbbcf53109faa',1,'combin::symmetriser::collect()']]],
@@ -187,5 +188,6 @@ var searchData=
   ['current_5fparent_5frel',['current_parent_rel',['../classParser.html#a9352603562e1e764c3eae6d63c50a8ab',1,'Parser']]],
   ['current_5fweight',['current_weight',['../classcombin_1_1combinations__base.html#a66dc81bb80cfad25f543a6cccf24eac1',1,'combin::combinations_base']]],
   ['cleanup',['Cleanup',['../group__display.html',1,'']]],
-  ['cadabra',['Cadabra',['../index.html',1,'']]]
+  ['cadabra',['Cadabra',['../index.html',1,'']]],
+  ['symbols',['symbols',['../namespacecadabra_1_1symbols.html',1,'cadabra']]]
 ];
