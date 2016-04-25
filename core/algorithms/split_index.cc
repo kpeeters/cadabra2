@@ -31,7 +31,6 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	if(full_class && (part1_is_number || part1_class) && (part2_is_number || part2_class) )
 		return;
 	
-	std::cout << "no type" << std::endl;
 	throw ArgumentException("split_index: The index types of (some of) these indices are not known.");
 	}
 

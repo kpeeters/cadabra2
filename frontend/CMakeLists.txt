@@ -25,5 +25,15 @@ message("-- Installing LaTeX style files in ${INSTALL_LATEX_DIR}")
 install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
-install(FILES    ${PROJECT_SOURCE_DIR}/latex/tableaux.sty DESTINATION ${INSTALL_LATEX_DIR})
+install(FILES    
+  ${PROJECT_SOURCE_DIR}/latex/tableaux.sty 
+  ${PROJECT_SOURCE_DIR}/latex/msabm.sym
+  ${PROJECT_SOURCE_DIR}/latex/mathstyle.sty 
+  ${PROJECT_SOURCE_DIR}/latex/mathptmx.sym
+  ${PROJECT_SOURCE_DIR}/latex/mathpazo.sym 
+  ${PROJECT_SOURCE_DIR}/latex/flexisym.sty 
+  ${PROJECT_SOURCE_DIR}/latex/cmbase.sym 
+  ${PROJECT_SOURCE_DIR}/latex/breqn.sty 
+  DESTINATION ${INSTALL_LATEX_DIR})
+
 install(SCRIPT   ${PROJECT_SOURCE_DIR}/latex/install.cmake)
