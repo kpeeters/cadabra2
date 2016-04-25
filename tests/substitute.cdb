@@ -216,3 +216,15 @@ def test104():
     assert(tst==0)
 
 test104()
+
+def test105():
+    __cdbkernel__=create_scope()
+    ex:= A_{m n} + B_{m n};
+    rl:= C?_{m? n?} -> n? C?_{n?};
+    substitute(ex, rl);
+    tst:= n A_{n} + n B_{n} - @(ex);
+    assert(tst==0)
+
+test105()
+
+    
