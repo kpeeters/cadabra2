@@ -1008,7 +1008,8 @@ bool NotebookWindow::quit_safeguard(bool quit)
 
 void NotebookWindow::on_file_quit()
 	{
-	hide();
+	if(quit_safeguard(true)) 
+		hide();
 	}
 
 void NotebookWindow::on_edit_undo()

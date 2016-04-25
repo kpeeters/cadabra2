@@ -1309,7 +1309,9 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 bool Algorithm::is_termlike(iterator it)
 	{
 	if(tr.is_valid(tr.parent(it))) {
-		if(*tr.parent(it)->name=="\\sum" || *tr.parent(it)->name=="\\expression" || tr.parent(it)->is_command() ) 
+		if(*tr.parent(it)->name=="\\sum" || 
+			(*tr.parent(it)->name=="\\expression" && *it->name!="\\sum") ||
+			tr.parent(it)->is_command() ) 
 			return true;
 		}
 	return false;
