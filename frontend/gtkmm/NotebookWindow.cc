@@ -47,6 +47,7 @@ NotebookWindow::NotebookWindow()
 	Glib::ustring data = "GtkTextView { color: blue;  }\n";
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "*:focused { background-color: #eee; }\n";
+	data += "*:selected { background-color: #ccc; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
 
 	if(!css_provider->load_from_data(data)) {
