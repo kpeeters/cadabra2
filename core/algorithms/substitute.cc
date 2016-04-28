@@ -67,10 +67,10 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
 
 bool substitute::can_apply(iterator st)
 	{
-	std::cerr << "attempting to match at " << Ex(st) << std::endl;
+	// std::cerr << "attempting to match at " << Ex(st) << std::endl;
 
 	Ex::iterator found = cadabra::find_in_list(args, args.begin(), [&](Ex::iterator arrow) {
-			std::cerr << "rule " << Ex(arrow) << std::endl;
+			// std::cerr << "rule " << Ex(arrow) << std::endl;
 			comparator.clear();
 			iterator lhs=tr.begin(arrow);
 			if(*lhs->name=="\\conditional") {
@@ -106,8 +106,10 @@ bool substitute::can_apply(iterator st)
 
 			return args.end();
 		});
-	if(found!=args.end())
-		std::cerr << "rule working: " << Ex(found) << std::endl;
+//	if(found!=args.end())
+//		std::cerr << "rule working: " << Ex(found) << std::endl;
+//	else
+//		std::cerr << "rule not working, going to return " << (found!=args.end()) << std::endl;
 	
 	return found!=args.end();
 	}
