@@ -17,6 +17,7 @@ set(TUTORIALS
   gamma_matrix_algebra
   poincare_algebra
   string_states
+  kaluza_klein
 )
 
 # Manual pages; just add the algorithm or property name to the lists below

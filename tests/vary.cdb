@@ -52,3 +52,11 @@ def test05():
     assert(tst==0)
 
 test05()
+
+def test06():
+x::Coordinate;
+\phi::Depends(x);
+\delta{\phi}::Depends(x);
+\partial{#}::PartialDerivative;
+ex:= -1/2 \int{m**2 \phi**2}{x};
+vary(_, $\phi -> \delta{\phi}$);
