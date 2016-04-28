@@ -281,6 +281,7 @@ class Ex_comparator {
 /// Basic comparison operator for tree iterators, so we can use them as keys in maps.
 
 bool operator<(const Ex::iterator&, const Ex::iterator&);
+bool operator<(const Ex&, const Ex&);
 
 class Ex_is_equivalent {
 	public:

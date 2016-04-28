@@ -1151,3 +1151,8 @@ bool operator<(const Ex::iterator& i1, const Ex::iterator& i2)
 	{
 	return i1.node < i2.node;
 	}
+
+bool operator<(const Ex& e1, const Ex& e2)
+	{
+	return e1.begin() < e2.begin();
+	}
