@@ -107,7 +107,7 @@ Algorithm::result_t vary::apply(iterator& it)
 		
 		Ex prodcopy(it); // keep a copy to restore after each substitute
 		
-		vary subs(kernel, tr, args);
+		vary varyfac(kernel, tr, args);
 		int pos=0;
 		for(;;) { 
 			sibling_iterator fcit=tr.begin(it);
@@ -115,11 +115,8 @@ Algorithm::result_t vary::apply(iterator& it)
 			if(fcit==tr.end(it)) break;
 			
 			iterator fcit2(fcit);
-			if(subs.can_apply(fcit2)) {
-				std::cerr << "can apply substitute at " << Ex(fcit2) << std::endl;
-				result_t res = subs.apply(fcit2);
-				std::cerr << "result = " << res << std::endl;
-				
+			if(varyfac.can_apply(fcit2)) {
+				result_t res = varyfac.apply(fcit2);
 				if(fcit2->is_zero()==false && res==result_t::l_applied) {
 					result.append_child(newsum, it);
 					}
@@ -171,17 +168,15 @@ Algorithm::result_t vary::apply(iterator& it)
 		}
 
 	if(*it->name=="\\pow") { 
+		Ex backup(it);
 		// Wrap the power in a \cdb_Derivative and then call @prodrule.
 		it=tr.wrap(it, str_node("\\cdb_Derivative"));
-//		txtout << "** before prodrule\n";
-//		tr.print_recursive_treeform(txtout, it);
 		product_rule pr(kernel, tr);
 		pr.can_apply(it);
 		pr.apply(it);
-//		txtout << "** after prodrule\n";
-//		tr.print_recursive_treeform(txtout, it);
 		// Find the '\cdb_Derivative node again'.
 		sibling_iterator sib=tr.begin(it);
+		res=result_t::l_no_action;
 		while(sib!=tr.end(it)) {
 			if(*sib->name=="\\cdb_Derivative") {
 				tr.flatten(sib);
@@ -189,15 +184,17 @@ Algorithm::result_t vary::apply(iterator& it)
 				vary vry(kernel, tr, args);
 				iterator app=sib;
 				if(vry.can_apply(app)) {
-					vry.apply(app);
-					res=result_t::l_applied;
+					res=vry.apply(app);
 					}
 				break;
 				}
 			++sib;
 			}
-//		txtout << "** after removing cdb_der" << std::endl;
-//		tr.print_recursive_treeform(txtout, it);
+		if(res!=result_t::l_applied) {
+			// restore original
+			it=tr.replace(it, backup.begin());
+			}
+		return res;
 		}
 	
 	der = kernel.properties.get<Derivative>(tr.parent(it));
@@ -206,13 +203,10 @@ Algorithm::result_t vary::apply(iterator& it)
 	if(der || acc || is_single_term(it)) { // easy: just vary this term by substitution
 		substitute subs(kernel, tr, args);
 		if(subs.can_apply(it)) {
-//			tr.print_recursive_treeform(std::cerr, tr.begin());
 			if(subs.apply(it)==result_t::l_applied) {
-//				tr.print_recursive_treeform(std::cerr, tr.begin());
 				return result_t::l_applied;
 				}
 			}
-//		tr.print_recursive_treeform(std::cerr, tr.begin());
 		
 		if(is_termlike(it)) {
 			zero(it->multiplier);

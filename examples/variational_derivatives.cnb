@@ -56,7 +56,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}\\partial_{\\mu}{\\delta\\left(\\phi\\right)} \\partial^{\\mu}{\\phi}%\n+\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\delta\\left(\\phi\\right)}%\n+2m m \\phi^{2}%\n+m^{2} 2\\phi \\delta\\left(\\phi\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}\\partial_{\\mu}{\\delta\\left(\\phi\\right)} \\partial^{\\mu}{\\phi}%\n+\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\delta\\left(\\phi\\right)}%\n+2m^{2} \\phi \\delta\\left(\\phi\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "vary(_, $\\phi -> \\delta{\\phi}$);"
@@ -69,7 +69,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}-\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}%\n-\\partial^{\\mu}\\,_{\\mu}{\\phi} \\delta\\left(\\phi\\right)%\n+2m m \\phi^{2}%\n+m^{2} 2\\phi \\delta\\left(\\phi\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}-\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}%\n-\\partial^{\\mu}\\,_{\\mu}{\\phi} \\delta\\left(\\phi\\right)%\n+2m^{2} \\phi \\delta\\left(\\phi\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "integrate_by_parts(_, $\\delta{\\phi}$);"
@@ -82,7 +82,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\int{}-\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}%\n-\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}-\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}%\n-\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\delta\\left(\\phi\\right) \\phi m^{2}\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "sort_product(_);"
@@ -95,7 +95,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-\\int{}\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}-2\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\delta\\left(\\phi\\right) \\phi m^{2}\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "canonicalise(_);"

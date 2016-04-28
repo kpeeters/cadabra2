@@ -56,9 +56,7 @@ test05()
 def test06():
 x::Coordinate;
 \phi::Depends(x);
-\chi::Depends(x);
-\delta{\chi}::Depends(x);
+\delta{\phi}::Depends(x);
 \partial{#}::PartialDerivative;
 ex:= -1/2 \int{m**2 \phi**2}{x};
-substitute(_, $\phi -> \chi$);
-vary(_, $\chi -> \delta{\chi}$);
+vary(_, $\phi -> \delta{\phi}$);
