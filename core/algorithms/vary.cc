@@ -116,7 +116,9 @@ Algorithm::result_t vary::apply(iterator& it)
 			
 			iterator fcit2(fcit);
 			if(subs.can_apply(fcit2)) {
+				std::cerr << "can apply substitute at " << Ex(fcit2) << std::endl;
 				result_t res = subs.apply(fcit2);
+				std::cerr << "result = " << res << std::endl;
 				
 				if(fcit2->is_zero()==false && res==result_t::l_applied) {
 					result.append_child(newsum, it);
