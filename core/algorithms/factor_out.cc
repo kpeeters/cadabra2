@@ -42,14 +42,15 @@ Algorithm::result_t factor_out::apply(iterator& it)
 
 	sibling_iterator st=tr.begin(it);
 	while(st!=tr.end(it)) { // Loop through each term in the sum
-		Ex left_factors, right_factors; // Where we will store extracted factors
-		left_factors.set_head(str_node("\\prod"));
-		right_factors.set_head(str_node("\\prod"));
+		Ex left_factors("\\prod"), right_factors("\\prod"); // Where we will store extracted factors
 		
 		if(*st->name=="\\prod") {
 			extract_factors(st, true, left_factors);
 			extract_factors(st, false, right_factors);
 			
+			std::cerr << "left: " << left_factors << std::endl;
+			std::cerr << "right: " << right_factors << std::endl;
+
 			// The factors are not extracted in any particular order.
 			// We want to put them in some canonical order so that equal factors are grouped.
 			order_factors(st, left_factors);
@@ -104,6 +105,11 @@ Algorithm::result_t factor_out::apply(iterator& it)
 
 	if(collector.size()==0) return result_t::l_no_action;
 	
+	for(auto& c: collector) {
+		std::cerr << c.first << std::endl;
+		}
+	std::cerr << Ex(it) << std::endl;
+
 	// The expression is currently in a weird state - we have pulled out all of the factors from each
 	// term that they appeared, but not added them back in anywhere. Since we now have a multimap with
 	// keys corresponding to each type of factor (A, B, AB, etc) and members corresponding to the rest
@@ -113,8 +119,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 	collector_t::iterator ci=collector.begin();
 	Ex oldkey = (*ci).first;
 	while(ci!=collector.end()) {
-		Ex term;
-		term.set_head(str_node("\\prod")); // Create the * in (factor * (a + b + c)).
+		Ex term("\\prod"); // Create the * in (factor * (a + b + c)).
 		const Ex thiskey=(*ci).first;
 		
 		// Extract left_factors and right_factors from how they were stored
@@ -122,11 +127,15 @@ Algorithm::result_t factor_out::apply(iterator& it)
 		sibling_iterator sum_iter = thiskey.begin(thiskey.begin());
 		iterator left_factors = sum_iter;
 		iterator right_factors = ++sum_iter;
+
+		std::cerr << "handling " << Ex(left_factors) << std::endl;
 		
 		// Insert left factors on the left.
 		if (thiskey.number_of_children(left_factors) > 0)
 			term.reparent(term.begin(), left_factors);
 		
+		std::cerr << "term now " << term << std::endl;
+
 		sibling_iterator sumit=term.append_child(term.begin(),str_node("\\sum"));
 		size_t terms=0;
 		Ex_is_equivalent cmp(kernel.properties);
@@ -140,6 +149,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			++ci;
 			}
 		
+		std::cerr << "term then " << term << std::endl;
+
 		// Insert right factors on the right.
 		if (thiskey.number_of_children(right_factors) > 0)
 			term.reparent(term.begin(), right_factors);
@@ -151,9 +162,15 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			term.erase(sumit);
 			}
 		
+		std::cerr << "term later " << term << std::endl;
+		std::cerr << "orig then  " << Ex(it) << std::endl;
+
 		// Put our factor * (a + b + ...) piece back into the tree.
-		tr.insert_subtree(tr.begin(it), term.begin());
+//		tr.insert_subtree(tr.begin(it), term.begin());
+		tr.append_child(it, term.begin());
 		
+		std::cerr << "the tree is now " << Ex(it) << std::endl;
+
 		if(ci==collector.end())
 			break;
 		oldkey=(*ci).first;
@@ -215,6 +232,7 @@ void factor_out::extract_factors(sibling_iterator product, bool left_to_right, E
 				current_term--;
 			}
 		first_element = false;
+		std::cerr << "considering " << Ex(current_term) << std::endl;
 		
 		bool factor_removed = false;
 		

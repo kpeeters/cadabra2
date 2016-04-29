@@ -701,9 +701,6 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 	}
 
 
-// Determine whether the two objects can be moved next to each other,
-// with 'one' to the left of 'two'. Return the sign, or zero.
-//
 int Ex_comparator::can_move_adjacent(Ex::iterator prod,
 													 Ex::sibling_iterator one, Ex::sibling_iterator two) 
 	{

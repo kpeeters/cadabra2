@@ -104,6 +104,7 @@ namespace boost {
 #include "algorithms/expand_delta.hh"
 #include "algorithms/expand_diracbar.hh"
 #include "algorithms/factor_in.hh"
+#include "algorithms/factor_out.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/integrate_by_parts.hh"
@@ -1020,6 +1021,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<lr_tensor>("lr_tensor");
 
 	def("factor_in", &dispatch_ex<factor_in, Ex&>, 
+		 (arg("ex"),
+		  arg("factors"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("factor_out", &dispatch_ex<factor_out, Ex&>, 
 		 (arg("ex"),
 		  arg("factors"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
