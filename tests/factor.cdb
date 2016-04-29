@@ -17,31 +17,33 @@ def test03():
     assert(tst==0)
 
 def test04():
-ex:= a b + a c e - 4 q - 2 g a d + a d - 3 p s - 9/2 a;
-factor_out(_, $a$);
-tst4:= -4 q - 3 p s + a*(b + c e - 2 g d + d - 9/2) - @(ex);
-assert(1==0)
+    ex:= a b + a c e - 4 q - 2 g a d + a d - 3 p s - 9/2 a;
+    factor_out(_, $a$);
+    tst4:= -4 q - 3 p s + a*(b + c e - 2 g d + d - 9/2) - @(ex);
+    assert(1==0)
+
+test04()
 
 def test05():
     ex:= c - a;
     factor_out(_, $a$)
+    tst:= c - a - @(ex);
     assert(1==0)
-    # FIXME: leads to \prod{a}{-1}.
 
+test05()
+    
 def test06():
+    ex:= 3 a b + 2 a c e + 5 a c + 7 e f - 2 c e + c d - a d + a - c;
+    factor_out(ex, $a,c$);
+    tst5:=  a * c * (2 * e + 5) + c * ( - 2 * e + d - 1) + a * (3 * b - d + 1) + 7 * e * f - @(ex);
+    assert(tst5==0)
 
-ex:= 3 a b + 2 a c e + 5 a c + 7 e f - 2 c e + c d - a d + a - c:
-@factor_out!(%){a,c};
-@factor_out!(%){a,c};
-tst5:=  a * c * (2 * e + 5) + c * ( - 2 * e + d - 1) + a * (3 * b - d + 1) + 7 * e * f - @(obj5);
-@collect_terms!(%);
-@assert(tst5);
-
+test06()
+    
 # Non-commuting objects
 
 # Basic behaviour
-@reset.
-{A, B, C, D, E}::NonCommuting.
+{A, B, C, D, E}::NonCommuting;
 ex := A B + A C + D A + E A:
 factor_out(_, $A$);
 
