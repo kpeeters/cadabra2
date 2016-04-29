@@ -149,8 +149,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a972533b614158af77bec9308a7eb6c44"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a972533b614158af77bec9308a7eb6c44">can_swap</a> (Ex::iterator <a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, Ex::iterator two, int subtree_comparison, bool ignore_implicit_indices=false)</td></tr>
 <tr class="memdesc:a972533b614158af77bec9308a7eb6c44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether obj and obj+1 be exchanged? If yes, return the sign, if no return zero.  <a href="#a972533b614158af77bec9308a7eb6c44">More...</a><br/></td></tr>
 <tr class="separator:a972533b614158af77bec9308a7eb6c44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0154fab7d950677919d3bd5b9242e01"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#ab0154fab7d950677919d3bd5b9242e01">can_move_adjacent</a> (Ex::iterator prod, Ex::sibling_iterator <a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, Ex::sibling_iterator two)</td></tr>
-<tr class="separator:ab0154fab7d950677919d3bd5b9242e01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa976f63e1db387918f876aac07937ca8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#aa976f63e1db387918f876aac07937ca8">can_move_adjacent</a> (Ex::iterator prod, Ex::sibling_iterator <a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, Ex::sibling_iterator two, bool fix_one=false)</td></tr>
+<tr class="memdesc:aa976f63e1db387918f876aac07937ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether object 'one' and 'two' can be moved next to each other by moving either one or the other: if fix_one==true the first node is kept fixed, otherwise the second node is kept fixed.  <a href="#aa976f63e1db387918f876aac07937ca8">More...</a><br/></td></tr>
+<tr class="separator:aa976f63e1db387918f876aac07937ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -263,7 +264,7 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ab0154fab7d950677919d3bd5b9242e01"></a>
+<a class="anchor" id="aa976f63e1db387918f876aac07937ca8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -283,7 +284,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Ex::sibling_iterator&#160;</td>
-          <td class="paramname"><em>two</em>&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>fix_one</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -292,6 +299,8 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Determine whether object 'one' and 'two' can be moved next to each other by moving either one or the other: if fix_one==true the first node is kept fixed, otherwise the second node is kept fixed. </p>
 
 </div>
 </div>
@@ -872,7 +881,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Apr 25 2016 12:25:28 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 29 2016 21:30:40 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
