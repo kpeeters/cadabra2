@@ -255,8 +255,9 @@ class Ex_comparator {
 		int  can_swap(Ex::iterator one, Ex::iterator two, int subtree_comparison,
 						  bool ignore_implicit_indices=false);
 
-		/// Determine whether object 'one' and 'two' can be moved next to 
-		/// each other.
+		/// Determine whether object 'one' and 'two' can be moved next
+		/// to each other, with 'one' to the left of 'two'. Returns the
+		/// sign, or zero.
 		int  can_move_adjacent(Ex::iterator prod, 
 									  Ex::sibling_iterator one, Ex::sibling_iterator two) ;
 
