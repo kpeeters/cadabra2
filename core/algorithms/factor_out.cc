@@ -112,8 +112,18 @@ Algorithm::result_t factor_out::apply(iterator& it)
 
 	for(auto& nt: new_terms) {
 		auto prod = tr.append_child(it, nt.first.begin());
+		std::cerr << prod.node << " versus " << nt.first.begin().node << std::endl;
+		std::cerr << "prod is " << Ex(prod) << std::endl;
 		if(nt.second.size()==1) { // factored, but only one term found.
-			tr.append_children(prod, nt.second[0].begin(), nt.second[0].end());
+			auto top = nt.second[0].begin();
+			std::cerr << "first to copy " << Ex(nt.second[0].begin(top)) << std::endl;
+			tr.append_child(prod, iterator(nt.second[0].begin(top)));
+			multiply(prod->multiplier, *(nt.second[0].begin()->multiplier));
+// FIXME: append_children has a BUG! Messes up the tree. But it is needed to
+// handle terms where the sub-factor is not a simple element.
+//			tr.append_children(prod, nt.second[0].begin(top), nt.second[0].end(top));
+			cleanup_dispatch(kernel, tr, prod);
+			std::cerr << "after append " << Ex(it) << std::endl;
 			}
 		else {
 			auto sum = tr.append_child(prod, str_node("\\sum"));
@@ -123,6 +133,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				}
 			}
 		}
+	std::cerr << "all done " << Ex(it) << std::endl;
 	
 	return result;
 	}
