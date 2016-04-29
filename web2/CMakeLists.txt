@@ -33,6 +33,7 @@ set(ALGOS
   evaluate
   expand_diracbar
   factor_in
+  factor_out
   join_gamma
   vary
   young_project_tensor

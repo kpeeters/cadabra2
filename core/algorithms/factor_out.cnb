@@ -1,0 +1,132 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{factor_out}{Isolate common factors in a sum of products}\n\nGiven a list of symbols, this algorithm tries to factor those symbols\nout of terms. As an example,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{factor_out}{Isolate common factors in a sum of products}\n\nGiven a list of symbols, this algorithm tries to factor those symbols\nout of terms. As an example,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}a b%\n+a c e%\n+a d\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= a b + a c e + a d;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}a \\left(b%\n+c e%\n+d\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_, $a$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In case you are familiar with FORM, \\algo{factor_out} is like its \\verb|bracket| statement. \nIf you add more factors to factor out, it works as in the following example."
+				}
+			],
+			"hidden" : true,
+			"source" : "In case you are familiar with FORM, \\algo{factor_out} is like its \\verb|bracket| statement. \nIf you add more factors to factor out, it works as in the following example."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}a b%\n+a c e%\n+a c%\n+c e%\n+c d%\n+a d\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= a b + a c e + a c + c e + c d + a d;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}a \\left(b%\n+d\\right)%\n+a c \\left(e%\n+1\\right)%\n+c \\left(e%\n+d\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_, $a, c$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "That is, separate terms will be generated for terms which differ by\npowers of the factors to be factored out.\n\nThe algorithm of course also works with indexed objects, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "That is, separate terms will be generated for terms which differ by\npowers of the factors to be factored out.\n\nThe algorithm of course also works with indexed objects, as in"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m} B_{m}%\n+C_{m} A_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A_{m} B_{m} + C_{m} A_{m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m} \\left(B_{m}%\n+C_{m}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_, $A_{m}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
