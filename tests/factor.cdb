@@ -17,20 +17,20 @@ def test03():
     assert(tst==0)
 
 def test04():
-ex:= a b + a c e + a d - a;
+ex:= a b + a c e - 4 q - 2 g a d + a d - 3 p s - 9/2 a;
 factor_out(_, $a$);
+tst4:= -4 q - 3 p s + a*(b + c e - 2 g d + d - 9/2) - @(ex);
+assert(1==0)
 
-tst4:= a ( b + c e + d - 1 ) - @(obj4);
-@collect_terms!(%);
-@assert(tst4);
+def test05():
+    ex:= c - a;
+    factor_out(_, $a$)
+    assert(1==0)
+    # FIXME: leads to \prod{a}{-1}.
 
-#@reset.
-#obj4b:= c - a;
-#@factor_out!(%){a};
-# FIXME: leads to \prod{a}{-1}.
+def test06():
 
-@reset.
-obj5:= 3 a b + 2 a c e + 5 a c + 7 e f - 2 c e + c d - a d + a - c:
+ex:= 3 a b + 2 a c e + 5 a c + 7 e f - 2 c e + c d - a d + a - c:
 @factor_out!(%){a,c};
 @factor_out!(%){a,c};
 tst5:=  a * c * (2 * e + 5) + c * ( - 2 * e + d - 1) + a * (3 * b - d + 1) + 7 * e * f - @(obj5);
@@ -42,8 +42,9 @@ tst5:=  a * c * (2 * e + 5) + c * ( - 2 * e + d - 1) + a * (3 * b - d + 1) + 7 *
 # Basic behaviour
 @reset.
 {A, B, C, D, E}::NonCommuting.
-obj := A B + A C + D A + E A:
-@factor_out!(%)(A);
+ex := A B + A C + D A + E A:
+factor_out(_, $A$);
+
 tst := A*(B + C) + (D + E)*A - @(obj);
 @collect_terms!(%);
 @assert(tst);

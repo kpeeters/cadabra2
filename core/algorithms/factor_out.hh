@@ -12,13 +12,8 @@ class factor_out : public Algorithm {
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
 
-	protected:
+	private:
 		typedef std::vector<Ex>    to_factor_out_t;
 		to_factor_out_t            to_factor_out;
-
-	private:
-		void extract_factors(sibling_iterator product, bool left_to_right, Ex& collector);
-		void order_factors(sibling_iterator product, Ex& collector);
-		void order_factors(sibling_iterator product, Ex& collector, sibling_iterator first_unordered_term);
 };
 
