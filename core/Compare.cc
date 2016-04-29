@@ -702,7 +702,7 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 
 
 int Ex_comparator::can_move_adjacent(Ex::iterator prod,
-													 Ex::sibling_iterator one, Ex::sibling_iterator two) 
+												 Ex::sibling_iterator one, Ex::sibling_iterator two, bool fix_one) 
 	{
 	assert(Ex::parent(one)==Ex::parent(two));
 	assert(Ex::parent(one)==prod);
@@ -727,14 +727,30 @@ int Ex_comparator::can_move_adjacent(Ex::iterator prod,
 
 	if(sign!=0) {
 		// Loop over all pair flips which are necessary to move one to the left of two.
-		probe=one;
-		++probe;
-		while(probe!=two) {
-			assert(probe!=prod.end());
-			int es=subtree_compare(&properties, one,probe);
-			sign*=can_swap(one,probe,es);
-			if(sign==0) break;
+		// Keep one fixed if fix_one is true.
+
+		if(fix_one) {
+			probe=two;
+			--probe;
+			while(probe!=one) {
+				int es=subtree_compare(&properties, two,probe);
+				// std::cerr << "swapping " << Ex(two) << " and " << Ex(probe) << std::endl;
+				sign*=can_swap(two,probe,es);
+				if(sign==0) break;
+				--probe;
+				}
+			}
+		else {
+			probe=one;
 			++probe;
+			while(probe!=two) {
+				assert(probe!=prod.end());
+				int es=subtree_compare(&properties, one,probe);
+				// std::cerr << "swapping " << Ex(one) << " and " << Ex(probe) << std::endl;
+				sign*=can_swap(one,probe,es);
+				if(sign==0) break;
+				++probe;
+				}
 			}
 		}
 	return sign;

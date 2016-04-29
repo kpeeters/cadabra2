@@ -1,38 +1,50 @@
 def test01():
+    __cdbkernel__=create_scope()
     ex:= a*b+a*c+d;
     factor_in(_, $b,c$);
     tst:=(b+c)*a + d - @(ex);
     assert(tst==0)
 
+test01()
+
 def test02():
+    __cdbkernel__=create_scope()
     ex:=2*a+b*a;
     factor_in(_, $b$);
     tst:=(2+b)*a - @(ex);
     assert(tst==0)
 
+test02()
+    
 def test03():
+    __cdbkernel__=create_scope()
     ex:= 3*a*b + 5*c*b;
     factor_in(_, $a,c$);
     tst:=(3 a + 5 c) b - @(ex);
     assert(tst==0)
 
+test03()
+
 def test04():
+    __cdbkernel__=create_scope()
     ex:= a b + a c e - 4 q - 2 g a d + a d - 3 p s - 9/2 a;
     factor_out(_, $a$);
     tst4:= -4 q - 3 p s + a*(b + c e - 2 g d + d - 9/2) - @(ex);
-    assert(1==0)
+    assert(tst4==0)
 
 test04()
 
 def test05():
+    __cdbkernel__=create_scope()
     ex:= c - a;
     factor_out(_, $a$)
     tst:= c - a - @(ex);
-    assert(1==0)
+    assert(tst==0)
 
 test05()
     
 def test06():
+    __cdbkernel__=create_scope()
     ex:= 3 a b + 2 a c e + 5 a c + 7 e f - 2 c e + c d - a d + a - c;
     factor_out(ex, $a,c$);
     tst5:=  a * c * (2 * e + 5) + c * ( - 2 * e + d - 1) + a * (3 * b - d + 1) + 7 * e * f - @(ex);
@@ -43,83 +55,105 @@ test06()
 # Non-commuting objects
 
 # Basic behaviour
-{A, B, C, D, E}::NonCommuting;
-ex := A B + A C + D A + E A:
-factor_out(_, $A$);
+def test07():
+    __cdbkernel__=create_scope()
+    {A, B, C, D, E}::NonCommuting;
+    ex := A B + A C + D A + E A:
+    factor_out(_, $A$, right=True);
+    factor_out(_, $A$, right=False);
+    tst := A*(B + C) + (D + E)*A - @(ex);
+    assert(tst==0)
 
-tst := A*(B + C) + (D + E)*A - @(obj);
-@collect_terms!(%);
-@assert(tst);
+test07()
 
-@reset.
-{A, B, C, D}::AntiCommuting.
-obj := A B + A C + D A:
-@factor_out!(%)(A);
-tst := A*(B + C - D) - @(obj);
-@collect_terms!(%);
-@assert(tst);
+def test08():
+    __cdbkernel__=create_scope()
+    {A, B, C, D}::AntiCommuting.
+    obj := A B + A C + D A:
+    factor_out(_, $A$);
+    tst := A*(B + C - D) - @(obj);
+    assert(tst==0)
 
+test08()
 
 # Ordering of pulled out factors
-@reset.
-{A, B}::AntiCommuting.
-obj := A B c X + c B A Y:
-@factor_out!(%)(A, B, c);
-tst := A B c * (X - Y) - @(obj);
-@collect_terms!(%);
-@assert(tst);
+def test09():
+    __cdbkernel__=create_scope()
+    {A, B}::AntiCommuting.
+    obj := A B c X + c B A Y:
+    factor_out(_, $A, B, c$);
+    tst := A B c * (X - Y) - @(obj);
+    assert(tst==0)
 
-@reset.
-{A, B}::AntiCommuting.
-{A, X, Y}::NonCommuting.
-{B, X, Y}::NonCommuting.
-obj := A B c X + c B A Y + X A B c + Y c B A:
-@factor_out!(%)(c, A, B);
-tst := c A B * (X - Y) + c * (X - Y) * A B - @(obj);
-@collect_terms!(%);
-@assert(tst);
+test09()
+
+def test10():
+    __cdbkernel__=create_scope()
+    {A, B}::AntiCommuting.
+    {A, X, Y}::NonCommuting.
+    {B, X, Y}::NonCommuting.
+    obj := A B c X + c B A Y + X A B c + Y c B A:
+    factor_out(_, $c, A, B$);
+    factor_out(_, $c, A, B$, right=True);
+    tst := (A B (X-Y) + (-X+Y) A B) c - @(obj);
+    assert(tst==0)
+
+test10()
 
 # Ordering past a non commuting term
-@reset.
-{A, B, C, D, E}::AntiCommuting.
-{A, X}::NonCommuting.
-{B, X}::NonCommuting.
-obj := X A B Y + X B A Z:
-@factor_out!(%)(A, B, X);
-tst := X A B (Y - Z) - @(obj);
-@collect_terms!(%);
-@assert(tst);
+def test11():
+    __cdbkernel__=create_scope()
+    {A, B, C, D, E}::AntiCommuting.
+    {A, X}::NonCommuting.
+    {B, X}::NonCommuting.
+    obj := X A B Y + X B A Z:
+    factor_out(_, $A, B, X$);
+    tst := X A B (Y - Z) - @(obj);
+    assert(tst==0)
 
-obj := A B X A B Y + B A X B A Z:
-@factor_out!(%)(A, B, X);
-tst := A B X A B (Y + Z) - @(obj);
-@collect_terms!(%);
-@assert(tst);
+test11()
 
-obj := A B C D Y + D A B C Z:
-@factor_out!(%)(A, B, C, D);
-tst := A B C D (Y - Z) - @(obj);
-@collect_terms!(%);
-@assert(tst);
+def test12():
+    __cdbkernel__=create_scope()
+    {A, B, C, D, E}::AntiCommuting.
+    {A, X}::NonCommuting.
+    {B, X}::NonCommuting.
+    obj := A B X A B Y + B A X B A Z:
+    factor_out(_, $A, B, X$);
+    tst := A B X A B (Y + Z) - @(obj);
+    assert(tst==0)
+
+test12()
+
+def test13():
+    __cdbkernel__=create_scope()
+    {A, B, C, D, E}::AntiCommuting.
+    {A, X}::NonCommuting.
+    {B, X}::NonCommuting.
+    obj := A B C D Y + D A B C Z:
+    factor_out(_, $A, B, C, D$);
+    tst := A B C D (Y - Z) - @(obj);
+    assert(tst==0)
+
+test13()
+
+# Indices.
+
+def test14():
+    __cdbkernel__=create_scope()
+    obj:= A_{a} B_{b} + A_{a} C_{b} + A_{b} D_{a};
+    factor_out(_, $A_{a}$);
+    tst:= A_{a} (B_{b} + C_{b}) + A_{b} D_{a} - @(obj);
+    assert(tst==0)
+
+test14()
 
 
-
-# Test 10: Indices
-#
-@reset.
-obj:= A_{a} B_{b} + A_{a} C_{b} + A_{b} D_{a};
-@factor_out!(%)(A_{a});
-tst: A_{a} (B_{b} + C_{b}) + A_{b} D_{a} - @(obj);
-@collect_terms!(%);
-@assert(%);
-
-
-
-@reset.
-{a,b,m,n,p,q}::Indices.
-obj6:= A_{m n} C_{m n} D_{p q} + A_{p m} C_{m n} D_{n q} + A_{m n} C_{m n} E_{p q} Q;
-@factor_out!(%){ A_{a b}, C_{m n} };
-
+# @reset.
+# {a,b,m,n,p,q}::Indices.
+# obj6:= A_{m n} C_{m n} D_{p q} + A_{p m} C_{m n} D_{n q} + A_{m n} C_{m n} E_{p q} Q;
+# @factor_out!(%){ A_{a b}, C_{m n} };
+# 
 # NOTE: see the email to James Allen on Thu, 14 Oct 2010 20:58:52 +0100. 
 # Should be solved by modifying @rename_dummies. The text below is obsolete but
 # kept until the bug is fixed.
@@ -135,16 +169,16 @@ obj6:= A_{m n} C_{m n} D_{p q} + A_{p m} C_{m n} D_{n q} + A_{m n} C_{m n} E_{p 
 # However, @collect_terms does not do this type of collecting either: it requires
 # you to rename dummies first. If we do that, our problem goes away here too.
 
-{m,n,p,q,r,s,t}::Indices.
-A_{m n} C_{n p} D_{m p} + A_{q r} C_{r s} E_{q t} F_{t s};
-@rename_dummies!(%);
+#{m,n,p,q,r,s,t}::Indices.
+#A_{m n} C_{n p} D_{m p} + A_{q r} C_{r s} E_{q t} F_{t s};
+#@rename_dummies!(%);
 
 # So the conclusion is that we would prefer to stick to a simpler matching, in which
 # we only allow for dummy index names to differ. But what do we then do with
 
-{m,n,p,q,r,s,t}::Indices.
-A_{m n} D_{m p} Q_{n p} + A_{q r} E_{q t} F_{t s} Q_{r s} ;
-@rename_dummies!(%);
+#{m,n,p,q,r,s,t}::Indices.
+#A_{m n} D_{m p} Q_{n p} + A_{q r} E_{q t} F_{t s} Q_{r s} ;
+#@rename_dummies!(%);
 
 # -> A_{m n} * D_{m p} * Q_{n p} + A_{m n} * E_{m p} * F_{p q} * Q_{n q};
 

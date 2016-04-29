@@ -256,10 +256,9 @@ class Ex_comparator {
 						  bool ignore_implicit_indices=false);
 
 		/// Determine whether object 'one' and 'two' can be moved next
-		/// to each other, with 'one' to the left of 'two'. Returns the
-		/// sign, or zero.
-		int  can_move_adjacent(Ex::iterator prod, 
-									  Ex::sibling_iterator one, Ex::sibling_iterator two) ;
+		/// to each other by moving either one or the other: if fix_one==true
+		/// the first node is kept fixed, otherwise the second node is kept fixed.
+		int  can_move_adjacent(Ex::iterator prod, Ex::sibling_iterator one, Ex::sibling_iterator two, bool fix_one=false) ;
 
 	protected:
 		const Properties& properties;

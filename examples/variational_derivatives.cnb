@@ -103,6 +103,19 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int{}\\delta\\left(\\phi\\right) \\left(-2\\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\phi m^{2}\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_, $\\delta{\\phi}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
 			"source" : ""
 		}
 	],

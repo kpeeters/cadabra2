@@ -1025,9 +1025,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("factors"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
-	def("factor_out", &dispatch_ex<factor_out, Ex&>, 
+	def("factor_out", &dispatch_ex<factor_out, Ex&, bool>, 
 		 (arg("ex"),
-		  arg("factors"),
+		  arg("factors"),arg("right")=false,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("substitute", &dispatch_ex<substitute, Ex&>, 

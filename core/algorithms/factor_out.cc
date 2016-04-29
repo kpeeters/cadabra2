@@ -2,10 +2,11 @@
 #include "Cleanup.hh"
 #include "Functional.hh"
 #include "algorithms/factor_out.hh"
+#include "algorithms/sort_product.hh"
 #include <map>
 
-factor_out::factor_out(const Kernel& k, Ex& e, Ex& args)
-	: Algorithm(k, e)
+factor_out::factor_out(const Kernel& k, Ex& e, Ex& args, bool right)
+	: Algorithm(k, e), to_right(right)
 	{
 	cadabra::do_list(args, args.begin(), [&](Ex::iterator arg) {
 			to_factor_out.push_back(Ex(arg));
@@ -49,37 +50,72 @@ Algorithm::result_t factor_out::apply(iterator& it)
 
 		Ex collector("\\prod"); // collect all factors that we have taken out
 
-		std::cerr << "Considering " << Ex(prod) << std::endl;
-
-		// Insert a dummy symbol at the very front.
-		auto dummy = tr.prepend_child(prod, str_node("dummy"));
+		// Insert a dummy symbol at the very front or back.
+		iterator dummy;
+		if(to_right) dummy = tr.append_child(prod, str_node("dummy"));
+		else         dummy = tr.prepend_child(prod, str_node("dummy"));
 
 		// Look at all factors in turn and determine if they should be taken out.
-		auto fac=tr.begin(prod);
-		while(fac!=tr.end(prod)) {
+		if(to_right) {
+			auto fac=tr.end(prod);
 			auto next=fac;
-			++next;
-			for(size_t i=0; i<to_factor_out.size(); ++i) {
-				auto match=comparator.equal_subtree(fac, to_factor_out[i].begin());
-				if(match==Ex_comparator::subtree_match) {
-					int sign=comparator.can_move_adjacent(prod, dummy, fac);
-					if(sign!=0) {
-						collector.append_child(collector.begin(), iterator(fac));
-						next=tr.erase(fac);
-						result=result_t::l_applied;
-						break;
+			--next;
+			do {
+				fac=next;
+				--next;
+				for(size_t i=0; i<to_factor_out.size(); ++i) {
+					auto match=comparator.equal_subtree(fac, to_factor_out[i].begin());
+					if(match==Ex_comparator::subtree_match) {
+						int sign=comparator.can_move_adjacent(prod, dummy, fac, false);
+						if(sign!=0) {
+							collector.append_child(collector.begin(), iterator(fac));
+							multiply(prod->multiplier, sign);
+							next=tr.erase(fac);
+							result=result_t::l_applied;
+							break;
+							}
 						}
 					}
-				}
-			fac=next;
+				} while(fac!=tr.begin(prod));
 			}
+		else {
+			auto fac=tr.begin(prod);
+			while(fac!=tr.end(prod)) {
+				auto next=fac;
+				++next;
+				for(size_t i=0; i<to_factor_out.size(); ++i) {
+					auto match=comparator.equal_subtree(fac, to_factor_out[i].begin());
+					if(match==Ex_comparator::subtree_match) {
+						int sign=comparator.can_move_adjacent(prod, dummy, fac, true);
+						if(sign!=0) {
+							collector.append_child(collector.begin(), iterator(fac));
+							multiply(prod->multiplier, sign);
+							next=tr.erase(fac);
+							result=result_t::l_applied;
+							break;
+							}
+						}
+					}
+				fac=next;
+				}
+			}
+		
 		tr.erase(dummy);
 		if(tr.number_of_children(prod)==0)
 			tr.append_child(prod, str_node("1"));
 
 		if(collector.number_of_children(collector.begin())!=0) { 
 			// The stuff factored out of this term is in 'collector'. See if we have 
-			// factored out that thing before.
+			// factored out that thing before. Because we may not always have collected
+			// factors in the same order (the original expression may not have had
+			// its product sorted), we first sort the collector product.
+
+			sort_product sp(kernel, collector);
+			auto coltop=collector.begin();
+			if(sp.can_apply(coltop))
+				sp.apply(coltop);
+			multiply(prod->multiplier, *coltop->multiplier);
+			one(coltop->multiplier);
 			
 			bool found=false;
 			for(auto& nt: new_terms) {
@@ -105,35 +141,35 @@ Algorithm::result_t factor_out::apply(iterator& it)
 		term=next_term;
 		}
 
-	std::cerr << "result " << Ex(it) << std::endl;
-
 	// Everything has been collected now into new_terms. Expand those out
 	// into a proper sum of products.
 
 	for(auto& nt: new_terms) {
 		auto prod = tr.append_child(it, nt.first.begin());
-		std::cerr << prod.node << " versus " << nt.first.begin().node << std::endl;
-		std::cerr << "prod is " << Ex(prod) << std::endl;
 		if(nt.second.size()==1) { // factored, but only one term found.
 			auto top = nt.second[0].begin();
-			std::cerr << "first to copy " << Ex(nt.second[0].begin(top)) << std::endl;
-			tr.append_child(prod, iterator(nt.second[0].begin(top)));
+			if(to_right)
+				tr.prepend_child(prod, iterator(nt.second[0].begin(top)));
+			else
+				tr.append_child(prod, iterator(nt.second[0].begin(top)));
 			multiply(prod->multiplier, *(nt.second[0].begin()->multiplier));
 // FIXME: append_children has a BUG! Messes up the tree. But it is needed to
 // handle terms where the sub-factor is not a simple element.
 //			tr.append_children(prod, nt.second[0].begin(top), nt.second[0].end(top));
 			cleanup_dispatch(kernel, tr, prod);
-			std::cerr << "after append " << Ex(it) << std::endl;
 			}
 		else {
-			auto sum = tr.append_child(prod, str_node("\\sum"));
+			iterator sum;
+			if(to_right)
+				sum = tr.prepend_child(prod, str_node("\\sum"));
+			else
+				sum = tr.append_child(prod, str_node("\\sum"));
 			for(auto& term: nt.second) { 
 				auto tmp = tr.append_child(sum, term.begin());
 				cleanup_dispatch(kernel, tr, tmp);
 				}
 			}
 		}
-	std::cerr << "all done " << Ex(it) << std::endl;
 	
 	return result;
 	}
