@@ -35,10 +35,10 @@ Linux (Debian/Ubuntu/Mint)
 
 On Debian/Ubuntu you can install all that is needed with::
 
-    sudo apt-get install cmake python-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
+    sudo apt-get install cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
     sudo apt-get install libgtkmm-3.0-dev libboost-all-dev libgmp-dev
     sudo apt-get install python-sympy libsqlite3-dev uuid-dev
-    sudo apt-get install texlive texlive-latex-extra python-matplotlib python-mpmath dvipng
+    sudo apt-get install texlive texlive-latex-extra python3-matplotlib python3-mpmath dvipng
 
 The configuration script will warn you if dependencies are missing. 
 To build the documentation locally, you need::
