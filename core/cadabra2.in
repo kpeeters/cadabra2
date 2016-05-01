@@ -97,7 +97,10 @@ class Shell(InteractiveConsole):
         # Do not do anything with comment lines.
         if len(line_stripped)>0 and line_stripped[0]=='#':
             return line
-        # print '='+line_stripped+"=="
+        # Bare ';' gets replaced with 'display(_)'.
+        if line_stripped==';':
+            return indent_line+"display(_)\n"
+        
         lastchar = line_stripped[-1:]
         if lastchar=='.' or lastchar==';' or lastchar==':':
             if self.lhs!="":
@@ -121,7 +124,14 @@ class Shell(InteractiveConsole):
 
         # Replace $...$ with Ex(...).
         line_stripped=re.sub(r'\$([^\$]*)\$', r'Ex(r"\1", False)', line_stripped)
-                
+
+        # Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
+        imatch = re.match(r'([ ]*)converge\(([^\)]*)\):', line_stripped)
+        if imatch:
+            ret  = imatch.group(1)+imatch.group(2)+".reset(); _="+imatch.group(2)+"\n"
+            ret += imatch.group(1)+"while "+imatch.group(2)+".changed():\n"
+            return ret
+        
         found = line_stripped.find(':=')
         if found>0:
             # If the last character is not a Cadabra terminator, start a capture process.
@@ -160,6 +170,9 @@ class Shell(InteractiveConsole):
                     print "inconsistent" # property names can only contain letters
             else:
                 line=indent_line+line_stripped
+                if lastchar==';':
+                    line+=" display(_)"
+                    
         return line+end_of_line
 
     def push(self,line):
