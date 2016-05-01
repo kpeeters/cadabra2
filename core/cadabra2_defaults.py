@@ -88,10 +88,16 @@ def display(obj):
 #        server.send("\\begin{dmath*}{}"+str(obj.to_list())+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Ex):
-        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        if 'server' in globals():
+            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        else:
+            print(obj.__str__());
 
     elif isinstance(obj, Property):
-        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        if 'server' in globals():
+            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        else:
+            print(obj.__str__())
 
     elif type(obj)==list:
 #        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")

@@ -526,3 +526,32 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		}	
 
 	}
+
+std::string cadabra::export_as_python(const DTree& doc)
+	{
+	std::ostringstream str;
+	python_recurse(doc, doc.begin(), str);
+
+	return str.str();
+	}
+
+void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str)
+	{
+	if(it->cell_type==DataCell::CellType::document)
+		str << "#!/usr/local/bin/cadabra2\n";
+	else {
+		if(it->cell_type==DataCell::CellType::python) {
+			if(it->textbuf.size()>0) {
+				str << it->textbuf << "\n";
+				}
+			}
+		}
+
+	if(doc.number_of_children(it)>0) {
+		DTree::sibling_iterator sib=doc.begin(it);
+		while(sib!=doc.end(it)) {
+			python_recurse(doc, sib, str);
+			++sib;
+			}
+		}
+	}
