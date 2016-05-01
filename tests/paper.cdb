@@ -174,24 +174,6 @@ def test10():
 
 test10()
 
-def post_process(ex):
-    sort_product(ex)
-    eliminate_kronecker(ex)
-    canonicalise(ex)
-    collect_terms(ex)
-
-{s,r,l,k,m,n}::Indices(vector).
-{s,r,l,k,m,n}::Integer(0..d-1).
-\Gamma_{#}::GammaMatrix(metric=\delta).
-\delta_{m n}::KroneckerDelta.
-obj:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s};
-join_gamma(_)
-distribute(_)
-join_gamma(_)
-distribute(_)
-join_gamma(_)
-distribute(_)
-collect_factors(_)
 
 # @factorise!(%){d};
 # @collect_factors!(%);
