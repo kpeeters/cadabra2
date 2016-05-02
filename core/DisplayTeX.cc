@@ -247,6 +247,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\components")     print_components(str, it);
 	else if(*it->name=="\\conditional")    print_conditional(str, it);
 	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
+	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
 	else                                   print_other(str, it);
 	}
 
@@ -472,6 +473,15 @@ void DisplayTeX::print_relation(std::ostream& str, Ex::iterator it)
 	if(*it->name=="\\less")    str << " < ";
 	++sib;
 	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_indexbracket(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	str << "\\left(";
+	dispatch(str, sib);
+	str << "\\right)";
+	print_children(str, it, 1);
 	}
 
 bool DisplayTeX::children_have_brackets(Ex::iterator ch) const

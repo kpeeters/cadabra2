@@ -102,6 +102,7 @@ namespace boost {
 #include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/epsilon_to_delta.hh"
 #include "algorithms/evaluate.hh"
+#include "algorithms/expand.hh"
 #include "algorithms/expand_delta.hh"
 #include "algorithms/expand_diracbar.hh"
 #include "algorithms/factor_in.hh"
@@ -944,6 +945,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
 	def_algo_1<epsilon_to_delta>("epsilon_to_delta");
+ 	def_algo_1<expand>("expand");
 	def_algo_1<expand_delta>("expand_delta");
 	def_algo_1<expand_diracbar>("expand_diracbar");
 	def_algo_1<flatten_sum>("flatten_sum");
