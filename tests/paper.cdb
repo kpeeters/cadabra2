@@ -175,31 +175,24 @@ def test10():
 test10()
 
 
-# @factorise!(%){d};
-# @collect_factors!(%);
-# tst:= \Gamma_{k l} (12 - 18 d + 8 d**2 - d**3) + \delta_{k l} ( - 3 + 6 d - 4 d**2 + d**3) - @(obj);
-# @assert(tst);
-# 
-# #-------
-# 
-# @reset.
-# {a,b,c,d#}::Indices(spinor).
-# \Gamma_{#}::GammaMatrix(metric=\delta).
-# obj:=(\Gamma_{m n})_{a b} (\Gamma_{n p})_{b c};
-# @combine!(%);
-# @join!(%){expand}:
-# @canonicalise!(%);
-# tst:= (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} 
-# + \delta_{m p} \delta_{n n} - \delta_{m n} \delta_{n p})_{a c} - @(obj);
-# @collect_terms!(%);
-# @assert(tst);
-# @distribute!(obj);
-# @expand!(%);
-# tst:= (\Gamma_{m p})_{a c} \delta_{n n} - (\Gamma_{m n})_{a c} \delta_{n p} 
-# + (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{m p} \delta_{n n})_{a c} 
-# - (\delta_{m n} \delta_{n p})_{a c} - @(obj);
-# @collect_terms!(%);
-# #@assert(tst);
+{a,b,c,d#}::Indices(spinor).
+\Gamma_{#}::GammaMatrix(metric=\delta).
+obj:=(\Gamma_{m n})_{a b} (\Gamma_{n p})_{b c};
+combine(_);
+
+@join!(%){expand}:
+@canonicalise!(%);
+tst:= (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} 
++ \delta_{m p} \delta_{n n} - \delta_{m n} \delta_{n p})_{a c} - @(obj);
+@collect_terms!(%);
+@assert(tst);
+@distribute!(obj);
+@expand!(%);
+tst:= (\Gamma_{m p})_{a c} \delta_{n n} - (\Gamma_{m n})_{a c} \delta_{n p} 
++ (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{m p} \delta_{n n})_{a c} 
+- (\delta_{m n} \delta_{n p})_{a c} - @(obj);
+@collect_terms!(%);
+#@assert(tst);
 # # FIXME!!!
 # 
 # #-------
