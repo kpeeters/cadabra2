@@ -130,7 +130,7 @@ void cleanup_indexbracket(const Kernel& k, Ex& tr, Ex::iterator& it)
 		while(sib!=tr.end(it)) {
 			if(sib->fl.parent_rel==str_node::p_super || sib->fl.parent_rel==str_node::p_sub) {
 				auto ibrack=tr.insert(it,str_node("\\indexbracket"));
-				auto nxt=it;
+				Ex::sibling_iterator nxt=it;
 				++nxt;
 				tr.reparent(ibrack,Ex::sibling_iterator(it),nxt);
 				it=tr.begin(ibrack);

@@ -22,7 +22,7 @@ if sympy.__version__ != "unavailable":
     from sympy import factor
     from sympy import integrate
     from sympy import diff
-    from sympy import expand
+#    from sympy import expand
     from sympy import symbols
     from sympy import latex
     from sympy import sin, cos, tan, trigsimp

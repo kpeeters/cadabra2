@@ -137,6 +137,7 @@ set(LOCAL_SRC_FILES
   algorithms/eliminate_kronecker.cc
   algorithms/epsilon_to_delta.cc
   algorithms/evaluate.cc
+  algorithms/expand.cc
   algorithms/expand_delta.cc
   algorithms/expand_diracbar.cc
   algorithms/factor_in.cc
