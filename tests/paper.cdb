@@ -193,26 +193,25 @@ def test11():
 
 test11()
 
-# 
-# @reset.
-# {\mu,\nu,\rho}::Indices(curved, position=fixed).
-# {m,n,p,q,r,s,t#}::Indices(flat).
-# {m,n,p,q,r,s,t#}::Integer(0..10).
-# T^{#{\mu}}::AntiSymmetric.
-# \psi_{\mu}::SelfAntiCommuting.
-# \psi_{\mu}::Spinor(dimension=11, type=Majorana).
-# \theta::Spinor(dimension=11, type=Majorana).
-# \epsilon::Spinor(dimension=11, type=Majorana).
-# {\theta,\epsilon,\psi_{\mu}}::AntiCommuting
-# \bar{#}::DiracBar.
-# \delta^{m n}::KroneckerDelta.
-# \Gamma^{#{m}}::GammaMatrix(metric=\delta).
-# 
-# obj:= T^{\mu\nu\rho} e_{\nu}^{s}
-#      \bar{\theta} \Gamma^{r s} \psi_{\rho}
-#      \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
-# 
-# @fierz!(%)( \theta, \epsilon, \psi_{\mu}, \psi_{\nu} );
+{\mu,\nu,\rho}::Indices(curved, position=fixed).
+{m,n,p,q,r,s,t#}::Indices(flat).
+{m,n,p,q,r,s,t#}::Integer(0..10).
+T^{#{\mu}}::AntiSymmetric.
+\psi_{\mu}::SelfAntiCommuting.
+\psi_{\mu}::Spinor(dimension=11, type=Majorana).
+\theta::Spinor(dimension=11, type=Majorana).
+\epsilon::Spinor(dimension=11, type=Majorana).
+{\theta,\epsilon,\psi_{\mu}}::AntiCommuting
+\bar{#}::DiracBar.
+\delta^{m n}::KroneckerDelta.
+\Gamma^{#{m}}::GammaMatrix(metric=\delta).
+
+obj:= T^{\mu\nu\rho} e_{\nu}^{s}
+     \bar{\theta} \Gamma^{r s} \psi_{\rho}
+     \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
+
+fierz(_, $\theta, \epsilon, \psi_{\mu}, \psi_{\nu}$ );
+
 # 
 # @join!(%){expand}:
 # @distribute!(%):

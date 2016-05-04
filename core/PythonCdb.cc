@@ -107,6 +107,7 @@ namespace boost {
 #include "algorithms/expand_diracbar.hh"
 #include "algorithms/factor_in.hh"
 #include "algorithms/factor_out.hh"
+#include "algorithms/fierz.hh"
 #include "algorithms/flatten_sum.hh"
 #include "algorithms/indexsort.hh"
 #include "algorithms/integrate_by_parts.hh"
@@ -1032,6 +1033,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("factor_out", &dispatch_ex<factor_out, Ex&, bool>, 
 		 (arg("ex"),
 		  arg("factors"),arg("right")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("fierz", &dispatch_ex<fierz, Ex&>, 
+		 (arg("ex"),
+		  arg("spinors"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("substitute", &dispatch_ex<substitute, Ex&>, 
