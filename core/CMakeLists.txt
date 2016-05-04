@@ -142,6 +142,7 @@ set(LOCAL_SRC_FILES
   algorithms/expand_diracbar.cc
   algorithms/factor_in.cc
   algorithms/factor_out.cc
+  algorithms/fierz.cc
   algorithms/flatten_product.cc
   algorithms/flatten_sum.cc
   algorithms/indexsort.cc
