@@ -81,8 +81,8 @@ bool fierz::can_apply(iterator it)
 							gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
 							} while(gmnxt==0 && spnxt==0);
 						if(gmnxt) {
-//							txtout << "found gam2" << std::endl;
 							gam2=ch;
+							std::cerr << "found gam2: " << Ex(gam2) << std::endl;
 							// Skip to next spinor-index carrying object
 							do {
 								++ch;
@@ -186,6 +186,8 @@ Algorithm::result_t fierz::apply(iterator& it)
 				locgam2=tmpit;
 				if(i==0) cpyterm.erase(locgam2);
 				else 		cpyterm.erase_children(locgam2);
+				if(i>0)
+					std::cerr << "New gamma reads " << Ex(locgam2) << std::endl;
 				}
 			
 			++cpit;
@@ -202,14 +204,16 @@ Algorithm::result_t fierz::apply(iterator& it)
 			else
 				loc1->fl.parent_rel=str_node::p_super;
 			// Add the indices in opposite order in the second gamma matrix
-			iterator loc2=cpyterm.insert_subtree(locgam2.begin(), newdum.begin());
+//			std::cerr << "inserting " << newdum << " at " << Ex(locgam2) << std::endl;
+			iterator loc2=cpyterm.prepend_child(locgam2, newdum.begin());
 			loc2->fl.parent_rel=str_node::p_sub;
 			}
 		
+//		std::cerr << cpyterm << std::endl;
 		rep.append_child(rep.begin(), cpyterm.begin());
 		}
 
-	std::cerr << rep << std::endl;
+//	std::cerr << rep << std::endl;
 
 	it=tr.replace(it, rep.begin());
 	cleanup_dispatch(kernel, tr, it);
