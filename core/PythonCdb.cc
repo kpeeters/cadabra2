@@ -145,6 +145,55 @@ std::vector<T> to_std_vector(const boost::python::list& iterable )
 								  boost::python::stl_input_iterator< T >( ) );
 	}
 
+// Split a 'sum' expression into its individual terms.
+
+boost::python::list terms(const Ex& ex) 
+	{
+	Ex::iterator it=ex.begin();
+
+	if(*it->name!="\\sum")
+		throw ArgumentException("terms() expected a sum expression.");
+
+	boost::python::list ret;
+
+	auto sib=ex.begin(it);
+	while(sib!=ex.end(it)) {
+		ret.append(Ex(sib));
+		++sib;
+		}
+	
+	return ret;
+	}
+
+Ex Ex_getitem(Ex &ex, int index)
+	{
+	Ex::iterator it=ex.begin();
+
+	size_t num=ex.number_of_children(it);
+	if(index>=0 && (size_t)index<num)
+		return Ex(ex.child(it, index));
+	else 
+		throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
+	}
+
+void Ex_setitem(Ex &ex, int index, Ex val)
+	{
+	Ex::iterator it=ex.begin();
+
+	size_t num=ex.number_of_children(it);
+	if(index>=0 && (size_t)index<num) 
+		ex.replace(ex.child(it, index), val.begin());
+	else 
+		throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
+	}
+
+size_t Ex_len(Ex& ex)
+	{
+	Ex::iterator it=ex.begin();
+
+	return ex.number_of_children(it);
+	}
+
 bool output_ipython=false;
 bool post_process_enabled=true;
 
@@ -258,10 +307,7 @@ void pull_in(std::shared_ptr<Ex> ex)
 				std::string pobj = *(ex->begin(it)->name);
 				std::shared_ptr<Ex> ex = fetch_from_python(pobj);
 				if(ex) {
-					// The top node is an \expression, so we need the first child of that.
-					// FIMXE: assert consistency.
-					Ex::iterator expression_it = ex->begin();
-					Ex::iterator topnode_it    = ex->begin(expression_it);
+					Ex::iterator topnode_it = ex->begin();
 
 					multiplier_t mult=*(it->multiplier);
 					it=ex->replace(it, topnode_it);
@@ -311,6 +357,7 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
 	catch(std::exception& except) {
 		throw ParseException("Cannot parse");
 		}
+	parser.finalise();
 
 	// First pull in any expressions referred to with @(...) notation, because the
 	// full expression may not have consistent indices otherwise.
@@ -581,8 +628,6 @@ void inject_defaults(Kernel *k)
 void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	{
 	Ex::iterator it=ex->begin();
-	assert(*(it->name)=="\\expression");
-	it=ex->begin(it);
 
 	if(param) {
 		keyval_t keyvals;
@@ -654,7 +699,7 @@ std::string Property<Prop>::repr_() const
 template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
-	Ex::iterator it=ex.begin().begin();
+	Ex::iterator it=ex.begin();
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
 		if(*it->name=="\\equals") 
 			it=ex.child(it,1);
@@ -904,6 +949,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__eq__",   &__eq__Ex_Ex)
 		.def("__eq__",   &__eq__Ex_int)
 		.def("__sympy__",  &Ex_to_Sympy)
+		.def("__getitem__", &Ex_getitem)
+		.def("__setitem__", &Ex_setitem)
+		.def("__len__",  &Ex_len)
 		.def("state",    &Ex::state)
 		.def("reset",    &Ex::reset_state)
 		.def("changed",  &Ex::changed_state);
@@ -927,8 +975,13 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_value_policy<manage_new_object>() );
 	def("create_scope_from_global", &create_scope_from_global, 
 		 return_value_policy<manage_new_object>());
-	def("create_empty_scope", &create_empty_scope, 
+	def("create_empty_scope", &create_empty_scope,
 		 return_value_policy<manage_new_object>());
+
+	// Algorithms which spit out a new Ex (or a list of new Exs), instead of 
+	// modifying the existing one.
+
+	def("terms", &terms);
 
 	// We do not use implicitly_convertible to convert a string
 	// parameter to an Ex object automatically (it never
