@@ -42,10 +42,6 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 
 //void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it) 
 //	{
-//	if(*it->name=="\\expression") {
-//		dispatch(str, tree.begin(it));
-//		return;
-//		}
 //
 //	// print multiplier and object name
 //	if(*it->multiplier!=1)
@@ -330,16 +326,18 @@ void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it)
 		print_multiplier(str, it);
 
 	Ex::iterator par=tree.parent(it);
-	if(tree.number_of_children(par) - Algorithm::number_of_direct_indices(par)>1) { 
-      // for a single argument, the parent already takes care of the brackets
-		if(*it->multiplier!=1 || (tree.is_valid(par) && *par->name!="\\expression")) {
-			// test whether we need extra brackets
-			close_bracket=!children_have_brackets(it);
-			if(close_bracket)
-				str << "(";
+	if(tree.is_valid(par)) {
+		if(tree.number_of_children(par) - Algorithm::number_of_direct_indices(par)>1) { 
+			// for a single argument, the parent already takes care of the brackets
+			if(*it->multiplier!=1) {
+				// test whether we need extra brackets
+				close_bracket=!children_have_brackets(it);
+				if(close_bracket)
+					str << "(";
+				}
 			}
 		}
-
+	
 	unsigned int steps=0;
 
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;

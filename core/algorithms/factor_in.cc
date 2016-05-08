@@ -9,6 +9,7 @@ factor_in::factor_in(const Kernel& k, Ex& tr, Ex& factors_)
 
 bool factor_in::can_apply(iterator st)
 	{
+	std::cerr << "can apply factor_in? " << *st->name << std::endl;
 	factnodes.clear();
 	assert(tr.is_valid(st));
 	if(*st->name=="\\sum") {
@@ -108,6 +109,7 @@ bool factor_in::compare_restricted(iterator one, iterator two) const
 
 Algorithm::result_t factor_in::apply(iterator& it)
 	{
+	std::cerr << "factor in called" << std::endl;
 	result_t ret=result_t::l_no_action;
 	fill_hash_map(it);
 

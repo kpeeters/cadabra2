@@ -1,7 +1,7 @@
 def test01():
     __cdbkernel__=create_scope()
-    ex:= a*b+a*c+d;
-    factor_in(_, $b,c$);
+ex:= a*b+a*c+d;
+factor_in(_, $b,c$);
     tst:=(b+c)*a + d - @(ex);
     assert(tst==0)
 

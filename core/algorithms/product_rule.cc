@@ -157,7 +157,7 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			  // Add the whole product node to the replacement sum.
 			  iterator dummy=rep.append_child(sm);
 			  dummy=rep.replace(dummy, prodnode);
-			  if(*tr.parent(it)->name=="\\expression") 
+			  if(tr.is_valid(tr.parent(it))==false)
 					dummy->fl.bracket=str_node::b_none;
 			  else dummy->fl.bracket=str_node::b_round;
 

@@ -44,16 +44,26 @@
 				},
 				{
 					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{9}{32}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{s} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma^{s} \\psi_{\\rho}%\n - \\frac{1}{32}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{r} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma^{r} \\psi_{\\rho}%\n+\\frac{5}{16}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m} \\psi_{\\rho}%\n+\\frac{7}{64}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n s} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n}\\,^{s} \\psi_{\\rho}%\n - \\frac{1}{64}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n r} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n}\\,^{r} \\psi_{\\rho}%\n+\\frac{1}{4}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n} \\psi_{\\rho}%\n+\\frac{1}{3840}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n p q s t} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n p q}\\,^{s}\\,_{t} \\psi_{\\rho}%\n - \\frac{1}{3840}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n p q r t} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n p q}\\,^{r}\\,_{t} \\psi_{\\rho}%\n+\\frac{1}{384}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{n p q t} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n p q t} \\psi_{\\rho}\\end{dmath*}"
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}126\\end{verbatim}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{4}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma^{n} \\psi_{\\rho}%\n+\\frac{5}{16}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m} \\psi_{\\rho}%\n+\\frac{3}{32}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma_{m}\\,^{n p} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{n}\\,^{p} \\psi_{\\rho}%\n+\\frac{1}{4}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{n} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n} \\psi_{\\rho}%\n+\\frac{1}{384}T^{\\mu \\nu \\rho} e_{\\mu}\\,^{m} \\bar{\\theta} \\Gamma^{n p q r} \\epsilon \\bar{\\psi_{\\nu}} \\Gamma_{m n p q r} \\psi_{\\rho}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{32}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s m r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{m} \\psi_{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{32}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s m r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{m} \\psi_{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{32}T^{\\mu \\nu \\rho} e_{\\nu}\\,^{s} \\bar{\\theta} \\Gamma^{r s m r} \\epsilon \\bar{\\psi_{\\mu}} \\Gamma_{m} \\psi_{\\rho}\\end{dmath*}"
 				}
 			],
-			"source" : "join_gamma(_);\ndistribute(_)\neliminate_kronecker(_)\njoin_gamma(_)\ndistribute(_)\neliminate_kronecker(_)\ncanonicalise(_);\nrename_dummies(_);"
+			"source" : "join_gamma(_);\ndistribute(_)\neliminate_kronecker(_)\njoin_gamma(_)\ndistribute(_)\neliminate_kronecker(_)\nq=terms(_)\nlen(q);\nq[3];\ncanonicalise(_);\nrename_dummies(_);"
 		},
 		{
 			"cell_origin" : "client",

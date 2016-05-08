@@ -71,9 +71,8 @@ Ex::Ex(const std::string& str)
 Ex::Ex(int val) 
 	: state_(result_t::l_no_action)
 	{
-	set_head(str_node("\\expression"));
-	Ex::iterator it = append_child(begin(), str_node("1"));
-	multiply(it->multiplier, val);
+	set_head(str_node("1"));
+	multiply(begin()->multiplier, val);
 	}
 
 Ex::result_t Ex::state() const
@@ -223,32 +222,6 @@ Ex::iterator Ex::erase_expression(Ex::iterator it)
 	return erase(it);
 	}
 
-Ex::iterator Ex::keep_only_last(Ex::iterator it)
-	{
-	it=named_parent(it, "\\history");
-	if(begin(it)==end(it)) return it;
-
-	sibling_iterator expit=end(it);
-	--expit;
-//	std::cout << *expit->name << std::endl;
-	while(expit.node!=0) { // FIXME: this is a hack, how does one do 'rbegin'?
-		if(*expit->name=="\\expression") {
-//			std::cout << "found expression node" << std::endl;
-			sibling_iterator prev=begin(it);
-			while(prev!=expit) {
-				if(*prev->name=="\\expression") {
-//					std::cout << "erasing old expression" << std::endl;
-					prev=erase(prev);
-					}
-				else
-					++prev;
-				}
-			return expit;
-			}
-		--expit;
-		}
-	return it;
-	}
 
 hashval_t Ex::calc_hash(iterator it) const
 	{
@@ -293,141 +266,6 @@ multiplier_t Ex::arg_to_num(sibling_iterator sib, unsigned int num) const
 	else                      nod=sib;
 	return *nod->multiplier;
 	}
-
-//Ex::sibling_iterator Ex::tensor_index(const iterator_base& position, unsigned int num) const
-//	{
-//	index_iterator ret=begin_index(position);
-//	while(num-- > 0)
-//		++ret;
-//	return ret;
-
-//	const Derivative *der=properties::get<Derivative>(position);
-//	if(der) {
-//		unsigned int tensor_children=number_of_children(begin(position));
-//		if(num<tensor_children) return child(begin(position), num);
-//		else                    return child(position, num+1-tensor_children);
-//		}
-//	else return child(position, num);
-//	}
-
-// Given an iterator somewhere inside an expression (can be the
-// \\history node), this member returns an iterator pointing to the
-// \expression node of the active expression. 
-Ex::iterator Ex::active_expression(Ex::iterator it) const
-	{
-	it=named_parent(it, "\\history");
-	Ex::sibling_iterator sube=end(it);
-	--sube;
-	return sube;
-	}
-
-/*unsigned int Ex::number_of_steps(Ex::iterator it) const
-	{
-	it=named_parent(it, "\\expression");
-	sibling_iterator sib=begin(it);
-	unsigned int ret=0;
-	while(sib!=end(it)) {
-		if(*sib->name=="\\history")
-			++ret;
-		++sib;
-		}
-	return ret;
-	}
-*/
-
-//void Ex::select(unsigned int node, unsigned int mark)
-//	{
-//	iterator it=begin();
-//	unsigned int here=1;
-//	while(it!=end()) {
-//		if(here==node) {
-//			it->fl.mark=mark;
-//			break;
-//			  iterator nd=it;
-//			  nd.skip_children();
-//			  ++nd;
-//			  while(it!=nd) {
-//				  it->fl.mark=mark;
-//				  ++it;
-//				  }
-//			  break;
-//			}
-//		++here;
-//		++it;
-//		}
-//	}
-
-//void Ex::select(iterator it, unsigned int mark)
-//	{
-//	it->fl.mark=mark;
-//	  iterator nd=it;
-//	  nd.skip_children();
-//	  ++nd;
-//	  while(it!=nd) {
-//		  it->fl.mark=mark;
-//		  ++it;
-//		  }
-//	}
-
-//void Ex::unselect(unsigned int node)
-//	{
-//	select(node, 0);
-//	}
-
-//void Ex::unselect(iterator it, bool deep)
-//	{
-//	select(it, 0);
-//	if(deep) {
-//		iterator nxt=it;
-//		nxt.skip_children();
-//		++nxt;
-//		iterator ch=begin(it);
-//		while(ch!=nxt) {
-//			select(ch,0);
-//			++ch;
-//			}
-//		}
-//	}
-
-//void Ex::select_all(unsigned int mark)
-//	{
-//	iterator it=begin();
-//	while(it!=end()) {
-//		(*it).fl.mark=mark;
-//		++it;
-//		}
-//	}
-//
-//void Ex::unselect_all(unsigned int mark)
-//	{
-//	iterator it=begin();
-//	while(it!=end()) {
-//		if((*it).fl.mark==mark)
-//			(*it).fl.mark=0;
-//		++it;
-//		}
-//	}
-//
-//void Ex::unselect_all()
-//	{
-//	iterator it=begin();
-//	while(it!=end()) {
-//		(*it).fl.mark=0;
-//		++it;
-//		}
-//	}
-
-//void Ex::marked_nodes(std::vector<iterator>& v) const
-//	{
-//	iterator it=begin();
-//	while(it!=end()) {
-//		if(it->fl.mark) {
-//			v.push_back(it);
-//			it.skip_children();
-//			}
-//		++it;
-//		}
-//	}
 
 unsigned int Ex::equation_number(Ex::iterator it) const
 	{

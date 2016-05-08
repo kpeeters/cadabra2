@@ -53,6 +53,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	result_t ret=result_t::l_no_action;
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
+	std::cerr << "apply_generic at " << *it->name << " " << *start->name << std::endl;
 	while(tr.is_valid(start)) {
 		result_t thisret=result_t::l_no_action;
 		Ex::iterator enter(start);
@@ -443,7 +444,7 @@ bool Algorithm::check_consistency(iterator it) const
 	stopwatch w1;
 	w1.start();
 //	debugout << "checking consistency ... " << std::flush;
-	assert(*it->name=="\\expression");
+	assert(tr.is_valid(tr.parent(it))==false);
 //	iterator entry=it;
 	iterator end=it;
 	end.skip_children();
@@ -972,7 +973,7 @@ void Algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_ma
 	{
 	loopie:
 	iterator par=Ex::parent(it);
-	if(tr.is_valid(par)==false || par==tr.end() || *par->name=="\\expression" || *par->name=="\\history") { // reached the top
+	if(tr.is_valid(par)==false || par==tr.end()) { // reached the top
 		return;
 		}
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(par);
@@ -1021,10 +1022,6 @@ void Algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_ma
 			}
 		it=par;
 		goto loopie;
-		}
-	else if(*par->name=="\\expression") { // reached the top
-		index_sw.stop();
-		return;
 		}
 	else if((*par->name).size()>0 && (*par->name)[0]=='@') { // command nodes swallow everything
 		index_sw.stop();
@@ -1188,7 +1185,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			}
 		ind_free.insert(free_so_far.begin(), free_so_far.end());
 		}
-	else if(*it->name=="\\expression") {
+	else if(tr.is_valid(tr.parent(it))==false) {
 		classify_indices(it.begin(), ind_free, ind_dummy);
 		}
 	else if(*it->name=="\\tie") {
@@ -1309,8 +1306,7 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 bool Algorithm::is_termlike(iterator it)
 	{
 	if(tr.is_valid(tr.parent(it))) {
-		if(*tr.parent(it)->name=="\\sum" || 
-			(*tr.parent(it)->name=="\\expression" && *it->name!="\\sum") ||
+		if(*tr.parent(it)->name=="\\sum" || (tr.is_valid(tr.parent(it))==false && *it->name!="\\sum") ||
 			tr.parent(it)->is_command() ) 
 			return true;
 		}
@@ -1329,9 +1325,9 @@ bool Algorithm::is_factorlike(iterator it)
 bool Algorithm::is_single_term(iterator it)
 	{
 	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" 
-		&& *it->name!="\\equals" && *it->name!="\\arrow" && *it->name!="\\expression" ) {
+		&& *it->name!="\\equals" && *it->name!="\\arrow" && tr.is_valid(tr.parent(it))==false ) {
 		if(tr.is_valid(tr.parent(it))) {
-			if(*tr.parent(it)->name=="\\sum" || *tr.parent(it)->name=="\\expression" || tr.parent(it)->is_command())
+			if(*tr.parent(it)->name=="\\sum" || tr.is_valid(tr.parent(it))==false || tr.parent(it)->is_command())
 				return true;
 //			if(*tr.parent(it)->name!="\\prod" && 
 //				it->fl.parent_rel==str_node::p_none) // object is an argument of a wrapping object, not an index
@@ -1495,8 +1491,7 @@ bool Algorithm::locate_object_set(const Ex& objs,
 	// index (offset wrt. 'st') rather than an iterator because the
 	// latter only apply to a single tree, not to its copies.
 
-	// We accept either a tree with a \comma node at the top, or
-	// a tree which is \expression{\comma{...}}.
+	// We accept only a tree with a \comma node at the top.
 	Ex::iterator top=objs.begin();
 	if(*top->name!="\\comma") 
 		top = objs.begin(objs.begin());
