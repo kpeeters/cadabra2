@@ -131,9 +131,25 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 		}
 	}
 
-void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it)
+void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 	{
-	bool turned_one=false;
+	mpz_class denom=it->multiplier->get_den();
+
+	if(denom!=1) {
+		if(mult*it->multiplier->get_num()<0) {
+			str << " - ";
+			mult *= -1;
+			}
+		str << " " << mult * it->multiplier->get_num() << "/" << it->multiplier->get_den() << " ";
+		}
+	else if(mult * (*it->multiplier)==-1) {
+		str << "-";
+		}
+	else {
+		str << mult * (*it->multiplier);
+		}
+
+/*	bool turned_one=false;
 	mpz_class denom=it->multiplier->get_den();
 
 	if(*it->multiplier<0) {
@@ -173,7 +189,7 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it)
 		}
 
 	if(!turned_one && !(*it->name=="1"))
-		str << "*";
+	str << "*"; */
 	}
 
 void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
@@ -321,69 +337,24 @@ void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, cons
 
 void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it) 
 	{
-	bool close_bracket=false;
-	if(*it->multiplier!=1) 
-		print_multiplier(str, it);
+	assert(*it->multiplier==1);
 
-	Ex::iterator par=tree.parent(it);
-	if(tree.is_valid(par)) {
-		if(tree.number_of_children(par) - Algorithm::number_of_direct_indices(par)>1) { 
-			// for a single argument, the parent already takes care of the brackets
-			if(*it->multiplier!=1) {
-				// test whether we need extra brackets
-				close_bracket=!children_have_brackets(it);
-				if(close_bracket)
-					str << "(";
-				}
-			}
-		}
-	
+	if(needs_brackets(it)) 
+		str << "(";
+
 	unsigned int steps=0;
 
-	str_node::bracket_t previous_bracket_=str_node::b_invalid;
 	Ex::sibling_iterator ch=tree.begin(it);
-	bool beginning_of_group=true;
 	while(ch!=tree.end(it)) {
-		if(++steps==20) {
-			steps=0;
-			}
-		str_node::bracket_t current_bracket_=(*ch).fl.bracket;
-		if(previous_bracket_!=current_bracket_)
-			if(current_bracket_!=str_node::b_none) {
-				if(ch!=tree.begin(it)) {
-					str << "+";
-					}
-				print_opening_bracket(str, current_bracket_, str_node::p_none);
-				beginning_of_group=true;
-				}
-		if(beginning_of_group) {
-			beginning_of_group=false;
-			if(*ch->multiplier<0) {
-				str << "-";
-				}
-			}
-		else {
-			if(*ch->multiplier<0) {
-				str << "-";
-				}
-			else {
-				str << "+";
-				}
-			}
-		if(*ch->name=="1" && (*ch->multiplier==1 || *ch->multiplier==-1)) 
-			str << "1"; // special case numerical constant
-		else 
-			dispatch(str, ch);
-		++ch;
-		if(ch==tree.end(it)) {
-			if(current_bracket_!=str_node::b_none)
-				print_closing_bracket(str, current_bracket_, str_node::p_none);
-			}
+		if(*ch->multiplier>=0 && ch!=tree.begin(it))
+			str << "+"; 
 
-		previous_bracket_=current_bracket_;
+		dispatch(str, ch);
+		++ch;
 		}
 
-	if(close_bracket) str << ")";
+	if(needs_brackets(it)) 
+		str << ")";
 	str << std::flush;
 	}
 

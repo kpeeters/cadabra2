@@ -156,6 +156,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 // FIXME: append_children has a BUG! Messes up the tree. But it is needed to
 // handle terms where the sub-factor is not a simple element.
 //			tr.append_children(prod, nt.second[0].begin(top), nt.second[0].end(top));
+
 			cleanup_dispatch(kernel, tr, prod);
 			}
 		else {

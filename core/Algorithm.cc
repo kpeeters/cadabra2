@@ -53,7 +53,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	result_t ret=result_t::l_no_action;
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
-	std::cerr << "apply_generic at " << *it->name << " " << *start->name << std::endl;
+	// std::cerr << "apply_generic at " << *it->name << " " << *start->name << std::endl;
 	while(tr.is_valid(start)) {
 		result_t thisret=result_t::l_no_action;
 		Ex::iterator enter(start);
@@ -558,6 +558,7 @@ void Algorithm::report_progress(const std::string& str, int todo, int done, int 
 
 bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo) 
 	{
+//	std::cerr << "renaming in " << Ex(two) << std::endl;
 //	std::cout << "full story " << *two->name << std::endl;
 //	print_classify_indices(two);
 //	std::cout << "replacement" << std::endl;
@@ -567,13 +568,11 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	index_map_t ind_free_full, ind_dummy_full;
 
 	if(still_inside_algo) {
-		classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
-//		print_classify_indices(std::cout, tr.parent(two));
+		if(tr.is_head(two)==false)
+			classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
 		}
 	else {
-//		txtout << "classify indices up" << *(tr.parent(two)->name) << std::endl;
 		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
-//		print_classify_indices(std::cout, two);
 		}
 	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
 
@@ -972,6 +971,7 @@ void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 void Algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_map_t& ind_dummy)  const
 	{
 	loopie:
+	if(tr.is_head(it)) return;
 	iterator par=Ex::parent(it);
 	if(tr.is_valid(par)==false || par==tr.end()) { // reached the top
 		return;
@@ -1076,7 +1076,6 @@ void Algorithm::dumpmap(std::ostream& str, const index_map_t& mp) const
 void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
 	{
 	index_sw.start();
-//	debugout << "   " << *it->name << std::endl;
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(it);
 	if(*it->name=="\\sum" || *it->name=="\\equals") {
 		index_map_t first_free;
@@ -1185,9 +1184,9 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			}
 		ind_free.insert(free_so_far.begin(), free_so_far.end());
 		}
-	else if(tr.is_valid(tr.parent(it))==false) {
-		classify_indices(it.begin(), ind_free, ind_dummy);
-		}
+//	else if(tr.is_valid(tr.parent(it))==false) {
+//		classify_indices(it.begin(), ind_free, ind_dummy);
+//		}
 	else if(*it->name=="\\tie") {
 		ind_free.clear();
 		ind_dummy.clear();
@@ -1324,10 +1323,9 @@ bool Algorithm::is_factorlike(iterator it)
 
 bool Algorithm::is_single_term(iterator it)
 	{
-	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" 
-		&& *it->name!="\\equals" && *it->name!="\\arrow" && tr.is_valid(tr.parent(it))==false ) {
-		if(tr.is_valid(tr.parent(it))) {
-			if(*tr.parent(it)->name=="\\sum" || tr.is_valid(tr.parent(it))==false || tr.parent(it)->is_command())
+	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
+		if(tr.is_head(it)==false) {
+			if(*tr.parent(it)->name=="\\sum")
 				return true;
 //			if(*tr.parent(it)->name!="\\prod" && 
 //				it->fl.parent_rel==str_node::p_none) // object is an argument of a wrapping object, not an index
