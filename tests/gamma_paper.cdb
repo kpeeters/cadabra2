@@ -1,0 +1,21 @@
+#!/usr/local/bin/cadabra2
+{s,r,l,k,m,n}::Indices(vector);
+{s,r,l,k,m,n}::Integer(0..d-1);
+\Gamma_{#}::GammaMatrix(metric=\delta);
+\delta_{m n}::KroneckerDelta;
+def post_process(ex):
+	sort_product(ex)
+	eliminate_kronecker(ex)
+	canonicalise(ex)
+	collect_terms(ex)
+    
+ex:=\Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s};
+for i in range(3):
+	join_gamma(_)
+	distribute(_)
+    
+factor_in(_, $d$);
+collect_factors(ex);
+tst:= \Gamma_{k l} (12 - 18 d + 8 d**2 - d**3) + \delta_{k l} ( - 3 + 6 d - 4 d**2 + d**3) - @(ex);
+distribute(_)
+assert(tst==0)

@@ -4,6 +4,7 @@ def test01():
     factor_in(_, $b,c$);
     tst:=(b+c)*a + d - @(ex);
     assert(tst==0)
+    print('Test 01 passed')
 
 test01()
 
@@ -13,6 +14,7 @@ def test02():
     factor_in(_, $b$);
     tst:=(2+b)*a - @(ex);
     assert(tst==0)
+    print('Test 02 passed')
 
 test02()
     
@@ -22,6 +24,7 @@ def test03():
     factor_in(_, $a,c$);
     tst:=(3 a + 5 c) b - @(ex);
     assert(tst==0)
+    print('Test 03 passed')
 
 test03()
 
@@ -31,6 +34,7 @@ def test04():
     factor_out(_, $a$);
     tst4:= -4 q - 3 p s + a*(b + c e - 2 g d + d - 9/2) - @(ex);
     assert(tst4==0)
+    print('Test 04 passed')
 
 test04()
 
@@ -40,6 +44,7 @@ def test05():
     factor_out(_, $a$)
     tst:= c - a - @(ex);
     assert(tst==0)
+    print('Test 05 passed')
 
 test05()
     
@@ -49,6 +54,7 @@ def test06():
     factor_out(ex, $a,c$);
     tst5:=  a * c * (2 * e + 5) + c * ( - 2 * e + d - 1) + a * (3 * b - d + 1) + 7 * e * f - @(ex);
     assert(tst5==0)
+    print('Test 06 passed')
 
 test06()
     
@@ -63,6 +69,7 @@ def test07():
     factor_out(_, $A$, right=False);
     tst := A*(B + C) + (D + E)*A - @(ex);
     assert(tst==0)
+    print('Test 07 passed')
 
 test07()
 
@@ -73,6 +80,7 @@ def test08():
     factor_out(_, $A$);
     tst := A*(B + C - D) - @(obj);
     assert(tst==0)
+    print('Test 08 passed')
 
 test08()
 
@@ -84,6 +92,7 @@ def test09():
     factor_out(_, $A, B, c$);
     tst := A B c * (X - Y) - @(obj);
     assert(tst==0)
+    print('Test 09 passed')
 
 test09()
 
@@ -97,6 +106,7 @@ def test10():
     factor_out(_, $c, A, B$, right=True);
     tst := (A B (X-Y) + (-X+Y) A B) c - @(obj);
     assert(tst==0)
+    print('Test 10 passed')
 
 test10()
 
@@ -110,6 +120,7 @@ def test11():
     factor_out(_, $A, B, X$);
     tst := X A B (Y - Z) - @(obj);
     assert(tst==0)
+    print('Test 11 passed')
 
 test11()
 
@@ -122,6 +133,7 @@ def test12():
     factor_out(_, $A, B, X$);
     tst := A B X A B (Y + Z) - @(obj);
     assert(tst==0)
+    print('Test 12 passed')
 
 test12()
 
@@ -134,6 +146,7 @@ def test13():
     factor_out(_, $A, B, C, D$);
     tst := A B C D (Y - Z) - @(obj);
     assert(tst==0)
+    print('Test 13 passed')
 
 test13()
 
@@ -145,6 +158,7 @@ def test14():
     factor_out(_, $A_{a}$);
     tst:= A_{a} (B_{b} + C_{b}) + A_{b} D_{a} - @(obj);
     assert(tst==0)
+    print('Test 14 passed')
 
 test14()
 

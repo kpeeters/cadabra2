@@ -53,6 +53,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	result_t ret=result_t::l_no_action;
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
+	// std::cerr << "apply_generic at " << *it->name << " " << *start->name << std::endl;
 	while(tr.is_valid(start)) {
 		result_t thisret=result_t::l_no_action;
 		Ex::iterator enter(start);
@@ -443,7 +444,7 @@ bool Algorithm::check_consistency(iterator it) const
 	stopwatch w1;
 	w1.start();
 //	debugout << "checking consistency ... " << std::flush;
-	assert(*it->name=="\\expression");
+	assert(tr.is_valid(tr.parent(it))==false);
 //	iterator entry=it;
 	iterator end=it;
 	end.skip_children();
@@ -557,6 +558,7 @@ void Algorithm::report_progress(const std::string& str, int todo, int done, int 
 
 bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo) 
 	{
+//	std::cerr << "renaming in " << Ex(two) << std::endl;
 //	std::cout << "full story " << *two->name << std::endl;
 //	print_classify_indices(two);
 //	std::cout << "replacement" << std::endl;
@@ -566,13 +568,11 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	index_map_t ind_free_full, ind_dummy_full;
 
 	if(still_inside_algo) {
-		classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
-//		print_classify_indices(std::cout, tr.parent(two));
+		if(tr.is_head(two)==false)
+			classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
 		}
 	else {
-//		txtout << "classify indices up" << *(tr.parent(two)->name) << std::endl;
 		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
-//		print_classify_indices(std::cout, two);
 		}
 	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
 
@@ -971,8 +971,9 @@ void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 void Algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_map_t& ind_dummy)  const
 	{
 	loopie:
+	if(tr.is_head(it)) return;
 	iterator par=Ex::parent(it);
-	if(tr.is_valid(par)==false || par==tr.end() || *par->name=="\\expression" || *par->name=="\\history") { // reached the top
+	if(tr.is_valid(par)==false || par==tr.end()) { // reached the top
 		return;
 		}
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(par);
@@ -1021,10 +1022,6 @@ void Algorithm::classify_indices_up(iterator it, index_map_t& ind_free, index_ma
 			}
 		it=par;
 		goto loopie;
-		}
-	else if(*par->name=="\\expression") { // reached the top
-		index_sw.stop();
-		return;
 		}
 	else if((*par->name).size()>0 && (*par->name)[0]=='@') { // command nodes swallow everything
 		index_sw.stop();
@@ -1079,7 +1076,6 @@ void Algorithm::dumpmap(std::ostream& str, const index_map_t& mp) const
 void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
 	{
 	index_sw.start();
-//	debugout << "   " << *it->name << std::endl;
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(it);
 	if(*it->name=="\\sum" || *it->name=="\\equals") {
 		index_map_t first_free;
@@ -1116,9 +1112,9 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(first_free.count((*fri).first)==0) {
 								if(*it->name=="\\sum") {
-									// std::cerr << (*fri).first << " not in first term" << std::endl;
-									// std::cerr << Ex(it) << std::endl;
-									throw ConsistencyException("Free ind in different terms in a sum do not match 2.");
+									std::cerr << (*fri).first << " not in first term" << std::endl;
+									 std::cerr << Ex(it) << std::endl;
+									throw ConsistencyException("Free indices in different terms in a sum do not match.");
 									}
 								else
 									throw ConsistencyException("Free indices on lhs and rhs do not match.");
@@ -1188,9 +1184,9 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			}
 		ind_free.insert(free_so_far.begin(), free_so_far.end());
 		}
-	else if(*it->name=="\\expression") {
-		classify_indices(it.begin(), ind_free, ind_dummy);
-		}
+//	else if(tr.is_valid(tr.parent(it))==false) {
+//		classify_indices(it.begin(), ind_free, ind_dummy);
+//		}
 	else if(*it->name=="\\tie") {
 		ind_free.clear();
 		ind_dummy.clear();
@@ -1308,13 +1304,14 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 
 bool Algorithm::is_termlike(iterator it)
 	{
-	if(tr.is_valid(tr.parent(it))) {
-		if(*tr.parent(it)->name=="\\sum" || 
-			(*tr.parent(it)->name=="\\expression" && *it->name!="\\sum") ||
-			tr.parent(it)->is_command() ) 
-			return true;
+	if(tr.is_head(it)) {
+		if(*it->name!="\\sum") return true;
+		return false;
 		}
-	return false;
+	else {
+		if(*tr.parent(it)->name=="\\sum") return true;
+		return false;
+		}
 	}
 
 bool Algorithm::is_factorlike(iterator it)
@@ -1328,10 +1325,9 @@ bool Algorithm::is_factorlike(iterator it)
 
 bool Algorithm::is_single_term(iterator it)
 	{
-	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" 
-		&& *it->name!="\\equals" && *it->name!="\\arrow" && *it->name!="\\expression" ) {
-		if(tr.is_valid(tr.parent(it))) {
-			if(*tr.parent(it)->name=="\\sum" || *tr.parent(it)->name=="\\expression" || tr.parent(it)->is_command())
+	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
+		if(tr.is_head(it)==false) {
+			if(*tr.parent(it)->name=="\\sum")
 				return true;
 //			if(*tr.parent(it)->name!="\\prod" && 
 //				it->fl.parent_rel==str_node::p_none) // object is an argument of a wrapping object, not an index
@@ -1495,8 +1491,7 @@ bool Algorithm::locate_object_set(const Ex& objs,
 	// index (offset wrt. 'st') rather than an iterator because the
 	// latter only apply to a single tree, not to its copies.
 
-	// We accept either a tree with a \comma node at the top, or
-	// a tree which is \expression{\comma{...}}.
+	// We accept only a tree with a \comma node at the top.
 	Ex::iterator top=objs.begin();
 	if(*top->name!="\\comma") 
 		top = objs.begin(objs.begin());

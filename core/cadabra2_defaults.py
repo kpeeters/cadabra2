@@ -22,7 +22,7 @@ if sympy.__version__ != "unavailable":
     from sympy import factor
     from sympy import integrate
     from sympy import diff
-    from sympy import expand
+#    from sympy import expand
     from sympy import symbols
     from sympy import latex
     from sympy import sin, cos, tan, trigsimp
@@ -88,23 +88,31 @@ def display(obj):
 #        server.send("\\begin{dmath*}{}"+str(obj.to_list())+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Ex):
-        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        if 'server' in globals():
+            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        else:
+            print(obj.__str__());
 
     elif isinstance(obj, Property):
-        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        if 'server' in globals():
+            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        else:
+            print(obj.__str__())
 
     elif type(obj)==list:
-#        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
-         out="\\begin{dmath*}{}"
-         first=True
-         for elm in obj:
-             if first==False:
-                 out+=", "
-             else:
-                 first=False
-             out+=latex(obj)
-         out+="\\end{dmath*}"
-         server.send(out, "latex_view")
+        out="\\begin{dmath*}{}"
+        first=True
+        for elm in obj:
+            if first==False:
+                out+=", "
+            else:
+                first=False
+            if isinstance(elm, Ex):
+                out += elm._latex()
+            else:
+                out+=latex(elm)   # Sympy to the rescue for all other objects.
+        out+="\\end{dmath*}"
+        server.send(out, "latex_view")
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
         server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")

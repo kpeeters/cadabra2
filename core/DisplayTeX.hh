@@ -70,6 +70,7 @@ class DisplayTeX : public DisplayBase {
 		void print_components(std::ostream&, Ex::iterator);
 		void print_conditional(std::ostream&, Ex::iterator);
 		void print_relation(std::ostream&, Ex::iterator);
+		void print_indexbracket(std::ostream&, Ex::iterator);
 		void print_other(std::ostream& str, Ex::iterator it);
 
 		bool children_have_brackets(Ex::iterator ch) const;

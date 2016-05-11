@@ -15,11 +15,6 @@ void DisplayBase::output(std::ostream& str)
 
 void DisplayBase::output(std::ostream& str, Ex::iterator it) 
 	{
-	if(*it->name=="\\expression") {
-		dispatch(str, tree.begin(it));
-		return;
-		}
-
 	dispatch(str, it);
 	}
 

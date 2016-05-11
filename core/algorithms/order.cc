@@ -35,8 +35,8 @@ Algorithm::result_t order::apply(iterator& st)
 					}
 				}
 			
-			// \expression{\comma{A}{B}}
-			sibling_iterator orig_st=objects.begin(objects.begin(objects.begin()));
+			// \comma{A}{B}}
+			sibling_iterator orig_st=objects.begin(objects.begin());
 
 			for(unsigned int i=0; i<ordered.size(); ++i) {
 				iterator dest_st=tr.begin(st);

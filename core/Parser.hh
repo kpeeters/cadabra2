@@ -45,6 +45,11 @@ class Parser {
 
 		void remove_empty_nodes();
 
+		// Finalise the parsed expression. This function should be
+		// called when no further operator>> calls are going to be made,
+		// and is necessary to ensure that the tree is consistent.
+		void finalise();
+
 		std::shared_ptr<Ex> tree;
 	private:
 		Ex::iterator parts;

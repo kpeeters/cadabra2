@@ -96,7 +96,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 
 	// This does not work, because it does not flip parent rels (disabled for a reason?)
 	// FIXME: fix logic for subtree/Ex_compare usage.
-	//std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
+//	std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
 	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
 	//std::cerr << res << std::endl;
 
@@ -245,10 +245,9 @@ bool property::parse_one_argument(Ex::iterator arg, keyval_t& keyvals)
 
 bool property::parse_to_keyvals(const Ex& tr, keyval_t& keyvals) 
 	{
-	if(tr.number_of_children(tr.begin())==0) return true;
-	if(tr.number_of_children(tr.begin())>1)  return false;
+	if(tr.begin()==tr.end()) return true;
 
-	auto it=tr.begin(tr.begin());
+	auto it=tr.begin();
 
 //	std::cout << "parsing to keyvals" << std::endl;
 	if(*(it)->name!="\\comma") { // one argument

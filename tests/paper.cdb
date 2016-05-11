@@ -174,96 +174,64 @@ def test10():
 
 test10()
 
-def post_process(ex):
-    sort_product(ex)
-    eliminate_kronecker(ex)
-    canonicalise(ex)
-    collect_terms(ex)
+def test11():
+    __cdbkernel__=create_scope()
+    {a,b,c,d#}::Indices(spinor).
+    \Gamma_{#}::GammaMatrix(metric=\delta).
+    obj:=(\Gamma_{m n})_{a b} (\Gamma_{n p})_{b c};
+    combine(_);
+    join_gamma(_);
+    canonicalise(_);
+    tst:= (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} + \delta_{m p} \delta_{n n} - \delta_{m n} \delta_{n p})_{a c} - @(obj);
+    assert(tst==0)
+    distribute(obj);
+    expand(obj);
+    tst:= (\Gamma_{m p})_{a c} \delta_{n n} - (\Gamma_{m n})_{a c} \delta_{n p} 
+    + (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{m p} \delta_{n n})_{a c} 
+    - (\delta_{m n} \delta_{n p})_{a c} - @(obj);
+    assert(tst==0)
+    print('Test 11 passed')
 
-{s,r,l,k,m,n}::Indices(vector).
-{s,r,l,k,m,n}::Integer(0..d-1).
-\Gamma_{#}::GammaMatrix(metric=\delta).
-\delta_{m n}::KroneckerDelta.
-obj:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s};
-join_gamma(_)
-distribute(_)
-join_gamma(_)
-distribute(_)
-join_gamma(_)
-distribute(_)
-collect_factors(_)
+test11()
 
-# @factorise!(%){d};
-# @collect_factors!(%);
-# tst:= \Gamma_{k l} (12 - 18 d + 8 d**2 - d**3) + \delta_{k l} ( - 3 + 6 d - 4 d**2 + d**3) - @(obj);
-# @assert(tst);
-# 
-# #-------
-# 
-# @reset.
-# {a,b,c,d#}::Indices(spinor).
-# \Gamma_{#}::GammaMatrix(metric=\delta).
-# obj:=(\Gamma_{m n})_{a b} (\Gamma_{n p})_{b c};
-# @combine!(%);
-# @join!(%){expand}:
-# @canonicalise!(%);
-# tst:= (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} 
-# + \delta_{m p} \delta_{n n} - \delta_{m n} \delta_{n p})_{a c} - @(obj);
-# @collect_terms!(%);
-# @assert(tst);
-# @distribute!(obj);
-# @expand!(%);
-# tst:= (\Gamma_{m p})_{a c} \delta_{n n} - (\Gamma_{m n})_{a c} \delta_{n p} 
-# + (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{m p} \delta_{n n})_{a c} 
-# - (\delta_{m n} \delta_{n p})_{a c} - @(obj);
-# @collect_terms!(%);
-# #@assert(tst);
-# # FIXME!!!
-# 
-# #-------
-# 
-# @reset.
-# {\mu,\nu,\rho}::Indices(curved, position=fixed).
-# {m,n,p,q,r,s,t#}::Indices(flat).
-# {m,n,p,q,r,s,t#}::Integer(0..10).
-# T^{#{\mu}}::AntiSymmetric.
-# \psi_{\mu}::SelfAntiCommuting.
-# \psi_{\mu}::Spinor(dimension=11, type=Majorana).
-# \theta::Spinor(dimension=11, type=Majorana).
-# \epsilon::Spinor(dimension=11, type=Majorana).
-# {\theta,\epsilon,\psi_{\mu}}::AntiCommuting
-# \bar{#}::DiracBar.
-# \delta^{m n}::KroneckerDelta.
-# \Gamma^{#{m}}::GammaMatrix(metric=\delta).
-# 
-# obj:= T^{\mu\nu\rho} e_{\nu}^{s}
-#      \bar{\theta} \Gamma^{r s} \psi_{\rho}
-#      \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
-# 
-# @fierz!(%)( \theta, \epsilon, \psi_{\mu}, \psi_{\nu} );
-# 
-# @join!(%){expand}:
-# @distribute!(%):
-# @eliminate_kr!(%):
-# @join!(%){expand}:
-# @distribute!(%):
-# @eliminate_kr!(%):
-# @collect_terms!(%):
-# @canonicalise!(%): 
-# @rename_dummies!(%):
-# @collect_terms!(%);
-# 
-# tst:=1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n}
-# \epsilon \bar{\psi_{\nu}} \Gamma_{n} \psi_{\rho} 
-# + 5/16 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \epsilon
-# \bar{\psi_{\nu}} \Gamma_{m} \psi_{\rho} 
-# + 3/32 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n p} \epsilon
-# \bar{\psi_{\nu}} \Gamma_{n p} \psi_{\rho} 
-# + 1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{n}
-# \epsilon \bar{\psi_{\nu}} \Gamma_{m n} \psi_{\rho} 
-# + 1/384 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta}
-# \Gamma^{n p q r} \epsilon \bar{\psi_{\nu}} \Gamma_{m n p q r} \psi_{\rho}
-# - @(obj);
-# @collect_terms!(%);
-# @assert(tst);
+{\mu,\nu,\rho}::Indices(curved, position=fixed).
+{m,n,p,q,r,s,t#}::Indices(flat, position=independent).
+{m,n,p,q,r,s,t#}::Integer(0..10).
+T^{#{\mu}}::AntiSymmetric.
+\psi_{\mu}::SelfAntiCommuting.
+\psi_{\mu}::Spinor(dimension=11, type=Majorana).
+\theta::Spinor(dimension=11, type=Majorana).
+\epsilon::Spinor(dimension=11, type=Majorana).
+{\theta,\epsilon,\psi_{\mu}}::AntiCommuting.
+\bar{#}::DiracBar.
+\delta^{m n}::KroneckerDelta.
+\Gamma^{#{m}}::GammaMatrix(metric=\delta).
+
+obj:= T^{\mu\nu\rho} e_{\nu}^{s}
+     \bar{\theta} \Gamma^{r s} \psi_{\rho}
+     \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
+
+fierz(_, $\theta, \epsilon, \psi_{\mu}, \psi_{\nu}$ );
+join_gamma(_)
+distribute(_)
+eliminate_kronecker(_)
+join_gamma(_)
+distribute(_)
+eliminate_kronecker(_)
+canonicalise(_)
+rename_dummies(_);
+
+tst:=1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n}
+\epsilon \bar{\psi_{\nu}} \Gamma_{n} \psi_{\rho} 
++ 5/16 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \epsilon
+\bar{\psi_{\nu}} \Gamma_{m} \psi_{\rho} 
++ 3/32 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n p} \epsilon
+\bar{\psi_{\nu}} \Gamma_{n p} \psi_{\rho} 
++ 1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{n}
+\epsilon \bar{\psi_{\nu}} \Gamma_{m n} \psi_{\rho} 
++ 1/384 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta}
+\Gamma^{n p q r} \epsilon \bar{\psi_{\nu}} \Gamma_{m n p q r} \psi_{\rho}
+- @(obj);
+
+
 

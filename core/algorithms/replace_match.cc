@@ -10,23 +10,28 @@ replace_match::replace_match(const Kernel& k, Ex& e)
 
 bool replace_match::can_apply(iterator it) 
 	{
-	if(*it->name=="\\sum" || *it->name=="\\comma") return true;
+	if(tr.history_size()>0) return true;
 	return false;
 	}
 
 Algorithm::result_t replace_match::apply(iterator& it)
 	{
-	Ex current(tr);
+	Ex current(tr); // preserve the expression before popping
 	Ex rules=tr.pop_history();
 
-//	std::cerr << "rules: " << rules << std::endl;
-//	std::cerr << "current: " << current << std::endl;
-//	std::cerr << "old: " << tr << std::endl;
-//
+	// std::cerr << "rules: " << rules << std::endl;
+	// std::cerr << "current: " << current << std::endl;
+	// std::cerr << "old: " << tr << std::endl;
+
 	it=tr.begin();
+	while(it!=tr.end()) {
+		if(*it->name=="\\sum")
+			break;
+		++it;
+		}
 	substitute subs(kernel, tr, rules);
 
-	auto sumnode=tr.begin(it);
+	auto sumnode=it;
 	sibling_iterator sib=tr.begin(sumnode);
 	bool replaced=false;
 	while(sib!=tr.end(sumnode)) {
@@ -34,8 +39,9 @@ Algorithm::result_t replace_match::apply(iterator& it)
 			// std::cerr << "applying" << std::endl;
 			sib=tr.erase(sib);
 			if(!replaced) {
+				// Replace the first term that matches with 'current'.
 				replaced=true;
-				iterator ci = tr.insert_subtree(sib, current.begin(current.begin()));
+				iterator ci = tr.insert_subtree(sib, current.begin());
 				cleanup_dispatch(kernel, tr, ci);
 				}
 			}
@@ -44,8 +50,7 @@ Algorithm::result_t replace_match::apply(iterator& it)
 
 	// std::cerr << tr << std::endl;
 
-	cleanup_dispatch_deep(kernel, tr);
-	it=tr.begin();
+	cleanup_dispatch(kernel, tr, it);
 	
 //	std::cerr << tr << std::endl;
 
