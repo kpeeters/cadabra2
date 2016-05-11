@@ -27,6 +27,8 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\partial" && child=="\\sum") return false; // Always handled by the functional argument. Was: true;
 
+	if(parent=="\\int" && child=="\\sum") return true;
+
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
 //		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
