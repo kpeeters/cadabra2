@@ -11,39 +11,47 @@ set(DC         ${CMAKE_SOURCE_DIR}/client_server/cadabra2html.cc ${CMAKE_SOURCE_
 
 set(TUTORIALS
   beginners
-  plotting
+  tensor_monomials
   for_previous_users
-  schwarzschild
+  converge
+  fierz
   gamma_matrix_algebra
   poincare_algebra
   string_states
+  bianchi_identities
+  schwarzschild
   kaluza_klein
+  plotting
+  scalar_manipulations
 )
 
 # Manual pages; just add the algorithm or property name to the lists below
 # and the rest will be taken care of automatically.
 
 set(ALGOS
-  collect_factors
   canonicalise
+  collect_factors
+  collect_terms
   complete
   decompose_product
   distribute
   eliminate_kronecker
   evaluate
+  expand
   expand_diracbar
   factor_in
   factor_out
   join_gamma
+  substitute
   vary
   young_project_tensor
 )
 set(PROPS
   Accent
   AntiCommuting
-  Commuting
   CommutingAsProduct
   CommutingAsSum
+  Commuting
   Coordinate
   DAntiSymmetric
   Depends

@@ -342,8 +342,6 @@ void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it)
 	if(needs_brackets(it)) 
 		str << "(";
 
-	unsigned int steps=0;
-
 	Ex::sibling_iterator ch=tree.begin(it);
 	while(ch!=tree.end(it)) {
 		if(*ch->multiplier>=0 && ch!=tree.begin(it))

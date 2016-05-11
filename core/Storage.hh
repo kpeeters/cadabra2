@@ -231,11 +231,16 @@ class Ex : public tree<str_node> {
 		/// the selector that got us there.
 		Ex   pop_history();
 
+		/// Return the size of the history; 0 means no history, just the current
+		/// expression.
+		int  history_size() const;
+
 	private:
 		result_t state_;
 
 		std::vector<tree<str_node> > history;
-		std::vector<tree<str_node> > selectors; // patterns which describe how to get from one history step to the next
+      /// Patterns which describe how to get from one history step to the next.
+		std::vector<tree<str_node> > selectors; 
 };
 
 

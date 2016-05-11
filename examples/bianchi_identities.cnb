@@ -1,57 +1,43 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{The higher-derivative example from section 2.4 of hep-th/0701238}\n\nThe identity which we will prove here comes from appendix A of hep-th/0111128. The declaration\nof the indices, Weyl tensor and covariant derivative:"
+					"source" : "\\section*{A higher-derivative Bianchi identity}\n\nThe identity which we will prove here comes from appendix A of hep-th/0111128. It shows that a particular\ncubic polynomial of Weyl tensors vanishes by virtue of the Weyl tensor multi-term symmetries. The declaration\nof the indices, Weyl tensor and covariant derivative is done with:"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{The higher-derivative example from section 2.4 of hep-th/0701238}\n\nThe identity which we will prove here comes from appendix A of hep-th/0111128. The declaration\nof the indices, Weyl tensor and covariant derivative:"
+			"source" : "\\section*{A higher-derivative Bianchi identity}\n\nThe identity which we will prove here comes from appendix A of hep-th/0111128. It shows that a particular\ncubic polynomial of Weyl tensors vanishes by virtue of the Weyl tensor multi-term symmetries. The declaration\nof the indices, Weyl tensor and covariant derivative is done with:"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-C_{i m k l} C_{j p k q} C_{l p m q}+\\frac{1}{4}C_{i m k l} C_{j m p q} C_{k l p q} - \\frac{1}{2}C_{i k j l} C_{k m p q} C_{l m p q}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-C_{i m k l} C_{j p k q} C_{l p m q}%\n+\\frac{1}{4}C_{i m k l} C_{j m p q} C_{k l p q}%\n - \\frac{1}{2}C_{i k j l} C_{k m p q} C_{l m p q}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}C_{j m n k} C_{m p q n} C_{p j k q}+\\frac{1}{2}C_{j k m n} C_{p q m n} C_{j k p q}\\end{dmath*}"
-				},
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\nabla_{i}(\\nabla_{j}(-C_{i m k l} C_{j p k q} C_{l p m q}+\\frac{1}{4}C_{i m k l} C_{j m p q} C_{k l p q} - \\frac{1}{2}C_{i k j l} C_{k m p q} C_{l m p q})) - \\frac{1}{6}\\nabla_{i}(\\nabla_{i}(C_{j m n k} C_{m p q n} C_{p j k q}+\\frac{1}{2}C_{j k m n} C_{p q m n} C_{j k p q}))\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\nabla_{i}\\left(\\nabla_{j}\\left(-C_{i m k l} C_{j p k q} C_{l p m q}%\n+\\frac{1}{4}C_{i m k l} C_{j m p q} C_{k l p q}%\n - \\frac{1}{2}C_{i k j l} C_{k m p q} C_{l m p q}\\right)\\right)%\n - \\frac{1}{6}\\nabla_{i}\\left(\\nabla_{i}\\left(C_{j m n k} C_{m p q n} C_{p j k q}%\n+\\frac{1}{2}C_{j k m n} C_{p q m n} C_{j k p q}\\right)\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "{i,j,m,n,k,p,q,l,r,r#}::Indices(vector).\nC_{m n p q}::WeylTensor.\n\\nabla{#}::Derivative.\n\\nabla_{r}{ C_{m n p q} }::SatisfiesBianchi.\n\\delta_{i j}::KroneckerDelta.\n\nEij:=- C_{i m k l} C_{j p k q} C_{l p m q} + 1/4 C_{i m k l} C_{j m p q} C_{k l p q}\n     - 1/2 C_{i k j l} C_{k m p q} C_{l m p q}:\n\nE:=  C_{j m n k} C_{m p q n} C_{p j k q} + 1/2 C_{j k m n} C_{p q m n} C_{j k p q}:\n\nexp:= \\nabla_{i}{\\nabla_{j}{ @(Eij) }} - 1/6 \\nabla_{i}{\\nabla_{i}{ @(E) }};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -61,28 +47,24 @@
 			"hidden" : true,
 			"source" : "First apply the product rule twice to write out derivatives:"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}C_{i j m n} C_{i k m p} \\nabla_{q}(\\nabla_{j}(C_{n k p q}))-C_{i j m n} \\nabla_{k}(C_{i p m q}) \\nabla_{p}(C_{j q n k})-2C_{i j m n} \\nabla_{i}(C_{m k p q}) \\nabla_{p}(C_{j k n q})-C_{i j m n} \\nabla_{k}(C_{i k m p}) \\nabla_{q}(C_{j p n q})+C_{i j m n} C_{i k m p} \\nabla_{j}(\\nabla_{q}(C_{n k p q}))-2C_{i j m n} \\nabla_{i}(C_{j k m p}) \\nabla_{q}(C_{n k p q})-C_{i j m n} C_{i k p q} \\nabla_{m}(\\nabla_{p}(C_{j q n k})) - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}(\\nabla_{m}(C_{n q k p}))+\\frac{1}{4}C_{i j m n} \\nabla_{k}(C_{i j p q}) \\nabla_{p}(C_{m n k q}) - \\frac{1}{2}C_{i j m n} \\nabla_{i}(C_{j k p q}) \\nabla_{k}(C_{m n p q}) - \\frac{1}{4}C_{i j m n} \\nabla_{k}(C_{i j k p}) \\nabla_{q}(C_{m n p q}) - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{m}(\\nabla_{q}(C_{n q k p})) - \\frac{1}{2}C_{i j m n} \\nabla_{i}(C_{m n k p}) \\nabla_{q}(C_{j q k p})+\\frac{1}{4}C_{i j m n} C_{i k p q} \\nabla_{j}(\\nabla_{k}(C_{m n p q})) - \\frac{1}{2}C_{i j m n} C_{i j m k} \\nabla_{p}(\\nabla_{q}(C_{n p k q}))+C_{i j m n} \\nabla_{k}(C_{i j m p}) \\nabla_{q}(C_{n q k p})-C_{i j m n} \\nabla_{k}(C_{i j m p}) \\nabla_{q}(C_{n k p q})+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{m}(\\nabla_{j}(C_{n k p q}))+\\frac{1}{2}C_{i j m n} \\nabla_{i}(C_{m k p q}) \\nabla_{n}(C_{j k p q})%\n - \\frac{1}{2}C_{i j m n} \\nabla_{i}(C_{j k p q}) \\nabla_{m}(C_{n k p q})+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{j}(\\nabla_{m}(C_{n k p q}))+\\frac{1}{2}C_{i j m n} C_{i k m p} \\nabla_{q}(\\nabla_{q}(C_{j k n p}))+C_{i j m n} \\nabla_{k}(C_{i p m q}) \\nabla_{k}(C_{j p n q}) - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}(\\nabla_{q}(C_{m n k p})) - \\frac{1}{2}C_{i j m n} \\nabla_{k}(C_{i j p q}) \\nabla_{k}(C_{m n p q})\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}C_{i j m n} C_{i k m p} \\nabla_{q}\\left(\\nabla_{j}{C_{n k p q}}\\right)%\n-C_{i j m n} \\nabla_{k}{C_{i p m q}} \\nabla_{p}{C_{j q n k}}%\n-2C_{i j m n} \\nabla_{i}{C_{m k p q}} \\nabla_{p}{C_{j k n q}}%\n-C_{i j m n} \\nabla_{k}{C_{i k m p}} \\nabla_{q}{C_{j p n q}}%\n+C_{i j m n} C_{i k m p} \\nabla_{j}\\left(\\nabla_{q}{C_{n k p q}}\\right)%\n-2C_{i j m n} \\nabla_{i}{C_{j k m p}} \\nabla_{q}{C_{n k p q}}%\n-C_{i j m n} C_{i k p q} \\nabla_{m}\\left(\\nabla_{p}{C_{j q n k}}\\right)%\n - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}\\left(\\nabla_{m}{C_{n q k p}}\\right)%\n+\\frac{1}{4}C_{i j m n} \\nabla_{k}{C_{i j p q}} \\nabla_{p}{C_{m n k q}}%\n - \\frac{1}{2}C_{i j m n} \\nabla_{i}{C_{j k p q}} \\nabla_{k}{C_{m n p q}}%\n - \\frac{1}{4}C_{i j m n} \\nabla_{k}{C_{i j k p}} \\nabla_{q}{C_{m n p q}}%\n - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{m}\\left(\\nabla_{q}{C_{n q k p}}\\right)%\n - \\frac{1}{2}C_{i j m n} \\nabla_{i}{C_{m n k p}} \\nabla_{q}{C_{j q k p}}%\n+\\frac{1}{4}C_{i j m n} C_{i k p q} \\nabla_{j}\\left(\\nabla_{k}{C_{m n p q}}\\right)%\n - \\frac{1}{2}C_{i j m n} C_{i j m k} \\nabla_{p}\\left(\\nabla_{q}{C_{n p k q}}\\right)%\n+C_{i j m n} \\nabla_{k}{C_{i j m p}} \\nabla_{q}{C_{n q k p}}%\n-C_{i j m n} \\nabla_{k}{C_{i j m p}} \\nabla_{q}{C_{n k p q}}%\n+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{m}\\left(\\nabla_{j}{C_{n k p q}}\\right)%\n+\\frac{1}{2}C_{i j m n} \\nabla_{i}{C_{m k p q}} \\nabla_{n}{C_{j k p q}}%\n - \\frac{1}{2}C_{i j m n} \\nabla_{i}{C_{j k p q}} \\nabla_{m}{C_{n k p q}}%\n+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{j}\\left(\\nabla_{m}{C_{n k p q}}\\right)%\n+\\frac{1}{2}C_{i j m n} C_{i k m p} \\nabla_{q}\\left(\\nabla_{q}{C_{j k n p}}\\right)%\n+C_{i j m n} \\nabla_{k}{C_{i p m q}} \\nabla_{k}{C_{j p n q}}%\n - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}\\left(\\nabla_{q}{C_{m n k p}}\\right)%\n - \\frac{1}{2}C_{i j m n} \\nabla_{k}{C_{i j p q}} \\nabla_{k}{C_{m n p q}}\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(_); product_rule(_); distribute(_); product_rule(_)\nsort_product(_); canonicalise(_)\nrename_dummies(_);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -92,44 +74,38 @@
 			"hidden" : true,
 			"source" : "Because the identity which we intend to prove is only supposed to hold on Einstein spaces, we\nset the divergence of the Weyl tensor to zero,"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}C_{i j m n} C_{i k m p} \\nabla_{q}(\\nabla_{j}(C_{n k p q}))-C_{i j m n} \\nabla_{k}(C_{i p m q}) \\nabla_{p}(C_{j q n k})-2C_{i j m n} \\nabla_{i}(C_{m k p q}) \\nabla_{p}(C_{j k n q})-C_{i j m n} C_{i k p q} \\nabla_{m}(\\nabla_{p}(C_{j q n k})) - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}(\\nabla_{m}(C_{n q k p}))+\\frac{1}{4}C_{i j m n} \\nabla_{k}(C_{i j p q}) \\nabla_{p}(C_{m n k q}) - \\frac{1}{2}C_{i j m n} \\nabla_{i}(C_{j k p q}) \\nabla_{k}(C_{m n p q})+\\frac{1}{4}C_{i j m n} C_{i k p q} \\nabla_{j}(\\nabla_{k}(C_{m n p q}))+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{m}(\\nabla_{j}(C_{n k p q}))+\\frac{1}{2}C_{i j m n} \\nabla_{i}(C_{m k p q}) \\nabla_{n}(C_{j k p q}) - \\frac{1}{2}C_{i j m n} \\nabla_{i}(C_{j k p q}) \\nabla_{m}(C_{n k p q})+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{j}(\\nabla_{m}(C_{n k p q}))+\\frac{1}{2}C_{i j m n} C_{i k m p} \\nabla_{q}(\\nabla_{q}(C_{j k n p}))+C_{i j m n} \\nabla_{k}(C_{i p m q}) \\nabla_{k}(C_{j p n q}) - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}(\\nabla_{q}(C_{m n k p})) - \\frac{1}{2}C_{i j m n} \\nabla_{k}(C_{i j p q}) \\nabla_{k}(C_{m n p q})\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}C_{i j m n} C_{i k m p} \\nabla_{q}\\left(\\nabla_{j}{C_{n k p q}}\\right)%\n-C_{i j m n} \\nabla_{k}{C_{i p m q}} \\nabla_{p}{C_{j q n k}}%\n-2C_{i j m n} \\nabla_{i}{C_{m k p q}} \\nabla_{p}{C_{j k n q}}%\n-C_{i j m n} C_{i k p q} \\nabla_{m}\\left(\\nabla_{p}{C_{j q n k}}\\right)%\n - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}\\left(\\nabla_{m}{C_{n q k p}}\\right)%\n+\\frac{1}{4}C_{i j m n} \\nabla_{k}{C_{i j p q}} \\nabla_{p}{C_{m n k q}}%\n - \\frac{1}{2}C_{i j m n} \\nabla_{i}{C_{j k p q}} \\nabla_{k}{C_{m n p q}}%\n+\\frac{1}{4}C_{i j m n} C_{i k p q} \\nabla_{j}\\left(\\nabla_{k}{C_{m n p q}}\\right)%\n+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{m}\\left(\\nabla_{j}{C_{n k p q}}\\right)%\n+\\frac{1}{2}C_{i j m n} \\nabla_{i}{C_{m k p q}} \\nabla_{n}{C_{j k p q}}%\n - \\frac{1}{2}C_{i j m n} \\nabla_{i}{C_{j k p q}} \\nabla_{m}{C_{n k p q}}%\n+\\frac{1}{2}C_{i j m n} C_{i k p q} \\nabla_{j}\\left(\\nabla_{m}{C_{n k p q}}\\right)%\n+\\frac{1}{2}C_{i j m n} C_{i k m p} \\nabla_{q}\\left(\\nabla_{q}{C_{j k n p}}\\right)%\n+C_{i j m n} \\nabla_{k}{C_{i p m q}} \\nabla_{k}{C_{j p n q}}%\n - \\frac{1}{4}C_{i j m n} C_{i j k p} \\nabla_{q}\\left(\\nabla_{q}{C_{m n k p}}\\right)%\n - \\frac{1}{2}C_{i j m n} \\nabla_{k}{C_{i j p q}} \\nabla_{k}{C_{m n p q}}\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(_, $\\nabla_{i}{ C_{k i l m} } -> 0, \\nabla_{i}{ C_{k m l i} } -> 0$);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "This expression should vanish upon use of the Bianchi identity. By expanding all tensors using\ntheir Young projectors, this becomes manifest,"
+					"source" : "This expression should vanish upon use of the Bianchi identity. By expanding all tensors using\ntheir Young projectors, this becomes manifest; a few seconds of computation produces:"
 				}
 			],
 			"hidden" : true,
-			"source" : "This expression should vanish upon use of the Bianchi identity. By expanding all tensors using\ntheir Young projectors, this becomes manifest,"
+			"source" : "This expression should vanish upon use of the Bianchi identity. By expanding all tensors using\ntheir Young projectors, this becomes manifest; a few seconds of computation produces:"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -138,13 +114,11 @@
 			],
 			"source" : "young_project_product(_);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -154,7 +128,6 @@
 			"hidden" : true,
 			"source" : "This proves the identity."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -162,6 +135,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-
