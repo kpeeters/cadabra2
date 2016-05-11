@@ -34,6 +34,9 @@ std::istream& operator>>(std::istream& str, Parser& pa)
 //		std::cout << "[" << inp << "]" << std::endl;
 		pa.string2tree(inp);
 		}
+	// Remove the expression head.
+	pa.finalise();
+
 	return str;
 	}
 
@@ -108,6 +111,16 @@ void Parser::remove_empty_nodes()
 			it=tree->erase(it);
 			}
 		++it;
+		}
+	}
+
+void Parser::finalise()
+	{
+	if(tree->is_valid(tree->begin())==false) return;
+
+	if(*(tree->begin()->name)=="\\expression") {
+		tree->flatten(tree->begin());
+		tree->erase(tree->begin());
 		}
 	}
 

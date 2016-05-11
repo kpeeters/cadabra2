@@ -133,7 +133,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement rule, and then replace nodes and subtrees in there
 	// based on how the pattern matching went.
    Ex repl(rhs);
-	repl.wrap(repl.begin(), str_node("\\expression"));
+//	repl.wrap(repl.begin(), str_node("\\expression"));
    index_map_t ind_free, ind_dummy, ind_forced;
 
 	if(rhs_contains_dummies[use_rule])
@@ -253,8 +253,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 	//std::cerr << "repl after: \n" << repl << std::endl;
 
 	// Remove the wrapping "\expression" node, not needed anymore.
-	repl.flatten(repl.begin());
-	repl.erase(repl.begin());
+//	repl.flatten(repl.begin());
+//	repl.erase(repl.begin());
 
 	repl.begin()->fl.bracket=st->fl.bracket;
 	bool rename_replacement_dummies_called=false;

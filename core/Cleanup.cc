@@ -22,7 +22,6 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 		}
 	else if(*it->name=="\\prod")       cleanup_productlike(kernel, tr, it);
 	else if(*it->name=="\\sum")        cleanup_sumlike(kernel, tr, it);
-	else if(*it->name=="\\expression") cleanup_expressionlike(kernel, tr, it);
 	else if(*it->name=="\\components") cleanup_components(kernel, tr, it);
 
 	const PartialDerivative *der = kernel.properties.get<PartialDerivative>(it);
@@ -188,23 +187,6 @@ void cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 //		tr.flatten(it); // unwrap equals
 //		it=tr.erase(it);
 //		it=tr.erase(it); // remove empty comma for index values
-		}
-	}
-
-void cleanup_expressionlike(const Kernel& k, Ex&tr, Ex::iterator& it)
-	{
-	assert(*it->name=="\\expression");
-
-	// Can only have one child which contains actual expression data;
-	// all others are meta-data like \asymimplicit. If this child has
-	// zero multiplier, simplify.
-
-	Ex::sibling_iterator sib=tr.begin(it);
-	if(sib==tr.end(it)) return;
-	if(sib->is_zero()) {
-		// FIXME: duplicate of node_zero in Algorithm.
-		tr.erase_children(sib);
-		sib->name=name_set.insert("1").first;
 		}
 	}
 

@@ -106,7 +106,7 @@ class property {
 	public:
 		virtual ~property() {};
 
-		// Parse the argument tree into key-value pairs.
+		// Parse the argument tree into key-value pairs. Returns false on error.
 		bool                parse_to_keyvals(const Ex&, keyval_t&);
 
 		// Use the pre-parsed arguments in key/value form to set parameters.

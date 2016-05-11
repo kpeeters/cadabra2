@@ -73,6 +73,8 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_file_export_html_segment) );
 	actiongroup->add( Gtk::Action::create("ExportLaTeX", "Export to standalone LaTeX"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_export_latex) );
+	actiongroup->add( Gtk::Action::create("ExportPython", "Export to Python/Cadabra source"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_export_python) );
 	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
@@ -131,6 +133,7 @@ NotebookWindow::NotebookWindow()
 		"      <menuitem action='ExportHtml'/>"
 		"      <menuitem action='ExportHtmlSegment'/>"
 		"      <menuitem action='ExportLaTeX'/>"
+		"      <menuitem action='ExportPython'/>"
 		"      <separator/>"
 		"      <menuitem action='Quit'/>"
 		"    </menu>"
@@ -916,6 +919,26 @@ void NotebookWindow::on_file_export_latex()
 			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_LaTeX(doc);
+			}
+		}
+	}
+
+void NotebookWindow::on_file_export_python()
+	{
+	Gtk::FileChooserDialog dialog("Please enter a file name for the Python/Cadabra document",
+											Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+	dialog.set_transient_for(*this);
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+	int result=dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+			std::string name = dialog.get_filename();			
+			std::ofstream temp(name);
+			temp << export_as_python(doc);
 			}
 		}
 	}

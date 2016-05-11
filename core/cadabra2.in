@@ -53,9 +53,11 @@ class Shell(InteractiveConsole):
     # pass it on to the previously existing display hook.
     def _displayhook(self, arg):
         if isinstance(arg, Ex):
-            print(str(arg))
+            pass
+            #print(str(arg))
         elif isinstance(arg, Property):
-            print(str(arg))
+            pass
+            #print(str(arg))
         else:
             self.remember_display_hook(arg)
 
@@ -84,7 +86,7 @@ class Shell(InteractiveConsole):
     # TODO: make ';' at the end of '::' line result the print statement printing 
     # property objects using their readable form; addresses one issue report).
 
-    def preprocess(self, line):
+    def preprocess(self, line, shell):
         # print '='+line+"=="
         imatch = re.search('([\s]*)([^\s].*[^\s])([\s]*)', line)
         if imatch:
@@ -97,7 +99,10 @@ class Shell(InteractiveConsole):
         # Do not do anything with comment lines.
         if len(line_stripped)>0 and line_stripped[0]=='#':
             return line
-        # print '='+line_stripped+"=="
+        # Bare ';' gets replaced with 'display(_)'.
+        if line_stripped==';':
+            return indent_line+"display(_)\n"
+        
         lastchar = line_stripped[-1:]
         if lastchar=='.' or lastchar==';' or lastchar==':':
             if self.lhs!="":
@@ -105,7 +110,7 @@ class Shell(InteractiveConsole):
                 self.rhs += line_stripped
                 rewrite = self.indent + self.lhs + " = Ex(r'" + self.rhs+"')"
                 if lastchar!='.' and len(self.indent)==0:
-                    rewrite += "; print("+self.lhs+")"
+                    rewrite += "; display("+self.lhs+")"
                 rewrite = rewrite+"\n"
                 self.indent=""
                 self.lhs=""
@@ -121,7 +126,14 @@ class Shell(InteractiveConsole):
 
         # Replace $...$ with Ex(...).
         line_stripped=re.sub(r'\$([^\$]*)\$', r'Ex(r"\1", False)', line_stripped)
-                
+
+        # Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
+        imatch = re.match(r'([ ]*)converge\(([^\)]*)\):', line_stripped)
+        if imatch:
+            ret  = imatch.group(1)+imatch.group(2)+".reset(); _="+imatch.group(2)+"\n"
+            ret += imatch.group(1)+"while "+imatch.group(2)+".changed():\n"
+            return ret
+        
         found = line_stripped.find(':=')
         if found>0:
             # If the last character is not a Cadabra terminator, start a capture process.
@@ -136,7 +148,7 @@ class Shell(InteractiveConsole):
 
                 objname=line_stripped[:found]
                 if lastchar!='.' and len(indent_line)==0:
-                    rewrite = rewrite + "; print(" + objname+")"
+                    rewrite = rewrite + "; display(" + objname+")"
                 line=rewrite
         else:
             # Is it a property declaration?
@@ -154,17 +166,20 @@ class Shell(InteractiveConsole):
                     objname="__cdbtmp__"
                     # print the expression if we are at top level (not in a function) and the last char is not '.'
                     if lastchar!='.' and len(indent_line)==0:
-                        rewrite = rewrite + "; print " + objname
+                        rewrite = rewrite + "; display(" + objname+")"
                     line=rewrite
                 else:
                     print "inconsistent" # property names can only contain letters
             else:
                 line=indent_line+line_stripped
+                if lastchar==';' and shell==False:
+                    line+=" display(_)"
+                    
         return line+end_of_line
 
     def push(self,line):
 
-        line = self.preprocess(line)
+        line = self.preprocess(line, True)
         if self.lhs == "":
             # print 'executing: '
             # print line
@@ -208,7 +223,7 @@ if __name__ == '__main__':
                 for line in f:
                     sline=line.strip()
 #                    if len(sline)>0 and sline[0]!='#':
-                    collect += sh.preprocess(line)
+                    collect += sh.preprocess(line, False)
                 #print "----\n"+collect+"----\n"
                 cmp = compile(collect, sys.argv[1], 'exec')
                 exec(cmp)

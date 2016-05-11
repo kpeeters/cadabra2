@@ -162,7 +162,6 @@ class Ex : public tree<str_node> {
 		/// Step up until matching node is found (if current node matches, do nothing)
 		iterator     named_parent(iterator it, const std::string&) const;
 		iterator     erase_expression(iterator it);
-		iterator     keep_only_last(iterator it);
 
 		/// Calculate the hash value for the subtree starting at 'it'
 		hashval_t    calc_hash(iterator it) const;
@@ -176,7 +175,6 @@ class Ex : public tree<str_node> {
 		// Like 'child', but using index iterators instead.
 //		sibling_iterator tensor_index(const iterator_base& position, unsigned int) const;
 
-		iterator         active_expression(iterator it) const;
 		// Number of \\history nodes in an expression
 		unsigned int     number_of_steps(iterator it) const;
 		// Given an iterator pointing to any node in the tree, figure
@@ -233,11 +231,16 @@ class Ex : public tree<str_node> {
 		/// the selector that got us there.
 		Ex   pop_history();
 
+		/// Return the size of the history; 0 means no history, just the current
+		/// expression.
+		int  history_size() const;
+
 	private:
 		result_t state_;
 
 		std::vector<tree<str_node> > history;
-		std::vector<tree<str_node> > selectors; // patterns which describe how to get from one history step to the next
+      /// Patterns which describe how to get from one history step to the next.
+		std::vector<tree<str_node> > selectors; 
 };
 
 
