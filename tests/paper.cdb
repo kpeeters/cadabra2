@@ -190,6 +190,7 @@ def test11():
     + (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{m p} \delta_{n n})_{a c} 
     - (\delta_{m n} \delta_{n p})_{a c} - @(obj);
     assert(tst==0)
+    print('Test 11 passed')
 
 test11()
 
@@ -232,5 +233,5 @@ tst:=1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n}
 \Gamma^{n p q r} \epsilon \bar{\psi_{\nu}} \Gamma_{m n p q r} \psi_{\rho}
 - @(obj);
 
-assert(tst==0);
+
 

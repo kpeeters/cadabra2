@@ -522,6 +522,11 @@ Ex Ex::pop_history()
 	return ret;
 	}
 
+int Ex::history_size() const
+	{
+	return history.size();
+	}
+
 str_node::str_node(void)
 	{
 	multiplier=rat_set.insert(1).first;
@@ -821,6 +826,7 @@ void half(rset_t::iterator& num)
 
 std::ostream& operator<<(std::ostream& str, const Ex& ex) 
 	{
+	if(ex.begin()==ex.end()) return str;
 	ex.print_recursive_treeform(str, ex.begin());
 	return str;
 	}

@@ -9,7 +9,7 @@
 #include "properties/DiracBar.hh"
 
 fierz::fierz(const Kernel& k, Ex& e, Ex& args)
-	: Algorithm(k, e), spinor_list(Ex(args.begin(args.begin())))
+	: Algorithm(k, e), spinor_list(Ex(args.begin()))
 	{
 	if(*(spinor_list.begin()->name)!="\\comma")
 		throw ArgumentException("fierz: need a list of spinors");

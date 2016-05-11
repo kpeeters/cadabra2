@@ -1304,12 +1304,14 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 
 bool Algorithm::is_termlike(iterator it)
 	{
-	if(tr.is_valid(tr.parent(it))) {
-		if(*tr.parent(it)->name=="\\sum" || (tr.is_valid(tr.parent(it))==false && *it->name!="\\sum") ||
-			tr.parent(it)->is_command() ) 
-			return true;
+	if(tr.is_head(it)) {
+		if(*it->name!="\\sum") return true;
+		return false;
 		}
-	return false;
+	else {
+		if(*tr.parent(it)->name=="\\sum") return true;
+		return false;
+		}
 	}
 
 bool Algorithm::is_factorlike(iterator it)
