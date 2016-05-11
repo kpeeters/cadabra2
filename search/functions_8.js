@@ -14,6 +14,7 @@ var searchData=
   ['hash',['hash',['../namespacecombin.html#ad93edf3cab15d465e8fea289d4b99580',1,'combin']]],
   ['head',['head',['../classProperties.html#aa0a32398d5f7abe37356b2272f62b926',1,'Properties']]],
   ['height',['height',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a45a6df5b7a6a627cc56e02506f79b994',1,'cadabra::TeXEngine::TeXRequest']]],
+  ['history_5fsize',['history_size',['../classEx.html#aabb58a0c53d718721c9d587a3731b644',1,'Ex']]],
   ['hook_5flength',['hook_length',['../classyngtab_1_1tableau__base.html#a5651ffe242108b6bcf98d186b2002bc5',1,'yngtab::tableau_base']]],
   ['hook_5flength_5fprod',['hook_length_prod',['../classyngtab_1_1tableau__base.html#a01e44666a566fa3701923ba0f78ea551',1,'yngtab::tableau_base']]],
   ['html_5frecurse',['HTML_recurse',['../namespacecadabra.html#a04d45844128be92d43f4bcc3b83c64de',1,'cadabra']]]

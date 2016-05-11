@@ -62,5 +62,7 @@ var searchData=
   ['multiplier',['multiplier',['../classstr__node.html#a34d65114d0155c73bb3abe0532bf30db',1,'str_node::multiplier()'],['../classcombin_1_1combinations__base.html#a67c9085c50818bdfa049a7c85664c300',1,'combin::combinations_base::multiplier()'],['../classcombin_1_1combinations.html#acb68834280ea249bc2b68084d2eb0799',1,'combin::combinations::multiplier()']]],
   ['multiplier_5ft',['multiplier_t',['../Storage_8hh.html#aad74ea408f31d2d673c876764301e245',1,'Storage.hh']]],
   ['multiply',['multiply',['../group__core.html#ga1ac55b1d1d20bb0352a5815c9e0a494c',1,'multiply(rset_t::iterator &amp;num, multiplier_t fac):&#160;Storage.cc'],['../group__core.html#ga1ac55b1d1d20bb0352a5815c9e0a494c',1,'multiply(rset_t::iterator &amp;, multiplier_t):&#160;Storage.cc']]],
+  ['mx_5ffirst',['mx_first',['../classexpand.html#a11e4e6ce3c91aa1ed2e9cc85c2691bf5',1,'expand']]],
+  ['mx_5flast',['mx_last',['../classexpand.html#a292563e2b42b5b2ca1b14dfd693a242a',1,'expand']]],
   ['myclient',['MyClient',['../classMyClient.html',1,'MyClient'],['../classMyClient.html#a80201ead53268befbb0a43765c1423fb',1,'MyClient::MyClient()']]]
 ];

@@ -11,6 +11,7 @@ var searchData=
   ['combinations_3c_20unsigned_20int_20_3e',['combinations&lt; unsigned int &gt;',['../classcombin_1_1combinations.html',1,'combin']]],
   ['combinations_5fbase',['combinations_base',['../classcombin_1_1combinations__base.html',1,'combin']]],
   ['combinations_5fbase_3c_20unsigned_20int_20_3e',['combinations_base&lt; unsigned int &gt;',['../classcombin_1_1combinations__base.html',1,'combin']]],
+  ['combine',['combine',['../classcombine.html',1,'']]],
   ['commuting',['Commuting',['../classCommuting.html',1,'']]],
   ['commutingasproduct',['CommutingAsProduct',['../classCommutingAsProduct.html',1,'']]],
   ['commutingassum',['CommutingAsSum',['../classCommutingAsSum.html',1,'']]],

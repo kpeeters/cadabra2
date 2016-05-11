@@ -25,6 +25,7 @@ var searchData=
   ['on_5ffile_5fexport_5fhtml',['on_file_export_html',['../classcadabra_1_1NotebookWindow.html#a1477f4378d971f0084e173cb979f50ab',1,'cadabra::NotebookWindow']]],
   ['on_5ffile_5fexport_5fhtml_5fsegment',['on_file_export_html_segment',['../classcadabra_1_1NotebookWindow.html#ae66948fe0e4611945008f8a43d6b339b',1,'cadabra::NotebookWindow']]],
   ['on_5ffile_5fexport_5flatex',['on_file_export_latex',['../classcadabra_1_1NotebookWindow.html#a80445198e000d3e31d37c75c8d44d7a8',1,'cadabra::NotebookWindow']]],
+  ['on_5ffile_5fexport_5fpython',['on_file_export_python',['../classcadabra_1_1NotebookWindow.html#a4523eae97730c76c4e55848a4783826f',1,'cadabra::NotebookWindow']]],
   ['on_5ffile_5fnew',['on_file_new',['../classcadabra_1_1NotebookWindow.html#a913a2e27f866f155ff1ac1a380b5600e',1,'cadabra::NotebookWindow']]],
   ['on_5ffile_5fopen',['on_file_open',['../classcadabra_1_1NotebookWindow.html#ae11638f96ea30baa34390db3cd52630f',1,'cadabra::NotebookWindow']]],
   ['on_5ffile_5fquit',['on_file_quit',['../classcadabra_1_1NotebookWindow.html#a00c70e2adeb8b9d880a7d7e88c3a4ea3',1,'cadabra::NotebookWindow']]],

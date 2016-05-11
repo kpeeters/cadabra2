@@ -111,11 +111,15 @@ Functions</h2></td></tr>
 <tr class="memitem:ae4ce521aadcd3ceec97db8e8f960fccd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#ae4ce521aadcd3ceec97db8e8f960fccd">pre_clean_dispatch_deep</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr)</td></tr>
 <tr class="separator:ae4ce521aadcd3ceec97db8e8f960fccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a152bc7cf87ad120c827faf6fb12ca5cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#a152bc7cf87ad120c827faf6fb12ca5cc">cleanup_rational</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;st)</td></tr>
+<tr class="memdesc:a152bc7cf87ad120c827faf6fb12ca5cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup for individual node types.  <a href="#a152bc7cf87ad120c827faf6fb12ca5cc">More...</a><br/></td></tr>
 <tr class="separator:a152bc7cf87ad120c827faf6fb12ca5cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab03b0c5a94bd1dcf853c287abfefc011"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#ab03b0c5a94bd1dcf853c287abfefc011">cleanup_frac</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;st)</td></tr>
 <tr class="separator:ab03b0c5a94bd1dcf853c287abfefc011"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea5af570ba36de63ca3affb45876fb4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#aea5af570ba36de63ca3affb45876fb4e">cleanup_sub</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
 <tr class="separator:aea5af570ba36de63ca3affb45876fb4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ee060b28f571f0c17b81a1d5930658c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#a7ee060b28f571f0c17b81a1d5930658c">cleanup_indexbracket</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:a7ee060b28f571f0c17b81a1d5930658c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert parser output which indicates an indexbracket to an actual indexbracket node.  <a href="#a7ee060b28f571f0c17b81a1d5930658c">More...</a><br/></td></tr>
+<tr class="separator:a7ee060b28f571f0c17b81a1d5930658c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="ab03b0c5a94bd1dcf853c287abfefc011"></a>
@@ -150,6 +154,40 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7ee060b28f571f0c17b81a1d5930658c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cleanup_indexbracket </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert parser output which indicates an indexbracket to an actual indexbracket node. </p>
+
+</div>
+</div>
 <a class="anchor" id="a152bc7cf87ad120c827faf6fb12ca5cc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -164,13 +202,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>tr</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Ex::iterator &amp;&#160;</td>
-          <td class="paramname"><em>st</em>&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -179,6 +217,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Cleanup for individual node types. </p>
+<p>These are not needed during any later stages of the manipulation of an expression (and are hence defined here, not in '<a class="el" href="Cleanup_8hh.html">Cleanup.hh</a>'). </p>
 
 </div>
 </div>
@@ -243,7 +284,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 29 2016 21:30:34 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed May 11 2016 20:55:13 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

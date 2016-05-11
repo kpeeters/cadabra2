@@ -38,7 +38,7 @@ var searchData=
   ['difference_5ftype',['difference_type',['../classyngtab_1_1filled__tableau_1_1iterator__base.html#a331737886c275e74176e6880ad98f5cf',1,'yngtab::filled_tableau::iterator_base']]],
   ['diffsec',['diffsec',['../classstopwatch.html#a3307796d7f96f9b351ea597417eb211a',1,'stopwatch']]],
   ['diffusec',['diffusec',['../classstopwatch.html#a37fcea2ff0b27b62596b46b2a7202d58',1,'stopwatch']]],
-  ['dim',['dim',['../classdecompose__product.html#a2f79d4a5bb32fbfe042f5195de43b372',1,'decompose_product::dim()'],['../classcadabra_1_1TeXView.html#a20370fe70d1703ed1d750fe402136853',1,'cadabra::TeXView::dim()']]],
+  ['dim',['dim',['../classdecompose__product.html#a2f79d4a5bb32fbfe042f5195de43b372',1,'decompose_product::dim()'],['../classfierz.html#a93a5004a580e5a6d255fa69fc67bc306',1,'fierz::dim()'],['../classcadabra_1_1TeXView.html#a20370fe70d1703ed1d750fe402136853',1,'cadabra::TeXView::dim()']]],
   ['dim_5foutput_5fcells',['dim_output_cells',['../classcadabra_1_1NotebookWindow.html#aa287831cb22bcc9a04cf158b8900fd89',1,'cadabra::NotebookWindow']]],
   ['dimension',['dimension',['../classFilledTableau.html#af10c7ddb57394d33ec9ba3a7c312f3c5',1,'FilledTableau::dimension()'],['../classSpinor.html#a656407e59d8393df84656a10d9669a76',1,'Spinor::dimension()'],['../classTableau.html#a4cdb976d123c22700663edc46b8258c7',1,'Tableau::dimension()'],['../classyngtab_1_1tableau__base.html#a7e30ab33e3669cac6e1a25c7c538af40',1,'yngtab::tableau_base::dimension()']]],
   ['diracbar',['DiracBar',['../classDiracBar.html',1,'']]],

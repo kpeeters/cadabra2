@@ -18,7 +18,7 @@ var searchData=
   ['requests',['requests',['../classcadabra_1_1TeXEngine.html#a1688559da0a69f50dba5478c5643c2c4',1,'cadabra::TeXEngine']]],
   ['restarting_5fkernel',['restarting_kernel',['../classcadabra_1_1ComputeThread.html#a7fb3fbb68e1aa23cd8af885061cb1fee',1,'cadabra::ComputeThread']]],
   ['reuse_5fgenerating_5fset',['reuse_generating_set',['../classcanonicalise.html#a9925d090a02c10494f5c73b8f0fb0aae',1,'canonicalise']]],
-  ['rho',['rho',['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc'],['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc']]],
+  ['rho',['Rho',['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc'],['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc']]],
   ['rhs',['rhs',['../classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd',1,'Server']]],
   ['rhs_5fcontains_5fdummies',['rhs_contains_dummies',['../classsubstitute.html#a3d6f2d675aedd99fd08e9b657a4d7b3e',1,'substitute']]],
   ['roof',['roof',['../classindex__iterator.html#a9de2d516ea67bd10e8a38b9ab88cc6c7',1,'index_iterator']]],
