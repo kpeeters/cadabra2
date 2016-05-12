@@ -63,25 +63,6 @@ This platform receives less testing so please get in touch if you run
 into any issues. You can use either g++ or the clang++ compiler.
 
 
-
-Linux (Fedora/CentOS/Scientific Linux)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-On Scientific Linux you can install the dependencies with::
-
-    sudo yum install cmake gcc-c++ python-devel pcre-devel gmp-devel
-    sudo yum install libuuid-devel sqlite-devel
-    sudo yum install gtkmm30-devel boost-devel
-
-You also need to install jsconcpp-devel, which is not in the standard
-repositories. Find an appropriate package for your distribution at
-http://www.rpmfind.net/ and install that (either version 0.6.0 or 0.10.5
-will do).
-
-At present there is a problem running the notebook interface on
-Scientific Linux.
-
-
 OS X
 ~~~~
 
