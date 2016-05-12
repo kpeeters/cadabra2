@@ -46,17 +46,14 @@ set(CPACK_PACKAGE_VERSION_PATCH  "${CADABRA_VERSION_BUILD}")
 set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
 set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_SOURCE_DIR}/config/postinst)
+set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/config/postinst)
 
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python-matplotlib, python-mpmath, dvipng, python-sympy")
+set(CPACK_RPM_PACKAGE_REQUIRES   "dvipng, texlive-latex")
+
 set(CPACK_DEBIAN_PACKAGE_SECTION "math")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "field-theory motivated computer algebra system")
-set(CPACK_PACKAGE_DESCRIPTION "Cadabra is a computer algebra system designed specifically for the
- solution of problems encountered in field theory. It has extensive
- functionality for tensor polynomial simplification including
- multi-term symmetries, fermions and anti-commuting variables,
- Clifford algebras and Fierz transformations, implicit coordinate
- dependence, multiple index types and many more. The input format is
- a subset of TeX. This is the 2.x series of the software.")
+set(CPACK_PACKAGE_DESCRIPTIONFILE ${CMAKE_CURRENT_SOURCE_DIR}/doc/description)
 include(CPack)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
