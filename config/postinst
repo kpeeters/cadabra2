@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# Script to be included in the cadabra.deb package and to be run 
+# after installation, to make TeX pick up our style sheets.
+
+texhash
