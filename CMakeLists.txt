@@ -33,7 +33,8 @@ if(EXISTS "/etc/issue")
    endif(LINUX_ISSUE MATCHES "Mint")
 endif(EXISTS "/etc/issue")
 
-# Logic to build packages (RPM/DEB) using CPack.
+# Logic to build packages (RPM/DEB) using CPack; see
+# 
 include (InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_NAME           "cadabra2")
 set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/doc/license.txt")
