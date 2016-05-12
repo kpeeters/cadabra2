@@ -46,7 +46,7 @@ set(CPACK_SYSTEM_NAME            "trusty")
 set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA texhash)
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54, libboost-system1.54, libstdc++6, uuid-runtime, libgtkmm-3.0, texlive, texlive-latex-extra, python-matplotlib, python-mpmath, dvipng, python-sympy")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0, texlive, texlive-latex-extra, python-matplotlib, python-mpmath, dvipng, python-sympy")
 set(CPACK_DEBIAN_PACKAGE_SECTION "math")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "field-theory motivated computer algebra system")
 set(CPACK_PACKAGE_DESCRIPTION "Cadabra is a computer algebra system designed specifically for the
