@@ -58,6 +58,7 @@ set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
 set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_SOURCE_DIR}/config/postinst)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/config/postinst)
+set(CPACK_RPM_EXCLUDE_LIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
 
 #xdg-desktop-menu install <install>/share/applications/MyApp.desktop
 
