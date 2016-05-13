@@ -46,6 +46,14 @@ install(DIRECTORY DESTINATION ${INSTALL_IMAGES_DIR} DIRECTORY_PERMISSIONS OWNER_
                                                              WORLD_READ WORLD_EXECUTE)
 
 # Install programs.
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-gtk     DESTINATION bin)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra.png DESTINATION ${INSTALL_IMAGES_DIR})
+find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu REQUIRED)
 
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-gtk     DESTINATION bin)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2.png DESTINATION ${INSTALL_IMAGES_DIR})
+#xdg-desktop-menu messes up the file permissions, so we just install things by hand...
+#install(CODE "execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop)")
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/64x64/cadabra2.png     DESTINATION share/icons/hicolor/64x64/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2.png   DESTINATION share/icons/hicolor/256x256/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra2.svg           DESTINATION share/icons/hicolor/scalable/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop       DESTINATION share/applications)
+install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
