@@ -20,5 +20,7 @@ var searchData=
   ['expand_5fdelta_2ecc',['expand_delta.cc',['../expand__delta_8cc.html',1,'']]],
   ['expand_5fdelta_2ehh',['expand_delta.hh',['../expand__delta_8hh.html',1,'']]],
   ['expand_5fdiracbar_2ecc',['expand_diracbar.cc',['../expand__diracbar_8cc.html',1,'']]],
-  ['expand_5fdiracbar_2ehh',['expand_diracbar.hh',['../expand__diracbar_8hh.html',1,'']]]
+  ['expand_5fdiracbar_2ehh',['expand_diracbar.hh',['../expand__diracbar_8hh.html',1,'']]],
+  ['expand_5fpower_2ecc',['expand_power.cc',['../expand__power_8cc.html',1,'']]],
+  ['expand_5fpower_2ehh',['expand_power.hh',['../expand__power_8hh.html',1,'']]]
 ];

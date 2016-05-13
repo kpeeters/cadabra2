@@ -40,6 +40,7 @@ var searchData=
   ['expand',['expand',['../classexpand.html#a55ad95a014c7080e325a61d487b040ab',1,'expand']]],
   ['expand_5fdelta',['expand_delta',['../classexpand__delta.html#af4b894ba57ae06c1b39ef6368d0727bb',1,'expand_delta']]],
   ['expand_5fdiracbar',['expand_diracbar',['../classexpand__diracbar.html#aa9d8ddef704a9d3b140ed26472fdcb34',1,'expand_diracbar']]],
+  ['expand_5fpower',['expand_power',['../classexpand__power.html#abe37737185ac454aa50ce067aac764c0',1,'expand_power']]],
   ['export_5fas_5fhtml',['export_as_HTML',['../namespacecadabra.html#a9da1f5667a79f57423e77d7316b2dce3',1,'cadabra']]],
   ['export_5fas_5flatex',['export_as_LaTeX',['../namespacecadabra.html#a6f28b80b2747d0677e2faa23e3c1a0d7',1,'cadabra']]],
   ['export_5fas_5fpython',['export_as_python',['../namespacecadabra.html#a2bcbb2d2130b304c3fa0b6f5359fbf66',1,'cadabra']]]
