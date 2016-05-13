@@ -44,6 +44,8 @@ else(EXISTS "/etc/redhat-release")
    endif(EXISTS "/etc/issue")
 endif(EXISTS "/etc/redhat-release")
 
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT_BINARY_DIR}/postinst")
+
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
 include (InstallRequiredSystemLibraries)
@@ -56,8 +58,8 @@ set(CPACK_PACKAGE_VERSION_PATCH  "${CADABRA_VERSION_BUILD}")
 set(CPACK_PACKAGE_VENDOR         "Kasper Peeters")
 set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
 set(CPACK_STRIP_FILES            ON)
-set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_SOURCE_DIR}/config/postinst)
-set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/config/postinst)
+set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
+set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
 set(CPACK_RPM_EXCLUDE_LIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
 
 #xdg-desktop-menu install <install>/share/applications/MyApp.desktop

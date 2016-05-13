@@ -1,0 +1,106 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{expand_delta}{Expand generalised Kronecker delta symbols}\n\nIn Cadabra the \\prop{KroneckerDelta} property indicates a generalised Kronecker\ndelta symbol. In order to expand it into standard two-index Kronecker deltas, use\n\\algo{expand_delta}, as in the example below."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{expand_delta}{Expand generalised Kronecker delta symbols}\n\nIn Cadabra the \\prop{KroneckerDelta} property indicates a generalised Kronecker\ndelta symbol. In order to expand it into standard two-index Kronecker deltas, use\n\\algo{expand_delta}, as in the example below."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property KroneckerDelta to~}\\delta\\left(\\#\\right).\\end{dmath*}"
+				}
+			],
+			"source" : "\\delta{#}::KroneckerDelta;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta^{a}\\,_{b}\\,^{c}\\,_{d}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\delta^{a}_{b}^{c}_{d};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\delta^{a}\\,_{b} \\delta^{c}\\,_{d} - \\frac{1}{2}\\delta^{c}\\,_{b} \\delta^{a}\\,_{d}\\end{dmath*}"
+				}
+			],
+			"source" : "expand_delta(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta^{a}\\,_{m}\\,^{l}\\,_{n} \\delta_{a}\\,^{c}\\,_{b}\\,^{d}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\delta^{a}_{m}^{l}_{n} \\delta_{a}^{c}_{b}^{d};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(\\frac{1}{2}\\delta^{a}\\,_{m} \\delta^{l}\\,_{n} - \\frac{1}{2}\\delta^{l}\\,_{m} \\delta^{a}\\,_{n}\\right) \\left(\\frac{1}{2}\\delta_{a}\\,^{c} \\delta_{b}\\,^{d} - \\frac{1}{2}\\delta_{b}\\,^{c} \\delta_{a}\\,^{d}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{4}\\delta^{a}\\,_{m} \\delta^{l}\\,_{n} \\delta_{a}\\,^{c} \\delta_{b}\\,^{d} - \\frac{1}{4}\\delta^{a}\\,_{m} \\delta^{l}\\,_{n} \\delta_{b}\\,^{c} \\delta_{a}\\,^{d} - \\frac{1}{4}\\delta^{l}\\,_{m} \\delta^{a}\\,_{n} \\delta_{a}\\,^{c} \\delta_{b}\\,^{d}+\\frac{1}{4}\\delta^{l}\\,_{m} \\delta^{a}\\,_{n} \\delta_{b}\\,^{c} \\delta_{a}\\,^{d}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{4}\\delta^{l}\\,_{n} \\delta_{m}\\,^{c} \\delta_{b}\\,^{d} - \\frac{1}{4}\\delta^{l}\\,_{n} \\delta_{b}\\,^{c} \\delta_{m}\\,^{d} - \\frac{1}{4}\\delta^{l}\\,_{m} \\delta_{n}\\,^{c} \\delta_{b}\\,^{d}+\\frac{1}{4}\\delta^{l}\\,_{m} \\delta_{b}\\,^{c} \\delta_{n}\\,^{d}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{4}\\delta_{b}\\,^{d} \\delta^{c}\\,_{m} \\delta^{l}\\,_{n} - \\frac{1}{4}\\delta_{b}\\,^{c} \\delta^{d}\\,_{m} \\delta^{l}\\,_{n} - \\frac{1}{4}\\delta_{b}\\,^{d} \\delta^{c}\\,_{n} \\delta^{l}\\,_{m}+\\frac{1}{4}\\delta_{b}\\,^{c} \\delta^{d}\\,_{n} \\delta^{l}\\,_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "expand_delta(_);\ndistribute(_);\neliminate_kronecker(_);\ncanonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
