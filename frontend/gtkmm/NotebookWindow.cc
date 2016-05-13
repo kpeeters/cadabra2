@@ -1160,7 +1160,7 @@ void NotebookWindow::on_kernel_restart()
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);
