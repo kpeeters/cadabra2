@@ -105,6 +105,7 @@ namespace boost {
 #include "algorithms/expand.hh"
 #include "algorithms/expand_delta.hh"
 #include "algorithms/expand_diracbar.hh"
+#include "algorithms/expand_power.hh"
 #include "algorithms/factor_in.hh"
 #include "algorithms/factor_out.hh"
 #include "algorithms/fierz.hh"
@@ -1002,6 +1003,7 @@ BOOST_PYTHON_MODULE(cadabra2)
  	def_algo_1<expand>("expand");
 	def_algo_1<expand_delta>("expand_delta");
 	def_algo_1<expand_diracbar>("expand_diracbar");
+	def_algo_1<expand_power>("expand_power");
 	def_algo_1<flatten_sum>("flatten_sum");
 	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
@@ -1065,13 +1067,13 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	def("sym", &dispatch_ex<sym, Ex&, bool>, 
 		 (arg("ex"),
-		  arg("items"), arg("anticommuting")=false,
+		  arg("items"), arg("antisymmetric")=false,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
 	def("asym", &dispatch_ex<sym, Ex&, bool>, 
 		 (arg("ex"),
-		  arg("items"), arg("anticommuting")=true,
+		  arg("items"), arg("antisymmetric")=true,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 

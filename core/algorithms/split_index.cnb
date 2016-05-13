@@ -1,0 +1,81 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{split_index}{Split the range of an index into two subsets}\n\nReplace a sum by a sum-of-sums, abstractly. Concretely, replaces all\nindex contractions of a given type by a sum of two terms, each with\nindices of a different type. Useful for Kaluza-Klein reductions and\nthe like. An example makes this more clear:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{split_index}{Split the range of an index into two subsets}\n\nReplace a sum by a sum-of-sums, abstractly. Concretely, replaces all\nindex contractions of a given type by a sum of two terms, each with\nindices of a different type. Useful for Kaluza-Klein reductions and\nthe like. An example makes this more clear:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "{M,N,P,Q,R}::Indices(full).\n{m,n,p,q,r}::Indices(space1).\n{a,b,c,d,e}::Indices(space2)."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{M p} B_{M p}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m p} B_{m p}+A_{a p} B_{a p}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A_{M p} B_{M p};\nsplit_index(_, $M,m,a$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{M p} B_{M p}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m p} B_{m p}+A_{4 p} B_{4 p}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A_{M p} B_{M p};\nsplit_index(_, $M,m,4$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that the two index types into which the original indices should be\nsplit can be either symbolic (as in the first case above) or numeric\n(as in the second case)."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that the two index types into which the original indices should be\nsplit can be either symbolic (as in the first case above) or numeric\n(as in the second case)."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

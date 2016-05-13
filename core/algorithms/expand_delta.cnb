@@ -97,6 +97,46 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that it is in principle possible to get a result similar to the expanded form by using the \nYoung projector and then canonicalising, but this is more expensive:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that it is in principle possible to get a result similar to the expanded form by using the \nYoung projector and then canonicalising, but this is more expensive:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta^{a}\\,_{b}\\,^{c}\\,_{d}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\delta^{a}_{b}^{c}_{d};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta^{a}\\,_{b}\\,^{c}\\,_{d}\\end{dmath*}"
+				}
+			],
+			"source" : "young_project_tensor(_);"
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
 		}

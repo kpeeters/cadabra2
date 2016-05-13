@@ -29,6 +29,8 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\int" && child=="\\sum") return true;
 
+	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum")) return  true;
+
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
 //		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
@@ -305,6 +307,9 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 		print_multiplier(str, it);
 		}
 
+	if(needs_brackets(it)) 
+		str << "\\left(";
+
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
 	// If there is any sum as child, and if the sum children do not
 	// all have the same bracket type (different from b_none or b_no),
@@ -339,6 +344,10 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 			}
 		previous_bracket_=current_bracket_;
 		}
+
+	if(needs_brackets(it)) 
+		str << "\\right)";
+
 	}
 
 void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it) 

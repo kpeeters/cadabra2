@@ -29,6 +29,7 @@ set(TUTORIALS
 # and the rest will be taken care of automatically.
 
 set(ALGOS
+  asym
   canonicalise
   collect_factors
   collect_terms
@@ -36,12 +37,16 @@ set(ALGOS
   decompose_product
   distribute
   eliminate_kronecker
+  epsilon_to_delta
   evaluate
   expand
+  expand_delta
   expand_diracbar
+  expand_power
   factor_in
   factor_out
   join_gamma
+  split_index
   substitute
   vary
   young_project_tensor
