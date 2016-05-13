@@ -1,14 +1,11 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -18,13 +15,11 @@
 			"hidden" : true,
 			"source" : "\\algorithm{collect_factors}{Collect identical factors in a product.}\n\nCollect factors in a product that differ only by their exponent. Note\nthat factors containing sub- or superscripted indices do not get\ncollected (i.e.~$A_m A^m$ does not get reduced to $(A_m)^2$)."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -33,13 +28,11 @@
 			],
 			"source" : "ex:=A A B A B A;"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -48,13 +41,11 @@
 			],
 			"source" : "collect_factors(_);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -64,13 +55,11 @@
 			"hidden" : true,
 			"source" : "Arbitrary powers can be collected this way,"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -79,13 +68,11 @@
 			],
 			"source" : "ex:=X X**(-1) X**(-4);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -94,13 +81,11 @@
 			],
 			"source" : "collect_factors(_);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -110,13 +95,11 @@
 			"hidden" : true,
 			"source" : "The exponent notation can be expanded again \nusing \\algo{expand_power}."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -126,7 +109,24 @@
 			"hidden" : true,
 			"source" : ""
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}X^{4}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}X X X X\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=X**4;\nexpand_power(_);"
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -134,6 +134,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-

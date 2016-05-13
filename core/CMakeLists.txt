@@ -140,6 +140,7 @@ set(LOCAL_SRC_FILES
   algorithms/expand.cc
   algorithms/expand_delta.cc
   algorithms/expand_diracbar.cc
+  algorithms/expand_power.cc
   algorithms/factor_in.cc
   algorithms/factor_out.cc
   algorithms/fierz.cc
