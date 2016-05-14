@@ -1,10 +1,11 @@
 
 #include "algorithms/epsilon_to_delta.hh"
+#include "algorithms/reduce_delta.hh"
 #include "properties/EpsilonTensor.hh"
 #include "properties/Metric.hh"
 
-epsilon_to_delta::epsilon_to_delta(const Kernel& k, Ex& tr)
-	: Algorithm(k, tr)
+epsilon_to_delta::epsilon_to_delta(const Kernel& k, Ex& tr, bool r)
+	: Algorithm(k, tr), reduce(r)
 	{
 	}
 
@@ -64,15 +65,15 @@ Algorithm::result_t epsilon_to_delta::apply(iterator& st)
 
 	iterator gend=tr.replace(epsilons[1], rep.begin());
 
-//	if(!has_argument("noreduce")) {
-//		reduce_gendelta rg(tr, tr.end());
-//		if(rg.can_apply(gend))
-//			rg.apply(gend);
-//		if(*gend->multiplier==0) {
-//			zero(st->multiplier);
-//			return result_t::l_applied;
-//			}
-//		}
+	if(reduce) {
+		reduce_delta rg(kernel, tr);
+		if(rg.can_apply(gend))
+			rg.apply(gend);
+		if(*gend->multiplier==0) {
+			zero(st->multiplier);
+			return result_t::l_applied;
+			}
+		}
 	
 	if(*gend->multiplier!=1) {
 		multiply(tr.parent(gend)->multiplier, *gend->multiplier);

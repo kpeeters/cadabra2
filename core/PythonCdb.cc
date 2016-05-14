@@ -117,6 +117,7 @@ namespace boost {
 #include "algorithms/lr_tensor.hh"
 #include "algorithms/order.hh"
 #include "algorithms/product_rule.hh"
+#include "algorithms/reduce_delta.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
@@ -999,7 +1000,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<decompose_product>("decompose_product");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
-	def_algo_1<epsilon_to_delta>("epsilon_to_delta");
  	def_algo_1<expand>("expand");
 	def_algo_1<expand_delta>("expand_delta");
 	def_algo_1<expand_diracbar>("expand_diracbar");
@@ -1007,6 +1007,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<flatten_sum>("flatten_sum");
 	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
+	def_algo_1<reduce_delta>("reduce_delta");
 	def_algo_1<rename_dummies>("rename_dummies");
 //	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
@@ -1062,6 +1063,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("order", &dispatch_ex<order, Ex&, bool>, 
 		 (arg("ex"),
 		  arg("factors"), arg("anticommuting")=false,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("epsilon_to_delta", &dispatch_ex<epsilon_to_delta, bool>,
+		 (arg("ex"),
+		  arg("reduce")=true,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
