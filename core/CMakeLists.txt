@@ -153,6 +153,7 @@ set(LOCAL_SRC_FILES
   algorithms/lr_tensor.cc
   algorithms/order.cc
   algorithms/product_rule.cc
+  algorithms/reduce_delta.cc
   algorithms/rename_dummies.cc
   algorithms/sort_product.cc
   algorithms/split_index.cc

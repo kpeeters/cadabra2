@@ -46,6 +46,7 @@ set(ALGOS
   factor_in
   factor_out
   join_gamma
+  reduce_delta
   split_index
   substitute
   vary

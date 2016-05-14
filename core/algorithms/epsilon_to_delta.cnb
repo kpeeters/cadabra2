@@ -36,10 +36,47 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}6\\delta_{a a b b c d}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2\\delta_{c d}\\end{dmath*}"
 				}
 			],
 			"source" : "epsilon_to_delta(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Remember that if the result is a generalised delta, you can expand it in terms\nof normal deltas using \\algo{expand_delta},"
+				}
+			],
+			"hidden" : true,
+			"source" : "Remember that if the result is a generalised delta, you can expand it in terms\nof normal deltas using \\algo{expand_delta},"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\epsilon_{a b c} \\epsilon_{a d e}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2\\delta_{b d c e}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta_{b d} \\delta_{c e}-\\delta_{c d} \\delta_{b e}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\epsilon_{a b c} \\epsilon_{a d e};\nepsilon_to_delta(_);\nexpand_delta(_);"
 		},
 		{
 			"cell_origin" : "client",
@@ -63,11 +100,29 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "As you can see from this example, contracted indices inside the\ngeneralised delta are automatically eliminated, as the\nalgorithm \\algo{reduce_gendelta} is called automatically; if you\ndo not want this use the optional argument \\verb|noreduce=True|."
+					"source" : "As you can see from this example, contracted indices inside the\ngeneralised delta are automatically eliminated, as the\nalgorithm \\algo{reduce_gendelta} is called automatically; if you\ndo not want this use the optional argument \\verb|reduce=False|."
 				}
 			],
 			"hidden" : true,
-			"source" : "As you can see from this example, contracted indices inside the\ngeneralised delta are automatically eliminated, as the\nalgorithm \\algo{reduce_gendelta} is called automatically; if you\ndo not want this use the optional argument \\verb|noreduce=True|."
+			"source" : "As you can see from this example, contracted indices inside the\ngeneralised delta are automatically eliminated, as the\nalgorithm \\algo{reduce_gendelta} is called automatically; if you\ndo not want this use the optional argument \\verb|reduce=False|."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\epsilon_{a b c} \\epsilon_{a b d}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}6\\delta_{a a b b c d}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\epsilon_{a b c} \\epsilon_{a b d};\nepsilon_to_delta(_, reduce=False);"
 		},
 		{
 			"cell_origin" : "client",
@@ -77,11 +132,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Note that the results typically depend on the signature of the\nspace-time, which can be introduced through the optional \\verb|metric|\nargument of the \\prop|EpsilonTensor| property. Compare the two\nexamples below:"
+					"source" : "Note that the results typically depend on the signature of the\nspace-time, which can be introduced through the optional \\verb|metric|\nargument of the \\prop{EpsilonTensor} property. Compare the two\nexamples below:"
 				}
 			],
 			"hidden" : true,
-			"source" : "Note that the results typically depend on the signature of the\nspace-time, which can be introduced through the optional \\verb|metric|\nargument of the \\prop|EpsilonTensor| property. Compare the two\nexamples below:"
+			"source" : "Note that the results typically depend on the signature of the\nspace-time, which can be introduced through the optional \\verb|metric|\nargument of the \\prop{EpsilonTensor} property. Compare the two\nexamples below:"
 		},
 		{
 			"cell_origin" : "client",
@@ -104,7 +159,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-6\\delta_{a a b b c c}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-6\\end{dmath*}"
 				}
 			],
 			"source" : "epsilon_to_delta(_);"
@@ -122,7 +177,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}6\\delta_{a a b b c c}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}6\\end{dmath*}"
 				}
 			],
 			"source" : "g_{a b}::Metric(signature=+1).\nex:=\\epsilon_{a b c} \\epsilon_{a b c};\nepsilon_to_delta(_);"
