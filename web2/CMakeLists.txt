@@ -49,6 +49,7 @@ set(ALGOS
   reduce_delta
   split_index
   substitute
+  unwrap
   vary
   young_project_tensor
 )
