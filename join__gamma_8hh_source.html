@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -104,7 +105,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
 <div class="line"><a name="l00006"></a><span class="lineno"><a class="line" href="classjoin__gamma.html">    6</a></span>&#160;<span class="keyword">class </span><a class="code" href="classjoin__gamma.html">join_gamma</a> : <span class="keyword">public</span> <a class="code" href="classAlgorithm.html">Algorithm</a> {</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        <a class="code" href="classjoin__gamma.html#af76d5ac9d3f2beb94d891eebe7afc9f6">join_gamma</a>(<span class="keyword">const</span> <a class="code" href="classKernel.html">Kernel</a>&amp;, <a class="code" href="classEx.html">Ex</a>&amp;, <span class="keywordtype">bool</span> <a class="code" href="classexpand.html">expand</a>, <span class="keywordtype">bool</span> use_gendelta);</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        <a class="code" href="classjoin__gamma.html#af76d5ac9d3f2beb94d891eebe7afc9f6">join_gamma</a>(<span class="keyword">const</span> <a class="code" href="classKernel.html">Kernel</a>&amp;, <a class="code" href="classEx.html">Ex</a>&amp;, <span class="keywordtype">bool</span> <a class="code" href="classjoin__gamma.html#ae05a00a9cfdf4e8b3fb820e358265b5c">expand</a>, <span class="keywordtype">bool</span> use_gendelta);</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span>     <a class="code" href="classjoin__gamma.html#ad03e74e35bd086e9ca58211b25a623e0">can_apply</a>(<a class="code" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>);</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classEx.html#a2b752a88144e6ad7bee2ff30bd671811">result_t</a> <a class="code" href="classjoin__gamma.html#a7f4af8130f2e82fddc383a02634f5c2b">apply</a>(<a class="code" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>&amp;);</div>
@@ -128,7 +129,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classjoin__gamma_html_a4448cab745327532e1b7043e9e29f4d1"><div class="ttname"><a href="classjoin__gamma.html#a4448cab745327532e1b7043e9e29f4d1">join_gamma::gm2</a></div><div class="ttdeci">const GammaMatrix * gm2</div><div class="ttdef"><b>Definition:</b> join_gamma.hh:15</div></div>
 <div class="ttc" id="classjoin__gamma_html_ad03e74e35bd086e9ca58211b25a623e0"><div class="ttname"><a href="classjoin__gamma.html#ad03e74e35bd086e9ca58211b25a623e0">join_gamma::can_apply</a></div><div class="ttdeci">virtual bool can_apply(iterator)</div><div class="ttdef"><b>Definition:</b> join_gamma.cc:107</div></div>
 <div class="ttc" id="classjoin__gamma_html_adfb2f5e69c40069ac1aa40a3216d9b85"><div class="ttname"><a href="classjoin__gamma.html#adfb2f5e69c40069ac1aa40a3216d9b85">join_gamma::gamma_name_</a></div><div class="ttdeci">Ex::iterator gamma_name_</div><div class="ttdef"><b>Definition:</b> join_gamma.hh:24</div></div>
-<div class="ttc" id="classexpand_html"><div class="ttname"><a href="classexpand.html">expand</a></div><div class="ttdef"><b>Definition:</b> expand.hh:6</div></div>
 <div class="ttc" id="classAlgorithm_html_ae6f68540d91f815d6d9ebcc34540fe6d"><div class="ttname"><a href="classAlgorithm.html#ae6f68540d91f815d6d9ebcc34540fe6d">Algorithm::sibling_iterator</a></div><div class="ttdeci">Ex::sibling_iterator sibling_iterator</div><div class="ttdef"><b>Definition:</b> Algorithm.hh:68</div></div>
 <div class="ttc" id="classjoin__gamma_html_afc9f2e6f5c935cc6087e2a81a2134a93"><div class="ttname"><a href="classjoin__gamma.html#afc9f2e6f5c935cc6087e2a81a2134a93">join_gamma::gamma_bracket_</a></div><div class="ttdeci">str_node::bracket_t gamma_bracket_</div><div class="ttdef"><b>Definition:</b> join_gamma.hh:25</div></div>
 <div class="ttc" id="classjoin__gamma_html_a7f4af8130f2e82fddc383a02634f5c2b"><div class="ttname"><a href="classjoin__gamma.html#a7f4af8130f2e82fddc383a02634f5c2b">join_gamma::apply</a></div><div class="ttdeci">virtual result_t apply(iterator &amp;)</div><div class="ttdef"><b>Definition:</b> join_gamma.cc:132</div></div>
@@ -151,7 +151,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 13 2016 21:11:41 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 20 2016 20:57:05 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

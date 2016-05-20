@@ -23,13 +23,10 @@ var searchData=
   ['evaluate',['evaluate',['../classevaluate.html#a7f09dd44304d73c7d56f9bc9d96bf19a',1,'evaluate']]],
   ['ex',['Ex',['../classEx.html#a1f988b4ff6e998d00dec18ac2a0f6a04',1,'Ex::Ex()'],['../classEx.html#a085a65d0c652892d9418d594b767351e',1,'Ex::Ex(tree&lt; str_node &gt;::iterator)'],['../classEx.html#a7a8b5a48e4b8e40e2736b432ac0856ee',1,'Ex::Ex(const str_node &amp;)'],['../classEx.html#a9904430b6b19bea942b89fab60c9b9ac',1,'Ex::Ex(const Ex &amp;)'],['../classEx.html#a168138379529e6c89725904ea2119639',1,'Ex::Ex(const std::string &amp;)'],['../classEx.html#afd2732e2b570d6c983445a0f1dc5ac89',1,'Ex::Ex(int)']]],
   ['ex_5fcomparator',['Ex_comparator',['../classEx__comparator.html#ac90a9ba40ba967df80fc33d48682e4fd',1,'Ex_comparator']]],
-  ['ex_5fgetitem',['Ex_getitem',['../PythonCdb_8cc.html#abfad8edee4f862ef375b818fbaa08b3b',1,'PythonCdb.cc']]],
   ['ex_5fis_5fequivalent',['Ex_is_equivalent',['../classEx__is__equivalent.html#a2edfe5ae7cec113d2e7d928bf774fa54',1,'Ex_is_equivalent']]],
   ['ex_5fis_5fless',['Ex_is_less',['../classEx__is__less.html#a5f3739514a09102ebaa27fdc9bd5ed88',1,'Ex_is_less']]],
   ['ex_5flatex_5f',['Ex_latex_',['../group__pythoncore.html#gab572cc13efaa1f95af984b68ed478b12',1,'Ex_latex_(const Ex &amp;ex):&#160;PythonCdb.cc'],['../group__pythoncore.html#gab572cc13efaa1f95af984b68ed478b12',1,'Ex_latex_(const Ex &amp;):&#160;PythonCdb.cc']]],
-  ['ex_5flen',['Ex_len',['../PythonCdb_8cc.html#ad6ad8ac9c4ab59df32689d6d704d9662',1,'PythonCdb.cc']]],
   ['ex_5frepr_5f',['Ex_repr_',['../PythonCdb_8cc.html#afa7280e0886f1ca4a1e7b9ea8149df36',1,'Ex_repr_(const Ex &amp;ex):&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#a111c2e7847eb32dd65111096f940be7f',1,'Ex_repr_(const Ex &amp;):&#160;PythonCdb.cc']]],
-  ['ex_5fsetitem',['Ex_setitem',['../PythonCdb_8cc.html#acfe28f30dd4bbe50647aa8efb997677d',1,'PythonCdb.cc']]],
   ['ex_5fstr_5f',['Ex_str_',['../group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69',1,'Ex_str_(const Ex &amp;ex):&#160;PythonCdb.cc'],['../group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69',1,'Ex_str_(const Ex &amp;):&#160;PythonCdb.cc']]],
   ['ex_5fto_5fsympy',['Ex_to_Sympy',['../PythonCdb_8cc.html#af0960e91acaead99009ef7754dea30c9',1,'Ex_to_Sympy(const Ex &amp;ex):&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#a0fafa63eaa225856324b5564b24af929',1,'Ex_to_Sympy(const Ex &amp;):&#160;PythonCdb.cc']]],
   ['exceptions',['exceptions',['../classexec__stream__t.html#a213ff012ef99a1b720379d710fda4c3f',1,'exec_stream_t']]],
@@ -37,11 +34,8 @@ var searchData=
   ['execute_5fcell',['execute_cell',['../classcadabra_1_1ComputeThread.html#a04abcacb1305898419c2777436d51520',1,'cadabra::ComputeThread']]],
   ['exit_5fcode',['exit_code',['../classexec__stream__t.html#a780d98f4bf7a1d6ad2b576f41a70619c',1,'exec_stream_t']]],
   ['exp_5finput_5ftv',['exp_input_tv',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#afe51d7e8f84dea16f0da967bcfb29dcb',1,'cadabra::CodeInput::exp_input_tv']]],
-  ['expand',['expand',['../classexpand.html#a55ad95a014c7080e325a61d487b040ab',1,'expand']]],
   ['expand_5fdelta',['expand_delta',['../classexpand__delta.html#af4b894ba57ae06c1b39ef6368d0727bb',1,'expand_delta']]],
   ['expand_5fdiracbar',['expand_diracbar',['../classexpand__diracbar.html#aa9d8ddef704a9d3b140ed26472fdcb34',1,'expand_diracbar']]],
-  ['expand_5fpower',['expand_power',['../classexpand__power.html#abe37737185ac454aa50ce067aac764c0',1,'expand_power']]],
   ['export_5fas_5fhtml',['export_as_HTML',['../namespacecadabra.html#a9da1f5667a79f57423e77d7316b2dce3',1,'cadabra']]],
-  ['export_5fas_5flatex',['export_as_LaTeX',['../namespacecadabra.html#a6f28b80b2747d0677e2faa23e3c1a0d7',1,'cadabra']]],
-  ['export_5fas_5fpython',['export_as_python',['../namespacecadabra.html#a2bcbb2d2130b304c3fa0b6f5359fbf66',1,'cadabra']]]
+  ['export_5fas_5flatex',['export_as_LaTeX',['../namespacecadabra.html#a6f28b80b2747d0677e2faa23e3c1a0d7',1,'cadabra']]]
 ];

@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -157,11 +158,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a103ae48f7ba6fbb75394367c52870f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af41a1ba12585d720d965dc57ca34a51a"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#af41a1ba12585d720d965dc57ca34a51a">erase_expression</a> (iterator it)</td></tr>
 <tr class="separator:af41a1ba12585d720d965dc57ca34a51a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2498cf3dcc524889b52b74f56f4e012b"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#a2498cf3dcc524889b52b74f56f4e012b">keep_only_last</a> (iterator it)</td></tr>
+<tr class="separator:a2498cf3dcc524889b52b74f56f4e012b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afec7b4f5d43ebdd90533dcf41111b2dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Storage_8hh.html#a5e0376621f663ebbc8ea8996a15c4085">hashval_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#afec7b4f5d43ebdd90533dcf41111b2dc">calc_hash</a> (iterator it) const </td></tr>
 <tr class="memdesc:afec7b4f5d43ebdd90533dcf41111b2dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the hash value for the subtree starting at 'it'.  <a href="#afec7b4f5d43ebdd90533dcf41111b2dc">More...</a><br/></td></tr>
 <tr class="separator:afec7b4f5d43ebdd90533dcf41111b2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa128603552c5d60f2394b5cb194c2abd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="Storage_8hh.html#aad74ea408f31d2d673c876764301e245">multiplier_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#aa128603552c5d60f2394b5cb194c2abd">arg_to_num</a> (sibling_iterator, unsigned int) const </td></tr>
 <tr class="separator:aa128603552c5d60f2394b5cb194c2abd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0655a87d9c73a1f2e1985a2ed00bad9d"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#a0655a87d9c73a1f2e1985a2ed00bad9d">active_expression</a> (iterator it) const </td></tr>
+<tr class="separator:a0655a87d9c73a1f2e1985a2ed00bad9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa6fd8312277dcc927a20a44cfb630de"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#afa6fd8312277dcc927a20a44cfb630de">number_of_steps</a> (iterator it) const </td></tr>
 <tr class="separator:afa6fd8312277dcc927a20a44cfb630de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaecc40806e6bd3455e64342e7ce1cdbe"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#aaecc40806e6bd3455e64342e7ce1cdbe">number_of_equations</a> () const </td></tr>
@@ -207,9 +212,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa7a26161967b60991eaabb958f73178b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#aa7a26161967b60991eaabb958f73178b">pop_history</a> ()</td></tr>
 <tr class="memdesc:aa7a26161967b60991eaabb958f73178b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pop the most recent state of the expression off the history stack; returns the selector that got us there.  <a href="#aa7a26161967b60991eaabb958f73178b">More...</a><br/></td></tr>
 <tr class="separator:aa7a26161967b60991eaabb958f73178b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabb58a0c53d718721c9d587a3731b644"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#aabb58a0c53d718721c9d587a3731b644">history_size</a> () const </td></tr>
-<tr class="memdesc:aabb58a0c53d718721c9d587a3731b644"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the size of the history; 0 means no history, just the current expression.  <a href="#aabb58a0c53d718721c9d587a3731b644">More...</a><br/></td></tr>
-<tr class="separator:aabb58a0c53d718721c9d587a3731b644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -230,7 +232,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ab9653f7c2b420532fc7877e5f4ff6d63"><td class="memItemLeft" align="right" valign="top">std::vector&lt; tree&lt; <a class="el" href="classstr__node.html">str_node</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#ab9653f7c2b420532fc7877e5f4ff6d63">history</a></td></tr>
 <tr class="separator:ab9653f7c2b420532fc7877e5f4ff6d63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5cdc585ac1cb1a87199cf379cc789526"><td class="memItemLeft" align="right" valign="top">std::vector&lt; tree&lt; <a class="el" href="classstr__node.html">str_node</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#a5cdc585ac1cb1a87199cf379cc789526">selectors</a></td></tr>
-<tr class="memdesc:a5cdc585ac1cb1a87199cf379cc789526"><td class="mdescLeft">&#160;</td><td class="mdescRight">Patterns which describe how to get from one history step to the next.  <a href="#a5cdc585ac1cb1a87199cf379cc789526">More...</a><br/></td></tr>
 <tr class="separator:a5cdc585ac1cb1a87199cf379cc789526"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
@@ -358,6 +359,22 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a0655a87d9c73a1f2e1985a2ed00bad9d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ex::iterator Ex::active_expression </td>
+          <td>(</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>it</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a2f2a561cba1bc595407611598bcbf2f9"></a>
 <div class="memitem">
 <div class="memproto">
@@ -689,20 +706,19 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aabb58a0c53d718721c9d587a3731b644"></a>
+<a class="anchor" id="a2498cf3dcc524889b52b74f56f4e012b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Ex::history_size </td>
+          <td class="memname">Ex::iterator Ex::keep_only_last </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype">iterator&#160;</td>
+          <td class="paramname"><em>it</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Return the size of the history; 0 means no history, just the current expression. </p>
 
 </div>
 </div>
@@ -1115,8 +1131,6 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Patterns which describe how to get from one history step to the next. </p>
-
 </div>
 </div>
 <a class="anchor" id="a208cb7797ec246f5dcc73ff6e93b4d41"></a>
@@ -1146,7 +1160,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 13 2016 21:11:47 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri May 20 2016 20:57:11 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

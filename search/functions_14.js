@@ -6,7 +6,6 @@ var searchData=
   ['tabs_5fto_5ftree',['tabs_to_tree',['../classtab__basics.html#afae6680a90848d28abab4208baa6a628',1,'tab_basics']]],
   ['take_5fmatch',['take_match',['../classtake__match.html#a5c8cf670cae43c62c2b8188caa83f07b',1,'take_match']]],
   ['terminate',['terminate',['../classcadabra_1_1ComputeThread.html#a8a3d3abd3bcdf44564758a3913efb995',1,'cadabra::ComputeThread']]],
-  ['terms',['terms',['../PythonCdb_8cc.html#a8aa7a6b2d258e2b2a135c0b2cb50a33d',1,'PythonCdb.cc']]],
   ['texengine',['TeXEngine',['../classcadabra_1_1TeXEngine.html#a09348689e3c5ab33989cee9eaf8bd8ae',1,'cadabra::TeXEngine']]],
   ['texexception',['TeXException',['../classcadabra_1_1TeXEngine_1_1TeXException.html#a5b61c3828229e5b2664e059a83214f22',1,'cadabra::TeXEngine::TeXException']]],
   ['texify',['texify',['../classDisplayTeX.html#a40287a7e3d5579f00cba31a529caeb89',1,'DisplayTeX']]],

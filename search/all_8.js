@@ -25,7 +25,6 @@ var searchData=
   ['helpers_5fh',['HELPERS_H',['../exec-stream_8cc.html#a4fd85cebb3a7e1a87f883886a1e43791',1,'exec-stream.cc']]],
   ['hidden',['hidden',['../classcadabra_1_1DataCell.html#a637a6a37f15eefa56f57b5e3c5cfb2c9',1,'cadabra::DataCell']]],
   ['history',['history',['../classEx.html#ab9653f7c2b420532fc7877e5f4ff6d63',1,'Ex']]],
-  ['history_5fsize',['history_size',['../classEx.html#aabb58a0c53d718721c9d587a3731b644',1,'Ex']]],
   ['hook_5flength',['hook_length',['../classyngtab_1_1tableau__base.html#a5651ffe242108b6bcf98d186b2002bc5',1,'yngtab::tableau_base']]],
   ['hook_5flength_5fprod',['hook_length_prod',['../classyngtab_1_1tableau__base.html#a01e44666a566fa3701923ba0f78ea551',1,'yngtab::tableau_base']]],
   ['horizontal_5fpixels_5f',['horizontal_pixels_',['../classcadabra_1_1TeXEngine.html#a729497d3cb3dd6a546227a7f0c883f39',1,'cadabra::TeXEngine']]],

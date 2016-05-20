@@ -15,12 +15,8 @@ var searchData=
   ['exchange_2ehh',['Exchange.hh',['../Exchange_8hh.html',1,'']]],
   ['exec_2dstream_2ecc',['exec-stream.cc',['../exec-stream_8cc.html',1,'']]],
   ['exec_2dstream_2eh',['exec-stream.h',['../exec-stream_8h.html',1,'']]],
-  ['expand_2ecc',['expand.cc',['../expand_8cc.html',1,'']]],
-  ['expand_2ehh',['expand.hh',['../expand_8hh.html',1,'']]],
   ['expand_5fdelta_2ecc',['expand_delta.cc',['../expand__delta_8cc.html',1,'']]],
   ['expand_5fdelta_2ehh',['expand_delta.hh',['../expand__delta_8hh.html',1,'']]],
   ['expand_5fdiracbar_2ecc',['expand_diracbar.cc',['../expand__diracbar_8cc.html',1,'']]],
-  ['expand_5fdiracbar_2ehh',['expand_diracbar.hh',['../expand__diracbar_8hh.html',1,'']]],
-  ['expand_5fpower_2ecc',['expand_power.cc',['../expand__power_8cc.html',1,'']]],
-  ['expand_5fpower_2ehh',['expand_power.hh',['../expand__power_8hh.html',1,'']]]
+  ['expand_5fdiracbar_2ehh',['expand_diracbar.hh',['../expand__diracbar_8hh.html',1,'']]]
 ];

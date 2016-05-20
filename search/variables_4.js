@@ -7,7 +7,7 @@ var searchData=
   ['difference',['difference',['../classInteger.html#a3d66374c8aa672eb63b4306e9ad2a9a4',1,'Integer']]],
   ['diffsec',['diffsec',['../classstopwatch.html#a3307796d7f96f9b351ea597417eb211a',1,'stopwatch']]],
   ['diffusec',['diffusec',['../classstopwatch.html#a37fcea2ff0b27b62596b46b2a7202d58',1,'stopwatch']]],
-  ['dim',['dim',['../classdecompose__product.html#a2f79d4a5bb32fbfe042f5195de43b372',1,'decompose_product::dim()'],['../classfierz.html#a93a5004a580e5a6d255fa69fc67bc306',1,'fierz::dim()']]],
+  ['dim',['dim',['../classdecompose__product.html#a2f79d4a5bb32fbfe042f5195de43b372',1,'decompose_product']]],
   ['dimension',['dimension',['../classFilledTableau.html#af10c7ddb57394d33ec9ba3a7c312f3c5',1,'FilledTableau::dimension()'],['../classSpinor.html#a656407e59d8393df84656a10d9669a76',1,'Spinor::dimension()'],['../classTableau.html#a4cdb976d123c22700663edc46b8258c7',1,'Tableau::dimension()']]],
   ['discard_5fcommand_5fnode',['discard_command_node',['../classAlgorithm.html#a4b0306a812b97d84700d0445e603d50d',1,'Algorithm']]],
   ['dispatcher',['dispatcher',['../classcadabra_1_1NotebookWindow.html#a3492ad800a0386075eb0580977f6d586',1,'cadabra::NotebookWindow']]],
