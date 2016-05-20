@@ -1,4 +1,7 @@
 
+
+#include "PythonCdb.hh"
+
 #include <memory>
 
 // make boost::python understand std::shared_ptr when compiled with clang.
@@ -16,8 +19,6 @@ namespace boost {
    }
 #endif
 
-#include "PythonCdb.hh"
-
 #include "Parser.hh"
 #include "Exceptions.hh"
 #include "DisplayTeX.hh"
@@ -29,8 +30,8 @@ namespace boost {
 
 #include <boost/python/implicit.hpp>
 #include <boost/parameter/preprocessor.hpp>
-#include <boost/parameter/python.hpp>
-#include <boost/python.hpp>
+//#include <boost/parameter/python.hpp>
+//#include <boost/python.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/python/enum.hpp>
 #include <boost/python/def.hpp>
@@ -41,7 +42,6 @@ namespace boost {
 #include <boost/algorithm/string/replace.hpp>
 
 #include <sstream>
-#include <memory>
 
 // Properties.
 
