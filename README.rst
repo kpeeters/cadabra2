@@ -88,7 +88,7 @@ OS X
 In order to build on OS X you need a number of packages from Homebrew
 (see http://brew.sh).  Install these packages with::
 
-    brew install cmake boost boost-python pcre gmp python 
+    brew install cmake boost boost-python pcre gmp python3 
     brew install pkgconfig ossp-uuid 
     brew install gtkmm3 adwaita-icon-theme
 

@@ -29,7 +29,7 @@ find_package(PythonInterp 3.4 REQUIRED)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.54.0 COMPONENTS python)
+find_package(Boost 1.54.0 COMPONENTS python-py34)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
