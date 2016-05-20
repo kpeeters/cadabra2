@@ -1,6 +1,5 @@
 
 
-#include "PythonCdb.hh"
 
 #include <memory>
 
@@ -18,6 +17,8 @@ namespace boost {
 		}
    }
 #endif
+
+#include "PythonCdb.hh"
 
 #include "Parser.hh"
 #include "Exceptions.hh"
