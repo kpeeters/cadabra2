@@ -17,6 +17,8 @@ var searchData=
   ['collect_5fterms_2ehh',['collect_terms.hh',['../collect__terms_8hh.html',1,'']]],
   ['combinatorics_2ecc',['Combinatorics.cc',['../Combinatorics_8cc.html',1,'']]],
   ['combinatorics_2ehh',['Combinatorics.hh',['../Combinatorics_8hh.html',1,'']]],
+  ['combine_2ecc',['combine.cc',['../combine_8cc.html',1,'']]],
+  ['combine_2ehh',['combine.hh',['../combine_8hh.html',1,'']]],
   ['commuting_2ecc',['Commuting.cc',['../Commuting_8cc.html',1,'']]],
   ['commuting_2ehh',['Commuting.hh',['../Commuting_8hh.html',1,'']]],
   ['commutingasproduct_2ecc',['CommutingAsProduct.cc',['../CommutingAsProduct_8cc.html',1,'']]],

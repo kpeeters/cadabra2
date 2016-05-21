@@ -28,7 +28,6 @@ var searchData=
   ['distributable_2ecc',['Distributable.cc',['../Distributable_8cc.html',1,'']]],
   ['distributable_2ehh',['Distributable.hh',['../Distributable_8hh.html',1,'']]],
   ['distribute_2ecc',['distribute.cc',['../distribute_8cc.html',1,'']]],
-  ['distribute_2edox',['distribute.dox',['../distribute_8dox.html',1,'']]],
   ['distribute_2ehh',['distribute.hh',['../distribute_8hh.html',1,'']]],
   ['documentthread_2ecc',['DocumentThread.cc',['../DocumentThread_8cc.html',1,'']]],
   ['documentthread_2ehh',['DocumentThread.hh',['../DocumentThread_8hh.html',1,'']]],

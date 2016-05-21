@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['reduce_5fdelta_2ecc',['reduce_delta.cc',['../reduce__delta_8cc.html',1,'']]],
+  ['reduce_5fdelta_2ehh',['reduce_delta.hh',['../reduce__delta_8hh.html',1,'']]],
   ['regexp_5ftester_2ecc',['regexp_tester.cc',['../regexp__tester_8cc.html',1,'']]],
   ['rename_5fdummies_2ecc',['rename_dummies.cc',['../rename__dummies_8cc.html',1,'']]],
   ['rename_5fdummies_2ehh',['rename_dummies.hh',['../rename__dummies_8hh.html',1,'']]],

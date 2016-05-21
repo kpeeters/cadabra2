@@ -18,6 +18,5 @@ var searchData=
   ['num_5fto_5fit',['num_to_it',['../classtab__basics.html#a0517bf5085c01e6c6f969450d6676c3c',1,'tab_basics']]],
   ['number_5fof_5fcalls',['number_of_calls',['../classAlgorithm.html#af7b04b3174cb0a4eb98229bcfef9ace9',1,'Algorithm']]],
   ['number_5fof_5findices',['number_of_indices',['../structexchange_1_1identical__tensors__t.html#a56738c850a07f1b485a754d3fbf3e551',1,'exchange::identical_tensors_t::number_of_indices()'],['../structexchange_1_1tensor__type__t.html#ae30d8beae300050fb75d4f0f973a0858',1,'exchange::tensor_type_t::number_of_indices()'],['../classproduct__rule.html#af25a685ea71eb88628983ae5aba2ea7f',1,'product_rule::number_of_indices()']]],
-  ['number_5fof_5fmodifications',['number_of_modifications',['../classAlgorithm.html#ae0c617a303b2d5ef64aa22af3a5fa636',1,'Algorithm']]],
-  ['nw',['nw',['../classCadabra.html#ae95a91a3f53259d4d031207e32f725a2',1,'Cadabra']]]
+  ['number_5fof_5fmodifications',['number_of_modifications',['../classAlgorithm.html#ae0c617a303b2d5ef64aa22af3a5fa636',1,'Algorithm']]]
 ];

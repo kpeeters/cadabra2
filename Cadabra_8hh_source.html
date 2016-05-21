@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -119,17 +118,16 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classCadabra.html#a97f485207634e80e866046db75bce480">on_open</a>(<span class="keyword">const</span> Gio::Application::type_vec_files&amp; files, <span class="keyword">const</span> Glib::ustring&amp; hint) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classCadabra.html#ae95a91a3f53259d4d031207e32f725a2">   23</a></span>&#160;        <a class="code" href="classcadabra_1_1NotebookWindow.html">cadabra::NotebookWindow</a> <a class="code" href="classCadabra.html#ae95a91a3f53259d4d031207e32f725a2">nw</a>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classCadabra.html#ac553b7cec2cc5676c10c75ddab4473b8">   24</a></span>&#160;        <a class="code" href="classcadabra_1_1ComputeThread.html">cadabra::ComputeThread</a>  <a class="code" href="classCadabra.html#ac553b7cec2cc5676c10c75ddab4473b8">compute</a>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classCadabra.html#acd5cf675eeb6ea52c4c32da78d25b09b">   25</a></span>&#160;        std::thread             <a class="code" href="classCadabra.html#acd5cf675eeb6ea52c4c32da78d25b09b">compute_thread</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classCadabra.html#abd225102cb553dd2682e44d371381a7a">   23</a></span>&#160;        std::vector&lt;cadabra::NotebookWindow&gt; <a class="code" href="classCadabra.html#abd225102cb553dd2682e44d371381a7a">windows</a>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classCadabra.html#ac553b7cec2cc5676c10c75ddab4473b8">   24</a></span>&#160;        <a class="code" href="classcadabra_1_1ComputeThread.html">cadabra::ComputeThread</a>               <a class="code" href="classCadabra.html#ac553b7cec2cc5676c10c75ddab4473b8">compute</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classCadabra.html#acd5cf675eeb6ea52c4c32da78d25b09b">   25</a></span>&#160;        std::thread                          <a class="code" href="classCadabra.html#acd5cf675eeb6ea52c4c32da78d25b09b">compute_thread</a>;</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;};</div>
 <div class="ttc" id="gtkmm_2NotebookWindow_8hh_html"><div class="ttname"><a href="gtkmm_2NotebookWindow_8hh.html">NotebookWindow.hh</a></div></div>
 <div class="ttc" id="classCadabra_html_ac553b7cec2cc5676c10c75ddab4473b8"><div class="ttname"><a href="classCadabra.html#ac553b7cec2cc5676c10c75ddab4473b8">Cadabra::compute</a></div><div class="ttdeci">cadabra::ComputeThread compute</div><div class="ttdef"><b>Definition:</b> Cadabra.hh:24</div></div>
 <div class="ttc" id="classCadabra_html_abe0ca1728c37a2340b4fe3680d43983f"><div class="ttname"><a href="classCadabra.html#abe0ca1728c37a2340b4fe3680d43983f">Cadabra::Cadabra</a></div><div class="ttdeci">Cadabra(int, char **)</div><div class="ttdef"><b>Definition:</b> Cadabra.cc:28</div></div>
 <div class="ttc" id="classCadabra_html_acd5cf675eeb6ea52c4c32da78d25b09b"><div class="ttname"><a href="classCadabra.html#acd5cf675eeb6ea52c4c32da78d25b09b">Cadabra::compute_thread</a></div><div class="ttdeci">std::thread compute_thread</div><div class="ttdef"><b>Definition:</b> Cadabra.hh:25</div></div>
 <div class="ttc" id="classCadabra_html"><div class="ttname"><a href="classCadabra.html">Cadabra</a></div><div class="ttdoc">The Cadabra notebook application. </div><div class="ttdef"><b>Definition:</b> Cadabra.hh:11</div></div>
-<div class="ttc" id="classcadabra_1_1NotebookWindow_html"><div class="ttname"><a href="classcadabra_1_1NotebookWindow.html">cadabra::NotebookWindow</a></div><div class="ttdoc">Each notebook has one main window which controls it. </div><div class="ttdef"><b>Definition:</b> NotebookWindow.hh:36</div></div>
-<div class="ttc" id="classCadabra_html_ae95a91a3f53259d4d031207e32f725a2"><div class="ttname"><a href="classCadabra.html#ae95a91a3f53259d4d031207e32f725a2">Cadabra::nw</a></div><div class="ttdeci">cadabra::NotebookWindow nw</div><div class="ttdef"><b>Definition:</b> Cadabra.hh:23</div></div>
+<div class="ttc" id="classCadabra_html_abd225102cb553dd2682e44d371381a7a"><div class="ttname"><a href="classCadabra.html#abd225102cb553dd2682e44d371381a7a">Cadabra::windows</a></div><div class="ttdeci">std::vector&lt; cadabra::NotebookWindow &gt; windows</div><div class="ttdef"><b>Definition:</b> Cadabra.hh:23</div></div>
 <div class="ttc" id="classCadabra_html_a909a00f8033ee15d1377db0a382becbb"><div class="ttname"><a href="classCadabra.html#a909a00f8033ee15d1377db0a382becbb">Cadabra::create</a></div><div class="ttdeci">static Glib::RefPtr&lt; Cadabra &gt; create(int, char **)</div><div class="ttdef"><b>Definition:</b> Cadabra.cc:23</div></div>
 <div class="ttc" id="classCadabra_html_a8e9a54af1034ca5072239a452fd799e2"><div class="ttname"><a href="classCadabra.html#a8e9a54af1034ca5072239a452fd799e2">Cadabra::on_activate</a></div><div class="ttdeci">void on_activate() override</div><div class="ttdef"><b>Definition:</b> Cadabra.cc:49</div></div>
 <div class="ttc" id="classCadabra_html_a97f485207634e80e866046db75bce480"><div class="ttname"><a href="classCadabra.html#a97f485207634e80e866046db75bce480">Cadabra::on_open</a></div><div class="ttdeci">void on_open(const Gio::Application::type_vec_files &amp;files, const Glib::ustring &amp;hint) override</div><div class="ttdef"><b>Definition:</b> Cadabra.cc:111</div></div>
@@ -139,7 +137,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 21 2016 09:49:00 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat May 21 2016 18:04:11 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

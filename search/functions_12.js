@@ -1,6 +1,7 @@
 var searchData=
 [
   ['reads_5fas_5foperator',['reads_as_operator',['../classDisplayTeX.html#a74bdd19ede9390123da4473c8ed279ba',1,'DisplayTeX']]],
+  ['reduce_5fdelta',['reduce_delta',['../classreduce__delta.html#a4dcb92e75d396eff85b4bbb186a12ab3',1,'reduce_delta']]],
   ['refresh_5fall',['refresh_all',['../classcadabra_1_1NotebookCanvas.html#ad0ee64ae68df7ec15c6e79004d0033ab',1,'cadabra::NotebookCanvas']]],
   ['register_5fproperty',['register_property',['../classProperties.html#a476e7621de7296a59e17b3c0da664e8a',1,'Properties']]],
   ['regroup_5findices_5f',['regroup_indices_',['../classjoin__gamma.html#adfccdb57d61ced67691b7abe5b95f344',1,'join_gamma']]],

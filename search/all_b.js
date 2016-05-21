@@ -4,7 +4,6 @@ var searchData=
   ['k_5funichar_5fto_5futf8',['k_unichar_to_utf8',['../DisplayTeX_8cc.html#af4a07164631b2e1f57fbf885c4094b56',1,'DisplayTeX.cc']]],
   ['kappa',['Kappa',['../Symbols_8cc.html#a716787dafa0c18cd8de7e47e0c16855b',1,'Kappa():&#160;Symbols.cc'],['../Symbols_8cc.html#a53e114df0344d27442892fa07f8a3520',1,'kappa():&#160;Symbols.cc']]],
   ['keep_5fafter_5feval',['keep_after_eval',['../structstr__node_1_1flag__t.html#ab0bc9d5cfe540243349f5849d4fbce8c',1,'str_node::flag_t']]],
-  ['keep_5fonly_5flast',['keep_only_last',['../classEx.html#a2498cf3dcc524889b52b74f56f4e012b',1,'Ex']]],
   ['keep_5fterms',['keep_terms',['../classkeep__terms.html',1,'keep_terms'],['../classkeep__terms.html#ae705ad3af82c228ac205717fe9223208',1,'keep_terms::keep_terms()']]],
   ['keep_5fterms_2ecc',['keep_terms.cc',['../keep__terms_8cc.html',1,'']]],
   ['keep_5fterms_2ehh',['keep_terms.hh',['../keep__terms_8hh.html',1,'']]],

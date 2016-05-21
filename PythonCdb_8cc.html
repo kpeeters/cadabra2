@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -170,16 +169,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="canonicalise_8hh_source.html">algorithms/canonicalise.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="collect__factors_8hh_source.html">algorithms/collect_factors.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="collect__terms_8hh_source.html">algorithms/collect_terms.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="combine_8hh_source.html">algorithms/combine.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="complete_8hh_source.html">algorithms/complete.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="decompose__product_8hh_source.html">algorithms/decompose_product.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="distribute_8hh_source.html">algorithms/distribute.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="eliminate__kronecker_8hh_source.html">algorithms/eliminate_kronecker.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="epsilon__to__delta_8hh_source.html">algorithms/epsilon_to_delta.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="evaluate_8hh_source.html">algorithms/evaluate.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="expand_8hh_source.html">algorithms/expand.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="expand__delta_8hh_source.html">algorithms/expand_delta.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="expand__diracbar_8hh_source.html">algorithms/expand_diracbar.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="expand__power_8hh_source.html">algorithms/expand_power.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="factor__in_8hh_source.html">algorithms/factor_in.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="factor__out_8hh_source.html">algorithms/factor_out.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="fierz_8hh_source.html">algorithms/fierz.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="flatten__sum_8hh_source.html">algorithms/flatten_sum.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="indexsort_8hh_source.html">algorithms/indexsort.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="integrate__by__parts_8hh_source.html">algorithms/integrate_by_parts.hh</a>&quot;</code><br/>
@@ -188,6 +191,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="lr__tensor_8hh_source.html">algorithms/lr_tensor.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="order_8hh_source.html">algorithms/order.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="product__rule_8hh_source.html">algorithms/product_rule.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="reduce__delta_8hh_source.html">algorithms/reduce_delta.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="rename__dummies_8hh_source.html">algorithms/rename_dummies.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="split__index_8hh_source.html">algorithms/split_index.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="substitute_8hh_source.html">algorithms/substitute.hh</a>&quot;</code><br/>
@@ -210,6 +214,14 @@ Functions</h2></td></tr>
 <tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a64a5521d7ebd2cc0ad62bb167898746b">to_std_vector</a> (const boost::python::list &amp;iterable)</td></tr>
 <tr class="separator:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aa7a6b2d258e2b2a135c0b2cb50a33d"><td class="memItemLeft" align="right" valign="top">boost::python::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a8aa7a6b2d258e2b2a135c0b2cb50a33d">terms</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:a8aa7a6b2d258e2b2a135c0b2cb50a33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfad8edee4f862ef375b818fbaa08b3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#abfad8edee4f862ef375b818fbaa08b3b">Ex_getitem</a> (<a class="el" href="classEx.html">Ex</a> &amp;ex, int index)</td></tr>
+<tr class="separator:abfad8edee4f862ef375b818fbaa08b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfe28f30dd4bbe50647aa8efb997677d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#acfe28f30dd4bbe50647aa8efb997677d">Ex_setitem</a> (<a class="el" href="classEx.html">Ex</a> &amp;ex, int index, <a class="el" href="classEx.html">Ex</a> val)</td></tr>
+<tr class="separator:acfe28f30dd4bbe50647aa8efb997677d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6ad8ac9c4ab59df32689d6d704d9662"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ad6ad8ac9c4ab59df32689d6d704d9662">Ex_len</a> (<a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:ad6ad8ac9c4ab59df32689d6d704d9662"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaaac8ee218579ca3faa6c1cec2c7d3c69"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69">Ex_str_</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
 <tr class="memdesc:gaaac8ee218579ca3faa6c1cec2c7d3c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() and repr() representation of the <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object.  <a href="group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69">More...</a><br/></td></tr>
 <tr class="separator:gaaac8ee218579ca3faa6c1cec2c7d3c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -713,6 +725,48 @@ template&lt;class F , typename... Args&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="abfad8edee4f862ef375b818fbaa08b3b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classEx.html">Ex</a> Ex_getitem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad6ad8ac9c4ab59df32689d6d704d9662"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Ex_len </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afa7280e0886f1ca4a1e7b9ea8149df36"></a>
 <div class="memitem">
 <div class="memproto">
@@ -723,6 +777,38 @@ template&lt;class F , typename... Args&gt; </div>
           <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="acfe28f30dd4bbe50647aa8efb997677d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ex_setitem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a>&#160;</td>
+          <td class="paramname"><em>val</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -856,6 +942,22 @@ template&lt;class F , typename... Args&gt; </div>
           <td class="memname">std::string print_tree </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classEx.html">Ex</a> *&#160;</td>
+          <td class="paramname"><em>ex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a8aa7a6b2d258e2b2a135c0b2cb50a33d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::python::list terms </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1022,7 +1124,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat May 21 2016 09:49:00 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat May 21 2016 18:04:11 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

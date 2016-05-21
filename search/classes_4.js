@@ -13,6 +13,8 @@ var searchData=
   ['exchange',['exchange',['../classexchange.html',1,'']]],
   ['exec_5fstream_5ft',['exec_stream_t',['../classexec__stream__t.html',1,'']]],
   ['exp_5finput_5ftv',['exp_input_tv',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html',1,'cadabra::CodeInput']]],
+  ['expand',['expand',['../classexpand.html',1,'']]],
   ['expand_5fdelta',['expand_delta',['../classexpand__delta.html',1,'']]],
-  ['expand_5fdiracbar',['expand_diracbar',['../classexpand__diracbar.html',1,'']]]
+  ['expand_5fdiracbar',['expand_diracbar',['../classexpand__diracbar.html',1,'']]],
+  ['expand_5fpower',['expand_power',['../classexpand__power.html',1,'']]]
 ];

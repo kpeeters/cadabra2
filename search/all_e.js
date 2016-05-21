@@ -35,8 +35,8 @@ var searchData=
   ['nonscalarexception',['NonScalarException',['../classNonScalarException.html',1,'NonScalarException'],['../classNonScalarException.html#a687a9e17be3536776b24639da3dcee03',1,'NonScalarException::NonScalarException()']]],
   ['nonscalarexceptiontype',['NonScalarExceptionType',['../PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b',1,'PythonCdb.cc']]],
   ['nonstandard_5floc',['nonstandard_loc',['../classyngtab_1_1filled__tableau.html#aa3caf7d2ec239278add64b836c39c995',1,'yngtab::filled_tableau']]],
-  ['notebookcanvas',['NotebookCanvas',['../classcadabra_1_1NotebookCanvas.html#a0169f785f06e4cc377f7d9096bcd1826',1,'cadabra::NotebookCanvas']]],
   ['notebookcanvas',['NotebookCanvas',['../classcadabra_1_1NotebookCanvas.html',1,'cadabra']]],
+  ['notebookcanvas',['NotebookCanvas',['../classcadabra_1_1NotebookCanvas.html#a0169f785f06e4cc377f7d9096bcd1826',1,'cadabra::NotebookCanvas']]],
   ['notebookcanvas_2ecc',['NotebookCanvas.cc',['../NotebookCanvas_8cc.html',1,'']]],
   ['notebookcanvas_2ehh',['NotebookCanvas.hh',['../gtkmm_2NotebookCanvas_8hh.html',1,'']]],
   ['notebookcanvas_2ehh',['NotebookCanvas.hh',['../osx_2Cadabra_2Cadabra_2NotebookCanvas_8hh.html',1,'']]],
@@ -73,6 +73,5 @@ var searchData=
   ['numericalflat_2ecc',['NumericalFlat.cc',['../NumericalFlat_8cc.html',1,'']]],
   ['numericalflat_2ehh',['NumericalFlat.hh',['../NumericalFlat_8hh.html',1,'']]],
   ['numtab_5ft',['numtab_t',['../classdecompose__product.html#a56e8d94bcadaed90d171395c769122a7',1,'decompose_product']]],
-  ['numtabs_5ft',['numtabs_t',['../classdecompose__product.html#a718f954b04d33d445888a17984b16cf4',1,'decompose_product']]],
-  ['nw',['nw',['../classCadabra.html#ae95a91a3f53259d4d031207e32f725a2',1,'Cadabra']]]
+  ['numtabs_5ft',['numtabs_t',['../classdecompose__product.html#a718f954b04d33d445888a17984b16cf4',1,'decompose_product']]]
 ];
