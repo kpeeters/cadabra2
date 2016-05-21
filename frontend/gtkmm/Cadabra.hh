@@ -20,7 +20,7 @@ class Cadabra : public Gtk::Application {
 		void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
 
 	private:
-		std::vector<cadabra::NotebookWindow> windows;
-		cadabra::ComputeThread               compute;
-		std::thread                          compute_thread;
+		std::vector<cadabra::NotebookWindow *> windows;
+		cadabra::ComputeThread                 compute;
+		std::thread                            compute_thread;
 };
