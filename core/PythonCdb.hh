@@ -20,8 +20,6 @@
 
 #pragma once
 
-#include <python.h>
-#include <patchlevel.h>
 #include <boost/python.hpp>
 #include <stdexcept>
 #include "Storage.hh"
