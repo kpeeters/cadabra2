@@ -20,16 +20,21 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules
 # Locate python
 
 set(Python_ADDITIONAL_VERSIONS 3.4)
+find_package(PythonInterp 3.4 REQUIRED)
 if(APPLE)
    find_package(PythonLibsOSX 3.4 REQUIRED)
 else()
    find_package(PythonLibs 3.4 REQUIRED)
 endif()
-find_package(PythonInterp 3.4 REQUIRED)
 message("-- Found python ${PYTHON_LIBRARIES}")
 
 # Locate Boost
-find_package(Boost 1.54.0 COMPONENTS python-py34 system regex program_options REQUIRED)
+if(APPLE)
+   find_package(Boost 1.54.0 COMPONENTS python3
+ system regex program_options REQUIRED)
+else()
+   find_package(Boost 1.54.0 COMPONENTS python-py34 system regex program_options REQUIRED)
+endif()
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
