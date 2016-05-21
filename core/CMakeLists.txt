@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 2.8)
 
 project(Cadabra)
@@ -17,19 +18,23 @@ endif(POLICY CMP0042)
 # were taken from Nikolaus Dremmel's repo at github.com/NikolausDemmel/CMake.
 set(Python_ADDITIONAL_VERSIONS 3.4)
 set(PythonInterp_ADDITIONAL_VERSIONS 3.4)
+find_package(PythonInterp 3.4 REQUIRED)
 if(APPLE)
    find_package(PythonLibsOSX 3.4 REQUIRED)
 else()
    find_package(PythonLibs 3.4 REQUIRED)
 endif()
-find_package(PythonInterp 3.4 REQUIRED)
 
 
 # Locate Boost and Boost.Python.
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.54.0 COMPONENTS python-py34)
+if(APPLE)
+   find_package(Boost 1.54.0 COMPONENTS python3)
+else()
+   find_package(Boost 1.54.0 COMPONENTS python-py34)
+endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
@@ -37,6 +42,8 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     endif()
 #	 add_definitions("-Wno-potentially-evaluated-expression")
 endif()
+
+
 
 # Locate gmpxx
 find_library(GMP_LIB gmp REQUIRED)
