@@ -72,7 +72,7 @@ http://brew.sh).  Install these packages with::
 
     brew install cmake boost pcre gmp python3 
     brew uninstall boost-python
-	 brew install boost-python --with-python3
+    brew install boost-python --with-python3
     brew install pkgconfig ossp-uuid 
     brew install gtkmm3 adwaita-icon-theme
 
