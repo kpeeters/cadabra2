@@ -7,7 +7,7 @@ def test06():
     tst6:= X X G A A B + @(obj6);
     collect_terms(_)
     assert(tst6==0)
-    print 'test06 passed'
+    print('test06 passed')
 
 test06()
 
@@ -20,7 +20,7 @@ def test07():
     tst7:= G A X A X B - @(obj7);
     collect_terms(_)
     assert(tst7==0)
-    print 'test07 passed'
+    print('test07 passed')
 
 test07()
 
@@ -33,7 +33,7 @@ def test08():
     tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
     collect_terms(_)
     assert(tst8==0)
-    print 'test08 passed'
+    print('test08 passed')
 
 test08()
 
@@ -45,7 +45,7 @@ def test09():
     tst9:= \theta_a \theta_b \theta_c + @(obj9);
     collect_terms(_)
     assert(tst9==0)
-    print 'test09 passed'
+    print('test09 passed')
 
 test09()
 
@@ -61,7 +61,7 @@ def test10():
     tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
     collect_terms(_);
     assert(tst10==0)
-    print 'test10 passed'
+    print('test10 passed')
 
 test10()
 
@@ -74,7 +74,7 @@ def test12():
     tst12:= D \bar{K} \bar{B} A - @(obj12);
     collect_terms(_)
     assert(tst12==0)
-    print 'test12 passed'
+    print('test12 passed')
 
 test12()
 
@@ -87,7 +87,7 @@ def test16():
     tst16:= \diff{A_\rho}_{\sigma} * \diff{B_\mu}_{\nu} + @(obj16);
     collect_terms(_)
     assert(tst16==0)
-    print 'test16 passed'
+    print('test16 passed')
 
 test16()
 
@@ -102,7 +102,7 @@ def test17():
     sort_product(_)
     tst17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n}) - @(obj17b);
     assert(tst17b==0)
-    print 'test17 passed'
+    print('test17 passed')
 
 test17()
 
@@ -118,7 +118,7 @@ def test18():
     tst18:= \bar{\psi} \Gamma_{m n p} \chi - @(obj18);
     collect_terms(_)
     assert(tst18==0)
-    print 'test18 passed'
+    print('test18 passed')
 
 test18()
 

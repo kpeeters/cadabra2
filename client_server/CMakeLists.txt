@@ -19,30 +19,22 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules
 
 # Locate python
 
-# if(APPLE)
-#   find_program(PYTHON_CONFIG_EXECUTABLE python-config)
-#   if (NOT PYTHON_CONFIG_EXECUTABLE)
-#     message(SEND_ERROR "python-config executable not found, but python is required.")
-#   endif()
-#   # using "python-config --prefix" so that cmake always uses the python that is
-#   # in the user's path, this is a fix for homebrew on Mac:
-#   # https://github.com/Homebrew/homebrew/issues/25118 [^]
-#   execute_process(COMMAND ${PYTHON_CONFIG_EXECUTABLE} --prefix OUTPUT_VARIABLE python_prefix OUTPUT_STRIP_TRAILING_WHITESPACE)
-#   set(PYTHON_INCLUDE_DIR ${python_prefix}/include/python2.7)
-#   set(PYTHON_LIBRARY ${python_prefix}/lib/libpython2.7${CMAKE_SHARED_LIBRARY_SUFFIX})
-#   set(PYTHON_INCLUDE_DIRS ${python_prefix}/include/python2.7)
-# endif()
-
+set(Python_ADDITIONAL_VERSIONS 3.4)
+find_package(PythonInterp 3.4 REQUIRED)
 if(APPLE)
-   find_package(PythonLibsOSX 2.7 REQUIRED)
+   find_package(PythonLibsOSX 3.4 REQUIRED)
 else()
-   find_package(PythonLibs 2.7 REQUIRED)
+   find_package(PythonLibs 3.4 REQUIRED)
 endif()
-#set(Python_ADDITIONAL_VERSIONS 2.7)
-find_package(PythonInterp REQUIRED)
+message("-- Found python ${PYTHON_LIBRARIES}")
 
 # Locate Boost
-find_package(Boost 1.45.0 COMPONENTS python system regex program_options REQUIRED)
+if(APPLE)
+   find_package(Boost 1.54.0 COMPONENTS python3
+ system regex program_options REQUIRED)
+else()
+   find_package(Boost 1.54.0 COMPONENTS python-py34 system regex program_options REQUIRED)
+endif()
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -67,7 +59,7 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 # Create the server library
 link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_server ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${PYTHON_LIBRARIES} )
 
 # Create the client library. 
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc jsoncpp/jsoncpp.cpp)
@@ -79,8 +71,8 @@ add_executable(cadabra-server cadabra-server.cc)
 add_executable(cadabra2html cadabra2html.cc DataCell.cc)
 #add_executable(test_talk_to_server test_talk_to_server.cc)
 #add_executable(regexp_tester regexp_tester.cc)
-target_link_libraries(cadabra-server cadabra_server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-target_link_libraries(cadabra2html cadabra_client ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+target_link_libraries(cadabra-server cadabra_server)
+target_link_libraries(cadabra2html cadabra_client)
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")

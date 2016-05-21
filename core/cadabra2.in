@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # \ingroup pythoncore
 #
@@ -169,7 +169,7 @@ class Shell(InteractiveConsole):
                         rewrite = rewrite + "; display(" + objname+")"
                     line=rewrite
                 else:
-                    print "inconsistent" # property names can only contain letters
+                    print("inconsistent") # property names can only contain letters
             else:
                 line=indent_line+line_stripped
                 if lastchar==';' and shell==False:
@@ -216,7 +216,11 @@ if __name__ == '__main__':
             os.system(rs)
         else:
 #           execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
-            execfile(imp.find_module('cadabra2_defaults')[1])
+#            execfile(imp.find_module('cadabra2_defaults')[1])
+            with open(imp.find_module('cadabra2_defaults')[1]) as f:
+                code = compile(f.read(), "cadabra2_defaults.py", 'exec')
+                exec(code)
+
             sh2 = InteractiveConsole()
             with open(sys.argv[1]) as f:
                 collect=""
@@ -231,5 +235,5 @@ if __name__ == '__main__':
                 # pulling in the right locals/globals
                 #            sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
     else:
-        sh.runsource("print 'Cadabra @CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@ (build @CADABRA_VERSION_BUILD@)'; print 'Copyright (C) @COPYRIGHT_YEARS@  Kasper Peeters <kasper.peeters@phi-sci.com>'; import imp; execfile(imp.find_module('cadabra2_defaults')[1]); print 'Using SymPy version '+sympy.__version__;")
+        sh.runsource("print('Cadabra @CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@ (build @CADABRA_VERSION_BUILD@)'); print ('Copyright (C) @COPYRIGHT_YEARS@  Kasper Peeters <kasper.peeters@phi-sci.com>'); import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close(); print('Using SymPy version '+sympy.__version__);")
         sh.interact(banner='Info at http://cadabra.science/\nAvailable under the terms of the GNU General Public License v3\n')
