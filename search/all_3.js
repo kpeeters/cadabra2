@@ -137,7 +137,7 @@ var searchData=
   ['compute',['compute',['../classcadabra_1_1DocumentThread.html#ae43e65e54b243343625e117a61477d21',1,'cadabra::DocumentThread::compute()'],['../classCadabra.html#ac553b7cec2cc5676c10c75ddab4473b8',1,'Cadabra::compute()'],['../NotebookController_8mm.html#a4d5d0e1bf7dec525d402ebb756c98e4f',1,'compute():&#160;NotebookController.mm']]],
   ['compute_5fthread',['compute_thread',['../classCadabra.html#acd5cf675eeb6ea52c4c32da78d25b09b',1,'Cadabra::compute_thread()'],['../NotebookController_8mm.html#a50799e302f093f88e7e29249e8e499c0',1,'compute_thread():&#160;NotebookController.mm']]],
   ['computethread',['ComputeThread',['../classcadabra_1_1ComputeThread.html',1,'cadabra']]],
-  ['computethread',['ComputeThread',['../classcadabra_1_1ComputeThread.html#a09740a57f8005c73d875a36c262395ea',1,'cadabra::ComputeThread::ComputeThread(GUIBase *, DocumentThread &amp;)'],['../classcadabra_1_1ComputeThread.html#a79fe86c209c169902221be974d404f39',1,'cadabra::ComputeThread::ComputeThread(const ComputeThread &amp;)=delete']]],
+  ['computethread',['ComputeThread',['../classcadabra_1_1ComputeThread.html#aa7970ca2c8b8eed7bad826d0c75af71e',1,'cadabra::ComputeThread::ComputeThread()'],['../classcadabra_1_1ComputeThread.html#a79fe86c209c169902221be974d404f39',1,'cadabra::ComputeThread::ComputeThread(const ComputeThread &amp;)=delete']]],
   ['computethread_2ecc',['ComputeThread.cc',['../ComputeThread_8cc.html',1,'']]],
   ['computethread_2ehh',['ComputeThread.hh',['../ComputeThread_8hh.html',1,'']]],
   ['conditions',['conditions',['../classsubstitute.html#a079f3dede482b85d68e05e135bc09f60',1,'substitute']]],

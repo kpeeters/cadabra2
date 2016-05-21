@@ -70,7 +70,7 @@ var searchData=
   ['complete',['complete',['../classcomplete.html#a63ec9511809da80f658de0b028ed548f',1,'complete']]],
   ['component',['component',['../classcomponent.html#a81188f4b5e7c5f4a27aa6faf1754b4f8',1,'component']]],
   ['compose',['compose',['../classexec__stream__t_1_1error__t.html#a50f6ff7d2ab046f6cecd36371520d833',1,'exec_stream_t::error_t']]],
-  ['computethread',['ComputeThread',['../classcadabra_1_1ComputeThread.html#a09740a57f8005c73d875a36c262395ea',1,'cadabra::ComputeThread::ComputeThread(GUIBase *, DocumentThread &amp;)'],['../classcadabra_1_1ComputeThread.html#a79fe86c209c169902221be974d404f39',1,'cadabra::ComputeThread::ComputeThread(const ComputeThread &amp;)=delete']]],
+  ['computethread',['ComputeThread',['../classcadabra_1_1ComputeThread.html#aa7970ca2c8b8eed7bad826d0c75af71e',1,'cadabra::ComputeThread::ComputeThread()'],['../classcadabra_1_1ComputeThread.html#a79fe86c209c169902221be974d404f39',1,'cadabra::ComputeThread::ComputeThread(const ComputeThread &amp;)=delete']]],
   ['connection',['Connection',['../classServer_1_1Connection.html#acca3d927d72df28cfc377a258df88b6f',1,'Server::Connection']]],
   ['consistencyexception',['ConsistencyException',['../classConsistencyException.html#a2114be5aed85e768f26491360e666f86',1,'ConsistencyException']]],
   ['construct',['construct',['../classiterable__converter.html#a914b0b410e2302aabe0e19ad37c8fb98',1,'iterable_converter']]],

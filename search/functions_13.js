@@ -16,6 +16,7 @@ var searchData=
   ['set_5ffont_5fsize',['set_font_size',['../classcadabra_1_1TeXEngine.html#a7c4514c70d4b8590a12f6c17916c7e92',1,'cadabra::TeXEngine']]],
   ['set_5fgeometry',['set_geometry',['../classcadabra_1_1TeXEngine.html#acbcc16ced20d93b02588ff83b3fddba7',1,'cadabra::TeXEngine']]],
   ['set_5fimage_5ffrom_5fbase64',['set_image_from_base64',['../classcadabra_1_1ImageView.html#a40ddecad334340843526af8e91fbd349',1,'cadabra::ImageView']]],
+  ['set_5fmaster',['set_master',['../classcadabra_1_1ComputeThread.html#ad2aa5f14e7f01d4cdc7fbc39a131a821',1,'cadabra::ComputeThread']]],
   ['set_5fmultiplicity',['set_multiplicity',['../classcombin_1_1symmetriser.html#add5ee43e7b036b95f02e69bb7db4eca3',1,'combin::symmetriser']]],
   ['set_5fname',['set_name',['../classcadabra_1_1NotebookWindow.html#afcf0ceb80b52767a3f5eca2e3cf83f11',1,'cadabra::NotebookWindow']]],
   ['set_5fscale',['set_scale',['../classcadabra_1_1TeXEngine.html#ad1a1792cbed9cf2a2e6c198191b456b7',1,'cadabra::TeXEngine']]],
