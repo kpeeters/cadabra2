@@ -29,11 +29,11 @@ endif()
 message("-- Found python ${PYTHON_LIBRARIES}")
 
 # Locate Boost
-if(APPLE)
-   find_package(Boost 1.54.0 COMPONENTS python3
- system regex program_options REQUIRED)
+find_package(Boost 1.54.0 COMPONENTS python3)
+if(Boost_PYTHON3_FOUND)
+  find_package(Boost 1.54.0 COMPONENTS python3 system regex program_options REQUIRED)
 else()
-   find_package(Boost 1.54.0 COMPONENTS python-py34 system regex program_options REQUIRED)
+  find_package(Boost 1.54.0 COMPONENTS python-py34 system regex program_options REQUIRED)
 endif()
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
@@ -61,7 +61,7 @@ link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
 target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${PYTHON_LIBRARIES} )
 
-# Create the client library. 
+# Create the client library.
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc jsoncpp/jsoncpp.cpp)
 target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${PYTHON_LIBRARIES})
 
@@ -80,5 +80,3 @@ install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-server DESTINATION bin)
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra2html DESTINATION bin)
 install(TARGETS cadabra_client LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
 install(TARGETS cadabra_server LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
-
-
