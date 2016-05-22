@@ -147,7 +147,8 @@ This can be done using manually using ``makepkg`` with::
     cd cadabra2-git
     makepkg -sri
 
-For more information regarding building on Arch Linux see the `Arch Wiki <https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages>`.
+Please consult the `Arch Wiki <https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages>`
+for more information regarding installing packages from the AUR.
 
 
 Tutorials and other help
