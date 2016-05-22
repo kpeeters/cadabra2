@@ -30,10 +30,9 @@ endif()
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-if(APPLE)
-   find_package(Boost 1.54.0 COMPONENTS python3)
-else()
-   find_package(Boost 1.54.0 COMPONENTS python-py34)
+find_package(Boost 1.54.0 COMPONENTS python3)
+if(NOT Boost_PYTHON3_FOUND)
+  find_package(Boost 1.54.0 COMPONENTS python-py34 REQUIRED)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -61,7 +60,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
 
-set(LOCAL_SRC_FILES 
+set(LOCAL_SRC_FILES
   PythonCdb.cc
   Algorithm.cc
   Cleanup.cc
@@ -209,13 +208,10 @@ set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}"
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
 
-install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                        GROUP_READ GROUP_EXECUTE 
+install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                                                        GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
 
-install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                        GROUP_READ GROUP_EXECUTE 
+install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                                                        GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
-
-
-
