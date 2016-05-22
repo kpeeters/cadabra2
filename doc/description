@@ -1,0 +1,7 @@
+Cadabra is a computer algebra system designed specifically for the
+solution of problems encountered in field theory. It has extensive
+functionality for tensor polynomial simplification including
+multi-term symmetries, fermions and anti-commuting variables,
+Clifford algebras and Fierz transformations, implicit coordinate
+dependence, multiple index types and many more. The input format is
+a subset of TeX. This is the 2.x series of the software.

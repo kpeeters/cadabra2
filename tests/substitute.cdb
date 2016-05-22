@@ -12,7 +12,7 @@ def test01():
     substitute(_, $b_{p} -> c_{p m n} A^{m n} + c_{p}$ );
     distribute(_);
     tst1:= a_{m} * c_{n d2 d1} * A^{d2 d1} + a_{m} * c_{n} + c_{r} * c_{r d1 d2} * A^{d1 d2} * d_{m n} + c_{r} * c_{r} * d_{m n} - @(obj1); 
-    assert(tst1)
+    assert(tst1==0)
     print('Test 01 passed')
 
 test01()
@@ -24,7 +24,7 @@ def test02():
     rl:= F_{m n} -> G_{m n};
     substitute(ex, rl)
     tst:= G_{m n} F^{m n} - @(ex);
-    assert(tst)
+    assert(tst==0)
     print('Test 02 passed')    
 
 test02()
@@ -36,7 +36,7 @@ def test02b():
     obj2:= a_{m n} * q * e * b_{m p} * o + d_{n p};
     substitute(obj2, $a_{r s} b_{r t} -> c_{s t}$ )
     tst2:= c_{n p} q e o + d_{n p} - @(obj2);
-    assert(tst2)
+    assert(tst2==0)
     print('Test 02b passed')    
 
 test02b()
@@ -46,7 +46,7 @@ def test02c():
     __cdbkernel__=create_scope()
     obj3:= A_{m n} B_{m n} k1_{a} k1_{a} k2_{b};
     substitute(_,  $k1_a k1_a -> 0$ )
-    assert(obj3)
+    assert(obj3==0)
     print('Test 02c passed')    
 
 test02c()
@@ -77,7 +77,7 @@ def test04():
     obj43:= A*B*A + D*E;
     vary(obj43, $A->C$)
     tst43:= C*B*A + A*B*C - @(obj43);
-    assert(tst43)
+    assert(tst43==0)
     print('Test 04 passed')
     
 test04()
@@ -88,7 +88,7 @@ def test04b():
     obj4:= A_m A_n + B_m C_n + D_{m n} A_p A_p;
     substitute(_, $A_a A_a -> q$ )
     tst4:= A_m A_n + B_m C_n + D_{m n} q - @(obj4);
-    assert(tst4)
+    assert(tst4==0)
     print('Test 04b passed')
     
 test04b()
@@ -101,7 +101,7 @@ def test05():
     obj45:= \bar{A}*B*A;
     vary(obj45, $A -> C$)
     tst45:= \bar{C}*B*A + \bar{A}*B*C - @(obj45);
-    assert(tst45)
+    assert(tst45==0)
     print('Test 05 passed')
     
 test05()
@@ -118,7 +118,7 @@ def test06():
     rl:= \Omega( \partial_{a}{A??} )( B?? ) -> \partial_{a}{ \Omega(A??)(B??) };
     substitute(obj46, rl)
     tst46:= \partial_{a}{ \Omega(A)(\partialp_{b}{B}) } - @(obj46);
-    assert(tst46)
+    assert(tst46==0)
     print('Test 06 passed')
     
 test06()
@@ -129,7 +129,7 @@ def test07():
     obj70:= A + B Q;
     vary(_, $A -> Q, B -> Z$ )
     tst70:= Q + Z Q - @(obj70);
-    assert(tst70)
+    assert(tst70==0)
     print('Test 07 passed')
     
 test07()
@@ -139,7 +139,7 @@ def test17():
     obj17:= [ A B, C];
     substitute(_, $[ M? N?, P? ] -> P? M? N?$ );
     tst17:= @(obj17) - C A B;
-    assert(tst17)
+    assert(tst17==0)
     print('Test 17 passed')
     
 test17()
@@ -150,7 +150,7 @@ def test84():
     yy:= a+ a*A;
     vary(yy, $A->\delta{A}$ )
     tst84:= a \delta{A} - @(yy);
-    assert(tst84)
+    assert(tst84==0)
     print('Test 84 passed')
 
 test84()
@@ -169,12 +169,13 @@ def test101():
     rl:= A_{m?} A_{n?} | m? > n? -> Q;
     substitute(ex, rl, repeat=True);
     tst:= Q Q + A_{0} A_{1} - @(ex);
-    assert(tst)
+    assert(tst==0)
     print('Test 101 passed')
 
 test101()
 
 def test102():
+    __cdbkernel__=create_scope()
     {m,n,p}::Symbol;
     A_{m}::SelfNonCommuting;
     ex:= A_{2} A_{3} A_{1} + A_{1} A_{0};
@@ -188,8 +189,42 @@ def test102():
         sort_product(ex)
     
     tst:= A_{1} A_{2} A_{3} + A_{3} Q + A_{2} Q + A_{0} A_{1} + Q - @(ex);
-    assert(tst)
+    assert(tst==0)
     print('Test 102 passed')
 
 test102()
+    
+def test103():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    rl:= A_{m? n?} -> \partial_{m?}{B_{n?}};
+    ex:= A_{4 k} A_{k 4};
+    substitute(ex, rl)
+    tst:= \partial_{4}{B_{k}} \partial_{k}{B_{4}} - @(ex);
+    assert(tst==0)
+
+test103()
+
+def test104():
+    __cdbkernel__=create_scope()
+    {m,n,p}::Indices(position=independent);
+    ex:= g^{4};
+    rl:= g_{4} -> A;
+    # How is this thing supposed to know that 4 is in the {m,n,p} set?
+    substitute(ex, rl);
+    tst:= g^{4} - @(ex);
+    assert(tst==0)
+
+test104()
+
+def test105():
+    __cdbkernel__=create_scope()
+    ex:= A_{m n} + B_{m n};
+    rl:= C?_{m? n?} -> n? C?_{n?};
+    substitute(ex, rl);
+    tst:= n A_{n} + n B_{n} - @(ex);
+    assert(tst==0)
+
+test105()
+
     

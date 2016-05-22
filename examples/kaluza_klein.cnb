@@ -1,0 +1,275 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{The Kaluza-Klein example from section 2.5 of hep-th/0701238}\n\nThis example shows how to use \\algo{split_index} in a somewhat more complicated setting. \nWe first declare the indices that we will use."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{The Kaluza-Klein example from section 2.5 of hep-th/0701238}\n\nThis example shows how to use \\algo{split_index} in a somewhat more complicated setting. \nWe first declare the indices that we will use."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left(\\mu, \\nu, \\rho, \\sigma, \\kappa, \\lambda, \\eta, \\chi\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left(m, n, p, q, r, s, t, u, v, w, x, y, z, m\\#\\right).\\end{dmath*}"
+				}
+			],
+			"source" : "{\\mu,\\nu,\\rho,\\sigma,\\kappa,\\lambda,\\eta,\\chi#}::Indices(full, position=independent);\n{m,n,p,q,r,s,t,u,v,w,x,y,z,m#}::Indices(subspace, position=independent, parent=full);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note the appearance of \\verb|parent=full|. This indicates that the indices in the second set\nspan a subspace of the indices in the first set. Also note that we have declared the indices\nas \\verb|position=independent|, to prevent Cadabra from automatically raising or lowering them \nwhen canonicalising (as this does not really help us here).\n\nThe remaining declarations are standard,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note the appearance of \\verb|parent=full|. This indicates that the indices in the second set\nspan a subspace of the indices in the first set. Also note that we have declared the indices\nas \\verb|position=independent|, to prevent Cadabra from automatically raising or lowering them \nwhen canonicalising (as this does not really help us here).\n\nThe remaining declarations are standard,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric.\ng_{\\mu? \\nu?}::Symmetric.\ng^{\\mu? \\nu?}::Symmetric.\nh_{m n}::Metric.\nh^{m n}::InverseMetric.\n\\delta^{\\mu?}_{\\nu?}::KroneckerDelta.\n\\delta_{\\mu?}^{\\nu?}::KroneckerDelta.\nF_{m n}::AntiSymmetric."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We will want to expand the Riemann tensor in terms of the metric. The following two substitution\nrules do the conversion from Riemann tensor to Christoffel symbol and from Christoffel symbol\nto metric (a library with common substitution rules like these is in preparation)."
+				}
+			],
+			"hidden" : true,
+			"source" : "We will want to expand the Riemann tensor in terms of the metric. The following two substitution\nrules do the conversion from Riemann tensor to Christoffel symbol and from Christoffel symbol\nto metric (a library with common substitution rules like these is in preparation)."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R^{\\lambda?}\\,_{\\mu? \\nu? \\kappa?} \\rightarrow -\\partial_{\\kappa?}{\\Gamma^{\\lambda?}\\,_{\\mu? \\nu?}}%\n+\\partial_{\\nu?}{\\Gamma^{\\lambda?}\\,_{\\mu? \\kappa?}}%\n-\\Gamma^{\\eta}\\,_{\\mu? \\nu?} \\Gamma^{\\lambda?}\\,_{\\kappa? \\eta}%\n+\\Gamma^{\\eta}\\,_{\\mu? \\kappa?} \\Gamma^{\\lambda?}\\,_{\\nu? \\eta}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda?}\\,_{\\mu? \\nu?} \\rightarrow \\frac{1}{2}g^{\\lambda? \\kappa} \\left(\\partial_{\\nu?}{g_{\\kappa \\mu?}}%\n+\\partial_{\\mu?}{g_{\\kappa \\nu?}}%\n-\\partial_{\\kappa}{g_{\\mu? \\nu?}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "RtoG:= R^{\\lambda?}_{\\mu?\\nu?\\kappa?} -> \n - \\partial_{\\kappa?}{ \\Gamma^{\\lambda?}_{\\mu?\\nu?} }\n + \\partial_{\\nu?}{ \\Gamma^{\\lambda?}_{\\mu?\\kappa?} }\n - \\Gamma^{\\eta}_{\\mu?\\nu?} \\Gamma^{\\lambda?}_{\\kappa?\\eta}\n + \\Gamma^{\\eta}_{\\mu?\\kappa?} \\Gamma^{\\lambda?}_{\\nu?\\eta};\n\nGtog:= \\Gamma^{\\lambda?}_{\\mu?\\nu?} ->\n  (1/2) * g^{\\lambda?\\kappa} ( \n        \\partial_{\\nu?}{ g_{\\kappa\\mu?} } + \\partial_{\\mu?}{ g_{\\kappa\\nu?} } - \\partial_{\\kappa}{ g_{\\mu?\\nu?} } );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In this example we want to compute the Kaluza-Klein reduction of the $R_{m 4 n 4}$ component of the\nRiemann tensor. So we enter this component and do the substitution that takes the Riemann tensor\nto metrics. After each substitution, we distribute\nproducts over sums. We also apply the product rule to distribute derivatives over factors in a\nproduct."
+				}
+			],
+			"hidden" : true,
+			"source" : "In this example we want to compute the Kaluza-Klein reduction of the $R_{m 4 n 4}$ component of the\nRiemann tensor. So we enter this component and do the substitution that takes the Riemann tensor\nto metrics. After each substitution, we distribute\nproducts over sums. We also apply the product rule to distribute derivatives over factors in a\nproduct."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}g_{m1 m} R^{m1}\\,_{4 n 4}%\n+g_{4 m} R^{4}\\,_{4 n 4}\\end{dmath*}"
+				}
+			],
+			"source" : "todo:= g_{m1 m} R^{m1}_{4 n 4} + g_{4 m} R^{4}_{4 n 4};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\partial_{4}{g^{m1 \\kappa}} \\partial_{n}{g_{\\kappa 4}} g_{m1 m}%\n - \\frac{1}{2}\\partial_{4 n}{g_{\\kappa 4}} g_{m1 m} g^{m1 \\kappa}%\n - \\frac{1}{2}\\partial_{4}{g_{\\kappa n}} \\partial_{4}{g^{m1 \\kappa}} g_{m1 m}%\n - \\frac{1}{2}\\partial_{4 4}{g_{\\kappa n}} g_{m1 m} g^{m1 \\kappa}%\n+\\frac{1}{2}\\partial_{4}{g^{m1 \\kappa}} \\partial_{\\kappa}{g_{4 n}} g_{m1 m}%\n+\\frac{1}{2}\\partial_{4 \\kappa}{g_{4 n}} g_{m1 m} g^{m1 \\kappa}%\n+\\partial_{4}{g_{\\kappa 4}} \\partial_{n}{g^{m1 \\kappa}} g_{m1 m}%\n+\\partial_{n 4}{g_{\\kappa 4}} g_{m1 m} g^{m1 \\kappa}%\n - \\frac{1}{2}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g^{m1 \\kappa}} g_{m1 m}%\n - \\frac{1}{2}\\partial_{n \\kappa}{g_{4 4}} g_{m1 m} g^{m1 \\kappa}%\n - \\frac{1}{4}\\partial_{\\eta}{g_{\\mu 4}} \\partial_{n}{g_{\\kappa 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{4}{g_{\\mu \\eta}} \\partial_{n}{g_{\\kappa 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{n}{g_{\\kappa 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{4}{g_{\\kappa n}} \\partial_{\\eta}{g_{\\mu 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{4}{g_{\\mu \\eta}} \\partial_{4}{g_{\\kappa n}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{4}{g_{\\kappa n}} \\partial_{\\mu}{g_{4 \\eta}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 n}} \\partial_{\\eta}{g_{\\mu 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{4}{g_{\\mu \\eta}} \\partial_{\\kappa}{g_{4 n}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{\\kappa}{g_{4 n}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{2}\\partial_{4}{g_{\\kappa 4}} \\partial_{\\eta}{g_{\\mu n}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{2}\\partial_{4}{g_{\\kappa 4}} \\partial_{n}{g_{\\mu \\eta}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{2}\\partial_{4}{g_{\\kappa 4}} \\partial_{\\mu}{g_{n \\eta}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\eta}{g_{\\mu n}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g_{\\mu \\eta}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\mu}{g_{n \\eta}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{2}\\partial_{4}{g^{4 \\kappa}} \\partial_{n}{g_{\\kappa 4}} g_{4 m}%\n - \\frac{1}{2}\\partial_{4 n}{g_{\\kappa 4}} g_{4 m} g^{4 \\kappa}%\n - \\frac{1}{2}\\partial_{4}{g^{4 \\kappa}} \\partial_{4}{g_{\\kappa n}} g_{4 m}%\n - \\frac{1}{2}\\partial_{4 4}{g_{\\kappa n}} g_{4 m} g^{4 \\kappa}%\n+\\frac{1}{2}\\partial_{4}{g^{4 \\kappa}} \\partial_{\\kappa}{g_{4 n}} g_{4 m}%\n+\\frac{1}{2}\\partial_{4 \\kappa}{g_{4 n}} g_{4 m} g^{4 \\kappa}%\n+\\partial_{4}{g_{\\kappa 4}} \\partial_{n}{g^{4 \\kappa}} g_{4 m}%\n+\\partial_{n 4}{g_{\\kappa 4}} g_{4 m} g^{4 \\kappa}%\n - \\frac{1}{2}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g^{4 \\kappa}} g_{4 m}%\n - \\frac{1}{2}\\partial_{n \\kappa}{g_{4 4}} g_{4 m} g^{4 \\kappa}%\n - \\frac{1}{4}\\partial_{\\eta}{g_{\\mu 4}} \\partial_{n}{g_{\\kappa 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{4}{g_{\\mu \\eta}} \\partial_{n}{g_{\\kappa 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{n}{g_{\\kappa 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{4}{g_{\\kappa n}} \\partial_{\\eta}{g_{\\mu 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{4}{g_{\\mu \\eta}} \\partial_{4}{g_{\\kappa n}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{4}{g_{\\kappa n}} \\partial_{\\mu}{g_{4 \\eta}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 n}} \\partial_{\\eta}{g_{\\mu 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{4}{g_{\\mu \\eta}} \\partial_{\\kappa}{g_{4 n}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{\\kappa}{g_{4 n}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{2}\\partial_{4}{g_{\\kappa 4}} \\partial_{\\eta}{g_{\\mu n}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{2}\\partial_{4}{g_{\\kappa 4}} \\partial_{n}{g_{\\mu \\eta}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{2}\\partial_{4}{g_{\\kappa 4}} \\partial_{\\mu}{g_{n \\eta}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\eta}{g_{\\mu n}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g_{\\mu \\eta}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\mu}{g_{n \\eta}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, RtoG)\nsubstitute(_, Gtog)\ndistribute(_)\nproduct_rule(_)\ndistribute(_)\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "None of the tensors will depend on the 4-th direction, so we set derivatives in that direction to zero."
+				}
+			],
+			"hidden" : true,
+			"source" : "None of the tensors will depend on the 4-th direction, so we set derivatives in that direction to zero."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g^{m1 \\kappa}} g_{m1 m}%\n - \\frac{1}{2}\\partial_{n \\kappa}{g_{4 4}} g_{m1 m} g^{m1 \\kappa}%\n - \\frac{1}{4}\\partial_{\\eta}{g_{\\mu 4}} \\partial_{n}{g_{\\kappa 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{n}{g_{\\kappa 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 n}} \\partial_{\\eta}{g_{\\mu 4}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{\\kappa}{g_{4 n}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\eta}{g_{\\mu n}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g_{\\mu \\eta}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\mu}{g_{n \\eta}} g^{\\eta \\kappa} g_{m1 m} g^{m1 \\mu}%\n - \\frac{1}{2}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g^{4 \\kappa}} g_{4 m}%\n - \\frac{1}{2}\\partial_{n \\kappa}{g_{4 4}} g_{4 m} g^{4 \\kappa}%\n - \\frac{1}{4}\\partial_{\\eta}{g_{\\mu 4}} \\partial_{n}{g_{\\kappa 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{n}{g_{\\kappa 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 n}} \\partial_{\\eta}{g_{\\mu 4}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{\\mu}{g_{4 \\eta}} \\partial_{\\kappa}{g_{4 n}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\eta}{g_{\\mu n}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n - \\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{n}{g_{\\mu \\eta}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}%\n+\\frac{1}{4}\\partial_{\\kappa}{g_{4 4}} \\partial_{\\mu}{g_{n \\eta}} g_{4 m} g^{4 \\mu} g^{\\eta \\kappa}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\partial_{4}{A??} -> 0$, repeat=True)\nsubstitute(_, $\\partial_{4 m?}{A??} -> 0$, repeat=True)\nsubstitute(_, $\\partial_{m? 4}{A??} -> 0$, repeat=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We then split the greek indices into roman indices and the 4-th direction. Notice the use\nof \\verb|repeat=True| which will keep doing this substitution until all greek indices\nhave been split. After that we again have to set all derivatives in the 4-th direction to zero."
+				}
+			],
+			"hidden" : true,
+			"source" : "We then split the greek indices into roman indices and the 4-th direction. Notice the use\nof \\verb|repeat=True| which will keep doing this substitution until all greek indices\nhave been split. After that we again have to set all derivatives in the 4-th direction to zero."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\partial_{p}{g_{4 4}} \\partial_{n}{g^{m1 p}} g_{m1 m}%\n - \\frac{1}{2}\\partial_{n p}{g_{4 4}} g_{m1 m} g^{m1 p}%\n - \\frac{1}{4}\\partial_{p}{g_{r 4}} \\partial_{n}{g_{q 4}} g^{p q} g_{m1 m} g^{m1 r}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{q 4}} g^{p q} g_{m1 m} g^{m1 4}%\n - \\frac{1}{4}\\partial_{p}{g_{q 4}} \\partial_{n}{g_{4 4}} g^{p 4} g_{m1 m} g^{m1 q}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{4 4}} g^{p 4} g_{m1 m} g^{m1 4}%\n+\\frac{1}{4}\\partial_{r}{g_{4 p}} \\partial_{n}{g_{q 4}} g^{p q} g_{m1 m} g^{m1 r}%\n+\\frac{1}{4}\\partial_{q}{g_{4 p}} \\partial_{n}{g_{4 4}} g^{p 4} g_{m1 m} g^{m1 q}%\n+\\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{n}{g_{p 4}} g^{4 p} g_{m1 m} g^{m1 q}%\n+\\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{4 4}} g^{4 4} g_{m1 m} g^{m1 p}%\n+\\frac{1}{4}\\partial_{q}{g_{4 n}} \\partial_{p}{g_{r 4}} g^{p q} g_{m1 m} g^{m1 r}%\n+\\frac{1}{4}\\partial_{q}{g_{4 n}} \\partial_{p}{g_{4 4}} g^{p q} g_{m1 m} g^{m1 4}%\n - \\frac{1}{4}\\partial_{r}{g_{4 p}} \\partial_{q}{g_{4 n}} g^{p q} g_{m1 m} g^{m1 r}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{p}{g_{4 n}} g^{4 p} g_{m1 m} g^{m1 q}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{p}{g_{r n}} g^{p q} g_{m1 m} g^{m1 r}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{p}{g_{4 n}} g^{p q} g_{m1 m} g^{m1 4}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{n}{g_{r p}} g^{p q} g_{m1 m} g^{m1 r}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{n}{g_{4 p}} g^{p q} g_{m1 m} g^{m1 4}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{q 4}} g^{4 p} g_{m1 m} g^{m1 q}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{4 4}} g^{4 p} g_{m1 m} g^{m1 4}%\n+\\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{r}{g_{n p}} g^{p q} g_{m1 m} g^{m1 r}%\n+\\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{q}{g_{n 4}} g^{4 p} g_{m1 m} g^{m1 q}%\n - \\frac{1}{2}\\partial_{p}{g_{4 4}} \\partial_{n}{g^{4 p}} g_{4 m}%\n - \\frac{1}{2}\\partial_{n p}{g_{4 4}} g_{4 m} g^{4 p}%\n - \\frac{1}{4}\\partial_{p}{g_{r 4}} \\partial_{n}{g_{q 4}} g_{4 m} g^{4 r} g^{p q}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{q 4}} g_{4 m} g^{4 4} g^{p q}%\n - \\frac{1}{4}\\partial_{p}{g_{q 4}} \\partial_{n}{g_{4 4}} g_{4 m} g^{4 q} g^{p 4}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{4 4}} g_{4 m} g^{4 4} g^{p 4}%\n+\\frac{1}{4}\\partial_{r}{g_{4 p}} \\partial_{n}{g_{q 4}} g_{4 m} g^{4 r} g^{p q}%\n+\\frac{1}{4}\\partial_{q}{g_{4 p}} \\partial_{n}{g_{4 4}} g_{4 m} g^{4 q} g^{p 4}%\n+\\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{n}{g_{p 4}} g_{4 m} g^{4 q} g^{4 p}%\n+\\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{4 4}} g_{4 m} g^{4 p} g^{4 4}%\n+\\frac{1}{4}\\partial_{q}{g_{4 n}} \\partial_{p}{g_{r 4}} g_{4 m} g^{4 r} g^{p q}%\n+\\frac{1}{4}\\partial_{q}{g_{4 n}} \\partial_{p}{g_{4 4}} g_{4 m} g^{4 4} g^{p q}%\n - \\frac{1}{4}\\partial_{r}{g_{4 p}} \\partial_{q}{g_{4 n}} g_{4 m} g^{4 r} g^{p q}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{p}{g_{4 n}} g_{4 m} g^{4 q} g^{4 p}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{p}{g_{r n}} g_{4 m} g^{4 r} g^{p q}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{p}{g_{4 n}} g_{4 m} g^{4 4} g^{p q}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{n}{g_{r p}} g_{4 m} g^{4 r} g^{p q}%\n - \\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{n}{g_{4 p}} g_{4 m} g^{4 4} g^{p q}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{q 4}} g_{4 m} g^{4 q} g^{4 p}%\n - \\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{n}{g_{4 4}} g_{4 m} g^{4 4} g^{4 p}%\n+\\frac{1}{4}\\partial_{q}{g_{4 4}} \\partial_{r}{g_{n p}} g_{4 m} g^{4 r} g^{p q}%\n+\\frac{1}{4}\\partial_{p}{g_{4 4}} \\partial_{q}{g_{n 4}} g_{4 m} g^{4 q} g^{4 p}\\end{dmath*}"
+				}
+			],
+			"source" : "split_index(_, $\\mu, m1, 4$, repeat=True)\nsubstitute(_, $\\partial_{4}{A??} -> 0$, repeat=True)\nsubstitute(_, $\\partial_{4 m?}{A??} -> 0$, repeat=True)\nsubstitute(_, $\\partial_{m? 4}{A??} -> 0$, repeat=True)\ncanonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Now comes the ansatz of the metric in terms of the Kaluza-Klein gauge field $A_\\mu$ and the scalar $\\phi$. \nWe substitute this with the lines below. The output is not particularly enlightening..."
+				}
+			],
+			"hidden" : true,
+			"source" : "Now comes the ansatz of the metric in terms of the Kaluza-Klein gauge field $A_\\mu$ and the scalar $\\phi$. \nWe substitute this with the lines below. The output is not particularly enlightening..."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\partial_{p}{\\phi} \\partial_{n}\\left(\\phi h^{m1 p}\\right) \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right)%\n - \\frac{1}{2}\\partial_{n p}{\\phi} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 p}%\n - \\frac{1}{4}\\partial_{p}\\left(\\phi A_{r}\\right) \\partial_{n}\\left(\\phi A_{q}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r}%\n+\\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}\\left(\\phi A_{q}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r} A_{r}%\n+\\frac{1}{4}\\partial_{p}\\left(\\phi A_{q}\\right) \\partial_{n}{\\phi} \\phi h^{p r} A_{r} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 q}%\n - \\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}{\\phi} \\phi h^{p q} A_{q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r} A_{r}%\n+\\frac{1}{4}\\partial_{r}\\left(\\phi A_{p}\\right) \\partial_{n}\\left(\\phi A_{q}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r}%\n - \\frac{1}{4}\\partial_{q}\\left(\\phi A_{p}\\right) \\partial_{n}{\\phi} \\phi h^{p r} A_{r} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 q}%\n - \\frac{1}{4}\\partial_{q}{\\phi} \\partial_{n}\\left(\\phi A_{p}\\right) \\phi h^{p r} A_{r} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 q}%\n+\\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}{\\phi} \\left(\\phi^{-1}%\n+\\phi A_{q} h^{q r} A_{r}\\right) \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 p}%\n+\\frac{1}{4}\\partial_{q}\\left(\\phi A_{n}\\right) \\partial_{p}\\left(\\phi A_{r}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r}%\n - \\frac{1}{4}\\partial_{q}\\left(\\phi A_{n}\\right) \\partial_{p}{\\phi} \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r} A_{r}%\n - \\frac{1}{4}\\partial_{r}\\left(\\phi A_{p}\\right) \\partial_{q}\\left(\\phi A_{n}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r}%\n+\\frac{1}{4}\\partial_{q}{\\phi} \\partial_{p}\\left(\\phi A_{n}\\right) \\phi h^{p r} A_{r} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 q}%\n - \\frac{1}{4}\\partial_{q}{\\phi} \\partial_{p}\\left(\\phi^{-1} h_{r n}%\n+\\phi A_{r} A_{n}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r}%\n+\\frac{1}{4}\\partial_{q}{\\phi} \\partial_{p}\\left(\\phi A_{n}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r} A_{r}%\n - \\frac{1}{4}\\partial_{q}{\\phi} \\partial_{n}\\left(\\phi^{-1} h_{r p}%\n+\\phi A_{r} A_{p}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r}%\n+\\frac{1}{4}\\partial_{q}{\\phi} \\partial_{n}\\left(\\phi A_{p}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r} A_{r}%\n+\\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}\\left(\\phi A_{q}\\right) \\phi h^{p r} A_{r} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 q}%\n - \\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}{\\phi} \\phi h^{p r} A_{r} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 q} A_{q}%\n+\\frac{1}{4}\\partial_{q}{\\phi} \\partial_{r}\\left(\\phi^{-1} h_{n p}%\n+\\phi A_{n} A_{p}\\right) \\phi h^{p q} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 r}%\n - \\frac{1}{4}\\partial_{p}{\\phi} \\partial_{q}\\left(\\phi A_{n}\\right) \\phi h^{p r} A_{r} \\left(\\phi^{-1} h_{m1 m}%\n+\\phi A_{m1} A_{m}\\right) \\phi h^{m1 q}%\n+\\frac{1}{2}\\partial_{p}{\\phi} \\partial_{n}\\left(\\phi h^{p q} A_{q}\\right) \\phi A_{m}%\n+\\frac{1}{2}\\partial_{n p}{\\phi} \\phi A_{m} \\phi h^{p q} A_{q}%\n+\\frac{1}{4}\\partial_{p}\\left(\\phi A_{r}\\right) \\partial_{n}\\left(\\phi A_{q}\\right) \\phi A_{m} \\phi h^{r s} A_{s} \\phi h^{p q}%\n - \\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}\\left(\\phi A_{q}\\right) \\phi A_{m} \\left(\\phi^{-1}%\n+\\phi A_{r} h^{r s} A_{s}\\right) \\phi h^{p q}%\n - \\frac{1}{4}\\partial_{p}\\left(\\phi A_{q}\\right) \\partial_{n}{\\phi} \\phi A_{m} \\phi h^{q s} A_{s} \\phi h^{p r} A_{r}%\n+\\frac{1}{2}\\partial_{p}{\\phi} \\partial_{n}{\\phi} \\phi A_{m} \\left(\\phi^{-1}%\n+\\phi A_{q} h^{q r} A_{r}\\right) \\phi h^{p s} A_{s}%\n - \\frac{1}{4}\\partial_{r}\\left(\\phi A_{p}\\right) \\partial_{n}\\left(\\phi A_{q}\\right) \\phi A_{m} \\phi h^{r s} A_{s} \\phi h^{p q}%\n+\\frac{1}{4}\\partial_{q}\\left(\\phi A_{p}\\right) \\partial_{n}{\\phi} \\phi A_{m} \\phi h^{q s} A_{s} \\phi h^{p r} A_{r}%\n+\\frac{1}{4}\\partial_{q}{\\phi} \\partial_{n}\\left(\\phi A_{p}\\right) \\phi A_{m} \\phi h^{q r} A_{r} \\phi h^{p s} A_{s}%\n - \\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}{\\phi} \\phi A_{m} \\phi h^{p s} A_{s} \\left(\\phi^{-1}%\n+\\phi A_{q} h^{q r} A_{r}\\right)%\n - \\frac{1}{4}\\partial_{q}\\left(\\phi A_{n}\\right) \\partial_{p}\\left(\\phi A_{r}\\right) \\phi A_{m} \\phi h^{r s} A_{s} \\phi h^{p q}%\n+\\frac{1}{4}\\partial_{q}\\left(\\phi A_{n}\\right) \\partial_{p}{\\phi} \\phi A_{m} \\left(\\phi^{-1}%\n+\\phi A_{r} h^{r s} A_{s}\\right) \\phi h^{p q}%\n+\\frac{1}{4}\\partial_{r}\\left(\\phi A_{p}\\right) \\partial_{q}\\left(\\phi A_{n}\\right) \\phi A_{m} \\phi h^{r s} A_{s} \\phi h^{p q}%\n - \\frac{1}{4}\\partial_{q}{\\phi} \\partial_{p}\\left(\\phi A_{n}\\right) \\phi A_{m} \\phi h^{q r} A_{r} \\phi h^{p s} A_{s}%\n+\\frac{1}{4}\\partial_{q}{\\phi} \\partial_{p}\\left(\\phi^{-1} h_{r n}%\n+\\phi A_{r} A_{n}\\right) \\phi A_{m} \\phi h^{r s} A_{s} \\phi h^{p q}%\n - \\frac{1}{4}\\partial_{q}{\\phi} \\partial_{p}\\left(\\phi A_{n}\\right) \\phi A_{m} \\left(\\phi^{-1}%\n+\\phi A_{r} h^{r s} A_{s}\\right) \\phi h^{p q}%\n+\\frac{1}{4}\\partial_{q}{\\phi} \\partial_{n}\\left(\\phi^{-1} h_{r p}%\n+\\phi A_{r} A_{p}\\right) \\phi A_{m} \\phi h^{r s} A_{s} \\phi h^{p q}%\n - \\frac{1}{4}\\partial_{q}{\\phi} \\partial_{n}\\left(\\phi A_{p}\\right) \\phi A_{m} \\left(\\phi^{-1}%\n+\\phi A_{r} h^{r s} A_{s}\\right) \\phi h^{p q}%\n - \\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}\\left(\\phi A_{q}\\right) \\phi A_{m} \\phi h^{q r} A_{r} \\phi h^{p s} A_{s}%\n - \\frac{1}{4}\\partial_{q}{\\phi} \\partial_{r}\\left(\\phi^{-1} h_{n p}%\n+\\phi A_{n} A_{p}\\right) \\phi A_{m} \\phi h^{r s} A_{s} \\phi h^{p q}%\n+\\frac{1}{4}\\partial_{p}{\\phi} \\partial_{q}\\left(\\phi A_{n}\\right) \\phi A_{m} \\phi h^{q r} A_{r} \\phi h^{p s} A_{s}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $g_{4 4} -> \\phi$ )\nsubstitute(_, $g_{m 4} -> \\phi A_{m}$ )\nsubstitute(_, $g_{4 m} -> \\phi A_{m}$ )\nsubstitute(_, $g_{m n} -> \\phi**{-1} h_{m n} + \\phi A_{m} A_{n}$ )\nsubstitute(_, $g^{4 4} -> \\phi**{-1} + \\phi A_{m} h^{m n} A_{n}$ )\nsubstitute(_, $g^{m 4} -> - \\phi h^{m n} A_{n}$ )\nsubstitute(_, $g^{4 m} -> - \\phi h^{m n} A_{n}$ )\nsubstitute(_, $g^{m n} -> \\phi h^{m n}$ );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We now need to distribute derivatives over sums and use the product rule (twice). The output \nof those operations is quite large, so we suppress it (by not writing semi-colons after the \nfunction calls)."
+				}
+			],
+			"hidden" : true,
+			"source" : "We now need to distribute derivatives over sums and use the product rule (twice). The output \nof those operations is quite large, so we suppress it (by not writing semi-colons after the \nfunction calls)."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "distribute(_)\nproduct_rule(_)\ndistribute(_)\nproduct_rule(_)\ncanonicalise(_)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\partial_{m}{\\phi} \\partial_{n}{\\phi} \\phi^{-1}%\n+\\frac{1}{4}\\partial_{m1}{\\phi} \\partial_{n}{h_{m p}} h^{m1 p}%\n - \\frac{3}{4}A_{m} A_{m1} \\partial_{n}{\\phi} \\partial_{p}{\\phi} \\phi h^{m1 p}%\n - \\frac{1}{2}A_{m} A_{m1} \\partial_{p}{\\phi} \\partial_{n}{h^{m1 p}} \\phi^{2}%\n - \\frac{1}{2}\\partial_{m n}{\\phi}%\n - \\frac{1}{2}A_{m} A_{m1} \\partial_{n p}{\\phi} \\phi^{2} h^{m1 p}%\n - \\frac{1}{2}A_{m} \\partial_{n}{A_{m1}} \\partial_{q}{\\phi} \\phi^{2} h^{m1 q}%\n - \\frac{1}{4}A_{m1} \\partial_{q}{A_{m}} \\partial_{n}{\\phi} \\phi^{2} h^{m1 q}%\n - \\frac{1}{4}\\partial_{n}{A_{m1}} \\partial_{p}{A_{m}} \\phi^{3} h^{m1 p}%\n - \\frac{1}{4}A_{m} A_{m1} \\partial_{n}{A_{p}} \\partial_{q}{A_{r}} \\phi^{5} h^{m1 r} h^{p q}%\n+\\frac{3}{4}A_{m} A_{m1} \\partial_{n}{\\phi} \\partial_{q}{\\phi} \\phi h^{m1 q}%\n+\\frac{1}{2}A_{m} \\partial_{n}{A_{p}} \\partial_{q}{\\phi} \\phi^{2} h^{p q}%\n+\\frac{1}{4}A_{m1} \\partial_{r}{A_{m}} \\partial_{n}{\\phi} \\phi^{2} h^{m1 r}%\n+\\frac{1}{4}A_{m1} A_{q} \\partial_{m}{\\phi} \\partial_{n}{\\phi} \\phi h^{m1 q}%\n+\\frac{1}{4}A_{p} \\partial_{n}{A_{q}} \\partial_{m}{\\phi} \\phi^{2} h^{p q}%\n+\\frac{1}{4}A_{p} \\partial_{m}{A_{q}} \\partial_{n}{\\phi} \\phi^{2} h^{p q}%\n+\\frac{1}{4}\\partial_{m}{A_{m1}} \\partial_{n}{A_{q}} \\phi^{3} h^{m1 q}%\n+\\frac{1}{4}A_{m} A_{m1} \\partial_{n}{A_{p}} \\partial_{q}{A_{r}} \\phi^{5} h^{m1 q} h^{p r}%\n - \\frac{1}{4}A_{m1} A_{r} \\partial_{m}{\\phi} \\partial_{n}{\\phi} \\phi h^{m1 r}%\n - \\frac{1}{4}A_{p} \\partial_{m}{A_{r}} \\partial_{n}{\\phi} \\phi^{2} h^{p r}%\n - \\frac{1}{4}A_{p} \\partial_{n}{A_{r}} \\partial_{m}{\\phi} \\phi^{2} h^{p r}%\n+\\frac{1}{4}A_{m} \\partial_{m1}{A_{n}} \\partial_{p}{\\phi} \\phi^{2} h^{m1 p}%\n+\\frac{1}{4}\\partial_{m1}{A_{m}} \\partial_{p}{A_{n}} \\phi^{3} h^{m1 p}%\n+\\frac{1}{4}A_{m} A_{m1} \\partial_{p}{A_{n}} \\partial_{q}{A_{r}} \\phi^{5} h^{m1 r} h^{p q}%\n - \\frac{1}{4}A_{p} \\partial_{q}{A_{n}} \\partial_{m}{\\phi} \\phi^{2} h^{p q}%\n - \\frac{1}{4}A_{n} \\partial_{m}{A_{p}} \\partial_{q}{\\phi} \\phi^{2} h^{p q}%\n - \\frac{1}{4}\\partial_{m}{A_{m1}} \\partial_{q}{A_{n}} \\phi^{3} h^{m1 q}%\n - \\frac{1}{4}A_{m} A_{m1} \\partial_{p}{A_{n}} \\partial_{q}{A_{r}} \\phi^{5} h^{m1 q} h^{p r}%\n+\\frac{1}{4}A_{p} \\partial_{r}{A_{n}} \\partial_{m}{\\phi} \\phi^{2} h^{p r}%\n+\\frac{1}{4}\\partial_{m1}{\\phi} \\partial_{p}{\\phi} \\phi^{-1} h_{m n} h^{m1 p}%\n - \\frac{1}{4}\\partial_{m1}{\\phi} \\partial_{p}{h_{m n}} h^{m1 p}%\n+\\frac{1}{4}A_{m} A_{n} \\partial_{p}{\\phi} \\partial_{q}{\\phi} \\phi h^{p q}%\n - \\frac{1}{4}A_{m} A_{m1} \\partial_{p}{\\phi} \\partial_{q}{h_{n r}} \\phi^{2} h^{m1 r} h^{p q}%\n - \\frac{1}{4}A_{m} \\partial_{m1}{A_{n}} \\partial_{q}{\\phi} \\phi^{2} h^{m1 q}%\n - \\frac{1}{4}A_{m} A_{m1} \\partial_{p}{\\phi} \\partial_{n}{h_{q r}} \\phi^{2} h^{m1 q} h^{p r}%\n - \\frac{1}{4}A_{m1} \\partial_{n}{A_{m}} \\partial_{q}{\\phi} \\phi^{2} h^{m1 q}%\n+\\frac{1}{4}A_{m1} \\partial_{n}{A_{m}} \\partial_{r}{\\phi} \\phi^{2} h^{m1 r}%\n+\\frac{1}{4}\\partial_{m1}{\\phi} \\partial_{m}{h_{n q}} h^{m1 q}%\n - \\frac{1}{4}A_{m} A_{p} \\partial_{n}{\\phi} \\partial_{r}{\\phi} \\phi h^{p r}%\n+\\frac{1}{4}A_{m} A_{m1} \\partial_{p}{\\phi} \\partial_{q}{h_{n r}} \\phi^{2} h^{m1 q} h^{p r}%\n+\\frac{1}{4}A_{m1} \\partial_{m}{A_{n}} \\partial_{q}{\\phi} \\phi^{2} h^{m1 q}%\n+\\frac{1}{4}A_{n} \\partial_{m}{A_{m1}} \\partial_{q}{\\phi} \\phi^{2} h^{m1 q}%\n - \\frac{1}{4}A_{m1} \\partial_{m}{A_{n}} \\partial_{r}{\\phi} \\phi^{2} h^{m1 r}%\n+\\frac{1}{2}A_{m} A_{p} \\partial_{q}{\\phi} \\partial_{n}{h^{p q}} \\phi^{2}%\n+\\frac{1}{2}A_{m} A_{p} \\partial_{n q}{\\phi} \\phi^{2} h^{p q}%\n+\\frac{1}{4}A_{m} A_{p} \\partial_{n}{A_{q}} \\partial_{r}{A_{s}} \\phi^{5} h^{p s} h^{q r}%\n+\\frac{1}{4}A_{m} A_{p} \\partial_{n}{\\phi} \\partial_{s}{\\phi} \\phi h^{p s}%\n - \\frac{1}{4}A_{m} A_{p} \\partial_{n}{A_{q}} \\partial_{r}{A_{s}} \\phi^{5} h^{p r} h^{q s}%\n - \\frac{1}{4}A_{m} A_{p} \\partial_{q}{A_{n}} \\partial_{r}{A_{s}} \\phi^{5} h^{p s} h^{q r}%\n+\\frac{1}{4}A_{m} A_{p} \\partial_{q}{A_{n}} \\partial_{r}{A_{s}} \\phi^{5} h^{p r} h^{q s}%\n - \\frac{1}{4}A_{m} A_{n} \\partial_{q}{\\phi} \\partial_{r}{\\phi} \\phi h^{q r}%\n+\\frac{1}{4}A_{m} A_{p} \\partial_{q}{\\phi} \\partial_{r}{h_{n s}} \\phi^{2} h^{p s} h^{q r}%\n - \\frac{1}{4}A_{m} A_{p} \\partial_{n}{\\phi} \\partial_{q}{\\phi} \\phi h^{p q}%\n+\\frac{1}{4}A_{m} A_{p} \\partial_{q}{\\phi} \\partial_{n}{h_{r s}} \\phi^{2} h^{p r} h^{q s}%\n+\\frac{1}{4}A_{m} A_{q} \\partial_{n}{\\phi} \\partial_{s}{\\phi} \\phi h^{q s}%\n - \\frac{1}{4}A_{m} A_{p} \\partial_{q}{\\phi} \\partial_{r}{h_{n s}} \\phi^{2} h^{p r} h^{q s}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\partial_{p}{h^{n m}} h_{q m} -> - \\partial_{p}{h_{q m}} h^{n m}$ )\ncollect_factors(_)\nsort_product(_)\nconverge(todo):\n\tsubstitute(_, $h_{m1 m2} h^{m3 m2} -> \\delta_{m1}^{m3}$, repeat=True )\n\teliminate_kronecker(_)\n\tcanonicalise(_)\n;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We can now finally rewrite the derivative of the gauge potential in terms of the field strength\nto obtain the result."
+				}
+			],
+			"hidden" : true,
+			"source" : "We can now finally rewrite the derivative of the gauge potential in terms of the field strength\nto obtain the result."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\partial_{m}{\\phi} \\partial_{n}{\\phi} \\phi^{-1}%\n+\\frac{1}{4}\\partial_{p}{\\phi} \\partial_{n}{h_{m q}} h^{p q}%\n - \\frac{1}{2}\\partial_{m n}{\\phi}%\n+\\frac{1}{4}F_{m p} F_{n q} \\phi^{3} h^{p q}%\n+\\frac{1}{4}\\partial_{p}{\\phi} \\partial_{q}{\\phi} \\phi^{-1} h_{m n} h^{p q}%\n - \\frac{1}{4}\\partial_{p}{\\phi} \\partial_{q}{h_{m n}} h^{p q}%\n+\\frac{1}{4}\\partial_{p}{\\phi} \\partial_{m}{h_{n q}} h^{p q}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\partial_{n}{A_{m}} -> 1/2*\\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\\partial_{m}{A_{n}}$ )\ndistribute(_)\nsort_product(_)\ncanonicalise(_)\nrename_dummies(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

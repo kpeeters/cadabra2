@@ -1,188 +1,223 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/}.\n\nThe first thing we will do is enter some tensorial expressions. "
+					"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/}.\n\n\\section*{Equations of motion}\n\nA good example to illustrate a number of Cadabra manipulations is to derive the equations of\nmotion of a field theory from an action. Below we discuss the Maxwell equations, just for\nsimplicity.\n\nIn Cadabra, the default setting is to do very little automatic simplification (essentially, only\nequal terms are collected). You can change this, however, by writing a \\verb|post_process|\nfunction which contains all the algorithms which you want to run at every step of your notebook.\nBelow is an example:"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/}.\n\nThe first thing we will do is enter some tensorial expressions. "
+			"source" : "\\section*{Introduction to Cadabra for beginners}\n\nThis notebook introduces Cadabra to people who have never used it before, or who have\nused one of the old 1.x versions. It will show you how to enter expressions, attach\nproperties to patterns, perform simple substitutions and so on. \n\nIf you need help, do not hesitate to email \\href{mailto:help@cadabra.science}{help@cadabra.science} or visit\nthe web site at \\url{http://cadabra.science/}.\n\n\\section*{Equations of motion}\n\nA good example to illustrate a number of Cadabra manipulations is to derive the equations of\nmotion of a field theory from an action. Below we discuss the Maxwell equations, just for\nsimplicity.\n\nIn Cadabra, the default setting is to do very little automatic simplification (essentially, only\nequal terms are collected). You can change this, however, by writing a \\verb|post_process|\nfunction which contains all the algorithms which you want to run at every step of your notebook.\nBelow is an example:"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def post_process(ex):\n\tsort_product(ex)\n\tcanonicalise(ex)\n\tcollect_terms(ex)"
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "As you can see, this sorts factors in a product (alphabetically, you can change this if you want), then \nwrites indices in canonical form, and collects equal terms.\n\nBefore we can enter our Maxwell action, we need to declare some properties of the symbols which we\nwant to use. Cadabra is fairly minimalistic with this; you typically only have to declare what\nyou are going to use. Below we declare that $\\mu$, $\\nu$, $\\rho$ are indices, $x$ is a coordinate\nlabel, and \\verb|\\partial| indicates a partial derivative. We then declare properties of the field \nstrength and the gauge potential. This should all read fairly naturally."
+				}
+			],
+			"hidden" : true,
+			"source" : "As you can see, this sorts factors in a product (alphabetically, you can change this if you want), then \nwrites indices in canonical form, and collects equal terms.\n\nBefore we can enter our Maxwell action, we need to declare some properties of the symbols which we\nwant to use. Cadabra is fairly minimalistic with this; you typically only have to declare what\nyou are going to use. Below we declare that $\\mu$, $\\nu$, $\\rho$ are indices, $x$ is a coordinate\nlabel, and \\verb|\\partial| indicates a partial derivative. We then declare properties of the field \nstrength and the gauge potential. This should all read fairly naturally."
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}F_{\\mu \\nu}.\\end{dmath*}"
+				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\delta{\\#}.\\end{dmath*}"
-				},
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}F^{\\mu \\nu} F_{\\mu \\nu}\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "{\\mu,\\nu,\\rho}::Indices(position=free).\nx::Coordinate.\n\\partial{#}::Derivative.\n\nF_{\\mu\\nu}::AntiSymmetric.\nF_{\\mu\\nu}::Depends(x).\nA_{\\mu}::Depends(x,\\partial).\n\\delta{#}::Accent;\n\nS:= S = -1/4 \\int{ F_{\\mu\\nu} F^{\\mu\\nu} }{x};"
+			"source" : "{\\mu,\\nu,\\rho}::Indices(position=free).\nx::Coordinate.\n\\partial{#}::Derivative.\n\nF_{\\mu\\nu}::AntiSymmetric;\nF_{\\mu\\nu}::Depends(x).\nA_{\\mu}::Depends(x,\\partial).\n\\delta{#}::Accent;"
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note how lines ending in a semi-colon get their output printed, while those ending in a period do not.\n\nWe are now ready to write down our action, very similar to what you would write down in \\LaTeX{}. We also \nwrite down a rule which says how the field strength is related to the gauge potential. Note how this rule\ndoes not automatically get inserted into the action; you need to tell Cadabra to do that."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note how lines ending in a semi-colon get their output printed, while those ending in a period do not.\n\nWe are now ready to write down our action, very similar to what you would write down in \\LaTeX{}. We also \nwrite down a rule which says how the field strength is related to the gauge potential. Note how this rule\ndoes not automatically get inserted into the action; you need to tell Cadabra to do that."
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = \\partial_{\\mu}{A_{\\nu}}-\\partial_{\\nu}{A_{\\mu}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}F^{\\mu \\nu} F_{\\mu \\nu}\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "S:= -1/4 \\int{ F_{\\mu\\nu} F^{\\mu\\nu} }{x};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = \\partial_{\\mu}{A_{\\nu}}%\n-\\partial_{\\nu}{A_{\\mu}}\\end{dmath*}"
 				}
 			],
 			"source" : "rl:= F_{\\mu\\nu} = \\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}{A_{\\nu}}-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}{A^{\\nu}}-\\partial^{\\nu}{A^{\\mu}}\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}{A_{\\nu}}%\n-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}{A^{\\nu}}%\n-\\partial^{\\nu}{A^{\\mu}}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(S, rl);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Note how this has automatically replaced the field strength with upper as well as\nlower indices, by virtue of the fact that the index position was declared `free'.\n\nWe can now compute a variational derivative of this object with respect to $A_\\mu$.\nNote the use of inline formulas using the standard \\TeX{} \\$\\ldots\\$ construction."
+					"source" : "Note how this has automatically replaced the field strength with upper as well as\nlower indices, by virtue of the fact that the index position was declared with \\verb|position=free|.\n\nWe can now compute a variational derivative of this object with respect to $A_\\mu$.\nNote the use of inline formulas using the standard \\TeX{} \\$\\ldots\\$ construction."
 				}
 			],
 			"hidden" : true,
-			"source" : "Note how this has automatically replaced the field strength with upper as well as\nlower indices, by virtue of the fact that the index position was declared `free'.\n\nWe can now compute a variational derivative of this object with respect to $A_\\mu$.\nNote the use of inline formulas using the standard \\TeX{} \\$\\ldots\\$ construction."
+			"source" : "Note how this has automatically replaced the field strength with upper as well as\nlower indices, by virtue of the fact that the index position was declared with \\verb|position=free|.\n\nWe can now compute a variational derivative of this object with respect to $A_\\mu$.\nNote the use of inline formulas using the standard \\TeX{} \\$\\ldots\\$ construction."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}(\\delta{A_{\\nu}})-\\partial_{\\nu}(\\delta{A_{\\mu}})\\right) \\left(\\partial^{\\mu}{A^{\\nu}}-\\partial^{\\nu}{A^{\\mu}}\\right)+\\left(\\partial_{\\mu}{A_{\\nu}}-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}(\\delta{A^{\\nu}})-\\partial^{\\nu}(\\delta{A^{\\mu}})\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}{\\delta{A_{\\nu}}}%\n-\\partial_{\\nu}{\\delta{A_{\\mu}}}\\right) \\left(\\partial^{\\mu}{A^{\\nu}}%\n-\\partial^{\\nu}{A^{\\mu}}\\right)%\n+\\left(\\partial_{\\mu}{A_{\\nu}}%\n-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}{\\delta{A^{\\nu}}}%\n-\\partial^{\\nu}{\\delta{A^{\\mu}}}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "vary(S, $A_{\\mu} -> \\delta{A_{\\mu}}$);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "This now needs to be integrated by parts in order to get to an equation of motion."
+					"source" : "We need to distribute the products over the sums, and then integrate by parts, away from\nthe $\\delta{A_{\\mu}}$ factors:"
 				}
 			],
 			"hidden" : true,
-			"source" : "This now needs to be integrated by parts in order to get to an equation of motion."
+			"source" : "We need to distribute the products over the sums, and then integrate by parts, away from\nthe $\\delta{A_{\\mu}}$ factors:"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}2\\partial^{\\mu}(\\delta{A^{\\nu}}) \\partial_{\\mu}{A_{\\nu}}-4\\partial^{\\mu}{A^{\\nu}} \\partial_{\\nu}(\\delta{A_{\\mu}})+2\\partial^{\\mu}{A^{\\nu}} \\partial_{\\mu}(\\delta{A_{\\nu}})\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}2\\partial^{\\mu}{\\delta{A^{\\nu}}} \\partial_{\\mu}{A_{\\nu}}%\n-4\\partial^{\\mu}{A^{\\nu}} \\partial_{\\nu}{\\delta{A_{\\mu}}}%\n+2\\partial^{\\mu}{A^{\\nu}} \\partial_{\\mu}{\\delta{A_{\\nu}}}\\, {\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\partial_{\\nu}{A_{\\mu}}\\right)%\n+4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\partial_{\\mu}{A_{\\nu}}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(_);"
+			"source" : "distribute(_);\nintegrate_by_parts(_, $\\delta{A_{\\mu}}$);"
 		},
-		
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
+			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
-					"cell_origin" : "server",
+					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\nu}{A_{\\mu}})+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\partial_{\\mu}{A_{\\nu}})\\, {\\rm d}x\\end{dmath*}"
+					"source" : "Finally, in order to write this back in terms of the field strength, we use the following rewriting trick,"
 				}
 			],
-			"source" : "integrate_by_parts(_, $\\delta{A_{\\mu}}$);"
+			"hidden" : true,
+			"source" : "Finally, in order to write this back in terms of the field strength, we use the following rewriting trick,"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S =  - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}} - \\frac{1}{2}F_{\\mu \\nu}+\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}\\right))+4\\delta{A^{\\mu}} \\partial^{\\nu}(\\left(\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}+\\frac{1}{2}F_{\\mu \\nu}+\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}}\\right))\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}}%\n - \\frac{1}{2}F_{\\mu \\nu}%\n+\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}\\right)%\n+4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}%\n+\\frac{1}{2}F_{\\mu \\nu}%\n+\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(_, $\\partial_{\\mu}{A_{\\nu}} -> 1/2 \\partial_{\\mu}{A_{\\nu}} + 1/2 F_{\\mu\\nu} + 1/2 \\partial_{\\nu}{A_{\\mu}}$);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}S = -\\int{}\\delta{A^{\\mu}} \\partial^{\\nu}{F_{\\mu \\nu}}\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\int{}\\delta{A^{\\mu}} \\partial^{\\nu}{F_{\\mu \\nu}}\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(_);"
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This isolates the equations of motion $\\partial^\\nu F_{\\mu\\nu}=0$ in the integrand."
+				}
+			],
+			"hidden" : true,
+			"source" : "This isolates the equations of motion $\\partial^\\nu F_{\\mu\\nu}=0$ in the integrand."
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -190,6 +225,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-

@@ -81,6 +81,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	boost::regex prop(R"(\\prop\{([^\}]*)\})");
 	boost::regex underscore(R"(\\_)");
 	boost::regex e_aigu(R"(\\'e)");
+	boost::regex ldots(R"(\$\\ldots\$)");
 
 	std::string res;
 
@@ -105,6 +106,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = boost::regex_replace(res, latex, "LaTeX");
 		res = boost::regex_replace(res, tex, "TeX");
 		res = boost::regex_replace(res, e_aigu, "é");
+		res = boost::regex_replace(res, ldots, "...");
 		}
 	catch(boost::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;
@@ -443,23 +445,32 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
-			str << "\\documentclass[11pt]{article}\n"
-				 << "\\usepackage{amsmath}\n"
+			str << "\\documentclass[10pt]{article}\n"
+				 << "\\usepackage[scale=.8]{geometry}\n"
+				 << "\\usepackage[fleqn]{amsmath}\n"
+				 << "\\usepackage{listings}\n"
 				 << "\\usepackage{amssymb}\n"
 				 << "\\usepackage{inconsolata}\n"
 				 << "\\usepackage{color}\n"
 				 << "\\usepackage{tableaux}\n"
 				 << "\\usepackage{breqn}\n"
+				 << "\\newcommand{\\algorithm}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
+				 << "\\newcommand{\\property}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
+				 << "\\newcommand{\\algo}[1]{{\\tt #1}}\n"
+				 << "\\newcommand{\\prop}[1]{{\\tt #1}}\n"
+				 << "\\setlength{\\mathindent}{1em}\n"
+				 << "\\lstnewenvironment{python}[1][]\n"
+				 << "{\\lstset{language=Python, columns=fullflexible, xleftmargin=1em, basicstyle=\\small\\ttfamily\\color{blue}, keywordstyle={}}}{}\n"
 				 << "\\begin{document}\n";
 			break;
 		case DataCell::CellType::python:
-			str << "\\begin{verbatim}\n";
+			str << "\\begin{python}\n";
 			break;
 		case DataCell::CellType::output:
-			str << "\\begin{verbatim}\n";
+			str << "\\begin{python}\n";
 			break;
 		case DataCell::CellType::verbatim:
-			str << "\\begin{verbatim}\n";
+			str << "\\begin{python}\n";
 			break;
 		case DataCell::CellType::latex:
 			break;
@@ -484,7 +495,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::python:
 		case DataCell::CellType::output:
 		case DataCell::CellType::verbatim:
-			str << "\\end{verbatim}\n";
+			str << "\\end{python}\n";
 			break;
 		case DataCell::CellType::document:
 		case DataCell::CellType::latex:
@@ -516,4 +527,33 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			break;
 		}	
 
+	}
+
+std::string cadabra::export_as_python(const DTree& doc)
+	{
+	std::ostringstream str;
+	python_recurse(doc, doc.begin(), str);
+
+	return str.str();
+	}
+
+void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str)
+	{
+	if(it->cell_type==DataCell::CellType::document)
+		str << "#!/usr/local/bin/cadabra2\n";
+	else {
+		if(it->cell_type==DataCell::CellType::python) {
+			if(it->textbuf.size()>0) {
+				str << it->textbuf << "\n";
+				}
+			}
+		}
+
+	if(doc.number_of_children(it)>0) {
+		DTree::sibling_iterator sib=doc.begin(it);
+		while(sib!=doc.end(it)) {
+			python_recurse(doc, sib, str);
+			++sib;
+			}
+		}
 	}

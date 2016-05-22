@@ -35,9 +35,13 @@ namespace cadabra {
 			/// If the ComputeThread is constructed with a null pointer to the
 			/// gui, there will be no gui updates, just DTree updates.
 			
-			ComputeThread(GUIBase *, DocumentThread&);
+			ComputeThread();
 			ComputeThread(const ComputeThread& )=delete; // You cannot copy this object
 			~ComputeThread();
+
+			/// Determine the objects that this compute thread should be 
+			/// talking to.
+			void set_master(GUIBase *, DocumentThread *);
 			
 			/// Main entry point, which will connect to the server and
 			/// then start an event loop to handle communication with the
@@ -82,7 +86,7 @@ namespace cadabra {
 			
 		private:
 			GUIBase        *gui;
-			DocumentThread& docthread;
+			DocumentThread *docthread;
 
 			// For debugging purposes, we keep record of the main thread id,
 			// so that we can flag when code runs on the wrong thread.

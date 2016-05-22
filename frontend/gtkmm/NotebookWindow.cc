@@ -47,6 +47,7 @@ NotebookWindow::NotebookWindow()
 	Glib::ustring data = "GtkTextView { color: blue;  }\n";
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "*:focused { background-color: #eee; }\n";
+	data += "*:selected { background-color: #ccc; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
 
 	if(!css_provider->load_from_data(data)) {
@@ -72,6 +73,8 @@ NotebookWindow::NotebookWindow()
 							sigc::mem_fun(*this, &NotebookWindow::on_file_export_html_segment) );
 	actiongroup->add( Gtk::Action::create("ExportLaTeX", "Export to standalone LaTeX"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_export_latex) );
+	actiongroup->add( Gtk::Action::create("ExportPython", "Export to Python/Cadabra source"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_export_python) );
 	actiongroup->add( Gtk::Action::create("Quit", Gtk::Stock::QUIT),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
@@ -130,6 +133,7 @@ NotebookWindow::NotebookWindow()
 		"      <menuitem action='ExportHtml'/>"
 		"      <menuitem action='ExportHtmlSegment'/>"
 		"      <menuitem action='ExportLaTeX'/>"
+		"      <menuitem action='ExportPython'/>"
 		"      <separator/>"
 		"      <menuitem action='Quit'/>"
 		"    </menu>"
@@ -246,13 +250,14 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	if(cfg->width != last_configure_width) {
 		last_configure_width = cfg->width;
 		try {
+			std::cerr << "running TeX" << std::endl;
 			engine.invalidate_all();
 			engine.convert_all();
 			for(unsigned int i=0; i<canvasses.size(); ++i) 
 				canvasses[i]->refresh_all();
 			}
 		catch(TeXEngine::TeXException& ex) {
-			std::cerr << "TeX exception" << std::endl;
+			on_tex_error(ex.what(), doc.end());
 			}
 		}
 
@@ -822,12 +827,6 @@ void NotebookWindow::load_file(const std::string& notebook_contents)
 	{
 	load_from_string(notebook_contents);
 
-	try {
-		engine.convert_all();
-		}
-	catch(TeXEngine::TeXException& ex) {
-		std::cerr << "TeX exception: " << ex.what() << std::endl;
-		}
 	mainbox.show_all();
 	modified=false;
 	update_title();
@@ -897,7 +896,7 @@ void NotebookWindow::on_file_export_html()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			name = dialog.get_filename();			
+			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc);
 			}
@@ -917,9 +916,29 @@ void NotebookWindow::on_file_export_latex()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			name = dialog.get_filename();			
+			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_LaTeX(doc);
+			}
+		}
+	}
+
+void NotebookWindow::on_file_export_python()
+	{
+	Gtk::FileChooserDialog dialog("Please enter a file name for the Python/Cadabra document",
+											Gtk::FILE_CHOOSER_ACTION_SAVE);
+
+	dialog.set_transient_for(*this);
+	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
+	dialog.add_button("Select", Gtk::RESPONSE_OK);
+
+	int result=dialog.run();
+
+	switch(result) {
+		case(Gtk::RESPONSE_OK): {
+			std::string name = dialog.get_filename();			
+			std::ofstream temp(name);
+			temp << export_as_python(doc);
 			}
 		}
 	}
@@ -938,7 +957,7 @@ void NotebookWindow::on_file_export_html_segment()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			name = dialog.get_filename();			
+			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
 			temp << export_as_HTML(doc, true);
 			}
@@ -1012,7 +1031,8 @@ bool NotebookWindow::quit_safeguard(bool quit)
 
 void NotebookWindow::on_file_quit()
 	{
-	hide();
+	if(quit_safeguard(true)) 
+		hide();
 	}
 
 void NotebookWindow::on_edit_undo()
@@ -1140,7 +1160,7 @@ void NotebookWindow::on_kernel_restart()
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);

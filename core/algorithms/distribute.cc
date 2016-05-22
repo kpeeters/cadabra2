@@ -33,8 +33,8 @@ bool distribute::can_apply(iterator st)
 Algorithm::result_t distribute::apply(iterator& prod)
 	{
 	Ex rep;
-	rep.set_head(str_node("\\expression"));
-	sibling_iterator top=rep.append_child(rep.begin(), str_node("\\sum", prod->fl.bracket, prod->fl.parent_rel));
+	rep.set_head(str_node("\\sum", prod->fl.bracket, prod->fl.parent_rel));
+	sibling_iterator top=rep.begin();
 	// add
 	iterator ploc=rep.append_child(top, str_node(prod->name, prod->fl.bracket, prod->fl.parent_rel));
 	// The multiplier should sit on each term, not on the sum.

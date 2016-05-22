@@ -9,17 +9,13 @@ DisplayBase::DisplayBase(const Kernel& k, const Ex& e)
 void DisplayBase::output(std::ostream& str) 
 	{
 	Ex::iterator it=tree.begin();
+	if(it==tree.end()) return;
 
 	output(str, it);
 	}
 
 void DisplayBase::output(std::ostream& str, Ex::iterator it) 
 	{
-	if(*it->name=="\\expression") {
-		dispatch(str, tree.begin(it));
-		return;
-		}
-
 	dispatch(str, it);
 	}
 

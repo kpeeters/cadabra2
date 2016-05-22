@@ -3,9 +3,6 @@
 
 void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f)
 	{
-	if(*it->name=="\\expression")
-		it=tr.begin(it);
-
    if(*it->name=="\\comma") {
 		Ex::sibling_iterator sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
@@ -23,9 +20,6 @@ void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iter
 
 int cadabra::list_size(const Ex& tr, Ex::iterator it)
 	{
-	if(*it->name=="\\expression")
-		it=tr.begin(it);
-
    if(*it->name=="\\comma") 
 		return tr.number_of_children(it);
 	else 
@@ -51,9 +45,6 @@ void cadabra::do_subtree(const Ex& tr, Ex::iterator it, std::function<void(Ex::i
 
 Ex::iterator cadabra::find_in_list(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f)
 	{
-	if(*it->name=="\\expression")
-		it=tr.begin(it);
-
    if(*it->name=="\\comma") {
 		Ex::sibling_iterator sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
@@ -72,8 +63,6 @@ Ex::iterator cadabra::find_in_list(const Ex& tr, Ex::iterator it, std::function<
 Ex cadabra::make_list(Ex el)
 	{
 	auto it=el.begin();
-	if(*it->name=="\\expression") 
-		it=el.begin(it);
 
 	if(*it->name!="\\comma")
 		el.wrap(it, str_node("\\comma"));

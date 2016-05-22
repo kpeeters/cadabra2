@@ -18,7 +18,7 @@ Algorithm::result_t take_match::apply(iterator& it)
 	{
 	// Push a copy of the expression onto the history stack.
 
-	auto wrap = rules.wrap(rules.begin(rules.begin()), str_node("\\arrow"));
+	auto wrap = rules.wrap(rules.begin(), str_node("\\arrow"));
 	rules.append_child(wrap, str_node("dummy"));
 
 	tr.push_history(rules);
@@ -35,8 +35,7 @@ Algorithm::result_t take_match::apply(iterator& it)
 			++sib;
 			}
 		}
-	iterator top=tr.begin();
-	cleanup_dispatch(kernel, tr, top);
+	cleanup_dispatch(kernel, tr, it);
 	
 	return result_t::l_applied;
 	}

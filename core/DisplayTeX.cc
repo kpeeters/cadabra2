@@ -1,4 +1,5 @@
 
+#include "Symbols.hh"
 #include "DisplayTeX.hh"
 #include "Algorithm.hh"
 #include "properties/LaTeXForm.hh"
@@ -24,7 +25,11 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	std::string parent=*tree.parent(it)->name;
 	std::string child =*it->name;
 
-	if(parent=="\\partial" && child=="\\sum") return true;
+	if(parent=="\\partial" && child=="\\sum") return false; // Always handled by the functional argument. Was: true;
+
+	if(parent=="\\int" && child=="\\sum") return true;
+
+	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum")) return  true;
 
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
@@ -46,7 +51,7 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 	if(der) {
 		// FIXME: this needs fine-tuning; there are more cases where
 		// no brackets are needed.
-		if((*arg->name).size()==1) return true;
+      if((*arg->name).size()==1 || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
 	return false;
 	}
@@ -185,13 +190,13 @@ void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br
 	{
 	switch(br) {
 		case str_node::b_none:
-			if(pr==str_node::p_none)     str << "(";
+			if(pr==str_node::p_none)     str << "\\left(";
 			else                         str << "{";
 			break;
 		case str_node::b_pointy: str << "\\<"; break;
-		case str_node::b_curly:  str << "\\{"; break;
-		case str_node::b_round:  str << "(";   break;
-		case str_node::b_square: str << "[";   break;
+		case str_node::b_curly:  str << "\\left\\{"; break;
+		case str_node::b_round:  str << "\\left(";   break;
+		case str_node::b_square: str << "\\left[";   break;
 		default :	return;
 		}
 	++(bracket_level);
@@ -201,13 +206,13 @@ void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 	{
 	switch(br) {
 		case str_node::b_none:   
-			if(pr==str_node::p_none)     str << ")";
+			if(pr==str_node::p_none)     str << "\\right)";
 			else                         str << "}";
 			break;
 		case str_node::b_pointy: str << "\\>"; break;
-		case str_node::b_curly:  str << "\\}"; break;
-		case str_node::b_round:  str << ")";   break;
-		case str_node::b_square: str << "]";   break;
+		case str_node::b_curly:  str << "\\right\\}"; break;
+		case str_node::b_round:  str << "\\right)";   break;
+		case str_node::b_square: str << "\\right]";   break;
 		default :	return;
 		}
 	--(bracket_level);
@@ -246,6 +251,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\components")     print_components(str, it);
 	else if(*it->name=="\\conditional")    print_conditional(str, it);
 	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
+	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
 	else                                   print_other(str, it);
 	}
 
@@ -301,6 +307,9 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 		print_multiplier(str, it);
 		}
 
+	if(needs_brackets(it)) 
+		str << "\\left(";
+
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
 	// If there is any sum as child, and if the sum children do not
 	// all have the same bracket type (different from b_none or b_no),
@@ -335,6 +344,10 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 			}
 		previous_bracket_=current_bracket_;
 		}
+
+	if(needs_brackets(it)) 
+		str << "\\right)";
+
 	}
 
 void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it) 
@@ -348,6 +361,8 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	while(ch!=tree.end(it)) {
+//		if(ch!=tree.begin(it))
+//			str << "%\n"; // prevent LaTeX overflow.
 		if(++steps==20) {
 			steps=0;
 			str << "%\n"; // prevent LaTeX overflow.
@@ -469,6 +484,15 @@ void DisplayTeX::print_relation(std::ostream& str, Ex::iterator it)
 	if(*it->name=="\\less")    str << " < ";
 	++sib;
 	dispatch(str, sib);
+	}
+
+void DisplayTeX::print_indexbracket(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	str << "\\left(";
+	dispatch(str, sib);
+	str << "\\right)";
+	print_children(str, it, 1);
 	}
 
 bool DisplayTeX::children_have_brackets(Ex::iterator ch) const

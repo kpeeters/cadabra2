@@ -62,7 +62,7 @@ bool integrate_by_parts::derivative_acting_on_arg(iterator der_it) const
 	
 	++der_it;
 	Ex_comparator comp(kernel.properties);
-	auto top=away_from.begin(away_from.begin());
+	auto top=away_from.begin();
 	while(der_it!=stop) {
 		if( comp.equal_subtree(der_it, top)==Ex_comparator::match_t::subtree_match) return true;
 		++der_it;

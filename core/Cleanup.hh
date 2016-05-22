@@ -58,7 +58,6 @@ void cleanup_dispatch_deep(const Kernel& k, Ex&, dispatcher_t disp=&cleanup_disp
 
 void cleanup_productlike(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_sumlike(const Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_expressionlike(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_derivative(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_components(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_numericalflat(const Kernel& k, Ex&, Ex::iterator& it);

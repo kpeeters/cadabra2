@@ -16,44 +16,62 @@ configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/
 include_directories(${PROJECT_BINARY_DIR}/core)
 
 # Determine what type of system we are on, for packaging.
-if(EXISTS "/etc/issue")
-   set(LINUX_NAME "")
-   file(READ "/etc/issue" LINUX_ISSUE)
+set(LINUX_NAME "")
+if(EXISTS "/etc/redhat-release")
+   file(READ "/etc/redhat-release" LINUX_ISSUE)
+   if(LINUX_ISSUE MATCHES "CentOS")
+       set(CPACK_GENERATOR "RPM")
+       set(CPACK_SYSTEM_NAME "centos")
+       message("-- This is a CentOS system")
+   endif(LINUX_ISSUE MATCHES "CentOS")
    if(LINUX_ISSUE MATCHES "Fedora")
-     set(CPACK_GENERATOR "RPM")      
-	  message("-- This is a Fedora system")
+       set(CPACK_GENERATOR   "RPM")
+       set(CPACK_SYSTEM_NAME "fedora")
+       message("-- This is a Fedora system")
    endif(LINUX_ISSUE MATCHES "Fedora")
-   if(LINUX_ISSUE MATCHES "Ubuntu")
-     set(CPACK_GENERATOR "DEB")
-	  message("-- This is an Ubuntu system")
-   endif(LINUX_ISSUE MATCHES "Ubuntu")
-   if(LINUX_ISSUE MATCHES "Mint")
-     set(CPACK_GENERATOR "DEB")
-	  message("-- This is a Linux Mint system")
-   endif(LINUX_ISSUE MATCHES "Mint")
-endif(EXISTS "/etc/issue")
+else(EXISTS "/etc/redhat-release")
+   if(EXISTS "/etc/issue")
+      file(READ "/etc/issue" LINUX_ISSUE)
+      if(LINUX_ISSUE MATCHES "Ubuntu")
+        set(CPACK_GENERATOR   "DEB")
+   	  set(CPACK_SYSTEM_NAME "trusty")
+   	  message("-- This is an Ubuntu system")
+      endif(LINUX_ISSUE MATCHES "Ubuntu")
+      if(LINUX_ISSUE MATCHES "Mint")
+        set(CPACK_GENERATOR "DEB")
+   	  message("-- This is a Linux Mint system")
+      endif(LINUX_ISSUE MATCHES "Mint")
+   endif(EXISTS "/etc/issue")
+endif(EXISTS "/etc/redhat-release")
 
-# Logic to build packages (RPM/DEB) using CPack.
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT_BINARY_DIR}/postinst")
+
+# Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
+# 
 include (InstallRequiredSystemLibraries)
 set(CPACK_PACKAGE_NAME           "cadabra2")
 set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/doc/license.txt")
+set(CPACK_RPM_PACKAGE_LICENSE    "GPLv3")
 set(CPACK_PACKAGE_VERSION_MAJOR  "${CADABRA_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR  "${CADABRA_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH  "${CADABRA_VERSION_BUILD}")
+set(CPACK_PACKAGE_VENDOR         "Kasper Peeters")
 set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
-set(CPACK_SYSTEM_NAME            "trusty")
 set(CPACK_STRIP_FILES            ON)
+set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
+set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
+set(CPACK_RPM_EXCLUDE_LIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "texlive, texlive-latex-extra, python-matplotlib, python-mpmath, dvipng, python-sympy")
+#xdg-desktop-menu install <install>/share/applications/MyApp.desktop
+
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python-matplotlib, python-mpmath, dvipng, python-sympy")
+set(CPACK_RPM_PACKAGE_REQUIRES   "python-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python-matplotlib, dvipng, texlive-latex")
+
 set(CPACK_DEBIAN_PACKAGE_SECTION "math")
+set(CPACK_RPM_PACKAGE_GROUP      "Applications/Productivity")
+
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "field-theory motivated computer algebra system")
-set(CPACK_PACKAGE_DESCRIPTION "Cadabra is a computer algebra system designed specifically for the
- solution of problems encountered in field theory. It has extensive
- functionality for tensor polynomial simplification including
- multi-term symmetries, fermions and anti-commuting variables,
- Clifford algebras and Fierz transformations, implicit coordinate
- dependence, multiple index types and many more. The input format is
- a subset of TeX. This is the 2.x series of the software.")
+set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/doc/description)
 include(CPack)
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)

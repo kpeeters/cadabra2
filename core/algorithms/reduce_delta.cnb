@@ -1,0 +1,76 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{reduce_delta}{Simplify a self-contracted generalised delta.}\n\nReduce a self-contracted generalised Kronecker delta symbol to a simpler\nexpression without self-contractions, according to\n\\begin{equation}\nn! \\, \\delta^{a_1\\cdots a_n}_{b_1\\cdots b_n}\\, \\delta^{b_1}_{a_1}\n\\cdots \\delta^{b_m}_{a_m} = \n\\Big[\\prod_{i=1}^m \\big( d-(n-i) \\big) \\Big]\n\\, (n-m)!\\, \\delta^{a_{m+1}\\cdots a_n}_{b_{m+1}\\cdots b_n}\\, .\n\\end{equation}\nHere is an example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{reduce_delta}{Simplify a self-contracted generalised delta.}\n\nReduce a self-contracted generalised Kronecker delta symbol to a simpler\nexpression without self-contractions, according to\n\\begin{equation}\nn! \\, \\delta^{a_1\\cdots a_n}_{b_1\\cdots b_n}\\, \\delta^{b_1}_{a_1}\n\\cdots \\delta^{b_m}_{a_m} = \n\\Big[\\prod_{i=1}^m \\big( d-(n-i) \\big) \\Big]\n\\, (n-m)!\\, \\delta^{a_{m+1}\\cdots a_n}_{b_{m+1}\\cdots b_n}\\, .\n\\end{equation}\nHere is an example:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property KroneckerDelta to~}\\delta\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left(m, n, q\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\delta_{m}\\,^{n}\\,_{n}\\,^{q}\\end{dmath*}"
+				}
+			],
+			"source" : "\\delta{#}::KroneckerDelta;\n{m,n,q}::Integer(0..3);\nex:=\\delta_{m}^{n}_{n}^{q};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{3}{2}\\delta_{m}\\,^{q}\\end{dmath*}"
+				}
+			],
+			"source" : "reduce_delta(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that this requires that the indices on the Kronecker\ndelta symbol also carry an \\prop{Integer} property to specify\ntheir range."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that this requires that the indices on the Kronecker\ndelta symbol also carry an \\prop{Integer} property to specify\ntheir range."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

@@ -86,7 +86,7 @@ def test06():
    R_{m n p q}::RiemannTensor;
    tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
    canonicalise(tst7)
-   assert(tst7)
+   assert(tst7==0)
    print('Test 06 passed')
 
 test06()
@@ -113,10 +113,10 @@ def test07():
    assert(tst8b==0)
    tst8c:= @(obj8a)-@(obj8c);
    collect_terms(_)
-   assert(tst8c)
+   assert(tst8c==0)
    tst8d:= @(obj8a)-@(obj8d);
    collect_terms(_)
-   assert(tst8d)
+   assert(tst8d==0)
    print('Test 07 passed')
    
 test07()
@@ -132,7 +132,7 @@ def test08():
    tst9:= @(obj9a)-@(obj9b);
    canonicalise(_)
    collect_terms(_)
-   assert(tst9)
+   assert(tst9==0)
    print('Test 08 passed')
    
 test08()
@@ -177,7 +177,7 @@ def test12():
    R_{m n p q}::RiemannTensor.
    tst11:= R_{a b c d} R_{e f k h} R_{i a j e} R_{b c d i} R_{f k h j};
    canonicalise(_)
-   assert(tst11)
+   assert(tst11==0)
    print('Test 12 passed')
    
 test12()
@@ -190,7 +190,7 @@ def test13():
    tst12:= k_a k_b zeta_{a b} - k_b k_a zeta_{a b};
    canonicalise(_)
    collect_terms(_)
-   assert(tst12)
+   assert(tst12==0)
    print('Test 13 passed')
    
 test13()
@@ -203,7 +203,7 @@ def test13b():
    canonicalise(_)
    tst13:= A_{b} A_{a} A_{a} - @(obj13);
    collect_terms(_)
-   assert(tst13)
+   assert(tst13==0)
    print('Test 13b passed')
    
 test13b()
@@ -216,7 +216,7 @@ def test14():
    canonicalise(_)
    tst14:= C1_{d5} *k3_{d5} * k3_{d6} * k3_{d6} - @(obj14);
    collect_terms(_)
-   assert(tst14)
+   assert(tst14==0)
    print('Test 14 passed')
    
 test14()
@@ -230,7 +230,7 @@ def test15():
    canonicalise(_)
    tst15:= q A_{d b c a} + @(obj15);
    collect_terms(_)
-   assert(tst15)
+   assert(tst15==0)
    print('Test 15 passed')
    
 test15()
@@ -245,7 +245,7 @@ def test16():
    canonicalise(_)
    tst16:= -dF5_{m n p q r s} * AA_{n p q m r s} - @(obj16);
    collect_terms(_)
-   assert(tst16)
+   assert(tst16==0)
    print('Test 16 passed')
    
 test16()
@@ -268,7 +268,7 @@ def test18():
    canonicalise(_)
    tst18:= tt_{a1 a2 a4 a5 a6 a7}*a + @(obj18);
    collect_terms(_)
-   assert(tst18)
+   assert(tst18==0)
    print('Test 18 passed')
    
 test18()
@@ -284,7 +284,7 @@ def test19():
    canonicalise(_)
    tst19:= a \delta_{b c} - @(obj19);
    collect_terms(_)
-   assert(tst19)
+   assert(tst19==0)
    print('Test 19 passed')
    
 test19()
@@ -298,7 +298,7 @@ def test20():
    obj20:= \diff{A_{m}}_{n} B_{n m} - \diff{A_{m}}_{n} B_{m n};
    canonicalise(_)
    collect_terms(_)
-   assert(obj20)
+   assert(obj20==0)
    print('Test 20 passed')
 
 test20()
@@ -322,7 +322,7 @@ def test22():
    canonicalise(_)
    tst22:= \diff{\phi}_{p} * \diff{g3_{m m1}}_{n} - @(obj22);
    collect_terms(_)
-   assert(tst22)
+   assert(tst22==0)
    print('Test 22 passed')
    
 test22()
@@ -335,21 +335,21 @@ def test23():
    A_{\mu\nu}::AntiSymmetric.
    obj23:= q*\diff{A_{\mu\nu}}_{\mu\nu};
    canonicalise(_)
-   assert(obj23)
+   assert(obj23==0)
    print('Test 23 passed')
    
 test23()
 
 def test24():
-   __cdbkernel__=create_scope()
-   \diff{#}::PartialDerivative.
-   A_{\mu\nu}::AntiSymmetric.
-   obj24:= \diff{A_{\mu\nu}}_{\rho\sigma} B^{\nu\mu};
-   canonicalise(_)
-   tst24:= - \diff{A_{\mu\nu}}_{\rho\sigma} B^{\mu\nu} - @(obj24);
-   collect_terms(_)
-   assert(tst24)
-   print('Test 24 passed')
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho,\sigma}::Indices(position=independent).
+    \diff{#}::PartialDerivative.
+    A_{\mu\nu}::AntiSymmetric.
+    obj24:= \diff{A_{\mu\nu}}_{\rho\sigma} B^{\nu\mu};
+    canonicalise(_)
+    tst24:= - \diff{A_{\mu\nu}}_{\rho\sigma} B^{\mu\nu} - @(obj24);
+    assert(tst24==0)
+    print('Test 24 passed')
    
 test24()
 
@@ -359,13 +359,12 @@ test24()
 def test25():
    __cdbkernel__=create_scope()
    \diff{#}::PartialDerivative.
-   {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector).
+   {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector,position=fixed).
    obj25:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
    canonicalise(_)
    tst25:= \diff{g_{m n}}_{p} * \diff{g_{r s}}_{p} * T^{m n r s} - @(obj25);
    rename_dummies(_)
-   collect_terms(_)
-   assert(tst25)
+   assert(tst25==0)
    print('Test 25 passed')
    
 test25()
@@ -373,13 +372,13 @@ test25()
 def test26():
    __cdbkernel__=create_scope()
    \diff{#}::PartialDerivative.
-   {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector).
+   {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector, position=fixed).
    obj26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
    canonicalise(_)
    tst26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{m n r s} - @(obj26);
    rename_dummies(_)
    collect_terms(_)
-   assert(tst26)
+   assert(tst26==0)
    print('Test 26 passed')
    
 test26()
@@ -397,7 +396,7 @@ def test27():
    canonicalise(_)
    tst27:= psi10001_{m} \Gamma_{s t u} psi10001_{n} H_{p q r} -@(obj27);
    collect_terms(_)
-   assert(tst27)
+   assert(tst27==0)
    print('Test 27 passed')
    
 test27()
@@ -412,7 +411,7 @@ def test28():
    canonicalise(_)
    tst28:= psi10001_{m} \Gamma_{s} psi10001_{n} H_{p q r} + @(obj28);
    collect_terms(_)
-   assert(tst28)
+   assert(tst28==0)
    print('Test 28 passed')
    
 test28()
@@ -428,7 +427,7 @@ def test29():
    canonicalise(_)
    tst28b:=  \bar{\psi_{m}} A B \Gamma_{n p} C \psi_{r} + @(obj28b);
    collect_terms(_)
-   assert(tst28b)
+   assert(tst28b==0)
    print('Test 28b passed')
    
 test29()
@@ -442,7 +441,7 @@ def test29b():
    dR_{m n p q r s}::Traceless.
    tst29:= dR_{m n p q r r};
    canonicalise(_)
-   assert(tst29)
+   assert(tst29==0)
    print('Test 29b passed')
    
 test29b()
@@ -460,7 +459,7 @@ def test30():
    canonicalise(_)
    tst30:= W_{a b c d} * W_{e f g h} * W_{i j k l} * \eps_{a b c d e f g h i j} * A_{k l} + @(obj30);
    collect_terms(_)
-   assert(tst30)
+   assert(tst30==0)
    print('Test 30 passed')
    
 test30()
@@ -480,7 +479,7 @@ def test31():
    canonicalise(_)
    tst31:= \bar{\psi_{m}} \Gamma_{n p q} \psi_{m} H_{n p q} - @(obj31);
    collect_terms(_)
-   assert(tst31)
+   assert(tst31==0)
    print('Test 31 passed')
    
 test31()
@@ -498,7 +497,7 @@ def test32():
    canonicalise(_)
    tst32:= HppT_{i j x} * \tenSp_{i b a} * \fiveSp_{j a} + @(obj32);
    collect_terms(_)
-   assert(tst32)
+   assert(tst32==0)
    print('Test 32 passed')
    
 test32()
@@ -524,7 +523,7 @@ def test34():
    A_{m? n?}::AntiSymmetric.
    tst34a:= A_{4 4};
    canonicalise(_)
-   assert(tst34a)
+   assert(tst34a==0)
    print('Test 34 passed')
    
 test34()
@@ -536,7 +535,7 @@ def test34b():
    canonicalise(_)
    rl:={ R_{m? m? n? p?} -> 0, R_{n? p? m? m?} -> 0 };
    substitute(tst34b, rl)
-   assert(tst34b)
+   assert(tst34b==0)
    print('Test 34b passed')
    
 test34b()
@@ -550,7 +549,7 @@ def test35b():
    canonicalise(_)
    tst35:= - \delta_{1 1}\delta_{2 2} - @(obj35);
    collect_terms(_)
-   assert(tst35)
+   assert(tst35==0)
    print('Test 35 passed')
    
 test35b()
@@ -565,7 +564,7 @@ def test36():
    canonicalise(_)
    tst36:= \Gamma_{a}^{b}_{c}^{d} + @(obj36);
    collect_terms(_)
-   assert(tst36)
+   assert(tst36==0)
    print('Test 36 passed')
    
 test36()
@@ -577,7 +576,7 @@ def test37():
    canonicalise(_)
    tst37:= B^{a} B_{a} A^{b} A_{b} - @(obj37);
    collect_terms(_)
-   assert(tst37)
+   assert(tst37==0)
    print('Test 37 passed')
    
 test37()
@@ -644,7 +643,7 @@ def test42():
    canonicalise(_)
    tst42:= \delta^{n}_{r} * \partial_{n}{u^{r}} - @(obj42);
    collect_terms(_)
-   assert(tst42)
+   assert(tst42==0)
    print('Test 42 passed')
    
 test42()
@@ -661,7 +660,7 @@ def test43():
    canonicalise(_)
    tst43:= A_{m n} \partial_{k}{ B^{m n} } - @(obj43);
    collect_terms(_)
-   assert(tst43)
+   assert(tst43==0)
    print('Test 43 passed')
    
 test43()
@@ -677,20 +676,20 @@ def test45():
    canonicalise(_)
    tst45a:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45a);
    collect_terms(_)
-   assert(tst45a)
+   assert(tst45a==0)
    obj45b:= \partial_{4 n}{ g_{4 p} } g_{m1 m} g^{m1 p};
    canonicalise(_)
    tst45b:= \partial_{4 n}{ g_{4 p} } g_{m}^{m1} g_{m1}^{p} - @(obj45b);
    collect_terms(_)
-   assert(tst45b)
+   assert(tst45b==0)
    obj45d:= A_{p} \partial_{n}{ g^{m1 p} } B_{m1};
    canonicalise(_)
    tst45d:= A_{m1} \partial_{n}{ g^{m1 p} } B_{p} - @(obj45d);
    collect_terms(_)
-   assert(tst45d)
+   assert(tst45d==0)
    print('Test 45d passed')
    
-test45()
+#test45()
 
 # Spinor indices
 
@@ -701,7 +700,7 @@ def test46():
    tst46:= \chi_{a} \psi^{a} + \chi^{a} \psi_{a};
    canonicalise(_)
    collect_terms(_)
-   assert(tst46)
+   assert(tst46==0)
    print('Test 46 passed')
    
 test46()
@@ -733,7 +732,18 @@ def test48():
    canonicalise(_)
    tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49);
    collect_terms(_)
-   assert(tst49)
+   assert(tst49==0)
    print('Test 48 passed')
    
 test48()
+
+def test49():
+   __cdbkernel__=create_scope()
+   A_{m? n?}::AntiSymmetric.
+   ex:=A_{4 m} + A_{m 4};
+   canonicalise(_);
+   assert(ex==0)
+
+test49()
+
+

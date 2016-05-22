@@ -254,8 +254,11 @@ class Ex_comparator {
 
 		int  can_swap(Ex::iterator one, Ex::iterator two, int subtree_comparison,
 						  bool ignore_implicit_indices=false);
-		int  can_move_adjacent(Ex::iterator prod, 
-									  Ex::sibling_iterator one, Ex::sibling_iterator two) ;
+
+		/// Determine whether object 'one' and 'two' can be moved next
+		/// to each other by moving either one or the other: if fix_one==true
+		/// the first node is kept fixed, otherwise the second node is kept fixed.
+		int  can_move_adjacent(Ex::iterator prod, Ex::sibling_iterator one, Ex::sibling_iterator two, bool fix_one=false) ;
 
 	protected:
 		const Properties& properties;
@@ -281,6 +284,7 @@ class Ex_comparator {
 /// Basic comparison operator for tree iterators, so we can use them as keys in maps.
 
 bool operator<(const Ex::iterator&, const Ex::iterator&);
+bool operator<(const Ex&, const Ex&);
 
 class Ex_is_equivalent {
 	public:

@@ -37,6 +37,8 @@ target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
 set(INSTALL_IMAGES_DIR    share/cadabra2/images  CACHE PATH "Installation directory for image files.")
+set(INSTALL_DESKTOP_DIR   share/applications     CACHE PATH "Installation directory for .desktop files.")
+set(INSTALL_ICONS_DIR     share/icons            CACHE PATH "Installation directory for icons.")
 
 install(DIRECTORY DESTINATION ${INSTALL_SHARE_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
@@ -44,8 +46,44 @@ install(DIRECTORY DESTINATION ${INSTALL_SHARE_DIR} DIRECTORY_PERMISSIONS OWNER_R
 install(DIRECTORY DESTINATION ${INSTALL_IMAGES_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_DESKTOP_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/64x64 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/256x256 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/64x64/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/256x256/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
+install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
 
 # Install programs.
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-gtk     DESTINATION bin)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra.png DESTINATION ${INSTALL_IMAGES_DIR})
+find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu REQUIRED)
 
+install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-gtk     DESTINATION bin)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2.png DESTINATION ${INSTALL_IMAGES_DIR})
+#xdg-desktop-menu messes up the file permissions, so we just install things by hand...
+#install(CODE "execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop)")
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/64x64/cadabra2.png     DESTINATION share/icons/hicolor/64x64/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2.png   DESTINATION share/icons/hicolor/256x256/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra2.svg           DESTINATION share/icons/hicolor/scalable/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop       DESTINATION share/applications)
+install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
+install(CODE     "execute_process(COMMAND chmod go+r ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/icon-theme.cache)")
