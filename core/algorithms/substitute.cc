@@ -67,9 +67,10 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
 
 bool substitute::can_apply(iterator st)
 	{
-	//std::cerr << "attempting to match at " << Ex(st) << std::endl;
+	// std::cerr << "attempting to match at " << Ex(st) << std::endl;
 
 	Ex::iterator found = cadabra::find_in_list(args, args.begin(), [&](Ex::iterator arrow) {
+			// std::cerr << "rule " << Ex(arrow) << std::endl;
 			comparator.clear();
 			iterator lhs=tr.begin(arrow);
 			if(*lhs->name=="\\conditional") {
@@ -105,6 +106,10 @@ bool substitute::can_apply(iterator st)
 
 			return args.end();
 		});
+//	if(found!=args.end())
+//		std::cerr << "rule working: " << Ex(found) << std::endl;
+//	else
+//		std::cerr << "rule not working, going to return " << (found!=args.end()) << std::endl;
 	
 	return found!=args.end();
 	}
@@ -128,7 +133,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement rule, and then replace nodes and subtrees in there
 	// based on how the pattern matching went.
    Ex repl(rhs);
-	repl.wrap(repl.begin(), str_node("\\expression"));
+//	repl.wrap(repl.begin(), str_node("\\expression"));
    index_map_t ind_free, ind_dummy, ind_forced;
 
 	if(rhs_contains_dummies[use_rule])
@@ -248,8 +253,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 	//std::cerr << "repl after: \n" << repl << std::endl;
 
 	// Remove the wrapping "\expression" node, not needed anymore.
-	repl.flatten(repl.begin());
-	repl.erase(repl.begin());
+//	repl.flatten(repl.begin());
+//	repl.erase(repl.begin());
 
 	repl.begin()->fl.bracket=st->fl.bracket;
 	bool rename_replacement_dummies_called=false;

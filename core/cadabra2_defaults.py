@@ -22,7 +22,7 @@ if sympy.__version__ != "unavailable":
     from sympy import factor
     from sympy import integrate
     from sympy import diff
-    from sympy import expand
+#    from sympy import expand
     from sympy import symbols
     from sympy import latex
     from sympy import sin, cos, tan, trigsimp
@@ -46,7 +46,7 @@ try:
 except ImportError:
     have_matplotlib=False
 
-import StringIO
+import io
 import base64
 
 # FIXME: it is not a good idea to have this pollute the global namespace.
@@ -57,7 +57,7 @@ import base64
 
 def display(obj):
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
-        imgstring = StringIO.StringIO()
+        imgstring = io.BytesIO()
         obj.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
@@ -65,7 +65,7 @@ def display(obj):
 
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
         f = obj.get_figure()
-        imgstring = StringIO.StringIO()
+        imgstring = io.BytesIO()
         f.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
@@ -74,7 +74,7 @@ def display(obj):
     elif hasattr(obj,'_backend'):
         if hasattr(obj._backend,'fig'):
             f = obj._backend.fig
-            imgstring = StringIO.StringIO()
+            imgstring = io.BytesIO()
             f.savefig(imgstring,format='png')
             imgstring.seek(0)
             b64 = base64.b64encode(imgstring.getvalue())
@@ -88,23 +88,31 @@ def display(obj):
 #        server.send("\\begin{dmath*}{}"+str(obj.to_list())+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Ex):
-        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        if 'server' in globals():
+            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        else:
+            print(obj.__str__());
 
     elif isinstance(obj, Property):
-        server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        if 'server' in globals():
+            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+        else:
+            print(obj.__str__())
 
     elif type(obj)==list:
-#        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
-         out="\\begin{dmath*}{}"
-         first=True
-         for elm in obj:
-             if first==False:
-                 out+=", "
-             else:
-                 first=False
-             out+=latex(obj)
-         out+="\\end{dmath*}"
-         server.send(out, "latex_view")
+        out="\\begin{dmath*}{}"
+        first=True
+        for elm in obj:
+            if first==False:
+                out+=", "
+            else:
+                first=False
+            if isinstance(elm, Ex):
+                out += elm._latex()
+            else:
+                out+=latex(elm)   # Sympy to the rescue for all other objects.
+        out+="\\end{dmath*}"
+        server.send(out, "latex_view")
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
         server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")

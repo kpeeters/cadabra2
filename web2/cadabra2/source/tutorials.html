@@ -47,25 +47,38 @@
   <a href="notebooks/for_previous_users.cnb">download notebook</a>
 </div>
 
-<h2>SymPy users</h2>
+<h2>Writing packages for Cadabra</h2>
 <p>
-  Cadabra relies on <a href="http://www.sympy.org">SymPy</a> for all
-  scalar computer algebra, that is, for all algebra on expressions
-  which do not involve indices. Here is a simple notebook to
-  illustrate the basic concepts. This may also be a useful read if you
-  want to use the Cadabra notebook interface just to work with Sympy.
+  One of the key reasons for the rewrite of Cadabra was to make it
+  much easier for users to contribute small bits of functionality. As
+  all of its internals are available via Python, it becomes much
+  easier to write small add-on packages, just like you can for other
+  computer algebra systems. 
+</p>
+<p>
+  A more step-by-step tutorial for writing packages will follow; for
+  the time being here are some smaller tutorials describing a number of
+  Cadabra programming concepts.
 </p>
 <div class="view_options">
-  <span>SymPy inside Cadabra:</span>
-  <a href="notebooks/scalar_manipulations.html">read online</a>
-  <a href="notebooks/scalar_manipulations.cnb">download notebook</a>
+  <span>Convergence of operations:</span>
+  <a href="notebooks/converge.html">read online</a>
+  <a href="notebooks/converge.cnb">download notebook</a>
 </div>
+
+
 
 
 <h2>Actions, equations of motion, variational derivatives</h2>
 <p>
   
 </p>
+<div class="view_options">
+  <span>Fierz transformations:</span>
+  <a href="notebooks/fierz.html">read online</a>
+  <a href="notebooks/fierz.cnb">download notebook</a>
+</div>
+
 
 <h2>Quantum mechanics, groups and algebras</h2>
 <p>
@@ -102,6 +115,20 @@
   <a href="notebooks/string_states.cnb">download notebook</a>
 </div>
 
+<h2>Abstract general relativity</h2>
+<p>
+  Cadabra was originally written in order to facilitate computations
+  in extensions of general relativity. The following example shows how
+  to prove a particular polynomial identity cubic in the Weyl tensor,
+  by virtue of its multi-term symmetries.
+</p>
+<div class="view_options">
+  <span>Bianchi identities:</span>
+  <a href="notebooks/bianchi_identities.html">read online</a>
+  <a href="notebooks/bianchi_identities.cnb">download notebook</a>
+</div>
+</p>
+
 <h2>Component computations</h2>
 <p>
   From version 2.x you can do abstract as well as component
@@ -117,8 +144,43 @@
   <a href="notebooks/schwarzschild.cnb">download notebook</a>
 </div>
 <p>
-  
+  Somewhat related to component computations is the concept of 
+  splitting a vector bundle into two parts, like you do in
+  Kaluza-Klein models. The following notebook is also discussed in the
+  original Cadabra
+  paper <a href="http://arxiv.org/abs/hep-th/0701238">hep-th/0701238</a>.
 </p>
+<div class="view_options">
+  <span>Kaluza-Klein:</span>
+  <a href="notebooks/kaluza_klein.html">read online</a>
+  <a href="notebooks/kaluza_klein.cnb">download notebook</a>
+</div>
+
+<h2>Plotting</h2>
+
+<p>
+  Cadabra's notebook now displays graphics from a variety of Python
+  sources; see the notebook below for some basic examples.
+</p>
+<div class="view_options">
+  <span>Plotting tutorial:</span>
+  <a href="notebooks/plotting.html">read online</a>
+  <a href="notebooks/plotting.cnb">download notebook</a>
+</div>
+
+<h2>SymPy users</h2>
+<p>
+  Cadabra relies on <a href="http://www.sympy.org">SymPy</a> for all
+  scalar computer algebra, that is, for all algebra on expressions
+  which do not involve indices. Here is a simple notebook to
+  illustrate the basic concepts. This may also be a useful read if you
+  want to use the Cadabra notebook interface just to work with Sympy.
+</p>
+<div class="view_options">
+  <span>SymPy inside Cadabra:</span>
+  <a href="notebooks/scalar_manipulations.html">read online</a>
+  <a href="notebooks/scalar_manipulations.cnb">download notebook</a>
+</div>
 
 
 <h2>Using Cadabra from IPython/Jupyter</h2>
@@ -135,18 +197,6 @@
   <span>Cadabra inside Jupyter:</span>
   <a href="static/cadabra_in_ipython.nb.html">read online</a>
   <a href="static/cadabra_in_ipython.nb">download notebook</a>
-</div>
-
-<h2>Plotting</h2>
-
-<p>
-  Cadabra's notebook now displays graphics from a variety of Python
-  sources; see the notebook below for some basic examples.
-</p>
-<div class="view_options">
-  <span>Plotting tutorial:</span>
-  <a href="notebooks/plotting.html">read online</a>
-  <a href="notebooks/plotting.cnb">download notebook</a>
 </div>
 
 {%- endblock %}

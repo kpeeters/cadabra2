@@ -9,6 +9,7 @@ def test01():
     ex:= \int{ \partial_{\mu}{ \epsilon^{\mu} \phi } }{x};
     integrate_by_parts(ex, $\epsilon$);
     assert(ex==0)
+    print('Test 01 passed')
 
 test01()
 
@@ -20,7 +21,8 @@ def test02():
     integrate_by_parts(ex, $\delta{\phi}$, repeat=True);
     tst:= \int{ \delta{\phi} \partial_{\mu}{  \phi \chi } }{x} + @(ex);
     assert(tst==0)
-
+    print('Test 02 passed')
+    
 test02()
     
 def test03():
@@ -30,7 +32,8 @@ def test03():
     integrate_by_parts(ex, $\delta{\phi}$);
     tst:= \int{ \partial_{\mu}{\phi \chi}  \delta{\phi} }{x} + @(ex);
     assert(tst==0)
-
+    print('Test 03 passed')
+    
 test03()
     
 def test04():
@@ -40,7 +43,8 @@ def test04():
     integrate_by_parts(ex, $\delta{\phi}$);
     tst:= \int{ -\partial_{\mu}{ \phi \chi } \delta{\phi} - \delta{\phi} \partial_{\mu}{ \phi \chi } }{x} - @(ex);
     assert(tst==0)
-
+    print('Test 04 passed')
+    
 test04()
 
 def test05():
@@ -50,5 +54,20 @@ def test05():
     integrate_by_parts(ex, $\delta{\phi}$);
     tst:=\int{ -\partial_{\mu}{ \phi \chi } \delta{\phi} \Phi \Chi - \phi \chi \delta{\phi} \partial_{\mu}{ \Phi \Chi} }{x} - @(ex);
     assert(tst==0)
-
+    print('Test 05 passed')
+    
 test05()
+
+def test06():
+    __cdbkernel__=create_scope();
+    x::Coordinate;
+    \phi::Depends(x);
+    \delta{\phi}::Depends(x);
+    \partial{#}::PartialDerivative;
+    ex:= -1/2 \int{m**2 \phi**2}{x};
+    vary(_, $\phi -> \delta{\phi}$);
+    tst:= - \int{m**2 \delta{\phi}\phi}{x} - @(ex);
+    assert(tst)
+    print('Test 06 passed')
+    
+test06()

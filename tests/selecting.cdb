@@ -1,10 +1,10 @@
 
 def test01():
-	 ex:=A + B D G + C D A;
-	 take_match(_, $D Q??$);
-	 substitute(_, $A = Q$);
-	 replace_match(_);
-	 tst:= A + B D G + C D Q - @(ex);
-	 assert(tst==0);
+    ex:=A + B D G + C D A;
+    take_match(_, $D Q??$);
+    substitute(_, $A = Q$);
+    replace_match(_);
+    tst:= A + B D G + C D Q - @(ex);
+    assert(tst==0);
 
 test01()

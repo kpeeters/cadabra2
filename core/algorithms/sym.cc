@@ -36,8 +36,8 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 	assert(*it->name=="\\prod");
 
 	// Setup combinations class. First construct original and block length.
-	sibling_iterator fst=objects.begin(objects.begin(objects.begin()));
-	sibling_iterator fnd=objects.end(objects.begin(objects.begin()));
+	sibling_iterator fst=objects.begin(objects.begin());
+	sibling_iterator fnd=objects.end(objects.begin());
 	raw_ints.clear();
 	raw_ints.block_length=0;
 	

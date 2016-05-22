@@ -1,0 +1,217 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{unwrap}{Move objects out of derivatives or accents.}\n\nMove objects out of \\prop{Derivative}s or \\prop{Accent}s when\nthey do not depend on these operators.  Accents will get removed from objects which do not depend on them, as\nin the following example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{unwrap}{Move objects out of derivatives or accents.}\n\nMove objects out of \\prop{Derivative}s or \\prop{Accent}s when\nthey do not depend on these operators.  Accents will get removed from objects which do not depend on them, as\nin the following example:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\hat{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Distributable to~}\\hat{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}B.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\hat{A+B+C}\\end{dmath*}"
+				}
+			],
+			"source" : "\\hat{#}::Accent;\n\\hat{#}::Distributable;\nB::Depends(\\hat);\n\nex:=\\hat{A+B+C};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\hat{A}+\\hat{B}+\\hat{C}\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "unwrap(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Derivatives will be set to zero if an object inside does not depend on\nit. All objects which are annihilated by the derivative operator are\nmoved to the front (taking into account anti-commutativity if necessary),"
+				}
+			],
+			"hidden" : true,
+			"source" : "Derivatives will be set to zero if an object inside does not depend on\nit. All objects which are annihilated by the derivative operator are\nmoved to the front (taking into account anti-commutativity if necessary),"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiCommuting to~}\\left(A, B, C, D\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\left(B, D\\right).\\end{dmath*}"
+				}
+			],
+			"source" : "\\partial{#}::PartialDerivative;\n{A,B,C,D}::AntiCommuting;\nx::Coordinate;\n{B,D}::Depends(\\partial);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{x}\\left(A B C D\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\partial_{x}{A B C D};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-A C \\partial_{x}\\left(B D\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "unwrap(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that a product remains inside the derivative; to expand that\nuse \\algo{prodrule}. Here is another example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that a product remains inside the derivative; to expand that\nuse \\algo{prodrule}. Here is another example:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}X.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial\\left(X Y Z\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "\\del{#}::LaTeXForm(\"\\partial\").\n\\del{#}::Derivative;\nX::Depends(\\del);\nex:=\\del{X*Y*Z};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial{X} Y Z+X \\partial{Y} Z+X Y \\partial{Z}\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial{X} Y Z\\end{dmath*}"
+				}
+			],
+			"source" : "unwrap(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that all objects are by default constants for the action of\n\\prop{Derivative} operators. If you want objects to stay inside\nderivative operators you have to explicitly declare that they depend\non the derivative operator or on the coordinate with respect to which\nyou take a derivative.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that all objects are by default constants for the action of\n\\prop{Derivative} operators. If you want objects to stay inside\nderivative operators you have to explicitly declare that they depend\non the derivative operator or on the coordinate with respect to which\nyou take a derivative.\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

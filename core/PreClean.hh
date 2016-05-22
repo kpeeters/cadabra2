@@ -24,10 +24,14 @@
 void pre_clean_dispatch(const Kernel& k, Ex&, Ex::iterator& it);
 void pre_clean_dispatch_deep(const Kernel& k, Ex&);
 
-// Cleanup for individual node types.  These are not needed during any
-// later stages of the manipulation of an expression (and are hence
-// defined here, not in 'Cleanup.hh').
+/// Cleanup for individual node types.  These are not needed during any
+/// later stages of the manipulation of an expression (and are hence
+/// defined here, not in 'Cleanup.hh').
 
 void cleanup_rational(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_frac(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_sub(const Kernel& k, Ex&, Ex::iterator& it);
+
+/// Convert parser output which indicates an indexbracket to an actual
+/// indexbracket node.
+void cleanup_indexbracket(const Kernel& k, Ex&, Ex::iterator& it);

@@ -86,7 +86,6 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 			break;
 			}
 		case Position::previous: {
-			std::cerr << "previous " << ref->textbuf << std::endl;
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(--sib)) {
 				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {

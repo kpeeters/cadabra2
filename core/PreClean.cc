@@ -8,6 +8,8 @@ void pre_clean_dispatch(const Kernel& kernel, Ex& ex, Ex::iterator& it)
 	
 	if(*it->name=="\\frac")     cleanup_frac(kernel, ex, it);
 	else if(*it->name=="\\sub") cleanup_sub(kernel, ex, it);
+
+	cleanup_indexbracket(kernel, ex, it);
 	}
 
 void pre_clean_dispatch_deep(const Kernel& k, Ex& tr)
@@ -105,6 +107,46 @@ void cleanup_sub(const Kernel& k, Ex& tr, Ex::iterator& it)
 		multiply(sit->multiplier, *it->multiplier);
 		tr.flatten(it);
 		it=tr.erase(it);
+		}
+	}
+
+void cleanup_indexbracket(const Kernel& k, Ex& tr, Ex::iterator& it)
+	{
+	if((*it->name).size()==0) {
+		auto sib=tr.begin(it);
+		if(sib->fl.parent_rel!=str_node::p_super && sib->fl.parent_rel!=str_node::p_sub) {
+			++sib;
+			while(sib!=tr.end(it)) {
+				if(sib->fl.parent_rel==str_node::p_super || sib->fl.parent_rel==str_node::p_sub) {
+					it->name=name_set.insert("\\indexbracket").first;
+					return;
+					}
+				++sib;
+				}
+			}
+		}
+	else if(*it->name=="\\prod" || *it->name=="\\sum") {
+		auto sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
+			if(sib->fl.parent_rel==str_node::p_super || sib->fl.parent_rel==str_node::p_sub) {
+				auto ibrack=tr.insert(it,str_node("\\indexbracket"));
+				Ex::sibling_iterator nxt=it;
+				++nxt;
+				tr.reparent(ibrack,Ex::sibling_iterator(it),nxt);
+				it=tr.begin(ibrack);
+				auto sib=tr.begin(it);
+				while(sib!=tr.end(it)) {
+					if(sib->fl.parent_rel==str_node::p_super || sib->fl.parent_rel==str_node::p_sub) {
+						tr.append_child(ibrack,*sib);
+						sib=tr.erase(sib);
+						}
+					else ++sib;
+					}
+				it=ibrack;
+				return;
+				}
+			++sib;
+			}
 		}
 	}
 

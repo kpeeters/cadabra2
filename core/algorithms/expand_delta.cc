@@ -20,8 +20,8 @@ bool expand_delta::can_apply(iterator st)
 
 Algorithm::result_t expand_delta::apply(iterator& st)
 	{
-	Ex rep;
-	iterator sum=tr.insert(rep.begin(), str_node("\\sum"));
+	Ex rep("\\sum");
+	iterator sum=rep.begin();
 	combin::combinations<str_node> ci;
 
 	std::vector<iterator> remove_these;
@@ -151,21 +151,13 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 		rep.flatten(sum);
 		rep.erase(sum);
 		}
-	iterator reploc=tr.replace(st, rep.begin());
-	if(*reploc->name=="\\sum" && *(tr.parent(reploc)->name)=="\\sum") {
-		tr.flatten(reploc);
-		reploc=tr.erase(reploc);
-		}
-	else if(*(tr.parent(reploc)->name)=="\\prod") {
-		cleanup_dispatch(kernel, tr, reploc);
-		}
-	
+	st=tr.replace(st, rep.begin());
+	cleanup_dispatch(kernel, tr, st);
+
 	// remove the stuff we added
 //	for(unsigned int i=0; i<remove_these.size(); ++i)
 //		tr.erase(remove_these[i]);
 
-
-	st=reploc;
 	return result_t::l_applied;
 	}
 

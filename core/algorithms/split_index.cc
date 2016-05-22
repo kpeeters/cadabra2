@@ -4,7 +4,7 @@
 split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	: Algorithm(k, tr), part1_is_number(false), part2_is_number(false)
 	{
-	iterator top=triple.begin(triple.begin());
+	iterator top=triple.begin();
 	if(*(top->name)!="\\comma") {
 		std::cout << "not comma" << std::endl;		
 		throw ArgumentException("split_index: Need a list of three index names.");
@@ -31,7 +31,6 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	if(full_class && (part1_is_number || part1_class) && (part2_is_number || part2_class) )
 		return;
 	
-	std::cout << "no type" << std::endl;
 	throw ArgumentException("split_index: The index types of (some of) these indices are not known.");
 	}
 
