@@ -64,7 +64,7 @@ set(CPACK_RPM_EXCLUDE_LIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/li
 
 #xdg-desktop-menu install <install>/share/applications/MyApp.desktop
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python-matplotlib, python-mpmath, dvipng, python-sympy")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
 set(CPACK_RPM_PACKAGE_REQUIRES   "python-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python-matplotlib, dvipng, texlive-latex")
 
 set(CPACK_DEBIAN_PACKAGE_SECTION "math")
