@@ -29,7 +29,7 @@ Cadabra::Cadabra(int argc, char **argv)
 	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
 	  compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
-	windows.push_back(new cadabra::NotebookWindow());
+	windows.push_back(new cadabra::NotebookWindow(this));
 	compute.set_master(windows[0], windows[0]);
 
 	// Connect the two threads.
@@ -140,3 +140,10 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	Gtk::Application::on_open(files, hint);
 	}
 
+void Cadabra::open_help(const std::string& nm) 
+	{
+	std::cerr << "opening help file " << nm << std::endl;
+	windows.push_back(new cadabra::NotebookWindow(this));
+	windows[1]->load_file(nm);
+	windows[1]->show();
+	}
