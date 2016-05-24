@@ -26,6 +26,8 @@
 /// \ingroup frontend
 /// Notebook user interface implemented using gtkmm.
 
+class Cadabra;
+
 namespace cadabra {
 	
 	/// \ingroup gtkmm
@@ -35,7 +37,7 @@ namespace cadabra {
 
    class NotebookWindow : public Gtk::Window, public DocumentThread, public GUIBase {
       public:
-         NotebookWindow();
+         NotebookWindow(Cadabra *);
          ~NotebookWindow();
         
          // Virtual functions from GUIBase.
@@ -73,6 +75,7 @@ namespace cadabra {
 			DTree::iterator current_cell;
 
       private:
+			Cadabra *cdbapp;
 
 			// Main handler which fires whenever the Client object signals 
 			// that the document is changing or the network status is modified.
@@ -147,6 +150,7 @@ namespace cadabra {
 			void on_run_stop();
 
 			void on_help_about();
+			void on_help() const;
 
 			void on_kernel_restart();
 

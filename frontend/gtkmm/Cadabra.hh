@@ -12,6 +12,8 @@ class Cadabra : public Gtk::Application {
 	public:
 		static Glib::RefPtr<Cadabra> create(int, char **);
 
+		void open_help(const std::string&);
+
 	protected:
 		Cadabra(int, char**);
 		virtual ~Cadabra();
