@@ -24,7 +24,7 @@ if(APPLE)
 else()
    find_package(PythonLibs 3.4 REQUIRED)
 endif()
-
+message("-- Python version = ${PYTHONLIBS_VERSION_STRING}")
 
 # Locate Boost and Boost.Python.
 set(Boost_USE_STATIC_LIBS OFF)
@@ -32,7 +32,11 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(Boost 1.54.0 COMPONENTS python3)
 if(NOT Boost_PYTHON3_FOUND)
-  find_package(Boost 1.54.0 COMPONENTS python-py34 REQUIRED)
+  if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.4")
+    find_package(Boost 1.54.0 COMPONENTS python-py34 REQUIRED)
+  else()
+    find_package(Boost 1.54.0 COMPONENTS python-py35 REQUIRED)
+  endif()
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
