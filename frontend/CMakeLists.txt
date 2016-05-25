@@ -38,8 +38,12 @@ install(FILES
 
 install(SCRIPT   ${PROJECT_SOURCE_DIR}/latex/install.cmake)
 
+set(INSTALL_MAN_DIR      "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual")
 set(INSTALL_MAN_ALGO_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual/algorithms")
 set(INSTALL_MAN_PROP_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual/properties")
+install(DIRECTORY DESTINATION ${INSTALL_MAN_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
 install(DIRECTORY DESTINATION ${INSTALL_MAN_ALGO_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)

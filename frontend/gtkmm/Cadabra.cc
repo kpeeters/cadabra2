@@ -1,6 +1,7 @@
 
 #include "Cadabra.hh"
 #include <signal.h>
+#include <fstream>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/entry.h>
 #if GTKMM_MINOR_VERSION < 10
@@ -142,8 +143,10 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 
 void Cadabra::open_help(const std::string& nm) 
 	{
-	std::cerr << "opening help file " << nm << std::endl;
 	windows.push_back(new cadabra::NotebookWindow(this));
-	windows[1]->load_file(nm);
+	std::ifstream fl(nm);
+	std::stringstream buffer;
+	buffer << fl.rdbuf();
+	windows[1]->load_file(buffer.str());
 	windows[1]->show();
 	}
