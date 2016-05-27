@@ -1,0 +1,118 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "It is possible to manipulate parts of an expression using standard Python methods to \naddress the $n$-th term or factor. For example,"
+				}
+			],
+			"hidden" : true,
+			"source" : "It is possible to manipulate parts of an expression using standard Python methods to \naddress the $n$-th term or factor. For example,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m}+B_{m}+C_{m}+D_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A_{m}+B_{m}+C_{m}+D_{m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}4\\end{verbatim}"
+				}
+			],
+			"source" : "len(ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}Q_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex[2]=$Q_{m}$;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m}+B_{m}+Q_{m}+D_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "If you address a term which does not exist, an exception will be thrown:"
+				}
+			],
+			"hidden" : true,
+			"source" : "If you address a term which does not exist, an exception will be thrown:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n<class 'cadabra2.ArgumentException'>: index 5 out of range, must be smaller than 4\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "ex[5]=$Q_{m}$;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nBoost.Python.ArgumentError: Python argument types in\n    Ex.__getitem__(Ex, slice)\ndid not match C++ signature:\n    __getitem__(Ex {lvalue}, int)\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "ex[2:3];"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

@@ -35,8 +35,7 @@ Algorithm::result_t take_match::apply(iterator& it)
 			++sib;
 			}
 		}
-	iterator top=tr.begin();
-	cleanup_dispatch(kernel, tr, top);
+	cleanup_dispatch(kernel, tr, it);
 	
 	return result_t::l_applied;
 	}

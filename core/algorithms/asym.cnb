@@ -1,0 +1,124 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{asym}{Anti-symmetrise or symmetrise an expression in indicated indices or arguments}\n\nAnti-symmetrise or symmetrise (depending on the \\verb|antisymmetric| flag) a product or tensor in the indicated objects.\nThis works both with normal objects and with indices. An example of the former:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{asym}{Anti-symmetrise or symmetrise an expression in indicated indices or arguments}\n\nAnti-symmetrise or symmetrise (depending on the \\verb|antisymmetric| flag) a product or tensor in the indicated objects.\nThis works both with normal objects and with indices. An example of the former:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B C\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A B C;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{6}A B C - \\frac{1}{6}A C B - \\frac{1}{6}B A C+\\frac{1}{6}B C A+\\frac{1}{6}C A B - \\frac{1}{6}C B A\\end{dmath*}"
+				}
+			],
+			"source" : "asym(_, $A,B,C$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "When used with indices, remember to also\nindicate whether you want to symmetrise upper or lower indices, as in\nthe example below."
+				}
+			],
+			"hidden" : true,
+			"source" : "When used with indices, remember to also\nindicate whether you want to symmetrise upper or lower indices, as in\nthe example below."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n} B_{p}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A_{m n} B_{p};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{6}A_{m n} B_{p} - \\frac{1}{6}A_{m p} B_{n} - \\frac{1}{6}A_{n m} B_{p}+\\frac{1}{6}A_{n p} B_{m}+\\frac{1}{6}A_{p m} B_{n} - \\frac{1}{6}A_{p n} B_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "asym(_, $_{m}, _{n}, _{p}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "If you want to \\emph{symmetrise} in the indicated objects instead, use the \\verb|antisymmetric=False| flag:"
+				}
+			],
+			"hidden" : true,
+			"source" : "If you want to \\emph{symmetrise} in the indicated objects instead, use the \\verb|antisymmetric=False| flag:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n} B_{p}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{1}{6}A_{m n} B_{p}+\\frac{1}{6}A_{m p} B_{n}+\\frac{1}{6}A_{n m} B_{p}+\\frac{1}{6}A_{n p} B_{m}+\\frac{1}{6}A_{p m} B_{n}+\\frac{1}{6}A_{p n} B_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A_{m n} B_{p};\nasym(_, $_{m}, _{n}, _{p}$, antisymmetric=False);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

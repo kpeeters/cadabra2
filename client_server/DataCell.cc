@@ -81,6 +81,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	boost::regex prop(R"(\\prop\{([^\}]*)\})");
 	boost::regex underscore(R"(\\_)");
 	boost::regex e_aigu(R"(\\'e)");
+	boost::regex ldots(R"(\$\\ldots\$)");
 
 	std::string res;
 
@@ -105,6 +106,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = boost::regex_replace(res, latex, "LaTeX");
 		res = boost::regex_replace(res, tex, "TeX");
 		res = boost::regex_replace(res, e_aigu, "é");
+		res = boost::regex_replace(res, ldots, "...");
 		}
 	catch(boost::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;

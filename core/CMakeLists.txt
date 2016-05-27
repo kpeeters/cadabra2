@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 2.8)
 
 project(Cadabra)
@@ -15,20 +16,28 @@ endif(POLICY CMP0042)
 # to the Apple-supplied Python libraries. We need the Homebrew
 # installed ones. In order to achieve this, we use CMake scripts which
 # were taken from Nikolaus Dremmel's repo at github.com/NikolausDemmel/CMake.
+set(Python_ADDITIONAL_VERSIONS 3.4)
+set(PythonInterp_ADDITIONAL_VERSIONS 3.4)
+find_package(PythonInterp 3.4 REQUIRED)
 if(APPLE)
-   find_package(PythonLibsOSX 2.7 REQUIRED)
+   find_package(PythonLibsOSX 3.4 REQUIRED)
 else()
-   find_package(PythonLibs 2.7 REQUIRED)
+   find_package(PythonLibs 3.4 REQUIRED)
 endif()
-find_package(PythonInterp REQUIRED)
-
+message("-- Python version = ${PYTHONLIBS_VERSION_STRING}")
 
 # Locate Boost and Boost.Python.
-find_package(Boost 1.45.0)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.45.0 COMPONENTS python)
+find_package(Boost 1.54.0 COMPONENTS python3)
+if(NOT Boost_PYTHON3_FOUND)
+  if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.4")
+    find_package(Boost 1.54.0 COMPONENTS python-py34 REQUIRED)
+  else()
+    find_package(Boost 1.54.0 COMPONENTS python-py35 REQUIRED)
+  endif()
+endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
@@ -37,10 +46,11 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 #	 add_definitions("-Wno-potentially-evaluated-expression")
 endif()
 
+
+
 # Locate gmpxx
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)
-FIND_PACKAGE(PythonLibs REQUIRED)
 message("-- Found gmp ${GMP_LIB}")
 message("-- Found gmpxx ${GMPXX_LIB}")
 message("-- Found python ${PYTHON_LIBRARIES}")
@@ -54,7 +64,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
 
-set(LOCAL_SRC_FILES 
+set(LOCAL_SRC_FILES
   PythonCdb.cc
   Algorithm.cc
   Cleanup.cc
@@ -140,6 +150,7 @@ set(LOCAL_SRC_FILES
   algorithms/expand.cc
   algorithms/expand_delta.cc
   algorithms/expand_diracbar.cc
+  algorithms/expand_power.cc
   algorithms/factor_in.cc
   algorithms/factor_out.cc
   algorithms/fierz.cc
@@ -152,6 +163,7 @@ set(LOCAL_SRC_FILES
   algorithms/lr_tensor.cc
   algorithms/order.cc
   algorithms/product_rule.cc
+  algorithms/reduce_delta.cc
   algorithms/rename_dummies.cc
   algorithms/sort_product.cc
   algorithms/split_index.cc
@@ -175,7 +187,7 @@ set(IMAGES
 )
 
 if("${PYTHON_SITE_PATH}" STREQUAL "")
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print site.getsitepackages()[0];"
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
                   OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
@@ -200,13 +212,10 @@ set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}"
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} )
 
-install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                        GROUP_READ GROUP_EXECUTE 
+install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                                                        GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
 
-install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                        GROUP_READ GROUP_EXECUTE 
+install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                                                        GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
-
-
-
