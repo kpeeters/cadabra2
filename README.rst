@@ -30,12 +30,13 @@ graphical interface are available.
 Installation
 -------------
 
-:ref:`debian`
-:ref:`fedora`
-:ref:`arch`
-:ref:`osx`
+Cadabra builds on Linux and OS X, select your distribution below:
 
-.. _debian
+`Linux (Debian/Ubuntu/Mint)`_
+`Linux (Fedora/CentOS/Scientific Linux)`_
+`Linux (Arch/Manjaro)`_
+`Mac OS X`_
+
 
 Linux (Debian/Ubuntu/Mint)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,7 +69,6 @@ and the Gtk notebook interface::
 You can also find the latter in the 'Education' menu.
 
 
-.. _fedora
 Linux (Fedora/CentOS/Scientific Linux)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -100,7 +100,6 @@ and the Gtk notebook interface::
 You can also find the latter in the 'Education' menu.
 
 
-.. _arch
 Linux (Arch/Manjaro)
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -121,10 +120,9 @@ Please consult the `Arch Wiki
 <https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages>`
 for more information regarding installing packages from the AUR.
 
-.. _osx
 
-OS X
-~~~~~
+Mac OS X
+~~~~~~~~
 
 Cadabra builds with the standard Apple compiler, but in order to
 build on OS X you need a number of packages from Homebrew (see
