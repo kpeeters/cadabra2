@@ -10,13 +10,12 @@ Cadabra
 
 Kasper Peeters
 
-**end user documentation**: http://cadabra.science/
+- End-user documentation at http://cadabra.science/
+- Source code documentation at http://kpeeters.github.io/cadabra2
 
-**source code documentation**: http://kpeeters.github.io/cadabra2
-
-This repository holds the 2.x series of the Cadabra computer
-algebra system. It is slowly getting ready for public consumption, but 
-expect some rough edges.
+This repository holds the 2.x series of the Cadabra computer algebra
+system. It is slowly getting ready for public consumption, but expect
+some rough edges.
 
 Cadabra was designed specifically for the solution of problems
 encountered in quantum and classical field theory. It has extensive
@@ -30,12 +29,16 @@ graphical interface are available.
 Installation
 -------------
 
-Cadabra builds on Linux and OS X, select your distribution below:
+Cadabra builds on Linux and Mac OS X, select your distribution below:
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora/CentOS/Scientific Linux)`_
 - `Linux (Arch/Manjaro)`_
 - `Mac OS X`_
+
+Binaries for all these platforms will be provided as soon as we get to
+a somewhat more stable state; for the time being you need to compile
+from source.
 
 
 Linux (Debian/Ubuntu/Mint)
@@ -58,7 +61,7 @@ done with the standard::
     make
     sudo make install
 
-This will produce the command line app ``cadabra`` and the Gtk
+This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra-gtk``. You can also find the latter in
 the 'Education' menu.
 
@@ -83,7 +86,7 @@ compiler. Building is then done with the standard::
     make
     sudo make install
 
-This will produce the command line app ``cadabra`` and the Gtk
+This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra-gtk``. You can also find the latter in
 the 'Education' menu.
 
@@ -142,7 +145,7 @@ done with the standard::
     make
     sudo make install
 
-This will produce the command line app ``cadabra`` and the Gtk
+This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra-gtk``. 
 
 I am still planning a native OS X interface, but because building the
