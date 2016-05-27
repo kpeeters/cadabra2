@@ -30,12 +30,13 @@ graphical interface are available.
 Installation
 -------------
 
-[Linux (Debian/Ubuntu/Mint)](#debian)
-[Linux (Fedora/CentOS/Scientific Linux)](#fedora)
-[Linux (Arch/Manjaro)](#arch)
-[Mac OS X](#os-x)
+:ref:`debian`
+:ref:`fedora`
+:ref:`arch`
+:ref:`osx`
 
-#debian
+.. _debian
+
 Linux (Debian/Ubuntu/Mint)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -67,7 +68,7 @@ and the Gtk notebook interface::
 You can also find the latter in the 'Education' menu.
 
 
-#fedora
+.. _fedora
 Linux (Fedora/CentOS/Scientific Linux)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -99,7 +100,7 @@ and the Gtk notebook interface::
 You can also find the latter in the 'Education' menu.
 
 
-#arch
+.. _arch
 Linux (Arch/Manjaro)
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -120,8 +121,9 @@ Please consult the `Arch Wiki
 <https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages>`
 for more information regarding installing packages from the AUR.
 
+.. _osx
 
-#OS X
+OS X
 ~~~~~
 
 Cadabra builds with the standard Apple compiler, but in order to
