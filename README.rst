@@ -32,10 +32,10 @@ Installation
 
 Cadabra builds on Linux and OS X, select your distribution below:
 
-`Linux (Debian/Ubuntu/Mint)`_
-`Linux (Fedora/CentOS/Scientific Linux)`_
-`Linux (Arch/Manjaro)`_
-`Mac OS X`_
+- `Linux (Debian/Ubuntu/Mint)`_
+- `Linux (Fedora/CentOS/Scientific Linux)`_
+- `Linux (Arch/Manjaro)`_
+- `Mac OS X`_
 
 
 Linux (Debian/Ubuntu/Mint)
