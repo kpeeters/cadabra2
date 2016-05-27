@@ -4,6 +4,7 @@ var searchData=
   ['canvasses',['canvasses',['../classcadabra_1_1NotebookWindow.html#a89ac590b0219421ed3d269e37d5b2962',1,'cadabra::NotebookWindow::canvasses()'],['../classcadabra__osx_1_1NotebookWindow.html#a074f9bde697f21aad1da8b94600767c0',1,'cadabra_osx::NotebookWindow::canvasses()']]],
   ['catcherr',['catchErr',['../classServer.html#a195296c36ba24a8be42aa82526512234',1,'Server']]],
   ['catchout',['catchOut',['../classServer.html#a6cd039ca30457f8fdcd52ba539afb96f',1,'Server']]],
+  ['cdbapp',['cdbapp',['../classcadabra_1_1NotebookWindow.html#a4fd6f612e55a08ba606c98b5d7e4ff4c',1,'cadabra::NotebookWindow']]],
   ['cell_5fgot_5ffocus',['cell_got_focus',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#ad8e3a0fcdc1b1f15281bb57dc184ac2b',1,'cadabra::CodeInput::exp_input_tv']]],
   ['cell_5fid',['cell_id',['../classServer_1_1Block.html#a289fdbb8ab64e345c28bbf9bd28a485d',1,'Server::Block']]],
   ['cell_5ftype',['cell_type',['../classcadabra_1_1DataCell.html#a11fa696a6f554b5c8d2395564bcb9a01',1,'cadabra::DataCell']]],

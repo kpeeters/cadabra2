@@ -46,7 +46,7 @@ var searchData=
   ['notebookcontroller_2eh',['NotebookController.h',['../NotebookController_8h.html',1,'']]],
   ['notebookcontroller_2emm',['NotebookController.mm',['../NotebookController_8mm.html',1,'']]],
   ['notebookwindow',['NotebookWindow',['../classcadabra_1_1NotebookWindow.html',1,'cadabra']]],
-  ['notebookwindow',['NotebookWindow',['../classcadabra_1_1NotebookWindow.html#a6b4849a0d555c32fb991da7f8381cee2',1,'cadabra::NotebookWindow::NotebookWindow()'],['../classcadabra__osx_1_1NotebookWindow.html#a946f38cf44d08ec86f75d1844f55696c',1,'cadabra_osx::NotebookWindow::NotebookWindow()']]],
+  ['notebookwindow',['NotebookWindow',['../classcadabra_1_1NotebookWindow.html#a3ce3f702eea1636dcb3f933a2c217f95',1,'cadabra::NotebookWindow::NotebookWindow()'],['../classcadabra__osx_1_1NotebookWindow.html#a946f38cf44d08ec86f75d1844f55696c',1,'cadabra_osx::NotebookWindow::NotebookWindow()']]],
   ['notebookwindow',['NotebookWindow',['../classcadabra__osx_1_1NotebookWindow.html',1,'cadabra_osx']]],
   ['notebookwindow_2ecc',['NotebookWindow.cc',['../NotebookWindow_8cc.html',1,'']]],
   ['notebookwindow_2ehh',['NotebookWindow.hh',['../gtkmm_2NotebookWindow_8hh.html',1,'']]],
