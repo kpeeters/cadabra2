@@ -93,7 +93,7 @@ You can also find the latter in the 'Education' menu.
 
 
 Linux (Arch/Manjaro)
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 The development package for Arch Linux is `cadabra2-git
 <https://aur.archlinux.org/packages/cadabra2-git/>`.  Building and
