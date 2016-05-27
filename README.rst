@@ -103,8 +103,8 @@ You can also find the latter in the 'Education' menu.
 Linux (Arch/Manjaro)
 ~~~~~~~~~~~~~~~~~~~~
 
-The development package for Arch Linux is `cadabra2-git
-<https://aur.archlinux.org/packages/cadabra2-git/>`.  Building and
+The development package for Arch Linux is cadabra2-git
+https://aur.archlinux.org/packages/cadabra2-git/.  Building and
 installing (including dependencies) can be accomplished with::
 
     yaourt -Sy cadabra2-git
@@ -116,8 +116,8 @@ Alternatively use ``makepkg``::
     cd cadabra2-git
     makepkg -sri
 
-Please consult the `Arch Wiki
-<https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages>`
+Please consult the Arch Wiki
+https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages
 for more information regarding installing packages from the AUR.
 
 
