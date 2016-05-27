@@ -33,7 +33,7 @@ Installation
 [Linux (Debian/Ubuntu/Mint)](#debian)
 [Linux (Fedora/CentOS/Scientific Linux)](#fedora)
 [Linux (Arch/Manjaro)](#arch)
-[Mac OS X](#osx)
+[Mac OS X](#os-x)
 
 #debian
 Linux (Debian/Ubuntu/Mint)
@@ -121,9 +121,8 @@ Please consult the `Arch Wiki
 for more information regarding installing packages from the AUR.
 
 
-#osx
-OS X
-~~~~
+#OS X
+~~~~~
 
 Cadabra builds with the standard Apple compiler, but in order to
 build on OS X you need a number of packages from Homebrew (see
