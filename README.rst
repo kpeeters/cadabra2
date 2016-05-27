@@ -30,6 +30,12 @@ graphical interface are available.
 Installation
 -------------
 
+[Linux (Debian/Ubuntu/Mint)](#debian)
+[Linux (Fedora/CentOS/Scientific Linux)](#fedora)
+[Linux (Arch/Manjaro)](#arch)
+[Mac OS X](#osx)
+
+#debian
 Linux (Debian/Ubuntu/Mint)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -61,6 +67,7 @@ and the Gtk notebook interface::
 You can also find the latter in the 'Education' menu.
 
 
+#fedora
 Linux (Fedora/CentOS/Scientific Linux)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -92,6 +99,7 @@ and the Gtk notebook interface::
 You can also find the latter in the 'Education' menu.
 
 
+#arch
 Linux (Arch/Manjaro)
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -113,6 +121,7 @@ Please consult the `Arch Wiki
 for more information regarding installing packages from the AUR.
 
 
+#osx
 OS X
 ~~~~
 
