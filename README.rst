@@ -8,7 +8,7 @@ Cadabra
 
 *A field-theory motivated approach to computer algebra.*
 
-Kasper Peeters
+Kasper Peeters <info@cadabra.science>
 
 - End-user documentation at http://cadabra.science/
 - Source code documentation at http://kpeeters.github.io/cadabra2
@@ -167,7 +167,7 @@ also be generated locally; you will need (on Debian and derivatives)::
 
     sudo apt-get install doxygen libjs-mathjax  
 
-For any questions, please contact mailto:info@cadabra.science .
+For any questions, please contact info@cadabra.science .
 
 
 
