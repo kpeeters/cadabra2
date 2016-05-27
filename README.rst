@@ -48,7 +48,7 @@ done with the standard::
     cd build
     cmake ..
     make
-	 sudo make install
+    sudo make install
 
 This will produce the command line app::
 
@@ -79,7 +79,7 @@ compiler. Building is then done with the standard::
     cd build
     cmake ..
     make
-	 sudo make install
+    sudo make install
 
 This will produce the command line app::
 
@@ -144,7 +144,7 @@ done with the standard::
     cd build
     cmake ..
     make
-	 sudo make install
+    sudo make install
 
 This will produce the command line app::
 
