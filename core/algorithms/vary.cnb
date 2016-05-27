@@ -1,14 +1,11 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -18,34 +15,29 @@
 			"hidden" : true,
 			"source" : "\\algorithm{vary}{Generic variation algorithm for functional derivatives.}\n\nGeneric variation command.  Takes a rule or a set of rules\naccording to which the terms in a sum should be varied. In every term,\napply the rule once to every factor."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A B+A C\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}A B%\n+A C\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\epsilon D B+A \\epsilon C+\\epsilon D C+A \\left(\\epsilon A-\\epsilon B\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\epsilon D B%\n+A \\epsilon C%\n+\\epsilon D C%\n+A \\left(\\epsilon A%\n-\\epsilon B\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex:= A B + A C;\n\nvary(_, $A -> \\epsilon D, B -> \\epsilon C, C -> \\epsilon A - \\epsilon B$ );"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -55,34 +47,29 @@
 			"hidden" : true,
 			"source" : "It also works when acting on powers, in which case it will use the\nproduct rule to expand them."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A^{3}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}3A^{2} \\delta(A)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}3A^{2} \\delta\\left(A\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex:= A**3;\nvary(_, $A -> \\delta{A}$);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -92,50 +79,82 @@
 			"hidden" : true,
 			"source" : "This algorithm is thus mostly intended for variational derivatives."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial(\\#).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int{}\\partial_{\\mu}(\\phi) \\partial^{\\mu}(\\phi)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\int{}\\left(\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi}%\n+m^{2} \\phi^{2}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
-			"source" : "\\partial{#}::PartialDerivative;\nex:= \\int{\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi}}{x};"
+			"source" : "\\partial{#}::PartialDerivative;\nex:= -\\int{\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\phi} + m**2 \\phi**2}{x};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int{}\\partial_{\\mu}(\\delta(\\phi)) \\partial^{\\mu}(\\phi)+\\partial_{\\mu}(\\phi) \\partial^{\\mu}(\\delta(\\phi))\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\int{}\\left(\\partial_{\\mu}{\\delta\\left(\\phi\\right)} \\partial^{\\mu}{\\phi}%\n+\\partial_{\\mu}{\\phi} \\partial^{\\mu}{\\delta\\left(\\phi\\right)}%\n+2m^{2} \\phi \\delta\\left(\\phi\\right)\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "vary(ex, $\\phi -> \\delta{\\phi}$);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "integrate_by_parts(ex, $\\delta{\\phi}$);\n\n"
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\int{}\\left(-\\delta\\left(\\phi\\right) \\partial_{\\mu}\\,^{\\mu}{\\phi}%\n-\\partial^{\\mu}\\,_{\\mu}{\\phi} \\delta\\left(\\phi\\right)%\n+2m^{2} \\phi \\delta\\left(\\phi\\right)\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "integrate_by_parts(ex, $\\delta{\\phi}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\int{}\\left(-2\\delta\\left(\\phi\\right) \\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\delta\\left(\\phi\\right) \\phi m^{2}\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_)\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\int{}\\delta\\left(\\phi\\right) \\left(-2\\partial^{\\mu}\\,_{\\mu}{\\phi}%\n+2\\phi m^{2}\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_, $\\delta{\\phi}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-

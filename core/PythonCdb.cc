@@ -1,4 +1,6 @@
 
+
+
 #include <memory>
 
 // make boost::python understand std::shared_ptr when compiled with clang.
@@ -29,8 +31,8 @@ namespace boost {
 
 #include <boost/python/implicit.hpp>
 #include <boost/parameter/preprocessor.hpp>
-#include <boost/parameter/python.hpp>
-#include <boost/python.hpp>
+//#include <boost/parameter/python.hpp>
+//#include <boost/python.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/python/enum.hpp>
 #include <boost/python/def.hpp>
@@ -41,7 +43,6 @@ namespace boost {
 #include <boost/algorithm/string/replace.hpp>
 
 #include <sstream>
-#include <memory>
 
 // Properties.
 
@@ -105,6 +106,7 @@ namespace boost {
 #include "algorithms/expand.hh"
 #include "algorithms/expand_delta.hh"
 #include "algorithms/expand_diracbar.hh"
+#include "algorithms/expand_power.hh"
 #include "algorithms/factor_in.hh"
 #include "algorithms/factor_out.hh"
 #include "algorithms/fierz.hh"
@@ -116,6 +118,7 @@ namespace boost {
 #include "algorithms/lr_tensor.hh"
 #include "algorithms/order.hh"
 #include "algorithms/product_rule.hh"
+#include "algorithms/reduce_delta.hh"
 #include "algorithms/rename_dummies.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
@@ -998,13 +1001,14 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<decompose_product>("decompose_product");
 	def_algo_1<distribute>("distribute");
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
-	def_algo_1<epsilon_to_delta>("epsilon_to_delta");
  	def_algo_1<expand>("expand");
 	def_algo_1<expand_delta>("expand_delta");
 	def_algo_1<expand_diracbar>("expand_diracbar");
+	def_algo_1<expand_power>("expand_power");
 	def_algo_1<flatten_sum>("flatten_sum");
 	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
+	def_algo_1<reduce_delta>("reduce_delta");
 	def_algo_1<rename_dummies>("rename_dummies");
 //	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
@@ -1063,15 +1067,21 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
+	def("epsilon_to_delta", &dispatch_ex<epsilon_to_delta, bool>,
+		 (arg("ex"),
+		  arg("reduce")=true,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
 	def("sym", &dispatch_ex<sym, Ex&, bool>, 
 		 (arg("ex"),
-		  arg("items"), arg("anticommuting")=false,
+		  arg("items"), arg("antisymmetric")=false,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
 	def("asym", &dispatch_ex<sym, Ex&, bool>, 
 		 (arg("ex"),
-		  arg("items"), arg("anticommuting")=true,
+		  arg("items"), arg("antisymmetric")=true,
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 

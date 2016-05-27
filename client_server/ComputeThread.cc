@@ -11,8 +11,8 @@
 using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
-ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
-	: gui(g), docthread(dt), connection_is_open(false), restarting_kernel(false), server_pid(0), server_stdout(0)
+ComputeThread::ComputeThread()
+	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0), server_stdout(0)
 	{
    // The ComputeThread constructor is always run on the main thread,
 	// so we can grab the main thread id here.
@@ -22,6 +22,12 @@ ComputeThread::ComputeThread(GUIBase *g, DocumentThread& dt)
 
 ComputeThread::~ComputeThread()
 	{
+	}
+
+void ComputeThread::set_master(GUIBase *b, DocumentThread *d)
+	{
+	gui=b;
+	docthread=d;
 	}
 
 void ComputeThread::init() 
@@ -104,7 +110,7 @@ void ComputeThread::all_cells_nonrunning()
 	for(auto it: running_cells) {
 		std::shared_ptr<ActionBase> rs_action = 
 			std::make_shared<ActionSetRunStatus>(it.second, false);
-		docthread.queue_action(rs_action);
+		docthread->queue_action(rs_action);
 		}
 	gui->process_data();
 	gui->on_kernel_runstatus(false);
@@ -237,7 +243,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		if(finished) {
 			std::shared_ptr<ActionBase> rs_action = 
 				std::make_shared<ActionSetRunStatus>(it, false);
-			docthread.queue_action(rs_action);
+			docthread->queue_action(rs_action);
 			}
 
 		if(content["output"].asString().size()>0) {
@@ -252,7 +258,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				// Finally, the action to add the output cell.
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-				docthread.queue_action(action);
+				docthread->queue_action(action);
 				}
 			else if(msg_type.asString()=="verbatim") {
 				std::string output = "\\begin{verbatim}"+content["output"].asString()+"\\end{verbatim}";
@@ -265,14 +271,14 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				// Finally, the action to add the output cell.
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-				docthread.queue_action(action);
+				docthread->queue_action(action);
 				}
 			else if(msg_type.asString()=="latex_view") {
 				// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
 				DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-				docthread.queue_action(action);
+				docthread->queue_action(action);
 				}
 			else if(msg_type.asString()=="error") {
 				std::string error = "{\\color{red}{\\begin{verbatim}"+content["output"].asString()
@@ -289,13 +295,13 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				// Finally, the action.
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-				docthread.queue_action(action);
+				docthread->queue_action(action);
 				
 				// Position the cursor in the cell that generated the error. All other cells on 
 				// the execute queue have been cancelled by the server.
 				std::shared_ptr<ActionBase> actionpos =
 					std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::in);
-				docthread.queue_action(actionpos);
+				docthread->queue_action(actionpos);
 				
 				// FIXME: iterate over all cells and set the running flag to false.
 				}
@@ -303,7 +309,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-				docthread.queue_action(action);
+				docthread->queue_action(action);
 				}
 			else {
 				std::cerr << "cadabra-client: received cell we did not expect: " 
@@ -342,7 +348,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 	// accidentally get executed twice.
 	std::shared_ptr<ActionBase> actionpos =
 		std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
-	docthread.queue_action(actionpos);
+	docthread->queue_action(actionpos);
 	gui->process_data();
 	
 	// For a code cell, construct a server request message and then
@@ -353,7 +359,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		// Schedule an action to update the running status of this cell.
 		std::shared_ptr<ActionBase> rs_action = 
 			std::make_shared<ActionSetRunStatus>(it, true);
-		docthread.queue_action(rs_action);
+		docthread->queue_action(rs_action);
 
 		Json::Value req, header, content;
 		header["uuid"]="none";
@@ -382,7 +388,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		
 		std::shared_ptr<ActionBase> action = 
 			std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);
-		docthread.queue_action(action);
+		docthread->queue_action(action);
 		}
 	}
 

@@ -1,0 +1,4 @@
+\delta{#}::KroneckerDelta;
+ex:=\delta^{a}_{b}^{c}_{d};
+expand_delta(_);
+       

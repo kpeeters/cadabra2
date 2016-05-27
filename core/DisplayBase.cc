@@ -9,6 +9,7 @@ DisplayBase::DisplayBase(const Kernel& k, const Ex& e)
 void DisplayBase::output(std::ostream& str) 
 	{
 	Ex::iterator it=tree.begin();
+	if(it==tree.end()) return;
 
 	output(str, it);
 	}

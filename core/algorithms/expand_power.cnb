@@ -1,0 +1,118 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{expand_power}{Expand powers into repeated products}\n\nExpand powers into repeated products, i.e.~do the opposite\nof \\algo{collect_factors}. For example,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{expand_power}{Expand powers into repeated products}\n\nExpand powers into repeated products, i.e.~do the opposite\nof \\algo{collect_factors}. For example,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(A B\\right)^{3}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=(A B)**3;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B A B A B\\end{dmath*}"
+				}
+			],
+			"source" : "expand_power(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A A B B B\\end{dmath*}"
+				}
+			],
+			"source" : "sort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A^{3} B^{3}\\end{dmath*}"
+				}
+			],
+			"source" : "collect_factors(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This command automatically takes care of index relabelling when\nnecessary, as in the following example"
+				}
+			],
+			"hidden" : true,
+			"source" : "This command automatically takes care of index relabelling when\nnecessary, as in the following example"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(A_{m} B_{m}\\right)^{3}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q,r}::Indices(vector).\nex:= (A_m B_m)**3;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m} B_{m} A_{n} B_{n} A_{p} B_{p}\\end{dmath*}"
+				}
+			],
+			"source" : "expand_power(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
