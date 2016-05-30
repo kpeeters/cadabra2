@@ -8,15 +8,14 @@ Cadabra
 
 *A field-theory motivated approach to computer algebra.*
 
-Kasper Peeters
+Kasper Peeters <info@cadabra.science>
 
-**end user documentation**: http://cadabra.science/
+- End-user documentation at http://cadabra.science/
+- Source code documentation at http://kpeeters.github.io/cadabra2
 
-**source code documentation**: http://kpeeters.github.io/cadabra2
-
-This repository holds the 2.x series of the Cadabra computer
-algebra system. It is slowly getting ready for public consumption, but
-expect some rough edges.
+This repository holds the 2.x series of the Cadabra computer algebra
+system. It is slowly getting ready for public consumption, but expect
+some rough edges.
 
 Cadabra was designed specifically for the solution of problems
 encountered in quantum and classical field theory. It has extensive
@@ -27,8 +26,20 @@ implicit coordinate dependence, multiple index types and many
 more. The input format is a subset of TeX. Both a command-line and a
 graphical interface are available.
 
-Prerequisites
+Installation
 -------------
+
+Cadabra builds on Linux and Mac OS X, select your distribution below:
+
+- `Linux (Debian/Ubuntu/Mint)`_
+- `Linux (Fedora/CentOS/Scientific Linux)`_
+- `Linux (Arch/Manjaro)`_
+- `Mac OS X`_
+
+Binaries for all these platforms will be provided as soon as we get to
+a somewhat more stable state; for the time being you need to compile
+from source.
+
 
 Linux (Debian/Ubuntu/Mint)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,13 +51,19 @@ On Debian/Ubuntu you can install all that is needed with::
     sudo apt-get install python-sympy libsqlite3-dev uuid-dev
     sudo apt-get install texlive texlive-latex-extra python3-matplotlib python3-mpmath dvipng
 
-The configuration script will warn you if dependencies are missing.
-To build the documentation locally, you need::
-
-    sudo apt-get install doxygen libjs-mathjax
-
 This is the development platform and issues are typically first fixed
-here. You can use either g++ or the clang++ compiler.
+here. You can use either g++ or the clang++ compiler. Building is then
+done with the standard::
+
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
+
+This will produce the command line app ``cadabra2`` and the Gtk
+notebook interface ``cadabra-gtk``. You can also find the latter in
+the 'Education' menu.
 
 
 Linux (Fedora/CentOS/Scientific Linux)
@@ -60,21 +77,43 @@ On Fedora/CentOS/Scientific Linux you can install the dependencies with::
     sudo yum install texlive python3-matplotlib
 
 This platform receives less testing so please get in touch if you run
-into any issues. You can use either g++ or the clang++ compiler.
+into any issues. You can use either g++ or the clang++
+compiler. Building is then done with the standard::
+
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
+
+This will produce the command line app ``cadabra2`` and the Gtk
+notebook interface ``cadabra-gtk``. You can also find the latter in
+the 'Education' menu.
 
 
-Linux (Arch/Manjaro/Arch Derivatives)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Linux (Arch/Manjaro)
+~~~~~~~~~~~~~~~~~~~~
 
-On Arch/Manjaro/Arch Derivative Linux you can install the dependencies by using an automated build
-program such as ``yaourt`` or by specifying the ``-s`` flag with ``makepkg``.
+The development package for Arch Linux is cadabra2-git
+https://aur.archlinux.org/packages/cadabra2-git/.  Building and
+installing (including dependencies) can be accomplished with::
 
-This platform receives less testing so please get in touch if you run
-into any issues. You can use either g++ or the clang++ compiler.
+    yaourt -Sy cadabra2-git
+
+Alternatively use ``makepkg``::
+
+    curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/cadabra2-git.tar.gz
+    tar -xvf cadabra2-git.tar.gz
+    cd cadabra2-git
+    makepkg -sri
+
+Please consult the Arch Wiki
+https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages
+for more information regarding installing packages from the AUR.
 
 
-OS X
-~~~~
+Mac OS X
+~~~~~~~~
 
 Cadabra builds with the standard Apple compiler, but in order to
 build on OS X you need a number of packages from Homebrew (see
@@ -82,7 +121,7 @@ http://brew.sh).  Install these packages with::
 
     brew install cmake boost pcre gmp python3
     brew uninstall boost-python
-	  brew install boost-python --with-python3
+    brew install boost-python --with-python3
     brew install pkgconfig ossp-uuid
     brew install gtkmm3 adwaita-icon-theme
 
@@ -97,7 +136,18 @@ to build Cadabra, otherwise the Cadabra style files will not be
 installed in the appropriate place. Make sure 'latex' works from the
 terminal in which you will build Cadabra.
 
-With the above packages, you will build the Gtk interface for Cadabra.
+Building is then
+done with the standard::
+
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
+
+This will produce the command line app ``cadabra2`` and the Gtk
+notebook interface ``cadabra-gtk``.
+
 I am still planning a native OS X interface, but because building the
 Gtk interface is so easy and the result looks relatively decent, this
 may take a while (definitely until after 2.0 has been released).
@@ -106,53 +156,15 @@ Feedback from OS X users is *very* welcome because this is not my main
 development platform.
 
 
-Installation instructions
--------------------------
-
-Once you have the required prerequisites installed, you can build
-Cadabra, on all supported platforms, using the standard::
-
-    mkdir build
-    cd build
-    cmake ..
-    make
-
-This will build all binaries relevant for your platform. You will get
-warned when dependencies are missing. Use::
-
-    sudo make install
-
-to install the software. The notebook interface is started with::
-
-    cadabra-gtk
-
-while the command-line version is called::
-
-    cadabra2
-
-
-Installation instructions for Arch/Manjaro/Arch Derivatives
------------------------------------------------------------
-
-The development package for Arch Linux is `cadabra2-git <https://aur.archlinux.org/packages/cadabra2-git/>`.
-Building and installing (including dependencies) can be accomplished with a front end to ``pacman`` such as
-``yaourt`` with::
-
-    yaourt -Sy cadabra2-git
-
-This can be done using manually using ``makepkg`` with::
-
-    curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/cadabra2-git.tar.gz
-    tar -xvf cadabra2-git.tar.gz
-    cd cadabra2-git
-    makepkg -sri
-
-Please consult the `Arch Wiki <https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages>`
-for more information regarding installing packages from the AUR.
-
 
 Tutorials and other help
 ------------------------
 
 Please consult http://cadabra.science/ for tutorial-style notebooks
-and all other documentation.
+and all other documentation, and http://kpeeters.github.io/cadabra2
+for doxygen documentation of the current master branch. The latter can
+also be generated locally; you will need (on Debian and derivatives)::
+
+    sudo apt-get install doxygen libjs-mathjax
+
+For any questions, please contact info@cadabra.science .
