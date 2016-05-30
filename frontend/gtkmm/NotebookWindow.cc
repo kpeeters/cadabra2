@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "Actions.hh"
+#include "Cadabra.hh"
 #include "Config.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
@@ -15,8 +16,9 @@
 
 using namespace cadabra;
 
-NotebookWindow::NotebookWindow()
+NotebookWindow::NotebookWindow(Cadabra *c)
 	: DocumentThread(this),
+	  cdbapp(c),
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
 	  kernel_spinner_status(false),
@@ -114,9 +116,10 @@ NotebookWindow::NotebookWindow()
 	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
 //	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
 //							sigc::mem_fun(*this, &NotebookWindow::on_help_notebook) );
-	actiongroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::HELP, "About Cadabra"),
+	actiongroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT, "About Cadabra"),
 							sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
-
+	actiongroup->add( Gtk::Action::create("HelpContext", Gtk::Stock::HELP, "Contextual help"),
+							sigc::mem_fun(*this, &NotebookWindow::on_help) );
 
 	uimanager = Gtk::UIManager::create();
 	uimanager->insert_action_group(actiongroup);
@@ -164,6 +167,7 @@ NotebookWindow::NotebookWindow()
 		"    <menu action='MenuHelp'>"
 //		"      <menuitem action='HelpNotebook' />"
 		"      <menuitem action='HelpAbout' />"
+		"      <menuitem action='HelpContext' />"
 		"    </menu>"
 		"  </menubar>"
 		"  <toolbar name='ToolBar'>"
@@ -1156,6 +1160,11 @@ void NotebookWindow::on_kernel_restart()
 	// FIXME: add warnings
 
 	compute->restart_kernel();
+	}
+
+void NotebookWindow::on_help() const
+	{
+	cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/distribute.cnb");
 	}
 
 void NotebookWindow::on_help_about()

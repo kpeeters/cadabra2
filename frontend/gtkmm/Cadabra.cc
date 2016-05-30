@@ -1,6 +1,7 @@
 
 #include "Cadabra.hh"
 #include <signal.h>
+#include <fstream>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/entry.h>
 #if GTKMM_MINOR_VERSION < 10
@@ -29,7 +30,7 @@ Cadabra::Cadabra(int argc, char **argv)
 	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
 	  compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
-	windows.push_back(new cadabra::NotebookWindow());
+	windows.push_back(new cadabra::NotebookWindow(this));
 	compute.set_master(windows[0], windows[0]);
 
 	// Connect the two threads.
@@ -140,3 +141,12 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	Gtk::Application::on_open(files, hint);
 	}
 
+void Cadabra::open_help(const std::string& nm) 
+	{
+	windows.push_back(new cadabra::NotebookWindow(this));
+	std::ifstream fl(nm);
+	std::stringstream buffer;
+	buffer << fl.rdbuf();
+	windows[1]->load_file(buffer.str());
+	windows[1]->show();
+	}
