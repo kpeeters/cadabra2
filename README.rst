@@ -46,7 +46,7 @@ Linux (Debian/Ubuntu/Mint)
 
 On Debian/Ubuntu you can install all that is needed with::
 
-    sudo apt-get install cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
+    sudo apt-get install cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev
     sudo apt-get install libgtkmm-3.0-dev libboost-all-dev libgmp-dev
     sudo apt-get install python-sympy libsqlite3-dev uuid-dev
     sudo apt-get install texlive texlive-latex-extra python3-matplotlib python3-mpmath dvipng
@@ -73,7 +73,7 @@ On Fedora/CentOS/Scientific Linux you can install the dependencies with::
 
     sudo yum install cmake gcc-c++ python-devel pcre-devel gmp-devel
     sudo yum install libuuid-devel sqlite-devel
-    sudo yum install gtkmm30-devel boost-devel 
+    sudo yum install gtkmm30-devel boost-devel
     sudo yum install texlive python3-matplotlib
 
 This platform receives less testing so please get in touch if you run
@@ -119,10 +119,10 @@ Cadabra builds with the standard Apple compiler, but in order to
 build on OS X you need a number of packages from Homebrew (see
 http://brew.sh).  Install these packages with::
 
-    brew install cmake boost pcre gmp python3 
+    brew install cmake boost pcre gmp python3
     brew uninstall boost-python
     brew install boost-python --with-python3
-    brew install pkgconfig ossp-uuid 
+    brew install pkgconfig ossp-uuid
     brew install gtkmm3 adwaita-icon-theme
 
 The uninstall of boost-python in the 2nd line is to ensure that you
@@ -146,7 +146,7 @@ done with the standard::
     sudo make install
 
 This will produce the command line app ``cadabra2`` and the Gtk
-notebook interface ``cadabra-gtk``. 
+notebook interface ``cadabra-gtk``.
 
 I am still planning a native OS X interface, but because building the
 Gtk interface is so easy and the result looks relatively decent, this
@@ -165,12 +165,6 @@ and all other documentation, and http://kpeeters.github.io/cadabra2
 for doxygen documentation of the current master branch. The latter can
 also be generated locally; you will need (on Debian and derivatives)::
 
-    sudo apt-get install doxygen libjs-mathjax  
+    sudo apt-get install doxygen libjs-mathjax
 
 For any questions, please contact info@cadabra.science .
-
-
-
-
-
-
