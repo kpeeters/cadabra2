@@ -594,8 +594,10 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		VisualCell& vc = canvasses[i]->visualcells[&(*it)];
-		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) 
+		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
+			vc.inbox->buffer->set_text(it->textbuf);
 			vc.inbox->queue_draw();
+			}
 		}
 	
 	}
@@ -639,6 +641,9 @@ size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
 		}
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
+
+	// FIXME: textbuf->get_insert does not return (probably?) a plain integer;
+	// how do we get that out of gtkmm?
 
 	return 5;
 	}
