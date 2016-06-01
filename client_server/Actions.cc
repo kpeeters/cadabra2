@@ -155,6 +155,48 @@ void ActionRemoveCell::update_gui(const DTree& tr, GUIBase& gb)
 	}
 
 
+ActionSplitCell::ActionSplitCell(DTree::iterator ref_) 
+	: this_cell(ref_)
+	{
+	}
+
+ActionSplitCell::~ActionSplitCell()
+	{
+	}
+
+void ActionSplitCell::pre_execute(DocumentThread& cl)  
+	{
+//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+
+//	size_t pos = gb.get_cursor_position(tr, this_cell);
+//	std::cerr << "cursor position = " << pos << std::endl;
+
+//	std::string segment1=
+//		this_cell->textbuf->get_slice(dc->textbuf->begin(), 
+//									  dc->textbuf->get_iter_at_mark(dc->textbuf->get_insert())));
+
+
+	DataCell newcell(this_cell->cell_type, "hi!");
+
+	newref = cl.doc.insert(this_cell, newcell);
+	}
+
+void ActionSplitCell::post_execute(DocumentThread& cl)  
+	{
+	}
+
+void ActionSplitCell::revert(DocumentThread& cl)
+	{
+	// FIXME: implement
+	}
+
+void ActionSplitCell::update_gui(const DTree& tr, GUIBase& gb)
+	{
+	// std::cout << "updating gui for ActionSplitCell" << std::endl;
+	gb.add_cell(tr, newref, true);
+	}
+
+
 
 ActionSetRunStatus::ActionSetRunStatus(DTree::iterator ref_, bool running) 
 	: this_cell(ref_), new_running_(running)
@@ -179,3 +221,4 @@ void ActionSetRunStatus::update_gui(const DTree& tr, GUIBase& gb)
 	{
 	gb.update_cell(tr, this_cell);
 	}
+
