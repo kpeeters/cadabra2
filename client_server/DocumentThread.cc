@@ -132,9 +132,7 @@ void DocumentThread::process_action_queue()
 		// Unlock the action queue while we are processing this particular action,
 		// so that other actions can be added which we run.
 		stack_mutex.unlock();
-		ab->pre_execute(*this);
-		ab->update_gui(doc, *gui);
-		ab->post_execute(*this);
+		ab->execute(*this, *gui);
 		// Lock the queue to remove the running action.
 		stack_mutex.lock();
 		pending_actions.pop();
