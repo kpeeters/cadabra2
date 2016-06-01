@@ -14,7 +14,7 @@ ActionAddCell::ActionAddCell(DataCell cell, DTree::iterator ref_, Position pos_)
 	{
 	}
 
-void ActionAddCell::pre_execute(DocumentThread& cl)  
+void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)  
 	{
 	// std::cout << "ActionAddCell::execute" << std::endl;
 
@@ -32,21 +32,12 @@ void ActionAddCell::pre_execute(DocumentThread& cl)
 			newref = cl.doc.append_child(ref, newcell);
 			break;
 		}
+	gb.add_cell(cl.doc, newref, true);
 	}
 
-void ActionAddCell::post_execute(DocumentThread& cl)  
-	{
-	}
-
-void ActionAddCell::revert(DocumentThread& cl)
+void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
 	// FIXME: implement
-	}
-
-void ActionAddCell::update_gui(const DTree& tr, GUIBase& gb)
-	{
-	// std::cout << "updating gui for ActionAddCell" << std::endl;
-	gb.add_cell(tr, newref, true);
 	}
 
 
@@ -55,7 +46,7 @@ ActionPositionCursor::ActionPositionCursor(DTree::iterator ref_, Position pos_)
 	{
 	}
 
-void ActionPositionCursor::pre_execute(DocumentThread& cl)  
+void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)  
 	{
 	// std::cout << "ActionPositionCursor::execute" << std::endl;
 
@@ -99,25 +90,19 @@ void ActionPositionCursor::pre_execute(DocumentThread& cl)
 			break;
 			}
 		}
-	}
 
-void ActionPositionCursor::post_execute(DocumentThread& cl)  
-	{
-	}
-
-void ActionPositionCursor::revert(DocumentThread& cl)  
-	{
-	// FIXME: implement
-	}
-
-void ActionPositionCursor::update_gui(const DTree& tr, GUIBase& gb)
-	{
+	// Update GUI.
 	if(needed_new_cell) {
 		// std::cerr << "cadabra-client: adding new visual cell before positioning cursor" << std::endl;
-		gb.add_cell(tr, newref, true);
+		gb.add_cell(cl.doc, newref, true);
 		}
 	// std::cerr << "cadabra-client: positioning cursor" << std::endl;
-	gb.position_cursor(tr, newref);
+	gb.position_cursor(cl.doc, newref);
+	}
+
+void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)  
+	{
+	// FIXME: implement
 	}
 
 
@@ -130,28 +115,18 @@ ActionRemoveCell::~ActionRemoveCell()
 	{
 	}
 
-void ActionRemoveCell::pre_execute(DocumentThread& cl)  
+void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	}
-
-void ActionRemoveCell::post_execute(DocumentThread& cl)  
-	{
-//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+	gb.remove_cell(cl.doc, this_cell);
 
 	reference_parent_cell = cl.doc.parent(this_cell);
 	reference_child_index = cl.doc.index(this_cell);
 	cl.doc.erase(this_cell);
 	}
 
-void ActionRemoveCell::revert(DocumentThread& cl)
+void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
 	// FIXME: implement
-	}
-
-void ActionRemoveCell::update_gui(const DTree& tr, GUIBase& gb)
-	{
-	// std::cout << "updating gui for ActionRemoveCell" << std::endl;
-	gb.remove_cell(tr, this_cell);
 	}
 
 
@@ -164,36 +139,27 @@ ActionSplitCell::~ActionSplitCell()
 	{
 	}
 
-void ActionSplitCell::pre_execute(DocumentThread& cl)  
+void ActionSplitCell::execute(DocumentThread& cl, GUIBase& gb)  
 	{
 //	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
 
-//	size_t pos = gb.get_cursor_position(tr, this_cell);
-//	std::cerr << "cursor position = " << pos << std::endl;
+	size_t pos = gb.get_cursor_position(cl.doc, this_cell);
+	std::cerr << "cursor position = " << pos << std::endl;
 
-//	std::string segment1=
-//		this_cell->textbuf->get_slice(dc->textbuf->begin(), 
-//									  dc->textbuf->get_iter_at_mark(dc->textbuf->get_insert())));
+	std::string segment1=this_cell->textbuf.substr(0, pos);
+	std::string segment2=this_cell->textbuf.substr(pos);
 
-
-	DataCell newcell(this_cell->cell_type, "hi!");
-
+	DataCell newcell(this_cell->cell_type, segment1);
 	newref = cl.doc.insert(this_cell, newcell);
+	this_cell->textbuf=segment2;
+
+	gb.add_cell(cl.doc, newref, true);
+	gb.update_cell(cl.doc, this_cell);
 	}
 
-void ActionSplitCell::post_execute(DocumentThread& cl)  
-	{
-	}
-
-void ActionSplitCell::revert(DocumentThread& cl)
+void ActionSplitCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
 	// FIXME: implement
-	}
-
-void ActionSplitCell::update_gui(const DTree& tr, GUIBase& gb)
-	{
-	// std::cout << "updating gui for ActionSplitCell" << std::endl;
-	gb.add_cell(tr, newref, true);
 	}
 
 
@@ -203,22 +169,15 @@ ActionSetRunStatus::ActionSetRunStatus(DTree::iterator ref_, bool running)
 	{
 	}
 
-void ActionSetRunStatus::pre_execute(DocumentThread& cl)  
+void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	}
+	gb.update_cell(cl.doc, this_cell);
 
-void ActionSetRunStatus::post_execute(DocumentThread& cl)  
-	{
 	was_running_=this_cell->running;
 	this_cell->running=new_running_;
 	}
 
-void ActionSetRunStatus::revert(DocumentThread& cl)
+void ActionSetRunStatus::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	}
-
-void ActionSetRunStatus::update_gui(const DTree& tr, GUIBase& gb)
-	{
-	gb.update_cell(tr, this_cell);
 	}
 
