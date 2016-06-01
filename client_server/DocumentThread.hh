@@ -18,6 +18,7 @@ namespace cadabra {
    class ActionAddCell;
 	class ActionPositionCursor;
 	class ActionRemoveCell;
+	class ActionSplitCell;
    class ComputeThread;
    class GUIBase;
 
@@ -68,6 +69,7 @@ namespace cadabra {
          friend ActionAddCell;
 			friend ActionPositionCursor;
 			friend ActionRemoveCell;
+			friend ActionSplitCell;
          // FIXME: add other actions.
 	
 			bool is_registered() const;

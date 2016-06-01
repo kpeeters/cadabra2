@@ -121,12 +121,16 @@ void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
 void DocumentThread::process_action_queue()
 	{
 	// FIXME: we certainly do not want any two threads to run this at the same time,
-	// but that is not guaranteed.
+	// but that is not guaranteed. Actions should always be run on the GUI thread.
+	// This absolutely has to be run on the main GUI thread.
+//	assert(main_thread_id==std::this_thread::get_id());
+
 
 	stack_mutex.lock();
 	while(pending_actions.size()>0) {
 		std::shared_ptr<ActionBase> ab = pending_actions.front();
-		// Unlock the queue while we are processing this particular action.
+		// Unlock the action queue while we are processing this particular action,
+		// so that other actions can be added which we run.
 		stack_mutex.unlock();
 		ab->pre_execute(*this);
 		ab->update_gui(doc, *gui);

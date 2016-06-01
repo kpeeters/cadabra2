@@ -28,18 +28,26 @@ namespace cadabra {
 	class ActionBase {
 		public:
 			/// Execute changes to the DTree document which need to be made
-			/// before the GUI is updated.
+			/// before the GUI is updated. As an example, the 'ActionAddCell'
+			/// adds a new cell to the document tree here, after which the
+			/// update_gui method makes it visible on screen.
+
 			virtual void pre_execute(DocumentThread&)=0;
 
 			/// Make sure the GUI reflects the change.
 			/// FIXME: do we need an exec/revert combo here too?
+
 			virtual void update_gui(const DTree&, GUIBase&)=0;
 
 			/// Execute changes to the DTree document which need to be made
-			/// after the GUI has been updated.
+			/// after the GUI has been updated. As an example, the 'ActionRemoveCell'
+			/// first removes the cell from the display in 'update_gui', and 
+			/// then removes it from the underlying document tree here.
+
 			virtual void post_execute(DocumentThread&)=0;
 
 			/// Revert the change to the DTree document.
+
 			virtual void revert(DocumentThread&)=0;
 	};
 	
@@ -152,6 +160,9 @@ namespace cadabra {
 			virtual void post_execute(DocumentThread&) override;
 
 			virtual void revert(DocumentThread&) override;
+			
+		private:
+			DTree::iterator this_cell, newref; // the newly created cell
 	};
 
 }

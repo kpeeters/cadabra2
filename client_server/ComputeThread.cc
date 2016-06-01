@@ -14,10 +14,11 @@ typedef websocketpp::client<websocketpp::config::asio_client> client;
 ComputeThread::ComputeThread()
 	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0), server_stdout(0)
 	{
-   // The ComputeThread constructor is always run on the main thread,
-	// so we can grab the main thread id here.
+   // The ComputeThread constructor (but _not_ the run() member!) is
+	// always run on the gui thread, so we can grab the gui thread id
+	// here.
 
-	main_thread_id=std::this_thread::get_id();
+	gui_thread_id=std::this_thread::get_id();
 	}
 
 ComputeThread::~ComputeThread()
@@ -334,7 +335,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 void ComputeThread::execute_cell(DTree::iterator it)
 	{
 	// This absolutely has to be run on the main GUI thread.
-	assert(main_thread_id==std::this_thread::get_id());
+	assert(gui_thread_id==std::this_thread::get_id());
 
 	if(connection_is_open==false)
 		return;
