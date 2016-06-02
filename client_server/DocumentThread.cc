@@ -3,6 +3,7 @@
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
 
+#include <typeinfo>
 #include <iostream>
 #include <set>
 #include <string>
@@ -132,6 +133,7 @@ void DocumentThread::process_action_queue()
 		// Unlock the action queue while we are processing this particular action,
 		// so that other actions can be added which we run.
 		stack_mutex.unlock();
+//		std::cerr << "Executing action " << typeid(*ab).name() << std::endl;
 		ab->execute(*this, *gui);
 		// Lock the queue to remove the running action.
 		stack_mutex.lock();

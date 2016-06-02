@@ -237,9 +237,23 @@ void CodeInput::exp_input_tv::on_show()
 		Gtk::TextView::on_show();
 	}
 
+void CodeInput::update_buffer()
+	{
+	std::string newtxt = edit.datacell->textbuf;
+	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
+	std::string oldtxt = textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end());
+	if(newtxt!=oldtxt) {
+		std::cerr << "setting buffer from " 
+					 << oldtxt
+					 << " to " << newtxt << std::endl;
+		buffer->set_text(newtxt);
+		}
+	}
+
 void CodeInput::handle_changed()
 	{
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
 	std::string tmp(textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end()));
+	std::cerr << "sending buffer for " << tmp << std::endl;
 	edit.content_changed(tmp, edit.datacell);
 	}

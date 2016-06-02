@@ -59,20 +59,22 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 			break;
 		case Position::next: {
 			DTree::sibling_iterator sib=ref;
+			bool found=false;
 			while(cl.doc.is_valid(++sib)) {
 				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
 					if(!sib->hidden) {
-						// std::cout << "found input cell " << sib->textbuf << std::endl;
 						newref=sib;
-						return;
+						found=true;
+						break;
 						}
 					}
 				}
-			// std::cout << "no input cell available, adding new" << std::endl;
-			if(ref->textbuf!="") { // If the last cell is empty, stay where we are.
-				DataCell newcell(DataCell::CellType::python, "");
-				newref = cl.doc.insert(sib, newcell);
-				needed_new_cell=true;
+			if(!found) {
+				if(ref->textbuf!="") { // If the last cell is empty, stay where we are.
+					DataCell newcell(DataCell::CellType::python, "");
+					newref = cl.doc.insert(sib, newcell);
+					needed_new_cell=true;
+					}
 				}
 			break;
 			}
@@ -144,14 +146,19 @@ void ActionSplitCell::execute(DocumentThread& cl, GUIBase& gb)
 //	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
 
 	size_t pos = gb.get_cursor_position(cl.doc, this_cell);
-	std::cerr << "cursor position = " << pos << std::endl;
 
 	std::string segment1=this_cell->textbuf.substr(0, pos);
 	std::string segment2=this_cell->textbuf.substr(pos);
 
-	DataCell newcell(this_cell->cell_type, segment1);
-	newref = cl.doc.insert(this_cell, newcell);
-	this_cell->textbuf=segment2;
+	// Strip leading newline in 2nd segment, if any.
+	if(segment2.size()>0) {
+		if(segment2[0]=='\n')
+			segment2=segment2.substr(1);
+		}
+
+	DataCell newcell(this_cell->cell_type, segment2);
+	newref = cl.doc.insert_after(this_cell, newcell);
+	this_cell->textbuf=segment1;
 
 	gb.add_cell(cl.doc, newref, true);
 	gb.update_cell(cl.doc, this_cell);
