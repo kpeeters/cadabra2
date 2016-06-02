@@ -1,14 +1,11 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -18,58 +15,44 @@
 			"hidden" : true,
 			"source" : "\\section*{The Schwarzschild spacetime}\n\nThis notebook shows how you can do component computations in Cadabra. It illustrates this by computing\nproperties of the Schwarzschild spacetime.\n\nThe first thing we always need to do is to declare the coordinates used, and the names of the indices."
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric."
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}(g_{\\nu \\sigma})+\\partial_{\\nu}(g_{\\rho \\sigma})-\\partial_{\\sigma}(g_{\\nu \\rho})\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta\\right)\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta\\right)\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin(\\theta)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta, g^{t t} = \\frac{r}{2M-r}, g^{r r} = \\frac{-2M+r}{r}, g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin(\\theta)^{2}}, g^{\\theta \\theta} = r^{-2})\\end{dmath*}"
-				},
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}(g_{\\nu \\sigma})+\\partial_{\\nu}(g_{\\rho \\sigma})-\\partial_{\\sigma}(g_{\\nu \\rho})\\right)\\end{dmath*}"
-				},
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}{}_{t}{}_{r}= &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}^{t}{}_{r}{}_{t}= &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}^{r}{}_{r}{}_{r}= & M \\frac{2M-r}{r^{3} \\left( - \\frac{2M}{r}+1\\right)^{2}}\\\\\n\\square{}^{r}{}_{\\phi}{}_{\\phi}= & \\left(2M-r\\right) \\sin(\\theta)^{2}\\\\\n\\square{}^{r}{}_{\\theta}{}_{\\theta}= & 2M-r\\\\\n\\square{}^{r}{}_{t}{}_{t}= & M \\frac{-2M+r}{r^{3}}\\\\\n\\square{}^{\\phi}{}_{\\phi}{}_{r}= & \\frac{1}{r}\\\\\n\\square{}^{\\phi}{}_{\\phi}{}_{\\theta}= & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n\\square{}^{\\phi}{}_{r}{}_{\\phi}= & \\frac{1}{r}\\\\\n\\square{}^{\\phi}{}_{\\theta}{}_{\\phi}= & \\frac{\\cos(\\theta)}{\\sin(\\theta)}\\\\\n\\square{}^{\\theta}{}_{\\theta}{}_{r}= & \\frac{1}{r}\\\\\n\\square{}^{\\theta}{}_{r}{}_{\\theta}= & \\frac{1}{r}\\\\\n\\square{}^{\\theta}{}_{\\phi}{}_{\\phi}= & -\\sin(\\theta) \\cos(\\theta)\\\\\n\\end{aligned}\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric.\n\n#equation_mode(True);         \nex:= \\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       X^t = t, X^r = r, X^\\theta=\\theta\n     };\ncomplete(ss, $g^{\\mu\\nu}$);\nsubstitute(ex, rl);\nevaluate(ex, ss);"
+			"source" : "ex:= \\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       X^t = t, X^r = r, X^\\theta=\\theta\n     };\ncomplete(ss, $g^{\\mu\\nu}$);\nsubstitute(ex, rl);\nevaluate(ex, ss);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -78,13 +61,11 @@
 			],
 			"source" : "\\ddot{#}::Accent.\n\\dot{#}::Accent.\nXrl:= { X^t = T, X^r = R, X^\\theta=\\Theta, X^\\phi = \\Phi };"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -93,13 +74,11 @@
 			],
 			"source" : "eom:= \\ddot{X^\\mu} + \\Gamma^{\\mu}_{\\nu\\rho} \\dot{X^\\nu}\\dot{X^\\rho};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -108,13 +87,11 @@
 			],
 			"source" : "substitute(eom,rl);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -123,13 +100,11 @@
 			],
 			"source" : "evaluate(eom,ss);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -138,13 +113,11 @@
 			],
 			"source" : "substitute(eom, $\\dot{t} -> (E/(1-2M/r))$);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -153,13 +126,11 @@
 			],
 			"source" : "fv:= g_{\\mu\\nu} \\dot{X^\\mu} \\dot{X^\\nu};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -168,13 +139,11 @@
 			],
 			"source" : "evaluate(fv, ss);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -183,7 +152,6 @@
 			],
 			"source" : "tst:=@(fv)+@(fv);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -191,6 +159,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-
