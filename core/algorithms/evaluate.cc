@@ -305,6 +305,8 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			++rhs1;
 			iterator nd=rhs1;
 			sympy::apply(kernel, tr, nd, "", "", "");
+			if(nd->is_zero())
+				tr.erase(it1);
 			return true;
 			});
 	}
