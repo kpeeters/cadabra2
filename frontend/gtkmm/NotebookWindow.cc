@@ -258,7 +258,6 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	if(cfg->width != last_configure_width) {
 		last_configure_width = cfg->width;
 		try {
-			std::cerr << "running TeX" << std::endl;
 			engine.invalidate_all();
 			engine.convert_all();
 			for(unsigned int i=0; i<canvasses.size(); ++i) 
@@ -595,7 +594,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		VisualCell& vc = canvasses[i]->visualcells[&(*it)];
 		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
-			vc.inbox->buffer->set_text(it->textbuf);
+			vc.inbox->update_buffer();
 			vc.inbox->queue_draw();
 			}
 		}
@@ -605,7 +604,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
 //	if(it==doc.end()) return;
-//	std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
+	//std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
 	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
@@ -641,11 +640,9 @@ size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
 		}
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
-
-	// FIXME: textbuf->get_insert does not return (probably?) a plain integer;
-	// how do we get that out of gtkmm?
-
-	return 5;
+	size_t offset = target.inbox->buffer->get_insert()->get_iter().get_offset();
+	
+	return offset;
 	}
 
 void NotebookWindow::scroll_into_view(DTree::iterator it)
@@ -714,13 +711,12 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
 	{
 	current_canvas=canvas_number;
-	// std::cout << "received: " << content << std::endl;
-	it->textbuf=content;
-
-	dim_output_cells(it);
-
-	modified=true;
-	update_title();
+	if(it->textbuf!=content) {
+		it->textbuf=content;
+		dim_output_cells(it);
+		modified=true;
+		update_title();
+		}
 
 	return false;
 	}
