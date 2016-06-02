@@ -62,7 +62,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 
 	ds.import(*parser.tree);
 
-	Ex::iterator first=parser.tree->begin(parser.tree->begin());
+	Ex::iterator first=parser.tree->begin();
    it = ex.move_ontop(it, first);
 
 	return it;
@@ -126,7 +126,7 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 	sympy::apply(kernel, matrix, top, "", "", ".inv()");
 	//matrix.print_recursive_treeform(std::cerr, top);
 
-	Ex::iterator ruleslist=rules.begin(rules.begin());
+	Ex::iterator ruleslist=rules.begin();
 
 	// Now we need to iterate over the components again and construct sparse rules.
 	cols=matrix.begin(matrix.begin()); // outer comma
