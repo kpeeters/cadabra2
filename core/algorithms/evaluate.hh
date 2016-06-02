@@ -64,6 +64,11 @@ class evaluate : public Algorithm {
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
 		
+		/// Merge the information in two 'components' nodes at the given
+		/// iterators, moving all out of the second one into the first
+		/// one.
+		void merge_components(iterator it1, iterator it2);
+
 	private:
 		const Ex& components;
 
@@ -76,11 +81,6 @@ class evaluate : public Algorithm {
 		/// in which values should be stored in index value sets.
 
 		void handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free);
-
-		/// Merge the information in two 'components' nodes at the given
-		/// iterators, moving all out of the second one into the first
-		/// one.
-		void merge_components(iterator it1, iterator it2);
 
 		/// Merge entries in a single 'components' node when they are for the
 		/// same index value(s).
