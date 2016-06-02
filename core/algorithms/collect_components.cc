@@ -38,6 +38,13 @@ Algorithm::result_t collect_components::apply(iterator& st)
 		++s1;
 		}
 
+	if(s1!=tr.end(st)) {
+		auto comma=tr.end(s1);
+		--comma;
+		if(tr.number_of_children(comma)==0)
+			node_zero(s1);
+		}
+	
 	return res;
 	}
 
