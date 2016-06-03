@@ -21,22 +21,25 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 	// FIXME: write as individual parent/current tests
 	if(tree.is_valid(tree.parent(it))==false) return false;
 
+	Ex::iterator parent_it = tree.parent(it);
+	Ex::iterator child_it  = it;
+	int child_num = tree.index(it);
+
 	std::string parent=*tree.parent(it)->name;
 	std::string child =*it->name;
 
 	if(parent=="\\partial" && child=="\\sum") return true;
 
-	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
-		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
-//		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
-		}
-	else if(it->fl.parent_rel==str_node::p_none) { // function argument
-		if(*it->name=="\\sum") return false;
-		}
-	else {
-		if(*it->name=="\\sum")  return true;
-		if(*it->name=="\\prod") return true;
-		}
+	if(parent=="\\frac" && ( child=="\\sum" || child=="\\prod" || (*child_it->multiplier!=1 && child_num>0) )) return true;
+
+	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum") ) return true;
+
+//	if(parent=="\\pow" && child_num>0 && *child_it->multiplier!=1 ) return true;
+
+	if(parent=="\\prod" && child=="\\sum") return true;
+
+//	if(it->fl.parent_rel==str_node::p_none && (child=="\\sum" || child=="\\prod") ) return true;
+
 	return false;
 	}
 
@@ -195,9 +198,12 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int m
 void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-		case str_node::b_none: str << "(";     break;
-		case str_node::b_pointy: str << "\\<"; break;
-		case str_node::b_curly:  str << "\\{"; break;
+		case str_node::b_none:
+			if(pr==str_node::p_none)     str << "(";
+			else                         str << "{";
+			break;
+		case str_node::b_pointy: str << "<"; break;
+		case str_node::b_curly:  str << "{"; break;
 		case str_node::b_round:  str << "(";   break;
 		case str_node::b_square: str << "[";   break;
 		default :	return;
@@ -208,9 +214,12 @@ void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket
 void DisplayTerminal::print_closing_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-		case str_node::b_none:   str << ")";   break;
-		case str_node::b_pointy: str << "\\>"; break;
-		case str_node::b_curly:  str << "\\}"; break;
+		case str_node::b_none:   
+			if(pr==str_node::p_none)     str << ")";
+			else                         str << "}";
+			break;
+		case str_node::b_pointy: str << ">"; break;
+		case str_node::b_curly:  str << "}"; break;
 		case str_node::b_round:  str << ")";   break;
 		case str_node::b_square: str << "]";   break;
 		default :	return;
@@ -277,23 +286,26 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator num=tree.begin(it), den=num;
 	++den;
 
-	bool close_bracket=false;
-	if(*it->multiplier!=1) {
+	if(*it->multiplier!=1) 
 		print_multiplier(str, it);
-		str << "(";
-		close_bracket=true;
-		}
-	str << "(";
+
+//	if(needs_brackets(num))
+//		str << "(";
 
 	dispatch(str, num);
 
-	str << ")/(";
+//	if(needs_brackets(num))
+//		str << ")";
+
+	str << "/";
+
+//	if(needs_brackets(den))
+//		str << "(";
 	
 	dispatch(str, den);
 
-	str << ")";
-	if(close_bracket)
-		str << ")";
+//	if(needs_brackets(den))
+//		str << ")";
 	}
 
 void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
@@ -362,10 +374,13 @@ void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	dispatch(str, sib);
-	str << "**(";
+	str << "**";
 	++sib;
+	if(needs_brackets(sib))
+		str << "(";
 	dispatch(str, sib);
-	str << ")";
+	if(needs_brackets(sib))
+		str << ")";
 	}
 
 void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)
@@ -437,15 +452,15 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 		}
 	
 	bool needs_extra_brackets=false;
-	const Accent *ac=kernel.properties.get<Accent>(it);
-	if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
-		Ex::sibling_iterator sib=tree.begin(it);
-		while(sib!=tree.end(it)) {
-			if(sib->is_index()) 
-				needs_extra_brackets=true;
-			++sib;
-			}
-		}
+//	const Accent *ac=kernel.properties.get<Accent>(it);
+//	if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
+//		Ex::sibling_iterator sib=tree.begin(it);
+//		while(sib!=tree.end(it)) {
+//			if(sib->is_index()) 
+//				needs_extra_brackets=true;
+//			++sib;
+//			}
+//		}
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
 	str << *it->name;

@@ -94,6 +94,7 @@ namespace boost {
 // Algorithms.
 
 #include "algorithms/canonicalise.hh"
+#include "algorithms/collect_components.hh"
 #include "algorithms/collect_factors.hh"
 #include "algorithms/collect_terms.hh"
 #include "algorithms/combine.hh"
@@ -995,6 +996,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	// Algorithms with only the Ex as argument.
 	def_algo_1<canonicalise>("canonicalise");
+	def_algo_1<collect_components>("collect_components");
 	def_algo_1<collect_factors>("collect_factors");
  	def_algo_1<collect_terms>("collect_terms");
  	def_algo_1<combine>("combine");

@@ -92,7 +92,9 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
 	// Sympy has no notion of children with different parent relations; it's all 
-	// functions of functions kind of stuff. 
+	// functions of functions kind of stuff. What we will do is print upper and
+	// lower indices as 'UP(..)' and 'DN(..)' type arguments, and then convert
+	// them back later.
 
 	// We need to know if the symbol has implicit dependence on other symbols,
 	// as this needs to be made explicit for sympy.
@@ -106,7 +108,15 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 		while(ch!=tree.end(it)) {
 			if(first) first=false;
 			else      str << ", ";
+			if(ch->fl.parent_rel==str_node::p_super) 
+				str << "UP(";
+			if(ch->fl.parent_rel==str_node::p_sub) 
+				str << "DN(";
+
 			dispatch(str, ch);
+
+			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub) 
+				str << ")";
 			++ch;
 			}
 		if(dep) {

@@ -42,11 +42,12 @@ namespace cadabra {
         
          // Virtual functions from GUIBase.
 
-         virtual void add_cell(const DTree&, DTree::iterator, bool) override;
-         virtual void remove_cell(const DTree&, DTree::iterator) override;
-         virtual void remove_all_cells() override;
-         virtual void update_cell(const DTree&, DTree::iterator) override;
-			virtual void position_cursor(const DTree&, DTree::iterator) override;
+         virtual void   add_cell(const DTree&, DTree::iterator, bool) override;
+         virtual void   remove_cell(const DTree&, DTree::iterator) override;
+         virtual void   remove_all_cells() override;
+         virtual void   update_cell(const DTree&, DTree::iterator) override;
+			virtual void   position_cursor(const DTree&, DTree::iterator) override;
+			virtual size_t get_cursor_position(const DTree&, DTree::iterator) override;
 
          virtual void on_connect() override;
          virtual void on_disconnect(const std::string&) override;
@@ -138,6 +139,7 @@ namespace cadabra {
 			void on_edit_insert_above();
 			void on_edit_insert_below();
 			void on_edit_delete();
+			void on_edit_split();
 			void on_edit_cell_is_latex();
 			void on_edit_cell_is_python();
 

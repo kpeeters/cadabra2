@@ -18,6 +18,8 @@ namespace cadabra {
    class ActionAddCell;
 	class ActionPositionCursor;
 	class ActionRemoveCell;
+	class ActionSetRunStatus;
+	class ActionSplitCell;
    class ComputeThread;
    class GUIBase;
 
@@ -41,7 +43,7 @@ namespace cadabra {
 			/// should only be used when loading new documents or creating
 			/// a new canvas view.
 
-			void         build_visual_representation();
+			void build_visual_representation();
 			
 			/// All changes to the document should be made by submitting
 			/// ActionBase derived objects to the 'queue_action' function,
@@ -68,6 +70,8 @@ namespace cadabra {
          friend ActionAddCell;
 			friend ActionPositionCursor;
 			friend ActionRemoveCell;
+			friend ActionSplitCell;
+			friend ActionSetRunStatus;
          // FIXME: add other actions.
 	
 			bool is_registered() const;

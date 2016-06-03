@@ -89,6 +89,8 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
 	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
+	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"), 
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Python"), Gtk::AccelKey("<control><shift>P"),
@@ -146,6 +148,8 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"      <menuitem action='EditInsertAbove' />"
 		"      <menuitem action='EditInsertBelow' />"
 		"      <menuitem action='EditDelete' />"
+		"      <separator/>"
+		"      <menuitem action='EditSplit' />"
 		"      <separator/>"
 		"      <menuitem action='EditMakeCellTeX' />"
 		"      <menuitem action='EditMakeCellPython' />"
@@ -254,7 +258,6 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	if(cfg->width != last_configure_width) {
 		last_configure_width = cfg->width;
 		try {
-			std::cerr << "running TeX" << std::endl;
 			engine.invalidate_all();
 			engine.convert_all();
 			for(unsigned int i=0; i<canvasses.size(); ++i) 
@@ -590,8 +593,10 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		VisualCell& vc = canvasses[i]->visualcells[&(*it)];
-		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) 
+		if(it->cell_type==DataCell::CellType::python || it->cell_type==DataCell::CellType::latex) {
+			vc.inbox->update_buffer();
 			vc.inbox->queue_draw();
+			}
 		}
 	
 	}
@@ -599,7 +604,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 	{
 //	if(it==doc.end()) return;
-//	std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
+	//std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
 	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
@@ -625,6 +630,19 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 		}
 	
 	current_cell=it;
+	}
+
+size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
+	{
+	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
+		std::cerr << "cadabra-client: Cannot find cell to retrieve cursor position for." << std::endl;
+		return -1;
+		}
+
+	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
+	size_t offset = target.inbox->buffer->get_insert()->get_iter().get_offset();
+	
+	return offset;
 	}
 
 void NotebookWindow::scroll_into_view(DTree::iterator it)
@@ -693,13 +711,12 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
 	{
 	current_canvas=canvas_number;
-	// std::cout << "received: " << content << std::endl;
-	it->textbuf=content;
-
-	dim_output_cells(it);
-
-	modified=true;
-	update_title();
+	if(it->textbuf!=content) {
+		it->textbuf=content;
+		dim_output_cells(it);
+		modified=true;
+		update_title();
+		}
 
 	return false;
 	}
@@ -1082,6 +1099,13 @@ void NotebookWindow::on_edit_delete()
 	process_data();
 	}
 
+void NotebookWindow::on_edit_split()
+	{
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionSplitCell>(current_cell);
+	queue_action(action);
+	process_data();
+	}
+
 void NotebookWindow::on_edit_cell_is_python()
 	{
 	if(current_cell==doc.end()) return;
@@ -1187,6 +1211,7 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
+	special.push_back("Software Sustainability Institute");
 	about.add_credit_section("Special thanks", special);
 	about.run();
 	}

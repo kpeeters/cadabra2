@@ -47,6 +47,10 @@ namespace cadabra {
 
 			virtual void position_cursor(const DTree&, DTree::iterator)=0;
 
+			/// Retrieve the position of the cursor in the current cell.
+
+			virtual size_t get_cursor_position(const DTree&, DTree::iterator)=0;
+
 			/// Network status is propagated from the ComputeThread to the
          /// GUI using the following methods. These get called on the
 			/// compute thread (as opposed to the functions above, which get

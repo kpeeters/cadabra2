@@ -19,7 +19,7 @@ Algorithm::result_t complete::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
-	iterator bg=goal.begin(goal.begin());
+	iterator bg=goal.begin();
 
 	const InverseMetric *invmetric = kernel.properties.get<InverseMetric>(bg);
 	if(invmetric) {
