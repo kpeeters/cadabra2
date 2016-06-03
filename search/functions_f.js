@@ -20,6 +20,7 @@ var searchData=
   ['on_5fedit_5fdelete',['on_edit_delete',['../classcadabra_1_1NotebookWindow.html#a66c6fd89df9543cbb9f2a407525df789',1,'cadabra::NotebookWindow']]],
   ['on_5fedit_5finsert_5fabove',['on_edit_insert_above',['../classcadabra_1_1NotebookWindow.html#a54859cc18065e992eacb8e3fc2f53829',1,'cadabra::NotebookWindow']]],
   ['on_5fedit_5finsert_5fbelow',['on_edit_insert_below',['../classcadabra_1_1NotebookWindow.html#a533b29c157e2e0a00499b35762f1da7c',1,'cadabra::NotebookWindow']]],
+  ['on_5fedit_5fsplit',['on_edit_split',['../classcadabra_1_1NotebookWindow.html#a5bde5fefe634b37874b958a1c117ef31',1,'cadabra::NotebookWindow']]],
   ['on_5fedit_5fundo',['on_edit_undo',['../classcadabra_1_1NotebookWindow.html#a905b27ee4223d3e09495f3bc62e6497f',1,'cadabra::NotebookWindow']]],
   ['on_5ffail',['on_fail',['../classcadabra_1_1ComputeThread.html#af955445218198edee74fc12199c379d5',1,'cadabra::ComputeThread']]],
   ['on_5ffile_5fexport_5fhtml',['on_file_export_html',['../classcadabra_1_1NotebookWindow.html#a1477f4378d971f0084e173cb979f50ab',1,'cadabra::NotebookWindow']]],

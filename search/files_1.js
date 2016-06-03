@@ -11,6 +11,8 @@ var searchData=
   ['cleanup_2ehh',['Cleanup.hh',['../Cleanup_8hh.html',1,'']]],
   ['codeinput_2ecc',['CodeInput.cc',['../CodeInput_8cc.html',1,'']]],
   ['codeinput_2ehh',['CodeInput.hh',['../CodeInput_8hh.html',1,'']]],
+  ['collect_5fcomponents_2ecc',['collect_components.cc',['../collect__components_8cc.html',1,'']]],
+  ['collect_5fcomponents_2ehh',['collect_components.hh',['../collect__components_8hh.html',1,'']]],
   ['collect_5ffactors_2ecc',['collect_factors.cc',['../collect__factors_8cc.html',1,'']]],
   ['collect_5ffactors_2ehh',['collect_factors.hh',['../collect__factors_8hh.html',1,'']]],
   ['collect_5fterms_2ecc',['collect_terms.cc',['../collect__terms_8cc.html',1,'']]],

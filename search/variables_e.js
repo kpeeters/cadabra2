@@ -7,7 +7,7 @@ var searchData=
   ['needs_5fgenerating',['needs_generating',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a2e5f009e2f5a12d9f197ea3f5e6e0aa0',1,'cadabra::TeXEngine::TeXRequest']]],
   ['new_5frunning_5f',['new_running_',['../classcadabra_1_1ActionSetRunStatus.html#ab320351602aa155afabd674e87c99b3c',1,'cadabra::ActionSetRunStatus']]],
   ['newcell',['newcell',['../classcadabra_1_1ActionAddCell.html#ae32d1c07b4f153283f281b6b260bfa96',1,'cadabra::ActionAddCell']]],
-  ['newref',['newref',['../classcadabra_1_1ActionAddCell.html#a9a5c6613ddf7dfa74005c4e74832160c',1,'cadabra::ActionAddCell::newref()'],['../classcadabra_1_1ActionPositionCursor.html#a6e34b313e48f98a76fc2d9bad82db042',1,'cadabra::ActionPositionCursor::newref()']]],
+  ['newref',['newref',['../classcadabra_1_1ActionAddCell.html#a9a5c6613ddf7dfa74005c4e74832160c',1,'cadabra::ActionAddCell::newref()'],['../classcadabra_1_1ActionPositionCursor.html#a6e34b313e48f98a76fc2d9bad82db042',1,'cadabra::ActionPositionCursor::newref()'],['../classcadabra_1_1ActionSplitCell.html#ac995bdc69eb9c0a555ab3527fd63a847',1,'cadabra::ActionSplitCell::newref()']]],
   ['next_5fis_5fproduct_5f',['next_is_product_',['../classpreprocessor.html#ac8b74d74df3a8ea6095267c16256890b',1,'preprocessor']]],
   ['nonscalarexceptiontype',['NonScalarExceptionType',['../PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b',1,'PythonCdb.cc']]],
   ['nt1',['nt1',['../classdecompose__product.html#a3c82e36a8f45df98cc447195595b033e',1,'decompose_product']]],

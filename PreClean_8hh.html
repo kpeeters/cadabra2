@@ -110,8 +110,10 @@ Functions</h2></td></tr>
 <tr class="separator:gaff2a0c5f8749e25b136df72748e13363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a47dbaca62d868843cbe517b0f595fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8hh.html#a2a47dbaca62d868843cbe517b0f595fb">pre_clean_dispatch_deep</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;)</td></tr>
 <tr class="separator:a2a47dbaca62d868843cbe517b0f595fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3979923fa9db40f7fe57418a51e30ca4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8hh.html#a3979923fa9db40f7fe57418a51e30ca4">cleanup_updown</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:a3979923fa9db40f7fe57418a51e30ca4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup for individual node types.  <a href="#a3979923fa9db40f7fe57418a51e30ca4">More...</a><br/></td></tr>
+<tr class="separator:a3979923fa9db40f7fe57418a51e30ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f16c157200cd6c40fcb024f31dff61b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8hh.html#a4f16c157200cd6c40fcb024f31dff61b">cleanup_rational</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
-<tr class="memdesc:a4f16c157200cd6c40fcb024f31dff61b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup for individual node types.  <a href="#a4f16c157200cd6c40fcb024f31dff61b">More...</a><br/></td></tr>
 <tr class="separator:a4f16c157200cd6c40fcb024f31dff61b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab85f42e18ceb0f4fb7560e9c4ea31b23"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8hh.html#ab85f42e18ceb0f4fb7560e9c4ea31b23">cleanup_frac</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
 <tr class="separator:ab85f42e18ceb0f4fb7560e9c4ea31b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,9 +220,6 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Cleanup for individual node types. </p>
-<p>These are not needed during any later stages of the manipulation of an expression (and are hence defined here, not in '<a class="el" href="Cleanup_8hh.html">Cleanup.hh</a>'). </p>
-
 </div>
 </div>
 <a class="anchor" id="aa4f282691672830d65edb63feda68972"></a>
@@ -255,6 +254,41 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a3979923fa9db40f7fe57418a51e30ca4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cleanup_updown </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleanup for individual node types. </p>
+<p>These are not needed during any later stages of the manipulation of an expression (and are hence defined here, not in '<a class="el" href="Cleanup_8hh.html">Cleanup.hh</a>'). </p>
+
+</div>
+</div>
 <a class="anchor" id="a2a47dbaca62d868843cbe517b0f595fb"></a>
 <div class="memitem">
 <div class="memproto">
@@ -284,7 +318,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 27 2016 17:54:00 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 3 2016 15:40:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

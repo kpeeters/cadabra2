@@ -144,6 +144,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8ae251d7084d77e7855a348b3daed062"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a8ae251d7084d77e7855a348b3daed062">position_cursor</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;, DTree::iterator) override</td></tr>
 <tr class="memdesc:a8ae251d7084d77e7855a348b3daed062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position the cursor in the current canvas in the widget corresponding to the indicated cell.  <a href="#a8ae251d7084d77e7855a348b3daed062">More...</a><br/></td></tr>
 <tr class="separator:a8ae251d7084d77e7855a348b3daed062"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e3abbb595443c2ec8a37b9305b79d05"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a2e3abbb595443c2ec8a37b9305b79d05">get_cursor_position</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;, DTree::iterator) override</td></tr>
+<tr class="memdesc:a2e3abbb595443c2ec8a37b9305b79d05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the position of the cursor in the current cell.  <a href="#a2e3abbb595443c2ec8a37b9305b79d05">More...</a><br/></td></tr>
+<tr class="separator:a2e3abbb595443c2ec8a37b9305b79d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14f143db319a48f82dacc6f2fbca378e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a14f143db319a48f82dacc6f2fbca378e">on_connect</a> () override</td></tr>
 <tr class="memdesc:a14f143db319a48f82dacc6f2fbca378e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Network status is propagated from the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> to the.  <a href="#a14f143db319a48f82dacc6f2fbca378e">More...</a><br/></td></tr>
 <tr class="separator:a14f143db319a48f82dacc6f2fbca378e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,6 +207,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a653683b9882f455539df970a4f5a1698 inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79a7e9b8f7b23a244f816f3276b8ad83 inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a79a7e9b8f7b23a244f816f3276b8ad83">ActionRemoveCell</a></td></tr>
 <tr class="separator:a79a7e9b8f7b23a244f816f3276b8ad83 inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad672e7fffbcc20f93504ead740d316b2 inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#ad672e7fffbcc20f93504ead740d316b2">ActionSplitCell</a></td></tr>
+<tr class="separator:ad672e7fffbcc20f93504ead740d316b2 inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56b0aa54a1aa9d9459db8b2bfc941cfb inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a56b0aa54a1aa9d9459db8b2bfc941cfb">ActionSetRunStatus</a></td></tr>
+<tr class="separator:a56b0aa54a1aa9d9459db8b2bfc941cfb inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -280,6 +287,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a533b29c157e2e0a00499b35762f1da7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66c6fd89df9543cbb9f2a407525df789"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a66c6fd89df9543cbb9f2a407525df789">on_edit_delete</a> ()</td></tr>
 <tr class="separator:a66c6fd89df9543cbb9f2a407525df789"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bde5fefe634b37874b958a1c117ef31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a5bde5fefe634b37874b958a1c117ef31">on_edit_split</a> ()</td></tr>
+<tr class="separator:a5bde5fefe634b37874b958a1c117ef31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab6ed19684997f99b84e7eef14beb2ed0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#ab6ed19684997f99b84e7eef14beb2ed0">on_edit_cell_is_latex</a> ()</td></tr>
 <tr class="separator:ab6ed19684997f99b84e7eef14beb2ed0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9e75cac8f5b8ef07f0faf301cf26fd1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a9e75cac8f5b8ef07f0faf301cf26fd1d">on_edit_cell_is_python</a> ()</td></tr>
@@ -623,6 +632,44 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a2e3abbb595443c2ec8a37b9305b79d05"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t NotebookWindow::get_cursor_position </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DTree::iterator&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the position of the cursor in the current cell. </p>
+
+<p>Implements <a class="el" href="classcadabra_1_1GUIBase.html#a029e3fef79a0e4533965307914402ec3">cadabra::GUIBase</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a403932b5f2214315bc59fa8c06a5c5e4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -842,6 +889,29 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void NotebookWindow::on_edit_insert_below </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5bde5fefe634b37874b958a1c117ef31"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NotebookWindow::on_edit_split </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -2327,7 +2397,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 27 2016 17:54:19 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 3 2016 15:40:44 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

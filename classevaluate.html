@@ -133,6 +133,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0db30439730aef27e52e00a75d805209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d49c8b37dba4cee0d06d136f717b1c9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classEx.html#a2b752a88144e6ad7bee2ff30bd671811">result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a3d49c8b37dba4cee0d06d136f717b1c9">apply</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> &amp;) override</td></tr>
 <tr class="separator:a3d49c8b37dba4cee0d06d136f717b1c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0d14dc9f9f88db5c6865c3c2f965abf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#ab0d14dc9f9f88db5c6865c3c2f965abf">merge_components</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it1, <a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it2)</td></tr>
+<tr class="memdesc:ab0d14dc9f9f88db5c6865c3c2f965abf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge the information in two 'components' nodes at the given iterators, moving all out of the second one into the first one.  <a href="#ab0d14dc9f9f88db5c6865c3c2f965abf">More...</a><br/></td></tr>
+<tr class="separator:ab0d14dc9f9f88db5c6865c3c2f965abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classAlgorithm"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classAlgorithm')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classAlgorithm.html">Algorithm</a></td></tr>
 <tr class="memitem:a2a57d262e4d04e7d3ee81cbe1f03dee4 inherit pub_methods_classAlgorithm"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAlgorithm.html#a2a57d262e4d04e7d3ee81cbe1f03dee4">Algorithm</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;, <a class="el" href="classEx.html">Ex</a> &amp;)</td></tr>
 <tr class="memdesc:a2a57d262e4d04e7d3ee81cbe1f03dee4 inherit pub_methods_classAlgorithm"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialise the algorithm with a reference to the expression tree, but do not yet do anything with this tree.  <a href="#a2a57d262e4d04e7d3ee81cbe1f03dee4">More...</a><br/></td></tr>
@@ -167,9 +170,6 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ad8179ea00d19150d16e474610aed019c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#ad8179ea00d19150d16e474610aed019c">handle_factor</a> (<a class="el" href="classAlgorithm.html#ae6f68540d91f815d6d9ebcc34540fe6d">sibling_iterator</a> &amp;sib, const <a class="el" href="classAlgorithm.html#a44a0e184f264c43b1a1f3ade8a52ca93">index_map_t</a> &amp;full_ind_free)</td></tr>
 <tr class="memdesc:ad8179ea00d19150d16e474610aed019c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace a single factor with a 'components' ...  <a href="#ad8179ea00d19150d16e474610aed019c">More...</a><br/></td></tr>
 <tr class="separator:ad8179ea00d19150d16e474610aed019c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0d14dc9f9f88db5c6865c3c2f965abf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#ab0d14dc9f9f88db5c6865c3c2f965abf">merge_components</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it1, <a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it2)</td></tr>
-<tr class="memdesc:ab0d14dc9f9f88db5c6865c3c2f965abf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge the information in two 'components' nodes at the given iterators, moving all out of the second one into the first one.  <a href="#ab0d14dc9f9f88db5c6865c3c2f965abf">More...</a><br/></td></tr>
-<tr class="separator:ab0d14dc9f9f88db5c6865c3c2f965abf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a261171e3a5dada80c18fc64c52b97930"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a261171e3a5dada80c18fc64c52b97930">merge_component_children</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it)</td></tr>
 <tr class="memdesc:a261171e3a5dada80c18fc64c52b97930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge entries in a single 'components' node when they are for the same index value(s).  <a href="#a261171e3a5dada80c18fc64c52b97930">More...</a><br/></td></tr>
 <tr class="separator:a261171e3a5dada80c18fc64c52b97930"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -607,9 +607,6 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 <a class="anchor" id="ab0d14dc9f9f88db5c6865c3c2f965abf"></a>
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void evaluate::merge_components </td>
@@ -629,11 +626,6 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Merge the information in two 'components' nodes at the given iterators, moving all out of the second one into the first one. </p>
@@ -668,7 +660,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 27 2016 17:54:06 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 3 2016 15:40:30 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

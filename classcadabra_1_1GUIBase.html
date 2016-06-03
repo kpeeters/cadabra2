@@ -134,6 +134,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3e2730c1435e2dedd1ae42d7b0659ff3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1GUIBase.html#a3e2730c1435e2dedd1ae42d7b0659ff3">position_cursor</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;, DTree::iterator)=0</td></tr>
 <tr class="memdesc:a3e2730c1435e2dedd1ae42d7b0659ff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position the cursor in the current canvas in the widget corresponding to the indicated cell.  <a href="#a3e2730c1435e2dedd1ae42d7b0659ff3">More...</a><br/></td></tr>
 <tr class="separator:a3e2730c1435e2dedd1ae42d7b0659ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a029e3fef79a0e4533965307914402ec3"><td class="memItemLeft" align="right" valign="top">virtual size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1GUIBase.html#a029e3fef79a0e4533965307914402ec3">get_cursor_position</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;, DTree::iterator)=0</td></tr>
+<tr class="memdesc:a029e3fef79a0e4533965307914402ec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the position of the cursor in the current cell.  <a href="#a029e3fef79a0e4533965307914402ec3">More...</a><br/></td></tr>
+<tr class="separator:a029e3fef79a0e4533965307914402ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a01f8a34c53efda713fcf04f8f17fc02f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1GUIBase.html#a01f8a34c53efda713fcf04f8f17fc02f">process_data</a> ()=0</td></tr>
 <tr class="memdesc:a01f8a34c53efda713fcf04f8f17fc02f"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> needs to modify the document, it stores an <a class="el" href="classcadabra_1_1ActionBase.html" title="All actions derive from the ActionBase object, which defines the interface they need to implement...">ActionBase</a> object on the stack (see the DocumenThread class) and then wakes up the GUI thread signalling it to process this action.  <a href="#a01f8a34c53efda713fcf04f8f17fc02f">More...</a><br/></td></tr>
 <tr class="separator:a01f8a34c53efda713fcf04f8f17fc02f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,6 +194,44 @@ Public Member Functions</h2></td></tr>
 <p>The GUI needs to figure out from the location of this cell in the DTree where to insert the cell in the visual display. If the 'visible' flag is false, hide the cell from view independent of whether its hidden flag is set (this is only used when constructing a document on load time and we do not want to show cells until they have all been added to the document). </p>
 
 <p>Implemented in <a class="el" href="classcadabra_1_1NotebookWindow.html#ac9b449578da87cc81a960cd33fc9f10d">cadabra::NotebookWindow</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a029e3fef79a0e4533965307914402ec3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual size_t cadabra::GUIBase::get_cursor_position </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DTree::iterator&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the position of the cursor in the current cell. </p>
+
+<p>Implemented in <a class="el" href="classcadabra_1_1NotebookWindow.html#a2e3abbb595443c2ec8a37b9305b79d05">cadabra::NotebookWindow</a>.</p>
 
 </div>
 </div>
@@ -475,7 +516,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri May 27 2016 17:54:18 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jun 3 2016 15:40:43 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
