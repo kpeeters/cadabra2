@@ -1112,8 +1112,8 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(first_free.count((*fri).first)==0) {
 								if(*it->name=="\\sum") {
-									std::cerr << (*fri).first << " not in first term" << std::endl;
-									 std::cerr << Ex(it) << std::endl;
+//									std::cerr << (*fri).first << " not in first term" << std::endl;
+//									 std::cerr << Ex(it) << std::endl;
 									throw ConsistencyException("Free indices in different terms in a sum do not match.");
 									}
 								else

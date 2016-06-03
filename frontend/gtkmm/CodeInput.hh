@@ -52,6 +52,7 @@ namespace cadabra {
 
 			bool handle_button_press(GdkEventButton *);
 			void handle_changed();
+			void update_buffer(); // update buffer from datacell
 
 			/// We cannot edit the content of the DataCell directly,
 			/// because Gtk needs a Gtk::TextBuffer. However, the

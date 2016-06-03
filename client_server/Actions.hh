@@ -27,20 +27,16 @@ namespace cadabra {
 
 	class ActionBase {
 		public:
-			/// Execute changes to the DTree document which need to be made
-			/// before the GUI is updated.
-			virtual void pre_execute(DocumentThread&)=0;
+			/// Perform the action. This should update both the document
+			/// tree data structure and the GUI. The latter is updated
+			/// by calling relevant methods on the GUIBase object passed
+			/// in.
 
-			/// Make sure the GUI reflects the change.
-			/// FIXME: do we need an exec/revert combo here too?
-			virtual void update_gui(const DTree&, GUIBase&)=0;
+			virtual void execute(DocumentThread&, GUIBase&)=0;
 
-			/// Execute changes to the DTree document which need to be made
-			/// after the GUI has been updated.
-			virtual void post_execute(DocumentThread&)=0;
+			/// Revert the change to the DTree document and the GUI.
 
-			/// Revert the change to the DTree document.
-			virtual void revert(DocumentThread&)=0;
+			virtual void revert(DocumentThread&, GUIBase&)=0;
 	};
 	
 	/// \ingroup clientserver
@@ -53,11 +49,8 @@ namespace cadabra {
 			
 			ActionAddCell(DataCell, DTree::iterator ref_, Position pos_);
 			
-			virtual void pre_execute(DocumentThread&) override;
-			virtual void update_gui(const DTree&, GUIBase&) override;
-			virtual void post_execute(DocumentThread&) override;
-
-			virtual void revert(DocumentThread&) override;
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
 			
 		private:
 			// Keep track of the location where this cell is inserted into
@@ -80,11 +73,8 @@ namespace cadabra {
 
 			ActionPositionCursor(DTree::iterator ref_, Position pos_);
 
-			virtual void pre_execute(DocumentThread&) override;
-			virtual void update_gui(const DTree&, GUIBase&) override;
-			virtual void post_execute(DocumentThread&) override;
-
-			virtual void revert(DocumentThread&) override;
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
 
 		private:
 			bool              needed_new_cell;
@@ -100,11 +90,8 @@ namespace cadabra {
 		public:
 			ActionSetRunStatus(DTree::iterator ref_, bool running);
 
-			virtual void pre_execute(DocumentThread&) override;
-			virtual void update_gui(const DTree&, GUIBase&) override;
-			virtual void post_execute(DocumentThread&) override;
-
-			virtual void revert(DocumentThread&) override;
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
 
 		private:
 			DTree::iterator this_cell;
@@ -121,11 +108,8 @@ namespace cadabra {
 			ActionRemoveCell(DTree::iterator ref_);
 			~ActionRemoveCell();
 			
-			virtual void pre_execute(DocumentThread&) override;
-			virtual void update_gui(const DTree&, GUIBase&) override;
-			virtual void post_execute(DocumentThread&) override;
-
-			virtual void revert(DocumentThread&) override;
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
 
 		private:
 			// Keep track of the location where this cell (and its child
@@ -147,11 +131,11 @@ namespace cadabra {
 			ActionSplitCell(DTree::iterator ref_);
 			~ActionSplitCell();
 
-			virtual void pre_execute(DocumentThread&) override;
-			virtual void update_gui(const DTree&, GUIBase&) override;
-			virtual void post_execute(DocumentThread&) override;
-
-			virtual void revert(DocumentThread&) override;
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+			
+		private:
+			DTree::iterator this_cell, newref; // the newly created cell
 	};
 
 }

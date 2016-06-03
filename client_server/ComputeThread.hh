@@ -88,9 +88,10 @@ namespace cadabra {
 			GUIBase        *gui;
 			DocumentThread *docthread;
 
-			// For debugging purposes, we keep record of the main thread id,
+			// For debugging purposes, we keep record of the gui thread id,
 			// so that we can flag when code runs on the wrong thread.
-			std::thread::id  main_thread_id; 
+			// Gets initialised in the ComputeThread constructor.
+			std::thread::id  gui_thread_id; 
 
 			// Keeping track of cells which are running on the server, in
 			// a form which allows us to look them up quickly based only
