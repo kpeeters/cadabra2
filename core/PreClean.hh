@@ -28,6 +28,7 @@ void pre_clean_dispatch_deep(const Kernel& k, Ex&);
 /// later stages of the manipulation of an expression (and are hence
 /// defined here, not in 'Cleanup.hh').
 
+void cleanup_updown(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_rational(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_frac(const Kernel& k, Ex&, Ex::iterator& it);
 void cleanup_sub(const Kernel& k, Ex&, Ex::iterator& it);
