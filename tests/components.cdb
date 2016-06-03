@@ -42,7 +42,7 @@ def test03():
     substitute(ex, rl);
     evaluate(ex, ss);
     # Check against arxiv:0904.4184.
-    tst:=\components^{\mu}_{\nu\rho}( {t,r,t}            =  M/r**2 (1-2 M/r)**(-1),
+    tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
                                     {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
                                     {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
                                     {r,t,t}            =  M/r**2 (1-2 M/r),
