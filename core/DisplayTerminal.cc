@@ -289,23 +289,23 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1) 
 		print_multiplier(str, it);
 
-	if(needs_brackets(num))
-		str << "(";
+//	if(needs_brackets(num))
+//		str << "(";
 
 	dispatch(str, num);
 
-	if(needs_brackets(num))
-		str << ")";
+//	if(needs_brackets(num))
+//		str << ")";
 
 	str << "/";
 
-	if(needs_brackets(den))
-		str << "(";
+//	if(needs_brackets(den))
+//		str << "(";
 	
 	dispatch(str, den);
 
-	if(needs_brackets(den))
-		str << ")";
+//	if(needs_brackets(den))
+//		str << ")";
 	}
 
 void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
