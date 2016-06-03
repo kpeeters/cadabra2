@@ -31,7 +31,7 @@ before_install:
    - cp config/travisci_rsa ~/.ssh/id_rsa
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python-dev
-     g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python-sympy; fi
+     g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python3-pip; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev
      libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y python-matplotlib python-mpmath; fi
@@ -41,12 +41,13 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gmp || brew upgrade gmp; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pkgconfig || brew upgrade pkgconfig; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated ossp-uuid || brew upgrade ossp-uuid; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pcre jsoncpp python3 gtkmm3 gnome-icon-theme; fi
+   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install pip3 pcre jsoncpp python3 gtkmm3 gnome-icon-theme; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python --with-python3; fi
+   - sudo pip3 install sympy
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [[ "`${CC} --version |grep gcc`" != "" ]]; then sudo apt-get install --yes doxygen graphviz texlive-font-utils; ./config/publish-doxygen; fi; fi
 
 install:
-   - pip install --user matplotlib
+   - pip3 install --user matplotlib
 
 
 notifications:
