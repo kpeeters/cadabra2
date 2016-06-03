@@ -21,24 +21,25 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 	// FIXME: write as individual parent/current tests
 	if(tree.is_valid(tree.parent(it))==false) return false;
 
+	Ex::iterator parent_it = tree.parent(it);
+	Ex::iterator child_it  = it;
+	int child_num = tree.index(it);
+
 	std::string parent=*tree.parent(it)->name;
 	std::string child =*it->name;
 
 	if(parent=="\\partial" && child=="\\sum") return true;
 
-	if(parent=="\\frac" && ( child=="\\sum" || child=="\\prod")) return true;
+	if(parent=="\\frac" && ( child=="\\sum" || child=="\\prod" || (*child_it->multiplier!=1 && child_num>0) )) return true;
 
-	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
-		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
-//		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
-		}
-	else if(it->fl.parent_rel==str_node::p_none) { // function argument
-		if(*it->name=="\\sum") return false;
-		}
-	else {
-		if(*it->name=="\\sum")  return true;
-		if(*it->name=="\\prod") return true;
-		}
+	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum") ) return true;
+
+//	if(parent=="\\pow" && child_num>0 && *child_it->multiplier!=1 ) return true;
+
+	if(parent=="\\prod" && child=="\\sum") return true;
+
+//	if(it->fl.parent_rel==str_node::p_none && (child=="\\sum" || child=="\\prod") ) return true;
+
 	return false;
 	}
 
@@ -380,10 +381,13 @@ void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	dispatch(str, sib);
-	str << "**(";
+	str << "**";
+	if(needs_brackets(sib))
+		str << "(";
 	++sib;
 	dispatch(str, sib);
-	str << ")";
+	if(needs_brackets(sib))
+		str << ")";
 	}
 
 void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)

@@ -304,7 +304,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			auto rhs1 = tr.begin(it1);
 			++rhs1;
 			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "", "", "");
+			sympy::apply(kernel, tr, nd, "simplify", "", "");
 			if(nd->is_zero())
 				tr.erase(it1);
 			return true;
