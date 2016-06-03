@@ -43,7 +43,7 @@ tst:=\components^{\mu}_{\nu\rho}( {t,r,t}            =  M/r**2 (1-2 M/r)**(-1),
                                   {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
                                   {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
                                   {r,t,t}            =  M/r**2 (1-2 M/r),
-                                  {r,\theta,\theta}  = -r (r-2M/r),
+                                  {r,\theta,\theta}  = -r (1-2M/r),
                                   {r,\phi,\phi}      = -r (r-2M/r) \sin(\theta)**2,
                                   {\theta,\theta,r}  = 1/r,
                                   {\theta,r,\theta}  = 1/r,
@@ -53,6 +53,7 @@ tst:=\components^{\mu}_{\nu\rho}( {t,r,t}            =  M/r**2 (1-2 M/r)**(-1),
                                   {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
                                   {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
                                   ) - @(ex);
+collect_components(_);
 
 # Schutz (11.117) has an error in \Gamma^{\theta}_{\phi\phi}.
 
