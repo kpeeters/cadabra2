@@ -6,8 +6,9 @@ void pre_clean_dispatch(const Kernel& kernel, Ex& ex, Ex::iterator& it)
 	{
 	if(*it->name!="1" && it->is_unsimplified_rational()) cleanup_rational(kernel, ex, it);
 	
-	if(*it->name=="\\frac")     cleanup_frac(kernel, ex, it);
-	else if(*it->name=="\\sub") cleanup_sub(kernel, ex, it);
+	if(*it->name=="\\frac")                      cleanup_frac(kernel, ex, it);
+	else if(*it->name=="\\sub")                  cleanup_sub(kernel, ex, it);
+	else if(*it->name=="UP" || *it->name=="DN")  cleanup_updown(kernel, ex, it);
 
 	cleanup_indexbracket(kernel, ex, it);
 	}
@@ -15,6 +16,18 @@ void pre_clean_dispatch(const Kernel& kernel, Ex& ex, Ex::iterator& it)
 void pre_clean_dispatch_deep(const Kernel& k, Ex& tr)
 	{
 	return cleanup_dispatch_deep(k, tr, &pre_clean_dispatch);
+	}
+
+void cleanup_updown(const Kernel& k, Ex& tr, Ex::iterator& st)
+	{
+	bool isup=true;
+	if(*st->name=="DN")
+		isup=false;
+
+	tr.flatten(st);
+	st=tr.erase(st);
+	if(isup) st->fl.parent_rel=str_node::p_super;
+	else     st->fl.parent_rel=str_node::p_sub;
 	}
 
 void cleanup_rational(const Kernel& k, Ex& tr, Ex::iterator& st)
