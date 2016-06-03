@@ -286,12 +286,8 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator num=tree.begin(it), den=num;
 	++den;
 
-	bool close_bracket=false;
 	if(*it->multiplier!=1) 
 		print_multiplier(str, it);
-//		str << "(";
-//		close_bracket=true;
-//		}
 
 	if(needs_brackets(num))
 		str << "(";
@@ -309,9 +305,6 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 	dispatch(str, den);
 
 	if(needs_brackets(den))
-		str << ")";
-
-	if(close_bracket)
 		str << ")";
 	}
 
