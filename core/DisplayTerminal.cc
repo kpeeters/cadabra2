@@ -287,11 +287,11 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 	++den;
 
 	bool close_bracket=false;
-	if(*it->multiplier!=1) {
+	if(*it->multiplier!=1) 
 		print_multiplier(str, it);
-		str << "(";
-		close_bracket=true;
-		}
+//		str << "(";
+//		close_bracket=true;
+//		}
 
 	if(needs_brackets(num))
 		str << "(";
@@ -382,9 +382,9 @@ void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 		print_multiplier(str, it);
 	dispatch(str, sib);
 	str << "**";
+	++sib;
 	if(needs_brackets(sib))
 		str << "(";
-	++sib;
 	dispatch(str, sib);
 	if(needs_brackets(sib))
 		str << ")";
