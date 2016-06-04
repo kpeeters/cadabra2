@@ -76,53 +76,55 @@ def test04():
 
 test04()
 
-# {r,t}::Coordinate.
-# {m,n,p}::Indices(values={r,t}).
-# ex:= A_{m n}*A_{m n};
-# ss:= { A_{r r} -> a+b, A_{r t} -> b, A_{t t} -> c, A_{r r t}->3, A_{t t t}->c };
-# evaluate(ex, ss);
-# print(tree(ex))
-# 
-# 
-# ------------------------
-# 
-# # The following test components of tensor outer products. The first one
-# # leads to a scalar multiplying the components tensor.
-# 
-# {r,t}::Coordinate.
-# {m,n}::Indices(values={t,r}).
-# ex:= g_{m n} X^{n} A;
-# rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
-# evaluate(ex,rl);
-# 
-# # The second one is manifestly an outer product.
-# 
-# {r,t}::Coordinate.
-# {m,n,p}::Indices(values={t,r}).
-# ex:= X^{n} X^{m} X^{p};
-# rl:= { X^{t} -> T, X^{r} -> R };
-# evaluate(ex,rl);
-# 
-# -------------------------------------------
-# 
-# 
-# {r,t}::Coordinate.
-# {m,n}::Indices(values={r,t}).
-# ex:= A_{m n}+A_{n m};
-# ss:= { A_{m n} -> C_{m n} };
-# rl:= { C_{r r}=3 };
-# # Note: 
-# evaluate(ex, ss, rl);
-# 
-# 
-# {r,t}::Coordinate.
-# {m,n}::Indices("full",values={r,t}).
-# {i,j}::Indices("3d", parent="full").
-# ex:= A_{m n}+A_{n m};
-# rl:= { A_{t t} -> 3, A_{i j} -> \delta_{i j} };
-# evaluate(ex, rl);
-# 
-# 
+# Component computations leading to a scalar.
+
+def test05():
+    {r,t}::Coordinate.
+    {m,n,p}::Indices(values={r,t}).
+    ex:= A_{m n}*A_{m n};
+    ss:= { A_{r r} -> a+b, A_{r t} -> b, A_{t t} -> c, A_{r r t}->3, A_{t t t}->c };
+    evaluate(ex, ss);
+    tst:= (a+b)**2+b**2+c**2  - @(ex);
+    assert(tst==0)
+    print("Test 05 passed")
+
+test05()
+
+# The following test components of tensor outer products. The first one
+# leads to a scalar multiplying the components tensor.
+
+def test06():
+    {r,t}::Coordinate.
+    {m,n}::Indices(values={t,r}).
+    ex:= g_{m n} X^{n} A;
+    rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
+    evaluate(ex,rl);
+    tst:= \components_{m}( \comma{t}= A X^{t} ) - @(ex);
+    collect_components(_);
+    assert(tst==0)
+    print("Test 06 passed")
+
+test06()
+
+ 
+# The second one is manifestly an outer product.
+
+def test07():
+    {r,t}::Coordinate.
+    {m,n,p}::Indices(values={t,r}).
+    ex:= X^{n} X^{m} X^{p};
+    rl:= { X^{t} -> T, X^{r} -> R };
+    evaluate(ex,rl);
+    tst:=\components^{n m p}( {t,t,t}=T**3, {t,t,r}=R T**2, {t,r,t}=R T**2,
+                            {t,r,r}=T R**2, {r,t,t}=R T**2, {r,t,r}=T R**2,
+                            {r,r,t}=R**2 T, {r,r,r}=R**3 ) - @(ex);
+    collect_components(tst);
+    assert(tst==0)
+    print("Test 07 passed")
+
+test07()                          
+
+# More GR stuff.
 # {\mu,\nu,\rho,\sigma}::Indices(position=fixed).
 # \partial{#}::PartialDerivative.
 # ex:= R^{\mu}_{\nu\rho\sigma};
@@ -132,53 +134,16 @@ test04()
 #                                                  -\partial_{\sigma}{g_{\nu\rho}} )
 #                                                   };
 # substitute(ex, rl, repeat=True);                                                  
-#        
-# 
-# 
-# # The above does not yet figure out that the expression is symmetric in nu and rho.
-#                                            
-# 
-# substitute(ex, rl);
-# # should give 3*2*1+3*5*(C_{r}+D_{r}).
-# 
-# 
-# - Store components as
-# 
-#     \components_{m}^{n p}(r,t){{r,t,t}={r**2},{...}}
-# 
-#     A_{m n}(r,t)[ {r,r}=r**2, {r,t}=r*t ]
-# 
-#   At a sum node, we then have terms which are either \components nodes (from lower levels)
-#   or tensors which still have to be replaced. E.g.
-# 
-#     A_{m n} + C_{m p} D_{p n}
-# 
-#     A_{m n} + \components_{m n}< {r,r}=r**2 + sin(r), {r,t}=r*cos(r) >
-#     
-# 
-# - First make depends logic, returning a list of Ex objects on which another Ex depends.
-#   Needed to determine which components of \partial_{\mu}{...} to keep.
-# 
-# - Also need substitute patterns ot automatically generate patterns for objects related by
-#   symmetry.
-# 
-# #---
-# 
-# {m,n,p}::Indices.
+
+
+# -------------------------------------------
+
+# This one does not yet work, and might be better served with a split-index
+# first.
 # {r,t}::Coordinate.
-# ex:= A_{m n} A_{m n};
-# crds:= m -> { t, r, \phi, \theta };
-# vals:= { A_{t t} -> r, A_{r r} -> r**2, A_{t \phi} -> t };
-# evaluate(ex, crds, vals);
-# tst:= r*r + r**2 * r**2 + t*t - @(ex);
-# assert(tst)
-# 
-# {m,n,p,q}::Indices.
-# {t,r}::Coordinate.
-# ex:= A_{p m n} ( A_{m n} + B_{m n} );
-# crds:= m -> { t, r };
-# vals:= { A_{t t t} -> r, A_{t r r} -> r**2, A_{t t} -> r, A_{r r} -> r**2, B_{t t} -> 1 };
-# evaluate(ex, crds, vals);
-# 
-# tst:= r * ( r + 1 ) + r**2 * r**2 - @(ex);
-# assert(tst)
+# {m,n}::Indices("full",values={r,t}).
+# {i,j}::Indices("3d", parent="full").
+# ex:= A_{m n}+A_{n m};
+# rl:= { A_{t t} -> 3, A_{i j} -> \delta_{i j} };
+# evaluate(ex, rl);
+
