@@ -47,7 +47,7 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [[ "`${CC} --version |grep gcc`" != "" ]]; then sudo apt-get install --yes doxygen graphviz texlive-font-utils; ./config/publish-doxygen; fi; fi
 
 install:
-   - pip3 install --user matplotlib
+   - pip3 install --user matplotlib sympy
 
 
 notifications:

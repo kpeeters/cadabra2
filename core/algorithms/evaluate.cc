@@ -42,7 +42,6 @@ Algorithm::result_t evaluate::apply(iterator& it)
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) handle_derivative(walk);
 				}
-//			cleanup_dispatch(kernel, tr, walk);
 			}
 		);
 
@@ -95,6 +94,7 @@ void evaluate::handle_sum(iterator it)
 		sib2=tr.erase(sib2);
 		}
 	cleanup_components(sib1);
+
 	tr.flatten_and_erase(it);
 	}
 
@@ -660,6 +660,11 @@ void evaluate::handle_prod(iterator it)
 	// At this stage, there should be only one factor in the product, which 
 	// should be a \components node. We do a cleanup, after which it should be
 	// at the 'it' node.
+	// std::cerr << "should take care of it at " << Ex(it) << std::endl;
+	// FIXME: the code below works because it only cleans up the \prod; if we
+	// fix cleanup_dispatch to cleanup until nothing needs cleaning up anymore,
+	// then we will be left with a non-\component node in case this is a scalar.
+
 	cleanup_dispatch(kernel, tr, it);
 	assert(*it->name=="\\components");
 
@@ -679,4 +684,8 @@ void evaluate::handle_prod(iterator it)
 			sympy::apply(kernel, tr, nd, "", "", "");
 			return true;
 			});
+	
+	// std::cerr << "should take care of it again at " << Ex(it) << std::endl;
+	cleanup_dispatch(kernel, tr, it);
+	// std::cerr << "done " << Ex(it) << std::endl;
 	}
