@@ -70,7 +70,10 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 					}
 				}
 			if(!found) {
-				if(ref->textbuf!="") { // If the last cell is empty, stay where we are.
+				if(ref->textbuf=="") { // If the last cell is empty, stay where we are.
+					newref=ref;
+					}
+				else {
 					DataCell newcell(DataCell::CellType::python, "");
 					newref = cl.doc.insert(sib, newcell);
 					needed_new_cell=true;
@@ -79,16 +82,19 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 			break;
 			}
 		case Position::previous: {
+			bool found=false;
 			DTree::sibling_iterator sib=ref;
 			while(cl.doc.is_valid(--sib)) {
 				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
 					if(!sib->hidden) {
 						newref=sib;
-						return;
+						found=true;
+						break;
 						}
 					}
 				}
-			newref=ref; // No previous sibling cell. FIXME: walk tree structure
+			if(!found) 
+				newref=ref; // No previous sibling cell. FIXME: walk tree structure
 			break;
 			}
 		}
