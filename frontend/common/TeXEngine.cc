@@ -262,7 +262,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 #ifndef __APPLE__
 	  //			<< "\\usepackage{inconsolata}\n"
 #endif
-			<< "\\usepackage{amsmath}\n"
+			<< "\\usepackage[fleqn]{amsmath}\n"
 			<< "\\usepackage{color}\\usepackage{amssymb}\n"
 	      << "\\usepackage[parfill]{parskip}\n"
   	      << "\\usepackage{tableaux}"
