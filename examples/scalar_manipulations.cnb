@@ -53,7 +53,7 @@
 					"source" : "\\begin{dmath*}{}\\log{\\left (x \\right )}\\end{dmath*}"
 				}
 			],
-			"source" : "sympy.integrate(ex.__sympy__());"
+			"source" : "sympy.integrate(ex);"
 		},
 		{
 			"cell_origin" : "client",
@@ -66,7 +66,7 @@
 					"source" : "\\begin{dmath*}{}\\frac{1}{x}\\end{dmath*}"
 				}
 			],
-			"source" : "sympy.simplify(ex.__sympy__());"
+			"source" : "sympy.simplify(ex);"
 		},
 		{
 			"cell_origin" : "client",
@@ -179,7 +179,7 @@
 					"source" : "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
 				}
 			],
-			"source" : "ex2.__sympy__();\nprint(type(ex2.__sympy__()))"
+			"source" : "ex2._sympy_();\nprint(type(ex2._sympy_()))"
 		},
 		{
 			"cell_origin" : "client",
@@ -192,7 +192,7 @@
 					"source" : "\\begin{dmath*}{}\\frac{x^{3}}{3} + \\frac{1}{2} \\sin^{2}{\\left (x \\right )}\\end{dmath*}"
 				}
 			],
-			"source" : "ex2.__sympy__().doit();"
+			"source" : "ex2._sympy_().doit();"
 		},
 		{
 			"cell_origin" : "client",
@@ -232,7 +232,7 @@
 					"source" : "\\begin{dmath*}{}- \\sqrt{3}, \\sqrt{3}\\end{dmath*}"
 				}
 			],
-			"source" : "sympy.solve(ex4.__sympy__());"
+			"source" : "sympy.solve(ex4._sympy_());"
 		},
 		{
 			"cell_origin" : "client",
