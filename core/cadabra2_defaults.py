@@ -22,12 +22,10 @@ if sympy.__version__ != "unavailable":
     from sympy import factor
     from sympy import integrate
     from sympy import diff
-#    from sympy import expand
     from sympy import symbols
     from sympy import latex
     from sympy import sin, cos, tan, trigsimp
     from sympy import Matrix as sMatrix
-#    sympy.init_printing()
 
 # Import matplotlib and setup functions to prepare its output
 # for sending as base64 to the client. Example use:

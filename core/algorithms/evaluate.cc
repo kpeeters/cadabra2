@@ -36,6 +36,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// the index name -> index value map.
 	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
+			// FIXME: does not yet handle single terms yet.
 			if(*(walk->name)=="\\sum")       handle_sum(walk);
 			else if(*(walk->name)=="\\prod") handle_prod(walk);
 			else {
@@ -443,9 +444,10 @@ void evaluate::handle_prod(iterator it)
 		sib=nxt;
 		}
 	
-	// Now everything is a \component node.  The thing is effectively a
-	// large sparse tensor product. We need to do the sums over the
-	// dummy indices, turning this into a single \component node.
+	// Now every factor in the product is a \component node.  The thing
+	// is effectively a large sparse tensor product. We need to do the
+	// sums over the dummy indices, turning this into a single
+	// \component node.
 	
 	index_map_t ind_free, ind_dummy;
 	classify_indices(it, ind_free, ind_dummy);
@@ -581,7 +583,8 @@ void evaluate::handle_prod(iterator it)
 		++di; ++di;
 		}
 
-	// FIXME: At this stage we have one or more components nodes in the product.
+	// At this stage we have one or more components nodes in the product,
+	// and we have collected all possible index value combinations.
 	// We need to do an outer multiplication, merging all index names into
 	// one, and computing tensor component values for all possible index values.
 
