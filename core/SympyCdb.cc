@@ -35,16 +35,16 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	// We then execute the expression in Python.
 
 	//ex.print_recursive_treeform(std::cerr, it);
-	// std::cerr << "feeding " << str.str() << std::endl;
+	std::cerr << "feeding " << str.str() << std::endl;
 
 	auto module = boost::python::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
 	boost::python::object obj = parse(str.str());
-	// std::cerr << "converting result to string" << std::endl;
+	std::cerr << "converting result to string" << std::endl;
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-	// std::cerr << result << std::endl;
+	std::cerr << result << std::endl;
 	
 
    // After that, we construct a new sub-expression from this string by using our
