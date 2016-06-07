@@ -28,6 +28,11 @@ if sympy.__version__ != "unavailable":
     from sympy import sin, cos, tan, trigsimp
     from sympy import Matrix as sMatrix
 #    sympy.init_printing()
+# FIXME: does not yet work!
+    tmpsympify=sympy.sympify
+    def sympify(a, locals=None, convert_xor=True, strict=False, rational=False, evaluate=None):
+        print('hello!')
+        return tmpsympify(a, locals, convert_xor, strict, rational, evaluate)
 
 # Import matplotlib and setup functions to prepare its output
 # for sending as base64 to the client. Example use:
