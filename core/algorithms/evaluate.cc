@@ -155,11 +155,17 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			Ex rule(c);
 			Ex obj(sib);
+			// std::cerr << "attempting rule " << rule << std::endl;
+			// rule is a single rule, we walk the list.
 			substitute subs(kernel, obj, rule);
 			iterator oit=obj.begin();
 			if(subs.can_apply(oit)) {
 				auto el = repl.append_child(vl, str_node("\\equals"));
 				auto il = repl.append_child(el, str_node("\\comma"));
+				// FIXME: if we have dummy indices, we need to remove these dummies
+				// from the index values which we will add to the 'il' list. It may
+				// then happen that we have match lists with the same names; need
+				// to collect those (either here or later).
 				auto fi = full_ind_free.begin();
 				// FIXME: need to do something sensible with indices on the lhs 
 				// of rules which are not coordinates. You can have A_{m n} as expression,
