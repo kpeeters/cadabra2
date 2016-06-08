@@ -34,7 +34,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// The logic in Compare.cc helps us by matching component A_{t r}
 	// in the rule to an abstract tensor A_{m n} in the expression, storing
 	// the index name -> index value map.
-	
+
 	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
 			// FIXME: does not yet handle single terms yet.
 			if(*(walk->name)=="\\sum")       handle_sum(walk);
@@ -42,6 +42,11 @@ Algorithm::result_t evaluate::apply(iterator& it)
 			else {
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) handle_derivative(walk);
+				else if(tr.is_head(walk)) {
+					index_map_t empty;
+					sibling_iterator tmp(walk);
+					handle_factor(tmp, empty);
+					}
 				}
 			}
 		);

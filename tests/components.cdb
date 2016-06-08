@@ -140,8 +140,8 @@ test07()
 
 # This one does not yet work, and might be better served with a split-index
 # first.
-# {r,t}::Coordinate.
-# {m,n}::Indices("full",values={r,t}).
+# {r,t,\phi,\theta}::Coordinate.
+# {m,n}::Indices("full",values={t,r,\phi,\theta}).
 # {i,j}::Indices("3d", parent="full").
 # ex:= A_{m n}+A_{n m};
 # rl:= { A_{t t} -> 3, A_{i j} -> \delta_{i j} };
@@ -160,4 +160,16 @@ def test08():
    print("Test 08 passed")
 
 test08()
+
+def test09():
+   {r,t}::Coordinate.
+   {m,n,p}::Indices(values={r,t})
+   ex:= A_{m}^{m};
+   rl:= { A_{t}^{r} -> S, A_{t}^{t} -> 3, A_{r}^{r} -> r };
+   evaluate(ex, rl);
+   tst:= r+3 - @(ex);
+   assert(tst==0);
+   print("Test 09 passed");
+
+test09()
 
