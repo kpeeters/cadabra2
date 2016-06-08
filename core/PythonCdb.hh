@@ -64,14 +64,23 @@ std::string Ex_repr_(const Ex&);
 /// objects to be printed. This one is required to produce output
 /// which looks readable but is also still valid input. In order to
 /// produce proper LaTeX output, this is therefore not the right
-/// function to use. Hence the last output function: Ex_latex_.
-/// It internally uses DisplayTeX to do the actual printing.
+/// function to use, because Cadabra only reads a restricted subset
+/// of LaTeX (for instance, we output spacing commands like '\,' but
+/// do not accept it on input). 
+/// So we have a separate _latex_() member on each object, which 
+///internally uses DisplayTeX to do the actual printing.
 
 std::string Ex_latex_(const Ex&);
 
+/// \ingroup scalar
+///
 /// Convert a Cadabra 'Ex' to a Sympy expression. This first converts the
 /// Cadabra expression to a string, and then reads that back in by calling
-/// sympy.parsing.sympy_parser.parse_expr.
+/// sympy.parsing.sympy_parser.parse_expr. Is mapped to a '_sympy_()' 
+/// function on each Ex object. 
+/// When you feed an Ex object to a Sympy function, the Ex gets converted
+/// to a Sympy object in 'sympy.sympify' because the latter attempts to 
+/// call __sympy__ on every object that you feed it.
 
 boost::python::object Ex_to_Sympy(const Ex&);
 
