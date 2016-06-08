@@ -144,6 +144,8 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		//std::cerr << tr << std::endl;
 		return;
 		}
+
+
 	
 	// Attempt to apply each component substitution rule on this term.
 	Ex repl("\\components");
@@ -155,25 +157,39 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			Ex rule(c);
 			Ex obj(sib);
-			// std::cerr << "attempting rule " << rule << std::endl;
+			// std::cerr << "attempting rule " << rule << " on " << obj << std::endl;
 			// rule is a single rule, we walk the list.
 			substitute subs(kernel, obj, rule);
 			iterator oit=obj.begin();
 			if(subs.can_apply(oit)) {
+				// std::cerr << "can apply" << std::endl;
 				auto el = repl.append_child(vl, str_node("\\equals"));
 				auto il = repl.append_child(el, str_node("\\comma"));
-				// FIXME: if we have dummy indices, we need to remove these dummies
-				// from the index values which we will add to the 'il' list. It may
-				// then happen that we have match lists with the same names; need
-				// to collect those (either here or later).
 				auto fi = full_ind_free.begin();
 				// FIXME: need to do something sensible with indices on the lhs 
 				// of rules which are not coordinates. You can have A_{m n} as expression,
 				// A_{0 0} -> r, A_{i j} -> \delta_{i j} as rule, but at the moment the
 				// second rule does not do the right thing.
+
+				// Store all free indices (not the dummies!) in the component node.
+				// If we have been passed an empty list of free indices (because the parent
+				// node is not a sum node), simply add all free index values in turn. 
 				if(fi==full_ind_free.end()) {
-					for(auto& r: subs.comparator.index_value_map) 
-						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
+//					for(auto& r: subs.comparator.index_value_map) {
+//						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
+//						}
+					fi=ind_free.begin();
+					while(fi!=ind_free.end()) {
+						for(auto& r: subs.comparator.index_value_map) {
+							if(fi->first == r.first) {
+								repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
+								break;
+								}
+							}
+						auto fiold(fi);
+						while(fi!=ind_free.end() && fiold->first==fi->first)
+							++fi;
+						}
 					}
 				else {
 					while(fi!=full_ind_free.end()) {
@@ -196,6 +212,8 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 			return true;
 			});
 
+	// std::cerr << "result now " << repl << std::endl;
+	merge_component_children(repl.begin());
 
 	sib = tr.move_ontop(iterator(sib), repl.begin());
 	}
