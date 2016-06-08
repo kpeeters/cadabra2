@@ -855,7 +855,7 @@ void def_prop()
 
 	delete p;
 
-	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_).def("_latex", &Property<P>::latex_);
+	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_).def("_latex_", &Property<P>::latex_);
 	}
 
 
@@ -948,7 +948,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int))
 		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int_2))
 		.def("__str__",  &Ex_str_)
-		.def("_latex",   &Ex_latex_)
+		.def("_latex_",  &Ex_latex_)
 		.def("__repr__", &Ex_repr_)
 		.def("__eq__",   &__eq__Ex_Ex)
 		.def("__eq__",   &__eq__Ex_int)
