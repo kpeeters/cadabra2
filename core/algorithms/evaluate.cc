@@ -128,10 +128,10 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	// FIXME: not yet handled.
 	index_map_t ind_free, ind_dummy;
 	classify_indices(sib, ind_free, ind_dummy);
-	if(ind_dummy.size()>0) {
-		std::cerr << "Internal contractions, not yet handled" << std::endl;
-		return;
-		}
+//	if(ind_dummy.size()>0) {
+//		std::cerr << "Internal contractions, not yet handled" << std::endl;
+//		return;
+//		}
 
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.

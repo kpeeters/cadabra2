@@ -147,8 +147,8 @@ test07()
 # rl:= { A_{t t} -> 3, A_{i j} -> \delta_{i j} };
 # evaluate(ex, rl);
 
-# {r,t}::Coordinate.
-# {m,n,p}::Indices(values={r,t})
-# ex:= Q A_{m}^{m};
-# rl:= { A_{t}^{t} -> 3, A_{r}^{r} -> r };
-# evaluate(ex, rl);
+{r,t}::Coordinate.
+{m,n,p}::Indices(values={r,t})
+ex:= Q A_{m}^{m};
+rl:= { A_{t}^{r} -> S, A_{t}^{t} -> 3, A_{r}^{r} -> r };
+evaluate(ex, rl);

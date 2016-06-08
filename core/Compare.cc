@@ -567,6 +567,22 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 												  else return false;
 											  });
 			if(ivals!=t2->values.end()) {
+				// Verify that the 'two' index has not already been matched to a value
+				// different from 'one'.
+				Ex t1(two), t2(two), o1(one), o2(one);
+				t2.begin()->flip_parent_rel();
+				o2.begin()->flip_parent_rel();
+				auto prev1 = index_value_map.find(t1);
+				auto prev2 = index_value_map.find(t2);
+				if(prev1!=index_value_map.end() && ! (prev1->second==o1) ) {
+//					std::cerr << "Previously 1 " << Ex(two) << " was " << Ex(prev1->second) << std::endl;
+					return no_match_less;
+					}
+				if(prev2!=index_value_map.end() && ! (prev2->second==o2) ) {
+//					std::cerr << "Previously 2 " << Ex(two) << " was " << Ex(prev2->second) << std::endl;
+					return no_match_less;
+					}
+		  
 				index_value_map[two]=one;
 				return node_match;
 				} 
