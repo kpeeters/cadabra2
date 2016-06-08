@@ -34,7 +34,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// The logic in Compare.cc helps us by matching component A_{t r}
 	// in the rule to an abstract tensor A_{m n} in the expression, storing
 	// the index name -> index value map.
-	
+
 	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
 			// FIXME: does not yet handle single terms yet.
 			if(*(walk->name)=="\\sum")       handle_sum(walk);
@@ -42,6 +42,11 @@ Algorithm::result_t evaluate::apply(iterator& it)
 			else {
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) handle_derivative(walk);
+				else if(tr.is_head(walk)) {
+					index_map_t empty;
+					sibling_iterator tmp(walk);
+					handle_factor(tmp, empty);
+					}
 				}
 			}
 		);
@@ -128,10 +133,10 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	// FIXME: not yet handled.
 	index_map_t ind_free, ind_dummy;
 	classify_indices(sib, ind_free, ind_dummy);
-	if(ind_dummy.size()>0) {
-		std::cerr << "Internal contractions, not yet handled" << std::endl;
-		return;
-		}
+//	if(ind_dummy.size()>0) {
+//		std::cerr << "Internal contractions, not yet handled" << std::endl;
+//		return;
+//		}
 
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.
@@ -144,6 +149,8 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		//std::cerr << tr << std::endl;
 		return;
 		}
+
+
 	
 	// Attempt to apply each component substitution rule on this term.
 	Ex repl("\\components");
@@ -155,9 +162,12 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			Ex rule(c);
 			Ex obj(sib);
+			// std::cerr << "attempting rule " << rule << " on " << obj << std::endl;
+			// rule is a single rule, we walk the list.
 			substitute subs(kernel, obj, rule);
 			iterator oit=obj.begin();
 			if(subs.can_apply(oit)) {
+				// std::cerr << "can apply" << std::endl;
 				auto el = repl.append_child(vl, str_node("\\equals"));
 				auto il = repl.append_child(el, str_node("\\comma"));
 				auto fi = full_ind_free.begin();
@@ -165,9 +175,26 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 				// of rules which are not coordinates. You can have A_{m n} as expression,
 				// A_{0 0} -> r, A_{i j} -> \delta_{i j} as rule, but at the moment the
 				// second rule does not do the right thing.
+
+				// Store all free indices (not the dummies!) in the component node.
+				// If we have been passed an empty list of free indices (because the parent
+				// node is not a sum node), simply add all free index values in turn. 
 				if(fi==full_ind_free.end()) {
-					for(auto& r: subs.comparator.index_value_map) 
-						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
+//					for(auto& r: subs.comparator.index_value_map) {
+//						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
+//						}
+					fi=ind_free.begin();
+					while(fi!=ind_free.end()) {
+						for(auto& r: subs.comparator.index_value_map) {
+							if(fi->first == r.first) {
+								repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
+								break;
+								}
+							}
+						auto fiold(fi);
+						while(fi!=ind_free.end() && fiold->first==fi->first)
+							++fi;
+						}
 					}
 				else {
 					while(fi!=full_ind_free.end()) {
@@ -190,6 +217,8 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 			return true;
 			});
 
+	// std::cerr << "result now " << repl << std::endl;
+	merge_component_children(repl.begin());
 
 	sib = tr.move_ontop(iterator(sib), repl.begin());
 	}

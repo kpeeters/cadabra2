@@ -181,7 +181,7 @@ void cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 
 	auto comma=tr.begin(it);
 	if(*comma->name=="\\comma") {
-		std::cerr << "components node for a scalar" << std::endl;
+		// std::cerr << "components node for a scalar" << std::endl;
 		tr.flatten(comma); // unwrap comma
 		comma=tr.erase(comma);
 		tr.flatten(comma); // unwrap equals
