@@ -248,7 +248,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The Python 'print' function always calls the 'str' member on objects to be printed. </p>
-<p>This one is required to produce output which looks readable but is also still valid input. In order to produce proper LaTeX output, this is therefore not the right function to use. Hence the last output function: Ex_latex_. It internally uses <a class="el" href="classDisplayTeX.html" title="Class to handle display of expressions using LaTeX notation. ">DisplayTeX</a> to do the actual printing. </p>
+<p>This one is required to produce output which looks readable but is also still valid input. In order to produce proper LaTeX output, this is therefore not the right function to use, because <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> only reads a restricted subset of LaTeX (for instance, we output spacing commands like '\,' but do not accept it on input). So we have a separate <em>latex</em>() member on each object, which internally uses <a class="el" href="classDisplayTeX.html" title="Class to handle display of expressions using LaTeX notation. ">DisplayTeX</a> to do the actual printing. </p>
 
 </div>
 </div>
@@ -368,7 +368,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jun 7 2016 14:59:29 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jun 8 2016 18:38:09 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

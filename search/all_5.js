@@ -56,7 +56,7 @@ var searchData=
   ['ex_5frepr_5f',['Ex_repr_',['../PythonCdb_8cc.html#afa7280e0886f1ca4a1e7b9ea8149df36',1,'Ex_repr_(const Ex &amp;ex):&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#a111c2e7847eb32dd65111096f940be7f',1,'Ex_repr_(const Ex &amp;):&#160;PythonCdb.cc']]],
   ['ex_5fsetitem',['Ex_setitem',['../PythonCdb_8cc.html#acfe28f30dd4bbe50647aa8efb997677d',1,'PythonCdb.cc']]],
   ['ex_5fstr_5f',['Ex_str_',['../group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69',1,'Ex_str_(const Ex &amp;ex):&#160;PythonCdb.cc'],['../group__pythoncore.html#gaaac8ee218579ca3faa6c1cec2c7d3c69',1,'Ex_str_(const Ex &amp;):&#160;PythonCdb.cc']]],
-  ['ex_5fto_5fsympy',['Ex_to_Sympy',['../PythonCdb_8cc.html#af0960e91acaead99009ef7754dea30c9',1,'Ex_to_Sympy(const Ex &amp;ex):&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#a0fafa63eaa225856324b5564b24af929',1,'Ex_to_Sympy(const Ex &amp;):&#160;PythonCdb.cc']]],
+  ['ex_5fto_5fsympy',['Ex_to_Sympy',['../group__scalar.html#ga0fafa63eaa225856324b5564b24af929',1,'Ex_to_Sympy(const Ex &amp;ex):&#160;PythonCdb.cc'],['../group__scalar.html#ga0fafa63eaa225856324b5564b24af929',1,'Ex_to_Sympy(const Ex &amp;):&#160;PythonCdb.cc']]],
   ['exact_5fmatch',['exact_match',['../classproperty.html#a802ab9406d3e66849282bcb9c2d50a2da32b6848dce53187022c8e5179450ac8f',1,'property']]],
   ['exceptions',['exceptions',['../classexec__stream__t.html#a213ff012ef99a1b720379d710fda4c3f',1,'exec_stream_t']]],
   ['exceptions_2ecc',['Exceptions.cc',['../Exceptions_8cc.html',1,'']]],
