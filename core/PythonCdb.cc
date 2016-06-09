@@ -149,7 +149,7 @@ std::vector<T> to_std_vector(const boost::python::list& iterable )
 								  boost::python::stl_input_iterator< T >( ) );
 	}
 
-// Split a 'sum' expression into its individual terms.
+// Split a 'sum' expression into its individual terms. FIXME: now deprecated because we have operator[]?
 
 boost::python::list terms(const Ex& ex) 
 	{
@@ -167,6 +167,32 @@ boost::python::list terms(const Ex& ex)
 		}
 	
 	return ret;
+	}
+
+Ex lhs(const Ex& ex)
+	{
+	auto it=ex.begin();
+	if(it==ex.end()) 
+		throw ArgumentException("Empty expression passed to 'lhs'.");
+
+	if(*it->name!="\\equals")
+		throw ArgumentException("Cannot take 'lhs' of expression which is not an equation.");
+
+	return Ex(ex.begin(ex.begin()));
+	}
+
+Ex rhs(const Ex& ex)
+	{
+	auto it=ex.begin();
+	if(it==ex.end()) 
+		throw ArgumentException("Empty expression passed to 'rhs'.");
+
+	if(*it->name!="\\equals")
+		throw ArgumentException("Cannot take 'rhs' of expression which is not an equation.");
+
+	auto sib=ex.begin(ex.begin());
+	++sib;
+	return Ex(sib);
 	}
 
 Ex Ex_getitem(Ex &ex, int index)
@@ -487,9 +513,34 @@ std::string print_tree(Ex *ex)
 // Setup logic to pass C++ exceptions down to Python properly.
  
 PyObject *ParseExceptionType = NULL;
-PyObject *ArgumentExceptionType = NULL;
+PyObject *ArgumentExceptionType = 0;
 PyObject *NonScalarExceptionType = NULL;
 PyObject *InternalErrorType = NULL;
+
+// Create a new Python exception class which derives from Exception (as it should to
+// be a good Python exception). Taken from http://stackoverflow.com/questions/11448735.
+PyObject* createExceptionClass(const char* name, PyObject* baseTypeObj = PyExc_Exception)
+	{
+	char* cname = const_cast<char*>(name);
+
+	PyObject* typeObj = PyErr_NewException(cname, baseTypeObj, 0);
+	if(!typeObj) boost::python::throw_error_already_set();
+	boost::python::scope().attr("ArgumentException") = boost::python::handle<>(boost::python::borrowed(typeObj));
+	return typeObj;
+	}
+
+// Handler to translate a C++ exception and pass it on as a Python exception
+void translate_ArgumentException(const ArgumentException& x) 
+	{
+	std::cerr << "getting confused" << std::endl;
+	assert(ArgumentExceptionType != 0);
+	boost::python::object exc(x); // wrap the C++ exception
+//	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));
+//	exc_t.attr("cause") = exc; // add the wrapped exception to the Python exception
+	
+//    PyErr_SetString(ArgumentExceptionType, x.what());
+	PyErr_SetObject(ArgumentExceptionType, exc.ptr()); //exc_t.ptr());
+	}
 
 void translate_ParseException(const ParseException &e)
 	{
@@ -498,12 +549,12 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
-void translate_ArgumentException(const ArgumentException &e)
-	{
-	assert(ArgumentExceptionType != NULL);
-	boost::python::object pythonExceptionInstance(e);
-	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
-	}
+//void translate_ArgumentException(const ArgumentException &e)
+//	{
+//	assert(ArgumentExceptionType != NULL);
+//	boost::python::object pythonExceptionInstance(e);
+//	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
+//	}
 
 void translate_NonScalarException(const NonScalarException &e)
 	{
@@ -921,9 +972,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyParseException.def("__str__", &ParseException::what);
 	ParseExceptionType=pyParseException.ptr();
 
-	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
-	pyArgumentException.def("__str__", &ArgumentException::py_what);
-	ArgumentExceptionType=pyArgumentException.ptr();
+//	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
+//	pyArgumentException.def("__str__", &ArgumentException::py_what);
+//	ArgumentExceptionType=pyArgumentException.ptr();
 
 	class_<NonScalarException> pyNonScalarException("NonScalarException", init<std::string>());
 	pyNonScalarException.def("__str__", &NonScalarException::py_what);
@@ -983,9 +1034,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_value_policy<manage_new_object>());
 
 	// Algorithms which spit out a new Ex (or a list of new Exs), instead of 
-	// modifying the existing one.
+	// modifying the existing one. 
 
 	def("terms", &terms);
+
+	def("lhs", &lhs);
+	def("rhs", &rhs);
 
 	// We do not use implicitly_convertible to convert a string
 	// parameter to an Ex object automatically (it never
@@ -1188,8 +1242,14 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<WeightInherit>();
 	def_prop<WeylTensor>();
 
-	register_exception_translator<ParseException>(&translate_ParseException);
+
+	ArgumentExceptionType=createExceptionClass("cadabra2.ArgumentException");
+	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
+	pyArgumentException.def("__str__", &ArgumentException::what);
+//	ArgumentExceptionType=pyArgumentException.ptr();
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
+
+	register_exception_translator<ParseException>(&translate_ParseException);
 	register_exception_translator<NonScalarException>(&translate_NonScalarException);
 	register_exception_translator<InternalError>(&translate_InternalError);
 	
