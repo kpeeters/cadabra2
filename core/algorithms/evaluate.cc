@@ -345,18 +345,8 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			return true;
 			});
 
-	// Simplify the component by calling sympy.
 
-	cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
-			assert(*it1->name=="\\equals");
-			auto rhs1 = tr.begin(it1);
-			++rhs1;
-			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "simplify", "", "");
-			if(nd->is_zero())
-				tr.erase(it1);
-			return true;
-			});
+	simplify_components(it1);
 	}
 
 void evaluate::cleanup_components(iterator it) 
@@ -465,6 +455,8 @@ void evaluate::simplify_components(iterator it)
 			++rhs1;
 			iterator nd=rhs1;
 			sympy::apply(kernel, tr, nd, "simplify", "", "");
+			if(nd->is_zero())
+				tr.erase(eqs);
 			return true;
 			});
 	}
