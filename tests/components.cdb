@@ -27,36 +27,36 @@ test02();
 
 def test03():
     __cdbkernel__=create_scope()
-    {r,t,\phi,\theta}::Coordinate.
-    {\mu,\nu,\rho,\sigma}::Indices(values={t,r,\phi,\theta}, position=fixed).
-    \partial{#}::PartialDerivative.
-    g_{\mu\nu}::Metric.
-    g^{\mu\nu}::InverseMetric.         
-    ex:= \Gamma^{\mu}_{\nu\rho};
-    rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
-                                                    +\partial_{\nu}{g_{\rho\sigma}}
-                                                    -\partial_{\sigma}{g_{\nu\rho}} );
-    
-    ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
-    complete(ss, $g^{\mu\nu}$)
-    substitute(ex, rl);
-    evaluate(ex, ss);
+{r,t,\phi,\theta}::Coordinate.
+{\mu,\nu,\rho,\sigma}::Indices(values={t,r,\phi,\theta}, position=fixed).
+\partial{#}::PartialDerivative.
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.         
+ex:= \Gamma^{\mu}_{\nu\rho};
+rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
+                                                +\partial_{\nu}{g_{\rho\sigma}}
+                                                -\partial_{\sigma}{g_{\nu\rho}} );
+
+ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+complete(ss, $g^{\mu\nu}$)
+substitute(ex, rl);
+evaluate(ex, ss);
     # Check against arxiv:0904.4184.
-    tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
-                                    {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
-                                    {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
-                                    {r,t,t}            =  M/r**2 (1-2 M/r),
-                                    {r,\theta,\theta}  = -r (1-2M/r),
-                                    {r,\phi,\phi}      = - (r-2M) \sin(\theta)**2,
-                                    {\theta,\theta,r}  = 1/r,
-                                    {\theta,r,\theta}  = 1/r,
-                                    {\phi,\phi,r}      = 1/r,
-                                    {\phi,r,\phi}      = 1/r,
-                                    {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
-                                    {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
-                                    {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
-                                  ) - @(ex);
-    collect_components(_);
+tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
+                                {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
+                                {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
+                                {r,t,t}            =  M/r**2 (1-2 M/r),
+                                {r,\theta,\theta}  = -r (1-2M/r),
+                                {r,\phi,\phi}      = - (r-2M) \sin(\theta)**2,
+                                {\theta,\theta,r}  = 1/r,
+                                {\theta,r,\theta}  = 1/r,
+                                {\phi,\phi,r}      = 1/r,
+                                {\phi,r,\phi}      = 1/r,
+                                {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
+                                {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
+                                {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
+                              ) - @(ex);
+collect_components(_);
     assert(tst==0)
     print("Test 03 passed")
     
@@ -173,3 +173,14 @@ def test09():
 
 test09()
 
+def test10():
+    {r,t,\phi}::Coordinate;
+    {m,n,p}::Indices(values={r,t,\phi});
+    ex:= A_{n}^{n p} B_{p};
+    rl:= A_{r}^{r t} -> a, A_{r}^{r r} -> b, A_{r}^{t t} -> Q1, A_{t}^{r t} -> Q2, A_{t}^{r r} -> Q3,
+         A_{t}^{t t}-> c, A_{t}^{t r} -> d, B_{r} -> Br, B_{t} -> Bt;
+    evaluate(ex, rl);
+    tst:= a Bt + c Bt + b Br + d Br - @(ex);
+    assert(sympy.simplify(tst)==0)
+
+test10()
