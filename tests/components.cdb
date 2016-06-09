@@ -1,6 +1,7 @@
 
 # Testing a substitution rule in which an abstract index in the 
 # expression is matched against a coordinate in the pattern.
+# FIXME: this is not supposed to match!
 # {m,n,p}::Indices(values={t,r}).
 # {r,t}::Coordinate.
 # ex:= A_{m n} + B_{m n};
@@ -8,6 +9,7 @@
 # substitute(ex, rl)
 
 def test02():
+    __cdbkernel__=create_scope()
     {r,t}::Coordinate.
     {m,n,p,s}::Indices(values={t,r}).
     \partial{#}::PartialDerivative.
@@ -23,25 +25,23 @@ def test02():
 test02();
 
 
-# Now a Christoffel example, i.e. with derivatives.
+# Riemann curvature example.
 
 def test03():
     __cdbkernel__=create_scope()
     {r,t,\phi,\theta}::Coordinate.
-    {\mu,\nu,\rho,\sigma}::Indices(values={t,r,\phi,\theta}, position=fixed).
+    {\mu,\nu,\rho,\sigma,\lambda}::Indices(values={t,r,\phi,\theta}, position=fixed).
     \partial{#}::PartialDerivative.
     g_{\mu\nu}::Metric.
     g^{\mu\nu}::InverseMetric.         
-    ex:= \Gamma^{\mu}_{\nu\rho};
-    rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
-                                                    +\partial_{\nu}{g_{\rho\sigma}}
-                                                    -\partial_{\sigma}{g_{\nu\rho}} );
-    
     ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
     complete(ss, $g^{\mu\nu}$)
-    substitute(ex, rl);
-    evaluate(ex, ss);
-    # Check against arxiv:0904.4184.
+    ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
+                                                    +\partial_{\nu}{g_{\rho\sigma}}
+                                                    -\partial_{\sigma}{g_{\nu\rho}} );
+    evaluate(ch, ss);
+    chtst=rhs(ch);
+    # Check against e.g. arxiv:0904.4184.
     tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
                                     {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
                                     {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
@@ -55,10 +55,25 @@ def test03():
                                     {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
                                     {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
                                     {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
-                                  ) - @(ex);
+                                  ) - @(chtst);
     collect_components(_);
     assert(tst==0)
-    print("Test 03 passed")
+    print("Test 03a passed")
+    
+    rm:= R^{\rho}_{\sigma\mu\nu} = \partial_{\mu}{\Gamma^{\rho}_{\nu\sigma}}
+                                  -\partial_{\nu}{\Gamma^{\rho}_{\mu\sigma}}
+                                  +\Gamma^{\rho}_{\mu\lambda} \Gamma^{\lambda}_{\nu\sigma}
+                                  -\Gamma^{\rho}_{\nu\lambda} \Gamma^{\lambda}_{\mu\sigma};
+    
+    substitute(rm, ch);
+    evaluate(rm, ss);
+    
+    # The Ricci tensor should be zero.
+    rc:= R_{\sigma\nu} = R^{\rho}_{\sigma\rho\nu};
+    substitute(rc, rm);
+    evaluate(rc, ss);
+    assert(rhs(rc)==0)
+    print("Test 03b passed")
     
 test03()
     
@@ -69,7 +84,7 @@ def test04():
     rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
     ex:= g_{m n} X^{n};
     evaluate(ex, rl);
-    tst:= \components_{m}( \comma{t} = X^{t} ) - @(ex);
+    tst:= \components_{m}( \comma{ \comma{t} = X^{t} } ) - @(ex);
     collect_components(_);
     assert(tst==0)
     print("Test 04 passed")
@@ -79,6 +94,7 @@ test04()
 # Component computations leading to a scalar.
 
 def test05():
+    __cdbkernel__=create_scope()
     {r,t}::Coordinate.
     {m,n,p}::Indices(values={r,t}).
     ex:= A_{m n}*A_{m n};
@@ -94,12 +110,13 @@ test05()
 # leads to a scalar multiplying the components tensor.
 
 def test06():
+    __cdbkernel__=create_scope()
     {r,t}::Coordinate.
     {m,n}::Indices(values={t,r}).
     ex:= g_{m n} X^{n} A;
     rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
     evaluate(ex,rl);
-    tst:= \components_{m}( \comma{t}= A X^{t} ) - @(ex);
+    tst:= \components_{m}( \comma{ \comma{t}= A X^{t} } ) - @(ex);
     collect_components(_);
     assert(tst==0)
     print("Test 06 passed")
@@ -110,6 +127,7 @@ test06()
 # The second one is manifestly an outer product.
 
 def test07():
+    __cdbkernel__=create_scope()
     {r,t}::Coordinate.
     {m,n,p}::Indices(values={t,r}).
     ex:= X^{n} X^{m} X^{p};
@@ -150,26 +168,64 @@ test07()
 # Self-contracted tensors.
 
 def test08():
-   {r,t}::Coordinate.
-   {m,n,p}::Indices(values={r,t})
-   ex:= A_{n}^{n} A_{m}^{m};
-   rl:= { A_{t}^{r} -> S, A_{t}^{t} -> 3, A_{r}^{r} -> r };
-   evaluate(ex, rl);
-   tst:= (r+3)**2 - @(ex);
-   assert(tst==0)
-   print("Test 08 passed")
+    __cdbkernel__=create_scope()
+    {r,t}::Coordinate.
+    {m,n,p}::Indices(values={r,t})
+    ex:= A_{n}^{n} A_{m}^{m};
+    rl:= { A_{t}^{r} -> S, A_{t}^{t} -> 3, A_{r}^{r} -> r };
+    evaluate(ex, rl);
+    tst:= (r+3)**2 - @(ex);
+    assert(tst==0)
+    print("Test 08 passed")
 
 test08()
 
 def test09():
-   {r,t}::Coordinate.
-   {m,n,p}::Indices(values={r,t})
-   ex:= A_{m}^{m};
-   rl:= { A_{t}^{r} -> S, A_{t}^{t} -> 3, A_{r}^{r} -> r };
-   evaluate(ex, rl);
-   tst:= r+3 - @(ex);
-   assert(tst==0);
-   print("Test 09 passed");
+    __cdbkernel__=create_scope()
+    {r,t}::Coordinate.
+    {m,n,p}::Indices(values={r,t})
+    ex:= A_{m}^{m};
+    rl:= { A_{t}^{r} -> S, A_{t}^{t} -> 3, A_{r}^{r} -> r };
+    evaluate(ex, rl);
+    tst:= r+3 - @(ex);
+    assert(tst==0);
+    print("Test 09 passed");
 
 test09()
 
+def test10():
+    __cdbkernel__=create_scope()
+    {r,t,\phi}::Coordinate;
+    {m,n,p}::Indices(values={r,t,\phi});
+    ex:= A_{n}^{n p} B_{p};
+    rl:= A_{r}^{r t} -> a, A_{r}^{r r} -> b, A_{r}^{t t} -> Q1, A_{t}^{r t} -> Q2, A_{t}^{r r} -> Q3,
+         A_{t}^{t t}-> c, A_{t}^{t r} -> d, B_{r} -> Br, B_{t} -> Bt;
+    evaluate(ex, rl);
+    tst:= a Bt + c Bt + b Br + d Br - @(ex);
+    assert(sympy.simplify(tst)==0)
+
+test10()
+
+# This does not work when 'Q' is removed.
+def test11():
+    __cdbkernel__=create_scope()
+    {r,t,\phi}::Coordinate;
+    {m,n,p}::Indices(values={r,t,\phi});
+    ex:= T_{m n} = Q A_{m n};
+    rl:= A_{r r} -> r, A_{t t} -> t, A_{r t} -> t r;
+    evaluate(ex, rl);
+    ex2:= T_{m m};
+    substitute(ex2, ex);
+    evaluate(ex2, rl);
+    tst:= Q (r+t) - @(ex2);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
+
+# {r,t,\phi}::Coordinate;
+# {m,n,p}::Indices(values={r,t,\phi});
+# \partial{#}::PartialDerivative;
+# ex:= \partial_{m}{ A_{n} };
+# rl:= A_{r} -> r, A_{t} -> t;
+# evaluate( ex, rl );

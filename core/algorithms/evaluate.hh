@@ -72,6 +72,9 @@ class evaluate : public Algorithm {
 	private:
 		const Ex& components;
 
+		bool is_component(iterator it) const;
+
+		void handle_components(iterator it);
 		void handle_sum(iterator it);
 		void handle_prod(iterator it);
 		void handle_derivative(iterator it);
@@ -89,6 +92,10 @@ class evaluate : public Algorithm {
 		/// Cleanup all components in a 'components' node; that is, call the 
 		/// cleanup_dispatch function on them.
 		void cleanup_components(iterator it1);
+
+		/// Simplify all components of a 'components' node by running sympy's simplify
+		/// on them.
+		void simplify_components(iterator);
 
 		/// Determine all the Coordinate dependencies of the object at 'it'. For the
 		/// time being this can only be a 'components' node.

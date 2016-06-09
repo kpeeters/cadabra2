@@ -87,13 +87,13 @@ def display(obj):
 
     elif isinstance(obj, Ex):
         if 'server' in globals():
-            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
         else:
             print(obj.__str__());
 
     elif isinstance(obj, Property):
         if 'server' in globals():
-            server.send("\\begin{dmath*}{}"+obj._latex()+"\\end{dmath*}", "latex_view")
+            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
         else:
             print(obj.__str__())
 
@@ -106,7 +106,7 @@ def display(obj):
             else:
                 first=False
             if isinstance(elm, Ex):
-                out += elm._latex()
+                out += elm._latex_()
             else:
                 out+=latex(elm)   # Sympy to the rescue for all other objects.
         out+="\\end{dmath*}"
