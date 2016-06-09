@@ -36,9 +36,10 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// the index name -> index value map.
 
 	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
-			// FIXME: does not yet handle single terms yet.
-			if(*(walk->name)=="\\sum")       handle_sum(walk);
-			else if(*(walk->name)=="\\prod") handle_prod(walk);
+			if(*(walk->name)=="\\components") handle_components(walk);
+			else if(is_component(walk)) return;
+			else if(*(walk->name)=="\\sum")   handle_sum(walk);
+			else if(*(walk->name)=="\\prod")  handle_prod(walk);
 			else {
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) handle_derivative(walk);
@@ -54,6 +55,31 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	return res;
 	}
 
+bool evaluate::is_component(iterator it) const
+	{
+	iterator cpy=it;
+	do {
+		if(*it->name=="\\components") {
+			return true;
+			}
+		it=tr.parent(it);
+		} while(tr.is_valid(it));
+	return false;
+	}
+
+void evaluate::handle_components(iterator it)
+	{
+	// This just cleans up component nodes. At the moment this means
+	// taking care of handling dummy pairs.
+
+	index_map_t ind_free, ind_dummy;
+	classify_indices(it, ind_free, ind_dummy);
+	if(ind_dummy.size()==0) return;
+
+	// Wrap in a product, use handle_prod to sort out summation.
+	it = tr.wrap(it, str_node("\\prod"));
+	handle_prod(it);
+	}
 
 void evaluate::handle_sum(iterator it)
 	{
@@ -73,11 +99,10 @@ void evaluate::handle_sum(iterator it)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
 
-	// Iterate over all terms in the sum. These should be of three types: \component nodes,
-	// nodes with only free indices, and nodes with internal contractions (e.g. A_{m}^{m}). 
-	// The first type can, at this stage, be ignored. The second type needs to be converted
-	// into a \component node using the component evaluation rules. The last type 
-	// separate treatment, and is currently not handled yet; see the beginning of handle_factor.
+	// Iterate over all terms in the sum. These should be of two types: \component nodes,
+	// which we do not need to touch anymore, and nodes which have still not been 
+	// evaluated. We send them all to handle_factor, which will return immediately on the
+	// first node type, and convert the second type to the first.
 
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -106,6 +131,7 @@ void evaluate::handle_sum(iterator it)
 
 void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free)
 	{
+	// std::cerr << "handle_factor " << Ex(sib) << std::endl;
 	if(*sib->name=="\\components") return;
 
 	// If this factor is an accent at the top level, descent further.
@@ -129,18 +155,15 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		return;
 		}
 	
-	// Internal contractions.
-	// FIXME: not yet handled.
+	// We need to know for all indices whether they are free or dummy,
+	// in particular to handle internal contractions correctly.
 	index_map_t ind_free, ind_dummy;
 	classify_indices(sib, ind_free, ind_dummy);
-//	if(ind_dummy.size()>0) {
-//		std::cerr << "Internal contractions, not yet handled" << std::endl;
-//		return;
-//		}
 
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.
 	if(ind_free.size()==0 && ind_dummy.size()==0) {
+		// std::cerr << "wrapping scalar" << std::endl;
 		// FIXME: would be good if we could write this in a more readable form.
 		auto eq=tr.wrap(sib, str_node("\\equals"));
 		tr.prepend_child(eq, str_node("\\comma"));
@@ -149,7 +172,6 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		//std::cerr << tr << std::endl;
 		return;
 		}
-
 
 	
 	// Attempt to apply each component substitution rule on this term.
@@ -183,10 +205,12 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 //					for(auto& r: subs.comparator.index_value_map) {
 //						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
 //						}
+
 					fi=ind_free.begin();
 					while(fi!=ind_free.end()) {
 						for(auto& r: subs.comparator.index_value_map) {
 							if(fi->first == r.first) {
+								// std::cerr << "adding " << r.second.begin() << std::endl;
 								repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
 								break;
 								}
@@ -269,8 +293,6 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	sibling_iterator sib2=tr.end(it2);
 	--sib2;
 
-	// tr.print_recursive_treeform(std::cerr, tr.begin());
-
 	// We cannot directly compare the lhs of this equals node with the lhs
 	// of the equals node of the other components node, because the index
 	// order on the two components nodes may be different. We first
@@ -278,16 +300,14 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	// if we have anything to permutate in the first place.
 
 	if(*tr.begin(it1)->name!="\\comma") {
-		//std::cerr << "merging for " << *tr.begin(it1)->name << std::endl;
+		// Look at all indices on the two components nodes. Find
+		// the permutation that taked the indices on it2 and brings
+		// them in the order as they are on it1.
 		Perm perm;
 		perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
-//	for(auto p: perm.perm)
-//		std::cerr << p << " ";
-//	std::cerr << std::endl;
 		
 		//perm.apply(tr.begin(it2), sib2);
-		//std::cerr << "after permutation" << std::endl;
-		//tr.print_recursive_treeform(std::cerr, tr.begin());
+		//std::cerr << "after permutation " << Ex(tr) << std::endl;
 		
 		cadabra::do_list(tr, sib2, [&](Ex::iterator nd) {
 				auto lhs2 = tr.begin(nd);
@@ -295,8 +315,6 @@ void evaluate::merge_components(iterator it1, iterator it2)
 				return true;
 				});
 		}
-//	else std::cerr << "merging scalars" << std::endl;
-
 
 	// Now all index orders match and we can simply compare index value sets.
 
@@ -327,18 +345,8 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			return true;
 			});
 
-	// Simplify the component by calling sympy.
 
-	cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
-			assert(*it1->name=="\\equals");
-			auto rhs1 = tr.begin(it1);
-			++rhs1;
-			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "simplify", "", "");
-			if(nd->is_zero())
-				tr.erase(it1);
-			return true;
-			});
+	simplify_components(it1);
 	}
 
 void evaluate::cleanup_components(iterator it) 
@@ -357,6 +365,8 @@ void evaluate::cleanup_components(iterator it)
 
 void evaluate::handle_derivative(iterator it)
 	{
+	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
+
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
 	// figure out the dependence of that argument on the various coordinates.
@@ -366,8 +376,10 @@ void evaluate::handle_derivative(iterator it)
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
 		if(sib->is_index()==false) {
-			index_map_t empty;
-			handle_factor(sib, empty);
+			if(is_component(sib)==false) {
+				index_map_t empty;
+				handle_factor(sib, empty);
+				}
 			break;
 			}
 		++sib;
@@ -423,6 +435,30 @@ void evaluate::handle_derivative(iterator it)
 		++pch;
 		}
 	it=tr.flatten_and_erase(it);
+	// std::cerr << "now " << Ex(it) << std::endl;
+	simplify_components(it);
+	// std::cerr << "then " << Ex(it) << std::endl;
+	}
+
+void evaluate::simplify_components(iterator it)
+	{
+	assert(*it->name=="\\components");
+
+	// Simplify the components of the now single \component node by calling sympy.
+	// We just feed it the input; we do not call 'simplify'.
+	sibling_iterator lst = tr.end(it);
+	--lst;
+	
+	cadabra::do_list(tr, lst, [&](Ex::iterator eqs) {
+			assert(*eqs->name=="\\equals");
+			auto rhs1 = tr.begin(eqs);
+			++rhs1;
+			iterator nd=rhs1;
+			sympy::apply(kernel, tr, nd, "simplify", "", "");
+			if(nd->is_zero())
+				tr.erase(eqs);
+			return true;
+			});
 	}
 
 std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
@@ -437,6 +473,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 				Ex cpy(nd);
 				cpy.begin()->fl.bracket=str_node::b_none;
 				cpy.begin()->fl.parent_rel=str_node::p_none;
+				one(cpy.begin()->multiplier);
 				ret.insert(cpy);
 				}
 			});
@@ -459,6 +496,8 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 
 void evaluate::handle_prod(iterator it)
 	{
+	// std::cerr << "handle_prod " << Ex(it) << std::endl;
+
 	// All factors are either \component nodes, pure scalar nodes, or nodes which still need replacing.
 	// The handle_factor function takes care of the latter two.
 
@@ -467,8 +506,10 @@ void evaluate::handle_prod(iterator it)
 		sibling_iterator nxt=sib;
 		++nxt;
 
-		index_map_t empty;
-		handle_factor(sib, empty);
+		if(is_component(sib)==false) {
+			index_map_t empty;
+			handle_factor(sib, empty);
+			}
 
 		sib=nxt;
 		}
@@ -703,19 +744,7 @@ void evaluate::handle_prod(iterator it)
 	// We may have duplicate index value entries; merge them.
 	merge_component_children(it);
 
-	// Simplify the components of the now single \component node by calling sympy.
-	// We just feed it the input; we do not call 'simplify'.
-	sibling_iterator lst = tr.end(it);
-	--lst;
-	
-	cadabra::do_list(tr, lst, [&](Ex::iterator eqs) {
-			assert(*eqs->name=="\\equals");
-			auto rhs1 = tr.begin(eqs);
-			++rhs1;
-			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "", "", "");
-			return true;
-			});
+	simplify_components(it);
 	
 	// std::cerr << "should take care of it again at " << Ex(it) << std::endl;
 	cleanup_dispatch(kernel, tr, it);

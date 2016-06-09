@@ -409,13 +409,27 @@ void DisplayTerminal::print_equalitylike(std::ostream& str, Ex::iterator it)
 
 void DisplayTerminal::print_components(std::ostream& str, Ex::iterator it)
 	{
-	str << *it->name;
+	str << R"(□)";
 	auto sib=tree.begin(it);
 	auto end=tree.end(it);
 	--end;
-	while(sib!=end) {
-		dispatch(str, sib);
-		++sib;
+	if(sib!=end) {
+		bool needs_close=false;
+		str_node::parent_rel_t prel=str_node::parent_rel_t::p_none;
+		while(sib!=end) {
+			if(sib->fl.parent_rel!=prel) {
+				if(needs_close) 
+					str << "}";
+				needs_close=true;
+				prel=sib->fl.parent_rel;
+				if(prel==str_node::p_sub)   str << "_{";
+				if(prel==str_node::p_super) str << "^{";
+				}
+			dispatch(str, sib);
+			++sib;
+			}
+		if(needs_close)
+			str << "}";
 		}
 	str << "\n";
 	sib=tree.begin(end);

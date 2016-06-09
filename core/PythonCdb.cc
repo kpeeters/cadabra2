@@ -149,7 +149,7 @@ std::vector<T> to_std_vector(const boost::python::list& iterable )
 								  boost::python::stl_input_iterator< T >( ) );
 	}
 
-// Split a 'sum' expression into its individual terms.
+// Split a 'sum' expression into its individual terms. FIXME: now deprecated because we have operator[]?
 
 boost::python::list terms(const Ex& ex) 
 	{
@@ -167,6 +167,32 @@ boost::python::list terms(const Ex& ex)
 		}
 	
 	return ret;
+	}
+
+Ex lhs(const Ex& ex)
+	{
+	auto it=ex.begin();
+	if(it==ex.end()) 
+		throw ArgumentException("Empty expression passed to 'lhs'.");
+
+	if(*it->name!="\\equals")
+		throw ArgumentException("Cannot take 'lhs' of expression which is not an equation.");
+
+	return Ex(ex.begin(ex.begin()));
+	}
+
+Ex rhs(const Ex& ex)
+	{
+	auto it=ex.begin();
+	if(it==ex.end()) 
+		throw ArgumentException("Empty expression passed to 'rhs'.");
+
+	if(*it->name!="\\equals")
+		throw ArgumentException("Cannot take 'rhs' of expression which is not an equation.");
+
+	auto sib=ex.begin(ex.begin());
+	++sib;
+	return Ex(sib);
 	}
 
 Ex Ex_getitem(Ex &ex, int index)
@@ -487,9 +513,36 @@ std::string print_tree(Ex *ex)
 // Setup logic to pass C++ exceptions down to Python properly.
  
 PyObject *ParseExceptionType = NULL;
-PyObject *ArgumentExceptionType = NULL;
+PyObject *ArgumentExceptionType = 0;
 PyObject *NonScalarExceptionType = NULL;
 PyObject *InternalErrorType = NULL;
+
+// Create a new Python exception class which derives from Exception (as it should to
+// be a good Python exception). Taken from http://stackoverflow.com/questions/11448735.
+PyObject* createExceptionClass(const char* name, PyObject* baseTypeObj = PyExc_Exception)
+	{
+	std::string scope_name = boost::python::extract<std::string>(boost::python::scope().attr("__name__"));
+	std::string qualified0 = scope_name + "." + name;
+	char*       qualified1 = const_cast<char*>(qualified0.c_str());
+	
+	PyObject* typeObj = PyErr_NewException(qualified1, baseTypeObj, 0);
+	if(!typeObj) boost::python::throw_error_already_set();
+	boost::python::scope().attr(name) = boost::python::handle<>(boost::python::borrowed(typeObj));
+	return typeObj;
+	}
+
+// Handler to translate a C++ exception and pass it on as a Python exception
+void translate_ArgumentException(const ArgumentException& x) 
+	{
+	std::cerr << "getting confused" << std::endl;
+	assert(ArgumentExceptionType != 0);
+	boost::python::object exc(x); // wrap the C++ exception
+//	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));
+//	exc_t.attr("cause") = exc; // add the wrapped exception to the Python exception
+	
+//    PyErr_SetString(ArgumentExceptionType, x.what());
+	PyErr_SetObject(ArgumentExceptionType, exc.ptr()); //exc_t.ptr());
+	}
 
 void translate_ParseException(const ParseException &e)
 	{
@@ -498,12 +551,12 @@ void translate_ParseException(const ParseException &e)
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
 	}
 
-void translate_ArgumentException(const ArgumentException &e)
-	{
-	assert(ArgumentExceptionType != NULL);
-	boost::python::object pythonExceptionInstance(e);
-	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
-	}
+//void translate_ArgumentException(const ArgumentException &e)
+//	{
+//	assert(ArgumentExceptionType != NULL);
+//	boost::python::object pythonExceptionInstance(e);
+//	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
+//	}
 
 void translate_NonScalarException(const NonScalarException &e)
 	{
@@ -917,22 +970,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	{
 	using namespace boost::python;
 
-	class_<ParseException> pyParseException("ParseException", init<std::string>());
-	pyParseException.def("__str__", &ParseException::what);
-	ParseExceptionType=pyParseException.ptr();
-
-	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
-	pyArgumentException.def("__str__", &ArgumentException::py_what);
-	ArgumentExceptionType=pyArgumentException.ptr();
-
-	class_<NonScalarException> pyNonScalarException("NonScalarException", init<std::string>());
-	pyNonScalarException.def("__str__", &NonScalarException::py_what);
-	NonScalarExceptionType=pyNonScalarException.ptr();
-
-	class_<InternalError> pyInternalError("InternalError", init<std::string>());
-	pyInternalError.def("__str__", &InternalError::py_what);
-	InternalErrorType=pyInternalError.ptr();
-
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	class_<Kernel> pyKernel("Kernel", init<>());
 
@@ -983,9 +1020,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_value_policy<manage_new_object>());
 
 	// Algorithms which spit out a new Ex (or a list of new Exs), instead of 
-	// modifying the existing one.
+	// modifying the existing one. 
 
 	def("terms", &terms);
+
+	def("lhs", &lhs);
+	def("rhs", &rhs);
 
 	// We do not use implicitly_convertible to convert a string
 	// parameter to an Ex object automatically (it never
@@ -1188,9 +1228,30 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<WeightInherit>();
 	def_prop<WeylTensor>();
 
-	register_exception_translator<ParseException>(&translate_ParseException);
+	// Register exceptions. FIXME: This is not right yet: we create a proper 
+	// Python exception object derived from Exception, but then we 
+	// create a _separate_ C++ object with the same name and a Python
+	// wrapper around that. The problem is that PyErr_NewException produces
+	// a PyObject but that is not related to the C++ object.
+
+	ArgumentExceptionType=createExceptionClass("ArgumentException");
+	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
+	pyArgumentException.def("__str__", &ArgumentException::what);
 	register_exception_translator<ArgumentException>(&translate_ArgumentException);
+
+	ParseExceptionType=createExceptionClass("ParseException");
+	class_<ParseException> pyParseException("ParseException", init<std::string>());
+	pyParseException.def("__str__", &ParseException::what);
+	register_exception_translator<ParseException>(&translate_ParseException);
+
+	NonScalarExceptionType=createExceptionClass("NonscalarException");
+	class_<NonScalarException> pyNonScalarException("NonScalarException", init<std::string>());
+	pyNonScalarException.def("__str__", &NonScalarException::py_what);
 	register_exception_translator<NonScalarException>(&translate_NonScalarException);
+
+	InternalErrorType=createExceptionClass("InternalError");
+	class_<InternalError> pyInternalError("InternalError", init<std::string>());
+	pyInternalError.def("__str__", &InternalError::py_what);
 	register_exception_translator<InternalError>(&translate_InternalError);
 	
 
