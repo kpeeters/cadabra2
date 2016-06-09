@@ -443,7 +443,7 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 	auto ind_values=tree.end(it);
 	--ind_values;
 
-	str << "\\begin{aligned}";
+	str << "\\left\\{\\begin{aligned}";
 	auto sib=tree.begin(ind_values);
 	while(sib!=tree.end(ind_values)) {
 		Ex::sibling_iterator c=tree.begin(sib);
@@ -464,7 +464,7 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 		str << "\\\\\n";
 		++sib;
 		}
-	str << "\\end{aligned}\n";
+	str << "\\end{aligned}\\right.\n";
 	}
 
 void DisplayTeX::print_conditional(std::ostream& str, Ex::iterator it)

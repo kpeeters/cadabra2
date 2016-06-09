@@ -134,7 +134,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nSystemError: exception <class 'cadabra2.ArgumentException'> not a BaseException subclass\n\\end{verbatim}}}"
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\ncadabra2.ArgumentException: index 5 out of range, must be smaller than 4\n\\end{verbatim}}}"
 				}
 			],
 			"source" : "ex[5]=$Q_{m}$;"
