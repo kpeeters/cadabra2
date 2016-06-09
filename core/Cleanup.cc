@@ -190,6 +190,18 @@ void cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 		tr.flatten(it); // remove components node
 		it=tr.erase(it);
 		}
+	else {
+		while(comma!=tr.end(it)) {
+			if(*comma->name=="\\comma") {
+				if(tr.number_of_children(comma)==0) 
+					zero(it->multiplier);
+				return;
+				}
+			++comma;
+			}
+		// Anonymous tensor with all components vanishing.
+		zero(it->multiplier);
+		}
 	}
 
 void cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
