@@ -1,6 +1,7 @@
 
 # Testing a substitution rule in which an abstract index in the 
 # expression is matched against a coordinate in the pattern.
+# FIXME: this is not supposed to match!
 # {m,n,p}::Indices(values={t,r}).
 # {r,t}::Coordinate.
 # ex:= A_{m n} + B_{m n};
@@ -24,6 +25,35 @@ test02();
 
 
 # Now a Christoffel example, i.e. with derivatives.
+
+def test03a():
+{r,t,\phi,\theta}::Coordinate.
+{\mu,\nu,\rho,\sigma}::Indices(values={t,r,\phi,\theta}, position=fixed).
+\partial{#}::PartialDerivative.
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.         
+ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+complete(ss, $g^{\mu\nu}$)
+ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
+                                                +\partial_{\nu}{g_{\rho\sigma}}
+                                                -\partial_{\sigma}{g_{\nu\rho}} );
+evaluate(ch, ss);
+tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
+                                {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
+                                {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
+                                {r,t,t}            =  M/r**2 (1-2 M/r),
+                                {r,\theta,\theta}  = -r (1-2M/r),
+                                {r,\phi,\phi}      = - (r-2M) \sin(\theta)**2,
+                                {\theta,\theta,r}  = 1/r,
+                                {\theta,r,\theta}  = 1/r,
+                                {\phi,\phi,r}      = 1/r,
+                                {\phi,r,\phi}      = 1/r,
+                                {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
+                                {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
+                                {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
+                              ) - @(ex);
+collect_components(_);
+
 
 def test03():
     __cdbkernel__=create_scope()
