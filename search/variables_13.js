@@ -16,7 +16,7 @@ var searchData=
   ['terms_5f',['terms_',['../classkeep__terms.html#a085a8dd56ce327bc5642b1538ac753dc',1,'keep_terms']]],
   ['tex_5ferror',['tex_error',['../classcadabra_1_1TeXView.html#afdfcea67e32bf0124cb00d8bafb3ef63',1,'cadabra::TeXView']]],
   ['textbuf',['textbuf',['../classcadabra_1_1DataCell.html#af6cc5c22c8696fb514050b3ed278f893',1,'cadabra::DataCell']]],
-  ['theta',['theta',['../Symbols_8cc.html#ad387e4d205b9bd2ae497a2efd57be0da',1,'theta():&#160;Symbols.cc'],['../Symbols_8cc.html#ad9515854d25ac82b322b8ab5fc7698bd',1,'Theta():&#160;Symbols.cc']]],
+  ['theta',['Theta',['../Symbols_8cc.html#ad9515854d25ac82b322b8ab5fc7698bd',1,'Theta():&#160;Symbols.cc'],['../Symbols_8cc.html#ad387e4d205b9bd2ae497a2efd57be0da',1,'theta():&#160;Symbols.cc']]],
   ['this_5fapp_5f',['this_app_',['../classsnoop_1_1SnoopImpl.html#a747adcdb27facc1d0fbc2424d6b4496e',1,'snoop::SnoopImpl']]],
   ['this_5fcell',['this_cell',['../classcadabra_1_1ActionSetRunStatus.html#a017d55a32cb118932e79dec580d0e24b',1,'cadabra::ActionSetRunStatus::this_cell()'],['../classcadabra_1_1ActionRemoveCell.html#a40369ef2f211168432a15d60066b49ab',1,'cadabra::ActionRemoveCell::this_cell()'],['../classcadabra_1_1ActionSplitCell.html#ac0a871020b962de2e2dbbf69c4011490',1,'cadabra::ActionSplitCell::this_cell()']]],
   ['this_5flog_5f',['this_log_',['../classsnoop_1_1SnoopImpl.html#aaa42bb68a413e669ac3c25dda725ee79',1,'snoop::SnoopImpl']]],

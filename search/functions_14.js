@@ -18,7 +18,7 @@ var searchData=
   ['to_5fstring',['to_string',['../Storage_8cc.html#a47409da3e0df7003b9674c4a5b1a5187',1,'to_string(long num):&#160;Storage.cc'],['../Storage_8hh.html#ade131bfe0fbf243f0a3a8f3682088928',1,'to_string(long):&#160;Storage.cc']]],
   ['total_5fdimension',['total_dimension',['../classyngtab_1_1tableaux.html#ae70f5bdc21f90b90cb86b39a12d9161e',1,'yngtab::tableaux']]],
   ['total_5fpermutations',['total_permutations',['../classcombin_1_1combinations__base.html#a084f11337e87a57fa649d56f92fd92d6',1,'combin::combinations_base']]],
-  ['translate_5fargumentexception',['translate_ArgumentException',['../PythonCdb_8cc.html#a7ba0af944814dbdf300a91c9e9ed9beb',1,'PythonCdb.cc']]],
+  ['translate_5fargumentexception',['translate_ArgumentException',['../PythonCdb_8cc.html#abd1e248b6386a794b8864bdc1e06b709',1,'PythonCdb.cc']]],
   ['translate_5finternalerror',['translate_InternalError',['../PythonCdb_8cc.html#aa8295e68aa959a2799038598172215e4',1,'PythonCdb.cc']]],
   ['translate_5fnonscalarexception',['translate_NonScalarException',['../PythonCdb_8cc.html#af1a5442f7e8fca0e50293d7f343ffc92',1,'PythonCdb.cc']]],
   ['translate_5fparseexception',['translate_ParseException',['../PythonCdb_8cc.html#a381c20ab5d72688caa9ccbd9dadf8d68',1,'PythonCdb.cc']]],

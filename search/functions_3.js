@@ -91,5 +91,6 @@ var searchData=
   ['create_5fscope',['create_scope',['../group__pythoncore.html#gab651e8cd08d38f318645947b17129d1f',1,'create_scope():&#160;PythonCdb.cc'],['../group__pythoncore.html#gab651e8cd08d38f318645947b17129d1f',1,'create_scope():&#160;PythonCdb.cc']]],
   ['create_5fscope_5ffrom_5fglobal',['create_scope_from_global',['../PythonCdb_8cc.html#a9932cf275f573915c926239303b89d7c',1,'create_scope_from_global():&#160;PythonCdb.cc'],['../PythonCdb_8hh.html#a9932cf275f573915c926239303b89d7c',1,'create_scope_from_global():&#160;PythonCdb.cc']]],
   ['create_5ftables',['create_tables',['../classsnoop_1_1SnoopImpl.html#a6db48fd68d4531aa7b0dacca33738c48',1,'snoop::SnoopImpl']]],
+  ['createexceptionclass',['createExceptionClass',['../PythonCdb_8cc.html#aaaa2fd40b08f8958535c9a94a466347a',1,'PythonCdb.cc']]],
   ['current_5fbracket_5f',['current_bracket_',['../classpreprocessor.html#af20706458d872bdbf57257aeed259413',1,'preprocessor']]]
 ];

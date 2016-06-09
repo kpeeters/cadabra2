@@ -161,6 +161,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a01b52bae76513ffb0341afa99e5b5784"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a01b52bae76513ffb0341afa99e5b5784">is_component</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it) const </td></tr>
+<tr class="separator:a01b52bae76513ffb0341afa99e5b5784"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a1a2ee94e1d5df5907888847873616c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a2a1a2ee94e1d5df5907888847873616c">handle_components</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it)</td></tr>
+<tr class="separator:a2a1a2ee94e1d5df5907888847873616c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae61ff223a4d165f2e8f8f84384b761ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#ae61ff223a4d165f2e8f8f84384b761ce">handle_sum</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it)</td></tr>
 <tr class="separator:ae61ff223a4d165f2e8f8f84384b761ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a91d21dffa786668ce4fd48aaf783cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a6a91d21dffa786668ce4fd48aaf783cf">handle_prod</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it)</td></tr>
@@ -176,6 +180,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a28065c81dff020efa0cc25f9690cc909"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a28065c81dff020efa0cc25f9690cc909">cleanup_components</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it1)</td></tr>
 <tr class="memdesc:a28065c81dff020efa0cc25f9690cc909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup all components in a 'components' node; that is, call the cleanup_dispatch function on them.  <a href="#a28065c81dff020efa0cc25f9690cc909">More...</a><br/></td></tr>
 <tr class="separator:a28065c81dff020efa0cc25f9690cc909"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22e72099c249eb08db21319323173e20"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a22e72099c249eb08db21319323173e20">simplify_components</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>)</td></tr>
+<tr class="memdesc:a22e72099c249eb08db21319323173e20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplify all components of a 'components' node by running sympy's simplify on them.  <a href="#a22e72099c249eb08db21319323173e20">More...</a><br/></td></tr>
+<tr class="separator:a22e72099c249eb08db21319323173e20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a456195867eb2108861791aee40fb1067"><td class="memItemLeft" align="right" valign="top">std::set&lt; <a class="el" href="classEx.html">Ex</a>, <a class="el" href="classtree__exact__less__obj.html">tree_exact_less_obj</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a456195867eb2108861791aee40fb1067">dependencies</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it)</td></tr>
 <tr class="memdesc:a456195867eb2108861791aee40fb1067"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine all the <a class="el" href="classCoordinate.html">Coordinate</a> dependencies of the object at 'it'.  <a href="#a456195867eb2108861791aee40fb1067">More...</a><br/></td></tr>
 <tr class="separator:a456195867eb2108861791aee40fb1067"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -469,6 +476,30 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 
 </div>
 </div>
+<a class="anchor" id="a2a1a2ee94e1d5df5907888847873616c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void evaluate::handle_components </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>&#160;</td>
+          <td class="paramname"><em>it</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5a849a42372b6466ee479e548d22db17"></a>
 <div class="memitem">
 <div class="memproto">
@@ -578,6 +609,30 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 
 </div>
 </div>
+<a class="anchor" id="a01b52bae76513ffb0341afa99e5b5784"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool evaluate::is_component </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>&#160;</td>
+          <td class="paramname"><em>it</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a261171e3a5dada80c18fc64c52b97930"></a>
 <div class="memitem">
 <div class="memproto">
@@ -632,6 +687,32 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 
 </div>
 </div>
+<a class="anchor" id="a22e72099c249eb08db21319323173e20"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void evaluate::simplify_components </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>&#160;</td>
+          <td class="paramname"><em>it</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Simplify all components of a 'components' node by running sympy's simplify on them. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="a8cc44aaac30f6bb2d3d64d930e6721a7"></a>
 <div class="memitem">
@@ -660,7 +741,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 8 2016 18:38:15 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jun 9 2016 22:46:48 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

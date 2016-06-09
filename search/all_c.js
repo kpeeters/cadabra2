@@ -28,7 +28,7 @@ var searchData=
   ['less_5findexed_5ftreenode',['less_indexed_treenode',['../classindexsort_1_1less__indexed__treenode.html',1,'indexsort']]],
   ['less_5findexed_5ftreenode',['less_indexed_treenode',['../classindexsort_1_1less__indexed__treenode.html#ac00fe5002f73d72988b17c77cb1d3ebf',1,'indexsort::less_indexed_treenode']]],
   ['less_5fwithout_5fnumbers',['less_without_numbers',['../classAlgorithm.html#a279af74fab4f5f35132f6656b45a2dd7',1,'Algorithm']]],
-  ['lhs',['lhs',['../classServer.html#a928bc478421917ae3fa122dbfe7bd392',1,'Server']]],
+  ['lhs',['lhs',['../classServer.html#a928bc478421917ae3fa122dbfe7bd392',1,'Server::lhs()'],['../PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92',1,'lhs():&#160;PythonCdb.cc']]],
   ['lhs_5fcontains_5fdummies',['lhs_contains_dummies',['../classEx__comparator.html#a27ae14af3aa66928893da846be15344b',1,'Ex_comparator::lhs_contains_dummies()'],['../classsubstitute.html#ad5d79b3f88d17b0d3422da9ea3ffc7e1',1,'substitute::lhs_contains_dummies()']]],
   ['line_5fper_5fnode',['line_per_node',['../structstr__node_1_1flag__t.html#ab032c61bde3a09b929169172a3a48e10',1,'str_node::flag_t']]],
   ['list_5fproperties',['list_properties',['../PythonCdb_8cc.html#ac217f28bc50ad9cc2d209be157fe4af4',1,'PythonCdb.cc']]],

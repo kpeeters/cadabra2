@@ -43,7 +43,7 @@ var searchData=
   ['permute_5fblocks',['permute_blocks',['../classcombin_1_1symmetriser.html#aa648fb4950fdf98653c19a20ee831d7b',1,'combin::symmetriser']]],
   ['permuted_5fsets_5ft',['permuted_sets_t',['../classcombin_1_1combinations.html#abffb5d524784517e184fc30e5e2b3f1a',1,'combin::combinations']]],
   ['phi',['phi',['../Symbols_8cc.html#abd9d59694d19e4089af65af09278e717',1,'phi():&#160;Symbols.cc'],['../Symbols_8cc.html#a07553f03c63862c2f9607d6332017b4e',1,'Phi():&#160;Symbols.cc']]],
-  ['pi',['pi',['../Symbols_8cc.html#aec463b5e1007a18d6521c6748d5ac227',1,'pi():&#160;Symbols.cc'],['../Symbols_8cc.html#a3a51bafc189b70ceefb5a24c7c373ea7',1,'Pi():&#160;Symbols.cc']]],
+  ['pi',['Pi',['../Symbols_8cc.html#a3a51bafc189b70ceefb5a24c7c373ea7',1,'Pi():&#160;Symbols.cc'],['../Symbols_8cc.html#aec463b5e1007a18d6521c6748d5ac227',1,'pi():&#160;Symbols.cc']]],
   ['pid',['pid',['../classsnoop_1_1Snoop_1_1AppEntry.html#a4e6abf53c2f3b268c69b1c8f7a29528d',1,'snoop::Snoop::AppEntry']]],
   ['pixbuf',['pixbuf',['../classcadabra_1_1TeXView.html#a975dd2d366401fdd17364d0b7f614087',1,'cadabra::TeXView']]],
   ['pointer',['pointer',['../classyngtab_1_1filled__tableau_1_1iterator__base.html#a7293b9ec8c2779035296cc9b574be2ef',1,'yngtab::filled_tableau::iterator_base']]],
