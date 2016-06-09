@@ -58,19 +58,17 @@ collect_components(_);
 def test03():
     __cdbkernel__=create_scope()
 {r,t,\phi,\theta}::Coordinate.
-{\mu,\nu,\rho,\sigma}::Indices(values={t,r,\phi,\theta}, position=fixed).
+{\mu,\nu,\rho,\sigma,\lambda}::Indices(values={t,r,\phi,\theta}, position=fixed).
 \partial{#}::PartialDerivative.
 g_{\mu\nu}::Metric.
 g^{\mu\nu}::InverseMetric.         
-ex:= \Gamma^{\mu}_{\nu\rho};
-rl:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
-                                                +\partial_{\nu}{g_{\rho\sigma}}
-                                                -\partial_{\sigma}{g_{\nu\rho}} );
-
 ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r), g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
 complete(ss, $g^{\mu\nu}$)
-substitute(ex, rl);
-evaluate(ex, ss);
+ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
+                                                +\partial_{\nu}{g_{\rho\sigma}}
+                                                -\partial_{\sigma}{g_{\nu\rho}} );
+evaluate(ch, ss);
+chtst=rhs(ch);
     # Check against arxiv:0904.4184.
 tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
                                 {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
@@ -85,10 +83,17 @@ tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
                                 {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
                                 {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
                                 {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
-                              ) - @(ex);
+                              ) - @(chtst);
 collect_components(_);
-    assert(tst==0)
-    print("Test 03 passed")
+assert(tst==0)
+print("Test 03a passed")
+
+rm:= R^{\rho}_{\sigma\mu\nu} = \partial_{\mu}{\Gamma^{\rho}_{\nu\sigma}}
+                              -\partial_{\nu}{\Gamma^{\rho}_{\mu\sigma}}
+                              +\Gamma^{\rho}_{\mu\lambda} \Gamma^{\lambda}_{\nu\sigma}
+                              -\Gamma^{\rho}_{\nu\lambda} \Gamma^{\lambda}_{\mu\sigma};
+
+substitute(rm, ch);
     
 test03()
     
@@ -214,3 +219,9 @@ def test10():
     assert(sympy.simplify(tst)==0)
 
 test10()
+
+{r,t,\phi}::Coordinate;
+{m,n,p}::Indices(values={r,t,\phi});
+ex:= \partial_{m}{ A_{n} };
+rl:= A_{r} -> r, A_{t} -> t;
+evaluate( ex, rl );
