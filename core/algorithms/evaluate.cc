@@ -73,11 +73,10 @@ void evaluate::handle_sum(iterator it)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
 
-	// Iterate over all terms in the sum. These should be of three types: \component nodes,
-	// nodes with only free indices, and nodes with internal contractions (e.g. A_{m}^{m}). 
-	// The first type can, at this stage, be ignored. The second type needs to be converted
-	// into a \component node using the component evaluation rules. The last type 
-	// separate treatment, and is currently not handled yet; see the beginning of handle_factor.
+	// Iterate over all terms in the sum. These should be of two types: \component nodes,
+	// which we do not need to touch anymore, and nodes which have still not been 
+	// evaluated. We send them all to handle_factor, which will return immediately on the
+	// first node type, and convert the second type to the first.
 
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -129,14 +128,10 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		return;
 		}
 	
-	// Internal contractions.
-	// FIXME: not yet handled.
+	// We need to know for all indices whether they are free or dummy,
+	// in particular to handle internal contractions correctly.
 	index_map_t ind_free, ind_dummy;
 	classify_indices(sib, ind_free, ind_dummy);
-//	if(ind_dummy.size()>0) {
-//		std::cerr << "Internal contractions, not yet handled" << std::endl;
-//		return;
-//		}
 
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.
@@ -149,7 +144,6 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		//std::cerr << tr << std::endl;
 		return;
 		}
-
 
 	
 	// Attempt to apply each component substitution rule on this term.
@@ -183,10 +177,12 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 //					for(auto& r: subs.comparator.index_value_map) {
 //						repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
 //						}
+
 					fi=ind_free.begin();
 					while(fi!=ind_free.end()) {
 						for(auto& r: subs.comparator.index_value_map) {
 							if(fi->first == r.first) {
+								// std::cerr << "adding " << r.second.begin() << std::endl;
 								repl.append_child(il, r.second.begin())->fl.parent_rel=str_node::p_none; 
 								break;
 								}
@@ -269,8 +265,6 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	sibling_iterator sib2=tr.end(it2);
 	--sib2;
 
-	// tr.print_recursive_treeform(std::cerr, tr.begin());
-
 	// We cannot directly compare the lhs of this equals node with the lhs
 	// of the equals node of the other components node, because the index
 	// order on the two components nodes may be different. We first
@@ -278,16 +272,14 @@ void evaluate::merge_components(iterator it1, iterator it2)
 	// if we have anything to permutate in the first place.
 
 	if(*tr.begin(it1)->name!="\\comma") {
-		//std::cerr << "merging for " << *tr.begin(it1)->name << std::endl;
+		// Look at all indices on the two components nodes. Find
+		// the permutation that taked the indices on it2 and brings
+		// them in the order as they are on it1.
 		Perm perm;
 		perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
-//	for(auto p: perm.perm)
-//		std::cerr << p << " ";
-//	std::cerr << std::endl;
 		
 		//perm.apply(tr.begin(it2), sib2);
-		//std::cerr << "after permutation" << std::endl;
-		//tr.print_recursive_treeform(std::cerr, tr.begin());
+		//std::cerr << "after permutation " << Ex(tr) << std::endl;
 		
 		cadabra::do_list(tr, sib2, [&](Ex::iterator nd) {
 				auto lhs2 = tr.begin(nd);
@@ -295,8 +287,6 @@ void evaluate::merge_components(iterator it1, iterator it2)
 				return true;
 				});
 		}
-//	else std::cerr << "merging scalars" << std::endl;
-
 
 	// Now all index orders match and we can simply compare index value sets.
 

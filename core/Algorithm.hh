@@ -111,7 +111,7 @@ class Algorithm {
 
 
 		/// A map from a pattern to the position where it occurs in the tree. The comparator
-		/// is such that we store indices apart exactly, apart from their multiplicative factor.
+		/// is such that we store indices exactly, apart from their multiplicative factor.
 		/// This means that the index in A_{n} and in A_{-n} are stored in the same way,
 		/// and one needs to lookup the expression in the tree to find this multiplier.
 		/// See basic.cdb test 26 for an example that uses this.
