@@ -18,7 +18,39 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma,\\lambda}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric."
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left(r, \\linebreak[0] t, \\linebreak[0] \\phi, \\linebreak[0] \\theta\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left(\\mu, \\linebreak[0] \\nu, \\linebreak[0] \\rho, \\linebreak[0] \\sigma, \\linebreak[0] \\lambda, \\linebreak[0] \\kappa, \\linebreak[0] \\chi, \\linebreak[0] \\gamma\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				}
+			],
+			"source" : "{r,t,\\phi,\\theta}::Coordinate;\n{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa,\\chi,\\gamma}::Indices(values={t,r,\\phi,\\theta}, position=fixed);\n\\partial{#}::PartialDerivative;\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Below is the Schwarzschild metric in standard coordinates. Note how the components are\ngiven in terms of substitution rules, and how the inverse metric is computed. \nThe \\algo{complete} algorithm adds the rules for the inverse metric to the rules for the metric."
+				}
+			],
+			"hidden" : true,
+			"source" : "Below is the Schwarzschild metric in standard coordinates. Note how the components are\ngiven in terms of substitution rules, and how the inverse metric is computed. \nThe \\algo{complete} algorithm adds the rules for the inverse metric to the rules for the metric."
 		},
 		{
 			"cell_origin" : "client",
@@ -28,12 +60,34 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta\\right)\\end{dmath*}"
-				},
+					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, \\linebreak[0] g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, \\linebreak[0] g_{\\theta \\theta} = r^{2}, \\linebreak[0] g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, \\linebreak[0] g^{t t} = \\frac{r}{2M-r}, \\linebreak[0] g^{r r} = \\frac{-2M+r}{r}, \\linebreak[0] g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin\\left(\\theta\\right)^{2}}, \\linebreak[0] g^{\\theta \\theta} = r^{-2}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ss:= { g_{t t} = -(1-2 M/r),   \n       g_{r r} = 1/(1-2 M/r), \n       g_{\\theta\\theta} = r**2, \n       g_{\\phi\\phi}=r**2 \\sin(\\theta)**2\n     }.\n\ncomplete(ss, $g^{\\mu\\nu}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We can now compute the Christoffel symbols. We give Cadabra the expression for the \nChristoffel symbols in terms of the metric, and then evaluate the components of the\nmetric using the \\algo{evaluate} algorithm."
+				}
+			],
+			"hidden" : true,
+			"source" : "We can now compute the Christoffel symbols. We give Cadabra the expression for the \nChristoffel symbols in terms of the metric, and then evaluate the components of the\nmetric using the \\algo{evaluate} algorithm."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, \\linebreak[0] g_{\\theta \\theta} = r^{2}, \\linebreak[0] g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, \\linebreak[0] X^{t} = t, \\linebreak[0] X^{r} = r, \\linebreak[0] X^{\\theta} = \\theta, \\linebreak[0] g^{t t} = \\frac{r}{2M-r}, \\linebreak[0] g^{r r} = \\frac{-2M+r}{r}, g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin\\left(\\theta\\right)^{2}}, g^{\\theta \\theta} = r^{-2}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -41,7 +95,21 @@
 					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{r}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\\n\\square{}_{\\theta}{}_{r}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{r}{}^{r}= & \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}_{t}{}_{r}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\\n\\square{}_{r}{}_{\\phi}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\theta}{}_{\\phi}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\\n\\square{}_{r}{}_{\\theta}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{t}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{r}= & \\left(2M-r\\right) \\sin\\left(\\theta\\right)^{2}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}= &  - \\frac{1}{2}\\sin\\left(2\\theta\\right)\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{r}= & 2M-r\\\\\n\\square{}_{t}{}_{t}{}^{r}= & M \\frac{-2M+r}{r^{3}}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "ch:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       X^t = t, X^r = r, X^\\theta=\\theta\n     };\ncomplete(ss, $g^{\\mu\\nu}$);\n\nevaluate(ch, ss);"
+			"source" : "ch:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \n                                   \\partial_{\\rho}{g_{\\nu\\sigma}} \n                                  +\\partial_{\\nu}{g_{\\rho\\sigma}}\n                                  -\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nevaluate(ch, ss);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Continuing from here we can compute the Riemann tensor components. Again, we start\nby giving this tensor in terms of the Christoffel symbols. We then subsitute the \nChristoffel symbols just found, and work out any remaining component substitions using\n\\algo{evaluate} (the computation takes a few seconds, essentially because of the round\ntrips through Sympy)."
+				}
+			],
+			"hidden" : true,
+			"source" : "Continuing from here we can compute the Riemann tensor components. Again, we start\nby giving this tensor in terms of the Christoffel symbols. We then subsitute the \nChristoffel symbols just found, and work out any remaining component substitions using\n\\algo{evaluate} (the computation takes a few seconds, essentially because of the round\ntrips through Sympy)."
 		},
 		{
 			"cell_origin" : "client",
@@ -71,6 +139,20 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The Ricci tensor should of course vanish as the Schwarzschild solution is a vacuum\nsolution. Following the same logic as above, this is easily verified:"
+				}
+			],
+			"hidden" : true,
+			"source" : "The Ricci tensor should of course vanish as the Schwarzschild solution is a vacuum\nsolution. Following the same logic as above, this is easily verified:"
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
@@ -86,6 +168,60 @@
 				}
 			],
 			"source" : "rc:= R_{\\sigma\\nu} = R^{\\rho}_{\\sigma\\rho\\nu};\nsubstitute(rc, rm)\nevaluate(rc, ss);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "More interesting is the Kretschmann scalar. "
+				}
+			],
+			"hidden" : true,
+			"source" : "More interesting is the Kretschmann scalar. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}K = R^{\\mu}\\,_{\\nu \\rho \\sigma} R^{\\lambda}\\,_{\\kappa \\gamma \\chi} g_{\\mu \\lambda} g^{\\nu \\kappa} g^{\\rho \\gamma} g^{\\sigma \\chi}\\end{dmath*}"
+				}
+			],
+			"source" : "K:= K = R^{\\mu}_{\\nu\\rho\\sigma} R^{\\lambda}_{\\kappa\\gamma\\chi} \n           g_{\\mu\\lambda} g^{\\nu\\kappa} g^{\\rho\\gamma} g^{\\sigma\\chi};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}K = \\frac{48M^{2}}{r^{6}}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(K, rm)\nevaluate(K, ss);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This shows that $r=0$ is a true singularity."
+				}
+			],
+			"hidden" : true,
+			"source" : "This shows that $r=0$ is a true singularity."
 		},
 		{
 			"cell_origin" : "client",
