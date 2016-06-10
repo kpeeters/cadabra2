@@ -18,7 +18,7 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric."
+			"source" : "{r,t,\\phi,\\theta}::Coordinate.\n{\\mu,\\nu,\\rho,\\sigma,\\lambda}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\n\\partial{#}::PartialDerivative.\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric."
 		},
 		{
 			"cell_origin" : "client",
@@ -28,27 +28,17 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta\\right)\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, g_{\\theta \\theta} = r^{2}, g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, X^{t} = t, X^{r} = r, X^{\\theta} = \\theta, g^{t t} = \\frac{r}{2M-r}, g^{r r} = \\frac{-2M+r}{r}, g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin\\left(\\theta\\right)^{2}}, g^{\\theta \\theta} = r^{-2}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(g_{t t} = -1+\\frac{2M}{r}, g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, \\linebreak[0] g_{\\theta \\theta} = r^{2}, \\linebreak[0] g_{\\phi \\phi} = r^{2} \\sin\\left(\\theta\\right)^{2}, \\linebreak[0] X^{t} = t, \\linebreak[0] X^{r} = r, \\linebreak[0] X^{\\theta} = \\theta, \\linebreak[0] g^{t t} = \\frac{r}{2M-r}, \\linebreak[0] g^{r r} = \\frac{-2M+r}{r}, g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin\\left(\\theta\\right)^{2}}, g^{\\theta \\theta} = r^{-2}\\right)\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}_{\\phi}{}_{r}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}= & \\frac{\\sin\\left(2\\theta\\right)}{2\\sin\\left(\\theta\\right)^{2}}\\\\\n\\square{}_{\\theta}{}_{r}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{r}{}^{r}= & -M \\frac{-2M+r}{r \\left(2M-r\\right)^{2}}\\\\\n\\square{}_{t}{}_{r}{}^{t}= &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}_{r}{}_{\\phi}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\theta}{}_{\\phi}{}^{\\phi}= & \\frac{\\sin\\left(2\\theta\\right)}{2\\sin\\left(\\theta\\right)^{2}}\\\\\n\\square{}_{r}{}_{\\theta}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{t}{}^{t}= &  - \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{r}= & -\\left(-2M+r\\right) \\sin\\left(\\theta\\right)^{2}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}= &  - \\frac{1}{2}\\sin\\left(2\\theta\\right)\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{r}= & 2M-r\\\\\n\\square{}_{t}{}_{t}{}^{r}= & M \\frac{-2M+r}{r^{3}}\\\\\n\\end{aligned}\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{r}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\\n\\square{}_{\\theta}{}_{r}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{r}{}^{r}= & \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}_{t}{}_{r}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\\n\\square{}_{r}{}_{\\phi}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\theta}{}_{\\phi}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\\n\\square{}_{r}{}_{\\theta}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{t}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{r}= & \\left(2M-r\\right) \\sin\\left(\\theta\\right)^{2}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}= &  - \\frac{1}{2}\\sin\\left(2\\theta\\right)\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{r}= & 2M-r\\\\\n\\square{}_{t}{}_{t}{}^{r}= & M \\frac{-2M+r}{r^{3}}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
 			"source" : "ch:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nss:= { g_{t t} = -(1-2 M/r),   g_{r r} = 1/(1-2 M/r), g_{\\theta\\theta} = r**2, g_{\\phi\\phi}=r**2 \\sin(\\theta)**2,\n       X^t = t, X^r = r, X^\\theta=\\theta\n     };\ncomplete(ss, $g^{\\mu\\nu}$);\n\nevaluate(ch, ss);"
@@ -61,10 +51,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(X^{t} = T, X^{r} = R, X^{\\theta} = \\Theta, X^{\\phi} = \\Phi)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\partial_{\\nu}{\\Gamma^{\\rho}\\,_{\\mu \\sigma}}+\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\Gamma^{\\lambda}\\,_{\\nu \\sigma}-\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\Gamma^{\\lambda}\\,_{\\mu \\sigma}\\end{dmath*}"
 				}
 			],
-			"source" : "\\ddot{#}::Accent.\n\\dot{#}::Accent.\nXrl:= { X^t = T, X^r = R, X^\\theta=\\Theta, X^\\phi = \\Phi };"
+			"source" : "rm:= R^{\\rho}_{\\sigma\\mu\\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}_{\\nu\\sigma}}\n                                  -\\partial_{\\nu}{\\Gamma^{\\rho}_{\\mu\\sigma}}\n                                  +\\Gamma^{\\rho}_{\\mu\\lambda} \\Gamma^{\\lambda}_{\\nu\\sigma}\n                                  -\\Gamma^{\\rho}_{\\nu\\lambda} \\Gamma^{\\lambda}_{\\mu\\sigma};"
 		},
 		{
 			"cell_origin" : "client",
@@ -74,10 +64,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ddot{X^{\\mu}}+\\Gamma^{\\mu}\\,_{\\nu \\rho} \\dot{X^{\\nu}} \\dot{X^{\\rho}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\left\\{\\begin{aligned}\\square{}_{t}{}_{t}{}^{r}{}_{r}= & 2M \\frac{2M-r}{r^{4}}\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{r}{}_{r}= &  - \\frac{M}{r}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}{}_{\\theta}= & 2M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{r}{}_{r}= & -M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{t}{}_{r}{}^{t}{}_{r}= & \\frac{2M}{r^{2} \\left(2M-r\\right)}\\\\\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}{}_{\\theta}= &  - \\frac{2M}{r}\\\\\n\\square{}_{r}{}_{t}{}^{r}{}_{t}= & 2M \\frac{-2M+r}{r^{4}}\\\\\n\\square{}_{r}{}_{\\theta}{}^{r}{}_{\\theta}= & \\frac{M}{r}\\\\\n\\square{}_{\\theta}{}_{\\phi}{}^{\\theta}{}_{\\phi}= & -2M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{r}{}_{\\phi}{}^{r}{}_{\\phi}= & M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{r}{}_{r}{}^{t}{}_{t}= & \\frac{2M}{r^{2} \\left(-2M+r\\right)}\\\\\n\\square{}_{r}{}_{r}{}^{\\theta}{}_{\\theta}= & \\frac{M}{r^{2} \\left(2M-r\\right)}\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{\\phi}{}_{\\phi}= & \\frac{2M}{r}\\\\\n\\square{}_{r}{}_{r}{}^{\\phi}{}_{\\phi}= & \\frac{M}{r^{2} \\left(2M-r\\right)}\\\\\n\\square{}_{t}{}_{t}{}^{\\phi}{}_{\\phi}= & M \\frac{-2M+r}{r^{4}}\\\\\n\\square{}_{t}{}_{t}{}^{\\theta}{}_{\\theta}= & M \\frac{-2M+r}{r^{4}}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{t}{}_{t}= & -M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{t}{}_{t}= &  - \\frac{M}{r}\\\\\n\\square{}_{\\phi}{}_{r}{}^{\\phi}{}_{r}= & \\frac{M}{r^{2} \\left(-2M+r\\right)}\\\\\n\\square{}_{\\phi}{}_{t}{}^{\\phi}{}_{t}= & M \\frac{2M-r}{r^{4}}\\\\\n\\square{}_{\\theta}{}_{r}{}^{\\theta}{}_{r}= & \\frac{M}{r^{2} \\left(-2M+r\\right)}\\\\\n\\square{}_{\\theta}{}_{t}{}^{\\theta}{}_{t}= & M \\frac{2M-r}{r^{4}}\\\\\n\\square{}_{t}{}_{\\phi}{}^{t}{}_{\\phi}= & M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{t}{}_{\\theta}{}^{t}{}_{\\theta}= & \\frac{M}{r}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "eom:= \\ddot{X^\\mu} + \\Gamma^{\\mu}_{\\nu\\rho} \\dot{X^\\nu}\\dot{X^\\rho};"
+			"source" : "substitute(rm, ch)\nevaluate(rm, ss);"
 		},
 		{
 			"cell_origin" : "client",
@@ -87,75 +77,15 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ddot{X^{\\mu}}+\\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}(g_{\\nu \\sigma})+\\partial_{\\nu}(g_{\\rho \\sigma})-\\partial_{\\sigma}(g_{\\nu \\rho})\\right) \\dot{X^{\\nu}} \\dot{X^{\\rho}}\\end{dmath*}"
-				}
-			],
-			"source" : "substitute(eom,rl);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
+					"source" : "\\begin{dmath*}{}R_{\\sigma \\nu} = R^{\\rho}\\,_{\\sigma \\rho \\nu}\\end{dmath*}"
+				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}= & -2M \\dot{r} \\frac{\\dot{t}}{r \\left(2M-r\\right)}+\\ddot{t}\\\\\n\\square{}^{r}= & M \\left(-2M+r\\right) \\frac{\\dot{t}^{2}}{r^{3}}+M \\left(2M-r\\right) \\frac{\\dot{r}^{2}}{r^{3} \\left( - \\frac{2M}{r}+1\\right)^{2}}-\\left(-2M+r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\\\\n\\square{}^{\\theta}= & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}R_{\\sigma \\nu} = 0\\end{dmath*}"
 				}
 			],
-			"source" : "evaluate(eom,ss);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square{}^{t}= & -2M \\dot{r} \\frac{\\frac{E}{1 - \\frac{2M}{r}}}{r \\left(2M-r\\right)}+\\ddot{t}\\\\\n\\square{}^{r}= & M \\left(-2M+r\\right) \\frac{\\frac{E}{1 - \\frac{2M}{r}}^{2}}{r^{3}}+M \\left(2M-r\\right) \\frac{\\dot{r}^{2}}{r^{3} \\left( - \\frac{2M}{r}+1\\right)^{2}}-\\left(-2M+r\\right) \\dot{\\theta}^{2}+\\ddot{r}\\\\\n\\square{}^{\\theta}= & \\ddot{\\theta}+2\\dot{r} \\frac{\\dot{\\theta}}{r}\\\\\n\\end{aligned}\n\\end{dmath*}"
-				}
-			],
-			"source" : "substitute(eom, $\\dot{t} -> (E/(1-2M/r))$);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}g_{\\mu \\nu} \\dot{X^{\\mu}} \\dot{X^{\\nu}}\\end{dmath*}"
-				}
-			],
-			"source" : "fv:= g_{\\mu\\nu} \\dot{X^\\mu} \\dot{X^\\nu};"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\begin{aligned}\\square= & r^{2} \\dot{\\theta}^{2}+\\left(\\frac{2M}{r}-1\\right) \\dot{t}^{2}+\\frac{\\dot{r}^{2}}{ - \\frac{2M}{r}+1}\\\\\n\\end{aligned}\n\\end{dmath*}"
-				}
-			],
-			"source" : "evaluate(fv, ss);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}(() = r^{2} \\dot{\\theta}^{2}+\\left(\\frac{2M}{r}-1\\right) \\dot{t}^{2}+\\frac{\\dot{r}^{2}}{ - \\frac{2M}{r}+1})\\end{dmath*}"
-				}
-			],
-			"source" : "tst:=@(fv)+@(fv);"
+			"source" : "rc:= R_{\\sigma\\nu} = R^{\\rho}_{\\sigma\\rho\\nu};\nsubstitute(rc, rm)\nevaluate(rc, ss);"
 		},
 		{
 			"cell_origin" : "client",
