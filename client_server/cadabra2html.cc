@@ -25,9 +25,11 @@ int main(int argc, char **argv)
 		}
 
 	auto from=cdb_file.find_last_of("/");
-	++from;
+	++from; 
 	auto to  =cdb_file.find_last_of(".");
-	std::string title="Cadabra manual: "+cdb_file.substr(from, to-from);
+	std::string t=cdb_file.substr(from, to-from);
+	t[0]=toupper(t[0]);
+	std::string title="Cadabra manual: "+t;
 
 	std::ifstream file(cdb_file);
 	std::string content, line;
