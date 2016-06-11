@@ -49,6 +49,8 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
 include (InstallRequiredSystemLibraries)
+set(CPACK_SET_DESTDIR true)
+set(CPACK_INSTALL_PREFIX /usr)
 set(CPACK_PACKAGE_NAME           "cadabra2")
 set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/doc/license.txt")
 set(CPACK_RPM_PACKAGE_LICENSE    "GPLv3")
