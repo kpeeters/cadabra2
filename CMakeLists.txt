@@ -15,6 +15,9 @@ enable_testing()
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
 include_directories(${PROJECT_BINARY_DIR}/core)
 
+# Provide option to build with Python 3 (default) or Python 2.
+option(USE_PYTHON_3 "Use Python 3 if ON, or fall back to Python 2 if OFF" ON)
+
 # Determine what type of system we are on, for packaging.
 set(LINUX_NAME "")
 if(EXISTS "/etc/redhat-release")
@@ -45,6 +48,12 @@ else(EXISTS "/etc/redhat-release")
 endif(EXISTS "/etc/redhat-release")
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT_BINARY_DIR}/postinst")
+
+if(USE_PYTHON_3)
+  message("-- Building for use with Python 3 (good!)")
+else()
+  message("-- Building for use with Python 2 (consider upgrading!)")
+endif()
 
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
@@ -82,7 +91,6 @@ endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
-# -I/usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework/Versions/2.7/include/python2.7")
 endif()
 
 
