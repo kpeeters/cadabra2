@@ -5,29 +5,24 @@
 {% block head %}{%- endblock %}
 
 {% block main %}
-<h1>Warning</h1>
-<p  class="hyphenate">
-  This is the web site for the new Cadabra 2.x series. It is currently
-  meant for people interested in having a look at what the future will
-  bring. Not all functionality of the 1.x series is present in series
-  2.x yet, so if you just want to get work done, you probably still want
-  to visit the <a href="http://cadabra.phi-sci.com">old site</a> for
-  now.
-</p>
 
 <h1>What is Cadabra?</h1>
 <p  class="hyphenate">
   Cadabra is a symbolic computer algebra system (CAS) designed
   specifically for the solution of problems encountered in field
   theory. It has extensive functionality for tensor computer
-  algebra, tensor polynomial simplification including multi-term
-  symmetries, fermions and anti-commuting variables, Clifford
-  algebras and Fierz transformations, implicit coordinate
-  dependence, multiple index types and many more. The input
-  format is a subset of TeX. Both a command-line and a graphical
-  interface are available.
+  algebra, <a href="/notebooks/tensor_monomials.html">tensor
+  polynomial simplification</a> including multi-term symmetries,
+  fermions and anti-commuting
+  variables, <a href="/notebooks/gamma_matrix_algebra.html">Clifford
+  algebras</a> and <a href="/notebooks/fierz.html">Fierz
+  transformations</a>, <a href="/notebooks/schwarzschild.html">component computations</a>,
+  implicit coordinate dependence, multiple index
+  types and many more. The input format is a subset of TeX. Both a
+  command-line and a graphical interface are available.
+</p>
   <div class="splash_image">
-	 <img src="/static/images/screenshot.png" />
+	 <img src="/static/images/screenshot.png" alt="[screenshot]"/>
   </div>
   <ul>
 	 <li>
@@ -55,7 +50,10 @@
 		Input and output using a subset of LaTeX notation.
 	 </li>
   </ul>
-</ul>
+<p>
+  You are looking at the web site for the new Cadabra 2.x series,
+  which is not compatible with the 1.x series. For the latter, consult
+  the <a href="http://cadabra.phi-sci.com">old site</a>.
 </p>
 <br/>
 
@@ -88,10 +86,26 @@
 </p>
 <br/>
 
-<p>
-  <ul>
-  </ul>
+<h1>History</h1>
+<p class="hyphenate">
+  Cadabra was originally written around 2001 to solve a number of
+  problems related to higher-derivative supergravity. It was then
+  expanded and polished, and first saw its public release in 2007.
+  During the years that followed, it became clear that several design
+  decisions were not ideal, such as the use of a custom programming
+  language and the lack functionality for component computations. Over
+  the course of 2015-2016 a large rewrite took place, which resulted
+  in Cadabra 2.x.  This new version is programmable in Python and does
+  both abstract and component computations. This new web site, with
+  new tutorials and all manual pages accessible online, will also
+  hopefully help to make Cadabra easier to use.
 </p>
+<p class="hyphenate">
+  Version 2.x is still actively being worked on, so expect the
+  occasional bumpy ride, but it is already much better (and easier to
+  compile, too) than the old 1.x.
+</p>
+
 <br/>
 
 {%- endblock %}

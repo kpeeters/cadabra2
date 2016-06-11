@@ -159,7 +159,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			str << "<div class='latex'>";
 			break;
 		case DataCell::CellType::latex_view:
-			str << "<div class='latex_view'>";
+			str << "<div class='latex_view hyphenate'>";
 			break;
 		case DataCell::CellType::error:
 			str << "<div class='error'>";
