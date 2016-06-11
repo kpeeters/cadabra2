@@ -82,7 +82,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	boost::regex underscore(R"(\\_)");
 	boost::regex e_aigu(R"(\\'e)");
 	boost::regex ldots(R"(\$\\ldots\$)");
-
+	boost::regex linebreak(R"(\\linebreak\[0\])");
 	std::string res;
 
 	try {
@@ -100,13 +100,14 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = boost::regex_replace(res, href, "<a href=\"$1\">$2</a>");
 		res = boost::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
 		res = boost::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
-		res = boost::regex_replace(res, algo, "<a href=\"$1.html\"><code>$1</code></a>");
-		res = boost::regex_replace(res, prop, "<a href=\"$1.html\"><code>$1</code></a>");
+		res = boost::regex_replace(res, algo, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
+		res = boost::regex_replace(res, prop, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
 		res = boost::regex_replace(res, underscore, "_");
 		res = boost::regex_replace(res, latex, "LaTeX");
 		res = boost::regex_replace(res, tex, "TeX");
 		res = boost::regex_replace(res, e_aigu, "é");
 		res = boost::regex_replace(res, ldots, "...");
+		res = boost::regex_replace(res, linebreak, "\\\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
 		}
 	catch(boost::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;

@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}Cadabra: Manual pages{% endblock %}
+
+{% block head %}{%- endblock %}
+
+{% block main %}
+
+<h1>Manual pages</h1>
+<p>
+  Every algorithm and every property has a manual page with examples,
+  which you can view online:
+</p>
+<h2>Algorithms</h2>
+  <table>
+	 {% include "algo_toc.html" %}
+  </table>
+
+<h2>Properties</h2>
+  <table>
+	 {% include "prop_toc.html" %}
+  </table>
+
+{%- endblock %}
