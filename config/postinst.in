@@ -3,5 +3,10 @@
 # Script to be included in the cadabra2.deb package and to be run 
 # after installation, to make TeX pick up our style sheets.
 
+/sbin/ldconfig -v
 texhash
-gtk-update-icon-cache-3.0 -t /usr/share/icons/hicolor
+if hash gtk-update-icon-cache-3.0 2>/dev/null; then 
+   gtk-update-icon-cache-3.0 -t /usr/share/icons/hicolor
+else
+   gtk-update-icon-cache -t /usr/share/icons/hicolor
+fi
