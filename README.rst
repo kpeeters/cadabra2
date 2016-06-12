@@ -72,13 +72,19 @@ Linux (Fedora/CentOS/Scientific Linux)
 
 On Fedora/CentOS/Scientific Linux you can install the dependencies with::
 
+    sudy yum install epel-release
     sudo yum install python-devel cmake gcc-c++ 
     sudo yum install pcre-devel gmp-devel libuuid-devel sqlite-devel
     sudo yum install gtkmm30-devel boost-devel 
     sudo yum install texlive python-matplotlib
 
 There is no Python 3 by default on this platform, so the instructions
-here will build Cadabra for use with Python 2.
+here will build Cadabra for use with Python 2. You also need to
+install sympy by hand::
+
+    sudo yum install python-pip
+    sudo pip install sympy
+
 This platform receives less testing so please get in touch if you run
 into any issues. You can use either g++ or the clang++
 compiler. Building is then done with the standard::
