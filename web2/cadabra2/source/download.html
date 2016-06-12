@@ -22,15 +22,14 @@
   they will not interfere with each other.
 </p>
 
-<table>
-  <tr><th>Distribution</th><th>package</th><th>python</th><th>last updated</th></tr>
+<table class="packages">
+  <tr><th>distribution</th><th>package</th><th>updated</th><th>notes</th></tr>
   <tr>
 	 <td>Ubuntu Trusty Tahr 14.04</td>
 	 <td><a href="/packages/cadabra2-2.0.794.f14aa68-trusty.deb">cadabra2-2.0.794.f14aa68-trusty.deb</a></td>
-	 <td>3</td>
 	 <td>11-Jun-2016</td>
   </tr>
-  <tr>
+<!--  <tr>
 	 <td>Mint</td>
 	 <td></td>
   </tr>
@@ -41,12 +40,13 @@
   <tr>
 	 <td>Scientific Linux</td>
 	 <td></td>
-  </tr>
+  </tr> -->
   <tr>
 	 <td>CentOS 7</td>
-	 <td></td>
-	 <td>2</td>
-	 <td></td>
+	 <td><a href="/packages/cadabra2-2.0.798.1a69a49-centos.rpm">cadabra2-2.0.798.1a69a49-centos.rpm</a></td>
+	 <td>12-Jun-2016</td>
+	 <td>You also need to run <br/><code>sudo yum install
+	 epel-release</code><br/><code>sudo yum install python-pip</code><br/><code>sudo pip install sympy</code></td>
   </tr>
 </table>
 
@@ -94,7 +94,7 @@
   You can build .deb and .rpm packages yourself when building from
   source, by running <code>sudo cpack</code> after a successful
   build. Note that on rpm systems this requires the use
-  of <code>cmake3</code>; the default cmake will lead to a broken package.
+  of <code>cmake3</code> and <code>cpack3</code>; the default cmake will lead to a broken package.
 </p>
 
 {%- endblock %}

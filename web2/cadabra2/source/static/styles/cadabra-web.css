@@ -361,6 +361,19 @@ div.literal {
 	 line-height: 20px;
 	 margin-left: 50px;
 }
+table.packages {
+	 border-collapse: separate;
+    border-spacing:  5px 10px;
+}
+table.packages td {
+	 vertical-align: top;
+}
+table.packages tr {
+}
+table.packages code {
+	 font-size: 12px;
+	 margin-left: 10px;
+}
 
 /* Small screens */
 
