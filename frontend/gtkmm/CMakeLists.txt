@@ -85,5 +85,6 @@ install(FILES    ${PROJECT_SOURCE_DIR}/../../images/64x64/cadabra2.png     DESTI
 install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2.png   DESTINATION share/icons/hicolor/256x256/apps)
 install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra2.svg           DESTINATION share/icons/hicolor/scalable/apps)
 install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop       DESTINATION share/applications)
+install(CODE     "execute_process(COMMAND touch ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/icon-theme.cache)")
 install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
 install(CODE     "execute_process(COMMAND chmod go+r ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/icon-theme.cache)")
