@@ -23,12 +23,31 @@
 </p>
 
 <table>
-  <tr><th>Distribution</th><th>package</th><th>last updated</th></tr>
-  <tr><td>Ubuntu Trusty Tahr 14.04</td><td><a href="/packages/cadabra2-2.0.794.f14aa68-trusty.deb">cadabra2-2.0.794.f14aa68-trusty.deb</a></td><td>11-Jun-2016</td></tr>
-  <tr><td>Mint</td><td></td></tr>
-  <tr><td>Fedora</td><td></td></tr>
-  <tr><td>Scientific Linux</td><td></td></tr>
-  <tr><td>CentOS</td><td></td></tr>
+  <tr><th>Distribution</th><th>package</th><th>python</th><th>last updated</th></tr>
+  <tr>
+	 <td>Ubuntu Trusty Tahr 14.04</td>
+	 <td><a href="/packages/cadabra2-2.0.794.f14aa68-trusty.deb">cadabra2-2.0.794.f14aa68-trusty.deb</a></td>
+	 <td>3</td>
+	 <td>11-Jun-2016</td>
+  </tr>
+  <tr>
+	 <td>Mint</td>
+	 <td></td>
+  </tr>
+  <tr>
+	 <td>Fedora</td>
+	 <td></td>
+  </tr>
+  <tr>
+	 <td>Scientific Linux</td>
+	 <td></td>
+  </tr>
+  <tr>
+	 <td>CentOS 7</td>
+	 <td></td>
+	 <td>2</td>
+	 <td></td>
+  </tr>
 </table>
 
 <p>
@@ -36,6 +55,7 @@
   source (see below) or send an email
   to <a href="mailto:info@cadabra.science">info@cadabra.science</a>
   to request a package for your distribution.
+</p>
 
 <!--<p>
   If you are on an Ubuntu/Mint/Debian system, you can install a recent
@@ -69,6 +89,12 @@
   is distributed via github, see the
    <a href="https://github.com/kpeeters/cadabra2">kpeeters/cadabra2</a>
   repository for more details, including the pre-requisites.
+</p>
+<p>
+  You can build .deb and .rpm packages yourself when building from
+  source, by running <code>sudo cpack</code> after a successful
+  build. Note that on rpm systems this requires the use
+  of <code>cmake3</code>; the default cmake will lead to a broken package.
 </p>
 
 {%- endblock %}

@@ -71,12 +71,13 @@ set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
 set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
+# We need to exclude things from the RPM, but the line below does not work?
 set(CPACK_RPM_EXCLUDE_LIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
 
 #xdg-desktop-menu install <install>/share/applications/MyApp.desktop
 
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
-set(CPACK_RPM_PACKAGE_REQUIRES   "python-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python-matplotlib, dvipng, texlive-latex")
+set(CPACK_RPM_PACKAGE_REQUIRES   "python-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python-matplotlib, dvipng, texlive")
 
 set(CPACK_DEBIAN_PACKAGE_SECTION "math")
 set(CPACK_RPM_PACKAGE_GROUP      "Applications/Productivity")
