@@ -117,11 +117,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "As you can see, simply call the function and pass in the Python object corresponding to the mathematical expression\nyou want to act on. \n\nWith Python at your disposal, you can now do things which were impossible or at the least very clumsy with the old\n\\verb|@procedure| construction. For instance, you can now looping constructions like the following."
+					"source" : "As you can see, simply call the function and pass in the Python object corresponding to the mathematical expression\nyou want to act on. \n\nWith Python at your disposal, you can now do things which were impossible or at the least very clumsy with the old\n\\verb|@procedure| construction. For instance, you can now use loop constructions like the following:"
 				}
 			],
 			"hidden" : true,
-			"source" : "As you can see, simply call the function and pass in the Python object corresponding to the mathematical expression\nyou want to act on. \n\nWith Python at your disposal, you can now do things which were impossible or at the least very clumsy with the old\n\\verb|@procedure| construction. For instance, you can now looping constructions like the following."
+			"source" : "As you can see, simply call the function and pass in the Python object corresponding to the mathematical expression\nyou want to act on. \n\nWith Python at your disposal, you can now do things which were impossible or at the least very clumsy with the old\n\\verb|@procedure| construction. For instance, you can now use loop constructions like the following:"
 		},
 		{
 			"cell_origin" : "client",

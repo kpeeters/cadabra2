@@ -77,8 +77,8 @@ div#menubar ul li:hover {
 div.splash_image {
 	 width: 50%;
 	 float: right;
-	 margin-left: 30px;
-	 margin-bottom: 10px;
+	 margin-left: 50px;
+	 margin-bottom: 20px;
 }
 div.splash_image img {
 	 width: 100%;
@@ -360,6 +360,19 @@ div.literal {
 	 color: blue; 
 	 line-height: 20px;
 	 margin-left: 50px;
+}
+table.packages {
+	 border-collapse: separate;
+    border-spacing:  5px 10px;
+}
+table.packages td {
+	 vertical-align: top;
+}
+table.packages tr {
+}
+table.packages code {
+	 font-size: 12px;
+	 margin-left: 10px;
 }
 
 /* Small screens */

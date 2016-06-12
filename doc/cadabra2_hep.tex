@@ -48,7 +48,8 @@
 %SPIN-06/46\\
 %ITP-UU-06/56\\
 hep-th/0701238\\
-25 January 2007
+25 January 2007\\
+11 June 2016 (updated for v2)
 \end{flushright}
 \vskip 7ex
 
@@ -91,8 +92,8 @@ gravity, supergravity and quantum field theory.
   unchanged. A more in-depth discussion of the changes of the 2.x
   series will appear in an upcoming paper. The software itself,
   including source code, can be obtained from the web site
-  \url{http://cadabra.science/} where further documentation can also
-  be found.}
+  \url{http://cadabra.science/} where further documentation and
+  tutorial notebooks can also be found.}
 \end{minipage}
 \end{center}
 \eject
@@ -332,7 +333,7 @@ canonicalise(_);
 \botrule
 The first line indicates that the tensor has the symmetries of the
 \raisebox{2ex}{$\ftableau{ac,bd}$} tableau (the numbers in the \verb|indices| argument
-refer to the index positions). The \verb|@canonicalise| command writes
+refer to the index positions). The \verb|canonicalise| command writes
 the input in canonical form with respect to mono-term symmetries
 (anti-symmetry in the two index pairs and symmetry under pair
 exchange). The Ricci symmetry is also encoded in the Young tableau and
@@ -375,7 +376,7 @@ canonicalise(_);
 0;
 \end{cdbout}
 \begin{cdbcont}
-\nabla_{m p}( A_{q r} V_{n} ) A^{p m};
+ex:=\nabla_{m p}( A_{q r} V_{n} ) A^{p m};
 canonicalise(_);
 \end{cdbcont}
 \begin{cdbout}

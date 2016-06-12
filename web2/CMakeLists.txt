@@ -10,6 +10,7 @@ set(DC         ${CMAKE_SOURCE_DIR}/client_server/cadabra2html.cc ${CMAKE_SOURCE_
 # Sample/tutorial notebooks.
 
 set(TUTORIALS
+  quickstart
   beginners
   tensor_monomials
   for_previous_users
