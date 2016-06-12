@@ -15,6 +15,14 @@ enable_testing()
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
 include_directories(${PROJECT_BINARY_DIR}/core)
 
+# Provide option to build with Python 3 (default) or Python 2.
+option(USE_PYTHON_3 "Use Python 3 if ON, or fall back to Python 2 if OFF" ON)
+if(USE_PYTHON_3)
+  set(PYTHON_POSTFIX "3")
+else()
+  set(PYTHON_POSTFIX "")
+endif()
+
 # Determine what type of system we are on, for packaging.
 set(LINUX_NAME "")
 if(EXISTS "/etc/redhat-release")
@@ -46,9 +54,17 @@ endif(EXISTS "/etc/redhat-release")
 
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT_BINARY_DIR}/postinst")
 
+if(USE_PYTHON_3)
+  message("-- Building for use with Python 3 (good!)")
+else()
+  message("-- Building for use with Python 2 (consider upgrading!)")
+endif()
+
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
 include (InstallRequiredSystemLibraries)
+set(CPACK_SET_DESTDIR true)
+set(CPACK_INSTALL_PREFIX /usr)
 set(CPACK_PACKAGE_NAME           "cadabra2")
 set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/doc/license.txt")
 set(CPACK_RPM_PACKAGE_LICENSE    "GPLv3")
@@ -60,12 +76,13 @@ set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
 set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
-set(CPACK_RPM_EXCLUDE_LIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
+#set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
+set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 #xdg-desktop-menu install <install>/share/applications/MyApp.desktop
 
 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
-set(CPACK_RPM_PACKAGE_REQUIRES   "python-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python-matplotlib, dvipng, texlive-latex")
+set(CPACK_RPM_PACKAGE_REQUIRES   "python-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python-matplotlib, dvipng, texlive")
 
 set(CPACK_DEBIAN_PACKAGE_SECTION "math")
 set(CPACK_RPM_PACKAGE_GROUP      "Applications/Productivity")
@@ -80,7 +97,6 @@ endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
-# -I/usr/local/Cellar/python/2.7.8_2/Frameworks/Python.framework/Versions/2.7/include/python2.7")
 endif()
 
 
