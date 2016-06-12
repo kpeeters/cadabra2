@@ -17,6 +17,11 @@ include_directories(${PROJECT_BINARY_DIR}/core)
 
 # Provide option to build with Python 3 (default) or Python 2.
 option(USE_PYTHON_3 "Use Python 3 if ON, or fall back to Python 2 if OFF" ON)
+if(USE_PYTHON_3)
+  set(PYTHON_POSTFIX "3")
+else()
+  set(PYTHON_POSTFIX "")
+endif()
 
 # Determine what type of system we are on, for packaging.
 set(LINUX_NAME "")
@@ -71,7 +76,8 @@ set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
 set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
-set(CPACK_RPM_EXCLUDE_LIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
+#set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
+set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
 
 #xdg-desktop-menu install <install>/share/applications/MyApp.desktop
 
