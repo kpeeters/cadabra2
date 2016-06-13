@@ -179,3 +179,8 @@ def test26():
 
 test26()
 
+def test27():
+ex:=A+B;
+ex2:= @(ex)^{\mu\nu};
+tst:=(A+C)^{\mu\nu} - @(ex2);
+assert(tst==0);
