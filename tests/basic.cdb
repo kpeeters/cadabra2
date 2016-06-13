@@ -179,6 +179,11 @@ def test26():
 
 test26()
 
+ex:=A;
+ex2:= @(ex)^{\mu\nu};
+tst:=A^{\mu\nu} - @(ex2);
+assert(tst==0);
+
 def test27():
 ex:=A+B;
 ex2:= @(ex)^{\mu\nu};
