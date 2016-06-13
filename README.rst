@@ -29,12 +29,14 @@ graphical interface are available.
 Installation
 -------------
 
-Cadabra builds on Linux and Mac OS X, select your distribution below:
+Cadabra builds on Linux and Mac OS X, and might soon build on Windows
+too. Select your system from the list bel
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora/CentOS/Scientific Linux)`_
 - `Linux (Arch/Manjaro)`_
 - `Mac OS X`_
+- `Windows`_
 
 Binaries for all these platforms will be provided as soon as we get to
 a somewhat more stable state; for the time being you need to compile
@@ -164,6 +166,22 @@ may take a while (definitely until after 2.0 has been released).
 Feedback from OS X users is *very* welcome because this is not my main
 development platform.
 
+
+Windows
+-------
+
+Building on windows does not work yet, but here is something to get
+things at least roughly in the right direction. First, install MSYS2
+from http://msys2.github.io. Once you have a working MSYS2 shell,
+do the following to install various packages::
+
+    pacman -S mingw-w64_x86_64-gcc
+    pacman -S mingw-w64_x86_64-gtkmm3
+    pacman -S mingw-w64-x86_64-boost
+    pacman -S cmake
+
+
+If you get any further, please get in touch.
 
 
 Tutorials and other help
