@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 project(Cadabra)
 set(CADABRA_VERSION_MAJOR 2)
@@ -10,8 +11,6 @@ set(CADABRA_VERSION_BUILD "${GIT_COMMIT_SERIAL}.${GIT_SHORT_SHA}")
 message("-- Build id ${CADABRA_VERSION_BUILD}")
 
 enable_testing()
-
-set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 # Generate config file with CMake variables.
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
