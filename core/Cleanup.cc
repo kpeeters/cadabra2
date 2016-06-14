@@ -6,6 +6,7 @@
 #include "properties/PartialDerivative.hh"
 #include "properties/NumericalFlat.hh"
 #include "properties/Diagonal.hh"
+#include "properties/KroneckerDelta.hh"
 
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
@@ -32,6 +33,9 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 
 	const Diagonal *diag = kernel.properties.get<Diagonal>(it);
 	if(diag) cleanup_diagonal(kernel, tr, it);
+
+	const KroneckerDelta *kr = kernel.properties.get<KroneckerDelta>(it);
+	if(kr) cleanup_kronecker(kernel, tr, it);
 
 	if(it->is_zero())  {
 		::zero(it->multiplier);
@@ -273,6 +277,26 @@ void cleanup_diagonal(const Kernel& k, Ex& tr, Ex::iterator& it)
 	if(c1->is_rational() && c2->is_rational())
 		if(c1->multiplier != c2->multiplier)
 			zero(it->multiplier);
+	}
+
+void cleanup_kronecker(const Kernel& k, Ex& tr, Ex::iterator& it)
+	{
+	if(tr.number_of_children(it)!=2) return;
+
+	auto c1=tr.begin(it);
+	auto c2(c1);
+	++c2;
+
+	if(c1->is_rational() && c2->is_rational()) {
+		if(c1->multiplier != c2->multiplier) {
+			zero(it->multiplier);
+			}
+		else {
+			::one(it->multiplier);
+			tr.erase_children(it);
+			it->name=name_set.insert("1").first;
+			}
+		}
 	}
 
 void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)

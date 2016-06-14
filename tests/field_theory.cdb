@@ -21,6 +21,17 @@ def test02():
 
 test02()
 
+def test03():
+    \delta{#}::KroneckerDelta.
+    ex:= \delta_{m?}_{-n?} \delta^{\mu\nu};
+    eliminate_kronecker(_)
+    tst:= \delta_{m?}_{-n?} \delta^{\mu\nu} - @(ex);
+    assert(tst==0)
+    print('Test 03 passed')
+
+test03()
+
+
 \delta{#}::KroneckerDelta.
 \eps_{#}::EpsilonTensor(delta=\delta).
 F_{q r s a b c}::TableauSymmetry(shape={1,1}, indices={0,1}, shape={1,1,1}, indices={3,4,5}).
