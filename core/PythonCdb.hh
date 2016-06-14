@@ -40,13 +40,6 @@ bool __eq__Ex_Ex(const Ex&, const Ex&);
 
 bool __eq__Ex_int(const Ex&, int);
 
-/// \ingroup pythoncore
-///
-/// Replace any objects of the form '@(...)' in the expression tree by the
-/// python expression '...' if it exists. Rename dummies to avoid clashes.
-
-void pull_in(std::shared_ptr<Ex>);
-
 /// Fetch an Ex object from the Python side using its Python identifier.
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm);
