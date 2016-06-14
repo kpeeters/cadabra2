@@ -21,6 +21,7 @@ namespace boost {
 #include "PythonCdb.hh"
 
 #include "Parser.hh"
+#include "Bridge.hh"
 #include "Exceptions.hh"
 #include "DisplayTeX.hh"
 #include "DisplaySympy.hh"
@@ -325,43 +326,6 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 	return 0;
 	}
 
-
-void pull_in(std::shared_ptr<Ex> ex)
-	{
-	collect_terms rr(*get_kernel_from_scope(), *ex);
-	
-	bool acted=false;
-	Ex::iterator it=ex->begin();
-	while(it!=ex->end()) {
-		if(*it->name=="@") {
-			std::string pobj = *(ex->begin(it)->name);
-			std::cerr << "finding in " << pobj << std::endl;
-			std::shared_ptr<Ex> ex = fetch_from_python(pobj);
-			if(ex) {
-				acted=true;
-				std::cerr << "pulling in " << pobj << std::endl;
-				Ex::iterator topnode_it = ex->begin();
-				multiplier_t mult=*(it->multiplier);
-				auto at_arg = ex->begin(it);
-
-				ex->erase(at_arg);           // erase argument of @
-				std::cerr << * ((*(topnode_it)).name) << std::endl;
-				it=ex->replace(it, *(topnode_it));     // replace @ with head of ex
-				std::cerr << "need to add from " << *(ex->begin(topnode_it)->name) << std::endl;
-//				ex->prepend_children(it, ex->begin(topnode_it), ex->end(topnode_it)); // add children of ex
-				multiply(it->multiplier, mult);
-				rr.rename_replacement_dummies(it, false);
-				}
-			else throw ArgumentException("Python object '"+pobj+"' does not exist.");
-			}
-		++it;
-		}
-
-	if(acted)
-		std::cerr << "pull_in done: " << *ex << std::endl;
-
-	return;
-	}
 
 
 bool __eq__Ex_Ex(const Ex& one, const Ex& other) 
