@@ -146,8 +146,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:afecc5ef5b52335a65509d4226d64d103"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac6771acb841596f5f28cc54f0b39e418"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#ac6771acb841596f5f28cc54f0b39e418">print_children</a> (std::ostream &amp;, Ex::iterator, int skip=0)</td></tr>
 <tr class="separator:ac6771acb841596f5f28cc54f0b39e418"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40287a7e3d5579f00cba31a529caeb89"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a40287a7e3d5579f00cba31a529caeb89">texify</a> (const std::string &amp;) const </td></tr>
-<tr class="separator:a40287a7e3d5579f00cba31a529caeb89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2598c3b843b91694b7a5d1f1c340820"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#ac2598c3b843b91694b7a5d1f1c340820">texify</a> (std::string) const </td></tr>
+<tr class="separator:ac2598c3b843b91694b7a5d1f1c340820"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ff43a244bdd8f1212259b7d3ebd9052"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a1ff43a244bdd8f1212259b7d3ebd9052">dispatch</a> (std::ostream &amp;, Ex::iterator) override</td></tr>
 <tr class="memdesc:a1ff43a244bdd8f1212259b7d3ebd9052"><td class="mdescLeft">&#160;</td><td class="mdescRight">For every object encountered, dispatch will figure out the most appropriate way to convert it into a LaTeX expression.  <a href="#a1ff43a244bdd8f1212259b7d3ebd9052">More...</a><br/></td></tr>
 <tr class="separator:a1ff43a244bdd8f1212259b7d3ebd9052"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,6 +204,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a892ee92c9403f1f879dfbd9f69759a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d9d72e67ac4475f1f93680ae9363fa2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a1d9d72e67ac4475f1f93680ae9363fa2">bracket_level</a> =0</td></tr>
 <tr class="separator:a1d9d72e67ac4475f1f93680ae9363fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26479aae12d13f4e728f2dca3ae35c69"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <br class="typebreak"/>
+std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a26479aae12d13f4e728f2dca3ae35c69">symmap</a></td></tr>
+<tr class="memdesc:a26479aae12d13f4e728f2dca3ae35c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> symbols to LaTeX symbols (for some typographic cleanup).  <a href="#a26479aae12d13f4e728f2dca3ae35c69">More...</a><br/></td></tr>
+<tr class="separator:a26479aae12d13f4e728f2dca3ae35c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -1061,7 +1065,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a40287a7e3d5579f00cba31a529caeb89"></a>
+<a class="anchor" id="ac2598c3b843b91694b7a5d1f1c340820"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -1071,7 +1075,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">std::string DisplayTeX::texify </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>str</em></td><td>)</td>
           <td> const</td>
         </tr>
@@ -1186,6 +1190,28 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a26479aae12d13f4e728f2dca3ae35c69"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, std::string&gt; DisplayTeX::symmap</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Map from <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> symbols to LaTeX symbols (for some typographic cleanup). </p>
+
+</div>
+</div>
 <a class="anchor" id="a6b75d215e3eabf7c203f90381414b130"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1253,7 +1279,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 12 2016 10:48:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jun 14 2016 10:16:33 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

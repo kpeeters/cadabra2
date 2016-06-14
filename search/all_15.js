@@ -18,7 +18,7 @@ var searchData=
   ['update_5fstate',['update_state',['../classEx.html#a71254cc1437ba43fafd34cd41b5be6de',1,'Ex']]],
   ['update_5ftitle',['update_title',['../classcadabra_1_1NotebookWindow.html#a62613a40e82b552f57183c8e8f6fe266',1,'cadabra::NotebookWindow']]],
   ['update_5fweights',['update_weights',['../classcombin_1_1combinations__base.html#ab62eeb73ecf208b2bf3d52e9bcd7619c',1,'combin::combinations_base']]],
-  ['upsilon',['Upsilon',['../Symbols_8cc.html#a3746fac64f253791492c1e3e79fd3db4',1,'Upsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#af4256ce339bc9b51e8a8eba595b96c72',1,'upsilon():&#160;Symbols.cc']]],
+  ['upsilon',['upsilon',['../Symbols_8cc.html#af4256ce339bc9b51e8a8eba595b96c72',1,'upsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#a3746fac64f253791492c1e3e79fd3db4',1,'Upsilon():&#160;Symbols.cc']]],
   ['use_5fgeneralised_5fdelta_5f',['use_generalised_delta_',['../classjoin__gamma.html#ac39c827ac5a36fee40b5977bbdbb5e24',1,'join_gamma']]],
   ['use_5frule',['use_rule',['../classsubstitute.html#a4250db75a16a745f9a067be2b91ed49f',1,'substitute']]],
   ['useconds',['useconds',['../classstopwatch.html#aa50af230c1bab94f32fac3b8f0ac20dd',1,'stopwatch']]],

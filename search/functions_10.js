@@ -60,7 +60,7 @@ var searchData=
   ['projector_5fnormalisation',['projector_normalisation',['../classyngtab_1_1filled__tableau.html#aca476b2b39c7651f6517b84f0695ac54',1,'yngtab::filled_tableau']]],
   ['propagate_5fzeroes',['propagate_zeroes',['../classAlgorithm.html#a538482f78b15463eb1fe20bb42fde13e',1,'Algorithm']]],
   ['property',['Property',['../classProperty.html#af822cb8ba299ecb735bf508d8cd835e8',1,'Property']]],
-  ['pull_5fin',['pull_in',['../group__pythoncore.html#gab3b5cb077ac260be317a8c6dccb153b6',1,'pull_in(std::shared_ptr&lt; Ex &gt; ex):&#160;PythonCdb.cc'],['../group__pythoncore.html#gab3b5cb077ac260be317a8c6dccb153b6',1,'pull_in(std::shared_ptr&lt; Ex &gt;):&#160;PythonCdb.cc']]],
+  ['pull_5fin',['pull_in',['../group__pythoncore.html#ga40314f9e6ee8efe62d9e9464c33b91a8',1,'pull_in(std::shared_ptr&lt; Ex &gt; ex):&#160;Bridge.cc'],['../group__pythoncore.html#ga40314f9e6ee8efe62d9e9464c33b91a8',1,'pull_in(std::shared_ptr&lt; Ex &gt; ex):&#160;Bridge.cc']]],
   ['push_5fback',['push_back',['../classkeyval__t.html#a2021427ca4380d0f314cc704c43ed569',1,'keyval_t']]],
   ['push_5fdown_5fmultiplier',['push_down_multiplier',['../Cleanup_8cc.html#a618e4c9ee49676cb9c46b12360652608',1,'push_down_multiplier(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc'],['../Cleanup_8hh.html#a618e4c9ee49676cb9c46b12360652608',1,'push_down_multiplier(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc']]],
   ['push_5fhistory',['push_history',['../classEx.html#ab9eac3989aec0ace4f72de191ddd3614',1,'Ex']]],

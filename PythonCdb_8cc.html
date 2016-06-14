@@ -104,6 +104,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><code>#include &lt;memory&gt;</code><br/>
 <code>#include &quot;<a class="el" href="PythonCdb_8hh_source.html">PythonCdb.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Parser_8hh_source.html">Parser.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="Bridge_8hh_source.html">Bridge.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Exceptions_8hh_source.html">Exceptions.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="DisplayTeX_8hh_source.html">DisplayTeX.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="DisplaySympy_8hh_source.html">DisplaySympy.hh</a>&quot;</code><br/>
@@ -241,9 +242,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a0a4ace1e0bde4ab74e7333dd33b1af14">fetch_from_python</a> (const std::string &amp;nm)</td></tr>
 <tr class="memdesc:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch an <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object from the Python side using its Python identifier.  <a href="#a0a4ace1e0bde4ab74e7333dd33b1af14">More...</a><br/></td></tr>
 <tr class="separator:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab3b5cb077ac260be317a8c6dccb153b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gab3b5cb077ac260be317a8c6dccb153b6">pull_in</a> (std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt; ex)</td></tr>
-<tr class="memdesc:gab3b5cb077ac260be317a8c6dccb153b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace any objects of the form '@(...)' in the expression tree by the python expression '...' if it exists.  <a href="group__pythoncore.html#gab3b5cb077ac260be317a8c6dccb153b6">More...</a><br/></td></tr>
-<tr class="separator:gab3b5cb077ac260be317a8c6dccb153b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1ec1708b2f8eede27d73db4b02a12dbf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga1ec1708b2f8eede27d73db4b02a12dbf">__eq__Ex_Ex</a> (const <a class="el" href="classEx.html">Ex</a> &amp;<a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, const <a class="el" href="classEx.html">Ex</a> &amp;other)</td></tr>
 <tr class="memdesc:ga1ec1708b2f8eede27d73db4b02a12dbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> objects in Python.  <a href="group__pythoncore.html#ga1ec1708b2f8eede27d73db4b02a12dbf">More...</a><br/></td></tr>
 <tr class="separator:ga1ec1708b2f8eede27d73db4b02a12dbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1170,7 +1168,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jun 12 2016 10:48:11 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jun 14 2016 10:16:28 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

@@ -9,7 +9,7 @@ var searchData=
   ['terms',['terms',['../PythonCdb_8cc.html#a8aa7a6b2d258e2b2a135c0b2cb50a33d',1,'PythonCdb.cc']]],
   ['texengine',['TeXEngine',['../classcadabra_1_1TeXEngine.html#a09348689e3c5ab33989cee9eaf8bd8ae',1,'cadabra::TeXEngine']]],
   ['texexception',['TeXException',['../classcadabra_1_1TeXEngine_1_1TeXException.html#a5b61c3828229e5b2664e059a83214f22',1,'cadabra::TeXEngine::TeXException']]],
-  ['texify',['texify',['../classDisplayTeX.html#a40287a7e3d5579f00cba31a529caeb89',1,'DisplayTeX']]],
+  ['texify',['texify',['../classDisplayTeX.html#ac2598c3b843b91694b7a5d1f1c340820',1,'DisplayTeX']]],
   ['texrequest',['TeXRequest',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a82fa2bf25f9ed43914fa388fe640138a',1,'cadabra::TeXEngine::TeXRequest']]],
   ['texview',['TeXView',['../classcadabra_1_1TeXView.html#a0561162a88f537f59d6b71bb112dde40',1,'cadabra::TeXView']]],
   ['to_5fjson',['to_json',['../classsnoop_1_1Snoop_1_1AppEntry.html#aba7231162542dd80c04921e1ef4bba07',1,'snoop::Snoop::AppEntry::to_json()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#afbcb659c7c3b4b4330a0145ca662647f',1,'snoop::Snoop::LogEntry::to_json()']]],

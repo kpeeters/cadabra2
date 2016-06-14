@@ -56,6 +56,6 @@ var searchData=
   ['suppress_5fnormal_5foutput',['suppress_normal_output',['../classAlgorithm.html#a4bb30f08798a00fb414874e580967593',1,'Algorithm']]],
   ['svh_5f',['svh_',['../classcombin_1_1symmetriser.html#aff979c3bca025ee1d8ba258917871039',1,'combin::symmetriser']]],
   ['sym',['sym',['../classyoung__project.html#abe0fbeec799af2d5abf154d6e5db9aa3',1,'young_project::sym()'],['../classyoung__project__tensor.html#a315f4fc787af92b926ce2a7027a2a9e1',1,'young_project_tensor::sym()']]],
-  ['symmap',['symmap',['../classDisplaySympy.html#a64125dd889ab4ad8f1b39b04e1c24e90',1,'DisplaySympy::symmap()'],['../classDisplayTerminal.html#ace9bec9a383c7c4fc5d8d2575033235a',1,'DisplayTerminal::symmap()']]],
+  ['symmap',['symmap',['../classDisplaySympy.html#a64125dd889ab4ad8f1b39b04e1c24e90',1,'DisplaySympy::symmap()'],['../classDisplayTerminal.html#ace9bec9a383c7c4fc5d8d2575033235a',1,'DisplayTerminal::symmap()'],['../classDisplayTeX.html#a26479aae12d13f4e728f2dca3ae35c69',1,'DisplayTeX::symmap()']]],
   ['sync_5fimmediately_5f',['sync_immediately_',['../classsnoop_1_1Snoop.html#aac2fd567a0fee30bf65bc3c15d5403cc',1,'snoop::Snoop']]]
 ];
