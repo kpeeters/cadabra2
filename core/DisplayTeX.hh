@@ -31,7 +31,7 @@ class DisplayTeX : public DisplayBase {
 		void print_parent_rel(std::ostream&, str_node::parent_rel_t, bool first);
 		void print_children(std::ostream&, Ex::iterator, int skip=0);
 
-		std::string texify(const std::string&) const;
+		std::string texify(std::string) const;
 
 		bool print_star=false;
 		bool tight_star=false;
@@ -82,6 +82,10 @@ class DisplayTeX : public DisplayBase {
 		/// instead of '\partial(A)'. 
 	  
 		bool reads_as_operator(Ex::iterator obj, Ex::iterator arg) const;
+
+		/// Map from Cadabra symbols to LaTeX symbols (for some typographic cleanup).
+		std::map<std::string, std::string> symmap;
+
 };
 
 const char *unichar(kunichar c);

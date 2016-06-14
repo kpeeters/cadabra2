@@ -21,6 +21,7 @@ namespace boost {
 #include "PythonCdb.hh"
 
 #include "Parser.hh"
+#include "Bridge.hh"
 #include "Exceptions.hh"
 #include "DisplayTeX.hh"
 #include "DisplaySympy.hh"
@@ -325,32 +326,6 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 	return 0;
 	}
 
-
-void pull_in(std::shared_ptr<Ex> ex)
-	{
-	collect_terms rr(*get_kernel_from_scope(), *ex);
-	
-	Ex::iterator it=ex->begin();
-	while(it!=ex->end()) {
-		if(*it->name=="@") {
-			if(ex->number_of_children(it)==1) {
-				std::string pobj = *(ex->begin(it)->name);
-				std::shared_ptr<Ex> ex = fetch_from_python(pobj);
-				if(ex) {
-					Ex::iterator topnode_it = ex->begin();
-
-					multiplier_t mult=*(it->multiplier);
-					it=ex->replace(it, topnode_it);
-					multiply(it->multiplier, mult);
-					rr.rename_replacement_dummies(it, false);
-					}
-				}
-			}
-		++it;
-		}
-
-	return;
-	}
 
 
 bool __eq__Ex_Ex(const Ex& one, const Ex& other) 

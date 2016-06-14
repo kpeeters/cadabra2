@@ -86,6 +86,7 @@ endif()
 
 set(LOCAL_SRC_FILES
   PythonCdb.cc
+  Bridge.cc
   Algorithm.cc
   Cleanup.cc
   Combinatorics.cc
@@ -238,5 +239,15 @@ install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE O
                                                         WORLD_READ WORLD_EXECUTE)
 
 install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+                                                        GROUP_READ GROUP_EXECUTE
+                                                        WORLD_READ WORLD_EXECUTE)
+
+# Install packages.
+set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
+install(FILES
+  "${PROJECT_SOURCE_DIR}/packages/cdb/gr.py" DESTINATION "${PYTHON_CDB_PACKAGE_PATH}" 
+)
+
+install(DIRECTORY DESTINATION ${PYTHON_CDB_PACKAGE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)

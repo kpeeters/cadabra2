@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.5
-    \date     12-Apr-2016
+    \version  3.6
+    \date     13-Jun-2016
     \see      http://tree.phi-sci.com/
     \see      http://tree.phi-sci.com/ChangeLog
 
@@ -1154,12 +1154,14 @@ iter tree<T, tree_node_allocator>::prepend_children(iter position, sibling_itera
 	assert(position.node!=feet);
 	assert(position.node);
 
-	iter ret=from;
+	if(from==to) return from; // should return end of tree?
 
-	while(from!=to) {
-		insert_subtree(position.begin(), from);
-		++from;
-		}
+	iter ret;
+	do {
+		--to;
+		ret=insert_subtree(position.begin(), to);
+		} while(to!=from);
+
 	return ret;
 	}
 
