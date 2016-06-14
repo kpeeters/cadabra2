@@ -14,6 +14,10 @@
 DisplayTeX::DisplayTeX(const Kernel& k, const Ex& e)
 	: DisplayBase(k, e)
 	{
+	symmap = {
+		{"\\hat", "\\widehat"},
+		{"\\tilde", "\\widetilde"}
+		};
 	}
 
 bool DisplayTeX::needs_brackets(Ex::iterator it)
@@ -96,8 +100,12 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		str << "\\right)";
 	}
 
-std::string DisplayTeX::texify(const std::string& str) const
+std::string DisplayTeX::texify(std::string str) const
 	{
+	auto rn = symmap.find(str);
+	if(rn!=symmap.end())
+		str = rn->second;
+
 	std::string res;
    for(unsigned int i=0; i<str.size(); ++i) {
 		 if(str[i]=='#') res+="\\#";
