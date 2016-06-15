@@ -1,5 +1,6 @@
 
 def test01():
+    __cdbkernel__=create_scope()
     \delta{#}::KroneckerDelta.
     obj1:= 2*a*\delta^{i1 j1 i2 j2};
     expand_delta(_);
@@ -11,6 +12,7 @@ def test01():
 test01()
     
 def test02():
+    __cdbkernel__=create_scope()
     \delta{#}::KroneckerDelta.
     n::Integer(0..d).
     obj2:= a*\delta_{n n};
@@ -22,6 +24,7 @@ def test02():
 test02()
 
 def test03():
+    __cdbkernel__=create_scope()
     \delta{#}::KroneckerDelta.
     ex:= \delta_{m?}_{-n?} \delta^{\mu\nu};
     eliminate_kronecker(_)
