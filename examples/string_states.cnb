@@ -22,11 +22,6 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def post_process(ex):\n   eliminate_kronecker(ex)\n   collect_terms(ex)"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
 			"cells" : 
 			[
 				{
@@ -103,10 +98,15 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2\\alpha_{0}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(L1c, rl);"
+			"source" : "converge(L1c):\n   substitute(L1c, rl)\n   distribute(L1c)\n   eliminate_kronecker(L1c)\n;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def L(m):\n\tins=''\n\tfor n in range(-10,10):\n\t\tif n!=-10:\n\t\t\tins+='+ '\n\t\tins += r'\\alpha_{'+str(m-n)+r'}^{\\mu} \\alpha_{'+str(n)+r'}^{\\mu}'\n\tex=Ex(ins)\n\treturn ex"
 		},
 		{
 			"cell_origin" : "client",
@@ -116,67 +116,15 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\left(\\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu}+\\delta^{\\mu \\nu}\\right) \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "substitute(L1c, rl);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{10}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-7}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-8}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-9}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\left(\\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu}+\\delta^{\\mu \\nu}\\right) |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{11}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{10}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-7}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-8}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(L1c);\nsubstitute(L1c,rl);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\delta^{\\mu \\nu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "distribute(L1c);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\delta^{\\mu \\nu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\delta^{\\mu \\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "substitute(L1c, rl);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}2\\alpha_{0}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "eliminate_kronecker(_);"
+			"source" : "L0=L(0);\nL1=L(1);"
 		},
 		{
 			"cell_origin" : "client",
