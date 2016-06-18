@@ -85,10 +85,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(\\alpha_{m?}\\,^{\\mu} \\alpha_{n?}\\,^{\\nu}\\quad\\text{with}\\quad{}m? > 0 \\rightarrow \\alpha_{n?}\\,^{\\nu} \\alpha_{m?}\\,^{\\mu}+\\delta_{m? -n?} \\delta^{\\mu \\nu}, \\linebreak[0] \\alpha_{m?}\\,^{\\mu} |0\\rangle\\quad\\text{with}\\quad{}m? > 0 \\rightarrow 0\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(\\alpha_{m?}\\,^{\\mu} \\alpha_{n?}\\,^{\\nu}\\quad\\text{with}\\quad{}m? > n? \\rightarrow \\alpha_{n?}\\,^{\\nu} \\alpha_{m?}\\,^{\\mu}+\\delta_{m? -n?} \\delta^{\\mu \\nu}, \\linebreak[0] \\alpha_{m?}\\,^{\\mu} |0\\rangle\\quad\\text{with}\\quad{}m? > 0 \\rightarrow 0\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "rl:= { \\alpha_{m?}^{\\mu} \\alpha_{n?}^{\\nu} | m? > 0 -> \\alpha_{n?}^{\\nu} \\alpha_{m?}^{\\mu} +  \\delta_{m?}_{-n?} \\delta^{\\mu\\nu},\n       \\alpha_{m?}^{\\mu} \\vac | m? > 0 -> 0 };"
+			"source" : "rl:= { \\alpha_{m?}^{\\mu} \\alpha_{n?}^{\\nu} | m? > n? -> \\alpha_{n?}^{\\nu} \\alpha_{m?}^{\\mu} +  \\delta_{m?}_{-n?} \\delta^{\\mu\\nu},\n       \\alpha_{m?}^{\\mu} \\vac | m? > 0 -> 0 };"
 		},
 		{
 			"cell_origin" : "client",
@@ -98,7 +98,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}2\\alpha_{0}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}4\\alpha_{0}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "converge(L1c):\n   substitute(L1c, rl)\n   distribute(L1c)\n   eliminate_kronecker(L1c)\n;"
@@ -152,7 +152,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}4\\alpha_{0}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle+3\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "act(L1c);"
@@ -183,15 +183,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{12}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{11}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{10}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{9}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{8}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{7}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{6}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{5}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{4}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{3}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{2}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{1}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{0}\\,^{\\mu} \\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{-1}\\,^{\\mu} \\alpha_{3}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{-2}\\,^{\\mu} \\alpha_{4}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{-3}\\,^{\\mu} \\alpha_{5}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{-4}\\,^{\\mu} \\alpha_{6}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{-5}\\,^{\\mu} \\alpha_{7}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle+\\alpha_{-6}\\,^{\\mu} \\alpha_{8}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle%\n+\\alpha_{-7}\\,^{\\mu} \\alpha_{9}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2d |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(_);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "act(_);"
+			"source" : "act(L2c);"
 		},
 		{
 			"cell_origin" : "client",
