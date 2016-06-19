@@ -6,7 +6,7 @@ message("-- Configuring self-tests")
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
-set(PYTHONPATH ${CMAKE_BINARY_DIR}/core)
+set(PYTHONPATH ${CMAKE_BINARY_DIR}/core:${CMAKE_BINARY_DIR}/core/packages)
 message("-- Set PYTHONPATH for testing to ${PYTHONPATH}:$ENV{PYTHONPATH}")
 
 if(APPLE)
