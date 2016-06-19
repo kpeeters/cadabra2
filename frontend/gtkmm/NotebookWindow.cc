@@ -50,7 +50,7 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "*:focused { background-color: #eee; }\n";
 	data += "*:selected { background-color: #ccc; }\n";
-	data += "GtkTextView.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: black; }\n";
+	data += "GtkTextView.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
 
 	if(!css_provider->load_from_data(data)) {
