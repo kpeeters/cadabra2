@@ -50,6 +50,7 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "*:focused { background-color: #eee; }\n";
 	data += "*:selected { background-color: #ccc; }\n";
+	data += "GtkTextView.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
 
 	if(!css_provider->load_from_data(data)) {
@@ -786,11 +787,28 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 
 bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 	{
-	Gtk::MessageDialog md("TeX error", false, Gtk::MESSAGE_WARNING, 
-								 Gtk::BUTTONS_OK, true);
+//	Gtk::Dialog md;
+	Gtk::MessageDialog md("Generic TeX error", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+	md.set_resizable(true);
+//	Gtk::Button ok(Gtk::Stock::OK);
 	md.set_transient_for(*this);
 	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-	md.set_secondary_text(str);
+	auto box = md.get_message_area();
+//	md.add_button(Gtk::Stock::OK, 1);
+	Gtk::ScrolledWindow sw;
+	Gtk::TextView tv;
+	auto buffer = tv.get_buffer();
+	buffer->set_text(str);
+//	auto iter = buffer->get_iter_at_offset(0);
+//	buffer->insert(iter, str);
+	tv.set_editable(false);
+	box->add(sw);
+	sw.add(tv);
+	auto context = tv.get_style_context();
+	context->add_class("error");
+	auto screen = Gdk::Screen::get_default();
+	sw.set_size_request(screen->get_width()/4, screen->get_width()/4);
+	sw.show_all();
 	md.run();
 	return true;
 	}

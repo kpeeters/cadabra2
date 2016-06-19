@@ -175,8 +175,8 @@ std::string Server::pre_parse(const std::string& line)
 	boost::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
 	boost::smatch converge_res;
 	if(boost::regex_match(line_stripped, converge_res, converge_match)) {
-		ret = std::string(converge_res[1])+std::string(converge_res[2])+".reset(); _="+std::string(converge_res[2])+"\n"
-			+ std::string(converge_res[1])+"while "+std::string(converge_res[2])+".changed():";
+		ret = indent_line+std::string(converge_res[1])+std::string(converge_res[2])+".reset(); _="+std::string(converge_res[2])+"\n"
+			 + indent_line+std::string(converge_res[1])+"while "+std::string(converge_res[2])+".changed():";
 		return ret;
 		}
 	
@@ -253,7 +253,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 //		std::cerr << "preparsed : " + res << std::endl;
 		newblk += res+'\n';
 		}
-//	std::cerr << "PREPARSED:\n " << newblk << std::endl;
+	std::cerr << "PREPARSED:\n " << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
