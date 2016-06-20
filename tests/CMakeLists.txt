@@ -6,7 +6,7 @@ message("-- Configuring self-tests")
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
-set(PYTHONPATH ${CMAKE_BINARY_DIR}/core:${CMAKE_BINARY_DIR}/core/packages)
+set(PYTHONPATH ${CMAKE_SOURCE_DIR}/core:${CMAKE_SOURCE_DIR}/core/packages:${CMAKE_BINARY_DIR}/core)
 message("-- Set PYTHONPATH for testing to ${PYTHONPATH}:$ENV{PYTHONPATH}")
 
 if(APPLE)
@@ -14,8 +14,8 @@ if(APPLE)
 else()
   add_test(comparison     test_comparison)
 endif()
-add_test(components     ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/components.cdb)
 add_test(packages       ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/packages.cdb)
+add_test(components     ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/components.cdb)
 add_test(factor         ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/factor.cdb)
 add_test(field_theory   ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/field_theory.cdb)
 add_test(gamma_paper    ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/gamma_paper.cdb)
