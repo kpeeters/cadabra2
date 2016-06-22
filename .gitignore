@@ -3,3 +3,4 @@ doxygen
 *~
 *.o
 build
+__pycache__
