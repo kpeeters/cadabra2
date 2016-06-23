@@ -9,10 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{product_rule}{}\n\nApply the product rule or ``Leibnitz\n  identity'' to an object which has the \\prop{Derivative} property, i.e.\n\\begin{equation*}\nD(f\\, g) = D(f)\\, g + f\\, D(g)\\, .\n\\end{equation*}\nIn terms of actual code this example would read"
+					"source" : "\\algorithm{product_rule}{Apply the Leibnitz rule for derivatives}\n\nApply the product rule or ``Leibnitz\n  identity'' to an object which has the \\prop{Derivative} property, i.e.\n\\begin{equation*}\nD(f\\, g) = D(f)\\, g + f\\, D(g)\\, .\n\\end{equation*}\nIn terms of actual code this example would read"
 				}
 			],
-			"source" : "\\algorithm{product_rule}{}\n\nApply the product rule or ``Leibnitz\n  identity'' to an object which has the \\prop{Derivative} property, i.e.\n\\begin{equation*}\nD(f\\, g) = D(f)\\, g + f\\, D(g)\\, .\n\\end{equation*}\nIn terms of actual code this example would read"
+			"hidden" : true,
+			"source" : "\\algorithm{product_rule}{Apply the Leibnitz rule for derivatives}\n\nApply the product rule or ``Leibnitz\n  identity'' to an object which has the \\prop{Derivative} property, i.e.\n\\begin{equation*}\nD(f\\, g) = D(f)\\, g + f\\, D(g)\\, .\n\\end{equation*}\nIn terms of actual code this example would read"
 		},
 		{
 			"cell_origin" : "client",

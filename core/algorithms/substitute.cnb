@@ -1,14 +1,11 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -18,19 +15,16 @@
 			"hidden" : true,
 			"source" : "\\algorithm{substitute}{Generic substitution algorithm.}\n\n Generic substitution algorithm.\nTakes a rule or a set of rules according to which an expression\nshould be modified. If more than one rule is given, it tries each rule\nin turn, until the first working one is encountered, after which it\ncontinues with the next node."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}G_{\\mu \\nu \\rho}+F_{\\mu \\nu \\rho}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -39,34 +33,75 @@
 			],
 			"source" : "ex:=G_{\\mu \\nu \\rho} + F_{\\mu \\nu \\rho};\nsubstitute(_,  $F_{\\mu \\nu \\rho} -> A_{\\mu \\nu} B_{\\rho}$ );"
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Notice that the rule is given between dollar signs, i.e. \\(\\$ rule \\$\\). If more than one rule is given, these must be comma separated, "
+				}
+			],
+			"hidden" : true,
+			"source" : "Notice that the rule is given between dollar signs, i.e. \\(\\$ rule \\$\\). If more than one rule is given, these must be comma separated, "
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}G_{\\mu \\nu \\rho}+F_{\\mu \\nu \\rho}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}M_{\\mu \\nu} N_{\\rho}+A_{\\mu \\nu} B_{\\rho}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=G_{\\mu \\nu \\rho} + F_{\\mu \\nu \\rho};\nsubstitute(_,  $F_{\\mu \\nu \\rho} -> A_{\\mu \\nu} B_{\\rho}, G_{\\mu \\nu \\rho} -> M_{\\mu \\nu} N_{\\rho} $);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Additionally, one can assign \\emph{labels} to the substitution rules, in which case the rule is called by its label (without the dollars sign).\n\n\\textbf{NOTICE:} in this example the indices make no sense after the substitution. However, the manipulation is made as commanded!!!"
+				}
+			],
+			"hidden" : true,
+			"source" : "Additionally, one can assign \\emph{labels} to the substitution rules, in which case the rule is called by its label (without the dollars sign).\n\n\\textbf{NOTICE:} in this example the indices make no sense after the substitution. However, the manipulation is made as commanded!!!"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A_{\\mu \\nu} B_{\\nu \\rho} C_{\\rho \\sigma}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}D_{\\mu \\sigma} B_{\\nu \\rho}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= A_{\\mu \\nu} B_{\\nu \\rho} C_{\\rho \\sigma};\nsubstitute(_, $A_{m n} C_{p q} -> D_{m q}$ );"
+			"source" : "ex:= A_{\\mu \\nu} B_{\\nu \\rho} C_{\\rho \\sigma};\nrl := A_{m n} C_{p q} -> D_{m q}.\nsubstitute(ex, rl );"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -76,13 +111,11 @@
 			"hidden" : true,
 			"source" : "This command takes full care of dummy index relabelling, as the\nfollowing example shows:"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -91,13 +124,11 @@
 			],
 			"source" : "{m,n,q,r,s,t,u}::Indices(vector).\nex:= a_{m} b_{n};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -106,23 +137,62 @@
 			],
 			"source" : "substitute(_, $a_{q} -> c_{m n} d_{m n q}$ );"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "By postfixing a name with a question mark, it becomes a pattern.\n\nThe substitution algorithm can do very complicated things; for more\ndetailed information on substitution, see the manual."
+					"source" : "By postfixing a name with a question mark, it becomes a pattern.\n\nSubstitutions run once (you cannot substitute a variable introduced by a substitution rule within the same command line),\n but they can be applied recurently through the use of the \\texttt{repeat=True} flag."
 				}
 			],
 			"hidden" : true,
-			"source" : "By postfixing a name with a question mark, it becomes a pattern.\n\nThe substitution algorithm can do very complicated things; for more\ndetailed information on substitution, see the manual."
+			"source" : "By postfixing a name with a question mark, it becomes a pattern.\n\nSubstitutions run once (you cannot substitute a variable introduced by a substitution rule within the same command line),\n but they can be applied recurently through the use of the \\texttt{repeat=True} flag."
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}Q Q Q Q Q Q\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right) \\left(A+B\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(2+B\\right) \\left(2+B\\right) \\left(2+B\\right) \\left(2+B\\right) \\left(2+B\\right) \\left(2+B\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}15625\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=Q Q Q Q Q Q;\nex1 := @(ex).\nex2 := @(ex).\nex3 := @(ex).\nsubstitute(ex1, $Q->A+B, A->2$);\nsubstitute(ex2, $Q->A+B, A->2$, repeat=True);\nsubstitute(ex3, $Q->A+B, A->2, B->3$, repeat=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The substitution algorithm can do very complicated things; for more\ndetailed information on substitution, see the manual."
+				}
+			],
+			"hidden" : true,
+			"source" : "The substitution algorithm can do very complicated things; for more\ndetailed information on substitution, see the manual."
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -130,6 +200,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-
