@@ -1,0 +1,76 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{product_rule}{Apply the Leibnitz rule for derivatives}\n\nApply the product rule or ``Leibnitz\n  identity'' to an object which has the \\prop{Derivative} property, i.e.\n\\begin{equation*}\nD(f\\, g) = D(f)\\, g + f\\, D(g)\\, .\n\\end{equation*}\nIn terms of actual code this example would read"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{product_rule}{Apply the Leibnitz rule for derivatives}\n\nApply the product rule or ``Leibnitz\n  identity'' to an object which has the \\prop{Derivative} property, i.e.\n\\begin{equation*}\nD(f\\, g) = D(f)\\, g + f\\, D(g)\\, .\n\\end{equation*}\nIn terms of actual code this example would read"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D\\left(f g\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D{f} g+f D{g}\\end{dmath*}"
+				}
+			],
+			"source" : "D{#}::Derivative.\nex := D(f g);\nproduct_rule(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This of course also works for derivatives which explicitly mention\nindices or components, as well as for multiple derivatives, as in the example below."
+				}
+			],
+			"hidden" : true,
+			"source" : "This of course also works for derivatives which explicitly mention\nindices or components, as well as for multiple derivatives, as in the example below."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D_{m n}\\left(f g\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}D_{m}{D_{n}{f}} g+D_{n}{f} D_{m}{g}+D_{m}{f} D_{n}{g}+f D_{m}{D_{n}{g}}\\end{dmath*}"
+				}
+			],
+			"source" : "D{#}::Derivative.\nex := D_{m n}(f g);\nproduct_rule(_)\ndistribute(_)\nproduct_rule(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
