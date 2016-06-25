@@ -344,6 +344,7 @@ void Properties::insert_prop(const Ex& et, const property *pr)
 				// property we are trying to insert?
 				const labelled_property *lp   =dynamic_cast<const labelled_property *>(pr);
 				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
+
 				if(!lp || !lpold || lp->label==lpold->label) {
 
 					// The to-be-inserted property cannot co-exist on this pattern with the
@@ -393,7 +394,7 @@ void Properties::insert_prop(const Ex& et, const property *pr)
 		}
 
 	pats.insert(pattern_map_t::value_type(pr, pat));
-//	std::cout << "inserting for " << *(pat->obj.begin()->name_only()) << std::endl;
+	std::cout << "inserting for " << *(pat->obj.begin()->name_only()) << std::endl;
 	props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 	}
 

@@ -8,9 +8,9 @@ of \subscommand{keep\_weight}.
 As an example, consider the simple case in which we want to drop all
 terms with 3~fields. This is done using
 \begin{screen}{1,2,3}
-{A,B}::Weight(label=field).
-A B B + A A A + A B + B:
-@drop_weight!(%){field}{3};
+{A,B}::Weight(label=field);
+ex:=A B B + A A A + A B + B:
+drop_weight(_, $field=3$);
 A B + B;
 \end{screen}
 

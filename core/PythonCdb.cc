@@ -102,6 +102,7 @@ namespace boost {
 #include "algorithms/complete.hh"
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
+#include "algorithms/drop_weight.hh"
 #include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/epsilon_to_delta.hh"
 #include "algorithms/evaluate.hh"
@@ -630,9 +631,16 @@ void inject_defaults(Kernel *k)
 	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\prod{#}"), 0);
 	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\prod{#}"), 0);
+	auto wi2=new WeightInherit();
+	wi2->combination_type = WeightInherit::multiplicative;
+	auto wa2=make_Ex_from_string("label=all, type=multiplicative");
+	inject_property(k, wi2,                      make_Ex_from_string("\\prod{#}"), wa2);
 
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
 	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}"), 0);
+	auto wi=new WeightInherit();
+	auto wa=make_Ex_from_string("label=all, type=additive");
+	inject_property(k, wi,                       make_Ex_from_string("\\sum{#}"), wa);
 
 	inject_property(k, new Derivative(),         make_Ex_from_string("\\commutator{#}"), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\commutator{#}"), 0);
@@ -662,6 +670,7 @@ void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std
 	Ex::iterator it=ex->begin();
 
 	if(param) {
+		std::cerr << "property with " << *param << std::endl;
 		keyval_t keyvals;
 		prop->parse_to_keyvals(*param, keyvals);
 		prop->parse(*kernel, keyvals);
@@ -1034,6 +1043,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	def("complete", &dispatch_ex<complete, Ex&>, 
 		 (arg("ex"),arg("add"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("drop_weight", &dispatch_ex<drop_weight, Ex&>, 
+		 (arg("ex"),arg("condition"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
