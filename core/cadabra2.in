@@ -208,7 +208,7 @@ if __name__ == '__main__':
 
     if len(sys.argv)>1:
         if '-d' in sys.argv:
-            rs = "gdb -q -ex r --args python "+sys.argv[0];
+            rs = "gdb -q -ex r --args python@PYTHON_POSTFIX@ "+sys.argv[0];
             for a in sys.argv[1:]:
                 if a!='-d':
                     rs += " "+a

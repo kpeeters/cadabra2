@@ -12,11 +12,11 @@ WeightInherit::WeightException::WeightException(const std::string& str)
 	{
 	}
 
-bool WeightInherit::parse(const Kernel&, keyval_t& kv)
+bool WeightInherit::parse(const Kernel& k, keyval_t& kv)
 	{
 	keyval_t::const_iterator tpit=kv.find("type");
 	if(tpit!=kv.end()) {
-		if(*tpit->second->name=="Multiplicative") combination_type=multiplicative;
+		if(*tpit->second->name=="multiplicative") combination_type=multiplicative;
 		else                                      combination_type=additive;
 		}
 	else combination_type=multiplicative;
@@ -27,7 +27,7 @@ bool WeightInherit::parse(const Kernel&, keyval_t& kv)
 		}
 	else value_self=0;
 
-	return true;
+	return WeightBase::parse(k, kv);
 	}
 
 multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const std::string& forcedlabel) const
