@@ -50,6 +50,7 @@ set(ALGOS
   join_gamma
   keep_weight
   reduce_delta
+  sort_product
   split_index
   substitute
   unwrap
