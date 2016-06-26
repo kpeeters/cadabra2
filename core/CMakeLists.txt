@@ -165,7 +165,7 @@ set(LOCAL_SRC_FILES
   algorithms/complete.cc
   algorithms/decompose_product.cc
   algorithms/distribute.cc
-#  algorithms/drop_weight.cc
+  algorithms/drop_weight.cc
   algorithms/eliminate_kronecker.cc
   algorithms/epsilon_to_delta.cc
   algorithms/evaluate.cc
