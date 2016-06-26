@@ -1,0 +1,140 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{sort_product}{Sort factors in a product}\n\nSort factors in a product, taking into account\nany \\prop{SortOrder} properties. Also takes into account\ncommutativity properties, such as \\prop{SelfCommuting}. If no sort\norder is given, it first does a lexographical sort based on the name\nof the factor, and if two names are identical, does a sort based on\nthe number of children and (if this number is equal) a lexographical\ncomparison of the names of the children.\n\nThe simplest sort is illustrated below,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{sort_product}{Sort factors in a product}\n\nSort factors in a product, taking into account\nany \\prop{SortOrder} properties. Also takes into account\ncommutativity properties, such as \\prop{SelfCommuting}. If no sort\norder is given, it first does a lexographical sort based on the name\nof the factor, and if two names are identical, does a sort based on\nthe number of children and (if this number is equal) a lexographical\ncomparison of the names of the children.\n\nThe simplest sort is illustrated below,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}C B A D\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B C D\\end{dmath*}"
+				}
+			],
+			"source" : "ex := C B A D;\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We can declare the objects to be anti-commuting, which then leads to"
+				}
+			],
+			"hidden" : true,
+			"source" : "We can declare the objects to be anti-commuting, which then leads to"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}C B A D\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-A B C D\\end{dmath*}"
+				}
+			],
+			"source" : "{A, B, C, D}::AntiCommuting.\nex := C B A D;\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "For indexed objects, the anti-commutativity of components is indicated\nusing the \\prop{SelfAntiCommuting} property,"
+				}
+			],
+			"hidden" : true,
+			"source" : "For indexed objects, the anti-commutativity of components is indicated\nusing the \\prop{SelfAntiCommuting} property,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\psi_{n} \\psi_{m} \\psi_{p}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\psi_{m} \\psi_{n} \\psi_{p}\\end{dmath*}"
+				}
+			],
+			"source" : "\\psi_{m}::SelfAntiCommuting.\nex := \\psi_{n} \\psi_{m} \\psi_{p};\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Finally, the lexographical sort order can be overridden by using\nthe \\prop{SortOrder} property,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Finally, the lexographical sort order can be overridden by using\nthe \\prop{SortOrder} property,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}C B A D\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-D C B A\\end{dmath*}"
+				}
+			],
+			"source" : "{D, C, B, A}::SortOrder.\n{A, B, C, D}::AntiCommuting.\nex := C B A D;\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
