@@ -23,7 +23,7 @@ var searchData=
   ['displayterminal',['DisplayTerminal',['../classDisplayTerminal.html#a0bbd4541500d16b672933300f1dd14b6',1,'DisplayTerminal']]],
   ['displaytex',['DisplayTeX',['../classDisplayTeX.html#abd43ef3623d9d2e010502de5672e839e',1,'DisplayTeX']]],
   ['distribute',['distribute',['../classdistribute.html#a93bcd12ec661770bd95288465ca61018',1,'distribute']]],
-  ['do_5fapply',['do_apply',['../classdrop__keep__weight.html#a3d02090da6ea116fac604001c9e136a4',1,'drop_keep_weight']]],
+  ['do_5fapply',['do_apply',['../classdrop__keep__weight.html#a974ef2f0161d7f6fa7b8973769a4475b',1,'drop_keep_weight']]],
   ['do_5fexecute',['do_execute',['../classechokernel_1_1EchoKernel.html#a7def49efe22ced9db9e912f1298ea584',1,'echokernel::EchoKernel']]],
   ['do_5ffilledtableau',['do_filledtableau',['../classlr__tensor.html#a5587eb4c1bd4473c848bc3eb8bcc7eb8',1,'lr_tensor']]],
   ['do_5flist',['do_list',['../group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0',1,'cadabra']]],
@@ -31,7 +31,7 @@ var searchData=
   ['do_5ftableau',['do_tableau',['../classlr__tensor.html#aab36dd5a4727ad6ea72fd6fffec672f9',1,'lr_tensor']]],
   ['documentthread',['DocumentThread',['../classcadabra_1_1DocumentThread.html#a9574c93a03118e2acf47295b77ed79be',1,'cadabra::DocumentThread::DocumentThread(GUIBase *)'],['../classcadabra_1_1DocumentThread.html#ad9d573008fc3ed7203dfab960ac8e995',1,'cadabra::DocumentThread::DocumentThread(const DocumentThread &amp;)=delete']]],
   ['doit',['doit',['../classsym.html#ab7da4e9e381be48b1cf18589f8a21dbc',1,'sym']]],
-  ['drop_5fkeep_5fweight',['drop_keep_weight',['../classdrop__keep__weight.html#ab05c31a6881169cbe6dff638d776116a',1,'drop_keep_weight']]],
-  ['drop_5fweight',['drop_weight',['../classdrop__weight.html#ad2ff9f54630b4ff27dc9796412cb411d',1,'drop_weight']]],
+  ['drop_5fkeep_5fweight',['drop_keep_weight',['../classdrop__keep__weight.html#aa4a10fa06e853810f4794be051cad876',1,'drop_keep_weight']]],
+  ['drop_5fweight',['drop_weight',['../classdrop__weight.html#a57d0ab188979cdbd0b33f567d937a722',1,'drop_weight']]],
   ['dumpmap',['dumpmap',['../classAlgorithm.html#a5aca32e44982761bbbb90a935bf2a794',1,'Algorithm']]]
 ];
