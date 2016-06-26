@@ -34,6 +34,16 @@ def test03():
 
 test03()
 
+def test04():
+    __cdbkernel__=create_scope()
+    {A,B}::Weight(label=field);
+    C::Weight(label=field, value=2);
+    ex:=A B B + A A A + A B + A C + B;
+    drop_weight(_, $field=3$)
+    tst:= A B + B - @(ex);
+    assert(tst==0)
+
+test04()
 
 \delta{#}::KroneckerDelta.
 \eps_{#}::EpsilonTensor(delta=\delta).
