@@ -34,6 +34,7 @@ set(ALGOS
   canonicalise
   collect_factors
   collect_terms
+  combine
   complete
   decompose_product
   distribute
@@ -47,8 +48,11 @@ set(ALGOS
   expand_power
   factor_in
   factor_out
+  fierz
+  integrate_by_parts
   join_gamma
   keep_weight
+  product_rule
   reduce_delta
   sort_product
   split_index
