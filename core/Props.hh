@@ -365,7 +365,8 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, const std::s
 				if((*walk).second.first->match(*this, it)) { // match found
 					ret=dynamic_cast<const T *>((*walk).second.second);
 					if(ret) { // found! determine serial number
-						if(ret->label!=label && ret->label!="all") 
+						// std::cerr << "found weight for " << ret->label << " vs " << label << std::endl;
+						if(ret->label!=label && ret->label!="all")
 							ret=0;
 						else {
 							if(doserial) 
