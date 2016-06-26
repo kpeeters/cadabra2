@@ -37,6 +37,7 @@ set(ALGOS
   complete
   decompose_product
   distribute
+  drop_weight
   eliminate_kronecker
   epsilon_to_delta
   evaluate
@@ -47,6 +48,7 @@ set(ALGOS
   factor_in
   factor_out
   join_gamma
+  keep_weight
   reduce_delta
   split_index
   substitute
