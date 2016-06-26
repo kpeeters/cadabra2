@@ -32,7 +32,7 @@ bool drop_keep_weight::can_apply(iterator st)
 	++argit;
 	weight=*argit->multiplier;
 	
-	std::cerr << "dk: " << label << " = " << weight << std::endl;
+	//std::cerr << "dk: " << label << " = " << weight << std::endl;
 
 	const WeightInherit *gmnpar=0;
 	const Weight        *wghpar=0;
@@ -44,10 +44,10 @@ bool drop_keep_weight::can_apply(iterator st)
 		wghpar=kernel.properties.get_composite<Weight>(tr.parent(st), label);
 		}
 
-	std::cerr << *st->name << ": " << gmn << ", " << wgh << ", " << gmnpar << " " << std::endl;
+	// std::cerr << *st->name << ": " << gmn << ", " << wgh << ", " << gmnpar << " " << std::endl;
 	if(gmn!=0 || wgh!=0) {
 		bool ret = (gmnpar==0 && wghpar==0);
-		std::cerr << "can_apply " << ret << std::endl;
+		// std::cerr << "can_apply " << ret << std::endl;
 		return ret;
 		}
 
@@ -70,15 +70,15 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 			while(sib!=tr.end(it)) {
 				const WeightBase *gnb=kernel.properties.get_composite<WeightBase>(sib, label);
 				if(gnb) {
-					std::cerr << "WeightBase for child " << Ex(sib) << std::endl;
+					// std::cerr << "WeightBase for child " << Ex(sib) << std::endl;
 					multiplier_t val;
 					bool no_val=false;
 					try {
 						val=gnb->value(kernel, sib, label);
-						std::cerr << *sib->name << " has weight " << val << std::endl;
+						// std::cerr << *sib->name << " has weight " << val << std::endl;
 						}
 					catch(WeightInherit::WeightException& we) {
-						std::cerr << *sib->name << " has undeterminable weight " << std::endl;
+						// std::cerr << *sib->name << " has undeterminable weight " << std::endl;
 						// If we cannot determine the weight of this term because this is a sum of
 						// terms with different weights: keep when in @drop, drop when in @keep.
 						no_val=true;
@@ -90,7 +90,7 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 					else ++sib;
 					}
 				else {
-					std::cerr << "NO WeightBase for child " << Ex(sib) << std::endl;
+					// std::cerr << "NO WeightBase for child " << Ex(sib) << std::endl;
 					if( (keepthem==true && weight!=0) || (keepthem==false && weight==0) ) {
 						sib=tr.erase(sib);
 						}
@@ -128,4 +128,14 @@ drop_weight::drop_weight(const Kernel& k, Ex& e, Ex& a)
 Algorithm::result_t drop_weight::apply(iterator& it)
 	{
 	return do_apply(it, false);
+	}
+
+keep_weight::keep_weight(const Kernel& k, Ex& e, Ex& a)
+	: drop_keep_weight(k, e, a)
+	{
+	}
+
+Algorithm::result_t keep_weight::apply(iterator& it)
+	{
+	return do_apply(it, true);
 	}

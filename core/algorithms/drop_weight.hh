@@ -28,3 +28,10 @@ class drop_weight : public drop_keep_weight {
 		virtual result_t apply(iterator&) override;		
 };
 
+class keep_weight : public drop_keep_weight {
+	public:
+		keep_weight(const Kernel&, Ex&, Ex&);
+
+		virtual result_t apply(iterator&) override;		
+};
+

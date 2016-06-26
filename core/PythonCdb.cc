@@ -670,7 +670,7 @@ void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std
 	Ex::iterator it=ex->begin();
 
 	if(param) {
-		std::cerr << "property with " << *param << std::endl;
+		// std::cerr << "property with " << *param << std::endl;
 		keyval_t keyvals;
 		prop->parse_to_keyvals(*param, keyvals);
 		prop->parse(*kernel, keyvals);
@@ -1047,6 +1047,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_internal_reference<1>() );
 
 	def("drop_weight", &dispatch_ex<drop_weight, Ex&>, 
+		 (arg("ex"),arg("condition"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("keep_weight", &dispatch_ex<keep_weight, Ex&>, 
 		 (arg("ex"),arg("condition"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );

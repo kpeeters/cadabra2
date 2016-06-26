@@ -394,7 +394,7 @@ void Properties::insert_prop(const Ex& et, const property *pr)
 		}
 
 	pats.insert(pattern_map_t::value_type(pr, pat));
-	std::cout << "inserting for " << *(pat->obj.begin()->name_only()) << std::endl;
+	// std::cout << "inserting for " << *(pat->obj.begin()->name_only()) << std::endl;
 	props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 	}
 
