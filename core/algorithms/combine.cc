@@ -94,7 +94,7 @@ Algorithm::result_t combine::apply(iterator& it)
 			if(isbrack1) {
 				sibling_iterator nxt=tr.begin(parn1);
 				++nxt;
-				tr.begin(parn1)->fl.bracket=str_node::b_round;
+//				tr.begin(parn1)->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod, tr.begin(parn1), nxt);
 				multiply(brackprod->multiplier, *parn1->multiplier);
 				tr.erase(parn1);
@@ -102,13 +102,13 @@ Algorithm::result_t combine::apply(iterator& it)
 			else {
 				sibling_iterator nxt=parn1;
 				++nxt;
-				parn1->fl.bracket=str_node::b_round;
+//				parn1->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod,parn1,nxt);
 				}
 			if(isbrack2) {
 				sibling_iterator nxt=tr.begin(parn2);
 				++nxt;
-				tr.begin(parn2)->fl.bracket=str_node::b_round;
+//				tr.begin(parn2)->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod, tr.begin(parn2), nxt);
 				multiply(brackprod->multiplier, *parn2->multiplier);
 				tr.erase(parn2);
@@ -116,7 +116,7 @@ Algorithm::result_t combine::apply(iterator& it)
 			else {
 				sibling_iterator nxt=parn2;
 				++nxt;
-				parn2->fl.bracket=str_node::b_round;
+//				parn2->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod,parn2,nxt);
 				}
 			}

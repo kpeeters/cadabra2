@@ -1,0 +1,90 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{combine}{Combine two consecutive indexbracket objects}\n\nCombine two consecutive objects with indexbrackets and consecutive\ncontracted indices into one object with an indexbracket. An example\nwith two contracted matrices:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{combine}{Combine two consecutive indexbracket objects}\n\nCombine two consecutive objects with indexbrackets and consecutive\ncontracted indices into one object with an indexbracket. An example\nwith two contracted matrices:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(\\Gamma_{r}\\right)\\,_{\\alpha \\beta} \\left(\\Gamma_{s t u}\\right)\\,_{\\beta \\gamma}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(\\Gamma_{r} \\Gamma_{s t u}\\right)\\,_{\\alpha \\gamma}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=(\\Gamma_r)_{\\alpha\\beta} (\\Gamma_{s t u})_{\\beta\\gamma};\ncombine(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "An example with a matrix and a vector:"
+				}
+			],
+			"hidden" : true,
+			"source" : "An example with a matrix and a vector:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(\\Gamma_{r}\\right)\\,_{\\alpha \\beta} v_{\\beta}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(\\Gamma_{r} v\\right)\\,_{\\alpha}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=(\\Gamma_r)_{\\alpha\\beta} v_{\\beta};\ncombine(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The inverse of \\algo{combine} is \\algo{expand}."
+				}
+			],
+			"hidden" : true,
+			"source" : "The inverse of \\algo{combine} is \\algo{expand}."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

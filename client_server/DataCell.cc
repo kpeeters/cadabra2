@@ -180,7 +180,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				else
 					out=latex_to_html(it->textbuf);
 				if(out.size()>0)
-					str << "<div class=\"source\">"+out+"</div>";
+					str << "<div class=\"source donthyphenate\">"+out+"</div>";
 				}
 			}
 		}

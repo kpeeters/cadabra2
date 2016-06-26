@@ -33,6 +33,8 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\int" && child=="\\sum") return true;
 
+	if(parent=="\\indexbracket" && child=="\\prod") return false;
+
 	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum")) return  true;
 
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
