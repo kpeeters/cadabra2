@@ -1,0 +1,78 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{fierz}{Perform a Fierz transformation on a product of four spinors}\n\nPerform a Fierz transformation on a product of four spinors,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{fierz}{Perform a Fierz transformation on a product of four spinors}\n\nPerform a Fierz transformation on a product of four spinors,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}\\Gamma\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DiracBar to~}\\bar{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\bar{\\theta} \\Gamma_{m} \\chi \\bar{\\psi} \\Gamma^{m} \\lambda\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p#}::Indices;\n{m,n,p}::Integer(0..3);\n\\Gamma{#}::GammaMatrix;\n\\bar{#}::DiracBar;\nex:=\\bar{\\theta} \\Gamma_{m} \\chi \\bar{\\psi} \\Gamma^{m} \\lambda;\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "fierz(_, $\\theta, \\lambda, \\psi, \\chi$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The argument to \\algo{fierz} is the required order of the\nfermions; note that this algorithm does not flip around Majorana\nspinors and \\algo{spinorsort} should be used for that.  Also\nnote that it is important to define not only the symbols representing\nthe spinors, Dirac bar and gamma matrices, but also the range of the\nindices.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "The argument to \\algo{fierz} is the required order of the\nfermions; note that this algorithm does not flip around Majorana\nspinors and \\algo{spinorsort} should be used for that.  Also\nnote that it is important to define not only the symbols representing\nthe spinors, Dirac bar and gamma matrices, but also the range of the\nindices.\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
