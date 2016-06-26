@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{sort_product}{}\n\nSort factors in a product, taking into account\nany \\prop{SortOrder} properties. Also takes into account\ncommutativity properties, such as \\prop{SelfCommuting}. If no sort\norder is given, it first does a lexographical sort based on the name\nof the factor, and if two names are identical, does a sort based on\nthe number of children and (if this number is equal) a lexographical\ncomparison of the names of the children.\n\nThe simplest sort is illustrated below,"
+					"source" : "\\algorithm{sort_product}{Sort factors in a product}\n\nSort factors in a product, taking into account\nany \\prop{SortOrder} properties. Also takes into account\ncommutativity properties, such as \\prop{SelfCommuting}. If no sort\norder is given, it first does a lexographical sort based on the name\nof the factor, and if two names are identical, does a sort based on\nthe number of children and (if this number is equal) a lexographical\ncomparison of the names of the children.\n\nThe simplest sort is illustrated below,"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{sort_product}{}\n\nSort factors in a product, taking into account\nany \\prop{SortOrder} properties. Also takes into account\ncommutativity properties, such as \\prop{SelfCommuting}. If no sort\norder is given, it first does a lexographical sort based on the name\nof the factor, and if two names are identical, does a sort based on\nthe number of children and (if this number is equal) a lexographical\ncomparison of the names of the children.\n\nThe simplest sort is illustrated below,"
+			"source" : "\\algorithm{sort_product}{Sort factors in a product}\n\nSort factors in a product, taking into account\nany \\prop{SortOrder} properties. Also takes into account\ncommutativity properties, such as \\prop{SelfCommuting}. If no sort\norder is given, it first does a lexographical sort based on the name\nof the factor, and if two names are identical, does a sort based on\nthe number of children and (if this number is equal) a lexographical\ncomparison of the names of the children.\n\nThe simplest sort is illustrated below,"
 		},
 		{
 			"cell_origin" : "client",
