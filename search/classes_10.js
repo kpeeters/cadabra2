@@ -12,6 +12,7 @@ var searchData=
   ['sortorder',['SortOrder',['../classSortOrder.html',1,'']]],
   ['spinor',['Spinor',['../classSpinor.html',1,'']]],
   ['split',['split',['../classsplit.html',1,'']]],
+  ['split_5fgamma',['split_gamma',['../classsplit__gamma.html',1,'']]],
   ['split_5findex',['split_index',['../classsplit__index.html',1,'']]],
   ['stopwatch',['stopwatch',['../classstopwatch.html',1,'']]],
   ['str_5fnode',['str_node',['../classstr__node.html',1,'']]],

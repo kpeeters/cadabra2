@@ -22,6 +22,8 @@ var searchData=
   ['spinor_2ehh',['Spinor.hh',['../Spinor_8hh.html',1,'']]],
   ['split_2ecc',['split.cc',['../split_8cc.html',1,'']]],
   ['split_2ehh',['split.hh',['../split_8hh.html',1,'']]],
+  ['split_5fgamma_2ecc',['split_gamma.cc',['../split__gamma_8cc.html',1,'']]],
+  ['split_5fgamma_2ehh',['split_gamma.hh',['../split__gamma_8hh.html',1,'']]],
   ['split_5findex_2ecc',['split_index.cc',['../split__index_8cc.html',1,'']]],
   ['split_5findex_2ehh',['split_index.hh',['../split__index_8hh.html',1,'']]],
   ['stopwatch_2ecc',['Stopwatch.cc',['../Stopwatch_8cc.html',1,'']]],
