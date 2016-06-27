@@ -1,0 +1,57 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{split_gamma}{Split a Dirac gamma matrix off a generalised product of gamma matrices.}\n\nGiven a generalised product of Dirac gamma matrices, rewrite it as a product with an \nexplicit single gamma matrix. This is the inverse of the \\algo{join_gamma} algorithm.\nAn example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{split_gamma}{Split a Dirac gamma matrix off a generalised product of gamma matrices.}\n\nGiven a generalised product of Dirac gamma matrices, rewrite it as a product with an \nexplicit single gamma matrix. This is the inverse of the \\algo{join_gamma} algorithm.\nAn example:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}\\Gamma\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{m n p}\\end{dmath*}"
+				}
+			],
+			"source" : "\\Gamma{#}::GammaMatrix(metric=\\eta);\nex:=\\Gamma^{m n p};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{m} \\Gamma^{n p}-\\Gamma^{p} \\eta^{m n}+\\Gamma^{n} \\eta^{m p}\\end{dmath*}"
+				}
+			],
+			"source" : "split_gamma(_, on_back=False);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
