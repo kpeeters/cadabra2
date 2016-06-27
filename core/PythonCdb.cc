@@ -123,6 +123,7 @@ namespace boost {
 #include "algorithms/product_rule.hh"
 #include "algorithms/reduce_delta.hh"
 #include "algorithms/rename_dummies.hh"
+#include "algorithms/split_gamma.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/sym.hh"
@@ -1157,6 +1158,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 (arg("ex"),
 		  arg("rules"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("split_gamma", &dispatch_ex<split_gamma, bool>, 
+		 (arg("ex"),
+		  arg("on_back"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("split_index", &dispatch_ex<split_index, Ex&>, 
 		 (arg("ex"),

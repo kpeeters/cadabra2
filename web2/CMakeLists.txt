@@ -55,6 +55,7 @@ set(ALGOS
   product_rule
   reduce_delta
   sort_product
+  split_gamma
   split_index
   substitute
   unwrap
