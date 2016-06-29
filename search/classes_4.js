@@ -1,6 +1,7 @@
 var searchData=
 [
   ['echokernel',['EchoKernel',['../classechokernel_1_1EchoKernel.html',1,'echokernel']]],
+  ['einsteinify',['einsteinify',['../classeinsteinify.html',1,'']]],
   ['eliminate_5fkronecker',['eliminate_kronecker',['../classeliminate__kronecker.html',1,'']]],
   ['epsilon_5fto_5fdelta',['epsilon_to_delta',['../classepsilon__to__delta.html',1,'']]],
   ['epsilontensor',['EpsilonTensor',['../classEpsilonTensor.html',1,'']]],

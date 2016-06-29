@@ -43,7 +43,7 @@ var searchData=
   ['merge_5fcomponents',['merge_components',['../classevaluate.html#ab0d14dc9f9f88db5c6865c3c2f965abf',1,'evaluate']]],
   ['message',['message',['../classsnoop_1_1Snoop_1_1LogEntry.html#a96f6fdf3ed5886b6dd4709861b0f6697',1,'snoop::Snoop::LogEntry']]],
   ['message_5fptr',['message_ptr',['../ComputeThread_8hh.html#a8d7da57f57aec5c532259ba0b3fc7a78',1,'message_ptr():&#160;ComputeThread.hh'],['../SnoopPrivate_8hh.html#a8d7da57f57aec5c532259ba0b3fc7a78',1,'message_ptr():&#160;SnoopPrivate.hh'],['../test__talk__to__server_8cc.html#a8d7da57f57aec5c532259ba0b3fc7a78',1,'message_ptr():&#160;test_talk_to_server.cc']]],
-  ['metric',['Metric',['../classMetric.html',1,'Metric'],['../classEpsilonTensor.html#a629047dbe838133b870b711cd2107508',1,'EpsilonTensor::metric()'],['../classGammaMatrix.html#ace9c416e0c6673c7bbeda114f7c8a1f0',1,'GammaMatrix::metric()'],['../classMetric.html#a5a3d74daf5dcaf419ef9e58360d7bfe7',1,'Metric::Metric()']]],
+  ['metric',['Metric',['../classMetric.html',1,'Metric'],['../classeinsteinify.html#a93acece215853b93cc88c95b4170f3f8',1,'einsteinify::metric()'],['../classEpsilonTensor.html#a629047dbe838133b870b711cd2107508',1,'EpsilonTensor::metric()'],['../classGammaMatrix.html#ace9c416e0c6673c7bbeda114f7c8a1f0',1,'GammaMatrix::metric()'],['../classMetric.html#a5a3d74daf5dcaf419ef9e58360d7bfe7',1,'Metric::Metric()']]],
   ['metric_2ecc',['Metric.cc',['../Metric_8cc.html',1,'']]],
   ['metric_2ehh',['Metric.hh',['../Metric_8hh.html',1,'']]],
   ['millimeter_5fper_5finch',['millimeter_per_inch',['../classcadabra_1_1TeXEngine.html#a9eb5c5f92c0737c0e05a5a95ae25704c',1,'cadabra::TeXEngine']]],

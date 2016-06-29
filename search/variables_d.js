@@ -14,7 +14,7 @@ var searchData=
   ['max_5fserial_5fnumber',['max_serial_number',['../classcadabra_1_1DataCell.html#ac494264b59e4abcdf041cbad0c730357',1,'cadabra::DataCell']]],
   ['max_5fweights',['max_weights',['../classcombin_1_1combinations__base.html#a7aad7eeaff480f52a9a46522be4731ef',1,'combin::combinations_base']]],
   ['message',['message',['../classsnoop_1_1Snoop_1_1LogEntry.html#a96f6fdf3ed5886b6dd4709861b0f6697',1,'snoop::Snoop::LogEntry']]],
-  ['metric',['metric',['../classEpsilonTensor.html#a629047dbe838133b870b711cd2107508',1,'EpsilonTensor::metric()'],['../classGammaMatrix.html#ace9c416e0c6673c7bbeda114f7c8a1f0',1,'GammaMatrix::metric()']]],
+  ['metric',['metric',['../classeinsteinify.html#a93acece215853b93cc88c95b4170f3f8',1,'einsteinify::metric()'],['../classEpsilonTensor.html#a629047dbe838133b870b711cd2107508',1,'EpsilonTensor::metric()'],['../classGammaMatrix.html#ace9c416e0c6673c7bbeda114f7c8a1f0',1,'GammaMatrix::metric()']]],
   ['millimeter_5fper_5finch',['millimeter_per_inch',['../classcadabra_1_1TeXEngine.html#a9eb5c5f92c0737c0e05a5a95ae25704c',1,'cadabra::TeXEngine']]],
   ['mod_5fprel',['mod_prel',['../classEx__is__less.html#a599bf5d2127b64ef1046c7faeac142ef',1,'Ex_is_less']]],
   ['modified',['modified',['../classcadabra_1_1NotebookWindow.html#ab2b37a1a30f8f2427bf240f323784293',1,'cadabra::NotebookWindow']]],
