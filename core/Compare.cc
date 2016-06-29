@@ -12,6 +12,7 @@
 #include "properties/CommutingAsSum.hh"
 #include "properties/CommutingAsProduct.hh"
 #include "properties/CommutingBehaviour.hh"
+#include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
 int subtree_compare(const Properties *properties, 
@@ -405,11 +406,33 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
    //   - match coordinate to index
 	//   - everything else, which does not involve patterns/wildcards
 
-	if(pattern || (implicit_pattern && two->is_integer()==false)) { 
-		// The above is to ensure that we never match integers to implicit patterns.
-		// FIXME: this is wrong: we should only not match integers to implicit patterns
-		// if we know that the implicit pattern can never take the particular numerical value.
-		// This prevents basic.cdb/test26 from working without '?' characters.
+	if(pattern || implicit_pattern) { 
+
+		// It is possible to match integers to implicit patterns (indices), provided
+		// we know that the given index can take the found numerical value. 
+		// See basic.cdb/test26 for a simple example. 
+		// If we have a proper 'question mark' pattern, we always match to integers.
+
+		if(two->is_rational() && implicit_pattern) {
+			// Determine whether 'one' can take the value 'two'.
+			const Integer *ip = properties.get<Integer>(one, true); // 'true' to ignore parent rel.
+			if(ip==0) return no_match_less;
+
+			bool lower_bdy=true, upper_bdy=true;
+			multiplier_t from, to;
+			if(ip->from.begin()==ip->from.end()) lower_bdy=false;
+			else {
+				if(!ip->from.begin()->is_rational()) return no_match_less;
+				from = *ip->from.begin()->multiplier;
+				}
+			if(ip->to.begin()==ip->to.end())     upper_bdy=false;
+			else {
+				if(!ip->to.begin()->is_rational()) return no_match_less;
+				to   = *ip->to.begin()->multiplier;
+				}
+			if((lower_bdy && *two->multiplier < from) || (upper_bdy && *two->multiplier > to))  
+				return no_match_less;
+			}
 
 		// We want to search the replacement map for replacement rules which we have
 		// constructed earlier, and discard the current match if it conflicts those 
@@ -460,30 +483,31 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		else {
 			// This index/pattern was not encountered earlier. If this node is an index, 
 			// check that the index types in pattern and object agree (if known, otherwise assume they match)
+			// If two is a rational, we have already check that one can take this value.
 
-			//std::cerr << "index check " << *one->name << " " << *two->name << std::endl;
+			if(two->is_rational()==false) {
+				const Indices *t1=properties.get<Indices>(one, true);
+				const Indices *t2=properties.get<Indices>(two, true);
 
- 			const Indices *t1=properties.get<Indices>(one, true);
-			const Indices *t2=properties.get<Indices>(two, true);
-
-			// Check parent rel if a) there is no Indices property for the indices, b) the index positions
-			// are not free. Effectively this means that indices without property info get treated as
-			// fixed-position indices.
-			if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
-				if(one->fl.parent_rel != two->fl.parent_rel)                
-					return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
-
-         //			std::cerr << t1 << " " << t2 << std::endl;
-			if( (t1 || t2) && implicit_pattern ) {
-				if(t1 && t2) {
-					if((*t1).set_name != (*t2).set_name) {
-						if((*t1).set_name < (*t2).set_name) return no_match_less;
-						else                                return no_match_greater;
+				// Check parent rel if a) there is no Indices property for the indices, b) the index positions
+				// are not free. Effectively this means that indices without property info get treated as
+				// fixed-position indices.
+				if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
+					if(one->fl.parent_rel != two->fl.parent_rel)                
+						return (one->fl.parent_rel < two->fl.parent_rel)?no_match_less:no_match_greater;
+				
+				//			std::cerr << t1 << " " << t2 << std::endl;
+				if( (t1 || t2) && implicit_pattern ) {
+					if(t1 && t2) {
+						if((*t1).set_name != (*t2).set_name) {
+							if((*t1).set_name < (*t2).set_name) return no_match_less;
+							else                                return no_match_greater;
+							}
 						}
-					}
-				else {
-					if(t1) return no_match_less;
-					else   return no_match_greater;
+					else {
+						if(t1) return no_match_less;
+						else   return no_match_greater;
+						}
 					}
 				}
 
@@ -506,6 +530,10 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
  					cmptree2.begin()->flip_parent_rel();
 				//std::cerr << "storing " << Ex(cmptree1) << " -> " << Ex(cmptree2) << std::endl;
 				replacement_map[cmptree1]=cmptree2;
+//				// and without the index
+//				cmptree1.begin()->fl.parent_rel = str_node::p_none;
+//				cmptree2.begin()->fl.parent_rel = str_node::p_none;
+//				replacement_map[cmptree1]=cmptree2;
  				}
 			
 			// if this is a pattern and the pattern has a non-zero number of children,
@@ -518,7 +546,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				//std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 				}
 			// and if this is a pattern also insert the one without the parent_rel
-			if(one->is_name_wildcard() && one->is_index()) {
+			if( /* one->is_name_wildcard()  &&  */ one->is_index()) {
 				//std::cerr << "storing pattern without pattern rel " << replacement_map.size() << std::endl;
 				Ex tmp1(one), tmp2(two);
 				tmp1.begin()->fl.parent_rel=str_node::p_none;
