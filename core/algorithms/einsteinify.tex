@@ -4,8 +4,8 @@ In an expression containing dummy indices at the same position
 (i.e.~either both subscripts or both superscripts), raise one of the
 indices.
 \begin{screen}{1,2}
-A_{m} A_{m};
-@einsteinify!(%);
+ex:= A_{m} A_{m};
+einsteinify(_);
 A^{m} A_{m};
 \end{screen}
 If an additional argument is given to this command, it instead inserts

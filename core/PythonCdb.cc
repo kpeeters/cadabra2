@@ -103,6 +103,7 @@ namespace boost {
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/drop_weight.hh"
+#include "algorithms/einsteinify.hh"
 #include "algorithms/eliminate_kronecker.hh"
 #include "algorithms/epsilon_to_delta.hh"
 #include "algorithms/evaluate.hh"
@@ -1075,6 +1076,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Automatically convert Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
+	def("einsteinify", &dispatch_ex<einsteinify, Ex&>,
+		 (arg("ex"), arg("metric")=make_Ex_from_string(""),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+		  
 	def("evaluate", &dispatch_ex<evaluate, Ex&>,
 		 (arg("ex"), arg("components"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
