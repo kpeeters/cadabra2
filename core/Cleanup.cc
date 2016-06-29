@@ -103,6 +103,11 @@ void cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 
 	// Flatten sums which are supposed to be flat.
 	long num=tr.number_of_children(it);
+	if(num==0) {
+		::zero(it->multiplier);
+		return;
+		}
+
 	if(num==1) {
 		if(tr.begin(it)->is_range_wildcard())
 			return;
