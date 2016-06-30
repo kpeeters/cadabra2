@@ -18,6 +18,8 @@ bool rename_dummies::can_apply(iterator st)
 
 Algorithm::result_t rename_dummies::apply(iterator& st)
 	{
+	result_t res=result_t::l_no_action;
+
 	prod_wrap_single_term(st);
 
 	// First do a normal classify_indices both downwards and upwards.
@@ -59,7 +61,10 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 				added_dummies.insert(index_map_t::value_type(relabel, ii));
 				index_iterator tmp(ii);
 				++tmp;
-				tr.replace_index(ii, relabel.begin(), true);
+				if(subtree_compare(&kernel.properties, ii, relabel.begin())!=0) {
+					res=result_t::l_applied;
+					tr.replace_index(ii, relabel.begin(), true);
+					}
 				ii=tmp;
 				}
 			else {
@@ -75,5 +80,5 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 
 	prod_unwrap_single_term(st);
 
-	return result_t::l_applied;
+	return res;
 	}
