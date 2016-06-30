@@ -15,7 +15,13 @@ NotebookCanvas::NotebookCanvas()
 //	scroll.add(ebox);
 //	ebox.override_background_color(Gdk::RGBA("white"));
 
-	scroll.override_background_color(Gdk::RGBA("white"));
+	// Do NOT do the following. This will create areas at the top
+	// and bottom where the content of the scrolledwindow is
+	// covered with white (except when totally at the top or
+	// bottom of the content).
+        // scroll.override_background_color(Gdk::RGBA("white"));
+	(*this).override_background_color(Gdk::RGBA("white"));
+
 //	scroll.set_overlay_scrolling(false);
 	}
 
