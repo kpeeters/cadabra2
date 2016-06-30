@@ -28,17 +28,21 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
 	// Query high-dpi settings. For now only for cinnamon.
-#ifdef __APPLE__
 	scale = 1.0;
-#else
-	settings = Gio::Settings::create((strcmp(std::getenv("DESKTOP_SESSION"), "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
-	scale = settings->get_double("text-scaling-factor");
+#ifndef __APPLE__
+	const char *ds = std::getenv("DESKTOP_SESSION");
+	if(ds) {
+	  settings = Gio::Settings::create((strcmp(ds, "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
+	  scale = settings->get_double("text-scaling-factor");
+	}
 #endif
 	engine.set_scale(scale);
 
 #ifndef __APPLE__
-	settings->signal_changed().connect(
-		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
+	if(ds) {
+	  settings->signal_changed().connect(
+					     sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
+	}
 #endif
 
 	// Setup styling. Note that 'margin-left' and so on do not work; you need
@@ -52,8 +56,10 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	data += "*:selected { background-color: #ccc; }\n";
 	data += "GtkTextView.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
+	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
 	if(!css_provider->load_from_data(data)) {
+	  std::cerr << "Cannot parse internal CSS." << std::endl;
 		throw std::logic_error("Failed to parse widget CSS information.");
 		}
 	auto screen = Gdk::Screen::get_default();
