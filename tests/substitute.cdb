@@ -228,3 +228,8 @@ def test105():
 test105()
 
     
+def test106():
+ex:= Q_{m n} -> A_{m n} - B_{m n};
+substitute(ex, $m -> 2$);
+tst:= A_{2 n} - B_{2 n};
+assert(tst==0)

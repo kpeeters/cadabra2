@@ -160,6 +160,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 			 is_stripped=true;
 			 }
 
+		// std::cerr << "consider " << Ex(it) << std::endl;
+
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
 			// std::cerr << "rule: " << Ex(loc->first) << " -> " << Ex(loc->second) << std::endl;
 
@@ -197,7 +199,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			}
 		else if( (sloc=comparator.subtree_replacement_map.find(it->name)) 
 					!=comparator.subtree_replacement_map.end()) { // object wildcards
-//			txtout << "srule : " << *it->name << std::endl;
+			// std::cerr << "srule : " << Ex(it) << std::endl;
 			multiplier_t tmpmult=*it->multiplier; // remember target multiplier
 			iterator tmp= tr.insert_subtree(it, (*sloc).second);
 			tmp->fl.bracket=it->fl.bracket;
