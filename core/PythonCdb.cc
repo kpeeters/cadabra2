@@ -656,6 +656,7 @@ void inject_defaults(Kernel *k)
 	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}"), 0);
 
 	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\int{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\int{#}"), 0);
 
 	// Accents, necessary for proper display.
 	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}"), 0);
