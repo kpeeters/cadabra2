@@ -214,6 +214,7 @@ def test104():
     substitute(ex, rl);
     tst:= g^{4} - @(ex);
     assert(tst==0)
+    print("Test 104 passed")
 
 test104()
 
@@ -224,12 +225,26 @@ def test105():
     substitute(ex, rl);
     tst:= n A_{n} + n B_{n} - @(ex);
     assert(tst==0)
+    print("Test 105 passed")
 
 test105()
 
+def test106():
+    __cdbkernel__=create_scope()
+    {m,n,p}::Indices(position=free);
+    ex:=\int{ A_{m} A^{m} }{x};
+    rl:= A_{m} -> B_{m n} C^{n};
+    substitute(ex, rl);
+    tst:= \int{ B_{m n} C^{n} B^{m}_{p} C^{p} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 106 passed")
+    
+test106()
     
 # def test106():
 # ex:= Q_{m n} -> A_{m n} - B_{m n};
 # substitute(ex, $m -> 2$);
 # tst:= A_{2 n} - B_{2 n};
 # assert(tst==0)
+
+

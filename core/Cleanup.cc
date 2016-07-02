@@ -297,7 +297,7 @@ void cleanup_kronecker(const Kernel& k, Ex& tr, Ex::iterator& it)
 			zero(it->multiplier);
 			}
 		else {
-			::one(it->multiplier);
+//			::one(it->multiplier);
 			tr.erase_children(it);
 			it->name=name_set.insert("1").first;
 			}
