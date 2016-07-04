@@ -79,12 +79,16 @@ class DisplayTeX : public DisplayBase {
 		/// the single argument 'arg', reads as an operator, and therefore
 		/// 'arg' does not need to be wrapped in brackets. 
 		/// Example: the tree \partial{A} can be displayed as '\partial A'
-		/// instead of '\partial(A)'. 
+		/// (or rather, '\partial{A}', instead of '\partial(A)'. 
 	  
 		bool reads_as_operator(Ex::iterator obj, Ex::iterator arg) const;
 
 		/// Map from Cadabra symbols to LaTeX symbols (for some typographic cleanup).
 		std::map<std::string, std::string> symmap;
+
+		/// List of operators which need all arguments fed with curly brackets, not 
+		/// round ones (e.g. \sqrt).
+		std::set<std::string> curly_bracket_operators;
 
 };
 
