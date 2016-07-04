@@ -63,7 +63,7 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 		// no brackets are needed.
       if((*arg->name).size()==1 || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
-	auto it=curly_bracket_operators.find(*arg->name);
+	auto it=curly_bracket_operators.find(*obj->name);
 	if(it!=curly_bracket_operators.end()) return true;
 
 	return false;
@@ -152,8 +152,6 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		bool function_bracket_needed=true;
 		if(current_bracket_==str_node::b_none)
 			function_bracket_needed=!reads_as_operator(it, ch);
-
-		std::cerr << "function bracket: " << *it->name << reads_as_operator(it,ch) << std::endl;
 
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
