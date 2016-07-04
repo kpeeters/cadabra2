@@ -208,6 +208,9 @@ Private Attributes</h2></td></tr>
 std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a26479aae12d13f4e728f2dca3ae35c69">symmap</a></td></tr>
 <tr class="memdesc:a26479aae12d13f4e728f2dca3ae35c69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> symbols to LaTeX symbols (for some typographic cleanup).  <a href="#a26479aae12d13f4e728f2dca3ae35c69">More...</a><br/></td></tr>
 <tr class="separator:a26479aae12d13f4e728f2dca3ae35c69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56ccbf6890c1989f74730817b69f3a85"><td class="memItemLeft" align="right" valign="top">std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDisplayTeX.html#a56ccbf6890c1989f74730817b69f3a85">curly_bracket_operators</a></td></tr>
+<tr class="memdesc:a56ccbf6890c1989f74730817b69f3a85"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of operators which need all arguments fed with curly brackets, not round ones (e.g.  <a href="#a56ccbf6890c1989f74730817b69f3a85">More...</a><br/></td></tr>
+<tr class="separator:a56ccbf6890c1989f74730817b69f3a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -1061,7 +1064,7 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Determine whether the indicated object 'obj', when acting on the single argument 'arg', reads as an operator, and therefore 'arg' does not need to be wrapped in brackets. </p>
-<p>Example: the tree {A} can be displayed as ' A' instead of '(A)'. </p>
+<p>Example: the tree {A} can be displayed as ' A' (or rather, '{A}', instead of '(A)'. </p>
 
 </div>
 </div>
@@ -1107,6 +1110,29 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a56ccbf6890c1989f74730817b69f3a85"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::set&lt;std::string&gt; DisplayTeX::curly_bracket_operators</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>List of operators which need all arguments fed with curly brackets, not round ones (e.g. </p>
+<p>). </p>
 
 </div>
 </div>
@@ -1279,7 +1305,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jul 2 2016 11:58:05 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 4 2016 21:12:01 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

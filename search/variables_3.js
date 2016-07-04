@@ -37,6 +37,7 @@ var searchData=
   ['cur',['cur',['../classpreprocessor.html#aae5409abdba615f00428ef94a1dcbb6c',1,'preprocessor']]],
   ['cur_5fpos',['cur_pos',['../classpreprocessor.html#a9611cfbe3fd5940dee95931a2b50f5bf',1,'preprocessor']]],
   ['cur_5fstr',['cur_str',['../classpreprocessor.html#a26ce11ef83ef8df8f3b6db8c4eee0116',1,'preprocessor']]],
+  ['curly_5fbracket_5foperators',['curly_bracket_operators',['../classDisplayTeX.html#a56ccbf6890c1989f74730817b69f3a85',1,'DisplayTeX']]],
   ['current_5f',['current_',['../classcombin_1_1symmetriser.html#a6d917e459b82fad844a604a33549fc06',1,'combin::symmetriser']]],
   ['current_5fbracket',['current_bracket',['../classParser.html#a22f8b9388e7272b78f452be5bcef7989',1,'Parser']]],
   ['current_5fcanvas',['current_canvas',['../classcadabra_1_1NotebookWindow.html#af6c38a8c6071e566ff0ceca5bfaa550f',1,'cadabra::NotebookWindow::current_canvas()'],['../classcadabra__osx_1_1NotebookWindow.html#a60de468db3883f2ac8e7a87c7dce1df6',1,'cadabra_osx::NotebookWindow::current_canvas()']]],
