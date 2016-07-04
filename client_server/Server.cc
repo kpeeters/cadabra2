@@ -253,7 +253,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 //		std::cerr << "preparsed : " + res << std::endl;
 		newblk += res+'\n';
 		}
-	std::cerr << "PREPARSED:\n " << newblk << std::endl;
+	// std::cerr << "PREPARSED:\n " << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
