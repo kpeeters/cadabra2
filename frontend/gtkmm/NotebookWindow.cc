@@ -90,9 +90,9 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
 	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
-	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"),
+	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
-	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"),
+	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"), Gtk::AccelKey("<alt>Down"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
 	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
