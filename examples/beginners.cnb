@@ -87,7 +87,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = \\partial_{\\mu}{A_{\\nu}}%\n-\\partial_{\\nu}{A_{\\mu}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}F_{\\mu \\nu} = \\partial_{\\mu}{A_{\\nu}}-\\partial_{\\nu}{A_{\\mu}}\\end{dmath*}"
 				}
 			],
 			"source" : "rl:= F_{\\mu\\nu} = \\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}};"
@@ -100,7 +100,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}{A_{\\nu}}%\n-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}{A^{\\nu}}%\n-\\partial^{\\nu}{A^{\\mu}}\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}{A^{\\mu}}-\\partial^{\\mu}{A_{\\mu}}\\right) \\left(\\partial_{\\nu}{A^{\\nu}}-\\partial^{\\nu}{A_{\\nu}}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(S, rl);"
@@ -127,7 +127,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}\\left(\\partial_{\\mu}{\\delta{A_{\\nu}}}%\n-\\partial_{\\nu}{\\delta{A_{\\mu}}}\\right) \\left(\\partial^{\\mu}{A^{\\nu}}%\n-\\partial^{\\nu}{A^{\\mu}}\\right)%\n+\\left(\\partial_{\\mu}{A_{\\nu}}%\n-\\partial_{\\nu}{A_{\\mu}}\\right) \\left(\\partial^{\\mu}{\\delta{A^{\\nu}}}%\n-\\partial^{\\nu}{\\delta{A^{\\mu}}}\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}\\left(\\partial^{\\mu}{A_{\\mu}}-\\partial^{\\mu}{A_{\\mu}}\\right) \\left(\\partial^{\\nu}{\\delta{A_{\\nu}}}-\\partial^{\\nu}{\\delta{A_{\\nu}}}\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "vary(S, $A_{\\mu} -> \\delta{A_{\\mu}}$);"
@@ -154,15 +154,15 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}2\\partial^{\\mu}{\\delta{A^{\\nu}}} \\partial_{\\mu}{A_{\\nu}}%\n-4\\partial^{\\mu}{A^{\\nu}} \\partial_{\\nu}{\\delta{A_{\\mu}}}%\n+2\\partial^{\\mu}{A^{\\nu}} \\partial_{\\mu}{\\delta{A_{\\nu}}}\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\partial_{\\nu}{A_{\\mu}}\\right)%\n+4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\partial_{\\mu}{A_{\\nu}}\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
 				}
 			],
-			"source" : "distribute(_);\nintegrate_by_parts(_, $\\delta{A_{\\mu}}$);"
+			"source" : "distribute(S);\nintegrate_by_parts(S, $\\delta{A_{\\mu}}$);"
 		},
 		{
 			"cell_origin" : "client",
@@ -186,7 +186,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\int{}-4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}}%\n - \\frac{1}{2}F_{\\mu \\nu}%\n+\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}\\right)%\n+4\\delta{A^{\\mu}} \\partial^{\\nu}\\left(\\frac{1}{2}\\partial_{\\mu}{A_{\\nu}}%\n+\\frac{1}{2}F_{\\mu \\nu}%\n+\\frac{1}{2}\\partial_{\\nu}{A_{\\mu}}\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(_, $\\partial_{\\mu}{A_{\\nu}} -> 1/2 \\partial_{\\mu}{A_{\\nu}} + 1/2 F_{\\mu\\nu} + 1/2 \\partial_{\\nu}{A_{\\mu}}$);"
@@ -199,7 +199,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-\\int{}\\delta{A^{\\mu}} \\partial^{\\nu}{F_{\\mu \\nu}}\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(_);"

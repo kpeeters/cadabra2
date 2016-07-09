@@ -196,3 +196,22 @@ def test28():
 
 test28()
 
+def post_process(ex):
+	sort_product(ex)
+	#canonicalise(ex)
+	collect_terms(ex)
+
+{\mu,\nu,\rho}::Indices(position=free).
+x::Coordinate.
+\partial{#}::Derivative.
+
+F_{\mu\nu}::AntiSymmetric;
+F_{\mu\nu}::Depends(x).
+A_{\mu}::Depends(x,\partial).
+\delta{#}::Accent;
+
+S:= -1/4 \int{ F_{\mu\nu} F^{\mu\nu} }{x};
+rl:= F_{\mu\nu} = \partial_{\mu}{A_{\nu}} - \partial_{\nu}{A_{\mu}};
+substitute(S, rl);
+vary(S, $A_{\mu} -> \delta{A_{\mu}}$);
+distribute(S);
