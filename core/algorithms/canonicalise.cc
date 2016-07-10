@@ -16,7 +16,8 @@ canonicalise::canonicalise(const Kernel& k, Ex& tr)
 bool canonicalise::can_apply(iterator it) 
 	{
 	if(*(it->name)!="\\prod")
-		return(is_single_term(it));
+		if(is_single_term(it)==false)
+			return false;
 	
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -24,12 +25,12 @@ bool canonicalise::can_apply(iterator it)
 		// if those are scalars, i.e. carry no indices. 
 		// FIXME: For the time being, we even forbid dummy indices.
 		if(*sib->name=="\\sum" || *sib->name=="\\prod" ) {
+			// std::cerr << "A child of " << *it->name << " is a " << *sib->name << std::endl;
 			index_map_t ind_dummy, ind_free;
 			classify_indices(sib, ind_free, ind_dummy);
 			if(ind_free.size()+ind_dummy.size()>0)
 				return false;
-			else 
-				return true;
+			// std::cerr << "but has no indices whatsoever" << std::endl;
 			}
 		++sib;
 		}
@@ -127,12 +128,8 @@ bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const
 
 Algorithm::result_t canonicalise::apply(iterator& it)
 	{
-//	std::cerr << "canonicalise at " << Ex(it) << std::endl;
-//	std::cerr << is_single_term(it) << std::endl;
-//	if(is_single_term(it)==false) {
-//		std::cerr << "not acting" << std::endl;
-//		return result_t::l_no_action;
-//		}
+	// std::cerr << "canonicalise at " << Ex(it) << std::endl;
+	// std::cerr << is_single_term(it) << std::endl;
 
 	stopwatch totalsw;
 	totalsw.start();

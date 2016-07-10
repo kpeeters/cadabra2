@@ -746,4 +746,12 @@ def test49():
 
 test49()
 
+def test50():
+    {m,n,p}::Indices(position=free);
+    A_{m n}::Symmetric;
+    ex:=\int{ A_{m n} (A^{n m} + A^{m n}) }{x};
+    canonicalise(_);
+    tst:= 2 \int{ A_{m n} A^{m n} }{x} - @(ex);
+    assert(tst==0)
 
+test50()
