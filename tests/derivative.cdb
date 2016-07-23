@@ -403,3 +403,20 @@ def test23():
     assert(tst23==0)
 
 test23()
+
+# Unwrapping.
+
+def test24():
+    __cdbkernel__=create_scope()
+    \hat{#}::Accent;
+    \hat{#}::Distributable;
+    B::Depends(\hat);
+    ex:=\hat{A+B+C};
+    distribute(_);
+    unwrap(_);
+    tst:=\hat{B}-@(ex);
+    assert(tst==0)
+    print("Test 24 passed")
+
+test24()
+
