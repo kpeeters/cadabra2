@@ -23,12 +23,12 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\hat{\\#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\widehat{\\#}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Distributable to~}\\hat{\\#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Distributable to~}\\widehat{\\#}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -38,7 +38,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\hat{A+B+C}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\widehat{A+B+C}\\end{dmath*}"
 				}
 			],
 			"source" : "\\hat{#}::Accent;\n\\hat{#}::Distributable;\nB::Depends(\\hat);\n\nex:=\\hat{A+B+C};"
@@ -51,7 +51,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\hat{A}+\\hat{B}+\\hat{C}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\widehat{A}+\\widehat{B}+\\widehat{C}\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(_);"
@@ -59,6 +59,14 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\widehat{B}\\end{dmath*}"
+				}
+			],
 			"source" : "unwrap(_);"
 		},
 		{
@@ -88,7 +96,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property AntiCommuting to~}\\left(A, B, C, D\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiCommuting to~}\\left(A, \\linebreak[0] B, \\linebreak[0] C, \\linebreak[0] D\\right).\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -98,7 +106,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\left(B, D\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\left(B, \\linebreak[0] D\\right).\\end{dmath*}"
 				}
 			],
 			"source" : "\\partial{#}::PartialDerivative;\n{A,B,C,D}::AntiCommuting;\nx::Coordinate;\n{B,D}::Depends(\\partial);"

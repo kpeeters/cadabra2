@@ -172,6 +172,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			}
 		}
 	
+	std::cerr << "end of factor_out: \n" << Ex(it) << std::endl;
+
 	return result;
 	}
 
