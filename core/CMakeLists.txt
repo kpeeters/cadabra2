@@ -168,6 +168,7 @@ set(LOCAL_SRC_FILES
   algorithms/drop_weight.cc
   algorithms/einsteinify.cc
   algorithms/eliminate_kronecker.cc
+  algorithms/eliminate_metric.cc
   algorithms/epsilon_to_delta.cc
   algorithms/evaluate.cc
   algorithms/expand.cc
