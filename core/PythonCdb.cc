@@ -1168,8 +1168,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 (arg("ex"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
-	def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex&>, 
-		 (arg("ex"),arg("preferred"),
+	def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex&, Ex&>, 
+		 (arg("ex"),arg("preferred"),arg("converters"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("vary", &dispatch_ex<vary, Ex&>, 

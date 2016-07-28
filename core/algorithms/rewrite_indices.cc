@@ -4,9 +4,13 @@
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
 
-rewrite_indices::rewrite_indices(const Kernel& k, Ex& e, Ex& pref)
-	: Algorithm(k, e), preferred(pref)
+rewrite_indices::rewrite_indices(const Kernel& k, Ex& e, Ex& pref, Ex& conv)
+	: Algorithm(k, e), preferred(pref), converters(conv)
 	{
+	auto c=converters.begin();
+	if(*c->name!="\\comma") {
+		converters.wrap(c, str_node("\\comma"));
+		}
 	}
 
 bool rewrite_indices::can_apply(iterator it) 
@@ -41,12 +45,9 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	// Put arguments in canonical form.
 
 	sibling_iterator objs=preferred.begin();
-	sibling_iterator vielb=objs;
-	++vielb;
-	if(*objs->name!="\\comma") {
-//		args_begin_=tr.end(); // force recompute FIXME: this is a hack v2: HOW DID IT WORK?
-		objs=tr.wrap(objs, str_node("\\comma"));
-		}
+	sibling_iterator vielb=converters.begin().begin();
+	std::cerr << "preferred: " << Ex(objs) << std::endl;
+	std::cerr << "vielbein: "  << Ex(vielb) << std::endl;
 
 	// Determine which conversion types are possible.
 	// itype1 and itype2 are the index types of the 1st and 2nd index of the 
@@ -73,7 +74,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	while(dit!=ind_dummy.end()) {
 		sibling_iterator par=tr.parent(dit->second);
 		for(sibling_iterator prefit=tr.begin(objs); prefit!=tr.end(objs); ++prefit) {
-//			txtout << "one " << *par->name << ", " << *prefit->name << std::endl;
+			std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl;
 			if(subtree_equal(&kernel.properties, par, prefit, 1, false)) {
 //				txtout << "found " << *par->name << std::endl;
 				// Determine whether the indices are of preferred type or not.
