@@ -2,7 +2,9 @@ var searchData=
 [
   ['echokernel',['EchoKernel',['../classechokernel_1_1EchoKernel.html',1,'echokernel']]],
   ['einsteinify',['einsteinify',['../classeinsteinify.html',1,'']]],
+  ['eliminate_5fconverter',['eliminate_converter',['../classeliminate__converter.html',1,'']]],
   ['eliminate_5fkronecker',['eliminate_kronecker',['../classeliminate__kronecker.html',1,'']]],
+  ['eliminate_5fmetric',['eliminate_metric',['../classeliminate__metric.html',1,'']]],
   ['epsilon_5fto_5fdelta',['epsilon_to_delta',['../classepsilon__to__delta.html',1,'']]],
   ['epsilontensor',['EpsilonTensor',['../classEpsilonTensor.html',1,'']]],
   ['error_5ft',['error_t',['../classexec__stream__t_1_1error__t.html',1,'exec_stream_t']]],

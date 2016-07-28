@@ -7,6 +7,7 @@ var searchData=
   ['handle_5fderivative',['handle_derivative',['../classevaluate.html#a5a849a42372b6466ee479e548d22db17',1,'evaluate']]],
   ['handle_5ffactor',['handle_factor',['../classevaluate.html#ad8179ea00d19150d16e474610aed019c',1,'evaluate']]],
   ['handle_5flatex_5ferrors',['handle_latex_errors',['../classcadabra_1_1TeXEngine.html#a71a9c9979a45edaf26ed5f11f3fa2739',1,'cadabra::TeXEngine']]],
+  ['handle_5fone_5findex',['handle_one_index',['../classeliminate__converter.html#a7f46f66e87b89de6533d97a4f64221a7',1,'eliminate_converter']]],
   ['handle_5fprod',['handle_prod',['../classevaluate.html#a6a91d21dffa786668ce4fd48aaf783cf',1,'evaluate']]],
   ['handle_5fsum',['handle_sum',['../classevaluate.html#ae61ff223a4d165f2e8f8f84384b761ce',1,'evaluate']]],
   ['handle_5fterm',['handle_term',['../classintegrate__by__parts.html#a2ab129c107a30879fd0af1acda1236de',1,'integrate_by_parts']]],

@@ -1,8 +1,8 @@
 var searchData=
 [
   ['tab_5fbasics',['tab_basics',['../classtab__basics.html',1,'']]],
-  ['tableau',['Tableau',['../classTableau.html',1,'']]],
   ['tableau',['tableau',['../classyngtab_1_1tableau.html',1,'yngtab']]],
+  ['tableau',['Tableau',['../classTableau.html',1,'']]],
   ['tableau_5fbase',['tableau_base',['../classyngtab_1_1tableau__base.html',1,'yngtab']]],
   ['tableaubase',['TableauBase',['../classTableauBase.html',1,'']]],
   ['tableausymmetry',['TableauSymmetry',['../classTableauSymmetry.html',1,'']]],

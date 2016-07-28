@@ -16,6 +16,8 @@ var searchData=
   ['inbox',['inbox',['../classcadabra_1_1VisualCell.html#ac6b1b11499aa0354a05fcf7335e8844c',1,'cadabra::VisualCell']]],
   ['ind1',['ind1',['../classdecompose__product.html#aeb30cdb485313f8eaef4362dcacd7489',1,'decompose_product']]],
   ['ind2',['ind2',['../classdecompose__product.html#ab1c61c9efea950712d2e8a8263443b09',1,'decompose_product']]],
+  ['ind_5fdummy',['ind_dummy',['../classeliminate__converter.html#a631f3158a089c899d8dd86955b4d3a1e',1,'eliminate_converter']]],
+  ['ind_5ffree',['ind_free',['../classeliminate__converter.html#a784340481cef6d693cf041006847529e',1,'eliminate_converter']]],
   ['indent',['indent',['../classServer.html#a28546b9b7980bb2ab6b6ad6c50f0c4fc',1,'Server']]],
   ['index_5fsw',['index_sw',['../classAlgorithm.html#a0413980424e8cfb0695c727d779768d1',1,'Algorithm']]],
   ['index_5fvalue_5fmap',['index_value_map',['../classEx__comparator.html#a0d9c14e1539ec289aa8f2581eafe56b5',1,'Ex_comparator']]],

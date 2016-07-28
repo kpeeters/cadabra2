@@ -35,6 +35,7 @@ var searchData=
   ['is_5fclosing_5fbracket_5f',['is_closing_bracket_',['../classpreprocessor.html#acb782ad8e3daf7cc92d22f231d7eeb34',1,'preprocessor']]],
   ['is_5fcommand',['is_command',['../classstr__node.html#a45159c080205d0cb96d8f57757a31dea',1,'str_node']]],
   ['is_5fcomponent',['is_component',['../classevaluate.html#a01b52bae76513ffb0341afa99e5b5784',1,'evaluate']]],
+  ['is_5fconversion_5fobject',['is_conversion_object',['../classeliminate__converter.html#a14ded3990b69f6263a64d3dab45cd370',1,'eliminate_converter::is_conversion_object()'],['../classeliminate__metric.html#ad286252db3fc452c9fa0e953f5563717',1,'eliminate_metric::is_conversion_object()']]],
   ['is_5fdigits_5f',['is_digits_',['../classpreprocessor.html#a5dedb01138ea15c41e4cf5b3e8d21d6e',1,'preprocessor']]],
   ['is_5ffactorlike',['is_factorlike',['../classAlgorithm.html#a39f52c31b9eeaa8a1648d19f894019c8',1,'Algorithm']]],
   ['is_5fidentity',['is_identity',['../classstr__node.html#a549469a81db3e073d4efb52fddf55384',1,'str_node']]],

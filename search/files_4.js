@@ -5,6 +5,8 @@ var searchData=
   ['einsteinify_2ehh',['einsteinify.hh',['../einsteinify_8hh.html',1,'']]],
   ['eliminate_5fkronecker_2ecc',['eliminate_kronecker.cc',['../eliminate__kronecker_8cc.html',1,'']]],
   ['eliminate_5fkronecker_2ehh',['eliminate_kronecker.hh',['../eliminate__kronecker_8hh.html',1,'']]],
+  ['eliminate_5fmetric_2ecc',['eliminate_metric.cc',['../eliminate__metric_8cc.html',1,'']]],
+  ['eliminate_5fmetric_2ehh',['eliminate_metric.hh',['../eliminate__metric_8hh.html',1,'']]],
   ['epsilon_5fto_5fdelta_2ecc',['epsilon_to_delta.cc',['../epsilon__to__delta_8cc.html',1,'']]],
   ['epsilon_5fto_5fdelta_2ehh',['epsilon_to_delta.hh',['../epsilon__to__delta_8hh.html',1,'']]],
   ['epsilontensor_2ecc',['EpsilonTensor.cc',['../EpsilonTensor_8cc.html',1,'']]],

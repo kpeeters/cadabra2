@@ -1,7 +1,9 @@
 var searchData=
 [
   ['einsteinify',['einsteinify',['../classeinsteinify.html#a68133b7ee38b092e8ec64721354ad15a',1,'einsteinify']]],
+  ['eliminate_5fconverter',['eliminate_converter',['../classeliminate__converter.html#a3d0c153251dd523307900318a27c4258',1,'eliminate_converter']]],
   ['eliminate_5fkronecker',['eliminate_kronecker',['../classeliminate__kronecker.html#ab15d2803f89e20dcbef42aa086d8ce7d',1,'eliminate_kronecker']]],
+  ['eliminate_5fmetric',['eliminate_metric',['../classeliminate__metric.html#a6fecafdbfe8c9ef9965a982cd71a2ebe',1,'eliminate_metric']]],
   ['end',['end',['../classindex__iterator.html#a9f5e2b26a466ff856295a70b29fb6dad',1,'index_iterator::end()'],['../classkeyval__t.html#a7f1a832ff70011a7a7192348dde13f65',1,'keyval_t::end()'],['../classyngtab_1_1filled__tableau.html#a010729736e8edce8d8887c7d3fc8decc',1,'yngtab::filled_tableau::end()']]],
   ['end_5fcolumn',['end_column',['../classyngtab_1_1filled__tableau.html#abbcb9291e02341074f3aaecb26a3b510',1,'yngtab::filled_tableau']]],
   ['end_5findex',['end_index',['../classAlgorithm.html#a60851756e1d2c887b9bc6b044690e092',1,'Algorithm']]],
