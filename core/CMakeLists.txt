@@ -189,6 +189,7 @@ set(LOCAL_SRC_FILES
   algorithms/product_rule.cc
   algorithms/reduce_delta.cc
   algorithms/rename_dummies.cc
+  algorithms/rewrite_indices.cc
   algorithms/sort_product.cc
   algorithms/split_gamma.cc
   algorithms/split_index.cc

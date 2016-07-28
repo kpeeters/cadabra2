@@ -131,6 +131,7 @@ namespace boost {
 #include "algorithms/sym.hh"
 #include "algorithms/take_match.hh"
 #include "algorithms/replace_match.hh"
+#include "algorithms/rewrite_indices.hh"
 #include "algorithms/unwrap.hh"
 #include "algorithms/vary.hh"
 #include "algorithms/young_project.hh"
@@ -1165,6 +1166,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_internal_reference<1>() );
 	def("replace_match", &dispatch_ex<replace_match>, 
 		 (arg("ex"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex&>, 
+		 (arg("ex"),arg("preferred"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("vary", &dispatch_ex<vary, Ex&>, 
