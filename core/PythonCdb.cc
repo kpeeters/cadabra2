@@ -105,6 +105,7 @@ namespace boost {
 #include "algorithms/drop_weight.hh"
 #include "algorithms/einsteinify.hh"
 #include "algorithms/eliminate_kronecker.hh"
+#include "algorithms/eliminate_metric.hh"
 #include "algorithms/epsilon_to_delta.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/expand.hh"
@@ -1051,6 +1052,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	def("drop_weight", &dispatch_ex<drop_weight, Ex&>, 
 		 (arg("ex"),arg("condition"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("eliminate_metric", &dispatch_ex<eliminate_metric, Ex&>, 
+		 (arg("ex"),arg("preferred")=make_Ex_from_string(""),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 

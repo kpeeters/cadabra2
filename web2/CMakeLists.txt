@@ -40,6 +40,7 @@ set(ALGOS
   distribute
   drop_weight
   eliminate_kronecker
+  eliminate_metric
   epsilon_to_delta
   evaluate
   expand

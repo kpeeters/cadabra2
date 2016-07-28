@@ -1,0 +1,68 @@
+
+def test01():
+    __cdbkernel__=create_scope();
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    {m, n, p, q, r}::Integer(0..9).
+    g_{m n}::Metric.
+    g^{m n}::InverseMetric.
+    g_{m}^{n}::KroneckerDelta.
+    g^{m}_{n}::KroneckerDelta.
+    obj10:= g_{m p} g^{p m};
+    eliminate_metric(_);
+    eliminate_kronecker(_);
+    tst10:= 10 - @(obj10);
+    assert(tst10==0)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    __cdbkernel__=create_scope();
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    g_{m n}::Metric.
+    g^{m n}::InverseMetric.
+    obj11b:= 3 g_{m p} g^{m p};
+    eliminate_metric(_);
+    tst11b:= 3 g_{p}^{p} - @(obj11b);
+    assert(tst11b==0)
+    print("Test 02 passed")
+
+test02()
+
+# Eliminating metrics in presence of derivatives.
+
+def test03():
+    __cdbkernel__=create_scope();
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    g_{m n}::Metric.
+    \partial{#}::Derivative.
+    obj12a:= g_{m n} \partial_{p}{ A^{n} };
+    eliminate_metric(_);
+    tst12a:= \partial_{p}{ A_{m} } - @(obj12a);
+    assert(tst12a==0)
+    print("Test 03 passed")
+    
+test03()
+
+def test04():
+    __cdbkernel__=create_scope();
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    g_{m n}::Metric.
+    \partial{#}::Derivative.
+    g_{m n}::Depends(\partial).
+    obj12b:= g_{m n} \partial_{p}{ A^{n} };
+    eliminate_metric(_);
+    tst12b:= g_{m n} \partial_{p}{ A^{n} } - @(obj12b);
+    assert(tst12b==0)
+    print("Test 04 passed")
+
+test04()
+
+# Reported bug with eliminate_metric.
+# {a,b,c,d,e,i,j,k}::Indices(curved).
+# g^{a b}::InverseMetric.
+# \nabla{#}::Derivative.
+# h_{a b}::Symmetric.
+# ex:=g^{a k} * \nabla_{b}{h_{k c}} +g^{a k} * \nabla_{c}{h_{k b}};
+# eliminate_metric(_);
+
