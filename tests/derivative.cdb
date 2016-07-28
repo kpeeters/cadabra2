@@ -420,3 +420,23 @@ def test24():
 
 test24()
 
+# Bug reported 
+def test25():
+    __cdbkernel__=create_scope()
+    \del{#}::Derivative.
+    X::Depends(\del).
+    ex1:= \del{X*Y*Z*\del{X}};
+    product_rule(ex1);
+    unwrap(ex1);
+    tst:=\del{X} Y Z \del{X} + X Y Z \del{\del{X}} - @(ex1);
+    assert(tst==0)
+    print("Test 25a passed")
+    ex2:= \del{X*Y*Z*\del{Y}};
+    product_rule(ex2);
+    unwrap(ex2);
+    assert(ex2==0)
+    print("Test 25b passed")
+
+test25()
+
+
