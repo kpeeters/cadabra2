@@ -75,7 +75,6 @@ Algorithm::result_t unwrap::apply(iterator& it)
 			sibling_iterator factor=tr.begin(derarg);
 			while(factor!=tr.end(derarg)) {
 				sibling_iterator nxt=factor;
-				// std::cerr << "considering " << Ex(factor) << std::endl;
 				++nxt;
 				bool move_out=true;
 				
@@ -91,7 +90,6 @@ Algorithm::result_t unwrap::apply(iterator& it)
 //						if(subtree_exact_equal(it, depobjs)) { WRONG! Depends(\del) should work
 // without having any arguments in \del. Otherwise we would need to write this as Depends(\del{#})
 						if(old_it->name == depobjs->name) {
-//							txtout << "yep" << std::endl;
 							move_out=false;
 							break;
 							}

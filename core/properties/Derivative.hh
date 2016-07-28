@@ -6,10 +6,11 @@
 #include "properties/WeightBase.hh"
 #include "properties/TableauBase.hh"
 #include "properties/Distributable.hh"
+#include "properties/DependsInherit.hh"
 #include "properties/IndexInherit.hh"
 
 class Derivative : public IndexInherit, 
-//                   public Inherit<DependsBase>,
+						 public DependsInherit,
 //                   public Inherit<Spinor>,
 //                   public Inherit<SortOrder>,
                    public CommutingAsProduct, 
