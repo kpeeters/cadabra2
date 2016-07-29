@@ -8,9 +8,12 @@ rewrite_indices::rewrite_indices(const Kernel& k, Ex& e, Ex& pref, Ex& conv)
 	: Algorithm(k, e), preferred(pref), converters(conv)
 	{
 	auto c=converters.begin();
-	if(*c->name!="\\comma") {
+	if(*c->name!="\\comma") 
 		converters.wrap(c, str_node("\\comma"));
-		}
+
+	auto p=preferred.begin();
+	if(*p->name!="\\comma")
+		preferred.wrap(p, str_node("\\comma"));
 	}
 
 bool rewrite_indices::can_apply(iterator it) 
@@ -46,8 +49,6 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 
 	sibling_iterator objs=preferred.begin();
 	sibling_iterator vielb=converters.begin().begin();
-	std::cerr << "preferred: " << Ex(objs) << std::endl;
-	std::cerr << "vielbein: "  << Ex(vielb) << std::endl;
 
 	// Determine which conversion types are possible.
 	// itype1 and itype2 are the index types of the 1st and 2nd index of the 
@@ -74,17 +75,17 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	while(dit!=ind_dummy.end()) {
 		sibling_iterator par=tr.parent(dit->second);
 		for(sibling_iterator prefit=tr.begin(objs); prefit!=tr.end(objs); ++prefit) {
-			std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl;
+			// std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl;
 			if(subtree_equal(&kernel.properties, par, prefit, 1, false)) {
-//				txtout << "found " << *par->name << std::endl;
+				// std::cerr << "found " << *par->name << std::endl;
 				// Determine whether the indices are of preferred type or not.
 				int num=std::distance(tr.begin(par), (sibling_iterator)dit->second);
 				const Indices *origtype=kernel.properties.get<Indices>(dit->second, true);
 				if(!origtype) {
 					throw ArgumentException("Need to know about the index type of index "+*dit->second->name+".");
 					}
-//				txtout << "index " << *dit->second->name << "(" << num << ") has type " 
-//						 << origtype->set_name << std::endl;
+				// std::cerr << "index " << *dit->second->name << "(" << num << ") has type " 
+				//		 << origtype->set_name << std::endl;
 
 				// 'walk' is the index on the preferred form of the tensor, corresponding
 				// to the index on the original tensor which is currently under consideration 
