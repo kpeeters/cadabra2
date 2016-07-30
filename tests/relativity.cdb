@@ -134,3 +134,16 @@ def test10():
     print("Test 10 passed")
 
 test10()
+
+def test11():
+    __cdbkernel__=create_scope();
+    {a, b, c, d, e, f}::Indices(position=fixed).
+    \eta_{a b}::Metric.
+    ex:=F_{a}^{b} G_{b c} + F^{b d}G_{d a c b};
+    rewrite_indices(_, $F_{a b}$, $\eta^{a b}$);
+    tst:=F_{a d} G_{b c} \eta^{b d} + F_{e f} G_{d a c b} \eta^{b e} \eta^{d f} - @(ex);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
+
