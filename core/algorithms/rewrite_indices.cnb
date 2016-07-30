@@ -1,0 +1,90 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{rewrite_indices}{Rewrite indices by contracting with vielbein or metric.}\n\nRewrite indices on an object by contracting it with a second object\nwhich contains indices of both the old and the new type (a vielbein,\nin other words, or a metric). A vielbein example is"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{rewrite_indices}{Rewrite indices by contracting with vielbein or metric.}\n\nRewrite indices on an object by contracting it with a second object\nwhich contains indices of both the old and the new type (a vielbein,\nin other words, or a metric). A vielbein example is"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}T_{m n p}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}T_{\\mu \\nu \\rho} e^{\\mu}\\,_{m} e^{\\nu}\\,_{n} e^{\\rho}\\,_{p}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p}::Indices(flat).\n{\\mu,\\nu,\\rho}::Indices(curved).\nex:=T_{m n p};\nrewrite_indices(_, $T_{\\mu\\nu\\rho}$, $e_{\\mu}^{n}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "If you want to raise or lower an index with a metric, this can also be\ndone with as an index rewriting command, as the following example shows:"
+				}
+			],
+			"hidden" : true,
+			"source" : "If you want to raise or lower an index with a metric, this can also be\ndone with as an index rewriting command, as the following example shows:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}H_{\\mu \\nu \\rho}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}H^{\\sigma \\lambda \\kappa} g_{\\mu \\sigma} g_{\\nu \\lambda} g_{\\rho \\kappa}\\end{dmath*}"
+				}
+			],
+			"source" : "{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa}::Indices(curved, position=fixed).\nex:=H_{\\mu \\nu \\rho};\nrewrite_indices(_, $H^{\\mu \\nu \\rho}$, $g_{\\mu \\nu}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "As these examples show, the desired form of the tensor should be given\nas the first argument, and the conversion object (metric, vielbein) as\nthe second object. "
+				}
+			],
+			"hidden" : true,
+			"source" : "As these examples show, the desired form of the tensor should be given\nas the first argument, and the conversion object (metric, vielbein) as\nthe second object. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
