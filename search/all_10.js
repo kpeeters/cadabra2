@@ -68,7 +68,7 @@ var searchData=
   ['pre_5fparse',['pre_parse',['../classServer.html#a4213c640f5bb2690945eb20e29c70917',1,'Server']]],
   ['preclean_2ecc',['PreClean.cc',['../PreClean_8cc.html',1,'']]],
   ['preclean_2ehh',['PreClean.hh',['../PreClean_8hh.html',1,'']]],
-  ['preferred',['preferred',['../classeliminate__converter.html#a4e2db9640066ec4721b980d8f0f50665',1,'eliminate_converter']]],
+  ['preferred',['preferred',['../classeliminate__converter.html#a4e2db9640066ec4721b980d8f0f50665',1,'eliminate_converter::preferred()'],['../classrewrite__indices.html#a8fe3fd333538e336c5efbd378911efc2',1,'rewrite_indices::preferred()']]],
   ['preprocessor',['preprocessor',['../classpreprocessor.html',1,'preprocessor'],['../classpreprocessor.html#a548322f00a5eced33a58fc1362d91468',1,'preprocessor::preprocessor()']]],
   ['preprocessor_2ecc',['PreProcessor.cc',['../PreProcessor_8cc.html',1,'']]],
   ['preprocessor_2ehh',['PreProcessor.hh',['../PreProcessor_8hh.html',1,'']]],

@@ -21,7 +21,7 @@ var searchData=
   ['pos',['pos',['../classcadabra_1_1ActionAddCell.html#a02cf61ec3c9c2d855b26aef671536681',1,'cadabra::ActionAddCell::pos()'],['../classcadabra_1_1ActionPositionCursor.html#aa363ac5fd75c0dbee6be02de37744c87',1,'cadabra::ActionPositionCursor::pos()']]],
   ['position_5ftype',['position_type',['../classIndices.html#a7e7c90a615cf7b46fa928028bf77da37',1,'Indices']]],
   ['post_5fprocess_5fenabled',['post_process_enabled',['../PythonCdb_8cc.html#ac690888937da1cc3ede9915f16610f9b',1,'PythonCdb.cc']]],
-  ['preferred',['preferred',['../classeliminate__converter.html#a4e2db9640066ec4721b980d8f0f50665',1,'eliminate_converter']]],
+  ['preferred',['preferred',['../classeliminate__converter.html#a4e2db9640066ec4721b980d8f0f50665',1,'eliminate_converter::preferred()'],['../classrewrite__indices.html#a8fe3fd333538e336c5efbd378911efc2',1,'rewrite_indices::preferred()']]],
   ['print_5fstar',['print_star',['../classDisplayTeX.html#a9f7af02da7fa651262d2105b4986e6b5',1,'DisplayTeX']]],
   ['prodnode',['prodnode',['../classproduct__rule.html#a584c1b2861c94324c51cf39486995f74',1,'product_rule']]],
   ['progressbar',['progressbar',['../classcadabra_1_1NotebookWindow.html#a49ae38b8bdf53e77e17240d237f87c0d',1,'cadabra::NotebookWindow']]],

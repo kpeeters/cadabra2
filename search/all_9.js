@@ -99,6 +99,7 @@ var searchData=
   ['is_5fcommand',['is_command',['../classstr__node.html#a45159c080205d0cb96d8f57757a31dea',1,'str_node']]],
   ['is_5fcomponent',['is_component',['../classevaluate.html#a01b52bae76513ffb0341afa99e5b5784',1,'evaluate']]],
   ['is_5fconversion_5fobject',['is_conversion_object',['../classeliminate__converter.html#a14ded3990b69f6263a64d3dab45cd370',1,'eliminate_converter::is_conversion_object()'],['../classeliminate__metric.html#ad286252db3fc452c9fa0e953f5563717',1,'eliminate_metric::is_conversion_object()']]],
+  ['is_5fderivative_5fargument',['is_derivative_argument',['../classrewrite__indices.html#a3694dca72bf4a10027654e621f1c7c0f',1,'rewrite_indices']]],
   ['is_5fdiff',['is_diff',['../classflatten__product.html#a1113e05ca46112bf8c1e1f6d60068667',1,'flatten_product']]],
   ['is_5fdigits_5f',['is_digits_',['../classpreprocessor.html#a5dedb01138ea15c41e4cf5b3e8d21d6e',1,'preprocessor']]],
   ['is_5ffactorlike',['is_factorlike',['../classAlgorithm.html#a39f52c31b9eeaa8a1648d19f894019c8',1,'Algorithm']]],
@@ -131,8 +132,8 @@ var searchData=
   ['is_5fzero',['is_zero',['../classstr__node.html#aeb383a4110dcbcaaa0dd2c71d0758db6',1,'str_node']]],
   ['it',['it',['../classindexsort_1_1less__indexed__treenode.html#ad3b58a3e25e7583b5ee6108ce92c38e0',1,'indexsort::less_indexed_treenode']]],
   ['iterable_5fconverter',['iterable_converter',['../classiterable__converter.html',1,'']]],
-  ['iterator',['iterator',['../classAlgorithm.html#a238645043dc3b992ce92ebcd66389217',1,'Algorithm::iterator()'],['../classkeyval__t.html#a6beadd7be2de48f55c36010a17ef6632',1,'keyval_t::iterator()'],['../classProperties_1_1registered__property__map__t.html#af9593dd913eabd0379c4473b5022cdf5',1,'Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
   ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
+  ['iterator',['iterator',['../classAlgorithm.html#a238645043dc3b992ce92ebcd66389217',1,'Algorithm::iterator()'],['../classkeyval__t.html#a6beadd7be2de48f55c36010a17ef6632',1,'keyval_t::iterator()'],['../classProperties_1_1registered__property__map__t.html#af9593dd913eabd0379c4473b5022cdf5',1,'Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
   ['iterator_5fbase',['iterator_base',['../classyngtab_1_1filled__tableau_1_1iterator__base.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fcategory',['iterator_category',['../classyngtab_1_1filled__tableau_1_1iterator__base.html#ab11be0dad33e55a845b007ff4130c974',1,'yngtab::filled_tableau::iterator_base']]]
 ];
