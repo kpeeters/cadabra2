@@ -180,6 +180,9 @@ For any questions, please contact info@cadabra.science .
 
 
 
+Special thanks
+--------------
 
-
-
+Special thanks to José M. Martín-García (for the xPerm
+canonicalisation code), James Allen (for writing much of the factoring
+code) and the Software Sustainability Institute.
