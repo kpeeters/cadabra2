@@ -89,7 +89,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 
 				// 'walk' is the index on the preferred form of the tensor, corresponding
 				// to the index on the original tensor which is currently under consideration 
-				// for change.
+				// for change. We need to preserve the parent rel of this index.
 				sibling_iterator walk=begin_index(prefit);
 				while(num-- > 0)
 					++walk;
@@ -102,40 +102,44 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 //						 << newtype->set_name << std::endl;
 
 				if(newtype->set_name == origtype->set_name) {
-//					txtout << "index already has same type" << std::endl;
+					// Index already has preferred type.
 					if(origtype->position_type==Indices::free || walk->fl.parent_rel==dit->second->fl.parent_rel) {
-//						txtout << "and position is also already fine" << std::endl;
+						// Position is also already fine.
 						continue; // already fine
 						}
-//					txtout << "need to raise/lower" << std::endl;
+					// Need to convert index.
 					}
 
 				Ex repvb(vielb);
 				sibling_iterator vbi1=repvb.begin(repvb.begin());
 				sibling_iterator vbi2=vbi1; ++vbi2;
 
+				// Set the indices on the vielbein/converter which we are going to insert.
 				if(origtype->set_name == itype1->set_name && newtype->set_name == itype2->set_name) {
-//					txtout << "hit 1" << std::endl;
 					if( itype1->position_type==Indices::free || dit->second->fl.parent_rel == pr1 ) {
 						if( itype2->position_type==Indices::free || walk->fl.parent_rel != pr2 ) {
-//							txtout << "activate" << std::endl;
 							tr.replace_index(vbi1, dit->second);
 							Ex nd=get_dummy(itype2, par);
-							tr.replace_index(vbi2, nd.begin());
-							tr.replace_index(dit->second, nd.begin())->fl.parent_rel=walk->fl.parent_rel;
+							auto nl = tr.replace_index(dit->second, nd.begin(), true);
+							auto vielbein_index = tr.replace_index(vbi2, nd.begin());
+							nl->fl.parent_rel=walk->fl.parent_rel;
+							vielbein_index->fl.parent_rel=walk->fl.parent_rel;
+							vielbein_index->flip_parent_rel();
 							}
 						else continue;
 						}
 					else continue;
 					}
 				else if(origtype->set_name == itype2->set_name && newtype->set_name == itype1->set_name) {
-//					txtout << "hit 2" << std::endl;
 					if( itype2->position_type==Indices::free || dit->second->fl.parent_rel == pr2 ) {
 						if( itype1->position_type==Indices::free || walk->fl.parent_rel != pr1 ) {
 							tr.replace_index(vbi2, dit->second);
 							Ex nd=get_dummy(itype1, par);
-							tr.replace_index(vbi1,nd.begin());
-							tr.replace_index(dit->second,nd.begin())->fl.parent_rel=walk->fl.parent_rel;
+							auto nl=tr.replace_index(dit->second,nd.begin());
+							auto vielbein_index = tr.replace_index(vbi1,nd.begin());
+							nl->fl.parent_rel=walk->fl.parent_rel;
+							vielbein_index->fl.parent_rel=walk->fl.parent_rel;
+							vielbein_index->flip_parent_rel();
 							}
 						else continue;
 						}

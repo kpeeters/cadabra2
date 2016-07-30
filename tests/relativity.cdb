@@ -124,3 +124,13 @@ def test09():
 
 test09()
 
+def test10():
+    __cdbkernel__=create_scope();
+    {m,n,p,q,r,s}::Indices(curved, position=fixed).
+    ex:=H_{m n p};
+    rewrite_indices(_, $H^{m n p}$, $g_{m n}$);
+    tst:=H^{q r s} g_{m q} g_{n r} g_{p s} - @(ex);
+    assert(tst==0)
+    print("Test 10 passed")
+
+test10()
