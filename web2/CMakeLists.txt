@@ -55,6 +55,7 @@ set(ALGOS
   keep_weight
   product_rule
   reduce_delta
+  rewrite_indices
   sort_product
   split_gamma
   split_index
