@@ -72,7 +72,9 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 
 	// 'dit' is the index under consideration for a rewrite.
 	index_map_t::const_iterator dit=ind_dummy.begin();
+	// std::cerr << "apply" << std::endl;
 	while(dit!=ind_dummy.end()) {
+		// std::cerr << "considering " << *dit->second->name << std::endl;
 		sibling_iterator par=tr.parent(dit->second);
 		for(sibling_iterator prefit=tr.begin(objs); prefit!=tr.end(objs); ++prefit) {
 			// std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl;
@@ -98,8 +100,8 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 				if(!newtype) {
 					throw ArgumentException("Need to know about the index type of index "+*walk->name+".");
 					}
-//				txtout << "prefi " << *walk->name << "(" << num << ") has type " 
-//						 << newtype->set_name << std::endl;
+				// std::cerr << "prefi " << *walk->name << "(" << num << ") has type " 
+				//		 << newtype->set_name << std::endl;
 
 				if(newtype->set_name == origtype->set_name) {
 					// Index already has preferred type.
