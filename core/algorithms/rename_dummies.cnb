@@ -23,7 +23,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, n, p, q, r, s\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p, \\linebreak[0] q, \\linebreak[0] r, \\linebreak[0] s\\right).\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -32,6 +32,47 @@
 				}
 			],
 			"source" : "{m,n,p,q,r,s}::Indices(vector);\nex:=A_{m n} B_{m n} - A_{p q} B_{p q};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Using \\algo{canonicalise} does nothing here, "
+				}
+			],
+			"hidden" : true,
+			"source" : "Using \\algo{canonicalise} does nothing here, "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n} B_{m n}-A_{p q} B_{p q}\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "However, renaming indices does the trick,"
+				}
+			],
+			"hidden" : true,
+			"source" : "However, renaming indices does the trick,"
 		},
 		{
 			"cell_origin" : "client",
