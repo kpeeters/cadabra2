@@ -133,6 +133,7 @@ http://brew.sh).  Install these packages with::
     brew install boost-python --with-python3
     brew install pkgconfig ossp-uuid 
     brew install gtkmm3 adwaita-icon-theme
+    sudo pip3 install sympy
 
 The uninstall of boost-python in the 2nd line is to ensure that you
 have a version with python3 support. If the lines above prompt you to
