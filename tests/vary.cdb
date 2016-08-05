@@ -1,6 +1,6 @@
 
 def test01():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     x^{\mu}::Coordinate;
     x::Coordinate;
     #x::Implicit(x^{\mu});
