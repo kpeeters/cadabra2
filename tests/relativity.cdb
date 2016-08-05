@@ -1,6 +1,6 @@
 
 def test01():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {m, n, p, q, r}::Indices(vector, position=fixed).
     {m, n, p, q, r}::Integer(0..9).
     g_{m n}::Metric.
