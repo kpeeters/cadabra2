@@ -1212,7 +1212,23 @@ void NotebookWindow::on_kernel_restart()
 
 void NotebookWindow::on_help() const
 	{
-	cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/distribute.cnb");
+	if(current_cell==doc.end()) return;
+	if(current_cell->cell_type!=DataCell::CellType::python) return;
+
+	// Figure out the keyword under the cursor.
+	VisualCell& actual = canvasses[current_canvas]->visualcells[&(*current_cell)];
+	std::string before, after;
+	actual.inbox->slice_cell(before, after);
+
+	help_t help_type;
+	std::string help_topic;
+	help_type_and_topic(before, after, help_type, help_topic);
+	std::cerr << help_topic << std::endl;
+
+	if(help_type==help_t::algorithm)
+		cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb");
+	if(help_type==help_t::property)
+		cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/properties/"+help_topic+".cnb");
 	}
 
 void NotebookWindow::on_help_about()

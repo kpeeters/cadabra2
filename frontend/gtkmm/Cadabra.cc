@@ -143,10 +143,13 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 
 void Cadabra::open_help(const std::string& nm) 
 	{
+	std::cerr << "opening help document " << nm << std::endl;
 	windows.push_back(new cadabra::NotebookWindow(this));
 	std::ifstream fl(nm);
-	std::stringstream buffer;
-	buffer << fl.rdbuf();
-	windows[1]->load_file(buffer.str());
-	windows[1]->show();
+	if(fl.is_open()) {
+		std::stringstream buffer;
+		buffer << fl.rdbuf();
+		windows[1]->load_file(buffer.str());
+		windows[1]->show();
+		}
 	}

@@ -159,3 +159,60 @@ void DocumentThread::set_user_details(const std::string& name, const std::string
 	std::ofstream config(homedir + std::string("/.config/cadabra.conf"));
 	config << "registered=true" << std::endl;
 	}
+
+bool DocumentThread::help_type_and_topic(const std::string& before, const std::string& after,
+													  help_t& help_type, std::string& help_topic) const
+	{
+	help_t objtype=help_t::algorithm;
+	if(! (before.size()==0 && after.size()==0) ) {
+		 // We provide help for properties, algorithms and reserved node
+       // names.  Properties are delimited to the left by '::' and to
+       // the right by anything non-alnum. Algorithms are delimited to
+       // the left by non-alnum except '_' and to the right by '('. Reserved node
+       // names are TeX symbols, starting with '\'.
+		 // 
+		 // So scan the 'before' string for a left-delimiter and the 'after' string
+		 // for a right-delimiter.
+		 
+		int lpos=before.size()-1;
+		while(lpos>=0) {
+			if(before[lpos]==':' && lpos>0 && before[lpos-1]==':') {
+				objtype=help_t::property;
+				break;
+				}
+			if(before[lpos]=='\\') {
+				objtype=help_t::latex;
+				break;
+				}
+			if(isalnum(before[lpos])==0 && before[lpos]!='_') {
+				objtype=help_t::algorithm;
+				break;
+				}
+			--lpos;
+			}
+		if(objtype==help_t::none) return false;
+		++lpos;
+		
+		size_t rpos=0;
+		while(rpos<after.size()) {
+			std::cerr << after[rpos] << std::endl;
+			if(objtype==help_t::property) {
+				if(isalnum(after[rpos])==0)
+					break;
+				}
+			else if(objtype==help_t::algorithm) {
+				if(after[rpos]=='(')
+					break;
+				}
+			else if(objtype==help_t::latex) {
+				if(isalnum(after[rpos])==0 && after[rpos]!='_')
+					break;
+				}
+			++rpos;
+			}
+		help_topic=before.substr(lpos)+after.substr(0,rpos);
+		}
+
+	help_type=objtype;
+	return true;
+	}

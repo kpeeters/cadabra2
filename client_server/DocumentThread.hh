@@ -107,6 +107,12 @@ namespace cadabra {
 
 			/// Configuration options read from ~/.config/cadabra.conf.
 			bool  registered;
+
+			/// Help system 
+			enum class help_t { algorithm, property, latex, none };
+			bool help_type_and_topic(const std::string& before, const std::string& after,
+											 help_t& help_type, std::string& help_topic) const;
+
 	};
 	
 }
