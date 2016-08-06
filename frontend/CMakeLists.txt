@@ -54,6 +54,7 @@ install(DIRECTORY DESTINATION ${INSTALL_MAN_PROP_DIR} DIRECTORY_PERMISSIONS OWNE
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
 
-install(FILES
-  ${PROJECT_SOURCE_DIR}/../core/algorithms/distribute.cnb
-  DESTINATION ${INSTALL_MAN_ALGO_DIR})
+FILE(GLOB man_algorithms "${PROJECT_SOURCE_DIR}/../core/algorithms/*.cnb")
+install(FILES ${man_algorithms} DESTINATION ${INSTALL_MAN_ALGO_DIR})
+FILE(GLOB man_properties "${PROJECT_SOURCE_DIR}/../core/properties/*.cnb")
+install(FILES ${man_properties} DESTINATION ${INSTALL_MAN_PROP_DIR})

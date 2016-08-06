@@ -256,3 +256,12 @@ void CodeInput::handle_changed()
 	std::string tmp(textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end()));
 	edit.content_changed(tmp, edit.datacell);
 	}
+
+void CodeInput::slice_cell(std::string& before, std::string& after)
+	{
+	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
+
+	Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(textbuf->get_insert());
+	before=textbuf->get_slice(textbuf->begin(), it);
+	after =textbuf->get_slice(it, textbuf->end());
+	}
