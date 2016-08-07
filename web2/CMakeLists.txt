@@ -67,6 +67,7 @@ set(ALGOS
 set(PROPS
   Accent
   AntiCommuting
+  AntiSymmetric
   CommutingAsProduct
   CommutingAsSum
   Commuting
@@ -95,6 +96,7 @@ set(PROPS
   SelfNonCommuting
   SortOrder
   Spinor
+  Symmetric
 )
 
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)
