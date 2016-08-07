@@ -195,7 +195,6 @@ bool DocumentThread::help_type_and_topic(const std::string& before, const std::s
 		
 		size_t rpos=0;
 		while(rpos<after.size()) {
-			std::cerr << after[rpos] << std::endl;
 			if(objtype==help_t::property) {
 				if(isalnum(after[rpos])==0)
 					break;
