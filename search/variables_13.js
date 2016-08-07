@@ -22,6 +22,7 @@ var searchData=
   ['this_5flog_5f',['this_log_',['../classsnoop_1_1SnoopImpl.html#aaa42bb68a413e669ac3c25dda725ee79',1,'snoop::SnoopImpl']]],
   ['tight_5fplus',['tight_plus',['../classDisplayTeX.html#a6b75d215e3eabf7c203f90381414b130',1,'DisplayTeX']]],
   ['tight_5fstar',['tight_star',['../classDisplayTeX.html#a706b02e234e4bf4910c38653c9505501',1,'DisplayTeX']]],
+  ['title_5fprefix',['title_prefix',['../classcadabra_1_1NotebookWindow.html#afad2e23b8a151b0fd02d66ceeeaa1d20',1,'cadabra::NotebookWindow']]],
   ['to',['to',['../classInteger.html#a03e00e5e36db4a0d8405efe433ee0611',1,'Integer']]],
   ['to_5ffactor_5fout',['to_factor_out',['../classfactor__out.html#a301fc9abedc3f5a3ffd756eb99a2e102',1,'factor_out']]],
   ['to_5fright',['to_right',['../classfactor__out.html#a2c9ccd951d58832b7022930abfb4aba5',1,'factor_out']]],

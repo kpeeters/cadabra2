@@ -23,6 +23,8 @@ var searchData=
   ['head_5fis_5fgenerated',['head_is_generated',['../classpreprocessor_1_1accu__t.html#a070ea5823f5a30394b5b309965b71dbd',1,'preprocessor::accu_t']]],
   ['height',['height',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a45a6df5b7a6a627cc56e02506f79b994',1,'cadabra::TeXEngine::TeXRequest']]],
   ['height_5f',['height_',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a83fd19205ee1da4efeb0d59e4fd6a188',1,'cadabra::TeXEngine::TeXRequest']]],
+  ['help_5ft',['help_t',['../classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6a',1,'cadabra::DocumentThread']]],
+  ['help_5ftype_5fand_5ftopic',['help_type_and_topic',['../classcadabra_1_1DocumentThread.html#ac3d5adc63d75c6ad0ea0a480192a275f',1,'cadabra::DocumentThread']]],
   ['helpers_5fcpp',['HELPERS_CPP',['../exec-stream_8cc.html#a367823623c3ed9db7d63c380d0de8a00',1,'exec-stream.cc']]],
   ['helpers_5fh',['HELPERS_H',['../exec-stream_8cc.html#a4fd85cebb3a7e1a87f883886a1e43791',1,'exec-stream.cc']]],
   ['hidden',['hidden',['../classcadabra_1_1DataCell.html#a637a6a37f15eefa56f57b5e3c5cfb2c9',1,'cadabra::DataCell']]],

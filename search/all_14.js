@@ -68,6 +68,7 @@ var searchData=
   ['tight_5fplus',['tight_plus',['../classDisplayTeX.html#a6b75d215e3eabf7c203f90381414b130',1,'DisplayTeX']]],
   ['tight_5fstar',['tight_star',['../classDisplayTeX.html#a706b02e234e4bf4910c38653c9505501',1,'DisplayTeX']]],
   ['timeout_5ft',['timeout_t',['../classexec__stream__t.html#a5ad2147c3f65e90679897e93e870fb0b',1,'exec_stream_t']]],
+  ['title_5fprefix',['title_prefix',['../classcadabra_1_1NotebookWindow.html#afad2e23b8a151b0fd02d66ceeeaa1d20',1,'cadabra::NotebookWindow']]],
   ['to',['to',['../classInteger.html#a03e00e5e36db4a0d8405efe433ee0611',1,'Integer']]],
   ['to_5ffactor_5fout',['to_factor_out',['../classfactor__out.html#a301fc9abedc3f5a3ffd756eb99a2e102',1,'factor_out']]],
   ['to_5ffactor_5fout_5ft',['to_factor_out_t',['../classfactor__out.html#a2d293a4c9ed8134f639267cc9baf5748',1,'factor_out']]],

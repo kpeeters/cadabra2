@@ -9,7 +9,6 @@ var searchData=
   ['weyl',['weyl',['../classSpinor.html#a31711e1b294a47f458eb5852d914f321',1,'Spinor']]],
   ['wgh',['wgh',['../classdrop__keep__weight.html#a041c54a82efea4c9a7d8a7869b36059d',1,'drop_keep_weight']]],
   ['width_5f',['width_',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a206abf1c9efd0684401a0348b8bebb21',1,'cadabra::TeXEngine::TeXRequest']]],
-  ['windows',['windows',['../classCadabra.html#a7f1e79972a5e29e459ba11a6671e2713',1,'Cadabra']]],
   ['ws_5fmutex',['ws_mutex',['../classServer.html#a5ffcd6a9e2c7a5b7f5d5dc30eb1845d4',1,'Server']]],
   ['wsclient',['wsclient',['../classcadabra_1_1ComputeThread.html#ab34e81c19720b1352777d42f2671d94d',1,'cadabra::ComputeThread::wsclient()'],['../classsnoop_1_1SnoopImpl.html#a645609b5c9d054c9c8c4fce7352c464f',1,'snoop::SnoopImpl::wsclient()']]],
   ['wsclient_5fthread',['wsclient_thread',['../classsnoop_1_1SnoopImpl.html#a4fa9670b72c17ad04cab80ed507d45ec',1,'snoop::SnoopImpl']]],

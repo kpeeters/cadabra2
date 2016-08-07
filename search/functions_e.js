@@ -15,7 +15,7 @@ var searchData=
   ['nonscalarexception',['NonScalarException',['../classNonScalarException.html#a687a9e17be3536776b24639da3dcee03',1,'NonScalarException']]],
   ['nonstandard_5floc',['nonstandard_loc',['../classyngtab_1_1filled__tableau.html#aa3caf7d2ec239278add64b836c39c995',1,'yngtab::filled_tableau']]],
   ['notebookcanvas',['NotebookCanvas',['../classcadabra_1_1NotebookCanvas.html#a0169f785f06e4cc377f7d9096bcd1826',1,'cadabra::NotebookCanvas']]],
-  ['notebookwindow',['NotebookWindow',['../classcadabra_1_1NotebookWindow.html#a3ce3f702eea1636dcb3f933a2c217f95',1,'cadabra::NotebookWindow::NotebookWindow()'],['../classcadabra__osx_1_1NotebookWindow.html#a946f38cf44d08ec86f75d1844f55696c',1,'cadabra_osx::NotebookWindow::NotebookWindow()']]],
+  ['notebookwindow',['NotebookWindow',['../classcadabra_1_1NotebookWindow.html#a662aae2472de3a0d6331f0a4b2f21927',1,'cadabra::NotebookWindow::NotebookWindow()'],['../classcadabra__osx_1_1NotebookWindow.html#a946f38cf44d08ec86f75d1844f55696c',1,'cadabra_osx::NotebookWindow::NotebookWindow()']]],
   ['nth_5findex_5fnode',['nth_index_node',['../classyoung__project.html#a9f176f49aa34f4217f981cfb23a32fcd',1,'young_project']]],
   ['number_5fof_5fcells_5fexecuting',['number_of_cells_executing',['../classcadabra_1_1ComputeThread.html#a569e63c9e8a88a4c7e4555f1cb0e90ca',1,'cadabra::ComputeThread']]],
   ['number_5fof_5fdirect_5findices',['number_of_direct_indices',['../classAlgorithm.html#a3f3fe4b1ad135fb6159314cccfa88444',1,'Algorithm']]],

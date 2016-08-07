@@ -31,7 +31,7 @@ var searchData=
   ['advance',['advance',['../classParser.html#a195f9e7e4a5ac404552630d4e4dd1196',1,'Parser']]],
   ['after',['after',['../classcadabra_1_1ActionAddCell.html#ad6b469653c850b1ee245e46accbca2c1a632a2406bbcbcd553eec45ac14b40a0a',1,'cadabra::ActionAddCell']]],
   ['after_5ftree_5fchange',['after_tree_change',['../classMyClient.html#ab06666321c2eba32f245cdbe23a12f02',1,'MyClient']]],
-  ['algorithm',['Algorithm',['../classAlgorithm.html',1,'Algorithm'],['../classAlgorithm.html#a2a57d262e4d04e7d3ee81cbe1f03dee4',1,'Algorithm::Algorithm()']]],
+  ['algorithm',['Algorithm',['../classAlgorithm.html',1,'Algorithm'],['../classAlgorithm.html#a2a57d262e4d04e7d3ee81cbe1f03dee4',1,'Algorithm::Algorithm()'],['../classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6aaed469618898d75b149e5c7c4b6a1c415',1,'cadabra::DocumentThread::algorithm()']]],
   ['algorithm_2ecc',['Algorithm.cc',['../Algorithm_8cc.html',1,'']]],
   ['algorithm_2ehh',['Algorithm.hh',['../Algorithm_8hh.html',1,'']]],
   ['algorithms',['Algorithms',['../group__algorithms.html',1,'']]],

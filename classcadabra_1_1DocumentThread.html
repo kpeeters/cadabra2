@@ -162,6 +162,13 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
 Protected Types</h2></td></tr>
+<tr class="memitem:a21a99901925543192381be495284be6a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6a">help_t</a> { <a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6aaed469618898d75b149e5c7c4b6a1c415">help_t::algorithm</a>, 
+<a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6aa1a8db4c996d8ed8289da5f957879ab94">help_t::property</a>, 
+<a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6aa25f7e525b5c0641e1eb1fb3bdbeb15b5">help_t::latex</a>, 
+<a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6aa334c4a4c42fdb79d7ebc3e73b517e6f8">help_t::none</a>
+ }</td></tr>
+<tr class="memdesc:a21a99901925543192381be495284be6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Help system.  <a href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6a">More...</a><br/></td></tr>
+<tr class="separator:a21a99901925543192381be495284be6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80fb293f063dd9150bc3c911de9c722a"><td class="memItemLeft" align="right" valign="top">typedef std::stack<br class="typebreak"/>
 &lt; std::shared_ptr&lt; <a class="el" href="classcadabra_1_1ActionBase.html">ActionBase</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a80fb293f063dd9150bc3c911de9c722a">ActionStack</a></td></tr>
 <tr class="separator:a80fb293f063dd9150bc3c911de9c722a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,6 +178,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aedaa6ca651cb27090babaa6a41350cc1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#aedaa6ca651cb27090babaa6a41350cc1">process_action_queue</a> ()</td></tr>
 <tr class="memdesc:aedaa6ca651cb27090babaa6a41350cc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the action queue.  <a href="#aedaa6ca651cb27090babaa6a41350cc1">More...</a><br/></td></tr>
 <tr class="separator:aedaa6ca651cb27090babaa6a41350cc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3d5adc63d75c6ad0ea0a480192a275f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#ac3d5adc63d75c6ad0ea0a480192a275f">help_type_and_topic</a> (const std::string &amp;before, const std::string &amp;after, <a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6a">help_t</a> &amp;help_type, std::string &amp;help_topic) const </td></tr>
+<tr class="separator:ac3d5adc63d75c6ad0ea0a480192a275f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -213,6 +222,39 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a class="anchor" id="a21a99901925543192381be495284be6a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6a">cadabra::DocumentThread::help_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Help system. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="a21a99901925543192381be495284be6aaed469618898d75b149e5c7c4b6a1c415"></a>algorithm</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a21a99901925543192381be495284be6aa1a8db4c996d8ed8289da5f957879ab94"></a>property</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a21a99901925543192381be495284be6aa25f7e525b5c0641e1eb1fb3bdbeb15b5"></a>latex</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="a21a99901925543192381be495284be6aa334c4a4c42fdb79d7ebc3e73b517e6f8"></a>none</em>&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
 
 </div>
 </div>
@@ -273,6 +315,52 @@ Protected Attributes</h2></td></tr>
 
 <p>Ensure that the gui has an up-to-date representation of the dtree. </p>
 <p>Traverses the entire tree so is expensive to run and should only be used when loading new documents or creating a new canvas view. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac3d5adc63d75c6ad0ea0a480192a275f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DocumentThread::help_type_and_topic </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>before</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>after</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1DocumentThread.html#a21a99901925543192381be495284be6a">help_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>help_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>help_topic</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -661,7 +749,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 5 2016 16:37:49 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Aug 7 2016 20:07:49 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

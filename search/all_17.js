@@ -32,7 +32,6 @@ var searchData=
   ['width',['width',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#afb92193f1f32fa1ddbcc8fb98e3c091f',1,'cadabra::TeXEngine::TeXRequest']]],
   ['width_5f',['width_',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a206abf1c9efd0684401a0348b8bebb21',1,'cadabra::TeXEngine::TeXRequest']]],
   ['window',['window',['../categoryAppDelegate_07_08.html#ab23aa75c68dacbf295bd62577cfbef88',1,'AppDelegate()']]],
-  ['windows',['windows',['../classCadabra.html#a7f1e79972a5e29e459ba11a6671e2713',1,'Cadabra']]],
   ['wrap',['wrap',['../classintegrate__by__parts.html#a4b4424eb8c478e5700d4ac9784d5bf93',1,'integrate_by_parts']]],
   ['write',['write',['../classServer_1_1CatchOutput.html#afaeb362ba4c863330c4e70bf75d8f8d6',1,'Server::CatchOutput::write()'],['../popen2_8cc.html#aa10f470e996d0f51210d24f442d25e1e',1,'WRITE():&#160;popen2.cc']]],
   ['ws_5fmutex',['ws_mutex',['../classServer.html#a5ffcd6a9e2c7a5b7f5d5dc30eb1845d4',1,'Server']]],
