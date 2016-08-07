@@ -97,6 +97,7 @@ set(PROPS
   SortOrder
   Spinor
   Symmetric
+  TableauSymmetry
 )
 
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)
