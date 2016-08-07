@@ -16,13 +16,13 @@
 
 using namespace cadabra;
 
-NotebookWindow::NotebookWindow(Cadabra *c)
+NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
 	  cdbapp(c),
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
-	  kernel_spinner_status(false),
-	  modified(false)
+	  kernel_spinner_status(false), title_prefix("Cadabra: "),
+	  modified(false), read_only(ro)
 	{
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
@@ -72,6 +72,8 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 							sigc::mem_fun(*this, &NotebookWindow::on_file_new) );
 	actiongroup->add( Gtk::Action::create("Open", Gtk::Stock::OPEN), Gtk::AccelKey("<control>O"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_open) );
+	actiongroup->add( Gtk::Action::create("Close", Gtk::Stock::CLOSE), Gtk::AccelKey("<control>W"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_close) );
 	actiongroup->add( Gtk::Action::create("Save", Gtk::Stock::SAVE), Gtk::AccelKey("<control>S"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
 	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS),
@@ -139,6 +141,7 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"    <menu action='MenuFile'>"
 		"      <menuitem action='New'/>"
 		"      <menuitem action='Open'/>"
+		"      <menuitem action='Close'/>"
 		"      <separator/>"
 		"      <menuitem action='Save'/>"
 		"      <menuitem action='SaveAs'/>"
@@ -148,7 +151,9 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"      <menuitem action='ExportPython'/>"
 		"      <separator/>"
 		"      <menuitem action='Quit'/>"
-		"    </menu>"
+		"    </menu>";
+	if(!read_only) 
+		ui_info+=
 		"    <menu action='MenuEdit'>"
 		"      <menuitem action='EditUndo' />"
 		"      <separator/>"
@@ -174,7 +179,8 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"    </menu>"
 		"    <menu action='MenuKernel'>"
 		"      <menuitem action='KernelRestart' />"
-		"    </menu>"
+			"    </menu>";
+	ui_info+=
 		"    <menu action='MenuHelp'>"
 //		"      <menuitem action='HelpNotebook' />"
 		"      <menuitem action='HelpAbout' />"
@@ -202,7 +208,7 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	topbox.pack_start(statusbarbox, false, false);
 	supermainbox.pack_start(mainbox, true, true);
 
-	
+
 	// Status bar
 	status_label.set_alignment( 0.0, 0.5 );
 	kernel_label.set_alignment( 0.0, 0.5 );
@@ -217,17 +223,13 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	progressbar.set_text("idle");
 	progressbar.set_show_text(true);
 
-	// Buttons
-	set_stop_sensitive(false);
 
 	// The three main widgets
 //	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
 
 	// We always have at least one canvas.
 	canvasses.push_back(manage( new NotebookCanvas() ));
-//	canvasses.push_back(manage( new NotebookCanvas() ));
 	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
-//	mainbox.pack_start(*canvasses[1], Gtk::PACK_EXPAND_WIDGET, 0);
 
 
 	// Window size and title, and ready to go.
@@ -238,6 +240,15 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	update_title();
 	show_all();
 	kernel_spinner.hide();
+	if(read_only) {
+		statusbarbox.hide();
+		progressbar.hide();
+		toolbar->hide();
+		} 
+	else {
+		// Buttons
+		set_stop_sensitive(false);
+		}
 
 	new_document();
 	}
@@ -278,13 +289,18 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	return ret;
 	}
 
+void NotebookWindow::set_title_prefix(const std::string& pf)
+	{
+	title_prefix=pf;
+	}
+
 void NotebookWindow::update_title()
 	{
 	if(name.size()>0) {
 		if(modified)
-			set_title("Cadabra: "+name+"*");
+			set_title(title_prefix+name+"*");
 		else
-			set_title("Cadabra: "+name);
+			set_title(title_prefix+name);
 		}
 	else {
 		if(modified) 
@@ -465,6 +481,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					global_buffer=ci->buffer;
 					}
 				else ci = new CodeInput(it, global_buffer,scale);
+				if(read_only)
+					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
 				ci->edit.content_changed.connect( 
@@ -832,6 +850,12 @@ void NotebookWindow::on_file_new()
 		}
 	}
 
+void NotebookWindow::on_file_close()
+	{
+	if(quit_safeguard(true))
+		hide();
+	}
+
 void NotebookWindow::on_file_open()
 	{
 	if(quit_safeguard(false)==false)
@@ -1076,6 +1100,8 @@ bool NotebookWindow::quit_safeguard(bool quit)
 
 void NotebookWindow::on_file_quit()
 	{
+	// FIXME: this needs to not just close the current window, but also all
+	// other ones.
 	if(quit_safeguard(true)) 
 		hide();
 	}
@@ -1173,6 +1199,8 @@ void NotebookWindow::on_view_close()
 
 void NotebookWindow::on_run_cell()
 	{
+	if(read_only) return;
+
 	// This is actually handled by the CodeInput widget, which ensures that the
 	// DTree is up to date and then calls execute.
 	
@@ -1223,12 +1251,22 @@ void NotebookWindow::on_help() const
 	help_t help_type;
 	std::string help_topic;
 	help_type_and_topic(before, after, help_type, help_topic);
-	std::cerr << help_topic << std::endl;
 
+	bool ret=false;
 	if(help_type==help_t::algorithm)
-		cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb");
+		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb",
+									 help_topic);
 	if(help_type==help_t::property)
-		cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/properties/"+help_topic+".cnb");
+		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/properties/"+help_topic+".cnb",
+									 help_topic);
+
+	if(!ret) {
+		Gtk::MessageDialog md("No help available", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+//		md.set_transient_for(*this);
+		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		md.set_secondary_text("No help available for '"+help_topic+"'.\nNot all algorithms and properties have manual pages yet, sorry.");
+		md.run();
+		}
 	}
 
 void NotebookWindow::on_help_about()

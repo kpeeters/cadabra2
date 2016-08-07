@@ -27,19 +27,10 @@ Glib::RefPtr<Cadabra> Cadabra::create(int argc, char **argv)
 	}
 
 Cadabra::Cadabra(int argc, char **argv)
-	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra", Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
+	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra", 
+							 Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
 	  compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
-	windows.push_back(new cadabra::NotebookWindow(this));
-	compute.set_master(windows[0], windows[0]);
-
-	// Connect the two threads.
-	windows[0]->set_compute_thread(&compute);
-	
-	// Setup ctrl-C handler so we can shut down gracefully (i.e. ask
-	// for confirmation, shut down server).
-	signal_window = windows[0];
-	signal(SIGINT, signal_handler);
 	}
 
 Cadabra::~Cadabra()
@@ -49,18 +40,29 @@ Cadabra::~Cadabra()
 	compute.terminate();
 	compute_thread.join();
 
-	for(auto w: windows)
-		delete w;
+//	for(auto w: windows)
+//		delete w;
 	}
 
 void Cadabra::on_activate()
 	{
-	add_window(*windows[0]);
-	windows[0]->show();
+	auto nw = new cadabra::NotebookWindow(this);
+	compute.set_master(nw, nw);
 
-	if(!windows[0]->is_registered()) {
-		Gtk::Dialog md("Welcome to Cadabra!", *windows[0], Gtk::MESSAGE_WARNING);
-		md.set_transient_for(*windows[0]);
+	// Connect the two threads.
+	nw->set_compute_thread(&compute);
+	
+	// Setup ctrl-C handler so we can shut down gracefully (i.e. ask
+	// for confirmation, shut down server).
+	signal_window = nw;
+	signal(SIGINT, signal_handler);
+
+   add_window(*nw);
+	nw->show();
+
+	if(!nw->is_registered()) {
+		Gtk::Dialog md("Welcome to Cadabra!", *nw, Gtk::MESSAGE_WARNING);
+		md.set_transient_for(*nw);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		Gtk::Box *box = md.get_content_area();
 		Gtk::Label txt;
@@ -104,7 +106,7 @@ void Cadabra::on_activate()
 		hbox.pack_end(reg, Gtk::PACK_SHRINK, 10);
 		hbox.pack_start(nothanks, Gtk::PACK_SHRINK,10);
 		reg.signal_clicked().connect([&]() {
-				windows[0]->set_user_details(name.get_text(), email.get_text(), affiliation.get_text());
+				nw->set_user_details(name.get_text(), email.get_text(), affiliation.get_text());
 				md.hide();
 				});
 		nothanks.signal_clicked().connect([&]() {
@@ -136,20 +138,26 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 		}
 
 	// Tell the window to open the notebook stored in the string.
-	windows[0]->set_name(files[0]->get_path());
-	windows[0]->load_file(text);
+	auto wins = get_windows();
+	auto nw = static_cast<cadabra::NotebookWindow *>(wins[0]);
+	nw->set_name(files[0]->get_path());
+	nw->load_file(text);
 	Gtk::Application::on_open(files, hint);
 	}
 
-void Cadabra::open_help(const std::string& nm) 
+bool Cadabra::open_help(const std::string& nm, const std::string& title) 
 	{
-	std::cerr << "opening help document " << nm << std::endl;
-	windows.push_back(new cadabra::NotebookWindow(this));
 	std::ifstream fl(nm);
-	if(fl.is_open()) {
+	if(fl) {
+		auto nw = new cadabra::NotebookWindow(this, true);
+		nw->set_title_prefix("Cadabra help for ");
+		nw->set_name(title);
+		add_window(*nw);
 		std::stringstream buffer;
 		buffer << fl.rdbuf();
-		windows[1]->load_file(buffer.str());
-		windows[1]->show();
+		nw->load_file(buffer.str());
+		nw->show();
+		return true;
 		}
+	else return false;
 	}

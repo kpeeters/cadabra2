@@ -12,7 +12,7 @@ class Cadabra : public Gtk::Application {
 	public:
 		static Glib::RefPtr<Cadabra> create(int, char **);
 
-		void open_help(const std::string&);
+		bool open_help(const std::string& filename, const std::string& title);
 
 	protected:
 		Cadabra(int, char**);
@@ -22,7 +22,6 @@ class Cadabra : public Gtk::Application {
 		void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
 
 	private:
-		std::vector<cadabra::NotebookWindow *> windows;
 		cadabra::ComputeThread                 compute;
 		std::thread                            compute_thread;
 };

@@ -37,7 +37,7 @@ namespace cadabra {
 
    class NotebookWindow : public Gtk::Window, public DocumentThread, public GUIBase {
       public:
-         NotebookWindow(Cadabra *);
+         NotebookWindow(Cadabra *, bool read_only=false);
          ~NotebookWindow();
         
          // Virtual functions from GUIBase.
@@ -65,6 +65,7 @@ namespace cadabra {
 			sigc::connection grab_connection;
 
 			void set_name(const std::string&);
+			void set_title_prefix(const std::string&);
 			void load_file(const std::string& notebook_contents);
 
 
@@ -120,12 +121,13 @@ namespace cadabra {
 			void             update_title();
 			void             set_stop_sensitive(bool);
 			void             scroll_into_view(DTree::iterator);
-			std::string      name;
-			bool             modified;
+			std::string      name, title_prefix;
+			bool             modified, read_only;
 
 			// Menu and button callbacks.
 			void on_file_new();
 			void on_file_open();
+			void on_file_close();
 			void on_file_save();
 			void on_file_save_as();
 			void on_file_export_html();
