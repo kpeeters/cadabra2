@@ -36,11 +36,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "yields the symmetries of the Riemann tensor, that is, the symmetries of a Young tableau\nwith two rows of two boxes each. Note that indices are\ncounted from zero. You can see that this works by showing that the cyclic identity \nholds,\n"
+					"source" : "yields the symmetries of the Riemann tensor, that is, the symmetries of a Young tableau\nwith two rows of two boxes each. Note that indices are\ncounted from zero. You can see that this works by showing that the cyclic identity \nholds, using \\algo{young_project_tensor},\n"
 				}
 			],
 			"hidden" : true,
-			"source" : "yields the symmetries of the Riemann tensor, that is, the symmetries of a Young tableau\nwith two rows of two boxes each. Note that indices are\ncounted from zero. You can see that this works by showing that the cyclic identity \nholds,\n"
+			"source" : "yields the symmetries of the Riemann tensor, that is, the symmetries of a Young tableau\nwith two rows of two boxes each. Note that indices are\ncounted from zero. You can see that this works by showing that the cyclic identity \nholds, using \\algo{young_project_tensor},\n"
 		},
 		{
 			"cell_origin" : "client",
