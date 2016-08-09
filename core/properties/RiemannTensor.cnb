@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\property{RiemannTensor}{Make an object a Riemann curvature tensor.}\n\nGives an object the symmetry properties of a Riemann tensor. This has implications for various\nsimplification algorithms such as \\algo{canonicalise} or \\algo{young_project}.\n\nThe following is an example which makes use of the Ricci identity."
+					"source" : "\\property{RiemannTensor}{Make an object a Riemann curvature tensor.}\n\nGives an object the symmetry properties of a Riemann tensor. This has implications for various\nsimplification algorithms such as \\algo{canonicalise} or \\algo{young_project_tensor}.\n\nThe following is an example which makes use of the Ricci identity."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\property{RiemannTensor}{Make an object a Riemann curvature tensor.}\n\nGives an object the symmetry properties of a Riemann tensor. This has implications for various\nsimplification algorithms such as \\algo{canonicalise} or \\algo{young_project}.\n\nThe following is an example which makes use of the Ricci identity."
+			"source" : "\\property{RiemannTensor}{Make an object a Riemann curvature tensor.}\n\nGives an object the symmetry properties of a Riemann tensor. This has implications for various\nsimplification algorithms such as \\algo{canonicalise} or \\algo{young_project_tensor}.\n\nThe following is an example which makes use of the Ricci identity."
 		},
 		{
 			"cell_origin" : "client",
