@@ -66,13 +66,40 @@ This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra-gtk``. You can also find the latter in
 the 'Education' menu.
 
+Linux (Fedora 24)
+~~~~~~~~~~~~~~~~~
 
-Linux (Fedora/CentOS/Scientific Linux)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Fedora 24 is the first Fedora to have Python 3 by default; for older
+Fedora versions see below. Install the dependencies with::
+
+    sudo dnf install python3-devel cmake gcc-c++ 
+    sudo dnf install pcre-devel gmp-devel libuuid-devel sqlite-devel
+    sudo dnf install gtkmm30-devel boost3-devel boost-python3-devel
+    sudo dnf install texlive python3-matplotlib
+    sudo dnf install python3-pip
+    sudo pip3 install sympy
+
+This platform receives less testing so please get in touch if you run
+into any issues. You can use either g++ or the clang++
+compiler. Building is then done with the standard::
+
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
+
+This will produce the command line app ``cadabra2`` and the Gtk
+notebook interface ``cadabra-gtk``. You can also find the latter in
+the 'Education' menu.
+
+
+Linux (Fedora <=23/CentOS/Scientific Linux)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On Fedora/CentOS/Scientific Linux you can install the dependencies with::
 
-    sudy yum install epel-release
+    sudo yum install epel-release
     sudo yum install python-devel cmake gcc-c++ 
     sudo yum install pcre-devel gmp-devel libuuid-devel sqlite-devel
     sudo yum install gtkmm30-devel boost-devel 
