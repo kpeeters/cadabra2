@@ -241,10 +241,14 @@ def test106():
     
 test106()
     
-# def test106():
-# ex:= Q_{m n} -> A_{m n} - B_{m n};
-# substitute(ex, $m -> 2$);
-# tst:= A_{2 n} - B_{2 n};
-# assert(tst==0)
+def test107():
+    __cdbkernel__=create_scope()
+    ex:= A_{m n} - B_{m n};
+    substitute(ex, $m -> 2$);
+    tst:= A_{2 n} - B_{2 n} - @(ex);
+    assert(tst==0)
+    print("Test 107 passed")
+
+test107()
 
 
