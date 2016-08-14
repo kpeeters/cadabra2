@@ -349,6 +349,9 @@ void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, cons
 
 void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it) 
 	{
+	if(*it->multiplier!=1) {
+		std::cerr << Ex(it) << std::endl;
+		}
 	assert(*it->multiplier==1);
 
 	if(needs_brackets(it)) 

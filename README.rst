@@ -94,7 +94,7 @@ notebook interface ``cadabra-gtk``. You can also find the latter in
 the 'Education' menu.
 
 
-Linux (Fedora <=23/CentOS/Scientific Linux)
+Linux (Fedora ≤23/CentOS/Scientific Linux)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On Fedora/CentOS/Scientific Linux you can install the dependencies with::
