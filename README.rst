@@ -32,13 +32,15 @@ Installation
 Cadabra builds on Linux and Mac OS X, select your distribution below:
 
 - `Linux (Debian/Ubuntu/Mint)`_
-- `Linux (Fedora/CentOS/Scientific Linux)`_
+- `Linux (Fedora 24)`_
+- `Linux (Fedora <=23/CentOS/Scientific Linux)`_
+- `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Mac OS X`_
 
-Binaries for all these platforms will be provided as soon as we get to
-a somewhat more stable state; for the time being you need to compile
-from source.
+Binaries for these platforms may (or may not) be provided from the
+download page at http://cadabra.science/download.html, but they are
+not always very up-to-date.
 
 
 Linux (Debian/Ubuntu/Mint)
@@ -74,7 +76,7 @@ Fedora versions see below. Install the dependencies with::
 
     sudo dnf install python3-devel cmake gcc-c++ 
     sudo dnf install pcre-devel gmp-devel libuuid-devel sqlite-devel
-    sudo dnf install gtkmm30-devel boost3-devel boost-python3-devel
+    sudo dnf install gtkmm30-devel boost-devel boost-python3-devel
     sudo dnf install texlive python3-matplotlib
     sudo dnf install python3-pip
     sudo pip3 install sympy
@@ -125,6 +127,37 @@ compiler. Building is then done with the standard::
 This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra-gtk``. You can also find the latter in
 the 'Education' menu.
+
+Linux (OpenSUSE)
+~~~~~~~~~~~~~~~~
+
+For OpenSUSE (tested on 'Leap', probably also fine for 'Tumbleweed')
+the dependencies can be installed with::
+
+    sudo zypper install cmake python3-devel gcc-c++
+    sudo zypper install pcre-devel gmp-devel libuuid-devel sqlite-devel
+    sudo zypper install gtkmm3-devel 
+    sudo zypper install texlive python3-matplotlib
+    sudo zypper install python3-pip
+    sudo pip3 install sympy
+
+You then also need to install `boost_1_61-devel` and
+`libboost_python3-1_61_0` by using the `devel:libraries:c_c++` repository;
+see
+    
+    https://software.opensuse.org/package/libboost_python3-1_61_0
+
+This platform receives less testing so please get in touch if you run
+into any issues. Building is then done with the standard::
+
+    mkdir build
+    cd build
+    cmake .. 
+    make
+    sudo make install
+
+This will produce the command line app ``cadabra2`` and the Gtk
+notebook interface ``cadabra-gtk``. 
 
 
 Linux (Arch/Manjaro)
