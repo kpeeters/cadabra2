@@ -175,11 +175,9 @@ bool push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it)
 	if(*it->name=="\\sum") {
 		auto sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
-			if(mult!=1) {
-				ret=true;
-				multiply(sib->multiplier, mult);
-				push_down_multiplier(k, tr, sib);
-				}
+			ret=true;
+			multiply(sib->multiplier, mult);
+			push_down_multiplier(k, tr, sib);
 			++sib;
 			}
 		if(*it->multiplier!=1)
