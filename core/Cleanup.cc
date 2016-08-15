@@ -196,7 +196,10 @@ bool push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it)
 					ret=true;
 					multiply(val->multiplier, mult);
 					}
-				ret = ret || push_down_multiplier(k, tr, val);
+            // Need to evaluate it; just putting it in '||' may lead to the compiler not evaluating it if 
+				// 'ret' is already true!
+				bool tmp = push_down_multiplier(k, tr, val); 
+				ret = ret || tmp;
 				return true;
 				});
 		if(*it->multiplier!=1)

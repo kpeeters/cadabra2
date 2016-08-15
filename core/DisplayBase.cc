@@ -11,8 +11,6 @@ void DisplayBase::output(std::ostream& str)
 	Ex::iterator it=tree.begin();
 	if(it==tree.end()) return;
 
-	std::cerr << Ex(it) << std::endl;
-
 	output(str, it);
 	}
 

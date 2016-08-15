@@ -10,14 +10,14 @@
 
 def test02():
     __cdbkernel__=create_scope()
-{r,t}::Coordinate.
-{m,n,p,s}::Indices(values={t,r}).
-\partial{#}::PartialDerivative.
-C::Depends(r,t).
-ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
-rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];
-evaluate(ex, rl);
-tst:= \components_{s}(\comma{r}= 6 r**2 t + 6, \comma{t}=15 t**2) - @(ex):
+    {r,t}::Coordinate.
+    {m,n,p,s}::Indices(values={t,r}).
+    \partial{#}::PartialDerivative.
+    C::Depends(r,t).
+    ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
+    rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];
+    evaluate(ex, rl);
+    tst:= \components_{s}(\comma{r}= 6 r**2 t + 6, \comma{t}=15 t**2) - @(ex):
     collect_components(_);
     assert(tst==0)
     print("Test 02 passed");
