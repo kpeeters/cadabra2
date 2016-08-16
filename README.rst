@@ -131,21 +131,22 @@ the 'Education' menu.
 Linux (OpenSUSE)
 ~~~~~~~~~~~~~~~~
 
-For OpenSUSE (tested on 'Leap', probably also fine for 'Tumbleweed')
-the dependencies can be installed with::
+For OpenSUSE (tested on 'Leap', probably also fine with minor changes
+for 'Tumbleweed') you first need to add the `devel:libraries:c_c++`
+repository. To do this, start YaST, go to Software/Software
+Repositories/Add/Add by URL.  Use the URL
+
+    http://download.opensuse.org/repositories/devel:/libraries:/c_c++/openSUSE_Leap_42.1
+
+After that, dependencies can be installed with::
 
     sudo zypper install cmake python3-devel gcc-c++
     sudo zypper install pcre-devel gmp-devel libuuid-devel sqlite-devel
     sudo zypper install gtkmm3-devel 
     sudo zypper install texlive python3-matplotlib
     sudo zypper install python3-pip
+    sudo zypper install boost_1_61-devel libboost_python3-1_61_0
     sudo pip3 install sympy
-
-You then also need to install `boost_1_61-devel` and
-`libboost_python3-1_61_0` by using the `devel:libraries:c_c++` repository;
-see
-    
-    https://software.opensuse.org/package/libboost_python3-1_61_0
 
 This platform receives less testing so please get in touch if you run
 into any issues. Building is then done with the standard::
