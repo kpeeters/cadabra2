@@ -10,7 +10,7 @@
 # For some reason, on openSUSE, you cannot write the
 # ls-R even when running texhash as root... and the 
 # folder needs to be sticky... Hack.
-if("@CPACK_SYSTEM_NAME@" == "leap421"); then
+if [ "@CPACK_SYSTEM_NAME@" == "leap421" ]; then
 	TEXPATH=`kpsewhich -var-value=TEXMFLOCAL`
 	chmod o+t ${TEXPATH}
    chmod go+w ${TEXPATH}/ls-R
