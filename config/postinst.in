@@ -1,10 +1,17 @@
 #!/bin/sh
 #
-# Script to be included in the cadabra2.deb package and to be run 
-# after installation, to make TeX pick up our style sheets.
+# Script to be included in the cadabra2 packages (deb/rpm) and to be
+# run after installation, to make TeX pick up our style sheets and
+# the desktop pickup our menu entry/icon.
 
 /sbin/ldconfig -v
+
+# kpsewhich wants its folders to be sticky, otherwise
+# it simply refuses to generate an ls-R in it.
+TEXPATH=`kpsewhich -var-value=TEXMFLOCAL`
+chmod o+t ${TEXPATH}
 texhash
+
 if hash gtk-update-icon-cache-3.0 2>/dev/null; then 
    gtk-update-icon-cache-3.0 -t /usr/share/icons/hicolor
 else
