@@ -87,7 +87,7 @@ else()
    endif()
 endif()
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT_BINARY_DIR}/postinst")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT_BINARY_DIR}/postinst" @ONLY)
 
 if(USE_PYTHON_3)
   message("-- Building for use with Python 3 (good!)")
