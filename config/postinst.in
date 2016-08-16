@@ -6,7 +6,7 @@
 
 /sbin/ldconfig -v
 
-# kpsewhich wants its folders to be sticky, otherwise
+# kpathsea wants its folders to be sticky, otherwise
 # it simply refuses to generate an ls-R in it.
 TEXPATH=`kpsewhich -var-value=TEXMFLOCAL`
 chmod o+t ${TEXPATH}
