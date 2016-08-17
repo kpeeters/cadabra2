@@ -372,6 +372,11 @@ table.packages .system {
 table.packages .date {
 	 white-space: nowrap;
 }
+table.packages .instructions {
+	 font-size: smaller;
+	 padding-left: 20px;
+	 text-align: left;
+}
 table.packages td {
 	 vertical-align: top;
 }
