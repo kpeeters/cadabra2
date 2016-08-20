@@ -61,7 +61,7 @@ var searchData=
   ['texview',['TeXView',['../classcadabra_1_1TeXView.html',1,'cadabra']]],
   ['texview_2ecc',['TeXView.cc',['../TeXView_8cc.html',1,'']]],
   ['texview_2ehh',['TeXView.hh',['../TeXView_8hh.html',1,'']]],
-  ['theta',['theta',['../Symbols_8cc.html#ad387e4d205b9bd2ae497a2efd57be0da',1,'theta():&#160;Symbols.cc'],['../Symbols_8cc.html#ad9515854d25ac82b322b8ab5fc7698bd',1,'Theta():&#160;Symbols.cc']]],
+  ['theta',['Theta',['../Symbols_8cc.html#ad9515854d25ac82b322b8ab5fc7698bd',1,'Theta():&#160;Symbols.cc'],['../Symbols_8cc.html#ad387e4d205b9bd2ae497a2efd57be0da',1,'theta():&#160;Symbols.cc']]],
   ['this_5fapp_5f',['this_app_',['../classsnoop_1_1SnoopImpl.html#a747adcdb27facc1d0fbc2424d6b4496e',1,'snoop::SnoopImpl']]],
   ['this_5fcell',['this_cell',['../classcadabra_1_1ActionSetRunStatus.html#a017d55a32cb118932e79dec580d0e24b',1,'cadabra::ActionSetRunStatus::this_cell()'],['../classcadabra_1_1ActionRemoveCell.html#a40369ef2f211168432a15d60066b49ab',1,'cadabra::ActionRemoveCell::this_cell()'],['../classcadabra_1_1ActionSplitCell.html#ac0a871020b962de2e2dbbf69c4011490',1,'cadabra::ActionSplitCell::this_cell()']]],
   ['this_5flog_5f',['this_log_',['../classsnoop_1_1SnoopImpl.html#aaa42bb68a413e669ac3c25dda725ee79',1,'snoop::SnoopImpl']]],

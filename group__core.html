@@ -168,7 +168,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:gad925ab5545854ee596c218738f11b013"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensure that the tree is a list, even if it contains only a single element.  <a href="#gad925ab5545854ee596c218738f11b013">More...</a><br/></td></tr>
 <tr class="separator:gad925ab5545854ee596c218738f11b013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaff2a0c5f8749e25b136df72748e13363"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#gaff2a0c5f8749e25b136df72748e13363">pre_clean_dispatch</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
-<tr class="memdesc:gaff2a0c5f8749e25b136df72748e13363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions:  <a href="#gaff2a0c5f8749e25b136df72748e13363">More...</a><br/></td></tr>
+<tr class="memdesc:gaff2a0c5f8749e25b136df72748e13363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions.  <a href="#gaff2a0c5f8749e25b136df72748e13363">More...</a><br/></td></tr>
 <tr class="separator:gaff2a0c5f8749e25b136df72748e13363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1ac55b1d1d20bb0352a5815c9e0a494c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga1ac55b1d1d20bb0352a5815c9e0a494c">multiply</a> (rset_t::iterator &amp;, <a class="el" href="Storage_8hh.html#aad74ea408f31d2d673c876764301e245">multiplier_t</a>)</td></tr>
 <tr class="memdesc:ga1ac55b1d1d20bb0352a5815c9e0a494c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions for manipulation of multipliers.  <a href="#ga1ac55b1d1d20bb0352a5815c9e0a494c">More...</a><br/></td></tr>
@@ -415,11 +415,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions: </p>
+<p>Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions. </p>
+<p>This does not involve the property system.</p>
 <ul>
 <li>All numerical multipliers in a product on the product node, no multiplier on a sum node.</li>
 <li>Any '\frac' nodes with a purely numerical denominator should be rewritten as a rational multiplier for the numerator node.</li>
-<li><a class="el" href="classDerivative.html">Derivative</a> nodes can have an arbitrary number of index child nodes and must have at least one function child node. The first function node is interpreted as the argument on which the derivative(s) act. All other nodes indicate with respect to which object or variable the derivatives are taken. </li>
+<li>Any \sub nodes get converted to \sum nodes. </li>
 </ul>
 
 </div>
@@ -427,7 +428,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Aug 20 2016 10:14:17 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Aug 20 2016 19:45:21 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
