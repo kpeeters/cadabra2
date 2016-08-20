@@ -143,12 +143,14 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 	// them back later.
 
 	// We need to know if the symbol has implicit dependence on other symbols,
-	// as this needs to be made explicit for sympy.
+	// as this needs to be made explicit for sympy. We need to strip this 
+	// dependence off later again.
 
 	const Depends *dep=kernel.properties.get<Depends>(it);
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	if(ch!=tree.end(it) || dep!=0) {
+		depsyms.insert(*it->name);
 		str << "(";
 		bool first=true;
 		while(ch!=tree.end(it)) {
@@ -481,11 +483,20 @@ void DisplaySympy::import(Ex& ex)
 	{
 	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
 			for(auto& m: symmap) {
+				// If we have converted the name of this symbol, convert back.
 				if(m.second==*it->name) {
 					it->name=name_set.insert(m.first).first;
 					break;
 					}
 				}
+			// See if we have added dependencies to this symbol (lookup in map).
+			// If yes, strip them off again.
+			auto fnd = depsyms.find(*it->name);
+			if(fnd!=depsyms.end()) {
+				if(*ex.begin(it)->name=="\\comma")
+					ex.erase(ex.begin(it));
+				}
+
 			return it;
 			});
 	}
