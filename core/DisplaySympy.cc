@@ -432,12 +432,13 @@ bool DisplaySympy::children_have_brackets(Ex::iterator ch) const
 
 void DisplaySympy::import(Ex& ex)
 	{
-	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) {
+	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
 			for(auto& m: symmap) {
 				if(m.second==*it->name) {
 					it->name=name_set.insert(m.first).first;
 					break;
 					}
 				}
+			return it;
 			});
 	}
