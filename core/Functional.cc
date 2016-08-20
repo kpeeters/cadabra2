@@ -1,7 +1,9 @@
 
 #include "Functional.hh"
 
-void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f)
+namespace cadabra {
+
+void do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f)
 	{
    if(*it->name=="\\comma") {
 		Ex::sibling_iterator sib=tr.begin(it);
@@ -18,7 +20,7 @@ void cadabra::do_list(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iter
 		}
 	}
 
-int cadabra::list_size(const Ex& tr, Ex::iterator it)
+int list_size(const Ex& tr, Ex::iterator it)
 	{
    if(*it->name=="\\comma") 
 		return tr.number_of_children(it);
@@ -26,7 +28,7 @@ int cadabra::list_size(const Ex& tr, Ex::iterator it)
 		return 1;
 	}
 
-void cadabra::do_subtree(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f)
+Ex::iterator do_subtree(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f)
 	{
 	Ex::post_order_iterator walk=it, last=it;
 	++last;
@@ -36,14 +38,19 @@ void cadabra::do_subtree(const Ex& tr, Ex::iterator it, std::function<void(Ex::i
 		auto nxt=walk;
 		++nxt;
 
-		f(walk);
+		bool cpy=false;
+		if(walk==it) cpy=true;
+		walk = f(walk);
+		if(cpy) it=walk;
 
 		walk=nxt;
 		} while(walk!=last);
+
+	return it;
 	}
 
 
-Ex::iterator cadabra::find_in_list(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f)
+Ex::iterator find_in_list(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f)
 	{
    if(*it->name=="\\comma") {
 		Ex::sibling_iterator sib=tr.begin(it);
@@ -60,7 +67,7 @@ Ex::iterator cadabra::find_in_list(const Ex& tr, Ex::iterator it, std::function<
 		}
 	}
 
-Ex cadabra::make_list(Ex el)
+Ex make_list(Ex el)
 	{
 	auto it=el.begin();
 
@@ -70,4 +77,5 @@ Ex cadabra::make_list(Ex el)
 	return el;
 	}
 
+}
 

@@ -759,9 +759,12 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin();
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
-		if(*it->name=="\\equals") 
+		if(*it->name=="\\equals") {
+			// std::cerr << "full expression:\n" << print_tree(&ex) << std::endl;
 			it=ex.child(it,1);
+			}
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
 		}
 	return &ex;

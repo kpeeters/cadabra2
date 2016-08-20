@@ -193,11 +193,9 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				++itarg;
 
 			cleanup_dispatch(kernel, tr, itarg);
-			
-			// Unnest products if necessary.
-			cleanup_dispatch(kernel, tr, it);
 			}
 		}
+	cleanup_dispatch(kernel, tr, it);
 
 	// std::cerr << "unwrap done " << Ex(it) << std::endl;
 

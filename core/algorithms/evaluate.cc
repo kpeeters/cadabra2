@@ -25,6 +25,8 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
+	// std::cerr << "evaluate::apply at " << *it->name << std::endl;
+
 	// Descend down the tree. The general logic of the routines this
 	// calls is that, instead of looping over all possible index value
 	// sets, we look straight at the substitution rules, and check that
@@ -35,22 +37,28 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// in the rule to an abstract tensor A_{m n} in the expression, storing
 	// the index name -> index value map.
 
-	cadabra::do_subtree(tr, it, [&](Ex::iterator walk) {
-			if(*(walk->name)=="\\components") handle_components(walk);
-			else if(is_component(walk)) return;
-			else if(*(walk->name)=="\\sum")   handle_sum(walk);
-			else if(*(walk->name)=="\\prod")  handle_prod(walk);
+	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
+			if(*(walk->name)=="\\components") walk = handle_components(walk);
+			else if(is_component(walk)) return walk;
+			else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
+			else if(*(walk->name)=="\\prod")  walk = handle_prod(walk);
 			else {
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
-				if(pd) handle_derivative(walk);
+				if(pd) walk = handle_derivative(walk);
 				else if(tr.is_head(walk)) {
 					index_map_t empty;
 					sibling_iterator tmp(walk);
-					handle_factor(tmp, empty);
+					tmp = handle_factor(tmp, empty);
 					}
 				}
+			return walk;
 			}
 		);
+
+	// Final cleanup, e.g. to reduce scalar expressions to proper
+	// scalars instead of 'components' nodes.
+
+	cleanup_dispatch(kernel, tr, it);
 
 	return res;
 	}
@@ -67,22 +75,25 @@ bool evaluate::is_component(iterator it) const
 	return false;
 	}
 
-void evaluate::handle_components(iterator it)
+Ex::iterator evaluate::handle_components(iterator it)
 	{
 	// This just cleans up component nodes. At the moment this means
 	// taking care of handling dummy pairs.
 
 	index_map_t ind_free, ind_dummy;
 	classify_indices(it, ind_free, ind_dummy);
-	if(ind_dummy.size()==0) return;
+	if(ind_dummy.size()==0) return it;
 
 	// Wrap in a product, use handle_prod to sort out summation.
 	it = tr.wrap(it, str_node("\\prod"));
-	handle_prod(it);
+	it = handle_prod(it);
+	return it;
 	}
 
-void evaluate::handle_sum(iterator it)
+Ex::iterator evaluate::handle_sum(iterator it)
 	{
+	// std::cerr << "handle sum" << Ex(it) << std::endl;
+
 	index_map_t full_ind_free, full_ind_dummy;
 
 	// First find the values that all indices will need to take. We do not loop over
@@ -126,13 +137,15 @@ void evaluate::handle_sum(iterator it)
 		}
 	cleanup_components(sib1);
 
-	tr.flatten_and_erase(it);
+	it=tr.flatten_and_erase(it);
+
+	return it;
 	}
 
-void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free)
+Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
 	// std::cerr << "handle_factor " << Ex(sib) << std::endl;
-	if(*sib->name=="\\components") return;
+	if(*sib->name=="\\components") return sib;
 
 	// If this factor is an accent at the top level, descent further.
 	const Accent *acc = kernel.properties.get<Accent>(sib);
@@ -152,7 +165,7 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 		sib=tr.flatten(sib);
 		sib=tr.erase(sib);
 		//tr.print_recursive_treeform(std::cerr, sib);
-		return;
+		return sib;
 		}
 	
 	// We need to know for all indices whether they are free or dummy,
@@ -163,16 +176,9 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.
 	if(ind_free.size()==0 && ind_dummy.size()==0) {
-		// std::cerr << "wrapping scalar" << std::endl;
-		// FIXME: would be good if we could write this in a more readable form.
-		auto eq=tr.wrap(sib, str_node("\\equals"));
-		tr.prepend_child(eq, str_node("\\comma"));
-		eq=tr.wrap(eq, str_node("\\comma"));
-		sib=tr.wrap(eq, str_node("\\components"));
-		//std::cerr << tr << std::endl;
-		return;
+		sib=wrap_scalar_in_components_node(sib);
+		return sib;
 		}
-
 	
 	// Attempt to apply each component substitution rule on this term.
 	Ex repl("\\components");
@@ -245,6 +251,8 @@ void evaluate::handle_factor(sibling_iterator& sib, const index_map_t& full_ind_
 	merge_component_children(repl.begin());
 
 	sib = tr.move_ontop(iterator(sib), repl.begin());
+
+	return sib;
 	}
 
 void evaluate::merge_component_children(iterator it)
@@ -255,9 +263,18 @@ void evaluate::merge_component_children(iterator it)
 	// rule { A_{r}=3, A_{t}=5, A_{r t}=1, A_{t t}=2 }, which
 	// leads to two entries for the free index n=t.
 
+//	if(*it->name!="\\components")
+//		std::cerr << "*** " << *it->name << std::endl;
+	assert(*it->name=="\\components");
+
 	auto comma=tr.end(it);
 	--comma;
-	auto cv1=tr.begin(comma);
+	
+//	if(*comma->name!="\\comma")
+//		std::cerr << "*** " << *comma->name << std::endl;
+	assert(*comma->name=="\\comma");
+
+	auto cv1=tr.begin(comma);  // equals node
 	while(cv1!=tr.end(comma)) {
 		auto iv1=tr.begin(cv1); // index values \comma
 		auto cv2=cv1;
@@ -265,6 +282,7 @@ void evaluate::merge_component_children(iterator it)
 		while(cv2!=tr.end(comma)) {
 			auto iv2=tr.begin(cv2); // index values \comma
 			if(tr.equal_subtree(iv1, iv2)) {
+				// std::cerr << "merging " << Ex(iv1) << std::endl;
 				Ex::sibling_iterator tv1=iv1; // tensor component value
 				++tv1;
 				Ex::sibling_iterator tv2=iv2;
@@ -363,7 +381,7 @@ void evaluate::cleanup_components(iterator it)
 			});
 	}
 
-void evaluate::handle_derivative(iterator it)
+Ex::iterator evaluate::handle_derivative(iterator it)
 	{
 	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
 
@@ -378,7 +396,7 @@ void evaluate::handle_derivative(iterator it)
 		if(sib->is_index()==false) {
 			if(is_component(sib)==false) {
 				index_map_t empty;
-				handle_factor(sib, empty);
+				sib=handle_factor(sib, empty);
 				}
 			break;
 			}
@@ -438,6 +456,8 @@ void evaluate::handle_derivative(iterator it)
 	// std::cerr << "now " << Ex(it) << std::endl;
 	simplify_components(it);
 	// std::cerr << "then " << Ex(it) << std::endl;
+
+	return it;
 	}
 
 void evaluate::simplify_components(iterator it)
@@ -467,7 +487,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	std::set<Ex, tree_exact_less_obj> ret(comp);
 
 	// Determine explicit dependence on Coordinates.
-	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) {
+	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
 			const Coordinate *cd = kernel.properties.get<Coordinate>(nd);
 			if(cd) {
 				Ex cpy(nd);
@@ -476,6 +496,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 				one(cpy.begin()->multiplier);
 				ret.insert(cpy);
 				}
+			return nd;
 			});
 
 	// Determine implicit dependence via Depends.
@@ -494,7 +515,17 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	return ret;
 	}
 
-void evaluate::handle_prod(iterator it)
+Algorithm::iterator evaluate::wrap_scalar_in_components_node(iterator sib)
+	{
+	// FIXME: would be good if we could write this in a more readable form.
+	auto eq=tr.wrap(sib, str_node("\\equals"));
+	tr.prepend_child(eq, str_node("\\comma"));
+	eq=tr.wrap(eq, str_node("\\comma"));
+	sib=tr.wrap(eq, str_node("\\components"));
+	return sib;
+	}
+
+Ex::iterator evaluate::handle_prod(iterator it)
 	{
 	// std::cerr << "handle_prod " << Ex(it) << std::endl;
 
@@ -513,6 +544,9 @@ void evaluate::handle_prod(iterator it)
 
 		sib=nxt;
 		}
+
+	// TRACE: still ok here
+	// std::cerr << "every factor a \\component:\n" << Ex(it) << std::endl;
 	
 	// Now every factor in the product is a \component node.  The thing
 	// is effectively a large sparse tensor product. We need to do the
@@ -653,13 +687,17 @@ void evaluate::handle_prod(iterator it)
 		++di; ++di;
 		}
 
+	// TRACE: are we still ok here? Looks ok: one component node
+	// with no indices.
+	// std::cerr << "Before doing outer product:\n" << Ex(it) << std::endl;
+
 	// At this stage we have one or more components nodes in the product,
 	// and we have collected all possible index value combinations.
 	// We need to do an outer multiplication, merging all index names into
 	// one, and computing tensor component values for all possible index values.
 
 	int n=tr.number_of_children(it);
-	//std::cerr << Ex(it) << std::endl;
+	// std::cerr << "outer product:\n" << Ex(it) << std::endl;
 	if(n>1) {
 		//std::cerr << "merging" << std::endl;
 		auto first=tr.begin(it); // component node
@@ -733,20 +771,48 @@ void evaluate::handle_prod(iterator it)
 	// At this stage, there should be only one factor in the product, which 
 	// should be a \components node. We do a cleanup, after which it should be
 	// at the 'it' node.
-	// std::cerr << "should take care of it at " << Ex(it) << std::endl;
-	// FIXME: the code below works because it only cleans up the \prod; if we
-	// fix cleanup_dispatch to cleanup until nothing needs cleaning up anymore,
-	// then we will be left with a non-\component node in case this is a scalar.
 
-	cleanup_dispatch(kernel, tr, it);
-	assert(*it->name=="\\components");
+	assert(*it->name=="\\prod");
+	assert(tr.number_of_children(it)==1);
+	assert(*tr.begin(it)->name=="\\components");
+	tr.begin(it)->fl.bracket=it->fl.bracket;
+	tr.begin(it)->fl.parent_rel=it->fl.parent_rel;
+	tr.begin(it)->multiplier=it->multiplier;
+	tr.flatten(it);
+	it=tr.erase(it);
+	push_down_multiplier(kernel, tr, it);
+	
+//	iterator pr=tr.end();
+//	if(tr.is_head(it)==false) {
+//		pr=tr.parent(it);
+//		std::cerr << "Tracing just before merge:\n " << Ex(pr) << std::endl;
+//		}
 
-	// We may have duplicate index value entries; merge them.
 	merge_component_children(it);
 
+//	if(pr!=tr.end())
+//		std::cerr << "after component merge:\n " << Ex(pr) << std::endl;	
+
+//	cleanup_dispatch(kernel, tr, it);
+//	if(pr!=tr.end()) 
+//		std::cerr << "And afterwards:\n " << Ex(pr) << std::endl;
+
+	if(*it->name!="\\components") {
+		// The result is a scalar. Because we are expected to return
+		// a \components node, we wrap this scalar again.
+		// std::cerr << "wrapping scalar" << std::endl;
+		it=wrap_scalar_in_components_node(it);
+		// std::cerr << Ex(it) << std::endl;
+		}
+
+//	else {
+//		// We may have duplicate index value entries; merge them.
+//		merge_component_children(it);
+//		}
+
+	// Use sympy to simplify components.
 	simplify_components(it);
-	
-	// std::cerr << "should take care of it again at " << Ex(it) << std::endl;
-	cleanup_dispatch(kernel, tr, it);
-	// std::cerr << "done " << Ex(it) << std::endl;
+	// std::cerr << "simplified:\n" << Ex(it) << std::endl;
+
+	return it;
 	}
