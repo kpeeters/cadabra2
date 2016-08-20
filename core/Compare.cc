@@ -382,6 +382,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	bool is_index=false;
 	bool is_sibling_pattern=false;
 	bool is_coordinate=false;
+	bool is_number=false;
 	
 	if(one->fl.bracket==str_node::b_none && one->is_index() ) 
 		is_index=true;
@@ -399,6 +400,8 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		else
 			is_coordinate=true;
 		}
+	else if(one->is_integer()) 
+		is_number=true;
 		
 	// Various cases to be distinguished now:
 	//   - match index pattern to object
@@ -575,7 +578,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		
 		return subtree_match;
 		}
-	else if(is_coordinate) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
+	else if(is_coordinate || is_number) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
 		const Indices *t2=properties.get<Indices>(two, true);
 		if(t2) {
 			// std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;

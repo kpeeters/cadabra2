@@ -237,10 +237,17 @@ bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 	// If this component node has no free indices, get rid of all
 	// the baggage and turn into a normal expression.
 
-	//std::cerr << "components cleanup: " << Ex(it) << std::endl;
+	// std::cerr << "components cleanup: " << Ex(it) << std::endl;
 
 	auto comma=tr.begin(it);
 	if(*comma->name=="\\comma") {
+		if(tr.number_of_children(comma)==0) {
+			// Totally empty component node, can happen after an
+			// evaluate with no rules matching.
+			zero(it->multiplier);
+			ret=true;
+			return ret;
+			}
 		ret=true;
 		// std::cerr << "components node for a scalar" << std::endl;
 		tr.flatten(comma);     // unwrap comma
