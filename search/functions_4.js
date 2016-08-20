@@ -27,7 +27,7 @@ var searchData=
   ['do_5fexecute',['do_execute',['../classechokernel_1_1EchoKernel.html#a7def49efe22ced9db9e912f1298ea584',1,'echokernel::EchoKernel']]],
   ['do_5ffilledtableau',['do_filledtableau',['../classlr__tensor.html#a5587eb4c1bd4473c848bc3eb8bcc7eb8',1,'lr_tensor']]],
   ['do_5flist',['do_list',['../group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0',1,'cadabra']]],
-  ['do_5fsubtree',['do_subtree',['../group__core.html#ga9b4e698e597f52dc43f1e3ca8414a959',1,'cadabra']]],
+  ['do_5fsubtree',['do_subtree',['../group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8',1,'cadabra']]],
   ['do_5ftableau',['do_tableau',['../classlr__tensor.html#aab36dd5a4727ad6ea72fd6fffec672f9',1,'lr_tensor']]],
   ['documentthread',['DocumentThread',['../classcadabra_1_1DocumentThread.html#a9574c93a03118e2acf47295b77ed79be',1,'cadabra::DocumentThread::DocumentThread(GUIBase *)'],['../classcadabra_1_1DocumentThread.html#ad9d573008fc3ed7203dfab960ac8e995',1,'cadabra::DocumentThread::DocumentThread(const DocumentThread &amp;)=delete']]],
   ['doit',['doit',['../classsym.html#ab7da4e9e381be48b1cf18589f8a21dbc',1,'sym']]],

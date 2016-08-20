@@ -62,7 +62,7 @@ var searchData=
   ['property',['Property',['../classProperty.html#af822cb8ba299ecb735bf508d8cd835e8',1,'Property']]],
   ['pull_5fin',['pull_in',['../group__pythoncore.html#ga40314f9e6ee8efe62d9e9464c33b91a8',1,'pull_in(std::shared_ptr&lt; Ex &gt; ex):&#160;Bridge.cc'],['../group__pythoncore.html#ga40314f9e6ee8efe62d9e9464c33b91a8',1,'pull_in(std::shared_ptr&lt; Ex &gt; ex):&#160;Bridge.cc']]],
   ['push_5fback',['push_back',['../classkeyval__t.html#a2021427ca4380d0f314cc704c43ed569',1,'keyval_t']]],
-  ['push_5fdown_5fmultiplier',['push_down_multiplier',['../Cleanup_8cc.html#a618e4c9ee49676cb9c46b12360652608',1,'push_down_multiplier(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc'],['../Cleanup_8hh.html#a618e4c9ee49676cb9c46b12360652608',1,'push_down_multiplier(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc']]],
+  ['push_5fdown_5fmultiplier',['push_down_multiplier',['../Cleanup_8cc.html#aaefb50b0d106555f7869513465c7bb1a',1,'push_down_multiplier(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc'],['../Cleanup_8hh.html#aaefb50b0d106555f7869513465c7bb1a',1,'push_down_multiplier(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc']]],
   ['push_5fhistory',['push_history',['../classEx.html#ab9eac3989aec0ace4f72de191ddd3614',1,'Ex']]],
   ['pushup_5fmultiplier',['pushup_multiplier',['../classAlgorithm.html#ac187fbad12f3881e6afe04b5a4e2ea0a',1,'Algorithm']]],
   ['py_5fwhat',['py_what',['../classArgumentException.html#a112bd21f8131c6bdd8229485c548f15c',1,'ArgumentException::py_what()'],['../classNonScalarException.html#ac8406dbb5276b508cf47b3083ea188d7',1,'NonScalarException::py_what()'],['../classInternalError.html#aaec9b0117071e2a5fef01e9b7e59a640',1,'InternalError::py_what()']]],

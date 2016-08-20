@@ -158,8 +158,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">cadabra::do_list</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; bool(Ex::iterator)&gt; f)</td></tr>
 <tr class="memdesc:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function on every element of a list, or if the iterator 'it' does not point to a list, only on that single element.  <a href="#ga5c0d915d27dbcdf1aa070153a3e608b0">More...</a><br/></td></tr>
 <tr class="separator:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga9b4e698e597f52dc43f1e3ca8414a959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga9b4e698e597f52dc43f1e3ca8414a959">cadabra::do_subtree</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; void(Ex::iterator)&gt; f)</td></tr>
-<tr class="separator:ga9b4e698e597f52dc43f1e3ca8414a959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">cadabra::do_subtree</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
+<tr class="memdesc:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function on every node in the tree at and below the given node, depth-first.  <a href="#ga44043f2e9b54d9d04d5df7aed63c59d8">More...</a><br/></td></tr>
+<tr class="separator:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3a2ae6b908d34ea0490114559107ede5"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">cadabra::find_in_list</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
 <tr class="memdesc:ga3a2ae6b908d34ea0490114559107ede5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the first element for which 'f' does not return tr.end().  <a href="#ga3a2ae6b908d34ea0490114559107ede5">More...</a><br/></td></tr>
 <tr class="separator:ga3a2ae6b908d34ea0490114559107ede5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,12 +213,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga9b4e698e597f52dc43f1e3ca8414a959"></a>
+<a class="anchor" id="ga44043f2e9b54d9d04d5df7aed63c59d8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cadabra::do_subtree </td>
+          <td class="memname">Ex::iterator cadabra::do_subtree </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>tr</em>, </td>
@@ -231,7 +232,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::function&lt; void(Ex::iterator)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; Ex::iterator(Ex::iterator)&gt;&#160;</td>
           <td class="paramname"><em>f</em>&#160;</td>
         </tr>
         <tr>
@@ -241,7 +242,9 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Apply a function on every node in the tree below the given node, depth-first. </p>
+
+<p>Apply a function on every node in the tree at and below the given node, depth-first. </p>
+<p>Return an iterator to the top node, which replaces 'it' (may be the same). </p>
 
 </div>
 </div>
@@ -424,7 +427,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 16 2016 14:40:10 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Aug 20 2016 09:45:27 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
