@@ -291,6 +291,14 @@ bool cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 	Ex::sibling_iterator sib=tr.begin(it);
 	if(sib==tr.end(it)) return ret;
 
+	if(Algorithm::number_of_direct_indices(it) == tr.number_of_children(it)) {
+		// This is a derivative acting on nothing, always occurs
+		// when all constants have been moved out.
+		zero(it->multiplier);
+		ret=true;
+		return ret;
+		}
+
 	while(sib->is_index()) {
 		++sib;
 		if(sib==tr.end(it))
