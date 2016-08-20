@@ -103,8 +103,15 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	classify_indices(it, full_ind_free, full_ind_dummy);
 	for(auto i: full_ind_free) {
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
-		if(prop==0)
-			throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property.");
+		if(prop==0) {
+			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second);
+			if(crd==0) {
+				throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property.");
+				}
+			else {
+				full_ind_free.erase(i);
+				}
+			}
 
 		if(prop->values.size()==0)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
