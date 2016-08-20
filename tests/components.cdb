@@ -239,3 +239,15 @@ test11()
 # ex:= \partial_{m}{ A_{n} };
 # rl:= A_{r} -> r, A_{t} -> t;
 # evaluate( ex, rl );
+
+def test12():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho,\sigma}::Indices(values={0,1,2,3});
+    ex:=A_{\mu} A_{\mu};
+    rl:= A_{0} -> -\xi_{0}, A_{1} -> \xi_{1}, A_{2} -> -\xi_{2}, A_{3} -> \xi_{3};
+    evaluate(ex, rl);
+    tst:= \xi_{0}**2 + \xi_{1}**2 + \xi_{2}**2 + \xi_{3}**2 - @(ex);
+    assert(tst==0)
+    print("Test 12 passed")
+
+test12()
