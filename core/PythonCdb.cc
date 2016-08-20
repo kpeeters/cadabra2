@@ -526,7 +526,6 @@ PyObject* createExceptionClass(const char* name, PyObject* baseTypeObj = PyExc_E
 // Handler to translate a C++ exception and pass it on as a Python exception
 void translate_ArgumentException(const ArgumentException& x) 
 	{
-	std::cerr << "getting confused" << std::endl;
 	assert(ArgumentExceptionType != 0);
 	boost::python::object exc(x); // wrap the C++ exception
 //	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));

@@ -6,7 +6,8 @@
 /// \ingroup core
 ///
 /// Handle the entire preclean stage, which turns a parsed expression
-/// into an expression which satisfies the Cadabra conventions:
+/// into an expression which satisfies the Cadabra conventions. This
+/// does not involve the property system.
 ///
 /// - All numerical multipliers in a product on the product node, no
 ///   multiplier on a sum node.
@@ -14,11 +15,7 @@
 /// - Any '\\frac' nodes with a purely numerical denominator should be
 ///   rewritten as a rational multiplier for the numerator node. 
 ///
-/// - Derivative nodes can have an arbitrary number of index child nodes and
-///   must have at least one function child node. The first function node is
-///   interpreted as the argument on which the derivative(s) act. All other
-///   nodes indicate with respect to which object or variable the
-///   derivatives are taken.
+/// - Any \\sub nodes get converted to \\sum nodes.
 
 
 void pre_clean_dispatch(const Kernel& k, Ex&, Ex::iterator& it);

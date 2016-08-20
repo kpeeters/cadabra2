@@ -28,7 +28,7 @@ bool Depends::parse(const Kernel& kernel, keyval_t& kv)
 			const Accent     *acc=pr.get<Accent>(it->second);
 			if(dum==0 && crd==0 && der==0 && acc==0) {
 				throw ArgumentException(std::string("Depends: ")+*it->second->name
-												+" lacks property Coordinate, Derivative, Accent or Indices.");
+												+" lacks property Coordinate, Derivative, Accent or Indices.\nIn 2.x, make sure to write dependence on a derivative\nas A::Depends(\\partial{#}), note the '{#}'.");
 				}
 //			std::cout << "adding " << *it->second->name << " to deps list" << std::endl;
 			dependencies_.append_child(comma, it->second);

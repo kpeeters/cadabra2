@@ -1,4 +1,8 @@
 {r,t}::Coordinate;
 f::Depends(r,t);
 ex:=f*A;
-ex.__sympy__()
+ex._sympy_()
+
+\partial{#}::PartialDerivative;
+ex:= \partial_{r}{ f };
+ex._sympy_()

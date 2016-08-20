@@ -111,8 +111,8 @@ def test06():
     __cdbkernel__=create_scope()
     {a,b,c,d}::Indices.
     { \partial{#}, \partialp{#} }::PartialDerivative.
-    A::Depends(\partial).
-    B::Depends(\partialp).
+    A::Depends(\partial{#}).
+    B::Depends(\partialp{#}).
     \Omega{#}::Derivative.
     obj46:= \Omega( \partial_{a}{A} )( \partialp_{b}{B} );
     rl:= \Omega( \partial_{a}{A??} )( B?? ) -> \partial_{a}{ \Omega(A??)(B??) };

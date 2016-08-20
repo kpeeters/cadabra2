@@ -12,9 +12,7 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
 	//std::cerr << "cleanup at " << *it->name << std::endl;
 
-	// FIXME: any of these can lead to expressions which need another
-	// application at this level. So we should run this as long as things
-	// change. Right now, we just do things as they seemed required by tests.
+	// Run the cleanup as long as the expression changes.
 
 	bool changed;
 	do {
@@ -38,9 +36,14 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 		changed = changed || res;
 		// std::cerr << "components " << changed << std::endl;
 		
-		const PartialDerivative *der = kernel.properties.get<PartialDerivative>(it);
+		const Derivative *der = kernel.properties.get<Derivative>(it);
 		if(der) { 
 			res = cleanup_derivative(kernel, tr, it);
+			changed = changed || res;
+			}
+		const PartialDerivative *pder = kernel.properties.get<PartialDerivative>(it);
+		if(pder) { 
+			res = cleanup_partialderivative(kernel, tr, it);
 			changed = changed || res;
 			}
 		// std::cerr << "derivative " << changed << std::endl;
@@ -278,33 +281,29 @@ bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 	return ret;
 	}
 
-bool cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
+bool cleanup_partialderivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 	{
-	bool ret=false;
-
 	// Nested derivatives with the same name should be flattened, but
 	// only if both the outer derivative and the inner derivative have
 	// an index (otherwise D(D(A)) becomes D(A) which is wrong).
 
 	// Find first non-index child.
 
+	bool ret=false;
+
 	Ex::sibling_iterator sib=tr.begin(it);
 	if(sib==tr.end(it)) return ret;
 
-	if(Algorithm::number_of_direct_indices(it) == tr.number_of_children(it)) {
-		// This is a derivative acting on nothing, always occurs
-		// when all constants have been moved out.
-		zero(it->multiplier);
-		ret=true;
-		return ret;
-		}
-
 	while(sib->is_index()) {
 		++sib;
-		if(sib==tr.end(it))
-			throw ConsistencyException("Encountered Derivative object without argument on which to act.");
-		// FIXME: the above is not correct when a derivative is declared without argument,
-		// like in \Omega::Derivative; A::Depends(\Omega).
+		if(sib==tr.end(it)) {
+			zero(it->multiplier);
+			return true;
+			}
+//		if(sib==tr.end(it))
+//			throw ConsistencyException("Encountered PartialDerivative object without argument on which to act.");
+//		// FIXME: the above is not correct when a derivative is declared without argument,
+//		// like in \Omega::Derivative; A::Depends(\Omega).
 		}
 
 	// FIXME: this ignores that derivatives can have functional child
@@ -317,6 +316,21 @@ bool cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 			tr.erase(sib);
 			ret=true;
 			}
+		}
+
+	return ret;
+	}
+
+bool cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
+	{
+	bool ret=false;
+
+	if(Algorithm::number_of_direct_indices(it) == tr.number_of_children(it)) {
+		// This is a derivative acting on nothing, always occurs
+		// when all constants have been moved out.
+		zero(it->multiplier);
+		ret=true;
+		return ret;
 		}
 
 	return ret;
