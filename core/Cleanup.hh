@@ -59,6 +59,7 @@ void cleanup_dispatch_deep(const Kernel& k, Ex&, dispatcher_t disp=&cleanup_disp
 bool cleanup_productlike(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_sumlike(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_derivative(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_partialderivative(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_components(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_numericalflat(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_diagonal(const Kernel& k, Ex&, Ex::iterator& it);

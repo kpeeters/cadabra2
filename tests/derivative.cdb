@@ -10,6 +10,7 @@ def test01():
     product_rule(_)
     tst1:= a*b*(D(c)*d*e+c*D(d)*e+c*d*D(e))*f*g-@(obj1);
     assert(tst1==0)
+    print("Test 01 passed")
 
 test01()
 
@@ -20,7 +21,8 @@ def test02():
     product_rule(_)
     tst2:= a*b*(D(c)(h1)(h2)*d*e+c*D(d)(h1)(h2)*e+c*d*D(e)(h1)(h2))*f*g-@(obj2);
     assert(tst2==0)
-
+    print("Test 02 passed")
+    
 test02()
 
 # Using the properties of \diff.
@@ -32,7 +34,8 @@ def test03():
     product_rule(_)
     tst5:= \diff{A}_\mu * B + A * \diff{B}_\mu - @(obj5);
     assert(tst5==0)
-
+    print("Test 03 passed")
+    
 test03()
 
 def test04():
@@ -43,7 +46,8 @@ def test04():
     tst6:= \diff{g^{\mu \kappa}}_{\sigma} * \diff{g_{\kappa \nu}}_{\rho}
         +g^{\mu \kappa} * \diff{g_{\kappa \nu}}_{\rho \sigma} - @(obj6);
     assert(tst6==0)
-
+    print("Test 04 passed")
+    
 test04()
 
 def test07():
@@ -54,7 +58,8 @@ def test07():
     rl:=\diff{\eta_{\mu\nu}}_{\rho} -> 0;
     substitute(obj7, rl)
     assert(obj7==0)
-
+    print("Test 07 passed")
+    
 test07();
 
 # \delta in combination with \diff
@@ -67,7 +72,8 @@ def test08():
     eliminate_kronecker(_)
     tst8:= \diff{A_{m q}}_{t} - @(obj8);
     assert(tst8==0)
-
+    print("Test 08 passed")
+    
 test08()
 
 # Multiple derivatives and the product rule
@@ -81,7 +87,8 @@ def test09():
     product_rule(_)
     tst9:= 12 \diff_{m n}{A} B + 12 \diff_{m}{A} \diff_{n}{B} + 12 \diff_{n}{A} \diff_{m}{B} + 12 A \diff_{m n}{B} - @(obj9);
     assert(tst9==0)
-
+    print("Test 09 passed")
+    
 test09()
 
 # Order of child nodes on PartialDerivative.
@@ -96,7 +103,8 @@ def test10():
     tst10:= \partial_{a b}{ A_{c d} } + @(obj10);
     collect_terms(_)
     assert(tst10==0)
-
+    print("Test 10 passed")
+    
 test10()
 
 def test10b():
@@ -108,7 +116,8 @@ def test10b():
     canonicalise(_);
     tst10b:= \partial{ A_{c d} }_{a b} + @(obj10b);
     assert(tst10b==0)
-
+    print("Test 10b passed")
+    
 test10b()
 
 # Multiple derivatives again
@@ -133,14 +142,15 @@ def test11b():
     tst11b:= \partial_{a}{\partial_{b}(A) * B * C + A * \partial_{b}(B) * C + A * B * \partial_{b}(C)} - @(obj11b);
     collect_terms(_)
     assert(tst11b==0)
-
+    print("Test 11b passed")
+    
 test11b()
 
 # More tricky derivatives
 def test12():
     __cdbkernel__=create_scope()
     \Omega{#}::Derivative.
-    {A,B,C,D}::Depends(\Omega);
+    {A,B,C,D}::Depends(\Omega{#});
     obj12:= \Omega_{a}(A B)(C D);
     product_rule(_)
     product_rule(_)
@@ -149,7 +159,8 @@ def test12():
         -@(obj12);
     collect_terms(_)
     assert(tst12==0)
-
+    print("Test 12 passed")
+    
 test12()
 
 # Test 13: Inheritance
@@ -170,7 +181,8 @@ def test14():
     tst14a:= \partial_{m}(2*A*\partial_{n}{A}) - @(obj14a);
     collect_terms(_)
     assert(tst14a==0)
-
+    print("Test 14 passed")
+    
 test14()
 
 def test14b():
@@ -181,7 +193,8 @@ def test14b():
     tst14b:= \partial_{m}(3*A**2*\partial_{n}{A}) - @(obj14b);
     collect_terms(_)
     assert(tst14b==0)
-
+    print("Test 14b passed")
+    
 test14b()
 
 # reset.
@@ -198,7 +211,8 @@ def test14d():
     tst14d:= \partial_{m}(d * A**(d - 1) * \partial_{n}{A}) - @(obj14d);
     collect_terms(_)
     assert(tst14d==0)
-
+    print("Test 14d passed")
+    
 test14d()
 
 def test14f():
@@ -209,7 +223,8 @@ def test14f():
     tst14f:= \partial{A} * \partial{A} + A * \partial{\partial{A}} - @(obj14f);
     collect_terms(_)
     assert(tst14f==0)
-
+    print("Test 14f passed")
+    
 test14f()
 
 def test15():
@@ -220,7 +235,8 @@ def test15():
     tst15:= 2 a \partial{a} + @(obj15);
     collect_terms(_)
     assert(tst15==0)
-
+    print("Test 15 passed")
+    
 test15()
 
 def test16():
@@ -231,7 +247,8 @@ def test16():
     tst16:= 3 a**2 \partial{a} + @(obj16);
     collect_terms(_)
     assert(tst16==0)
-
+    print("Test 16 passed")
+    
 test16()
 
 # Flattening
@@ -242,7 +259,8 @@ def test17():
     obj17:= \partial_{a}{\partial_{b c}{F}};
     tst17:= \partial_{a b c}{F} - @(obj17);
     assert(tst17==0);
-
+    print("Test 17 passed")
+    
 test17()
 
 # # Test 18: more flattening
@@ -271,7 +289,8 @@ def test19():
     tst19a:= D_{\theta^{\alpha}}{\theta^{\beta}} \theta^{\gamma}  
              - \theta^{\beta} D_{\theta^{\alpha}}{\theta^{\gamma}} - @(obj19a);
     assert(tst19a==0)
-
+    print("Test 19 passed")
+    
 test19()
 
 def test19b():
@@ -285,7 +304,8 @@ def test19b():
     tst19b:= D_{\alpha}{\theta^{\beta}} \theta^{\gamma}  
              - \theta^{\beta} D_{\alpha}{\theta^{\gamma}} - @(obj19b);
     assert(tst19b==0)
-
+    print("Test 19b passed")
+    
 def test19c():
     __cdbkernel__=create_scope()
     {\alpha,\beta,\gamma}::Indices(spinor, position=fixed).
@@ -300,7 +320,8 @@ def test19c():
               - D^{\alpha}{T^{\beta}} * D_{\alpha}{S^{\gamma}}
               + T^{\beta} * D^{\alpha}{D_{\alpha}{S^{\gamma}}} - @(obj19c);
     assert(tst19c==0)
-
+    print("Test 19c passed")
+    
 test19c()
 
 # In the following test, the objects 'b' and 'c' carry an implicit
@@ -346,7 +367,8 @@ def test20():
         + f * D_{a}{D_{\dot{a}}{g}} - @(obj20);
     collect_terms(_)
     assert(tst20==0)
-
+    print("Test 20 passed")
+    
 test20()
 
 # Two index sets, anti-commuting
@@ -368,7 +390,8 @@ def test21():
         + b * D_{\alpha}{\bD_{\dalpha}{c}} - @(obj21);
     collect_terms(_)
     assert(tst21==0)
-
+    print("Test 21 passed")
+    
 test21()
 
 
@@ -385,7 +408,8 @@ def test22():
     tst22:= D_{\alpha}{\theta} \lambda - \theta D_{\alpha}{\lambda} - @(obj22);
     collect_terms(_)
     assert(tst22==0)
-
+    print("Test 22 passed")
+    
 test22()
 
 # Multiple indices on tensors.
@@ -401,7 +425,8 @@ def test23():
         - @(obj23);
     collect_terms(_)
     assert(tst23==0)
-
+    print("Test 23 passed")
+    
 test23()
 
 # Unwrapping.
@@ -410,7 +435,7 @@ def test24():
     __cdbkernel__=create_scope()
     \hat{#}::Accent;
     \hat{#}::Distributable;
-    B::Depends(\hat);
+    B::Depends(\hat{#});
     ex:=\hat{A+B+C};
     distribute(_);
     unwrap(_);
@@ -424,7 +449,7 @@ test24()
 def test25():
     __cdbkernel__=create_scope()
     \del{#}::Derivative.
-    X::Depends(\del).
+    X::Depends(\del{#}).
     ex1:= \del{X*Y*Z*\del{X}};
     product_rule(ex1);
     unwrap(ex1);
@@ -439,4 +464,22 @@ def test25():
 
 test25()
 
+def test26():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex:=\partial_{\mu}{A};
+    substitute(_, $A -> 3$);
+    assert(ex==0)
+    print("Test 26 passed")
 
+test26()
+
+def test27():
+    __cdbkernel__=create_scope()
+    \partial{#}::Derivative;
+    ex:=\partial_{\mu}{A};
+    substitute(_, $A -> 3$);
+    assert(ex==0)
+    print("Test 27 passed")
+
+test27()

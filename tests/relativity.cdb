@@ -49,7 +49,7 @@ def test04():
     {m, n, p, q, r}::Indices(vector, position=fixed).
     g_{m n}::Metric.
     \partial{#}::Derivative.
-    g_{m n}::Depends(\partial).
+    g_{m n}::Depends(\partial{#}).
     obj12b:= g_{m n} \partial_{p}{ A^{n} };
     eliminate_metric(_);
     tst12b:= g_{m n} \partial_{p}{ A^{n} } - @(obj12b);

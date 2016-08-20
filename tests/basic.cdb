@@ -207,7 +207,7 @@ x::Coordinate.
 
 F_{\mu\nu}::AntiSymmetric;
 F_{\mu\nu}::Depends(x).
-A_{\mu}::Depends(x,\partial).
+A_{\mu}::Depends(x,\partial{#}).
 \delta{#}::Accent;
 
 S:= -1/4 \int{ F_{\mu\nu} F^{\mu\nu} }{x};

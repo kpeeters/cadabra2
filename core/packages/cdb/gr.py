@@ -18,3 +18,13 @@ def RiemannFromChristoffel(R, c):
 
     return ex
 
+def ChristoffelFromMetric(c, g):
+    """
+    @param c: Christoffel symbol.
+    @param g: metric tensor.
+    """
+
+    ex = cdb.Ex(r'@(c)^{\lambda}_{\mu\nu} = 1/2 g^{\lambda\kappa} ( \partial_{\mu}{ g_{\kappa\nu} } + \partial_{\nu}{ g_{\kappa\mu} } - \partial_{\kappa}{ g_{\mu\nu} } )')
+
+    return ex
+
