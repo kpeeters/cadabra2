@@ -15,14 +15,60 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\int", "Integral" },
 		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },
-		{"\\theta", "theta"},
-		{"\\Theta", "Theta"},
-		{"\\Phi", "Phi"},
-		{"\\phi", "phi"},
-		{"\\Sigma", "Sigma"},
+
+		{"\\alpha",   "alpha" },
+		{"\\beta",    "bbeta" },  // beta seems to be reserved
+		{"\\gamma",   "ggamma" }, // gamma seems to be reserved 
+		{"\\delta",   "delta" },
+		{"\\epsilon", "epsilon" },
+		{"\\zeta",    "zeta" },
+		{"\\eta",     "eta" },
+		{"\\theta",   "theta" },
+		{"\\iota",    "iota" },
+		{"\\kappa",   "kappa" },
+		{"\\lambda",  "lamda" }, // lambda is reserved
+		{"\\mu",      "mu" },
+		{"\\nu",      "nu" },
+		{"\\xi",      "xi" },
+		{"\\omicron", "omicron" },
+		{"\\pi",      "pi" },
+		{"\\rho",     "rho" },
+		{"\\sigma",   "sigma" },
+		{"\\tau",     "tau" },
+		{"\\upsilon", "upsilon" },
+		{"\\phi",     "phi" },
+		{"\\chi",     "chi" },
+		{"\\psi",     "psi" },
+		{"\\omega",   "omega" },
+
+		{"\\Alpha",   "Alpha" },
+		{"\\Beta",    "Beta" },
+		{"\\Gamma",   "Gamma" },
+		{"\\Delta",   "Delta" },
+		{"\\Epsilon", "Epsilon" },
+		{"\\Zeta",    "Zeta" },
+		{"\\Eta",     "Eta" },
+		{"\\Theta",   "Theta" },
+		{"\\Iota",    "Iota" },
+		{"\\Kappa",   "Kappa" },
+		{"\\Lambda",  "Lamda" },
+		{"\\Mu",      "Mu" },
+		{"\\Nu",      "Nu" },
+		{"\\Xi",      "Xi" },
+		{"\\Omicron", "Omicron" },
+		{"\\Pi",      "Pi" },
+		{"\\Rho",     "Rho" },
+		{"\\Sigma",   "Sigma" },
+		{"\\Tau",     "Tau" },
+		{"\\Upsilon", "Upsilon" },
+		{"\\Phi",     "Phi" },
+		{"\\Chi",     "Chi" },
+		{"\\Psi",     "Psi" },
+		{"\\Omega",   "Omega" },
+
 		{"\\partial", "Derivative"},
-		{"\\dot", "dot"},
-		{"\\ddot", "ddot"}
+		{"\\dot",     "dot"},
+		{"\\ddot",    "ddot"}
 		};
 	}
 
@@ -327,9 +373,10 @@ void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	dispatch(str, sib);
-	str << "**";
+	str << "**(";
 	++sib;
 	dispatch(str, sib);
+	str << ")";
 	}
 
 void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
