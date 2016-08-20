@@ -19,6 +19,7 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	bool changed;
 	do {
 		changed=false;
+		bool res=false;
 		if(it->is_zero() && (tr.number_of_children(it)!=0 || *it->name!="1"))  {
 			::zero(it->multiplier);
 			tr.erase_children(it);
@@ -27,30 +28,47 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 			break;
 			}
 		// std::cerr << "zero " << changed << std::endl;
-		if(*it->name=="\\prod")       changed = changed || cleanup_productlike(kernel, tr, it);
+		if(*it->name=="\\prod")  res = cleanup_productlike(kernel, tr, it);
+		changed = changed || res;
 		// std::cerr << "product " << changed << std::endl;
-		if(*it->name=="\\sum")        changed = changed || cleanup_sumlike(kernel, tr, it);
+		if(*it->name=="\\sum")   res = cleanup_sumlike(kernel, tr, it);
+		changed = changed || res;
 		// std::cerr << "sum " << changed << std::endl;
-		if(*it->name=="\\components") changed = changed || cleanup_components(kernel, tr, it);
+		if(*it->name=="\\components") res = cleanup_components(kernel, tr, it);
+		changed = changed || res;
 		// std::cerr << "components " << changed << std::endl;
 		
 		const PartialDerivative *der = kernel.properties.get<PartialDerivative>(it);
-		if(der) changed = changed || cleanup_derivative(kernel, tr, it);
+		if(der) { 
+			res = cleanup_derivative(kernel, tr, it);
+			changed = changed || res;
+			}
 		// std::cerr << "derivative " << changed << std::endl;
 		
 		const NumericalFlat *nf = kernel.properties.get<NumericalFlat>(it);
-		if(nf)  changed = changed || cleanup_numericalflat(kernel, tr, it);
+		if(nf) {
+			res = cleanup_numericalflat(kernel, tr, it);
+			changed = changed || res;
+			}
 		// std::cerr << "numerical " << changed << std::endl;
 		
 		const Diagonal *diag = kernel.properties.get<Diagonal>(it);
-		if(diag) changed = changed || cleanup_diagonal(kernel, tr, it);
+		if(diag) {
+			res = cleanup_diagonal(kernel, tr, it);
+			changed = changed || res;
+			}
 		// std::cerr << "diagonal " << changed << std::endl;
 		
 		const KroneckerDelta *kr = kernel.properties.get<KroneckerDelta>(it);
-		if(kr) changed = changed || cleanup_kronecker(kernel, tr, it);
+		if(kr) {
+			res = cleanup_kronecker(kernel, tr, it);
+			changed = changed || res;
+			}
 		// std::cerr << "delta " << changed << std::endl;
 
 		} while(changed);
+
+//	std::cerr << Ex(it) << std::endl;
 	}
 
 bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
@@ -213,9 +231,8 @@ bool push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it)
 bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	assert(*it->name=="\\components");
-	bool ret=false;
 
-	ret = ret || push_down_multiplier(k, tr, it);
+	bool ret=push_down_multiplier(k, tr, it);
 
 	// If this component node has no free indices, get rid of all
 	// the baggage and turn into a normal expression.
@@ -226,13 +243,14 @@ bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 	if(*comma->name=="\\comma") {
 		ret=true;
 		// std::cerr << "components node for a scalar" << std::endl;
-		tr.flatten(comma); // unwrap comma
-		comma=tr.erase(comma);
-		tr.flatten(comma); // unwrap equals
-		comma=tr.erase(comma);
+		tr.flatten(comma);     // unwrap comma
+		comma=tr.erase(comma); // erase comma
+		tr.flatten(comma);     // unwrap equals
+		comma=tr.erase(comma); // erase equals
 		comma=tr.erase(comma); // remove empty comma for index values
 		tr.flatten(it); // remove components node
 		it=tr.erase(it);
+		// std::cerr << Ex(it) << std::endl;
 		}
 	else {
 		while(comma!=tr.end(it)) {

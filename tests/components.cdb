@@ -60,15 +60,15 @@ def test03():
     collect_components(_);
     assert(tst==0)
     print("Test 03a passed")
-
+    
     rm:= R^{\rho}_{\sigma\mu\nu} = \partial_{\mu}{\Gamma^{\rho}_{\nu\sigma}}
                                   -\partial_{\nu}{\Gamma^{\rho}_{\mu\sigma}}
                                   +\Gamma^{\rho}_{\mu\lambda} \Gamma^{\lambda}_{\nu\sigma}
                                   -\Gamma^{\rho}_{\nu\lambda} \Gamma^{\lambda}_{\mu\sigma};
-
+    
     substitute(rm, ch);
     evaluate(rm, ss);
-
+    
     # The Ricci tensor should be zero.
     rc:= R_{\sigma\nu} = R^{\rho}_{\sigma\rho\nu};
     substitute(rc, rm);

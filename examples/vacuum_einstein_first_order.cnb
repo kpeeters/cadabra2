@@ -1,0 +1,428 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{center}\n{\\Large \\textbf{First-order perturbation of Einstein-Hilbert action}}\\\\\nVictor Santos, 2016\\\\\nUniversidade Federal do Cear\\'{a}, Brazil\\\\\n\\texttt{victor\\_santos@fisica.ufc.br}\n\\end{center}\n\nThis notebook illustrate some Cadabra manipulations to derive the linearized Einstein equation around a vacuum solution; that is, given a solution \\(\\eta\\) of\n\\begin{equation}\n\\textrm{Ric}(\\eta) = 0,\\label{eq:vacuum-einstein-eq}\n\\end{equation}\nwe find the linearized equation\n\\begin{equation}\n\\frac{\\textrm{d}}{\\textrm{d}\\epsilon}\\Big|_{\\epsilon=0}\\textrm{Ric}(g(\\epsilon)) = 0,\n\\end{equation}\nwhere the family \\(g(\\epsilon)\\) of solutions of (1) satisfy\n\\begin{equation}\ng(0) = \\eta,\\quad \\frac{\\mathrm{d}}{\\mathrm{d}\\epsilon}\\Big|_{\\epsilon=0}\\,g(\\epsilon) = h\n\\end{equation}\nwhere \\(h\\) is a symmetric 2-tensor, representing a perturbation.\n\n\\subsection*{Indices and tensors}\nWe first declare the indices that we will use. The declarations for the metric \\(g\\) and the perturbation \\(h\\) are standard.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\begin{center}\n{\\Large \\textbf{First-order perturbation of Einstein-Hilbert action}}\\\\\nVictor Santos, 2016\\\\\nUniversidade Federal do Cear\\'{a}, Brazil\\\\\n\\texttt{victor\\_santos@fisica.ufc.br}\n\\end{center}\n\nThis notebook illustrate some Cadabra manipulations to derive the linearized Einstein equation around a vacuum solution; that is, given a solution \\(\\eta\\) of\n\\begin{equation}\n\\textrm{Ric}(\\eta) = 0,\\label{eq:vacuum-einstein-eq}\n\\end{equation}\nwe find the linearized equation\n\\begin{equation}\n\\frac{\\textrm{d}}{\\textrm{d}\\epsilon}\\Big|_{\\epsilon=0}\\textrm{Ric}(g(\\epsilon)) = 0,\n\\end{equation}\nwhere the family \\(g(\\epsilon)\\) of solutions of (1) satisfy\n\\begin{equation}\ng(0) = \\eta,\\quad \\frac{\\mathrm{d}}{\\mathrm{d}\\epsilon}\\Big|_{\\epsilon=0}\\,g(\\epsilon) = h\n\\end{equation}\nwhere \\(h\\) is a symmetric 2-tensor, representing a perturbation.\n\n\\subsection*{Indices and tensors}\nWe first declare the indices that we will use. The declarations for the metric \\(g\\) and the perturbation \\(h\\) are standard.\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left(\\alpha, \\linebreak[0] \\beta, \\linebreak[0] \\gamma, \\linebreak[0] \\delta, \\linebreak[0] \\mu, \\linebreak[0] \\nu, \\linebreak[0] \\rho, \\linebreak[0] \\sigma, \\linebreak[0] \\kappa, \\linebreak[0] \\lambda, \\linebreak[0] \\chi, \\linebreak[0] \\xi\\#\\right).\\end{dmath*}"
+				}
+			],
+			"source" : "{\\alpha,\\beta,\\gamma,\\delta,\\mu,\\nu,\\rho,\\sigma,\\kappa,\\lambda,\\chi,\\xi#}::Indices(full, position=independent);\n\\nabla{#}::Derivative. \ng_{\\mu\\nu}::Metric. \ng^{\\mu\\nu}::InverseMetric.\nh_{m n}::Symmetric."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Connection coefficients}\n\nWe want to expand the Ricci tensor in terms of the first-order perturbation \\(h\\). For this we write the connection coefficients \\(\\Gamma^{\\lambda}_{\\mu\\nu}(\\lambda)\\):"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Connection coefficients}\n\nWe want to expand the Ricci tensor in terms of the first-order perturbation \\(h\\). For this we write the connection coefficients \\(\\Gamma^{\\lambda}_{\\mu\\nu}(\\lambda)\\):"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\frac{1}{2}g^{\\lambda \\kappa} \\left(\\nabla_{\\nu}{g_{\\kappa \\mu}}+\\nabla_{\\mu}{g_{\\kappa \\nu}}-\\nabla_{\\kappa}{g_{\\mu \\nu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "Gtog:= \\Gamma^{\\lambda}_{\\mu\\nu} -> \n      (1/2) * g^{\\lambda\\kappa} ( \\nabla_{\\nu}{ g_{\\kappa\\mu} } \n                        + \\nabla_{\\mu}{ g_{\\kappa\\nu} } - \\nabla_{\\kappa}{ g_{\\mu\\nu} } );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "and now we change the metric by the first order approximation \\(g\\mapsto g + \\epsilon h\\):"
+				}
+			],
+			"hidden" : true,
+			"source" : "and now we change the metric by the first order approximation \\(g\\mapsto g + \\epsilon h\\):"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\frac{1}{2}\\left(g^{\\lambda \\kappa}-\\epsilon h^{\\lambda \\kappa}\\right) \\left(\\nabla_{\\nu}\\left(g_{\\kappa \\mu}+\\epsilon h_{\\kappa \\mu}\\right)+\\nabla_{\\mu}\\left(g_{\\kappa \\nu}+\\epsilon h_{\\kappa \\nu}\\right)-\\nabla_{\\kappa}\\left(g_{\\mu \\nu}+\\epsilon h_{\\mu \\nu}\\right)\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $g_{\\mu \\nu} -> g_{\\mu \\nu} + \\epsilon*h_{\\mu \\nu}$)\nsubstitute(_, $g^{\\mu \\nu} -> g^{\\mu \\nu} - \\epsilon*h^{\\mu \\nu}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We now apply the product rule twice to write out the derivatives:"
+				}
+			],
+			"hidden" : true,
+			"source" : "We now apply the product rule twice to write out the derivatives:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\nu}{g_{\\kappa \\mu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\nu}{\\epsilon} h_{\\kappa \\mu}+\\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\mu}{g_{\\kappa \\nu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\mu}{\\epsilon} h_{\\kappa \\nu}+\\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\kappa}{g_{\\mu \\nu}} - \\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\kappa}{\\epsilon} h_{\\mu \\nu} - \\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\kappa}{h_{\\mu \\nu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\nu}{g_{\\kappa \\mu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\nu}{\\epsilon} h_{\\kappa \\mu} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\nu}{h_{\\kappa \\mu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\mu}{g_{\\kappa \\nu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\mu}{\\epsilon} h_{\\kappa \\nu} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\kappa}{g_{\\mu \\nu}}+\\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\kappa}{\\epsilon} h_{\\mu \\nu}+\\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\kappa}{h_{\\mu \\nu}}\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_)\nproduct_rule(_)\ndistribute(_)\nproduct_rule(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "once \\(\\epsilon\\) is by assumption a constant, used only to keep track of the perturbation order, its derivatives must be zero:"
+				}
+			],
+			"hidden" : true,
+			"source" : "once \\(\\epsilon\\) is by assumption a constant, used only to keep track of the perturbation order, its derivatives must be zero:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\nu}{g_{\\kappa \\mu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\mu}{g_{\\kappa \\nu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\kappa}{g_{\\mu \\nu}} - \\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\kappa}{h_{\\mu \\nu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\nu}{g_{\\kappa \\mu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\nu}{h_{\\kappa \\mu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\mu}{g_{\\kappa \\nu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\nabla_{\\kappa}{g_{\\mu \\nu}}+\\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\kappa}{h_{\\mu \\nu}}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\nabla_{\\mu}{ \\epsilon } -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We consider \\(\\nabla\\) to be the derivative operator compatible with the unperturbed solution \\(g(0)\\). Therefore we can set the derivatives of \\(g\\) to zero"
+				}
+			],
+			"hidden" : true,
+			"source" : "We consider \\(\\nabla\\) to be the derivative operator compatible with the unperturbed solution \\(g(0)\\). Therefore we can set the derivatives of \\(g\\) to zero"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\kappa}{h_{\\mu \\nu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\nu}{h_{\\kappa \\mu}} - \\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\epsilon h^{\\lambda \\kappa} \\epsilon \\nabla_{\\kappa}{h_{\\mu \\nu}}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\nabla_{\\mu}{ g_{\\nu \\kappa} } -> 0$)\nsubstitute(_, $\\nabla_{\\mu}{ g^{\\nu \\kappa} } -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "we now collect the linear and second-order terms in \\(\\epsilon\\), and factor out the metric from the resulting expression"
+				}
+			],
+			"hidden" : true,
+			"source" : "we now collect the linear and second-order terms in \\(\\epsilon\\), and factor out the metric from the resulting expression"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}g^{\\lambda \\kappa} \\epsilon \\nabla_{\\kappa}{h_{\\mu \\nu}} - \\frac{1}{2}\\epsilon^{2} h^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} - \\frac{1}{2}\\epsilon^{2} h^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\epsilon^{2} h^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\mu \\nu}}\\end{dmath*}"
+				}
+			],
+			"source" : "collect_factors(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\epsilon \\left(\\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)+\\epsilon^{2} \\left( - \\frac{1}{2}h^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} - \\frac{1}{2}h^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}h^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_,$\\epsilon,\\epsilon**2$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\epsilon g^{\\lambda \\kappa} \\left(\\frac{1}{2}\\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}\\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}\\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)+\\epsilon^{2} \\left( - \\frac{1}{2}h^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\mu \\kappa}} - \\frac{1}{2}h^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\nu \\kappa}}+\\frac{1}{2}h^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_, $g^{\\mu? \\nu?}$)\ncanonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "and then we discard the second-order terms, as they are irrelevant for the linearization procedure"
+				}
+			],
+			"hidden" : true,
+			"source" : "and then we discard the second-order terms, as they are irrelevant for the linearization procedure"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} \\rightarrow \\epsilon g^{\\lambda \\kappa} \\left(\\frac{1}{2}\\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}\\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}\\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\epsilon**{2} -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Ricci tensor}\n\nThe Ricci tensor of \\(g(\\epsilon)\\) is given by"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Ricci tensor}\n\nThe Ricci tensor of \\(g(\\epsilon)\\) is given by"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow -\\nabla_{\\mu}{\\Gamma^{\\rho}\\,_{\\rho \\nu}}+\\nabla_{\\rho}{\\Gamma^{\\rho}\\,_{\\mu \\nu}}+\\Gamma^{\\lambda}\\,_{\\nu \\mu} \\Gamma^{\\rho}\\,_{\\rho \\lambda}+\\Gamma^{\\lambda}\\,_{\\nu \\lambda} \\Gamma^{\\rho}\\,_{\\rho \\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "rm:= R_{\\mu\\nu} -> -\\nabla_{\\mu}{\\Gamma^{\\rho}_{\\rho\\nu}}+\\nabla_{\\rho}{\\Gamma^{\\rho}_{\\mu\\nu}}\n                                  +\\Gamma^{\\lambda}_{\\nu\\mu} \\Gamma^{\\rho}_{\\rho\\lambda}\n                                  +\\Gamma^{\\lambda}_{\\nu\\lambda} \\Gamma^{\\rho}_{\\rho\\mu};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "where it was used the fact that \\(\\textrm{Ric}(g(0))=0\\).\n\nSubstituting the linearized version of the connection coefficients, we obtain"
+				}
+			],
+			"hidden" : true,
+			"source" : "where it was used the fact that \\(\\textrm{Ric}(g(0))=0\\).\n\nSubstituting the linearized version of the connection coefficients, we obtain"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow -\\nabla_{\\mu}\\left(\\epsilon g^{\\rho \\kappa} \\left(\\frac{1}{2}\\nabla_{\\nu}{h_{\\kappa \\rho}}+\\frac{1}{2}\\nabla_{\\rho}{h_{\\kappa \\nu}} - \\frac{1}{2}\\nabla_{\\kappa}{h_{\\rho \\nu}}\\right)\\right)+\\nabla_{\\rho}\\left(\\epsilon g^{\\rho \\kappa} \\left(\\frac{1}{2}\\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}\\nabla_{\\mu}{h_{\\kappa \\nu}} - \\frac{1}{2}\\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)\\right)+\\epsilon g^{\\lambda \\kappa} \\left(\\frac{1}{2}\\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\nabla_{\\nu}{h_{\\kappa \\mu}} - \\frac{1}{2}\\nabla_{\\kappa}{h_{\\nu \\mu}}\\right) \\epsilon g^{\\rho \\alpha} \\left(\\frac{1}{2}\\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{2}\\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{2}\\nabla_{\\alpha}{h_{\\rho \\lambda}}\\right)+\\epsilon g^{\\lambda \\kappa} \\left(\\frac{1}{2}\\nabla_{\\lambda}{h_{\\kappa \\nu}}+\\frac{1}{2}\\nabla_{\\nu}{h_{\\kappa \\lambda}} - \\frac{1}{2}\\nabla_{\\kappa}{h_{\\nu \\lambda}}\\right) \\epsilon g^{\\rho \\alpha} \\left(\\frac{1}{2}\\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{2}\\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{2}\\nabla_{\\alpha}{h_{\\rho \\mu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(rm,Gtog);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Finally, we apply the same procedure of the linearization of the connection coefficients:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Finally, we apply the same procedure of the linearization of the connection coefficients:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow  - \\frac{1}{2}\\nabla_{\\mu}{\\epsilon} g^{\\rho \\kappa} \\nabla_{\\nu}{h_{\\kappa \\rho}} - \\frac{1}{2}\\epsilon \\nabla_{\\mu}{g^{\\rho \\kappa}} \\nabla_{\\nu}{h_{\\kappa \\rho}} - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\nu}{h_{\\kappa \\rho}}\\right) - \\frac{1}{2}\\nabla_{\\mu}{\\epsilon} g^{\\rho \\kappa} \\nabla_{\\rho}{h_{\\kappa \\nu}} - \\frac{1}{2}\\epsilon \\nabla_{\\mu}{g^{\\rho \\kappa}} \\nabla_{\\rho}{h_{\\kappa \\nu}} - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\rho}{h_{\\kappa \\nu}}\\right)+\\frac{1}{2}\\nabla_{\\mu}{\\epsilon} g^{\\rho \\kappa} \\nabla_{\\kappa}{h_{\\rho \\nu}}+\\frac{1}{2}\\epsilon \\nabla_{\\mu}{g^{\\rho \\kappa}} \\nabla_{\\kappa}{h_{\\rho \\nu}}+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\kappa}{h_{\\rho \\nu}}\\right)+\\frac{1}{2}\\nabla_{\\rho}{\\epsilon} g^{\\rho \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}\\epsilon \\nabla_{\\rho}{g^{\\rho \\kappa}} \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\nu}{h_{\\kappa \\mu}}\\right)+\\frac{1}{2}\\nabla_{\\rho}{\\epsilon} g^{\\rho \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\epsilon \\nabla_{\\rho}{g^{\\rho \\kappa}} \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\mu}{h_{\\kappa \\nu}}\\right) - \\frac{1}{2}\\nabla_{\\rho}{\\epsilon} g^{\\rho \\kappa} \\nabla_{\\kappa}{h_{\\mu \\nu}} - \\frac{1}{2}\\epsilon \\nabla_{\\rho}{g^{\\rho \\kappa}} \\nabla_{\\kappa}{h_{\\mu \\nu}} - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}%\n+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_)\nproduct_rule(_)\ndistribute(_)\nproduct_rule(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow  - \\frac{1}{2}\\epsilon \\nabla_{\\mu}{g^{\\rho \\kappa}} \\nabla_{\\nu}{h_{\\kappa \\rho}} - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\nu}{h_{\\kappa \\rho}}\\right) - \\frac{1}{2}\\epsilon \\nabla_{\\mu}{g^{\\rho \\kappa}} \\nabla_{\\rho}{h_{\\kappa \\nu}} - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\rho}{h_{\\kappa \\nu}}\\right)+\\frac{1}{2}\\epsilon \\nabla_{\\mu}{g^{\\rho \\kappa}} \\nabla_{\\kappa}{h_{\\rho \\nu}}+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\kappa}{h_{\\rho \\nu}}\\right)+\\frac{1}{2}\\epsilon \\nabla_{\\rho}{g^{\\rho \\kappa}} \\nabla_{\\nu}{h_{\\kappa \\mu}}+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\nu}{h_{\\kappa \\mu}}\\right)+\\frac{1}{2}\\epsilon \\nabla_{\\rho}{g^{\\rho \\kappa}} \\nabla_{\\mu}{h_{\\kappa \\nu}}+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\mu}{h_{\\kappa \\nu}}\\right) - \\frac{1}{2}\\epsilon \\nabla_{\\rho}{g^{\\rho \\kappa}} \\nabla_{\\kappa}{h_{\\mu \\nu}} - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}%\n - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\nabla_{\\mu}{ \\epsilon } -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow  - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\nu}{h_{\\kappa \\rho}}\\right) - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\rho}{h_{\\kappa \\nu}}\\right)+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\kappa}{h_{\\rho \\nu}}\\right)+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\nu}{h_{\\kappa \\mu}}\\right)+\\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\mu}{h_{\\kappa \\nu}}\\right) - \\frac{1}{2}\\epsilon g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}%\n+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}} - \\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}}+\\frac{1}{4}\\epsilon g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} \\epsilon g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\nabla_{\\mu}{ g_{\\nu \\kappa} } -> 0$)\nsubstitute(_, $\\nabla_{\\mu}{ g^{\\nu \\kappa} } -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow \\epsilon \\left( - \\frac{1}{2}g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\nu}{h_{\\kappa \\rho}}\\right) - \\frac{1}{2}g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\rho}{h_{\\kappa \\nu}}\\right)+\\frac{1}{2}g^{\\rho \\kappa} \\nabla_{\\mu}\\left(\\nabla_{\\kappa}{h_{\\rho \\nu}}\\right)+\\frac{1}{2}g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\nu}{h_{\\kappa \\mu}}\\right)+\\frac{1}{2}g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\mu}{h_{\\kappa \\nu}}\\right) - \\frac{1}{2}g^{\\rho \\kappa} \\nabla_{\\rho}\\left(\\nabla_{\\kappa}{h_{\\mu \\nu}}\\right)\\right)+\\epsilon^{2} \\left(\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\mu}{h_{\\kappa \\nu}} g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\mu}} g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} g^{\\rho \\alpha} \\nabla_{\\lambda}{h_{\\alpha \\rho}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\lambda}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\mu}} g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\lambda}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\lambda}{h_{\\kappa \\nu}} g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\nu}{h_{\\kappa \\lambda}} g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} g^{\\rho \\alpha} \\nabla_{\\mu}{h_{\\alpha \\rho}} - \\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} g^{\\rho \\alpha} \\nabla_{\\rho}{h_{\\alpha \\mu}}+\\frac{1}{4}g^{\\lambda \\kappa} \\nabla_{\\kappa}{h_{\\nu \\lambda}} g^{\\rho \\alpha} \\nabla_{\\alpha}{h_{\\rho \\mu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "collect_factors(_)\nfactor_out(_, $\\epsilon, \\epsilon**2$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow \\epsilon \\left( - \\frac{1}{2}g^{\\kappa \\rho} \\nabla_{\\mu}\\left(\\nabla_{\\nu}{h_{\\kappa \\rho}}\\right)+\\frac{1}{2}g^{\\kappa \\rho} \\nabla_{\\kappa}\\left(\\nabla_{\\nu}{h_{\\mu \\rho}}\\right)+\\frac{1}{2}g^{\\kappa \\rho} \\nabla_{\\kappa}\\left(\\nabla_{\\mu}{h_{\\nu \\rho}}\\right) - \\frac{1}{2}g^{\\kappa \\rho} \\nabla_{\\kappa}\\left(\\nabla_{\\rho}{h_{\\mu \\nu}}\\right)\\right)+\\epsilon^{2} \\left(\\frac{1}{4}g^{\\alpha \\kappa} \\nabla_{\\mu}{h_{\\nu \\alpha}} g^{\\lambda \\rho} \\nabla_{\\kappa}{h_{\\lambda \\rho}}+\\frac{1}{4}g^{\\alpha \\kappa} \\nabla_{\\nu}{h_{\\mu \\alpha}} g^{\\lambda \\rho} \\nabla_{\\kappa}{h_{\\lambda \\rho}} - \\frac{1}{4}g^{\\alpha \\kappa} \\nabla_{\\alpha}{h_{\\mu \\nu}} g^{\\lambda \\rho} \\nabla_{\\kappa}{h_{\\lambda \\rho}}+\\frac{1}{4}g^{\\alpha \\kappa} \\nabla_{\\mu}{h_{\\alpha \\kappa}} g^{\\lambda \\rho} \\nabla_{\\nu}{h_{\\lambda \\rho}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Finally we make some post processing, to obtain"
+				}
+			],
+			"hidden" : true,
+			"source" : "Finally we make some post processing, to obtain"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\mu \\nu} \\rightarrow  - \\frac{1}{2}g^{\\alpha \\beta} \\nabla_{\\mu}\\left(\\nabla_{\\nu}{h_{\\alpha \\beta}}\\right)+\\frac{1}{2}g^{\\alpha \\beta} \\nabla_{\\alpha}\\left(\\nabla_{\\nu}{h_{\\mu \\beta}}\\right)+\\frac{1}{2}g^{\\alpha \\beta} \\nabla_{\\alpha}\\left(\\nabla_{\\mu}{h_{\\nu \\beta}}\\right) - \\frac{1}{2}g^{\\alpha \\beta} \\nabla_{\\alpha}\\left(\\nabla_{\\beta}{h_{\\mu \\nu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $\\epsilon**{2} -> 0$)\nsubstitute(_, $\\epsilon -> 1$)\nrename_dummies(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This last expression agrees with Eq. (7.5.14) showed in Wald."
+				}
+			],
+			"hidden" : true,
+			"source" : "This last expression agrees with Eq. (7.5.14) showed in Wald."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

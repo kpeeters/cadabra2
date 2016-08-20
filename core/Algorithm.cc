@@ -23,6 +23,7 @@
 #include "Storage.hh"
 #include "Props.hh"
 #include "Cleanup.hh"
+#include <typeinfo>
 
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
@@ -54,11 +55,17 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
 	// std::cerr << "apply_generic at " << *it->name << " " << *start->name << std::endl;
+
 	while(tr.is_valid(start)) {
+//		std::cerr << "evaluate main loop at " << *start->name << std::endl;
+//		std::cerr << "main loop for " << typeid(*this).name() << ":\n" << Ex(start) << std::endl;
+
 		result_t thisret=result_t::l_no_action;
 		Ex::iterator enter(start);
 		Ex::fixed_depth_iterator next(start);
 		++next;
+//		if(tr.is_valid(next))
+//			std::cerr << "next = " << *next->name << std::endl;
 		do {
 //			std::cout << "apply at " << *enter->name << std::endl;
 			if(deep && depth==0) 
@@ -71,8 +78,13 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 				ret=result_t::l_applied;
 			} while(depth==0 && repeat && thisret==result_t::l_applied);
 
-		if(depth==0)  
+		if(depth==0) {
+			// std::cerr << "break " << std::endl;
 			break;
+			}
+		else {
+			// std::cerr << "no break " << std::endl;
+			}
 		start=next;
 		} 
 
@@ -83,9 +95,17 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 		while(tr.is_valid(start)) {
 			Ex::iterator work=start;
 			++start;
+			bool cpy=false;
+			if(work==it) cpy=true;
 			cleanup_dispatch(kernel, tr, work);
+			if(cpy) it=work;
 			}
 		}
+	
+//	if(tr.is_valid(it)) {
+//		std::cerr << "exit " << *it->name << std::endl;
+//		std::cerr << "exit apply_generic\n" << Ex(it) << std::endl;
+//		}
 
 	return ret;
 	}

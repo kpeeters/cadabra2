@@ -24,9 +24,11 @@ namespace cadabra {
 	
 	/// \ingroup core
 	///
-   /// Apply a function on every node in the tree below the given node, depth-first.
+   /// Apply a function on every node in the tree at and below the
+   /// given node, depth-first. Return an iterator to the top node,
+	/// which replaces 'it' (may be the same).
 	
-	void do_subtree(const Ex& tr, Ex::iterator it, std::function<void(Ex::iterator)> f);
+	Ex::iterator do_subtree(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f);
 
 	/// \ingroup core
 	///

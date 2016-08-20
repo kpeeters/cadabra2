@@ -12,6 +12,23 @@
 
 	See tests/components.cdb for basic samples. 
 
+	Components nodes have the following structure:
+
+     \components
+        _{m}            // index names/types
+        _{n}
+        \comma          // last child
+            \equals
+               \comma   // list of index values
+                   r
+                   t
+               [value]  // value of tensor for above values of indices
+            \equals
+               ...
+            \equals
+               ...
+
+
      ex:= A_{m n} ( A_{m n} + B_{m n} );
      crds:= m -> { t, r, \phi, \theta };
      vals:= { A_{t t} -> r, A_{r r} -> r**2, A_{t \phi} -> t, B_{t t} -> 1 };
@@ -74,16 +91,16 @@ class evaluate : public Algorithm {
 
 		bool is_component(iterator it) const;
 
-		void handle_components(iterator it);
-		void handle_sum(iterator it);
-		void handle_prod(iterator it);
-		void handle_derivative(iterator it);
+		iterator handle_components(iterator it);
+		iterator handle_sum(iterator it);
+		iterator handle_prod(iterator it);
+		iterator handle_derivative(iterator it);
 
 		/// Replace a single factor with a 'components' ...
 		/// The full_ind_free argument can contain a list of indices in the order
 		/// in which values should be stored in index value sets.
 
-		void handle_factor(sibling_iterator& sib, const index_map_t& full_ind_free);
+		iterator handle_factor(sibling_iterator sib, const index_map_t& full_ind_free);
 
 		/// Merge entries in a single 'components' node when they are for the
 		/// same index value(s).
@@ -94,8 +111,11 @@ class evaluate : public Algorithm {
 		void cleanup_components(iterator it1);
 
 		/// Simplify all components of a 'components' node by running sympy's simplify
-		/// on them.
+		/// on them. Returns a replacement iterator to the top.
 		void simplify_components(iterator);
+
+		/// Wrap a non-component scalar node in a 'components' node.
+		iterator wrap_scalar_in_components_node(iterator sib);
 
 		/// Determine all the Coordinate dependencies of the object at 'it'. For the
 		/// time being this can only be a 'components' node.
