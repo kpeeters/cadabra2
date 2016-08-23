@@ -105,18 +105,15 @@ Ex::iterator evaluate::handle_sum(iterator it)
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
 		if(prop==0) {
 			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second);
-			if(crd==0) {
-				throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property.");
-				}
-			else {
-				full_ind_free.erase(i);
-				}
+			if(crd==0) 
+				throw ArgumentException("evaluate: Index "+*(i.second->name)
+												+" does not have an Indices property.");
 			}
-
+		
 		if(prop->values.size()==0)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
-
+	
 	// Iterate over all terms in the sum. These should be of two types: \component nodes,
 	// which we do not need to touch anymore, and nodes which have still not been 
 	// evaluated. We send them all to handle_factor, which will return immediately on the

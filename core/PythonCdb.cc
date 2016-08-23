@@ -19,6 +19,7 @@ namespace boost {
 #endif
 
 #include "PythonCdb.hh"
+#include "SympyCdb.hh"
 
 #include "Parser.hh"
 #include "Bridge.hh"
@@ -286,6 +287,14 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	boost::python::object ret=parse(str.str());
 
 	return ret;
+	}
+
+Ex Ex_through_Sympy(Ex ex, std::string head)
+	{
+	Ex::iterator it=ex.begin();
+	sympy::apply(*get_kernel_from_scope(), ex, it, head, "", "");
+
+	return ex;
 	}
 
 // Fetch objects from the Python side using their Python identifier.
@@ -1014,6 +1023,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("tree", &print_tree);
 	def("init_ipython", &init_ipython);
 	def("properties", &list_properties);
+	def("scas", &Ex_through_Sympy);
 
 	def("create_scope", &create_scope, 
 		 return_value_policy<manage_new_object>() );

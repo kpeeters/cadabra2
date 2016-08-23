@@ -19,10 +19,15 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\rho\\left(\\#\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\rho.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\chi.\\end{dmath*}"
 				}
 			],
-			"source" : "{r,t}::Coordinate;\n\\partial{#}::PartialDerivative;\n\\rho{#}::Depends(r,t);"
+			"source" : "{r,t}::Coordinate;\n\\partial{#}::PartialDerivative;\n\\rho::Depends(r,t);\n\\chi::Depends(r);"
 		},
 		{
 			"cell_origin" : "client",
@@ -32,10 +37,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\rho+\\rho^{2}+\\partial_{t}{\\rho}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\rho+\\rho^{2}+\\partial_{t r}{\\rho}+\\partial_{r}{\\chi}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= \\rho+\\rho**2 +\\partial_{t}{\\rho};"
+			"source" : "ex:= \\rho+\\rho**2 +\\partial_{t r}{\\rho} + \\partial_{r}{\\chi};"
 		},
 		{
 			"cell_origin" : "client",
@@ -45,23 +50,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}1\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\rho^{2}+\\rho+\\partial_{r}{\\chi}+\\partial_{r t}{\\rho}\\end{dmath*}"
 				}
 			],
-			"source" : "rl:= 1;"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\ncadabra2.ArgumentException: evaluate: Index t does not have an Indices property.\n\\end{verbatim}}}"
-				}
-			],
-			"source" : "evaluate(ex, rl);"
+			"source" : "res=scas(ex, \"\");"
 		},
 		{
 			"cell_origin" : "client",
@@ -85,10 +77,64 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "output",
-					"source" : "\\begin{verbatim}{\\prod}  (0x7fcde40541c8)\n  1:{\\sum}  (0x7fcde4054178)\n  2:  {\\rho}  (0x7fcde401bb98)\n  3:  {1}  (0x7fcde401bcd8)\n  4:{\\rho}  (0x7fcde401bd28)\n\n\\end{verbatim}"
+					"source" : "\\begin{verbatim}{\\sum}  (0x7f6a280272f8)\n  1:{\\pow}  (0x7f6a28021078)\n  2:  {\\rho}  (0x7f6a280236c8)\n  3:  {1}  2  (0x7f6a28020fd8)\n  4:{\\rho}  (0x7f6a28023718)\n  5:{\\partial}  (0x7f6a28025c38)\n  6:  _{r}  (0x7f6a2801de28)\n  7:  {\\chi}  (0x7f6a2801ddd8)\n  8:{\\partial}  (0x7f6a28010c28)\n  9:  _{r}  (0x7f6a280274d8)\n 10:  _{t}  (0x7f6a2800a698)\n 11:  {\\rho}  (0x7f6a2800a6e8)\n\n\\end{verbatim}"
 				}
 			],
-			"source" : "print(tree(ex))"
+			"source" : "print(tree(res))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, \\linebreak[0] n\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\Delta.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Metric to~}g_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}g^{m n}.\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n}::Indices(values={r,t});\n\\Delta::Depends(r);\ng_{m n}::Metric;\ng^{m n}::InverseMetric;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(g_{t t} = \\Delta, \\linebreak[0] g_{r r} = \\sin\\left(t\\right)\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "rl:= g_{t t} = \\Delta, g_{r r} = \\sin(t);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left(g_{t t} = \\Delta, \\linebreak[0] g_{r r} = \\sin\\left(t\\right), \\linebreak[0] g^{r r} = \\frac{1}{\\sin\\left(t\\right)}, \\linebreak[0] g^{t t} = \\frac{1}{\\Delta}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "complete(rl, $g^{m n}$);"
 		},
 		{
 			"cell_origin" : "client",
