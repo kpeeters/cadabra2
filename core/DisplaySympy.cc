@@ -147,10 +147,11 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 	// dependence off later again.
 
 	const Depends *dep=kernel.properties.get<Depends>(it);
+	if(dep)
+		depsyms.insert(*it->name);
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	if(ch!=tree.end(it) || dep!=0) {
-		depsyms.insert(*it->name);
 		str << "(";
 		bool first=true;
 		while(ch!=tree.end(it)) {
@@ -493,8 +494,26 @@ void DisplaySympy::import(Ex& ex)
 			// If yes, strip them off again.
 			auto fnd = depsyms.find(*it->name);
 			if(fnd!=depsyms.end()) {
-				if(*ex.begin(it)->name=="\\comma")
-					ex.erase(ex.begin(it));
+				std::cerr << "stripping from " << *it->name << std::endl;
+//				if(*ex.begin(it)->name=="\\comma")
+				ex.erase(ex.begin(it));
+				}
+			
+			// Move child nodes of partial to the right place.
+			if(*it->name=="\\partial") {
+				auto comma = ex.begin(it);
+				if(*comma->name=="\\comma") {
+					auto args=ex.begin(comma);
+					++args;
+					while(args!=ex.end(comma)) {
+						auto nxt=args;
+						++nxt;
+						ex.move_before(comma, args)->fl.parent_rel=str_node::p_sub;
+						args=nxt;
+						}
+					ex.flatten(comma);
+					ex.erase(comma);
+					}
 				}
 
 			return it;
