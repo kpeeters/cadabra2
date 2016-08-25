@@ -15,6 +15,7 @@ else()
   add_test(comparison     test_comparison)
 endif()
 add_test(packages       ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/packages.cdb)
+add_test(algebra        ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/algebra.cdb)
 add_test(components     ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/components.cdb)
 add_test(factor         ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/factor.cdb)
 add_test(field_theory   ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/field_theory.cdb)
@@ -35,6 +36,7 @@ add_test(young          ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/te
 
 # We need to set the Python path so that we pick up the correct cadabra2.so Python module
 # even if we did not do 'make install' yet.
+set_tests_properties(algebra      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")
 set_tests_properties(components   PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")
 set_tests_properties(packages     PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")
 set_tests_properties(factor       PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")

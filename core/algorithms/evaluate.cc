@@ -103,13 +103,17 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	classify_indices(it, full_ind_free, full_ind_dummy);
 	for(auto i: full_ind_free) {
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
-		if(prop==0)
-			throw ArgumentException("evaluate: Index "+*(i.second->name)+" does not have an Indices property.");
-
+		if(prop==0) {
+			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second);
+			if(crd==0) 
+				throw ArgumentException("evaluate: Index "+*(i.second->name)
+												+" does not have an Indices property.");
+			}
+		
 		if(prop->values.size()==0)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
-
+	
 	// Iterate over all terms in the sum. These should be of two types: \component nodes,
 	// which we do not need to touch anymore, and nodes which have still not been 
 	// evaluated. We send them all to handle_factor, which will return immediately on the
@@ -383,8 +387,8 @@ void evaluate::cleanup_components(iterator it)
 
 Ex::iterator evaluate::handle_derivative(iterator it)
 	{
-	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
-
+	std::cerr << "handle_derivative " << Ex(it) << std::endl;
+	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
 	// figure out the dependence of that argument on the various coordinates.
@@ -403,6 +407,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		++sib;
 		}
 	assert(sib!=tr.end(it));
+
+	std::cerr << "after handle\n" << Ex(it) << std::endl;
 	
 	// Walk all the index value sets of the \components node inside the
 	// argument.  For each, determine the dependencies, and generate
@@ -414,6 +420,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
 			sibling_iterator rhs = tr.begin(iv);
 			++rhs;
+			std::cerr << "getting dependencies of " << *rhs->name << std::endl;
 			auto deps=dependencies(rhs);
 
 			// FIXME: all indices on \partial can take any of the values of the 
@@ -500,6 +507,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 			});
 
 	// Determine implicit dependence via Depends.
+	std::cerr << "deps for " << *it->name << std::endl;
 	const Depends *dep = kernel.properties.get<Depends>(it);
 	if(dep) {
 		Ex deps(dep->dependencies(kernel, it));
@@ -510,6 +518,8 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 				ret.insert(cpy);
 				return true;
 				});
+		for(auto& e: ret)
+			std::cerr << e << std::endl;
 		}
 
 	return ret;

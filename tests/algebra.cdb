@@ -1,483 +1,490 @@
 # 
 # Test 1:= keep_terms
 
-obj1:= a1 + a2 + a3 + a4 + a5 + a6 + a7;
-@keep_terms(%){2}{4};
-tst1:= a3 + a4 + a5 - @(obj1);
-@collect_terms!(%);
-@assert(tst1);
-
-obj2:= a1 + a2 + a3 + a4 + a5 + a6 + a7;
-@keep_terms(%){6}{6};
-tst2:= a7 - @(obj2);
-@collect_terms!(%);
-@assert(tst2);
-
-obj3:= a1 + a2 + a3 + a4 + a5 + a6 + a7;
-@keep_terms(%){3};
-tst3:= a4 + a5 + a6 + a7 - @(obj3);
-@collect_terms!(%);
-@assert(tst3);
+# obj1:= a1 + a2 + a3 + a4 + a5 + a6 + a7;
+# @keep_terms(%){2}{4};
+# tst1:= a3 + a4 + a5 - @(obj1);
+# @collect_terms!(%);
+# @assert(tst1);
+# 
+# obj2:= a1 + a2 + a3 + a4 + a5 + a6 + a7;
+# @keep_terms(%){6}{6};
+# tst2:= a7 - @(obj2);
+# @collect_terms!(%);
+# @assert(tst2);
+# 
+# obj3:= a1 + a2 + a3 + a4 + a5 + a6 + a7;
+# @keep_terms(%){3};
+# tst3:= a4 + a5 + a6 + a7 - @(obj3);
+# @collect_terms!(%);
+# @assert(tst3);
 
 # Test 4:= dummy index relabelling upon @ substitution:
 #
-{m1,m2,m3,m4,m5}::Indices(vector).
-tmp1:= A_{m1 m2} + B_{m1 m2};
-tmp2:= C_{m3 m4} + D_{m3 m4};
-obj4:= @(tmp1) @(tmp2) g^{m1 m3} g^{m2 m4};
-
-# Test 5:= list manipulations.
-#
-obj5:= {a,b,{c,d}};
-@listflatten(%);
-tst5:= {a,b,c,d} - @(obj5);
-@collect_terms!(%);
-@assert(tst5);
+# def test04():
+# {m1,m2,m3,m4,m5}::Indices(vector).
+# tmp1:= A_{m1 m2} + B_{m1 m2};
+# tmp2:= C_{m3 m4} + D_{m3 m4};
+# obj4:= @(tmp1) @(tmp2) g^{m1 m3} g^{m2 m4};
 
 # Test 6 - 11:= prodsort
 #
 def test06():
+    __cdbkernel__=create_scope()
     {X,G,Y,A,B}::SortOrder.
     {X,A}::AntiCommuting.
-    obj6:= A B G X A X
+    obj6:= A B G X A X;
     sort_product(obj6)
     tst6:= X X G A A B + @(obj6);
-    collect_terms(_)
     assert(tst6==0)
 
 test06()
 
 def test07():
+    __cdbkernel__=create_scope()
     {X,G,Y,A,B}::SortOrder.
     {X,A}::NonCommuting.
-    obj7:= A*B*G*X*A*X
+    obj7:= A*B*G*X*A*X;
     sort_product(_)
     tst7:= G A X A X B - @(obj7);
-    collect_terms(_)
     assert(tst7==0)
 
 test07()
 
 def test08():
+    __cdbkernel__=create_scope()
     { W_{m n}, W_{m} }::SortOrder.
     { W_{m n}, W_{m} }::AntiCommuting.
     obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
     sort_product(_)
     tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
-    collect_terms(_)
     assert(tst8==0)
 
 test08()
 
 def test09():
+    __cdbkernel__=create_scope()
     { \theta_a, \theta_b }::SelfAntiCommuting.
     obj9:= \theta_c \theta_b \theta_a;
     sort_product(_)
-    print(_)
     tst9:= \theta_a \theta_b \theta_c + @(obj9);
-    collect_terms(_)
     assert(tst9==0)
 
 test09()
 
 def test10():
+    __cdbkernel__=create_scope()
     {a,b,c,d}::Indices.
     { \theta_a, \chi_a }::SortOrder.
     \theta_{a}::SelfAntiCommuting.
     \chi_{a}::SelfAntiCommuting.
     { \theta_a, \chi_a }::Commuting.
-    print(properties())
     obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
     sort_product(_);
-    print(_)
     tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
-    collect_terms(_);
     assert(tst10==0)
 
 test10()
 
-@reset;
-\Gamma_{#}::GammaMatrix.
-obj11:= \Gamma_{m n p} \Gamma_{r s};
-@prodsort!(%);
-tst11:= \Gamma_{m n p} \Gamma_{r s} - @(obj11);
-@collect_terms!(%);
-@assert(tst11);
+def test11():
+    __cdbkernel__=create_scope()
+    \Gamma_{#}::GammaMatrix.
+    obj11:= \Gamma_{m n p} \Gamma_{r s};
+    sort_product(_)
+    tst11:= \Gamma_{m n p} \Gamma_{r s} - @(obj11);
+    assert(tst11==0)
+    print("Test 11 passed")
+
+test11()
 
 # Test 12:= Inherited sort order
 #
-@reset;
-\bar{#}::Accent.
-{D,K,B,A}::SortOrder.
-obj12:= A \bar{B} \bar{K} D;
-@prodsort!(%);
-tst12:= D \bar{K} \bar{B} A - @(obj12);
-@collect_terms!(%);
-@assert(tst12);
+def test12():
+    __cdbkernel__=create_scope()
+    \bar{#}::Accent.
+    {D,K,B,A}::SortOrder.
+    obj12:= A \bar{B} \bar{K} D;
+    sort_product(_)
+    tst12:= D \bar{K} \bar{B} A - @(obj12);
+    assert(tst12==0)
+    print("Test 12 passed")
 
-@reset;
-{b,d,e,f}::AntiCommuting.
-obj13:= (a+b)*(d*e*f);
-@prodsort!(%);
-tst13:= (a+b)*(d*e*f) - @(obj13);
-@collect_terms!(%);
-@assert(tst13);
+test12()
 
-@reset;
-{a,b,f}::AntiCommuting.
-obj14:= (a+b)*(d*e*f);
-@prodsort!(%);
-tst14:= (d*e*f)*(a+b) + @(obj14);
-@collect_terms!(%);
-@assert(tst14);
+def test13():
+    __cdbkernel__=create_scope()
+    {b,d,e,f}::AntiCommuting.
+    obj13:= (a+b)*(d*e*f);
+    sort_product(_)
+    tst13:= (a+b)*(d*e*f) - @(obj13);
+    assert(tst13==0)
+    print("Test 13 passed")
 
-@reset;
-{b,f}::AntiCommuting.
-obj15:= (d*e*f)*(a*b);
-@prodsort(%);
-tst15:= (a*b)*(d*e*f) + @(obj15);
-@collect_terms!(%);
-@assert(tst15);
-
-@reset;
-{A_\mu, B_\mu}::AntiCommuting.
-\diff{#}::Derivative.
-obj16:= \diff{B_\mu}_{\nu} * \diff{A_\rho}_{\sigma};
-@prodsort(%);
-tst16:= \diff{A_\rho}_{\sigma} * \diff{B_\mu}_{\nu} + @(obj16);
-@collect_terms!(%);
-@assert(tst16);
-
-@reset;
-\Gamma{#}::GammaMatrix.
-obj17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r};
-@prodsort!(%);
-tst17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r} - @(obj17a);
-@collect_terms!(%);
-@assert(tst17a);
-obj17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n});
-@prodsort!(%);
-tst17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n}) - @(obj17b);
-@collect_terms!(%);
-@assert(tst17a);
-
-# Test 18:= 
+#def test14():
 #
-@reset;
-{\psi, \chi}::Spinor.
-{\psi, \chi, \Gamma_{#}}::NonCommuting.
-\Gamma_{#}::GammaMatrix.
-{\chi,\psi}::SortOrder.
-\bar{#}::Accent.
-obj18:= \bar{\psi} \Gamma_{m n p} \chi;
-@prodsort!(%);
-tst18:= \bar{\psi} \Gamma_{m n p} \chi - @(obj18);
-@collect_terms!(%);
-@assert(tst18);
+# {a,b,f}::AntiCommuting.
+# {d,e,f,a,b}::SortOrder.
+# obj14:= (a+b)*(d*e*f);
+# sort_product(_);
+# tst14:= (d*e*f)*(a+b) + @(obj14);
+# assert(tst14==0)
 
-# Test 19 - 21:= acting at a fixed level.
-#
-@reset;
-obj19:= (A+(B+C*(G+K))*D)*(E+F);
-@distribute!3(%);
-tst19:= (A + B * D + C * (G + K) * D) * (E + F) - @(obj19);
-@collect_terms(%);
-@assert(tst19);
+def test15():
+    __cdbkernel__=create_scope()
+    {b,f}::AntiCommuting.
+    obj15:= (d*e*f)*(a*b);
+    sort_product(_);
+    tst15:= (a*b)*(d*e*f) + @(obj15);
+    assert(tst15==0)
+    print("Test 15 passed")
 
-obj20:= (A+(B+C*(G+K))*D)*(E+F)*(M+(N+P*(H+K))*P);
-@distribute!3(%);
-tst20:= (A + B * D + C * (G + K) * D) * (E + F) * (M + N * P + P * (H + K) * P) - @(obj20);
-@collect_terms(%);
-@assert(tst20);
-
-obj21:= { A*(B+C*(D+E)), F*(G+H*(I+J)) };
-@distribute!2(%);
-tst21:= { A*B + A*C*(D+E), F*G+F*H*(I+J) } - @(obj21);
-@collect_terms!(%);
-@assert(tst21);
-
-# Test 22:= weights
-#
-@reset;
-{\chi, \psi}::Weight(label=grassmann, value=1).
-tst22a:= \chi \psi \chi;
-@drop_weight!(%){grassmann}{3};
-@assert(tst22a);
-
-@reset;
-{\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
-obj22aa:= H B^{m} B_{n} + B_{n} C^{m};
-@drop_weight!(%){small}{2};
-tst22aa:= B_{n} C^{m} - @(obj22aa);
-@collect_terms!(%);
-@assert(tst22aa);
-
-@reset;
-{\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
-obj22aaa:= H B^{m} B_{n} + B_{n} C^{m};
-@keep_weight!(%){small}{2};
-tst22aaa:= H B^{m} B_{n} - @(obj22aaa);
-@collect_terms!(%);
-@assert(tst22aaa);
-
-@reset;
-{\chi, \psi}::Weight(label=grassmann, value=1).
-obj22b:= \chi \chi \chi + \chi \chi + \chi + \chi \chi;
-@drop_weight!(%){grassmann}{3};
-tst22b:= \chi \chi + \chi + \chi \chi - @(obj22b);
-@collect_terms!(%);
-@assert(tst22b);
-
-obj22c:= \chi \chi \chi + \chi \chi * (\chi + \chi) + \chi + \chi \chi;
-@keep_weight!(%){grassmann}{3};
-tst22c:= \chi \chi \chi + \chi \chi * (\chi + \chi) - @(obj22c);
-@collect_terms!(%);
-@assert(tst22c);
-
-\bar{#}::Accent.
-obj22d:= \chi \bar{\chi*\chi};
-@keep_weight!(%){grassmann}{3};
-tst22d:= \chi \bar{\chi*\chi} - @(obj22d);
-@collect_terms!(%);
-@assert(tst22d);
-
-\bar{#}::Accent.
-obj22e:= \chi \chi \bar{\chi};
-@keep_weight!(%){grassmann}{3};
-tst22e:= \chi \chi \bar{\chi} - @(obj22e);
-@collect_terms!(%);
-@assert(tst22e);
-
-@reset.
-{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u#}::Indices.
-Q_{a b c}::Weight(label=myTerms,value=3).
-g_{a b c}::Weight(label=myTerms,value=1).
-obj22f:=Q_{f g h} Dx^{f} Dx^{g} Dx^{h};
-@keep_weight!(%){myTerms}{3};
-tst22f:=Q_{f g h} Dx^{f} Dx^{g} Dx^{h} - @(obj22f);
-@collect_terms!(%);
-@assert(tst22f);
-
-@reset.
-{A,B}::Weight(label=field, value=1).
-obj22g:= C + A + A B;
-@keep_weight!(%){field}{2};
-tst22g:= A B - @(obj22g);
-@collect_terms!(%);
-@assert(tst22g);
-
-@reset.
-A::Weight(label=field, value=1).
-B::Weight(label=field, value=-1).
-obj22h:= C + A + A B;
-@keep_weight!(%){field}{0};
-tst22h:= C + A B - @(obj22h);
-@collect_terms!(%);
-@assert(tst22h);
-
-@reset.
-A::Weight(label=field, value=3/2).
-B::Weight(label=field, value=-1).
-C::Weight(label=field, value=1/2).
-obj22i:= C + A + A B;
-@keep_weight!(%){field}{1/2};
-tst22i:= C + A B - @(obj22i);
-@collect_terms!(%);
-@assert(tst22i);
+test15()
 
 
-# Test 23: spinor sort
-#
-@reset;
-{\chi, \psi, \psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).
-{\chi, \psi, \psi_{m}}::AntiCommuting.
-\bar{#}::DiracBar.
-\Gamma{#}::GammaMatrix.
-{\psi_{m}, \psi, \chi}::SortOrder.
-obj23:= \bar{\chi} \Gamma_{m n p} \psi;
-@spinorsort!(%);
-tst23:= \bar{\psi} \Gamma_{m n p} \chi - @(obj23);
-@collect_terms!(%);
-@assert(tst23);
+def test16():
+    __cdbkernel__=create_scope()
+    {A_\mu, B_\mu}::AntiCommuting.
+    \diff{#}::Derivative.
+    obj16:= \diff{B_\mu}_{\nu} * \diff{A_\rho}_{\sigma};
+    sort_product(_);
+    tst16:= \diff{A_\rho}_{\sigma} * \diff{B_\mu}_{\nu} + @(obj16);
+    assert(tst16==0)
+    print("Test 16 passed")
 
-obj24:= \bar{\chi}\psi;
-@spinorsort!(%);
-tst24:= \bar{\psi}\chi - @(obj24);
-@collect_terms!(%);
-@assert(tst24);
+test16()
 
-obj25:= \chi\Gamma_{m n p}\psi;
-@spinorsort!(%);
-tst25:= \chi\Gamma_{m n p}\psi - @(obj25);
-@collect_terms!(%);
-@assert(tst25);
 
-obj26:= \bar{\chi} \Gamma_{m n} \psi_{m};
-@spinorsort!(%);
-tst26:= - \bar{\psi_{m}} \Gamma_{m n} \chi - @(obj26);
-@collect_terms!(%);
-@assert(tst26);
+def test17():
+    __cdbkernel__=create_scope()
+    \Gamma{#}::GammaMatrix.
+    obj17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r};
+    sort_product(_);
+    tst17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r} - @(obj17a);
+    assert(tst17a==0)
+    obj17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n});
+    sort_product(_);
+    tst17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n}) - @(obj17b);
+    assert(tst17b==0);
+    print("Test 17 passed")
 
-# Test 27:= multiple implicitindex objects
-#
-@reset;
-{\chi,\psi, \lambda, \rho}::Spinor.
-\Gamma{#}::GammaMatrix.
-\bar{#}::DiracBar.
-obj27:= \bar{\chi}\Gamma_{m n p}\psi A_{m n} \bar{\lambda}\Gamma_{p}\rho;
-@prodsort!(%);
-@spinorsort!(%);
-A_{m n} \bar{\chi} \Gamma_{m n p} \psi \bar{\lambda} \Gamma_{p} \rho;
+test17()
 
-# Test 28: powers
-@reset.
-obj28:= 8 d**2 - d**3;
-@collect_terms!(%);
-@substitute!(%)( d**3 -> Q );
-
-tst28:= 8 d**2 - Q - @(obj28);
-@collect_terms!(%);
-@assert(tst28);
-
-# Test 28: sumsort
-#
-@reset.
-{D,A,C,B}::SortOrder;
-obj28:= A + B + C - D + B - A;
-@sumsort!(%);
-@rename!(%)("\sum")("\comma");
-tst28:= {- D,  A, -A, C, B, B} - @(obj28);
-@collect_terms!(%);
-@assert(tst28);
-
-@reset.
-obj29:= A + B + C - D + B - A;
-@sumsort!(%);
-@rename!(%)("\sum")("\comma");
-tst29:= { A, -A, B, B, C, -D } - @(obj29);
-@collect_terms!(%);
-@assert(tst29);
-
-@reset.
-obj30:= a**{-1+d}-a**{d-1};
-@sumsort!(%);
-@collect_terms!(%);
-@assert(obj30);
-
-# Test 31: commutativity properties
-#
-@reset.
-{\sigma_{1},\sigma_{2},\sigma_{3}}::NonCommuting.
-obj31:= \sigma_{2}\sigma_{1};
-@prodsort!(%);
-tst31:= \sigma_{2}\sigma_{1} - @(obj31);
-@collect_terms!(%);
-@assert(tst31);
-
-@reset.
-\sigma{#}::SelfNonCommuting.
-obj32:= \sigma_{2}\sigma_{1};
-@prodsort!(%);
-tst32:= \sigma_{2}\sigma_{1} - @(obj32);
-@collect_terms!(%);
-@assert(tst32);
-
-# Test 32: more drop & keep
-#
-@reset.
-{\phi,\chi}::Weight(label=small, value=1).
-\partial{#}::PartialDerivative.
-\partial{#}::WeightInherit(label=all, type=Multiplicative).
-obj:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda};
-@drop_weight!(%){small}{1};
-tst:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda} - @(obj);
-@collect_terms!(%);
-@assert(tst);
-
-@reset.
-{\phi,\chi}::Weight(label=small, value=1).
-\lambda::Weight(label=small, value=3).
-obj:= \phi \chi + \lambda;
-@drop_weight!(%){small}{2};
-tst:= \lambda - @(obj);
-@collect_terms!(%);
-@assert(tst);
-
-@reset.
-{\phi,\chi}::Weight(label=small, value=2).
-\lambda::Weight(label=small, value=2).
-obj:= ( \phi \chi + \lambda ) + ( \phi + \chi );
-#           4          2           2       2
-#             undefined                2
-@drop_weight!(%){small}{2};
-tst:= ( \phi \chi + \lambda ) - @(obj);
-@sumflatten!(%);
-@collect_terms!(%);
-@assert(tst);
-
-@reset.
-{\phi,\chi}::Weight(label=small, value=2).
-\lambda::Weight(label=small, value=2).
-obj:= ( \phi \chi + \lambda ) + ( \phi + \chi );
-#           4          2           2       2
-#             undefined                2
-@keep_weight!(%){small}{2};
-tst:= (\phi + \chi) - @(obj);
-@sumflatten!(%);
-@collect_terms!(%);
-@assert(tst);
-
-# Test 33: collect_terms and wildcards at deeper levels
-@reset.
-obj33:= \commutator{B??}{\commutator{C??}{A??}} + \commutator{C??}{\commutator{B??}{A??};
-@collect_terms!(%);
-tst33:= \commutator{B??}{\commutator{C??}{A??}} + \commutator{C??}{\commutator{B??}{A??}} - @(obj33);
-@collect_terms!(%);
-@assert(tst33);
-
-# Test34: canonicalorder
-#
-@reset.
-obj34:= A_{a b c} + A_{b a c};
-@acanonicalorder!(%)(_{a}, _{b});
-@collect_terms!(%);
-@assert(obj34);
-
-# Test 35: keep current expression pointer consistent
-#
-@reset.
-obj35a:= A B + B Q;
-obj35b:= { A -> Z };
-@vary!(obj35a)( Q -> Z );
-@substitute!(%)( @(obj35b) );
-tst35:= B Z - @(%);
-@collect_terms!(%);
-@assert(tst35);
-
-# Test 36: two sets of anti-commuting objects
-#
-@reset.
-{a,b}::AntiCommuting.
-{a,c}::AntiCommuting.
-obj36:= b*a;
-@prodsort!(%);
-tst36:= - a b - @(obj36);
-@collect_terms!(%);
-@assert(tst36);
-
-# Test 37: weight inheritance
-#
-@reset.
-D{#}::Derivative.
-{a,b,c}::Symbol.
-{a,b,c}::Weight(label=grassmann, value=1).
-D_{a}( b c ) + D_{c}( d e );
-@keep_weight!(%){grassmann}{3};
-
-# Test 38: stupid nested expression bug
-@reset.
-obj37:= A - ( B - ( C - ( D - E ) ) );
-@sumflatten!(%);
-tst38:= A - B + C - D + E - @(obj37);
-@collect_terms!(%);
-@assert(tst38);
+# def test18():
+# 
+# {\psi, \chi}::Spinor.
+# {\psi, \chi, \Gamma_{#}}::NonCommuting.
+# \Gamma_{#}::GammaMatrix.
+# {\chi,\psi}::SortOrder.
+# \bar{#}::Accent.
+# obj18:= \bar{\psi} \Gamma_{m n p} \chi;
+# @prodsort!(%);
+# tst18:= \bar{\psi} \Gamma_{m n p} \chi - @(obj18);
+# @collect_terms!(%);
+# @assert(tst18);
+# 
+# # Test 19 - 21:= acting at a fixed level.
+# #
+# @reset;
+# obj19:= (A+(B+C*(G+K))*D)*(E+F);
+# @distribute!3(%);
+# tst19:= (A + B * D + C * (G + K) * D) * (E + F) - @(obj19);
+# @collect_terms(%);
+# @assert(tst19);
+# 
+# obj20:= (A+(B+C*(G+K))*D)*(E+F)*(M+(N+P*(H+K))*P);
+# @distribute!3(%);
+# tst20:= (A + B * D + C * (G + K) * D) * (E + F) * (M + N * P + P * (H + K) * P) - @(obj20);
+# @collect_terms(%);
+# @assert(tst20);
+# 
+# obj21:= { A*(B+C*(D+E)), F*(G+H*(I+J)) };
+# @distribute!2(%);
+# tst21:= { A*B + A*C*(D+E), F*G+F*H*(I+J) } - @(obj21);
+# @collect_terms!(%);
+# @assert(tst21);
+# 
+# # Test 22:= weights
+# #
+# @reset;
+# {\chi, \psi}::Weight(label=grassmann, value=1).
+# tst22a:= \chi \psi \chi;
+# @drop_weight!(%){grassmann}{3};
+# @assert(tst22a);
+# 
+# @reset;
+# {\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
+# obj22aa:= H B^{m} B_{n} + B_{n} C^{m};
+# @drop_weight!(%){small}{2};
+# tst22aa:= B_{n} C^{m} - @(obj22aa);
+# @collect_terms!(%);
+# @assert(tst22aa);
+# 
+# @reset;
+# {\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
+# obj22aaa:= H B^{m} B_{n} + B_{n} C^{m};
+# @keep_weight!(%){small}{2};
+# tst22aaa:= H B^{m} B_{n} - @(obj22aaa);
+# @collect_terms!(%);
+# @assert(tst22aaa);
+# 
+# @reset;
+# {\chi, \psi}::Weight(label=grassmann, value=1).
+# obj22b:= \chi \chi \chi + \chi \chi + \chi + \chi \chi;
+# @drop_weight!(%){grassmann}{3};
+# tst22b:= \chi \chi + \chi + \chi \chi - @(obj22b);
+# @collect_terms!(%);
+# @assert(tst22b);
+# 
+# obj22c:= \chi \chi \chi + \chi \chi * (\chi + \chi) + \chi + \chi \chi;
+# @keep_weight!(%){grassmann}{3};
+# tst22c:= \chi \chi \chi + \chi \chi * (\chi + \chi) - @(obj22c);
+# @collect_terms!(%);
+# @assert(tst22c);
+# 
+# \bar{#}::Accent.
+# obj22d:= \chi \bar{\chi*\chi};
+# @keep_weight!(%){grassmann}{3};
+# tst22d:= \chi \bar{\chi*\chi} - @(obj22d);
+# @collect_terms!(%);
+# @assert(tst22d);
+# 
+# \bar{#}::Accent.
+# obj22e:= \chi \chi \bar{\chi};
+# @keep_weight!(%){grassmann}{3};
+# tst22e:= \chi \chi \bar{\chi} - @(obj22e);
+# @collect_terms!(%);
+# @assert(tst22e);
+# 
+# @reset.
+# {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u#}::Indices.
+# Q_{a b c}::Weight(label=myTerms,value=3).
+# g_{a b c}::Weight(label=myTerms,value=1).
+# obj22f:=Q_{f g h} Dx^{f} Dx^{g} Dx^{h};
+# @keep_weight!(%){myTerms}{3};
+# tst22f:=Q_{f g h} Dx^{f} Dx^{g} Dx^{h} - @(obj22f);
+# @collect_terms!(%);
+# @assert(tst22f);
+# 
+# @reset.
+# {A,B}::Weight(label=field, value=1).
+# obj22g:= C + A + A B;
+# @keep_weight!(%){field}{2};
+# tst22g:= A B - @(obj22g);
+# @collect_terms!(%);
+# @assert(tst22g);
+# 
+# @reset.
+# A::Weight(label=field, value=1).
+# B::Weight(label=field, value=-1).
+# obj22h:= C + A + A B;
+# @keep_weight!(%){field}{0};
+# tst22h:= C + A B - @(obj22h);
+# @collect_terms!(%);
+# @assert(tst22h);
+# 
+# @reset.
+# A::Weight(label=field, value=3/2).
+# B::Weight(label=field, value=-1).
+# C::Weight(label=field, value=1/2).
+# obj22i:= C + A + A B;
+# @keep_weight!(%){field}{1/2};
+# tst22i:= C + A B - @(obj22i);
+# @collect_terms!(%);
+# @assert(tst22i);
+# 
+# 
+# # Test 23: spinor sort
+# #
+# @reset;
+# {\chi, \psi, \psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).
+# {\chi, \psi, \psi_{m}}::AntiCommuting.
+# \bar{#}::DiracBar.
+# \Gamma{#}::GammaMatrix.
+# {\psi_{m}, \psi, \chi}::SortOrder.
+# obj23:= \bar{\chi} \Gamma_{m n p} \psi;
+# @spinorsort!(%);
+# tst23:= \bar{\psi} \Gamma_{m n p} \chi - @(obj23);
+# @collect_terms!(%);
+# @assert(tst23);
+# 
+# obj24:= \bar{\chi}\psi;
+# @spinorsort!(%);
+# tst24:= \bar{\psi}\chi - @(obj24);
+# @collect_terms!(%);
+# @assert(tst24);
+# 
+# obj25:= \chi\Gamma_{m n p}\psi;
+# @spinorsort!(%);
+# tst25:= \chi\Gamma_{m n p}\psi - @(obj25);
+# @collect_terms!(%);
+# @assert(tst25);
+# 
+# obj26:= \bar{\chi} \Gamma_{m n} \psi_{m};
+# @spinorsort!(%);
+# tst26:= - \bar{\psi_{m}} \Gamma_{m n} \chi - @(obj26);
+# @collect_terms!(%);
+# @assert(tst26);
+# 
+# # Test 27:= multiple implicitindex objects
+# #
+# @reset;
+# {\chi,\psi, \lambda, \rho}::Spinor.
+# \Gamma{#}::GammaMatrix.
+# \bar{#}::DiracBar.
+# obj27:= \bar{\chi}\Gamma_{m n p}\psi A_{m n} \bar{\lambda}\Gamma_{p}\rho;
+# @prodsort!(%);
+# @spinorsort!(%);
+# A_{m n} \bar{\chi} \Gamma_{m n p} \psi \bar{\lambda} \Gamma_{p} \rho;
+# 
+# # Test 28: powers
+# @reset.
+# obj28:= 8 d**2 - d**3;
+# @collect_terms!(%);
+# @substitute!(%)( d**3 -> Q );
+# 
+# tst28:= 8 d**2 - Q - @(obj28);
+# @collect_terms!(%);
+# @assert(tst28);
+# 
+# # Test 28: sumsort
+# #
+# @reset.
+# {D,A,C,B}::SortOrder;
+# obj28:= A + B + C - D + B - A;
+# @sumsort!(%);
+# @rename!(%)("\sum")("\comma");
+# tst28:= {- D,  A, -A, C, B, B} - @(obj28);
+# @collect_terms!(%);
+# @assert(tst28);
+# 
+# @reset.
+# obj29:= A + B + C - D + B - A;
+# @sumsort!(%);
+# @rename!(%)("\sum")("\comma");
+# tst29:= { A, -A, B, B, C, -D } - @(obj29);
+# @collect_terms!(%);
+# @assert(tst29);
+# 
+# @reset.
+# obj30:= a**{-1+d}-a**{d-1};
+# @sumsort!(%);
+# @collect_terms!(%);
+# @assert(obj30);
+# 
+# # Test 31: commutativity properties
+# #
+# @reset.
+# {\sigma_{1},\sigma_{2},\sigma_{3}}::NonCommuting.
+# obj31:= \sigma_{2}\sigma_{1};
+# @prodsort!(%);
+# tst31:= \sigma_{2}\sigma_{1} - @(obj31);
+# @collect_terms!(%);
+# @assert(tst31);
+# 
+# @reset.
+# \sigma{#}::SelfNonCommuting.
+# obj32:= \sigma_{2}\sigma_{1};
+# @prodsort!(%);
+# tst32:= \sigma_{2}\sigma_{1} - @(obj32);
+# @collect_terms!(%);
+# @assert(tst32);
+# 
+# # Test 32: more drop & keep
+# #
+# @reset.
+# {\phi,\chi}::Weight(label=small, value=1).
+# \partial{#}::PartialDerivative.
+# \partial{#}::WeightInherit(label=all, type=Multiplicative).
+# obj:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda};
+# @drop_weight!(%){small}{1};
+# tst:= \phi \partial_{0}{\phi} + \partial_{0}{\lambda} - @(obj);
+# @collect_terms!(%);
+# @assert(tst);
+# 
+# @reset.
+# {\phi,\chi}::Weight(label=small, value=1).
+# \lambda::Weight(label=small, value=3).
+# obj:= \phi \chi + \lambda;
+# @drop_weight!(%){small}{2};
+# tst:= \lambda - @(obj);
+# @collect_terms!(%);
+# @assert(tst);
+# 
+# @reset.
+# {\phi,\chi}::Weight(label=small, value=2).
+# \lambda::Weight(label=small, value=2).
+# obj:= ( \phi \chi + \lambda ) + ( \phi + \chi );
+# #           4          2           2       2
+# #             undefined                2
+# @drop_weight!(%){small}{2};
+# tst:= ( \phi \chi + \lambda ) - @(obj);
+# @sumflatten!(%);
+# @collect_terms!(%);
+# @assert(tst);
+# 
+# @reset.
+# {\phi,\chi}::Weight(label=small, value=2).
+# \lambda::Weight(label=small, value=2).
+# obj:= ( \phi \chi + \lambda ) + ( \phi + \chi );
+# #           4          2           2       2
+# #             undefined                2
+# @keep_weight!(%){small}{2};
+# tst:= (\phi + \chi) - @(obj);
+# @sumflatten!(%);
+# @collect_terms!(%);
+# @assert(tst);
+# 
+# # Test 33: collect_terms and wildcards at deeper levels
+# @reset.
+# obj33:= \commutator{B??}{\commutator{C??}{A??}} + \commutator{C??}{\commutator{B??}{A??};
+# @collect_terms!(%);
+# tst33:= \commutator{B??}{\commutator{C??}{A??}} + \commutator{C??}{\commutator{B??}{A??}} - @(obj33);
+# @collect_terms!(%);
+# @assert(tst33);
+# 
+# # Test34: canonicalorder
+# #
+# @reset.
+# obj34:= A_{a b c} + A_{b a c};
+# @acanonicalorder!(%)(_{a}, _{b});
+# @collect_terms!(%);
+# @assert(obj34);
+# 
+# # Test 35: keep current expression pointer consistent
+# #
+# @reset.
+# obj35a:= A B + B Q;
+# obj35b:= { A -> Z };
+# @vary!(obj35a)( Q -> Z );
+# @substitute!(%)( @(obj35b) );
+# tst35:= B Z - @(%);
+# @collect_terms!(%);
+# @assert(tst35);
+# 
+# # Test 36: two sets of anti-commuting objects
+# #
+# @reset.
+# {a,b}::AntiCommuting.
+# {a,c}::AntiCommuting.
+# obj36:= b*a;
+# @prodsort!(%);
+# tst36:= - a b - @(obj36);
+# @collect_terms!(%);
+# @assert(tst36);
+# 
+# # Test 37: weight inheritance
+# #
+# @reset.
+# D{#}::Derivative.
+# {a,b,c}::Symbol.
+# {a,b,c}::Weight(label=grassmann, value=1).
+# D_{a}( b c ) + D_{c}( d e );
+# @keep_weight!(%){grassmann}{3};
+# 
+# # Test 38: stupid nested expression bug
+# @reset.
+# obj37:= A - ( B - ( C - ( D - E ) ) );
+# @sumflatten!(%);
+# tst38:= A - B + C - D + E - @(obj37);
+# @collect_terms!(%);
+# @assert(tst38);
