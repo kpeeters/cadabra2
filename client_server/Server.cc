@@ -9,6 +9,7 @@
 #include <boost/regex.hpp>
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
+#include <boost/algorithm/string/replace.hpp>
 #include <json/json.h>  
 //#include <boost/shared_ptr.hpp>
 //#include <boost/make_shared.hpp>
@@ -113,6 +114,14 @@ void Server::init()
 	run_string(startup);
 	}
 
+std::string Server::escape_quotes(const std::string& line)
+	{
+	return "''"+line+"''";
+//	std::string ret=boost::replace_all_copy(line, "'", "\\'");
+//	boost::replace_all(ret, "\"", "\\\"");
+//	return ret;
+	}
+
 std::string Server::pre_parse(const std::string& line)
 	{
 	std::string ret;
@@ -149,7 +158,7 @@ std::string Server::pre_parse(const std::string& line)
 		if(lhs!="") {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 			rhs += line_stripped;
-			ret = indent + lhs + " = Ex(r'" + rhs + "')";
+			ret = indent + lhs + " = Ex(r'" + escape_quotes(rhs) + "')";
 			if(lastchar!=".")
 				ret = ret + "; display("+lhs+")";
 			indent="";
@@ -169,7 +178,7 @@ std::string Server::pre_parse(const std::string& line)
 	
 	// Replace $...$ with Ex(...).
 	boost::regex dollarmatch(R"(\$([^\$]*)\$)");
-	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'$1', False\\)", boost::match_default | boost::format_all);
+	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'''$1''', False\\)", boost::match_default | boost::format_all);
 	
 	// Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
 	boost::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
@@ -191,7 +200,8 @@ std::string Server::pre_parse(const std::string& line)
 			}
 		else {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
-			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" + line_stripped.substr(found+2) + "')";
+			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
+				+ escape_quotes(line_stripped.substr(found+2)) + "')";
 			std::string objname = line_stripped.substr(0,found);
 			if(lastchar==";" && indent_line.size()==0)
 				ret = ret + "; display("+objname+")";
@@ -209,14 +219,14 @@ std::string Server::pre_parse(const std::string& line)
 				if(argument.size()>0) { // declaration with arguments
 					argument=argument.substr(1,argument.size()-2);
 					ret = indent_line + "__cdbtmp__ = "+propname
-						+"(Ex(r'"+line_stripped.substr(0,found)
-						+"'), Ex(r'" +argument + "') )";
+						+"(Ex(r'"+escape_quotes(line_stripped.substr(0,found))
+						+"'), Ex(r'" +escape_quotes(argument) + "') )";
 					}
 				else {
 					// no arguments
 					line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 					ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
-						+ "(Ex(r'"+line_stripped.substr(0,found)+"'))";
+						+ "(Ex(r'"+escape_quotes(line_stripped.substr(0,found))+"'))";
 					}
 				if(lastchar==";") 
 					ret += "; display(__cdbtmp__)";
@@ -250,7 +260,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	while(std::getline(str, line, '\n')) {
 //		std::cerr << "preparsing: " + line << std::endl;
 		std::string res=pre_parse(line);
-//		std::cerr << "preparsed : " + res << std::endl;
+		std::cerr << "preparsed : " + res << std::endl;
 		newblk += res+'\n';
 		}
 	// std::cerr << "PREPARSED:\n " << newblk << std::endl;
