@@ -118,6 +118,9 @@ class Server {
 		// Python. Mimics the functionality in core/cadabra2.
 		std::string              pre_parse(const std::string&);
 
+		// Escape single and double quotes so they can be fed into Python strings.
+		std::string              escape_quotes(const std::string& line);
+
 		std::string indent, lhs, rhs;
 
 		/// Called by the run_block() thread upon completion of the
