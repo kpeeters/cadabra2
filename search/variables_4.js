@@ -4,6 +4,7 @@ var searchData=
   ['db',['db',['../classsnoop_1_1SnoopImpl.html#aef92c18ce355c332e5d131d38fffece4',1,'snoop::SnoopImpl']]],
   ['delta',['Delta',['../Symbols_8cc.html#ac95bccd0ac00ebe774e5138c31a06238',1,'Delta():&#160;Symbols.cc'],['../Symbols_8cc.html#ab65a074e38c44168a4d9be288261b588',1,'delta():&#160;Symbols.cc']]],
   ['dependencies_5f',['dependencies_',['../classDepends.html#a34e4a31f4f724e657206427d0ec1f4ba',1,'Depends']]],
+  ['depsyms',['depsyms',['../classDisplaySympy.html#a1a24c2c0019db29367e1750bf70e8199',1,'DisplaySympy']]],
   ['difference',['difference',['../classInteger.html#a3d66374c8aa672eb63b4306e9ad2a9a4',1,'Integer']]],
   ['diffsec',['diffsec',['../classstopwatch.html#a3307796d7f96f9b351ea597417eb211a',1,'stopwatch']]],
   ['diffusec',['diffusec',['../classstopwatch.html#a37fcea2ff0b27b62596b46b2a7202d58',1,'stopwatch']]],

@@ -103,6 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="textblock"><code>#include &lt;memory&gt;</code><br/>
 <code>#include &quot;<a class="el" href="PythonCdb_8hh_source.html">PythonCdb.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="SympyCdb_8hh_source.html">SympyCdb.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Parser_8hh_source.html">Parser.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Bridge_8hh_source.html">Bridge.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Exceptions_8hh_source.html">Exceptions.hh</a>&quot;</code><br/>
@@ -244,6 +245,8 @@ Functions</h2></td></tr>
 <tr class="memitem:ga0fafa63eaa225856324b5564b24af929"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#ga0fafa63eaa225856324b5564b24af929">Ex_to_Sympy</a> (const <a class="el" href="classEx.html">Ex</a> &amp;ex)</td></tr>
 <tr class="memdesc:ga0fafa63eaa225856324b5564b24af929"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> '<a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a>' to a Sympy expression.  <a href="group__scalar.html#ga0fafa63eaa225856324b5564b24af929">More...</a><br/></td></tr>
 <tr class="separator:ga0fafa63eaa225856324b5564b24af929"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87e4672c4b9ad2adf2d6ec598fb15fc3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a87e4672c4b9ad2adf2d6ec598fb15fc3">Ex_through_Sympy</a> (<a class="el" href="classEx.html">Ex</a> ex, std::string head)</td></tr>
+<tr class="separator:a87e4672c4b9ad2adf2d6ec598fb15fc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a0a4ace1e0bde4ab74e7333dd33b1af14">fetch_from_python</a> (const std::string &amp;nm)</td></tr>
 <tr class="memdesc:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch an <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object from the Python side using its Python identifier.  <a href="#a0a4ace1e0bde4ab74e7333dd33b1af14">More...</a><br/></td></tr>
 <tr class="separator:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -851,6 +854,32 @@ template&lt;class F , typename... Args&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a87e4672c4b9ad2adf2d6ec598fb15fc3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classEx.html">Ex</a> Ex_through_Sympy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a>&#160;</td>
+          <td class="paramname"><em>ex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>head</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a0a4ace1e0bde4ab74e7333dd33b1af14"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1173,7 +1202,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Aug 20 2016 19:45:21 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 25 2016 16:13:18 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
