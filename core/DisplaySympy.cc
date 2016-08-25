@@ -143,9 +143,12 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 	// them back later.
 
 	// We need to know if the symbol has implicit dependence on other symbols,
-	// as this needs to be made explicit for sympy.
+	// as this needs to be made explicit for sympy. We need to strip this 
+	// dependence off later again.
 
 	const Depends *dep=kernel.properties.get<Depends>(it);
+	if(dep)
+		depsyms.insert(*it->name);
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	if(ch!=tree.end(it) || dep!=0) {
@@ -481,11 +484,38 @@ void DisplaySympy::import(Ex& ex)
 	{
 	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
 			for(auto& m: symmap) {
+				// If we have converted the name of this symbol, convert back.
 				if(m.second==*it->name) {
 					it->name=name_set.insert(m.first).first;
 					break;
 					}
 				}
+			// See if we have added dependencies to this symbol (lookup in map).
+			// If yes, strip them off again.
+			auto fnd = depsyms.find(*it->name);
+			if(fnd!=depsyms.end()) {
+				std::cerr << "stripping from " << *it->name << std::endl;
+//				if(*ex.begin(it)->name=="\\comma")
+				ex.erase(ex.begin(it));
+				}
+			
+			// Move child nodes of partial to the right place.
+			if(*it->name=="\\partial") {
+				auto comma = ex.begin(it);
+				if(*comma->name=="\\comma") {
+					auto args=ex.begin(comma);
+					++args;
+					while(args!=ex.end(comma)) {
+						auto nxt=args;
+						++nxt;
+						ex.move_before(comma, args)->fl.parent_rel=str_node::p_sub;
+						args=nxt;
+						}
+					ex.flatten(comma);
+					ex.erase(comma);
+					}
+				}
+
 			return it;
 			});
 	}
