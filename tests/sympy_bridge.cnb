@@ -90,6 +90,11 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left(r, \\linebreak[0] t\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, \\linebreak[0] n\\right).\\end{dmath*}"
 				},
 				{
@@ -108,7 +113,7 @@
 					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}g^{m n}.\\end{dmath*}"
 				}
 			],
-			"source" : "{m,n}::Indices(values={r,t});\n\\Delta::Depends(r);\ng_{m n}::Metric;\ng^{m n}::InverseMetric;"
+			"source" : "{r,t}::Coordinate;\n{m,n}::Indices(values={r,t});\n\\Delta::Depends(r);\n\\partial{#}::PartialDerivative;\ng_{m n}::Metric;\ng^{m n}::InverseMetric;"
 		},
 		{
 			"cell_origin" : "client",
@@ -135,6 +140,45 @@
 				}
 			],
 			"source" : "complete(rl, $g^{m n}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\mu}\\left(g_{\\mu \\nu}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ex2:=\\partial_{\\mu}{ g_{\\mu\\nu} };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left\\{\\begin{aligned}\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(ex2, rl);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}{\\components}  (0x7fcdb0001048)\n  1:_{\\mu}  (0x7fcdb00096d8)\n  2:{\\comma}  (0x7fcdb0003648)\n\n\\end{verbatim}"
+				}
+			],
+			"source" : "print(tree(ex2))"
 		},
 		{
 			"cell_origin" : "client",
