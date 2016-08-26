@@ -387,7 +387,7 @@ void evaluate::cleanup_components(iterator it)
 
 Ex::iterator evaluate::handle_derivative(iterator it)
 	{
-	std::cerr << "handle_derivative " << Ex(it) << std::endl;
+	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
 	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
@@ -408,7 +408,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		}
 	assert(sib!=tr.end(it));
 
-	std::cerr << "after handle\n" << Ex(it) << std::endl;
+	// std::cerr << "after handle\n" << Ex(it) << std::endl;
 	
 	// Walk all the index value sets of the \components node inside the
 	// argument.  For each, determine the dependencies, and generate
