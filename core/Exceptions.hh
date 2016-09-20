@@ -49,6 +49,15 @@ class NonScalarException : public CadabraException {
 		std::string py_what() const;
 };
 
+/// Exception thrown when an algorithm cannot complete, e.g. because it does not
+/// yet know how to process a particular expression. This gets thrown if returning
+/// the original expression would be a mathematical error.
+
+class RuntimeException : public CadabraException {
+	public:
+		RuntimeException(std::string="");
+};
+
 
 class InternalError : public CadabraException {
 	public:

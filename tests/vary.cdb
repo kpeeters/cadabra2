@@ -71,3 +71,21 @@ def test06():
     print('Test 06 passed')
     
 test06()
+
+def test07():
+    __cdbkernel__=create_scope();
+    ex:= \commutator{a}{b};
+    vary(_, $a -> \delta{a}, b->\delta{b}$)
+    tst:= \commutator{\delta{a}}{b} + \commutator{a}{\delta{b}} - @(ex);
+    assert(tst==0)
+
+test07()
+
+# def test08():
+#     __cdbkernel__=create_scope();
+#     ex:= \log(a);
+#     vary(_, $a -> \delta{a}$)
+#     tst:= \log(\delta{a}) - @(ex);
+#     assert(tst==0)
+#
+# test08()

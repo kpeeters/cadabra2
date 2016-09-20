@@ -260,7 +260,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	while(std::getline(str, line, '\n')) {
 //		std::cerr << "preparsing: " + line << std::endl;
 		std::string res=pre_parse(line);
-		std::cerr << "preparsed : " + res << std::endl;
+		// std::cerr << "preparsed : " + res << std::endl;
 		newblk += res+'\n';
 		}
 	// std::cerr << "PREPARSED:\n " << newblk << std::endl;
