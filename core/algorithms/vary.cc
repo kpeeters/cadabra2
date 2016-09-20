@@ -40,6 +40,7 @@ bool vary::can_apply(iterator it)
 	{
 	if(*it->name=="\\prod") return true;
 	if(*it->name=="\\commutator") return true;
+	if(*it->name=="\\anticommutator") return true;
 	if(*it->name=="\\sum") return true;
 	if(*it->name=="\\pow") return true;
 	if(*it->name=="\\int") return true;
@@ -68,7 +69,7 @@ Algorithm::result_t vary::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 	
-	if(*it->name=="\\prod" || *it->name=="\\commutator") {
+	if(*it->name=="\\prod" || *it->name=="\\commutator" || *it->name=="\\anticommutator") {
 		Ex result;
 		result.set_head(str_node("\\expression"));
 		iterator newsum=result.append_child(result.begin(), str_node("\\sum"));
