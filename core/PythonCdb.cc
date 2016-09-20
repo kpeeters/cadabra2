@@ -676,6 +676,9 @@ void inject_defaults(Kernel *k)
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}",false), 0);
 
 	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}",false), 0);
+	auto wi3=new WeightInherit();
+	auto wa3=make_Ex_from_string("label=all, type=power", false);
+	inject_property(k, wi3,                      make_Ex_from_string("\\pow{#}",false), wa3);
 
 	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\int{#}",false), 0);
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\int{#}",false), 0);
