@@ -182,15 +182,7 @@ test17()
 # @collect_terms!(%);
 # @assert(tst18);
 # 
-# # Test 19 - 21:= acting at a fixed level.
-# #
-# @reset;
-# obj19:= (A+(B+C*(G+K))*D)*(E+F);
-# @distribute!3(%);
-# tst19:= (A + B * D + C * (G + K) * D) * (E + F) - @(obj19);
-# @collect_terms(%);
-# @assert(tst19);
-# 
+
 # obj20:= (A+(B+C*(G+K))*D)*(E+F)*(M+(N+P*(H+K))*P);
 # @distribute!3(%);
 # tst20:= (A + B * D + C * (G + K) * D) * (E + F) * (M + N * P + P * (H + K) * P) - @(obj20);
@@ -203,51 +195,81 @@ test17()
 # @collect_terms!(%);
 # @assert(tst21);
 # 
-# # Test 22:= weights
-# #
-# @reset;
-# {\chi, \psi}::Weight(label=grassmann, value=1).
-# tst22a:= \chi \psi \chi;
-# @drop_weight!(%){grassmann}{3};
-# @assert(tst22a);
-# 
-# @reset;
-# {\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
-# obj22aa:= H B^{m} B_{n} + B_{n} C^{m};
-# @drop_weight!(%){small}{2};
-# tst22aa:= B_{n} C^{m} - @(obj22aa);
-# @collect_terms!(%);
-# @assert(tst22aa);
-# 
-# @reset;
-# {\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
-# obj22aaa:= H B^{m} B_{n} + B_{n} C^{m};
-# @keep_weight!(%){small}{2};
-# tst22aaa:= H B^{m} B_{n} - @(obj22aaa);
-# @collect_terms!(%);
-# @assert(tst22aaa);
-# 
-# @reset;
-# {\chi, \psi}::Weight(label=grassmann, value=1).
-# obj22b:= \chi \chi \chi + \chi \chi + \chi + \chi \chi;
-# @drop_weight!(%){grassmann}{3};
-# tst22b:= \chi \chi + \chi + \chi \chi - @(obj22b);
-# @collect_terms!(%);
-# @assert(tst22b);
-# 
-# obj22c:= \chi \chi \chi + \chi \chi * (\chi + \chi) + \chi + \chi \chi;
-# @keep_weight!(%){grassmann}{3};
-# tst22c:= \chi \chi \chi + \chi \chi * (\chi + \chi) - @(obj22c);
-# @collect_terms!(%);
-# @assert(tst22c);
-# 
-# \bar{#}::Accent.
-# obj22d:= \chi \bar{\chi*\chi};
-# @keep_weight!(%){grassmann}{3};
-# tst22d:= \chi \bar{\chi*\chi} - @(obj22d);
-# @collect_terms!(%);
-# @assert(tst22d);
-# 
+
+def test18():
+    __cdbkernel__=create_scope()
+    {\chi, \psi}::Weight(label=grassmann, value=1);
+    ex:= \chi \psi \chi;
+    drop_weight(_, $grassmann=2$);
+    tst1:= \chi\psi\chi - @(ex);
+    assert(tst1==0)
+    drop_weight(ex, $grassmann=3$);
+    assert(ex==0)
+
+test18()
+
+def test19():
+    __cdbkernel__=create_scope()
+    {\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
+    ex:= H B^{m} B_{n} + B_{n} C^{m};
+    drop_weight(_, $small=2$);
+    tst:= B_{n} C^{m} - @(ex);
+    assert(tst==0)
+
+test19()
+
+def test20():
+    __cdbkernel__=create_scope()
+    {\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
+    ex:= H B^{m} B_{n} + B_{n} C^{m};
+    keep_weight(_, $small=2$)
+    tst:= H B^{m} B_{n} - @(ex);
+    assert(tst==0)
+
+test20()
+
+def test21():
+    __cdbkernel__=create_scope()
+    {\chi, \psi}::Weight(label=grassmann, value=1).
+    ex:= \chi \chi \chi + 2 \chi \chi + \chi;
+    drop_weight(_, $grassmann=3$);
+    tst:= 2 \chi \chi + \chi - @(ex);
+    assert(tst==0)
+
+test21()
+
+def test21():
+    __cdbkernel__=create_scope()
+    {\chi, \psi}::Weight(label=grassmann, value=1).
+    ex:= \chi \chi \chi + \chi \chi * (\chi + \psi) + \chi + \chi \chi;
+    keep_weight(_, $grassmann=3$)
+    tst:= \chi \chi \chi + \chi \chi * (\chi + \psi) - @(ex);
+    assert(tst==0)
+
+test21()
+
+def test22():
+    __cdbkernel__=create_scope()
+    {\chi, \psi}::Weight(label=grassmann, value=1).
+    \bar{#}::Accent.
+    ex:= \chi \bar{\chi \chi};
+    keep_weight(_, $grassmann=3$)
+    tst:= \chi \bar{\chi \chi} - @(ex);
+    assert(tst==0)
+
+test22()
+
+def test22():
+    __cdbkernel__=create_scope()
+    {a,b}::Weight(label=small, value=1);
+    ex:= a**2 + a b + b**2 + a**2 b + a b c;
+    keep_weight(_, $small=2$)
+    tst:= a**2 + a b + b**2 + a b c - @(ex);
+    assert(tst==0)
+    
+test23()
+
+  
 # \bar{#}::Accent.
 # obj22e:= \chi \chi \bar{\chi};
 # @keep_weight!(%){grassmann}{3};
