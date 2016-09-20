@@ -19,7 +19,7 @@ class WeightInherit : virtual public WeightBase {
 		virtual std::string   unnamed_argument() const override { return "type"; };
 		virtual std::string   name() const override;
 		
-		enum { multiplicative, additive } combination_type;
+		enum { multiplicative, additive, power } combination_type;
 
 		multiplier_t value_self;
 };
