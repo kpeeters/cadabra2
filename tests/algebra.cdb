@@ -259,7 +259,7 @@ def test22():
 
 test22()
 
-def test22():
+def test23():
     __cdbkernel__=create_scope()
     {a,b}::Weight(label=small, value=1);
     ex:= a**2 + a b + b**2 + a**2 b + a b c;
