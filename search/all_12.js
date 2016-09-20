@@ -79,5 +79,6 @@ var searchData=
   ['run_5fstring',['run_string',['../classServer.html#ad269cf819e6c3f9f7cbb16087f5eab74',1,'Server']]],
   ['runner',['runner',['../classServer.html#a2f7c69d01db7d1c0fb61dc0550084b89',1,'Server']]],
   ['running',['running',['../classcadabra_1_1DataCell.html#a2399d86186985e6d0cb013d0a852707c',1,'cadabra::DataCell']]],
-  ['running_5fcells',['running_cells',['../classcadabra_1_1ComputeThread.html#ab28adc355af224d1545f187cffb28594',1,'cadabra::ComputeThread']]]
+  ['running_5fcells',['running_cells',['../classcadabra_1_1ComputeThread.html#ab28adc355af224d1545f187cffb28594',1,'cadabra::ComputeThread']]],
+  ['runtimeexception',['RuntimeException',['../classRuntimeException.html',1,'RuntimeException'],['../classRuntimeException.html#a0bb07d4ec6362fe5c312434721d605b6',1,'RuntimeException::RuntimeException()']]]
 ];

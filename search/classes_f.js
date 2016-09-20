@@ -5,5 +5,6 @@ var searchData=
   ['rename_5fdummies',['rename_dummies',['../classrename__dummies.html',1,'']]],
   ['replace_5fmatch',['replace_match',['../classreplace__match.html',1,'']]],
   ['rewrite_5findices',['rewrite_indices',['../classrewrite__indices.html',1,'']]],
-  ['riemanntensor',['RiemannTensor',['../classRiemannTensor.html',1,'']]]
+  ['riemanntensor',['RiemannTensor',['../classRiemannTensor.html',1,'']]],
+  ['runtimeexception',['RuntimeException',['../classRuntimeException.html',1,'']]]
 ];

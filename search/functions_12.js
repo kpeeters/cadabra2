@@ -30,5 +30,6 @@ var searchData=
   ['riemanntensor',['RiemannTensor',['../classRiemannTensor.html#a0fc927d13a399efa0d81c84471aa2055',1,'RiemannTensor']]],
   ['row_5fsize',['row_size',['../classyngtab_1_1tableau__base.html#a9849a9b5be3ecac8a5abc38f5a0be42f',1,'yngtab::tableau_base::row_size()'],['../classyngtab_1_1tableau.html#a43b4ee0a5c9856f4d96451b1bbdbf194',1,'yngtab::tableau::row_size()'],['../classyngtab_1_1filled__tableau.html#a9599fe493008a9442f95ff7341e82243',1,'yngtab::filled_tableau::row_size()']]],
   ['run',['run',['../classcadabra_1_1ComputeThread.html#a3ca24710ea632e3efd59a585b8c6e404',1,'cadabra::ComputeThread::run()'],['../classServer.html#abb27d30b40a94326e3fd629d3b30b7d5',1,'Server::run()'],['../classUI.html#a6bdaec41e41f67039516936fae3f0c30',1,'UI::run()']]],
-  ['run_5fstring',['run_string',['../classServer.html#ad269cf819e6c3f9f7cbb16087f5eab74',1,'Server']]]
+  ['run_5fstring',['run_string',['../classServer.html#ad269cf819e6c3f9f7cbb16087f5eab74',1,'Server']]],
+  ['runtimeexception',['RuntimeException',['../classRuntimeException.html#a0bb07d4ec6362fe5c312434721d605b6',1,'RuntimeException']]]
 ];
