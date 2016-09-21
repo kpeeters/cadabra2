@@ -1,0 +1,4 @@
+#!/bin/sh
+
+ssh buildbot "nohup VBoxHeadless -s 'Ubuntu_16.04_build' > /tmp/Ubuntu_16.04.out 2> /tmp/Ubuntu_16.04.err < /dev/null &"
+ssh buildbot "ssh -p 7000 localhost cadabra2/config/buildpkg"
