@@ -9,11 +9,11 @@ add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 set(PYTHONPATH ${CMAKE_SOURCE_DIR}/core:${CMAKE_SOURCE_DIR}/core/packages:${CMAKE_BINARY_DIR}/core)
 message("-- Set PYTHONPATH for testing to ${PYTHONPATH}:$ENV{PYTHONPATH}")
 
-if(APPLE)
-  message("-- Not running comparison test on OS X")
-else()
-  add_test(comparison     test_comparison)
-endif()
+#if(APPLE)
+#  message("-- Not running comparison test on OS X")
+#else()
+add_test(comparison     test_comparison)
+#endif()
 add_test(packages       ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/packages.cdb)
 add_test(algebra        ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/algebra.cdb)
 add_test(components     ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/components.cdb)
@@ -57,6 +57,9 @@ set_tests_properties(young        PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPAT
 
 # This does not work properly, and on OSX it fails because we do not use any other include
 # settings.
+if(APPLE)
+   add_definitions("-I/usr/local/include")
+endif()
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)
 
