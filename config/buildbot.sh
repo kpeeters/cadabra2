@@ -1,21 +1,33 @@
-#!/bin/sh
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# start the VM and wait for it to come up
-echo 'Starting build bot...'
-ssh buildbot "nohup VBoxHeadless -s 'Ubuntu_16.04_build' > /tmp/Ubuntu_16.04.out 2> /tmp/Ubuntu_16.04.err < /dev/null &"
-sleep 5
+function runbuild {
+	 # start the VM and wait for it to come up
+	 echo "Starting build bot for $1, ssh port $3"
+	 ssh buildbothost "nohup VBoxHeadless -s '$1' > /tmp/buildbot.out 2> /tmp/buildbot.err < /dev/null &"
+	 sleep 5
 
-# setup the tunnel to the VM
-echo 'Going to start build process...'
-ssh -M -S my-ctrl-socket -fnNT -L 7000:localhost:7000 buildbot
+	 # setup the tunnel to the VM
+	 echo 'Going to start build process...'
+	 ssh -M -S my-ctrl-socket -fnNT -L $3:localhost:$3 buildbothost
+	 
+	 # execute build commands on the VM
+	 #ssh -tt buildbot cadabra2/config/buildpkg
+	 ssh -tt -p $3 buildbot "bash -s" -- < ${DIR}/buildpkg.sh
+	 
+	 # copy the generated package to the web server
+	 echo 'Going to copy the package to the web server'
+	 scp -P $3 'buildbot:cadabra2/build/cadabra*' .
+	 scp cadabra*.$2 cadabra_web:/var/www/cadabra2/packages/
+	 
+	 # take down the VM gracefully
+	 echo 'Shutting down build bot...'
+	 ssh -tt -p $3 buildbot 'sudo shutdown now'
+	 
+	 # close the tunnel to the VM
+	 ssh -S my-ctrl-socket -O exit buildbot
+}
 
-# execute build commands on the VM
-ssh -tt -p 7000 localhost cadabra2/config/buildpkg
 
-# take down the VM gracefully
-echo 'Shutting down build bot...'
-ssh -tt -p 7000 localhost 'sudo shutdown now'
-
-# close the tunnel to the VM
-ssh -S my-ctrl-socket -O exit buildbot
-
+#runbuild "Ubuntu_16.04_build" ".deb" 7000
+runbuild "Fedora_24_build" ".rpm" 7001
