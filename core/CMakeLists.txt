@@ -68,7 +68,11 @@ endif()
 
 
 
-# Locate gmpxx
+# Locate gmpxx. On Homebrew there seems to be constantly something wrong with
+# the pkgconfig for gmpxx. So we just add the include path by hand.
+if(APPLE)
+   add_definitions("-I/usr/local/include")
+endif()
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)
 message("-- Found gmp ${GMP_LIB}")
