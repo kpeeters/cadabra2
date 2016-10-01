@@ -57,6 +57,7 @@ set(ALGOS
   reduce_delta
   rewrite_indices
   sort_product
+  sort_sum
   split_gamma
   split_index
   substitute
