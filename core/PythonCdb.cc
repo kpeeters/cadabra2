@@ -126,6 +126,8 @@ namespace boost {
 #include "algorithms/product_rule.hh"
 #include "algorithms/reduce_delta.hh"
 #include "algorithms/rename_dummies.hh"
+#include "algorithms/sort_product.hh"
+#include "algorithms/sort_sum.hh"
 #include "algorithms/split_gamma.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
@@ -1070,6 +1072,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<rename_dummies>("rename_dummies");
 //	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
+	def_algo_1<sort_sum>("sort_sum");
 	def_algo_1<unwrap>("unwrap");
 	def_algo_1<young_project_product>("young_project_product");
 

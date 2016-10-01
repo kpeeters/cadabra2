@@ -1,0 +1,92 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{sort_sum}{Sort terms in a sum.}\n\nSort terms in a sum, taking into account any \\prop{SortOrder}\nproperties, or else sorting lexographically. "
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{sort_sum}{Sort terms in a sum.}\n\nSort terms in a sum, taking into account any \\prop{SortOrder}\nproperties, or else sorting lexographically. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}E+D+A+C+B\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=E+D+A+C+B;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A+B+C+D+E\\end{dmath*}"
+				}
+			],
+			"source" : "sort_sum(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This is often useful in case sums appear as exponents; in this case it\nis necessary to first sort the sums before terms can be collected, as\nthe following example shows."
+				}
+			],
+			"hidden" : true,
+			"source" : "This is often useful in case sums appear as exponents; in this case it\nis necessary to first sort the sums before terms can be collected, as\nthe following example shows."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}a^{\\left(-1+d\\right)}-a^{\\left(d-1\\right)}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=a**(-1+d) - a**(d-1);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "sort_sum(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
