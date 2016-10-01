@@ -9,6 +9,7 @@ var searchData=
   ['snoop',['Snoop',['../classsnoop_1_1Snoop.html',1,'snoop']]],
   ['snoopimpl',['SnoopImpl',['../classsnoop_1_1SnoopImpl.html',1,'snoop']]],
   ['sort_5fproduct',['sort_product',['../classsort__product.html',1,'']]],
+  ['sort_5fsum',['sort_sum',['../classsort__sum.html',1,'']]],
   ['sortorder',['SortOrder',['../classSortOrder.html',1,'']]],
   ['spinor',['Spinor',['../classSpinor.html',1,'']]],
   ['split',['split',['../classsplit.html',1,'']]],
