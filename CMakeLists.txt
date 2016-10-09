@@ -135,9 +135,13 @@ endif()
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
+option(ENABLE_FRONTEND "Enable the UI frontend" ON)
+
 add_subdirectory(core)
 add_subdirectory(client_server)
-add_subdirectory(frontend)
+if(ENABLE_FRONTEND)
+  add_subdirectory(frontend)
+endif()
 add_subdirectory(tests)
 add_subdirectory(web2 EXCLUDE_FROM_ALL)
 
