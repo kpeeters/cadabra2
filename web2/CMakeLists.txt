@@ -63,6 +63,7 @@ set(ALGOS
   substitute
   unwrap
   vary
+  young_project_product
   young_project_tensor
 )
 set(PROPS
