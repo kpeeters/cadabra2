@@ -215,3 +215,20 @@ rl:= F_{\mu\nu} = \partial_{\mu}{A_{\nu}} - \partial_{\nu}{A_{\mu}};
 substitute(S, rl);
 vary(S, $A_{\mu} -> \delta{A_{\mu}}$);
 distribute(S);
+
+
+def test30():
+    __cdbkernel__=create_scope()
+    # Matching of numerical values in expressions to indices in patterns
+    # should respect index position.
+{m,n}::Integer.
+{m,n}::Indices(position=fixed);
+g_{m}^{n}::KroneckerDelta;
+ex:= g^{0 0};
+substitute(_, $g^{a? b?} -> h^{a? b?}$);
+tst:= h^{0 0} - @(ex);
+assert(tst==0)
+
+test30()
+
+

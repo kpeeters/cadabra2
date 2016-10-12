@@ -19,7 +19,7 @@ int subtree_compare(const Properties *properties,
 						  Ex::iterator one, Ex::iterator two, 
 						  int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards) 
 	{
-	// std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << std::endl;
+	std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " " << mod_prel << ", " << checksets << std::endl;
 
 	// The logic is to compare successive aspects of the two objects, returning a
 	// no-match code if a difference is found at a particular level, or continuing
@@ -53,8 +53,8 @@ int subtree_compare(const Properties *properties,
 		if(checksets && properties!=0) {
 			// Strip off the parent_rel because Indices properties are declared without
 			// those.
-			//std::cerr << "getting indices for " << Ex(one) << std::endl;
-			//std::cerr << "and getting indices for " << Ex(two) << std::endl;
+			std::cerr << "getting indices for " << Ex(one) << std::endl;
+			std::cerr << "and getting indices for " << Ex(two) << std::endl;
 			const Indices *ind1=properties->get<Indices>(one);
 			const Indices *ind2=properties->get<Indices>(two);
 			if(ind1!=ind2) { 
@@ -79,6 +79,21 @@ int subtree_compare(const Properties *properties,
 			return 0;
 		}
 
+	// Compare parent relations.
+	if(mod_prel<=-2) {
+		std::cerr << "testing parent rel" << std::endl;
+		str_node::parent_rel_t p1=one->fl.parent_rel;
+		str_node::parent_rel_t p2=two->fl.parent_rel;
+		if(position_type==Indices::free && mod_prel==-3) {
+			if(p1==str_node::p_super) p1=str_node::p_sub; // for comparison, treat super as sub
+			if(p2==str_node::p_super) p2=str_node::p_sub;
+			}
+		if(p1!=p2) {
+			std::cerr << "not equal" << std::endl;
+			return (p1<p2)?2:-2;
+			}
+		}
+
 	// Handle mismatching node names.
 	if(one->name!=two->name) {
 		if(literal_wildcards) {
@@ -96,17 +111,6 @@ int subtree_compare(const Properties *properties,
 			if(*one->name < *two->name) return mult;
 			else return -mult;
 			}
-		}
-
-	// Compare parent relations.
-	if(mod_prel<=-2) {
-		str_node::parent_rel_t p1=one->fl.parent_rel;
-		str_node::parent_rel_t p2=two->fl.parent_rel;
-		if(position_type==Indices::free && mod_prel==-3) {
-			if(p1==str_node::p_super) p1=str_node::p_sub; // for comparison, treat super as sub
-			if(p2==str_node::p_super) p2=str_node::p_sub;
-			}
-		if(p1!=p2) return (p1<p2)?2:-2;
 		}
 
 	// Now turn to the child nodes. Before comparing them directly, first compare
@@ -146,6 +150,7 @@ int subtree_compare(const Properties *properties,
 		while(sib1!=one.end()) {
 			if(sib1->is_index() == do_indices) {
 				int ret=subtree_compare(properties, sib1,sib2, mod_prel, checksets, compare_multiplier, literal_wildcards);
+				// std::cerr << "result " << ret << std::endl;
 				if(abs(ret)>1)
 					return ret/abs(ret)*mult;
 				if(ret!=0 && remember_ret==0) 
@@ -453,6 +458,8 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				}
 			if((lower_bdy && *two->multiplier < from) || (upper_bdy && *two->multiplier > to))  
 				return no_match_less;
+
+			// std::cerr << Ex(one) << " can take value " << *two->multiplier << std::endl;
 			}
 
 		// We want to search the replacement map for replacement rules which we have

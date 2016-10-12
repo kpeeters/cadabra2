@@ -91,14 +91,11 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 //	if(obj.number_of_children(obj.begin())>0)
 //		std::cerr << "comparing: " << ignore_parent_rel << "\n" << Ex(it) << " " << obj << std::endl;
 //	Ex::print_recursive_treeform(txtout, it);
-//	Ex::print_recursive_treeform(txtout, obj.begin());
+//	Ex::print_recursive_treeform(txtout, obj.
 
-
-	// This does not work, because it does not flip parent rels (disabled for a reason?)
-	// FIXME: fix logic for subtree/Ex_compare usage.
-//	std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
-	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
-	//std::cerr << res << std::endl;
+	// std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
+	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, true /* was true; but that leads to infinite recurion */, 0);
+	// std::cerr << res << std::endl;
 
 	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
 	// because Ex_comparator tries to fetch property information which then gets back here.
