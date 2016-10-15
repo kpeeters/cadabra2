@@ -94,7 +94,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 //	Ex::print_recursive_treeform(txtout, obj.
 
 	// std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
-	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, true /* was true; but that leads to infinite recurion */, 0);
+	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
 	// std::cerr << res << std::endl;
 
 	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)

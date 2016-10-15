@@ -76,7 +76,7 @@ def test05():
     assert(tst==0)
     print("Test 05 passed")
 
-test05()
+# test05()
 
 def test06():
     __cdbkernel__=create_scope();
@@ -100,7 +100,7 @@ def test07():
     assert(tst==0)
     print("Test 07 passed")
 
-test07()
+# test07()
 
 def test08():
     __cdbkernel__=create_scope();
