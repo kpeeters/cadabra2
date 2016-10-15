@@ -17,7 +17,7 @@ def test02():
     ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
     rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];
     evaluate(ex, rl);
-    tst:= \components_{s}(\comma{r}= 6 r**2 t + 6, \comma{t}=15 t**2) - @(ex);
+    tst:= \components_{s}(\comma{r}= 6 r**2 t + 6, \comma{t}=15 t**2) - @(ex):
     collect_components(_);
     assert(tst==0)
     print("Test 02 passed");
@@ -60,15 +60,15 @@ def test03():
     collect_components(_);
     assert(tst==0)
     print("Test 03a passed")
-
+    
     rm:= R^{\rho}_{\sigma\mu\nu} = \partial_{\mu}{\Gamma^{\rho}_{\nu\sigma}}
                                   -\partial_{\nu}{\Gamma^{\rho}_{\mu\sigma}}
                                   +\Gamma^{\rho}_{\mu\lambda} \Gamma^{\lambda}_{\nu\sigma}
                                   -\Gamma^{\rho}_{\nu\lambda} \Gamma^{\lambda}_{\mu\sigma};
-
+    
     substitute(rm, ch);
     evaluate(rm, ss);
-
+    
     # The Ricci tensor should be zero.
     rc:= R_{\sigma\nu} = R^{\rho}_{\sigma\rho\nu};
     substitute(rc, rm);
@@ -239,3 +239,15 @@ test11()
 # ex:= \partial_{m}{ A_{n} };
 # rl:= A_{r} -> r, A_{t} -> t;
 # evaluate( ex, rl );
+
+def test12():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho,\sigma}::Indices(values={0,1,2,3});
+    ex:=A_{\mu} A_{\mu};
+    rl:= A_{0} -> -\xi_{0}, A_{1} -> \xi_{1}, A_{2} -> -\xi_{2}, A_{3} -> \xi_{3};
+    evaluate(ex, rl);
+    tst:= \xi_{0}**2 + \xi_{1}**2 + \xi_{2}**2 + \xi_{3}**2 - @(ex);
+    assert(tst==0)
+    print("Test 12 passed")
+
+test12()

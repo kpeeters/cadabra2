@@ -1,5 +1,5 @@
 def test06():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {X,G,Y,A,B}::SortOrder.
     {X,A}::AntiCommuting.
     obj6:= A B G X A X;
@@ -12,7 +12,7 @@ def test06():
 test06()
 
 def test07():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {X,G,Y,A,B}::SortOrder.
     {X,A}::NonCommuting.
     obj7:= A*B*G*X*A*X;
@@ -25,7 +25,7 @@ def test07():
 test07()
 
 def test08():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     { W_{m n}, W_{m} }::SortOrder.
     { W_{m n}, W_{m} }::AntiCommuting.
     obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
@@ -38,7 +38,7 @@ def test08():
 test08()
 
 def test09():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     { \theta_a, \theta_b }::SelfAntiCommuting.
     obj9:= \theta_c \theta_b \theta_a;
     sort_product(_)
@@ -207,7 +207,7 @@ x::Coordinate.
 
 F_{\mu\nu}::AntiSymmetric;
 F_{\mu\nu}::Depends(x).
-A_{\mu}::Depends(x,\partial).
+A_{\mu}::Depends(x,\partial{#}).
 \delta{#}::Accent;
 
 S:= -1/4 \int{ F_{\mu\nu} F^{\mu\nu} }{x};

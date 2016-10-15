@@ -747,6 +747,7 @@ def test49():
 test49()
 
 def test50():
+    __cdbkernel__=create_scope()
     {m,n,p}::Indices(position=free);
     A_{m n}::Symmetric;
     ex:=\int{ A_{m n} (A^{n m} + A^{m n}) }{x};
@@ -755,3 +756,34 @@ def test50():
     assert(tst==0)
 
 test50()
+
+def test51():
+    __cdbkernel__=create_scope()
+    {a,b,c}::Indices(position=fixed);
+    ex:= A^{a}(A) A_{a}(B) + A^{a}(B) A_{a}(A);
+    sort_product(_);
+    canonicalise(_);
+    tst:= 2 A^{a}(A) A_{a}(B) - @(ex);
+    assert(tst==0)
+
+test51()
+
+def test52():
+    __cdbkernel__=create_scope()
+    {a,b,c}::Indices(position=fixed);
+    D{#}::Derivative;
+    ex:= D^{a}{A} D_{a}{B} + D^{a}{B} D_{a}{A};
+    sort_product(_);
+    canonicalise(_);
+    tst:= 2 D^{a}{A} D_{a}{B} - @(ex);
+    assert(tst==0)
+
+test52()
+
+# def test53():
+# 
+# {a,b,c}::Indices(position=fixed);
+# D{#}::Derivative;
+# ex:= D^{a}{A_{b}} D_{a}{B} + D^{a}{B} D_{a}{A};
+# sort_product(_);
+# canonicalise(_);

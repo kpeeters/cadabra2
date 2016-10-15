@@ -4,6 +4,7 @@
 #include "DisplayBase.hh"
 #include <ostream>
 #include <map>
+#include <set>
 
 typedef uint32_t kunichar;
 
@@ -76,6 +77,9 @@ class DisplaySympy : public DisplayBase {
 
 		/// Map from Cadabra symbols to Sympy symbols.
 		std::map<std::string, std::string> symmap;
+
+		/// List of symbols which have had dependencies added.
+		std::set<std::string> depsyms;
 };
 
 const char *unichar(kunichar c);

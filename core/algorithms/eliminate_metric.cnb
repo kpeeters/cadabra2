@@ -1,0 +1,71 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{eliminate_metric}{Eliminate metrics by raising or lowering indices.}\n\nEliminate metric and inverse metric objects by raising or lowering indices."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{eliminate_metric}{Eliminate metrics by raising or lowering indices.}\n\nEliminate metric and inverse metric objects by raising or lowering indices."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}g_{m p} g^{p m}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}g^{p}\\,_{p}\\end{dmath*}"
+				}
+			],
+			"source" : "{m, n, p, q, r}::Indices(vector, position=fixed).\n{m, n, p, q, r}::Integer(0..9).\ng_{m n}::Metric.\ng^{m n}::InverseMetric.\ng_{m}^{n}::KroneckerDelta.\ng^{m}_{n}::KroneckerDelta.\nex:=g_{m p} g^{p m};\neliminate_metric(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}10\\end{dmath*}"
+				}
+			],
+			"source" : "eliminate_kronecker(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Related algorithms are \\algo{eliminate_kronecker} and \\algo{eliminate_vielbein}."
+				}
+			],
+			"hidden" : true,
+			"source" : "Related algorithms are \\algo{eliminate_kronecker} and \\algo{eliminate_vielbein}."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

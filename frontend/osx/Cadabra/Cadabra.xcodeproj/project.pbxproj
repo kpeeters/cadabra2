@@ -235,7 +235,7 @@
 		A7B0F7091A05663700FCC711 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "phi-sci";
 				TargetAttributes = {
 					A7B0F7101A05663700FCC711 = {
@@ -359,6 +359,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -438,6 +439,7 @@
 					"$(OTHER_CFLAGS)",
 					"-D_WEBSOCKETPP_CPP11_STL_",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.phi-sci.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/ /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7";
@@ -467,6 +469,7 @@
 					"$(OTHER_CFLAGS)",
 					"-D_WEBSOCKETPP_CPP11_STL_",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.phi-sci.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
 				"USER_HEADER_SEARCH_PATHS[arch=*]" = "../../../client_server /usr/local/Cellar/boost/1.56.0/include/ /usr/local/Cellar/jsoncpp/0.6.0-rc2/include/ /System/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7";
@@ -488,6 +491,7 @@
 				);
 				INFOPLIST_FILE = CadabraTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.phi-sci.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadabra.app/Contents/MacOS/Cadabra";
 			};
@@ -504,6 +508,7 @@
 				);
 				INFOPLIST_FILE = CadabraTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.phi-sci.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Cadabra.app/Contents/MacOS/Cadabra";
 			};

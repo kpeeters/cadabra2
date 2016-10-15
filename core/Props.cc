@@ -130,7 +130,8 @@ bool Properties::has(const property *pb, Ex::iterator it)
 //		txtout << *it->name << std::endl;
 //		txtout << typeid(pit.first->second.second).name() << " versus " 
 //				 << typeid(pb).name() << std::endl;
-		if(typeid(*(pit.first->second.second))==typeid(*pb) && 
+		const property *tmp = (pit.first->second.second);
+		if(typeid(*tmp)==typeid(*pb) && 
 			pit.first->second.first->match(*this, it))  // match found
 			return true;
 		++pit.first;
@@ -338,7 +339,8 @@ void Properties::insert_prop(const Ex& et, const property *pr)
 
 			// Does this entry in props give a property of the same type as the one we
 			// are trying to insert?
-			if(typeid(*pr)==typeid(*(*pit.first).second.second)) {
+			const property *tmp = (*pit.first).second.second;
+			if(typeid(*pr)==typeid(*tmp)) {
 
 				// If this is a labelled property, is the label different from the one on the
 				// property we are trying to insert?
@@ -407,7 +409,8 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 	// introducing a duplicate.
 	pattern_map_t::iterator fit=pats.begin();
 	while(fit!=pats.end()) {
-		if(typeid(*(*fit).first)==typeid(*pr))
+		const property *tmp = (*fit).first;
+		if(typeid(*tmp)==typeid(*pr))
 			if(pr->equals((*fit).first)==property::exact_match) {
 				pr=static_cast<const list_property *>( (*fit).first );
 				break;
@@ -420,7 +423,8 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 	const property *to_delete_property=0;
 	pattern_map_t::iterator pit=pats.begin();
 	while(pit!=pats.end()) {
-		if(typeid(*(*pit).first)==typeid(*pr))
+		const property *tmp = (*pit).first;
+		if(typeid(*tmp)==typeid(*pr))
 			if(pr->equals((*pit).first)==property::id_match) {
 				to_delete_property = (*pit).first;
 				break;

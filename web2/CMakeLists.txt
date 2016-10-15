@@ -40,6 +40,7 @@ set(ALGOS
   distribute
   drop_weight
   eliminate_kronecker
+  eliminate_metric
   epsilon_to_delta
   evaluate
   expand
@@ -54,17 +55,21 @@ set(ALGOS
   keep_weight
   product_rule
   reduce_delta
+  rewrite_indices
   sort_product
+  sort_sum
   split_gamma
   split_index
   substitute
   unwrap
   vary
+  young_project_product
   young_project_tensor
 )
 set(PROPS
   Accent
   AntiCommuting
+  AntiSymmetric
   CommutingAsProduct
   CommutingAsSum
   Commuting
@@ -93,6 +98,8 @@ set(PROPS
   SelfNonCommuting
   SortOrder
   Spinor
+  Symmetric
+  TableauSymmetry
 )
 
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)

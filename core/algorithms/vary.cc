@@ -1,5 +1,6 @@
 
 #include "Cleanup.hh"
+#include "Exceptions.hh"
 #include "algorithms/vary.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/product_rule.hh"
@@ -38,6 +39,8 @@ vary::vary(const Kernel& k, Ex& tr, Ex& args_)
 bool vary::can_apply(iterator it) 
 	{
 	if(*it->name=="\\prod") return true;
+	if(*it->name=="\\commutator") return true;
+	if(*it->name=="\\anticommutator") return true;
 	if(*it->name=="\\sum") return true;
 	if(*it->name=="\\pow") return true;
 	if(*it->name=="\\int") return true;
@@ -66,36 +69,7 @@ Algorithm::result_t vary::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 	
-	const Derivative *der = kernel.properties.get<Derivative>(it);
-	const Accent     *acc = kernel.properties.get<Accent>(it);
-	if(der || acc) {
-		vary vry(kernel, tr, args);
-
-		sibling_iterator sib=tr.begin(it);
-		bool has_applied=false;
-		while(sib!=tr.end(it)) {
-			iterator app=sib;
-			++sib;
-			if(app->is_index()) continue;
-			if(vry.can_apply(app)) {
-				if(vry.apply(app)==result_t::l_applied) {
-					has_applied=true;
-					res=result_t::l_applied;
-					}
-				}
-			}
-
-		// If no variation took place, set to zero if we are termlike.
-//		txtout << "on " << *it->name << " " << has_applied << " " << is_termlike(it) << " " << expression_modified << " " << vry.expression_modified << std::endl;
-		if(!has_applied && is_termlike(it)) {
-			zero(it->multiplier);
-			return result_t::l_applied;
-			}
-
-		return res;
-		}
-
-	if(*it->name=="\\prod") {
+	if(*it->name=="\\prod" || *it->name=="\\commutator" || *it->name=="\\anticommutator") {
 		Ex result;
 		result.set_head(str_node("\\expression"));
 		iterator newsum=result.append_child(result.begin(), str_node("\\sum"));
@@ -134,6 +108,34 @@ Algorithm::result_t vary::apply(iterator& it)
 			}
 		cleanup_dispatch(kernel, tr, it);
 		res=result_t::l_applied;
+		return res;
+		}
+
+	const Derivative *der = kernel.properties.get<Derivative>(it);
+	const Accent     *acc = kernel.properties.get<Accent>(it);
+	if(der || acc) {
+		vary vry(kernel, tr, args);
+
+		sibling_iterator sib=tr.begin(it);
+		bool has_applied=false;
+		while(sib!=tr.end(it)) {
+			iterator app=sib;
+			++sib;
+			if(app->is_index()) continue;
+			if(vry.can_apply(app)) {
+				if(vry.apply(app)==result_t::l_applied) {
+					has_applied=true;
+					res=result_t::l_applied;
+					}
+				}
+			}
+
+		// If no variation took place, set to zero if we are termlike.
+		if(!has_applied && is_termlike(it)) {
+			zero(it->multiplier);
+			return result_t::l_applied;
+			}
+
 		return res;
 		}
 
@@ -196,25 +198,28 @@ Algorithm::result_t vary::apply(iterator& it)
 			}
 		return res;
 		}
-	
-	der = kernel.properties.get<Derivative>(tr.parent(it));
-	acc = kernel.properties.get<Accent>(tr.parent(it));
 
-	if(der || acc || is_single_term(it)) { // easy: just vary this term by substitution
-		substitute subs(kernel, tr, args);
-		if(subs.can_apply(it)) {
-			if(subs.apply(it)==result_t::l_applied) {
+	if(tr.is_head(it)==false) {
+		der = kernel.properties.get<Derivative>(tr.parent(it));
+		acc = kernel.properties.get<Accent>(tr.parent(it));
+		
+		if(der || acc || is_single_term(it)) { // easy: just vary this term by substitution
+			// std::cerr << "single term " << *it->name << std::endl;
+			substitute subs(kernel, tr, args);
+			if(subs.can_apply(it)) {
+				if(subs.apply(it)==result_t::l_applied) {
+					return result_t::l_applied;
+					}
+				}
+			
+			if(is_termlike(it)) {
+				zero(it->multiplier);
 				return result_t::l_applied;
 				}
+			return result_t::l_no_action;
 			}
-		
-		if(is_termlike(it)) {
-			zero(it->multiplier);
-			return result_t::l_applied;
-			}
-		return result_t::l_no_action;
 		}
-	
+
 	if(is_nonprod_factor_in_prod(it)) {
 		substitute subs(kernel, tr, args);
 		if(subs.can_apply(it)) {
@@ -229,6 +234,14 @@ Algorithm::result_t vary::apply(iterator& it)
 			}
 		return result_t::l_no_action;
 		}
+
+	// If we get here, we are talking about a single term for which we do 
+   // not know (yet) how to take a variational derivative. For instance
+	// some unknown function f(a) varied wrt. a. This should spit out
+	// \delta{f(a)}{\delta{a}}\delta{a} or something like that.
+
+	throw RuntimeException("Do not yet know how to vary that expression.");
+//	std::cerr << "No idea how to vary single term " << Ex(it) << std::endl;
 
 	return res;
 	}

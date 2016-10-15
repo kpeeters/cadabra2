@@ -252,7 +252,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement tree.
 	//std::cerr << "repl before: \n" << repl << std::endl;
 	cleanup_dispatch_deep(kernel, repl);
-	//std::cerr << "repl after: \n" << repl << std::endl;
+	// std::cerr << "repl after: \n" << repl << std::endl;
 
 	// Remove the wrapping "\expression" node, not needed anymore.
 //	repl.flatten(repl.begin());
@@ -289,7 +289,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 		}
 	else {
 		multiply(repl.begin()->multiplier, *st->multiplier);
+		auto keep_parent_rel=st->fl.parent_rel;
 		st=tr.move_ontop(st, repl.begin()); // no need to keep the original repl tree
+		st->fl.parent_rel=keep_parent_rel;
 		}
 
 	if(ind_dummy.size()>0 && !rename_replacement_dummies_called) 
