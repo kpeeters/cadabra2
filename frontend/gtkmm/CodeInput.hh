@@ -54,6 +54,11 @@ namespace cadabra {
 			void handle_changed();
 			void update_buffer(); // update buffer from datacell
 
+			/// Return two strings corresponding to the text before and
+			/// after the current cursor position.
+
+			void slice_cell(std::string& before, std::string& after);
+
 			/// We cannot edit the content of the DataCell directly,
 			/// because Gtk needs a Gtk::TextBuffer. However, the
 			/// CodeInput widgets corresponding to a single DataCell all

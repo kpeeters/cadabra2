@@ -269,7 +269,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		// setting the metric flag to 0. Ditto when only one index is on a derivative
 		// (canonicalising usually makes the expression uglier in that case).
 		iterator tmp;
-		if( ( (separated_by_derivative(ii->first, i2->first,tmp) 
+		if( ( (separated_by_derivative(tr.parent(ii->first), tr.parent(i2->first),tmp) 
 				 || only_one_on_derivative(ii->first, i2->first) )
 				&& position_type(ii->first)==Indices::fixed ) ||
 			 position_type(ii->first)==Indices::independent ) {

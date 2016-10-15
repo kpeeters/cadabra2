@@ -32,13 +32,15 @@ Installation
 Cadabra builds on Linux and Mac OS X, select your distribution below:
 
 - `Linux (Debian/Ubuntu/Mint)`_
-- `Linux (Fedora/CentOS/Scientific Linux)`_
+- `Linux (Fedora 24)`_
+- `Linux (Fedora <=23/CentOS/Scientific Linux)`_
+- `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Mac OS X`_
 
-Binaries for all these platforms will be provided as soon as we get to
-a somewhat more stable state; for the time being you need to compile
-from source.
+Binaries for these platforms may (or may not) be provided from the
+download page at http://cadabra.science/download.html, but they are
+not always very up-to-date.
 
 
 Linux (Debian/Ubuntu/Mint)
@@ -66,13 +68,40 @@ This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra-gtk``. You can also find the latter in
 the 'Education' menu.
 
+Linux (Fedora 24)
+~~~~~~~~~~~~~~~~~
 
-Linux (Fedora/CentOS/Scientific Linux)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Fedora 24 is the first Fedora to have Python 3 by default; for older
+Fedora versions see below. Install the dependencies with::
+
+    sudo dnf install python3-devel cmake gcc-c++ 
+    sudo dnf install pcre-devel gmp-devel libuuid-devel sqlite-devel
+    sudo dnf install gtkmm30-devel boost-devel boost-python3-devel
+    sudo dnf install texlive python3-matplotlib
+    sudo dnf install python3-pip
+    sudo pip3 install sympy
+
+This platform receives less testing so please get in touch if you run
+into any issues. You can use either g++ or the clang++
+compiler. Building is then done with the standard::
+
+    mkdir build
+    cd build
+    cmake ..
+    make
+    sudo make install
+
+This will produce the command line app ``cadabra2`` and the Gtk
+notebook interface ``cadabra-gtk``. You can also find the latter in
+the 'Education' menu.
+
+
+Linux (Fedora ≤23/CentOS/Scientific Linux)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On Fedora/CentOS/Scientific Linux you can install the dependencies with::
 
-    sudy yum install epel-release
+    sudo yum install epel-release
     sudo yum install python-devel cmake gcc-c++ 
     sudo yum install pcre-devel gmp-devel libuuid-devel sqlite-devel
     sudo yum install gtkmm30-devel boost-devel 
@@ -98,6 +127,38 @@ compiler. Building is then done with the standard::
 This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra-gtk``. You can also find the latter in
 the 'Education' menu.
+
+Linux (OpenSUSE)
+~~~~~~~~~~~~~~~~
+
+For OpenSUSE (tested on 'Leap', probably also fine with minor changes
+for 'Tumbleweed') you first need to add the `devel:libraries:c_c++`
+repository. To do this, start YaST, go to Software/Software
+Repositories/Add/Add by URL.  Use the URL
+
+    http://download.opensuse.org/repositories/devel:/libraries:/c_c++/openSUSE_Leap_42.1
+
+After that, dependencies can be installed with::
+
+    sudo zypper install cmake python3-devel gcc-c++
+    sudo zypper install pcre-devel gmp-devel libuuid-devel sqlite-devel
+    sudo zypper install gtkmm3-devel 
+    sudo zypper install texlive python3-matplotlib
+    sudo zypper install python3-pip
+    sudo zypper install boost_1_61-devel libboost_python3-1_61_0
+    sudo pip3 install sympy
+
+This platform receives less testing so please get in touch if you run
+into any issues. Building is then done with the standard::
+
+    mkdir build
+    cd build
+    cmake .. 
+    make
+    sudo make install
+
+This will produce the command line app ``cadabra2`` and the Gtk
+notebook interface ``cadabra-gtk``. 
 
 
 Linux (Arch/Manjaro)
@@ -133,6 +194,7 @@ http://brew.sh).  Install these packages with::
     brew install boost-python --with-python3
     brew install pkgconfig ossp-uuid 
     brew install gtkmm3 adwaita-icon-theme
+    sudo pip3 install sympy
 
 The uninstall of boost-python in the 2nd line is to ensure that you
 have a version with python3 support. If the lines above prompt you to
@@ -180,6 +242,9 @@ For any questions, please contact info@cadabra.science .
 
 
 
+Special thanks
+--------------
 
-
-
+Special thanks to José M. Martín-García (for the xPerm
+canonicalisation code), James Allen (for writing much of the factoring
+code) and the Software Sustainability Institute.

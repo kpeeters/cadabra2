@@ -51,6 +51,7 @@ class DisplayTerminal : public DisplayBase {
 		void print_powlike(std::ostream&, Ex::iterator);
 		void print_intlike(std::ostream&, Ex::iterator);
 		void print_equalitylike(std::ostream&, Ex::iterator);
+		void print_commutator(std::ostream& str, Ex::iterator it, bool comm);
 		void print_components(std::ostream&, Ex::iterator);
 		void print_other(std::ostream&, Ex::iterator);
 

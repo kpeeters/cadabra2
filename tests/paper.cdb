@@ -60,7 +60,7 @@ def test05():
     \nabla{#}::Derivative.
     \partial{#}::PartialDerivative.
     A_{m n}::AntiSymmetric.
-    V_{m}::Depends(\nabla).
+    V_{m}::Depends(\nabla{#}).
     obj:= \partial_{m p}( A_{q r} V_{n} ) A^{p m};
     canonicalise(_)
     assert(obj==0)

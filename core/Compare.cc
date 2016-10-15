@@ -126,23 +126,41 @@ int subtree_compare(const Properties *properties,
 		else return -2;
 		}
 
-	// Compare actual children.
-	Ex::sibling_iterator sib1=one.begin(), sib2=two.begin();
+	// Compare actual children. We run through this twice: first
+	// consider all non-index children, then all index children. This
+	// is because we want products of tensors which differ only by
+	// index position to be sorted by the names of the tensors first,
+	// not first by their index positions. Otherwise canonicalise cannot
+	// do its raising/lowering job.
+
+	bool do_indices=false;
 	int remember_ret=0;
 	if(mod_prel==0) mod_prel=-2;
 	else if(mod_prel>0)  --mod_prel;
 	if(compare_multiplier==0) compare_multiplier=-2;
 	else if(compare_multiplier>0)  --compare_multiplier;
+	
+	for(;;) {
+		Ex::sibling_iterator sib1=one.begin(), sib2=two.begin();
+		
+		while(sib1!=one.end()) {
+			if(sib1->is_index() == do_indices) {
+				int ret=subtree_compare(properties, sib1,sib2, mod_prel, checksets, compare_multiplier, literal_wildcards);
+				if(abs(ret)>1)
+					return ret/abs(ret)*mult;
+				if(ret!=0 && remember_ret==0) 
+					remember_ret=ret;
+				}
+			++sib1;
+			++sib2;
+			}
 
-	while(sib1!=one.end()) {
-		int ret=subtree_compare(properties, sib1,sib2, mod_prel, checksets, compare_multiplier, literal_wildcards);
-		if(abs(ret)>1)
-			return ret/abs(ret)*mult;
-		if(ret!=0 && remember_ret==0) 
-			remember_ret=ret;
-		++sib1;
-		++sib2;
-		}
+		if(remember_ret!=0) break;
+
+		if(!do_indices) do_indices=true;
+		else break;
+		} 
+
 	return remember_ret;
 	}
 
@@ -382,6 +400,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	bool is_index=false;
 	bool is_sibling_pattern=false;
 	bool is_coordinate=false;
+	bool is_number=false;
 	
 	if(one->fl.bracket==str_node::b_none && one->is_index() ) 
 		is_index=true;
@@ -399,6 +418,8 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		else
 			is_coordinate=true;
 		}
+	else if(one->is_integer()) 
+		is_number=true;
 		
 	// Various cases to be distinguished now:
 	//   - match index pattern to object
@@ -575,7 +596,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		
 		return subtree_match;
 		}
-	else if(is_coordinate) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
+	else if(is_coordinate || is_number) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
 		const Indices *t2=properties.get<Indices>(two, true);
 		if(t2) {
 			// std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;

@@ -362,8 +362,20 @@ div.literal {
 	 margin-left: 50px;
 }
 table.packages {
+	 font-size: smaller;
 	 border-collapse: separate;
     border-spacing:  5px 10px;
+}
+table.packages .system {
+	 white-space: nowrap;
+}
+table.packages .date {
+	 white-space: nowrap;
+}
+table.packages .instructions {
+	 font-size: smaller;
+	 padding-left: 20px;
+	 text-align: left;
 }
 table.packages td {
 	 vertical-align: top;

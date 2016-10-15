@@ -56,13 +56,14 @@ void cleanup_dispatch_deep(const Kernel& k, Ex&, dispatcher_t disp=&cleanup_disp
 /// allowed to modify anything except the node and nodes below (in
 /// particular, they will leave sibling nodes untouched).
 
-void cleanup_productlike(const Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_sumlike(const Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_derivative(const Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_components(const Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_numericalflat(const Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_diagonal(const Kernel& k, Ex&, Ex::iterator& it);
-void cleanup_kronecker(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_productlike(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_sumlike(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_derivative(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_partialderivative(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_components(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_numericalflat(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_diagonal(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_kronecker(const Kernel& k, Ex&, Ex::iterator& it);
 
 /// Given a node with a non-unit multiplier, push this multiplier
 /// down the tree if the node is not allowed to have a non-unit
@@ -73,7 +74,7 @@ void cleanup_kronecker(const Kernel& k, Ex&, Ex::iterator& it);
 /// children, but that should be handled individually (see cleanup
 /// of product nodes for an example).
 
-void push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it);
+bool push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it);
 
 
 
