@@ -74,6 +74,8 @@ Algorithm::result_t unwrap::apply(iterator& it)
 			// the derivative (but see the comment above). 
 			sibling_iterator factor=tr.begin(derarg);
 			while(factor!=tr.end(derarg)) {
+				// std::cerr << "checking " << Ex(factor) << std::endl;
+
 				sibling_iterator nxt=factor;
 				++nxt;
 				bool move_out=true;
