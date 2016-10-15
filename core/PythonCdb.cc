@@ -664,6 +664,7 @@ void inject_defaults(Kernel *k)
 
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}",false), 0);
 	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false), 0);
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\sum{#}",false), 0);
 	auto wi=new WeightInherit();
 	auto wa=make_Ex_from_string("label=all, type=additive", false);
 	inject_property(k, wi,                       make_Ex_from_string("\\sum{#}", false), wa);
