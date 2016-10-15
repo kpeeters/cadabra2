@@ -162,6 +162,26 @@ def test14():
 
 test14()
 
+def test15():
+    __cdbkernel__=create_scope()
+    ex:=  3 A G B_{m} C D + 4 E_{m}  ;
+    factor_out(_,  $  A $ );
+    tst:= 3 A G B_{m} C D + 4 E_{m}  - @(ex);
+    assert(tst==0)
+    print('Test 15 passed')
+
+test15()
+
+def test16():
+    __cdbkernel__=create_scope()
+    ex:=  3 A G B_{m} C D + 4 E_{m}  ;
+    factor_out(_,  $  A $, right=True );
+    tst:= 4 E_{m} + 3 G B_{m} C D A - @(ex);
+    assert(tst==0)
+    print('Test 16 passed')
+
+test16()
+
 
 # @reset.
 # {a,b,m,n,p,q}::Indices.
