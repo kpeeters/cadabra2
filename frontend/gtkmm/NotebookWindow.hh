@@ -173,7 +173,8 @@ namespace cadabra {
 
 			bool cell_got_focus(DTree::iterator, int);
 			bool cell_toggle_visibility(DTree::iterator it, int);
-			bool cell_content_changed(const std::string&, DTree::iterator, int);
+			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
+			bool cell_content_erase(int, int, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
 			
 			void dim_output_cells(DTree::iterator it);

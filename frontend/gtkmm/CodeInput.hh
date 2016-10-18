@@ -39,9 +39,11 @@ namespace cadabra {
 
 					void         shift_enter_pressed();
 					
-					sigc::signal1<bool, DTree::iterator>              content_execute;
-					sigc::signal2<bool, std::string, DTree::iterator> content_changed;
-					sigc::signal1<bool, DTree::iterator>              cell_got_focus;
+					sigc::signal1<bool, DTree::iterator>                   content_execute;
+//					sigc::signal2<bool, std::string, DTree::iterator>      content_changed;
+					sigc::signal3<bool, std::string, int, DTree::iterator> content_insert;
+					sigc::signal3<bool, int, int, DTree::iterator>         content_erase;
+					sigc::signal1<bool, DTree::iterator>                   cell_got_focus;
 
 					friend CodeInput;
 
@@ -51,7 +53,9 @@ namespace cadabra {
 			};
 
 			bool handle_button_press(GdkEventButton *);
-			void handle_changed();
+//			void handle_changed();
+			void handle_insert(const Gtk::TextIter& pos, const Glib::ustring& text, int bytes);
+			void handle_erase(const Gtk::TextIter& start, const Gtk::TextIter& end);
 			void update_buffer(); // update buffer from datacell
 
 			/// Return two strings corresponding to the text before and
