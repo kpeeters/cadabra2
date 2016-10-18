@@ -115,7 +115,7 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 		gb.add_cell(cl.doc, newref, true);
 		}
 	// std::cerr << "cadabra-client: positioning cursor" << std::endl;
-	gb.position_cursor(cl.doc, newref);
+	gb.position_cursor(cl.doc, newref, -1);
 	}
 
 void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)  
@@ -124,7 +124,7 @@ void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)
 		gb.remove_cell(cl.doc, newref);
 		cl.doc.erase(newref);
 		}
-	gb.position_cursor(cl.doc, ref);
+	gb.position_cursor(cl.doc, ref, -1);
 	}
 
 
@@ -247,5 +247,6 @@ void ActionEraseText::revert(DocumentThread& cl, GUIBase& gb)
 	{
 	this_cell->textbuf.insert(from_pos, removed_text);
 	gb.update_cell(cl.doc, this_cell);
+	gb.position_cursor(cl.doc, this_cell, from_pos+removed_text.size());
 	}
 

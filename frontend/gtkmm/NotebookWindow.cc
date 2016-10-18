@@ -631,7 +631,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 	
 	}
 
-void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
+void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int pos)
 	{
 //	if(it==doc.end()) return;
 	//std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
@@ -658,6 +658,9 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 				&(target.inbox->edit)
 						  ));
 		}
+	
+	if(pos>=0)
+		target.inbox->edit.place_cursor(pos);
 	
 	current_cell=it;
 	}
