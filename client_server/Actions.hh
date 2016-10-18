@@ -24,6 +24,10 @@ namespace cadabra {
 	/// pass (user) action instructions around.  They can be stored in
 	/// undo/redo stacks. All actions run on the GUI thread. The
 	/// update_gui members typically call members of the GUIBase class.
+	/// Action objects are allowed to modify the DTree document doc,
+	/// since they essentially contain code which is part of the 
+	/// DocumentThread object.
+
 
 	class ActionBase {
 		public:
@@ -37,6 +41,9 @@ namespace cadabra {
 			/// Revert the change to the DTree document and the GUI.
 
 			virtual void revert(DocumentThread&, GUIBase&)=0;
+
+			/// Can this action be undone?
+			virtual bool undoable() const;
 	};
 	
 	/// \ingroup clientserver
@@ -84,7 +91,7 @@ namespace cadabra {
 
 	/// \ingroup clientserver
 	///
-	/// Update the running status of the indicated cell.
+	/// Update the running status of the indicated cell. 
 
 	class ActionSetRunStatus : public ActionBase {
 		public:
@@ -93,6 +100,7 @@ namespace cadabra {
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
 
+			virtual bool undoable() const override;
 		private:
 			DTree::iterator this_cell;
 			bool            was_running_, new_running_;
@@ -138,29 +146,54 @@ namespace cadabra {
 			DTree::iterator this_cell, newref; // the newly created cell
 	};
 
-}
+	
+	/// \ingroup clientserver
+	///
+	/// Add a text string (can be just a single character) at the point
+	/// of the cursor.
+	/// This action is assumed to be triggered from a user change to
+	/// the GUI cells, so will not update the GUI itself, only the 
+	/// underlying DTree. However, the revert method will need to
+	/// update the GUI representation.
+
+	class ActionInsertText : public ActionBase {
+		public:
+			ActionInsertText(DTree::iterator, int pos, const std::string&);
 			
-//			class ActionAddText : public ActionBase {
-//				public:
-//					ActionAddText(tree<DataCell>::iterator, int, const std::string&);
-//					
-//					virtual void execute(XCadabra&);
-//					virtual void revert(XCadabra&);
-//					
-//					int         insert_pos;
-//					std::string text;
-//			};
-//			
-//			class ActionRemoveText : public ActionBase {
-//				public:
-//					ActionRemoveText(tree<DataCell>::iterator, int, int, const std::string&);
-//					
-//					virtual void execute(XCadabra&);
-//					virtual void revert(XCadabra&);
-//					
-//					int from_pos, to_pos;
-//					std::string removed_text;
-//			};
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+			
+		private:
+			DTree::iterator   this_cell;
+			int         insert_pos;
+			std::string text;
+	};
+	
+	/// \ingroup clientserver
+	///
+	/// Remove a text string starting at the indicated position, and
+	/// with the indicated length, from the indicated cell.
+	/// This action is assumed to be triggered from a user change to
+	/// the GUI cells, so will not update the GUI itself, only the
+	/// underlying DTree. However, the revert method will need to
+	/// update the GUI representation.
+
+	class ActionEraseText : public ActionBase {
+		public:
+			ActionEraseText(DTree::iterator, int, int);
+			
+			virtual void execute(DocumentThread&, GUIBase&) override;
+			virtual void revert(DocumentThread&,  GUIBase&) override;
+			
+		private:
+			DTree::iterator   this_cell;
+			int from_pos, to_pos;
+			std::string removed_text;
+	};
+	
+}
+
+
 //
 //       class ActionMergeCells
 			

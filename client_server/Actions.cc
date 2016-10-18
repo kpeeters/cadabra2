@@ -9,6 +9,11 @@
 
 using namespace cadabra;
 
+bool ActionBase::undoable() const 
+	{
+	return true;
+	}
+
 ActionAddCell::ActionAddCell(DataCell cell, DTree::iterator ref_, Position pos_) 
 	: newcell(cell), ref(ref_), pos(pos_)
 	{
@@ -37,7 +42,12 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 
 void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	// FIXME: implement
+	// Remove the GUI cell from the notebook and then
+	// remove the corresponding DataCell from the DTree.
+
+	std::cerr << "removing cell " << newref->textbuf << std::endl;
+	gb.remove_cell(cl.doc, newref);
+	cl.doc.erase(newref);
 	}
 
 
@@ -110,7 +120,11 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 
 void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)  
 	{
-	// FIXME: implement
+	if(needed_new_cell) {
+		gb.remove_cell(cl.doc, newref);
+		cl.doc.erase(newref);
+		}
+	gb.position_cursor(cl.doc, ref);
 	}
 
 
@@ -182,6 +196,11 @@ ActionSetRunStatus::ActionSetRunStatus(DTree::iterator ref_, bool running)
 	{
 	}
 
+bool ActionSetRunStatus::undoable() const 
+	{
+	return false;
+	}
+
 void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)  
 	{
 	gb.update_cell(cl.doc, this_cell);
@@ -192,5 +211,41 @@ void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)
 
 void ActionSetRunStatus::revert(DocumentThread& cl, GUIBase& gb)
 	{
+	}
+
+
+ActionInsertText::ActionInsertText(DTree::iterator ref_, int pos, const std::string& content)
+	: this_cell(ref_), insert_pos(pos), text(content)
+	{
+	}
+
+void ActionInsertText::execute(DocumentThread& cl, GUIBase& gb)  
+	{
+	this_cell->textbuf.insert(insert_pos, text);
+	}
+
+void ActionInsertText::revert(DocumentThread& cl, GUIBase& gb)
+	{
+	this_cell->textbuf.erase(insert_pos, text.size());
+	gb.update_cell(cl.doc, this_cell);
+	}
+
+
+ActionEraseText::ActionEraseText(DTree::iterator ref_, int start, int end)
+	: this_cell(ref_), from_pos(start), to_pos(end)
+	{
+	}
+
+void ActionEraseText::execute(DocumentThread& cl, GUIBase& gb)  
+	{
+	std::cerr << from_pos << ", " << to_pos << std::endl;
+	removed_text=this_cell->textbuf.substr(from_pos, to_pos-from_pos);
+	this_cell->textbuf.erase(from_pos, to_pos-from_pos);
+	}
+
+void ActionEraseText::revert(DocumentThread& cl, GUIBase& gb)
+	{
+	this_cell->textbuf.insert(from_pos, removed_text);
+	gb.update_cell(cl.doc, this_cell);
 	}
 
