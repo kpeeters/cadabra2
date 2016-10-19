@@ -98,14 +98,14 @@ void DocumentThread::undo()
 	{
 	stack_mutex.lock();
 	if(undo_stack.size()==0) {
-		std::cerr << "no entries left on the stack" << std::endl;
+		//std::cerr << "no entries left on the stack" << std::endl;
 		stack_mutex.unlock();
 		return;
 		}
 
 	disable_stacks=true;
 	auto ua = undo_stack.top();
-	std::cerr << "Undo action " << typeid(*ua).name() << std::endl;
+	//std::cerr << "Undo action " << typeid(*ua).name() << std::endl;
 
 	redo_stack.push(ua);
 	undo_stack.pop();
@@ -154,7 +154,7 @@ void DocumentThread::process_action_queue()
 		// Unlock the action queue while we are processing this particular action,
 		// so that other actions can be added which we run.
 		stack_mutex.unlock();
-//		std::cerr << "Executing action " << typeid(*ab).name() << std::endl;
+		//std::cerr << "Executing action " << typeid(*ab).name() << std::endl;
 		// Execute the action; this will run synchronously, so after
 		// this returns the doc and visual representation have both been
 		// updated.

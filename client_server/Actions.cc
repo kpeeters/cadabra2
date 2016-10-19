@@ -37,6 +37,7 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 			newref = cl.doc.append_child(ref, newcell);
 			break;
 		}
+	child_num=cl.doc.index(newref);
 	gb.add_cell(cl.doc, newref, true);
 	}
 
@@ -45,9 +46,10 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	// Remove the GUI cell from the notebook and then
 	// remove the corresponding DataCell from the DTree.
 
-	std::cerr << "removing cell " << newref->textbuf << std::endl;
-	gb.remove_cell(cl.doc, newref);
-	cl.doc.erase(newref);
+	auto ch = cl.doc.child(ref, child_num);
+	std::cerr << "removing cell " << ch->textbuf << std::endl;
+	gb.remove_cell(cl.doc, ch);
+	cl.doc.erase(ch);
 	}
 
 
@@ -143,12 +145,25 @@ void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)
 
 	reference_parent_cell = cl.doc.parent(this_cell);
 	reference_child_index = cl.doc.index(this_cell);
+	removed_tree=DTree(this_cell);
 	cl.doc.erase(this_cell);
 	}
 
 void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	// FIXME: implement
+	std::cerr << "need to undo a remove cell at index " << reference_child_index << std::endl;
+	DTree::iterator newcell;
+	if(cl.doc.number_of_children(reference_parent_cell)==0) {
+		newcell = cl.doc.append_child(reference_parent_cell, removed_tree.begin());
+		} 
+	else {
+		auto it = cl.doc.child(reference_parent_cell, reference_child_index);
+		++it;
+		newcell = cl.doc.insert_subtree(it, removed_tree.begin());
+		std::cerr << "added doc cell" << std::endl;
+		}
+	gb.add_cell(cl.doc, newcell, true);
+	std::cerr << "added vis rep" << std::endl;
 	}
 
 
