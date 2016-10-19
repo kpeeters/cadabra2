@@ -62,7 +62,7 @@ var searchData=
   ['set_5ftext_5fmode',['set_text_mode',['../classexec__stream__t.html#a8395f752df42373dfbc79c57cb728bae',1,'exec_stream_t']]],
   ['set_5ftitle_5fprefix',['set_title_prefix',['../classcadabra_1_1NotebookWindow.html#aaf3774a00925d7eb6c72afe58dd5c91d',1,'cadabra::NotebookWindow']]],
   ['set_5funit_5fsublengths',['set_unit_sublengths',['../classcombin_1_1combinations__base.html#a1fbccd52843957af32893db5b932314a',1,'combin::combinations_base']]],
-  ['set_5fuser_5fdetails',['set_user_details',['../classcadabra_1_1DocumentThread.html#ab581992dec880b82771bf1ece2a8b533',1,'cadabra::DocumentThread']]],
+  ['set_5fuser_5fdetails',['set_user_details',['../classcadabra_1_1DocumentThread.html#a6d56902706c0536f555829ddcf105019',1,'cadabra::DocumentThread']]],
   ['set_5fwait_5ftimeout',['set_wait_timeout',['../classexec__stream__t.html#aa74eb70695cdbff39d06140a79879a4c',1,'exec_stream_t']]],
   ['settings',['settings',['../classcadabra_1_1NotebookWindow.html#aec3e22d7901442003088a2e9f2a4c022',1,'cadabra::NotebookWindow']]],
   ['setup_5fcss_5fprovider',['setup_css_provider',['../classcadabra_1_1NotebookWindow.html#a64806a8680ce409e6a0e978355a5a7ca',1,'cadabra::NotebookWindow']]],

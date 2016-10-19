@@ -107,7 +107,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Description</h2>
-<div class="textblock"><p>Base class which manipulates the document tree. </p>
+<div class="textblock"><p>A base class with all the logic to manipulate a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> notebook document. </p>
+<p>Relies on the various objects derived from <a class="el" href="classcadabra_1_1ActionBase.html" title="All actions derive from the ActionBase object, which defines the interface they need to implement...">ActionBase</a> in order to get actual work done. All methods here will always run on the GUI thread.In order to implement a GUI, derive from both <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a> and <a class="el" href="classcadabra_1_1GUIBase.html" title="Abstract base class with methods that need to be implemented by any GUI. ">GUIBase</a> and then implement the virtual functions of the latter (those implement basic insertion/removal of notebook cells; the logic to figure out which ones and to implement the undo/redo stack is all in the GUI-agnostic <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a>). </p>
 </div>
 <p><code>#include &lt;<a class="el" href="DocumentThread_8hh_source.html">DocumentThread.hh</a>&gt;</code></p>
 <div class="dynheader">
@@ -125,6 +126,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9574c93a03118e2acf47295b77ed79be"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a9574c93a03118e2acf47295b77ed79be">DocumentThread</a> (<a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> *)</td></tr>
 <tr class="separator:a9574c93a03118e2acf47295b77ed79be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9d573008fc3ed7203dfab960ac8e995"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#ad9d573008fc3ed7203dfab960ac8e995">DocumentThread</a> (const <a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;)=delete</td></tr>
+<tr class="memdesc:ad9d573008fc3ed7203dfab960ac8e995"><td class="mdescLeft">&#160;</td><td class="mdescRight">It is not possible to copy-construct a <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a> as it holds on to resources which are not easily copied (such as GUI elements).  <a href="#ad9d573008fc3ed7203dfab960ac8e995">More...</a><br/></td></tr>
 <tr class="separator:ad9d573008fc3ed7203dfab960ac8e995"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4eff5a783cfc5f811992939d2f807b77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a4eff5a783cfc5f811992939d2f807b77">set_compute_thread</a> (<a class="el" href="classcadabra_1_1ComputeThread.html">ComputeThread</a> *)</td></tr>
 <tr class="memdesc:a4eff5a783cfc5f811992939d2f807b77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Let the notebook know about the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> so that it can send cells for evaluation.  <a href="#a4eff5a783cfc5f811992939d2f807b77">More...</a><br/></td></tr>
@@ -141,15 +143,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3cc5626ccf2e0966ffabd7a438704f78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a3cc5626ccf2e0966ffabd7a438704f78">load_from_string</a> (const std::string &amp;)</td></tr>
 <tr class="memdesc:a3cc5626ccf2e0966ffabd7a438704f78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load a new notebook from a JSON string.  <a href="#a3cc5626ccf2e0966ffabd7a438704f78">More...</a><br/></td></tr>
 <tr class="separator:a3cc5626ccf2e0966ffabd7a438704f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c7fa52dbea94a43c5e99a6dff16c2bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a2c7fa52dbea94a43c5e99a6dff16c2bf">undo</a> ()</td></tr>
+<tr class="memdesc:a2c7fa52dbea94a43c5e99a6dff16c2bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">One undo step.  <a href="#a2c7fa52dbea94a43c5e99a6dff16c2bf">More...</a><br/></td></tr>
+<tr class="separator:a2c7fa52dbea94a43c5e99a6dff16c2bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91869c1027b517cd7df852e62c2886f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a91869c1027b517cd7df852e62c2886f0">is_registered</a> () const </td></tr>
+<tr class="memdesc:a91869c1027b517cd7df852e62c2886f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if a user has been registered with the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> log server.  <a href="#a91869c1027b517cd7df852e62c2886f0">More...</a><br/></td></tr>
 <tr class="separator:a91869c1027b517cd7df852e62c2886f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab581992dec880b82771bf1ece2a8b533"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#ab581992dec880b82771bf1ece2a8b533">set_user_details</a> (const std::string &amp;, const std::string &amp;, const std::string &amp;)</td></tr>
-<tr class="separator:ab581992dec880b82771bf1ece2a8b533"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d56902706c0536f555829ddcf105019"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a6d56902706c0536f555829ddcf105019">set_user_details</a> (const std::string &amp;name, const std::string &amp;email, const std::string &amp;affiliation)</td></tr>
+<tr class="memdesc:a6d56902706c0536f555829ddcf105019"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set user details which will be sent to the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> log server.  <a href="#a6d56902706c0536f555829ddcf105019">More...</a><br/></td></tr>
+<tr class="separator:a6d56902706c0536f555829ddcf105019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:acf190258aa71c2479263269e5e1d4327"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#acf190258aa71c2479263269e5e1d4327">ActionAddCell</a></td></tr>
-<tr class="memdesc:acf190258aa71c2479263269e5e1d4327"><td class="mdescLeft">&#160;</td><td class="mdescRight">Action objects are allowed to modify the DTree document doc, since they essentially contain code which is part of the <a class="el" href="classcadabra_1_1DocumentThread.html" title="Base class which manipulates the document tree. ">DocumentThread</a> object.  <a href="#acf190258aa71c2479263269e5e1d4327">More...</a><br/></td></tr>
 <tr class="separator:acf190258aa71c2479263269e5e1d4327"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a653683b9882f455539df970a4f5a1698"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a653683b9882f455539df970a4f5a1698">ActionPositionCursor</a></td></tr>
 <tr class="separator:a653683b9882f455539df970a4f5a1698"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,6 +165,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:ad672e7fffbcc20f93504ead740d316b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a56b0aa54a1aa9d9459db8b2bfc941cfb"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a56b0aa54a1aa9d9459db8b2bfc941cfb">ActionSetRunStatus</a></td></tr>
 <tr class="separator:a56b0aa54a1aa9d9459db8b2bfc941cfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae041b772d4c61c96e680779aa2d18b89"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#ae041b772d4c61c96e680779aa2d18b89">ActionInsertText</a></td></tr>
+<tr class="separator:ae041b772d4c61c96e680779aa2d18b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6849f2074e59d6d705a2b14c06056b56"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a6849f2074e59d6d705a2b14c06056b56">ActionEraseText</a></td></tr>
+<tr class="separator:a6849f2074e59d6d705a2b14c06056b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
 Protected Types</h2></td></tr>
@@ -200,6 +210,8 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a801691d452dea74237a7c30d8765ec7e"><td class="memItemLeft" align="right" valign="top">std::queue&lt; std::shared_ptr<br class="typebreak"/>
 &lt; <a class="el" href="classcadabra_1_1ActionBase.html">ActionBase</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#a801691d452dea74237a7c30d8765ec7e">pending_actions</a></td></tr>
 <tr class="separator:a801691d452dea74237a7c30d8765ec7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4f40e94cbfdfd5a73ab4febca6ab46d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#af4f40e94cbfdfd5a73ab4febca6ab46d">disable_stacks</a></td></tr>
+<tr class="separator:af4f40e94cbfdfd5a73ab4febca6ab46d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae24929b663e3347a1bf614181e5b770f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#ae24929b663e3347a1bf614181e5b770f">registered</a></td></tr>
 <tr class="memdesc:ae24929b663e3347a1bf614181e5b770f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configuration options read from ~/.config/cadabra.conf.  <a href="#ae24929b663e3347a1bf614181e5b770f">More...</a><br/></td></tr>
 <tr class="separator:ae24929b663e3347a1bf614181e5b770f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -297,6 +309,8 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>It is not possible to copy-construct a <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a> as it holds on to resources which are not easily copied (such as GUI elements). </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
@@ -376,6 +390,8 @@ Protected Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Determine if a user has been registered with the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> log server. </p>
 
 </div>
 </div>
@@ -479,7 +495,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab581992dec880b82771bf1ece2a8b533"></a>
+<a class="anchor" id="a6d56902706c0536f555829ddcf105019"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -509,6 +525,25 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Set user details which will be sent to the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> log server. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2c7fa52dbea94a43c5e99a6dff16c2bf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DocumentThread::undo </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>One undo step. </p>
+
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -522,7 +557,29 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Action objects are allowed to modify the DTree document doc, since they essentially contain code which is part of the <a class="el" href="classcadabra_1_1DocumentThread.html" title="Base class which manipulates the document tree. ">DocumentThread</a> object. </p>
+</div>
+</div>
+<a class="anchor" id="a6849f2074e59d6d705a2b14c06056b56"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend cadabra::DocumentThread::ActionEraseText</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae041b772d4c61c96e680779aa2d18b89"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend cadabra::DocumentThread::ActionInsertText</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -594,6 +651,26 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af4f40e94cbfdfd5a73ab4febca6ab46d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::DocumentThread::disable_stacks</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a6c703caf839326a3287024c454d5d47b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -613,7 +690,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The actual document tree. </p>
-<p>This object is only modified on the GUI thread, either directly by code in <a class="el" href="classcadabra_1_1DocumentThread.html" title="Base class which manipulates the document tree. ">DocumentThread</a>, or by code in the various objects derived from <a class="el" href="classcadabra_1_1ActionBase.html" title="All actions derive from the ActionBase object, which defines the interface they need to implement...">ActionBase</a>. In particular, <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> cannot access this tree directly. </p>
+<p>This object is only modified on the GUI thread, either directly by code in <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a>, or by code in the various objects derived from <a class="el" href="classcadabra_1_1ActionBase.html" title="All actions derive from the ActionBase object, which defines the interface they need to implement...">ActionBase</a>. In particular, <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> cannot access this tree directly. </p>
 
 </div>
 </div>
@@ -718,7 +795,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The action undo/redo/todo stacks and logic to execute. </p>
-<p>them. These stacks can be accessed from both the <a class="el" href="classcadabra_1_1DocumentThread.html" title="Base class which manipulates the document tree. ">DocumentThread</a> as well as the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> (the latter does it through the <a class="el" href="classcadabra_1_1DocumentThread.html#a23095f3baabfa2130bc483c54f8954af" title="All changes to the document should be made by submitting ActionBase derived objects to the &#39;queue_act...">DocumentThread::queue_action</a> method), so they need a mutex to access them. </p>
+<p>them. These stacks can be accessed from both the <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a> as well as the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> (the latter does it through the <a class="el" href="classcadabra_1_1DocumentThread.html#a23095f3baabfa2130bc483c54f8954af" title="All changes to the document should be made by submitting ActionBase derived objects to the &#39;queue_act...">DocumentThread::queue_action</a> method), so they need a mutex to access them. </p>
 
 </div>
 </div>
@@ -749,7 +826,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Oct 15 2016 21:11:34 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 19 2016 11:15:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

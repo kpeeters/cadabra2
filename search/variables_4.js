@@ -10,6 +10,7 @@ var searchData=
   ['diffusec',['diffusec',['../classstopwatch.html#a37fcea2ff0b27b62596b46b2a7202d58',1,'stopwatch']]],
   ['dim',['dim',['../classdecompose__product.html#a2f79d4a5bb32fbfe042f5195de43b372',1,'decompose_product::dim()'],['../classfierz.html#a93a5004a580e5a6d255fa69fc67bc306',1,'fierz::dim()']]],
   ['dimension',['dimension',['../classFilledTableau.html#af10c7ddb57394d33ec9ba3a7c312f3c5',1,'FilledTableau::dimension()'],['../classSpinor.html#a656407e59d8393df84656a10d9669a76',1,'Spinor::dimension()'],['../classTableau.html#a4cdb976d123c22700663edc46b8258c7',1,'Tableau::dimension()']]],
+  ['disable_5fstacks',['disable_stacks',['../classcadabra_1_1DocumentThread.html#af4f40e94cbfdfd5a73ab4febca6ab46d',1,'cadabra::DocumentThread']]],
   ['discard_5fcommand_5fnode',['discard_command_node',['../classAlgorithm.html#a4b0306a812b97d84700d0445e603d50d',1,'Algorithm']]],
   ['dispatcher',['dispatcher',['../classcadabra_1_1NotebookWindow.html#a3492ad800a0386075eb0580977f6d586',1,'cadabra::NotebookWindow']]],
   ['doc',['doc',['../classcadabra_1_1DocumentThread.html#a6c703caf839326a3287024c454d5d47b',1,'cadabra::DocumentThread']]],

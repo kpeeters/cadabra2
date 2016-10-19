@@ -2,6 +2,8 @@ var searchData=
 [
   ['accu_5ft',['accu_t',['../classpreprocessor_1_1accu__t.html#ab6a3df359e8f75af7e878a9cb6f34f46',1,'preprocessor::accu_t']]],
   ['actionaddcell',['ActionAddCell',['../classcadabra_1_1ActionAddCell.html#ab919691b2989b69d53ffb18589df91e5',1,'cadabra::ActionAddCell']]],
+  ['actionerasetext',['ActionEraseText',['../classcadabra_1_1ActionEraseText.html#ab7a5b3b508b30bea0ed58b65e63de10b',1,'cadabra::ActionEraseText']]],
+  ['actioninserttext',['ActionInsertText',['../classcadabra_1_1ActionInsertText.html#a2a66a21a70f091925339ed92358c2567',1,'cadabra::ActionInsertText']]],
   ['actionpositioncursor',['ActionPositionCursor',['../classcadabra_1_1ActionPositionCursor.html#aa58fe03fec076ad551d268c140477c23',1,'cadabra::ActionPositionCursor']]],
   ['actionremovecell',['ActionRemoveCell',['../classcadabra_1_1ActionRemoveCell.html#ac784b474f47c036961fb1a2616601c89',1,'cadabra::ActionRemoveCell']]],
   ['actionsetrunstatus',['ActionSetRunStatus',['../classcadabra_1_1ActionSetRunStatus.html#a3ce083ce097fbcc44e187690a03c07f8',1,'cadabra::ActionSetRunStatus']]],

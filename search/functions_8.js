@@ -2,10 +2,11 @@ var searchData=
 [
   ['half',['half',['../Storage_8cc.html#ae1b9312268055d86e16e7f75681bec0f',1,'half(rset_t::iterator &amp;num):&#160;Storage.cc'],['../Storage_8hh.html#ab91e5fd8dda72d41a74e255b77125261',1,'half(rset_t::iterator &amp;):&#160;Storage.cc']]],
   ['handle_5fbutton_5fpress',['handle_button_press',['../classcadabra_1_1CodeInput.html#af766ae20063b88d1e425a7fc1fcfb878',1,'cadabra::CodeInput']]],
-  ['handle_5fchanged',['handle_changed',['../classcadabra_1_1CodeInput.html#a3b4b0d528e1630cc9e2204b054507b4f',1,'cadabra::CodeInput']]],
   ['handle_5fcomponents',['handle_components',['../classevaluate.html#a0e4b480a3aaf126a0f78c1cd1cc823ab',1,'evaluate']]],
   ['handle_5fderivative',['handle_derivative',['../classevaluate.html#a58f67908bbff45290e8c2fc796c1bcbf',1,'evaluate']]],
+  ['handle_5ferase',['handle_erase',['../classcadabra_1_1CodeInput.html#aad1428fbc22c2c612b02067694a85e2a',1,'cadabra::CodeInput']]],
   ['handle_5ffactor',['handle_factor',['../classevaluate.html#af90e8e16af9cbde4f874594bc9f926e9',1,'evaluate']]],
+  ['handle_5finsert',['handle_insert',['../classcadabra_1_1CodeInput.html#ac7161c8138da3263789782c9e56df832',1,'cadabra::CodeInput']]],
   ['handle_5flatex_5ferrors',['handle_latex_errors',['../classcadabra_1_1TeXEngine.html#a71a9c9979a45edaf26ed5f11f3fa2739',1,'cadabra::TeXEngine']]],
   ['handle_5fone_5findex',['handle_one_index',['../classeliminate__converter.html#a7f46f66e87b89de6533d97a4f64221a7',1,'eliminate_converter']]],
   ['handle_5fprod',['handle_prod',['../classevaluate.html#a3481898723b3714afa942d934ffe9dc7',1,'evaluate']]],

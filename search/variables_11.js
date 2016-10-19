@@ -13,6 +13,7 @@ var searchData=
   ['registered_5fproperties',['registered_properties',['../classProperties.html#ad0f6e92c35ff254c35880be0a681df52',1,'Properties']]],
   ['remember_5fdisplay_5fhook',['remember_display_hook',['../namespacecadabra2__defaults.html#a2b4d34712d648727cbce32234c760f07',1,'cadabra2_defaults']]],
   ['remove_5ftraces',['remove_traces',['../classyoung__project.html#a23431f438908033e404597dcaef5e8dc',1,'young_project']]],
+  ['removed_5ftext',['removed_text',['../classcadabra_1_1ActionEraseText.html#a0eb8bc0749bada523a3ca74c4a0038a7',1,'cadabra::ActionEraseText']]],
   ['removed_5ftree',['removed_tree',['../classcadabra_1_1ActionRemoveCell.html#a8b7ab0f326c31945b3e7e04d133a7252',1,'cadabra::ActionRemoveCell']]],
   ['repdelta',['repdelta',['../classepsilon__to__delta.html#a069a063a30db30a0513b575284919ff4',1,'epsilon_to_delta']]],
   ['replacement_5fmap',['replacement_map',['../classEx__comparator.html#a16b4cbb194afdce75e2e31fc01e48037',1,'Ex_comparator']]],

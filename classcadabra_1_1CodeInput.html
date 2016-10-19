@@ -133,8 +133,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1d1700de20cdf584edd357df36b6cb43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af766ae20063b88d1e425a7fc1fcfb878"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput.html#af766ae20063b88d1e425a7fc1fcfb878">handle_button_press</a> (GdkEventButton *)</td></tr>
 <tr class="separator:af766ae20063b88d1e425a7fc1fcfb878"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b4b0d528e1630cc9e2204b054507b4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput.html#a3b4b0d528e1630cc9e2204b054507b4f">handle_changed</a> ()</td></tr>
-<tr class="separator:a3b4b0d528e1630cc9e2204b054507b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7161c8138da3263789782c9e56df832"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput.html#ac7161c8138da3263789782c9e56df832">handle_insert</a> (const Gtk::TextIter &amp;pos, const Glib::ustring &amp;text, int bytes)</td></tr>
+<tr class="separator:ac7161c8138da3263789782c9e56df832"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad1428fbc22c2c612b02067694a85e2a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput.html#aad1428fbc22c2c612b02067694a85e2a">handle_erase</a> (const Gtk::TextIter &amp;start, const Gtk::TextIter &amp;end)</td></tr>
+<tr class="separator:aad1428fbc22c2c612b02067694a85e2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17995730870f3ec120cab07cd658b73f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput.html#a17995730870f3ec120cab07cd658b73f">update_buffer</a> ()</td></tr>
 <tr class="separator:a17995730870f3ec120cab07cd658b73f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4ac2e29e8b0e7c54a7944dc86ab7c29"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput.html#af4ac2e29e8b0e7c54a7944dc86ab7c29">slice_cell</a> (std::string &amp;before, std::string &amp;after)</td></tr>
@@ -239,15 +241,58 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3b4b0d528e1630cc9e2204b054507b4f"></a>
+<a class="anchor" id="aad1428fbc22c2c612b02067694a85e2a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void CodeInput::handle_changed </td>
+          <td class="memname">void CodeInput::handle_erase </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const Gtk::TextIter &amp;&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const Gtk::TextIter &amp;&#160;</td>
+          <td class="paramname"><em>end</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac7161c8138da3263789782c9e56df832"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CodeInput::handle_insert </td>
+          <td>(</td>
+          <td class="paramtype">const Gtk::TextIter &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Glib::ustring &amp;&#160;</td>
+          <td class="paramname"><em>text</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>bytes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -355,7 +400,7 @@ Private Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Oct 15 2016 21:11:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 19 2016 11:15:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

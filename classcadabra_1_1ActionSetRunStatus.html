@@ -127,6 +127,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af31b385cdd14da83df68bbedba1a12fb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#af31b385cdd14da83df68bbedba1a12fb">revert</a> (<a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;, <a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> &amp;) override</td></tr>
 <tr class="memdesc:af31b385cdd14da83df68bbedba1a12fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Revert the change to the DTree document and the GUI.  <a href="#af31b385cdd14da83df68bbedba1a12fb">More...</a><br/></td></tr>
 <tr class="separator:af31b385cdd14da83df68bbedba1a12fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2038bf94de1ef65b359847d38002edf"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#ab2038bf94de1ef65b359847d38002edf">undoable</a> () const override</td></tr>
+<tr class="memdesc:ab2038bf94de1ef65b359847d38002edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Can this action be undone?  <a href="#ab2038bf94de1ef65b359847d38002edf">More...</a><br/></td></tr>
+<tr class="separator:ab2038bf94de1ef65b359847d38002edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -242,6 +245,33 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab2038bf94de1ef65b359847d38002edf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ActionSetRunStatus::undoable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Can this action be undone? </p>
+
+<p>Reimplemented from <a class="el" href="classcadabra_1_1ActionBase.html#a579c6d1856fbffa6e1e04a81587ebe06">cadabra::ActionBase</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="ab320351602aa155afabd674e87c99b3c"></a>
 <div class="memitem">
@@ -310,7 +340,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Oct 15 2016 21:11:34 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Oct 19 2016 11:15:22 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
