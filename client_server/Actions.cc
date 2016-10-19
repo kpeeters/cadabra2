@@ -47,7 +47,7 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	// remove the corresponding DataCell from the DTree.
 
 	auto ch = cl.doc.child(ref, child_num);
-	std::cerr << "removing cell " << ch->textbuf << std::endl;
+	//std::cerr << "removing cell " << ch->textbuf << std::endl;
 	gb.remove_cell(cl.doc, ch);
 	cl.doc.erase(ch);
 	}
@@ -151,7 +151,7 @@ void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)
 
 void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	std::cerr << "need to undo a remove cell at index " << reference_child_index << std::endl;
+	//std::cerr << "need to undo a remove cell at index " << reference_child_index << std::endl;
 	DTree::iterator newcell;
 	if(cl.doc.number_of_children(reference_parent_cell)==0) {
 		newcell = cl.doc.append_child(reference_parent_cell, removed_tree.begin());
@@ -160,10 +160,10 @@ void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 		auto it = cl.doc.child(reference_parent_cell, reference_child_index);
 		++it;
 		newcell = cl.doc.insert_subtree(it, removed_tree.begin());
-		std::cerr << "added doc cell" << std::endl;
+		//std::cerr << "added doc cell" << std::endl;
 		}
 	gb.add_cell(cl.doc, newcell, true);
-	std::cerr << "added vis rep" << std::endl;
+	//std::cerr << "added vis rep" << std::endl;
 	}
 
 
@@ -253,7 +253,7 @@ ActionEraseText::ActionEraseText(DTree::iterator ref_, int start, int end)
 
 void ActionEraseText::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	std::cerr << from_pos << ", " << to_pos << std::endl;
+	//std::cerr << from_pos << ", " << to_pos << std::endl;
 	removed_text=this_cell->textbuf.substr(from_pos, to_pos-from_pos);
 	this_cell->textbuf.erase(from_pos, to_pos-from_pos);
 	}
