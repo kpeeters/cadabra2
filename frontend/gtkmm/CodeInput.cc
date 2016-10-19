@@ -89,7 +89,10 @@ void CodeInput::init()
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, 
 																				&CodeInput::handle_button_press), 
 															 false);
-	edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::handle_changed));
+
+	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true);
+	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(this, &CodeInput::handle_erase), false);
+
 	edit.set_can_focus(true);
 
 	add(edit);
@@ -111,7 +114,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 	
 	if(is_shift_return) {
-		content_changed(tmp, datacell);
+//		content_changed(tmp, datacell);
 		content_execute(datacell);
 		return true;
 		}
@@ -136,7 +139,7 @@ void CodeInput::exp_input_tv::shift_enter_pressed()
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 
-	content_changed(tmp, datacell);
+//	content_changed(tmp, datacell);
 	content_execute(datacell);
 	}
 
@@ -243,18 +246,27 @@ void CodeInput::update_buffer()
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
 	std::string oldtxt = textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end());
 	if(newtxt!=oldtxt) {
-		std::cerr << "setting buffer from " 
-					 << oldtxt
-					 << " to " << newtxt << std::endl;
+		// std::cerr << "setting buffer from " 
+		// 			 << oldtxt
+		// 			 << " to " << newtxt << std::endl;
 		buffer->set_text(newtxt);
 		}
 	}
 
-void CodeInput::handle_changed()
+void CodeInput::handle_insert(const Gtk::TextIter& pos, const Glib::ustring& text, int bytes)
 	{
-	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
-	std::string tmp(textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end()));
-	edit.content_changed(tmp, edit.datacell);
+	Glib::RefPtr<Gtk::TextBuffer> buf=edit.get_buffer();
+	// warning: pos contains the cursor pos, and because we get to this handler
+	// _after_ the default handler has run, the cursor will have moved by
+	// the length of the insertion.
+	edit.content_insert(text, std::distance(buf->begin(), pos)-bytes, edit.datacell);
+	}
+
+void CodeInput::handle_erase(const Gtk::TextIter& start, const Gtk::TextIter& end)
+	{
+	//std::cerr << "handle_erase: " << start << ", " << end << std::endl;
+	Glib::RefPtr<Gtk::TextBuffer> buf=edit.get_buffer();
+	edit.content_erase(std::distance(buf->begin(), start), std::distance(buf->begin(), end), edit.datacell);
 	}
 
 void CodeInput::slice_cell(std::string& before, std::string& after)
