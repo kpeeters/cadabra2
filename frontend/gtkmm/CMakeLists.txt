@@ -18,8 +18,8 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 include_directories("${Boost_INCLUDE_DIRS}")
-pkg_check_modules(UUID uuid REQUIRED)
-link_directories(${UUID_LIBRARY_DIRS})
+#pkg_check_modules(UUID uuid REQUIRED)
+#link_directories(${UUID_LIBRARY_DIRS})
 
 include_directories("." "../../client_server" "../../client_server/jsoncpp" "../../client_server/websocketpp")
 
@@ -32,7 +32,7 @@ add_executable(cadabra-gtk main.cc
   Cadabra.cc
   ../common/TeXEngine.cc)
 
-target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread ${UUID_LIBRARIES})
+target_link_libraries(cadabra-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
 
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
