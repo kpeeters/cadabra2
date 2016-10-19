@@ -45,7 +45,7 @@ namespace cadabra {
 			/// Position the cursor in the current canvas in the widget 
 			/// corresponding to the indicated cell.
 
-			virtual void position_cursor(const DTree&, DTree::iterator)=0;
+			virtual void position_cursor(const DTree&, DTree::iterator, int)=0;
 
 			/// Retrieve the position of the cursor in the current cell.
 

@@ -9,6 +9,11 @@
 
 using namespace cadabra;
 
+bool ActionBase::undoable() const 
+	{
+	return true;
+	}
+
 ActionAddCell::ActionAddCell(DataCell cell, DTree::iterator ref_, Position pos_) 
 	: newcell(cell), ref(ref_), pos(pos_)
 	{
@@ -32,12 +37,19 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 			newref = cl.doc.append_child(ref, newcell);
 			break;
 		}
+	child_num=cl.doc.index(newref);
 	gb.add_cell(cl.doc, newref, true);
 	}
 
 void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	// FIXME: implement
+	// Remove the GUI cell from the notebook and then
+	// remove the corresponding DataCell from the DTree.
+
+	auto ch = cl.doc.child(ref, child_num);
+	std::cerr << "removing cell " << ch->textbuf << std::endl;
+	gb.remove_cell(cl.doc, ch);
+	cl.doc.erase(ch);
 	}
 
 
@@ -105,12 +117,16 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 		gb.add_cell(cl.doc, newref, true);
 		}
 	// std::cerr << "cadabra-client: positioning cursor" << std::endl;
-	gb.position_cursor(cl.doc, newref);
+	gb.position_cursor(cl.doc, newref, -1);
 	}
 
 void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)  
 	{
-	// FIXME: implement
+	if(needed_new_cell) {
+		gb.remove_cell(cl.doc, newref);
+		cl.doc.erase(newref);
+		}
+	gb.position_cursor(cl.doc, ref, -1);
 	}
 
 
@@ -129,12 +145,25 @@ void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)
 
 	reference_parent_cell = cl.doc.parent(this_cell);
 	reference_child_index = cl.doc.index(this_cell);
+	removed_tree=DTree(this_cell);
 	cl.doc.erase(this_cell);
 	}
 
 void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	// FIXME: implement
+	std::cerr << "need to undo a remove cell at index " << reference_child_index << std::endl;
+	DTree::iterator newcell;
+	if(cl.doc.number_of_children(reference_parent_cell)==0) {
+		newcell = cl.doc.append_child(reference_parent_cell, removed_tree.begin());
+		} 
+	else {
+		auto it = cl.doc.child(reference_parent_cell, reference_child_index);
+		++it;
+		newcell = cl.doc.insert_subtree(it, removed_tree.begin());
+		std::cerr << "added doc cell" << std::endl;
+		}
+	gb.add_cell(cl.doc, newcell, true);
+	std::cerr << "added vis rep" << std::endl;
 	}
 
 
@@ -182,6 +211,11 @@ ActionSetRunStatus::ActionSetRunStatus(DTree::iterator ref_, bool running)
 	{
 	}
 
+bool ActionSetRunStatus::undoable() const 
+	{
+	return false;
+	}
+
 void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)  
 	{
 	gb.update_cell(cl.doc, this_cell);
@@ -192,5 +226,42 @@ void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)
 
 void ActionSetRunStatus::revert(DocumentThread& cl, GUIBase& gb)
 	{
+	}
+
+
+ActionInsertText::ActionInsertText(DTree::iterator ref_, int pos, const std::string& content)
+	: this_cell(ref_), insert_pos(pos), text(content)
+	{
+	}
+
+void ActionInsertText::execute(DocumentThread& cl, GUIBase& gb)  
+	{
+	this_cell->textbuf.insert(insert_pos, text);
+	}
+
+void ActionInsertText::revert(DocumentThread& cl, GUIBase& gb)
+	{
+	this_cell->textbuf.erase(insert_pos, text.size());
+	gb.update_cell(cl.doc, this_cell);
+	}
+
+
+ActionEraseText::ActionEraseText(DTree::iterator ref_, int start, int end)
+	: this_cell(ref_), from_pos(start), to_pos(end)
+	{
+	}
+
+void ActionEraseText::execute(DocumentThread& cl, GUIBase& gb)  
+	{
+	std::cerr << from_pos << ", " << to_pos << std::endl;
+	removed_text=this_cell->textbuf.substr(from_pos, to_pos-from_pos);
+	this_cell->textbuf.erase(from_pos, to_pos-from_pos);
+	}
+
+void ActionEraseText::revert(DocumentThread& cl, GUIBase& gb)
+	{
+	this_cell->textbuf.insert(from_pos, removed_text);
+	gb.update_cell(cl.doc, this_cell);
+	gb.position_cursor(cl.doc, this_cell, from_pos+removed_text.size());
 	}
 
