@@ -659,8 +659,11 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int p
 						  ));
 		}
 	
-	if(pos>=0)
-		target.inbox->edit.place_cursor(pos);
+	if(pos>=0) {
+		auto cursor=target.inbox->edit.get_buffer()->begin();
+		cursor.forward_chars(pos);
+		target.inbox->edit.get_buffer()->place_cursor(cursor);
+		}
 	
 	current_cell=it;
 	}
@@ -762,7 +765,7 @@ bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DT
 	{
 	if(disable_stacks) return false;
 
-	std::cerr << "cell_content_insert" << std::endl;
+	//std::cerr << "cell_content_insert" << std::endl;
 	std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(it, pos, content);	
 	queue_action(action);
 	process_todo_queue();
@@ -774,7 +777,7 @@ bool NotebookWindow::cell_content_erase(int start, int end, DTree::iterator it, 
 	{
 	if(disable_stacks) return false;
 
-	std::cerr << "cell_content_erase" << std::endl;
+	//std::cerr << "cell_content_erase" << std::endl;
 	std::shared_ptr<ActionBase> action = std::make_shared<ActionEraseText>(it, start, end);
 	queue_action(action);
 	process_todo_queue();
@@ -880,7 +883,7 @@ void NotebookWindow::on_file_new()
 		remove_all_cells();
 		new_document();
 		compute->restart_kernel();
-		position_cursor(doc, doc.begin(doc.begin()));
+		position_cursor(doc, doc.begin(doc.begin()), -1);
 		name="";
 		update_title();
 		}

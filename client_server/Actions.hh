@@ -66,6 +66,7 @@ namespace cadabra {
 			DataCell          newcell;
 			DTree::iterator   ref, newref;
 			Position          pos;
+			int               child_num;
 	};
 
 
