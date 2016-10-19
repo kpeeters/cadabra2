@@ -60,8 +60,8 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(PkgConfig REQUIRED)
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR})
-pkg_check_modules(UUID uuid REQUIRED)
-include_directories("${UUID_INCLUDE_DIRS}")
+#pkg_check_modules(UUID uuid REQUIRED)
+#include_directories("${UUID_INCLUDE_DIRS}")
 
 # Snoop for logging. At the moment the required Snoop.cc|.hh are included
 # in the Cadabra sources so we do not need to look for this. However, we
@@ -77,13 +77,13 @@ endif()
 add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 
 # Create the server library
-link_directories(${UUID_LIBRARY_DIRS})
+#link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${PYTHON_LIBRARIES} )
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} )
 
 # Create the client library.
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${UUID_LIBRARIES} ${PYTHON_LIBRARIES})
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES})
 
 # Create server binary
 include_directories("." "./websocketpp" "./jsoncpp")

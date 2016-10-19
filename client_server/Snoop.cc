@@ -6,7 +6,7 @@
 #include <string.h>
 #include <regex>
 #include <iostream>
-#include <uuid/uuid.h>
+#include <boost/uuid/uuid.hpp>
 #include <chrono>
 #include <ctime>
 #include <sys/utsname.h>
