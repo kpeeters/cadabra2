@@ -87,18 +87,21 @@ def display(obj):
 
     elif isinstance(obj, Ex):
         if 'server' in globals():
-            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
+#            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
+            server.send("${}"+obj._latex_()+"$", "latex_view")
         else:
             print(obj.__str__());
 
     elif isinstance(obj, Property):
         if 'server' in globals():
-            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
+#            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
+            server.send("${}"+obj._latex_()+"$", "latex_view")
         else:
             print(obj.__str__())
 
     elif type(obj)==list:
-        out="\\begin{dmath*}{}"
+#        out="\\begin{dmath*}{}"
+        out="$"
         first=True
         for elm in obj:
             if first==False:
@@ -109,11 +112,13 @@ def display(obj):
                 out += elm._latex_()
             else:
                 out+=latex(elm)   # Sympy to the rescue for all other objects.
-        out+="\\end{dmath*}"
+#        out+="\\end{dmath*}"
+        out+="$"
         server.send(out, "latex_view")
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
-        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
+#        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
+        server.send("${}"+latex(obj)+"$", "latex_view")
         
     else:
         # Failing all else, just dump a str representation to the notebook, asking

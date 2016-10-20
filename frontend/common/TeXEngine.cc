@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 #include "exec-stream.h"
 #include "lodepng.h"
 #include <fstream>
@@ -98,7 +99,7 @@ TeXEngine::~TeXEngine()
 TeXEngine::TeXEngine()
 	: horizontal_pixels_(800), font_size_(12), scale_(1.0)
 	{
-	latex_packages.push_back("breqn");
+//	latex_packages.push_back("breqn");
 	latex_packages.push_back("hyperref");
 	}
 
@@ -277,7 +278,11 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			<< "\\newcommand{\\property}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
 			<< "\\newcommand{\\algo}[1]{{\\tt #1}}\n"
 			<< "\\newcommand{\\prop}[1]{{\\tt #1}}\n"
-			<< "\\begin{document}\n\\pagestyle{empty}\n"
+
+			<< "\\makeatletter\\def\\old@comma{,} \\catcode`\\,=13 \\def,{"
+			<< "\\ifmmode\\old@comma\\discretionary{}{}{}\\else\\old@comma\\fi}\\makeatother\n"
+
+			<< "\\begin{document}\n\\pagestyle{empty}\\everymath{\\displaystyle\\allowbreak}\n"
 			<< "\\renewcommand{\\arraystretch}{1.2}\n";
 
 	std::set<std::shared_ptr<TeXRequest> >::iterator reqit=reqs.begin();
@@ -288,7 +293,15 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			else {
 				if((*reqit)->start_wrap.size()>0) 
 					total << (*reqit)->start_wrap;
-				total << (*reqit)->latex_string;
+
+				std::string lr=(*reqit)->latex_string;
+				boost::replace_all(lr, "\\left(", "(");
+				boost::replace_all(lr, "\\right)", ")");
+				boost::replace_all(lr, "\\begin{dmath*}", "$");
+				boost::replace_all(lr, "\\end{dmath*}", "$");
+
+				total << lr;
+
 				if((*reqit)->end_wrap.size()>0)
 					total << "\n" << (*reqit)->end_wrap;
 				else total << "\n";
