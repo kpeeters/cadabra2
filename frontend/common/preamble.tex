@@ -1,0 +1,36 @@
+\usepackage{setspace}
+\usepackage[fleqn]{amsmath}
+\usepackage{color}
+\usepackage{amssymb}
+\usepackage[parfill]{parskip}
+\usepackage{tableaux}
+\def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
+\renewcommand{\bar}[1]{\overline{#1}}
+\newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[-1ex]
+}
+\newcommand{\property}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
+{\emph{#2}}\\[-1ex]
+}
+\newcommand{\algo}[1]{{\tt #1}}
+\newcommand{\prop}[1]{{\tt #1}}
+\makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
+\ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Math expressions wrapped in \brwrap will get typeset with
+% round brackets around them, which have the appropriate size.
+% The expression itself can still be broken over multiple lines.
+
+\newcommand{\brwrap}[1]{%
+  \setbox0=\hbox{$#1$}
+  \left(\vbox to \expandafter\the\ht0{\hbox to 0pt{}}\right.%
+  \noexpand #1%
+  \left.\vbox to \expandafter\the\ht0{\hbox to 0pt{}}\right)%
+}
+
+%  \left.\vbox to \brwrapht {\hbox to 0pt{!}}\right)%
+% Document start.
+
+\begin{document}
+\pagestyle{empty}\everymath{\displaystyle\allowbreak}
+\renewcommand{\arraystretch}{1.2}

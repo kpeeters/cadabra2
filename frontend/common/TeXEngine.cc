@@ -1,5 +1,6 @@
 
 #include "TeXEngine.hh"
+#include "Config.hh"
 
 #include <iostream>
 #include <boost/filesystem.hpp>
@@ -101,6 +102,15 @@ TeXEngine::TeXEngine()
 	{
 //	latex_packages.push_back("breqn");
 	latex_packages.push_back("hyperref");
+
+	// Load the pre-amble from file.
+	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/texengine/preamble.tex";
+	std::ifstream preamble(pname);
+	if(!preamble)
+		throw std::logic_error("Cannot open TeXEngine preamble at "+pname);
+	std::stringstream buffer;
+	buffer << preamble.rdbuf();	
+	preamble_string = buffer.str();
 	}
 
 void TeXEngine::set_geometry(int horpix)
@@ -263,27 +273,13 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 #ifndef __APPLE__
 	  //			<< "\\usepackage{inconsolata}\n"
 #endif
-			<< "\\usepackage[fleqn]{amsmath}\n"
-			<< "\\usepackage{color}\\usepackage{amssymb}\n"
-	      << "\\usepackage[parfill]{parskip}\n"
-  	      << "\\usepackage{tableaux}"
-	      << "\n";
+		;
 
 	for(size_t i=0; i<latex_packages.size(); ++i)
 		total << "\\usepackage{" << latex_packages[i] << "}\n";
 
-	total	<< "\\def\\specialcolon{\\mathrel{\\mathop{:}}\\hspace{-.5em}}\n"
-			<< "\\renewcommand{\\bar}[1]{\\overline{#1}}\n"
-			<< "\\newcommand{\\algorithm}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
-			<< "\\newcommand{\\property}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
-			<< "\\newcommand{\\algo}[1]{{\\tt #1}}\n"
-			<< "\\newcommand{\\prop}[1]{{\\tt #1}}\n"
+	total << preamble_string;
 
-			<< "\\makeatletter\\def\\old@comma{,} \\catcode`\\,=13 \\def,{"
-			<< "\\ifmmode\\old@comma\\discretionary{}{}{}\\else\\old@comma\\fi}\\makeatother\n"
-
-			<< "\\begin{document}\n\\pagestyle{empty}\\everymath{\\displaystyle\\allowbreak}\n"
-			<< "\\renewcommand{\\arraystretch}{1.2}\n";
 
 	std::set<std::shared_ptr<TeXRequest> >::iterator reqit=reqs.begin();
 	while(reqit!=reqs.end()) {
@@ -295,9 +291,9 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 					total << (*reqit)->start_wrap;
 
 				std::string lr=(*reqit)->latex_string;
-				boost::replace_all(lr, "\\left(", "(");
-				boost::replace_all(lr, "\\right)", ")");
-				boost::replace_all(lr, "\\begin{dmath*}", "$");
+				boost::replace_all(lr, "\\left(", "\\brwrap{");
+				boost::replace_all(lr, "\\right)", "}");
+				boost::replace_all(lr, "\\begin{dmath*}", "$\\setstretch{2.5}");
 				boost::replace_all(lr, "\\end{dmath*}", "$");
 
 				total << lr;
