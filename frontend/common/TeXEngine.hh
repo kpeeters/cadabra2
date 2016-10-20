@@ -87,6 +87,7 @@ namespace cadabra {
 
 			std::set<std::shared_ptr<TeXRequest> > requests;
 			
+			std::string            preamble_string;
 			int                    horizontal_pixels_;
 			int                    font_size_;
 			double                 scale_;
