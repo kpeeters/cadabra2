@@ -67,6 +67,7 @@ var searchData=
   ['pre_5fclean_5fdispatch',['pre_clean_dispatch',['../group__core.html#gaff2a0c5f8749e25b136df72748e13363',1,'pre_clean_dispatch(const Kernel &amp;kernel, Ex &amp;ex, Ex::iterator &amp;it):&#160;PreClean.cc'],['../group__core.html#gaff2a0c5f8749e25b136df72748e13363',1,'pre_clean_dispatch(const Kernel &amp;k, Ex &amp;, Ex::iterator &amp;it):&#160;PreClean.cc']]],
   ['pre_5fclean_5fdispatch_5fdeep',['pre_clean_dispatch_deep',['../PreClean_8cc.html#ae4ce521aadcd3ceec97db8e8f960fccd',1,'pre_clean_dispatch_deep(const Kernel &amp;k, Ex &amp;tr):&#160;PreClean.cc'],['../PreClean_8hh.html#a2a47dbaca62d868843cbe517b0f595fb',1,'pre_clean_dispatch_deep(const Kernel &amp;k, Ex &amp;):&#160;PreClean.cc']]],
   ['pre_5fparse',['pre_parse',['../classServer.html#a4213c640f5bb2690945eb20e29c70917',1,'Server']]],
+  ['preamble_5fstring',['preamble_string',['../classcadabra_1_1TeXEngine.html#a3d8d6721b3d766234d8878e943eefb03',1,'cadabra::TeXEngine']]],
   ['preclean_2ecc',['PreClean.cc',['../PreClean_8cc.html',1,'']]],
   ['preclean_2ehh',['PreClean.hh',['../PreClean_8hh.html',1,'']]],
   ['preferred',['preferred',['../classeliminate__converter.html#a4e2db9640066ec4721b980d8f0f50665',1,'eliminate_converter::preferred()'],['../classrewrite__indices.html#a8fe3fd333538e336c5efbd378911efc2',1,'rewrite_indices::preferred()']]],
