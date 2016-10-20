@@ -30,16 +30,18 @@ install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_R
                                                              WORLD_READ WORLD_EXECUTE)
 install(FILES    
   ${PROJECT_SOURCE_DIR}/latex/tableaux.sty 
-  ${PROJECT_SOURCE_DIR}/latex/msabm.sym
-  ${PROJECT_SOURCE_DIR}/latex/mathstyle.sty 
-  ${PROJECT_SOURCE_DIR}/latex/mathptmx.sym
-  ${PROJECT_SOURCE_DIR}/latex/mathpazo.sym 
-  ${PROJECT_SOURCE_DIR}/latex/flexisym.sty 
-  ${PROJECT_SOURCE_DIR}/latex/cmbase.sym 
-  ${PROJECT_SOURCE_DIR}/latex/breqn.sty 
+#  ${PROJECT_SOURCE_DIR}/latex/msabm.sym
+#  ${PROJECT_SOURCE_DIR}/latex/mathstyle.sty 
+#  ${PROJECT_SOURCE_DIR}/latex/mathptmx.sym
+#  ${PROJECT_SOURCE_DIR}/latex/mathpazo.sym 
+#  ${PROJECT_SOURCE_DIR}/latex/flexisym.sty 
+#  ${PROJECT_SOURCE_DIR}/latex/cmbase.sym 
+#  ${PROJECT_SOURCE_DIR}/latex/breqn.sty 
   DESTINATION ${INSTALL_LATEX_DIR})
 
 install(SCRIPT   ${PROJECT_SOURCE_DIR}/latex/install.cmake)
+
+install(FILES  ${PROJECT_SOURCE_DIR}/common/preamble.tex DESTINATION "${CMAKE_INSTALL_PREFIX}/share/cadabra2/texengine/")
 
 set(INSTALL_MAN_DIR      "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual")
 set(INSTALL_MAN_ALGO_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual/algorithms")
