@@ -185,9 +185,6 @@ for more information regarding installing packages from the AUR.
 Mac OS X
 ~~~~~~~~
 
-*** There is an issue with the 'uuid' package on Homebrew which
-prevents Cadabra from building on OS X at the moment. ***
-
 Cadabra builds with the standard Apple compiler, but in order to
 build on OS X you need a number of packages from Homebrew (see
 http://brew.sh).  Install these packages with::
@@ -195,7 +192,7 @@ http://brew.sh).  Install these packages with::
     brew install cmake boost pcre gmp python3 
     brew uninstall boost-python
     brew install boost-python --with-python3
-    brew install pkgconfig ossp-uuid 
+    brew install pkgconfig 
     brew install gtkmm3 adwaita-icon-theme
     sudo pip3 install sympy
 
