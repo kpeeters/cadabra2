@@ -6,6 +6,7 @@
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/functional.hpp>
 #include <mutex>
+#include <condition_variable>
 
 typedef websocketpp::client<websocketpp::config::asio_client> WebsocketClient;
 typedef websocketpp::config::asio_client::message_type::ptr   message_ptr;
@@ -89,8 +90,11 @@ namespace snoop {
 			/// Store a log entry in the local database. Generates its
 			/// own receive_millis field (the one given gets
 			/// overwritten). Will update the 'id' field in the LogEntry.
+			/// Returns 'true' if the entry was stored, or 'false' if an
+			/// entry with this client_log_id was already present (except
+			/// when it is 0).
 
-			void store_log_entry(Snoop::LogEntry&);
+			bool store_log_entry(Snoop::LogEntry&, bool avoid_server_duplicates);
 
 			/// Return a vector of all aps registered in the database. If
 			/// the uuid filter is non-empty, will filter on the given
@@ -107,6 +111,8 @@ namespace snoop {
 			
 			WebsocketClient                 wsclient;
 			std::thread                     wsclient_thread;
+			std::mutex                      connection_mutex;
+			std::condition_variable         connection_cv;
 			bool                            connection_is_open;
 			WebsocketClient::connection_ptr connection;
 			websocketpp::connection_hdl     our_connection_hdl;

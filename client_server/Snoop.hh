@@ -26,7 +26,7 @@ namespace snoop {
    extern Flush flush;
 
 	/// Logging class with functionality to send log information to a
-	/// remote server using a websocket connection. 
+	/// remote server using a websocket connection.
 
    class Snoop {
       public:
@@ -41,7 +41,10 @@ namespace snoop {
 						 std::string server="", std::string local_log_file="");
 
 			/// Get a string which uniquely identifies the current user. This is
-			/// stored in ~/.config/snoop/appname.conf.
+			/// stored in ~/.config/snoop/appname.conf, and in the 'user_id' field
+			/// in each LogEntry. Note that this is different from the 'uuid' field,
+			/// which will change from one run to the next.
+
 			std::string get_user_uuid(const std::string& app_name);
 
 			/// Operator to initialise a logging entry with the type of
@@ -82,7 +85,7 @@ namespace snoop {
 			void sync_logs_with_server(bool from_wsthread=false);
 			
 
-			/// C++ representation of an app entry.
+			/// C++ representation of an run entry.
 
 			class AppEntry {
 				public:
