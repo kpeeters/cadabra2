@@ -6,7 +6,11 @@
 #include <string.h>
 #include <regex>
 #include <iostream>
-#include <uuid/uuid.h>
+//#include <uuid/uuid.h>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
+
 #include <chrono>
 #include <ctime>
 #include <sys/utsname.h>
@@ -156,11 +160,10 @@ std::string SnoopImpl::get_user_uuid(const std::string& appname)
 		
 		std::ofstream config(configpath);
 		if(config) {
-			uuid_t nid;
-			uuid_generate(nid);
-			char *uuid_string = new char[100];
-			uuid_unparse(nid, uuid_string);
-			user_uuid=uuid_string;
+			auto tmp = boost::uuids::random_generator()();
+			std::ostringstream str;
+			str << tmp;
+			user_uuid = str.str();
 
 			config << "user = " << user_uuid << std::endl;
 			}
@@ -242,11 +245,10 @@ void SnoopImpl::obtain_uuid()
 	// Generate and insert a new uuid if there is no existing entry for the current pid.
 
 	if(this_app_.uuid.size()==0) {
-		uuid_t nid;
-		uuid_generate(nid);
-		char *uuid_string = new char[100];
-		uuid_unparse(nid, uuid_string);
-		this_app_.uuid=uuid_string;
+		auto tmp = boost::uuids::random_generator()();
+		std::ostringstream str;
+		str << tmp;
+		this_app_.uuid = str.str();
 
 		store_app_entry_without_lock(this_app_);
 		}
