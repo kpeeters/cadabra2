@@ -24,7 +24,7 @@
 \newcommand{\brwrap}[1]{%
   \setbox0=\hbox{$#1$}
   \left(\vbox to \expandafter\the\ht0{\hbox to 0pt{}}\right.%
-  \noexpand #1%
+  #1%
   \left.\vbox to \expandafter\the\ht0{\hbox to 0pt{}}\right)%
 }
 
