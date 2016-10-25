@@ -57,7 +57,7 @@ var searchData=
   ['stopwatch',['stopwatch',['../classstopwatch.html#a427b7eff0db59c70a0239dc354b4323e',1,'stopwatch']]],
   ['store_5fapp_5fentry',['store_app_entry',['../classsnoop_1_1SnoopImpl.html#ac28359479011fde520c831809789ea65',1,'snoop::SnoopImpl']]],
   ['store_5fapp_5fentry_5fwithout_5flock',['store_app_entry_without_lock',['../classsnoop_1_1SnoopImpl.html#a6c6dd6de4779255e301cce78036cc50a',1,'snoop::SnoopImpl']]],
-  ['store_5flog_5fentry',['store_log_entry',['../classsnoop_1_1SnoopImpl.html#af5dfa7ab07e363e608ff7f1818279684',1,'snoop::SnoopImpl']]],
+  ['store_5flog_5fentry',['store_log_entry',['../classsnoop_1_1SnoopImpl.html#a7f7f89f3c86ba1223b08b6ca71905ef2',1,'snoop::SnoopImpl']]],
   ['str',['str',['../classServer_1_1CatchOutput.html#aa1b3fc1cb5f938871fdbf66b2bda2142',1,'Server::CatchOutput']]],
   ['str_5f',['str_',['../classProperty.html#a4ef694ed4fda65a29f8bb31e20b563d1',1,'Property']]],
   ['str_5fnode',['str_node',['../classstr__node.html#ab15e63ddce46b8d7d5c1d1ac44031356',1,'str_node::str_node(void)'],['../classstr__node.html#ae37aae698cff803eec2f82b23fb49726',1,'str_node::str_node(nset_t::iterator name, bracket_t btype=b_none, parent_rel_t ptype=p_none)'],['../classstr__node.html#a4cc29a75e49481c79646beb80ea7e5db',1,'str_node::str_node(const std::string &amp;name, bracket_t btype=b_none, parent_rel_t ptype=p_none)']]],

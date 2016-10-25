@@ -147,9 +147,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac28359479011fde520c831809789ea65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c6dd6de4779255e301cce78036cc50a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#a6c6dd6de4779255e301cce78036cc50a">store_app_entry_without_lock</a> (<a class="el" href="classsnoop_1_1Snoop_1_1AppEntry.html">Snoop::AppEntry</a> &amp;)</td></tr>
 <tr class="separator:a6c6dd6de4779255e301cce78036cc50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5dfa7ab07e363e608ff7f1818279684"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#af5dfa7ab07e363e608ff7f1818279684">store_log_entry</a> (<a class="el" href="classsnoop_1_1Snoop_1_1LogEntry.html">Snoop::LogEntry</a> &amp;)</td></tr>
-<tr class="memdesc:af5dfa7ab07e363e608ff7f1818279684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a log entry in the local database.  <a href="#af5dfa7ab07e363e608ff7f1818279684">More...</a><br/></td></tr>
-<tr class="separator:af5dfa7ab07e363e608ff7f1818279684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f7f89f3c86ba1223b08b6ca71905ef2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#a7f7f89f3c86ba1223b08b6ca71905ef2">store_log_entry</a> (<a class="el" href="classsnoop_1_1Snoop_1_1LogEntry.html">Snoop::LogEntry</a> &amp;, bool avoid_server_duplicates)</td></tr>
+<tr class="memdesc:a7f7f89f3c86ba1223b08b6ca71905ef2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a log entry in the local database.  <a href="#a7f7f89f3c86ba1223b08b6ca71905ef2">More...</a><br/></td></tr>
+<tr class="separator:a7f7f89f3c86ba1223b08b6ca71905ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26ad5f33095a7f2b544d2dc93e5c81e1"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classsnoop_1_1Snoop_1_1AppEntry.html">Snoop::AppEntry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#a26ad5f33095a7f2b544d2dc93e5c81e1">get_app_registrations</a> (std::string uuid_filter=&quot;&quot;)</td></tr>
 <tr class="memdesc:a26ad5f33095a7f2b544d2dc93e5c81e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a vector of all aps registered in the database.  <a href="#a26ad5f33095a7f2b544d2dc93e5c81e1">More...</a><br/></td></tr>
 <tr class="separator:a26ad5f33095a7f2b544d2dc93e5c81e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,6 +186,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a645609b5c9d054c9c8c4fce7352c464f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4fa9670b72c17ad04cab80ed507d45ec"><td class="memItemLeft" align="right" valign="top">std::thread&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#a4fa9670b72c17ad04cab80ed507d45ec">wsclient_thread</a></td></tr>
 <tr class="separator:a4fa9670b72c17ad04cab80ed507d45ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34f7798cd6b91a2f35df11a9cacac387"><td class="memItemLeft" align="right" valign="top">std::mutex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#a34f7798cd6b91a2f35df11a9cacac387">connection_mutex</a></td></tr>
+<tr class="separator:a34f7798cd6b91a2f35df11a9cacac387"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9b162a29a2d750b861c91e62fcb650d"><td class="memItemLeft" align="right" valign="top">std::condition_variable&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#ae9b162a29a2d750b861c91e62fcb650d">connection_cv</a></td></tr>
+<tr class="separator:ae9b162a29a2d750b861c91e62fcb650d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75a0eec02ada6760ddf1c2b7e34d36bf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#a75a0eec02ada6760ddf1c2b7e34d36bf">connection_is_open</a></td></tr>
 <tr class="separator:a75a0eec02ada6760ddf1c2b7e34d36bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7eea87dbf2eeb75671ddb123c92c9f0"><td class="memItemLeft" align="right" valign="top">WebsocketClient::connection_ptr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classsnoop_1_1SnoopImpl.html#af7eea87dbf2eeb75671ddb123c92c9f0">connection</a></td></tr>
@@ -529,22 +533,32 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af5dfa7ab07e363e608ff7f1818279684"></a>
+<a class="anchor" id="a7f7f89f3c86ba1223b08b6ca71905ef2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void SnoopImpl::store_log_entry </td>
+          <td class="memname">bool SnoopImpl::store_log_entry </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classsnoop_1_1Snoop_1_1LogEntry.html">Snoop::LogEntry</a> &amp;&#160;</td>
-          <td class="paramname"><em>log_entry</em></td><td>)</td>
+          <td class="paramname"><em>log_entry</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>avoid_server_duplicates</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Store a log entry in the local database. </p>
-<p>Generates its own receive_millis field (the one given gets overwritten). Will update the 'id' field in the LogEntry. </p>
+<p>Generates its own receive_millis field (the one given gets overwritten). Will update the 'id' field in the LogEntry. Returns 'true' if the entry was stored, or 'false' if an entry with this client_log_id was already present (except when it is 0). </p>
 
 </div>
 </div>
@@ -636,12 +650,36 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae9b162a29a2d750b861c91e62fcb650d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::condition_variable snoop::SnoopImpl::connection_cv</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a75a0eec02ada6760ddf1c2b7e34d36bf"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool snoop::SnoopImpl::connection_is_open</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a34f7798cd6b91a2f35df11a9cacac387"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::mutex snoop::SnoopImpl::connection_mutex</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -791,7 +829,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Oct 20 2016 19:57:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Oct 25 2016 16:16:30 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
