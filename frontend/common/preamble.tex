@@ -21,12 +21,13 @@
 % round brackets around them, which have the appropriate size.
 % The expression itself can still be broken over multiple lines.
 
-\newcommand{\brwrap}[1]{%
+\def\brwrap#1{%
   \setbox0=\hbox{$#1$}
-  \left(\vbox to \expandafter\the\ht0{\hbox to 0pt{}}\right.%
-  #1%
-  \left.\vbox to \expandafter\the\ht0{\hbox to 0pt{}}\right)%
+  \left(\vbox to \the\ht0{\hbox to 0pt{}}\right.
+  {#1}
+  \left.\vbox to \the\ht0{\hbox to 0pt{}}\right)
 }
+\message{\meaning\brwrap{\frac{A}{B}}}
 
 %  \left.\vbox to \brwrapht {\hbox to 0pt{!}}\right)%
 % Document start.

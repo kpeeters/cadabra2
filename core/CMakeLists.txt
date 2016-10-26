@@ -22,8 +22,8 @@ endif(POLICY CMP0042)
 
 
 if(USE_PYTHON_3)
-  set(Python_ADDITIONAL_VERSIONS 3.4)
-  set(PythonInterp_ADDITIONAL_VERSIONS 3.4)
+  set(Python_ADDITIONAL_VERSIONS 3.4 3.5)
+  set(PythonInterp_ADDITIONAL_VERSIONS 3.4 3.5)
   find_package(PythonInterp 3.4 REQUIRED)
   if(APPLE)
      find_package(PythonLibsOSX 3.4 REQUIRED)
@@ -71,7 +71,7 @@ endif()
 # Locate gmpxx. On Homebrew there seems to be constantly something wrong with
 # the pkgconfig for gmpxx. So we just add the include path by hand.
 if(APPLE)
-   add_definitions("-I/usr/local/include")
+   add_definitions("-I/usr/local/include -I/opt/local/include")
 endif()
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)
