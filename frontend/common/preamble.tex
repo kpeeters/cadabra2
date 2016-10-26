@@ -24,7 +24,7 @@
 \def\brwrap#1{%
   \setbox0=\hbox{$#1$}
   \left(\vbox to \the\ht0{\hbox to 0pt{}}\right.
-  {#1}
+  \begingroup #1\endgroup
   \left.\vbox to \the\ht0{\hbox to 0pt{}}\right)
 }
 \message{\meaning\brwrap{\frac{A}{B}}}
