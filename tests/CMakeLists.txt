@@ -55,7 +55,7 @@ set_tests_properties(young        PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPAT
 # use any other include settings, unless we hard-code the path to
 # where we expect gmpxx to be if Homebrew installed it.
 if(APPLE)
-   add_definitions("-I/usr/local/include")
+   add_definitions("-I/usr/local/include -I/opt/local/include")
 endif()
 find_library(GMP_LIB gmp REQUIRED)
 find_library(GMPXX_LIB gmpxx REQUIRED)
