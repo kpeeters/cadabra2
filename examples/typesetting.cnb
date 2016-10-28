@@ -4,19 +4,6 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q\\left(\\frac{29A+B}{C+D}\\right)\\end{dmath*}"
-				}
-			],
-			"source" : "ex:= Q(\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}\n   +\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}\n   +\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}\n   +\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}\n   +\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}\n   +\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D}+\\frac{A+B}{C+D});"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
 			"source" : "s=\"Q(\"\nfor i in range(20):\n\ts=s+\"+a_{\"+str(i)+\"} \\\\frac{A+B}{C+D}\"\ns=s+\")+R(\"\nfor i in range(20):\n\ts=s+\"a_{\"+str(i)+\"} \\\\frac{A+B}{C+D},\"\ns=s+\"M)\""
 		},
 		{
