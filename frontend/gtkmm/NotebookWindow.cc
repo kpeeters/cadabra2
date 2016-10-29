@@ -27,6 +27,11 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
+	// Set the window icon.
+	set_icon_name("cadabra2-gtk2");
+//	std::cerr << CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png" << std::endl;
+//	set_icon_from_file(CMAKE_INSTALL_PREFIX"/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg");
+
 	// Query high-dpi settings. For now only for cinnamon.
 	scale = 1.0;
 #ifndef __APPLE__
@@ -1310,7 +1315,7 @@ void NotebookWindow::on_help() const
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);

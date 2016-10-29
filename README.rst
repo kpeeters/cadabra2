@@ -65,7 +65,7 @@ done with the standard::
     sudo make install
 
 This will produce the command line app ``cadabra2`` and the Gtk
-notebook interface ``cadabra-gtk``. You can also find the latter in
+notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
 
 Linux (Fedora 24)
@@ -92,7 +92,7 @@ compiler. Building is then done with the standard::
     sudo make install
 
 This will produce the command line app ``cadabra2`` and the Gtk
-notebook interface ``cadabra-gtk``. You can also find the latter in
+notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
 
 
@@ -125,7 +125,7 @@ compiler. Building is then done with the standard::
     sudo make install
 
 This will produce the command line app ``cadabra2`` and the Gtk
-notebook interface ``cadabra-gtk``. You can also find the latter in
+notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
 
 Linux (OpenSUSE)
@@ -158,7 +158,7 @@ into any issues. Building is then done with the standard::
     sudo make install
 
 This will produce the command line app ``cadabra2`` and the Gtk
-notebook interface ``cadabra-gtk``. 
+notebook interface ``cadabra2-gtk``. 
 
 
 Linux (Arch/Manjaro)
@@ -217,7 +217,7 @@ done with the standard::
     sudo make install
 
 This will produce the command line app ``cadabra2`` and the Gtk
-notebook interface ``cadabra-gtk``. 
+notebook interface ``cadabra2-gtk``. 
 
 I am still planning a native OS X interface, but because building the
 Gtk interface is so easy and the result looks relatively decent, this
