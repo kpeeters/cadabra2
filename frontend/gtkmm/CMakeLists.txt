@@ -75,10 +75,14 @@ install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable/apps DIRECTO
                                                              WORLD_READ WORLD_EXECUTE)
 
 
-# Remove old versions of files which we no longer need. 
-install(CODE     "execute_process(COMMAND rm ${CMAKE_INSTALL_PREFIX}/bin/cadabra-gtk)")
-install(CODE     "execute_process(COMMAND rm ${CMAKE_INSTALL_PREFIX}/bin/cadabra-qt5)")
-install(CODE     "execute_process(COMMAND rm ${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2.desktop)")
+# Remove old versions of files which we no longer need, to avoid confusion.
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/bin/cadabra-gtk)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/bin/cadabra-qt5)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2.desktop)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps/cadabra2.png)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps/cadabra2.png)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps/cadabra2.png)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/cadabra2.svg)")
 
 # Install programs.
 #find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu REQUIRED)
