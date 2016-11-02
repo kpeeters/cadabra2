@@ -22,7 +22,7 @@
 using namespace cadabra;
 
 DocumentThread::DocumentThread(GUIBase* g)
-	: gui(g), compute(0)
+	: gui(g), compute(0), disable_stacks(false)
 	{
 	// Setup logging.
 	snoop::log.init("Cadabra", "2.0", "log.cadabra.science");
@@ -94,6 +94,27 @@ void DocumentThread::load_from_string(const std::string& json)
 	build_visual_representation();
 	}
 
+void DocumentThread::undo()
+	{
+	stack_mutex.lock();
+	if(undo_stack.size()==0) {
+		//std::cerr << "no entries left on the stack" << std::endl;
+		stack_mutex.unlock();
+		return;
+		}
+
+	disable_stacks=true;
+	auto ua = undo_stack.top();
+	//std::cerr << "Undo action " << typeid(*ua).name() << std::endl;
+
+	redo_stack.push(ua);
+	undo_stack.pop();
+	ua->revert(*this, *gui);
+	disable_stacks=false;
+
+	stack_mutex.unlock();
+	}
+
 void DocumentThread::build_visual_representation()
 	{
 	// Because the add_cell method figures out by itself where to generate the VisualCell,
@@ -133,10 +154,16 @@ void DocumentThread::process_action_queue()
 		// Unlock the action queue while we are processing this particular action,
 		// so that other actions can be added which we run.
 		stack_mutex.unlock();
-//		std::cerr << "Executing action " << typeid(*ab).name() << std::endl;
+		//std::cerr << "Executing action " << typeid(*ab).name() << std::endl;
+		// Execute the action; this will run synchronously, so after
+		// this returns the doc and visual representation have both been
+		// updated.
 		ab->execute(*this, *gui);
-		// Lock the queue to remove the running action.
+		// Lock the queue to remove the action just executed, and
+		// add it to the undo stack.
 		stack_mutex.lock();
+		if(ab->undoable())
+			undo_stack.push(ab);
 		pending_actions.pop();
 		}
 	stack_mutex.unlock();

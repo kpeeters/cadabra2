@@ -23,12 +23,14 @@ namespace cadabra {
 
 			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale);
 
-			// Initialise with a new TextBuffer (to be created by
-			// CodeInput), filling it with the content of the given
-			// string.
+			/// Initialise with a new TextBuffer (to be created by
+			/// CodeInput), filling it with the content of the given
+			/// string.
 
 			CodeInput(DTree::iterator, const std::string&, double scale);
 			
+			/// The actual text widget used by CodeInput. 
+
 			class exp_input_tv : public Gtk::TextView {
 				public:
 					exp_input_tv(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale);
@@ -39,9 +41,11 @@ namespace cadabra {
 
 					void         shift_enter_pressed();
 					
-					sigc::signal1<bool, DTree::iterator>              content_execute;
-					sigc::signal2<bool, std::string, DTree::iterator> content_changed;
-					sigc::signal1<bool, DTree::iterator>              cell_got_focus;
+					sigc::signal1<bool, DTree::iterator>                   content_execute;
+//					sigc::signal2<bool, std::string, DTree::iterator>      content_changed;
+					sigc::signal3<bool, std::string, int, DTree::iterator> content_insert;
+					sigc::signal3<bool, int, int, DTree::iterator>         content_erase;
+					sigc::signal1<bool, DTree::iterator>                   cell_got_focus;
 
 					friend CodeInput;
 
@@ -51,8 +55,26 @@ namespace cadabra {
 			};
 
 			bool handle_button_press(GdkEventButton *);
-			void handle_changed();
-			void update_buffer(); // update buffer from datacell
+			
+			/// Handle an insert event, which can consist of one or more
+			/// inserted characters. This function will just massage that
+			/// data and then feed it through to the notebook window class
+			/// by emitting a signal on content_insert (done like this to
+			/// separate DTree modification from the widget).
+
+			void handle_insert(const Gtk::TextIter& pos, const Glib::ustring& text, int bytes);
+
+			/// Handle an erase event. This function will just massage that
+			/// data and then feed it through to the notebook window class
+			/// by emitting a signal on content_erase (done like this to
+			/// separate DTree modification from the widget).
+
+			void handle_erase(const Gtk::TextIter& start, const Gtk::TextIter& end);
+
+			/// Ensure that the visual representation matches the DTree
+			/// cell.
+
+			void update_buffer(); 
 
 			/// Return two strings corresponding to the text before and
 			/// after the current cursor position.

@@ -27,6 +27,11 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
+	// Set the window icon.
+	set_icon_name("cadabra2-gtk2");
+//	std::cerr << CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png" << std::endl;
+//	set_icon_from_file(CMAKE_INSTALL_PREFIX"/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg");
+
 	// Query high-dpi settings. For now only for cinnamon.
 	scale = 1.0;
 #ifndef __APPLE__
@@ -90,7 +95,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
-	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO),
+	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO), Gtk::AccelKey("<control>Z"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
 	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
@@ -485,8 +490,13 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-				ci->edit.content_changed.connect( 
-					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+//				ci->edit.content_changed.connect( 
+//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+				ci->edit.content_insert.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_insert), i ) );
+				ci->edit.content_erase.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_erase), i ) );
+
 				ci->edit.content_execute.connect( 
 				sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
 				ci->edit.cell_got_focus.connect( 
@@ -626,7 +636,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 	
 	}
 
-void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
+void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int pos)
 	{
 //	if(it==doc.end()) return;
 	//std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
@@ -652,6 +662,12 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 				sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
 				&(target.inbox->edit)
 						  ));
+		}
+	
+	if(pos>=0) {
+		auto cursor=target.inbox->edit.get_buffer()->begin();
+		cursor.forward_chars(pos);
+		target.inbox->edit.get_buffer()->place_cursor(cursor);
 		}
 	
 	current_cell=it;
@@ -733,15 +749,43 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 	return false;
 	}
 
-bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
+// bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
+// 	{
+// 	// FIXME: need to keep track of individual characters inserted, otherwise we
+// 	// cannot build an undo stack. The it->textbuf=content needs to be replaced
+// 	// with an ActionAddText. CodeInput::handle_changed 
+// 
+// 	current_canvas=canvas_number;
+// 	if(it->textbuf!=content) {
+// 		it->textbuf=content;
+// 		dim_output_cells(it);
+// 		modified=true;
+// 		update_title();
+// 		}
+// 
+// 	return false;
+// 	}
+
+bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DTree::iterator it, int canvas_number)
 	{
-	current_canvas=canvas_number;
-	if(it->textbuf!=content) {
-		it->textbuf=content;
-		dim_output_cells(it);
-		modified=true;
-		update_title();
-		}
+	if(disable_stacks) return false;
+
+	//std::cerr << "cell_content_insert" << std::endl;
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(it, pos, content);	
+	queue_action(action);
+	process_todo_queue();
+
+	return false;
+	}
+
+bool NotebookWindow::cell_content_erase(int start, int end, DTree::iterator it, int canvas_number)
+	{
+	if(disable_stacks) return false;
+
+	//std::cerr << "cell_content_erase" << std::endl;
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionEraseText>(it, start, end);
+	queue_action(action);
+	process_todo_queue();
 
 	return false;
 	}
@@ -844,7 +888,7 @@ void NotebookWindow::on_file_new()
 		remove_all_cells();
 		new_document();
 		compute->restart_kernel();
-		position_cursor(doc, doc.begin(doc.begin()));
+		position_cursor(doc, doc.begin(doc.begin()), -1);
 		name="";
 		update_title();
 		}
@@ -1108,7 +1152,7 @@ void NotebookWindow::on_file_quit()
 
 void NotebookWindow::on_edit_undo()
 	{
-	// FIXME: to be implemented
+	undo();
 	}
 
 void NotebookWindow::on_edit_insert_above()
@@ -1271,7 +1315,7 @@ void NotebookWindow::on_help() const
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);
