@@ -517,10 +517,10 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf,scale);
+					ci = new CodeInput(it, it->textbuf,scale,prefs.font_step);
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer,scale);
+				else ci = new CodeInput(it, global_buffer,scale,prefs.font_step);
 				if(read_only)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -1420,6 +1420,13 @@ void NotebookWindow::on_prefs_font_size(int num)
 
 	for(unsigned int i=0; i<canvasses.size(); ++i) 
 		canvasses[i]->refresh_all();
-	queue_draw();
+
+//	// Hack.
+//	auto screen = Gdk::Screen::get_default();
+//	if(get_window()!=0) {
+//		std::cerr << "invalidating" << std::endl;
+//		get_window()->invalidate_rect(Gdk::Rectangle(0, 0, screen->get_width()/2, screen->get_height()*0.8),true);
+//		queue_draw();
+//		}
 	}
 
