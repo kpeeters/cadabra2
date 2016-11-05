@@ -277,3 +277,13 @@ void CodeInput::slice_cell(std::string& before, std::string& after)
 	before=textbuf->get_slice(textbuf->begin(), it);
 	after =textbuf->get_slice(it, textbuf->end());
 	}
+
+void CodeInput::set_font_size(int num)
+	{
+	std::ostringstream fstr;
+	fstr << "monospace " << 12+(num*2); 
+	edit.hide();
+	edit.override_font(Pango::FontDescription(fstr.str()));
+	edit.show();
+	edit.queue_draw();
+	}

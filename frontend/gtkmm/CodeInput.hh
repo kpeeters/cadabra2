@@ -54,6 +54,12 @@ namespace cadabra {
 					DTree::iterator datacell;
 			};
 
+			/// Set the font size, 0 being default, negative smaller, positive larger.
+			
+			void set_font_size(int num);
+
+			/// Handle mouse buttons.
+
 			bool handle_button_press(GdkEventButton *);
 			
 			/// Handle an insert event, which can consist of one or more

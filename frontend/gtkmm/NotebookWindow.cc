@@ -9,12 +9,18 @@
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/aboutdialog.h>
+#include <gtkmm/radioaction.h>
 #include <fstream>
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
 #endif
 
 using namespace cadabra;
+
+NotebookWindow::Prefs::Prefs()
+	: font_step(0)
+	{
+	}
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
@@ -116,6 +122,29 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add( Gtk::Action::create("ViewClose", "Close view"),
 							sigc::mem_fun(*this, &NotebookWindow::on_view_close) );
 
+	Gtk::RadioAction::Group group_font_size;
+
+	actiongroup->add( Gtk::Action::create("MenuFontSize", "Font size") );
+	auto font_action0=Gtk::RadioAction::create(group_font_size, "FontSmall", "Small");
+	font_action0->property_value()=-1;
+	actiongroup->add( font_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),-1 ));
+	if(prefs.font_step==-1) font_action0->set_active();
+
+	auto font_action1=Gtk::RadioAction::create(group_font_size, "FontMedium", "Medium (default)");
+	font_action1->property_value()= 0;
+	actiongroup->add( font_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0));
+	if(prefs.font_step==0) font_action1->set_active();
+
+	auto font_action2=Gtk::RadioAction::create(group_font_size, "FontLarge", "Large");
+	font_action2->property_value()= 2;
+	actiongroup->add( font_action2, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 2));
+	if(prefs.font_step==2) font_action2->set_active();
+
+	auto font_action3=Gtk::RadioAction::create(group_font_size, "FontExtraLarge", "Extra large");
+	font_action3->property_value()= 4;
+	actiongroup->add( font_action3, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 4));
+	if(prefs.font_step==4) font_action3->set_active();
+
 	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
  	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
@@ -174,6 +203,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"    <menu action='MenuView'>"
 		"      <menuitem action='ViewSplit' />"
 		"      <menuitem action='ViewClose' />"
+		"      <menu action='MenuFontSize'>"
+		"         <menuitem action='FontSmall'/>"
+		"         <menuitem action='FontMedium'/>"
+		"         <menuitem action='FontLarge'/>"
+		"         <menuitem action='FontExtraLarge'/>"
+      "      </menu>"
 		"    </menu>"
 		"    <menu action='MenuEvaluate'>"
 		"      <menuitem action='EvaluateCell' />"
@@ -1355,3 +1390,36 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 			}
 		}
 	}
+
+void NotebookWindow::on_prefs_font_size(int num)
+	{
+	if(prefs.font_step==num) return;
+
+	prefs.font_step=num;
+
+//	std::string res=save_config();
+//	if(res.size()>0) {
+//		 Gtk::MessageDialog md("Error");
+//		 md.set_secondary_text(res);
+//		 md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+//		 md.run();
+//		 }
+
+	engine.set_font_size(12+(num*2));
+	engine.invalidate_all();
+	engine.convert_all();
+
+	for(auto& canvas: canvasses) {
+		for(auto& visualcell: canvas->visualcells) {
+			if(visualcell.first->cell_type==DataCell::CellType::python || 
+				visualcell.first->cell_type==DataCell::CellType::latex) {
+				visualcell.second.inbox->set_font_size(num);
+				}
+			}
+		}
+
+	for(unsigned int i=0; i<canvasses.size(); ++i) 
+		canvasses[i]->refresh_all();
+	queue_draw();
+	}
+
