@@ -152,6 +152,8 @@ namespace cadabra {
 			void on_run_runall();
 			void on_run_runtocursor();
 			void on_run_stop();
+			
+			void on_prefs_font_size(int num);
 
 			void on_help_about();
 			void on_help() const;
@@ -190,6 +192,15 @@ namespace cadabra {
 			void on_text_scaling_factor_changed(const std::string& key);
 
 			int last_configure_width;
+
+			class Prefs {
+				public:
+					Prefs();
+
+					int font_step;
+			};
+
+			Prefs prefs;
 	};
 
 };
