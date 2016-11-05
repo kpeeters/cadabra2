@@ -252,3 +252,13 @@ def test107():
 test107()
 
 
+{\mu,\nu,\rho,\sigma}::Indices;
+\partial{#}::PartialDerivative;
+g_{\mu\nu}::Metric;
+g^{\mu\nu}::InverseMetric;
+g^{\mu}_{\nu}::KroneckerDelta;
+g_{\mu}^{\nu}::KroneckerDelta;
+ex:= \partial_{5}{ g^{5 5} } \partial_{5}{ g_{5 5} }  - A_{5};
+substitute(ex, $g_{5 5} -> B$);
+tst:= \partial_{5}{ g^{5 5} } \partial_{5}{B} - A_{5} - @(ex);
+assert(tst==0)

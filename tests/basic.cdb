@@ -26,10 +26,10 @@ test07()
 
 def test08():
     __cdbkernel__=create_scope()
-    { W_{m n}, W_{m} }::SortOrder.
-    { W_{m n}, W_{m} }::AntiCommuting.
-    obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
-    sort_product(_)
+{ W_{m n}, W_{m} }::SortOrder.
+{ W_{m n}, W_{m} }::AntiCommuting.
+obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
+sort_product(_)
     tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
     collect_terms(_)
     assert(tst8==0)
@@ -224,6 +224,7 @@ def test30():
 {m,n}::Integer(0..3).
 {m,n}::Indices(position=fixed);
 g_{m}^{n}::KroneckerDelta;
+ex:= g_{0}^{0};
 ex:= g^{0 0} + g_{0}^{0};
 substitute(_, $g^{a? b?} -> h^{a? b?}$);
 tst:= h^{0 0} + 1 - @(ex);

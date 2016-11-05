@@ -19,7 +19,7 @@ int subtree_compare(const Properties *properties,
 						  Ex::iterator one, Ex::iterator two, 
 						  int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards) 
 	{
-	// std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " " << mod_prel << ", " << checksets << std::endl;
+//	std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " " << mod_prel << ", " << checksets << std::endl;
 
 	// The logic is to compare successive aspects of the two objects, returning a
 	// no-match code if a difference is found at a particular level, or continuing
@@ -41,36 +41,38 @@ int subtree_compare(const Properties *properties,
 	// If one and two are sub/superscript, and sit in the same Indices, we keep mult=1, all
 	// other cases get mult=2. 
 
-	int  mult=1;
-	Indices::position_t position_type=Indices::free;
-	if(one->is_index() && two->is_index() && one->is_rational() && two->is_rational()) {
-		mult=2;
-		// For a purely numerical index we cannot determine in which bundle it lives.
-		// The only thing we can do is disallow automatic index raising/lowering.
-		position_type=Indices::fixed;
-		}
-	if(one->is_index() && two->is_index()) {
-		if(checksets && properties!=0) {
-			// Strip off the parent_rel because Indices properties are declared without
-			// those.
-			// std::cerr << "getting indices for " << Ex(one) << std::endl;
-			// std::cerr << "and getting indices for " << Ex(two) << std::endl;
-			const Indices *ind1=properties->get<Indices>(one);
-			const Indices *ind2=properties->get<Indices>(two);
-			if(ind1!=ind2) { 
-				// It may still be that one set is a subset of the other, i.e that the
-				// parent argument of Indices has been used.
-				mult=2;
-				// FIXME: this is required for implicit symmetry patterns on split_index objects
-				//			if(ind1!=0 && ind2!=0) 
-				//				if(ind1->parent_name==ind2->set_name || ind2->parent_name==ind1->set_name)
-				//					mult=1;
-				}
-			if(ind1!=0 && ind1==ind2) 
-				position_type=ind1->position_type;
-			}
-		}
-	else mult=2;
+	int  mult=2;
+//	Indices::position_t position_type=Indices::free;
+//	if(one->is_index() && two->is_index() && one->is_rational() && two->is_rational()) {
+//		mult=2;
+//		// For a purely numerical index we cannot determine in which bundle it lives.
+//		// The only thing we can do is disallow automatic index raising/lowering.
+//		position_type=Indices::fixed;
+//		}
+//	if(one->is_index() && two->is_index()) {
+//		if(checksets && properties!=0) {
+//			// Strip off the parent_rel because Indices properties are declared without
+//			// those.
+//			// std::cerr << "getting indices for " << Ex(one) << std::endl;
+//			// std::cerr << "and getting indices for " << Ex(two) << std::endl;
+//			const Indices *ind1=properties->get<Indices>(one);
+//			const Indices *ind2=properties->get<Indices>(two);
+//			if(ind1!=ind2) { 
+//				// It may still be that one set is a subset of the other, i.e that the
+//				// parent argument of Indices has been used.
+//				mult=2;
+//				// FIXME: this is required for implicit symmetry patterns on split_index objects
+//				//			if(ind1!=0 && ind2!=0) 
+//				//				if(ind1->parent_name==ind2->set_name || ind2->parent_name==ind1->set_name)
+//				//					mult=1;
+//				}
+//			if(ind1!=0 && ind1==ind2) {
+//				position_type=ind1->position_type;
+//				// std::cerr << "known index type, " << position_type << std::endl;
+//				}
+//			}
+//		}
+//	else mult=2;
 
 
 	// Handle object wildcards and comparison
@@ -81,7 +83,7 @@ int subtree_compare(const Properties *properties,
 
 	// Handle mismatching node names.
 	if(one->name!=two->name) {
-		std::cerr << *one->name << " != " << *two->name << std::endl;
+		// std::cerr << *one->name << " != " << *two->name << std::endl;
 		if(literal_wildcards) {
 			if(*one->name < *two->name) return mult;
 			else return -mult;
@@ -104,16 +106,17 @@ int subtree_compare(const Properties *properties,
 		// std::cerr << "testing parent rel" << std::endl;
 		str_node::parent_rel_t p1=one->fl.parent_rel;
 		str_node::parent_rel_t p2=two->fl.parent_rel;
-		if(position_type==Indices::free && mod_prel==-3) {
-			if(p1==str_node::p_super) p1=str_node::p_sub; // for comparison, treat super as sub
-			if(p2==str_node::p_super) p2=str_node::p_sub;
-			}
+//		if(position_type==Indices::free && mod_prel==-3) {
+//			if(p1==str_node::p_super) p1=str_node::p_sub; // for comparison, treat super as sub
+//			if(p2==str_node::p_super) p2=str_node::p_sub;
+//			}
 		if(p1!=p2) {
 			// std::cerr << "not equal" << std::endl;
 			return (p1<p2)?2:-2;
 			}
 		}
 
+	// std::cerr << "comparing child nodes" << std::endl;
 	// Now turn to the child nodes. Before comparing them directly, first compare
 	// the number of children, taking into account range wildcards.
 	int numch1=Ex::number_of_children(one);
@@ -315,7 +318,7 @@ void Ex_comparator::clear()
 	factor_moving_signs.clear();
 	}
 
-Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2)
+Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props)
 	{
 	Ex::sibling_iterator i1end(i1);
 	Ex::sibling_iterator i2end(i2);
@@ -324,7 +327,7 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 
 	bool first_call=true;
 	while(i1!=i1end && i2!=i2end) {
-		match_t mm=compare(i1,i2,first_call);
+		match_t mm=compare(i1, i2, first_call, use_props);
 		first_call=false;
 		switch(mm) {
 			case no_match_less:
@@ -379,8 +382,8 @@ Ex_comparator::Ex_comparator(const Properties& k)
 	}
 
 Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one, 
-																		  const Ex::iterator& two, 
-																		  bool nobrackets) 
+															 const Ex::iterator& two, 
+															 bool nobrackets, bool use_props) 
 	{
 	// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
 	// 'one' is the substitute pattern, 'two' the expression under consideration.
@@ -411,7 +414,10 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		is_sibling_pattern=true;
 	else if(is_index && one->is_integer()==false) {
 		// Things in _{..} or ^{..} are either indices (implicit patterns) or coordinates.
-		const Coordinate *cdn1=properties.get<Coordinate>(one, true);
+		const Coordinate *cdn1=0;
+		if(use_props) 
+			cdn1=properties.get<Coordinate>(one, true);
+
 		if(cdn1==0)
 			implicit_pattern=true;
 		else
@@ -435,7 +441,10 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 
 		if(two->is_rational() && implicit_pattern) {
 			// Determine whether 'one' can take the value 'two'.
-			const Integer *ip = properties.get<Integer>(one, true); // 'true' to ignore parent rel.
+			const Integer *ip = 0;
+			if(use_props)
+				ip = properties.get<Integer>(one, true); // 'true' to ignore parent rel.
+
 			if(ip==0) return no_match_less;
 
 			bool lower_bdy=true, upper_bdy=true;
@@ -508,8 +517,12 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// If two is a rational, we have already check that one can take this value.
 
 			if(two->is_rational()==false) {
-				const Indices *t1=properties.get<Indices>(one, true);
-				const Indices *t2=properties.get<Indices>(two, true);
+				const Indices *t1=0;
+				const Indices *t2=0;
+				if(use_props) {
+					t1=properties.get<Indices>(one, true);
+					t2=properties.get<Indices>(two, true);
+					}
 
 				// Check parent rel if a) there is no Indices property for the indices, b) the index positions
 				// are not free. Effectively this means that indices without property info get treated as
@@ -598,7 +611,10 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		return subtree_match;
 		}
 	else if(is_coordinate || is_number) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
-		const Indices *t2=properties.get<Indices>(two, true);
+		const Indices *t2=0;
+		if(use_props)
+			t2=properties.get<Indices>(two, true);
+
 		if(t2) {
 			// std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
 			// If the 'two' index type is fixed or independent, ensure

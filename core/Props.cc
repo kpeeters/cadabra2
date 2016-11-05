@@ -88,24 +88,21 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 		}
 
 	// Cases without range wildcard.
-//	if(obj.number_of_children(obj.begin())>0)
-//		std::cerr << "comparing: " << ignore_parent_rel << "\n" << Ex(it) << " " << obj << std::endl;
-//	Ex::print_recursive_treeform(txtout, it);
-//	Ex::print_recursive_treeform(txtout, obj.
 
-	// std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
-	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
-	// std::cerr << res << std::endl;
+	int res=subtree_compare(&properties, it, obj.begin(), 
+									ignore_parent_rel?0:-3, 
+									false, /* was true; but that leads to infinite recurion */
+									0);
 
 	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
 	// because Ex_comparator tries to fetch property information which then gets back here.
-	// Ex_comparator comp(properties);
-	// int res=comp.equal_subtree(it, obj.begin());
+	
+//	Ex_comparator comp(properties);
+//	int res=comp.equal_subtree(it, obj.begin(), false);
 
-	//txtout << res << std::endl;
+	std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
+
 	if(abs(res)<=1) {
-//		if(obj.number_of_children(obj.begin())>0)
-//			std::cerr << "match!" << std::endl;
 		return true;
 		}
 

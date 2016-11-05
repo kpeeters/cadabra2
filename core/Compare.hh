@@ -194,9 +194,11 @@ class Ex_comparator {
 		/// Match two subtrees taking into account symbol
 		/// properties. Return subtree_match or one of the no_match
 		/// results.  You need to fill lhs_contains_dummies before
-		/// calling!
+		/// calling! 
+		/// If use_props is false, it will not try to fetch any property
+		/// information at the top level of the comparison.
 
-		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2);
+		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props=true);
 
       /// Find a subproduct in a product. The 'lhs' iterator points to the product which
       /// we want to find, the 'tofind' iterator to the current factor which we are looking
@@ -268,7 +270,9 @@ class Ex_comparator {
 		/// index. Indices are considered to be leaf-nodes, and for these
 		/// a full subtree match will be attempted (using subtree_compare).
 
-		match_t compare(const Ex::iterator&, const Ex::iterator&, bool nobrackets=false);
+		match_t compare(const Ex::iterator&, const Ex::iterator&, 
+							 bool nobrackets=false, 
+							 bool use_props=true);
 
       // Internal functions used by can_swap.
 		int  can_swap_prod_obj(Ex::iterator prod, Ex::iterator obj, bool) ;
