@@ -49,7 +49,7 @@ var searchData=
   ['set_5fbinary_5fmode',['set_binary_mode',['../classexec__stream__t.html#ac2d505addc0c90c2946af80a8f6acf87',1,'exec_stream_t']]],
   ['set_5fbuffer_5flimit',['set_buffer_limit',['../classexec__stream__t.html#a1e53a751f21e667adafa1eb0766e82bc',1,'exec_stream_t']]],
   ['set_5fcompute_5fthread',['set_compute_thread',['../classcadabra_1_1DocumentThread.html#a4eff5a783cfc5f811992939d2f807b77',1,'cadabra::DocumentThread']]],
-  ['set_5ffont_5fsize',['set_font_size',['../classcadabra_1_1TeXEngine.html#a7c4514c70d4b8590a12f6c17916c7e92',1,'cadabra::TeXEngine']]],
+  ['set_5ffont_5fsize',['set_font_size',['../classcadabra_1_1TeXEngine.html#a7c4514c70d4b8590a12f6c17916c7e92',1,'cadabra::TeXEngine::set_font_size()'],['../classcadabra_1_1CodeInput.html#a7ac79fc35703167e5aab03e783692441',1,'cadabra::CodeInput::set_font_size()']]],
   ['set_5fgeometry',['set_geometry',['../classcadabra_1_1TeXEngine.html#acbcc16ced20d93b02588ff83b3fddba7',1,'cadabra::TeXEngine']]],
   ['set_5fimage_5ffrom_5fbase64',['set_image_from_base64',['../classcadabra_1_1ImageView.html#a40ddecad334340843526af8e91fbd349',1,'cadabra::ImageView']]],
   ['set_5fmaster',['set_master',['../classcadabra_1_1ComputeThread.html#ad2aa5f14e7f01d4cdc7fbc39a131a821',1,'cadabra::ComputeThread']]],

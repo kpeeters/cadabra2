@@ -52,7 +52,7 @@ var searchData=
   ['clear_5fresults',['clear_results',['../classcombin_1_1combinations__base.html#a85915d2267ddb990191f0d321d538c57',1,'combin::combinations_base::clear_results()'],['../classcombin_1_1combinations.html#ae151443e00eb5502923cee80bb0ac661',1,'combin::combinations::clear_results()']]],
   ['close',['close',['../classexec__stream__t.html#a9188d8034c27711b959987c4973c37ed',1,'exec_stream_t']]],
   ['close_5fin',['close_in',['../classexec__stream__t.html#a9f67532a41f54711270448c86e7e2b8a',1,'exec_stream_t']]],
-  ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput.html#ab5dc3e61371b0a932269dbd35e2875f6',1,'cadabra::CodeInput::CodeInput(DTree::iterator, Glib::RefPtr&lt; Gtk::TextBuffer &gt;, double scale)'],['../classcadabra_1_1CodeInput.html#a1d1700de20cdf584edd357df36b6cb43',1,'cadabra::CodeInput::CodeInput(DTree::iterator, const std::string &amp;, double scale)']]],
+  ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput.html#a13322896f2ca0b6163e7cb52d5f4b4ee',1,'cadabra::CodeInput::CodeInput(DTree::iterator, Glib::RefPtr&lt; Gtk::TextBuffer &gt;, double scale, int font_step)'],['../classcadabra_1_1CodeInput.html#aac24da0dd39f1ddec33d9b27652eaf71',1,'cadabra::CodeInput::CodeInput(DTree::iterator, const std::string &amp;, double scale, int font_step)']]],
   ['collect',['collect',['../classcombin_1_1symmetriser.html#ad3a1ccb0b2d32fcd254bbbcf53109faa',1,'combin::symmetriser']]],
   ['collect_5fcomponents',['collect_components',['../classcollect__components.html#ab0e9b98242f020f3af2303cd8e308227',1,'collect_components']]],
   ['collect_5ffactors',['collect_factors',['../classcollect__factors.html#aebb4ae5427f878316b1f9b5f96b38d5b',1,'collect_factors']]],

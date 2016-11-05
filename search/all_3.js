@@ -81,7 +81,7 @@ var searchData=
   ['close_5fbrackets',['close_brackets',['../classpreprocessor.html#a8da08ed608991d82797a2422fe1a5a91',1,'preprocessor']]],
   ['close_5fin',['close_in',['../classexec__stream__t.html#a9f67532a41f54711270448c86e7e2b8a',1,'exec_stream_t']]],
   ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput.html',1,'cadabra']]],
-  ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a348fb769c5ee5d4d3f311bceca0414e2',1,'cadabra::CodeInput::exp_input_tv::CodeInput()'],['../classcadabra_1_1CodeInput.html#ab5dc3e61371b0a932269dbd35e2875f6',1,'cadabra::CodeInput::CodeInput(DTree::iterator, Glib::RefPtr&lt; Gtk::TextBuffer &gt;, double scale)'],['../classcadabra_1_1CodeInput.html#a1d1700de20cdf584edd357df36b6cb43',1,'cadabra::CodeInput::CodeInput(DTree::iterator, const std::string &amp;, double scale)']]],
+  ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a348fb769c5ee5d4d3f311bceca0414e2',1,'cadabra::CodeInput::exp_input_tv::CodeInput()'],['../classcadabra_1_1CodeInput.html#a13322896f2ca0b6163e7cb52d5f4b4ee',1,'cadabra::CodeInput::CodeInput(DTree::iterator, Glib::RefPtr&lt; Gtk::TextBuffer &gt;, double scale, int font_step)'],['../classcadabra_1_1CodeInput.html#aac24da0dd39f1ddec33d9b27652eaf71',1,'cadabra::CodeInput::CodeInput(DTree::iterator, const std::string &amp;, double scale, int font_step)']]],
   ['codeinput_2ecc',['CodeInput.cc',['../CodeInput_8cc.html',1,'']]],
   ['codeinput_2ehh',['CodeInput.hh',['../CodeInput_8hh.html',1,'']]],
   ['collect',['collect',['../classServer_1_1CatchOutput.html#a74c6d5f0e84f6c5657873b7cb36a5e77',1,'Server::CatchOutput::collect()'],['../classcombin_1_1symmetriser.html#ad3a1ccb0b2d32fcd254bbbcf53109faa',1,'combin::symmetriser::collect()']]],

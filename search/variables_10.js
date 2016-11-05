@@ -23,6 +23,7 @@ var searchData=
   ['post_5fprocess_5fenabled',['post_process_enabled',['../PythonCdb_8cc.html#ac690888937da1cc3ede9915f16610f9b',1,'PythonCdb.cc']]],
   ['preamble_5fstring',['preamble_string',['../classcadabra_1_1TeXEngine.html#a3d8d6721b3d766234d8878e943eefb03',1,'cadabra::TeXEngine']]],
   ['preferred',['preferred',['../classeliminate__converter.html#a4e2db9640066ec4721b980d8f0f50665',1,'eliminate_converter::preferred()'],['../classrewrite__indices.html#a8fe3fd333538e336c5efbd378911efc2',1,'rewrite_indices::preferred()']]],
+  ['prefs',['prefs',['../classcadabra_1_1NotebookWindow.html#ae5a8c0bcc61c450c1599990787b60ea0',1,'cadabra::NotebookWindow']]],
   ['print_5fstar',['print_star',['../classDisplayTeX.html#a9f7af02da7fa651262d2105b4986e6b5',1,'DisplayTeX']]],
   ['prodnode',['prodnode',['../classproduct__rule.html#a584c1b2861c94324c51cf39486995f74',1,'product_rule']]],
   ['progressbar',['progressbar',['../classcadabra_1_1NotebookWindow.html#a49ae38b8bdf53e77e17240d237f87c0d',1,'cadabra::NotebookWindow']]],
