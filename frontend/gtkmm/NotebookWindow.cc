@@ -34,9 +34,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
 	// Set the window icon.
-	set_icon_name("cadabra2-gtk2");
+//#ifdef __APPLE__
+	set_icon_name("cadabra2-gtk");
+//#else
 //	std::cerr << CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png" << std::endl;
-//	set_icon_from_file(CMAKE_INSTALL_PREFIX"/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg");
+//	set_icon_from_file("/usr/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg");
+//#endif
 
 	// Query high-dpi settings. For now only for cinnamon.
 	scale = 1.0;
@@ -63,7 +66,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// padding-left: 20px; does not work on some versions of gtk, so we use margin in CodeInput
 	Glib::ustring data = "GtkTextView { color: blue;  }\n";
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
-	data += "*:focused { background-color: #eee; }\n";
+	data += "*:focus { background-color: #eee; }\n";
 	data += "*:selected { background-color: #ccc; }\n";
 	data += "GtkTextView.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
