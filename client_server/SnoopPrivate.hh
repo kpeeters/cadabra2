@@ -113,7 +113,7 @@ namespace snoop {
 			std::thread                     wsclient_thread;
 			std::mutex                      connection_mutex;
 			std::condition_variable         connection_cv;
-			bool                            connection_is_open;
+			bool                            connection_is_open, connection_attempt_failed;
 			WebsocketClient::connection_ptr connection;
 			websocketpp::connection_hdl     our_connection_hdl;
 			
