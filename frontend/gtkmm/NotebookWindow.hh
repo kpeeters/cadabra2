@@ -46,7 +46,7 @@ namespace cadabra {
          virtual void   remove_cell(const DTree&, DTree::iterator) override;
          virtual void   remove_all_cells() override;
          virtual void   update_cell(const DTree&, DTree::iterator) override;
-			virtual void   position_cursor(const DTree&, DTree::iterator) override;
+			virtual void   position_cursor(const DTree&, DTree::iterator, int pos) override;
 			virtual size_t get_cursor_position(const DTree&, DTree::iterator) override;
 
          virtual void on_connect() override;
@@ -152,6 +152,8 @@ namespace cadabra {
 			void on_run_runall();
 			void on_run_runtocursor();
 			void on_run_stop();
+			
+			void on_prefs_font_size(int num);
 
 			void on_help_about();
 			void on_help() const;
@@ -173,7 +175,8 @@ namespace cadabra {
 
 			bool cell_got_focus(DTree::iterator, int);
 			bool cell_toggle_visibility(DTree::iterator it, int);
-			bool cell_content_changed(const std::string&, DTree::iterator, int);
+			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
+			bool cell_content_erase(int, int, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
 			
 			void dim_output_cells(DTree::iterator it);
@@ -189,6 +192,15 @@ namespace cadabra {
 			void on_text_scaling_factor_changed(const std::string& key);
 
 			int last_configure_width;
+
+			class Prefs {
+				public:
+					Prefs();
+
+					int font_step;
+			};
+
+			Prefs prefs;
 	};
 
 };

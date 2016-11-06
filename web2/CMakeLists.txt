@@ -57,11 +57,13 @@ set(ALGOS
   reduce_delta
   rewrite_indices
   sort_product
+  sort_sum
   split_gamma
   split_index
   substitute
   unwrap
   vary
+  young_project_product
   young_project_tensor
 )
 set(PROPS

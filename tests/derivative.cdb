@@ -483,3 +483,29 @@ def test27():
     print("Test 27 passed")
 
 test27()
+
+def test28():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    { A, B, C, D }::Depends(\partial{#});
+    ex := \partial_{\alpha}{ A (B + r C) };
+    unwrap(ex)
+    tst:= \partial_{\alpha}{ A (B + r C) } - @(ex);
+    assert(tst==0)
+    print("Test 28 passed")
+
+test28()
+
+def test29():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    { A, B, C, D }::Depends(\partial{#});
+    ex := \partial_{\alpha}{ (A + r B) (C + r D) }.
+    unwrap(ex)
+    tst:= \partial_{\alpha}{ (A + r B) (C + r D) } - @(ex);
+    assert(tst==0)
+    print("Test 29 passed")
+
+test29()
+
+         

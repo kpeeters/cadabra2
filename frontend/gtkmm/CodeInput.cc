@@ -33,26 +33,26 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 //	init();
 //	}
 
-CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s)
+CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, int font_step)
 	: buffer(tb), edit(it, tb, s)
 	{
-	init();
+	init(font_step);
 	}
 
-CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s)
+CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, int font_step)
 	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s)
 	{
 	buffer->set_text(txt);
-	init();
+	init(font_step);
 	}
 
-void CodeInput::init() 
+void CodeInput::init(int font_step) 
 	{
 //	scroll_.set_size_request(-1,200);
 //	scroll_.set_border_width(1);
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
 #ifndef __APPLE__
-	edit.override_font(Pango::FontDescription("monospace")); 
+	set_font_size(font_step);
 #endif
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 
@@ -89,7 +89,10 @@ void CodeInput::init()
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, 
 																				&CodeInput::handle_button_press), 
 															 false);
-	edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::handle_changed));
+
+	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true);
+	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(this, &CodeInput::handle_erase), false);
+
 	edit.set_can_focus(true);
 
 	add(edit);
@@ -111,7 +114,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 	
 	if(is_shift_return) {
-		content_changed(tmp, datacell);
+//		content_changed(tmp, datacell);
 		content_execute(datacell);
 		return true;
 		}
@@ -136,7 +139,7 @@ void CodeInput::exp_input_tv::shift_enter_pressed()
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 
-	content_changed(tmp, datacell);
+//	content_changed(tmp, datacell);
 	content_execute(datacell);
 	}
 
@@ -243,18 +246,27 @@ void CodeInput::update_buffer()
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
 	std::string oldtxt = textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end());
 	if(newtxt!=oldtxt) {
-		std::cerr << "setting buffer from " 
-					 << oldtxt
-					 << " to " << newtxt << std::endl;
+		// std::cerr << "setting buffer from " 
+		// 			 << oldtxt
+		// 			 << " to " << newtxt << std::endl;
 		buffer->set_text(newtxt);
 		}
 	}
 
-void CodeInput::handle_changed()
+void CodeInput::handle_insert(const Gtk::TextIter& pos, const Glib::ustring& text, int bytes)
 	{
-	Glib::RefPtr<Gtk::TextBuffer> textbuf=edit.get_buffer();
-	std::string tmp(textbuf->get_text(edit.get_buffer()->begin(), edit.get_buffer()->end()));
-	edit.content_changed(tmp, edit.datacell);
+	Glib::RefPtr<Gtk::TextBuffer> buf=edit.get_buffer();
+	// warning: pos contains the cursor pos, and because we get to this handler
+	// _after_ the default handler has run, the cursor will have moved by
+	// the length of the insertion.
+	edit.content_insert(text, std::distance(buf->begin(), pos)-bytes, edit.datacell);
+	}
+
+void CodeInput::handle_erase(const Gtk::TextIter& start, const Gtk::TextIter& end)
+	{
+	//std::cerr << "handle_erase: " << start << ", " << end << std::endl;
+	Glib::RefPtr<Gtk::TextBuffer> buf=edit.get_buffer();
+	edit.content_erase(std::distance(buf->begin(), start), std::distance(buf->begin(), end), edit.datacell);
 	}
 
 void CodeInput::slice_cell(std::string& before, std::string& after)
@@ -264,4 +276,11 @@ void CodeInput::slice_cell(std::string& before, std::string& after)
 	Gtk::TextBuffer::iterator it=textbuf->get_iter_at_mark(textbuf->get_insert());
 	before=textbuf->get_slice(textbuf->begin(), it);
 	after =textbuf->get_slice(it, textbuf->end());
+	}
+
+void CodeInput::set_font_size(int num)
+	{
+	std::ostringstream fstr;
+	fstr << "monospace " << 9+(num*2); 
+	edit.override_font(Pango::FontDescription(fstr.str()));
 	}

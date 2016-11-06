@@ -556,7 +556,8 @@ void Server::run()
 		wserver.set_reuse_addr(true);
 		wserver.listen(0);
 		wserver.start_accept();
-		auto p = wserver.get_acceptor()->local_endpoint();
+		websocketpp::lib::asio::error_code ec;
+		auto p = wserver.get_local_endpoint(ec);
 		std::cout << p.port()  << std::endl;
 		
 		// std::cerr << "cadabra-server: spawning job thread "  << std::endl;
