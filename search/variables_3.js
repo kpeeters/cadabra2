@@ -26,6 +26,7 @@ var searchData=
   ['conditions',['conditions',['../classsubstitute.html#a079f3dede482b85d68e05e135bc09f60',1,'substitute']]],
   ['connected',['connected',['../classsnoop_1_1Snoop_1_1AppEntry.html#ade8879f4781376574ab37d68d6a3453a',1,'snoop::Snoop::AppEntry']]],
   ['connection',['connection',['../classcadabra_1_1ComputeThread.html#a290bd753f88b0835daeaf8afecaa7d47',1,'cadabra::ComputeThread::connection()'],['../classsnoop_1_1SnoopImpl.html#af7eea87dbf2eeb75671ddb123c92c9f0',1,'snoop::SnoopImpl::connection()']]],
+  ['connection_5fattempt_5ffailed',['connection_attempt_failed',['../classsnoop_1_1SnoopImpl.html#a225b2a93eda4e0734320e5fcc8d7315c',1,'snoop::SnoopImpl']]],
   ['connection_5fcv',['connection_cv',['../classsnoop_1_1SnoopImpl.html#ae9b162a29a2d750b861c91e62fcb650d',1,'snoop::SnoopImpl']]],
   ['connection_5fis_5fopen',['connection_is_open',['../classcadabra_1_1ComputeThread.html#a7bf08ea8778841f0ddc38f69ae66c5b7',1,'cadabra::ComputeThread::connection_is_open()'],['../classsnoop_1_1SnoopImpl.html#a75a0eec02ada6760ddf1c2b7e34d36bf',1,'snoop::SnoopImpl::connection_is_open()']]],
   ['connection_5fmutex',['connection_mutex',['../classsnoop_1_1SnoopImpl.html#a34f7798cd6b91a2f35df11a9cacac387',1,'snoop::SnoopImpl']]],
