@@ -79,10 +79,15 @@ install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable/apps DIRECTO
 install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/bin/cadabra-gtk)")
 install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/bin/cadabra-qt5)")
 install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2.desktop)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2-gtk.desktop)")
 install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps/cadabra2.png)")
 install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps/cadabra2.png)")
 install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps/cadabra2.png)")
 install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/cadabra2.svg)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps/cadabra2-gtk.png)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps/cadabra2-gtk.png)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps/cadabra2-gtk.png)")
+install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg)")
 
 # Install programs.
 #find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu REQUIRED)
@@ -98,19 +103,28 @@ install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png DES
 #   - /usr/local/share/icons/hicolor may lack an index.theme file, which means that things below there
 #     actually never get picked up (or at least not by cinnamon).
 #   - So we need to copy index.theme into /usr/local if it does not exist there yet.
-#
-set(ICON_THEME ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/index.theme)
-if(EXISTS "${ICON_THEME}")
-   message("-- ${ICON_THEME} exists, good")
+#   - In order to avoid all that, just use /usr/share/icons on Linux; package managers will install it
+#     there anyway.
+#   - gtk-update-icon-cache is broken and only works half of the time.
+
+if(APPLE)
+  set(ICON_PREFIX "${CMAKE_INSTALL_PREFIX}")
 else()
-   message("-- Will copy index.theme from /usr/share/icons/hicolor/index.theme")
-	install(CODE     "execute_process(COMMAND cp /usr/share/icons/hicolor/index.theme ${ICON_THEME})")
+  set(ICON_PREFIX "/usr")
 endif()
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/64x64/cadabra2-gtk.png     DESTINATION share/icons/hicolor/64x64/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/128x128/cadabra2-gtk.png   DESTINATION share/icons/hicolor/128x128/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png   DESTINATION share/icons/hicolor/256x256/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra2-gtk.svg           DESTINATION share/icons/hicolor/scalable/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2-gtk.desktop       DESTINATION share/applications)
-install(CODE     "execute_process(COMMAND touch ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/icon-theme.cache)")
-install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
-install(CODE     "execute_process(COMMAND chmod go+r ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+
+#set(ICON_THEME ${ICON_PREFIX}/share/icons/hicolor/index.theme)
+#if(EXISTS "${ICON_THEME}")
+#   message("-- ${ICON_THEME} exists, good")
+#else()
+#   message("-- Will copy index.theme from /usr/share/icons/hicolor/index.theme")
+#	install(CODE     "execute_process(COMMAND cp /usr/share/icons/hicolor/index.theme ${ICON_THEME})")
+#endif()
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/256x256/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra2-gtk.svg           DESTINATION ${ICON_PREFIX}/share/icons/hicolor/scalable/apps)
+install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2-gtk.desktop       DESTINATION ${ICON_PREFIX}/share/applications)
+install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFIX}/share/icons/hicolor)")
+install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
