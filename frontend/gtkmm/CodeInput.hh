@@ -21,13 +21,13 @@ namespace cadabra {
 			/// it (e.g. in order to know when to display a 'busy' indicator).
 			/// The scale parameter refers to hdpi scaling.
 
-			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale);
+			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, int font_step);
 
 			/// Initialise with a new TextBuffer (to be created by
 			/// CodeInput), filling it with the content of the given
 			/// string.
 
-			CodeInput(DTree::iterator, const std::string&, double scale);
+			CodeInput(DTree::iterator, const std::string&, double scale, int font_step);
 			
 			/// The actual text widget used by CodeInput. 
 
@@ -53,6 +53,12 @@ namespace cadabra {
 					double scale_;
 					DTree::iterator datacell;
 			};
+
+			/// Set the font size, 0 being default, negative smaller, positive larger.
+			
+			void set_font_size(int num);
+
+			/// Handle mouse buttons.
 
 			bool handle_button_press(GdkEventButton *);
 			
@@ -91,7 +97,7 @@ namespace cadabra {
 			exp_input_tv                  edit;
 
 		private:
-			void init();
+			void init(int font_step);
 	};
 
 }

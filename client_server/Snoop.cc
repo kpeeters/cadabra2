@@ -6,19 +6,12 @@
 #include <string.h>
 #include <regex>
 #include <iostream>
-//#include <uuid/uuid.h>
-#include <boost/uuid/uuid.hpp>
-#include <boost/uuid/uuid_generators.hpp> // generators
-#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
-
 #include <chrono>
 #include <ctime>
 #include <sys/utsname.h>
 #include <stdint.h>
 #include <json/json.h>
 #include <set>
-
-
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -30,6 +23,9 @@
 #include <boost/config.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 
 using namespace snoop;
 
@@ -50,18 +46,20 @@ std::string safestring(const unsigned char *c)
 	}
 
 Snoop::Snoop()
-	: sync_immediately_(false)
+	: sync_immediately_(false), impl(0)
 	{
-	impl=new SnoopImpl(this);
 	}
 
 SnoopImpl::SnoopImpl(Snoop *s)
-	: snoop_(s), db(0), insert_statement(0), id_for_uuid_statement(0), connection_is_open(false)
+	: snoop_(s), db(0), insert_statement(0), id_for_uuid_statement(0), connection_is_open(false), connection_attempt_failed(false)
    {
    }
 
 void Snoop::init(const std::string& app_name, const std::string& app_version, std::string server, std::string dbname)
    {
+	if(impl==0)
+		impl=new SnoopImpl(this);
+
 	impl->init(app_name, app_version, server, dbname);
 	}
 
@@ -69,7 +67,6 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
    {
 	assert(app_name.size()>0);
 	
-
 	if(db==0) { // Only initialise if database has not been opened before
 		this_app_.app_name=app_name;
 		this_app_.app_version=app_version;
@@ -98,7 +95,8 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
 			}
-		
+
+		std::cerr << "Snoop: logging in " << dbname << std::endl;
 		int ret = sqlite3_open_v2(dbname.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 		if(ret) {
 			throw std::logic_error("SnoopImpl::init: Cannot open database");
@@ -114,7 +112,8 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 
 		// If this is a client, i.e. not a SnoopServer: obtain a uuid, start the websocket listener,
 		// and sync with the remote server whatever has not yet been synced in previous runs.
-		
+
+		std::cerr << "Starting websocket connection" << std::endl;
 		if(this_app_.app_name!="SnoopServer") {
 			obtain_uuid();
 			start_websocket_client();
@@ -217,6 +216,26 @@ void SnoopImpl::create_tables()
 						 , NULL, NULL, &errmsg) != SQLITE_OK) {
 		sqlite3_free(errmsg);
 		throw std::logic_error("Failed to create table logs");
+		}
+	if(sqlite3_exec(db, "create index if not exists logs_id_idx on logs(id);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.id: "+err);
+		}
+	if(sqlite3_exec(db, "create index if not exists logs_client_log_id_idx on logs(client_log_id);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.client_log_id: "+err);
+		}
+	if(sqlite3_exec(db, "create index if not exists logs_create_millis_idx on logs(create_millis);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.create_millis: "+err);
+		}
+	if(sqlite3_exec(db, "create index if not exists logs_type_idx on logs(type);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.type: "+err);
 		}
 	}
 
@@ -379,6 +398,12 @@ bool SnoopImpl::store_log_entry(Snoop::LogEntry& log_entry, bool avoid_server_du
 
 void SnoopImpl::start_websocket_client()
 	{
+	std::cerr << "Snoop: attempting open" << std::endl;
+	{ 	std::unique_lock<std::mutex> lock(connection_mutex);
+		connection_attempt_failed=false;
+		std::cerr << "Snoop: attempting open" << std::endl;
+		}
+
 	using websocketpp::lib::bind;
 
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
@@ -645,19 +670,30 @@ void SnoopImpl::on_client_open(websocketpp::connection_hdl)
 	sync_with_server(true);
 	std::unique_lock<std::mutex> lock(connection_mutex);
 	connection_is_open=true;
+	connection_attempt_failed=false;
 	connection_cv.notify_all();
-	// std::cerr << "Snoop: sync'ed with server" << std::endl;
+	std::cerr << "Snoop: connection open" << std::endl;
 	}
 
 void SnoopImpl::on_client_fail(websocketpp::connection_hdl)
 	{
-	// std::cerr << "Snoop: connection failed" << std::endl;	
+	// Clients may be waiting for the connection to open, but we may
+	// never get to that stage. Signal them to move on.
+	std::unique_lock<std::mutex> lock(connection_mutex);
+	connection_attempt_failed=true;
+	connection_cv.notify_all();
+	std::cerr << "Snoop: connection failed" << std::endl;	
 	}
 
 void SnoopImpl::on_client_close(websocketpp::connection_hdl)
 	{
+	// Clients may be waiting for the connection to open, but we may
+	// never get to that stage. Signal them to move on.
+	std::unique_lock<std::mutex> lock(connection_mutex);
 	connection_is_open=false;
-	// std::cerr << "Snoop: connection closed" << std::endl;	
+	connection_attempt_failed=true;
+	connection_cv.notify_all();
+	std::cerr << "Snoop: connection closed" << std::endl;	
 	}
 
 void SnoopImpl::on_client_message(websocketpp::connection_hdl, WebsocketClient::message_ptr msg) 
@@ -738,8 +774,11 @@ SnoopImpl::~SnoopImpl()
 	// we will want to wait for the connection to open, so that we can do a final
 	// sync before we terminate.
 
+	// However, if the connection was attempted but failed (e.g. no server), we
+	// can skip all that.
+
 	std::unique_lock<std::mutex> lock(connection_mutex);
-	if(connection_is_open==false) {
+	if(connection_is_open==false && connection_attempt_failed==false) {
 		connection_cv.wait(lock);
 		}
 
