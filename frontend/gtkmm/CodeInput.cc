@@ -283,4 +283,5 @@ void CodeInput::set_font_size(int num)
 	std::ostringstream fstr;
 	fstr << "monospace " << 9+(num*2); 
 	edit.override_font(Pango::FontDescription(fstr.str()));
+	edit.queue_resize();
 	}

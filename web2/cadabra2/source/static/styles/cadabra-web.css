@@ -95,6 +95,14 @@ div#main > p {
 	 margin-bottom: 20px;
 	 margin-left: 40px;
 }
+div#main > dl {
+	 margin-bottom: 20px;
+	 margin-left: 40px;
+}
+div#main > dl dt {
+	 font-style: oblique;
+	 font-size: smaller;
+}
 div#main blockquote {
 	 margin-top: -5px;
 	 margin-left: 60px;

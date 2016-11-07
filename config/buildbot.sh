@@ -25,6 +25,7 @@ function runbuild {
 	 echo 'Going to copy the package to the web server'
 	 scp -P $3 'buildbot:cadabra2/build/cadabra*' .
 	 scp cadabra*$2 "cadabra_web:/var/www/cadabra2/packages/$4"
+	 rm -f cadabra*$2
 	 
 	 # Take down the VM gracefully.
 
@@ -51,8 +52,9 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-#runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
-runbuild "Fedora_24_build" ".rpm" 7001 fedora24
+runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
+#runbuild "Fedora_24_build" ".rpm" 7001 fedora24
 #runbuild "Mint_18" ".deb" 7002 mint18
 #runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
 #runbuild "CentOS_7" ".rpm" 7004 centos7
+#runbuild "Ubuntu_14.04_build" ".deb" 7005 ubuntu1404
