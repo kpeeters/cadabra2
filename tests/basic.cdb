@@ -56,7 +56,7 @@ def test10():
     {\chi_{a},\chi_{b}}::SelfAntiCommuting.
     { \theta_a, \chi_a }::SortOrder.
     obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
-    sort_product(_);
+    sort_product(_)
     tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
     assert(tst10==0)
     print('test10 passed')
@@ -88,6 +88,14 @@ def test16():
     print('test16 passed')
 
 test16()
+
+def test16b():
+    __cdbkernel__=create_scope()
+    ex:= C A D B;
+    sort_product(_);
+    tst:= A B C D - @(ex);
+    assert(tst==0)
+    print("Test 16b passed")
 
 def test17():
     __cdbkernel__=create_scope()
@@ -134,7 +142,8 @@ def test23():
     ex:=\nabla_{i}{ C D E };
     substitute(_, $D->0$)
     assert(ex==0)
-
+    print("Test 23 passed")
+    
 test23()
 
 def test24():
@@ -144,20 +153,20 @@ def test24():
     \Gamma{#}::GammaMatrix(metric=\delta).
     \delta_{m n}::KroneckerDelta.
     obj:= \Gamma_{l r} \Gamma_{k s} q \Gamma_{r s} + \Gamma_{l r} d \Gamma_{k s} \Gamma_{r s};
-    sort_product(_);
+    sort_product(_)
     tst:= \Gamma_{l r} \Gamma_{k s} \Gamma_{r s} q + \Gamma_{l r} \Gamma_{k s} \Gamma_{r s} d - @(obj);
     assert(tst==0)
-    print('test24 passed')
+    print('Test24 passed')
 
 test24()
 
 def test25():
     __cdbkernel__=create_scope()
     ex:=(a*d+b)*c;
-    distribute(_);
+    distribute(_)
     tst:= a d c + b c - @(ex);
     assert(tst==0)
-    print('test25 passed')
+    print('Test25 passed')
 
 test25()
 
@@ -165,13 +174,14 @@ def test26():
     __cdbkernel__=create_scope()
     # This example shows that indices can match to integers
     # provided you declare them a such.
-    {m,n}::Integer.
-    ex:= a_{1} a_{0} a_{-1};
-    rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
-    substitute(ex, rl);
-    tst:= a_{0} a_{1} a_{-1} - @(ex);
+{m,n}::Integer.
+ex:= a_{1} a_{0} a_{-1};
+rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
+substitute(ex, rl)
+tst:= a_{0} a_{1} a_{-1} - @(ex);
     assert(tst==0)
-
+    print("Test 26 passed")
+    
 test26()
 
 def test27():

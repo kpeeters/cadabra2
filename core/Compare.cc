@@ -847,8 +847,10 @@ bool Ex_comparator::should_swap(Ex::iterator obj, match_t subtree_comparison)
 
 	if(so1==0 || so2==0 || so1!=so2) { 
       // No explicit sort order known; use alpha sort.
-		if(subtree_comparison==match_t::subtree_match) return false;
-		else return true;
+		if(subtree_comparison==match_t::subtree_match)    return false;
+		if(subtree_comparison==match_t::no_match_less)    return false;
+		if(subtree_comparison==match_t::no_match_greater) return true;
+		return false;
 		}
 
 	assert(so1==so2);
