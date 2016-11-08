@@ -191,7 +191,7 @@ Algorithm::result_t product_rule::apply(iterator& it)
 				  else ++theDargs;
 				  }
 			  
-			  int stc=subtree_compare(&kernel.properties, emptyD.begin(), repch);
+			  auto stc=comp.equal_subtree(emptyD.begin(), repch);
 //			  txtout << "trying to move " << *emptyD.begin()->name << " through " << *repch->name 
 //						<< " " << stc << std::endl;
 			  int ret=comp.can_swap(emptyD.begin(), repch, stc);

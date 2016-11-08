@@ -26,10 +26,10 @@ test07()
 
 def test08():
     __cdbkernel__=create_scope()
-{ W_{m n}, W_{m} }::SortOrder.
-{ W_{m n}, W_{m} }::AntiCommuting.
-obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
-sort_product(_)
+    { W_{m n}, W_{m} }::SortOrder.
+    { W_{m n}, W_{m} }::AntiCommuting.
+    obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
+    sort_product(_)
     tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
     collect_terms(_)
     assert(tst8==0)
@@ -43,7 +43,6 @@ def test09():
     obj9:= \theta_c \theta_b \theta_a;
     sort_product(_)
     tst9:= \theta_a \theta_b \theta_c + @(obj9);
-    collect_terms(_)
     assert(tst9==0)
     print('test09 passed')
 
@@ -52,14 +51,13 @@ test09()
 def test10():
     __cdbkernel__=create_scope();
     {a,b,c,d}::Indices.
-    { \theta_a, \chi_a }::SortOrder.
     { \theta_a, \chi_a }::Commuting.
     {\theta_{a}, \theta_{b}}::SelfAntiCommuting.
     {\chi_{a},\chi_{b}}::SelfAntiCommuting.
+    { \theta_a, \chi_a }::SortOrder.
     obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
     sort_product(_);
     tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
-    collect_terms(_);
     assert(tst10==0)
     print('test10 passed')
 

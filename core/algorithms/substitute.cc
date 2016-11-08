@@ -99,7 +99,7 @@ bool substitute::can_apply(iterator st)
 			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
 			else                     ret=comparator.equal_subtree(lhs, st);
 			
-			if(ret == Ex_comparator::subtree_match) {
+			if(ret == Ex_comparator::match_t::subtree_match) {
 				use_rule=arrow;
 				return arrow;
 				}

@@ -87,22 +87,16 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 		return true;
 		}
 
-	// Cases without range wildcard.
-
-	int res=subtree_compare(&properties, it, obj.begin(), 
-									ignore_parent_rel?0:-3, 
-									false, /* was true; but that leads to infinite recurion */
-									0);
-
-	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
-	// because Ex_comparator tries to fetch property information which then gets back here.
+	// Cases without range wildcard.  Compare making full use of
+	// property information.
 	
-//	Ex_comparator comp(properties);
-//	int res=comp.equal_subtree(it, obj.begin(), false);
+	Ex_comparator comp(properties);
+	Ex_comparator::match_t res=comp.equal_subtree(it, obj.begin(), false);
 
-	std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
+	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
 
-	if(abs(res)<=1) {
+	if(res==Ex_comparator::match_t::subtree_match || res==Ex_comparator::match_t::match_index_less ||
+		res==Ex_comparator::match_t::match_index_greater || res==Ex_comparator::match_t::node_match) {
 		return true;
 		}
 
