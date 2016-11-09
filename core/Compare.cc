@@ -269,7 +269,7 @@ void Ex_comparator::clear()
 	factor_moving_signs.clear();
 	}
 
-Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props)
+Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props, bool ignore_parent_rel)
 	{
 	Ex::sibling_iterator i1end(i1);
 	Ex::sibling_iterator i2end(i2);
@@ -282,7 +282,7 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 
 	while(i1!=i1end && i2!=i2end) {
 		int curdepth=Ex::depth(i1);
-		match_t mm=compare(i1, i2, first_call, use_props || topdepth!=curdepth);
+		match_t mm=compare(i1, i2, first_call, use_props || topdepth!=curdepth, ignore_parent_rel);
 		// std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl;
 		first_call=false;
 		switch(mm) {
@@ -354,12 +354,13 @@ Ex_comparator::Ex_comparator(const Properties& k)
 
 Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one, 
 															 const Ex::iterator& two, 
-															 bool nobrackets, bool use_props) 
+															 bool nobrackets, bool use_props, bool ignore_parent_rel) 
 	{
 	// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
 	// 'one' is the substitute pattern, 'two' the expression under consideration.
 	
-//	std::cerr << "matching " << *one->name << " to " << *two->name << std::endl;
+	//std::cerr << "matching " << *one->name << " to " << *two->name << std::endl;
+	//std::cerr << "matching " << Ex(one) << " to " << Ex(two) << std::endl;
 
 	if(nobrackets==false && one->fl.bracket != two->fl.bracket) 
 		return (one->fl.bracket < two->fl.bracket)?match_t::no_match_less:match_t::no_match_greater;
@@ -410,6 +411,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 
 		if(two->is_rational() && implicit_pattern) {
 			// Determine whether 'one' can take the value 'two'.
+			//std::cerr << "**** can one take value two " << use_props  << std::endl;
 			const Integer *ip = 0;
 			if(use_props)
 				ip = properties.get<Integer>(one, true); // 'true' to ignore parent rel.
@@ -487,31 +489,38 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// check that the index types in pattern and object agree (if known, 
 			// otherwise assume they match).
 			// If two is a rational, we have already checked that one can take this value.
-
-			if(two->is_rational()==false) {
-				const Indices *t1=0;
-				const Indices *t2=0;
-				if(use_props) {
-					t1=properties.get<Indices>(one, true);
+			
+			const Indices *t1=0;
+			const Indices *t2=0;
+			if(use_props) {
+				t1=properties.get<Indices>(one, true);
+				if(two->is_rational()==false) 
 					t2=properties.get<Indices>(two, true);
-					}
+				else
+					t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.
+				}
 
-				// Check parent rel if a) there is no Indices property for the indices, b) the index positions
-				// are not free. Effectively this means that indices without property info get treated as
-				// fixed-position indices.
+			// Check parent rel if a) there is no Indices property for the indices, b) the index positions
+			// are not free. Effectively this means that indices without property info get treated as
+			// fixed-position indices.
+			if(!ignore_parent_rel) 
 				if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
 					if(one->fl.parent_rel != two->fl.parent_rel)                
 						return (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater;
-				
-				// If both indices have no Indices property, compare them by name and pretend they are
-				// both in the same Indices set.
+			
+			// If both indices have no Indices property, compare them by name and pretend they are
+			// both in the same Indices set.
+
+//		FIXME: this exits the function too early! We absolutely need to 
+
+			if(two->is_rational()==false) {
 				if(t1==0 && t2==0) {
 					int xc = subtree_compare(0, one, two, -2);
 					if(xc==0) return match_t::subtree_match;
 					if(xc>0)  return match_t::match_index_less;
 					return match_t::match_index_greater;
 					}
-
+				
 				if( (t1 || t2) && implicit_pattern ) {
 					if(t1 && t2) {
 						if((*t1).set_name != (*t2).set_name) {
@@ -607,9 +616,10 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// If the 'two' index type is fixed or independent, ensure
 			// that the parent relation matches!
 
-			if(t2->position_type==Indices::fixed || t2->position_type==Indices::independent) 
-				if(one->fl.parent_rel != two->fl.parent_rel)
-					return match_t::no_match_less;
+			if(!ignore_parent_rel)
+				if(t2->position_type==Indices::fixed || t2->position_type==Indices::independent) 
+					if(one->fl.parent_rel != two->fl.parent_rel)
+						return match_t::no_match_less;
 			
 			// Look through values attribute of Indices object to see if the 'two' index
 			// can take the 'one' value. 
@@ -663,8 +673,9 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				// Equal numerical factors with different parent rel _never_ match, because
 				// we cannot determine if index raising/lowering is allowed if we do not
 				// know the bundle type.
-				if(one->fl.parent_rel != two->fl.parent_rel)                
-					return (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater;
+				if(!ignore_parent_rel)
+					if(one->fl.parent_rel != two->fl.parent_rel)                
+						return (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater;
 				}
 			}
 		
@@ -711,11 +722,12 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 
 			// Compare this factor with 'tofind'. 
 
-			if(equal_subtree(tofind, start)==match_t::subtree_match) { // found factor
+			auto match = equal_subtree(tofind, start);
+			if(match==match_t::subtree_match || match==match_t::match_index_less || match==match_t::match_index_greater) {
 
-				// Verify that the factor found now can be moved next to
-				// the previous factor, if applicable (nontrivial if
-				// factors do not commute).
+				// The factor has been found. Verify that it can be moved
+				// next to the previous factor, if applicable (nontrivial
+				// if factors do not commute).
 
 				int sign=1;
 				if(factor_locations.size()>0) {

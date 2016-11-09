@@ -209,7 +209,7 @@ class Ex_comparator {
 		/// information at the TOP level of the comparison. Properties
 		/// will always be used at  levels.
 
-		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props=true);
+		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props=true, bool ignore_parent_rel=false);
 
       /// Find a subproduct in a product. The 'lhs' iterator points to the product which
       /// we want to find, the 'tofind' iterator to the current factor which we are looking
@@ -290,7 +290,8 @@ class Ex_comparator {
 
 		match_t compare(const Ex::iterator&, const Ex::iterator&, 
 							 bool nobrackets=false, 
-							 bool use_props=true);
+							 bool use_props=true,
+							 bool ignore_parent_rel=false);
 
       // Internal functions used by can_swap.
 		int  can_swap_prod_obj(Ex::iterator prod, Ex::iterator obj, bool) ;

@@ -88,10 +88,12 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 		}
 
 	// Cases without range wildcard.  Compare making full use of
-	// property information.
+	// property information. Note the order of the arguments to
+	// 'equal_subtree': the first argument is supposed to be a
+	// pattern, the second an expression which is to be matched.
 	
 	Ex_comparator comp(properties);
-	Ex_comparator::match_t res=comp.equal_subtree(it, obj.begin(), false);
+	Ex_comparator::match_t res=comp.equal_subtree(obj.begin(), it, false, ignore_parent_rel);
 
 	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
 

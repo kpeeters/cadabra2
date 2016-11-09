@@ -174,11 +174,11 @@ def test26():
     __cdbkernel__=create_scope()
     # This example shows that indices can match to integers
     # provided you declare them a such.
-{m,n}::Integer.
-ex:= a_{1} a_{0} a_{-1};
-rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
-substitute(ex, rl)
-tst:= a_{0} a_{1} a_{-1} - @(ex);
+    {m,n}::Integer.
+    ex:= a_{1} a_{0} a_{-1};
+    rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
+    substitute(ex, rl)
+    tst:= a_{0} a_{1} a_{-1} - @(ex);
     assert(tst==0)
     print("Test 26 passed")
     
@@ -229,14 +229,15 @@ def test30():
     __cdbkernel__=create_scope()
     # Matching of numerical values in expressions to indices in patterns
     # should respect index position.
-{m,n}::Integer(0..3).
-{m,n}::Indices(position=fixed);
-g_{m}^{n}::KroneckerDelta;
-ex:= g_{0}^{0};
-ex:= g^{0 0} + g_{0}^{0};
-substitute(_, $g^{a? b?} -> h^{a? b?}$);
-tst:= h^{0 0} + 1 - @(ex);
-assert(tst==0)
+    {m,n}::Integer(0..3).
+    {m,n}::Indices(position=fixed);
+    g_{m}^{n}::KroneckerDelta;
+    ex:= g^{0 0};
+    ex:= 1 + g_{0}^{0};
+    ex:= g^{0 0} + g_{0}^{0};
+    substitute(_, $g^{a? b?} -> h^{a? b?}$);
+    tst:= h^{0 0} + 1 - @(ex);
+    assert(tst==0)
 
 test30()
 
