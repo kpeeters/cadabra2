@@ -81,11 +81,11 @@ test05()
 
 def test06():
    __cdbkernel__=create_scope()
-   F_{#}::AntiSymmetric;
-   G_{#}::AntiSymmetric;
-   R_{m n p q}::RiemannTensor;
-   tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
-   canonicalise(tst7)
+F_{#}::AntiSymmetric;
+G_{#}::AntiSymmetric;
+R_{m n p q}::RiemannTensor;
+tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
+canonicalise(tst7)
    assert(tst7==0)
    print('Test 06 passed')
 
