@@ -1,4 +1,5 @@
 # All examples from the hep-th paper, converted to version 2 format.
+import timeit
 
 def test01():
     __cdbkernel__=create_scope()
@@ -9,7 +10,7 @@ def test01():
     assert(tst==0)
     print('Test 01 passed')
 
-test01()
+#print(timeit.timeit(test01,number=1))
 
 #-------
 
@@ -22,7 +23,7 @@ def test02():
     assert(tst==0)
     print('Test 02 passed')
 
-test02()
+#print(timeit.timeit(test02,number=1))
 
 #-------
 
@@ -36,7 +37,7 @@ def test03():
     assert(tst==0)
     print('Test 03 passed')
 
-test03()
+#print(timeit.timeit(test03,number=1))
 
 #-------
 
@@ -50,7 +51,7 @@ def test04():
     assert(tst==0)
     print('Test 04 passed')
 
-test04()
+#print(timeit.timeit(test04,number=1))
 
 #-------
 
@@ -77,7 +78,7 @@ def test05():
     assert(tst==0)
     print('Test 05c passed')
 
-test05()
+#print(timeit.timeit(test05,number=1))
 
 #-------
 
@@ -92,7 +93,7 @@ def test06():
     assert(obj==0)
     print('Test 06 passed')
 
-test06()
+#print(timeit.timeit(test06,number=1))
 
 #-------
 
@@ -109,7 +110,7 @@ def test07():
     assert(tst==0)
     print('Test 07 passed')
 
-test07()
+#print(timeit.timeit(test07,number=1))
 
 #-------
 
@@ -124,7 +125,7 @@ def test08():
     assert(obj==0)
     print('Test 08 passed')
 
-test08()
+#print(timeit.timeit(test08,number=1))
 
 #-------
 
@@ -142,24 +143,28 @@ def test09():
     E:=  C_{j m n k} C_{m p q n} C_{p j k q} + 1/2 C_{j k m n} C_{p q m n} C_{j k p q};
     
     exp:= \nabla_{i}{\nabla_{j}{ @(Eij) }} - 1/6 \nabla_{i}{\nabla_{i}{ @(E) }};
+    print('one')
     
     distribute(_)
     product_rule(_)
     distribute(_)
     product_rule(_)
+    print('two')
     
     sort_product(_)
     canonicalise(_)
     rename_dummies(_)
-    
+    print('three')
+        
     rl:={ \nabla_{i}{C_{k i l m}} -> 0, \nabla_{i}{C_{k m l i}} -> 0 };
     substitute(exp, rl)
-
+    print('four')
+    
     young_project_product(exp)
     assert(exp==0)
     print('Test 09 passed')
 
-test09()
+print(timeit.timeit(test09,number=1))
 
 def test10():
     __cdbkernel__=create_scope()
@@ -172,7 +177,7 @@ def test10():
     assert(tst==0)
     print('Test 10 passed')
 
-test10()
+print(timeit.timeit(test10,number=1))
 
 def test11():
     __cdbkernel__=create_scope()
@@ -192,7 +197,7 @@ def test11():
     assert(tst==0)
     print('Test 11 passed')
 
-test11()
+print(timeit.timeit(test11,number=1))
 
 {\mu,\nu,\rho}::Indices(curved, position=fixed).
 {m,n,p,q,r,s,t#}::Indices(flat, position=independent).

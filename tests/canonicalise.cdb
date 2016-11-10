@@ -80,14 +80,14 @@ test05()
 # The key test that inspired it all:
 
 def test06():
-   __cdbkernel__=create_scope()
-F_{#}::AntiSymmetric;
-G_{#}::AntiSymmetric;
-R_{m n p q}::RiemannTensor;
-tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
-canonicalise(tst7)
-   assert(tst7==0)
-   print('Test 06 passed')
+    __cdbkernel__=create_scope()
+    F_{#}::AntiSymmetric;
+    G_{#}::AntiSymmetric;
+    R_{m n p q}::RiemannTensor;
+    tst7:= R_{d1 d2 d3 d4} R_{d4 d5 d6 d7} F_{d1 d2 d6 d7} G_{d3 d5 r5 s5};
+    canonicalise(tst7)
+    assert(tst7==0)
+    print('Test 06 passed')
 
 test06()
 
@@ -544,6 +544,7 @@ test34b()
 
 def test35b():
    __cdbkernel__=create_scope()
+   {m,n}::Integer;
    \delta_{m n}::Diagonal.
    obj35:= \delta_{1 2} * \delta_{1 2} - \delta_{1 1} * \delta_{2 2};
    canonicalise(_)
@@ -743,6 +744,7 @@ def test49():
    ex:=A_{4 m} + A_{m 4};
    canonicalise(_);
    assert(ex==0)
+   print('Test 49 passed')
 
 test49()
 
@@ -754,18 +756,20 @@ def test50():
     canonicalise(_);
     tst:= 2 \int{ A_{m n} A^{m n} }{x} - @(ex);
     assert(tst==0)
+    print('Test 50 passed')
 
 test50()
 
 def test51():
     __cdbkernel__=create_scope()
-    {a,b,c}::Indices(position=fixed);
-    ex:= A^{a}(A) A_{a}(B) + A^{a}(B) A_{a}(A);
-    sort_product(_);
-    canonicalise(_);
+{a,b,c}::Indices(position=fixed);
+ex:= A^{a}(A) A_{a}(B) + A^{a}(B) A_{a}(A);
+sort_product(_);
+canonicalise(_);
     tst:= 2 A^{a}(A) A_{a}(B) - @(ex);
     assert(tst==0)
-
+    print('Test 51 passed')
+   
 test51()
 
 def test52():
@@ -777,7 +781,8 @@ def test52():
     canonicalise(_);
     tst:= 2 D^{a}{A} D_{a}{B} - @(ex);
     assert(tst==0)
-
+    print('Test 52 passed')
+   
 test52()
 
 # def test53():

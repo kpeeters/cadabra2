@@ -91,7 +91,7 @@ def test04b():
     assert(tst4==0)
     print('Test 04b passed')
     
-test04b()
+#test04b()
 
 
 def test05():
@@ -163,11 +163,11 @@ def test100():
 
 
 def test101():
-    {m,n,p}::Symbol;
-    A_{m}::SelfNonCommuting.
-    ex:= A_{3} A_{2} A_{1} A_{0} + A_{0} A_{1};
-    rl:= A_{m?} A_{n?} | m? > n? -> Q;
-    substitute(ex, rl, repeat=True);
+{m,n,p}::Symbol;
+A_{m}::SelfNonCommuting.
+ex:= A_{3} A_{2} A_{1} A_{0} + A_{0} A_{8};
+rl:= A_{m?} A_{n?} | m? > n? -> Q;
+substitute(ex, rl, repeat=True);
     tst:= Q Q + A_{0} A_{1} - @(ex);
     assert(tst==0)
     print('Test 101 passed')

@@ -467,13 +467,11 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 
 			// If this is an index/pattern, try to match the whole index/pattern.
 			if(tested_full) 
-				cmp=subtree_compare(&properties, (*loc).second.begin(), two, -2 
-										  /* KP: don't switch to -2 (kk.cdb fails) */); 
+				cmp=subtree_compare(&properties, (*loc).second.begin(), two, -2); 
 			else {
 				Ex tmp2(two);
 				tmp2.erase_children(tmp2.begin());
-				cmp=subtree_compare(&properties, (*loc).second.begin(), tmp2.begin(), -2
-										  /* KP: see above */); 
+				cmp=subtree_compare(&properties, (*loc).second.begin(), tmp2.begin(), -2); 
 				}
          //			std::cerr << " pattern " << *two->name
          //						 << " should be " << *((*loc).second.begin()->name)  
@@ -489,48 +487,50 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// check that the index types in pattern and object agree (if known, 
 			// otherwise assume they match).
 			// If two is a rational, we have already checked that one can take this value.
-			
-			const Indices *t1=0;
-			const Indices *t2=0;
-			if(use_props) {
-				t1=properties.get<Indices>(one, true);
-				if(two->is_rational()==false) 
-					t2=properties.get<Indices>(two, true);
-				else
-					t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.
-				}
 
-			// Check parent rel if a) there is no Indices property for the indices, b) the index positions
-			// are not free. Effectively this means that indices without property info get treated as
-			// fixed-position indices.
-			if(!ignore_parent_rel) 
-				if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
-					if(one->fl.parent_rel != two->fl.parent_rel)                
-						return (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater;
-			
-			// If both indices have no Indices property, compare them by name and pretend they are
-			// both in the same Indices set.
-
-//		FIXME: this exits the function too early! We absolutely need to 
-
-			if(two->is_rational()==false) {
-				if(t1==0 && t2==0) {
-					int xc = subtree_compare(0, one, two, -2);
-					if(xc==0) return match_t::subtree_match;
-					if(xc>0)  return match_t::match_index_less;
-					return match_t::match_index_greater;
+			if(one->is_index()) {
+				const Indices *t1=0;
+				const Indices *t2=0;
+				if(use_props) {
+					t1=properties.get<Indices>(one, true);
+					if(two->is_rational()==false) 
+						t2=properties.get<Indices>(two, true);
+					else
+						t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.
 					}
 				
-				if( (t1 || t2) && implicit_pattern ) {
-					if(t1 && t2) {
-						if((*t1).set_name != (*t2).set_name) {
-							if((*t1).set_name < (*t2).set_name) return match_t::no_match_less;
-							else                                return match_t::no_match_greater;
+				// Check parent rel if a) there is no Indices property for the indices, b) the index positions
+				// are not free. Effectively this means that indices without property info get treated as
+				// fixed-position indices.
+
+				if(!ignore_parent_rel) 
+					if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
+						if(one->fl.parent_rel != two->fl.parent_rel)                
+							return (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater;
+			
+				// If both indices have no Indices property, compare them by name and pretend they are
+				// both in the same Indices set.
+				
+				if(two->is_rational()==false && !(t1==0 && t2==0)) {
+//					if(t1==0 && t2==0) {
+//						int xc = subtree_compare(0, one, two, -2);
+//						// if xc==0 we need to generate a replacement_match entry; don't return yet!
+//					FIXME: we also need a replacement match for match_index_less!
+//						if(xc>0)  return match_t::match_index_less;
+//						if(xc<0)  return match_t::match_index_greater;
+//						}
+					
+					if( (t1 || t2) && implicit_pattern ) {
+						if(t1 && t2) {
+							if((*t1).set_name != (*t2).set_name) {
+								if((*t1).set_name < (*t2).set_name) return match_t::no_match_less;
+								else                                return match_t::no_match_greater;
+								}
 							}
-						}
-					else {
-						if(t1) return match_t::no_match_less;
-						else   return match_t::no_match_greater;
+						else {
+							if(t1) return match_t::no_match_less;
+							else   return match_t::no_match_greater;
+							}
 						}
 					}
 				}
@@ -541,7 +541,6 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// if we want that a found _{z} also leads to a replacement for ^{z},
 			// this needs to be added to the replacement map explicitly.
 
-			// std::cerr << "storing " << Ex(one) << " -> " << Ex(two) << std::endl;
 			replacement_map[one]=two;
 			
  			// if this is an index, also store the pattern with the parent_rel flipped
@@ -1133,6 +1132,8 @@ bool Ex_comparator::satisfies_conditions(Ex::iterator conditions, std::string& e
 					}
 				}
 			else mrhs=*rhs->multiplier;
+
+			std::cerr << "compare " << mlhs << " and " << mrhs << std::endl;
 
 			if(*cond->name=="\\greater" && mlhs <= mrhs) return false;
 			if(*cond->name=="\\less"    && mlhs >= mrhs) return false;
