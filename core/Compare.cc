@@ -1133,8 +1133,6 @@ bool Ex_comparator::satisfies_conditions(Ex::iterator conditions, std::string& e
 				}
 			else mrhs=*rhs->multiplier;
 
-			std::cerr << "compare " << mlhs << " and " << mrhs << std::endl;
-
 			if(*cond->name=="\\greater" && mlhs <= mrhs) return false;
 			if(*cond->name=="\\less"    && mlhs >= mrhs) return false;
 			}

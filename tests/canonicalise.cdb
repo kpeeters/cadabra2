@@ -161,9 +161,8 @@ def test11():
    a_{#}::AntiSymmetric;
    s_{#}::Symmetric;
    obj4:= s_{m n m n};
-   canonicalise(obj4);
+   canonicalise(obj4)
    tst4:= s_{m m n n}-@(obj4);
-   collect_terms(tst4)
    assert(tst4==0)
    print('Test 11 passed')
    
@@ -732,7 +731,6 @@ def test48():
    split_index(_, $ {q, i, A} $, repeat=True)
    canonicalise(_)
    tst49:= X_{i j} Y_{i j} + X_{i A} Y_{i A} + X_{A i} Y_{A i} + X_{A B} Y_{A B} - @(obj49);
-   collect_terms(_)
    assert(tst49==0)
    print('Test 48 passed')
    
@@ -742,7 +740,7 @@ def test49():
    __cdbkernel__=create_scope()
    A_{m? n?}::AntiSymmetric.
    ex:=A_{4 m} + A_{m 4};
-   canonicalise(_);
+   canonicalise(_)
    assert(ex==0)
    print('Test 49 passed')
 
@@ -753,7 +751,7 @@ def test50():
     {m,n,p}::Indices(position=free);
     A_{m n}::Symmetric;
     ex:=\int{ A_{m n} (A^{n m} + A^{m n}) }{x};
-    canonicalise(_);
+    canonicalise(_)
     tst:= 2 \int{ A_{m n} A^{m n} }{x} - @(ex);
     assert(tst==0)
     print('Test 50 passed')
@@ -761,11 +759,15 @@ def test50():
 test50()
 
 def test51():
+    # Sorting should be such that we first sort based on
+    # argument names, and then on index positions. Only
+    # then will canonicalise be able to collect terms
+    # which differ by index raising/lowering.
     __cdbkernel__=create_scope()
 {a,b,c}::Indices(position=fixed);
 ex:= A^{a}(A) A_{a}(B) + A^{a}(B) A_{a}(A);
 sort_product(_);
-canonicalise(_);
+    canonicalise(_);
     tst:= 2 A^{a}(A) A_{a}(B) - @(ex);
     assert(tst==0)
     print('Test 51 passed')
