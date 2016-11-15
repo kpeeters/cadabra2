@@ -1,36 +1,30 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{distribute}{Distribute factors over sums.}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation}\nThis would read"
+					"source" : "\\algorithm{distribute}{Distribute factors over sums.}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation*}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation*}\nThis would read"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{distribute}{Distribute factors over sums.}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation}\nThis would read"
+			"source" : "\\algorithm{distribute}{Distribute factors over sums.}\n\nRewrite a product of sums as a sum of products, as in\n\\begin{equation*}\na\\,(b+c) \\rightarrow a\\,b + a\\,c\\, .\n\\end{equation*}\nThis would read"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}a \\left(b+c\\right)\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -39,13 +33,11 @@
 			],
 			"source" : "ex:=a (b+c);\ndistribute(_);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -55,40 +47,34 @@
 			"hidden" : true,
 			"source" : "The algorithm in fact works on all objects which carry\nthe \\prop{Distributable} property, "
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Distributable to~}Op(\\#).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Distributable to~}Op\\left(\\#\\right).\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Op(A+B)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}Op\\left(A+B\\right)\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Op(A)+Op(B)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}Op\\left(A\\right)+Op\\left(B\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "Op{#}::Distributable;\nex:=Op(A+B);\ndistribute(_);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -98,34 +84,29 @@
 			"hidden" : true,
 			"source" : "The primary example of a property which inherits\nthe \\prop{Distributable} property\nis \\prop{PartialDerivative}. The \\algo{distribute} algorithm\nthus also automatically writes out partial derivatives of sums as sums\nof partial derivatives,\n"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial(\\#).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\partial_{m}(\\left(A+B+C\\right))\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\partial_{m}\\left(A+B+C\\right)\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\partial_{m}(A)+\\partial_{m}(B)+\\partial_{m}(C)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\partial_{m}{A}+\\partial_{m}{B}+\\partial_{m}{C}\\end{dmath*}"
 				}
 			],
 			"source" : "\\partial{#}::PartialDerivative;\nex:=\\partial_{m}{A + B + C};\ndistribute(_);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -133,6 +114,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-
