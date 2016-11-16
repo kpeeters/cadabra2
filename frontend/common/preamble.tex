@@ -1,6 +1,7 @@
 \usepackage{setspace}
 \usepackage[fleqn]{amsmath}
 \usepackage{color}
+\usepackage{etoolbox}
 \usepackage{amssymb}
 \usepackage[parfill]{parskip}
 \usepackage{tableaux}
@@ -12,8 +13,8 @@
 \newcommand{\property}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
 {\emph{#2}}\\[1ex]
 }
-\newcommand{\algo}[1]{{\tt #1}}
-\newcommand{\prop}[1]{{\tt #1}}
+\newcommand{\algo}[1]{{\tt \detokenize{#1}}}
+\newcommand{\prop}[1]{{\tt \detokenize{#1}}}
 \makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
 \ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
 
@@ -23,17 +24,42 @@
 
 \def\brwrap#1{%
   \setbox0=\hbox{$#1$}
-  \left(\vbox to \the\ht0{\hbox to 0pt{}}\right.
-  \begingroup #1\endgroup
+  \left(\vbox to \the\ht0{\hbox to 0pt{}}\right.\kern-.2em
+  \begingroup #1\endgroup\kern-.15em
   \left.\vbox to \the\ht0{\hbox to 0pt{}}\right)
 }
 \message{\meaning\brwrap{\frac{A}{B}}}
 
 %  \left.\vbox to \brwrapht {\hbox to 0pt{!}}\right)%
+
+% Long formulas are much easier to read if they break such that
+% the '+' or '-' sign ends up on the next line, not at the end
+% of the previous
+
+\makeatletter
+\newcommand{\DeclareMathActive}[2]{%
+  % #1 is the character, #2 is the definition
+  \expandafter\edef\csname keep@#1@code\endcsname{\mathchar\the\mathcode`#1 }
+  \begingroup\lccode`~=`#1\relax
+  \lowercase{\endgroup\def~}{#2}%
+  \AtBeginDocument{\mathcode`#1="8000 }%
+}
+
+\DeclareMathActive{+}{\mathbreak\std{+}}
+
+\newcommand{\std}[1]{\csname keep@#1@code\endcsname}
+\patchcmd{\newmcodes@}{\mathcode`\-\relax}{\std@minuscode\relax}{}{\ddt}
+\AtBeginDocument{\edef\std@minuscode{\the\mathcode`-}}
+\makeatother
+
+\def\mathbreak{\discretionary{}{}{}}
+
+
+
 % Document start.
 
 \begin{document}
-\linespread{2.5}\pagestyle{empty}\everymath{\displaystyle\allowbreak}
+\pagestyle{empty}\everymath{\displaystyle\allowbreak}
 \renewcommand{\arraystretch}{1.2}
 \tolerance=10000
 \relpenalty=10

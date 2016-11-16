@@ -1,6 +1,6 @@
 
 all:
-	@echo -n "To build Cadabra, \n\n   mkdir build\n   cd build\n   cmake ..\n   make\n\nThe other targets here are (mainly for maintainer purposes only)\n\n   tarball:  build a tarball cadabra2-latest.tar.gz of current HEAD\n   doc:      generate doxygen docs in doc\n   webup:    build web pages/tutorials/man pages and upload to server\n\nIf you need help, email info@cadabra.science\n"
+	@echo -n "\nTo build Cadabra, \n\n   mkdir build\n   cd build\n   cmake ..\n   make\n\nThe other targets here are (for maintainer purposes only)\n\n   tarball:     build a tarball cadabra2-latest.tar.gz of current HEAD\n   doc:         generate doxygen docs in doc\n   webup:       build web pages/tutorials/man pages and upload to server\n   updatesnoop: sync snoop repo\n   packages:    create deb/rpm packages on buildbot\n\nIf you need help, email info@cadabra.science\n\n"
 
 tarball:
 	git archive --format=tar --prefix=cadabra2-latest/ HEAD | gzip > ${HOME}/tmp/cadabra2-latest.tar.gz
@@ -14,3 +14,6 @@ webup:
 
 packages:
 	bash config/buildbot.sh
+
+updatesnoop:
+	cp ../snoop/src/Snoop.cc ../snoop/src/SnoopPrivate.hh ../snoop/src/Snoop.hh client_server/
