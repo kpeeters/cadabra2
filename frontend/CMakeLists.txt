@@ -41,7 +41,11 @@ install(FILES
 
 install(SCRIPT   ${PROJECT_SOURCE_DIR}/latex/install.cmake)
 
-install(FILES  ${PROJECT_SOURCE_DIR}/common/preamble.tex DESTINATION "${CMAKE_INSTALL_PREFIX}/share/cadabra2/texengine/")
+set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/texengine/")
+install(FILES  ${PROJECT_SOURCE_DIR}/common/preamble.tex DESTINATION ${INSTALL_LATEX_DIR})
+install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                             GROUP_READ GROUP_EXECUTE 
+                                                             WORLD_READ WORLD_EXECUTE)
 
 set(INSTALL_MAN_DIR      "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual")
 set(INSTALL_MAN_ALGO_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual/algorithms")
