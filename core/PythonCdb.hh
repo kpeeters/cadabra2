@@ -80,6 +80,18 @@ boost::python::object Ex_to_Sympy(const Ex&);
 
 /// \ingroup pythoncore
 ///
+/// Add two expressions, adding a top-level \sum node if required.
+
+Ex operator+(const Ex& ex1, const Ex& ex2);
+
+/// \ingroup pythoncore
+///
+/// Subtract two expressions, adding a top-level \sum node if required.
+
+Ex operator-(const Ex& ex1, const Ex& ex2);
+
+/// \ingroup pythoncore
+///
 /// Helper class to ensure that all Python property objects derive from the
 /// same base class.
 

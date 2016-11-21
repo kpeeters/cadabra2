@@ -9,7 +9,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}B A%\n+C A%\n+D B\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}B A+C A+D B\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=B*A+C*A+D*B;"
@@ -35,7 +35,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}B A%\n+C A%\n+B D\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}B A+C A+B D\\end{dmath*}"
 				}
 			],
 			"source" : "ex;"
@@ -48,7 +48,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int{}\\left(A%\n+B%\n+C%\n+D\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\int{}\\left(A+B+C+D\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=\\int{ A + B + C + D}{x};"
@@ -79,10 +79,67 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\int{}\\left(A%\n+B%\n+C%\n+D\\right)\\, {\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\int{}\\left(A+B+C+D\\right)\\, {\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "ex[0][2]=substitute(ex[0][2], $C->Q$);\nex;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A+A_{0}+A_{1}+A_{2}+A_{3}+A_{4}+A_{5}+A_{6}+A_{7}+A_{8}+A_{9}\\end{dmath*}"
+				}
+			],
+			"source" : "ex3:=A;\nfor i in range(10):\n\tex3 = ex3 + Ex('A_{'+str(i)+'}')\nex3;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}C-D\\end{dmath*}"
+				}
+			],
+			"source" : "ex4:=C - D;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A+A_{0}+A_{1}+A_{2}+A_{3}+A_{4}+A_{5}+A_{6}+A_{7}+A_{8}+A_{9}-C+D\\end{dmath*}"
+				}
+			],
+			"source" : "ex5=ex3-ex4;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\ncadabra2.ArgumentException: index 15 out of range, must be smaller than 13\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "ex5[15];"
 		},
 		{
 			"cell_origin" : "client",
