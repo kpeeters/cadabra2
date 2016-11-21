@@ -204,6 +204,31 @@ Ex rhs(const Ex& ex)
 	return Ex(sib);
 	}
 
+Ex Ex_getslice(Ex &ex, boost::python::slice slice)
+	{
+	Ex result;
+
+	boost::python::slice::range<Ex::sibling_iterator> range;
+	try {
+		range = slice.get_indices(ex.begin(ex.begin()), ex.end(ex.begin()));
+		}
+	catch (std::invalid_argument) {
+		return result;
+		}
+
+	// Set head
+	auto it = result.set_head(*ex.begin());
+
+	// Iterate over fully-closed range.
+	for (; range.start != range.stop; std::advance(range.start, range.step)) {
+		Ex::iterator toadd(range.start);
+		result.append_child(it, toadd);
+		}
+	Ex::iterator toadd(range.start);
+	result.append_child(it, toadd);
+	return result;
+	}
+
 Ex Ex_getitem(Ex &ex, int index)
 	{
 	Ex::iterator it=ex.begin();
@@ -442,6 +467,47 @@ std::shared_ptr<Ex> construct_Ex_from_int_2(int num, bool add_ref)
 	return make_Ex_from_int(num, add_ref);
 	}
 
+
+Ex operator+(const Ex& ex1, const Ex& ex2)
+	{
+	if(ex1.size()==0) return ex2;
+	if(ex2.size()==0) return ex1;
+
+	Ex ret(ex1);
+	if(*ret.begin()->name!="\\sum") 
+		ret.wrap(ret.begin(), str_node("\\sum"));
+	ret.append_child(ret.begin(), ex2.begin());
+
+	auto it=ret.begin();
+	cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+
+	return ret;
+	}
+
+Ex operator-(const Ex& ex1, const Ex& ex2)
+	{
+	if(ex1.size()==0) {
+		if(ex2.size()!=0) {
+			Ex ret(ex2);
+			multiply(ex2.begin()->multiplier, -1);
+			auto it=ret.begin();
+			cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+			return ret;
+			}
+		else return ex2;
+		}
+	if(ex2.size()==0) return ex1;
+
+	Ex ret(ex1);
+	if(*ret.begin()->name!="\\sum") 
+		ret.wrap(ret.begin(), str_node("\\sum"));
+	multiply( ret.append_child(ret.begin(), ex2.begin())->multiplier, -1 );
+
+	auto it=ret.begin();
+	cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+	
+	return ret;
+	}
 
 // Initialise mathematics typesetting for IPython.
 
@@ -999,21 +1065,24 @@ BOOST_PYTHON_MODULE(cadabra2)
 //	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
 	class_<Ex, std::shared_ptr<Ex> >("Ex", boost::python::no_init)
 		.def("__init__", boost::python::make_constructor(&construct_Ex_from_string))
-	        .def("__init__", boost::python::make_constructor(&construct_Ex_from_string_2))
-		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int))
-		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int_2))
-		.def("__str__",  &Ex_str_)
-		.def("_latex_",  &Ex_latex_)
-		.def("__repr__", &Ex_repr_)
-		.def("__eq__",   &__eq__Ex_Ex)
-		.def("__eq__",   &__eq__Ex_int)
-		.def("_sympy_",  &Ex_to_Sympy)
+		.def("__init__", boost::python::make_constructor(&construct_Ex_from_string_2))
+		.def("__init__",    boost::python::make_constructor(&construct_Ex_from_int))
+		.def("__init__",    boost::python::make_constructor(&construct_Ex_from_int_2))
+		.def("__str__",     &Ex_str_)
+		.def("_latex_",     &Ex_latex_)
+		.def("__repr__",    &Ex_repr_)
+		.def("__eq__",      &__eq__Ex_Ex)
+		.def("__eq__",      &__eq__Ex_int)
+		.def("_sympy_",     &Ex_to_Sympy)
 		.def("__getitem__", &Ex_getitem)
+		.def("__getslice__",&Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
-		.def("__len__",  &Ex_len)
-		.def("state",    &Ex::state)
-		.def("reset",    &Ex::reset_state)
-		.def("changed",  &Ex::changed_state);
+		.def("__len__",     &Ex_len)
+		.def("state",       &Ex::state)
+		.def("reset",       &Ex::reset_state)
+		.def("changed",     &Ex::changed_state)
+		.def(self + self)
+		.def(self - self);
 	
 	enum_<Algorithm::result_t>("result_t")
 		.value("checkpointed", Algorithm::result_t::l_checkpointed)

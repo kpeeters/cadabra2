@@ -262,3 +262,4 @@ class nset_it_less {
 /// DisplayTerminal.
 
 std::ostream& operator<<(std::ostream&, const Ex&);
+
