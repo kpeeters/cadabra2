@@ -15,6 +15,8 @@
 #include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
+int Ex_comparator::offset=0;
+
 int subtree_compare(const Properties *properties, 
 						  Ex::iterator one, Ex::iterator two, 
 						  int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards) 
@@ -271,6 +273,8 @@ void Ex_comparator::clear()
 
 Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props, bool ignore_parent_rel)
 	{
+	++offset;
+
 	Ex::sibling_iterator i1end(i1);
 	Ex::sibling_iterator i2end(i2);
 	++i1end;
@@ -282,6 +286,7 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 
 	while(i1!=i1end && i2!=i2end) {
 		int curdepth=Ex::depth(i1);
+		// std::cerr << tab() << "match at depth " << curdepth << std::endl;
 		match_t mm=compare(i1, i2, first_call, use_props || topdepth!=curdepth, ignore_parent_rel);
 		// std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl;
 		first_call=false;
@@ -289,7 +294,7 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 			case match_t::no_match_less:
 			case match_t::no_match_greater:
 				// As soon as we get a mismatch, return.
-				return mm;
+				return report(mm);
 			case match_t::node_match: {
 				size_t num1=Ex::number_of_children(i1);
 				size_t num2=Ex::number_of_children(i2);
@@ -314,8 +319,8 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 				// to restrict how far to the right a search should go), but in 
 				// practise this is probably not relevant (and can always be added).
 
-				if(num1 < num2)      return match_t::no_match_less;
-				else if(num1 > num2) return match_t::no_match_greater;
+				if(num1 < num2)      return report(match_t::no_match_less);
+				else if(num1 > num2) return report(match_t::no_match_greater);
 				break;
 				}
 			case match_t::match_index_less:
@@ -344,7 +349,7 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 		++i2;
 		}
 
-	return first_index_mismatch;
+	return report(first_index_mismatch);
 	}
 
 Ex_comparator::Ex_comparator(const Properties& k)
@@ -352,18 +357,57 @@ Ex_comparator::Ex_comparator(const Properties& k)
 	{
 	}
 
+std::string Ex_comparator::tab() const
+	{
+	std::string ret;
+	for(int i=0; i<offset; ++i)
+		ret+="   ";
+	return ret;
+	}
+
+Ex_comparator::match_t Ex_comparator::report(Ex_comparator::match_t r) const
+	{
+	return r;
+
+	std::cerr << tab() << "result = ";
+	switch(r) {
+		case match_t::node_match: 
+			std::cerr << "node_match";
+			break;
+		case match_t::subtree_match: 
+			std::cerr << "subtree_match";
+			break;
+		case match_t::match_index_less: 
+			std::cerr << "match_index_less";
+			break;
+		case match_t::match_index_greater: 
+			std::cerr << "match_index_greater";
+			break;
+		case match_t::no_match_less: 
+			std::cerr << "no_match_less";
+			break;
+		case match_t::no_match_greater: 
+			std::cerr << "no_match_greater";
+			break;
+		}
+	std::cerr << std::endl;
+	--offset;
+	return r;
+	}
+
 Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one, 
 															 const Ex::iterator& two, 
 															 bool nobrackets, bool use_props, bool ignore_parent_rel) 
 	{
+	++offset;
+	
 	// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
 	// 'one' is the substitute pattern, 'two' the expression under consideration.
 	
-	//std::cerr << "matching " << *one->name << " to " << *two->name << std::endl;
-	//std::cerr << "matching " << Ex(one) << " to " << Ex(two) << std::endl;
+	// std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << std::endl;
 
 	if(nobrackets==false && one->fl.bracket != two->fl.bracket) 
-		return (one->fl.bracket < two->fl.bracket)?match_t::no_match_less:match_t::no_match_greater;
+		return report( (one->fl.bracket < two->fl.bracket)?match_t::no_match_less:match_t::no_match_greater );
 
 	// Determine whether we are dealing with one of the pattern types.
 	bool pattern=false;
@@ -416,24 +460,24 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			if(use_props)
 				ip = properties.get<Integer>(one, true); // 'true' to ignore parent rel.
 
-			if(ip==0) return match_t::no_match_less;
+			if(ip==0) return report(match_t::no_match_less);
 
 			bool lower_bdy=true, upper_bdy=true;
 			multiplier_t from, to;
 			if(ip->from.begin()==ip->from.end()) lower_bdy=false;
 			else {
-				if(!ip->from.begin()->is_rational()) return match_t::no_match_less;
+				if(!ip->from.begin()->is_rational()) return report(match_t::no_match_less);
 				from = *ip->from.begin()->multiplier;
 				}
 			if(ip->to.begin()==ip->to.end())     upper_bdy=false;
 			else {
-				if(!ip->to.begin()->is_rational()) return match_t::no_match_less;
+				if(!ip->to.begin()->is_rational()) return report(match_t::no_match_less);
 				to   = *ip->to.begin()->multiplier;
 				}
 			if((lower_bdy && *two->multiplier < from) || (upper_bdy && *two->multiplier > to))  
-				return match_t::no_match_less;
-
-			// std::cerr << Ex(one) << " can take value " << *two->multiplier << std::endl;
+				return report(match_t::no_match_less);
+			
+			// std::cerr << tab() << Ex(one) << tab() << "can take value " << *two->multiplier << std::endl;
 			}
 
 		// We want to search the replacement map for replacement rules which we have
@@ -457,7 +501,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			loc = replacement_map.find(tmp1);
 			tested_full=false;
 			}
-
+	   
 		if(loc!=replacement_map.end()) {
 			// We constructed a replacement rule for this node already at an earlier
 			// stage. Need to make sure that that rule is consistent with what we
@@ -478,9 +522,9 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
          //						 << " because that's what " << *one->name 
          //						 << " was set to previously; result " << cmp << std::endl;
 
-			if(cmp==0)      return match_t::subtree_match;
-			else if(cmp>0)  return match_t::no_match_less;
-			else            return match_t::no_match_greater;
+			if(cmp==0)      return report(match_t::subtree_match);
+			else if(cmp>0)  return report(match_t::no_match_less);
+			else            return report(match_t::no_match_greater);
 			}
 		else {
 			// This index/pattern was not encountered earlier. If this node is an index, 
@@ -489,12 +533,17 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// If two is a rational, we have already checked that one can take this value.
 
 			if(one->is_index()) {
+				// std::cerr << tab() << "One is index " << use_props << std::endl;
+
 				const Indices *t1=0;
 				const Indices *t2=0;
 				if(use_props) {
-					t1=properties.get<Indices>(one, true);
-					if(two->is_rational()==false) 
-						t2=properties.get<Indices>(two, true);
+					t1=properties.get<Indices>(one, false);
+					// std::cerr << tab() << "Do we know about one? " << t1 << std::endl;
+					if(two->is_rational()==false) {
+						t2=properties.get<Indices>(two, false);
+						// std::cerr << tab() << "Do we know about two? " << t2 << std::endl;
+						}
 					else
 						t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.
 					}
@@ -503,10 +552,12 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				// are not free. Effectively this means that indices without property info get treated as
 				// fixed-position indices.
 
+				// std::cerr << tab() << "Compare parent_rel " << use_props << ", " << ignore_parent_rel << ", " << t1 << ", " << t2 << std::endl;
 				if(!ignore_parent_rel) 
 					if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
 						if(one->fl.parent_rel != two->fl.parent_rel)                
-							return (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater;
+							return report( (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater );
+				// std::cerr << tab() << "Compare parent_rel got through" << std::endl;
 			
 				// If both indices have no Indices property, compare them by name and pretend they are
 				// both in the same Indices set.
@@ -523,13 +574,13 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 					if( (t1 || t2) && implicit_pattern ) {
 						if(t1 && t2) {
 							if((*t1).set_name != (*t2).set_name) {
-								if((*t1).set_name < (*t2).set_name) return match_t::no_match_less;
-								else                                return match_t::no_match_greater;
+								if((*t1).set_name < (*t2).set_name) return report(match_t::no_match_less);
+								else                                return report(match_t::no_match_greater);
 								}
 							}
 						else {
-							if(t1) return match_t::no_match_less;
-							else   return match_t::no_match_greater;
+							if(t1) return report(match_t::no_match_less);
+							else   return report(match_t::no_match_greater);
 							}
 						}
 					}
@@ -590,20 +641,20 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		// name, we still need to let the caller know about this.
 		if(is_index) {
 			int xc = subtree_compare(0, one, two, -2);
-			if(xc==0) return match_t::subtree_match;
-			if(xc>0)  return match_t::match_index_less;
-			return match_t::match_index_greater;
+			if(xc==0) return report(match_t::subtree_match);
+			if(xc>0)  return report(match_t::match_index_less);
+			return report(match_t::match_index_greater);
 			}
-		else return match_t::node_match;
+		else return report(match_t::node_match);
 		}
 	else if(objectpattern) {
 		subtree_replacement_map_t::iterator loc=subtree_replacement_map.find(one->name);
 		if(loc!=subtree_replacement_map.end()) {
-			return equal_subtree((*loc).second,two);
+			return report(equal_subtree((*loc).second,two));
 			}
 		else subtree_replacement_map[one->name]=two;
 		
-		return match_t::subtree_match;
+		return report(match_t::subtree_match);
 		}
 	else if(is_coordinate || is_number) { // Check if the coordinate can come from an index. INCOMPLETE FIXME
 		const Indices *t2=0;
@@ -618,7 +669,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			if(!ignore_parent_rel)
 				if(t2->position_type==Indices::fixed || t2->position_type==Indices::independent) 
 					if(one->fl.parent_rel != two->fl.parent_rel)
-						return match_t::no_match_less;
+						return report(match_t::no_match_less);
 			
 			// Look through values attribute of Indices object to see if the 'two' index
 			// can take the 'one' value. 
@@ -638,35 +689,35 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				auto prev2 = index_value_map.find(t2);
 				if(prev1!=index_value_map.end() && ! (prev1->second==o1) ) {
 //					std::cerr << "Previously 1 " << Ex(two) << " was " << Ex(prev1->second) << std::endl;
-					return match_t::no_match_less;
+					return report(match_t::no_match_less);
 					}
 				if(prev2!=index_value_map.end() && ! (prev2->second==o2) ) {
 //					std::cerr << "Previously 2 " << Ex(two) << " was " << Ex(prev2->second) << std::endl;
-					return match_t::no_match_less;
+					return report(match_t::no_match_less);
 					}
 		  
 				index_value_map[two]=one;
-				return match_t::node_match;
+				return report(match_t::node_match);
 				} 
 			else {
-				return match_t::no_match_less;
+				return report(match_t::no_match_less);
 				}
 			}
 		else {
 			// What's left is the possibility that both indices are Coordinates, in which case they
 			// need to match exactly.
 			int cmp=subtree_compare(&properties, one, two, -2);
-			if(cmp==0)      return match_t::subtree_match;
-			else if(cmp>0)  return match_t::no_match_less;
-			else            return match_t::no_match_greater;
+			if(cmp==0)      return report(match_t::subtree_match);
+			else if(cmp>0)  return report(match_t::no_match_less);
+			else            return report(match_t::no_match_greater);
 			}
 		}
 	else { // object is not dummy nor objectpattern nor coordinate
 
 		if(one->is_rational() && two->is_rational()) {
 			if(one->multiplier!=two->multiplier) {
-				if(*one->multiplier < *two->multiplier) return match_t::no_match_less;
-				else                                    return match_t::no_match_greater;
+				if(*one->multiplier < *two->multiplier) return report(match_t::no_match_less);
+				else                                    return report(match_t::no_match_greater);
 				}
 			else {
 				// Equal numerical factors with different parent rel _never_ match, because
@@ -674,26 +725,26 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				// know the bundle type.
 				if(!ignore_parent_rel)
 					if(one->fl.parent_rel != two->fl.parent_rel)                
-						return (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater;
+						return report( (one->fl.parent_rel < two->fl.parent_rel)?match_t::no_match_less:match_t::no_match_greater );
 				}
 			}
 		
 		if(one->name==two->name) {
 			if(nobrackets || (one->multiplier == two->multiplier) ) 
-				return match_t::node_match;
+				return report( match_t::node_match );
 
-			if(*one->multiplier < *two->multiplier) return match_t::no_match_less;
-			else                                    return match_t::no_match_greater;
+			if(*one->multiplier < *two->multiplier) return report(match_t::no_match_less);
+			else                                    return report(match_t::no_match_greater);
 			}
 		else {
-			if( *one->name < *two->name ) return match_t::no_match_less;
-			else                          return match_t::no_match_greater;
+			if( *one->name < *two->name ) return report(match_t::no_match_less);
+			else                          return report(match_t::no_match_greater);
 			}
 		}
 	
 	assert(1==0); // should never be reached
 
-	return match_t::no_match_less; 
+	return report(match_t::no_match_less); 
 	}
 
 

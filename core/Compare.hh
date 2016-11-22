@@ -300,6 +300,11 @@ class Ex_comparator {
 		int  can_swap_prod_sum(Ex::iterator prod, Ex::iterator sum, bool) ;
 		int  can_swap_sum_sum(Ex::iterator sum1, Ex::iterator sum2, bool) ;
 		int  can_swap_ilist_ilist(Ex::iterator obj1, Ex::iterator obj2);
+
+		std::string tab() const;
+		match_t     report(match_t r) const;
+
+		static int offset;
 };
 
 /// \ingroup core

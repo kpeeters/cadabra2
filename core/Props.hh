@@ -301,6 +301,7 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 						break;
 						}
 					}
+				ret=0;
 				if(dynamic_cast<const PropertyInherit *>((*walk).second.second)) 
 					inherits=true;
 				}

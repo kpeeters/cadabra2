@@ -229,8 +229,8 @@ def test30():
     __cdbkernel__=create_scope()
     # Matching of numerical values in expressions to indices in patterns
     # should respect index position.
-    {m,n}::Integer(0..3).
     {m,n}::Indices(position=fixed);
+    {m,n}::Integer(0..3).
     g_{m}^{n}::KroneckerDelta;
     ex:= g^{0 0};
     ex:= 1 + g_{0}^{0};
