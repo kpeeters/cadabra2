@@ -199,6 +199,12 @@ class Ex_comparator {
 			no_match_greater=7 
 		};
 
+		enum class useprops_t {
+			always=0,         // always use property info
+			not_at_top,       // don't use property info at top level of the expression
+			never=2           // never use property info
+		};
+
 		/// Reset the object for a new match.
 
 		void    clear();
@@ -211,7 +217,8 @@ class Ex_comparator {
 		/// information at the TOP level of the comparison. Properties
 		/// will always be used at  levels.
 
-		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2, bool use_props=true, bool ignore_parent_rel=false);
+		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2, 
+									 useprops_t use_props=useprops_t::always, bool ignore_parent_rel=false);
 
       /// Find a subproduct in a product. The 'lhs' iterator points to the product which
       /// we want to find, the 'tofind' iterator to the current factor which we are looking
@@ -291,9 +298,9 @@ class Ex_comparator {
 		/// a full subtree match will be attempted (using subtree_compare).
 
 		match_t compare(const Ex::iterator&, const Ex::iterator&, 
-							 bool nobrackets=false, 
-							 bool use_props=true,
-							 bool ignore_parent_rel=false);
+							 bool       nobrackets=false, 
+							 useprops_t use_props=useprops_t::always,
+							 bool       ignore_parent_rel=false);
 
       // Internal functions used by can_swap.
 		int  can_swap_prod_obj(Ex::iterator prod, Ex::iterator obj, bool) ;
@@ -334,4 +341,4 @@ class Ex_is_less {
 };
 
 
-
+std::ostream& operator<<(std::ostream&, Ex_comparator::useprops_t up);

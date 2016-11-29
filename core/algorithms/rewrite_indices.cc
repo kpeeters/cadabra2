@@ -37,6 +37,8 @@ bool rewrite_indices::can_apply(iterator it)
 
 Algorithm::result_t rewrite_indices::apply(iterator& it) 
 	{
+	// std::cerr << "apply at " << Ex(it) << std::endl;
+
 	result_t res=result_t::l_no_action;
 
 	if(is_derivative_argument) force_prod_wrap(it);
@@ -50,7 +52,8 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	sibling_iterator objs=preferred.begin();
 	sibling_iterator vielb=converters.begin().begin();
 
-	// Determine which conversion types are possible.
+	// Determine which conversion types are possible by determining
+	// the index sets in which the two indices of the converter sit.
 	// itype1 and itype2 are the index types of the 1st and 2nd index of the 
 	// converter (i.e. vielbein or metric).
 	
@@ -61,6 +64,10 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	const Indices *itype2=kernel.properties.get<Indices>(vbind, true);
 	str_node::parent_rel_t pr2=vbind->fl.parent_rel;	
 
+	// FIXME: should we even continue if one of itype1 or itype2 is 0?
+
+	// std::cerr << "can convert between " << itype1->set_name << " and " << itype2->set_name << std::endl;
+
 	// Since this algorithm works both on dummy indices and on free
 	// ones, we merge the two.
 
@@ -69,48 +76,64 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 	// Go through all indices, determine on which object they sit,
 	// and see if that object appears in the list of preferred-form
 	// objects. If so, take appropriate action.
+	// FIXME: this attempts to convert every object as many times as
+	// there are indices on the object!!!
 
 	// 'dit' is the index under consideration for a rewrite.
 	index_map_t::const_iterator dit=ind_dummy.begin();
-	// std::cerr << "apply" << std::endl;
 	while(dit!=ind_dummy.end()) {
-		// std::cerr << "considering " << *dit->second->name << std::endl;
+		//std::cerr << "** considering index " << Ex(dit->second) << std::endl;
 		sibling_iterator par=tr.parent(dit->second);
 		for(sibling_iterator prefit=tr.begin(objs); prefit!=tr.end(objs); ++prefit) {
-			// std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl;
-			if(subtree_equal(&kernel.properties, par, prefit, 1, false)) {
-				// std::cerr << "found " << *par->name << std::endl;
+			// std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl; 
+
+			// We want to determine whether the 'par' object is the same
+			// as the 'prefit' object, but the index types are different
+			// on the 'prefit' object, or the index positions are
+			// different. So we need to compare these two without using
+			// index properties, so that we get a comparison strictly
+			// based on alpha info.
+
+			Ex_comparator comp(kernel.properties);
+			Ex_comparator::match_t fnd = comp.equal_subtree(par, prefit, Ex_comparator::useprops_t::never);
+
+			if(is_in(fnd, { Ex_comparator::match_t::subtree_match, 
+						Ex_comparator::match_t::match_index_less, 
+						Ex_comparator::match_t::match_index_greater,
+						Ex_comparator::match_t::no_match_indexpos_less,
+						Ex_comparator::match_t::no_match_indexpos_greater })) {
+				//std::cerr << "found " << *par->name << std::endl;
+
 				// Determine whether the indices are of preferred type or not.
 				int num=std::distance(tr.begin(par), (sibling_iterator)dit->second);
 				const Indices *origtype=kernel.properties.get<Indices>(dit->second, true);
-				if(!origtype) {
+				if(!origtype) 
 					throw ArgumentException("Need to know about the index type of index "+*dit->second->name+".");
-					}
-				// std::cerr << "index " << *dit->second->name << "(" << num << ") has type " 
-				//		 << origtype->set_name << std::endl;
 
 				// 'walk' is the index on the preferred form of the tensor, corresponding
 				// to the index on the original tensor which is currently under consideration 
-				// for change. We need to preserve the parent rel of this index.
+				// for change. We need to preserve the parent rel of this index on the preferred form.
 				sibling_iterator walk=begin_index(prefit);
 				while(num-- > 0)
 					++walk;
 
 				const Indices *newtype=kernel.properties.get<Indices>(walk, true);
-				if(!newtype) {
+				if(!newtype) 
 					throw ArgumentException("Need to know about the index type of index "+*walk->name+".");
-					}
-				// std::cerr << "prefi " << *walk->name << "(" << num << ") has type " 
-				//		 << newtype->set_name << std::endl;
 
 				if(newtype->set_name == origtype->set_name) {
 					// Index already has preferred type.
 					if(origtype->position_type==Indices::free || walk->fl.parent_rel==dit->second->fl.parent_rel) {
 						// Position is also already fine.
-						continue; // already fine
+						//std::cerr << "index position already fine" << std::endl;
+						continue; // already fine, no need for conversion
 						}
-					// Need to convert index.
+					else {
+						//std::cerr << "index position wrong" << std::endl;
+						}
 					}
+
+				//std::cerr << "need to convert from " << origtype->set_name << " to " << newtype->set_name << std::endl;
 
 				Ex repvb(vielb);
 				sibling_iterator vbi1=repvb.begin(repvb.begin());
@@ -147,7 +170,10 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 						}
 					else continue;
 					}
-				else continue; // next index
+				else {
+					// std::cerr << "Uh, cannot convert?" << std::endl;
+					continue; // next index
+					}
 
 				// Insert the conversion object.
 				iterator vbit;

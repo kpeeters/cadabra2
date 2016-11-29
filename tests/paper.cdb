@@ -10,7 +10,7 @@ def test01():
     assert(tst==0)
     print('Test 01 passed')
 
-#print(timeit.timeit(test01,number=1))
+print(timeit.timeit(test01,number=1))
 
 #-------
 
@@ -23,7 +23,7 @@ def test02():
     assert(tst==0)
     print('Test 02 passed')
 
-#print(timeit.timeit(test02,number=1))
+print(timeit.timeit(test02,number=1))
 
 #-------
 
@@ -37,7 +37,7 @@ def test03():
     assert(tst==0)
     print('Test 03 passed')
 
-#print(timeit.timeit(test03,number=1))
+print(timeit.timeit(test03,number=1))
 
 #-------
 
@@ -51,7 +51,7 @@ def test04():
     assert(tst==0)
     print('Test 04 passed')
 
-#print(timeit.timeit(test04,number=1))
+print(timeit.timeit(test04,number=1))
 
 #-------
 
@@ -78,7 +78,7 @@ def test05():
     assert(tst==0)
     print('Test 05c passed')
 
-#print(timeit.timeit(test05,number=1))
+print(timeit.timeit(test05,number=1))
 
 #-------
 
@@ -93,7 +93,7 @@ def test06():
     assert(obj==0)
     print('Test 06 passed')
 
-#print(timeit.timeit(test06,number=1))
+print(timeit.timeit(test06,number=1))
 
 #-------
 
@@ -110,7 +110,7 @@ def test07():
     assert(tst==0)
     print('Test 07 passed')
 
-#print(timeit.timeit(test07,number=1))
+print(timeit.timeit(test07,number=1))
 
 #-------
 
@@ -125,7 +125,7 @@ def test08():
     assert(obj==0)
     print('Test 08 passed')
 
-#print(timeit.timeit(test08,number=1))
+print(timeit.timeit(test08,number=1))
 
 #-------
 
@@ -187,12 +187,12 @@ def test11():
     combine(_);
     join_gamma(_);
     canonicalise(_);
-    tst:= (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} + \delta_{m p} \delta_{n n} - \delta_{m n} \delta_{n p})_{a c} - @(obj);
+    tst:= (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} + \delta_{n n} \delta_{m p} - \delta_{m n} \delta_{n p})_{a c} - @(obj);
     assert(tst==0)
     distribute(obj);
     expand(obj);
     tst:= (\Gamma_{m p})_{a c} \delta_{n n} - (\Gamma_{m n})_{a c} \delta_{n p} 
-    + (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{m p} \delta_{n n})_{a c} 
+    + (\Gamma_{p n})_{a c} \delta_{m n} + (\delta_{n n} \delta_{m p} )_{a c} 
     - (\delta_{m n} \delta_{n p})_{a c} - @(obj);
     assert(tst==0)
     print('Test 11 passed')

@@ -93,12 +93,17 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 	// pattern, the second an expression which is to be matched.
 	
 	Ex_comparator comp(properties);
-	Ex_comparator::match_t res=comp.equal_subtree(obj.begin(), it, false, ignore_parent_rel);
+	Ex_comparator::match_t res=comp.equal_subtree(obj.begin(), it, 
+																 Ex_comparator::useprops_t::not_at_top, 
+																 ignore_parent_rel);
 
 	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
 
-	if(res==Ex_comparator::match_t::subtree_match || res==Ex_comparator::match_t::match_index_less ||
-		res==Ex_comparator::match_t::match_index_greater || res==Ex_comparator::match_t::node_match) {
+	if(is_in(res, 
+				 { Ex_comparator::match_t::subtree_match,
+				   Ex_comparator::match_t::match_index_less,
+				   Ex_comparator::match_t::match_index_greater,
+					Ex_comparator::match_t::node_match } )) {
 		return true;
 		}
 

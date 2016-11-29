@@ -148,7 +148,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
-	// std::cerr << "handle_factor " << Ex(sib) << std::endl;
+	std::cerr << "handle_factor " << Ex(sib) << std::endl;
 	if(*sib->name=="\\components") return sib;
 
 	// If this factor is an accent at the top level, descent further.
@@ -194,12 +194,12 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			Ex rule(c);
 			Ex obj(sib);
-			// std::cerr << "attempting rule " << rule << " on " << obj << std::endl;
+			std::cerr << "attempting rule " << rule << " on " << obj << std::endl;
 			// rule is a single rule, we walk the list.
 			substitute subs(kernel, obj, rule);
 			iterator oit=obj.begin();
 			if(subs.can_apply(oit)) {
-				// std::cerr << "can apply" << std::endl;
+				std::cerr << "can apply" << std::endl;
 				auto el = repl.append_child(vl, str_node("\\equals"));
 				auto il = repl.append_child(el, str_node("\\comma"));
 				auto fi = full_ind_free.begin();
@@ -251,7 +251,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 			return true;
 			});
 
-	// std::cerr << "result now " << repl << std::endl;
+	std::cerr << "result now " << repl << std::endl;
 	merge_component_children(repl.begin());
 
 	sib = tr.move_ontop(iterator(sib), repl.begin());
@@ -575,8 +575,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 		++di2;
 		int num1 = tr.index(di->second);
 		int num2 = tr.index(di2->second);
-		// std::cerr << *(di->first.begin()->name) 
-		//           << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
+		std::cerr << *(di->first.begin()->name) 
+		           << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
 
 		// three cases:
 		//    two factors, single index in common. Merge is simple.
@@ -699,7 +699,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 
 	// TRACE: are we still ok here? Looks ok: one component node
 	// with no indices.
-	// std::cerr << "Before doing outer product:\n" << Ex(it) << std::endl;
+	std::cerr << "Before doing outer product:\n" << Ex(it) << std::endl;
 
 	// At this stage we have one or more components nodes in the product,
 	// and we have collected all possible index value combinations.

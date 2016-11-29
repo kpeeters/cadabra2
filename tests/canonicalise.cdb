@@ -764,9 +764,9 @@ def test51():
     # then will canonicalise be able to collect terms
     # which differ by index raising/lowering.
     __cdbkernel__=create_scope()
-{a,b,c}::Indices(position=fixed);
-ex:= A^{a}(A) A_{a}(B) + A^{a}(B) A_{a}(A);
-sort_product(_);
+    {a,b,c}::Indices(position=fixed);
+    ex:= A^{a}(A) A_{a}(B) + A^{a}(B) A_{a}(A);
+    sort_product(_);
     canonicalise(_);
     tst:= 2 A^{a}(A) A_{a}(B) - @(ex);
     assert(tst==0)
