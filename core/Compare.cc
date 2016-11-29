@@ -15,6 +15,8 @@
 #include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
+#define DEBUG(ln) ln
+
 int Ex_comparator::offset=0;
 
 int subtree_compare(const Properties *properties, 
@@ -288,7 +290,7 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 		int curdepth=Ex::depth(i1);
 		// std::cerr << tab() << "match at depth " << curdepth << std::endl;
 		match_t mm=compare(i1, i2, first_call, use_props || topdepth!=curdepth, ignore_parent_rel);
-		// std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl;
+//		DEBUG( std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl; )
 		first_call=false;
 		switch(mm) {
 			case match_t::no_match_less:
@@ -367,7 +369,7 @@ std::string Ex_comparator::tab() const
 
 Ex_comparator::match_t Ex_comparator::report(Ex_comparator::match_t r) const
 	{
-	return r;
+//	return r;
 
 	std::cerr << tab() << "result = ";
 	switch(r) {
@@ -404,7 +406,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
 	// 'one' is the substitute pattern, 'two' the expression under consideration.
 	
-	// std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << std::endl;
+	DEBUG( std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << std::endl; )
 
 	if(nobrackets==false && one->fl.bracket != two->fl.bracket) 
 		return report( (one->fl.bracket < two->fl.bracket)?match_t::no_match_less:match_t::no_match_greater );
@@ -563,14 +565,6 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				// both in the same Indices set.
 				
 				if(two->is_rational()==false && !(t1==0 && t2==0)) {
-//					if(t1==0 && t2==0) {
-//						int xc = subtree_compare(0, one, two, -2);
-//						// if xc==0 we need to generate a replacement_match entry; don't return yet!
-//					FIXME: we also need a replacement match for match_index_less!
-//						if(xc>0)  return match_t::match_index_less;
-//						if(xc<0)  return match_t::match_index_greater;
-//						}
-					
 					if( (t1 || t2) && implicit_pattern ) {
 						if(t1 && t2) {
 							if((*t1).set_name != (*t2).set_name) {

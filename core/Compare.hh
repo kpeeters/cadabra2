@@ -189,12 +189,14 @@ class Ex_comparator {
 		Ex_comparator(const Properties&);
 
 		enum class match_t { 
-         node_match=0,            // a single node matches
-			subtree_match=1,         // identical match, including index names
-			match_index_less=2,      // structure match, indices in same set, but different
+         node_match=0,                 // a single node matches
+			subtree_match=1,              // identical match, including index names
+			match_index_less=2,           // structure match, indices in same set, but different names
 			match_index_greater=3,
-			no_match_less=4,         // structural mismatch
-			no_match_greater=5 
+			no_match_indexpos_less=4,     // mismatch but only for index positions
+		   no_match_indexpos_greater=5,
+			no_match_less=6,              // more serious mismatch
+			no_match_greater=7 
 		};
 
 		/// Reset the object for a new match.
