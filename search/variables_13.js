@@ -8,7 +8,7 @@ var searchData=
   ['tab1',['tab1',['../classlr__tensor.html#ae6619aed1a5dff1cd269f018f0f365d3',1,'lr_tensor']]],
   ['tab2',['tab2',['../classlr__tensor.html#a9197db03edf3cd880ad459ea73e3554e',1,'lr_tensor']]],
   ['tabs',['tabs',['../classTableauSymmetry.html#a20c7c5ccf74bf7f9ead5bf4b3f644265',1,'TableauSymmetry']]],
-  ['tau',['Tau',['../Symbols_8cc.html#a97667ccd0a0885b3cc3d31fd79a8ca01',1,'Tau():&#160;Symbols.cc'],['../Symbols_8cc.html#a9bd3f8638bab3f607829794a6339b272',1,'tau():&#160;Symbols.cc']]],
+  ['tau',['tau',['../Symbols_8cc.html#a9bd3f8638bab3f607829794a6339b272',1,'tau():&#160;Symbols.cc'],['../Symbols_8cc.html#a97667ccd0a0885b3cc3d31fd79a8ca01',1,'Tau():&#160;Symbols.cc']]],
   ['tb',['tb',['../classindexsort.html#ab8dd2a4bcf40a7d8d26f7c061d70a356',1,'indexsort::tb()'],['../classyoung__project__tensor.html#a20a0783d54ac40b7d8f44ea08af7a834',1,'young_project_tensor::tb()']]],
   ['temparr',['temparr',['../classcombin_1_1combinations__base.html#a338a3b09e9a59344da59f291b9c04423',1,'combin::combinations_base']]],
   ['tensors',['tensors',['../structexchange_1_1identical__tensors__t.html#a0332376ab0a877aec84ba2dc64c1de8d',1,'exchange::identical_tensors_t']]],

@@ -97,6 +97,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
 <a href="classEx__comparator-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ex_comparator Class Reference<div class="ingroups"><a class="el" href="group__compare.html">Expression comparison</a></div></div>  </div>
@@ -110,12 +111,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:ad5372f4e330c7d12573601a632403674"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a> { <a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674afb2974bbea582ec65619a30968e99b25">node_match</a> =0, 
-<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674affc219d628bca6e4f27dde7d8a8de407">subtree_match</a> =1, 
-<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674ad7c23ecd8594452d819fbef6848015f4">no_match_less</a> =2, 
-<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674aa15b8168ed85a67f789f4d60c66c5bac">no_match_greater</a> =3
+<tr class="memitem:ad5372f4e330c7d12573601a632403674"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a> { <br/>
+&#160;&#160;<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674a6ab8d47d57b37a27d121188fb8990ce9">match_t::node_match</a> =0, 
+<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674a8f7fadf6f6a653fdd28923fa66ec8df5">match_t::subtree_match</a> =1, 
+<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674a5746d6bc760070229acbdfa29b226da0">match_t::match_index_less</a> =2, 
+<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674acee57ff8ba9aa5a49d1bcfda5e392f29">match_t::match_index_greater</a> =3, 
+<br/>
+&#160;&#160;<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674af1a57e8b3833bffadd79a6d1108ec1ed">match_t::no_match_indexpos_less</a> =4, 
+<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674a7eae2f249f19dee408e68c8be9e9f819">match_t::no_match_indexpos_greater</a> =5, 
+<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674a12f8458c3a79b8ff941296e049c20403">match_t::no_match_less</a> =6, 
+<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674ad56ab519304b3db20b3b5fd52c45fcdd">match_t::no_match_greater</a> =7
+<br/>
  }</td></tr>
 <tr class="separator:ad5372f4e330c7d12573601a632403674"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af200349f8c0861e65a9b32de88aa7b37"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37">useprops_t</a> { <a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37af9f90eeaf400d228facde6bc48da5cfb">useprops_t::always</a> =0, 
+<a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37a00d0463a863d42a7dc917e3f8b24be4e">useprops_t::not_at_top</a>, 
+<a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37ac7561db7a418dd39b2201dfe110ab4a4">useprops_t::never</a> =2
+ }</td></tr>
+<tr class="separator:af200349f8c0861e65a9b32de88aa7b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3670fde19741726d14333aa25147ae3"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; <a class="el" href="classEx.html">Ex</a>, <a class="el" href="classEx.html">Ex</a>, <br class="typebreak"/>
 <a class="el" href="classtree__exact__less__no__wildcards__obj.html">tree_exact_less_no_wildcards_obj</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#ab3670fde19741726d14333aa25147ae3">replacement_map_t</a></td></tr>
 <tr class="memdesc:ab3670fde19741726d14333aa25147ae3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map for the replacement of nodes (indices, patterns).  <a href="#ab3670fde19741726d14333aa25147ae3">More...</a><br/></td></tr>
@@ -133,21 +146,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8c8fc7049320633baf10be5c80115d26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a8c8fc7049320633baf10be5c80115d26">clear</a> ()</td></tr>
 <tr class="memdesc:a8c8fc7049320633baf10be5c80115d26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the object for a new match.  <a href="#a8c8fc7049320633baf10be5c80115d26">More...</a><br/></td></tr>
 <tr class="separator:a8c8fc7049320633baf10be5c80115d26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba924c00462046bdca39e2d45e3d9b6a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#aba924c00462046bdca39e2d45e3d9b6a">equal_subtree</a> (Ex::iterator i1, Ex::iterator i2)</td></tr>
-<tr class="memdesc:aba924c00462046bdca39e2d45e3d9b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Match two subtrees taking into account symbol properties.  <a href="#aba924c00462046bdca39e2d45e3d9b6a">More...</a><br/></td></tr>
-<tr class="separator:aba924c00462046bdca39e2d45e3d9b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6db1d27d1e0bebf53c989a24b9045620"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a6db1d27d1e0bebf53c989a24b9045620">equal_subtree</a> (Ex::iterator i1, Ex::iterator i2, <a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37">useprops_t</a> use_props=<a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37af9f90eeaf400d228facde6bc48da5cfb">useprops_t::always</a>, bool ignore_parent_rel=false)</td></tr>
+<tr class="memdesc:a6db1d27d1e0bebf53c989a24b9045620"><td class="mdescLeft">&#160;</td><td class="mdescRight">Match two subtrees taking into account symbol properties.  <a href="#a6db1d27d1e0bebf53c989a24b9045620">More...</a><br/></td></tr>
+<tr class="separator:a6db1d27d1e0bebf53c989a24b9045620"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8925b4f8c759f492eee24a5bc5de57d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#ad8925b4f8c759f492eee24a5bc5de57d">match_subproduct</a> (const <a class="el" href="classEx.html">Ex</a> &amp;, Ex::sibling_iterator <a class="el" href="PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92">lhs</a>, Ex::sibling_iterator tofind, Ex::sibling_iterator st, Ex::iterator conditions)</td></tr>
 <tr class="memdesc:ad8925b4f8c759f492eee24a5bc5de57d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a subproduct in a product.  <a href="#ad8925b4f8c759f492eee24a5bc5de57d">More...</a><br/></td></tr>
 <tr class="separator:ad8925b4f8c759f492eee24a5bc5de57d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc931788e12e3ea3aca24f18462a3384"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#afc931788e12e3ea3aca24f18462a3384">satisfies_conditions</a> (Ex::iterator conditions, std::string &amp;error)</td></tr>
 <tr class="memdesc:afc931788e12e3ea3aca24f18462a3384"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the a match found by calling equal_subtree or match_subproduct satisfies the conditions as stated.  <a href="#afc931788e12e3ea3aca24f18462a3384">More...</a><br/></td></tr>
 <tr class="separator:afc931788e12e3ea3aca24f18462a3384"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcd4680d9b28b020268ef0d96c44cdbe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#abcd4680d9b28b020268ef0d96c44cdbe">should_swap</a> (Ex::iterator obj, int subtree_comparison)</td></tr>
-<tr class="memdesc:abcd4680d9b28b020268ef0d96c44cdbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether two objects should be swapped according to the available <a class="el" href="classSortOrder.html">SortOrder</a> properties.  <a href="#abcd4680d9b28b020268ef0d96c44cdbe">More...</a><br/></td></tr>
-<tr class="separator:abcd4680d9b28b020268ef0d96c44cdbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a972533b614158af77bec9308a7eb6c44"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a972533b614158af77bec9308a7eb6c44">can_swap</a> (Ex::iterator <a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, Ex::iterator two, int subtree_comparison, bool ignore_implicit_indices=false)</td></tr>
-<tr class="memdesc:a972533b614158af77bec9308a7eb6c44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether obj and obj+1 be exchanged? If yes, return the sign, if no return zero.  <a href="#a972533b614158af77bec9308a7eb6c44">More...</a><br/></td></tr>
-<tr class="separator:a972533b614158af77bec9308a7eb6c44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73557bfe159792ea0dbafb4c167e63c5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a73557bfe159792ea0dbafb4c167e63c5">should_swap</a> (Ex::iterator obj, <a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a> subtree_comparison)</td></tr>
+<tr class="memdesc:a73557bfe159792ea0dbafb4c167e63c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether two objects should be swapped according to the available <a class="el" href="classSortOrder.html">SortOrder</a> properties.  <a href="#a73557bfe159792ea0dbafb4c167e63c5">More...</a><br/></td></tr>
+<tr class="separator:a73557bfe159792ea0dbafb4c167e63c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4f6459887b5c6e3793fe061dff8fa2a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#ad4f6459887b5c6e3793fe061dff8fa2a">can_swap</a> (Ex::iterator <a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, Ex::iterator two, <a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a> subtree_comparison, bool ignore_implicit_indices=false)</td></tr>
+<tr class="memdesc:ad4f6459887b5c6e3793fe061dff8fa2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether obj and obj+1 be exchanged? If yes, return the sign, if no return zero.  <a href="#ad4f6459887b5c6e3793fe061dff8fa2a">More...</a><br/></td></tr>
+<tr class="separator:ad4f6459887b5c6e3793fe061dff8fa2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa976f63e1db387918f876aac07937ca8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#aa976f63e1db387918f876aac07937ca8">can_move_adjacent</a> (Ex::iterator prod, Ex::sibling_iterator <a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, Ex::sibling_iterator two, bool fix_one=false)</td></tr>
 <tr class="memdesc:aa976f63e1db387918f876aac07937ca8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine whether object 'one' and 'two' can be moved next to each other by moving either one or the other: if fix_one==true the first node is kept fixed, otherwise the second node is kept fixed.  <a href="#aa976f63e1db387918f876aac07937ca8">More...</a><br/></td></tr>
 <tr class="separator:aa976f63e1db387918f876aac07937ca8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,9 +185,9 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a237353020ebf72edb8f57286211ae281"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a237353020ebf72edb8f57286211ae281">compare</a> (const Ex::iterator &amp;, const Ex::iterator &amp;, bool nobrackets=false)</td></tr>
-<tr class="memdesc:a237353020ebf72edb8f57286211ae281"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal entry point.  <a href="#a237353020ebf72edb8f57286211ae281">More...</a><br/></td></tr>
-<tr class="separator:a237353020ebf72edb8f57286211ae281"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef879930438def5449c1a01b9255b7f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#aef879930438def5449c1a01b9255b7f0">compare</a> (const Ex::iterator &amp;, const Ex::iterator &amp;, bool nobrackets=false, <a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37">useprops_t</a> use_props=<a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37af9f90eeaf400d228facde6bc48da5cfb">useprops_t::always</a>, bool ignore_parent_rel=false)</td></tr>
+<tr class="memdesc:aef879930438def5449c1a01b9255b7f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal entry point.  <a href="#aef879930438def5449c1a01b9255b7f0">More...</a><br/></td></tr>
+<tr class="separator:aef879930438def5449c1a01b9255b7f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3911f45223dc0c0765219e18c37aa43"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#ab3911f45223dc0c0765219e18c37aa43">can_swap_prod_obj</a> (Ex::iterator prod, Ex::iterator obj, bool)</td></tr>
 <tr class="separator:ab3911f45223dc0c0765219e18c37aa43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1422c9be77894230516fa6dbc2cb712d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a1422c9be77894230516fa6dbc2cb712d">can_swap_prod_prod</a> (Ex::iterator prod1, Ex::iterator prod2, bool)</td></tr>
@@ -187,11 +200,20 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:ae3b630b36cfdbeb7ca1ea16bfc86c3bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a08f71e47278b5afcc1f21cdfe4c716e3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a08f71e47278b5afcc1f21cdfe4c716e3">can_swap_ilist_ilist</a> (Ex::iterator obj1, Ex::iterator obj2)</td></tr>
 <tr class="separator:a08f71e47278b5afcc1f21cdfe4c716e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a931853e2bac2106f6e122dcea9255e78"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a931853e2bac2106f6e122dcea9255e78">tab</a> () const </td></tr>
+<tr class="separator:a931853e2bac2106f6e122dcea9255e78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d7ea3822e6d34eb79c2da0762936d20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a8d7ea3822e6d34eb79c2da0762936d20">report</a> (<a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a> r) const </td></tr>
+<tr class="separator:a8d7ea3822e6d34eb79c2da0762936d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:add2d4318ffac5ca7d8fcbb035a670555"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classProperties.html">Properties</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#add2d4318ffac5ca7d8fcbb035a670555">properties</a></td></tr>
 <tr class="separator:add2d4318ffac5ca7d8fcbb035a670555"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:a23b0e9fb326c4319f9457d4a181e131a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html#a23b0e9fb326c4319f9457d4a181e131a">offset</a> =0</td></tr>
+<tr class="separator:a23b0e9fb326c4319f9457d4a181e131a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="ab3670fde19741726d14333aa25147ae3"></a>
@@ -226,20 +248,64 @@ Protected Attributes</h2></td></tr>
 <a class="anchor" id="ad5372f4e330c7d12573601a632403674"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">enum <a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">Ex_comparator::match_t</a></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674afb2974bbea582ec65619a30968e99b25"></a>node_match</em>&#160;</td><td class="fielddoc">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674a6ab8d47d57b37a27d121188fb8990ce9"></a>node_match</em>&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674affc219d628bca6e4f27dde7d8a8de407"></a>subtree_match</em>&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674a8f7fadf6f6a653fdd28923fa66ec8df5"></a>subtree_match</em>&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674ad7c23ecd8594452d819fbef6848015f4"></a>no_match_less</em>&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674a5746d6bc760070229acbdfa29b226da0"></a>match_index_less</em>&#160;</td><td class="fielddoc">
 </td></tr>
-<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674aa15b8168ed85a67f789f4d60c66c5bac"></a>no_match_greater</em>&#160;</td><td class="fielddoc">
+<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674acee57ff8ba9aa5a49d1bcfda5e392f29"></a>match_index_greater</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674af1a57e8b3833bffadd79a6d1108ec1ed"></a>no_match_indexpos_less</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674a7eae2f249f19dee408e68c8be9e9f819"></a>no_match_indexpos_greater</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674a12f8458c3a79b8ff941296e049c20403"></a>no_match_less</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="ad5372f4e330c7d12573601a632403674ad56ab519304b3db20b3b5fd52c45fcdd"></a>no_match_greater</em>&#160;</td><td class="fielddoc">
+</td></tr>
+</table>
+
+</div>
+</div>
+<a class="anchor" id="af200349f8c0861e65a9b32de88aa7b37"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37">Ex_comparator::useprops_t</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><em><a class="anchor" id="af200349f8c0861e65a9b32de88aa7b37af9f90eeaf400d228facde6bc48da5cfb"></a>always</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="af200349f8c0861e65a9b32de88aa7b37a00d0463a863d42a7dc917e3f8b24be4e"></a>not_at_top</em>&#160;</td><td class="fielddoc">
+</td></tr>
+<tr><td class="fieldname"><em><a class="anchor" id="af200349f8c0861e65a9b32de88aa7b37ac7561db7a418dd39b2201dfe110ab4a4"></a>never</em>&#160;</td><td class="fielddoc">
 </td></tr>
 </table>
 
@@ -303,7 +369,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a972533b614158af77bec9308a7eb6c44"></a>
+<a class="anchor" id="ad4f6459887b5c6e3793fe061dff8fa2a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -322,7 +388,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td>
           <td class="paramname"><em>subtree_comparison</em>, </td>
         </tr>
         <tr>
@@ -596,7 +662,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a237353020ebf72edb8f57286211ae281"></a>
+<a class="anchor" id="aef879930438def5449c1a01b9255b7f0"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -619,7 +685,19 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>nobrackets</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>nobrackets</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37">useprops_t</a>&#160;</td>
+          <td class="paramname"><em>use_props</em> = <code><a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37af9f90eeaf400d228facde6bc48da5cfb">useprops_t::always</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignore_parent_rel</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -639,7 +717,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aba924c00462046bdca39e2d45e3d9b6a"></a>
+<a class="anchor" id="a6db1d27d1e0bebf53c989a24b9045620"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -653,7 +731,19 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">Ex::iterator&#160;</td>
-          <td class="paramname"><em>i2</em>&#160;</td>
+          <td class="paramname"><em>i2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37">useprops_t</a>&#160;</td>
+          <td class="paramname"><em>use_props</em> = <code><a class="el" href="classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37af9f90eeaf400d228facde6bc48da5cfb">useprops_t::always</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignore_parent_rel</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -664,7 +754,7 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Match two subtrees taking into account symbol properties. </p>
-<p>Return subtree_match or one of the no_match results. You need to fill lhs_contains_dummies before calling! </p>
+<p>Return subtree_match or one of the no_match results. You need to fill lhs_contains_dummies before calling! If use_props is false, it will not try to fetch any property information at the TOP level of the comparison. <a class="el" href="classProperties.html" title="Class holding a collection of properties attached to expressions. ">Properties</a> will always be used at levels. </p>
 
 </div>
 </div>
@@ -715,6 +805,30 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a8d7ea3822e6d34eb79c2da0762936d20"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">Ex_comparator::match_t</a> Ex_comparator::report </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">Ex_comparator::match_t</a>&#160;</td>
+          <td class="paramname"><em>r</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afc931788e12e3ea3aca24f18462a3384"></a>
 <div class="memitem">
 <div class="memproto">
@@ -744,7 +858,7 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abcd4680d9b28b020268ef0d96c44cdbe"></a>
+<a class="anchor" id="a73557bfe159792ea0dbafb4c167e63c5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -757,7 +871,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype"><a class="el" href="classEx__comparator.html#ad5372f4e330c7d12573601a632403674">match_t</a>&#160;</td>
           <td class="paramname"><em>subtree_comparison</em>&#160;</td>
         </tr>
         <tr>
@@ -769,6 +883,29 @@ Protected Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Determine whether two objects should be swapped according to the available <a class="el" href="classSortOrder.html">SortOrder</a> properties. </p>
+
+</div>
+</div>
+<a class="anchor" id="a931853e2bac2106f6e122dcea9255e78"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Ex_comparator::tab </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -829,6 +966,26 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a23b0e9fb326c4319f9457d4a181e131a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Ex_comparator::offset =0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="add2d4318ffac5ca7d8fcbb035a670555"></a>
 <div class="memitem">
 <div class="memproto">
@@ -880,7 +1037,7 @@ Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 21 2016 20:47:48 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Nov 30 2016 12:14:21 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

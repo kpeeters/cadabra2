@@ -41,6 +41,7 @@ var searchData=
   ['algorithms',['Algorithms',['../group__algorithms.html',1,'']]],
   ['all_5fcells_5fnonrunning',['all_cells_nonrunning',['../classcadabra_1_1ComputeThread.html#acd23922c0b8e15be80d69005aa515b92',1,'cadabra::ComputeThread']]],
   ['alpha',['Alpha',['../Symbols_8cc.html#a25f5b9f61f6132e1e46c2859efe1cd90',1,'Alpha():&#160;Symbols.cc'],['../Symbols_8cc.html#af9760ca31a32b75163d32402eab4ece8',1,'alpha():&#160;Symbols.cc']]],
+  ['always',['always',['../classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37af9f90eeaf400d228facde6bc48da5cfb',1,'Ex_comparator']]],
   ['anticomm',['anticomm',['../classorder.html#a4589707811f88460f56f2987ab1498b4',1,'order']]],
   ['anticommuting',['AntiCommuting',['../classAntiCommuting.html',1,'']]],
   ['anticommuting_2ecc',['AntiCommuting.cc',['../AntiCommuting_8cc.html',1,'']]],

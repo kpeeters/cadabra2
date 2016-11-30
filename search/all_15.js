@@ -24,6 +24,7 @@ var searchData=
   ['use_5fgeneralised_5fdelta_5f',['use_generalised_delta_',['../classjoin__gamma.html#ac39c827ac5a36fee40b5977bbdbb5e24',1,'join_gamma']]],
   ['use_5frule',['use_rule',['../classsubstitute.html#a4250db75a16a745f9a067be2b91ed49f',1,'substitute']]],
   ['useconds',['useconds',['../classstopwatch.html#aa50af230c1bab94f32fac3b8f0ac20dd',1,'stopwatch']]],
+  ['useprops_5ft',['useprops_t',['../classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37',1,'Ex_comparator']]],
   ['user_5fid',['user_id',['../classsnoop_1_1Snoop_1_1AppEntry.html#a5b58a09cf90c5bb4b41be268f658f6d8',1,'snoop::Snoop::AppEntry']]],
   ['utf8_5foutput',['utf8_output',['../classDisplayTeX.html#a11652bb935ec0f1c18a564b489bedb0f',1,'DisplayTeX']]],
   ['uuid',['uuid',['../classServer_1_1Connection.html#a93a4df5516566bbea3c92724a7d65bf2',1,'Server::Connection::uuid()'],['../classsnoop_1_1Snoop_1_1AppEntry.html#ab9e8d331069c8f1824adbc2ed12773b8',1,'snoop::Snoop::AppEntry::uuid()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#ad903802f4239b5e382d8ecc778e26589',1,'snoop::Snoop::LogEntry::uuid()']]]

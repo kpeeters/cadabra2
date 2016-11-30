@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nbsp',['nbsp',['../DisplayTeX_8cc.html#a58ae5ce24687c5ae93754cccf558be8e',1,'DisplayTeX.cc']]]
+  ['loc',['LOC',['../Snoop_8hh.html#a0fee446a4a4ef6536664bc1ff47ff694',1,'Snoop.hh']]]
 ];

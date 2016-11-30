@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weight_5fcond',['weight_cond',['../classcombin_1_1combinations__base.html#af822cc3932fd5caa382a4b6d3e577c16',1,'combin::combinations_base']]]
+  ['useprops_5ft',['useprops_t',['../classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37',1,'Ex_comparator']]]
 ];

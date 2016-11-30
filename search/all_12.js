@@ -48,6 +48,7 @@ var searchData=
   ['replace_5fmatch_2ehh',['replace_match.hh',['../replace__match_8hh.html',1,'']]],
   ['replacement_5fmap',['replacement_map',['../classEx__comparator.html#a16b4cbb194afdce75e2e31fc01e48037',1,'Ex_comparator']]],
   ['replacement_5fmap_5ft',['replacement_map_t',['../classEx__comparator.html#ab3670fde19741726d14333aa25147ae3',1,'Ex_comparator']]],
+  ['report',['report',['../classEx__comparator.html#a8d7ea3822e6d34eb79c2da0762936d20',1,'Ex_comparator']]],
   ['report_5fprogress',['report_progress',['../classAlgorithm.html#a314bc7bb881fbf49a6b2c567fd7e2b18',1,'Algorithm']]],
   ['report_5fprogress_5fstopwatch',['report_progress_stopwatch',['../classAlgorithm.html#a325a93c61dfda552fb60ca33244ca9a7',1,'Algorithm']]],
   ['repr_5f',['repr_',['../classProperty.html#a5c6e192308ece5901f9871bc37fabd2d',1,'Property']]],

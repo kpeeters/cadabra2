@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['tab',['tab',['../classEx__comparator.html#a931853e2bac2106f6e122dcea9255e78',1,'Ex_comparator']]],
   ['tab_5fbasics',['tab_basics',['../classtab__basics.html#a54cdec91f50e1d899b308ef9a1d85734',1,'tab_basics']]],
   ['tableau_5fbase',['tableau_base',['../classyngtab_1_1tableau__base.html#a7d0aea171e9f2d732ebd2b8caf6f883c',1,'yngtab::tableau_base']]],
   ['tabs_5fto_5fsinglet_5frules',['tabs_to_singlet_rules',['../classtab__basics.html#ad443a16489658e55f6ed7cc1aac92b2f',1,'tab_basics']]],

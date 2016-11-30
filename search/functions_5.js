@@ -9,7 +9,7 @@ var searchData=
   ['end_5findex',['end_index',['../classAlgorithm.html#a60851756e1d2c887b9bc6b044690e092',1,'Algorithm']]],
   ['entry_5faccepted',['entry_accepted',['../classcombin_1_1combinations__base.html#a45a4ab66e347838a4f04a2d0b20c7fa0',1,'combin::combinations_base']]],
   ['epsilon_5fto_5fdelta',['epsilon_to_delta',['../classepsilon__to__delta.html#aa5f41b0fc38297d564addb0df2b844b6',1,'epsilon_to_delta']]],
-  ['equal_5fsubtree',['equal_subtree',['../classEx__comparator.html#aba924c00462046bdca39e2d45e3d9b6a',1,'Ex_comparator']]],
+  ['equal_5fsubtree',['equal_subtree',['../classEx__comparator.html#a6db1d27d1e0bebf53c989a24b9045620',1,'Ex_comparator']]],
   ['equal_5fwithout_5fnumbers',['equal_without_numbers',['../classAlgorithm.html#a3911d0e8527cf2d41d076d11590284a4',1,'Algorithm']]],
   ['equals',['equals',['../classproperty.html#a671377512ffb3fe8b9e7688ab7c17492',1,'property::equals()'],['../classCommutingBehaviour.html#ae79800f708da4edb22463d5660e7e279',1,'CommutingBehaviour::equals()'],['../classIndices.html#a84296f34c0eb3a06915b7a240141c996',1,'Indices::equals()'],['../classSortOrder.html#aa0819efbf167ca92270b2342e4643d6d',1,'SortOrder::equals()']]],
   ['equation_5fby_5fname',['equation_by_name',['../classEx.html#a571dae79145172b96c28f234fb6540de',1,'Ex::equation_by_name(nset_t::iterator it) const '],['../classEx.html#ad54e7c6d6585d8f67620f389e4e14234',1,'Ex::equation_by_name(nset_t::iterator it, unsigned int &amp;) const ']]],

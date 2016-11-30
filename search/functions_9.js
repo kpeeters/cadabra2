@@ -39,6 +39,7 @@ var searchData=
   ['is_5fdigits_5f',['is_digits_',['../classpreprocessor.html#a5dedb01138ea15c41e4cf5b3e8d21d6e',1,'preprocessor']]],
   ['is_5ffactorlike',['is_factorlike',['../classAlgorithm.html#a39f52c31b9eeaa8a1648d19f894019c8',1,'Algorithm']]],
   ['is_5fidentity',['is_identity',['../classstr__node.html#a549469a81db3e073d4efb52fddf55384',1,'str_node']]],
+  ['is_5fin',['is_in',['../Storage_8hh.html#a7a636cd75b6dc37e570036df2f7f399b',1,'Storage.hh']]],
   ['is_5findex',['is_index',['../classindex__iterator.html#a43bee12d5318e171140824d44eee0ffa',1,'index_iterator::is_index()'],['../classstr__node.html#ad1cd8fce2721c51a4f6b66da255728e4',1,'str_node::is_index()']]],
   ['is_5findexplus_5fwildcard',['is_indexplus_wildcard',['../classstr__node.html#a2f794b1d82352d3fb0dc2efd184a8365',1,'str_node']]],
   ['is_5findexstar_5fwildcard',['is_indexstar_wildcard',['../classstr__node.html#a540686efc35fcf121201e3d7852f79f1',1,'str_node']]],

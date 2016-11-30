@@ -30,6 +30,8 @@ var searchData=
   ['make_5fx_5fand_5finject_5fy',['make_x_and_inject_y',['../ptest_8cc.html#a87a58683149353edf4ee2fa9ab715f61',1,'ptest.cc']]],
   ['master_5finsert',['master_insert',['../classProperties.html#a0d54a20c7052dac5d2dc362276f98a76',1,'Properties']]],
   ['match',['match',['../classpattern.html#ad3ef1fbd9c892f506eeceae5109f11e1',1,'pattern']]],
+  ['match_5findex_5fgreater',['match_index_greater',['../classEx__comparator.html#ad5372f4e330c7d12573601a632403674acee57ff8ba9aa5a49d1bcfda5e392f29',1,'Ex_comparator']]],
+  ['match_5findex_5fless',['match_index_less',['../classEx__comparator.html#ad5372f4e330c7d12573601a632403674a5746d6bc760070229acbdfa29b226da0',1,'Ex_comparator']]],
   ['match_5fsubproduct',['match_subproduct',['../classEx__comparator.html#ad8925b4f8c759f492eee24a5bc5de57d',1,'Ex_comparator']]],
   ['match_5ft',['match_t',['../classEx__comparator.html#ad5372f4e330c7d12573601a632403674',1,'Ex_comparator::match_t()'],['../classproperty.html#a802ab9406d3e66849282bcb9c2d50a2d',1,'property::match_t()']]],
   ['matrix',['Matrix',['../classMatrix.html',1,'']]],

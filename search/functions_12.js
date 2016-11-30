@@ -18,6 +18,7 @@ var searchData=
   ['rename_5freplacement_5fdummies',['rename_replacement_dummies',['../classAlgorithm.html#a6daf6ecadfd6f8b20277bd1daa9ab839',1,'Algorithm']]],
   ['replace_5findex',['replace_index',['../classEx.html#aefac2708c5f2a4641353e1a1ee47a45d',1,'Ex']]],
   ['replace_5fmatch',['replace_match',['../classreplace__match.html#a3a5b77298719ee02216f301d04c42b32',1,'replace_match']]],
+  ['report',['report',['../classEx__comparator.html#a8d7ea3822e6d34eb79c2da0762936d20',1,'Ex_comparator']]],
   ['report_5fprogress',['report_progress',['../classAlgorithm.html#a314bc7bb881fbf49a6b2c567fd7e2b18',1,'Algorithm']]],
   ['repr_5f',['repr_',['../classProperty.html#a5c6e192308ece5901f9871bc37fabd2d',1,'Property']]],
   ['reset',['reset',['../classstopwatch.html#a68a314e2c797624fa84cfd44eac0310a',1,'stopwatch']]],
