@@ -15,6 +15,9 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\int", "Integral" },
 		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },
+		{"\\exp", "exp" },
+
+		{"\\infty", "sympy.oo"},
 
 		{"\\alpha",   "alpha" },
 		{"\\beta",    "bbeta" },  // beta seems to be reserved

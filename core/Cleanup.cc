@@ -62,8 +62,10 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 			}
 		// std::cerr << "diagonal " << changed << std::endl;
 		
+		//std::cerr << "Is symbol " << Ex(it) << " a KD?" << std::endl;
 		const KroneckerDelta *kr = kernel.properties.get<KroneckerDelta>(it);
 		if(kr) {
+			//std::cerr << "Symbol " << Ex(it) << " is a KD" << std::endl;
 			res = cleanup_kronecker(kernel, tr, it);
 			changed = changed || res;
 			}

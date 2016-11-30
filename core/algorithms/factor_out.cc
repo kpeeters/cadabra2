@@ -65,7 +65,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				--next;
 				for(size_t i=0; i<to_factor_out.size(); ++i) {
 					auto match=comparator.equal_subtree(fac, to_factor_out[i].begin());
-					if(match==Ex_comparator::subtree_match) {
+					if(match==Ex_comparator::match_t::subtree_match) {
 						int sign=comparator.can_move_adjacent(prod, dummy, fac, false);
 						if(sign!=0) {
 							collector.append_child(collector.begin(), iterator(fac));
@@ -85,7 +85,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				++next;
 				for(size_t i=0; i<to_factor_out.size(); ++i) {
 					auto match=comparator.equal_subtree(fac, to_factor_out[i].begin());
-					if(match==Ex_comparator::subtree_match) {
+					if(match==Ex_comparator::match_t::subtree_match) {
 						int sign=comparator.can_move_adjacent(prod, dummy, fac, true);
 						if(sign!=0) {
 							collector.append_child(collector.begin(), iterator(fac));

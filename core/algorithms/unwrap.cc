@@ -140,7 +140,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					int sign=1;
 					if(factor!=tr.begin(derarg)) {
 						Ex_comparator compare(kernel.properties);
-						sign=compare.can_swap(tr.begin(derarg),factor,2);
+						sign=compare.can_swap(tr.begin(derarg),factor,Ex_comparator::match_t::no_match_less);
 						}
 					
 					res=result_t::l_applied;

@@ -87,28 +87,23 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 		return true;
 		}
 
-	// Cases without range wildcard.
-//	if(obj.number_of_children(obj.begin())>0)
-//		std::cerr << "comparing: " << ignore_parent_rel << "\n" << Ex(it) << " " << obj << std::endl;
-//	Ex::print_recursive_treeform(txtout, it);
-//	Ex::print_recursive_treeform(txtout, obj.begin());
+	// Cases without range wildcard.  Compare making full use of
+	// property information. Note the order of the arguments to
+	// 'equal_subtree': the first argument is supposed to be a
+	// pattern, the second an expression which is to be matched.
+	
+	Ex_comparator comp(properties);
+	Ex_comparator::match_t res=comp.equal_subtree(obj.begin(), it, 
+																 Ex_comparator::useprops_t::not_at_top, 
+																 ignore_parent_rel);
 
+	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
 
-	// This does not work, because it does not flip parent rels (disabled for a reason?)
-	// FIXME: fix logic for subtree/Ex_compare usage.
-//	std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
-	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
-	//std::cerr << res << std::endl;
-
-	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
-	// because Ex_comparator tries to fetch property information which then gets back here.
-	// Ex_comparator comp(properties);
-	// int res=comp.equal_subtree(it, obj.begin());
-
-	//txtout << res << std::endl;
-	if(abs(res)<=1) {
-//		if(obj.number_of_children(obj.begin())>0)
-//			std::cerr << "match!" << std::endl;
+	if(is_in(res, 
+				 { Ex_comparator::match_t::subtree_match,
+				   Ex_comparator::match_t::match_index_less,
+				   Ex_comparator::match_t::match_index_greater,
+					Ex_comparator::match_t::node_match } )) {
 		return true;
 		}
 
