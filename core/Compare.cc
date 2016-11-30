@@ -16,8 +16,8 @@
 #include "properties/SortOrder.hh"
 
 // In order to enable/disable debug output, also flip the swith in 'report' below.
-#define DEBUG(ln) ln
-//#define DEBUG(ln)
+//#define DEBUG(ln) ln
+#define DEBUG(ln)
 
 int Ex_comparator::offset=0;
 
@@ -387,7 +387,7 @@ std::string Ex_comparator::tab() const
 
 Ex_comparator::match_t Ex_comparator::report(Ex_comparator::match_t r) const
 	{
-//	return r;
+	return r;
 
 	std::cerr << tab() << "result = ";
 	switch(r) {
@@ -456,9 +456,12 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	else if(is_index && one->is_integer()==false) {
 		// Things in _{..} or ^{..} are either indices (implicit patterns) or coordinates.
 		const Coordinate *cdn1=0;
-		if(use_props==useprops_t::always) 
+		if(use_props==useprops_t::always) {
+			DEBUG( std::cerr << tab() << "is " << *one->name << " a coordinate?" << std::endl; );
 			cdn1=properties.get<Coordinate>(one, true);
-
+			DEBUG( std::cerr << tab() << cdn1 << std::endl; );
+			}
+			
 		if(cdn1==0)
 			implicit_pattern=true;
 		else
@@ -484,8 +487,11 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// Determine whether 'one' can take the value 'two'.
 			//std::cerr << "**** can one take value two " << use_props  << std::endl;
 			const Integer *ip = 0;
-			if(use_props==useprops_t::always)
+			if(use_props==useprops_t::always) {
+				DEBUG( std::cerr << tab() << "is " << *one->name << " an integer?" << std::endl; );
 				ip = properties.get<Integer>(one, true); // 'true' to ignore parent rel.
+				DEBUG( std::cerr << tab() << ip << std::endl; );
+				}
 
 			if(ip==0) return report(match_t::no_match_less);
 
@@ -565,9 +571,13 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				const Indices *t1=0;
 				const Indices *t2=0;
 				if(use_props==useprops_t::always) {
+					DEBUG( std::cerr << tab() << "is " << *one->name << " an index?" << std::endl; )
 					t1=properties.get<Indices>(one, false);
+					DEBUG( std::cerr << tab() << t1 << std::endl; );
 					if(two->is_rational()==false) {
+						DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; )
 						t2=properties.get<Indices>(two, false);
+						DEBUG( std::cerr << tab() << t2 << std::endl; );
 						}
 					else
 						t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.
@@ -582,9 +592,11 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 
 				if(!ignore_parent_rel) 
 					if(t1==0 || t2==0 || (t1->position_type!=Indices::free && t2->position_type!=Indices::free))
-						if(one->fl.parent_rel != two->fl.parent_rel)                
+						if(one->fl.parent_rel != two->fl.parent_rel) {               
+							DEBUG( std::cerr << tab() << "parent_rels not the same" << std::endl;);
 							return report( (one->fl.parent_rel < two->fl.parent_rel)
 												?match_t::no_match_indexpos_less:match_t::no_match_indexpos_greater );
+							}
 			
 				// If both indices have no Indices property, compare them by name and pretend they are
 				// both in the same Indices set.
@@ -671,8 +683,11 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 		}
 	else if(is_coordinate || is_number) { // Check if the coordinate can come from an index. 
 		const Indices *t2=0;
-		if(use_props==useprops_t::always)
+		if(use_props==useprops_t::always) {
+			DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; )
 			t2=properties.get<Indices>(two, true);
+			DEBUG( std::cerr << tab() << t2 << std::endl; );
+			}
 
 		if(t2) {
 			// std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
@@ -680,10 +695,14 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			// that the parent relation matches!
 
 			if(!ignore_parent_rel)
-				if(t2->position_type==Indices::fixed || t2->position_type==Indices::independent) 
-					return report( (one->fl.parent_rel < two->fl.parent_rel)
-										?match_t::no_match_indexpos_less:match_t::no_match_indexpos_greater );
-			
+				if(t2->position_type==Indices::fixed || t2->position_type==Indices::independent) {
+					if( one->fl.parent_rel != two->fl.parent_rel ) {
+						DEBUG( std::cerr << tab() << "parent_rels not the same" << std::endl;);
+						return report( (one->fl.parent_rel < two->fl.parent_rel)
+											?match_t::no_match_indexpos_less:match_t::no_match_indexpos_greater );
+						}
+					}
+
 			// Look through values attribute of Indices object to see if the 'two' index
 			// can take the 'one' value. 
 
