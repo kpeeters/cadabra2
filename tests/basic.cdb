@@ -242,3 +242,16 @@ def test30():
 test30()
 
 
+def test31():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    {m,n}::Integer(0..3).
+    g_{m}^{n}::KroneckerDelta;
+    g_{m n}::Metric;
+    ex:= g_{0 0} + g_{0}^{0};
+    substitute(_, $g_{m n} = h_{m n}$)
+    tst:= h_{0 0} + 1 - @(ex);
+    assert(tst==0)
+
+test31()
+
