@@ -356,31 +356,19 @@ test24()
 # FIXME: this already gives zero at rename_dummies, is that correct?
 
 def test25():
-   __cdbkernel__=create_scope()
-   \diff{#}::PartialDerivative.
-   {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector,position=fixed).
-   obj25:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
-   canonicalise(_)
-   tst25:= \diff{g_{m n}}_{p} * \diff{g_{r s}}_{p} * T^{m n r s} - @(obj25);
-   rename_dummies(_)
-   assert(tst25==0)
-   print('Test 25 passed')
+    __cdbkernel__=create_scope()
+    \diff{#}::PartialDerivative.
+    {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector,position=fixed).
+    g^{m n}::Symmetric;
+    obj25:= g^{p q} \diff{g_{m n}}_{p} \diff{g_{r s}}_{q} T^{r s m n};
+    canonicalise(_)
+    tst25:= g^{p q} \diff{g_{m n}}_{p} \diff{g_{r s}}_{q} * T^{m n r s} - @(obj25);
+    rename_dummies(_)
+    assert(tst25==0)
+    print('Test 25 passed')
    
 test25()
 
-def test26():
-   __cdbkernel__=create_scope()
-   \diff{#}::PartialDerivative.
-   {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector, position=fixed).
-   obj26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{r s m n};
-   canonicalise(_)
-   tst26:= \diff{g_{m n}}_{p} \diff{g_{r s}}_{p} T^{m n r s} - @(obj26);
-   rename_dummies(_)
-   collect_terms(_)
-   assert(tst26==0)
-   print('Test 26 passed')
-   
-test26()
 
 # Test 27 & 28: spinors and anti-commuting objects
 #

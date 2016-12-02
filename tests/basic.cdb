@@ -255,3 +255,14 @@ def test31():
 
 test31()
 
+def test32():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    ex1:= A_{m} A^{m};
+    try:
+        ex2:= A_{m} A_{m};
+        assert(1==0)
+    except:
+        print('Test 32 passed')
+
+test32()

@@ -417,6 +417,7 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
    // cleanup of nested sums and products.
 	pre_clean_dispatch_deep(*get_kernel_from_scope(), *ptr);
 	cleanup_dispatch_deep(*get_kernel_from_scope(), *ptr);
+	check_index_consistency(*get_kernel_from_scope(), *ptr, (*ptr).begin());
 	call_post_process(*ptr);
 	//	std::cerr << "cleaned up" << std::endl;
 
@@ -583,6 +584,7 @@ std::string print_tree(Ex *ex)
  
 PyObject *ParseExceptionType = NULL;
 PyObject *ArgumentExceptionType = 0;
+PyObject *ConsistencyExceptionType = 0;
 PyObject *NonScalarExceptionType = NULL;
 PyObject *InternalErrorType = NULL;
 
@@ -610,6 +612,17 @@ void translate_ArgumentException(const ArgumentException& x)
 	
 //    PyErr_SetString(ArgumentExceptionType, x.what());
 	PyErr_SetObject(ArgumentExceptionType, exc.ptr()); //exc_t.ptr());
+	}
+
+void translate_ConsistencyException(const ConsistencyException& x) 
+	{
+	assert(ConsistencyExceptionType != 0);
+	boost::python::object exc(x); // wrap the C++ exception
+//	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));
+//	exc_t.attr("cause") = exc; // add the wrapped exception to the Python exception
+	
+//    PyErr_SetString(ArgumentExceptionType, x.what());
+	PyErr_SetObject(ConsistencyExceptionType, exc.ptr()); //exc_t.ptr());
 	}
 
 void translate_ParseException(const ParseException &e)
@@ -1350,6 +1363,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// create a _separate_ C++ object with the same name and a Python
 	// wrapper around that. The problem is that PyErr_NewException produces
 	// a PyObject but that is not related to the C++ object.
+
+	ConsistencyExceptionType=createExceptionClass("ConsistencyException");
+	class_<ConsistencyException> pyConsistencyException("ConsistencyException", init<std::string>());
+	pyConsistencyException.def("__str__", &ConsistencyException::what);
+	register_exception_translator<ConsistencyException>(&translate_ConsistencyException);
 
 	ArgumentExceptionType=createExceptionClass("ArgumentException");
 	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());

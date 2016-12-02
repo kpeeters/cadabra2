@@ -76,6 +76,13 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 //	std::cerr << Ex(it) << std::endl;
 	}
 
+void check_index_consistency(const Kernel& k, Ex& tr, Ex::iterator it)
+	{
+	if(it==tr.end()) return;
+	collect_terms ct(k, tr);
+	ct.check_index_consistency(it);
+	}
+
 bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	bool ret=false;
