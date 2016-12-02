@@ -266,3 +266,25 @@ def test32():
         print('Test 32 passed')
 
 test32()
+
+def test33():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    try:
+        ex:= A_{m n} + A_{m};
+        assert(1==0)
+    except:
+        print('Test 33 passed')
+
+test33()
+
+def test34():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    try:
+        ex:= A_{m n} A^{m} B_{m};
+        assert(1==0)
+    except:
+        print('Test 34 passed')
+
+test34()
