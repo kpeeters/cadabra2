@@ -23,7 +23,7 @@ var searchData=
   ['cell_5ftoggle_5fvisibility',['cell_toggle_visibility',['../classcadabra_1_1NotebookWindow.html#ab894b17030833ef9feda2a94938803b0',1,'cadabra::NotebookWindow']]],
   ['changed_5fstate',['changed_state',['../classEx.html#ace4f2ee392de2b723745259bb087295e',1,'Ex']]],
   ['check_5fconsistency',['check_consistency',['../classAlgorithm.html#a36d0e79228d64531eaca39046f85828b',1,'Algorithm']]],
-  ['check_5findex_5fconsistency',['check_index_consistency',['../classAlgorithm.html#aca1ff8d3801d43a8ee0f5f8056981c17',1,'Algorithm']]],
+  ['check_5findex_5fconsistency',['check_index_consistency',['../classAlgorithm.html#aca1ff8d3801d43a8ee0f5f8056981c17',1,'Algorithm::check_index_consistency()'],['../Cleanup_8cc.html#a88e844cef07e88c72084999fea1d2244',1,'check_index_consistency(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc'],['../Cleanup_8hh.html#a88e844cef07e88c72084999fea1d2244',1,'check_index_consistency(const Kernel &amp;k, Ex &amp;tr, Ex::iterator it):&#160;Cleanup.cc']]],
   ['checkin',['checkin',['../classcadabra_1_1TeXEngine.html#ac0da282550eb4dcb5eeb3559066fceed',1,'cadabra::TeXEngine']]],
   ['checkout',['checkout',['../classcadabra_1_1TeXEngine.html#a8ab25e7e8d79c3b328d6e97cc8b21473',1,'cadabra::TeXEngine']]],
   ['checkout_5fall',['checkout_all',['../classcadabra_1_1TeXEngine.html#a6a3a81114a06637f1e24dbafeee9bbe2',1,'cadabra::TeXEngine']]],

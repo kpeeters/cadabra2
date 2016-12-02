@@ -20,6 +20,7 @@ var searchData=
   ['total_5fdimension',['total_dimension',['../classyngtab_1_1tableaux.html#ae70f5bdc21f90b90cb86b39a12d9161e',1,'yngtab::tableaux']]],
   ['total_5fpermutations',['total_permutations',['../classcombin_1_1combinations__base.html#a084f11337e87a57fa649d56f92fd92d6',1,'combin::combinations_base']]],
   ['translate_5fargumentexception',['translate_ArgumentException',['../PythonCdb_8cc.html#abd1e248b6386a794b8864bdc1e06b709',1,'PythonCdb.cc']]],
+  ['translate_5fconsistencyexception',['translate_ConsistencyException',['../PythonCdb_8cc.html#a43d75187ebdf25289ef87240a2d0ee7c',1,'PythonCdb.cc']]],
   ['translate_5finternalerror',['translate_InternalError',['../PythonCdb_8cc.html#aa8295e68aa959a2799038598172215e4',1,'PythonCdb.cc']]],
   ['translate_5fnonscalarexception',['translate_NonScalarException',['../PythonCdb_8cc.html#af1a5442f7e8fca0e50293d7f343ffc92',1,'PythonCdb.cc']]],
   ['translate_5fparseexception',['translate_ParseException',['../PythonCdb_8cc.html#a381c20ab5d72688caa9ccbd9dadf8d68',1,'PythonCdb.cc']]],

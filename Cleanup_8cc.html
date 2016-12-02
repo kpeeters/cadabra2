@@ -113,6 +113,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a196920defc7d1e125b56dbe8baabc21f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a196920defc7d1e125b56dbe8baabc21f">cleanup_dispatch</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;kernel, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
 <tr class="memdesc:a196920defc7d1e125b56dbe8baabc21f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Central cleanup dispatch routine, which calls the other cleanup functions defined later.  <a href="#a196920defc7d1e125b56dbe8baabc21f">More...</a><br/></td></tr>
 <tr class="separator:a196920defc7d1e125b56dbe8baabc21f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88e844cef07e88c72084999fea1d2244"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a88e844cef07e88c72084999fea1d2244">check_index_consistency</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
+<tr class="memdesc:a88e844cef07e88c72084999fea1d2244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic tool to check for index inconsistencies independent of running any algorithm.  <a href="#a88e844cef07e88c72084999fea1d2244">More...</a><br/></td></tr>
+<tr class="separator:a88e844cef07e88c72084999fea1d2244"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f15df056756c26b14bec550fda0ada2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a9f15df056756c26b14bec550fda0ada2">cleanup_productlike</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
 <tr class="memdesc:a9f15df056756c26b14bec550fda0ada2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Individual node cleanup routines.  <a href="#a9f15df056756c26b14bec550fda0ada2">More...</a><br/></td></tr>
 <tr class="separator:a9f15df056756c26b14bec550fda0ada2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,6 +141,40 @@ Functions</h2></td></tr>
 <tr class="separator:a511a512e206a148f333e7dffc557f4bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a88e844cef07e88c72084999fea1d2244"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void check_index_consistency </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generic tool to check for index inconsistencies independent of running any algorithm. </p>
+
+</div>
+</div>
 <a class="anchor" id="af5364bd8a80ead9df3ba31ad6ba6d4ae"></a>
 <div class="memitem">
 <div class="memproto">
@@ -506,7 +543,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 30 2016 12:14:15 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 2 2016 22:39:50 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

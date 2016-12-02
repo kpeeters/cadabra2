@@ -288,6 +288,8 @@ Functions</h2></td></tr>
 <tr class="separator:aaaa2fd40b08f8958535c9a94a466347a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd1e248b6386a794b8864bdc1e06b709"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#abd1e248b6386a794b8864bdc1e06b709">translate_ArgumentException</a> (const <a class="el" href="classArgumentException.html">ArgumentException</a> &amp;x)</td></tr>
 <tr class="separator:abd1e248b6386a794b8864bdc1e06b709"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43d75187ebdf25289ef87240a2d0ee7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a43d75187ebdf25289ef87240a2d0ee7c">translate_ConsistencyException</a> (const <a class="el" href="classConsistencyException.html">ConsistencyException</a> &amp;x)</td></tr>
+<tr class="separator:a43d75187ebdf25289ef87240a2d0ee7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a381c20ab5d72688caa9ccbd9dadf8d68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a381c20ab5d72688caa9ccbd9dadf8d68">translate_ParseException</a> (const <a class="el" href="classParseException.html">ParseException</a> &amp;e)</td></tr>
 <tr class="separator:a381c20ab5d72688caa9ccbd9dadf8d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1a5442f7e8fca0e50293d7f343ffc92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af1a5442f7e8fca0e50293d7f343ffc92">translate_NonScalarException</a> (const <a class="el" href="classNonScalarException.html">NonScalarException</a> &amp;e)</td></tr>
@@ -347,6 +349,8 @@ Variables</h2></td></tr>
 <tr class="separator:ae98b2e345ddb18d03f95bde4e507ab47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15be08e78140330ba2d8df78b4b035c2"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a15be08e78140330ba2d8df78b4b035c2">ArgumentExceptionType</a> = 0</td></tr>
 <tr class="separator:a15be08e78140330ba2d8df78b4b035c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aa585d1b2cc6912bb73e08326741d3d"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a2aa585d1b2cc6912bb73e08326741d3d">ConsistencyExceptionType</a> = 0</td></tr>
+<tr class="separator:a2aa585d1b2cc6912bb73e08326741d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c191879421828dc6e2e8502e253ae7b"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b">NonScalarExceptionType</a> = NULL</td></tr>
 <tr class="separator:a4c191879421828dc6e2e8502e253ae7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5dc592f07bcb79a492ce2736ed52d068"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a5dc592f07bcb79a492ce2736ed52d068">InternalErrorType</a> = NULL</td></tr>
@@ -1114,6 +1118,22 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a43d75187ebdf25289ef87240a2d0ee7c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_ConsistencyException </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classConsistencyException.html">ConsistencyException</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aa8295e68aa959a2799038598172215e4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1169,6 +1189,18 @@ template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">PyObject* ArgumentExceptionType = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2aa585d1b2cc6912bb73e08326741d3d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* ConsistencyExceptionType = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1238,7 +1270,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Nov 30 2016 12:14:15 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Dec 2 2016 22:39:50 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
