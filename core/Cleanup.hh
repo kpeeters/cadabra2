@@ -76,6 +76,7 @@ bool cleanup_kronecker(const Kernel& k, Ex&, Ex::iterator& it);
 
 bool push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it);
 
+/// Generic tool to check for index inconsistencies independent of
+/// running any algorithm. 
 
-
-
+void check_index_consistency(const Kernel& k, Ex& tr, Ex::iterator it);

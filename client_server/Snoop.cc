@@ -6,15 +6,12 @@
 #include <string.h>
 #include <regex>
 #include <iostream>
-#include <uuid/uuid.h>
 #include <chrono>
 #include <ctime>
 #include <sys/utsname.h>
 #include <stdint.h>
 #include <json/json.h>
 #include <set>
-
-
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -26,6 +23,9 @@
 #include <boost/config.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp> // generators
+#include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 
 using namespace snoop;
 
@@ -46,18 +46,20 @@ std::string safestring(const unsigned char *c)
 	}
 
 Snoop::Snoop()
-	: sync_immediately_(false)
+	: sync_immediately_(false), impl(0)
 	{
-	impl=new SnoopImpl(this);
 	}
 
 SnoopImpl::SnoopImpl(Snoop *s)
-	: snoop_(s), db(0), insert_statement(0), id_for_uuid_statement(0), connection_is_open(false)
+	: snoop_(s), db(0), insert_statement(0), id_for_uuid_statement(0), connection_is_open(false), connection_attempt_failed(false)
    {
    }
 
 void Snoop::init(const std::string& app_name, const std::string& app_version, std::string server, std::string dbname)
    {
+	if(impl==0)
+		impl=new SnoopImpl(this);
+
 	impl->init(app_name, app_version, server, dbname);
 	}
 
@@ -65,7 +67,6 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
    {
 	assert(app_name.size()>0);
 	
-
 	if(db==0) { // Only initialise if database has not been opened before
 		this_app_.app_name=app_name;
 		this_app_.app_version=app_version;
@@ -91,12 +92,14 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			const char *homedir = pw->pw_dir;
 			std::string logdir = homedir+std::string("/.log");
 			mkdir(logdir.c_str(), 0700);
+			std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
 			}
-		
+
+		std::cerr << "Snoop: logging in " << dbname << std::endl;
 		int ret = sqlite3_open_v2(dbname.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 		if(ret) {
-			throw std::logic_error("Cannot open database");
+			throw std::logic_error("SnoopImpl::init: Cannot open database");
 			}
 		create_tables();
 
@@ -109,7 +112,8 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 
 		// If this is a client, i.e. not a SnoopServer: obtain a uuid, start the websocket listener,
 		// and sync with the remote server whatever has not yet been synced in previous runs.
-		
+
+		std::cerr << "Starting websocket connection" << std::endl;
 		if(this_app_.app_name!="SnoopServer") {
 			obtain_uuid();
 			start_websocket_client();
@@ -155,11 +159,10 @@ std::string SnoopImpl::get_user_uuid(const std::string& appname)
 		
 		std::ofstream config(configpath);
 		if(config) {
-			uuid_t nid;
-			uuid_generate(nid);
-			char *uuid_string = new char[100];
-			uuid_unparse(nid, uuid_string);
-			user_uuid=uuid_string;
+			auto tmp = boost::uuids::random_generator()();
+			std::ostringstream str;
+			str << tmp;
+			user_uuid = str.str();
 
 			config << "user = " << user_uuid << std::endl;
 			}
@@ -214,6 +217,26 @@ void SnoopImpl::create_tables()
 		sqlite3_free(errmsg);
 		throw std::logic_error("Failed to create table logs");
 		}
+	if(sqlite3_exec(db, "create index if not exists logs_id_idx on logs(id);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.id: "+err);
+		}
+	if(sqlite3_exec(db, "create index if not exists logs_client_log_id_idx on logs(client_log_id);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.client_log_id: "+err);
+		}
+	if(sqlite3_exec(db, "create index if not exists logs_create_millis_idx on logs(create_millis);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.create_millis: "+err);
+		}
+	if(sqlite3_exec(db, "create index if not exists logs_type_idx on logs(type);", NULL, NULL, &errmsg) != SQLITE_OK) {
+		std::string err(errmsg);
+		sqlite3_free(errmsg);
+		throw std::logic_error("Failed to create index on logs.type: "+err);
+		}
 	}
 
 void SnoopImpl::obtain_uuid()
@@ -225,7 +248,7 @@ void SnoopImpl::obtain_uuid()
 	sqlite3_stmt *statement=0;
 	std::ostringstream ss;
 //	ss << "select uuid from runs where pid=" << getpid() << " order by create_millis desc limit 1";
-	ss << "select uuid from runs where id=" << getpid() << " order by create_millis desc limit 1";
+	ss << "select uuid from runs where pid=" << getpid() << " order by create_millis desc limit 1";
 	
 	int res = sqlite3_prepare(db, ss.str().c_str(), -1, &statement, NULL);
 	if(res==SQLITE_OK) {
@@ -241,11 +264,10 @@ void SnoopImpl::obtain_uuid()
 	// Generate and insert a new uuid if there is no existing entry for the current pid.
 
 	if(this_app_.uuid.size()==0) {
-		uuid_t nid;
-		uuid_generate(nid);
-		char *uuid_string = new char[100];
-		uuid_unparse(nid, uuid_string);
-		this_app_.uuid=uuid_string;
+		auto tmp = boost::uuids::random_generator()();
+		std::ostringstream str;
+		str << tmp;
+		this_app_.uuid = str.str();
 
 		store_app_entry_without_lock(this_app_);
 		}
@@ -262,11 +284,24 @@ bool SnoopImpl::store_app_entry(Snoop::AppEntry& app)
 
 bool SnoopImpl::store_app_entry_without_lock(Snoop::AppEntry& app)
 	{
+	// Do we already have a record with this uuid?
+	sqlite3_stmt *testq=0;
+	int testq_res = sqlite3_prepare(db, "select count(*) from runs where uuid=?", -1, &testq, NULL);
+	if(testq_res!=SQLITE_OK) 
+		throw std::logic_error("SnoopImpl::store_app_entry_without_lock: failed to test for row presence");
+
+	sqlite3_bind_text(testq, 1, app.uuid.c_str(), app.uuid.size(), 0);
+	sqlite3_step(testq);
+	int64_t num = sqlite3_column_int64(testq, 0);
+	sqlite3_finalize(testq);
+	if(num>0) 
+		return false;
+	
+	// No entry yet, we need to store it.
 	sqlite3_stmt *statement=0;
 	int res = sqlite3_prepare(db, "insert into runs (uuid, create_millis, receive_millis, pid, ip_address, machine_id, "
 									  "app_name, app_version, user_id, server_status) "
-									  "values "
-									  "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+									  "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 									  -1, &statement, NULL);
 	
 	if(res==SQLITE_OK) {
@@ -280,24 +315,44 @@ bool SnoopImpl::store_app_entry_without_lock(Snoop::AppEntry& app)
 		sqlite3_bind_text(statement,   8, app.app_version.c_str(), app.app_version.size(), 0);
 		sqlite3_bind_text(statement,   9, app.user_id.c_str(), app.user_id.size(), 0);
 		sqlite3_bind_int(statement,   10, app.server_status);
+		sqlite3_bind_text(statement,   11, app.uuid.c_str(), app.uuid.size(), 0);
 		
 		sqlite3_step(statement);
 		sqlite3_finalize(statement);
 
 		app.id = sqlite3_last_insert_rowid(db);
+
+		return true;
 		}
 	else {
 		throw std::logic_error("Failed to prepare insertion");
 		}
-
-	return false;
 	}
 
-void SnoopImpl::store_log_entry(Snoop::LogEntry& log_entry)
+bool SnoopImpl::store_log_entry(Snoop::LogEntry& log_entry, bool avoid_server_duplicates)
 	{
 	assert(db!=0);
 	
 	std::lock_guard<std::mutex> lock(sqlite_mutex);
+
+	if(avoid_server_duplicates) {
+		// Do we already have a record with this client_log_id and id?
+		sqlite3_stmt *testq=0;
+		int testq_res = sqlite3_prepare(db, "select count(*) from logs where client_log_id=? and id=? and client_log_id!=-1", -1, &testq, NULL);
+		if(testq_res!=SQLITE_OK) 
+			throw std::logic_error("SnoopImpl::store_log_entry_without_lock: failed to test for row presence");
+		
+		sqlite3_bind_int64(testq, 1, log_entry.client_log_id);
+		sqlite3_bind_int64(testq, 2, log_entry.id);
+		sqlite3_bind_int64(testq, 3, log_entry.client_log_id);
+		sqlite3_step(testq);
+		int64_t num = sqlite3_column_int64(testq, 0);
+		sqlite3_finalize(testq);
+		if(num>0) 
+			return false;
+		}
+	
+	// Need to store this entry.
 
 	auto duration =  std::chrono::high_resolution_clock::now().time_since_epoch();
 	log_entry.receive_millis   = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
@@ -307,8 +362,7 @@ void SnoopImpl::store_log_entry(Snoop::LogEntry& log_entry)
 		res=sqlite3_prepare_v2(db, "insert into logs "
 									  "(client_log_id, id, create_millis, receive_millis, loc_file, loc_line, loc_method, "
 									  " type, message, server_status) "
-									  "values "
-									  "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+									  "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 									  -1, &insert_statement, NULL);
 		}
 
@@ -323,20 +377,33 @@ void SnoopImpl::store_log_entry(Snoop::LogEntry& log_entry)
 		sqlite3_bind_text(insert_statement,   8, log_entry.type.c_str(),    log_entry.type.size(), 0);
 		sqlite3_bind_text(insert_statement,   9, log_entry.message.c_str(), log_entry.message.size(), 0);
 		sqlite3_bind_int(insert_statement,   10, log_entry.server_status);
+
+		// We check on whether we already have a record with the same 'id' (to identify a run) and
+		// the same 'client_log_id' (to identify a log entry).
+//		sqlite3_bind_int(insert_statement,   11, log_entry.client_log_id);
+//		sqlite3_bind_int(insert_statement,   12, log_entry.id);
 		 
 		sqlite3_step(insert_statement);
 
 		log_entry.log_id = sqlite3_last_insert_rowid(db);
-
 		sqlite3_reset(insert_statement);
+
+		return true;
 		}
 	else {
 		throw std::logic_error("Failed to insert log entry");
 		}
+
 	}
 
 void SnoopImpl::start_websocket_client()
 	{
+	std::cerr << "Snoop: attempting open" << std::endl;
+	{ 	std::unique_lock<std::mutex> lock(connection_mutex);
+		connection_attempt_failed=false;
+		std::cerr << "Snoop: attempting open" << std::endl;
+		}
+
 	using websocketpp::lib::bind;
 
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
@@ -501,7 +568,7 @@ void SnoopImpl::sync_logs_with_server(bool from_wsthread)
 					le.log_id           = sqlite3_column_int(statement, 0);
 					le.client_log_id    = sqlite3_column_int(statement, 1);
 					le.id               = sqlite3_column_int(statement, 2);
-					le.uuid             = this_app_.uuid;
+					le.uuid             = this_app_.uuid; // FIXME: this is wrong, we may still have log entries from a previous run!
 					le.create_millis    = sqlite3_column_int64(statement, 3);
 					le.loc_file         = safestring(sqlite3_column_text(statement, 4));
 					le.loc_line         = sqlite3_column_int(statement, 5);
@@ -601,27 +668,42 @@ void SnoopImpl::on_client_open(websocketpp::connection_hdl)
 	{
  	// std::cerr << "Snoop: connection to " << server_  << " open " << std::this_thread::get_id() << std::endl;
 	sync_with_server(true);
+	std::unique_lock<std::mutex> lock(connection_mutex);
 	connection_is_open=true;
-	// std::cerr << "Snoop: sync'ed with server" << std::endl;
+	connection_attempt_failed=false;
+	connection_cv.notify_all();
+	std::cerr << "Snoop: connection open" << std::endl;
 	}
 
 void SnoopImpl::on_client_fail(websocketpp::connection_hdl)
 	{
-	// std::cerr << "Snoop: connection failed" << std::endl;	
+	// Clients may be waiting for the connection to open, but we may
+	// never get to that stage. Signal them to move on.
+	std::unique_lock<std::mutex> lock(connection_mutex);
+	connection_attempt_failed=true;
+	connection_cv.notify_all();
+	std::cerr << "Snoop: connection failed" << std::endl;	
 	}
 
 void SnoopImpl::on_client_close(websocketpp::connection_hdl)
 	{
+	// Clients may be waiting for the connection to open, but we may
+	// never get to that stage. Signal them to move on.
+	std::unique_lock<std::mutex> lock(connection_mutex);
 	connection_is_open=false;
-	// std::cerr << "Snoop: connection closed" << std::endl;	
+	connection_attempt_failed=true;
+	connection_cv.notify_all();
+	std::cerr << "Snoop: connection closed" << std::endl;	
 	}
 
 void SnoopImpl::on_client_message(websocketpp::connection_hdl, WebsocketClient::message_ptr msg) 
 	{
 	Json::Value  root;
 	Json::Reader reader;
-	if(!reader.parse( msg->get_payload(), root )) 
-		throw std::logic_error("Cannot parse LogEntry from JSON");
+	if(!reader.parse( msg->get_payload(), root )) {
+		std::cerr << "SnoopImpl::on_client_message: Cannot parse LogEntry from JSON" << std::endl;
+		return;
+		}
 	
 	// Determine whether this is a log or an app message.
 
@@ -687,6 +769,21 @@ Snoop::~Snoop()
 
 SnoopImpl::~SnoopImpl()
    {
+	// If a program runs for only a very short time, the connection to the logging 
+	// server may not be open yet when we reach this destructor. In that case,
+	// we will want to wait for the connection to open, so that we can do a final
+	// sync before we terminate.
+
+	// However, if the connection was attempted but failed (e.g. no server), we
+	// can skip all that.
+
+	std::unique_lock<std::mutex> lock(connection_mutex);
+	if(connection_is_open==false && connection_attempt_failed==false) {
+		connection_cv.wait(lock);
+		}
+
+	sync_with_server();
+
 	if(db!=0) { // If the database is not open the wsclient won't be running either
 		wsclient.stop();
 		wsclient_thread.join();
@@ -743,7 +840,7 @@ Snoop& SnoopImpl::operator<<(const Flush&)
 	this_log_.message       = snoop_->out_.str();
 	this_log_.server_status = 0;
 
-	store_log_entry(this_log_);
+	store_log_entry(this_log_, false);
 	if(snoop_->sync_immediately_)
 		sync_logs_with_server();
 

@@ -9,19 +9,21 @@
 ///
 /// Basic building block subtree comparison function for tensors
 /// without dummy indices, which determines whether two tensor
-/// subtrees are equal up to the names of indices. This only uses
-/// Indices property information, and can hence be called from within
-/// properties.get<...> algorithms. 
+/// subtrees are equal up to the names of indices. This uses NO
+/// property information whatsoever; when indices are compared,
+/// they are simply compared based on their name, not on the
+/// index set they may belong to. In most cases, this is NOT what
+/// you want.
 ///
-/// In most cases, the use of Ex_comparator below is recommended 
+/// In MOST cases, the use of Ex_comparator below is recommended 
 /// instead, as it can do much more complicated matching and will
 /// also keep track of the relation between symbols in the pattern
 /// and symbols in the object to be matched.
 ///
 /// Examples:
 ///
-///     A_m                        equals  A_n
-///     \diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s
+///     A_m                        equals  A_n                       up to index names
+///     \diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s up to index names
 ///
 ///  return | meaning
 ///  -------|-----------------------------------------------
@@ -32,11 +34,12 @@
 /// -2      | structure different, one > two
 ///
 /// @param mod_prel            see below
-/// @param checksets           if properties!=0, indices match when they sit in the same set.
+/// @param checksets           ignored FIXME: remove
 /// @param literal_wildcards   whether to treat wildcard names as ordinary names.
 ///
 /// The mod_prel variable determines whether parent relations are taken into
 /// account when comparing:
+/// FIXME: now that subtree_compare does not use properties anymore, a lot can be simplified.
 ///
 ///        -3: require that parent relations match, unless indexpos=free.
 ///        -2: require that parent relations match (even when indexpos = free)
@@ -185,7 +188,22 @@ class Ex_comparator {
 	public:
 		Ex_comparator(const Properties&);
 
-		enum match_t { node_match=0, subtree_match=1, no_match_less=2, no_match_greater=3 };
+		enum class match_t { 
+         node_match=0,                 // a single node matches
+			subtree_match=1,              // identical match, including index names
+			match_index_less=2,           // structure match, indices in same set, but different names
+			match_index_greater=3,
+			no_match_indexpos_less=4,     // mismatch but only for index positions
+		   no_match_indexpos_greater=5,
+			no_match_less=6,              // more serious mismatch
+			no_match_greater=7 
+		};
+
+		enum class useprops_t {
+			always=0,         // always use property info
+			not_at_top,       // don't use property info at top level of the expression
+			never=2           // never use property info
+		};
 
 		/// Reset the object for a new match.
 
@@ -195,8 +213,12 @@ class Ex_comparator {
 		/// properties. Return subtree_match or one of the no_match
 		/// results.  You need to fill lhs_contains_dummies before
 		/// calling!
+		/// If use_props is false, it will not try to fetch any property
+		/// information at the TOP level of the comparison. Properties
+		/// will always be used at  levels.
 
-		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2);
+		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2, 
+									 useprops_t use_props=useprops_t::always, bool ignore_parent_rel=false);
 
       /// Find a subproduct in a product. The 'lhs' iterator points to the product which
       /// we want to find, the 'tofind' iterator to the current factor which we are looking
@@ -213,22 +235,27 @@ class Ex_comparator {
 		/// Check whether the a match found by calling equal_subtree or match_subproduct 
 		/// satisfies the conditions as stated.
 		/// FIXME: document possible conditions.
+
 		bool    satisfies_conditions(Ex::iterator conditions, std::string& error);
 
 		/// Map for the replacement of nodes (indices, patterns).
+
 		typedef std::map<Ex, Ex, tree_exact_less_no_wildcards_obj>     replacement_map_t;
 		replacement_map_t                                              replacement_map;
 
 		/// Map for the replacement of entire subtrees (object patterns).
+
 		typedef std::map<nset_t::iterator, Ex::iterator, nset_it_less> subtree_replacement_map_t;
 		subtree_replacement_map_t                                      subtree_replacement_map;
 
 		/// Map for matching of index names to index values. Note: this is in the opposite order
 		/// from replacement_map!
+
 		replacement_map_t                                              index_value_map;
 
 		/// Information to keep track of where individual factors in a sub-product were
 		/// found, and whether moving them into the searched-for order leads to sign flips.
+
 		std::vector<Ex::sibling_iterator> factor_locations;
 		std::vector<int>                  factor_moving_signs;
 
@@ -240,7 +267,7 @@ class Ex_comparator {
       /// Determine whether two objects should be swapped according to
       /// the available SortOrder properties.
 
-		bool should_swap(Ex::iterator obj, int subtree_comparison) ;
+		bool should_swap(Ex::iterator obj, match_t subtree_comparison) ;
 
       /// Determine whether obj and obj+1 be exchanged? If yes, return
       /// the sign, if no return zero. This is the general entry point
@@ -252,13 +279,15 @@ class Ex_comparator {
       /// which would otherwise always receive a 0 from this
       /// function).
 
-		int  can_swap(Ex::iterator one, Ex::iterator two, int subtree_comparison,
+		int  can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_comparison,
 						  bool ignore_implicit_indices=false);
 
 		/// Determine whether object 'one' and 'two' can be moved next
 		/// to each other by moving either one or the other: if fix_one==true
 		/// the first node is kept fixed, otherwise the second node is kept fixed.
-		int  can_move_adjacent(Ex::iterator prod, Ex::sibling_iterator one, Ex::sibling_iterator two, bool fix_one=false) ;
+
+		int  can_move_adjacent(Ex::iterator prod, Ex::sibling_iterator one, 
+									  Ex::sibling_iterator two, bool fix_one=false) ;
 
 	protected:
 		const Properties& properties;
@@ -268,7 +297,10 @@ class Ex_comparator {
 		/// index. Indices are considered to be leaf-nodes, and for these
 		/// a full subtree match will be attempted (using subtree_compare).
 
-		match_t compare(const Ex::iterator&, const Ex::iterator&, bool nobrackets=false);
+		match_t compare(const Ex::iterator&, const Ex::iterator&, 
+							 bool       nobrackets=false, 
+							 useprops_t use_props=useprops_t::always,
+							 bool       ignore_parent_rel=false);
 
       // Internal functions used by can_swap.
 		int  can_swap_prod_obj(Ex::iterator prod, Ex::iterator obj, bool) ;
@@ -277,6 +309,11 @@ class Ex_comparator {
 		int  can_swap_prod_sum(Ex::iterator prod, Ex::iterator sum, bool) ;
 		int  can_swap_sum_sum(Ex::iterator sum1, Ex::iterator sum2, bool) ;
 		int  can_swap_ilist_ilist(Ex::iterator obj1, Ex::iterator obj2);
+
+		std::string tab() const;
+		match_t     report(match_t r) const;
+
+		static int offset;
 };
 
 /// \ingroup core
@@ -304,4 +341,4 @@ class Ex_is_less {
 };
 
 
-
+std::ostream& operator<<(std::ostream&, Ex_comparator::useprops_t up);

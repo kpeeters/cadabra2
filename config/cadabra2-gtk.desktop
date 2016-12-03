@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Cadabra 2
+GenericName=Computer algebra system
+Comment=Computer algebra system for field theory problems
+Icon=cadabra2-gtk
+Categories=Math;Science;Education;
+Exec=cadabra2-gtk
+Terminal=false
+MimeType=application/cadabra;application/x-cadabra;
+
+

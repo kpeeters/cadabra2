@@ -8,10 +8,24 @@
 # rl:= A_{t r} + B_{t r} = 3;
 # substitute(ex, rl)
 
+def test01():
+    __cdbkernel__=create_scope()
+    {r,t}::Coordinate.
+    {m,n}::Indices(values={t,r}, position=fixed).
+    ex:= A_{m};
+    rl:= A_{t} = 3;
+    evaluate(ex, rl);
+    tst:= \components_{m}( \comma( \comma{t} = 3  ) ) - @(ex);
+    collect_components(_)
+    assert(tst==0)
+
+test01()
+
+
 def test02():
     __cdbkernel__=create_scope()
     {r,t}::Coordinate.
-    {m,n,p,s}::Indices(values={t,r}).
+    {m,n,p,s}::Indices(values={t,r}, position=free).
     \partial{#}::PartialDerivative.
     C::Depends(r,t).
     ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
@@ -35,7 +49,7 @@ def test03():
     g_{\mu\nu}::Metric.
     g^{\mu\nu}::InverseMetric.         
     ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
-           g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+        g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
     complete(ss, $g^{\mu\nu}$)
     ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
                                                     +\partial_{\nu}{g_{\rho\sigma}}

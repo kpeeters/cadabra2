@@ -69,9 +69,9 @@ test04()
 def test05():
     __cdbkernel__=create_scope();
     { m, n, p }::Indices(flat, position=fixed).
-    { \mu, \nu, \rho, \mu# }::Indices(curved).
+    { \mu, \nu, \rho, \sigma, \kappa }::Indices(curved, position=fixed).
     obj:= H_{m n p} ( B^{m n p} + H^{m n p} );
-    rewrite_indices(_, $H_{\mu\nu\rho}$, $e_{m \mu}$);
+    rewrite_indices(_, $H_{\mu\nu\rho}$, $e_{m}^{\mu}$);
     tst:= H_{\mu \nu \rho} * ( B^{m n p} + H^{m n p} ) * e_{m}^{\mu} * e_{n}^{\nu} * e_{p}^{\rho} - @(obj);
     assert(tst==0)
     print("Test 05 passed")
@@ -89,18 +89,6 @@ def test06():
     print("Test 06 passed")
 
 test06()
-
-def test07():
-    __cdbkernel__=create_scope();
-    { m, n, p }::Indices(flat, position=fixed).
-    { \mu, \nu, \rho, \mu# }::Indices(curved, position=fixed).
-    obj:= H_{m n p} [ B^{m n p} + H^{m n p} ];
-    rewrite_indices(_, $H_{\mu\nu\rho}$, $e_{m}^{\mu}$);
-    tst:= H_{\mu \nu \rho} * [B^{m n p} + H^{m n p}] * e_{m}^{\mu} * e_{n}^{\nu} * e_{p}^{\rho} - @(obj);
-    assert(tst==0)
-    print("Test 07 passed")
-
-test07()
 
 def test08():
     __cdbkernel__=create_scope();

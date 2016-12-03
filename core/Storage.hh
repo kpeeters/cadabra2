@@ -29,6 +29,7 @@
 #include <map>
 #include <stdint.h>
 #include <assert.h>
+#include <initializer_list>
 
 #include "tree.hh"
 
@@ -262,3 +263,15 @@ class nset_it_less {
 /// DisplayTerminal.
 
 std::ostream& operator<<(std::ostream&, const Ex&);
+
+
+template <typename T>
+bool is_in(const T& val, const std::initializer_list<T>& list)
+	{
+	for (const auto& i : list) {
+		if (val == i) {
+			return true;
+			}
+		}
+	return false;
+	}

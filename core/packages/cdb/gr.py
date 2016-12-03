@@ -14,6 +14,7 @@ def RiemannFromChristoffel(R, c):
     # - determine name of head node on c.
     # - construct rule
 
+    cdb.PartialDerivative(cdb.Ex(r'\partial{#}'), cdb.Ex(r''))
     ex = cdb.Ex(r'@(R)^{\rho}_{\sigma\mu\nu} = \partial_{\mu}{@(c)^{\rho}_{\nu\sigma}} -\partial_{\nu}{@(c)^{\rho}_{\mu\sigma}} + @(c)^{\rho}_{\mu\lambda} @(c)^{\lambda}_{\nu\sigma} - @(c)^{\rho}_{\nu\lambda} @(c)^{\lambda}_{\mu\sigma}')
 
     return ex

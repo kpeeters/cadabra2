@@ -420,7 +420,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
 			sibling_iterator rhs = tr.begin(iv);
 			++rhs;
-			std::cerr << "getting dependencies of " << *rhs->name << std::endl;
+			// std::cerr << "getting dependencies of " << *rhs->name << std::endl;
 			auto deps=dependencies(rhs);
 
 			// FIXME: all indices on \partial can take any of the values of the 
@@ -507,7 +507,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 			});
 
 	// Determine implicit dependence via Depends.
-	std::cerr << "deps for " << *it->name << std::endl;
+	// std::cerr << "deps for " << *it->name << std::endl;
 	const Depends *dep = kernel.properties.get<Depends>(it);
 	if(dep) {
 		Ex deps(dep->dependencies(kernel, it));
@@ -518,8 +518,8 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 				ret.insert(cpy);
 				return true;
 				});
-		for(auto& e: ret)
-			std::cerr << e << std::endl;
+//		for(auto& e: ret)
+//			std::cerr << e << std::endl;
 		}
 
 	return ret;
@@ -576,7 +576,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 		int num1 = tr.index(di->second);
 		int num2 = tr.index(di2->second);
 		// std::cerr << *(di->first.begin()->name) 
-		//           << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
+		//    << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
 
 		// three cases:
 		//    two factors, single index in common. Merge is simple.

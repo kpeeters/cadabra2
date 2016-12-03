@@ -904,6 +904,9 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
 				if(tree_exact_equal(&kernel.properties, (*it1).first,(*it2).first,1,true,-2,true)) {
+					const Indices *ind=kernel.properties.get<Indices>(it1->second);
+					if(ind && ind->position_type==Indices::fixed && it1->second->fl.parent_rel==it2->second->fl.parent_rel)
+						throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
 					target.insert((*it2));
 					if(move_out) {
 						index_map_t::iterator nxt=it2;
@@ -971,6 +974,11 @@ void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 				 if(ind_dummy.count(it)>0) {
 					 throw ConsistencyException("Triple index occurred.");
 					 }
+				 // check consistency: one up and one down if index position is fixed.
+				 // std::cerr << "check positions" << std::endl;
+				 const Indices *ind=kernel.properties.get<Indices>(it);
+				 if(ind && ind->position_type==Indices::fixed && it->fl.parent_rel==fnd->second->fl.parent_rel) 
+					 throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
 				 ind_dummy.insert(*fnd);
 				 ind_dummy.insert(index_map_t::value_type(Ex(it), it));
 				 ind_free.erase(fnd);
@@ -1158,6 +1166,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		index_map_t free_so_far;
 		sibling_iterator sit=it.begin();
 		while(sit!=it.end()) {
+			// std::cerr << "testing" << std::endl;
 			if(sit->is_index()==false) {
 				index_map_t factor_free, factor_dummy;
 				classify_indices(sit, factor_free, factor_dummy);
@@ -1180,7 +1189,13 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 				
 				ind_dummy.insert(factor_dummy.begin(), factor_dummy.end());
 				index_map_t new_dummy;
+//				for(auto& ii: factor_free)
+//					std::cerr << "factor_free " << Ex(ii.second) << std::endl;
+//				for(auto& ii: free_so_far)
+//					std::cerr << "free_so_far " << Ex(ii.second) << std::endl;
 				determine_intersection(factor_free, free_so_far, new_dummy, true);
+//				for(auto& ii: new_dummy)
+//					std::cerr << "new dummy " << Ex(ii.second) << std::endl;
 				free_so_far.insert(factor_free.begin(), factor_free.end());
 				ind_dummy.insert(new_dummy.begin(), new_dummy.end());
 				}
