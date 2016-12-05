@@ -8,6 +8,8 @@
 #include "properties/Derivative.hh"
 #include "properties/AntiCommuting.hh"
 
+// #define XPERM_DEBUG 1
+
 canonicalise::canonicalise(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), reuse_generating_set(false) 
 	{
@@ -16,7 +18,8 @@ canonicalise::canonicalise(const Kernel& k, Ex& tr)
 bool canonicalise::can_apply(iterator it) 
 	{
 	if(*(it->name)!="\\prod")
-		return(is_single_term(it));
+		if(is_single_term(it)==false)
+			return false;
 	
 	sibling_iterator sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
@@ -24,12 +27,12 @@ bool canonicalise::can_apply(iterator it)
 		// if those are scalars, i.e. carry no indices. 
 		// FIXME: For the time being, we even forbid dummy indices.
 		if(*sib->name=="\\sum" || *sib->name=="\\prod" ) {
+			// std::cerr << "A child of " << *it->name << " is a " << *sib->name << std::endl;
 			index_map_t ind_dummy, ind_free;
 			classify_indices(sib, ind_free, ind_dummy);
 			if(ind_free.size()+ind_dummy.size()>0)
 				return false;
-			else 
-				return true;
+			// std::cerr << "but has no indices whatsoever" << std::endl;
 			}
 		++sib;
 		}
@@ -127,12 +130,8 @@ bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const
 
 Algorithm::result_t canonicalise::apply(iterator& it)
 	{
-//	std::cerr << "canonicalise at " << Ex(it) << std::endl;
-//	std::cerr << is_single_term(it) << std::endl;
-//	if(is_single_term(it)==false) {
-//		std::cerr << "not acting" << std::endl;
-//		return result_t::l_no_action;
-//		}
+	// std::cerr << "canonicalise at " << Ex(it) << std::endl;
+	// std::cerr << is_single_term(it) << std::endl;
 
 	stopwatch totalsw;
 	totalsw.start();
@@ -236,7 +235,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		index_position_map_t::const_iterator i2=ind_pos_dummy.find(next_it->second);
 
 #ifdef XPERM_DEBUG
-		txtout << *(ii->first->name) << " at pos " << ii->second+1 << " " << ii->first->fl.parent_rel << std::endl;
+		std::cerr << *(ii->first->name) << " at pos " << ii->second+1 << " " << ii->first->fl.parent_rel << std::endl;
 #endif
 
 		switch(ii->first->fl.parent_rel) {
@@ -272,7 +271,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		// setting the metric flag to 0. Ditto when only one index is on a derivative
 		// (canonicalising usually makes the expression uglier in that case).
 		iterator tmp;
-		if( ( (separated_by_derivative(ii->first, i2->first,tmp) 
+		if( ( (separated_by_derivative(tr.parent(ii->first), tr.parent(i2->first),tmp) 
 				 || only_one_on_derivative(ii->first, i2->first) )
 				&& position_type(ii->first)==Indices::fixed ) ||
 			 position_type(ii->first)==Indices::independent ) {
@@ -318,6 +317,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		int curr_pos=0;
 		while(facit!=tr.end(it)) {
 			const TableauBase *tba=kernel.properties.get_composite<TableauBase>(facit);
+			// std::cerr << Ex(facit) << " has tableaubase " << tba << std::endl;
 			if(tba) {
 				unsigned int num_ind=number_of_indices(facit);
 
@@ -329,6 +329,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 				// loop over tabs
 				for(unsigned int ti=0; ti<tba->size(kernel.properties, tr, facit); ++ti) {
 					TableauBase::tab_t tmptab=tba->get_tab(kernel.properties, tr,facit,ti);
+					// std::cerr << tmptab << std::endl;
 					if(tmptab.number_of_rows()>0) {
 						for(unsigned int col=0; col<tmptab.row_size(0); ++col) { // anti-symmetry in all inds in a col
 							if(tmptab.column_size(col)>1) {
@@ -410,7 +411,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// End of construction of generating set.
 
 #ifdef XPERM_DEBUG
-	txtout << generating_set.size() << " " << *it->multiplier << std::endl;
+	std::cerr << generating_set.size() << " " << *it->multiplier << std::endl;
 #endif
 	if(*it->multiplier!=0) {
 		// Fill data for the xperm routines.
@@ -422,11 +423,11 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 				for(unsigned int j=0; j<total_number_of_indices+2; ++j) {
 					gs[i*(total_number_of_indices+2)+j]=generating_set[i][j];
 #ifdef XPERM_DEBUG
-					txtout << gs[i*(total_number_of_indices+2)+j] << " ";
+					std::cerr << gs[i*(total_number_of_indices+2)+j] << " ";
 #endif				
 					}
 #ifdef XPERM_DEBUG
-				txtout << std::endl;
+				std::cerr << std::endl;
 #endif
 				}
 			}
@@ -473,27 +474,27 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		lengths_of_repeated_sets[0]=0;
 		
 #ifdef XPERM_DEBUG
-			txtout << "perm:" << std::endl;
+			std::cerr << "perm:" << std::endl;
 			for(unsigned int i=0; i<total_number_of_indices+2; ++i)
-			txtout << perm[i] << " "; 
-			txtout << std::endl;
-			txtout << "base:" << std::endl;
+			std::cerr << perm[i] << " "; 
+			std::cerr << std::endl;
+			std::cerr << "base:" << std::endl;
 			for(unsigned int i=0; i<base_here.size(); ++i)
-			txtout << base[i] << " "; 
-			txtout << std::endl;
-			txtout << "free indices:" << std::endl;
+			std::cerr << base[i] << " "; 
+			std::cerr << std::endl;
+			std::cerr << "free indices:" << std::endl;
 			for(unsigned int i=0; i<ind_free.size(); ++i)
-			txtout << free_indices[i] << " "; 
-			txtout << std::endl;
-			txtout << "lengths_of_dummy_sets:" << std::endl;
+			std::cerr << free_indices[i] << " "; 
+			std::cerr << std::endl;
+			std::cerr << "lengths_of_dummy_sets:" << std::endl;
 			for(unsigned int i=0; i<dummy_sets.size(); ++i)
-				txtout << lengths_of_dummy_sets[i] 
+				std::cerr << lengths_of_dummy_sets[i] 
 						 << " (metric=" << metric_signatures[i] << ") "; 
-			txtout << std::endl;
-			txtout << "dummies:" << std::endl;
+			std::cerr << std::endl;
+			std::cerr << "dummies:" << std::endl;
 			for(unsigned int i=0; i<ind_dummy.size(); ++i)
-				txtout << dummies[i] << " "; 
-			txtout << std::endl;
+				std::cerr << dummies[i] << " "; 
+			std::cerr << std::endl;
 #endif
 
 		stopwatch sw;
@@ -513,11 +514,11 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			dummies_new_order[i] = onpoints(dummies[i], perm1, total_number_of_indices+2);
 			}
 #ifdef XPERM_DEBUG
-		txtout << "perm1: ";
+		std::cerr << "perm1: ";
 		for(unsigned int i=0; i<total_number_of_indices; ++i) {
-			txtout << perm1[i] << " ";
+			std::cerr << perm1[i] << " ";
 			}
-		txtout << std::endl;
+		std::cerr << std::endl;
 #endif
 		// Brief reminder of the meaning of the various arrays, using the example in
 		// Jose's xPerm paper (not yet updated to reflect the _ext version which allows
@@ -586,13 +587,13 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		delete [] perm2;
 
 		sw.stop();
-//		txtout << "xperm took " << sw << std::endl;
+//		std::cerr << "xperm took " << sw << std::endl;
 
 #ifdef XPERM_DEBUG		
-		txtout << "cperm:" << std::endl;
+		std::cerr << "cperm:" << std::endl;
 		for(unsigned int i=0; i<total_number_of_indices+2; ++i)
-			txtout << cperm[i] << " ";
-		txtout << std::endl;
+			std::cerr << cperm[i] << " ";
+		std::cerr << std::endl;
 #endif
 
 		if(cperm[0]!=0) {
@@ -620,7 +621,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 					// and 8, and so we put it at 7, etc.
 
 #ifdef XPERM_DEBUG					
-					txtout << "putting index " << i+1 << "(" << *num_to_tree_map[i].begin()->name 
+					std::cerr << "putting index " << i+1 << "(" << *num_to_tree_map[i].begin()->name 
 							 << ", " << num_to_tree_map[i].begin()->fl.parent_rel 
 							 << ") in slot " << cperm[i] << std::endl;
 #endif
@@ -654,7 +655,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	delete [] free_indices;
 
 	totalsw.stop();
-//	txtout << "total canonicalise took " << totalsw << std::endl;
+//	std::cerr << "total canonicalise took " << totalsw << std::endl;
 	
 	return res;
 	}

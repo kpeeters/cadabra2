@@ -52,6 +52,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 		if(db) 
 			truetensor=tr.begin(truetensor);
 
+		Ex_comparator comp(properties);
+
 		// Compare the current tensor with all other tensors encountered so far.
 		for(; i<idts.size(); ++i) {
 			Ex::sibling_iterator truetensor2=idts[i].tensors[0];
@@ -59,7 +61,11 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 			if(db2) 
 				truetensor2=tr.begin(truetensor2);
 			
-			if(subtree_equal(&properties, truetensor2, truetensor)) {
+			comp.clear();
+			auto match = comp.equal_subtree(truetensor2, truetensor);
+			if(match==Ex_comparator::match_t::subtree_match || 
+				match==Ex_comparator::match_t::match_index_less ||
+				match==Ex_comparator::match_t::match_index_greater) {
 				// If this is a spinor, check that it's connected to the one already stored
 				// by a Gamma matrix, or that it is connected directly.
 				if(idts[i].spino) {

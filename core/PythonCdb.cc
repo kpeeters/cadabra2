@@ -19,8 +19,10 @@ namespace boost {
 #endif
 
 #include "PythonCdb.hh"
+#include "SympyCdb.hh"
 
 #include "Parser.hh"
+#include "Bridge.hh"
 #include "Exceptions.hh"
 #include "DisplayTeX.hh"
 #include "DisplaySympy.hh"
@@ -101,7 +103,10 @@ namespace boost {
 #include "algorithms/complete.hh"
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
+#include "algorithms/drop_weight.hh"
+#include "algorithms/einsteinify.hh"
 #include "algorithms/eliminate_kronecker.hh"
+#include "algorithms/eliminate_metric.hh"
 #include "algorithms/epsilon_to_delta.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/expand.hh"
@@ -121,11 +126,15 @@ namespace boost {
 #include "algorithms/product_rule.hh"
 #include "algorithms/reduce_delta.hh"
 #include "algorithms/rename_dummies.hh"
+#include "algorithms/sort_product.hh"
+#include "algorithms/sort_sum.hh"
+#include "algorithms/split_gamma.hh"
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/sym.hh"
 #include "algorithms/take_match.hh"
 #include "algorithms/replace_match.hh"
+#include "algorithms/rewrite_indices.hh"
 #include "algorithms/unwrap.hh"
 #include "algorithms/vary.hh"
 #include "algorithms/young_project.hh"
@@ -193,6 +202,31 @@ Ex rhs(const Ex& ex)
 	auto sib=ex.begin(ex.begin());
 	++sib;
 	return Ex(sib);
+	}
+
+Ex Ex_getslice(Ex &ex, boost::python::slice slice)
+	{
+	Ex result;
+
+	boost::python::slice::range<Ex::sibling_iterator> range;
+	try {
+		range = slice.get_indices(ex.begin(ex.begin()), ex.end(ex.begin()));
+		}
+	catch (std::invalid_argument) {
+		return result;
+		}
+
+	// Set head
+	auto it = result.set_head(*ex.begin());
+
+	// Iterate over fully-closed range.
+	for (; range.start != range.stop; std::advance(range.start, range.step)) {
+		Ex::iterator toadd(range.start);
+		result.append_child(it, toadd);
+		}
+	Ex::iterator toadd(range.start);
+	result.append_child(it, toadd);
+	return result;
 	}
 
 Ex Ex_getitem(Ex &ex, int index)
@@ -282,6 +316,14 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	return ret;
 	}
 
+Ex Ex_through_Sympy(Ex ex, std::string head)
+	{
+	Ex::iterator it=ex.begin();
+	sympy::apply(*get_kernel_from_scope(), ex, it, head, "", "");
+
+	return ex;
+	}
+
 // Fetch objects from the Python side using their Python identifier.
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
@@ -326,32 +368,6 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 	}
 
 
-void pull_in(std::shared_ptr<Ex> ex)
-	{
-	collect_terms rr(*get_kernel_from_scope(), *ex);
-	
-	Ex::iterator it=ex->begin();
-	while(it!=ex->end()) {
-		if(*it->name=="@") {
-			if(ex->number_of_children(it)==1) {
-				std::string pobj = *(ex->begin(it)->name);
-				std::shared_ptr<Ex> ex = fetch_from_python(pobj);
-				if(ex) {
-					Ex::iterator topnode_it = ex->begin();
-
-					multiplier_t mult=*(it->multiplier);
-					it=ex->replace(it, topnode_it);
-					multiply(it->multiplier, mult);
-					rr.rename_replacement_dummies(it, false);
-					}
-				}
-			}
-		++it;
-		}
-
-	return;
-	}
-
 
 bool __eq__Ex_Ex(const Ex& one, const Ex& other) 
 	{
@@ -381,31 +397,44 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
 	std::stringstream str(ex_);
 
 	try {
+	  //	  std::cerr << "parsing " << ex_ << std::endl;
 		str >> parser;
 //		Ex::print_recursive_treeform(std::cout, ptr->begin());
 		}
 	catch(std::exception& except) {
+	  //	  std::cerr << "cannot parse " << ex_ << std::endl;
 		throw ParseException("Cannot parse");
 		}
 	parser.finalise();
+	//	std::cerr << "finalised" << std::endl;
 
 	// First pull in any expressions referred to with @(...) notation, because the
 	// full expression may not have consistent indices otherwise.
 	pull_in(ptr);
+	//	std::cerr << "pulled in" << std::endl;
    
 	// Basic cleanup of rationals and subtractions, followed by
    // cleanup of nested sums and products.
 	pre_clean_dispatch_deep(*get_kernel_from_scope(), *ptr);
 	cleanup_dispatch_deep(*get_kernel_from_scope(), *ptr);
+	check_index_consistency(*get_kernel_from_scope(), *ptr, (*ptr).begin());
 	call_post_process(*ptr);
+	//	std::cerr << "cleaned up" << std::endl;
 
 	// The local variable stack is not writeable so we cannot insert '_'
 	// as a local variable. Instead, we push it onto the global stack.
 	
 	if(make_ref) {
-		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-		globals["_"]=ptr;
-		}
+	  //	  std::cerr << "making ref" << std::endl;
+	  auto globals_c = PyEval_GetGlobals();
+	  if(globals_c!=NULL) {
+	    // std::cerr << "globals_c non-null" << std::endl;
+	    boost::python::object globals(boost::python::borrowed(globals_c));
+	    // std::cerr << "inserting ref" << std::endl;
+	    globals["_"]=ptr;
+	  }
+	}
+	// std::cerr << "make_ex_from_string done" << std::endl;
 	return ptr;
 	}
 
@@ -439,6 +468,47 @@ std::shared_ptr<Ex> construct_Ex_from_int_2(int num, bool add_ref)
 	return make_Ex_from_int(num, add_ref);
 	}
 
+
+Ex operator+(const Ex& ex1, const Ex& ex2)
+	{
+	if(ex1.size()==0) return ex2;
+	if(ex2.size()==0) return ex1;
+
+	Ex ret(ex1);
+	if(*ret.begin()->name!="\\sum") 
+		ret.wrap(ret.begin(), str_node("\\sum"));
+	ret.append_child(ret.begin(), ex2.begin());
+
+	auto it=ret.begin();
+	cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+
+	return ret;
+	}
+
+Ex operator-(const Ex& ex1, const Ex& ex2)
+	{
+	if(ex1.size()==0) {
+		if(ex2.size()!=0) {
+			Ex ret(ex2);
+			multiply(ex2.begin()->multiplier, -1);
+			auto it=ret.begin();
+			cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+			return ret;
+			}
+		else return ex2;
+		}
+	if(ex2.size()==0) return ex1;
+
+	Ex ret(ex1);
+	if(*ret.begin()->name!="\\sum") 
+		ret.wrap(ret.begin(), str_node("\\sum"));
+	multiply( ret.append_child(ret.begin(), ex2.begin())->multiplier, -1 );
+
+	auto it=ret.begin();
+	cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+	
+	return ret;
+	}
 
 // Initialise mathematics typesetting for IPython.
 
@@ -514,6 +584,7 @@ std::string print_tree(Ex *ex)
  
 PyObject *ParseExceptionType = NULL;
 PyObject *ArgumentExceptionType = 0;
+PyObject *ConsistencyExceptionType = 0;
 PyObject *NonScalarExceptionType = NULL;
 PyObject *InternalErrorType = NULL;
 
@@ -534,7 +605,6 @@ PyObject* createExceptionClass(const char* name, PyObject* baseTypeObj = PyExc_E
 // Handler to translate a C++ exception and pass it on as a Python exception
 void translate_ArgumentException(const ArgumentException& x) 
 	{
-	std::cerr << "getting confused" << std::endl;
 	assert(ArgumentExceptionType != 0);
 	boost::python::object exc(x); // wrap the C++ exception
 //	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));
@@ -542,6 +612,17 @@ void translate_ArgumentException(const ArgumentException& x)
 	
 //    PyErr_SetString(ArgumentExceptionType, x.what());
 	PyErr_SetObject(ArgumentExceptionType, exc.ptr()); //exc_t.ptr());
+	}
+
+void translate_ConsistencyException(const ConsistencyException& x) 
+	{
+	assert(ConsistencyExceptionType != 0);
+	boost::python::object exc(x); // wrap the C++ exception
+//	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));
+//	exc_t.attr("cause") = exc; // add the wrapped exception to the Python exception
+	
+//    PyErr_SetString(ArgumentExceptionType, x.what());
+	PyErr_SetObject(ConsistencyExceptionType, exc.ptr()); //exc_t.ptr());
 	}
 
 void translate_ParseException(const ParseException &e)
@@ -650,36 +731,48 @@ void inject_defaults(Kernel *k)
 	// Create and inject properties; these then get owned by the kernel.
 	post_process_enabled=false;
 
-	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}"), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}"), 0);
-	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}"), 0);
-	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\prod{#}"), 0);
-	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\prod{#}"), 0);
+	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}",false), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}",false), 0);
+	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\prod{#}",false), 0);
+	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\prod{#}",false), 0);
+	auto wi2=new WeightInherit();
+	wi2->combination_type = WeightInherit::multiplicative;
+	auto wa2=make_Ex_from_string("label=all, type=multiplicative", false);
+	inject_property(k, wi2,                      make_Ex_from_string("\\prod{#}",false), wa2);
 
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}"), 0);
-	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}"), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}",false), 0);
+	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false), 0);
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\sum{#}",false), 0);
+	auto wi=new WeightInherit();
+	auto wa=make_Ex_from_string("label=all, type=additive", false);
+	inject_property(k, wi,                       make_Ex_from_string("\\sum{#}", false), wa);
 
-	inject_property(k, new Derivative(),         make_Ex_from_string("\\commutator{#}"), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\commutator{#}"), 0);
+	inject_property(k, new Derivative(),         make_Ex_from_string("\\commutator{#}",false), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false), 0);
 
-	inject_property(k, new Derivative(),         make_Ex_from_string("\\anticommutator{#}"), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}"), 0);
+	inject_property(k, new Derivative(),         make_Ex_from_string("\\anticommutator{#}",false), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}",false), 0);
 
-	inject_property(k, new Distributable(),      make_Ex_from_string("\\indexbracket{#}"), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}"), 0);
+	inject_property(k, new Distributable(),      make_Ex_from_string("\\indexbracket{#}",false), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}",false), 0);
 
-	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}"), 0);
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}",false), 0);
+	auto wi3=new WeightInherit();
+	auto wa3=make_Ex_from_string("label=all, type=power", false);
+	inject_property(k, wi3,                      make_Ex_from_string("\\pow{#}",false), wa3);
 
-	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\int{#}"), 0);
+	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\int{#}",false), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\int{#}",false), 0);
 
 	// Accents, necessary for proper display.
-	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}"), 0);
-	inject_property(k, new Accent(),             make_Ex_from_string("\\bar{#}"), 0);
-	inject_property(k, new Accent(),             make_Ex_from_string("\\overline{#}"), 0);
-	inject_property(k, new Accent(),             make_Ex_from_string("\\tilde{#}"), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}",false), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\bar{#}",false), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\overline{#}",false), 0);
+	inject_property(k, new Accent(),             make_Ex_from_string("\\tilde{#}",false), 0);
 
 	post_process_enabled=true;
-//	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}"), 0);
+//	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}",false), 0);
 	}
 
 void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
@@ -687,6 +780,7 @@ void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std
 	Ex::iterator it=ex->begin();
 
 	if(param) {
+		// std::cerr << "property with " << *param << std::endl;
 		keyval_t keyvals;
 		prop->parse_to_keyvals(*param, keyvals);
 		prop->parse(*kernel, keyvals);
@@ -758,9 +852,12 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin();
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
-		if(*it->name=="\\equals") 
+		if(*it->name=="\\equals") {
+			// std::cerr << "full expression:\n" << print_tree(&ex) << std::endl;
 			it=ex.child(it,1);
+			}
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
 		}
 	return &ex;
@@ -981,21 +1078,24 @@ BOOST_PYTHON_MODULE(cadabra2)
 //	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
 	class_<Ex, std::shared_ptr<Ex> >("Ex", boost::python::no_init)
 		.def("__init__", boost::python::make_constructor(&construct_Ex_from_string))
-	   .def("__init__", boost::python::make_constructor(&construct_Ex_from_string_2))
-		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int))
-		.def("__init__", boost::python::make_constructor(&construct_Ex_from_int_2))
-		.def("__str__",  &Ex_str_)
-		.def("_latex_",  &Ex_latex_)
-		.def("__repr__", &Ex_repr_)
-		.def("__eq__",   &__eq__Ex_Ex)
-		.def("__eq__",   &__eq__Ex_int)
-		.def("_sympy_",  &Ex_to_Sympy)
+		.def("__init__", boost::python::make_constructor(&construct_Ex_from_string_2))
+		.def("__init__",    boost::python::make_constructor(&construct_Ex_from_int))
+		.def("__init__",    boost::python::make_constructor(&construct_Ex_from_int_2))
+		.def("__str__",     &Ex_str_)
+		.def("_latex_",     &Ex_latex_)
+		.def("__repr__",    &Ex_repr_)
+		.def("__eq__",      &__eq__Ex_Ex)
+		.def("__eq__",      &__eq__Ex_int)
+		.def("_sympy_",     &Ex_to_Sympy)
 		.def("__getitem__", &Ex_getitem)
+		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
-		.def("__len__",  &Ex_len)
-		.def("state",    &Ex::state)
-		.def("reset",    &Ex::reset_state)
-		.def("changed",  &Ex::changed_state);
+		.def("__len__",     &Ex_len)
+		.def("state",       &Ex::state)
+		.def("reset",       &Ex::reset_state)
+		.def("changed",     &Ex::changed_state)
+		.def(self + self)
+		.def(self - self);
 	
 	enum_<Algorithm::result_t>("result_t")
 		.value("checkpointed", Algorithm::result_t::l_checkpointed)
@@ -1011,6 +1111,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("tree", &print_tree);
 	def("init_ipython", &init_ipython);
 	def("properties", &list_properties);
+	def("scas", &Ex_through_Sympy);
 
 	def("create_scope", &create_scope, 
 		 return_value_policy<manage_new_object>() );
@@ -1054,11 +1155,27 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<rename_dummies>("rename_dummies");
 //	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
+	def_algo_1<sort_sum>("sort_sum");
 	def_algo_1<unwrap>("unwrap");
 	def_algo_1<young_project_product>("young_project_product");
 
 	def("complete", &dispatch_ex<complete, Ex&>, 
 		 (arg("ex"),arg("add"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("drop_weight", &dispatch_ex<drop_weight, Ex&>, 
+		 (arg("ex"),arg("condition"),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("eliminate_metric", &dispatch_ex<eliminate_metric, Ex&>, 
+	    (arg("ex"),arg("preferred")=new Ex(), 
+	     arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+	    return_internal_reference<1>() );
+
+	def("keep_weight", &dispatch_ex<keep_weight, Ex&>, 
+		 (arg("ex"),arg("condition"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
@@ -1080,6 +1197,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Automatically convert Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
+	def("einsteinify", &dispatch_ex<einsteinify, Ex&>,
+	    (arg("ex"), arg("metric")=new Ex(),
+		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+		  
 	def("evaluate", &dispatch_ex<evaluate, Ex&>,
 		 (arg("ex"), arg("components"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
@@ -1159,17 +1281,25 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 (arg("ex"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
+	def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex&, Ex&>, 
+		 (arg("ex"),arg("preferred"),arg("converters"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
 	def("vary", &dispatch_ex<vary, Ex&>, 
 		 (arg("ex"),
 		  arg("rules"),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	def("split_gamma", &dispatch_ex<split_gamma, bool>, 
+		 (arg("ex"),
+		  arg("on_back"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 	def("split_index", &dispatch_ex<split_index, Ex&>, 
 		 (arg("ex"),
 		  arg("rules"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
-
 
 	// Properties are declared as objects on the Python side as well. They all take two
 	// Ex objects as constructor parameters: the first one is the object(s) to which the
@@ -1234,6 +1364,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// wrapper around that. The problem is that PyErr_NewException produces
 	// a PyObject but that is not related to the C++ object.
 
+	ConsistencyExceptionType=createExceptionClass("ConsistencyException");
+	class_<ConsistencyException> pyConsistencyException("ConsistencyException", init<std::string>());
+	pyConsistencyException.def("__str__", &ConsistencyException::what);
+	register_exception_translator<ConsistencyException>(&translate_ConsistencyException);
+
 	ArgumentExceptionType=createExceptionClass("ArgumentException");
 	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
 	pyArgumentException.def("__str__", &ArgumentException::what);
@@ -1254,7 +1389,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyInternalError.def("__str__", &InternalError::py_what);
 	register_exception_translator<InternalError>(&translate_InternalError);
 	
-
 #if BOOST_VERSION >= 106000
 	boost::python::register_ptr_to_python<std::shared_ptr<Ex> >();
 	//	boost::python::register_ptr_to_python<std::shared_ptr<Property> >();

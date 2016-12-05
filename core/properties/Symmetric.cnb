@@ -1,0 +1,133 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Symmetric}{Make an object symmetric in all indices.}\n\nMake an object symmetric in all indices. This information is then\nsubsequently used by various algorithms, for instance \\algo{canonicalise}. \nAn example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Symmetric}{Make an object symmetric in all indices.}\n\nMake an object symmetric in all indices. This information is then\nsubsequently used by various algorithms, for instance \\algo{canonicalise}. \nAn example:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n} B_{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "A_{m n}::AntiSymmetric.\nB_{m n}::Symmetric.\nex:=A_{m n} B_{m n};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "If you need symmetry in only a subset of all indices of a tensor, you need to use the\n\\prop{TableauSymmetry} property. A quick example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "If you need symmetry in only a subset of all indices of a tensor, you need to use the\n\\prop{TableauSymmetry} property. A quick example:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}C_{a n p}.\\end{dmath*}"
+				}
+			],
+			"source" : "C_{a n p}::TableauSymmetry(shape={2}, indices={1,2});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This gives indices 1 and 2 (counting starts from 0) the symmetry of the Young Tableau\nformed by one row of 2 boxes, which is the fully symmetric representation of the \npermutation group. Now you get, as expected,"
+				}
+			],
+			"hidden" : true,
+			"source" : "This gives indices 1 and 2 (counting starts from 0) the symmetry of the Young Tableau\nformed by one row of 2 boxes, which is the fully symmetric representation of the \npermutation group. Now you get, as expected,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}C_{a n p}-C_{a p n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=C_{a n p} - C_{a p n};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "For more information see the \\prop{TableauSymmetry} documentation."
+				}
+			],
+			"hidden" : true,
+			"source" : "For more information see the \\prop{TableauSymmetry} documentation."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

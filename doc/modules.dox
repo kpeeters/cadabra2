@@ -63,4 +63,11 @@
 /// well. The compute thread merely puts requests to change the
 /// document onto a stack, and then requests that the GUI updates
 /// the document.
-
+///
+/// In order to enable undo/redo, all updates to DocumentThread::dtree 
+/// are made by putting objects derived from ActionBase onto the 
+/// action stack. See DocumentThread::queue_action for details.
+/// These ActionBase objects (among which ActionAddCell, ActionRemoveCell, 
+/// ActionInsertText, etc) get executed on the GUI thread, and contain
+/// the actual logic to perform updates to the document and related
+/// GUI elements. 

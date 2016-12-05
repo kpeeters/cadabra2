@@ -44,6 +44,11 @@ std::string NonScalarException::py_what() const
 	return what();
 	}
 
+RuntimeException::RuntimeException(std::string s)
+	: CadabraException(s)
+	{
+	}
+
 InternalError::InternalError(std::string s)
 	: CadabraException(s)
 	{

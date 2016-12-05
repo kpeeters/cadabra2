@@ -99,8 +99,11 @@ bool substitute::can_apply(iterator st)
 			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
 			else                     ret=comparator.equal_subtree(lhs, st);
 			
-			if(ret == Ex_comparator::subtree_match) {
+			if(ret == Ex_comparator::match_t::subtree_match || 
+				ret == Ex_comparator::match_t::match_index_less || 
+				ret == Ex_comparator::match_t::match_index_greater) {
 				use_rule=arrow;
+				// std::cerr << "can apply rule" << std::endl;
 				return arrow;
 				}
 
@@ -160,6 +163,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 			 is_stripped=true;
 			 }
 
+		// std::cerr << "consider " << Ex(it) << std::endl;
+
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
 			// std::cerr << "rule: " << Ex(loc->first) << " -> " << Ex(loc->second) << std::endl;
 
@@ -197,7 +202,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			}
 		else if( (sloc=comparator.subtree_replacement_map.find(it->name)) 
 					!=comparator.subtree_replacement_map.end()) { // object wildcards
-//			txtout << "srule : " << *it->name << std::endl;
+			// std::cerr << "srule : " << Ex(it) << std::endl;
 			multiplier_t tmpmult=*it->multiplier; // remember target multiplier
 			iterator tmp= tr.insert_subtree(it, (*sloc).second);
 			tmp->fl.bracket=it->fl.bracket;
@@ -250,7 +255,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement tree.
 	//std::cerr << "repl before: \n" << repl << std::endl;
 	cleanup_dispatch_deep(kernel, repl);
-	//std::cerr << "repl after: \n" << repl << std::endl;
+	// std::cerr << "repl after: \n" << repl << std::endl;
 
 	// Remove the wrapping "\expression" node, not needed anymore.
 //	repl.flatten(repl.begin());
@@ -287,7 +292,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 		}
 	else {
 		multiply(repl.begin()->multiplier, *st->multiplier);
+		auto keep_parent_rel=st->fl.parent_rel;
 		st=tr.move_ontop(st, repl.begin()); // no need to keep the original repl tree
+		st->fl.parent_rel=keep_parent_rel;
 		}
 
 	if(ind_dummy.size()>0 && !rename_replacement_dummies_called) 

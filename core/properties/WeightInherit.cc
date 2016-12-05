@@ -12,12 +12,13 @@ WeightInherit::WeightException::WeightException(const std::string& str)
 	{
 	}
 
-bool WeightInherit::parse(const Kernel&, keyval_t& kv)
+bool WeightInherit::parse(const Kernel& k, keyval_t& kv)
 	{
 	keyval_t::const_iterator tpit=kv.find("type");
 	if(tpit!=kv.end()) {
-		if(*tpit->second->name=="Multiplicative") combination_type=multiplicative;
-		else                                      combination_type=additive;
+		if(*tpit->second->name=="multiplicative") combination_type=multiplicative;
+		else if(*tpit->second->name=="additive")  combination_type=additive;
+		else                                      combination_type=power;
 		}
 	else combination_type=multiplicative;
 
@@ -27,7 +28,8 @@ bool WeightInherit::parse(const Kernel&, keyval_t& kv)
 		}
 	else value_self=0;
 
-	return true;
+	auto ret = WeightBase::parse(k, kv);
+	return ret;
 	}
 
 multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const std::string& forcedlabel) const
@@ -37,36 +39,55 @@ multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const s
 	multiplier_t ret=0;
 	bool first_term=true;
 
-//	txtout << "calling inherit on " << *it->name << " " << &(*it) << " " << forcedlabel << std::endl;
+	// std::cerr << "calling inherit on " << *it->name << " " << &(*it) << " " << forcedlabel << std::endl;
 	Ex::sibling_iterator sib=it.begin();
 	while(sib!=it.end()) {
 		 if(!sib->is_index()) {
-			  if(combination_type==multiplicative) {
-					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
-					if(gnb) {
-						multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
+			 switch(combination_type) {
+				 case multiplicative: {
+					 const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					 // std::cerr << "finding weight for " << Ex(sib) << std::endl;
+					 if(gnb) {
+						 multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
 						 ret+=tmp;
 						 }
-					}
-			  else {
-					multiplier_t thisone=0;
-					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
-					if(gnb) thisone=gnb->value(kernel, sib, forcedlabel);
-					else    thisone=0;
-					if(first_term) {
-						first_term=false;
-						ret=thisone;
-						}
-					else if(ret!=thisone) { // the weights in the sum are not uniform
-						throw WeightException("Encountered sum with un-equal weight terms.");
-						}
-				  }
+					 }
+					 break;
+				 case additive: {
+					 multiplier_t thisone=0;
+					 const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					 if(gnb) thisone=gnb->value(kernel, sib, forcedlabel);
+					 else    thisone=0;
+					 if(first_term) {
+						 first_term=false;
+						 ret=thisone;
+						 }
+					 else if(ret!=thisone) { // the weights in the sum are not uniform
+						 throw WeightException("Encountered sum with un-equal weight terms.");
+						 }
+					 }
+					 break;
+				 case power: {
+					 const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					 if(gnb) {
+						 multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
+						 ++sib;
+						 if(sib==it.end() || sib->is_rational()==false)
+							 throw RuntimeException("Can only handle numerical exponents for weight counting.");
+
+						 ret+=(*sib->multiplier)*tmp;
+						 sib=it.end();
+						 continue;
+						 }
+					 }
+					 break;
+				 }
 			 }
 		 ++sib;
 		}
-
+	
 	ret+=value_self;  // Add our own weight.
-
+	
 	return ret;
 	}
 

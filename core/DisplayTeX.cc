@@ -14,6 +14,14 @@
 DisplayTeX::DisplayTeX(const Kernel& k, const Ex& e)
 	: DisplayBase(k, e)
 	{
+	symmap = {
+		{"\\hat", "\\widehat"},
+		{"\\tilde", "\\widetilde"}
+		};
+
+	curly_bracket_operators = {
+		"\\sqrt"
+	};
 	}
 
 bool DisplayTeX::needs_brackets(Ex::iterator it)
@@ -28,6 +36,8 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	if(parent=="\\partial" && child=="\\sum") return false; // Always handled by the functional argument. Was: true;
 
 	if(parent=="\\int" && child=="\\sum") return true;
+
+	if(parent=="\\indexbracket" && child=="\\prod") return false;
 
 	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum")) return  true;
 
@@ -53,6 +63,9 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 		// no brackets are needed.
       if((*arg->name).size()==1 || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
+	auto it=curly_bracket_operators.find(*obj->name);
+	if(it!=curly_bracket_operators.end()) return true;
+
 	return false;
 	}
 
@@ -96,8 +109,12 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		str << "\\right)";
 	}
 
-std::string DisplayTeX::texify(const std::string& str) const
+std::string DisplayTeX::texify(std::string str) const
 	{
+	auto rn = symmap.find(str);
+	if(rn!=symmap.end())
+		str = rn->second;
+
 	std::string res;
    for(unsigned int i=0; i<str.size(); ++i) {
 		 if(str[i]=='#') res+="\\#";

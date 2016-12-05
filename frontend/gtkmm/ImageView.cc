@@ -34,7 +34,7 @@ void ImageView::set_image_from_base64(const std::string& b64)
 	str->add_data(dec.c_str(), dec.size()); 
 
 	Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str,400,-1,true);
-	if(pixbuf==0)
+	if(!pixbuf)
 		std::cerr << "cadabra-client: unable to create image from data" << std::endl;
 	else {
 //		pixbuf->scale_simple(400,300,Gdk::INTERP_BILINEAR);

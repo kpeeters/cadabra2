@@ -19,4 +19,7 @@ int main(int argc, char **argv)
 		std::cerr << er.what() << std::endl;
 		return -1;
 		}
+	catch(std::exception& ex) {
+	  std::cerr << ex.what() << std::endl;
+	}
 	}

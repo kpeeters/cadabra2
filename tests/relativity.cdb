@@ -1,0 +1,137 @@
+
+def test01():
+    __cdbkernel__=create_scope()
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    {m, n, p, q, r}::Integer(0..9).
+    g_{m n}::Metric.
+    g^{m n}::InverseMetric.
+    g_{m}^{n}::KroneckerDelta.
+    g^{m}_{n}::KroneckerDelta.
+    obj10:= g_{m p} g^{p m};
+    eliminate_metric(_);
+    eliminate_kronecker(_);
+    tst10:= 10 - @(obj10);
+    assert(tst10==0)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    __cdbkernel__=create_scope();
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    g_{m n}::Metric.
+    g^{m n}::InverseMetric.
+    obj11b:= 3 g_{m p} g^{m p};
+    eliminate_metric(_);
+    tst11b:= 3 g_{p}^{p} - @(obj11b);
+    assert(tst11b==0)
+    print("Test 02 passed")
+
+test02()
+
+# Eliminating metrics in presence of derivatives.
+
+def test03():
+    __cdbkernel__=create_scope();
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    g_{m n}::Metric.
+    \partial{#}::Derivative.
+    obj12a:= g_{m n} \partial_{p}{ A^{n} };
+    eliminate_metric(_);
+    tst12a:= \partial_{p}{ A_{m} } - @(obj12a);
+    assert(tst12a==0)
+    print("Test 03 passed")
+    
+test03()
+
+def test04():
+    __cdbkernel__=create_scope();
+    {m, n, p, q, r}::Indices(vector, position=fixed).
+    g_{m n}::Metric.
+    \partial{#}::Derivative.
+    g_{m n}::Depends(\partial{#}).
+    obj12b:= g_{m n} \partial_{p}{ A^{n} };
+    eliminate_metric(_);
+    tst12b:= g_{m n} \partial_{p}{ A^{n} } - @(obj12b);
+    assert(tst12b==0)
+    print("Test 04 passed")
+
+test04()
+
+# Reported bug with eliminate_metric.
+# {a,b,c,d,e,i,j,k}::Indices(curved).
+# g^{a b}::InverseMetric.
+# \nabla{#}::Derivative.
+# h_{a b}::Symmetric.
+# ex:=g^{a k} * \nabla_{b}{h_{k c}} +g^{a k} * \nabla_{c}{h_{k b}};
+# eliminate_metric(_);
+
+def test05():
+    __cdbkernel__=create_scope();
+    { m, n, p }::Indices(flat, position=fixed).
+    { \mu, \nu, \rho, \sigma, \kappa }::Indices(curved, position=fixed).
+    obj:= H_{m n p} ( B^{m n p} + H^{m n p} );
+    rewrite_indices(_, $H_{\mu\nu\rho}$, $e_{m}^{\mu}$);
+    tst:= H_{\mu \nu \rho} * ( B^{m n p} + H^{m n p} ) * e_{m}^{\mu} * e_{n}^{\nu} * e_{p}^{\rho} - @(obj);
+    assert(tst==0)
+    print("Test 05 passed")
+
+test05()
+
+def test06():
+    __cdbkernel__=create_scope();
+    { m, n, p }::Indices(flat).
+    { \mu, \nu, \rho, \mu# }::Indices(curved, position=fixed).
+    obj:= H_{m n p} [ B^{m n p} + H^{m n p} ];
+    rewrite_indices(_, $H_{\mu\nu\rho}$, $e_{m \mu}$);
+    tst:= H_{m n p} [ B^{m n p} + H^{m n p} ] - @(obj);
+    assert(tst==0)
+    print("Test 06 passed")
+
+test06()
+
+def test08():
+    __cdbkernel__=create_scope();
+    { m,n,p,q,r,s,t,u }::Indices(curved, position=fixed).
+    obj:= B_{m n p} B^{m n q} C_{q};
+    rewrite_indices(_, $B_{m n p}$, $g^{m n}$);
+    tst:= B_{m n p} B_{r s t} C_{q} g^{m r} g^{n s} g^{q t} - @(obj);
+    assert(tst==0)
+    print("Test 08 passed")
+
+test08()
+
+def test09():
+    __cdbkernel__=create_scope();
+    { m,n,p,q,r,s,t,u }::Indices(curved, position=free).
+    obj:= B_{m n p} B_{m n q} C_{q};
+    rewrite_indices(_, $B_{m n p}$, $g^{m n}$);
+    tst:= B_{m n p} B_{m n q} C_{q} - @(obj);
+    assert(tst==0)
+    print("Test 09 passed")
+
+test09()
+
+def test10():
+    __cdbkernel__=create_scope();
+    {m,n,p,q,r,s}::Indices(curved, position=fixed).
+    ex:=H_{m n p};
+    rewrite_indices(_, $H^{m n p}$, $g_{m n}$);
+    tst:=H^{q r s} g_{m q} g_{n r} g_{p s} - @(ex);
+    assert(tst==0)
+    print("Test 10 passed")
+
+test10()
+
+def test11():
+    __cdbkernel__=create_scope();
+    {a, b, c, d, e, f}::Indices(position=fixed).
+    \eta_{a b}::Metric.
+    ex:=F_{a}^{b} G_{b c} + F^{b d}G_{d a c b};
+    rewrite_indices(_, $F_{a b}$, $\eta^{a b}$);
+    tst:=F_{a d} G_{b c} \eta^{b d} + F_{e f} G_{d a c b} \eta^{b e} \eta^{d f} - @(ex);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
+

@@ -87,8 +87,9 @@ bool TableauSymmetry::parse(const Kernel& kernel, keyval_t& keyvals)
 
 void TableauSymmetry::latex(std::ostream& str) const
 	{
-	for(unsigned int i=0; i<tabs.size(); ++i)
-		str << tabs[i] << std::endl;
+	str << "TableauSymmetry";
+//	for(unsigned int i=0; i<tabs.size(); ++i)
+//		str << tabs[i] << std::endl;
 	}
 
 unsigned int TableauSymmetry::size(const Properties&, Ex&, Ex::iterator) const

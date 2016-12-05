@@ -1,0 +1,157 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{drop_weight}{Drop terms with given weight}\n\nDrop those terms for which a product has the indicated\nweight. Weights are computed by making use of the \\prop{Weight}\nproperty of symbols. This algorithm does the opposite\nof \\algo{keep_weight}.\n\nAs an example, consider the simple case in which we want to drop all\nterms with 3~fields. This is done using"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{drop_weight}{Drop terms with given weight}\n\nDrop those terms for which a product has the indicated\nweight. Weights are computed by making use of the \\prop{Weight}\nproperty of symbols. This algorithm does the opposite\nof \\algo{keep_weight}.\n\nAs an example, consider the simple case in which we want to drop all\nterms with 3~fields. This is done using"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left(A, \\linebreak[0] B\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B B+A A A+A B+B\\end{dmath*}"
+				}
+			],
+			"source" : "{A,B}::Weight(label=field);\nex:=A B B + A A A + A B + B;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B+B\\end{dmath*}"
+				}
+			],
+			"source" : "drop_weight(_, $field=3$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "However, you can also do more complicated things by assigning non-unit\nweights to symbols, as in the example below,"
+				}
+			],
+			"hidden" : true,
+			"source" : "However, you can also do more complicated things by assigning non-unit\nweights to symbols, as in the example below,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left(A, \\linebreak[0] B\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}C.\\end{dmath*}"
+				}
+			],
+			"source" : "{A,B}::Weight(label=field);\nC::Weight(label=field, value=2);\nex:=A B B + A A A + A B + A C + B:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A B+B\\end{dmath*}"
+				}
+			],
+			"source" : "drop_weight(_, $field=3$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Weights can be ``inherited'' by operators by using\nthe \\prop{WeightInherit} property. Here is an example using\npartial derivatives,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Weights can be ``inherited'' by operators by using\nthe \\prop{WeightInherit} property. Here is an example using\npartial derivatives,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left(\\phi, \\linebreak[0] \\chi\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property WeightInherit to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\phi \\partial_{0}{\\phi}+\\partial_{0}{\\lambda}+\\lambda \\partial_{3}{\\chi}\\end{dmath*}"
+				}
+			],
+			"source" : "{\\phi,\\chi}::Weight(label=small, value=1);\n\\partial{#}::PartialDerivative;\n\\partial{#}::WeightInherit(label=all, type=Multiplicative);\nex:=\\phi \\partial_{0}{\\phi} + \\partial_{0}{\\lambda} + \\lambda \\partial_{3}{\\chi};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\phi \\partial_{0}{\\phi}+\\partial_{0}{\\lambda}\\end{dmath*}"
+				}
+			],
+			"source" : "drop_weight(_, $small=1$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

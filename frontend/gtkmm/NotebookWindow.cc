@@ -9,6 +9,7 @@
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/aboutdialog.h>
+#include <gtkmm/radioaction.h>
 #include <fstream>
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
@@ -16,29 +17,46 @@
 
 using namespace cadabra;
 
-NotebookWindow::NotebookWindow(Cadabra *c)
+NotebookWindow::Prefs::Prefs()
+	: font_step(0)
+	{
+	}
+
+NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
 	  cdbapp(c),
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
-	  kernel_spinner_status(false),
-	  modified(false)
+	  kernel_spinner_status(false), title_prefix("Cadabra: "),
+	  modified(false), read_only(ro)
 	{
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
+	// Set the window icon.
+//#ifdef __APPLE__
+	set_icon_name("cadabra2-gtk");
+//#else
+//	std::cerr << CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png" << std::endl;
+//	set_icon_from_file("/usr/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg");
+//#endif
+
 	// Query high-dpi settings. For now only for cinnamon.
-#ifdef __APPLE__
 	scale = 1.0;
-#else
-	settings = Gio::Settings::create((strcmp(std::getenv("DESKTOP_SESSION"), "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
-	scale = settings->get_double("text-scaling-factor");
+#ifndef __APPLE__
+	const char *ds = std::getenv("DESKTOP_SESSION");
+	if(ds) {
+	  settings = Gio::Settings::create((strcmp(ds, "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
+	  scale = settings->get_double("text-scaling-factor");
+	}
 #endif
 	engine.set_scale(scale);
 
 #ifndef __APPLE__
-	settings->signal_changed().connect(
-		sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
+	if(ds) {
+	  settings->signal_changed().connect(
+					     sigc::mem_fun(*this, &NotebookWindow::on_text_scaling_factor_changed));
+	}
 #endif
 
 	// Setup styling. Note that 'margin-left' and so on do not work; you need
@@ -48,11 +66,14 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	// padding-left: 20px; does not work on some versions of gtk, so we use margin in CodeInput
 	Glib::ustring data = "GtkTextView { color: blue;  }\n";
 	data += "GtkTextView { background: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
-	data += "*:focused { background-color: #eee; }\n";
+	data += "*:focus { background-color: #eee; }\n";
 	data += "*:selected { background-color: #ccc; }\n";
+	data += "GtkTextView.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
+	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
 	if(!css_provider->load_from_data(data)) {
+	  std::cerr << "Cannot parse internal CSS." << std::endl;
 		throw std::logic_error("Failed to parse widget CSS information.");
 		}
 	auto screen = Gdk::Screen::get_default();
@@ -65,6 +86,8 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 							sigc::mem_fun(*this, &NotebookWindow::on_file_new) );
 	actiongroup->add( Gtk::Action::create("Open", Gtk::Stock::OPEN), Gtk::AccelKey("<control>O"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_open) );
+	actiongroup->add( Gtk::Action::create("Close", Gtk::Stock::CLOSE), Gtk::AccelKey("<control>W"),
+							sigc::mem_fun(*this, &NotebookWindow::on_file_close) );
 	actiongroup->add( Gtk::Action::create("Save", Gtk::Stock::SAVE), Gtk::AccelKey("<control>S"),
 							sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
 	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS),
@@ -81,11 +104,11 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 							sigc::mem_fun(*this, &NotebookWindow::on_file_quit) );
 
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
-	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO),
+	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO), Gtk::AccelKey("<control>Z"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
-	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"),
+	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
-	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"),
+	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"), Gtk::AccelKey("<alt>Down"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
 	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
@@ -101,6 +124,29 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 							sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
 	actiongroup->add( Gtk::Action::create("ViewClose", "Close view"),
 							sigc::mem_fun(*this, &NotebookWindow::on_view_close) );
+
+	Gtk::RadioAction::Group group_font_size;
+
+	actiongroup->add( Gtk::Action::create("MenuFontSize", "Font size") );
+	auto font_action0=Gtk::RadioAction::create(group_font_size, "FontSmall", "Small");
+	font_action0->property_value()=-1;
+	actiongroup->add( font_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size),-1 ));
+	if(prefs.font_step==-1) font_action0->set_active();
+
+	auto font_action1=Gtk::RadioAction::create(group_font_size, "FontMedium", "Medium (default)");
+	font_action1->property_value()= 0;
+	actiongroup->add( font_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0));
+	if(prefs.font_step==0) font_action1->set_active();
+
+	auto font_action2=Gtk::RadioAction::create(group_font_size, "FontLarge", "Large");
+	font_action2->property_value()= 2;
+	actiongroup->add( font_action2, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 2));
+	if(prefs.font_step==2) font_action2->set_active();
+
+	auto font_action3=Gtk::RadioAction::create(group_font_size, "FontExtraLarge", "Extra large");
+	font_action3->property_value()= 4;
+	actiongroup->add( font_action3, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 4));
+	if(prefs.font_step==4) font_action3->set_active();
 
 	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
  	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
@@ -132,6 +178,7 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"    <menu action='MenuFile'>"
 		"      <menuitem action='New'/>"
 		"      <menuitem action='Open'/>"
+		"      <menuitem action='Close'/>"
 		"      <separator/>"
 		"      <menuitem action='Save'/>"
 		"      <menuitem action='SaveAs'/>"
@@ -141,7 +188,9 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"      <menuitem action='ExportPython'/>"
 		"      <separator/>"
 		"      <menuitem action='Quit'/>"
-		"    </menu>"
+		"    </menu>";
+	if(!read_only) 
+		ui_info+=
 		"    <menu action='MenuEdit'>"
 		"      <menuitem action='EditUndo' />"
 		"      <separator/>"
@@ -157,6 +206,12 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"    <menu action='MenuView'>"
 		"      <menuitem action='ViewSplit' />"
 		"      <menuitem action='ViewClose' />"
+		"      <menu action='MenuFontSize'>"
+		"         <menuitem action='FontSmall'/>"
+		"         <menuitem action='FontMedium'/>"
+		"         <menuitem action='FontLarge'/>"
+		"         <menuitem action='FontExtraLarge'/>"
+      "      </menu>"
 		"    </menu>"
 		"    <menu action='MenuEvaluate'>"
 		"      <menuitem action='EvaluateCell' />"
@@ -167,7 +222,8 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 		"    </menu>"
 		"    <menu action='MenuKernel'>"
 		"      <menuitem action='KernelRestart' />"
-		"    </menu>"
+			"    </menu>";
+	ui_info+=
 		"    <menu action='MenuHelp'>"
 //		"      <menuitem action='HelpNotebook' />"
 		"      <menuitem action='HelpAbout' />"
@@ -195,7 +251,7 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	topbox.pack_start(statusbarbox, false, false);
 	supermainbox.pack_start(mainbox, true, true);
 
-	
+
 	// Status bar
 	status_label.set_alignment( 0.0, 0.5 );
 	kernel_label.set_alignment( 0.0, 0.5 );
@@ -210,17 +266,13 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	progressbar.set_text("idle");
 	progressbar.set_show_text(true);
 
-	// Buttons
-	set_stop_sensitive(false);
 
 	// The three main widgets
 //	mainbox.pack_start(buttonbox, Gtk::PACK_SHRINK, 0);
 
 	// We always have at least one canvas.
 	canvasses.push_back(manage( new NotebookCanvas() ));
-//	canvasses.push_back(manage( new NotebookCanvas() ));
 	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
-//	mainbox.pack_start(*canvasses[1], Gtk::PACK_EXPAND_WIDGET, 0);
 
 
 	// Window size and title, and ready to go.
@@ -231,6 +283,15 @@ NotebookWindow::NotebookWindow(Cadabra *c)
 	update_title();
 	show_all();
 	kernel_spinner.hide();
+	if(read_only) {
+		statusbarbox.hide();
+		progressbar.hide();
+		toolbar->hide();
+		} 
+	else {
+		// Buttons
+		set_stop_sensitive(false);
+		}
 
 	new_document();
 	}
@@ -271,13 +332,18 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	return ret;
 	}
 
+void NotebookWindow::set_title_prefix(const std::string& pf)
+	{
+	title_prefix=pf;
+	}
+
 void NotebookWindow::update_title()
 	{
 	if(name.size()>0) {
 		if(modified)
-			set_title("Cadabra: "+name+"*");
+			set_title(title_prefix+name+"*");
 		else
-			set_title("Cadabra: "+name);
+			set_title(title_prefix+name);
 		}
 	else {
 		if(modified) 
@@ -454,14 +520,21 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf,scale);
+					ci = new CodeInput(it, it->textbuf,scale,prefs.font_step);
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer,scale);
+				else ci = new CodeInput(it, global_buffer,scale,prefs.font_step);
+				if(read_only)
+					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-				ci->edit.content_changed.connect( 
-					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+//				ci->edit.content_changed.connect( 
+//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+				ci->edit.content_insert.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_insert), i ) );
+				ci->edit.content_erase.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_erase), i ) );
+
 				ci->edit.content_execute.connect( 
 				sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
 				ci->edit.cell_got_focus.connect( 
@@ -601,7 +674,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 	
 	}
 
-void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
+void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int pos)
 	{
 //	if(it==doc.end()) return;
 	//std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
@@ -627,6 +700,12 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it)
 				sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
 				&(target.inbox->edit)
 						  ));
+		}
+	
+	if(pos>=0) {
+		auto cursor=target.inbox->edit.get_buffer()->begin();
+		cursor.forward_chars(pos);
+		target.inbox->edit.get_buffer()->place_cursor(cursor);
 		}
 	
 	current_cell=it;
@@ -708,15 +787,43 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 	return false;
 	}
 
-bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
+// bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
+// 	{
+// 	// FIXME: need to keep track of individual characters inserted, otherwise we
+// 	// cannot build an undo stack. The it->textbuf=content needs to be replaced
+// 	// with an ActionAddText. CodeInput::handle_changed 
+// 
+// 	current_canvas=canvas_number;
+// 	if(it->textbuf!=content) {
+// 		it->textbuf=content;
+// 		dim_output_cells(it);
+// 		modified=true;
+// 		update_title();
+// 		}
+// 
+// 	return false;
+// 	}
+
+bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DTree::iterator it, int canvas_number)
 	{
-	current_canvas=canvas_number;
-	if(it->textbuf!=content) {
-		it->textbuf=content;
-		dim_output_cells(it);
-		modified=true;
-		update_title();
-		}
+	if(disable_stacks) return false;
+
+	//std::cerr << "cell_content_insert" << std::endl;
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(it, pos, content);	
+	queue_action(action);
+	process_todo_queue();
+
+	return false;
+	}
+
+bool NotebookWindow::cell_content_erase(int start, int end, DTree::iterator it, int canvas_number)
+	{
+	if(disable_stacks) return false;
+
+	//std::cerr << "cell_content_erase" << std::endl;
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionEraseText>(it, start, end);
+	queue_action(action);
+	process_todo_queue();
 
 	return false;
 	}
@@ -786,11 +893,28 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 
 bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
 	{
-	Gtk::MessageDialog md("TeX error", false, Gtk::MESSAGE_WARNING, 
-								 Gtk::BUTTONS_OK, true);
+//	Gtk::Dialog md;
+	Gtk::MessageDialog md("Generic TeX error", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+	md.set_resizable(true);
+//	Gtk::Button ok(Gtk::Stock::OK);
 	md.set_transient_for(*this);
 	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-	md.set_secondary_text(str);
+	auto box = md.get_message_area();
+//	md.add_button(Gtk::Stock::OK, 1);
+	Gtk::ScrolledWindow sw;
+	Gtk::TextView tv;
+	auto buffer = tv.get_buffer();
+	buffer->set_text(str);
+//	auto iter = buffer->get_iter_at_offset(0);
+//	buffer->insert(iter, str);
+	tv.set_editable(false);
+	box->add(sw);
+	sw.add(tv);
+	auto context = tv.get_style_context();
+	context->add_class("error");
+	auto screen = Gdk::Screen::get_default();
+	sw.set_size_request(screen->get_width()/4, screen->get_width()/4);
+	sw.show_all();
 	md.run();
 	return true;
 	}
@@ -802,10 +926,16 @@ void NotebookWindow::on_file_new()
 		remove_all_cells();
 		new_document();
 		compute->restart_kernel();
-		position_cursor(doc, doc.begin(doc.begin()));
+		position_cursor(doc, doc.begin(doc.begin()), -1);
 		name="";
 		update_title();
 		}
+	}
+
+void NotebookWindow::on_file_close()
+	{
+	if(quit_safeguard(true))
+		hide();
 	}
 
 void NotebookWindow::on_file_open()
@@ -1052,13 +1182,15 @@ bool NotebookWindow::quit_safeguard(bool quit)
 
 void NotebookWindow::on_file_quit()
 	{
+	// FIXME: this needs to not just close the current window, but also all
+	// other ones.
 	if(quit_safeguard(true)) 
 		hide();
 	}
 
 void NotebookWindow::on_edit_undo()
 	{
-	// FIXME: to be implemented
+	undo();
 	}
 
 void NotebookWindow::on_edit_insert_above()
@@ -1149,6 +1281,8 @@ void NotebookWindow::on_view_close()
 
 void NotebookWindow::on_run_cell()
 	{
+	if(read_only) return;
+
 	// This is actually handled by the CodeInput widget, which ensures that the
 	// DTree is up to date and then calls execute.
 	
@@ -1188,12 +1322,38 @@ void NotebookWindow::on_kernel_restart()
 
 void NotebookWindow::on_help() const
 	{
-	cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/distribute.cnb");
+	if(current_cell==doc.end()) return;
+	if(current_cell->cell_type!=DataCell::CellType::python) return;
+
+	// Figure out the keyword under the cursor.
+	VisualCell& actual = canvasses[current_canvas]->visualcells[&(*current_cell)];
+	std::string before, after;
+	actual.inbox->slice_cell(before, after);
+
+	help_t help_type;
+	std::string help_topic;
+	help_type_and_topic(before, after, help_type, help_topic);
+
+	bool ret=false;
+	if(help_type==help_t::algorithm)
+		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb",
+									 help_topic);
+	if(help_type==help_t::property)
+		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/properties/"+help_topic+".cnb",
+									 help_topic);
+
+	if(!ret) {
+		Gtk::MessageDialog md("No help available", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
+//		md.set_transient_for(*this);
+		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+		md.set_secondary_text("No help available for '"+help_topic+"'.\nNot all algorithms and properties have manual pages yet, sorry.");
+		md.run();
+		}
 	}
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);
@@ -1211,6 +1371,7 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
+	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("Software Sustainability Institute");
 	about.add_credit_section("Special thanks", special);
 	about.run();
@@ -1232,3 +1393,43 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 			}
 		}
 	}
+
+void NotebookWindow::on_prefs_font_size(int num)
+	{
+	if(prefs.font_step==num) return;
+
+	prefs.font_step=num;
+
+//	std::string res=save_config();
+//	if(res.size()>0) {
+//		 Gtk::MessageDialog md("Error");
+//		 md.set_secondary_text(res);
+//		 md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+//		 md.run();
+//		 }
+
+	engine.set_font_size(12+(num*2));
+	engine.invalidate_all();
+	engine.convert_all();
+
+	for(auto& canvas: canvasses) {
+		for(auto& visualcell: canvas->visualcells) {
+			if(visualcell.first->cell_type==DataCell::CellType::python || 
+				visualcell.first->cell_type==DataCell::CellType::latex) {
+				visualcell.second.inbox->set_font_size(num);
+				}
+			}
+		}
+
+	for(unsigned int i=0; i<canvasses.size(); ++i) 
+		canvasses[i]->refresh_all();
+
+//	// Hack.
+//	auto screen = Gdk::Screen::get_default();
+//	if(get_window()!=0) {
+//		std::cerr << "invalidating" << std::endl;
+//		get_window()->invalidate_rect(Gdk::Rectangle(0, 0, screen->get_width()/2, screen->get_height()*0.8),true);
+//		queue_draw();
+//		}
+	}
+

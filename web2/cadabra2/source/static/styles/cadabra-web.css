@@ -95,6 +95,14 @@ div#main > p {
 	 margin-bottom: 20px;
 	 margin-left: 40px;
 }
+div#main > dl {
+	 margin-bottom: 20px;
+	 margin-left: 40px;
+}
+div#main > dl dt {
+	 font-style: oblique;
+	 font-size: smaller;
+}
 div#main blockquote {
 	 margin-top: -5px;
 	 margin-left: 60px;
@@ -364,6 +372,17 @@ div.literal {
 table.packages {
 	 border-collapse: separate;
     border-spacing:  5px 10px;
+}
+table.packages .system {
+	 white-space: nowrap;
+}
+table.packages .date {
+	 white-space: nowrap;
+}
+table.packages .instructions {
+	 font-size: smaller;
+	 padding-left: 20px;
+	 text-align: left;
 }
 table.packages td {
 	 vertical-align: top;

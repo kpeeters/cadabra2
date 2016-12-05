@@ -1,0 +1,123 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{integrate_by_parts}{Integrate by parts away from the indicated expression}\n\nIntegrate by parts. This requires an expression with an\nobject carrying a \\prop{Derivative} property. The algorithm should be given\nan expression that any derivatives should be integrated away from. An example \nmakes this more clear:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{integrate_by_parts}{Integrate by parts away from the indicated expression}\n\nIntegrate by parts. This requires an expression with an\nobject carrying a \\prop{Derivative} property. The algorithm should be given\nan expression that any derivatives should be integrated away from. An example \nmakes this more clear:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int{}\\partial_{m}{A} B C D\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "\\partial{#}::PartialDerivative;\nex:= \\int{ \\partial_{m}{ A } B C D }{x};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\int{}A \\partial_{m}\\left(B C D\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "integrate_by_parts(_, $A$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\int{}A \\left(\\partial_{m}{B} C D+B \\partial_{m}{C} D+B C \\partial_{m}{D}\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\int{}\\left(A \\partial_{m}{B} C D+A B \\partial_{m}{C} D+A B C \\partial_{m}{D}\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that \\algo{integrate_by_parts} only does the formal manipulation of moving the \nderivative around. If you want to discard derivatives of objects which are constant,\nyou need to use the \\prop{Depends} property to indicate on which coordinates or derivatives \nobjects depend, and the \\algo{unwrap} algorithm to eliminate derivatives of constants, \nas in the following lines."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that \\algo{integrate_by_parts} only does the formal manipulation of moving the \nderivative around. If you want to discard derivatives of objects which are constant,\nyou need to use the \\prop{Depends} property to indicate on which coordinates or derivatives \nobjects depend, and the \\algo{unwrap} algorithm to eliminate derivatives of constants, \nas in the following lines."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\left(B, \\linebreak[0] D\\right).\\end{dmath*}"
+				}
+			],
+			"source" : "{B,D}::Depends(\\partial);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\int{}\\left(A \\partial_{m}{B} C D+A B C \\partial_{m}{D}\\right)\\, {\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "unwrap(ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

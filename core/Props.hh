@@ -282,15 +282,11 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 	for(;;) {
 		property_map_t::const_iterator walk=pit.first;
 		while(walk!=pit.second) {
-//			std::cout << "walk " << *((*walk).second.first->obj.begin()->name) << std::endl;
 			if(wildcards==(*walk).second.first->children_wildcard()) {
-//				std::cout << "searching " << *it->name << std::endl;
-//				std::cout << "comparing " << *(walk->second.first->obj.begin()->name) << std::endl;
-				if((*walk).second.first->match(*this, it, ignore_parent_rel)) { // match found
-//					std::cout << "found match" << std::endl;
-					ret=dynamic_cast<const T *>((*walk).second.second);
-					if(ret) { // found! determine serial number
-//						std::cout << "found property" << std::endl;
+				// First check property type; a dynamic cast is much faster than a pattern match.
+				ret=dynamic_cast<const T *>((*walk).second.second);
+				if(ret) {
+					if((*walk).second.first->match(*this, it, ignore_parent_rel)) {
 						if(doserial) {
 							std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator> 
 								pm=pats.equal_range((*walk).second.second);
@@ -304,11 +300,10 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 							}
 						break;
 						}
-//					else 						std::cout << "NOT found property" << std::endl;
-					if(dynamic_cast<const PropertyInherit *>((*walk).second.second)) 
-						inherits=true;
 					}
-//				else std::cout << "NOT found match" << std::endl;
+				ret=0;
+				if(dynamic_cast<const PropertyInherit *>((*walk).second.second)) 
+					inherits=true;
 				}
 			++walk;
 			}
@@ -365,7 +360,8 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, const std::s
 				if((*walk).second.first->match(*this, it)) { // match found
 					ret=dynamic_cast<const T *>((*walk).second.second);
 					if(ret) { // found! determine serial number
-						if(ret->label!=label && ret->label!="all") 
+						// std::cerr << "found weight for " << ret->label << " vs " << label << std::endl;
+						if(ret->label!=label && ret->label!="all")
 							ret=0;
 						else {
 							if(doserial) 

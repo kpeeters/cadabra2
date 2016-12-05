@@ -23,6 +23,7 @@
 #include "Storage.hh"
 #include "Props.hh"
 #include "Cleanup.hh"
+#include <typeinfo>
 
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
@@ -54,11 +55,17 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
 	// std::cerr << "apply_generic at " << *it->name << " " << *start->name << std::endl;
+
 	while(tr.is_valid(start)) {
+//		std::cerr << "evaluate main loop at " << *start->name << std::endl;
+//		std::cerr << "main loop for " << typeid(*this).name() << ":\n" << Ex(start) << std::endl;
+
 		result_t thisret=result_t::l_no_action;
 		Ex::iterator enter(start);
 		Ex::fixed_depth_iterator next(start);
 		++next;
+//		if(tr.is_valid(next))
+//			std::cerr << "next = " << *next->name << std::endl;
 		do {
 //			std::cout << "apply at " << *enter->name << std::endl;
 			if(deep && depth==0) 
@@ -71,8 +78,13 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 				ret=result_t::l_applied;
 			} while(depth==0 && repeat && thisret==result_t::l_applied);
 
-		if(depth==0)  
+		if(depth==0) {
+			// std::cerr << "break " << std::endl;
 			break;
+			}
+		else {
+			// std::cerr << "no break " << std::endl;
+			}
 		start=next;
 		} 
 
@@ -83,9 +95,17 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 		while(tr.is_valid(start)) {
 			Ex::iterator work=start;
 			++start;
+			bool cpy=false;
+			if(work==it) cpy=true;
 			cleanup_dispatch(kernel, tr, work);
+			if(cpy) it=work;
 			}
 		}
+	
+//	if(tr.is_valid(it)) {
+//		std::cerr << "exit " << *it->name << std::endl;
+//		std::cerr << "exit apply_generic\n" << Ex(it) << std::endl;
+//		}
 
 	return ret;
 	}
@@ -884,6 +904,9 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
 				if(tree_exact_equal(&kernel.properties, (*it1).first,(*it2).first,1,true,-2,true)) {
+					const Indices *ind=kernel.properties.get<Indices>(it1->second);
+					if(ind && ind->position_type==Indices::fixed && it1->second->fl.parent_rel==it2->second->fl.parent_rel)
+						throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
 					target.insert((*it2));
 					if(move_out) {
 						index_map_t::iterator nxt=it2;
@@ -951,6 +974,11 @@ void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 				 if(ind_dummy.count(it)>0) {
 					 throw ConsistencyException("Triple index occurred.");
 					 }
+				 // check consistency: one up and one down if index position is fixed.
+				 // std::cerr << "check positions" << std::endl;
+				 const Indices *ind=kernel.properties.get<Indices>(it);
+				 if(ind && ind->position_type==Indices::fixed && it->fl.parent_rel==fnd->second->fl.parent_rel) 
+					 throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
 				 ind_dummy.insert(*fnd);
 				 ind_dummy.insert(index_map_t::value_type(Ex(it), it));
 				 ind_free.erase(fnd);
@@ -1138,6 +1166,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		index_map_t free_so_far;
 		sibling_iterator sit=it.begin();
 		while(sit!=it.end()) {
+			// std::cerr << "testing" << std::endl;
 			if(sit->is_index()==false) {
 				index_map_t factor_free, factor_dummy;
 				classify_indices(sit, factor_free, factor_dummy);
@@ -1160,7 +1189,13 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 				
 				ind_dummy.insert(factor_dummy.begin(), factor_dummy.end());
 				index_map_t new_dummy;
+//				for(auto& ii: factor_free)
+//					std::cerr << "factor_free " << Ex(ii.second) << std::endl;
+//				for(auto& ii: free_so_far)
+//					std::cerr << "free_so_far " << Ex(ii.second) << std::endl;
 				determine_intersection(factor_free, free_so_far, new_dummy, true);
+//				for(auto& ii: new_dummy)
+//					std::cerr << "new dummy " << Ex(ii.second) << std::endl;
 				free_so_far.insert(factor_free.begin(), factor_free.end());
 				ind_dummy.insert(new_dummy.begin(), new_dummy.end());
 				}

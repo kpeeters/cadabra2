@@ -1,5 +1,5 @@
 def test06():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {X,G,Y,A,B}::SortOrder.
     {X,A}::AntiCommuting.
     obj6:= A B G X A X;
@@ -12,7 +12,7 @@ def test06():
 test06()
 
 def test07():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {X,G,Y,A,B}::SortOrder.
     {X,A}::NonCommuting.
     obj7:= A*B*G*X*A*X;
@@ -25,7 +25,7 @@ def test07():
 test07()
 
 def test08():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     { W_{m n}, W_{m} }::SortOrder.
     { W_{m n}, W_{m} }::AntiCommuting.
     obj8:= W_{m n} W_{p} W_{q r} W_{s} W_{t};
@@ -38,12 +38,11 @@ def test08():
 test08()
 
 def test09():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     { \theta_a, \theta_b }::SelfAntiCommuting.
     obj9:= \theta_c \theta_b \theta_a;
     sort_product(_)
     tst9:= \theta_a \theta_b \theta_c + @(obj9);
-    collect_terms(_)
     assert(tst9==0)
     print('test09 passed')
 
@@ -52,14 +51,13 @@ test09()
 def test10():
     __cdbkernel__=create_scope();
     {a,b,c,d}::Indices.
-    { \theta_a, \chi_a }::SortOrder.
     { \theta_a, \chi_a }::Commuting.
     {\theta_{a}, \theta_{b}}::SelfAntiCommuting.
     {\chi_{a},\chi_{b}}::SelfAntiCommuting.
+    { \theta_a, \chi_a }::SortOrder.
     obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
-    sort_product(_);
+    sort_product(_)
     tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
-    collect_terms(_);
     assert(tst10==0)
     print('test10 passed')
 
@@ -90,6 +88,14 @@ def test16():
     print('test16 passed')
 
 test16()
+
+def test16b():
+    __cdbkernel__=create_scope()
+    ex:= C A D B;
+    sort_product(_);
+    tst:= A B C D - @(ex);
+    assert(tst==0)
+    print("Test 16b passed")
 
 def test17():
     __cdbkernel__=create_scope()
@@ -136,7 +142,8 @@ def test23():
     ex:=\nabla_{i}{ C D E };
     substitute(_, $D->0$)
     assert(ex==0)
-
+    print("Test 23 passed")
+    
 test23()
 
 def test24():
@@ -146,36 +153,138 @@ def test24():
     \Gamma{#}::GammaMatrix(metric=\delta).
     \delta_{m n}::KroneckerDelta.
     obj:= \Gamma_{l r} \Gamma_{k s} q \Gamma_{r s} + \Gamma_{l r} d \Gamma_{k s} \Gamma_{r s};
-    sort_product(_);
+    sort_product(_)
     tst:= \Gamma_{l r} \Gamma_{k s} \Gamma_{r s} q + \Gamma_{l r} \Gamma_{k s} \Gamma_{r s} d - @(obj);
     assert(tst==0)
-    print('test24 passed')
+    print('Test24 passed')
 
 test24()
 
 def test25():
     __cdbkernel__=create_scope()
     ex:=(a*d+b)*c;
-    distribute(_);
+    distribute(_)
     tst:= a d c + b c - @(ex);
     assert(tst==0)
-    print('test25 passed')
+    print('Test25 passed')
 
 test25()
 
 def test26():
     __cdbkernel__=create_scope()
-    # FIXME: This won't work yet because we do not want to match
-    # indices to numbers
-    # rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
+    # This example shows that indices can match to integers
+    # provided you declare them a such.
     {m,n}::Integer.
     ex:= a_{1} a_{0} a_{-1};
-    rl:= a_{n?} a_{m?} = a_{m?} a_{n?} + m? \delta_{m?}_{-n?};
-    substitute(ex, rl);
-    # FIXME: should not be necessary if the m?=0 would have removed the 2nd term.
-    distribute(ex);
+    rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
+    substitute(ex, rl)
     tst:= a_{0} a_{1} a_{-1} - @(ex);
     assert(tst==0)
-
+    print("Test 26 passed")
+    
 test26()
 
+def test27():
+    __cdbkernel__=create_scope()
+    ex:=A;
+    ex2:= @(ex)^{\mu\nu};
+    tst:=A^{\mu\nu} - @(ex2);
+    assert(tst==0);
+    print("Test 27 passed")
+
+test27()
+
+def test28():
+    __cdbkernel__=create_scope()
+    ex:=A+B;
+    ex2:= @(ex)^{\mu\nu};
+    tst:=(A+B)^{\mu\nu} - @(ex2);
+    assert(tst==0)
+    print("Test 28 passed")
+
+test28()
+
+def post_process(ex):
+	sort_product(ex)
+	#canonicalise(ex)
+	collect_terms(ex)
+
+{\mu,\nu,\rho}::Indices(position=free).
+x::Coordinate.
+\partial{#}::Derivative.
+
+F_{\mu\nu}::AntiSymmetric;
+F_{\mu\nu}::Depends(x).
+A_{\mu}::Depends(x,\partial{#}).
+\delta{#}::Accent;
+
+S:= -1/4 \int{ F_{\mu\nu} F^{\mu\nu} }{x};
+rl:= F_{\mu\nu} = \partial_{\mu}{A_{\nu}} - \partial_{\nu}{A_{\mu}};
+substitute(S, rl);
+vary(S, $A_{\mu} -> \delta{A_{\mu}}$);
+distribute(S);
+
+
+def test30():
+    __cdbkernel__=create_scope()
+    # Matching of numerical values in expressions to indices in patterns
+    # should respect index position.
+    {m,n}::Indices(position=fixed);
+    {m,n}::Integer(0..3).
+    g_{m}^{n}::KroneckerDelta;
+    ex:= g^{0 0};
+    ex:= 1 + g_{0}^{0};
+    ex:= g^{0 0} + g_{0}^{0};
+    substitute(_, $g^{a? b?} -> h^{a? b?}$);
+    tst:= h^{0 0} + 1 - @(ex);
+    assert(tst==0)
+
+test30()
+
+
+def test31():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    {m,n}::Integer(0..3).
+    g_{m}^{n}::KroneckerDelta;
+    g_{m n}::Metric;
+    ex:= g_{0 0} + g_{0}^{0};
+    substitute(_, $g_{m n} = h_{m n}$)
+    tst:= h_{0 0} + 1 - @(ex);
+    assert(tst==0)
+
+test31()
+
+def test32():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    ex1:= A_{m} A^{m};
+    try:
+        ex2:= A_{m} A_{m};
+        assert(1==0)
+    except:
+        print('Test 32 passed')
+
+test32()
+
+def test33():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    try:
+        ex:= A_{m n} + A_{m};
+        assert(1==0)
+    except:
+        print('Test 33 passed')
+
+test33()
+
+def test34():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(position=fixed);
+    try:
+        ex:= A_{m n} A^{m} B_{m};
+        assert(1==0)
+    except:
+        print('Test 34 passed')
+
+test34()

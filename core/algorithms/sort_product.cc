@@ -38,8 +38,8 @@ Algorithm::result_t sort_product::apply(iterator& st)
 		two=one; ++two;
 //		for(unsigned int j=i+1; j<=num; ++j) { // this loops too many times, no?
 		while(two!=tr.end(st)) {
-			int es=subtree_compare(&kernel.properties, one, two, -2);
-//			std::cerr << "hi " << es << std::endl;
+			compare.clear();
+			auto es = compare.equal_subtree(one, two);
 			if(compare.should_swap(one, es)) {
 //				std::cerr << "should swap " << *(one->name) << " with " << *(two->name) << std::endl;
 				int canswap=compare.can_swap(one, two, es);

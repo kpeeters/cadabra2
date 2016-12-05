@@ -37,7 +37,7 @@ namespace cadabra {
 
    class NotebookWindow : public Gtk::Window, public DocumentThread, public GUIBase {
       public:
-         NotebookWindow(Cadabra *);
+         NotebookWindow(Cadabra *, bool read_only=false);
          ~NotebookWindow();
         
          // Virtual functions from GUIBase.
@@ -46,7 +46,7 @@ namespace cadabra {
          virtual void   remove_cell(const DTree&, DTree::iterator) override;
          virtual void   remove_all_cells() override;
          virtual void   update_cell(const DTree&, DTree::iterator) override;
-			virtual void   position_cursor(const DTree&, DTree::iterator) override;
+			virtual void   position_cursor(const DTree&, DTree::iterator, int pos) override;
 			virtual size_t get_cursor_position(const DTree&, DTree::iterator) override;
 
          virtual void on_connect() override;
@@ -65,6 +65,7 @@ namespace cadabra {
 			sigc::connection grab_connection;
 
 			void set_name(const std::string&);
+			void set_title_prefix(const std::string&);
 			void load_file(const std::string& notebook_contents);
 
 
@@ -120,12 +121,13 @@ namespace cadabra {
 			void             update_title();
 			void             set_stop_sensitive(bool);
 			void             scroll_into_view(DTree::iterator);
-			std::string      name;
-			bool             modified;
+			std::string      name, title_prefix;
+			bool             modified, read_only;
 
 			// Menu and button callbacks.
 			void on_file_new();
 			void on_file_open();
+			void on_file_close();
 			void on_file_save();
 			void on_file_save_as();
 			void on_file_export_html();
@@ -150,6 +152,8 @@ namespace cadabra {
 			void on_run_runall();
 			void on_run_runtocursor();
 			void on_run_stop();
+			
+			void on_prefs_font_size(int num);
 
 			void on_help_about();
 			void on_help() const;
@@ -171,7 +175,8 @@ namespace cadabra {
 
 			bool cell_got_focus(DTree::iterator, int);
 			bool cell_toggle_visibility(DTree::iterator it, int);
-			bool cell_content_changed(const std::string&, DTree::iterator, int);
+			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
+			bool cell_content_erase(int, int, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
 			
 			void dim_output_cells(DTree::iterator it);
@@ -187,6 +192,15 @@ namespace cadabra {
 			void on_text_scaling_factor_changed(const std::string& key);
 
 			int last_configure_width;
+
+			class Prefs {
+				public:
+					Prefs();
+
+					int font_step;
+			};
+
+			Prefs prefs;
 	};
 
 };

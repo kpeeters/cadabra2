@@ -1,10 +1,6 @@
 
 #pragma once
 
-// A base class with all the logic that will run on the GUI thread.
-// In order to implement a GUI, create a derived class and implement
-// the pure virtual methods here.
-
 #include <queue>
 #include <mutex>
 #include <stack>
@@ -20,16 +16,33 @@ namespace cadabra {
 	class ActionRemoveCell;
 	class ActionSetRunStatus;
 	class ActionSplitCell;
+	class ActionInsertText;
+	class ActionEraseText;
    class ComputeThread;
    class GUIBase;
 
 	/// \ingroup clientserver
 	///
-	/// Base class which manipulates the document tree.
+   /// A base class with all the logic to manipulate a Cadabra
+   /// notebook document. Relies on the various objects derived from
+   /// ActionBase in order to get actual work done. All methods here
+   /// will always run on the GUI thread.
+   ///
+	/// In order to implement a GUI, derive from both DocumentThread
+	/// and GUIBase and then implement the virtual functions of the
+	/// latter (those implement basic insertion/removal of notebook
+	/// cells; the logic to figure out which ones and to implement the
+	/// undo/redo stack is all in the GUI-agnostic DocumentThread).
+
 
    class DocumentThread {
 		public:
          DocumentThread(GUIBase *);
+
+			/// It is not possible to copy-construct a DocumentThread as
+			/// it holds on to resources which are not easily copied
+			/// (such as GUI elements).
+
          DocumentThread(const DocumentThread&)=delete;
 
          /// Let the notebook know about the ComputeThread so that it
@@ -63,19 +76,26 @@ namespace cadabra {
 
 			void load_from_string(const std::string&);
 
-			/// Action objects are allowed to modify the DTree document doc,
-			/// since they essentially contain code which is part of the 
-			/// DocumentThread object.
+			/// One undo step.
+			void undo();
 
          friend ActionAddCell;
 			friend ActionPositionCursor;
 			friend ActionRemoveCell;
 			friend ActionSplitCell;
 			friend ActionSetRunStatus;
-         // FIXME: add other actions.
+			friend ActionInsertText;
+			friend ActionEraseText;
 	
+			/// Determine if a user has been registered with the Cadabra
+			/// log server. 
+
 			bool is_registered() const;
-			void set_user_details(const std::string&, const std::string&, const std::string&);
+
+			/// Set user details which will be sent to the Cadabra log
+			/// server.
+
+			void set_user_details(const std::string& name, const std::string& email, const std::string& affiliation);
 		protected:
          GUIBase       *gui;
          ComputeThread *compute;
@@ -98,6 +118,7 @@ namespace cadabra {
 			typedef std::stack<std::shared_ptr<ActionBase> > ActionStack;
 			ActionStack                                      undo_stack, redo_stack;
 			std::queue<std::shared_ptr<ActionBase> >         pending_actions;			
+			bool                                             disable_stacks;
 
 			/// Process the action queue. It is allowed to call queue_action() above
 			/// while this is running. So a running action can add more actions.
@@ -107,6 +128,12 @@ namespace cadabra {
 
 			/// Configuration options read from ~/.config/cadabra.conf.
 			bool  registered;
+
+			/// Help system 
+			enum class help_t { algorithm, property, latex, none };
+			bool help_type_and_topic(const std::string& before, const std::string& after,
+											 help_t& help_type, std::string& help_topic) const;
+
 	};
 	
 }

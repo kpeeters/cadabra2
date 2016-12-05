@@ -65,7 +65,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				--next;
 				for(size_t i=0; i<to_factor_out.size(); ++i) {
 					auto match=comparator.equal_subtree(fac, to_factor_out[i].begin());
-					if(match==Ex_comparator::subtree_match) {
+					if(match==Ex_comparator::match_t::subtree_match) {
 						int sign=comparator.can_move_adjacent(prod, dummy, fac, false);
 						if(sign!=0) {
 							collector.append_child(collector.begin(), iterator(fac));
@@ -85,7 +85,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				++next;
 				for(size_t i=0; i<to_factor_out.size(); ++i) {
 					auto match=comparator.equal_subtree(fac, to_factor_out[i].begin());
-					if(match==Ex_comparator::subtree_match) {
+					if(match==Ex_comparator::match_t::subtree_match) {
 						int sign=comparator.can_move_adjacent(prod, dummy, fac, true);
 						if(sign!=0) {
 							collector.append_child(collector.begin(), iterator(fac));
@@ -104,6 +104,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 		if(tr.number_of_children(prod)==0)
 			tr.append_child(prod, str_node("1"));
 
+		// std::cerr << "product after factoring out " << Ex(prod) << std::endl;
+
 		if(collector.number_of_children(collector.begin())!=0) { 
 			// The stuff factored out of this term is in 'collector'. See if we have 
 			// factored out that thing before. Because we may not always have collected
@@ -117,14 +119,16 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			multiply(prod->multiplier, *coltop->multiplier);
 			one(coltop->multiplier);
 			
+			// Scan through the things factored out so far.
 			bool found=false;
 			for(auto& nt: new_terms) {
-				if(nt.first==collector) {
+				if(nt.first==collector) { // have that factored out already, add the other factors
 					nt.second.push_back(Ex(prod));
 					found=true;
 					break;
 					}
 				}
+			// We hadn't factored this bit out before, make a new term.
 			if(!found) {
 				std::vector<Ex> v;
 				v.push_back(Ex(prod));
@@ -147,11 +151,22 @@ Algorithm::result_t factor_out::apply(iterator& it)
 	for(auto& nt: new_terms) {
 		auto prod = tr.append_child(it, nt.first.begin());
 		if(nt.second.size()==1) { // factored, but only one term found.
-			auto top = nt.second[0].begin();
-			if(to_right)
-				tr.prepend_child(prod, iterator(nt.second[0].begin(top)));
-			else
-				tr.append_child(prod, iterator(nt.second[0].begin(top)));
+			auto top = nt.second[0].begin(); // prod node
+			if(to_right) {
+				auto ins = tr.end(top);
+				--ins;
+				while(tr.is_valid(ins)) {
+					tr.prepend_child(prod, iterator(ins));
+					--ins;
+					}
+				}
+			else {
+				auto ins = tr.begin(top);
+				while(ins!=tr.end(top)) {
+					tr.append_child(prod, iterator(ins));
+					++ins;
+					}
+				}
 			multiply(prod->multiplier, *(nt.second[0].begin()->multiplier));
 // FIXME: append_children has a BUG! Messes up the tree. But it is needed to
 // handle terms where the sub-factor is not a simple element.
@@ -172,6 +187,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			}
 		}
 	
+	// std::cerr << "end of factor_out: \n" << Ex(it) << std::endl;
+
 	return result;
 	}
 

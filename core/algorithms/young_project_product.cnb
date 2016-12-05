@@ -1,0 +1,52 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{young_project_product}{Project all tensors in a product with their Young tableau projector.}\n\nProject all tensors in a product with their Young tableau\nprojector. Each factor is projected in turn, after which the product\nis distributed and then canonicalised. This is often faster and more\nmemory-efficient than first projecting every factor and then\ndistributing.\n\nYoung projection can be used to find equalities between tensor\npolynomials which are due to multi-term symmetries, such as the Ricci\nidentity in the example below."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{young_project_product}{Project all tensors in a product with their Young tableau projector.}\n\nProject all tensors in a product with their Young tableau\nprojector. Each factor is projected in turn, after which the product\nis distributed and then canonicalised. This is often faster and more\nmemory-efficient than first projecting every factor and then\ndistributing.\n\nYoung projection can be used to find equalities between tensor\npolynomials which are due to multi-term symmetries, such as the Ricci\nidentity in the example below."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2R_{a b c d} R_{a c b d}-R_{a b c d} R_{a b c d}\\end{dmath*}"
+				}
+			],
+			"source" : "{a,b,c,d}::Indices.\nR_{a b c d}::RiemannTensor.\n\nex:=2 R_{a b c d} R_{a c b d} - R_{a b c d} R_{a b c d};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "young_project_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

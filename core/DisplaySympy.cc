@@ -15,14 +15,63 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\int", "Integral" },
 		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },
-		{"\\theta", "theta"},
-		{"\\Theta", "Theta"},
-		{"\\Phi", "Phi"},
-		{"\\phi", "phi"},
-		{"\\Sigma", "Sigma"},
+		{"\\exp", "exp" },
+
+		{"\\infty", "sympy.oo"},
+
+		{"\\alpha",   "alpha" },
+		{"\\beta",    "bbeta" },  // beta seems to be reserved
+		{"\\gamma",   "ggamma" }, // gamma seems to be reserved 
+		{"\\delta",   "delta" },
+		{"\\epsilon", "epsilon" },
+		{"\\zeta",    "zeta" },
+		{"\\eta",     "eta" },
+		{"\\theta",   "theta" },
+		{"\\iota",    "iota" },
+		{"\\kappa",   "kappa" },
+		{"\\lambda",  "lamda" }, // lambda is reserved
+		{"\\mu",      "mu" },
+		{"\\nu",      "nu" },
+		{"\\xi",      "xi" },
+		{"\\omicron", "omicron" },
+		{"\\pi",      "pi" },
+		{"\\rho",     "rho" },
+		{"\\sigma",   "sigma" },
+		{"\\tau",     "tau" },
+		{"\\upsilon", "upsilon" },
+		{"\\phi",     "phi" },
+		{"\\chi",     "chi" },
+		{"\\psi",     "psi" },
+		{"\\omega",   "omega" },
+
+		{"\\Alpha",   "Alpha" },
+		{"\\Beta",    "Beta" },
+		{"\\Gamma",   "Gamma" },
+		{"\\Delta",   "Delta" },
+		{"\\Epsilon", "Epsilon" },
+		{"\\Zeta",    "Zeta" },
+		{"\\Eta",     "Eta" },
+		{"\\Theta",   "Theta" },
+		{"\\Iota",    "Iota" },
+		{"\\Kappa",   "Kappa" },
+		{"\\Lambda",  "Lamda" },
+		{"\\Mu",      "Mu" },
+		{"\\Nu",      "Nu" },
+		{"\\Xi",      "Xi" },
+		{"\\Omicron", "Omicron" },
+		{"\\Pi",      "Pi" },
+		{"\\Rho",     "Rho" },
+		{"\\Sigma",   "Sigma" },
+		{"\\Tau",     "Tau" },
+		{"\\Upsilon", "Upsilon" },
+		{"\\Phi",     "Phi" },
+		{"\\Chi",     "Chi" },
+		{"\\Psi",     "Psi" },
+		{"\\Omega",   "Omega" },
+
 		{"\\partial", "Derivative"},
-		{"\\dot", "dot"},
-		{"\\ddot", "ddot"}
+		{"\\dot",     "dot"},
+		{"\\ddot",    "ddot"}
 		};
 	}
 
@@ -97,9 +146,12 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 	// them back later.
 
 	// We need to know if the symbol has implicit dependence on other symbols,
-	// as this needs to be made explicit for sympy.
+	// as this needs to be made explicit for sympy. We need to strip this 
+	// dependence off later again.
 
 	const Depends *dep=kernel.properties.get<Depends>(it);
+	if(dep)
+		depsyms.insert(*it->name);
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	if(ch!=tree.end(it) || dep!=0) {
@@ -327,9 +379,10 @@ void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	dispatch(str, sib);
-	str << "**";
+	str << "**(";
 	++sib;
 	dispatch(str, sib);
+	str << ")";
 	}
 
 void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
@@ -432,12 +485,40 @@ bool DisplaySympy::children_have_brackets(Ex::iterator ch) const
 
 void DisplaySympy::import(Ex& ex)
 	{
-	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) {
+	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
 			for(auto& m: symmap) {
+				// If we have converted the name of this symbol, convert back.
 				if(m.second==*it->name) {
 					it->name=name_set.insert(m.first).first;
 					break;
 					}
 				}
+			// See if we have added dependencies to this symbol (lookup in map).
+			// If yes, strip them off again.
+			auto fnd = depsyms.find(*it->name);
+			if(fnd!=depsyms.end()) {
+				std::cerr << "stripping from " << *it->name << std::endl;
+//				if(*ex.begin(it)->name=="\\comma")
+				ex.erase(ex.begin(it));
+				}
+			
+			// Move child nodes of partial to the right place.
+			if(*it->name=="\\partial") {
+				auto comma = ex.begin(it);
+				if(*comma->name=="\\comma") {
+					auto args=ex.begin(comma);
+					++args;
+					while(args!=ex.end(comma)) {
+						auto nxt=args;
+						++nxt;
+						ex.move_before(comma, args)->fl.parent_rel=str_node::p_sub;
+						args=nxt;
+						}
+					ex.flatten(comma);
+					ex.erase(comma);
+					}
+				}
+
+			return it;
 			});
 	}

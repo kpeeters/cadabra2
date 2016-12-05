@@ -31,7 +31,7 @@ class DisplayTeX : public DisplayBase {
 		void print_parent_rel(std::ostream&, str_node::parent_rel_t, bool first);
 		void print_children(std::ostream&, Ex::iterator, int skip=0);
 
-		std::string texify(const std::string&) const;
+		std::string texify(std::string) const;
 
 		bool print_star=false;
 		bool tight_star=false;
@@ -79,9 +79,17 @@ class DisplayTeX : public DisplayBase {
 		/// the single argument 'arg', reads as an operator, and therefore
 		/// 'arg' does not need to be wrapped in brackets. 
 		/// Example: the tree \partial{A} can be displayed as '\partial A'
-		/// instead of '\partial(A)'. 
+		/// (or rather, '\partial{A}', instead of '\partial(A)'. 
 	  
 		bool reads_as_operator(Ex::iterator obj, Ex::iterator arg) const;
+
+		/// Map from Cadabra symbols to LaTeX symbols (for some typographic cleanup).
+		std::map<std::string, std::string> symmap;
+
+		/// List of operators which need all arguments fed with curly brackets, not 
+		/// round ones (e.g. \sqrt).
+		std::set<std::string> curly_bracket_operators;
+
 };
 
 const char *unichar(kunichar c);

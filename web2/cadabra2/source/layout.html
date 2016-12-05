@@ -6,8 +6,9 @@
 	 <title>{% block title %}{% endblock %}</title>
 	 <link rel="shortcut icon" type="image/png" href="/static/cadabra.png">
 
-	 <script type="text/javascript"
-		      src="http://beta.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+	 <script type="text/javascript" 
+				src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+
 	 </script>
 	 <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'>
 	 <link href='https://fonts.googleapis.com/css?family=Lato:300,:400' rel='stylesheet' type='text/css'>
@@ -70,6 +71,14 @@
 			 <img src="/static/icons/quickstart.png" alt="[quick start]" />
 			 <div class="icon_text">
 				Quick start
+			 </div>
+		  </div>
+		</a>
+		<a href="/v1x.html">
+		  <div class="icon_background" >
+			 <img src="/static/icons/v1.png" alt="[upgrade]" />
+			 <div class="icon_text">
+				Upgrade
 			 </div>
 		  </div>
 		</a>
@@ -144,8 +153,5 @@
 	 </div>
 	 
 	 <script src="/static/scripts/hyphenator.js"></script>
-<script type="text/javascript">
-        Hyphenator.run();
-</script>
   </body>
 </html>

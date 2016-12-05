@@ -87,28 +87,23 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 		return true;
 		}
 
-	// Cases without range wildcard.
-//	if(obj.number_of_children(obj.begin())>0)
-//		std::cerr << "comparing: " << ignore_parent_rel << "\n" << Ex(it) << " " << obj << std::endl;
-//	Ex::print_recursive_treeform(txtout, it);
-//	Ex::print_recursive_treeform(txtout, obj.begin());
+	// Cases without range wildcard.  Compare making full use of
+	// property information. Note the order of the arguments to
+	// 'equal_subtree': the first argument is supposed to be a
+	// pattern, the second an expression which is to be matched.
+	
+	Ex_comparator comp(properties);
+	Ex_comparator::match_t res=comp.equal_subtree(obj.begin(), it, 
+																 Ex_comparator::useprops_t::not_at_top, 
+																 ignore_parent_rel);
 
+	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
 
-	// This does not work, because it does not flip parent rels (disabled for a reason?)
-	// FIXME: fix logic for subtree/Ex_compare usage.
-//	std::cerr << "Comparing " << Ex(it) <<  " with " << obj << " " << ignore_parent_rel << std::endl;
-	int res=subtree_compare(&properties, it, obj.begin(), ignore_parent_rel?0:-3, false /* was true; but that leads to infinite recurion */, 0);
-	//std::cerr << res << std::endl;
-
-	// This should work better, but this is _not_ allowed (and crashes in an infinite recursion)
-	// because Ex_comparator tries to fetch property information which then gets back here.
-	// Ex_comparator comp(properties);
-	// int res=comp.equal_subtree(it, obj.begin());
-
-	//txtout << res << std::endl;
-	if(abs(res)<=1) {
-//		if(obj.number_of_children(obj.begin())>0)
-//			std::cerr << "match!" << std::endl;
+	if(is_in(res, 
+				 { Ex_comparator::match_t::subtree_match,
+				   Ex_comparator::match_t::match_index_less,
+				   Ex_comparator::match_t::match_index_greater,
+					Ex_comparator::match_t::node_match } )) {
 		return true;
 		}
 
@@ -130,7 +125,8 @@ bool Properties::has(const property *pb, Ex::iterator it)
 //		txtout << *it->name << std::endl;
 //		txtout << typeid(pit.first->second.second).name() << " versus " 
 //				 << typeid(pb).name() << std::endl;
-		if(typeid(*(pit.first->second.second))==typeid(*pb) && 
+		const property *tmp = (pit.first->second.second);
+		if(typeid(*tmp)==typeid(*pb) && 
 			pit.first->second.first->match(*this, it))  // match found
 			return true;
 		++pit.first;
@@ -338,12 +334,14 @@ void Properties::insert_prop(const Ex& et, const property *pr)
 
 			// Does this entry in props give a property of the same type as the one we
 			// are trying to insert?
-			if(typeid(*pr)==typeid(*(*pit.first).second.second)) {
+			const property *tmp = (*pit.first).second.second;
+			if(typeid(*pr)==typeid(*tmp)) {
 
 				// If this is a labelled property, is the label different from the one on the
 				// property we are trying to insert?
 				const labelled_property *lp   =dynamic_cast<const labelled_property *>(pr);
 				const labelled_property *lpold=dynamic_cast<const labelled_property *>(pit.first->second.second);
+
 				if(!lp || !lpold || lp->label==lpold->label) {
 
 					// The to-be-inserted property cannot co-exist on this pattern with the
@@ -393,7 +391,7 @@ void Properties::insert_prop(const Ex& et, const property *pr)
 		}
 
 	pats.insert(pattern_map_t::value_type(pr, pat));
-//	std::cout << "inserting for " << *(pat->obj.begin()->name_only()) << std::endl;
+	// std::cout << "inserting for " << *(pat->obj.begin()->name_only()) << std::endl;
 	props.insert(property_map_t::value_type(pat->obj.begin()->name_only(), pat_prop_pair_t(pat,pr)));
 	}
 
@@ -406,7 +404,8 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 	// introducing a duplicate.
 	pattern_map_t::iterator fit=pats.begin();
 	while(fit!=pats.end()) {
-		if(typeid(*(*fit).first)==typeid(*pr))
+		const property *tmp = (*fit).first;
+		if(typeid(*tmp)==typeid(*pr))
 			if(pr->equals((*fit).first)==property::exact_match) {
 				pr=static_cast<const list_property *>( (*fit).first );
 				break;
@@ -419,7 +418,8 @@ void Properties::insert_list_prop(const std::vector<Ex>& its, const list_propert
 	const property *to_delete_property=0;
 	pattern_map_t::iterator pit=pats.begin();
 	while(pit!=pats.end()) {
-		if(typeid(*(*pit).first)==typeid(*pr))
+		const property *tmp = (*pit).first;
+		if(typeid(*tmp)==typeid(*pr))
 			if(pr->equals((*pit).first)==property::id_match) {
 				to_delete_property = (*pit).first;
 				break;

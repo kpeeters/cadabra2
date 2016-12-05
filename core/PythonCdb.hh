@@ -40,13 +40,6 @@ bool __eq__Ex_Ex(const Ex&, const Ex&);
 
 bool __eq__Ex_int(const Ex&, int);
 
-/// \ingroup pythoncore
-///
-/// Replace any objects of the form '@(...)' in the expression tree by the
-/// python expression '...' if it exists. Rename dummies to avoid clashes.
-
-void pull_in(std::shared_ptr<Ex>);
-
 /// Fetch an Ex object from the Python side using its Python identifier.
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm);
@@ -84,6 +77,18 @@ std::string Ex_latex_(const Ex&);
 
 boost::python::object Ex_to_Sympy(const Ex&);
 
+
+/// \ingroup pythoncore
+///
+/// Add two expressions, adding a top-level \sum node if required.
+
+Ex operator+(const Ex& ex1, const Ex& ex2);
+
+/// \ingroup pythoncore
+///
+/// Subtract two expressions, adding a top-level \sum node if required.
+
+Ex operator-(const Ex& ex1, const Ex& ex2);
 
 /// \ingroup pythoncore
 ///
