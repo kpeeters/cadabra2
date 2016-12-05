@@ -236,8 +236,14 @@ Ex Ex_getitem(Ex &ex, int index)
 	size_t num=ex.number_of_children(it);
 	if(index>=0 && (size_t)index<num)
 		return Ex(ex.child(it, index));
-	else 
-		throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
+	else {
+//		if(num==0 && index==0) {
+//			std::cerr << "returning " << ex << std::endl;
+//			return Ex(ex);
+//			}
+//		else
+			throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
+		}
 	}
 
 void Ex_setitem(Ex &ex, int index, Ex val)
