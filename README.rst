@@ -237,11 +237,21 @@ things at least roughly in the right direction. First, install MSYS2
 from http://msys2.github.io. Once you have a working MSYS2 shell,
 do the following to install various packages::
 
-    pacman -S mingw-w64_x86_64-gcc
-    pacman -S mingw-w64_x86_64-gtkmm3
+    pacman -S mingw-w64-x86_64-gcc
+    pacman -S mingw-w64-x86_64-gtkmm3
     pacman -S mingw-w64-x86_64-boost
-    pacman -S cmake
+	 pacman -S gmp gmp-devel pcre-devel
+    pacman -S mingw-w64-x86_64-cmake
 
+Then close the MSYS2 shell and open the MINGW64 shell. Run::
+  
+    cd cadabra2/build
+    cmake -G "MinGW Makefiles" -DUSE_PYTHON_3=NO ..
+
+* Not clear yet how to get it to pick up python3.
+* install Library TARGETS given no DESTINATION in
+  client_server/CMakeLists.txt 101
+* ditto frontend/common/CMakeLists.txt
 
 If you get any further, please get in touch.
 
@@ -265,4 +275,6 @@ Special thanks
 
 Special thanks to José M. Martín-García (for the xPerm
 canonicalisation code), James Allen (for writing much of the factoring
-code) and the Software Sustainability Institute.
+code) and the Software Sustainability Institute. Thanks to the many
+people who have sent me bug reports (keep 'm coming), and thanks to
+all of you who cited the Cadabra papers.
