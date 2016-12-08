@@ -21,9 +21,10 @@ bool evaluate::can_apply(iterator it)
 	if(only_rhs) {
 		if(*it->name=="\\equals") return false;
 		if(tr.is_head(it)==false) 
-			if(*(tr.parent(it)->name)=="\\equals")
+			if(*(tr.parent(it)->name)=="\\equals") {
 				if(tr.index(it)!=1)
 					return false;
+				}
 		}
 	return true;
 	}
@@ -201,7 +202,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			Ex rule(c);
 			Ex obj(sib);
-			// std::cerr << "attempting rule " << rule << " on " << obj << std::endl;
+//			std::cerr << "attempting rule " << rule << " on " << obj << std::endl;
 			// rule is a single rule, we walk the list.
 			substitute subs(kernel, obj, rule);
 			iterator oit=obj.begin();

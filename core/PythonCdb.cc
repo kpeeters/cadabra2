@@ -1235,7 +1235,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_internal_reference<1>() );
 		  
 	def("evaluate", &dispatch_ex<evaluate, Ex&, bool>,
-		 (arg("ex"), arg("components"), arg("rhs")=true,
+		 (arg("ex"), arg("components"), arg("rhsonly")=false,
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  
