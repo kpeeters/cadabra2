@@ -1,10 +1,35 @@
 
 def test01():
+    __cdbkernel__=create_scope()
     ex:=A + B D G + C D A;
-    take_match(_, $D Q??$);
-    substitute(_, $A = Q$);
-    replace_match(_);
+    take_match(_, $D Q??$)
+    substitute(_, $A = Q$)
+    replace_match(_)
     tst:= A + B D G + C D Q - @(ex);
-    assert(tst==0);
+    assert(tst==0)
+    print("Test 01 passed")
 
 test01()
+
+def test02():
+    __cdbkernel__=create_scope()
+    a:= A,B,C;
+    b:= D,E,F;
+    c:= Q;
+    d:= R+S;
+    ex1=a+b
+    ex2=a+c
+    ex3=c+a
+    ex4=a+d
+    tst1:= {A,B,C,D,E,F} - @(ex1);
+    tst2:= {A,B,C,Q} - @(ex2);
+    tst3:= {Q,A,B,C} - @(ex3);
+    tst4:= {A,B,C,R+S} - @(ex4);
+    assert(tst1==0)
+    assert(tst2==0)
+    assert(tst3==0)
+    assert(tst4==0)
+    print("Test 02 passed")
+
+test02()
+

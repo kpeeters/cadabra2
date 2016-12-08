@@ -11,13 +11,20 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c)
-	: Algorithm(k, tr), components(c)
+evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
+	: Algorithm(k, tr), components(c), only_rhs(rhs)
 	{
 	}
 
-bool evaluate::can_apply(iterator) 
+bool evaluate::can_apply(iterator it) 
 	{
+	if(only_rhs) {
+		if(*it->name=="\\equals") return false;
+		if(tr.is_head(it)==false) 
+			if(*(tr.parent(it)->name)=="\\equals")
+				if(tr.index(it)!=1)
+					return false;
+		}
 	return true;
 	}
 
@@ -25,7 +32,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
-	// std::cerr << "evaluate::apply at " << *it->name << std::endl;
+	std::cerr << "evaluate::apply at " << *it->name << std::endl;
 
 	// Descend down the tree. The general logic of the routines this
 	// calls is that, instead of looping over all possible index value

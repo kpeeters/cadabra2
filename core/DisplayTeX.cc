@@ -478,7 +478,7 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 		str << "= & ";
 		++c;
 		dispatch(str, c);
-		str << "\\\\\n";
+		str << "\\\\[-.5ex]\n";
 		++sib;
 		}
 	str << "\\end{aligned}\\right.\n";

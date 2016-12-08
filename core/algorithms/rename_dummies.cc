@@ -37,8 +37,20 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	repmap_t    repmap;
 	index_map_t added_dummies;
 
-	index_iterator ii=begin_index(st);
+	// Store all indices in a map sorted by the name of the parent.
+	// FIXME: this is not sufficient, you really need to determine which
+	// are common factors in all terms in a sum, and then collect those
+	// to the front of the renaming queue.
+	std::multimap<nset_t::iterator, index_iterator, nset_it_less> parent_sorted_indices;
+	auto ii = begin_index(st);
 	while(ii!=end_index(st)) {
+		parent_sorted_indices.insert(std::make_pair(tr.parent(iterator(ii))->name, ii));
+		++ii;
+		}
+
+	auto iim=parent_sorted_indices.begin();
+	while(iim!=parent_sorted_indices.end()) {
+		ii = iim->second;
 		if(ind_dummy.find(Ex(ii))!=ind_dummy.end()) {
 			// std::cerr << Ex(ii) << " is dummy " << std::endl;
 			repmap_t::iterator rmi=repmap.find(Ex(ii));
@@ -59,23 +71,23 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 				Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
 				repmap.insert(repmap_t::value_type(Ex(ii),relabel));
 				added_dummies.insert(index_map_t::value_type(relabel, ii));
-				index_iterator tmp(ii);
-				++tmp;
+//				index_iterator tmp(ii);
+//				++tmp;
 				if(subtree_compare(&kernel.properties, ii, relabel.begin())!=0) {
 					res=result_t::l_applied;
 					tr.replace_index(ii, relabel.begin(), true);
 					}
-				ii=tmp;
+//				ii=tmp;
 				}
 			else {
 				// std::cerr << "already encountered => " << rmi->second << std::endl;
-				index_iterator tmp(ii);
-				++tmp;
+//				index_iterator tmp(ii);
+//				++tmp;
 				tr.replace_index(ii, (*rmi).second.begin(), true);
-				ii=tmp;
+//				ii=tmp;
 				}
 			}
-		else ++ii;
+		++iim;
 		}
 
 	prod_unwrap_single_term(st);

@@ -251,6 +251,15 @@ def test107():
 
 test107()
 
+def test108():
+\nabla{#}::Derivative;
+{\mu,\nu,\rho,\sigma}::Indices(position=fixed);
+ex:= \nabla_{\mu}{K^{\nu}} = B_{\mu} D^{\nu};
+substitute(_, $\nabla_{\mu}{A?^{\nu}} = C_{\mu}^{\nu}$);
+
+
+test108()
+
 
 {\mu,\nu,\rho,\sigma}::Indices;
 \partial{#}::PartialDerivative;

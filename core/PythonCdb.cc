@@ -480,15 +480,35 @@ Ex operator+(const Ex& ex1, const Ex& ex2)
 	if(ex1.size()==0) return ex2;
 	if(ex2.size()==0) return ex1;
 
-	Ex ret(ex1);
-	if(*ret.begin()->name!="\\sum") 
-		ret.wrap(ret.begin(), str_node("\\sum"));
-	ret.append_child(ret.begin(), ex2.begin());
+	bool comma1 = (*ex1.begin()->name=="\\comma");
+	bool comma2 = (*ex2.begin()->name=="\\comma");
 
-	auto it=ret.begin();
-	cleanup_dispatch(*get_kernel_from_scope(), ret, it);
-
-	return ret;
+	if(comma1 || comma2) {
+		if(comma1) {
+			Ex ret(ex1);
+			auto loc = ret.append_child(ret.begin(), ex2.begin());
+			if(comma2)
+				ret.flatten_and_erase(loc);
+			return ret;
+			}
+		else {
+			Ex ret(ex2);
+			auto loc = ret.prepend_child(ret.begin(), ex1.begin());
+			if(comma1)
+				ret.flatten_and_erase(loc);
+			return ret;
+			}
+		}
+	else {
+		Ex ret(ex1);
+		if(*ret.begin()->name!="\\sum") 
+			ret.wrap(ret.begin(), str_node("\\sum"));
+		ret.append_child(ret.begin(), ex2.begin());
+		
+		auto it=ret.begin();
+		cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+		return ret;
+		}
 	}
 
 Ex operator-(const Ex& ex1, const Ex& ex2)
@@ -803,6 +823,7 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	for_obj = ex;
 	Kernel *kernel=get_kernel_from_scope();
 	prop = new Prop(); // we keep a pointer, but the kernel owns it.
+//	std::cerr << "Declaring property " << prop->name() << " in kernel " << kernel << std::endl;
 	inject_property(kernel, prop, ex, param);
 	}
 
@@ -858,10 +879,10 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin();
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
-		if(*it->name=="\\equals") {
-			// std::cerr << "full expression:\n" << print_tree(&ex) << std::endl;
-			it=ex.child(it,1);
-			}
+//		if(*it->name=="\\equals") {
+//			// std::cerr << "full expression:\n" << print_tree(&ex) << std::endl;
+//			it=ex.child(it,1);
+//			}
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
@@ -1074,7 +1095,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	using namespace boost::python;
 
 	// Declare the Kernel object for Python so we can store it in the local Python context.
+	// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
+	// pull that into the interpreter scope in the 'cadabra2_default.py' file.
 	class_<Kernel> pyKernel("Kernel", init<>());
+	boost::python::object kernel=pyKernel();
+	inject_defaults(boost::python::extract<Kernel*>(kernel));
+	boost::python::scope().attr("__cdbkernel__")=kernel;
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	// We do not allow initialisation/construction except through the two 
@@ -1208,8 +1234,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  
-	def("evaluate", &dispatch_ex<evaluate, Ex&>,
-		 (arg("ex"), arg("components"),
+	def("evaluate", &dispatch_ex<evaluate, Ex&, bool>,
+		 (arg("ex"), arg("components"), arg("rhs")=true,
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  

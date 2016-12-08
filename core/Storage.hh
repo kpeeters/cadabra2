@@ -215,9 +215,10 @@ class Ex : public tree<str_node> {
 		void             list_wrap_single_element(iterator&);
 		void             list_unwrap_single_element(iterator&);
 
-		/// Replace the node with the only child of the node, useful for e.g.
+		/// Replace the node with the children of the node, useful for e.g.
 		/// \\prod{A} -> A. This algorithm takes care of the multiplier of the 
-		/// top node, i.e. it does 2\\prod{A} -> 2 A.
+		/// top node, i.e. it does 2\\prod{A} -> 2 A. Returns an iterator
+      /// to the new location of the first child of the original node.
 		iterator         flatten_and_erase(iterator position);
 
       /// Compare two Ex objects for exact equality; no dummy equivalence or other
