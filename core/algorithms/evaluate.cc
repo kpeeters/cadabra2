@@ -18,22 +18,14 @@ evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
 
 bool evaluate::can_apply(iterator it) 
 	{
-	if(only_rhs) {
-		if(*it->name=="\\equals") return false;
-		if(tr.is_head(it)==false) 
-			if(*(tr.parent(it)->name)=="\\equals") {
-				if(tr.index(it)!=1)
-					return false;
-				}
-		}
-	return true;
+	return tr.is_head(it); // only act at top level, we descend ourselves
 	}
 
 Algorithm::result_t evaluate::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
-	std::cerr << "evaluate::apply at " << *it->name << std::endl;
+	// std::cerr << "evaluate::apply at " << *it->name << std::endl;
 
 	// Descend down the tree. The general logic of the routines this
 	// calls is that, instead of looping over all possible index value
@@ -44,7 +36,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// The logic in Compare.cc helps us by matching component A_{t r}
 	// in the rule to an abstract tensor A_{m n} in the expression, storing
 	// the index name -> index value map.
-
+	
 	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
 			else if(is_component(walk)) return walk;
@@ -53,10 +45,12 @@ Algorithm::result_t evaluate::apply(iterator& it)
 			else {
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) walk = handle_derivative(walk);
-				else if(tr.is_head(walk)) {
-					index_map_t empty;
-					sibling_iterator tmp(walk);
-					tmp = handle_factor(tmp, empty);
+				else if(*walk->name!="\\equals" && walk->is_index()==false) {
+					if(! (only_rhs && tr.is_head(walk)==false && *(tr.parent(walk)->name)=="\\equals" && tr.index(walk)==0) ) {
+						index_map_t empty;
+						sibling_iterator tmp(walk);
+						walk = handle_factor(tmp, empty);
+						}
 					}
 				}
 			return walk;
@@ -66,7 +60,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// Final cleanup, e.g. to reduce scalar expressions to proper
 	// scalars instead of 'components' nodes.
 
-	cleanup_dispatch(kernel, tr, it);
+	cleanup_dispatch_deep(kernel, tr);
 
 	return res;
 	}
@@ -156,7 +150,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
-	// std::cerr << "handle_factor " << Ex(sib) << std::endl;
+   // std::cerr << "handle_factor " << Ex(sib) << std::endl;
 	if(*sib->name=="\\components") return sib;
 
 	// If this factor is an accent at the top level, descent further.
@@ -480,7 +474,7 @@ void evaluate::simplify_components(iterator it)
 	assert(*it->name=="\\components");
 
 	// Simplify the components of the now single \component node by calling sympy.
-	// We just feed it the input; we do not call 'simplify'.
+	// We feed it the components and wrap in a 'simplify'.
 	sibling_iterator lst = tr.end(it);
 	--lst;
 	
@@ -494,6 +488,11 @@ void evaluate::simplify_components(iterator it)
 				tr.erase(eqs);
 			return true;
 			});
+
+	// Note: the 'erase' in the loop above may have left us with a
+   // \components node with an empty list of component values. However,
+	// since all logic expects to find a \component node, we do NOT yet
+	// replace this with a scalar zero here.
 	}
 
 std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
