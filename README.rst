@@ -232,10 +232,10 @@ development platform.
 Windows
 -------
 
-Building on windows does not work yet, but here is something to get
+Building on Windows does not work yet, but here is something to get
 things at least roughly in the right direction. First, install MSYS2
 from http://msys2.github.io. Once you have a working MSYS2 shell,
-do the following to install various packages::
+do the following to install various packages (all from an MSYS2 shell!)::
 
     pacman -S mingw-w64-x86_64-gcc
     pacman -S mingw-w64-x86_64-gtkmm3
@@ -247,13 +247,11 @@ Then close the MSYS2 shell and open the MINGW64 shell. Run::
   
     cd cadabra2/build
     cmake -G "MinGW Makefiles" -DUSE_PYTHON_3=NO ..
+    mingw32-make
 
-* Not clear yet how to get it to pick up python3.
-* install Library TARGETS given no DESTINATION in
-  client_server/CMakeLists.txt 101
-* ditto frontend/common/CMakeLists.txt
-
-If you get any further, please get in touch.
+If the cmake fails with a complaint about 'sh.exe', just run it again.
+The above builds for python2, let me know if you know how to make it
+pick up python3 on Windows.
 
 
 Tutorials and other help
