@@ -114,7 +114,7 @@ bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 	
 	if(is_shift_return) {
-//		content_changed(tmp, datacell);
+		content_changed(tmp, datacell);
 		content_execute(datacell);
 		return true;
 		}
@@ -139,7 +139,7 @@ void CodeInput::exp_input_tv::shift_enter_pressed()
 	Glib::RefPtr<Gtk::TextBuffer> textbuf=get_buffer();
 	std::string tmp(textbuf->get_text(get_buffer()->begin(), get_buffer()->end()));
 
-//	content_changed(tmp, datacell);
+	content_changed(tmp, datacell);
 	content_execute(datacell);
 	}
 

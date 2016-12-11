@@ -27,7 +27,7 @@ if sympy.__version__ != "unavailable":
     from sympy import diff
     from sympy import symbols
     from sympy import latex
-    from sympy import sin, cos, tan, trigsimp
+    from sympy import sin, cos, tan, sqrt, trigsimp
     from sympy import Matrix as sMatrix
 
 # Import matplotlib and setup functions to prepare its output

@@ -528,8 +528,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-//				ci->edit.content_changed.connect( 
-//					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+				ci->edit.content_changed.connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
 				ci->edit.content_insert.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_insert), i ) );
 				ci->edit.content_erase.connect( 
@@ -787,12 +787,15 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 	return false;
 	}
 
-// bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
-// 	{
-// 	// FIXME: need to keep track of individual characters inserted, otherwise we
-// 	// cannot build an undo stack. The it->textbuf=content needs to be replaced
-// 	// with an ActionAddText. CodeInput::handle_changed 
-// 
+ bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
+ 	{
+	modified=true;
+	update_title();
+
+ 	// FIXME: need to keep track of individual characters inserted, otherwise we
+ 	// cannot build an undo stack. The it->textbuf=content needs to be replaced
+ 	// with an ActionAddText. CodeInput::handle_changed 
+ 
 // 	current_canvas=canvas_number;
 // 	if(it->textbuf!=content) {
 // 		it->textbuf=content;
@@ -800,9 +803,9 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 // 		modified=true;
 // 		update_title();
 // 		}
-// 
-// 	return false;
-// 	}
+ 
+ 	return false;
+ 	}
 
 bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DTree::iterator it, int canvas_number)
 	{

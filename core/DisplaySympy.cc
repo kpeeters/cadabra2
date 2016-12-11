@@ -16,6 +16,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },
 		{"\\exp", "exp" },
+		{"\\sqrt", "sqrt" },
 
 		{"\\infty", "sympy.oo"},
 

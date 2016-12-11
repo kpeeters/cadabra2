@@ -178,7 +178,8 @@ namespace cadabra {
 			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
 			bool cell_content_erase(int, int, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
-			
+			bool cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number);
+
 			void dim_output_cells(DTree::iterator it);
 
 			// Handler for callbacks from TeXView cells.
