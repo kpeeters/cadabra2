@@ -129,7 +129,7 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 		iterator prod=tr.append_child(sum, str_node("\\prod"));
 		int sgn=combin::ordersign(ci[permnum].begin(), ci[permnum].end(), 
 										  ci.original.begin(), ci.original.end());
-		multiplier_t mult=multiplier_t(ci.multiplier(permnum))/multiplier_t(combin::fact(ci.original.size()))*sgn;
+		multiplier_t mult=multiplier_t(ci.multiplier(permnum))/multiplier_t(combin::fact((unsigned long long)ci.original.size()))*sgn;
 //		debugout << "multipliers: " << mult << " = " << ci.multiplier(permnum) 
 //					<< " / " << fact(ci.original.size()) << " * " << sgn << std::endl;
 		multiply(prod->multiplier, mult);
