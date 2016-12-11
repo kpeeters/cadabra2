@@ -7,6 +7,8 @@
 #include "GUIBase.hh"
 #include "Actions.hh"
 #include "popen2.hh"
+#include <sys/types.h>
+#include <signal.h>
 
 using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
