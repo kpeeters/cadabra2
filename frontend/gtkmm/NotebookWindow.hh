@@ -62,7 +62,9 @@ namespace cadabra {
 
 			// For grabbing focus of widgets which are not yet allocated.
 			void on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w);
+			void on_scroll_size_allocate(Gtk::Allocation&, double shift);
 			sigc::connection grab_connection;
+			sigc::connection scroll_connection;
 
 			void set_name(const std::string&);
 			void set_title_prefix(const std::string&);
@@ -120,7 +122,7 @@ namespace cadabra {
 			// Name and modification data.
 			void             update_title();
 			void             set_stop_sensitive(bool);
-			void             scroll_into_view(DTree::iterator);
+			void             setup_focus_after_allocate(DTree::iterator);
 			std::string      name, title_prefix;
 			bool             modified, read_only;
 

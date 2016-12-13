@@ -609,7 +609,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		}
 
 //	if(current_cell!=doc.end()) 
-//		scroll_into_view(current_cell);
+//		setup_focus_after_allocate(it);
 	}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
@@ -692,8 +692,10 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int p
 	// gets fires as soon as size/position allocation happens.
 
 	Gtk::Allocation alloc=target.inbox->get_allocation();
-	if(alloc.get_y()!=-1)
+	if(alloc.get_y()!=-1) {
+		std::cerr << "box " << it->textbuf << " grabbing focus" << std::endl;
 		target.inbox->edit.grab_focus();
+		}
 	else {
 		grab_connection = target.inbox->signal_size_allocate().connect(
 			sigc::bind(
@@ -724,39 +726,92 @@ size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
 	return offset;
 	}
 
-void NotebookWindow::scroll_into_view(DTree::iterator it)
+void NotebookWindow::setup_focus_after_allocate(DTree::iterator it)
 	{
+	// This function sets up a handler on the visualcells corresponding
+	// to 'it'. When those visual cells are allocated, we call
+	// on_widget_size_allocate which then ensures that the current_cell
+	// is in view. The reason for doing things this way is that when a
+	// cell is added to a canvas, it does not immediately get sizes
+	// allocated, so we need to defer scrolling until that has
+	// happened.
+
 	if(current_canvas<0 || current_canvas>=(int)canvasses.size()) return;
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
 		std::cerr << "cadabra-client: Cannot find cell to scroll into view." << std::endl;
 		return;
 		}
+	if(canvasses[current_canvas]->visualcells.find(&(*current_cell))==canvasses[current_canvas]->visualcells.end()) {
+		std::cerr << "cadabra-client: Cannot find current cell to scroll into view." << std::endl;
+		return;
+		}
 
-	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
-	// std::cerr << "Scrolling into view " << it->textbuf << std::endl;
+	VisualCell& busybox  = canvasses[current_canvas]->visualcells[&(*it)];
+	VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*current_cell)];
+
+	std::cerr << "Focusing " << current_cell->textbuf << std::endl;
 
 	// Grab widgets focus, which will scroll it into view. If the widget has not yet
 	// had its size and position allocated, we need to setup a signal handler which
 	// gets fires as soon as size/position allocation happens.
 
-	Gtk::Allocation alloc=target.inbox->get_allocation();
-	if(alloc.get_y()!=-1) {
-		// std::cerr << "grabbing focus" << std::endl;
-		target.inbox->edit.grab_focus();
-		}
-	else {
-		grab_connection = target.inbox->signal_size_allocate().connect(
-			sigc::bind(
-				sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
-				&(target.inbox->edit)
-						  ));
-		}
+//	Gtk::Allocation alloc=busybox.inbox->get_allocation();
+//	if(alloc.get_y()!=-1) {
+//		// std::cerr << "grabbing focus" << std::endl;
+//      //		target.inbox->edit.grab_focus();
+//		}
+//	else {
+
+	grab_connection = busybox.inbox->signal_size_allocate().connect(
+		sigc::bind(
+			sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
+			&(focusbox.inbox->edit)
+					  ));
 	}
 
-void NotebookWindow::on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w)
+#define LINE_SPACING 0
+
+void NotebookWindow::on_widget_size_allocate(Gtk::Allocation& busy_alloc, Gtk::Widget *w)
 	{
+	std::cerr << "on_widget_size_allocate" << std::endl;
 	grab_connection.disconnect();
-	w->grab_focus();
+
+//	Gdk::Rectangle rect;
+//	w->get_iter_location(vc->inbox->edit.get_buffer()->get_iter_at_mark(
+//													 vc->inbox->edit.get_buffer()->get_insert()), rect);
+
+	Gtk::Allocation               al=w->get_allocation();
+	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
+
+	double upper_visible=va->get_value();
+	double lower_visible=va->get_value()+va->get_page_size();
+
+	// When we get called, the busybox has its allocation done and size set. However,
+	// the edit box below still has its old position (but its correct height). So we
+	// should make sure that busybox.y+busybox.height+editbox.height is at the bottom
+	// of the scrollbox.
+
+	std::cerr << upper_visible << " - " << lower_visible << std::endl;
+	std::cerr << busy_alloc.get_y() << " height " << busy_alloc.get_height() << std::endl;
+	std::cerr << al.get_y() << " height " << al.get_height() << std::endl;
+
+	double should_be_visible = upper_visible+busy_alloc.get_height()+al.get_height();
+	double shift = should_be_visible - lower_visible;
+	std::cerr << should_be_visible << " should be visible" << std::endl;
+//	if(shift > 0) {
+	scroll_connection.disconnect();
+		scroll_connection = canvasses[current_canvas]->scroll.signal_size_allocate().connect(
+			sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate), shift));
+//		}
+	}
+
+void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc, double shift)
+	{
+	scroll_connection.disconnect();
+	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
+	std::cerr << "scrolling from " << va->get_value() << " to " << shift << std::endl;
+	if(shift>0)
+		va->set_value( va->get_value() + shift);
 	}
 
 bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_number)
