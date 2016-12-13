@@ -227,5 +227,6 @@ test16()
     
 {m,n,p,q,r,s,t}::Indices;
 ex:= A_{m n} D_{m p} Q_{n p} + A_{q r} E_{q t} F_{t s} Q_{r s} ;
+factor_out(_, $A_{m n}$);
 sort_product(_);
 rename_dummies(_);

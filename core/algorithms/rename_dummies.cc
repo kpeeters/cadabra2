@@ -10,9 +10,11 @@ rename_dummies::rename_dummies(const Kernel& k, Ex& tr)
 
 bool rename_dummies::can_apply(iterator st)
 	{
-	if(*st->name!="\\prod") 
+	if(*st->name!="\\prod" && *st->name!="\\sum") 
 		if(!is_single_term(st))
 			return false;
+
+	if(*st->name=="\\prod" && tr.is_head(st)==false && *(tr.parent(st)->name)=="\\sum") return false;
 	return true;
 	}
 
@@ -27,6 +29,8 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	index_map_t ind_free, ind_dummy, ind_free_up, ind_dummy_up;
 	classify_indices(st, ind_free, ind_dummy);
 	classify_indices_up(st, ind_free_up, ind_dummy_up);
+
+	print_classify_indices(std::cerr, st);
 	
 	// Run through all indices once more, in order. If an index
 	// occurs in the ind_dummy set, and there is no entry in repmap,
