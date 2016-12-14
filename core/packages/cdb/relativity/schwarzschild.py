@@ -9,7 +9,7 @@ from cadabra2 import *
 __cdbkernel__ = cadabra2.__cdbkernel__
 
 Coordinate(Ex(r't,r,\theta,\phi'),Ex(r''))
-Indices(Ex(r'\mu,\nu,\rho,\sigma,\kappa,\lambda'), Ex(r'name=spacetime, values={r,t,\theta,\phi}, position=fixed'))
+Indices(Ex(r'\mu,\nu,\rho,\sigma,\kappa,\lambda,\chi,\gamma'), Ex(r'name=spacetime, values={t,r,\theta,\phi}, position=fixed'))
 Metric(Ex(r'g_{\mu\nu}'), Ex(r''))
 InverseMetric(Ex(r'g^{\mu\nu}'), Ex(r''))
 
