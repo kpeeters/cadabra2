@@ -78,6 +78,7 @@ def test07():
     vary(_, $a -> \delta{a}, b->\delta{b}$)
     tst:= \commutator{\delta{a}}{b} + \commutator{a}{\delta{b}} - @(ex);
     assert(tst==0)
+    print("Test 07 passed")
 
 test07()
 
@@ -89,3 +90,14 @@ test07()
 #     assert(tst==0)
 #
 # test08()
+
+def test08():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex:= \int{ Q + R +  A \partial{B} C }{x};
+    integrate_by_parts(_, $B$)
+    tst:= \int{ Q + R - \partial{A} B C - A B \partial{C} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 08 passed")
+
+test08()

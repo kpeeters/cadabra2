@@ -71,8 +71,10 @@ Algorithm::result_t vary::apply(iterator& it)
 	
 	if(*it->name=="\\prod" || *it->name=="\\commutator" || *it->name=="\\anticommutator") {
 		Ex result;
-		result.set_head(str_node("\\expression"));
-		iterator newsum=result.append_child(result.begin(), str_node("\\sum"));
+//		result.set_head(str_node("\\expression"));
+//		iterator newsum=result.append_child(result.begin(), str_node("\\sum"));
+		result.set_head(str_node("\\sum"));
+		iterator newsum=result.begin();
 		
 		// Iterate over all factors, attempting a substitute. If this
 		// succeeds, copy the term to the "result" tree. Then restore the
@@ -92,7 +94,10 @@ Algorithm::result_t vary::apply(iterator& it)
 			if(varyfac.can_apply(fcit2)) {
 				result_t res = varyfac.apply(fcit2);
 				if(fcit2->is_zero()==false && res==result_t::l_applied) {
-					result.append_child(newsum, it);
+					auto toclean = result.append_child(newsum, it);
+					// the varied factor itself cannot get rid of nested
+					// products, that's for us to do at the top level prod.
+					cleanup_dispatch(kernel, tr, toclean);
 					}
 
 				// restore original

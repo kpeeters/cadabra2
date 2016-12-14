@@ -288,3 +288,18 @@ def test34():
         print('Test 34 passed')
 
 test34()
+
+def test35():
+    __cdbkernel__=create_scope()
+    {\del{#}, \delbar{#}}::PartialDerivative.
+    {\Psi_{\mu}, \Psibar_{\mu}, \eps, \epsbar}::AntiCommuting;
+    {\Psi_{\mu}, \Psibar_{\mu}, \eps, \epsbar}::SelfAntiCommuting;
+    {\Psi_{\mu}, \Psibar_{\mu}, X_{\mu}}::Depends(\del{#}, \delbar{#});
+    {i, \Psi_\mu, \Psibar_\mu, \eps, \epsbar, X_\mu}::SortOrder;
+    ex:= i\epsbar\del{\Psi_{\mu}} \delbar{X_{\mu}};
+    sort_product(_);
+    tst:= -i\del{\Psi_{\mu}} \epsbar \delbar{X_{\mu}} - @(ex);
+    assert(tst==0)
+
+test35()
+

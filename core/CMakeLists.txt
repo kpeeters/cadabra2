@@ -257,6 +257,10 @@ install(FILES
   "${PROJECT_SOURCE_DIR}/packages/cdb/relativity/__init__.py" 
   "${PROJECT_SOURCE_DIR}/packages/cdb/relativity/schwarzschild.py" DESTINATION "${PYTHON_CDB_PACKAGE_PATH}/relativity" 
 )
+install(FILES
+  "${PROJECT_SOURCE_DIR}/packages/cdb/gauge_theory/__init__.py" 
+  "${PROJECT_SOURCE_DIR}/packages/cdb/gauge_theory/instantons.py" DESTINATION "${PYTHON_CDB_PACKAGE_PATH}/gauge_theory" 
+)
 
 install(DIRECTORY DESTINATION ${PYTHON_CDB_PACKAGE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE

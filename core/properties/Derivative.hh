@@ -8,11 +8,12 @@
 #include "properties/Distributable.hh"
 #include "properties/DependsInherit.hh"
 #include "properties/IndexInherit.hh"
+#include "properties/SortOrder.hh"
 
 class Derivative : public IndexInherit, 
 						 public DependsInherit,
 //                   public Inherit<Spinor>,
-//                   public Inherit<SortOrder>,
+                   public Inherit<SortOrder>,
                    public CommutingAsProduct, 
                    public NumericalFlat,
                    public WeightBase,

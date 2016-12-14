@@ -156,6 +156,22 @@ class list_property : public property {
 	public:
 };
 
+/// If a property X derives from Inherit<Y>, and get<Y> is called on
+/// an object which has an X property (but no Y property), then the
+/// get<Y> will look at the non-index child of the object to see if
+/// that has a Y property.  FIXME: need to decided what to do if there
+/// are more non-index children.
+
+template<class T>
+class Inherit {
+	public:
+		virtual ~Inherit() {};
+		virtual std::string name() const { return std::string("Stay Away"); };
+};
+
+/// PropertyInherit is like Inherit<T> for all properties. This is very 
+/// generic and almost never really useful.
+
 class PropertyInherit : virtual public property {
 	public: 
 		virtual std::string name() const { return std::string("PropertyInherit"); };
@@ -304,6 +320,8 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 				ret=0;
 				if(dynamic_cast<const PropertyInherit *>((*walk).second.second)) 
 					inherits=true;
+				else if(dynamic_cast<const Inherit<T> *>((*walk).second.second)) 
+					inherits=true;
 				}
 			++walk;
 			}
@@ -371,8 +389,8 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, const std::s
 						}
 					if(dynamic_cast<const PropertyInherit *>((*walk).second.second))
 						inherits=true;
-//					else if(dynamic_cast<const Inherit<T> *>((*walk).second.second)) 
-//						inherits=true;
+					else if(dynamic_cast<const Inherit<T> *>((*walk).second.second)) 
+						inherits=true;
 					}
 				}
 			++walk;

@@ -508,4 +508,8 @@ def test29():
 
 test29()
 
-         
+def test30():
+{ \del{#}, \delbar{#} }::PartialDerivative;
+X_{\mu}::Depends(\del{#}, \delbar{#});
+ex:= \del{\delbar{X_{\mu}}};
+unwrap(_);                

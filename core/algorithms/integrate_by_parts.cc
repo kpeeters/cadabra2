@@ -34,6 +34,9 @@ Algorithm::result_t integrate_by_parts::apply(iterator& it)
 						cleanup_dispatch(kernel, tr, ti);
 						}
 					}
+				// Cleanup nested sums
+				iterator tmp(sib);
+				cleanup_dispatch(kernel, tr, tmp);
 				}
 			else {
 				iterator ti(sib);
@@ -86,6 +89,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 			return result_t::l_applied;
 			}
 		}
+
+	prod_wrap_single_term(it);
 
 	assert(*it->name=="\\prod");
 	auto fac=tr.begin(it);
