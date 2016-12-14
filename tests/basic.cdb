@@ -204,10 +204,10 @@ def test28():
 
 test28()
 
-def post_process(ex):
-	sort_product(ex)
-	#canonicalise(ex)
-	collect_terms(ex)
+# def post_process(ex):
+# 	sort_product(ex)
+# 	#canonicalise(ex)
+# 	collect_terms(ex)
 
 {\mu,\nu,\rho}::Indices(position=free).
 x::Coordinate.
@@ -252,6 +252,7 @@ def test31():
     substitute(_, $g_{m n} = h_{m n}$)
     tst:= h_{0 0} + 1 - @(ex);
     assert(tst==0)
+    print("Test 31 passed")
 
 test31()
 
@@ -288,3 +289,19 @@ def test34():
         print('Test 34 passed')
 
 test34()
+
+def test35():
+    __cdbkernel__=create_scope()
+    {\del{#}, \delbar{#}}::PartialDerivative.
+    {\Psi_{\mu}, \Psibar_{\mu}, \eps, \epsbar}::AntiCommuting;
+    {\Psi_{\mu}, \Psibar_{\mu}}::SelfAntiCommuting;
+    {\Psi_{\mu}, \Psibar_{\mu}, X_{\mu}}::Depends(\del{#}, \delbar{#});
+    {i, \Psi_\mu, \Psibar_\mu, \eps, \epsbar, X_\mu}::SortOrder;
+    ex:= i\epsbar\del{\Psi_{\mu}} \delbar{X_{\mu}};
+    sort_product(_)
+    tst:= -i\del{\Psi_{\mu}} \epsbar \delbar{X_{\mu}} - @(ex);
+    assert(tst==0)
+    print("Test 35 passed")
+    
+test35()
+

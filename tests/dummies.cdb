@@ -1,0 +1,4 @@
+
+{m,n,p,q}::Indices;
+ex:= A_{m} A^{m} + B_{m} C^{m} + A_{n} A^{n};
+rename_dummies(_)

@@ -9,8 +9,8 @@ def test01():
     __cdbkernel__=create_scope()
     {d1,d2,d3,d4,m,n,p,r}::Indices(vector).
     obj1:= a_{m}*b_{n} + c_r b_r d_{m n};
-    substitute(_, $b_{p} -> c_{p m n} A^{m n} + c_{p}$ );
-    distribute(_);
+    substitute(_, $b_{p} -> c_{p m n} A^{m n} + c_{p}$ )
+    distribute(_)
     tst1:= a_{m} * c_{n d2 d1} * A^{d2 d1} + a_{m} * c_{n} + c_{r} * c_{r d1 d2} * A^{d1 d2} * d_{m n} + c_{r} * c_{r} * d_{m n} - @(obj1); 
     assert(tst1==0)
     print('Test 01 passed')
@@ -137,7 +137,7 @@ test07()
 def test17():
     # Test 17: Object wildcards
     obj17:= [ A B, C];
-    substitute(_, $[ M? N?, P? ] -> P? M? N?$ );
+    substitute(_, $[ M? N?, P? ] -> P? M? N?$ )
     tst17:= @(obj17) - C A B;
     assert(tst17==0)
     print('Test 17 passed')
@@ -168,7 +168,7 @@ def test101():
     A_{m}::SelfNonCommuting.
     ex:= A_{3} A_{2} A_{1} A_{0} + A_{0} A_{8};
     rl:= A_{m} A_{n} | m > n -> Q;
-    substitute(ex, rl, repeat=True);
+    substitute(ex, rl, repeat=True)
     tst:= Q Q + A_{0} A_{8} - @(ex);
     assert(tst==0)
     print('Test 101 passed')
@@ -211,7 +211,7 @@ def test104():
     ex:= g^{4};
     rl:= g_{4} -> A;
     # How is this thing supposed to know that 4 is in the {m,n,p} set?
-    substitute(ex, rl);
+    substitute(ex, rl)
     tst:= g^{4} - @(ex);
     assert(tst==0)
     print("Test 104 passed")
@@ -222,7 +222,7 @@ def test105():
     __cdbkernel__=create_scope()
     ex:= A_{m n} + B_{m n};
     rl:= C?_{m? n?} -> n? C?_{n?};
-    substitute(ex, rl);
+    substitute(ex, rl)
     tst:= n A_{n} + n B_{n} - @(ex);
     assert(tst==0)
     print("Test 105 passed")
@@ -234,7 +234,7 @@ def test106():
     {m,n,p}::Indices(position=free);
     ex:=\int{ A_{m} A^{m} }{x};
     rl:= A_{m} -> B_{m n} C^{n};
-    substitute(ex, rl);
+    substitute(ex, rl)
     tst:= \int{ B_{m n} C^{n} B^{m}_{p} C^{p} }{x} - @(ex);
     assert(tst==0)
     print("Test 106 passed")
@@ -244,21 +244,38 @@ test106()
 def test107():
     __cdbkernel__=create_scope()
     ex:= A_{m n} - B_{m n};
-    substitute(ex, $m -> 2$);
+    substitute(ex, $m -> 2$)
     tst:= A_{2 n} - B_{2 n} - @(ex);
     assert(tst==0)
     print("Test 107 passed")
 
 test107()
 
+def test108():
+    __cdbkernel__=create_scope()
+    \nabla{#}::Derivative;
+    {\mu,\nu,\rho,\sigma}::Indices(position=fixed);
+    ex:= \nabla_{\mu}{K^{\nu}} = B_{\mu} D^{\nu};
+    substitute(_, $\nabla_{\mu}{A?^{\nu}} = C_{\mu}^{\nu}$)
+    tst:= C_{\mu}^{\nu} = B_{\mu} D^{\nu};
+    assert(ex==tst)
+    print("Test 108 passed")
 
-{\mu,\nu,\rho,\sigma}::Indices;
-\partial{#}::PartialDerivative;
-g_{\mu\nu}::Metric;
-g^{\mu\nu}::InverseMetric;
-g^{\mu}_{\nu}::KroneckerDelta;
-g_{\mu}^{\nu}::KroneckerDelta;
-ex:= \partial_{5}{ g^{5 5} } \partial_{5}{ g_{5 5} }  - A_{5};
-substitute(ex, $g_{5 5} -> B$);
-tst:= \partial_{5}{ g^{5 5} } \partial_{5}{B} - A_{5} - @(ex);
-assert(tst==0)
+test108()
+
+def test109():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho,\sigma}::Indices;
+    \partial{#}::PartialDerivative;
+    g_{\mu\nu}::Metric;
+    g^{\mu\nu}::InverseMetric;
+    g^{\mu}_{\nu}::KroneckerDelta;
+    g_{\mu}^{\nu}::KroneckerDelta;
+    ex:= \partial_{5}{ g^{5 5} } \partial_{5}{ g_{5 5} }  - A_{5};
+    substitute(ex, $g_{5 5} -> B$)
+    tst:= \partial_{5}{ g^{5 5} } \partial_{5}{B} - A_{5} - @(ex);
+    assert(tst==0)
+    print("Test 109 passed")
+
+test109()
+

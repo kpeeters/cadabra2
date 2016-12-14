@@ -344,6 +344,15 @@ void ComputeThread::execute_cell(DTree::iterator it)
 
 	// std::cout << "cadabra-client: ComputeThread going to execute " << dc.textbuf << std::endl;
 
+	if((it->textbuf).substr(0,7)=="reset()") {
+		restart_kernel();
+
+		std::shared_ptr<ActionBase> action = 
+			std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
+
+		docthread->queue_action(action);
+		return;
+		}
 
 	// Position the cursor in the next cell so this one will not 
 	// accidentally get executed twice.

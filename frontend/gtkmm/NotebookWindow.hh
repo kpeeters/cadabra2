@@ -62,7 +62,9 @@ namespace cadabra {
 
 			// For grabbing focus of widgets which are not yet allocated.
 			void on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w);
+			void on_scroll_size_allocate(Gtk::Allocation&, double shift);
 			sigc::connection grab_connection;
+			sigc::connection scroll_connection;
 
 			void set_name(const std::string&);
 			void set_title_prefix(const std::string&);
@@ -120,7 +122,7 @@ namespace cadabra {
 			// Name and modification data.
 			void             update_title();
 			void             set_stop_sensitive(bool);
-			void             scroll_into_view(DTree::iterator);
+			void             setup_focus_after_allocate(DTree::iterator);
 			std::string      name, title_prefix;
 			bool             modified, read_only;
 
@@ -178,7 +180,8 @@ namespace cadabra {
 			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
 			bool cell_content_erase(int, int, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int);
-			
+			bool cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number);
+
 			void dim_output_cells(DTree::iterator it);
 
 			// Handler for callbacks from TeXView cells.

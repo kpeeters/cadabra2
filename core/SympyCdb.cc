@@ -44,7 +44,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-	std::cerr << result << std::endl;
+	// std::cerr << result << std::endl;
 	
 
    // After that, we construct a new sub-expression from this string by using our

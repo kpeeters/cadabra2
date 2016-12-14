@@ -4,7 +4,10 @@
 # the GUI backend server 'cadabra-server'.
 
 import sys
+import cadabra2
 from cadabra2 import *
+__cdbkernel__=cadabra2.__cdbkernel__
+
 #sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 
 # Attempt to import sympy; if not, setup logic so that the
@@ -24,7 +27,7 @@ if sympy.__version__ != "unavailable":
     from sympy import diff
     from sympy import symbols
     from sympy import latex
-    from sympy import sin, cos, tan, trigsimp
+    from sympy import sin, cos, tan, sqrt, trigsimp
     from sympy import Matrix as sMatrix
 
 # Import matplotlib and setup functions to prepare its output

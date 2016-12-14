@@ -42,7 +42,7 @@ namespace cadabra {
 					void         shift_enter_pressed();
 					
 					sigc::signal1<bool, DTree::iterator>                   content_execute;
-//					sigc::signal2<bool, std::string, DTree::iterator>      content_changed;
+					sigc::signal2<bool, std::string, DTree::iterator>      content_changed;
 					sigc::signal3<bool, std::string, int, DTree::iterator> content_insert;
 					sigc::signal3<bool, int, int, DTree::iterator>         content_erase;
 					sigc::signal1<bool, DTree::iterator>                   cell_got_focus;

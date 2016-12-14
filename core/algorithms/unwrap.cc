@@ -80,36 +80,45 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				++nxt;
 				bool move_out=true;
 				
-				// First figure out whether there is implicit dependence on the operator.
+				// An object pattern like 'A??' should always be assumed to have
+				// dependence, because we don't yet know what it will match.
+				if(move_out) {
+					if(factor->is_name_wildcard() || factor->is_object_wildcard())
+						move_out=false;
+					}
+				
+				// Then figure out whether there is implicit dependence on the operator.
 				// or on the coordinate.
-				const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
-				if(dep!=0) {
-					// std::cerr << *factor->name << " depends" << std::endl;
-					Ex deps=dep->dependencies(kernel, factor /* it */);
-					sibling_iterator depobjs=deps.begin(deps.begin());
-					while(depobjs!=deps.end(deps.begin())) {
+				if(move_out) {
+					const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
+					if(dep!=0) {
+						// std::cerr << *factor->name << " depends" << std::endl;
+						Ex deps=dep->dependencies(kernel, factor /* it */);
+						sibling_iterator depobjs=deps.begin(deps.begin());
+						while(depobjs!=deps.end(deps.begin())) {
 //						std::cout << "?" << *it->name << " == " << *depobjs->name << std::endl;
 //						if(subtree_exact_equal(it, depobjs)) { WRONG! Depends(\del) should work
 // without having any arguments in \del. Otherwise we would need to write this as Depends(\del{#})
-						if(old_it->name == depobjs->name) {
-							move_out=false;
-							break;
-							}
-						else {
-							// compare all indices
-							sibling_iterator indit=tr.begin(old_it);
-							while(indit!=tr.end(old_it)) {
-								if(indit->is_index()) {
-									if(subtree_exact_equal(&kernel.properties, indit, depobjs)) {
-										move_out=false;
-										break;
-										}
-									}
-								++indit;
+							if(old_it->name == depobjs->name) {
+								move_out=false;
+								break;
 								}
-							if(!move_out) break;
+							else {
+								// compare all indices
+								sibling_iterator indit=tr.begin(old_it);
+								while(indit!=tr.end(old_it)) {
+									if(indit->is_index()) {
+										if(subtree_exact_equal(&kernel.properties, indit, depobjs)) {
+											move_out=false;
+											break;
+											}
+										}
+									++indit;
+									}
+								if(!move_out) break;
+								}
+							++depobjs;
 							}
-						++depobjs;
 						}
 					}
 				
@@ -132,7 +141,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
                   ++chldit;
                   }
 					}
-				
+
 				// If no dependence found, move this child out of the derivative.
 				if(move_out) { 
                // FIXME: Does not handle subtree-compare properly, and does not look at the

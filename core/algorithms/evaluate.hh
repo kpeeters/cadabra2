@@ -76,7 +76,7 @@
 
 class evaluate : public Algorithm {
 	public:
-		evaluate(const Kernel&, Ex&, const Ex& component_values);
+		evaluate(const Kernel&, Ex&, const Ex& component_values, bool rhs=false);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
@@ -88,6 +88,7 @@ class evaluate : public Algorithm {
 
 	private:
 		const Ex& components;
+		bool only_rhs;
 
 		bool is_component(iterator it) const;
 
