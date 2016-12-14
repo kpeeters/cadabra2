@@ -357,13 +357,13 @@ test24()
 
 def test25():
     __cdbkernel__=create_scope()
-\diff{#}::PartialDerivative.
-{m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector,position=fixed).
-g^{m n}::Symmetric;
-obj25:= g^{p q} \diff{g_{m n}}_{p} \diff{g_{r s}}_{q} T^{r s m n};
-canonicalise(_)
-tst25:= g^{p q} \diff{g_{m n}}_{p} \diff{g_{r s}}_{q} * T^{m n r s} - @(obj25);
-rename_dummies(_)
+    \diff{#}::PartialDerivative.
+    {m,n,p,q,r,s,t,u,v,w,m1,m2,m3,m4,m5,m6,m7}::Indices(vector,position=fixed).
+    g^{m n}::Symmetric;
+    obj25:= g^{p q} \diff{g_{m n}}_{p} \diff{g_{r s}}_{q} T^{r s m n};
+    canonicalise(_)
+    tst25:= g^{p q} \diff{g_{m n}}_{p} \diff{g_{r s}}_{q} * T^{m n r s} - @(obj25);
+    rename_dummies(_)
     assert(tst25==0)
     print('Test 25 passed')
    
@@ -754,8 +754,8 @@ def test51():
     __cdbkernel__=create_scope()
     {a,b,c}::Indices(position=fixed);
     ex:= A^{a}(A) A_{a}(B) + A^{a}(B) A_{a}(A);
-    sort_product(_);
-    canonicalise(_);
+    sort_product(_)
+    canonicalise(_)
     tst:= 2 A^{a}(A) A_{a}(B) - @(ex);
     assert(tst==0)
     print('Test 51 passed')
@@ -767,8 +767,8 @@ def test52():
     {a,b,c}::Indices(position=fixed);
     D{#}::Derivative;
     ex:= D^{a}{A} D_{a}{B} + D^{a}{B} D_{a}{A};
-    sort_product(_);
-    canonicalise(_);
+    sort_product(_)
+    canonicalise(_)
     tst:= 2 D^{a}{A} D_{a}{B} - @(ex);
     assert(tst==0)
     print('Test 52 passed')

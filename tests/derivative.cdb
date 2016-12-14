@@ -509,7 +509,14 @@ def test29():
 test29()
 
 def test30():
-{ \del{#}, \delbar{#} }::PartialDerivative;
-X_{\mu}::Depends(\del{#}, \delbar{#});
-ex:= \del{\delbar{X_{\mu}}};
-unwrap(_);                
+    __cdbkernel__=create_scope()
+    { \del{#}, \delbar{#} }::PartialDerivative;
+    X_{\mu}::Depends(\del{#}, \delbar{#});
+    ex:= \del{\delbar{X_{\mu}}};
+    unwrap(_)
+    tst:= \del{\delbar{X_{\mu}}} - @(ex);
+    assert(tst==0)
+    print("Test 30 passed")
+
+test30()
+
