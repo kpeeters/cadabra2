@@ -1,10 +1,17 @@
 
-import cdb.gr as gr
+import cdb.relativity as rel
 
-\partial{#}::PartialDerivative;
+def test01():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex = rel.riemann_from_christoffel($Q$, $\gamma$)
+    exl = lhs(ex)
+    exr = rhs(ex)
+    tstl := Q^{\rho}_{\sigma\mu\nu} - @(exl);
+    assert(tstl==0)
+    print("Test 01a passed")
+    tstr := \partial_{\mu}{\gamma^{\rho}_{\nu\sigma}} -\partial_{\nu}{\gamma^{\rho}_{\mu\sigma}} + \gamma^{\rho}_{\mu\lambda} \gamma^{\lambda}_{\nu\sigma} - \gamma^{\rho}_{\nu\lambda} \gamma^{\lambda}_{\mu\sigma} - @(exr);
+    assert(tstr==0)
+    print("Test 01b passed")
 
-ex = gr.RiemannFromChristoffel($Q$, $\gamma$)
-exl = lhs(ex)
-exr = rhs(ex)
-tstl := Q^{\rho}_{\sigma\mu\nu} - @(exl);
-tstr := \partial_{\mu}{\gamma^{\rho}_{\nu\sigma}} -\partial_{\nu}{\gamma^{\rho}_{\mu\sigma}} + \gamma^{\rho}_{\mu\lambda} \gamma^{\lambda}_{\nu\sigma} - \gamma^{\rho}_{\nu\lambda} \gamma^{\lambda}_{\mu\sigma} - @(exr);
+test01()
