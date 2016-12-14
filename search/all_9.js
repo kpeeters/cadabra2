@@ -59,6 +59,8 @@ var searchData=
   ['indices_5fequivalent',['indices_equivalent',['../classdecompose__product.html#af208a34f62b4978349570892a7a252f1',1,'decompose_product']]],
   ['indprop',['indprop',['../classfierz.html#a4a560c9c837be80dfe7e4610248bd211',1,'fierz']]],
   ['info',['info',['../namespacesnoop.html#a55955f3e34cf1d1e0750593eab4d8456',1,'snoop']]],
+  ['inherit',['Inherit',['../classInherit.html',1,'']]],
+  ['inherit_3c_20sortorder_20_3e',['Inherit&lt; SortOrder &gt;',['../classInherit.html',1,'']]],
   ['init',['init',['../classcadabra_1_1ComputeThread.html#a1a404f7a41f16795657e6920fc4fdae8',1,'cadabra::ComputeThread::init()'],['../classServer.html#a1016678b77eacc5aa97f2310f8b442b1',1,'Server::init()'],['../classsnoop_1_1Snoop.html#a19eb26be3c5132edcdae59b453cbd424',1,'snoop::Snoop::init()'],['../classsnoop_1_1SnoopImpl.html#ab491f98ad9fb8c394ed5bc148017d628',1,'snoop::SnoopImpl::init()'],['../classcadabra_1_1CodeInput.html#a186d024b5bfbe72f985363b9d4e47650',1,'cadabra::CodeInput::init()']]],
   ['init_5fipython',['init_ipython',['../PythonCdb_8cc.html#ad4da81b58246fcb4b2a2e0c9a8fce95c',1,'PythonCdb.cc']]],
   ['inject_5fdefaults',['inject_defaults',['../group__pythoncore.html#ga917d8e2fe635e288b9b7345a220b4c72',1,'inject_defaults(Kernel *k):&#160;PythonCdb.cc'],['../group__pythoncore.html#ga917d8e2fe635e288b9b7345a220b4c72',1,'inject_defaults(Kernel *):&#160;PythonCdb.cc']]],
@@ -134,8 +136,8 @@ var searchData=
   ['is_5fzero',['is_zero',['../classstr__node.html#aeb383a4110dcbcaaa0dd2c71d0758db6',1,'str_node']]],
   ['it',['it',['../classindexsort_1_1less__indexed__treenode.html#ad3b58a3e25e7583b5ee6108ce92c38e0',1,'indexsort::less_indexed_treenode']]],
   ['iterable_5fconverter',['iterable_converter',['../classiterable__converter.html',1,'']]],
-  ['iterator',['iterator',['../classAlgorithm.html#a238645043dc3b992ce92ebcd66389217',1,'Algorithm::iterator()'],['../classkeyval__t.html#a6beadd7be2de48f55c36010a17ef6632',1,'keyval_t::iterator()'],['../classProperties_1_1registered__property__map__t.html#af9593dd913eabd0379c4473b5022cdf5',1,'Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
   ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
+  ['iterator',['iterator',['../classAlgorithm.html#a238645043dc3b992ce92ebcd66389217',1,'Algorithm::iterator()'],['../classkeyval__t.html#a6beadd7be2de48f55c36010a17ef6632',1,'keyval_t::iterator()'],['../classProperties_1_1registered__property__map__t.html#af9593dd913eabd0379c4473b5022cdf5',1,'Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
   ['iterator_5fbase',['iterator_base',['../classyngtab_1_1filled__tableau_1_1iterator__base.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fcategory',['iterator_category',['../classyngtab_1_1filled__tableau_1_1iterator__base.html#ab11be0dad33e55a845b007ff4130c974',1,'yngtab::filled_tableau::iterator_base']]]
 ];

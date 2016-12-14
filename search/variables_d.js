@@ -19,7 +19,7 @@ var searchData=
   ['mod_5fprel',['mod_prel',['../classEx__is__less.html#a599bf5d2127b64ef1046c7faeac142ef',1,'Ex_is_less']]],
   ['modified',['modified',['../classcadabra_1_1NotebookWindow.html#ab2b37a1a30f8f2427bf240f323784293',1,'cadabra::NotebookWindow']]],
   ['modulo_5fmonoterm',['modulo_monoterm',['../classyoung__project__tensor.html#a137bd93f51df05419cdc315ec5fafbb3',1,'young_project_tensor']]],
-  ['mu',['Mu',['../Symbols_8cc.html#a704014e84d5bf0a461183948649c21f8',1,'Mu():&#160;Symbols.cc'],['../Symbols_8cc.html#a63309004c7ba26037089ca8af1664a19',1,'mu():&#160;Symbols.cc']]],
+  ['mu',['mu',['../Symbols_8cc.html#a63309004c7ba26037089ca8af1664a19',1,'mu():&#160;Symbols.cc'],['../Symbols_8cc.html#a704014e84d5bf0a461183948649c21f8',1,'Mu():&#160;Symbols.cc']]],
   ['multiple_5fpick',['multiple_pick',['../classcombin_1_1combinations__base.html#a1a38e5381965e66c5af1124219fda902',1,'combin::combinations_base']]],
   ['multiplicity',['multiplicity',['../classcombin_1_1symmetriser.html#ad058b1522ac6e064483b8c8c4cda9b2f',1,'combin::symmetriser::multiplicity()'],['../classyngtab_1_1tableau__base.html#ab0b8f993dff86e614c975579a93e4bf0',1,'yngtab::tableau_base::multiplicity()']]],
   ['multiplier',['multiplier',['../classstr__node.html#a34d65114d0155c73bb3abe0532bf30db',1,'str_node']]],

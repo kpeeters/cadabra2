@@ -31,6 +31,7 @@ var searchData=
   ['lhs',['lhs',['../classServer.html#a928bc478421917ae3fa122dbfe7bd392',1,'Server::lhs()'],['../PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92',1,'lhs():&#160;PythonCdb.cc']]],
   ['lhs_5fcontains_5fdummies',['lhs_contains_dummies',['../classEx__comparator.html#a27ae14af3aa66928893da846be15344b',1,'Ex_comparator::lhs_contains_dummies()'],['../classsubstitute.html#ad5d79b3f88d17b0d3422da9ea3ffc7e1',1,'substitute::lhs_contains_dummies()']]],
   ['line_5fper_5fnode',['line_per_node',['../structstr__node_1_1flag__t.html#ab032c61bde3a09b929169172a3a48e10',1,'str_node::flag_t']]],
+  ['line_5fspacing',['LINE_SPACING',['../NotebookWindow_8cc.html#a444ff05a96165c5ead52d0c1fdc75b6d',1,'NotebookWindow.cc']]],
   ['list_5fproperties',['list_properties',['../PythonCdb_8cc.html#ac217f28bc50ad9cc2d209be157fe4af4',1,'PythonCdb.cc']]],
   ['list_5fproperty',['list_property',['../classlist__property.html',1,'']]],
   ['list_5fsize',['list_size',['../namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef',1,'cadabra']]],

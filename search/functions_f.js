@@ -49,6 +49,7 @@ var searchData=
   ['on_5frun_5frunall',['on_run_runall',['../classcadabra_1_1NotebookWindow.html#a322611f8ef95c5036d4d390ff3a87523',1,'cadabra::NotebookWindow']]],
   ['on_5frun_5fruntocursor',['on_run_runtocursor',['../classcadabra_1_1NotebookWindow.html#aa94d87034b2708d20a12c4f2f53be2c7',1,'cadabra::NotebookWindow']]],
   ['on_5frun_5fstop',['on_run_stop',['../classcadabra_1_1NotebookWindow.html#a83e5ae4ad3d7ac1bee3720c2bdd3f868',1,'cadabra::NotebookWindow']]],
+  ['on_5fscroll_5fsize_5fallocate',['on_scroll_size_allocate',['../classcadabra_1_1NotebookWindow.html#abba41c48449462ccb87c5c0601347996',1,'cadabra::NotebookWindow']]],
   ['on_5fshow',['on_show',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a4cad40d4ed6f4f90393065ee7810c92c',1,'cadabra::CodeInput::exp_input_tv::on_show()'],['../classcadabra_1_1TeXView.html#a71e1fdc84ee372c77c630826d0b2f969',1,'cadabra::TeXView::on_show()']]],
   ['on_5fsocket_5finit',['on_socket_init',['../classServer.html#af318d85743a9bd207db367523bfb470b',1,'Server']]],
   ['on_5ftex_5ferror',['on_tex_error',['../classcadabra_1_1NotebookWindow.html#ab16ab6965a532686edc3c39bdc179cc2',1,'cadabra::NotebookWindow']]],

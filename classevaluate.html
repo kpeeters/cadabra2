@@ -129,8 +129,8 @@ Inheritance diagram for evaluate:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a7f09dd44304d73c7d56f9bc9d96bf19a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a7f09dd44304d73c7d56f9bc9d96bf19a">evaluate</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;, <a class="el" href="classEx.html">Ex</a> &amp;, const <a class="el" href="classEx.html">Ex</a> &amp;component_values)</td></tr>
-<tr class="separator:a7f09dd44304d73c7d56f9bc9d96bf19a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34d6b9472af826b1bf17f007fc5d3d5b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a34d6b9472af826b1bf17f007fc5d3d5b">evaluate</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;, <a class="el" href="classEx.html">Ex</a> &amp;, const <a class="el" href="classEx.html">Ex</a> &amp;component_values, bool <a class="el" href="PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d">rhs</a>=false)</td></tr>
+<tr class="separator:a34d6b9472af826b1bf17f007fc5d3d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0db30439730aef27e52e00a75d805209"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a0db30439730aef27e52e00a75d805209">can_apply</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>) override</td></tr>
 <tr class="separator:a0db30439730aef27e52e00a75d805209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d49c8b37dba4cee0d06d136f717b1c9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classEx.html#a2b752a88144e6ad7bee2ff30bd671811">result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a3d49c8b37dba4cee0d06d136f717b1c9">apply</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> &amp;) override</td></tr>
@@ -196,6 +196,8 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a8cc44aaac30f6bb2d3d64d930e6721a7"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a8cc44aaac30f6bb2d3d64d930e6721a7">components</a></td></tr>
 <tr class="separator:a8cc44aaac30f6bb2d3d64d930e6721a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a215db33569d4515fd4df1c50d5721249"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classevaluate.html#a215db33569d4515fd4df1c50d5721249">only_rhs</a></td></tr>
+<tr class="separator:a215db33569d4515fd4df1c50d5721249"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -343,7 +345,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="separator:ab22b43bf8bdd5a560348fbd0eb3abf21 inherit pro_attribs_classAlgorithm"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a7f09dd44304d73c7d56f9bc9d96bf19a"></a>
+<a class="anchor" id="a34d6b9472af826b1bf17f007fc5d3d5b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -363,7 +365,13 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>component_values</em>&#160;</td>
+          <td class="paramname"><em>component_values</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>rhs</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -413,7 +421,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
           <td class="memname">bool evaluate::can_apply </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>it</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -766,6 +774,26 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 
 </div>
 </div>
+<a class="anchor" id="a215db33569d4515fd4df1c50d5721249"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool evaluate::only_rhs</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>core/algorithms/<a class="el" href="evaluate_8hh_source.html">evaluate.hh</a></li>
 <li>core/algorithms/<a class="el" href="evaluate_8cc.html">evaluate.cc</a></li>
@@ -773,7 +801,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 2 2016 22:39:56 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Dec 14 2016 12:20:27 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

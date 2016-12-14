@@ -196,7 +196,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2e95d0ecb14088e7ff3b8e88ae9abe32"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#a2e95d0ecb14088e7ff3b8e88ae9abe32">list_unwrap_single_element</a> (iterator &amp;)</td></tr>
 <tr class="separator:a2e95d0ecb14088e7ff3b8e88ae9abe32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a88051d00c2850121dbe147c013688ed6"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#a88051d00c2850121dbe147c013688ed6">flatten_and_erase</a> (iterator position)</td></tr>
-<tr class="memdesc:a88051d00c2850121dbe147c013688ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace the node with the only child of the node, useful for e.g.  <a href="#a88051d00c2850121dbe147c013688ed6">More...</a><br/></td></tr>
+<tr class="memdesc:a88051d00c2850121dbe147c013688ed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace the node with the children of the node, useful for e.g.  <a href="#a88051d00c2850121dbe147c013688ed6">More...</a><br/></td></tr>
 <tr class="separator:a88051d00c2850121dbe147c013688ed6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add42e30f7962806d3e8e940ce58fb040"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx.html#add42e30f7962806d3e8e940ce58fb040">operator==</a> (const <a class="el" href="classEx.html">Ex</a> &amp;other) const </td></tr>
 <tr class="memdesc:add42e30f7962806d3e8e940ce58fb040"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> objects for exact equality; no dummy equivalence or other things that require property information.  <a href="#add42e30f7962806d3e8e940ce58fb040">More...</a><br/></td></tr>
@@ -684,8 +684,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Replace the node with the only child of the node, useful for e.g. </p>
-<p>\prod{A} -&gt; A. This algorithm takes care of the multiplier of the top node, i.e. it does 2\prod{A} -&gt; 2 A. </p>
+<p>Replace the node with the children of the node, useful for e.g. </p>
+<p>\prod{A} -&gt; A. This algorithm takes care of the multiplier of the top node, i.e. it does 2\prod{A} -&gt; 2 A. Returns an iterator to the new location of the first child of the original node. </p>
 
 </div>
 </div>
@@ -1146,7 +1146,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Dec 2 2016 22:39:56 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Dec 14 2016 12:20:27 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

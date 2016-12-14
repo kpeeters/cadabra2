@@ -12,7 +12,7 @@ var searchData=
   ['nonscalarexceptiontype',['NonScalarExceptionType',['../PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b',1,'PythonCdb.cc']]],
   ['nt1',['nt1',['../classdecompose__product.html#a3c82e36a8f45df98cc447195595b033e',1,'decompose_product']]],
   ['nt2',['nt2',['../classdecompose__product.html#a803cd8262ff8afda443e3e5d57bc51f8',1,'decompose_product']]],
-  ['nu',['Nu',['../Symbols_8cc.html#aa6b24b60f7fb3bbe69179d6cde8d4dcf',1,'Nu():&#160;Symbols.cc'],['../Symbols_8cc.html#a361de67e57dcc9db7ff4b22eb7eed895',1,'nu():&#160;Symbols.cc']]],
+  ['nu',['nu',['../Symbols_8cc.html#a361de67e57dcc9db7ff4b22eb7eed895',1,'nu():&#160;Symbols.cc'],['../Symbols_8cc.html#aa6b24b60f7fb3bbe69179d6cde8d4dcf',1,'Nu():&#160;Symbols.cc']]],
   ['num1',['num1',['../classsplit__index.html#a801c0668f4809ed89ea0a38fd886cfaa',1,'split_index']]],
   ['num2',['num2',['../classsplit__index.html#afed1d4133e168ec2c9091cd44cbc806e',1,'split_index']]],
   ['num_5fto_5fit',['num_to_it',['../classtab__basics.html#a0517bf5085c01e6c6f969450d6676c3c',1,'tab_basics']]],

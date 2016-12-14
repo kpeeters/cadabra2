@@ -56,7 +56,7 @@ var searchData=
   ['modules_2edox',['modules.dox',['../modules_8dox.html',1,'']]],
   ['modulo_5fmonoterm',['modulo_monoterm',['../classyoung__project__tensor.html#a137bd93f51df05419cdc315ec5fafbb3',1,'young_project_tensor']]],
   ['move_5findex',['move_index',['../classEx.html#a7085abf80be0ffff6e695f121b9a6533',1,'Ex']]],
-  ['mu',['Mu',['../Symbols_8cc.html#a704014e84d5bf0a461183948649c21f8',1,'Mu():&#160;Symbols.cc'],['../Symbols_8cc.html#a63309004c7ba26037089ca8af1664a19',1,'mu():&#160;Symbols.cc']]],
+  ['mu',['mu',['../Symbols_8cc.html#a63309004c7ba26037089ca8af1664a19',1,'mu():&#160;Symbols.cc'],['../Symbols_8cc.html#a704014e84d5bf0a461183948649c21f8',1,'Mu():&#160;Symbols.cc']]],
   ['multiple_5fpick',['multiple_pick',['../classcombin_1_1combinations__base.html#a1a38e5381965e66c5af1124219fda902',1,'combin::combinations_base']]],
   ['multiplicative',['multiplicative',['../classWeightInherit.html#abd9226040073eb1045ea33bac5b0d56fa04501dec6df3dce94fa920a496227add',1,'WeightInherit']]],
   ['multiplicity',['multiplicity',['../classcombin_1_1symmetriser.html#ad058b1522ac6e064483b8c8c4cda9b2f',1,'combin::symmetriser::multiplicity()'],['../classyngtab_1_1tableau__base.html#ab0b8f993dff86e614c975579a93e4bf0',1,'yngtab::tableau_base::multiplicity()']]],

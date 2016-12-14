@@ -51,7 +51,7 @@ var searchData=
   ['error_5ft',['error_t',['../classexec__stream__t_1_1error__t.html#a2f277612d6b4d9c47789ec57c4908b46',1,'exec_stream_t::error_t::error_t(std::string const &amp;msg)'],['../classexec__stream__t_1_1error__t.html#ad55801354c3189f64a452164f2d62de5',1,'exec_stream_t::error_t::error_t(std::string const &amp;msg, error_code_t code)'],['../classexec__stream__t_1_1error__t.html#aec666938a71e734a050ee81960089108',1,'exec_stream_t::error_t::error_t()']]],
   ['escape_5fquotes',['escape_quotes',['../classServer.html#a5fe96bed08382d46dcbcf30e7cb5c778',1,'Server']]],
   ['eta',['Eta',['../Symbols_8cc.html#ad52b4804814a7ba427094dd93a6f062e',1,'Eta():&#160;Symbols.cc'],['../Symbols_8cc.html#a86f17e01842c561ef2abe23cdd3ace88',1,'eta():&#160;Symbols.cc']]],
-  ['evaluate',['evaluate',['../classevaluate.html',1,'evaluate'],['../classevaluate.html#a7f09dd44304d73c7d56f9bc9d96bf19a',1,'evaluate::evaluate()']]],
+  ['evaluate',['evaluate',['../classevaluate.html',1,'evaluate'],['../classevaluate.html#a34d6b9472af826b1bf17f007fc5d3d5b',1,'evaluate::evaluate()']]],
   ['evaluate_2ecc',['evaluate.cc',['../evaluate_8cc.html',1,'']]],
   ['evaluate_2ehh',['evaluate.hh',['../evaluate_8hh.html',1,'']]],
   ['ex',['Ex',['../classEx.html',1,'Ex'],['../classEx.html#a1f988b4ff6e998d00dec18ac2a0f6a04',1,'Ex::Ex()'],['../classEx.html#a085a65d0c652892d9418d594b767351e',1,'Ex::Ex(tree&lt; str_node &gt;::iterator)'],['../classEx.html#a7a8b5a48e4b8e40e2736b432ac0856ee',1,'Ex::Ex(const str_node &amp;)'],['../classEx.html#a9904430b6b19bea942b89fab60c9b9ac',1,'Ex::Ex(const Ex &amp;)'],['../classEx.html#a168138379529e6c89725904ea2119639',1,'Ex::Ex(const std::string &amp;)'],['../classEx.html#afd2732e2b570d6c983445a0f1dc5ac89',1,'Ex::Ex(int)']]],

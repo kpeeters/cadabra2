@@ -33,6 +33,7 @@ var searchData=
   ['connections',['connections',['../classServer.html#a4206fbdc2622296afc6911cdee0b216e',1,'Server']]],
   ['consistencyexceptiontype',['ConsistencyExceptionType',['../PythonCdb_8cc.html#a2aa585d1b2cc6912bb73e08326741d3d',1,'PythonCdb.cc']]],
   ['content',['content',['../classcadabra_1_1TeXView.html#a84c556997ba67c8d64862d1e2848bbd6',1,'cadabra::TeXView']]],
+  ['content_5fchanged',['content_changed',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#adfa73d4d71fb1bef1aa50fec74199296',1,'cadabra::CodeInput::exp_input_tv']]],
   ['content_5ferase',['content_erase',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a540a12ab03ceffc0f57527c80ade315f',1,'cadabra::CodeInput::exp_input_tv']]],
   ['content_5fexecute',['content_execute',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#abcdd3dde45beefc15abffabfb5f59cad',1,'cadabra::CodeInput::exp_input_tv']]],
   ['content_5finsert',['content_insert',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a79025107e3c26aff7dcdfb4b1f9efba8',1,'cadabra::CodeInput::exp_input_tv']]],

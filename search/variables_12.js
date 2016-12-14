@@ -3,6 +3,7 @@ var searchData=
   ['scale',['scale',['../classcadabra_1_1NotebookWindow.html#a858d9543c010d21ea542b27d416486d9',1,'cadabra::NotebookWindow']]],
   ['scale_5f',['scale_',['../classcadabra_1_1TeXEngine.html#a4d3034c9432f946a63b8f1d7cc2d62bd',1,'cadabra::TeXEngine::scale_()'],['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#ace88839ae8856a325c4fbd046b76fa50',1,'cadabra::CodeInput::exp_input_tv::scale_()']]],
   ['scroll',['scroll',['../classcadabra_1_1NotebookCanvas.html#ac0fb128f63188d3be58993daaaaacb79',1,'cadabra::NotebookCanvas']]],
+  ['scroll_5fconnection',['scroll_connection',['../classcadabra_1_1NotebookWindow.html#a581ed2665237bbb746882eff7d69f336',1,'cadabra::NotebookWindow']]],
   ['selectors',['selectors',['../classEx.html#a5cdc585ac1cb1a87199cf379cc789526',1,'Ex']]],
   ['selfdual_5fcolumn',['selfdual_column',['../classyngtab_1_1tableau__base.html#adf8cd8541a3f170933fd8f344ee92de3',1,'yngtab::tableau_base']]],
   ['sensitive',['sensitive',['../classcadabra_1_1DataCell.html#ab327b337aa4a84f871a60cb368fd2c26',1,'cadabra::DataCell']]],
