@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{fierz}{Perform a Fierz transformation on a product of four spinors}\n\nPerform a Fierz transformation on a product of four spinors,"
+					"source" : "\\algorithm{fierz}{Perform a Fierz transformation on a product of four spinors}\n\nChange the order of the spinors in a four-spinor expression using a Fierz\ntransformation. This relies on the generic fact that Dirac gamma matrices satisfy\nthe completeness relation\n\\begin{equation*}\n\\sum_{a} \\left(\\Gamma_{a}\\right)_{ij} \\left(\\Gamma^{a}\\right)_{kl} \n = \\delta_{il} \\delta_{jk}\\,.\n\\end{equation*}\nThe following example explains the typical usage pattern."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{fierz}{Perform a Fierz transformation on a product of four spinors}\n\nPerform a Fierz transformation on a product of four spinors,"
+			"source" : "\\algorithm{fierz}{Perform a Fierz transformation on a product of four spinors}\n\nChange the order of the spinors in a four-spinor expression using a Fierz\ntransformation. This relies on the generic fact that Dirac gamma matrices satisfy\nthe completeness relation\n\\begin{equation*}\n\\sum_{a} \\left(\\Gamma_{a}\\right)_{ij} \\left(\\Gamma^{a}\\right)_{kl} \n = \\delta_{il} \\delta_{jk}\\,.\n\\end{equation*}\nThe following example explains the typical usage pattern."
 		},
 		{
 			"cell_origin" : "client",
@@ -23,12 +23,12 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p\\#\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p, \\linebreak[0] q, \\linebreak[0] r, \\linebreak[0] s\\right).\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p, \\linebreak[0] q, \\linebreak[0] r, \\linebreak[0] s\\right).\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -43,14 +43,27 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Spinor to~}\\left(\\theta, \\linebreak[0] \\lambda, \\linebreak[0] \\psi, \\linebreak[0] \\chi\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\bar{\\theta} \\Gamma_{m} \\chi \\bar{\\psi} \\Gamma^{m} \\lambda\\end{dmath*}"
 				}
 			],
-			"source" : "{m,n,p#}::Indices;\n{m,n,p}::Integer(0..3);\n\\Gamma{#}::GammaMatrix;\n\\bar{#}::DiracBar;\nex:=\\bar{\\theta} \\Gamma_{m} \\chi \\bar{\\psi} \\Gamma^{m} \\lambda;\n"
+			"source" : "{m,n,p,q,r,s}::Indices;\n{m,n,p,q,r,s}::Integer(0..3);\n\\Gamma{#}::GammaMatrix;\n\\bar{#}::DiracBar;\n{\\theta, \\lambda, \\psi, \\chi}::Spinor;\nex:=\\bar{\\theta} \\Gamma_{m} \\chi \\bar{\\psi} \\Gamma^{m} \\lambda;"
 		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{4}\\bar{\\theta} \\Gamma_{m} \\Gamma^{m} \\lambda \\bar{\\psi} \\chi - \\frac{1}{4}\\bar{\\theta} \\Gamma_{m} \\Gamma_{n} \\Gamma^{m} \\lambda \\bar{\\psi} \\Gamma_{n} \\chi - \\frac{1}{8}\\bar{\\theta} \\Gamma_{m} \\Gamma_{n p} \\Gamma^{m} \\lambda \\bar{\\psi} \\Gamma_{p n} \\chi\\end{dmath*}"
+				}
+			],
 			"source" : "fierz(_, $\\theta, \\lambda, \\psi, \\chi$);"
 		},
 		{

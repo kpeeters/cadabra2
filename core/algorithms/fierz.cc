@@ -30,7 +30,7 @@ bool fierz::can_apply(iterator it)
 	while(sib!=tr.end(it)) {
 		const DiracBar *db=kernel.properties.get_composite<DiracBar>(sib);
 		if(db) {
-//			txtout << "found db" << std::endl;
+			// std::cerr << "found db" << Ex(sib) << std::endl;
 			spin1=sib;
 			prop1=kernel.properties.get_composite<Spinor>(spin1);
 			sibling_iterator ch=sib;
@@ -39,11 +39,12 @@ bool fierz::can_apply(iterator it)
 			// Skip to next spinor-index carrying object
 			do {
 				++ch;
+				if(ch==tr.end(it)) break;
 				gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
 				spnxt=kernel.properties.get_composite<Spinor>(ch);
 				} while(gmnxt==0 && spnxt==0);
 			if(gmnxt) {
-//				txtout << "found gam" << std::endl;
+				// std::cerr << "found gam" << Ex(ch) << std::endl;
 				// FIXME: should also work when there is a unit matrix in between.
 				indit=kernel.properties.get_composite<Integer>(ch.begin(), true);
 				indprop=kernel.properties.get_composite<Indices>(ch.begin(), true);
@@ -56,42 +57,46 @@ bool fierz::can_apply(iterator it)
 				// Skip to next spinor-index carrying object
 				do {
 					++ch;
+					if(ch==tr.end(it)) break;
 					spnxt=kernel.properties.get_composite<Spinor>(ch);
 					gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
 					} while(gmnxt==0 && spnxt==0);
 				prop2=spnxt;
 				if(prop2) { // one fermi bilinear found.
-//					txtout << "found spin2" << std::endl;
+					// std::cerr << "found spin2 " << Ex(ch) << std::endl;
 					spin2=ch;
 					// Skip to next spinor-index carrying object
 					do {
 						++ch;
+						if(ch==tr.end(it)) break;
 						spnxt=kernel.properties.get_composite<Spinor>(ch);
 						gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
 						} while(gmnxt==0 && spnxt==0);
 					db=kernel.properties.get_composite<DiracBar>(ch);
 					if(db) {
-//						txtout << "found db2" << std::endl;
+						// std::cerr << "found db2" << std::endl;
 						spin3=ch;
 						prop3=spnxt;
 						// Skip to next spinor-index carrying object
 						do {
 							++ch;
+							if(ch==tr.end(it)) break;
 							spnxt=kernel.properties.get_composite<Spinor>(ch);
 							gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
 							} while(gmnxt==0 && spnxt==0);
 						if(gmnxt) {
 							gam2=ch;
-							std::cerr << "found gam2: " << Ex(gam2) << std::endl;
+							// std::cerr << "found gam2: " << Ex(gam2) << std::endl;
 							// Skip to next spinor-index carrying object
 							do {
 								++ch;
+								if(ch==tr.end(it)) break;
 								spnxt=kernel.properties.get_composite<Spinor>(ch);
 								gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
 								} while(gmnxt==0 && spnxt==0);
 							prop4=spnxt;
 							if(prop4) {
-//								txtout << "found spin4" << std::endl;
+								// std::cerr << "found spin4" << std::endl;
 								spin4=ch;
 								return true;
 								}
@@ -154,7 +159,7 @@ Algorithm::result_t fierz::apply(iterator& it)
 		maxind/=2;
 
 	for(int i=0; i<=maxind; ++i) {
-		std::cerr << i << " of " << maxind << std::endl;
+//		std::cerr << i << " of " << maxind << std::endl;
 
 		// Make a copy of this term, moving the gamma matrices into the 
 		// first factor and inserting projector gamma matrices as well.
@@ -186,8 +191,8 @@ Algorithm::result_t fierz::apply(iterator& it)
 				locgam2=tmpit;
 				if(i==0) cpyterm.erase(locgam2);
 				else 		cpyterm.erase_children(locgam2);
-				if(i>0)
-					std::cerr << "New gamma reads " << Ex(locgam2) << std::endl;
+//				if(i>0)
+//					std::cerr << "New gamma reads " << Ex(locgam2) << std::endl;
 				}
 			
 			++cpit;
