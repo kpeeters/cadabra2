@@ -1,0 +1,12 @@
+
+def test01():
+    __cdbkernel__=create_scope()
+    {m,n,p,q,r,s}::Indices;
+    {m,n,p,q,r,s}::Integer(0..3);
+    \Gamma{#}::GammaMatrix;
+    \bar{#}::DiracBar;
+    {\theta, \lambda, \psi, \chi}::Spinor;
+    ex:=\bar{\theta} \Gamma_{m} \chi \bar{\psi} \Gamma^{m} \lambda;
+    fierz(_, $\theta, \lambda, \psi, \chi$)
+
+test01()
