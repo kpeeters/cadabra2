@@ -89,7 +89,7 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
 target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
 if (WIN32)
-   target_link_libraries(cadabra_server ws2_32)
+   target_link_libraries(cadabra_server ws2_32 mswsock)
 endif()
 
 # Create the client library.
