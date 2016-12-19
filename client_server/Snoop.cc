@@ -8,6 +8,7 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
+#include <thread>
 #ifndef _WIN32
   #ifndef _WIN64
      #include <sys/utsname.h>
