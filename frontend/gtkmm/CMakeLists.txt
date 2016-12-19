@@ -32,10 +32,12 @@ add_executable(cadabra2-gtk main.cc
   Cadabra.cc
   ../common/TeXEngine.cc)
 
+# On Windows we need to link statically in order to avoid having to copy dll's 
+# along with our binary. 
 if(WIN32)
   target_link_libraries(cadabra2-gtk -static -static-libstdc++ -static-libgcc)
 endif()
-target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+target_link_libraries(cadabra2-gtk cadabra_client texengine -shared ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
 
 
 
