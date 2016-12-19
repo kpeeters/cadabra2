@@ -8,7 +8,9 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
-#include <sys/utsname.h>
+#ifndef WINDOWS
+   #include <sys/utsname.h>
+#endif
 #include <stdint.h>
 #include <json/json.h>
 #include <set>
@@ -71,6 +73,7 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		this_app_.app_name=app_name;
 		this_app_.app_version=app_version;
 		this_app_.pid = getpid();
+#ifndef WINDOWS
 		struct utsname buf;
 		if(uname(&buf)==0) {
 			this_app_.machine_id = std::string(buf.sysname)
@@ -79,6 +82,7 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			this_app_.machine_id += std::string(", ")+buf.domainname;
 #endif
 			}
+#endif
 
 		this_app_.user_id = get_user_uuid(app_name);
 
