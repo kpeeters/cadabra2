@@ -169,10 +169,15 @@ std::string SnoopImpl::get_user_uuid(const std::string& appname)
 		}
 	if(need_to_write) {
 		// First time run; create config file.
-		std::string confbase = homedir+std::string("/.config");
+		std::string confbase = Glib::get_user_config_dir();
+		std::string confdir = confbase+std::string("/snoop");
+#if defined(_WIN32) || defined(_WIN64)
+		mkdir(confbase.c_str());
+		mkdir(confdir.c_str());
+#else
 		mkdir(confbase.c_str(), 0700);
-		std::string confdir = homedir+std::string("/.config/snoop");
 		mkdir(confdir.c_str(), 0700);
+#endif
 		
 		std::ofstream config(configpath);
 		if(config) {
