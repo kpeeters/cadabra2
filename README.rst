@@ -247,9 +247,10 @@ do the following to install various packages (all from an MSYS2 shell!)::
 Then close the MSYS2 shell and open the MINGW64 shell. Run::
   
     cd cadabra2/build
-    cmake -G "MinGW Makefiles" -DUSE_PYTHON_3=NO ..
+    cmake -G "MinGW Makefiles" -DUSE_PYTHON_3=NO -DCMAKE_INSTALL_PREFIX=/home/[user] ..
     mingw32-make
 
+Replace '[user]' with your user name
 If the cmake fails with a complaint about 'sh.exe', just run it again.
 The above builds for python2, let me know if you know how to make it
 pick up python3 on Windows.
