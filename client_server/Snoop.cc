@@ -21,9 +21,8 @@
 #include <sys/types.h>
 #if !defined(_WIN32) && !defined(_WIN64)
    #include <pwd.h>
-#else
-   #include <glibmm/miscutils.h>
 #endif
+#include <glibmm/miscutils.h>
 
 #define BOOST_SPIRIT_THREADSAFE
 #include <boost/property_tree/ptree.hpp>
