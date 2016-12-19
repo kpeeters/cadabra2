@@ -15,7 +15,7 @@
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <pwd.h>
+#include <glibmm/miscutils.h>
 
 #include "Snoop.hh"
 
@@ -29,10 +29,8 @@ DocumentThread::DocumentThread(GUIBase* g)
 	snoop::log.set_sync_immediately(true);
 //	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 
-	struct passwd *pw = getpwuid(getuid());
-	const char *homedir = pw->pw_dir;
-
-	std::ifstream config(homedir + std::string("/.config/cadabra.conf"));
+	std::string configdir = Glib::get_user_config_dir();
+	std::ifstream config(configdir + std::string("/cadabra.conf"));
 	if(config) {
 		// std::cerr << "cadabra-client: reading config file" << std::endl;
 		std::set<std::string> options;
@@ -45,13 +43,13 @@ DocumentThread::DocumentThread(GUIBase* g)
 		}
 	else {
 		// First time run; create config file.
-		std::ofstream config(homedir + std::string("/.config/cadabra.conf"));		
+		std::ofstream config(configdir + std::string("/cadabra.conf"));		
 		registered=false;
 		if(config) {
 			// config file written.
 			}
 		else {
-			throw std::logic_error("cadabra-client: Cannot write ~/.config/cadabra.conf");
+			throw std::logic_error("cadabra-client: Cannot write "+configdir+"/cadabra.conf");
 			}
 		}
 	}
@@ -181,9 +179,8 @@ void DocumentThread::set_user_details(const std::string& name, const std::string
 	snoop::log("affiliation") << affiliation << snoop::flush;	
 
 	// FIXME: make this a generic function to write all our config data.
-	struct passwd *pw = getpwuid(getuid());
-	const char *homedir = pw->pw_dir;
-	std::ofstream config(homedir + std::string("/.config/cadabra.conf"));
+	std::string configdir = Glib::get_user_config_dir();
+	std::ofstream config(configdir + std::string("/cadabra.conf"));
 	config << "registered=true" << std::endl;
 	}
 
