@@ -102,12 +102,13 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		if(dbname.size()==0) {
 #if defined(_WIN32) || defined(_WIN64)
          std::string logdir = Glib::get_user_data_dir();
+         mkdir(logdir.c_str());
 #else
 			struct passwd *pw = getpwuid(getuid());
 			const char *homedir = pw->pw_dir;
 			std::string logdir = homedir+std::string("/.log");
-#endif
 			mkdir(logdir.c_str(), 0700);
+#endif
 			std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
 			}
@@ -147,11 +148,11 @@ std::string Snoop::get_user_uuid(const std::string& appname)
 
 std::string SnoopImpl::get_user_uuid(const std::string& appname) 
 	{
-	struct passwd *pw = getpwuid(getuid());
-	const char *homedir = pw->pw_dir;
 	std::string user_uuid="";
 
-	std::string configpath=homedir + std::string("/.config/snoop/"+appname+".conf");
+	std::string configdir = Glib::get_user_config_dir();
+
+	std::string configpath=configdir + std::string("/snoop/"+appname+".conf");
 	std::ifstream config(configpath);
 	bool need_to_write=true;
 	if(config) {
