@@ -9,12 +9,14 @@
 #include "popen2.hh"
 #include <sys/types.h>
 #include <signal.h>
+#include <glibmm/spawn.h>
 
 using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 ComputeThread::ComputeThread()
-	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0), server_stdout(0)
+	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0), 
+	  server_stdout(0), server_stderr(0)
 	{
    // The ComputeThread constructor (but _not_ the run() member!) is
 	// always run on the gui thread, so we can grab the gui thread id
@@ -25,6 +27,14 @@ ComputeThread::ComputeThread()
 
 ComputeThread::~ComputeThread()
 	{
+	if(server_stdout!=0) {
+		close(server_stdout);
+		close(server_stderr);
+		Glib::spawn_close_pid(server_pid);
+		server_pid=0;
+		server_stdout=0;
+		server_stderr=0;
+		}
 	}
 
 void ComputeThread::set_master(GUIBase *b, DocumentThread *d)
@@ -102,9 +112,18 @@ void ComputeThread::terminate()
 
 	if(server_pid!=0) {
 		std::cerr << "cadabra-client: killing server" << std::endl;
-		kill(server_pid, SIGKILL);
-		if(server_stdout)
-			pclose2(server_stdout, server_pid); 
+
+		if(server_stdout!=0) {
+			close(server_stdout);
+			close(server_stderr);
+			Glib::spawn_close_pid(server_pid);
+			server_pid=0;
+			server_stdout=0;
+			server_stderr=0;
+			}
+//		kill(server_pid, SIGKILL);
+// 		if(server_stdout)
+//			pclose2(server_stdout, server_pid); 
 		}
 	}
 
@@ -126,14 +145,21 @@ void ComputeThread::on_fail(websocketpp::connection_hdl hdl)
 	connection_is_open=false;
 	all_cells_nonrunning();
 	if(gui && server_pid!=0) {
-		kill(server_pid, SIGKILL);
+		close(server_stdout);
+		close(server_stderr);
+		Glib::spawn_close_pid(server_pid);
+//		kill(server_pid, SIGKILL);
 		server_pid=0;
+		server_stdout=0;
+		server_stderr=0;
 		gui->on_network_error();
 		}
 
 	try_spawn_server();
 	try_connect();
 	}
+
+using SlotSpawnChildSetup = sigc::slot<void()>;
 
 void ComputeThread::try_spawn_server()
 	{
@@ -143,14 +169,25 @@ void ComputeThread::try_spawn_server()
 
 	std::cerr << "cadabra-client: spawning server" << std::endl;
 
-	server_stdout = popen2("exec cadabra-server", "r", server_pid);
+	std::vector<std::string> argv, envp;
+	argv.push_back("cadabra-server");
+	Glib::Pid pid;
+	std::string wd("");
+	
+	Glib::spawn_async_with_pipes(wd, argv, envp,
+										  Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
+										  sigc::slot<void>(),
+										  &pid,
+										  0,
+										  &server_stdout,
+										  &server_stderr);
+	
 	char buffer[100];
-	if(fscanf(server_stdout, "%100s", buffer)!=1) {
+	FILE *f = fdopen(server_stdout, "r");
+	if(fscanf(f, "%100s", buffer)!=1) {
 		throw std::logic_error("Failed to read port from server.");
 		}
 	port = atoi(buffer);
-
-	// std::cerr << "read from popen: " << buffer << std::endl;
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 

@@ -121,7 +121,7 @@ namespace cadabra {
 
 			// Self-started server
 			pid_t           server_pid;
-			FILE           *server_stdout;
+			int             server_stdout, server_stderr;
 			unsigned short  port;
 	};
 

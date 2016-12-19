@@ -4,6 +4,7 @@
 #include <gtkmm/application.h>
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/label.h>
+#include <glibmm/spawn.h>
 
 // Cadabra frontend with GTK+ interface (using gtkmm). 
 // Makes use of the client classes in the client_server directory.
@@ -21,5 +22,5 @@ int main(int argc, char **argv)
 		}
 	catch(std::exception& ex) {
 	  std::cerr << ex.what() << std::endl;
-	}
+		}
 	}

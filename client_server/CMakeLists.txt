@@ -40,6 +40,14 @@ else()
 endif()
 message("-- Found python ${PYTHON_LIBRARIES}")
 
+# Locate glibmm (for spawning processes)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GLIBMM3 REQUIRED glibmm-2.4)
+include_directories(${GLIBMM3_INCLUDE_DIRS})
+link_directories(${GLIBMM3_LIBRARY_DIRS})
+add_definitions(${GLIBMM3_CFLAGS_OTHER})
+
+
 # Locate Boost
 if(USE_PYTHON_3)
   find_package(Boost 1.53.0 COMPONENTS python3)
@@ -79,11 +87,11 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 # Create the server library
 #link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} )
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES})
 
 # Create the client library.
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES})
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
 
 # Create server binary
 include_directories("." "./websocketpp" "./jsoncpp")
