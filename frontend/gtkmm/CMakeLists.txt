@@ -33,6 +33,11 @@ add_executable(cadabra2-gtk main.cc
   ../common/TeXEngine.cc)
 
 target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+if(WIN32)
+  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
+endif()
+
+
 
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
