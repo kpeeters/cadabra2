@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <mutex>
 #include <json/json.h>
+#include <thread>
 
 namespace snoop {
 

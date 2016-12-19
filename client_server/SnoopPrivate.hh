@@ -7,6 +7,7 @@
 #include <websocketpp/common/functional.hpp>
 #include <mutex>
 #include <condition_variable>
+#include <thread>
 
 typedef websocketpp::client<websocketpp::config::asio_client> WebsocketClient;
 typedef websocketpp::config::asio_client::message_type::ptr   message_ptr;
