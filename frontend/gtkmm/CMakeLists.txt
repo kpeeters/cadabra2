@@ -32,10 +32,10 @@ add_executable(cadabra2-gtk main.cc
   Cadabra.cc
   ../common/TeXEngine.cc)
 
-target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
 if(WIN32)
-  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc winpthread)
+  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
 endif()
+target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
 
 
 
