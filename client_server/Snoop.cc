@@ -19,7 +19,11 @@
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <pwd.h>
+#if !defined(_WIN32) && !defined(_WIN64)
+   #include <pwd.h>
+#else
+   #include <glibmm/miscutils.h>
+#endif
 
 #define BOOST_SPIRIT_THREADSAFE
 #include <boost/property_tree/ptree.hpp>
@@ -96,9 +100,13 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		server_=server;
 
 		if(dbname.size()==0) {
+#if defined(_WIN32) || defined(_WIN64)
+         std::string logdir = Glib::get_user_data_dir();
+#else
 			struct passwd *pw = getpwuid(getuid());
 			const char *homedir = pw->pw_dir;
 			std::string logdir = homedir+std::string("/.log");
+#endif
 			mkdir(logdir.c_str(), 0700);
 			std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
