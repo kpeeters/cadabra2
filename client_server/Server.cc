@@ -544,8 +544,8 @@ void Server::on_kernel_fault(Block blk)
 void Server::run() 
 	{
 	try {
-		wserver.clear_access_channels(websocketpp::log::alevel::all);
-		wserver.clear_error_channels(websocketpp::log::elevel::all);
+//		wserver.clear_access_channels(websocketpp::log::alevel::all);
+//		wserver.clear_error_channels(websocketpp::log::elevel::all);
 		
 		wserver.set_socket_init_handler(bind(&Server::on_socket_init, this, ::_1,::_2));
 		wserver.set_message_handler(bind(&Server::on_message, this, ::_1, ::_2));
