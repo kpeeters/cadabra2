@@ -108,7 +108,6 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			this_app_.machine_id += std::string(", ")+buf.domainname;
 #endif
 			}
-  #endif
 #endif
 
 		this_app_.user_id = get_user_uuid(app_name);
