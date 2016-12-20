@@ -21,6 +21,8 @@
 #include <sys/types.h>
 #if !defined(_WIN32) && !defined(_WIN64)
    #include <pwd.h>
+#else
+   #include <windows.h>
 #endif
 #include <glibmm/miscutils.h>
 
@@ -78,8 +80,26 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		this_app_.app_name=app_name;
 		this_app_.app_version=app_version;
 		this_app_.pid = getpid();
-#ifndef _WIN32
-  #ifndef _WIN64
+#if defined(_WIN32) || defined(_WIN64) {
+		DWORD dwVersion = 0; 
+		DWORD dwMajorVersion = 0;
+		DWORD dwMinorVersion = 0; 
+		DWORD dwBuild = 0;
+		
+		dwVersion = GetVersion();
+		
+		// Get the Windows version.
+		
+		dwMajorVersion = (DWORD)(LOBYTE(LOWORD(dwVersion)));
+		dwMinorVersion = (DWORD)(HIBYTE(LOWORD(dwVersion)));
+		
+		// Get the build number.
+		
+		if (dwVersion < 0x80000000)              
+			dwBuild = (DWORD)(HIWORD(dwVersion));
+		
+		this_app_.machine_id = "Windows "+std::to_string(dwMajorVersion)+"."+std::to_string(dwMinorVersion);
+#else
 		struct utsname buf;
 		if(uname(&buf)==0) {
 			this_app_.machine_id = std::string(buf.sysname)

@@ -258,7 +258,11 @@ pick up python3 on Windows.
 
 This fails to install the shared libraries, but they do get
 built. Copy them all in ~/bin, and also copy a whole slew of other
-things into there. Then we are left with the SpawnError...
+things into there. In addition you need 
+
+    cp /mingw64/bin/gspawn-win* ~/bin
+
+This still fails with 'SpawnError: failed to read from child pipe'.
 
 
 Tutorials and other help
