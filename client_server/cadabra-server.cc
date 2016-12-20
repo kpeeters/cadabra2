@@ -6,6 +6,8 @@
 
 int main()
 	{
+	std::cout << "1000" << std::endl;
+
 	snoop::log.init("CadabraServer", "2.0", "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
 //	snoop::log(snoop::info) << "Starting" << snoop::flush;

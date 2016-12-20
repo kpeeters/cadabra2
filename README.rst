@@ -244,6 +244,7 @@ packages (all from an MSYS2 shell!)::
 	 pacman -S gmp gmp-devel pcre-devel
     pacman -S mingw-w64-x86_64-cmake
 	 pacman -S mingw-w64-x86_64-sqlite3
+    pacman -S mingw-w64-x86_64-adwaita-icon-theme
 
 Then close the MSYS2 shell and open the MINGW64 shell. Run::
   
