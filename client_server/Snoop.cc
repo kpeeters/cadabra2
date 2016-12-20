@@ -80,7 +80,7 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		this_app_.app_name=app_name;
 		this_app_.app_version=app_version;
 		this_app_.pid = getpid();
-#if defined(_WIN32) || defined(_WIN64) {
+#if defined(_WIN32) || defined(_WIN64) 
 		DWORD dwVersion = 0; 
 		DWORD dwMajorVersion = 0;
 		DWORD dwMinorVersion = 0; 
