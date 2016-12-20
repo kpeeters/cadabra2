@@ -331,6 +331,7 @@ void Server::on_close(websocketpp::connection_hdl hdl)
 	auto it = connections.find(hdl);
 	// snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
 	connections.erase(hdl);
+	exit(-1);
 	}
 
 int quit(void *)

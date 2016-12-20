@@ -446,8 +446,8 @@ void SnoopImpl::start_websocket_client()
 
 	using websocketpp::lib::bind;
 
-//	wsclient.clear_access_channels(websocketpp::log::alevel::all);
-//	wsclient.clear_error_channels(websocketpp::log::elevel::all);
+	wsclient.clear_access_channels(websocketpp::log::alevel::all);
+	wsclient.clear_error_channels(websocketpp::log::elevel::all);
 
 	wsclient.set_open_handler(bind(&SnoopImpl::on_client_open, this, websocketpp::lib::placeholders::_1));
 	wsclient.set_fail_handler(bind(&SnoopImpl::on_client_fail, this, websocketpp::lib::placeholders::_1));
