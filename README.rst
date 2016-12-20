@@ -232,10 +232,11 @@ development platform.
 Windows
 -------
 
-Building on Windows does not work yet, but here is something to get
-things at least roughly in the right direction. First, install MSYS2
-from http://msys2.github.io. Once you have a working MSYS2 shell,
-do the following to install various packages (all from an MSYS2 shell!)::
+Building on Windows does not work yet completely, but here is
+something to get things at least roughly in the right
+direction. First, install MSYS2 from http://msys2.github.io. Once you
+have a working MSYS2 shell, do the following to install various
+packages (all from an MSYS2 shell!)::
 
     pacman -S mingw-w64-x86_64-gcc
     pacman -S mingw-w64-x86_64-gtkmm3
@@ -250,10 +251,14 @@ Then close the MSYS2 shell and open the MINGW64 shell. Run::
     cmake -G "MinGW Makefiles" -DUSE_PYTHON_3=NO -DCMAKE_INSTALL_PREFIX=/home/[user] ..
     mingw32-make
 
-Replace '[user]' with your user name
+Replace '[user]' with your user name.
 If the cmake fails with a complaint about 'sh.exe', just run it again.
 The above builds for python2, let me know if you know how to make it
 pick up python3 on Windows.
+
+This fails to install the shared libraries, but they do get
+built. Copy them all in ~/bin, and also copy a whole slew of other
+things into there. Then we are left with the SpawnError...
 
 
 Tutorials and other help
