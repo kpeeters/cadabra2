@@ -6,6 +6,7 @@
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/functional.hpp>
 #include <thread>
+#include <glibmm/spawn.h>
 
 typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
@@ -120,8 +121,8 @@ namespace cadabra {
 
 
 			// Self-started server
-			pid_t           server_pid;
-			FILE           *server_stdout;
+			Glib::Pid       server_pid;
+			int             server_stdout, server_stderr;
 			unsigned short  port;
 	};
 

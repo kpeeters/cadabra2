@@ -32,7 +32,16 @@ add_executable(cadabra2-gtk main.cc
   Cadabra.cc
   ../common/TeXEngine.cc)
 
-target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+# On Windows we need to link statically in order to avoid having to copy dll's 
+# along with our binary. 
+if(WIN32)
+  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
+  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+else()
+  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+endif()
+
+
 
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
@@ -91,7 +100,7 @@ install(CODE     "execute_process(COMMAND rm -f ${CMAKE_INSTALL_PREFIX}/share/ic
 
 # Install programs.
 #find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu REQUIRED)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra2-gtk     DESTINATION bin)
+install(TARGETS  cadabra2-gtk     DESTINATION bin)
 install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png DESTINATION ${INSTALL_IMAGES_DIR})
 #xdg-desktop-menu messes up the file permissions, so we just install things by hand...
 #install(CODE "execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop)")

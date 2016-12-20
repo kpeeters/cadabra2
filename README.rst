@@ -29,7 +29,8 @@ graphical interface are available.
 Installation
 -------------
 
-Cadabra builds on Linux and Mac OS X, select your distribution below:
+Cadabra builds on Linux and Mac OS X, and might soon build on Windows
+too. Select your system from the list bel
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24)`_
@@ -37,6 +38,7 @@ Cadabra builds on Linux and Mac OS X, select your distribution below:
 - `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Mac OS X`_
+- `Windows`_
 
 Binaries for these platforms may (or may not) be provided from the
 download page at http://cadabra.science/download.html, but they are
@@ -227,6 +229,45 @@ Feedback from OS X users is *very* welcome because this is not my main
 development platform.
 
 
+Windows
+-------
+
+Building on Windows does not work yet completely, but here is
+something to get things at least roughly in the right
+direction. First, install MSYS2 from http://msys2.github.io. Once you
+have a working MSYS2 shell, do the following to install various
+packages (all from an MSYS2 shell!)::
+
+    pacman -S mingw-w64-x86_64-gcc
+    pacman -S mingw-w64-x86_64-gtkmm3
+    pacman -S mingw-w64-x86_64-boost
+	 pacman -S gmp gmp-devel pcre-devel
+    pacman -S mingw-w64-x86_64-cmake
+	 pacman -S mingw-w64-x86_64-sqlite3
+    pacman -S mingw-w64-x86_64-adwaita-icon-theme
+
+Then close the MSYS2 shell and open the MINGW64 shell. Run::
+  
+    cd cadabra2/build
+    cmake -G "MinGW Makefiles" -DUSE_PYTHON_3=NO -DCMAKE_INSTALL_PREFIX=/home/[user] ..
+    mingw32-make
+
+Replace '[user]' with your user name.
+If the cmake fails with a complaint about 'sh.exe', just run it again.
+The above builds for python2, let me know if you know how to make it
+pick up python3 on Windows.
+
+This fails to install the shared libraries, but they do get
+built. Copy them all in ~/bin, and also copy a whole slew of other
+things into there. In addition you need 
+
+    cp /mingw64/bin/gspawn-win* ~/bin
+    export PYTHONPATH=/mingw64/lib/python2.7:/home/kasper/bin
+
+This fails to start the server with 'The application has requested the
+Runtime to terminate it in an unusual way'.
+
+
 
 Tutorials and other help
 ------------------------
@@ -247,4 +288,6 @@ Special thanks
 
 Special thanks to José M. Martín-García (for the xPerm
 canonicalisation code), James Allen (for writing much of the factoring
-code) and the Software Sustainability Institute.
+code) and the Software Sustainability Institute. Thanks to the many
+people who have sent me bug reports (keep 'm coming), and thanks to
+all of you who cited the Cadabra papers.

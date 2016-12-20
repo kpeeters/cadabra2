@@ -8,14 +8,23 @@
 #include <iostream>
 #include <chrono>
 #include <ctime>
-#include <sys/utsname.h>
+#ifndef _WIN32
+  #ifndef _WIN64
+     #include <sys/utsname.h>
+  #endif
+#endif
 #include <stdint.h>
 #include <json/json.h>
 #include <set>
 
 #include <unistd.h>
 #include <sys/types.h>
-#include <pwd.h>
+#if !defined(_WIN32) && !defined(_WIN64)
+   #include <pwd.h>
+#else
+   #include <windows.h>
+#endif
+#include <glibmm/miscutils.h>
 
 #define BOOST_SPIRIT_THREADSAFE
 #include <boost/property_tree/ptree.hpp>
@@ -71,6 +80,26 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		this_app_.app_name=app_name;
 		this_app_.app_version=app_version;
 		this_app_.pid = getpid();
+#if defined(_WIN32) || defined(_WIN64) 
+		DWORD dwVersion = 0; 
+		DWORD dwMajorVersion = 0;
+		DWORD dwMinorVersion = 0; 
+		DWORD dwBuild = 0;
+		
+		dwVersion = GetVersion();
+		
+		// Get the Windows version.
+		
+		dwMajorVersion = (DWORD)(LOBYTE(LOWORD(dwVersion)));
+		dwMinorVersion = (DWORD)(HIBYTE(LOWORD(dwVersion)));
+		
+		// Get the build number.
+		
+		if (dwVersion < 0x80000000)              
+			dwBuild = (DWORD)(HIWORD(dwVersion));
+		
+		this_app_.machine_id = "Windows "+std::to_string(dwMajorVersion)+"."+std::to_string(dwMinorVersion);
+#else
 		struct utsname buf;
 		if(uname(&buf)==0) {
 			this_app_.machine_id = std::string(buf.sysname)
@@ -79,6 +108,7 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			this_app_.machine_id += std::string(", ")+buf.domainname;
 #endif
 			}
+#endif
 
 		this_app_.user_id = get_user_uuid(app_name);
 
@@ -88,10 +118,15 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		server_=server;
 
 		if(dbname.size()==0) {
+#if defined(_WIN32) || defined(_WIN64)
+         std::string logdir = Glib::get_user_data_dir();
+         mkdir(logdir.c_str());
+#else
 			struct passwd *pw = getpwuid(getuid());
 			const char *homedir = pw->pw_dir;
 			std::string logdir = homedir+std::string("/.log");
 			mkdir(logdir.c_str(), 0700);
+#endif
 			std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
 			}
@@ -131,11 +166,11 @@ std::string Snoop::get_user_uuid(const std::string& appname)
 
 std::string SnoopImpl::get_user_uuid(const std::string& appname) 
 	{
-	struct passwd *pw = getpwuid(getuid());
-	const char *homedir = pw->pw_dir;
 	std::string user_uuid="";
 
-	std::string configpath=homedir + std::string("/.config/snoop/"+appname+".conf");
+	std::string configdir = Glib::get_user_config_dir();
+
+	std::string configpath=configdir + std::string("/snoop/"+appname+".conf");
 	std::ifstream config(configpath);
 	bool need_to_write=true;
 	if(config) {
@@ -152,10 +187,15 @@ std::string SnoopImpl::get_user_uuid(const std::string& appname)
 		}
 	if(need_to_write) {
 		// First time run; create config file.
-		std::string confbase = homedir+std::string("/.config");
+		std::string confbase = Glib::get_user_config_dir();
+		std::string confdir = confbase+std::string("/snoop");
+#if defined(_WIN32) || defined(_WIN64)
+		mkdir(confbase.c_str());
+		mkdir(confdir.c_str());
+#else
 		mkdir(confbase.c_str(), 0700);
-		std::string confdir = homedir+std::string("/.config/snoop");
 		mkdir(confdir.c_str(), 0700);
+#endif
 		
 		std::ofstream config(configpath);
 		if(config) {

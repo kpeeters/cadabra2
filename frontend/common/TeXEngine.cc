@@ -9,6 +9,7 @@
 #include "lodepng.h"
 #include <fstream>
 #include <sstream>
+#include <unistd.h>
 
 //#define DEBUG
 

@@ -40,6 +40,14 @@ else()
 endif()
 message("-- Found python ${PYTHON_LIBRARIES}")
 
+# Locate glibmm (for spawning processes)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GLIBMM3 REQUIRED glibmm-2.4)
+include_directories(${GLIBMM3_INCLUDE_DIRS})
+link_directories(${GLIBMM3_LIBRARY_DIRS})
+add_definitions(${GLIBMM3_CFLAGS_OTHER})
+
+
 # Locate Boost
 if(USE_PYTHON_3)
   find_package(Boost 1.53.0 COMPONENTS python3)
@@ -79,11 +87,17 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 # Create the server library
 #link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} )
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+if (WIN32)
+   target_link_libraries(cadabra_server ws2_32 mswsock)
+endif()
 
 # Create the client library.
-add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc popen2.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES})
+add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc Snoop.cc jsoncpp/jsoncpp.cpp)
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+if (WIN32)
+   target_link_libraries(cadabra_client ws2_32)
+endif()
 
 # Create server binary
 include_directories("." "./websocketpp" "./jsoncpp")
@@ -95,8 +109,8 @@ target_link_libraries(cadabra-server cadabra_server)
 target_link_libraries(cadabra2html cadabra_client)
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
-set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra-server DESTINATION bin)
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/cadabra2html DESTINATION bin)
-install(TARGETS cadabra_client LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
-install(TARGETS cadabra_server LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
+#set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
+install(TARGETS cadabra-server DESTINATION bin)
+install(TARGETS cadabra2html DESTINATION bin)
+install(TARGETS cadabra_client LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
