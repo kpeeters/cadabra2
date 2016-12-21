@@ -29,7 +29,7 @@ ComputeThread::~ComputeThread()
 	{
 	if(server_stdout!=0) {
 		close(server_stdout);
-		close(server_stderr);
+		// close(server_stderr);
 		Glib::spawn_close_pid(server_pid);
 		server_pid=0;
 		server_stdout=0;
@@ -115,7 +115,7 @@ void ComputeThread::terminate()
 
 		if(server_stdout!=0) {
 			close(server_stdout);
-			close(server_stderr);
+			// close(server_stderr);
 			Glib::spawn_close_pid(server_pid);
 			server_pid=0;
 			server_stdout=0;
@@ -146,7 +146,7 @@ void ComputeThread::on_fail(websocketpp::connection_hdl hdl)
 	all_cells_nonrunning();
 	if(gui && server_pid!=0) {
 		close(server_stdout);
-		close(server_stderr);
+		// close(server_stderr);
 		Glib::spawn_close_pid(server_pid);
 //		kill(server_pid, SIGKILL);
 		server_pid=0;
@@ -184,7 +184,8 @@ void ComputeThread::try_spawn_server()
 										  &pid,
 										  0,
 										  &server_stdout,
-										  &server_stderr);
+										  0); // We need to see stderr on the console
+//										  &server_stderr);
 	
 	char buffer[100];
 	FILE *f = fdopen(server_stdout, "r");

@@ -127,11 +127,11 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 			std::string logdir = homedir+std::string("/.log");
 			mkdir(logdir.c_str(), 0700);
 #endif
-			std::cerr << logdir << std::endl;
+			//std::cerr << logdir << std::endl;
 			dbname=logdir+"/"+app_name+".sql";
 			}
 
-		std::cerr << "Snoop: logging in " << dbname << std::endl;
+		//std::cerr << "Snoop: logging in " << dbname << std::endl;
 		int ret = sqlite3_open_v2(dbname.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 		if(ret) {
 			throw std::logic_error("SnoopImpl::init: Cannot open database");
@@ -148,7 +148,7 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		// If this is a client, i.e. not a SnoopServer: obtain a uuid, start the websocket listener,
 		// and sync with the remote server whatever has not yet been synced in previous runs.
 
-		std::cerr << "Starting websocket connection" << std::endl;
+		//std::cerr << "Starting websocket connection" << std::endl;
 		if(this_app_.app_name!="SnoopServer") {
 			obtain_uuid();
 			start_websocket_client();
@@ -438,10 +438,10 @@ bool SnoopImpl::store_log_entry(Snoop::LogEntry& log_entry, bool avoid_server_du
 
 void SnoopImpl::start_websocket_client()
 	{
-	std::cerr << "Snoop: attempting open" << std::endl;
+	//std::cerr << "Snoop: attempting open" << std::endl;
 	{ 	std::unique_lock<std::mutex> lock(connection_mutex);
 		connection_attempt_failed=false;
-		std::cerr << "Snoop: attempting open" << std::endl;
+		//std::cerr << "Snoop: attempting open" << std::endl;
 		}
 
 	using websocketpp::lib::bind;
@@ -712,7 +712,7 @@ void SnoopImpl::on_client_open(websocketpp::connection_hdl)
 	connection_is_open=true;
 	connection_attempt_failed=false;
 	connection_cv.notify_all();
-	std::cerr << "Snoop: connection open" << std::endl;
+	//std::cerr << "Snoop: connection open" << std::endl;
 	}
 
 void SnoopImpl::on_client_fail(websocketpp::connection_hdl)
@@ -722,7 +722,7 @@ void SnoopImpl::on_client_fail(websocketpp::connection_hdl)
 	std::unique_lock<std::mutex> lock(connection_mutex);
 	connection_attempt_failed=true;
 	connection_cv.notify_all();
-	std::cerr << "Snoop: connection failed" << std::endl;	
+	//std::cerr << "Snoop: connection failed" << std::endl;	
 	}
 
 void SnoopImpl::on_client_close(websocketpp::connection_hdl)
@@ -733,7 +733,7 @@ void SnoopImpl::on_client_close(websocketpp::connection_hdl)
 	connection_is_open=false;
 	connection_attempt_failed=true;
 	connection_cv.notify_all();
-	std::cerr << "Snoop: connection closed" << std::endl;	
+//	std::cerr << "Snoop: connection closed" << std::endl;	
 	}
 
 void SnoopImpl::on_client_message(websocketpp::connection_hdl, WebsocketClient::message_ptr msg) 

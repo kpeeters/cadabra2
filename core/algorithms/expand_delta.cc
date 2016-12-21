@@ -20,6 +20,8 @@ bool expand_delta::can_apply(iterator st)
 
 Algorithm::result_t expand_delta::apply(iterator& st)
 	{
+	// std::cerr << "applying " << Ex(st) << std::endl;
+
 	Ex rep("\\sum");
 	iterator sum=rep.begin();
 	combin::combinations<str_node> ci;
@@ -157,6 +159,8 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 	// remove the stuff we added
 //	for(unsigned int i=0; i<remove_these.size(); ++i)
 //		tr.erase(remove_these[i]);
+
+	// std::cerr << "applied" << std::endl;
 
 	return result_t::l_applied;
 	}

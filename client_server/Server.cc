@@ -431,10 +431,11 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 	const Json::Value content = root["content"];
 	const Json::Value header  = root["header"];
 	std::string msg_type = header["msg_type"].asString();
-//	std::cout << "received msg_type |" << msg_type << "|" << std::endl;
+	// std::cerr << "received msg_type |" << msg_type << "|" << std::endl;
 
 	if(msg_type=="execute_request") {
 		std::string code = content.get("code","").asString();
+		// std::cerr << code << std::endl;
 		uint64_t id = header.get("cell_id", 0).asUInt64();
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		block_queue.push(Block(hdl, code, id));
@@ -468,6 +469,7 @@ void Server::on_block_finished(Block blk)
 
 void Server::send(const std::string& output, const std::string& msg_type)
 	{
+	// std::cerr << "sending json" << std::endl;
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
@@ -545,8 +547,8 @@ void Server::on_kernel_fault(Block blk)
 void Server::run() 
 	{
 	try {
-//		wserver.clear_access_channels(websocketpp::log::alevel::all);
-//		wserver.clear_error_channels(websocketpp::log::elevel::all);
+		wserver.clear_access_channels(websocketpp::log::alevel::all);
+		wserver.clear_error_channels(websocketpp::log::elevel::all);
 		
 		wserver.set_socket_init_handler(bind(&Server::on_socket_init, this, ::_1,::_2));
 		wserver.set_message_handler(bind(&Server::on_message, this, ::_1, ::_2));

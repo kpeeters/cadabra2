@@ -92,10 +92,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{r}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\\n\\square{}_{\\theta}{}_{r}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{r}{}^{r}= & \\frac{M}{r \\left(2M-r\\right)}\\\\\n\\square{}_{t}{}_{r}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\\n\\square{}_{r}{}_{\\phi}{}^{\\phi}= & \\frac{1}{r}\\\\\n\\square{}_{\\theta}{}_{\\phi}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\\n\\square{}_{r}{}_{\\theta}{}^{\\theta}= & \\frac{1}{r}\\\\\n\\square{}_{r}{}_{t}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{r}= & \\left(2M-r\\right) \\sin\\left(\\theta\\right)^{2}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}= &  - \\frac{1}{2}\\sin\\left(2\\theta\\right)\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{r}= & 2M-r\\\\\n\\square{}_{t}{}_{t}{}^{r}= & M \\frac{-2M+r}{r^{3}}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{r}{}^{\\phi}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{r}{}^{\\theta}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{r}= & \\frac{M}{r \\left(2M-r\\right)}\\\\[-.5ex]\n\\square{}_{t}{}_{r}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\[-.5ex]\n\\square{}_{r}{}_{\\phi}{}^{\\phi}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\phi}{}^{\\phi}= & \\frac{1}{\\tan\\left(\\theta\\right)}\\\\[-.5ex]\n\\square{}_{r}{}_{\\theta}{}^{\\theta}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{t}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{r}= & \\left(2M-r\\right) \\sin\\left(\\theta\\right)^{2}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}= &  - \\frac{1}{2}\\sin\\left(2\\theta\\right)\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}= & 2M-r\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{r}= & M \\frac{-2M+r}{r^{3}}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "ch:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \n                                   \\partial_{\\rho}{g_{\\nu\\sigma}} \n                                  +\\partial_{\\nu}{g_{\\rho\\sigma}}\n                                  -\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nevaluate(ch, ss);"
+			"source" : "ch:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \n                                   \\partial_{\\rho}{g_{\\nu\\sigma}} \n                                  +\\partial_{\\nu}{g_{\\rho\\sigma}}\n                                  -\\partial_{\\sigma}{g_{\\nu\\rho}} ):\n                          \nevaluate(ch, ss, rhsonly=True);"
 		},
 		{
 			"cell_origin" : "client",
@@ -132,10 +132,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\left\\{\\begin{aligned}\\square{}_{t}{}_{t}{}^{r}{}_{r}= & 2M \\frac{2M-r}{r^{4}}\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{r}{}_{r}= &  - \\frac{M}{r}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}{}_{\\theta}= & 2M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{r}{}_{r}= & -M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{t}{}_{r}{}^{t}{}_{r}= & \\frac{2M}{r^{2} \\left(2M-r\\right)}\\\\\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}{}_{\\theta}= &  - \\frac{2M}{r}\\\\\n\\square{}_{r}{}_{t}{}^{r}{}_{t}= & 2M \\frac{-2M+r}{r^{4}}\\\\\n\\square{}_{r}{}_{\\theta}{}^{r}{}_{\\theta}= & \\frac{M}{r}\\\\\n\\square{}_{\\theta}{}_{\\phi}{}^{\\theta}{}_{\\phi}= & -2M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{r}{}_{\\phi}{}^{r}{}_{\\phi}= & M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{r}{}_{r}{}^{t}{}_{t}= & \\frac{2M}{r^{2} \\left(-2M+r\\right)}\\\\\n\\square{}_{r}{}_{r}{}^{\\theta}{}_{\\theta}= & \\frac{M}{r^{2} \\left(2M-r\\right)}\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{\\phi}{}_{\\phi}= & \\frac{2M}{r}\\\\\n\\square{}_{r}{}_{r}{}^{\\phi}{}_{\\phi}= & \\frac{M}{r^{2} \\left(2M-r\\right)}\\\\\n\\square{}_{t}{}_{t}{}^{\\phi}{}_{\\phi}= & M \\frac{-2M+r}{r^{4}}\\\\\n\\square{}_{t}{}_{t}{}^{\\theta}{}_{\\theta}= & M \\frac{-2M+r}{r^{4}}\\\\\n\\square{}_{\\phi}{}_{\\phi}{}^{t}{}_{t}= & -M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{\\theta}{}_{\\theta}{}^{t}{}_{t}= &  - \\frac{M}{r}\\\\\n\\square{}_{\\phi}{}_{r}{}^{\\phi}{}_{r}= & \\frac{M}{r^{2} \\left(-2M+r\\right)}\\\\\n\\square{}_{\\phi}{}_{t}{}^{\\phi}{}_{t}= & M \\frac{2M-r}{r^{4}}\\\\\n\\square{}_{\\theta}{}_{r}{}^{\\theta}{}_{r}= & \\frac{M}{r^{2} \\left(-2M+r\\right)}\\\\\n\\square{}_{\\theta}{}_{t}{}^{\\theta}{}_{t}= & M \\frac{2M-r}{r^{4}}\\\\\n\\square{}_{t}{}_{\\phi}{}^{t}{}_{\\phi}= & M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\\n\\square{}_{t}{}_{\\theta}{}^{t}{}_{\\theta}= & \\frac{M}{r}\\\\\n\\end{aligned}\\right.\n\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\left\\{\\begin{aligned}\\square{}_{t}{}_{t}{}^{r}{}_{r}= & 2M \\frac{2M-r}{r^{4}}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}{}_{r}= &  - \\frac{M}{r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}{}_{\\theta}= & 2M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{r}{}_{r}= & -M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\[-.5ex]\n\\square{}_{t}{}_{r}{}^{t}{}_{r}= & \\frac{2M}{r^{2} \\left(2M-r\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}{}_{\\theta}= &  - \\frac{2M}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{t}{}^{r}{}_{t}= & 2M \\frac{-2M+r}{r^{4}}\\\\[-.5ex]\n\\square{}_{r}{}_{\\theta}{}^{r}{}_{\\theta}= & \\frac{M}{r}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\phi}{}^{\\theta}{}_{\\phi}= & -2M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{\\phi}{}^{r}{}_{\\phi}= & M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{t}{}_{t}= & \\frac{2M}{r^{2} \\left(-2M+r\\right)}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{\\theta}{}_{\\theta}= & \\frac{M}{r^{2} \\left(2M-r\\right)}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{\\phi}{}_{\\phi}= & \\frac{2M}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{\\phi}{}_{\\phi}= & \\frac{M}{r^{2} \\left(2M-r\\right)}\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{\\phi}{}_{\\phi}= & M \\frac{-2M+r}{r^{4}}\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{\\theta}{}_{\\theta}= & M \\frac{-2M+r}{r^{4}}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{t}{}_{t}= & -M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{t}{}_{t}= &  - \\frac{M}{r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{r}{}^{\\phi}{}_{r}= & \\frac{M}{r^{2} \\left(-2M+r\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{t}{}^{\\phi}{}_{t}= & M \\frac{2M-r}{r^{4}}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{r}{}^{\\theta}{}_{r}= & \\frac{M}{r^{2} \\left(-2M+r\\right)}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{t}{}^{\\theta}{}_{t}= & M \\frac{2M-r}{r^{4}}\\\\[-.5ex]\n\\square{}_{t}{}_{\\phi}{}^{t}{}_{\\phi}= & M \\frac{\\sin\\left(\\theta\\right)^{2}}{r}\\\\[-.5ex]\n\\square{}_{t}{}_{\\theta}{}^{t}{}_{\\theta}= & \\frac{M}{r}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(rm, ch)\nevaluate(rm, ss);"
+			"source" : "substitute(rm, ch)\nevaluate(rm, ss, rhsonly=True);"
 		},
 		{
 			"cell_origin" : "client",
@@ -167,7 +167,7 @@
 					"source" : "\\begin{dmath*}{}R_{\\sigma \\nu} = 0\\end{dmath*}"
 				}
 			],
-			"source" : "rc:= R_{\\sigma\\nu} = R^{\\rho}_{\\sigma\\rho\\nu};\nsubstitute(rc, rm)\nevaluate(rc, ss);"
+			"source" : "rc:= R_{\\sigma\\nu} = R^{\\rho}_{\\sigma\\rho\\nu};\nsubstitute(rc, rm)\nevaluate(rc, ss, rhsonly=True);"
 		},
 		{
 			"cell_origin" : "client",
@@ -207,7 +207,7 @@
 					"source" : "\\begin{dmath*}{}K = \\frac{48M^{2}}{r^{6}}\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(K, rm)\nevaluate(K, ss);"
+			"source" : "substitute(K, rm)\nevaluate(K, ss, rhsonly=True);"
 		},
 		{
 			"cell_origin" : "client",

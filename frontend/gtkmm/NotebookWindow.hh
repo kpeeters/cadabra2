@@ -204,6 +204,7 @@ namespace cadabra {
 			};
 
 			Prefs prefs;
+			bool  is_configured;
 	};
 
 };

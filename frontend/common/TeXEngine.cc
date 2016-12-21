@@ -209,13 +209,14 @@ void TeXEngine::convert_all()
 		}
 
 	if(need_generating!=0) {
-//		std::cerr << "cadabra-client: running TeX on " << requests.size() << " requests" << std::endl;
+		std::cerr << "cadabra-client: running TeX on " << need_generating << " requests" << std::endl;
 		convert_set(requests);
 		}
 	}
 
 void TeXEngine::convert_one(std::shared_ptr<TeXRequest> req)
 	{
+	std::cerr << "cadabra-client: running TeX on 1 request" << std::endl;
 	std::set<std::shared_ptr<TeXRequest> > reqset;
 	reqset.insert(req);
 	convert_set(reqset);
@@ -344,12 +345,14 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	std::string result;
 	try {
 //		latex_proc.start("latex", "--interaction nonstopmode "+nf);
+		std::cerr << "cadabra-client: starting latex" << std::endl;
 		latex_proc.start("latex", "-halt-on-error "+nf);
  		std::string line; 
 		while( std::getline( latex_proc.out(), line ).good() ) 
 			result+=line+"\n";
 
 		latex_proc.close();
+		std::cerr << "cadabra-client: latex done" << std::endl;
 
 		erase_file(std::string(templ)+".aux");
 		erase_file(std::string(templ)+".log");
@@ -417,6 +420,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 //	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch;
 //	dvipng_proc << resspec.str() << std::string(templ)+".dvi";
 
+	std::cerr << "cadabra-client: convert to png" << std::endl;
 	try {
 		dvipng_proc.start("dvipng", "-T tight -bg Transparent -D "+resspec.str()+" "+std::string(templ)+".dvi");
 		std::string s, result;
@@ -453,6 +457,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	// Conversion completed successfully, now convert all resulting PNG files to Pixbuf images.
 
+	std::cerr << "cadabra-client: reading png" << std::endl;
 	reqit=reqs.begin();
 	int pagenum=1;
 	while(reqit!=reqs.end()) {
@@ -473,6 +478,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			}
 		++reqit;
 		}
+	std::cerr << "cadabra-client: conversion done" << std::endl;
 
 	if(chdir(olddir)==-1)
 		throw TeXException("Failed to chdir back to " +std::string(olddir)+".");

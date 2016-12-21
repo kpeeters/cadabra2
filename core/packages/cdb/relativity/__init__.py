@@ -22,3 +22,14 @@ def expand_covariant_derivative():
 
     return ex
 
+def riemann_to_ricci(ex):
+    """ Convert contractions of Riemann tensors to Ricci tensors or scalars. """
+
+    rl1 = Ex(r'R^{a?}_{b? a? c?}     =  R_{b? c?}, R^{a?}_{b? c? a?}     = -R_{b? c?}')
+    rl2 = Ex(r'R_{a?}_{b?}^{a?}_{c?} =  R_{b? c?}, R_{a?}_{b? c?}^{a?}   = -R_{b? c?}')
+    rl3 = Ex(r'R_{b?}^{a?}_{c? a?}   =  R_{b? c?}, R_{b?}^{a?}_{a? c?}   = -R_{b? c?}')
+    rl4 = Ex(r'R^{a?}_{a?} = R, R_{a?}^{a?} = R')
+
+    substitute(ex, rl1+rl2+rl3+rl4)
+
+    return ex

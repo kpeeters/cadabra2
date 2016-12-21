@@ -49,6 +49,9 @@ namespace cadabra {
 		protected:
 			virtual bool on_button_release_event(GdkEventButton *) override;
 			virtual void on_show() override;
+//			virtual bool on_configure_event(GdkEventConfigure *) override;
+
+			void convert();
 
 		private:
 			TeXEngine& engine;

@@ -53,7 +53,7 @@ On Debian/Ubuntu you can install all that is needed with::
     sudo apt-get install cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
     sudo apt-get install libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev 
     sudo apt-get install texlive texlive-latex-extra dvipng
-    sudo apt-get install python3-matplotlib python3-mpmath python3-pip
+    sudo apt-get install python3-matplotlib python3-mpmath python3-pip python3-setuptools
     sudo pip3 install sympy
 
 This is the development platform and issues are typically first fixed

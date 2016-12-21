@@ -28,7 +28,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
 	  kernel_spinner_status(false), title_prefix("Cadabra: "),
-	  modified(false), read_only(ro)
+	  modified(false), read_only(ro), is_configured(false)
 	{
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
@@ -311,6 +311,8 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	{
+//	std::cerr << "cadabra-client: on_configure_event " << cfg->width << " x " << cfg->height << std::endl;
+	is_configured=true;
 	if(cfg->width != last_configure_width) 
 		engine.set_geometry(cfg->width-2*30);
 
@@ -1466,21 +1468,30 @@ void NotebookWindow::on_prefs_font_size(int num)
 //		 md.run();
 //		 }
 
+	std::cerr << "cadabra-client: prefs_font_size = " << num << std::endl;
 	engine.set_font_size(12+(num*2));
-	engine.invalidate_all();
-	engine.convert_all();
 
-	for(auto& canvas: canvasses) {
-		for(auto& visualcell: canvas->visualcells) {
-			if(visualcell.first->cell_type==DataCell::CellType::python || 
-				visualcell.first->cell_type==DataCell::CellType::latex) {
-				visualcell.second.inbox->set_font_size(num);
+	if(is_configured) {
+		std::cerr << "cadabra-client: re-running TeX to change font size" << std::endl;
+		// No point in running TeX on all cells if we have not yet had an
+		// on_configure_event signal; that will come after us and then we will
+		// have to run all again.
+		engine.invalidate_all();
+		engine.convert_all();
+		
+		for(auto& canvas: canvasses) {
+			for(auto& visualcell: canvas->visualcells) {
+				if(visualcell.first->cell_type==DataCell::CellType::python || 
+					visualcell.first->cell_type==DataCell::CellType::latex) {
+					visualcell.second.inbox->set_font_size(num);
+					}
 				}
 			}
+		
+		for(unsigned int i=0; i<canvasses.size(); ++i) 
+			canvasses[i]->refresh_all();
 		}
 
-	for(unsigned int i=0; i<canvasses.size(); ++i) 
-		canvasses[i]->refresh_all();
 
 //	// Hack.
 //	auto screen = Gdk::Screen::get_default();
