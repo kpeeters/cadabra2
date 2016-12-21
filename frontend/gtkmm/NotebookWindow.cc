@@ -24,6 +24,7 @@ NotebookWindow::Prefs::Prefs()
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
+	  current_cell(doc.end()),
 	  cdbapp(c),
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
@@ -273,13 +274,15 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// We always have at least one canvas.
 	canvasses.push_back(manage( new NotebookCanvas() ));
 	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
+	canvasses[0]->scroll.signal_size_allocate().connect(
+		sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate), 0));
 
 
 	// Window size and title, and ready to go.
 	set_default_size(screen->get_width()/2, screen->get_height()*0.8);
 	// FIXME: the subtraction for the margin and scrollbar made below
 	// is estimated but should be computed.
-	engine.set_geometry(screen->get_width()/2 - 2*30);
+//	engine.set_geometry(screen->get_width()/2 - 2*30);
 	update_title();
 	show_all();
 	kernel_spinner.hide();
@@ -610,6 +613,15 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		
 		}
 
+//	if(current_cell!=doc.end()) {
+//		auto loc = canvasses[current_canvas]->visualcells.find(&(*current_cell));
+//		if(loc!=canvasses[current_canvas]->visualcells.end()) {
+//			std::cerr << "grabbing focus on " << current_cell->textbuf << std::endl;
+//			VisualCell& target = (*loc).second;
+//			target.inbox->edit.grab_focus();			
+//			}
+//		}
+	
 //	if(current_cell!=doc.end()) 
 //		setup_focus_after_allocate(it);
 	}
@@ -782,7 +794,15 @@ void NotebookWindow::on_widget_size_allocate(Gtk::Allocation& busy_alloc, Gtk::W
 //	w->get_iter_location(vc->inbox->edit.get_buffer()->get_iter_at_mark(
 //													 vc->inbox->edit.get_buffer()->get_insert()), rect);
 
-	Gtk::Allocation               al=w->get_allocation();
+//	scroll_current_cell_into_view();
+	}
+
+void NotebookWindow::scroll_current_cell_into_view()
+	{
+	if(current_cell==doc.end()) return;
+	VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*current_cell)];
+
+	Gtk::Allocation               al=focusbox.inbox->edit.get_allocation();
 	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
 
 	double upper_visible=va->get_value();
@@ -792,28 +812,30 @@ void NotebookWindow::on_widget_size_allocate(Gtk::Allocation& busy_alloc, Gtk::W
 	// the edit box below still has its old position (but its correct height). So we
 	// should make sure that busybox.y+busybox.height+editbox.height is at the bottom
 	// of the scrollbox.
+	std::cerr << "-----" << std::endl;
+	std::cerr << "viewport = " << upper_visible << " - " << lower_visible << std::endl;
+//	std::cerr << busy_alloc.get_y() << " height " << busy_alloc.get_height() << std::endl;
+	std::cerr << "current_cell = " << al.get_y() << " height " << al.get_height() << std::endl;
 
-	std::cerr << upper_visible << " - " << lower_visible << std::endl;
-	std::cerr << busy_alloc.get_y() << " height " << busy_alloc.get_height() << std::endl;
-	std::cerr << al.get_y() << " height " << al.get_height() << std::endl;
-
-	double should_be_visible = upper_visible+busy_alloc.get_height()+al.get_height();
+	double should_be_visible = al.get_y()+al.get_height()+10;
 	double shift = should_be_visible - lower_visible;
-	std::cerr << should_be_visible << " should be visible" << std::endl;
-//	if(shift > 0) {
-	scroll_connection.disconnect();
-		scroll_connection = canvasses[current_canvas]->scroll.signal_size_allocate().connect(
-			sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate), shift));
-//		}
+	std::cerr << "position " << should_be_visible << " should be visible" << std::endl;
+	std::cerr << "shift = " << shift << std::endl;
+	if(shift>0) {
+		va->set_value( upper_visible + shift);
+		}
 	}
 
 void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc, double shift)
 	{
-	scroll_connection.disconnect();
-	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
-	std::cerr << "scrolling from " << va->get_value() << " to " << shift << std::endl;
-	if(shift>0)
-		va->set_value( va->get_value() + shift);
+	std::cerr << "on_scroll_size_allocate" << std::endl;
+//	scroll_connection.disconnect();
+//	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
+//	std::cerr << "scrolling from " << va->get_value() << " to " << shift << std::endl;
+//	if(shift>0)
+//		va->set_value( va->get_value() + shift);
+
+	scroll_current_cell_into_view();
 	}
 
 bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_number)

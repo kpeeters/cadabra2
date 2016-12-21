@@ -66,6 +66,12 @@ namespace cadabra {
 			sigc::connection grab_connection;
 			sigc::connection scroll_connection;
 
+			// Ensure that the current cell is visible. This will assume
+			// that all size allocations of widgets inside the scrolled window
+			// have been made; it only does scrolling, based on the current
+			// allocations.
+			void scroll_current_cell_into_view();
+
 			void set_name(const std::string&);
 			void set_title_prefix(const std::string&);
 			void load_file(const std::string& notebook_contents);
