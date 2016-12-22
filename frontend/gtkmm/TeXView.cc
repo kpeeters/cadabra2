@@ -14,8 +14,12 @@
 	 vbox.set_margin_bottom(0);
 	 vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
 	 hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
- //	set_state(Gtk::STATE_PRELIGHT);
+//	 add(image);
 	 override_background_color(Gdk::RGBA("white"));
+
+	 set_reveal_child(false);
+	 set_transition_duration(500);
+	 set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
 	 }
 
  TeXView::~TeXView()
@@ -26,7 +30,7 @@
 void TeXView::on_show() 
 	{
 	convert();
-	Gtk::EventBox::on_show();
+	Gtk::Revealer::on_show();
 	}
 
 //bool TeXView::on_configure_event(GdkEventConfigure *ev)

@@ -4,6 +4,7 @@
 #include <gtkmm/eventbox.h>
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
+#include <gtkmm/revealer.h>
 
 #include "DataCell.hh"
 #include "../common/TeXEngine.hh"
@@ -13,7 +14,7 @@ namespace cadabra {
 	/// TeXView is a widget which knows how to turn a string into
 	/// a LaTeX-rendered image and display that. 
 
-	class TeXView : public Gtk::EventBox {
+	class TeXView : public Gtk::Revealer {
 		public:
          TeXView(TeXEngine&, DTree::iterator, int hmargin=25);
 			virtual ~TeXView();

@@ -275,7 +275,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	canvasses.push_back(manage( new NotebookCanvas() ));
 	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
 	canvasses[0]->scroll.signal_size_allocate().connect(
-		sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate), 0));
+		sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate));
 
 
 	// Window size and title, and ready to go.
@@ -504,6 +504,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				//if(it->cell_type==DataCell::CellType::error) 
 				//   std::cerr << "error cell" << std::endl;
 				newcell.outbox = manage( new TeXView(engine, it) );
+				newcell.outbox->set_reveal_child(true);
 				w=newcell.outbox;
 				break;
 				}
@@ -517,6 +518,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.outbox->show_hide_requested.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
 
+				to_reveal.push_back(newcell.outbox);
+				
 				w=newcell.outbox;
 				break;
 
@@ -547,6 +550,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 				newcell.inbox = manage( ci );
 				w=newcell.inbox;
+
 				break;
 				}
 			case DataCell::CellType::image_png: {
@@ -613,14 +617,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		
 		}
 
-//	if(current_cell!=doc.end()) {
-//		auto loc = canvasses[current_canvas]->visualcells.find(&(*current_cell));
-//		if(loc!=canvasses[current_canvas]->visualcells.end()) {
-//			std::cerr << "grabbing focus on " << current_cell->textbuf << std::endl;
-//			VisualCell& target = (*loc).second;
-//			target.inbox->edit.grab_focus();			
-//			}
-//		}
+	// Connect
+	Glib::signal_idle().connect(sigc::mem_fun(*this, &NotebookWindow::idle_handler));
 	
 //	if(current_cell!=doc.end()) 
 //		setup_focus_after_allocate(it);
@@ -651,6 +649,11 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		else
 			parentbox=parent_visual.inbox;
 		VisualCell& actual = canvasses[i]->visualcells[&(*it)];
+
+//		if(it->cell_type==DataCell::CellType::latex_view) {
+//			actual.outbox->set_reveal_child(false);
+//			}
+//		else {
 		// The pointers are all in a union, and Gtkmm does not care
 		// about the precise type, so we just remove imagebox, knowing
 		// that it may actually be an inbox or outbox.
@@ -660,6 +663,7 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		// ourselves. Fortunately the container does not try to delete
 		// it again in its destructor.
 		delete actual.imagebox;
+//			}
 		canvasses[i]->visualcells.erase(&(*it));
 		}	
 	}
@@ -691,7 +695,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int pos)
 	{
 //	if(it==doc.end()) return;
-	//std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
+	// std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
 	set_stop_sensitive( compute->number_of_cells_executing()>0 );
 
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
@@ -701,22 +705,8 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int p
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 
-	// Grab widgets focus, which will scroll it into view. If the widget has not yet
-	// had its size and position allocated, we need to setup a signal handler which
-	// gets fires as soon as size/position allocation happens.
-
 	Gtk::Allocation alloc=target.inbox->get_allocation();
-	if(alloc.get_y()!=-1) {
-		std::cerr << "box " << it->textbuf << " grabbing focus" << std::endl;
-		target.inbox->edit.grab_focus();
-		}
-	else {
-		grab_connection = target.inbox->signal_size_allocate().connect(
-			sigc::bind(
-				sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
-				&(target.inbox->edit)
-						  ));
-		}
+	target.inbox->edit.grab_focus();
 	
 	if(pos>=0) {
 		auto cursor=target.inbox->edit.get_buffer()->begin();
@@ -740,63 +730,6 @@ size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
 	return offset;
 	}
 
-void NotebookWindow::setup_focus_after_allocate(DTree::iterator it)
-	{
-	// This function sets up a handler on the visualcells corresponding
-	// to 'it'. When those visual cells are allocated, we call
-	// on_widget_size_allocate which then ensures that the current_cell
-	// is in view. The reason for doing things this way is that when a
-	// cell is added to a canvas, it does not immediately get sizes
-	// allocated, so we need to defer scrolling until that has
-	// happened.
-
-	if(current_canvas<0 || current_canvas>=(int)canvasses.size()) return;
-	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
-		std::cerr << "cadabra-client: Cannot find cell to scroll into view." << std::endl;
-		return;
-		}
-	if(canvasses[current_canvas]->visualcells.find(&(*current_cell))==canvasses[current_canvas]->visualcells.end()) {
-		std::cerr << "cadabra-client: Cannot find current cell to scroll into view." << std::endl;
-		return;
-		}
-
-	VisualCell& busybox  = canvasses[current_canvas]->visualcells[&(*it)];
-	VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*current_cell)];
-
-	std::cerr << "Focusing " << current_cell->textbuf << std::endl;
-
-	// Grab widgets focus, which will scroll it into view. If the widget has not yet
-	// had its size and position allocated, we need to setup a signal handler which
-	// gets fires as soon as size/position allocation happens.
-
-//	Gtk::Allocation alloc=busybox.inbox->get_allocation();
-//	if(alloc.get_y()!=-1) {
-//		// std::cerr << "grabbing focus" << std::endl;
-//      //		target.inbox->edit.grab_focus();
-//		}
-//	else {
-
-	grab_connection = busybox.inbox->signal_size_allocate().connect(
-		sigc::bind(
-			sigc::mem_fun(*this, &NotebookWindow::on_widget_size_allocate),
-			&(focusbox.inbox->edit)
-					  ));
-	}
-
-#define LINE_SPACING 0
-
-void NotebookWindow::on_widget_size_allocate(Gtk::Allocation& busy_alloc, Gtk::Widget *w)
-	{
-	std::cerr << "on_widget_size_allocate" << std::endl;
-	grab_connection.disconnect();
-
-//	Gdk::Rectangle rect;
-//	w->get_iter_location(vc->inbox->edit.get_buffer()->get_iter_at_mark(
-//													 vc->inbox->edit.get_buffer()->get_insert()), rect);
-
-//	scroll_current_cell_into_view();
-	}
-
 void NotebookWindow::scroll_current_cell_into_view()
 	{
 	if(current_cell==doc.end()) return;
@@ -812,29 +745,21 @@ void NotebookWindow::scroll_current_cell_into_view()
 	// the edit box below still has its old position (but its correct height). So we
 	// should make sure that busybox.y+busybox.height+editbox.height is at the bottom
 	// of the scrollbox.
-	std::cerr << "-----" << std::endl;
-	std::cerr << "viewport = " << upper_visible << " - " << lower_visible << std::endl;
-//	std::cerr << busy_alloc.get_y() << " height " << busy_alloc.get_height() << std::endl;
-	std::cerr << "current_cell = " << al.get_y() << " height " << al.get_height() << std::endl;
+	//std::cerr << "-----" << std::endl;
+	//std::cerr << "viewport = " << upper_visible << " - " << lower_visible << std::endl;
+	//std::cerr << "current_cell = " << al.get_y() << " height " << al.get_height() << std::endl;
 
 	double should_be_visible = al.get_y()+al.get_height()+10;
 	double shift = should_be_visible - lower_visible;
-	std::cerr << "position " << should_be_visible << " should be visible" << std::endl;
-	std::cerr << "shift = " << shift << std::endl;
+	//std::cerr << "position " << should_be_visible << " should be visible" << std::endl;
+	//std::cerr << "shift = " << shift << std::endl;
 	if(shift>0) {
 		va->set_value( upper_visible + shift);
 		}
 	}
 
-void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc, double shift)
+void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc)
 	{
-	std::cerr << "on_scroll_size_allocate" << std::endl;
-//	scroll_connection.disconnect();
-//	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
-//	std::cerr << "scrolling from " << va->get_value() << " to " << shift << std::endl;
-//	if(shift>0)
-//		va->set_value( va->get_value() + shift);
-
 	scroll_current_cell_into_view();
 	}
 
@@ -1490,7 +1415,7 @@ void NotebookWindow::on_prefs_font_size(int num)
 //		 md.run();
 //		 }
 
-	std::cerr << "cadabra-client: prefs_font_size = " << num << std::endl;
+	// std::cerr << "cadabra-client: prefs_font_size = " << num << std::endl;
 	engine.set_font_size(12+(num*2));
 
 	if(is_configured) {
@@ -1524,3 +1449,11 @@ void NotebookWindow::on_prefs_font_size(int num)
 //		}
 	}
 
+bool NotebookWindow::idle_handler()
+	{
+	for(auto& reveal: to_reveal) {
+		reveal->set_reveal_child(true);
+		}
+	to_reveal.clear();
+	return false; // disconnect
+	}

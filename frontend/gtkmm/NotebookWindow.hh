@@ -60,11 +60,12 @@ namespace cadabra {
 			TeXEngine        engine;
 			double           scale; // highdpi scale
 
-			// For grabbing focus of widgets which are not yet allocated.
-			void on_widget_size_allocate(Gtk::Allocation&, Gtk::Widget *w);
-			void on_scroll_size_allocate(Gtk::Allocation&, double shift);
-			sigc::connection grab_connection;
-			sigc::connection scroll_connection;
+			// When something inside the large notebook canvas changes, we need
+			// to make sure that the current cell stays into view (if we are
+			// editing that cell). We can only do that once all size info is
+			// known, which is when the scrolledwindow gets its size_allocate
+			// signal. Here's the handler for it.
+			void on_scroll_size_allocate(Gtk::Allocation&);
 
 			// Ensure that the current cell is visible. This will assume
 			// that all size allocations of widgets inside the scrolled window
@@ -128,7 +129,6 @@ namespace cadabra {
 			// Name and modification data.
 			void             update_title();
 			void             set_stop_sensitive(bool);
-			void             setup_focus_after_allocate(DTree::iterator);
 			std::string      name, title_prefix;
 			bool             modified, read_only;
 
@@ -211,6 +211,11 @@ namespace cadabra {
 
 			Prefs prefs;
 			bool  is_configured;
+
+
+			// Transition animations.
+			std::vector<Gtk::Revealer *> to_reveal;
+			bool idle_handler();
 	};
 
 };
