@@ -18,8 +18,8 @@
 	 override_background_color(Gdk::RGBA("white"));
 
 	 set_reveal_child(false);
-	 set_transition_duration(500);
-	 set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_SLIDE_DOWN);
+	 set_transition_duration(1000);
+	 set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
 	 }
 
  TeXView::~TeXView()
