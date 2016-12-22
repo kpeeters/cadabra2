@@ -9,7 +9,8 @@
 	 {
 	 content = engine.checkin(datacell->textbuf, "", "");
 
-	 add(vbox);
+	 add(rbox);
+	 rbox.add(vbox);
 	 vbox.set_margin_top(10);
 	 vbox.set_margin_bottom(0);
 	 vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
@@ -17,9 +18,9 @@
 //	 add(image);
 	 override_background_color(Gdk::RGBA("white"));
 
-	 set_reveal_child(false);
-	 set_transition_duration(1000);
-	 set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
+	 rbox.set_reveal_child(false);
+	 rbox.set_transition_duration(1000);
+	 rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
 	 }
 
  TeXView::~TeXView()
@@ -30,7 +31,7 @@
 void TeXView::on_show() 
 	{
 	convert();
-	Gtk::Revealer::on_show();
+	Gtk::EventBox::on_show();
 	}
 
 //bool TeXView::on_configure_event(GdkEventConfigure *ev)

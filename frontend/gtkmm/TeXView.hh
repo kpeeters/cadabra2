@@ -14,7 +14,7 @@ namespace cadabra {
 	/// TeXView is a widget which knows how to turn a string into
 	/// a LaTeX-rendered image and display that. 
 
-	class TeXView : public Gtk::Revealer {
+	class TeXView : public Gtk::EventBox {
 		public:
          TeXView(TeXEngine&, DTree::iterator, int hmargin=25);
 			virtual ~TeXView();
@@ -24,6 +24,7 @@ namespace cadabra {
 			sigc::signal1<bool, DTree::iterator>   show_hide_requested;
 			
 			DTree::iterator           datacell;
+			Gtk::Revealer             rbox;
 			Gtk::VBox                 vbox;
 			Gtk::HBox                 hbox;
 			Gtk::Image                image;
