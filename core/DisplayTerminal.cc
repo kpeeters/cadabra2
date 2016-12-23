@@ -10,9 +10,60 @@ DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e)
 		{"\\cos", "cos"},
 		{"\\sin", "sin"},
 		{"\\tan", "tan"},
-		{"\\int", "Integral" },
-		{"\\sum", "Sum" }
-		};
+		{"\\int", "∫" },
+		{"\\sum", "∑" },
+
+		{"\\alpha",   "α" },
+		{"\\beta",    "β" },  // beta seems to be reserved
+		{"\\gamma",   "γ" }, // gamma seems to be reserved 
+		{"\\delta",   "δ" },
+		{"\\epsilon", "ε" },
+		{"\\zeta",    "ζ" },
+		{"\\eta",     "η" },
+		{"\\theta",   "θ" },
+		{"\\iota",    "ι" },
+		{"\\kappa",   "κ" },
+		{"\\lambda",  "λ" }, // lambda is reserved
+		{"\\mu",      "μ" },
+		{"\\nu",      "ν" },
+		{"\\xi",      "ξ" },
+		{"\\omicron", "ο" },
+		{"\\pi",      "π" },
+		{"\\rho",     "ρ" },
+		{"\\sigma",   "σ" },
+		{"\\tau",     "τ" },
+		{"\\upsilon", "υ" },
+		{"\\phi",     "φ" },
+		{"\\chi",     "χ" },
+		{"\\psi",     "ψ" },
+		{"\\omega",   "ω" },
+
+		{"\\Alpha",   "Α" },
+		{"\\Beta",    "Β" },
+		{"\\Gamma",   "Γ" },
+		{"\\Delta",   "Δ" },
+		{"\\Epsilon", "Ε" },
+		{"\\Zeta",    "Ζ" },
+		{"\\Eta",     "Η" },
+		{"\\Theta",   "ϴ" },
+		{"\\Iota",    "Ι" },
+		{"\\Kappa",   "Κ" },
+		{"\\Lambda",  "Λ" },
+		{"\\Mu",      "Μ" },
+		{"\\Nu",      "Ν" },
+		{"\\Xi",      "Ξ" },
+		{"\\Omicron", "Ο" },
+		{"\\Pi",      "Π" },
+		{"\\Rho",     "Ρ" },
+		{"\\Sigma",   "Σ" },
+		{"\\Tau",     "Τ" },
+		{"\\Upsilon", "Υ" },
+		{"\\Phi",     "Φ" },
+		{"\\Chi",     "Χ" },
+		{"\\Psi",     "Ψ" },
+		{"\\Omega",   "Ω" },
+
+	};
 	}
 
 bool DisplayTerminal::needs_brackets(Ex::iterator it)
@@ -104,6 +155,11 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 		str_node::parent_rel_t current_parent_rel_=(*ch).fl.parent_rel;
 		const Accent *is_accent=kernel.properties.get<Accent>(it);
 		
+		if(current_bracket_==str_node::b_none) {
+			if(previous_bracket_==str_node::b_none)
+				str << ", ";
+			}
+		
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
 			if(is_accent==0) 
@@ -126,7 +182,7 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 											 current_parent_rel_);
 			else str  << "}";
 			}
-		else str << " ";
+//		else str << " ";
 		
 		previous_bracket_=current_bracket_;
 		previous_parent_rel_=current_parent_rel_;
@@ -262,7 +318,7 @@ void DisplayTerminal::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
-	print_opening_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	str << "{";
 	while(sib!=tree.end(it)) {
 		if(first)
 			first=false;
@@ -271,14 +327,14 @@ void DisplayTerminal::print_commalike(std::ostream& str, Ex::iterator it)
 		dispatch(str, sib);
 		++sib;
 		}
-	print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	str << "}";
 	}
 
 void DisplayTerminal::print_arrowlike(std::ostream& str, Ex::iterator it) 
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << " \\rightarrow ";
+	str << " → ";
 	++sib;
 	dispatch(str, sib);
 	}
@@ -495,7 +551,11 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 //		}
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-	str << *it->name;
+	auto rn = symmap.find(*it->name);
+	if(rn!=symmap.end())
+		str << rn->second;
+	else
+		str << *it->name;
 	if(needs_extra_brackets) str << "}";
 
 	print_children(str, it);

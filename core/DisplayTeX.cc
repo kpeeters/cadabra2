@@ -150,8 +150,11 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		const Accent *is_accent=kernel.properties.get<Accent>(it);
 		
 		bool function_bracket_needed=true;
-		if(current_bracket_==str_node::b_none)
+		if(current_bracket_==str_node::b_none) {
+			if(previous_bracket_==str_node::b_none)
+				str << ", ";
 			function_bracket_needed=!reads_as_operator(it, ch);
+			}
 
 		if(current_bracket_!=str_node::b_none || previous_bracket_!=current_bracket_ || previous_parent_rel_!=current_parent_rel_) {
 			print_parent_rel(str, current_parent_rel_, ch==tree.begin(it));
@@ -276,7 +279,7 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
-	print_opening_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	str << "\\left\\{";
 	while(sib!=tree.end(it)) {
 		if(first)
 			first=false;
@@ -285,7 +288,7 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 		dispatch(str, sib);
 		++sib;
 		}
-	print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	str << "\\right\\}";
 	}
 
 void DisplayTeX::print_arrowlike(std::ostream& str, Ex::iterator it) 
