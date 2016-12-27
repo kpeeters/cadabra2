@@ -365,6 +365,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 				bracket_reached=true;
 			}
 
+
 		std::string obrack, cbrack;
 		if(cb==0 || !usebracket || (onum==sizeof(orders) && bracket_reached && accus.back().accu.size()>0)) {
 			obrack="{";
@@ -374,22 +375,25 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 
 		if(cur.parts.size()>1 || cur.order==order_factorial) { // More than one argument to the function.
 			if(cur.order<sizeof(orders)) {
-				bool special=(cb==2 && std::string(order_names[cur.order])=="\\comma");
+				bool special=((cb==2 || cb==3) && std::string(order_names[cur.order])=="\\comma" && accus.size()>0 && accus.back().accu!="");
 				if(!special)
 					tmp+=order_names[cur.order];
+				else
+					bracket_strings_(accus.back().bracket, obrack, cbrack);
+					
 				for(unsigned int k=0; k<cur.parts.size(); ++k) 
 					if(cur.parts[k].size()>0) {
 						if(is_already_bracketed_(cur.parts[k]) && (cur.parts[k][0]==obrack[0] || obrack[0]=='{')) 
 							tmp+=cur.parts[k];
 						else {
 							if(special) {
-								if(k>0) tmp+="(";
+								if(k>0) tmp+=obrack;
 								}
 							else 
 								tmp+=obrack;
 							tmp+=cur.parts[k];
 							if(special) {
-								if(k<cur.parts.size()-1) tmp+=")";
+								if(k<cur.parts.size()-1) tmp+=cbrack;
 								}
 							else 
 								tmp+=cbrack;

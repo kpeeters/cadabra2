@@ -15,7 +15,7 @@ def test01():
     ex:= A_{m};
     rl:= A_{t} = 3;
     evaluate(ex, rl)
-    tst:= \components_{m}( \comma( \comma{t} = 3  ) ) - @(ex);
+    tst:= \components_{m}( \comma{ \comma{t} = 3  } ) - @(ex);
     collect_components(_)
     assert(tst==0)
     print("Test 01 passed")
@@ -32,7 +32,7 @@ def test02():
     ex:= A_{n m} B_{m n p} ( C_{p s} + D_{s p} );
     rl:= [ A_{r t} = 3, B_{t r t} = 2, B_{t r r} = 5, C_{t r} = 1, D_{r t} = r**2*t, D_{t r}=t**2 ];
     evaluate(ex, rl)
-    tst:= \components_{s}(\comma{r}= 6 r**2 t + 6, \comma{t}=15 t**2) - @(ex):
+    tst:= \components_{s}{\comma{r}= 6 r**2 t + 6, \comma{t}=15 t**2} - @(ex):
     collect_components(_)
     assert(tst==0)
     print("Test 02 passed")
@@ -58,7 +58,7 @@ def test03():
     evaluate(ch, ss, rhsonly=True)
     chtst=rhs(ch)
     # Check against e.g. arxiv:0904.4184.
-    tst:=\components^{\mu}_{\nu\rho}( {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
+    tst:=\components^{\mu}_{\nu\rho}{ {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
                                 {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
                                 {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
                                 {r,t,t}            =  M/r**2 (1-2 M/r),
@@ -71,7 +71,7 @@ def test03():
                                 {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
                                 {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
                                 {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
-                            ) - @(chtst);
+                            } - @(chtst);
     collect_components(_)
     assert(tst==0)
     print("Test 03a passed")
@@ -109,7 +109,7 @@ def test04():
     rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
     ex:= g_{m n} X^{n};
     evaluate(ex, rl)
-    tst:= \components_{m}( \comma{ \comma{t} = X^{t} } ) - @(ex);
+    tst:= \components_{m}{ \comma{ \comma{t} = X^{t} } } - @(ex);
     collect_components(_)
     assert(tst==0)
     print("Test 04 passed")
@@ -141,7 +141,7 @@ def test06():
     ex:= g_{m n} X^{n} A;
     rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
     evaluate(ex,rl)
-    tst:= \components_{m}( \comma{ \comma{t}= A X^{t} } ) - @(ex);
+    tst:= \components_{m}{ \comma{ \comma{t}= A X^{t} } } - @(ex);
     collect_components(_)
     assert(tst==0)
     print("Test 06 passed")
@@ -158,9 +158,9 @@ def test07():
     ex:= X^{n} X^{m} X^{p};
     rl:= { X^{t} -> T, X^{r} -> R };
     evaluate(ex,rl)
-    tst:=\components^{n m p}( {t,t,t}=T**3, {t,t,r}=R T**2, {t,r,t}=R T**2,
+    tst:=\components^{n m p}{ {t,t,t}=T**3, {t,t,r}=R T**2, {t,r,t}=R T**2,
                             {t,r,r}=T R**2, {r,t,t}=R T**2, {r,t,r}=T R**2,
-                            {r,r,t}=R**2 T, {r,r,r}=R**3 ) - @(ex);
+                            {r,r,t}=R**2 T, {r,r,r}=R**3 } - @(ex);
     collect_components(tst)
     assert(tst==0)
     print("Test 07 passed")
