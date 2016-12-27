@@ -39,7 +39,7 @@ pattern::pattern(const Ex& o)
 bool pattern::match(const Properties& properties, const Ex::iterator& it, bool ignore_parent_rel) const
 	{
 	// Special case for range wildcards.
-	// FIXME: move this to storage.cc (see the FIXME there)
+	// FIXME: move this to Compare.cc (see the FIXME there)
 
 	if(it->name==obj.begin()->name && children_wildcard()) {
 		Ex::iterator hm=obj.begin(obj.begin());

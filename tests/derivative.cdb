@@ -520,3 +520,16 @@ def test30():
 
 test30()
 
+def test31():
+    __cdbkernel__=create_scope()
+    \hat{#}::Accent;
+    \partial{#}::PartialDerivative;
+    A::Depends(\partial{#}, \hat{#});
+    ex:=\partial{A \hat{A} B};
+    product_rule(_);
+    unwrap(_);
+    #, $\partial{#}$)
+    tst:= \partial{A} \hat{A} B + A \partial{\hat{A}} B - @(ex);
+    assert(tst==0)
+    print("Test 31 passed")
+

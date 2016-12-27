@@ -7,17 +7,43 @@
 #include "properties/DependsBase.hh"
 //#include "algorithms/prodcollectnum.hh"
 
-unwrap::unwrap(const Kernel& k, Ex& tr)
+unwrap::unwrap(const Kernel& k, Ex& tr, Ex& w)
 	: Algorithm(k, tr)
 	{
+	if(w.begin()!=w.end()) {
+		if(*w.begin()->name!="\\comma")
+			wrappers.push_back(w);
+		else {
+			auto sib=w.begin(w.begin());
+			while(sib!=w.end(w.begin())) {
+				wrappers.push_back(Ex(sib));
+				++sib;
+				}
+			}
+		}
 	}
 
 bool unwrap::can_apply(iterator it)
 	{
 	const Derivative *der=kernel.properties.get<Derivative>(it);
 	const Accent     *acc=kernel.properties.get<Accent>(it);
-	if(der || acc) 
+	if(der || acc) {
+		Ex_comparator comp(kernel.properties);
+		if(wrappers.size()>0) {
+			bool found=false;
+			for(auto&w : wrappers) {
+				std::cerr << "comparing " << w << " to " << Ex(it) << std::endl;
+				if(comp.equal_subtree(w.begin(), it)==Ex_comparator::match_t::subtree_match) {
+					std::cerr << "yes" << std::endl;
+					found=true;
+					break;
+					}
+				}
+			if(!found) return false;
+			}
 		return true;
+		}
+	
 	return false;
 	}
 
@@ -92,13 +118,11 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				if(move_out) {
 					const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
 					if(dep!=0) {
-						// std::cerr << *factor->name << " depends" << std::endl;
+						// std::cerr << *factor->name << " acted on by " << *old_it->name << "; depends" << std::endl;
 						Ex deps=dep->dependencies(kernel, factor /* it */);
 						sibling_iterator depobjs=deps.begin(deps.begin());
 						while(depobjs!=deps.end(deps.begin())) {
-//						std::cout << "?" << *it->name << " == " << *depobjs->name << std::endl;
-//						if(subtree_exact_equal(it, depobjs)) { WRONG! Depends(\del) should work
-// without having any arguments in \del. Otherwise we would need to write this as Depends(\del{#})
+							// std::cerr << "?" << *it->name << " == " << *depobjs->name << std::endl;
 							if(old_it->name == depobjs->name) {
 								move_out=false;
 								break;

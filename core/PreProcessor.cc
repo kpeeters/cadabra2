@@ -330,6 +330,8 @@ void preprocessor::bracket_strings_(unsigned int cb, std::string& obrack, std::s
 
 bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool usebracket) const
 	{
+//	std::cout << "unwinding to " << onum << " " << usebracket << std::endl;
+	
 //	static long iters=0;
 	bool generated_head=false;
 	bool bracket_reached=false;
@@ -343,7 +345,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 			cur.parts.push_back(cur.accu);
 		unsigned int cb=current_bracket_();
 
-//		std::cout << std::endl;
+//		std::cout << "current bracket = " << cb << std::endl;
 //		print_stack();
 
 		if(onum==sizeof(orders) && bracketgoal) {
@@ -363,6 +365,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 				bracket_reached=true;
 			}
 
+
 		std::string obrack, cbrack;
 		if(cb==0 || !usebracket || (onum==sizeof(orders) && bracket_reached && accus.back().accu.size()>0)) {
 			obrack="{";
@@ -372,15 +375,28 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 
 		if(cur.parts.size()>1 || cur.order==order_factorial) { // More than one argument to the function.
 			if(cur.order<sizeof(orders)) {
-				tmp+=order_names[cur.order];
+				bool special=((cb==2 || cb==3) && std::string(order_names[cur.order])=="\\comma" && accus.size()>0 && accus.back().accu!="");
+				if(!special)
+					tmp+=order_names[cur.order];
+				else
+					bracket_strings_(accus.back().bracket, obrack, cbrack);
+					
 				for(unsigned int k=0; k<cur.parts.size(); ++k) 
 					if(cur.parts[k].size()>0) {
 						if(is_already_bracketed_(cur.parts[k]) && (cur.parts[k][0]==obrack[0] || obrack[0]=='{')) 
 							tmp+=cur.parts[k];
-						else {                                   
-							tmp+=obrack;
+						else {
+							if(special) {
+								if(k>0) tmp+=obrack;
+								}
+							else 
+								tmp+=obrack;
 							tmp+=cur.parts[k];
-							tmp+=cbrack;
+							if(special) {
+								if(k<cur.parts.size()-1) tmp+=cbrack;
+								}
+							else 
+								tmp+=cbrack;
 							}
 						}
 				generated_head=true;
@@ -520,7 +536,7 @@ void preprocessor::parse_internal_()
 		if(eat_initial_whitespace_ && c=='*')
 			goto loopdone;
 		eat_initial_whitespace_=false;
-//		std::cerr << c << ", brac=" << cur.bracket << ", order=" << cur.order << std::endl;
+		//std::cerr << c << ", brac=" << cur.bracket << ", order=" << cur.order << std::endl;
 		if(verbatim_) {
 			if(c=='\"')
 				verbatim_=false;

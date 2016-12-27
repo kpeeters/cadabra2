@@ -1188,7 +1188,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 //	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<sort_sum>("sort_sum");
-	def_algo_1<unwrap>("unwrap");
 	def_algo_1<young_project_product>("young_project_product");
 
 	def("complete", &dispatch_ex<complete, Ex&>, 
@@ -1333,6 +1332,18 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
+	def("split_index", &dispatch_ex<split_index, Ex&>, 
+		 (arg("ex"),
+		  arg("rules"),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	
+	def("unwrap", &dispatch_ex<unwrap, Ex&>, 
+		 (arg("ex"),
+		  arg("wrapper")=new Ex(),
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+	
 	// Properties are declared as objects on the Python side as well. They all take two
 	// Ex objects as constructor parameters: the first one is the object(s) to which the
 	// property is attached, the second one is the argument list (represented as an Ex).

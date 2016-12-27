@@ -210,7 +210,8 @@ class Ex_comparator {
 		void    clear();
 
 		/// Match two subtrees taking into account symbol
-		/// properties. Return subtree_match or one of the no_match
+		/// properties. 'i1' can be a pattern.
+		/// Returns subtree_match or one of the no_match
 		/// results.  You need to fill lhs_contains_dummies before
 		/// calling!
 		/// If use_props is false, it will not try to fetch any property

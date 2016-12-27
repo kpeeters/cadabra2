@@ -1,14 +1,11 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -18,53 +15,51 @@
 			"hidden" : true,
 			"source" : "\\property{IndexInherit}{Make an object inherit all indices from its child objects.}\n\nIndicates that an object should inherit the indices of its child\nobjects. This is useful mainly for operators. Matrix transposition,\nfor instance, could be written as"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}T(B_{m n})+C_{m n}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property IndexInherit to~}T\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}T\\left(B_{m n}\\right)+C_{m n}\\end{dmath*}"
 				}
 			],
-			"source" : "T{#}::IndexInherit.\nex:=T(B_{m n}) + C_{m n};"
+			"source" : "T{#}::IndexInherit;\nex:=T(B_{m n}) + C_{m n};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term."
+					"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported, as in the example below. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term."
 				}
 			],
 			"hidden" : true,
-			"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term."
+			"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported, as in the example below. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}Q(B_{m n})+C_{m n}\\end{dmath*}"
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\ncadabra2.ConsistencyException: Free indices in different terms in a sum do not match.\n\\end{verbatim}}}"
 				}
 			],
 			"source" : "ex:=Q(B_{m n}) + C_{m n};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -72,6 +67,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-
