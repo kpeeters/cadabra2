@@ -269,6 +269,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\components")     print_components(str, it);
+	else if(*it->name=="\\wedge")          print_wedgeproduct(str, it);
 	else if(*it->name=="\\conditional")    print_conditional(str, it);
 	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
@@ -289,6 +290,28 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 		++sib;
 		}
 	str << "\\right\\}";
+	}
+
+void DisplayTeX::print_wedgeproduct(std::ostream& str, Ex::iterator it) 
+	{
+	if(*it->multiplier!=1) {
+		print_multiplier(str, it);
+		}
+
+	if(needs_brackets(it)) 
+		str << "\\left(";
+
+	Ex::sibling_iterator sib=tree.begin(it);
+	dispatch(str, sib);
+	++sib;
+	while(sib!=tree.end(it)) {
+		str << "\\wedge ";
+		dispatch(str, sib);
+		++sib;
+		}
+
+	if(needs_brackets(it)) 
+		str << "\\right)";
 	}
 
 void DisplayTeX::print_arrowlike(std::ostream& str, Ex::iterator it) 

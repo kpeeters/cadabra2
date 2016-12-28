@@ -1082,6 +1082,17 @@ int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_
 	{
 	//std::cout << "can_swap " << *one->name << " " << *two->name << ignore_implicit_indices << std::endl;
 
+	// Differential forms cannot be moved through each other except
+	// when the degree of one of them is zero.
+	
+//	const DifferentialForm *df1 = properties.get<DifferentialForm>(one);
+//	const DifferentialForm *df2 = properties.get<DifferentialForm>(two);
+//
+//	if(df1 && df2) {
+//		if(! (df1.degree.is_zero() || df2.degree.is_zero()) )
+//			return 0;
+//		}
+	
 	const ImplicitIndex *ii1 = properties.get_composite<ImplicitIndex>(one);
 	const ImplicitIndex *ii2 = properties.get_composite<ImplicitIndex>(two);
 

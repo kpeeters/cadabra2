@@ -33,6 +33,7 @@ bool product_rule::can_apply(iterator it)
 			if(prodnode!=tr.end()) return true;
 			}
 		}
+	
 	return false;
 	}
 

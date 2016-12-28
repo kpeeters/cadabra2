@@ -127,9 +127,11 @@ set(LOCAL_SRC_FILES
   properties/DependsInherit.cc
   properties/Derivative.cc
   properties/Diagonal.cc
+  properties/DifferentialForm.cc
   properties/DiracBar.cc
   properties/Distributable.cc
   properties/EpsilonTensor.cc
+  properties/ExteriorDerivative.cc
   properties/FilledTableau.cc
   properties/GammaMatrix.cc
   properties/GammaTraceless.cc

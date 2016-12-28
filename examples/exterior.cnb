@@ -1,0 +1,136 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(0)}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(1)}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(2)}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(3)}.\\end{dmath*}"
+				}
+			],
+			"source" : "A0::LaTeXForm(\"A^{(0)}\").\nA1::LaTeXForm(\"A^{(1)}\").\nA2::LaTeXForm(\"A^{(2)}\").\nA3::LaTeXForm(\"A^{(3)}\").\nA0::DifferentialForm(degree=0);\nA1::DifferentialForm(degree=1);\nA2::DifferentialForm(degree=2);\nA3::DifferentialForm(degree=3);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A^{(1)}\\wedge A^{(2)}-A^{(2)}\\wedge A^{(1)}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A1 ^ A2 - A2 ^ A1;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}{\\rm d}{\\#}.\\end{dmath*}"
+				}
+			],
+			"source" : "d{#}::ExteriorDerivative;\nd{#}::LaTeXForm(\"{\\rm d}\")."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}-A^{(2)}\\wedge A^{(1)}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ex2:= d{ @(ex) };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A^{(2)} A^{(1)}-A^{(1)} A^{(2)}\\end{dmath*}"
+				}
+			],
+			"source" : "ex3:= A2 A1 - A1 A2;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "sort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}e^{a}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}\\omega^{a}\\,_{b}.\\end{dmath*}"
+				}
+			],
+			"source" : "e^{a}::DifferentialForm(degree=1);\n\\omega^{a}_{b}::DifferentialForm(degree=2);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}{\\rm d}\\left(e^{a}\\right)+\\omega^{a}\\,_{b}\\wedge e^{b}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=d{e^{a}} + \\omega^{a}_{b} ^ e^{b};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

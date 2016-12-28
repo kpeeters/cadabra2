@@ -56,6 +56,7 @@ namespace boost {
 #include "properties/Depends.hh"
 #include "properties/DependsInherit.hh"
 #include "properties/Derivative.hh"
+#include "properties/DifferentialForm.hh"
 #include "properties/DiracBar.hh"
 #include "properties/GammaMatrix.hh"
 #include "properties/CommutingAsProduct.hh"
@@ -64,6 +65,7 @@ namespace boost {
 #include "properties/Diagonal.hh"
 #include "properties/Distributable.hh"
 #include "properties/EpsilonTensor.hh"
+#include "properties/ExteriorDerivative.hh"
 #include "properties/FilledTableau.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/Indices.hh"
@@ -1368,9 +1370,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Depends>();
 	def_prop<Derivative>();
 	def_prop<Diagonal>();
+	def_prop<DifferentialForm>();
 	def_prop<Distributable>();
 	def_prop<DiracBar>();
 	def_prop<EpsilonTensor>();
+	def_prop<ExteriorDerivative>();
 	def_prop<FilledTableau>();
 	def_prop<GammaMatrix>();
 	def_prop<ImplicitIndex>();	

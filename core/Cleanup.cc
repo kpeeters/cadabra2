@@ -81,6 +81,7 @@ void check_index_consistency(const Kernel& k, Ex& tr, Ex::iterator it)
 	if(it==tr.end()) return;
 	collect_terms ct(k, tr);
 	ct.check_index_consistency(it);
+	ct.check_degree_consistency(it); // FIXME: needs to be implemented in Algorithm.
 	}
 
 bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)

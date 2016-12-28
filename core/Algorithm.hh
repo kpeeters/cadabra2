@@ -84,9 +84,11 @@ class Algorithm {
 		bool             suppress_normal_output;
 		bool             discard_command_node;
 
-		// Given an \expression node, check consistency
+		/// Given an expression top node, check index consistency.
 		bool      check_consistency(iterator) const;
 		bool      check_index_consistency(iterator) const;
+		/// Given an expression top node, check differential form degree consistency.
+		bool      check_degree_consistency(iterator) const;
 
 		void report_progress(const std::string&, int todo, int done, int count=2);
 
