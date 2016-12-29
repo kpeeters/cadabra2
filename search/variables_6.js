@@ -12,9 +12,7 @@ var searchData=
   ['fl',['fl',['../classstr__node.html#a63d968d06b027c1b62669fe6b8044110',1,'str_node']]],
   ['flush',['flush',['../namespacesnoop.html#a9126e00546e669d5e981ca1fa533d368',1,'snoop']]],
   ['font_5fsize_5f',['font_size_',['../classcadabra_1_1TeXEngine.html#ac7e649e119f3c11e08ff711769b69dfa',1,'cadabra::TeXEngine']]],
-  ['font_5fstep',['font_step',['../classcadabra_1_1NotebookWindow_1_1Prefs.html#ae922dc8f2dfaf1f22f022da4cb35d948',1,'cadabra::NotebookWindow::Prefs']]],
   ['for_5fobj',['for_obj',['../classProperty.html#a00653805de818edd68375272565df370',1,'Property']]],
   ['from',['from',['../classInteger.html#ac024d3c9deed0c75a9a13f03357c7e5f',1,'Integer']]],
-  ['from_5fpos',['from_pos',['../classcadabra_1_1ActionEraseText.html#a2e2b8f9805be0d921391c80391f4cd98',1,'cadabra::ActionEraseText']]],
   ['full_5fclass',['full_class',['../classsplit__index.html#a8b3214b4afe5274326d524dff3ade0ad',1,'split_index']]]
 ];

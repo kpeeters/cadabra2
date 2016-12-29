@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -101,36 +102,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Props_8hh.html">Props.hh</a>&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Symmetric_8hh.html">properties/Symmetric.hh</a>&quot;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="TableauSymmetry_8hh.html">properties/TableauSymmetry.hh</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classMetric.html">    7</a></span>&#160;<span class="keyword">class </span><a class="code" href="classMetric.html">Metric</a> : <span class="keyword">public</span> <a class="code" href="classSymmetric.html">Symmetric</a>, <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classproperty.html">property</a> {</div>
+<div class="line"><a name="l00007"></a><span class="lineno"><a class="line" href="classMetric.html">    7</a></span>&#160;<span class="keyword">class </span><a class="code" href="classMetric.html">Metric</a> : <span class="keyword">public</span> <a class="code" href="classTableauSymmetry.html">TableauSymmetry</a>, <span class="keyword">virtual</span> <span class="keyword">public</span> <a class="code" href="classproperty.html">property</a> {</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        <a class="code" href="classMetric.html#a5a3d74daf5dcaf419ef9e58360d7bfe7">Metric</a>();</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="keyword">virtual</span> std::string <a class="code" href="classMetric.html#a6ecae202b9318161dfced03ff5ca53e1">name</a>() <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span>        <a class="code" href="classMetric.html#ac6284fa6ed3c1892fea1410cc84d235e">parse</a>(<span class="keyword">const</span> <a class="code" href="classKernel.html">Kernel</a>&amp;, <a class="code" href="classkeyval__t.html">keyval_t</a>&amp;) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span>        <a class="code" href="classMetric.html#a810134d175dc1ca07588cab097c1118d">validate</a>(<span class="keyword">const</span> <a class="code" href="classKernel.html">Kernel</a>&amp;, <span class="keyword">const</span> <a class="code" href="classEx.html">Ex</a>&amp;) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span>        <a class="code" href="classMetric.html#ae5a4b3df5108f4bb32de951ed0d4a7a5">latex</a>(std::ostream&amp;) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classMetric.html#aff34937849b8ca9d16e94ef14d7dd639">   15</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classMetric.html#aff34937849b8ca9d16e94ef14d7dd639">signature</a>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;};</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classMetric.html#aff34937849b8ca9d16e94ef14d7dd639">   14</a></span>&#160;        <span class="keywordtype">int</span> <a class="code" href="classMetric.html#aff34937849b8ca9d16e94ef14d7dd639">signature</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;};</div>
 <div class="ttc" id="classMetric_html_a5a3d74daf5dcaf419ef9e58360d7bfe7"><div class="ttname"><a href="classMetric.html#a5a3d74daf5dcaf419ef9e58360d7bfe7">Metric::Metric</a></div><div class="ttdeci">Metric()</div><div class="ttdef"><b>Definition:</b> Metric.cc:5</div></div>
 <div class="ttc" id="classkeyval__t_html"><div class="ttname"><a href="classkeyval__t.html">keyval_t</a></div><div class="ttdoc">Arguments to properties get parsed into a keyval_t structure. </div><div class="ttdef"><b>Definition:</b> Props.hh:46</div></div>
 <div class="ttc" id="Props_8hh_html"><div class="ttname"><a href="Props_8hh.html">Props.hh</a></div></div>
-<div class="ttc" id="classSymmetric_html"><div class="ttname"><a href="classSymmetric.html">Symmetric</a></div><div class="ttdef"><b>Definition:</b> Symmetric.hh:6</div></div>
 <div class="ttc" id="classMetric_html_a810134d175dc1ca07588cab097c1118d"><div class="ttname"><a href="classMetric.html#a810134d175dc1ca07588cab097c1118d">Metric::validate</a></div><div class="ttdeci">virtual void validate(const Kernel &amp;, const Ex &amp;) const override</div><div class="ttdef"><b>Definition:</b> Metric.cc:27</div></div>
 <div class="ttc" id="classMetric_html"><div class="ttname"><a href="classMetric.html">Metric</a></div><div class="ttdef"><b>Definition:</b> Metric.hh:7</div></div>
-<div class="ttc" id="Symmetric_8hh_html"><div class="ttname"><a href="Symmetric_8hh.html">Symmetric.hh</a></div></div>
-<div class="ttc" id="classMetric_html_aff34937849b8ca9d16e94ef14d7dd639"><div class="ttname"><a href="classMetric.html#aff34937849b8ca9d16e94ef14d7dd639">Metric::signature</a></div><div class="ttdeci">int signature</div><div class="ttdef"><b>Definition:</b> Metric.hh:15</div></div>
-<div class="ttc" id="classEx_html"><div class="ttname"><a href="classEx.html">Ex</a></div><div class="ttdoc">Basic storage class for symbolic mathemematical expressions. </div><div class="ttdef"><b>Definition:</b> Storage.hh:128</div></div>
-<div class="ttc" id="classMetric_html_ae5a4b3df5108f4bb32de951ed0d4a7a5"><div class="ttname"><a href="classMetric.html#ae5a4b3df5108f4bb32de951ed0d4a7a5">Metric::latex</a></div><div class="ttdeci">virtual void latex(std::ostream &amp;) const override</div><div class="ttdoc">Display the property on the stream. </div><div class="ttdef"><b>Definition:</b> Metric.cc:33</div></div>
+<div class="ttc" id="classMetric_html_aff34937849b8ca9d16e94ef14d7dd639"><div class="ttname"><a href="classMetric.html#aff34937849b8ca9d16e94ef14d7dd639">Metric::signature</a></div><div class="ttdeci">int signature</div><div class="ttdef"><b>Definition:</b> Metric.hh:14</div></div>
+<div class="ttc" id="classEx_html"><div class="ttname"><a href="classEx.html">Ex</a></div><div class="ttdoc">Basic storage class for symbolic mathemematical expressions. </div><div class="ttdef"><b>Definition:</b> Storage.hh:127</div></div>
+<div class="ttc" id="TableauSymmetry_8hh_html"><div class="ttname"><a href="TableauSymmetry_8hh.html">TableauSymmetry.hh</a></div></div>
 <div class="ttc" id="classproperty_html"><div class="ttname"><a href="classproperty.html">property</a></div><div class="ttdoc">Base class for all properties, handling argument parsing and defining the interface. </div><div class="ttdef"><b>Definition:</b> Props.hh:105</div></div>
 <div class="ttc" id="classKernel_html"><div class="ttname"><a href="classKernel.html">Kernel</a></div><div class="ttdoc">core </div><div class="ttdef"><b>Definition:</b> Kernel.hh:13</div></div>
 <div class="ttc" id="classMetric_html_a6ecae202b9318161dfced03ff5ca53e1"><div class="ttname"><a href="classMetric.html#a6ecae202b9318161dfced03ff5ca53e1">Metric::name</a></div><div class="ttdeci">virtual std::string name() const override</div><div class="ttdef"><b>Definition:</b> Metric.cc:13</div></div>
+<div class="ttc" id="classTableauSymmetry_html"><div class="ttname"><a href="classTableauSymmetry.html">TableauSymmetry</a></div><div class="ttdef"><b>Definition:</b> TableauSymmetry.hh:7</div></div>
 <div class="ttc" id="classMetric_html_ac6284fa6ed3c1892fea1410cc84d235e"><div class="ttname"><a href="classMetric.html#ac6284fa6ed3c1892fea1410cc84d235e">Metric::parse</a></div><div class="ttdeci">virtual bool parse(const Kernel &amp;, keyval_t &amp;) override</div><div class="ttdef"><b>Definition:</b> Metric.cc:18</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 14 2016 17:32:18 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:06:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

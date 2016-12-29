@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -121,15 +122,18 @@ Inheritance diagram for cadabra::ActionSetRunStatus:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a3ce083ce097fbcc44e187690a03c07f8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#a3ce083ce097fbcc44e187690a03c07f8">ActionSetRunStatus</a> (DTree::iterator ref_, bool running)</td></tr>
 <tr class="separator:a3ce083ce097fbcc44e187690a03c07f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af316cdbfada0c7d5bf56139425d5f473"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#af316cdbfada0c7d5bf56139425d5f473">execute</a> (<a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;, <a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> &amp;) override</td></tr>
-<tr class="memdesc:af316cdbfada0c7d5bf56139425d5f473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the action.  <a href="#af316cdbfada0c7d5bf56139425d5f473">More...</a><br/></td></tr>
-<tr class="separator:af316cdbfada0c7d5bf56139425d5f473"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af31b385cdd14da83df68bbedba1a12fb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#af31b385cdd14da83df68bbedba1a12fb">revert</a> (<a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;, <a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> &amp;) override</td></tr>
-<tr class="memdesc:af31b385cdd14da83df68bbedba1a12fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Revert the change to the DTree document and the GUI.  <a href="#af31b385cdd14da83df68bbedba1a12fb">More...</a><br/></td></tr>
-<tr class="separator:af31b385cdd14da83df68bbedba1a12fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2038bf94de1ef65b359847d38002edf"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#ab2038bf94de1ef65b359847d38002edf">undoable</a> () const override</td></tr>
-<tr class="memdesc:ab2038bf94de1ef65b359847d38002edf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Can this action be undone?  <a href="#ab2038bf94de1ef65b359847d38002edf">More...</a><br/></td></tr>
-<tr class="separator:ab2038bf94de1ef65b359847d38002edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92079e115b4d122b030437d68c94a262"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#a92079e115b4d122b030437d68c94a262">pre_execute</a> (<a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;) override</td></tr>
+<tr class="memdesc:a92079e115b4d122b030437d68c94a262"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute changes to the DTree document which need to be made before the GUI is updated.  <a href="#a92079e115b4d122b030437d68c94a262">More...</a><br/></td></tr>
+<tr class="separator:a92079e115b4d122b030437d68c94a262"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65f244d80828e56700caa7f5ddf09a8e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#a65f244d80828e56700caa7f5ddf09a8e">update_gui</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;, <a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> &amp;) override</td></tr>
+<tr class="memdesc:a65f244d80828e56700caa7f5ddf09a8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make sure the GUI reflects the change.  <a href="#a65f244d80828e56700caa7f5ddf09a8e">More...</a><br/></td></tr>
+<tr class="separator:a65f244d80828e56700caa7f5ddf09a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28670c1541932d74b33905404f455631"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#a28670c1541932d74b33905404f455631">post_execute</a> (<a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;) override</td></tr>
+<tr class="memdesc:a28670c1541932d74b33905404f455631"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute changes to the DTree document which need to be made after the GUI has been updated.  <a href="#a28670c1541932d74b33905404f455631">More...</a><br/></td></tr>
+<tr class="separator:a28670c1541932d74b33905404f455631"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41822da887d3b6dccfd27307c7ce419c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSetRunStatus.html#a41822da887d3b6dccfd27307c7ce419c">revert</a> (<a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;) override</td></tr>
+<tr class="memdesc:a41822da887d3b6dccfd27307c7ce419c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Revert the change to the DTree document.  <a href="#a41822da887d3b6dccfd27307c7ce419c">More...</a><br/></td></tr>
+<tr class="separator:a41822da887d3b6dccfd27307c7ce419c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -168,7 +172,7 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="af316cdbfada0c7d5bf56139425d5f473"></a>
+<a class="anchor" id="a28670c1541932d74b33905404f455631"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -176,21 +180,11 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void ActionSetRunStatus::execute </td>
+          <td class="memname">void ActionSetRunStatus::post_execute </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -200,14 +194,41 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Perform the action. </p>
-<p>This should update both the document tree data structure and the GUI. The latter is updated by calling relevant methods on the <a class="el" href="classcadabra_1_1GUIBase.html" title="Abstract base class with methods that need to be implemented by any GUI. ">GUIBase</a> object passed in. </p>
+<p>Execute changes to the DTree document which need to be made after the GUI has been updated. </p>
 
-<p>Implements <a class="el" href="classcadabra_1_1ActionBase.html#a92ac3e27b56c75f0dde10aef7ea09d97">cadabra::ActionBase</a>.</p>
+<p>Implements <a class="el" href="classcadabra_1_1ActionBase.html#aba9f5747c9b2ab84d791e53ddd71f65a">cadabra::ActionBase</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="af31b385cdd14da83df68bbedba1a12fb"></a>
+<a class="anchor" id="a92079e115b4d122b030437d68c94a262"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ActionSetRunStatus::pre_execute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Execute changes to the DTree document which need to be made before the GUI is updated. </p>
+
+<p>Implements <a class="el" href="classcadabra_1_1ActionBase.html#a0cf08f9396c712a227af71f7ee7f0741">cadabra::ActionBase</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a41822da887d3b6dccfd27307c7ce419c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -218,6 +239,34 @@ Private Attributes</h2></td></tr>
           <td class="memname">void ActionSetRunStatus::revert </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Revert the change to the DTree document. </p>
+
+<p>Implements <a class="el" href="classcadabra_1_1ActionBase.html#aa83435da34231c3b9b7986e3d0cc88a5">cadabra::ActionBase</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a65f244d80828e56700caa7f5ddf09a8e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ActionSetRunStatus::update_gui </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -239,36 +288,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Revert the change to the DTree document and the GUI. </p>
+<p>Make sure the GUI reflects the change. </p>
+<p>FIXME: do we need an exec/revert combo here too? </p>
 
-<p>Implements <a class="el" href="classcadabra_1_1ActionBase.html#ae96319bc6a7a08ac0de7e727241ce421">cadabra::ActionBase</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="ab2038bf94de1ef65b359847d38002edf"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool ActionSetRunStatus::undoable </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Can this action be undone? </p>
-
-<p>Reimplemented from <a class="el" href="classcadabra_1_1ActionBase.html#a579c6d1856fbffa6e1e04a81587ebe06">cadabra::ActionBase</a>.</p>
+<p>Implements <a class="el" href="classcadabra_1_1ActionBase.html#a9545c1ff991cc09db5b6ae48b9c9f8cf">cadabra::ActionBase</a>.</p>
 
 </div>
 </div>
@@ -340,7 +363,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 14 2016 17:32:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:06:32 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

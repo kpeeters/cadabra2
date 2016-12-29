@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['gam1',['gam1',['../classfierz.html#a1d6d5270b259b7f6268d793d293e22e6',1,'fierz']]],
-  ['gam2',['gam2',['../classfierz.html#a7cc739191407b6e373c9fb80fcd89cf0',1,'fierz']]],
   ['gamma',['Gamma',['../Symbols_8cc.html#a60576bcd8b3ecfa64cee85cf1b985ae8',1,'Gamma():&#160;Symbols.cc'],['../Symbols_8cc.html#a8e40c46cc7a4691079f3336ace7b6688',1,'gamma():&#160;Symbols.cc']]],
   ['gamma_5fbracket_5f',['gamma_bracket_',['../classjoin__gamma.html#afc9f2e6f5c935cc6087e2a81a2134a93',1,'join_gamma']]],
   ['gamma_5fname_5f',['gamma_name_',['../classjoin__gamma.html#adfb2f5e69c40069ac1aa40a3216d9b85',1,'join_gamma']]],
@@ -17,7 +15,6 @@ var searchData=
   ['get_5fapp_5fregistrations',['get_app_registrations',['../classsnoop_1_1SnoopImpl.html#a26ad5f33095a7f2b544d2dc93e5c81e1',1,'snoop::SnoopImpl']]],
   ['get_5fback_5finsert_5fiterator',['get_back_insert_iterator',['../classyngtab_1_1tableaux.html#ae32886bd6a0aaa6ae06bf525ebc4b649',1,'yngtab::tableaux']]],
   ['get_5fcomposite',['get_composite',['../classProperties.html#a6b5bd50eeddc46ee540c5f5a1ab17bf1',1,'Properties::get_composite(Ex::iterator, bool ignore_parent_rel=false) const '],['../classProperties.html#ab47a16f14dc5acead901c768d7804d62',1,'Properties::get_composite(Ex::iterator, int &amp;serialnum, bool doserial=true, bool ignore_parent_rel=false) const '],['../classProperties.html#a93d8638359d324454f268b38434d5919',1,'Properties::get_composite(Ex::iterator, const std::string &amp;label) const '],['../classProperties.html#a4ab58306c45550002247da4e876eea60',1,'Properties::get_composite(Ex::iterator, int &amp;serialnum, const std::string &amp;label, bool doserial=true) const '],['../classProperties.html#a5d1d4fcd18930bcc05f1ebbdd577aca9',1,'Properties::get_composite(Ex::iterator, Ex::iterator, bool ignore_parent_rel=false) const '],['../classProperties.html#a8d814e30c7c95d688e04d8b17499a967',1,'Properties::get_composite(Ex::iterator, Ex::iterator, int &amp;, int &amp;, bool ignore_parent_rel=false) const ']]],
-  ['get_5fcursor_5fposition',['get_cursor_position',['../classcadabra_1_1GUIBase.html#a029e3fef79a0e4533965307914402ec3',1,'cadabra::GUIBase::get_cursor_position()'],['../classcadabra_1_1NotebookWindow.html#a2e3abbb595443c2ec8a37b9305b79d05',1,'cadabra::NotebookWindow::get_cursor_position()']]],
   ['get_5fdummy',['get_dummy',['../classAlgorithm.html#a41e65a73a7417ad4a061aa58586ef298',1,'Algorithm::get_dummy(const list_property *, const index_map_t *m1, const index_map_t *m2=0, const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const '],['../classAlgorithm.html#aaaccd819465a266d7af5c7940da0b8fb',1,'Algorithm::get_dummy(const list_property *, iterator) const '],['../classAlgorithm.html#aae3de03c71499164463b9376a9db969e',1,'Algorithm::get_dummy(const list_property *, iterator, iterator) const ']]],
   ['get_5fdummy_5fsw',['get_dummy_sw',['../classAlgorithm.html#aa0ea06f0c89b089654e1529bd4ab1c00',1,'Algorithm']]],
   ['get_5findex_5fset_5fname',['get_index_set_name',['../classcanonicalise.html#adb5535537ed652a15da25bab30a96c3c',1,'canonicalise']]],
@@ -36,7 +33,6 @@ var searchData=
   ['greek',['greek',['../namespacecadabra_1_1symbols.html#aa12e330caef517e6c2376d060cc2ccb1',1,'cadabra::symbols']]],
   ['gtk_2b',['Gtk+',['../group__gtkmm.html',1,'']]],
   ['gui',['gui',['../classcadabra_1_1ComputeThread.html#aa7b3af2f59b272a71fc092bccb201cee',1,'cadabra::ComputeThread::gui()'],['../classcadabra_1_1DocumentThread.html#a874fae5211b2cceaf626ef6e808668fe',1,'cadabra::DocumentThread::gui()']]],
-  ['gui_5fthread_5fid',['gui_thread_id',['../classcadabra_1_1ComputeThread.html#a2be0a78247610d267c7c75f82e12ff32',1,'cadabra::ComputeThread']]],
   ['guibase',['GUIBase',['../classcadabra_1_1GUIBase.html',1,'cadabra']]],
   ['guibase_2ehh',['GUIBase.hh',['../GUIBase_8hh.html',1,'']]]
 ];

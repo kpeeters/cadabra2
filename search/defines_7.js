@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['write',['WRITE',['../popen2_8cc.html#aa10f470e996d0f51210d24f442d25e1e',1,'popen2.cc']]]
+  ['zwnbsp',['zwnbsp',['../DisplayTeX_8cc.html#a29328c0c7ce987631186dad88f22f8ed',1,'DisplayTeX.cc']]]
 ];

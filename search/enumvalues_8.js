@@ -9,7 +9,5 @@ var searchData=
   ['m_5fsinglecharname',['m_singlecharname',['../classParser.html#aa14df7baefd6aa477bb5edf0396ec439a3ca5e0aed24a93ab4a449c75803ad424',1,'Parser']]],
   ['m_5fskipwhite',['m_skipwhite',['../classParser.html#aa14df7baefd6aa477bb5edf0396ec439a5d5087c1a11ddf4fab32bd7a7b613b0d',1,'Parser']]],
   ['m_5fverbatim',['m_verbatim',['../classParser.html#aa14df7baefd6aa477bb5edf0396ec439ac4b6f6d0fd9b0c9953b333e64817cce4',1,'Parser']]],
-  ['match_5findex_5fgreater',['match_index_greater',['../classEx__comparator.html#ad5372f4e330c7d12573601a632403674acee57ff8ba9aa5a49d1bcfda5e392f29',1,'Ex_comparator']]],
-  ['match_5findex_5fless',['match_index_less',['../classEx__comparator.html#ad5372f4e330c7d12573601a632403674a5746d6bc760070229acbdfa29b226da0',1,'Ex_comparator']]],
   ['multiplicative',['multiplicative',['../classWeightInherit.html#abd9226040073eb1045ea33bac5b0d56fa04501dec6df3dce94fa920a496227add',1,'WeightInherit']]]
 ];

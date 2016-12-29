@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -158,9 +159,8 @@ Functions</h2></td></tr>
 <tr class="memitem:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">cadabra::do_list</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; bool(Ex::iterator)&gt; f)</td></tr>
 <tr class="memdesc:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function on every element of a list, or if the iterator 'it' does not point to a list, only on that single element.  <a href="#ga5c0d915d27dbcdf1aa070153a3e608b0">More...</a><br/></td></tr>
 <tr class="separator:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">cadabra::do_subtree</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
-<tr class="memdesc:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function on every node in the tree at and below the given node, depth-first.  <a href="#ga44043f2e9b54d9d04d5df7aed63c59d8">More...</a><br/></td></tr>
-<tr class="separator:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9b4e698e597f52dc43f1e3ca8414a959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga9b4e698e597f52dc43f1e3ca8414a959">cadabra::do_subtree</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; void(Ex::iterator)&gt; f)</td></tr>
+<tr class="separator:ga9b4e698e597f52dc43f1e3ca8414a959"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga3a2ae6b908d34ea0490114559107ede5"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">cadabra::find_in_list</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
 <tr class="memdesc:ga3a2ae6b908d34ea0490114559107ede5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the first element for which 'f' does not return tr.end().  <a href="#ga3a2ae6b908d34ea0490114559107ede5">More...</a><br/></td></tr>
 <tr class="separator:ga3a2ae6b908d34ea0490114559107ede5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,7 +168,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:gad925ab5545854ee596c218738f11b013"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensure that the tree is a list, even if it contains only a single element.  <a href="#gad925ab5545854ee596c218738f11b013">More...</a><br/></td></tr>
 <tr class="separator:gad925ab5545854ee596c218738f11b013"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaff2a0c5f8749e25b136df72748e13363"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#gaff2a0c5f8749e25b136df72748e13363">pre_clean_dispatch</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
-<tr class="memdesc:gaff2a0c5f8749e25b136df72748e13363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions.  <a href="#gaff2a0c5f8749e25b136df72748e13363">More...</a><br/></td></tr>
+<tr class="memdesc:gaff2a0c5f8749e25b136df72748e13363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions:  <a href="#gaff2a0c5f8749e25b136df72748e13363">More...</a><br/></td></tr>
 <tr class="separator:gaff2a0c5f8749e25b136df72748e13363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga1ac55b1d1d20bb0352a5815c9e0a494c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga1ac55b1d1d20bb0352a5815c9e0a494c">multiply</a> (rset_t::iterator &amp;, <a class="el" href="Storage_8hh.html#aad74ea408f31d2d673c876764301e245">multiplier_t</a>)</td></tr>
 <tr class="memdesc:ga1ac55b1d1d20bb0352a5815c9e0a494c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions for manipulation of multipliers.  <a href="#ga1ac55b1d1d20bb0352a5815c9e0a494c">More...</a><br/></td></tr>
@@ -213,12 +213,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ga44043f2e9b54d9d04d5df7aed63c59d8"></a>
+<a class="anchor" id="ga9b4e698e597f52dc43f1e3ca8414a959"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Ex::iterator cadabra::do_subtree </td>
+          <td class="memname">void cadabra::do_subtree </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>tr</em>, </td>
@@ -232,7 +232,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::function&lt; Ex::iterator(Ex::iterator)&gt;&#160;</td>
+          <td class="paramtype">std::function&lt; void(Ex::iterator)&gt;&#160;</td>
           <td class="paramname"><em>f</em>&#160;</td>
         </tr>
         <tr>
@@ -242,9 +242,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Apply a function on every node in the tree at and below the given node, depth-first. </p>
-<p>Return an iterator to the top node, which replaces 'it' (may be the same). </p>
+<p>Apply a function on every node in the tree below the given node, depth-first. </p>
 
 </div>
 </div>
@@ -415,12 +413,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions. </p>
-<p>This does not involve the property system.</p>
+<p>Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions: </p>
 <ul>
 <li>All numerical multipliers in a product on the product node, no multiplier on a sum node.</li>
 <li>Any '\frac' nodes with a purely numerical denominator should be rewritten as a rational multiplier for the numerator node.</li>
-<li>Any \sub nodes get converted to \sum nodes. </li>
+<li><a class="el" href="classDerivative.html">Derivative</a> nodes can have an arbitrary number of index child nodes and must have at least one function child node. The first function node is interpreted as the argument on which the derivative(s) act. All other nodes indicate with respect to which object or variable the derivatives are taken. </li>
 </ul>
 
 </div>
@@ -428,7 +425,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 14 2016 17:32:18 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:06:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

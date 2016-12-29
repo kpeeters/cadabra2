@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -92,7 +93,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
@@ -114,11 +114,6 @@ Inheritance diagram for Cadabra:</div>
 </map>
  </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a852413368ce2f03c7a4cdee7f95d10f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCadabra.html#a852413368ce2f03c7a4cdee7f95d10f3">open_help</a> (const std::string &amp;filename, const std::string &amp;title)</td></tr>
-<tr class="separator:a852413368ce2f03c7a4cdee7f95d10f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a909a00f8033ee15d1377db0a382becbb"><td class="memItemLeft" align="right" valign="top">static Glib::RefPtr&lt; <a class="el" href="classCadabra.html">Cadabra</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCadabra.html#a909a00f8033ee15d1377db0a382becbb">create</a> (int, char **)</td></tr>
@@ -137,6 +132,8 @@ Protected Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:ae95a91a3f53259d4d031207e32f725a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1NotebookWindow.html">cadabra::NotebookWindow</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCadabra.html#ae95a91a3f53259d4d031207e32f725a2">nw</a></td></tr>
+<tr class="separator:ae95a91a3f53259d4d031207e32f725a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac553b7cec2cc5676c10c75ddab4473b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1ComputeThread.html">cadabra::ComputeThread</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCadabra.html#ac553b7cec2cc5676c10c75ddab4473b8">compute</a></td></tr>
 <tr class="separator:ac553b7cec2cc5676c10c75ddab4473b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd5cf675eeb6ea52c4c32da78d25b09b"><td class="memItemLeft" align="right" valign="top">std::thread&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classCadabra.html#acd5cf675eeb6ea52c4c32da78d25b09b">compute_thread</a></td></tr>
@@ -292,32 +289,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a852413368ce2f03c7a4cdee7f95d10f3"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Cadabra::open_help </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>filename</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>title</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a class="anchor" id="ac553b7cec2cc5676c10c75ddab4473b8"></a>
 <div class="memitem">
@@ -359,6 +330,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae95a91a3f53259d4d031207e32f725a2"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcadabra_1_1NotebookWindow.html">cadabra::NotebookWindow</a> Cadabra::nw</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>frontend/gtkmm/<a class="el" href="Cadabra_8hh_source.html">Cadabra.hh</a></li>
 <li>frontend/gtkmm/<a class="el" href="Cadabra_8cc.html">Cadabra.cc</a></li>
@@ -366,7 +357,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 14 2016 17:32:19 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:06:17 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

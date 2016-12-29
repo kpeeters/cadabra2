@@ -1,7 +1,6 @@
 var searchData=
 [
   ['reads_5fas_5foperator',['reads_as_operator',['../classDisplayTeX.html#a74bdd19ede9390123da4473c8ed279ba',1,'DisplayTeX']]],
-  ['reduce_5fdelta',['reduce_delta',['../classreduce__delta.html#a4dcb92e75d396eff85b4bbb186a12ab3',1,'reduce_delta']]],
   ['refresh_5fall',['refresh_all',['../classcadabra_1_1NotebookCanvas.html#ad0ee64ae68df7ec15c6e79004d0033ab',1,'cadabra::NotebookCanvas']]],
   ['register_5fproperty',['register_property',['../classProperties.html#a476e7621de7296a59e17b3c0da664e8a',1,'Properties']]],
   ['regroup_5findices_5f',['regroup_indices_',['../classjoin__gamma.html#adfccdb57d61ced67691b7abe5b95f344',1,'join_gamma']]],
@@ -18,19 +17,15 @@ var searchData=
   ['rename_5freplacement_5fdummies',['rename_replacement_dummies',['../classAlgorithm.html#a6daf6ecadfd6f8b20277bd1daa9ab839',1,'Algorithm']]],
   ['replace_5findex',['replace_index',['../classEx.html#aefac2708c5f2a4641353e1a1ee47a45d',1,'Ex']]],
   ['replace_5fmatch',['replace_match',['../classreplace__match.html#a3a5b77298719ee02216f301d04c42b32',1,'replace_match']]],
-  ['report',['report',['../classEx__comparator.html#a8d7ea3822e6d34eb79c2da0762936d20',1,'Ex_comparator']]],
   ['report_5fprogress',['report_progress',['../classAlgorithm.html#a314bc7bb881fbf49a6b2c567fd7e2b18',1,'Algorithm']]],
   ['repr_5f',['repr_',['../classProperty.html#a5c6e192308ece5901f9871bc37fabd2d',1,'Property']]],
   ['reset',['reset',['../classstopwatch.html#a68a314e2c797624fa84cfd44eac0310a',1,'stopwatch']]],
   ['reset_5fstate',['reset_state',['../classEx.html#a6c4066fb7bce2b7e075e654ab0f4d123',1,'Ex']]],
   ['restart_5fkernel',['restart_kernel',['../classcadabra_1_1ComputeThread.html#a765f00b5776dcffff98443c28bfafb75',1,'cadabra::ComputeThread']]],
   ['restore_5fweights',['restore_weights',['../classcombin_1_1combinations__base.html#adc68a733c6e35c548777c0fe3f3ff2b0',1,'combin::combinations_base']]],
-  ['revert',['revert',['../classcadabra_1_1ActionBase.html#ae96319bc6a7a08ac0de7e727241ce421',1,'cadabra::ActionBase::revert()'],['../classcadabra_1_1ActionAddCell.html#ae447293c732729ac8e7e47d929e59e3d',1,'cadabra::ActionAddCell::revert()'],['../classcadabra_1_1ActionPositionCursor.html#a30ad3d3eccd9b9910ed74ece56fddc7a',1,'cadabra::ActionPositionCursor::revert()'],['../classcadabra_1_1ActionSetRunStatus.html#af31b385cdd14da83df68bbedba1a12fb',1,'cadabra::ActionSetRunStatus::revert()'],['../classcadabra_1_1ActionRemoveCell.html#a036fb7ce67b1692cb2f40d57758e1cd7',1,'cadabra::ActionRemoveCell::revert()'],['../classcadabra_1_1ActionSplitCell.html#a36cf49b923dbf6698e9aedb6acb2e91d',1,'cadabra::ActionSplitCell::revert()'],['../classcadabra_1_1ActionInsertText.html#a8b8da1b049bc8bf7fc25302bf7d61850',1,'cadabra::ActionInsertText::revert()'],['../classcadabra_1_1ActionEraseText.html#a49cb7e1eeeeb32a9cbfa231e3d7b1b16',1,'cadabra::ActionEraseText::revert()']]],
-  ['rewrite_5findices',['rewrite_indices',['../classrewrite__indices.html#ab4d0c72771190d6572a94e1694226696',1,'rewrite_indices']]],
-  ['rhs',['rhs',['../PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d',1,'PythonCdb.cc']]],
+  ['revert',['revert',['../classcadabra_1_1ActionBase.html#aa83435da34231c3b9b7986e3d0cc88a5',1,'cadabra::ActionBase::revert()'],['../classcadabra_1_1ActionAddCell.html#ab59ef147114cb380d0427d90acde8dc8',1,'cadabra::ActionAddCell::revert()'],['../classcadabra_1_1ActionPositionCursor.html#acc5386fd684cb3ea6cf8c23e801491e0',1,'cadabra::ActionPositionCursor::revert()'],['../classcadabra_1_1ActionSetRunStatus.html#a41822da887d3b6dccfd27307c7ce419c',1,'cadabra::ActionSetRunStatus::revert()'],['../classcadabra_1_1ActionRemoveCell.html#af701f7932c44fdd789f3cc0cd8fb68d6',1,'cadabra::ActionRemoveCell::revert()'],['../classcadabra_1_1ActionSplitCell.html#a81abadc5a3863aac7dedbc6d775f501d',1,'cadabra::ActionSplitCell::revert()']]],
   ['riemanntensor',['RiemannTensor',['../classRiemannTensor.html#a0fc927d13a399efa0d81c84471aa2055',1,'RiemannTensor']]],
   ['row_5fsize',['row_size',['../classyngtab_1_1tableau__base.html#a9849a9b5be3ecac8a5abc38f5a0be42f',1,'yngtab::tableau_base::row_size()'],['../classyngtab_1_1tableau.html#a43b4ee0a5c9856f4d96451b1bbdbf194',1,'yngtab::tableau::row_size()'],['../classyngtab_1_1filled__tableau.html#a9599fe493008a9442f95ff7341e82243',1,'yngtab::filled_tableau::row_size()']]],
   ['run',['run',['../classcadabra_1_1ComputeThread.html#a3ca24710ea632e3efd59a585b8c6e404',1,'cadabra::ComputeThread::run()'],['../classServer.html#abb27d30b40a94326e3fd629d3b30b7d5',1,'Server::run()'],['../classUI.html#a6bdaec41e41f67039516936fae3f0c30',1,'UI::run()']]],
-  ['run_5fstring',['run_string',['../classServer.html#ad269cf819e6c3f9f7cbb16087f5eab74',1,'Server']]],
-  ['runtimeexception',['RuntimeException',['../classRuntimeException.html#a0bb07d4ec6362fe5c312434721d605b6',1,'RuntimeException']]]
+  ['run_5fstring',['run_string',['../classServer.html#ad269cf819e6c3f9f7cbb16087f5eab74',1,'Server']]]
 ];

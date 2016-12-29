@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -105,23 +106,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Description</h2>
-<div class="textblock"><p>Base class which talks to the server and sends Action objects back to the <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a>. </p>
+<div class="textblock"><p>Base class which talks to the server and sends Action objects back to the <a class="el" href="classcadabra_1_1DocumentThread.html" title="Base class which manipulates the document tree. ">DocumentThread</a>. </p>
 <p><a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> is the base class which takes care of doing actual computations with the cells in a document. It handles talking to the server backend. It knows how to pass cells to the server and ask them to be executed. Results are reported back to the GUI by putting <a class="el" href="classcadabra_1_1ActionBase.html" title="All actions derive from the ActionBase object, which defines the interface they need to implement...">ActionBase</a> objects onto its todo stack. <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> never directly modifies the document tree. </p>
 </div>
 <p><code>#include &lt;<a class="el" href="ComputeThread_8hh_source.html">ComputeThread.hh</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa7970ca2c8b8eed7bad826d0c75af71e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#aa7970ca2c8b8eed7bad826d0c75af71e">ComputeThread</a> ()</td></tr>
-<tr class="memdesc:aa7970ca2c8b8eed7bad826d0c75af71e"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> is constructed with a null pointer to the gui, there will be no gui updates, just DTree updates.  <a href="#aa7970ca2c8b8eed7bad826d0c75af71e">More...</a><br/></td></tr>
-<tr class="separator:aa7970ca2c8b8eed7bad826d0c75af71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09740a57f8005c73d875a36c262395ea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a09740a57f8005c73d875a36c262395ea">ComputeThread</a> (<a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> *, <a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;)</td></tr>
+<tr class="memdesc:a09740a57f8005c73d875a36c262395ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">If the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> is constructed with a null pointer to the gui, there will be no gui updates, just DTree updates.  <a href="#a09740a57f8005c73d875a36c262395ea">More...</a><br/></td></tr>
+<tr class="separator:a09740a57f8005c73d875a36c262395ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a79fe86c209c169902221be974d404f39"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a79fe86c209c169902221be974d404f39">ComputeThread</a> (const <a class="el" href="classcadabra_1_1ComputeThread.html">ComputeThread</a> &amp;)=delete</td></tr>
 <tr class="separator:a79fe86c209c169902221be974d404f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a209ed31618d3640f174a4126c6cbf8e5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a209ed31618d3640f174a4126c6cbf8e5">~ComputeThread</a> ()</td></tr>
 <tr class="separator:a209ed31618d3640f174a4126c6cbf8e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2aa5f14e7f01d4cdc7fbc39a131a821"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#ad2aa5f14e7f01d4cdc7fbc39a131a821">set_master</a> (<a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> *, <a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> *)</td></tr>
-<tr class="memdesc:ad2aa5f14e7f01d4cdc7fbc39a131a821"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the objects that this compute thread should be talking to.  <a href="#ad2aa5f14e7f01d4cdc7fbc39a131a821">More...</a><br/></td></tr>
-<tr class="separator:ad2aa5f14e7f01d4cdc7fbc39a131a821"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ca24710ea632e3efd59a585b8c6e404"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a3ca24710ea632e3efd59a585b8c6e404">run</a> ()</td></tr>
 <tr class="memdesc:a3ca24710ea632e3efd59a585b8c6e404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Main entry point, which will connect to the server and then start an event loop to handle communication with the server.  <a href="#a3ca24710ea632e3efd59a585b8c6e404">More...</a><br/></td></tr>
 <tr class="separator:a3ca24710ea632e3efd59a585b8c6e404"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,10 +164,10 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:aa7b3af2f59b272a71fc092bccb201cee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#aa7b3af2f59b272a71fc092bccb201cee">gui</a></td></tr>
 <tr class="separator:aa7b3af2f59b272a71fc092bccb201cee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf80de911bd63523b3a49473084f417e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#abf80de911bd63523b3a49473084f417e">docthread</a></td></tr>
-<tr class="separator:abf80de911bd63523b3a49473084f417e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2be0a78247610d267c7c75f82e12ff32"><td class="memItemLeft" align="right" valign="top">std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a2be0a78247610d267c7c75f82e12ff32">gui_thread_id</a></td></tr>
-<tr class="separator:a2be0a78247610d267c7c75f82e12ff32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24cca861de8b241fc7c2bcd91dd10d2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a24cca861de8b241fc7c2bcd91dd10d2b">docthread</a></td></tr>
+<tr class="separator:a24cca861de8b241fc7c2bcd91dd10d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ef9afb4073473fe03378d1b75080f44"><td class="memItemLeft" align="right" valign="top">std::thread::id&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a8ef9afb4073473fe03378d1b75080f44">main_thread_id</a></td></tr>
+<tr class="separator:a8ef9afb4073473fe03378d1b75080f44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab28adc355af224d1545f187cffb28594"><td class="memItemLeft" align="right" valign="top">std::map&lt; <a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a>, <br class="typebreak"/>
 DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#ab28adc355af224d1545f187cffb28594">running_cells</a></td></tr>
 <tr class="separator:ab28adc355af224d1545f187cffb28594"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,15 +189,26 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 <tr class="separator:afdda71b345863d965a6c09477522574a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="aa7970ca2c8b8eed7bad826d0c75af71e"></a>
+<a class="anchor" id="a09740a57f8005c73d875a36c262395ea"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ComputeThread::ComputeThread </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;&#160;</td>
+          <td class="paramname"><em>dt</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -289,7 +298,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 </div><div class="memdoc">
 
 <p>In order to execute code on the server, call the following from the GUI thread. </p>
-<p>This method returns as soon as the request has been put on the network queue. If no communication with the server is necessary, this returns immediately. The <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> will report the result of the computation/processing by adding actions to the <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a> owned pending_actions stack, by calling queue_action. It will never modify the cell directly, and will also never modify any other cells in the document tree. </p>
+<p>This method returns as soon as the request has been put on the network queue. If no communication with the server is necessary, this returns immediately. The <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> will report the result of the computation/processing by adding actions to the <a class="el" href="classcadabra_1_1DocumentThread.html" title="Base class which manipulates the document tree. ">DocumentThread</a> owned pending_actions stack, by calling queue_action. It will never modify the cell directly, and will also never modify any other cells in the document tree. </p>
 
 </div>
 </div>
@@ -507,34 +516,6 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 </div>
 </div>
-<a class="anchor" id="ad2aa5f14e7f01d4cdc7fbc39a131a821"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ComputeThread::set_master </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> *&#160;</td>
-          <td class="paramname"><em>b</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> *&#160;</td>
-          <td class="paramname"><em>d</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Determine the objects that this compute thread should be talking to. </p>
-
-</div>
-</div>
 <a class="anchor" id="a1f9b3142f007febb505218be83751201"></a>
 <div class="memitem">
 <div class="memproto">
@@ -656,7 +637,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 </div>
 </div>
-<a class="anchor" id="abf80de911bd63523b3a49473084f417e"></a>
+<a class="anchor" id="a24cca861de8b241fc7c2bcd91dd10d2b"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -664,7 +645,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a>* cadabra::ComputeThread::docthread</td>
+          <td class="memname"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a>&amp; cadabra::ComputeThread::docthread</td>
         </tr>
       </table>
   </td>
@@ -696,7 +677,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 </div>
 </div>
-<a class="anchor" id="a2be0a78247610d267c7c75f82e12ff32"></a>
+<a class="anchor" id="a8ef9afb4073473fe03378d1b75080f44"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -704,7 +685,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::thread::id cadabra::ComputeThread::gui_thread_id</td>
+          <td class="memname">std::thread::id cadabra::ComputeThread::main_thread_id</td>
         </tr>
       </table>
   </td>
@@ -863,7 +844,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Dec 14 2016 17:32:36 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:06:32 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

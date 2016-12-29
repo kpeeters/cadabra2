@@ -16,8 +16,8 @@ var searchData=
   ['begin_5fcolumn',['begin_column',['../classyngtab_1_1filled__tableau.html#a7b8e36a3d19d7040b503b00e180c7c71',1,'yngtab::filled_tableau']]],
   ['begin_5findex',['begin_index',['../classAlgorithm.html#ad68a0d802b88156b7f1b59ba64765101',1,'Algorithm']]],
   ['beta',['Beta',['../Symbols_8cc.html#a60b19d333f6846fadc0f3ad25539dcbc',1,'Beta():&#160;Symbols.cc'],['../Symbols_8cc.html#a0eb89214dfd36a6e0459c4ac0c311c81',1,'beta():&#160;Symbols.cc']]],
-  ['block',['Block',['../classServer_1_1Block.html#a74d144ff8fa17b5c2248a60232bede7b',1,'Server::Block']]],
   ['block',['Block',['../classServer_1_1Block.html',1,'Server']]],
+  ['block',['Block',['../classServer_1_1Block.html#a74d144ff8fa17b5c2248a60232bede7b',1,'Server::Block']]],
   ['block_5favailable',['block_available',['../classServer.html#ade8da0024bd6a181acaac6b43b0b4dc7',1,'Server']]],
   ['block_5favailable_5fmutex',['block_available_mutex',['../classServer.html#ac04e9d62fc1c569a19511cd25d0e182b',1,'Server']]],
   ['block_5flength',['block_length',['../classcombin_1_1combinations__base.html#a0732a540a346d00487126de2ad539d64',1,'combin::combinations_base::block_length()'],['../classcombin_1_1symmetriser.html#af76adb538cca04d208c2662b093f421f',1,'combin::symmetriser::block_length()']]],
@@ -30,8 +30,6 @@ var searchData=
   ['bracket_5flevel',['bracket_level',['../classDisplayTerminal.html#a57b0f64b9526eaa1da4e2430b79b4645',1,'DisplayTerminal::bracket_level()'],['../classDisplayTeX.html#a1d9d72e67ac4475f1f93680ae9363fa2',1,'DisplayTeX::bracket_level()']]],
   ['bracket_5fstrings_5f',['bracket_strings_',['../classpreprocessor.html#a7c0ea43844ec44b7f0ea9b6d38c8e995',1,'preprocessor']]],
   ['bracket_5ft',['bracket_t',['../classstr__node.html#a4745713526779b3cada029eeaed9049b',1,'str_node']]],
-  ['bridge_2ecc',['Bridge.cc',['../Bridge_8cc.html',1,'']]],
-  ['bridge_2ehh',['Bridge.hh',['../Bridge_8hh.html',1,'']]],
   ['buffer',['buffer',['../classcadabra_1_1CodeInput.html#aa31d2b7aaf07a0849e0b2d2bcc364cde',1,'cadabra::CodeInput']]],
   ['build_5fvisual_5frepresentation',['build_visual_representation',['../classcadabra_1_1DocumentThread.html#ab5b9641f075e29d200c56d260569432d',1,'cadabra::DocumentThread']]]
 ];

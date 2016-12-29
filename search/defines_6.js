@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['read',['READ',['../popen2_8cc.html#ada74e7db007a68e763f20c17f2985356',1,'popen2.cc']]]
+  ['write',['WRITE',['../popen2_8cc.html#aa10f470e996d0f51210d24f442d25e1e',1,'popen2.cc']]]
 ];
