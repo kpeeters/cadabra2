@@ -70,6 +70,7 @@ bool cleanup_components(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_numericalflat(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_diagonal(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_kronecker(const Kernel& k, Ex&, Ex::iterator& it);
+bool cleanup_exterior_derivative(const Kernel& k, Ex&, Ex::iterator& it);
 
 /// Given a node with a non-unit multiplier, push this multiplier
 /// down the tree if the node is not allowed to have a non-unit

@@ -3,11 +3,16 @@
 
 #include "Props.hh"
 #include "properties/ImplicitIndex.hh"
+#include "properties/IndexInherit.hh"
+#include "properties/DifferentialFormBase.hh"
 
-class DifferentialForm : public ImplicitIndex, public IndexInherit, virtual public property {
+class DifferentialForm : public ImplicitIndex, public IndexInherit, public DifferentialFormBase {
 	public:
       virtual std::string name() const override;
 		virtual bool parse(const Kernel&, keyval_t&) override;
 		
-		Ex degree;
+		virtual Ex degree(const Properties&, Ex::iterator) const override;
+
+	private:
+		Ex degree_;
 };

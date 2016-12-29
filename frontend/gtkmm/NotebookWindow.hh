@@ -75,6 +75,7 @@ namespace cadabra {
 
 			void set_name(const std::string&);
 			void set_title_prefix(const std::string&);
+
 			void load_file(const std::string& notebook_contents);
 
 
@@ -176,6 +177,9 @@ namespace cadabra {
 			// thing is that it is run on the GUI thread.
 			void process_todo_queue();
 
+			void on_crash_window_closed(int);
+			bool crash_window_hidden;
+			
 			// The following are handlers that get called when the cell
 			// gets focus, the content of a cell is changed, the user
 			// requests to run it (shift-enter). The last two parameters are

@@ -226,6 +226,7 @@ void ComputeThread::on_close(websocketpp::connection_hdl hdl)
 	{
 	std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
+	all_cells_nonrunning();	
 	if(gui) {
 		if(restarting_kernel) gui->on_disconnect("restarting kernel");
 		else                  gui->on_disconnect("not connected");

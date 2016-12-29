@@ -59,9 +59,22 @@ class RuntimeException : public CadabraException {
 };
 
 
+/// Exception thrown when there the Cadabra code detects an internal inconsistency;
+/// this should never happen, but is better than bailing out with an assert.
+
 class InternalError : public CadabraException {
 	public:
 		InternalError(std::string="");
+
+		std::string py_what() const;
+};
+
+/// Exception thrown when there the Cadabra code detects an internal inconsistency;
+/// this should never happen, but is better than bailing out with an assert.
+
+class NotYetImplemented : public CadabraException {
+	public:
+		NotYetImplemented(std::string="");
 
 		std::string py_what() const;
 };

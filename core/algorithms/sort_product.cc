@@ -12,7 +12,7 @@ sort_product::sort_product(const Kernel&k, Ex& tr)
 
 bool sort_product::can_apply(iterator st) 
 	{
-	if(*st->name=="\\prod" || *st->name=="\\dot") return true;
+	if(*st->name=="\\prod" || *st->name=="\\dot" || *st->name=="\\wedge") return true;
 	else return false;
 	}
 

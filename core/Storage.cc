@@ -20,6 +20,7 @@
 
 #include "Storage.hh"
 #include "Combinatorics.hh"
+#include "Exceptions.hh"
 #include <iomanip>
 #include <sstream>
 #include <pcrecpp.h>
@@ -106,6 +107,21 @@ bool Ex::changed_state()
 	if(state_==result_t::l_checkpointed || state_==result_t::l_applied) ret=true;
 	state_=result_t::l_no_action;
 	return ret;
+	}
+
+bool Ex::is_rational() const
+	{
+	if(begin()!=end())
+		if(begin()->is_rational())
+			return true;
+	return false;
+	}
+
+multiplier_t Ex::to_rational() const
+	{
+	if(!is_rational())
+		throw InternalError("Called to_rational() on non-rational Ex");
+	return *(begin()->multiplier);
 	}
 
 std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it) 
