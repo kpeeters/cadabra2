@@ -61,8 +61,15 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 	if(der) {
 		// FIXME: this needs fine-tuning; there are more cases where
 		// no brackets are needed.
-      if((*arg->name).size()==1 || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
+		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
+      if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
+
+	if(*obj->name=="\\cos" || *obj->name=="\\sin" || *obj->name=="\\tan") {
+		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
+      if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
+		}
+	
 	auto it=curly_bracket_operators.find(*obj->name);
 	if(it!=curly_bracket_operators.end()) return true;
 

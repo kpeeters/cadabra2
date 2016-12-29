@@ -94,7 +94,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\right)\\wedge A^{(2)}-A^{(1)}\\wedge {\\rm d}\\left(A^{(2)}\\right)-{\\rm d}\\left(A^{(2)}\\right)\\wedge A^{(1)}-A^{(2)}\\wedge {\\rm d}\\left(A^{(1)}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}{\\rm d}{A^{(1)}}\\wedge A^{(2)}-A^{(1)}\\wedge {\\rm d}{A^{(2)}}-{\\rm d}{A^{(2)}}\\wedge A^{(1)}-A^{(2)}\\wedge {\\rm d}{A^{(1)}}\\end{dmath*}"
 				}
 			],
 			"source" : "product_rule(_);"
@@ -133,7 +133,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}\\wedge {\\rm d}\\left(A^{(3)}\\right)\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(3)}}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex:= d{ A1 ^ A2 ^ d{ A3 } };"
@@ -146,7 +146,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\right)\\wedge A^{(2)}\\wedge {\\rm d}\\left(A^{(3)}\\right)-A^{(1)}\\wedge {\\rm d}\\left(A^{(2)}\\right)\\wedge {\\rm d}\\left(A^{(3)}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}{\\rm d}{A^{(1)}}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(3)}}-A^{(1)}\\wedge {\\rm d}{A^{(2)}}\\wedge {\\rm d}{A^{(3)}}\\end{dmath*}"
 				}
 			],
 			"source" : "product_rule(_);"
@@ -154,7 +154,15 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : ""
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A^{(2)}\\wedge {\\rm d}{A^{(1)}}\\wedge {\\rm d}{A^{(3)}}-A^{(1)}\\wedge {\\rm d}{A^{(2)}}\\wedge {\\rm d}{A^{(3)}}\\end{dmath*}"
+				}
+			],
+			"source" : "sort_product(_);"
 		},
 		{
 			"cell_origin" : "client",
@@ -290,7 +298,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-2{\\rm d}\\left(A^{(1)}\\right)\\wedge A^{(3)}+2A^{(1)}\\wedge {\\rm d}\\left(A^{(3)}\\right)+{\\rm d}\\left(A^{(0)}\\right)\\wedge A^{(2)}\\wedge A^{(2)}+A^{(0)}\\wedge {\\rm d}\\left(A^{(2)}\\right)\\wedge A^{(2)}+A^{(0)}\\wedge A^{(2)}\\wedge {\\rm d}\\left(A^{(2)}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-2{\\rm d}{A^{(1)}}\\wedge A^{(3)}+2A^{(1)}\\wedge {\\rm d}{A^{(3)}}+{\\rm d}{A^{(0)}}\\wedge A^{(2)}\\wedge A^{(2)}+A^{(0)}\\wedge {\\rm d}{A^{(2)}}\\wedge A^{(2)}+A^{(0)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(2)}}\\end{dmath*}"
 				}
 			],
 			"source" : "product_rule(_);"
@@ -303,7 +311,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-2{\\rm d}\\left(A^{(1)}\\right)\\wedge A^{(3)}+2A^{(1)}\\wedge {\\rm d}\\left(A^{(3)}\\right)+A^{(2)}\\wedge A^{(2)}\\wedge {\\rm d}\\left(A^{(0)}\\right)+A^{(0)}\\wedge {\\rm d}\\left(A^{(2)}\\right)\\wedge A^{(2)}+A^{(0)}\\wedge A^{(2)}\\wedge {\\rm d}\\left(A^{(2)}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-2A^{(3)}\\wedge {\\rm d}{A^{(1)}}+2A^{(1)}\\wedge {\\rm d}{A^{(3)}}+A^{(2)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(0)}}+2A^{(0)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(2)}}\\end{dmath*}"
 				}
 			],
 			"source" : "sort_product(_);"
@@ -315,11 +323,91 @@
 			[
 				{
 					"cell_origin" : "server",
-					"cell_type" : "output",
-					"source" : "\\begin{verbatim}{\\sum}  (0x7f45d4006388)\n  1:{\\wedge}  -2  (0x7f45d4003e38)\n  2:  {d}  (0x7f45d400b798)\n  3:    {A1}  (0x7f45d4006428)\n  4:  {A3}  (0x7f45d40072f8)\n  5:{\\wedge}  2  (0x7f45d4005688)\n  6:  {A1}  (0x7f45d4004518)\n  7:  {d}  (0x7f45d4006738)\n  8:    {A3}  (0x7f45d400b938)\n  9:{\\wedge}  (0x7f45d4002df8)\n 10:  {A2}  (0x7f45d4007168)\n 11:  {A2}  (0x7f45d400b6f8)\n 12:  {d}  (0x7f45d4006ce8)\n 13:    {A0}  (0x7f45d4005828)\n 14:{\\wedge}  (0x7f45d400b658)\n 15:  {A0}  (0x7f45d400e4e8)\n 16:  {d}  (0x7f45d400e538)\n 17:    {A2}  (0x7f45d400e5d8)\n 18:  {A2}  (0x7f45d400e628)\n 19:{\\wedge}  (0x7f45d400e678)\n 20:  {A0}  (0x7f45d4001c68)\n 21:  {A2}  (0x7f45d4001cb8)\n 22:  {d}  (0x7f45d4001d08)\n 23:    {A2}  (0x7f45d4001d58)\n\n\\end{verbatim}"
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left\\{i, \\linebreak[0] j, \\linebreak[0] k, \\linebreak[0] l\\right\\}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left\\{i, \\linebreak[0] j, \\linebreak[0] k, \\linebreak[0] l\\right\\}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property EpsilonTensor to~}\\epsilon^{i j k}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}d{\\#}.\\end{dmath*}"
 				}
 			],
-			"source" : "print(tree(_))"
+			"source" : "{i,j,k,l}::Indices(values={1,2,3});\n{i,j,k,l}::Integer(1..3);\n\\epsilon^{i j k}::EpsilonTensor;\nd{#}::ExteriorDerivative;\nd{#}::LaTeXForm(\"{\\rm d}\")."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\epsilon^{i j k}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\epsilon^{i j k};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(_, $$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left\\{\\Sigma^{1} = \\cos{\\psi} {\\rm d}{\\theta}+\\sin{\\psi} \\sin{\\theta} {\\rm d}{\\phi}, \\linebreak[0] \\Sigma^{2} = -\\sin{\\psi} {\\rm d}{\\theta}+\\cos{\\psi} \\sin{\\theta} {\\rm d}{\\phi}, \\linebreak[0] \\Sigma^{3} = \\cos{\\theta} {\\rm d}{\\phi}+{\\rm d}{\\psi}\\right\\}\\end{dmath*}"
+				}
+			],
+			"source" : "rl:= { \\Sigma^{1} =  \\cos{\\psi} d{\\theta} + \\sin{\\psi} \\sin{\\theta} d{\\phi},\n       \\Sigma^{2} = -\\sin{\\psi} d{\\theta} + \\cos{\\psi} \\sin{\\theta} d{\\phi},\n       \\Sigma^{3} =  \\cos{\\theta} d{\\phi} + d{\\psi} };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\epsilon^{i j k} \\Sigma^{j}\\wedge \\Sigma^{k}\\end{dmath*}"
+				}
+			],
+			"source" : "tst:= -1/2 \\epsilon^{i j k} \\Sigma^{j} ^ \\Sigma^{k};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(tst, rl);"
 		},
 		{
 			"cell_origin" : "client",
