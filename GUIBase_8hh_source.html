@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -123,27 +122,32 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#acd1d64b5705a7a94e3914c3481268181">add_cell</a>(<span class="keyword">const</span> <a class="code" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a>&amp;, DTree::iterator, <span class="keywordtype">bool</span> visible)=0;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a3e2730c1435e2dedd1ae42d7b0659ff3">position_cursor</a>(<span class="keyword">const</span> <a class="code" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a>&amp;, DTree::iterator)=0;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#ac32e206a775a50c69728eb246d56d4a4">position_cursor</a>(<span class="keyword">const</span> <a class="code" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a>&amp;, DTree::iterator, <span class="keywordtype">int</span>)=0;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#ae50433aae621adead3172b5a16a9aeb5">on_connect</a>()=0;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a407a74e8442f626534d34a513ae94a93">on_disconnect</a>(<span class="keyword">const</span> std::string&amp; reason)=0;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a2c2007ce76362bf52fcd70a497e04b2e">on_network_error</a>()=0;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a3f5b615aedd7cdacb47f11158a20fcaf">on_kernel_runstatus</a>(<span class="keywordtype">bool</span>)=0;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a01f8a34c53efda713fcf04f8f17fc02f">process_data</a>()=0;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    };</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">size_t</span> <a class="code" href="classcadabra_1_1GUIBase.html#a029e3fef79a0e4533965307914402ec3">get_cursor_position</a>(<span class="keyword">const</span> <a class="code" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a>&amp;, DTree::iterator)=0;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#ae50433aae621adead3172b5a16a9aeb5">on_connect</a>()=0;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a407a74e8442f626534d34a513ae94a93">on_disconnect</a>(<span class="keyword">const</span> std::string&amp; reason)=0;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a2c2007ce76362bf52fcd70a497e04b2e">on_network_error</a>()=0;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a3f5b615aedd7cdacb47f11158a20fcaf">on_kernel_runstatus</a>(<span class="keywordtype">bool</span>)=0;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;};</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1GUIBase.html#a01f8a34c53efda713fcf04f8f17fc02f">process_data</a>()=0;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    };</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;};</div>
+<div class="ttc" id="classcadabra_1_1GUIBase_html_ac32e206a775a50c69728eb246d56d4a4"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#ac32e206a775a50c69728eb246d56d4a4">cadabra::GUIBase::position_cursor</a></div><div class="ttdeci">virtual void position_cursor(const DTree &amp;, DTree::iterator, int)=0</div><div class="ttdoc">Position the cursor in the current canvas in the widget corresponding to the indicated cell...</div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html_a407a74e8442f626534d34a513ae94a93"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a407a74e8442f626534d34a513ae94a93">cadabra::GUIBase::on_disconnect</a></div><div class="ttdeci">virtual void on_disconnect(const std::string &amp;reason)=0</div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html_a01f8a34c53efda713fcf04f8f17fc02f"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a01f8a34c53efda713fcf04f8f17fc02f">cadabra::GUIBase::process_data</a></div><div class="ttdeci">virtual void process_data()=0</div><div class="ttdoc">When the ComputeThread needs to modify the document, it stores an ActionBase object on the stack (see...</div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html_a9f8a5eebee867d2a5bb926291875c88c"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a9f8a5eebee867d2a5bb926291875c88c">cadabra::GUIBase::remove_cell</a></div><div class="ttdeci">virtual void remove_cell(const DTree &amp;, DTree::iterator)=0</div><div class="ttdoc">Remove a single cell. </div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html_a58baa9a45f05190289fa635b8708c8b4"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a58baa9a45f05190289fa635b8708c8b4">cadabra::GUIBase::update_cell</a></div><div class="ttdeci">virtual void update_cell(const DTree &amp;, DTree::iterator)=0</div><div class="ttdoc">The basic manipulations that a GUI needs to implement are adding, removing and updating (refreshing t...</div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html"><div class="ttname"><a href="classcadabra_1_1GUIBase.html">cadabra::GUIBase</a></div><div class="ttdoc">Abstract base class with methods that need to be implemented by any GUI. </div><div class="ttdef"><b>Definition:</b> GUIBase.hh:16</div></div>
+<div class="ttc" id="classcadabra_1_1GUIBase_html_a029e3fef79a0e4533965307914402ec3"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a029e3fef79a0e4533965307914402ec3">cadabra::GUIBase::get_cursor_position</a></div><div class="ttdeci">virtual size_t get_cursor_position(const DTree &amp;, DTree::iterator)=0</div><div class="ttdoc">Retrieve the position of the cursor in the current cell. </div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html_ae50433aae621adead3172b5a16a9aeb5"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#ae50433aae621adead3172b5a16a9aeb5">cadabra::GUIBase::on_connect</a></div><div class="ttdeci">virtual void on_connect()=0</div><div class="ttdoc">Network status is propagated from the ComputeThread to the. </div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html_a3f5b615aedd7cdacb47f11158a20fcaf"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a3f5b615aedd7cdacb47f11158a20fcaf">cadabra::GUIBase::on_kernel_runstatus</a></div><div class="ttdeci">virtual void on_kernel_runstatus(bool)=0</div></div>
 <div class="ttc" id="namespacecadabra_html_a2ebe95cddc83ab28291353b704a5ed0b"><div class="ttname"><a href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">cadabra::DTree</a></div><div class="ttdeci">tree&lt; DataCell &gt; DTree</div><div class="ttdef"><b>Definition:</b> DataCell.hh:105</div></div>
@@ -151,11 +155,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classcadabra_1_1GUIBase_html_acd1d64b5705a7a94e3914c3481268181"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#acd1d64b5705a7a94e3914c3481268181">cadabra::GUIBase::add_cell</a></div><div class="ttdeci">virtual void add_cell(const DTree &amp;, DTree::iterator, bool visible)=0</div><div class="ttdoc">Add a GUI cell corresponding to the document cell at the iterator. </div></div>
 <div class="ttc" id="DataCell_8hh_html"><div class="ttname"><a href="DataCell_8hh.html">DataCell.hh</a></div></div>
 <div class="ttc" id="classcadabra_1_1GUIBase_html_a7eee17ecf014a4495be7859672dd6efe"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a7eee17ecf014a4495be7859672dd6efe">cadabra::GUIBase::remove_all_cells</a></div><div class="ttdeci">virtual void remove_all_cells()=0</div><div class="ttdoc">Remove all GUI cells from the display (used as a quick way to clear all before loading a new document...</div></div>
-<div class="ttc" id="classcadabra_1_1GUIBase_html_a3e2730c1435e2dedd1ae42d7b0659ff3"><div class="ttname"><a href="classcadabra_1_1GUIBase.html#a3e2730c1435e2dedd1ae42d7b0659ff3">cadabra::GUIBase::position_cursor</a></div><div class="ttdeci">virtual void position_cursor(const DTree &amp;, DTree::iterator)=0</div><div class="ttdoc">Position the cursor in the current canvas in the widget corresponding to the indicated cell...</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:06:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:14:06 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

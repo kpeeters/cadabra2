@@ -10,6 +10,8 @@ var searchData=
   ['indexinherit',['IndexInherit',['../classIndexInherit.html',1,'']]],
   ['indexsort',['indexsort',['../classindexsort.html',1,'']]],
   ['indices',['Indices',['../classIndices.html',1,'']]],
+  ['inherit',['Inherit',['../classInherit.html',1,'']]],
+  ['inherit_3c_20sortorder_20_3e',['Inherit&lt; SortOrder &gt;',['../classInherit.html',1,'']]],
   ['integer',['Integer',['../classInteger.html',1,'']]],
   ['integral',['Integral',['../classIntegral.html',1,'']]],
   ['integrate_5fby_5fparts',['integrate_by_parts',['../classintegrate__by__parts.html',1,'']]],

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['latex',['latex',['../classproperty.html#af8148d7d4bc0301483b2529953b36363',1,'property::latex()'],['../classGammaMatrix.html#a6ee378d5545ab8ffb9132d4e8c13c8e0',1,'GammaMatrix::latex()'],['../classImplicitIndex.html#aed6c9f445d8e20e5c13536f9adb4a358',1,'ImplicitIndex::latex()'],['../classIndices.html#a3be95cd020e2805ff28d75da90d0e22e',1,'Indices::latex()'],['../classTableauSymmetry.html#a19147103becd42897788ad85b382ddd7',1,'TableauSymmetry::latex()'],['../classWeylTensor.html#a591180ca00dc842b45b00e3815c05eb5',1,'WeylTensor::latex()']]],
+  ['latex',['latex',['../classproperty.html#af8148d7d4bc0301483b2529953b36363',1,'property::latex()'],['../classGammaMatrix.html#a6ee378d5545ab8ffb9132d4e8c13c8e0',1,'GammaMatrix::latex()'],['../classImplicitIndex.html#aed6c9f445d8e20e5c13536f9adb4a358',1,'ImplicitIndex::latex()'],['../classIndices.html#a3be95cd020e2805ff28d75da90d0e22e',1,'Indices::latex()'],['../classMetric.html#ae5a4b3df5108f4bb32de951ed0d4a7a5',1,'Metric::latex()'],['../classTableauSymmetry.html#a19147103becd42897788ad85b382ddd7',1,'TableauSymmetry::latex()'],['../classWeylTensor.html#a591180ca00dc842b45b00e3815c05eb5',1,'WeylTensor::latex()']]],
   ['latex_5f',['latex_',['../classProperty.html#af2d72c941d502096b520e552e6f0a9e9',1,'Property::latex_() const '],['../classProperty.html#ab8b4f1231e3ad493dc49b38c12b588f3',1,'Property::latex_() const']]],
   ['latex_5fform',['latex_form',['../classLaTeXForm.html#a2e654a8106e71426591f641855f33169',1,'LaTeXForm']]],
   ['latex_5frecurse',['LaTeX_recurse',['../namespacecadabra.html#a4a5337e840c3fe2c7c107715d33de6d0',1,'cadabra']]],
@@ -8,6 +8,7 @@ var searchData=
   ['legal_5fbox',['legal_box',['../namespaceyngtab.html#aa4750cf433f9fad2d55de1df2338bea4',1,'yngtab']]],
   ['less_5findexed_5ftreenode',['less_indexed_treenode',['../classindexsort_1_1less__indexed__treenode.html#ac00fe5002f73d72988b17c77cb1d3ebf',1,'indexsort::less_indexed_treenode']]],
   ['less_5fwithout_5fnumbers',['less_without_numbers',['../classAlgorithm.html#a279af74fab4f5f35132f6656b45a2dd7',1,'Algorithm']]],
+  ['lhs',['lhs',['../PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92',1,'PythonCdb.cc']]],
   ['list_5fproperties',['list_properties',['../PythonCdb_8cc.html#ac217f28bc50ad9cc2d209be157fe4af4',1,'PythonCdb.cc']]],
   ['list_5fsize',['list_size',['../namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef',1,'cadabra']]],
   ['list_5funwrap_5fsingle_5felement',['list_unwrap_single_element',['../classEx.html#a2e95d0ecb14088e7ff3b8e88ae9abe32',1,'Ex']]],

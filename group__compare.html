@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -163,11 +162,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Basic building block subtree comparison function for tensors without dummy indices, which determines whether two tensor subtrees are equal up to the names of indices. </p>
-<p>This only uses <a class="el" href="classIndices.html">Indices</a> property information, and can hence be called from within properties.get&lt;...&gt; algorithms.</p>
-<p>In most cases, the use of <a class="el" href="classEx__comparator.html" title="A generic tree comparison class which will take into account index contractions and will also keep tr...">Ex_comparator</a> below is recommended instead, as it can do much more complicated matching and will also keep track of the relation between symbols in the pattern and symbols in the object to be matched.</p>
+<p>This uses NO property information whatsoever; when indices are compared, they are simply compared based on their name, not on the index set they may belong to. In most cases, this is NOT what you want.</p>
+<p>In MOST cases, the use of <a class="el" href="classEx__comparator.html" title="A generic tree comparison class which will take into account index contractions and will also keep tr...">Ex_comparator</a> below is recommended instead, as it can do much more complicated matching and will also keep track of the relation between symbols in the pattern and symbols in the object to be matched.</p>
 <p>Examples: </p>
-<pre class="fragment">A_m                        equals  A_n
-\diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s
+<pre class="fragment">A_m                        equals  A_n                       up to index names
+\diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s up to index names
 </pre><table class="doxtable">
 <tr>
 <th>return </th><th>meaning  </th></tr>
@@ -185,12 +184,12 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">mod_prel</td><td>see below </td></tr>
-    <tr><td class="paramname">checksets</td><td>if properties!=0, indices match when they sit in the same set. </td></tr>
+    <tr><td class="paramname">checksets</td><td>ignored FIXME: remove </td></tr>
     <tr><td class="paramname">literal_wildcards</td><td>whether to treat wildcard names as ordinary names.</td></tr>
   </table>
   </dd>
 </dl>
-<p>The mod_prel variable determines whether parent relations are taken into account when comparing: </p>
+<p>The mod_prel variable determines whether parent relations are taken into account when comparing: FIXME: now that subtree_compare does not use properties anymore, a lot can be simplified. </p>
 <pre class="fragment">   -3: require that parent relations match, unless indexpos=free.
    -2: require that parent relations match (even when indexpos = free)
    -1: do not require that parent relations match
@@ -202,7 +201,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:06:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:14:07 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

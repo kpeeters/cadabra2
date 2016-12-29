@@ -6,6 +6,7 @@ var searchData=
   ['pattern',['pattern',['../classpattern.html',1,'']]],
   ['perm',['Perm',['../classPerm.html',1,'']]],
   ['permutationexception',['PermutationException',['../classPermutationException.html',1,'']]],
+  ['prefs',['Prefs',['../classcadabra_1_1NotebookWindow_1_1Prefs.html',1,'cadabra::NotebookWindow']]],
   ['preprocessor',['preprocessor',['../classpreprocessor.html',1,'']]],
   ['product_5frule',['product_rule',['../classproduct__rule.html',1,'']]],
   ['properties',['Properties',['../classProperties.html',1,'']]],

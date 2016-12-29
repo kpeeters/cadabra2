@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -105,7 +104,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">cadabra::CodeInput::exp_input_tv Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<a name="details" id="details"></a><h2 class="groupheader">Description</h2>
+<div class="textblock"><p>The actual text widget used by <a class="el" href="classcadabra_1_1CodeInput.html" title="A text cell editor widget with support for editing Python and LaTeX. ">CodeInput</a>. </p>
+</div>
 <p><code>#include &lt;<a class="el" href="CodeInput_8hh_source.html">CodeInput.hh</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for cadabra::CodeInput::exp_input_tv:</div>
@@ -139,6 +140,13 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 <tr class="memitem:adfa73d4d71fb1bef1aa50fec74199296"><td class="memItemLeft" align="right" valign="top">sigc::signal2&lt; bool, <br class="typebreak"/>
 std::string, DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput_1_1exp__input__tv.html#adfa73d4d71fb1bef1aa50fec74199296">content_changed</a></td></tr>
 <tr class="separator:adfa73d4d71fb1bef1aa50fec74199296"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79025107e3c26aff7dcdfb4b1f9efba8"><td class="memItemLeft" align="right" valign="top">sigc::signal3&lt; bool, <br class="typebreak"/>
+std::string, int, <br class="typebreak"/>
+DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput_1_1exp__input__tv.html#a79025107e3c26aff7dcdfb4b1f9efba8">content_insert</a></td></tr>
+<tr class="separator:a79025107e3c26aff7dcdfb4b1f9efba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a540a12ab03ceffc0f57527c80ade315f"><td class="memItemLeft" align="right" valign="top">sigc::signal3&lt; bool, int, int, <br class="typebreak"/>
+DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput_1_1exp__input__tv.html#a540a12ab03ceffc0f57527c80ade315f">content_erase</a></td></tr>
+<tr class="separator:a540a12ab03ceffc0f57527c80ade315f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8e3a0fcdc1b1f15281bb57dc184ac2b"><td class="memItemLeft" align="right" valign="top">sigc::signal1&lt; bool, <br class="typebreak"/>
 DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CodeInput_1_1exp__input__tv.html#ad8e3a0fcdc1b1f15281bb57dc184ac2b">cell_got_focus</a></td></tr>
 <tr class="separator:ad8e3a0fcdc1b1f15281bb57dc184ac2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -333,12 +341,36 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a540a12ab03ceffc0f57527c80ade315f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sigc::signal3&lt;bool, int, int, DTree::iterator&gt; cadabra::CodeInput::exp_input_tv::content_erase</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="abcdd3dde45beefc15abffabfb5f59cad"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">sigc::signal1&lt;bool, DTree::iterator&gt; cadabra::CodeInput::exp_input_tv::content_execute</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a79025107e3c26aff7dcdfb4b1f9efba8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">sigc::signal3&lt;bool, std::string, int, DTree::iterator&gt; cadabra::CodeInput::exp_input_tv::content_insert</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -392,7 +424,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:06:33 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:14:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

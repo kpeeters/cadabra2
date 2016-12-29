@@ -7,17 +7,16 @@ var searchData=
   ['needs_5fgenerating',['needs_generating',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a2e5f009e2f5a12d9f197ea3f5e6e0aa0',1,'cadabra::TeXEngine::TeXRequest']]],
   ['new_5frunning_5f',['new_running_',['../classcadabra_1_1ActionSetRunStatus.html#ab320351602aa155afabd674e87c99b3c',1,'cadabra::ActionSetRunStatus']]],
   ['newcell',['newcell',['../classcadabra_1_1ActionAddCell.html#ae32d1c07b4f153283f281b6b260bfa96',1,'cadabra::ActionAddCell']]],
-  ['newref',['newref',['../classcadabra_1_1ActionAddCell.html#a9a5c6613ddf7dfa74005c4e74832160c',1,'cadabra::ActionAddCell::newref()'],['../classcadabra_1_1ActionPositionCursor.html#a6e34b313e48f98a76fc2d9bad82db042',1,'cadabra::ActionPositionCursor::newref()']]],
+  ['newref',['newref',['../classcadabra_1_1ActionAddCell.html#a9a5c6613ddf7dfa74005c4e74832160c',1,'cadabra::ActionAddCell::newref()'],['../classcadabra_1_1ActionPositionCursor.html#a6e34b313e48f98a76fc2d9bad82db042',1,'cadabra::ActionPositionCursor::newref()'],['../classcadabra_1_1ActionSplitCell.html#ac995bdc69eb9c0a555ab3527fd63a847',1,'cadabra::ActionSplitCell::newref()']]],
   ['next_5fis_5fproduct_5f',['next_is_product_',['../classpreprocessor.html#ac8b74d74df3a8ea6095267c16256890b',1,'preprocessor']]],
   ['nonscalarexceptiontype',['NonScalarExceptionType',['../PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b',1,'PythonCdb.cc']]],
   ['nt1',['nt1',['../classdecompose__product.html#a3c82e36a8f45df98cc447195595b033e',1,'decompose_product']]],
   ['nt2',['nt2',['../classdecompose__product.html#a803cd8262ff8afda443e3e5d57bc51f8',1,'decompose_product']]],
-  ['nu',['Nu',['../Symbols_8cc.html#aa6b24b60f7fb3bbe69179d6cde8d4dcf',1,'Nu():&#160;Symbols.cc'],['../Symbols_8cc.html#a361de67e57dcc9db7ff4b22eb7eed895',1,'nu():&#160;Symbols.cc']]],
+  ['nu',['nu',['../Symbols_8cc.html#a361de67e57dcc9db7ff4b22eb7eed895',1,'nu():&#160;Symbols.cc'],['../Symbols_8cc.html#aa6b24b60f7fb3bbe69179d6cde8d4dcf',1,'Nu():&#160;Symbols.cc']]],
   ['num1',['num1',['../classsplit__index.html#a801c0668f4809ed89ea0a38fd886cfaa',1,'split_index']]],
   ['num2',['num2',['../classsplit__index.html#afed1d4133e168ec2c9091cd44cbc806e',1,'split_index']]],
   ['num_5fto_5fit',['num_to_it',['../classtab__basics.html#a0517bf5085c01e6c6f969450d6676c3c',1,'tab_basics']]],
   ['number_5fof_5fcalls',['number_of_calls',['../classAlgorithm.html#af7b04b3174cb0a4eb98229bcfef9ace9',1,'Algorithm']]],
   ['number_5fof_5findices',['number_of_indices',['../structexchange_1_1identical__tensors__t.html#a56738c850a07f1b485a754d3fbf3e551',1,'exchange::identical_tensors_t::number_of_indices()'],['../structexchange_1_1tensor__type__t.html#ae30d8beae300050fb75d4f0f973a0858',1,'exchange::tensor_type_t::number_of_indices()'],['../classproduct__rule.html#af25a685ea71eb88628983ae5aba2ea7f',1,'product_rule::number_of_indices()']]],
-  ['number_5fof_5fmodifications',['number_of_modifications',['../classAlgorithm.html#ae0c617a303b2d5ef64aa22af3a5fa636',1,'Algorithm']]],
-  ['nw',['nw',['../classCadabra.html#ae95a91a3f53259d4d031207e32f725a2',1,'Cadabra']]]
+  ['number_5fof_5fmodifications',['number_of_modifications',['../classAlgorithm.html#ae0c617a303b2d5ef64aa22af3a5fa636',1,'Algorithm']]]
 ];

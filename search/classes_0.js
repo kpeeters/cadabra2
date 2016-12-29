@@ -4,6 +4,8 @@ var searchData=
   ['accu_5ft',['accu_t',['../classpreprocessor_1_1accu__t.html',1,'preprocessor']]],
   ['actionaddcell',['ActionAddCell',['../classcadabra_1_1ActionAddCell.html',1,'cadabra']]],
   ['actionbase',['ActionBase',['../classcadabra_1_1ActionBase.html',1,'cadabra']]],
+  ['actionerasetext',['ActionEraseText',['../classcadabra_1_1ActionEraseText.html',1,'cadabra']]],
+  ['actioninserttext',['ActionInsertText',['../classcadabra_1_1ActionInsertText.html',1,'cadabra']]],
   ['actionpositioncursor',['ActionPositionCursor',['../classcadabra_1_1ActionPositionCursor.html',1,'cadabra']]],
   ['actionremovecell',['ActionRemoveCell',['../classcadabra_1_1ActionRemoveCell.html',1,'cadabra']]],
   ['actionsetrunstatus',['ActionSetRunStatus',['../classcadabra_1_1ActionSetRunStatus.html',1,'cadabra']]],

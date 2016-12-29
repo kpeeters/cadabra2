@@ -1,7 +1,7 @@
 var searchData=
 [
   ['_7eactionremovecell',['~ActionRemoveCell',['../classcadabra_1_1ActionRemoveCell.html#af73d877bad691323fb0e9804a2bae575',1,'cadabra::ActionRemoveCell']]],
-  ['_7eactionsplitcell',['~ActionSplitCell',['../classcadabra_1_1ActionSplitCell.html#aacd6d73e7bd455a290150823f1e6acae',1,'cadabra::ActionSplitCell']]],
+  ['_7eactionsplitcell',['~ActionSplitCell',['../classcadabra_1_1ActionSplitCell.html#a8eaeb1cfefc941bee1898bf00813e88e',1,'cadabra::ActionSplitCell']]],
   ['_7ealgorithm',['~Algorithm',['../classAlgorithm.html#ae2801c5b6cd6f45b3852d8c94f354cd5',1,'Algorithm']]],
   ['_7eantisymmetric',['~AntiSymmetric',['../classAntiSymmetric.html#aa80f22dc5154fb32b1daed85c5fcabef',1,'AntiSymmetric']]],
   ['_7ecadabra',['~Cadabra',['../classCadabra.html#a2e58e6fbe256f64ec24e3838a7e45ed0',1,'Cadabra']]],
@@ -18,6 +18,7 @@ var searchData=
   ['_7efilledtableau',['~FilledTableau',['../classFilledTableau.html#a18218f4e41dc18a51f41b7b820dc7dce',1,'FilledTableau']]],
   ['_7egammatraceless',['~GammaTraceless',['../classGammaTraceless.html#aa2a1350da75c4b41c91d4ee6b7df42a3',1,'GammaTraceless']]],
   ['_7eimageview',['~ImageView',['../classcadabra_1_1ImageView.html#a83e4c77d560bc7ff34973dfced77cc72',1,'cadabra::ImageView']]],
+  ['_7einherit',['~Inherit',['../classInherit.html#a22dcc73cc00839f008cec76f46ab4aad',1,'Inherit']]],
   ['_7einteger',['~Integer',['../classInteger.html#a6caf6b3d10e4fbfce9d42b53cb4e6ada',1,'Integer']]],
   ['_7eintegral',['~Integral',['../classIntegral.html#ad13ba93c3f4f4aea3e3957e303055199',1,'Integral']]],
   ['_7ekernel',['~Kernel',['../classKernel.html#a9c7407e3a0b1cb9b2f96e9a030187064',1,'Kernel']]],
@@ -33,7 +34,7 @@ var searchData=
   ['_7esnoop',['~Snoop',['../classsnoop_1_1Snoop.html#a76ed22fee001bb18cb45711f0ef4583b',1,'snoop::Snoop']]],
   ['_7esnoopimpl',['~SnoopImpl',['../classsnoop_1_1SnoopImpl.html#a6ca20e379b854edcf67de9e39cde50dc',1,'snoop::SnoopImpl']]],
   ['_7espinor',['~Spinor',['../classSpinor.html#a73d0a5e5f4a09eeb60bcc76418ce4fd7',1,'Spinor']]],
-  ['_7etableau',['~tableau',['../classyngtab_1_1tableau.html#ada845d1d942200fc54f447dba6959de4',1,'yngtab::tableau::~tableau()'],['../classTableau.html#a688be155bacf2fdb1060053b4e809701',1,'Tableau::~Tableau()']]],
+  ['_7etableau',['~Tableau',['../classTableau.html#a688be155bacf2fdb1060053b4e809701',1,'Tableau::~Tableau()'],['../classyngtab_1_1tableau.html#ada845d1d942200fc54f447dba6959de4',1,'yngtab::tableau::~tableau()']]],
   ['_7etableau_5fbase',['~tableau_base',['../classyngtab_1_1tableau__base.html#a4d90abf4238bf60340a04c96408fca80',1,'yngtab::tableau_base']]],
   ['_7etableaubase',['~TableauBase',['../classTableauBase.html#a1878387bebbdd2b63a901dad080c0654',1,'TableauBase']]],
   ['_7etableausymmetry',['~TableauSymmetry',['../classTableauSymmetry.html#ab0b035de51e928b85a43668345316081',1,'TableauSymmetry']]],

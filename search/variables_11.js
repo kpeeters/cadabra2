@@ -2,8 +2,10 @@ var searchData=
 [
   ['rat_5fset',['rat_set',['../Storage_8cc.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc'],['../Storage_8hh.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc']]],
   ['raw_5fints',['raw_ints',['../classsym.html#a938267c89e18daffcf14823923b5944d',1,'sym']]],
+  ['read_5fonly',['read_only',['../classcadabra_1_1NotebookWindow.html#a3ff79c4919808b8b12e90ee698343766',1,'cadabra::NotebookWindow']]],
   ['receive_5fmillis',['receive_millis',['../classsnoop_1_1Snoop_1_1AppEntry.html#aa2d111c3a96cac92a571489a2e9976dc',1,'snoop::Snoop::AppEntry::receive_millis()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#ac5c65cf4a533aca9284b11cdcf7311c0',1,'snoop::Snoop::LogEntry::receive_millis()']]],
   ['redo_5fstack',['redo_stack',['../classcadabra_1_1DocumentThread.html#ab42384a7f5ad6146a4c462e97a619dbf',1,'cadabra::DocumentThread']]],
+  ['reduce',['reduce',['../classepsilon__to__delta.html#a4c8e2c17df3b98357a681de1998cf463',1,'epsilon_to_delta']]],
   ['ref',['ref',['../classcadabra_1_1ActionAddCell.html#a071c09cfa5c7c853e2c1847fee098771',1,'cadabra::ActionAddCell::ref()'],['../classcadabra_1_1ActionPositionCursor.html#ae0a5c4216ec2885eac9a0ee6356f0480',1,'cadabra::ActionPositionCursor::ref()']]],
   ['reference_5fchild_5findex',['reference_child_index',['../classcadabra_1_1ActionRemoveCell.html#a24c120aad6931df6c867b1a238b7fc2a',1,'cadabra::ActionRemoveCell']]],
   ['reference_5fparent_5fcell',['reference_parent_cell',['../classcadabra_1_1ActionRemoveCell.html#a1dcee12759b054f5bbf861153e71583b',1,'cadabra::ActionRemoveCell']]],
@@ -11,6 +13,7 @@ var searchData=
   ['registered_5fproperties',['registered_properties',['../classProperties.html#ad0f6e92c35ff254c35880be0a681df52',1,'Properties']]],
   ['remember_5fdisplay_5fhook',['remember_display_hook',['../namespacecadabra2__defaults.html#a2b4d34712d648727cbce32234c760f07',1,'cadabra2_defaults']]],
   ['remove_5ftraces',['remove_traces',['../classyoung__project.html#a23431f438908033e404597dcaef5e8dc',1,'young_project']]],
+  ['removed_5ftext',['removed_text',['../classcadabra_1_1ActionEraseText.html#a0eb8bc0749bada523a3ca74c4a0038a7',1,'cadabra::ActionEraseText']]],
   ['removed_5ftree',['removed_tree',['../classcadabra_1_1ActionRemoveCell.html#a8b7ab0f326c31945b3e7e04d133a7252',1,'cadabra::ActionRemoveCell']]],
   ['repdelta',['repdelta',['../classepsilon__to__delta.html#a069a063a30db30a0513b575284919ff4',1,'epsilon_to_delta']]],
   ['replacement_5fmap',['replacement_map',['../classEx__comparator.html#a16b4cbb194afdce75e2e31fc01e48037',1,'Ex_comparator']]],

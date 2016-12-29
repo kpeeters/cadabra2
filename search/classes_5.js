@@ -2,6 +2,7 @@ var searchData=
 [
   ['factor_5fin',['factor_in',['../classfactor__in.html',1,'']]],
   ['factor_5fout',['factor_out',['../classfactor__out.html',1,'']]],
+  ['fierz',['fierz',['../classfierz.html',1,'']]],
   ['filled_5ftableau',['filled_tableau',['../classyngtab_1_1filled__tableau.html',1,'yngtab']]],
   ['filled_5ftableau_3c_20iterator_20_3e',['filled_tableau&lt; iterator &gt;',['../classyngtab_1_1filled__tableau.html',1,'yngtab']]],
   ['filled_5ftableau_3c_20unsigned_20int_20_3e',['filled_tableau&lt; unsigned int &gt;',['../classyngtab_1_1filled__tableau.html',1,'yngtab']]],

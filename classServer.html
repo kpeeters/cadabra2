@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -171,6 +170,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ad269cf819e6c3f9f7cbb16087f5eab74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4213c640f5bb2690945eb20e29c70917"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a4213c640f5bb2690945eb20e29c70917">pre_parse</a> (const std::string &amp;)</td></tr>
 <tr class="separator:a4213c640f5bb2690945eb20e29c70917"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fe96bed08382d46dcbcf30e7cb5c778"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a5fe96bed08382d46dcbcf30e7cb5c778">escape_quotes</a> (const std::string &amp;line)</td></tr>
+<tr class="separator:a5fe96bed08382d46dcbcf30e7cb5c778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22fb31480cad49b1ad5d00cd24914494"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a22fb31480cad49b1ad5d00cd24914494">on_block_finished</a> (<a class="el" href="classServer_1_1Block.html">Block</a>)</td></tr>
 <tr class="memdesc:a22fb31480cad49b1ad5d00cd24914494"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the run_block() thread upon completion of the task.  <a href="#a22fb31480cad49b1ad5d00cd24914494">More...</a><br/></td></tr>
 <tr class="separator:a22fb31480cad49b1ad5d00cd24914494"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -374,6 +375,30 @@ Private Attributes</h2></td></tr>
 
 <p>Takes a JSON encoded message and performs the required action to process it. </p>
 <p>Where applicable these messages are compatible with IPython's message types, <a href="http://ipython.org/ipython-doc/dev/development/messaging.html">http://ipython.org/ipython-doc/dev/development/messaging.html</a> </p>
+
+</div>
+</div>
+<a class="anchor" id="a5fe96bed08382d46dcbcf30e7cb5c778"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Server::escape_quotes </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1151,7 +1176,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:06:28 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:14:20 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

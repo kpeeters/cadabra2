@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['gam1',['gam1',['../classfierz.html#a1d6d5270b259b7f6268d793d293e22e6',1,'fierz']]],
+  ['gam2',['gam2',['../classfierz.html#a7cc739191407b6e373c9fb80fcd89cf0',1,'fierz']]],
   ['gamma',['Gamma',['../Symbols_8cc.html#a60576bcd8b3ecfa64cee85cf1b985ae8',1,'Gamma():&#160;Symbols.cc'],['../Symbols_8cc.html#a8e40c46cc7a4691079f3336ace7b6688',1,'gamma():&#160;Symbols.cc']]],
   ['gamma_5fbracket_5f',['gamma_bracket_',['../classjoin__gamma.html#afc9f2e6f5c935cc6087e2a81a2134a93',1,'join_gamma']]],
   ['gamma_5fname_5f',['gamma_name_',['../classjoin__gamma.html#adfb2f5e69c40069ac1aa40a3216d9b85',1,'join_gamma']]],
@@ -12,5 +14,6 @@ var searchData=
   ['goal',['goal',['../classcomplete.html#a3f0fce8bf8993b9cced7e63da6c5805c',1,'complete']]],
   ['grab_5fconnection',['grab_connection',['../classcadabra_1_1NotebookWindow.html#a1c182cec58a1453b1d8621d6b123e651',1,'cadabra::NotebookWindow']]],
   ['greek',['greek',['../namespacecadabra_1_1symbols.html#aa12e330caef517e6c2376d060cc2ccb1',1,'cadabra::symbols']]],
-  ['gui',['gui',['../classcadabra_1_1ComputeThread.html#aa7b3af2f59b272a71fc092bccb201cee',1,'cadabra::ComputeThread::gui()'],['../classcadabra_1_1DocumentThread.html#a874fae5211b2cceaf626ef6e808668fe',1,'cadabra::DocumentThread::gui()']]]
+  ['gui',['gui',['../classcadabra_1_1ComputeThread.html#aa7b3af2f59b272a71fc092bccb201cee',1,'cadabra::ComputeThread::gui()'],['../classcadabra_1_1DocumentThread.html#a874fae5211b2cceaf626ef6e808668fe',1,'cadabra::DocumentThread::gui()']]],
+  ['gui_5fthread_5fid',['gui_thread_id',['../classcadabra_1_1ComputeThread.html#a2be0a78247610d267c7c75f82e12ff32',1,'cadabra::ComputeThread']]]
 ];

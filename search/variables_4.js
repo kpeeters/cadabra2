@@ -4,14 +4,16 @@ var searchData=
   ['db',['db',['../classsnoop_1_1SnoopImpl.html#aef92c18ce355c332e5d131d38fffece4',1,'snoop::SnoopImpl']]],
   ['delta',['Delta',['../Symbols_8cc.html#ac95bccd0ac00ebe774e5138c31a06238',1,'Delta():&#160;Symbols.cc'],['../Symbols_8cc.html#ab65a074e38c44168a4d9be288261b588',1,'delta():&#160;Symbols.cc']]],
   ['dependencies_5f',['dependencies_',['../classDepends.html#a34e4a31f4f724e657206427d0ec1f4ba',1,'Depends']]],
+  ['depsyms',['depsyms',['../classDisplaySympy.html#a1a24c2c0019db29367e1750bf70e8199',1,'DisplaySympy']]],
   ['difference',['difference',['../classInteger.html#a3d66374c8aa672eb63b4306e9ad2a9a4',1,'Integer']]],
   ['diffsec',['diffsec',['../classstopwatch.html#a3307796d7f96f9b351ea597417eb211a',1,'stopwatch']]],
   ['diffusec',['diffusec',['../classstopwatch.html#a37fcea2ff0b27b62596b46b2a7202d58',1,'stopwatch']]],
-  ['dim',['dim',['../classdecompose__product.html#a2f79d4a5bb32fbfe042f5195de43b372',1,'decompose_product']]],
+  ['dim',['dim',['../classdecompose__product.html#a2f79d4a5bb32fbfe042f5195de43b372',1,'decompose_product::dim()'],['../classfierz.html#a93a5004a580e5a6d255fa69fc67bc306',1,'fierz::dim()']]],
   ['dimension',['dimension',['../classFilledTableau.html#af10c7ddb57394d33ec9ba3a7c312f3c5',1,'FilledTableau::dimension()'],['../classSpinor.html#a656407e59d8393df84656a10d9669a76',1,'Spinor::dimension()'],['../classTableau.html#a4cdb976d123c22700663edc46b8258c7',1,'Tableau::dimension()']]],
+  ['disable_5fstacks',['disable_stacks',['../classcadabra_1_1DocumentThread.html#af4f40e94cbfdfd5a73ab4febca6ab46d',1,'cadabra::DocumentThread']]],
   ['discard_5fcommand_5fnode',['discard_command_node',['../classAlgorithm.html#a4b0306a812b97d84700d0445e603d50d',1,'Algorithm']]],
   ['dispatcher',['dispatcher',['../classcadabra_1_1NotebookWindow.html#a3492ad800a0386075eb0580977f6d586',1,'cadabra::NotebookWindow']]],
   ['doc',['doc',['../classcadabra_1_1DocumentThread.html#a6c703caf839326a3287024c454d5d47b',1,'cadabra::DocumentThread']]],
-  ['docthread',['docthread',['../classcadabra_1_1ComputeThread.html#a24cca861de8b241fc7c2bcd91dd10d2b',1,'cadabra::ComputeThread']]],
+  ['docthread',['docthread',['../classcadabra_1_1ComputeThread.html#abf80de911bd63523b3a49473084f417e',1,'cadabra::ComputeThread']]],
   ['document',['document',['../classcadabra_1_1VisualCell.html#a141d0d13ed6211fefba6471ec68bed49',1,'cadabra::VisualCell']]]
 ];

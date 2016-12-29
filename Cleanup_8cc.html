@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -107,41 +106,81 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="PartialDerivative_8hh_source.html">properties/PartialDerivative.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="NumericalFlat_8hh_source.html">properties/NumericalFlat.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Diagonal_8hh_source.html">properties/Diagonal.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="KroneckerDelta_8hh_source.html">properties/KroneckerDelta.hh</a>&quot;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a196920defc7d1e125b56dbe8baabc21f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a196920defc7d1e125b56dbe8baabc21f">cleanup_dispatch</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;kernel, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
 <tr class="memdesc:a196920defc7d1e125b56dbe8baabc21f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Central cleanup dispatch routine, which calls the other cleanup functions defined later.  <a href="#a196920defc7d1e125b56dbe8baabc21f">More...</a><br/></td></tr>
 <tr class="separator:a196920defc7d1e125b56dbe8baabc21f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0130c9c69f82f3dd73b158c18ba2da75"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a0130c9c69f82f3dd73b158c18ba2da75">cleanup_productlike</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="memdesc:a0130c9c69f82f3dd73b158c18ba2da75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Individual node cleanup routines.  <a href="#a0130c9c69f82f3dd73b158c18ba2da75">More...</a><br/></td></tr>
-<tr class="separator:a0130c9c69f82f3dd73b158c18ba2da75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3426eb1a5d7e477824dbe905ef68d7e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a3426eb1a5d7e477824dbe905ef68d7e0">cleanup_sumlike</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="separator:a3426eb1a5d7e477824dbe905ef68d7e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a618e4c9ee49676cb9c46b12360652608"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a618e4c9ee49676cb9c46b12360652608">push_down_multiplier</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
-<tr class="memdesc:a618e4c9ee49676cb9c46b12360652608"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a node with a non-unit multiplier, push this multiplier down the tree if the node is not allowed to have a non-unit multiplier.  <a href="#a618e4c9ee49676cb9c46b12360652608">More...</a><br/></td></tr>
-<tr class="separator:a618e4c9ee49676cb9c46b12360652608"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc9bc6ee39cd4ca01697775c1795be61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#acc9bc6ee39cd4ca01697775c1795be61">cleanup_components</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="separator:acc9bc6ee39cd4ca01697775c1795be61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0965eb420203e8ad8b0912ad993ef13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#ae0965eb420203e8ad8b0912ad993ef13">cleanup_expressionlike</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="separator:ae0965eb420203e8ad8b0912ad993ef13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a608861efe2d1ae67e5f3fd5705230562"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a608861efe2d1ae67e5f3fd5705230562">cleanup_derivative</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="separator:a608861efe2d1ae67e5f3fd5705230562"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeadc7f40d7eca2d4a0dc83e7150587cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#aeadc7f40d7eca2d4a0dc83e7150587cc">cleanup_numericalflat</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="separator:aeadc7f40d7eca2d4a0dc83e7150587cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4ebea3652aa99e1ada287b8e756654d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#ae4ebea3652aa99e1ada287b8e756654d">cleanup_diagonal</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="separator:ae4ebea3652aa99e1ada287b8e756654d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88e844cef07e88c72084999fea1d2244"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a88e844cef07e88c72084999fea1d2244">check_index_consistency</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
+<tr class="memdesc:a88e844cef07e88c72084999fea1d2244"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic tool to check for index inconsistencies independent of running any algorithm.  <a href="#a88e844cef07e88c72084999fea1d2244">More...</a><br/></td></tr>
+<tr class="separator:a88e844cef07e88c72084999fea1d2244"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f15df056756c26b14bec550fda0ada2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a9f15df056756c26b14bec550fda0ada2">cleanup_productlike</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:a9f15df056756c26b14bec550fda0ada2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Individual node cleanup routines.  <a href="#a9f15df056756c26b14bec550fda0ada2">More...</a><br/></td></tr>
+<tr class="separator:a9f15df056756c26b14bec550fda0ada2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af53967b5b269f2a4b0118dcb8683e7bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#af53967b5b269f2a4b0118dcb8683e7bc">cleanup_sumlike</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:af53967b5b269f2a4b0118dcb8683e7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaefb50b0d106555f7869513465c7bb1a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#aaefb50b0d106555f7869513465c7bb1a">push_down_multiplier</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
+<tr class="memdesc:aaefb50b0d106555f7869513465c7bb1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a node with a non-unit multiplier, push this multiplier down the tree if the node is not allowed to have a non-unit multiplier.  <a href="#aaefb50b0d106555f7869513465c7bb1a">More...</a><br/></td></tr>
+<tr class="separator:aaefb50b0d106555f7869513465c7bb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5364bd8a80ead9df3ba31ad6ba6d4ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#af5364bd8a80ead9df3ba31ad6ba6d4ae">cleanup_components</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:af5364bd8a80ead9df3ba31ad6ba6d4ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9df64d2f0081200e8b50b5d3eb3d0972"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a9df64d2f0081200e8b50b5d3eb3d0972">cleanup_partialderivative</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a9df64d2f0081200e8b50b5d3eb3d0972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0177064e7fdd69343e2dabba28e6d8b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a0177064e7fdd69343e2dabba28e6d8b4">cleanup_derivative</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a0177064e7fdd69343e2dabba28e6d8b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a638fb79b8695e9cc808cca2c683f95ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a638fb79b8695e9cc808cca2c683f95ff">cleanup_numericalflat</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a638fb79b8695e9cc808cca2c683f95ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2229b3086e51160707ff60a8fb41601"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#ae2229b3086e51160707ff60a8fb41601">cleanup_diagonal</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:ae2229b3086e51160707ff60a8fb41601"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29cc03850485b5e366f9af976fd05860"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a29cc03850485b5e366f9af976fd05860">cleanup_kronecker</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a29cc03850485b5e366f9af976fd05860"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a511a512e206a148f333e7dffc557f4bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a511a512e206a148f333e7dffc557f4bb">cleanup_dispatch_deep</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, <a class="el" href="Cleanup_8hh.html#aa43273d0b334fde490020cda7626561a">dispatcher_t</a> dispatch)</td></tr>
 <tr class="memdesc:a511a512e206a148f333e7dffc557f4bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">More general cleanup of an entire tree.  <a href="#a511a512e206a148f333e7dffc557f4bb">More...</a><br/></td></tr>
 <tr class="separator:a511a512e206a148f333e7dffc557f4bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="acc9bc6ee39cd4ca01697775c1795be61"></a>
+<a class="anchor" id="a88e844cef07e88c72084999fea1d2244"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cleanup_components </td>
+          <td class="memname">void check_index_consistency </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generic tool to check for index inconsistencies independent of running any algorithm. </p>
+
+</div>
+</div>
+<a class="anchor" id="af5364bd8a80ead9df3ba31ad6ba6d4ae"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cleanup_components </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -168,12 +207,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a608861efe2d1ae67e5f3fd5705230562"></a>
+<a class="anchor" id="a0177064e7fdd69343e2dabba28e6d8b4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cleanup_derivative </td>
+          <td class="memname">bool cleanup_derivative </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -200,12 +239,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae4ebea3652aa99e1ada287b8e756654d"></a>
+<a class="anchor" id="ae2229b3086e51160707ff60a8fb41601"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cleanup_diagonal </td>
+          <td class="memname">bool cleanup_diagonal </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -302,12 +341,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae0965eb420203e8ad8b0912ad993ef13"></a>
+<a class="anchor" id="a29cc03850485b5e366f9af976fd05860"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cleanup_expressionlike </td>
+          <td class="memname">bool cleanup_kronecker </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -334,12 +373,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aeadc7f40d7eca2d4a0dc83e7150587cc"></a>
+<a class="anchor" id="a638fb79b8695e9cc808cca2c683f95ff"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cleanup_numericalflat </td>
+          <td class="memname">bool cleanup_numericalflat </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -366,12 +405,44 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a0130c9c69f82f3dd73b158c18ba2da75"></a>
+<a class="anchor" id="a9df64d2f0081200e8b50b5d3eb3d0972"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cleanup_productlike </td>
+          <td class="memname">bool cleanup_partialderivative </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a9f15df056756c26b14bec550fda0ada2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cleanup_productlike </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -402,12 +473,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a3426eb1a5d7e477824dbe905ef68d7e0"></a>
+<a class="anchor" id="af53967b5b269f2a4b0118dcb8683e7bc"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void cleanup_sumlike </td>
+          <td class="memname">bool cleanup_sumlike </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -434,12 +505,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a618e4c9ee49676cb9c46b12360652608"></a>
+<a class="anchor" id="aaefb50b0d106555f7869513465c7bb1a"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void push_down_multiplier </td>
+          <td class="memname">bool push_down_multiplier </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
           <td class="paramname"><em>k</em>, </td>
@@ -472,7 +543,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:06:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:14:07 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

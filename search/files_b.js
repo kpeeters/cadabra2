@@ -1,17 +1,11 @@
 var searchData=
 [
-  ['noncommuting_2ecc',['NonCommuting.cc',['../NonCommuting_8cc.html',1,'']]],
-  ['noncommuting_2ehh',['NonCommuting.hh',['../NonCommuting_8hh.html',1,'']]],
-  ['notebookcanvas_2ecc',['NotebookCanvas.cc',['../NotebookCanvas_8cc.html',1,'']]],
-  ['notebookcanvas_2ehh',['NotebookCanvas.hh',['../gtkmm_2NotebookCanvas_8hh.html',1,'']]],
-  ['notebookcanvas_2ehh',['NotebookCanvas.hh',['../osx_2Cadabra_2Cadabra_2NotebookCanvas_8hh.html',1,'']]],
-  ['notebookcanvas_2emm',['NotebookCanvas.mm',['../NotebookCanvas_8mm.html',1,'']]],
-  ['notebookcontroller_2eh',['NotebookController.h',['../NotebookController_8h.html',1,'']]],
-  ['notebookcontroller_2emm',['NotebookController.mm',['../NotebookController_8mm.html',1,'']]],
-  ['notebookwindow_2ecc',['NotebookWindow.cc',['../NotebookWindow_8cc.html',1,'']]],
-  ['notebookwindow_2ehh',['NotebookWindow.hh',['../osx_2Cadabra_2Cadabra_2NotebookWindow_8hh.html',1,'']]],
-  ['notebookwindow_2ehh',['NotebookWindow.hh',['../gtkmm_2NotebookWindow_8hh.html',1,'']]],
-  ['notebookwindow_2emm',['NotebookWindow.mm',['../NotebookWindow_8mm.html',1,'']]],
-  ['numericalflat_2ecc',['NumericalFlat.cc',['../NumericalFlat_8cc.html',1,'']]],
-  ['numericalflat_2ehh',['NumericalFlat.hh',['../NumericalFlat_8hh.html',1,'']]]
+  ['main_2ecc',['main.cc',['../main_8cc.html',1,'']]],
+  ['main_2em',['main.m',['../main_8m.html',1,'']]],
+  ['main_2emd',['main.md',['../main_8md.html',1,'']]],
+  ['matrix_2ecc',['Matrix.cc',['../Matrix_8cc.html',1,'']]],
+  ['matrix_2ehh',['Matrix.hh',['../Matrix_8hh.html',1,'']]],
+  ['metric_2ecc',['Metric.cc',['../Metric_8cc.html',1,'']]],
+  ['metric_2ehh',['Metric.hh',['../Metric_8hh.html',1,'']]],
+  ['modules_2edox',['modules.dox',['../modules_8dox.html',1,'']]]
 ];

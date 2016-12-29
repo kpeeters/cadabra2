@@ -28,7 +28,6 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="cadabra.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -94,7 +93,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Base classes (independent of any GUI toolkit) to write <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> clients and servers. </p>
 <p>All clients use two threads. One is the main thread and runs most of the logic in the DocumentThread object. The other one is a thread which communicates with the server process; code for this thread is in the ComputeThread object. One typically subclasses the former into a full-fledged object driving the graphical user interface.</p>
 <p>All functionality that deals with GUI updates is isolated in GUIBase. A client should derive from this abstract base class and implement the methods there. Clients should also derive from DocumentThread, but there are no abstract virtual members to implemented from this base class.</p>
-<p>All actual updates to the document stored in the DocumentThread::dtree member are made on the GUI thread as well. The compute thread merely puts requests to change the document onto a stack, and then requests that the GUI updates the document. </p>
+<p>All actual updates to the document stored in the DocumentThread::dtree member are made on the GUI thread as well. The compute thread merely puts requests to change the document onto a stack, and then requests that the GUI updates the document.</p>
+<p>In order to enable undo/redo, all updates to DocumentThread::dtree are made by putting objects derived from ActionBase onto the action stack. See DocumentThread::queue_action for details. These ActionBase objects (among which ActionAddCell, ActionRemoveCell, ActionInsertText, etc) get executed on the GUI thread, and contain the actual logic to perform updates to the document and related GUI elements. </p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -116,14 +116,20 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionSplitCell.html">cadabra::ActionSplitCell</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a cell into two separate cells, at the point of the cursor.  <a href="classcadabra_1_1ActionSplitCell.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionInsertText.html">cadabra::ActionInsertText</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a text string (can be just a single character) at the point of the cursor.  <a href="classcadabra_1_1ActionInsertText.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove a text string starting at the indicated position, and with the indicated length, from the indicated cell.  <a href="classcadabra_1_1ActionEraseText.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html">cadabra::ComputeThread</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class which talks to the server and sends Action objects back to the <a class="el" href="classcadabra_1_1DocumentThread.html" title="Base class which manipulates the document tree. ">DocumentThread</a>.  <a href="classcadabra_1_1ComputeThread.html#details">More...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class which talks to the server and sends Action objects back to the <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a>.  <a href="classcadabra_1_1ComputeThread.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DataCell.html">cadabra::DataCell</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">DataCells are the basic building blocks for a document.  <a href="classcadabra_1_1DataCell.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html">cadabra::DocumentThread</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class which manipulates the document tree.  <a href="classcadabra_1_1DocumentThread.html#details">More...</a><br/></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A base class with all the logic to manipulate a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> notebook document.  <a href="classcadabra_1_1DocumentThread.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1GUIBase.html">cadabra::GUIBase</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class with methods that need to be implemented by any GUI.  <a href="classcadabra_1_1GUIBase.html#details">More...</a><br/></td></tr>
@@ -135,7 +141,7 @@ Classes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:06:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Dec 29 2016 22:14:07 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
