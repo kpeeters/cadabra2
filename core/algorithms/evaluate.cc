@@ -494,8 +494,30 @@ Ex::iterator evaluate::handle_epsilon(iterator it)
 		}
 	auto cvals = rep.append_child(rep.begin(), str_node("\\comma"));
 
-	
+	sib=tr.begin(it);
+	const Indices *ind = kernel.properties.get<Indices>(sib);
+	if(ind==0)
+		throw ArgumentException("No Indices property known for indices in EpsilonTensor.");
 
+	combin::combinations<Ex> cb;
+	for(auto& val: ind->values)
+		cb.original.push_back(val);
+	cb.multiple_pick=false;
+	cb.block_length=1;
+	cb.set_unit_sublengths();
+	cb.permute();
+
+	for(unsigned int i=0; i<cb.size(); ++i) {
+		auto equals = rep.append_child(cvals, str_node("\\equals"));
+		auto vcomma = rep.append_child(equals, str_node("\\comma"));
+		for(unsigned int j=0; j<cb.original.size(); ++j) {
+//			std::cerr << *(cb[i][j].begin()->multiplier) << " ";
+			rep.append_child(vcomma, cb[i][j].begin());
+			}
+		auto one = rep.append_child(equals, str_node("1"));
+		multiply(one->multiplier, cb.ordersign(i));
+//		std::cerr << std::endl;
+		}
 	
 	it=tr.move_ontop(it, rep.begin());
 	return it;

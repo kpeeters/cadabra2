@@ -1,5 +1,8 @@
 
-"""General relativity package for Cadabra."""
+"""
+   General relativity package for Cadabra.
+   NOTE: this is a proof of concept, not something that is finished in any sense.
+"""
 
 import cadabra2
 from cadabra2 import *
@@ -28,8 +31,9 @@ def riemann_to_ricci(ex):
     rl1 = Ex(r'R^{a?}_{b? a? c?}     =  R_{b? c?}, R^{a?}_{b? c? a?}     = -R_{b? c?}')
     rl2 = Ex(r'R_{a?}_{b?}^{a?}_{c?} =  R_{b? c?}, R_{a?}_{b? c?}^{a?}   = -R_{b? c?}')
     rl3 = Ex(r'R_{b?}^{a?}_{c? a?}   =  R_{b? c?}, R_{b?}^{a?}_{a? c?}   = -R_{b? c?}')
-    rl4 = Ex(r'R^{a?}_{a?} = R, R_{a?}^{a?} = R')
+    rl4 = Ex(r'R_{b?}_{a?}^{c? a?}   =  R_{b?}^{c?}')    
+    rl5 = Ex(r'R^{a?}_{a?} = R, R_{a?}^{a?} = R')
 
-    substitute(ex, rl1+rl2+rl3+rl4)
+    substitute(ex, rl1+rl2+rl3+rl4+rl5, repeat=True)
 
     return ex

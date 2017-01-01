@@ -158,7 +158,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		
 		bool function_bracket_needed=true;
 		if(current_bracket_==str_node::b_none) {
-			if(previous_bracket_==str_node::b_none && current_parent_rel_==str_node::p_none)
+			if(previous_bracket_==str_node::b_none && current_parent_rel_==previous_parent_rel_ && current_parent_rel_==str_node::p_none)
 				str << ", ";
 			function_bracket_needed=!reads_as_operator(it, ch);
 			}

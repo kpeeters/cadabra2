@@ -365,7 +365,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left\\{\\begin{aligned}\\square{}^{1}{}^{2}{}^{3}= & 1\\\\[-.5ex]\n\\square{}^{1}{}^{3}{}^{2}= & -1\\\\[-.5ex]\n\\square{}^{2}{}^{1}{}^{3}= & -1\\\\[-.5ex]\n\\square{}^{2}{}^{3}{}^{1}= & 1\\\\[-.5ex]\n\\square{}^{3}{}^{1}{}^{2}= & 1\\\\[-.5ex]\n\\square{}^{3}{}^{2}{}^{1}= & -1\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
 			"source" : "evaluate(_, $$);"
