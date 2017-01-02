@@ -130,8 +130,8 @@ class Shell(InteractiveConsole):
         # Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
         imatch = re.match(r'([ ]*)converge\(([^\)]*)\):', line_stripped)
         if imatch:
-            ret  = imatch.group(1)+imatch.group(2)+".reset(); _="+imatch.group(2)+"\n"
-            ret += imatch.group(1)+"while "+imatch.group(2)+".changed():\n"
+            ret  = indent_line+imatch.group(1)+imatch.group(2)+".reset(); _="+imatch.group(2)+"\n"
+            ret += indent_line+imatch.group(1)+"while "+imatch.group(2)+".changed():\n"
             return ret
         
         found = line_stripped.find(':=')
