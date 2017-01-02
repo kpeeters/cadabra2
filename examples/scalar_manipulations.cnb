@@ -130,38 +130,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "You can print this in a Sympy-parseable form by using Python's \\verb|str|:"
+					"source" : "You can print this in a Sympy-parseable form by using the \\verb|_sympy_()| method:"
 				}
 			],
 			"hidden" : true,
-			"source" : "You can print this in a Sympy-parseable form by using Python's \\verb|str|:"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "output",
-					"source" : "\\begin{verbatim}Integral(\\sin(x)*\\cos(x), x)+Integral(x**2, x)\n\\end{verbatim}"
-				}
-			],
-			"source" : "print(str(ex2))"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "Alternatively, convert to a Sympy expression using:"
-				}
-			],
-			"hidden" : true,
-			"source" : "Alternatively, convert to a Sympy expression using:"
+			"source" : "You can print this in a Sympy-parseable form by using the \\verb|_sympy_()| method:"
 		},
 		{
 			"cell_origin" : "client",
@@ -176,10 +149,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "output",
-					"source" : "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
+					"source" : "\\begin{verbatim}Integral(x**2, x) + Integral(sin(x)*cos(x), x)\n<class 'sympy.core.add.Add'>\n\\end{verbatim}"
 				}
 			],
-			"source" : "ex2._sympy_();\nprint(type(ex2._sympy_()))"
+			"source" : "ex2._sympy_();\nprint(ex2._sympy_())\nprint(type(ex2._sympy_()))"
 		},
 		{
 			"cell_origin" : "client",
@@ -259,7 +232,7 @@
 					"source" : "\\begin{dmath*}{}\\int_{0}^{2} \\sin{\\left (x \\right )}\\, dx\\end{dmath*}"
 				}
 			],
-			"source" : "from sympy import *\nx,y=var('x,y')\nIntegral(sin(x),(x,0,2));"
+			"source" : "from sympy import *\nx,y=var('x,y')\ni = Integral(sin(x),(x,0,2));"
 		},
 		{
 			"cell_origin" : "client",
@@ -272,7 +245,7 @@
 					"source" : "\\begin{dmath*}{}- \\cos{\\left (2 \\right )} + 1\\end{dmath*}"
 				}
 			],
-			"source" : "_.doit();"
+			"source" : "i.doit();"
 		},
 		{
 			"cell_origin" : "client",

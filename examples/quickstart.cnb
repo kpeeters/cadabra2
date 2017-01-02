@@ -23,7 +23,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(a, \\linebreak[0] b, \\linebreak[0] c, \\linebreak[0] d\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left\\{a, \\linebreak[0] b, \\linebreak[0] c, \\linebreak[0] d\\right\\}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -132,7 +132,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(a_{1}, \\linebreak[0] a_{2}, \\linebreak[0] a_{3}, \\linebreak[0] a_{4}\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left\\{a_{1}, \\linebreak[0] a_{2}, \\linebreak[0] a_{3}, \\linebreak[0] a_{4}\\right\\}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -142,7 +142,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}M_{a_{1} a_{2}} N_{a_{2}} W_{a_{1}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}M_{a_{1} a} N_{a} W_{a_{1}}\\end{dmath*}"
 				}
 			],
 			"source" : "{ a_{1}, a_{2}, a_{3}, a_{4} }::Indices(vector);\nex:= V_{a_{1}} W_{a_{1}};\nsubstitute(_, $V_{a_{2}} -> M_{a_{2} a_{1}} N_{a_{1}}$ );"
@@ -257,6 +257,11 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left\\{m, \\linebreak[0] n, \\linebreak[0] p, \\linebreak[0] q, \\linebreak[0] r\\right\\}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
 				},
 				{
@@ -277,10 +282,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\partial_{m p}\\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\partial_{m p}, \\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
 				}
 			],
-			"source" : "\\nabla{#}::Derivative;\n\\partial{#}::PartialDerivative;\nA_{m n}::AntiSymmetric;\nV_{m}::Depends(\\nabla);\n\nex:= \\partial_{m p}( A_{q r} V_{n} ) A^{p m};"
+			"source" : "{m,n,p,q,r}::Indices(position=free);\n\\nabla{#}::Derivative;\n\\partial{#}::PartialDerivative;\nA_{m n}::AntiSymmetric;\nV_{m}::Depends(\\nabla{#});\n\nex:= \\partial_{m p}( A_{q r} V_{n} ) A^{p m};"
 		},
 		{
 			"cell_origin" : "client",
@@ -303,12 +308,12 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\nabla_{m p}\\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\nabla_{m p}, \\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-\\nabla^{m p}\\left(A_{q r} V_{n}\\right) A_{m p}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\nabla^{m p}, \\left(A_{q r} V_{n}\\right) A_{m p}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=\\nabla_{m p}( A_{q r} V_{n} ) A^{p m};\ncanonicalise(_);"
@@ -321,7 +326,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-A_{q r} \\nabla^{m p}{V_{n}} A_{m p}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-A_{q r} \\nabla^{m p}, {V_{n}} A_{m p}\\end{dmath*}"
 				}
 			],
 			"source" : "unwrap(_);"
