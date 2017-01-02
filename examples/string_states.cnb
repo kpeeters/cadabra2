@@ -58,10 +58,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}L_{1} \\chi = \\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "L1c:= @(L1) @(chi);"
+			"source" : "L1c:= L_1 \\chi = @(L1) @(chi);"
 		},
 		{
 			"cell_origin" : "client",
@@ -98,28 +98,24 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}L_{1} \\chi = \\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(L1c,rl);"
 		},
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
+			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
-					"cell_origin" : "server",
+					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle+\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\nu} |0\\rangle-\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 3, in <module>\nAssertionError\n\\end{verbatim}}}"
+					"source" : "Obviously we need to do this substitution a number of times, and distribute any factors over sums. The \n\\verb|converge| logic helps to automate this."
 				}
 			],
-			"source" : "#test \ntst:= \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\mu} \\vac + \\alpha_{-1}^{\\nu} \\alpha_{0}^{\\nu} \\vac - @(L1c);\nassert(tst==0)"
+			"hidden" : true,
+			"source" : "Obviously we need to do this substitution a number of times, and distribute any factors over sums. The \n\\verb|converge| logic helps to automate this."
 		},
 		{
 			"cell_origin" : "client",
@@ -129,49 +125,24 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu} |0\\rangle+\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\mu} \\delta^{\\mu \\nu} |0\\rangle+\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "distribute(L1c);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{1}\\,^{\\mu} |0\\rangle+\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle+\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "eliminate_kronecker(L1c);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}2\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "rename_dummies(L1c);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}2\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}L_{1} \\chi = 2\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "converge(L1c):\n   substitute(L1c, rl)\n   distribute(L1c)\n   eliminate_kronecker(L1c)\n   rename_dummies(L1c)\n;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The $L_m$ Virasoro generators are given by infinite sums. The function below constructs part of that sum explicitly:"
+				}
+			],
+			"hidden" : true,
+			"source" : "The $L_m$ Virasoro generators are given by infinite sums. The function below constructs part of that sum explicitly:"
 		},
 		{
 			"cell_origin" : "client",
@@ -204,10 +175,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(\\alpha_{11}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{10}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-7}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-8}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}L_{1} \\chi = \\left(\\alpha_{11}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{10}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-7}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-8}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "L1c:= @(L1) @(chi);"
+			"source" : "L1c:= L_1 \\chi = @(L1) @(chi);"
 		},
 		{
 			"cell_origin" : "client",
@@ -222,7 +193,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}4\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}L_{1} \\chi = 4\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "act(L1c);"

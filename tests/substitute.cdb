@@ -279,3 +279,10 @@ def test109():
 
 test109()
 
+# def test110():
+# {\mu,\nu,\rho}::Integer(0..d-1).
+# {\mu,\nu,\rho}::Indices.
+# {m,n}::Integer.
+# rl:= \alpha_{m}^{\mu} \alpha_{n}^{\nu} | m > n -> \alpha_{n}^{\nu} \alpha_{m}^{\mu} +  \delta_{m}_{-n} \delta^{\mu\nu};
+# ex:= \alpha_{1}^{\mu} \alpha_{0}^{\mu};
+# substitute(ex, rl);
