@@ -471,6 +471,9 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 
 void DisplayTeX::print_commutator(std::ostream& str, Ex::iterator it, bool comm)
 	{
+	if(*it->multiplier!=1)
+		print_multiplier(str, it);
+
 	if(comm) str << "{}\\left[";
 	else     str << "{}\\left\\{";
 	auto sib=tree.begin(it);

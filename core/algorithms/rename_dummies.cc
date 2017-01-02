@@ -10,6 +10,8 @@ rename_dummies::rename_dummies(const Kernel& k, Ex& tr)
 
 bool rename_dummies::can_apply(iterator st)
 	{
+//	std::cerr << "---" << std::endl << Ex(st);
+
 	if(*st->name!="\\prod") // && *st->name!="\\sum") 
 		if(!is_single_term(st))
 			return false;
@@ -22,8 +24,10 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	{
 	result_t res=result_t::l_no_action;
 
+//	std::cerr << Ex(st);
 	prod_wrap_single_term(st);
-
+//	std::cerr << Ex(st);
+	
 	// First do a normal classify_indices both downwards and upwards.
 	//
 	index_map_t ind_free, ind_dummy, ind_free_up, ind_dummy_up;
@@ -94,7 +98,9 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 		++iim;
 		}
 
+//	std::cerr << Ex(st);
 	prod_unwrap_single_term(st);
-
+//	std::cerr << Ex(st);
+	
 	return res;
 	}

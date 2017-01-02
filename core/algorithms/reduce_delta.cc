@@ -54,7 +54,7 @@ bool reduce_delta::one_step_(sibling_iterator dl)
 		}
    return false;
    found:
-//	debugout << "reduce_delta: eliminating " << *up->name << " contraction." << std::endl;
+//	std::cerr << "reduce_delta: eliminating " << *up->name << " contraction." << std::endl;
 //	{unsigned int num=1;
 //	tr.print_recursive_treeform(debugout, dl, num) << std::endl;}
 	// FIXME: use properties for the dimension!
