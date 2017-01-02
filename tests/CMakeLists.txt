@@ -12,6 +12,40 @@ message("-- Set PYTHONPATH for testing to ${PYTHONPATH}:$ENV{PYTHONPATH}")
 if (!WIN32)
   add_test(comparison     test_comparison)
 endif()
+
+
+# Notebooks with built-in tests.
+#
+set(CNBIN   ${CMAKE_SOURCE_DIR}/examples)
+set(CDBOUT  ${CMAKE_BINARY_DIR}/tests)
+set(DC      ${CMAKE_SOURCE_DIR}/client_server/cadabra2html.cc ${CMAKE_SOURCE_DIR}/client_server/DataCell.hh ${CMAKE_SOURCE_DIR}/client_server/DataCell.cc)
+set(NBTESTS
+  quickstart
+  beginners
+  tensor_monomials
+  for_previous_users
+  converge
+  fierz
+  gamma_matrix_algebra
+  poincare_algebra
+  string_states
+  bianchi_identities
+  schwarzschild
+  kaluza_klein
+  scalar_manipulations
+  )
+foreach(NBTEST ${NBTESTS})
+  add_custom_command(OUTPUT  ${CDBOUT}/${NBTEST}.cdb
+	 DEPENDS ${CNBIN}/${NBTEST}.cnb ${DC}
+	 COMMAND cadabra2cadabra
+	 ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
+	 COMMENT "Creating ${NBTEST} notebook...")
+  add_custom_target("${NBTEST}_test" ALL echo -n DEPENDS ${CDBOUT}/${NBTEST}.cdb)
+  add_test(${NBTEST}  ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
+endforeach()
+
+# The main test suite.
+#
 add_test(packages       ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/packages.cdb)
 add_test(algebra        ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/algebra.cdb)
 add_test(components     ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/components.cdb)
@@ -31,7 +65,6 @@ add_test(relativity     ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/te
 add_test(symmetry       ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/symmetry.cdb)
 add_test(vary           ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/vary.cdb)
 add_test(young          ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/young.cdb)
-
 
 # We need to set the Python path so that we pick up the correct cadabra2.so Python module
 # even if we did not do 'make install' yet.

@@ -132,8 +132,8 @@ Algorithm::result_t expand_delta::apply(iterator& st)
 		int sgn=combin::ordersign(ci[permnum].begin(), ci[permnum].end(), 
 										  ci.original.begin(), ci.original.end());
 		multiplier_t mult=multiplier_t(ci.multiplier(permnum))/multiplier_t(combin::fact((unsigned long)ci.original.size()))*sgn;
-//		debugout << "multipliers: " << mult << " = " << ci.multiplier(permnum) 
-//					<< " / " << fact(ci.original.size()) << " * " << sgn << std::endl;
+//		std::cerr << "multipliers: " << mult << " = " << ci.multiplier(permnum) 
+//					 << " / " << combin::fact(ci.original.size()) << " * " << sgn << std::endl;
 		multiply(prod->multiplier, mult);
 		multiply(prod->multiplier, *st->multiplier);
 		sibling_iterator ind=tr.begin(st);
