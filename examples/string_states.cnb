@@ -27,7 +27,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left(\\alpha_{n}\\,^{\\mu}, \\linebreak[0] |0\\rangle\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left\\{\\alpha_{n}\\,^{\\mu}, \\linebreak[0] |0\\rangle\\right\\}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -85,7 +85,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(\\alpha_{m}\\,^{\\mu} \\alpha_{n}\\,^{\\nu}\\quad\\text{with}\\quad{}m > n \\rightarrow \\alpha_{n}\\,^{\\nu} \\alpha_{m}\\,^{\\mu}+\\delta_{m -n} \\delta^{\\mu \\nu}, \\linebreak[0] \\alpha_{m}\\,^{\\mu} |0\\rangle\\quad\\text{with}\\quad{}m > 0 \\rightarrow 0\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left\\{\\alpha_{m}\\,^{\\mu} \\alpha_{n}\\,^{\\nu}\\quad\\text{with}\\quad{}m > n \\rightarrow \\alpha_{n}\\,^{\\nu} \\alpha_{m}\\,^{\\mu}+\\delta_{m -n} \\delta^{\\mu \\nu}, \\linebreak[0] \\alpha_{m}\\,^{\\mu} |0\\rangle\\quad\\text{with}\\quad{}m > 0 \\rightarrow 0\\right\\}\\end{dmath*}"
 				}
 			],
 			"source" : "rl:= { \\alpha_{m}^{\\mu} \\alpha_{n}^{\\nu} | m > n -> \\alpha_{n}^{\\nu} \\alpha_{m}^{\\mu} +  \\delta_{m}_{-n} \\delta^{\\mu\\nu},\n       \\alpha_{m}^{\\mu} \\vac | m > 0 -> 0 };"
@@ -98,10 +98,28 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle+\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(L1c,rl);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle+\\alpha_{-1}\\,^{\\nu} \\alpha_{0}\\,^{\\nu} |0\\rangle-\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 3, in <module>\nAssertionError\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "#test \ntst:= \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\mu} \\vac + \\alpha_{-1}^{\\nu} \\alpha_{0}^{\\nu} \\vac - @(L1c);\nassert(tst==0)"
 		},
 		{
 			"cell_origin" : "client",
