@@ -9,6 +9,7 @@ var searchData=
   ['notebookcontroller_28_29',['NotebookController()',['../categoryNotebookController_07_08.html',1,'']]],
   ['notebookwindow',['NotebookWindow',['../classcadabra__osx_1_1NotebookWindow.html',1,'cadabra_osx']]],
   ['notebookwindow',['NotebookWindow',['../classcadabra_1_1NotebookWindow.html',1,'cadabra']]],
+  ['notyetimplemented',['NotYetImplemented',['../classNotYetImplemented.html',1,'']]],
   ['nset_5fit_5fless',['nset_it_less',['../classnset__it__less.html',1,'']]],
   ['numericalflat',['NumericalFlat',['../classNumericalFlat.html',1,'']]]
 ];

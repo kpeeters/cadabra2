@@ -5,6 +5,7 @@ var searchData=
   ['handle_5fbutton_5fpress',['handle_button_press',['../classcadabra_1_1CodeInput.html#af766ae20063b88d1e425a7fc1fcfb878',1,'cadabra::CodeInput']]],
   ['handle_5fcomponents',['handle_components',['../classevaluate.html#a0e4b480a3aaf126a0f78c1cd1cc823ab',1,'evaluate']]],
   ['handle_5fderivative',['handle_derivative',['../classevaluate.html#a58f67908bbff45290e8c2fc796c1bcbf',1,'evaluate']]],
+  ['handle_5fepsilon',['handle_epsilon',['../classevaluate.html#a99458f5d936a612990acfa2137decae1',1,'evaluate']]],
   ['handle_5ferase',['handle_erase',['../classcadabra_1_1CodeInput.html#aad1428fbc22c2c612b02067694a85e2a',1,'cadabra::CodeInput']]],
   ['handle_5ffactor',['handle_factor',['../classevaluate.html#af90e8e16af9cbde4f874594bc9f926e9',1,'evaluate']]],
   ['handle_5finsert',['handle_insert',['../classcadabra_1_1CodeInput.html#ac7161c8138da3263789782c9e56df832',1,'cadabra::CodeInput']]],

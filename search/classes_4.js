@@ -19,5 +19,6 @@ var searchData=
   ['expand',['expand',['../classexpand.html',1,'']]],
   ['expand_5fdelta',['expand_delta',['../classexpand__delta.html',1,'']]],
   ['expand_5fdiracbar',['expand_diracbar',['../classexpand__diracbar.html',1,'']]],
-  ['expand_5fpower',['expand_power',['../classexpand__power.html',1,'']]]
+  ['expand_5fpower',['expand_power',['../classexpand__power.html',1,'']]],
+  ['exteriorderivative',['ExteriorDerivative',['../classExteriorDerivative.html',1,'']]]
 ];

@@ -34,6 +34,7 @@ var searchData=
   ['window',['window',['../categoryAppDelegate_07_08.html#ab23aa75c68dacbf295bd62577cfbef88',1,'AppDelegate()']]],
   ['wrap',['wrap',['../classintegrate__by__parts.html#a4b4424eb8c478e5700d4ac9784d5bf93',1,'integrate_by_parts']]],
   ['wrap_5fscalar_5fin_5fcomponents_5fnode',['wrap_scalar_in_components_node',['../classevaluate.html#abee4bed7a172546d2b28f8843ba814e8',1,'evaluate']]],
+  ['wrappers',['wrappers',['../classunwrap.html#ae2a1ec115e2ba9073a16b9cd66c7e62b',1,'unwrap']]],
   ['write',['write',['../classServer_1_1CatchOutput.html#afaeb362ba4c863330c4e70bf75d8f8d6',1,'Server::CatchOutput::write()'],['../popen2_8cc.html#aa10f470e996d0f51210d24f442d25e1e',1,'WRITE():&#160;popen2.cc']]],
   ['ws_5fmutex',['ws_mutex',['../classServer.html#a5ffcd6a9e2c7a5b7f5d5dc30eb1845d4',1,'Server']]],
   ['wsclient',['wsclient',['../classcadabra_1_1ComputeThread.html#ab34e81c19720b1352777d42f2671d94d',1,'cadabra::ComputeThread::wsclient()'],['../classsnoop_1_1SnoopImpl.html#a645609b5c9d054c9c8c4fce7352c464f',1,'snoop::SnoopImpl::wsclient()'],['../ComputeThread_8hh.html#a954a13b64191d97550b93df2fd33d460',1,'WSClient():&#160;ComputeThread.hh']]],

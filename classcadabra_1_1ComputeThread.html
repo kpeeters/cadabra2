@@ -183,10 +183,12 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 <tr class="separator:a290bd753f88b0835daeaf8afecaa7d47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b21b5ab520016925de6889039172144"><td class="memItemLeft" align="right" valign="top">websocketpp::connection_hdl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a9b21b5ab520016925de6889039172144">our_connection_hdl</a></td></tr>
 <tr class="separator:a9b21b5ab520016925de6889039172144"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29eb28ae72421f8dd4f2802d26b123ce"><td class="memItemLeft" align="right" valign="top">pid_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a29eb28ae72421f8dd4f2802d26b123ce">server_pid</a></td></tr>
-<tr class="separator:a29eb28ae72421f8dd4f2802d26b123ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aabcdbc94dbfb9d1eb3ce64e892f253c6"><td class="memItemLeft" align="right" valign="top">FILE *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#aabcdbc94dbfb9d1eb3ce64e892f253c6">server_stdout</a></td></tr>
-<tr class="separator:aabcdbc94dbfb9d1eb3ce64e892f253c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4335140f2cca6e7cdd14ea79c09d282c"><td class="memItemLeft" align="right" valign="top">Glib::Pid&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a4335140f2cca6e7cdd14ea79c09d282c">server_pid</a></td></tr>
+<tr class="separator:a4335140f2cca6e7cdd14ea79c09d282c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ea8b61bfec4e9a725be211eb6be8b71"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a7ea8b61bfec4e9a725be211eb6be8b71">server_stdout</a></td></tr>
+<tr class="separator:a7ea8b61bfec4e9a725be211eb6be8b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2346bffd29c6f6d3fda6e6c2214fe00"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#af2346bffd29c6f6d3fda6e6c2214fe00">server_stderr</a></td></tr>
+<tr class="separator:af2346bffd29c6f6d3fda6e6c2214fe00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdda71b345863d965a6c09477522574a"><td class="memItemLeft" align="right" valign="top">unsigned short&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#afdda71b345863d965a6c09477522574a">port</a></td></tr>
 <tr class="separator:afdda71b345863d965a6c09477522574a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -796,7 +798,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 </div>
 </div>
-<a class="anchor" id="a29eb28ae72421f8dd4f2802d26b123ce"></a>
+<a class="anchor" id="a4335140f2cca6e7cdd14ea79c09d282c"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -804,7 +806,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">pid_t cadabra::ComputeThread::server_pid</td>
+          <td class="memname">Glib::Pid cadabra::ComputeThread::server_pid</td>
         </tr>
       </table>
   </td>
@@ -816,7 +818,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 </div>
 </div>
-<a class="anchor" id="aabcdbc94dbfb9d1eb3ce64e892f253c6"></a>
+<a class="anchor" id="af2346bffd29c6f6d3fda6e6c2214fe00"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -824,7 +826,27 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">FILE* cadabra::ComputeThread::server_stdout</td>
+          <td class="memname">int cadabra::ComputeThread::server_stderr</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a7ea8b61bfec4e9a725be211eb6be8b71"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int cadabra::ComputeThread::server_stdout</td>
         </tr>
       </table>
   </td>
@@ -863,7 +885,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:14:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 3 2017 10:32:32 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

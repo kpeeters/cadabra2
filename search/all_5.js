@@ -97,6 +97,9 @@ var searchData=
   ['export_5fas_5fhtml',['export_as_HTML',['../namespacecadabra.html#a9da1f5667a79f57423e77d7316b2dce3',1,'cadabra']]],
   ['export_5fas_5flatex',['export_as_LaTeX',['../namespacecadabra.html#a6f28b80b2747d0677e2faa23e3c1a0d7',1,'cadabra']]],
   ['export_5fas_5fpython',['export_as_python',['../namespacecadabra.html#a2bcbb2d2130b304c3fa0b6f5359fbf66',1,'cadabra']]],
+  ['exteriorderivative',['ExteriorDerivative',['../classExteriorDerivative.html',1,'']]],
+  ['exteriorderivative_2ecc',['ExteriorDerivative.cc',['../ExteriorDerivative_8cc.html',1,'']]],
+  ['exteriorderivative_2ehh',['ExteriorDerivative.hh',['../ExteriorDerivative_8hh.html',1,'']]],
   ['extra_5fbrackets_5ffor_5fsymbols',['extra_brackets_for_symbols',['../classDisplayTeX.html#a892ee92c9403f1f879dfbd9f69759a5e',1,'DisplayTeX']]],
   ['extra_5fsign',['extra_sign',['../structexchange_1_1identical__tensors__t.html#ab16d5a2e206f04420d4c277b9e1bb6a3',1,'exchange::identical_tensors_t']]]
 ];

@@ -5,6 +5,7 @@ var searchData=
   ['def_5falgo_5f1',['def_algo_1',['../PythonCdb_8cc.html#a0faaf97782adb937278d0660459ef4d2',1,'PythonCdb.cc']]],
   ['def_5fprop',['def_prop',['../PythonCdb_8cc.html#a51cbb86696b71c4d6112a4b5a1f4af6a',1,'PythonCdb.cc']]],
   ['default_5fis_5fproduct_5f',['default_is_product_',['../classpreprocessor.html#a7509e9a6e41aa6439e3b98fff1d517db',1,'preprocessor']]],
+  ['degree',['degree',['../classDifferentialForm.html#a143804c0de12a6f22362276ea8bd7255',1,'DifferentialForm::degree()'],['../classDifferentialFormBase.html#aab1c030481929b0dbe56a99d033d78cd',1,'DifferentialFormBase::degree()'],['../classExteriorDerivative.html#ad1ce720f75977cccc7e3dbf1d80e4116',1,'ExteriorDerivative::degree()']]],
   ['dependencies',['dependencies',['../classevaluate.html#a456195867eb2108861791aee40fb1067',1,'evaluate::dependencies()'],['../classDepends.html#ad9676ce9164018ddbc38309842f297f7',1,'Depends::dependencies()'],['../classDependsBase.html#a04ef9242e972c4bef930be26ce80253d',1,'DependsBase::dependencies()'],['../classDependsInherit.html#a855af072e78370ce5dd8044afc12da81',1,'DependsInherit::dependencies()']]],
   ['derivative_5facting_5fon_5farg',['derivative_acting_on_arg',['../classintegrate__by__parts.html#aa9225659577d3f0e02b89dd32d4f01de',1,'integrate_by_parts']]],
   ['determine_5fintersection',['determine_intersection',['../classAlgorithm.html#ae996e070814cff9c47b1cddedd6a2ab5',1,'Algorithm']]],

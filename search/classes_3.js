@@ -8,6 +8,8 @@ var searchData=
   ['dependsinherit',['DependsInherit',['../classDependsInherit.html',1,'']]],
   ['derivative',['Derivative',['../classDerivative.html',1,'']]],
   ['diagonal',['Diagonal',['../classDiagonal.html',1,'']]],
+  ['differentialform',['DifferentialForm',['../classDifferentialForm.html',1,'']]],
+  ['differentialformbase',['DifferentialFormBase',['../classDifferentialFormBase.html',1,'']]],
   ['diracbar',['DiracBar',['../classDiracBar.html',1,'']]],
   ['displaybase',['DisplayBase',['../classDisplayBase.html',1,'']]],
   ['displaysympy',['DisplaySympy',['../classDisplaySympy.html',1,'']]],

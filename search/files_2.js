@@ -4,6 +4,7 @@ var searchData=
   ['cadabra_2ecc',['Cadabra.cc',['../Cadabra_8cc.html',1,'']]],
   ['cadabra_2ehh',['Cadabra.hh',['../Cadabra_8hh.html',1,'']]],
   ['cadabra2_5fdefaults_2epy',['cadabra2_defaults.py',['../cadabra2__defaults_8py.html',1,'']]],
+  ['cadabra2cadabra_2ecc',['cadabra2cadabra.cc',['../cadabra2cadabra_8cc.html',1,'']]],
   ['cadabra2html_2ecc',['cadabra2html.cc',['../cadabra2html_8cc.html',1,'']]],
   ['canonicalise_2ecc',['canonicalise.cc',['../canonicalise_8cc.html',1,'']]],
   ['canonicalise_2ehh',['canonicalise.hh',['../canonicalise_8hh.html',1,'']]],

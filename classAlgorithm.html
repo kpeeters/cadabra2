@@ -200,9 +200,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a065db0550af7fea605455674639019ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx.html#a2b752a88144e6ad7bee2ff30bd671811">result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAlgorithm.html#a065db0550af7fea605455674639019ea">apply_generic</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> &amp;, bool deep, bool repeat, unsigned int depth)</td></tr>
 <tr class="separator:a065db0550af7fea605455674639019ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36d0e79228d64531eaca39046f85828b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAlgorithm.html#a36d0e79228d64531eaca39046f85828b">check_consistency</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>) const </td></tr>
+<tr class="memdesc:a36d0e79228d64531eaca39046f85828b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given an expression top node, check index consistency.  <a href="#a36d0e79228d64531eaca39046f85828b">More...</a><br/></td></tr>
 <tr class="separator:a36d0e79228d64531eaca39046f85828b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca1ff8d3801d43a8ee0f5f8056981c17"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAlgorithm.html#aca1ff8d3801d43a8ee0f5f8056981c17">check_index_consistency</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>) const </td></tr>
 <tr class="separator:aca1ff8d3801d43a8ee0f5f8056981c17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1db8f7ac9575be29252a7532d5838018"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAlgorithm.html#a1db8f7ac9575be29252a7532d5838018">check_degree_consistency</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>) const </td></tr>
+<tr class="memdesc:a1db8f7ac9575be29252a7532d5838018"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given an expression top node, check differential form degree consistency.  <a href="#a1db8f7ac9575be29252a7532d5838018">More...</a><br/></td></tr>
+<tr class="separator:a1db8f7ac9575be29252a7532d5838018"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a314bc7bb881fbf49a6b2c567fd7e2b18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAlgorithm.html#a314bc7bb881fbf49a6b2c567fd7e2b18">report_progress</a> (const std::string &amp;, int todo, int done, int count=2)</td></tr>
 <tr class="separator:a314bc7bb881fbf49a6b2c567fd7e2b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad68a0d802b88156b7f1b59ba64765101"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classindex__iterator.html">index_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAlgorithm.html#ad68a0d802b88156b7f1b59ba64765101">begin_index</a> (<a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a> it) const </td></tr>
@@ -707,6 +711,26 @@ Private Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Given an expression top node, check index consistency. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1db8f7ac9575be29252a7532d5838018"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Algorithm::check_degree_consistency </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classAlgorithm.html#a238645043dc3b992ce92ebcd66389217">iterator</a>&#160;</td>
+          <td class="paramname"><em>it</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given an expression top node, check differential form degree consistency. </p>
 
 </div>
 </div>
@@ -2447,7 +2471,7 @@ template&lt;class BinaryPredicate &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:14:07 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 3 2017 10:32:13 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

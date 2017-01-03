@@ -2,6 +2,7 @@ var searchData=
 [
   ['rat_5fset',['rat_set',['../Storage_8cc.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc'],['../Storage_8hh.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc']]],
   ['raw_5fints',['raw_ints',['../classsym.html#a938267c89e18daffcf14823923b5944d',1,'sym']]],
+  ['rbox',['rbox',['../classcadabra_1_1TeXView.html#a30cd584643a13299dd3728c72219ea31',1,'cadabra::TeXView']]],
   ['read_5fonly',['read_only',['../classcadabra_1_1NotebookWindow.html#a3ff79c4919808b8b12e90ee698343766',1,'cadabra::NotebookWindow']]],
   ['receive_5fmillis',['receive_millis',['../classsnoop_1_1Snoop_1_1AppEntry.html#aa2d111c3a96cac92a571489a2e9976dc',1,'snoop::Snoop::AppEntry::receive_millis()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#ac5c65cf4a533aca9284b11cdcf7311c0',1,'snoop::Snoop::LogEntry::receive_millis()']]],
   ['redo_5fstack',['redo_stack',['../classcadabra_1_1DocumentThread.html#ab42384a7f5ad6146a4c462e97a619dbf',1,'cadabra::DocumentThread']]],
@@ -21,7 +22,7 @@ var searchData=
   ['requests',['requests',['../classcadabra_1_1TeXEngine.html#a1688559da0a69f50dba5478c5643c2c4',1,'cadabra::TeXEngine']]],
   ['restarting_5fkernel',['restarting_kernel',['../classcadabra_1_1ComputeThread.html#a7fb3fbb68e1aa23cd8af885061cb1fee',1,'cadabra::ComputeThread']]],
   ['reuse_5fgenerating_5fset',['reuse_generating_set',['../classcanonicalise.html#a9925d090a02c10494f5c73b8f0fb0aae',1,'canonicalise']]],
-  ['rho',['rho',['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc'],['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc']]],
+  ['rho',['Rho',['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc'],['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc']]],
   ['rhs',['rhs',['../classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd',1,'Server']]],
   ['rhs_5fcontains_5fdummies',['rhs_contains_dummies',['../classsubstitute.html#a3d6f2d675aedd99fd08e9b657a4d7b3e',1,'substitute']]],
   ['roof',['roof',['../classindex__iterator.html#a9de2d516ea67bd10e8a38b9ab88cc6c7',1,'index_iterator']]],

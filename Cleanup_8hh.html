@@ -135,6 +135,8 @@ Functions</h2></td></tr>
 <tr class="separator:aac4e97b8d05c3e827f471c808db28768"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ef3aeaf17aad07011e8e2aeaf3278d7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8hh.html#a7ef3aeaf17aad07011e8e2aeaf3278d7">cleanup_kronecker</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
 <tr class="separator:a7ef3aeaf17aad07011e8e2aeaf3278d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28d2627a9d81950c85d143c97341e0ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8hh.html#a28d2627a9d81950c85d143c97341e0ca">cleanup_exterior_derivative</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a28d2627a9d81950c85d143c97341e0ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaefb50b0d106555f7869513465c7bb1a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8hh.html#aaefb50b0d106555f7869513465c7bb1a">push_down_multiplier</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
 <tr class="memdesc:aaefb50b0d106555f7869513465c7bb1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a node with a non-unit multiplier, push this multiplier down the tree if the node is not allowed to have a non-unit multiplier.  <a href="#aaefb50b0d106555f7869513465c7bb1a">More...</a><br/></td></tr>
 <tr class="separator:aaefb50b0d106555f7869513465c7bb1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -317,6 +319,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Central cleanup dispatch routine, which calls the other cleanup functions defined later. </p>
+<p>These cleanup routines do NOT use normal cadabra algorithms; they are completely independent of them to prevent circular dependence or infinite recursion.</p>
 <p>These algorithms clean up the tree at the current node and the first layer of child nodes, but do NOT descend deeper down the tree, UNLESS that would leave the tree in an inconsistent state. An example is acting at the top node of {4}{{a}{b}}, which would push the 4 to the multiplier of the sum, but that is not allowed, so it needs to go further down. Sibling nodes of 'it' remain untouched as well. </p>
 
 </div>
@@ -353,6 +356,38 @@ Functions</h2></td></tr>
 
 <p>More general cleanup of an entire tree. </p>
 <p>Walks depth-first along the entire tree and call cleanup_dispatch at every node. </p>
+
+</div>
+</div>
+<a class="anchor" id="a28d2627a9d81950c85d143c97341e0ca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cleanup_exterior_derivative </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -558,7 +593,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:14:07 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 3 2017 10:32:13 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

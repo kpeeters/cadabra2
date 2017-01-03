@@ -165,10 +165,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a026e8ff12b8c4c5bae4a14b9e8f7ec2e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a026e8ff12b8c4c5bae4a14b9e8f7ec2e">process_data</a> () override</td></tr>
 <tr class="memdesc:a026e8ff12b8c4c5bae4a14b9e8f7ec2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">When the <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> needs to modify the document, it stores an <a class="el" href="classcadabra_1_1ActionBase.html" title="All actions derive from the ActionBase object, which defines the interface they need to implement...">ActionBase</a> object on the stack (see the DocumenThread class) and then wakes up the GUI thread signalling it to process this action.  <a href="#a026e8ff12b8c4c5bae4a14b9e8f7ec2e">More...</a><br/></td></tr>
 <tr class="separator:a026e8ff12b8c4c5bae4a14b9e8f7ec2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4426c8ffc78ec9c44e9bd4f45bd705c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#ac4426c8ffc78ec9c44e9bd4f45bd705c">on_widget_size_allocate</a> (Gtk::Allocation &amp;, Gtk::Widget *w)</td></tr>
-<tr class="separator:ac4426c8ffc78ec9c44e9bd4f45bd705c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abba41c48449462ccb87c5c0601347996"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#abba41c48449462ccb87c5c0601347996">on_scroll_size_allocate</a> (Gtk::Allocation &amp;, double shift)</td></tr>
-<tr class="separator:abba41c48449462ccb87c5c0601347996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e2fbe9b44addf72c9cf227aaab42e54"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a1e2fbe9b44addf72c9cf227aaab42e54">on_scroll_size_allocate</a> (Gtk::Allocation &amp;)</td></tr>
+<tr class="separator:a1e2fbe9b44addf72c9cf227aaab42e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8d598f3fccc5cc32848a26eaf2b61c0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#aa8d598f3fccc5cc32848a26eaf2b61c0">scroll_current_cell_into_view</a> ()</td></tr>
+<tr class="separator:aa8d598f3fccc5cc32848a26eaf2b61c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afcf0ceb80b52767a3f5eca2e3cf83f11"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#afcf0ceb80b52767a3f5eca2e3cf83f11">set_name</a> (const std::string &amp;)</td></tr>
 <tr class="separator:afcf0ceb80b52767a3f5eca2e3cf83f11"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf3774a00925d7eb6c72afe58dd5c91d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#aaf3774a00925d7eb6c72afe58dd5c91d">set_title_prefix</a> (const std::string &amp;)</td></tr>
@@ -213,10 +213,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a97bf0c613a7577307ee7dc9110041289"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a858d9543c010d21ea542b27d416486d9"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a858d9543c010d21ea542b27d416486d9">scale</a></td></tr>
 <tr class="separator:a858d9543c010d21ea542b27d416486d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c182cec58a1453b1d8621d6b123e651"><td class="memItemLeft" align="right" valign="top">sigc::connection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a1c182cec58a1453b1d8621d6b123e651">grab_connection</a></td></tr>
-<tr class="separator:a1c182cec58a1453b1d8621d6b123e651"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a581ed2665237bbb746882eff7d69f336"><td class="memItemLeft" align="right" valign="top">sigc::connection&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a581ed2665237bbb746882eff7d69f336">scroll_connection</a></td></tr>
-<tr class="separator:a581ed2665237bbb746882eff7d69f336"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classcadabra_1_1DocumentThread"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classcadabra_1_1DocumentThread')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classcadabra_1_1DocumentThread.html">cadabra::DocumentThread</a></td></tr>
 <tr class="memitem:acf190258aa71c2479263269e5e1d4327 inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#acf190258aa71c2479263269e5e1d4327">ActionAddCell</a></td></tr>
 <tr class="separator:acf190258aa71c2479263269e5e1d4327 inherit pub_attribs_classcadabra_1_1DocumentThread"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,8 +278,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a62613a40e82b552f57183c8e8f6fe266"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a755823fe5c752bc94dd03e2ae8997626"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a755823fe5c752bc94dd03e2ae8997626">set_stop_sensitive</a> (bool)</td></tr>
 <tr class="separator:a755823fe5c752bc94dd03e2ae8997626"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5b6604cbc7a6ff0ec22af7e5bf03287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#af5b6604cbc7a6ff0ec22af7e5bf03287">setup_focus_after_allocate</a> (DTree::iterator)</td></tr>
-<tr class="separator:af5b6604cbc7a6ff0ec22af7e5bf03287"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a913a2e27f866f155ff1ac1a380b5600e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a913a2e27f866f155ff1ac1a380b5600e">on_file_new</a> ()</td></tr>
 <tr class="separator:a913a2e27f866f155ff1ac1a380b5600e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae11638f96ea30baa34390db3cd52630f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#ae11638f96ea30baa34390db3cd52630f">on_file_open</a> ()</td></tr>
@@ -344,6 +338,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8a952a69cd040d3d369b48a4997c6245"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a2bf2a7e6714d7785c41206239fde5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a2a2bf2a7e6714d7785c41206239fde5f">process_todo_queue</a> ()</td></tr>
 <tr class="separator:a2a2bf2a7e6714d7785c41206239fde5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f7a4fee7e8c5ba7c808157bd177d660"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a1f7a4fee7e8c5ba7c808157bd177d660">on_crash_window_closed</a> (int)</td></tr>
+<tr class="separator:a1f7a4fee7e8c5ba7c808157bd177d660"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab127760fd76bcc7e998791c46d48f363"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#ab127760fd76bcc7e998791c46d48f363">cell_got_focus</a> (DTree::iterator, int)</td></tr>
 <tr class="separator:ab127760fd76bcc7e998791c46d48f363"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab894b17030833ef9feda2a94938803b0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#ab894b17030833ef9feda2a94938803b0">cell_toggle_visibility</a> (DTree::iterator it, int)</td></tr>
@@ -364,6 +360,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a64806a8680ce409e6a0e978355a5a7ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8819d8cffbaaf923abed4b0f0e81453e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a8819d8cffbaaf923abed4b0f0e81453e">on_text_scaling_factor_changed</a> (const std::string &amp;key)</td></tr>
 <tr class="separator:a8819d8cffbaaf923abed4b0f0e81453e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad4ca4338b33b1390a7d2f4722e5447c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#aad4ca4338b33b1390a7d2f4722e5447c">idle_handler</a> ()</td></tr>
+<tr class="separator:aad4ca4338b33b1390a7d2f4722e5447c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -411,6 +409,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab2b37a1a30f8f2427bf240f323784293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ff79c4919808b8b12e90ee698343766"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a3ff79c4919808b8b12e90ee698343766">read_only</a></td></tr>
 <tr class="separator:a3ff79c4919808b8b12e90ee698343766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a890eac318ece54934f5757ca42ed896d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a890eac318ece54934f5757ca42ed896d">crash_window_hidden</a></td></tr>
+<tr class="separator:a890eac318ece54934f5757ca42ed896d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d02b6eed193689965db6a03da83438b"><td class="memItemLeft" align="right" valign="top">Glib::RefPtr&lt; Gtk::CssProvider &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a1d02b6eed193689965db6a03da83438b">css_provider</a></td></tr>
 <tr class="separator:a1d02b6eed193689965db6a03da83438b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec3e22d7901442003088a2e9f2a4c022"><td class="memItemLeft" align="right" valign="top">Glib::RefPtr&lt; Gio::Settings &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#aec3e22d7901442003088a2e9f2a4c022">settings</a></td></tr>
@@ -419,6 +419,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a2466330357ed9f9a2c930c9111120059"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae5a8c0bcc61c450c1599990787b60ea0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1NotebookWindow_1_1Prefs.html">Prefs</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#ae5a8c0bcc61c450c1599990787b60ea0">prefs</a></td></tr>
 <tr class="separator:ae5a8c0bcc61c450c1599990787b60ea0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6883dad44e7f8449f0cc1f05efd4d6cb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a6883dad44e7f8449f0cc1f05efd4d6cb">is_configured</a></td></tr>
+<tr class="separator:a6883dad44e7f8449f0cc1f05efd4d6cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79c4870df95555b208586ea2489450a9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Gtk::Revealer * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a79c4870df95555b208586ea2489450a9">to_reveal</a></td></tr>
+<tr class="separator:a79c4870df95555b208586ea2489450a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -818,6 +822,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aad4ca4338b33b1390a7d2f4722e5447c"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NotebookWindow::idle_handler </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a403932b5f2214315bc59fa8c06a5c5e4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -883,6 +910,30 @@ Additional Inherited Members</h2></td></tr>
 <p>GUI using the following methods. These get called on the compute thread (as opposed to the functions above, which get called on the gui thread). </p>
 
 <p>Implements <a class="el" href="classcadabra_1_1GUIBase.html#ae50433aae621adead3172b5a16a9aeb5">cadabra::GUIBase</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1f7a4fee7e8c5ba7c808157bd177d660"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NotebookWindow::on_crash_window_closed </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -1587,7 +1638,7 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abba41c48449462ccb87c5c0601347996"></a>
+<a class="anchor" id="a1e2fbe9b44addf72c9cf227aaab42e54"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1595,18 +1646,8 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void NotebookWindow::on_scroll_size_allocate </td>
           <td>(</td>
           <td class="paramtype">Gtk::Allocation &amp;&#160;</td>
-          <td class="paramname"><em>scroll_alloc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>scroll_alloc</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>shift</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1713,32 +1754,6 @@ Additional Inherited Members</h2></td></tr>
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac4426c8ffc78ec9c44e9bd4f45bd705c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void NotebookWindow::on_widget_size_allocate </td>
-          <td>(</td>
-          <td class="paramtype">Gtk::Allocation &amp;&#160;</td>
-          <td class="paramname"><em>busy_alloc</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Gtk::Widget *&#160;</td>
-          <td class="paramname"><em>w</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
 </div><div class="memdoc">
 
 </div>
@@ -1951,6 +1966,21 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa8d598f3fccc5cc32848a26eaf2b61c0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NotebookWindow::scroll_current_cell_into_view </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="afcf0ceb80b52767a3f5eca2e3cf83f11"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2018,30 +2048,6 @@ Additional Inherited Members</h2></td></tr>
           <td class="memname">void cadabra::NotebookWindow::setup_css_provider </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="af5b6604cbc7a6ff0ec22af7e5bf03287"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void NotebookWindow::setup_focus_after_allocate </td>
-          <td>(</td>
-          <td class="paramtype">DTree::iterator&#160;</td>
-          <td class="paramname"><em>it</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -2177,6 +2183,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a890eac318ece54934f5757ca42ed896d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::NotebookWindow::crash_window_hidden</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a1d02b6eed193689965db6a03da83438b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2269,14 +2295,22 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1c182cec58a1453b1d8621d6b123e651"></a>
+<a class="anchor" id="a6883dad44e7f8449f0cc1f05efd4d6cb"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">sigc::connection cadabra::NotebookWindow::grab_connection</td>
+          <td class="memname">bool cadabra::NotebookWindow::is_configured</td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -2513,18 +2547,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a581ed2665237bbb746882eff7d69f336"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">sigc::connection cadabra::NotebookWindow::scroll_connection</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="aec3e22d7901442003088a2e9f2a4c022"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2665,6 +2687,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a79c4870df95555b208586ea2489450a9"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;Gtk::Revealer *&gt; cadabra::NotebookWindow::to_reveal</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a0a744d50bd9f04b5a7600c4f7228d357"></a>
 <div class="memitem">
 <div class="memproto">
@@ -2712,7 +2754,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:14:26 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 3 2017 10:32:33 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

@@ -103,10 +103,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="Functional_8hh_source.html">Functional.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Algorithm_8hh_source.html">Algorithm.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="collect__terms_8hh_source.html">algorithms/collect_terms.hh</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="PartialDerivative_8hh_source.html">properties/PartialDerivative.hh</a>&quot;</code><br/>
-<code>#include &quot;<a class="el" href="NumericalFlat_8hh_source.html">properties/NumericalFlat.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Diagonal_8hh_source.html">properties/Diagonal.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="ExteriorDerivative_8hh_source.html">properties/ExteriorDerivative.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="KroneckerDelta_8hh_source.html">properties/KroneckerDelta.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="NumericalFlat_8hh_source.html">properties/NumericalFlat.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="PartialDerivative_8hh_source.html">properties/PartialDerivative.hh</a>&quot;</code><br/>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -136,6 +137,8 @@ Functions</h2></td></tr>
 <tr class="separator:ae2229b3086e51160707ff60a8fb41601"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29cc03850485b5e366f9af976fd05860"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a29cc03850485b5e366f9af976fd05860">cleanup_kronecker</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
 <tr class="separator:a29cc03850485b5e366f9af976fd05860"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f812bc69be2e12d951ad18978fa9cef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a8f812bc69be2e12d951ad18978fa9cef">cleanup_exterior_derivative</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a8f812bc69be2e12d951ad18978fa9cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a511a512e206a148f333e7dffc557f4bb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="Cleanup_8cc.html#a511a512e206a148f333e7dffc557f4bb">cleanup_dispatch_deep</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, <a class="el" href="Cleanup_8hh.html#aa43273d0b334fde490020cda7626561a">dispatcher_t</a> dispatch)</td></tr>
 <tr class="memdesc:a511a512e206a148f333e7dffc557f4bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">More general cleanup of an entire tree.  <a href="#a511a512e206a148f333e7dffc557f4bb">More...</a><br/></td></tr>
 <tr class="separator:a511a512e206a148f333e7dffc557f4bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -302,6 +305,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Central cleanup dispatch routine, which calls the other cleanup functions defined later. </p>
+<p>These cleanup routines do NOT use normal cadabra algorithms; they are completely independent of them to prevent circular dependence or infinite recursion.</p>
 <p>These algorithms clean up the tree at the current node and the first layer of child nodes, but do NOT descend deeper down the tree, UNLESS that would leave the tree in an inconsistent state. An example is acting at the top node of {4}{{a}{b}}, which would push the 4 to the multiplier of the sum, but that is not allowed, so it needs to go further down. Sibling nodes of 'it' remain untouched as well. </p>
 
 </div>
@@ -338,6 +342,38 @@ Functions</h2></td></tr>
 
 <p>More general cleanup of an entire tree. </p>
 <p>Walks depth-first along the entire tree and call cleanup_dispatch at every node. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8f812bc69be2e12d951ad18978fa9cef"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cleanup_exterior_derivative </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -543,7 +579,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Dec 29 2016 22:14:07 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 3 2017 10:32:13 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

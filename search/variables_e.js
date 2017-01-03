@@ -10,6 +10,7 @@ var searchData=
   ['newref',['newref',['../classcadabra_1_1ActionAddCell.html#a9a5c6613ddf7dfa74005c4e74832160c',1,'cadabra::ActionAddCell::newref()'],['../classcadabra_1_1ActionPositionCursor.html#a6e34b313e48f98a76fc2d9bad82db042',1,'cadabra::ActionPositionCursor::newref()'],['../classcadabra_1_1ActionSplitCell.html#ac995bdc69eb9c0a555ab3527fd63a847',1,'cadabra::ActionSplitCell::newref()']]],
   ['next_5fis_5fproduct_5f',['next_is_product_',['../classpreprocessor.html#ac8b74d74df3a8ea6095267c16256890b',1,'preprocessor']]],
   ['nonscalarexceptiontype',['NonScalarExceptionType',['../PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b',1,'PythonCdb.cc']]],
+  ['notyetimplementedtype',['NotYetImplementedType',['../PythonCdb_8cc.html#ab7143b05eaaf70c822886bd5ca25993c',1,'PythonCdb.cc']]],
   ['nt1',['nt1',['../classdecompose__product.html#a3c82e36a8f45df98cc447195595b033e',1,'decompose_product']]],
   ['nt2',['nt2',['../classdecompose__product.html#a803cd8262ff8afda443e3e5d57bc51f8',1,'decompose_product']]],
   ['nu',['nu',['../Symbols_8cc.html#a361de67e57dcc9db7ff4b22eb7eed895',1,'nu():&#160;Symbols.cc'],['../Symbols_8cc.html#aa6b24b60f7fb3bbe69179d6cde8d4dcf',1,'Nu():&#160;Symbols.cc']]],

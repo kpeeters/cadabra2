@@ -2,6 +2,7 @@ var searchData=
 [
   ['id',['id',['../classcadabra_1_1DataCell.html#a4febb2a14e2aa2e5854bce69538ff28a',1,'cadabra::DataCell']]],
   ['id_5ft',['id_t',['../classcadabra_1_1DataCell_1_1id__t.html#aeb9d2b3df7ea8798e6bf15ffddf59848',1,'cadabra::DataCell::id_t']]],
+  ['idle_5fhandler',['idle_handler',['../classcadabra_1_1NotebookWindow.html#aad4ca4338b33b1390a7d2f4722e5447c',1,'cadabra::NotebookWindow']]],
   ['image',['image',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#ad67422a688510c88b70a08d6f514019e',1,'cadabra::TeXEngine::TeXRequest']]],
   ['imageview',['ImageView',['../classcadabra_1_1ImageView.html#a8382a8ee74d8ff437f0be6cffc2ba957',1,'cadabra::ImageView']]],
   ['import',['import',['../classDisplaySympy.html#a58e3de402442e6b633fc9976ab596046',1,'DisplaySympy']]],
@@ -57,7 +58,7 @@ var searchData=
   ['is_5fopening_5fbracket_5f',['is_opening_bracket_',['../classpreprocessor.html#affa2d99cb586e6bde3240d80c6b863a0',1,'preprocessor']]],
   ['is_5fquoted_5fstring',['is_quoted_string',['../classstr__node.html#a940af28dec5e5f237b05d31b1606af01',1,'str_node']]],
   ['is_5frange_5fwildcard',['is_range_wildcard',['../classstr__node.html#a4e66e14a7f747acca9c222dda7ab6ecf',1,'str_node']]],
-  ['is_5frational',['is_rational',['../classstr__node.html#a0de612b6e922a60625a0115d694fa706',1,'str_node']]],
+  ['is_5frational',['is_rational',['../classstr__node.html#a0de612b6e922a60625a0115d694fa706',1,'str_node::is_rational()'],['../classEx.html#abeba060333f8f8f6baadb1ccf4eec72a',1,'Ex::is_rational()']]],
   ['is_5fregistered',['is_registered',['../classcadabra_1_1DocumentThread.html#a91869c1027b517cd7df852e62c2886f0',1,'cadabra::DocumentThread']]],
   ['is_5fsiblings_5fwildcard',['is_siblings_wildcard',['../classstr__node.html#a3f7f8c78b70ccd2329dc83c9f5417999',1,'str_node']]],
   ['is_5fsimple_5fsymmetry',['is_simple_symmetry',['../classTableauBase.html#a59b9bedd542f8ea1eae6d859d860a194',1,'TableauBase']]],

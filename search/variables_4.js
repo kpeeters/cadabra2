@@ -2,6 +2,7 @@ var searchData=
 [
   ['datacell',['datacell',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a1da87a2c3525d3b02ec2b404b89f87ff',1,'cadabra::CodeInput::exp_input_tv::datacell()'],['../classcadabra_1_1TeXView.html#a4294abe5d4c715227baf838b412637f5',1,'cadabra::TeXView::datacell()']]],
   ['db',['db',['../classsnoop_1_1SnoopImpl.html#aef92c18ce355c332e5d131d38fffece4',1,'snoop::SnoopImpl']]],
+  ['degree_5f',['degree_',['../classDifferentialForm.html#aa3b53295724363eeb0dead201437eea0',1,'DifferentialForm']]],
   ['delta',['Delta',['../Symbols_8cc.html#ac95bccd0ac00ebe774e5138c31a06238',1,'Delta():&#160;Symbols.cc'],['../Symbols_8cc.html#ab65a074e38c44168a4d9be288261b588',1,'delta():&#160;Symbols.cc']]],
   ['dependencies_5f',['dependencies_',['../classDepends.html#a34e4a31f4f724e657206427d0ec1f4ba',1,'Depends']]],
   ['depsyms',['depsyms',['../classDisplaySympy.html#a1a24c2c0019db29367e1750bf70e8199',1,'DisplaySympy']]],

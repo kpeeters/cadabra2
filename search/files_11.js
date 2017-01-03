@@ -12,6 +12,7 @@ var searchData=
   ['take_5fmatch_2ehh',['take_match.hh',['../take__match_8hh.html',1,'']]],
   ['test_5fclient_2ecc',['test_client.cc',['../test__client_8cc.html',1,'']]],
   ['test_5fpermutations_2ecc',['test_permutations.cc',['../test__permutations_8cc.html',1,'']]],
+  ['test_5fpreprocessor_2ecc',['test_preprocessor.cc',['../test__preprocessor_8cc.html',1,'']]],
   ['test_5ftalk_5fto_5fserver_2ecc',['test_talk_to_server.cc',['../test__talk__to__server_8cc.html',1,'']]],
   ['test_5ftex_2ecc',['test_tex.cc',['../test__tex_8cc.html',1,'']]],
   ['texengine_2ecc',['TeXEngine.cc',['../TeXEngine_8cc.html',1,'']]],
