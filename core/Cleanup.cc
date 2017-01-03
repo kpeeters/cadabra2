@@ -3,10 +3,11 @@
 #include "Functional.hh"
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
-#include "properties/PartialDerivative.hh"
-#include "properties/NumericalFlat.hh"
 #include "properties/Diagonal.hh"
+#include "properties/ExteriorDerivative.hh"
 #include "properties/KroneckerDelta.hh"
+#include "properties/NumericalFlat.hh"
+#include "properties/PartialDerivative.hh"
 
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
@@ -71,6 +72,12 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 			}
 		// std::cerr << "delta " << changed << std::endl;
 
+		const ExteriorDerivative *ed = kernel.properties.get<ExteriorDerivative>(it);
+		if(ed) {
+			res = cleanup_exterior_derivative(kernel, tr, it);
+			changed = changed || res;
+			}
+		
 		} while(changed);
 
 //	std::cerr << Ex(it) << std::endl;
@@ -81,6 +88,7 @@ void check_index_consistency(const Kernel& k, Ex& tr, Ex::iterator it)
 	if(it==tr.end()) return;
 	collect_terms ct(k, tr);
 	ct.check_index_consistency(it);
+	ct.check_degree_consistency(it); // FIXME: needs to be implemented in Algorithm.
 	}
 
 bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
@@ -424,6 +432,22 @@ bool cleanup_kronecker(const Kernel& k, Ex& tr, Ex::iterator& it)
 
 	return ret;
 	}
+
+bool cleanup_exterior_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
+	{
+	// FIXME: could have this act on a sum as well.
+	if(tr.number_of_children(it)==1) {
+		auto sib=tr.begin(it);
+		const ExteriorDerivative *ed1=k.properties.get<ExteriorDerivative>(it);
+		const ExteriorDerivative *ed2=k.properties.get<ExteriorDerivative>(sib);
+		if(ed1==ed2) {
+			zero(it->multiplier);
+			return true;
+			}
+		}
+	return false;
+	}
+
 
 void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	{

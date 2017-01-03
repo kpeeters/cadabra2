@@ -61,8 +61,15 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 	if(der) {
 		// FIXME: this needs fine-tuning; there are more cases where
 		// no brackets are needed.
-      if((*arg->name).size()==1 || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
+		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
+      if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
+
+	if(*obj->name=="\\cos" || *obj->name=="\\sin" || *obj->name=="\\tan") {
+		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
+      if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
+		}
+	
 	auto it=curly_bracket_operators.find(*obj->name);
 	if(it!=curly_bracket_operators.end()) return true;
 
@@ -151,7 +158,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		
 		bool function_bracket_needed=true;
 		if(current_bracket_==str_node::b_none) {
-			if(previous_bracket_==str_node::b_none && current_parent_rel_==str_node::p_none)
+			if(previous_bracket_==str_node::b_none && current_parent_rel_==previous_parent_rel_ && current_parent_rel_==str_node::p_none)
 				str << ", ";
 			function_bracket_needed=!reads_as_operator(it, ch);
 			}
@@ -269,6 +276,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\components")     print_components(str, it);
+	else if(*it->name=="\\wedge")          print_wedgeproduct(str, it);
 	else if(*it->name=="\\conditional")    print_conditional(str, it);
 	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
@@ -289,6 +297,28 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 		++sib;
 		}
 	str << "\\right\\}";
+	}
+
+void DisplayTeX::print_wedgeproduct(std::ostream& str, Ex::iterator it) 
+	{
+	if(*it->multiplier!=1) {
+		print_multiplier(str, it);
+		}
+
+	if(needs_brackets(it)) 
+		str << "\\left(";
+
+	Ex::sibling_iterator sib=tree.begin(it);
+	dispatch(str, sib);
+	++sib;
+	while(sib!=tree.end(it)) {
+		str << "\\wedge ";
+		dispatch(str, sib);
+		++sib;
+		}
+
+	if(needs_brackets(it)) 
+		str << "\\right)";
 	}
 
 void DisplayTeX::print_arrowlike(std::ostream& str, Ex::iterator it) 

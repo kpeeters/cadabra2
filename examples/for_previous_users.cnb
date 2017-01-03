@@ -23,10 +23,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A_{m n} B^{m n}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}A_{m n} B_{m n}\\end{dmath*}"
 				}
 			],
-			"source" : "ex := A_{m n} B^{m n};"
+			"source" : "ex := A_{m n} B_{m n};"
 		},
 		{
 			"cell_origin" : "client",
@@ -131,7 +131,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A_{m n} B^{m n}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}A_{m n} B_{m n}\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -141,20 +141,20 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(A_{m n}+C_{m n}\\right) B^{m n}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(A_{m n}+C_{m n}\\right) B_{m n}\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(A_{m n}+2C_{m n}\\right) B^{m n}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(A_{m n}+2C_{m n}\\right) B_{m n}\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(A_{m n}+3C_{m n}\\right) B^{m n}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(A_{m n}+3C_{m n}\\right) B_{m n}\\end{dmath*}"
 				}
 			],
-			"source" : "ex  := A_{m n} B^{m n};\nrule:= A_{m n} -> A_{m n} + C_{m n};\nfor i in range(3):\n\tsubstitute(ex, rule);"
+			"source" : "ex  := A_{m n} B_{m n};\nrule:= A_{m n} -> A_{m n} + C_{m n};\nfor i in range(3):\n\tsubstitute(ex, rule);"
 		},
 		{
 			"cell_origin" : "client",

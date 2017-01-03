@@ -419,7 +419,7 @@ class tree {
 		/// Determine whether the iterator is an 'end' iterator and thus not actually pointing to a node.
 		bool     is_valid(const iterator_base&) const;
 		/// Determine whether the iterator is one of the 'head' nodes at the top level, i.e. has no parent.
-		bool     is_head(const iterator_base&) const;
+		static   bool is_head(const iterator_base&);
 		/// Find the lowest common ancestor of two nodes, that is, the deepest node such that
 		/// both nodes are descendants of it.
 		iterator lowest_common_ancestor(const iterator_base&, const iterator_base &) const;
@@ -2211,7 +2211,7 @@ bool tree<T, tree_node_allocator>::is_valid(const iterator_base& it) const
 	}
 
 template <class T, class tree_node_allocator>
-bool tree<T, tree_node_allocator>::is_head(const iterator_base& it) const
+bool tree<T, tree_node_allocator>::is_head(const iterator_base& it) 
   	{
 	if(it.node->parent==0) return true;
 	return false;
@@ -3151,5 +3151,5 @@ typename tree<T, tree_node_allocator>::leaf_iterator& tree<T, tree_node_allocato
 #endif
 
 // Local variables:
-// default-tab-width: 3
+// tab-width: 3
 // End:

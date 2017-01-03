@@ -3,6 +3,7 @@
 #include "Cleanup.hh"
 #include "algorithms/product_rule.hh"
 #include "properties/Derivative.hh"
+#include "properties/DifferentialForm.hh"
 
 product_rule::product_rule(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), number_of_indices(0)
@@ -23,7 +24,7 @@ bool product_rule::can_apply(iterator it)
 		if(tr.number_of_children(it)>0) {
 			sibling_iterator ch=tr.begin(it);
 			while(ch!=tr.end(it)) {
-				 if(prodnode==tr.end() && ( *ch->name=="\\prod" || *ch->name=="\\pow") )
+				 if(prodnode==tr.end() && ( *ch->name=="\\prod" || *ch->name=="\\pow" || *ch->name=="\\wedge" ) )
 					prodnode=ch; // prodnode contains the first product node, there may be more
 				else {
 					if(ch->is_index()) ++number_of_indices;
@@ -33,6 +34,7 @@ bool product_rule::can_apply(iterator it)
 			if(prodnode!=tr.end()) return true;
 			}
 		}
+	
 	return false;
 	}
 
@@ -170,8 +172,11 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			  theD->fl.bracket=wrap->fl.bracket;
 			  // Go to the 'prod' child of the \diff.
 			  sibling_iterator repch=tr.begin(theD);
-			  while(*repch->name!="\\prod")
-					++repch;
+			  while(*repch->name!="\\prod" && *repch->name!="\\wedge") {
+				  ++repch;
+				  if(repch==tr.end(theD))
+					  throw InternalError("Inconsistent intermediate expression in product_rule()");
+				  }
 			  // Replace this 'prod' child with 'just' the factor to be replaced, i.e.
 			  // remove all the other factors which have been taken out of the derivative.
 			  wrap->fl.bracket=prodnode->fl.bracket;
@@ -200,6 +205,10 @@ Algorithm::result_t product_rule::apply(iterator& it)
 				  return result_t::l_no_action;
 			  sign*=ret;
 
+			  // Because 'd' already reports itself to have differential form degree one,
+			  // and can_swap takes that into account when computing the swap behaviour of
+			  // 'd' and another form, we do not need to do anything separately for the
+			  // exterior derivative.
 			  
 			  // Avoid \partial_{a}{\partial_{b} ...} constructions in 
 			  // case this child is a \partial-like too.

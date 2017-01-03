@@ -60,3 +60,14 @@ std::string InternalError::py_what() const
 	return what();
 	}
 
+NotYetImplemented::NotYetImplemented(std::string s)
+	: CadabraException(s)
+	{
+	}
+
+std::string NotYetImplemented::py_what() const
+	{
+	std::cerr << "Not yet implemented: " << what() << std::endl;
+	return what();
+	}
+

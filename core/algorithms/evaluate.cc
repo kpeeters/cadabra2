@@ -5,6 +5,7 @@
 #include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/substitute.hh"
+#include "properties/EpsilonTensor.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Depends.hh"
@@ -38,18 +39,28 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// the index name -> index value map.
 	
 	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
+			// std::cerr << "evaluate at " << *walk->name << std::endl;
+			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
 			else if(is_component(walk)) return walk;
 			else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
-			else if(*(walk->name)=="\\prod")  walk = handle_prod(walk);
+			else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge")  walk = handle_prod(walk);
 			else {
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) walk = handle_derivative(walk);
-				else if(*walk->name!="\\equals" && walk->is_index()==false) {
-					if(! (only_rhs && tr.is_head(walk)==false && *(tr.parent(walk)->name)=="\\equals" && tr.index(walk)==0) ) {
-						index_map_t empty;
-						sibling_iterator tmp(walk);
-						walk = handle_factor(tmp, empty);
+				else {
+					const EpsilonTensor *eps = kernel.properties.get<EpsilonTensor>(walk);
+					if(eps) {
+						walk = handle_epsilon(walk);
+						}
+					else if(*walk->name!="\\equals" && walk->is_index()==false) {
+						if(! (only_rhs && tr.is_head(walk)==false && *(tr.parent(walk)->name)=="\\equals" && tr.index(walk)==0) ) {
+							index_map_t empty;
+							sibling_iterator tmp(walk);
+							// std::cerr << "handling factor" << std::endl;
+							// std::cerr << *walk->name << std::endl;
+							walk = handle_factor(tmp, empty);
+							}
 						}
 					}
 				}
@@ -325,7 +336,7 @@ void evaluate::merge_components(iterator it1, iterator it2)
 
 	if(*tr.begin(it1)->name!="\\comma") {
 		// Look at all indices on the two components nodes. Find
-		// the permutation that taked the indices on it2 and brings
+		// the permutation that takes the indices on it2 and brings
 		// them in the order as they are on it1.
 		Perm perm;
 		perm.find(tr.begin(it2), sib2, tr.begin(it1), sib1);
@@ -466,6 +477,49 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	simplify_components(it);
 	// std::cerr << "then " << Ex(it) << std::endl;
 
+	return it;
+	}
+
+Ex::iterator evaluate::handle_epsilon(iterator it)
+	{
+	Ex rep("\\components");
+	// attach indices to components
+	// figure out the index value ranges
+	// generate permutations of 'r1 ... rn' and signs
+	// fill components
+	auto sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		rep.append_child(rep.begin(), (iterator)sib);
+		++sib;
+		}
+	auto cvals = rep.append_child(rep.begin(), str_node("\\comma"));
+
+	sib=tr.begin(it);
+	const Indices *ind = kernel.properties.get<Indices>(sib);
+	if(ind==0)
+		throw ArgumentException("No Indices property known for indices in EpsilonTensor.");
+
+	combin::combinations<Ex> cb;
+	for(auto& val: ind->values)
+		cb.original.push_back(val);
+	cb.multiple_pick=false;
+	cb.block_length=1;
+	cb.set_unit_sublengths();
+	cb.permute();
+
+	for(unsigned int i=0; i<cb.size(); ++i) {
+		auto equals = rep.append_child(cvals, str_node("\\equals"));
+		auto vcomma = rep.append_child(equals, str_node("\\comma"));
+		for(unsigned int j=0; j<cb.original.size(); ++j) {
+//			std::cerr << *(cb[i][j].begin()->multiplier) << " ";
+			rep.append_child(vcomma, cb[i][j].begin());
+			}
+		auto one = rep.append_child(equals, str_node("1"));
+		multiply(one->multiplier, cb.ordersign(i));
+//		std::cerr << std::endl;
+		}
+	
+	it=tr.move_ontop(it, rep.begin());
 	return it;
 	}
 
@@ -789,7 +843,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 	// should be a \components node. We do a cleanup, after which it should be
 	// at the 'it' node.
 
-	assert(*it->name=="\\prod");
+	assert(*it->name=="\\prod" || *it->name=="\\wedge");
 	assert(tr.number_of_children(it)==1);
 	assert(*tr.begin(it)->name=="\\components");
 	tr.begin(it)->fl.bracket=it->fl.bracket;

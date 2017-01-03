@@ -96,6 +96,7 @@ class evaluate : public Algorithm {
 		iterator handle_sum(iterator it);
 		iterator handle_prod(iterator it);
 		iterator handle_derivative(iterator it);
+		iterator handle_epsilon(iterator it);
 
 		/// Replace a single factor with a 'components' ...
 		/// The full_ind_free argument can contain a list of indices in the order

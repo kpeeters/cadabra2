@@ -155,6 +155,11 @@ class Ex : public tree<str_node> {
 		/// set the state to 'no_action'.
 		bool     changed_state(); 
 
+		/// Test if the expression is a rational number.
+		/// FIXME: add tests for integers as well.
+		bool          is_rational() const;
+		multiplier_t  to_rational() const;
+		
 		/// Output helpers mainly for debugging purposes.
 		std::ostream& print_entire_tree(std::ostream& str) const;
 		static std::ostream& print_recursive_treeform(std::ostream& str, Ex::iterator it);

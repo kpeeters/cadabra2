@@ -459,6 +459,11 @@ bool Algorithm::check_index_consistency(iterator it) const
 	return true;
 	}
 
+bool Algorithm::check_degree_consistency(iterator it) const
+	{
+	return true; // FIXME: this needs to be implemented.
+	}
+
 bool Algorithm::check_consistency(iterator it) const
 	{
 	stopwatch w1;

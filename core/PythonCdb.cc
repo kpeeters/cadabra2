@@ -56,6 +56,7 @@ namespace boost {
 #include "properties/Depends.hh"
 #include "properties/DependsInherit.hh"
 #include "properties/Derivative.hh"
+#include "properties/DifferentialForm.hh"
 #include "properties/DiracBar.hh"
 #include "properties/GammaMatrix.hh"
 #include "properties/CommutingAsProduct.hh"
@@ -64,6 +65,7 @@ namespace boost {
 #include "properties/Diagonal.hh"
 #include "properties/Distributable.hh"
 #include "properties/EpsilonTensor.hh"
+#include "properties/ExteriorDerivative.hh"
 #include "properties/FilledTableau.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/Indices.hh"
@@ -613,6 +615,7 @@ PyObject *ArgumentExceptionType = 0;
 PyObject *ConsistencyExceptionType = 0;
 PyObject *NonScalarExceptionType = NULL;
 PyObject *InternalErrorType = NULL;
+PyObject *NotYetImplementedType = NULL;
 
 // Create a new Python exception class which derives from Exception (as it should to
 // be a good Python exception). Taken from http://stackoverflow.com/questions/11448735.
@@ -677,6 +680,13 @@ void translate_InternalError(const InternalError &e)
 	assert(InternalErrorType != NULL);
 	boost::python::object pythonExceptionInstance(e);
 	PyErr_SetObject(InternalErrorType, pythonExceptionInstance.ptr());
+	}
+
+void translate_NotYetImplemented(const NotYetImplemented &e)
+	{
+	assert(NotYetImplementedType != NULL);
+	boost::python::object pythonExceptionInstance(e);
+	PyErr_SetObject(NotYetImplementedType, pythonExceptionInstance.ptr());
 	}
 
 // Return the kernel (with symbol __cdbkernel__) in local scope if
@@ -766,6 +776,16 @@ void inject_defaults(Kernel *k)
 	wi2->combination_type = WeightInherit::multiplicative;
 	auto wa2=make_Ex_from_string("label=all, type=multiplicative", false);
 	inject_property(k, wi2,                      make_Ex_from_string("\\prod{#}",false), wa2);
+	
+//	inject_property(k, new Distributable(),      make_Ex_from_string("\\wedge{#}",false), 0);
+	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false), 0);
+//	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
+	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\wedge{#}",false), 0);
+	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\wedge{#}",false), 0);
+	auto wi4=new WeightInherit();
+	wi4->combination_type = WeightInherit::multiplicative;
+	auto wa4=make_Ex_from_string("label=all, type=multiplicative", false);
+	inject_property(k, wi4,                      make_Ex_from_string("\\wedge{#}",false), wa4);
 
 	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}",false), 0);
 	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false), 0);
@@ -1368,9 +1388,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Depends>();
 	def_prop<Derivative>();
 	def_prop<Diagonal>();
+	def_prop<DifferentialForm>();
 	def_prop<Distributable>();
 	def_prop<DiracBar>();
 	def_prop<EpsilonTensor>();
+	def_prop<ExteriorDerivative>();
 	def_prop<FilledTableau>();
 	def_prop<GammaMatrix>();
 	def_prop<ImplicitIndex>();	
@@ -1431,6 +1453,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	class_<InternalError> pyInternalError("InternalError", init<std::string>());
 	pyInternalError.def("__str__", &InternalError::py_what);
 	register_exception_translator<InternalError>(&translate_InternalError);
+	
+	NotYetImplementedType=createExceptionClass("NotYetImplemented");
+	class_<NotYetImplemented> pyNotYetImplemented("NotYetImplemented", init<std::string>());
+	pyNotYetImplemented.def("__str__", &NotYetImplemented::py_what);
+	register_exception_translator<NotYetImplemented>(&translate_NotYetImplemented);
 	
 #if BOOST_VERSION >= 106000
 	boost::python::register_ptr_to_python<std::shared_ptr<Ex> >();

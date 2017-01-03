@@ -12,6 +12,7 @@
 #include "properties/CommutingAsSum.hh"
 #include "properties/CommutingAsProduct.hh"
 #include "properties/CommutingBehaviour.hh"
+#include "properties/DifferentialForm.hh"
 #include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
@@ -1080,8 +1081,30 @@ int Ex_comparator::can_swap_ilist_ilist(Ex::iterator obj1, Ex::iterator obj2)
 int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_comparison,
 										 bool ignore_implicit_indices) 
 	{
-	//std::cout << "can_swap " << *one->name << " " << *two->name << ignore_implicit_indices << std::endl;
+	// std::cerr << "can_swap " << *one->name << " " << *two->name << " " << ignore_implicit_indices << std::endl;
 
+	// Differential forms in a product cannot be moved through each
+	// other except when the degree of one of them is zero.  In a wedge
+	// product, we can move them and potentially pick up a sign.
+	
+	const DifferentialFormBase *df1 = properties.get<DifferentialFormBase>(one);
+	const DifferentialFormBase *df2 = properties.get<DifferentialFormBase>(two);
+
+	if(df1 && df2) {
+		if(df1->degree(properties,one).begin()->is_zero() || df2->degree(properties,two).begin()->is_zero())
+			return 1;
+		else {
+			if(Ex::is_head(one) || *(Ex::parent(one)->name)=="\\wedge") {
+//				if(df1->degree.is_rational()==false || df2->degree.is_rational()==false)
+//					throw NotYetImplemented("Cannot yet order forms with non-numerical degrees");
+				long d1 = to_long(df1->degree(properties, one).to_rational());
+				long d2 = to_long(df2->degree(properties, two).to_rational());
+				if( (d1*d2) % 2 == 1) return -1;
+				return 1;
+				}
+			}
+		}
+	
 	const ImplicitIndex *ii1 = properties.get_composite<ImplicitIndex>(one);
 	const ImplicitIndex *ii2 = properties.get_composite<ImplicitIndex>(two);
 

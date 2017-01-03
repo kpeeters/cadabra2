@@ -152,6 +152,9 @@ class labelled_property : virtual public property {
 		std::string label;
 };
 
+/// Something cannot be both a list property and a normal property at
+/// the same time, so we can safely inherit without virtual.
+
 class list_property : public property {
 	public:
 };

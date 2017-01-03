@@ -29,7 +29,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
 	  kernel_spinner_status(false), title_prefix("Cadabra: "),
-	  modified(false), read_only(ro), is_configured(false)
+	  modified(false), read_only(ro), crash_window_hidden(true), is_configured(false)
 	{
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
@@ -427,15 +427,25 @@ void NotebookWindow::process_todo_queue()
 	// Perform any ActionBase actions.
 	process_action_queue();
 
-	if(kernel_string=="not connected") {
+	// Before we pop up any dialogs, enable queue processing again, otherwise
+	// subsequent calls to process_todo_queue will get postponed until a
+	// dispatcher.emit() is called when the dialog is closed.
+	running=false;
+
+	if(crash_window_hidden && kernel_string=="not connected") {
+		crash_window_hidden=false;
 		Gtk::MessageDialog md("Kernel crashed", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
 		md.set_transient_for(*this);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
+		md.signal_response().connect(sigc::mem_fun(*this, &NotebookWindow::on_crash_window_closed));
 		md.run();
 		}
+	}
 
-	running=false;
+void NotebookWindow::on_crash_window_closed(int)
+	{
+	crash_window_hidden=true;
 	}
 
 bool NotebookWindow::on_key_press_event(GdkEventKey* event)
