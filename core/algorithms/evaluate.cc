@@ -39,7 +39,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// the index name -> index value map.
 	
 	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
-			std::cerr << "evaluate at " << *walk->name << std::endl;
+			// std::cerr << "evaluate at " << *walk->name << std::endl;
 			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
 			else if(is_component(walk)) return walk;
@@ -57,8 +57,8 @@ Algorithm::result_t evaluate::apply(iterator& it)
 						if(! (only_rhs && tr.is_head(walk)==false && *(tr.parent(walk)->name)=="\\equals" && tr.index(walk)==0) ) {
 							index_map_t empty;
 							sibling_iterator tmp(walk);
-							std::cerr << "handling factor" << std::endl;
-							std::cerr << *walk->name << std::endl;
+							// std::cerr << "handling factor" << std::endl;
+							// std::cerr << *walk->name << std::endl;
 							walk = handle_factor(tmp, empty);
 							}
 						}
@@ -883,7 +883,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 
 	// Use sympy to simplify components.
 	simplify_components(it);
-	std::cerr << "simplified:\n" << Ex(it) << std::endl;
+	// std::cerr << "simplified:\n" << Ex(it) << std::endl;
 
 	return it;
 	}
