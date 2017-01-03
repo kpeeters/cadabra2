@@ -407,6 +407,8 @@ void DisplaySympy::print_equalitylike(std::ostream& str, Ex::iterator it)
 	dispatch(str, sib);
 	str << " = ";
 	++sib;
+	if(sib==tree.end(it)) 
+		throw ConsistencyException("Found equals node with only one child node.");
 	dispatch(str, sib);
 	}
 

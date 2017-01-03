@@ -3,6 +3,20 @@
 	[
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Differential forms}\n\nCadabra can handle the calculus of differential forms. Differential forms are declared by attaching\nthe property \\prop{DifferentialForm} to an object, as in the example below, where we declare\nfour forms, with degree 0 to 3, and one form with symbolic degree $p$."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Differential forms}\n\nCadabra can handle the calculus of differential forms. Differential forms are declared by attaching\nthe property \\prop{DifferentialForm} to an object, as in the example below, where we declare\nfour forms, with degree 0 to 3, and one form with symbolic degree $p$."
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
@@ -36,16 +50,17 @@
 		},
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
+			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
-					"cell_origin" : "server",
+					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A^{(1)}\\wedge A^{(2)}-A^{(2)}\\wedge A^{(1)}\\end{dmath*}"
+					"source" : "The exterior product (or wedge product) of forms is denoted with a \\verb|^| symbol (make sure to put a space\nbefore and after this symbol to avoid confusion with a superscript)."
 				}
 			],
-			"source" : "ex:=A1 ^ A2 - A2 ^ A1;"
+			"hidden" : true,
+			"source" : "The exterior product (or wedge product) of forms is denoted with a \\verb|^| symbol (make sure to put a space\nbefore and after this symbol to avoid confusion with a superscript)."
 		},
 		{
 			"cell_origin" : "client",
@@ -55,7 +70,47 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}d{\\#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}A^{(1)}\\wedge A^{(2)}+A^{(2)}\\wedge A^{(1)}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A1 ^ A2 + A2 ^ A1;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2A^{(1)}\\wedge A^{(2)}\\end{dmath*}"
+				}
+			],
+			"source" : "sort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "An exterior derivative can be declared by using the \\prop{ExteriorDerivative} property. Applying an exterior\nderivative twice produces zero, and it obeys the product rule taking into account the degree of differential forms."
+				}
+			],
+			"hidden" : true,
+			"source" : "An exterior derivative can be declared by using the \\prop{ExteriorDerivative} property. Applying an exterior\nderivative twice produces zero, and it obeys the product rule taking into account the degree of differential forms."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}{\\rm d}{\\#}.\\end{dmath*}"
 				}
 			],
 			"source" : "d{#}::ExteriorDerivative;\nd{#}::LaTeXForm(\"{\\rm d}\")."
@@ -68,7 +123,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}-A^{(2)}\\wedge A^{(1)}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex2:= d{ @(ex) };"
@@ -81,49 +136,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}\\right)-{\\rm d}\\left(A^{(2)}\\wedge A^{(1)}\\right)\\end{dmath*}"
-				}
-			],
-			"source" : "distribute(ex2);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\rm d}{A^{(1)}}\\wedge A^{(2)}-A^{(1)}\\wedge {\\rm d}{A^{(2)}}-{\\rm d}{A^{(2)}}\\wedge A^{(1)}-A^{(2)}\\wedge {\\rm d}{A^{(1)}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2{\\rm d}{A^{(1)}}\\wedge A^{(2)}-2A^{(1)}\\wedge {\\rm d}{A^{(2)}}\\end{dmath*}"
 				}
 			],
 			"source" : "product_rule(_);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A^{(2)} A^{(1)}-A^{(1)} A^{(2)}\\end{dmath*}"
-				}
-			],
-			"source" : "ex3:= A2 A1 - A1 A2;"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}A^{(2)} A^{(1)}-A^{(1)} A^{(2)}\\end{dmath*}"
-				}
-			],
-			"source" : "sort_product(_);"
 		},
 		{
 			"cell_origin" : "client",
@@ -163,11 +179,6 @@
 				}
 			],
 			"source" : "sort_product(_);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
 		},
 		{
 			"cell_origin" : "client",
@@ -235,9 +246,28 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Differential forms can have tensor indices, e.g.~for vielbeine or spin connections:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Differential forms can have tensor indices, e.g.~for vielbeine or spin connections:"
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left\\{a, \\linebreak[0] b, \\linebreak[0] c\\right\\}.\\end{dmath*}"
+				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -249,7 +279,7 @@
 					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}\\omega^{a}\\,_{b}.\\end{dmath*}"
 				}
 			],
-			"source" : "e^{a}::DifferentialForm(degree=1);\n\\omega^{a}_{b}::DifferentialForm(degree=2);"
+			"source" : "{a,b,c}::Indices;\ne^{a}::DifferentialForm(degree=1);\n\\omega^{a}_{b}::DifferentialForm(degree=2);"
 		},
 		{
 			"cell_origin" : "client",
@@ -259,10 +289,68 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\rm d}{e^{a}}+\\omega^{a}\\,_{b}\\wedge e^{b}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}{\\rm d}{e^{a}} = -\\omega^{a}\\,_{b}\\wedge e^{b}\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=d{e^{a}} + \\omega^{a}_{b} ^ e^{b};"
+			"source" : "ex:=d{e^{a}} = - \\omega^{a}_{b} ^ e^{b};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0 = -{\\rm d}\\left(\\omega^{a}\\,_{b}\\wedge e^{b}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "cv:= d{ @(ex) };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0 = -{\\rm d}\\left(\\omega^{a}\\,_{b}\\wedge e^{b}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0 = -{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge {\\rm d}{e^{b}}\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(cv);\nproduct_rule(cv);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0 = -{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}+\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}\\wedge e^{c}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(cv, ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Some more random assorted ramblings below, not finished yet."
+				}
+			],
+			"hidden" : true,
+			"source" : "Some more random assorted ramblings below, not finished yet."
 		},
 		{
 			"cell_origin" : "client",
@@ -339,7 +427,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}d{\\#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}{\\rm d}{\\#}.\\end{dmath*}"
 				}
 			],
 			"source" : "{i,j,k,l}::Indices(values={1,2,3});\n{i,j,k,l}::Integer(1..3);\n\\epsilon^{i j k}::EpsilonTensor;\nd{#}::ExteriorDerivative;\nd{#}::LaTeXForm(\"{\\rm d}\")."
@@ -360,14 +448,6 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{\\begin{aligned}\\square{}^{1}{}^{2}{}^{3}= & 1\\\\[-.5ex]\n\\square{}^{1}{}^{3}{}^{2}= & -1\\\\[-.5ex]\n\\square{}^{2}{}^{1}{}^{3}= & -1\\\\[-.5ex]\n\\square{}^{2}{}^{3}{}^{1}= & 1\\\\[-.5ex]\n\\square{}^{3}{}^{1}{}^{2}= & 1\\\\[-.5ex]\n\\square{}^{3}{}^{2}{}^{1}= & -1\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
-				}
-			],
 			"source" : "evaluate(_, $$);"
 		},
 		{

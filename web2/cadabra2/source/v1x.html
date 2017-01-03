@@ -6,29 +6,63 @@
 
 {% block main %}
 
-<h1>Upgrading from the old Cadabra 1.x series</h1>
+<h1>The new Cadabra is here</h1>
 
 <p>
-This new web site is about the new Cadabra 2.x series, which is a
-rewrite and extension of the old 1.x series which first saw the light
-in 2007. Many things have changed and improved. This page tells you
-what you need to know about the differences.
+  The old Cadabra site at <tt>cadabra.phi-sci.com</tt> has been
+  disabled, and all information about Cadabra, in particular the new 2.x
+  series, can be found here. This page lists some things about the 1.x
+  release which may still be relevant for its current users.
 </p>
-
-<h2>Distribution</h2>
 
 <p>
-Version 1.x is available in many Linux distributions and on MacPorts,
-but will eventually disappear from there as it takes too much time to
-keep that all up-to-date. Because of the rapid changes in 2.x, it is
-at the moment not yet available in many distributions. Instead, get it
-directly from this web site's <a href="/download.html">download
-page</a>, in the form of various packages for Linux distributions. On
-Mac OS X you need to build from source, but this is a fairly painless
-procedure thanks to the magic of Homebrew.
+  The new Cadabra 2.x series is a rewrite and extension of the old 1.x
+  series, which first saw the light in 2007. Many things have changed
+  and improved. This page tells you what you need to know about the
+  differences. Unless you have old 1.x notebooks which you need to run,
+  you are strongly encouraged to try installing 2.x. Support for 1.x
+  will not go away, but there will be no more improvements, only bug
+  fixes.
 </p>
 
-<h2>Usage</h2>
-<p>more to come</p>
+<h2>Getting the software</h2>
+
+<p>
+  Version 1.x is available in many Linux distributions and on
+  MacPorts, and has just been accepted for the new Debian release, so
+  it will continue to be available for some time to come.  Version 2.x
+  is still undergoing many rapid changes, so it is at the moment not
+  yet available in any distributions. Instead, you can get it directly
+  from this web site's <a href="/download.html">download page</a>, in
+  the form of various packages for Linux distributions. On Mac OS X
+  you need to build from source, but this is a fairly painless
+  procedure thanks to the magic of Homebrew.
+</p>
+
+<p>
+  You can install 1.x and 2.x on the same system without any clashes,
+  so you can continue to work with 1.x and at the same time get used
+  to 2.x.
+</p>
+
+<p>
+  I will no longer provide source tarballs for 1.x, but you can easily
+  get the source from
+  the <a href="http://github.com/kpeeters/cadabra">Cadabra 1.x github
+  repository</a>.
+</p>
+
+<h2>Notebook (in)compatibility</h2>
+
+<p>
+  The new 2.x notebooks are not compatible with the old 1.x notebooks,
+  and you can not (yet?) read old notebooks into the new version. The
+  main reason for not providing backward compatibility is that there
+  have been many changes in the input format, and writing a converter
+  takes time. However, if you have large 1.x notebooks that you would
+  really like to auto-convert, get in touch and we'll see what we can
+  do.
+</p>
+
 
 {%- endblock %}

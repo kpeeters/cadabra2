@@ -156,7 +156,7 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 		const Accent *is_accent=kernel.properties.get<Accent>(it);
 		
 		if(current_bracket_==str_node::b_none) {
-			if(previous_bracket_==str_node::b_none)
+			if(previous_bracket_==str_node::b_none && current_parent_rel_==previous_parent_rel_ && current_parent_rel_==str_node::p_none)
 				str << ", ";
 			}
 		
@@ -462,6 +462,8 @@ void DisplayTerminal::print_equalitylike(std::ostream& str, Ex::iterator it)
 	dispatch(str, sib);
 	str << " = ";
 	++sib;
+	if(sib==tree.end(it)) 
+		throw ConsistencyException("Found equals node with only one child node.");
 	dispatch(str, sib);
 	}
 

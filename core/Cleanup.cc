@@ -210,7 +210,7 @@ bool push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it)
 	if(mult==1) 
 		return ret;
 
-	if(*it->name=="\\sum") {
+	if(*it->name=="\\sum" || *it->name=="\\equals") {
 		auto sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
 			ret=true;
@@ -317,10 +317,8 @@ bool cleanup_partialderivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 			zero(it->multiplier);
 			return true;
 			}
-//		if(sib==tr.end(it))
-//			throw ConsistencyException("Encountered PartialDerivative object without argument on which to act.");
-//		// FIXME: the above is not correct when a derivative is declared without argument,
-//		// like in \Omega::Derivative; A::Depends(\Omega).
+		if(sib==tr.end(it))
+			throw ConsistencyException("Encountered PartialDerivative object without argument on which to act.");
 		}
 
 	// FIXME: this ignores that derivatives can have functional child
@@ -348,6 +346,44 @@ bool cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 		zero(it->multiplier);
 		ret=true;
 		return ret;
+		}
+
+	auto sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(sib->fl.parent_rel==str_node::p_none) {
+			if(*sib->name=="\\equals") {
+				// FIXME: this should probably be taken out for generalisation.
+				auto lhs = tr.begin(sib);
+				auto rhs = lhs;
+				++rhs;
+				
+				auto lhswrap = tr.wrap(lhs, *it);
+				auto rhswrap = tr.wrap(rhs, *it);
+				multiply(lhswrap->multiplier, *it->multiplier);
+				multiply(rhswrap->multiplier, *it->multiplier);
+				
+				auto sib2=tr.begin(it);
+				while(sib2!=tr.end(it)) {
+					if(sib2!=sib) {
+						tr.insert_subtree(lhs, sib2);
+						tr.insert_subtree(rhs, sib2);
+						sib2=tr.erase(sib2);
+						}
+					else ++sib2;
+					}
+				
+				it=tr.flatten(it);
+				it=tr.erase(it);
+
+				Ex::iterator tmp1(lhswrap), tmp2(rhswrap);
+				cleanup_dispatch(k, tr, tmp1);
+				cleanup_dispatch(k, tr, tmp2);
+				
+				ret=true;
+				break;
+				}
+			}
+		++sib;
 		}
 
 	return ret;

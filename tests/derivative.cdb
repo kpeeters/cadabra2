@@ -60,7 +60,7 @@ def test07():
     assert(obj7==0)
     print("Test 07 passed")
     
-test07();
+test07()
 
 # \delta in combination with \diff
 #
@@ -82,8 +82,8 @@ def test09():
     __cdbkernel__=create_scope()
     \diff{#}::PartialDerivative.
     obj9:= 3 \diff_{m n}{4*A*B};
-    product_rule(_);
-    distribute(_);
+    product_rule(_)
+    distribute(_)
     product_rule(_)
     tst9:= 12 \diff_{m n}{A} B + 12 \diff_{m}{A} \diff_{n}{B} + 12 \diff_{n}{A} \diff_{m}{B} + 12 A \diff_{m n}{B} - @(obj9);
     assert(tst9==0)
@@ -99,7 +99,7 @@ def test10():
     \partial{#}::PartialDerivative.
     A_{a b}::AntiSymmetric.
     obj10:= \partial_{b a}{ A_{d c} };
-    canonicalise(_);
+    canonicalise(_)
     tst10:= \partial_{a b}{ A_{c d} } + @(obj10);
     collect_terms(_)
     assert(tst10==0)
@@ -113,7 +113,7 @@ def test10b():
     \partial{#}::PartialDerivative.
     A_{a b}::AntiSymmetric.
     obj10b:= \partial{ A_{d c} }_{b a};
-    canonicalise(_);
+    canonicalise(_)
     tst10b:= \partial{ A_{c d} }_{a b} + @(obj10b);
     assert(tst10b==0)
     print("Test 10b passed")
@@ -258,7 +258,7 @@ def test17():
     \partial{#}::PartialDerivative.
     obj17:= \partial_{a}{\partial_{b c}{F}};
     tst17:= \partial_{a b c}{F} - @(obj17);
-    assert(tst17==0);
+    assert(tst17==0)
     print("Test 17 passed")
     
 test17()
@@ -285,7 +285,7 @@ def test19():
     \theta^{\alpha}::SelfAntiCommuting.
     D{#}::Derivative.
     obj19a:= D_{\theta^{\alpha}}{\theta^\beta \theta^\gamma};
-    product_rule(_);
+    product_rule(_)
     tst19a:= D_{\theta^{\alpha}}{\theta^{\beta}} \theta^{\gamma}  
              - \theta^{\beta} D_{\theta^{\alpha}}{\theta^{\gamma}} - @(obj19a);
     assert(tst19a==0)
@@ -437,8 +437,8 @@ def test24():
     \hat{#}::Distributable;
     B::Depends(\hat{#});
     ex:=\hat{A+B+C};
-    distribute(_);
-    unwrap(_);
+    distribute(_)
+    unwrap(_)
     tst:=\hat{B}-@(ex);
     assert(tst==0)
     print("Test 24 passed")
@@ -451,14 +451,14 @@ def test25():
     \del{#}::Derivative.
     X::Depends(\del{#}).
     ex1:= \del{X*Y*Z*\del{X}};
-    product_rule(ex1);
-    unwrap(ex1);
+    product_rule(ex1)
+    unwrap(ex1)
     tst:=\del{X} Y Z \del{X} + X Y Z \del{\del{X}} - @(ex1);
     assert(tst==0)
     print("Test 25a passed")
     ex2:= \del{X*Y*Z*\del{Y}};
-    product_rule(ex2);
-    unwrap(ex2);
+    product_rule(ex2)
+    unwrap(ex2)
     assert(ex2==0)
     print("Test 25b passed")
 
@@ -468,7 +468,7 @@ def test26():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:=\partial_{\mu}{A};
-    substitute(_, $A -> 3$);
+    substitute(_, $A -> 3$)
     assert(ex==0)
     print("Test 26 passed")
 
@@ -478,7 +478,7 @@ def test27():
     __cdbkernel__=create_scope()
     \partial{#}::Derivative;
     ex:=\partial_{\mu}{A};
-    substitute(_, $A -> 3$);
+    substitute(_, $A -> 3$)
     assert(ex==0)
     print("Test 27 passed")
 
@@ -526,10 +526,43 @@ def test31():
     \partial{#}::PartialDerivative;
     A::Depends(\partial{#}, \hat{#});
     ex:=\partial{A \hat{A} B};
-    product_rule(_);
-    unwrap(_);
-    #, $\partial{#}$)
+    product_rule(_)
+    unwrap(_)
     tst:= \partial{A} \hat{A} B + A \partial{\hat{A}} B - @(ex);
     assert(tst==0)
     print("Test 31 passed")
+
+test31()
+        
+def test32():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{\mu}{A_{\nu}} = B_{\mu\nu};
+    ex2:= 4 \partial^{\mu}{ @(ex) };
+    lhs2 = lhs(ex2)
+    rhs2 = rhs(ex2)
+    lhstst:= 4 \partial^{\mu}_{\mu}{A_{\nu}} - @(lhs2);
+    rhstst:= 4 \partial^{\mu}{ B_{\mu\nu} } -  @(rhs2);
+    assert(lhstst==0)
+    assert(rhstst==0)
+    print("Test 32 passed")
+
+test32()
+
+def test33():
+    __cdbkernel__=create_scope()
+    d{#}::ExteriorDerivative;
+    A::DifferentialForm(degree=3);
+    B::DifferentialForm(degree=3);    
+    ex:= A = B;
+    ex2:= d{ @(ex) };
+    lhs2 = lhs(ex2)
+    rhs2 = rhs(ex2)
+    lhstst := d{A} - @(lhs2);
+    rhstst := d{B} - @(rhs2);
+    assert(lhstst==0)
+    assert(rhstst==0)
+    print("Test 33 passed")
+
+test33()
 
