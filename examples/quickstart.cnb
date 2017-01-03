@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Cadabra quick start}\n\nThis is a quick start introduction to Cadabra. For more in-depth\ndiscussion of its features, consult the various\n\\href{http://cadabra.science/tutorials.html}{tutorials}.\n\nAfter installation, Cadabra can be started with \\verb|cadabra-gtk|.\n\n\\subsection*{Bosonic basics}\n\nBefore discussing actual calculations, let us start with a few words\nconcerning notation. This discussion can be short because \nmathematical expressions are entered\nessentially as one would enter them in \\TeX{} (with a few restrictions\nto avoid ambiguities, which we will discuss as we go along). In order\nto manipulate expressions, Cadabra often needs to know a bit more about\nproperties of tensors or other symbols. Such properties are entered\nusing the `\\verb|::|' symbol. A simple example is the declaration of\nindex sets, useful for automatic dummy index relabelling. An example\nwill clarify this,"
+					"source" : "\\section*{Cadabra quick start}\n\nThis is a quick start introduction to Cadabra. For more in-depth\ndiscussion of its features, consult the various\n\\href{http://cadabra.science/tutorials.html}{tutorials}.\n\nAfter installation, Cadabra can be started with \\verb|cadabra2-gtk| from the command line, \nor by picking it from the `Education' menu.\n\n\\subsection*{Bosonic basics}\n\nBefore discussing actual calculations, let us start with a few words\nconcerning notation. This discussion can be short because \nmathematical expressions are entered\nessentially as one would enter them in \\TeX{} (with a few restrictions\nto avoid ambiguities, which we will discuss as we go along). In order\nto manipulate expressions, Cadabra often needs to know a bit more about\nproperties of tensors or other symbols. Such properties are entered\nusing the `\\verb|::|' symbol. A simple example is the declaration of\nindex sets, useful for automatic dummy index relabelling. An example\nwill clarify this,"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Cadabra quick start}\n\nThis is a quick start introduction to Cadabra. For more in-depth\ndiscussion of its features, consult the various\n\\href{http://cadabra.science/tutorials.html}{tutorials}.\n\nAfter installation, Cadabra can be started with \\verb|cadabra-gtk|.\n\n\\subsection*{Bosonic basics}\n\nBefore discussing actual calculations, let us start with a few words\nconcerning notation. This discussion can be short because \nmathematical expressions are entered\nessentially as one would enter them in \\TeX{} (with a few restrictions\nto avoid ambiguities, which we will discuss as we go along). In order\nto manipulate expressions, Cadabra often needs to know a bit more about\nproperties of tensors or other symbols. Such properties are entered\nusing the `\\verb|::|' symbol. A simple example is the declaration of\nindex sets, useful for automatic dummy index relabelling. An example\nwill clarify this,"
+			"source" : "\\section*{Cadabra quick start}\n\nThis is a quick start introduction to Cadabra. For more in-depth\ndiscussion of its features, consult the various\n\\href{http://cadabra.science/tutorials.html}{tutorials}.\n\nAfter installation, Cadabra can be started with \\verb|cadabra2-gtk| from the command line, \nor by picking it from the `Education' menu.\n\n\\subsection*{Bosonic basics}\n\nBefore discussing actual calculations, let us start with a few words\nconcerning notation. This discussion can be short because \nmathematical expressions are entered\nessentially as one would enter them in \\TeX{} (with a few restrictions\nto avoid ambiguities, which we will discuss as we go along). In order\nto manipulate expressions, Cadabra often needs to know a bit more about\nproperties of tensors or other symbols. Such properties are entered\nusing the `\\verb|::|' symbol. A simple example is the declaration of\nindex sets, useful for automatic dummy index relabelling. An example\nwill clarify this,"
 		},
 		{
 			"cell_origin" : "client",
@@ -282,7 +282,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\partial_{m p}, \\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\partial_{m p}\\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
 				}
 			],
 			"source" : "{m,n,p,q,r}::Indices(position=free);\n\\nabla{#}::Derivative;\n\\partial{#}::PartialDerivative;\nA_{m n}::AntiSymmetric;\nV_{m}::Depends(\\nabla{#});\n\nex:= \\partial_{m p}( A_{q r} V_{n} ) A^{p m};"
@@ -308,12 +308,12 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\nabla_{m p}, \\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\nabla_{m p}\\left(A_{q r} V_{n}\\right) A^{p m}\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-\\nabla^{m p}, \\left(A_{q r} V_{n}\\right) A_{m p}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\nabla^{m p}\\left(A_{q r} V_{n}\\right) A_{m p}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=\\nabla_{m p}( A_{q r} V_{n} ) A^{p m};\ncanonicalise(_);"
@@ -326,7 +326,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}-A_{q r} \\nabla^{m p}, {V_{n}} A_{m p}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-A_{q r} \\nabla^{m p}{V_{n}} A_{m p}\\end{dmath*}"
 				}
 			],
 			"source" : "unwrap(_);"

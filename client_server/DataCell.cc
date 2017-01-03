@@ -81,7 +81,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 	boost::regex prop(R"(\\prop\{([^\}]*)\})");
 	boost::regex underscore(R"(\\_)");
 	boost::regex e_aigu(R"(\\'e)");
-	boost::regex ldots(R"(\$\\ldots\$)");
+	boost::regex ldots(R"(\\ldots)");
+	boost::regex dquote(R"(``([^']*)'')");
+	boost::regex squote(R"(`([^']*)')");
 	boost::regex linebreak(R"(\\linebreak\[0\])");
 	std::string res;
 
@@ -107,6 +109,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = boost::regex_replace(res, tex, "TeX");
 		res = boost::regex_replace(res, e_aigu, "é");
 		res = boost::regex_replace(res, ldots, "...");
+		res = boost::regex_replace(res, dquote, "\"$1\"");
+		res = boost::regex_replace(res, squote,  "'$1'");
 		res = boost::regex_replace(res, linebreak, "\\\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
 		}
 	catch(boost::regex_error& ex) {
