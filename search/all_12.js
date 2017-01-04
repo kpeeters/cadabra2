@@ -4,7 +4,6 @@ var searchData=
   ['range_5fvector_5ft',['range_vector_t',['../classAlgorithm.html#a26a1cdc76494208cb9bf64a52336999a',1,'Algorithm::range_vector_t()'],['../namespacecombin.html#a3758b111c04311fdded2282b60f43732',1,'combin::range_vector_t()']]],
   ['rat_5fset',['rat_set',['../Storage_8cc.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc'],['../Storage_8hh.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc']]],
   ['raw_5fints',['raw_ints',['../classsym.html#a938267c89e18daffcf14823923b5944d',1,'sym']]],
-  ['rbox',['rbox',['../classcadabra_1_1TeXView.html#a30cd584643a13299dd3728c72219ea31',1,'cadabra::TeXView']]],
   ['read',['READ',['../popen2_8cc.html#ada74e7db007a68e763f20c17f2985356',1,'popen2.cc']]],
   ['read_5fonly',['read_only',['../classcadabra_1_1NotebookWindow.html#a3ff79c4919808b8b12e90ee698343766',1,'cadabra::NotebookWindow']]],
   ['reads_5fas_5foperator',['reads_as_operator',['../classDisplayTeX.html#a74bdd19ede9390123da4473c8ed279ba',1,'DisplayTeX']]],

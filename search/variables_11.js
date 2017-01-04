@@ -2,7 +2,6 @@ var searchData=
 [
   ['rat_5fset',['rat_set',['../Storage_8cc.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc'],['../Storage_8hh.html#aa8cf0e3351e7b45b6979458ec37ae618',1,'rat_set():&#160;Storage.cc']]],
   ['raw_5fints',['raw_ints',['../classsym.html#a938267c89e18daffcf14823923b5944d',1,'sym']]],
-  ['rbox',['rbox',['../classcadabra_1_1TeXView.html#a30cd584643a13299dd3728c72219ea31',1,'cadabra::TeXView']]],
   ['read_5fonly',['read_only',['../classcadabra_1_1NotebookWindow.html#a3ff79c4919808b8b12e90ee698343766',1,'cadabra::NotebookWindow']]],
   ['receive_5fmillis',['receive_millis',['../classsnoop_1_1Snoop_1_1AppEntry.html#aa2d111c3a96cac92a571489a2e9976dc',1,'snoop::Snoop::AppEntry::receive_millis()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#ac5c65cf4a533aca9284b11cdcf7311c0',1,'snoop::Snoop::LogEntry::receive_millis()']]],
   ['redo_5fstack',['redo_stack',['../classcadabra_1_1DocumentThread.html#ab42384a7f5ad6146a4c462e97a619dbf',1,'cadabra::DocumentThread']]],

@@ -27,7 +27,6 @@ var searchData=
   ['to',['to',['../classInteger.html#a03e00e5e36db4a0d8405efe433ee0611',1,'Integer']]],
   ['to_5ffactor_5fout',['to_factor_out',['../classfactor__out.html#a301fc9abedc3f5a3ffd756eb99a2e102',1,'factor_out']]],
   ['to_5fpos',['to_pos',['../classcadabra_1_1ActionEraseText.html#a0c97febe9d6a9d88f4d8a4cfe8acaa89',1,'cadabra::ActionEraseText']]],
-  ['to_5freveal',['to_reveal',['../classcadabra_1_1NotebookWindow.html#a79c4870df95555b208586ea2489450a9',1,'cadabra::NotebookWindow']]],
   ['to_5fright',['to_right',['../classfactor__out.html#a2c9ccd951d58832b7022930abfb4aba5',1,'factor_out']]],
   ['topbox',['topbox',['../classcadabra_1_1NotebookWindow.html#a0a744d50bd9f04b5a7600c4f7228d357',1,'cadabra::NotebookWindow']]],
   ['tr',['tr',['../classAlgorithm.html#ab22b43bf8bdd5a560348fbd0eb3abf21',1,'Algorithm::tr()'],['../classindexsort_1_1less__indexed__treenode.html#a06228f7406543dd03c84954eacbeb4ca',1,'indexsort::less_indexed_treenode::tr()']]],

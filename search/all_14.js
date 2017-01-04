@@ -79,7 +79,6 @@ var searchData=
   ['to_5flong',['to_long',['../Storage_8cc.html#a82c8136162b12864d565395ef7c6061c',1,'to_long(multiplier_t mul):&#160;Storage.cc'],['../Storage_8hh.html#a78738591105f642027baea9d10d0e0cd',1,'to_long(multiplier_t):&#160;Storage.cc']]],
   ['to_5fpos',['to_pos',['../classcadabra_1_1ActionEraseText.html#a0c97febe9d6a9d88f4d8a4cfe8acaa89',1,'cadabra::ActionEraseText']]],
   ['to_5frational',['to_rational',['../classEx.html#adc71c670146d41a500e16c1d400f0a7d',1,'Ex']]],
-  ['to_5freveal',['to_reveal',['../classcadabra_1_1NotebookWindow.html#a79c4870df95555b208586ea2489450a9',1,'cadabra::NotebookWindow']]],
   ['to_5fright',['to_right',['../classfactor__out.html#a2c9ccd951d58832b7022930abfb4aba5',1,'factor_out']]],
   ['to_5fstd_5fvector',['to_std_vector',['../PythonCdb_8cc.html#a64a5521d7ebd2cc0ad62bb167898746b',1,'PythonCdb.cc']]],
   ['to_5fstring',['to_string',['../Storage_8cc.html#a47409da3e0df7003b9674c4a5b1a5187',1,'to_string(long num):&#160;Storage.cc'],['../Storage_8hh.html#ade131bfe0fbf243f0a3a8f3682088928',1,'to_string(long):&#160;Storage.cc']]],
