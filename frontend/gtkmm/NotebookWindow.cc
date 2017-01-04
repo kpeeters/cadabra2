@@ -749,7 +749,7 @@ void NotebookWindow::scroll_current_cell_into_view()
 	if(current_cell==doc.end()) return;
 	if(current_canvas>=canvasses.size()) return;
 
-	if(canvasses[current_canvas]->visualcells.find(&(*current_cell))==visualcells.end()) return;
+	if(canvasses[current_canvas]->visualcells.find(&(*current_cell))==canvasses[current_canvas]->visualcells.end()) return;
 	
 	VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*current_cell)];
 
