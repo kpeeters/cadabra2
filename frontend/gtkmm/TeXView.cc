@@ -16,7 +16,7 @@
 	 rbox.set_transition_duration(1000);
 	 rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
 #else
-	 add(vbox)
+	 add(vbox);
 #endif		 
 	 vbox.set_margin_top(10);
 	 vbox.set_margin_bottom(0);
