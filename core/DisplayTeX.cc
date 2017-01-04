@@ -292,7 +292,7 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 		if(first)
 			first=false;
 		else
-			str << ", \\linebreak[0] ";
+			str << ",~\\linebreak[0] ";
 		dispatch(str, sib);
 		++sib;
 		}

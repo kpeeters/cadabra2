@@ -218,7 +218,9 @@ namespace cadabra {
 
 
 			// Transition animations.
+#if GTK_CHECK_VERSION(3,10,0)	 			
 			std::vector<Gtk::Revealer *> to_reveal;
+#endif			
 			bool idle_handler();
 	};
 

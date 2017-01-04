@@ -4,7 +4,9 @@
 #include <gtkmm/eventbox.h>
 #include <gtkmm/box.h>
 #include <gtkmm/image.h>
-#include <gtkmm/revealer.h>
+#if GTK_CHECK_VERSION(3,10,0)
+  #include <gtkmm/revealer.h>
+#endif
 
 #include "DataCell.hh"
 #include "../common/TeXEngine.hh"
@@ -24,7 +26,9 @@ namespace cadabra {
 			sigc::signal1<bool, DTree::iterator>   show_hide_requested;
 			
 			DTree::iterator           datacell;
+#if GTK_CHECK_VERSION(3,10,0)			
 			Gtk::Revealer             rbox;
+#endif			
 			Gtk::VBox                 vbox;
 			Gtk::HBox                 hbox;
 			Gtk::Image                image;

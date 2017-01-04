@@ -9,18 +9,21 @@
 	 {
 	 content = engine.checkin(datacell->textbuf, "", "");
 
+#if GTK_CHECK_VERSION(3,10,0)	 
 	 add(rbox);
 	 rbox.add(vbox);
+	 rbox.set_reveal_child(false);
+	 rbox.set_transition_duration(1000);
+	 rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
+#else
+	 add(vbox)
+#endif		 
 	 vbox.set_margin_top(10);
 	 vbox.set_margin_bottom(0);
 	 vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
 	 hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
 //	 add(image);
 	 override_background_color(Gdk::RGBA("white"));
-
-	 rbox.set_reveal_child(false);
-	 rbox.set_transition_duration(1000);
-	 rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
 	 }
 
  TeXView::~TeXView()
