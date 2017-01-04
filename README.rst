@@ -34,7 +34,7 @@ too. Select your system from the list bel
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24)`_
-- `Linux (Fedora <=23/CentOS/Scientific Linux)`_
+- `Linux (older Fedora/CentOS/Scientific Linux)`_
 - `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Mac OS X`_
@@ -98,8 +98,8 @@ notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
 
 
-Linux (Fedora ≤23/CentOS/Scientific Linux)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Linux (older Fedora/CentOS/Scientific Linux)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 On Fedora/CentOS/Scientific Linux you can install the dependencies with::
 
@@ -241,9 +241,9 @@ packages (all from an MSYS2 shell!)::
     pacman -S mingw-w64-x86_64-gcc
     pacman -S mingw-w64-x86_64-gtkmm3
     pacman -S mingw-w64-x86_64-boost
-	 pacman -S gmp gmp-devel pcre-devel
+    pacman -S gmp gmp-devel pcre-devel
     pacman -S mingw-w64-x86_64-cmake
-	 pacman -S mingw-w64-x86_64-sqlite3
+    pacman -S mingw-w64-x86_64-sqlite3
     pacman -S mingw-w64-x86_64-adwaita-icon-theme
 
 Then close the MSYS2 shell and open the MINGW64 shell. Run::
@@ -259,7 +259,7 @@ pick up python3 on Windows.
 
 This fails to install the shared libraries, but they do get
 built. Copy them all in ~/bin, and also copy a whole slew of other
-things into there. In addition you need 
+things into there. In addition you need::
 
     cp /mingw64/bin/gspawn-win* ~/bin
     export PYTHONPATH=/mingw64/lib/python2.7:/home/kasper/bin
