@@ -103,7 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;gtkmm/eventbox.h&gt;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;gtkmm/box.h&gt;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;gtkmm/image.h&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#if GTK_CHECK_VERSION(3,10,0)</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#if GTKMM_MINOR_VERSION&gt;=10</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor"></span><span class="preprocessor">  #include &lt;gtkmm/revealer.h&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor"></span></div>
@@ -123,7 +123,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="classcadabra_1_1TeXView.html#afab333d2a75b26586a8800074f872239">   26</a></span>&#160;            sigc::signal1&lt;bool, DTree::iterator&gt;   <a class="code" href="classcadabra_1_1TeXView.html#afab333d2a75b26586a8800074f872239">show_hide_requested</a>;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;            </div>
 <div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classcadabra_1_1TeXView.html#a4294abe5d4c715227baf838b412637f5">   28</a></span>&#160;            DTree::iterator           <a class="code" href="classcadabra_1_1TeXView.html#a4294abe5d4c715227baf838b412637f5">datacell</a>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#if GTK_CHECK_VERSION(3,10,0)           </span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#if GTKMM_MINOR_VERSION&gt;=10</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor"></span>            Gtk::Revealer             rbox;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#endif          </span></div>
 <div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classcadabra_1_1TeXView.html#a0070b3b3f26e2ab63ad25600177810ec">   32</a></span>&#160;<span class="preprocessor"></span>            Gtk::VBox                 <a class="code" href="classcadabra_1_1TeXView.html#a0070b3b3f26e2ab63ad25600177810ec">vbox</a>;</div>
@@ -176,7 +176,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 4 2017 10:31:57 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 4 2017 10:41:37 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
