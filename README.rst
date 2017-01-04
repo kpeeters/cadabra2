@@ -14,8 +14,8 @@ Kasper Peeters <info@cadabra.science>
 - Source code documentation at http://kpeeters.github.io/cadabra2
 
 This repository holds the 2.x series of the Cadabra computer algebra
-system. It is slowly getting ready for public consumption, but expect
-some rough edges.
+system. It supersedes the 1.x series, which can still be found at
+http://github.com/kpeeters/cadabra.
 
 Cadabra was designed specifically for the solution of problems
 encountered in quantum and classical field theory. It has extensive
@@ -223,7 +223,7 @@ notebook interface ``cadabra2-gtk``.
 
 I am still planning a native OS X interface, but because building the
 Gtk interface is so easy and the result looks relatively decent, this
-may take a while (definitely until after 2.0 has been released).
+has been put on hold for the time being.
 
 Feedback from OS X users is *very* welcome because this is not my main
 development platform.
