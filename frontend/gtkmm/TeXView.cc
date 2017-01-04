@@ -9,7 +9,7 @@
 	 {
 	 content = engine.checkin(datacell->textbuf, "", "");
 
-#if GTK_CHECK_VERSION(3,10,0)	 
+#if GTKMM_MINOR_VERSION>=10
 	 add(rbox);
 	 rbox.add(vbox);
 	 rbox.set_reveal_child(false);

@@ -514,7 +514,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				//if(it->cell_type==DataCell::CellType::error) 
 				//   std::cerr << "error cell" << std::endl;
 				newcell.outbox = manage( new TeXView(engine, it) );
-#if GTK_CHECK_VERSION(3,10,0)
+#if GTKMM_MINOR_VERSION>=10
 				newcell.outbox->rbox.set_reveal_child(true);
 #endif				
 				w=newcell.outbox;
@@ -530,7 +530,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.outbox->show_hide_requested.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
 
-#if GTK_CHECK_VERSION(3,10,0)	 				
+#if GTKMM_MINOR_VERSION>=10
 				to_reveal.push_back(&newcell.outbox->rbox);
 #endif				
 				
@@ -1466,7 +1466,7 @@ void NotebookWindow::on_prefs_font_size(int num)
 
 bool NotebookWindow::idle_handler()
 	{
-#if GTK_CHECK_VERSION(3,10,0)	 	
+#if GTKMM_MINOR_VERSION>=10
 	for(auto& reveal: to_reveal) {
 		reveal->set_reveal_child(true);
 		}
