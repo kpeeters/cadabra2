@@ -11,9 +11,9 @@ if [ -f /etc/redhat-release ]; then
    centos="`cat /etc/redhat-release | grep CentOS`"
    echo ${centos}
    if [ -n "${centos}" ]; then
-      cmake .. -DUSE_PYTHON_3=OFF -DCMAKE_INSTALL_PREFIX=/usr
+      cmake .. -DUSE_PYTHON_3=OFF -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr
    else
-      cmake .. -DCMAKE_INSTALL_PREFIX=/usr
+      cmake .. -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr
    fi
 else
    cmake ..
