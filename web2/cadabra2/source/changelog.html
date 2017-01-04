@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Cadabra: change log{% endblock %}
+
+{% block head %}{%- endblock %}
+
+{% block main %}
+
+<h1>Change log</h1>
+<p>
+  The list below gives a human-readable overview of the changes from
+  one version to the next. For details of precisely what is changed at
+  the code level, consult
+  the <a href="http://github.com/kpeeters/cadabra2">github
+  repository</a>.
+</p>
+<a name="2.1.2"></a>
+<h3>2.1.2</h3>
+<ul>
+  <li>Bug fix: Crash on opening of a notebook on Ubuntu 16.04 and possibly
+	 others, related to minor differences in gtk versions.</li>
+  <li>Bug fix: Installation paths of Debian/Ubuntu/Mint binary
+	 packages changed from <tt>/usr/local</tt> to <tt>/usr</tt>.</li>
+</ul>
+
+<a name="2.1.1"></a>
+<h3>2.1.1</h3>
+<ul>
+  <li>Bug fix: Compilation error on gtk versions lower than 3.10.0.</li>
+</ul>
+
+<a name="2.1.0"></a>
+<h3>2.1.0</h3>
+<ul>
+  <li>First properly versioned release after a series of 2.0.x
+	 releases which were meant for testing.</li>
+</ul>
+
+{%- endblock %}
