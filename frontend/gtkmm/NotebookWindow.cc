@@ -747,8 +747,14 @@ size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
 void NotebookWindow::scroll_current_cell_into_view()
 	{
 	if(current_cell==doc.end()) return;
+	if(current_canvas>=canvasses.size()) return;
+
+	if(visualcells.find(&(*current_cell))==visualcells.end()) return;
+	
 	VisualCell& focusbox = canvasses[current_canvas]->visualcells[&(*current_cell)];
 
+	if(focusbox.inbox==0) return;
+	
 	Gtk::Allocation               al=focusbox.inbox->edit.get_allocation();
 	Glib::RefPtr<Gtk::Adjustment> va=canvasses[current_canvas]->scroll.get_vadjustment();
 
