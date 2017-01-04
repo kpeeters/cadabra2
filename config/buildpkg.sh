@@ -1,9 +1,9 @@
 #!/bin/bash
-sudo rm -Rf ${HOME}/cadabra2
-git clone https://github.com/kpeeters/cadabra2
+#sudo rm -Rf ${HOME}/cadabra2
+#git clone https://github.com/kpeeters/cadabra2
 cd ${HOME}/cadabra2
 sudo ls 
-#git pull origin
+git pull origin
 sudo rm -Rf build/*
 mkdir build
 cd build
