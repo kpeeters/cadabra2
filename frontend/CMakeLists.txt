@@ -19,7 +19,11 @@ endif(GTKMM3_FOUND)
 #    message("-- Not building native OSX interface")
 # endif(APPLE)
 
-execute_process(COMMAND kpsewhich -var-value=TEXMFLOCAL OUTPUT_VARIABLE INSTALL_LATEX_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+if(PACKAGING_MODE)
+  message("-- Using system wide package default paths for LaTeX")
+else()
+  execute_process(COMMAND kpsewhich -var-value=TEXMFLOCAL OUTPUT_VARIABLE INSTALL_LATEX_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
 # Get the last path in the LaTeX install dir, if there is more than one separated by a ':'.
 #string(REPLACE ":" ";" INSTALL_LATEX_DIR "${INSTALL_LATEX_DIR}")
 #list(GET INSTALL_LATEX_DIR -1 INSTALL_LATEX_DIR)
