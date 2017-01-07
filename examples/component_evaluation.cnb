@@ -1,0 +1,123 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left\\{\\mu,~\\linebreak[0] \\nu,~\\linebreak[0] \\rho\\right\\}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}F_{\\mu \\nu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}A^{\\mu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\mu}{F^{\\mu \\nu}} = 0\\end{dmath*}"
+				}
+			],
+			"source" : "{\\mu,\\nu,\\rho}::Indices(position=fixed, values={0,1,2,3});\n\\partial{#}::PartialDerivative;\nF_{\\mu\\nu}::AntiSymmetric;\nA^{\\mu}::Depends(\\partial{#});\neom:=\\partial_{\\mu}{ F^{\\mu\\nu} } = 0;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}F^{\\mu \\nu} = \\partial^{\\mu}{A^{\\nu}}-\\partial^{\\nu}{A^{\\mu}}\\end{dmath*}"
+				}
+			],
+			"source" : "fdef:= F^{\\mu\\nu} = \\partial^{\\mu}{A^{\\nu}} - \\partial^{\\nu}{A^{\\mu}};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\mu}\\left(\\partial^{\\mu}{A^{\\nu}}-\\partial^{\\nu}{A^{\\mu}}\\right) = 0\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(eom, fdef);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left\\{A^{0} = A^{0},~\\linebreak[0] A^{1} = A^{1},~\\linebreak[0] A^{2} = A^{2},~\\linebreak[0] A^{3} = A^{3}\\right\\}\\end{dmath*}"
+				}
+			],
+			"source" : "cmp:= {A^0 = A^0, A^1 = A^1, A^2 = A^2, A^3 = A^3 };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0 = 0\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(eom, cmp);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\mu}{A^{2}}\\end{dmath*}"
+				}
+			],
+			"source" : "tst:=\\partial_{\\mu}{A^{2}};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "unwrap(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
