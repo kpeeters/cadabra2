@@ -91,6 +91,16 @@ Parser::Parser(std::shared_ptr<Ex> t)
 	parts=tree->begin();
 	}
 
+Parser::Parser(std::shared_ptr<Ex> t, const std::string& str)
+	: tree(t)
+	{
+	tree->clear();
+	tree->set_head(str_node("\\expression", str_node::b_none, str_node::p_none));
+	parts=tree->begin();
+	string2tree(str);
+	finalise();
+	}
+
 void Parser::erase()
 	{
 	str.clear();

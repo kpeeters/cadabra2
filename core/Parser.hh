@@ -37,6 +37,7 @@ class Parser {
 	public:
 		Parser();
 		Parser(std::shared_ptr<Ex>);
+		Parser(std::shared_ptr<Ex>, const std::string&);		
 	  
 		void erase();
 
