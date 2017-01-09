@@ -909,9 +909,11 @@ void Algorithm::determine_intersection(index_map_t& one, index_map_t& two, index
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
 				if(tree_exact_equal(&kernel.properties, (*it1).first,(*it2).first,1,true,-2,true)) {
-					const Indices *ind=kernel.properties.get<Indices>(it1->second);
-					if(ind && ind->position_type==Indices::fixed && it1->second->fl.parent_rel==it2->second->fl.parent_rel)
-						throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
+//					const Indices *ind=kernel.properties.get<Indices>(it1->second);
+//					if(ind && ind->position_type==Indices::fixed && it1->second->fl.parent_rel==it2->second->fl.parent_rel) {
+//						std::cerr << tr << std::endl;
+//						throw ConsistencyException("Fixed index pair with two upper or two lower indices "+ *it1->second->name + " found.");
+//						}
 					target.insert((*it2));
 					if(move_out) {
 						index_map_t::iterator nxt=it2;
@@ -976,20 +978,20 @@ void Algorithm::classify_add_index(iterator it, index_map_t& ind_free, index_map
 			 index_map_t::iterator fnd=find_modulo_parent_rel(it, ind_free);
 			 if(fnd!=ind_free.end()) {
 				 // std::cerr << "found in free indices" << std::endl;
-				 if(ind_dummy.count(it)>0) {
-					 throw ConsistencyException("Triple index occurred.");
-					 }
-				 // check consistency: one up and one down if index position is fixed.
-				 // std::cerr << "check positions" << std::endl;
+ 				 // check consistency: one up and one down if index position is fixed.
 				 const Indices *ind=kernel.properties.get<Indices>(it);
-				 if(ind && ind->position_type==Indices::fixed && it->fl.parent_rel==fnd->second->fl.parent_rel) 
+				 if(ind && ind->position_type==Indices::fixed && it->fl.parent_rel==fnd->second->fl.parent_rel)  {
 					 throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
+					 }
 				 ind_dummy.insert(*fnd);
 				 ind_dummy.insert(index_map_t::value_type(Ex(it), it));
 				 ind_free.erase(fnd);
 				 }
 			 else {
 				 // std::cerr << "not yet found; after insertion" << std::endl;
+				 if(ind_dummy.count(it)>0) {
+					 throw ConsistencyException("Triple index occurred.");
+					 }
 				 ind_free.insert(index_map_t::value_type(Ex(it), it));
 				 // for(auto& n: ind_free)
 				 //	 std::cerr << n.first << std::endl;
