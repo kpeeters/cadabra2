@@ -1,6 +1,8 @@
 
 #include "properties/SelfNonCommuting.hh"
 
+using namespace cadabra;
+
 std::string SelfNonCommuting::name() const
 	{
 	return "SelfNonCommuting";

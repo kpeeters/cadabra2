@@ -5,6 +5,8 @@
 #include "algorithms/decompose_product.hh"
 #include "properties/Integer.hh"
 
+using namespace cadabra;
+
 decompose_product::decompose_product(const Kernel& k, Ex&tr)
 	: Algorithm(k, tr), t1(0), t2(0)
 	{

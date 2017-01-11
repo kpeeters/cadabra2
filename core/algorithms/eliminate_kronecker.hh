@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 class eliminate_kronecker : public Algorithm {
 	public:
 		eliminate_kronecker(const Kernel&, Ex&);
@@ -11,3 +13,4 @@ class eliminate_kronecker : public Algorithm {
 		virtual result_t apply(iterator&) override;
 };
 
+}

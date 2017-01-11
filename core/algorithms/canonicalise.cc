@@ -10,6 +10,8 @@
 
 // #define XPERM_DEBUG 1
 
+using namespace cadabra;
+
 canonicalise::canonicalise(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), reuse_generating_set(false) 
 	{

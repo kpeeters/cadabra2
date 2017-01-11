@@ -6,6 +6,8 @@
 //#include "algorithms/prodcollectnum.hh"
 #include "properties/Indices.hh"
 
+using namespace cadabra;
+
 substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
 	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr)
 	{
@@ -70,7 +72,6 @@ bool substitute::can_apply(iterator st)
 	// std::cerr << "attempting to match at " << Ex(st) << std::endl;
 
 	Ex::iterator found = cadabra::find_in_list(args, args.begin(), [&](Ex::iterator arrow) {
-			// std::cerr << "rule " << Ex(arrow) << std::endl;
 			comparator.clear();
 			iterator lhs=tr.begin(arrow);
 			if(*lhs->name=="\\conditional") {

@@ -5,6 +5,8 @@
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
 
+using namespace cadabra;
+
 DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 	: DisplayBase(kernel, e)
 	{

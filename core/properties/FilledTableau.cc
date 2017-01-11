@@ -1,6 +1,8 @@
 
 #include "properties/FilledTableau.hh"
 
+using namespace cadabra;
+
 std::string FilledTableau::name() const
 	{
 	return "FilledTableau";

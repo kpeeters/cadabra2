@@ -25,6 +25,9 @@
 #include <sstream>
 #include <pcrecpp.h>
 
+
+namespace cadabra {
+
 nset_t    name_set;
 rset_t    rat_set;
 
@@ -771,12 +774,6 @@ bool str_node::operator==(const str_node& other) const
 	else return false;
 	}
 
-bool str_node::operator<(const str_node& other) const
-	{
-	if(*name<*other.name) return true;
-	else return false;
-	}
-
 bool str_node::compare_names_only(const str_node& one, const str_node& two)
 	{
 	if(one.name==two.name) return true;
@@ -840,9 +837,20 @@ void half(rset_t::iterator& num)
 	num=rat_set.insert((*num)/2).first;
 	}
 
-std::ostream& operator<<(std::ostream& str, const Ex& ex) 
+bool str_node::operator<(const cadabra::str_node& other) const
+	{
+	if(*name<*other.name) return true;
+	else return false;
+	}
+
+}	
+
+// Keep operator overloading outside of the cadabra namespace.
+
+std::ostream& operator<<(std::ostream& str, const cadabra::Ex& ex) 
 	{
 	if(ex.begin()==ex.end()) return str;
 	ex.print_recursive_treeform(str, ex.begin());
 	return str;
 	}
+

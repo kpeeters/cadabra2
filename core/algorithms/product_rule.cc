@@ -5,6 +5,8 @@
 #include "properties/Derivative.hh"
 #include "properties/DifferentialForm.hh"
 
+using namespace cadabra;
+
 product_rule::product_rule(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), number_of_indices(0)
 	{

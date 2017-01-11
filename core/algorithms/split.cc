@@ -1,6 +1,8 @@
 
 #include "split.hh"
 
+using namespace cadabra;
+
 split::split(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{

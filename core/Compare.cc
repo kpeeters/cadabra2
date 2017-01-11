@@ -20,6 +20,8 @@
 //#define DEBUG(ln) ln
 #define DEBUG(ln)
 
+namespace cadabra {
+
 int Ex_comparator::offset=0;
 
 int subtree_compare(const Properties *properties, 
@@ -1342,23 +1344,26 @@ bool Ex_is_less::operator()(const Ex& one, const Ex& two)
 	else        return false;
 	}
 
+}
 
-bool operator<(const Ex::iterator& i1, const Ex::iterator& i2)
+bool operator<(const cadabra::Ex::iterator& i1, const cadabra::Ex::iterator& i2)
 	{
 	return i1.node < i2.node;
 	}
 
-bool operator<(const Ex& e1, const Ex& e2)
+bool operator<(const cadabra::Ex& e1, const cadabra::Ex& e2)
 	{
-	return e1.begin() < e2.begin();
+	return e1.begin().node < e2.begin().node;
 	}
 
-std::ostream& operator<<(std::ostream& s, Ex_comparator::useprops_t up)
+std::ostream& operator<<(std::ostream& s, cadabra::Ex_comparator::useprops_t up)
 	{
 	switch(up) {
-		case Ex_comparator::useprops_t::always:     s << "always";     break;
-		case Ex_comparator::useprops_t::not_at_top: s << "not_at_top"; break;
-		case Ex_comparator::useprops_t::never:      s << "never";      break;
+		case cadabra::Ex_comparator::useprops_t::always:     s << "always";     break;
+		case cadabra::Ex_comparator::useprops_t::not_at_top: s << "not_at_top"; break;
+		case cadabra::Ex_comparator::useprops_t::never:      s << "never";      break;
 		}
 	return s;
 	}
+
+

@@ -1,13 +1,16 @@
 
 #include "Algorithm.hh"
 
-class flatten_sum : public Algorithm {
-	public:
-		flatten_sum(const Kernel&, Ex&);
+namespace cadabra {
 
-		virtual bool     can_apply(iterator);
-		virtual result_t apply(iterator&);
+	class flatten_sum : public Algorithm {
+		public:
+			flatten_sum(const Kernel&, Ex&);
+			
+			virtual bool     can_apply(iterator);
+			virtual result_t apply(iterator&);
+			
+			bool make_consistent_only;
+	};
 
-		bool make_consistent_only;
-};
-
+}

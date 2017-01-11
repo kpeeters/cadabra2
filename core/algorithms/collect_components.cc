@@ -2,6 +2,8 @@
 #include "algorithms/collect_components.hh"
 #include "algorithms/evaluate.hh"
 
+using namespace cadabra;
+
 collect_components::collect_components(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{

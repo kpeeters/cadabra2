@@ -4,6 +4,8 @@
 #include "algorithms/expand.hh"
 #include "properties/Matrix.hh"
 
+using namespace cadabra;
+
 expand::expand(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

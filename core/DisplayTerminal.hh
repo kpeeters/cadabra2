@@ -20,6 +20,8 @@ typedef uint32_t kunichar;
 /// the present class, but be printed as 'sympy.diff' by the DisplaySympy
 /// class).
 
+namespace cadabra {
+
 class DisplayTerminal : public DisplayBase {
 	public:
 		DisplayTerminal(const Kernel&, const Ex&);
@@ -61,3 +63,5 @@ class DisplayTerminal : public DisplayBase {
 };
 
 const char *unichar(kunichar c);
+
+}

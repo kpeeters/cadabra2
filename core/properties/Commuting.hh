@@ -3,9 +3,12 @@
 
 #include "properties/CommutingBehaviour.hh"
 
-class Commuting : virtual public CommutingBehaviour {
-	public:
-		virtual std::string name() const;
-		virtual int sign() const { return 1; }
-};
+namespace cadabra {
 
+	class Commuting : virtual public CommutingBehaviour {
+		public:
+			virtual std::string name() const;
+			virtual int sign() const { return 1; }
+	};
+
+}

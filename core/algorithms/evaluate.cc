@@ -12,6 +12,8 @@
 #include "properties/Accent.hh"
 #include <functional>
 
+using namespace cadabra;
+
 evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
 	: Algorithm(k, tr), components(c), only_rhs(rhs)
 	{

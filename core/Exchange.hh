@@ -40,6 +40,8 @@
 #include "properties/SelfCommutingBehaviour.hh"
 #include "properties/CommutingBehaviour.hh"
 
+namespace cadabra {
+
 class exchange {
 	public:
 		struct identical_tensors_t {
@@ -74,3 +76,4 @@ class exchange {
 bool operator<(const exchange::tensor_type_t& one, const exchange::tensor_type_t& two);
 
 
+}

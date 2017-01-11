@@ -1,6 +1,8 @@
 
 #include "properties/DependsInherit.hh"
 
+using namespace cadabra;
+
 std::string DependsInherit::name() const
 	{
 	return "DependsInherit";

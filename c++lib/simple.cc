@@ -2,27 +2,46 @@
 #include "cadabra2++/Storage.hh"
 #include "cadabra2++/DisplayTerminal.hh"
 #include "cadabra2++/algorithms/substitute.hh"
+#include "cadabra2++/TerminalStream.hh"
+#include "cadabra2++/properties/PartialDerivative.hh"
 
+#include <iostream>
 #include <sstream>
 
 int main(int argc, char **argv)
 	{
-	Kernel kernel;
+	cadabra::Kernel kernel;
 
-	auto ex = std::make_shared<Ex>();
-	Parser parser1(ex, "\\int{ F_{m n} F^{m n} }{x}");
-	auto rl = std::make_shared<Ex>();
-	Parser parser2(rl, "F_{m n} = \\partial_{m}{A_{n}} - \\partial_{n}{A_{m}}");
-
-	DisplayTerminal dt1(kernel, *ex);
-	dt1.output(std::cerr);
-	std::cerr << std::endl;
-	DisplayTerminal dt2(kernel, *rl);
-	dt2.output(std::cerr);
-	std::cerr << std::endl;
+	// The following few lines are equivalent to entering
+	//
+	//    {m,n,p,q}::Indices(position=free).
+	//    \partial{#}::PartialDerivative;
+	//    ex:= \int{ F_{m n} F^{m n} }{x};
+	//    rl:= F_{m n} = \\partial_{m}{A_{n}} - \\partial_{n}{A_{m}};
+	//    substitute(ex, rl, deep=True);
+	//
+	// in the Cadabra notebook.
 	
-	substitute subs(kernel, *ex, *rl);
-	DisplayTerminal dt3(kernel, *ex);
-	dt3.output(std::cerr);
-	std::cerr << std::endl;
+	auto ind1 = kernel.ex_from_string("{m,n,p,q}");
+	auto ind2 = kernel.ex_from_string("position=free");
+	kernel.inject_property(new cadabra::Indices(), ind1, ind2);
+
+	auto pd   = kernel.ex_from_string("\\partial{#}");
+	kernel.inject_property(new cadabra::PartialDerivative(), pd, 0);
+
+	auto ex = kernel.ex_from_string("\\int{ F_{m n} F^{m n} }{x}");
+	auto rl = kernel.ex_from_string("F_{m n} = \\partial_{m}{A_{n}} - \\partial_{n}{A_{m}}");
+
+	// Pretty-printing stream object.
+	cadabra::TerminalStream ss(kernel, std::cerr);
+
+	ss << ex << std::endl;
+	ss << rl << std::endl;
+
+	// Apply the 'substitute' algorithm.
+	cadabra::substitute subs(kernel, *ex, *rl);
+	auto top=ex->begin();
+	subs.apply_generic(top, true, false, 0);
+
+	ss << ex << std::endl;
 	}

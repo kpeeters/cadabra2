@@ -2,6 +2,8 @@
 #include "WeightInherit.hh"
 #include "Kernel.hh"
 
+using namespace cadabra;
+
 std::string WeightInherit::name() const 
 	{
 	return "WeightInherit";

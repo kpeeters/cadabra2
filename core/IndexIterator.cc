@@ -2,6 +2,8 @@
 #include "IndexIterator.hh"
 #include "properties/IndexInherit.hh"
 
+using namespace cadabra;
+
 index_iterator::index_iterator(const Properties& k)
 	: iterator_base(), properties(&k)
 	{
@@ -143,13 +145,13 @@ index_iterator& index_iterator::operator=(const index_iterator& other)
 	return *this;
 	}
 
-size_t number_of_indices(const Properties& pr, Ex::iterator it)
-	{
-	unsigned int res=0;
-	index_iterator indit=index_iterator::begin(pr, it);
-	while(indit!=index_iterator::end(pr, it)) {
-		++res;
-		++indit;
-		}
-	return res;
-	}
+//size_t number_of_indices(const Properties& pr, Ex::iterator it)
+//	{
+//	unsigned int res=0;
+//	index_iterator indit=index_iterator::begin(pr, it);
+//	while(indit!=index_iterator::end(pr, it)) {
+//		++res;
+//		++indit;
+//		}
+//	return res;
+//	}

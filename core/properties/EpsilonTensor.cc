@@ -1,6 +1,8 @@
 
 #include "properties/EpsilonTensor.hh"
 
+using namespace cadabra;
+
 std::string EpsilonTensor::name() const
 	{
 	return "EpsilonTensor";

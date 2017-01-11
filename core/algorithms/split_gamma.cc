@@ -3,6 +3,8 @@
 #include "algorithms/split_gamma.hh"
 #include "algorithms/join_gamma.hh"
 
+using namespace cadabra;
+
 split_gamma::split_gamma(const Kernel& k, Ex& e, bool ob)
 	: Algorithm(k, e), on_back(ob)
 	{

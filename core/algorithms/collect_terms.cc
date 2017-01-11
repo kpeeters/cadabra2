@@ -1,6 +1,8 @@
 
 #include "algorithms/collect_terms.hh"
 
+using namespace cadabra;
+
 collect_terms::collect_terms(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{

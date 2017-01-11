@@ -99,6 +99,7 @@ set(LOCAL_SRC_FILES
   DisplayTeX.cc
   DisplaySympy.cc
   DisplayTerminal.cc
+  TerminalStream.cc
   Exceptions.cc
   Exchange.cc
   Functional.cc

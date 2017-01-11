@@ -3,6 +3,8 @@
 #include "Bridge.hh"
 #include "algorithms/collect_terms.hh"
 
+using namespace cadabra;
+
 void pull_in(std::shared_ptr<Ex> ex)
 	{
 	collect_terms rr(*get_kernel_from_scope(), *ex);

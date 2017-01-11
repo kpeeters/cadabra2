@@ -7,6 +7,8 @@
 #include "algorithms/flatten_product.hh"
 #include "properties/Distributable.hh"
 
+using namespace cadabra;
+
 distribute::distribute(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{

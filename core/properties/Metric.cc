@@ -2,6 +2,8 @@
 #include "Exceptions.hh"
 #include "properties/Metric.hh"
 
+using namespace cadabra;
+
 Metric::Metric()
 	{
 //	tab_t tab;

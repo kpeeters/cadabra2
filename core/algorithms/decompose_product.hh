@@ -5,6 +5,8 @@
 #include "properties/TableauBase.hh"
 #include "properties/Indices.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Decompose a product of tensors by applying Young projectors.
@@ -41,3 +43,5 @@ class decompose_product : public Algorithm {
 
 		combin::range_vector_t asym_ranges;
 };
+
+}

@@ -27,6 +27,8 @@
 #include <sstream>
 #include "properties/Indices.hh"
 
+using namespace cadabra;
+
 pattern::pattern()
 	{
 	}

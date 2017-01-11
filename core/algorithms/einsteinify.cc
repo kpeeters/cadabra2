@@ -1,6 +1,8 @@
 
 #include "algorithms/einsteinify.hh"
 
+using namespace cadabra;
+
 einsteinify::einsteinify(const Kernel& k, Ex& e, Ex& m)
 	: Algorithm(k, e), metric(m)
 	{

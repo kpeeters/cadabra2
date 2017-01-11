@@ -1,6 +1,8 @@
 
 #include "algorithms/split_index.hh"
 
+using namespace cadabra;
+
 split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	: Algorithm(k, tr), part1_is_number(false), part2_is_number(false)
 	{

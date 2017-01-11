@@ -5,6 +5,8 @@
 #include "Props.hh"
 #include "properties/Indices.hh"
 
+namespace cadabra {
+
 /// \ingroup compare
 ///
 /// Basic building block subtree comparison function for tensors
@@ -321,9 +323,6 @@ class Ex_comparator {
 ///
 /// Basic comparison operator for tree iterators, so we can use them as keys in maps.
 
-bool operator<(const Ex::iterator&, const Ex::iterator&);
-bool operator<(const Ex&, const Ex&);
-
 class Ex_is_equivalent {
 	public:
 		Ex_is_equivalent(const Properties&);
@@ -342,4 +341,9 @@ class Ex_is_less {
 };
 
 
-std::ostream& operator<<(std::ostream&, Ex_comparator::useprops_t up);
+
+}
+
+bool operator<(const cadabra::Ex::iterator&, const cadabra::Ex::iterator&);
+bool operator<(const cadabra::Ex&, const cadabra::Ex&);
+std::ostream& operator<<(std::ostream&, cadabra::Ex_comparator::useprops_t up);

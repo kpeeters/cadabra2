@@ -3,6 +3,8 @@
 #include "algorithms/replace_match.hh"
 #include "algorithms/substitute.hh"
 
+using namespace cadabra;
+
 replace_match::replace_match(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

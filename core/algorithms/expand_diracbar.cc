@@ -5,6 +5,8 @@
 #include "properties/Spinor.hh"
 #include "properties/GammaMatrix.hh"
 
+using namespace cadabra;
+
 expand_diracbar::expand_diracbar(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

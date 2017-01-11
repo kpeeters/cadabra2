@@ -3,6 +3,7 @@
 
 #include "Compare.hh"
 
+
 /// \ingroup algorithms
 ///
 /// Evaluate a tensorial expression to components, performing all
@@ -74,6 +75,8 @@
 #include "Algorithm.hh"
 #include "properties/Indices.hh"
 
+namespace cadabra {
+
 class evaluate : public Algorithm {
 	public:
 		evaluate(const Kernel&, Ex&, const Ex& component_values, bool rhs=false);
@@ -123,3 +126,5 @@ class evaluate : public Algorithm {
 		/// time being this can only be a 'components' node.
 		std::set<Ex, tree_exact_less_obj> dependencies(iterator it);
 }; 
+
+}

@@ -23,7 +23,8 @@
 
 #include <sstream>
 
-std::istream& operator>>(std::istream& str, Parser& pa)
+
+std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 	{
 	std::string inp;
 	while(std::getline(str, inp)) {
@@ -39,6 +40,8 @@ std::istream& operator>>(std::istream& str, Parser& pa)
 
 	return str;
 	}
+
+using namespace cadabra;
 
 //std::ostream& operator<<(std::ostream& str, Parser& pa)
 //	{

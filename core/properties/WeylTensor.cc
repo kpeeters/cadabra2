@@ -2,7 +2,10 @@
 #include "IndexIterator.hh"
 #include "Exceptions.hh"
 #include "Kernel.hh"
+#include "Algorithm.hh"
 #include "properties/WeylTensor.hh"
+
+using namespace cadabra;
 
 WeylTensor::WeylTensor()
 	{
@@ -21,7 +24,7 @@ std::string WeylTensor::name() const
 
 void WeylTensor::validate(const Kernel& kernel, const Ex& pat) const
 	{
-	if(number_of_indices(kernel.properties, pat.begin())!=4) 
+	if(Algorithm::number_of_indices(kernel.properties, pat.begin())!=4) 
 		throw ConsistencyException("WeylTensor: need exactly 4 indices.");
 	}
 

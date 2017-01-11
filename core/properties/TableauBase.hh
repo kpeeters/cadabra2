@@ -4,7 +4,9 @@
 #include "Props.hh"
 #include "YoungTab.hh"
 
-class TableauBase {
+namespace cadabra {
+
+	class TableauBase {
 	public:
 		virtual ~TableauBase() {};
 		typedef yngtab::filled_tableau<unsigned int> tab_t;
@@ -23,3 +25,4 @@ class TableauBase {
 		bool                 is_simple_symmetry(const Properties&, Ex&, Ex::iterator) const;
 };
 
+}

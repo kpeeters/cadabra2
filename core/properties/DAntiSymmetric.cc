@@ -1,6 +1,8 @@
 
 #include "properties/DAntiSymmetric.hh"
 
+using namespace cadabra;
+
 std::string DAntiSymmetric::name() const
 	{
 	return "DAntiSymmetric";

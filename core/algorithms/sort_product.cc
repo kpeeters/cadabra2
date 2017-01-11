@@ -1,6 +1,8 @@
 
 #include "algorithms/sort_product.hh"
 
+using namespace cadabra;
+
 sort_product::sort_product(const Kernel&k, Ex& tr)
 	: Algorithm(k, tr), ignore_numbers_(false)
 	{

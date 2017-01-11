@@ -8,6 +8,8 @@
 #include "properties/Integer.hh"
 #include "properties/DiracBar.hh"
 
+using namespace cadabra;
+
 fierz::fierz(const Kernel& k, Ex& e, Ex& args)
 	: Algorithm(k, e), spinor_list(Ex(args.begin()))
 	{

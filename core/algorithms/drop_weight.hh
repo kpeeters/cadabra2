@@ -6,6 +6,8 @@
 #include "properties/Weight.hh"
 #include <string>
 
+namespace cadabra {
+
 class drop_keep_weight : public Algorithm {
 	public:
 		drop_keep_weight(const Kernel&, Ex&, Ex&);
@@ -35,3 +37,4 @@ class keep_weight : public drop_keep_weight {
 		virtual result_t apply(iterator&) override;		
 };
 
+}

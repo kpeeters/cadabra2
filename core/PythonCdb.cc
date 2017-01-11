@@ -144,6 +144,8 @@ namespace boost {
 #include "algorithms/young_project_tensor.hh"
 
 
+using namespace cadabra;
+
 // TODO: 
 //
 // - Make a list of useful things to pass to functions which are not Ex objects. 
@@ -821,19 +823,6 @@ void inject_defaults(Kernel *k)
 //	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}",false), 0);
 	}
 
-void inject_property(Kernel *kernel, property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
-	{
-	Ex::iterator it=ex->begin();
-
-	if(param) {
-		// std::cerr << "property with " << *param << std::endl;
-		keyval_t keyvals;
-		prop->parse_to_keyvals(*param, keyvals);
-		prop->parse(*kernel, keyvals);
-		}
-	prop->validate(*kernel, Ex(it));
-	kernel->properties.master_insert(Ex(it), prop);
-	}
 
 // Property constructor and display members for Python purposes.
 

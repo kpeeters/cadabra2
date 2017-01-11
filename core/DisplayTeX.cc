@@ -11,6 +11,8 @@
 #define zwnbsp ""
 //(( parent.utf8_output?(unichar(0xfeff)):""))
 
+using namespace cadabra;
+
 DisplayTeX::DisplayTeX(const Kernel& k, const Ex& e)
 	: DisplayBase(k, e)
 	{

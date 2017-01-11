@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 
 class factor_in : public Algorithm {
@@ -29,3 +31,4 @@ class factor_in : public Algorithm {
 		term_hash_t term_hash;
 };
 
+}

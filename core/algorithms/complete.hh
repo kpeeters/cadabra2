@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Complete a set of coordinate rules so that they also cover related tensors.
@@ -20,3 +22,4 @@ class complete : public Algorithm {
 		Ex goal;
 };
 
+}

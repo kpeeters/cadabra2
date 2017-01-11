@@ -8,6 +8,8 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/indexsort.hh"
 
+using namespace cadabra;
+
 young_project_tensor::young_project_tensor(const Kernel& k, Ex& tr, bool modmono)
 	: Algorithm(k, tr), modulo_monoterm(modmono)
 	{

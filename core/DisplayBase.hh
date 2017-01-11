@@ -4,6 +4,8 @@
 #include "Props.hh"
 #include "Storage.hh"
 
+namespace cadabra {
+
 /// \ingroup display
 ///
 /// Base class for all display classes.  A key difficulty with
@@ -35,3 +37,5 @@ class DisplayBase {
 		const Kernel& kernel;
 
 };
+
+}

@@ -4,6 +4,8 @@
 #include "Props.hh"
 #include "Kernel.hh"
 
+namespace cadabra {
+
 /// \ingroup core
 
 class DependsBase : virtual public property {
@@ -12,3 +14,4 @@ class DependsBase : virtual public property {
       virtual Ex dependencies(const Kernel&, Ex::iterator) const=0;
 };
 
+}

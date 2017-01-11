@@ -4,6 +4,8 @@
 #include "properties/Metric.hh"
 #include "properties/InverseMetric.hh"
 
+using namespace cadabra;
+
 eliminate_metric::eliminate_metric(const Kernel& k, Ex& e, Ex& pref)
 	: eliminate_converter(k, e, pref)
 	{

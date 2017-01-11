@@ -2,6 +2,8 @@
 #include "Exceptions.hh"
 #include "ExteriorDerivative.hh"
 
+using namespace cadabra;
+
 std::string ExteriorDerivative::name() const
 	{
 	return "ExteriorDerivative";

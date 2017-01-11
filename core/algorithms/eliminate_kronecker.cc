@@ -4,6 +4,8 @@
 #include "properties/KroneckerDelta.hh"
 #include "properties/Integer.hh"
 
+using namespace cadabra;
+
 eliminate_kronecker::eliminate_kronecker(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{

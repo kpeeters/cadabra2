@@ -9,6 +9,8 @@
 #include "DisplaySympy.hh"
 #include "algorithms/substitute.hh"
 
+using namespace cadabra;
+
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args, 
 								  const std::string& method)
 	{
@@ -51,7 +53,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
    // own parser, and replace the original.
 
 	auto ptr = std::make_shared<Ex>();
-	Parser parser(ptr);
+	cadabra::Parser parser(ptr);
 	std::stringstream istr(result);
 	istr >> parser;
 

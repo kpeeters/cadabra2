@@ -25,6 +25,8 @@
 #include "Algorithm.hh"
 #include "properties/DiracBar.hh"
 
+using namespace cadabra;
+
 // Find groups of identical tensors. 
 //
 int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex::iterator it,

@@ -4,6 +4,8 @@
 #include "properties/Tableau.hh"
 #include "properties/FilledTableau.hh"
 
+using namespace cadabra;
+
 lr_tensor::lr_tensor(const Kernel& k, Ex& tr)
 	: tab_basics(k, tr)
 	{

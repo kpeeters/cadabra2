@@ -4,6 +4,8 @@
 #include "Algorithm.hh"
 #include "algorithms/sort_product.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Generic substitution algorithm. 
@@ -44,3 +46,5 @@ class substitute : public Algorithm {
 		// For object swap testing routines:
 		sort_product    sort_product_;
 };
+
+}

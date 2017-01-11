@@ -3,9 +3,12 @@
 
 #include "Props.hh"
 
-class GammaTraceless : public property {
-	public:
-		virtual ~GammaTraceless() {};
-		virtual std::string name() const;
-};
+namespace cadabra {
 
+	class GammaTraceless : public property {
+		public:
+			virtual ~GammaTraceless() {};
+			virtual std::string name() const;
+	};
+
+}

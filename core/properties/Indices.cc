@@ -3,6 +3,8 @@
 #include "Exceptions.hh"
 #include "Functional.hh"
 
+using namespace cadabra;
+
 Indices::Indices()
 	: position_type(free)
 	{

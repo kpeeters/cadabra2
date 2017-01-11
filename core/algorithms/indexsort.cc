@@ -3,6 +3,8 @@
 #include "properties/TableauSymmetry.hh"
 #include "algorithms/indexsort.hh"
 
+using namespace cadabra;
+
 indexsort::indexsort(const Kernel& k, Ex& tr) 
 	: Algorithm(k, tr), tb(0)
 	{

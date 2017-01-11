@@ -33,6 +33,8 @@
 
 #include "tree.hh"
 
+namespace cadabra {
+
 typedef mpq_class               multiplier_t;
 typedef std::set<std::string>   nset_t;
 typedef std::set<multiplier_t>  rset_t;
@@ -268,7 +270,6 @@ class nset_it_less {
 /// fancy output, look at DisplayTeX, DisplaySympy and
 /// DisplayTerminal.
 
-std::ostream& operator<<(std::ostream&, const Ex&);
 
 
 template <typename T>
@@ -281,3 +282,7 @@ bool is_in(const T& val, const std::initializer_list<T>& list)
 		}
 	return false;
 	}
+
+}
+
+std::ostream& operator<<(std::ostream&, const cadabra::Ex&);

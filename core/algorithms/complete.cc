@@ -5,6 +5,8 @@
 #include "properties/InverseMetric.hh"
 #include "SympyCdb.hh"
 
+using namespace cadabra;
+
 complete::complete(const Kernel& k, Ex& e, Ex& g)
 	: Algorithm(k, e), goal(g)
 	{

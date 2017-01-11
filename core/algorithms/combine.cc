@@ -3,6 +3,8 @@
 #include "algorithms/combine.hh"
 #include "properties/Matrix.hh"
 
+using namespace cadabra;
+
 combine::combine(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

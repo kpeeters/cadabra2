@@ -4,6 +4,8 @@
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
 
+using namespace cadabra;
+
 rewrite_indices::rewrite_indices(const Kernel& k, Ex& e, Ex& pref, Ex& conv)
 	: Algorithm(k, e), preferred(pref), converters(conv)
 	{

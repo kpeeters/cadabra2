@@ -2,6 +2,8 @@
 #include "GammaMatrix.hh"
 #include "Kernel.hh"
 
+using namespace cadabra;
+
 std::string GammaMatrix::name() const
 	{
 	return "GammaMatrix";

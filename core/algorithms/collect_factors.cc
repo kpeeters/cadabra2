@@ -6,6 +6,8 @@
 #include "algorithms/collect_terms.hh"
 #include "properties/Symbol.hh"
 
+using namespace cadabra;
+
 collect_factors::collect_factors(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

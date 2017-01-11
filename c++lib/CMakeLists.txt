@@ -40,7 +40,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 set(LOCAL_SRC_FILES
-  SympyDummy.cc
   ${CMAKE_SOURCE_DIR}/../core/Algorithm.cc
   ${CMAKE_SOURCE_DIR}/../core/Cleanup.cc
   ${CMAKE_SOURCE_DIR}/../core/Combinatorics.cc
@@ -49,6 +48,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/DisplayTeX.cc
   ${CMAKE_SOURCE_DIR}/../core/DisplaySympy.cc
   ${CMAKE_SOURCE_DIR}/../core/DisplayTerminal.cc
+  ${CMAKE_SOURCE_DIR}/../core/TerminalStream.cc
   ${CMAKE_SOURCE_DIR}/../core/Exceptions.cc
   ${CMAKE_SOURCE_DIR}/../core/Exchange.cc
   ${CMAKE_SOURCE_DIR}/../core/Functional.cc
@@ -158,6 +158,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/algorithms/young_project.cc
   ${CMAKE_SOURCE_DIR}/../core/algorithms/young_project_product.cc
   ${CMAKE_SOURCE_DIR}/../core/algorithms/young_project_tensor.cc
+  SympyDummy.cc
 )
 set(PUBLIC_HEADER_FILES
   ${CMAKE_SOURCE_DIR}/../core/Algorithm.hh
@@ -174,7 +175,7 @@ set(IMAGES
 # Create the 'variable-substituted' cadabra2 inside the source tree so that we can
 # run the tests and pick up cadabra2_defaults.py from there.
 
-include_directories("${CMAKE_SOURCE_DIR}/../core" ".")
+include_directories("${CMAKE_SOURCE_DIR}/../core" "./treetracker" ".")
 add_library(cadabra2++ SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra2++ PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 target_link_libraries(cadabra2++ ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})

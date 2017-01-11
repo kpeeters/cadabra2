@@ -4,6 +4,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Integrate by parts away from the indicated derivative object.
@@ -37,3 +39,4 @@ class integrate_by_parts : public Algorithm {
 		Ex away_from;
 };
 
+}

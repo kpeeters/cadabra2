@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 class eliminate_converter : public Algorithm {
 	public:
 		eliminate_converter(const Kernel&, Ex&, Ex&);
@@ -28,3 +30,4 @@ class eliminate_metric : public eliminate_converter {
 		virtual bool is_conversion_object(iterator) const override; 
 };
 
+}

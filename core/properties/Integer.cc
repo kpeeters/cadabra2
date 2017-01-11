@@ -4,6 +4,8 @@
 #include "Kernel.hh"
 #include "algorithms/collect_terms.hh"
 
+using namespace cadabra;
+
 std::string Integer::name() const
 	{
 	return "Integer";

@@ -27,6 +27,8 @@
 #include <list>
 #include "Storage.hh"
 
+namespace cadabra {
+
 class Properties; 
 class Kernel;
 
@@ -526,3 +528,4 @@ Ex::iterator Properties::head(Ex::iterator it, bool ignore_parent_rel) const
 	return dn;
 	}
 
+}

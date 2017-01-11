@@ -3,6 +3,8 @@
 #include "algorithms/substitute.hh"
 #include "Cleanup.hh"
 
+using namespace cadabra;
+
 take_match::take_match(const Kernel& k, Ex& e, Ex& rules_)
 	: Algorithm(k, e), rules(rules_)
 	{

@@ -1,6 +1,8 @@
 
 #include "properties/SelfCommuting.hh"
 
+using namespace cadabra;
+
 std::string SelfCommuting::name() const
 	{
 	return "SelfCommuting";

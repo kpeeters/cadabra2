@@ -17,6 +17,7 @@
 ///
 /// - Any \\sub nodes get converted to \\sum nodes.
 
+namespace cadabra {
 
 void pre_clean_dispatch(const Kernel& k, Ex&, Ex::iterator& it);
 void pre_clean_dispatch_deep(const Kernel& k, Ex&);
@@ -33,3 +34,5 @@ void cleanup_sub(const Kernel& k, Ex&, Ex::iterator& it);
 /// Convert parser output which indicates an indexbracket to an actual
 /// indexbracket node.
 void cleanup_indexbracket(const Kernel& k, Ex&, Ex::iterator& it);
+
+}

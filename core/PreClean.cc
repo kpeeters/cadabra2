@@ -2,6 +2,8 @@
 #include "PreClean.hh"
 #include "Cleanup.hh"
 
+namespace cadabra {
+
 void pre_clean_dispatch(const Kernel& kernel, Ex& ex, Ex::iterator& it)
 	{
 	if(*it->name!="1" && it->is_unsimplified_rational()) cleanup_rational(kernel, ex, it);
@@ -163,3 +165,4 @@ void cleanup_indexbracket(const Kernel& k, Ex& tr, Ex::iterator& it)
 		}
 	}
 
+}

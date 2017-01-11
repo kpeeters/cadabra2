@@ -2,6 +2,8 @@
 #include "IndexIterator.hh"
 #include "algorithms/young_project.hh"
 
+using namespace cadabra;
+
 young_project::young_project(const Kernel& k, Ex& tr)
 	: Algorithm(k,tr), remove_traces(false)
 	{

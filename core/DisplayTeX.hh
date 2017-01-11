@@ -16,6 +16,8 @@ typedef uint32_t kunichar;
 /// best way to print any given object. See the DisplayTeX::dispatch
 /// method to see how this works in more detail.
 
+namespace cadabra {
+
 class DisplayTeX : public DisplayBase {
 	public:
 		DisplayTeX(const Kernel&, const Ex&);
@@ -94,3 +96,5 @@ class DisplayTeX : public DisplayBase {
 };
 
 const char *unichar(kunichar c);
+
+}

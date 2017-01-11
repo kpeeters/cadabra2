@@ -1,6 +1,8 @@
 
 #include "algorithms/flatten_sum.hh"
 
+using namespace cadabra;
+
 flatten_sum::flatten_sum(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), make_consistent_only(false)
 	{

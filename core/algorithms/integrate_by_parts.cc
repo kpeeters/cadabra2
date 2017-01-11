@@ -4,6 +4,8 @@
 #include "properties/Derivative.hh"
 #include "Cleanup.hh"
 
+using namespace cadabra;
+
 integrate_by_parts::integrate_by_parts(const Kernel& k, Ex& tr, Ex& af)
 	: Algorithm(k, tr), away_from(af)
 	{

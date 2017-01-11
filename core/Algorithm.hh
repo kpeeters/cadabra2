@@ -32,6 +32,8 @@
 #include <fstream>
 #include <cstddef>
 
+namespace cadabra {
+
 /// \ingroup core
 ///
 /// Base class for all algorithms, containing generic routines and in
@@ -271,3 +273,4 @@ unsigned int Algorithm::intersection_number(sibling_iterator from1, sibling_iter
 	}
 
 
+}
