@@ -3,11 +3,11 @@
 #include "properties/Indices.hh"
 #include <vector>
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Canonicalise the index structure of a tensorial expression.
-
-namespace cadabra {
 
 	class canonicalise : public Algorithm {
 		public:
