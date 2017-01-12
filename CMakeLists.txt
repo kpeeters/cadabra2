@@ -28,6 +28,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
 # Generate config file with CMake variables.
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
+configure_file("${PROJECT_SOURCE_DIR}/core/ScalarConfig.hh.in" "${PROJECT_BINARY_DIR}/core/ScalarConfig.hh")
 include_directories(${PROJECT_BINARY_DIR}/core)
 
 # Provide option to build with Python 3 (default) or Python 2.
