@@ -163,7 +163,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
-	std::cerr << "handle_factor " << Ex(sib) << std::endl;
+//	std::cerr << "handle_factor " << Ex(sib) << std::endl;
 	if(*sib->name=="\\components") return sib;
 
 	// If this factor is an accent at the top level, descent further.
@@ -266,7 +266,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 			return true;
 			});
 
-	std::cerr << "result now " << repl << std::endl;
+//	std::cerr << "result now " << repl << std::endl;
 	merge_component_children(repl.begin());
 
 	sib = tr.move_ontop(iterator(sib), repl.begin());
@@ -541,7 +541,8 @@ void evaluate::simplify_components(iterator it)
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
-			sympy::apply(kernel, tr, nd, "simplify", "", "");
+//			sympy::apply(kernel, tr, nd, "simplify", "", "");
+			sympy::apply(kernel, tr, nd, "", "", "");			
 			if(nd->is_zero())
 				tr.erase(eqs);
 			return true;

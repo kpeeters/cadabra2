@@ -1,0 +1,6 @@
+
+#pragma once
+
+// Scalar backends
+
+#define USE_TREETRACKER       "@USE_TREETRACKER@"

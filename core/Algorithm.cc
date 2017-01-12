@@ -50,6 +50,12 @@ Algorithm::~Algorithm()
 	{
 	}
 
+Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned int depth)
+	{
+	auto it = tr.begin();
+	return apply_generic(it, deep, repeat, depth);
+	}
+
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
 	result_t ret=result_t::l_no_action;

@@ -44,6 +44,10 @@ Binaries for these platforms may (or may not) be provided from the
 download page at http://cadabra.science/download.html, but they are
 not always very up-to-date.
 
+See `Building Cadabra as C++ library`_ for instructions on how to
+build the entire Cadabra functionality as a library which you can use
+in a C++ program.
+
 
 Linux (Debian/Ubuntu/Mint)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -281,6 +285,22 @@ also be generated locally; you will need (on Debian and derivatives)::
 
 For any questions, please contact info@cadabra.science .
 
+
+Building Cadabra as C++ library
+-------------------------------
+
+EXPERIMENTAL: If you want to use the functionality of Cadabra inside
+your own C++ programs, you can build Cadabra as a shared library. To
+do this::
+
+    cd c++lib
+	 mkdir build
+	 cmake ..
+	 make
+	 sudo make install
+
+There is a sample program `simple.cc` in the `c++lib` directory which
+shows how to use the Cadabra library.
 
 
 Special thanks

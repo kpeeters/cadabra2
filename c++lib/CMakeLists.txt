@@ -160,22 +160,37 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/algorithms/young_project_tensor.cc
   SympyDummy.cc
 )
-set(PUBLIC_HEADER_FILES
+set(MAIN_HEADERS
   ${CMAKE_SOURCE_DIR}/../core/Algorithm.hh
   ${CMAKE_SOURCE_DIR}/../core/DisplayTerminal.hh
   ${CMAKE_SOURCE_DIR}/../core/Parser.hh
   ${CMAKE_SOURCE_DIR}/../core/Storage.hh
   ${CMAKE_SOURCE_DIR}/../core/tree.hh
-  ${CMAKE_SOURCE_DIR}/../core/algorithms/substitute.hh
-)
-set(IMAGES
-  ../images/cadabra.png
-)
+  )
+FILE(GLOB ALGO_HEADERS ${CMAKE_SOURCE_DIR}/../core/algorithms/*.hh)
+FILE(GLOB PROP_HEADERS ${CMAKE_SOURCE_DIR}/../core/properties/*.hh)
 
 # Create the 'variable-substituted' cadabra2 inside the source tree so that we can
 # run the tests and pick up cadabra2_defaults.py from there.
 
-include_directories("${CMAKE_SOURCE_DIR}/../core" "./treetracker" ".")
+include_directories("${CMAKE_SOURCE_DIR}/../core" ".")
+
+# Scalar backend options.
+option(USE_TREETRACKER "Use the TreeTracker scalar backend" ON)
+set(PATH_TREETRACKER   "./treetracker" CACHE STRING "Path to the TreeTracker library")
+configure_file("${PROJECT_SOURCE_DIR}/../core/ScalarConfig.hh.in" "${PROJECT_BINARY_DIR}/c++lib/ScalarConfig.hh")
+if(USE_TREETRACKER)
+  if(EXISTS "${PATH_TREETRACKER}/treetracker.h" OR EXISTS "${CMAKE_SOURCE_DIR}/${PATH_TREETRACKER}/treetracker.h")
+	 include_directories(${PATH_TREETRACKER})
+	 message("-- Using the TreeTracker scalar backend at ${PATH_TREETRACKER}")
+  else()
+	 message(FATAL_ERROR "-- Cannot find the 'treetracker.h' file in '${PATH_TREETRACKER}'")
+  endif()
+else()
+  message("-- Not using the TreeTracker scalar backend")
+endif()
+# .. more to come
+
 add_library(cadabra2++ SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra2++ PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 target_link_libraries(cadabra2++ ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
@@ -183,14 +198,14 @@ target_link_libraries(cadabra2++ ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
 set(INSTALL_LIB_DIR     lib                CACHE PATH "Installation directory for library")
 set(INSTALL_INCLUDE_DIR include/cadabra2++ CACHE PATH "Installation directory for header files")
 
-install(TARGETS       cadabra2++
-  LIBRARY       DESTINATION "${INSTALL_LIB_DIR}" 
-  PUBLIC_HEADER DESTINATION "${INSTALL_INCLUDE_DIR}" COMPONENT dev)
+install(TARGETS  cadabra2++       LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
+install(FILES    ${MAIN_HEADERS}  DESTINATION "${INSTALL_INCLUDE_DIR}")
+install(FILES    ${ALGO_HEADERS}  DESTINATION "${INSTALL_INCLUDE_DIR}/algorithms")
+install(FILES    ${PROP_HEADERS}  DESTINATION "${INSTALL_INCLUDE_DIR}/properties")
 
 install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE
   WORLD_READ WORLD_EXECUTE)
-
 
 install(DIRECTORY DESTINATION lib DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE

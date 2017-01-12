@@ -78,6 +78,7 @@ class Algorithm {
 		// changes. The 'depth' flag, if not equal to -1, indicates the depth in the tree
 		// where the algorithm should start applying.
 
+		result_t  apply_generic(bool deep=true, bool repeat=false, unsigned int depth=0);
 		result_t  apply_generic(iterator&, bool deep, bool repeat, unsigned int depth);
 
 		// Global information

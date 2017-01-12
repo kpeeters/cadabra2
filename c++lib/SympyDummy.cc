@@ -1,3 +1,4 @@
+
 #include "Parser.hh"
 #include "Cleanup.hh"
 #include "PreClean.hh"
@@ -25,23 +26,26 @@ cadabra::Ex::iterator sympy::apply(const cadabra::Kernel& kernel, cadabra::Ex& e
 	if(head.size()>0)
 		str << ")";
 
+//	std::cerr << "Send: " << str.str() << std::endl;
+
+#ifdef USE_TREETRACKER
+	
 	auto res = TreeTracker::FromString(str.str());
+	res.RecursiveSimplify();
 	std::stringstream istr;
    res.ShowTree(istr, 0, false, true);	
-	
+//	std::cerr << "Return: " << istr.str() << std::endl;
 	auto ptr = std::make_shared<cadabra::Ex>();
 	cadabra::Parser parser(ptr);
 	istr >> parser;
-
 	pre_clean_dispatch_deep(kernel, *parser.tree);
    cleanup_dispatch_deep(kernel, *parser.tree);
-
 	//parser.tree->print_recursive_treeform(std::cerr, parser.tree->begin());
-
 	ds.import(*parser.tree);
 
 	cadabra::Ex::iterator first=parser.tree->begin();
    it = ex.move_ontop(it, first);
+#endif
 	
 	return it;
 	}

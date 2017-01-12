@@ -2,16 +2,44 @@
 #include "cadabra2++/Storage.hh"
 #include "cadabra2++/DisplayTerminal.hh"
 #include "cadabra2++/algorithms/substitute.hh"
+#include "cadabra2++/algorithms/evaluate.hh"
 #include "cadabra2++/TerminalStream.hh"
 #include "cadabra2++/properties/PartialDerivative.hh"
+#include "cadabra2++/properties/Coordinate.hh"
 
 #include <iostream>
 #include <sstream>
 
-int main(int argc, char **argv)
+void test1()
 	{
+	// The following few lines are equivalent to entering
+	//
+	//    {r,t}::Coordinate.
+	//    {m,n}::Indices(values={t,r}, position=free).
+	//    ex:= A_{m} A^{m};
+	//    rl:= A_{t} = 3 + a;
+	//    evaluate(ex, rl);
+	//
+	// in the Cadabra notebook.
+
 	cadabra::Kernel kernel;
 
+	kernel.inject_property(new cadabra::Coordinate(), kernel.ex_from_string("{r,t}"), 0);
+	kernel.inject_property(new cadabra::Indices(),    kernel.ex_from_string("{m,n}"),
+								  kernel.ex_from_string("values={t,r}, position=free"));
+	
+	auto ex = kernel.ex_from_string("A_{m} A^{m}");
+	auto rl = kernel.ex_from_string("A_{t} = 3 + a ");
+	cadabra::evaluate ev(kernel, *ex, *rl);
+	ev.apply_generic();
+
+	// Pretty-printing stream object.
+	cadabra::TerminalStream ss(kernel, std::cerr);
+	ss << ex << std::endl;
+	}
+
+void test2()
+	{
 	// The following few lines are equivalent to entering
 	//
 	//    {m,n,p,q}::Indices(position=free).
@@ -21,6 +49,8 @@ int main(int argc, char **argv)
 	//    substitute(ex, rl, deep=True);
 	//
 	// in the Cadabra notebook.
+
+	cadabra::Kernel kernel;
 	
 	auto ind1 = kernel.ex_from_string("{m,n,p,q}");
 	auto ind2 = kernel.ex_from_string("position=free");
@@ -40,8 +70,14 @@ int main(int argc, char **argv)
 
 	// Apply the 'substitute' algorithm.
 	cadabra::substitute subs(kernel, *ex, *rl);
-	auto top=ex->begin();
-	subs.apply_generic(top, true, false, 0);
+	subs.apply_generic();
 
 	ss << ex << std::endl;
+	}
+
+
+int main(int argc, char **argv)
+	{
+	test1();
+	test2();
 	}
