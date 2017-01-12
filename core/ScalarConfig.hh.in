@@ -3,4 +3,4 @@
 
 // Scalar backends
 
-#define USE_TREETRACKER       "@USE_TREETRACKER@"
+#define USE_TREETRACKER   @USE_TREETRACKER@
