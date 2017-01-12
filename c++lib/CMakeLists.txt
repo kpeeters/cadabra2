@@ -173,7 +173,7 @@ FILE(GLOB PROP_HEADERS ${CMAKE_SOURCE_DIR}/../core/properties/*.hh)
 # Create the 'variable-substituted' cadabra2 inside the source tree so that we can
 # run the tests and pick up cadabra2_defaults.py from there.
 
-include_directories("${CMAKE_SOURCE_DIR}/../core" ".")
+include_directories("${CMAKE_SOURCE_DIR}/../core" "." "${PROJECT_BINARY_DIR}/c++lib")
 
 # Scalar backend options.
 option(USE_TREETRACKER "Use the TreeTracker scalar backend" ON)

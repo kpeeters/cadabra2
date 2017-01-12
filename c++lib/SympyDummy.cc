@@ -1,4 +1,5 @@
 
+#include "ScalarConfig.hh"
 #include "Parser.hh"
 #include "Cleanup.hh"
 #include "PreClean.hh"
