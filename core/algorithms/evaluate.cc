@@ -541,8 +541,11 @@ void evaluate::simplify_components(iterator it)
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
-//			sympy::apply(kernel, tr, nd, "simplify", "", "");
-			sympy::apply(kernel, tr, nd, "", "", "");			
+#ifndef USE_TREETRACKER			
+			sympy::apply(kernel, tr, nd, "simplify", "", "");
+#else
+			sympy::apply(kernel, tr, nd, "", "", "");
+#endif
 			if(nd->is_zero())
 				tr.erase(eqs);
 			return true;

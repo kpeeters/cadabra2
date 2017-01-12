@@ -234,13 +234,6 @@ void    inject_defaults(cadabra::Kernel *);
 
 /// \ingroup pythoncore
 ///
-/// Inject a property into the kernel in current scope. The property is
-/// then owned by the kernel.
-
-void    inject_property(cadabra::Kernel *, cadabra::property *, std::shared_ptr<cadabra::Ex>, std::shared_ptr<cadabra::Ex>);
-
-/// \ingroup pythoncore
-///
 /// Get a pointer to the currently visible kernel.
 cadabra::Kernel *get_kernel_from_scope();
 

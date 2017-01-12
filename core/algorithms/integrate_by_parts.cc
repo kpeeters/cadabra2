@@ -1,5 +1,5 @@
 
-#include <boost/utility.hpp>
+#include <iterator>
 #include "algorithms/integrate_by_parts.hh"
 #include "properties/Derivative.hh"
 #include "Cleanup.hh"
@@ -109,7 +109,7 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 				// FIXME: this does not yet take anti-commutativity of the
 				// derivative itself into account.
 
-				if(fac==tr.begin(it) || boost::next(fac)==tr.end(it)) {
+				if(fac==tr.begin(it) || std::next(fac)==tr.end(it)) {
 					// Derivative is first or last factor in product; generate one term only.
 					
 					sibling_iterator from, to;
@@ -122,7 +122,7 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 						from=tr.begin(it);
 						to=fac;
 						}
-					if(boost::next(from)!=to)
+					if(std::next(from)!=to)
 						from = tr.wrap(from, to, str_node("\\prod"));
 
 					auto der_arg = tr.begin(fac);
@@ -149,7 +149,7 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					sibling_iterator from=sum.begin(t1prod);
 					sibling_iterator to  =from;
 					to+=pos;
-					if(boost::next(from)!=to)
+					if(std::next(from)!=to)
 						from = tr.wrap(from, to, str_node("\\prod"));
 
 					auto der_arg = tr.begin(to);
@@ -171,7 +171,7 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					auto der=from;
 					++from;
 					to  =sum.end(t2prod);
-					if(boost::next(from)!=to)
+					if(std::next(from)!=to)
 						from = tr.wrap(from, to, str_node("\\prod"));
 
 					der_arg = tr.begin(der);

@@ -769,58 +769,58 @@ void inject_defaults(Kernel *k)
 	// Create and inject properties; these then get owned by the kernel.
 	post_process_enabled=false;
 
-	inject_property(k, new Distributable(),      make_Ex_from_string("\\prod{#}",false), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\prod{#}",false), 0);
-	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
-	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\prod{#}",false), 0);
-	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new Distributable(),      make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\prod{#}",false), 0);
 	auto wi2=new WeightInherit();
 	wi2->combination_type = WeightInherit::multiplicative;
 	auto wa2=make_Ex_from_string("label=all, type=multiplicative", false);
-	inject_property(k, wi2,                      make_Ex_from_string("\\prod{#}",false), wa2);
+	k->inject_property(wi2,                      make_Ex_from_string("\\prod{#}",false), wa2);
 	
-//	inject_property(k, new Distributable(),      make_Ex_from_string("\\wedge{#}",false), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false), 0);
-//	inject_property(k, new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
-	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\wedge{#}",false), 0);
-	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\wedge{#}",false), 0);
+//	k->inject_property(new Distributable(),      make_Ex_from_string("\\wedge{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false), 0);
+//	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\wedge{#}",false), 0);
+	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\wedge{#}",false), 0);
 	auto wi4=new WeightInherit();
 	wi4->combination_type = WeightInherit::multiplicative;
 	auto wa4=make_Ex_from_string("label=all, type=multiplicative", false);
-	inject_property(k, wi4,                      make_Ex_from_string("\\wedge{#}",false), wa4);
+	k->inject_property(wi4,                      make_Ex_from_string("\\wedge{#}",false), wa4);
 
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\sum{#}",false), 0);
-	inject_property(k, new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false), 0);
-	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\sum{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\sum{#}",false), 0);
+	k->inject_property(new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\sum{#}",false), 0);
 	auto wi=new WeightInherit();
 	auto wa=make_Ex_from_string("label=all, type=additive", false);
-	inject_property(k, wi,                       make_Ex_from_string("\\sum{#}", false), wa);
+	k->inject_property(wi,                       make_Ex_from_string("\\sum{#}", false), wa);
 
-	inject_property(k, new Derivative(),         make_Ex_from_string("\\commutator{#}",false), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false), 0);
+	k->inject_property(new Derivative(),         make_Ex_from_string("\\commutator{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false), 0);
 
-	inject_property(k, new Derivative(),         make_Ex_from_string("\\anticommutator{#}",false), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}",false), 0);
+	k->inject_property(new Derivative(),         make_Ex_from_string("\\anticommutator{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}",false), 0);
 
-	inject_property(k, new Distributable(),      make_Ex_from_string("\\indexbracket{#}",false), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}",false), 0);
+	k->inject_property(new Distributable(),      make_Ex_from_string("\\indexbracket{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}",false), 0);
 
-	inject_property(k, new DependsInherit(),     make_Ex_from_string("\\pow{#}",false), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\pow{#}",false), 0);
 	auto wi3=new WeightInherit();
 	auto wa3=make_Ex_from_string("label=all, type=power", false);
-	inject_property(k, wi3,                      make_Ex_from_string("\\pow{#}",false), wa3);
+	k->inject_property(wi3,                      make_Ex_from_string("\\pow{#}",false), wa3);
 
-	inject_property(k, new NumericalFlat(),      make_Ex_from_string("\\int{#}",false), 0);
-	inject_property(k, new IndexInherit(),       make_Ex_from_string("\\int{#}",false), 0);
+	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\int{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\int{#}",false), 0);
 
 	// Accents, necessary for proper display.
-	inject_property(k, new Accent(),             make_Ex_from_string("\\hat{#}",false), 0);
-	inject_property(k, new Accent(),             make_Ex_from_string("\\bar{#}",false), 0);
-	inject_property(k, new Accent(),             make_Ex_from_string("\\overline{#}",false), 0);
-	inject_property(k, new Accent(),             make_Ex_from_string("\\tilde{#}",false), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\hat{#}",false), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\bar{#}",false), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\overline{#}",false), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\tilde{#}",false), 0);
 
 	post_process_enabled=true;
-//	inject_property(k, new Integral(),           make_Ex_from_string("\\int{#}",false), 0);
+//	k->inject_property(new Integral(),           make_Ex_from_string("\\int{#}",false), 0);
 	}
 
 
@@ -833,7 +833,7 @@ Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	Kernel *kernel=get_kernel_from_scope();
 	prop = new Prop(); // we keep a pointer, but the kernel owns it.
 //	std::cerr << "Declaring property " << prop->name() << " in kernel " << kernel << std::endl;
-	inject_property(kernel, prop, ex, param);
+	kernel->inject_property(prop, ex, param);
 	}
 
 template<class Prop>
@@ -1106,7 +1106,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
 	// pull that into the interpreter scope in the 'cadabra2_default.py' file.
-	class_<Kernel> pyKernel("Kernel", init<>());
+	class_<Kernel, boost::noncopyable> pyKernel("Kernel", init<>());
 	boost::python::object kernel=pyKernel();
 	inject_defaults(boost::python::extract<Kernel*>(kernel));
 	boost::python::scope().attr("__cdbkernel__")=kernel;
