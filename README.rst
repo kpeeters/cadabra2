@@ -61,9 +61,15 @@ On Debian/Ubuntu you can install all that is needed with::
     sudo pip3 install sympy
 
 This is the development platform and issues are typically first fixed
-here. You can use either g++ or the clang++ compiler. Building is then
-done with the standard::
+here. You can use either g++ or the clang++ compiler. You need to
+clone the cadabra2 git repository (if you download the .zip file you
+will not have all data necessary to build). So first do::
 
+    git clone https://github.com/kpeeters/cadabra2
+
+Building is then done with the standard::
+
+    cd cadabra2
     mkdir build
     cd build
     cmake ..
@@ -88,9 +94,15 @@ Fedora versions see below. Install the dependencies with::
     sudo pip3 install sympy
 
 This platform receives less testing so please get in touch if you run
-into any issues. You can use either g++ or the clang++
-compiler. Building is then done with the standard::
+into any issues. You can use either g++ or the clang++ compiler.
+You need to clone the cadabra2 git repository (if you download the
+.zip file you will not have all data necessary to build). So first do::
 
+    git clone https://github.com/kpeeters/cadabra2
+
+Building is then done with the standard::
+
+    cd cadabra2
     mkdir build
     cd build
     cmake ..
@@ -121,9 +133,15 @@ install sympy by hand::
     sudo pip install sympy
 
 This platform receives less testing so please get in touch if you run
-into any issues. You can use either g++ or the clang++
-compiler. Building is then done with the standard::
+into any issues. You can use either g++ or the clang++ compiler. You
+need to clone the cadabra2 git repository (if you download the .zip
+file you will not have all data necessary to build). So first do::
 
+    git clone https://github.com/kpeeters/cadabra2
+
+Building is then done with the standard::
+
+    cd cadabra2
     mkdir build
     cd build
     cmake .. -DUSE_PYTHON_3=OFF
@@ -155,8 +173,15 @@ After that, dependencies can be installed with::
     sudo pip3 install sympy
 
 This platform receives less testing so please get in touch if you run
-into any issues. Building is then done with the standard::
+into any issues. You need to clone the cadabra2 git repository (if you
+download the .zip file you will not have all data necessary to
+build). So first do::
 
+    git clone https://github.com/kpeeters/cadabra2
+
+Building is then done with the standard::
+
+    cd cadabra2
     mkdir build
     cd build
     cmake .. 
@@ -213,9 +238,14 @@ to build Cadabra, otherwise the Cadabra style files will not be
 installed in the appropriate place. Make sure 'latex' works from the
 terminal in which you will build Cadabra.
 
-Building is then
-done with the standard::
+You need to clone the cadabra2 git repository (if you download the
+.zip file you will not have all data necessary to build). So do::
 
+    git clone https://github.com/kpeeters/cadabra2
+
+After that you can build with the standard::
+
+    cd cadabra2
     mkdir build
     cd build
     cmake ..
