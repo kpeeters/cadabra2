@@ -1,5 +1,4 @@
 
-#include "ScalarConfig.hh"
 #include "Functional.hh"
 #include "Cleanup.hh"
 #include "Permutations.hh"
