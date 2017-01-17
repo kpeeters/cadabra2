@@ -452,14 +452,39 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	str << *it->name << "{}"; // FIXME: add limits
+	str << *it->name;
+	
 	Ex::sibling_iterator sib=tree.begin(it);
-	dispatch(str, sib);
-	++sib;
-	if(tree.is_valid(sib)) {
-		str << "\\, {\\rm d}";
-		dispatch(str, sib);
+	int numnormal=0;
+	while(sib!=tree.end(it)) {
+		if(sib->fl.parent_rel!=str_node::p_none)
+			dispatch(str, sib);
+		else 
+			++numnormal;
+		++sib;
 		}
+
+	str << "{}"; // FIXME: add limits
+	sib=tree.begin(it);
+	while(sib!=tree.end(it)) {
+		if(sib->fl.parent_rel==str_node::p_none) {
+			dispatch(str, sib);
+			++sib;
+			break;
+			}
+		++sib;
+		}
+	while(sib!=tree.end(it)) {
+		if(sib->fl.parent_rel==str_node::p_none) {		
+			if(tree.is_valid(sib)) {
+				str << "\\, {\\rm d}";
+				dispatch(str, sib);
+				break;
+				}
+			}
+		++sib;
+		}
+
 	}
 
 void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
