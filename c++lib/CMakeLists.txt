@@ -178,8 +178,8 @@ include_directories("${CMAKE_SOURCE_DIR}/../core" "." "${PROJECT_BINARY_DIR}/c++
 # Scalar backend options.
 option(USE_TREETRACKER "Use the TreeTracker scalar backend" ON)
 set(PATH_TREETRACKER   "./treetracker" CACHE STRING "Path to the TreeTracker library")
-configure_file("${PROJECT_SOURCE_DIR}/../core/ScalarConfig.hh.in" "${PROJECT_BINARY_DIR}/c++lib/ScalarConfig.hh")
 if(USE_TREETRACKER)
+  add_definitions(-DUSE_TREETRACKER)
   if(EXISTS "${PATH_TREETRACKER}/treetracker.h" OR EXISTS "${CMAKE_SOURCE_DIR}/${PATH_TREETRACKER}/treetracker.h")
 	 include_directories(${PATH_TREETRACKER})
 	 message("-- Using the TreeTracker scalar backend at ${PATH_TREETRACKER}")
@@ -191,17 +191,22 @@ else()
 endif()
 # .. more to come
 
-add_library(cadabra2++ SHARED ${LOCAL_SRC_FILES})
-set_target_properties(cadabra2++ PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
-target_link_libraries(cadabra2++ ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
+add_library(cadabra2++objects         OBJECT ${LOCAL_SRC_FILES})
+set_property(TARGET cadabra2++objects PROPERTY POSITION_INDEPENDENT_CODE 1)
+add_library(cadabra2++         SHARED $<TARGET_OBJECTS:cadabra2++objects>)
+add_library(cadabra2++_static  STATIC $<TARGET_OBJECTS:cadabra2++objects>)
+set_target_properties(cadabra2++        PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
+target_link_libraries(cadabra2++        ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
+target_link_libraries(cadabra2++_static ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
 
 set(INSTALL_LIB_DIR     lib                CACHE PATH "Installation directory for library")
 set(INSTALL_INCLUDE_DIR include/cadabra2++ CACHE PATH "Installation directory for header files")
 
-install(TARGETS  cadabra2++       LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
-install(FILES    ${MAIN_HEADERS}  DESTINATION "${INSTALL_INCLUDE_DIR}")
-install(FILES    ${ALGO_HEADERS}  DESTINATION "${INSTALL_INCLUDE_DIR}/algorithms")
-install(FILES    ${PROP_HEADERS}  DESTINATION "${INSTALL_INCLUDE_DIR}/properties")
+install(TARGETS  cadabra2++        LIBRARY DESTINATION "${INSTALL_LIB_DIR}")
+install(TARGETS  cadabra2++_static LIBRARY DESTINATION "${INSTALL_LIB_DIR}" ARCHIVE DESTINATION "${INSTALL_LIB_DIR}")
+install(FILES    ${MAIN_HEADERS}   DESTINATION "${INSTALL_INCLUDE_DIR}")
+install(FILES    ${ALGO_HEADERS}   DESTINATION "${INSTALL_INCLUDE_DIR}/algorithms")
+install(FILES    ${PROP_HEADERS}   DESTINATION "${INSTALL_INCLUDE_DIR}/properties")
 
 install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
   GROUP_READ GROUP_EXECUTE
