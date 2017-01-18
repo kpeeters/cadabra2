@@ -453,38 +453,49 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	str << *it->name;
-	
-	Ex::sibling_iterator sib=tree.begin(it);
-	int numnormal=0;
+
+	// The first argument is the integrand. Subsequent arguments are
+	// either integration variables, or lists consisting of an
+	// integration variable, a start value and an end value.
+	// Since the integration ranges need to be attached to the
+	// integral symbols, we need to scan for them first.
+
+	auto sib=tree.begin(it);
+	++sib;
 	while(sib!=tree.end(it)) {
-		if(sib->fl.parent_rel!=str_node::p_none)
-			dispatch(str, sib);
-		else 
-			++numnormal;
+		if(*sib->name=="\\comma") {
+			auto bvalue = tree.child(sib, 1);
+			auto evalue = tree.child(sib, 2);
+			str << "_{";
+			dispatch(str, bvalue);
+			str << "}^{";
+			dispatch(str, evalue);
+			str << "}";
+			}
 		++sib;
+		if(sib!=tree.end(it))
+			str << *it->name;
 		}
 
-	str << "{}"; // FIXME: add limits
 	sib=tree.begin(it);
-	while(sib!=tree.end(it)) {
-		if(sib->fl.parent_rel==str_node::p_none) {
-			dispatch(str, sib);
-			++sib;
-			break;
-			}
-		++sib;
-		}
-	while(sib!=tree.end(it)) {
-		if(sib->fl.parent_rel==str_node::p_none) {		
-			if(tree.is_valid(sib)) {
-				str << "\\, {\\rm d}";
-				dispatch(str, sib);
-				break;
-				}
-			}
-		++sib;
-		}
+	dispatch(str, sib);
+	++sib;
+	bool first=true;
 
+	while(sib!=tree.end(it)) {
+		if(first) {
+			str << "\\,";
+			first=false;
+			}
+		str << "\\,{\\rm d}";
+		if(*sib->name=="\\comma") {
+			dispatch(str, tree.child(sib,0));
+			}
+		else {
+			dispatch(str, sib);
+			}
+		++sib;
+		}
 	}
 
 void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)

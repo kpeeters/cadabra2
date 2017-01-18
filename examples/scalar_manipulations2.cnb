@@ -1,0 +1,38 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int_{0}^{\\pi}\\int_{0}^{\\pi}\\sin{x}\\,\\,{\\rm d}x\\,{\\rm d}y\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\int(\\sin(x), {x,0,\\pi}, {y,0,\\pi});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int_{-a}^{a}\\int_{-\\infty}^{\\infty}\\sin{x}\\,\\,{\\rm d}x\\,{\\rm d}y\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\int(\\sin(x), {x,-a,a}, {y,-\\infty,\\infty});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
