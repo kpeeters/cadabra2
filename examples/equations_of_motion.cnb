@@ -1,0 +1,123 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left\\{\\mu,~\\linebreak[0] \\nu\\right\\}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int\\sqrt{-g} \\left(\\frac{1}{2}g^{\\mu \\nu} \\partial_{\\mu}{\\phi} \\partial_{\\nu}{\\phi}+V\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "\\partial{#}::PartialDerivative;\n{\\mu,\\nu}::Indices(position=fixed);\nS:= \\int{ \\sqrt{-g} ( 1/2 g^{\\mu\\nu}\\partial_{\\mu}{\\phi} \\partial_{\\nu}{\\phi} + V )}{x};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Accent to~}\\delta{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Symmetric to~}g^{\\mu \\nu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left\\{\\phi \\rightarrow \\delta{\\phi},~\\linebreak[0] V \\rightarrow V' \\delta{\\phi}\\right\\}\\end{dmath*}"
+				}
+			],
+			"source" : "\\delta{#}::Accent;\ng^{\\mu\\nu}::Symmetric;\nrl:= \\phi -> \\delta{\\phi}, V -> V' \\delta{\\phi};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int\\sqrt{-g} \\left(\\frac{1}{2}g^{\\mu \\nu} \\partial_{\\mu}{\\delta{\\phi}} \\partial_{\\nu}{\\phi}+\\frac{1}{2}g^{\\mu \\nu} \\partial_{\\mu}{\\phi} \\partial_{\\nu}{\\delta{\\phi}}+V' \\delta{\\phi}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "vary(S, rl);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int\\sqrt{-g} \\left(\\partial_{\\mu}{\\delta{\\phi}} \\partial_{\\nu}{\\phi} g^{\\mu \\nu}+V' \\delta{\\phi}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "sort_product(_)\ncanonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int\\left(\\sqrt{-g} \\partial_{\\mu}{\\delta{\\phi}} \\partial_{\\nu}{\\phi} g^{\\mu \\nu}+\\sqrt{-g} V' \\delta{\\phi}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int\\left(-\\partial_{\\mu}\\left(\\sqrt{-g}\\right) \\delta{\\phi} \\partial_{\\nu}{\\phi} g^{\\mu \\nu}-\\sqrt{-g} \\delta{\\phi} \\partial_{\\mu}\\left(\\partial_{\\nu}{\\phi} g^{\\mu \\nu}\\right)+\\sqrt{-g} V' \\delta{\\phi}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "integrate_by_parts(_, $\\delta{\\phi}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int\\delta{\\phi} \\left(-\\partial_{\\mu}\\left(\\sqrt{-g}\\right) \\partial_{\\nu}{\\phi} g^{\\mu \\nu}-\\sqrt{-g} \\partial_{\\mu}\\left(\\partial_{\\nu}{\\phi} g^{\\mu \\nu}\\right)+\\sqrt{-g} V'\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "factor_out(_, $\\delta{\\phi}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
