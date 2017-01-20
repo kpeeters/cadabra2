@@ -49,6 +49,7 @@ endforeach()
 #
 set(RTESTS
   packages
+  noncovariant
   algebra
   components
   factor

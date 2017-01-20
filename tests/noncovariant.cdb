@@ -1,0 +1,11 @@
+
+def test01():
+   __cdbkernel__=create_scope()
+   t::Coordinate;
+   {\mu,\nu}::Indices(spacetime);
+   {i,j,k}::Indices(space, parent=spacetime);
+   ex:= A_{\mu} B^{\mu};
+   split_index(_, $\mu, t, i$);
+
+test01()
+
