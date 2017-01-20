@@ -3,6 +3,7 @@
 
 #include "Algorithm.hh"
 #include "properties/Indices.hh"
+#include "properties/Coordinate.hh"
 
 namespace cadabra {
 
@@ -15,8 +16,11 @@ namespace cadabra {
 			
 		private:
 			const Indices *full_class, *part1_class, *part2_class;
+			const Coordinate *part1_coord, *part2_coord;
 			bool     part1_is_number, part2_is_number;
 			long     num1, num2;
+			
+			iterator part1_coord_node, part2_coord_node;
 	};
 
 }

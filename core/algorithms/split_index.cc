@@ -4,7 +4,8 @@
 using namespace cadabra;
 
 split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
-	: Algorithm(k, tr), part1_is_number(false), part2_is_number(false)
+	: Algorithm(k, tr), part1_class(0), part2_class(0),
+	  part1_coord(0), part2_coord(0), part1_is_number(false), part2_is_number(false)
 	{
 	iterator top=triple.begin();
 	if(*(top->name)!="\\comma") {
@@ -23,14 +24,22 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 		part1_is_number=true;
 		num1=to_long(*(iname->multiplier));
 		}
-	else part1_class=kernel.properties.get<Indices>(iname, true);
+	else {
+		part1_class=kernel.properties.get<Indices>(iname, true);
+		part1_coord=kernel.properties.get<Coordinate>(iname, true);
+		if(part1_coord) part1_coord_node=iname;
+		}
 	++iname;
 	if(iname->is_integer()) {
 		part2_is_number=true;
 		num2=to_long(*(iname->multiplier));
 		}
-	else part2_class=kernel.properties.get<Indices>(iname, true);
-	if(full_class && (part1_is_number || part1_class) && (part2_is_number || part2_class) )
+	else {
+		part2_class=kernel.properties.get<Indices>(iname, true);
+		part2_coord=kernel.properties.get<Coordinate>(iname, true);
+		if(part2_coord) part2_coord_node=iname;
+		}
+	if(full_class && (part1_is_number || part1_class || part1_coord) && (part2_is_number || part2_class || part2_coord) )
 		return;
 	
 	throw ArgumentException("split_index: The index types of (some of) these indices are not known.");
@@ -63,13 +72,16 @@ Algorithm::result_t split_index::apply(iterator& it)
 		if(tcl) {
 			if((*tcl).set_name==(*full_class).set_name) {
 				Ex dum1,dum2;
-				if(!part1_is_number)
+				if(!part1_is_number && !part1_coord)
 					dum1=get_dummy(part1_class, it);
 				index_map_t::iterator current=prs;
 				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part1_is_number) {
 						node_integer(current->second, num1);
 //						(*prs).second->name=name_set.insert(to_string(num1)).first;
+						}
+					else if(part1_coord) {
+						(*current).second=tr.replace_index((*current).second, part1_coord_node, true);
 						}
 					else {
 //						txtout << "going to replace" << std::endl;
@@ -81,12 +93,15 @@ Algorithm::result_t split_index::apply(iterator& it)
 					}
 				rep.append_child(rep.begin(), workcopy.begin());
 				current=prs;
-				if(!part2_is_number) 
+				if(!part2_is_number && !part2_coord) 
 					dum2=get_dummy(part2_class, it);
 				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part2_is_number) {
 						node_integer(current->second, num2);
 //						(*prs).second->name=name_set.insert(to_string(num2)).first;
+						}
+					else if(part2_coord) {
+						(*current).second=tr.replace_index((*current).second, part2_coord_node, true);
 						}
 					else tr.replace_index((*current).second,dum2.begin(), true);
 					++current;
