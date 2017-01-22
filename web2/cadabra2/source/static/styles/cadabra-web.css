@@ -362,6 +362,12 @@ div#bottomright {
 	 padding-bottom: 10px;
 }
 
+tt {
+	 font-family: "Inconsolata", monospace; 
+	 font-size: 15.8px;
+	 color: green;
+}
+	 
 div.literal {
 	 font-family: "Inconsolata", monospace; 
 	 font-size: 15.8px;

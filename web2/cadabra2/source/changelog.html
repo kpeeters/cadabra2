@@ -19,11 +19,15 @@
 <ul>
   <li>Improved LaTeX export to make printed notebooks look much
 	 better.</li>
+  <li>Better line spacing for line-wrapped equations.</li>
   <li>Experimental support to use Cadabra directly from C++ code, as a
-  library.</li>
+  library (see the <tt>c++lib</tt> directory).</li>
   <li>Fixed: <tt>split_index</tt> does not work properly on left- and
 	 right-hand side of equations.</li>
-  <li>Fixed: <tt>sort_order</tt> does not always sort expressions.</li>
+  <li>Fixed: <tt>sort_order</tt> does not always sort
+	 expressions.</li>
+  <li>Fixed: <tt>eliminate_metric</tt> only acts at top level of an
+  expression, should have <tt>deep=True</tt> by default.</li>
 </ul>
 <a name="2.1.2"></a>
 <h3>2.1.2</h3>
