@@ -2,6 +2,8 @@
 #include "Functional.hh"
 #include "algorithms/factor_in.hh"
 
+using namespace cadabra;
+
 factor_in::factor_in(const Kernel& k, Ex& tr, Ex& factors_)
 	: Algorithm(k, tr), factors(factors_)
 	{

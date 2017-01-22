@@ -4,6 +4,8 @@
 #include "properties/IndexInherit.hh"
 #include "properties/NumericalFlat.hh"
 
+namespace cadabra {
+
 /**
  \ingroup properties
 
@@ -28,3 +30,5 @@ class Accent : public PropertyInherit, public IndexInherit, public NumericalFlat
 		virtual std::string name() const;
 };
 
+
+}

@@ -2,6 +2,8 @@
 #include "algorithms/flatten_product.hh"
 #include "properties/PartialDerivative.hh"
 
+using namespace cadabra;
+
 
 flatten_product::flatten_product(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), make_consistent_only(false), is_diff(false)

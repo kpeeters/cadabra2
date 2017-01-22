@@ -3,6 +3,8 @@
 
 #include "properties/DependsBase.hh"
 
+namespace cadabra {
+
 /// \ingroup properties
 
 class DependsInherit : public DependsBase, virtual public property {
@@ -11,3 +13,4 @@ class DependsInherit : public DependsBase, virtual public property {
 		virtual Ex dependencies(const Kernel&, Ex::iterator) const override;
 };
 
+}

@@ -3,6 +3,8 @@
 #include "Exceptions.hh"
 #include "properties/InverseMetric.hh"
 
+using namespace cadabra;
+
 InverseMetric::InverseMetric()
 	{
 	tab_t tab;

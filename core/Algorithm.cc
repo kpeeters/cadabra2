@@ -34,6 +34,7 @@
 #include <typeinfo>
 #include <sstream>
 
+using namespace cadabra;
 
 Algorithm::Algorithm(const Kernel& k, Ex& tr_)
   : interrupted(false),
@@ -47,6 +48,12 @@ Algorithm::Algorithm(const Kernel& k, Ex& tr_)
 
 Algorithm::~Algorithm()
 	{
+	}
+
+Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned int depth)
+	{
+	auto it = tr.begin();
+	return apply_generic(it, deep, repeat, depth);
 	}
 
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
@@ -262,7 +269,7 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 				singlearg->fl.bracket=walk->fl.bracket; // to remove brackets of the sum
 				if(*tr.parent(walk)->name=="\\prod") {
 					multiply(tr.parent(walk)->multiplier, *singlearg->multiplier);
-					::one(singlearg->multiplier);
+					cadabra::one(singlearg->multiplier);
 					}
 				}
 			tr.flatten(walk);
@@ -357,52 +364,6 @@ int Algorithm::index_parity(iterator it) const
 	return sgn;
 	}
 
-bool Algorithm::less_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
-	{
-	std::string::const_iterator ch1=(*it1).begin();
-	std::string::const_iterator ch2=(*it2).begin();
-
-	while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
-		if(isdigit(*ch1)) return true;   // bla1  < blaq
-		if(isdigit(*ch2)) return false;  // blaa !< bla1 
-		if(*ch1>=*ch2)    return false;
-		++ch1;
-		++ch2;
-		}
-	if(ch1==(*it1).end()) {
-		if(ch2==(*it2).end())
-			return false;
-		else 
-			return true;
-		}
-	return false;
-	}
-
-bool Algorithm::equal_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
-	{
-	std::string::const_iterator ch1=(*it1).begin();
-	std::string::const_iterator ch2=(*it2).begin();
-
-	while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
-		if(isdigit(*ch1)) {
-			if(isdigit(*ch2)) 
-				return true;
-			else
-				return false;
-			}
-		if(*ch1!=*ch2) return false;
-		++ch1;
-		++ch2;
-		}
-	if(ch1==(*it1).end()) {
-		if(ch2==(*it2).end())
-			return true;
-		else 
-			return false;
-		}
-	return false;	
-	}
-
 
 unsigned int Algorithm::number_of_indices(iterator it) 
 	{
@@ -411,29 +372,6 @@ unsigned int Algorithm::number_of_indices(iterator it)
 	while(indit!=end_index(it)) {
 		++res;
 		++indit;
-		}
-	return res;
-	}
-
-unsigned int Algorithm::number_of_indices(const Properties& pr, iterator it) 
-	{
-	unsigned int res=0;
-	index_iterator indit=index_iterator::begin(pr, it);
-	while(indit!=index_iterator::end(pr, it)) {
-		++res;
-		++indit;
-		}
-	return res;
-	}
-
-unsigned int Algorithm::number_of_direct_indices(iterator it) 
-	{
-	unsigned int res=0;
-	sibling_iterator sib=Ex::begin(it);
-	while(sib!=Ex::end(it)) {
-		if(sib->fl.parent_rel==str_node::p_sub || sib->fl.parent_rel==str_node::p_super)
-			++res;
-		++sib;
 		}
 	return res;
 	}
@@ -1347,11 +1285,14 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 bool Algorithm::is_termlike(iterator it)
 	{
 	if(tr.is_head(it)) {
-		if(*it->name!="\\sum") return true;
+		if(*it->name!="\\sum" && *it->name!="\\equals") return true;
 		return false;
 		}
 	else {
-		if(*tr.parent(it)->name=="\\sum") return true;
+		if(*tr.parent(it)->name=="\\sum" )
+			return true;
+		else if(*tr.parent(it)->name=="\\equals")
+			return true;
 		return false;
 		}
 	}
@@ -1561,6 +1502,80 @@ bool Algorithm::locate_object_set(const Ex& objs,
 	return true;
 	}
 
+
+namespace cadabra {
+
+// static functions
+	
+unsigned int Algorithm::number_of_indices(const Properties& pr, iterator it) 
+	{
+	unsigned int res=0;
+	index_iterator indit=index_iterator::begin(pr, it);
+	while(indit!=index_iterator::end(pr, it)) {
+		++res;
+		++indit;
+		}
+	return res;
+	}
+
+unsigned int Algorithm::number_of_direct_indices(iterator it) 
+	{
+	unsigned int res=0;
+	sibling_iterator sib=Ex::begin(it);
+	while(sib!=Ex::end(it)) {
+		if(sib->fl.parent_rel==str_node::p_sub || sib->fl.parent_rel==str_node::p_super)
+			++res;
+		++sib;
+		}
+	return res;
+	}
+
+bool Algorithm::less_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
+	{
+	std::string::const_iterator ch1=(*it1).begin();
+	std::string::const_iterator ch2=(*it2).begin();
+
+	while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
+		if(isdigit(*ch1)) return true;   // bla1  < blaq
+		if(isdigit(*ch2)) return false;  // blaa !< bla1 
+		if(*ch1>=*ch2)    return false;
+		++ch1;
+		++ch2;
+		}
+	if(ch1==(*it1).end()) {
+		if(ch2==(*it2).end())
+			return false;
+		else 
+			return true;
+		}
+	return false;
+	}
+
+bool Algorithm::equal_without_numbers(nset_t::iterator it1, nset_t::iterator it2) 
+	{
+	std::string::const_iterator ch1=(*it1).begin();
+	std::string::const_iterator ch2=(*it2).begin();
+
+	while(ch1!=(*it1).end() && ch2!=(*it2).end()) {
+		if(isdigit(*ch1)) {
+			if(isdigit(*ch2)) 
+				return true;
+			else
+				return false;
+			}
+		if(*ch1!=*ch2) return false;
+		++ch1;
+		++ch2;
+		}
+	if(ch1==(*it1).end()) {
+		if(ch2==(*it2).end())
+			return true;
+		else 
+			return false;
+		}
+	return false;	
+	}
+
 bool Algorithm::compare_(const str_node& one, const str_node& two)
 	{
 	// If the obj->name is empty, this means that we look for a tree with
@@ -1577,3 +1592,5 @@ bool Algorithm::compare_(const str_node& one, const str_node& two)
 		return true;
 	return false;
 	}
+
+}

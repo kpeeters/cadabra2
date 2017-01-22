@@ -2,6 +2,8 @@
 #include "properties/SortOrder.hh"
 #include "algorithms/sort_sum.hh"
 
+using namespace cadabra;
+
 sort_sum::sort_sum(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

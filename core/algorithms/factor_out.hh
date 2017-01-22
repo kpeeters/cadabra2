@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 
 class factor_out : public Algorithm {
@@ -19,3 +21,4 @@ class factor_out : public Algorithm {
 		to_factor_out_t            to_factor_out;
 };
 
+}

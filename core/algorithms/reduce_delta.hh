@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 class reduce_delta : public Algorithm {
 	public:
 		reduce_delta(const Kernel&, Ex&);
@@ -13,3 +15,5 @@ class reduce_delta : public Algorithm {
 	private:
 		bool one_step_(sibling_iterator);
 };
+
+}

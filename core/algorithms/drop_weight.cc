@@ -5,6 +5,7 @@
 #include "properties/Weight.hh"
 #include "properties/WeightInherit.hh"
 
+using namespace cadabra;
 
 drop_keep_weight::drop_keep_weight(const Kernel& k, Ex& tr, Ex& a)
 	: Algorithm(k, tr), arg(a)

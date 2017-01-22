@@ -3,6 +3,8 @@
 #include "Exceptions.hh"
 #include "Kernel.hh"
 
+using namespace cadabra;
+
 Spinor::Spinor()
 	: dimension(10), weyl(true), chirality(positive), majorana(true)
 	{

@@ -12,6 +12,8 @@
 #include "properties/Accent.hh"
 #include <functional>
 
+using namespace cadabra;
+
 evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
 	: Algorithm(k, tr), components(c), only_rhs(rhs)
 	{
@@ -161,7 +163,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
-   // std::cerr << "handle_factor " << Ex(sib) << std::endl;
+//	std::cerr << "handle_factor " << Ex(sib) << std::endl;
 	if(*sib->name=="\\components") return sib;
 
 	// If this factor is an accent at the top level, descent further.
@@ -264,7 +266,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 			return true;
 			});
 
-	// std::cerr << "result now " << repl << std::endl;
+//	std::cerr << "result now " << repl << std::endl;
 	merge_component_children(repl.begin());
 
 	sib = tr.move_ontop(iterator(sib), repl.begin());
@@ -400,7 +402,7 @@ void evaluate::cleanup_components(iterator it)
 
 Ex::iterator evaluate::handle_derivative(iterator it)
 	{
-	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
+	std::cerr << "handle_derivative " << Ex(it) << std::endl;
 	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
@@ -433,8 +435,10 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
 			sibling_iterator rhs = tr.begin(iv);
 			++rhs;
-			// std::cerr << "getting dependencies of " << *rhs->name << std::endl;
+			std::cerr << "getting dependencies of " << Ex(rhs) << std::endl;
 			auto deps=dependencies(rhs);
+			for(auto& d: deps)
+				std::cerr << d << std::endl;
 
 			// FIXME: all indices on \partial can take any of the values of the 
 			// dependencies. Need all permutations. 
@@ -537,7 +541,11 @@ void evaluate::simplify_components(iterator it)
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
+#ifndef USE_TREETRACKER			
 			sympy::apply(kernel, tr, nd, "simplify", "", "");
+#else
+			sympy::apply(kernel, tr, nd, "", "", "");
+#endif
 			if(nd->is_zero())
 				tr.erase(eqs);
 			return true;
@@ -571,6 +579,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	// std::cerr << "deps for " << *it->name << std::endl;
 	const Depends *dep = kernel.properties.get<Depends>(it);
 	if(dep) {
+		std::cerr << "Explicit deps" << std::endl;
 		Ex deps(dep->dependencies(kernel, it));
 		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
 				Ex cpy(nd);

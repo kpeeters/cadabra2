@@ -1,6 +1,8 @@
 
 #include "properties/LaTeXForm.hh"
 
+using namespace cadabra;
+
 std::string LaTeXForm::name() const
 	{
 	return "LaTeXForm";

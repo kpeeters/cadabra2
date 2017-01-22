@@ -7,6 +7,8 @@
 #include "Exceptions.hh"
 #include "Kernel.hh"
 
+using namespace cadabra;
+
 std::string Depends::name() const
 	{
 	return "Depends";

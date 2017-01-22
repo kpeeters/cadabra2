@@ -24,6 +24,8 @@
 #include "Storage.hh"
 #include "Kernel.hh"
 
+namespace cadabra {
+
 typedef void (*dispatcher_t)(const Kernel& k, Ex&, Ex::iterator& it);
 
 /// \ingroup cleanup
@@ -87,3 +89,5 @@ bool push_down_multiplier(const Kernel& k, Ex& tr, Ex::iterator it);
 /// running any algorithm. 
 
 void check_index_consistency(const Kernel& k, Ex& tr, Ex::iterator it);
+
+}

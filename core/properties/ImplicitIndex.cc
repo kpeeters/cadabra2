@@ -2,6 +2,8 @@
 #include "properties/ImplicitIndex.hh"
 #include "Exceptions.hh"
 
+using namespace cadabra;
+
 std::string ImplicitIndex::name() const
 	{
 	return "ImplicitIndex";

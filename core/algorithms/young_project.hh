@@ -4,6 +4,8 @@
 #include "Algorithm.hh"
 #include "YoungTab.hh"
 
+namespace cadabra {
+
 class young_project : public Algorithm {
 	public:
 		young_project(const Kernel&, Ex&);
@@ -30,3 +32,4 @@ class young_project : public Algorithm {
 		iterator nth_index_node(iterator, unsigned int);
 };
 
+}

@@ -5,6 +5,8 @@
 #include "algorithms/sort_product.hh"
 #include <map>
 
+using namespace cadabra;
+
 factor_out::factor_out(const Kernel& k, Ex& e, Ex& args, bool right)
 	: Algorithm(k, e), to_right(right)
 	{

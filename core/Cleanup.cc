@@ -9,6 +9,8 @@
 #include "properties/NumericalFlat.hh"
 #include "properties/PartialDerivative.hh"
 
+namespace cadabra {
+
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
 	//std::cerr << "cleanup at " << *it->name << std::endl;
@@ -20,7 +22,7 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 		changed=false;
 		bool res=false;
 		if(it->is_zero() && (tr.number_of_children(it)!=0 || *it->name!="1"))  {
-			::zero(it->multiplier);
+			cadabra::zero(it->multiplier);
 			tr.erase_children(it);
 			it->name=name_set.insert("1").first;
 			// once we hit zero, there is nothing to simplify anymore
@@ -155,7 +157,7 @@ bool cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	long num=tr.number_of_children(it);
 	if(num==0) {
 		ret=true;
-		::zero(it->multiplier);
+		cadabra::zero(it->multiplier);
 		return ret;
 		}
 
@@ -507,3 +509,4 @@ void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 		}
 	}
 
+}

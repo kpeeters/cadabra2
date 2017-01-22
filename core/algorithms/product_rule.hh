@@ -1,6 +1,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 class product_rule : public Algorithm {
 	public:
 		product_rule(const Kernel&, Ex&);
@@ -11,3 +13,5 @@ class product_rule : public Algorithm {
 		sibling_iterator prodnode;
 		unsigned int     number_of_indices;
 };
+
+}

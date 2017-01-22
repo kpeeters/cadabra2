@@ -2,6 +2,8 @@
 #include "Algorithm.hh"
 #include "properties/PartialDerivative.hh"
 
+using namespace cadabra;
+
 unsigned int PartialDerivative::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
 	return Derivative::size(properties, tr, it)+1;

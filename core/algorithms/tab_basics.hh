@@ -2,6 +2,8 @@
 #include "Algorithm.hh"
 #include "YoungTab.hh"
 
+namespace cadabra {
+
 class tab_basics : public Algorithm {
 	public:
 		tab_basics(const Kernel&, Ex&);
@@ -19,3 +21,5 @@ class tab_basics : public Algorithm {
 		
 		std::vector<Ex::iterator> num_to_it;
 };
+
+}

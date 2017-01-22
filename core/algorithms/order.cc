@@ -2,6 +2,8 @@
 #include "algorithms/order.hh"
 #include "Combinatorics.hh"
 
+using namespace cadabra;
+
 order::order(const Kernel& k, Ex& tr, Ex& objs, bool ac)
 	: Algorithm(k, tr), objects(objs), anticomm(ac)
 	{

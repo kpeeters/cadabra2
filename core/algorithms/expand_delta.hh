@@ -3,11 +3,14 @@
 
 #include "Algorithm.hh"
 
-class expand_delta : public Algorithm {
-	public:
-		expand_delta(const Kernel&, Ex&);
+namespace cadabra {
 
-		virtual bool     can_apply(iterator) override;
-		virtual result_t apply(iterator&) override;
-};
+	class expand_delta : public Algorithm {
+		public:
+			expand_delta(const Kernel&, Ex&);
+			
+			virtual bool     can_apply(iterator) override;
+			virtual result_t apply(iterator&) override;
+	};
 
+}

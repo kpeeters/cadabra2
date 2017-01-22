@@ -33,15 +33,17 @@
 /// tree. The output of preprocessor.hh is assumed to be
 /// valid and consistent, so the code here is rather simple.
 
+
+
+namespace cadabra {
+
 class Parser { 
 	public:
 		Parser();
 		Parser(std::shared_ptr<Ex>);
+		Parser(std::shared_ptr<Ex>, const std::string&);		
 	  
 		void erase();
-
-		friend std::istream& operator>>(std::istream&, Parser&);
-		friend std::ostream& operator<<(std::ostream&, Parser&);
 
 		void remove_empty_nodes();
 
@@ -49,6 +51,7 @@ class Parser {
 		// called when no further operator>> calls are going to be made,
 		// and is necessary to ensure that the tree is consistent.
 		void finalise();
+		bool string2tree(const std::string& inp);
 
 		std::shared_ptr<Ex> tree;
 	private:
@@ -61,7 +64,6 @@ class Parser {
 
 		void                   advance(unsigned int& i);
 		unsigned char          get_token(unsigned int i);
-		bool                   string2tree(const std::string& inp);
 		bool                   is_number(const std::string& str) const;
 		str_node::bracket_t    is_closing_bracket(const unsigned char& br) const;
 		str_node::bracket_t    is_opening_bracket(const unsigned char& br) const;
@@ -72,7 +74,9 @@ class Parser {
 		std::vector<str_node::parent_rel_t> current_parent_rel;
 };
 
-std::istream& operator>>(std::istream&, Parser&);
+}
+
+std::istream& operator>>(std::istream&, cadabra::Parser&);
+
+
 //std::ostream& operator<<(std::ostream&, Parser&);
-
-

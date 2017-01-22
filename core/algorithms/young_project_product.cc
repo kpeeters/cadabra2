@@ -6,6 +6,8 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/canonicalise.hh"
 
+using namespace cadabra;
+
 young_project_product::young_project_product(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{

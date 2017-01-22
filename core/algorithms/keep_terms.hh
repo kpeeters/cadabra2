@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 class keep_terms : public Algorithm {
 	public:
 		keep_terms(const Kernel&, Ex&, std::vector<int> terms);
@@ -14,3 +16,4 @@ class keep_terms : public Algorithm {
 		std::vector<int> terms_;
 };
 
+}

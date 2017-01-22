@@ -3,6 +3,8 @@
 #include "IndexIterator.hh"
 #include "Kernel.hh"
 
+using namespace cadabra;
+
 TableauSymmetry::~TableauSymmetry()
 	{
 	}

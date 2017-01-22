@@ -429,7 +429,7 @@ class tree {
 		/// Inverse of 'index': return the n-th child of the node at position.
 		static sibling_iterator child(const iterator_base& position, unsigned int);
 		/// Return iterator to the sibling indicated by index
-		sibling_iterator sibling(const iterator_base& position, unsigned int);  				
+		sibling_iterator sibling(const iterator_base& position, unsigned int) const;  				
 		
 		/// For debugging only: verify internal consistency by inspecting all pointers in the tree
 		/// (which will also trigger a valgrind error in case something got corrupted).
@@ -2260,7 +2260,7 @@ unsigned int tree<T, tree_node_allocator>::index(sibling_iterator it) const
 	}
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::sibling(const iterator_base& it, unsigned int num)
+typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::sibling(const iterator_base& it, unsigned int num) const
    {
    tree_node *tmp;
    if(it.node->parent==0) {

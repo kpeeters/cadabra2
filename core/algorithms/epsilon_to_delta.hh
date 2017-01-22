@@ -4,6 +4,8 @@
 #include "Algorithm.hh"
 #include <vector>
 
+namespace cadabra {
+
 class epsilon_to_delta : public Algorithm {
 	public:
 		epsilon_to_delta(const Kernel&, Ex&, bool reduce_);
@@ -17,3 +19,4 @@ class epsilon_to_delta : public Algorithm {
 		Ex                        repdelta;
 };
 
+}

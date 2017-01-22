@@ -3,6 +3,8 @@
 #include "Props.hh"
 #include "Kernel.hh"
 
+using namespace cadabra;
+
 unsigned int Derivative::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
 	it=properties.head<Derivative>(it);

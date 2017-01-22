@@ -3,6 +3,8 @@
 #include "Algorithm.hh"
 #include "properties/GammaMatrix.hh"
 
+namespace cadabra {
+
 class join_gamma : public Algorithm {
 	public:
 		join_gamma(const Kernel&, Ex&, bool expand, bool use_gendelta);
@@ -24,3 +26,5 @@ class join_gamma : public Algorithm {
 		Ex::iterator   gamma_name_;
 		str_node::bracket_t gamma_bracket_;
 };
+
+}

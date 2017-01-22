@@ -1,6 +1,8 @@
 
 #include "properties/TableauBase.hh"
 
+using namespace cadabra;
+
 int TableauBase::get_indexgroup(const Properties& pr, Ex& tr, Ex::iterator it, int indexnum) const
 	{
 	const TableauBase *pd;

@@ -3,6 +3,8 @@
 #include "DisplayTerminal.hh"
 #include "properties/Accent.hh"
 
+using namespace cadabra;
+
 DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e)
 	: DisplayBase(k, e)
 	{

@@ -4,6 +4,8 @@
 #include "properties/TableauBase.hh"
 #include "Cleanup.hh"
 
+using namespace cadabra;
+
 expand_delta::expand_delta(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
 	{

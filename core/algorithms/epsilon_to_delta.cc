@@ -4,6 +4,8 @@
 #include "properties/EpsilonTensor.hh"
 #include "properties/Metric.hh"
 
+using namespace cadabra;
+
 epsilon_to_delta::epsilon_to_delta(const Kernel& k, Ex& tr, bool r)
 	: Algorithm(k, tr), reduce(r)
 	{

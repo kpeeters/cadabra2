@@ -5,6 +5,8 @@
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
 
+using namespace cadabra;
+
 DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 	: DisplayBase(kernel, e)
 	{
@@ -12,7 +14,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\cos", "cos"},
 		{"\\sin", "sin"},
 		{"\\tan", "tan"},
-		{"\\int", "Integral" },
+		{"\\int", "integrate" },
 		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },
 		{"\\exp", "exp" },
@@ -265,6 +267,7 @@ void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
+	str << "(";
 	while(sib!=tree.end(it)) {
 		if(first)
 			first=false;
@@ -273,6 +276,7 @@ void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 		dispatch(str, sib);
 		++sib;
 		}
+	str << ")";
 	//print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
 	}
 

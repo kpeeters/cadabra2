@@ -1,6 +1,8 @@
 
 #include "Weight.hh"
 
+using namespace cadabra;
+
 std::string Weight::name() const 
 	{
 	return "Weight";

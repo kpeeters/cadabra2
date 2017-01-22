@@ -7,6 +7,8 @@
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
 
+using namespace cadabra;
+
 /*  bug: cadabra-34.
 
     Vary should take into account the depth of an object in a more clever way than

@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 class order : virtual public Algorithm {
 	public:
 		order(const Kernel&, Ex&, Ex& objs, bool ac);
@@ -15,3 +17,4 @@ class order : virtual public Algorithm {
 		bool    anticomm;
 };
 
+}

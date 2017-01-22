@@ -1,6 +1,8 @@
 
 #include "properties/Symbol.hh"
 
+using namespace cadabra;
+
 std::string Symbol::name() const
 	{
 	return "Symbol";

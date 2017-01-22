@@ -16,6 +16,7 @@ typedef uint32_t kunichar;
 /// notation. This class contains the printing logic that you see in
 /// action when you call the '__sympy__' method on an Ex object.
 
+namespace cadabra {
 
 class DisplaySympy : public DisplayBase {
 	public:
@@ -83,3 +84,5 @@ class DisplaySympy : public DisplayBase {
 };
 
 const char *unichar(kunichar c);
+
+}

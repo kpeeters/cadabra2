@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Distribute factors over a sum, that is,
@@ -17,3 +19,4 @@ class distribute : public Algorithm {
 		virtual result_t apply(iterator&);
 };
 
+}

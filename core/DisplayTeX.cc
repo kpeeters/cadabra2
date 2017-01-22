@@ -11,6 +11,8 @@
 #define zwnbsp ""
 //(( parent.utf8_output?(unichar(0xfeff)):""))
 
+using namespace cadabra;
+
 DisplayTeX::DisplayTeX(const Kernel& k, const Ex& e)
 	: DisplayBase(k, e)
 	{
@@ -450,13 +452,49 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	str << *it->name << "{}"; // FIXME: add limits
-	Ex::sibling_iterator sib=tree.begin(it);
+	str << *it->name;
+
+	// The first argument is the integrand. Subsequent arguments are
+	// either integration variables, or lists consisting of an
+	// integration variable, a start value and an end value.
+	// Since the integration ranges need to be attached to the
+	// integral symbols, we need to scan for them first.
+
+	auto sib=tree.begin(it);
+	++sib;
+	while(sib!=tree.end(it)) {
+		if(*sib->name=="\\comma") {
+			auto bvalue = tree.child(sib, 1);
+			auto evalue = tree.child(sib, 2);
+			str << "_{";
+			dispatch(str, bvalue);
+			str << "}^{";
+			dispatch(str, evalue);
+			str << "}";
+			}
+		++sib;
+		if(sib!=tree.end(it))
+			str << *it->name;
+		}
+
+	sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
-	if(tree.is_valid(sib)) {
-		str << "\\, {\\rm d}";
-		dispatch(str, sib);
+	bool first=true;
+
+	while(sib!=tree.end(it)) {
+		if(first) {
+			str << "\\,";
+			first=false;
+			}
+		str << "\\,{\\rm d}";
+		if(*sib->name=="\\comma") {
+			dispatch(str, tree.child(sib,0));
+			}
+		else {
+			dispatch(str, sib);
+			}
+		++sib;
 		}
 	}
 

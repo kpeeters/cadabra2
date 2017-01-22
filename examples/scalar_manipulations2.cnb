@@ -1,0 +1,69 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int_{0}^{\\pi}\\int_{0}^{\\pi}\\sin{x}\\,\\,{\\rm d}x\\,{\\rm d}y\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\int(\\sin(x), {x,0,\\pi}, {y,0,\\pi});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int_{-\\pi}^{\\pi}\\int_{-\\pi}^{\\pi}\\sin{x}\\,\\,{\\rm d}x\\,{\\rm d}y\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\int(\\sin(x), {x,-\\pi,\\pi}, {y,-\\pi,\\pi});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Symbol to~}a.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{a}\\left(\\int_{0}^{\\pi}\\exp\\left(-a x^{2}\\right)\\,\\,{\\rm d}x\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "a::Symbol;\nex:=\\partial_{a}{\\int( \\exp(-a x**2), {x,0,\\pi})};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}Piecewise\\left(\\left\\{0,~\\linebreak[0] Eq\\left(a , 0\\right)\\right\\} , \\left\\{\\pi \\frac{\\exp\\left(-\\pi^{2} a\\right)}{2a}-\\sqrt{\\pi} \\frac{erf\\left(\\pi \\sqrt{a}\\right)}{4a^{\\frac{3}{2}}},~\\linebreak[0] True\\right\\}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "scas(ex,\"\");"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

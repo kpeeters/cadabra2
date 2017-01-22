@@ -2,6 +2,8 @@
 #include "Cleanup.hh"
 #include "algorithms/expand_power.hh"
 
+using namespace cadabra;
+
 expand_power::expand_power(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

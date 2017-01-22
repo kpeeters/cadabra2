@@ -1,0 +1,134 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left\\{b,~\\linebreak[0] bd\\right\\}.\\end{dmath*}"
+				}
+			],
+			"source" : "{b,bd}::NonCommuting;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "bd::LaTeXForm(\"b^\\dagger\").\nvs::LaTeXForm(\"|0\\rangle\")."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}b^\\dagger b\\end{dmath*}"
+				}
+			],
+			"source" : "N:= bd b;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}b^\\dagger b b^\\dagger b^\\dagger b^\\dagger |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= @(N) bd bd bd vs;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left\\{b b^\\dagger = b^\\dagger b+1,~\\linebreak[0] b |0\\rangle = 0\\right\\}\\end{dmath*}"
+				}
+			],
+			"source" : "rl:= b bd = bd b + 1, b vs = 0;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}8b^\\dagger b^\\dagger |0\\rangle+4b^\\dagger b^\\dagger b^\\dagger b^\\dagger |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "converge(ex):\n   substitute(ex, rl)\n   distribute(ex)\n;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}f\\left(x , y\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=f(x,y);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}b^\\dagger b \\left(b+b^\\dagger\\right)^{4} |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= @(N) (b + bd)**4 vs;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}b^\\dagger b \\left(b+b^\\dagger\\right) \\left(b+b^\\dagger\\right) \\left(b+b^\\dagger\\right) \\left(b+b^\\dagger\\right) |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "expand_power(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}b^\\dagger b b b b b |0\\rangle+b^\\dagger b b b b b^\\dagger |0\\rangle+b^\\dagger b b b b^\\dagger b |0\\rangle+b^\\dagger b b b b^\\dagger b^\\dagger |0\\rangle+b^\\dagger b b b^\\dagger b b |0\\rangle+b^\\dagger b b b^\\dagger b b^\\dagger |0\\rangle+b^\\dagger b b b^\\dagger b^\\dagger b |0\\rangle+b^\\dagger b b b^\\dagger b^\\dagger b^\\dagger |0\\rangle+b^\\dagger b b^\\dagger b b b |0\\rangle+b^\\dagger b b^\\dagger b b b^\\dagger |0\\rangle+b^\\dagger b b^\\dagger b b^\\dagger b |0\\rangle+b^\\dagger b b^\\dagger b b^\\dagger b^\\dagger |0\\rangle+b^\\dagger b b^\\dagger b^\\dagger b b |0\\rangle+b^\\dagger b b^\\dagger b^\\dagger b b^\\dagger |0\\rangle+b^\\dagger b b^\\dagger b^\\dagger b^\\dagger b |0\\rangle+b^\\dagger b b^\\dagger b^\\dagger b^\\dagger b^\\dagger |0\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

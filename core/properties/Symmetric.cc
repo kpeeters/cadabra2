@@ -1,6 +1,8 @@
 
 #include "properties/Symmetric.hh"
 
+using namespace cadabra;
+
 std::string Symmetric::name() const
 	{
 	return "Symmetric";

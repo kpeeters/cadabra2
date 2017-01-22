@@ -2,6 +2,8 @@
 #include "properties/KroneckerDelta.hh"
 #include "Exceptions.hh"
 
+using namespace cadabra;
+
 std::string KroneckerDelta::name() const
 	{
 	return "KroneckerDelta";

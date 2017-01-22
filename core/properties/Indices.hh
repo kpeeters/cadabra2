@@ -3,6 +3,8 @@
 
 #include "Props.hh"
 
+namespace cadabra {
+
 class Indices : public list_property {
 	public:
 		Indices(); //const std::string& parent="");
@@ -26,3 +28,5 @@ class Indices : public list_property {
 
 		void collect_index_values(Ex::iterator ind_values);
 };
+
+}

@@ -1,6 +1,8 @@
 
 #include "properties/Tableau.hh"
 
+using namespace cadabra;
+
 std::string Tableau::name() const
 	{
 	return "Tableau";

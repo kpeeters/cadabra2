@@ -9,6 +9,8 @@
 #include "DisplaySympy.hh"
 #include "algorithms/substitute.hh"
 
+using namespace cadabra;
+
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args, 
 								  const std::string& method)
 	{
@@ -35,7 +37,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	// We then execute the expression in Python.
 
 	//ex.print_recursive_treeform(std::cerr, it);
-	// std::cerr << "feeding " << str.str() << std::endl;
+	std::cerr << "feeding " << str.str() << std::endl;
 
 	auto module = boost::python::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
@@ -44,14 +46,14 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-	// std::cerr << result << std::endl;
+	std::cerr << result << std::endl;
 	
 
    // After that, we construct a new sub-expression from this string by using our
    // own parser, and replace the original.
 
 	auto ptr = std::make_shared<Ex>();
-	Parser parser(ptr);
+	cadabra::Parser parser(ptr);
 	std::stringstream istr(result);
 	istr >> parser;
 

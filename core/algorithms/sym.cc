@@ -1,6 +1,8 @@
 
 #include "algorithms/sym.hh"
 
+using namespace cadabra;
+
 sym::sym(const Kernel& k, Ex& tr, Ex& objs, bool s)
 	: Algorithm(k, tr), objects(objs), sign(s)
 	{

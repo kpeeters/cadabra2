@@ -1,6 +1,8 @@
 
 #include "algorithms/tab_basics.hh"
 
+using namespace cadabra;
+
 tab_basics::tab_basics(const Kernel& k, Ex& tr) 
 	: Algorithm(k, tr)
 	{

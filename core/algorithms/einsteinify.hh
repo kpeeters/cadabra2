@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 
 class einsteinify : public Algorithm {
@@ -15,3 +17,4 @@ class einsteinify : public Algorithm {
 		Ex metric;
 };
 
+}

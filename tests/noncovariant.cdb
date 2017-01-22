@@ -1,0 +1,25 @@
+
+def test01():
+   __cdbkernel__=create_scope()
+   t::Coordinate;
+   {\mu,\nu}::Indices(spacetime);
+   {i,j,k}::Indices(space, parent=spacetime);
+   ex:= A_{\mu} B^{\mu};
+   split_index(_, $\mu, t, i$)
+   print("Test 01 passed")
+
+test01()
+
+def test02():
+   __cdbkernel__=create_scope()
+   \partial{#}::Derivative;
+   t::Coordinate;
+   {i,j}::Indices;
+   ex:=\partial_{t}{ \psi_{1} } \partial_{i}{ v0_{i} } 
+      -\partial_{i}{ v0_{i} } \partial_{t}{ \psi_{1} }    ;
+   sort_product(_)
+   assert(ex==0)
+   print("Test 02 passed")
+
+test02()
+

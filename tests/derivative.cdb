@@ -566,3 +566,12 @@ def test33():
 
 test33()
 
+def test34():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho}::Indices(position=fixed, values={0,1,2,3});
+    \partial{#}::PartialDerivative;
+    A^{\mu}::Depends(\partial{#});
+    ex:= \partial_{\mu}{A^{2}};
+    unwrap(ex)
+    tst:= \partial_{\mu}{A^{2}} - @(ex);
+    assert(tst==0)

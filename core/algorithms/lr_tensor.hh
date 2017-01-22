@@ -2,6 +2,8 @@
 #include "Algorithm.hh"
 #include "algorithms/tab_basics.hh"
 
+namespace cadabra {
+
 class lr_tensor : public tab_basics  {
 	public:
 		lr_tensor(const Kernel&, Ex&);
@@ -16,3 +18,4 @@ class lr_tensor : public tab_basics  {
 		void do_filledtableau(iterator&);
 };
 
+}

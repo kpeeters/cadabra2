@@ -2,6 +2,8 @@
 #include "properties/SatisfiesBianchi.hh"
 #include "IndexIterator.hh"
 
+using namespace cadabra;
+
 std::string SatisfiesBianchi::name() const
 	{
 	return "SatisfiesBianchi";

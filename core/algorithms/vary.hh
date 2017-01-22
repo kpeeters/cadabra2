@@ -4,6 +4,8 @@
 #include "Algorithm.hh"
 #include "algorithms/sort_product.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Generic variational derivative algorithm. 
@@ -19,3 +21,5 @@ class vary : public Algorithm {
 		Ex&        args;
 		
 };
+
+}

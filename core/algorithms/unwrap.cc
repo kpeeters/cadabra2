@@ -7,6 +7,8 @@
 #include "properties/DependsBase.hh"
 //#include "algorithms/prodcollectnum.hh"
 
+using namespace cadabra;
+
 unwrap::unwrap(const Kernel& k, Ex& tr, Ex& w)
 	: Algorithm(k, tr)
 	{

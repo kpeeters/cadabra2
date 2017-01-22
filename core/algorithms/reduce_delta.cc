@@ -4,6 +4,8 @@
 #include "properties/Integer.hh"
 #include "properties/KroneckerDelta.hh"
 
+using namespace cadabra;
+
 reduce_delta::reduce_delta(const Kernel& k, Ex& e)
 	: Algorithm(k, e)
 	{

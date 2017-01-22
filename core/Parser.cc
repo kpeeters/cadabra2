@@ -23,7 +23,8 @@
 
 #include <sstream>
 
-std::istream& operator>>(std::istream& str, Parser& pa)
+
+std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 	{
 	std::string inp;
 	while(std::getline(str, inp)) {
@@ -39,6 +40,8 @@ std::istream& operator>>(std::istream& str, Parser& pa)
 
 	return str;
 	}
+
+using namespace cadabra;
 
 //std::ostream& operator<<(std::ostream& str, Parser& pa)
 //	{
@@ -89,6 +92,16 @@ Parser::Parser(std::shared_ptr<Ex> t)
 	tree->clear();
 	tree->set_head(str_node("\\expression", str_node::b_none, str_node::p_none));
 	parts=tree->begin();
+	}
+
+Parser::Parser(std::shared_ptr<Ex> t, const std::string& str)
+	: tree(t)
+	{
+	tree->clear();
+	tree->set_head(str_node("\\expression", str_node::b_none, str_node::p_none));
+	parts=tree->begin();
+	string2tree(str);
+	finalise();
 	}
 
 void Parser::erase()

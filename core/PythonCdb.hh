@@ -32,24 +32,24 @@
 /// need a Properties object, we cannot have such operator== things in C++,
 /// but we can in Python since we can get the kernel in the current scope.
 
-bool __eq__Ex_Ex(const Ex&, const Ex&);
+bool __eq__Ex_Ex(const cadabra::Ex&, const cadabra::Ex&);
 
 /// \ingroup pythoncore
 ///
 /// Comparison operator for Ex objects in Python. See __eq__Ex_Ex for more.
 
-bool __eq__Ex_int(const Ex&, int);
+bool __eq__Ex_int(const cadabra::Ex&, int);
 
 /// Fetch an Ex object from the Python side using its Python identifier.
 
-std::shared_ptr<Ex> fetch_from_python(const std::string& nm);
+std::shared_ptr<cadabra::Ex> fetch_from_python(const std::string& nm);
 
 /// \ingroup pythoncore
 ///
 /// Generate the Python str() and repr() representation of the Ex object.
 
-std::string Ex_str_(const Ex&);
-std::string Ex_repr_(const Ex&);
+std::string Ex_str_(const cadabra::Ex&);
+std::string Ex_repr_(const cadabra::Ex&);
 
 /// \ingroup pythoncore
 ///
@@ -63,7 +63,7 @@ std::string Ex_repr_(const Ex&);
 /// So we have a separate _latex_() member on each object, which 
 ///internally uses DisplayTeX to do the actual printing.
 
-std::string Ex_latex_(const Ex&);
+std::string Ex_latex_(const cadabra::Ex&);
 
 /// \ingroup scalar
 ///
@@ -75,20 +75,20 @@ std::string Ex_latex_(const Ex&);
 /// to a Sympy object in 'sympy.sympify' because the latter attempts to 
 /// call __sympy__ on every object that you feed it.
 
-boost::python::object Ex_to_Sympy(const Ex&);
+boost::python::object Ex_to_Sympy(const cadabra::Ex&);
 
 
 /// \ingroup pythoncore
 ///
 /// Add two expressions, adding a top-level \sum node if required.
 
-Ex operator+(const Ex& ex1, const Ex& ex2);
+cadabra::Ex operator+(const cadabra::Ex& ex1, const cadabra::Ex& ex2);
 
 /// \ingroup pythoncore
 ///
 /// Subtract two expressions, adding a top-level \sum node if required.
 
-Ex operator-(const Ex& ex1, const Ex& ex2);
+cadabra::Ex operator-(const cadabra::Ex& ex1, const cadabra::Ex& ex2);
 
 /// \ingroup pythoncore
 ///
@@ -127,7 +127,7 @@ class BaseProperty {
 template<class T>
 class Property : public BaseProperty {
 	public:
-		Property(std::shared_ptr<Ex> obj, std::shared_ptr<Ex> params=0);
+		Property(std::shared_ptr<cadabra::Ex> obj, std::shared_ptr<cadabra::Ex> params=0);
 
 		/// Human-readable form in text, i.e. no special formatting.
 		std::string str_() const;
@@ -152,7 +152,7 @@ class Property : public BaseProperty {
 		// We also keep a shared pointer to the expression for which we
 		// have defined this property, so that we can print sensible 
 		// information.
-		std::shared_ptr<Ex> for_obj;
+		std::shared_ptr<cadabra::Ex> for_obj;
 };
 
 
@@ -218,9 +218,9 @@ class Property : public BaseProperty {
 /// there is no kernel available locally, they will then revert to using
 /// the global kernel. 
 
-Kernel *create_scope();
-Kernel *create_scope_from_global();
-Kernel *create_empty_scope();
+cadabra::Kernel *create_scope();
+cadabra::Kernel *create_scope_from_global();
+cadabra::Kernel *create_empty_scope();
 
 /// \ingroup pythoncore
 ///
@@ -230,22 +230,15 @@ Kernel *create_empty_scope();
 /// Python, but we want to populate the kernel with defaults before we hand it
 /// back).
 
-void    inject_defaults(Kernel *);
-
-/// \ingroup pythoncore
-///
-/// Inject a property into the kernel in current scope. The property is
-/// then owned by the kernel.
-
-void    inject_property(Kernel *, property *, std::shared_ptr<Ex>, std::shared_ptr<Ex>);
+void    inject_defaults(cadabra::Kernel *);
 
 /// \ingroup pythoncore
 ///
 /// Get a pointer to the currently visible kernel.
-Kernel *get_kernel_from_scope();
+cadabra::Kernel *get_kernel_from_scope();
 
 /// \ingroup pythoncore
 ///
 /// Run the post-process Python function (if defined) on the given expression.
 
-void call_post_process(Ex& ex);
+void call_post_process(cadabra::Ex& ex);

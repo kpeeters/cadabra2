@@ -1,5 +1,10 @@
 
 #include "Kernel.hh"
+#include "PreClean.hh"
+#include "Cleanup.hh"
+#include "Parser.hh"
+
+using namespace cadabra;
 
 Kernel::Kernel()
 	{
@@ -11,8 +16,29 @@ Kernel::~Kernel()
 //	std::cerr << "~Kernel() " << this << std::endl;
 	}
 
-Kernel::Kernel(const Kernel& other)
+void Kernel::inject_property(property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
 	{
-	std::cerr << "KERNEL COPY " << &other << " -> " << this << std::endl;
-	properties=other.properties;
+	Ex::iterator it=ex->begin();
+
+	if(param) {
+		// std::cerr << "property with " << *param << std::endl;
+		keyval_t keyvals;
+		prop->parse_to_keyvals(*param, keyvals);
+		prop->parse(*this, keyvals);
+		}
+	prop->validate(*this, Ex(it));
+	properties.master_insert(Ex(it), prop);
 	}
+
+std::shared_ptr<cadabra::Ex> Kernel::ex_from_string(const std::string& s)
+	{
+	auto ex = std::make_shared<cadabra::Ex>();
+	cadabra::Parser parser1(ex, s);
+
+	pre_clean_dispatch_deep(*this, *ex);
+	cleanup_dispatch_deep(*this, *ex);
+	check_index_consistency(*this, *ex, ex->begin());
+
+	return ex;
+	}
+

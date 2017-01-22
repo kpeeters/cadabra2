@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Collect symbolically equal factors in a product.
@@ -21,3 +23,5 @@ class collect_factors : public Algorithm {
 
 		factor_hash_t factor_hash;
 };
+
+}

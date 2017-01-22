@@ -32,6 +32,8 @@
 #include <fstream>
 #include <cstddef>
 
+namespace cadabra {
+
 /// \ingroup core
 ///
 /// Base class for all algorithms, containing generic routines and in
@@ -76,6 +78,7 @@ class Algorithm {
 		// changes. The 'depth' flag, if not equal to -1, indicates the depth in the tree
 		// where the algorithm should start applying.
 
+		result_t  apply_generic(bool deep=true, bool repeat=false, unsigned int depth=0);
 		result_t  apply_generic(iterator&, bool deep, bool repeat, unsigned int depth);
 
 		// Global information
@@ -271,3 +274,4 @@ unsigned int Algorithm::intersection_number(sibling_iterator from1, sibling_iter
 	}
 
 
+}

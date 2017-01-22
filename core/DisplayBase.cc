@@ -1,6 +1,8 @@
 
 #include "DisplayBase.hh"
 
+using namespace cadabra;
+
 DisplayBase::DisplayBase(const Kernel& k, const Ex& e)
 	: tree(e), kernel(k)
 	{

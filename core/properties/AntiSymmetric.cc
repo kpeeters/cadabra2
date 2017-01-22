@@ -2,6 +2,8 @@
 #include "Algorithm.hh"
 #include "properties/AntiSymmetric.hh"
 
+using namespace cadabra;
+
 std::string AntiSymmetric::name() const
 	{
 	return "AntiSymmetric";

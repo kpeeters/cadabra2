@@ -1,6 +1,8 @@
 
 #include "DifferentialForm.hh"
 
+using namespace cadabra;
+
 std::string DifferentialForm::name() const
 	{
 	return "DifferentialForm";

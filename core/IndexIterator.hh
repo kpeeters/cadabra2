@@ -4,6 +4,8 @@
 #include "Storage.hh"
 #include "Props.hh"
 
+namespace cadabra {
+
 /// \ingroup core
 ///
 /// An iterator which iterates over indices even if they are at lower
@@ -35,4 +37,6 @@ class index_iterator : public Ex::iterator_base {
 		bool is_index(Ex::iterator) const;
 };
 
-size_t number_of_indices(const Properties&, Ex::iterator);
+//size_t number_of_indices(const Properties&, Ex::iterator);
+
+}

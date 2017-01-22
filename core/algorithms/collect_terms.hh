@@ -3,6 +3,8 @@
 
 #include "Algorithm.hh"
 
+namespace cadabra {
+
 /// \ingroup algorithms
 ///
 /// Collect symbolically equal terms in a sum.
@@ -26,3 +28,4 @@ class collect_terms : public Algorithm {
 		term_hash_t term_hash;
 };
 
+}
