@@ -1211,7 +1211,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 
 	def("eliminate_metric", &dispatch_ex<eliminate_metric, Ex&>, 
 	    (arg("ex"),arg("preferred")=new Ex(), 
-	     arg("deep")=false,arg("repeat")=false,arg("depth")=0),
+	     arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 	    return_internal_reference<1>() );
 
 	def("keep_weight", &dispatch_ex<keep_weight, Ex&>, 
