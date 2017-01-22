@@ -103,25 +103,37 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Props_8hh.html">Props.hh</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classKernel.html">   13</a></span>&#160;<span class="keyword">class </span><a class="code" href="classKernel.html">Kernel</a> {</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="code" href="classKernel.html#a84dba549c0823454ecfc8089c20cf812">Kernel</a>();</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <a class="code" href="classKernel.html#a84dba549c0823454ecfc8089c20cf812">Kernel</a>(<span class="keyword">const</span> <a class="code" href="classKernel.html">Kernel</a>&amp; other);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <a class="code" href="classKernel.html#a9c7407e3a0b1cb9b2f96e9a030187064">~Kernel</a>();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classKernel.html#afd0001c71685e35882669699f6797aff">   19</a></span>&#160;        <a class="code" href="classProperties.html">Properties</a> <a class="code" href="classKernel.html#afd0001c71685e35882669699f6797aff">properties</a>;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;};</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span>cadabra {</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classcadabra_1_1Kernel.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcadabra_1_1Kernel.html">Kernel</a> {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <a class="code" href="classcadabra_1_1Kernel.html#a84dba549c0823454ecfc8089c20cf812">Kernel</a>();</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <a class="code" href="classcadabra_1_1Kernel.html#a84dba549c0823454ecfc8089c20cf812">Kernel</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">Kernel</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="classcadabra_1_1Kernel.html#a9c7407e3a0b1cb9b2f96e9a030187064">~Kernel</a>();</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1Kernel.html#a4bab4b77df87dea5bd7c05cb78758875">inject_property</a>(<a class="code" href="classcadabra_1_1property.html">property</a> *prop, std::shared_ptr&lt;Ex&gt; <a class="code" href="classcadabra_1_1pattern.html">pattern</a>, std::shared_ptr&lt;Ex&gt; property_arguments);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        std::shared_ptr&lt;Ex&gt; <a class="code" href="classcadabra_1_1Kernel.html#a9439bdc1c1d9aad4638a6e83ab9a4613">ex_from_string</a>(<span class="keyword">const</span> std::string&amp;);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        </div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classcadabra_1_1Kernel.html#a3ced0bf6fe3266debfd1ce73d93988ba">   28</a></span>&#160;        <a class="code" href="classcadabra_1_1Properties.html">Properties</a> <a class="code" href="classcadabra_1_1Kernel.html#a3ced0bf6fe3266debfd1ce73d93988ba">properties</a>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;};</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
+<div class="ttc" id="classcadabra_1_1Kernel_html_a9c7407e3a0b1cb9b2f96e9a030187064"><div class="ttname"><a href="classcadabra_1_1Kernel.html#a9c7407e3a0b1cb9b2f96e9a030187064">cadabra::Kernel::~Kernel</a></div><div class="ttdeci">~Kernel()</div><div class="ttdef"><b>Definition:</b> Kernel.cc:14</div></div>
 <div class="ttc" id="Props_8hh_html"><div class="ttname"><a href="Props_8hh.html">Props.hh</a></div></div>
-<div class="ttc" id="classKernel_html_a84dba549c0823454ecfc8089c20cf812"><div class="ttname"><a href="classKernel.html#a84dba549c0823454ecfc8089c20cf812">Kernel::Kernel</a></div><div class="ttdeci">Kernel()</div><div class="ttdef"><b>Definition:</b> Kernel.cc:4</div></div>
-<div class="ttc" id="classProperties_html"><div class="ttname"><a href="classProperties.html">Properties</a></div><div class="ttdoc">Class holding a collection of properties attached to expressions. </div><div class="ttdef"><b>Definition:</b> Props.hh:193</div></div>
-<div class="ttc" id="classKernel_html"><div class="ttname"><a href="classKernel.html">Kernel</a></div><div class="ttdoc">core </div><div class="ttdef"><b>Definition:</b> Kernel.hh:13</div></div>
-<div class="ttc" id="classKernel_html_afd0001c71685e35882669699f6797aff"><div class="ttname"><a href="classKernel.html#afd0001c71685e35882669699f6797aff">Kernel::properties</a></div><div class="ttdeci">Properties properties</div><div class="ttdef"><b>Definition:</b> Kernel.hh:19</div></div>
-<div class="ttc" id="classKernel_html_a9c7407e3a0b1cb9b2f96e9a030187064"><div class="ttname"><a href="classKernel.html#a9c7407e3a0b1cb9b2f96e9a030187064">Kernel::~Kernel</a></div><div class="ttdeci">~Kernel()</div><div class="ttdef"><b>Definition:</b> Kernel.cc:9</div></div>
+<div class="ttc" id="classcadabra_1_1Kernel_html_a84dba549c0823454ecfc8089c20cf812"><div class="ttname"><a href="classcadabra_1_1Kernel.html#a84dba549c0823454ecfc8089c20cf812">cadabra::Kernel::Kernel</a></div><div class="ttdeci">Kernel()</div><div class="ttdef"><b>Definition:</b> Kernel.cc:9</div></div>
+<div class="ttc" id="classcadabra_1_1Kernel_html_a4bab4b77df87dea5bd7c05cb78758875"><div class="ttname"><a href="classcadabra_1_1Kernel.html#a4bab4b77df87dea5bd7c05cb78758875">cadabra::Kernel::inject_property</a></div><div class="ttdeci">void inject_property(property *prop, std::shared_ptr&lt; Ex &gt; pattern, std::shared_ptr&lt; Ex &gt; property_arguments)</div><div class="ttdoc">Inject a property into the system and attach it to the given pattern. </div><div class="ttdef"><b>Definition:</b> Kernel.cc:19</div></div>
+<div class="ttc" id="classcadabra_1_1property_html"><div class="ttname"><a href="classcadabra_1_1property.html">cadabra::property</a></div><div class="ttdoc">Base class for all properties, handling argument parsing and defining the interface. </div><div class="ttdef"><b>Definition:</b> Props.hh:107</div></div>
+<div class="ttc" id="classcadabra_1_1Kernel_html_a9439bdc1c1d9aad4638a6e83ab9a4613"><div class="ttname"><a href="classcadabra_1_1Kernel.html#a9439bdc1c1d9aad4638a6e83ab9a4613">cadabra::Kernel::ex_from_string</a></div><div class="ttdeci">std::shared_ptr&lt; Ex &gt; ex_from_string(const std::string &amp;)</div><div class="ttdoc">Create an Ex expression object from a string, which will be parsed. </div><div class="ttdef"><b>Definition:</b> Kernel.cc:33</div></div>
+<div class="ttc" id="classcadabra_1_1Kernel_html_a3ced0bf6fe3266debfd1ce73d93988ba"><div class="ttname"><a href="classcadabra_1_1Kernel.html#a3ced0bf6fe3266debfd1ce73d93988ba">cadabra::Kernel::properties</a></div><div class="ttdeci">Properties properties</div><div class="ttdef"><b>Definition:</b> Kernel.hh:28</div></div>
+<div class="ttc" id="classcadabra_1_1Kernel_html"><div class="ttname"><a href="classcadabra_1_1Kernel.html">cadabra::Kernel</a></div><div class="ttdef"><b>Definition:</b> Kernel.hh:15</div></div>
+<div class="ttc" id="classcadabra_1_1pattern_html"><div class="ttname"><a href="classcadabra_1_1pattern.html">cadabra::pattern</a></div><div class="ttdef"><b>Definition:</b> Props.hh:35</div></div>
+<div class="ttc" id="classcadabra_1_1Properties_html"><div class="ttname"><a href="classcadabra_1_1Properties.html">cadabra::Properties</a></div><div class="ttdoc">Class holding a collection of properties attached to expressions. </div><div class="ttdef"><b>Definition:</b> Props.hh:195</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 9 2017 22:17:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 22 2017 11:31:09 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

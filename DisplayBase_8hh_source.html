@@ -103,39 +103,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Props_8hh.html">Props.hh</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Storage_8hh.html">Storage.hh</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classDisplayBase.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classDisplayBase.html">DisplayBase</a> {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <a class="code" href="classDisplayBase.html#a3b877b417214f3a540450775e1a6343d">DisplayBase</a>(<span class="keyword">const</span> <a class="code" href="classKernel.html">Kernel</a>&amp;, <span class="keyword">const</span> <a class="code" href="classEx.html">Ex</a>&amp;);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classDisplayBase.html#ace820000cdeb348b9c345de8ad1cbff7">output</a>(std::ostream&amp;);</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classDisplayBase.html#ace820000cdeb348b9c345de8ad1cbff7">output</a>(std::ostream&amp;, Ex::iterator);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classDisplayBase.html#ab72082f65d897fb6ae38f5f70fd74224">dispatch</a>(std::ostream&amp;, Ex::iterator)=0;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>cadabra {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classcadabra_1_1DisplayBase.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="classcadabra_1_1DisplayBase.html">DisplayBase</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="classcadabra_1_1DisplayBase.html#a3b877b417214f3a540450775e1a6343d">DisplayBase</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">Kernel</a>&amp;, <span class="keyword">const</span> <a class="code" href="classcadabra_1_1Ex.html">Ex</a>&amp;);</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1DisplayBase.html#ace820000cdeb348b9c345de8ad1cbff7">output</a>(std::ostream&amp;);</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1DisplayBase.html#ace820000cdeb348b9c345de8ad1cbff7">output</a>(std::ostream&amp;, Ex::iterator);</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classDisplayBase.html#aefa579b998e91b08f45d79dbcc0b8b75">needs_brackets</a>(Ex::iterator it)=0;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classcadabra_1_1DisplayBase.html#af01a53c8e12f84ecae8fa4507e4d0883">dispatch</a>(std::ostream&amp;, Ex::iterator)=0;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classDisplayBase.html#a6548047eded297c51f57eaaf1411c268">   34</a></span>&#160;        <span class="keyword">const</span> <a class="code" href="classEx.html">Ex</a>&amp;     <a class="code" href="classDisplayBase.html#a6548047eded297c51f57eaaf1411c268">tree</a>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classDisplayBase.html#a5949681ce4ab0e05a08a611d09912cd9">   35</a></span>&#160;        <span class="keyword">const</span> <a class="code" href="classKernel.html">Kernel</a>&amp; <a class="code" href="classDisplayBase.html#a5949681ce4ab0e05a08a611d09912cd9">kernel</a>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
-<div class="ttc" id="classDisplayBase_html_ab72082f65d897fb6ae38f5f70fd74224"><div class="ttname"><a href="classDisplayBase.html#ab72082f65d897fb6ae38f5f70fd74224">DisplayBase::dispatch</a></div><div class="ttdeci">virtual void dispatch(std::ostream &amp;, Ex::iterator)=0</div></div>
-<div class="ttc" id="classDisplayBase_html_a5949681ce4ab0e05a08a611d09912cd9"><div class="ttname"><a href="classDisplayBase.html#a5949681ce4ab0e05a08a611d09912cd9">DisplayBase::kernel</a></div><div class="ttdeci">const Kernel &amp; kernel</div><div class="ttdef"><b>Definition:</b> DisplayBase.hh:35</div></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classcadabra_1_1DisplayBase.html#a34b019164dfc2bb4591e5d149d7278f5">needs_brackets</a>(Ex::iterator it)=0;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classcadabra_1_1DisplayBase.html#a527706f63c79247bed1db8db2f4bc36e">   36</a></span>&#160;        <span class="keyword">const</span> <a class="code" href="classcadabra_1_1Ex.html">Ex</a>&amp;     <a class="code" href="classcadabra_1_1DisplayBase.html#a527706f63c79247bed1db8db2f4bc36e">tree</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classcadabra_1_1DisplayBase.html#a3aa14144fbddb85603dadbef2fabb329">   37</a></span>&#160;        <span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">Kernel</a>&amp; <a class="code" href="classcadabra_1_1DisplayBase.html#a3aa14144fbddb85603dadbef2fabb329">kernel</a>;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;};</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
+<div class="ttc" id="classcadabra_1_1Ex_html"><div class="ttname"><a href="classcadabra_1_1Ex.html">cadabra::Ex</a></div><div class="ttdoc">Basic storage class for symbolic mathemematical expressions. </div><div class="ttdef"><b>Definition:</b> Storage.hh:130</div></div>
 <div class="ttc" id="Props_8hh_html"><div class="ttname"><a href="Props_8hh.html">Props.hh</a></div></div>
-<div class="ttc" id="classEx_html"><div class="ttname"><a href="classEx.html">Ex</a></div><div class="ttdoc">Basic storage class for symbolic mathemematical expressions. </div><div class="ttdef"><b>Definition:</b> Storage.hh:128</div></div>
-<div class="ttc" id="classDisplayBase_html_ace820000cdeb348b9c345de8ad1cbff7"><div class="ttname"><a href="classDisplayBase.html#ace820000cdeb348b9c345de8ad1cbff7">DisplayBase::output</a></div><div class="ttdeci">void output(std::ostream &amp;)</div><div class="ttdef"><b>Definition:</b> DisplayBase.cc:9</div></div>
-<div class="ttc" id="classDisplayBase_html"><div class="ttname"><a href="classDisplayBase.html">DisplayBase</a></div><div class="ttdoc">Base class for all display classes. </div><div class="ttdef"><b>Definition:</b> DisplayBase.hh:16</div></div>
-<div class="ttc" id="classDisplayBase_html_aefa579b998e91b08f45d79dbcc0b8b75"><div class="ttname"><a href="classDisplayBase.html#aefa579b998e91b08f45d79dbcc0b8b75">DisplayBase::needs_brackets</a></div><div class="ttdeci">virtual bool needs_brackets(Ex::iterator it)=0</div><div class="ttdoc">Determine if a node needs extra brackets around it. </div></div>
-<div class="ttc" id="classKernel_html"><div class="ttname"><a href="classKernel.html">Kernel</a></div><div class="ttdoc">core </div><div class="ttdef"><b>Definition:</b> Kernel.hh:13</div></div>
+<div class="ttc" id="classcadabra_1_1DisplayBase_html_ace820000cdeb348b9c345de8ad1cbff7"><div class="ttname"><a href="classcadabra_1_1DisplayBase.html#ace820000cdeb348b9c345de8ad1cbff7">cadabra::DisplayBase::output</a></div><div class="ttdeci">void output(std::ostream &amp;)</div><div class="ttdef"><b>Definition:</b> DisplayBase.cc:11</div></div>
+<div class="ttc" id="classcadabra_1_1DisplayBase_html_af01a53c8e12f84ecae8fa4507e4d0883"><div class="ttname"><a href="classcadabra_1_1DisplayBase.html#af01a53c8e12f84ecae8fa4507e4d0883">cadabra::DisplayBase::dispatch</a></div><div class="ttdeci">virtual void dispatch(std::ostream &amp;, Ex::iterator)=0</div></div>
+<div class="ttc" id="classcadabra_1_1DisplayBase_html"><div class="ttname"><a href="classcadabra_1_1DisplayBase.html">cadabra::DisplayBase</a></div><div class="ttdoc">Base class for all display classes. </div><div class="ttdef"><b>Definition:</b> DisplayBase.hh:18</div></div>
+<div class="ttc" id="classcadabra_1_1DisplayBase_html_a3aa14144fbddb85603dadbef2fabb329"><div class="ttname"><a href="classcadabra_1_1DisplayBase.html#a3aa14144fbddb85603dadbef2fabb329">cadabra::DisplayBase::kernel</a></div><div class="ttdeci">const Kernel &amp; kernel</div><div class="ttdef"><b>Definition:</b> DisplayBase.hh:37</div></div>
+<div class="ttc" id="classcadabra_1_1DisplayBase_html_a3b877b417214f3a540450775e1a6343d"><div class="ttname"><a href="classcadabra_1_1DisplayBase.html#a3b877b417214f3a540450775e1a6343d">cadabra::DisplayBase::DisplayBase</a></div><div class="ttdeci">DisplayBase(const Kernel &amp;, const Ex &amp;)</div><div class="ttdef"><b>Definition:</b> DisplayBase.cc:6</div></div>
+<div class="ttc" id="classcadabra_1_1DisplayBase_html_a527706f63c79247bed1db8db2f4bc36e"><div class="ttname"><a href="classcadabra_1_1DisplayBase.html#a527706f63c79247bed1db8db2f4bc36e">cadabra::DisplayBase::tree</a></div><div class="ttdeci">const Ex &amp; tree</div><div class="ttdef"><b>Definition:</b> DisplayBase.hh:36</div></div>
+<div class="ttc" id="classcadabra_1_1DisplayBase_html_a34b019164dfc2bb4591e5d149d7278f5"><div class="ttname"><a href="classcadabra_1_1DisplayBase.html#a34b019164dfc2bb4591e5d149d7278f5">cadabra::DisplayBase::needs_brackets</a></div><div class="ttdeci">virtual bool needs_brackets(Ex::iterator it)=0</div><div class="ttdoc">Determine if a node needs extra brackets around it. </div></div>
+<div class="ttc" id="classcadabra_1_1Kernel_html"><div class="ttname"><a href="classcadabra_1_1Kernel.html">cadabra::Kernel</a></div><div class="ttdef"><b>Definition:</b> Kernel.hh:15</div></div>
 <div class="ttc" id="Storage_8hh_html"><div class="ttname"><a href="Storage_8hh.html">Storage.hh</a></div></div>
-<div class="ttc" id="classDisplayBase_html_a3b877b417214f3a540450775e1a6343d"><div class="ttname"><a href="classDisplayBase.html#a3b877b417214f3a540450775e1a6343d">DisplayBase::DisplayBase</a></div><div class="ttdeci">DisplayBase(const Kernel &amp;, const Ex &amp;)</div><div class="ttdef"><b>Definition:</b> DisplayBase.cc:4</div></div>
-<div class="ttc" id="classDisplayBase_html_a6548047eded297c51f57eaaf1411c268"><div class="ttname"><a href="classDisplayBase.html#a6548047eded297c51f57eaaf1411c268">DisplayBase::tree</a></div><div class="ttdeci">const Ex &amp; tree</div><div class="ttdef"><b>Definition:</b> DisplayBase.hh:34</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 9 2017 22:17:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 22 2017 11:31:09 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

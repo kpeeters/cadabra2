@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['result_5ft',['result_t',['../classEx.html#a2b752a88144e6ad7bee2ff30bd671811',1,'Ex']]]
+  ['result_5ft',['result_t',['../classcadabra_1_1Ex.html#a213ffa8eb9a47db69eda13be42d317cd',1,'cadabra::Ex']]]
 ];

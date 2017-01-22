@@ -11,13 +11,13 @@ var searchData=
   ['actionsetrunstatus',['ActionSetRunStatus',['../classcadabra_1_1DocumentThread.html#a56b0aa54a1aa9d9459db8b2bfc941cfb',1,'cadabra::DocumentThread']]],
   ['actionsplitcell',['ActionSplitCell',['../classcadabra_1_1DocumentThread.html#ad672e7fffbcc20f93504ead740d316b2',1,'cadabra::DocumentThread']]],
   ['alpha',['Alpha',['../Symbols_8cc.html#a25f5b9f61f6132e1e46c2859efe1cd90',1,'Alpha():&#160;Symbols.cc'],['../Symbols_8cc.html#af9760ca31a32b75163d32402eab4ece8',1,'alpha():&#160;Symbols.cc']]],
-  ['anticomm',['anticomm',['../classorder.html#a4589707811f88460f56f2987ab1498b4',1,'order']]],
+  ['anticomm',['anticomm',['../classcadabra_1_1order.html#a358e937bcfef416705027c8cf7086af1',1,'cadabra::order']]],
   ['app_5fname',['app_name',['../classsnoop_1_1Snoop_1_1AppEntry.html#afc18a25ba37504ac2f17b72ad5b08563',1,'snoop::Snoop::AppEntry']]],
   ['app_5fversion',['app_version',['../classsnoop_1_1Snoop_1_1AppEntry.html#aa50d4dc55d41c29429d931c3dc9dd125',1,'snoop::Snoop::AppEntry']]],
-  ['arg',['arg',['../classdrop__keep__weight.html#aed93ec9166443b89cf6c1bdf05521c71',1,'drop_keep_weight']]],
-  ['argloc_5f2_5ftreeloc',['argloc_2_treeloc',['../classsym.html#a7f5cfe205a26cc13e15ac608627d74ce',1,'sym']]],
-  ['args',['args',['../classsubstitute.html#a5eff11b4a98fee2f377448ec81754d07',1,'substitute::args()'],['../classvary.html#a418215fccd6814821aa46fba256a09ef',1,'vary::args()']]],
+  ['arg',['arg',['../classcadabra_1_1drop__keep__weight.html#adc68ddc74bd124a07c2dbd65a49c2473',1,'cadabra::drop_keep_weight']]],
+  ['argloc_5f2_5ftreeloc',['argloc_2_treeloc',['../classcadabra_1_1sym.html#a253afebd68be3c9a7bbfefb8c4badf13',1,'cadabra::sym']]],
+  ['args',['args',['../classcadabra_1_1substitute.html#a8503deea7c9cd36d1fc2bb95cae7c55d',1,'cadabra::substitute::args()'],['../classcadabra_1_1vary.html#a9e469228af80a2737cd78a29d28bd36c',1,'cadabra::vary::args()']]],
   ['argumentexceptiontype',['ArgumentExceptionType',['../PythonCdb_8cc.html#a15be08e78140330ba2d8df78b4b035c2',1,'PythonCdb.cc']]],
-  ['asym_5franges',['asym_ranges',['../classdecompose__product.html#a4e8273015edabf7b98545678ac1f4823',1,'decompose_product::asym_ranges()'],['../classyoung__project.html#acf699297c3e873cb6569bc194418c70c',1,'young_project::asym_ranges()']]],
-  ['away_5ffrom',['away_from',['../classintegrate__by__parts.html#acb602facf434da8264144a4cd5afbd67',1,'integrate_by_parts']]]
+  ['asym_5franges',['asym_ranges',['../classcadabra_1_1decompose__product.html#aabd7726903de5128d1e8d76633bc275e',1,'cadabra::decompose_product::asym_ranges()'],['../classcadabra_1_1young__project.html#ad56acc6324c8b7d3f0c407af5909edac',1,'cadabra::young_project::asym_ranges()']]],
+  ['away_5ffrom',['away_from',['../classcadabra_1_1integrate__by__parts.html#a550443358ef8feb53b20a2878bfd78da',1,'cadabra::integrate_by_parts']]]
 ];

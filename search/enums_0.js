@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bracket_5ft',['bracket_t',['../classstr__node.html#a4745713526779b3cada029eeaed9049b',1,'str_node']]]
+  ['bracket_5ft',['bracket_t',['../classcadabra_1_1str__node.html#a268216f062b396f5b6476d01a005f98a',1,'cadabra::str_node']]]
 ];

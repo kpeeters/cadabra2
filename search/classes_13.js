@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['vary',['vary',['../classvary.html',1,'']]],
+  ['vary',['vary',['../classcadabra_1_1vary.html',1,'cadabra']]],
   ['visualcell',['VisualCell',['../classcadabra_1_1VisualCell.html',1,'cadabra']]]
 ];

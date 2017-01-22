@@ -96,25 +96,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classEx__comparator.html">Ex_comparator</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A generic tree comparison class which will take into account index contractions and will also keep track of a replacement list for all types of cadabra wildcards.  <a href="classEx__comparator.html#details">More...</a><br/></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html">cadabra::Ex_comparator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A generic tree comparison class which will take into account index contractions and will also keep track of a replacement list for all types of cadabra wildcards.  <a href="classcadabra_1_1Ex__comparator.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gae714e040d38aea557b18e18b7ed62609"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__compare.html#gae714e040d38aea557b18e18b7ed62609">subtree_compare</a> (const <a class="el" href="classProperties.html">Properties</a> *, Ex::iterator <a class="el" href="Storage_8hh.html#a471b56ecdfda729f02647aed609a3aa1">one</a>, Ex::iterator two, int mod_prel=-2, bool checksets=true, int compare_multiplier=-2, bool literal_wildcards=false)</td></tr>
-<tr class="memdesc:gae714e040d38aea557b18e18b7ed62609"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic building block subtree comparison function for tensors without dummy indices, which determines whether two tensor subtrees are equal up to the names of indices.  <a href="#gae714e040d38aea557b18e18b7ed62609">More...</a><br/></td></tr>
-<tr class="separator:gae714e040d38aea557b18e18b7ed62609"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2149f5e760a85127785ad64dabd4a5a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__compare.html#ga2149f5e760a85127785ad64dabd4a5a3">cadabra::subtree_compare</a> (const Properties *, Ex::iterator one, Ex::iterator two, int mod_prel=-2, bool checksets=true, int compare_multiplier=-2, bool literal_wildcards=false)</td></tr>
+<tr class="memdesc:ga2149f5e760a85127785ad64dabd4a5a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic building block subtree comparison function for tensors without dummy indices, which determines whether two tensor subtrees are equal up to the names of indices.  <a href="#ga2149f5e760a85127785ad64dabd4a5a3">More...</a><br/></td></tr>
+<tr class="separator:ga2149f5e760a85127785ad64dabd4a5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="gae714e040d38aea557b18e18b7ed62609"></a>
+<a class="anchor" id="ga2149f5e760a85127785ad64dabd4a5a3"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int subtree_compare </td>
+          <td class="memname">int cadabra::subtree_compare </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classProperties.html">Properties</a> *&#160;</td>
+          <td class="paramtype">const Properties *&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -163,7 +163,7 @@ Functions</h2></td></tr>
 
 <p>Basic building block subtree comparison function for tensors without dummy indices, which determines whether two tensor subtrees are equal up to the names of indices. </p>
 <p>This uses NO property information whatsoever; when indices are compared, they are simply compared based on their name, not on the index set they may belong to. In most cases, this is NOT what you want.</p>
-<p>In MOST cases, the use of <a class="el" href="classEx__comparator.html" title="A generic tree comparison class which will take into account index contractions and will also keep tr...">Ex_comparator</a> below is recommended instead, as it can do much more complicated matching and will also keep track of the relation between symbols in the pattern and symbols in the object to be matched.</p>
+<p>In MOST cases, the use of <a class="el" href="classcadabra_1_1Ex__comparator.html" title="A generic tree comparison class which will take into account index contractions and will also keep tr...">Ex_comparator</a> below is recommended instead, as it can do much more complicated matching and will also keep track of the relation between symbols in the pattern and symbols in the object to be matched.</p>
 <p>Examples: </p>
 <pre class="fragment">A_m                        equals  A_n                       up to index names
 \diff{A*B_g*\diff{C}_k}_m  equals  \diff{A*B_h*\diff{C}_r}_s up to index names
@@ -201,7 +201,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 9 2017 22:17:24 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 22 2017 11:31:10 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

@@ -106,27 +106,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// the integrand and the coordinate over which to integrate, optionally</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// with a range.</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classIntegral.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="classIntegral.html">Integral</a> : <span class="keyword">public</span> <a class="code" href="classproperty.html">property</a> {</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classIntegral.html">   10</a></span>&#160;<span class="keyword">class </span><a class="code" href="classIntegral.html">Integral</a> : <span class="keyword">public</span> property {</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="classIntegral.html#ad13ba93c3f4f4aea3e3957e303055199">   12</a></span>&#160;        <span class="keyword">virtual</span> <a class="code" href="classIntegral.html#ad13ba93c3f4f4aea3e3957e303055199">~Integral</a>() {};</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        </div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">virtual</span> std::string <a class="code" href="classIntegral.html#a7b9b7b3f27633559c260fc7290a56035">name</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span>        <a class="code" href="classIntegral.html#ac9528853b9e3ae02680a0d66261896b5">parse</a>(<span class="keyword">const</span> <a class="code" href="classProperties.html">Properties</a>&amp;, <a class="code" href="classkeyval__t.html">keyval_t</a>&amp; keyvals) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">bool</span>        <a class="code" href="classIntegral.html#ac9528853b9e3ae02680a0d66261896b5">parse</a>(<span class="keyword">const</span> Properties&amp;, keyval_t&amp; keyvals) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">virtual</span> <span class="keywordtype">void</span>        <a class="code" href="classIntegral.html#acaf2c98c9c3df69e8d3c0d353413f0d9">display</a>(std::ostream&amp;) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;};</div>
-<div class="ttc" id="classkeyval__t_html"><div class="ttname"><a href="classkeyval__t.html">keyval_t</a></div><div class="ttdoc">Arguments to properties get parsed into a keyval_t structure. </div><div class="ttdef"><b>Definition:</b> Props.hh:46</div></div>
 <div class="ttc" id="Props_8hh_html"><div class="ttname"><a href="Props_8hh.html">Props.hh</a></div></div>
-<div class="ttc" id="classProperties_html"><div class="ttname"><a href="classProperties.html">Properties</a></div><div class="ttdoc">Class holding a collection of properties attached to expressions. </div><div class="ttdef"><b>Definition:</b> Props.hh:193</div></div>
 <div class="ttc" id="classIntegral_html_acaf2c98c9c3df69e8d3c0d353413f0d9"><div class="ttname"><a href="classIntegral.html#acaf2c98c9c3df69e8d3c0d353413f0d9">Integral::display</a></div><div class="ttdeci">virtual void display(std::ostream &amp;) const </div></div>
 <div class="ttc" id="classIntegral_html_ad13ba93c3f4f4aea3e3957e303055199"><div class="ttname"><a href="classIntegral.html#ad13ba93c3f4f4aea3e3957e303055199">Integral::~Integral</a></div><div class="ttdeci">virtual ~Integral()</div><div class="ttdef"><b>Definition:</b> Integral.hh:12</div></div>
 <div class="ttc" id="classIntegral_html_a7b9b7b3f27633559c260fc7290a56035"><div class="ttname"><a href="classIntegral.html#a7b9b7b3f27633559c260fc7290a56035">Integral::name</a></div><div class="ttdeci">virtual std::string name() const </div></div>
 <div class="ttc" id="classIntegral_html_ac9528853b9e3ae02680a0d66261896b5"><div class="ttname"><a href="classIntegral.html#ac9528853b9e3ae02680a0d66261896b5">Integral::parse</a></div><div class="ttdeci">virtual bool parse(const Properties &amp;, keyval_t &amp;keyvals) override</div></div>
-<div class="ttc" id="classproperty_html"><div class="ttname"><a href="classproperty.html">property</a></div><div class="ttdoc">Base class for all properties, handling argument parsing and defining the interface. </div><div class="ttdef"><b>Definition:</b> Props.hh:105</div></div>
 <div class="ttc" id="classIntegral_html"><div class="ttname"><a href="classIntegral.html">Integral</a></div><div class="ttdef"><b>Definition:</b> Integral.hh:10</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 9 2017 22:17:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 22 2017 11:31:09 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

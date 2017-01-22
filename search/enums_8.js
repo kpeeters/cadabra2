@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['useprops_5ft',['useprops_t',['../classEx__comparator.html#af200349f8c0861e65a9b32de88aa7b37',1,'Ex_comparator']]]
+  ['useprops_5ft',['useprops_t',['../classcadabra_1_1Ex__comparator.html#a6b431741f3cdbc868f68f199258ea70b',1,'cadabra::Ex_comparator']]]
 ];

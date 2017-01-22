@@ -10,6 +10,8 @@ var searchData=
   ['tableausymmetry_2ehh',['TableauSymmetry.hh',['../TableauSymmetry_8hh.html',1,'']]],
   ['take_5fmatch_2ecc',['take_match.cc',['../take__match_8cc.html',1,'']]],
   ['take_5fmatch_2ehh',['take_match.hh',['../take__match_8hh.html',1,'']]],
+  ['terminalstream_2ecc',['TerminalStream.cc',['../TerminalStream_8cc.html',1,'']]],
+  ['terminalstream_2ehh',['TerminalStream.hh',['../TerminalStream_8hh.html',1,'']]],
   ['test_5fclient_2ecc',['test_client.cc',['../test__client_8cc.html',1,'']]],
   ['test_5fpermutations_2ecc',['test_permutations.cc',['../test__permutations_8cc.html',1,'']]],
   ['test_5fpreprocessor_2ecc',['test_preprocessor.cc',['../test__preprocessor_8cc.html',1,'']]],

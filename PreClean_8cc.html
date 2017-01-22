@@ -94,6 +94,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">PreClean.cc File Reference</div>  </div>
@@ -102,222 +103,35 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><code>#include &quot;<a class="el" href="PreClean_8hh_source.html">PreClean.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Cleanup_8hh_source.html">Cleanup.hh</a>&quot;</code><br/>
 </div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespacecadabra"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html">cadabra</a></td></tr>
+<tr class="memdesc:namespacecadabra"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to display expressions in a format that Sympy can parse. <br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:gaff2a0c5f8749e25b136df72748e13363"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#gaff2a0c5f8749e25b136df72748e13363">pre_clean_dispatch</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;kernel, <a class="el" href="classEx.html">Ex</a> &amp;ex, Ex::iterator &amp;it)</td></tr>
-<tr class="memdesc:gaff2a0c5f8749e25b136df72748e13363"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions.  <a href="group__core.html#gaff2a0c5f8749e25b136df72748e13363">More...</a><br/></td></tr>
-<tr class="separator:gaff2a0c5f8749e25b136df72748e13363"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4ce521aadcd3ceec97db8e8f960fccd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#ae4ce521aadcd3ceec97db8e8f960fccd">pre_clean_dispatch_deep</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr)</td></tr>
-<tr class="separator:ae4ce521aadcd3ceec97db8e8f960fccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae163ccace7cd75f12a46285084a50330"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#ae163ccace7cd75f12a46285084a50330">cleanup_updown</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;st)</td></tr>
-<tr class="memdesc:ae163ccace7cd75f12a46285084a50330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup for individual node types.  <a href="#ae163ccace7cd75f12a46285084a50330">More...</a><br/></td></tr>
-<tr class="separator:ae163ccace7cd75f12a46285084a50330"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a152bc7cf87ad120c827faf6fb12ca5cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#a152bc7cf87ad120c827faf6fb12ca5cc">cleanup_rational</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;st)</td></tr>
-<tr class="separator:a152bc7cf87ad120c827faf6fb12ca5cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab03b0c5a94bd1dcf853c287abfefc011"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#ab03b0c5a94bd1dcf853c287abfefc011">cleanup_frac</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;st)</td></tr>
-<tr class="separator:ab03b0c5a94bd1dcf853c287abfefc011"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea5af570ba36de63ca3affb45876fb4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#aea5af570ba36de63ca3affb45876fb4e">cleanup_sub</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="separator:aea5af570ba36de63ca3affb45876fb4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ee060b28f571f0c17b81a1d5930658c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PreClean_8cc.html#a7ee060b28f571f0c17b81a1d5930658c">cleanup_indexbracket</a> (const <a class="el" href="classKernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
-<tr class="memdesc:a7ee060b28f571f0c17b81a1d5930658c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert parser output which indicates an indexbracket to an actual indexbracket node.  <a href="#a7ee060b28f571f0c17b81a1d5930658c">More...</a><br/></td></tr>
-<tr class="separator:a7ee060b28f571f0c17b81a1d5930658c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc672b9718fce3d851a54bcb56b3fa05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#abc672b9718fce3d851a54bcb56b3fa05">cadabra::pre_clean_dispatch</a> (const Kernel &amp;kernel, Ex &amp;ex, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:abc672b9718fce3d851a54bcb56b3fa05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a794a7078576b183fe39df8253ff9bd80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a794a7078576b183fe39df8253ff9bd80">cadabra::pre_clean_dispatch_deep</a> (const Kernel &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, Ex &amp;tr)</td></tr>
+<tr class="separator:a794a7078576b183fe39df8253ff9bd80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adea14e545029583364883ee37dcf8641"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#adea14e545029583364883ee37dcf8641">cadabra::cleanup_updown</a> (const Kernel &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, Ex &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:adea14e545029583364883ee37dcf8641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup for individual node types.  <a href="#adea14e545029583364883ee37dcf8641">More...</a><br/></td></tr>
+<tr class="separator:adea14e545029583364883ee37dcf8641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ba5f1430d3175548d280bf48bab5f87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a1ba5f1430d3175548d280bf48bab5f87">cadabra::cleanup_rational</a> (const Kernel &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, Ex &amp;tr, Ex::iterator &amp;st)</td></tr>
+<tr class="separator:a1ba5f1430d3175548d280bf48bab5f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7423d710efa4b2568f686a5a8d7715b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ad7423d710efa4b2568f686a5a8d7715b">cadabra::cleanup_frac</a> (const Kernel &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, Ex &amp;tr, Ex::iterator &amp;st)</td></tr>
+<tr class="separator:ad7423d710efa4b2568f686a5a8d7715b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a860df130ca5bd12ec901f9492aa93ed3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a860df130ca5bd12ec901f9492aa93ed3">cadabra::cleanup_sub</a> (const Kernel &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, Ex &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a860df130ca5bd12ec901f9492aa93ed3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02b255e25b4383bff38c48ffa346832f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a02b255e25b4383bff38c48ffa346832f">cadabra::cleanup_indexbracket</a> (const Kernel &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, Ex &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:a02b255e25b4383bff38c48ffa346832f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert parser output which indicates an indexbracket to an actual indexbracket node.  <a href="#a02b255e25b4383bff38c48ffa346832f">More...</a><br/></td></tr>
+<tr class="separator:a02b255e25b4383bff38c48ffa346832f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ab03b0c5a94bd1dcf853c287abfefc011"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cleanup_frac </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>tr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Ex::iterator &amp;&#160;</td>
-          <td class="paramname"><em>st</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7ee060b28f571f0c17b81a1d5930658c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cleanup_indexbracket </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Ex::iterator &amp;&#160;</td>
-          <td class="paramname"><em>it</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert parser output which indicates an indexbracket to an actual indexbracket node. </p>
-
-</div>
-</div>
-<a class="anchor" id="a152bc7cf87ad120c827faf6fb12ca5cc"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cleanup_rational </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>tr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Ex::iterator &amp;&#160;</td>
-          <td class="paramname"><em>st</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aea5af570ba36de63ca3affb45876fb4e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cleanup_sub </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>tr</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Ex::iterator &amp;&#160;</td>
-          <td class="paramname"><em>it</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae163ccace7cd75f12a46285084a50330"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void cleanup_updown </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Ex::iterator &amp;&#160;</td>
-          <td class="paramname"><em>it</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Cleanup for individual node types. </p>
-<p>These are not needed during any later stages of the manipulation of an expression (and are hence defined here, not in '<a class="el" href="Cleanup_8hh.html">Cleanup.hh</a>'). </p>
-
-</div>
-</div>
-<a class="anchor" id="ae4ce521aadcd3ceec97db8e8f960fccd"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void pre_clean_dispatch_deep </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classKernel.html">Kernel</a> &amp;&#160;</td>
-          <td class="paramname"><em>k</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>tr</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 9 2017 22:17:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 22 2017 11:31:10 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

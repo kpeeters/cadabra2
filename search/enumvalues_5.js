@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['fixed',['fixed',['../classIndices.html#a71b77c1b27423f9547a155c7e977e630afa06a6f947b8baa9786edf8659b1fe00',1,'Indices']]],
-  ['free',['free',['../classIndices.html#a71b77c1b27423f9547a155c7e977e630a2b0efe1a257d0170f014a23c0844fc4b',1,'Indices']]]
+  ['fixed',['fixed',['../classcadabra_1_1Indices.html#a2d52b26920bf0a8f516c008b06bd3257a681a17793d123ec9303b63a596705c1f',1,'cadabra::Indices']]],
+  ['free',['free',['../classcadabra_1_1Indices.html#a2d52b26920bf0a8f516c008b06bd3257af2d184d1b507dd5bccd6faa418d0acdd',1,'cadabra::Indices']]]
 ];

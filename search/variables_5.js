@@ -7,10 +7,10 @@ var searchData=
   ['end_5fwrap',['end_wrap',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a8d1eb051bd7f835636d5a5b8b433052b',1,'cadabra::TeXEngine::TeXRequest']]],
   ['engine',['engine',['../classcadabra_1_1NotebookWindow.html#a97bf0c613a7577307ee7dc9110041289',1,'cadabra::NotebookWindow::engine()'],['../classcadabra_1_1TeXView.html#a1252e0712500364f489b196ab608e4e6',1,'cadabra::TeXView::engine()']]],
   ['epsilon',['Epsilon',['../Symbols_8cc.html#ab9dc09a3a581e694c349538a321d6a43',1,'Epsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#aa5a114dec1675e43d6a7235d20402c40',1,'epsilon():&#160;Symbols.cc']]],
-  ['epsilons',['epsilons',['../classepsilon__to__delta.html#aaa0beba16d069990fdbe935bb8970d9c',1,'epsilon_to_delta']]],
+  ['epsilons',['epsilons',['../classcadabra_1_1epsilon__to__delta.html#ac141f844229c5c91ba0011d23b49e7bf',1,'cadabra::epsilon_to_delta']]],
   ['error',['error',['../classServer_1_1Block.html#ae59e1457b887dcdaacbac13d73974057',1,'Server::Block::error()'],['../namespacesnoop.html#afed6cad118b299290114f820ecf4e2e5',1,'snoop::error()']]],
   ['eta',['Eta',['../Symbols_8cc.html#ad52b4804814a7ba427094dd93a6f062e',1,'Eta():&#160;Symbols.cc'],['../Symbols_8cc.html#a86f17e01842c561ef2abe23cdd3ace88',1,'eta():&#160;Symbols.cc']]],
-  ['expand',['expand',['../classjoin__gamma.html#ae05a00a9cfdf4e8b3fb820e358265b5c',1,'join_gamma']]],
-  ['extra_5fbrackets_5ffor_5fsymbols',['extra_brackets_for_symbols',['../classDisplayTeX.html#a892ee92c9403f1f879dfbd9f69759a5e',1,'DisplayTeX']]],
-  ['extra_5fsign',['extra_sign',['../structexchange_1_1identical__tensors__t.html#ab16d5a2e206f04420d4c277b9e1bb6a3',1,'exchange::identical_tensors_t']]]
+  ['expand',['expand',['../classcadabra_1_1join__gamma.html#a200a70fd08b7c83718144d19eb867f79',1,'cadabra::join_gamma']]],
+  ['extra_5fbrackets_5ffor_5fsymbols',['extra_brackets_for_symbols',['../classcadabra_1_1DisplayTeX.html#a0ad607bf84299bbbacc1ea56ee010346',1,'cadabra::DisplayTeX']]],
+  ['extra_5fsign',['extra_sign',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a0c2da55db38ead57e4d001774eadf191',1,'cadabra::exchange::identical_tensors_t']]]
 ];

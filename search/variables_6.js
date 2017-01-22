@@ -1,20 +1,20 @@
 var searchData=
 [
-  ['f1',['f1',['../classdecompose__product.html#a729b25910a20039547476190c52b586c',1,'decompose_product']]],
-  ['f2',['f2',['../classdecompose__product.html#aa863f9c0bef238c555d01740380577ac',1,'decompose_product']]],
-  ['factnodes',['factnodes',['../classfactor__in.html#a22f48e56ac99769f39d26858a998497b',1,'factor_in']]],
-  ['factor_5fhash',['factor_hash',['../classcollect__factors.html#ac57f5c97116d161b2e850b1624aecdcc',1,'collect_factors']]],
-  ['factor_5flocations',['factor_locations',['../classEx__comparator.html#a9d64a3c64172d1fd4b5be018be831f4a',1,'Ex_comparator']]],
-  ['factor_5fmoving_5fsigns',['factor_moving_signs',['../classEx__comparator.html#a6d4d4060e2fbf68ae464c1eb8c4d10b8',1,'Ex_comparator']]],
-  ['factors',['factors',['../classfactor__in.html#a0865aea415631c2a716ffef35c30c31c',1,'factor_in']]],
+  ['f1',['f1',['../classcadabra_1_1decompose__product.html#abd36ac92f18296a7bd6eab12fd0050c8',1,'cadabra::decompose_product']]],
+  ['f2',['f2',['../classcadabra_1_1decompose__product.html#a702e6c1f8bd6a02b53aa7b8a791e0016',1,'cadabra::decompose_product']]],
+  ['factnodes',['factnodes',['../classcadabra_1_1factor__in.html#a5ceb2f67f3452772baf3d348427b0e9d',1,'cadabra::factor_in']]],
+  ['factor_5fhash',['factor_hash',['../classcadabra_1_1collect__factors.html#ae53d0826e03d763d84b9a8b34be126d7',1,'cadabra::collect_factors']]],
+  ['factor_5flocations',['factor_locations',['../classcadabra_1_1Ex__comparator.html#ac51dfbe2658dd4b71a294273cb0f8bef',1,'cadabra::Ex_comparator']]],
+  ['factor_5fmoving_5fsigns',['factor_moving_signs',['../classcadabra_1_1Ex__comparator.html#ad0496e7c3fcc616ad9a52bd2a4f55bf0',1,'cadabra::Ex_comparator']]],
+  ['factors',['factors',['../classcadabra_1_1factor__in.html#ad7cc7a8a45a45fa3f631e837f2d2edc2',1,'cadabra::factor_in']]],
   ['fatal',['fatal',['../namespacesnoop.html#a0eeed3f9a12ca61f3a4b753281eb7b80',1,'snoop']]],
   ['first_5fone',['first_one',['../classcombin_1_1symm__helper.html#a5ac6adfe04debc9a8c1ba1ddede6d388',1,'combin::symm_helper::first_one()'],['../classcombin_1_1symm__val__helper.html#aa2eb0a120cceae834bed7f69debded1e',1,'combin::symm_val_helper::first_one()']]],
-  ['fl',['fl',['../classstr__node.html#a63d968d06b027c1b62669fe6b8044110',1,'str_node']]],
+  ['fl',['fl',['../classcadabra_1_1str__node.html#ae040dd2c3b189a29578fb4e5f0eaebea',1,'cadabra::str_node']]],
   ['flush',['flush',['../namespacesnoop.html#a9126e00546e669d5e981ca1fa533d368',1,'snoop']]],
   ['font_5fsize_5f',['font_size_',['../classcadabra_1_1TeXEngine.html#ac7e649e119f3c11e08ff711769b69dfa',1,'cadabra::TeXEngine']]],
   ['font_5fstep',['font_step',['../classcadabra_1_1NotebookWindow_1_1Prefs.html#ae922dc8f2dfaf1f22f022da4cb35d948',1,'cadabra::NotebookWindow::Prefs']]],
-  ['for_5fobj',['for_obj',['../classProperty.html#a00653805de818edd68375272565df370',1,'Property']]],
-  ['from',['from',['../classInteger.html#ac024d3c9deed0c75a9a13f03357c7e5f',1,'Integer']]],
+  ['for_5fobj',['for_obj',['../classProperty.html#a94c26b4da57ca3e79d24370efb0c5f65',1,'Property']]],
+  ['from',['from',['../classcadabra_1_1Integer.html#a82288c23b1f9dd0f46da2bd5504ded1a',1,'cadabra::Integer']]],
   ['from_5fpos',['from_pos',['../classcadabra_1_1ActionEraseText.html#a2e2b8f9805be0d921391c80391f4cd98',1,'cadabra::ActionEraseText']]],
-  ['full_5fclass',['full_class',['../classsplit__index.html#a8b3214b4afe5274326d524dff3ade0ad',1,'split_index']]]
+  ['full_5fclass',['full_class',['../classcadabra_1_1split__index.html#a785accdc9afc528c689648d5cd7a77f3',1,'cadabra::split_index']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['factor_5fhash_5fiterator_5ft',['factor_hash_iterator_t',['../classcollect__factors.html#af60f5eda7653f8506f45a17e08ecc385',1,'collect_factors']]],
-  ['factor_5fhash_5ft',['factor_hash_t',['../classcollect__factors.html#a2f55cfcf544fbebc48e43f075950b70e',1,'collect_factors']]]
+  ['factor_5fhash_5fiterator_5ft',['factor_hash_iterator_t',['../classcadabra_1_1collect__factors.html#a5f6c80daf224d26b6faf47b116792a6f',1,'cadabra::collect_factors']]],
+  ['factor_5fhash_5ft',['factor_hash_t',['../classcadabra_1_1collect__factors.html#a91b2082a24b6a8e967e4a0f623f23ed6',1,'cadabra::collect_factors']]]
 ];

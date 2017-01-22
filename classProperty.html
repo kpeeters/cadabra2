@@ -105,7 +105,7 @@ class Property&lt; T &gt;</h3>
 
 <p><a class="el" href="classProperty.html" title="Property is a templated wrapper around a C++ property object. ">Property</a> is a templated wrapper around a C++ property object. </p>
 <p>It provides it with _latex, <b>str</b> and <b>repr</b> methods. In order to have a quick way to figure out in Python whether an object is a property, we derive it from <a class="el" href="classBaseProperty.html" title="Helper class to ensure that all Python property objects derive from the same base class...">BaseProperty</a>, which is an empty placeholder (in Python <a class="el" href="classBaseProperty.html" title="Helper class to ensure that all Python property objects derive from the same base class...">BaseProperty</a> is called <a class="el" href="classProperty.html" title="Property is a templated wrapper around a C++ property object. ">Property</a>).</p>
-<p><a class="el" href="classProperties.html" title="Class holding a collection of properties attached to expressions. ">Properties</a> can have arguments. These are not parsed by Python, but rather by the C++ side. There is a number of reasons for doing things this way. The most important of them is that this makes it a lot easier for <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> to provide useful feedback on parameters which are not valid. So all properties get initialised with two <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> <a class="el" href="classEx.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> objects: the 1st is the pattern to which the property should be attached, the 2nd is the argument of the property, interpreted as a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> expression.</p>
+<p>Properties can have arguments. These are not parsed by Python, but rather by the C++ side. There is a number of reasons for doing things this way. The most important of them is that this makes it a lot easier for <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> to provide useful feedback on parameters which are not valid. So all properties get initialised with two <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> Ex objects: the 1st is the pattern to which the property should be attached, the 2nd is the argument of the property, interpreted as a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> expression.</p>
 <p><a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> properties cannot be proper Python properties, because we need to give the latter names in order to prevent them from going out of scope. So <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> keeps a list of 'anonymous property objects in the current scope'.</p>
 <p>The question is now what we do when Python keeps a pointer to these objects, and let that pointer escape local scope (e.g. by returning the Python property object). How do we keep it in scope? </p>
 </div>
@@ -122,8 +122,8 @@ Inheritance diagram for Property&lt; T &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af822cb8ba299ecb735bf508d8cd835e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProperty.html#af822cb8ba299ecb735bf508d8cd835e8">Property</a> (std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt; obj, std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt; params=0)</td></tr>
-<tr class="separator:af822cb8ba299ecb735bf508d8cd835e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a320bea854837c8b82cb2240c7a578ec4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProperty.html#a320bea854837c8b82cb2240c7a578ec4">Property</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt; obj, std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt; params=0)</td></tr>
+<tr class="separator:a320bea854837c8b82cb2240c7a578ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ef694ed4fda65a29f8bb31e20b563d1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProperty.html#a4ef694ed4fda65a29f8bb31e20b563d1">str_</a> () const </td></tr>
 <tr class="memdesc:a4ef694ed4fda65a29f8bb31e20b563d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Human-readable form in text, i.e. no special formatting.  <a href="#a4ef694ed4fda65a29f8bb31e20b563d1">More...</a><br/></td></tr>
 <tr class="separator:a4ef694ed4fda65a29f8bb31e20b563d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -141,11 +141,11 @@ Public Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:adab385f82c314bb9dc0adef9caba02fe"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProperty.html#adab385f82c314bb9dc0adef9caba02fe">prop</a></td></tr>
 <tr class="separator:adab385f82c314bb9dc0adef9caba02fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00653805de818edd68375272565df370"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProperty.html#a00653805de818edd68375272565df370">for_obj</a></td></tr>
-<tr class="separator:a00653805de818edd68375272565df370"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94c26b4da57ca3e79d24370efb0c5f65"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProperty.html#a94c26b4da57ca3e79d24370efb0c5f65">for_obj</a></td></tr>
+<tr class="separator:a94c26b4da57ca3e79d24370efb0c5f65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af822cb8ba299ecb735bf508d8cd835e8"></a>
+<a class="anchor" id="a320bea854837c8b82cb2240c7a578ec4"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -154,13 +154,13 @@ template&lt;class Prop &gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classProperty.html">Property</a>&lt; Prop &gt;::<a class="el" href="classProperty.html">Property</a> </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;&#160;</td>
           <td class="paramname"><em>obj</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classEx.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;&#160;</td>
           <td class="paramname"><em>params</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
@@ -200,7 +200,7 @@ template&lt;class Prop &gt; </div>
 template&lt;&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::string <a class="el" href="classProperty.html">Property</a>&lt; <a class="el" href="classLaTeXForm.html">LaTeXForm</a> &gt;::latex_ </td>
+          <td class="memname">std::string <a class="el" href="classProperty.html">Property</a>&lt; <a class="el" href="classcadabra_1_1LaTeXForm.html">LaTeXForm</a> &gt;::latex_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -249,7 +249,7 @@ template&lt;class Prop &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a00653805de818edd68375272565df370"></a>
+<a class="anchor" id="a94c26b4da57ca3e79d24370efb0c5f65"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -259,7 +259,7 @@ template&lt;class T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classEx.html">Ex</a>&gt; <a class="el" href="classProperty.html">Property</a>&lt; T &gt;::for_obj</td>
+          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&gt; <a class="el" href="classProperty.html">Property</a>&lt; T &gt;::for_obj</td>
         </tr>
       </table>
   </td>
@@ -300,7 +300,7 @@ template&lt;class T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 9 2017 22:17:36 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 22 2017 11:31:12 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

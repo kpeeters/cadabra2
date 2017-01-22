@@ -93,11 +93,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#namespaces">Namespaces</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">cadabra Namespace Reference</div>  </div>
+<div class="title">cadabra Namespace Reference<div class="ingroups"><a class="el" href="group__display.html">Cleanup</a> &#124; <a class="el" href="group__core.html">Core</a> &#124; <a class="el" href="group__algorithms.html">Algorithms</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class to display expressions in a format that Sympy can parse.  
+<a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
@@ -106,6 +110,311 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Algorithm.html">Algorithm</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all algorithms, containing generic routines and in particular the logic for index classification.  <a href="classcadabra_1_1Algorithm.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__less__obj.html">tree_less_obj</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two trees by pattern logic, i.e. modulo index names.  <a href="classcadabra_1_1tree__less__obj.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__less__modprel__obj.html">tree_less_modprel_obj</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__equal__obj.html">tree_equal_obj</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__exact__less__obj.html">tree_exact_less_obj</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two trees exactly, i.e. including exact index names.  <a href="classcadabra_1_1tree__exact__less__obj.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__exact__less__mod__prel__obj.html">tree_exact_less_mod_prel_obj</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__exact__equal__obj.html">tree_exact_equal_obj</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__exact__equal__mod__prel__obj.html">tree_exact_equal_mod_prel_obj</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__exact__less__for__indexmap__obj.html">tree_exact_less_for_indexmap_obj</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare for indexmap_t.  <a href="classcadabra_1_1tree__exact__less__for__indexmap__obj.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__exact__less__no__wildcards__obj.html">tree_exact_less_no_wildcards_obj</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two trees exactly, treat wildcard names as ordinary names.  <a href="classcadabra_1_1tree__exact__less__no__wildcards__obj.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tree__exact__less__no__wildcards__mod__prel__obj.html">tree_exact_less_no_wildcards_mod_prel_obj</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html">Ex_comparator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A generic tree comparison class which will take into account index contractions and will also keep track of a replacement list for all types of cadabra wildcards.  <a href="classcadabra_1_1Ex__comparator.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__is__equivalent.html">Ex_is_equivalent</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic comparison operator for tree iterators, so we can use them as keys in maps.  <a href="classcadabra_1_1Ex__is__equivalent.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__is__less.html">Ex_is_less</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayBase.html">DisplayBase</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all display classes.  <a href="classcadabra_1_1DisplayBase.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplaySympy.html">DisplaySympy</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayTerminal.html">DisplayTerminal</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayTeX.html">DisplayTeX</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1exchange.html">exchange</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1index__iterator.html">index_iterator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An iterator which iterates over indices even if they are at lower levels, i.e.  <a href="classcadabra_1_1index__iterator.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Kernel.html">Kernel</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Parser.html">Parser</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1pattern.html">pattern</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1keyval__t.html">keyval_t</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments to properties get parsed into a <a class="el" href="classcadabra_1_1keyval__t.html" title="Arguments to properties get parsed into a keyval_t structure. ">keyval_t</a> structure.  <a href="classcadabra_1_1keyval__t.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html">property</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all properties, handling argument parsing and defining the interface.  <a href="classcadabra_1_1property.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1labelled__property.html">labelled_property</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1list__property.html">list_property</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Something cannot be both a list property and a normal property at the same time, so we can safely inherit without virtual.  <a href="classcadabra_1_1list__property.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Inherit.html">Inherit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">If a property <a class="el" href="structX.html" title="Mockup types. ">X</a> derives from Inherit&lt;Y&gt;, and get&lt;Y&gt; is called on an object which has an <a class="el" href="structX.html" title="Mockup types. ">X</a> property (but no <a class="el" href="structY.html">Y</a> property), then the get&lt;Y&gt; will look at the non-index child of the object to see if that has a <a class="el" href="structY.html">Y</a> property.  <a href="classcadabra_1_1Inherit.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1PropertyInherit.html">PropertyInherit</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcadabra_1_1PropertyInherit.html" title="PropertyInherit is like Inherit&lt;T&gt; for all properties. ">PropertyInherit</a> is like Inherit&lt;T&gt; for all properties.  <a href="classcadabra_1_1PropertyInherit.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Properties.html">Properties</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class holding a collection of properties attached to expressions.  <a href="classcadabra_1_1Properties.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1str__node.html">str_node</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Elementary building block for a mathematical expression.  <a href="classcadabra_1_1str__node.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex.html">Ex</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic storage class for symbolic mathemematical expressions.  <a href="classcadabra_1_1Ex.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1nset__it__less.html">nset_it_less</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compare two nset iterators by comparing the strings to which they point.  <a href="classcadabra_1_1nset__it__less.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TerminalStream.html">TerminalStream</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1canonicalise.html">canonicalise</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Canonicalise the index structure of a tensorial expression.  <a href="classcadabra_1_1canonicalise.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1collect__components.html">collect_components</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect  terms inside a sum, merging their substitution rules.  <a href="classcadabra_1_1collect__components.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1collect__factors.html">collect_factors</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect symbolically equal factors in a product.  <a href="classcadabra_1_1collect__factors.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1collect__terms.html">collect_terms</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect symbolically equal terms in a sum.  <a href="classcadabra_1_1collect__terms.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1combine.html">combine</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1complete.html">complete</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Complete a set of coordinate rules so that they also cover related tensors.  <a href="classcadabra_1_1complete.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1decompose__product.html">decompose_product</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decompose a product of tensors by applying Young projectors.  <a href="classcadabra_1_1decompose__product.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1distribute.html">distribute</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distribute factors over a sum, that is, \( (A+B) C \rightarrow A C + B C \).  <a href="classcadabra_1_1distribute.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1drop__keep__weight.html">drop_keep_weight</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1drop__weight.html">drop_weight</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1keep__weight.html">keep_weight</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1einsteinify.html">einsteinify</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1eliminate__kronecker.html">eliminate_kronecker</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1eliminate__converter.html">eliminate_converter</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1eliminate__metric.html">eliminate_metric</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1epsilon__to__delta.html">epsilon_to_delta</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html">evaluate</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1expand.html">expand</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1expand__delta.html">expand_delta</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1expand__diracbar.html">expand_diracbar</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1expand__power.html">expand_power</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1factor__in.html">factor_in</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1factor__out.html">factor_out</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1fierz.html">fierz</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1flatten__product.html">flatten_product</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1flatten__sum.html">flatten_sum</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1indexsort.html">indexsort</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1integrate__by__parts.html">integrate_by_parts</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integrate by parts away from the indicated derivative object.  <a href="classcadabra_1_1integrate__by__parts.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1join__gamma.html">join_gamma</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1keep__terms.html">keep_terms</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1lr__tensor.html">lr_tensor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1order.html">order</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1product__rule.html">product_rule</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1reduce__delta.html">reduce_delta</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1rename__dummies.html">rename_dummies</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1replace__match.html">replace_match</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1rewrite__indices.html">rewrite_indices</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1sort__product.html">sort_product</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1sort__sum.html">sort_sum</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1split__gamma.html">split_gamma</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1split__index.html">split_index</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1substitute.html">substitute</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic substitution algorithm.  <a href="classcadabra_1_1substitute.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1sym.html">sym</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1tab__basics.html">tab_basics</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1take__match.html">take_match</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1unwrap.html">unwrap</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1vary.html">vary</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic variational derivative algorithm.  <a href="classcadabra_1_1vary.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1young__project.html">young_project</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1young__project__product.html">young_project_product</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1young__project__tensor.html">young_project_tensor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Accent.html">Accent</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Turns a symbol into an accent.  <a href="classcadabra_1_1Accent.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1AntiCommuting.html">AntiCommuting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1AntiSymmetric.html">AntiSymmetric</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Commuting.html">Commuting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CommutingAsProduct.html">CommutingAsProduct</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CommutingAsSum.html">CommutingAsSum</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1CommutingBehaviour.html">CommutingBehaviour</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Coordinate.html">Coordinate</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DAntiSymmetric.html">DAntiSymmetric</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Depends.html">Depends</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DependsBase.html">DependsBase</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DependsInherit.html">DependsInherit</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Derivative.html">Derivative</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Diagonal.html">Diagonal</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DifferentialForm.html">DifferentialForm</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DifferentialFormBase.html">DifferentialFormBase</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DiracBar.html">DiracBar</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Distributable.html">Distributable</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1EpsilonTensor.html">EpsilonTensor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ExteriorDerivative.html">ExteriorDerivative</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1FilledTableau.html">FilledTableau</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1GammaMatrix.html">GammaMatrix</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1GammaTraceless.html">GammaTraceless</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ImplicitIndex.html">ImplicitIndex</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1IndexInherit.html">IndexInherit</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Indices.html">Indices</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Integer.html">Integer</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classProperty.html" title="Property is a templated wrapper around a C++ property object. ">Property</a> indicating that a symbolic object always takes integer values.  <a href="classcadabra_1_1Integer.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1InverseMetric.html">InverseMetric</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1KroneckerDelta.html">KroneckerDelta</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1LaTeXForm.html">LaTeXForm</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Matrix.html">Matrix</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Metric.html">Metric</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NonCommuting.html">NonCommuting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NumericalFlat.html">NumericalFlat</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classProperty.html" title="Property is a templated wrapper around a C++ property object. ">Property</a> indicating that an operator is numerically flat, so that numerical factors in the argument can be taken outside.  <a href="classcadabra_1_1NumericalFlat.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1PartialDerivative.html">PartialDerivative</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1RiemannTensor.html">RiemannTensor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1SatisfiesBianchi.html">SatisfiesBianchi</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1SelfAntiCommuting.html">SelfAntiCommuting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1SelfCommuting.html">SelfCommuting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1SelfCommutingBehaviour.html">SelfCommutingBehaviour</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1SelfNonCommuting.html">SelfNonCommuting</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1SortOrder.html">SortOrder</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Spinor.html">Spinor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Symbol.html">Symbol</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Symmetric.html">Symmetric</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Tableau.html">Tableau</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TableauBase.html">TableauBase</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1TableauSymmetry.html">TableauSymmetry</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Traceless.html">Traceless</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Weight.html">Weight</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1WeightBase.html">WeightBase</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1WeightInherit.html">WeightInherit</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1WeylTensor.html">WeylTensor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionBase.html">ActionBase</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">All actions derive from the <a class="el" href="classcadabra_1_1ActionBase.html" title="All actions derive from the ActionBase object, which defines the interface they need to implement...">ActionBase</a> object, which defines the interface they need to implement.  <a href="classcadabra_1_1ActionBase.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,26 +474,128 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a01b80749ddd083fbce68d68f2f2a8d2a"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a01b80749ddd083fbce68d68f2f2a8d2a">dispatcher_t</a> )(const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a01b80749ddd083fbce68d68f2f2a8d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5b4f3cbcbe2f37602e15bd629b6c921"><td class="memItemLeft" align="right" valign="top">typedef mpq_class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a></td></tr>
+<tr class="separator:ae5b4f3cbcbe2f37602e15bd629b6c921"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbdf1b091485694a30a09e9262634ffa"><td class="memItemLeft" align="right" valign="top">typedef std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#abbdf1b091485694a30a09e9262634ffa">nset_t</a></td></tr>
+<tr class="separator:abbdf1b091485694a30a09e9262634ffa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2355a5becc23a99d052286ab7f010ee5"><td class="memItemLeft" align="right" valign="top">typedef std::set&lt; <a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a2355a5becc23a99d052286ab7f010ee5">rset_t</a></td></tr>
+<tr class="separator:a2355a5becc23a99d052286ab7f010ee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a772a1f0d03e1047dbc570e9b2b7f5366"><td class="memItemLeft" align="right" valign="top">typedef uintptr_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a772a1f0d03e1047dbc570e9b2b7f5366">hashval_t</a></td></tr>
+<tr class="separator:a772a1f0d03e1047dbc570e9b2b7f5366"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ebe95cddc83ab28291353b704a5ed0b"><td class="memItemLeft" align="right" valign="top">typedef tree&lt; <a class="el" href="classcadabra_1_1DataCell.html">DataCell</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a></td></tr>
 <tr class="separator:a2ebe95cddc83ab28291353b704a5ed0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">do_list</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; bool(Ex::iterator)&gt; f)</td></tr>
+<tr class="memitem:aab585ad00ba79405717929a3a3963cfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#aab585ad00ba79405717929a3a3963cfd">cleanup_dispatch</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:aab585ad00ba79405717929a3a3963cfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Central cleanup dispatch routine, which calls the other cleanup functions defined later.  <a href="#aab585ad00ba79405717929a3a3963cfd">More...</a><br/></td></tr>
+<tr class="separator:aab585ad00ba79405717929a3a3963cfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6ab0a604d946c17913abc631dd577e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ac6ab0a604d946c17913abc631dd577e8">check_index_consistency</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
+<tr class="memdesc:ac6ab0a604d946c17913abc631dd577e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic tool to check for index inconsistencies independent of running any algorithm.  <a href="#ac6ab0a604d946c17913abc631dd577e8">More...</a><br/></td></tr>
+<tr class="separator:ac6ab0a604d946c17913abc631dd577e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13492c7357906533c7be9761e1b0e3ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a13492c7357906533c7be9761e1b0e3ee">cleanup_productlike</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:a13492c7357906533c7be9761e1b0e3ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Individual node cleanup routines.  <a href="#a13492c7357906533c7be9761e1b0e3ee">More...</a><br/></td></tr>
+<tr class="separator:a13492c7357906533c7be9761e1b0e3ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2128a5981cecfe60e429d54b1c8822d9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a2128a5981cecfe60e429d54b1c8822d9">cleanup_sumlike</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a2128a5981cecfe60e429d54b1c8822d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55a6d58d1b9d54c38a104deafe54d6f7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a55a6d58d1b9d54c38a104deafe54d6f7">push_down_multiplier</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
+<tr class="memdesc:a55a6d58d1b9d54c38a104deafe54d6f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a node with a non-unit multiplier, push this multiplier down the tree if the node is not allowed to have a non-unit multiplier.  <a href="#a55a6d58d1b9d54c38a104deafe54d6f7">More...</a><br/></td></tr>
+<tr class="separator:a55a6d58d1b9d54c38a104deafe54d6f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f9d57c3cb1e38cf64f40423dcad34ec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a2f9d57c3cb1e38cf64f40423dcad34ec">cleanup_components</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a2f9d57c3cb1e38cf64f40423dcad34ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab83b457c68dbff9f10cb2bfb8b6d0798"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ab83b457c68dbff9f10cb2bfb8b6d0798">cleanup_partialderivative</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:ab83b457c68dbff9f10cb2bfb8b6d0798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a430b9a76757ee863b0f10d7c1d5d8483"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a430b9a76757ee863b0f10d7c1d5d8483">cleanup_derivative</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a430b9a76757ee863b0f10d7c1d5d8483"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99ba90e35f1fddb616016016cfb039b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a99ba90e35f1fddb616016016cfb039b1">cleanup_numericalflat</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a99ba90e35f1fddb616016016cfb039b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42f88d57780321b8d61201a401ad3426"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a42f88d57780321b8d61201a401ad3426">cleanup_diagonal</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a42f88d57780321b8d61201a401ad3426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a427a179023cc97c2047eb1723ddbd42b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a427a179023cc97c2047eb1723ddbd42b">cleanup_kronecker</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a427a179023cc97c2047eb1723ddbd42b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c6f432d41369035a85614df226d371c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a2c6f432d41369035a85614df226d371c">cleanup_exterior_derivative</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a2c6f432d41369035a85614df226d371c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a234837b85622d61be9ab36451beef8d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a234837b85622d61be9ab36451beef8d6">cleanup_dispatch_deep</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, <a class="el" href="namespacecadabra.html#a01b80749ddd083fbce68d68f2f2a8d2a">dispatcher_t</a> disp=&amp;<a class="el" href="namespacecadabra.html#aab585ad00ba79405717929a3a3963cfd">cleanup_dispatch</a>)</td></tr>
+<tr class="memdesc:a234837b85622d61be9ab36451beef8d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">More general cleanup of an entire tree.  <a href="#a234837b85622d61be9ab36451beef8d6">More...</a><br/></td></tr>
+<tr class="separator:a234837b85622d61be9ab36451beef8d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2149f5e760a85127785ad64dabd4a5a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__compare.html#ga2149f5e760a85127785ad64dabd4a5a3">subtree_compare</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *, Ex::iterator <a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, Ex::iterator two, int mod_prel=-2, bool checksets=true, int compare_multiplier=-2, bool literal_wildcards=false)</td></tr>
+<tr class="memdesc:ga2149f5e760a85127785ad64dabd4a5a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic building block subtree comparison function for tensors without dummy indices, which determines whether two tensor subtrees are equal up to the names of indices.  <a href="group__compare.html#ga2149f5e760a85127785ad64dabd4a5a3">More...</a><br/></td></tr>
+<tr class="separator:ga2149f5e760a85127785ad64dabd4a5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf8d1e7ecfcfc8ea9ea3fb525b90193"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#accf8d1e7ecfcfc8ea9ea3fb525b90193">tree_less</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;<a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;two, int mod_prel=-2, bool checksets=true, int compare_multiplier=-2)</td></tr>
+<tr class="memdesc:accf8d1e7ecfcfc8ea9ea3fb525b90193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Various comparison functions, some exact, some with pattern logic.  <a href="#accf8d1e7ecfcfc8ea9ea3fb525b90193">More...</a><br/></td></tr>
+<tr class="separator:accf8d1e7ecfcfc8ea9ea3fb525b90193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85c2a10c9c2abf0a9eb6ffa107c594ae"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a85c2a10c9c2abf0a9eb6ffa107c594ae">tree_equal</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;<a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;two, int mod_prel, bool checksets, int compare_multiplier)</td></tr>
+<tr class="separator:a85c2a10c9c2abf0a9eb6ffa107c594ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd78be5db03d9a450b08cc593d68fc92"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#afd78be5db03d9a450b08cc593d68fc92">tree_exact_less</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;<a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)</td></tr>
+<tr class="separator:afd78be5db03d9a450b08cc593d68fc92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a733646d45bc966a16fa15058aa6d4131"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a733646d45bc966a16fa15058aa6d4131">tree_exact_equal</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;<a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)</td></tr>
+<tr class="separator:a733646d45bc966a16fa15058aa6d4131"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae22d3eae3fb7692101ca8ef2e6b93cb7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ae22d3eae3fb7692101ca8ef2e6b93cb7">subtree_less</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, Ex::iterator <a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier)</td></tr>
+<tr class="separator:ae22d3eae3fb7692101ca8ef2e6b93cb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5c7cd70fded2c78d5655082f0c8c5db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ad5c7cd70fded2c78d5655082f0c8c5db">subtree_equal</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, Ex::iterator <a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier)</td></tr>
+<tr class="separator:ad5c7cd70fded2c78d5655082f0c8c5db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea64eaef5b558ac08afe8245b4e70469"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#aea64eaef5b558ac08afe8245b4e70469">subtree_exact_less</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, Ex::iterator <a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)</td></tr>
+<tr class="separator:aea64eaef5b558ac08afe8245b4e70469"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33c6dea9f93fcf4b738dc04f8ecd4d74"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a33c6dea9f93fcf4b738dc04f8ecd4d74">subtree_exact_equal</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, Ex::iterator <a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)</td></tr>
+<tr class="separator:a33c6dea9f93fcf4b738dc04f8ecd4d74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cf50024f3044df922f1839e0140f21e"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a4cf50024f3044df922f1839e0140f21e">unichar</a> (<a class="el" href="DisplaySympy_8hh.html#a0da26994377a47c9c53069f9dfb9e670">kunichar</a> c)</td></tr>
+<tr class="separator:a4cf50024f3044df922f1839e0140f21e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af388a48091c5194e6732b924615cc336"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#af388a48091c5194e6732b924615cc336">operator&lt;</a> (const <a class="el" href="structcadabra_1_1exchange_1_1tensor__type__t.html">exchange::tensor_type_t</a> &amp;<a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, const <a class="el" href="structcadabra_1_1exchange_1_1tensor__type__t.html">exchange::tensor_type_t</a> &amp;two)</td></tr>
+<tr class="separator:af388a48091c5194e6732b924615cc336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">do_list</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; bool(Ex::iterator)&gt; f)</td></tr>
 <tr class="memdesc:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function on every element of a list, or if the iterator 'it' does not point to a list, only on that single element.  <a href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">More...</a><br/></td></tr>
 <tr class="separator:ga5c0d915d27dbcdf1aa070153a3e608b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d2ff3550d3c5f407f9e365719030cef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef">list_size</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
+<tr class="memitem:a1d2ff3550d3c5f407f9e365719030cef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef">list_size</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator it)</td></tr>
 <tr class="memdesc:a1d2ff3550d3c5f407f9e365719030cef"><td class="mdescLeft">&#160;</td><td class="mdescRight">For lists as defined above for 'do_list', return their size (in case you really need to know the size before iterating over the elements).  <a href="#a1d2ff3550d3c5f407f9e365719030cef">More...</a><br/></td></tr>
 <tr class="separator:a1d2ff3550d3c5f407f9e365719030cef"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">do_subtree</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
+<tr class="memitem:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">do_subtree</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
 <tr class="memdesc:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a function on every node in the tree at and below the given node, depth-first.  <a href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">More...</a><br/></td></tr>
 <tr class="separator:ga44043f2e9b54d9d04d5df7aed63c59d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga3a2ae6b908d34ea0490114559107ede5"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">find_in_list</a> (const <a class="el" href="classEx.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
+<tr class="memitem:ga3a2ae6b908d34ea0490114559107ede5"><td class="memItemLeft" align="right" valign="top">Ex::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">find_in_list</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</td></tr>
 <tr class="memdesc:ga3a2ae6b908d34ea0490114559107ede5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the first element for which 'f' does not return tr.end().  <a href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">More...</a><br/></td></tr>
 <tr class="separator:ga3a2ae6b908d34ea0490114559107ede5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gad925ab5545854ee596c218738f11b013"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classEx.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#gad925ab5545854ee596c218738f11b013">make_list</a> (<a class="el" href="classEx.html">Ex</a> el)</td></tr>
+<tr class="memitem:gad925ab5545854ee596c218738f11b013"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#gad925ab5545854ee596c218738f11b013">make_list</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> el)</td></tr>
 <tr class="memdesc:gad925ab5545854ee596c218738f11b013"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ensure that the tree is a list, even if it contains only a single element.  <a href="group__core.html#gad925ab5545854ee596c218738f11b013">More...</a><br/></td></tr>
 <tr class="separator:gad925ab5545854ee596c218738f11b013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc672b9718fce3d851a54bcb56b3fa05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#abc672b9718fce3d851a54bcb56b3fa05">pre_clean_dispatch</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;kernel, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:abc672b9718fce3d851a54bcb56b3fa05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a794a7078576b183fe39df8253ff9bd80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a794a7078576b183fe39df8253ff9bd80">pre_clean_dispatch_deep</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr)</td></tr>
+<tr class="separator:a794a7078576b183fe39df8253ff9bd80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adea14e545029583364883ee37dcf8641"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#adea14e545029583364883ee37dcf8641">cleanup_updown</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:adea14e545029583364883ee37dcf8641"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup for individual node types.  <a href="#adea14e545029583364883ee37dcf8641">More...</a><br/></td></tr>
+<tr class="separator:adea14e545029583364883ee37dcf8641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ba5f1430d3175548d280bf48bab5f87"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a1ba5f1430d3175548d280bf48bab5f87">cleanup_rational</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;st)</td></tr>
+<tr class="separator:a1ba5f1430d3175548d280bf48bab5f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7423d710efa4b2568f686a5a8d7715b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ad7423d710efa4b2568f686a5a8d7715b">cleanup_frac</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;st)</td></tr>
+<tr class="separator:ad7423d710efa4b2568f686a5a8d7715b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a860df130ca5bd12ec901f9492aa93ed3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a860df130ca5bd12ec901f9492aa93ed3">cleanup_sub</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;it)</td></tr>
+<tr class="separator:a860df130ca5bd12ec901f9492aa93ed3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02b255e25b4383bff38c48ffa346832f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a02b255e25b4383bff38c48ffa346832f">cleanup_indexbracket</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
+<tr class="memdesc:a02b255e25b4383bff38c48ffa346832f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert parser output which indicates an indexbracket to an actual indexbracket node.  <a href="#a02b255e25b4383bff38c48ffa346832f">More...</a><br/></td></tr>
+<tr class="separator:a02b255e25b4383bff38c48ffa346832f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7282735a5554432bd92bb6c809c2c77"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ad7282735a5554432bd92bb6c809c2c77">to_long</a> (<a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a> mul)</td></tr>
+<tr class="separator:ad7282735a5554432bd92bb6c809c2c77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af76b09b6c07f69fdbcb1a4111972d8a0"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#af76b09b6c07f69fdbcb1a4111972d8a0">to_string</a> (long num)</td></tr>
+<tr class="separator:af76b09b6c07f69fdbcb1a4111972d8a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab1cc47d4202281e99226e0df7c83e2ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__core.html#gab1cc47d4202281e99226e0df7c83e2ec">multiply</a> (rset_t::iterator &amp;, <a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a>)</td></tr>
+<tr class="memdesc:gab1cc47d4202281e99226e0df7c83e2ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper functions for manipulation of multipliers.  <a href="group__core.html#gab1cc47d4202281e99226e0df7c83e2ec">More...</a><br/></td></tr>
+<tr class="separator:gab1cc47d4202281e99226e0df7c83e2ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5a11acaf0ce48d1e207c65b5bfc691d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ad5a11acaf0ce48d1e207c65b5bfc691d">add</a> (rset_t::iterator &amp;num, <a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a> fac)</td></tr>
+<tr class="separator:ad5a11acaf0ce48d1e207c65b5bfc691d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86e9e37fdc0e24260d8371f7eee50e41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a86e9e37fdc0e24260d8371f7eee50e41">zero</a> (rset_t::iterator &amp;num)</td></tr>
+<tr class="separator:a86e9e37fdc0e24260d8371f7eee50e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4a7ba5360aeda7798d431720f40a099"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a> (rset_t::iterator &amp;num)</td></tr>
+<tr class="separator:ac4a7ba5360aeda7798d431720f40a099"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44b4ff05df2251dda5c2d48e3de4d111"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a44b4ff05df2251dda5c2d48e3de4d111">flip_sign</a> (rset_t::iterator &amp;num)</td></tr>
+<tr class="separator:a44b4ff05df2251dda5c2d48e3de4d111"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad38cb50afe8e8cef124e536ddf108977"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ad38cb50afe8e8cef124e536ddf108977">half</a> (rset_t::iterator &amp;num)</td></tr>
+<tr class="separator:ad38cb50afe8e8cef124e536ddf108977"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga98816a86ca429d63a5c80d3ade497458"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ga98816a86ca429d63a5c80d3ade497458"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__core.html#ga98816a86ca429d63a5c80d3ade497458">is_in</a> (const T &amp;val, const std::initializer_list&lt; T &gt; &amp;list)</td></tr>
+<tr class="memdesc:ga98816a86ca429d63a5c80d3ade497458"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bare output operator for <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> objects, mainly to provide a simple way to generate debugging output.  <a href="group__core.html#ga98816a86ca429d63a5c80d3ade497458">More...</a><br/></td></tr>
+<tr class="separator:ga98816a86ca429d63a5c80d3ade497458"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9bdd885edb3d7830b2943440b4102b8"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#af9bdd885edb3d7830b2943440b4102b8">JSON_serialise</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;)</td></tr>
 <tr class="memdesc:af9bdd885edb3d7830b2943440b4102b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Serialise a document into .cj format, which is a JSON version of the document tree.  <a href="#af9bdd885edb3d7830b2943440b4102b8">More...</a><br/></td></tr>
 <tr class="separator:af9bdd885edb3d7830b2943440b4102b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -206,15 +617,69 @@ Functions</h2></td></tr>
 <tr class="memitem:a6f28b80b2747d0677e2faa23e3c1a0d7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a6f28b80b2747d0677e2faa23e3c1a0d7">export_as_LaTeX</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;doc)</td></tr>
 <tr class="memdesc:a6f28b80b2747d0677e2faa23e3c1a0d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export a document to a single self-contained LaTeX file.  <a href="#a6f28b80b2747d0677e2faa23e3c1a0d7">More...</a><br/></td></tr>
 <tr class="separator:a6f28b80b2747d0677e2faa23e3c1a0d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a5337e840c3fe2c7c107715d33de6d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a4a5337e840c3fe2c7c107715d33de6d0">LaTeX_recurse</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;doc, DTree::iterator it, std::ostringstream &amp;str)</td></tr>
-<tr class="separator:a4a5337e840c3fe2c7c107715d33de6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b2c375fa984d30ee572fcbdb7b88fa2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a6b2c375fa984d30ee572fcbdb7b88fa2">LaTeX_recurse</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;doc, DTree::iterator it, std::ostringstream &amp;str, const std::string &amp;preamble_string)</td></tr>
+<tr class="separator:a6b2c375fa984d30ee572fcbdb7b88fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2bcbb2d2130b304c3fa0b6f5359fbf66"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a2bcbb2d2130b304c3fa0b6f5359fbf66">export_as_python</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;doc)</td></tr>
 <tr class="memdesc:a2bcbb2d2130b304c3fa0b6f5359fbf66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Export a document to a python-like file (converting text cells to comments and python cells to python code, dropping output cells).  <a href="#a2bcbb2d2130b304c3fa0b6f5359fbf66">More...</a><br/></td></tr>
 <tr class="separator:a2bcbb2d2130b304c3fa0b6f5359fbf66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4b6c2486b34a1a23a9a7d22633115a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ab4b6c2486b34a1a23a9a7d22633115a1">python_recurse</a> (const <a class="el" href="namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b">DTree</a> &amp;doc, DTree::iterator it, std::ostringstream &amp;str)</td></tr>
 <tr class="separator:ab4b6c2486b34a1a23a9a7d22633115a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aeea63c7cf5a3841b0bec4e87c0637580"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacecadabra.html#abbdf1b091485694a30a09e9262634ffa">nset_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#aeea63c7cf5a3841b0bec4e87c0637580">name_set</a></td></tr>
+<tr class="separator:aeea63c7cf5a3841b0bec4e87c0637580"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0726aa4388453285dbf8d88ac11a5f84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacecadabra.html#a2355a5becc23a99d052286ab7f010ee5">rset_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a0726aa4388453285dbf8d88ac11a5f84">rat_set</a></td></tr>
+<tr class="separator:a0726aa4388453285dbf8d88ac11a5f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Typedef Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class to display expressions in a format that Sympy can parse. </p>
+<p>Evaluate a tensorial expression to components, performing all dummy index sums.</p>
+<p>Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions.</p>
+<p><a class="el" href="classcadabra_1_1Parser.html">Parser</a> module, which takes the string output of the preprocessor.hh module and turns it into an <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> expression tree.</p>
+<p><a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> kernel that keeps all state information that needs to be passed around to algorithms and properties.</p>
+<p>Functions to handle the exchange properties of two or more symbols in a product.</p>
+<p>Class to handle display of expressions using LaTeX notation.</p>
+<p>Class to display expressions to the terminal.</p>
+<p>Will throw an exception if a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object cannot be understood by Sympy. Can also convert expressions back to <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> notation. This class contains the printing logic that you see in action when you call the '<b>sympy</b>' method on an <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object.</p>
+<p>This is used in the PythonCdb bridge to provide 'str' type python printing for <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> objects. The cadabra2 command line application uses this class for all its output. This class does not necessarily produce output which is readable by sympy; for that, use the <a class="el" href="classcadabra_1_1DisplaySympy.html">DisplaySympy</a> class (as an example, partial derivatives will display using a LaTeX notation using the present class, but be printed as 'sympy.diff' by the <a class="el" href="classcadabra_1_1DisplaySympy.html">DisplaySympy</a> class).</p>
+<p>This is a very non-local bit of logic, in the sense that it will try to look around the property assignments in order to figure out the best way to print any given object. See the <a class="el" href="classcadabra_1_1DisplayTeX.html#a1ff43a244bdd8f1212259b7d3ebd9052" title="For every object encountered, dispatch will figure out the most appropriate way to convert it into a ...">DisplayTeX::dispatch</a> method to see how this works in more detail.</p>
+<p>This module is only concerned with the exchange properties of tensors as a whole, not with index permutation symmetries (which are handled in the canonicalise class of algebra.cc).</p>
+<p>At the moment only stores property information, but could also store global settings and the like at some later stage.</p>
+<p>The output of preprocessor.hh is assumed to be valid and consistent, so the code here is rather simple.</p>
+<p>This does not involve the property system.</p>
+<ul>
+<li>All numerical multipliers in a product on the product node, no multiplier on a sum node.</li>
+<li>Any '\frac' nodes with a purely numerical denominator should be rewritten as a rational multiplier for the numerator node.</li>
+<li><p class="startli">Any \sub nodes get converted to \sum nodes.</p>
+<p class="startli">See tests/components.cdb for basic samples.</p>
+<p class="startli">Components nodes have the following structure:</p>
+<p class="startli">_{m} // index names/types _{n}  // last child   // list of index values r t [value] // value of tensor for above values of indices  ...  ...</p>
+<p class="startli">ex:= A_{m n} ( A_{m n} + B_{m n} ); crds:= m -&gt; { t, r, ,  }; vals:= { A_{t t} -&gt; r, A_{r r} -&gt; r**2, A_{t } -&gt; t, B_{t t} -&gt; 1 }; evaluate(ex, crds, vals); tst:= r * ( r + 1 ) + r**2 * r**2 + t*t - @(ex);</p>
+<p class="startli">The algorithm performs the following steps. First, all free and dummy indices are classified using members of <a class="el" href="classcadabra_1_1Algorithm.html" title="Base class for all algorithms, containing generic routines and in particular the logic for index clas...">Algorithm</a> (maybe later?). For all indices, the 'crds' argument to the algorithm is scanned for a </p>
+<pre class="fragment">m -&gt; { a,b,c }
+</pre></li>
+</ul>
+<p>type pattern.</p>
+<p>Do a dept-first scan until the first sum or product node.</p>
+<p>In a sum node, all terms must have the same index structure, so we can now make a map from the subtree pattern to all possible index values. For each such index value set, lookup if there is a replacement pattern, if not replace by zero. This map can be reused later for equal sub-expressions (here it is important that a normal tensor expression can be used as a pattern immediately, though I would search both on explicit iterator (for things that we have just seen) and on pattern (for things that occur again later in the tree)).</p>
+<p>In a product node, find all dummies and free indices. Create a set of all index value sets, e.g.</p>
+<p>{m, n, p} -&gt; { {t, t, t}, {r,t,t}, {t,r,t}, ... }</p>
+<p>For each such index value set, lookup replacement rules.</p>
+<p>KEY: quick way to lookup, for a given set of index values on a (found) pattern/pattern pointed to by iterator, whether and what is the value of the pattern. </p>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a01b80749ddd083fbce68d68f2f2a8d2a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* cadabra::dispatcher_t)(const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::iterator &amp;it)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a2ebe95cddc83ab28291353b704a5ed0b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +692,643 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a772a1f0d03e1047dbc570e9b2b7f5366"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef uintptr_t <a class="el" href="namespacecadabra.html#a772a1f0d03e1047dbc570e9b2b7f5366">cadabra::hashval_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae5b4f3cbcbe2f37602e15bd629b6c921"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef mpq_class <a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">cadabra::multiplier_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abbdf1b091485694a30a09e9262634ffa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::set&lt;std::string&gt; <a class="el" href="namespacecadabra.html#abbdf1b091485694a30a09e9262634ffa">cadabra::nset_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2355a5becc23a99d052286ab7f010ee5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::set&lt;<a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a>&gt; <a class="el" href="namespacecadabra.html#a2355a5becc23a99d052286ab7f010ee5">cadabra::rset_t</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="ad5a11acaf0ce48d1e207c65b5bfc691d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::add </td>
+          <td>(</td>
+          <td class="paramtype">rset_t::iterator &amp;&#160;</td>
+          <td class="paramname"><em>num</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">multiplier_t&#160;</td>
+          <td class="paramname"><em>fac</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac6ab0a604d946c17913abc631dd577e8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::check_index_consistency </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Generic tool to check for index inconsistencies independent of running any algorithm. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2f9d57c3cb1e38cf64f40423dcad34ec"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_components </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a430b9a76757ee863b0f10d7c1d5d8483"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_derivative </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a42f88d57780321b8d61201a401ad3426"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_diagonal </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aab585ad00ba79405717929a3a3963cfd"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_dispatch </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Central cleanup dispatch routine, which calls the other cleanup functions defined later. </p>
+<p>These cleanup routines do NOT use normal cadabra algorithms; they are completely independent of them to prevent circular dependence or infinite recursion.</p>
+<p>These algorithms clean up the tree at the current node and the first layer of child nodes, but do NOT descend deeper down the tree, UNLESS that would leave the tree in an inconsistent state. An example is acting at the top node of {4}{{a}{b}}, which would push the 4 to the multiplier of the sum, but that is not allowed, so it needs to go further down. Sibling nodes of 'it' remain untouched as well. </p>
+
+</div>
+</div>
+<a class="anchor" id="a234837b85622d61be9ab36451beef8d6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_dispatch_deep </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dispatcher_t&#160;</td>
+          <td class="paramname"><em>disp</em> = <code>&amp;cleanup_dispatch</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>More general cleanup of an entire tree. </p>
+<p>Walks depth-first along the entire tree and call cleanup_dispatch at every node. </p>
+
+</div>
+</div>
+<a class="anchor" id="a2c6f432d41369035a85614df226d371c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_exterior_derivative </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad7423d710efa4b2568f686a5a8d7715b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_frac </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>st</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a02b255e25b4383bff38c48ffa346832f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_indexbracket </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert parser output which indicates an indexbracket to an actual indexbracket node. </p>
+
+</div>
+</div>
+<a class="anchor" id="a427a179023cc97c2047eb1723ddbd42b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_kronecker </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a99ba90e35f1fddb616016016cfb039b1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_numericalflat </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab83b457c68dbff9f10cb2bfb8b6d0798"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_partialderivative </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a13492c7357906533c7be9761e1b0e3ee"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_productlike </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Individual node cleanup routines. </p>
+<p>Do not call these yourself.</p>
+<p>Once more, these algorithms clean up the tree at the current node and the first layer of child nodes, but do NOT descend deeper down the tree, except when that is necessary to ensure that the tree remains consistent. As with any algorithms, the iterator pointing to the starting node may be changed, but these functions are not allowed to modify anything except the node and nodes below (in particular, they will leave sibling nodes untouched). </p>
+
+</div>
+</div>
+<a class="anchor" id="a1ba5f1430d3175548d280bf48bab5f87"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_rational </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>st</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a860df130ca5bd12ec901f9492aa93ed3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_sub </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2128a5981cecfe60e429d54b1c8822d9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::cleanup_sumlike </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="adea14e545029583364883ee37dcf8641"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_updown </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleanup for individual node types. </p>
+<p>These are not needed during any later stages of the manipulation of an expression (and are hence defined here, not in '<a class="el" href="Cleanup_8hh.html">Cleanup.hh</a>'). </p>
+
+</div>
+</div>
 <a class="anchor" id="a9da1f5667a79f57423e77d7316b2dce3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -295,6 +1396,38 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Export a document to a python-like file (converting text cells to comments and python cells to python code, dropping output cells). </p>
+
+</div>
+</div>
+<a class="anchor" id="a44b4ff05df2251dda5c2d48e3de4d111"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::flip_sign </td>
+          <td>(</td>
+          <td class="paramtype">rset_t::iterator &amp;&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad38cb50afe8e8cef124e536ddf108977"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::half </td>
+          <td>(</td>
+          <td class="paramtype">rset_t::iterator &amp;&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -452,7 +1585,7 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a4a5337e840c3fe2c7c107715d33de6d0"></a>
+<a class="anchor" id="a6b2c375fa984d30ee572fcbdb7b88fa2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -472,7 +1605,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::ostringstream &amp;&#160;</td>
-          <td class="paramname"><em>str</em>&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>preamble_string</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -509,7 +1648,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">int cadabra::list_size </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classEx.html">Ex</a> &amp;&#160;</td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
           <td class="paramname"><em>tr</em>, </td>
         </tr>
         <tr>
@@ -527,6 +1666,141 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>For lists as defined above for 'do_list', return their size (in case you really need to know the size before iterating over the elements). </p>
+
+</div>
+</div>
+<a class="anchor" id="ac4a7ba5360aeda7798d431720f40a099"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::one </td>
+          <td>(</td>
+          <td class="paramtype">rset_t::iterator &amp;&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af388a48091c5194e6732b924615cc336"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::operator&lt; </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structcadabra_1_1exchange_1_1tensor__type__t.html">exchange::tensor_type_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="structcadabra_1_1exchange_1_1tensor__type__t.html">exchange::tensor_type_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>two</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abc672b9718fce3d851a54bcb56b3fa05"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::pre_clean_dispatch </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>kernel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>ex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a794a7078576b183fe39df8253ff9bd80"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::pre_clean_dispatch_deep </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a55a6d58d1b9d54c38a104deafe54d6f7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::push_down_multiplier </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given a node with a non-unit multiplier, push this multiplier down the tree if the node is not allowed to have a non-unit multiplier. </p>
+<p>This is a recursive procedure as the node onto which the multiplier gets pushed may itself not allow for a non-unit multiplier. Note that some nodes disallow non-unit multipliers on their children, but that should be handled individually (see cleanup of product nodes for an example). </p>
 
 </div>
 </div>
@@ -562,10 +1836,525 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad5c7cd70fded2c78d5655082f0c8c5db"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::subtree_equal </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a33c6dea9f93fcf4b738dc04f8ecd4d74"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::subtree_exact_equal </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>literal_wildcards</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aea64eaef5b558ac08afe8245b4e70469"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::subtree_exact_less </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>literal_wildcards</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae22d3eae3fb7692101ca8ef2e6b93cb7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::subtree_less </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ad7282735a5554432bd92bb6c809c2c77"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">long cadabra::to_long </td>
+          <td>(</td>
+          <td class="paramtype">multiplier_t&#160;</td>
+          <td class="paramname"><em>mul</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af76b09b6c07f69fdbcb1a4111972d8a0"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string cadabra::to_string </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a85c2a10c9c2abf0a9eb6ffa107c594ae"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::tree_equal </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a733646d45bc966a16fa15058aa6d4131"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::tree_exact_equal </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>literal_wildcards</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="afd78be5db03d9a450b08cc593d68fc92"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::tree_exact_less </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>literal_wildcards</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="accf8d1e7ecfcfc8ea9ea3fb525b90193"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::tree_less </td>
+          <td>(</td>
+          <td class="paramtype">const Properties *&#160;</td>
+          <td class="paramname"><em>properties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>one</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ex &amp;&#160;</td>
+          <td class="paramname"><em>two</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>mod_prel</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>checksets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>compare_multiplier</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Various comparison functions, some exact, some with pattern logic. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4cf50024f3044df922f1839e0140f21e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * cadabra::unichar </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="DisplaySympy_8hh.html#a0da26994377a47c9c53069f9dfb9e670">kunichar</a>&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a86e9e37fdc0e24260d8371f7eee50e41"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::zero </td>
+          <td>(</td>
+          <td class="paramtype">rset_t::iterator &amp;&#160;</td>
+          <td class="paramname"><em>num</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="aeea63c7cf5a3841b0bec4e87c0637580"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacecadabra.html#abbdf1b091485694a30a09e9262634ffa">nset_t</a> cadabra::name_set</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a0726aa4388453285dbf8d88ac11a5f84"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacecadabra.html#a2355a5becc23a99d052286ab7f010ee5">rset_t</a> cadabra::rat_set</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 9 2017 22:17:41 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Jan 22 2017 11:31:13 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
