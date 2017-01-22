@@ -1,7 +1,11 @@
 
+#include "Config.hh"
 #include "DataCell.hh"
 #include <sstream>
+#include <fstream>
 #include <boost/regex.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/algorithm/string.hpp>
 //#include <regex>
 #include <iostream>
 
@@ -440,33 +444,44 @@ DataCell::id_t DataCell::id() const
 
 std::string cadabra::export_as_LaTeX(const DTree& doc)
 	{
+	// Load the pre-amble from file.
+	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/notebook.tex";
+	std::ifstream preamble(pname);
+	if(!preamble)
+		throw std::logic_error("Cannot open LaTeX preamble at "+pname);
+	std::stringstream buffer;
+	buffer << preamble.rdbuf();
+	std::cerr << "Using preamble at " << pname << std::endl;
+	std::string preamble_string = buffer.str();
+
+	// Open the LaTeX file for writing.
 	std::ostringstream str;
-	LaTeX_recurse(doc, doc.begin(), str);
+	LaTeX_recurse(doc, doc.begin(), str, preamble_string);
 
 	return str.str();
 	}
 
-void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str)
+void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, const std::string& preamble_string)
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
-			str << "\\documentclass[10pt]{article}\n"
-				 << "\\usepackage[scale=.8]{geometry}\n"
-				 << "\\usepackage[fleqn]{amsmath}\n"
-				 << "\\usepackage{listings}\n"
-				 << "\\usepackage{amssymb}\n"
-				 << "\\usepackage{inconsolata}\n"
-				 << "\\usepackage{color}\n"
-				 << "\\usepackage{tableaux}\n"
-				 << "\\usepackage{breqn}\n"
-				 << "\\newcommand{\\algorithm}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
-				 << "\\newcommand{\\property}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
-				 << "\\newcommand{\\algo}[1]{{\\tt #1}}\n"
-				 << "\\newcommand{\\prop}[1]{{\\tt #1}}\n"
-				 << "\\setlength{\\mathindent}{1em}\n"
-				 << "\\lstnewenvironment{python}[1][]\n"
-				 << "{\\lstset{language=Python, columns=fullflexible, xleftmargin=1em, basicstyle=\\small\\ttfamily\\color{blue}, keywordstyle={}}}{}\n"
-				 << "\\begin{document}\n";
+			str << preamble_string;
+//			str << "\\documentclass[10pt]{article}\n"
+//				 << "\\usepackage[scale=.8]{geometry}\n"
+//				 << "\\usepackage[fleqn]{amsmath}\n"
+//				 << "\\usepackage{listings}\n"
+//				 << "\\usepackage{amssymb}\n"
+//				 << "\\usepackage{inconsolata}\n"
+//				 << "\\usepackage{color}\n"
+//				 << "\\usepackage{tableaux}\n"
+//				 << "\\newcommand{\\algorithm}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
+//				 << "\\newcommand{\\property}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
+//				 << "\\newcommand{\\algo}[1]{{\\tt #1}}\n"
+//				 << "\\newcommand{\\prop}[1]{{\\tt #1}}\n"
+//				 << "\\setlength{\\mathindent}{1em}\n"
+//				 << "\\lstnewenvironment{python}[1][]\n"
+//				 << "{\\lstset{language=Python, columns=fullflexible, xleftmargin=1em, basicstyle=\\small\\ttfamily\\color{blue}, keywordstyle={}}}{}\n"
+			str << "\\begin{document}\n";
 			break;
 		case DataCell::CellType::python:
 			str << "\\begin{python}\n";
@@ -492,7 +507,12 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		if(it->cell_type==DataCell::CellType::image_png)
 			str << it->textbuf;
 		else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
-			str << it->textbuf << "\n";
+			std::string lr(it->textbuf);
+			boost::replace_all(lr, "\\left(", "\\brwrap{");
+			boost::replace_all(lr, "\\right)", "}");
+			boost::replace_all(lr, "\\begin{dmath*}", "\\begin{adjustwidth}{1em}{0cm}$");
+			boost::replace_all(lr, "\\end{dmath*}", "$\\\\\\end{adjustwidth}");
+			str << lr << "\n";
 			}
 		}
 
@@ -513,7 +533,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
 		while(sib!=doc.end(it)) {
-			LaTeX_recurse(doc, sib, str);
+			LaTeX_recurse(doc, sib, str, preamble_string);
 			++sib;
 			}
 		}

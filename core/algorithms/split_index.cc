@@ -59,7 +59,7 @@ Algorithm::result_t split_index::apply(iterator& it)
 	Ex workcopy(it); // so we can make changes without spoiling the big tree
 //	assert(*it->multiplier==1); // see if this made a difference
 
-//	txtout << "split index acting at " << *(it->name) << std::endl;
+	// std::cerr << "split index acting at " << *(it->name) << std::endl;
 
 	// we only replace summed indices, so first find them.
 	index_map_t ind_free, ind_dummy;

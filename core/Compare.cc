@@ -613,8 +613,13 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 								}
 							}
 						else {
-							if(t1) return report(match_t::no_match_less);
-							else   return report(match_t::no_match_greater);
+							// If we get here, 'one' or 'two' has an Indices property, and
+							// the other one doesn't. So we do not know how to compare them,
+							// except by name. Note that we should return something which is
+							// symmetric if 'two' and 'one' had been exchanged!
+							int dc = subtree_compare(&properties, one, two, 0);
+							if(dc<0) return report(match_t::no_match_less);
+							else     return report(match_t::no_match_greater);
 							}
 						}
 					}
@@ -735,7 +740,12 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 				return report(match_t::node_match);
 				} 
 			else {
-				return report(match_t::no_match_less);
+				// The index 'one' is not known to be able to take value 'two'. So this is not
+				// a match. Compare lexographically; this should be symmetric if one and two had
+				// been exchanged.
+				int dc = subtree_compare(&properties, one, two, 0);
+				if(dc<0) return report(match_t::no_match_less);
+				else     return report(match_t::no_match_greater);
 				}
 			}
 		else {
@@ -943,7 +953,10 @@ bool Ex_comparator::should_swap(Ex::iterator obj, match_t subtree_comparison)
 	const SortOrder *so1=properties.get_composite<SortOrder>(one,num1);
 	const SortOrder *so2=properties.get_composite<SortOrder>(two,num2);
 
-	if(so1==0 || so2==0 || so1!=so2) { 
+	if(so1==0 || so2==0 || so1!=so2) {
+		// std::cerr << "No sort order between " << Ex(one) << " and " << Ex(two);
+		report(subtree_comparison);
+		// std::cerr <<  std::endl;
       // No explicit sort order known; use alpha sort.
 		if(subtree_comparison==match_t::subtree_match)    return false;
 		if(subtree_comparison==match_t::no_match_less)    return false;

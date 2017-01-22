@@ -129,11 +129,12 @@ namespace cadabra {
 	/// Export a document to a single self-contained LaTeX file.
 
 	std::string export_as_LaTeX(const DTree& doc);
-	void        LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str);
+	void        LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, const std::string& preamble_string);
 
 	/// Export a document to a python-like file (converting text cells to comments
 	/// and python cells to python code, dropping output cells).
 
 	std::string export_as_python(const DTree& doc);
 	void        python_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str);
+
 }
