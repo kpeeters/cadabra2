@@ -59,10 +59,15 @@
 % Document start.
 
 \begin{document}
-\pagestyle{empty}\everymath{\displaystyle\allowbreak}
+\pagestyle{empty}\everymath{\displaystyle}
 \renewcommand{\arraystretch}{1.2}
 \tolerance=10000
 \relpenalty=10
 \binoppenalty=10
 \hyphenpenalty=10
 \raggedright
+
+% Ensure that maths broken over multiple lines has a bit of spacing
+% between lines.
+\lineskiplimit=0mm
+\lineskip=1.5ex

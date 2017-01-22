@@ -451,7 +451,7 @@ std::string cadabra::export_as_LaTeX(const DTree& doc)
 		throw std::logic_error("Cannot open LaTeX preamble at "+pname);
 	std::stringstream buffer;
 	buffer << preamble.rdbuf();
-	std::cerr << "Using preamble at " << pname << std::endl;
+	// std::cerr << "Using preamble at " << pname << std::endl;
 	std::string preamble_string = buffer.str();
 
 	// Open the LaTeX file for writing.

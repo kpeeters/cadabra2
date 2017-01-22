@@ -49,12 +49,14 @@
 \lstnewenvironment{python}[1][]{\lstset{language=python,
    columns=fullflexible,
    xleftmargin=1em,
+   belowskip=0pt,
+   breaklines=true,   
    basicstyle=\small\ttfamily\color{blue},
    keywordstyle={}
 }}{}
   
 
-\everymath{\displaystyle\allowbreak}
+\everymath{\displaystyle}
 
 % Page numbers
 \pagestyle{fancy}
@@ -66,3 +68,8 @@
 
 \makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%
 \ifmmode\old@comma\discretionary{}{}{}\else\old@comma\fi}\makeatother
+
+% Ensure that maths broken over multiple lines has a bit of spacing
+% between lines.
+\lineskiplimit=0mm
+\lineskip=1.5ex
