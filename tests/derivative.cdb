@@ -575,3 +575,12 @@ def test34():
     unwrap(ex)
     tst:= \partial_{\mu}{A^{2}} - @(ex);
     assert(tst==0)
+
+def test35():
+\partial{#}::PartialDerivative;
+{\mu,\nu,\rho}::Indices;    
+ex:= \cdbDerivative_{\mu}{ (\partial_{\nu}{\phi} \partial^{\nu}{\phi})**3 };
+product_rule(ex);
+tst:= 2 \partial_{\nu}{\phi} \partial^{\nu}{\phi}
+    \partial_{\mu}{\partial_{\nu}{\phi} \partial^{\nu}{\phi} } - @(ex);
+assert(tst==0)

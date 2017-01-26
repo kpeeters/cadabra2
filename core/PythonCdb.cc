@@ -796,6 +796,8 @@ void inject_defaults(Kernel *k)
 	auto wa=make_Ex_from_string("label=all, type=additive", false);
 	k->inject_property(wi,                       make_Ex_from_string("\\sum{#}", false), wa);
 
+	k->inject_property(new Derivative(),         make_Ex_from_string("\\cdbDerivative{#}",false), 0);
+	
 	k->inject_property(new Derivative(),         make_Ex_from_string("\\commutator{#}",false), 0);
 	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false), 0);
 

@@ -538,6 +538,10 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
 		}
 	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
+	std::cerr << "dummies of " << *two->name << std::endl;
+	for(auto& ii: ind_dummy) {
+		std::cerr << ii.first << std::endl;
+		}
 
 	index_map_t must_be_empty;
 	index_map_t newly_generated;

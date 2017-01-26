@@ -20,7 +20,7 @@ product_rule::product_rule(const Kernel& k, Ex& tr)
 bool product_rule::can_apply(iterator it)
 	{
 	const Derivative *der=kernel.properties.get<Derivative>(it);
-	if(der || *it->name=="\\cdb_Derivative") {
+	if(der || *it->name=="\\cdbDerivative") {
 		prodnode=tr.end();
 		number_of_indices=0;
 		if(tr.number_of_children(it)>0) {
@@ -81,6 +81,8 @@ Algorithm::result_t product_rule::apply(iterator& it)
 	//                          D(A*B)  -> D(A)*B + A*D(B) 
 	// both suitably generalised to anti-commuting derivatives.
 
+	iterator rename_dummies_at = tr.end();
+	
 	if(*prodnode->name=="\\pow") {
 		 sibling_iterator ar=tr.begin(prodnode);
 		 sibling_iterator pw=ar;
@@ -93,6 +95,7 @@ Algorithm::result_t product_rule::apply(iterator& it)
 		 // \partial(A**n)
 		 iterator pref=rep.append_child(sm, iterator(prodnode));  // add A**n
 		 iterator theD=rep.append_child(sm, it);                  // add \partial_{m}(A**n)
+		 rename_dummies_at=theD;
 		 sibling_iterator repch=tr.begin(theD);                   // convert to \partial_{m}(A)
 		 while(*repch->name!="\\pow") 
 			  ++repch;
@@ -101,6 +104,7 @@ Algorithm::result_t product_rule::apply(iterator& it)
 //		 txtout << "after rep.move_before" << std::endl;
 //		 tr.print_recursive_treeform(txtout, rep.begin());
 		 rep.erase(repch);
+
 //		 txtout << "after rep.erase" << std::endl;
 //		 tr.print_recursive_treeform(txtout, rep.begin());
 
@@ -132,7 +136,7 @@ Algorithm::result_t product_rule::apply(iterator& it)
 					multiply(tmp->multiplier, -1);
 					}
 			  }
-
+		 
 		 iterator top=rep.begin();
 		 cleanup_dispatch(kernel, tr, top);
 		 }
@@ -224,7 +228,16 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			  ++num;
 			  }
 		 }
-	it=tr.replace(it,rep.begin()); 
+//	it=tr.replace(it,rep.begin());
+	it=tr.move_ontop(it, rep.begin());
+	if(rename_dummies_at!=tr.end()) {
+		std::cerr << "...\n";
+		std::cerr << Ex(rename_dummies_at) << std::endl;
+		std::cerr << "---\n";
+		std::cerr << Ex(it) << std::endl;
+		std::cerr << "===\n";
+		rename_replacement_dummies(rename_dummies_at, false);
+		}
 //	cleanup_expression(tr, it);
 //	cleanup_nests_below(tr, it);
 	return result_t::l_applied;
