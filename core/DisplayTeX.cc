@@ -477,6 +477,7 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 			str << *it->name;
 		}
 
+	str << " ";
 	sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;

@@ -62,6 +62,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 							// std::cerr << "handling factor" << std::endl;
 							// std::cerr << *walk->name << std::endl;
 							walk = handle_factor(tmp, empty);
+							// std::cerr << "handling factor done" << std::endl;							
 							}
 						}
 					}
@@ -163,7 +164,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
-//	std::cerr << "handle_factor " << Ex(sib) << std::endl;
+	// std::cerr << "handle_factor " << Ex(sib) << std::endl;
 	if(*sib->name=="\\components") return sib;
 
 	// If this factor is an accent at the top level, descent further.
@@ -196,6 +197,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	// easier for the rest of the algorithm.
 	if(ind_free.size()==0 && ind_dummy.size()==0) {
 		sib=wrap_scalar_in_components_node(sib);
+		// std::cerr << "wrapped scalar as tensor" << std::endl;
 		return sib;
 		}
 	
@@ -266,9 +268,9 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 			return true;
 			});
 
-//	std::cerr << "result now " << repl << std::endl;
 	merge_component_children(repl.begin());
 
+	// std::cerr << "result now " << repl << std::endl;
 	sib = tr.move_ontop(iterator(sib), repl.begin());
 
 	return sib;
@@ -307,7 +309,8 @@ void evaluate::merge_component_children(iterator it)
 				Ex::sibling_iterator tv2=iv2;
 				++tv2;
 				// std::cerr << "need to merge" << std::endl;
-				tv1=tr.wrap(tv1, str_node("\\sum"));
+				if(*tv1->name!="\\sum")
+					tv1=tr.wrap(tv1, str_node("\\sum"));
 				tr.append_child(tv1, tv2);
 				cv2=tr.erase(cv2);
 				}
@@ -402,7 +405,7 @@ void evaluate::cleanup_components(iterator it)
 
 Ex::iterator evaluate::handle_derivative(iterator it)
 	{
-	std::cerr << "handle_derivative " << Ex(it) << std::endl;
+	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
 	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
@@ -415,6 +418,9 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		if(sib->is_index()==false) {
 			if(is_component(sib)==false) {
 				index_map_t empty;
+            // This really shouldn't be necessary; the way in which the
+				// top level 'apply' works, it should have rewritten the argument
+				// of the derivative into a \components node already.
 				sib=handle_factor(sib, empty);
 				}
 			break;
@@ -424,60 +430,226 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	assert(sib!=tr.end(it));
 
 	// std::cerr << "after handle\n" << Ex(it) << std::endl;
+
+	index_map_t ind_free, ind_dummy;
+	classify_indices(it, ind_free, ind_dummy);
 	
+	// Figure out the positions of the index values in the components
+	// node inside the derivative which correspond to values of dummy
+	// indices (these necessarily have the other dummy on the
+	// derivative itself).
+	std::vector<std::pair<size_t, size_t>> dummy_positions;
+
+	decltype(ind_dummy.begin()) dumit[2];
+	dumit[0] = ind_dummy.begin();
+	while(dumit[0]!=ind_dummy.end()) {
+		dumit[1]=dumit[0];
+		++dumit[1];
+		assert(dumit[1]!=ind_dummy.end());
+
+		bool     on_component[2];
+		iterator parents[2];
+		for(int i=0; i<2; ++i) {
+			parents[i]=tr.parent(dumit[i]->second);
+			on_component[i]=*parents[i]->name=="\\components";
+			}
+		
+		if(on_component[0]==false && on_component[1]==true) 
+			dummy_positions.push_back(std::make_pair(tr.index(dumit[0]->second), tr.index(dumit[1]->second)));
+		else if(on_component[1]==false && on_component[0]==true) 
+			dummy_positions.push_back(std::make_pair(tr.index(dumit[1]->second), tr.index(dumit[0]->second)));
+
+		++dumit[0];	++dumit[0];
+		}
+
 	// Walk all the index value sets of the \components node inside the
-	// argument.  For each, determine the dependencies, and generate
-	// one element for each dependence.
+	// \partial node.  For each, determine the dependencies, and
+	// generate one element for each dependence.
 
 	sibling_iterator ivalues = tr.end(sib);
 	--ivalues;
 
+	size_t ni=number_of_direct_indices(it);
+	
 	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
+			// For each internal dummy set, keep track of the
+			// position in the permutation array where we generate
+			// its value.
+			std::map<Ex, int, tree_exact_less_for_indexmap_obj> d2p;
+			
 			sibling_iterator rhs = tr.begin(iv);
 			++rhs;
-			std::cerr << "getting dependencies of " << Ex(rhs) << std::endl;
 			auto deps=dependencies(rhs);
-			for(auto& d: deps)
-				std::cerr << d << std::endl;
 
-			// FIXME: all indices on \partial can take any of the values of the 
-			// dependencies. Need all permutations. 
-			assert(number_of_direct_indices(it)==1);
+			// All indices on \partial can take any of the values of the
+			// dependencies, EXCEPT when the index is a dummy index. In
+			// the latter case, we firstly need to ensure that both
+			// indices in the dummy pair take the same value (this is
+			// done with d2p). Secondly, we need to ensure that if the
+			// second index sits on the argument, we only use the value
+			// of that index as given in the 'iv' list.
 
+			// Need all combinations of values, with repetition (multiple
+			// pick) allowed.
+
+			combin::combinations<Ex> cb;
 			for(auto& obj: deps) {
-				Ex eqcopy(iv);
+				cb.original.push_back(obj);
+				}
+			cb.multiple_pick=true;
+			cb.block_length=1;
+			for(size_t n=0; n<ni; ++n) {
+				Ex iname(tr.child(it,n));
+				if(ind_dummy.find(iname)!=ind_dummy.end()) {
+					// If this dummy has one leg on the argument of the derivative,
+					// take it out of the combinatorics, because its value will
+					// be fixed.
+					bool out=false;
+					for(auto& d: dummy_positions)
+						if(d.first==n) {
+							out=true;
+							break;
+							}
+					if(out) continue;
+					
+					if(d2p.find(iname)!=d2p.end())
+						continue;
+					else {
+						d2p[iname]=cb.sublengths.size();
+						}
+					}
+				cb.sublengths.push_back(1);
+				}
+			if(cb.sublengths.size()>0) // only if not all indices are fixed
+				cb.permute();
+
+			// FIXME: we should flag an error if a partial derivative has
+			// an upper index which is not position=free, and require
+			// that the user first converts the index. Otherwise we have
+			// to do raising/lowering in evaluate.
+			
+			// Note: indices on partial may be dummies, in which case the
+			// values cannot be arbitrary. This is a self-contraction,
+			// but cannot be caught by handle_factor because derivatives
+			// do not get handled by patterns directly, they get
+			// constructed by looking at dependencies.
+
+			// For each index value set we constructed for the indices on the
+			// derivative, create an entry in the \components node.
+
+			for(unsigned int i=0; i<cb.size() || cb.size()==0; ++i) {
+				// std::cerr << "Index combination " << i << std::endl;
+				Ex eqcopy(iv); 
 				auto lhs=eqcopy.begin(eqcopy.begin());
 				assert(*lhs->name=="\\comma");
-				eqcopy.append_child(iterator(lhs), obj.begin());
-				++lhs;
-				multiplier_t mult=*lhs->multiplier;
-				one(lhs->multiplier);
-				lhs=eqcopy.wrap(lhs, str_node("\\partial"));
-				multiply(lhs->multiplier, mult);
-				multiply(lhs->multiplier, *it->multiplier);
-				auto pch=tr.begin(it);
-				auto arg=tr.begin(lhs);
-				// FIXME: as above: need all permutations.
-				while(pch!=tr.end(it)) {
-					if(pch->is_index()) 
-						eqcopy.insert_subtree(arg, obj.begin())->fl.parent_rel=str_node::p_sub;
-					++pch;
+
+				if(cb.size()>0) {
+					// Setup the index values; simply copy from the cb array, but only
+					// if the indices are not internal dummy.
+					for(size_t j=0; j<cb[i].size(); ++j) {
+						auto fd = ind_dummy.find(Ex(tr.child(it, j)));
+						if(fd==ind_dummy.end()) 
+							eqcopy.append_child(iterator(lhs), cb[i][j].begin() );
+						}
 					}
+				auto rhs=lhs;
+				++rhs;
+				multiplier_t mult=*rhs->multiplier;
+				one(rhs->multiplier);
+
+				// Wrap a '\\partial' node around the component value, and add the
+				// same index values as above to this node.
+				rhs=eqcopy.wrap(rhs, str_node("\\partial"));
+				multiply(rhs->multiplier, mult);
+				multiply(rhs->multiplier, *it->multiplier);
+				auto pch=tr.begin(it);
+				iterator arg=tr.begin(rhs);
+				for(size_t j=0, cb_j=0; j<ni; ++j) {
+					bool done=false;
+					for(auto& d: dummy_positions) {
+						if(d.first==j) {
+							// This index is forced to a value because it is a dummy of which the partner
+							// is fixed by the argument on which the derivative acts.
+							eqcopy.insert_subtree(rhs.begin(), tr.child(lhs,d.second))->fl.parent_rel=str_node::p_sub;
+							done=true;
+							break;
+							}
+						}
+					if(!done) {
+						size_t fromj=cb_j;
+						Ex iname(tr.child(it,j));
+						auto fi = d2p.find(iname);
+						if(fi!=d2p.end()) {
+							fromj = (*fi).second;
+							if(fromj == cb_j)
+								++cb_j;
+							}
+						else {
+							++cb_j;
+							}
+						eqcopy.insert_subtree(rhs.begin(), cb[i][fromj].begin() )->fl.parent_rel=str_node::p_sub;
+						}
+					}
+				
+				// For all dummy pairs which have one index on the
+				// \components node inside the derivative, we need to
+				// remove the corresponding value from the components
+				// node.
+				std::vector<sibling_iterator> sibs_to_erase;
+				for(auto di: dummy_positions) {
+					sibs_to_erase.push_back(tr.child(lhs, di.second));
+					}
+				for(auto se: sibs_to_erase)
+					tr.erase(se);
+
+				// Now move this replacement expression into the tree.
+				
+				// std::cerr << "Replacement now " << std::endl;
+				// std::cerr << eqcopy << std::endl;
 				tr.move_before(tr.begin(ivalues), eqcopy.begin());
+
+				if(cb.size()==0) break;
 				}
 			tr.erase(iv);
 			return true;
 			});
 
-	// Now move the partial indices to the components node, and then unwrap the
-	// partial node.
-	auto pch=tr.begin(it);
-	while(pch!=tr.end(it)) {
-		tr.move_before(ivalues, pch);
-		++pch;
-		}
-	it=tr.flatten_and_erase(it);
 	// std::cerr << "now " << Ex(it) << std::endl;
+
+	
+	// Now move the free (but not the internal dummy!) partial indices
+   //	to the components node, and then unwrap the partial node.
+	
+	auto pch=tr.begin(it);
+	for(size_t n=0; n<ni; ++n) {
+		sibling_iterator nxt=pch;
+		++nxt;
+		if(ind_dummy.find(Ex(pch))!=ind_dummy.end()) {
+			tr.erase(pch);
+			}
+		else
+			tr.move_before(ivalues, pch);
+		pch=nxt;
+		}
+
+
+	// Remove indices from the components node which came from the 
+	// argument and which are dummy.
+	it=tr.flatten_and_erase(it);
+	auto se = tr.begin(it);
+	while(se!=tr.end(it)) {
+		if(ind_dummy.find(Ex(se))!=ind_dummy.end())
+			se = tr.erase(se);
+		else
+			++se;
+		}
+
+		// std::cerr << "after index move " << Ex(it) << std::endl;
+
+	merge_component_children(it);
+
+	// std::cerr << "after merge " << Ex(it) << std::endl;
+
 	simplify_components(it);
 	// std::cerr << "then " << Ex(it) << std::endl;
 
@@ -562,7 +734,9 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	tree_exact_less_obj comp(&kernel.properties);
 	std::set<Ex, tree_exact_less_obj> ret(comp);
 
-	// Determine explicit dependence on Coordinates.
+	// Determine explicit dependence on Coordinates, that is, collect
+	// parent_rel=p_none arguments which carry a Coordinate property.
+	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
 			const Coordinate *cd = kernel.properties.get<Coordinate>(nd);
 			if(cd) {
@@ -577,9 +751,10 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 
 	// Determine implicit dependence via Depends.
 	// std::cerr << "deps for " << *it->name << std::endl;
+
 	const Depends *dep = kernel.properties.get<Depends>(it);
 	if(dep) {
-		std::cerr << "Explicit deps" << std::endl;
+		// std::cerr << "implicit deps" << std::endl;
 		Ex deps(dep->dependencies(kernel, it));
 		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
 				Ex cpy(nd);

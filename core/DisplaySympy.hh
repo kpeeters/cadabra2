@@ -79,8 +79,9 @@ class DisplaySympy : public DisplayBase {
 		/// Map from Cadabra symbols to Sympy symbols.
 		std::map<std::string, std::string> symmap;
 
-		/// List of symbols which have had dependencies added.
-		std::set<std::string> depsyms;
+		/// Map from symbols which have had dependencies added
+		/// to an expression containing these dependencies.
+		std::map<nset_t::iterator, Ex, nset_it_less> depsyms;
 };
 
 const char *unichar(kunichar c);

@@ -178,16 +178,16 @@ Algorithm::result_t vary::apply(iterator& it)
 
 	if(*it->name=="\\pow") { 
 		Ex backup(it);
-		// Wrap the power in a \cdb_Derivative and then call @prodrule.
-		it=tr.wrap(it, str_node("\\cdb_Derivative"));
+		// Wrap the power in a \cdbDerivative and then call @prodrule.
+		it=tr.wrap(it, str_node("\\cdbDerivative"));
 		product_rule pr(kernel, tr);
 		pr.can_apply(it);
 		pr.apply(it);
-		// Find the '\cdb_Derivative node again'.
+		// Find the '\cdbDerivative node again'.
 		sibling_iterator sib=tr.begin(it);
 		res=result_t::l_no_action;
 		while(sib!=tr.end(it)) {
-			if(*sib->name=="\\cdb_Derivative") {
+			if(*sib->name=="\\cdbDerivative") {
 				tr.flatten(sib);
 				sib=tr.erase(sib);
 				vary vry(kernel, tr, args);

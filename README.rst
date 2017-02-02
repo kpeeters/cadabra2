@@ -329,8 +329,9 @@ do this::
 	 make
 	 sudo make install
 
-There is a sample program `simple.cc` in the `c++lib` directory which
-shows how to use the Cadabra library.
+There is a sample program `simple.cc
+<https://github.com/kpeeters/cadabra2/blob/master/c%2B%2Blib/simple.cc>`_
+in the `c++lib` directory which shows how to use the Cadabra library.
 
 
 Special thanks
