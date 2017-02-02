@@ -8,7 +8,7 @@ var searchData=
   ['tab1',['tab1',['../classcadabra_1_1lr__tensor.html#a5dfe5cb1e251508c74cd31b985f8c0ab',1,'cadabra::lr_tensor']]],
   ['tab2',['tab2',['../classcadabra_1_1lr__tensor.html#a0fd269486020dc2a7ed87d8946d4263a',1,'cadabra::lr_tensor']]],
   ['tabs',['tabs',['../classcadabra_1_1TableauSymmetry.html#adf7e14d6c1bbba85645647e54aa50137',1,'cadabra::TableauSymmetry']]],
-  ['tau',['tau',['../Symbols_8cc.html#a9bd3f8638bab3f607829794a6339b272',1,'tau():&#160;Symbols.cc'],['../Symbols_8cc.html#a97667ccd0a0885b3cc3d31fd79a8ca01',1,'Tau():&#160;Symbols.cc']]],
+  ['tau',['Tau',['../Symbols_8cc.html#a97667ccd0a0885b3cc3d31fd79a8ca01',1,'Tau():&#160;Symbols.cc'],['../Symbols_8cc.html#a9bd3f8638bab3f607829794a6339b272',1,'tau():&#160;Symbols.cc']]],
   ['tb',['tb',['../classcadabra_1_1indexsort.html#ac8aafd5f3ab868653561ab272a45b119',1,'cadabra::indexsort::tb()'],['../classcadabra_1_1young__project__tensor.html#a5fa924ed7861d0bc0c3f6aab9ad02d1e',1,'cadabra::young_project_tensor::tb()']]],
   ['temparr',['temparr',['../classcombin_1_1combinations__base.html#a338a3b09e9a59344da59f291b9c04423',1,'combin::combinations_base']]],
   ['tensors',['tensors',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a5f8337d38497312b7924382e374c4ad1',1,'cadabra::exchange::identical_tensors_t']]],

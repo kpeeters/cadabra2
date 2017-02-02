@@ -5,7 +5,7 @@ var searchData=
   ['degree_5f',['degree_',['../classcadabra_1_1DifferentialForm.html#ab0134659a6ca2e60c2b3e6835dc27942',1,'cadabra::DifferentialForm']]],
   ['delta',['Delta',['../Symbols_8cc.html#ac95bccd0ac00ebe774e5138c31a06238',1,'Delta():&#160;Symbols.cc'],['../Symbols_8cc.html#ab65a074e38c44168a4d9be288261b588',1,'delta():&#160;Symbols.cc']]],
   ['dependencies_5f',['dependencies_',['../classcadabra_1_1Depends.html#ab5e9013c496282eceba6067ec98613fc',1,'cadabra::Depends']]],
-  ['depsyms',['depsyms',['../classcadabra_1_1DisplaySympy.html#a14772e925bdc0a4504929d21bc49fcc9',1,'cadabra::DisplaySympy']]],
+  ['depsyms',['depsyms',['../classcadabra_1_1DisplaySympy.html#a9837712e14918f230c00b289f5255b53',1,'cadabra::DisplaySympy']]],
   ['difference',['difference',['../classcadabra_1_1Integer.html#a7f22c288cc34c8b701ce359b73085221',1,'cadabra::Integer']]],
   ['diffsec',['diffsec',['../classstopwatch.html#a3307796d7f96f9b351ea597417eb211a',1,'stopwatch']]],
   ['diffusec',['diffusec',['../classstopwatch.html#a37fcea2ff0b27b62596b46b2a7202d58',1,'stopwatch']]],

@@ -30,5 +30,6 @@ var searchData=
   ['rules',['rules',['../classcadabra_1_1take__match.html#aa0f2bd0491525b239fa76138927736fa',1,'cadabra::take_match']]],
   ['runner',['runner',['../classServer.html#a2f7c69d01db7d1c0fb61dc0550084b89',1,'Server']]],
   ['running',['running',['../classcadabra_1_1DataCell.html#a2399d86186985e6d0cb013d0a852707c',1,'cadabra::DataCell']]],
-  ['running_5fcells',['running_cells',['../classcadabra_1_1ComputeThread.html#ab28adc355af224d1545f187cffb28594',1,'cadabra::ComputeThread']]]
+  ['running_5fcells',['running_cells',['../classcadabra_1_1ComputeThread.html#ab28adc355af224d1545f187cffb28594',1,'cadabra::ComputeThread']]],
+  ['runtimeexceptiontype',['RuntimeExceptionType',['../PythonCdb_8cc.html#a8d6519013bb1de3db946fd2892894592',1,'PythonCdb.cc']]]
 ];

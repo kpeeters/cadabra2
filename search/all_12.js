@@ -64,8 +64,8 @@ var searchData=
   ['result_5ft',['result_t',['../classcadabra_1_1Ex.html#a213ffa8eb9a47db69eda13be42d317cd',1,'cadabra::Ex::result_t()'],['../classcadabra_1_1Algorithm.html#a8b41c7f00beff3ca195d530ffda61e60',1,'cadabra::Algorithm::result_t()']]],
   ['reuse_5fgenerating_5fset',['reuse_generating_set',['../classcadabra_1_1canonicalise.html#ad8910c7a4bc8045477b5dd55b53f26c8',1,'cadabra::canonicalise']]],
   ['revert',['revert',['../classcadabra_1_1ActionBase.html#ae96319bc6a7a08ac0de7e727241ce421',1,'cadabra::ActionBase::revert()'],['../classcadabra_1_1ActionAddCell.html#ae447293c732729ac8e7e47d929e59e3d',1,'cadabra::ActionAddCell::revert()'],['../classcadabra_1_1ActionPositionCursor.html#a30ad3d3eccd9b9910ed74ece56fddc7a',1,'cadabra::ActionPositionCursor::revert()'],['../classcadabra_1_1ActionSetRunStatus.html#af31b385cdd14da83df68bbedba1a12fb',1,'cadabra::ActionSetRunStatus::revert()'],['../classcadabra_1_1ActionRemoveCell.html#a036fb7ce67b1692cb2f40d57758e1cd7',1,'cadabra::ActionRemoveCell::revert()'],['../classcadabra_1_1ActionSplitCell.html#a36cf49b923dbf6698e9aedb6acb2e91d',1,'cadabra::ActionSplitCell::revert()'],['../classcadabra_1_1ActionInsertText.html#a8b8da1b049bc8bf7fc25302bf7d61850',1,'cadabra::ActionInsertText::revert()'],['../classcadabra_1_1ActionEraseText.html#a49cb7e1eeeeb32a9cbfa231e3d7b1b16',1,'cadabra::ActionEraseText::revert()']]],
-  ['rewrite_5findices',['rewrite_indices',['../classcadabra_1_1rewrite__indices.html',1,'cadabra']]],
   ['rewrite_5findices',['rewrite_indices',['../classcadabra_1_1rewrite__indices.html#ab4d0c72771190d6572a94e1694226696',1,'cadabra::rewrite_indices']]],
+  ['rewrite_5findices',['rewrite_indices',['../classcadabra_1_1rewrite__indices.html',1,'cadabra']]],
   ['rewrite_5findices_2ecc',['rewrite_indices.cc',['../rewrite__indices_8cc.html',1,'']]],
   ['rewrite_5findices_2ehh',['rewrite_indices.hh',['../rewrite__indices_8hh.html',1,'']]],
   ['rho',['rho',['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc'],['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc']]],
@@ -87,5 +87,6 @@ var searchData=
   ['runner',['runner',['../classServer.html#a2f7c69d01db7d1c0fb61dc0550084b89',1,'Server']]],
   ['running',['running',['../classcadabra_1_1DataCell.html#a2399d86186985e6d0cb013d0a852707c',1,'cadabra::DataCell']]],
   ['running_5fcells',['running_cells',['../classcadabra_1_1ComputeThread.html#ab28adc355af224d1545f187cffb28594',1,'cadabra::ComputeThread']]],
-  ['runtimeexception',['RuntimeException',['../classRuntimeException.html',1,'RuntimeException'],['../classRuntimeException.html#a0bb07d4ec6362fe5c312434721d605b6',1,'RuntimeException::RuntimeException()']]]
+  ['runtimeexception',['RuntimeException',['../classRuntimeException.html',1,'RuntimeException'],['../classRuntimeException.html#a0bb07d4ec6362fe5c312434721d605b6',1,'RuntimeException::RuntimeException()']]],
+  ['runtimeexceptiontype',['RuntimeExceptionType',['../PythonCdb_8cc.html#a8d6519013bb1de3db946fd2892894592',1,'PythonCdb.cc']]]
 ];

@@ -188,9 +188,10 @@ Private Attributes</h2></td></tr>
 std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplaySympy.html#a2db0c6b74c4533cab0c95bb89237a412">symmap</a></td></tr>
 <tr class="memdesc:a2db0c6b74c4533cab0c95bb89237a412"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> symbols to Sympy symbols.  <a href="#a2db0c6b74c4533cab0c95bb89237a412">More...</a><br/></td></tr>
 <tr class="separator:a2db0c6b74c4533cab0c95bb89237a412"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14772e925bdc0a4504929d21bc49fcc9"><td class="memItemLeft" align="right" valign="top">std::set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplaySympy.html#a14772e925bdc0a4504929d21bc49fcc9">depsyms</a></td></tr>
-<tr class="memdesc:a14772e925bdc0a4504929d21bc49fcc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of symbols which have had dependencies added.  <a href="#a14772e925bdc0a4504929d21bc49fcc9">More...</a><br/></td></tr>
-<tr class="separator:a14772e925bdc0a4504929d21bc49fcc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9837712e14918f230c00b289f5255b53"><td class="memItemLeft" align="right" valign="top">std::map&lt; nset_t::iterator, <a class="el" href="classcadabra_1_1Ex.html">Ex</a>, <br class="typebreak"/>
+<a class="el" href="classcadabra_1_1nset__it__less.html">nset_it_less</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplaySympy.html#a9837712e14918f230c00b289f5255b53">depsyms</a></td></tr>
+<tr class="memdesc:a9837712e14918f230c00b289f5255b53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from symbols which have had dependencies added to an expression containing these dependencies.  <a href="#a9837712e14918f230c00b289f5255b53">More...</a><br/></td></tr>
+<tr class="separator:a9837712e14918f230c00b289f5255b53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -942,7 +943,7 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a14772e925bdc0a4504929d21bc49fcc9"></a>
+<a class="anchor" id="a9837712e14918f230c00b289f5255b53"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -950,7 +951,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::set&lt;std::string&gt; cadabra::DisplaySympy::depsyms</td>
+          <td class="memname">std::map&lt;nset_t::iterator, <a class="el" href="classcadabra_1_1Ex.html">Ex</a>, <a class="el" href="classcadabra_1_1nset__it__less.html">nset_it_less</a>&gt; cadabra::DisplaySympy::depsyms</td>
         </tr>
       </table>
   </td>
@@ -960,7 +961,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>List of symbols which have had dependencies added. </p>
+<p>Map from symbols which have had dependencies added to an expression containing these dependencies. </p>
 
 </div>
 </div>
@@ -993,7 +994,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 26 2017 20:43:14 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 2 2017 17:20:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

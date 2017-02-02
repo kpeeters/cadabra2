@@ -28,6 +28,7 @@ var searchData=
   ['translate_5fnonscalarexception',['translate_NonScalarException',['../PythonCdb_8cc.html#af1a5442f7e8fca0e50293d7f343ffc92',1,'PythonCdb.cc']]],
   ['translate_5fnotyetimplemented',['translate_NotYetImplemented',['../PythonCdb_8cc.html#aacb2cc8c7d8eb8a504a19e5e3e7dbc66',1,'PythonCdb.cc']]],
   ['translate_5fparseexception',['translate_ParseException',['../PythonCdb_8cc.html#a381c20ab5d72688caa9ccbd9dadf8d68',1,'PythonCdb.cc']]],
+  ['translate_5fruntimeexception',['translate_RuntimeException',['../PythonCdb_8cc.html#a1e13631fd61db534808c4802c020de07',1,'PythonCdb.cc']]],
   ['tree_5fequal',['tree_equal',['../namespacecadabra.html#a85c2a10c9c2abf0a9eb6ffa107c594ae',1,'cadabra']]],
   ['tree_5fequal_5fobj',['tree_equal_obj',['../classcadabra_1_1tree__equal__obj.html#a55fcd4bceddc836489e0d4b3783f8ac9',1,'cadabra::tree_equal_obj']]],
   ['tree_5fexact_5fequal',['tree_exact_equal',['../namespacecadabra.html#a733646d45bc966a16fa15058aa6d4131',1,'cadabra']]],
