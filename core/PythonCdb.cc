@@ -615,6 +615,7 @@ std::string print_tree(Ex *ex)
 PyObject *ParseExceptionType = NULL;
 PyObject *ArgumentExceptionType = 0;
 PyObject *ConsistencyExceptionType = 0;
+PyObject *RuntimeExceptionType = 0;
 PyObject *NonScalarExceptionType = NULL;
 PyObject *InternalErrorType = NULL;
 PyObject *NotYetImplementedType = NULL;
@@ -661,6 +662,13 @@ void translate_ParseException(const ParseException &e)
 	assert(ParseExceptionType != NULL);
 	boost::python::object pythonExceptionInstance(e);
 	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
+	}
+
+void translate_RuntimeException(const RuntimeException &e)
+	{
+	assert(RuntimeExceptionType != NULL);
+	boost::python::object pythonExceptionInstance(e);
+	PyErr_SetObject(RuntimeExceptionType, pythonExceptionInstance.ptr());
 	}
 
 //void translate_ArgumentException(const ArgumentException &e)
@@ -1243,7 +1251,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		 return_internal_reference<1>() );
 		  
 	def("evaluate", &dispatch_ex<evaluate, Ex&, bool>,
-		 (arg("ex"), arg("components"), arg("rhsonly")=false,
+		 (arg("ex"), arg("components")=new Ex(), arg("rhsonly")=false,
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  
@@ -1432,6 +1440,11 @@ BOOST_PYTHON_MODULE(cadabra2)
 	class_<ParseException> pyParseException("ParseException", init<std::string>());
 	pyParseException.def("__str__", &ParseException::what);
 	register_exception_translator<ParseException>(&translate_ParseException);
+
+	RuntimeExceptionType=createExceptionClass("RuntimeException");
+	class_<RuntimeException> pyRuntimeException("RuntimeException", init<std::string>());
+	pyRuntimeException.def("__str__", &RuntimeException::what);
+	register_exception_translator<RuntimeException>(&translate_RuntimeException);
 
 	NonScalarExceptionType=createExceptionClass("NonscalarException");
 	class_<NonScalarException> pyNonScalarException("NonScalarException", init<std::string>());

@@ -153,8 +153,10 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 	// dependence off later again.
 
 	const Depends *dep=kernel.properties.get<Depends>(it);
-	if(dep)
-		depsyms.insert(*it->name);
+	if(dep) {
+		depsyms[it->name]=dep->dependencies(kernel, it);
+//		std::cerr << *it->name << "depends on " << depsyms[it->name] << std::endl;
+		}
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	if(ch!=tree.end(it) || dep!=0) {
@@ -177,8 +179,17 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 		if(dep) {
 			if(!first) str << ", ";
 			Ex deplist=dep->dependencies(kernel, it);
-			DisplaySympy ds(kernel, deplist);
-			ds.output(str);
+			// deplist is always a \comma node
+			auto sib=tree.begin(deplist.begin());
+			while(sib!=tree.end(deplist.begin())) {
+				dispatch(str, sib);
+				++sib;
+				if(sib!=tree.end(deplist.begin()))
+					str << ", ";
+				}
+//				
+//			DisplaySympy ds(kernel, deplist);
+//			ds.output(str);
 			}
 		str << ")";
 		}
@@ -502,28 +513,47 @@ void DisplaySympy::import(Ex& ex)
 				}
 			// See if we have added dependencies to this symbol (lookup in map).
 			// If yes, strip them off again.
-			auto fnd = depsyms.find(*it->name);
+			auto fnd = depsyms.find(it->name);
 			if(fnd!=depsyms.end()) {
-				std::cerr << "stripping from " << *it->name << std::endl;
-//				if(*ex.begin(it)->name=="\\comma")
-				ex.erase(ex.begin(it));
+				auto args=ex.begin(it);
+				// Strip out only those symbols which have been added.
+				while(args!=ex.end(it)) {
+					if(args->fl.parent_rel==str_node::p_none) {
+						auto findsib=fnd->second.begin(fnd->second.begin());
+						bool removed=false;
+						while(findsib!=fnd->second.end(fnd->second.begin())) {
+							if(subtree_equal(0, findsib, args)) {
+								args=ex.erase(args);
+								removed=true;
+								break;
+								}
+							++findsib;
+							}
+						if(!removed)
+							++args;
+						}
+					else
+						++args;
+					}
+//				std::cerr << "stripping from " << *it->name << std::endl;
+////				if(*ex.begin(it)->name=="\\comma")
+//				ex.erase(ex.begin(it));
 				}
 			
 			// Move child nodes of partial to the right place.
 			if(*it->name=="\\partial") {
-				auto comma = ex.begin(it);
-				if(*comma->name=="\\comma") {
-					auto args=ex.begin(comma);
-					++args;
-					while(args!=ex.end(comma)) {
-						auto nxt=args;
-						++nxt;
-						ex.move_before(comma, args)->fl.parent_rel=str_node::p_sub;
-						args=nxt;
-						}
-					ex.flatten(comma);
-					ex.erase(comma);
+				// std::cerr << Ex(it) << std::endl;
+				auto args = ex.begin(it);
+				++args;
+				while(args!=ex.end(it)) {
+					auto nxt=args;
+					++nxt;
+					ex.move_before(ex.begin(it), args)->fl.parent_rel=str_node::p_sub;
+					args=nxt;
 					}
+//				ex.flatten(comma);
+//				ex.erase(comma);
+//				}
 				}
 
 			return it;

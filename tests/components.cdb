@@ -269,3 +269,98 @@ def test13():
     ex:=\epsilon^{i j k};
     evaluate(ex, $$);
     # Not finished  
+
+
+def test14():        
+    __cdbkernel__=create_scope()
+    {t,x,y,z}::Coordinate;        
+    {\mu,\nu,\rho,\sigma}::Indices(values={t,x,y,z});
+    f::Depends({t,x,y,z});
+    \partial{#}::PartialDerivative;
+    ex:= F^{\mu} \partial_{\mu}{ f };
+    rl:= F^{t} = A, F^{x} = B, F^{z} = C;
+    evaluate(ex, rl)
+    canonicalise(ex)
+    tst:= A \partial_{t}{f} + B \partial_{x}{f} + C \partial_{z}{f} - @(ex);
+    assert(tst==0)
+    print("Test 14 passed")
+
+test14()
+
+def test15():        
+    __cdbkernel__=create_scope()
+    {t,x,y,z}::Coordinate;        
+    {\mu,\nu,\rho,\sigma}::Indices(values={t,x,y,z});
+    f::Depends({t,x,y,z});
+    \partial{#}::PartialDerivative;
+    ex:= F^{\mu\nu} \partial_{\mu \nu}{ f };
+    rl:= F^{t x} = A, F^{x y} = B, F^{z x} = C;
+    evaluate(ex, rl)
+    canonicalise(ex)
+    tst:= A \partial_{t x}{f} + B \partial_{x y}{f} + C \partial_{x z}{f} - @(ex);
+    assert(tst==0)
+    print("Test 15 passed")
+
+test15()
+
+def test16():        
+    __cdbkernel__=create_scope()
+    {x,y,z}::Coordinate;
+    f::Depends({x,y,z});
+    \partial{#}::PartialDerivative;
+    {i,j,k,l}::Indices(values={x,y,z}, position=free);
+    ex:= \partial_{i i}{f} + m**2 f;
+    evaluate(ex)
+    tst:= \partial_{x x}{f} + \partial_{y y}{f} + \partial_{z z}{f} + m**2 f - @(ex);
+    assert(tst==0)
+    print("Test 16 passed")
+
+test16()
+        
+def test17():
+    __cdbkernel__=create_scope()
+    {x,y,z}::Coordinate;
+    {i,j,k,l}::Indices(values={x,y,z}, position=free);
+    Ax::Depends(y);
+    Ay::Depends(z);
+    Az::Depends(x);        
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{i j}{A_{i}} + m**2 A_{j};
+    evaluate(ex, $A_x=Ax, A_y=Ay, A_z=Az$)
+    tst:= \components_{j}{ \comma{x}=m**2 Ax, \comma{y}=m**2 Ay, \comma{z}=m**2 Az } - @(ex);
+    collect_components(tst)
+    assert(tst==0)
+    print("Test 17 passed")
+
+test17()
+
+def test18():
+    __cdbkernel__=create_scope()
+    {x,y,z}::Coordinate;
+    {i,j,k,l}::Indices(values={x,y,z}, position=free);
+    A_{i}::Depends({x,y,z});
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{i}{A_{j}};
+    evaluate(ex, $A_{z}=z$)
+    tst:= \components_{j i}( \comma{ {z,z}=1 } ) - @(ex);
+    collect_components(tst)
+    assert(tst==0)
+    print("Test 18 passed")
+
+test18()
+
+def test19():
+    __cdbkernel__=create_scope()
+    {x,y,z}::Coordinate;
+    {i,j,k,l}::Indices(values={x,y,z}, position=free);
+    A_{i}::Depends({x,y,z});
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{i}{A_{i}} + m**2 f;
+    evaluate(ex, $A_{z}=\sin{z}$)
+    tst:= m**2 f + \cos{z} - @(ex);
+    sort_product(_)
+    assert(tst==0)
+    print("Test 19 passed")
+
+test19()
+    

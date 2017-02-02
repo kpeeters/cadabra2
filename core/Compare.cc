@@ -53,7 +53,7 @@ int subtree_compare(const Properties *properties,
 
 	// Handle mismatching node names.
 	if(one->name!=two->name) {
-		// std::cerr << *one->name << " != " << *two->name << std::endl;
+//		std::cerr << *one->name << " != " << *two->name << std::endl;
 		if(literal_wildcards) {
 			if(*one->name < *two->name) return mult;
 			else return -mult;
@@ -129,7 +129,7 @@ int subtree_compare(const Properties *properties,
 		if(!do_indices) do_indices=true;
 		else break;
 		} 
-
+	
 	return remember_ret;
 	}
 
