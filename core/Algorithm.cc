@@ -1175,6 +1175,22 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		ind_free.clear();
 		ind_dummy.clear();
 		}
+	else if(*it->name=="\\pow") {
+		// Power nodes can have dummies in all arguments, but no free indices. We allow for
+		// \pow{ A_{m} A^{m} }{2} type of things, in the understanding that any algorithm that
+		// does something with this (e.g. product_rule) will need to relabel once the expression
+		// gets down to A_{m} A^{m} itself.
+		auto sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
+			index_map_t ind_free_here, ind_dummy_here;
+			classify_indices(sib, ind_free_here, ind_dummy_here);
+			if(ind_free_here.size()>0)
+				throw ConsistencyException("Power with free indices not allowed.");
+			// FIXME: add test for overlap
+			ind_dummy.insert(ind_dummy_here.begin(), ind_dummy_here.end());
+			++sib;
+			}
+		}
 	else if((*it->name).size()>0 && (*it->name)[0]=='@') {
 		// This is an active node that has not been replaced yet; since
 		// we do not know anything about what this will become, do not return
