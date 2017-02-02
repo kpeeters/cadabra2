@@ -20,7 +20,7 @@ product_rule::product_rule(const Kernel& k, Ex& tr)
 bool product_rule::can_apply(iterator it)
 	{
 	const Derivative *der=kernel.properties.get<Derivative>(it);
-	if(der || *it->name=="\\cdb_Derivative") {
+	if(der || *it->name=="\\cdbDerivative") {
 		prodnode=tr.end();
 		number_of_indices=0;
 		if(tr.number_of_children(it)>0) {
