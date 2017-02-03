@@ -49,6 +49,7 @@ endforeach()
 #
 set(RTESTS
   packages
+  trigonometric
   noncovariant
   algebra
   components

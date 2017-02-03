@@ -223,7 +223,7 @@ class Ex_comparator {
 		match_t equal_subtree(Ex::iterator i1, Ex::iterator i2, 
 									 useprops_t use_props=useprops_t::always, bool ignore_parent_rel=false);
 
-      /// Find a subproduct in a product. The 'lhs' iterator points to the product which
+      /// Find a sub-product in a product. The 'lhs' iterator points to the product which
       /// we want to find, the 'tofind' iterator to the current factor which we are looking
       /// for. The product in which to search is pointed to by 'st'.
       /// Once 'tofind' is found, this routine calls itself to find the next factor in
@@ -234,6 +234,16 @@ class Ex_comparator {
 										 Ex::sibling_iterator lhs, Ex::sibling_iterator tofind, 
 										 Ex::sibling_iterator st, Ex::iterator conditions);
 
+      /// Find a sub-sum in a sum. The 'lhs' iterator points to the sum which
+      /// we want to find, the 'tofind' iterator to the current term which we are looking
+      /// for. The sum in which to search is pointed to by 'st'.
+      /// Once 'tofind' is found, this routine calls itself to find the next term in
+      /// 'lhs'. Since Cadabra assumes all terms in a sum commute, we do not
+		/// need the backtracking logic of subproduct.
+
+		match_t match_subsum(const Ex&, 
+									Ex::sibling_iterator lhs, Ex::sibling_iterator tofind, 
+									Ex::sibling_iterator st, Ex::iterator conditions);
 
 		/// Check whether the a match found by calling equal_subtree or match_subproduct 
 		/// satisfies the conditions as stated.

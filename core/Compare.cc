@@ -877,6 +877,50 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 	return match_t::no_match_less; // FIXME not entirely true
 	}
 
+Ex_comparator::match_t Ex_comparator::match_subsum(const Ex& tr, 
+																		 Ex::sibling_iterator lhs, 
+																		 Ex::sibling_iterator tofind, 
+																		 Ex::sibling_iterator st,
+																		 Ex::iterator conditions)
+	{
+	// 'Start' iterates over all terms, trying to find 'tofind'.
+
+	Ex::sibling_iterator start=st.begin();
+	while(start!=st.end()) {
+
+		// The term 'tofind' can only be matched against a term in the
+		// subsum if we have not already previously matched part of the
+		// lhs to this factor. We check that first.
+
+		if(std::find(factor_locations.begin(), factor_locations.end(), start)==factor_locations.end()) {  
+
+			// Compare this term with 'tofind'. 
+
+			auto match = equal_subtree(tofind, start);
+			if(match==match_t::subtree_match || match==match_t::match_index_less || match==match_t::match_index_greater) {
+				factor_locations.push_back(start);
+				
+				Ex::sibling_iterator nxt=tofind; 
+				++nxt;
+				if(nxt!=lhs.end()) {
+					match_t res=match_subsum(tr, lhs, nxt, st, conditions);
+					return res;
+					}
+				else {
+					// Found all factors in sub-product, now check the conditions.
+					std::string error;
+					if(conditions==tr.end()) return match_t::subtree_match;
+					if(satisfies_conditions(conditions, error)) {
+						return match_t::subtree_match;
+						}
+					}
+				}
+			}
+		++start;
+		}
+	return match_t::no_match_less;
+	}
+	
 
 int Ex_comparator::can_move_adjacent(Ex::iterator prod,
 												 Ex::sibling_iterator one, Ex::sibling_iterator two, bool fix_one) 

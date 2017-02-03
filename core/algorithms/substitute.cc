@@ -97,8 +97,9 @@ bool substitute::can_apply(iterator st)
 			// A + B + C + D
 			// > substitute(_, $B+C -> Q$)
 			
-			if(*lhs->name=="\\prod") ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
-			else                     ret=comparator.equal_subtree(lhs, st);
+			if(*lhs->name=="\\prod")     ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
+			else if(*lhs->name=="\\sum") ret=comparator.match_subsum(tr, lhs, tr.begin(lhs), st, conditions);
+			else                         ret=comparator.equal_subtree(lhs, st);
 			
 			if(ret == Ex_comparator::match_t::subtree_match || 
 				ret == Ex_comparator::match_t::match_index_less || 
@@ -289,6 +290,19 @@ Algorithm::result_t substitute::apply(iterator& st)
 			multiply(tr.begin(st)->multiplier, *st->multiplier);
 			tr.flatten(st);
 			st=tr.erase(st);
+			}
+		}
+	else if(*lhs->name=="\\sum") {
+		for(unsigned int i=1; i<comparator.factor_locations.size(); ++i)
+			tr.erase(comparator.factor_locations[i]);
+		
+		// no need to keep repl
+		iterator newtr=tr.move_ontop(iterator(comparator.factor_locations[0]),repl.begin()); 
+		multiply(st->multiplier, *newtr->multiplier);
+		one(newtr->multiplier);
+		if(ind_dummy.size()>0) {
+			rename_replacement_dummies(newtr); // do NOW, otherwise the replacement cannot be isolated anymore
+			rename_replacement_dummies_called=true;
 			}
 		}
 	else {
