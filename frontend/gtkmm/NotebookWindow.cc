@@ -747,7 +747,7 @@ size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
 void NotebookWindow::scroll_current_cell_into_view()
 	{
 	if(current_cell==doc.end()) return;
-	if(current_canvas>=canvasses.size()) return;
+	if(current_canvas>=(int)canvasses.size()) return;
 
 	if(canvasses[current_canvas]->visualcells.find(&(*current_cell))==canvasses[current_canvas]->visualcells.end()) return;
 	

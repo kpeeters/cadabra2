@@ -149,7 +149,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				}
 			else {
 				str << "{% extends \"notebook_layout.html\" %}\n"
-					 << "{% block head %}{%- endblock %}\n"
+					 << "{% block head %}\n"
+					 << " <meta name=\"keywords\" content=\"cadabra, manual\"/>\n"
+					 << "{%- endblock %}\n"
 					 << "{% block main %}\n"
 					 << "{% raw %}\n";
 				}

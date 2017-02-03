@@ -575,3 +575,19 @@ def test34():
     unwrap(ex)
     tst:= \partial_{\mu}{A^{2}} - @(ex);
     assert(tst==0)
+    print("Test 34 passed")        
+
+#test34()
+        
+def test35():
+    __cdbkernel__=create_scope()        
+    \partial{#}::PartialDerivative;
+    {\mu,\nu,\rho}::Indices;    
+    ex:= \partial_{\mu}{ (\partial_{\nu}{\phi} \partial^{\nu}{\phi})**3 };
+    product_rule(ex)
+    tst:= 3 (\partial_{\nu}{\phi} \partial^{\nu}{\phi})**2
+        \partial_{\mu}{\partial_{\rho}{\phi} \partial^{\rho}{\phi} } - @(ex);
+    assert(tst==0)
+    print("Test 35 passed")
+
+test35()

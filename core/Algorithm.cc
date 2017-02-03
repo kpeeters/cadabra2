@@ -538,6 +538,10 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
 		}
 	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
+	// std::cerr << "dummies of " << *two->name << std::endl;
+	// for(auto& ii: ind_dummy) {
+	// 	std::cerr << ii.first << std::endl;
+	// 	}
 
 	index_map_t must_be_empty;
 	index_map_t newly_generated;
@@ -1171,6 +1175,32 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 		ind_free.clear();
 		ind_dummy.clear();
 		}
+	else if(*it->name=="\\pow") {
+		// Power nodes can have dummies in all arguments, but no free indices. We allow for
+		// \pow{ A_{m} A^{m} }{2} type of things, in the understanding that any algorithm that
+		// does something with this (e.g. product_rule) will need to relabel once the expression
+		// gets down to A_{m} A^{m} itself. Note that the classifier will mark numerical indices
+		// and coordinate indices as free.
+		auto sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
+			index_map_t ind_free_here, ind_dummy_here;
+			classify_indices(sib, ind_free_here, ind_dummy_here);
+			if(ind_free_here.size()>0) {
+				for(auto& di: ind_free_here) {
+					const Coordinate *cdn=kernel.properties.get<Coordinate>(di.second);
+					const Symbol     *smb=kernel.properties.get<Symbol>(di.second);
+					if(! (cdn || smb || di.second->is_integer()) ) {
+						std::cerr << di.first << std::endl;
+						throw ConsistencyException("Power with free indices not allowed.");
+						}
+					}
+				ind_free_here.clear();
+				}
+			// FIXME: add test for overlap
+			ind_dummy.insert(ind_dummy_here.begin(), ind_dummy_here.end());
+			++sib;
+			}
+		}
 	else if((*it->name).size()>0 && (*it->name)[0]=='@') {
 		// This is an active node that has not been replaced yet; since
 		// we do not know anything about what this will become, do not return
@@ -1186,8 +1216,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) && sit->fl.bracket==str_node::b_none) {
 				if(*sit->name!="??") {
 					const Coordinate *cdn=kernel.properties.get<Coordinate>(sit, true);
-//					const Symbol     *smb=Symbol::get(kernel.properties, sit, true);
-					const Symbol     *smb=kernel.properties.get<Symbol>(sit, true); //Symbol::get(kernel.properties, sit, true);
+					const Symbol     *smb=kernel.properties.get<Symbol>(sit, true);
 					// integer, coordinate or symbol indices always ok
 					if(sit->is_integer() || cdn || smb) {
 						// Note: even integers need to be stored as indices, because we expect e.g. canonicalise
