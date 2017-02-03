@@ -1,14 +1,11 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -18,19 +15,16 @@
 			"hidden" : true,
 			"source" : "\\algorithm{substitute}{Generic substitution algorithm.}\n\n Generic substitution algorithm.\nTakes a rule or a set of rules according to which an expression\nshould be modified. If more than one rule is given, it tries each rule\nin turn, until the first working one is encountered, after which it\ncontinues with the next node."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}G_{\\mu \\nu \\rho}+F_{\\mu \\nu \\rho}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -39,19 +33,16 @@
 			],
 			"source" : "ex:=G_{\\mu \\nu \\rho} + F_{\\mu \\nu \\rho};\nsubstitute(_,  $F_{\\mu \\nu \\rho} -> A_{\\mu \\nu} B_{\\rho}$ );"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A_{\\mu \\nu} B_{\\nu \\rho} C_{\\rho \\sigma}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -60,13 +51,11 @@
 			],
 			"source" : "ex:= A_{\\mu \\nu} B_{\\nu \\rho} C_{\\rho \\sigma};\nsubstitute(_, $A_{m n} C_{p q} -> D_{m q}$ );"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
@@ -76,13 +65,11 @@
 			"hidden" : true,
 			"source" : "This command takes full care of dummy index relabelling, as the\nfollowing example shows:"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -91,38 +78,51 @@
 			],
 			"source" : "{m,n,q,r,s,t,u}::Indices(vector).\nex:= a_{m} b_{n};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}c_{q d1} d_{q d1 m} b_{n}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}c_{q r} d_{q r m} b_{n}\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(_, $a_{q} -> c_{m n} d_{m n q}$ );"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "By postfixing a name with a question mark, it becomes a pattern.\n\nThe substitution algorithm can do very complicated things; for more\ndetailed information on substitution, see the manual."
+					"source" : "By postfixing a name with a question mark, it becomes a pattern. You do not need this for indices (as the examples\nabove show) but it is necessary for other types of function arguments."
 				}
 			],
 			"hidden" : true,
-			"source" : "By postfixing a name with a question mark, it becomes a pattern.\n\nThe substitution algorithm can do very complicated things; for more\ndetailed information on substitution, see the manual."
+			"source" : "By postfixing a name with a question mark, it becomes a pattern. You do not need this for indices (as the examples\nabove show) but it is necessary for other types of function arguments."
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\sin{x}^{2}+3+\\cos{x}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}4\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= \\sin{ x }**2 + 3 + \\cos{ x }**2;\nsubstitute(ex, $\\sin{A?}**2 + \\cos{A?}**2 = 1$);"
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -130,6 +130,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-
