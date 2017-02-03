@@ -154,8 +154,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a6170ac297e72956136a5c7a78828556d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Match two subtrees taking into account symbol properties.  <a href="#a6170ac297e72956136a5c7a78828556d">More...</a><br/></td></tr>
 <tr class="separator:a6170ac297e72956136a5c7a78828556d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5231edc5cffe35126aed77c499872338"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex__comparator.html#af0e8465f5532a2836740b9e2170cff6c">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html#a5231edc5cffe35126aed77c499872338">match_subproduct</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::sibling_iterator <a class="el" href="PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92">lhs</a>, Ex::sibling_iterator tofind, Ex::sibling_iterator st, Ex::iterator conditions)</td></tr>
-<tr class="memdesc:a5231edc5cffe35126aed77c499872338"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a subproduct in a product.  <a href="#a5231edc5cffe35126aed77c499872338">More...</a><br/></td></tr>
+<tr class="memdesc:a5231edc5cffe35126aed77c499872338"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a sub-product in a product.  <a href="#a5231edc5cffe35126aed77c499872338">More...</a><br/></td></tr>
 <tr class="separator:a5231edc5cffe35126aed77c499872338"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e822a5e48887d624a254dee611e1ce9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex__comparator.html#af0e8465f5532a2836740b9e2170cff6c">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html#a0e822a5e48887d624a254dee611e1ce9">match_subsum</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::sibling_iterator <a class="el" href="PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92">lhs</a>, Ex::sibling_iterator tofind, Ex::sibling_iterator st, Ex::iterator conditions)</td></tr>
+<tr class="memdesc:a0e822a5e48887d624a254dee611e1ce9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a sub-sum in a sum.  <a href="#a0e822a5e48887d624a254dee611e1ce9">More...</a><br/></td></tr>
+<tr class="separator:a0e822a5e48887d624a254dee611e1ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adfbc1d07f0f306a33b6aca82cd6e5d0a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html#adfbc1d07f0f306a33b6aca82cd6e5d0a">satisfies_conditions</a> (Ex::iterator conditions, std::string &amp;error)</td></tr>
 <tr class="memdesc:adfbc1d07f0f306a33b6aca82cd6e5d0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether the a match found by calling equal_subtree or match_subproduct satisfies the conditions as stated.  <a href="#adfbc1d07f0f306a33b6aca82cd6e5d0a">More...</a><br/></td></tr>
 <tr class="separator:adfbc1d07f0f306a33b6aca82cd6e5d0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -804,8 +807,55 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Find a subproduct in a product. </p>
+<p>Find a sub-product in a product. </p>
 <p>The 'lhs' iterator points to the product which we want to find, the 'tofind' iterator to the current factor which we are looking for. The product in which to search is pointed to by 'st'. Once 'tofind' is found, this routine calls itself to find the next factor in 'lhs'. If the next factor cannot be found, we backtrack and try to find the previous factor again (it may have appeared multiple times). </p>
+
+</div>
+</div>
+<a class="anchor" id="a0e822a5e48887d624a254dee611e1ce9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex__comparator.html#af0e8465f5532a2836740b9e2170cff6c">Ex_comparator::match_t</a> cadabra::Ex_comparator::match_subsum </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::sibling_iterator&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::sibling_iterator&#160;</td>
+          <td class="paramname"><em>tofind</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::sibling_iterator&#160;</td>
+          <td class="paramname"><em>st</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>conditions</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Find a sub-sum in a sum. </p>
+<p>The 'lhs' iterator points to the sum which we want to find, the 'tofind' iterator to the current term which we are looking for. The sum in which to search is pointed to by 'st'. Once 'tofind' is found, this routine calls itself to find the next term in 'lhs'. Since <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> assumes all terms in a sum commute, we do not need the backtracking logic of subproduct. </p>
 
 </div>
 </div>
@@ -1041,7 +1091,7 @@ Static Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Feb 2 2017 17:23:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 3 2017 17:34:09 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

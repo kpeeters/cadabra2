@@ -33,6 +33,7 @@ var searchData=
   ['match_5findex_5fgreater',['match_index_greater',['../classcadabra_1_1Ex__comparator.html#af0e8465f5532a2836740b9e2170cff6cacee57ff8ba9aa5a49d1bcfda5e392f29',1,'cadabra::Ex_comparator']]],
   ['match_5findex_5fless',['match_index_less',['../classcadabra_1_1Ex__comparator.html#af0e8465f5532a2836740b9e2170cff6ca5746d6bc760070229acbdfa29b226da0',1,'cadabra::Ex_comparator']]],
   ['match_5fsubproduct',['match_subproduct',['../classcadabra_1_1Ex__comparator.html#a5231edc5cffe35126aed77c499872338',1,'cadabra::Ex_comparator']]],
+  ['match_5fsubsum',['match_subsum',['../classcadabra_1_1Ex__comparator.html#a0e822a5e48887d624a254dee611e1ce9',1,'cadabra::Ex_comparator']]],
   ['match_5ft',['match_t',['../classcadabra_1_1Ex__comparator.html#af0e8465f5532a2836740b9e2170cff6c',1,'cadabra::Ex_comparator::match_t()'],['../classcadabra_1_1property.html#adb8b292b18172a8d5f9f3ee9f1bd5cb7',1,'cadabra::property::match_t()']]],
   ['matrix',['Matrix',['../classcadabra_1_1Matrix.html',1,'cadabra']]],
   ['matrix_2ecc',['Matrix.cc',['../Matrix_8cc.html',1,'']]],

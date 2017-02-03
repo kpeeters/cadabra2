@@ -8,6 +8,7 @@ var searchData=
   ['master_5finsert',['master_insert',['../classcadabra_1_1Properties.html#a0d54a20c7052dac5d2dc362276f98a76',1,'cadabra::Properties']]],
   ['match',['match',['../classcadabra_1_1pattern.html#ad3ef1fbd9c892f506eeceae5109f11e1',1,'cadabra::pattern']]],
   ['match_5fsubproduct',['match_subproduct',['../classcadabra_1_1Ex__comparator.html#a5231edc5cffe35126aed77c499872338',1,'cadabra::Ex_comparator']]],
+  ['match_5fsubsum',['match_subsum',['../classcadabra_1_1Ex__comparator.html#a0e822a5e48887d624a254dee611e1ce9',1,'cadabra::Ex_comparator']]],
   ['max_5fnumbered_5fname',['max_numbered_name',['../classcadabra_1_1Algorithm.html#aa7e64a13a24c369f9ce3846f80f8efc8',1,'cadabra::Algorithm']]],
   ['max_5fnumbered_5fname_5fone',['max_numbered_name_one',['../classcadabra_1_1Algorithm.html#aa9f42a7e53662a08857aa5cea2572749',1,'cadabra::Algorithm']]],
   ['merge_5fcomponent_5fchildren',['merge_component_children',['../classcadabra_1_1evaluate.html#a261171e3a5dada80c18fc64c52b97930',1,'cadabra::evaluate']]],
