@@ -296,14 +296,17 @@ Algorithm::result_t substitute::apply(iterator& st)
 		for(unsigned int i=1; i<comparator.factor_locations.size(); ++i)
 			tr.erase(comparator.factor_locations[i]);
 		
+		multiply(repl.begin()->multiplier, 1/comparator.term_ratio);
+
 		// no need to keep repl
 		iterator newtr=tr.move_ontop(iterator(comparator.factor_locations[0]),repl.begin()); 
-		multiply(st->multiplier, *newtr->multiplier);
-		one(newtr->multiplier);
+//		multiply(st->multiplier, *newtr->multiplier);
+//		one(newtr->multiplier);
 		if(ind_dummy.size()>0) {
 			rename_replacement_dummies(newtr); // do NOW, otherwise the replacement cannot be isolated anymore
 			rename_replacement_dummies_called=true;
 			}
+		
 		}
 	else {
 		multiply(repl.begin()->multiplier, *st->multiplier);
@@ -316,7 +319,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 		rename_replacement_dummies(st);
 
 	// The replacement is done now.  What is left is to take into
-	// account any signs caused by moving factors through each other.
+	// account any signs caused by moving factors through each other
 	int totsign=1;
 	for(unsigned int i=0; i<comparator.factor_moving_signs.size(); ++i)
 		totsign*=comparator.factor_moving_signs[i];

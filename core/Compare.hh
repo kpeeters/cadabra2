@@ -266,11 +266,14 @@ class Ex_comparator {
 
 		replacement_map_t                                              index_value_map;
 
-		/// Information to keep track of where individual factors in a sub-product were
-		/// found, and whether moving them into the searched-for order leads to sign flips.
+		/// Information to keep track of where individual factors/terms
+		/// in a sub-product/sub-sum were found, and (for sub-products)
+		/// whether moving them into the searched-for order leads to
+		/// sign flips.
 
 		std::vector<Ex::sibling_iterator> factor_locations;
 		std::vector<int>                  factor_moving_signs;
+		multiplier_t                      term_ratio;
 
 		/// Flag to indicate whether additional care must be taken to handle dummies in the 
 		/// lhs of the pattern.
