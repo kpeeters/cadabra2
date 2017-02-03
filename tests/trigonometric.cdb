@@ -1,0 +1,33 @@
+
+def test01():
+    __cdbkernel__=create_scope()
+    rl:= \sin{A??}**2 + \cos{A??}**2 = 1;
+    ex:= \sin{x}**2 + 3 + \cos{x}**2 + Q;
+    substitute(ex, rl)
+    tst:= 4 + Q - @(ex);
+    assert(tst==0)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    __cdbkernel__=create_scope()
+    rl:= \sin{A??}**2 + \cos{A??}**2 = 1;
+    ex:= \sin{A_{m} A^{m}}**2 + \cos{A_{n} A^{n}}**2;
+    substitute(ex, rl)
+    tst:= 1 - @(ex);
+    assert(tst==0)
+    print("Test 02 passed")
+
+test02()
+
+def test03():
+    __cdbkernel__=create_scope()
+    rl:= \sin{A??}**2 + \cos{A??}**2 = 1;
+    ex:= \sin{A_{m} A^{m} B_{n} B^{n}}**2 + \cos{A_{m} A^{n} B_{n} B^{m}}**2;
+    substitute(ex, rl)
+    tst:= \sin{A_{m} A^{m} B_{n} B^{n}}**2 + \cos{A_{m} A^{n} B_{n} B^{m}}**2 - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
+
+test03()

@@ -286,3 +286,14 @@ test109()
 # rl:= \alpha_{m}^{\mu} \alpha_{n}^{\nu} | m > n -> \alpha_{n}^{\nu} \alpha_{m}^{\mu} +  \delta_{m}_{-n} \delta^{\mu\nu};
 # ex:= \alpha_{1}^{\mu} \alpha_{0}^{\mu};
 # substitute(ex, rl);
+
+def test110():        
+    __cdbkernel__=create_scope()
+    ex:= A + B + C + D;
+    substitute(_, $B + D = Q$)
+    tst:= A + C + Q - @(ex);
+    assert(tst==0)
+    print("Test 110 passed")
+
+test110()
+
