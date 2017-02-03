@@ -13,6 +13,7 @@ var searchData=
   ['temparr',['temparr',['../classcombin_1_1combinations__base.html#a338a3b09e9a59344da59f291b9c04423',1,'combin::combinations_base']]],
   ['tensors',['tensors',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a5f8337d38497312b7924382e374c4ad1',1,'cadabra::exchange::identical_tensors_t']]],
   ['term_5fhash',['term_hash',['../classcadabra_1_1collect__terms.html#a6f708c5a562ba84b087b4591a0a2ef29',1,'cadabra::collect_terms::term_hash()'],['../classcadabra_1_1factor__in.html#a72bc39a616d0bec7c7d8d13b01aab65f',1,'cadabra::factor_in::term_hash()']]],
+  ['term_5fratio',['term_ratio',['../classcadabra_1_1Ex__comparator.html#a488b42b69dc9c27c37331b45769abf43',1,'cadabra::Ex_comparator']]],
   ['terms_5f',['terms_',['../classcadabra_1_1keep__terms.html#acb82d548ab5512b16b2f87c869b1bb63',1,'cadabra::keep_terms']]],
   ['tex_5ferror',['tex_error',['../classcadabra_1_1TeXView.html#afdfcea67e32bf0124cb00d8bafb3ef63',1,'cadabra::TeXView']]],
   ['text',['text',['../classcadabra_1_1ActionInsertText.html#a163a386bd17b454893c6a102dc8ecc87',1,'cadabra::ActionInsertText']]],

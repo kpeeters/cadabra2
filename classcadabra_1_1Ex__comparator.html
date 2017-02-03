@@ -182,10 +182,12 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a9e15897f5a3cb6fe203cd67513c66554"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map for matching of index names to index values.  <a href="#a9e15897f5a3cb6fe203cd67513c66554">More...</a><br/></td></tr>
 <tr class="separator:a9e15897f5a3cb6fe203cd67513c66554"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac51dfbe2658dd4b71a294273cb0f8bef"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Ex::sibling_iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html#ac51dfbe2658dd4b71a294273cb0f8bef">factor_locations</a></td></tr>
-<tr class="memdesc:ac51dfbe2658dd4b71a294273cb0f8bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information to keep track of where individual factors in a sub-product were found, and whether moving them into the searched-for order leads to sign flips.  <a href="#ac51dfbe2658dd4b71a294273cb0f8bef">More...</a><br/></td></tr>
+<tr class="memdesc:ac51dfbe2658dd4b71a294273cb0f8bef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information to keep track of where individual factors/terms in a sub-product/sub-sum were found, and (for sub-products) whether moving them into the searched-for order leads to sign flips.  <a href="#ac51dfbe2658dd4b71a294273cb0f8bef">More...</a><br/></td></tr>
 <tr class="separator:ac51dfbe2658dd4b71a294273cb0f8bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0496e7c3fcc616ad9a52bd2a4f55bf0"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html#ad0496e7c3fcc616ad9a52bd2a4f55bf0">factor_moving_signs</a></td></tr>
 <tr class="separator:ad0496e7c3fcc616ad9a52bd2a4f55bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a488b42b69dc9c27c37331b45769abf43"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html#a488b42b69dc9c27c37331b45769abf43">term_ratio</a></td></tr>
+<tr class="separator:a488b42b69dc9c27c37331b45769abf43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e5984ecd92fb61aa639ddd202518832"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex__comparator.html#a3e5984ecd92fb61aa639ddd202518832">lhs_contains_dummies</a></td></tr>
 <tr class="memdesc:a3e5984ecd92fb61aa639ddd202518832"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag to indicate whether additional care must be taken to handle dummies in the lhs of the pattern.  <a href="#a3e5984ecd92fb61aa639ddd202518832">More...</a><br/></td></tr>
 <tr class="separator:a3e5984ecd92fb61aa639ddd202518832"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -974,7 +976,7 @@ Static Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Information to keep track of where individual factors in a sub-product were found, and whether moving them into the searched-for order leads to sign flips. </p>
+<p>Information to keep track of where individual factors/terms in a sub-product/sub-sum were found, and (for sub-products) whether moving them into the searched-for order leads to sign flips. </p>
 
 </div>
 </div>
@@ -1084,6 +1086,18 @@ Static Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a488b42b69dc9c27c37331b45769abf43"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacecadabra.html#ae5b4f3cbcbe2f37602e15bd629b6c921">multiplier_t</a> cadabra::Ex_comparator::term_ratio</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>core/<a class="el" href="Compare_8hh_source.html">Compare.hh</a></li>
 <li>core/<a class="el" href="Compare_8cc.html">Compare.cc</a></li>
@@ -1091,7 +1105,7 @@ Static Protected Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 3 2017 17:34:09 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 3 2017 21:27:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
