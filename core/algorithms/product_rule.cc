@@ -231,11 +231,11 @@ Algorithm::result_t product_rule::apply(iterator& it)
 //	it=tr.replace(it,rep.begin());
 	it=tr.move_ontop(it, rep.begin());
 	if(rename_dummies_at!=tr.end()) {
-		std::cerr << "...\n";
-		std::cerr << Ex(rename_dummies_at) << std::endl;
-		std::cerr << "---\n";
-		std::cerr << Ex(it) << std::endl;
-		std::cerr << "===\n";
+//		std::cerr << "...\n";
+//		std::cerr << Ex(rename_dummies_at) << std::endl;
+//		std::cerr << "---\n";
+//		std::cerr << Ex(it) << std::endl;
+//		std::cerr << "===\n";
 		rename_replacement_dummies(rename_dummies_at, false);
 		}
 //	cleanup_expression(tr, it);
