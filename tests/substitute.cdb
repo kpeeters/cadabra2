@@ -289,9 +289,9 @@ test109()
 
 def test110():        
     __cdbkernel__=create_scope()
-    ex:= A + B + C + D;
+    ex:= A + 2 B + C + 2 D;
     substitute(_, $B + D = Q$)
-    tst:= A + C + Q - @(ex);
+    tst:= A + C + 2 Q - @(ex);
     assert(tst==0)
     print("Test 110 passed")
 
