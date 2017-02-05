@@ -296,7 +296,7 @@ built. Copy them all in ~/bin, and also copy a whole slew of other
 things into there. In addition you need::
 
     cp /mingw64/bin/gspawn-win* ~/bin
-    export PYTHONPATH=/mingw64/lib/python2.7:/home/kasper/bin
+    export PYTHONPATH=/mingw64/lib/python2.7:/home/[user]/bin
 
 This fails to start the server with 'The application has requested the
 Runtime to terminate it in an unusual way'.
