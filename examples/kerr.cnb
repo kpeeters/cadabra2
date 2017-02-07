@@ -1,41 +1,39 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}{t, r, \\theta, \\phi}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left\\{t,~\\linebreak[0] r,~\\linebreak[0] \\theta,~\\linebreak[0] \\phi\\right\\}.\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property LaTeXForm to~}rs.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Metric to~}g_{\\mu \\nu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}g^{\\mu \\nu}.\\end{dmath*}"
 				}
 			],
-			"source" : "{t,r,\\theta,\\phi}::Coordinate;\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\nrs::LaTeXForm(\"r_s\");\n\\partial{#}::PartialDerivative."
+			"source" : "{t,r,\\theta,\\phi}::Coordinate;\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\nrs::LaTeXForm(\"r_s\").\ng_{\\mu\\nu}::Metric;\ng^{\\mu\\nu}::InverseMetric;\n\\partial{#}::PartialDerivative."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\Delta.\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -44,79 +42,65 @@
 			],
 			"source" : "\\Delta::Depends(r);\n\\Sigma::Depends(r);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{g_{t t} = -1+r_s \\frac{r}{\\Sigma}, g_{t \\phi} = -r_s a r \\frac{\\sin(\\theta)^{2}}{\\Sigma}, g_{\\phi t} = -r_s a r \\frac{\\sin(\\theta)^{2}}{\\Sigma}, g_{r r} = \\frac{\\Sigma}{\\Delta}, g_{\\theta \\theta} = \\Sigma, g_{\\phi \\phi} = \\left(r^{2}+a^{2}+r_s a^{2} r \\frac{\\sin(\\theta)^{2}}{\\Sigma}\\right) \\sin(\\theta)^{2}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left\\{g_{t t} = -1+r_s \\frac{r}{\\Sigma},~\\linebreak[0] g_{t \\phi} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{\\phi t} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{r r} = \\frac{\\Sigma}{\\Delta},~\\linebreak[0] g_{\\theta \\theta} = \\Sigma,~\\linebreak[0] g_{\\phi \\phi} = \\left(r^{2}+a^{2}+r_s a^{2} r \\frac{\\sin{\\theta}^{2}}{\\Sigma}\\right) \\sin{\\theta}^{2}\\right\\}\\end{dmath*}"
 				}
 			],
 			"source" : "kerr:= { g_{t t}            = - (1 - rs r / \\Sigma),\n         g_{t \\phi}         = - rs a r \\sin(\\theta)**2 / \\Sigma,\n         g_{\\phi t}         = - rs a r \\sin(\\theta)**2 / \\Sigma,\n         g_{r r}            = \\Sigma / \\Delta,\n         g_{\\theta \\theta } = \\Sigma,\n         g_{\\phi \\phi}      = ( r**2 + a**2 + rs a**2 r \\sin(\\theta)**2 / \\Sigma ) \\sin(\\theta)**2 };"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\Gamma^{\\mu}\\,_{\\nu \\rho}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left\\{g_{t t} = -1+r_s \\frac{r}{\\Sigma},~\\linebreak[0] g_{t \\phi} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{\\phi t} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{r r} = \\frac{\\Sigma}{\\Delta},~\\linebreak[0] g_{\\theta \\theta} = \\Sigma,~\\linebreak[0] g_{\\phi \\phi} = \\left(r^{2}+a^{2}+r_s a^{2} r \\frac{\\sin{\\theta}^{2}}{\\Sigma}\\right) \\sin{\\theta}^{2},~\\linebreak[0] g^{t t} = a^{2} r^{2} r_s^{2} \\left(r r_s-\\Sigma\\right) \\frac{\\sin{\\theta}^{2}}{\\left(r \\frac{r_s}{\\Sigma}-1\\right)^{2} \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma^{2}}+\\frac{1}{r \\frac{r_s}{\\Sigma}-1},~\\linebreak[0] g^{t \\phi} = a r r_s \\frac{r r_s-\\Sigma}{\\left(r \\frac{r_s}{\\Sigma}-1\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma},~\\linebreak[0] g^{r r} = \\frac{\\Delta}{\\Sigma},~\\linebreak[0] g^{\\phi t} = a r r_s \\frac{r r_s-\\Sigma}{\\left(r \\frac{r_s}{\\Sigma}-1\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma},~\\linebreak[0] g^{\\phi \\phi} = \\frac{r r_s-\\Sigma}{\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\sin{\\theta}^{2}},~\\linebreak[0] g^{\\theta \\theta} = \\frac{1}{\\Sigma}\\right\\}\\end{dmath*}"
+				}
+			],
+			"source" : "complete(kerr, $g^{\\mu\\nu}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "import cdb.relativity as gr"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left\\{\\mu,~\\linebreak[0] \\nu,~\\linebreak[0] \\rho,~\\linebreak[0] \\sigma,~\\linebreak[0] \\kappa,~\\linebreak[0] \\gamma,~\\linebreak[0] \\lambda\\right\\}.\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} = \\frac{1}{2}g^{\\lambda \\kappa} \\left(\\partial_{\\mu}{g_{\\kappa \\nu}}+\\partial_{\\nu}{g_{\\kappa \\mu}}-\\partial_{\\kappa}{g_{\\mu \\nu}}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= \\Gamma^{\\mu}_{\\nu\\rho}=\\Gamma^{\\mu}_{\\nu\\rho};\nrl:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}}-\\partial_{\\sigma}{g_{\\nu\\rho}} );                         "
+			"source" : "ch = gr.christoffel_from_metric();"
 		},
-		
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "evaluate(ch, kerr);"
+		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
-				}
-			],
-			"source" : "substitute(ex, rl);"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} =  = \\left\\{\\begin{aligned}\\end{aligned}\\right.\n\\end{dmath*}"
-				}
-			],
-			"source" : "evaluate(ex, kerr);"
-		},
-		
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "output",
@@ -125,7 +109,6 @@
 			],
 			"source" : "print(tree(ex))"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -133,6 +116,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-

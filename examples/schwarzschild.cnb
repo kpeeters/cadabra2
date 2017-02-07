@@ -23,12 +23,12 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left\\{r, \\linebreak[0] t, \\linebreak[0] \\phi, \\linebreak[0] \\theta\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left\\{r,~\\linebreak[0] t,~\\linebreak[0] \\phi,~\\linebreak[0] \\theta\\right\\}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left\\{\\mu, \\linebreak[0] \\nu, \\linebreak[0] \\rho, \\linebreak[0] \\sigma, \\linebreak[0] \\lambda, \\linebreak[0] \\kappa, \\linebreak[0] \\chi, \\linebreak[0] \\gamma\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left\\{\\mu,~\\linebreak[0] \\nu,~\\linebreak[0] \\rho,~\\linebreak[0] \\sigma,~\\linebreak[0] \\lambda,~\\linebreak[0] \\kappa,~\\linebreak[0] \\chi,~\\linebreak[0] \\gamma\\right\\}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -60,7 +60,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{g_{t t} = -1+\\frac{2M}{r}, \\linebreak[0] g_{r r} = \\frac{1}{1 - \\frac{2M}{r}}, \\linebreak[0] g_{\\theta \\theta} = r^{2}, \\linebreak[0] g_{\\phi \\phi} = r^{2} \\sin{\\theta}^{2}, \\linebreak[0] g^{t t} = \\frac{r}{2M-r}, \\linebreak[0] g^{r r} = \\frac{-2M+r}{r}, \\linebreak[0] g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin{\\theta}^{2}}, \\linebreak[0] g^{\\theta \\theta} = r^{-2}\\right\\}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left\\{g_{t t} = -1+\\frac{2M}{r},~\\linebreak[0] g_{r r} = \\frac{1}{1 - \\frac{2M}{r}},~\\linebreak[0] g_{\\theta \\theta} = r^{2},~\\linebreak[0] g_{\\phi \\phi} = r^{2} \\sin{\\theta}^{2},~\\linebreak[0] g^{t t} = \\frac{r}{2M-r},~\\linebreak[0] g^{r r} = \\frac{-2M+r}{r},~\\linebreak[0] g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin{\\theta}^{2}},~\\linebreak[0] g^{\\theta \\theta} = r^{-2}\\right\\}\\end{dmath*}"
 				}
 			],
 			"source" : "ss:= { g_{t t} = -(1-2 M/r),   \n       g_{r r} = 1/(1-2 M/r), \n       g_{\\theta\\theta} = r**2, \n       g_{\\phi\\phi}=r**2 \\sin(\\theta)**2\n     }.\n\ncomplete(ss, $g^{\\mu\\nu}$);"
@@ -222,6 +222,90 @@
 			],
 			"hidden" : true,
 			"source" : "This shows that $r=0$ is a true singularity."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "You could have computed the Riemann tensor in a different way, first expanding it fully in terms of the metric tensor, \nand then substituting the components. This is a bit more wasteful on resources, but of course gives the same result:"
+				}
+			],
+			"hidden" : true,
+			"source" : "You could have computed the Riemann tensor in a different way, first expanding it fully in terms of the metric tensor, \nand then substituting the components. This is a bit more wasteful on resources, but of course gives the same result:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\partial_{\\nu}{\\Gamma^{\\rho}\\,_{\\mu \\sigma}}+\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\Gamma^{\\lambda}\\,_{\\nu \\sigma}-\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\Gamma^{\\lambda}\\,_{\\mu \\sigma}\\end{dmath*}"
+				}
+			],
+			"source" : "rm:= R^{\\rho}_{\\sigma\\mu\\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}_{\\nu\\sigma}}\n                                  -\\partial_{\\nu}{\\Gamma^{\\rho}_{\\mu\\sigma}}\n                                  +\\Gamma^{\\rho}_{\\mu\\lambda} \\Gamma^{\\lambda}_{\\nu\\sigma}\n                                  -\\Gamma^{\\rho}_{\\nu\\lambda} \\Gamma^{\\lambda}_{\\mu\\sigma};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ch:= \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \n                                   \\partial_{\\rho}{g_{\\nu\\sigma}} \n                                  +\\partial_{\\nu}{g_{\\rho\\sigma}}\n                                  -\\partial_{\\sigma}{g_{\\nu\\rho}} );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\frac{1}{2}\\partial_{\\mu}\\left(g^{\\rho \\lambda} \\left(\\partial_{\\sigma}{g_{\\nu \\lambda}}+\\partial_{\\nu}{g_{\\sigma \\lambda}}-\\partial_{\\lambda}{g_{\\nu \\sigma}}\\right)\\right) - \\frac{1}{2}\\partial_{\\nu}\\left(g^{\\rho \\lambda} \\left(\\partial_{\\sigma}{g_{\\mu \\lambda}}+\\partial_{\\mu}{g_{\\sigma \\lambda}}-\\partial_{\\lambda}{g_{\\mu \\sigma}}\\right)\\right)+\\frac{1}{4}g^{\\rho \\kappa} \\left(\\partial_{\\lambda}{g_{\\mu \\kappa}}+\\partial_{\\mu}{g_{\\lambda \\kappa}}-\\partial_{\\kappa}{g_{\\mu \\lambda}}\\right) g^{\\lambda \\chi} \\left(\\partial_{\\sigma}{g_{\\nu \\chi}}+\\partial_{\\nu}{g_{\\sigma \\chi}}-\\partial_{\\chi}{g_{\\nu \\sigma}}\\right) - \\frac{1}{4}g^{\\rho \\kappa} \\left(\\partial_{\\lambda}{g_{\\nu \\kappa}}+\\partial_{\\nu}{g_{\\lambda \\kappa}}-\\partial_{\\kappa}{g_{\\nu \\lambda}}\\right) g^{\\lambda \\chi} \\left(\\partial_{\\sigma}{g_{\\mu \\chi}}+\\partial_{\\mu}{g_{\\sigma \\chi}}-\\partial_{\\chi}{g_{\\mu \\sigma}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(rm, ch);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "evaluate(rm, ss, rhsonly=True)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}K = R^{\\mu}\\,_{\\nu \\rho \\sigma} R^{\\lambda}\\,_{\\kappa \\gamma \\chi} g_{\\mu \\lambda} g^{\\nu \\kappa} g^{\\rho \\gamma} g^{\\sigma \\chi}\\end{dmath*}"
+				}
+			],
+			"source" : "K:= K = R^{\\mu}_{\\nu\\rho\\sigma} R^{\\lambda}_{\\kappa\\gamma\\chi} \n           g_{\\mu\\lambda} g^{\\nu\\kappa} g^{\\rho\\gamma} g^{\\sigma\\chi};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}K = \\frac{48M^{2}}{r^{6}}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(K, rm)\nevaluate(K, ss);"
 		},
 		{
 			"cell_origin" : "client",
