@@ -78,6 +78,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		throw std::logic_error("Failed to parse widget CSS information.");
 		}
 	auto screen = Gdk::Screen::get_default();
+	std::cerr << "cadabra-client: scale = " << screen->get_monitor_scale_factor(0) << std::endl;
 	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 	// Setup menu.
