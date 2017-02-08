@@ -22,7 +22,6 @@ var searchData=
   ['restarting_5fkernel',['restarting_kernel',['../classcadabra_1_1ComputeThread.html#a7fb3fbb68e1aa23cd8af885061cb1fee',1,'cadabra::ComputeThread']]],
   ['reuse_5fgenerating_5fset',['reuse_generating_set',['../classcadabra_1_1canonicalise.html#ad8910c7a4bc8045477b5dd55b53f26c8',1,'cadabra::canonicalise']]],
   ['rho',['rho',['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc'],['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc']]],
-  ['rhs',['rhs',['../classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd',1,'Server']]],
   ['rhs_5fcontains_5fdummies',['rhs_contains_dummies',['../classcadabra_1_1substitute.html#aa6588285835faccf09a121e0e9efe133',1,'cadabra::substitute']]],
   ['roof',['roof',['../classcadabra_1_1index__iterator.html#aedf356d844912be79bf0fd7acedfcba2',1,'cadabra::index_iterator']]],
   ['row_5fnumber',['row_number',['../classyngtab_1_1filled__tableau_1_1in__column__iterator.html#a8c0edac65fbef444c086225237f033a2',1,'yngtab::filled_tableau::in_column_iterator::row_number()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ad55408a35119697d1238aa4916ae0373',1,'yngtab::filled_tableau::iterator::row_number()']]],

@@ -168,10 +168,6 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a91939b498bc14f975f2fc03808341b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad269cf819e6c3f9f7cbb16087f5eab74"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ad269cf819e6c3f9f7cbb16087f5eab74">run_string</a> (const std::string &amp;, bool handle_output=true)</td></tr>
 <tr class="separator:ad269cf819e6c3f9f7cbb16087f5eab74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4213c640f5bb2690945eb20e29c70917"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a4213c640f5bb2690945eb20e29c70917">pre_parse</a> (const std::string &amp;)</td></tr>
-<tr class="separator:a4213c640f5bb2690945eb20e29c70917"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fe96bed08382d46dcbcf30e7cb5c778"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a5fe96bed08382d46dcbcf30e7cb5c778">escape_quotes</a> (const std::string &amp;line)</td></tr>
-<tr class="separator:a5fe96bed08382d46dcbcf30e7cb5c778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22fb31480cad49b1ad5d00cd24914494"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a22fb31480cad49b1ad5d00cd24914494">on_block_finished</a> (<a class="el" href="classServer_1_1Block.html">Block</a>)</td></tr>
 <tr class="memdesc:a22fb31480cad49b1ad5d00cd24914494"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by the run_block() thread upon completion of the task.  <a href="#a22fb31480cad49b1ad5d00cd24914494">More...</a><br/></td></tr>
 <tr class="separator:a22fb31480cad49b1ad5d00cd24914494"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -213,12 +209,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a1304a856a8e8d17dbf96455eff9d2df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af524d2a049d8ae7417792355a887307d"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#af524d2a049d8ae7417792355a887307d">current_id</a></td></tr>
 <tr class="separator:af524d2a049d8ae7417792355a887307d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28546b9b7980bb2ab6b6ad6c50f0c4fc"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a28546b9b7980bb2ab6b6ad6c50f0c4fc">indent</a></td></tr>
-<tr class="separator:a28546b9b7980bb2ab6b6ad6c50f0c4fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a928bc478421917ae3fa122dbfe7bd392"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a928bc478421917ae3fa122dbfe7bd392">lhs</a></td></tr>
-<tr class="separator:a928bc478421917ae3fa122dbfe7bd392"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7cfc50dd1a9ea202249b2c45ebf26cd"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#ab7cfc50dd1a9ea202249b2c45ebf26cd">rhs</a></td></tr>
-<tr class="separator:ab7cfc50dd1a9ea202249b2c45ebf26cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd358142aeb5927137a2a25fcb7d7e4b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#afd358142aeb5927137a2a25fcb7d7e4b">started</a></td></tr>
 <tr class="separator:afd358142aeb5927137a2a25fcb7d7e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a423e2c04f9c93af4c9cb93ee95f0abb3"><td class="memItemLeft" align="right" valign="top">std::future&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a423e2c04f9c93af4c9cb93ee95f0abb3">job</a></td></tr>
@@ -375,30 +365,6 @@ Private Attributes</h2></td></tr>
 
 <p>Takes a JSON encoded message and performs the required action to process it. </p>
 <p>Where applicable these messages are compatible with IPython's message types, <a href="http://ipython.org/ipython-doc/dev/development/messaging.html">http://ipython.org/ipython-doc/dev/development/messaging.html</a> </p>
-
-</div>
-</div>
-<a class="anchor" id="a5fe96bed08382d46dcbcf30e7cb5c778"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Server::escape_quotes </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>line</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -609,30 +575,6 @@ Private Attributes</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4213c640f5bb2690945eb20e29c70917"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Server::pre_parse </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>line</em></td><td>)</td>
-          <td></td>
         </tr>
       </table>
   </td>
@@ -949,26 +891,6 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a28546b9b7980bb2ab6b6ad6c50f0c4fc"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Server::indent</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="a423e2c04f9c93af4c9cb93ee95f0abb3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -978,26 +900,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::future&lt;std::string&gt; Server::job</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a928bc478421917ae3fa122dbfe7bd392"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Server::lhs</td>
         </tr>
       </table>
   </td>
@@ -1038,26 +940,6 @@ Private Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">boost::python::object Server::main_namespace</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ab7cfc50dd1a9ea202249b2c45ebf26cd"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string Server::rhs</td>
         </tr>
       </table>
   </td>
@@ -1176,7 +1058,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 3 2017 21:27:24 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 8 2017 08:34:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

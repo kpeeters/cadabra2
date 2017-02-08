@@ -34,7 +34,7 @@ var searchData=
   ['_7esnoop',['~Snoop',['../classsnoop_1_1Snoop.html#a76ed22fee001bb18cb45711f0ef4583b',1,'snoop::Snoop']]],
   ['_7esnoopimpl',['~SnoopImpl',['../classsnoop_1_1SnoopImpl.html#a6ca20e379b854edcf67de9e39cde50dc',1,'snoop::SnoopImpl']]],
   ['_7espinor',['~Spinor',['../classcadabra_1_1Spinor.html#a892837cf3d9487483f64456a4346dec0',1,'cadabra::Spinor']]],
-  ['_7etableau',['~tableau',['../classyngtab_1_1tableau.html#ada845d1d942200fc54f447dba6959de4',1,'yngtab::tableau::~tableau()'],['../classcadabra_1_1Tableau.html#ae04d22224af865c215e98f2167949fe8',1,'cadabra::Tableau::~Tableau()']]],
+  ['_7etableau',['~Tableau',['../classcadabra_1_1Tableau.html#ae04d22224af865c215e98f2167949fe8',1,'cadabra::Tableau::~Tableau()'],['../classyngtab_1_1tableau.html#ada845d1d942200fc54f447dba6959de4',1,'yngtab::tableau::~tableau()']]],
   ['_7etableau_5fbase',['~tableau_base',['../classyngtab_1_1tableau__base.html#a4d90abf4238bf60340a04c96408fca80',1,'yngtab::tableau_base']]],
   ['_7etableaubase',['~TableauBase',['../classcadabra_1_1TableauBase.html#ace3909795a5b9e17eb9c79da203c98f8',1,'cadabra::TableauBase']]],
   ['_7etableausymmetry',['~TableauSymmetry',['../classcadabra_1_1TableauSymmetry.html#ab0b035de51e928b85a43668345316081',1,'cadabra::TableauSymmetry']]],

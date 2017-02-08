@@ -489,6 +489,12 @@ Typedefs</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ac7856c841ee9ade4be36b1acb91672a4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ac7856c841ee9ade4be36b1acb91672a4">escape_quotes</a> (const std::string &amp;)</td></tr>
+<tr class="separator:ac7856c841ee9ade4be36b1acb91672a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03d5408e538863e8d89d81d24518a5ef"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a03d5408e538863e8d89d81d24518a5ef">cdb2python</a> (const std::string &amp;)</td></tr>
+<tr class="separator:a03d5408e538863e8d89d81d24518a5ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f2664b21df60c3371ed32f1e6635374"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a8f2664b21df60c3371ed32f1e6635374">convert_line</a> (const std::string &amp;, std::string &amp;<a class="el" href="PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92">lhs</a>, std::string &amp;<a class="el" href="PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d">rhs</a>, std::string &amp;indent)</td></tr>
+<tr class="separator:a8f2664b21df60c3371ed32f1e6635374"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab585ad00ba79405717929a3a3963cfd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#aab585ad00ba79405717929a3a3963cfd">cleanup_dispatch</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, Ex::iterator &amp;it)</td></tr>
 <tr class="memdesc:aab585ad00ba79405717929a3a3963cfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Central cleanup dispatch routine, which calls the other cleanup functions defined later.  <a href="#aab585ad00ba79405717929a3a3963cfd">More...</a><br/></td></tr>
 <tr class="separator:aab585ad00ba79405717929a3a3963cfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -761,6 +767,22 @@ Variables</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a03d5408e538863e8d89d81d24518a5ef"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string cadabra::cdb2python </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>blk</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1326,6 +1348,60 @@ Variables</h2></td></tr>
 
 <p>Cleanup for individual node types. </p>
 <p>These are not needed during any later stages of the manipulation of an expression (and are hence defined here, not in '<a class="el" href="Cleanup_8hh.html">Cleanup.hh</a>'). </p>
+
+</div>
+</div>
+<a class="anchor" id="a8f2664b21df60c3371ed32f1e6635374"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string cadabra::convert_line </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>indent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac7856c841ee9ade4be36b1acb91672a4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string cadabra::escape_quotes </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>line</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2354,7 +2430,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 3 2017 21:27:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Feb 8 2017 08:34:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

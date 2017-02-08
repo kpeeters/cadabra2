@@ -20,7 +20,6 @@ var searchData=
   ['post_5fprocess',['post_process',['../namespacecadabra2__defaults.html#ad2f75be0040b77a13630572059a76093',1,'cadabra2_defaults']]],
   ['pre_5fclean_5fdispatch',['pre_clean_dispatch',['../namespacecadabra.html#abc672b9718fce3d851a54bcb56b3fa05',1,'cadabra']]],
   ['pre_5fclean_5fdispatch_5fdeep',['pre_clean_dispatch_deep',['../namespacecadabra.html#a794a7078576b183fe39df8253ff9bd80',1,'cadabra']]],
-  ['pre_5fparse',['pre_parse',['../classServer.html#a4213c640f5bb2690945eb20e29c70917',1,'Server']]],
   ['prefs',['Prefs',['../classcadabra_1_1NotebookWindow_1_1Prefs.html#a2c4ff3dc15e9207d1518784c161ac169',1,'cadabra::NotebookWindow::Prefs']]],
   ['preprocessor',['preprocessor',['../classpreprocessor.html#a548322f00a5eced33a58fc1362d91468',1,'preprocessor']]],
   ['print_5farrowlike',['print_arrowlike',['../classcadabra_1_1DisplaySympy.html#a8aaf558de819f7b8098f490e98d35cee',1,'cadabra::DisplaySympy::print_arrowlike()'],['../classcadabra_1_1DisplayTerminal.html#af44786a0c1fe19fb4dad76ec128b6d52',1,'cadabra::DisplayTerminal::print_arrowlike()'],['../classcadabra_1_1DisplayTeX.html#acd04dce2d9d4a3cb8842dd2270224a57',1,'cadabra::DisplayTeX::print_arrowlike()']]],
