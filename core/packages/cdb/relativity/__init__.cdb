@@ -5,7 +5,8 @@
 """
 
 import __main__
-server        = __main__.server
+if hasattr(__main__, "server"):
+    server        = __main__.server
 display       = __main__.display
 __cdbkernel__ = __main__.__cdbkernel__
 
