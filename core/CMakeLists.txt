@@ -270,12 +270,12 @@ set(PDIRS
   relativity
   gauge_theory
   )
-set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages)
+set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages/cdb)
 message("-- Packages built in ${PACKAGEDIR}")
 file(MAKE_DIRECTORY ${PACKAGEDIR})
 foreach(PDIR ${PDIRS})
    add_custom_target("${PDIR}" ALL
-	                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PACKAGEDIR}/${PDIR}
+	             COMMAND ${CMAKE_COMMAND} -E make_directory ${PACKAGEDIR}/${PDIR}
                      COMMENT "Creating package ${PDIR}...")
 endforeach()
 
