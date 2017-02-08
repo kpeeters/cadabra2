@@ -309,9 +309,9 @@ def test16():
     f::Depends({x,y,z});
     \partial{#}::PartialDerivative;
     {i,j,k,l}::Indices(values={x,y,z}, position=free);
-    ex:= \partial_{i i}{f} + m**2 f;
+    ex:= 2 \partial_{i i}{3 f} + m**2 f;
     evaluate(ex)
-    tst:= \partial_{x x}{f} + \partial_{y y}{f} + \partial_{z z}{f} + m**2 f - @(ex);
+    tst:= 6\partial_{x x}{f} + 6\partial_{y y}{f} + 6\partial_{z z}{f} + m**2 f - @(ex);
     assert(tst==0)
     print("Test 16 passed")
 

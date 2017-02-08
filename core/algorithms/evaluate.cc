@@ -614,6 +614,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			return true;
 			});
 
+   one(it->multiplier);
 	// std::cerr << "now " << Ex(it) << std::endl;
 
 	

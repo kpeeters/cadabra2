@@ -114,15 +114,6 @@ class Server {
 		// thread constructed by on_message().
 		std::string              run_string(const std::string&, bool handle_output=true);
 
-		// Pre-parse a line of code to convert Cadabra notation into proper
-		// Python. Mimics the functionality in core/cadabra2.
-		std::string              pre_parse(const std::string&);
-
-		// Escape single and double quotes so they can be fed into Python strings.
-		std::string              escape_quotes(const std::string& line);
-
-		std::string indent, lhs, rhs;
-
 		/// Called by the run_block() thread upon completion of the
 		/// task.  Handles communication of the result back to the
 		/// client in JSON format. This is always of the form

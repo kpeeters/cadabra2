@@ -47,16 +47,16 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 if(USE_PYTHON_3)
-  find_package(Boost 1.53.0 COMPONENTS python3)
+  find_package(Boost 1.53.0 COMPONENTS python3 regex)
   if(NOT Boost_PYTHON3_FOUND)
     if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.4")
-      find_package(Boost 1.53.0 COMPONENTS python-py34 REQUIRED)
+      find_package(Boost 1.53.0 COMPONENTS python-py34 regex REQUIRED)
     else()
-      find_package(Boost 1.53.0 COMPONENTS python-py35 REQUIRED)
+      find_package(Boost 1.53.0 COMPONENTS python-py35 regex REQUIRED)
     endif()
   endif()
 else()
-  find_package(Boost 1.53.0 COMPONENTS python)
+  find_package(Boost 1.53.0 COMPONENTS python regex)
 endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -245,6 +245,8 @@ set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX "
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
+add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
+target_link_libraries(cadabra2python ${Boost_LIBRARIES})
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
@@ -256,17 +258,46 @@ install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_RE
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
 
+
+# Convert packages from cdb to python.
+set(PACKAGES
+  relativity/__init__
+  relativity/schwarzschild
+  gauge_theory/__init__
+  gauge_theory/instantons
+  )
+set(PDIRS
+  relativity
+  gauge_theory
+  )
+set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages)
+message("-- Packages built in ${PACKAGEDIR}")
+file(MAKE_DIRECTORY ${PACKAGEDIR})
+foreach(PDIR ${PDIRS})
+   add_custom_target("${PDIR}" ALL
+	                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PACKAGEDIR}/${PDIR}
+                     COMMENT "Creating package ${PDIR}...")
+endforeach()
+
+foreach(PACKAGE ${PACKAGES})
+	string(REGEX REPLACE "/" "_" PACKAGETARGET ${PACKAGE})
+	message("--    ${PACKAGETARGET}")					  
+   add_custom_target("${PACKAGETARGET}" ALL
+	                  COMMAND cadabra2python ${CMAKE_SOURCE_DIR}/core/packages/cdb/${PACKAGE}.cdb ${PACKAGEDIR}/${PACKAGE}.py
+                     COMMENT "Creating ${PACKAGE}.py...")
+endforeach()
+																		
 # Install packages.
 set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
-install(FILES
-  "${PROJECT_SOURCE_DIR}/packages/cdb/relativity/__init__.py" 
-  "${PROJECT_SOURCE_DIR}/packages/cdb/relativity/schwarzschild.py" DESTINATION "${PYTHON_CDB_PACKAGE_PATH}/relativity" 
-)
-install(FILES
-  "${PROJECT_SOURCE_DIR}/packages/cdb/gauge_theory/__init__.py" 
-  "${PROJECT_SOURCE_DIR}/packages/cdb/gauge_theory/instantons.py" DESTINATION "${PYTHON_CDB_PACKAGE_PATH}/gauge_theory" 
-)
+foreach(PACKAGE ${PACKAGES})
+  get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
+  install(FILES "${PACKAGEDIR}/${PACKAGE}.py" DESTINATION ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL})
+endforeach()
 
 install(DIRECTORY DESTINATION ${PYTHON_CDB_PACKAGE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
+
+# Install conversion program.
+install(TARGETS cadabra2python DESTINATION bin)
+

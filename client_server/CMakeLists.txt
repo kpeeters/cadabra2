@@ -67,7 +67,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 find_package(PkgConfig REQUIRED)
-include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR})
+include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR} ../core)
 #pkg_check_modules(UUID uuid REQUIRED)
 #include_directories("${UUID_INCLUDE_DIRS}")
 
@@ -86,7 +86,7 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 
 # Create the server library
 #link_directories(${UUID_LIBRARY_DIRS})
-add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp)
+add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp ../core/CdbPython.cc)
 target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
 if (WIN32)
    target_link_libraries(cadabra_server ws2_32 mswsock)
