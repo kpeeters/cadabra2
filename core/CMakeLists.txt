@@ -246,7 +246,7 @@ set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}"
 
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
 add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
-target_link_libraries(cadabra2python ${Boost_LIBRARIES})
+target_link_libraries(cadabra2python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
@@ -270,12 +270,12 @@ set(PDIRS
   relativity
   gauge_theory
   )
-set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages)
+set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages/cdb)
 message("-- Packages built in ${PACKAGEDIR}")
 file(MAKE_DIRECTORY ${PACKAGEDIR})
 foreach(PDIR ${PDIRS})
    add_custom_target("${PDIR}" ALL
-	                  COMMAND ${CMAKE_COMMAND} -E make_directory ${PACKAGEDIR}/${PDIR}
+	             COMMAND ${CMAKE_COMMAND} -E make_directory ${PACKAGEDIR}/${PDIR}
                      COMMENT "Creating package ${PDIR}...")
 endforeach()
 
