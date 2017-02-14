@@ -5,8 +5,8 @@
 
 using namespace cadabra;
 
-rename_dummies::rename_dummies(const Kernel& k, Ex& tr)
-	: Algorithm(k, tr)
+rename_dummies::rename_dummies(const Kernel& k, Ex& tr, std::string d1, std::string d2)
+	: Algorithm(k, tr), dset1(d1), dset2(d2)
 	{
 	}
 
@@ -58,6 +58,24 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 		++ii;
 		}
 
+	// If target set is specified, find a handle to the Indices property
+	// with this name.
+	const Indices *ind2=0;
+	if(dset2!="") {
+		auto f2=kernel.properties.pats.begin();
+		while(f2!=kernel.properties.pats.end()) {
+			ind2 = dynamic_cast<const Indices *>(f2->first);
+			if(ind2) {
+				if(ind2->set_name==dset2)
+					break;
+				else ind2=0;
+				}
+			++f2;
+			}
+		if(ind2==0)
+			throw ConsistencyException("No index set with name `"+dset2+"' known.");
+		}
+
 	auto iim=parent_sorted_indices.begin();
 	while(iim!=parent_sorted_indices.end()) {
 		ii = iim->second;
@@ -73,21 +91,22 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 				rmi=repmap.find(other_parent_rel);
 				}
 			if(rmi==repmap.end()) {
-				// std::cerr << " not found yet " << std::endl;
 				const Indices *dums=kernel.properties.get<Indices>(ii, true);
 				if(!dums)
 					throw ConsistencyException("No index set for index "+*ii->name+" known.");
+				
+				// only rename dummies from dset1.
+				if(dset1=="" || dums->set_name==dset1) {
+					if(dset2!="") dums=ind2; // replace with dummies from set 2
 
-				Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
-				repmap.insert(repmap_t::value_type(Ex(ii),relabel));
-				added_dummies.insert(index_map_t::value_type(relabel, ii));
-//				index_iterator tmp(ii);
-//				++tmp;
-				if(subtree_compare(&kernel.properties, ii, relabel.begin())!=0) {
-					res=result_t::l_applied;
-					tr.replace_index(ii, relabel.begin(), true);
+					Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
+					repmap.insert(repmap_t::value_type(Ex(ii),relabel));
+					added_dummies.insert(index_map_t::value_type(relabel, ii));
+					if(subtree_compare(&kernel.properties, ii, relabel.begin())!=0) {
+						res=result_t::l_applied;
+						tr.replace_index(ii, relabel.begin(), true);
+						}
 					}
-//				ii=tmp;
 				}
 			else {
 				// std::cerr << "already encountered => " << rmi->second << std::endl;
