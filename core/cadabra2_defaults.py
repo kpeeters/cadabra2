@@ -52,9 +52,14 @@ import base64
 
 # FIXME: it is not a good idea to have this pollute the global namespace.
 #
-# Generate a JSON object for sending to the client. This function
-# does different things depending on the object type it is being
-# fed.
+# Take a Python object and convert it to a string representation which
+# the Server.send(...) function accepts. This means encoding the object
+# in an appropriate way, and sending it along with an identifier which
+# tells the Server what this encoded string contains.
+#
+# The version of 'display' below assumes that the Server can handle
+# images and LaTeX strings, so it is not suitable for use on the terminal.
+# FIXME: make this more general.
 
 def display(obj):
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
@@ -105,11 +110,15 @@ def display(obj):
         first=True
         for elm in obj:
             if first==False:
-                out+=", "
+                out+=",\discretionary{}{}{} "
             else:
                 first=False
-            if isinstance(elm, Ex):
+            if isinstance(elm, Ex):  # this should be done recursively, but we need top-level wrappers
                 out += elm._latex_()
+            elif isinstance(elm, Property):
+                out += elm._latex_()
+#            elif OBJECT IS STRING:
+#                texify string before sending.
             else:
                 out+=latex(elm)   # Sympy to the rescue for all other objects.
         out+="\\end{dmath*}"

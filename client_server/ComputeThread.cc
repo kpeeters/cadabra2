@@ -320,7 +320,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 				docthread->queue_action(action);
 				}
 			else if(msg_type.asString()=="latex_view") {
-				// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
+				std::cerr << "received latex cell " << content["output"].asString() << std::endl;
 				DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
 				std::shared_ptr<ActionBase> action = 
 					std::make_shared<ActionAddCell>(result, it, ActionAddCell::Position::child);

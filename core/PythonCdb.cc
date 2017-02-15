@@ -870,6 +870,10 @@ template<class Prop>
 std::string Property<Prop>::latex_() const
 	{
 	std::ostringstream str;
+
+//	HERE: this text should go away, property should just print itself in a python form,
+//   the decorating text should be printed in a separate place.
+
 	str << "\\text{Attached property ";
 	prop->latex(str);
 	std::string bare=Ex_latex_(*for_obj);
