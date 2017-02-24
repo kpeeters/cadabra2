@@ -118,7 +118,7 @@ def display(obj, delay_send=False):
         first=True
         for elm in obj:
             if first==False:
-                out+=", "
+                out+=",\discretionary{}{}{} "
             else:
                 first=False
             out+= display(elm, True)
