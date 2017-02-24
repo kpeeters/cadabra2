@@ -118,6 +118,32 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		str << "\\right)";
 	}
 
+void DisplayTeX::print_raw(std::ostream& str, Ex::iterator it) 
+	{
+	if(needs_brackets(it))
+		str << "\\left(";
+
+	// print multiplier and object name
+	if(*it->multiplier!=1) {
+		print_multiplier(str, it);
+		str << "\\, ";
+		}
+	
+   str << texify(*it->name);
+	auto sib=tree.begin(it);
+	str << "{";
+	while(sib!=tree.end(it)) {
+		str << "{";
+		dispatch(str, sib);
+		str << "}";
+		++sib;
+		}
+	str << "}";
+	
+	if(needs_brackets(it))
+		str << "\\right)";
+	}
+
 std::string DisplayTeX::texify(std::string str) const
 	{
 	auto rn = symmap.find(str);
@@ -282,6 +308,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\conditional")    print_conditional(str, it);
 	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
+	else if(*it->name=="\\tableau")        print_raw(str, it);
 	else                                   print_other(str, it);
 	}
 

@@ -11,4 +11,11 @@ def test01():
 
 test01()
 
+__cdbkernel__=create_scope()
+{n,p,q}::Indices("one");
+{m,n,p,q,r,s,t}::Indices("two")
+ex:= A_{r} = A_{m r} A^{m} + A_{n r} A^{n} + A_{s r} A^{s};
+rename_dummies(_, "two", "one")
+
+
 

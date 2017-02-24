@@ -14,6 +14,12 @@ bool rename_dummies::can_apply(iterator st)
 	{
 //	std::cerr << "---" << std::endl << Ex(st);
 
+	if(*st->name=="\\equals") {
+		// special case: rename all free indices on lhs and rhs.
+		// FIXME: add flag to class to disable this when called as rename_dummies.
+		return true;
+		}
+	
 	if(*st->name!="\\prod") // && *st->name!="\\sum") 
 		if(!is_single_term(st))
 			return false;
@@ -26,6 +32,10 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	{
 	result_t res=result_t::l_no_action;
 
+//	if(*st->name=="\\equals") {
+//		
+//		}
+			
 //	std::cerr << Ex(st);
 	prod_wrap_single_term(st);
 //	std::cerr << Ex(st);
@@ -119,6 +129,18 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 		++iim;
 		}
 
+	// Now rename free indices.
+
+//	if(*st->name=="\\equals") {
+//		auto fit = ind_free.begin();
+//		while(fit!=ind_free.end()) {
+//			std::cerr << "renaming " << fit->first << std::endl;
+//			Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
+//			++fit;
+//			}
+//		std::cerr << "----" << std::endl;
+//		}
+	
 //	std::cerr << Ex(st);
 	prod_unwrap_single_term(st);
 //	std::cerr << Ex(st);
