@@ -293,9 +293,13 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 					total << (*reqit)->start_wrap;
 
 				std::string lr=(*reqit)->latex_string;
-				boost::replace_all(lr, "\\left(", "\\brwrap{");
+				boost::replace_all(lr, "\\left(", "\\brwrap{(}{)}{");
 				boost::replace_all(lr, "\\right)", "}");
-				boost::replace_all(lr, "\\begin{dmath*}", "$\\setstretch{2.5}");
+				boost::replace_all(lr, "\\left[", "\\brwrap{[}{]}{");
+				boost::replace_all(lr, "\\right]", "}");
+				boost::replace_all(lr, "\\left\\{", "\\brwrap{\\{}{\\}}{");
+				boost::replace_all(lr, "\\right\\}", "}");
+				boost::replace_all(lr, "\\begin{dmath*}", "$");
 				boost::replace_all(lr, "\\end{dmath*}", "$");
 
 				total << lr;
@@ -312,7 +316,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	// Now write the 'total' buffer to the .tex file
 
-//	std::cerr << total.str() << std::endl;
+	// std::cerr << total.str() << std::endl;
 	ssize_t start=0;
 	do {
 		ssize_t written=write(fd, &(total.str().c_str()[start]), total.str().size()-start);

@@ -57,8 +57,18 @@ DataCell::DataCell(const DataCell& other)
 
 std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::string title)
 	{
+	// Load the pre-amble from file.
+	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/notebook.html";
+	std::ifstream preamble(pname);
+	if(!preamble)
+		throw std::logic_error("Cannot open HTML preamble at "+pname);
+	std::stringstream buffer;
+	buffer << preamble.rdbuf();
+	// std::cerr << "Using preamble at " << pname << std::endl;
+	std::string preamble_string = buffer.str();
+
 	std::ostringstream str;
-	HTML_recurse(doc, doc.begin(), str, for_embedding, title);
+	HTML_recurse(doc, doc.begin(), str, preamble_string, for_embedding, title);
 
 	return str.str();
 	}
@@ -92,8 +102,12 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::string res;
 
 	try {
-		res = boost::regex_replace(str, begin_dmath, R"(\\[)");
-		res = boost::regex_replace(res, end_dmath, R"(\\])");
+		res = boost::regex_replace(str, begin_dmath, R"(\\(\\displaystyle)");
+		boost::replace_all(res, "\\discretionary{}{}{}", "");
+		boost::replace_all(res, "\\discretionary{}{}{}", "");
+//		boost::replace_all(res, "\\left", "");
+//		boost::replace_all(res, "\\right", "");
+		res = boost::regex_replace(res, end_dmath, R"(\\))");
 		res = boost::regex_replace(res, tilde, " ");
 		res = boost::regex_replace(res, less, "&lt;");
 		res = boost::regex_replace(res, tilde, "&gt;");
@@ -124,28 +138,15 @@ std::string cadabra::latex_to_html(const std::string& str)
 	return res;
 	}
 
-void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, bool for_embedding,
+void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
+									const std::string& preamble_string,
+									bool for_embedding,
 									std::string title)
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
 			if(!for_embedding) {
-				// FIXME: this needs to be read from a text file.
-				str << "<html>\n";
-				str << "<head>\n";
-				str << "<link rel=\"stylesheet\" href=\"http://cadabra.science/static/fonts/Serif/cmun-serif.css\"></link>\n";
-				str << "<script type=\"text/javascript\" src=\"http://beta.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\"></script>\n";
-				str << "<style>\n";
-				str << "div.image_png { width: 400px; }\n"
-					 << "div.output { font-family: monospace; }\n"
-					 << "h1, h2, h3 { font-family: 'STIXGENERAL'; }\n"
-					 << "div.latex_view { font-family: 'STIXGENERAL'; color: black; font-size: 16px; line-height: 23px; margin-left: 40px; margin-right: 40px; padding-left: 10px; margin-bottom: 10px; }\n"
-					 << "div.image_png img { width: 100%; }\n"
-					 << "div.python { font-family: monospace; padding-left: 10px; margin-left: 40px; margin-right; 40px; margin-bottom: 10px; margin-top: 10px; white-space: pre; color: blue; }\n"
-					 << "pre.output { color: black; }\n";
-				str << "</style>\n";
-				str << "</head>\n";
-				str << "<body>\n";
+				str << preamble_string << "\n<body>\n";
 				}
 			else {
 				str << "{% extends \"notebook_layout.html\" %}\n"
@@ -202,7 +203,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
 		while(sib!=doc.end(it)) {
-			HTML_recurse(doc, sib, str);
+			HTML_recurse(doc, sib, str, preamble_string);
 			++sib;
 			}
 		}
@@ -510,8 +511,12 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			str << it->textbuf;
 		else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
 			std::string lr(it->textbuf);
-			boost::replace_all(lr, "\\left(", "\\brwrap{");
+			boost::replace_all(lr, "\\left(", "\\brwrap{(}{)}{");
 			boost::replace_all(lr, "\\right)", "}");
+			boost::replace_all(lr, "\\left[", "\\brwrap{[}{]}{");
+			boost::replace_all(lr, "\\right]", "}");
+			boost::replace_all(lr, "\\left\\{", "\\brwrap{\\{}{\\}}{");
+			boost::replace_all(lr, "\\right\\}", "}");
 			boost::replace_all(lr, "\\begin{dmath*}", "\\begin{adjustwidth}{1em}{0cm}$");
 			boost::replace_all(lr, "\\end{dmath*}", "$\\\\\\end{adjustwidth}");
 			str << lr << "\n";

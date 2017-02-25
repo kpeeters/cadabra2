@@ -115,7 +115,8 @@ target_link_libraries(cadabra2cadabra cadabra_client)
 # ../frontend/common/texengine; this one is meant for printing so
 # slightly different, but cadabra-specific macros should be copied.
 set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2")
-install(FILES  notebook.tex DESTINATION ${INSTALL_LATEX_DIR})
+install(FILES  notebook.tex  DESTINATION ${INSTALL_LATEX_DIR})
+install(FILES  notebook.html DESTINATION ${INSTALL_LATEX_DIR})
 
 #set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 install(TARGETS cadabra-server DESTINATION bin)
