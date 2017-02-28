@@ -136,20 +136,16 @@ std::ostream& Ex::print_python(std::ostream& str, Ex::iterator it)
 	else if((*it).fl.bracket   ==str_node::b_none && is_head(it)==false)   str << "{";
 	std::string name(*(*it).name);
 	std::string res;
+	if(*it->multiplier!=1)
+		str << *it->multiplier;
+
 	for(unsigned int i=0; i<name.size(); ++i) {
 		if(name[i]=='#')       res+="\\#";
-		else if(name[i]=='\\') res+="\\backslash{}";
+//		else if(name[i]=='\\') res+="\\backslash{}";
 		else                   res+=name[i];
 		}
 	str << res;
-	if((*it).fl.bracket   ==str_node::b_round)       str << ")";
-	else if((*it).fl.bracket   ==str_node::b_square) str << "]";
-	else if((*it).fl.bracket   ==str_node::b_curly)  str << "}";
-	else if((*it).fl.bracket   ==str_node::b_pointy) str << ">";
-	else if((*it).fl.bracket   ==str_node::b_none && is_head(it)==false)   str << "}";
 
-	if(*it->multiplier!=1)
-		str << *it->multiplier;
 	
 	Ex::sibling_iterator beg=it.begin();
 	Ex::sibling_iterator fin=it.end();
@@ -165,6 +161,12 @@ std::ostream& Ex::print_python(std::ostream& str, Ex::iterator it)
 		print_python(str, beg);
 		++beg;
 		}
+
+	if((*it).fl.bracket   ==str_node::b_round)       str << ")";
+	else if((*it).fl.bracket   ==str_node::b_square) str << "]";
+	else if((*it).fl.bracket   ==str_node::b_curly)  str << "}";
+	else if((*it).fl.bracket   ==str_node::b_pointy) str << ">";
+	else if((*it).fl.bracket   ==str_node::b_none && is_head(it)==false)   str << "}";
 	
 	return str;
 	}

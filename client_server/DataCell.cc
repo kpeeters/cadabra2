@@ -99,6 +99,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 	boost::regex dquote(R"(``([^']*)'')");
 	boost::regex squote(R"(`([^']*)')");
 	boost::regex linebreak(R"(\\linebreak\[0\])");
+	boost::regex tableau(R"(\\tableau\{(\{[^\}]*\})*\})");
+	boost::regex ftableau(R"(\\ftableau\{(\{[^\}]*\}[,]?)*\})");		
 	std::string res;
 
 	try {
@@ -130,6 +132,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = boost::regex_replace(res, dquote, "\"$1\"");
 		res = boost::regex_replace(res, squote,  "'$1'");
 		res = boost::regex_replace(res, linebreak, "\\\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
+		res = boost::regex_replace(res, tableau, "\\\\)<div class=\"young_box\"></div>\\\\(\\\\displaystyle");
+		res = boost::regex_replace(res, ftableau, "\\\\)<div class=\"young_box filled\"></div>\\\\(\\\\displaystyle");		
 		}
 	catch(boost::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;

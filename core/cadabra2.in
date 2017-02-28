@@ -5,9 +5,9 @@
 # \file 
 # Command line interpreter for Cadabra, written in Python.
 #
-#     cadabra2 [-g] [filename]
+#     cadabra2 [-d] [filename]
 #
-# Running with the '-g' flag runs cadabra under gdb, so that
+# Running with the '-d' flag runs cadabra under gdb, so that
 # one can generate back traces etc.
 
 import sys

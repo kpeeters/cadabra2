@@ -53,8 +53,10 @@ set(ALGOS
   integrate_by_parts
   join_gamma
   keep_weight
+  lr_tensor
   product_rule
   reduce_delta
+  rename_dummies
   rewrite_indices
   sort_product
   sort_sum
@@ -99,6 +101,7 @@ set(PROPS
   SortOrder
   Spinor
   Symmetric
+  Tableau
   TableauSymmetry
 )
 

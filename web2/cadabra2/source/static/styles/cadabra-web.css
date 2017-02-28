@@ -400,6 +400,30 @@ table.packages code {
 	 margin-left: 10px;
 }
 
+/* Young tableaux */
+
+div.young_box {
+	 display: inline-block;
+	 border: 1px solid black;
+	 width: 10px;
+	 min-width: 10px;
+	 height: 10px;
+	 min-height: 10px;
+	 margin: 0px;
+	 padding: 0px;
+}
+div.filled {
+	 background: red;
+}
+div.young_tableau {
+	 display: inline-block;
+}
+div.young_row {
+	 padding: 0px;
+	 margin: 0px;
+	 height: 10px;
+}
+
 /* Small screens */
 
 @media screen and (max-width: 800px) {
