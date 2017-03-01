@@ -67,6 +67,7 @@ set(RTESTS
   canonicalise
   derivative
   relativity
+  spinors
   symmetry
   vary
   young

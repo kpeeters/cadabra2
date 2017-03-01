@@ -1,0 +1,57 @@
+
+def test01():
+    __cdbkernel__=create_scope()
+    {\chi, \psi, \psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).
+    {\chi, \psi, \psi_{m}}::AntiCommuting.
+    \bar{#}::DiracBar.
+    \Gamma{#}::GammaMatrix.
+    {\psi_{m}, \psi, \chi}::SortOrder.
+    ex:= \bar{\chi} \Gamma_{m n p} \psi;
+    sort_spinors(_)
+    tst:= \bar{\psi} \Gamma_{m n p} \chi - @(ex);
+    assert(tst==0)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    __cdbkernel__=create_scope()
+    {\chi, \psi, \psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).
+    {\chi, \psi}::AntiCommuting.
+    \bar{#}::DiracBar.
+    \Gamma{#}::GammaMatrix.
+    {\psi, \chi}::SortOrder.
+    ex:= \bar{\chi}\psi;
+    sort_spinors(_)
+    tst:= \bar{\psi}\chi - @(ex);
+    assert(tst==0)
+    print("Test 02a passed")
+    ex:= \chi\Gamma_{m n p}\psi;
+    sort_spinors(_)
+    tst:= \chi\Gamma_{m n p}\psi - @(ex);
+    assert(tst==0)
+    print("Test 02b passed")
+    ex:= \bar{\chi} \Gamma_{m n} \psi_{m};
+    sort_spinors(_)
+    tst:= - \bar{\psi_{m}} \Gamma_{m n} \chi - @(ex);
+    assert(tst==0)
+    print("Test 02c passed")
+
+test02()
+
+# Multiple ImplicitIndex objects
+
+def test03():
+    __cdbkernel__=create_scope()
+    {\chi,\psi, \lambda, \rho}::Spinor.
+    \Gamma{#}::GammaMatrix.
+    \bar{#}::DiracBar.
+    ex:= \bar{\chi}\Gamma_{m n p}\psi A_{m n} \bar{\lambda}\Gamma_{p}\rho;
+    sort_product(_)
+    sort_spinors(_)
+    tst:=A_{m n} \bar{\chi} \Gamma_{m n p} \psi \bar{\lambda} \Gamma_{p} \rho - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
+
+test03()
+
