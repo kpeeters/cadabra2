@@ -1,13 +1,15 @@
 
 
 def test01():
+    __cdbkernel__=create_scope()
     {i,j,k}::Indices;
     {i,j,k}::Integer(1..3);
     rl:= N_{i j} -> A_{i j};
     ex:= N_{1 2};
-    substitute(ex, rl);
+    substitute(ex, rl)
     tst:= A_{1 2} - @(ex);
     assert(tst==0)
+    print("Test 01 passed")
 
 test01()
 
@@ -20,5 +22,14 @@ test01()
 # ex:= \bar{4 \psi};
 # 
 
-i::ImaginaryI;
-ex:= A_{m n} i  B^{m} i i C i D i ;
+def test02():
+    __cdbkernel__=create_scope()
+    i::ImaginaryI;
+    ex:= i i A_{m n} i  B^{m} i i C i D i ;
+    tst:= - A_{m n} B^{m} C D i - @(ex);
+    assert(tst==0)
+    print("Test 02 passed")
+
+test02()
+
+    
