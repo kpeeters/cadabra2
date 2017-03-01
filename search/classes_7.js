@@ -4,6 +4,7 @@ var searchData=
   ['identical_5ftensors_5ft',['identical_tensors_t',['../structcadabra_1_1exchange_1_1identical__tensors__t.html',1,'cadabra::exchange']]],
   ['images',['Images',['../classImages.html',1,'']]],
   ['imageview',['ImageView',['../classcadabra_1_1ImageView.html',1,'cadabra']]],
+  ['imaginaryi',['ImaginaryI',['../classcadabra_1_1ImaginaryI.html',1,'cadabra']]],
   ['implicitindex',['ImplicitIndex',['../classcadabra_1_1ImplicitIndex.html',1,'cadabra']]],
   ['in_5fcolumn_5fiterator',['in_column_iterator',['../classyngtab_1_1filled__tableau_1_1in__column__iterator.html',1,'yngtab::filled_tableau']]],
   ['index_5fiterator',['index_iterator',['../classcadabra_1_1index__iterator.html',1,'cadabra']]],

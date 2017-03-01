@@ -2,6 +2,8 @@ var searchData=
 [
   ['imageview_2ecc',['ImageView.cc',['../ImageView_8cc.html',1,'']]],
   ['imageview_2ehh',['ImageView.hh',['../ImageView_8hh.html',1,'']]],
+  ['imaginaryi_2ecc',['ImaginaryI.cc',['../ImaginaryI_8cc.html',1,'']]],
+  ['imaginaryi_2ehh',['ImaginaryI.hh',['../ImaginaryI_8hh.html',1,'']]],
   ['implicitindex_2ecc',['ImplicitIndex.cc',['../ImplicitIndex_8cc.html',1,'']]],
   ['implicitindex_2ehh',['ImplicitIndex.hh',['../ImplicitIndex_8hh.html',1,'']]],
   ['indexinherit_2ehh',['IndexInherit.hh',['../IndexInherit_8hh.html',1,'']]],
