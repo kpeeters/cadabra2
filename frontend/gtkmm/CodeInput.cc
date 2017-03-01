@@ -145,41 +145,43 @@ void CodeInput::exp_input_tv::shift_enter_pressed()
 
 bool CodeInput::handle_button_press(GdkEventButton* button)
 	{
-	if(button->button!=2) return false;
+	if(button->button!=2 || button->type!=GDK_BUTTON_PRESS) return false;
 
 	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
 
 	std::vector<Glib::ustring> sah=refClipboard->wait_for_targets();
+	bool hascadabra=false;
 	bool hastext=false;
 	bool hasstring=false;
 	Gtk::SelectionData sd;
 
-	// find out _where_ to insert
-	Gtk::TextBuffer::iterator insertpos;
-	int somenumber;
-	edit.get_iter_at_position(insertpos, somenumber, button->x, button->y);
-	++insertpos;
-
 	for(unsigned int i=0; i<sah.size(); ++i) {
 		 if(sah[i]=="cadabra") {
-			  sd=refClipboard->wait_for_contents("cadabra");
-			  std::string topaste=sd.get_data_as_string();
-			  insertpos=edit.get_buffer()->insert(insertpos, topaste);
-			  edit.get_buffer()->place_cursor(insertpos);
-			  return true;
-			  }
+			 hascadabra=true;
+			 break;
+			 }
 		 else if(sah[i]=="TEXT")
-			  hastext=true;
+			 hastext=true;
 		 else if(sah[i]=="STRING")
-			  hasstring=true;
-		 }
-	
-	if(hastext)        sd=refClipboard->wait_for_contents("TEXT");
+			 hasstring=true;
+		}
+
+	if(hascadabra)     sd=refClipboard->wait_for_contents("cadabra");
+	else if(hastext)   sd=refClipboard->wait_for_contents("TEXT");
 	else if(hasstring) sd=refClipboard->wait_for_contents("STRING");
-	if(hastext || hasstring) {
-		 insertpos=edit.get_buffer()->insert(insertpos, sd.get_data_as_string());
-		 edit.get_buffer()->place_cursor(insertpos);
-		 }
+	if(hascadabra || hastext || hasstring) {
+		// find out _where_ to insert
+		Gtk::TextBuffer::iterator insertpos;
+		int somenumber;
+		edit.get_iter_at_position(insertpos, somenumber, button->x, button->y);
+		if(insertpos!=edit.get_buffer()->end())
+			++insertpos;
+		
+		// std::cerr << "inserting at " << insertpos << " text " << sd.get_data_as_string() << std::endl;
+		insertpos=edit.get_buffer()->insert(insertpos, sd.get_text());
+		// std::cerr << "placing cursor" << std::endl;
+		edit.get_buffer()->place_cursor(insertpos);
+		}
 
 	return true;
 	}
