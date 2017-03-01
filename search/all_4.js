@@ -83,8 +83,8 @@ var searchData=
   ['distributable',['Distributable',['../classcadabra_1_1Distributable.html',1,'cadabra']]],
   ['distributable_2ecc',['Distributable.cc',['../Distributable_8cc.html',1,'']]],
   ['distributable_2ehh',['Distributable.hh',['../Distributable_8hh.html',1,'']]],
-  ['distribute',['distribute',['../classcadabra_1_1distribute.html#a93bcd12ec661770bd95288465ca61018',1,'cadabra::distribute']]],
   ['distribute',['distribute',['../classcadabra_1_1distribute.html',1,'cadabra']]],
+  ['distribute',['distribute',['../classcadabra_1_1distribute.html#a93bcd12ec661770bd95288465ca61018',1,'cadabra::distribute']]],
   ['distribute_2ecc',['distribute.cc',['../distribute_8cc.html',1,'']]],
   ['distribute_2ehh',['distribute.hh',['../distribute_8hh.html',1,'']]],
   ['do_5fapply',['do_apply',['../classcadabra_1_1drop__keep__weight.html#a974ef2f0161d7f6fa7b8973769a4475b',1,'cadabra::drop_keep_weight']]],
@@ -107,6 +107,8 @@ var searchData=
   ['drop_5fweight',['drop_weight',['../classcadabra_1_1drop__weight.html',1,'cadabra']]],
   ['drop_5fweight_2ecc',['drop_weight.cc',['../drop__weight_8cc.html',1,'']]],
   ['drop_5fweight_2ehh',['drop_weight.hh',['../drop__weight_8hh.html',1,'']]],
+  ['dset1',['dset1',['../classcadabra_1_1rename__dummies.html#a813fbc899d8cc74f399e160e1df5a4ef',1,'cadabra::rename_dummies']]],
+  ['dset2',['dset2',['../classcadabra_1_1rename__dummies.html#aa45d344c64750ede2ffa4161a30ebf68',1,'cadabra::rename_dummies']]],
   ['dtree',['DTree',['../namespacecadabra.html#a2ebe95cddc83ab28291353b704a5ed0b',1,'cadabra']]],
   ['dummies_2ehh',['Dummies.hh',['../Dummies_8hh.html',1,'']]],
   ['dumpmap',['dumpmap',['../classcadabra_1_1Algorithm.html#a5aca32e44982761bbbb90a935bf2a794',1,'cadabra::Algorithm']]]

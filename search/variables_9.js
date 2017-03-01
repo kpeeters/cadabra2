@@ -28,7 +28,7 @@ var searchData=
   ['insert_5fstatement',['insert_statement',['../classsnoop_1_1SnoopImpl.html#a2120a939bd23f2c626588d7143af6a35',1,'snoop::SnoopImpl']]],
   ['internalerrortype',['InternalErrorType',['../PythonCdb_8cc.html#a5dc592f07bcb79a492ce2736ed52d068',1,'PythonCdb.cc']]],
   ['interrupted',['interrupted',['../classcadabra_1_1Algorithm.html#a35858fd2c0dbfa8e094f7291d8e1f3d9',1,'cadabra::Algorithm']]],
-  ['iota',['Iota',['../Symbols_8cc.html#a5babef3ff82f82a181d45f3fb2afc6d3',1,'Iota():&#160;Symbols.cc'],['../Symbols_8cc.html#a3d40533ca7d963dd247fa567d4f0717d',1,'iota():&#160;Symbols.cc']]],
+  ['iota',['iota',['../Symbols_8cc.html#a3d40533ca7d963dd247fa567d4f0717d',1,'iota():&#160;Symbols.cc'],['../Symbols_8cc.html#a5babef3ff82f82a181d45f3fb2afc6d3',1,'Iota():&#160;Symbols.cc']]],
   ['ip_5faddress',['ip_address',['../classsnoop_1_1Snoop_1_1AppEntry.html#a1a3d4e89062c3e6ef75eb13b6bcf22a2',1,'snoop::Snoop::AppEntry']]],
   ['is_5fconfigured',['is_configured',['../classcadabra_1_1NotebookWindow.html#a6883dad44e7f8449f0cc1f05efd4d6cb',1,'cadabra::NotebookWindow']]],
   ['is_5fderivative_5fargument',['is_derivative_argument',['../classcadabra_1_1rewrite__indices.html#ae1c9527d16a3c8a700244770a132ef41',1,'cadabra::rewrite_indices']]],

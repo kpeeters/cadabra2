@@ -38,7 +38,7 @@ var searchData=
   ['remove_5fzeroed_5fterms',['remove_zeroed_terms',['../classcadabra_1_1collect__terms.html#a26595b2aa28a6053d5c4b0d3c77207f4',1,'cadabra::collect_terms']]],
   ['removed_5ftext',['removed_text',['../classcadabra_1_1ActionEraseText.html#a0eb8bc0749bada523a3ca74c4a0038a7',1,'cadabra::ActionEraseText']]],
   ['removed_5ftree',['removed_tree',['../classcadabra_1_1ActionRemoveCell.html#a8b7ab0f326c31945b3e7e04d133a7252',1,'cadabra::ActionRemoveCell']]],
-  ['rename_5fdummies',['rename_dummies',['../classrename__dummies.html',1,'rename_dummies'],['../classrename__dummies.html#ac9fdc865ba4b8ca4a9cd5fec5e44fe6f',1,'rename_dummies::rename_dummies()'],['../classcadabra_1_1rename__dummies.html#a078f36e9b596282129c6360557e30cd2',1,'cadabra::rename_dummies::rename_dummies()']]],
+  ['rename_5fdummies',['rename_dummies',['../classrename__dummies.html',1,'rename_dummies'],['../classrename__dummies.html#ac9fdc865ba4b8ca4a9cd5fec5e44fe6f',1,'rename_dummies::rename_dummies()'],['../classcadabra_1_1rename__dummies.html#a49907b7461151876ea276caabc46f82d',1,'cadabra::rename_dummies::rename_dummies()']]],
   ['rename_5fdummies',['rename_dummies',['../classcadabra_1_1rename__dummies.html',1,'cadabra']]],
   ['rename_5fdummies_2ecc',['rename_dummies.cc',['../rename__dummies_8cc.html',1,'']]],
   ['rename_5fdummies_2ehh',['rename_dummies.hh',['../rename__dummies_8hh.html',1,'']]],

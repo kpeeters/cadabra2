@@ -7,6 +7,7 @@ var searchData=
   ['head_5fis_5fgenerated',['head_is_generated',['../classpreprocessor_1_1accu__t.html#a070ea5823f5a30394b5b309965b71dbd',1,'preprocessor::accu_t']]],
   ['height_5f',['height_',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a83fd19205ee1da4efeb0d59e4fd6a188',1,'cadabra::TeXEngine::TeXRequest']]],
   ['hidden',['hidden',['../classcadabra_1_1DataCell.html#a637a6a37f15eefa56f57b5e3c5cfb2c9',1,'cadabra::DataCell']]],
+  ['hidden_5f',['hidden_',['../classcadabra_1_1property.html#ab7bdc2ac768cf0e00e8ab9b13114216d',1,'cadabra::property']]],
   ['history',['history',['../classcadabra_1_1Ex.html#ac9f4ad1a2136784bcda14dffdfda0235',1,'cadabra::Ex']]],
   ['horizontal_5fpixels_5f',['horizontal_pixels_',['../classcadabra_1_1TeXEngine.html#a729497d3cb3dd6a546227a7f0c883f39',1,'cadabra::TeXEngine']]]
 ];

@@ -99,6 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classcadabra_1_1property-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">cadabra::property Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span><div class="ingroups"><a class="el" href="group__core.html">Core</a></div></div>  </div>
@@ -173,6 +174,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a4d1c87c379f100bde45b8bf01b19c48b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#a4d1c87c379f100bde45b8bf01b19c48b">property</a> (bool <a class="el" href="classcadabra_1_1property.html#a60a579ac721e8096ae604272d1910e36">hidden</a>=false)</td></tr>
+<tr class="separator:a4d1c87c379f100bde45b8bf01b19c48b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab96cd627ccec2910bbd5537f4e07126c"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#ab96cd627ccec2910bbd5537f4e07126c">~property</a> ()</td></tr>
 <tr class="separator:ab96cd627ccec2910bbd5537f4e07126c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9688f2c6f000dce88639f5f81c111ce4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#a9688f2c6f000dce88639f5f81c111ce4">parse_to_keyvals</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, <a class="el" href="classcadabra_1_1keyval__t.html">keyval_t</a> &amp;)</td></tr>
@@ -190,11 +193,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a63b15892a8f709ccd0c7a7fbcb9bc144"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a671377512ffb3fe8b9e7688ab7c17492"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classcadabra_1_1property.html#adb8b292b18172a8d5f9f3ee9f1bd5cb7">match_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#a671377512ffb3fe8b9e7688ab7c17492">equals</a> (const <a class="el" href="classcadabra_1_1property.html">property</a> *) const </td></tr>
 <tr class="separator:a671377512ffb3fe8b9e7688ab7c17492"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60a579ac721e8096ae604272d1910e36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#a60a579ac721e8096ae604272d1910e36">hidden</a> (bool h)</td></tr>
+<tr class="memdesc:a60a579ac721e8096ae604272d1910e36"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classcadabra_1_1Properties.html" title="Class holding a collection of properties attached to expressions. ">Properties</a> can be hidden because they only make sense to the system; they will not be printed when the user asks for a list of properties.  <a href="#a60a579ac721e8096ae604272d1910e36">More...</a><br/></td></tr>
+<tr class="separator:a60a579ac721e8096ae604272d1910e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5aeb3a9863d68cf4d69fb43d8284a14e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#a5aeb3a9863d68cf4d69fb43d8284a14e">hidden</a> (void) const </td></tr>
+<tr class="separator:a5aeb3a9863d68cf4d69fb43d8284a14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:aa4244c9266a83367b63b574d356fb3bb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#aa4244c9266a83367b63b574d356fb3bb">parse_one_argument</a> (Ex::iterator arg, <a class="el" href="classcadabra_1_1keyval__t.html">keyval_t</a> &amp;keyvals)</td></tr>
 <tr class="separator:aa4244c9266a83367b63b574d356fb3bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ab7bdc2ac768cf0e00e8ab9b13114216d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1property.html#ab7bdc2ac768cf0e00e8ab9b13114216d">hidden_</a></td></tr>
+<tr class="separator:ab7bdc2ac768cf0e00e8ab9b13114216d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Enumeration Documentation</h2>
 <a class="anchor" id="adb8b292b18172a8d5f9f3ee9f1bd5cb7"></a>
@@ -218,6 +231,22 @@ Private Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a4d1c87c379f100bde45b8bf01b19c48b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">property::property </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hidden</em> = <code>false</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab96cd627ccec2910bbd5537f4e07126c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -265,6 +294,40 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Reimplemented in <a class="el" href="classcadabra_1_1Indices.html#a84296f34c0eb3a06915b7a240141c996">cadabra::Indices</a>, <a class="el" href="classcadabra_1_1CommutingBehaviour.html#ae79800f708da4edb22463d5660e7e279">cadabra::CommutingBehaviour</a>, and <a class="el" href="classcadabra_1_1SortOrder.html#aa0819efbf167ca92270b2342e4643d6d">cadabra::SortOrder</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a60a579ac721e8096ae604272d1910e36"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void property::hidden </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>h</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classcadabra_1_1Properties.html" title="Class holding a collection of properties attached to expressions. ">Properties</a> can be hidden because they only make sense to the system; they will not be printed when the user asks for a list of properties. </p>
+
+</div>
+</div>
+<a class="anchor" id="a5aeb3a9863d68cf4d69fb43d8284a14e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool property::hidden </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -479,6 +542,27 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="ab7bdc2ac768cf0e00e8ab9b13114216d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::property::hidden_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>core/<a class="el" href="Props_8hh_source.html">Props.hh</a></li>
 <li>core/<a class="el" href="Props_8cc.html">Props.cc</a></li>
@@ -486,7 +570,7 @@ Private Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Feb 8 2017 18:08:37 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 1 2017 11:27:13 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

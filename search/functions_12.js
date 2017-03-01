@@ -14,7 +14,7 @@ var searchData=
   ['remove_5ftraceless_5ftraces',['remove_traceless_traces',['../classcadabra_1_1canonicalise.html#a572775dca9ef66a8350fa80bdceb48b4',1,'cadabra::canonicalise']]],
   ['remove_5fvanishing_5fnumericals',['remove_vanishing_numericals',['../classcadabra_1_1canonicalise.html#a87d714a6be4b0970aba89f8a5ffa09a6',1,'cadabra::canonicalise']]],
   ['remove_5fzeroed_5fterms',['remove_zeroed_terms',['../classcadabra_1_1collect__terms.html#a26595b2aa28a6053d5c4b0d3c77207f4',1,'cadabra::collect_terms']]],
-  ['rename_5fdummies',['rename_dummies',['../classrename__dummies.html#ac9fdc865ba4b8ca4a9cd5fec5e44fe6f',1,'rename_dummies::rename_dummies()'],['../classcadabra_1_1rename__dummies.html#a078f36e9b596282129c6360557e30cd2',1,'cadabra::rename_dummies::rename_dummies()']]],
+  ['rename_5fdummies',['rename_dummies',['../classrename__dummies.html#ac9fdc865ba4b8ca4a9cd5fec5e44fe6f',1,'rename_dummies::rename_dummies()'],['../classcadabra_1_1rename__dummies.html#a49907b7461151876ea276caabc46f82d',1,'cadabra::rename_dummies::rename_dummies()']]],
   ['rename_5freplacement_5fdummies',['rename_replacement_dummies',['../classcadabra_1_1Algorithm.html#a6daf6ecadfd6f8b20277bd1daa9ab839',1,'cadabra::Algorithm']]],
   ['replace_5findex',['replace_index',['../classcadabra_1_1Ex.html#ae8b685c1cccc7c5ff1acb321c013dc8b',1,'cadabra::Ex']]],
   ['replace_5fmatch',['replace_match',['../classcadabra_1_1replace__match.html#a3a5b77298719ee02216f301d04c42b32',1,'cadabra::replace_match']]],

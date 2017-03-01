@@ -16,5 +16,7 @@ var searchData=
   ['dispatcher',['dispatcher',['../classcadabra_1_1NotebookWindow.html#a3492ad800a0386075eb0580977f6d586',1,'cadabra::NotebookWindow']]],
   ['doc',['doc',['../classcadabra_1_1DocumentThread.html#a6c703caf839326a3287024c454d5d47b',1,'cadabra::DocumentThread']]],
   ['docthread',['docthread',['../classcadabra_1_1ComputeThread.html#abf80de911bd63523b3a49473084f417e',1,'cadabra::ComputeThread']]],
-  ['document',['document',['../classcadabra_1_1VisualCell.html#a141d0d13ed6211fefba6471ec68bed49',1,'cadabra::VisualCell']]]
+  ['document',['document',['../classcadabra_1_1VisualCell.html#a141d0d13ed6211fefba6471ec68bed49',1,'cadabra::VisualCell']]],
+  ['dset1',['dset1',['../classcadabra_1_1rename__dummies.html#a813fbc899d8cc74f399e160e1df5a4ef',1,'cadabra::rename_dummies']]],
+  ['dset2',['dset2',['../classcadabra_1_1rename__dummies.html#aa45d344c64750ede2ffa4161a30ebf68',1,'cadabra::rename_dummies']]]
 ];

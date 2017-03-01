@@ -29,11 +29,12 @@ var searchData=
   ['help_5ftype_5fand_5ftopic',['help_type_and_topic',['../classcadabra_1_1DocumentThread.html#ac3d5adc63d75c6ad0ea0a480192a275f',1,'cadabra::DocumentThread']]],
   ['helpers_5fcpp',['HELPERS_CPP',['../exec-stream_8cc.html#a367823623c3ed9db7d63c380d0de8a00',1,'exec-stream.cc']]],
   ['helpers_5fh',['HELPERS_H',['../exec-stream_8cc.html#a4fd85cebb3a7e1a87f883886a1e43791',1,'exec-stream.cc']]],
-  ['hidden',['hidden',['../classcadabra_1_1DataCell.html#a637a6a37f15eefa56f57b5e3c5cfb2c9',1,'cadabra::DataCell']]],
+  ['hidden',['hidden',['../classcadabra_1_1DataCell.html#a637a6a37f15eefa56f57b5e3c5cfb2c9',1,'cadabra::DataCell::hidden()'],['../classcadabra_1_1property.html#a60a579ac721e8096ae604272d1910e36',1,'cadabra::property::hidden(bool h)'],['../classcadabra_1_1property.html#a5aeb3a9863d68cf4d69fb43d8284a14e',1,'cadabra::property::hidden(void) const ']]],
+  ['hidden_5f',['hidden_',['../classcadabra_1_1property.html#ab7bdc2ac768cf0e00e8ab9b13114216d',1,'cadabra::property']]],
   ['history',['history',['../classcadabra_1_1Ex.html#ac9f4ad1a2136784bcda14dffdfda0235',1,'cadabra::Ex']]],
   ['history_5fsize',['history_size',['../classcadabra_1_1Ex.html#a66a03ffe536e4ffee5f2497f6845bced',1,'cadabra::Ex']]],
   ['hook_5flength',['hook_length',['../classyngtab_1_1tableau__base.html#a5651ffe242108b6bcf98d186b2002bc5',1,'yngtab::tableau_base']]],
   ['hook_5flength_5fprod',['hook_length_prod',['../classyngtab_1_1tableau__base.html#a01e44666a566fa3701923ba0f78ea551',1,'yngtab::tableau_base']]],
   ['horizontal_5fpixels_5f',['horizontal_pixels_',['../classcadabra_1_1TeXEngine.html#a729497d3cb3dd6a546227a7f0c883f39',1,'cadabra::TeXEngine']]],
-  ['html_5frecurse',['HTML_recurse',['../namespacecadabra.html#a04d45844128be92d43f4bcc3b83c64de',1,'cadabra']]]
+  ['html_5frecurse',['HTML_recurse',['../namespacecadabra.html#a6cc7dcf7f511c13cc1cb80f776051b81',1,'cadabra']]]
 ];

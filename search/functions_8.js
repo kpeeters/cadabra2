@@ -19,8 +19,9 @@ var searchData=
   ['head',['head',['../classcadabra_1_1Properties.html#a6d936dc7609465b308d84f690bd28c7d',1,'cadabra::Properties']]],
   ['height',['height',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a45a6df5b7a6a627cc56e02506f79b994',1,'cadabra::TeXEngine::TeXRequest']]],
   ['help_5ftype_5fand_5ftopic',['help_type_and_topic',['../classcadabra_1_1DocumentThread.html#ac3d5adc63d75c6ad0ea0a480192a275f',1,'cadabra::DocumentThread']]],
+  ['hidden',['hidden',['../classcadabra_1_1property.html#a60a579ac721e8096ae604272d1910e36',1,'cadabra::property::hidden(bool h)'],['../classcadabra_1_1property.html#a5aeb3a9863d68cf4d69fb43d8284a14e',1,'cadabra::property::hidden(void) const ']]],
   ['history_5fsize',['history_size',['../classcadabra_1_1Ex.html#a66a03ffe536e4ffee5f2497f6845bced',1,'cadabra::Ex']]],
   ['hook_5flength',['hook_length',['../classyngtab_1_1tableau__base.html#a5651ffe242108b6bcf98d186b2002bc5',1,'yngtab::tableau_base']]],
   ['hook_5flength_5fprod',['hook_length_prod',['../classyngtab_1_1tableau__base.html#a01e44666a566fa3701923ba0f78ea551',1,'yngtab::tableau_base']]],
-  ['html_5frecurse',['HTML_recurse',['../namespacecadabra.html#a04d45844128be92d43f4bcc3b83c64de',1,'cadabra']]]
+  ['html_5frecurse',['HTML_recurse',['../namespacecadabra.html#a6cc7dcf7f511c13cc1cb80f776051b81',1,'cadabra']]]
 ];
