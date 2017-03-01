@@ -8,6 +8,7 @@
 #include "properties/KroneckerDelta.hh"
 #include "properties/NumericalFlat.hh"
 #include "properties/PartialDerivative.hh"
+#include "properties/ImaginaryI.hh"
 
 namespace cadabra {
 
@@ -119,7 +120,7 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 
 	// Turn products of ImaginaryI into -1 factors.
 	if(tr.number_of_children(it)>1) {
-		std::vector<sibling_iterator> fs;
+		std::vector<Ex::sibling_iterator> fs;
 		auto sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
 			if(k.properties.get<ImaginaryI>(sib))

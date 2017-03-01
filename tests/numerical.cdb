@@ -19,3 +19,6 @@ test01()
 # \bar{#}::DiracBar;
 # ex:= \bar{4 \psi};
 # 
+
+i::ImaginaryI;
+ex:= A_{m n} i  B^{m} i i C i D i ;
