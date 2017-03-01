@@ -128,7 +128,7 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 			++sib;
 			}
 		multiplier_t mult=1;
-		for(int i=0; i<fs.size()/2; ++i) {
+		for(size_t i=0; i<fs.size()/2; ++i) {
 			tr.erase(fs[2*i]);
 			tr.erase(fs[2*i+1]);
 			mult*=-1;
