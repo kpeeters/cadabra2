@@ -117,6 +117,24 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 
 	ret = ret || cleanup_numericalflat(k, tr, it);
 
+	// Turn products of ImaginaryI into -1 factors.
+	if(tr.number_of_children(it)>1) {
+		std::vector<sibling_iterator> fs;
+		auto sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
+			if(k.properties.get<ImaginaryI>(sib))
+				fs.push_back(sib);
+			++sib;
+			}
+		multiplier_t mult=1;
+		for(int i=0; i<fs.size()/2; ++i) {
+			tr.erase(fs[2*i]);
+			tr.erase(fs[2*i+1]);
+			mult*=-1;
+			}
+		multiply(it->multiplier, mult);
+		}
+
 	// Handle edge cases where the product should collapse to a single node,
 	// e.g. when we have just a single factor, or when the product vanishes.
 
@@ -133,6 +151,8 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 		ret=true;
 		it->name=name_set.insert("1").first;
 		}
+
+	
 
 	return ret;
 	}

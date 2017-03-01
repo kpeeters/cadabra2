@@ -67,6 +67,7 @@ namespace boost {
 #include "properties/EpsilonTensor.hh"
 #include "properties/ExteriorDerivative.hh"
 #include "properties/FilledTableau.hh"
+#include "properties/ImaginaryI.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/Indices.hh"
 #include "properties/IndexInherit.hh"
@@ -1413,6 +1414,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<ExteriorDerivative>();
 	def_prop<FilledTableau>();
 	def_prop<GammaMatrix>();
+	def_prop<ImaginaryI>();	
 	def_prop<ImplicitIndex>();	
 	def_prop<IndexInherit>();
 	def_prop<Indices>();	

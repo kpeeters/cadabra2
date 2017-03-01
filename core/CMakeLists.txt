@@ -136,6 +136,7 @@ set(LOCAL_SRC_FILES
   properties/FilledTableau.cc
   properties/GammaMatrix.cc
   properties/GammaTraceless.cc
+  properties/ImaginaryI.cc
   properties/ImplicitIndex.cc
   properties/Indices.cc
   properties/Integer.cc
