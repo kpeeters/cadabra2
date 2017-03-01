@@ -34,6 +34,8 @@
 #include <typeinfo>
 #include <sstream>
 
+//#define DEBUG
+
 using namespace cadabra;
 
 Algorithm::Algorithm(const Kernel& k, Ex& tr_)
@@ -155,7 +157,9 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 
 	for(;;) {
 //		std::cout << "reached " << *current->name << std::endl;
+#ifdef DEBUG
 		std::cout << "apply_deep " << typeid(*this).name() << ": current = " << *current->name << std::endl;
+#endif
 
 		if(current.node==last.node) {
 //			std::cout << "stop after this one" << std::endl;
@@ -163,20 +167,26 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 			}
 
 		if(deepest_action > tr.depth(current)) {
-			std::cout << "simplify; we are at " << *(current->name) << std::endl;
+#ifdef DEBUG
+			std::cerr << "simplify; we are at " << *(current->name) << std::endl;
+#endif
 			iterator work=current;
 			bool work_is_topnode=(work==it);
 			cleanup_dispatch(kernel, tr, work);
 			current=work;
 			if(work_is_topnode)
 				it=work;
+#ifdef DEBUG
 			std::cerr << "current now " << *(current->name) << std::endl;
 			tr.print_recursive_treeform(std::cerr, current); 
+#endif
 			deepest_action = tr.depth(current); // needs to propagate upwards
 			}
 		
 		if(can_apply(current)) {
+#ifdef DEBUG
 			std::cout << "acting at " << *current->name << std::endl;
+#endif
 			iterator work=current;
 			post_order_iterator next(current);
 			++next;
@@ -190,12 +200,16 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 				// then restart our post-order traversal such that everything that has
 				// been removed from the tree by this zero will no longer be considered.
 				if(*work->multiplier==0) {
+#ifdef DEBUG
 					std::cerr << "propagate zero up the tree" << std::endl;
 					tr.print_recursive_treeform(std::cerr, it);
+#endif
 					post_order_iterator moved_next=work;
 					propagate_zeroes(moved_next, it);
+#ifdef DEBUG
 					tr.print_recursive_treeform(std::cerr, it);
 					std::cerr << Ex(it) << std::endl;
+#endif
 					next=moved_next;
 					}
 
@@ -218,7 +232,9 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 
 		}
 
-	std::cout << "recursive end **" << std::endl;
+#ifdef DEBUG
+	std::cerr << "recursive end **" << std::endl;
+#endif
 
 	return some_changes_somewhere;
 	}
@@ -228,7 +244,9 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 	assert(*it->multiplier==0);
 	if(it==topnode) return;
 	iterator walk=tr.parent(it);
+#ifdef DEBUG
 	std::cerr << "propagate_zeroes at " << *walk->name << std::endl;
+#endif
 	if(!tr.is_valid(walk)) 
 		return;
 
@@ -271,7 +289,9 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 			// If the sum is the top node, we cannot flatten it because
 			// we are not allowed to invalidate the topnode iterator
 			if(walk==topnode) {
+#ifdef DEBUG
 				std::cerr << "\\sum at top, cannot flatten" << std::endl;
+#endif
 //				it=tr.next_sibling(it); // Added but wrong?
 				return;
 				}
@@ -1203,7 +1223,9 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					const Coordinate *cdn=kernel.properties.get<Coordinate>(di.second);
 					const Symbol     *smb=kernel.properties.get<Symbol>(di.second);
 					if(! (cdn || smb || di.second->is_integer()) ) {
+#ifdef DEBUG
 						std::cerr << di.first << std::endl;
+#endif
 						throw ConsistencyException("Power with free indices not allowed.");
 						}
 					}
