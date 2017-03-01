@@ -49,6 +49,7 @@ endforeach()
 #
 set(RTESTS
   packages
+  dummies
   trigonometric
   noncovariant
   algebra

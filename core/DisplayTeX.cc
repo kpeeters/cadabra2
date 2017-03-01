@@ -118,6 +118,71 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		str << "\\right)";
 	}
 
+void DisplayTeX::print_tableau(std::ostream& str, Ex::iterator it) 
+	{
+	if(needs_brackets(it))
+		str << "\\left(";
+
+	// print multiplier and object name
+	if(*it->multiplier!=1) {
+		print_multiplier(str, it);
+		str << "\\, ";
+		}
+	
+   str << texify(*it->name);
+	auto sib=tree.begin(it);
+	str << "{";
+	while(sib!=tree.end(it)) {
+		str << "{";
+		dispatch(str, sib);
+		str << "}";
+		++sib;
+		}
+	str << "}";
+	
+	if(needs_brackets(it))
+		str << "\\right)";
+	}
+
+void DisplayTeX::print_ftableau(std::ostream& str, Ex::iterator it) 
+	{
+	if(needs_brackets(it))
+		str << "\\left(";
+
+	// print multiplier and object name
+	if(*it->multiplier!=1) {
+		print_multiplier(str, it);
+		str << "\\, ";
+		}
+	
+   str << texify(*it->name);
+	auto sib=tree.begin(it);
+	str << "{";
+	while(sib!=tree.end(it)) {
+		if(sib!=tree.begin(it))
+			str << ",";
+		if(*sib->name!="\\comma") {
+			str << "{";
+			dispatch(str, sib);
+			str << "}";
+			}
+		else {
+			auto sib2=tree.begin(sib);		
+			while(sib2!=tree.end(sib)) {
+				str << "{";
+				dispatch(str, sib2);
+				str << "}";
+				++sib2;
+				}
+			}
+		++sib;
+		}
+	str << "}";
+	
+	if(needs_brackets(it))
+		str << "\\right)";
+	}
+
 std::string DisplayTeX::texify(std::string str) const
 	{
 	auto rn = symmap.find(str);
@@ -161,7 +226,7 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 		bool function_bracket_needed=true;
 		if(current_bracket_==str_node::b_none) {
 			if(previous_bracket_==str_node::b_none && current_parent_rel_==previous_parent_rel_ && current_parent_rel_==str_node::p_none)
-				str << ", ";
+				str << ", \\discretionary{}{}{}";
 			function_bracket_needed=!reads_as_operator(it, ch);
 			}
 
@@ -282,6 +347,8 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\conditional")    print_conditional(str, it);
 	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
+	else if(*it->name=="\\tableau")        print_tableau(str, it);
+	else if(*it->name=="\\ftableau")       print_ftableau(str, it);	
 	else                                   print_other(str, it);
 	}
 
@@ -289,16 +356,16 @@ void DisplayTeX::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
-	str << "\\left\\{";
+	str << "\\left[";
 	while(sib!=tree.end(it)) {
 		if(first)
 			first=false;
 		else
-			str << ",~\\linebreak[0] ";
+			str << ",~\\discretionary{}{}{} ";
 		dispatch(str, sib);
 		++sib;
 		}
-	str << "\\right\\}";
+	str << "\\right]";
 	}
 
 void DisplayTeX::print_wedgeproduct(std::ostream& str, Ex::iterator it) 
@@ -520,7 +587,7 @@ void DisplayTeX::print_commutator(std::ostream& str, Ex::iterator it, bool comm)
 	auto sib=tree.begin(it);
 	bool first=true;
 	while(sib!=tree.end(it)) {
-		if(!first) str << ", ";
+		if(!first) str << ", \\discretionary{}{}{}";
 		else       first=false;
 		dispatch(str, sib);
 		++sib;

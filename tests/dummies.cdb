@@ -1,4 +1,21 @@
 
-{m,n,p,q}::Indices;
-ex:= A_{m} A^{m} + B_{m} C^{m} + A_{n} A^{n};
-rename_dummies(_)
+def test01():
+   __cdbkernel__=create_scope()
+   {m,n,p,q}::Indices("one");
+   {a,b,c,d}::Indices("two")
+   ex:= A_{m} A^{m} + B_{m} C^{m} + A_{n} A^{n} + Q_{c d} R^{d c};
+   rename_dummies(_, "one", "two")
+   tst:= 2 A_{a} A^{a} + B_{a} C^{a} + Q_{c d} R^{d c} - @(ex);
+   assert(tst==0)
+   print("Test 01 passed")
+
+test01()
+
+__cdbkernel__=create_scope()
+{n,p,q}::Indices("one");
+{m,n,p,q,r,s,t}::Indices("two")
+ex:= A_{r} = A_{m r} A^{m} + A_{n r} A^{n} + A_{s r} A^{s};
+rename_dummies(_, "two", "one")
+
+
+

@@ -106,6 +106,7 @@ class keyval_t {
 
 class property {
 	public:
+		property(bool hidden=false);
 		virtual ~property() {};
 
 		// Parse the argument tree into key-value pairs. Returns false on error.
@@ -144,8 +145,15 @@ class property {
 		enum match_t { no_match, id_match, exact_match };
 		virtual match_t equals(const property *) const;
 
+		/// Properties can be hidden because they only make sense to the
+		/// system; they will not be printed when the user asks for a list
+		/// of properties.
+		void hidden(bool h);
+		bool hidden(void) const;
+		
 	private:
 		bool                parse_one_argument(Ex::iterator arg, keyval_t& keyvals);
+		bool hidden_;
 };
 
 class labelled_property : virtual public property {

@@ -401,6 +401,8 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
 	{
 	auto ptr = std::make_shared<Ex>();
 
+	// std::cerr << ex_ << std::endl;
+	
 	// Parse the string expression.
 
 	Parser parser(ptr);
@@ -562,6 +564,8 @@ boost::python::list list_properties()
 	std::string res;
 	bool multi=false;
 	for(auto it=props.pats.begin(); it!=props.pats.end(); ++it) {
+		if(it->first->hidden()) continue;
+		
 		// print the property name if we are at the end or if the next entry is for
 		// a different property.
 		decltype(it) nxt=it;
@@ -572,10 +576,14 @@ boost::python::list list_properties()
 			}
 
 
-		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
+		//std::cerr << Ex(it->second->obj) << std::endl;
+//		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
 		std::ostringstream str;
 		// std::cerr << "displaying" << std::endl;
-		dt.output(str);
+//		dt.output(str);
+
+		str << it->second->obj;
+		
 		// std::cerr << "displayed " << str.str() << std::endl;
 		res += str.str();
 
@@ -804,7 +812,9 @@ void inject_defaults(Kernel *k)
 	auto wa=make_Ex_from_string("label=all, type=additive", false);
 	k->inject_property(wi,                       make_Ex_from_string("\\sum{#}", false), wa);
 
-	k->inject_property(new Derivative(),         make_Ex_from_string("\\cdbDerivative{#}",false), 0);
+	auto d = new Derivative();
+	d->hidden(true);
+	k->inject_property(d,                        make_Ex_from_string("\\cdbDerivative{#}",false), 0);
 	
 	k->inject_property(new Derivative(),         make_Ex_from_string("\\commutator{#}",false), 0);
 	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false), 0);
@@ -860,6 +870,10 @@ template<class Prop>
 std::string Property<Prop>::latex_() const
 	{
 	std::ostringstream str;
+
+//	HERE: this text should go away, property should just print itself in a python form,
+//   the decorating text should be printed in a separate place.
+
 	str << "\\text{Attached property ";
 	prop->latex(str);
 	std::string bare=Ex_latex_(*for_obj);
@@ -1203,7 +1217,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_algo_1<indexsort>("indexsort");
 	def_algo_1<product_rule>("product_rule");
 	def_algo_1<reduce_delta>("reduce_delta");
-	def_algo_1<rename_dummies>("rename_dummies");
 //	def_algo_1<reduce_sub>("reduce_sub");
 	def_algo_1<sort_product>("sort_product");
 	def_algo_1<sort_sum>("sort_sum");
@@ -1284,6 +1297,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("epsilon_to_delta", &dispatch_ex<epsilon_to_delta, bool>,
 		 (arg("ex"),
 		  arg("reduce")=true,
+		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+		 return_internal_reference<1>() );
+
+	def("rename_dummies", &dispatch_ex<rename_dummies, std::string, std::string>, 
+		 (arg("ex"),
+		  arg("set")="", arg("to")="",
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 

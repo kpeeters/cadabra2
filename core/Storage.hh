@@ -161,6 +161,11 @@ class Ex : public tree<str_node> {
 		/// FIXME: add tests for integers as well.
 		bool          is_rational() const;
 		multiplier_t  to_rational() const;
+
+      /// Display expression in Python/Cadabra input form. This is
+		/// fairly straightforward so not handled with a separate
+		/// DisplayBase derived class.
+		static std::ostream& print_python(std::ostream& str, Ex::iterator it);		
 		
 		/// Output helpers mainly for debugging purposes.
 		std::ostream& print_entire_tree(std::ostream& str) const;

@@ -39,9 +39,17 @@ bool Indices::parse(const Kernel&, keyval_t& keyvals)
 				throw std::logic_error("Indices: use quotes to label names when they start with a number.");
 				}
 			set_name=*ki->second->name;
+			if(set_name.size()>0) {
+				if(set_name[0]=='\"' and set_name[set_name.size()-1]=='\"')
+					set_name=set_name.substr(1,set_name.size()-2);
+				}
 			}
 		else if(ki->first=="parent") {
 			parent_name=*ki->second->name;
+			if(parent_name.size()>0) {
+				if(parent_name[0]=='\"' and parent_name[set_name.size()-1]=='\"')
+					parent_name=parent_name.substr(1,parent_name.size()-2);
+				}
 			}
 		else if(ki->first=="position") {
 			if(*ki->second->name=="free")

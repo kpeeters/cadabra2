@@ -50,13 +50,18 @@ except ImportError:
 import io
 import base64
 
-# FIXME: it is not a good idea to have this pollute the global namespace.
-#
 # Generate a JSON object for sending to the client. This function
 # does different things depending on the object type it is being
-# fed.
+# fed. Data types the server object understands:
+#
+#  - "latex_view": text-mode LaTeX string.
+#  - "image_png":  base64 encoded png image.
+#  - "verbatim":   ascii string to be displayed verbatim.
 
-def display(obj):
+mopen="\\begin{dmath*}{}";
+mclose="\\end{dmath*}";
+
+def display(obj, delay_send=False):
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
         imgstring = io.BytesIO()
         obj.savefig(imgstring,format='png')
@@ -90,29 +95,34 @@ def display(obj):
 
     elif isinstance(obj, Ex):
         if 'server' in globals():
-            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
+            ret = mopen+obj._latex_()+mclose
+            if delay_send:
+                return ret
+            else:
+                server.send(ret, "latex_view")
         else:
             print(obj.__str__());
 
     elif isinstance(obj, Property):
         if 'server' in globals():
-            server.send("\\begin{dmath*}{}"+obj._latex_()+"\\end{dmath*}", "latex_view")
+            ret = mopen+obj._latex_()+mclose
+            if delay_send:
+                return ret
+            else:
+                server.send(ret , "latex_view")
         else:
             print(obj.__str__())
 
     elif type(obj)==list:
-        out="\\begin{dmath*}{}"
+        out="{}$\\big[$"
         first=True
         for elm in obj:
             if first==False:
-                out+=", "
+                out+=",\discretionary{}{}{} "
             else:
                 first=False
-            if isinstance(elm, Ex):
-                out += elm._latex_()
-            else:
-                out+=latex(elm)   # Sympy to the rescue for all other objects.
-        out+="\\end{dmath*}"
+            out+= display(elm, True)
+        out+="$\\big]$";
         server.send(out, "latex_view")
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
@@ -122,7 +132,10 @@ def display(obj):
         # Failing all else, just dump a str representation to the notebook, asking
         # it to display this verbatim.
         # server.send("\\begin{dmath*}{}"+str(obj)+"\\end{dmath*}", "latex")
-        server.send(str(obj), "verbatim")
+        if delay_send:
+            return "\\verb|"+str(obj)+"|"
+        else:
+            server.send(str(obj), "verbatim")
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

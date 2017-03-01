@@ -25,6 +25,11 @@ def setup():
 def riemann_from_christoffel(R=$R$, c=$\Gamma$):
     """ Return the Riemann tensor expressed in terms of Christoffel symbols. """
     setup()
+            # FIXME: need to create_scope_from_global, then
+            # create new index declaration in there, with e.g. name "cdb.relativity.spacetime".
+            # Then generate the equation using the symbol (need 'head'!) passed in
+            # as R and c. Then find name of index set on those function arguments
+            # and finally do a rename_dummies/indices.
     ex:= @(R)^{\rho}_{\sigma\mu\nu} =
           \partial_{\mu}{@(c)^{\rho}_{\nu\sigma}}
          -\partial_{\nu}{@(c)^{\rho}_{\mu\sigma}}

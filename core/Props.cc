@@ -208,6 +208,21 @@ void keyval_t::erase(iterator it)
 	}
 
 
+property::property(bool h)
+	: hidden_(h)
+	{
+	}
+
+void property::hidden(bool h)
+	{
+	hidden_=h;
+	}
+
+bool property::hidden() const
+	{
+	return hidden_;
+	}
+
 bool property::parse(const Kernel&, keyval_t& keyvals)
 	{
 	return true;

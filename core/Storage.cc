@@ -127,6 +127,50 @@ multiplier_t Ex::to_rational() const
 	return *(begin()->multiplier);
 	}
 
+std::ostream& Ex::print_python(std::ostream& str, Ex::iterator it)
+	{
+	if((*it).fl.bracket   ==str_node::b_round)       str << "(";
+	else if((*it).fl.bracket   ==str_node::b_square) str << "[";
+	else if((*it).fl.bracket   ==str_node::b_curly)  str << "{";
+	else if((*it).fl.bracket   ==str_node::b_pointy) str << "<";
+	else if((*it).fl.bracket   ==str_node::b_none && is_head(it)==false)   str << "{";
+	std::string name(*(*it).name);
+	std::string res;
+	if(*it->multiplier!=1)
+		str << *it->multiplier;
+
+	for(unsigned int i=0; i<name.size(); ++i) {
+		if(name[i]=='#')       res+="\\#";
+//		else if(name[i]=='\\') res+="\\backslash{}";
+		else                   res+=name[i];
+		}
+	str << res;
+
+	
+	Ex::sibling_iterator beg=it.begin();
+	Ex::sibling_iterator fin=it.end();
+
+	while(beg!=fin) {
+		switch((*beg).fl.parent_rel) {
+			case str_node::p_super: str << "^"; break;
+			case str_node::p_sub:   str << "_"; break;
+			case str_node::p_property: str << "$"; break;
+			case str_node::p_exponent: str << "&"; break;
+			default: break;
+			}
+		print_python(str, beg);
+		++beg;
+		}
+
+	if((*it).fl.bracket   ==str_node::b_round)       str << ")";
+	else if((*it).fl.bracket   ==str_node::b_square) str << "]";
+	else if((*it).fl.bracket   ==str_node::b_curly)  str << "}";
+	else if((*it).fl.bracket   ==str_node::b_pointy) str << ">";
+	else if((*it).fl.bracket   ==str_node::b_none && is_head(it)==false)   str << "}";
+	
+	return str;
+	}
+	
 std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it) 
 	{
 	unsigned int num=1;
@@ -850,7 +894,8 @@ bool str_node::operator<(const cadabra::str_node& other) const
 std::ostream& operator<<(std::ostream& str, const cadabra::Ex& ex) 
 	{
 	if(ex.begin()==ex.end()) return str;
-	ex.print_recursive_treeform(str, ex.begin());
+//	ex.print_recursive_treeform(str, ex.begin());
+	ex.print_python(str, ex.begin());	
 	return str;
 	}
 
