@@ -1,0 +1,58 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Tableau}{Make object a Young tableau}\n\nIndicates that the object is a Young\n  diagram, i.e.~a tableau without labels in the boxes. The arguments\n  of a \\prop{Tableau} property denote the lengths of the\n  successive rows,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Tableau}{Make object a Young tableau}\n\nIndicates that the object is a Young\n  diagram, i.e.~a tableau without labels in the boxes. The arguments\n  of a \\prop{Tableau} property denote the lengths of the\n  successive rows,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\tableau{{4}{2}{1}}\\end{dmath*}"
+				}
+			],
+			"source" : "\\tableau{#}::Tableau.\nex:=\\tableau{4}{2}{1};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "For several algorithms, the dimension of the permutation group\nassociated to the tableau must be known; this can be added as in the\nexample below,"
+				}
+			],
+			"hidden" : true,
+			"source" : "For several algorithms, the dimension of the permutation group\nassociated to the tableau must be known; this can be added as in the\nexample below,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "\\tableau{#}::Tableau(dimension=10)."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
