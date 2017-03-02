@@ -17,10 +17,10 @@ test01()
 def test02():
     __cdbkernel__=create_scope()
     {\chi, \psi, \psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).
-    {\chi, \psi}::AntiCommuting.
+    {\chi, \psi, \psi_{m}}::AntiCommuting.
     \bar{#}::DiracBar.
     \Gamma{#}::GammaMatrix.
-    {\psi, \chi}::SortOrder.
+    {\psi_{m}, \psi, \chi}::SortOrder.
     ex:= \bar{\chi}\psi;
     sort_spinors(_)
     tst:= \bar{\psi}\chi - @(ex);
