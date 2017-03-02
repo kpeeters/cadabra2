@@ -36,7 +36,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\bar{\\psi} \\Gamma_{m n} \\chi\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\bar{\\psi} \\Gamma_{m n} \\chi\\end{dmath*}"
 				}
 			],
 			"source" : "sort_spinors(_);"
