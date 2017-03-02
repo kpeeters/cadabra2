@@ -41,6 +41,7 @@ var searchData=
   ['snoopimpl',['SnoopImpl',['../classsnoop_1_1SnoopImpl.html#af9a7a1512aeceba3823ee20c32eb7d77',1,'snoop::SnoopImpl']]],
   ['sort_5fcolumns',['sort_columns',['../classyngtab_1_1filled__tableau.html#a47e495e6fda0442d3c73e3b5ce7ca881',1,'yngtab::filled_tableau::sort_columns()'],['../classyngtab_1_1filled__tableau.html#a9eabcd127094120c3d809d945ce50fa2',1,'yngtab::filled_tableau::sort_columns(StrictWeakOrdering comp)']]],
   ['sort_5fproduct',['sort_product',['../classcadabra_1_1sort__product.html#a94578ad9e61ffd4f34aaf89117b5a4de',1,'cadabra::sort_product']]],
+  ['sort_5fspinors',['sort_spinors',['../classcadabra_1_1sort__spinors.html#af99213e5f75d5aff1ac9250fe7c478a6',1,'cadabra::sort_spinors']]],
   ['sort_5fsum',['sort_sum',['../classcadabra_1_1sort__sum.html#a5545973a0667719a08894638aeaff14c',1,'cadabra::sort_sum']]],
   ['sort_5fwithin_5fcolumns',['sort_within_columns',['../classyngtab_1_1filled__tableau.html#a7c1030c7608ad56af9483a52d0f4c74f',1,'yngtab::filled_tableau::sort_within_columns()'],['../classyngtab_1_1filled__tableau.html#a6d1ab556357d0bf05237042d604770a2',1,'yngtab::filled_tableau::sort_within_columns(StrictWeakOrdering comp)']]],
   ['spinor',['Spinor',['../classcadabra_1_1Spinor.html#a50fe1603f885643b9dd3cbfac1a12e6c',1,'cadabra::Spinor']]],

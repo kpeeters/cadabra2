@@ -63,7 +63,7 @@ var searchData=
   ['on_5ftext_5fscaling_5ffactor_5fchanged',['on_text_scaling_factor_changed',['../classcadabra_1_1NotebookWindow.html#a8819d8cffbaaf923abed4b0f0e81453e',1,'cadabra::NotebookWindow']]],
   ['on_5fview_5fclose',['on_view_close',['../classcadabra_1_1NotebookWindow.html#a4ce3959761d8fa5753e51d5a7788bfc9',1,'cadabra::NotebookWindow']]],
   ['on_5fview_5fsplit',['on_view_split',['../classcadabra_1_1NotebookWindow.html#a0188c2ddb8bbb97378695c583b437b51',1,'cadabra::NotebookWindow']]],
-  ['one',['one',['../namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099',1,'cadabra']]],
+  ['one',['one',['../classcadabra_1_1sort__spinors.html#a5343b57f2d2001b3e7929c1e0bf6edfc',1,'cadabra::sort_spinors::one()'],['../namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099',1,'cadabra::one()']]],
   ['one_5findex',['one_index',['../classcadabra_1_1expand.html#af25c5ebd62fa57bb774d17e78fb0c999',1,'cadabra::expand']]],
   ['one_5fstep_5f',['one_step_',['../classcadabra_1_1reduce__delta.html#ab53b97115eb4544e467eff0d48d4305b',1,'cadabra::reduce_delta']]],
   ['only_5fcol_5f',['only_col_',['../classcadabra_1_1TableauSymmetry.html#a308632d5ed4a46e3dc830311297f7df2',1,'cadabra::TableauSymmetry']]],

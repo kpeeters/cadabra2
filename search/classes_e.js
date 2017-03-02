@@ -10,7 +10,7 @@ var searchData=
   ['preprocessor',['preprocessor',['../classpreprocessor.html',1,'']]],
   ['product_5frule',['product_rule',['../classcadabra_1_1product__rule.html',1,'cadabra']]],
   ['properties',['Properties',['../classcadabra_1_1Properties.html',1,'cadabra']]],
-  ['property',['Property',['../classProperty.html',1,'']]],
   ['property',['property',['../classcadabra_1_1property.html',1,'cadabra']]],
+  ['property',['Property',['../classProperty.html',1,'']]],
   ['propertyinherit',['PropertyInherit',['../classcadabra_1_1PropertyInherit.html',1,'cadabra']]]
 ];

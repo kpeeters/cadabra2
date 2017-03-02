@@ -34,6 +34,7 @@ var searchData=
   ['traceless',['traceless',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a8420c1de3c9fcdd785663d31a3840ae0',1,'cadabra::exchange::identical_tensors_t']]],
   ['tree',['tree',['../classcadabra_1_1DisplayBase.html#a527706f63c79247bed1db8db2f4bc36e',1,'cadabra::DisplayBase::tree()'],['../classcadabra_1_1Parser.html#a30f41d6f8f77320e7a07d0b4d06fc9a0',1,'cadabra::Parser::tree()']]],
   ['tv2',['tv2',['../classstopwatch.html#ab3bc20c6729466c85515df222e22d1ac',1,'stopwatch']]],
+  ['two',['two',['../classcadabra_1_1sort__spinors.html#a4ee96c34d9030e19a1d3bdbc96cc69e6',1,'cadabra::sort_spinors']]],
   ['type',['type',['../classsnoop_1_1Snoop_1_1LogEntry.html#acc89c0c7d7f1acec646c400b857f8df0',1,'snoop::Snoop::LogEntry']]],
   ['tz',['tz',['../classstopwatch.html#a89879a80cbfd00074b76e2226390a924',1,'stopwatch']]]
 ];

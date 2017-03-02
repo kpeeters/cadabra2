@@ -5,6 +5,7 @@ var searchData=
   ['gamma',['Gamma',['../Symbols_8cc.html#a60576bcd8b3ecfa64cee85cf1b985ae8',1,'Gamma():&#160;Symbols.cc'],['../Symbols_8cc.html#a8e40c46cc7a4691079f3336ace7b6688',1,'gamma():&#160;Symbols.cc']]],
   ['gamma_5fbracket_5f',['gamma_bracket_',['../classcadabra_1_1join__gamma.html#a3380e12aca27089e5b75db79010cd931',1,'cadabra::join_gamma']]],
   ['gamma_5fname_5f',['gamma_name_',['../classcadabra_1_1join__gamma.html#ac46a847b64f7a98c17c8ae9343a4a6c5',1,'cadabra::join_gamma']]],
+  ['gammamat',['gammamat',['../classcadabra_1_1sort__spinors.html#a06e1850352dcdedff6180bdfb8adbaf6',1,'cadabra::sort_spinors']]],
   ['gammatraceless',['gammatraceless',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a378e6b64d1133b03930996ac49361a65',1,'cadabra::exchange::identical_tensors_t']]],
   ['generating_5fset',['generating_set',['../classcadabra_1_1canonicalise.html#aa8dd5ecb14ec7d0408bd0a5d2cd1a356',1,'cadabra::canonicalise']]],
   ['get_5fdummy_5fsw',['get_dummy_sw',['../classcadabra_1_1Algorithm.html#ad6833213bb01b47bac466cd8e1c59666',1,'cadabra::Algorithm']]],

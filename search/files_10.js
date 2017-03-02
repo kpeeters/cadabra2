@@ -16,6 +16,8 @@ var searchData=
   ['snoopprivate_2ehh',['SnoopPrivate.hh',['../SnoopPrivate_8hh.html',1,'']]],
   ['sort_5fproduct_2ecc',['sort_product.cc',['../sort__product_8cc.html',1,'']]],
   ['sort_5fproduct_2ehh',['sort_product.hh',['../sort__product_8hh.html',1,'']]],
+  ['sort_5fspinors_2ecc',['sort_spinors.cc',['../sort__spinors_8cc.html',1,'']]],
+  ['sort_5fspinors_2ehh',['sort_spinors.hh',['../sort__spinors_8hh.html',1,'']]],
   ['sort_5fsum_2ecc',['sort_sum.cc',['../sort__sum_8cc.html',1,'']]],
   ['sort_5fsum_2ehh',['sort_sum.hh',['../sort__sum_8hh.html',1,'']]],
   ['sortorder_2ecc',['SortOrder.cc',['../SortOrder_8cc.html',1,'']]],

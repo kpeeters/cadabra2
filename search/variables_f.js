@@ -6,6 +6,7 @@ var searchData=
   ['omega',['omega',['../Symbols_8cc.html#acc4d3c53bcc625e6823139f6351f94d6',1,'omega():&#160;Symbols.cc'],['../Symbols_8cc.html#a9132de613a1de42d0ec7673cde2090ec',1,'Omega():&#160;Symbols.cc']]],
   ['omicron',['omicron',['../Symbols_8cc.html#a88d1d874e01611a5e3328d4e3da00094',1,'omicron():&#160;Symbols.cc'],['../Symbols_8cc.html#a9f794583a16b9879d5f798e1d010e630',1,'Omicron():&#160;Symbols.cc']]],
   ['on_5fback',['on_back',['../classcadabra_1_1split__gamma.html#a38d4d11d3b72163183ccd2513265a1ce',1,'cadabra::split_gamma']]],
+  ['one',['one',['../classcadabra_1_1sort__spinors.html#a5343b57f2d2001b3e7929c1e0bf6edfc',1,'cadabra::sort_spinors']]],
   ['one_5findex',['one_index',['../classcadabra_1_1expand.html#af25c5ebd62fa57bb774d17e78fb0c999',1,'cadabra::expand']]],
   ['only_5fcol_5f',['only_col_',['../classcadabra_1_1TableauSymmetry.html#a308632d5ed4a46e3dc830311297f7df2',1,'cadabra::TableauSymmetry']]],
   ['only_5fexpand',['only_expand',['../classcadabra_1_1join__gamma.html#ad42c64cbc1573e509263b5ed2c80e8a4',1,'cadabra::join_gamma']]],

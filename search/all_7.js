@@ -5,6 +5,7 @@ var searchData=
   ['gamma',['Gamma',['../Symbols_8cc.html#a60576bcd8b3ecfa64cee85cf1b985ae8',1,'Gamma():&#160;Symbols.cc'],['../Symbols_8cc.html#a8e40c46cc7a4691079f3336ace7b6688',1,'gamma():&#160;Symbols.cc']]],
   ['gamma_5fbracket_5f',['gamma_bracket_',['../classcadabra_1_1join__gamma.html#a3380e12aca27089e5b75db79010cd931',1,'cadabra::join_gamma']]],
   ['gamma_5fname_5f',['gamma_name_',['../classcadabra_1_1join__gamma.html#ac46a847b64f7a98c17c8ae9343a4a6c5',1,'cadabra::join_gamma']]],
+  ['gammamat',['gammamat',['../classcadabra_1_1sort__spinors.html#a06e1850352dcdedff6180bdfb8adbaf6',1,'cadabra::sort_spinors']]],
   ['gammamatrix',['GammaMatrix',['../classcadabra_1_1GammaMatrix.html',1,'cadabra']]],
   ['gammamatrix_2ecc',['GammaMatrix.cc',['../GammaMatrix_8cc.html',1,'']]],
   ['gammamatrix_2ehh',['GammaMatrix.hh',['../GammaMatrix_8hh.html',1,'']]],

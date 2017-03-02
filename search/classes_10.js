@@ -9,6 +9,7 @@ var searchData=
   ['snoop',['Snoop',['../classsnoop_1_1Snoop.html',1,'snoop']]],
   ['snoopimpl',['SnoopImpl',['../classsnoop_1_1SnoopImpl.html',1,'snoop']]],
   ['sort_5fproduct',['sort_product',['../classcadabra_1_1sort__product.html',1,'cadabra']]],
+  ['sort_5fspinors',['sort_spinors',['../classcadabra_1_1sort__spinors.html',1,'cadabra']]],
   ['sort_5fsum',['sort_sum',['../classcadabra_1_1sort__sum.html',1,'cadabra']]],
   ['sortorder',['SortOrder',['../classcadabra_1_1SortOrder.html',1,'cadabra']]],
   ['spinor',['Spinor',['../classcadabra_1_1Spinor.html',1,'cadabra']]],
