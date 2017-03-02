@@ -74,11 +74,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "The argument to \\algo{fierz} is the required order of the\nfermions; note that this algorithm does not flip around Majorana\nspinors and \\algo{spinorsort} should be used for that.  Also\nnote that it is important to define not only the symbols representing\nthe spinors, Dirac bar and gamma matrices, but also the range of the\nindices.\n"
+					"source" : "The argument to \\algo{fierz} is the required order of the\nfermions; note that this algorithm does not flip around Majorana\nspinors and \\algo{sort_spinors} should be used for that.  Also\nnote that it is important to define not only the symbols representing\nthe spinors, Dirac bar and gamma matrices, but also the range of the\nindices.\n"
 				}
 			],
 			"hidden" : true,
-			"source" : "The argument to \\algo{fierz} is the required order of the\nfermions; note that this algorithm does not flip around Majorana\nspinors and \\algo{spinorsort} should be used for that.  Also\nnote that it is important to define not only the symbols representing\nthe spinors, Dirac bar and gamma matrices, but also the range of the\nindices.\n"
+			"source" : "The argument to \\algo{fierz} is the required order of the\nfermions; note that this algorithm does not flip around Majorana\nspinors and \\algo{sort_spinors} should be used for that.  Also\nnote that it is important to define not only the symbols representing\nthe spinors, Dirac bar and gamma matrices, but also the range of the\nindices.\n"
 		},
 		{
 			"cell_origin" : "client",
