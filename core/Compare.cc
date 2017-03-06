@@ -13,6 +13,7 @@
 #include "properties/CommutingAsProduct.hh"
 #include "properties/CommutingBehaviour.hh"
 #include "properties/DifferentialForm.hh"
+#include "properties/DiracBar.hh"
 #include "properties/Integer.hh"
 #include "properties/SortOrder.hh"
 
@@ -1259,8 +1260,8 @@ int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_
 	// index lines and make the expression meaningless.
 	// FIXME: this would ideally make use of index and conjugate index lines.
 
-//	const DiracBar *db2 = kernel.properties->get_composite<DiracBar>(two);
-	if(! (ii1 && ii2 /* && db2 */) ) {
+	const DiracBar *db2 = properties.get_composite<DiracBar>(two);
+	if(! (ii1 && ii2 && db2) ) {
 
 		// First of all, check whether there is an explicit declaration for the commutativity 
 		// of these two symbols.

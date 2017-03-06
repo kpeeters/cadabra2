@@ -59,6 +59,7 @@ set(ALGOS
   rename_dummies
   rewrite_indices
   sort_product
+  sort_spinors
   sort_sum
   split_gamma
   split_index

@@ -1,0 +1,52 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{sort_spinors}{Sort Majorana spinor bilinears}\n\nSorts Majorana spinor bilinears using the Majorana flip property,\nwhich for anti-commuting spinors takes the form\n\\begin{equation}\n\\bar\\psi_1 \\Gamma_{r_1\\cdots r_n}\\psi_2 = \n  \\alpha \\beta^n (-)^{\\frac{1}{2}n(n-1)}\\, \\bar\\psi_1\n  \\Gamma_{r_1\\cdots r_n}\\psi_2\\, .\n\\end{equation}\nHere $\\alpha$ and $\\beta$ determine the properties of the charge\nconjugation matrix,\n\\begin{equation}\n{\\cal C}^T = \\alpha {\\cal C}\\,,\\quad\n{\\cal C}\\Gamma_r {\\cal C}^{-1} = \\beta \\Gamma_r^T\\, .\n\\end{equation}\nHere is an example."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{sort_spinors}{Sort Majorana spinor bilinears}\n\nSorts Majorana spinor bilinears using the Majorana flip property,\nwhich for anti-commuting spinors takes the form\n\\begin{equation}\n\\bar\\psi_1 \\Gamma_{r_1\\cdots r_n}\\psi_2 = \n  \\alpha \\beta^n (-)^{\\frac{1}{2}n(n-1)}\\, \\bar\\psi_1\n  \\Gamma_{r_1\\cdots r_n}\\psi_2\\, .\n\\end{equation}\nHere $\\alpha$ and $\\beta$ determine the properties of the charge\nconjugation matrix,\n\\begin{equation}\n{\\cal C}^T = \\alpha {\\cal C}\\,,\\quad\n{\\cal C}\\Gamma_r {\\cal C}^{-1} = \\beta \\Gamma_r^T\\, .\n\\end{equation}\nHere is an example."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\bar{\\chi} \\Gamma_{m n} \\psi\\end{dmath*}"
+				}
+			],
+			"source" : "{\\chi, \\psi, \\psi_{m}}::Spinor(dimension=10, type=MajoranaWeyl).\n{\\chi, \\psi, \\psi_{m}}::AntiCommuting.\n\\bar{#}::DiracBar.\n\\Gamma{#}::GammaMatrix.\n{\\psi_{m}, \\psi, \\chi}::SortOrder.\nex:=\\bar{\\chi} \\Gamma_{m n} \\psi;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\bar{\\psi} \\Gamma_{m n} \\chi\\end{dmath*}"
+				}
+			],
+			"source" : "sort_spinors(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
