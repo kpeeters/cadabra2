@@ -103,6 +103,7 @@ set(PROPS
   Symmetric
   Tableau
   TableauSymmetry
+  WeightInherit
 )
 
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)

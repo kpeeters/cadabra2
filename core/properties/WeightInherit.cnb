@@ -1,0 +1,90 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{WeightInherit}{Make object inherit weights from child nodes}\n\nIndicates that the object inherits all weights of its child nodes. The\nlabel indicates which weights are inherited; use {\\tt all} to inherit\nall weights. The type of inheritance determines whether weights of the\nchild nodes should be added or multiplied. \n\nAdditive weight inheritance is used to assign a weight to sum-like\nobjects. For example, if we declare"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{WeightInherit}{Make object inherit weights from child nodes}\n\nIndicates that the object inherits all weights of its child nodes. The\nlabel indicates which weights are inherited; use {\\tt all} to inherit\nall weights. The type of inheritance determines whether weights of the\nchild nodes should be added or multiplied. \n\nAdditive weight inheritance is used to assign a weight to sum-like\nobjects. For example, if we declare"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property WeightInherit to~}f\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}A.\\end{dmath*}"
+				}
+			],
+			"source" : "f{#}::WeightInherit(label=all, type=Additive);\nA::Weight(label=field, value=3);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "then the expression~\\verb|f{A}{A}| has weight~3. This is what would\nhappen if `\\verb|f|' would be a sum: the weight of the sum is the same\nas the weight of the terms (and is only defined if the weight of the\nall terms is equal).\n\nMultiplicative weight inheritance is used to assign a weight to \nproduct-like objects. For example, if we declare"
+				}
+			],
+			"hidden" : true,
+			"source" : "then the expression~\\verb|f{A}{A}| has weight~3. This is what would\nhappen if `\\verb|f|' would be a sum: the weight of the sum is the same\nas the weight of the terms (and is only defined if the weight of the\nall terms is equal).\n\nMultiplicative weight inheritance is used to assign a weight to \nproduct-like objects. For example, if we declare"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property WeightInherit to~}g\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}B.\\end{dmath*}"
+				}
+			],
+			"source" : "g{#}::WeightInherit(label=all, type=Multiplicative);\nB::Weight(label=field, value=3);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "then the expression~\\verb|g{B}{B}| has weight~6. This is what would\nhappen if `\\verb|g|' would be a product: the weight of the product is the same\nas the sum of the weights of the factors.\n\nTerms can be selected based on their weight by using the\n\\algo{keep_weight} or \\algo{drop_weight} algorithms."
+				}
+			],
+			"hidden" : true,
+			"source" : "then the expression~\\verb|g{B}{B}| has weight~6. This is what would\nhappen if `\\verb|g|' would be a product: the weight of the product is the same\nas the sum of the weights of the factors.\n\nTerms can be selected based on their weight by using the\n\\algo{keep_weight} or \\algo{drop_weight} algorithms."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
