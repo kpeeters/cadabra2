@@ -11,7 +11,7 @@
 #include <sstream>
 #include <unistd.h>
 
-#define DEBUG
+//#define DEBUG
 
 using namespace cadabra;
 
