@@ -1,0 +1,25 @@
+{t,r,\theta,\phi}::Coordinate;
+{\mu,\nu,\rho,\sigma,\kappa,\lambda}::Indices(values={t,r,\phi,\theta}, position=fixed).
+rs::LaTeXForm("r_s").
+g_{\mu\nu}::Metric;
+g^{\mu\nu}::InverseMetric;
+\partial{#}::PartialDerivative.
+
+\Delta::Depends(r);
+\Sigma::Depends(r);
+
+kerr:= { g_{t t}            = - (1 - rs r / \Sigma),
+         g_{t \phi}         = - rs a r \sin(\theta)**2 / \Sigma,
+         g_{\phi t}         = - rs a r \sin(\theta)**2 / \Sigma,
+         g_{r r}            = \Sigma / \Delta,
+         g_{\theta \theta } = \Sigma,
+         g_{\phi \phi}      = ( r**2 + a**2 + rs a**2 r \sin(\theta)**2 / \Sigma ) \sin(\theta)**2 };
+
+complete(kerr, $g^{\mu\nu}$);
+
+import cdb.relativity as gr
+
+ch = gr.christoffel_from_metric()
+display(ch)
+
+evaluate(ch, kerr, rhsonly=True);
