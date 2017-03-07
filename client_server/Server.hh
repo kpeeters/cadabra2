@@ -134,6 +134,8 @@ class Server {
 		void                     on_block_error(Block);
 		void                     on_kernel_fault(Block);
 
+		std::string              architecture() const;
+		
 		/// Raw code to send a string (which must be JSON formatted) as
 		/// a message to the client.
 		void                     send(const std::string& output, const std::string& msg_type);

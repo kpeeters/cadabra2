@@ -23,12 +23,12 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left\\{r,~\\linebreak[0] t,~\\linebreak[0] \\phi,~\\linebreak[0] \\theta\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[r,~\\discretionary{}{}{} t,~\\discretionary{}{}{} \\phi,~\\discretionary{}{}{} \\theta\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left\\{\\mu,~\\linebreak[0] \\nu,~\\linebreak[0] \\rho,~\\linebreak[0] \\sigma,~\\linebreak[0] \\lambda,~\\linebreak[0] \\kappa,~\\linebreak[0] \\chi,~\\linebreak[0] \\gamma\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\lambda,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\chi,~\\discretionary{}{}{} \\gamma\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -60,7 +60,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{g_{t t} = -1+\\frac{2M}{r},~\\linebreak[0] g_{r r} = \\frac{1}{1 - \\frac{2M}{r}},~\\linebreak[0] g_{\\theta \\theta} = r^{2},~\\linebreak[0] g_{\\phi \\phi} = r^{2} \\sin{\\theta}^{2},~\\linebreak[0] g^{t t} = \\frac{r}{2M-r},~\\linebreak[0] g^{r r} = \\frac{-2M+r}{r},~\\linebreak[0] g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin{\\theta}^{2}},~\\linebreak[0] g^{\\theta \\theta} = r^{-2}\\right\\}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left[g_{t t} = -1+\\frac{2M}{r},~\\discretionary{}{}{} g_{r r} = \\frac{1}{1 - \\frac{2M}{r}},~\\discretionary{}{}{} g_{\\theta \\theta} = r^{2},~\\discretionary{}{}{} g_{\\phi \\phi} = r^{2} \\sin{\\theta}^{2},~\\discretionary{}{}{} g^{t t} = \\frac{r}{2M-r},~\\discretionary{}{}{} g^{r r} = \\frac{-2M+r}{r},~\\discretionary{}{}{} g^{\\phi \\phi} = \\frac{1}{r^{2} \\sin{\\theta}^{2}},~\\discretionary{}{}{} g^{\\theta \\theta} = r^{-2}\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "ss:= { g_{t t} = -(1-2 M/r),   \n       g_{r r} = 1/(1-2 M/r), \n       g_{\\theta\\theta} = r**2, \n       g_{\\phi\\phi}=r**2 \\sin(\\theta)**2\n     }.\n\ncomplete(ss, $g^{\\mu\\nu}$);"

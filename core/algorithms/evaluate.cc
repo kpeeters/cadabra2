@@ -12,6 +12,8 @@
 #include "properties/Accent.hh"
 #include <functional>
 
+#define DEBUG
+
 using namespace cadabra;
 
 evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
@@ -41,7 +43,9 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// the index name -> index value map.
 	
 	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
-			// std::cerr << "evaluate at " << *walk->name << std::endl;
+#ifdef DEBUG
+			std::cerr << "evaluate at " << *walk->name << std::endl;
+#endif			
 			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
 			else if(is_component(walk)) return walk;
@@ -59,8 +63,10 @@ Algorithm::result_t evaluate::apply(iterator& it)
 						if(! (only_rhs && tr.is_head(walk)==false && *(tr.parent(walk)->name)=="\\equals" && tr.index(walk)==0) ) {
 							index_map_t empty;
 							sibling_iterator tmp(walk);
-							// std::cerr << "handling factor" << std::endl;
-							// std::cerr << *walk->name << std::endl;
+#ifdef DEBUG
+							std::cerr << "handling factor" << std::endl;
+							std::cerr << *walk->name << std::endl;
+#endif							
 							walk = handle_factor(tmp, empty);
 							// std::cerr << "handling factor done" << std::endl;							
 							}
@@ -270,7 +276,9 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 
 	merge_component_children(repl.begin());
 
-	// std::cerr << "result now " << repl << std::endl;
+#ifdef DEBUG	
+	std::cerr << "result now " << repl << std::endl;
+#endif	
 	sib = tr.move_ontop(iterator(sib), repl.begin());
 
 	return sib;
@@ -405,7 +413,7 @@ void evaluate::cleanup_components(iterator it)
 
 Ex::iterator evaluate::handle_derivative(iterator it)
 	{
-	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
+	std::cerr << "handle_derivative " << Ex(it) << std::endl;
 	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
@@ -472,6 +480,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	size_t ni=number_of_direct_indices(it);
 	
 	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
+			std::cerr << "====" << std::endl;
+			std::cerr << Ex(iv) << std::endl;
 			// For each internal dummy set, keep track of the
 			// position in the permutation array where we generate
 			// its value.
@@ -494,6 +504,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 			combin::combinations<Ex> cb;
 			for(auto& obj: deps) {
+				std::cerr << "dep " << obj << std::endl;
 				cb.original.push_back(obj);
 				}
 			cb.multiple_pick=true;
@@ -538,7 +549,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			// derivative, create an entry in the \components node.
 
 			for(unsigned int i=0; i<cb.size() || cb.size()==0; ++i) {
-				// std::cerr << "Index combination " << i << std::endl;
+				std::cerr << "Index combination " << i << std::endl;
 				Ex eqcopy(iv); 
 				auto lhs=eqcopy.begin(eqcopy.begin());
 				assert(*lhs->name=="\\comma");
@@ -565,11 +576,13 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				auto pch=tr.begin(it);
 				iterator arg=tr.begin(rhs);
 				for(size_t j=0, cb_j=0; j<ni; ++j) {
+					std::cerr << j << " : ";
 					bool done=false;
 					for(auto& d: dummy_positions) {
 						if(d.first==j) {
 							// This index is forced to a value because it is a dummy of which the partner
 							// is fixed by the argument on which the derivative acts.
+							std::cerr << "fixed" << std::endl;
 							eqcopy.insert_subtree(rhs.begin(), tr.child(lhs,d.second))->fl.parent_rel=str_node::p_sub;
 							done=true;
 							break;
@@ -587,9 +600,11 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 						else {
 							++cb_j;
 							}
+						std::cerr << "cb: " << i << ", " << fromj << std::endl;
 						eqcopy.insert_subtree(rhs.begin(), cb[i][fromj].begin() )->fl.parent_rel=str_node::p_sub;
 						}
 					}
+				std::cerr << "----" << std::endl;
 				
 				// For all dummy pairs which have one index on the
 				// \components node inside the derivative, we need to

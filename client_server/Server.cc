@@ -65,6 +65,11 @@ std::string Server::CatchOutput::str() const
 	return collect;
 	}
 
+std::string Server::architecture() const
+	{
+	return "client-server";
+	}
+
 void Server::init()
 	{
 	started=false;
@@ -81,7 +86,8 @@ void Server::init()
     	;
 
 	boost::python::class_<Server, boost::noncopyable>("Server")
-		.def("send", &Server::send);
+		.def("send", &Server::send)
+		.def("architecture", &Server::architecture);
 
 	std::string stdOutErr =
 		"import sys\n"

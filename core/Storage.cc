@@ -894,8 +894,8 @@ bool str_node::operator<(const cadabra::str_node& other) const
 std::ostream& operator<<(std::ostream& str, const cadabra::Ex& ex) 
 	{
 	if(ex.begin()==ex.end()) return str;
-//	ex.print_recursive_treeform(str, ex.begin());
-	ex.print_python(str, ex.begin());	
+	ex.print_recursive_treeform(str, ex.begin());
+//	ex.print_python(str, ex.begin());	
 	return str;
 	}
 

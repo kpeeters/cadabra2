@@ -11,7 +11,7 @@
 #include <sstream>
 #include <unistd.h>
 
-//#define DEBUG
+#define DEBUG
 
 using namespace cadabra;
 
@@ -293,12 +293,13 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 					total << (*reqit)->start_wrap;
 
 				std::string lr=(*reqit)->latex_string;
-				boost::replace_all(lr, "\\left(", "\\brwrap{(}{)}{");
-				boost::replace_all(lr, "\\right)", "}");
-				boost::replace_all(lr, "\\left[", "\\brwrap{[}{]}{");
-				boost::replace_all(lr, "\\right]", "}");
-				boost::replace_all(lr, "\\left\\{", "\\brwrap{\\{}{\\}}{");
-				boost::replace_all(lr, "\\right\\}", "}");
+				boost::replace_all(lr, "\\left(", "\\brwrap{(}{");
+				boost::replace_all(lr, "\\right)", "}{)}");
+				boost::replace_all(lr, "\\left[", "\\brwrap{[}{");
+				boost::replace_all(lr, "\\right]", "}{]}");
+				boost::replace_all(lr, "\\left\\{", "\\brwrap{\\{}{");
+				boost::replace_all(lr, "\\right\\}", "}{\\}}");
+				boost::replace_all(lr, "\\right.", "}{.}");
 				boost::replace_all(lr, "\\begin{dmath*}", "$");
 				boost::replace_all(lr, "\\end{dmath*}", "$");
 

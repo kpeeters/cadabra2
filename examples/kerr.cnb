@@ -9,7 +9,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left\\{t,~\\linebreak[0] r,~\\linebreak[0] \\theta,~\\linebreak[0] \\phi\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[t,~\\discretionary{}{}{} r,~\\discretionary{}{}{} \\theta,~\\discretionary{}{}{} \\phi\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -50,7 +50,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{g_{t t} = -1+r_s \\frac{r}{\\Sigma},~\\linebreak[0] g_{t \\phi} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{\\phi t} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{r r} = \\frac{\\Sigma}{\\Delta},~\\linebreak[0] g_{\\theta \\theta} = \\Sigma,~\\linebreak[0] g_{\\phi \\phi} = \\left(r^{2}+a^{2}+r_s a^{2} r \\frac{\\sin{\\theta}^{2}}{\\Sigma}\\right) \\sin{\\theta}^{2}\\right\\}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left[g_{t t} = -1+r_s \\frac{r}{\\Sigma},~\\discretionary{}{}{} g_{t \\phi} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\discretionary{}{}{} g_{\\phi t} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\discretionary{}{}{} g_{r r} = \\frac{\\Sigma}{\\Delta},~\\discretionary{}{}{} g_{\\theta \\theta} = \\Sigma,~\\discretionary{}{}{} g_{\\phi \\phi} = \\left(r^{2}+a^{2}+r_s a^{2} r \\frac{\\sin{\\theta}^{2}}{\\Sigma}\\right) \\sin{\\theta}^{2}\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "kerr:= { g_{t t}            = - (1 - rs r / \\Sigma),\n         g_{t \\phi}         = - rs a r \\sin(\\theta)**2 / \\Sigma,\n         g_{\\phi t}         = - rs a r \\sin(\\theta)**2 / \\Sigma,\n         g_{r r}            = \\Sigma / \\Delta,\n         g_{\\theta \\theta } = \\Sigma,\n         g_{\\phi \\phi}      = ( r**2 + a**2 + rs a**2 r \\sin(\\theta)**2 / \\Sigma ) \\sin(\\theta)**2 };"
@@ -63,7 +63,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{g_{t t} = -1+r_s \\frac{r}{\\Sigma},~\\linebreak[0] g_{t \\phi} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{\\phi t} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\linebreak[0] g_{r r} = \\frac{\\Sigma}{\\Delta},~\\linebreak[0] g_{\\theta \\theta} = \\Sigma,~\\linebreak[0] g_{\\phi \\phi} = \\left(r^{2}+a^{2}+r_s a^{2} r \\frac{\\sin{\\theta}^{2}}{\\Sigma}\\right) \\sin{\\theta}^{2},~\\linebreak[0] g^{t t} = a^{2} r^{2} r_s^{2} \\left(r r_s-\\Sigma\\right) \\frac{\\sin{\\theta}^{2}}{\\left(r \\frac{r_s}{\\Sigma}-1\\right)^{2} \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma^{2}}+\\frac{1}{r \\frac{r_s}{\\Sigma}-1},~\\linebreak[0] g^{t \\phi} = a r r_s \\frac{r r_s-\\Sigma}{\\left(r \\frac{r_s}{\\Sigma}-1\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma},~\\linebreak[0] g^{r r} = \\frac{\\Delta}{\\Sigma},~\\linebreak[0] g^{\\phi t} = a r r_s \\frac{r r_s-\\Sigma}{\\left(r \\frac{r_s}{\\Sigma}-1\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma},~\\linebreak[0] g^{\\phi \\phi} = \\frac{r r_s-\\Sigma}{\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\sin{\\theta}^{2}},~\\linebreak[0] g^{\\theta \\theta} = \\frac{1}{\\Sigma}\\right\\}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left[g_{t t} = -1+r_s \\frac{r}{\\Sigma},~\\discretionary{}{}{} g_{t \\phi} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\discretionary{}{}{} g_{\\phi t} = -r_s a r \\frac{\\sin{\\theta}^{2}}{\\Sigma},~\\discretionary{}{}{} g_{r r} = \\frac{\\Sigma}{\\Delta},~\\discretionary{}{}{} g_{\\theta \\theta} = \\Sigma,~\\discretionary{}{}{} g_{\\phi \\phi} = \\left(r^{2}+a^{2}+r_s a^{2} r \\frac{\\sin{\\theta}^{2}}{\\Sigma}\\right) \\sin{\\theta}^{2},~\\discretionary{}{}{} g^{t t} = a^{2} r^{2} r_s^{2} \\left(r r_s-\\Sigma\\right) \\frac{\\sin{\\theta}^{2}}{\\left(r \\frac{r_s}{\\Sigma}-1\\right)^{2} \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma^{2}}+\\frac{1}{r \\frac{r_s}{\\Sigma}-1},~\\discretionary{}{}{} g^{t \\phi} = a r r_s \\frac{r r_s-\\Sigma}{\\left(r \\frac{r_s}{\\Sigma}-1\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma},~\\discretionary{}{}{} g^{r r} = \\frac{\\Delta}{\\Sigma},~\\discretionary{}{}{} g^{\\phi t} = a r r_s \\frac{r r_s-\\Sigma}{\\left(r \\frac{r_s}{\\Sigma}-1\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma},~\\discretionary{}{}{} g^{\\phi \\phi} = \\frac{r r_s-\\Sigma}{\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\sin{\\theta}^{2}},~\\discretionary{}{}{} g^{\\theta \\theta} = \\frac{1}{\\Sigma}\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "complete(kerr, $g^{\\mu\\nu}$);"
@@ -81,7 +81,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left\\{\\mu,~\\linebreak[0] \\nu,~\\linebreak[0] \\rho,~\\linebreak[0] \\sigma,~\\linebreak[0] \\kappa,~\\linebreak[0] \\gamma,~\\linebreak[0] \\lambda\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\gamma,~\\discretionary{}{}{} \\lambda\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",

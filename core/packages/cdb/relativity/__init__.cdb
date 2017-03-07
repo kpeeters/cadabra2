@@ -4,11 +4,11 @@
    NOTE: this is a proof of concept, not something that is finished in any sense.
 """
 
-import __main__
-if hasattr(__main__, "server"):
-    server        = __main__.server
-display       = __main__.display
-__cdbkernel__ = __main__.__cdbkernel__
+import cadabra2
+
+__cdbkernel__ = cadabra2.__cdbkernel__
+server        = __cdbkernel__.server
+display       = __cdbkernel__.display
 
 #import cadabra2
 from cadabra2 import *
