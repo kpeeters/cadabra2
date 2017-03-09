@@ -22,7 +22,7 @@
 					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}g^{\\mu \\nu}.\\end{dmath*}"
 				}
 			],
-			"source" : "{t,r,\\theta,\\phi}::Coordinate;\n{\\mu,\\nu,\\rho,\\sigma}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\nrs::LaTeXForm(\"r_s\").\ng_{\\mu\\nu}::Metric;\ng^{\\mu\\nu}::InverseMetric;\n\\partial{#}::PartialDerivative."
+			"source" : "{t,r,\\theta,\\phi}::Coordinate;\n{\\mu,\\nu,\\rho,\\sigma,\\lambda,\\kappa}::Indices(values={t,r,\\phi,\\theta}, position=fixed).\nrs::LaTeXForm(\"r_s\").\ng_{\\mu\\nu}::Metric;\ng^{\\mu\\nu}::InverseMetric;\n\\partial{#}::PartialDerivative."
 		},
 		{
 			"cell_origin" : "client",
@@ -40,7 +40,7 @@
 					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\Sigma.\\end{dmath*}"
 				}
 			],
-			"source" : "\\Delta::Depends(r);\n\\Sigma::Depends(r);"
+			"source" : "\\Delta::Depends(r);\n\\Sigma::Depends(r, \\theta);"
 		},
 		{
 			"cell_origin" : "client",
@@ -81,11 +81,6 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\gamma,~\\discretionary{}{}{} \\lambda\\right].\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} = \\frac{1}{2}g^{\\lambda \\kappa} \\left(\\partial_{\\mu}{g_{\\kappa \\nu}}+\\partial_{\\nu}{g_{\\kappa \\mu}}-\\partial_{\\kappa}{g_{\\mu \\nu}}\\right)\\end{dmath*}"
 				}
 			],
@@ -94,7 +89,7 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "evaluate(ch, kerr);"
+			"source" : "evaluate(ch, kerr, rhsonly=True)"
 		},
 		{
 			"cell_origin" : "client",
@@ -103,16 +98,75 @@
 			[
 				{
 					"cell_origin" : "server",
-					"cell_type" : "output",
-					"source" : "\\begin{verbatim}{\\expression}  (0x7fd150006478)\n  1:{\\equals}  (0x7fd1500050a8)\n  2:  {\\Gamma}  (0x7fd150005058)\n  3:    ^{\\mu}  (0x7fd1500095e8)\n  4:    _{\\nu}  (0x7fd150009638)\n  5:    _{\\rho}  (0x7fd1500067d8)\n  6:  {\\components}  (0x7fd1500123b8)\n  7:    ^{\\mu}  (0x7fd1500129a8)\n  8:    _{\\nu}  (0x7fd150001928)\n  9:    _{\\rho}  (0x7fd150001868)\n 10:    {\\comma}  (0x7fd150012a98)\n\n\\end{verbatim}"
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\lambda}\\,_{\\mu \\nu} = \\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{r}{}^{t}= & a r_s \\left(2a^{2} r^{2} r_s r-a^{2} r r_s \\Sigma-2a^{2} r \\Sigma r+a^{2} \\Sigma^{2}+2r^{4} r_s r+r^{3} r_s \\Sigma-2r^{3} \\Sigma r-r^{2} \\Sigma^{2}\\right) \\frac{\\sin{\\theta}^{2}}{2\\left(r r_s-\\Sigma\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{r}{}^{\\phi}= & \\frac{a^{2} r r_s \\sin{\\theta}^{2} r - \\frac{1}{2}a^{2} r_s \\Sigma \\sin{\\theta}^{2}+r^{2} r_s \\Sigma-r \\Sigma^{2}}{\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{t}= & a r r_s \\left(2a^{2} r^{2} r_s^{2} \\sin{\\theta} \\cos{\\theta}-2a^{2} r r_s \\Sigma \\sin{\\theta} \\cos{\\theta}-2a^{2} r r_s a^{2} \\cos{\\theta} \\sin{\\theta}+2a^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}-2r^{3} r_s a^{2} \\cos{\\theta} \\sin{\\theta}+2r^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}\\right) \\frac{\\sin{\\theta}^{2}}{2\\left(r r_s-\\Sigma\\right) \\left(-a^{2} r r_s \\sin{\\theta}^{2}+a^{2} r r_s-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}= & \\frac{-a^{2} r^{2} r_s^{2} \\left(2\\Sigma \\cos{\\theta}+2\\sin{\\theta} a^{2} \\cos{\\theta} \\sin{\\theta}\\right) \\sin{\\theta}^{2}+\\left(r r_s-\\Sigma\\right) \\left(4a^{2} r r_s \\Sigma \\sin{\\theta}^{2} \\cos{\\theta}+2a^{2} r r_s \\sin{\\theta}^{3} a^{2} \\cos{\\theta} \\sin{\\theta}+2\\left(a^{2}+r^{2}\\right) \\Sigma^{2} \\cos{\\theta}\\right)}{2\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma^{2} \\sin{\\theta}}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{r}{}^{\\theta}= & \\frac{2r}{2\\Sigma}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{\\theta}= & \\frac{-2a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\Sigma}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{r}= & \\frac{2r}{2\\Sigma} - \\frac{2r-r_s}{2\\Delta}\\\\[-.5ex]\n\\square{}_{r}{}_{\\theta}{}^{r}= & \\frac{-2a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\Sigma}\\\\[-.5ex]\n\\square{}_{t}{}_{r}{}^{t}= & r_s \\left(2r r-\\Sigma\\right) \\frac{-a^{2} r r_s+a^{2} \\Sigma-r^{3} r_s+r^{2} \\Sigma}{2\\left(r r_s-\\Sigma\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{t}{}_{r}{}^{\\phi}= & -a r_s \\frac{2r r-\\Sigma}{2\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{t}{}_{\\theta}{}^{t}= & r r_s \\frac{-a^{2} r^{2} r_s^{2} \\sin{2\\theta}+a^{2} r r_s \\Sigma \\sin{2\\theta}+2a^{2} r r_s a^{2} \\cos{\\theta} \\sin{\\theta}-2a^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}+2r^{3} r_s a^{2} \\cos{\\theta} \\sin{\\theta}-2r^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\left(r r_s-\\Sigma\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{t}{}_{\\theta}{}^{\\phi}= & a r r_s \\frac{-2r \\frac{r_s}{\\tan{\\theta}}+\\frac{2\\Sigma}{\\tan{\\theta}}+2a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{r}{}_{\\phi}{}^{t}= & a r_s \\left(2a^{2} r^{2} r_s r-a^{2} r r_s \\Sigma-2a^{2} r \\Sigma r+a^{2} \\Sigma^{2}+2r^{4} r_s r+r^{3} r_s \\Sigma-2r^{3} \\Sigma r-r^{2} \\Sigma^{2}\\right) \\frac{\\sin{\\theta}^{2}}{2\\left(r r_s-\\Sigma\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{r}{}_{\\phi}{}^{\\phi}= & \\frac{a^{2} r r_s \\sin{\\theta}^{2} r - \\frac{1}{2}a^{2} r_s \\Sigma \\sin{\\theta}^{2}+r^{2} r_s \\Sigma-r \\Sigma^{2}}{\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\phi}{}^{t}= & a r r_s \\left(2a^{2} r^{2} r_s^{2} \\sin{\\theta} \\cos{\\theta}-2a^{2} r r_s \\Sigma \\sin{\\theta} \\cos{\\theta}-2a^{2} r r_s a^{2} \\cos{\\theta} \\sin{\\theta}+2a^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}-2r^{3} r_s a^{2} \\cos{\\theta} \\sin{\\theta}+2r^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}\\right) \\frac{\\sin{\\theta}^{2}}{2\\left(r r_s-\\Sigma\\right) \\left(-a^{2} r r_s \\sin{\\theta}^{2}+a^{2} r r_s-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\phi}{}^{\\phi}= & \\frac{-a^{2} r^{2} r_s^{2} \\left(2\\Sigma \\cos{\\theta}+2\\sin{\\theta} a^{2} \\cos{\\theta} \\sin{\\theta}\\right) \\sin{\\theta}^{2}+\\left(r r_s-\\Sigma\\right) \\left(4a^{2} r r_s \\Sigma \\sin{\\theta}^{2} \\cos{\\theta}+2a^{2} r r_s \\sin{\\theta}^{3} a^{2} \\cos{\\theta} \\sin{\\theta}+2\\left(a^{2}+r^{2}\\right) \\Sigma^{2} \\cos{\\theta}\\right)}{2\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma^{2} \\sin{\\theta}}\\\\[-.5ex]\n\\square{}_{r}{}_{\\theta}{}^{\\theta}= & \\frac{2r}{2\\Sigma}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{r}{}^{r}= & \\frac{-2a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\Sigma}\\\\[-.5ex]\n\\square{}_{r}{}_{t}{}^{t}= & r_s \\left(2r r-\\Sigma\\right) \\frac{-a^{2} r r_s+a^{2} \\Sigma-r^{3} r_s+r^{2} \\Sigma}{2\\left(r r_s-\\Sigma\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{r}{}_{t}{}^{\\phi}= & -a r_s \\frac{2r r-\\Sigma}{2\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{t}{}^{t}= & r r_s \\frac{-a^{2} r^{2} r_s^{2} \\sin{2\\theta}+a^{2} r r_s \\Sigma \\sin{2\\theta}+2a^{2} r r_s a^{2} \\cos{\\theta} \\sin{\\theta}-2a^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}+2r^{3} r_s a^{2} \\cos{\\theta} \\sin{\\theta}-2r^{2} \\Sigma a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\left(r r_s-\\Sigma\\right) \\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{t}{}^{\\phi}= & a r r_s \\frac{-2r \\frac{r_s}{\\tan{\\theta}}+\\frac{2\\Sigma}{\\tan{\\theta}}+2a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\left(a^{2} r r_s \\cos{\\theta}^{2}-a^{2} \\Sigma+r^{3} r_s-r^{2} \\Sigma\\right) \\Sigma}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{r}= & \\left(2a^{2} r r_s \\sin{\\theta}^{4} r-a^{2} r_s \\Sigma \\sin{\\theta}^{4}-2r \\Sigma^{2} \\sin{\\theta}^{2}\\right) \\frac{\\Delta}{2\\Sigma^{3}}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}= & -\\left(4a^{2} r r_s \\Sigma \\sin{\\theta}^{2} \\cos{\\theta}+2a^{2} r r_s \\sin{\\theta}^{3} a^{2} \\cos{\\theta} \\sin{\\theta}+2\\left(a^{2}+r^{2}\\right) \\Sigma^{2} \\cos{\\theta}\\right) \\frac{\\sin{\\theta}}{2\\Sigma^{3}}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}= & -\\Delta \\frac{2r}{2\\Sigma}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{\\theta}= &  - \\frac{-2a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\Delta \\Sigma}\\\\[-.5ex]\n\\square{}_{t}{}_{\\phi}{}^{r}= & -a r_s \\left(2r r-\\Sigma\\right) \\Delta \\frac{\\sin{\\theta}^{2}}{2\\Sigma^{3}}\\\\[-.5ex]\n\\square{}_{t}{}_{\\phi}{}^{\\theta}= & a r r_s \\frac{2\\Sigma \\sin{2\\theta}-2\\cos{2\\theta} a^{2} \\cos{\\theta} \\sin{\\theta}+2a^{2} \\cos{\\theta} \\sin{\\theta}}{4\\Sigma^{3}}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{t}{}^{r}= & -a r_s \\left(2r r-\\Sigma\\right) \\Delta \\frac{\\sin{\\theta}^{2}}{2\\Sigma^{3}}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{t}{}^{\\theta}= & a r r_s \\frac{2\\Sigma \\sin{2\\theta}-2\\cos{2\\theta} a^{2} \\cos{\\theta} \\sin{\\theta}+2a^{2} \\cos{\\theta} \\sin{\\theta}}{4\\Sigma^{3}}\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{r}= & r_s \\left(2r r-\\Sigma\\right) \\frac{\\Delta}{2\\Sigma^{3}}\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{\\theta}= & r r_s \\frac{-2a^{2} \\cos{\\theta} \\sin{\\theta}}{2\\Sigma^{3}}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "print(tree(ex))"
+			"source" : "substitute(ch, $\\partial_{r}{\\Sigma} = 2 r$)\nsubstitute(ch, $\\partial_{\\theta}{\\Sigma} = -2 a**2 \\cos{\\theta} \\sin{\\theta}$)\nsubstitute(ch, $\\partial_{r}{\\Delta} = 2 r - rs$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{\\mu}{\\Gamma^{\\rho}\\,_{\\nu \\sigma}}\\end{dmath*}"
+				}
+			],
+			"source" : "tst:=\\partial_{\\mu}{\\Gamma^{\\rho}_{\\nu\\sigma}};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "substitute(tst,ch)\nevaluate(tst, kerr);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\Gamma^{\\lambda}\\,_{\\nu \\sigma}\\end{dmath*}"
+				}
+			],
+			"source" : "tst2:=\\Gamma^{\\rho}_{\\mu\\lambda} \\Gamma^{\\lambda}_{\\nu\\sigma};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "substitute(tst2, ch)\nevaluate(tst2, kerr);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\partial_{\\nu}{\\Gamma^{\\rho}\\,_{\\mu \\sigma}}+\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\Gamma^{\\lambda}\\,_{\\nu \\sigma}-\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\Gamma^{\\lambda}\\,_{\\mu \\sigma}\\end{dmath*}"
+				}
+			],
+			"source" : "rm:= R^{\\rho}_{\\sigma\\mu\\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}_{\\nu\\sigma}}\n                                  -\\partial_{\\nu}{\\Gamma^{\\rho}_{\\mu\\sigma}}\n                                  +\\Gamma^{\\rho}_{\\mu\\lambda} \\Gamma^{\\lambda}_{\\nu\\sigma}\n                                  -\\Gamma^{\\rho}_{\\nu\\lambda} \\Gamma^{\\lambda}_{\\mu\\sigma};"
 		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "substitute(rm, ch)\nevaluate(rm, kerr, rhsonly=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "rc:= R_{\\sigma\\nu} = R^{\\rho}_{\\sigma\\rho\\nu};\nsubstitute(rc, rm)\nevaluate(rc, ss, rhsonly=True);"
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
