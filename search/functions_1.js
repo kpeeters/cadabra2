@@ -24,6 +24,7 @@ var searchData=
   ['apply_5fgeneric',['apply_generic',['../classcadabra_1_1Algorithm.html#a7d5eaee26645dc1d806829e1d782bed4',1,'cadabra::Algorithm::apply_generic(bool deep=true, bool repeat=false, unsigned int depth=0)'],['../classcadabra_1_1Algorithm.html#a065db0550af7fea605455674639019ea',1,'cadabra::Algorithm::apply_generic(iterator &amp;, bool deep, bool repeat, unsigned int depth)']]],
   ['apply_5fonce',['apply_once',['../classcadabra_1_1Algorithm.html#ad07fb4dffc23db25ae7fe305a40f608c',1,'cadabra::Algorithm']]],
   ['apply_5fsymmetry',['apply_symmetry',['../classcombin_1_1symmetriser.html#a35d9889eda23897efdeee1a7d276dd7c',1,'combin::symmetriser']]],
+  ['architecture',['architecture',['../classcadabra2__defaults_1_1Server.html#af77f61096de3a3c1b0a843ce6e427007',1,'cadabra2_defaults.Server.architecture()'],['../classServer.html#a1048ae0228afce888833fe627c931245',1,'Server::architecture()']]],
   ['arg',['arg',['../classcadabra_1_1Ex.html#a33a40298199e1eee5d49e6ccf43d8dd1',1,'cadabra::Ex']]],
   ['arg_5fsize',['arg_size',['../classcadabra_1_1Ex.html#a71c44cbb017488d7ee38ef9142f745aa',1,'cadabra::Ex']]],
   ['arg_5fto_5fnum',['arg_to_num',['../classcadabra_1_1Ex.html#ae8264d94529417f0b838be44a3eff713',1,'cadabra::Ex']]],

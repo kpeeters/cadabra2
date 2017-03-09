@@ -6,6 +6,7 @@ var searchData=
   ['selfcommutingbehaviour',['SelfCommutingBehaviour',['../classcadabra_1_1SelfCommutingBehaviour.html',1,'cadabra']]],
   ['selfnoncommuting',['SelfNonCommuting',['../classcadabra_1_1SelfNonCommuting.html',1,'cadabra']]],
   ['server',['Server',['../classServer.html',1,'']]],
+  ['server',['Server',['../classcadabra2__defaults_1_1Server.html',1,'cadabra2_defaults']]],
   ['snoop',['Snoop',['../classsnoop_1_1Snoop.html',1,'snoop']]],
   ['snoopimpl',['SnoopImpl',['../classsnoop_1_1SnoopImpl.html',1,'snoop']]],
   ['sort_5fproduct',['sort_product',['../classcadabra_1_1sort__product.html',1,'cadabra']]],
