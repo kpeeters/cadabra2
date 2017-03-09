@@ -29,14 +29,9 @@
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property LaTeXForm to {\\tt $\\backslash{}$}vac}.\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property LaTeXForm to {\\tt $\\backslash{}$}alphap}.\\end{dmath*}"
 				}
 			],
-			"source" : "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n\\vac::LaTeXForm(\"|k\\rangle\");\n\\alphap::LaTeXForm(\"\\alpha'\");"
+			"source" : "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n\\vac::LaTeXForm(\"|k\\rangle\");"
 		},
 		{
 			"cell_origin" : "client",
@@ -219,7 +214,7 @@
 					"source" : "\\begin{dmath*}{}\\left(\\frac{1}{2}\\alpha_{11}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\frac{1}{2}\\alpha_{10}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\frac{1}{2}\\alpha_{9}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\frac{1}{2}\\alpha_{8}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\frac{1}{2}\\alpha_{7}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\frac{1}{2}\\alpha_{6}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\frac{1}{2}\\alpha_{5}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\frac{1}{2}\\alpha_{4}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\frac{1}{2}\\alpha_{3}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\frac{1}{2}\\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\frac{1}{2}\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\frac{1}{2}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-1}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-2}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-3}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-4}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-5}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-6}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-7}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\frac{1}{2}\\alpha_{-8}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |k\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "L1c1:= @(L1) @(chi1);\nL1c2:= @(L1) @(chi2)\nL1c3:= @(L1) @(chi3)"
+			"source" : "L1c1:= @(L1) @(chi1);\nL1c2:= @(L1) @(chi2).\nL1c3:= @(L1) @(chi3)."
 		},
 		{
 			"cell_origin" : "client",
