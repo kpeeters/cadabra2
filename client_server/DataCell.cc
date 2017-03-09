@@ -515,12 +515,14 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			str << it->textbuf;
 		else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
 			std::string lr(it->textbuf);
-			boost::replace_all(lr, "\\left(", "\\brwrap{(}{)}{");
-			boost::replace_all(lr, "\\right)", "}");
-			boost::replace_all(lr, "\\left[", "\\brwrap{[}{]}{");
-			boost::replace_all(lr, "\\right]", "}");
-			boost::replace_all(lr, "\\left\\{", "\\brwrap{\\{}{\\}}{");
-			boost::replace_all(lr, "\\right\\}", "}");
+			// Make sure to sync these with the same in TeXEngine.cc !!!
+			boost::replace_all(lr, "\\left(", "\\brwrap{(}{");
+			boost::replace_all(lr, "\\right)", "}{)}");
+			boost::replace_all(lr, "\\left[", "\\brwrap{[}{");
+			boost::replace_all(lr, "\\right]", "}{]}");
+			boost::replace_all(lr, "\\left\\{", "\\brwrap{\\{}{");
+			boost::replace_all(lr, "\\right\\}", "}{\\}}");
+			boost::replace_all(lr, "\\right.", "}{.}");
 			boost::replace_all(lr, "\\begin{dmath*}", "\\begin{adjustwidth}{1em}{0cm}$");
 			boost::replace_all(lr, "\\end{dmath*}", "$\\\\\\end{adjustwidth}");
 			str << lr << "\n";

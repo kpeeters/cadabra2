@@ -30,6 +30,22 @@ if sympy.__version__ != "unavailable":
     from sympy import sin, cos, tan, sqrt, trigsimp
     from sympy import Matrix as sMatrix
 
+if 'server' in globals():
+    print("have server")
+    mopen="\\begin{dmath*}{}";
+    mclose="\\end{dmath*}";
+else:
+    mopen=''
+    mclose=''
+    class Server:
+        def send(self, data, typestr):
+            print(data)
+
+        def architecture(self):
+            return "terminal"
+            
+    server = Server()
+
 # Import matplotlib and setup functions to prepare its output
 # for sending as base64 to the client. Example use:
 #
@@ -58,9 +74,6 @@ import base64
 #  - "image_png":  base64 encoded png image.
 #  - "verbatim":   ascii string to be displayed verbatim.
 
-mopen="\\begin{dmath*}{}";
-mclose="\\end{dmath*}";
-
 def display(obj, delay_send=False):
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
         imgstring = io.BytesIO()
@@ -68,6 +81,9 @@ def display(obj, delay_send=False):
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
         server.send(b64, "image_png")
+        # FIXME: we should probably have a 'query' method on the Server object
+        # which can be used to figure out whether it can do something useful
+        # with a particular data type.
 
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
         f = obj.get_figure()
@@ -94,24 +110,18 @@ def display(obj, delay_send=False):
 #        server.send("\\begin{dmath*}{}"+str(obj.to_list())+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Ex):
-        if 'server' in globals():
-            ret = mopen+obj._latex_()+mclose
-            if delay_send:
-                return ret
-            else:
-                server.send(ret, "latex_view")
+        ret = mopen+obj._latex_()+mclose
+        if delay_send:
+            return ret
         else:
-            print(obj.__str__());
+            server.send(ret, "latex_view")
 
     elif isinstance(obj, Property):
-        if 'server' in globals():
-            ret = mopen+obj._latex_()+mclose
-            if delay_send:
-                return ret
-            else:
-                server.send(ret , "latex_view")
+        ret = mopen+obj._latex_()+mclose
+        if delay_send:
+            return ret
         else:
-            print(obj.__str__())
+            server.send(ret , "latex_view")
 
     elif type(obj)==list:
         out="{}$\\big[$"
@@ -136,6 +146,9 @@ def display(obj, delay_send=False):
             return "\\verb|"+str(obj)+"|"
         else:
             server.send(str(obj), "verbatim")
+    
+__cdbkernel__.server=server
+__cdbkernel__.display=display
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

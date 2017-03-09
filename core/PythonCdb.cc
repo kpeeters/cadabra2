@@ -796,6 +796,9 @@ void inject_defaults(Kernel *k)
 	wi2->combination_type = WeightInherit::multiplicative;
 	auto wa2=make_Ex_from_string("label=all, type=multiplicative", false);
 	k->inject_property(wi2,                      make_Ex_from_string("\\prod{#}",false), wa2);
+
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\frac{#}",false), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\frac{#}",false), 0);
 	
 //	k->inject_property(new Distributable(),      make_Ex_from_string("\\wedge{#}",false), 0);
 	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false), 0);

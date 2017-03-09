@@ -22,10 +22,10 @@
 % The expression itself can still be broken over multiple lines.
 
 \newcommand\brwrap[3]{%
-  \setbox0=\hbox{$#3$}
+  \setbox0=\hbox{$#2$}
   \left#1\vbox to \the\ht0{\hbox to 0pt{}}\right.\kern-.2em
-  \begingroup #3\endgroup\kern-.15em
-  \left.\vbox to \the\ht0{\hbox to 0pt{}}\right#2
+  \begingroup #2\endgroup\kern-.15em
+  \left.\vbox to \the\ht0{\hbox to 0pt{}}\right#3
 }
 %\message{\meaning\brwrap{\frac{A}{B}}}
 \everymath{\makeatletter\def\old@comma{,}\catcode`\,=13 \def,{%

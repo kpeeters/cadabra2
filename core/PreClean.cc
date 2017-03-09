@@ -42,7 +42,9 @@ void cleanup_rational(const Kernel& k, Ex& tr, Ex::iterator& st)
 void cleanup_frac(const Kernel& k, Ex& tr, Ex::iterator& st)
 	{
 	// Catch \frac{} nodes with one argument; those are supposed to be read as 1/(...).
+	// The only exception is \frac{#}, which needs to stay as it is.
 	if(tr.number_of_children(st)==1) {
+		if(tr.begin(st)->is_range_wildcard()) return;
 		tr.insert(tr.begin(st), str_node("1"));
 		}
 

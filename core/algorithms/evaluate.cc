@@ -12,6 +12,8 @@
 #include "properties/Accent.hh"
 #include <functional>
 
+//#define DEBUG
+
 using namespace cadabra;
 
 evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
@@ -41,12 +43,15 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	// the index name -> index value map.
 	
 	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
-			// std::cerr << "evaluate at " << *walk->name << std::endl;
+#ifdef DEBUG
+			std::cerr << "evaluate at " << *walk->name << std::endl;
+#endif			
 			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
 			else if(is_component(walk)) return walk;
 			else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
-			else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge")  walk = handle_prod(walk);
+			else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge" || *(walk->name)=="\\frac")  
+				walk = handle_prod(walk);
 			else {
 				const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(walk);
 				if(pd) walk = handle_derivative(walk);
@@ -59,8 +64,10 @@ Algorithm::result_t evaluate::apply(iterator& it)
 						if(! (only_rhs && tr.is_head(walk)==false && *(tr.parent(walk)->name)=="\\equals" && tr.index(walk)==0) ) {
 							index_map_t empty;
 							sibling_iterator tmp(walk);
-							// std::cerr << "handling factor" << std::endl;
-							// std::cerr << *walk->name << std::endl;
+#ifdef DEBUG
+							std::cerr << "handling factor" << std::endl;
+							std::cerr << *walk->name << std::endl;
+#endif							
 							walk = handle_factor(tmp, empty);
 							// std::cerr << "handling factor done" << std::endl;							
 							}
@@ -270,7 +277,9 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 
 	merge_component_children(repl.begin());
 
-	// std::cerr << "result now " << repl << std::endl;
+#ifdef DEBUG	
+	std::cerr << "result now " << repl << std::endl;
+#endif	
 	sib = tr.move_ontop(iterator(sib), repl.begin());
 
 	return sib;
@@ -405,7 +414,7 @@ void evaluate::cleanup_components(iterator it)
 
 Ex::iterator evaluate::handle_derivative(iterator it)
 	{
-	// std::cerr << "handle_derivative " << Ex(it) << std::endl;
+//	std::cerr << "handle_derivative " << Ex(it) << std::endl;
 	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
@@ -472,6 +481,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	size_t ni=number_of_direct_indices(it);
 	
 	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
+			// std::cerr << "====" << std::endl;
+			// std::cerr << Ex(iv) << std::endl;
 			// For each internal dummy set, keep track of the
 			// position in the permutation array where we generate
 			// its value.
@@ -481,6 +492,11 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			++rhs;
 			auto deps=dependencies(rhs);
 
+			// If the argument does not depend on anything, all derivatives
+			// would produce zero.
+			if(deps.size()==0) 
+				return true;
+			
 			// All indices on \partial can take any of the values of the
 			// dependencies, EXCEPT when the index is a dummy index. In
 			// the latter case, we firstly need to ensure that both
@@ -494,6 +510,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 			combin::combinations<Ex> cb;
 			for(auto& obj: deps) {
+				// std::cerr << "dep " << obj << std::endl;
 				cb.original.push_back(obj);
 				}
 			cb.multiple_pick=true;
@@ -565,11 +582,13 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				auto pch=tr.begin(it);
 				iterator arg=tr.begin(rhs);
 				for(size_t j=0, cb_j=0; j<ni; ++j) {
+					// std::cerr << j << " : ";
 					bool done=false;
 					for(auto& d: dummy_positions) {
 						if(d.first==j) {
 							// This index is forced to a value because it is a dummy of which the partner
 							// is fixed by the argument on which the derivative acts.
+							// std::cerr << "fixed" << std::endl;
 							eqcopy.insert_subtree(rhs.begin(), tr.child(lhs,d.second))->fl.parent_rel=str_node::p_sub;
 							done=true;
 							break;
@@ -587,9 +606,11 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 						else {
 							++cb_j;
 							}
+						// std::cerr << "cb: " << i << ", " << fromj << std::endl;
 						eqcopy.insert_subtree(rhs.begin(), cb[i][fromj].begin() )->fl.parent_rel=str_node::p_sub;
 						}
 					}
+				// std::cerr << "----" << std::endl;
 				
 				// For all dummy pairs which have one index on the
 				// \components node inside the derivative, we need to
@@ -753,7 +774,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	// Determine implicit dependence via Depends.
 	// std::cerr << "deps for " << *it->name << std::endl;
 
-	const Depends *dep = kernel.properties.get<Depends>(it);
+	const DependsBase *dep = kernel.properties.get<DependsBase>(it);
 	if(dep) {
 		// std::cerr << "implicit deps" << std::endl;
 		Ex deps(dep->dependencies(kernel, it));
@@ -890,7 +911,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 								ivs.append_child(ivs_rhs, iterator(rhs1));
 								auto rhs2=lhs2;
 								++rhs2;
-								ivs.append_child(ivs_rhs, iterator(rhs2));			
+								ivs.append_child(ivs_rhs, iterator(rhs2));	
+								//std::cerr << "ivs_rhs = " << Ex(ivs_rhs) << std::endl;
 								cleanup_dispatch_deep(kernel, ivs);
 								// Insert this new index value set before sib1, so that it will not get used
 								// inside the outer loop.
@@ -1003,7 +1025,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 						++iv;
 						}
 					// Multiply component values.
-					Ex prod("\\prod");
+					Ex prod(*it->name);
 					iv=tr.end(eq1);
 					--iv;
 					prod.append_child(prod.begin(), iterator(iv));
@@ -1028,7 +1050,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 	// should be a \components node. We do a cleanup, after which it should be
 	// at the 'it' node.
 
-	assert(*it->name=="\\prod" || *it->name=="\\wedge");
+	assert(*it->name=="\\prod" || *it->name=="\\wedge" || *it->name=="\\frac");
 	assert(tr.number_of_children(it)==1);
 	assert(*tr.begin(it)->name=="\\components");
 	tr.begin(it)->fl.bracket=it->fl.bracket;
@@ -1068,7 +1090,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 
 	// Use sympy to simplify components.
 	simplify_components(it);
-	// std::cerr << "simplified:\n" << Ex(it) << std::endl;
+	//std::cerr << "simplified:\n" << Ex(it) << std::endl;
 
 	return it;
 	}

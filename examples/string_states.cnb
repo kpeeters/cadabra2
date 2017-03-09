@@ -3,6 +3,20 @@
 	[
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Bosonic string oscillator algebra}\n\nThe computation below shows how you can do oscillator algebra for the (open) bosonic string.\nWe illustrate this by the classic computation which shows that you can construct a state\nwhich satisfies all the constraints but has negative norm when $d>26$. This is not a terribly difficult\ncomputation with pen-and-paper, but it is tricky to do with many other computer algebra systems (and\nif they handle it, their output will not look as nice as what you see below)."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Bosonic string oscillator algebra}\n\nThe computation below shows how you can do oscillator algebra for the (open) bosonic string.\nWe illustrate this by the classic computation which shows that you can construct a state\nwhich satisfies all the constraints but has negative norm when $d>26$. This is not a terribly difficult\ncomputation with pen-and-paper, but it is tricky to do with many other computer algebra systems (and\nif they handle it, their output will not look as nice as what you see below)."
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
@@ -15,53 +29,19 @@
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property LaTeXForm to {\\tt $\\backslash{}$}vac}.\\end{dmath*}"
-				}
-			],
-			"source" : "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n\\vac::LaTeXForm(\"|0\\rangle\");"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left\\{\\alpha_{n}\\,^{\\mu}, \\linebreak[0] |0\\rangle\\right\\}.\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property LaTeXForm to {\\tt $\\backslash{}$}alphap}.\\end{dmath*}"
 				}
 			],
-			"source" : "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n{m,n}::Integer.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal.\nchi:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;"
+			"source" : "\\alpha_{n}^{\\mu}::SelfNonCommuting;\n\\vac::LaTeXForm(\"|k\\rangle\");\n\\alphap::LaTeXForm(\"\\alpha'\");"
 		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}\\end{dmath*}"
-				}
-			],
-			"source" : "L1:= \\alpha_{1}^{\\mu} \\alpha_{0}^{\\mu};"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}L_{1} \\chi = \\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "L1c:= L_1 \\chi = @(L1) @(chi);"
+			"source" : "def post_process(ex):\n   substitute(ex, $\\sqrt{2} \\sqrt{2} -> 2$)\n   collect_terms(ex)"
 		},
 		{
 			"cell_origin" : "client",
@@ -71,11 +51,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Note that in the rule below, you need to write the indices on $\\delta_{m, -n}$ using two separate subscripts, otherwise\nyou get $m-n$ as index."
+					"source" : "We first need to define the various objects, mostly non-commuting operators."
 				}
 			],
 			"hidden" : true,
-			"source" : "Note that in the rule below, you need to write the indices on $\\delta_{m, -n}$ using two separate subscripts, otherwise\nyou get $m-n$ as index."
+			"source" : "We first need to define the various objects, mostly non-commuting operators."
 		},
 		{
 			"cell_origin" : "client",
@@ -85,23 +65,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{\\alpha_{m}\\,^{\\mu} \\alpha_{n}\\,^{\\nu}\\quad\\text{with}\\quad{}m > n \\rightarrow \\alpha_{n}\\,^{\\nu} \\alpha_{m}\\,^{\\mu}+\\delta_{m -n} \\delta^{\\mu \\nu}, \\linebreak[0] \\alpha_{m}\\,^{\\mu} |0\\rangle\\quad\\text{with}\\quad{}m > 0 \\rightarrow 0\\right\\}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left[\\alpha_{n}\\,^{\\mu},~\\discretionary{}{}{} |k\\rangle\\right].\\end{dmath*}"
 				}
 			],
-			"source" : "rl:= { \\alpha_{m}^{\\mu} \\alpha_{n}^{\\nu} | m > n -> \\alpha_{n}^{\\nu} \\alpha_{m}^{\\mu} +  \\delta_{m}_{-n} \\delta^{\\mu\\nu},\n       \\alpha_{m}^{\\mu} \\vac | m > 0 -> 0 };"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}L_{1} \\chi = \\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
-				}
-			],
-			"source" : "substitute(L1c,rl);"
+			"source" : "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n{m,n}::Integer.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal."
 		},
 		{
 			"cell_origin" : "client",
@@ -111,11 +78,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Obviously we need to do this substitution a number of times, and distribute any factors over sums. The \n\\verb|converge| logic helps to automate this."
+					"source" : "The trial state is given by $|\\chi\\rangle = |\\chi_1\\rangle + |\\chi_2\\rangle + |\\chi_3\\rangle$ with the three terms\ngiven by the following expressions:"
 				}
 			],
 			"hidden" : true,
-			"source" : "Obviously we need to do this substitution a number of times, and distribute any factors over sums. The \n\\verb|converge| logic helps to automate this."
+			"source" : "The trial state is given by $|\\chi\\rangle = |\\chi_1\\rangle + |\\chi_2\\rangle + |\\chi_3\\rangle$ with the three terms\ngiven by the following expressions:"
 		},
 		{
 			"cell_origin" : "client",
@@ -125,10 +92,20 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}L_{1} \\chi = 2\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\alpha_{-1}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu} |k\\rangle\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu} |k\\rangle\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\alpha_{0}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |k\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "converge(L1c):\n   substitute(L1c, rl)\n   distribute(L1c)\n   eliminate_kronecker(L1c)\n   rename_dummies(L1c)\n;"
+			"source" : "chi1:= \\alpha_{-1}^{\\mu} \\alpha_{-1}^{\\mu} \\vac;\nchi2:= \\alpha_{0}^\\mu \\alpha_{-2}^\\mu \\vac;\nchi3:= \\alpha_{0}^{\\mu} \\alpha_{-1}^{\\mu} \\alpha_{0}^{\\nu} \\alpha_{-1}^{\\nu})\\vac;"
 		},
 		{
 			"cell_origin" : "client",
@@ -138,16 +115,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "The $L_m$ Virasoro generators are given by infinite sums. The function below constructs part of that sum explicitly:"
+					"source" : "The main ingredient to verify that the $L_1$ and $L_2$ Virasoro constraints hold is, of course, the commutation relations\nbetween the $\\alpha_{m}^\\mu$ operators. What we want to do is commute all annihilation operators to the right until they hit\nthe momentum eigenstate $|k\\rangle$. Note that in the rule below, you need to write the indices on $\\delta_{m, -n}$ using two separate subscripts, otherwise\nyou get $m-n$ as index."
 				}
 			],
 			"hidden" : true,
-			"source" : "The $L_m$ Virasoro generators are given by infinite sums. The function below constructs part of that sum explicitly:"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def L(m):\n\tins=''\n\tfor n in range(-10,10):\n\t\tif n!=-10:\n\t\t\tins+='+ '\n\t\tins += r'\\alpha_{'+str(m-n)+r'}^{\\mu} \\alpha_{'+str(n)+r'}^{\\mu}'\n\tex=Ex(ins)\n\treturn ex"
+			"source" : "The main ingredient to verify that the $L_1$ and $L_2$ Virasoro constraints hold is, of course, the commutation relations\nbetween the $\\alpha_{m}^\\mu$ operators. What we want to do is commute all annihilation operators to the right until they hit\nthe momentum eigenstate $|k\\rangle$. Note that in the rule below, you need to write the indices on $\\delta_{m, -n}$ using two separate subscripts, otherwise\nyou get $m-n$ as index."
 		},
 		{
 			"cell_origin" : "client",
@@ -157,15 +129,57 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{10}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-7}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-8}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-9}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{11}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{10}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-7}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-8}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left[\\alpha_{m}\\,^{\\mu} \\alpha_{n}\\,^{\\nu}\\quad\\text{with}\\quad{}m > n \\rightarrow \\alpha_{n}\\,^{\\nu} \\alpha_{m}\\,^{\\mu}+m \\delta_{m -n} \\delta^{\\mu \\nu},~\\discretionary{}{}{} \\alpha_{m}\\,^{\\mu} |k\\rangle\\quad\\text{with}\\quad{}m > 0 \\rightarrow 0,~\\discretionary{}{}{} \\alpha_{0}\\,^{\\mu} |k\\rangle \\rightarrow \\sqrt{2} k^{\\mu} |k\\rangle,~\\discretionary{}{}{} k^{\\mu} k^{\\mu} \\rightarrow -1\\right]\\end{dmath*}"
 				}
 			],
-			"source" : "L0=L(0);\nL1=L(1);"
+			"source" : "rl:= { \\alpha_{m}^{\\mu} \\alpha_{n}^{\\nu} | m > n -> \\alpha_{n}^{\\nu} \\alpha_{m}^{\\mu} +  m\\delta_{m}_{-n} \\delta^{\\mu\\nu},\n       \\alpha_{m}^{\\mu} \\vac | m > 0 -> 0, \n       \\alpha_{0}^{\\mu} \\vac -> \\sqrt{2} k^{\\mu} \\vac, k^{\\mu} k^{\\mu} -> -1 };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Obviously we need to do this substitution a number of times, and distribute any factors over sums. We will see\nshortly how to automate this with \\verb|converge|."
+				}
+			],
+			"hidden" : true,
+			"source" : "Obviously we need to do this substitution a number of times, and distribute any factors over sums. We will see\nshortly how to automate this with \\verb|converge|."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Imposing the constraints}\n\nThe $L_m$ Virasoro generators are given by infinite sums. The function below constructs part of that sum explicitly. Of course, you would be a bit\nmore clever when doing things with pen and paper:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Imposing the constraints}\n\nThe $L_m$ Virasoro generators are given by infinite sums. The function below constructs part of that sum explicitly. Of course, you would be a bit\nmore clever when doing things with pen and paper:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def L(m):\n\tins=''\n\tfor n in range(-10,10):\n\t\tif n!=-10:\n\t\t\tins+='+ '\n\t\tins += r'1/2 \\alpha_{'+str(m-n)+r'}^{\\mu} \\alpha_{'+str(n)+r'}^{\\mu}'\n\tex=Ex(ins)\n\treturn ex"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Here is what $L_0$ looks like; the other operators are similar:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Here is what $L_0$ looks like; the other operators are similar:"
 		},
 		{
 			"cell_origin" : "client",
@@ -175,15 +189,24 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}L_{1} \\chi = \\left(\\alpha_{11}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{10}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-7}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-8}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\alpha_{10}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\frac{1}{2}\\alpha_{9}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\frac{1}{2}\\alpha_{8}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\frac{1}{2}\\alpha_{7}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\frac{1}{2}\\alpha_{6}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\frac{1}{2}\\alpha_{5}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\frac{1}{2}\\alpha_{4}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\frac{1}{2}\\alpha_{3}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\frac{1}{2}\\alpha_{2}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\frac{1}{2}\\alpha_{1}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\frac{1}{2}\\alpha_{0}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-1}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-2}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-3}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-4}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-5}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-6}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-7}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-8}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\frac{1}{2}\\alpha_{-9}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\end{dmath*}"
 				}
 			],
-			"source" : "L1c:= L_1 \\chi = @(L1) @(chi);"
+			"source" : "L0=L(0);\nL1=L(1)\nL2=L(2)"
 		},
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "def act(ex):\n\tconverge(ex):\n\t\tsubstitute(ex, rl)\n\t\tdistribute(ex)\n\t\teliminate_kronecker(ex)\n\t\trename_dummies(ex)\n\n\treturn ex"
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The $L_1$ operator acting on the three terms in the trial state gives the following three terms, which we will need to reduce\nusing the commutation relations (2nd and 3rd term suppressed; you get the idea)."
+				}
+			],
+			"hidden" : true,
+			"source" : "The $L_1$ operator acting on the three terms in the trial state gives the following three terms, which we will need to reduce\nusing the commutation relations (2nd and 3rd term suppressed; you get the idea)."
 		},
 		{
 			"cell_origin" : "client",
@@ -193,10 +216,43 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}L_{1} \\chi = 4\\alpha_{-1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\left(\\frac{1}{2}\\alpha_{11}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\frac{1}{2}\\alpha_{10}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\frac{1}{2}\\alpha_{9}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\frac{1}{2}\\alpha_{8}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\frac{1}{2}\\alpha_{7}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\frac{1}{2}\\alpha_{6}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\frac{1}{2}\\alpha_{5}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\frac{1}{2}\\alpha_{4}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\frac{1}{2}\\alpha_{3}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\frac{1}{2}\\alpha_{2}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\frac{1}{2}\\alpha_{1}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\frac{1}{2}\\alpha_{0}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-1}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-2}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-3}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-4}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-5}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-6}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\frac{1}{2}\\alpha_{-7}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\frac{1}{2}\\alpha_{-8}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |k\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "act(L1c);"
+			"source" : "L1c1:= @(L1) @(chi1);\nL1c2:= @(L1) @(chi2)\nL1c3:= @(L1) @(chi3)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We can now work out what is the action of a Virasoro operator on a state by repeatedly substituting the \ncommutation relations of the $\\alpha_{m}^{\\mu}$ and simplifying, until the result no longer changes.\nBelow, we stick that logic into a function \\verb|act| which you can apply on an expression."
+				}
+			],
+			"hidden" : true,
+			"source" : "We can now work out what is the action of a Virasoro operator on a state by repeatedly substituting the \ncommutation relations of the $\\alpha_{m}^{\\mu}$ and simplifying, until the result no longer changes.\nBelow, we stick that logic into a function \\verb|act| which you can apply on an expression."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def act(ex):\n\tconverge(ex):\n\t\tdistribute(ex)\n\t\tsubstitute(ex, rl)\n\t\tdistribute(ex)\n\t\teliminate_kronecker(ex)\n\t\trename_dummies(ex)\n\n\treturn ex"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Here is what happens when you apply the commutator rules to the three terms in the state $L_1 |\\chi\\rangle$:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Here is what happens when you apply the commutator rules to the three terms in the state $L_1 |\\chi\\rangle$:"
 		},
 		{
 			"cell_origin" : "client",
@@ -206,15 +262,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\alpha_{12}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{11}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{10}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-7}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left(\\alpha_{12}\\,^{\\mu} \\alpha_{-10}\\,^{\\mu}+\\alpha_{11}\\,^{\\mu} \\alpha_{-9}\\,^{\\mu}+\\alpha_{10}\\,^{\\mu} \\alpha_{-8}\\,^{\\mu}+\\alpha_{9}\\,^{\\mu} \\alpha_{-7}\\,^{\\mu}+\\alpha_{8}\\,^{\\mu} \\alpha_{-6}\\,^{\\mu}+\\alpha_{7}\\,^{\\mu} \\alpha_{-5}\\,^{\\mu}+\\alpha_{6}\\,^{\\mu} \\alpha_{-4}\\,^{\\mu}+\\alpha_{5}\\,^{\\mu} \\alpha_{-3}\\,^{\\mu}+\\alpha_{4}\\,^{\\mu} \\alpha_{-2}\\,^{\\mu}+\\alpha_{3}\\,^{\\mu} \\alpha_{-1}\\,^{\\mu}+\\alpha_{2}\\,^{\\mu} \\alpha_{0}\\,^{\\mu}+\\alpha_{1}\\,^{\\mu} \\alpha_{1}\\,^{\\mu}+\\alpha_{0}\\,^{\\mu} \\alpha_{2}\\,^{\\mu}+\\alpha_{-1}\\,^{\\mu} \\alpha_{3}\\,^{\\mu}+\\alpha_{-2}\\,^{\\mu} \\alpha_{4}\\,^{\\mu}+\\alpha_{-3}\\,^{\\mu} \\alpha_{5}\\,^{\\mu}+\\alpha_{-4}\\,^{\\mu} \\alpha_{6}\\,^{\\mu}+\\alpha_{-5}\\,^{\\mu} \\alpha_{7}\\,^{\\mu}+\\alpha_{-6}\\,^{\\mu} \\alpha_{8}\\,^{\\mu}%\n+\\alpha_{-7}\\,^{\\mu} \\alpha_{9}\\,^{\\mu}\\right) \\alpha_{-1}\\,^{\\nu} \\alpha_{-1}\\,^{\\nu} |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2\\alpha_{-1}\\,^{\\mu} \\sqrt{2} k^{\\mu} |k\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "L2=L(2);\nL2c:= @(L2) @(chi);"
+			"source" : "act(L1c1);"
 		},
 		{
 			"cell_origin" : "client",
@@ -224,10 +275,149 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}2d |0\\rangle\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}2\\alpha_{-1}\\,^{\\mu} \\sqrt{2} k^{\\mu} |k\\rangle\\end{dmath*}"
 				}
 			],
-			"source" : "act(L2c);"
+			"source" : "act(L1c2);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-4\\alpha_{-1}\\,^{\\mu} \\sqrt{2} |k\\rangle k^{\\mu}\\end{dmath*}"
+				}
+			],
+			"source" : "act(L1c3);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The procedure works the same for $L_2|\\chi\\rangle$:"
+				}
+			],
+			"hidden" : true,
+			"source" : "The procedure works the same for $L_2|\\chi\\rangle$:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "L2c1:= @(L2) @(chi1).\nL2c2:= @(L2) @(chi2).\nL2c3:= @(L2) @(chi3)."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}d |k\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "act(L2c1);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-4|k\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "act(L2c2);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-2|k\\rangle\\end{dmath*}"
+				}
+			],
+			"source" : "act(L2c3);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The constraints $L_1 |\\chi\\rangle=0$ and $L_2 |\\chi\\rangle=0$ thus reduce to"
+				}
+			],
+			"hidden" : true,
+			"source" : "The constraints $L_1 |\\chi\\rangle=0$ and $L_2 |\\chi\\rangle=0$ thus reduce to"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2\\alpha_{-1}\\,^{\\mu} \\sqrt{2} k^{\\mu} |k\\rangle+2A \\alpha_{-1}\\,^{\\mu} \\sqrt{2} k^{\\mu} |k\\rangle-4B \\alpha_{-1}\\,^{\\mu} \\sqrt{2} |k\\rangle k^{\\mu} = 0\\end{dmath*}"
+				}
+			],
+			"source" : "tst1:=@(L1c1) + A @(L1c2) + B @(L1c3) = 0;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}d |k\\rangle-4A |k\\rangle-2B |k\\rangle = 0\\end{dmath*}"
+				}
+			],
+			"source" : "tst2:=@(L2c1) + A @(L2c2) + B @(L2c3) = 0;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "These are solved by $A=\\frac{d-1}{5}$ and $B=\\frac{d+4}{10}$."
+				}
+			],
+			"hidden" : true,
+			"source" : "These are solved by $A=\\frac{d-1}{5}$ and $B=\\frac{d+4}{10}$."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Computing the norm}\n\nHaving pinned down the coefficients $A$ and $B$, we now want to compute the norm of the state $|\\chi\\rangle$ (to be added)."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Computing the norm}\n\nHaving pinned down the coefficients $A$ and $B$, we now want to compute the norm of the state $|\\chi\\rangle$ (to be added)."
 		},
 		{
 			"cell_origin" : "client",
