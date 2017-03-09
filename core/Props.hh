@@ -300,8 +300,8 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 	const T* ret=0;
 	bool inherits=false;
 
-//	std::cout << *it->name_only() << std::endl;
-//	std::cout << props.size() << std::endl;
+	//std::cerr << *it->name_only() << std::endl;
+//	std::cerr << props.size() << std::endl;
 	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit=props.equal_range(it->name_only());
 	
 	// First look for properties of the node itself. Go through the loop twice:
