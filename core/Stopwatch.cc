@@ -21,37 +21,37 @@
 #include "Stopwatch.hh"
 #include <assert.h>
 
-stopwatch::stopwatch()
+Stopwatch::Stopwatch()
 	: diffsec(0), diffusec(0), stopped_(true)
 	{
    gettimeofday(&tv1,&tz);	// the time since the counter has been running, if stopped_=false
 	}
 
-void stopwatch::reset()
+void Stopwatch::reset()
 	{
 	diffsec=0;
 	diffusec=0;
    gettimeofday(&tv1,&tz);	
 	}
 
-void stopwatch::start()
+void Stopwatch::start()
 	{
    gettimeofday(&tv1,&tz);	
 	stopped_=false;
 	}
 
-void stopwatch::stop()
+void Stopwatch::stop()
 	{
 	stopped_=true;
 	checkpoint_();
 	}
 
-bool stopwatch::stopped() const
+bool Stopwatch::stopped() const
 	{
 	return stopped_;
 	}
 
-void stopwatch::checkpoint_() const
+void Stopwatch::checkpoint_() const
 	{
    gettimeofday(&tv2,&tz);
    diffsec  += tv2.tv_sec-tv1.tv_sec;
@@ -67,19 +67,19 @@ void stopwatch::checkpoint_() const
 		}
 	}
 
-long stopwatch::seconds() const
+long Stopwatch::seconds() const
 	{
 	if(stopped_==false) checkpoint_();
 	return diffsec;
 	}
 
-long stopwatch::useconds() const
+long Stopwatch::useconds() const
 	{
 	if(stopped_==false) checkpoint_();
 	return diffusec;
 	}
 
-std::ostream& operator<<(std::ostream& os, const stopwatch& mt)
+std::ostream& operator<<(std::ostream& os, const Stopwatch& mt)
 	{
    os << mt.diffsec << " sec and " << mt.diffusec << " microsec";
 	return os;

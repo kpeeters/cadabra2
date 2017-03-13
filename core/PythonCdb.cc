@@ -751,7 +751,7 @@ Kernel *get_kernel_from_scope()
 
 	global_kernel = new Kernel();
 
-	// Store this as a Python object, making sure (using boost::ref) that the
+// Store this as a Python object, making sure (using boost::ref) that the
 	// kernel Python refers to by __cdbkernel__ is the same object as the one
 	// we will return to our caller.
 	globals["__cdbkernel__"]=boost::ref(global_kernel);

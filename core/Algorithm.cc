@@ -437,7 +437,7 @@ bool Algorithm::check_degree_consistency(iterator it) const
 
 bool Algorithm::check_consistency(iterator it) const
 	{
-	stopwatch w1;
+	Stopwatch w1;
 	w1.start();
 //	debugout << "checking consistency ... " << std::flush;
 	assert(tr.is_valid(tr.parent(it))==false);

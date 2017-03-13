@@ -14,10 +14,9 @@ using namespace cadabra;
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args, 
 								  const std::string& method)
 	{
-	// We first need to print the sub-expression using DisplaySympy,
-	// optionally with the head wrapped around it and the args added
+   // We first need to print the sub-expression using DisplaySympy,
+ 	// optionally with the head wrapped around it and the args added
 	// (if present).
-
 	std::ostringstream str;
 
 	if(head.size()>0)

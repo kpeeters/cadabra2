@@ -95,9 +95,9 @@ class Algorithm {
 
 		void report_progress(const std::string&, int todo, int done, int count=2);
 
-		mutable stopwatch index_sw;
-		mutable stopwatch get_dummy_sw;
-		mutable stopwatch report_progress_stopwatch;
+		mutable Stopwatch index_sw;
+		mutable Stopwatch get_dummy_sw;
+		mutable Stopwatch report_progress_stopwatch;
 
 		index_iterator begin_index(iterator it) const;
 		index_iterator end_index(iterator it) const;

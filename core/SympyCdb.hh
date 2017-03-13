@@ -4,6 +4,7 @@
 #include "Props.hh"
 #include "Storage.hh"
 #include "Kernel.hh"
+#include "Stopwatch.hh"
 
 namespace sympy {
 
@@ -33,5 +34,7 @@ namespace sympy {
    /// inverse matrix.
 
 	cadabra::Ex invert_matrix(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules);
+
+//	extern Stopwatch sympy_stopwatch;
 	
 };

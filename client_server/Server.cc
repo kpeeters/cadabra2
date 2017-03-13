@@ -17,6 +17,7 @@
 #include "Snoop.hh"
 #include "CdbPython.hh"
 #include "Server.hh"
+#include "SympyCdb.hh"
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -85,6 +86,14 @@ void Server::init()
 	   .def("clear", &Server::CatchOutput::clear)
     	;
 
+	// FIXME: Why does 's=Stopwatch()' not work in a notebook cell?
+	boost::python::class_<Stopwatch>("Stopwatch")
+		.def("start", &Stopwatch::start)
+		.def("stop",  &Stopwatch::stop)
+		.def("reset", &Stopwatch::reset)
+		.def("seconds", &Stopwatch::seconds)
+		.def("useconds", &Stopwatch::useconds);
+	
 	boost::python::class_<Server, boost::noncopyable>("Server")
 		.def("send", &Server::send)
 		.def("architecture", &Server::architecture);
@@ -121,6 +130,15 @@ void Server::init()
 	run_string(startup);
 	}
 
+void Server::start_sympy_stopwatch()
+	{
+	sympy_stopwatch.start();
+	}
+
+void Server::stop_sympy_stopwatch()
+	{
+	sympy_stopwatch.stop();
+	}
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
@@ -170,7 +188,9 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			}
 		throw std::runtime_error(err);
 		}
-   //	std::cerr << "------------" << std::endl;
+   std::cerr << "------------" << std::endl;
+
+	server_stopwatch.stop();
 	return result;
 	}
 
@@ -225,16 +245,22 @@ void Server::wait_for_job()
 		Block block = block_queue.front();
 		block_queue.pop();
 		lock.unlock();
+
+		server_stopwatch.reset();
+		server_stopwatch.start();
+	
 		try {
 			// We are done with the block_queue; release the lock so that the
 			// master thread can push new blocks onto it.
 			// snoop::log(snoop::info) << "Block finished running" << snoop::flush;
+			server_stopwatch.stop();
 			current_hdl=block.hdl;
 			current_id =block.cell_id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
 			}
 		catch(std::runtime_error& ex) {
+			server_stopwatch.stop();
 			snoop::log(snoop::info) << "Python runtime exception" << snoop::flush;
 			// On error we remove all other blocks from the queue.
 			lock.lock();
@@ -245,6 +271,7 @@ void Server::wait_for_job()
 			on_block_error(block);
 			}
 		catch(std::exception& ex) {
+			server_stopwatch.stop();
 			snoop::log(snoop::info) << "System exception" << snoop::flush;
 			lock.lock();
 			std::queue<Block> empty;
@@ -338,7 +365,8 @@ void Server::on_block_finished(Block blk)
 
 void Server::send(const std::string& output, const std::string& msg_type)
 	{
-	// std::cerr << "sending json" << std::endl;
+	if(msg_type=="output") 
+		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
@@ -346,6 +374,8 @@ void Server::send(const std::string& output, const std::string& msg_type)
 	header["parent_origin"]="client";
 	header["cell_id"]=1; //FIXME
 	header["cell_origin"]="server";
+	header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
+	header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
 	content["output"]=output;
 
 	json["header"]=header;
