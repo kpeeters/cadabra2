@@ -31,7 +31,6 @@ if sympy.__version__ != "unavailable":
     from sympy import Matrix as sMatrix
 
 if 'server' in globals():
-    print("have server")
     mopen="\\begin{dmath*}{}";
     mclose="\\end{dmath*}";
 else:
@@ -43,6 +42,15 @@ else:
 
         def architecture(self):
             return "terminal"
+
+        def group(self, name=""):
+            pass
+
+        def progress(self, n, tot):
+            pass
+
+        def test(self):
+            print("hello there!")
             
     server = Server()
 
