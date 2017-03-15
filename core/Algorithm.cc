@@ -44,12 +44,18 @@ Algorithm::Algorithm(const Kernel& k, Ex& tr_)
 	  suppress_normal_output(false),
 	  discard_command_node(false),
 	  kernel(k),
-	  tr(tr_)
+	  tr(tr_),
+	  pm(0)
 	{
 	}
 
 Algorithm::~Algorithm()
 	{
+	}
+
+void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
+	{
+	pm=pm_;
 	}
 
 Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned int depth)

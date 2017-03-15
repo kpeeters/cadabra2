@@ -27,6 +27,7 @@
 #include "Exceptions.hh"
 #include "Kernel.hh"
 #include "IndexIterator.hh"
+#include "ProgressMonitor.hh"
 
 #include <map>
 #include <fstream>
@@ -71,6 +72,11 @@ class Algorithm {
 		typedef Ex::result_t            result_t;
 
 		bool interrupted;
+
+		/// Provide the algorithm with a ProgressMonitor object on which to register
+		/// (nested) progress information, to be reported out-of-band to a client.
+
+		void set_progress_monitor(ProgressMonitor *);
 
 		// The main entry points for running algorithms. The 'deep' flag indicates
 		// whether sub-expressions should be acted on too. The 'repeat' flag indicates
@@ -129,6 +135,7 @@ class Algorithm {
 	protected:
 		const Kernel&  kernel;
 		Ex& tr;
+		ProgressMonitor *pm;
 
 		// The main entry point which is used by the public entry points listed
 		// above. Override these in any subclass.

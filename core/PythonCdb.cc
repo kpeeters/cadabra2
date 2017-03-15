@@ -914,31 +914,29 @@ std::string Property<Prop>::repr_() const
 // declaration of 'join_gamma' below for an example of how to declare
 // those additional arguments).
 
+ProgressMonitor *pm=0;
+
 template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin();
-	ProgressMonitor *pm=0;
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
-		try {
-			boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-			boost::python::object obj = globals["server"];
-			pm = boost::python::extract<ProgressMonitor *>(obj); // Need Server to inherit from interface class ProgressMonitor
-			// Then we pass the algorithm this progress monitor. Could do all this extraction work
-         // at module startup, probably, or only once at first algorithm run. If we run
-			// with command line Python Server, need different solution!?
-			pm->progress(0,1);
-//			boost::python::object fun = obj.attr("test");
-//			fun();
-			}
-		catch(boost::python::error_already_set& err) {
-			std::string err2 = parse_python_exception();
-			std::cerr << "*** " << err2 << std::endl;
-			pm = new ServerWrapper();
+		if(pm==0) {
+			try {
+				boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+				boost::python::object obj = globals["server"];
+				// The following will throw an exception if the Python 'server' object cannot
+				// be cast to a C++ object derived from the ProgressMonitor. In that case,
+				// the catch below will setup 'pm' so that it points to a ServerWrapper
+				// which calls directly into Python methods.
+				pm = boost::python::extract<ProgressMonitor *>(obj); 
+				}
+			catch(boost::python::error_already_set& err) {
+				pm = new ServerWrapper();
+				}
 			}
 
-		pm->group("hi");
-		
+		algo.set_progress_monitor(pm);
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
