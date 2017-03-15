@@ -44,6 +44,7 @@ else:
             return "terminal"
 
         def group(self, name=""):
+            print("hello "+name)
             pass
 
         def progress(self, n, tot):

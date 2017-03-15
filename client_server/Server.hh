@@ -10,6 +10,7 @@
 #include <boost/python.hpp>
 
 #include "Stopwatch.hh"
+#include "ProgressMonitor.hh"
 
 /// \ingroup clientserver
 ///
@@ -27,7 +28,7 @@
 /// When the Python code finishes (or when it is interrupted), this thread
 /// locks the socket_mutex and calls on_block_finished().
 
-class Server {
+class Server : public ProgressMonitor {
 	public:
 		Server();
 		Server(const Server&)=delete;
@@ -62,8 +63,9 @@ class Server {
 		Stopwatch server_stopwatch;
 		Stopwatch sympy_stopwatch;
 
-		void start_sympy_stopwatch();
-		void stop_sympy_stopwatch();		
+		virtual void group(std::string) override;
+		virtual void progress(int n, int total) override;
+		
 	private:
 		void init();
 
@@ -169,6 +171,6 @@ class Server {
 		boost::python::object main_module;
 		boost::python::object main_namespace;
 
-
+		int cells_ran;
 };
 

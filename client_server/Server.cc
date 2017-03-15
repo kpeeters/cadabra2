@@ -94,9 +94,20 @@ void Server::init()
 		.def("seconds", &Stopwatch::seconds)
 		.def("useconds", &Stopwatch::useconds);
 	
-	boost::python::class_<Server, boost::noncopyable>("Server")
-		.def("send", &Server::send)
-		.def("architecture", &Server::architecture);
+	try {
+		// Expose both the interface (abstract base class) ProgressMonitor and the Server class to Python.
+		// PythonCdb.cc gets a reference to the ProgressMonitor base, and can then call into the
+		// group/progress functions.
+		cells_ran=0;
+		boost::python::class_<ProgressMonitor, boost::noncopyable>("ProgressMonitor", boost::python::no_init);
+		boost::python::class_<Server, boost::python::bases<ProgressMonitor>, boost::noncopyable>("Server")
+			.def("send", &Server::send)
+			.def("architecture", &Server::architecture);
+		}
+	catch(boost::python::error_already_set& ex) {
+		PyErr_Print();
+		}
+
 
 	std::string stdOutErr =
 		"import sys\n"
@@ -128,16 +139,6 @@ void Server::init()
 //	std::string startup = "import imp; execfile(imp.find_module('cadabra2_defaults')[1])";
 	std::string startup = "import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close()"; 
 	run_string(startup);
-	}
-
-void Server::start_sympy_stopwatch()
-	{
-	sympy_stopwatch.start();
-	}
-
-void Server::stop_sympy_stopwatch()
-	{
-	sympy_stopwatch.stop();
 	}
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
@@ -470,4 +471,14 @@ void Server::run()
 	catch(websocketpp::exception& ex) {
 		std::cerr << "cadabra-server: websocket exception " << ex.code() << " " << ex.what() << std::endl;
 		}
+	}
+
+void Server::group(std::string name)
+	{
+	}
+
+void Server::progress(int n, int total)
+	{
+	++cells_ran;
+	std::cerr << cells_ran << ":" << n << " of " << total << " completed" << std::endl;
 	}

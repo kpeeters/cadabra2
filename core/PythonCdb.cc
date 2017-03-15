@@ -30,6 +30,8 @@ namespace boost {
 #include "Cleanup.hh"
 #include "PreClean.hh"
 #include "PythonException.hh"
+#include "ProgressMonitor.hh"
+#include "ServerWrapper.hh"
 
 #include <boost/python/implicit.hpp>
 #include <boost/parameter/preprocessor.hpp>
@@ -916,22 +918,27 @@ template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin();
+	ProgressMonitor *pm=0;
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
 		try {
 			boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
 			boost::python::object obj = globals["server"];
-			Server *server = boost::python::extract<Server *>(obj); // Need Server to inherit from interface class ProgressMonitor
+			pm = boost::python::extract<ProgressMonitor *>(obj); // Need Server to inherit from interface class ProgressMonitor
 			// Then we pass the algorithm this progress monitor. Could do all this extraction work
          // at module startup, probably, or only once at first algorithm run. If we run
 			// with command line Python Server, need different solution!?
+			pm->progress(0,1);
 //			boost::python::object fun = obj.attr("test");
 //			fun();
 			}
 		catch(boost::python::error_already_set& err) {
 			std::string err2 = parse_python_exception();
 			std::cerr << "*** " << err2 << std::endl;
+			pm = new ServerWrapper();
 			}
 
+		pm->group("hi");
+		
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
