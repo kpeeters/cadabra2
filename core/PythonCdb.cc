@@ -937,7 +937,9 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 			}
 
 		algo.set_progress_monitor(pm);
+		pm->group(typeid(algo).name());
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+		pm->group();
 		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
 		}

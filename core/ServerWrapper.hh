@@ -16,7 +16,7 @@ class ServerWrapper : public ProgressMonitor {
 	public:
 		ServerWrapper();
 		
-		virtual void group(std::string) override;
+		virtual void group(std::string name="") override;
 		virtual void progress(int n, int total) override;
 
 	private:

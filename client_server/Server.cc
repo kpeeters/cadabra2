@@ -475,6 +475,10 @@ void Server::run()
 
 void Server::group(std::string name)
 	{
+	if(name.size()==0)
+		std::cerr << "}\n";
+	else
+		std::cerr << name << " {\n";
 	}
 
 void Server::progress(int n, int total)
