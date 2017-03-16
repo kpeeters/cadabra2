@@ -91,6 +91,7 @@ endif()
 set(LOCAL_SRC_FILES
   PythonCdb.cc
   ServerWrapper.cc
+  ProgressMonitor.cc
   Bridge.cc
   Algorithm.cc
   Cleanup.cc

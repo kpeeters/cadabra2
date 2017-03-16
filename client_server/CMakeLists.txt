@@ -101,7 +101,7 @@ endif()
 
 # Create server binary
 include_directories("." "./websocketpp" "./jsoncpp")
-add_executable(cadabra-server cadabra-server.cc)
+add_executable(cadabra-server cadabra-server.cc ../core/ProgressMonitor.cc)
 add_executable(cadabra2html cadabra2html.cc DataCell.cc)
 add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc)
 #add_executable(test_talk_to_server test_talk_to_server.cc)

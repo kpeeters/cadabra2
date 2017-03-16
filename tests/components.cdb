@@ -405,13 +405,13 @@ test21()
 
 def test22():
     __cdbkernel__=create_scope()
-{r,t}::Coordinate;
-{a,b,c}::Indices(values={r,t});
-\partial{#}::PartialDerivative;
-{f,g}::Depends(r);    
-ex:= A_{a} \partial_{a}{ f * g };
-rl:= { A_{r} = q };
-evaluate(ex, rl)
+    {r,t}::Coordinate;
+    {a,b,c}::Indices(values={r,t});
+    \partial{#}::PartialDerivative;
+    {f,g}::Depends(r);    
+    ex:= A_{a} \partial_{a}{ f * g };
+    rl:= { A_{r} = q };
+    evaluate(ex, rl)
     tst:= q ( f \partial_{r}{g} + g\partial_{r}{f} ) - @(ex);
     assert(tst==0)
     print("Test 22 passed")

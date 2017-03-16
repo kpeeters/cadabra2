@@ -99,7 +99,7 @@ void Server::init()
 		// PythonCdb.cc gets a reference to the ProgressMonitor base, and can then call into the
 		// group/progress functions.
 		cells_ran=0;
-		boost::python::class_<ProgressMonitor, boost::noncopyable>("ProgressMonitor", boost::python::no_init);
+		boost::python::class_<ProgressMonitor>("ProgressMonitor");
 		boost::python::class_<Server, boost::python::bases<ProgressMonitor>, boost::noncopyable>("Server")
 			.def("send", &Server::send)
 			.def("architecture", &Server::architecture);
