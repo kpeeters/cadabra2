@@ -66,6 +66,8 @@ Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned in
 
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
+	if(pm) pm->group(typeid(*this).name());
+
 	result_t ret=result_t::l_no_action;
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
@@ -122,6 +124,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 //		std::cerr << "exit apply_generic\n" << Ex(it) << std::endl;
 //		}
 
+	if(pm) pm->group();
 	return ret;
 	}
 

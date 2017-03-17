@@ -14,6 +14,8 @@ class ProgressMonitor {
 		virtual void group(std::string name=""); 
 		virtual void progress(int n, int total);
 
+		void print() const;
+		
 	private:
 		class Block {
 			public:

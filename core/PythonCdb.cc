@@ -31,7 +31,7 @@ namespace boost {
 #include "PreClean.hh"
 #include "PythonException.hh"
 #include "ProgressMonitor.hh"
-#include "ServerWrapper.hh"
+//#include "ServerWrapper.hh"
 
 #include <boost/python/implicit.hpp>
 #include <boost/parameter/preprocessor.hpp>
@@ -925,21 +925,15 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 			try {
 				boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
 				boost::python::object obj = globals["server"];
-				// The following will throw an exception if the Python 'server' object cannot
-				// be cast to a C++ object derived from the ProgressMonitor. In that case,
-				// the catch below will setup 'pm' so that it points to a ServerWrapper
-				// which calls directly into Python methods.
 				pm = boost::python::extract<ProgressMonitor *>(obj); 
 				}
 			catch(boost::python::error_already_set& err) {
-				pm = new ServerWrapper();
+				std::cerr << "Cannot find ProgressMonitor derived 'server' object." << std::endl;
 				}
 			}
 
 		algo.set_progress_monitor(pm);
-		pm->group(typeid(algo).name());
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-		pm->group();
 		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
 		}
@@ -1157,6 +1151,9 @@ BOOST_PYTHON_MODULE(cadabra2)
 	boost::python::object kernel=pyKernel();
 	inject_defaults(boost::python::extract<Kernel*>(kernel));
 	boost::python::scope().attr("__cdbkernel__")=kernel;
+
+	// Make our profiling class known to the Python world.
+	class_<ProgressMonitor>("ProgressMonitor").def("print", &ProgressMonitor::print);
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	// We do not allow initialisation/construction except through the two 

@@ -36,19 +36,19 @@ if 'server' in globals():
 else:
     mopen=''
     mclose=''
-    class Server:
+    class Server(ProgressMonitor):
         def send(self, data, typestr):
             print(data)
 
         def architecture(self):
             return "terminal"
 
-        def group(self, name=""):
-            print("hello "+name)
-            pass
-
-        def progress(self, n, tot):
-            pass
+#        def group(self, name=""):
+#            print("hello "+name)
+#            pass
+#
+#        def progress(self, n, tot):
+#            pass
 
         def test(self):
             print("hello there!")
