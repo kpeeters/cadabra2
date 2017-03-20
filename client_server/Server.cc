@@ -23,6 +23,17 @@ using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 
+// Wrap the 'totals' member of ProgressMonitor to return a Python list.
+
+boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+	{
+	boost::python::list list;
+	auto totals = self.totals();
+	for(auto& total: totals)
+		list.append(total);
+	return list;
+	}
+
 Server::Server()
 	{
 	// FIXME: we do not actually do anything with this.
@@ -99,7 +110,12 @@ void Server::init()
 		// PythonCdb.cc gets a reference to the ProgressMonitor base, and can then call into the
 		// group/progress functions.
 		cells_ran=0;
-		boost::python::class_<ProgressMonitor>("ProgressMonitor");
+		// For some reason we need to re-export ProgressMonitor here, despite the fact that it has
+		// already been done in the cadabra2 module.
+		boost::python::class_<ProgressMonitor, boost::noncopyable>("ProgressMonitor")
+			.def("print", &ProgressMonitor::print)
+			.def("totals", &ProgressMonitor_totals_helper);
+
 		boost::python::class_<Server, boost::python::bases<ProgressMonitor>, boost::noncopyable>("Server")
 			.def("send", &Server::send)
 			.def("architecture", &Server::architecture);
@@ -473,16 +489,3 @@ void Server::run()
 		}
 	}
 
-void Server::group(std::string name)
-	{
-	if(name.size()==0)
-		std::cerr << "}\n";
-	else
-		std::cerr << name << " {\n";
-	}
-
-void Server::progress(int n, int total)
-	{
-	++cells_ran;
-	std::cerr << cells_ran << ":" << n << " of " << total << " completed" << std::endl;
-	}

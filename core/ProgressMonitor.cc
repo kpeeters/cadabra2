@@ -25,7 +25,7 @@ void ProgressMonitor::group(std::string name)
 	{
 	if(name=="") {
 		Block& blk=call_stack.top();
-		auto fnd = totals.find(blk.name);
+		auto fnd = call_totals.find(blk.name);
 		Total& tot=fnd->second;
 
 		tot.name=blk.name;
@@ -42,12 +42,12 @@ void ProgressMonitor::group(std::string name)
 
 		// Also insert an entry to the total stack for this group if there
 		// isn't one already.
-		auto fnd=totals.find(name);
-		if(fnd==totals.end()) {
+		auto fnd=call_totals.find(name);
+		if(fnd==call_totals.end()) {
 			Total tot;
 			tot.call_count=1;
 			tot.name=name;
-			totals[name]=tot;
+			call_totals[name]=tot;
 			}
 		else {
 			fnd->second.call_count++;
@@ -61,13 +61,36 @@ void ProgressMonitor::progress(int n, int total)
 	call_stack.top().total_steps=total;
 	}
 
+long ProgressMonitor::Total::time_spent_as_long() const
+	{
+	return time_spent.count();
+	}
+
 void ProgressMonitor::print() const
 	{
-	for(auto& t: totals) {
+	for(auto& t: call_totals) {
 		const Total& tot=t.second;
 		std::cerr << tot.name << ": "
 					 << tot.call_count << " calls, "
 //					 << (long)tot.time_spent << " ms, "
 					 << tot.total_steps << " steps" << std::endl;
 		}
+	}
+
+std::vector<ProgressMonitor::Total> ProgressMonitor::totals() const
+	{
+	std::vector<Total> res;
+	for(auto& t: call_totals) 
+		res.push_back(t.second);
+
+	return res;
+	}
+
+bool ProgressMonitor::Total::operator==(const Total& other) const
+	{
+	if(name==other.name &&
+		call_count==other.call_count &&
+		time_spent==other.time_spent &&
+		total_steps==other.total_steps) return true;
+	return false;
 	}

@@ -166,6 +166,18 @@ std::vector<T> to_std_vector(const boost::python::list& iterable )
 								  boost::python::stl_input_iterator< T >( ) );
 	}
 
+// Wrap the 'totals' member of ProgressMonitor to return a Python list.
+
+boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+	{
+	boost::python::list list;
+	auto totals = self.totals();
+	for(auto& total: totals)
+		list.append(total);
+	return list;
+	}
+
+
 // Split a 'sum' expression into its individual terms. FIXME: now deprecated because we have operator[]?
 
 boost::python::list terms(const Ex& ex) 
@@ -1153,7 +1165,15 @@ BOOST_PYTHON_MODULE(cadabra2)
 	boost::python::scope().attr("__cdbkernel__")=kernel;
 
 	// Make our profiling class known to the Python world.
-	class_<ProgressMonitor>("ProgressMonitor").def("print", &ProgressMonitor::print);
+	class_<ProgressMonitor>("ProgressMonitor")
+		.def("print", &ProgressMonitor::print)
+		.def("totals", &ProgressMonitor_totals_helper);
+	
+	class_<ProgressMonitor::Total>("Total")
+		.def_readonly("name", &ProgressMonitor::Total::name)
+		.def_readonly("call_count", &ProgressMonitor::Total::call_count)
+		.def_readonly("time_spent", &ProgressMonitor::Total::time_spent_as_long)
+		.def_readonly("total_steps", &ProgressMonitor::Total::total_steps);
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	// We do not allow initialisation/construction except through the two 
@@ -1278,9 +1298,15 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
-	// Automatically convert Python sets and so on of integers to std::vector.
+	// Automatically convert from Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
+	// Automatically convert from C++ vectors to Python lists.
+//	boost::python::class_<std::vector<ProgressMonitor::Total>>("TotalVector")
+	
+//	.def(boost::python::vector_indexing_suite<std::vector<ProgressMonitor::Total>>());
+
+	
 	def("einsteinify", &dispatch_ex<einsteinify, Ex&>,
 	    (arg("ex"), arg("metric")=new Ex(),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),

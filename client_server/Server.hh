@@ -63,9 +63,6 @@ class Server : public ProgressMonitor {
 		Stopwatch server_stopwatch;
 		Stopwatch sympy_stopwatch;
 
-		virtual void group(std::string name="") override;
-		virtual void progress(int n, int total) override;
-		
 	private:
 		void init();
 
