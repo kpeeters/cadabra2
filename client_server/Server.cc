@@ -205,7 +205,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			}
 		throw std::runtime_error(err);
 		}
-   std::cerr << "------------" << std::endl;
+//   std::cerr << "------------" << std::endl;
 
 	server_stopwatch.stop();
 	return result;
@@ -382,8 +382,8 @@ void Server::on_block_finished(Block blk)
 
 void Server::send(const std::string& output, const std::string& msg_type)
 	{
-	if(msg_type=="output") 
-		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
+//	if(msg_type=="output") 
+//		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
 	// Make a JSON message.
 	Json::Value json, content, header;
 	

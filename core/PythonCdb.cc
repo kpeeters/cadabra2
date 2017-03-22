@@ -1173,7 +1173,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def_readonly("name", &ProgressMonitor::Total::name)
 		.def_readonly("call_count", &ProgressMonitor::Total::call_count)
 		.def_readonly("time_spent", &ProgressMonitor::Total::time_spent_as_long)
-		.def_readonly("total_steps", &ProgressMonitor::Total::total_steps);
+		.def_readonly("total_steps", &ProgressMonitor::Total::total_steps)
+		.def("__str__", &ProgressMonitor::Total::str);
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	// We do not allow initialisation/construction except through the two 

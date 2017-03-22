@@ -12,7 +12,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-#define DEBUG
+//#define DEBUG
 
 using namespace cadabra;
 
@@ -171,7 +171,9 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
+#ifdef DEBUG
 	std::cerr << "handle_factor " << Ex(sib) << std::endl;
+#endif	
 	if(*sib->name=="\\components") return sib;
 
 	// If this factor is an accent at the top level, descent further.
@@ -414,7 +416,9 @@ void evaluate::cleanup_components(iterator it)
 
 Ex::iterator evaluate::handle_derivative(iterator it)
 	{
+#ifdef DEBUG
 	std::cerr << "handle_derivative " << Ex(it) << std::endl;
+#endif
 	
 	// In order to figure out which components to keep, we need to do two things:
 	// expand into components the argument of the derivative, and then
@@ -735,11 +739,14 @@ void evaluate::simplify_components(iterator it)
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
+			if(pm) pm->group("sympy");
 #ifndef USE_TREETRACKER			
 			sympy::apply(kernel, tr, nd, "simplify", "", "");
 #else
 			sympy::apply(kernel, tr, nd, "", "", "");
 #endif
+			if(pm) pm->group();
+			
 			if(nd->is_zero())
 				tr.erase(eqs);
 			return true;
@@ -772,11 +779,15 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 			});
 
 	// Determine implicit dependence via Depends.
+#ifdef DEBUG
 	std::cerr << "deps for " << *it->name << std::endl;
+#endif
 
 	const DependsBase *dep = kernel.properties.get<DependsBase>(it);
 	if(dep) {
+#ifdef DEBUG
 		std::cerr << "implicit deps" << std::endl;
+#endif
 		Ex deps(dep->dependencies(kernel, it));
 		cadabra::do_list(deps, deps.begin(), [&](Ex::iterator nd) {
 				Ex cpy(nd);
@@ -785,8 +796,10 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 				ret.insert(cpy);
 				return true;
 				});
+#ifdef DEBUG
 		for(auto& e: ret)
 			std::cerr << e << std::endl;
+#endif
 		}
 
 	return ret;

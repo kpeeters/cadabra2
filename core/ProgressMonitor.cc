@@ -1,6 +1,7 @@
 
 #include "ProgressMonitor.hh"
 #include <iostream>
+#include <sstream>
 
 ProgressMonitor::ProgressMonitor()
 	{
@@ -19,6 +20,14 @@ ProgressMonitor::Block::Block()
 ProgressMonitor::Total::Total()
 	: call_count(0), time_spent(0), total_steps(0)
 	{
+	}
+
+std::string ProgressMonitor::Total::str() const
+	{
+	std::ostringstream s;
+
+	s << name << ": " << call_count << " calls, " << total_steps << " steps, " << time_spent.count() << " ms";
+	return s.str();
 	}
 
 void ProgressMonitor::group(std::string name)

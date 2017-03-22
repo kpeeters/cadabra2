@@ -29,6 +29,8 @@ class ProgressMonitor {
 				long                      time_spent_as_long() const;
 
 				bool operator==(const Total& other) const;
+
+				std::string               str() const;
 		};
 
 		std::vector<Total> totals() const;
