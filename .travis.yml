@@ -25,6 +25,7 @@ script:
    - travis_wait 20 ctest -V .
 
 before_script:
+   - rvm get head
    - mkdir build
    - cd build
    - cmake ..
