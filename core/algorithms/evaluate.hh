@@ -107,7 +107,12 @@ class evaluate : public Algorithm {
 
 		iterator handle_factor(sibling_iterator sib, const index_map_t& full_ind_free);
 
-		/// Merge entries in a single 'components' node when they are for the
+		/// Expand a tensor factor into a components node with all components
+		/// written out explicitly. Used when there is no sparse rule matching
+		/// this factor.
+		iterator dense_factor(iterator sib, const index_map_t& ind_free, const index_map_t& ind_dummy);
+
+      /// Merge entries in a single 'components' node when they are for the
 		/// same index value(s).
 		void merge_component_children(iterator it);
 

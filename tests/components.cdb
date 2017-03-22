@@ -419,6 +419,10 @@ def test22():
 
 test22()
 
+{a,b,c}::Indices(values={0,1,2,3});
+ex:= X^{\mu} X_{\mu};
+evaluate(_, $$);
+        
 
 
 {r,t}::Coordinate.    

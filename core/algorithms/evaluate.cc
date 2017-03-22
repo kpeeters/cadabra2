@@ -282,16 +282,26 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 		// There was not a single rule which matched for this tensor. That's means
 		// that the user wants to keep the entire tensor (all components).
 		std::cerr << "No single rule matched " << Ex(sib) << std::endl;
+		sib=dense_factor(sib, ind_free, ind_dummy);
+		}
+	else {
+		merge_component_children(repl.begin());
+		
+#ifdef DEBUG	
+		std::cerr << "result now " << repl << std::endl;
+#endif	
+		sib = tr.move_ontop(iterator(sib), repl.begin());
 		}
 
-	merge_component_children(repl.begin());
-
-#ifdef DEBUG	
-	std::cerr << "result now " << repl << std::endl;
-#endif	
-	sib = tr.move_ontop(iterator(sib), repl.begin());
-
 	return sib;
+	}
+
+Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, const index_map_t& ind_dummy)
+	{
+	if(ind_dummy.size()!=0)
+		throw RuntimeException("Cannot yet evaluate this expression.");
+
+	return it;
 	}
 
 void evaluate::merge_component_children(iterator it)
