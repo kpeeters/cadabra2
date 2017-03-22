@@ -17,7 +17,7 @@ var searchData=
   ['removed_5ftree',['removed_tree',['../classcadabra_1_1ActionRemoveCell.html#a8b7ab0f326c31945b3e7e04d133a7252',1,'cadabra::ActionRemoveCell']]],
   ['repdelta',['repdelta',['../classcadabra_1_1epsilon__to__delta.html#a793c7da5747a685d68dbbec5dbbef16c',1,'cadabra::epsilon_to_delta']]],
   ['replacement_5fmap',['replacement_map',['../classcadabra_1_1Ex__comparator.html#af6476c8291bf54e182bc7a18e6369ba8',1,'cadabra::Ex_comparator']]],
-  ['report_5fprogress_5fstopwatch',['report_progress_stopwatch',['../classcadabra_1_1Algorithm.html#a103af89b730281a53b3f4a3d3dc5c9d7',1,'cadabra::Algorithm']]],
+  ['report_5fprogress_5fstopwatch',['report_progress_stopwatch',['../classcadabra_1_1Algorithm.html#aacda29ef6be080170dd742b4a590f369',1,'cadabra::Algorithm']]],
   ['requests',['requests',['../classcadabra_1_1TeXEngine.html#a1688559da0a69f50dba5478c5643c2c4',1,'cadabra::TeXEngine']]],
   ['restarting_5fkernel',['restarting_kernel',['../classcadabra_1_1ComputeThread.html#a7fb3fbb68e1aa23cd8af885061cb1fee',1,'cadabra::ComputeThread']]],
   ['reuse_5fgenerating_5fset',['reuse_generating_set',['../classcadabra_1_1canonicalise.html#ad8910c7a4bc8045477b5dd55b53f26c8',1,'cadabra::canonicalise']]],

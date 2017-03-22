@@ -113,6 +113,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="Cleanup_8hh_source.html">Cleanup.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="PreClean_8hh_source.html">PreClean.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="PythonException_8hh_source.html">PythonException.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="ProgressMonitor_8hh_source.html">ProgressMonitor.hh</a>&quot;</code><br/>
 <code>#include &lt;boost/python/implicit.hpp&gt;</code><br/>
 <code>#include &lt;boost/parameter/preprocessor.hpp&gt;</code><br/>
 <code>#include &lt;boost/mpl/vector.hpp&gt;</code><br/>
@@ -228,6 +229,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a64a5521d7ebd2cc0ad62bb167898746b">to_std_vector</a> (const boost::python::list &amp;iterable)</td></tr>
 <tr class="separator:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2bd4ca603346eb93c8e620b2ea319ac"><td class="memItemLeft" align="right" valign="top">boost::python::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ae2bd4ca603346eb93c8e620b2ea319ac">ProgressMonitor_totals_helper</a> (<a class="el" href="classProgressMonitor.html">ProgressMonitor</a> &amp;self)</td></tr>
+<tr class="separator:ae2bd4ca603346eb93c8e620b2ea319ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8aa7a6b2d258e2b2a135c0b2cb50a33d"><td class="memItemLeft" align="right" valign="top">boost::python::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a8aa7a6b2d258e2b2a135c0b2cb50a33d">terms</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
 <tr class="separator:a8aa7a6b2d258e2b2a135c0b2cb50a33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb82474fc15c3cdaebe18f1b00e8fd92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92">lhs</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
@@ -364,6 +367,8 @@ Variables</h2></td></tr>
 <tr class="separator:a5dc592f07bcb79a492ce2736ed52d068"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7143b05eaaf70c822886bd5ca25993c"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ab7143b05eaaf70c822886bd5ca25993c">NotYetImplementedType</a> = NULL</td></tr>
 <tr class="separator:ab7143b05eaaf70c822886bd5ca25993c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7e1e6ebc0e777a2bf7bbfbcd14f361c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classProgressMonitor.html">ProgressMonitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ac7e1e6ebc0e777a2bf7bbfbcd14f361c">pm</a> =0</td></tr>
+<tr class="separator:ac7e1e6ebc0e777a2bf7bbfbcd14f361c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a37ff0574884af8cf395027bf679d29a2"></a>
@@ -1061,6 +1066,22 @@ template&lt;class F , typename... Args&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ae2bd4ca603346eb93c8e620b2ea319ac"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::python::list ProgressMonitor_totals_helper </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classProgressMonitor.html">ProgressMonitor</a> &amp;&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ab7a4f494704b6ab899167b48aeb89b2d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1308,6 +1329,18 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="ac7e1e6ebc0e777a2bf7bbfbcd14f361c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classProgressMonitor.html">ProgressMonitor</a>* pm =0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="ac690888937da1cc3ede9915f16610f9b"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1335,7 +1368,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 9 2017 18:18:04 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 22 2017 18:26:49 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

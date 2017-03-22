@@ -1,8 +1,8 @@
 var searchData=
 [
   ['tab_5fbasics',['tab_basics',['../classcadabra_1_1tab__basics.html',1,'cadabra']]],
-  ['tableau',['tableau',['../classyngtab_1_1tableau.html',1,'yngtab']]],
   ['tableau',['Tableau',['../classcadabra_1_1Tableau.html',1,'cadabra']]],
+  ['tableau',['tableau',['../classyngtab_1_1tableau.html',1,'yngtab']]],
   ['tableau_5fbase',['tableau_base',['../classyngtab_1_1tableau__base.html',1,'yngtab']]],
   ['tableaubase',['TableauBase',['../classcadabra_1_1TableauBase.html',1,'cadabra']]],
   ['tableausymmetry',['TableauSymmetry',['../classcadabra_1_1TableauSymmetry.html',1,'cadabra']]],
@@ -14,6 +14,7 @@ var searchData=
   ['texexception',['TeXException',['../classcadabra_1_1TeXEngine_1_1TeXException.html',1,'cadabra::TeXEngine']]],
   ['texrequest',['TeXRequest',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html',1,'cadabra::TeXEngine']]],
   ['texview',['TeXView',['../classcadabra_1_1TeXView.html',1,'cadabra']]],
+  ['total',['Total',['../classProgressMonitor_1_1Total.html',1,'ProgressMonitor']]],
   ['traceless',['Traceless',['../classcadabra_1_1Traceless.html',1,'cadabra']]],
   ['tree_5fequal_5fobj',['tree_equal_obj',['../classcadabra_1_1tree__equal__obj.html',1,'cadabra']]],
   ['tree_5fexact_5fequal_5fmod_5fprel_5fobj',['tree_exact_equal_mod_prel_obj',['../classcadabra_1_1tree__exact__equal__mod__prel__obj.html',1,'cadabra']]],

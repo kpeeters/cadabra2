@@ -1,6 +1,9 @@
 var searchData=
 [
+  ['call_5fcount',['call_count',['../classProgressMonitor_1_1Total.html#a01364e35239e82879e8e080506f5ad84',1,'ProgressMonitor::Total']]],
   ['call_5fmutex',['call_mutex',['../classsnoop_1_1SnoopImpl.html#a5c542b0df58680ee74be5fff5725e369',1,'snoop::SnoopImpl']]],
+  ['call_5fstack',['call_stack',['../classProgressMonitor.html#adffcd451870c7d646046697ef32f2ac8',1,'ProgressMonitor']]],
+  ['call_5ftotals',['call_totals',['../classProgressMonitor.html#a1f18a8af832dd802d9cccc546ad7d9f4',1,'ProgressMonitor']]],
   ['canvasses',['canvasses',['../classcadabra_1_1NotebookWindow.html#a89ac590b0219421ed3d269e37d5b2962',1,'cadabra::NotebookWindow::canvasses()'],['../classcadabra__osx_1_1NotebookWindow.html#a074f9bde697f21aad1da8b94600767c0',1,'cadabra_osx::NotebookWindow::canvasses()']]],
   ['catcherr',['catchErr',['../classServer.html#a195296c36ba24a8be42aa82526512234',1,'Server']]],
   ['catchout',['catchOut',['../classServer.html#a6cd039ca30457f8fdcd52ba539afb96f',1,'Server']]],
@@ -8,6 +11,7 @@ var searchData=
   ['cell_5fgot_5ffocus',['cell_got_focus',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#ad8e3a0fcdc1b1f15281bb57dc184ac2b',1,'cadabra::CodeInput::exp_input_tv']]],
   ['cell_5fid',['cell_id',['../classServer_1_1Block.html#a289fdbb8ab64e345c28bbf9bd28a485d',1,'Server::Block']]],
   ['cell_5ftype',['cell_type',['../classcadabra_1_1DataCell.html#a11fa696a6f554b5c8d2395564bcb9a01',1,'cadabra::DataCell']]],
+  ['cells_5fran',['cells_ran',['../classServer.html#a7d035a5e8271a1b73595411d188ef8a7',1,'Server']]],
   ['chi',['chi',['../Symbols_8cc.html#a0e0353d863498a4c98efb2b5ed38f9fc',1,'chi():&#160;Symbols.cc'],['../Symbols_8cc.html#a000bb23c54a1419bdf305fc562bdc2ef',1,'Chi():&#160;Symbols.cc']]],
   ['child_5fnum',['child_num',['../classcadabra_1_1ActionAddCell.html#a326fbbc6872c65ad5ae92778ddd6f3dd',1,'cadabra::ActionAddCell']]],
   ['chirality',['chirality',['../classcadabra_1_1Spinor.html#a27aa8f55ba0ce4ddd615678285ce2684',1,'cadabra::Spinor']]],

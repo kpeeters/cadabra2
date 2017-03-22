@@ -109,6 +109,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Every block is run on the same Python scope. They run sequentially, one at a time, on a thread separate from the websocket++ main loop. When the Python code finishes (or when it is interrupted), this thread locks the socket_mutex and calls <a class="el" href="classServer.html#a22fb31480cad49b1ad5d00cd24914494" title="Called by the run_block() thread upon completion of the task. ">on_block_finished()</a>. </p>
 </div>
 <p><code>#include &lt;<a class="el" href="Server_8hh_source.html">Server.hh</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Server:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classServer.png" usemap="#Server_map" alt=""/>
+  <map id="Server_map" name="Server_map">
+<area href="classProgressMonitor.html" alt="ProgressMonitor" shape="rect" coords="0,0,106,24"/>
+</map>
+ </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -133,6 +142,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:abb27d30b40a94326e3fd629d3b30b7d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#abb27d30b40a94326e3fd629d3b30b7d5">run</a> ()</td></tr>
 <tr class="memdesc:abb27d30b40a94326e3fd629d3b30b7d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The only user-visible part: just instantiate a server object and start it with <a class="el" href="classServer.html#abb27d30b40a94326e3fd629d3b30b7d5" title="The only user-visible part: just instantiate a server object and start it with run(). ">run()</a>.  <a href="#abb27d30b40a94326e3fd629d3b30b7d5">More...</a><br/></td></tr>
 <tr class="separator:abb27d30b40a94326e3fd629d3b30b7d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classProgressMonitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classProgressMonitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classProgressMonitor.html">ProgressMonitor</a></td></tr>
+<tr class="memitem:a881d500e617dd2fdfc135a9e7f907566 inherit pub_methods_classProgressMonitor"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgressMonitor.html#a881d500e617dd2fdfc135a9e7f907566">ProgressMonitor</a> ()</td></tr>
+<tr class="separator:a881d500e617dd2fdfc135a9e7f907566 inherit pub_methods_classProgressMonitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e60fc6fed0aa96e57e73d21c42609f3 inherit pub_methods_classProgressMonitor"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgressMonitor.html#a0e60fc6fed0aa96e57e73d21c42609f3">~ProgressMonitor</a> ()</td></tr>
+<tr class="separator:a0e60fc6fed0aa96e57e73d21c42609f3 inherit pub_methods_classProgressMonitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96806e181df756378eb6860a8230268c inherit pub_methods_classProgressMonitor"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgressMonitor.html#a96806e181df756378eb6860a8230268c">group</a> (std::string name=&quot;&quot;)</td></tr>
+<tr class="separator:a96806e181df756378eb6860a8230268c inherit pub_methods_classProgressMonitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a144c3509e5dd8a7fa6986edbc94afd1a inherit pub_methods_classProgressMonitor"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgressMonitor.html#a144c3509e5dd8a7fa6986edbc94afd1a">progress</a> (int n, int total)</td></tr>
+<tr class="separator:a144c3509e5dd8a7fa6986edbc94afd1a inherit pub_methods_classProgressMonitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a517c6618221b3705f5bc0395b5e5f831 inherit pub_methods_classProgressMonitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgressMonitor.html#a517c6618221b3705f5bc0395b5e5f831">print</a> () const </td></tr>
+<tr class="separator:a517c6618221b3705f5bc0395b5e5f831 inherit pub_methods_classProgressMonitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd0fcb8144fdb7ec01f802e18e6517f0 inherit pub_methods_classProgressMonitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classProgressMonitor_1_1Total.html">Total</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classProgressMonitor.html#acd0fcb8144fdb7ec01f802e18e6517f0">totals</a> () const </td></tr>
+<tr class="separator:acd0fcb8144fdb7ec01f802e18e6517f0 inherit pub_methods_classProgressMonitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -140,6 +162,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a6cd039ca30457f8fdcd52ba539afb96f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a195296c36ba24a8be42aa82526512234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classServer_1_1CatchOutput.html">CatchOutput</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a195296c36ba24a8be42aa82526512234">catchErr</a></td></tr>
 <tr class="separator:a195296c36ba24a8be42aa82526512234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af12a2b058a0b1a8938460433583123c8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStopwatch.html">Stopwatch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#af12a2b058a0b1a8938460433583123c8">server_stopwatch</a></td></tr>
+<tr class="separator:af12a2b058a0b1a8938460433583123c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57b4477641838a603a4148746172ee53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classStopwatch.html">Stopwatch</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a57b4477641838a603a4148746172ee53">sympy_stopwatch</a></td></tr>
+<tr class="separator:a57b4477641838a603a4148746172ee53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -219,6 +245,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a21cfe7e2da7f64454b3dac13e005ad3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a798de16f2c421b49e0dc0e28ee2d5071"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a798de16f2c421b49e0dc0e28ee2d5071">main_namespace</a></td></tr>
 <tr class="separator:a798de16f2c421b49e0dc0e28ee2d5071"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d035a5e8271a1b73595411d188ef8a7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classServer.html#a7d035a5e8271a1b73595411d188ef8a7">cells_ran</a></td></tr>
+<tr class="separator:a7d035a5e8271a1b73595411d188ef8a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Typedef Documentation</h2>
 <a class="anchor" id="aa7ce63c04a8267d75d22c31feb644d93"></a>
@@ -463,11 +491,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Called by the run_block() thread upon completion of the task. </p>
-<p>Handles communication of the result back to the client in JSON format. This is always of the form </p>
-<pre class="fragment"> { "header":   { "parent_id":     "...",
-                 "parent_origin": "client" | "server", 
-                 "cell_id":       "...", 
-                 "cell_origin":   "client" | "server"  </pre><p> }, "content": { "output": "..." }, "msg_type": "..." } msg_type can be "output", "latex", "image_png" and so on, corresponding to the possible values of DataCell::CellType. </p>
+<p>This will send any output generated by printing directly to stdout or stderr from Python (so, output not generated by using the 'display' function). Indicates to the client that this block has finished executing. Will send an empty string if there has been no output 'print'ed. </p>
 
 </div>
 </div>
@@ -696,6 +720,11 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Raw code to send a string (which must be JSON formatted) as a message to the client. </p>
+<p>Handles communication of the result back to the client in JSON format. This is always of the form </p>
+<pre class="fragment"> { "header":   { "parent_id":     "...",
+                 "parent_origin": "client" | "server", 
+                 "cell_id":       "...", 
+                 "cell_origin":   "client" | "server"  </pre><p> }, "content": { "output": "..." }, "msg_type": "..." } msg_type can be "output", "latex", "image_png" and so on, corresponding to the possible values of DataCell::CellType. </p>
 
 </div>
 </div>
@@ -856,6 +885,26 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7d035a5e8271a1b73595411d188ef8a7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Server::cells_ran</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a4206fbdc2622296afc6911cdee0b216e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -996,6 +1045,18 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af12a2b058a0b1a8938460433583123c8"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classStopwatch.html">Stopwatch</a> Server::server_stopwatch</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a49402c1ff1187e47114e064bcf49fc2d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1032,6 +1093,18 @@ Private Attributes</h2></td></tr>
 <span class="mlabels"><span class="mlabel">private</span></span>  </td>
   </tr>
 </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a57b4477641838a603a4148746172ee53"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classStopwatch.html">Stopwatch</a> Server::sympy_stopwatch</td>
+        </tr>
+      </table>
 </div><div class="memdoc">
 
 </div>
@@ -1083,7 +1156,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 9 2017 18:18:07 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 22 2017 18:26:53 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

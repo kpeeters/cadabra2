@@ -21,7 +21,7 @@ var searchData=
   ['report',['report',['../classcadabra_1_1Ex__comparator.html#a9f7ff4cdd58513c56ab710fb5bb11e09',1,'cadabra::Ex_comparator']]],
   ['report_5fprogress',['report_progress',['../classcadabra_1_1Algorithm.html#a314bc7bb881fbf49a6b2c567fd7e2b18',1,'cadabra::Algorithm']]],
   ['repr_5f',['repr_',['../classProperty.html#a5c6e192308ece5901f9871bc37fabd2d',1,'Property']]],
-  ['reset',['reset',['../classstopwatch.html#a68a314e2c797624fa84cfd44eac0310a',1,'stopwatch']]],
+  ['reset',['reset',['../classStopwatch.html#a42c7014e7fffcf4c56ca6fb07f8eb31c',1,'Stopwatch']]],
   ['reset_5fstate',['reset_state',['../classcadabra_1_1Ex.html#a24e30d7395d6320986746e1a72ae8ada',1,'cadabra::Ex']]],
   ['restart_5fkernel',['restart_kernel',['../classcadabra_1_1ComputeThread.html#a765f00b5776dcffff98443c28bfafb75',1,'cadabra::ComputeThread']]],
   ['restore_5fweights',['restore_weights',['../classcombin_1_1combinations__base.html#adc68a733c6e35c548777c0fe3f3ff2b0',1,'combin::combinations_base']]],

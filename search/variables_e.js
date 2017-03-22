@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['name',['name',['../structcadabra_1_1exchange_1_1tensor__type__t.html#a7451476ba67a2f4f2e8e9ed25ca6dd33',1,'cadabra::exchange::tensor_type_t::name()'],['../classcadabra_1_1str__node.html#acbaec362f349bf8be9463cd0efc25cd3',1,'cadabra::str_node::name()'],['../classcadabra_1_1NotebookWindow.html#ac56fe123186274a639fcbe3ebac1cfbf',1,'cadabra::NotebookWindow::name()']]],
+  ['name',['name',['../structcadabra_1_1exchange_1_1tensor__type__t.html#a7451476ba67a2f4f2e8e9ed25ca6dd33',1,'cadabra::exchange::tensor_type_t::name()'],['../classProgressMonitor_1_1Total.html#a493421262c61ef398aac57509209fbc5',1,'ProgressMonitor::Total::name()'],['../classProgressMonitor_1_1Block.html#a8c2b5f3e4b0d5ba2a23a12fd4274b682',1,'ProgressMonitor::Block::name()'],['../classcadabra_1_1str__node.html#acbaec362f349bf8be9463cd0efc25cd3',1,'cadabra::str_node::name()'],['../classcadabra_1_1NotebookWindow.html#ac56fe123186274a639fcbe3ebac1cfbf',1,'cadabra::NotebookWindow::name()']]],
   ['name_5fset',['name_set',['../namespacecadabra.html#aeea63c7cf5a3841b0bec4e87c0637580',1,'cadabra']]],
   ['nametab',['nametab',['../classcadabra_1_1young__project.html#a7e6b60f0d609c3bec544fcf2e91479fe',1,'cadabra::young_project']]],
   ['needed_5fnew_5fcell',['needed_new_cell',['../classcadabra_1_1ActionPositionCursor.html#ab5bccf0e57463fd7f731d6c33c136af3',1,'cadabra::ActionPositionCursor']]],

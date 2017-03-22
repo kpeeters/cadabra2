@@ -8,7 +8,7 @@ var searchData=
   ['gammamat',['gammamat',['../classcadabra_1_1sort__spinors.html#a06e1850352dcdedff6180bdfb8adbaf6',1,'cadabra::sort_spinors']]],
   ['gammatraceless',['gammatraceless',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a378e6b64d1133b03930996ac49361a65',1,'cadabra::exchange::identical_tensors_t']]],
   ['generating_5fset',['generating_set',['../classcadabra_1_1canonicalise.html#aa8dd5ecb14ec7d0408bd0a5d2cd1a356',1,'cadabra::canonicalise']]],
-  ['get_5fdummy_5fsw',['get_dummy_sw',['../classcadabra_1_1Algorithm.html#ad6833213bb01b47bac466cd8e1c59666',1,'cadabra::Algorithm']]],
+  ['get_5fdummy_5fsw',['get_dummy_sw',['../classcadabra_1_1Algorithm.html#ae010cb38cbbd94add5e9fc7cb5e307ac',1,'cadabra::Algorithm']]],
   ['gm1',['gm1',['../classcadabra_1_1join__gamma.html#a7a0d87062a4d01ff7bfa940a57cd80ae',1,'cadabra::join_gamma']]],
   ['gm2',['gm2',['../classcadabra_1_1join__gamma.html#ab0245f66dfc991477f3e0fe0453ed2cf',1,'cadabra::join_gamma']]],
   ['gmn',['gmn',['../classcadabra_1_1drop__keep__weight.html#add6da99f867f1e99639d4ab40250ae9f',1,'cadabra::drop_keep_weight']]],

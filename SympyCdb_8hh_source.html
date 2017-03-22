@@ -103,29 +103,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Props_8hh.html">Props.hh</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Storage_8hh.html">Storage.hh</a>&quot;</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Kernel_8hh.html">Kernel.hh</a>&quot;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="namespacesympy.html">    8</a></span>&#160;<span class="keyword">namespace </span>sympy {</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    cadabra::Ex::iterator <a class="code" href="group__scalar.html#ga3244ab109aec47e36f0829a6d1104055">apply</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a>&amp;, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp;, cadabra::Ex::iterator&amp;,</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                             <span class="keyword">const</span> std::string&amp; head, <span class="keyword">const</span> std::string&amp; args, <span class="keyword">const</span> std::string&amp; method);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">//    /// \ingroup scalar</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//    ///</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//    /// Low-level function to feed a string to Python and read the result back in </span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">//  /// as a Cadabra Ex. As compared to &#39;apply&#39; above, this starts from a string rather</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//  /// than an Ex, and hence gives more flexibility in constructing input.</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">// </span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">//  Ex python(Kernel&amp;, Ex&amp;, Ex::iterator&amp;, const std::string&amp; head, const std::string&amp; args);</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Stopwatch_8hh.html">Stopwatch.hh</a>&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;</div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="namespacesympy.html">    9</a></span>&#160;<span class="keyword">namespace </span>sympy {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    cadabra::Ex::iterator <a class="code" href="group__scalar.html#ga3244ab109aec47e36f0829a6d1104055">apply</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a>&amp;, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp;, cadabra::Ex::iterator&amp;,</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;                             <span class="keyword">const</span> std::string&amp; head, <span class="keyword">const</span> std::string&amp; args, <span class="keyword">const</span> std::string&amp; method);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">//    /// \ingroup scalar</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">//    ///</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">//    /// Low-level function to feed a string to Python and read the result back in </span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">//  /// as a Cadabra Ex. As compared to &#39;apply&#39; above, this starts from a string rather</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">//  /// than an Ex, and hence gives more flexibility in constructing input.</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// </span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">//  Ex python(Kernel&amp;, Ex&amp;, Ex::iterator&amp;, const std::string&amp; head, const std::string&amp; args);</span></div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a> <a class="code" href="group__scalar.html#gae6c200fc6d852a1db0d8bf6099691f43">invert_matrix</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a>&amp;, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp; ex, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp; rules);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;};</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a> <a class="code" href="group__scalar.html#gae6c200fc6d852a1db0d8bf6099691f43">invert_matrix</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a>&amp;, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp; ex, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp; rules);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">//  extern Stopwatch sympy_stopwatch;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;};</div>
 <div class="ttc" id="classcadabra_1_1Ex_html"><div class="ttname"><a href="classcadabra_1_1Ex.html">cadabra::Ex</a></div><div class="ttdoc">Basic storage class for symbolic mathemematical expressions. </div><div class="ttdef"><b>Definition:</b> Storage.hh:130</div></div>
+<div class="ttc" id="Stopwatch_8hh_html"><div class="ttname"><a href="Stopwatch_8hh.html">Stopwatch.hh</a></div></div>
 <div class="ttc" id="Props_8hh_html"><div class="ttname"><a href="Props_8hh.html">Props.hh</a></div></div>
-<div class="ttc" id="group__scalar_html_gae6c200fc6d852a1db0d8bf6099691f43"><div class="ttname"><a href="group__scalar.html#gae6c200fc6d852a1db0d8bf6099691f43">sympy::invert_matrix</a></div><div class="ttdeci">cadabra::Ex invert_matrix(const cadabra::Kernel &amp;, cadabra::Ex &amp;ex, cadabra::Ex &amp;rules)</div><div class="ttdoc">Use Sympy to invert a matrix, given a set of rules determining its sparse components. </div><div class="ttdef"><b>Definition:</b> SympyCdb.cc:75</div></div>
+<div class="ttc" id="group__scalar_html_gae6c200fc6d852a1db0d8bf6099691f43"><div class="ttname"><a href="group__scalar.html#gae6c200fc6d852a1db0d8bf6099691f43">sympy::invert_matrix</a></div><div class="ttdeci">cadabra::Ex invert_matrix(const cadabra::Kernel &amp;, cadabra::Ex &amp;ex, cadabra::Ex &amp;rules)</div><div class="ttdoc">Use Sympy to invert a matrix, given a set of rules determining its sparse components. </div><div class="ttdef"><b>Definition:</b> SympyCdb.cc:74</div></div>
 <div class="ttc" id="classcadabra_1_1Kernel_html"><div class="ttname"><a href="classcadabra_1_1Kernel.html">cadabra::Kernel</a></div><div class="ttdef"><b>Definition:</b> Kernel.hh:15</div></div>
 <div class="ttc" id="Storage_8hh_html"><div class="ttname"><a href="Storage_8hh.html">Storage.hh</a></div></div>
 <div class="ttc" id="Kernel_8hh_html"><div class="ttname"><a href="Kernel_8hh.html">Kernel.hh</a></div></div>
@@ -133,7 +137,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Mar 9 2017 18:18:03 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 22 2017 18:26:49 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

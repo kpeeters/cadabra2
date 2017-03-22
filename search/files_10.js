@@ -11,6 +11,8 @@ var searchData=
   ['selfnoncommuting_2ehh',['SelfNonCommuting.hh',['../SelfNonCommuting_8hh.html',1,'']]],
   ['server_2ecc',['Server.cc',['../Server_8cc.html',1,'']]],
   ['server_2ehh',['Server.hh',['../Server_8hh.html',1,'']]],
+  ['serverwrapper_2ecc',['ServerWrapper.cc',['../ServerWrapper_8cc.html',1,'']]],
+  ['serverwrapper_2ehh',['ServerWrapper.hh',['../ServerWrapper_8hh.html',1,'']]],
   ['snoop_2ecc',['Snoop.cc',['../Snoop_8cc.html',1,'']]],
   ['snoop_2ehh',['Snoop.hh',['../Snoop_8hh.html',1,'']]],
   ['snoopprivate_2ehh',['SnoopPrivate.hh',['../SnoopPrivate_8hh.html',1,'']]],

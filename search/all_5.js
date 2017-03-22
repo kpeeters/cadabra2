@@ -55,7 +55,7 @@ var searchData=
   ['error_5ft',['error_t',['../classexec__stream__t_1_1error__t.html',1,'exec_stream_t']]],
   ['error_5ft',['error_t',['../classexec__stream__t_1_1error__t.html#a2f277612d6b4d9c47789ec57c4908b46',1,'exec_stream_t::error_t::error_t(std::string const &amp;msg)'],['../classexec__stream__t_1_1error__t.html#ad55801354c3189f64a452164f2d62de5',1,'exec_stream_t::error_t::error_t(std::string const &amp;msg, error_code_t code)'],['../classexec__stream__t_1_1error__t.html#aec666938a71e734a050ee81960089108',1,'exec_stream_t::error_t::error_t()']]],
   ['escape_5fquotes',['escape_quotes',['../namespacecadabra.html#ac7856c841ee9ade4be36b1acb91672a4',1,'cadabra']]],
-  ['eta',['Eta',['../Symbols_8cc.html#ad52b4804814a7ba427094dd93a6f062e',1,'Eta():&#160;Symbols.cc'],['../Symbols_8cc.html#a86f17e01842c561ef2abe23cdd3ace88',1,'eta():&#160;Symbols.cc']]],
+  ['eta',['eta',['../Symbols_8cc.html#a86f17e01842c561ef2abe23cdd3ace88',1,'eta():&#160;Symbols.cc'],['../Symbols_8cc.html#ad52b4804814a7ba427094dd93a6f062e',1,'Eta():&#160;Symbols.cc']]],
   ['evaluate',['evaluate',['../classcadabra_1_1evaluate.html',1,'cadabra']]],
   ['evaluate',['evaluate',['../classcadabra_1_1evaluate.html#a34d6b9472af826b1bf17f007fc5d3d5b',1,'cadabra::evaluate']]],
   ['evaluate_2ecc',['evaluate.cc',['../evaluate_8cc.html',1,'']]],

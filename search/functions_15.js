@@ -12,5 +12,5 @@ var searchData=
   ['update_5fstate',['update_state',['../classcadabra_1_1Ex.html#af41a6f14e3e661cfc7b337745aa54f3b',1,'cadabra::Ex']]],
   ['update_5ftitle',['update_title',['../classcadabra_1_1NotebookWindow.html#a62613a40e82b552f57183c8e8f6fe266',1,'cadabra::NotebookWindow']]],
   ['update_5fweights',['update_weights',['../classcombin_1_1combinations__base.html#ab62eeb73ecf208b2bf3d52e9bcd7619c',1,'combin::combinations_base']]],
-  ['useconds',['useconds',['../classstopwatch.html#aa50af230c1bab94f32fac3b8f0ac20dd',1,'stopwatch']]]
+  ['useconds',['useconds',['../classStopwatch.html#a07014d82fca032a130b93e9f434030bf',1,'Stopwatch']]]
 ];

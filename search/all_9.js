@@ -47,7 +47,7 @@ var searchData=
   ['index_5fmap_5ft',['index_map_t',['../classcadabra_1_1Algorithm.html#aed358581de295af8b2e78ce46216f4cc',1,'cadabra::Algorithm']]],
   ['index_5fparity',['index_parity',['../classcadabra_1_1Algorithm.html#af5a05ff8c26583987336ed8bd2876e0a',1,'cadabra::Algorithm']]],
   ['index_5fposition_5fmap_5ft',['index_position_map_t',['../classcadabra_1_1Algorithm.html#adc57bc8d36059e9bd8dedb724cbf3737',1,'cadabra::Algorithm']]],
-  ['index_5fsw',['index_sw',['../classcadabra_1_1Algorithm.html#a59150e5da7d9de71feb37259f9655a76',1,'cadabra::Algorithm']]],
+  ['index_5fsw',['index_sw',['../classcadabra_1_1Algorithm.html#a9b14d6a1da902829164d249d1d3744e2',1,'cadabra::Algorithm']]],
   ['index_5fvalue_5fmap',['index_value_map',['../classcadabra_1_1Ex__comparator.html#a9e15897f5a3cb6fe203cd67513c66554',1,'cadabra::Ex_comparator']]],
   ['indexinherit',['IndexInherit',['../classcadabra_1_1IndexInherit.html',1,'cadabra']]],
   ['indexinherit_2ehh',['IndexInherit.hh',['../IndexInherit_8hh.html',1,'']]],

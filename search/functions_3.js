@@ -30,7 +30,7 @@ var searchData=
   ['checkin',['checkin',['../classcadabra_1_1TeXEngine.html#ac0da282550eb4dcb5eeb3559066fceed',1,'cadabra::TeXEngine']]],
   ['checkout',['checkout',['../classcadabra_1_1TeXEngine.html#a8ab25e7e8d79c3b328d6e97cc8b21473',1,'cadabra::TeXEngine']]],
   ['checkout_5fall',['checkout_all',['../classcadabra_1_1TeXEngine.html#a6a3a81114a06637f1e24dbafeee9bbe2',1,'cadabra::TeXEngine']]],
-  ['checkpoint_5f',['checkpoint_',['../classstopwatch.html#a1a5b9ba9fd1293be7298c4a5e7912ce0',1,'stopwatch']]],
+  ['checkpoint_5f',['checkpoint_',['../classStopwatch.html#a87701eb094651dbcf93fb88a5701a1a7',1,'Stopwatch']]],
   ['children_5fhave_5fbrackets',['children_have_brackets',['../classcadabra_1_1DisplaySympy.html#a6818f35031e81a0e3a10f3b5c2a733ca',1,'cadabra::DisplaySympy::children_have_brackets()'],['../classcadabra_1_1DisplayTerminal.html#a98a8f0e5aa223ab9cec2b04bbaeb3263',1,'cadabra::DisplayTerminal::children_have_brackets()'],['../classcadabra_1_1DisplayTeX.html#a23df574403a8810016b8d89ccf6a4a14',1,'cadabra::DisplayTeX::children_have_brackets()']]],
   ['children_5fwildcard',['children_wildcard',['../classcadabra_1_1pattern.html#ac803fe6337846ba7c35fc392aed8539b',1,'cadabra::pattern']]],
   ['classify_5fadd_5findex',['classify_add_index',['../classcadabra_1_1Algorithm.html#aafb632082d59e49982a1a2459fa711c4',1,'cadabra::Algorithm']]],

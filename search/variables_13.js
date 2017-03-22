@@ -24,17 +24,19 @@ var searchData=
   ['this_5flog_5f',['this_log_',['../classsnoop_1_1SnoopImpl.html#aaa42bb68a413e669ac3c25dda725ee79',1,'snoop::SnoopImpl']]],
   ['tight_5fplus',['tight_plus',['../classcadabra_1_1DisplayTeX.html#a80ff0337edc9ef5b8c85f8363d523e50',1,'cadabra::DisplayTeX']]],
   ['tight_5fstar',['tight_star',['../classcadabra_1_1DisplayTeX.html#aa44e5b6106d6f3b1e35ab645e926c022',1,'cadabra::DisplayTeX']]],
+  ['time_5fspent',['time_spent',['../classProgressMonitor_1_1Total.html#a59e7d85d6a092cb63e54526881c101a9',1,'ProgressMonitor::Total']]],
   ['title_5fprefix',['title_prefix',['../classcadabra_1_1NotebookWindow.html#afad2e23b8a151b0fd02d66ceeeaa1d20',1,'cadabra::NotebookWindow']]],
   ['to',['to',['../classcadabra_1_1Integer.html#af67235265e5364018ed22e77891e01b3',1,'cadabra::Integer']]],
   ['to_5ffactor_5fout',['to_factor_out',['../classcadabra_1_1factor__out.html#acbfad02ad824d00dbc0b7c4ff86f6b2c',1,'cadabra::factor_out']]],
   ['to_5fpos',['to_pos',['../classcadabra_1_1ActionEraseText.html#a0c97febe9d6a9d88f4d8a4cfe8acaa89',1,'cadabra::ActionEraseText']]],
   ['to_5fright',['to_right',['../classcadabra_1_1factor__out.html#ad0aecc5266446ef635b2da940b322ae3',1,'cadabra::factor_out']]],
   ['topbox',['topbox',['../classcadabra_1_1NotebookWindow.html#a0a744d50bd9f04b5a7600c4f7228d357',1,'cadabra::NotebookWindow']]],
+  ['total_5fsteps',['total_steps',['../classProgressMonitor_1_1Total.html#ac70a50023e9eef4ff0b03bc9d230dd3b',1,'ProgressMonitor::Total::total_steps()'],['../classProgressMonitor_1_1Block.html#ac7d13a7c4f90c991184f9d3355997133',1,'ProgressMonitor::Block::total_steps()']]],
   ['tr',['tr',['../classcadabra_1_1Algorithm.html#ac1aa7dcfba00beabe9a288621de9539d',1,'cadabra::Algorithm::tr()'],['../classcadabra_1_1indexsort_1_1less__indexed__treenode.html#a1939750cd09c7e19646cbd4d70a1c121',1,'cadabra::indexsort::less_indexed_treenode::tr()']]],
   ['traceless',['traceless',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a8420c1de3c9fcdd785663d31a3840ae0',1,'cadabra::exchange::identical_tensors_t']]],
   ['tree',['tree',['../classcadabra_1_1DisplayBase.html#a527706f63c79247bed1db8db2f4bc36e',1,'cadabra::DisplayBase::tree()'],['../classcadabra_1_1Parser.html#a30f41d6f8f77320e7a07d0b4d06fc9a0',1,'cadabra::Parser::tree()']]],
-  ['tv2',['tv2',['../classstopwatch.html#ab3bc20c6729466c85515df222e22d1ac',1,'stopwatch']]],
+  ['tv2',['tv2',['../classStopwatch.html#aed0fd2c3bd53157b99aeea63c5612ceb',1,'Stopwatch']]],
   ['two',['two',['../classcadabra_1_1sort__spinors.html#a4ee96c34d9030e19a1d3bdbc96cc69e6',1,'cadabra::sort_spinors']]],
   ['type',['type',['../classsnoop_1_1Snoop_1_1LogEntry.html#acc89c0c7d7f1acec646c400b857f8df0',1,'snoop::Snoop::LogEntry']]],
-  ['tz',['tz',['../classstopwatch.html#a89879a80cbfd00074b76e2226390a924',1,'stopwatch']]]
+  ['tz',['tz',['../classStopwatch.html#a6ffa117beee05d6b9023c162eb167134',1,'Stopwatch']]]
 ];
