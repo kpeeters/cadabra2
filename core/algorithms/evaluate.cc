@@ -217,6 +217,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	// If there are no free indices, add an empty first child anyway,
 	// otherwise we need special cases in various other places.
 	auto vl = repl.append_child(repl.begin(), str_node("\\comma"));
+	bool has_acted=false;
 	cadabra::do_list(components, components.begin(), [&](Ex::iterator c) {
 			Ex rule(c);
 			Ex obj(sib);
@@ -225,6 +226,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 			substitute subs(kernel, obj, rule);
 			iterator oit=obj.begin();
 			if(subs.can_apply(oit)) {
+				has_acted=true;
 				// std::cerr << "can apply" << std::endl;
 				auto el = repl.append_child(vl, str_node("\\equals"));
 				auto il = repl.append_child(el, str_node("\\comma"));
@@ -276,6 +278,10 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 				}
 			return true;
 			});
+	if(!has_acted) {
+		// There was not a single rule which matched for this tensor. That's means
+		// that the user wants to keep the entire tensor (all components).
+		}
 
 	merge_component_children(repl.begin());
 
