@@ -281,6 +281,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	if(!has_acted) {
 		// There was not a single rule which matched for this tensor. That's means
 		// that the user wants to keep the entire tensor (all components).
+		std::cerr << "No single rule matched " << Ex(sib) << std::endl;
 		}
 
 	merge_component_children(repl.begin());
