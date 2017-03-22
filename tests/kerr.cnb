@@ -20,6 +20,5 @@ complete(kerr, $g^{\mu\nu}$);
 import cdb.relativity as gr
 
 ch = gr.christoffel_from_metric()
-display(ch)
-
 evaluate(ch, kerr, rhsonly=True);
+

@@ -17,10 +17,22 @@
 #include "Snoop.hh"
 #include "CdbPython.hh"
 #include "Server.hh"
+#include "SympyCdb.hh"
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
+
+// Wrap the 'totals' member of ProgressMonitor to return a Python list.
+
+boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+	{
+	boost::python::list list;
+	auto totals = self.totals();
+	for(auto& total: totals)
+		list.append(total);
+	return list;
+	}
 
 Server::Server()
 	{
@@ -85,9 +97,33 @@ void Server::init()
 	   .def("clear", &Server::CatchOutput::clear)
     	;
 
-	boost::python::class_<Server, boost::noncopyable>("Server")
-		.def("send", &Server::send)
-		.def("architecture", &Server::architecture);
+	// FIXME: Why does 's=Stopwatch()' not work in a notebook cell?
+	boost::python::class_<Stopwatch>("Stopwatch")
+		.def("start", &Stopwatch::start)
+		.def("stop",  &Stopwatch::stop)
+		.def("reset", &Stopwatch::reset)
+		.def("seconds", &Stopwatch::seconds)
+		.def("useconds", &Stopwatch::useconds);
+	
+	try {
+		// Expose both the interface (abstract base class) ProgressMonitor and the Server class to Python.
+		// PythonCdb.cc gets a reference to the ProgressMonitor base, and can then call into the
+		// group/progress functions.
+		cells_ran=0;
+		// For some reason we need to re-export ProgressMonitor here, despite the fact that it has
+		// already been done in the cadabra2 module.
+		boost::python::class_<ProgressMonitor, boost::noncopyable>("ProgressMonitor")
+			.def("print", &ProgressMonitor::print)
+			.def("totals", &ProgressMonitor_totals_helper);
+
+		boost::python::class_<Server, boost::python::bases<ProgressMonitor>, boost::noncopyable>("Server")
+			.def("send", &Server::send)
+			.def("architecture", &Server::architecture);
+		}
+	catch(boost::python::error_already_set& ex) {
+		PyErr_Print();
+		}
+
 
 	std::string stdOutErr =
 		"import sys\n"
@@ -120,7 +156,6 @@ void Server::init()
 	std::string startup = "import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close()"; 
 	run_string(startup);
 	}
-
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
@@ -170,7 +205,9 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			}
 		throw std::runtime_error(err);
 		}
-   //	std::cerr << "------------" << std::endl;
+//   std::cerr << "------------" << std::endl;
+
+	server_stopwatch.stop();
 	return result;
 	}
 
@@ -225,16 +262,22 @@ void Server::wait_for_job()
 		Block block = block_queue.front();
 		block_queue.pop();
 		lock.unlock();
+
+		server_stopwatch.reset();
+		server_stopwatch.start();
+	
 		try {
 			// We are done with the block_queue; release the lock so that the
 			// master thread can push new blocks onto it.
 			// snoop::log(snoop::info) << "Block finished running" << snoop::flush;
+			server_stopwatch.stop();
 			current_hdl=block.hdl;
 			current_id =block.cell_id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
 			}
 		catch(std::runtime_error& ex) {
+			server_stopwatch.stop();
 			snoop::log(snoop::info) << "Python runtime exception" << snoop::flush;
 			// On error we remove all other blocks from the queue.
 			lock.lock();
@@ -245,6 +288,7 @@ void Server::wait_for_job()
 			on_block_error(block);
 			}
 		catch(std::exception& ex) {
+			server_stopwatch.stop();
 			snoop::log(snoop::info) << "System exception" << snoop::flush;
 			lock.lock();
 			std::queue<Block> empty;
@@ -338,7 +382,8 @@ void Server::on_block_finished(Block blk)
 
 void Server::send(const std::string& output, const std::string& msg_type)
 	{
-	// std::cerr << "sending json" << std::endl;
+//	if(msg_type=="output") 
+//		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
@@ -346,6 +391,8 @@ void Server::send(const std::string& output, const std::string& msg_type)
 	header["parent_origin"]="client";
 	header["cell_id"]=1; //FIXME
 	header["cell_origin"]="server";
+	header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
+	header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
 	content["output"]=output;
 
 	json["header"]=header;
@@ -441,3 +488,4 @@ void Server::run()
 		std::cerr << "cadabra-server: websocket exception " << ex.code() << " " << ex.what() << std::endl;
 		}
 	}
+

@@ -30,6 +30,8 @@ namespace boost {
 #include "Cleanup.hh"
 #include "PreClean.hh"
 #include "PythonException.hh"
+#include "ProgressMonitor.hh"
+//#include "ServerWrapper.hh"
 
 #include <boost/python/implicit.hpp>
 #include <boost/parameter/preprocessor.hpp>
@@ -163,6 +165,18 @@ std::vector<T> to_std_vector(const boost::python::list& iterable )
 	return std::vector<T>( boost::python::stl_input_iterator< T >( iterable ),
 								  boost::python::stl_input_iterator< T >( ) );
 	}
+
+// Wrap the 'totals' member of ProgressMonitor to return a Python list.
+
+boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+	{
+	boost::python::list list;
+	auto totals = self.totals();
+	for(auto& total: totals)
+		list.append(total);
+	return list;
+	}
+
 
 // Split a 'sum' expression into its individual terms. FIXME: now deprecated because we have operator[]?
 
@@ -751,7 +765,7 @@ Kernel *get_kernel_from_scope()
 
 	global_kernel = new Kernel();
 
-	// Store this as a Python object, making sure (using boost::ref) that the
+// Store this as a Python object, making sure (using boost::ref) that the
 	// kernel Python refers to by __cdbkernel__ is the same object as the one
 	// we will return to our caller.
 	globals["__cdbkernel__"]=boost::ref(global_kernel);
@@ -912,15 +926,25 @@ std::string Property<Prop>::repr_() const
 // declaration of 'join_gamma' below for an example of how to declare
 // those additional arguments).
 
+ProgressMonitor *pm=0;
+
 template<class F>
 Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 	{
 	Ex::iterator it=ex.begin();
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
-//		if(*it->name=="\\equals") {
-//			// std::cerr << "full expression:\n" << print_tree(&ex) << std::endl;
-//			it=ex.child(it,1);
-//			}
+		if(pm==0) {
+			try {
+				boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+				boost::python::object obj = globals["server"];
+				pm = boost::python::extract<ProgressMonitor *>(obj); 
+				}
+			catch(boost::python::error_already_set& err) {
+				std::cerr << "Cannot find ProgressMonitor derived 'server' object." << std::endl;
+				}
+			}
+
+		algo.set_progress_monitor(pm);
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
 		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
 		call_post_process(ex);
@@ -1140,6 +1164,18 @@ BOOST_PYTHON_MODULE(cadabra2)
 	inject_defaults(boost::python::extract<Kernel*>(kernel));
 	boost::python::scope().attr("__cdbkernel__")=kernel;
 
+	// Make our profiling class known to the Python world.
+	class_<ProgressMonitor>("ProgressMonitor")
+		.def("print", &ProgressMonitor::print)
+		.def("totals", &ProgressMonitor_totals_helper);
+	
+	class_<ProgressMonitor::Total>("Total")
+		.def_readonly("name", &ProgressMonitor::Total::name)
+		.def_readonly("call_count", &ProgressMonitor::Total::call_count)
+		.def_readonly("time_spent", &ProgressMonitor::Total::time_spent_as_long)
+		.def_readonly("total_steps", &ProgressMonitor::Total::total_steps)
+		.def("__str__", &ProgressMonitor::Total::str);
+
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	// We do not allow initialisation/construction except through the two 
 	// make_Ex_from_... functions, which take care of creating a '_' reference
@@ -1263,9 +1299,15 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
-	// Automatically convert Python sets and so on of integers to std::vector.
+	// Automatically convert from Python sets and so on of integers to std::vector.
 	iterable_converter().from_python<std::vector<int> >();
 
+	// Automatically convert from C++ vectors to Python lists.
+//	boost::python::class_<std::vector<ProgressMonitor::Total>>("TotalVector")
+	
+//	.def(boost::python::vector_indexing_suite<std::vector<ProgressMonitor::Total>>());
+
+	
 	def("einsteinify", &dispatch_ex<einsteinify, Ex&>,
 	    (arg("ex"), arg("metric")=new Ex(),
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),

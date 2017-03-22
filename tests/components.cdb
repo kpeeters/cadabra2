@@ -22,6 +22,7 @@ def test01():
 
 test01()
 
+server.print()
 
 def test02():
     __cdbkernel__=create_scope()
@@ -417,3 +418,13 @@ def test22():
     print("Test 22 passed")
 
 test22()
+
+
+
+{r,t}::Coordinate.    
+{a,b,c}::Indices(values={r,t});
+\partial{#}::PartialDerivative;
+A_{a}::Depends(r);
+ex:= \partial_{a}{ A_{b} };
+rl:= \partial_{r}{ A_{t} } = 1;
+evaluate(ex, rl);

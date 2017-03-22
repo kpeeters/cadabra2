@@ -85,7 +85,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	boost::regex dollarmatch(R"(\$([^\$]*)\$)");
 	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'''$1''', False\\)", boost::match_default | boost::format_all);
 	
-	// Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
+	// Replace 'converge(ex):' with 'server.progress('converge'); ex.reset(); while ex.changed(): server.progress(); server.end_progress();' properly indented.
 	boost::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
 	boost::smatch converge_res;
 	if(boost::regex_match(line_stripped, converge_res, converge_match)) {

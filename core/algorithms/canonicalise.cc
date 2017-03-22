@@ -135,7 +135,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// std::cerr << "canonicalise at " << Ex(it) << std::endl;
 	// std::cerr << is_single_term(it) << std::endl;
 
-	stopwatch totalsw;
+	Stopwatch totalsw;
 	totalsw.start();
 	prod_wrap_single_term(it);
 	
@@ -499,7 +499,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			std::cerr << std::endl;
 #endif
 
-		stopwatch sw;
+		Stopwatch sw;
 		sw.start();
 
 		// JMM now uses a different convention. 
