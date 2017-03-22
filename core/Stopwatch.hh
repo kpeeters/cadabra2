@@ -29,9 +29,9 @@ extern "C" {
 
 #include <iostream>
 
-class stopwatch {
+class Stopwatch {
 	public:
-		stopwatch();
+		Stopwatch();
 
 		void reset();
 		void start();
@@ -40,7 +40,8 @@ class stopwatch {
 		long useconds() const;
 		bool stopped() const;
 
-		friend std::ostream& operator<<(std::ostream&, const stopwatch&);
+		friend std::ostream& operator<<(std::ostream&, const Stopwatch&);
+
 	private:
 		void checkpoint_() const;
 		mutable struct timeval  tv1,tv2; 
@@ -49,6 +50,6 @@ class stopwatch {
 		bool stopped_;
 };
 
-std::ostream& operator<<(std::ostream&, const stopwatch&);
+std::ostream& operator<<(std::ostream&, const Stopwatch&);
 
 #endif

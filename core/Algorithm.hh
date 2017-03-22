@@ -27,6 +27,7 @@
 #include "Exceptions.hh"
 #include "Kernel.hh"
 #include "IndexIterator.hh"
+#include "ProgressMonitor.hh"
 
 #include <map>
 #include <fstream>
@@ -72,6 +73,11 @@ class Algorithm {
 
 		bool interrupted;
 
+		/// Provide the algorithm with a ProgressMonitor object on which to register
+		/// (nested) progress information, to be reported out-of-band to a client.
+
+		void set_progress_monitor(ProgressMonitor *);
+
 		// The main entry points for running algorithms. The 'deep' flag indicates
 		// whether sub-expressions should be acted on too. The 'repeat' flag indicates
 		// whether the algorithm should be applied until the expression no longer 
@@ -95,9 +101,9 @@ class Algorithm {
 
 		void report_progress(const std::string&, int todo, int done, int count=2);
 
-		mutable stopwatch index_sw;
-		mutable stopwatch get_dummy_sw;
-		mutable stopwatch report_progress_stopwatch;
+		mutable Stopwatch index_sw;
+		mutable Stopwatch get_dummy_sw;
+		mutable Stopwatch report_progress_stopwatch;
 
 		index_iterator begin_index(iterator it) const;
 		index_iterator end_index(iterator it) const;
@@ -129,6 +135,7 @@ class Algorithm {
 	protected:
 		const Kernel&  kernel;
 		Ex& tr;
+		ProgressMonitor *pm;
 
 		// The main entry point which is used by the public entry points listed
 		// above. Override these in any subclass.

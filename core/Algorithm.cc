@@ -24,6 +24,7 @@
 #include "Props.hh"
 #include "Cleanup.hh"
 #include <typeinfo>
+#include <cxxabi.h>
 
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
@@ -31,7 +32,6 @@
 #include "properties/Symbol.hh"
 #include "properties/DependsBase.hh"
 
-#include <typeinfo>
 #include <sstream>
 
 //#define DEBUG
@@ -44,12 +44,18 @@ Algorithm::Algorithm(const Kernel& k, Ex& tr_)
 	  suppress_normal_output(false),
 	  discard_command_node(false),
 	  kernel(k),
-	  tr(tr_)
+	  tr(tr_),
+	  pm(0)
 	{
 	}
 
 Algorithm::~Algorithm()
 	{
+	}
+
+void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
+	{
+	pm=pm_;
 	}
 
 Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned int depth)
@@ -60,6 +66,15 @@ Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned in
 
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
+	if(pm) {
+		char *realname;
+		int status;
+		realname = abi::__cxa_demangle(typeid(*this).name(), 0, 0, &status);
+		pm->group(realname);
+		free(realname);
+		}
+	
+
 	result_t ret=result_t::l_no_action;
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
@@ -116,6 +131,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 //		std::cerr << "exit apply_generic\n" << Ex(it) << std::endl;
 //		}
 
+	if(pm) pm->group();
 	return ret;
 	}
 
@@ -437,7 +453,7 @@ bool Algorithm::check_degree_consistency(iterator it) const
 
 bool Algorithm::check_consistency(iterator it) const
 	{
-	stopwatch w1;
+	Stopwatch w1;
 	w1.start();
 //	debugout << "checking consistency ... " << std::flush;
 	assert(tr.is_valid(tr.parent(it))==false);
