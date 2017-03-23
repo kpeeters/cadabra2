@@ -22,8 +22,6 @@ def test01():
 
 test01()
 
-server.print()
-
 def test02():
     __cdbkernel__=create_scope()
     {r,t}::Coordinate.
@@ -419,16 +417,37 @@ def test22():
 
 test22()
 
+def test23():
+    {r,t}::Coordinate;        
+    {a,b,c}::Indices(values={r,t}, position=fixed);
+    \partial{#}::PartialDerivative;
+    ex:= \partial^{a}{ A_{a} };
+    rl:= A_{r} = r;
+    try:
+        evaluate(ex, rl);
+        assert(1==0)
+    except:
+        print("Test 23a passed")
+    ex:= \partial_{a}{ A^{a} };
+    rl:= A^{r} = r;
+    evaluate(ex, rl)
+    tst:= 1 - @(ex);
+    assert(tst==0)
+    print("Test 23b passed")
+        
+test23()
+        
+        
 {a,b,c}::Indices(values={0,1,2,3});
 ex:= X^{\mu} X_{\mu};
 evaluate(_, $$);
         
 
-
-{r,t}::Coordinate.    
-{a,b,c}::Indices(values={r,t});
-\partial{#}::PartialDerivative;
-A_{a}::Depends(r);
-ex:= \partial_{a}{ A_{b} };
-rl:= \partial_{r}{ A_{t} } = 1;
-evaluate(ex, rl);
+# 
+# {r,t}::Coordinate.    
+# {a,b,c}::Indices(values={r,t});
+# \partial{#}::PartialDerivative;
+# A_{a}::Depends(r);
+# ex:= \partial_{a}{ A_{b} };
+# rl:= \partial_{r}{ A_{t} } = 1;
+# evaluate(ex, rl);

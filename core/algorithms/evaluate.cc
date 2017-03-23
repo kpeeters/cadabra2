@@ -301,6 +301,13 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 	if(ind_dummy.size()!=0)
 		throw RuntimeException("Cannot yet evaluate this expression.");
 
+	// For each index we need to iterate over all possible values, and generate a
+	// components node for it. This should be done 'on the fly' eventually, the way
+	// python treats 'map', but that will require wrapping all access to
+	// '\components' in a separate class.
+
+	
+	
 	return it;
 	}
 
@@ -464,7 +471,22 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	index_map_t ind_free, ind_dummy;
 	classify_indices(it, ind_free, ind_dummy);
 	
-	// Figure out the positions of the index values in the components
+	// Flag an error if a partial derivative has an upper index which
+	// is not position=free: this would require converting the index
+	// with a metric, and that should be done by the user using
+	// rewrite_indices.
+
+	auto fu = tr.begin(it);
+	while(fu!=tr.end(it)) {
+		if(fu->is_index() && fu->fl.parent_rel==str_node::p_super) {
+			const Indices *ind = kernel.properties.get<Indices>(fu);
+			if(ind && ind->position_type!=Indices::free)
+				throw RuntimeException("All indices on derivatives need to be lowered first.");
+			}
+		++fu;
+		}
+
+   // Figure out the positions of the index values in the components
 	// node inside the derivative which correspond to values of dummy
 	// indices (these necessarily have the other dummy on the
 	// derivative itself).
@@ -560,11 +582,6 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				}
 			if(cb.sublengths.size()>0) // only if not all indices are fixed
 				cb.permute();
-
-			// FIXME: we should flag an error if a partial derivative has
-			// an upper index which is not position=free, and require
-			// that the user first converts the index. Otherwise we have
-			// to do raising/lowering in evaluate.
 			
 			// Note: indices on partial may be dummies, in which case the
 			// values cannot be arbitrary. This is a self-contraction,
