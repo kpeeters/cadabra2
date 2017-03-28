@@ -8,7 +8,8 @@
 #include "properties/Derivative.hh"
 #include "properties/AntiCommuting.hh"
 
-// #define XPERM_DEBUG 1
+#define DEBUG 1
+#define XPERM_DEBUG 1
 
 using namespace cadabra;
 
@@ -132,7 +133,9 @@ bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const
 
 Algorithm::result_t canonicalise::apply(iterator& it)
 	{
-	// std::cerr << "canonicalise at " << Ex(it) << std::endl;
+#ifdef DEBUG
+	std::cerr << "canonicalise at " << Ex(it) << std::endl;
+#endif	
 	// std::cerr << is_single_term(it) << std::endl;
 
 	Stopwatch totalsw;
@@ -157,9 +160,18 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	fill_index_position_map(it, ind_free, ind_pos_free);
 	fill_index_position_map(it, ind_dummy, ind_pos_dummy);
 	const unsigned int total_number_of_indices=ind_free.size()+ind_dummy.size();
+
+#ifdef DEBUG
+	std::cerr << "free index position map:\n";
+	for(auto& ip: ind_pos_free)
+		std::cerr << Ex(ip.first) << " @ " << ip.second << std::endl;;
+#endif	
 	
 	// If there are no indices, there is nothing to do here...
 	if(total_number_of_indices==0) {
+#ifdef DEBUG
+		std::cerr << "no indices on " << Ex(it) << std::endl;
+#endif
 		prod_unwrap_single_term(it);
 		return result_t::l_no_action;
 		}
@@ -173,13 +185,25 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// will bail out here, but the user can always distribute and then
 	// canonicalise.
 
+#ifdef DEBUG
+	std::cerr << "dummies:\n";
+	for(auto& dummy: ind_dummy)
+		std::cerr << dummy.first;
+	std::cerr << "free:\n";
+	for(auto& fr: ind_free)
+		std::cerr << fr.first;
+#endif	
+	
 	for(auto& dummy: ind_dummy)
 		if(ind_dummy.count(dummy.first)>2)
 			return result_t::l_no_action;
 
-	for(auto& free: ind_free)
-		if(ind_free.count(free.first)>1)
-			return result_t::l_no_action;
+	// PROGRESS
+//	for(auto& free: ind_free)
+//		if(ind_free.count(free.first)>1) {
+//			std::cerr << "bailing out" << std::endl;
+//			return result_t::l_no_action;
+//			}
 
 	result_t res=result_t::l_no_action;
 
@@ -202,10 +226,16 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	
 	index_map_t::iterator sorted_it=ind_free.begin();
 	int curr_index=0;
+#ifdef DEBUG	
+	std::cerr << "create free indices array" << std::endl;
+#endif
 	while(sorted_it!=ind_free.end()) {
 		index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
 		num_to_it_map[ii->second]=ii->first;
 		num_to_tree_map.push_back(Ex(ii->first));
+#ifdef DEBUG
+		std::cerr << Ex(sorted_it->second) << " at pos " << ii->second+1 << std::endl;
+#endif
 		free_indices[curr_index++]=ii->second+1;
 		vec_perm.push_back(ii->second+1);
 		
@@ -413,7 +443,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// End of construction of generating set.
 
 #ifdef XPERM_DEBUG
-	std::cerr << generating_set.size() << " " << *it->multiplier << std::endl;
+	std::cerr << "generating set size = " << generating_set.size() << " multiplier " << *it->multiplier << std::endl;
 #endif
 	if(*it->multiplier!=0) {
 		// Fill data for the xperm routines.
@@ -470,8 +500,47 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			++dsi;
 			}
 
-		int  *lengths_of_repeated_sets=new int[1];
-		int          *repeated_indices=new int[1];
+		// Setup repeated sets. These are free indices which appear more
+		// than once (so these are coordinates or integers). Take them out
+		// of the free set and store them in the repeated sets.
+
+		std::cerr << "creating repeated sets" << std::endl;
+		std::vector<int>          ind_repeated_lengths;
+		std::vector<Ex::iterator> ind_repeated;
+		auto fi = ind_free.begin();
+		Ex::iterator prev=fi->second;
+		++fi;
+		while(fi!=ind_free.end()) {
+			int len=1;
+			while(fi->first==*prev) {
+				if(len==1)
+					ind_repeated.push_back(prev);
+				ind_repeated.push_back(fi->second);
+				++len;
+				prev=fi->second;
+				++fi;
+				}
+			if(len!=1)
+				ind_repeated_lengths.push_back(len);
+			if(fi!=ind_free.end()) {
+				prev=fi->second;
+				++fi;
+				}
+			}
+//		std::cerr << "repeated sets:\n";
+//		for(auto& f: ind_repeated)
+//			std::cerr << *(f->multiplier) << " ";
+//		std::cerr << "\nrepeated lengths:\n";
+//		for(auto& i: ind_repeated_lengths)
+//			std::cerr << i << " ";
+//		std::cerr << std::endl;
+
+		int *repeated_indices         = new int[ind_repeated.size()];
+		int *lengths_of_repeated_sets = new int[ind_repeated_lengths.size()];
+		for(int i=0; i<ind_repeated.size(); ++i)
+			repeated_indices[i]=ind_repeated[i];
+		for(int i=0; i<ind_repeated_lengths.size(); ++i)
+			lengths_of_repeated_sets[i]=ind_repeated_lengths[i];
 
 		lengths_of_repeated_sets[0]=0;
 		
@@ -507,6 +576,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		int *perm2 = new int[total_number_of_indices+2];
 		int *free_indices_new_order = new int[ind_free.size()];
 		int *dummies_new_order      = new int[ind_dummy.size()];
+//		int *repeated_new_order     = new int[ind_repeated.size()];
 
 		inverse(perm, perm1, total_number_of_indices+2);
 		for(size_t i=0; i<ind_free.size(); i++) {
@@ -524,7 +594,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 #endif
 		// Brief reminder of the meaning of the various arrays, using the example in
 		// Jose's xPerm paper (not yet updated to reflect the _ext version which allows
-		// for multiple dummy sets and repeated (numerical) indices):
+		// for multiple dummy sets; see below for repeated (numerical) indices):
 		//
       // expression        = R_{b}^{1d1} R_{c}^{bac}
 		//
@@ -559,6 +629,15 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		//    1st slot gets sorted_index_set[1] ( = a )
       //    2nd slot gets sorted_index_set[3] ( = b )
 		//    ...
+		//
+		// for the repeated set logic:
+		//
+		// e.g. R_{3 3 m 3} R_{4 4 m 4}
+		//
+		// vrsl  = 2     (two repeated sets)
+		// vrs   = [3,3] (first set: 3 indices, 2nd set: 3 indices)
+		// repes = [1,2,4,5,6,8]
+		// rl    = 6
 
 		canonical_perm_ext(perm1,                       // permutation to be canonicalised
 								 total_number_of_indices+2,  // degree (+2 for the overall sign)

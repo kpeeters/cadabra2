@@ -49,7 +49,7 @@ def test09():
 test09()
 
 def test10():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {a,b,c,d}::Indices.
     { \theta_a, \chi_a }::Commuting.
     {\theta_{a}, \theta_{b}}::SelfAntiCommuting.
@@ -64,7 +64,7 @@ def test10():
 test10()
 
 def test12():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     \bar{#}::Accent.
     {D,K,B,A}::SortOrder.
     obj12:= A \bar{B} \bar{K} D;
@@ -77,7 +77,7 @@ def test12():
 test12()
 
 def test16():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {A_\mu, B_\mu}::AntiCommuting.
     \diff{#}::Derivative.
     obj16:= \diff{B_\mu}_{\nu} * \diff{A_\rho}_{\sigma};
@@ -113,7 +113,7 @@ def test17():
 test17()
 
 def test18():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {\psi, \chi}::Spinor.
     {\psi, \chi, \Gamma_{#}}::NonCommuting.
     \Gamma_{#}::GammaMatrix.
@@ -129,7 +129,7 @@ def test18():
 test18()
 
 def test22():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     {\chi, \psi}::Weight(label=grassmann, value=1).
     tst22a:= \chi \psi \chi;
     #drop_weight(_, grassmann=3)
@@ -156,7 +156,7 @@ def test24():
     sort_product(_)
     tst:= \Gamma_{l r} \Gamma_{k s} \Gamma_{r s} q + \Gamma_{l r} \Gamma_{k s} \Gamma_{r s} d - @(obj);
     assert(tst==0)
-    print('Test24 passed')
+    print('Test 24 passed')
 
 test24()
 
@@ -166,15 +166,18 @@ def test25():
     distribute(_)
     tst:= a d c + b c - @(ex);
     assert(tst==0)
-    print('Test25 passed')
+    print('Test 25 passed')
 
 test25()
 
 def test26():
     __cdbkernel__=create_scope()
     # This example shows that indices can match to integers
-    # provided you declare them a such.
+    # provided you declare them a such. You need to declare
+    # m,n as Symbol otherwise you cannot write one term with
+    # an 'n' index and another one with a '-n' index.
     {m,n}::Integer.
+    {m,n}::Symbol.
     ex:= a_{1} a_{0} a_{-1};
     rl:= a_{n} a_{m} = a_{m} a_{n} + m \delta_{m}_{-n};
     substitute(ex, rl)
@@ -189,7 +192,7 @@ def test27():
     ex:=A;
     ex2:= @(ex)^{\mu\nu};
     tst:=A^{\mu\nu} - @(ex2);
-    assert(tst==0);
+    assert(tst==0)
     print("Test 27 passed")
 
 test27()
@@ -213,10 +216,10 @@ test28()
 x::Coordinate.
 \partial{#}::Derivative.
 
-F_{\mu\nu}::AntiSymmetric;
+F_{\mu\nu}::AntiSymmetric.
 F_{\mu\nu}::Depends(x).
 A_{\mu}::Depends(x,\partial{#}).
-\delta{#}::Accent;
+\delta{#}::Accent.
 
 S:= -1/4 \int{ F_{\mu\nu} F^{\mu\nu} }{x};
 rl:= F_{\mu\nu} = \partial_{\mu}{A_{\nu}} - \partial_{\nu}{A_{\mu}};
@@ -235,7 +238,7 @@ def test30():
     ex:= g^{0 0};
     ex:= 1 + g_{0}^{0};
     ex:= g^{0 0} + g_{0}^{0};
-    substitute(_, $g^{a? b?} -> h^{a? b?}$);
+    substitute(_, $g^{a? b?} -> h^{a? b?}$)
     tst:= h^{0 0} + 1 - @(ex);
     assert(tst==0)
 

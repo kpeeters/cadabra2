@@ -1116,7 +1116,7 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 					index_map_t::iterator fri=first_free.begin();
 					while(fri!=first_free.end()) {
 						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
-						const Symbol     *smb=kernel.properties.get_composite<Symbol>(fri->second, true); //Symbol::get(kernel.properties, fri->second, true);
+						const Symbol     *smb=kernel.properties.get_composite<Symbol>(fri->second, true);
                   // integer, coordinate or symbol indices always ok
 						if(fri->second->is_integer()==false && !cdn && !smb) { 
 							if(term_free.count((*fri).first)==0) {

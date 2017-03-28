@@ -782,3 +782,25 @@ test52()
 # ex:= D^{a}{A_{b}} D_{a}{B} + D^{a}{B} D_{a}{A};
 # sort_product(_);
 # canonicalise(_);
+
+def test53():
+   __cdbkernel__=create_scope()
+   {m,n}::Integer;       
+   {m,n}::Indices(values={1,2,3});       
+   A_{m n}::Symmetric;
+   ex:= A_{1 2} - A_{2 1};
+   canonicalise(_);
+   #ex:= A_{m n} - A_{n m};
+   #canonicalise(_);
+   assert(ex==0)
+   print("Test 53 passed")
+
+test53()   
+
+{m,n,p,q}::Integer;       
+{m,n,p,q}::Indices(values={0,1,2,3});       
+R_{m n p q}::RiemannTensor;
+ex:=R_{3 m 3 3} + R_{3 3 m 3};
+canonicalise(_);
+assert(ex==0)
+
