@@ -8,8 +8,8 @@
 #include "properties/Derivative.hh"
 #include "properties/AntiCommuting.hh"
 
-#define DEBUG 1
-#define XPERM_DEBUG 1
+// #define DEBUG 1
+// #define XPERM_DEBUG 1
 
 using namespace cadabra;
 
@@ -566,7 +566,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			for(unsigned int i=0; i<base_here.size(); ++i)
 			std::cerr << base[i] << " "; 
 			std::cerr << std::endl;
-			std::cerr << "free indices:" << std::endl;
+			std::cerr << "free indices in slots:" << std::endl;
 			for(unsigned int i=0; i<ind_free.size(); ++i)
 				std::cerr << free_indices[i] << " "; 
 			std::cerr << std::endl;
@@ -575,7 +575,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 				std::cerr << lengths_of_dummy_sets[i] 
 						 << " (metric=" << metric_signatures[i] << ") "; 
 			std::cerr << std::endl;
-			std::cerr << "dummies:" << std::endl;
+			std::cerr << "dummies in slots:" << std::endl;
 			for(unsigned int i=0; i<ind_dummy.size(); ++i)
 				std::cerr << dummies[i] << " "; 
 			std::cerr << std::endl;
@@ -583,7 +583,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			for(unsigned int i=0; i<ind_repeated_lengths.size(); ++i)
 				std::cerr << lengths_of_repeated_sets[i];
 			std::cerr << std::endl;
-			std::cerr << "repeated indices:" << std::endl;
+			std::cerr << "repeated indices in slots:" << std::endl;
 			for(unsigned int i=0; i<ind_repeated.size(); ++i)
 				std::cerr << repeated_indices[i];
 			std::cerr << std::endl;
