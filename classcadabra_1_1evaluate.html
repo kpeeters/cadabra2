@@ -176,8 +176,11 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:af90e8e16af9cbde4f874594bc9f926e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#af90e8e16af9cbde4f874594bc9f926e9">handle_factor</a> (<a class="el" href="classcadabra_1_1Algorithm.html#a6629aef75b26ad48128b6806cd0ebad2">sibling_iterator</a> sib, const <a class="el" href="classcadabra_1_1Algorithm.html#aed358581de295af8b2e78ce46216f4cc">index_map_t</a> &amp;full_ind_free)</td></tr>
 <tr class="memdesc:af90e8e16af9cbde4f874594bc9f926e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replace a single factor with a 'components' ...  <a href="#af90e8e16af9cbde4f874594bc9f926e9">More...</a><br/></td></tr>
 <tr class="separator:af90e8e16af9cbde4f874594bc9f926e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88889c0888d5deb89391432087b5c200"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a88889c0888d5deb89391432087b5c200">dense_factor</a> (<a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a> sib, const <a class="el" href="classcadabra_1_1Algorithm.html#aed358581de295af8b2e78ce46216f4cc">index_map_t</a> &amp;ind_free, const <a class="el" href="classcadabra_1_1Algorithm.html#aed358581de295af8b2e78ce46216f4cc">index_map_t</a> &amp;ind_dummy)</td></tr>
+<tr class="memdesc:a88889c0888d5deb89391432087b5c200"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expand a tensor factor into a components node with all components written out explicitly.  <a href="#a88889c0888d5deb89391432087b5c200">More...</a><br/></td></tr>
+<tr class="separator:a88889c0888d5deb89391432087b5c200"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a261171e3a5dada80c18fc64c52b97930"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a261171e3a5dada80c18fc64c52b97930">merge_component_children</a> (<a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a> it)</td></tr>
-<tr class="memdesc:a261171e3a5dada80c18fc64c52b97930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge entries in a single 'components' node when they are for the same index value(s).  <a href="#a261171e3a5dada80c18fc64c52b97930">More...</a><br/></td></tr>
+<tr class="memdesc:a261171e3a5dada80c18fc64c52b97930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Merge entries in a single 'components' node when they are for the.  <a href="#a261171e3a5dada80c18fc64c52b97930">More...</a><br/></td></tr>
 <tr class="separator:a261171e3a5dada80c18fc64c52b97930"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28065c81dff020efa0cc25f9690cc909"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a28065c81dff020efa0cc25f9690cc909">cleanup_components</a> (<a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a> it1)</td></tr>
 <tr class="memdesc:a28065c81dff020efa0cc25f9690cc909"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup all components in a 'components' node; that is, call the cleanup_dispatch function on them.  <a href="#a28065c81dff020efa0cc25f9690cc909">More...</a><br/></td></tr>
@@ -464,6 +467,49 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 
 </div>
 </div>
+<a class="anchor" id="a88889c0888d5deb89391432087b5c200"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ex::iterator evaluate::dense_factor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a>&#160;</td>
+          <td class="paramname"><em>sib</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Algorithm.html#aed358581de295af8b2e78ce46216f4cc">index_map_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>ind_free</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Algorithm.html#aed358581de295af8b2e78ce46216f4cc">index_map_t</a> &amp;&#160;</td>
+          <td class="paramname"><em>ind_dummy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Expand a tensor factor into a components node with all components written out explicitly. </p>
+<p>Used when there is no sparse rule matching this factor. </p>
+
+</div>
+</div>
 <a class="anchor" id="a456195867eb2108861791aee40fb1067"></a>
 <div class="memitem">
 <div class="memproto">
@@ -694,7 +740,8 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 </table>
 </div><div class="memdoc">
 
-<p>Merge entries in a single 'components' node when they are for the same index value(s). </p>
+<p>Merge entries in a single 'components' node when they are for the. </p>
+<p>same index value(s). </p>
 
 </div>
 </div>
@@ -827,7 +874,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 22 2017 21:37:31 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 4 2017 13:18:16 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
