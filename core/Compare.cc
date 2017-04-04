@@ -261,7 +261,7 @@ bool tree_exact_equal_mod_prel_obj::operator()(const Ex& one, const Ex& two) con
 
 bool tree_exact_less_for_indexmap_obj::operator()(const Ex& one, const Ex& two) const
 	{
-	return tree_exact_less(0, one, two, -2 /* mod_prel, was 0 */, true, 0 /* compare_multiplier, was -2 */, true); 
+	return tree_exact_less(0, one, two, -2 /* mod_prel, was 0 */, true, -2 /* compare_multiplier, was 0 */, true); 
 	}
 
 //bool operator==(const Ex& first, const Ex& second)

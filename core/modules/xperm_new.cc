@@ -23,6 +23,7 @@
  *     Thanks to Kasper Peeters for spotting and correcting this.
  *  25-28 June 2007. Large extension to included multiple dummysets and
  *     repeatedsets.
+ *   2015. Eliminate nested functions. Kasper Peeters.
  *
  *  Main ideas:
  *      - Permutations are represented using Images notation.

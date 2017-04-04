@@ -63,7 +63,7 @@
 					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left[\\alpha_{n}\\,^{\\mu},~\\discretionary{}{}{} |k\\rangle\\right].\\end{dmath*}"
 				}
 			],
-			"source" : "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n{m,n}::Integer.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal."
+			"source" : "{\\alpha_{n}^{\\mu}, \\vac}::NonCommuting;\n{\\mu,\\nu,\\rho}::Integer(0..d-1).\n{\\mu,\\nu,\\rho}::Indices.\n{m,n}::Integer.\n{m,n}::Symbol.\n\\delta{#}::KroneckerDelta.\n\\delta{#}::Diagonal."
 		},
 		{
 			"cell_origin" : "client",

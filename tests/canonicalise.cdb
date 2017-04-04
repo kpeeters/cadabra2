@@ -782,3 +782,52 @@ test52()
 # ex:= D^{a}{A_{b}} D_{a}{B} + D^{a}{B} D_{a}{A};
 # sort_product(_);
 # canonicalise(_);
+
+def test53():
+   __cdbkernel__=create_scope()
+   {m,n}::Integer;       
+   {m,n}::Indices(values={1,2,3});       
+   A_{m n}::Symmetric;
+   ex:= A_{1 2} - A_{2 1};
+   canonicalise(_)
+   assert(ex==0)
+   print("Test 53a passed")
+   ex:= A_{m n} - A_{n m};
+   canonicalise(_)
+   assert(ex==0)
+   print("Test 53b passed")
+
+test53()   
+
+def test54():
+   __cdbkernel__=create_scope()
+   {m,n,p,q}::Integer;       
+   {m,n,p,q}::Indices(values={0,1,2,3});       
+   R_{m n p q}::RiemannTensor;
+   ex:=R_{3 m 3 3};
+   canonicalise(_)
+   assert(ex==0)
+   print("Test 54a passed")
+   ex:=R_{3 3 m 3};
+   canonicalise(_)
+   assert(ex==0)
+   print("Test 54b passed")
+
+test54()
+       
+def test55():
+   __cdbkernel__=create_scope()
+   {m,n,p,q}::Integer;       
+   {m,n,p,q}::Indices(values={0,1,2,3});       
+   R_{m n p q}::RiemannTensor;
+   ex:=R_{3 m 4 3};
+   canonicalise(_)
+   tst:= - R_{4 3 m 3} - @(ex);
+   assert(tst==0)
+   ex:= R_{3 4 3 m};       
+   canonicalise(_)
+   tst:= R_{4 3 m 3} - @(ex);
+   assert(tst==0)
+   print("Test 55 passed")
+
+test55()
