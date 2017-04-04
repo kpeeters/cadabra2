@@ -772,7 +772,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		delete [] perm;
 		delete [] free_indices;
 		}
+#ifdef DEBUG
    std::cerr << "=====\n";
+#endif
 	
 	cleanup_dispatch(kernel, tr, it);
 
