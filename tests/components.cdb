@@ -437,10 +437,11 @@ def test23():
         
 test23()
         
-        
-{a,b,c}::Indices(values={0,1,2,3});
-ex:= X^{\mu} X_{\mu};
-evaluate(_, $$);
+# This is where we go next.
+#
+# {a,b,c}::Indices(values={0,1,2,3});
+# ex:= X^{\mu} X_{\mu};
+# evaluate(_, $$);
         
 
 # 

@@ -211,7 +211,6 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// Also construct the free and dummy lists.
 	// And a map from index number to iterator (for later).
 	std::vector<int> vec_perm;
-	int              *free_indices=new int[ind_free.size()];
 	
 
 	// We need two arrays: one which maps from the order in which slots appear in 
@@ -233,7 +232,6 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 #ifdef DEBUG
 		std::cerr << Ex(sorted_it->second) << " at pos " << ii->second+1 << std::endl;
 #endif
-		free_indices[curr_index++]=ii->second+1;
 		vec_perm.push_back(ii->second+1);
 		
 		++sorted_it;
@@ -528,6 +526,18 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 					}
 				}
 			}
+
+      // free_indices stores a list of index slots which contain a free
+      // index.
+		int              *free_indices=new int[ind_free.size()];
+		sorted_it=ind_free.begin();
+		curr_index=0;
+		while(sorted_it!=ind_free.end()) {
+			index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
+			free_indices[curr_index++]=ii->second+1;
+			++sorted_it;
+			}
+
 //		std::cerr << "repeated sets:\n";
 //		for(auto& f: ind_repeated)
 //			std::cerr << *(f->multiplier) << " ";
@@ -538,6 +548,8 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 		int *repeated_indices         = new int[ind_repeated.size()];
 		int *lengths_of_repeated_sets = new int[ind_repeated_lengths.size()];
+
+      // repeated_indices contains a list of slots which contain repeated indices.
 		for(size_t i=0; i<ind_repeated.size(); ++i) {
 			auto pos=ind_pos_free.find(ind_repeated[i]);
 			repeated_indices[i]=pos->second+1;
@@ -666,13 +678,6 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		//    number of repes: 3
 		//    2 3 4         (2nd, 3rd and 4th index names are repeated: index 1, 3 and 4)
 		
-		// incorrect: ?
-		// e.g. R_{3 3 m 3} R_{4 4 m 4}
-		//
-		// vrsl  = 2     (two repeated sets)
-		// vrs   = [3,3] (first set: 3 indices, 2nd set: 3 indices)
-		// repes = [1,2,4,5,6,8]
-		// rl    = 6
 
 		canonical_perm_ext(perm1,                       // permutation to be canonicalised
 								 total_number_of_indices+2,  // degree (+2 for the overall sign)
@@ -765,12 +770,12 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		delete [] dummies;
 		delete [] cperm;
 		delete [] perm;
+		delete [] free_indices;
 		}
    std::cerr << "=====\n";
 	
 	cleanup_dispatch(kernel, tr, it);
 
-	delete [] free_indices;
 
 	totalsw.stop();
 //	std::cerr << "total canonicalise took " << totalsw << std::endl;
