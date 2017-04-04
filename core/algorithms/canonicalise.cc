@@ -162,9 +162,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	const unsigned int total_number_of_indices=ind_free.size()+ind_dummy.size();
 
 #ifdef DEBUG
-	std::cerr << "free index position map:\n";
-	for(auto& ip: ind_pos_free)
-		std::cerr << Ex(ip.first) << " @ " << ip.second << std::endl;;
+//	std::cerr << "free index position map:\n";
+//	for(auto& ip: ind_pos_free)
+//		std::cerr << Ex(ip.first) << " @ " << ip.second << std::endl;;
 #endif	
 	
 	// If there are no indices, there is nothing to do here...
@@ -186,12 +186,12 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// canonicalise.
 
 #ifdef DEBUG
-	std::cerr << "dummies:\n";
-	for(auto& dummy: ind_dummy)
-		std::cerr << dummy.first;
-	std::cerr << "free:\n";
-	for(auto& fr: ind_free)
-		std::cerr << fr.first;
+//	std::cerr << "dummies:\n";
+//	for(auto& dummy: ind_dummy)
+//		std::cerr << dummy.first;
+//	std::cerr << "free:\n";
+//	for(auto& fr: ind_free)
+//		std::cerr << fr.first;
 #endif	
 	
 	for(auto& dummy: ind_dummy)
@@ -226,9 +226,6 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	
 	index_map_t::iterator sorted_it=ind_free.begin();
 	int curr_index=0;
-#ifdef DEBUG	
-	std::cerr << "create free indices array" << std::endl;
-#endif
 	while(sorted_it!=ind_free.end()) {
 		index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
 		num_to_it_map[ii->second]=ii->first;
@@ -325,7 +322,6 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		++sorted_it;
 		}
 
-	// FIXME: handle 'repeated' sets (numerical indices)
 	// FIXME: kludge to handle numerical indices; should be done through lookup
 	// in Integer properties. This one does NOT work when there is more than
 	// one index set; we would need more clever logic to figure out which
@@ -504,27 +500,32 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		// than once (so these are coordinates or integers). Take them out
 		// of the free set and store them in the repeated sets.
 
+#ifdef DEBUG
 		std::cerr << "creating repeated sets" << std::endl;
+#endif
 		std::vector<int>          ind_repeated_lengths;
 		std::vector<Ex::iterator> ind_repeated;
 		auto fi = ind_free.begin();
-		Ex::iterator prev=fi->second;
-		++fi;
-		while(fi!=ind_free.end()) {
-			int len=1;
-			while(fi->first==*prev) {
-				if(len==1)
-					ind_repeated.push_back(prev);
-				ind_repeated.push_back(fi->second);
-				++len;
-				prev=fi->second;
-				++fi;
-				}
-			if(len!=1)
-				ind_repeated_lengths.push_back(len);
-			if(fi!=ind_free.end()) {
-				prev=fi->second;
-				++fi;
+		auto prev=fi;
+		if(fi!=ind_free.end()) {
+			++fi;
+			while(fi!=ind_free.end()) {
+				int len=1;
+				while(fi!=ind_free.end() && fi->first==prev->first) {
+					if(len==1) 
+						ind_repeated.push_back(prev->second);
+					ind_repeated.push_back(fi->second);
+					++len;
+					++fi;
+					}
+				if(len!=1) {
+					ind_free.erase(prev, fi);
+					ind_repeated_lengths.push_back(len);
+					}
+				if(fi!=ind_free.end()) {
+					prev=fi;
+					++fi;
+					}
 				}
 			}
 //		std::cerr << "repeated sets:\n";
@@ -537,13 +538,13 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 		int *repeated_indices         = new int[ind_repeated.size()];
 		int *lengths_of_repeated_sets = new int[ind_repeated_lengths.size()];
-		for(int i=0; i<ind_repeated.size(); ++i)
-			repeated_indices[i]=ind_repeated[i];
-		for(int i=0; i<ind_repeated_lengths.size(); ++i)
+		for(size_t i=0; i<ind_repeated.size(); ++i) {
+			auto pos=ind_pos_free.find(ind_repeated[i]);
+			repeated_indices[i]=pos->second+1;
+			}
+		for(size_t i=0; i<ind_repeated_lengths.size(); ++i)
 			lengths_of_repeated_sets[i]=ind_repeated_lengths[i];
 
-		lengths_of_repeated_sets[0]=0;
-		
 #ifdef XPERM_DEBUG
 			std::cerr << "perm:" << std::endl;
 			for(unsigned int i=0; i<total_number_of_indices+2; ++i)
@@ -555,7 +556,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			std::cerr << std::endl;
 			std::cerr << "free indices:" << std::endl;
 			for(unsigned int i=0; i<ind_free.size(); ++i)
-			std::cerr << free_indices[i] << " "; 
+				std::cerr << free_indices[i] << " "; 
 			std::cerr << std::endl;
 			std::cerr << "lengths_of_dummy_sets:" << std::endl;
 			for(unsigned int i=0; i<dummy_sets.size(); ++i)
@@ -565,6 +566,14 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			std::cerr << "dummies:" << std::endl;
 			for(unsigned int i=0; i<ind_dummy.size(); ++i)
 				std::cerr << dummies[i] << " "; 
+			std::cerr << std::endl;
+			std::cerr << "lengths_of_repeated_sets:" << std::endl;
+			for(unsigned int i=0; i<ind_repeated_lengths.size(); ++i)
+				std::cerr << lengths_of_repeated_sets[i];
+			std::cerr << std::endl;
+			std::cerr << "repeated indices:" << std::endl;
+			for(unsigned int i=0; i<ind_repeated.size(); ++i)
+				std::cerr << repeated_indices[i];
 			std::cerr << std::endl;
 #endif
 
@@ -576,7 +585,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		int *perm2 = new int[total_number_of_indices+2];
 		int *free_indices_new_order = new int[ind_free.size()];
 		int *dummies_new_order      = new int[ind_dummy.size()];
-//		int *repeated_new_order     = new int[ind_repeated.size()];
+		int *repeated_new_order     = new int[ind_repeated.size()];
 
 		inverse(perm, perm1, total_number_of_indices+2);
 		for(size_t i=0; i<ind_free.size(); i++) {
@@ -584,6 +593,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			}
 		for(size_t i=0; i<ind_dummy.size(); i++) {
 			dummies_new_order[i] = onpoints(dummies[i], perm1, total_number_of_indices+2);
+			}
+		for(size_t i=0; i<ind_repeated.size(); i++) {
+			repeated_new_order[i] = onpoints(repeated_indices[i], perm1, total_number_of_indices+2);
 			}
 #ifdef XPERM_DEBUG
 		std::cerr << "perm1: ";
@@ -631,7 +643,30 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		//    ...
 		//
 		// for the repeated set logic:
+		// (in both perm and free, numbers refer to index names (each index name has a separate number
+		// even if it occurs multiple times).
 		//
+		// R_{3 3 m 3}
+		//    perm: 6
+		//    2 3 1 4 5 6  (slot 3 gets index name 1, slot 1 index 2, slot 3 index 3, slot 4 index 4)
+		//    base: 4
+		//    1 2 3 4 
+		//    free: 1
+		//    1            (index name 1 is free)
+		//    number of repes: 3
+		//    2 3 4        (index names 2 to 4 are repeated);
+
+		// R_{3 m 3 3}
+		//    perm: 6
+		//    2 1 3 4 5 6   (slot 2 gets index name 1, ...)
+		//    base: 4
+		//    1 2 3 4       (always the same)
+		//    free: 1
+		//    1             (index name 1 is free)
+		//    number of repes: 3
+		//    2 3 4         (2nd, 3rd and 4th index names are repeated: index 1, 3 and 4)
+		
+		// incorrect: ?
 		// e.g. R_{3 3 m 3} R_{4 4 m 4}
 		//
 		// vrsl  = 2     (two repeated sets)
@@ -653,10 +688,10 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 								 dummies_new_order,          // list with pairs of dummies
 								 ind_dummy.size(),           //    its length
 								 metric_signatures,          // list of symmetries of metric
-								 0, //lengths_of_repeated_sets,   // list of lengths of repeated-sets
-								 0,                          //    its length
-								 0, //repeated_indices,           // list with repeated indices
-								 0,                          //    its length
+								 lengths_of_repeated_sets,   // list of lengths of repeated-sets
+								 ind_repeated_lengths.size(),//    its length
+								 repeated_new_order,         // list with repeated indices
+								 ind_repeated.size(),        //    its length
 								 perm2);                     // output
 
 		if (perm2[0] != 0) inverse(perm2, cperm, total_number_of_indices+2);
@@ -664,6 +699,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 		delete [] dummies_new_order;
 		delete [] free_indices_new_order;
+		delete [] repeated_new_order;
 		delete [] perm1;
 		delete [] perm2;
 
@@ -730,6 +766,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		delete [] cperm;
 		delete [] perm;
 		}
+   std::cerr << "=====\n";
 	
 	cleanup_dispatch(kernel, tr, it);
 
