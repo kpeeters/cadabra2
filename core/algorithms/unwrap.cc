@@ -4,8 +4,13 @@
 #include "algorithms/unwrap.hh"
 #include "properties/Derivative.hh"
 #include "properties/Accent.hh"
+#include "properties/DiracBar.hh"
+#include "properties/Spinor.hh"
+#include "properties/GammaMatrix.hh"
 #include "properties/DependsBase.hh"
 //#include "algorithms/prodcollectnum.hh"
+
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -34,9 +39,13 @@ bool unwrap::can_apply(iterator it)
 		if(wrappers.size()>0) {
 			bool found=false;
 			for(auto&w : wrappers) {
+#ifdef DEBUG
 				std::cerr << "comparing " << w << " to " << Ex(it) << std::endl;
+#endif
 				if(comp.equal_subtree(w.begin(), it)==Ex_comparator::match_t::subtree_match) {
+#ifdef DEBUG
 					std::cerr << "yes" << std::endl;
+#endif
 					found=true;
 					break;
 					}
@@ -67,11 +76,14 @@ bool unwrap::can_apply(iterator it)
 
 Algorithm::result_t unwrap::apply(iterator& it) 
 	{
-	// std::cerr << "Applying unwrap at " << Ex(it) << std::endl;
+#ifdef DEBUG	
+	std::cerr << "Applying unwrap at " << Ex(it) << std::endl;
+#endif
 	result_t res = result_t::l_no_action;
 
 	bool is_accent=kernel.properties.get<Accent>(it);
-
+	bool is_diracbar=kernel.properties.get<DiracBar>(it);
+	
 	// Wrap the 'derivative' in a product node so we can take
 	// child nodes out and stuff them inside the product.
 
@@ -91,7 +103,9 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				continue; // FIXME: Don't know how to handle this yet.
 				}
 
-			// std::cerr << "doing " << *derarg->name << std::endl;
+#ifdef DEBUG			
+			std::cerr << "doing " << *derarg->name << std::endl;
+#endif
 
 			// If the argument of the derivative is not a product, make
 			// into one, so we can handle everything using the same code.
@@ -114,13 +128,21 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					if(factor->is_name_wildcard() || factor->is_object_wildcard())
 						move_out=false;
 					}
+
+				if(move_out) {
+					if(is_diracbar) 
+						if(kernel.properties.get<Spinor>(factor) || kernel.properties.get<GammaMatrix>(factor))
+							move_out=false;
+					}
 				
 				// Then figure out whether there is implicit dependence on the operator.
 				// or on the coordinate.
 				if(move_out) {
 					const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
 					if(dep!=0) {
-						// std::cerr << *factor->name << " acted on by " << *old_it->name << "; depends" << std::endl;
+#ifdef DEBUG						
+						std::cerr << *factor->name << " acted on by " << *old_it->name << "; depends" << std::endl;
+#endif
 						Ex deps=dep->dependencies(kernel, factor /* it */);
 						sibling_iterator depobjs=deps.begin(deps.begin());
 						while(depobjs!=deps.end(deps.begin())) {
