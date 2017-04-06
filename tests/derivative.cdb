@@ -591,3 +591,26 @@ def test35():
     print("Test 35 passed")
 
 test35()
+
+def test36():
+    __cdbkernel__=create_scope()        
+    # When there are more types of accents and derivatives, unwrap
+    # needs to be guided about what to unwrap, or it will do all.
+    {m, n, p, q}::Indices( position=independent);
+    \partial{#}::PartialDerivative;
+    X_{m}::Depends(\partial{#});
+    \Gamma{#}::GammaMatrix;
+    { \theta, \psi }::Spinor(dimension=10, type=MajoranaWeyl);
+    \bar{\theta}::Depends(\partial{#});
+    \bar{#}::DiracBar;
+    ex:=\bar{Q \Gamma^{m} \theta}\partial_{\mu}{X_{m}} + \partial_{\mu}{\Gamma^{m}\bar{\theta}} X_{m};
+    unwrap(_, $\partial{#}$);
+    tst:=\bar{Q \Gamma^{m} \theta}\partial_{\mu}{X_{m}} + \Gamma^{m} \partial_{\mu}{\bar{\theta}} X_{m} - @(ex);
+    assert(tst==0)
+    print("Test 36a passed")    
+    unwrap(ex)
+    tst:=Q \bar{\Gamma^{m} \theta}\partial_{\mu}{X_{m}} + \Gamma^{m} \partial_{\mu}{\bar{\theta}} X_{m} - @(ex);
+    assert(tst==0)
+    print("Test 36b passed")
+
+test36()

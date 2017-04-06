@@ -323,6 +323,10 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 				size_t num1=Ex::number_of_children(i1);
 				size_t num2=Ex::number_of_children(i2);
 
+//				std::cerr << "comparing " << *i1->name << " with " << *i2->name << " " << num1 << " " << num2 << std::endl;
+				if(num1==1 && i1.begin()->is_range_wildcard())
+					return match_t::subtree_match;
+				
 				// TODO: this is where we should decide what to do with
 				// nodes which have sibling wildcards. Make a
 				// 'compare_siblings'. We also need a
