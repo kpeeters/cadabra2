@@ -377,3 +377,24 @@ two:= \GAMMA^{a}*@(one);
 # obj5:= \psi \gamma \Gamma \lambda;
 # @prodsort!(%);
 # 
+
+
+def test05():
+    def post_process(ex):
+        sort_product(ex)
+        eliminate_kronecker(ex)
+        canonicalise(ex)
+        collect_terms(ex)
+    
+    {\mu, \nu, \rho, \sigma}::Indices(vector, position=fixed);
+    {m, n, p, q}::Indices(vector,position=fixed);
+    \partial{#}::PartialDerivative;
+    {\psi, \theta}::Spinor(dimension=10, type=MajoranaWeyl);
+    {\psi, \theta}::AntiCommuting;
+    \bar{#}::DiracBar;
+    \Gamma{#}::GammaMatrix(metric=\eta);
+    ex:=\bar{\Gamma^{\mu}\Gamma_{\nu}\theta} \partial_{\rho}{X^{\nu}};
+    join_gamma(ex);
+    canonicalise(ex);
+
+test05()

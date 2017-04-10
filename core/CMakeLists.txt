@@ -22,8 +22,8 @@ endif(POLICY CMP0042)
 
 
 if(USE_PYTHON_3)
-  set(Python_ADDITIONAL_VERSIONS 3.4 3.5)
-  set(PythonInterp_ADDITIONAL_VERSIONS 3.4 3.5)
+  set(Python_ADDITIONAL_VERSIONS 3.4 3.5 3.6)
+  set(PythonInterp_ADDITIONAL_VERSIONS 3.4 3.5 3.6)
   find_package(PythonInterp 3.4 REQUIRED)
   if(APPLE)
      find_package(PythonLibsOSX 3.4 REQUIRED)

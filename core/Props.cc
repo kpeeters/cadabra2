@@ -43,7 +43,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 	// Special case for range wildcards.
 	// FIXME: move this to Compare.cc (see the FIXME there)
 
-	// std::cerr << "Attempting to match " << Ex(it) << " to " << obj << std::endl;
+//	 std::cerr << "Attempting to match " << Ex(it) << " to " << obj << std::endl;
 
 	if(it->name==obj.begin()->name && children_wildcard()) {
 		Ex::iterator hm=obj.begin(obj.begin());

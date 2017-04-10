@@ -36,6 +36,12 @@ namespace cadabra {
 
 	Ex::iterator find_in_list(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f);
 
+	/// \ingroup core
+	///
+	/// Returns an iterator to the first element for which 'f' returns 'true', or 'tr.end()'.
+
+	Ex::iterator find_in_subtree(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f, bool including_head=true);
+
    /// \ingroup core
    ///
    /// Ensure that the tree is a list, even if it contains only a single element.

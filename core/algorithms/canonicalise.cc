@@ -1,6 +1,7 @@
 
 #include "Cleanup.hh"
 #include "Exchange.hh"
+#include "Functional.hh"
 #include "algorithms/canonicalise.hh"
 #include "modules/xperm_new.h"
 #include "properties/Traceless.hh"
@@ -8,8 +9,8 @@
 #include "properties/Derivative.hh"
 #include "properties/AntiCommuting.hh"
 
-// #define DEBUG 1
-// #define XPERM_DEBUG 1
+//#define DEBUG 1
+//#define XPERM_DEBUG 1
 
 using namespace cadabra;
 
@@ -23,22 +24,22 @@ bool canonicalise::can_apply(iterator it)
 	if(*(it->name)!="\\prod")
 		if(is_single_term(it)==false)
 			return false;
+
+	// Canonicalise requires strict monomial structure: no products which contain
+	// sums as factors. Products as factors are ok, they do not lead to multiple
+	// identically named free indices.
 	
-	sibling_iterator sib=tr.begin(it);
-	while(sib!=tr.end(it)) {
-		// If a factor is a sum or a product, we can only canonicalise
-		// if those are scalars, i.e. carry no indices. 
-		// FIXME: For the time being, we even forbid dummy indices.
-		if(*sib->name=="\\sum" || *sib->name=="\\prod" ) {
-			// std::cerr << "A child of " << *it->name << " is a " << *sib->name << std::endl;
-			index_map_t ind_dummy, ind_free;
-			classify_indices(sib, ind_free, ind_dummy);
-			if(ind_free.size()+ind_dummy.size()>0)
-				return false;
-			// std::cerr << "but has no indices whatsoever" << std::endl;
-			}
-		++sib;
+	auto sum_or_prod = find_in_subtree(tr, it, [](Ex::iterator tst) {
+			if(*tst->name=="\\sum") return true;
+			return false;
+		}, false);
+	if(sum_or_prod!=tr.end()) {
+#ifdef DEBUG
+		std::cerr << "trying to canonicalise nested product/sum " << Ex(it) << " " << Ex(sum_or_prod) << std::endl;
+#endif
+		return false;
 		}
+	
 	return true;
 	}
 
