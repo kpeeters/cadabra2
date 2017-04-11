@@ -118,6 +118,7 @@ void Server::init()
 
 		boost::python::class_<Server, boost::python::bases<ProgressMonitor>, boost::noncopyable>("Server")
 			.def("send", &Server::send)
+			.def("handles", &Server::handles)
 			.def("architecture", &Server::architecture);
 		}
 	catch(boost::python::error_already_set& ex) {
@@ -378,6 +379,12 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 void Server::on_block_finished(Block blk)
 	{
 	send(blk.output, "output");
+	}
+
+bool Server::handles(const std::string& otype) const
+	{
+	if(otype=="latex_view" || otype=="image_png" || otype=="verbatim") return true;
+	return false;
 	}
 
 void Server::send(const std::string& output, const std::string& msg_type)

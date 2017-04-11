@@ -60,6 +60,9 @@ namespace cadabra {
 			TeXEngine        engine;
 			double           scale; // highdpi scale
 
+			// Handler for vertical scrollbar changes.
+			void on_vscroll_changed();
+			
 			// When something inside the large notebook canvas changes, we need
 			// to make sure that the current cell stays into view (if we are
 			// editing that cell). We can only do that once all size info is
@@ -189,7 +192,7 @@ namespace cadabra {
 			bool cell_toggle_visibility(DTree::iterator it, int);
 			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
 			bool cell_content_erase(int, int, DTree::iterator, int);
-			bool cell_content_execute(DTree::iterator, int);
+			bool cell_content_execute(DTree::iterator, int, bool shift_enter_pressed);
 			bool cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number);
 
 			void dim_output_cells(DTree::iterator it);
@@ -204,8 +207,9 @@ namespace cadabra {
 			Glib::RefPtr<Gio::Settings>    settings;
 			void on_text_scaling_factor_changed(const std::string& key);
 
-			int last_configure_width;
-
+			int             last_configure_width;
+			DTree::iterator follow_cell;
+			
 			class Prefs {
 				public:
 					Prefs();

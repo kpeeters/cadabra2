@@ -10,6 +10,7 @@
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/aboutdialog.h>
 #include <gtkmm/radioaction.h>
+#include <gtkmm/scrollbar.h>
 #include <fstream>
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
@@ -29,7 +30,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
 	  kernel_spinner_status(false), title_prefix("Cadabra: "),
-	  modified(false), read_only(ro), crash_window_hidden(true), is_configured(false)
+	  modified(false), read_only(ro), crash_window_hidden(true), follow_cell(doc.end()), is_configured(false)
 	{
    // Connect the dispatcher.
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
@@ -275,8 +276,14 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// We always have at least one canvas.
 	canvasses.push_back(manage( new NotebookCanvas() ));
 	mainbox.pack_start(*canvasses[0], Gtk::PACK_EXPAND_WIDGET, 0);
+
+	// FIXME: need to do this for every canvas.
 	canvasses[0]->scroll.signal_size_allocate().connect(
 		sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate));
+//	canvasses[0]->scroll.get_vadjustment()->signal_value_changed().connect(
+//		sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
+	canvasses[0]->scroll.get_vscrollbar()->signal_value_changed().connect(
+		sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
 
 
 	// Window size and title, and ready to go.
@@ -559,7 +566,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_erase), i ) );
 
 				ci->edit.content_execute.connect( 
-				sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i ) );
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i, true ) );
 				ci->edit.cell_got_focus.connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
 
@@ -779,9 +786,24 @@ void NotebookWindow::scroll_current_cell_into_view()
 		}
 	}
 
+void NotebookWindow::on_vscroll_changed()
+	{
+	std::cerr << "vscroll changed " << std::endl;
+	}
+
 void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc)
 	{
-	scroll_current_cell_into_view();
+	// The auto-scroll logic is as follows. Whenever a cell is ran (by
+	// user pressing shift-enter only, not by full run), we set to
+	// auto-scroll as soon as output for that cell appears. If multiple
+	// cells are sent to the queue, we follow output for the last one
+	// sent. Any scrollbar event stops auto-scrolling. Perhaps only
+	// auto-restart when scrolling to the bottom of the notebook,
+	// though that is not of much extra use. Could have a 'follow
+	// current' mode when running an entire notebook, which is again
+	// stopped by scrollbar event.
+	if(follow_cell!=doc.end())
+		scroll_current_cell_into_view();
 	}
 
 bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_number)
@@ -881,7 +903,7 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	return false;
 	}
 
-bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
+bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool shift_enter_pressed)
 	{
 	// This callback runs on the GUI thread. The cell pointed to by 'it' is
 	// guaranteed to be valid.
@@ -914,6 +936,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number)
 
 	// Execute the cell.
 	set_stop_sensitive(true);
+	follow_cell=it;
 	compute->execute_cell(it);
 
 	return true;
@@ -1327,7 +1350,7 @@ void NotebookWindow::on_run_runall()
 	DTree::sibling_iterator sib=doc.begin(doc.begin());
 	while(sib!=doc.end(doc.begin())) {
 		if(sib->cell_type==DataCell::CellType::python) 
-			cell_content_execute(DTree::iterator(sib), current_canvas);
+			cell_content_execute(DTree::iterator(sib), current_canvas, false);
 		++sib;
 		}
 	}

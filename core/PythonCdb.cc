@@ -345,7 +345,9 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 Ex Ex_through_Sympy(Ex ex, std::string head)
 	{
 	Ex::iterator it=ex.begin();
-	sympy::apply(*get_kernel_from_scope(), ex, it, head, "", "");
+	std::vector<std::string> wrap;
+	wrap.push_back(head);
+	sympy::apply(*get_kernel_from_scope(), ex, it, wrap, "", "");
 
 	return ex;
 	}

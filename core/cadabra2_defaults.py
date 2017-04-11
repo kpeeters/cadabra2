@@ -30,6 +30,11 @@ if sympy.__version__ != "unavailable":
     from sympy import sin, cos, tan, sqrt, trigsimp
     from sympy import Matrix as sMatrix
 
+# Whether running in command-line mode or as client-server, there always
+# needs to be a Server object known as 'server' through which interaction
+# with the display routines is handled. The 'display' function will
+# call the 'server.send' method.
+
 if 'server' in globals():
     mopen="\\begin{dmath*}{}";
     mclose="\\end{dmath*}";
@@ -43,15 +48,13 @@ else:
         def architecture(self):
             return "terminal"
 
-#        def group(self, name=""):
-#            print("hello "+name)
-#            pass
-#
-#        def progress(self, n, tot):
-#            pass
-
         def test(self):
             print("hello there!")
+
+        def handles(self, otype):
+            if(otype=="plain"):
+                return True
+            return False            
             
     server = Server()
 
@@ -75,9 +78,16 @@ except ImportError:
 import io
 import base64
 
-# Generate a JSON object for sending to the client. This function
-# does different things depending on the object type it is being
-# fed. Data types the server object understands:
+# The 'display' function is a replacement for 'str', in the sense that
+# it will generate human-readable output. However, in contrast to
+# 'str', it knows about what the front-end ('server') can display, and
+# will adapt the output to that. For instance, if
+# server.handles('latex_view') is true, it will generate LaTeX output,
+# while it will generate just plain text otherwise.
+#
+# Once it has figured out which display is accepted by 'server', it
+# will call server.send() with data depending on the object type it is
+# being fed. Data types the server object can support are:
 #
 #  - "latex_view": text-mode LaTeX string.
 #  - "image_png":  base64 encoded png image.
@@ -90,8 +100,8 @@ def display(obj, delay_send=False):
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
         server.send(b64, "image_png")
-        # FIXME: we should probably have a 'query' method on the Server object
-        # which can be used to figure out whether it can do something useful
+        # FIXME: Use the 'handles' query method on the Server object
+        # to figure out whether it can do something useful
         # with a particular data type.
 
     elif 'matplotlib' in sys.modules and isinstance(obj, matplotlib.artist.Artist):
@@ -119,19 +129,25 @@ def display(obj, delay_send=False):
 #        server.send("\\begin{dmath*}{}"+str(obj.to_list())+"\\end{dmath*}", "latex")
 
     elif isinstance(obj, Ex):
-        ret = mopen+obj._latex_()+mclose
-        if delay_send:
-            return ret
+        if server.handles('latex_view'):
+            ret = mopen+obj._latex_()+mclose
+            if delay_send:
+                return ret
+            else:
+                server.send(ret, "latex_view")
         else:
-            server.send(ret, "latex_view")
+            server.send(str(obj), "plain")
 
     elif isinstance(obj, Property):
-        ret = mopen+obj._latex_()+mclose
-        if delay_send:
-            return ret
+        if server.handles('latex_view'):
+            ret = mopen+obj._latex_()+mclose
+            if delay_send:
+                return ret
+            else:
+                server.send(ret , "latex_view")
         else:
-            server.send(ret , "latex_view")
-
+            server.send(str(obj), "plain")
+            
     elif type(obj)==list:
         out="{}$\\big[$"
         first=True

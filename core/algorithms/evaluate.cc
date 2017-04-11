@@ -774,10 +774,13 @@ void evaluate::simplify_components(iterator it)
 			++rhs1;
 			iterator nd=rhs1;
 			if(pm) pm->group("sympy");
-#ifndef USE_TREETRACKER			
-			sympy::apply(kernel, tr, nd, "simplify", "", "");
+			std::vector<std::string> wrap;
+#ifndef USE_TREETRACKER
+//			wrap.push_back("together");
+			wrap.push_back("simplify");
+			sympy::apply(kernel, tr, nd, wrap, "", "");
 #else
-			sympy::apply(kernel, tr, nd, "", "", "");
+			sympy::apply(kernel, tr, nd, wrap, "", "");
 #endif
 			if(pm) pm->group();
 			

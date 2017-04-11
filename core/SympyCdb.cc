@@ -11,7 +11,7 @@
 
 using namespace cadabra;
 
-Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::string& head, const std::string& args, 
+Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, const std::string& args, 
 								  const std::string& method)
 	{
    // We first need to print the sub-expression using DisplaySympy,
@@ -19,18 +19,21 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	// (if present).
 	std::ostringstream str;
 
-	if(head.size()>0)
-		str << head << "(";
+	for(size_t i=0; i<wrap.size(); ++i) {
+		str << wrap[i] << "(";
+		}
 
 	DisplaySympy ds(kernel, ex);
 	ds.output(str, it);
 
-	if(head.size()>0)
+	if(wrap.size()>0)
 		if(args.size()>0) 
 			str << ", " << args << ")";
+	for(size_t i=1; i<wrap.size(); ++i)
+		str << ")";
 	str << method;
 
-	if(head.size()>0)
+	if(wrap.size()>0)
 		str << ")";
 
 	// We then execute the expression in Python.
@@ -126,7 +129,8 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 		}
 	
 	auto top=matrix.begin();
-	sympy::apply(kernel, matrix, top, "", "", ".inv()");
+	std::vector<std::string> wrap;
+	sympy::apply(kernel, matrix, top, wrap, "", ".inv()");
 	//matrix.print_recursive_treeform(std::cerr, top);
 
 	Ex::iterator ruleslist=rules.begin();

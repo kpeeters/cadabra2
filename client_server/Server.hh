@@ -133,6 +133,8 @@ class Server : public ProgressMonitor {
 
 		std::string              architecture() const;
 		
+		bool handles(const std::string& otype) const;
+			
 		/// Raw code to send a string (which must be JSON formatted) as
 		/// a message to the client. Handles communication of the result back to the
 		/// client in JSON format. This is always of the form
