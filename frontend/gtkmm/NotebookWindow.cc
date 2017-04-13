@@ -282,8 +282,13 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		sigc::mem_fun(*this, &NotebookWindow::on_scroll_size_allocate));
 //	canvasses[0]->scroll.get_vadjustment()->signal_value_changed().connect(
 //		sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
-	canvasses[0]->scroll.get_vscrollbar()->signal_value_changed().connect(
+	canvasses[0]->scroll.get_vscrollbar()->signal_change_value().connect(
 		sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
+	canvasses[0]->ebox.signal_button_press_event().connect(
+		sigc::mem_fun(*this, &NotebookWindow::on_mouse_wheel));
+
+	canvasses[0]->ebox.signal_scroll_event().connect(
+		sigc::mem_fun(*this, &NotebookWindow::on_scroll));
 
 
 	// Window size and title, and ready to go.
@@ -786,9 +791,28 @@ void NotebookWindow::scroll_current_cell_into_view()
 		}
 	}
 
-void NotebookWindow::on_vscroll_changed()
+bool NotebookWindow::on_vscroll_changed(Gtk::ScrollType st, double v)
 	{
-	std::cerr << "vscroll changed " << std::endl;
+//	std::cerr << "vscroll changed " << std::endl;
+	// FIXME: does not catch scroll wheel events.
+	follow_cell=doc.end();
+	return false;
+	}
+
+bool NotebookWindow::on_mouse_wheel(GdkEventButton *b)
+	{
+	std::cerr << b->button << std::endl;
+	if(b->button==2)
+		follow_cell=doc.end();
+	return false;
+	}
+
+bool NotebookWindow::on_scroll(GdkEventScroll *s)
+	{
+	std::cerr << "scroll event" << std::endl;
+//	if(b->button==2)
+//		follow_cell=doc.end();
+	return false;
 	}
 
 void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc)
@@ -802,8 +826,10 @@ void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc)
 	// though that is not of much extra use. Could have a 'follow
 	// current' mode when running an entire notebook, which is again
 	// stopped by scrollbar event.
-	if(follow_cell!=doc.end())
+	if(follow_cell!=doc.end()) {
+//		std::cerr << "  scroll" << std::endl;
 		scroll_current_cell_into_view();
+		}
 	}
 
 bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_number)

@@ -124,6 +124,9 @@ class Shell(InteractiveConsole):
                 self.rhs += line_stripped
                 return ""
 
+        # Add '__cdbkernel__' as first argument of post_process if it doesn't have that already.
+        line_stripped=re.sub(r'def post_process\(([^_])', r'def post_process(__cdbkernel__, \1', line_stripped)
+
         # Replace $...$ with Ex(...).
         line_stripped=re.sub(r'\$([^\$]*)\$', r'Ex(r"\1", False)', line_stripped)
 

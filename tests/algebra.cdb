@@ -37,6 +37,7 @@ def test06():
     sort_product(obj6)
     tst6:= X X G A A B + @(obj6);
     assert(tst6==0)
+    print("Test 06 passed")
 
 test06()
 
@@ -48,7 +49,8 @@ def test07():
     sort_product(_)
     tst7:= G A X A X B - @(obj7);
     assert(tst7==0)
-
+    print("Test 07 passed")
+    
 test07()
 
 def test08():
@@ -59,7 +61,8 @@ def test08():
     sort_product(_)
     tst8:= - W_{m n} W_{q r} W_{p} W_{s} W_{t} - @(obj8);
     assert(tst8==0)
-
+    print("Test 08 passed")
+    
 test08()
 
 def test09():
@@ -69,6 +72,7 @@ def test09():
     sort_product(_)
     tst9:= \theta_a \theta_b \theta_c + @(obj9);
     assert(tst9==0)
+    print("Test 09 passed")
 
 test09()
 
@@ -80,10 +84,11 @@ def test10():
     \chi_{a}::SelfAntiCommuting.
     { \theta_a, \chi_a }::Commuting.
     obj10:= \theta_c \theta_b \theta_d \chi_d \theta_a \chi_a;
-    sort_product(_);
+    sort_product(_)
     tst10:= \theta_a \theta_b \theta_c \theta_d \chi_a \chi_d + @(obj10);
     assert(tst10==0)
-
+    print("Test 10 passed")
+    
 test10()
 
 def test11():
@@ -120,6 +125,8 @@ def test13():
     assert(tst13==0)
     print("Test 13 passed")
 
+test13()
+        
 #def test14():
 #
 # {a,b,f}::AntiCommuting.
@@ -133,7 +140,7 @@ def test15():
     __cdbkernel__=create_scope()
     {b,f}::AntiCommuting.
     obj15:= (d*e*f)*(a*b);
-    sort_product(_);
+    sort_product(_)
     tst15:= (a*b)*(d*e*f) + @(obj15);
     assert(tst15==0)
     print("Test 15 passed")
@@ -146,7 +153,7 @@ def test16():
     {A_\mu, B_\mu}::AntiCommuting.
     \diff{#}::Derivative.
     obj16:= \diff{B_\mu}_{\nu} * \diff{A_\rho}_{\sigma};
-    sort_product(_);
+    sort_product(_)
     tst16:= \diff{A_\rho}_{\sigma} * \diff{B_\mu}_{\nu} + @(obj16);
     assert(tst16==0)
     print("Test 16 passed")
@@ -158,13 +165,13 @@ def test17():
     __cdbkernel__=create_scope()
     \Gamma{#}::GammaMatrix.
     obj17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r};
-    sort_product(_);
+    sort_product(_)
     tst17a:= (\Gamma_{m n} + A_{m} \Gamma_{n})\Gamma_{p q r} - @(obj17a);
     assert(tst17a==0)
     obj17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n});
-    sort_product(_);
+    sort_product(_)
     tst17b:= \Gamma_{p q r} (\Gamma_{m n} + A_{m} \Gamma_{n}) - @(obj17b);
-    assert(tst17b==0);
+    assert(tst17b==0)
     print("Test 17 passed")
 
 test17()
@@ -200,22 +207,24 @@ def test18():
     __cdbkernel__=create_scope()
     {\chi, \psi}::Weight(label=grassmann, value=1);
     ex:= \chi \psi \chi;
-    drop_weight(_, $grassmann=2$);
+    drop_weight(_, $grassmann=2$)
     tst1:= \chi\psi\chi - @(ex);
     assert(tst1==0)
-    drop_weight(ex, $grassmann=3$);
+    drop_weight(ex, $grassmann=3$)
     assert(ex==0)
-
+    print("Test 18 passed")
+        
 test18()
 
 def test19():
     __cdbkernel__=create_scope()
     {\phi, B_{m}, B^{m}}::Weight(label=small, value=1).
     ex:= H B^{m} B_{n} + B_{n} C^{m};
-    drop_weight(_, $small=2$);
+    drop_weight(_, $small=2$)
     tst:= B_{n} C^{m} - @(ex);
     assert(tst==0)
-
+    print("Test 19 passed")
+        
 test19()
 
 def test20():
@@ -225,28 +234,31 @@ def test20():
     keep_weight(_, $small=2$)
     tst:= H B^{m} B_{n} - @(ex);
     assert(tst==0)
-
+    print("Test 20 passed")
+        
 test20()
 
 def test21():
     __cdbkernel__=create_scope()
     {\chi, \psi}::Weight(label=grassmann, value=1).
     ex:= \chi \chi \chi + 2 \chi \chi + \chi;
-    drop_weight(_, $grassmann=3$);
+    drop_weight(_, $grassmann=3$)
     tst:= 2 \chi \chi + \chi - @(ex);
     assert(tst==0)
-
+    print("Test 21 passed")
+        
 test21()
 
-def test21():
+def test21b():
     __cdbkernel__=create_scope()
     {\chi, \psi}::Weight(label=grassmann, value=1).
     ex:= \chi \chi \chi + \chi \chi * (\chi + \psi) + \chi + \chi \chi;
     keep_weight(_, $grassmann=3$)
     tst:= \chi \chi \chi + \chi \chi * (\chi + \psi) - @(ex);
     assert(tst==0)
-
-test21()
+    print("Test 21b passed")
+        
+test21b()
 
 def test22():
     __cdbkernel__=create_scope()
@@ -256,7 +268,8 @@ def test22():
     keep_weight(_, $grassmann=3$)
     tst:= \chi \bar{\chi \chi} - @(ex);
     assert(tst==0)
-
+    print("Test 22 passed")
+        
 test22()
 
 def test23():
@@ -266,7 +279,8 @@ def test23():
     keep_weight(_, $small=2$)
     tst:= a**2 + a b + b**2 + a b c - @(ex);
     assert(tst==0)
-    
+    print("Test 23 passed")
+        
 test23()
 
   

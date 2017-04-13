@@ -3,15 +3,16 @@
 # module too.
 
 def test01():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     \Gamma_{#}::GammaMatrix(metric=\delta).
     obj1:= \Gamma^{a b}\Gamma_{c};
     join_gamma(obj1)
     tst1:= \Gamma^{a b}_{c} + \Gamma^{a} \delta^{b}_{c} - \Gamma^{b} \delta^{a}_{c} - @(obj1);
     collect_terms(tst1)
     assert(tst1==0)
+    print("Test 01 passed")
 
-test01();
+#test01()
 
 # Test of the join functionality which keeps anti-symmetry in certain
 # indicated indices implicit (obj3a) versus the full thing (obj3b).
@@ -22,65 +23,71 @@ test01();
 # forget about all explicit anti-symmetrisations in those indices.
 
 def test02():
+    __cdbkernel__=create_scope()
     \delta_{m n}::KroneckerDelta.
     \Gamma_{#}::GammaMatrix(metric=\delta).
     obj3a:= \Gamma_{c d}\Gamma_{m1 m2 m3}\Gamma_{n1 n2};
 
-test02();
+#test02()
 
 def test02b():
+    __cdbkernel__=create_scope()
     \bar{#}::DiracBar;
     \psi::Spinor(dimension=10);
     \Gamma{#}::GammaMatrix;
     ex:=\bar{\Gamma^{m n p} \psi};
-    expand_diracbar(ex);
+    expand_diracbar(ex)
     tst:=\bar{\psi} \Gamma^{m n p} - @(ex);
-    assert(tst);
+    assert(tst==0)
+    print("Test 02b passed")
 
-test02b();
+#test02b()
 
-{m, n, p, q, r, a, b, c}::Indices(flat, position=free);
-{m, n, p, q, r, a, b, c}::Integer(1..10);
-\delta_{m n}::KroneckerDelta;
-ex:=\delta^{q q};
-eliminate_kronecker(ex);
+# {m, n, p, q, r, a, b, c}::Indices(flat, position=free);
+# {m, n, p, q, r, a, b, c}::Integer(1..10);
+# \delta_{m n}::KroneckerDelta;
+# ex:=\delta^{q q};
+# eliminate_kronecker(ex);
+# 
+# {m, n, p, q, r, a, b, c}::Indices(flat, position=fixed);
+# ex:=\delta_{q r};
+# substitute(ex, $\delta^{q r} -> K^{q r}$)
+# {m, n, p, q, r, a, b, c}::Indices(flat, position=free);
+# substitute(ex, $\delta^{q r} -> K^{q r}$)
+# 
+# 
+# 
+# 
+# \delta_{m n}::SelfCommuting;
+# \delta_{m n}::KroneckerDelta;
+# {m, n, p, q, r, a, b, c}::Indices(flat, position=free);
+# {m, n, p, q, r, a, b, c}::Integer(1..10);
+# 
+# \GAMMA^{#}::GammaMatrix(metric=\delta).
+# one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
+# join_gamma(_);
+# distribute(_);
+# eliminate_kronecker(_);
+# canonicalise(_);
+# sort_product(_);
+# 
+# join_gamma(_);
+# distribute(_);
+# eliminate_kronecker(_);
+# canonicalise(_);
+# sort_product(_);
+# 
+# 
+# \delta_{m n}::KroneckerDelta.
+# \Gamma_{#}::GammaMatrix(metric=\delta)
+# ex:=\Gamma_{a b c}\Gamma_{c d}\Gamma_{e};
+# join_gamma(ex)
+# distribute(ex)
+# sort_product(ex)
+# join_gamma(ex)
 
-{m, n, p, q, r, a, b, c}::Indices(flat, position=fixed);
-ex:=\delta_{q r};
-substitute(ex, $\delta^{q r} -> K^{q r}$)
-{m, n, p, q, r, a, b, c}::Indices(flat, position=free);
-substitute(ex, $\delta^{q r} -> K^{q r}$)
 
-
-
-
-\delta_{m n}::SelfCommuting;
-\delta_{m n}::KroneckerDelta;
-{m, n, p, q, r, a, b, c}::Indices(flat, position=free);
-{m, n, p, q, r, a, b, c}::Integer(1..10);
-
-\GAMMA^{#}::GammaMatrix(metric=\delta).
-one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
-join_gamma(_);
-distribute(_);
-eliminate_kronecker(_);
-canonicalise(_);
-sort_product(_);
-
-join_gamma(_);
-distribute(_);
-eliminate_kronecker(_);
-canonicalise(_);
-sort_product(_);
-
-
-\delta_{m n}::KroneckerDelta.
-\Gamma_{#}::GammaMatrix(metric=\delta)
-ex:=\Gamma_{a b c}\Gamma_{c d}\Gamma_{e};
-join_gamma(ex)
-distribute(ex)
-sort_product(ex)
-join_gamma(ex)
+        
 # segfault
 
 # obj3b:= @(obj3a);
@@ -119,77 +126,42 @@ join_gamma(ex)
 # 
 # 
 
-# This is one from the Abra help document. It's a bit more work here
-# because there are no default rules yet (if we make eliminate_kr, 
-# canonicalise, prodsort, asymprop and collect_terms default rules,
-# then things look a lot better). Anyhow, it does reproduce the 
-# correct result ;-) 
+# This is one from the Abra help document. Much nicer now in
+# Cadabra 2.x.    
 
 def test03():
-    __cdbkernel__ = create_scope();
-\delta_{m n}::SelfCommuting.
-\delta_{m n}::KroneckerDelta.
-{m, n, p, q, r, a, b, c}::Indices(flat).
-{m, n, p, q, r, a, b, c}::Integer(1..10).
-\GAMMA^{#}::GammaMatrix(metric=\delta).
-one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
-join_gamma(one)
-distribute(one)
-eliminate_kronecker(one)
+    # Unfortunately when you create a local scope the
+    # post-process function does not see this kernel,
+    # but rather the global one?!? That _despite_ the
+    # fact that print(__cdbkernel__) in there shows the
+    # same address?
+    #    __cdbkernel__ = create_scope()
+        
+    \delta{#}::KroneckerDelta.
+    {m, n, p, q, r, a, b, c}::Indices(flat).
+    {m, n, p, q, r, a, b, c}::Integer(1..10).
+    \GAMMA{#}::GammaMatrix(metric=\delta).
+
+    def post_process(ex):
+        distribute(ex)
+        eliminate_kronecker(ex)
+        sort_product(ex)
+        canonicalise(ex)
+        collect_terms(ex)
+
+    one:= \GAMMA^{m n p q r}\GAMMA^{a}\GAMMA^{b}\GAMMA^{m n p}\GAMMA^{c}\GAMMA^{q r};
+    for i in range(5):
+        join_gamma(one)
+
+    tst:=- 2016 * \GAMMA^{a b c} - 2016 * \GAMMA^{a} * \delta^{b c} + 2016 * \GAMMA^{b} * \delta^{a c} + 18144 * \GAMMA^{c} * \delta^{a b} - @(one);
+    assert(tst==0)
+    print("Test 03a passed")
+    two:= \GAMMA^{a}*@(one);
+    join_gamma(two)
+    assert(two==0)
+    print("Test 03b passed")
 
 test03()
-
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@canonicalise!(%):
-@prodsort!(%):
-#@asymprop!(%):
-@collect_terms!(%):
-
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@canonicalise!(%):
-@prodsort!(%):
-#@asymprop!(%):
-@collect_terms!(%):
-
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@canonicalise!(%):
-@prodsort!(%):
-#@asymprop!(%):
-@collect_terms!(%):
-
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@canonicalise!(%):
-@prodsort!(%):
-#@asymprop!(%):
-@collect_terms!(%):
-
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@canonicalise!(%):
-@prodsort!(%):
-#@asymprop!(%):
-@collect_terms!(%):
-# - 2016 * \GAMMA^{a b c} - 2016 * \GAMMA^{a} * \delta^{b c} + 2016 * \GAMMA^{b} * \delta^{a c} + 18144 * \GAMMA^{c} * \delta^{a b};
-
-two:= \GAMMA^{a}*@(one);
-@distribute!(%):
-@join!(%){expand}:
-@distribute!(%):
-#@asymprop!(%):
-@eliminate_kr!(%):
-@canonicalise!(%):
-@collect_terms!(%);
-@assert(two);
-
 
 # 
 # 
@@ -321,18 +293,24 @@ two:= \GAMMA^{a}*@(one);
 # # Test 3: numerical indices
 # #
 # @reset.
-# \delta{#}::KroneckerDelta.
-# \gamma{#}::GammaMatrix(metric=\delta).
-# obj3:= \gamma_{1 2}\gamma_{1 2};
-# @join!(%){expand};
-# tst3:= \gamma_{1 2 1 2} 
-#        + \gamma_{1 2} * \delta_{1 2} - \gamma_{1 1} * \delta_{2 2} 
-#        - \gamma_{2 2} * \delta_{1 1} + \gamma_{2 1} * \delta_{1 2} 
-#        + \delta_{1 2} * \delta_{1 2} - \delta_{1 1} * \delta_{2 2}
-#        - @(obj3);
-# @collect_terms!(%);
-# @assert(tst3);
-# 
+
+def test03():
+    __cdbkernel__ = create_scope()
+    \delta{#}::KroneckerDelta.
+    \gamma{#}::GammaMatrix(metric=\delta).
+    obj3:= \gamma_{1 2}\gamma_{1 2};
+    join_gamma(_);
+    tst3:= \gamma_{1 2 1 2} 
+        + \gamma_{1 2} * \delta_{1 2} - \gamma_{1 1} * \delta_{2 2} 
+        - \gamma_{2 2} * \delta_{1 1} + \gamma_{2 1} * \delta_{1 2} 
+        + \delta_{1 2} * \delta_{1 2} - \delta_{1 1} * \delta_{2 2}
+        - @(obj3);
+    display(tst3)
+    assert(tst3==0)
+    print("Test 03 passed")
+
+test03()
+        
 # # Test 4: keeping upper and lower indices 
 # #
 # @reset.
@@ -343,31 +321,35 @@ two:= \GAMMA^{a}*@(one);
 # @join!(%){expand};
 # 
 # 
-# # Test 4: indices and sub-indices (bug reported 5-Apr-2009)
-# #
-# @reset.
-# {a,b,c,d, e,f, g, h#}::Indices(group).
-# {M, N, P, Q#}::Indices(flat).
-# {M, N, P, Q#}::Integer(1..10).
-# {I,J,K,L#}::Indices(orthogonal, parent=flat).
-# {I,J,K,L#}::Integer(3..10).
-# {\mu, \nu, \lambda, \sigma#}::Indices(worldvolume, parent=flat).
-# {\mu, \nu, \lambda, \sigma#}::Integer(0..2).
-# \delta{\mu \nu}::KroneckerDelta.
-# \Gamma{#}::GammaMatrix(metric=\delta).
-# obj1:=\Gamma_{I J K}\Gamma_{\mu};
-# @join!(%){expand};
-# tst1:= \Gamma_{I J K \mu} + \Gamma_{I J} * \delta_{K \mu} - \Gamma_{I K} * \delta_{J \mu} + \Gamma_{J K} * \delta_{I \mu}
-#       - @(obj1);
-# @collect_terms!(%);
-# @assert(tst1);
-# obj2:=\Gamma_{\mu}\Gamma_{I J K};
-# @join!(%){expand};
-# tst2:= \Gamma_{\mu I J K} + \Gamma_{J K} * \delta_{I \mu} - \Gamma_{J I} * \delta_{K \mu} + \Gamma_{K I} * \delta_{J \mu}
-#       - @(obj2);
-# @collect_terms!(%);
-# @assert(tst2);
-# 
+
+# Indices and sub-indices (bug reported 5-Apr-2009)
+
+def test04():
+    __cdbkernel__ = create_scope()
+    {a,b,c,d, e,f, g, h#}::Indices(group).
+    {M, N, P, Q#}::Indices(flat).
+    {M, N, P, Q#}::Integer(1..10).
+    {I,J,K,L#}::Indices(orthogonal, parent=flat).
+    {I,J,K,L#}::Integer(3..10).
+    {\mu, \nu, \lambda, \sigma#}::Indices(worldvolume, parent=flat).
+    {\mu, \nu, \lambda, \sigma#}::Integer(0..2).
+    \delta{\mu \nu}::KroneckerDelta.
+    \Gamma{#}::GammaMatrix(metric=\delta).
+    obj1:=\Gamma_{I J K}\Gamma_{\mu};
+    join_gamma(_)
+    tst1:= \Gamma_{I J K \mu} + \Gamma_{I J} * \delta_{K \mu} - \Gamma_{I K} * \delta_{J \mu} + \Gamma_{J K} * \delta_{I \mu} - @(obj1);
+    assert(tst1==0)
+    print("Test 04a passed")
+    obj2:=\Gamma_{\mu}\Gamma_{I J K};
+    join_gamma(_)
+    tst2:= \Gamma_{\mu I J K} + \Gamma_{J K} * \delta_{I \mu} - \Gamma_{J I} * \delta_{K \mu} + \Gamma_{K I} * \delta_{J \mu}
+      - @(obj2);
+    assert(tst2==0)
+    print("Test 04b passed")
+
+test04()
+        
+    # 
 # # Test 5: multiple spinor lines
 # #
 # @reset.
@@ -398,3 +380,4 @@ def test05():
     canonicalise(ex);
 
 test05()
+

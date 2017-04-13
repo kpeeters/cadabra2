@@ -53,6 +53,7 @@ void cleanup_dispatch(const Kernel& k, Ex&, Ex::iterator& it);
 /// entire tree and call cleanup_dispatch at every node.
 
 void cleanup_dispatch_deep(const Kernel& k, Ex&, dispatcher_t disp=&cleanup_dispatch);
+void cleanup_dispatch_deep(const Kernel& k, Ex&, Ex::iterator& it, dispatcher_t disp=&cleanup_dispatch);	
 
 /// Individual node cleanup routines. Do not call these yourself. 
 ///

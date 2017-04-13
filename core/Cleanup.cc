@@ -510,6 +510,12 @@ bool cleanup_exterior_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 
 void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	{
+	Ex::iterator top=tr.begin();
+	cleanup_dispatch_deep(k, tr, top, dispatch);
+	}
+	
+void cleanup_dispatch_deep(const Kernel& k, Ex& tr, Ex::iterator& top, dispatcher_t dispatch)
+	{
 	// Cleanup the entire tree starting from the deepest nodes and
 	// working upwards. 
 
@@ -519,6 +525,11 @@ void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	// want to make recursive calls into that function either. And it is
 	// simple enough anyway.
 
+//	do_subtree(tr, top, [&dispatch, &tr, &k](Ex::iterator it) {
+//			dispatch(k, tr, it);
+//			return it;
+//			});
+	
 	Ex::post_order_iterator it=tr.begin();
 	it.descend_all();
 	while(it!=tr.end()) {
@@ -528,6 +539,7 @@ void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 		dispatch(k, tr, tmp);
 		it=next;
 		}
-	}
 
+	}
+	
 }

@@ -14,38 +14,39 @@ sort_spinors::sort_spinors(const Kernel& k, Ex& e)
 
 bool sort_spinors::can_apply(iterator it) 
 	{
-	const Spinor *sp1=kernel.properties.get_composite<Spinor>(it);
-	const DiracBar *db=kernel.properties.get<DiracBar>(it);
+	const Spinor   *sp1=kernel.properties.get_composite<Spinor>(it);
+	const DiracBar *db1=kernel.properties.get<DiracBar>(it);
 
-	// FIXME: make sure that the parent is a product
-	if(sp1 && sp1->majorana && db) {
-		iterator par=tr.parent(it);
-		if(tr.is_valid(par)==false || *par->name!="\\prod") 
-			return false;
-		one=it;
-		it.skip_children();
-		++it;
-		const Spinor *sp2=kernel.properties.get_composite<Spinor>(it);
-		if(sp2) {
-			if(sp2->majorana==false) 
-				throw ArgumentException("sort_spinors: first spinor not Majorana.");
-			two=it;
-			gammamat=tr.end();
+	// Only act if the node is a Dira conjugate Majorana spinor.
+	if(! (sp1 && sp1->majorana && db1)) return false;
+	
+	// Only act if we are inside a product.
+	auto par=tr.parent(it);
+	if(tr.is_valid(par)==false || *par->name!="\\prod") 
+		return false;
+
+	one=it;
+	gammamat=tr.end();
+	two=tr.end();
+	
+	sibling_iterator sib=it;
+	++sib;
+	while(sib!=tr.end(par)) {
+		const Spinor      *spinor=kernel.properties.get_composite<Spinor>(sib);
+		const GammaMatrix *gamma =kernel.properties.get_composite<GammaMatrix>(sib);
+
+		if(spinor) {
+			if(!spinor->majorana)
+				throw ArgumentException("sort_spinors: second spinor not Majorana.");
+			two=sib;
 			return true;
 			}
-		const GammaMatrix *gam=kernel.properties.get_composite<GammaMatrix>(it);
-		if(gam) {
-			gammamat=it;
-			it.skip_children();
-			++it;
-			sp2=kernel.properties.get_composite<Spinor>(it);
-			if(sp2) {
-				if(sp2->majorana==false) 
-					throw ArgumentException("sort_spinors: second spinor not Majorana.");
-				two=it;
-				return true;
-				}
+		if(gamma) {
+			if(gammamat!=tr.end())
+				throw ArgumentException("sort_spinors: need to join_gamma first.");
+			gammamat=sib;
 			}
+		++sib;
 		}
 	return false;
 	}

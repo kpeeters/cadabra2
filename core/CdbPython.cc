@@ -80,6 +80,10 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			return "::empty";
 			}
 		}
+
+   // Add '__cdbkernel__' as first argument of post_process if it doesn't have that already.
+	boost::regex postprocmatch(R"(def post_process\(([^_]))");
+	line_stripped = boost::regex_replace(line_stripped, postprocmatch, "def post_process(__cdbkernel__, $1");
 	
 	// Replace $...$ with Ex(...).
 	boost::regex dollarmatch(R"(\$([^\$]*)\$)");

@@ -61,7 +61,13 @@ namespace cadabra {
 			double           scale; // highdpi scale
 
 			// Handler for vertical scrollbar changes.
-			void on_vscroll_changed();
+			bool on_vscroll_changed(Gtk::ScrollType, double);
+
+			// Handler for mouse wheel events.
+			bool on_mouse_wheel(GdkEventButton*);
+			
+			// Handler for scroll events.
+			bool on_scroll(GdkEventScroll*);
 			
 			// When something inside the large notebook canvas changes, we need
 			// to make sure that the current cell stays into view (if we are

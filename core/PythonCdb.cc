@@ -445,10 +445,11 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=tr
    
 	// Basic cleanup of rationals and subtractions, followed by
    // cleanup of nested sums and products.
-	pre_clean_dispatch_deep(*get_kernel_from_scope(), *ptr);
-	cleanup_dispatch_deep(*get_kernel_from_scope(), *ptr);
-	check_index_consistency(*get_kernel_from_scope(), *ptr, (*ptr).begin());
-	call_post_process(*ptr);
+	Kernel *kernel=get_kernel_from_scope();
+	pre_clean_dispatch_deep(*kernel, *ptr);
+	cleanup_dispatch_deep(*kernel, *ptr);
+	check_index_consistency(*kernel, *ptr, (*ptr).begin());
+	call_post_process(*kernel, *ptr);
 	//	std::cerr << "cleaned up" << std::endl;
 
 	// The local variable stack is not writeable so we cannot insert '_'
@@ -948,13 +949,12 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 
 		algo.set_progress_monitor(pm);
 		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
-		// std::cerr << "before post_process:\n" << print_tree(&ex) << std::endl;
-		call_post_process(ex);
+		call_post_process(*get_kernel_from_scope(), ex);
 		}
 	return &ex;
 	}
 
-void call_post_process(Ex& ex) 
+void call_post_process(Kernel& kernel, Ex& ex) 
 	{
 	// Find the 'post_process' function, and if found, turn off
 	// post-processing, then call the function on the current Ex.
@@ -963,16 +963,32 @@ void call_post_process(Ex& ex)
 			return;
 
 		post_process_enabled=false;
-		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+
+		boost::python::object post_process;
+		
 		try {
-			boost::python::object post_process = globals["post_process"];
-			post_process(boost::ref(ex));
+			// First try the locals.
+			boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+			post_process = locals["post_process"];
+			// std::cerr << "local post_process" << std::endl;
 			}
 		catch(boost::python::error_already_set const &exc) {
-			// In order to prevent the error from propagating, we have to read it out. 
+			// In order to prevent the error from propagating, we have to read it out. 			
 			std::string err = parse_python_exception();
-//			throw;
+			try {
+				boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+				post_process = globals["post_process"];
+				// std::cerr << "global post_process" << std::endl;				
+				}
+			catch(boost::python::error_already_set const &exc) {
+				// In order to prevent the error from propagating, we have to read it out. 
+				std::string err = parse_python_exception();
+				post_process_enabled=true;
+				return;
+				}
 			}
+		// std::cerr << "calling post-process" << std::endl;
+		post_process(boost::ref(kernel), boost::ref(ex));
 		post_process_enabled=true;
 		}
 	}

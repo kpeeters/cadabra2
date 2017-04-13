@@ -1,0 +1,20 @@
+
+def test01():
+    __cdbkernel__ = create_scope()
+    
+    def post_process(ex):
+        distribute(ex)
+        eliminate_kronecker(ex)
+        sort_product(ex)
+        canonicalise(ex)
+        collect_terms(ex)
+
+    \delta{#}::KroneckerDelta;
+    \GAMMA{#}::GammaMatrix;
+    ex:=\GAMMA^{m} \GAMMA^{n p q} \GAMMA^{n p q m r} \delta^{a b} \delta^{c r};
+    display(ex)
+    tst:= \GAMMA^{m} \GAMMA^{n p q} \GAMMA^{n p q m c} \delta^{a b} - @(ex);
+    display(tst)
+    assert(tst==0)
+
+test01()

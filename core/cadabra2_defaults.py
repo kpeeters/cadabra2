@@ -190,8 +190,9 @@ def _displayhook(arg):
 remember_display_hook = sys.displayhook
 sys.displayhook = _displayhook
 
-# Default post-processing algorithms.
+# Default post-processing algorithms. These are not pre-processed
+# so need to have the '__cdbkernel__' argument.
 
-def post_process(ex):
+def post_process(__cdbkernel__, ex):
     collect_terms(ex)
 

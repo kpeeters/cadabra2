@@ -241,4 +241,4 @@ cadabra::Kernel *get_kernel_from_scope();
 ///
 /// Run the post-process Python function (if defined) on the given expression.
 
-void call_post_process(cadabra::Ex& ex);
+void call_post_process(cadabra::Kernel&, cadabra::Ex& ex);
