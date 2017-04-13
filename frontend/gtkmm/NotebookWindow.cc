@@ -284,11 +284,11 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //		sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
 	canvasses[0]->scroll.get_vscrollbar()->signal_change_value().connect(
 		sigc::mem_fun(*this, &NotebookWindow::on_vscroll_changed));
-	canvasses[0]->ebox.signal_button_press_event().connect(
-		sigc::mem_fun(*this, &NotebookWindow::on_mouse_wheel));
+//	canvasses[0]->ebox.signal_button_press_event().connect(
+//		sigc::mem_fun(*this, &NotebookWindow::on_mouse_wheel));
 
-	canvasses[0]->ebox.signal_scroll_event().connect(
-		sigc::mem_fun(*this, &NotebookWindow::on_scroll));
+	canvasses[0]->scroll.signal_scroll_event().connect(
+		sigc::mem_fun(*this, &NotebookWindow::on_scroll), false);
 
 
 	// Window size and title, and ready to go.
@@ -799,19 +799,19 @@ bool NotebookWindow::on_vscroll_changed(Gtk::ScrollType st, double v)
 	return false;
 	}
 
-bool NotebookWindow::on_mouse_wheel(GdkEventButton *b)
-	{
-	std::cerr << b->button << std::endl;
-	if(b->button==2)
-		follow_cell=doc.end();
-	return false;
-	}
+//bool NotebookWindow::on_mouse_wheel(GdkEventButton *b)
+//	{
+//	if(b->button==2)
+//		follow_cell=doc.end();
+//	return false;
+//	}
 
 bool NotebookWindow::on_scroll(GdkEventScroll *s)
 	{
-	std::cerr << "scroll event" << std::endl;
-//	if(b->button==2)
-//		follow_cell=doc.end();
+	// We get here when the user rolls the scroll wheel inside the canvas;
+	// need to disable auto-follow.
+
+	follow_cell=doc.end();
 	return false;
 	}
 

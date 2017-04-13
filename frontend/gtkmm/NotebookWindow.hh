@@ -64,7 +64,7 @@ namespace cadabra {
 			bool on_vscroll_changed(Gtk::ScrollType, double);
 
 			// Handler for mouse wheel events.
-			bool on_mouse_wheel(GdkEventButton*);
+			// bool on_mouse_wheel(GdkEventButton*);
 			
 			// Handler for scroll events.
 			bool on_scroll(GdkEventScroll*);
