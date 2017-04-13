@@ -530,6 +530,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a234837b85622d61be9ab36451beef8d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a234837b85622d61be9ab36451beef8d6">cleanup_dispatch_deep</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, <a class="el" href="namespacecadabra.html#a01b80749ddd083fbce68d68f2f2a8d2a">dispatcher_t</a> disp=&amp;<a class="el" href="namespacecadabra.html#aab585ad00ba79405717929a3a3963cfd">cleanup_dispatch</a>)</td></tr>
 <tr class="memdesc:a234837b85622d61be9ab36451beef8d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">More general cleanup of an entire tree.  <a href="#a234837b85622d61be9ab36451beef8d6">More...</a><br/></td></tr>
 <tr class="separator:a234837b85622d61be9ab36451beef8d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae62079995c66f1240846295c93c70a45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#ae62079995c66f1240846295c93c70a45">cleanup_dispatch_deep</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;tr, Ex::iterator &amp;top, <a class="el" href="namespacecadabra.html#a01b80749ddd083fbce68d68f2f2a8d2a">dispatcher_t</a> dispatch)</td></tr>
+<tr class="separator:ae62079995c66f1240846295c93c70a45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga2149f5e760a85127785ad64dabd4a5a3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__compare.html#ga2149f5e760a85127785ad64dabd4a5a3">subtree_compare</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *, Ex::iterator <a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, Ex::iterator two, int mod_prel=-2, bool checksets=true, int compare_multiplier=-2, bool literal_wildcards=false)</td></tr>
 <tr class="memdesc:ga2149f5e760a85127785ad64dabd4a5a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Basic building block subtree comparison function for tensors without dummy indices, which determines whether two tensor subtrees are equal up to the names of indices.  <a href="group__compare.html#ga2149f5e760a85127785ad64dabd4a5a3">More...</a><br/></td></tr>
 <tr class="separator:ga2149f5e760a85127785ad64dabd4a5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -994,6 +996,44 @@ Variables</h2></td></tr>
 
 <p>More general cleanup of an entire tree. </p>
 <p>Walks depth-first along the entire tree and call cleanup_dispatch at every node. </p>
+
+</div>
+</div>
+<a class="anchor" id="ae62079995c66f1240846295c93c70a45"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void cadabra::cleanup_dispatch_deep </td>
+          <td>(</td>
+          <td class="paramtype">const Kernel &amp;&#160;</td>
+          <td class="paramname"><em>k</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex &amp;&#160;</td>
+          <td class="paramname"><em>tr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator &amp;&#160;</td>
+          <td class="paramname"><em>top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dispatcher_t&#160;</td>
+          <td class="paramname"><em>dispatch</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2443,7 +2483,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Apr 10 2017 20:38:40 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 13 2017 18:25:43 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

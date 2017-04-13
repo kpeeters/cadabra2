@@ -1,6 +1,7 @@
 var searchData=
 [
   ['eat_5finitial_5fwhitespace_5f',['eat_initial_whitespace_',['../classpreprocessor.html#a83b5b651073b42a9ca74a8dbc2c10d5f',1,'preprocessor']]],
+  ['ebox',['ebox',['../classcadabra_1_1NotebookCanvas.html#aaf0c211e41378b7ec3c50d0a337b950c',1,'cadabra::NotebookCanvas']]],
   ['edit',['edit',['../classcadabra_1_1CodeInput.html#a9094465de47836fc4e9d2d6ef0b4f527',1,'cadabra::CodeInput']]],
   ['email',['email',['../namespacesnoop.html#aa3a89a4b0cb802bb85e322c78d83c4f2',1,'snoop']]],
   ['end_5f',['end_',['../classcombin_1_1combinations__base.html#aa121102c76ba0631f48df8120d5a75ac',1,'combin::combinations_base']]],

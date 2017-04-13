@@ -14,6 +14,7 @@ var searchData=
   ['handle_5fprod',['handle_prod',['../classcadabra_1_1evaluate.html#a3481898723b3714afa942d934ffe9dc7',1,'cadabra::evaluate']]],
   ['handle_5fsum',['handle_sum',['../classcadabra_1_1evaluate.html#ae058baef4c16bb0965861fcc767d4336',1,'cadabra::evaluate']]],
   ['handle_5fterm',['handle_term',['../classcadabra_1_1integrate__by__parts.html#a2ab129c107a30879fd0af1acda1236de',1,'cadabra::integrate_by_parts']]],
+  ['handles',['handles',['../classcadabra2__defaults_1_1Server.html#a712c360b4964a143ad3816fb531d5cb2',1,'cadabra2_defaults.Server.handles()'],['../classServer.html#a5abf6234cd9755527acba63f32e8f769',1,'Server::handles()']]],
   ['has',['has',['../classcadabra_1_1Properties.html#a66afc11eecdec069c1ed52609873c9a5',1,'cadabra::Properties']]],
   ['has_5fnullifying_5ftrace',['has_nullifying_trace',['../classyngtab_1_1filled__tableau.html#aa5cbabfbfe327b3080b76d0d6f6dd559',1,'yngtab::filled_tableau']]],
   ['hash',['hash',['../namespacecombin.html#ad93edf3cab15d465e8fea289d4b99580',1,'combin']]],

@@ -11,6 +11,7 @@ var searchData=
   ['first_5fone',['first_one',['../classcombin_1_1symm__helper.html#a5ac6adfe04debc9a8c1ba1ddede6d388',1,'combin::symm_helper::first_one()'],['../classcombin_1_1symm__val__helper.html#aa2eb0a120cceae834bed7f69debded1e',1,'combin::symm_val_helper::first_one()']]],
   ['fl',['fl',['../classcadabra_1_1str__node.html#ae040dd2c3b189a29578fb4e5f0eaebea',1,'cadabra::str_node']]],
   ['flush',['flush',['../namespacesnoop.html#a9126e00546e669d5e981ca1fa533d368',1,'snoop']]],
+  ['follow_5fcell',['follow_cell',['../classcadabra_1_1NotebookWindow.html#ae8f49893a27da5325cfab53f9adba405',1,'cadabra::NotebookWindow']]],
   ['font_5fsize_5f',['font_size_',['../classcadabra_1_1TeXEngine.html#ac7e649e119f3c11e08ff711769b69dfa',1,'cadabra::TeXEngine']]],
   ['font_5fstep',['font_step',['../classcadabra_1_1NotebookWindow_1_1Prefs.html#ae922dc8f2dfaf1f22f022da4cb35d948',1,'cadabra::NotebookWindow::Prefs']]],
   ['for_5fobj',['for_obj',['../classProperty.html#a94c26b4da57ca3e79d24370efb0c5f65',1,'Property']]],
