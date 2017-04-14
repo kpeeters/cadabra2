@@ -5,7 +5,8 @@ function runbuild {
 	 # Start the VM and wait for it to come up.
 	 echo "Starting build bot for $1, ssh port $3"
 	 ssh buildbothost "nohup VBoxHeadless -s '$1' > /tmp/buildbot.out 2> /tmp/buildbot.err < /dev/null &"
-	 sleep 5
+	 echo "Waiting 10 seconds for VM to start up..."
+	 sleep 10
 
 	 # Setup the tunnel to the VM; a local port $3 gets mapped
 	 # to a port $3 on the build host, which is forwarded by 
@@ -52,10 +53,10 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
-runbuild "Fedora_24_build" ".rpm" 7001 fedora24
-runbuild "Mint_18" ".deb" 7002 mint18
-runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
+#runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
+#runbuild "Fedora_24_build" ".rpm" 7001 fedora24
+#runbuild "Mint_18" ".deb" 7002 mint18
+#runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
 runbuild "CentOS_7" ".rpm" 7004 centos7
 runbuild "Ubuntu_14.04_build" ".deb" 7005 ubuntu1404
-runbuild "Debian86" ".deb" 7006 debian86
+#runbuild "Debian86" ".deb" 7006 debian86
