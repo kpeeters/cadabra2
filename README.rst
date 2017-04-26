@@ -37,6 +37,7 @@ too. Select your system from the list bel
 - `Linux (older Fedora/CentOS/Scientific Linux)`_
 - `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
+- `Linux (Solus)`_
 - `Mac OS X`_
 - `Windows`_
 
@@ -211,6 +212,34 @@ Alternatively use ``makepkg``::
 Please consult the Arch Wiki
 https://wiki.archlinux.org/index.php/Arch_User_Repository#Installing_packages
 for more information regarding installing packages from the AUR.
+
+
+Linux (Solus)
+~~~~~~~~~~~~~
+
+Support for Solux Linux is experimental. To build from source on Solus
+Linux, first install the dependencies by doing::
+
+    sudo eopkg install -c system.devel
+    sudo eopkg install libboost-devel gmp-devel libgtkmm-3-devel 
+    sudo eopkg install sqlite3-devel texlive python3-devel
+    sudo eopkg install git cmake make g++
+
+It seems that Solus does not have a version of boost.python linked to 
+python3, so for the time being you need to configure with::
+
+    cd cadabra2
+    mkdir build
+    cd build
+    cmake .. -DUSE_PYTHON_3=OFF -DCMAKE_INSTALL_PREFIX=/usr
+    make
+    sudo make install
+
+This installs below ``/usr`` (instead of ``/usr/local`` on other
+platforms) because I could not figure out how to make it pick up
+libraries there.
+
+Any feedback on these instructions is welcome.
 
 
 Mac OS X
