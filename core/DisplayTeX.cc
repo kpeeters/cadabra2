@@ -41,14 +41,30 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\indexbracket" && child=="\\prod") return false;
 
-	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum")) return  true;
+	const Derivative *der=kernel.properties.get<Derivative>(it);
 
+	if(parent=="\\pow") {
+		int nc = Ex::number_of_children(it);
+		int ic = Algorithm::number_of_direct_indices(it);
+		if(nc-ic>0) {
+			Ex::sibling_iterator ch = Ex::begin(it);
+			while(ch->is_index())
+				++ch;
+			bool rao = reads_as_operator(it, ch);
+			if(rao)
+				return true;
+			}
+		}
+
+	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum" || der)) return  true;
+
+	
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
 //		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) { // function argument
-		if(*it->name=="\\sum") return false;
+		if(*it->name=="\\sum" || *it->name=="\\pow") return false;
 		}
 	else {
 		if(*it->name=="\\sum")  return true;
@@ -61,6 +77,7 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 	{
 	const Derivative *der=kernel.properties.get<Derivative>(obj);
 	if(der) {
+		if(*arg->name=="\\pow") return true;
 		// FIXME: this needs fine-tuning; there are more cases where
 		// no brackets are needed.
 		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
@@ -505,9 +522,12 @@ void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
+
+	str << "{";
 	dispatch(str, sib);
 	++sib;
 
+	str << "}";
 	if(sib!=tree.end(it)) {
 		str << "^{";
 		dispatch(str, sib);
@@ -604,8 +624,18 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 	auto ind_values=tree.end(it);
 	--ind_values;
 
+	str << "\\square";
+	auto sib=ind_names;
+	while(sib!=ind_values) {
+		if(sib->fl.parent_rel==str_node::p_sub)   str << "{}_{";
+		if(sib->fl.parent_rel==str_node::p_super) str << "{}^{";
+		dispatch(str, sib);
+		str << "}";
+		++sib;
+		}
+	
 	str << "\\left\\{\\begin{aligned}";
-	auto sib=tree.begin(ind_values);
+	sib=tree.begin(ind_values);
 	while(sib!=tree.end(ind_values)) {
 		Ex::sibling_iterator c=tree.begin(sib);
 		auto iv = tree.begin(c);

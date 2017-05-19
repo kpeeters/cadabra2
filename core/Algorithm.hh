@@ -78,15 +78,24 @@ class Algorithm {
 
 		void set_progress_monitor(ProgressMonitor *);
 
-		// The main entry points for running algorithms. The 'deep' flag indicates
-		// whether sub-expressions should be acted on too. The 'repeat' flag indicates
-		// whether the algorithm should be applied until the expression no longer 
-		// changes. The 'depth' flag, if not equal to -1, indicates the depth in the tree
-		// where the algorithm should start applying.
+		/// The main entry points for running algorithms, which traverse
+		/// the tree post-order ('child before parent'). The 'deep' flag
+		/// indicates whether sub-expressions should be acted on
+		/// too. The 'repeat' flag indicates whether the algorithm
+		/// should be applied until the expression no longer
+		/// changes. The 'depth' flag, if not equal to -1, indicates the
+		/// depth in the tree where the algorithm should start applying.
 
 		result_t  apply_generic(bool deep=true, bool repeat=false, unsigned int depth=0);
 		result_t  apply_generic(iterator&, bool deep, bool repeat, unsigned int depth);
 
+		/// Apply algorithm with alternative traversal: starting from
+		/// the top node, traverse the tree pre-order ('parent before
+		/// child') and once the algorithm acts at a given node, do not
+		/// traverse the subtree below anymore.
+
+		result_t  apply_pre_order(bool repeat=false);
+		
 		// Global information
 		unsigned int     number_of_calls;
 		unsigned int     number_of_modifications;

@@ -58,6 +58,32 @@ void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
 	pm=pm_;
 	}
 
+Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
+	{
+	if(pm) {
+		char *realname;
+		int status;
+		realname = abi::__cxa_demangle(typeid(*this).name(), 0, 0, &status);
+		pm->group(realname);
+		free(realname);
+		}
+
+	result_t ret=result_t::l_no_action;
+	Ex::iterator start=tr.begin();
+	while(start!=tr.end()) {
+		if(start->is_index()==false && apply_once(start)==result_t::l_applied) {
+			ret=result_t::l_applied;
+			// Need to cleanup on the entire tree above us.
+			
+			start.skip_children();
+			}
+		++start;
+		}
+	
+	if(pm) pm->group();
+	return ret;
+	}
+
 Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned int depth)
 	{
 	auto it = tr.begin();

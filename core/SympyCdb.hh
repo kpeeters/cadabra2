@@ -8,6 +8,15 @@
 
 namespace sympy {
 
+	/// \ingroup scalar
+	///
+	/// Functionality to act with Sympy on all scalar parts of an expression, and
+	/// keep the result in-place. This is a higher-level function than
+	/// 'apply' below.
+
+	cadabra::Ex* map_sympy(const cadabra::Kernel&, cadabra::Ex&,
+								  const std::vector<std::string>& wrap, const std::string& args, const std::string& method);
+	
    /// \ingroup scalar
    ///
    /// Functionality to act with Sympy functions on (parts of) Cadabra Ex expressions

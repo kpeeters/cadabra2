@@ -6,3 +6,6 @@ ex._sympy_()
 \partial{#}::PartialDerivative;
 ex:= \partial_{r}{ f };
 ex._sympy_()
+
+\partial{#}::PartialDerivative;
+ex:= \partial_{r}{ (\sin(r)**2)**2 };

@@ -15,6 +15,7 @@
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
 #endif
+#include "Snoop.hh"
 
 using namespace cadabra;
 
@@ -1031,7 +1032,8 @@ void NotebookWindow::on_file_open()
 
 	switch(result) {
 		case(Gtk::RESPONSE_OK): {
-			name = dialog.get_filename();			
+			name = dialog.get_filename();
+			snoop::log("open") << name << snoop::flush;
 			std::ifstream file(name);
 			std::string content, line;
 			
@@ -1411,6 +1413,8 @@ void NotebookWindow::on_help() const
 	std::string help_topic;
 	help_type_and_topic(before, after, help_type, help_topic);
 
+	snoop::log("help") << help_topic << snoop::flush;
+	
 	bool ret=false;
 	if(help_type==help_t::algorithm)
 		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb",

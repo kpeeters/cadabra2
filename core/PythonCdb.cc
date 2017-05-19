@@ -127,6 +127,7 @@ namespace boost {
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
 #include "algorithms/lr_tensor.hh"
+#include "algorithms/map_sympy.hh"
 #include "algorithms/order.hh"
 #include "algorithms/product_rule.hh"
 #include "algorithms/reduce_delta.hh"
@@ -340,16 +341,6 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	boost::python::object ret=parse(str.str());
 
 	return ret;
-	}
-
-Ex Ex_through_Sympy(Ex ex, std::string head)
-	{
-	Ex::iterator it=ex.begin();
-	std::vector<std::string> wrap;
-	wrap.push_back(head);
-	sympy::apply(*get_kernel_from_scope(), ex, it, wrap, "", "");
-
-	return ex;
 	}
 
 // Fetch objects from the Python side using their Python identifier.
@@ -932,7 +923,7 @@ std::string Property<Prop>::repr_() const
 ProgressMonitor *pm=0;
 
 template<class F>
-Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
+Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth, bool pre_order)
 	{
 	Ex::iterator it=ex.begin();
 	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
@@ -948,10 +939,19 @@ Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth)
 			}
 
 		algo.set_progress_monitor(pm);
-		ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+		if(!pre_order)
+			ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+		else
+			ex.update_state(algo.apply_pre_order(repeat));			
 		call_post_process(*get_kernel_from_scope(), ex);
 		}
 	return &ex;
+	}
+
+Ex* map_sympy_wrapper(Ex& ex, std::string head)
+	{
+	map_sympy algo(*get_kernel_from_scope(), ex, head);
+	return dispatch_base(ex, algo, true, false, 0, true);
 	}
 
 void call_post_process(Kernel& kernel, Ex& ex) 
@@ -997,21 +997,21 @@ template<class F>
 Ex* dispatch_ex(Ex& ex, bool deep, bool repeat, unsigned int depth)
 	{
 	F algo(*get_kernel_from_scope(), ex);
-	return dispatch_base(ex, algo, deep, repeat, depth);
+	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
 template<class F, typename Arg1>
 Ex* dispatch_ex(Ex& ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)
 	{
 	F algo(*get_kernel_from_scope(), ex, arg);
-	return dispatch_base(ex, algo, deep, repeat, depth);
+	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
 template<class F, typename Arg1, typename Arg2>
 Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
 	{
 	F algo(*get_kernel_from_scope(), ex, arg1, arg2);
-	return dispatch_base(ex, algo, deep, repeat, depth);
+	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
 template<class F, typename... Args>
@@ -1235,7 +1235,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("tree", &print_tree);
 	def("init_ipython", &init_ipython);
 	def("properties", &list_properties);
-	def("scas", &Ex_through_Sympy);
+	def("map_sympy", &map_sympy_wrapper, (arg("ex"), arg("function")=""), return_internal_reference<1>());
 
 	def("create_scope", &create_scope, 
 		 return_value_policy<manage_new_object>() );

@@ -14,6 +14,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\cos", "cos"},
 		{"\\sin", "sin"},
 		{"\\tan", "tan"},
+		{"\\log", "log"},		
 		{"\\int", "integrate" },
 		{"\\matrix", "Matrix" },
 		{"\\sum", "Sum" },

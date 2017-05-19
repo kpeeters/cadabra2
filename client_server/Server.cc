@@ -279,7 +279,7 @@ void Server::wait_for_job()
 			}
 		catch(std::runtime_error& ex) {
 			server_stopwatch.stop();
-			snoop::log(snoop::info) << "Python runtime exception" << snoop::flush;
+			// snoop::log(snoop::info) << "Python runtime exception" << snoop::flush;
 			// On error we remove all other blocks from the queue.
 			lock.lock();
 			std::queue<Block> empty;
@@ -290,7 +290,7 @@ void Server::wait_for_job()
 			}
 		catch(std::exception& ex) {
 			server_stopwatch.stop();
-			snoop::log(snoop::info) << "System exception" << snoop::flush;
+			// snoop::log(snoop::info) << "System exception" << snoop::flush;
 			lock.lock();
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);
@@ -361,7 +361,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 //		std::cout << "clearing block queue" << std::endl;
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
-		snoop::log(snoop::warn) << "Job stop requested." << snoop::flush;
+		//snoop::log(snoop::warn) << "Job stop requested." << snoop::flush;
 		}
 	else if(msg_type=="init") {
 		// Stop any running blocks.

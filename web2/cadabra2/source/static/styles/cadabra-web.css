@@ -424,6 +424,15 @@ div.young_row {
 	 height: 10px;
 }
 
+/* Blog */
+
+h2.blog {
+	 width: 60%;
+}
+p.blog {
+	 width: 60%;
+}
+
 /* Small screens */
 
 @media screen and (max-width: 800px) {

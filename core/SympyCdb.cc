@@ -11,6 +11,8 @@
 
 using namespace cadabra;
 
+#define DEBUG
+
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, const std::string& args, 
 								  const std::string& method)
 	{
@@ -39,7 +41,9 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	// We then execute the expression in Python.
 
 	//ex.print_recursive_treeform(std::cerr, it);
-	// std::cerr << "feeding " << str.str() << std::endl;
+#ifdef DEBUG
+	std::cerr << "feeding " << str.str() << std::endl;
+#endif	
 
 	auto module = boost::python::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
@@ -48,7 +52,9 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	auto __str__ = obj.attr("__str__");
 	boost::python::object res = __str__();
 	std::string result = boost::python::extract<std::string>(res);
-	// std::cerr << "result " << result << std::endl;
+#ifdef DEBUG	
+	std::cerr << "result " << result << std::endl;
+#endif	
 	
 
    // After that, we construct a new sub-expression from this string by using our

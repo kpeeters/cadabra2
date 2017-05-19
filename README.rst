@@ -267,6 +267,10 @@ to build Cadabra, otherwise the Cadabra style files will not be
 installed in the appropriate place. Make sure 'latex' works from the
 terminal in which you will build Cadabra.
 
+If you have Anaconda installed as well, please refer to a this
+question on the Cadabra Q&A about getting Cadabra to build and run correctly:
+http://cadabra.science/qa/273/compatibility-with-anaconda
+
 You need to clone the cadabra2 git repository (if you download the
 .zip file you will not have all data necessary to build). So do::
 

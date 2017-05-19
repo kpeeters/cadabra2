@@ -7,6 +7,8 @@
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
 #endif
+#include "Snoop.hh"
+#include "Config.hh"
 
 // Signal handler for ctrl-C
 
@@ -60,6 +62,9 @@ void Cadabra::on_activate()
    add_window(*nw);
 	nw->show();
 
+	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;	
+	snoop::log("start") << version << snoop::flush;
+	
 	if(!nw->is_registered()) {
 		Gtk::Dialog md("Welcome to Cadabra!", *nw, Gtk::MESSAGE_WARNING);
 		md.set_transient_for(*nw);

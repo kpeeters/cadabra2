@@ -18,6 +18,7 @@
 #include <glibmm/miscutils.h>
 
 #include "Snoop.hh"
+#include "Config.hh"
 
 using namespace cadabra;
 
@@ -25,7 +26,8 @@ DocumentThread::DocumentThread(GUIBase* g)
 	: gui(g), compute(0), disable_stacks(false)
 	{
 	// Setup logging.
-	snoop::log.init("Cadabra", "2.0", "log.cadabra.science");
+	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
+	snoop::log.init("Cadabra", version, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
 //	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 

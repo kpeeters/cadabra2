@@ -184,7 +184,7 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 											 current_parent_rel_);
 			else str  << "}";
 			}
-//		else str << " ";
+		else str << " ";
 		
 		previous_bracket_=current_bracket_;
 		previous_parent_rel_=current_parent_rel_;

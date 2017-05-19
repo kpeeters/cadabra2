@@ -130,12 +130,7 @@ def test02b():
 # Cadabra 2.x.    
 
 def test03():
-    # Unfortunately when you create a local scope the
-    # post-process function does not see this kernel,
-    # but rather the global one?!? That _despite_ the
-    # fact that print(__cdbkernel__) in there shows the
-    # same address?
-    #    __cdbkernel__ = create_scope()
+    __cdbkernel__ = create_scope()
         
     \delta{#}::KroneckerDelta.
     {m, n, p, q, r, a, b, c}::Indices(flat).
@@ -290,9 +285,8 @@ test03()
 # @collect_terms!(%);
 # @assert(obj10b);
 # 
-# # Test 3: numerical indices
-# #
-# @reset.
+
+# Numerical indices
 
 def test03():
     __cdbkernel__ = create_scope()

@@ -194,6 +194,7 @@ set(LOCAL_SRC_FILES
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
   algorithms/lr_tensor.cc
+  algorithms/map_sympy.cc
   algorithms/order.cc
   algorithms/product_rule.cc
   algorithms/reduce_delta.cc
