@@ -79,6 +79,8 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 			}
 		++start;
 		}
+
+	cleanup_dispatch_deep(kernel, tr);
 	
 	if(pm) pm->group();
 	return ret;
