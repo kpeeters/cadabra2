@@ -1,0 +1,149 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}A.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}r.\\end{dmath*}"
+				}
+			],
+			"source" : "\\partial{#}::PartialDerivative;\nA::Depends(r);\nr::Coordinate;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}{\\left(\\partial_{r}{{\\left(\\sin{A}\\right)}^{2}}\\right)}^{2}+{\\left(\\partial_{r}{{A}^{2}}\\right)}^{2}+{\\left(\\partial_{r}{{r}^{2}}\\right)}^{2}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= \\partial_{r}{\\sin{A}**2}**2 +\\partial_{r}{A**2}**2 + \\partial_{r}{ r**2 }**2;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}4{r}^{2}+\\frac{1}{2}\\left(-\\cos{4A}+1\\right) {\\left(\\partial_{r}{A}\\right)}^{2}+4{A}^{2} {\\left(\\partial_{r}{A}\\right)}^{2}\\end{dmath*}"
+				}
+			],
+			"source" : "scas(ex,\"simplify\");"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}{\\sum}  (0x7f26d4029738)\n  1:{\\pow}  (0x7f26d401f8d8)\n  2:  {\\partial}  (0x7f26d4021e78)\n  3:    _{r}  (0x7f26d4033008)\n  4:    {\\pow}  (0x7f26d4033058)\n  5:      {\\sin}  (0x7f26d40341c8)\n  6:        {A}  (0x7f26d400b148)\n  7:      {1}  2  (0x7f26d4034218)\n  8:  {1}  2  (0x7f26d4044828)\n  9:{\\pow}  (0x7f26d4044878)\n 10:  {\\partial}  (0x7f26d4027ca8)\n 11:    _{r}  (0x7f26d4027cf8)\n 12:    {\\pow}  (0x7f26d4031228)\n 13:      {A}  (0x7f26d4031278)\n 14:      {1}  2  (0x7f26d40344b8)\n 15:  {1}  2  (0x7f26d4034508)\n 16:{\\pow}  (0x7f26d4027e88)\n 17:  {\\partial}  (0x7f26d4027ed8)\n 18:    _{r}  (0x7f26d4046c18)\n 19:    {\\pow}  (0x7f26d4046c68)\n 20:      {r}  (0x7f26d4036bf8)\n 21:      {1}  2  (0x7f26d4036c48)\n 22:  {1}  2  (0x7f26d4036c98)\n\n\\end{verbatim}"
+				}
+			],
+			"source" : "print(tree(ex))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{r}{{r}^{2}}\\end{dmath*}"
+				}
+			],
+			"source" : "ex2:= \\partial_{r}{r**2};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2r\\end{dmath*}"
+				}
+			],
+			"source" : "ex3=scas(ex2, \"simplify\");"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\partial_{r}{{r}^{2}}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2r\\end{dmath*}"
+				}
+			],
+			"source" : "ex2;\nex3;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}4 r^{2} + 4 A^{2}{\\left (r \\right )} \\frac{d}{d r} A{\\left (r \\right )}^{2} + 4 \\sin^{2}{\\left (A{\\left (r \\right )} \\right )} \\cos^{2}{\\left (A{\\left (r \\right )} \\right )} \\frac{d}{d r} A{\\left (r \\right )}^{2}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}<class 'sympy.core.add.Add'>\n\\end{verbatim}"
+				}
+			],
+			"source" : "s = ex._sympy_();\nprint(type(s))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}{\\left(\\partial_{r}{{\\left(\\sin{A}\\right)}^{2}}\\right)}^{2}+{\\left(\\partial_{r}{{A}^{2}}\\right)}^{2}+{\\left(\\partial_{r}{{r}^{2}}\\right)}^{2}\\end{dmath*}"
+				}
+			],
+			"source" : "ex;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
