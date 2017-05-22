@@ -18,7 +18,7 @@ bool map_sympy::can_apply(iterator st)
 	for(auto& ind: ind_free) {
 		const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(ind.second, true);
 		const Symbol     *smb=kernel.properties.get_composite<Symbol>(ind.second, true);
-		if(cdn==false && smb==false)
+		if(cdn==0 && smb==0)
 			return false;
 		}
 	return (ind_dummy.size()==0);
