@@ -39,7 +39,7 @@ var searchData=
   ['seq_5fnumbers_5fof_5ffirst_5findices',['seq_numbers_of_first_indices',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a225af5667949ae6079a871f8542eef05',1,'cadabra::exchange::identical_tensors_t']]],
   ['serial_5fmutex',['serial_mutex',['../classcadabra_1_1DataCell.html#abafd6821fe96982d973816982d205c4b',1,'cadabra::DataCell']]],
   ['serial_5fnumber',['serial_number',['../classcadabra_1_1DataCell.html#aad689c6c8d6ab49cb2b29a5a9ecceb8f',1,'cadabra::DataCell::serial_number()'],['../classcadabra_1_1Properties.html#ae09ae6819513542b2c020f5f184f238b',1,'cadabra::Properties::serial_number()']]],
-  ['server',['Server',['../classServer.html',1,'Server'],['../classServerWrapper.html#a3ee72c1737e42fef542337f59ebba9c3',1,'ServerWrapper::server()'],['../classServer.html#ad5ec9462b520e59f7ea831e157ee5e59',1,'Server::Server()'],['../classServer.html#aaf5176747aba430a307fd4ca82dd8c01',1,'Server::Server(const Server &amp;)=delete'],['../classServer.html#aa6b2b443e84f4391dc11e473b1514e6e',1,'Server::Server(const std::string &amp;socket)']]],
+  ['server',['Server',['../classServer.html',1,'Server'],['../classServer.html#ad5ec9462b520e59f7ea831e157ee5e59',1,'Server::Server()'],['../classServer.html#aaf5176747aba430a307fd4ca82dd8c01',1,'Server::Server(const Server &amp;)=delete'],['../classServer.html#aa6b2b443e84f4391dc11e473b1514e6e',1,'Server::Server(const std::string &amp;socket)'],['../classServerWrapper.html#a3ee72c1737e42fef542337f59ebba9c3',1,'ServerWrapper::server()']]],
   ['server',['Server',['../classcadabra2__defaults_1_1Server.html',1,'cadabra2_defaults']]],
   ['server_2ecc',['Server.cc',['../Server_8cc.html',1,'']]],
   ['server_2ehh',['Server.hh',['../Server_8hh.html',1,'']]],

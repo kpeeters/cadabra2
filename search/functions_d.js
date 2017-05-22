@@ -5,6 +5,8 @@ var searchData=
   ['make_5fex_5ffrom_5fstring',['make_Ex_from_string',['../PythonCdb_8cc.html#a0bf759b16ec857fe53da1cf78354d54d',1,'PythonCdb.cc']]],
   ['make_5flist',['make_list',['../group__core.html#gad925ab5545854ee596c218738f11b013',1,'cadabra']]],
   ['make_5fx_5fand_5finject_5fy',['make_x_and_inject_y',['../ptest_8cc.html#a87a58683149353edf4ee2fa9ab715f61',1,'ptest.cc']]],
+  ['map_5fsympy',['map_sympy',['../group__scalar.html#ga0ad37ce2c6ccfc434e7500426984e536',1,'sympy']]],
+  ['map_5fsympy_5fwrapper',['map_sympy_wrapper',['../PythonCdb_8cc.html#a257b7ec0e566fe19e70d8d66be8db1e2',1,'PythonCdb.cc']]],
   ['master_5finsert',['master_insert',['../classcadabra_1_1Properties.html#a0d54a20c7052dac5d2dc362276f98a76',1,'cadabra::Properties']]],
   ['match',['match',['../classcadabra_1_1pattern.html#ad3ef1fbd9c892f506eeceae5109f11e1',1,'cadabra::pattern']]],
   ['match_5fsubproduct',['match_subproduct',['../classcadabra_1_1Ex__comparator.html#a5231edc5cffe35126aed77c499872338',1,'cadabra::Ex_comparator']]],
