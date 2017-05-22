@@ -10,6 +10,7 @@ var searchData=
   ['popen2_2ehh',['popen2.hh',['../popen2_8hh.html',1,'']]],
   ['preclean_2ecc',['PreClean.cc',['../PreClean_8cc.html',1,'']]],
   ['preclean_2ehh',['PreClean.hh',['../PreClean_8hh.html',1,'']]],
+  ['preferences_2ehh',['Preferences.hh',['../Preferences_8hh.html',1,'']]],
   ['preprocessor_2ecc',['PreProcessor.cc',['../PreProcessor_8cc.html',1,'']]],
   ['preprocessor_2ehh',['PreProcessor.hh',['../PreProcessor_8hh.html',1,'']]],
   ['product_5frule_2ecc',['product_rule.cc',['../product__rule_8cc.html',1,'']]],

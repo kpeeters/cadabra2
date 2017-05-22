@@ -8,7 +8,7 @@ var searchData=
   ['machine_5fid',['machine_id',['../classsnoop_1_1Snoop_1_1AppEntry.html#a6580c9dd56fb636432e888afc5e1a840',1,'snoop::Snoop::AppEntry']]],
   ['main_5fmodule',['main_module',['../classServer.html#a21cfe7e2da7f64454b3dac13e005ad3d',1,'Server']]],
   ['main_5fnamespace',['main_namespace',['../classServer.html#a798de16f2c421b49e0dc0e28ee2d5071',1,'Server']]],
-  ['mainbox',['mainbox',['../classcadabra_1_1NotebookWindow.html#aaf20a08d6a31fc53ad4d61e377220b69',1,'cadabra::NotebookWindow']]],
+  ['mainbox',['mainbox',['../classcadabra_1_1NotebookWindow.html#aaf20a08d6a31fc53ad4d61e377220b69',1,'cadabra::NotebookWindow::mainbox()'],['../classPreferencesWindow.html#af3324b54031ad1a66e546a10a6efa13c',1,'PreferencesWindow::mainbox()']]],
   ['majorana',['majorana',['../classcadabra_1_1Spinor.html#a301264873e2cbb6b9faa2dc38ed7fc94',1,'cadabra::Spinor']]],
   ['make_5fconsistent_5fonly',['make_consistent_only',['../classcadabra_1_1flatten__product.html#ad97cca7b96948452a6f4567e0be5b128',1,'cadabra::flatten_product::make_consistent_only()'],['../classcadabra_1_1flatten__sum.html#a5908e841f86a6823c0e8f1e69d446172',1,'cadabra::flatten_sum::make_consistent_only()']]],
   ['max_5fserial_5fnumber',['max_serial_number',['../classcadabra_1_1DataCell.html#ac494264b59e4abcdf041cbad0c730357',1,'cadabra::DataCell']]],

@@ -23,6 +23,7 @@ var searchData=
   ['hbox',['hbox',['../classcadabra_1_1TeXView.html#a920c1a6292d0324b72ef965c936d452a',1,'cadabra::TeXView']]],
   ['hdl',['hdl',['../classServer_1_1Connection.html#acc5922b3c78f63de5c6c23213bed9923',1,'Server::Connection::hdl()'],['../classServer_1_1Block.html#a304db5a0671d63d5be9deb5932f35c00',1,'Server::Block::hdl()']]],
   ['head',['head',['../classcadabra_1_1Properties.html#a6d936dc7609465b308d84f690bd28c7d',1,'cadabra::Properties']]],
+  ['head_5f',['head_',['../classcadabra_1_1map__sympy.html#a6ae797646aebd43d458e3034cf474200',1,'cadabra::map_sympy']]],
   ['head_5fis_5fgenerated',['head_is_generated',['../classpreprocessor_1_1accu__t.html#a070ea5823f5a30394b5b309965b71dbd',1,'preprocessor::accu_t']]],
   ['height',['height',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a45a6df5b7a6a627cc56e02506f79b994',1,'cadabra::TeXEngine::TeXRequest']]],
   ['height_5f',['height_',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a83fd19205ee1da4efeb0d59e4fd6a188',1,'cadabra::TeXEngine::TeXRequest']]],
