@@ -159,6 +159,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	auto sib2=sib1;
 	++sib2;
 	while(sib2!=tr.end(it)) {
+		std::cerr << "merging components " << Ex(sib1) << " and " << Ex(sib2) << std::endl;
 		merge_components(sib1, sib2);
 		sib2=tr.erase(sib2);
 		}

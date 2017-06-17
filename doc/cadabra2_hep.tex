@@ -333,7 +333,7 @@ canonicalise(_);
 \botrule
 The first line indicates that the tensor has the symmetries of the
 \raisebox{2ex}{$\ftableau{ac,bd}$} tableau (the numbers in the \verb|indices| argument
-refer to the index positions). The \verb|canonicalise| command writes
+refer to the index positions). The \verb|canonicalise| algorithm writes
 the input in canonical form with respect to mono-term symmetries
 (anti-symmetry in the two index pairs and symmetry under pair
 exchange). The Ricci symmetry is also encoded in the Young tableau and
@@ -421,10 +421,10 @@ which makes use of the more general tableau symmetry property which we
 have seen earlier.} Here it effectively associates the $\nabla$
 operator to the Riemann tensor. We can see this in action, for
 instance, by verifying that the Bianchi identity indeed holds,
-\footnote{The ``2'' following the exclamation mark on
-  {\tt @young\_project\_tensor!2(\%)} indicates that this command should
-  only be applied at ``level 2'' of the expression, i.e.~at the level
-  of the terms of the sum.}
+\footnote{The {\tt depth=1} parameter of the
+  {\tt young\_project\_tensor} algorithm indicates that this command
+  should only be applied at ``level 1'' of the expression, i.e.~at the
+  level of the terms of the sum.}
 \end{cdbcom}
 \begin{cdbcont}
 ex:= \nabla_{m}{R_{p q r s}} + \nabla_{p}{R_{q m r s}} + \nabla_{q}{R_{m p r s}}:

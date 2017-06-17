@@ -452,3 +452,19 @@ test23()
 # ex:= \partial_{a}{ A_{b} };
 # rl:= \partial_{r}{ A_{t} } = 1;
 # evaluate(ex, rl);
+
+{\theta, \varphi}::Coordinate;
+{\alpha, \beta, \gamma, \delta, \rho, \sigma, \mu, \nu, \lambda}::Indices(values={\varphi, \theta}, position=fixed);
+\partial{#}::PartialDerivative;
+g_{\alpha\beta}::Metric.
+g^{\alpha\beta}::InverseMetric.
+
+sphe:={ g_{\theta\theta} = r**2,
+         g_{\varphi\varphi} = r**2 \sin(\theta)**2 }.
+complete(sphe, $g^{\alpha\beta}$);
+
+ch:= \Gamma^{\alpha}_{\mu\nu} = 1/2 g^{\alpha\beta} ( \partial_{\nu}{g_{\beta\mu}}
+                                                      +\partial_{\mu}{g_{\beta\nu}}
+                                                      -\partial_{\beta}{g_{\mu\nu}} );
+
+evaluate(ch, sphe, rhsonly=True);
