@@ -24,7 +24,9 @@
 #include "Props.hh"
 #include "Cleanup.hh"
 #include <typeinfo>
+#ifndef WIN32
 #include <cxxabi.h>
+#endif // !WIN32
 
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"

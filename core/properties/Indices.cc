@@ -40,14 +40,14 @@ bool Indices::parse(const Kernel&, keyval_t& keyvals)
 				}
 			set_name=*ki->second->name;
 			if(set_name.size()>0) {
-				if(set_name[0]=='\"' and set_name[set_name.size()-1]=='\"')
+				if(set_name[0]=='\"' && set_name[set_name.size()-1]=='\"') // wtf '&&' was 'and' before, what dark macro is that?
 					set_name=set_name.substr(1,set_name.size()-2);
 				}
 			}
 		else if(ki->first=="parent") {
 			parent_name=*ki->second->name;
 			if(parent_name.size()>0) {
-				if(parent_name[0]=='\"' and parent_name[set_name.size()-1]=='\"')
+				if(parent_name[0]=='\"' && parent_name[set_name.size()-1]=='\"')
 					parent_name=parent_name.substr(1,parent_name.size()-2);
 				}
 			}

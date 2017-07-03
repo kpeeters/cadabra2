@@ -4,7 +4,9 @@
 #include "Compare.hh"
 #include "Algorithm.hh" // FIXME: only needed because index_iterator is in there
 #include <sstream>
+#ifndef WIN32
 #include "pcrecpp.h"
+#endif //!WIN32
 #include "properties/Indices.hh"
 #include "properties/Coordinate.hh"
 #include "properties/ImplicitIndex.hh"

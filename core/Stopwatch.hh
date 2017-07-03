@@ -22,8 +22,10 @@
 #define stopwatch_hh__
 
 extern "C" {
+#ifndef WIN32
 #include <sys/time.h>
 #include <unistd.h>
+#endif !WIN32
 #include <signal.h>
 }
 
@@ -44,8 +46,10 @@ class Stopwatch {
 
 	private:
 		void checkpoint_() const;
+#ifndef WIN32
 		mutable struct timeval  tv1,tv2; 
 		mutable struct timezone tz;
+#endif // !WIN32
 		mutable long diffsec, diffusec;
 		bool stopped_;
 };

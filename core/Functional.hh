@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "functional"
+
 #include "Storage.hh"
 
 namespace cadabra {

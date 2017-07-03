@@ -71,10 +71,20 @@ endif()
 # Locate gmpxx. On Homebrew there seems to be constantly something wrong with
 # the pkgconfig for gmpxx. So we just add the include path by hand.
 if(APPLE)
-   add_definitions("-I/usr/local/include -I/opt/local/include")
+	add_definitions("-I/usr/local/include -I/opt/local/include")
+    find_library(GMP_LIB gmp REQUIRED)
+	find_library(GMPXX_LIB gmpxx REQUIRED)
+elseif(WIN32)
+	# by default in windows the gmp library puts results directly on the drive here
+    add_definitions("-I/msvc/include/ -I/msvc/lib/x86")
+    message("--- Adding ""-I/msvc/include -I/msvc/lib/x86"" for WIN32 for GMP")
+	
+	find_library(GMP_LIB NAMES gmp HINTS /msvc/lib/x86/ /msvc/include/)
+	find_library(GMPXX_LIB NAMES gmpxx HINTS /msvc/lib/x86/ /msvc/include/)
+else()
+	find_library(GMP_LIB gmp REQUIRED)
+	find_library(GMPXX_LIB gmpxx REQUIRED)
 endif()
-find_library(GMP_LIB gmp REQUIRED)
-find_library(GMPXX_LIB gmpxx REQUIRED)
 message("-- Found gmp ${GMP_LIB}")
 message("-- Found gmpxx ${GMPXX_LIB}")
 message("-- Found python ${PYTHON_LIBRARIES}")
