@@ -35,6 +35,9 @@ bool map_sympy::can_apply(iterator st)
    // In a product, it is still possible that there is a sub-product which
 	// contains no indices.
 	if(*st->name=="\\prod") {
+		// Find the factors in the product which have a proper index on them. Do this by
+		// starting at the index, and if it is not coordinate or symbol, then go up until we
+		// reach the first child level of the product.
 		for(auto& ind: ind_free) {
 			const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(ind.second, true);
 			const Symbol     *smb=kernel.properties.get_composite<Symbol>(ind.second, true);
@@ -73,13 +76,20 @@ Algorithm::result_t map_sympy::apply(iterator& it)
 	wrap.push_back(head_);
 
 	if(left.size()>0) {
-		std::cerr << "Sub-product with " << left.size() << " non-index carrying factors" << std::endl;
 		Ex prod("\\prod");
 		for(auto& fac: left)
-			prod.append_child(fac);
+			prod.append_child(prod.begin(), fac);
 		auto top=prod.begin();
 		sympy::apply(kernel, prod, top, wrap, "", "");
-		for(auto& kl: index_factors)
+		// Now remove the non-index carrying factors and replace with
+		// the factors of 'prod' just simplified.
+		sibling_iterator ps=prod.begin(top);
+		while(ps!=prod.end(top)) {
+			tr.insert_subtree(*left.begin(), ps);
+			++ps;
+			}
+		std::cerr << "Before erasing " << Ex(it) << std::endl;
+		for(auto& kl: left)
 			tr.erase(kl);
 		
 		return result_t::l_no_action;
