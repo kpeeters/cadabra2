@@ -4,3 +4,9 @@ doxygen
 *.o
 build
 __pycache__
+
+# windows specific build products
+Win32
+
+# untracked storage
+untracked
