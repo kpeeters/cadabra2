@@ -65,7 +65,11 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	if(pm) {
 		char *realname;
 		int status;
+#ifdef WIN32
+		realname = strdup(typeid(*this).name());
+#else // WIN32
 		realname = abi::__cxa_demangle(typeid(*this).name(), 0, 0, &status);
+#endif // WIN32
 		pm->group(realname);
 		free(realname);
 		}
@@ -99,7 +103,11 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	if(pm) {
 		char *realname;
 		int status;
+#ifdef WIN32
+		realname = strdup(typeid(*this).name());
+#else // WIN32
 		realname = abi::__cxa_demangle(typeid(*this).name(), 0, 0, &status);
+#endif // WIN32
 		pm->group(realname);
 		free(realname);
 		}
