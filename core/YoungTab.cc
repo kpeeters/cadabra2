@@ -166,7 +166,7 @@ std::ostream& operator<<(std::ostream& str, const tableau& tab)
 //	return false;
 //	}
 
-#ifndef __CYGWIN__
+#if !defined(__CYGWIN__) && !defined(WIN32)
 template<>
 void add_box(tableau& tab1, unsigned int row1,
 				 const tableau& tab2, unsigned int row2, unsigned int col2)

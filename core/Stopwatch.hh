@@ -21,11 +21,25 @@
 #ifndef stopwatch_hh__
 #define stopwatch_hh__
 
-extern "C" {
 #ifndef WIN32
-#include <sys/time.h>
-#include <unistd.h>
+	extern "C" {
+		#include <sys/time.h>
+		#include <unistd.h>
+	}
+#else
+	//#include <winsock2.h>
+	// MSVC defines this in winsock2.h but it's a heavyweight include
+	typedef struct Stopwatch_timeval {
+		long tv_sec;
+		long tv_usec;
+	} Stopwatch_timeval;
+	typedef struct Stopwatch_timezone {
+		// don't actually use this I guess
+		long dummy;
+	} Stopwatch_timezone;
 #endif !WIN32
+
+extern "C" {
 #include <signal.h>
 }
 
@@ -47,8 +61,11 @@ class Stopwatch {
 	private:
 		void checkpoint_() const;
 #ifndef WIN32
-		mutable struct timeval  tv1,tv2; 
+		mutable struct timeval  tv1, tv2;
 		mutable struct timezone tz;
+#else
+		mutable struct Stopwatch_timeval  tv1, tv2;
+		mutable struct Stopwatch_timezone tz;
 #endif // !WIN32
 		mutable long diffsec, diffusec;
 		bool stopped_;
