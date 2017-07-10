@@ -240,8 +240,13 @@ if("${PYTHON_SITE_PATH}" STREQUAL "")
 endif()
 
 message("-- Python site path at ${PYTHON_SITE_PATH}")
+if(WIN32)
+	set(PROJECT_BINARY_RESULT_EXT ".dll")
+else(WIN32)
+	set(PROJECT_BINARY_RESULT_EXT ".so")
+endif(WIN32)
 install(FILES
-  "${PROJECT_BINARY_DIR}/cadabra2.so"
+  "${PROJECT_BINARY_DIR}/cadabra2${PROJECT_BINARY_RESULT_EXT}"
   "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${PYTHON_SITE_PATH}")
 
 # Create the 'variable-substituted' cadabra2 inside the source tree so that we can
@@ -255,7 +260,7 @@ install(PROGRAMS "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
 add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
-set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
+set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX "${PROJECT_BINARY_RESULT_EXT}" IMPORT_SUFFIX "${PROJECT_BINARY_RESULT_EXT}")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
