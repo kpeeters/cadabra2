@@ -100,29 +100,30 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="Functional_8hh.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Storage_8hh.html">Storage.hh</a>&quot;</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>cadabra {</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">do_list</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;<span class="keywordtype">bool</span>(Ex::iterator)&gt; f);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef">list_size</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    Ex::iterator <a class="code" href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">do_subtree</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;Ex::iterator(Ex::iterator)&gt; f);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    Ex::iterator <a class="code" href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">find_in_list</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;Ex::iterator(Ex::iterator)&gt; f);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    Ex::iterator <a class="code" href="group__core.html#ga98df9c3dad71346a4a3eda736bc25547">find_in_subtree</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;<span class="keywordtype">bool</span>(Ex::iterator)&gt; f, <span class="keywordtype">bool</span> including_head=<span class="keyword">true</span>);</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    Ex <a class="code" href="group__core.html#gad925ab5545854ee596c218738f11b013">make_list</a>(Ex el);</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;};</div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="Storage_8hh.html">Storage.hh</a>&quot;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>cadabra {</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">do_list</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;<span class="keywordtype">bool</span>(Ex::iterator)&gt; f);</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef">list_size</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Ex::iterator <a class="code" href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">do_subtree</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;Ex::iterator(Ex::iterator)&gt; f);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    Ex::iterator <a class="code" href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">find_in_list</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;Ex::iterator(Ex::iterator)&gt; f);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    Ex::iterator <a class="code" href="group__core.html#ga98df9c3dad71346a4a3eda736bc25547">find_in_subtree</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;<span class="keywordtype">bool</span>(Ex::iterator)&gt; f, <span class="keywordtype">bool</span> including_head=<span class="keyword">true</span>);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    Ex <a class="code" href="group__core.html#gad925ab5545854ee596c218738f11b013">make_list</a>(Ex el);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;};</div>
 <div class="ttc" id="group__core_html_ga98df9c3dad71346a4a3eda736bc25547"><div class="ttname"><a href="group__core.html#ga98df9c3dad71346a4a3eda736bc25547">cadabra::find_in_subtree</a></div><div class="ttdeci">Ex::iterator find_in_subtree(const Ex &amp;tr, Ex::iterator it, std::function&lt; bool(Ex::iterator)&gt; f, bool including_head)</div><div class="ttdoc">Returns an iterator to the first element for which &#39;f&#39; returns &#39;true&#39;, or &#39;tr.end()&#39;. </div><div class="ttdef"><b>Definition:</b> Functional.cc:56</div></div>
 <div class="ttc" id="group__core_html_ga5c0d915d27dbcdf1aa070153a3e608b0"><div class="ttname"><a href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">cadabra::do_list</a></div><div class="ttdeci">void do_list(const Ex &amp;tr, Ex::iterator it, std::function&lt; bool(Ex::iterator)&gt; f)</div><div class="ttdoc">Apply a function on every element of a list, or if the iterator &#39;it&#39; does not point to a list...</div><div class="ttdef"><b>Definition:</b> Functional.cc:6</div></div>
 <div class="ttc" id="group__core_html_ga44043f2e9b54d9d04d5df7aed63c59d8"><div class="ttname"><a href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">cadabra::do_subtree</a></div><div class="ttdeci">Ex::iterator do_subtree(const Ex &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</div><div class="ttdoc">Apply a function on every node in the tree at and below the given node, depth-first. </div><div class="ttdef"><b>Definition:</b> Functional.cc:33</div></div>
@@ -133,7 +134,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 22 2017 14:36:28 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Jul 15 2017 19:46:52 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
