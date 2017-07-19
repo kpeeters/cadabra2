@@ -13,9 +13,12 @@
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
 
-#include <unistd.h>
 #include <sys/types.h>
+
+#if !defined(_MSC_VER)
+#include <unistd.h>
 #include <glibmm/miscutils.h>
+#endif // !defined(_MSC_VER)
 
 #include "Snoop.hh"
 #include "Config.hh"

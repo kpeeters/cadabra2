@@ -262,13 +262,14 @@ include_directories(".")
 add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
 set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX "${PROJECT_BINARY_RESULT_EXT}" IMPORT_SUFFIX "${PROJECT_BINARY_RESULT_EXT}")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
+set_target_properties(cadabra2 PROPERTIES IMPORT_SUFFIX ".lib")
 
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
 add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
 target_link_libraries(cadabra2python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-
+	
 install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
