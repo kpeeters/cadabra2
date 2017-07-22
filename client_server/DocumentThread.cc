@@ -16,8 +16,11 @@
 #include <sys/types.h>
 
 #if !defined(_MSC_VER)
-#include <unistd.h>
-#include <glibmm/miscutils.h>
+    #include <unistd.h>
+    #include <glibmm/miscutils.h>
+#else // !defined(_MSC_VER)
+    #include <Windows.h>
+    #include <Shlobj.h>
 #endif // !defined(_MSC_VER)
 
 #include "Snoop.hh"
@@ -34,8 +37,8 @@ DocumentThread::DocumentThread(GUIBase* g)
 	snoop::log.set_sync_immediately(true);
 //	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 
-	std::string configdir = Glib::get_user_config_dir();
-	std::ifstream config(configdir + std::string("/cadabra.conf"));
+    std::string configfilename = ConfigHelper::get_config_filename_path();
+    std::ifstream config(configfilename);
 	if(config) {
 		// std::cerr << "cadabra-client: reading config file" << std::endl;
 		std::set<std::string> options;
@@ -48,13 +51,13 @@ DocumentThread::DocumentThread(GUIBase* g)
 		}
 	else {
 		// First time run; create config file.
-		std::ofstream config(configdir + std::string("/cadabra.conf"));		
+		std::ofstream config(configfilename);
 		registered=false;
 		if(config) {
 			// config file written.
 			}
 		else {
-			throw std::logic_error("cadabra-client: Cannot write "+configdir+"/cadabra.conf");
+			throw std::logic_error("cadabra-client: Cannot write "+configfilename);
 			}
 		}
 	}
@@ -184,8 +187,7 @@ void DocumentThread::set_user_details(const std::string& name, const std::string
 	snoop::log("affiliation") << affiliation << snoop::flush;	
 
 	// FIXME: make this a generic function to write all our config data.
-	std::string configdir = Glib::get_user_config_dir();
-	std::ofstream config(configdir + std::string("/cadabra.conf"));
+	std::ofstream config(ConfigHelper::get_config_filename_path());
 	config << "registered=true" << std::endl;
 	}
 
@@ -244,3 +246,27 @@ bool DocumentThread::help_type_and_topic(const std::string& before, const std::s
 	help_type=objtype;
 	return true;
 	}
+
+std::string ConfigHelper::get_config_dir_path() {
+#ifdef _MSC_VER
+    CHAR localfolderpath[MAX_PATH];
+    if (SUCCEEDED(SHGetFolderPath(NULL /*hwndOwner*/,
+        CSIDL_PROFILE, NULL /*nToken*/,
+        0 /*dwFlags*/, localfolderpath))) {
+        std::string configdir(localfolderpath);
+        return configdir;
+        }
+    else {
+        return std::string("."); // probably imminent failure anyway
+        }
+#else // _MSC_VER
+    std::string configdir = Glib::get_user_config_dir();
+    return configdir;
+#endif // _MSC_VER
+    }
+
+std::string ConfigHelper::get_config_filename_path() {
+    std::string configfilename("/cadabra.conf");
+    std::string configdir = ConfigHelper::get_config_dir_path();
+    return configdir+configfilename;
+    }

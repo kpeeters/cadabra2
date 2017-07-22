@@ -135,5 +135,12 @@ namespace cadabra {
 											 help_t& help_type, std::string& help_topic) const;
 
 	};
+
+    // TODO: find a better place for this
+    class ConfigHelper {
+    public:
+        static std::string get_config_dir_path();
+        static std::string get_config_filename_path();
+    };
 	
 }

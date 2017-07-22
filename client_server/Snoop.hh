@@ -20,6 +20,10 @@
 #include <json/json.h>
 #include <thread>
 
+#ifdef _MSC_VER
+typedef int pid_t; // Doesn't actually seem to be used anyway
+#endif // _MSC_VER
+
 namespace snoop {
 
 	class SnoopImpl;

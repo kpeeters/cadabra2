@@ -1,6 +1,7 @@
 
 #include "Snoop.hh"
 #include "SnoopPrivate.hh"
+#include "DocumentThread.hh" // for ConfigHelper class which needs to be moved
 
 #include <iostream>
 #include <string.h>
@@ -17,14 +18,15 @@
 #include <json/json.h>
 #include <set>
 
-#include <unistd.h>
 #include <sys/types.h>
 #if !defined(_WIN32) && !defined(_WIN64)
-   #include <pwd.h>
+    #include <unistd.h>
+    #include <pwd.h>
+    #include <glibmm/miscutils.h>
 #else
-   #include <windows.h>
+    #include <Windows.h>
+    #include <Shlobj.h>
 #endif
-#include <glibmm/miscutils.h>
 
 #define BOOST_SPIRIT_THREADSAFE
 #include <boost/property_tree/ptree.hpp>
@@ -118,13 +120,30 @@ void SnoopImpl::init(const std::string& app_name, const std::string& app_version
 		server_=server;
 
 		if(dbname.size()==0) {
+            std::string logdir;
+            std::string logsubdir("/.log");
 #if defined(_WIN32) || defined(_WIN64)
-         std::string logdir = Glib::get_user_data_dir();
-         mkdir(logdir.c_str());
+    #ifdef _MSC_VER
+            CHAR localfolderpath[MAX_PATH];
+            if (SUCCEEDED(SHGetFolderPath(NULL /*hwndOwner*/,
+                            CSIDL_PROFILE, NULL /*nToken*/, 
+                            0 /*dwFlags*/, localfolderpath))) {
+                logdir.assign(localfolderpath);
+            }
+            else {
+                logdir.assign("C:\\"); // probably shouldn't be logging at all? 
+            }
+            logdir += logsubdir;
+            CreateDirectory(logdir.c_str(), NULL /*lpSecurityAttributes*/);
+    #else //_MSC_VER
+            logdir = Glib::get_user_data_dir();
+            logdir += logsubdir;
+            mkdir(logdir.c_str());
+    #endif // _MSC_VER
 #else
 			struct passwd *pw = getpwuid(getuid());
 			const char *homedir = pw->pw_dir;
-			std::string logdir = homedir+std::string("/.log");
+			logdir = homedir+logsubdir;
 			mkdir(logdir.c_str(), 0700);
 #endif
 			//std::cerr << logdir << std::endl;
@@ -167,10 +186,8 @@ std::string Snoop::get_user_uuid(const std::string& appname)
 std::string SnoopImpl::get_user_uuid(const std::string& appname) 
 	{
 	std::string user_uuid="";
-
-	std::string configdir = Glib::get_user_config_dir();
-
-	std::string configpath=configdir + std::string("/snoop/"+appname+".conf");
+	std::string configdir=cadabra::ConfigHelper::get_config_dir_path();
+    std::string configpath=configdir + std::string("/snoop/"+appname+".conf");
 	std::ifstream config(configpath);
 	bool need_to_write=true;
 	if(config) {
@@ -187,11 +204,16 @@ std::string SnoopImpl::get_user_uuid(const std::string& appname)
 		}
 	if(need_to_write) {
 		// First time run; create config file.
-		std::string confbase = Glib::get_user_config_dir();
+		std::string confbase = configdir;
 		std::string confdir = confbase+std::string("/snoop");
 #if defined(_WIN32) || defined(_WIN64)
-		mkdir(confbase.c_str());
-		mkdir(confdir.c_str());
+    #ifdef _MSC_VER
+        CreateDirectory(confbase.c_str(), NULL /*lpSecurityAttributes*/);
+        CreateDirectory(confdir.c_str(), NULL /*lpSecurityAttributes*/);
+    #else // _MSC_VER
+        mkdir(confbase.c_str());
+        mkdir(confdir.c_str());
+    #endif // _MSC_VER
 #else
 		mkdir(confbase.c_str(), 0700);
 		mkdir(confdir.c_str(), 0700);

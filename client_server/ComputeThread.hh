@@ -6,7 +6,11 @@
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/functional.hpp>
 #include <thread>
-#include <glibmm/spawn.h>
+#ifndef _MSC_VER
+    #include <glibmm/spawn.h>
+#else // !_MSC_VER
+    #include <Windows.h>
+#endif // !_MSC_VER
 
 typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
@@ -118,11 +122,18 @@ namespace cadabra {
 			/// Set all cells to be non-running (e.g. after a kernel failure) and
 			/// report the status of each cell to the GUI.
 			void all_cells_nonrunning();
+            void close_and_cleanup_process();
 
 
 			// Self-started server
+#ifdef _MSC_VER
+            //HANDLE          server_pid;
+            HANDLE          server_stdout, server_stderr;
+            PROCESS_INFORMATION process_info;
+#else // _MSC_VER
 			Glib::Pid       server_pid;
-			int             server_stdout, server_stderr;
+            int             server_stdout, server_stderr;
+#endif // _MSC_VER
 			unsigned short  port;
 	};
 
