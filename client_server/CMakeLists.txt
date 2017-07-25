@@ -58,6 +58,10 @@ endif()
 find_package(SQLite3 REQUIRED)
 
 # Locate Boost
+add_definitions("-DBOOST_ALL_NO_LIB")
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
 if(USE_PYTHON_3)
   find_package(Boost 1.53.0 COMPONENTS python3)
   if(Boost_PYTHON3_FOUND)
@@ -76,9 +80,6 @@ if(USE_PYTHON_3)
 else()
   find_package(Boost 1.53.0 COMPONENTS python system regex program_options date_time filesystem REQUIRED)
 endif()
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR} ${SQLITE3_INCLUDE_DIR} ../core)
 
 if(WIN32)
@@ -95,6 +96,28 @@ endif()
 
 # find_package(Snoop REQUIRED)
 
+# Locate gmpxx. On Homebrew there seems to be constantly something wrong with
+# the pkgconfig for gmpxx. So we just add the include path by hand.
+if(APPLE)
+	add_definitions("-I/usr/local/include -I/opt/local/include")
+    find_library(GMP_LIB gmp REQUIRED)
+	find_library(GMPXX_LIB gmpxx REQUIRED)
+elseif(WIN32)
+	# by default in windows the gmp library puts results directly on the drive here
+    add_definitions("-I/msvc/include/ -I/msvc/lib/x86")
+    message("--- Adding ""-I/msvc/include -I/msvc/lib/x86"" for WIN32 for GMP")
+	
+	find_library(GMP_LIB NAMES gmp HINTS /msvc/lib/x86/ /msvc/include/)
+	find_library(GMPXX_LIB NAMES gmpxx HINTS /msvc/lib/x86/ /msvc/include/)
+else()
+	find_library(GMP_LIB gmp REQUIRED)
+	find_library(GMPXX_LIB gmpxx REQUIRED)
+endif()
+message("-- Found gmp ${GMP_LIB}")
+message("-- Found gmpxx ${GMPXX_LIB}")
+message("-- Found python ${PYTHON_LIBRARIES}")
+include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIRS})
+message("-- Python include dirs: ${PYTHON_INCLUDE_DIRS}")
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
@@ -104,7 +127,7 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 # Create the server library
 #link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp ../core/CdbPython.cc ../core/Stopwatch.cc ../core/ProgressMonitor.cc)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB})
 if (WIN32)
    target_link_libraries(cadabra_server ws2_32 mswsock)
 endif()

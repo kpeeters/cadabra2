@@ -22,6 +22,12 @@
 
 #include <cstddef>
 #include <iostream>
+#ifdef _MSC_VER
+#ifdef min
+// gmpxx.h uses "min" as a variable name, but windows.h also has a "min" #define
+#undef min
+#endif // min def
+#endif // _MSC_VER
 #include <gmpxx.h>
 #include <string>
 #include <vector>

@@ -1,4 +1,7 @@
 
+#ifdef _MSC_VER
+    #define NOMINMAX // avoid a conflicting min/max definition that originates in windows.h builds
+#endif // _MSC_VER
 
 #include <iostream>
 #include <fstream>

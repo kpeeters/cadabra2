@@ -9,6 +9,7 @@
 #ifndef _MSC_VER
     #include <glibmm/spawn.h>
 #else // !_MSC_VER
+    #define NOMINMAX
     #include <Windows.h>
 #endif // !_MSC_VER
 

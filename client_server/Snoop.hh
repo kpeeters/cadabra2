@@ -24,6 +24,16 @@
 typedef int pid_t; // Doesn't actually seem to be used anyway
 #endif // _MSC_VER
 
+namespace cadabra {
+// TODO: find a better place for this
+class ConfigHelper {
+public:
+    static std::string get_config_dir_path();
+    static std::string get_config_filename_path();
+};
+} // namespace cadabra
+
+
 namespace snoop {
 
 	class SnoopImpl;

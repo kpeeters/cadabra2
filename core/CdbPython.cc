@@ -2,6 +2,7 @@
 #include "CdbPython.hh"
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/replace.hpp>
+#include <sstream>
 
 std::string cadabra::escape_quotes(const std::string& line)
 	{

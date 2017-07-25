@@ -38,6 +38,34 @@
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 
+
+namespace cadabra {
+// TODO: this is not the place, but didn't want to add a new cc file in the middle of this port
+std::string ConfigHelper::get_config_dir_path() {
+#ifdef _MSC_VER
+    CHAR localfolderpath[MAX_PATH];
+    if (SUCCEEDED(SHGetFolderPath(NULL /*hwndOwner*/,
+        CSIDL_PROFILE, NULL /*nToken*/,
+        0 /*dwFlags*/, localfolderpath))) {
+        std::string configdir(localfolderpath);
+        return configdir;
+    }
+    else {
+        return std::string("."); // probably imminent failure anyway
+    }
+#else // _MSC_VER
+    std::string configdir = Glib::get_user_config_dir();
+    return configdir;
+#endif // _MSC_VER
+}
+
+std::string ConfigHelper::get_config_filename_path() {
+    std::string configfilename("/cadabra.conf");
+    std::string configdir = ConfigHelper::get_config_dir_path();
+    return configdir + configfilename;
+}
+} // using namespace cadabra
+
 using namespace snoop;
 
 // Global instance.
