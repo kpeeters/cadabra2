@@ -141,14 +141,14 @@ endif()
 
 # Create server binary
 include_directories("." "./websocketpp" "./jsoncpp")
-add_executable(cadabra-server cadabra-server.cc)
-add_executable(cadabra2html cadabra2html.cc DataCell.cc)
-add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc)
+add_executable(cadabra-server cadabra-server.cc Server.cc Snoop.cc jsoncpp/jsoncpp.cpp ../core/CdbPython.cc ../core/Stopwatch.cc ../core/ProgressMonitor.cc)
+add_executable(cadabra2html cadabra2html.cc DataCell.cc jsoncpp/jsoncpp.cpp)
+add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc jsoncpp/jsoncpp.cpp)
 #add_executable(test_talk_to_server test_talk_to_server.cc)
 #add_executable(regexp_tester regexp_tester.cc)
-target_link_libraries(cadabra-server cadabra_server)
-target_link_libraries(cadabra2html cadabra_client)
-target_link_libraries(cadabra2cadabra cadabra_client)
+target_link_libraries(cadabra-server ${Boost_LIBRARIES} ${PYTHON_LIBRARIES} ${SQLITE3_LIBRARIES})  # cadabra_server)
+target_link_libraries(cadabra2html ${Boost_LIBRARIES}) # cadabra_client)
+target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}) # cadabra_client)
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 # The preamble 'notebook.tex' should be kept in sync with the one in
