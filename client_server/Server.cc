@@ -204,7 +204,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		if(handle_output) {
 			err = catchErr.str();
 			catchErr.clear();
-			// std::cerr << "ERROR: " << err << std::endl;
+			std::cerr << "ERROR: " << err << std::endl;
 //		catchobj.attr("clear")();
 			}
 		throw std::runtime_error(err);

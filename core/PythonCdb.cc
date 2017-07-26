@@ -1436,11 +1436,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 
-	def("split_index", &dispatch_ex<split_index, Ex&>, 
-		 (arg("ex"),
-		  arg("rules"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+    // this seems like an error?
+	//def("split_index", &dispatch_ex<split_index, Ex&>, 
+	//	 (arg("ex"),
+	//	  arg("rules"),
+	//	  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
+	//	 return_internal_reference<1>() );
 	
 	def("unwrap", &dispatch_ex<unwrap, Ex&>, 
 		 (arg("ex"),
@@ -1549,10 +1550,12 @@ BOOST_PYTHON_MODULE(cadabra2)
 	pyNotYetImplemented.def("__str__", &NotYetImplemented::py_what);
 	register_exception_translator<NotYetImplemented>(&translate_NotYetImplemented);
 	
-#if BOOST_VERSION >= 106000
-	boost::python::register_ptr_to_python<std::shared_ptr<Ex> >();
-	//	boost::python::register_ptr_to_python<std::shared_ptr<Property> >();
-#endif	
+#ifndef _MSC_VER // this code causes an assertion failure on windows, but assuming it's good for someone?
+    #if BOOST_VERSION >= 106000
+	    boost::python::register_ptr_to_python<std::shared_ptr<Ex> >();
+	    //	boost::python::register_ptr_to_python<std::shared_ptr<Property> >();
+    #endif	
+#endif // _MSC_VER
 
 	// How can we give Python access to information stored in properties?
 	}

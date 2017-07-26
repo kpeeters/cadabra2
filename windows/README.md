@@ -21,8 +21,17 @@
 * Now build relevant projects from the cadabra2.sln
 
 == CURRENT STATUS ==
-* The projects cadabra2, cadabra_client, cadabra_server and a few others are building but largely untested. Other projects in progress
-** Currently running into issues with cadabra_client and cadabra_server not creating a .lib file that can be linked by other projects
+* All binaries build, but msvc treats as errors the other projects
+* Currently able to run by doing the following:
+** Made a new bin directory and copied relevant *.dll, *.exe and *.py files
+** Rename (or copy) cadabra2.dll to cadabra2.pyd
+** Copy cadabra2 file (it's a no extension python file)
+*** If there are problems with the import, try this from a python command line in the same dir
+*** import os
+*** import sys
+*** sys.path.append(os.getcwd())
+*** import cadabra2
+*** If that still fails, use depends.exe on cadabra2.dll to figure out what is missing
 
 == TODO ==
 * Make gmp a sub-project of cadabra2
