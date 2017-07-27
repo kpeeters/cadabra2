@@ -26,12 +26,14 @@
 ** Made a new bin directory and copied relevant *.dll, *.exe and *.py files
 ** Rename (or copy) cadabra2.dll to cadabra2.pyd
 ** Copy cadabra2 file (it's a no extension python file)
+** Make sure to copy over boost*.dll, gmpxx.dll, libpcrecpp.dll
 *** If there are problems with the import, try this from a python command line in the same dir
 *** import os
 *** import sys
 *** sys.path.append(os.getcwd())
 *** import cadabra2
 *** If that still fails, use depends.exe on cadabra2.dll to figure out what is missing
+** execute "python cadabra2" from this directory to start interactive mode
 
 == TODO ==
 * Make gmp a sub-project of cadabra2
