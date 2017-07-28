@@ -1,0 +1,242 @@
+#!/usr/bin/env python
+#
+# \ingroup pythoncore
+#
+# \file 
+# Command line interpreter for Cadabra, written in Python.
+#
+#     cadabra2 [-d] [filename]
+#
+# Running with the '-d' flag runs cadabra under gdb, so that
+# one can generate back traces etc.
+
+import sys
+import imp
+import site
+from code import InteractiveConsole
+import code
+import re
+# import readline # unused
+import rlcompleter
+import os
+
+from cadabra2 import *
+
+class FileCacher:
+    "Cache the stdout text so we can analyze it before returning it"
+    def __init__(self): self.reset()
+    def reset(self): self.out = []
+    def write(self,line): self.out.append(line)
+    def flush(self):
+#        output = '\n'.join(self.out)
+        output=self.out
+        self.reset()
+        return output
+
+
+class Shell(InteractiveConsole):
+    "Wrapper around Python that can filter input/output to the shell"
+    def __init__(self):
+        self.stdout = sys.stdout
+        self.cache = FileCacher()
+        # Variables to keep track of multi-line parsing info.
+        self.indent   = "";
+        self.lhs      = "";
+        self.rhs      = "";
+        self.operator = "";
+#        readline.set_completer(rlcompleter.Completer(vars).complete)
+        InteractiveConsole.__init__(self)
+        return
+
+    # If the object to be displayed is an Ex (add Property), print it
+    # using the human-readable str (FIXME: add other printers). If not,
+    # pass it on to the previously existing display hook.
+    def _displayhook(self, arg):
+        if isinstance(arg, Ex):
+            pass
+            #print(str(arg))
+        elif isinstance(arg, Property):
+            pass
+            #print(str(arg))
+        else:
+            self.remember_display_hook(arg)
+
+            
+    # Setup hooks for pretty printing.
+    def set_display(self):
+        self.remember_display_hook = sys.displayhook
+        sys.displayhook = self._displayhook
+
+    def unset_display(self):
+        sys.displayhook = self.remember_display_hook
+
+
+    def get_output(self): sys.stdout = self.cache
+    def return_output(self): sys.stdout = self.stdout
+
+    # Detect Cadabra expression statements and rewrite to Python form.
+    #  
+    # Lines containing ':=' are interpreted as expression declarations.
+    # Lines containing '::' are interpreted as property declarations.
+    # 
+    # These need to end on '.', ':' or ';'. If not, keep track of the
+    # input so far and store that in self.lhs, self.operator, self.rhs, and
+    # then return an empty string.
+    #
+    # TODO: make ';' at the end of '::' line result the print statement printing 
+    # property objects using their readable form; addresses one issue report).
+
+    def preprocess(self, line, shell):
+        # print '='+line+"=="
+        imatch = re.search('([\s]*)([^\s].*[^\s])([\s]*)', line)
+        if imatch:
+            indent_line=imatch.group(1)
+            end_of_line=imatch.group(3)
+        else:
+            indent_line=""
+            end_of_line="\n"
+        line_stripped=line.rstrip().lstrip()
+        # Do not do anything with comment lines.
+        if len(line_stripped)>0 and line_stripped[0]=='#':
+            return line
+        # Bare ';' gets replaced with 'display(_)'.
+        if line_stripped==';':
+            return indent_line+"display(_)\n"
+        
+        lastchar = line_stripped[-1:]
+        if lastchar=='.' or lastchar==';' or lastchar==':':
+            if self.lhs!="":
+                line_stripped=line_stripped[:-1]
+                self.rhs += line_stripped
+                rewrite = self.indent + self.lhs + " = Ex(r'" + self.rhs+"')"
+                if lastchar!='.' and len(self.indent)==0:
+                    rewrite += "; display("+self.lhs+")"
+                rewrite = rewrite+"\n"
+                self.indent=""
+                self.lhs=""
+                self.operator=""
+                self.rhs=""
+                return rewrite
+        else:
+            # If we are a Cadabra continuation, add to the rhs without further processing
+            # and return an empty line immediately.
+            if self.lhs!="":
+                self.rhs += line_stripped
+                return ""
+
+        # Add '__cdbkernel__' as first argument of post_process if it doesn't have that already.
+        line_stripped=re.sub(r'def post_process\(([^_])', r'def post_process(__cdbkernel__, \1', line_stripped)
+
+        # Replace $...$ with Ex(...).
+        line_stripped=re.sub(r'\$([^\$]*)\$', r'Ex(r"\1", False)', line_stripped)
+
+        # Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
+        imatch = re.match(r'([ ]*)converge\(([^\)]*)\):', line_stripped)
+        if imatch:
+            ret  = indent_line+imatch.group(1)+imatch.group(2)+".reset(); _="+imatch.group(2)+"\n"
+            ret += indent_line+imatch.group(1)+"while "+imatch.group(2)+".changed():\n"
+            return ret
+        
+        found = line_stripped.find(':=')
+        if found>0:
+            # If the last character is not a Cadabra terminator, start a capture process.
+            if lastchar!='.' and lastchar!=';' and lastchar!=':':
+                self.indent = indent_line
+                self.lhs = line_stripped[:found]
+                self.operator = ':='
+                self.rhs = line_stripped[found+2:]
+                return ""
+            else:
+                rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:-1]+"')"
+
+                objname=line_stripped[:found]
+                if lastchar!='.' and len(indent_line)==0:
+                    rewrite = rewrite + "; display(" + objname+")"
+                line=rewrite
+        else:
+            # Is it a property declaration?
+            found = line_stripped.find('::')
+            if found>0:
+                match = re.search('([a-zA-Z]*)(.*)[;\.:]*', line_stripped[found+2:])
+                if match:
+                    if len(match.group(2))>0: # declaration with arguments
+                        last = match.group(2)[1:-1]
+                        if len(last)>0 and last[-1]==')':
+                            last=last[:-1]
+                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex(r'"+line_stripped[:found]+"'), Ex(r'"+last+"') )"
+                    else:
+                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex(r'"+line_stripped[:found]+"'))"
+                    objname="__cdbtmp__"
+                    # print the expression if we are at top level (not in a function) and the last char is not '.'
+                    if lastchar!='.' and len(indent_line)==0:
+                        rewrite = rewrite + "; display(" + objname+")"
+                    line=rewrite
+                else:
+                    print("inconsistent") # property names can only contain letters
+            else:
+                line=indent_line+line_stripped
+                if lastchar==';' and shell==False:
+                    line+=" display(_)"
+                    
+        return line+end_of_line
+
+    def push(self,line):
+
+        line = self.preprocess(line, True)
+        if self.lhs == "":
+            # print('executing: ')
+            # print(line)
+
+            # Now feed the pre-parsed input to Python.
+            self.get_output()
+            sys.ps1='> '
+            ret=InteractiveConsole.push(self,line)
+            self.return_output()
+            output = self.cache.flush()
+            for line in output:
+                sys.stdout.write(line)
+
+            return ret
+        else:
+            # Preprocessing has detected an unfinished Cadabra line;
+            # switch the prompt to indicate Cadabra continuation, and
+            # do not feed the line to Python yet.
+            sys.ps1='| '
+            return ""
+
+if __name__ == '__main__':
+    sh = Shell()
+    sys.ps1='> '
+    sys.ps2='. '
+
+    if len(sys.argv)>1:
+        if '-d' in sys.argv:
+            rs = "gdb -q -ex r --args python "+sys.argv[0];
+            for a in sys.argv[1:]:
+                if a!='-d':
+                    rs += " "+a
+            #print('executing '+rs)
+            os.system(rs)
+        else:
+#           execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
+#            execfile(imp.find_module('cadabra2_defaults')[1])
+            with open(imp.find_module('cadabra2_defaults')[1]) as f:
+                code = compile(f.read(), "cadabra2_defaults.py", 'exec')
+                exec(code)
+
+            sh2 = InteractiveConsole()
+            with open(sys.argv[1]) as f:
+                collect=""
+                for line in f:
+                    sline=line.strip()
+#                    if len(sline)>0 and sline[0]!='#':
+                    collect += sh.preprocess(line, False)
+                #print "----\n"+collect+"----\n"
+                cmp = compile(collect, sys.argv[1], 'exec')
+                exec(cmp)
+                # would be nice to be able to continue from here on the command line, but that requires
+                # pulling in the right locals/globals
+                #            sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
+    else:
+        sh.runsource("print('Cadabra 2.1.5 (build 1274.7252e3b84 dated 2017-07-27)'); print ('Copyright (C) 2001-2017  Kasper Peeters <kasper.peeters@phi-sci.com>'); import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close(); print('Using SymPy version '+sympy.__version__);")
+        sh.interact(banner='Info at http://cadabra.science/\nAvailable under the terms of the GNU General Public License v3\n')
