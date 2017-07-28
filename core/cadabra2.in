@@ -16,7 +16,7 @@ import site
 from code import InteractiveConsole
 import code
 import re
-import readline
+#import readline # unused
 import rlcompleter
 import os
 
