@@ -77,7 +77,7 @@ if(APPLE)
 elseif(WIN32)
 	# by default in windows the gmp library puts results directly on the drive here
     add_definitions("-I/msvc/include/ -I/msvc/lib/x86")
-    message("--- Adding ""-I/msvc/include -I/msvc/lib/x86"" for WIN32 for GMP")
+    message("--- Adding '-I/msvc/include -I/msvc/lib/x86' for WIN32 for GMP")
 	
 	find_library(GMP_LIB NAMES gmp HINTS /msvc/lib/x86/ /msvc/include/)
 	find_library(GMPXX_LIB NAMES gmpxx HINTS /msvc/lib/x86/ /msvc/include/)
