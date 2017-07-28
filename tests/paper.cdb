@@ -129,7 +129,7 @@ print(timeit.timeit(test08,number=1))
 
 #-------
 
-def test0b():
+def test08b():
     __cdbkernel__=create_scope() 
     \ftableau{#}::FilledTableau(dimension=10);
     ex:=\ftableau{0,0}{1,1} \ftableau{a,a}{b,b};

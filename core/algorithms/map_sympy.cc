@@ -72,6 +72,8 @@ bool map_sympy::can_apply(iterator st)
 
 Algorithm::result_t map_sympy::apply(iterator& it)
 	{
+	// std::cerr << "Apply on " << tr << std::endl;
+	
 	std::vector<std::string> wrap;
 	wrap.push_back(head_);
 
@@ -80,19 +82,17 @@ Algorithm::result_t map_sympy::apply(iterator& it)
 		for(auto& fac: left)
 			prod.append_child(prod.begin(), fac);
 		auto top=prod.begin();
+		// std::cerr << "Feeding to sympy " << prod << std::endl;
 		sympy::apply(kernel, prod, top, wrap, "", "");
 		// Now remove the non-index carrying factors and replace with
 		// the factors of 'prod' just simplified.
-		sibling_iterator ps=prod.begin(top);
-		while(ps!=prod.end(top)) {
-			tr.insert_subtree(*left.begin(), ps);
-			++ps;
-			}
-		std::cerr << "Before erasing " << Ex(it) << std::endl;
+		tr.insert_subtree(*left.begin(), top);
+		// std::cerr << "Before erasing " << Ex(it) << std::endl;
 		for(auto& kl: left)
 			tr.erase(kl);
+		// std::cerr << "After erasing " << Ex(it) << std::endl;
 		
-		return result_t::l_no_action;
+		return result_t::l_applied;
 		}
 	else {
 		sympy::apply(kernel, tr, it, wrap, "", "");
