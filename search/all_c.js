@@ -24,6 +24,7 @@ var searchData=
   ['latexform',['LaTeXForm',['../classcadabra_1_1LaTeXForm.html',1,'cadabra']]],
   ['latexform_2ecc',['LaTeXForm.cc',['../LaTeXForm_8cc.html',1,'']]],
   ['latexform_2ehh',['LaTeXForm.hh',['../LaTeXForm_8hh.html',1,'']]],
+  ['left',['left',['../classcadabra_1_1map__sympy.html#a26de6b66b993a51da4cbe9c0d15a5c5a',1,'cadabra::map_sympy']]],
   ['legal_5fbox',['legal_box',['../namespaceyngtab.html#aa4750cf433f9fad2d55de1df2338bea4',1,'yngtab']]],
   ['less_5findexed_5ftreenode',['less_indexed_treenode',['../classcadabra_1_1indexsort_1_1less__indexed__treenode.html',1,'cadabra::indexsort']]],
   ['less_5findexed_5ftreenode',['less_indexed_treenode',['../classcadabra_1_1indexsort_1_1less__indexed__treenode.html#ac00fe5002f73d72988b17c77cb1d3ebf',1,'cadabra::indexsort::less_indexed_treenode']]],
@@ -49,8 +50,8 @@ var searchData=
   ['logentry',['LogEntry',['../classsnoop_1_1Snoop_1_1LogEntry.html#accb5273de0a46dd22d4843a203bcd759',1,'snoop::Snoop::LogEntry::LogEntry()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#a1cd34309b20464a1e6d15a4472cf0d6d',1,'snoop::Snoop::LogEntry::LogEntry(int log_id_, int client_log_id_, int id_, const std::string &amp;, uint64_t, uint64_t, const std::string &amp;, int, const std::string &amp;, const std::string &amp;, const std::string &amp;, int status)']]],
   ['logentry',['LogEntry',['../classsnoop_1_1Snoop_1_1LogEntry.html',1,'snoop::Snoop']]],
   ['lr_5fadd_5fbox',['LR_add_box',['../namespaceyngtab.html#ab92f8f7898e1653d6b79ff621b61eee5',1,'yngtab']]],
-  ['lr_5ftensor',['lr_tensor',['../classcadabra_1_1lr__tensor.html#a144b97dffe50b41b3ade13e77e13955a',1,'cadabra::lr_tensor::lr_tensor()'],['../namespaceyngtab.html#ab49bee6b6c9682c04ec34c2f70e16c98',1,'yngtab::LR_tensor(const tableaux&lt; T &gt; &amp;tabs1, const T &amp;tab2, unsigned int maxrows, OutputIterator out, bool alltabs=false)'],['../namespaceyngtab.html#a0053904f7146b7d6f73685a627e480f1',1,'yngtab::LR_tensor(const Tab &amp;tab1, const Tab &amp;tab2, unsigned int maxrows, OutputIterator outit, bool alltabs=false)'],['../namespaceyngtab.html#a4a32720e708f1a24ce275a02edba9357',1,'yngtab::LR_tensor(const tableaux&lt; T &gt; &amp;, bool symmetric, unsigned int maxrows, OutputIterator outit)']]],
   ['lr_5ftensor',['lr_tensor',['../classcadabra_1_1lr__tensor.html',1,'cadabra']]],
+  ['lr_5ftensor',['lr_tensor',['../classcadabra_1_1lr__tensor.html#a144b97dffe50b41b3ade13e77e13955a',1,'cadabra::lr_tensor::lr_tensor()'],['../namespaceyngtab.html#ab49bee6b6c9682c04ec34c2f70e16c98',1,'yngtab::LR_tensor(const tableaux&lt; T &gt; &amp;tabs1, const T &amp;tab2, unsigned int maxrows, OutputIterator out, bool alltabs=false)'],['../namespaceyngtab.html#a0053904f7146b7d6f73685a627e480f1',1,'yngtab::LR_tensor(const Tab &amp;tab1, const Tab &amp;tab2, unsigned int maxrows, OutputIterator outit, bool alltabs=false)'],['../namespaceyngtab.html#a4a32720e708f1a24ce275a02edba9357',1,'yngtab::LR_tensor(const tableaux&lt; T &gt; &amp;, bool symmetric, unsigned int maxrows, OutputIterator outit)']]],
   ['lr_5ftensor_2ecc',['lr_tensor.cc',['../lr__tensor_8cc.html',1,'']]],
   ['lr_5ftensor_2ehh',['lr_tensor.hh',['../lr__tensor_8hh.html',1,'']]]
 ];

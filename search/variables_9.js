@@ -18,6 +18,7 @@ var searchData=
   ['ind2',['ind2',['../classcadabra_1_1decompose__product.html#ae5c7f441a73a67967ab3fac471249384',1,'cadabra::decompose_product']]],
   ['ind_5fdummy',['ind_dummy',['../classcadabra_1_1eliminate__converter.html#a9d767baa0c589e92235d566b100a4e99',1,'cadabra::eliminate_converter']]],
   ['ind_5ffree',['ind_free',['../classcadabra_1_1eliminate__converter.html#ab66c89cecc66ed8d34190c139cc4207a',1,'cadabra::eliminate_converter']]],
+  ['index_5ffactors',['index_factors',['../classcadabra_1_1map__sympy.html#aea09efa452497d7c4e1669e9c6738444',1,'cadabra::map_sympy']]],
   ['index_5fsw',['index_sw',['../classcadabra_1_1Algorithm.html#a9b14d6a1da902829164d249d1d3744e2',1,'cadabra::Algorithm']]],
   ['index_5fvalue_5fmap',['index_value_map',['../classcadabra_1_1Ex__comparator.html#a9e15897f5a3cb6fe203cd67513c66554',1,'cadabra::Ex_comparator']]],
   ['indprop',['indprop',['../classcadabra_1_1fierz.html#a00dece2fde3211982aa465bd96c06eba',1,'cadabra::fierz']]],
