@@ -461,10 +461,10 @@ g^{\alpha\beta}::InverseMetric.
 
 sphe:={ g_{\theta\theta} = r**2,
          g_{\varphi\varphi} = r**2 \sin(\theta)**2 }.
-# complete(sphe, $g^{\alpha\beta}$);
+complete(sphe, $g^{\alpha\beta}$);
 
-#ch:= \Gamma^{\alpha}_{\mu\nu} = 1/2 g^{\alpha\beta} ( \partial_{\nu}{g_{\beta\mu}}
-#                                                      +\partial_{\mu}{g_{\beta\nu}}
-#                                                     -\partial_{\beta}{g_{\mu\nu}} );
+ch:= \Gamma^{\alpha}_{\mu\nu} = 1/2 g^{\alpha\beta} ( \partial_{\nu}{g_{\beta\mu}}
+                                                      +\partial_{\mu}{g_{\beta\nu}}
+                                                     -\partial_{\beta}{g_{\mu\nu}} );
 
-# evaluate(ch, sphe, rhsonly=True);
+evaluate(ch, sphe, rhsonly=True);

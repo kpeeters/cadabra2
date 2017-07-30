@@ -493,9 +493,9 @@ the use of the hook formula to compute dimensions of representations,
 
 \toprule
 \begin{cdbin}
-\tableau{#}::FilledTableau(dimension=10).
-\tableau{0,0}{1,1} \tableau{a,a}{b,b}:
-@lr_tensor!(%);
+\ftableau{#}::FilledTableau(dimension=10).
+ex:=\ftableau{0,0}{1,1} \ftableau{a,a}{b,b}:
+lr_tensor(_);
 \end{cdbin}
 \begin{cdbout}
 \ftableau{{0}{0}{a}{a},{1}{1}{b}{b}} + \ftableau{{0}{0}{a}{a},{1}{1}{b},{b}} + \ftableau{{0}{0}{a}{a},{1}{1},{b}{b}} + \ftableau{{0}{0}{a},{1}{1}{b},{a},{b}} + \ftableau{{0}{0}{a},{1}{1},{a}{b},{b}} + \ftableau{{0}{0},{1}{1},{a}{a},{b}{b}};
