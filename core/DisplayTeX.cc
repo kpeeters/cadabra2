@@ -430,8 +430,8 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 	if(mult * (*it->multiplier)!=1) {
 		print_multiplier(str, it, mult);
 		}
-
-	dispatch(str, num);
+	if(num->is_rational()==false || (mult * (*it->multiplier))==1)
+		dispatch(str, num);
 	str << "}{";
 	dispatch(str, den);
 	str << "}";

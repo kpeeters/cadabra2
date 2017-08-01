@@ -24,10 +24,11 @@ class Perm {
 		std::vector<int> perm;
 
 		/// Find the permutation that takes [start1, end1> to [start2, end2>.
+		/// This will be available in 'perm' afterwards.
 		template<class iterator>
 		void find(iterator start1, iterator end1, iterator start2, iterator end2);
 
-		/// Apply the permutation on the range. 
+		/// Apply the permutation 'perm' on the given range.
 		template<class iterator>
 		void apply(iterator start1, iterator end1);
 
@@ -81,7 +82,11 @@ void Perm::apply(iterator start, iterator end)
 		}
 
 	// std::cerr << orig.size() << ", " << perm.size() << std::endl;
-	assert(orig.size()==perm.size());
+	if(orig.size()!=perm.size()) {
+		std::cerr << "Perm::apply: orig.size()=" << orig.size() << ", "
+					 << "perm.size()=" << perm.size() << std::endl;
+		assert(orig.size()==perm.size());
+		}
 
 	for(unsigned int i=0; i<orig.size(); ++i) {
 		*start=orig[perm[i]];

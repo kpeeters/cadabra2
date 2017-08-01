@@ -352,7 +352,8 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 //	if(needs_brackets(num))
 //		str << "(";
 
-	dispatch(str, num);
+	if(num->is_rational()==false || (*it->multiplier)==1)
+		dispatch(str, num);
 
 //	if(needs_brackets(num))
 //		str << ")";
