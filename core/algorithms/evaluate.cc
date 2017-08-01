@@ -12,7 +12,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-#define DEBUG
+//#define DEBUG
 
 using namespace cadabra;
 
@@ -539,8 +539,10 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	size_t ni=number_of_direct_indices(it);
 	
 	cadabra::do_list(tr, ivalues, [&](Ex::iterator iv) {
-			// std::cerr << "====" << std::endl;
-			// std::cerr << Ex(iv) << std::endl;
+			#ifdef DEBUG
+			std::cerr << "====" << std::endl;
+			std::cerr << Ex(iv) << std::endl;
+			#endif
 			// For each internal dummy set, keep track of the
 			// position in the permutation array where we generate
 			// its value.
@@ -551,9 +553,11 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			auto deps=dependencies(rhs);
 
 			// If the argument does not depend on anything, all derivatives
-			// would produce zero.
-			if(deps.size()==0) 
+			// would produce zero. Remove this \equals node from the tree.
+			if(deps.size()==0) {
+				tr.erase(iv);
 				return true;
+				}
 			
 			// All indices on \partial can take any of the values of the
 			// dependencies, EXCEPT when the index is a dummy index. In
@@ -568,7 +572,9 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 			combin::combinations<Ex> cb;
 			for(auto& obj: deps) {
-				// std::cerr << "dep " << obj << std::endl;
+				#ifdef DEBUG
+				std::cerr << "dep " << obj << std::endl;
+				#endif
 				cb.original.push_back(obj);
 				}
 			cb.multiple_pick=true;
@@ -608,18 +614,24 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			// derivative, create an entry in the \components node.
 
 			for(unsigned int i=0; i<cb.size() || cb.size()==0; ++i) {
-				// std::cerr << "Index combination " << i << std::endl;
+				#ifdef DEBUG
+				std::cerr << "Index combination " << i << std::endl;
+				#endif
 				Ex eqcopy(iv); 
 				auto lhs=eqcopy.begin(eqcopy.begin());
 				assert(*lhs->name=="\\comma");
 
 				if(cb.size()>0) {
+					#ifdef DEBUG
+					std::cerr << "Copying values of derivative indices" << std::endl;
+					#endif
 					// Setup the index values; simply copy from the cb array, but only
 					// if the indices are not internal dummy.
 					for(size_t j=0; j<cb[i].size(); ++j) {
 						auto fd = ind_dummy.find(Ex(tr.child(it, j)));
-						if(fd==ind_dummy.end()) 
+						if(fd==ind_dummy.end()) {
 							eqcopy.append_child(iterator(lhs), cb[i][j].begin() );
+							}
 						}
 					}
 				auto rhs=lhs;
@@ -684,6 +696,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 				if(cb.size()==0) break;
 				}
+
+			// Erase the original \equals entry (we generated a full replacement above).
 			tr.erase(iv);
 			return true;
 			});
@@ -691,7 +705,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
    one(it->multiplier);
 	// std::cerr << "now " << Ex(it) << std::endl;
 
-	
+
 	// Now move the free (but not the internal dummy!) partial indices
    //	to the components node, and then unwrap the partial node.
 	
@@ -719,11 +733,15 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			++se;
 		}
 
-		// std::cerr << "after index move " << Ex(it) << std::endl;
+	#ifdef DEBUG
+	std::cerr << "after index move " << Ex(it) << std::endl;
+	#endif
 
 	merge_component_children(it);
 
-	// std::cerr << "after merge " << Ex(it) << std::endl;
+	#ifdef DEBUG
+	std::cerr << "after merge " << Ex(it) << std::endl;
+	#endif
 
 	simplify_components(it);
 	// std::cerr << "then " << Ex(it) << std::endl;
