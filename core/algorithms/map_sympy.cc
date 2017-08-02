@@ -6,6 +6,8 @@
 
 using namespace cadabra;
 
+#define DEBUG 1
+
 map_sympy::map_sympy(const Kernel& k, Ex& tr, const std::string& head)
 	: Algorithm(k, tr), head_(head)
 	{
@@ -13,6 +15,12 @@ map_sympy::map_sympy(const Kernel& k, Ex& tr, const std::string& head)
 
 bool map_sympy::can_apply(iterator st)
 	{
+	// For \components nodes we need to map at the level of the individual
+	// component values, not the top \components node.
+	if(*st->name=="\\components") return false;
+	if(*st->name=="\\equals") return false;
+	if(*st->name=="\\comma") return false;		
+	
 	left.clear();
 	index_factors.clear();
 	index_map_t ind_free, ind_dummy;
@@ -72,7 +80,9 @@ bool map_sympy::can_apply(iterator st)
 
 Algorithm::result_t map_sympy::apply(iterator& it)
 	{
-	// std::cerr << "Apply on " << tr << std::endl;
+	#ifdef DEBUG
+	std::cerr << "map_sympy on " << Ex(it) << std::endl;
+	#endif
 	
 	std::vector<std::string> wrap;
 	wrap.push_back(head_);
