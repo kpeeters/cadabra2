@@ -1,0 +1,119 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{map_sympy}{Map Sympy algorithms to Cadabra expressions}\n\nCadabra expressions are typically tensor expressions, which you cannot feed directly\ninto Sympy. With the \\algo{map_sympy} function you can recursively apply Sympy algorithms\nto the scalar parts of Cadabra expressions.\n\nThe simplest example is when you have a scalar expression in Cadabra, for instance"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{map_sympy}{Map Sympy algorithms to Cadabra expressions}\n\nCadabra expressions are typically tensor expressions, which you cannot feed directly\ninto Sympy. With the \\algo{map_sympy} function you can recursively apply Sympy algorithms\nto the scalar parts of Cadabra expressions.\n\nThe simplest example is when you have a scalar expression in Cadabra, for instance"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int \\sin{x}\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= \\int{\\sin(x)}{x};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\cos{x}\\end{dmath*}"
+				}
+			],
+			"source" : "map_sympy(ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The inert Cadabra expression gets evaluated by Sympy and then stored again in the `ex` object,"
+				}
+			],
+			"hidden" : true,
+			"source" : "The inert Cadabra expression gets evaluated by Sympy and then stored again in the `ex` object,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}-\\cos{x}\\end{dmath*}"
+				}
+			],
+			"source" : "ex;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In more complicated cases you may have a tensorial expression which you would like to \nsimplify using Sympy, for instance"
+				}
+			],
+			"hidden" : true,
+			"source" : "In more complicated cases you may have a tensorial expression which you would like to \nsimplify using Sympy, for instance"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left({\\left(\\sin{x}\\right)}^{2}+{\\left(\\cos{x}\\right)}^{2}\\right) A_{m}-A_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= (\\sin(x)**2 + \\cos(x)**2) A_{m} - A_{m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "map_sympy(ex, \"simplify\");"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

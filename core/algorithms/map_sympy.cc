@@ -6,7 +6,7 @@
 
 using namespace cadabra;
 
-#define DEBUG 1
+//#define DEBUG 1
 
 map_sympy::map_sympy(const Kernel& k, Ex& tr, const std::string& head)
 	: Algorithm(k, tr), head_(head)
