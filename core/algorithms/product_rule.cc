@@ -84,6 +84,10 @@ Algorithm::result_t product_rule::apply(iterator& it)
 	iterator rename_dummies_at = tr.end();
 	
 	if(*prodnode->name=="\\pow") {
+		// FIXME: the code below assumes that the derivative acts on the first
+		// child of \pow only, so \partial_{x}{x^n} is done correctly, but
+		// \partial_{x}{e^x} becomes x e^{x-1} \partial_{x}{e} which is wrong.
+		
 		 sibling_iterator ar=tr.begin(prodnode);
 		 sibling_iterator pw=ar;
 		 ++pw;

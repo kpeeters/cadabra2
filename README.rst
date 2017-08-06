@@ -1,11 +1,13 @@
 Cadabra
 =======
 
-|Build status|
+|Build status| |DOI|
 
 .. |Build status| image:: https://secure.travis-ci.org/kpeeters/cadabra2.svg?branch=master
    :target: http://travis-ci.org/kpeeters/cadabra2
-
+.. |DOI| image:: https://zenodo.org/badge/45484302.svg
+   :target: https://zenodo.org/badge/latestdoi/45484302
+				
 *A field-theory motivated approach to computer algebra.*
 
 Kasper Peeters <info@cadabra.science>
