@@ -8,7 +8,7 @@ var searchData=
   ['datacell_2ecc',['DataCell.cc',['../DataCell_8cc.html',1,'']]],
   ['datacell_2ehh',['DataCell.hh',['../DataCell_8hh.html',1,'']]],
   ['db',['db',['../classsnoop_1_1SnoopImpl.html#aef92c18ce355c332e5d131d38fffece4',1,'snoop::SnoopImpl']]],
-  ['debug',['DEBUG',['../Compare_8cc.html#ae16773cc738cdbe1479aaa42208d468c',1,'DEBUG():&#160;Compare.cc'],['../map__sympy_8cc.html#ad72dbcf6d0153db1b8d8a58001feed83',1,'DEBUG():&#160;map_sympy.cc']]],
+  ['debug',['DEBUG',['../Compare_8cc.html#ae16773cc738cdbe1479aaa42208d468c',1,'Compare.cc']]],
   ['decompose_5fproduct',['decompose_product',['../classcadabra_1_1decompose__product.html',1,'cadabra']]],
   ['decompose_5fproduct',['decompose_product',['../classcadabra_1_1decompose__product.html#a4e455f1bbfbdff5d23c89ea3d23a3974',1,'cadabra::decompose_product']]],
   ['decompose_5fproduct_2ecc',['decompose_product.cc',['../decompose__product_8cc.html',1,'']]],
