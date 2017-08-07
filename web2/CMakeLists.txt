@@ -102,6 +102,7 @@ set(PROPS
   SelfNonCommuting
   SortOrder
   Spinor
+  Symbol
   Symmetric
   Tableau
   TableauSymmetry
