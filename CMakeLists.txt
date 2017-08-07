@@ -4,7 +4,7 @@ set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 project(Cadabra)
 set(CADABRA_VERSION_MAJOR 2)
 set(CADABRA_VERSION_MINOR 1)
-set(CADABRA_VERSION_PATCH 5)
+set(CADABRA_VERSION_PATCH 6)
 set(COPYRIGHT_YEARS "2001-2017")
 execute_process(COMMAND git rev-parse --short HEAD OUTPUT_VARIABLE GIT_SHORT_SHA     OUTPUT_STRIP_TRAILING_WHITESPACE)
 execute_process(COMMAND git rev-list --count HEAD  OUTPUT_VARIABLE GIT_COMMIT_SERIAL OUTPUT_STRIP_TRAILING_WHITESPACE)
@@ -49,6 +49,15 @@ if(PACKAGING_MODE)
 else()
   message("-- User mode")
 endif()
+
+# Ensure that all installed binaries have an RPATH setting
+# which enables them to find libtexengine, libcadabra_client and
+# libcadabra_server without any ld.so.conf settings.
+
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Determine what type of system we are on, for packaging.
 set(LINUX_NAME "")
