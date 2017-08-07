@@ -35,7 +35,7 @@ Cadabra builds on Linux and Mac OS X, and might soon build on Windows
 too. Select your system from the list bel
 
 - `Linux (Debian/Ubuntu/Mint)`_
-- `Linux (Fedora 24)`_
+- `Linux (Fedora 24 and later)`_
 - `Linux (older Fedora/CentOS/Scientific Linux)`_
 - `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
@@ -83,21 +83,23 @@ This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
 
-Linux (Fedora 24)
-~~~~~~~~~~~~~~~~~
+Linux (Fedora 24 and later)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Fedora 24 is the first Fedora to have Python 3 by default; for older
-Fedora versions see below. Install the dependencies with::
+Fedora versions see below. This platform receives less testing so
+please get in touch if you run into any issues. You can use either g++
+or the clang++ compiler.
 
-    sudo dnf install python3-devel cmake gcc-c++ 
-    sudo dnf install pcre-devel gmp-devel libuuid-devel sqlite-devel
-    sudo dnf install gtkmm30-devel boost-devel boost-python3-devel
-    sudo dnf install texlive python3-matplotlib
-    sudo dnf install python3-pip
+Install the dependencies with::
+
+    sudo dnf install python3-devel cmake gcc-c++ \
+         pcre-devel gmp-devel libuuid-devel sqlite-devel \
+         gtkmm30-devel boost-devel boost-python3-devel \
+         texlive python3-matplotlib \
+         python3-pip
     sudo pip3 install sympy
 
-This platform receives less testing so please get in touch if you run
-into any issues. You can use either g++ or the clang++ compiler.
 You need to clone the cadabra2 git repository (if you download the
 .zip file you will not have all data necessary to build). So first do::
 
