@@ -57,10 +57,10 @@ Linux (Debian/Ubuntu/Mint)
 
 On Debian/Ubuntu you can install all that is needed with::
 
-    sudo apt-get install cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev 
-    sudo apt-get install libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev 
-    sudo apt-get install texlive texlive-latex-extra dvipng
-    sudo apt-get install python3-matplotlib python3-mpmath python3-pip python3-setuptools
+    sudo apt install cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev \
+          libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  \
+          texlive texlive-latex-extra dvipng \
+          python3-matplotlib python3-mpmath python3-pip python3-setuptools
     sudo pip3 install sympy
 
 This is the development platform and issues are typically first fixed
@@ -93,7 +93,7 @@ or the clang++ compiler.
 
 Install the dependencies with::
 
-    sudo dnf install python3-devel cmake gcc-c++ \
+    sudo dnf install git python3-devel cmake gcc-c++ \
          pcre-devel gmp-devel libuuid-devel sqlite-devel \
          gtkmm30-devel boost-devel boost-python3-devel \
          texlive python3-matplotlib \
@@ -115,8 +115,8 @@ Building is then done with the standard::
     sudo make install
 
 This will produce the command line app ``cadabra2`` and the Gtk
-notebook interface ``cadabra2-gtk``. You can also find the latter in
-the 'Education' menu.
+notebook interface ``cadabra2-gtk``. You can also find the latter
+when searching for the 'Cadabra' app from the 'Activities' menu.
 
 
 Linux (older Fedora/CentOS/Scientific Linux)
@@ -124,11 +124,10 @@ Linux (older Fedora/CentOS/Scientific Linux)
 
 On Fedora/CentOS/Scientific Linux you can install the dependencies with::
 
-    sudo yum install epel-release
-    sudo yum install python-devel cmake gcc-c++ 
-    sudo yum install pcre-devel gmp-devel libuuid-devel sqlite-devel
-    sudo yum install gtkmm30-devel boost-devel 
-    sudo yum install texlive python-matplotlib
+    sudo yum install epel-release python-devel cmake gcc-c++ \
+             pcre-devel gmp-devel libuuid-devel sqlite-devel \
+             gtkmm30-devel boost-devel \
+             texlive python-matplotlib
 
 There is no Python 3 by default on this platform, so the instructions
 here will build Cadabra for use with Python 2. You also need to
@@ -169,12 +168,12 @@ Repositories/Add/Add by URL.  Use the URL
 
 After that, dependencies can be installed with::
 
-    sudo zypper install cmake python3-devel gcc-c++
-    sudo zypper install pcre-devel gmp-devel libuuid-devel sqlite-devel
-    sudo zypper install gtkmm3-devel 
-    sudo zypper install texlive python3-matplotlib
-    sudo zypper install python3-pip
-    sudo zypper install boost_1_61-devel libboost_python3-1_61_0
+    sudo zypper install cmake python3-devel gcc-c++ \
+                  pcre-devel gmp-devel libuuid-devel sqlite-devel \
+                  gtkmm3-devel  \
+                  texlive python3-matplotlib \
+                  python3-pip \
+                  boost_1_61-devel libboost_python3-1_61_0
     sudo pip3 install sympy
 
 This platform receives less testing so please get in touch if you run
