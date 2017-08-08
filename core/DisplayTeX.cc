@@ -679,6 +679,9 @@ void DisplayTeX::print_relation(std::ostream& str, Ex::iterator it)
 
 void DisplayTeX::print_indexbracket(std::ostream& str, Ex::iterator it)
 	{
+	if(*it->multiplier!=1)
+		print_multiplier(str, it);
+	
 	auto sib=tree.begin(it);
 	str << "\\left(";
 	dispatch(str, sib);

@@ -49,7 +49,7 @@
 %ITP-UU-06/56\\
 hep-th/0701238\\
 25 January 2007\\
-11 June 2016 (updated for v2)
+8 August 2017 (updated for v2)
 \end{flushright}
 \vskip 7ex
 
@@ -88,7 +88,7 @@ gravity, supergravity and quantum field theory.
 \begin{minipage}{0.95\textwidth}
 \noindent{\smaller\smaller This paper originally appeared in 2007. It
   has been updated to reflect the syntax changes introduced with
-  Cadabra~2.0 (released in 2016), but is otherwise essentially
+  Cadabra~2.0 (first released in 2016), but is otherwise essentially
   unchanged. A more in-depth discussion of the changes of the 2.x
   series will appear in an upcoming paper. The software itself,
   including source code, can be obtained from the web site
@@ -565,18 +565,18 @@ derivatives, and then sort the tensors and write the result in
 canonical form with respect to mono-term symmetries,
 \end{cdbcom}
 \begin{cdbcont}
-@distribute!(%): @prodrule!(%):
-@distribute!(%): @prodrule!(%):
+distribute(_); product_rule(_);
+distribute(_); product_rule(_);  
 
-@prodsort!(%): @canonicalise!(%): @rename_dummies!(%): 
-@collect_terms!(%):
+sort_product(_); canonicalise(_);
+rename_dummies(_);
 \end{cdbcont}
 \begin{cdbcom}
 Because the identity which we intend to prove is only supposed to hold
 on Einstein spaces, we set the divergence of the Weyl tensor to zero,
 \end{cdbcom}
 \begin{cdbcont}
-@substitute!(%)( \nabla_{i}{C_{k i l m}} -> 0 , \nabla_{i}{C_{k m l i}} -> 0 );
+substitute(_, $\nabla_{i}{C_{k i l m}} -> 0 , \nabla_{i}{C_{k m l i}} -> 0$ );
 \end{cdbcont}
 \begin{cdbout}
 \begin{aligned}
@@ -603,9 +603,7 @@ This expression should vanish upon use of the Bianchi identity. By
 expanding all tensors using their Young projectors, this becomes manifest,
 \end{cdbcom}
 \begin{cdbcont}
-@young_project_product!(%):
-@sumflatten!(%):
-@collect_terms!(%);
+young_project_product(_);
 \end{cdbcont}
 \begin{cdbout}
 0;
@@ -641,8 +639,8 @@ first illustrate this with a simple example.
 {m, n, p}::Indices(subspace1).
 {a, b, c}::Indices(subspace2).
 
-A_{M N} B_{N P};
-@split_index!(%){M, m, a};
+ex:= A_{M N} B_{N P};
+split_index(_, $M, m, a$);
 \end{cdbin}
 \begin{cdbout}
 A_{M m} \, B_{m P} + A_{M a}\, B_{a P}\,;
@@ -707,9 +705,10 @@ F_{m n}::AntiSymmetric.
 We will want to expand the Riemann tensor in terms of the metric. The
 following two substitution rules do the conversion from Riemann tensor
 to Christoffel symbol and from Christoffel symbol to
-metric.\footnote{A library with common substitution rules like these
-  is in preparation.} Index
-patterns like \verb|\lambda?| match both four- and three-dimensional indices.
+metric.\footnote{Cadabra 2.x contains a growing library of packages
+  with expressions of this type, but we will here not rely on that
+  library facility.} Index patterns like \verb|\lambda?| match both four- and
+three-dimensional indices.
 \end{cdbcom}
 \begin{cdbcont}
 RtoG:= R^{\lambda?}_{\mu?\nu?\kappa?} -> 
@@ -730,12 +729,12 @@ product rule to distribute derivatives over factors in a product.
 \end{cdbcom}
 \begin{cdbcont}
 todo:= g_{m1 m} R^{m1}_{4 n 4} + g_{4 m} R^{4}_{4 n 4};
-@substitute!(%)( @(RtoG) );
-@substitute!(%)( @(Gtog) );
-@distribute!(%);
-@prodrule!(%);
-@distribute!(%);
-@prodsort!(%);
+substitute(_, RtoG)
+substitute(_, Gtog)
+distribute(_)
+product_rule(_)
+distribute(_)
+sort_product(_)
 \end{cdbcont}
 \begin{cdbcom}
 We now split the $\mu$ index into a $m$ part and the remaining $4$
@@ -744,55 +743,55 @@ the result no longer changes).  After that, we remove $x^4$ derivatives of the g
 field and write the expression in canonical form,
 \end{cdbcom}
 \begin{cdbcont}
-@split_index!!(%){\mu,m1,4};
-@canonicalise!(%):
-@substitute!(%)( \partial_{4}{A??} -> 0 );
-@substitute!(%)( \partial_{4 m?}{A??} -> 0 );
+split_index(_, $\mu, m1, 4$, repeat=True)
+substitute(_, $\partial_{4}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{4 m?}{A??} -> 0$, repeat=True)
+substitute(_, $\partial_{m? 4}{A??} -> 0$, repeat=True)
+canonicalise(_);
 \end{cdbcont}
 \begin{cdbcom}
 In the next step, we insert the metric ansatz~\eqref{e:KKansatz} and
 simplify the result as much as possible.
 \end{cdbcom}
 \begin{cdbcont}
-@substitute!(%)( g_{4 4} -> \phi ):
-@substitute!(%)( g_{4 m} -> \phi A_{m} ):
-@substitute!(%)( g_{m n} -> \phi**{-1} h_{m n} + \phi A_{m} A_{n} );
-@substitute!(%)( g^{4 4} -> \phi**{-1} + \phi A_{m} h^{m n} A_{n} ):
-@substitute!(%)( g^{4 m} -> - \phi h^{m n} A_{n} ):
-@substitute!(%)( g^{m n} -> \phi h^{m n} ):
-@distribute!(%):
-@prodrule!(%):
-@distribute!(%):
-@prodrule!(%);
-@distribute!(%);
-@canonicalise!(%):
-@substitute!!(%)( h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3} );
-@eliminate_kr!(%):
+substitute(_, $g_{4 4} -> \phi$ )
+substitute(_, $g_{m 4} -> \phi A_{m}$ )
+substitute(_, $g_{4 m} -> \phi A_{m}$ )
+substitute(_, $g_{m n} -> \phi**{-1} h_{m n} + \phi A_{m} A_{n}$ )
+substitute(_, $g^{4 4} -> \phi**{-1} + \phi A_{m} h^{m n} A_{n}$ )
+substitute(_, $g^{m 4} -> - \phi h^{m n} A_{n}$ )
+substitute(_, $g^{4 m} -> - \phi h^{m n} A_{n}$ )
+substitute(_, $g^{m n} -> \phi h^{m n}$ );
 \end{cdbcont}
 \begin{cdbcom}
 Some derivatives have to be rewritten to a canonical form,
 \end{cdbcom}
 \begin{cdbcont}
-@substitute!(%)( \partial_{m}{\phi**{-1}} -> -\phi**{-2} \partial_{m}{\phi} ):
-@collect_factors!(%):
-@prodsort!(%):
-@substitute!(%)( \partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m} );
-@canonicalise!(%):
-@substitute!(%)( h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3} );
-@eliminate_kr!(%);
+converge(todo):
+   distribute(_)
+   product_rule(_)
+   canonicalise(_)
+\end{cdbcont}
+\begin{cdbcont}
+substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
+collect_factors(_)
+sort_product(_)
+converge(todo):
+	substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+	eliminate_kronecker(_)
+	canonicalise(_)
+   ;
 \end{cdbcont}
 \begin{cdbcom}
 Finally, we replace the derivative of the gauge field with the field
 strength,
 \end{cdbcom}
 \begin{cdbcont}
-@substitute!(%)( \partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} 
-                                                  + 1/2*\partial_{m}{A_{n}} ):
-@distribute!(%):
-@prodsort!(%):
-@canonicalise!(%):
-@rename_dummies!(%):
-@collect_terms!(%);
+substitute(_, $\partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\partial_{m}{A_{n}}$ )
+distribute(_)
+sort_product(_)
+canonicalise(_)
+rename_dummies(_);
 \end{cdbcont}
 \begin{cdbout}
 \begin{aligned}
@@ -835,16 +834,8 @@ example, we will expand the product $\Gamma_{s r} \Gamma_{r l}
 \Gamma_{k m} \Gamma_{m s}$ in arbitrary dimensions in terms of the
 irreducible~$\Gamma_{kl}$ and $\delta_{kl}$ components.  
 \toprule
-\begin{cdbin}
-::PostDefaultRules( @@prodsort!(%), @@eliminate_kr!(%),  
-                                    @@canonicalise!(%), @@collect_terms!(%) ).
-\end{cdbin}
 \begin{cdbcom}
-This single line adds some default simplification rules to the system,
-so that we do not have to type these by hand at every stage of the
-calculation. 
-
-We now declare the vector indices, their range, and the symbols used for
+We first declare the vector indices, their range, and the symbols used for
 gamma matrices and Kronecker deltas.
 \end{cdbcom}
 \begin{cdbcont}
@@ -859,35 +850,50 @@ object with implicit indices: the spinor indices will be
 suppressed. The notation \verb|_{#}| denotes the presence of an
 arbitrary number of indices.
 
-Next follows the actual calculation.
+It is useful to let Cadabra do a bit more simplification at every step
+(more than the default of simply collecting equal terms). This can be
+achieved by re-defining the \verb|post_process| function, which gets
+called after every step of the computation.
+\end{cdbcom}
+\begin{cdbin}
+def post_process(ex):
+   sort_product(ex)
+   eliminate_kronecker(ex)
+   canonicalise(ex)
+   collect_terms(ex)
+\end{cdbin}
+\begin{cdbcom}
+This sorts the product, eliminate Kronecker delta's, writes indices in
+canonical order and then finally collects equal terms.
+  
+Next follows the actual computation. We write down the gamma matrix
+product and join gamma matrices three times,
 \end{cdbcom}
 \begin{cdbcont}
-\Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s}:
-@join!(%){expand}:
-@join!(%){expand};
+ex:= \Gamma_{s r} \Gamma_{r l} \Gamma_{k m} \Gamma_{m s};
+for i in range(3):
+   join_gamma(_)
+   distribute(_)
 \end{cdbcont}
 \begin{cdbout}
 \label{e:gam1}
-(-1) ((2 \Gamma_{l r} - \Gamma_{l r} d + \delta_{l r} d - \delta_{l r}) (2 \Gamma_{k r} - \Gamma_{k r} d + \delta_{k r} - \delta_{k r} d));
+-18 \Gamma_{kl} d + 8 \Gamma_{kl} d d + 12 \Gamma_{kl} - 3\delta_{kl}
++ 6 \delta_{kl} d - 4 \delta_{kl} d d - \Gamma_{k l} d d d +
+\delta_{kl} d d d
 \end{cdbout}
 \begin{cdbcont}
-@distribute!(%);
-@join!(%){expand};
-@distribute!(%);
-@factorise!(%){d};
-@collect_factors!(%);
+factor_in(_, $d$)
+collect_factors(_)
 \end{cdbcont}
 \begin{cdbout}
-\Gamma_{k l} (12 - 18 d + 8 d^2 - d^3) + \delta_{k l} ( - 3 + 6 d - 4 d^2 + d^3);
+\Gamma_{k l} (- 18 d + 8 d^2 + 12 - d^3) + \delta_{k l} ( - 3 + 6 d - 4 d^2 + d^3);
 \end{cdbout}
 \botrule 
-The key ingredient here is the \verb|@join| command, which
+The key ingredient here is the \verb|join_gamma| algorithm, which
 takes two adjacent gamma matrices and expands their product in terms of
 a basis of fully antisymmetrised gamma matrices. In the step
-before~\eqref{e:gam1} the two commands join the 1st and 2nd gamma
-matrix, as well as the 3rd and 4th. The product is then expanded out
-and one final gamma join operation is performed. The last two lines
-combine all the $d$-dependence in overall factors.
+before~\eqref{e:gam1} the Python loop performs such a join three times
+and expands out the resulting product. 
 
 In the example above, the spinor indices on the gamma matrices were
 suppressed. The \verb|GammaMatrix| property has turned the gamma
@@ -903,14 +909,14 @@ e.g.~vectors or spinors. Here is a somewhat simpler example:
 {a,b,c,d#}::Indices(spinor).
 \Gamma_{#}::GammaMatrix(metric=\delta).
 (\Gamma_{m n})_{a b} (\Gamma_{n p})_{b c};
-@combine!(%);
+combine(_);
 \end{cdbin}
 \begin{cdbout}
 (\Gamma_{m n}\, \Gamma_{n p})_{a c};
 \end{cdbout}
 \begin{cdbcont}
-@join!(%){expand}:
-@canonicalise!(%);
+join_gamma(_)
+canonicalise(_);
 \end{cdbcont}
 \begin{cdbout}
  (\Gamma_{m p} \delta_{n n} - \Gamma_{m n} \delta_{n p} + \Gamma_{p n} \delta_{m n} 
@@ -924,8 +930,8 @@ of the index bracket when they are known not to contain implicit
 indices:
 \toprule
 \begin{cdbcont}
-@distribute!(%):
-@expand!(%);
+distribute(_)
+expand(_);
 \end{cdbcont}
 \begin{cdbout}
  (\Gamma_{m p})_{a c} \delta_{n n} - (\Gamma_{m n})_{a c} \delta_{n p} 
