@@ -1,0 +1,26 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{replace_match}{Put the result of a sub-computation back into the original expression}\n\nThis algorithm is the partner of \\algo{take_match}; see the documentation of that algorithm for\nfurther details."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{replace_match}{Put the result of a sub-computation back into the original expression}\n\nThis algorithm is the partner of \\algo{take_match}; see the documentation of that algorithm for\nfurther details."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

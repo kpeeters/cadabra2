@@ -94,6 +94,7 @@ namespace boost {
 #include "properties/Tableau.hh"
 #include "properties/TableauSymmetry.hh"
 #include "properties/Traceless.hh"
+#include "properties/Vielbein.hh"
 #include "properties/Weight.hh"
 #include "properties/WeightInherit.hh"
 #include "properties/WeylTensor.hh"
@@ -1504,6 +1505,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def_prop<Tableau>();
 	def_prop<TableauSymmetry>();
 	def_prop<Traceless>();
+	def_prop<Vielbein>();
+	def_prop<InverseVielbein>();		
 	def_prop<Weight>();
 	def_prop<WeightInherit>();
 	def_prop<WeylTensor>();

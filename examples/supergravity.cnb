@@ -1,0 +1,414 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n   eliminate_kronecker(ex)\n   sort_product(ex)\n   collect_terms(ex)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "It is easier to keep track of various parts of the computation if we disable automatic\nindex raising/lowering, so we use \\verb|position=independent| on the indices. "
+				}
+			],
+			"hidden" : true,
+			"source" : "It is easier to keep track of various parts of the computation if we disable automatic\nindex raising/lowering, so we use \\verb|position=independent| on the indices. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}D{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property DiracBar to~}\\bar{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\delta\\left(A??\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q,~\\discretionary{}{}{} r,~\\discretionary{}{}{} s,~\\discretionary{}{}{} t,~\\discretionary{}{}{} u\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q,~\\discretionary{}{}{} r,~\\discretionary{}{}{} s,~\\discretionary{}{}{} t,~\\discretionary{}{}{} u\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\lambda,~\\discretionary{}{}{} \\alpha,~\\discretionary{}{}{} \\beta\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\lambda,~\\discretionary{}{}{} \\alpha,~\\discretionary{}{}{} \\beta\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "D{#}::Derivative;\n\\partial{#}::PartialDerivative;\n\\bar{#}::DiracBar;\n\\delta{A??}::Derivative;\n{m,n,p,q,r,s,t,u}::Indices(flat, position=independent);\n{m,n,p,q,r,s,t,u}::Integer(0..3);\n{\\mu,\\nu,\\rho,\\sigma,\\kappa,\\lambda,\\alpha,\\beta}::Indices(curved,position=independent);\n{\\mu,\\nu,\\rho,\\sigma,\\kappa,\\lambda,\\alpha,\\beta}::Integer(0..3);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Vielbein to~}e^{m \\mu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property InverseVielbein to~}e_{m \\mu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}g^{\\mu \\nu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Metric to~}g_{\\mu \\nu}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Metric to~}\\delta_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}\\delta^{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}\\omega_{\\mu m n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\left[e_{m}\\,^{\\mu},~\\discretionary{}{}{} \\psi_{\\mu},~\\discretionary{}{}{} e,~\\discretionary{}{}{} T^{\\mu}\\,_{\\nu \\rho}\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "e^{m \\mu}::Vielbein;\ne_{m \\mu}::InverseVielbein;\ng^{\\mu\\nu}::InverseMetric;\ng_{\\mu\\nu}::Metric;\n\\delta_{m n}::Metric;\n\\delta^{m n}::InverseMetric;\n\\omega_{\\mu m n}::TableauSymmetry( indices={1,2}, shape={1,1} );\n{ e_{m}^{\\mu}, \\psi_{\\mu}, e, T^{\\mu}_{\\nu\\rho} }::Depends(\\partial{#});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Spinor to~}\\left[\\epsilon,~\\discretionary{}{}{} \\psi_{\\mu},~\\discretionary{}{}{} \\psi_{\\mu \\nu}\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}\\Gamma_{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiCommuting to~}\\left[\\psi_{\\mu \\nu},~\\discretionary{}{}{} \\psi_{\\mu},~\\discretionary{}{}{} \\epsilon\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property SelfAntiCommuting to~}\\left[\\psi_{\\mu},~\\discretionary{}{}{} \\psi_{\\mu \\nu}\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property SortOrder to~}\\left[\\epsilon,~\\discretionary{}{}{} \\psi_{\\mu},~\\discretionary{}{}{} \\psi_{\\mu \\nu}\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\Gamma_{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}\\psi_{\\mu \\nu}.\\end{dmath*}"
+				}
+			],
+			"source" : "{ \\epsilon,\\psi_{\\mu},\\psi_{\\mu\\nu} }::Spinor(dimension=4, type=Majorana);\n\\Gamma_{#}::GammaMatrix(metric=\\delta);\n{ \\psi_{\\mu\\nu}, \\psi_{\\mu}, \\epsilon }::AntiCommuting;\n{ \\psi_{\\mu}, \\psi_{\\mu\\nu} }::SelfAntiCommuting;\n{ \\epsilon, \\psi_{\\mu}, \\psi_{\\mu\\nu} }::SortOrder;\n\\Gamma_{#}::Depends(\\bar{#});\n\\psi_{\\mu\\nu}::AntiSymmetric;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int \\left( - \\frac{1}{2}R_{\\mu \\nu n m} e e^{m \\mu} e^{n \\nu} - \\frac{1}{2}\\bar{\\psi_{\\mu}} \\Gamma^{\\mu \\nu \\rho} D_{\\nu}{\\psi_{\\rho}} e\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int \\left( - \\frac{1}{2}R_{\\mu \\nu n m} e e^{m \\mu} e^{n \\nu} - \\frac{1}{2}\\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "L:= \\int{-1/2 e e^{n \\nu} e^{m \\mu} R_{\\mu\\nu n m} \n                 - 1/2 e \\bar{\\psi_\\mu} \\Gamma^{\\mu\\nu\\rho} D_{\\nu}{\\psi_{\\rho}} }{x};\nrewrite_indices(_, $\\Gamma^{m n p}$, $e_{n}^{\\mu}$ );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left[e^{n \\mu} \\rightarrow -\\bar{\\epsilon} \\Gamma^{m} \\psi_{\\nu} e^{m \\mu} e^{n \\nu},~\\discretionary{}{}{} e \\rightarrow \\bar{\\epsilon} \\Gamma^{n} \\psi_{\\mu} e e^{n \\mu},~\\discretionary{}{}{} \\psi_{\\mu} \\rightarrow D_{\\mu}{\\epsilon}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "susy:= { e^{n \\mu} -> -\\bar{\\epsilon} \\Gamma^m \\psi_\\nu e^{m \\mu} e^{n \\nu},\n         e         -> e \\bar{\\epsilon} \\Gamma^n \\psi_\\mu e^{n\\mu},\n         \\psi_\\mu  -> D_{\\mu}{\\epsilon} };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int \\left( - \\frac{1}{2}R_{\\mu \\nu n m} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e^{m \\mu} e^{n \\nu} e^{p \\rho}+\\frac{1}{2}R_{\\mu \\nu n m} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e^{m \\rho} e^{n \\nu} e^{p \\mu}+\\frac{1}{2}R_{\\mu \\nu n m} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e^{m \\mu} e^{n \\rho} e^{p \\nu} - \\frac{1}{2}\\bar{D_{\\mu}{\\epsilon}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{2}\\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{D_{\\rho}{\\epsilon}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{2}\\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\bar{\\epsilon} \\Gamma^{q} \\psi_{\\sigma} e e^{q \\sigma} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "vary(L, susy);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\int \\left( - \\frac{1}{2}R_{\\mu \\nu n m} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e^{m \\mu} e^{n \\nu} e^{p \\rho}+\\frac{1}{2}R_{\\mu \\nu n m} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e^{m \\rho} e^{n \\nu} e^{p \\mu}+\\frac{1}{2}R_{\\mu \\nu n m} \\bar{\\epsilon} \\Gamma^{p} \\psi_{\\rho} e e^{m \\mu} e^{n \\rho} e^{p \\nu} - \\frac{1}{2}\\bar{D_{\\mu}{\\epsilon}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{8}R_{\\nu \\rho q r} \\bar{\\psi_{\\mu}} \\Gamma^{m n p} \\Gamma^{q r} \\epsilon e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{2}\\bar{\\psi_{\\mu}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\bar{\\epsilon} \\Gamma^{q} \\psi_{\\sigma} e e^{q \\sigma} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $D_{\\nu}{ D_{\\rho}{ \\epsilon } } -> 1/4 R_{\\nu\\rho m n} \\Gamma^{m n} \\epsilon$ );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\bar{D_{\\mu}{\\epsilon}} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "take_match(_, $\\bar{D_{\\mu}{\\epsilon}}*A??$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\bar{D_{\\mu}{\\epsilon}} = \\partial_{\\mu}\\left(\\bar{\\epsilon}\\right) - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{m n} \\omega_{\\mu m n}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(\\partial_{\\mu}\\left(\\bar{\\epsilon}\\right) \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q r} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "covD:= \\bar{D_{\\mu}{\\epsilon}} = \\partial_{\\mu}{\\bar{\\epsilon}} \n                                  - 1/4 \\bar{\\epsilon}\\omega_{\\mu m n} \\Gamma^{m n} ):\nsubstitute(L, covD)\ndistribute(L);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\partial_{\\mu}\\left(\\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right) - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q r} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "integrate_by_parts(L, $\\bar{\\epsilon}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\left(\\partial_{\\mu}{\\Gamma^{m n p}} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\Gamma^{m n p} \\partial_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{n}\\,^{\\nu}} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho}+\\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{p}\\,^{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu}\\right) - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q r} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "product_rule(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\partial_{\\mu}{\\Gamma^{m n p}} D_{\\nu}{\\psi_{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} \\partial_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{n}\\,^{\\nu}} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{p}\\,^{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q r} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\Gamma^{m n p} \\partial_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{n}\\,^{\\nu}} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{p}\\,^{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q r} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "unwrap(_, $\\partial{#}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\Gamma^{m n p} \\partial_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{n}\\,^{\\nu}} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{p}\\,^{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} - \\frac{1}{4}\\bar{\\epsilon} \\left(\\Gamma^{q n p} \\delta^{m r}-\\Gamma^{q n m} \\delta^{p r}+\\Gamma^{q p m} \\delta^{n r}-\\Gamma^{r n p} \\delta^{m q}+\\Gamma^{r n m} \\delta^{p q}-\\Gamma^{r p m} \\delta^{n q}+\\Gamma^{p} \\delta^{m r} \\delta^{n q}-\\Gamma^{m} \\delta^{n q} \\delta^{p r}+\\Gamma^{n} \\delta^{m q} \\delta^{p r}-\\Gamma^{p} \\delta^{m q} \\delta^{n r}+\\Gamma^{m} \\delta^{n r} \\delta^{p q}-\\Gamma^{n} \\delta^{m r} \\delta^{p q}\\right) D_{\\nu}{\\psi_{\\rho}} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "join_gamma(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\Gamma^{m n p} \\partial_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{n}\\,^{\\nu}} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\nu}{\\psi_{\\rho}} \\partial_{\\mu}{e_{p}\\,^{\\rho}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q n p} D_{\\nu}{\\psi_{\\rho}} \\delta^{m r} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q n m} D_{\\nu}{\\psi_{\\rho}} \\delta^{p r} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{q p m} D_{\\nu}{\\psi_{\\rho}} \\delta^{n r} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\frac{1}{4}\\bar{\\epsilon} \\Gamma^{r n p} D_{\\nu}{\\psi_{\\rho}} \\delta^{m q} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{r n m} D_{\\nu}{\\psi_{\\rho}} \\delta^{p q} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\frac{1}{4}\\bar{\\epsilon} \\Gamma^{r p m} D_{\\nu}{\\psi_{\\rho}} \\delta^{n q} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{p} D_{\\nu}{\\psi_{\\rho}} \\delta^{m r} \\delta^{n q} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\frac{1}{4}\\bar{\\epsilon} \\Gamma^{m} D_{\\nu}{\\psi_{\\rho}} \\delta^{n q} \\delta^{p r} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{n} D_{\\nu}{\\psi_{\\rho}} \\delta^{m q} \\delta^{p r} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\frac{1}{4}\\bar{\\epsilon} \\Gamma^{p} D_{\\nu}{\\psi_{\\rho}} \\delta^{m q} \\delta^{n r} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} - \\frac{1}{4}\\bar{\\epsilon} \\Gamma^{m} D_{\\nu}{\\psi_{\\rho}} \\delta^{n r} \\delta^{p q} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\frac{1}{4}\\bar{\\epsilon} \\Gamma^{n} D_{\\nu}{\\psi_{\\rho}} \\delta^{m r} \\delta^{p q} \\omega_{\\mu q r} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "distribute(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\Gamma^{m n p} \\partial_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} e e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e_{m}\\,^{\\rho}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e_{m}\\,^{\\nu}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\delta^{q r} \\omega_{\\rho m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\delta^{q r} \\omega_{\\rho m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\delta^{q r} \\omega_{\\rho m q} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} e_{r}\\,^{\\mu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\nu}} \\delta^{n p} \\delta^{q r} \\omega_{\\rho n q} e e_{m}\\,^{\\nu} e_{p}\\,^{\\mu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\nu}} \\delta^{n p} \\delta^{q r} \\omega_{\\rho n q} e e_{m}\\,^{\\rho} e_{p}\\,^{\\mu} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\nu}} \\delta^{n p} \\delta^{q r} \\omega_{\\rho n q} e e_{m}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left(-\\bar{\\epsilon} \\Gamma^{m n p} \\partial_{\\nu}{D_{\\mu}{\\psi_{\\rho}}} e e_{m}\\,^{\\nu} e_{n}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\nu}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\rho}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu} e_{r}\\,^{\\mu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\rho} e_{p}\\,^{\\mu} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\nu} e_{p}\\,^{\\mu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "rename_dummies(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left( - \\frac{1}{4}R_{\\nu \\mu q r} \\bar{\\epsilon} \\Gamma^{m n p} \\Gamma^{q r} \\psi_{\\rho} e e_{m}\\,^{\\nu} e_{n}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e} e_{m}\\,^{\\mu} e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\nu}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\rho}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu} e_{r}\\,^{\\mu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\rho} e_{p}\\,^{\\mu} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\nu} e_{p}\\,^{\\mu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_,  $\\partial_{\\mu}{D_{\\nu}{\\psi_{\\rho}}} -> 1/4 R_{\\mu\\nu m n}\\Gamma^{m n} \\psi_{\\rho}$ );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left( - \\frac{1}{4}R_{\\nu \\mu q r} \\bar{\\epsilon} \\Gamma^{m n p} \\Gamma^{q r} \\psi_{\\rho} e e_{m}\\,^{\\nu} e_{n}\\,^{\\mu} e_{p}\\,^{\\rho}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{q}\\,^{\\sigma}} e e^{q}\\,_{\\sigma} e_{m}\\,^{\\mu} e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\nu}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\rho}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu} e_{r}\\,^{\\mu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\rho} e_{p}\\,^{\\mu} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\nu} e_{p}\\,^{\\mu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(L, $\\partial_{\\rho}{e} -> - e e^{n}_{\\mu} \\partial_{\\rho}{ e_{n}^{\\mu} }$ );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left( - \\frac{1}{4}R_{\\mu \\nu m n} \\bar{\\epsilon} \\Gamma^{p q r} \\Gamma^{m n} \\psi_{\\rho} e e_{p}\\,^{\\mu} e_{q}\\,^{\\nu} e_{r}\\,^{\\rho}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e_{q}\\,^{\\sigma}} e e^{q}\\,_{\\sigma} e_{m}\\,^{\\mu} e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e_{m}\\,^{\\rho}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\partial_{\\rho}{e_{m}\\,^{\\nu}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\delta^{q r} \\omega_{\\rho m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\delta^{q r} \\omega_{\\rho m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\nu}} \\delta^{q r} \\omega_{\\rho m q} e e_{n}\\,^{\\nu} e_{p}\\,^{\\rho} e_{r}\\,^{\\mu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\nu}} \\delta^{n p} \\delta^{q r} \\omega_{\\rho n q} e e_{m}\\,^{\\nu} e_{p}\\,^{\\mu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\nu}} \\delta^{n p} \\delta^{q r} \\omega_{\\rho n q} e e_{m}\\,^{\\rho} e_{p}\\,^{\\mu} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\nu}} \\delta^{n p} \\delta^{q r} \\omega_{\\rho n q} e e_{m}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\int \\left( - \\frac{1}{4}R_{\\mu \\nu m n} \\bar{\\epsilon} \\Gamma^{p q r} \\Gamma^{m n} \\psi_{\\rho} e e_{p}\\,^{\\mu} e_{q}\\,^{\\nu} e_{r}\\,^{\\rho}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{q}\\,^{\\sigma}} e e^{q}\\,_{\\sigma} e_{m}\\,^{\\mu} e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\nu}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho}-\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\mu}} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu}+\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\partial_{\\nu}{e_{m}\\,^{\\rho}} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\mu} e_{p}\\,^{\\nu} e_{r}\\,^{\\rho} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m n p} D_{\\mu}{\\psi_{\\rho}} \\delta^{q r} \\omega_{\\nu m q} e e_{n}\\,^{\\rho} e_{p}\\,^{\\nu} e_{r}\\,^{\\mu} - \\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\rho} e_{p}\\,^{\\mu} e_{r}\\,^{\\nu}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\nu} e_{p}\\,^{\\mu} e_{r}\\,^{\\rho}+\\frac{1}{2}\\bar{\\epsilon} \\Gamma^{m} D_{\\mu}{\\psi_{\\rho}} \\delta^{n p} \\delta^{q r} \\omega_{\\nu n q} e e_{m}\\,^{\\mu} e_{p}\\,^{\\rho} e_{r}\\,^{\\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "rename_dummies(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "Last three terms should have disappeared."
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

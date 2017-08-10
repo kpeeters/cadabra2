@@ -58,6 +58,7 @@ set(ALGOS
   product_rule
   reduce_delta
   rename_dummies
+  replace_match
   rewrite_indices
   sort_product
   sort_spinors
@@ -65,6 +66,7 @@ set(ALGOS
   split_gamma
   split_index
   substitute
+  take_match
   unwrap
   vary
   young_project_product

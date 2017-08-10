@@ -939,7 +939,8 @@ expand(_);
 - (\delta_{m n} \delta_{n p})_{a c};
 \end{cdbout}
 \botrule
-In this way, component and abstract calculations can be mixed at will.
+In this way, matrix operations can be switched between abstract and
+index notation at will.
 
 \subsection{Fierz transformations}
 \label{s:example3}
@@ -971,29 +972,27 @@ equation above. The notebook with comments is displayed below.\vfill\eject
 \toprule
 \begin{cdbin}
 {\mu,\nu,\rho}::Indices(curved, position=fixed).
-{m,n,p,q,r,s,t#}::Indices(flat).
-{m,n,p,q,r,s,t#}::Integer(0..10).
+{m,n,p,q,r,s,t,u,v}::Indices(flat, position=independent).
+{m,n,p,q,r,s,t,u,v}::Integer(0..10).
 T^{#{\mu}}::AntiSymmetric.
 \psi_{\mu}::SelfAntiCommuting.
 \psi_{\mu}::Spinor(dimension=11, type=Majorana).
 \theta::Spinor(dimension=11, type=Majorana).
 \epsilon::Spinor(dimension=11, type=Majorana).
-{\theta,\epsilon,\psi_{\mu}}::AntiCommuting
+{\theta,\epsilon,\psi_{\mu}}::AntiCommuting.
 \bar{#}::DiracBar.
 \delta^{m n}::KroneckerDelta.
-\Gamma^{#{m}}::GammaMatrix(metric=\delta).
-\end{cdbin}
+\Gamma^{#{m}}::GammaMatrix(metric=\delta).\end{cdbin}
 \begin{cdbcom}
 These lines define the properties of all the symbols. We now
 input (minus) the left-hand side of~\eqref{e:fierzthing}, and do a Fierz
 transformation to bring the~$\theta$ and~$\epsilon$ spinors together,
 \end{cdbcom}
 \begin{cdbcont}
-T^{\mu\nu\rho} e_{\nu}^{s}
+obj:= T^{\mu\nu\rho} e_{\nu}^{s}
      \bar{\theta} \Gamma^{r s} \psi_{\rho}
-     \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
-
-@fierz!(%)( \theta, \epsilon, \psi_{\mu}, \psi_{\nu} );
+     \bar{\psi_{\mu}} \Gamma^{r} \epsilon:
+fierz(_, $\theta, \epsilon, \psi_{\mu}, \psi_{\rho}$ );
 \end{cdbcont}
 \begin{cdbout}
 \begin{aligned}
@@ -1017,19 +1016,15 @@ T^{\mu\nu\rho} e_{\nu}^{s}
 \end{cdbout}
 \begin{cdbcom}
 This is not yet in the desired form, so we join gamma matrices
-twice and canonicalise the resulting expression,
+until we are left with fully anti-symmetrised gamma matrix products, 
 \end{cdbcom}
 \begin{cdbcont}
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@collect_terms!(%):
-@canonicalise!(%): 
-@rename_dummies!(%):
-@collect_terms!(%);
+converge(obj):
+   join_gamma(_)
+   distribute(_)
+   eliminate_kronecker(_)
+canonicalise(_)
+rename_dummies(_);
 \end{cdbcont}
 \begin{cdbout}
 \begin{aligned}
@@ -1051,7 +1046,7 @@ twice and canonicalise the resulting expression,
 This is indeed equivalent to the right-hand side of~\eqref{e:fierzthing}.
 \end{cdbcom}
 \botrule Note in particular once more the simplicity of the input on
-line~13-17. As advertised, very little knowledge of the program is
+line~12-14. As advertised, very little knowledge of the program is
 needed in order to be able to read and follow a calculation in a \Cdb
 notebook.
 
@@ -1075,13 +1070,13 @@ functionality: \toprule
 \begin{cdbin}
 \psi_{\mu}::SelfAntiCommuting.
 { \chi, \psi_{\mu} }::AntiCommuting.
-\chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
+ex:= \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
 \end{cdbin}
 \begin{cdbout}
 \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
 \end{cdbout}
 \begin{cdbin}
-@substitute!(%)( \psi_{\mu} \psi_{nu} -> B_{\mu\nu} );
+substitute(_, $\psi_{\mu} \psi_{nu} -> B_{\mu\nu}$ );
 \end{cdbin}
 \begin{cdbout}
 (-1) \chi \, A^{\mu \nu} \, B_{\mu \nu} \, \chi;
@@ -1092,20 +1087,13 @@ By declaring $\chi$ and $\psi_{\mu}$ to be mutually anti-commuting,
 substitution. 
 
 In order to illustrate the meaning of \verb|SelfAntiCommuting|, we
-undo the substitution command above,
-\end{cdbcom}
-\begin{cdbin}
-@pop(%);
-\end{cdbin}
-\begin{cdbout}
-\chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
-\end{cdbout}
-\begin{cdbcom}
-Now we declare $A^{\mu\nu}$ to be symmetric and canonicalise the expression,
+declare $A^{\mu\nu}$ to be symmetric and canonicalise the
+expression,
 \end{cdbcom}
 \begin{cdbin}
 A^{\mu\nu}::Symmetric.
-@canonicalise!(%);
+ex:= \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};  
+canonicalise(_);
 \end{cdbin}
 \begin{cdbout}
 0;
@@ -1116,9 +1104,6 @@ program knows that $\psi_{\mu}\psi_{\nu}$ is anti-symmetric in its two
 indices, and has used this to simplify the expression.
 \end{cdbcom}
 \botrule
-Incidentally, the \verb|@pop| command provides an undo facility which
-allows one to go back any arbitrary number of steps in the calculation
-(by simply applying it multiple times).
 
 To conclude, let us discuss one more calculation which combines some
 of the functionality of \Cdb discussed above, and also shows how to
@@ -1128,7 +1113,10 @@ supersymmetry transformations.  Consider the following sample calculation,
 \vfill\eject
 \toprule
 \begin{cdbin}
-::PostDefaultRules( @@eliminate_kr!(%), @@prodsort!(%), @@collect_terms!(%) ).
+def post_process(ex):
+   eliminate_kronecker(_)
+   sort_product(_)
+   collect_terms(_)
 \end{cdbin}
 %\begin{cdbcom}
 %Declaration of indices and derivatives,
