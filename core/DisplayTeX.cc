@@ -59,7 +59,7 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum" || der)) return  true;
 
 	
-	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
+	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow" || parent=="\\wedge") {
 		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
 //		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
 		}

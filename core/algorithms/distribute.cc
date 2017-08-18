@@ -100,6 +100,7 @@ Algorithm::result_t distribute::apply(iterator& prod)
 		}
 	if(rep.number_of_children(top)==1) { // nothing happened, no sum was present
 //		prod->fl.mark=0; // handled
+		// std::cerr << "only one for " << Ex(prod) << std::endl;		
 		return result_t::l_no_action;
 		}
 

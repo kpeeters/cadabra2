@@ -614,3 +614,19 @@ def test36():
     print("Test 36b passed")
 
 test36()
+
+def test37():
+    A::DifferentialForm(degree=1).
+    B::DifferentialForm(degree=2).
+    C::DifferentialForm(degree=3).
+    d{#}::ExteriorDerivative.
+    ex:=C= d{B}+A ^ B;
+    ge:=d{C}+A ^ C;
+    substitute(ge, ex);
+    distribute(ge);
+    product_rule(ge);
+    tst:= d{A} ^ B - @(ge);
+    assert(tst==0)
+
+test37()
+    
