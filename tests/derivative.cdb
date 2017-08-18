@@ -604,7 +604,7 @@ def test36():
     \bar{\theta}::Depends(\partial{#});
     \bar{#}::DiracBar;
     ex:=\bar{Q \Gamma^{m} \theta}\partial_{\mu}{X_{m}} + \partial_{\mu}{\Gamma^{m}\bar{\theta}} X_{m};
-    unwrap(_, $\partial{#}$);
+    unwrap(_, $\partial{#}$)
     tst:=\bar{Q \Gamma^{m} \theta}\partial_{\mu}{X_{m}} + \Gamma^{m} \partial_{\mu}{\bar{\theta}} X_{m} - @(ex);
     assert(tst==0)
     print("Test 36a passed")    
@@ -616,17 +616,31 @@ def test36():
 test36()
 
 def test37():
+    __cdbkernel__=create_scope()        
     A::DifferentialForm(degree=1).
     B::DifferentialForm(degree=2).
     C::DifferentialForm(degree=3).
     d{#}::ExteriorDerivative.
     ex:=C= d{B}+A ^ B;
     ge:=d{C}+A ^ C;
-    substitute(ge, ex);
-    distribute(ge);
-    product_rule(ge);
+    substitute(ge, ex)
+    distribute(ge)
+    product_rule(ge)
     tst:= d{A} ^ B - @(ge);
     assert(tst==0)
+    print("Test 37 passed")                
 
 test37()
-    
+
+def test38():        
+    __cdbkernel__=create_scope()        
+    A::DifferentialForm(degree=1).
+    B::DifferentialForm(degree=1).
+    C::DifferentialForm(degree=2).        
+    ex:= A ^ B + B ^ A + A ^ C + C ^ A;
+    sort_product(_)
+    tst:= 2 A ^ C - @(ex);
+    assert(tst==0)
+    print("Test 38 passed")        
+
+test38()
