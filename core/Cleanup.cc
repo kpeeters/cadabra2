@@ -3,6 +3,7 @@
 #include "Functional.hh"
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
+#include "properties/SelfAntiCommuting.hh"
 #include "properties/Diagonal.hh"
 #include "properties/ExteriorDerivative.hh"
 #include "properties/KroneckerDelta.hh"
@@ -30,7 +31,7 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 			break;
 			}
 		// std::cerr << "zero " << changed << std::endl;
-		if(*it->name=="\\prod")  res = cleanup_productlike(kernel, tr, it);
+		if(*it->name=="\\prod" || *it->name=="\\wedge")  res = cleanup_productlike(kernel, tr, it);
 		changed = changed || res;
 		// std::cerr << "product " << changed << std::endl;
 		if(*it->name=="\\sum")   res = cleanup_sumlike(kernel, tr, it);
@@ -98,12 +99,13 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	bool ret=false;
 
-	assert(*it->name=="\\prod");
+	assert(*it->name=="\\prod" || *it->name=="\\wedge");
+	std::string nm = *it->name;
 
 	// Flatten prod children inside this prod node.
 	auto sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
-		if(*sib->name=="\\prod") {
+		if(*sib->name==nm) {
 			multiply(it->multiplier, *sib->multiplier);
 			tr.flatten(sib); 
 			sib=tr.erase(sib);
@@ -136,7 +138,44 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 		multiply(it->multiplier, mult);
 		}
 
-	// Handle edge cases where the product should collapse to a single node,
+	// Turn products with two adjacent identical anti-commuting siblings to zero.
+	if(nm=="\\prod") {
+		auto s1=tr.begin(it);
+		auto s2=s1;
+		++s2;
+		while(s2!=tr.end(it)) {
+			auto ac = k.properties.get<SelfAntiCommuting>(s1);
+			if(ac) {
+				if(subtree_compare(0, s1, s2)==0) {
+					tr.erase_children(it);
+					zero(it->multiplier);
+					ret=true;
+					break;
+					}
+				}
+			++s2;
+			++s1;
+			}
+		}
+
+	// Turn wedge products containing two identical siblings to zero.
+	if(nm=="\\wedge") {
+		auto s1=tr.begin(it);
+		auto s2=s1;
+		++s2;
+		while(s2!=tr.end(it)) {
+			if(subtree_compare(0, s1, s2)==0) {
+				tr.erase_children(it);
+				zero(it->multiplier);
+				ret=true;				
+				break;
+				}
+			++s2;
+			++s1;
+			}
+		}
+
+   // Handle edge cases where the product should collapse to a single node,
 	// e.g. when we have just a single factor, or when the product vanishes.
 
 	if(tr.number_of_children(it)==1) { // i.e. from '3*4*7*a*9'

@@ -115,9 +115,11 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			// its product sorted), we first sort the collector product.
 
 			sort_product sp(kernel, collector);
+			sp.dont_cleanup(); // otherwise single-factor products will get stripped of the \prod wrapper.
 			auto coltop=collector.begin();
-			if(sp.can_apply(coltop))
+			if(sp.can_apply(coltop)) {
 				sp.apply(coltop);
+				}
 			multiply(prod->multiplier, *coltop->multiplier);
 			one(coltop->multiplier);
 			
