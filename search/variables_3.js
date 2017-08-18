@@ -15,6 +15,7 @@ var searchData=
   ['chi',['chi',['../Symbols_8cc.html#a0e0353d863498a4c98efb2b5ed38f9fc',1,'chi():&#160;Symbols.cc'],['../Symbols_8cc.html#a000bb23c54a1419bdf305fc562bdc2ef',1,'Chi():&#160;Symbols.cc']]],
   ['child_5fnum',['child_num',['../classcadabra_1_1ActionAddCell.html#a326fbbc6872c65ad5ae92778ddd6f3dd',1,'cadabra::ActionAddCell']]],
   ['chirality',['chirality',['../classcadabra_1_1Spinor.html#a27aa8f55ba0ce4ddd615678285ce2684',1,'cadabra::Spinor']]],
+  ['cleanup',['cleanup',['../classcadabra_1_1sort__product.html#abe4d74c5b9bca1ea7c409b299e88d809',1,'cadabra::sort_product']]],
   ['client',['client',['../test__client_8cc.html#aaaccf49040d6c5e022a6bb79711c697b',1,'test_client.cc']]],
   ['client_5flog_5fid',['client_log_id',['../classsnoop_1_1Snoop_1_1LogEntry.html#a26f89b5c2351b415b828025d5f888a3b',1,'snoop::Snoop::LogEntry']]],
   ['close_5fbrackets',['close_brackets',['../classpreprocessor.html#a8da08ed608991d82797a2422fe1a5a91',1,'preprocessor']]],

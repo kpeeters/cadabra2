@@ -33,6 +33,7 @@ var searchData=
   ['do_5ftableau',['do_tableau',['../classcadabra_1_1lr__tensor.html#aab36dd5a4727ad6ea72fd6fffec672f9',1,'cadabra::lr_tensor']]],
   ['documentthread',['DocumentThread',['../classcadabra_1_1DocumentThread.html#a9574c93a03118e2acf47295b77ed79be',1,'cadabra::DocumentThread::DocumentThread(GUIBase *)'],['../classcadabra_1_1DocumentThread.html#ad9d573008fc3ed7203dfab960ac8e995',1,'cadabra::DocumentThread::DocumentThread(const DocumentThread &amp;)=delete']]],
   ['doit',['doit',['../classcadabra_1_1sym.html#ab7da4e9e381be48b1cf18589f8a21dbc',1,'cadabra::sym']]],
+  ['dont_5fcleanup',['dont_cleanup',['../classcadabra_1_1sort__product.html#aebf757a68315e57b13b2ef577fe8231c',1,'cadabra::sort_product']]],
   ['drop_5fkeep_5fweight',['drop_keep_weight',['../classcadabra_1_1drop__keep__weight.html#aa4a10fa06e853810f4794be051cad876',1,'cadabra::drop_keep_weight']]],
   ['drop_5fweight',['drop_weight',['../classcadabra_1_1drop__weight.html#a57d0ab188979cdbd0b33f567d937a722',1,'cadabra::drop_weight']]],
   ['dumpmap',['dumpmap',['../classcadabra_1_1Algorithm.html#a5aca32e44982761bbbb90a935bf2a794',1,'cadabra::Algorithm']]]
