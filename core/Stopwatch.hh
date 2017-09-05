@@ -37,7 +37,7 @@
 		// don't actually use this I guess
 		long dummy;
 	} Stopwatch_timezone;
-#endif !WIN32
+#endif // !WIN32
 
 extern "C" {
 #include <signal.h>

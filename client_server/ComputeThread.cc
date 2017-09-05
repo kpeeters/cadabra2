@@ -62,8 +62,7 @@ void ComputeThread::close_and_cleanup_process()
         }
         //		kill(server_pid, SIGKILL);
         // 		if(server_stdout)
-        //			pclose2(server_stdout, server_pid); 
-    }
+        //			pclose2(server_stdout, server_pid);
 #endif // _MSC_VER
     }
 

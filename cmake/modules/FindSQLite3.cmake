@@ -11,11 +11,14 @@ find_path(SQLITE3_INCLUDE_DIR NAMES sqlite3.h
 			PATHS ${SQLITE3_INCLUDE_DIR_SEARCH}
 			DOC "SQLite3 includes directory (contains sqlite3.h)"
 			)
-find_library(SQLITE3_LIBRARIES NAMES sqlite3.lib
-			PATHS ${SQLITE3_LIBRARIES_SEARCH}
-			DOC "SQLite3 libraries directory (contains sqlite3.lib)")
-			
-find_package_handle_standard_args(SQLITE3 DEFAULT_MSG SQLITE3_INCLUDE_DIR SQLITE3_LIBRARIES)
 
-# TODO: 
-# * make these work:
+if(WIN32)
+	find_library(SQLITE3_LIBRARIES NAMES sqlite3.lib
+				PATHS ${SQLITE3_LIBRARIES_SEARCH}
+				DOC "SQLite3 libraries directory (contains sqlite3.lib)")
+else()
+    find_library(SQLITE3_LIBRARIES NAMES sqlite3)
+endif()
+
+find_package_handle_standard_args(SQLITE3 DEFAULT_MSG SQLITE3_INCLUDE_DIR SQLITE3_LIBRARIES)
+		
