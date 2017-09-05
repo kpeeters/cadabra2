@@ -32,7 +32,7 @@ Installation
 -------------
 
 Cadabra builds on Linux and Mac OS X, and might soon build on Windows
-too. Select your system from the list bel
+too. Select your system from the list below
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
