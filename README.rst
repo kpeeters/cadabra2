@@ -248,9 +248,14 @@ Any feedback on these instructions is welcome.
 Mac OS X
 ~~~~~~~~
 
-Cadabra builds with the standard Apple compiler, but in order to
-build on OS X you need a number of packages from Homebrew (see
-http://brew.sh).  Install these packages with::
+Cadabra builds with the standard Apple compiler, but in order to build
+on OS X you need a number of packages from Homebrew (see
+http://brew.sh). Quite a few Homebrew installations have broken
+permissions; best to first do::
+
+    sudo chown -R ${USER}:admin /usr/local/
+
+to clean that up. Then install the required dependencies with::
 
     brew install cmake boost pcre gmp python3 
     brew uninstall boost-python
