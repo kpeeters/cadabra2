@@ -37,7 +37,7 @@ too. Select your system from the list bel
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
 - `Linux (older Fedora/CentOS/Scientific Linux)`_
-- `Linux (OpenSUSE)`_
+- `Linux (openSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Linux (Solus)`_
 - `Mac OS X`_
@@ -156,10 +156,10 @@ This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
 
-Linux (OpenSUSE)
+Linux (openSUSE)
 ~~~~~~~~~~~~~~~~
 
-For OpenSUSE (tested on 'Leap', probably also fine with minor changes
+For openSUSE (tested on 'Leap', probably also fine with minor changes
 for 'Tumbleweed') you first need to add the `devel:libraries:c_c++`
 repository. To do this, start YaST, go to Software/Software
 Repositories/Add/Add by URL.  Use the URL
