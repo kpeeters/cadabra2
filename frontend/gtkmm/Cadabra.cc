@@ -1,4 +1,5 @@
 
+#define WIN32_COMPILE_HACK
 #ifdef _MSC_VER
 extern "C" {
     // typedef void* gpointer;
@@ -145,7 +146,6 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 				text=std::string(contents);
 				}
 			// ERROR TODO: windows currently leaking, as having compile problems
-#define WIN32_COMPILE_HACK
 #if defined(_MSC_VER) && !defined(WIN32_COMPILE_HACK)
             g_free(contents);
 #endif //ndef _MSC_VER

@@ -39,9 +39,9 @@
 == gtk frontend ==
 * The frontend is optional
 * Building gtk on windows is a long process
-* Built https://github.com/bluelips/gtk-win32
+* Built https://github.com/bluelips/gtk-win32 using its associated directions
 ** After restarts if it doesn't work, use -SkipDownload to avoid errors when repeating the build.ps1
-* Building https://github.com/bluelips/gtkmm-win32 for msvc2017
+* Building https://github.com/bluelips/gtkmm-win32 for msvc2017 using its associated directions
 ** To try it out to see if it worked (switched to cygwin)
 *** find -name "*.dll" -print | grep Debug | xargs -i cp '{}' ../untracked/winbin/
 *** find -name "*.exe" -print | grep Debug | grep Win32 | xargs -i cp '{}' ../untracked/winbin/
@@ -52,3 +52,4 @@
 === gtk todo ===
 * package into nice release for others to use binaries
 * fix gtk3 mm demo project
+* fix the leak associated with each cell, seems to be a linker problem associated with __cdecl calling convention
