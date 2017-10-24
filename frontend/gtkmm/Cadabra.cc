@@ -1,4 +1,14 @@
 
+#ifdef _MSC_VER
+extern "C" {
+    // typedef void* gpointer;
+    // __declspec(dllimport) 
+    // extern  void	 g_free(gpointer	 mem);
+#include <glib.h>
+}
+#endif // def _MSC_VER
+
+
 #include "Cadabra.hh"
 #include <signal.h>
 #include <fstream>
@@ -134,7 +144,12 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 			if(contents && length) {
 				text=std::string(contents);
 				}
-			g_free(contents);
+			// ERROR TODO: windows currently leaking, as having compile problems
+#define WIN32_COMPILE_HACK
+#if defined(_MSC_VER) && !defined(WIN32_COMPILE_HACK)
+            g_free(contents);
+#endif //ndef _MSC_VER
+
 			}
 		}
 	catch (const Glib::Error& ex) {

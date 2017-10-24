@@ -9,7 +9,14 @@
 #include "lodepng.h"
 #include <fstream>
 #include <sstream>
-#include <unistd.h>
+#ifdef _MSC_VER
+    #include <direct.h>
+    #include <Windows.h>
+    //#include <stdio.h>
+    //#include <stdlib.h>
+#else // def _MSC_VER
+    #include <unistd.h>
+#endif // def _MSC_VER
 
 //#define DEBUG
 
@@ -231,12 +238,23 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// for temporary files.
 
 	char olddir[1024];
-	if(getcwd(olddir, 1023)==NULL)
+    if(getcwd(olddir, 1023)==NULL)
 		 olddir[0]=0;
-	if(chdir("/tmp")==-1)
+    char tmpdirname[] = "/tmp";
+    if(chdir(tmpdirname)==-1)
 		throw TeXException("Failed to chdir to /tmp.");
 
-	char templ[]="/tmp/cdbXXXXXX";
+#ifdef _MSC_VER
+    char templ[MAX_PATH];
+    UINT uRetVal = GetTempFileName(tmpdirname,
+        TEXT("cdbXXXXXX"),
+        0,                // create unique name 
+        &templ[0]);  // buffer for name 
+    if (uRetVal == 0)
+        throw TeXException("Failed to get temp filename.");
+#else // def _MSC_VER
+    char templ[] = "/tmp/cdbXXXXXX";
+#endif // def _MSC_VER
 
 	// The size in mm or inches which we use will in the end determine how large
 	// the font will come out. 
@@ -264,9 +282,16 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// them by a page eject.
 
 	std::ostringstream total;
-	int fd = mkstemp(templ);
-	if(fd == -1) 
-		 throw TeXException("Failed to create temporary file in /tmp.");
+#ifdef _MSC_VER
+    FILE* fd = fopen(templ, "w");
+    if(fd == 0)
+        throw TeXException("Failed to create temporary file in /tmp.");
+
+#else // def _MSC_VER
+    int fd = mkstemp(templ);
+    if (fd == -1)
+        throw TeXException("Failed to create temporary file in /tmp.");
+#endif // def _MSC_VER
 
 	total << "\\documentclass[11pt]{article}\n"
 			<< "\\usepackage[dvips,verbose,voffset=0pt,hoffset=0pt,textwidth="
@@ -317,20 +342,39 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	// Now write the 'total' buffer to the .tex file
 
-	// std::cerr << total.str() << std::endl;
-	ssize_t start=0;
-	do {
-		ssize_t written=write(fd, &(total.str().c_str()[start]), total.str().size()-start);
-		if(written>=0)
-			start+=written;
-		else {
-			if(errno != EINTR) {
-				close(fd);
-				throw TeXException("Failed to write LaTeX temporary file.");
-				}
-			} 
-		} while(start<static_cast<ssize_t>(total.str().size()));
-	close(fd);
+#ifdef _MSC_VER
+    // std::cerr << total.str() << std::endl;
+    size_t start = 0;
+    do {
+        size_t written = fwrite(&(total.str().c_str()[start]), sizeof(char), total.str().size() - start, fd);
+        if (written >= 0)
+            start += written;
+        else {
+            if (errno != EINTR) {
+                fclose(fd);
+                throw TeXException("Failed to write LaTeX temporary file.");
+            }
+        }
+    } while (start<static_cast<size_t>(total.str().size()));
+    fclose(fd);
+
+#else // def _MSC_VER
+    // std::cerr << total.str() << std::endl;
+    ssize_t start = 0;
+    do {
+        ssize_t written = write(fd, &(total.str().c_str()[start]), total.str().size() - start);
+        if (written >= 0)
+            start += written;
+        else {
+            if (errno != EINTR) {
+                close(fd);
+                throw TeXException("Failed to write LaTeX temporary file.");
+            }
+        }
+    } while (start<static_cast<ssize_t>(total.str().size()));
+    close(fd);
+#endif // def _MSC_VER
+
 #ifdef DEBUG
 	std::cerr  << templ << std::endl;
 	std::cerr << "---\n" << total.str() << "\n---" << std::endl;

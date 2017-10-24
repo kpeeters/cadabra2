@@ -8,20 +8,39 @@ endif()
 add_definitions("-DBOOST_LOG_DYN_LINK")
 
 # Gtkmm-3.0 dependencies. 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
-include_directories(${GTKMM3_INCLUDE_DIRS})
-link_directories(${GTKMM3_LIBRARY_DIRS})
+if(WIN32)
+	find_package(GTK3Bundle REQUIRED)
+	include_directories(${GTK3_INCLUDE_DIR})
+	link_directories(${GTK3_LIBRARIES})
+	message("--- Using ${GTK3_INCLUDE_DIR} and ${GTK3_LIBRARIES} for gtk3")
+
+	find_package(GTKMM3Bundle REQUIRED)
+	include_directories(${GTKMM3_INCLUDE_DIR})
+	link_directories(${GTKMM3_LIBRARIES})
+	message("--- Using ${GTKMM3_INCLUDE_DIR} and ${GTKMM3_LIBRARIES} for glibmm")
+else()
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
+endif()
+
+include_directories(${GTKMM3_INCLUDE_DIR})
+link_directories(${GTKMM3_LIBRARIES})
 add_definitions(${GTKMM3_CFLAGS_OTHER})
-find_package(Boost 1.45.0 COMPONENTS system)
+add_definitions("-DBOOST_ALL_NO_LIB")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.45.0 COMPONENTS system random program_options regex filesystem date_time)
 include_directories("${Boost_INCLUDE_DIRS}")
 #pkg_check_modules(UUID uuid REQUIRED)
 #link_directories(${UUID_LIBRARY_DIRS})
+include_directories("${SQLITE3_INCLUDE_DIR}")
+link_directories("${SQLITE3_LIBRARIES}")
 
 include_directories("." "../../client_server" "../../client_server/jsoncpp" "../../client_server/websocketpp")
+if(WIN32)
+	include_directories("windows")
+endif()
 
 add_executable(cadabra2-gtk main.cc 
   NotebookWindow.cc 
@@ -30,15 +49,23 @@ add_executable(cadabra2-gtk main.cc
   CodeInput.cc 
   ImageView.cc
   Cadabra.cc
-  ../common/TeXEngine.cc)
+  ../common/lodepng.cc
+  ../common/exec-stream.cc
+  ../common/TeXEngine.cc
+  ../../client_server/DataCell.cc
+  ../../client_server/ComputeThread.cc
+  ../../client_server/DocumentThread.cc
+  ../../client_server/Actions.cc
+  ../../client_server/Snoop.cc
+  ../../client_server/jsoncpp/jsoncpp.cpp
+  )
 
-# On Windows we need to link statically in order to avoid having to copy dll's 
-# along with our binary. 
+# With msvc, there was a problem with shared libraries across the directory structure, so the files are added directly 
 if(WIN32)
-  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+	target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
+	target_link_libraries(cadabra2-gtk ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES})
 else()
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+	target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} -lpthread)
 endif()
 
 
