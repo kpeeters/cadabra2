@@ -6,12 +6,13 @@
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/common/functional.hpp>
 #include <thread>
-#ifndef _MSC_VER
-    #include <glibmm/spawn.h>
-#else // !_MSC_VER
+#define AVOID_GTK
+#if defined(_MSC_VER) && defined(AVOID_GTK)
     #define NOMINMAX
     #include <Windows.h>
-#endif // !_MSC_VER
+#else // defined(_MSC_VER) && defined(AVOID_GTK)
+    #include <glibmm/spawn.h>
+#endif // defined(_MSC_VER) && defined(AVOID_GTK)
 
 typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
 typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
@@ -127,14 +128,14 @@ namespace cadabra {
 
 
 			// Self-started server
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(AVOID_GTK)
             //HANDLE          server_pid;
             HANDLE          server_stdout, server_stderr;
             PROCESS_INFORMATION process_info;
-#else // _MSC_VER
+#else // defined(_MSC_VER) && defined(AVOID_GTK)
 			Glib::Pid       server_pid;
             int             server_stdout, server_stderr;
-#endif // _MSC_VER
+#endif // defined(_MSC_VER) && defined(AVOID_GTK)
 			unsigned short  port;
 	};
 

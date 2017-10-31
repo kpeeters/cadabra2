@@ -10,11 +10,11 @@
 #include <sys/types.h>
 #include <signal.h>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(AVOID_GTK)
     #include <Windows.h>
-#else // _MSC_VER
+#else // defined(_MSC_VER) && defined(AVOID_GTK)
     #include <glibmm/spawn.h>
-#endif // _MSC_VER
+#endif // defined(_MSC_VER) && defined(AVOID_GTK)
 
 using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
@@ -29,7 +29,7 @@ ComputeThread::ComputeThread()
 
 	gui_thread_id=std::this_thread::get_id();
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(AVOID_GTK)
     ZeroMemory(&process_info, sizeof(process_info));
 #else // _MSC_VER
     server_pid = 0;
@@ -43,9 +43,11 @@ ComputeThread::~ComputeThread()
 
 void ComputeThread::close_and_cleanup_process()
     {
-#ifdef _MSC_VER
-        if(server_stdout != 0) 
-            CloseHandle(server_stdout);
+#if defined(_MSC_VER) && defined(AVOID_GTK)
+    if(server_stdout != 0)
+        CloseHandle(server_stdout);
+    if(server_stderr != 0)
+        CloseHandle(server_stderr);
 
 
 #else // _MSC_VER
@@ -53,7 +55,10 @@ void ComputeThread::close_and_cleanup_process()
         std::cerr << "cadabra-client: killing server" << std::endl;
         }
     if (server_stdout != 0) {
+        //WINDOWS TODO: The OS should be able to handle the cleanup but it would be better to close server_stdout
+# if !defined(_MSC_VER)
         close(server_stdout);
+# endif // !defined(_MSC_VER)
         // close(server_stderr);
         Glib::spawn_close_pid(server_pid);
         server_pid = 0;
@@ -150,8 +155,10 @@ void ComputeThread::all_cells_nonrunning()
 			std::make_shared<ActionSetRunStatus>(it.second, false);
 		docthread->queue_action(rs_action);
 		}
-	gui->process_data();
-	gui->on_kernel_runstatus(false);
+    if(gui) {
+	    gui->process_data();
+	    gui->on_kernel_runstatus(false);
+        }
 	running_cells.clear();
 	}
 
@@ -169,7 +176,9 @@ void ComputeThread::on_fail(websocketpp::connection_hdl hdl)
 	try_connect();
 	}
 
-#ifndef _MSC_VER
+#if defined(_MSC_VER) && defined(AVOID_GTK)
+// not needed
+#else
 using SlotSpawnChildSetup = sigc::slot<void()>;
 #endif 
 
@@ -181,24 +190,26 @@ void ComputeThread::try_spawn_server()
 
 	std::cerr << "cadabra-client: spawning server" << std::endl;
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(AVOID_GTK)
     SECURITY_ATTRIBUTES security;
     security.nLength = sizeof(security);
     security.bInheritHandle = TRUE;
     security.lpSecurityDescriptor = NULL;
 
-    if(!CreatePipe(&server_stdout, NULL /*hWritePipe*/, 
-                   &security, 0 /*nSize*/)) {
+    if(!CreatePipe(&server_stdout, &server_stderr, 
+                   &security, sizeof(security))) {
         std::cerr << "Failed to create pipe for reading server stdout" << std::endl;
         return;
         }
     // So because we set inherit all handles above, we want to ensure the child doesn't get this one
     SetHandleInformation(server_stdout, HANDLE_FLAG_INHERIT, 0 /*dwFlags*/);
+    SetHandleInformation(server_stderr, HANDLE_FLAG_INHERIT, 0 /*dwFlags*/);
 
     STARTUPINFO startup;
     ZeroMemory(&startup, sizeof(startup));
     startup.cb = sizeof(startup);
     startup.hStdOutput = server_stdout;
+    startup.hStdError = server_stderr;
     startup.dwFlags = STARTF_USESTDHANDLES;
     ZeroMemory(&process_info, sizeof(process_info));
          
@@ -230,7 +241,11 @@ void ComputeThread::try_spawn_server()
     argv.push_back("cadabra-server");
 #endif
     Glib::Pid pid;
-    std::string wd("");
+    std::string wd;
+    wd.clear();
+
+    printf("Cadabra2: preparing to spawn in working dir: %s! std::string was %d with sizeof %u addr %u\n",
+        wd.c_str(), wd.size(), sizeof(wd), &wd);
 
     Glib::spawn_async_with_pipes(wd, argv, envp,
         Glib::SPAWN_DEFAULT | Glib::SPAWN_SEARCH_PATH,
@@ -242,6 +257,7 @@ void ComputeThread::try_spawn_server()
             //										  &server_stderr);
 
     char buffer[100];
+    //FILE* f = _fdopen(server_stdout, "r");
     FILE *f = fdopen(server_stdout, "r");
     if (fscanf(f, "%100s", buffer) != 1) {
         throw std::logic_error("Failed to read port from server.");
@@ -430,13 +446,15 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		std::cerr << "cadabra-client: trouble processing server response: " << ex.what() << std::endl;
 		}
 
-	// Update kernel busy indicator depending on number of running cells.
-	if(number_of_cells_executing()>0)
-		gui->on_kernel_runstatus(true);
-	else
-		gui->on_kernel_runstatus(false);
+    if(gui) {
+	    // Update kernel busy indicator depending on number of running cells.
+	    if(number_of_cells_executing()>0)
+		    gui->on_kernel_runstatus(true);
+	    else
+		    gui->on_kernel_runstatus(false);
 
-	gui->process_data();
+	    gui->process_data();
+        }
 	}
 
 void ComputeThread::execute_cell(DTree::iterator it)
@@ -466,7 +484,9 @@ void ComputeThread::execute_cell(DTree::iterator it)
 	std::shared_ptr<ActionBase> actionpos =
 		std::make_shared<ActionPositionCursor>(it, ActionPositionCursor::Position::next);
 	docthread->queue_action(actionpos);
-	gui->process_data();
+    if(gui) {
+    	gui->process_data();
+        }
 	
 	// For a code cell, construct a server request message and then
 	// send the cell to the server.
@@ -493,7 +513,9 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		std::ostringstream str;
 		str << req << std::endl;
 		wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
-		gui->on_kernel_runstatus(true);
+        if(gui) {
+    		gui->on_kernel_runstatus(true);
+            }
 		}
 
 	// For a LaTeX cell, immediately request a new latex output cell to be displayed.
@@ -529,8 +551,9 @@ void ComputeThread::stop()
 	
 //	std::cerr << str.str() << std::endl;
 
-#ifndef _MSC_VER
-	server_pid=0;
+#if defined(_MSC_VER) && defined(AVOID_GTK)
+#else
+    server_pid=0;
 #endif // _MSC_VER
 
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
@@ -546,7 +569,9 @@ void ComputeThread::restart_kernel()
 	// Restarting the kernel means all previously running blocks have stopped running.
 	// Inform the GUI about this.
 	// FIXME: set all running flags to false
-	gui->on_kernel_runstatus(false);
+    if(gui) {
+    	gui->on_kernel_runstatus(false);
+        }
 
 	std::cerr << "cadabra-client: restarting kernel" << std::endl;
 	Json::Value req, header, content;

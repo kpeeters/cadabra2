@@ -63,7 +63,7 @@ add_executable(cadabra2-gtk main.cc
 # With msvc, there was a problem with shared libraries across the directory structure, so the files are added directly 
 if(WIN32)
 	target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
-	target_link_libraries(cadabra2-gtk ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES})
+	target_link_libraries(cadabra2-gtk ${Boost_LIBRARIES} ${GTK3_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES})
 else()
 	target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} -lpthread)
 endif()
