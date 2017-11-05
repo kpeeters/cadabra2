@@ -1,4 +1,4 @@
-== Directions to build on windows using Microsoft Visual Studio 2017 Community ===
+### Directions to build on windows using Microsoft Visual Studio 2017 Community
 * If you don't have MSVC2017 community, it's free to download and install
   * Note: also used msvc2013 to build pcre and gmp so ymmv
 * Clone, build install from https://github.com/bluelips/pcre-win-build
@@ -7,6 +7,11 @@
   * git clone https://github.com/alex85k/sqlite3-cmake
   * cd sqlite3-cmake && mkdir build && cd build && cmake ..
   * Built sqlite3.sln in msvc2017
+* Install python 2.7 32-bit
+  * There is some support for other versions, etc but good luck!
+* Install Miktex
+  * https://miktex.org/
+  * Make sure to run the updater and getting all the packages is recommended (took a few runs of the updater)
 * Downloaded boost 1.61 and installed to c:\create\boost_1_61_0\
   * Downloaded windows prebuild binaries, the 32-bit version seems to be necessary. For my version of studio 2017, this was boost_1_61_0-msvc-14.0-32.exe
   * If boost doesn't line up from cmake, try -DBoost_DEBUG=ON as cmake param
@@ -20,15 +25,23 @@
     * cmake -DCMAKE_SUPPRESS_REGENERATION:BOOL=1 -DUSE_PYTHON_3=NO -DSQLITE3_INCLUDE_DIR_SEARCH="c:/create/sqlite3-cmake/src" -DSQLITE3_LIBRARIES_SEARCH="c:/create/sqlite3-cmake/build/Release" -DBOOST_ROOT="c:/create/boost_1_61_0" -DBOOST_LIBRARYDIR="c:/create/boost_1_61_0" -DPCRE_LIBRARY="C:\create\pcre-win-build\build-VS2013\Release\libpcrecpp.lib" -DPCRE_INCLUDE_DIR="C:\create\pcre-win-build\include" -DGTK3_BUNDLE_INCLUDE_DIR_SEARCH="C:\gtk-build\gtk\Win32\include" -DGTK3_BUNDLE_LIBRARIES_SEARCH="C:\gtk-build\gtk\Win32\lib" -DGTKMM3_BUNDLE_INCLUDE_DIR_SEARCH="C:\create\gtkmm-win32\gtkmm\Win32\include" -DGTKMM3_BUNDLE_LIBRARIES_SEARCH="C:\create\gtkmm-win32\gtkmm\Win32\lib" --debug_output --system_information -Wdev --trace .. > attempt.txt 2>&1 || tail attempt.txt
 * Now build relevant projects from the cadabra2.sln
 
-== CURRENT STATUS ==
-* Basic running cadabra-gtk client, not well tested
+#### CURRENT STATUS
+* Functional but buggy with latex gtk frontend client
 
-== TODO ==
+#### TODO 
 * Make gmp a sub-project of cadabra2
 * Boost python cmake setup seems flawed on some platforms: https://travis-ci.org/kpeeters/cadabra2/jobs/272162045
   * Didn't reproduce with a fresh ubuntu vm so will have to recreate that environment
+    
+##### GTK3 frontend todo
+* package into nice release for others to use binaries
+* Clean up proces handle leak in ComputeThread::close_and_cleanup_process()
+  * Not currently critical as windows should clean these up on restart, but kernel restarts need to be tested
+* Clean up the interprocess io with an appropriate read from pipe instead of the readfile code, which blocks due to not reading the requestd number of bytes
+* Clean up the .png file leaks in the temp folder
+  * Not currently critical as windows has built in mechanisms for cleaning the temp folder in low disk space situations, and files tend to be small
 
-== notes ==
+#### Notes
 * Building gmp dropped libs and includes into c:\msvc\ which is gross and should be changed when gmp is turned into a subproject
 * Found gmp through cmake by modifying the command to include the path hint directly
 * Using rm -rf * to clean cmake from build dir is a bad idea, as I trashed everything once when accidently in root project dir, so use instead
@@ -51,7 +64,7 @@
     * If that still fails, use depends.exe on cadabra2.dll to figure out what is missing 
   * execute "python cadabra2" from this directory to start interactive mode
 
-== gtk frontend ==
+#### Building the GTK3 frontend
 * The frontend is optional
 * Building gtk on windows is a long process
 * Built https://github.com/bluelips/gtk-win32 using its associated directions
@@ -62,9 +75,8 @@
     * find -name "*.exe" -print | grep Debug | grep Win32 | xargs -i cp '{}' ../untracked/winbin/
     * cd /cygdrive/c/gtk-build/build/Win32 && find -name "*.dll" -print | grep Debug | xargs -i cp '{}' /cygdrive/c/create/gtkmm-win32/untracked/winbin/
     * cd /cygdrive/c/gtk-build/gtk/Win32/bin && find -name "*.dll" -print | xargs -i cp '{}' /cygdrive/c/create/gtkmm-win32/untracked/winbin/
-
-
-=== gtk todo ===
-* package into nice release for others to use binaries
-* fix gtk3 mm demo project
-* fix the leak associated with each cell, seems to be a linker problem associated with __cdecl calling convention
+* Currently collecting all the dlls and associated binary products is tedious and error prone. 
+  * Additionally for gui it seems like copying the gtk share folder into the working directory is necessary, as well as the images directory.
+  * Needed to copy into the share/icons folder the Adwaita directory from C:\msys64\mingw64\share\icons
+  * copied the loader.cache from C:\gtk-build\gtk\Win32\lib\gdk-pixbuf-2.0\2.10.0 to share subdir
+  * copied *.sty files from the frontend\latex dir

@@ -168,8 +168,19 @@ void exec_stream_t::start( std::string const & program, std::string const & argu
     si.cb=sizeof( si );
     PROCESS_INFORMATION pi;
     ZeroMemory( &pi, sizeof( pi ) );
-    if( !CreateProcess( 0, const_cast< char * >( command.c_str() ), 0, 0, TRUE, 0, 0, 0, &si, &pi ) ) {
-        throw os_error_t( "exec_stream_t::start: CreateProcess failed.\n command line was: "+command );
+
+    // CreateProcess apparently can modify the string which shouldn't be done for std::string
+    char command_raw[2048];
+    strncpy(command_raw, command.c_str(), sizeof(command_raw));
+    command_raw[sizeof(command_raw) - 1] = 0;
+
+    if( !CreateProcess( 0, command_raw, 0, 0, TRUE, 0, 0, 0, &si, &pi ) ) {
+        char error_string[1024];
+        memset(error_string, 0, sizeof(error_string));
+        FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL /*source*/, GetLastError(),
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), error_string, sizeof(error_string) - 1, NULL /*args*/);
+        throw os_error_t( "exec_stream_t::start: CreateProcess failed.\n command line was: " 
+            + command + " and error was: " + std::string(error_string));
     }
 
     m_impl->m_child_process=pi.hProcess;

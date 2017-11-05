@@ -44,10 +44,12 @@ ComputeThread::~ComputeThread()
 void ComputeThread::close_and_cleanup_process()
     {
 #if defined(_MSC_VER) && defined(AVOID_GTK)
-    if(server_stdout != 0)
-        CloseHandle(server_stdout);
-    if(server_stderr != 0)
-        CloseHandle(server_stderr);
+    // This is apparently a crash if uncommented? We're not currently even using them so
+    // TODO: get rid of these
+    //if(server_stdout != 0)
+    //    CloseHandle(server_stdout);
+    //if(server_stderr != 0)
+    //    CloseHandle(server_stderr);
 
 
 #else // _MSC_VER
@@ -94,7 +96,7 @@ void ComputeThread::try_connect()
 	// https://svn.boost.org/trac/boost/ticket/2456
 	// Not sure why this works here, as the compiler claims this statement does
 	// not have any effect.
-   // No longer necessary with websocketpp-0.6.0.
+    // No longer necessary with websocketpp-0.6.0.
 	//
 	// boost::asio::ip::resolver_query_base::flags(0);
 
@@ -212,7 +214,16 @@ void ComputeThread::try_spawn_server()
     startup.hStdError = server_stderr;
     startup.dwFlags = STARTF_USESTDHANDLES;
     ZeroMemory(&process_info, sizeof(process_info));
-         
+
+    // having two problems with the interprocess communication (both in the win32 and glib approach??)
+    // so trying file io to get the port
+#define AVOID_READ_FILE
+#ifdef AVOID_READ_FILE
+    // first delete the file if it exists
+    char port_filename[] = "portfile.txt";
+    DeleteFile(port_filename);
+#endif // def AVOID_READ_FILE
+
 
     TCHAR commandline[] = TEXT("cadabra-server.exe");
     if(!CreateProcess(NULL /*appName*/, commandline, NULL /*processAttr*/,
@@ -223,6 +234,23 @@ void ComputeThread::try_spawn_server()
         return;
         }
 
+#ifdef AVOID_READ_FILE
+    int port_retries = 10;
+    unsigned short readport = -1;
+    for(int retry = 0; retry < port_retries; retry++) {
+        Sleep(500); // give it a chance to startup and write out the file
+        FILE* portfile = fopen(port_filename, "r");
+        if(portfile) {
+            fread(&readport, sizeof(readport), 1, portfile);
+            fclose(portfile);
+            port = readport;
+            break;
+        }
+    }
+    if(readport == -1) {
+        throw std::logic_error("Failed to read port from server portfile.txt.");
+    }
+#else // def AVOID_READ_FILE
     static constexpr DWORD buffer_size = 100;
     char buffer[buffer_size];    
     DWORD bytes_read;
@@ -232,6 +260,7 @@ void ComputeThread::try_spawn_server()
         }
 
     port = atoi(buffer);
+#endif // def AVOID_READ_FILE
 
 #else // _MSC_VER
     std::vector<std::string> argv, envp;

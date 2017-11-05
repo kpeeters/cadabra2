@@ -488,7 +488,17 @@ void Server::run()
 		websocketpp::lib::asio::error_code ec;
 		auto p = wserver.get_local_endpoint(ec);
 		std::cout << p.port()  << std::endl;
-		
+
+#ifdef _MSC_VER
+        // So.. the interprocess communication approach is failing out on win32 so let's try file io
+        FILE* portFile = fopen("portfile.txt", "w");
+        if(portFile) {
+            unsigned short port = p.port();
+            fwrite(&port, sizeof(port), 1, portFile);
+            fclose(portFile);
+        }
+#endif //def _MSC_VER
+
 		// std::cerr << "cadabra-server: spawning job thread "  << std::endl;
 		runner = std::thread(std::bind(&Server::wait_for_job, this));
 		

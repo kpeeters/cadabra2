@@ -237,14 +237,17 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// 
 	// for temporary files.
 
-	char olddir[1024];
-    if(getcwd(olddir, 1023)==NULL)
-		 olddir[0]=0;
-    char tmpdirname[] = "/tmp";
-    if(chdir(tmpdirname)==-1)
-		throw TeXException("Failed to chdir to /tmp.");
+    char olddir[1024];
+    if (getcwd(olddir, 1023) == NULL)
+        olddir[0] = 0;
 
 #ifdef _MSC_VER
+    char tmpdirname[MAX_PATH];
+    if(0 == GetTempPath(MAX_PATH, &tmpdirname[0]))
+        throw TeXException("Failed to get temp dir.");
+    if (chdir(tmpdirname) == -1)
+        throw TeXException("Failed to chdir to /tmp.");
+
     char templ[MAX_PATH];
     UINT uRetVal = GetTempFileName(tmpdirname,
         TEXT("cdbXXXXXX"),
@@ -253,6 +256,10 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
     if (uRetVal == 0)
         throw TeXException("Failed to get temp filename.");
 #else // def _MSC_VER
+    char tmpdirname[] = "/tmp";
+    if (chdir(tmpdirname) == -1)
+        throw TeXException("Failed to chdir to /tmp.");
+
     char templ[] = "/tmp/cdbXXXXXX";
 #endif // def _MSC_VER
 
@@ -392,10 +399,19 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Run LaTeX on the .tex file.
 	exec_stream_t latex_proc;
 	std::string result;
+    std::string latex_args("");
 	try {
-//		latex_proc.start("latex", "--interaction nonstopmode "+nf);
+#ifdef _MSC_VER
+        std::string program_name("latex.exe");
+        latex_proc.set_wait_timeout(exec_stream_t::s_all, 20000);
+        latex_args = std::string(" --include-directory=\"") + olddir + std::string("\" ");
+#else // def _MSC_VER
+        std::string program_name("latex");
+#endif // def _MSC_VER
+
+        //		latex_proc.start("latex", "--interaction nonstopmode "+nf);
 		//std::cerr << "cadabra-client: starting latex" << std::endl;
-		latex_proc.start("latex", "-halt-on-error "+nf);
+		latex_proc.start(program_name, "-halt-on-error " + latex_args + nf);
  		std::string line; 
 		while( std::getline( latex_proc.out(), line ).good() ) 
 			result+=line+"\n";
@@ -426,8 +442,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		erase_file(std::string(templ)+".tex");
 		}
 	catch(std::exception& err) {
-		std::cerr << "cadabra-client: Exception running LaTeX." << std::endl;
-		latex_proc.close();
+		std::cerr << "cadabra-client: Exception running LaTeX: " << err.what() << std::endl;
+        latex_proc.close();
 
 		// erase_file(std::string(templ)+".tex");
 		erase_file(std::string(templ)+".dvi");
@@ -521,7 +537,13 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 				if(error!=0)
 					throw TeXException("PNG conversion error");
 				(*reqit)->needs_generating=false;
+#ifndef _MSC_VER
+                // Windows seems to be holding on to the file a little longer so this is erroring
+                // There are built in mechanisms to clean up the temp directory when necessary so
+                // it should be acceptable to leak these files
+                // especially if we try to do a cdb* cleanup at program quit
 				erase_file(pngname.str());
+#endif // def _MSC_VER
 				}
 			++pagenum;
 			}

@@ -151,13 +151,13 @@ Algorithm::result_t product_rule::apply(iterator& it)
 		 // a number of cases:
 		 //
 		 //    D_{a}{\theta^{b}}                    with \theta^{a} Coordinate & SelfAntiCommuting
-       //    D_{\theta^{a}}{\theta^{b}}           with \theta^{a} Coordinate and a,b,c AntiCommuting
+         //    D_{\theta^{a}}{\theta^{b}}           with \theta^{a} Coordinate and a,b,c AntiCommuting
 		 //    D_{a}{D_{b}{G}}                      handled by making indices AntiCommuting.
 		 //    D_{a}{D_{\dot{b}}{G}}                handled by making indices AntiCommuting.
 		 //    D_{a}{T^{a b}}                       handled by making indices AntiCommuting.
 		 //    D_{a}{\theta}                        with \theta having an ImplicitIndex of type 'a' 
 		 //    D{ A B }                             not yet handled (problem is to give scalar anti-commutativity
-       //                                            property to D, A, B).
+         //                                            property to D, A, B).
 
 		 Ex_comparator comp(kernel.properties);
 
