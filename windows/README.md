@@ -9,6 +9,9 @@
   * Built sqlite3.sln in msvc2017
 * Install python 2.7 32-bit
   * There is some support for other versions, etc but good luck!
+  * install sympy and matplotlib, with pip do:
+    * pip install sympy
+	* pip install matplotlib
 * Install Miktex
   * https://miktex.org/
   * Make sure to run the updater and getting all the packages is recommended (took a few runs of the updater)
@@ -26,7 +29,8 @@
 * Now build relevant projects from the cadabra2.sln
 
 #### CURRENT STATUS
-* Functional but buggy with latex gtk frontend client
+* Currently there is a parser problem with {} being mangled before latex output, and the mangling deforms expressions enough to render them incorrectg latex
+* Basic latex gtk frontend client is functional
 
 #### TODO 
 * Make gmp a sub-project of cadabra2
