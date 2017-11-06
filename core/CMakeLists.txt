@@ -43,6 +43,7 @@ endif()
 message("-- Python version = ${PYTHONLIBS_VERSION_STRING}")
 
 # Locate Boost and Boost.Python.
+add_definitions("-DBOOST_ALL_NO_LIB")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -239,15 +240,19 @@ if("${PYTHON_SITE_PATH}" STREQUAL "")
                   OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 
-message("-- Python site path at ${PYTHON_SITE_PATH}")
+# On windows, this comes up as C:\python2.7 often, but then cmake seems to only sometimes automatically convert that into C:/python2.7 so do it manually to avoid errors. Double escape is needed, once to get from here to the internal regex engine, once for the regex engine.
+string(REGEX REPLACE "\\\\" "/" SAFE_PYTHON_SITE_PATH ${PYTHON_SITE_PATH})
+message("-- Python site path at ${SAFE_PYTHON_SITE_PATH}")
 if(WIN32)
+	set(PROJECT_BINARY_BUILD_TYPE "/\${CMAKE_INSTALL_CONFIG_NAME}")
 	set(PROJECT_BINARY_RESULT_EXT ".dll")
 else(WIN32)
+	set(PROJECT_BINARY_BUILD_TYPE "")
 	set(PROJECT_BINARY_RESULT_EXT ".so")
 endif(WIN32)
 install(FILES
-  "${PROJECT_BINARY_DIR}/cadabra2${PROJECT_BINARY_RESULT_EXT}"
-  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${PYTHON_SITE_PATH}")
+  "${PROJECT_BINARY_DIR}${PROJECT_BINARY_BUILD_TYPE}/cadabra2${PROJECT_BINARY_RESULT_EXT}"
+  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${SAFE_PYTHON_SITE_PATH}")
 
 # Create the 'variable-substituted' cadabra2 inside the source tree so that we can
 # run the tests and pick up cadabra2_defaults.py from there.
@@ -274,7 +279,8 @@ install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE O
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
 
-install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+
+install(DIRECTORY DESTINATION ${SAFE_PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
 
@@ -308,7 +314,7 @@ foreach(PACKAGE ${PACKAGES})
 endforeach()
 																		
 # Install packages.
-set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
+set(PYTHON_CDB_PACKAGE_PATH ${SAFE_PYTHON_SITE_PATH}/cdb)
 foreach(PACKAGE ${PACKAGES})
   get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
   install(FILES "${PACKAGEDIR}/${PACKAGE}.py" DESTINATION ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL})
