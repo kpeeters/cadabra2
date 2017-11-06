@@ -418,6 +418,7 @@ def test22():
 test22()
 
 def test23():
+    __cdbkernel__=create_scope()
     {r,t}::Coordinate;        
     {a,b,c}::Indices(values={r,t}, position=fixed);
     \partial{#}::PartialDerivative;
@@ -452,3 +453,43 @@ test23()
 # ex:= \partial_{a}{ A_{b} };
 # rl:= \partial_{r}{ A_{t} } = 1;
 # evaluate(ex, rl);
+
+def test24():
+    __cdbkernel__=create_scope()
+    {\theta, \varphi}::Coordinate;
+    {\alpha, \beta, \gamma, \delta, \rho, \sigma, \mu, \nu, \lambda}::Indices(values={\varphi, \theta}, position=fixed);
+    \partial{#}::PartialDerivative;
+    g_{\alpha\beta}::Metric.
+    g^{\alpha\beta}::InverseMetric.
+
+    sphe:={ g_{\theta\theta} = r**2,
+        g_{\varphi\varphi} = r**2 \sin(\theta)**2 }.
+    complete(sphe, $g^{\alpha\beta}$)
+
+    ch:= \Gamma^{\alpha}_{\mu\nu} = 1/2 g^{\alpha\beta} ( \partial_{\nu}{g_{\beta\mu}}
+                                                        +\partial_{\mu}{g_{\beta\nu}}
+                                                        -\partial_{\beta}{g_{\mu\nu}} );
+
+    evaluate(ch, sphe, rhsonly=True)
+
+    rm:= R^{\rho}_{\sigma\mu\nu} = +\partial_{\mu}{\Gamma^{\rho}_{\sigma\nu}}
+           -\partial_{\nu}{\Gamma^{\rho}_{\sigma\mu}}
+           +\Gamma^{\rho}_{\beta\mu} \Gamma^{\beta}_{\sigma\nu}
+           -\Gamma^{\rho}_{\beta\nu} \Gamma^{\beta}_{\sigma\mu};
+
+    substitute(rm, ch)
+    evaluate(rm, sphe, rhsonly=True)
+
+    ricci:= R_{\sigma\nu} = R^{\rho}_{\sigma\rho\nu};
+    substitute(ricci, rm)
+    evaluate(ricci, sphe, rhsonly=True)
+
+    R:= R = R_{\sigma\nu} g^{\sigma\nu};
+    substitute(R, ricci)
+    evaluate(R, sphe, rhsonly=True)
+    val = rhs(R)
+    tst:= @(val) - 2/r**2;
+    assert(tst==0)
+    print("Test 24 passed")
+        
+test24()

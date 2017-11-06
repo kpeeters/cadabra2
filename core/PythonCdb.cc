@@ -808,7 +808,7 @@ void inject_defaults(Kernel *k)
 	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\frac{#}",false), 0);
 	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\frac{#}",false), 0);
 	
-//	k->inject_property(new Distributable(),      make_Ex_from_string("\\wedge{#}",false), 0);
+	k->inject_property(new Distributable(),      make_Ex_from_string("\\wedge{#}",false), 0);
 	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false), 0);
 //	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
 	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\wedge{#}",false), 0);

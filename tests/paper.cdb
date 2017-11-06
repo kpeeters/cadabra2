@@ -129,6 +129,16 @@ print(timeit.timeit(test08,number=1))
 
 #-------
 
+def test08b():
+    __cdbkernel__=create_scope() 
+    \ftableau{#}::FilledTableau(dimension=10);
+    ex:=\ftableau{0,0}{1,1} \ftableau{a,a}{b,b};
+    lr_tensor(_);    
+
+print(timeit.timeit(test08b, number=1))
+        
+#-------
+
 def test09():
     __cdbkernel__=create_scope()
 

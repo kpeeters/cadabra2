@@ -373,16 +373,6 @@
 		},
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : ""
-		},
-		{
-			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
