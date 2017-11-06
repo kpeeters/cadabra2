@@ -21,7 +21,9 @@
 #include <stdlib.h>
 #include <stdexcept>
 #include <iostream>
+#ifndef _MSC_VER
 #include <unistd.h>
+#endif // ndef _MSC_VER
 #include <sstream>
 #include "PreProcessor.hh"
 
@@ -36,7 +38,7 @@ bool testit(const std::string& input, const std::string& output)
 		}
 	catch(std::exception& ex) {
 		if(output.size()==0) {
-			std::cout << "ok (threw exception)." << std::endl;
+			std::cout << "ok (threw exception)." << ex.what() << std::endl;
 			return true;
 			}
 		}
@@ -69,6 +71,10 @@ int main(int argc, char **argv)
 	int regression=1;
 
 	try {
+        regression *= testit(
+            "F_{\\mu\\nu} = \\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}}",
+            "\equals{F_{\mu \nu}}{\sub{\partial_{\mu}{A_{\nu}}}{\partial_{\nu}{A_{\mu}}}}");
+
 		regression*=testit(
 			"i k^{\\mu} ( lim_{z\\rightarrow w} (z-w)^{-1/2} \\psi_{\\mu}(w) S_{\\alpha}(z) )",
 			"\\prod{i}{k^{\\mu}}{\\prod(lim_{z \\rightarrow w})(\\sub(z)(w)^{\\sub{0}{\\frac{1}{2}}})(\\psi_{\\mu}(w))(S_{\\alpha}(z))}");

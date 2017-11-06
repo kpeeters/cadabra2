@@ -41,8 +41,13 @@ class DisplayTeX : public DisplayBase {
 		bool utf8_output=false;
 		bool latex_spacing=true;
 		bool latex_linefeeds=true;             // to prevent buffer overflows in TeX
-		bool extra_brackets_for_symbols=false; // wrap extra {} around symbols to ensure typesetting safety
-		
+#ifdef _MSC_VER
+        // wrap extra {} around symbols to ensure typesetting safety
+        // Some part of win32 or miktex required this to be true for correct typesetting
+        bool extra_brackets_for_symbols = true; 
+#else // def _MSC_VER
+        bool extra_brackets_for_symbols = false;
+#endif // def _MSC_VER		
 		int bracket_level=0;
 
 		/// For every object encountered, dispatch will figure out the

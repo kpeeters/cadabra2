@@ -58,10 +58,16 @@ DataCell::DataCell(const DataCell& other)
 std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::string title)
 	{
 	// Load the pre-amble from file.
-	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/notebook.html";
+    std::string subname = "/share/cadabra2/notebook.html";
+	std::string pname = CMAKE_INSTALL_PREFIX + subname;
 	std::ifstream preamble(pname);
-	if(!preamble)
-		throw std::logic_error("Cannot open HTML preamble at "+pname);
+	if(!preamble) {
+        // try the current working directory to support less official installations
+        preamble.open(std::string("." + subname));
+        if(!preamble) {
+    		throw std::logic_error("Cannot open HTML preamble at "+pname);
+            }
+        }
 	std::stringstream buffer;
 	buffer << preamble.rdbuf();
 	// std::cerr << "Using preamble at " << pname << std::endl;
@@ -452,10 +458,16 @@ DataCell::id_t DataCell::id() const
 std::string cadabra::export_as_LaTeX(const DTree& doc)
 	{
 	// Load the pre-amble from file.
-	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/notebook.tex";
+    std::string subname = "/share/cadabra2/notebook.tex";
+	std::string pname = CMAKE_INSTALL_PREFIX + subname;
 	std::ifstream preamble(pname);
-	if(!preamble)
-		throw std::logic_error("Cannot open LaTeX preamble at "+pname);
+	if(!preamble) {
+        preamble.open("." + subname);
+        if(!preamble) {
+    		throw std::logic_error("Cannot open LaTeX preamble at "+pname);
+            }
+        }
+
 	std::stringstream buffer;
 	buffer << preamble.rdbuf();
 	// std::cerr << "Using preamble at " << pname << std::endl;

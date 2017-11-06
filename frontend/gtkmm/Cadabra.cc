@@ -165,9 +165,13 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	Gtk::Application::on_open(files, hint);
 	}
 
-bool Cadabra::open_help(const std::string& nm, const std::string& title) 
+bool Cadabra::open_help(const std::string& subname, const std::string& title) 
 	{
-	std::ifstream fl(nm);
+    std::string filename = CMAKE_INSTALL_PREFIX + subname;
+	std::ifstream fl(filename);
+    if(!fl) {
+        fl.open("." + subname);
+    }
 	if(fl) {
 		auto nw = new cadabra::NotebookWindow(this, true);
 		nw->set_title_prefix("Cadabra help for ");

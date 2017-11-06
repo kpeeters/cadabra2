@@ -1417,10 +1417,10 @@ void NotebookWindow::on_help() const
 	
 	bool ret=false;
 	if(help_type==help_t::algorithm)
-		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb",
+		ret=cdbapp->open_help("/share/cadabra2/manual/algorithms/"+help_topic+".cnb",
 									 help_topic);
 	if(help_type==help_t::property)
-		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/properties/"+help_topic+".cnb",
+		ret=cdbapp->open_help("/share/cadabra2/manual/properties/"+help_topic+".cnb",
 									 help_topic);
 
 	if(!ret) {
