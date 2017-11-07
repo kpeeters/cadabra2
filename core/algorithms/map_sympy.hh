@@ -19,7 +19,9 @@ class map_sympy : public Algorithm {
 		virtual result_t apply(iterator&);
 
 	private:
-		std::string head_;
+		std::string               head_;
+		std::vector<Ex::iterator> left;
+		std::set<Ex::iterator>    index_factors;
 };
 
 }

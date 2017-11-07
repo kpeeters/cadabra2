@@ -283,6 +283,28 @@ def test23():
         
 test23()
 
+def test24():
+    __cdbkernel__=create_scope()
+    \theta::SelfAntiCommuting;
+    ex:= \theta \chi \theta + \theta \chi \lambda;
+    sort_product(_)
+    tst:= \theta\chi - @(ex);
+    assert(tst)
+    print("Test 24 passed")
+        
+test24()
+
+def test25():
+    __cdbkernel__=create_scope()
+    {i,j,k}::Indices;
+    \theta_i::SelfAntiCommuting;
+    ex:= \theta_{k} \theta_{j} \theta_{k} \theta_{j};
+    sort_product(_)
+    assert(ex==0)
+    print("Test 25 passed")
+
+test25()        
+        
   
 # \bar{#}::Accent.
 # obj22e:= \chi \chi \bar{\chi};

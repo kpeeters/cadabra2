@@ -112,10 +112,16 @@ TeXEngine::TeXEngine()
 	latex_packages.push_back("hyperref");
 
 	// Load the pre-amble from file.
-	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/texengine/preamble.tex";
+    std::string subname = "/share/cadabra2/texengine/preamble.tex";
+	std::string pname = CMAKE_INSTALL_PREFIX + subname;
 	std::ifstream preamble(pname);
-	if(!preamble)
-		throw std::logic_error("Cannot open TeXEngine preamble at "+pname);
+	if(!preamble) {
+        preamble.open(std::string("." + subname));
+        if (!preamble) {
+            throw std::logic_error("Cannot open TeXEngine preamble at "+pname);
+            }
+        }
+
 	std::stringstream buffer;
 	buffer << preamble.rdbuf();	
 	preamble_string = buffer.str();

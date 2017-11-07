@@ -1,0 +1,44 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Symbol}{Make an object not count as index when it is a sub- or super-script}\n\nIf you want to attach symbols to tensors in sub- or superscript, as\nin~$A^\\dagger$, you need to inform the system that this symbol is not\nan index (otherwise it will interpret~$A^\\dagger A^\\dagger$ as two\ncontracted vectors with vector indices~$\\dagger$). This is done by\nassociating the \\prop{Symbol} property to the symbol; in this\nexample"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Symbol}{Make an object not count as index when it is a sub- or super-script}\n\nIf you want to attach symbols to tensors in sub- or superscript, as\nin~$A^\\dagger$, you need to inform the system that this symbol is not\nan index (otherwise it will interpret~$A^\\dagger A^\\dagger$ as two\ncontracted vectors with vector indices~$\\dagger$). This is done by\nassociating the \\prop{Symbol} property to the symbol; in this\nexample"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Symbol to~}\\dagger.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A^{\\dagger} A^{\\dagger}\\end{dmath*}"
+				}
+			],
+			"source" : "\\dagger::Symbol;\nex:= A^{\\dagger} A^{\\dagger};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

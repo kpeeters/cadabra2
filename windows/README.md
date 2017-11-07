@@ -29,8 +29,8 @@
 * Now build relevant projects from the cadabra2.sln
 
 #### CURRENT STATUS
-* Currently there is a parser problem with {} being mangled before latex output, and the mangling deforms expressions enough to render them incorrectg latex
 * Basic latex gtk frontend client is functional
+* Investigating install process
 
 #### TODO 
 * Make gmp a sub-project of cadabra2

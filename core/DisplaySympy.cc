@@ -44,6 +44,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"\\tau",     "tau" },
 		{"\\upsilon", "upsilon" },
 		{"\\phi",     "phi" },
+		{"\\varphi",  "varphi" },		
 		{"\\chi",     "chi" },
 		{"\\psi",     "psi" },
 		{"\\omega",   "omega" },

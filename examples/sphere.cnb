@@ -1,0 +1,183 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Two-sphere}\n\nThis notebook computes the curvature of a 2-sphere by computing connection coefficients and the\nRiemann tensor components."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Two-sphere}\n\nThis notebook computes the curvature of a 2-sphere by computing connection coefficients and the\nRiemann tensor components."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[\\theta,~\\discretionary{}{}{} \\varphi\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[\\alpha,~\\discretionary{}{}{} \\beta,~\\discretionary{}{}{} \\gamma,~\\discretionary{}{}{} \\delta,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\lambda\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				}
+			],
+			"source" : "{\\theta, \\varphi}::Coordinate;\n{\\alpha, \\beta, \\gamma, \\delta, \\rho, \\sigma, \\mu, \\nu, \\lambda}::Indices(values={\\varphi, \\theta}, position=fixed);\n\\partial{#}::PartialDerivative;\ng_{\\alpha\\beta}::Metric.\ng^{\\alpha\\beta}::InverseMetric."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left[g_{\\theta \\theta} = {r}^{2},~\\discretionary{}{}{} g_{\\varphi \\varphi} = {r}^{2} {\\left(\\sin{\\theta}\\right)}^{2},~\\discretionary{}{}{} g^{\\varphi \\varphi} = \\frac{1}{{r}^{2} {\\left(\\sin{\\theta}\\right)}^{2}},~\\discretionary{}{}{} g^{\\theta \\theta} = {r}^{-2}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "sphe:={ g_{\\theta\\theta} = r**2,\n         g_{\\varphi\\varphi} = r**2 \\sin(\\theta)**2 }.\ncomplete(sphe, $g^{\\alpha\\beta}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\alpha}\\,_{\\mu \\nu} = \\frac{1}{2}g^{\\alpha \\beta} \\left(\\partial_{\\nu}{g_{\\beta \\mu}}+\\partial_{\\mu}{g_{\\beta \\nu}}-\\partial_{\\beta}{g_{\\mu \\nu}}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "ch:= \\Gamma^{\\alpha}_{\\mu\\nu} = 1/2 g^{\\alpha\\beta} ( \\partial_{\\nu}{g_{\\beta\\mu}}\n                                                      +\\partial_{\\mu}{g_{\\beta\\nu}}\n                                                      -\\partial_{\\beta}{g_{\\mu\\nu}} );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\alpha}\\,_{\\mu \\nu} = \\square{}_{\\mu}{}_{\\nu}{}^{\\alpha}\\left\\{\\begin{aligned}\\square{}_{\\varphi}{}_{\\theta}{}^{\\varphi}= & \\frac{1}{\\tan{\\theta}}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\varphi}{}^{\\varphi}= & \\frac{1}{\\tan{\\theta}}\\\\[-.5ex]\n\\square{}_{\\varphi}{}_{\\varphi}{}^{\\theta}= &  - \\frac{1}{2}\\sin{2\\theta}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(ch, sphe, rhsonly=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}\\,_{\\sigma \\nu}}-\\partial_{\\nu}{\\Gamma^{\\rho}\\,_{\\sigma \\mu}}+\\Gamma^{\\rho}\\,_{\\beta \\mu} \\Gamma^{\\beta}\\,_{\\sigma \\nu}-\\Gamma^{\\rho}\\,_{\\beta \\nu} \\Gamma^{\\beta}\\,_{\\sigma \\mu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\square{}_{\\sigma}{}_{\\nu}{}^{\\rho}{}_{\\mu}\\left\\{\\begin{aligned}\\square{}_{\\varphi}{}_{\\varphi}{}^{\\theta}{}_{\\theta}= & \\frac{\\sin{2\\theta}}{2\\tan{\\theta}}-\\cos{2\\theta}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\varphi}{}^{\\varphi}{}_{\\theta}= & -1\\\\[-.5ex]\n\\square{}_{\\varphi}{}_{\\theta}{}^{\\theta}{}_{\\varphi}= &  - \\frac{\\sin{2\\theta}}{2\\tan{\\theta}}+\\cos{2\\theta}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{\\varphi}{}_{\\varphi}= & 1\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "rm:= R^{\\rho}_{\\sigma\\mu\\nu} = +\\partial_{\\mu}{\\Gamma^{\\rho}_{\\sigma\\nu}}\n                           -\\partial_{\\nu}{\\Gamma^{\\rho}_{\\sigma\\mu}}\n                           +\\Gamma^{\\rho}_{\\beta\\mu} \\Gamma^{\\beta}_{\\sigma\\nu}\n                           -\\Gamma^{\\rho}_{\\beta\\nu} \\Gamma^{\\beta}_{\\sigma\\mu};\n\nsubstitute(rm, ch)\nevaluate(rm, sphe, rhsonly=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "These are not in the simplest form possible yet, but this is a \\verb|sympy| simplification issue; for the time being\nwe will continue and compute the Ricci tensor and scalar."
+				}
+			],
+			"hidden" : true,
+			"source" : "These are not in the simplest form possible yet, but this is a \\verb|sympy| simplification issue; for the time being\nwe will continue and compute the Ricci tensor and scalar."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\sigma \\nu} = R^{\\rho}\\,_{\\sigma \\rho \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R_{\\sigma \\nu} = \\square{}_{\\sigma}{}_{\\nu}\\left\\{\\begin{aligned}\\square{}_{\\varphi}{}_{\\varphi}= & \\frac{\\sin{2\\theta}}{2\\tan{\\theta}}-\\cos{2\\theta}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}= & 1\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "ricci:= R_{\\sigma\\nu} = R^{\\rho}_{\\sigma\\rho\\nu};\nsubstitute(ricci, rm)\nevaluate(ricci, sphe, rhsonly=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R = R_{\\sigma \\nu} g^{\\sigma \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}R = \\frac{2}{{r}^{2}}\\end{dmath*}"
+				}
+			],
+			"source" : "R:= R = R_{\\sigma\\nu} g^{\\sigma\\nu};\nsubstitute(R, ricci)\nevaluate(R, sphe, rhsonly=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The main time computing this is spent in the rather inefficient \\verb|sympy| bridge. You can see timing information\nby querying the \\verb|server| object for the \\verb|totals| list."
+				}
+			],
+			"hidden" : true,
+			"source" : "The main time computing this is spent in the rather inefficient \\verb|sympy| bridge. You can see timing information\nby querying the \\verb|server| object for the \\verb|totals| list."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "{}$\\big[$\\verb|cadabra::collect_terms: 20 calls, 0 steps, 0 ms|,\\discretionary{}{}{} \\verb|cadabra::complete: 1 calls, 0 steps, 87 ms|,\\discretionary{}{}{} \\verb|cadabra::evaluate: 4 calls, 0 steps, 2264 ms|,\\discretionary{}{}{} \\verb|cadabra::substitute: 3 calls, 0 steps, 3 ms|,\\discretionary{}{}{} \\verb|sympy: 49 calls, 0 steps, 2261 ms|$\\big]$"
+				}
+			],
+			"source" : "server.totals();"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

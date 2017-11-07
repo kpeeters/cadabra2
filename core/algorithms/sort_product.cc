@@ -1,15 +1,21 @@
 
+#include "Cleanup.hh"
 #include "algorithms/sort_product.hh"
 
 using namespace cadabra;
 
 sort_product::sort_product(const Kernel&k, Ex& tr)
-	: Algorithm(k, tr), ignore_numbers_(false)
+	: Algorithm(k, tr), ignore_numbers_(false), cleanup(true)
 	{
 //	if(has_argument("IgnoreNumbers")) {
 //		txtout << "ignoring numbers" << std::endl;
 //		ignore_numbers_=true;
 //		}
+	}
+
+void sort_product::dont_cleanup()
+	{
+	cleanup=false;
 	}
 
 bool sort_product::can_apply(iterator st) 
@@ -62,5 +68,8 @@ Algorithm::result_t sort_product::apply(iterator& st)
 			}
 		}
 
+	if(cleanup)
+		cleanup_dispatch(kernel, tr, st);
+	
 	return ret;
 	}

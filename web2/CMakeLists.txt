@@ -54,6 +54,7 @@ set(ALGOS
   join_gamma
   keep_weight
   lr_tensor
+  map_sympy
   product_rule
   reduce_delta
   rename_dummies
@@ -101,6 +102,7 @@ set(PROPS
   SelfNonCommuting
   SortOrder
   Spinor
+  Symbol
   Symmetric
   Tableau
   TableauSymmetry

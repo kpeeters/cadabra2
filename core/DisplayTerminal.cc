@@ -352,7 +352,8 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 //	if(needs_brackets(num))
 //		str << "(";
 
-	dispatch(str, num);
+	if(num->is_rational()==false || (*it->multiplier)==1)
+		dispatch(str, num);
 
 //	if(needs_brackets(num))
 //		str << ")";
@@ -447,7 +448,10 @@ void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	str << symmap[*it->name] << "(";
+	if(getenv("CADABRA_NO_UNICODE")!=0)
+		str << *it->name << "(";
+	else
+		str << symmap[*it->name] << "(";
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
@@ -556,7 +560,7 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
 	auto rn = symmap.find(*it->name);
-	if(rn!=symmap.end())
+	if(rn!=symmap.end() && 	getenv("CADABRA_NO_UNICODE")==0)
 		str << rn->second;
 	else
 		str << *it->name;
