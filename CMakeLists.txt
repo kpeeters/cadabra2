@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
 
+if (POLICY CMP0015)
+    cmake_policy(SET CMP0015 NEW)
+endif()
+
 project(Cadabra)
 set(CADABRA_VERSION_MAJOR 2)
 set(CADABRA_VERSION_MINOR 1)

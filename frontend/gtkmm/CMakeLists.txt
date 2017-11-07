@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 
+if (POLICY CMP0015)
+    cmake_policy(SET CMP0015 NEW)
+endif()
+
 project(CadabraGtkmm)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -15,17 +19,18 @@ if(WIN32)
 	message("--- Using ${GTK3_INCLUDE_DIR} and ${GTK3_LIBRARIES} for gtk3")
 
 	find_package(GTKMM3Bundle REQUIRED)
-	include_directories(${GTKMM3_INCLUDE_DIR})
-	link_directories(${GTKMM3_LIBRARIES})
-	message("--- Using ${GTKMM3_INCLUDE_DIR} and ${GTKMM3_LIBRARIES} for glibmm")
+    include_directories(${GTKMM3_INCLUDE_DIR})
+    link_directories(${GTKMM3_LIBRARIES})
+    message("--- Using ${GTKMM3_INCLUDE_DIR} and ${GTKMM3_LIBRARIES} for gtk3mm")
 else()
 	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
+    include_directories(${GTKMM3_INCLUDE_DIRS})
+    link_directories(${GTKMM3_LIBRARIES})
+    message("--- Using ${GTKMM3_INCLUDE_DIRS} and ${GTKMM3_LIBRARIES} for gtk3mm")
 endif()
-
-include_directories(${GTKMM3_INCLUDE_DIR})
-link_directories(${GTKMM3_LIBRARIES})
 add_definitions(${GTKMM3_CFLAGS_OTHER})
+
 add_definitions("-DBOOST_ALL_NO_LIB")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
