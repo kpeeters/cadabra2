@@ -30,14 +30,14 @@
 
 #### CURRENT STATUS
 * Basic latex gtk frontend client is functional
-* Investigating install process
-  * Currently fleshing out the dll copying, need to do the gtkmm stuff next
-    * Maybe hints needs to be file hint not path
+* Install process through cmake and msvc is functional
+  * Plenty of nice support files still not present
 
 #### TODO 
 * Make gmp a sub-project of cadabra2
 * Boost python cmake setup seems flawed on some platforms: https://travis-ci.org/kpeeters/cadabra2/jobs/272162045
   * Didn't reproduce with a fresh ubuntu vm so will have to recreate that environment
+* Make a nice click through installer which does all the dependencies like latex and python automatically for win32
     
 ##### GTK3 frontend todo
 * package into nice release for others to use binaries

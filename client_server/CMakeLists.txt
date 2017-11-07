@@ -107,8 +107,19 @@ elseif(WIN32)
     add_definitions("-I/msvc/include/ -I/msvc/lib/x86")
     message("--- Adding '-I/msvc/include -I/msvc/lib/x86' for WIN32 for GMP")
 	
+	# TODO: EIther use FindGMPXX.cmake or delete it
 	find_library(GMP_LIB NAMES gmp HINTS /msvc/lib/x86/ /msvc/include/)
 	find_library(GMPXX_LIB NAMES gmpxx HINTS /msvc/lib/x86/ /msvc/include/)
+	
+	find_file(GMP_RUNTIME NAMES gmp.dll
+  			HINTS /msvc/bin/x86/
+  			)
+    find_file(GMPXX_RUNTIME NAMES gmpxx.dll
+  			HINTS /msvc/bin/x86/
+  			)
+    list(APPEND GMPXX_RUNTIMES ${GMP_RUNTIME} ${GMPXX_RUNTIME})
+	message("---- GMP_RUNTIME was ${GMP_RUNTIME} and GMPXX_RUNTIME was ${GMPXX_RUNTIME} to give ${GMPXX_RUNTIMES}")
+
 else()
 	find_library(GMP_LIB gmp REQUIRED)
 	find_library(GMPXX_LIB gmpxx REQUIRED)
@@ -186,4 +197,7 @@ if(WIN32)
 	message(" --- boost dll lists was ${BOOST_REAL_DLLS}")
 
 	install(FILES ${BOOST_REAL_DLLS} DESTINATION ${INSTALL_BIN_DIR})
+
+	message("--- GMPXX_RUNTIMES was ${GMPXX_RUNTIMES}")
+	install(FILES ${GMPXX_RUNTIMES} DESTINATION ${INSTALL_BIN_DIR})
 endif()

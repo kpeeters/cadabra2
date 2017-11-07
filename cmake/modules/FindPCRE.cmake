@@ -13,6 +13,7 @@
 #
 # PCRE_INCLUDE_DIRS	- where to find pcre.h, etc.
 # PCRE_LIBRARIES	- List of libraries when using pcre.
+# PCRE_RUNTIMES 	- DLLs for windows
 # PCRE_FOUND	- True if pcre found.
 
 # Look for the header file.
@@ -21,9 +22,28 @@ FIND_PATH(PCRE_INCLUDE_DIR NAMES pcrecpp.h)
 # Look for the library.
 FIND_LIBRARY(PCRE_LIBRARY NAMES pcrecpp)
 
+if(WIN32)
+  message(" --- pcre_library was ${PCRE_LIBRARY}")
+  get_filename_component(PCRE_CONTAINER_DIRECTORY ${PCRE_LIBRARY} DIRECTORY)
+  message(" --- PCRE_CONTAINER_DIRECTORY was ${PCRE_CONTAINER_DIRECTORY}")
+  
+  find_file(PCRE_RUNTIME NAMES libpcre.dll
+			HINTS ${PCRE_CONTAINER_DIRECTORY}
+			)
+
+  find_file(PCRE_CPP_RUNTIME NAMES libpcrecpp.dll
+			HINTS ${PCRE_CONTAINER_DIRECTORY}
+			)
+			
+  list(APPEND PCRE_RUNTIMES ${PCRE_RUNTIME} ${PCRE_CPP_RUNTIME})
+  message(" --- PCRE_RUNTIMES was ${PCRE_RUNTIMES}")
+else()
+  set(PCRE_RUNTIMES "")
+endif()
+
 # Handle the QUIETLY and REQUIRED arguments and set PCRE_FOUND to TRUE if all listed variables are TRUE.
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(PCRE DEFAULT_MSG PCRE_LIBRARY PCRE_INCLUDE_DIR)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(PCRE DEFAULT_MSG PCRE_LIBRARY PCRE_INCLUDE_DIR PCRE_RUNTIMES )
 
 # Copy the results to the output variables.
 IF(PCRE_FOUND)
