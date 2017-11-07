@@ -4,3 +4,4 @@ doxygen
 *.o
 build
 __pycache__
+.vscode
