@@ -13,6 +13,30 @@ if (!WIN32)
   add_test(comparison     test_comparison)
 endif()
 
+# Locate Boost and Boost.Python.
+add_definitions("-DBOOST_ALL_NO_LIB")
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+if(USE_PYTHON_3)
+  find_package(Boost 1.53.0 COMPONENTS python3 regex)
+  if(NOT Boost_PYTHON3_FOUND)
+    if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.4")
+      find_package(Boost 1.53.0 COMPONENTS python-py34 regex REQUIRED)
+    else()
+      find_package(Boost 1.53.0 COMPONENTS python-py35 regex REQUIRED)
+    endif()
+  endif()
+else()
+  find_package(Boost 1.53.0 COMPONENTS python regex)
+endif()
+
+foreach(LIBARRAY ${Boost_LIBRARIES})
+	get_filename_component(BOOST_ANOTHER_PATH_DIR ${LIBARRAY} DIRECTORY)
+	list(APPEND BOOST_EXTRA_PATH ${BOOST_ANOTHER_PATH_DIR})
+endforeach()
+list(REMOVE_DUPLICATES BOOST_EXTRA_PATH)
+message(" ---- boostextrapath was ${BOOST_EXTRA_PATH}")
 
 # Notebooks with built-in tests.
 #
@@ -37,6 +61,7 @@ set(NBTESTS
 foreach(NBTEST ${NBTESTS})
   add_custom_command(OUTPUT  ${CDBOUT}/${NBTEST}.cdb
 	 DEPENDS ${CNBIN}/${NBTEST}.cnb ${DC}
+	 COMMAND set PATH=${BOOST_EXTRA_PATH}\;%PATH%
 	 COMMAND cadabra2cadabra
 	 ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
 	 COMMENT "Creating ${NBTEST} notebook...")

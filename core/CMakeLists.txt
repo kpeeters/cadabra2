@@ -246,10 +246,10 @@ message("-- Python site path at ${SAFE_PYTHON_SITE_PATH}")
 if(WIN32)
 	set(PROJECT_BINARY_BUILD_TYPE "/\${CMAKE_INSTALL_CONFIG_NAME}")
 	set(PROJECT_BINARY_RESULT_EXT ".dll")
-else(WIN32)
+else()
 	set(PROJECT_BINARY_BUILD_TYPE "")
 	set(PROJECT_BINARY_RESULT_EXT ".so")
-endif(WIN32)
+endif()
 install(FILES
   "${PROJECT_BINARY_DIR}${PROJECT_BINARY_BUILD_TYPE}/cadabra2${PROJECT_BINARY_RESULT_EXT}"
   "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${SAFE_PYTHON_SITE_PATH}")
@@ -305,10 +305,18 @@ foreach(PDIR ${PDIRS})
                      COMMENT "Creating package ${PDIR}...")
 endforeach()
 
+foreach(LIBARRAY ${Boost_LIBRARIES})
+	get_filename_component(BOOST_ANOTHER_PATH_DIR ${LIBARRAY} DIRECTORY)
+	list(APPEND BOOST_EXTRA_PATH ${BOOST_ANOTHER_PATH_DIR})
+endforeach()
+list(REMOVE_DUPLICATES BOOST_EXTRA_PATH)
+message(" ---- boostextrapath was ${BOOST_EXTRA_PATH}")
+
 foreach(PACKAGE ${PACKAGES})
 	string(REGEX REPLACE "/" "_" PACKAGETARGET ${PACKAGE})
 	message("--    ${PACKAGETARGET}")					  
    add_custom_target("${PACKAGETARGET}" ALL
+					  COMMAND set PATH=${BOOST_EXTRA_PATH}\;%PATH%
 	                  COMMAND cadabra2python ${CMAKE_SOURCE_DIR}/core/packages/cdb/${PACKAGE}.cdb ${PACKAGEDIR}/${PACKAGE}.py
                      COMMENT "Creating ${PACKAGE}.py...")
 endforeach()
