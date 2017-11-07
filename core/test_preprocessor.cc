@@ -73,7 +73,7 @@ int main(int argc, char **argv)
 	try {
         regression *= testit(
             "F_{\\mu\\nu} = \\partial_{\\mu}{A_{\\nu}} - \\partial_{\\nu}{A_{\\mu}}",
-            "\equals{F_{\mu \nu}}{\sub{\partial_{\mu}{A_{\nu}}}{\partial_{\nu}{A_{\mu}}}}");
+            "\\equals{F_{\\mu \\nu}}{\\sub{\\partial_{\\mu}{A_{\\nu}}}{\\partial_{\\nu}{A_{\\mu}}}}");
 
 		regression*=testit(
 			"i k^{\\mu} ( lim_{z\\rightarrow w} (z-w)^{-1/2} \\psi_{\\mu}(w) S_{\\alpha}(z) )",
