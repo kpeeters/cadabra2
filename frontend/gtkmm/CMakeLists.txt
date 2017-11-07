@@ -15,8 +15,6 @@ if(WIN32)
 	message("--- Using ${GTK3_INCLUDE_DIR} and ${GTK3_LIBRARIES} for gtk3")
 
 	find_package(GTKMM3Bundle REQUIRED)
-	include_directories(${GTKMM3_INCLUDE_DIR})
-	link_directories(${GTKMM3_LIBRARIES})
 	message("--- Using ${GTKMM3_INCLUDE_DIR} and ${GTKMM3_LIBRARIES} for glibmm")
 else()
 	find_package(PkgConfig REQUIRED)
@@ -75,6 +73,11 @@ set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation direct
 set(INSTALL_IMAGES_DIR    share/cadabra2/images  CACHE PATH "Installation directory for image files.")
 set(INSTALL_DESKTOP_DIR   share/applications     CACHE PATH "Installation directory for .desktop files.")
 set(INSTALL_ICONS_DIR     share/icons            CACHE PATH "Installation directory for icons.")
+if(WIN32)
+	set(INSTALL_BIN_DIR     "."					 CACHE PATH "Installation directory for binary products.")
+else()
+	set(INSTALL_BIN_DIR     bin					 CACHE PATH "Installation directory for binary products.")
+endif()
 
 install(DIRECTORY DESTINATION ${INSTALL_SHARE_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
@@ -112,8 +115,8 @@ install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable/apps DIRECTO
 
 
 # Remove old versions of files which we no longer need, to avoid confusion.
-install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/bin/cadabra-gtk\")")
-install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/bin/cadabra-qt5\")")
+install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/${INSTALL_BIN_DIR}/cadabra-gtk\")")
+install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/${INSTALL_BIN_DIR}/cadabra-qt5\")")
 install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2.desktop\")")
 install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2-gtk.desktop\")")
 install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps/cadabra2.png\")")
@@ -127,7 +130,7 @@ install(CODE     "execute_process(COMMAND rm -f \"${CMAKE_INSTALL_PREFIX}/share/
 
 # Install programs.
 #find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu REQUIRED)
-install(TARGETS  cadabra2-gtk     DESTINATION bin)
+install(TARGETS  cadabra2-gtk     DESTINATION ${INSTALL_BIN_DIR})
 install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png DESTINATION ${INSTALL_IMAGES_DIR})
 #xdg-desktop-menu messes up the file permissions, so we just install things by hand...
 #install(CODE "execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop)")
@@ -164,3 +167,10 @@ install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2-gtk.desktop       D
 install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
 install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFIX}/share/icons/hicolor)")
 install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+
+if(WIN32)
+	install(FILES ${GTK3_RUNTIMES} DESTINATION ${INSTALL_BIN_DIR})
+	install(FILES ${GTKMM3_RUNTIMES} DESTINATION ${INSTALL_BIN_DIR})
+	install(DIRECTORY ${GTK3_SHARE_DIR} DESTINATION ${INSTALL_BIN_DIR}) 
+	install(DIRECTORY ${PROJECT_SOURCE_DIR}/share DESTINATION ${INSTALL_BIN_DIR}) 
+endif()

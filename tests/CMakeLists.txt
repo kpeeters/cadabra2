@@ -35,7 +35,9 @@ foreach(LIBARRAY ${Boost_LIBRARIES})
 	get_filename_component(BOOST_ANOTHER_PATH_DIR ${LIBARRAY} DIRECTORY)
 	list(APPEND BOOST_EXTRA_PATH ${BOOST_ANOTHER_PATH_DIR})
 endforeach()
-list(REMOVE_DUPLICATES BOOST_EXTRA_PATH)
+if(BOOST_EXTRA_PATH)
+	list(REMOVE_DUPLICATES BOOST_EXTRA_PATH)
+endif()
 message(" ---- boostextrapath was ${BOOST_EXTRA_PATH}")
 
 # Notebooks with built-in tests.

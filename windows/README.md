@@ -23,14 +23,16 @@
   * You may need to install yasm for studio http://www.megastormsystems.com/news/yasm-integration-with-visual-studio-2010-2012-and-2013 (the official site's yasm is old and actually failed for vs2013 for me)
 * Next, the cmake (btw you need cmake ;) sequence from this dir:
   * mkdir build && cd build
-  * cmake -DCMAKE_SUPPRESS_REGENERATION:BOOL=1 -DUSE_PYTHON_3=NO -DSQLITE3_INCLUDE_DIR_SEARCH="c:/create/sqlite3-cmake/src" -DSQLITE3_LIBRARIES_SEARCH="c:/create/sqlite3-cmake/build/Release" -DBOOST_ROOT="c:/create/boost_1_61_0" -DBOOST_LIBRARYDIR="c:/create/boost_1_61_0" -DPCRE_LIBRARY="C:\create\pcre-win-build\build-VS2013\Release\libpcrecpp.lib" -DPCRE_INCLUDE_DIR="C:\create\pcre-win-build\include" -DGTK3_BUNDLE_INCLUDE_DIR_SEARCH="C:\gtk-build\gtk\Win32\include" -DGTK3_BUNDLE_LIBRARIES_SEARCH="C:\gtk-build\gtk\Win32\lib" -DGTKMM3_BUNDLE_INCLUDE_DIR_SEARCH="C:\create\gtkmm-win32\gtkmm\Win32\include" -DGTKMM3_BUNDLE_LIBRARIES_SEARCH="C:\create\gtkmm-win32\gtkmm\Win32\lib" ..
+  * cmake -DCMAKE_SUPPRESS_REGENERATION:BOOL=1 -DUSE_PYTHON_3=NO -DSQLITE3_INCLUDE_DIR_SEARCH="c:/create/sqlite3-cmake/src" -DSQLITE3_LIBRARIES_SEARCH="c:/create/sqlite3-cmake/build/Release" -DBOOST_ROOT="c:/create/boost_1_61_0" -DBOOST_LIBRARYDIR="c:/create/boost_1_61_0" -DPCRE_LIBRARY="C:/create/pcre-win-build/build-VS2013/Release/libpcrecpp.lib" -DPCRE_INCLUDE_DIR="C:/create/pcre-win-build/include" -DGTK3_BUNDLE_INCLUDE_DIR_SEARCH="C:/gtk-build/gtk/Win32/include" -DGTK3_BUNDLE_LIBRARIES_SEARCH="C:/gtk-build/gtk/Win32/lib" -DGTKMM3_BUNDLE_INCLUDE_DIR_SEARCH="C:/create/gtkmm-win32/gtkmm/Win32/include" -DGTKMM3_BUNDLE_LIBRARIES_SEARCH="C:/create/gtkmm-win32/gtkmm/Win32/lib" ..
     * If you have cmake problems, turn on lots of debugging that gets piped to "attempt.txt" like so:
-    * cmake -DCMAKE_SUPPRESS_REGENERATION:BOOL=1 -DUSE_PYTHON_3=NO -DSQLITE3_INCLUDE_DIR_SEARCH="c:/create/sqlite3-cmake/src" -DSQLITE3_LIBRARIES_SEARCH="c:/create/sqlite3-cmake/build/Release" -DBOOST_ROOT="c:/create/boost_1_61_0" -DBOOST_LIBRARYDIR="c:/create/boost_1_61_0" -DPCRE_LIBRARY="C:\create\pcre-win-build\build-VS2013\Release\libpcrecpp.lib" -DPCRE_INCLUDE_DIR="C:\create\pcre-win-build\include" -DGTK3_BUNDLE_INCLUDE_DIR_SEARCH="C:\gtk-build\gtk\Win32\include" -DGTK3_BUNDLE_LIBRARIES_SEARCH="C:\gtk-build\gtk\Win32\lib" -DGTKMM3_BUNDLE_INCLUDE_DIR_SEARCH="C:\create\gtkmm-win32\gtkmm\Win32\include" -DGTKMM3_BUNDLE_LIBRARIES_SEARCH="C:\create\gtkmm-win32\gtkmm\Win32\lib" --debug_output --system_information -Wdev --trace .. > attempt.txt 2>&1 || tail attempt.txt
+    * cmake -DCMAKE_SUPPRESS_REGENERATION:BOOL=1 -DUSE_PYTHON_3=NO -DSQLITE3_INCLUDE_DIR_SEARCH="c:/create/sqlite3-cmake/src" -DSQLITE3_LIBRARIES_SEARCH="c:/create/sqlite3-cmake/build/Release" -DBOOST_ROOT="c:/create/boost_1_61_0" -DBOOST_LIBRARYDIR="c:/create/boost_1_61_0" -DPCRE_LIBRARY="C:/create/pcre-win-build/build-VS2013/Release/libpcrecpp.lib" -DPCRE_INCLUDE_DIR="C:/create/pcre-win-build/include" -DGTK3_BUNDLE_INCLUDE_DIR_SEARCH="C:/gtk-build/gtk/Win32/include" -DGTK3_BUNDLE_LIBRARIES_SEARCH="C:/gtk-build/gtk/Win32/lib" -DGTKMM3_BUNDLE_INCLUDE_DIR_SEARCH="C:/create/gtkmm-win32/gtkmm/Win32/include" -DGTKMM3_BUNDLE_LIBRARIES_SEARCH="C:/create/gtkmm-win32/gtkmm/Win32/lib" --debug_output --system_information -Wdev --trace .. > attempt.txt 2>&1 || tail attempt.txt
 * Now build relevant projects from the cadabra2.sln
 
 #### CURRENT STATUS
 * Basic latex gtk frontend client is functional
 * Investigating install process
+  * Currently fleshing out the dll copying, need to do the gtkmm stuff next
+    * Maybe hints needs to be file hint not path
 
 #### TODO 
 * Make gmp a sub-project of cadabra2

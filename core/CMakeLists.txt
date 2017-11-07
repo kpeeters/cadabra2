@@ -13,6 +13,11 @@ if (POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
 endif(POLICY CMP0042)
 
+if(WIN32)
+	set(INSTALL_BIN_DIR     "."					 CACHE PATH "Installation directory for binary products.")
+else()
+	set(INSTALL_BIN_DIR     bin					 CACHE PATH "Installation directory for binary products.")
+endif()
 
 # Locate python. On Apple the standard CMake PythonLibs.cmake does not
 # work correctly, because it will always give some paths which point
@@ -53,7 +58,11 @@ if(USE_PYTHON_3)
     if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.4")
       find_package(Boost 1.53.0 COMPONENTS python-py34 regex REQUIRED)
     else()
-      find_package(Boost 1.53.0 COMPONENTS python-py35 regex REQUIRED)
+	  if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.5")    
+	    find_package(Boost 1.53.0 COMPONENTS python-py35 regex REQUIRED)
+	  else()
+	    find_package(Boost 1.53.0 COMPONENTS python-py36 regex REQUIRED)
+	  endif()
     endif()
   endif()
 else()
@@ -253,14 +262,13 @@ endif()
 install(FILES
   "${PROJECT_BINARY_DIR}${PROJECT_BINARY_BUILD_TYPE}/cadabra2${PROJECT_BINARY_RESULT_EXT}"
   "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${SAFE_PYTHON_SITE_PATH}")
-
+  
 # Create the 'variable-substituted' cadabra2 inside the source tree so that we can
 # run the tests and pick up cadabra2_defaults.py from there.
 
 configure_file("${PROJECT_SOURCE_DIR}/cadabra2.in"             "${PROJECT_SOURCE_DIR}/cadabra2")
 
-install(PROGRAMS "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
-
+install(PROGRAMS "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION ${INSTALL_BIN_DIR})
 
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
@@ -269,13 +277,21 @@ set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX "${PROJECT_BINARY_RES
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
 set_target_properties(cadabra2 PROPERTIES IMPORT_SUFFIX ".lib")
 
+if(WIN32)
+	# This seems wrong in principle as it should be part of the install target, however it was suggested the install target doesn't support renames
+	add_custom_command(TARGET cadabra2
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_BINARY_DIR}/\$(ConfigurationName)/cadabra2${PROJECT_BINARY_RESULT_EXT}" "${CMAKE_INSTALL_PREFIX}/cadabra2.pyd" )
+endif()
+
+
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
 add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
 target_link_libraries(cadabra2python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 	
-install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+install(DIRECTORY DESTINATION ${INSTALL_BIN_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
 
@@ -333,5 +349,5 @@ install(DIRECTORY DESTINATION ${PYTHON_CDB_PACKAGE_PATH} DIRECTORY_PERMISSIONS O
                                                         WORLD_READ WORLD_EXECUTE)
 
 # Install conversion program.
-install(TARGETS cadabra2python DESTINATION bin)
+install(TARGETS cadabra2python DESTINATION ${INSTALL_BIN_DIR})
 
