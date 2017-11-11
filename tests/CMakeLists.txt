@@ -61,12 +61,20 @@ set(NBTESTS
   scalar_manipulations
   )
 foreach(NBTEST ${NBTESTS})
-  add_custom_command(OUTPUT  ${CDBOUT}/${NBTEST}.cdb
-	 DEPENDS ${CNBIN}/${NBTEST}.cnb ${DC}
-	 COMMAND set PATH=${BOOST_EXTRA_PATH}\;%PATH%
-	 COMMAND cadabra2cadabra
-	 ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
-	 COMMENT "Creating ${NBTEST} notebook...")
+  if(WIN32)
+    add_custom_command(OUTPUT  ${CDBOUT}/${NBTEST}.cdb
+	     DEPENDS ${CNBIN}/${NBTEST}.cnb ${DC}
+	     COMMAND set PATH=${BOOST_EXTRA_PATH}\;%PATH%
+	     COMMAND cadabra2cadabra
+	     ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
+	     COMMENT "Creating ${NBTEST} notebook...")
+  else()
+    add_custom_command(OUTPUT  ${CDBOUT}/${NBTEST}.cdb
+	     DEPENDS ${CNBIN}/${NBTEST}.cnb ${DC}
+	     COMMAND cadabra2cadabra
+	     ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
+	     COMMENT "Creating ${NBTEST} notebook...")
+  endif()
   add_custom_target("${NBTEST}_test" ALL echo -n DEPENDS ${CDBOUT}/${NBTEST}.cdb)
   add_test(${NBTEST}  ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
   set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")

@@ -330,11 +330,18 @@ message(" ---- boostextrapath was ${BOOST_EXTRA_PATH}")
 
 foreach(PACKAGE ${PACKAGES})
 	string(REGEX REPLACE "/" "_" PACKAGETARGET ${PACKAGE})
-	message("--    ${PACKAGETARGET}")					  
-   add_custom_target("${PACKAGETARGET}" ALL
+	message("--    ${PACKAGETARGET}")				
+    if(WIN32)
+        # on windows, the path needs to include boost dlls
+        add_custom_target("${PACKAGETARGET}" ALL
 					  COMMAND set PATH=${BOOST_EXTRA_PATH}\;%PATH%
 	                  COMMAND cadabra2python ${CMAKE_SOURCE_DIR}/core/packages/cdb/${PACKAGE}.cdb ${PACKAGEDIR}/${PACKAGE}.py
+                     COMMENT "Creating ${PACKAGE}.py...")	  
+    else()
+        add_custom_target("${PACKAGETARGET}" ALL
+			            COMMAND cadabra2python ${CMAKE_SOURCE_DIR}/core/packages/cdb/${PACKAGE}.cdb ${PACKAGEDIR}/${PACKAGE}.py
                      COMMENT "Creating ${PACKAGE}.py...")
+    endif()
 endforeach()
 																		
 # Install packages.
