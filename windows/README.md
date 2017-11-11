@@ -31,7 +31,8 @@
 #### CURRENT STATUS
 * Basic latex gtk frontend client is functional
 * Install process through cmake and msvc is functional
-  * Plenty of nice support files still not present
+* Math errors?!!? Need to get a clean build going with latest code in vm to see if it is platform dependent or something has been broken in this process
+* Looking into using adwaita project to get the adwaita icons, although the overhead may not justify the 4 or 5 files that are actually referenced. May be more useful to track them down and just convert to the other theme for this build.
 
 #### TODO 
 * Make gmp a sub-project of cadabra2
