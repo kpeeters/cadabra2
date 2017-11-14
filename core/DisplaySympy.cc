@@ -76,7 +76,12 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 
 		{"\\partial", "Derivative"},
 		{"\\dot",     "dot"},
-		{"\\ddot",    "ddot"}
+		{"\\ddot",    "ddot"},
+
+		// A few symbols are reserved by sympy.
+		{"N", "sympyN"},
+		{"O", "sympyO"},
+		{"S", "sympyS"}
 		};
 	}
 
