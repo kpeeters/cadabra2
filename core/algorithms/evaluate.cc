@@ -277,6 +277,10 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 
 				return true; // Cannot yet abort the do_list loop.
 				}
+			else {
+				// TRACE: There is no rule which matches this factor. This means that
+				// we want to keep all components?
+				}
 			return true;
 			});
 	if(!has_acted) {
@@ -905,8 +909,14 @@ Ex::iterator evaluate::handle_prod(iterator it)
 		sib=nxt;
 		}
 
-	// TRACE: still ok here
-	// std::cerr << "every factor a \\component:\n" << Ex(it) << std::endl;
+	// TRACE: If a factor has not had a rule match, it will be left
+	// un-evaluated here. So you get
+	//  X^{a} \component_{a}( 0=3, 2=-5 )
+	// and then we fail lower down. What we could do is let
+	// handle_factor write out such unevaluated expressions to
+	// component ones. That's somewhat wasteful though. 
+	
+	std::cerr << "every factor a \\component:\n" << Ex(it) << std::endl;
 	
 	// Now every factor in the product is a \component node.  The thing
 	// is effectively a large sparse tensor product. We need to do the
