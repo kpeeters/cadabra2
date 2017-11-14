@@ -255,13 +255,19 @@ message("-- Python site path at ${SAFE_PYTHON_SITE_PATH}")
 if(WIN32)
 	set(PROJECT_BINARY_BUILD_TYPE "/\${CMAKE_INSTALL_CONFIG_NAME}")
 	set(PROJECT_BINARY_RESULT_EXT ".dll")
+	set(PYTHON_INSTALL_LOCATION "${INSTALL_BIN_DIR}")
+	install(
+		FILES "${PROJECT_SOURCE_DIR}/cmdstart.py" 
+		DESTINATION "${INSTALL_BIN_DIR}")
 else()
 	set(PROJECT_BINARY_BUILD_TYPE "")
 	set(PROJECT_BINARY_RESULT_EXT ".so")
+	set(PYTHON_INSTALL_LOCATION "${SAFE_PYTHON_SITE_PATH}")
 endif()
+
 install(FILES
   "${PROJECT_BINARY_DIR}${PROJECT_BINARY_BUILD_TYPE}/cadabra2${PROJECT_BINARY_RESULT_EXT}"
-  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${SAFE_PYTHON_SITE_PATH}")
+  "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${PYTHON_INSTALL_LOCATION}")
   
 # Create the 'variable-substituted' cadabra2 inside the source tree so that we can
 # run the tests and pick up cadabra2_defaults.py from there.

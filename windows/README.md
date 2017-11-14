@@ -29,10 +29,12 @@
 * Now build relevant projects from the cadabra2.sln
 
 #### CURRENT STATUS
-* Basic latex gtk frontend client is functional
-* Install process through cmake and msvc is functional
-* Math errors?!!? Need to get a clean build going with latest code in vm to see if it is platform dependent or something has been broken in this process
+* GTK frontend client and install process through cmake is functional
+* Startup connecting to server occasionally fails, so do another refactor of that
+* All the notebooks need at least one test-run as there have been subtle functionality changes due to portability
+  * bianchi_identities.cnb crashes on the last line
 * Looking into using adwaita project to get the adwaita icons, although the overhead may not justify the 4 or 5 files that are actually referenced. May be more useful to track them down and just convert to the other theme for this build.
+* Test the install of cadabra2cadabra
 
 #### TODO 
 * Make gmp a sub-project of cadabra2
@@ -87,3 +89,9 @@
   * Needed to copy into the share/icons folder the Adwaita directory from C:\msys64\mingw64\share\icons
   * copied the loader.cache from C:\gtk-build\gtk\Win32\lib\gdk-pixbuf-2.0\2.10.0 to share subdir
   * copied *.sty files from the frontend\latex dir
+
+#### Minor improvement ideas
+* Add right click contextual help item
+* Scroll bar sensitivity is much too high on win
+* Help page notebooks don't support processing
+* Hitting cancel on the close app dialog that asks about saving still closes
