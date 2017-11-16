@@ -213,8 +213,9 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 		
 		// Apply the product projector.
 		iterator rr=rep.append_child(rep.begin(), it);
-		assert(yp.can_apply(rr));
-		yp.apply(rr);
+        if(yp.can_apply(rr)) {
+    		yp.apply(rr);
+        }
 
 		// We cannot use any algorithms which re-order indices, as the
 		// order in yp.sym must match the order in the expression. Also,
@@ -324,8 +325,9 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 				++nxt2;
 
 				// Now apply the projector.
-				assert(ypinitial.can_apply(tmp));
-				ypinitial.apply(tmp);
+                if(ypinitial.can_apply(tmp)) {
+    				ypinitial.apply(tmp);
+                    }
 				trmit=nxt2;
 				}
 			}
@@ -333,8 +335,9 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 //			if(getenv("SMART")) 
 				ypinitial.asym_ranges=asym_ranges;
 			iterator tmp=term;
-			assert(ypinitial.can_apply(tmp));
-			ypinitial.apply(tmp);
+			if(ypinitial.can_apply(tmp)) {
+    			ypinitial.apply(tmp);
+                }
 			}
 
 		++termnum;
