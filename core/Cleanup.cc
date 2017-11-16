@@ -6,6 +6,7 @@
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/Diagonal.hh"
 #include "properties/ExteriorDerivative.hh"
+#include "properties/DifferentialForm.hh"
 #include "properties/KroneckerDelta.hh"
 #include "properties/NumericalFlat.hh"
 #include "properties/PartialDerivative.hh"
@@ -158,17 +159,29 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 			}
 		}
 
-	// Turn wedge products containing two identical siblings to zero.
+	// Turn wedge products containing two identical siblings of odd degree to zero.
 	if(nm=="\\wedge") {
 		auto s1=tr.begin(it);
 		auto s2=s1;
 		++s2;
 		while(s2!=tr.end(it)) {
 			if(subtree_compare(0, s1, s2)==0) {
-				tr.erase_children(it);
-				zero(it->multiplier);
-				ret=true;				
-				break;
+				auto df1 = k.properties.get<DifferentialForm>(s1);
+				auto df2 = k.properties.get<DifferentialForm>(s2);
+				if(df1 && df2) {
+					auto degree1 = df1->degree(k.properties, s1);
+					auto degree2 = df2->degree(k.properties, s2);
+					if(degree1.is_rational() && degree2.is_rational()) {
+						long d1 = to_long(degree1.to_rational());
+						long d2 = to_long(degree2.to_rational());
+						if(d1==d2 && d1%2==1) {
+							tr.erase_children(it);
+							zero(it->multiplier);
+							ret=true;				
+							break;
+							}
+						}
+					}
 				}
 			++s2;
 			++s1;
