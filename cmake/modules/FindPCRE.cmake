@@ -38,7 +38,7 @@ if(WIN32)
   list(APPEND PCRE_RUNTIMES ${PCRE_RUNTIME} ${PCRE_CPP_RUNTIME})
   message(" --- PCRE_RUNTIMES was ${PCRE_RUNTIMES}")
 else()
-  set(PCRE_RUNTIMES "")
+  set(PCRE_RUNTIMES TRUE)
 endif()
 
 # Handle the QUIETLY and REQUIRED arguments and set PCRE_FOUND to TRUE if all listed variables are TRUE.
