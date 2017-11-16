@@ -16,7 +16,7 @@ if [ -f /etc/redhat-release ]; then
       cmake .. -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr
    fi
 else
-   cmake ..
+   cmake .. -DCMAKE_INSTALL_PREFIX=/usr
 fi
 make
 sudo cpack

@@ -1247,8 +1247,9 @@ int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_
 			return 1;
 		else {
 			if(Ex::is_head(one) || *(Ex::parent(one)->name)=="\\wedge") {
-//				if(df1->degree.is_rational()==false || df2->degree.is_rational()==false)
-//					throw NotYetImplemented("Cannot yet order forms with non-numerical degrees");
+				if(df1->degree(properties, one).is_rational()==false ||
+					df2->degree(properties, two).is_rational()==false)
+					return 0; // Cannot yet order forms with non-numerical degrees.
 				long d1 = to_long(df1->degree(properties, one).to_rational());
 				long d2 = to_long(df2->degree(properties, two).to_rational());
 				if( (d1*d2) % 2 == 1) return -1;

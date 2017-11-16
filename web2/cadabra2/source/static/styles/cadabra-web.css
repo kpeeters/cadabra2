@@ -398,6 +398,8 @@ table.packages tr {
 table.packages code {
 	 font-size: 12px;
 	 margin-left: 10px;
+	 margin-top: 0px;
+	 margin-bottom:0px;
 }
 
 /* Young tableaux */
