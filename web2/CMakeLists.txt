@@ -21,6 +21,7 @@ set(TUTORIALS
   string_states
   bianchi_identities
   schwarzschild
+  exterior
   kaluza_klein
   plotting
   scalar_manipulations

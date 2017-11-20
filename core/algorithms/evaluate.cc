@@ -2,6 +2,7 @@
 #include "Functional.hh"
 #include "Cleanup.hh"
 #include "Permutations.hh"
+#include "MultiIndex.hh"
 #include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/substitute.hh"
@@ -12,7 +13,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-//#define DEBUG
+#define DEBUG
 
 using namespace cadabra;
 
@@ -313,6 +314,27 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 	// python treats 'map', but that will require wrapping all access to
 	// '\components' in a separate class.
 
+#ifdef DEBUG
+	auto fi = ind_free.begin();
+	std::cerr << "dense factor with indices: ";
+	MultiIndex<Ex> mi;
+	while(fi!=ind_free.end()) {
+		std::cerr << *(fi->first.begin()->name) << " ";
+		// Look up which values this index takes.
+		auto *id = kernel.properties.get<Indices>(fi->second);
+		if(!id)
+			throw RuntimeException("No Indices property for index.");
+
+		std::vector<Ex> values;
+		for(const auto& ex: id->values) 
+			values.push_back(ex);
+
+		mi.values.push_back(values);
+		std::cerr << std::endl;
+		++fi;
+		}
+	std::cerr << std::endl;
+#endif
 	
 	
 	return it;
@@ -915,8 +937,10 @@ Ex::iterator evaluate::handle_prod(iterator it)
 	// and then we fail lower down. What we could do is let
 	// handle_factor write out such unevaluated expressions to
 	// component ones. That's somewhat wasteful though. 
-	
+
+#ifdef DEBUG
 	std::cerr << "every factor a \\component:\n" << Ex(it) << std::endl;
+#endif
 	
 	// Now every factor in the product is a \component node.  The thing
 	// is effectively a large sparse tensor product. We need to do the
