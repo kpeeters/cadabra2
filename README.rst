@@ -60,9 +60,8 @@ On Debian/Ubuntu you can install all that is needed with::
     sudo apt install cmake python3-dev g++ libpcre3 libpcre3-dev libgmp3-dev \
           libgtkmm-3.0-dev libboost-all-dev libgmp-dev libsqlite3-dev uuid-dev  \
           texlive texlive-latex-extra dvipng \
-          python3-matplotlib python3-mpmath python3-pip python3-setuptools
-    sudo pip3 install sympy
-
+          python3-matplotlib python3-mpmath python3-pip python3-sympy
+    
 This is the development platform and issues are typically first fixed
 here. You can use either g++ or the clang++ compiler. You need to
 clone the cadabra2 git repository (if you download the .zip file you
