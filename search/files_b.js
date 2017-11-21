@@ -9,5 +9,6 @@ var searchData=
   ['matrix_2ehh',['Matrix.hh',['../Matrix_8hh.html',1,'']]],
   ['metric_2ecc',['Metric.cc',['../Metric_8cc.html',1,'']]],
   ['metric_2ehh',['Metric.hh',['../Metric_8hh.html',1,'']]],
-  ['modules_2edox',['modules.dox',['../modules_8dox.html',1,'']]]
+  ['modules_2edox',['modules.dox',['../modules_8dox.html',1,'']]],
+  ['multiindex_2ehh',['MultiIndex.hh',['../MultiIndex_8hh.html',1,'']]]
 ];

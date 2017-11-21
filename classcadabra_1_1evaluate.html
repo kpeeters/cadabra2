@@ -118,8 +118,8 @@ Inheritance diagram for cadabra::evaluate:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a34d6b9472af826b1bf17f007fc5d3d5b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a34d6b9472af826b1bf17f007fc5d3d5b">evaluate</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;component_values, bool <a class="el" href="PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d">rhs</a>=false)</td></tr>
-<tr class="separator:a34d6b9472af826b1bf17f007fc5d3d5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04fa1893c8cb3a9701bc20863c1a19dc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a04fa1893c8cb3a9701bc20863c1a19dc">evaluate</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;component_values, bool <a class="el" href="PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d">rhs</a>=false, bool simplify=true)</td></tr>
+<tr class="separator:a04fa1893c8cb3a9701bc20863c1a19dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0db30439730aef27e52e00a75d805209"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a0db30439730aef27e52e00a75d805209">can_apply</a> (<a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a>) override</td></tr>
 <tr class="separator:a0db30439730aef27e52e00a75d805209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d49c8b37dba4cee0d06d136f717b1c9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classcadabra_1_1Ex.html#a213ffa8eb9a47db69eda13be42d317cd">result_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a3d49c8b37dba4cee0d06d136f717b1c9">apply</a> (<a class="el" href="classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b">iterator</a> &amp;) override</td></tr>
@@ -205,6 +205,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aa17f3c15c0327e691e9e555e59b822c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29c4057d8b3aee886c336253317742a4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#a29c4057d8b3aee886c336253317742a4">only_rhs</a></td></tr>
 <tr class="separator:a29c4057d8b3aee886c336253317742a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf96c445836cfc2e737b394e917fb878"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1evaluate.html#adf96c445836cfc2e737b394e917fb878">call_sympy</a></td></tr>
+<tr class="separator:adf96c445836cfc2e737b394e917fb878"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -354,7 +356,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 <tr class="separator:ad10205ff95745f3b74e8d62857441024 inherit pro_attribs_classcadabra_1_1Algorithm"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a34d6b9472af826b1bf17f007fc5d3d5b"></a>
+<a class="anchor" id="a04fa1893c8cb3a9701bc20863c1a19dc"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -380,7 +382,13 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>rhs</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>rhs</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>simplify</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -831,6 +839,26 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="adf96c445836cfc2e737b394e917fb878"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::evaluate::call_sympy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="aa17f3c15c0327e691e9e555e59b822c3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -878,7 +906,7 @@ int, Ex::iterator_base_less &gt;&#160;</td><td class="memItemRight" valign="bott
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 20 2017 21:44:23 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Nov 21 2017 22:08:56 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

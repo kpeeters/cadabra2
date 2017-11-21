@@ -1,8 +1,8 @@
 var searchData=
 [
   ['tab_5fbasics',['tab_basics',['../classcadabra_1_1tab__basics.html',1,'cadabra']]],
-  ['tableau',['Tableau',['../classcadabra_1_1Tableau.html',1,'cadabra']]],
   ['tableau',['tableau',['../classyngtab_1_1tableau.html',1,'yngtab']]],
+  ['tableau',['Tableau',['../classcadabra_1_1Tableau.html',1,'cadabra']]],
   ['tableau_5fbase',['tableau_base',['../classyngtab_1_1tableau__base.html',1,'yngtab']]],
   ['tableaubase',['TableauBase',['../classcadabra_1_1TableauBase.html',1,'cadabra']]],
   ['tableausymmetry',['TableauSymmetry',['../classcadabra_1_1TableauSymmetry.html',1,'cadabra']]],

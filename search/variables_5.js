@@ -4,7 +4,7 @@ var searchData=
   ['ebox',['ebox',['../classcadabra_1_1NotebookCanvas.html#aaf0c211e41378b7ec3c50d0a337b950c',1,'cadabra::NotebookCanvas']]],
   ['edit',['edit',['../classcadabra_1_1CodeInput.html#a9094465de47836fc4e9d2d6ef0b4f527',1,'cadabra::CodeInput']]],
   ['email',['email',['../namespacesnoop.html#aa3a89a4b0cb802bb85e322c78d83c4f2',1,'snoop']]],
-  ['end_5f',['end_',['../classcombin_1_1combinations__base.html#aa121102c76ba0631f48df8120d5a75ac',1,'combin::combinations_base']]],
+  ['end_5f',['end_',['../classcombin_1_1combinations__base.html#aa121102c76ba0631f48df8120d5a75ac',1,'combin::combinations_base::end_()'],['../classMultiIndex.html#ae9810adccb2f4d63966813d70c4fdd57',1,'MultiIndex::end_()']]],
   ['end_5fwrap',['end_wrap',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a8d1eb051bd7f835636d5a5b8b433052b',1,'cadabra::TeXEngine::TeXRequest']]],
   ['engine',['engine',['../classcadabra_1_1NotebookWindow.html#a97bf0c613a7577307ee7dc9110041289',1,'cadabra::NotebookWindow::engine()'],['../classcadabra_1_1TeXView.html#a1252e0712500364f489b196ab608e4e6',1,'cadabra::TeXView::engine()']]],
   ['epsilon',['Epsilon',['../Symbols_8cc.html#ab9dc09a3a581e694c349538a321d6a43',1,'Epsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#aa5a114dec1675e43d6a7235d20402c40',1,'epsilon():&#160;Symbols.cc']]],

@@ -3,6 +3,7 @@ var searchData=
   ['call_5fcount',['call_count',['../classProgressMonitor_1_1Total.html#a01364e35239e82879e8e080506f5ad84',1,'ProgressMonitor::Total']]],
   ['call_5fmutex',['call_mutex',['../classsnoop_1_1SnoopImpl.html#a5c542b0df58680ee74be5fff5725e369',1,'snoop::SnoopImpl']]],
   ['call_5fstack',['call_stack',['../classProgressMonitor.html#adffcd451870c7d646046697ef32f2ac8',1,'ProgressMonitor']]],
+  ['call_5fsympy',['call_sympy',['../classcadabra_1_1evaluate.html#adf96c445836cfc2e737b394e917fb878',1,'cadabra::evaluate']]],
   ['call_5ftotals',['call_totals',['../classProgressMonitor.html#a1f18a8af832dd802d9cccc546ad7d9f4',1,'ProgressMonitor']]],
   ['canvasses',['canvasses',['../classcadabra_1_1NotebookWindow.html#a89ac590b0219421ed3d269e37d5b2962',1,'cadabra::NotebookWindow::canvasses()'],['../classcadabra__osx_1_1NotebookWindow.html#a074f9bde697f21aad1da8b94600767c0',1,'cadabra_osx::NotebookWindow::canvasses()']]],
   ['catcherr',['catchErr',['../classServer.html#a195296c36ba24a8be42aa82526512234',1,'Server']]],
@@ -61,5 +62,6 @@ var searchData=
   ['current_5fmode',['current_mode',['../classcadabra_1_1Parser.html#aa3cd9c56e72fdc87fd797787dba53346',1,'cadabra::Parser']]],
   ['current_5fmultiplicity',['current_multiplicity',['../classcombin_1_1symm__helper.html#a7530261fba8111d4e01c7ac58f20a7d7',1,'combin::symm_helper::current_multiplicity()'],['../classcombin_1_1symm__val__helper.html#a4dcafb425866aaadcdd95cbbeaebe756',1,'combin::symm_val_helper::current_multiplicity()']]],
   ['current_5fparent_5frel',['current_parent_rel',['../classcadabra_1_1Parser.html#ad780bba333bbf45fed76c427b5595193',1,'cadabra::Parser']]],
+  ['current_5fpos',['current_pos',['../classMultiIndex.html#a2822a37cb8667267169d2d4743aad422',1,'MultiIndex']]],
   ['current_5fweight',['current_weight',['../classcombin_1_1combinations__base.html#a66dc81bb80cfad25f543a6cccf24eac1',1,'combin::combinations_base']]]
 ];
