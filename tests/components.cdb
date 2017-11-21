@@ -438,18 +438,6 @@ def test23():
         
 test23()
         
-# This is where we go next.
-#
-{a,b,c}::Indices(values={0,1,2,3});
-ex:= X^{a} Y_{a};
-rl:= { Y_{0} = 3, Y_{2} = -5 };
-evaluate(ex, rl);
-
-
-{a,b,c}::Indices(values={0,1,2,3});
-ex:= X^{a b} Y_{a b};
-evaluate(ex);
-        
 
 # 
 # {r,t}::Coordinate.    
@@ -499,3 +487,31 @@ def test24():
     print("Test 24 passed")
         
 test24()
+
+# Evaluating with completely unspecified tensors.
+#
+def test25():        
+    __cdbkernel__=create_scope()
+    {a,b,c}::Indices(values={0,1,2,3});
+    ex:= X^{a} Y_{a};
+    rl:= { Y_{0} = 3, Y_{2} = -5 };
+    evaluate(ex, rl)
+    tst:= 3 X^{0} - 5 X^{2} - @(ex);
+    assert(tst==0)
+    print("Test 25 passed")
+
+test25()
+        
+def test26():
+    __cdbkernel__=create_scope()
+    {a,b,c}::Indices(values={0,1,2});
+    ex:= X^{a b} Y_{a b};
+    evaluate(ex, simplify=False)
+    tst:= X^{0 0} Y_{0 0} + X^{0 1} Y_{0 1} + X^{0 2} Y_{0 2}
+        + X^{1 0} Y_{1 0} + X^{1 1} Y_{1 1} + X^{1 2} Y_{1 2}
+        + X^{2 0} Y_{2 0} + X^{2 1} Y_{2 1} + X^{2 2} Y_{2 2} - @(ex):
+    assert(tst==0)
+    print("Test 26 passed")
+
+test26()
+        

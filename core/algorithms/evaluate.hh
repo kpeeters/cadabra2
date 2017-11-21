@@ -79,7 +79,7 @@ namespace cadabra {
 
 class evaluate : public Algorithm {
 	public:
-		evaluate(const Kernel&, Ex&, const Ex& component_values, bool rhs=false);
+		evaluate(const Kernel&, Ex&, const Ex& component_values, bool rhs=false, bool simplify=true);
 
 		virtual bool     can_apply(iterator) override;
 		virtual result_t apply(iterator&) override;
@@ -91,7 +91,7 @@ class evaluate : public Algorithm {
 
 	private:
 		const Ex& components;
-		bool only_rhs;
+		bool only_rhs, call_sympy;
 
 		bool is_component(iterator it) const;
 

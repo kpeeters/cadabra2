@@ -13,12 +13,12 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-#define DEBUG
+//#define DEBUG
 
 using namespace cadabra;
 
-evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
-	: Algorithm(k, tr), components(c), only_rhs(rhs)
+evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs, bool simplify)
+	: Algorithm(k, tr), components(c), only_rhs(rhs), call_sympy(simplify)
 	{
 	}
 
@@ -314,12 +314,16 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 	// python treats 'map', but that will require wrapping all access to
 	// '\components' in a separate class.
 
-#ifdef DEBUG
+	index_position_map_t ind_pos_free;
+	fill_index_position_map(it, ind_free, ind_pos_free);
+	
+	Ex comp("\\components");
+	
 	auto fi = ind_free.begin();
-	std::cerr << "dense factor with indices: ";
+	//std::cerr << "dense factor with indices: ";
 	MultiIndex<Ex> mi;
 	while(fi!=ind_free.end()) {
-		std::cerr << *(fi->first.begin()->name) << " ";
+		comp.append_child(comp.begin(), fi->first.begin());
 		// Look up which values this index takes.
 		auto *id = kernel.properties.get<Indices>(fi->second);
 		if(!id)
@@ -330,13 +334,36 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 			values.push_back(ex);
 
 		mi.values.push_back(values);
-		std::cerr << std::endl;
 		++fi;
 		}
-	std::cerr << std::endl;
-#endif
-	
-	
+
+	auto comma=comp.append_child(comp.begin(), str_node("\\comma"));
+
+	// For each set of index values...
+	for(mi.start(); !mi.end(); ++mi) {
+		auto ivs  = comp.append_child(comma, str_node("\\equals"));
+		auto ivsc = comp.append_child(ivs, str_node("\\comma"));
+		// ... add the values of the indices.
+		for(std::size_t i=0; i<mi.values.size(); ++i) {
+			comp.append_child(ivsc, mi[i].begin());
+			}
+		// ... then set the value of the tensor component.
+		auto repfac = comp.append_child(ivs, it);
+		fi = ind_free.begin();
+		size_t i=0;
+		while(fi!=ind_free.end()) {
+			auto il = begin_index(repfac);
+			auto num = ind_pos_free[fi->second];
+			il += num;
+			auto ii = iterator(il);
+			auto parent_rel = il->fl.parent_rel;
+			comp.replace(ii, mi[i].begin())->fl.parent_rel=parent_rel;
+			++fi;
+			++i;
+			}
+		}
+	it=tr.move_ontop(it, comp.begin());
+
 	return it;
 	}
 
@@ -462,7 +489,8 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			});
 
 
-	simplify_components(it1);
+	if(call_sympy)
+		simplify_components(it1);
 	}
 
 void evaluate::cleanup_components(iterator it) 
@@ -769,7 +797,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	std::cerr << "after merge " << Ex(it) << std::endl;
 	#endif
 
-	simplify_components(it);
+	if(call_sympy)
+		simplify_components(it);
 	// std::cerr << "then " << Ex(it) << std::endl;
 
 	return it;
@@ -939,7 +968,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 	// component ones. That's somewhat wasteful though. 
 
 #ifdef DEBUG
-	std::cerr << "every factor a \\component:\n" << Ex(it) << std::endl;
+	std::cerr << "every factor a \\components:\n" << Ex(it) << std::endl;
 #endif
 	
 	// Now every factor in the product is a \component node.  The thing
@@ -990,6 +1019,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 				}
 
 			cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
+					if(*it1->name!="\\equals")
+						std::cerr << *it->name << std::endl;
 					assert(*it1->name=="\\equals");
 					auto lhs1 = tr.begin(it1);
 					auto ivalue1 = tr.begin(lhs1);
@@ -1206,7 +1237,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 //		}
 
 	// Use sympy to simplify components.
-	simplify_components(it);
+	if(call_sympy)
+		simplify_components(it);
 	//std::cerr << "simplified:\n" << Ex(it) << std::endl;
 
 	return it;
