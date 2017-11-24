@@ -85,11 +85,15 @@
     * find -name "*.exe" -print | grep Debug | grep Win32 | xargs -i cp '{}' ../untracked/winbin/
     * cd /cygdrive/c/gtk-build/build/Win32 && find -name "*.dll" -print | grep Debug | xargs -i cp '{}' /cygdrive/c/create/gtkmm-win32/untracked/winbin/
     * cd /cygdrive/c/gtk-build/gtk/Win32/bin && find -name "*.dll" -print | xargs -i cp '{}' /cygdrive/c/create/gtkmm-win32/untracked/winbin/
-* Currently collecting all the dlls and associated binary products is tedious and error prone. 
-  * Additionally for gui it seems like copying the gtk share folder into the working directory is necessary, as well as the images directory.
-  * Needed to copy into the share/icons folder the Adwaita directory from C:\msys64\mingw64\share\icons
-  * copied the loader.cache from C:\gtk-build\gtk\Win32\lib\gdk-pixbuf-2.0\2.10.0 to share subdir
-  * copied *.sty files from the frontend\latex dir
+* Clone https://github.com/bluelips/adwaita-icon-theme
+  * From an x86 native tools command prompt for vs 2017, within the win32 directory
+    * copy adwaita-msvc.mak.in adwaita-msvc.mak
+	* nmake /f adwaita-msvc.mak
+	* set prefix=.
+	* nmake /f adwaita-msvc.mak install
+	* xcopy /E /R /Y share C:\gtk-build\gtk\Win32\share\
+* Now, from within msvc2017 the install target should build and install everything correctly to C:\Program Files (x86)\Cadabra\
+	
 
 #### Minor improvement ideas
 * Add right click contextual help item
