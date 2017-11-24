@@ -73,6 +73,12 @@
 	```
     * If that still fails, use depends.exe on cadabra2.dll to figure out what is missing 
   * execute "python cadabra2" from this directory to start interactive mode
+* Manually doing the gtk install process involves collecting all the dlls and associated binary products and is tedious and error prone. 
+  * Additionally for gui it seems like copying the gtk share folder into the working directory is necessary, as well as the images directory.
+  * Needed to copy into the share/icons folder the Adwaita directory from C:\msys64\mingw64\share\icons
+  * copied the loader.cache from C:\gtk-build\gtk\Win32\lib\gdk-pixbuf-2.0\2.10.0 to share subdir
+  * copied *.sty files from the frontend\latex dir
+
 
 #### Building the GTK3 frontend
 * The frontend is optional
