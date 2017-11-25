@@ -161,8 +161,8 @@ add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc jsoncpp/jsoncpp.cp
 #add_executable(test_talk_to_server test_talk_to_server.cc)
 #add_executable(regexp_tester regexp_tester.cc)
 target_link_libraries(cadabra-server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES} ${SQLITE3_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${CMAKE_THREAD_LIBS_INIT})  # cadabra_server)
-target_link_libraries(cadabra2html ${Boost_LIBRARIES}) # cadabra_client)
-target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}) # cadabra_client)
+target_link_libraries(cadabra2html ${Boost_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES}) # cadabra_client)
+target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES}) # cadabra_client)
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 # The preamble 'notebook.tex' should be kept in sync with the one in
