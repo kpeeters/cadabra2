@@ -23,7 +23,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left(A, \\linebreak[0] B\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left[A,~\\discretionary{}{}{} B\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -60,7 +60,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left(A, \\linebreak[0] B\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left[A,~\\discretionary{}{}{} B\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -182,7 +182,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left(\\phi, \\linebreak[0] \\chi\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left[\\phi,~\\discretionary{}{}{} \\chi\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -205,7 +205,7 @@
 					"source" : "\\begin{dmath*}{}\\lambda \\partial_{3}{\\chi}\\end{dmath*}"
 				}
 			],
-			"source" : "{\\phi,\\chi}::Weight(label=small, value=1);\n\\partial{#}::PartialDerivative;\n\\partial{#}::WeightInherit(label=all, type=Multiplicative);\nex:=\\phi \\partial_{0}{\\phi} + \\partial_{0}{\\lambda} + \\lambda \\partial_{3}{\\chi};\nkeep_weight(_, $small=1$);"
+			"source" : "{\\phi,\\chi}::Weight(label=small, value=1);\n\\partial{#}::PartialDerivative;\n\\partial{#}::WeightInherit(label=all, type=multiplicative);\nex:=\\phi \\partial_{0}{\\phi} + \\partial_{0}{\\lambda} + \\lambda \\partial_{3}{\\chi};\nkeep_weight(_, $small=1$);"
 		},
 		{
 			"cell_origin" : "client",
@@ -224,12 +224,17 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
+			"source" : "reset();"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
 			"cells" : 
 			[
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left(\\phi, \\linebreak[0] \\chi\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Weight to~}\\left[\\phi,~\\discretionary{}{}{} \\chi\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -249,10 +254,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\phi \\partial_{x}{\\phi}+\\phi \\chi+\\partial_{x}\\left(\\phi \\chi^{2}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\phi \\partial_{x}{\\phi}+\\phi \\chi+\\partial_{x}\\left(\\phi {\\chi}^{2}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "{\\phi,\\chi}::Weight(label=length, value=1);\n\nx::Coordinate;\n\\partial{#}::PartialDerivative;\n\\partial{#}::WeightInherit(label=length, type=Multiplicative, self=-1);\n\nex:=\\phi \\partial_{x}{\\phi} + \\phi\\chi + \\partial_{x}{ \\phi \\chi**2 };"
+			"source" : "{\\phi,\\chi}::Weight(label=length, value=1);\n\nx::Coordinate;\n\\partial{#}::PartialDerivative;\n\\partial{#}::WeightInherit(label=length, type=multiplicative, self=-1);\n\nex:=\\phi \\partial_{x}{\\phi} + \\phi\\chi + \\partial_{x}{ \\phi \\chi**2 };"
 		},
 		{
 			"cell_origin" : "client",
@@ -262,7 +267,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\partial_{x}\\left(\\phi \\chi^{2}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\phi \\partial_{x}{\\phi}\\end{dmath*}"
 				}
 			],
 			"source" : "keep_weight(_, $length=1$);"

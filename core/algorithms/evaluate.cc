@@ -13,7 +13,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-//#define DEBUG
+//#define DEBUG 1
 
 using namespace cadabra;
 
@@ -362,6 +362,11 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 			++i;
 			}
 		}
+
+#ifdef DEBUG
+	std::cerr << Ex(it) << std::endl;
+#endif
+	
 	it=tr.move_ontop(it, comp.begin());
 
 	return it;
@@ -989,7 +994,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 		int num1 = tr.index(di->second);
 		int num2 = tr.index(di2->second);
 		// std::cerr << *(di->first.begin()->name) 
-		//    << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
+		// << " is index " << num1 << " in first and index " << num2 << " in second node " << std::endl;
 
 		// three cases:
 		//    two factors, single index in common. Merge is simple.

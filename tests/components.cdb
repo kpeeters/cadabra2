@@ -1,4 +1,5 @@
 
+
 # Testing a substitution rule in which an abstract index in the 
 # expression is matched against a coordinate in the pattern.
 # FIXME: this is not supposed to match!
@@ -514,3 +515,27 @@ def test26():
     print("Test 26 passed")
 
 test26()
+
+import cdb.relativity as rel
+import cdb.relativity.schwarzschild as ss
+
+def test27():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho,\sigma}::Indices(position=fixed);
+    g=ss.metric()
+    complete(g,$g^{\mu\nu}$);
+    ch=rel.christoffel_from_metric();
+    evaluate(ch, g, rhsonly=True);
+    \ddot{#}::Accent;
+    \dot{#}::Accent;
+    geodesic:= \ddot{X^{\mu}} + \Gamma^{\mu}_{\nu\rho} \dot{X^{\nu}} \dot{X^{\rho}} = 0;
+    # Doing evaluate here messes up the components node of the \Gamma factor,
+    # there's a weird \components inside a \components. Can probably be tested
+    # with a simpler example.
+    substitute(geodesic, ch);
+    evaluate(geodesic);
+
+test27()
+        
+
+    
