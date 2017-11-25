@@ -34,8 +34,6 @@
 * All the notebooks need at least one test-run as there have been subtle functionality changes due to portability
   * component_evaluation.cnb gives an error saying indices on derivatives need to be lowered
   * component_expressions.cnb gives an attribute error looking for 'toEq'
-* Looking into using adwaita project to get the adwaita icons, although the overhead may not justify the 4 or 5 files that are actually referenced. May be more useful to track them down and just convert to the other theme for this build.
-* Test the install of cadabra2cadabra
 
 #### TODO 
 * Make gmp a sub-project of cadabra2
