@@ -48,7 +48,7 @@ link_directories(${GLIBMM3_LIBRARY_DIRS})
 add_definitions(${GLIBMM3_CFLAGS_OTHER})
 
 # Locate sqlite3.
-find_library(sqlite3 sqlite3 required)
+find_package(SQLite3)
 
 # Locate Boost
 if(USE_PYTHON_3)
