@@ -1442,12 +1442,6 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("rules"),
 		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
-
-	def("split_index", &dispatch_ex<split_index, Ex&>, 
-		 (arg("ex"),
-		  arg("rules"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
 	
 	def("unwrap", &dispatch_ex<unwrap, Ex&>, 
 		 (arg("ex"),
