@@ -40,6 +40,8 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 include_directories("${Boost_INCLUDE_DIRS}")
 #pkg_check_modules(UUID uuid REQUIRED)
 #link_directories(${UUID_LIBRARY_DIRS})
+
+find_package(SQLite3 REQUIRED)
 include_directories("${SQLITE3_INCLUDE_DIR}")
 link_directories("${SQLITE3_LIBRARIES}")
 
