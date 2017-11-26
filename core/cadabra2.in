@@ -16,7 +16,6 @@ import site
 from code import InteractiveConsole
 import code
 import re
-import readline
 import rlcompleter
 import os
 
@@ -44,7 +43,6 @@ class Shell(InteractiveConsole):
         self.lhs      = "";
         self.rhs      = "";
         self.operator = "";
-#        readline.set_completer(rlcompleter.Completer(vars).complete)
         InteractiveConsole.__init__(self)
         return
 
