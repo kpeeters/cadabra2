@@ -178,7 +178,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT
 if(USE_PYTHON_3)
   message("-- Building for use with Python 3 (good!)")
 else()
-  message("-- Building for use with Python 2 (consider upgrading!)")
+  message("-- Building for use with Python 2 (standing on principles!)")
 endif()
 
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack

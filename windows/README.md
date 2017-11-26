@@ -29,9 +29,10 @@
 * Now build relevant projects from the cadabra2.sln
   * Debug mode currently crashes, but if you need symbols, try RelWithDebInfo
   * If you want to build the frontend, you will need to additionally follow the steps from "Building the GTK3 frontend"
+    * If you did all that, you should be able to build the "INSTALL" project which will build everything and install the app to "C:\Program Files (x86)\Cadabra\"
+	  * Sometimes it takes two tries for some reason that hasn't been tracked down
 
 #### CURRENT STATUS
-* Trying to get osx clang to compile again using travis
 * GTK frontend client and install process through cmake is functional
 * All the notebooks need at least one test-run as there have been subtle functionality changes due to portability
   * component_evaluation.cnb gives an error saying indices on derivatives need to be lowered
@@ -99,7 +100,7 @@
 	* nmake /f adwaita-msvc.mak install
 	* xcopy /E /R /Y share C:\gtk-build\gtk\Win32\share\
 * Manually make sure the directory "C:\Program Files (x86)\Cadabra\" exists and is writable by your user
-* Now, from within msvc2017 the install target should build and install everything correctly to C:\Program Files (x86)\Cadabra\
+* Now, from within msvc2017 the "INSTALL" target should build and install everything correctly to C:\Program Files (x86)\Cadabra\
 
 #### Minor improvement ideas
 * Add right click contextual help item
