@@ -2,6 +2,7 @@
 #include "Functional.hh"
 #include "Cleanup.hh"
 #include "Permutations.hh"
+#include "MultiIndex.hh"
 #include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
 #include "algorithms/substitute.hh"
@@ -16,8 +17,8 @@
 
 using namespace cadabra;
 
-evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs)
-	: Algorithm(k, tr), components(c), only_rhs(rhs)
+evaluate::evaluate(const Kernel& k, Ex& tr, const Ex& c, bool rhs, bool simplify)
+	: Algorithm(k, tr), components(c), only_rhs(rhs), call_sympy(simplify)
 	{
 	}
 
@@ -277,6 +278,10 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 
 				return true; // Cannot yet abort the do_list loop.
 				}
+			else {
+				// TRACE: There is no rule which matches this factor. This means that
+				// we want to keep all components?
+				}
 			return true;
 			});
 	if(!has_acted) {
@@ -309,8 +314,56 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 	// python treats 'map', but that will require wrapping all access to
 	// '\components' in a separate class.
 
+	index_position_map_t ind_pos_free;
+	fill_index_position_map(it, ind_free, ind_pos_free);
 	
+	Ex comp("\\components");
 	
+	auto fi = ind_free.begin();
+	//std::cerr << "dense factor with indices: ";
+	MultiIndex<Ex> mi;
+	while(fi!=ind_free.end()) {
+		comp.append_child(comp.begin(), fi->first.begin());
+		// Look up which values this index takes.
+		auto *id = kernel.properties.get<Indices>(fi->second);
+		if(!id)
+			throw RuntimeException("No Indices property for index.");
+
+		std::vector<Ex> values;
+		for(const auto& ex: id->values) 
+			values.push_back(ex);
+
+		mi.values.push_back(values);
+		++fi;
+		}
+
+	auto comma=comp.append_child(comp.begin(), str_node("\\comma"));
+
+	// For each set of index values...
+	for(mi.start(); !mi.end(); ++mi) {
+		auto ivs  = comp.append_child(comma, str_node("\\equals"));
+		auto ivsc = comp.append_child(ivs, str_node("\\comma"));
+		// ... add the values of the indices.
+		for(std::size_t i=0; i<mi.values.size(); ++i) {
+			comp.append_child(ivsc, mi[i].begin());
+			}
+		// ... then set the value of the tensor component.
+		auto repfac = comp.append_child(ivs, it);
+		fi = ind_free.begin();
+		size_t i=0;
+		while(fi!=ind_free.end()) {
+			auto il = begin_index(repfac);
+			auto num = ind_pos_free[fi->second];
+			il += num;
+			auto ii = iterator(il);
+			auto parent_rel = il->fl.parent_rel;
+			comp.replace(ii, mi[i].begin())->fl.parent_rel=parent_rel;
+			++fi;
+			++i;
+			}
+		}
+	it=tr.move_ontop(it, comp.begin());
+
 	return it;
 	}
 
@@ -436,7 +489,8 @@ void evaluate::merge_components(iterator it1, iterator it2)
 			});
 
 
-	simplify_components(it1);
+	if(call_sympy)
+		simplify_components(it1);
 	}
 
 void evaluate::cleanup_components(iterator it) 
@@ -743,7 +797,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 	std::cerr << "after merge " << Ex(it) << std::endl;
 	#endif
 
-	simplify_components(it);
+	if(call_sympy)
+		simplify_components(it);
 	// std::cerr << "then " << Ex(it) << std::endl;
 
 	return it;
@@ -905,8 +960,16 @@ Ex::iterator evaluate::handle_prod(iterator it)
 		sib=nxt;
 		}
 
-	// TRACE: still ok here
-	// std::cerr << "every factor a \\component:\n" << Ex(it) << std::endl;
+	// TRACE: If a factor has not had a rule match, it will be left
+	// un-evaluated here. So you get
+	//  X^{a} \component_{a}( 0=3, 2=-5 )
+	// and then we fail lower down. What we could do is let
+	// handle_factor write out such unevaluated expressions to
+	// component ones. That's somewhat wasteful though. 
+
+#ifdef DEBUG
+	std::cerr << "every factor a \\components:\n" << Ex(it) << std::endl;
+#endif
 	
 	// Now every factor in the product is a \component node.  The thing
 	// is effectively a large sparse tensor product. We need to do the
@@ -956,6 +1019,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 				}
 
 			cadabra::do_list(tr, sib1, [&](Ex::iterator it1) {
+					if(*it1->name!="\\equals")
+						std::cerr << *it->name << std::endl;
 					assert(*it1->name=="\\equals");
 					auto lhs1 = tr.begin(it1);
 					auto ivalue1 = tr.begin(lhs1);
@@ -1172,7 +1237,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 //		}
 
 	// Use sympy to simplify components.
-	simplify_components(it);
+	if(call_sympy)
+		simplify_components(it);
 	//std::cerr << "simplified:\n" << Ex(it) << std::endl;
 
 	return it;

@@ -1014,6 +1014,13 @@ Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned i
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
+template<class F, typename Arg1, typename Arg2, typename Arg3>
+Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, Arg3 arg3, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), ex, arg1, arg2, arg3);
+	return dispatch_base(ex, algo, deep, repeat, depth, false);
+	}
+
 template<class F, typename... Args>
 Ex* dispatch_string(const std::string& ex, Args... args, bool deep, bool repeat, unsigned int depth)
 	{
@@ -1331,8 +1338,8 @@ BOOST_PYTHON_MODULE(cadabra2)
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  
-	def("evaluate", &dispatch_ex<evaluate, Ex&, bool>,
-		 (arg("ex"), arg("components")=new Ex(), arg("rhsonly")=false,
+	def("evaluate", &dispatch_ex<evaluate, Ex&, bool, bool>,
+		 (arg("ex"), arg("components")=new Ex(), arg("rhsonly")=false, arg("simplify")=true,
 		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
 		 return_internal_reference<1>() );
 		  

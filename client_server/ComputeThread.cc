@@ -12,6 +12,9 @@
 
 #if defined(_MSC_VER) && defined(AVOID_GTK)
     #include <Windows.h>
+    #include <io.h>
+    #include <fcntl.h>
+    #include <fstream>
 #else // defined(_MSC_VER) && defined(AVOID_GTK)
     #include <glibmm/spawn.h>
 #endif // defined(_MSC_VER) && defined(AVOID_GTK)
@@ -20,8 +23,13 @@ using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 ComputeThread::ComputeThread()
-	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), 
+	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false),
+    port(0),
+#ifdef _MSC_VER
+    server_stdout(INVALID_HANDLE_VALUE), server_stdout_write(INVALID_HANDLE_VALUE), server_stderr(INVALID_HANDLE_VALUE)
+#else // def _MSC_VER
       server_stdout(0), server_stderr(0)
+#endif // def _MSC_VER
 	{
    // The ComputeThread constructor (but _not_ the run() member!) is
 	// always run on the gui thread, so we can grab the gui thread id
@@ -44,12 +52,15 @@ ComputeThread::~ComputeThread()
 void ComputeThread::close_and_cleanup_process()
     {
 #if defined(_MSC_VER) && defined(AVOID_GTK)
-    // This is apparently a crash if uncommented? We're not currently even using them so
-    // TODO: get rid of these
-    //if(server_stdout != 0)
+    // TODO: clean up properly, this currently crashes
+    //if(server_stdout != INVALID_HANDLE_VALUE) {
     //    CloseHandle(server_stdout);
-    //if(server_stderr != 0)
-    //    CloseHandle(server_stderr);
+    //    server_stdout = INVALID_HANDLE_VALUE;
+    //    }
+    //if(server_stdout_write != INVALID_HANDLE_VALUE) {
+    //    CloseHandle(server_stdout_write);
+    //    server_stdout_write = INVALID_HANDLE_VALUE;
+    //    }
 
 
 #else // _MSC_VER
@@ -129,9 +140,14 @@ void ComputeThread::try_connect()
 
 void ComputeThread::run()
 	{
-	init();
-	try_spawn_server();
-	try_connect();
+    try {
+	    init();
+	    try_spawn_server();
+	    try_connect();
+        }
+    catch(std::exception& ex) {
+        std::cerr << "Compute thread exception: " << ex.what() << std::endl;
+        }
 
 	// Enter run loop, which will never terminate anymore. The on_fail and on_close
 	// handlers will re-try to establish connections when they go bad.
@@ -194,36 +210,29 @@ void ComputeThread::try_spawn_server()
 
 #if defined(_MSC_VER) && defined(AVOID_GTK)
     SECURITY_ATTRIBUTES security;
+    ZeroMemory(&security, sizeof(security));
     security.nLength = sizeof(security);
     security.bInheritHandle = TRUE;
     security.lpSecurityDescriptor = NULL;
 
-    if(!CreatePipe(&server_stdout, &server_stderr, 
+    // one end of the pipe is for reading, which this process will use
+    // one end of the pipe is for writing, which will be passed to the child process as its stdout
+    if(!CreatePipe(&server_stdout, &server_stdout_write, 
                    &security, sizeof(security))) {
         std::cerr << "Failed to create pipe for reading server stdout" << std::endl;
         return;
         }
-    // So because we set inherit all handles above, we want to ensure the child doesn't get this one
-    SetHandleInformation(server_stdout, HANDLE_FLAG_INHERIT, 0 /*dwFlags*/);
-    SetHandleInformation(server_stderr, HANDLE_FLAG_INHERIT, 0 /*dwFlags*/);
+    // the child process should get the write pipe but not the read pipe
+    SetHandleInformation(server_stdout, HANDLE_FLAG_INHERIT, 0 /* dwFlags */);
+    SetHandleInformation(server_stdout_write, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT);
 
     STARTUPINFO startup;
     ZeroMemory(&startup, sizeof(startup));
     startup.cb = sizeof(startup);
-    startup.hStdOutput = server_stdout;
-    startup.hStdError = server_stderr;
+    startup.hStdOutput = server_stdout_write;
+    startup.hStdError = 0;
     startup.dwFlags = STARTF_USESTDHANDLES;
     ZeroMemory(&process_info, sizeof(process_info));
-
-    // having two problems with the interprocess communication (both in the win32 and glib approach??)
-    // so trying file io to get the port
-#define AVOID_READ_FILE
-#ifdef AVOID_READ_FILE
-    // first delete the file if it exists
-    char port_filename[] = "portfile.txt";
-    DeleteFile(port_filename);
-#endif // def AVOID_READ_FILE
-
 
     TCHAR commandline[] = TEXT("cadabra-server.exe");
     if(!CreateProcess(NULL /*appName*/, commandline, NULL /*processAttr*/,
@@ -234,33 +243,28 @@ void ComputeThread::try_spawn_server()
         return;
         }
 
-#ifdef AVOID_READ_FILE
-    int port_retries = 10;
-    unsigned short readport = -1;
-    for(int retry = 0; retry < port_retries; retry++) {
-        Sleep(500); // give it a chance to startup and write out the file
-        FILE* portfile = fopen(port_filename, "r");
-        if(portfile) {
-            fread(&readport, sizeof(readport), 1, portfile);
-            fclose(portfile);
-            port = readport;
-            break;
-        }
-    }
-    if(readport == -1) {
-        throw std::logic_error("Failed to read port from server portfile.txt.");
-    }
-#else // def AVOID_READ_FILE
-    static constexpr DWORD buffer_size = 100;
-    char buffer[buffer_size];    
-    DWORD bytes_read;
-    if(!ReadFile(server_stdout, buffer, buffer_size, &bytes_read, 
-                 NULL /*overlapped*/)) {
-        throw std::logic_error("Failed to read port from server.");       
-        }
+    if(server_stdout == INVALID_HANDLE_VALUE)
+        throw std::logic_error("Failed to get stdout of server process.");
 
-    port = atoi(buffer);
-#endif // def AVOID_READ_FILE
+    int file_descriptor = _open_osfhandle((intptr_t)server_stdout, _O_TEXT);
+    if(file_descriptor == -1)
+        throw std::logic_error("Failed to get stdout file descriptor of server process.");
+
+    FILE* portfile = _fdopen(file_descriptor, "rt");
+    if(portfile == NULL)
+        throw std::logic_error("Failed to get stdout FILE* of server process.");
+
+    std::ifstream portstream(portfile);
+    std::string portline;
+    std::getline(portstream, portline);
+    
+    port = atoi(portline.c_str());
+    if(port == 0)
+        throw std::logic_error("Got invalid port from stdout server process, read:" + portline);
+
+    portstream.close();
+    fclose(portfile);
+    //_close(file_descriptor);
 
 #else // _MSC_VER
     std::vector<std::string> argv, envp;
@@ -293,6 +297,8 @@ void ComputeThread::try_spawn_server()
     }
     port = atoi(buffer);
 #endif // _MSC_VER
+
+    std::cerr << "cadabra-client: server spawned! " << std::endl;
 
 
 	}

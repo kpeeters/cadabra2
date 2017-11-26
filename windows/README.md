@@ -27,10 +27,12 @@
     * If you have cmake problems, turn on lots of debugging that gets piped to "attempt.txt" like so:
     * cmake -DCMAKE_SUPPRESS_REGENERATION:BOOL=1 -DUSE_PYTHON_3=NO -DSQLITE3_INCLUDE_DIR_SEARCH="c:/create/sqlite3-cmake/src" -DSQLITE3_LIBRARIES_SEARCH="c:/create/sqlite3-cmake/build/Release" -DBOOST_ROOT="c:/create/boost_1_61_0" -DBOOST_LIBRARYDIR="c:/create/boost_1_61_0" -DPCRE_LIBRARY="C:/create/pcre-win-build/build-VS2013/Release/libpcrecpp.lib" -DPCRE_INCLUDE_DIR="C:/create/pcre-win-build/include" -DGTK3_BUNDLE_INCLUDE_DIR_SEARCH="C:/gtk-build/gtk/Win32/include" -DGTK3_BUNDLE_LIBRARIES_SEARCH="C:/gtk-build/gtk/Win32/lib" -DGTKMM3_BUNDLE_INCLUDE_DIR_SEARCH="C:/create/gtkmm-win32/gtkmm/Win32/include" -DGTKMM3_BUNDLE_LIBRARIES_SEARCH="C:/create/gtkmm-win32/gtkmm/Win32/lib" --debug_output --system_information -Wdev --trace .. > attempt.txt 2>&1 || tail attempt.txt
 * Now build relevant projects from the cadabra2.sln
+  * Debug mode currently crashes, but if you need symbols, try RelWithDebInfo
+  * If you want to build the frontend, you will need to additionally follow the steps from "Building the GTK3 frontend"
 
 #### CURRENT STATUS
+* Trying to get osx clang to compile again using travis
 * GTK frontend client and install process through cmake is functional
-* Startup connecting to server occasionally fails, so do another refactor of that
 * All the notebooks need at least one test-run as there have been subtle functionality changes due to portability
   * component_evaluation.cnb gives an error saying indices on derivatives need to be lowered
   * component_expressions.cnb gives an attribute error looking for 'toEq'
@@ -96,8 +98,8 @@
 	* set prefix=.
 	* nmake /f adwaita-msvc.mak install
 	* xcopy /E /R /Y share C:\gtk-build\gtk\Win32\share\
+* Manually make sure the directory "C:\Program Files (x86)\Cadabra\" exists and is writable by your user
 * Now, from within msvc2017 the install target should build and install everything correctly to C:\Program Files (x86)\Cadabra\
-	
 
 #### Minor improvement ideas
 * Add right click contextual help item

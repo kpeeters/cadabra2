@@ -292,6 +292,7 @@ endif()
 
 
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
+add_executable(test_multiindex   test_multiindex.cc)
 add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
 target_link_libraries(cadabra2python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
