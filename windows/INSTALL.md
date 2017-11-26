@@ -1,3 +1,7 @@
+# Cadabra
+
+A field-theory motivated approach to computer algebra. Started by Kasper Peeters <info@cadabra.science>. End-user documentation at http://cadabra.science/     Built from source code at https://github.com/bluelips/cadabra2 with source code documentation at http://kpeeters.github.io/cadabra2
+
 ### Installation steps
 * Currently this is a bare-bones windows build. Several steps are required in order to get a functional application. It's also very fragile and requires precise dependencies. If you need more flexibility, build from source following the direction at https://github.com/bluelips/cadabra2
 * Install python 2.7, 32 bit. 
@@ -13,5 +17,8 @@
 ### Running from a command line within the python interpreter
 * From a command line, execute
   ``` python -i cmdstart.py ```
+  
+#### Thanks
+* Many thanks to  Kasper Peeters <info@cadabra.science> for starting this excellent field theory tool! Other contributors and information may be found at the original repository at https://github.com/kpeeters/cadabra2
 
   
