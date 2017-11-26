@@ -11,7 +11,10 @@ message("-- CMake version = ${CMAKE_VERSION}")
 
 if (POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
-endif(POLICY CMP0042)
+endif()
+if (POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
+endif()
 
 
 # Locate python. On Apple the standard CMake PythonLibs.cmake does not

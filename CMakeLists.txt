@@ -24,6 +24,10 @@ endif()
 message("-- Building ${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}")
 message("-- Build id ${CADABRA_VERSION_BUILD} dated ${CADABRA_VERSION_DATE}")
 
+if(POLICY CMP0054)
+  cmake_policy(SET CMP0054 NEW)
+endif()
+
 enable_testing()
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
