@@ -130,7 +130,7 @@ namespace cadabra {
 			// Self-started server
 #if defined(_MSC_VER) && defined(AVOID_GTK)
             //HANDLE          server_pid;
-            HANDLE          server_stdout, server_stderr;
+            HANDLE          server_stdout, server_stdout_write, server_stderr;
             PROCESS_INFORMATION process_info;
 #else // defined(_MSC_VER) && defined(AVOID_GTK)
 			Glib::Pid       server_pid;
