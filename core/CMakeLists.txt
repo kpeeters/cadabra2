@@ -64,7 +64,7 @@ endif()
 
 # Locate Mathematica (optional)
 set(Mathematica_USE_STATIC_LIBRARIES TRUE)
-find_package(Mathematica)
+find_package(Mathematica COMPONENTS WSTP REQUIRED)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)

@@ -2,8 +2,9 @@
 #include <iostream>
 
 // https://reference.wolfram.com/legacy/language/v10.2/ref/c/WSLogStreamToFile.html
+// http://edenwaith.com/development/tutorials/mathlink/ML_Tut.pdf
 //
-// run as
+// Run as
 //
 //    core/test_wstp -linkname 'math -mathlink' -linkmode launch
 
@@ -34,7 +35,8 @@ int main(int argc, char **argv)
 		}
 	res = WSLogStreamToFile(lp, fileName);
 	std::cerr << "Logging to " << fileName << std::endl;
-	
+
+	WSPutFunction(lp, "EvaluatePacket", 1L);		
 	WSPutFunction(lp, "ToString", 1L);	
 	WSPutFunction(lp, "FullSimplify", 1L);
 	WSPutFunction(lp, "ToExpression", 1L);
@@ -56,16 +58,13 @@ int main(int argc, char **argv)
 	std::cerr << "packet now " << pkt << std::endl;
 	
 	const char *out;
-//	int out;
 	if(! WSGetString(lp, &out)) {
 		printf("Unable to read from link\n");
 		return -1;
 		} else {
 		std::cerr << out << std::endl;
+		WSReleaseString(lp, out);
 		}
-//	WSReleaseString(lp, symbol);
-	
-//	WSPutFunction(lp, "Exit", 0);
 
 	WSReleaseLogFileNameForLink(lp, fileName);
 
