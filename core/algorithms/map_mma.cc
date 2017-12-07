@@ -95,7 +95,7 @@ Algorithm::result_t map_mma::apply(iterator& it)
 			prod.append_child(prod.begin(), fac);
 		auto top=prod.begin();
 		// std::cerr << "Feeding to sympy " << prod << std::endl;
-		apply_mma(kernel, prod, top, wrap, "", "");
+		MMA::apply_mma(kernel, prod, top, wrap, "", "");
 		// Now remove the non-index carrying factors and replace with
 		// the factors of 'prod' just simplified.
 		tr.insert_subtree(*left.begin(), top);
@@ -107,7 +107,7 @@ Algorithm::result_t map_mma::apply(iterator& it)
 		return result_t::l_applied;
 		}
 	else {
-		apply_mma(kernel, tr, it, wrap, "", "");
+		MMA::apply_mma(kernel, tr, it, wrap, "", "");
 		it.skip_children();
 		return result_t::l_applied;
 		}

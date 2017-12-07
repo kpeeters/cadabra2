@@ -507,6 +507,11 @@ bool DisplayMMA::children_have_brackets(Ex::iterator ch) const
 void DisplayMMA::import(Ex& ex)
 	{
 	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
+			// Mathematica wraps everything in square brackets, set these to
+			// b_none;
+			it->fl.bracket=str_node::b_none;
+
+			// Convert symbols.
 			for(auto& m: symmap) {
 				// If we have converted the name of this symbol, convert back.
 				if(m.second==*it->name) {

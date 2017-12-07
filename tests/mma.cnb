@@ -3,16 +3,36 @@
 	[
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
+			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
-					"cell_origin" : "server",
+					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}{\\left(\\cos{\\alpha}\\right)}^{2}+{\\left(\\sin{\\alpha}\\right)}^{2}+\\alpha\\end{dmath*}"
+					"source" : "We can use a Mathematica kernel to simplify all scalar expressions while\nusing all tensor capabilities of Cadabra, by simply running mathematica on\non expressions after every manipulation step."
 				}
 			],
-			"source" : "ex:= \\cos{\\alpha}**2 + \\sin{\\alpha}**2 + \\alpha;"
+			"hidden" : true,
+			"source" : "We can use a Mathematica kernel to simplify all scalar expressions while\nusing all tensor capabilities of Cadabra, by simply running mathematica on\non expressions after every manipulation step."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n\tmap_mma(ex, \"FullSimplify\")"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The following shows this in action."
+				}
+			],
+			"hidden" : true,
+			"source" : "The following shows this in action."
 		},
 		{
 			"cell_origin" : "client",
@@ -21,11 +41,168 @@
 			[
 				{
 					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nRuntimeError: \nPlus[1, \\\\[UnknownGlyph]]\n                       ^\nBracket mismatch.\n19\n\n\\end{verbatim}}}"
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}1\\end{dmath*}"
 				}
 			],
-			"source" : "map_mma(ex);"
+			"source" : "ex:= \\cos{\\alpha}**2 + \\sin{\\alpha}**2;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}{\\left(\\cos{x}\\right)}^{2}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= \\int{ \\cos{x} \\sin{x}}{x};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p}::Indices(values={0,1,2});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n} A^{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A_{m n} A^{m n};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\left[A_{0 1} = \\sin{x},~\\discretionary{}{}{} A_{1 2} = x+\\cos{x}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "rl:={ A_{0 1} = \\sin{x}, A_{1 2} = \\cos{x} + x };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}1+{x}^{2}+2x \\cos{x}\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(ex, rl);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2x {\\left(-1+{x}^{2}\\right)}^{-1}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= 1/(x+1) + 1/(x-1);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Just to see how fast this is, let's do this in a loop."
+				}
+			],
+			"hidden" : true,
+			"source" : "Just to see how fast this is, let's do this in a loop."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "for i in range(1000):\n\tex:= 1/(x+1) + 1/(x-1) + \\sin{x}**2 + \\cos{x}**2."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}1+{\\left(-1+x\\right)}^{-1}+{\\left(1+x\\right)}^{-1}\\end{dmath*}"
+				}
+			],
+			"source" : "ex;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The same loop but now with the sympy backend is considerably slower:"
+				}
+			],
+			"hidden" : true,
+			"source" : "The same loop but now with the sympy backend is considerably slower:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n\tmap_sympy(ex, \"simplify\")"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\frac{2x}{{x}^{2}-1}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=1/(x+1) + 1/(x-1);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "for i in range(1000):\n\tex:= 1/(x+1) + 1/(x-1) + \\sin{x}**2 + \\cos{x}**2."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "ex;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "server.totals();"
 		},
 		{
 			"cell_origin" : "client",

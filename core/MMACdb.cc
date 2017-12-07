@@ -1,5 +1,5 @@
 
-#include "wstp.h"
+
 #include "Config.hh"
 #include <boost/python.hpp>
 #include "Functional.hh"
@@ -13,10 +13,13 @@
 
 using namespace cadabra;
 
-#define DEBUG 1
+WSLINK        MMA::lp = 0;
+WSEnvironment MMA::stdenv = 0;
 
-Ex::iterator apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, const std::string& args, 
-								  const std::string& method)
+// #define DEBUG 1
+
+Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap,
+									 const std::string& args, const std::string& method)
 	{
    // We first need to print the sub-expression using DisplaySympy,
  	// optionally with the head wrapped around it and the args added
@@ -50,36 +53,11 @@ Ex::iterator apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std
 	std::string result;
 	
 	// ---------------------
-	char argvi[4][80] = { "-linkname", Mathematica_KERNEL_EXECUTABLE " -mathlink", "-linkmode", "launch" };
-	char *argv[4];
-	for (size_t i=0; i<4; ++i)
-		argv[i] = argvi[i];
-	int  argc = 4;
-	
-	int errno;
-	WSEnvironment stdenv;
-	stdenv = WSInitialize((WSEnvironmentParameter)0);
-	if(stdenv==0) 
-		throw InternalError("Failed to initialise WSTP");
-
-	// std::cerr << "initialised" << std::endl;	
-
-	auto lp = WSOpenArgcArgv(stdenv, argc, argv, &errno);
-	if(lp==0 || errno!=WSEOK) {
-		// std::cerr << errno << ", " << WSErrorMessage(lp) << ";" << std::endl;
-		throw InternalError("Failed to open loopback link");
-		}
-
-	// std::cerr << "loopback link open" << std::endl;
-	
-	WSActivate(lp);
-
-	std::cerr << "activated" << std::endl;	
+	setup_link();
 
 	WSPutFunction(lp, "EvaluatePacket", 1L);		
 	WSPutFunction(lp, "ToString", 1L);
 	WSPutFunction(lp, "FullForm", 1L);		
-	WSPutFunction(lp, "FullSimplify", 1L);
 	WSPutFunction(lp, "ToExpression", 1L);
 	WSPutString(lp, str.str().c_str());
 	WSEndPacket(lp);
@@ -106,8 +84,6 @@ Ex::iterator apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std
 		// std::cerr << out << std::endl;
 		WSReleaseString(lp, out);
 		}
-	WSClose(lp);
-	WSDeinitialize(stdenv);
 	// -------------------------------
 
    // After that, we construct a new sub-expression from this string by using our
@@ -125,6 +101,8 @@ Ex::iterator apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std
 
 	ds.import(*parser.tree);
 
+	pre_clean_dispatch_deep(kernel, *parser.tree);
+   cleanup_dispatch_deep(kernel, *parser.tree);
 
 	Ex::iterator first=parser.tree->begin();
 	// std::cerr << "reparsed " << Ex(first) << std::endl;
@@ -133,3 +111,39 @@ Ex::iterator apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std
 	return it;
 	}
 
+void MMA::setup_link()
+	{
+	if(lp!=0) return; // already setup
+	
+	char argvi[4][80] = { "-linkname", Mathematica_KERNEL_EXECUTABLE " -mathlink", "-linkmode", "launch" };
+	char *argv[4];
+	for (size_t i=0; i<4; ++i)
+		argv[i] = argvi[i];
+	int  argc = 4;
+	
+	int errno;
+	stdenv = WSInitialize((WSEnvironmentParameter)0);
+	if(stdenv==0) 
+		throw InternalError("Failed to initialise WSTP");
+
+	// std::cerr << "initialised" << std::endl;	
+
+	lp = WSOpenArgcArgv(stdenv, argc, argv, &errno);
+	if(lp==0 || errno!=WSEOK) {
+		// std::cerr << errno << ", " << WSErrorMessage(lp) << ";" << std::endl;
+		throw InternalError("Failed to open loopback link");
+		}
+
+	// std::cerr << "loopback link open" << std::endl;
+	
+	WSActivate(lp);
+	}
+
+void MMA::teardown_link()
+	{
+	if(lp!=0) {
+		WSClose(lp);
+		WSDeinitialize(stdenv);
+		lp=0;
+		}
+	}
