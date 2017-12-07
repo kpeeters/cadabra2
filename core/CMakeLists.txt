@@ -114,6 +114,7 @@ set(LOCAL_SRC_FILES
   Combinatorics.cc
   Compare.cc
   DisplayBase.cc
+  DisplayMMA.cc  
   DisplayTeX.cc
   DisplaySympy.cc
   DisplayTerminal.cc
@@ -123,6 +124,7 @@ set(LOCAL_SRC_FILES
   Functional.cc
   IndexIterator.cc
   Kernel.cc
+  MMACdb.cc  
   Parser.cc
   PreClean.cc
   PreProcessor.cc
@@ -211,6 +213,7 @@ set(LOCAL_SRC_FILES
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
   algorithms/lr_tensor.cc
+  algorithms/map_mma.cc  
   algorithms/map_sympy.cc
   algorithms/order.cc
   algorithms/product_rule.cc
@@ -271,7 +274,9 @@ add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
 target_link_libraries(cadabra2python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-
+if(MATHEMATICA_FOUND)
+  target_link_libraries(cadabra2 ${Mathematica_WSTP_LIBRARIES})
+endif()
 
 install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE

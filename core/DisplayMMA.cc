@@ -11,81 +11,77 @@ DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e)
 	: DisplayBase(kernel, e)
 	{
 	symmap = {
-		{"\\cos", "cos"},
-		{"\\sin", "sin"},
-		{"\\tan", "tan"},
-		{"\\log", "log"},		
-		{"\\int", "integrate" },
+		{"\\cos", "Cos"},
+		{"\\sin", "Sin"},
+		{"\\tan", "Tan"},
+		{"\\log", "Log"},		
+		{"\\int", "Integrate" },
 		{"\\matrix", "Matrix" },
-		{"\\sum", "Sum" },
-		{"\\exp", "exp" },
-		{"\\sqrt", "sqrt" },
+		{"\\sum", "Plus" },
+		{"\\exp", "Exp" },
+		{"\\sqrt", "Sqrt" },
+		{"\\prod", "Times" },
+		{"\\pow",  "Power" },
+		{"\\frac", "Rational" },
 
-		{"\\infty", "sympy.oo"},
+		{"\\infty",   "Infinity"},
 
-		{"\\alpha",   "alpha" },
-		{"\\beta",    "bbeta" },  // beta seems to be reserved
-		{"\\gamma",   "ggamma" }, // gamma seems to be reserved 
-		{"\\delta",   "delta" },
-		{"\\epsilon", "epsilon" },
-		{"\\zeta",    "zeta" },
-		{"\\eta",     "eta" },
-		{"\\theta",   "theta" },
-		{"\\iota",    "iota" },
-		{"\\kappa",   "kappa" },
-		{"\\lambda",  "lamda" }, // lambda is reserved
-		{"\\mu",      "mu" },
-		{"\\nu",      "nu" },
-		{"\\xi",      "xi" },
-		{"\\omicron", "omicron" },
-		{"\\pi",      "pi" },
-		{"\\rho",     "rho" },
-		{"\\sigma",   "sigma" },
-		{"\\tau",     "tau" },
-		{"\\upsilon", "upsilon" },
-		{"\\phi",     "phi" },
-		{"\\varphi",  "varphi" },		
-		{"\\chi",     "chi" },
-		{"\\psi",     "psi" },
-		{"\\omega",   "omega" },
+		{"\\alpha",   "\\[Alpha]"   },
+		{"\\beta",    "\\[Beta]"    },
+		{"\\gamma",   "\\[Gamma]"   }, 
+		{"\\delta",   "\\[Delta]"   },
+		{"\\epsilon", "\\[Epsilon]" },
+		{"\\zeta",    "\\[Zeta]"    },
+		{"\\eta",     "\\[Eta]"     },
+		{"\\theta",   "\\[Theta]"   },
+		{"\\iota",    "\\[Iota]"    },
+		{"\\kappa",   "\\[Kappa]"   },
+		{"\\lambda",  "\\[Lamda]"   }, 
+		{"\\mu",      "\\[Mu]"      },
+		{"\\nu",      "\\[Nu]"      },
+		{"\\xi",      "\\[Xi]"      },
+		{"\\omicron", "\\[Omicron]" },
+		{"\\pi",      "\\[Pi]"      },
+		{"\\rho",     "\\[Rho]"     },
+		{"\\sigma",   "\\[Sigma]"   },
+		{"\\tau",     "\\[Tau]"     },
+		{"\\upsilon", "\\[Upsilon]" },
+		{"\\phi",     "\\[Phi]"     },
+		{"\\varphi",  "varphi"     },		
+		{"\\chi",     "\\[Chi]"     },
+		{"\\psi",     "\\[Psi]"     },
+		{"\\omega",   "\\[Omega]"   },
 
-		{"\\Alpha",   "Alpha" },
-		{"\\Beta",    "Beta" },
-		{"\\Gamma",   "Gamma" },
-		{"\\Delta",   "Delta" },
-		{"\\Epsilon", "Epsilon" },
-		{"\\Zeta",    "Zeta" },
-		{"\\Eta",     "Eta" },
-		{"\\Theta",   "Theta" },
-		{"\\Iota",    "Iota" },
-		{"\\Kappa",   "Kappa" },
-		{"\\Lambda",  "Lamda" },
-		{"\\Mu",      "Mu" },
-		{"\\Nu",      "Nu" },
-		{"\\Xi",      "Xi" },
-		{"\\Omicron", "Omicron" },
-		{"\\Pi",      "Pi" },
-		{"\\Rho",     "Rho" },
-		{"\\Sigma",   "Sigma" },
-		{"\\Tau",     "Tau" },
-		{"\\Upsilon", "Upsilon" },
-		{"\\Phi",     "Phi" },
-		{"\\Chi",     "Chi" },
-		{"\\Psi",     "Psi" },
-		{"\\Omega",   "Omega" },
-
-		{"\\partial", "Derivative"},
-		{"\\dot",     "dot"},
-		{"\\ddot",    "ddot"},
-
-		// A few symbols are reserved by sympy.
-		{"N", "sympyN"},
-		{"O", "sympyO"},
-		{"S", "sympyS"}
+		{"\\Alpha",   "\\[CapitalAlpha]"   },
+		{"\\Beta",    "\\[CapitalBeta]"    },
+		{"\\Gamma",   "\\[CapitalGamma]"   },
+		{"\\Delta",   "\\[CapitalDelta]"   },
+		{"\\Epsilon", "\\[CapitalEpsilon]" },
+		{"\\Zeta",    "\\[CapitalZeta]"    },
+		{"\\Eta",     "\\[CapitalEta]"     },
+		{"\\Theta",   "\\[CapitalTheta]"   },
+		{"\\Iota",    "\\[CapitalIota]"    },
+		{"\\Kappa",   "\\[CapitalKappa]"   },
+		{"\\Lambda",  "\\[CapitalLamda]"   },
+		{"\\Mu",      "\\[CapitalMu]"      },
+		{"\\Nu",      "\\[CapitalNu]"      },
+		{"\\Xi",      "\\[CapitalXi]"      },
+		{"\\Omicron", "\\[CapitalOmicron]" },
+		{"\\Pi",      "\\[CapitalPi]"      },
+		{"\\Rho",     "\\[CapitalRho]"     },
+		{"\\Sigma",   "\\[CapitalSigma]"   },
+		{"\\Tau",     "\\[CapitalTau]"     },
+		{"\\Upsilon", "\\[CapitalUpsilon]" },
+		{"\\Phi",     "\\[CapitalPhi]"     },
+		{"\\Chi",     "\\[CapitalChi]"     },
+		{"\\Psi",     "\\[CapitalPsi]"     },
+		{"\\Omega",   "\\[CapitalOmega]"   },
+						  
+		{"\\partial", "Derivative"}
 		};
 	}
 
-//TODO: complete this list (take from Sympy)
+//TODO: complete this list
 
 bool DisplayMMA::needs_brackets(Ex::iterator it)
 	{
@@ -167,7 +163,7 @@ void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int skip)
 
 	Ex::sibling_iterator ch=tree.begin(it);
 	if(ch!=tree.end(it) || dep!=0) {
-		str << "(";
+		str << "[";
 		bool first=true;
 		while(ch!=tree.end(it)) {
 			if(first) first=false;
@@ -198,7 +194,7 @@ void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int skip)
 //			DisplayMMA ds(kernel, deplist);
 //			ds.output(str);
 			}
-		str << ")";
+		str << "]";
 		}
 	}
 
@@ -229,10 +225,10 @@ void DisplayMMA::print_multiplier(std::ostream& str, Ex::iterator it)
 void DisplayMMA::print_opening_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << ")";   break;
-		case str_node::b_pointy: str << "\\<"; break;
-		case str_node::b_curly:  str << "\\{"; break;
-		case str_node::b_round:  str << "(";   break;
+		case str_node::b_pointy: 
+		case str_node::b_curly:  throw NotYetImplemented("curly/pointy bracket type");
+		case str_node::b_none:   str << "[";   break;
+		case str_node::b_round:  str << "[";   break;
 		case str_node::b_square: str << "[";   break;
 		default :	return;
 		}
@@ -241,10 +237,10 @@ void DisplayMMA::print_opening_bracket(std::ostream& str, str_node::bracket_t br
 void DisplayMMA::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << ")";   break;
-		case str_node::b_pointy: str << "\\>"; break;
-		case str_node::b_curly:  str << "\\}"; break;
-		case str_node::b_round:  str << ")";   break;
+		case str_node::b_pointy: 
+		case str_node::b_curly:  throw NotYetImplemented("curly/pointy bracket type");
+		case str_node::b_none:   str << "]";   break;
+		case str_node::b_round:  str << "]";   break;
 		case str_node::b_square: str << "]";   break;
 		default :	return;
 		}
@@ -253,11 +249,11 @@ void DisplayMMA::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 void DisplayMMA::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
 	{
 	switch(pr) {
-		case str_node::p_super:    str << "^"; break;
-		case str_node::p_sub:      str << "_"; break;
-		case str_node::p_property: str << "$"; break;
-		case str_node::p_exponent: str << "**"; break;
-		case str_node::p_none: break;
+		case str_node::p_super:    
+		case str_node::p_sub:      throw NotYetImplemented("MMA print of indices");
+		case str_node::p_property: throw NotYetImplemented("MMA print of properties");
+		case str_node::p_exponent: str << "^"; break;
+		case str_node::p_none:       break;
 		case str_node::p_components: break;
 		}
 	}
@@ -402,7 +398,7 @@ void DisplayMMA::print_powlike(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	dispatch(str, sib);
-	str << "**(";
+	str << "^(";
 	++sib;
 	dispatch(str, sib);
 	str << ")";
@@ -412,7 +408,7 @@ void DisplayMMA::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	str << symmap[*it->name] << "(";
+	str << symmap[*it->name] << "[";
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
@@ -420,14 +416,14 @@ void DisplayMMA::print_intlike(std::ostream& str, Ex::iterator it)
 		str << ", ";
 		dispatch(str, sib);
 		}
-	str << ")";
+	str << "]";
 	}
 
 void DisplayMMA::print_equalitylike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << " = ";
+	str << " == ";
 	++sib;
 	if(sib==tree.end(it)) 
 		throw ConsistencyException("Found equals node with only one child node.");
@@ -459,7 +455,7 @@ void DisplayMMA::print_partial(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 
-	str << "diff(";
+	str << "Derivative[";
 	Ex::sibling_iterator sib=tree.begin(it);
 	while(sib!=tree.end(it)) {
 		if(sib->fl.parent_rel==str_node::p_none) {
@@ -476,7 +472,7 @@ void DisplayMMA::print_partial(std::ostream& str, Ex::iterator it)
 			}
 		++sib;
 		}
-	str << ")";
+	str << "]";
 	}
 
 void DisplayMMA::print_matrix(std::ostream& str, Ex::iterator it)

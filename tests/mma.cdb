@@ -1,0 +1,20 @@
+
+# Tests for the connection to a Mathematica kernel.
+
+def test01():
+    ex:= \alpha \beta \cos{\gamma \Delta}:
+    out=ex.mma_form()
+    tst="\[Alpha]*\[Beta]*Cos[\[Gamma]*\[CapitalDelta]]"
+    assert(out==tst)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+ex:= \cos{\alpha}**2 + \sin{2 \alpha}**2;
+map_mma(ex);
+ex:= \cos{x}**2 + \sin{2 x}**2;
+map_mma(ex);
+ex:= \int{\cos{x}**2}{x};
+map_mma(ex);
+    
