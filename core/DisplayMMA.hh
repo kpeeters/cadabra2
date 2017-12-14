@@ -29,6 +29,8 @@ class DisplayMMA : public DisplayBase {
 
 		void import(Ex&);
 
+		std::string preparse_import(const std::string&);
+
 	protected:
 		virtual bool needs_brackets(Ex::iterator it) override;
 
@@ -76,7 +78,13 @@ class DisplayMMA : public DisplayBase {
 		bool children_have_brackets(Ex::iterator ch) const;
 
 		/// Map from Cadabra symbols to Mathematica symbols.
-		std::map<std::string, std::string> symmap;
+		/// This is a bit tricky because MathLink does not pass
+		/// \[Alpha] and friends transparently. So we feed it UTF8
+		/// α and so on, but then we get \[Alpha] back, and that
+		/// needs to be regex-replaced before we feed it to our
+		/// parser as ours does not swallow that kind of bracketing.
+		std::map<std::string, std::string>      symmap;
+		std::multimap<std::string, std::string> regex_map;		
 
 		/// Map from symbols which have had dependencies added
 		/// to an expression containing these dependencies.

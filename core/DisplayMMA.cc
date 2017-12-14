@@ -4,6 +4,7 @@
 #include "DisplayMMA.hh"
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
+#include <regex>
 
 using namespace cadabra;
 
@@ -11,9 +12,21 @@ DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e)
 	: DisplayBase(kernel, e)
 	{
 	symmap = {
-		{"\\cos", "Cos"},
-		{"\\sin", "Sin"},
-		{"\\tan", "Tan"},
+		{"\\cos",  "Cos"},
+		{"\\sin",  "Sin"},
+		{"\\tan",  "Tan"},
+		{"\\sec",  "Sec"},
+		{"\\csc",  "Csc"},
+		{"\\cot",  "Cot"},
+		
+		{"\\cosh", "Cosh"},
+		{"\\sinh", "Sinh"},
+		{"\\tanh", "Tanh"},
+		
+		{"\\scsh", "Sech"},
+		{"\\csch", "Csch"},		
+		{"\\coth", "Coth"},
+		
 		{"\\log", "Log"},		
 		{"\\int", "Integrate" },
 		{"\\matrix", "Matrix" },
@@ -25,7 +38,61 @@ DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e)
 		{"\\frac", "Rational" },
 
 		{"\\infty",   "Infinity"},
+		
+		{"\\alpha",   "α" },
+		{"\\beta",    "β" },  // beta seems to be reserved
+		{"\\gamma",   "γ" }, // gamma seems to be reserved 
+		{"\\delta",   "δ" },
+		{"\\epsilon", "ε" },
+		{"\\zeta",    "ζ" },
+		{"\\eta",     "η" },
+		{"\\theta",   "θ" },
+		{"\\iota",    "ι" },
+		{"\\kappa",   "κ" },
+		{"\\lambda",  "λ" }, // lambda is reserved
+		{"\\mu",      "μ" },
+		{"\\nu",      "ν" },
+		{"\\xi",      "ξ" },
+		{"\\omicron", "ο" },
+		{"\\pi",      "π" },
+		{"\\rho",     "ρ" },
+		{"\\sigma",   "σ" },
+		{"\\tau",     "τ" },
+		{"\\upsilon", "υ" },
+		{"\\phi",     "ϕ" },
+		{"\\chi",     "χ" },
+		{"\\psi",     "ψ" },
+		{"\\omega",   "ω" },
 
+		{"\\Alpha",   "Α" },
+		{"\\Beta",    "Β" },
+		{"\\Gamma",   "Γ" },
+		{"\\Delta",   "Δ" },
+		{"\\Epsilon", "Ε" },
+		{"\\Zeta",    "Ζ" },
+		{"\\Eta",     "Η" },
+		{"\\Theta",   "ϴ" },
+		{"\\Iota",    "Ι" },
+		{"\\Kappa",   "Κ" },
+		{"\\Lambda",  "Λ" },
+		{"\\Mu",      "Μ" },
+		{"\\Nu",      "Ν" },
+		{"\\Xi",      "Ξ" },
+		{"\\Omicron", "Ο" },
+		{"\\Pi",      "Π" },
+		{"\\Rho",     "Ρ" },
+		{"\\Sigma",   "Σ" },
+		{"\\Tau",     "Τ" },
+		{"\\Upsilon", "Υ" },
+		{"\\Phi",     "Φ" },
+		{"\\Chi",     "Χ" },
+		{"\\Psi",     "Ψ" },
+		{"\\Omega",   "Ω" },
+						  
+		{"\\partial", "Derivative"}
+		};
+
+	regex_map = {
 		{"\\alpha",   "\\[Alpha]"   },
 		{"\\beta",    "\\[Beta]"    },
 		{"\\gamma",   "\\[Gamma]"   }, 
@@ -42,12 +109,13 @@ DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e)
 		{"\\xi",      "\\[Xi]"      },
 		{"\\omicron", "\\[Omicron]" },
 		{"\\pi",      "\\[Pi]"      },
+		{"\\pi",      "Pi"          },
 		{"\\rho",     "\\[Rho]"     },
 		{"\\sigma",   "\\[Sigma]"   },
 		{"\\tau",     "\\[Tau]"     },
 		{"\\upsilon", "\\[Upsilon]" },
 		{"\\phi",     "\\[Phi]"     },
-		{"\\varphi",  "varphi"     },		
+		{"\\varphi",  "\\[CurlyPhi]"},		
 		{"\\chi",     "\\[Chi]"     },
 		{"\\psi",     "\\[Psi]"     },
 		{"\\omega",   "\\[Omega]"   },
@@ -76,9 +144,7 @@ DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e)
 		{"\\Chi",     "\\[CapitalChi]"     },
 		{"\\Psi",     "\\[CapitalPsi]"     },
 		{"\\Omega",   "\\[CapitalOmega]"   },
-						  
-		{"\\partial", "Derivative"}
-		};
+	};
 	}
 
 //TODO: complete this list
@@ -146,7 +212,7 @@ void DisplayMMA::print_other(std::ostream& str, Ex::iterator it)
 
 void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
-	// Sympy has no notion of children with different parent relations; it's all 
+	// Mathematica has no notion of children with different parent relations; it's all 
 	// functions of functions kind of stuff. What we will do is print upper and
 	// lower indices as 'UP(..)' and 'DN(..)' type arguments, and then convert
 	// them back later.
@@ -169,14 +235,14 @@ void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int skip)
 			if(first) first=false;
 			else      str << ", ";
 			if(ch->fl.parent_rel==str_node::p_super) 
-				str << "UP(";
+				str << "UP[";
 			if(ch->fl.parent_rel==str_node::p_sub) 
-				str << "DN(";
+				str << "DN[";
 
 			dispatch(str, ch);
 
 			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub) 
-				str << ")";
+				str << "]";
 			++ch;
 			}
 		if(dep) {
@@ -281,7 +347,7 @@ void DisplayMMA::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
-	str << "(";
+	str << "{";
 	while(sib!=tree.end(it)) {
 		if(first)
 			first=false;
@@ -290,19 +356,17 @@ void DisplayMMA::print_commalike(std::ostream& str, Ex::iterator it)
 		dispatch(str, sib);
 		++sib;
 		}
-	str << ")";
+	str << "}";
 	//print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
 	}
 
 void DisplayMMA::print_arrowlike(std::ostream& str, Ex::iterator it) 
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
-	str << "rule(";
 	dispatch(str, sib);
-	str << ", ";
+	str << " -> ";
 	++sib;
 	dispatch(str, sib);
-	str << ")";
 	}
 
 void DisplayMMA::print_fraclike(std::ostream& str, Ex::iterator it)
@@ -455,7 +519,7 @@ void DisplayMMA::print_partial(std::ostream& str, Ex::iterator it)
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 
-	str << "Derivative[";
+	str << "D[";
 	Ex::sibling_iterator sib=tree.begin(it);
 	while(sib!=tree.end(it)) {
 		if(sib->fl.parent_rel==str_node::p_none) {
@@ -502,6 +566,15 @@ bool DisplayMMA::children_have_brackets(Ex::iterator ch) const
 	if(childbr==str_node::b_none || childbr==str_node::b_no)
 		return false;
 	else return true;
+	}
+
+std::string DisplayMMA::preparse_import(const std::string& in)
+	{
+	std::string ret = in;
+	for(auto& r: regex_map) {
+		ret = std::regex_replace(ret, std::regex(r.second), r.first);
+		}
+	return ret;
 	}
 
 void DisplayMMA::import(Ex& ex)

@@ -72,6 +72,10 @@ set(RTESTS
   vary
   young
   )
+find_package(Mathematica COMPONENTS WSTP REQUIRED)
+if(MATHEMATICA_FOUND)
+  set(RTESTS ${RTESTS} mma)
+endif()
 foreach(RTEST ${RTESTS})
   add_test(${RTEST}  ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/${RTEST}.cdb)
   # We need to set the Python path so that we pick up the correct cadabra2.so Python module

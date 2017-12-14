@@ -16,7 +16,7 @@ using namespace cadabra;
 WSLINK        MMA::lp = 0;
 WSEnvironment MMA::stdenv = 0;
 
-// #define DEBUG 1
+#define DEBUG 1
 
 Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap,
 									 const std::string& args, const std::string& method)
@@ -59,7 +59,7 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 	WSPutFunction(lp, "ToString", 1L);
 	WSPutFunction(lp, "FullForm", 1L);		
 	WSPutFunction(lp, "ToExpression", 1L);
-	WSPutString(lp, str.str().c_str());
+	WSPutUTF8String(lp, (const unsigned char *)str.str().c_str(), str.str().size());
 	WSEndPacket(lp);
 	WSFlush(lp);
 
@@ -81,14 +81,22 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 		}
 	else {
 		result=out;
-		// std::cerr << out << std::endl;
 		WSReleaseString(lp, out);
+		if(result=="$Failed") {
+			throw RuntimeException("Mathematica failed to handle expression.");
+			}
 		}
 	// -------------------------------
 
    // After that, we construct a new sub-expression from this string by using our
    // own parser, and replace the original.
 
+#ifdef DEBUG
+	std::cerr << "result: " << result << std::endl;
+#endif
+	
+	result = ds.preparse_import(result);
+	
 	auto ptr = std::make_shared<Ex>();
 	cadabra::Parser parser(ptr);
 	std::stringstream istr(result);
@@ -128,10 +136,19 @@ void MMA::setup_link()
 
 	// std::cerr << "initialised" << std::endl;	
 
-	lp = WSOpenArgcArgv(stdenv, argc, argv, &errno);
-	if(lp==0 || errno!=WSEOK) {
-		// std::cerr << errno << ", " << WSErrorMessage(lp) << ";" << std::endl;
-		throw InternalError("Failed to open loopback link");
+	try {
+		lp = WSOpenArgcArgv(stdenv, argc, argv, &errno);
+		if(lp==0 || errno!=WSEOK) {
+			// std::cerr << errno << ", " << WSErrorMessage(lp) << ";" << std::endl;
+			lp=0;
+			WSDeinitialize(stdenv);
+			throw InternalError("Failed to open Mathematica link");
+			}
+		}
+	catch(std::exception& ex) {
+		lp=0;
+		WSDeinitialize(stdenv);		
+		throw InternalError("Failed to open Mathematica link");
 		}
 
 	// std::cerr << "loopback link open" << std::endl;
