@@ -156,7 +156,7 @@ bool DisplayMMA::needs_brackets(Ex::iterator it)
 	if(tree.is_valid(tree.parent(it))==false) return false;
 
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
-		if(*it->name=="\\sum") return true;
+		if(*it->name=="\\sum" || *it->name=="\\prod") return true;
 		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) {

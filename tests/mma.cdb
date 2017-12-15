@@ -36,3 +36,8 @@ def test03():
     tst:= 2 r + \cos{r} - @(ex);
     assert(tst==0)
     print("Test 03 passed")
+
+
+ex:= (a*\cos{\theta})**2;
+print(tree(ex))
+map_mma(ex);
