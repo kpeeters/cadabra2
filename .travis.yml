@@ -27,7 +27,7 @@ matrix:
        compiler: gcc
 script:
    - cmake --build .
-   - ctest -VV -S .
+   - ctest -VV .
 
 before_script:
    - mkdir build
