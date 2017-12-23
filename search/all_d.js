@@ -32,7 +32,6 @@ var searchData=
   ['map_5fmma',['map_mma',['../classcadabra_1_1map__mma.html',1,'cadabra']]],
   ['map_5fmma_2ecc',['map_mma.cc',['../map__mma_8cc.html',1,'']]],
   ['map_5fmma_2ehh',['map_mma.hh',['../map__mma_8hh.html',1,'']]],
-  ['map_5fmma_5fwrapper',['map_mma_wrapper',['../PythonCdb_8cc.html#a69f1b34aeec34b2506e4a7b32a3fbe76',1,'PythonCdb.cc']]],
   ['map_5fsympy',['map_sympy',['../classcadabra_1_1map__sympy.html',1,'cadabra']]],
   ['map_5fsympy',['map_sympy',['../classcadabra_1_1map__sympy.html#a789a7dfb70abb88045c1bb32e049a45d',1,'cadabra::map_sympy']]],
   ['map_5fsympy_2ecc',['map_sympy.cc',['../map__sympy_8cc.html',1,'']]],

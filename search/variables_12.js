@@ -21,7 +21,7 @@ var searchData=
   ['settings',['settings',['../classcadabra_1_1NotebookWindow.html#aec3e22d7901442003088a2e9f2a4c022',1,'cadabra::NotebookWindow']]],
   ['sh_5f',['sh_',['../classcombin_1_1symmetriser.html#a69c91829e3a1271dd1552cc2068994a1',1,'combin::symmetriser']]],
   ['show_5fhide_5frequested',['show_hide_requested',['../classcadabra_1_1TeXView.html#afab333d2a75b26586a8800074f872239',1,'cadabra::TeXView']]],
-  ['sigma',['sigma',['../Symbols_8cc.html#affc6d77f4c3b06c4a5736ae5fe2442fb',1,'sigma():&#160;Symbols.cc'],['../Symbols_8cc.html#a21f4a8dded771b8d4f3369996219f29c',1,'Sigma():&#160;Symbols.cc']]],
+  ['sigma',['Sigma',['../Symbols_8cc.html#a21f4a8dded771b8d4f3369996219f29c',1,'Sigma():&#160;Symbols.cc'],['../Symbols_8cc.html#affc6d77f4c3b06c4a5736ae5fe2442fb',1,'sigma():&#160;Symbols.cc']]],
   ['sign',['sign',['../classcadabra_1_1sym.html#a2ebde39a8c22bd23d3983d0444c18ca0',1,'cadabra::sym']]],
   ['signal_5fwindow',['signal_window',['../Cadabra_8cc.html#a0616c791404c9966d3dcfb08e124376d',1,'Cadabra.cc']]],
   ['signature',['signature',['../classcadabra_1_1epsilon__to__delta.html#a1d554b047311d0a3eb2208d02bcd6cae',1,'cadabra::epsilon_to_delta::signature()'],['../classcadabra_1_1InverseMetric.html#a9544f2e9f9469f1d59ed5ae2633d041f',1,'cadabra::InverseMetric::signature()'],['../classcadabra_1_1Metric.html#a17d301e7934905c0e8df396f52b55966',1,'cadabra::Metric::signature()']]],

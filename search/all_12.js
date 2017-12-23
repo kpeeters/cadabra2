@@ -69,7 +69,7 @@ var searchData=
   ['rewrite_5findices',['rewrite_indices',['../classcadabra_1_1rewrite__indices.html',1,'cadabra']]],
   ['rewrite_5findices_2ecc',['rewrite_indices.cc',['../rewrite__indices_8cc.html',1,'']]],
   ['rewrite_5findices_2ehh',['rewrite_indices.hh',['../rewrite__indices_8hh.html',1,'']]],
-  ['rho',['rho',['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc'],['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc']]],
+  ['rho',['Rho',['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc'],['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc']]],
   ['rhs',['rhs',['../PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d',1,'PythonCdb.cc']]],
   ['rhs_5fcontains_5fdummies',['rhs_contains_dummies',['../classcadabra_1_1substitute.html#aa6588285835faccf09a121e0e9efe133',1,'cadabra::substitute']]],
   ['riemanntensor',['RiemannTensor',['../classcadabra_1_1RiemannTensor.html',1,'cadabra']]],

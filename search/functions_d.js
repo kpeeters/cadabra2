@@ -6,7 +6,6 @@ var searchData=
   ['make_5flist',['make_list',['../group__core.html#gad925ab5545854ee596c218738f11b013',1,'cadabra']]],
   ['make_5fx_5fand_5finject_5fy',['make_x_and_inject_y',['../ptest_8cc.html#a87a58683149353edf4ee2fa9ab715f61',1,'ptest.cc']]],
   ['map_5fmma',['map_mma',['../classcadabra_1_1map__mma.html#a3b3b0c0c85de31269159340beb0c9a60',1,'cadabra::map_mma']]],
-  ['map_5fmma_5fwrapper',['map_mma_wrapper',['../PythonCdb_8cc.html#a69f1b34aeec34b2506e4a7b32a3fbe76',1,'PythonCdb.cc']]],
   ['map_5fsympy',['map_sympy',['../classcadabra_1_1map__sympy.html#a789a7dfb70abb88045c1bb32e049a45d',1,'cadabra::map_sympy']]],
   ['map_5fsympy_5fwrapper',['map_sympy_wrapper',['../PythonCdb_8cc.html#a257b7ec0e566fe19e70d8d66be8db1e2',1,'PythonCdb.cc']]],
   ['master_5finsert',['master_insert',['../classcadabra_1_1Properties.html#a0d54a20c7052dac5d2dc362276f98a76',1,'cadabra::Properties']]],
