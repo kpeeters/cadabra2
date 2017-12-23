@@ -1543,16 +1543,21 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	{
 	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
 
-	if(selected) {
-		selected->outbox->set_state(Gtk::STATE_NORMAL);
-		if(selected==vis) {
-			refClipboard->set_text("");
-			selected=0;
-			return true;
-			}
+//	if(selected) {
+//		selected->outbox->set_state(Gtk::STATE_NORMAL);
+//		if(selected==vis) {
+//			refClipboard->set_text("");
+//			selected=0;
+//			return true;
+//			}
+//		}
+//	selected=vis;
+
+	// Colour the background of the selected cell, in all canvasses.
+	for(unsigned int i=0; i<xc.canvasses.size(); ++i) {
+			xc.canvasses[i]->remove_cell(*fnd);		
+		vis->outbox->set_state(Gtk::STATE_PRELIGHT);
 		}
-	selected=vis;
-	vis->outbox->set_state(Gtk::STATE_PRELIGHT);
 
 	std::string cpystring=vis->datacell->texbuf->tex_source->get_text();
 	size_t pos=cpystring.find("\\specialcolon{}");
