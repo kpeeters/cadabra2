@@ -30,7 +30,6 @@ endif()
 
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
-message("${CMAKE_MODULE_PATH}")
 
 enable_testing()
 

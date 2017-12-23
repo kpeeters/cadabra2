@@ -22,7 +22,7 @@ matrix:
        compiler: gcc
 script:
    - cmake --build .
-   - travis_wait 20 ctest -V .
+   - travis_wait 30 ctest -V .
 
 before_script:
    - mkdir build
