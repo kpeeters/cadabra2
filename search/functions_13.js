@@ -30,6 +30,7 @@ var searchData=
   ['set_5fuser_5fdetails',['set_user_details',['../classcadabra_1_1DocumentThread.html#a6d56902706c0536f555829ddcf105019',1,'cadabra::DocumentThread']]],
   ['set_5fwait_5ftimeout',['set_wait_timeout',['../classexec__stream__t.html#aa74eb70695cdbff39d06140a79879a4c',1,'exec_stream_t']]],
   ['setup_5fcss_5fprovider',['setup_css_provider',['../classcadabra_1_1NotebookWindow.html#a64806a8680ce409e6a0e978355a5a7ca',1,'cadabra::NotebookWindow']]],
+  ['setup_5flink',['setup_link',['../classMMA.html#ab9350e01c3c129965370aec80eb21320',1,'MMA']]],
   ['shift_5fenter_5fpressed',['shift_enter_pressed',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a4b8523ea3a20e16b90d0032731e746f2',1,'cadabra::CodeInput::exp_input_tv']]],
   ['should_5fswap',['should_swap',['../classcadabra_1_1Ex__comparator.html#a6e54572a5991bcff63160c876b9f88fa',1,'cadabra::Ex_comparator::should_swap()'],['../classcadabra_1_1sort__sum.html#a730bbe1c54b9480ae8b6aec161e68237',1,'cadabra::sort_sum::should_swap()']]],
   ['show_5fand_5fthrow_5f',['show_and_throw_',['../classpreprocessor.html#ac7ba3109bf906b8e60a9e00780548740',1,'preprocessor']]],

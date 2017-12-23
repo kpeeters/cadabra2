@@ -100,7 +100,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Class to display expressions in a format that Sympy can parse.  
+<p>Class to display expressions in a format that Mathematica can parse.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -147,6 +147,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayBase.html">DisplayBase</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all display classes.  <a href="classcadabra_1_1DisplayBase.html#details">More...</a><br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayMMA.html">DisplayMMA</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplaySympy.html">DisplaySympy</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,6 +267,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1keep__terms.html">keep_terms</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1lr__tensor.html">lr_tensor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1map__mma.html">map_mma</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functionality to act with Mathematica on all scalar parts of an expression, and keep the result in-place.  <a href="classcadabra_1_1map__mma.html#details">More...</a><br/></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1map__sympy.html">map_sympy</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Functionality to act with Sympy on all scalar parts of an expression, and keep the result in-place.  <a href="classcadabra_1_1map__sympy.html#details">More...</a><br/></td></tr>
@@ -555,7 +560,7 @@ Functions</h2></td></tr>
 <tr class="separator:aea64eaef5b558ac08afe8245b4e70469"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33c6dea9f93fcf4b738dc04f8ecd4d74"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a33c6dea9f93fcf4b738dc04f8ecd4d74">subtree_exact_equal</a> (const <a class="el" href="classcadabra_1_1Properties.html">Properties</a> *properties, Ex::iterator <a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, Ex::iterator two, int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards)</td></tr>
 <tr class="separator:a33c6dea9f93fcf4b738dc04f8ecd4d74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cf50024f3044df922f1839e0140f21e"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a4cf50024f3044df922f1839e0140f21e">unichar</a> (<a class="el" href="DisplaySympy_8hh.html#a0da26994377a47c9c53069f9dfb9e670">kunichar</a> c)</td></tr>
+<tr class="memitem:a4cf50024f3044df922f1839e0140f21e"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#a4cf50024f3044df922f1839e0140f21e">unichar</a> (<a class="el" href="DisplayMMA_8hh.html#a0da26994377a47c9c53069f9dfb9e670">kunichar</a> c)</td></tr>
 <tr class="separator:a4cf50024f3044df922f1839e0140f21e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af388a48091c5194e6732b924615cc336"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecadabra.html#af388a48091c5194e6732b924615cc336">operator&lt;</a> (const <a class="el" href="structcadabra_1_1exchange_1_1tensor__type__t.html">exchange::tensor_type_t</a> &amp;<a class="el" href="namespacecadabra.html#ac4a7ba5360aeda7798d431720f40a099">one</a>, const <a class="el" href="structcadabra_1_1exchange_1_1tensor__type__t.html">exchange::tensor_type_t</a> &amp;two)</td></tr>
 <tr class="separator:af388a48091c5194e6732b924615cc336"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -651,7 +656,7 @@ Variables</h2></td></tr>
 <tr class="separator:a0726aa4388453285dbf8d88ac11a5f84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class to display expressions in a format that Sympy can parse. </p>
+<div class="textblock"><p>Class to display expressions in a format that Mathematica can parse. </p>
 <p>Evaluate a tensorial expression to components, performing all dummy index sums.</p>
 <p>Handle the entire preclean stage, which turns a parsed expression into an expression which satisfies the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> conventions.</p>
 <p><a class="el" href="classcadabra_1_1Parser.html">Parser</a> module, which takes the string output of the preprocessor.hh module and turns it into an <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> expression tree.</p>
@@ -659,6 +664,8 @@ Variables</h2></td></tr>
 <p>Functions to handle the exchange properties of two or more symbols in a product.</p>
 <p>Class to handle display of expressions using LaTeX notation.</p>
 <p>Class to display expressions to the terminal.</p>
+<p>Class to display expressions in a format that Sympy can parse.</p>
+<p>Will throw an exception if a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object cannot be understood by Mathematica. Can also convert expressions back to <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> notation.</p>
 <p>Will throw an exception if a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object cannot be understood by Sympy. Can also convert expressions back to <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> notation. This class contains the printing logic that you see in action when you call the '<b>sympy</b>' method on an <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object.</p>
 <p>This is used in the PythonCdb bridge to provide 'str' type python printing for <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> objects. The cadabra2 command line application uses this class for all its output. This class does not necessarily produce output which is readable by sympy; for that, use the <a class="el" href="classcadabra_1_1DisplaySympy.html">DisplaySympy</a> class (as an example, partial derivatives will display using a LaTeX notation using the present class, but be printed as 'sympy.diff' by the <a class="el" href="classcadabra_1_1DisplaySympy.html">DisplaySympy</a> class).</p>
 <p>This is a very non-local bit of logic, in the sense that it will try to look around the property assignments in order to figure out the best way to print any given object. See the <a class="el" href="classcadabra_1_1DisplayTeX.html#a1ff43a244bdd8f1212259b7d3ebd9052" title="For every object encountered, dispatch will figure out the most appropriate way to convert it into a ...">DisplayTeX::dispatch</a> method to see how this works in more detail.</p>
@@ -2433,7 +2440,7 @@ Variables</h2></td></tr>
         <tr>
           <td class="memname">const char * cadabra::unichar </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="DisplaySympy_8hh.html#a0da26994377a47c9c53069f9dfb9e670">kunichar</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="DisplayMMA_8hh.html#a0da26994377a47c9c53069f9dfb9e670">kunichar</a>&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>
           <td></td>
         </tr>
@@ -2486,7 +2493,7 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Nov 26 2017 19:44:25 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 23 2017 16:48:42 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

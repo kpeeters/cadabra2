@@ -12,6 +12,7 @@ var searchData=
   ['differentialformbase',['DifferentialFormBase',['../classcadabra_1_1DifferentialFormBase.html',1,'cadabra']]],
   ['diracbar',['DiracBar',['../classcadabra_1_1DiracBar.html',1,'cadabra']]],
   ['displaybase',['DisplayBase',['../classcadabra_1_1DisplayBase.html',1,'cadabra']]],
+  ['displaymma',['DisplayMMA',['../classcadabra_1_1DisplayMMA.html',1,'cadabra']]],
   ['displaysympy',['DisplaySympy',['../classcadabra_1_1DisplaySympy.html',1,'cadabra']]],
   ['displayterminal',['DisplayTerminal',['../classcadabra_1_1DisplayTerminal.html',1,'cadabra']]],
   ['displaytex',['DisplayTeX',['../classcadabra_1_1DisplayTeX.html',1,'cadabra']]],

@@ -21,7 +21,7 @@ var searchData=
   ['update_5fstate',['update_state',['../classcadabra_1_1Ex.html#af41a6f14e3e661cfc7b337745aa54f3b',1,'cadabra::Ex']]],
   ['update_5ftitle',['update_title',['../classcadabra_1_1NotebookWindow.html#a62613a40e82b552f57183c8e8f6fe266',1,'cadabra::NotebookWindow']]],
   ['update_5fweights',['update_weights',['../classcombin_1_1combinations__base.html#ab62eeb73ecf208b2bf3d52e9bcd7619c',1,'combin::combinations_base']]],
-  ['upsilon',['Upsilon',['../Symbols_8cc.html#a3746fac64f253791492c1e3e79fd3db4',1,'Upsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#af4256ce339bc9b51e8a8eba595b96c72',1,'upsilon():&#160;Symbols.cc']]],
+  ['upsilon',['upsilon',['../Symbols_8cc.html#af4256ce339bc9b51e8a8eba595b96c72',1,'upsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#a3746fac64f253791492c1e3e79fd3db4',1,'Upsilon():&#160;Symbols.cc']]],
   ['use_5fgeneralised_5fdelta_5f',['use_generalised_delta_',['../classcadabra_1_1join__gamma.html#a896d386de915f28e1a13cc46b5ad9234',1,'cadabra::join_gamma']]],
   ['use_5frule',['use_rule',['../classcadabra_1_1substitute.html#a548bb5a4f3dba54ca5a29537e4029c92',1,'cadabra::substitute']]],
   ['useconds',['useconds',['../classStopwatch.html#a07014d82fca032a130b93e9f434030bf',1,'Stopwatch']]],

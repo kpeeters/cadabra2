@@ -22,6 +22,8 @@ var searchData=
   ['diracbar_2ehh',['DiracBar.hh',['../DiracBar_8hh.html',1,'']]],
   ['displaybase_2ecc',['DisplayBase.cc',['../DisplayBase_8cc.html',1,'']]],
   ['displaybase_2ehh',['DisplayBase.hh',['../DisplayBase_8hh.html',1,'']]],
+  ['displaymma_2ecc',['DisplayMMA.cc',['../DisplayMMA_8cc.html',1,'']]],
+  ['displaymma_2ehh',['DisplayMMA.hh',['../DisplayMMA_8hh.html',1,'']]],
   ['displaysympy_2ecc',['DisplaySympy.cc',['../DisplaySympy_8cc.html',1,'']]],
   ['displaysympy_2ehh',['DisplaySympy.hh',['../DisplaySympy_8hh.html',1,'']]],
   ['displayterminal_2ecc',['DisplayTerminal.cc',['../DisplayTerminal_8cc.html',1,'']]],

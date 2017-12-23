@@ -18,6 +18,7 @@ var searchData=
   ['test_5fpreprocessor_2ecc',['test_preprocessor.cc',['../test__preprocessor_8cc.html',1,'']]],
   ['test_5ftalk_5fto_5fserver_2ecc',['test_talk_to_server.cc',['../test__talk__to__server_8cc.html',1,'']]],
   ['test_5ftex_2ecc',['test_tex.cc',['../test__tex_8cc.html',1,'']]],
+  ['test_5fwstp_2ecc',['test_wstp.cc',['../test__wstp_8cc.html',1,'']]],
   ['texengine_2ecc',['TeXEngine.cc',['../TeXEngine_8cc.html',1,'']]],
   ['texengine_2ehh',['TeXEngine.hh',['../TeXEngine_8hh.html',1,'']]],
   ['texview_2ecc',['TeXView.cc',['../TeXView_8cc.html',1,'']]],

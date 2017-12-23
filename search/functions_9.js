@@ -5,7 +5,7 @@ var searchData=
   ['idle_5fhandler',['idle_handler',['../classcadabra_1_1NotebookWindow.html#aad4ca4338b33b1390a7d2f4722e5447c',1,'cadabra::NotebookWindow']]],
   ['image',['image',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#ad67422a688510c88b70a08d6f514019e',1,'cadabra::TeXEngine::TeXRequest']]],
   ['imageview',['ImageView',['../classcadabra_1_1ImageView.html#a8382a8ee74d8ff437f0be6cffc2ba957',1,'cadabra::ImageView']]],
-  ['import',['import',['../classcadabra_1_1DisplaySympy.html#a58e3de402442e6b633fc9976ab596046',1,'cadabra::DisplaySympy']]],
+  ['import',['import',['../classcadabra_1_1DisplayMMA.html#a2685588d308699d5d20cde00874262e5',1,'cadabra::DisplayMMA::import()'],['../classcadabra_1_1DisplaySympy.html#a58e3de402442e6b633fc9976ab596046',1,'cadabra::DisplaySympy::import()']]],
   ['in',['in',['../classexec__stream__t.html#a8c2f426eaaecc659994dffda004ada90',1,'exec_stream_t']]],
   ['in_5fcolumn_5fiterator',['in_column_iterator',['../classyngtab_1_1filled__tableau_1_1in__column__iterator.html#ad7285b3764c0e812c9f8c8147585deec',1,'yngtab::filled_tableau::in_column_iterator']]],
   ['index_5fin_5fset',['index_in_set',['../classcadabra_1_1Algorithm.html#a7c915cf4cf3ef86dd9107198f3bfffdb',1,'cadabra::Algorithm']]],

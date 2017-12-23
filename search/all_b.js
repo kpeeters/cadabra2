@@ -26,7 +26,7 @@ var searchData=
   ['kroneckerdelta',['KroneckerDelta',['../classcadabra_1_1KroneckerDelta.html',1,'cadabra']]],
   ['kroneckerdelta_2ecc',['KroneckerDelta.cc',['../KroneckerDelta_8cc.html',1,'']]],
   ['kroneckerdelta_2ehh',['KroneckerDelta.hh',['../KroneckerDelta_8hh.html',1,'']]],
-  ['kunichar',['kunichar',['../DisplaySympy_8hh.html#a0da26994377a47c9c53069f9dfb9e670',1,'kunichar():&#160;DisplaySympy.hh'],['../DisplayTerminal_8hh.html#a0da26994377a47c9c53069f9dfb9e670',1,'kunichar():&#160;DisplayTerminal.hh'],['../DisplayTeX_8hh.html#a0da26994377a47c9c53069f9dfb9e670',1,'kunichar():&#160;DisplayTeX.hh']]],
+  ['kunichar',['kunichar',['../DisplayMMA_8hh.html#a0da26994377a47c9c53069f9dfb9e670',1,'kunichar():&#160;DisplayMMA.hh'],['../DisplaySympy_8hh.html#a0da26994377a47c9c53069f9dfb9e670',1,'kunichar():&#160;DisplaySympy.hh'],['../DisplayTerminal_8hh.html#a0da26994377a47c9c53069f9dfb9e670',1,'kunichar():&#160;DisplayTerminal.hh'],['../DisplayTeX_8hh.html#a0da26994377a47c9c53069f9dfb9e670',1,'kunichar():&#160;DisplayTeX.hh']]],
   ['kvlist_5ft',['kvlist_t',['../classcadabra_1_1keyval__t.html#a1ff9b830033ef0fa3163226fa7aefbf9',1,'cadabra::keyval_t']]],
   ['kvpair_5ft',['kvpair_t',['../classcadabra_1_1keyval__t.html#ab8b2b71243d2eb2f1912bed63cb3ab70',1,'cadabra::keyval_t']]]
 ];

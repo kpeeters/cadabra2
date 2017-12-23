@@ -11,12 +11,13 @@ var searchData=
   ['latex_5fpackages',['latex_packages',['../classcadabra_1_1TeXEngine.html#a76ebee9e16fd8d189278d47c0912e67c',1,'cadabra::TeXEngine']]],
   ['latex_5fspacing',['latex_spacing',['../classcadabra_1_1DisplayTeX.html#a20874efb1345b7e4300ac871ccaf6f55',1,'cadabra::DisplayTeX']]],
   ['latex_5fstring',['latex_string',['../classcadabra_1_1TeXEngine_1_1TeXRequest.html#a40ef9f78a60186ebd7caf5d4106723ed',1,'cadabra::TeXEngine::TeXRequest']]],
-  ['left',['left',['../classcadabra_1_1map__sympy.html#a26de6b66b993a51da4cbe9c0d15a5c5a',1,'cadabra::map_sympy']]],
+  ['left',['left',['../classcadabra_1_1map__mma.html#a92cd83fabed81b2ea6c8a230dc9516de',1,'cadabra::map_mma::left()'],['../classcadabra_1_1map__sympy.html#a26de6b66b993a51da4cbe9c0d15a5c5a',1,'cadabra::map_sympy::left()']]],
   ['lhs_5fcontains_5fdummies',['lhs_contains_dummies',['../classcadabra_1_1Ex__comparator.html#a3e5984ecd92fb61aa639ddd202518832',1,'cadabra::Ex_comparator::lhs_contains_dummies()'],['../classcadabra_1_1substitute.html#a9e3c3ca32e6d81493284365437efe1d4',1,'cadabra::substitute::lhs_contains_dummies()']]],
   ['line_5fper_5fnode',['line_per_node',['../structcadabra_1_1str__node_1_1flag__t.html#a463e78738fe391935c98ba2647945ef1',1,'cadabra::str_node::flag_t']]],
   ['loc_5ffile',['loc_file',['../classsnoop_1_1Snoop_1_1LogEntry.html#a0377e9e3eb1523ad58cce906ec0f7c2a',1,'snoop::Snoop::LogEntry']]],
   ['loc_5fline',['loc_line',['../classsnoop_1_1Snoop_1_1LogEntry.html#a18ccd8da175d285efbc52822de332e2e',1,'snoop::Snoop::LogEntry']]],
   ['loc_5fmethod',['loc_method',['../classsnoop_1_1Snoop_1_1LogEntry.html#aa139f3ca14c4c91c70c1ab0bf642961d',1,'snoop::Snoop::LogEntry']]],
   ['log',['log',['../namespacesnoop.html#ab54ba8fb03f2ec4268bebe195f7d6a9d',1,'snoop']]],
-  ['log_5fid',['log_id',['../classsnoop_1_1Snoop_1_1LogEntry.html#aee60e5a66f8d7aa73142b98e7dde2a37',1,'snoop::Snoop::LogEntry']]]
+  ['log_5fid',['log_id',['../classsnoop_1_1Snoop_1_1LogEntry.html#aee60e5a66f8d7aa73142b98e7dde2a37',1,'snoop::Snoop::LogEntry']]],
+  ['lp',['lp',['../classMMA.html#ac048888110da5921365d0696297cb772',1,'MMA']]]
 ];

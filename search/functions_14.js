@@ -6,6 +6,7 @@ var searchData=
   ['tabs_5fto_5fsinglet_5frules',['tabs_to_singlet_rules',['../classcadabra_1_1tab__basics.html#ad443a16489658e55f6ed7cc1aac92b2f',1,'cadabra::tab_basics']]],
   ['tabs_5fto_5ftree',['tabs_to_tree',['../classcadabra_1_1tab__basics.html#afae6680a90848d28abab4208baa6a628',1,'cadabra::tab_basics']]],
   ['take_5fmatch',['take_match',['../classcadabra_1_1take__match.html#a5c8cf670cae43c62c2b8188caa83f07b',1,'cadabra::take_match']]],
+  ['teardown_5flink',['teardown_link',['../classMMA.html#abb01614f0b25e6ea27bf366b88e0cfea',1,'MMA']]],
   ['terminalstream',['TerminalStream',['../classcadabra_1_1TerminalStream.html#a278a8c0f3fe5b647069b994817086654',1,'cadabra::TerminalStream']]],
   ['terminate',['terminate',['../classcadabra_1_1ComputeThread.html#a8a3d3abd3bcdf44564758a3913efb995',1,'cadabra::ComputeThread']]],
   ['terms',['terms',['../PythonCdb_8cc.html#a8aa7a6b2d258e2b2a135c0b2cb50a33d',1,'PythonCdb.cc']]],

@@ -108,8 +108,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="namespacesympy.html">    9</a></span>&#160;<span class="keyword">namespace </span>sympy {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>* <a class="code" href="group__scalar.html#ga0ad37ce2c6ccfc434e7500426984e536">map_sympy</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a>&amp;, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp;,</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                                  <span class="keyword">const</span> std::vector&lt;std::string&gt;&amp; wrap, <span class="keyword">const</span> std::string&amp; args, <span class="keyword">const</span> std::string&amp; method);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">//  cadabra::Ex* map_sympy(const cadabra::Kernel&amp;, cadabra::Ex&amp;,</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">//                                const std::vector&lt;std::string&gt;&amp; wrap, const std::string&amp; args, const std::string&amp; method);</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    cadabra::Ex::iterator <a class="code" href="group__scalar.html#ga7b61d05c8d46d120cf4d7922cd870209">apply</a>(<span class="keyword">const</span> <a class="code" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a>&amp;, <a class="code" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&amp;, cadabra::Ex::iterator&amp;,</div>
@@ -133,8 +133,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="classcadabra_1_1Ex_html"><div class="ttname"><a href="classcadabra_1_1Ex.html">cadabra::Ex</a></div><div class="ttdoc">Basic storage class for symbolic mathemematical expressions. </div><div class="ttdef"><b>Definition:</b> Storage.hh:130</div></div>
 <div class="ttc" id="Stopwatch_8hh_html"><div class="ttname"><a href="Stopwatch_8hh.html">Stopwatch.hh</a></div></div>
 <div class="ttc" id="Props_8hh_html"><div class="ttname"><a href="Props_8hh.html">Props.hh</a></div></div>
-<div class="ttc" id="group__scalar_html_ga7b61d05c8d46d120cf4d7922cd870209"><div class="ttname"><a href="group__scalar.html#ga7b61d05c8d46d120cf4d7922cd870209">sympy::apply</a></div><div class="ttdeci">cadabra::Ex::iterator apply(const cadabra::Kernel &amp;, cadabra::Ex &amp;, cadabra::Ex::iterator &amp;, const std::vector&lt; std::string &gt; &amp;wrap, const std::string &amp;args, const std::string &amp;method)</div><div class="ttdoc">Functionality to act with Sympy functions on (parts of) Cadabra Ex expressions and read the result ba...</div></div>
-<div class="ttc" id="group__scalar_html_ga0ad37ce2c6ccfc434e7500426984e536"><div class="ttname"><a href="group__scalar.html#ga0ad37ce2c6ccfc434e7500426984e536">sympy::map_sympy</a></div><div class="ttdeci">cadabra::Ex * map_sympy(const cadabra::Kernel &amp;, cadabra::Ex &amp;, const std::vector&lt; std::string &gt; &amp;wrap, const std::string &amp;args, const std::string &amp;method)</div><div class="ttdoc">Functionality to act with Sympy on all scalar parts of an expression, and keep the result in-place...</div></div>
+<div class="ttc" id="group__scalar_html_ga7b61d05c8d46d120cf4d7922cd870209"><div class="ttname"><a href="group__scalar.html#ga7b61d05c8d46d120cf4d7922cd870209">sympy::apply</a></div><div class="ttdeci">cadabra::Ex::iterator apply(const cadabra::Kernel &amp;, cadabra::Ex &amp;, cadabra::Ex::iterator &amp;, const std::vector&lt; std::string &gt; &amp;wrap, const std::string &amp;args, const std::string &amp;method)</div><div class="ttdoc">Functionality to act with Sympy on all scalar parts of an expression, and keep the result in-place...</div></div>
 <div class="ttc" id="group__scalar_html_gae6c200fc6d852a1db0d8bf6099691f43"><div class="ttname"><a href="group__scalar.html#gae6c200fc6d852a1db0d8bf6099691f43">sympy::invert_matrix</a></div><div class="ttdeci">cadabra::Ex invert_matrix(const cadabra::Kernel &amp;, cadabra::Ex &amp;ex, cadabra::Ex &amp;rules)</div><div class="ttdoc">Use Sympy to invert a matrix, given a set of rules determining its sparse components. </div><div class="ttdef"><b>Definition:</b> SympyCdb.cc:83</div></div>
 <div class="ttc" id="classcadabra_1_1Kernel_html"><div class="ttname"><a href="classcadabra_1_1Kernel.html">cadabra::Kernel</a></div><div class="ttdef"><b>Definition:</b> Kernel.hh:15</div></div>
 <div class="ttc" id="Storage_8hh_html"><div class="ttname"><a href="Storage_8hh.html">Storage.hh</a></div></div>
@@ -142,7 +141,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Nov 26 2017 19:44:22 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 23 2017 16:48:38 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

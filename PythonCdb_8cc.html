@@ -107,6 +107,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="Parser_8hh_source.html">Parser.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Bridge_8hh_source.html">Bridge.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Exceptions_8hh_source.html">Exceptions.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="DisplayMMA_8hh_source.html">DisplayMMA.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="DisplayTeX_8hh_source.html">DisplayTeX.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="DisplaySympy_8hh_source.html">DisplaySympy.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="DisplayTerminal_8hh_source.html">DisplayTerminal.hh</a>&quot;</code><br/>
@@ -199,6 +200,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="join__gamma_8hh_source.html">algorithms/join_gamma.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="keep__terms_8hh_source.html">algorithms/keep_terms.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="lr__tensor_8hh_source.html">algorithms/lr_tensor.hh</a>&quot;</code><br/>
+<code>#include &quot;<a class="el" href="map__mma_8hh_source.html">algorithms/map_mma.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="map__sympy_8hh_source.html">algorithms/map_sympy.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="order_8hh_source.html">algorithms/order.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="product__rule_8hh_source.html">algorithms/product_rule.hh</a>&quot;</code><br/>
@@ -257,6 +259,8 @@ Functions</h2></td></tr>
 <tr class="memitem:gafd911392f791a94aa633d4cdb1670bda"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">Ex_to_Sympy</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
 <tr class="memdesc:gafd911392f791a94aa633d4cdb1670bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' to a Sympy expression.  <a href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">More...</a><br/></td></tr>
 <tr class="separator:gafd911392f791a94aa633d4cdb1670bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa13213c0efe0f4417018f230e311ea72"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#aa13213c0efe0f4417018f230e311ea72">Ex_to_MMA</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:aa13213c0efe0f4417018f230e311ea72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a0a4ace1e0bde4ab74e7333dd33b1af14">fetch_from_python</a> (const std::string &amp;nm)</td></tr>
 <tr class="memdesc:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch an Ex object from the Python side using its Python identifier.  <a href="#a0a4ace1e0bde4ab74e7333dd33b1af14">More...</a><br/></td></tr>
 <tr class="separator:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -324,6 +328,8 @@ Functions</h2></td></tr>
 <tr class="separator:a5f48ce4770f50e8547f50c575a58921d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a257b7ec0e566fe19e70d8d66be8db1e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a257b7ec0e566fe19e70d8d66be8db1e2">map_sympy_wrapper</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, std::string head)</td></tr>
 <tr class="separator:a257b7ec0e566fe19e70d8d66be8db1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69f1b34aeec34b2506e4a7b32a3fbe76"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a69f1b34aeec34b2506e4a7b32a3fbe76">map_mma_wrapper</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, std::string head)</td></tr>
+<tr class="separator:a69f1b34aeec34b2506e4a7b32a3fbe76"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga82c40aaba90049ed7cf7be1fc60152ac">call_post_process</a> (<a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;kernel, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
 <tr class="memdesc:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the post-process Python function (if defined) on the given expression.  <a href="group__pythoncore.html#ga82c40aaba90049ed7cf7be1fc60152ac">More...</a><br/></td></tr>
 <tr class="separator:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -976,6 +982,22 @@ template&lt;class F , typename... Args&gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="aa13213c0efe0f4417018f230e311ea72"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Ex_to_MMA </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a0a4ace1e0bde4ab74e7333dd33b1af14"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1081,6 +1103,32 @@ template&lt;class F , typename... Args&gt; </div>
           <td></td>
           <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>make_ref</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a69f1b34aeec34b2506e4a7b32a3fbe76"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* map_mma_wrapper </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>head</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1436,7 +1484,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Nov 26 2017 19:44:22 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sat Dec 23 2017 16:48:39 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

@@ -9,6 +9,7 @@ var searchData=
   ['ref',['ref',['../classcadabra_1_1ActionAddCell.html#a071c09cfa5c7c853e2c1847fee098771',1,'cadabra::ActionAddCell::ref()'],['../classcadabra_1_1ActionPositionCursor.html#ae0a5c4216ec2885eac9a0ee6356f0480',1,'cadabra::ActionPositionCursor::ref()']]],
   ['reference_5fchild_5findex',['reference_child_index',['../classcadabra_1_1ActionRemoveCell.html#a24c120aad6931df6c867b1a238b7fc2a',1,'cadabra::ActionRemoveCell']]],
   ['reference_5fparent_5fcell',['reference_parent_cell',['../classcadabra_1_1ActionRemoveCell.html#a1dcee12759b054f5bbf861153e71583b',1,'cadabra::ActionRemoveCell']]],
+  ['regex_5fmap',['regex_map',['../classcadabra_1_1DisplayMMA.html#a6307807b2ed10766cb9ee0aedc723ccc',1,'cadabra::DisplayMMA']]],
   ['registered',['registered',['../classcadabra_1_1DocumentThread.html#ae24929b663e3347a1bf614181e5b770f',1,'cadabra::DocumentThread']]],
   ['registered_5fproperties',['registered_properties',['../classcadabra_1_1Properties.html#a3148d7836ea37391d274278056b92023',1,'cadabra::Properties']]],
   ['remember_5fdisplay_5fhook',['remember_display_hook',['../namespacecadabra2__defaults.html#a2b4d34712d648727cbce32234c760f07',1,'cadabra2_defaults']]],

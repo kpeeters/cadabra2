@@ -46,6 +46,7 @@ var searchData=
   ['status_5fmutex',['status_mutex',['../classcadabra_1_1NotebookWindow.html#a45b33da6ed03e127119c5a451ea765e3',1,'cadabra::NotebookWindow']]],
   ['status_5fstring',['status_string',['../classcadabra_1_1NotebookWindow.html#ae4f2376d6d53ca03908b675fe6d2beec',1,'cadabra::NotebookWindow']]],
   ['statusbarbox',['statusbarbox',['../classcadabra_1_1NotebookWindow.html#a12e2b602188d288cc4edf1cf7a1eeb88',1,'cadabra::NotebookWindow']]],
+  ['stdenv',['stdenv',['../classMMA.html#a3f928d6eb1b159aeac3b06f873f98101',1,'MMA']]],
   ['step',['step',['../classProgressMonitor_1_1Block.html#a48d886eb665641fe9ca0c480deb1e94e',1,'ProgressMonitor::Block']]],
   ['stopit',['stopit',['../test__talk__to__server_8cc.html#a5ce892da8f30b6cc96b8a8fd5730e813',1,'test_talk_to_server.cc']]],
   ['stopped_5f',['stopped_',['../classStopwatch.html#a79870db7c4c9a084c66f47682754e6c4',1,'Stopwatch']]],
@@ -60,7 +61,7 @@ var searchData=
   ['suppress_5fnormal_5foutput',['suppress_normal_output',['../classcadabra_1_1Algorithm.html#aaff522665f73b72e15142ac94d9365f7',1,'cadabra::Algorithm']]],
   ['svh_5f',['svh_',['../classcombin_1_1symmetriser.html#aff979c3bca025ee1d8ba258917871039',1,'combin::symmetriser']]],
   ['sym',['sym',['../classcadabra_1_1young__project.html#a74296ac7ac7fd8f8e8b941a18c550eb5',1,'cadabra::young_project::sym()'],['../classcadabra_1_1young__project__tensor.html#a3652271b36b2d1abaf40e80652cc9517',1,'cadabra::young_project_tensor::sym()']]],
-  ['symmap',['symmap',['../classcadabra_1_1DisplaySympy.html#a2db0c6b74c4533cab0c95bb89237a412',1,'cadabra::DisplaySympy::symmap()'],['../classcadabra_1_1DisplayTerminal.html#aa1117a639447b4cee663ebb931188a7c',1,'cadabra::DisplayTerminal::symmap()'],['../classcadabra_1_1DisplayTeX.html#a4793738b214fb252d925a764b0cf86cc',1,'cadabra::DisplayTeX::symmap()']]],
+  ['symmap',['symmap',['../classcadabra_1_1DisplayMMA.html#a76a1741e3c481f1b97d573c563986c5b',1,'cadabra::DisplayMMA::symmap()'],['../classcadabra_1_1DisplaySympy.html#a2db0c6b74c4533cab0c95bb89237a412',1,'cadabra::DisplaySympy::symmap()'],['../classcadabra_1_1DisplayTerminal.html#aa1117a639447b4cee663ebb931188a7c',1,'cadabra::DisplayTerminal::symmap()'],['../classcadabra_1_1DisplayTeX.html#a4793738b214fb252d925a764b0cf86cc',1,'cadabra::DisplayTeX::symmap()']]],
   ['sympy_5fstopwatch',['sympy_stopwatch',['../classServer.html#a57b4477641838a603a4148746172ee53',1,'Server']]],
   ['sync_5fimmediately_5f',['sync_immediately_',['../classsnoop_1_1Snoop.html#aac2fd567a0fee30bf65bc3c15d5403cc',1,'snoop::Snoop']]]
 ];
