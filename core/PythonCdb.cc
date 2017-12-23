@@ -24,6 +24,7 @@ namespace boost {
 #include "Parser.hh"
 #include "Bridge.hh"
 #include "Exceptions.hh"
+#include "DisplayMMA.hh"
 #include "DisplayTeX.hh"
 #include "DisplaySympy.hh"
 #include "DisplayTerminal.hh"
@@ -127,6 +128,7 @@ namespace boost {
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
 #include "algorithms/lr_tensor.hh"
+#include "algorithms/map_mma.hh"
 #include "algorithms/map_sympy.hh"
 #include "algorithms/order.hh"
 #include "algorithms/product_rule.hh"
@@ -341,6 +343,23 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	boost::python::object ret=parse(str.str());
 
 	return ret;
+	}
+
+std::string Ex_to_MMA(const Ex& ex)
+	{
+	// Check to see if the expression is a scalar without dummy indices.
+//	Algorithm::index_map_t ind_free, ind_dummy;
+//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
+//	if(ind_dummy.size()>0) 
+//		throw NonScalarException("Expression contains dummy indices.");
+//	if(ind_free.size()>0) 
+//		throw NonScalarException("Expression contains free indices.");
+
+	std::ostringstream str;
+	DisplayMMA dt(*get_kernel_from_scope(), ex);
+	dt.output(str);
+
+	return str.str();
 	}
 
 // Fetch objects from the Python side using their Python identifier.
@@ -954,6 +973,12 @@ Ex* map_sympy_wrapper(Ex& ex, std::string head)
 	return dispatch_base(ex, algo, true, false, 0, true);
 	}
 
+Ex* map_mma_wrapper(Ex& ex, std::string head)
+	{
+	map_mma algo(*get_kernel_from_scope(), ex, head);
+	return dispatch_base(ex, algo, true, false, 0, true);
+	}
+
 void call_post_process(Kernel& kernel, Ex& ex) 
 	{
 	// Find the 'post_process' function, and if found, turn off
@@ -1218,6 +1243,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__eq__",      &__eq__Ex_Ex)
 		.def("__eq__",      &__eq__Ex_int)
 		.def("_sympy_",     &Ex_to_Sympy)
+		.def("mma_form",    &Ex_to_MMA)    // standardize on this
 		.def("__getitem__", &Ex_getitem)
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
@@ -1243,6 +1269,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("init_ipython", &init_ipython);
 	def("properties", &list_properties);
 	def("map_sympy", &map_sympy_wrapper, (arg("ex"), arg("function")=""), return_internal_reference<1>());
+	def("map_mma",   &map_mma_wrapper,   (arg("ex"), arg("function")=""), return_internal_reference<1>());	
 
 	def("create_scope", &create_scope, 
 		 return_value_policy<manage_new_object>() );

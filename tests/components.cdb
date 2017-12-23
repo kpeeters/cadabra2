@@ -520,8 +520,6 @@ import cdb.relativity as rel
 import cdb.relativity.schwarzschild as ss
 
 def test27():
-    __cdbkernel__=create_scope()
-    {\mu,\nu,\rho,\sigma}::Indices(position=fixed);
     g=ss.metric()
     complete(g,$g^{\mu\nu}$);
     ch=rel.christoffel_from_metric();

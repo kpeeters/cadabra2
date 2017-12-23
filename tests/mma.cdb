@@ -1,0 +1,43 @@
+
+# Tests for the connection to a Mathematica kernel.
+
+def test01():
+    ex:= \alpha \beta \cos{\gamma \Delta}:
+    out=ex.mma_form()
+    tst="α*β*Cos[γ*Δ]"
+    #\[Alpha]*\[Beta]*Cos[\[Gamma]*\[CapitalDelta]]"
+    assert(out==tst)
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    ex:= \cos{\alpha}**2 + \sin{2 \alpha}**2;
+    map_mma(ex)
+    tst:= \cos{\alpha}**2 + \sin{2 \alpha}**2 - @(ex);
+    assert(tst==0)
+    print("Test 02a passed");
+    ex:= \cos{x}**2 + \sin{x}**2;
+    map_mma(ex, "FullSimplify")
+    tst:=1 - @(ex);
+    assert(tst==0)
+    print("Test 02b passed");
+#ex:=Integrate( \sin{x} + x**2, {x,0,\pi} );
+#map_mma(ex);
+
+test02()
+
+def test03():
+    __cdbkernel__=create_scope()
+    r::Coordinate;
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{r}{ r**2 + \sin{r} };
+    map_mma(ex, "FullSimplify")
+    tst:= 2 r + \cos{r} - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
+
+
+ex:= (a*\cos{\theta})**2;
+print(tree(ex))
+map_mma(ex);

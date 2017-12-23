@@ -62,6 +62,10 @@ else()
   find_package(Boost 1.53.0 COMPONENTS python regex)
 endif()
 
+# Locate Mathematica (optional)
+set(Mathematica_USE_STATIC_LIBRARIES TRUE)
+find_package(Mathematica COMPONENTS WSTP REQUIRED)
+
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
         message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
@@ -84,6 +88,16 @@ message("-- Found python ${PYTHON_LIBRARIES}")
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIRS})
 message("-- Python include dirs: ${PYTHON_INCLUDE_DIRS}")
 
+# Mathematica WSTP test
+if(MATHEMATICA_FOUND)
+  message("-- Building with Mathematica support (linking against ${Mathematica_VERSION})")
+  include_directories(${Mathematica_WSTP_INCLUDE_DIR})
+  add_executable(test_wstp         test_wstp.cc)
+  target_link_libraries(test_wstp ${Mathematica_WSTP_LIBRARIES})
+else()
+  message("-- Building without Mathematica support")
+endif()
+
 # Locate pcre
 find_package(PCRE REQUIRED)
 
@@ -100,6 +114,7 @@ set(LOCAL_SRC_FILES
   Combinatorics.cc
   Compare.cc
   DisplayBase.cc
+  DisplayMMA.cc  
   DisplayTeX.cc
   DisplaySympy.cc
   DisplayTerminal.cc
@@ -109,6 +124,7 @@ set(LOCAL_SRC_FILES
   Functional.cc
   IndexIterator.cc
   Kernel.cc
+  MMACdb.cc  
   Parser.cc
   PreClean.cc
   PreProcessor.cc
@@ -197,6 +213,7 @@ set(LOCAL_SRC_FILES
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
   algorithms/lr_tensor.cc
+  algorithms/map_mma.cc  
   algorithms/map_sympy.cc
   algorithms/order.cc
   algorithms/product_rule.cc
@@ -257,6 +274,9 @@ add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
 target_link_libraries(cadabra2python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 
 target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+if(MATHEMATICA_FOUND)
+  target_link_libraries(cadabra2 ${Mathematica_WSTP_LIBRARIES})
+endif()
 
 install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE
