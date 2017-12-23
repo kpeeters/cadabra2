@@ -21,9 +21,6 @@ env:
     - CTEST_EXT_COLOR_OUTPUT=TRUE
     - CTEST_BUILD_FLAGS=-j4
 
-virtualenv:
-   system_site_packages: true
-
 matrix:
    exclude:
      - os: osx
@@ -45,7 +42,6 @@ before_install:
      g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python3-pip; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev
      libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y python3-matplotlib python3-sympy python3-mpmath; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew unlink json-c; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated cmake || brew upgrade cmake; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated boost || travis_wait brew upgrade boost; fi
@@ -57,8 +53,7 @@ before_install:
    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [[ "`${CC} --version |grep gcc`" != "" ]]; then sudo apt-get install --yes doxygen graphviz texlive-font-utils; ./config/publish-doxygen; fi; fi; fi
 
 install:
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y python3-matplotlib python3-sympy; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip3 install --user matplotlib sympy; fi
+   - pip3 install --user sympy
 
 
 notifications:
