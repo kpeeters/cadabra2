@@ -21,6 +21,9 @@ env:
     - CTEST_EXT_COLOR_OUTPUT=TRUE
     - CTEST_BUILD_FLAGS=-j4
 
+virtualenv:
+   system_site_packages: true
+
 matrix:
    exclude:
      - os: osx
