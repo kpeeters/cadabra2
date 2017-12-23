@@ -16,13 +16,18 @@ sudo: required
 
 dist: trusty
 
+env:
+  global:
+    - CTEST_EXT_COLOR_OUTPUT=TRUE
+    - CTEST_BUILD_FLAGS=-j4
+
 matrix:
    exclude:
      - os: osx
        compiler: gcc
 script:
    - cmake --build .
-   - travis_wait 30 ctest -V .
+   - ctest -VV -S .
 
 before_script:
    - mkdir build

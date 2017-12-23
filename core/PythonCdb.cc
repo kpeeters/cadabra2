@@ -18,6 +18,7 @@ namespace boost {
    }
 #endif
 
+#include "Config.hh"
 #include "PythonCdb.hh"
 #include "SympyCdb.hh"
 
