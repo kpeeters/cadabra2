@@ -124,7 +124,6 @@ set(LOCAL_SRC_FILES
   Functional.cc
   IndexIterator.cc
   Kernel.cc
-  MMACdb.cc  
   Parser.cc
   PreClean.cc
   PreProcessor.cc
@@ -213,7 +212,6 @@ set(LOCAL_SRC_FILES
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
   algorithms/lr_tensor.cc
-  algorithms/map_mma.cc  
   algorithms/map_sympy.cc
   algorithms/order.cc
   algorithms/product_rule.cc
@@ -235,7 +233,13 @@ set(LOCAL_SRC_FILES
   algorithms/young_project.cc
   algorithms/young_project_product.cc
   algorithms/young_project_tensor.cc
-)
+  )
+if(MATHEMATICA_FOUND)
+  set(LOCAL_SRC_FILES ${LOCAL_SRC_FILES}
+	 MMACdb.cc  
+	 algorithms/map_mma.cc
+	 )
+endif()
 set(PUBLIC_HEADER_FILES
   Parser.hh
   Storage.hh
