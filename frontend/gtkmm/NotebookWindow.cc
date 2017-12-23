@@ -551,6 +551,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 #endif				
 				
 				w=newcell.outbox;
+				newcell.outbox->signal_button_release_event().connect( 
+					sigc::bind( sigc::mem_fun(doc, &NotebookWindow::handle_outbox_select), it ) );
 				break;
 
 			case DataCell::CellType::python:
@@ -1535,4 +1537,40 @@ bool NotebookWindow::idle_handler()
 	to_reveal.clear();
 #endif	
 	return false; // disconnect
+	}
+
+bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
+	{
+	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
+
+	if(selected) {
+		selected->outbox->set_state(Gtk::STATE_NORMAL);
+		if(selected==vis) {
+			refClipboard->set_text("");
+			selected=0;
+			return true;
+			}
+		}
+	selected=vis;
+	vis->outbox->set_state(Gtk::STATE_PRELIGHT);
+
+	std::string cpystring=vis->datacell->texbuf->tex_source->get_text();
+	size_t pos=cpystring.find("\\specialcolon{}");
+	if(pos!=std::string::npos) 
+		cpystring.replace(pos, 15, " :");
+	
+	// Setup clipboard handling
+	clipboard_txt = cpystring;
+	clipboard_cdb = vis->datacell->cdbbuf;
+
+	std::list<Gtk::TargetEntry> listTargets;
+	if(clipboard_cdb.size()>0) 
+		listTargets.push_back( Gtk::TargetEntry("cadabra") ); 
+	listTargets.push_back( Gtk::TargetEntry("UTF8_STRING") ); 
+	listTargets.push_back( Gtk::TargetEntry("TEXT") ); 
+	refClipboard->set( listTargets, 
+							 sigc::mem_fun(this, &XCadabra::on_clipboard_get), 
+							 sigc::mem_fun(this, &XCadabra::on_clipboard_clear) );
+
+	return true;
 	}

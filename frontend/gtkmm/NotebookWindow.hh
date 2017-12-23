@@ -95,7 +95,9 @@ namespace cadabra {
 
 			DTree::iterator current_cell;
 
-      private:
+			bool handle_outbox_select(GdkEventButton *, NotebookCanvas *can, VisualCell *vis);
+
+	private:
 			Cadabra *cdbapp;
 
 			// Main handler which fires whenever the Client object signals 
