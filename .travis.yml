@@ -14,7 +14,7 @@ language: cpp
 
 sudo: required
 
-dist: xenial
+dist: trusty
 
 env:
   global:
@@ -38,7 +38,7 @@ before_install:
    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then openssl aes-256-cbc -K $encrypted_0c0fd3a7dbd0_key -iv $encrypted_0c0fd3a7dbd0_iv -in config/travisci_rsa.enc -out config/travisci_rsa -d; fi
    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then chmod 0600 config/travisci_rsa; cp config/travisci_rsa ~/.ssh/id_rsa; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get -qq update; fi
-   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python3-dev python3-sympy
+   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python3-dev
      g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python3-pip; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev
      libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
