@@ -18,6 +18,7 @@ namespace boost {
    }
 #endif
 
+#include "Config.hh"
 #include "PythonCdb.hh"
 #include "SympyCdb.hh"
 
@@ -128,7 +129,9 @@ namespace boost {
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
 #include "algorithms/lr_tensor.hh"
-#include "algorithms/map_mma.hh"
+#ifdef MATHEMATICA_FOUND
+   #include "algorithms/map_mma.hh"
+#endif
 #include "algorithms/map_sympy.hh"
 #include "algorithms/order.hh"
 #include "algorithms/product_rule.hh"
@@ -973,11 +976,13 @@ Ex* map_sympy_wrapper(Ex& ex, std::string head)
 	return dispatch_base(ex, algo, true, false, 0, true);
 	}
 
+#ifdef MATHEMATICA_FOUND
 Ex* map_mma_wrapper(Ex& ex, std::string head)
 	{
 	map_mma algo(*get_kernel_from_scope(), ex, head);
 	return dispatch_base(ex, algo, true, false, 0, true);
 	}
+#endif
 
 void call_post_process(Kernel& kernel, Ex& ex) 
 	{
@@ -1269,8 +1274,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 	def("init_ipython", &init_ipython);
 	def("properties", &list_properties);
 	def("map_sympy", &map_sympy_wrapper, (arg("ex"), arg("function")=""), return_internal_reference<1>());
+#ifdef MATHEMATICA_FOUND
 	def("map_mma",   &map_mma_wrapper,   (arg("ex"), arg("function")=""), return_internal_reference<1>());	
-
+#endif
+	
 	def("create_scope", &create_scope, 
 		 return_value_policy<manage_new_object>() );
 	def("create_scope_from_global", &create_scope_from_global, 

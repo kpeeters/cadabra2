@@ -16,12 +16,12 @@ def test02():
     map_mma(ex)
     tst:= \cos{\alpha}**2 + \sin{2 \alpha}**2 - @(ex);
     assert(tst==0)
-    print("Test 02a passed");
+    print("Test 02a passed")
     ex:= \cos{x}**2 + \sin{x}**2;
     map_mma(ex, "FullSimplify")
     tst:=1 - @(ex);
     assert(tst==0)
-    print("Test 02b passed");
+    print("Test 02b passed")
 #ex:=Integrate( \sin{x} + x**2, {x,0,\pi} );
 #map_mma(ex);
 
@@ -38,6 +38,5 @@ def test03():
     print("Test 03 passed")
 
 
-ex:= (a*\cos{\theta})**2;
-print(tree(ex))
-map_mma(ex);
+#ex:= (a*\cos{\theta})**2;
+#map_mma(ex);

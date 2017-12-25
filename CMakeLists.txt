@@ -28,9 +28,14 @@ if(POLICY CMP0054)
   cmake_policy(SET CMP0054 NEW)
 endif()
 
+# Set path to additional cmake files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+
 enable_testing()
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+
+find_package(Mathematica COMPONENTS WSTP)
 
 # Generate config file with CMake variables.
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
@@ -225,8 +230,6 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 
-# Set path to additional cmake files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 option(ENABLE_FRONTEND "Enable the UI frontend" ON)
 

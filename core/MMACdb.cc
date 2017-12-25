@@ -16,7 +16,7 @@ using namespace cadabra;
 WSLINK        MMA::lp = 0;
 WSEnvironment MMA::stdenv = 0;
 
-#define DEBUG 1
+// #define DEBUG 1
 
 Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap,
 									 const std::string& args, const std::string& method)

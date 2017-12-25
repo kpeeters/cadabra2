@@ -72,7 +72,7 @@ set(RTESTS
   vary
   young
   )
-find_package(Mathematica COMPONENTS WSTP REQUIRED)
+find_package(Mathematica COMPONENTS WSTP)
 if(MATHEMATICA_FOUND)
   set(RTESTS ${RTESTS} mma)
 endif()
