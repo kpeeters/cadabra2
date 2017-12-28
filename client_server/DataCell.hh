@@ -37,7 +37,7 @@ namespace cadabra {
 						latex,      ///< input : editor cell for code in latex
 						output,     ///< output: cell showing python stdout, verbatim
 						verbatim,   ///< output: cell showing other verbatim output
-						latex_view, ///< output: cell showing LaTeX text formatted using a LaTeX
+						latex_view, ///< output: cell showing LaTeX text formatted using LaTeX
 						image_png,  ///< output: cell showing a base64 encoded PNG image
 						error,      ///< output: cell showing LaTeX text for errors
 						// section

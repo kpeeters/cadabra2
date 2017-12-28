@@ -870,6 +870,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
  bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
  	{
 	modified=true;
+	unselect_output_cell();
 	update_title();
 
  	// FIXME: need to keep track of individual characters inserted, otherwise we
@@ -891,6 +892,7 @@ bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DT
 	{
 	if(disable_stacks) return false;
 
+	unselect_output_cell();
 	//std::cerr << "cell_content_insert" << std::endl;
 	std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(it, pos, content);	
 	queue_action(action);
@@ -903,6 +905,7 @@ bool NotebookWindow::cell_content_erase(int start, int end, DTree::iterator it, 
 	{
 	if(disable_stacks) return false;
 
+	unselect_output_cell();
 	//std::cerr << "cell_content_erase" << std::endl;
 	std::shared_ptr<ActionBase> action = std::make_shared<ActionEraseText>(it, start, end);
 	queue_action(action);
@@ -1541,28 +1544,30 @@ bool NotebookWindow::idle_handler()
 	return false; // disconnect
 	}
 
+void NotebookWindow::unselect_output_cell()
+	{
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		if(canvasses[i]->visualcells.find(&(*selected_cell))!=canvasses[i]->visualcells.end()) {
+			auto& outbox = canvasses[i]->visualcells[&(*selected_cell)].outbox;
+			outbox->image.set_state(Gtk::STATE_NORMAL);
+			}
+		}
+	}
+
 bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	{
 	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
 
-//	if(selected) {
-//		selected->outbox->set_state(Gtk::STATE_NORMAL);
-//		if(selected==vis) {
-//			refClipboard->set_text("");
-//			selected=0;
-//			return true;
-//			}
-//		}
-//	selected=vis;
+	unselect_output_cell();
 
 	// Colour the background of the selected cell, in all canvasses.
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
-			std::cerr << "found cell, lighting" << std::endl;
 			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
 			outbox->image.set_state(Gtk::STATE_SELECTED);
 			}
 		}
+	selected_cell=it;
 
 	std::string cpystring=(*it).textbuf;
 //	size_t pos=cpystring.find("\\specialcolon{}");

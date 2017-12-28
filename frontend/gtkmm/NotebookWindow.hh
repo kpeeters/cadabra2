@@ -96,6 +96,8 @@ namespace cadabra {
 			DTree::iterator current_cell;
 
 			bool handle_outbox_select(GdkEventButton *, DTree::iterator it);
+			DTree::iterator selected_cell;
+			void unselect_output_cell();
 
 	private:
 			Cadabra *cdbapp;

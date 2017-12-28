@@ -19,7 +19,7 @@
 ///
 /// \defgroup compare Expression comparison
 /// \ingroup core
-/// Functions to compare and match expressions stored in exptree objects. 
+/// Functions to compare and match expressions stored in Ex objects. 
 /// These can involve wildcards and dummy indices, and matching may depend on 
 /// the properties attached to symbols.
 /// This is an important bit of functionality used widely throughout the Cadabra core.
