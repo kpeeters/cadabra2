@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{rename_dummies}{Rename dummy indices.}\n\nRename the dummy indices in an expression. This can be necessary in\norder to make various terms in a sum use the same names for the\nindices, so that they can be collected."
+					"source" : "\\algorithm{rename_dummies}{Rename dummy indices, within a set or from one set to another.}\n\nRename the dummy indices in an expression. This can be necessary in\norder to make various terms in a sum use the same names for the\nindices, so that they can be collected."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{rename_dummies}{Rename dummy indices.}\n\nRename the dummy indices in an expression. This can be necessary in\norder to make various terms in a sum use the same names for the\nindices, so that they can be collected."
+			"source" : "\\algorithm{rename_dummies}{Rename dummy indices, within a set or from one set to another.}\n\nRename the dummy indices in an expression. This can be necessary in\norder to make various terms in a sum use the same names for the\nindices, so that they can be collected."
 		},
 		{
 			"cell_origin" : "client",
@@ -100,6 +100,70 @@
 			],
 			"hidden" : true,
 			"source" : "Note that the indices need to have been declared as being part of an\nindex list, using the \\prop{Indices} property.\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The algorithm can also be used to rename dummies from one set to another one, e.g. to change index conventions\n(this is used in many of Cadabra's packages). Here is an example."
+				}
+			],
+			"hidden" : true,
+			"source" : "The algorithm can also be used to rename dummies from one set to another one, e.g. to change index conventions\n(this is used in many of Cadabra's packages). Here is an example."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m} A^{m}+B_{m} C^{m}+A_{n} A^{n}+Q_{c d} R^{d c}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q}::Indices(\"one\");\n{a,b,c,d}::Indices(\"two\");\nex:= A_{m} A^{m} + B_{m} C^{m} + A_{n} A^{n} + Q_{c d} R^{d c};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The above expression has indices in two different sets. We now rename the first set to the second,"
+				}
+			],
+			"hidden" : true,
+			"source" : "The above expression has indices in two different sets. We now rename the first set to the second,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}2A_{a} A^{a}+B_{a} C^{a}+Q_{c d} R^{d c}\\end{dmath*}"
+				}
+			],
+			"source" : "rename_dummies(_, \"one\", \"two\");"
 		},
 		{
 			"cell_origin" : "client",
