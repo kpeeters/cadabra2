@@ -68,6 +68,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	css_provider = Gtk::CssProvider::create();
 	// padding-left: 20px; does not work on some versions of gtk, so we use margin in CodeInput
 	// We use CSS selectors for old-style and new-style (post 3.20) simultaneously.
+	// Run program with 'GTK_DEBUG=interactive' environment variable and press Ctrl-Shift-D
+	// to inspect.
 	Glib::ustring data = "";
 	data += "textview text { color: blue; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "GtkTextView { color: blue; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
@@ -551,8 +553,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 #endif				
 				
 				w=newcell.outbox;
-				newcell.outbox->signal_button_release_event().connect( 
-					sigc::bind( sigc::mem_fun(doc, &NotebookWindow::handle_outbox_select), it ) );
+				newcell.outbox->signal_button_press_event().connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
 				break;
 
 			case DataCell::CellType::python:
@@ -1554,28 +1556,45 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 //	selected=vis;
 
 	// Colour the background of the selected cell, in all canvasses.
-	for(unsigned int i=0; i<xc.canvasses.size(); ++i) {
-			xc.canvasses[i]->remove_cell(*fnd);		
-		vis->outbox->set_state(Gtk::STATE_PRELIGHT);
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
+			std::cerr << "found cell, lighting" << std::endl;
+			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
+			outbox->image.set_state(Gtk::STATE_SELECTED);
+			}
 		}
 
-	std::string cpystring=vis->datacell->texbuf->tex_source->get_text();
-	size_t pos=cpystring.find("\\specialcolon{}");
-	if(pos!=std::string::npos) 
-		cpystring.replace(pos, 15, " :");
+	std::string cpystring=(*it).textbuf;
+//	size_t pos=cpystring.find("\\specialcolon{}");
+//	if(pos!=std::string::npos) 
+//		cpystring.replace(pos, 15, " :");
 	
 	// Setup clipboard handling
 	clipboard_txt = cpystring;
-	clipboard_cdb = vis->datacell->cdbbuf;
-
-	std::list<Gtk::TargetEntry> listTargets;
+//	clipboard_cdb = vis->datacell->cdbbuf;
+	std::vector<Gtk::TargetEntry> listTargets;
 	if(clipboard_cdb.size()>0) 
 		listTargets.push_back( Gtk::TargetEntry("cadabra") ); 
 	listTargets.push_back( Gtk::TargetEntry("UTF8_STRING") ); 
 	listTargets.push_back( Gtk::TargetEntry("TEXT") ); 
 	refClipboard->set( listTargets, 
-							 sigc::mem_fun(this, &XCadabra::on_clipboard_get), 
-							 sigc::mem_fun(this, &XCadabra::on_clipboard_clear) );
+							 sigc::mem_fun(this, &NotebookWindow::on_clipboard_get), 
+							 sigc::mem_fun(this, &NotebookWindow::on_clipboard_clear) );
 
 	return true;
+	}
+
+void NotebookWindow::on_clipboard_get(Gtk::SelectionData& selection_data, guint info) 
+	{ 
+	const Glib::ustring target = selection_data.get_target(); 
+	
+	if(target == "cadabra")
+		selection_data.set("cadabra", clipboard_cdb);
+	else if(target == "UTF8_STRING" || target=="TEXT") {
+		selection_data.set_text(clipboard_txt);
+		}
+	}
+
+void NotebookWindow::on_clipboard_clear()
+	{
 	}

@@ -9,6 +9,8 @@
 
 typedef uint32_t kunichar;
 
+namespace cadabra {
+
 /// \ingroup display
 ///
 /// Class to display expressions to the terminal. This is used in the
@@ -19,8 +21,6 @@ typedef uint32_t kunichar;
 /// example, partial derivatives will display using a LaTeX notation using
 /// the present class, but be printed as 'sympy.diff' by the DisplaySympy
 /// class).
-
-namespace cadabra {
 
 class DisplayTerminal : public DisplayBase {
 	public:

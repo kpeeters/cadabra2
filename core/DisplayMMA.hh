@@ -8,14 +8,14 @@
 
 typedef uint32_t kunichar;
 
+namespace cadabra {
+
 /// \ingroup display
 ///
 /// Class to display expressions in a format that Mathematica can
 /// parse. Will throw an exception if a Cadabra Ex object cannot be
 /// understood by Mathematica. Can also convert expressions back to
 /// Cadabra notation. 
-
-namespace cadabra {
 
 class DisplayMMA : public DisplayBase {
 	public:

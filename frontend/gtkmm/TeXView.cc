@@ -24,6 +24,7 @@
 	 hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
 //	 add(image);
 	 override_background_color(Gdk::RGBA("white"));
+	 add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
 	 }
 
  TeXView::~TeXView()

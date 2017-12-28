@@ -122,8 +122,8 @@ namespace cadabra {
 									 const std::string& preamble_string,									 
 									 bool for_embedding=false, std::string title="");
 
-	/// Convert various LaTeX constructions to HTML-with-Mathjax, e.g. \section{...}, 
-	/// \begin{verbatim}...\end{verbatim}, \verb.
+	/// Convert various LaTeX constructions to HTML-with-Mathjax, e.g. \\section{...}, 
+	/// \\begin{verbatim}...\\end{verbatim}, \\verb.
 
 	std::string latex_to_html(const std::string&);
 

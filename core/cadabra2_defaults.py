@@ -1,3 +1,8 @@
+##
+# \file    cadabra2_defaults.py
+# \ingroup pythoncore
+# Cadabra2 pure Python functionality.
+#
 # This is a pure-python initialisation script to set the  path to
 # sympy and setup printing of Cadabra expressions.  This script is
 # called both by the command line interface 'cadabra2' as well as by
@@ -17,6 +22,11 @@ try:
     import sympy
 except:
     class Sympy:
+        """!@brief Stub object for when Sympy itself is not available.
+        
+        @long When Sympy is not available, this object contains some basic
+        functionality to prevent things from breaking elsewhere.
+        """
         __version__="unavailable"
 
     sympy = Sympy()
@@ -42,6 +52,14 @@ else:
     mopen=''
     mclose=''
     class Server(ProgressMonitor):
+        """!@brief Object to handle advanced display in a UI-independent way.
+
+        @long Cadabra makes available to Python a Server object, which
+        contains functions to send output to the user. When running
+        from the command line this simply prints to the screen, but it
+        can talk to a remote client to display images and maths.
+        """
+        
         def send(self, data, typestr):
             print(data)
 
@@ -78,20 +96,22 @@ except ImportError:
 import io
 import base64
 
+## @brief Generic display function which handles local as well as remote clients.
+#
 # The 'display' function is a replacement for 'str', in the sense that
 # it will generate human-readable output. However, in contrast to
 # 'str', it knows about what the front-end ('server') can display, and
 # will adapt the output to that. For instance, if
 # server.handles('latex_view') is true, it will generate LaTeX output,
 # while it will generate just plain text otherwise.
-#
+# 
 # Once it has figured out which display is accepted by 'server', it
 # will call server.send() with data depending on the object type it is
 # being fed. Data types the server object can support are:
-#
-#  - "latex_view": text-mode LaTeX string.
-#  - "image_png":  base64 encoded png image.
-#  - "verbatim":   ascii string to be displayed verbatim.
+# 
+# - "latex_view": text-mode LaTeX string.
+# - "image_png":  base64 encoded png image.
+# - "verbatim":   ascii string to be displayed verbatim.
 
 def display(obj, delay_send=False):
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):

@@ -10,6 +10,11 @@
 #include <iostream>
 #include <sstream>
 
+/// \file simple.cc
+/// \ingroup libcadabra
+///
+/// Sample program to demonstrate the use of Cadabra directly from C++ code.
+
 void test1()
 	{
 	// The following few lines are equivalent to entering
