@@ -114,6 +114,13 @@ import base64
 # - "verbatim":   ascii string to be displayed verbatim.
 
 def display(obj, delay_send=False):
+    """
+    Generalised 'print' function which knows how to display objects in the 
+    best possible way on the used interface, be it a console or graphical
+    notebook. In particular, it knows how to display Cadabra expressions
+    in typeset form whenever LaTeX functionality is available. Can also be
+    used to display matplotlib plots.
+    """
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
         imgstring = io.BytesIO()
         obj.savefig(imgstring,format='png')
