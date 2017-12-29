@@ -120,6 +120,10 @@ def display(obj, delay_send=False):
     notebook. In particular, it knows how to display Cadabra expressions
     in typeset form whenever LaTeX functionality is available. Can also be
     used to display matplotlib plots.
+
+    When using a Cadabra front-end (command line or notebook), an expression
+    with a trailing semi-colon ';' will automatically be wrapped in a 
+    'display' function call so that the expression is displayed immediately.
     """
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
         imgstring = io.BytesIO()
