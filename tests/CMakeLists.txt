@@ -49,6 +49,7 @@ endforeach()
 #
 set(RTESTS
   packages
+  display
   dummies
   trigonometric
   noncovariant

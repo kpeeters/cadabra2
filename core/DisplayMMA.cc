@@ -8,8 +8,8 @@
 
 using namespace cadabra;
 
-DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e)
-	: DisplayBase(kernel, e)
+DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e, bool uuc)
+	: DisplayBase(kernel, e), use_unicode(uuc)
 	{
 	symmap = {
 		{"\\cos",  "Cos"},
@@ -197,12 +197,18 @@ void DisplayMMA::print_other(std::ostream& str, Ex::iterator it)
 //			++sib;
 //			}
 //		}
-	
-	auto rn = symmap.find(*it->name);
+
+	auto sbit=*it->name;
+	if(!use_unicode) {
+		auto rn = regex_map.find(sbit);
+		if(rn!=regex_map.end())
+			sbit = rn->second;
+		}
+	auto rn = symmap.find(sbit);
 	if(rn!=symmap.end())
 		str << rn->second;
 	else
-		str << *it->name;
+		str << sbit;
 
 	print_children(str, it);
 

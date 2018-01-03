@@ -1,0 +1,10 @@
+
+def test01():
+    ex:= 3 A_{m n} B^{m n} + q(x) r s;
+    tst=Ex(repr(ex))
+    assert(tst==ex)
+    print("Test 01 passed")
+
+test01()
+
+

@@ -67,7 +67,7 @@ std::string Ex_latex_(const cadabra::Ex&);
 
 /// \ingroup scalar
 ///
-/// Convert a Cadabra 'Ex' to a Sympy expression. This first converts the
+/// Outputs a Cadabra 'Ex' as a Sympy expression. This first converts the
 /// Cadabra expression to a string, and then reads that back in by calling
 /// sympy.parsing.sympy_parser.parse_expr. Is mapped to a '_sympy_()' 
 /// function on each Ex object. 
@@ -76,6 +76,11 @@ std::string Ex_latex_(const cadabra::Ex&);
 /// call __sympy__ on every object that you feed it.
 
 boost::python::object Ex_to_Sympy(const cadabra::Ex&);
+
+/// Similar to Ex_to_Sympy, but only producing a string which can be parsed
+/// by Sympy, instead of a full-fledged Sympy expression.
+
+std::string Ex_to_Sympy_string(const cadabra::Ex&);
 
 
 /// \ingroup pythoncore

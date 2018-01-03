@@ -60,8 +60,13 @@ else:
         can talk to a remote client to display images and maths.
         """
         
-        def send(self, data, typestr):
+        def send(self, data, typestr, parent_id, last_in_sequence):
+            """ Send a message to the client; 'typestr' indicates the cell type,
+            'parent_id', if non-null, indicates the serial number of the parent
+            cell.
+            """
             print(data)
+            return 0
 
         def architecture(self):
             return "terminal"
@@ -130,7 +135,7 @@ def display(obj, delay_send=False):
         obj.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_png")
+        server.send(b64, "image_png", 0, False)
         # FIXME: Use the 'handles' query method on the Server object
         # to figure out whether it can do something useful
         # with a particular data type.
@@ -141,7 +146,7 @@ def display(obj, delay_send=False):
         f.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_png")
+        server.send(b64, "image_png", 0, False)
 
     elif hasattr(obj,'_backend'):
         if hasattr(obj._backend,'fig'):
@@ -150,7 +155,7 @@ def display(obj, delay_send=False):
             f.savefig(imgstring,format='png')
             imgstring.seek(0)
             b64 = base64.b64encode(imgstring.getvalue())
-            server.send(b64, "image_png")
+            server.send(b64, "image_png", 0, False)
 
     elif 'vtk' in sys.modules and isinstance(obj, vtk.vtkRenderer):
         # Vtk renderer, see http://nbviewer.ipython.org/urls/bitbucket.org/somada141/pyscience/raw/master/20140917_RayTracing/Material/PythonRayTracingEarthSun.ipynb
@@ -165,9 +170,12 @@ def display(obj, delay_send=False):
             if delay_send:
                 return ret
             else:
-                server.send(ret, "latex_view")
+                id=server.send(ret, "latex_view", 0, False)
+                # print(id)
+                # Make a child cell of the above with input form content.
+                server.send(obj.input_form(), "input_form", id, False)                
         else:
-            server.send(str(obj), "plain")
+            server.send(str(obj), "plain", 0, False)
 
     elif isinstance(obj, Property):
         if server.handles('latex_view'):
@@ -175,9 +183,11 @@ def display(obj, delay_send=False):
             if delay_send:
                 return ret
             else:
-                server.send(ret , "latex_view")
+                server.send(ret , "latex_view", 0, False)
+                # Not yet available.
+                # server.send(obj.input_form(), "input_form", 0, False)
         else:
-            server.send(str(obj), "plain")
+            server.send(str(obj), "plain", 0, False)
             
     elif type(obj)==list:
         out="{}$\\big[$"
@@ -189,10 +199,11 @@ def display(obj, delay_send=False):
                 first=False
             out+= display(elm, True)
         out+="$\\big]$";
-        server.send(out, "latex_view")
+        server.send(out, "latex_view", 0, False)
+        # FIXME: send input_form version.
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
-        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
+        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, False)
         
     else:
         # Failing all else, just dump a str representation to the notebook, asking
@@ -201,7 +212,7 @@ def display(obj, delay_send=False):
         if delay_send:
             return "\\verb|"+str(obj)+"|"
         else:
-            server.send(str(obj), "verbatim")
+            server.send(str(obj), "verbatim", 0, False)
     
 __cdbkernel__.server=server
 __cdbkernel__.display=display

@@ -38,6 +38,7 @@ namespace cadabra {
 						output,     ///< output: cell showing python stdout, verbatim
 						verbatim,   ///< output: cell showing other verbatim output
 						latex_view, ///< output: cell showing LaTeX text formatted using LaTeX
+					   input_form, ///< output: cell containing input form of preceding output cell
 						image_png,  ///< output: cell showing a base64 encoded PNG image
 						error,      ///< output: cell showing LaTeX text for errors
 						// section
@@ -77,7 +78,7 @@ namespace cadabra {
 			/// However, this gives us the flexibility to do manipulations on the input (e.g. 
 			/// resolving equation references) before feeding it to LaTeX. 
 
-			std::string                   textbuf; 
+			std::string                   textbuf;
 
 			/// Flag indicating whether this cell should be hidden from
 			/// view. The GUI should have a way to bring the cells back

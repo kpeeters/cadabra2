@@ -82,7 +82,9 @@ namespace cadabra {
 			void                        checkout(std::shared_ptr<TeXRequest>);
 			void                        checkout_all();
 			
-		private:		
+		private:
+			std::string convert_unicode_to_tex(const std::string&) const;
+			
 			static double millimeter_per_inch;
 
 			std::set<std::shared_ptr<TeXRequest> > requests;

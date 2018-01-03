@@ -35,6 +35,7 @@ boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
 	}
 
 Server::Server()
+	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
 	// FIXME: we do not actually do anything with this.
 	socket_name="tcp://localhost:5454";
@@ -42,6 +43,7 @@ Server::Server()
 	}
 
 Server::Server(const std::string& socket)
+	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)	
 	{
 	socket_name=socket;
 	init();
@@ -378,7 +380,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 
 void Server::on_block_finished(Block blk)
 	{
-	send(blk.output, "output");
+	send(blk.output, "output", 0, true); // last in sequence
 	}
 
 bool Server::handles(const std::string& otype) const
@@ -387,19 +389,25 @@ bool Server::handles(const std::string& otype) const
 	return false;
 	}
 
-void Server::send(const std::string& output, const std::string& msg_type)
+uint64_t Server::send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last)
 	{
 //	if(msg_type=="output") 
 //		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
 	// Make a JSON message.
 	Json::Value json, content, header;
+
+	++return_cell_id;
+	if(parent_id==0)
+		header["parent_id"]=(Json::Value::UInt64)current_id;
+	else
+		header["parent_id"]=(Json::Value::UInt64)parent_id;
 	
-	header["parent_id"]=(Json::Value::UInt64)current_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=1; //FIXME
+	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
 	header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
 	header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
+	header["last_in_sequence"]=last;
 	content["output"]=output;
 
 	json["header"]=header;
@@ -410,6 +418,8 @@ void Server::send(const std::string& output, const std::string& msg_type)
 	str << json << std::endl;
 
 	send_json(str.str());
+
+	return return_cell_id;
 	}
 
 void Server::send_json(const std::string& msg)
@@ -426,10 +436,12 @@ void Server::on_block_error(Block blk)
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
+	++return_cell_id;
 	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=1; // FIXME;
+	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
+	header["last_in_sequence"]=true;	
 	content["output"]=blk.error;
 
 	json["header"]=header;
@@ -449,11 +461,13 @@ void Server::on_kernel_fault(Block blk)
 	
 	// Make a JSON message.
 	Json::Value json, content, header;
-	
+
+	++return_cell_id;
 	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=1; // FIXME
+	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
+	header["last_in_sequence"]=true;
 	content["output"]=blk.error;
 
 	json["header"]=header;

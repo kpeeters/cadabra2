@@ -58,7 +58,7 @@ class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 
 		/// Child nodes are related to their parent node by a so-called parent relation, which can
 		/// be one of these values. 
-		enum parent_rel_t  { p_sub=0, p_super=1, p_none=2, p_property=3, p_exponent=4, p_components=5 };
+		enum parent_rel_t  { p_sub=0, p_super=1, p_none=2, p_property=3, p_exponent=4, p_components=5, p_invalid=7 };
 
 		str_node(void);
 		str_node(nset_t::iterator name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
@@ -172,6 +172,9 @@ class Ex : public tree<str_node> {
 		static std::ostream& print_recursive_treeform(std::ostream& str, Ex::iterator it);
 		static std::ostream& print_recursive_treeform(std::ostream& str, Ex::iterator it, unsigned int& number);
 
+		/// Print a representation like Python's 'repr'.
+		std::ostream& print_repr(std::ostream& str, Ex::iterator it) const;
+
 		/// Step up until matching node is found (if current node matches, do nothing)
 		iterator     named_parent(iterator it, const std::string&) const;
 		iterator     erase_expression(iterator it);
@@ -267,16 +270,6 @@ class nset_it_less {
 		bool operator()(nset_t::iterator first, nset_t::iterator second) const;
 };
 
-/// \ingroup core
-///
-/// Bare output operator for Ex objects, mainly to provide a simple
-/// way to generate debugging output. Does not do any fancy
-/// formatting; just prints a nested list representation.  For more
-/// fancy output, look at DisplayTeX, DisplaySympy and
-/// DisplayTerminal.
-
-
-
 template <typename T>
 bool is_in(const T& val, const std::initializer_list<T>& list)
 	{
@@ -289,5 +282,13 @@ bool is_in(const T& val, const std::initializer_list<T>& list)
 	}
 
 }
+
+/// \ingroup core
+///
+/// Bare output operator for Ex objects, mainly to provide a simple
+/// way to generate debugging output. Does not do any fancy
+/// formatting; just prints a nested list representation.  For more
+/// fancy output, look at DisplayTeX, DisplaySympy and
+/// DisplayTerminal.
 
 std::ostream& operator<<(std::ostream&, const cadabra::Ex&);

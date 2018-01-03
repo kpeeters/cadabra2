@@ -11,14 +11,14 @@ TerminalStream::TerminalStream(const Kernel& k, std::ostream& s)
 
 TerminalStream& TerminalStream::operator<<(const Ex& ex)
 	{
-	DisplayTerminal dt(kernel, ex);
+	DisplayTerminal dt(kernel, ex, true);
 	dt.output(out_);
 	return *this;
 	}
 
 TerminalStream& TerminalStream::operator<<(std::shared_ptr<Ex> ex)
 	{
-	DisplayTerminal dt(kernel, *ex);
+	DisplayTerminal dt(kernel, *ex, true);
 	dt.output(out_);
 	return *this;
 	}
