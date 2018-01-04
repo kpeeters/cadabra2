@@ -494,6 +494,11 @@ void DisplayTerminal::print_commutator(std::ostream& str, Ex::iterator it, bool 
 
 void DisplayTerminal::print_components(std::ostream& str, Ex::iterator it)
 	{
+	if( ! (use_unicode && getenv("CADABRA_NO_UNICODE")==0) ) {
+		print_other(str, it);
+		return;
+		}
+
 	str << R"(□)";
 	auto sib=tree.begin(it);
 	auto end=tree.end(it);
@@ -563,10 +568,10 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
 	std::string sbit=*it->name;
-	auto rn = symmap.find(sbit);
-	if(rn!=symmap.end())
-		sbit = rn->second;
 	if(use_unicode && getenv("CADABRA_NO_UNICODE")==0) {
+		auto rn1 = symmap.find(sbit);
+		if(rn1!=symmap.end())
+			sbit = rn1->second;
 		auto rn = greekmap.find(sbit);
 		if(rn!=greekmap.end())
 			sbit = rn->second;
