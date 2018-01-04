@@ -2,6 +2,8 @@ var searchData=
 [
   ['accu',['accu',['../classpreprocessor_1_1accu__t.html#acdd050db09c5cc0d4e1f02914f8eb58e',1,'preprocessor::accu_t']]],
   ['accus',['accus',['../classpreprocessor.html#aac8a400b518f9e2ad379231b75271cbf',1,'preprocessor']]],
+  ['action_5fcopy',['action_copy',['../classcadabra_1_1NotebookWindow.html#a340903af0ef9015d8c1e3cf769f47ab4',1,'cadabra::NotebookWindow']]],
+  ['action_5fpaste',['action_paste',['../classcadabra_1_1NotebookWindow.html#a3007454d873e8abfbed25deaa922cfcb',1,'cadabra::NotebookWindow']]],
   ['actionaddcell',['ActionAddCell',['../classcadabra_1_1DocumentThread.html#acf190258aa71c2479263269e5e1d4327',1,'cadabra::DocumentThread']]],
   ['actionbase',['ActionBase',['../classcadabra_1_1DocumentThread.html#ac989f4f09eed40464623d7f192a1f0da',1,'cadabra::DocumentThread']]],
   ['actionerasetext',['ActionEraseText',['../classcadabra_1_1DocumentThread.html#a6849f2074e59d6d705a2b14c06056b56',1,'cadabra::DocumentThread']]],

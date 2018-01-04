@@ -248,6 +248,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:ac32312f1f528e0462fb23eceeb106073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a76f191ce220c00b25f9dcfad7e260991"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a76f191ce220c00b25f9dcfad7e260991">unselect_output_cell</a> ()</td></tr>
 <tr class="separator:a76f191ce220c00b25f9dcfad7e260991"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a979d98ccef0515115fe4b8cf00c8a6a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a979d98ccef0515115fe4b8cf00c8a6a3">on_outbox_copy</a> (Glib::RefPtr&lt; Gtk::Clipboard &gt; refClipboard, DTree::iterator it)</td></tr>
+<tr class="separator:a979d98ccef0515115fe4b8cf00c8a6a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classcadabra_1_1DocumentThread"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classcadabra_1_1DocumentThread')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classcadabra_1_1DocumentThread.html">cadabra::DocumentThread</a></td></tr>
 <tr class="memitem:aedaa6ca651cb27090babaa6a41350cc1 inherit pro_methods_classcadabra_1_1DocumentThread"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DocumentThread.html#aedaa6ca651cb27090babaa6a41350cc1">process_action_queue</a> ()</td></tr>
 <tr class="memdesc:aedaa6ca651cb27090babaa6a41350cc1 inherit pro_methods_classcadabra_1_1DocumentThread"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process the action queue.  <a href="#aedaa6ca651cb27090babaa6a41350cc1">More...</a><br/></td></tr>
@@ -315,6 +317,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a949c0e7abd96e6f0ec6d8dcd1d1a81ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a905b27ee4223d3e09495f3bc62e6497f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a905b27ee4223d3e09495f3bc62e6497f">on_edit_undo</a> ()</td></tr>
 <tr class="separator:a905b27ee4223d3e09495f3bc62e6497f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d1538ff1742d51889d8c7b0d380d62e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a1d1538ff1742d51889d8c7b0d380d62e">on_edit_copy</a> ()</td></tr>
+<tr class="separator:a1d1538ff1742d51889d8c7b0d380d62e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4460aad717a04fc79561a670c4df2b4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a4460aad717a04fc79561a670c4df2b4d">on_edit_paste</a> ()</td></tr>
+<tr class="separator:a4460aad717a04fc79561a670c4df2b4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54859cc18065e992eacb8e3fc2f53829"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a54859cc18065e992eacb8e3fc2f53829">on_edit_insert_above</a> ()</td></tr>
 <tr class="separator:a54859cc18065e992eacb8e3fc2f53829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a533b29c157e2e0a00499b35762f1da7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a533b29c157e2e0a00499b35762f1da7c">on_edit_insert_below</a> ()</td></tr>
@@ -427,6 +433,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab2b37a1a30f8f2427bf240f323784293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ff79c4919808b8b12e90ee698343766"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a3ff79c4919808b8b12e90ee698343766">read_only</a></td></tr>
 <tr class="separator:a3ff79c4919808b8b12e90ee698343766"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a340903af0ef9015d8c1e3cf769f47ab4"><td class="memItemLeft" align="right" valign="top">Glib::RefPtr&lt; Gtk::Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a340903af0ef9015d8c1e3cf769f47ab4">action_copy</a></td></tr>
+<tr class="separator:a340903af0ef9015d8c1e3cf769f47ab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3007454d873e8abfbed25deaa922cfcb"><td class="memItemLeft" align="right" valign="top">Glib::RefPtr&lt; Gtk::Action &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a3007454d873e8abfbed25deaa922cfcb">action_paste</a></td></tr>
+<tr class="separator:a3007454d873e8abfbed25deaa922cfcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ad63e5e78399b1792820f9ad2eb5de5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a6ad63e5e78399b1792820f9ad2eb5de5">clipboard_txt</a></td></tr>
 <tr class="separator:a6ad63e5e78399b1792820f9ad2eb5de5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d8b11116bc10979f693d9aaf46671fb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1NotebookWindow.html#a5d8b11116bc10979f693d9aaf46671fb">clipboard_cdb</a></td></tr>
@@ -1154,6 +1164,29 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1d1538ff1742d51889d8c7b0d380d62e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NotebookWindow::on_edit_copy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a66c6fd89df9543cbb9f2a407525df789"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1209,6 +1242,29 @@ Additional Inherited Members</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">void NotebookWindow::on_edit_insert_below </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4460aad717a04fc79561a670c4df2b4d"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NotebookWindow::on_edit_paste </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1640,6 +1696,40 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classcadabra_1_1GUIBase.html#a2c2007ce76362bf52fcd70a497e04b2e">cadabra::GUIBase</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a979d98ccef0515115fe4b8cf00c8a6a3"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NotebookWindow::on_outbox_copy </td>
+          <td>(</td>
+          <td class="paramtype">Glib::RefPtr&lt; Gtk::Clipboard &gt;&#160;</td>
+          <td class="paramname"><em>refClipboard</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">DTree::iterator&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -2309,6 +2399,46 @@ Additional Inherited Members</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a340903af0ef9015d8c1e3cf769f47ab4"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Glib::RefPtr&lt;Gtk::Action&gt; cadabra::NotebookWindow::action_copy</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a3007454d873e8abfbed25deaa922cfcb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Glib::RefPtr&lt;Gtk::Action&gt; cadabra::NotebookWindow::action_paste</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="af9a19947728a89151cf3922d6d109019"></a>
 <div class="memitem">
 <div class="memproto">
@@ -3000,7 +3130,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 4 2018 12:20:01 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 13:25:10 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

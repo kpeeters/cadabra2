@@ -81,7 +81,7 @@ var searchData=
   ['preferenceswindow',['PreferencesWindow',['../classPreferencesWindow.html',1,'']]],
   ['preferred',['preferred',['../classcadabra_1_1eliminate__converter.html#a1bff65297246a1d022e2c3c4ad0cb1f4',1,'cadabra::eliminate_converter::preferred()'],['../classcadabra_1_1rewrite__indices.html#a9ab5ab76d762099097defad92e95614f',1,'cadabra::rewrite_indices::preferred()']]],
   ['prefs',['Prefs',['../classcadabra_1_1NotebookWindow_1_1Prefs.html',1,'cadabra::NotebookWindow']]],
-  ['prefs',['prefs',['../classcadabra_1_1NotebookWindow.html#ae5a8c0bcc61c450c1599990787b60ea0',1,'cadabra::NotebookWindow::prefs()'],['../classcadabra_1_1NotebookWindow_1_1Prefs.html#a2c4ff3dc15e9207d1518784c161ac169',1,'cadabra::NotebookWindow::Prefs::Prefs()']]],
+  ['prefs',['Prefs',['../classcadabra_1_1NotebookWindow_1_1Prefs.html#a2c4ff3dc15e9207d1518784c161ac169',1,'cadabra::NotebookWindow::Prefs::Prefs()'],['../classcadabra_1_1NotebookWindow.html#ae5a8c0bcc61c450c1599990787b60ea0',1,'cadabra::NotebookWindow::prefs()']]],
   ['preparse_5fimport',['preparse_import',['../classcadabra_1_1DisplayMMA.html#a6e011119c3d8f0ed0131a12ab152f1d1',1,'cadabra::DisplayMMA']]],
   ['preprocessor',['preprocessor',['../classpreprocessor.html',1,'preprocessor'],['../classpreprocessor.html#a548322f00a5eced33a58fc1362d91468',1,'preprocessor::preprocessor()']]],
   ['preprocessor_2ecc',['PreProcessor.cc',['../PreProcessor_8cc.html',1,'']]],
