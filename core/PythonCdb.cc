@@ -368,7 +368,7 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 	return ret;
 	}
 
-	std::string Ex_to_MMA(const Ex& ex)
+std::string Ex_to_MMA(const Ex& ex, bool use_unicode)
 	{
 	// Check to see if the expression is a scalar without dummy indices.
 //	Algorithm::index_map_t ind_free, ind_dummy;
@@ -379,7 +379,7 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 //		throw NonScalarException("Expression contains free indices.");
 
 	std::ostringstream str;
-	DisplayMMA dt(*get_kernel_from_scope(), ex, false);
+	DisplayMMA dt(*get_kernel_from_scope(), ex, use_unicode);
 	dt.output(str);
 
 	return str.str();
@@ -1269,7 +1269,7 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__eq__",      &__eq__Ex_int)
 		.def("_sympy_",     &Ex_to_Sympy)		
 		.def("sympy_form",  &Ex_to_Sympy_string)
-		.def("mma_form",    &Ex_to_MMA)    // standardize on this
+		.def("mma_form",    &Ex_to_MMA, (arg("unicode")=true))    // standardize on this
 		.def("input_form",  &Ex_to_input) 
 		.def("__getitem__", &Ex_getitem)
 		.def("__getitem__", &Ex_getslice)
