@@ -11,6 +11,8 @@ var searchData=
   ['terminate',['terminate',['../classcadabra_1_1ComputeThread.html#a8a3d3abd3bcdf44564758a3913efb995',1,'cadabra::ComputeThread']]],
   ['terms',['terms',['../PythonCdb_8cc.html#a8aa7a6b2d258e2b2a135c0b2cb50a33d',1,'PythonCdb.cc']]],
   ['test',['test',['../classcadabra2__defaults_1_1Server.html#ae2d4d5f348f4b6861016b00f179b701b',1,'cadabra2_defaults::Server']]],
+  ['test1',['test1',['../simple_8cc.html#a1440a7779ac56f47a3f355ce4a8c7da0',1,'simple.cc']]],
+  ['test2',['test2',['../simple_8cc.html#a0283886819c7c140a023582b7269e2d0',1,'simple.cc']]],
   ['testit',['testit',['../test__preprocessor_8cc.html#a354b0adf4eda0ae93a5bd34eceeb6fbf',1,'test_preprocessor.cc']]],
   ['texengine',['TeXEngine',['../classcadabra_1_1TeXEngine.html#a09348689e3c5ab33989cee9eaf8bd8ae',1,'cadabra::TeXEngine']]],
   ['texexception',['TeXException',['../classcadabra_1_1TeXEngine_1_1TeXException.html#a5b61c3828229e5b2664e059a83214f22',1,'cadabra::TeXEngine::TeXException']]],

@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -156,8 +157,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a8bfa19cc284e0ca57632270f5f93d976"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c87e64b595dccdacc4dde28660f2187"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a9c87e64b595dccdacc4dde28660f2187">on_message</a> (websocketpp::connection_hdl hdl, <a class="el" href="ComputeThread_8hh.html#a8d7da57f57aec5c532259ba0b3fc7a78">message_ptr</a> msg)</td></tr>
 <tr class="separator:a9c87e64b595dccdacc4dde28660f2187"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8a01997c2f427ef7908a4a4f65491ca"><td class="memItemLeft" align="right" valign="top">DTree::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#aa8a01997c2f427ef7908a4a4f65491ca">find_cell_by_id</a> (<a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a>, bool remove)</td></tr>
-<tr class="separator:aa8a01997c2f427ef7908a4a4f65491ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dd4f2d4d70f1f6b65ab58b199bfde2f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#a9dd4f2d4d70f1f6b65ab58b199bfde2f">cell_finished_running</a> (<a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a>)</td></tr>
+<tr class="separator:a9dd4f2d4d70f1f6b65ab58b199bfde2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd23922c0b8e15be80d69005aa515b92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ComputeThread.html#acd23922c0b8e15be80d69005aa515b92">all_cells_nonrunning</a> ()</td></tr>
 <tr class="memdesc:acd23922c0b8e15be80d69005aa515b92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set all cells to be non-running (e.g.  <a href="#acd23922c0b8e15be80d69005aa515b92">More...</a><br/></td></tr>
 <tr class="separator:acd23922c0b8e15be80d69005aa515b92"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -276,6 +277,30 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 </div>
 </div>
+<a class="anchor" id="a9dd4f2d4d70f1f6b65ab58b199bfde2f"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ComputeThread::cell_finished_running </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a>&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a04abcacb1305898419c2777436d51520"></a>
 <div class="memitem">
 <div class="memproto">
@@ -292,40 +317,6 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 
 <p>In order to execute code on the server, call the following from the GUI thread. </p>
 <p>This method returns as soon as the request has been put on the network queue. If no communication with the server is necessary, this returns immediately. The <a class="el" href="classcadabra_1_1ComputeThread.html" title="Base class which talks to the server and sends Action objects back to the DocumentThread. ">ComputeThread</a> will report the result of the computation/processing by adding actions to the <a class="el" href="classcadabra_1_1DocumentThread.html" title="A base class with all the logic to manipulate a Cadabra notebook document. ">DocumentThread</a> owned pending_actions stack, by calling queue_action. It will never modify the cell directly, and will also never modify any other cells in the document tree. </p>
-
-</div>
-</div>
-<a class="anchor" id="aa8a01997c2f427ef7908a4a4f65491ca"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">DTree::iterator ComputeThread::find_cell_by_id </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a>&#160;</td>
-          <td class="paramname"><em>id</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>remove</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
 
 </div>
 </div>
@@ -885,7 +876,7 @@ DTree::iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:47 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:59 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

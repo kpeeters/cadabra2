@@ -6,6 +6,7 @@ var searchData=
   ['upsilon',['Upsilon',['../Symbols_8cc.html#a3746fac64f253791492c1e3e79fd3db4',1,'Upsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#af4256ce339bc9b51e8a8eba595b96c72',1,'upsilon():&#160;Symbols.cc']]],
   ['use_5fgeneralised_5fdelta_5f',['use_generalised_delta_',['../classcadabra_1_1join__gamma.html#a896d386de915f28e1a13cc46b5ad9234',1,'cadabra::join_gamma']]],
   ['use_5frule',['use_rule',['../classcadabra_1_1substitute.html#a548bb5a4f3dba54ca5a29537e4029c92',1,'cadabra::substitute']]],
+  ['use_5funicode',['use_unicode',['../classcadabra_1_1DisplayMMA.html#a9c27e1d1001ecc4828d4270b674a3f62',1,'cadabra::DisplayMMA::use_unicode()'],['../classcadabra_1_1DisplayTerminal.html#ac0a1723c3a6fc421b3abb523c1aab716',1,'cadabra::DisplayTerminal::use_unicode()']]],
   ['user_5fid',['user_id',['../classsnoop_1_1Snoop_1_1AppEntry.html#a5b58a09cf90c5bb4b41be268f658f6d8',1,'snoop::Snoop::AppEntry']]],
   ['utf8_5foutput',['utf8_output',['../classcadabra_1_1DisplayTeX.html#afe1f440e91b40b0cb2477488f957d9d2',1,'cadabra::DisplayTeX']]],
   ['uuid',['uuid',['../classServer_1_1Connection.html#a93a4df5516566bbea3c92724a7d65bf2',1,'Server::Connection::uuid()'],['../classsnoop_1_1Snoop_1_1AppEntry.html#ab9e8d331069c8f1824adbc2ed12773b8',1,'snoop::Snoop::AppEntry::uuid()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#ad903802f4239b5e382d8ecc778e26589',1,'snoop::Snoop::LogEntry::uuid()']]]

@@ -40,7 +40,7 @@ var searchData=
   ['is_5fdigits_5f',['is_digits_',['../classpreprocessor.html#a5dedb01138ea15c41e4cf5b3e8d21d6e',1,'preprocessor']]],
   ['is_5ffactorlike',['is_factorlike',['../classcadabra_1_1Algorithm.html#a39f52c31b9eeaa8a1648d19f894019c8',1,'cadabra::Algorithm']]],
   ['is_5fidentity',['is_identity',['../classcadabra_1_1str__node.html#ad9312b82ae5d8299c169b4111ef242c3',1,'cadabra::str_node']]],
-  ['is_5fin',['is_in',['../group__core.html#ga98816a86ca429d63a5c80d3ade497458',1,'cadabra']]],
+  ['is_5fin',['is_in',['../namespacecadabra.html#a98816a86ca429d63a5c80d3ade497458',1,'cadabra']]],
   ['is_5findex',['is_index',['../classcadabra_1_1index__iterator.html#ac399761e24ccdf8d00edcca5e7df494d',1,'cadabra::index_iterator::is_index()'],['../classcadabra_1_1str__node.html#ae77a9bbd8afc02d8867e13e81a49f2c1',1,'cadabra::str_node::is_index()']]],
   ['is_5findexplus_5fwildcard',['is_indexplus_wildcard',['../classcadabra_1_1str__node.html#a66beb732784072315b3eab758ac0ed96',1,'cadabra::str_node']]],
   ['is_5findexstar_5fwildcard',['is_indexstar_wildcard',['../classcadabra_1_1str__node.html#ac59926f1a538b718c3d4afc232fc1cff',1,'cadabra::str_node']]],

@@ -2,6 +2,7 @@ var searchData=
 [
   ['p_5fcomponents',['p_components',['../classcadabra_1_1str__node.html#a71f009125bc46e7d8079bfa067e20e7dae8065e528bc102c8bd4344b22e2aa8ca',1,'cadabra::str_node']]],
   ['p_5fexponent',['p_exponent',['../classcadabra_1_1str__node.html#a71f009125bc46e7d8079bfa067e20e7da14092a05bb751db016f415f4c70e3aa2',1,'cadabra::str_node']]],
+  ['p_5finvalid',['p_invalid',['../classcadabra_1_1str__node.html#a71f009125bc46e7d8079bfa067e20e7da2a249aeb7873c3f8bbfcc99936c6decf',1,'cadabra::str_node']]],
   ['p_5fnone',['p_none',['../classcadabra_1_1str__node.html#a71f009125bc46e7d8079bfa067e20e7da743bd4d9cf75954edc093ffd00857992',1,'cadabra::str_node']]],
   ['p_5fproperty',['p_property',['../classcadabra_1_1str__node.html#a71f009125bc46e7d8079bfa067e20e7da309baf323d8fbc8e16c9c148c2c2592c',1,'cadabra::str_node']]],
   ['p_5fsub',['p_sub',['../classcadabra_1_1str__node.html#a71f009125bc46e7d8079bfa067e20e7da1f7055224aefca70c296b993ad134f33',1,'cadabra::str_node']]],

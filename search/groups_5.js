@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['os_2dx',['OS-X',['../group__osx.html',1,'']]]
+  ['mathematica_20bridge',['Mathematica bridge',['../group__mma.html',1,'']]]
 ];

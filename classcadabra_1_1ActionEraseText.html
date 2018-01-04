@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -120,8 +121,8 @@ Inheritance diagram for cadabra::ActionEraseText:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab7a5b3b508b30bea0ed58b65e63de10b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionEraseText.html#ab7a5b3b508b30bea0ed58b65e63de10b">ActionEraseText</a> (DTree::iterator, int, int)</td></tr>
-<tr class="separator:ab7a5b3b508b30bea0ed58b65e63de10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab959df65415ad0a38055e59ad2f148a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionEraseText.html#ab959df65415ad0a38055e59ad2f148a6">ActionEraseText</a> (<a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a> <a class="el" href="classcadabra_1_1ActionBase.html#ae15c79bc11d9a501c5e201eee6d4e6a3">ref_id</a>, int, int)</td></tr>
+<tr class="separator:ab959df65415ad0a38055e59ad2f148a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f7ec967cec0de783fdc934c46d24ba0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionEraseText.html#a2f7ec967cec0de783fdc934c46d24ba0">execute</a> (<a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;, <a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> &amp;) override</td></tr>
 <tr class="memdesc:a2f7ec967cec0de783fdc934c46d24ba0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform the action.  <a href="#a2f7ec967cec0de783fdc934c46d24ba0">More...</a><br/></td></tr>
 <tr class="separator:a2f7ec967cec0de783fdc934c46d24ba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -129,6 +130,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a49cb7e1eeeeb32a9cbfa231e3d7b1b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Revert the change to the DTree document and the GUI.  <a href="#a49cb7e1eeeeb32a9cbfa231e3d7b1b16">More...</a><br/></td></tr>
 <tr class="separator:a49cb7e1eeeeb32a9cbfa231e3d7b1b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classcadabra_1_1ActionBase"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classcadabra_1_1ActionBase')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classcadabra_1_1ActionBase.html">cadabra::ActionBase</a></td></tr>
+<tr class="memitem:a656dabfbbd725ddc66372bc0d841cff8 inherit pub_methods_classcadabra_1_1ActionBase"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionBase.html#a656dabfbbd725ddc66372bc0d841cff8">ActionBase</a> (<a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a> <a class="el" href="classcadabra_1_1ActionBase.html#ae15c79bc11d9a501c5e201eee6d4e6a3">ref_id</a>)</td></tr>
+<tr class="separator:a656dabfbbd725ddc66372bc0d841cff8 inherit pub_methods_classcadabra_1_1ActionBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a579c6d1856fbffa6e1e04a81587ebe06 inherit pub_methods_classcadabra_1_1ActionBase"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionBase.html#a579c6d1856fbffa6e1e04a81587ebe06">undoable</a> () const </td></tr>
 <tr class="memdesc:a579c6d1856fbffa6e1e04a81587ebe06 inherit pub_methods_classcadabra_1_1ActionBase"><td class="mdescLeft">&#160;</td><td class="mdescRight">Can this action be undone?  <a href="#a579c6d1856fbffa6e1e04a81587ebe06">More...</a><br/></td></tr>
 <tr class="separator:a579c6d1856fbffa6e1e04a81587ebe06 inherit pub_methods_classcadabra_1_1ActionBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,17 +146,25 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0c97febe9d6a9d88f4d8a4cfe8acaa89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eb8bc0749bada523a3ca74c4a0038a7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionEraseText.html#a0eb8bc0749bada523a3ca74c4a0038a7">removed_text</a></td></tr>
 <tr class="separator:a0eb8bc0749bada523a3ca74c4a0038a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_attribs_classcadabra_1_1ActionBase"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcadabra_1_1ActionBase')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcadabra_1_1ActionBase.html">cadabra::ActionBase</a></td></tr>
+<tr class="memitem:ae15c79bc11d9a501c5e201eee6d4e6a3 inherit pro_attribs_classcadabra_1_1ActionBase"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionBase.html#ae15c79bc11d9a501c5e201eee6d4e6a3">ref_id</a></td></tr>
+<tr class="separator:ae15c79bc11d9a501c5e201eee6d4e6a3 inherit pro_attribs_classcadabra_1_1ActionBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29f05993e10a16afabe18057c1347a71 inherit pro_attribs_classcadabra_1_1ActionBase"><td class="memItemLeft" align="right" valign="top">DTree::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1ActionBase.html#a29f05993e10a16afabe18057c1347a71">ref</a></td></tr>
+<tr class="separator:a29f05993e10a16afabe18057c1347a71 inherit pro_attribs_classcadabra_1_1ActionBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="ab7a5b3b508b30bea0ed58b65e63de10b"></a>
+<a class="anchor" id="ab959df65415ad0a38055e59ad2f148a6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">ActionEraseText::ActionEraseText </td>
           <td>(</td>
-          <td class="paramtype">DTree::iterator&#160;</td>
-          <td class="paramname"><em>ref_</em>, </td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1DataCell_1_1id__t.html">DataCell::id_t</a>&#160;</td>
+          <td class="paramname"><em>ref_id</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -189,13 +200,13 @@ Private Attributes</h2></td></tr>
           <td class="memname">void ActionEraseText::execute </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classcadabra_1_1DocumentThread.html">DocumentThread</a> &amp;&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>cl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classcadabra_1_1GUIBase.html">GUIBase</a> &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>gb</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -213,7 +224,7 @@ Private Attributes</h2></td></tr>
 <p>Perform the action. </p>
 <p>This should update both the document tree data structure and the GUI. The latter is updated by calling relevant methods on the <a class="el" href="classcadabra_1_1GUIBase.html" title="Abstract base class with methods that need to be implemented by any GUI. ">GUIBase</a> object passed in. </p>
 
-<p>Implements <a class="el" href="classcadabra_1_1ActionBase.html#a92ac3e27b56c75f0dde10aef7ea09d97">cadabra::ActionBase</a>.</p>
+<p>Reimplemented from <a class="el" href="classcadabra_1_1ActionBase.html#a468a1f2d9c19e400967dca245bd547ed">cadabra::ActionBase</a>.</p>
 
 </div>
 </div>
@@ -343,7 +354,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:47 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:59 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

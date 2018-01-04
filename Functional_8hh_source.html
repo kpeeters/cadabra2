@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -109,7 +110,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__core.html#ga5c0d915d27dbcdf1aa070153a3e608b0">do_list</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;<span class="keywordtype">bool</span>(Ex::iterator)&gt; f);</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef">list_size</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">int</span> <a class="code" href="group__core.html#ga1d2ff3550d3c5f407f9e365719030cef">list_size</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it);</div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    </div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    </div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Ex::iterator <a class="code" href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">do_subtree</a>(<span class="keyword">const</span> Ex&amp; tr, Ex::iterator it, std::function&lt;Ex::iterator(Ex::iterator)&gt; f);</div>
@@ -129,12 +130,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="ttc" id="group__core_html_ga44043f2e9b54d9d04d5df7aed63c59d8"><div class="ttname"><a href="group__core.html#ga44043f2e9b54d9d04d5df7aed63c59d8">cadabra::do_subtree</a></div><div class="ttdeci">Ex::iterator do_subtree(const Ex &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</div><div class="ttdoc">Apply a function on every node in the tree at and below the given node, depth-first. </div><div class="ttdef"><b>Definition:</b> Functional.cc:33</div></div>
 <div class="ttc" id="group__core_html_gad925ab5545854ee596c218738f11b013"><div class="ttname"><a href="group__core.html#gad925ab5545854ee596c218738f11b013">cadabra::make_list</a></div><div class="ttdeci">Ex make_list(Ex el)</div><div class="ttdoc">Ensure that the tree is a list, even if it contains only a single element. </div><div class="ttdef"><b>Definition:</b> Functional.cc:98</div></div>
 <div class="ttc" id="group__core_html_ga3a2ae6b908d34ea0490114559107ede5"><div class="ttname"><a href="group__core.html#ga3a2ae6b908d34ea0490114559107ede5">cadabra::find_in_list</a></div><div class="ttdeci">Ex::iterator find_in_list(const Ex &amp;tr, Ex::iterator it, std::function&lt; Ex::iterator(Ex::iterator)&gt; f)</div><div class="ttdoc">Returns an iterator to the first element for which &#39;f&#39; does not return tr.end(). </div><div class="ttdef"><b>Definition:</b> Functional.cc:81</div></div>
-<div class="ttc" id="namespacecadabra_html_a1d2ff3550d3c5f407f9e365719030cef"><div class="ttname"><a href="namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef">cadabra::list_size</a></div><div class="ttdeci">int list_size(const Ex &amp;tr, Ex::iterator it)</div><div class="ttdoc">For lists as defined above for &#39;do_list&#39;, return their size (in case you really need to know the size...</div><div class="ttdef"><b>Definition:</b> Functional.cc:25</div></div>
 <div class="ttc" id="Storage_8hh_html"><div class="ttname"><a href="Storage_8hh.html">Storage.hh</a></div></div>
+<div class="ttc" id="group__core_html_ga1d2ff3550d3c5f407f9e365719030cef"><div class="ttname"><a href="group__core.html#ga1d2ff3550d3c5f407f9e365719030cef">cadabra::list_size</a></div><div class="ttdeci">int list_size(const Ex &amp;tr, Ex::iterator it)</div><div class="ttdoc">For lists as defined above for &#39;do_list&#39;, return their size (in case you really need to know the size...</div><div class="ttdef"><b>Definition:</b> Functional.cc:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:24 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

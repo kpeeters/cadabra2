@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -251,16 +252,21 @@ Functions</h2></td></tr>
 <tr class="memitem:ga8a28af5339c592b6266bdd5a86e856bf"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga8a28af5339c592b6266bdd5a86e856bf">Ex_str_</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
 <tr class="memdesc:ga8a28af5339c592b6266bdd5a86e856bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() and repr() representation of the Ex object.  <a href="group__pythoncore.html#ga8a28af5339c592b6266bdd5a86e856bf">More...</a><br/></td></tr>
 <tr class="separator:ga8a28af5339c592b6266bdd5a86e856bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94d2dd53254fb7995bbfbf052d94e910"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a94d2dd53254fb7995bbfbf052d94e910">Ex_to_input</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:a94d2dd53254fb7995bbfbf052d94e910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga57a377f3ca30ab263f335b6236bdc894"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga57a377f3ca30ab263f335b6236bdc894">Ex_latex_</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
 <tr class="memdesc:ga57a377f3ca30ab263f335b6236bdc894"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Python 'print' function always calls the 'str' member on objects to be printed.  <a href="group__pythoncore.html#ga57a377f3ca30ab263f335b6236bdc894">More...</a><br/></td></tr>
 <tr class="separator:ga57a377f3ca30ab263f335b6236bdc894"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa7280e0886f1ca4a1e7b9ea8149df36"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#afa7280e0886f1ca4a1e7b9ea8149df36">Ex_repr_</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
 <tr class="separator:afa7280e0886f1ca4a1e7b9ea8149df36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1e099005d6266fa60b1ca2b4705653c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af1e099005d6266fa60b1ca2b4705653c">Ex_to_Sympy_string</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:af1e099005d6266fa60b1ca2b4705653c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression.  <a href="#af1e099005d6266fa60b1ca2b4705653c">More...</a><br/></td></tr>
+<tr class="separator:af1e099005d6266fa60b1ca2b4705653c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafd911392f791a94aa633d4cdb1670bda"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">Ex_to_Sympy</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
-<tr class="memdesc:gafd911392f791a94aa633d4cdb1670bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' to a Sympy expression.  <a href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">More...</a><br/></td></tr>
+<tr class="memdesc:gafd911392f791a94aa633d4cdb1670bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' as a Sympy expression.  <a href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">More...</a><br/></td></tr>
 <tr class="separator:gafd911392f791a94aa633d4cdb1670bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa13213c0efe0f4417018f230e311ea72"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#aa13213c0efe0f4417018f230e311ea72">Ex_to_MMA</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
-<tr class="separator:aa13213c0efe0f4417018f230e311ea72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae779b8038857729b9abb7b5ae0e68758"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ae779b8038857729b9abb7b5ae0e68758">Ex_to_MMA</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, bool use_unicode)</td></tr>
+<tr class="separator:ae779b8038857729b9abb7b5ae0e68758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a0a4ace1e0bde4ab74e7333dd33b1af14">fetch_from_python</a> (const std::string &amp;nm)</td></tr>
 <tr class="memdesc:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch an Ex object from the Python side using its Python identifier.  <a href="#a0a4ace1e0bde4ab74e7333dd33b1af14">More...</a><br/></td></tr>
 <tr class="separator:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -980,12 +986,12 @@ template&lt;class F , typename... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="aa13213c0efe0f4417018f230e311ea72"></a>
+<a class="anchor" id="a94d2dd53254fb7995bbfbf052d94e910"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::string Ex_to_MMA </td>
+          <td class="memname">std::string Ex_to_input </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
@@ -993,6 +999,50 @@ template&lt;class F , typename... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae779b8038857729b9abb7b5ae0e68758"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Ex_to_MMA </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
+          <td class="paramname"><em>ex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use_unicode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af1e099005d6266fa60b1ca2b4705653c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Ex_to_Sympy_string </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression. </p>
 
 </div>
 </div>
@@ -1456,7 +1506,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:24 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

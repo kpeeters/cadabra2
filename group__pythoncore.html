@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -84,6 +85,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="summary">
+<a href="#files">Files</a> &#124;
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
@@ -92,7 +94,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a name="details" id="details"></a><h2 class="groupheader">Module Description</h2>
 <p>Python wrapper around the C++ core module, making the entire functionality of <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> accessible from Python. </p>
+<p>This consists of two parts. One is <a class="el" href="cadabra2__defaults_8py.html" title="Cadabra2 pure Python functionality. ">core/cadabra2_defaults.py</a>, which is a pure-python file. It contains the display function to show <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> objects to the user in a UI-independent way (e.g. switching between a text representation on the command line and a LaTeX representation when running in a notebook). The other part is <a class="el" href="PythonCdb_8cc.html">core/PythonCdb.cc</a>, which builds the cadabra2 module for python, to be imported with 'from cadabra2 import *'. </p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="files"></a>
+Files</h2></td></tr>
+<tr class="memitem:cadabra2__defaults_8py"><td class="memItemLeft" align="right" valign="top">file &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cadabra2__defaults_8py.html">cadabra2_defaults.py</a></td></tr>
+<tr class="memdesc:cadabra2__defaults_8py"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cadabra2 pure Python functionality. <br/></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBaseProperty.html">BaseProperty</a></td></tr>
@@ -396,7 +405,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:24 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

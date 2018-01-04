@@ -19,7 +19,7 @@ var indexSectionsWithContent =
   9: "nsw",
   10: "fiost",
   11: "bdhilnrwz",
-  12: "acefgops",
+  12: "acefgmops",
   13: "c"
 };
 

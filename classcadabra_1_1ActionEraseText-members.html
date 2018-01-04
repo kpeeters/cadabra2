@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -102,18 +103,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>This is the complete list of members for <a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#ab7a5b3b508b30bea0ed58b65e63de10b">ActionEraseText</a>(DTree::iterator, int, int)</td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a2f7ec967cec0de783fdc934c46d24ba0">execute</a>(DocumentThread &amp;, GUIBase &amp;) override</td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a2e2b8f9805be0d921391c80391f4cd98">from_pos</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a0eb8bc0749bada523a3ca74c4a0038a7">removed_text</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a49cb7e1eeeeb32a9cbfa231e3d7b1b16">revert</a>(DocumentThread &amp;, GUIBase &amp;) override</td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#ab4497be2c43cd77a7b230a3881c84c65">this_cell</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a0c97febe9d6a9d88f4d8a4cfe8acaa89">to_pos</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html#a579c6d1856fbffa6e1e04a81587ebe06">undoable</a>() const </td><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html">cadabra::ActionBase</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html#a656dabfbbd725ddc66372bc0d841cff8">ActionBase</a>(DataCell::id_t ref_id)</td><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html">cadabra::ActionBase</a></td><td class="entry"></td></tr>
+  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#ab959df65415ad0a38055e59ad2f148a6">ActionEraseText</a>(DataCell::id_t ref_id, int, int)</td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a2f7ec967cec0de783fdc934c46d24ba0">execute</a>(DocumentThread &amp;, GUIBase &amp;) override</td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a2e2b8f9805be0d921391c80391f4cd98">from_pos</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html#a29f05993e10a16afabe18057c1347a71">ref</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html">cadabra::ActionBase</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html#ae15c79bc11d9a501c5e201eee6d4e6a3">ref_id</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html">cadabra::ActionBase</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a0eb8bc0749bada523a3ca74c4a0038a7">removed_text</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a49cb7e1eeeeb32a9cbfa231e3d7b1b16">revert</a>(DocumentThread &amp;, GUIBase &amp;) override</td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#ab4497be2c43cd77a7b230a3881c84c65">this_cell</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html#a0c97febe9d6a9d88f4d8a4cfe8acaa89">to_pos</a></td><td class="entry"><a class="el" href="classcadabra_1_1ActionEraseText.html">cadabra::ActionEraseText</a></td><td class="entry"><span class="mlabel">private</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html#a579c6d1856fbffa6e1e04a81587ebe06">undoable</a>() const </td><td class="entry"><a class="el" href="classcadabra_1_1ActionBase.html">cadabra::ActionBase</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:47 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:59 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

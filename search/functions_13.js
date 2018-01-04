@@ -5,7 +5,7 @@ var searchData=
   ['save',['save',['../classcadabra_1_1NotebookWindow.html#a8a952a69cd040d3d369b48a4997c6245',1,'cadabra::NotebookWindow']]],
   ['scroll_5fcurrent_5fcell_5finto_5fview',['scroll_current_cell_into_view',['../classcadabra_1_1NotebookWindow.html#aa8d598f3fccc5cc32848a26eaf2b61c0',1,'cadabra::NotebookWindow']]],
   ['seconds',['seconds',['../classStopwatch.html#a38b69dd21836a9f8146983d2ceb92adf',1,'Stopwatch']]],
-  ['send',['send',['../classcadabra2__defaults_1_1Server.html#aad976c530a5a249cc9304a3a796902d0',1,'cadabra2_defaults.Server.send()'],['../classServer.html#a65b1dac34696d3794c22f7aea36a6b29',1,'Server::send()']]],
+  ['send',['send',['../classcadabra2__defaults_1_1Server.html#aad976c530a5a249cc9304a3a796902d0',1,'cadabra2_defaults.Server.send()'],['../classServer.html#aa10a3339d8a79876f9fb13ad9ebcbe97',1,'Server::send()']]],
   ['send_5fjson',['send_json',['../classServer.html#ae90cfeca11bfa5cf6f4bb58bc74ba204',1,'Server']]],
   ['separated_5fby_5fderivative',['separated_by_derivative',['../classcadabra_1_1Algorithm.html#ac817594a86f913dede32df9f41653614',1,'cadabra::Algorithm']]],
   ['serial_5fnumber',['serial_number',['../classcadabra_1_1Properties.html#ae09ae6819513542b2c020f5f184f238b',1,'cadabra::Properties']]],

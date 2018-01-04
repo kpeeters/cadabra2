@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -98,14 +99,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classcadabra_1_1DisplayMMA-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">cadabra::DisplayMMA Class Reference</div>  </div>
+<div class="title">cadabra::DisplayMMA Class Reference<div class="ingroups"><a class="el" href="group__display.html">Expression display</a></div></div>  </div>
 </div><!--header-->
 <div class="contents">
-
+<a name="details" id="details"></a><h2 class="groupheader">Description</h2>
+<div class="textblock"><p>Class to display expressions in a format that Mathematica can parse. </p>
+<p>Will throw an exception if a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">Ex</a> object cannot be understood by Mathematica. Can also convert expressions back to <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> notation. </p>
+</div>
 <p><code>#include &lt;<a class="el" href="DisplayMMA_8hh_source.html">DisplayMMA.hh</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for cadabra::DisplayMMA:</div>
@@ -119,8 +124,8 @@ Inheritance diagram for cadabra::DisplayMMA:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af5658c309d7a491cfeecebc562f3c2f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayMMA.html#af5658c309d7a491cfeecebc562f3c2f3">DisplayMMA</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;)</td></tr>
-<tr class="separator:af5658c309d7a491cfeecebc562f3c2f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bd00360b0e87bd048a597690cc2fd16"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayMMA.html#a2bd00360b0e87bd048a597690cc2fd16">DisplayMMA</a> (const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;, bool <a class="el" href="classcadabra_1_1DisplayMMA.html#a9c27e1d1001ecc4828d4270b674a3f62">use_unicode</a>)</td></tr>
+<tr class="separator:a2bd00360b0e87bd048a597690cc2fd16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2685588d308699d5d20cde00874262e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayMMA.html#a2685588d308699d5d20cde00874262e5">import</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;)</td></tr>
 <tr class="memdesc:a2685588d308699d5d20cde00874262e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rewrite the output of mathematica back into a notation used by <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a>.  <a href="#a2685588d308699d5d20cde00874262e5">More...</a><br/></td></tr>
 <tr class="separator:a2685588d308699d5d20cde00874262e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,6 +144,16 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a18c952b7d5cdb002f5da906eba2a6656"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayMMA.html#a18c952b7d5cdb002f5da906eba2a6656">needs_brackets</a> (Ex::iterator it) override</td></tr>
 <tr class="memdesc:a18c952b7d5cdb002f5da906eba2a6656"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine if a node needs extra brackets around it.  <a href="#a18c952b7d5cdb002f5da906eba2a6656">More...</a><br/></td></tr>
 <tr class="separator:a18c952b7d5cdb002f5da906eba2a6656"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a9c27e1d1001ecc4828d4270b674a3f62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayMMA.html#a9c27e1d1001ecc4828d4270b674a3f62">use_unicode</a></td></tr>
+<tr class="separator:a9c27e1d1001ecc4828d4270b674a3f62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classcadabra_1_1DisplayBase"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcadabra_1_1DisplayBase')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcadabra_1_1DisplayBase.html">cadabra::DisplayBase</a></td></tr>
+<tr class="memitem:a527706f63c79247bed1db8db2f4bc36e inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayBase.html#a527706f63c79247bed1db8db2f4bc36e">tree</a></td></tr>
+<tr class="separator:a527706f63c79247bed1db8db2f4bc36e inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aa14144fbddb85603dadbef2fabb329 inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayBase.html#a3aa14144fbddb85603dadbef2fabb329">kernel</a></td></tr>
+<tr class="separator:a3aa14144fbddb85603dadbef2fabb329 inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -197,17 +212,9 @@ std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 <a class="el" href="classcadabra_1_1nset__it__less.html">nset_it_less</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayMMA.html#a4013d84d6923057a208f166f7165ec53">depsyms</a></td></tr>
 <tr class="memdesc:a4013d84d6923057a208f166f7165ec53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from symbols which have had dependencies added to an expression containing these dependencies.  <a href="#a4013d84d6923057a208f166f7165ec53">More...</a><br/></td></tr>
 <tr class="separator:a4013d84d6923057a208f166f7165ec53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_attribs_classcadabra_1_1DisplayBase"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classcadabra_1_1DisplayBase')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classcadabra_1_1DisplayBase.html">cadabra::DisplayBase</a></td></tr>
-<tr class="memitem:a527706f63c79247bed1db8db2f4bc36e inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayBase.html#a527706f63c79247bed1db8db2f4bc36e">tree</a></td></tr>
-<tr class="separator:a527706f63c79247bed1db8db2f4bc36e inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3aa14144fbddb85603dadbef2fabb329 inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1DisplayBase.html#a3aa14144fbddb85603dadbef2fabb329">kernel</a></td></tr>
-<tr class="separator:a3aa14144fbddb85603dadbef2fabb329 inherit pro_attribs_classcadabra_1_1DisplayBase"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="af5658c309d7a491cfeecebc562f3c2f3"></a>
+<a class="anchor" id="a2bd00360b0e87bd048a597690cc2fd16"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -221,7 +228,13 @@ Additional Inherited Members</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>e</em>&#160;</td>
+          <td class="paramname"><em>e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use_unicode</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1029,6 +1042,26 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a9c27e1d1001ecc4828d4270b674a3f62"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool cadabra::DisplayMMA::use_unicode</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>core/<a class="el" href="DisplayMMA_8hh_source.html">DisplayMMA.hh</a></li>
 <li>core/<a class="el" href="DisplayMMA_8cc.html">DisplayMMA.cc</a></li>
@@ -1036,7 +1069,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:28 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:40 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

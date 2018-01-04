@@ -74,6 +74,7 @@ var searchData=
   ['inject_5fproperty',['inject_property',['../classcadabra_1_1Kernel.html#a4bab4b77df87dea5bd7c05cb78758875',1,'cadabra::Kernel']]],
   ['input',['input',['../classServer_1_1Block.html#a2746806b99cc5cd12df577a41ede6e9a',1,'Server::Block']]],
   ['input_5fasym',['input_asym',['../classcombin_1_1combinations__base.html#ac13dd3ff508478d96c25fac7330762eb',1,'combin::combinations_base::input_asym()'],['../classcombin_1_1symmetriser.html#acfd8d0dbdf2757ab55f4185450d2646f',1,'combin::symmetriser::input_asym()']]],
+  ['input_5fform',['input_form',['../classcadabra_1_1DataCell.html#a5e25d5a99ad917e512efea6ec7b38039a07a49a59fde5f889a7112c1d8f964e02',1,'cadabra::DataCell']]],
   ['insert_5flist_5fprop',['insert_list_prop',['../classcadabra_1_1Properties.html#a0962742c657cc3338a043d49323cf71a',1,'cadabra::Properties']]],
   ['insert_5fpos',['insert_pos',['../classcadabra_1_1ActionInsertText.html#a88408e32128c5f6ba40895b47116965a',1,'cadabra::ActionInsertText']]],
   ['insert_5fprop',['insert_prop',['../classcadabra_1_1Properties.html#abb652c37ad7935df155e924832266d82',1,'cadabra::Properties']]],
@@ -117,7 +118,7 @@ var searchData=
   ['is_5fdigits_5f',['is_digits_',['../classpreprocessor.html#a5dedb01138ea15c41e4cf5b3e8d21d6e',1,'preprocessor']]],
   ['is_5ffactorlike',['is_factorlike',['../classcadabra_1_1Algorithm.html#a39f52c31b9eeaa8a1648d19f894019c8',1,'cadabra::Algorithm']]],
   ['is_5fidentity',['is_identity',['../classcadabra_1_1str__node.html#ad9312b82ae5d8299c169b4111ef242c3',1,'cadabra::str_node']]],
-  ['is_5fin',['is_in',['../group__core.html#ga98816a86ca429d63a5c80d3ade497458',1,'cadabra']]],
+  ['is_5fin',['is_in',['../namespacecadabra.html#a98816a86ca429d63a5c80d3ade497458',1,'cadabra']]],
   ['is_5findex',['is_index',['../classpreprocessor_1_1accu__t.html#a199b55f633deab223c365f037f024cd5',1,'preprocessor::accu_t::is_index()'],['../classcadabra_1_1index__iterator.html#ac399761e24ccdf8d00edcca5e7df494d',1,'cadabra::index_iterator::is_index()'],['../classcadabra_1_1str__node.html#ae77a9bbd8afc02d8867e13e81a49f2c1',1,'cadabra::str_node::is_index()']]],
   ['is_5findexplus_5fwildcard',['is_indexplus_wildcard',['../classcadabra_1_1str__node.html#a66beb732784072315b3eab758ac0ed96',1,'cadabra::str_node']]],
   ['is_5findexstar_5fwildcard',['is_indexstar_wildcard',['../classcadabra_1_1str__node.html#ac59926f1a538b718c3d4afc232fc1cff',1,'cadabra::str_node']]],
@@ -146,8 +147,8 @@ var searchData=
   ['is_5fzero',['is_zero',['../classcadabra_1_1str__node.html#abde7610c6c529a751b5321a23d577cc5',1,'cadabra::str_node']]],
   ['it',['it',['../classcadabra_1_1indexsort_1_1less__indexed__treenode.html#ac5751be91f697e9dc3e410a4dbfbe04b',1,'cadabra::indexsort::less_indexed_treenode']]],
   ['iterable_5fconverter',['iterable_converter',['../classiterable__converter.html',1,'']]],
-  ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
   ['iterator',['iterator',['../classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b',1,'cadabra::Algorithm::iterator()'],['../classcadabra_1_1keyval__t.html#a85e9d1ab7689870ba69b5cd856c62f53',1,'cadabra::keyval_t::iterator()'],['../classcadabra_1_1Properties_1_1registered__property__map__t.html#a246fe2117fc20ee44cb7ab14e7e0dfe8',1,'cadabra::Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
+  ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fbase',['iterator_base',['../classyngtab_1_1filled__tableau_1_1iterator__base.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fcategory',['iterator_category',['../classyngtab_1_1filled__tableau_1_1iterator__base.html#ab11be0dad33e55a845b007ff4130c974',1,'yngtab::filled_tableau::iterator_base']]]
 ];

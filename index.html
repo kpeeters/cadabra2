@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -92,11 +93,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <dl class="section see"><dt>See Also</dt><dd><a href="http://cadabra.science">http://cadabra.science</a></dd></dl>
 <p>This repository holds the 2.x series of the <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> computer algebra system.</p>
 <p><a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> was designed specifically for the solution of problems encountered in field theory. It has extensive functionality for tensor computer algebra, tensor polynomial simplification including multi-term symmetries, fermions and anti-commuting variables, Clifford algebras and Fierz transformations, implicit coordinate dependence, multiple index types and many more. The input format is a subset of TeX. Both a command-line and a graphical interface are available.</p>
+<p>The <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> system is built around the C++ expression storage class <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">cadabra::Ex</a>. This stores mathematical expressions in the form of a symbol tree. Properties, derived from <a class="el" href="classcadabra_1_1property.html" title="Base class for all properties, handling argument parsing and defining the interface. ">cadabra::property</a>, can be attached to symbols inside the tree. Algorithms, derived from <a class="el" href="classcadabra_1_1Algorithm.html" title="Base class for all algorithms, containing generic routines and in particular the logic for index clas...">cadabra::Algorithm</a>, act on the <a class="el" href="classcadabra_1_1Ex.html" title="Basic storage class for symbolic mathemematical expressions. ">cadabra::Ex</a> objects, transforming their content by making use of the property information.</p>
+<p>The C++ objects and algorithms can be accessed via Python (via the cadabra2 Python module built in PyCdb.cc), or they can be used directly through the use of Cadabra-as-a-library.</p>
 <p>To get started with the source code documentation, navigate to the modules overview. </p>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:50 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:20:03 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -137,8 +138,11 @@ Functions</h2></td></tr>
 <tr class="memdesc:ga57a377f3ca30ab263f335b6236bdc894"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Python 'print' function always calls the 'str' member on objects to be printed.  <a href="group__pythoncore.html#ga57a377f3ca30ab263f335b6236bdc894">More...</a><br/></td></tr>
 <tr class="separator:ga57a377f3ca30ab263f335b6236bdc894"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gafd911392f791a94aa633d4cdb1670bda"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">Ex_to_Sympy</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
-<tr class="memdesc:gafd911392f791a94aa633d4cdb1670bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' to a Sympy expression.  <a href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">More...</a><br/></td></tr>
+<tr class="memdesc:gafd911392f791a94aa633d4cdb1670bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' as a Sympy expression.  <a href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">More...</a><br/></td></tr>
 <tr class="separator:gafd911392f791a94aa633d4cdb1670bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa32e703d0b8e48c4aeebc6b12ac631ba"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8hh.html#aa32e703d0b8e48c4aeebc6b12ac631ba">Ex_to_Sympy_string</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
+<tr class="memdesc:aa32e703d0b8e48c4aeebc6b12ac631ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression.  <a href="#aa32e703d0b8e48c4aeebc6b12ac631ba">More...</a><br/></td></tr>
+<tr class="separator:aa32e703d0b8e48c4aeebc6b12ac631ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gac00ef36dd5d0995f1f8349666f02ad5b">operator+</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;ex1, const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;ex2)</td></tr>
 <tr class="memdesc:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add two expressions, adding a top-level  node if required.  <a href="group__pythoncore.html#gac00ef36dd5d0995f1f8349666f02ad5b">More...</a><br/></td></tr>
 <tr class="separator:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,6 +213,24 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="aa32e703d0b8e48c4aeebc6b12ac631ba"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Ex_to_Sympy_string </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression. </p>
+
+</div>
+</div>
 <a class="anchor" id="ae6cca7e074b177106fd9e7ae7a350935"></a>
 <div class="memitem">
 <div class="memproto">
@@ -230,7 +252,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:24 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:35 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

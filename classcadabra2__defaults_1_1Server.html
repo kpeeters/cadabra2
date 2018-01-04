@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -102,7 +103,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">cadabra2_defaults.Server Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
+<a name="details" id="details"></a><h2 class="groupheader">Description</h2>
+<div class="textblock"><p>Object to handle advanced display in a UI-independent way. </p>
+<p><a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> makes available to Python a <a class="el" href="classcadabra2__defaults_1_1Server.html" title="Object to handle advanced display in a UI-independent way. ">Server</a> object, which contains functions to send output to the user. When running from the command line this simply prints to the screen, but it can talk to a remote client to display images and maths. </p>
+</div><div class="dynheader">
 Inheritance diagram for cadabra2_defaults.Server:</div>
 <div class="dyncontent">
  <div class="center">
@@ -199,7 +203,19 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>typestr</em>&#160;</td>
+          <td class="paramname"><em>typestr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>parent_id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>last_in_sequence</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -208,7 +224,10 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
+<pre class="fragment">Send a message to the client; 'typestr' indicates the cell type,
+'parent_id', if non-null, indicates the serial number of the parent
+cell.
+</pre> 
 </div>
 </div>
 <a class="anchor" id="ae2d4d5f348f4b6861016b00f179b701b"></a>
@@ -233,7 +252,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:48 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:20:01 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

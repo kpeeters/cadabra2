@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['scalar_20algebra',['Scalar algebra',['../group__scalar.html',1,'']]]
+  ['properties',['Properties',['../group__properties.html',1,'']]],
+  ['python_20core',['Python Core',['../group__pythoncore.html',1,'']]]
 ];

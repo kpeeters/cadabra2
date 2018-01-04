@@ -19,6 +19,8 @@ var searchData=
   ['cleanup',['cleanup',['../classcadabra_1_1sort__product.html#abe4d74c5b9bca1ea7c409b299e88d809',1,'cadabra::sort_product']]],
   ['client',['client',['../test__client_8cc.html#aaaccf49040d6c5e022a6bb79711c697b',1,'test_client.cc']]],
   ['client_5flog_5fid',['client_log_id',['../classsnoop_1_1Snoop_1_1LogEntry.html#a26f89b5c2351b415b828025d5f888a3b',1,'snoop::Snoop::LogEntry']]],
+  ['clipboard_5fcdb',['clipboard_cdb',['../classcadabra_1_1NotebookWindow.html#a5d8b11116bc10979f693d9aaf46671fb',1,'cadabra::NotebookWindow']]],
+  ['clipboard_5ftxt',['clipboard_txt',['../classcadabra_1_1NotebookWindow.html#a6ad63e5e78399b1792820f9ad2eb5de5',1,'cadabra::NotebookWindow']]],
   ['close_5fbrackets',['close_brackets',['../classpreprocessor.html#a8da08ed608991d82797a2422fe1a5a91',1,'preprocessor']]],
   ['codeinput',['CodeInput',['../classcadabra_1_1CodeInput_1_1exp__input__tv.html#a348fb769c5ee5d4d3f311bceca0414e2',1,'cadabra::CodeInput::exp_input_tv']]],
   ['collect',['collect',['../classServer_1_1CatchOutput.html#a74c6d5f0e84f6c5657873b7cb36a5e77',1,'Server::CatchOutput']]],

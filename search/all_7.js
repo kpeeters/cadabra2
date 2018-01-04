@@ -35,6 +35,7 @@ var searchData=
   ['gmn',['gmn',['../classcadabra_1_1drop__keep__weight.html#add6da99f867f1e99639d4ab40250ae9f',1,'cadabra::drop_keep_weight']]],
   ['goal',['goal',['../classcadabra_1_1complete.html#a6f8ec013c99f39d19f50e1622a1963ec',1,'cadabra::complete']]],
   ['greek',['greek',['../namespacecadabra_1_1symbols.html#aa12e330caef517e6c2376d060cc2ccb1',1,'cadabra::symbols']]],
+  ['greekmap',['greekmap',['../classcadabra_1_1DisplayTerminal.html#afd4f7b8fe4ce4269638ab21f1e849e13',1,'cadabra::DisplayTerminal']]],
   ['group',['group',['../classProgressMonitor.html#a96806e181df756378eb6860a8230268c',1,'ProgressMonitor::group()'],['../classServerWrapper.html#ad64e13cc11080622e24adc7c618ee726',1,'ServerWrapper::group()']]],
   ['gtk_2b',['Gtk+',['../group__gtkmm.html',1,'']]],
   ['gui',['gui',['../classcadabra_1_1ComputeThread.html#aa7b3af2f59b272a71fc092bccb201cee',1,'cadabra::ComputeThread::gui()'],['../classcadabra_1_1DocumentThread.html#a874fae5211b2cceaf626ef6e808668fe',1,'cadabra::DocumentThread::gui()']]],

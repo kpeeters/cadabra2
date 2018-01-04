@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['properties',['Properties',['../group__properties.html',1,'']]],
-  ['python_20core',['Python Core',['../group__pythoncore.html',1,'']]]
+  ['os_2dx',['OS-X',['../group__osx.html',1,'']]]
 ];

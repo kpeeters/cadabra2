@@ -28,6 +28,7 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="cadabra2-gtk.png"/></td>
   <td style="padding-left: 0.5em;">
    <div id="projectname">Cadabra
    </div>
@@ -161,6 +162,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a45be85160db2266be51e0f36a01c6aaf"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex.html#a45be85160db2266be51e0f36a01c6aaf">print_entire_tree</a> (std::ostream &amp;str) const </td></tr>
 <tr class="memdesc:a45be85160db2266be51e0f36a01c6aaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output helpers mainly for debugging purposes.  <a href="#a45be85160db2266be51e0f36a01c6aaf">More...</a><br/></td></tr>
 <tr class="separator:a45be85160db2266be51e0f36a01c6aaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ecd955af1d1c204f66325a4d0e4db0b"><td class="memItemLeft" align="right" valign="top">std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex.html#a1ecd955af1d1c204f66325a4d0e4db0b">print_repr</a> (std::ostream &amp;str, Ex::iterator it) const </td></tr>
+<tr class="memdesc:a1ecd955af1d1c204f66325a4d0e4db0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print a representation like Python's 'repr'.  <a href="#a1ecd955af1d1c204f66325a4d0e4db0b">More...</a><br/></td></tr>
+<tr class="separator:a1ecd955af1d1c204f66325a4d0e4db0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad352fb17bcb6183fc56d11a7c5942eb8"><td class="memItemLeft" align="right" valign="top">iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcadabra_1_1Ex.html#ad352fb17bcb6183fc56d11a7c5942eb8">named_parent</a> (iterator it, const std::string &amp;) const </td></tr>
 <tr class="memdesc:ad352fb17bcb6183fc56d11a7c5942eb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Step up until matching node is found (if current node matches, do nothing)  <a href="#ad352fb17bcb6183fc56d11a7c5942eb8">More...</a><br/></td></tr>
 <tr class="separator:ad352fb17bcb6183fc56d11a7c5942eb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1023,6 +1027,34 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a1ecd955af1d1c204f66325a4d0e4db0b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::ostream &amp; cadabra::Ex::print_repr </td>
+          <td>(</td>
+          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramname"><em>str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ex::iterator&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Print a representation like Python's 'repr'. </p>
+
+</div>
+</div>
 <a class="anchor" id="abd343c9d87cfc0506549d492712f4916"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1228,7 +1260,7 @@ Private Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Dec 25 2017 18:23:30 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 4 2018 12:19:42 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

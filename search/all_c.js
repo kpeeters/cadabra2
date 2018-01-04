@@ -34,7 +34,7 @@ var searchData=
   ['line_5fper_5fnode',['line_per_node',['../structcadabra_1_1str__node_1_1flag__t.html#a463e78738fe391935c98ba2647945ef1',1,'cadabra::str_node::flag_t']]],
   ['list_5fproperties',['list_properties',['../PythonCdb_8cc.html#ac217f28bc50ad9cc2d209be157fe4af4',1,'PythonCdb.cc']]],
   ['list_5fproperty',['list_property',['../classcadabra_1_1list__property.html',1,'cadabra']]],
-  ['list_5fsize',['list_size',['../namespacecadabra.html#a1d2ff3550d3c5f407f9e365719030cef',1,'cadabra']]],
+  ['list_5fsize',['list_size',['../group__core.html#ga1d2ff3550d3c5f407f9e365719030cef',1,'cadabra']]],
   ['list_5funwrap_5fsingle_5felement',['list_unwrap_single_element',['../classcadabra_1_1Ex.html#a077dcef0f90393bcde583725a281901c',1,'cadabra::Ex']]],
   ['list_5fwrap_5fsingle_5felement',['list_wrap_single_element',['../classcadabra_1_1Ex.html#a790a4bcbddc552cced4fa9642ed63cad',1,'cadabra::Ex']]],
   ['load_5ffile',['load_file',['../classcadabra_1_1NotebookWindow.html#a403932b5f2214315bc59fa8c06a5c5e4',1,'cadabra::NotebookWindow']]],

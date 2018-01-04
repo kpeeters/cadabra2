@@ -11,6 +11,7 @@ var searchData=
   ['handle_5finsert',['handle_insert',['../classcadabra_1_1CodeInput.html#ac7161c8138da3263789782c9e56df832',1,'cadabra::CodeInput']]],
   ['handle_5flatex_5ferrors',['handle_latex_errors',['../classcadabra_1_1TeXEngine.html#a71a9c9979a45edaf26ed5f11f3fa2739',1,'cadabra::TeXEngine']]],
   ['handle_5fone_5findex',['handle_one_index',['../classcadabra_1_1eliminate__converter.html#a7f46f66e87b89de6533d97a4f64221a7',1,'cadabra::eliminate_converter']]],
+  ['handle_5foutbox_5fselect',['handle_outbox_select',['../classcadabra_1_1NotebookWindow.html#ac32312f1f528e0462fb23eceeb106073',1,'cadabra::NotebookWindow']]],
   ['handle_5fprod',['handle_prod',['../classcadabra_1_1evaluate.html#a3481898723b3714afa942d934ffe9dc7',1,'cadabra::evaluate']]],
   ['handle_5fsum',['handle_sum',['../classcadabra_1_1evaluate.html#ae058baef4c16bb0965861fcc767d4336',1,'cadabra::evaluate']]],
   ['handle_5fterm',['handle_term',['../classcadabra_1_1integrate__by__parts.html#a2ab129c107a30879fd0af1acda1236de',1,'cadabra::integrate_by_parts']]],
