@@ -114,6 +114,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
 	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO), Gtk::AccelKey("<control>Z"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	action_copy = Gtk::Action::create("EditCopy", Gtk::Stock::COPY);
+	actiongroup->add( action_copy, Gtk::AccelKey("<control>C"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
+	action_copy->set_sensitive(false);
+	actiongroup->add( Gtk::Action::create("EditPaste", Gtk::Stock::PASTE), Gtk::AccelKey("<control>V"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
 	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
 	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"), Gtk::AccelKey("<alt>Down"),
@@ -201,6 +207,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		ui_info+=
 		"    <menu action='MenuEdit'>"
 		"      <menuitem action='EditUndo' />"
+		"      <separator/>"
+		"      <menuitem action='EditCopy' />"
+//		"      <menuitem action='EditPaste' />"			
 		"      <separator/>"
 		"      <menuitem action='EditInsertAbove' />"
 		"      <menuitem action='EditInsertBelow' />"
@@ -944,6 +953,8 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	current_cell=it;
 	current_canvas=canvas_number;
 
+	unselect_output_cell(); // cell_got_focus is an input cell, so output cells should not be selected anymore.
+	
 	return false;
 	}
 
@@ -1289,6 +1300,21 @@ void NotebookWindow::on_edit_undo()
 	undo();
 	}
 
+void NotebookWindow::on_edit_copy()
+	{
+	if(selected_cell!=doc.end()) {
+		Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);	
+		on_outbox_copy(clipboard, selected_cell);
+		}
+	if(current_cell!=doc.end()) {
+		// FIXME: handle other cell types.
+		}
+	}
+
+void NotebookWindow::on_edit_paste()
+	{
+	}
+
 void NotebookWindow::on_edit_insert_above()
 	{
 	if(current_cell==doc.end()) return;
@@ -1556,29 +1582,42 @@ bool NotebookWindow::idle_handler()
 
 void NotebookWindow::unselect_output_cell()
 	{
+	if(selected_cell==doc.end()) return;
+	
 	for(unsigned int i=0; i<canvasses.size(); ++i) {
 		if(canvasses[i]->visualcells.find(&(*selected_cell))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*selected_cell)].outbox;
 			outbox->image.set_state(Gtk::STATE_NORMAL);
 			}
 		}
+	selected_cell=doc.end();
+	action_copy->set_sensitive(false);
 	}
 
 bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	{
-	Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);
-
 	unselect_output_cell();
 
 	// Colour the background of the selected cell, in all canvasses.
-	for(unsigned int i=0; i<canvasses.size(); ++i) {
+	for(int i=0; i<(int)canvasses.size(); ++i) {
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
 			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
 			outbox->image.set_state(Gtk::STATE_SELECTED);
+			// if(i==current_canvas)
+			//	outbox->grab_focus();
+			// FIXME: need to remove focus from any CodeInput widget; the above does not do that.
 			}
 		}
 	selected_cell=it;
+	action_copy->set_sensitive(true);
+	
+	Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);	
+	on_outbox_copy(clipboard, selected_cell);
+	return true;
+	}
 
+void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it)
+	{
 	std::string cpystring=(*it).textbuf;
 
 	// Find the child cell which contains the input_form data.
@@ -1602,8 +1641,6 @@ bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
 	refClipboard->set( listTargets, 
 							 sigc::mem_fun(this, &NotebookWindow::on_clipboard_get), 
 							 sigc::mem_fun(this, &NotebookWindow::on_clipboard_clear) );
-
-	return true;
 	}
 
 void NotebookWindow::on_clipboard_get(Gtk::SelectionData& selection_data, guint info) 

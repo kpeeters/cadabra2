@@ -327,6 +327,7 @@ void DisplayMMA::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 		case str_node::p_exponent: str << "^"; break;
 		case str_node::p_none:       break;
 		case str_node::p_components: break;
+		case str_node::p_invalid:    throw std::logic_error("DisplayMMA: p_invalid not handled.");
 		}
 	}
 
