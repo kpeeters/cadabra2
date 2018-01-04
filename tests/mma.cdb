@@ -5,9 +5,16 @@ def test01():
     ex:= \alpha \beta \cos{\gamma \Delta}:
     out=ex.mma_form()
     tst="α*β*Cos[γ*Δ]"
-    #\[Alpha]*\[Beta]*Cos[\[Gamma]*\[CapitalDelta]]"
     assert(out==tst)
-    print("Test 01 passed")
+    print("Test 01a passed")
+    out=ex.mma_form(unicode=False)
+    tst="\[Alpha]*\[Beta]*Cos[\[Gamma]*\[CapitalDelta]]"
+    assert(out==tst)
+    print("Test 01b passed")
+    out=ex.mma_form(unicode=True)
+    tst="α*β*Cos[γ*Δ]"
+    assert(out==tst)
+    print("Test 01c passed")
 
 test01()
 

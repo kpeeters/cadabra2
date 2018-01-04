@@ -304,7 +304,21 @@ std::string Ex_str_(const Ex& ex)
 // //		str << "(unchanged)" << std::endl;
 // 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
-	DisplayTerminal dt(*get_kernel_from_scope(), ex);
+	DisplayTerminal dt(*get_kernel_from_scope(), ex, true);
+	dt.output(str);
+
+	return str.str();
+	}
+
+std::string Ex_to_input(const Ex& ex)
+	{
+ 	std::ostringstream str;
+// 
+// //	if(state()==Algorithm::result_t::l_no_action)
+// //		str << "(unchanged)" << std::endl;
+// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+
+	DisplayTerminal dt(*get_kernel_from_scope(), ex, false);
 	dt.output(str);
 
 	return str.str();
@@ -322,33 +336,39 @@ std::string Ex_repr_(const Ex& ex)
 	{
 	Ex::iterator it = ex.begin();
 	std::ostringstream str;
-	ex.print_entire_tree(str);
+	ex.print_python(str, ex.begin());
+	return str.str();
+	}
+
+std::string Ex_to_Sympy_string(const Ex& ex)
+	{
+	// Check to see if the expression is a scalar without dummy indices.
+//	Algorithm::index_map_t ind_free, ind_dummy;
+//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
+//	if(ind_dummy.size()>0) 
+//		throw NonScalarException("Expression contains dummy indices.");
+//	if(ind_free.size()>0) 
+//		throw NonScalarException("Expression contains free indices.");
+
+	std::ostringstream str;
+	DisplaySympy dt(*get_kernel_from_scope(), ex);
+	dt.output(str);
 	return str.str();
 	}
 
 boost::python::object Ex_to_Sympy(const Ex& ex)
 	{
-	// Check to see if the expression is a scalar without dummy indices.
-//	Algorithm::index_map_t ind_free, ind_dummy;
-//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
-//	if(ind_dummy.size()>0) 
-//		throw NonScalarException("Expression contains dummy indices.");
-//	if(ind_free.size()>0) 
-//		throw NonScalarException("Expression contains free indices.");
-
-	// Call sympify on our textual representation.
+	// Generate a string which can be parsed by Sympy.
+	std::string txt = Ex_to_Sympy_string(ex);
+	
+	// Call sympify on a sympy-parseable  textual representation.
 	auto module = boost::python::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
-	std::ostringstream str;
-	DisplaySympy dt(*get_kernel_from_scope(), ex);
-	dt.output(str);
-
-	boost::python::object ret=parse(str.str());
-
+	boost::python::object ret=parse(txt);
 	return ret;
 	}
 
-std::string Ex_to_MMA(const Ex& ex)
+std::string Ex_to_MMA(const Ex& ex, bool use_unicode)
 	{
 	// Check to see if the expression is a scalar without dummy indices.
 //	Algorithm::index_map_t ind_free, ind_dummy;
@@ -359,7 +379,7 @@ std::string Ex_to_MMA(const Ex& ex)
 //		throw NonScalarException("Expression contains free indices.");
 
 	std::ostringstream str;
-	DisplayMMA dt(*get_kernel_from_scope(), ex);
+	DisplayMMA dt(*get_kernel_from_scope(), ex, use_unicode);
 	dt.output(str);
 
 	return str.str();
@@ -1247,8 +1267,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("__repr__",    &Ex_repr_)
 		.def("__eq__",      &__eq__Ex_Ex)
 		.def("__eq__",      &__eq__Ex_int)
-		.def("_sympy_",     &Ex_to_Sympy)
-		.def("mma_form",    &Ex_to_MMA)    // standardize on this
+		.def("_sympy_",     &Ex_to_Sympy)		
+		.def("sympy_form",  &Ex_to_Sympy_string)
+		.def("mma_form",    &Ex_to_MMA, (arg("unicode")=true))    // standardize on this
+		.def("input_form",  &Ex_to_input) 
 		.def("__getitem__", &Ex_getitem)
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)

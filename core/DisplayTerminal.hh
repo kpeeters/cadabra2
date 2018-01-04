@@ -9,6 +9,8 @@
 
 typedef uint32_t kunichar;
 
+namespace cadabra {
+
 /// \ingroup display
 ///
 /// Class to display expressions to the terminal. This is used in the
@@ -20,13 +22,13 @@ typedef uint32_t kunichar;
 /// the present class, but be printed as 'sympy.diff' by the DisplaySympy
 /// class).
 
-namespace cadabra {
-
 class DisplayTerminal : public DisplayBase {
 	public:
-		DisplayTerminal(const Kernel&, const Ex&);
+		DisplayTerminal(const Kernel&, const Ex&, bool use_unicode);
 
 	protected:
+		bool use_unicode;
+		
 		virtual void dispatch(std::ostream&, Ex::iterator) override;
 		virtual bool needs_brackets(Ex::iterator it) override;
 
@@ -59,7 +61,7 @@ class DisplayTerminal : public DisplayBase {
 
 		bool children_have_brackets(Ex::iterator ch) const;
 
-		std::map<std::string, std::string> symmap;
+		std::map<std::string, std::string> symmap, greekmap;
 };
 
 const char *unichar(kunichar c);

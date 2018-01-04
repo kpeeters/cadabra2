@@ -8,6 +8,8 @@
 
 typedef uint32_t kunichar;
 
+namespace cadabra {
+
 /// \ingroup display
 ///
 /// Class to handle display of expressions using LaTeX notation. This
@@ -15,8 +17,6 @@ typedef uint32_t kunichar;
 /// look around the property assignments in order to figure out the
 /// best way to print any given object. See the DisplayTeX::dispatch
 /// method to see how this works in more detail.
-
-namespace cadabra {
 
 class DisplayTeX : public DisplayBase {
 	public:
@@ -83,8 +83,8 @@ class DisplayTeX : public DisplayBase {
 		/// Determine whether the indicated object 'obj', when acting on
 		/// the single argument 'arg', reads as an operator, and therefore
 		/// 'arg' does not need to be wrapped in brackets. 
-		/// Example: the tree \partial{A} can be displayed as '\partial A'
-		/// (or rather, '\partial{A}', instead of '\partial(A)'. 
+		/// Example: the tree \\partial{A} can be displayed as '\\partial A'
+		/// (or rather, '\\partial{A}', instead of '\\partial(A)'. 
 	  
 		bool reads_as_operator(Ex::iterator obj, Ex::iterator arg) const;
 
@@ -92,7 +92,7 @@ class DisplayTeX : public DisplayBase {
 		std::map<std::string, std::string> symmap;
 
 		/// List of operators which need all arguments fed with curly brackets, not 
-		/// round ones (e.g. \sqrt).
+		/// round ones (e.g. \\sqrt).
 		std::set<std::string> curly_bracket_operators;
 
 };

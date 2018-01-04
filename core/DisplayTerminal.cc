@@ -5,16 +5,18 @@
 
 using namespace cadabra;
 
-DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e)
-	: DisplayBase(k, e)
+DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e, bool uuc)
+	: DisplayBase(k, e), use_unicode(uuc)
 	{
 	symmap = {
 		{"\\cos", "cos"},
 		{"\\sin", "sin"},
 		{"\\tan", "tan"},
 		{"\\int", "∫" },
-		{"\\sum", "∑" },
+		{"\\sum", "∑" }
+	};
 
+	greekmap = {
 		{"\\alpha",   "α" },
 		{"\\beta",    "β" },  // beta seems to be reserved
 		{"\\gamma",   "γ" }, // gamma seems to be reserved 
@@ -134,7 +136,7 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
 	str_node::bracket_t    previous_bracket_   =str_node::b_invalid;
-	str_node::parent_rel_t previous_parent_rel_=str_node::p_none;
+	str_node::parent_rel_t previous_parent_rel_=str_node::p_invalid;
 
 	int number_of_nonindex_children=0;
 	int number_of_index_children=0;
@@ -296,6 +298,7 @@ void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
 		case str_node::p_components: break;
+		case str_node::p_invalid: break;
 		}
 	}
 
@@ -491,6 +494,11 @@ void DisplayTerminal::print_commutator(std::ostream& str, Ex::iterator it, bool 
 
 void DisplayTerminal::print_components(std::ostream& str, Ex::iterator it)
 	{
+	if( ! (use_unicode && getenv("CADABRA_NO_UNICODE")==0) ) {
+		print_other(str, it);
+		return;
+		}
+
 	str << R"(□)";
 	auto sib=tree.begin(it);
 	auto end=tree.end(it);
@@ -559,11 +567,17 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 //		}
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-	auto rn = symmap.find(*it->name);
-	if(rn!=symmap.end() && 	getenv("CADABRA_NO_UNICODE")==0)
-		str << rn->second;
-	else
-		str << *it->name;
+	std::string sbit=*it->name;
+	if(use_unicode && getenv("CADABRA_NO_UNICODE")==0) {
+		auto rn1 = symmap.find(sbit);
+		if(rn1!=symmap.end())
+			sbit = rn1->second;
+		auto rn = greekmap.find(sbit);
+		if(rn!=greekmap.end())
+			sbit = rn->second;
+		}
+	str << sbit;
+		
 	if(needs_extra_brackets) str << "}";
 
 	print_children(str, it);

@@ -79,6 +79,7 @@ namespace cadabra {
 			/// One undo step.
 			void undo();
 
+			friend ActionBase;
          friend ActionAddCell;
 			friend ActionPositionCursor;
 			friend ActionRemoveCell;
@@ -96,6 +97,7 @@ namespace cadabra {
 			/// server.
 
 			void set_user_details(const std::string& name, const std::string& email, const std::string& affiliation);
+
 		protected:
          GUIBase       *gui;
          ComputeThread *compute;

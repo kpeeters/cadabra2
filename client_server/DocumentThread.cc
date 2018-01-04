@@ -80,7 +80,7 @@ void DocumentThread::new_document()
 	// soon as the GUI is up.
 
 	std::shared_ptr<ActionBase> actionpos =
-		std::make_shared<ActionPositionCursor>(one_it, ActionPositionCursor::Position::in);
+		std::make_shared<ActionPositionCursor>(one_it->id(), ActionPositionCursor::Position::in);
 	queue_action(actionpos);
 	}
 

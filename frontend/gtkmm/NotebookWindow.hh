@@ -95,7 +95,11 @@ namespace cadabra {
 
 			DTree::iterator current_cell;
 
-      private:
+			bool handle_outbox_select(GdkEventButton *, DTree::iterator it);
+			DTree::iterator selected_cell;
+			void unselect_output_cell();
+
+	private:
 			Cadabra *cdbapp;
 
 			// Main handler which fires whenever the Client object signals 
@@ -177,6 +181,11 @@ namespace cadabra {
 			void on_help() const;
 
 			void on_kernel_restart();
+
+			/// Clipboard handling
+			void on_clipboard_get(Gtk::SelectionData&, guint info);
+			void on_clipboard_clear();
+			std::string clipboard_txt, clipboard_cdb;
 
 			// FIXME: move to DocumentThread
 			std::string save(const std::string& fn) const;

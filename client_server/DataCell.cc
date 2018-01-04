@@ -11,7 +11,7 @@
 
 using namespace cadabra;
 
-uint64_t DataCell::max_serial_number=0;
+uint64_t DataCell::max_serial_number=1; // 0 is intended to mean 'not set'
 std::mutex DataCell::serial_mutex;
 
 bool DataCell::id_t::operator<(const DataCell::id_t& other) const
@@ -182,6 +182,9 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::image_png:
 			str << "<div class='image_png'><img src='data:image/png;base64,";
 			break;
+		case DataCell::CellType::input_form:
+			str << "<div class='input_form'>";
+			break;
 		}	
 
 	try {
@@ -245,6 +248,8 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		case DataCell::CellType::image_png:
 			str << "' /></div>\n";
 			break;
+		case DataCell::CellType::input_form:
+			str << "</div>\n";
 		}	
 	}
 
@@ -286,6 +291,9 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 			break;
 		case DataCell::CellType::image_png:
 			json["cell_type"]="image_png";
+			break;
+		case DataCell::CellType::input_form:
+			json["cell_type"]="input_form";
 			break;
 //		case DataCell::CellType::section: {
 //			assert(1==0);
@@ -386,6 +394,10 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 				}
 			else if(celltype.asString()=="verbatim") {
 				DataCell dc(id, cadabra::DataCell::CellType::verbatim, textbuf.asString(), hide);
+				last=doc.append_child(loc, dc);
+				}
+			else if(celltype.asString()=="input_form") {
+				DataCell dc(id, cadabra::DataCell::CellType::input_form, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
 				}
 			else if(celltype.asString()=="latex_view") {
@@ -505,6 +517,8 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			break;
 		case DataCell::CellType::error:
 			break;
+		case DataCell::CellType::input_form:
+			break;
 		case DataCell::CellType::image_png:
 			str << "(image)";
 			break;
@@ -538,6 +552,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::document:
 		case DataCell::CellType::latex:
 		case DataCell::CellType::latex_view:
+		case DataCell::CellType::input_form:
 		case DataCell::CellType::error:
 		case DataCell::CellType::image_png:
 			break;
@@ -560,6 +575,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::verbatim:
 		case DataCell::CellType::latex:
 		case DataCell::CellType::latex_view:
+		case DataCell::CellType::input_form:
 		case DataCell::CellType::error:
 		case DataCell::CellType::image_png:
 			break;

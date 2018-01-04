@@ -98,6 +98,7 @@ namespace cadabra {
 			// a form which allows us to look them up quickly based only
 			// on the id (which is all that the server knows about). 
 
+			// FIXME: moving this away into documentthread, so that we only need to refer to id's.
 			std::map<DataCell::id_t, DTree::iterator> running_cells;
 
 			// WebSocket++ things.
@@ -113,7 +114,7 @@ namespace cadabra {
 			void on_close(websocketpp::connection_hdl hdl);
 			void on_message(websocketpp::connection_hdl hdl, message_ptr msg);
 
-			DTree::iterator find_cell_by_id(DataCell::id_t, bool remove);
+			void cell_finished_running(DataCell::id_t);
 			
 			/// Set all cells to be non-running (e.g. after a kernel failure) and
 			/// report the status of each cell to the GUI.

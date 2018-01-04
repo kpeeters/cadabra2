@@ -8,6 +8,8 @@
 
 typedef uint32_t kunichar;
 
+namespace cadabra {
+
 /// \ingroup display
 ///
 /// Class to display expressions in a format that Mathematica can
@@ -15,11 +17,9 @@ typedef uint32_t kunichar;
 /// understood by Mathematica. Can also convert expressions back to
 /// Cadabra notation. 
 
-namespace cadabra {
-
 class DisplayMMA : public DisplayBase {
 	public:
-		DisplayMMA(const Kernel&, const Ex&);
+		DisplayMMA(const Kernel&, const Ex&, bool use_unicode);
 
       /// Rewrite the output of mathematica back into a notation used by
       /// Cadabra. This in particular involves converting 'Sin' and
@@ -32,6 +32,8 @@ class DisplayMMA : public DisplayBase {
 		std::string preparse_import(const std::string&);
 
 	protected:
+		bool use_unicode;
+		
 		virtual bool needs_brackets(Ex::iterator it) override;
 
 	private:

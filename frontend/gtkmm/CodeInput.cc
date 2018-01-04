@@ -178,7 +178,7 @@ bool CodeInput::handle_button_press(GdkEventButton* button)
 			++insertpos;
 		
 		// std::cerr << "inserting at " << insertpos << " text " << sd.get_data_as_string() << std::endl;
-		insertpos=edit.get_buffer()->insert(insertpos, sd.get_text());
+		insertpos=edit.get_buffer()->insert(insertpos, sd.get_data_as_string());
 		// std::cerr << "placing cursor" << std::endl;
 		edit.get_buffer()->place_cursor(insertpos);
 		}

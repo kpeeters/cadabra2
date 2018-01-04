@@ -30,7 +30,7 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 		str << wrap[i] << "[";
 		}
 
-	DisplayMMA ds(kernel, ex);
+	DisplayMMA ds(kernel, ex, true);
 	ds.output(str, it);
 
 	if(wrap.size()>0)

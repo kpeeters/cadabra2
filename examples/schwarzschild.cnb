@@ -60,7 +60,15 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left[g_{t t} = -1+\\frac{2M}{r},~\\discretionary{}{}{} g_{r r} = \\frac{1}{1 - \\frac{2M}{r}},~\\discretionary{}{}{} g_{\\theta \\theta} = {r}^{2},~\\discretionary{}{}{} g_{\\phi \\phi} = {r}^{2} {\\left(\\sin{\\theta}\\right)}^{2},~\\discretionary{}{}{} g^{t t} = \\frac{r}{2M-r},~\\discretionary{}{}{} g^{r r} = \\frac{-2M+r}{r},~\\discretionary{}{}{} g^{\\phi \\phi} = \\frac{1}{{r}^{2} {\\left(\\sin{\\theta}\\right)}^{2}},~\\discretionary{}{}{} g^{\\theta \\theta} = {r}^{-2}\\right]\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{g_{t t} = -1+2M/r, g_{r r} = 1/(1-2M/r), g_{\\theta \\theta} = r**2, g_{\\phi \\phi} = r**2*sin(\\theta)**2, g^{t t} = 1/(2M/r-1), g^{r r} = -2M/r+1, g^{\\phi \\phi} = 1/r**2*sin(\\theta)**2, g^{\\theta \\theta} = r**-2}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[g_{t t} = -1+\\frac{2M}{r},~\\discretionary{}{}{} g_{r r} = \\frac{1}{1 - \\frac{2M}{r}},~\\discretionary{}{}{} g_{\\theta \\theta} = {r}^{2},~\\discretionary{}{}{} g_{\\phi \\phi} = {r}^{2} {\\left(\\sin{\\theta}\\right)}^{2},~\\discretionary{}{}{} g^{t t} = \\frac{1}{\\frac{2M}{r}-1},~\\discretionary{}{}{} g^{r r} =  - \\frac{2M}{r}+1,~\\discretionary{}{}{} g^{\\phi \\phi} = \\frac{1}{{r}^{2} {\\left(\\sin{\\theta}\\right)}^{2}},~\\discretionary{}{}{} g^{\\theta \\theta} = {r}^{-2}\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "ss:= { g_{t t} = -(1-2 M/r),   \n       g_{r r} = 1/(1-2 M/r), \n       g_{\\theta\\theta} = r**2, \n       g_{\\phi\\phi}=r**2 \\sin(\\theta)**2\n     }.\n\ncomplete(ss, $g^{\\mu\\nu}$);"
@@ -87,11 +95,27 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\Gamma^{\\mu}_{\\nu \\rho} =  1/2 g^{\\mu \\sigma}*(\\partial_{\\rho}(g_{\\nu \\sigma})+\\partial_{\\nu}(g_{\\rho \\sigma})-\\partial_{\\sigma}(g_{\\nu \\rho}))"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\Gamma^{\\mu}_{\\nu \\rho} = □_{\\nu\\rho}^{\\mu}\n    {\\phi, r, \\phi} = 1/r\n    {\\phi, \\theta, \\phi} = 1/tan(\\theta)\n    {\\theta, r, \\theta} = 1/r\n    {r, r, r} = M/r*(2M-r)\n    {t, r, t} = M/r*(-2M+r)\n    {r, \\phi, \\phi} = 1/r\n    {\\theta, \\phi, \\phi} = 1/tan(\\theta)\n    {r, \\theta, \\theta} = 1/r\n    {r, t, t} = M/r*(-2M+r)\n    {\\phi, \\phi, r} = (2M-r)*sin(\\theta)**2\n    {\\phi, \\phi, \\theta} =  -  1/2 sin(2\\theta)\n    {\\theta, \\theta, r} = 2M-r\n    {t, t, r} = M*(-2M+r)/r**3\n"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\square{}_{\\nu}{}_{\\rho}{}^{\\mu}\\left\\{\\begin{aligned}\\square{}_{\\phi}{}_{r}{}^{\\phi}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\theta}{}^{\\phi}= & \\frac{1}{\\tan{\\theta}}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{r}{}^{\\theta}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{r}{}^{r}= & \\frac{M}{r \\left(2M-r\\right)}\\\\[-.5ex]\n\\square{}_{t}{}_{r}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\[-.5ex]\n\\square{}_{r}{}_{\\phi}{}^{\\phi}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\phi}{}^{\\phi}= & \\frac{1}{\\tan{\\theta}}\\\\[-.5ex]\n\\square{}_{r}{}_{\\theta}{}^{\\theta}= & \\frac{1}{r}\\\\[-.5ex]\n\\square{}_{r}{}_{t}{}^{t}= & \\frac{M}{r \\left(-2M+r\\right)}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{r}= & \\left(2M-r\\right) {\\left(\\sin{\\theta}\\right)}^{2}\\\\[-.5ex]\n\\square{}_{\\phi}{}_{\\phi}{}^{\\theta}= &  - \\frac{1}{2}\\sin{2\\theta}\\\\[-.5ex]\n\\square{}_{\\theta}{}_{\\theta}{}^{r}= & 2M-r\\\\[-.5ex]\n\\square{}_{t}{}_{t}{}^{r}= & M \\frac{-2M+r}{{r}^{3}}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],

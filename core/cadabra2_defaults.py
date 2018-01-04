@@ -1,3 +1,8 @@
+##
+# \file    cadabra2_defaults.py
+# \ingroup pythoncore
+# Cadabra2 pure Python functionality.
+#
 # This is a pure-python initialisation script to set the  path to
 # sympy and setup printing of Cadabra expressions.  This script is
 # called both by the command line interface 'cadabra2' as well as by
@@ -17,6 +22,11 @@ try:
     import sympy
 except:
     class Sympy:
+        """!@brief Stub object for when Sympy itself is not available.
+        
+        @long When Sympy is not available, this object contains some basic
+        functionality to prevent things from breaking elsewhere.
+        """
         __version__="unavailable"
 
     sympy = Sympy()
@@ -42,8 +52,21 @@ else:
     mopen=''
     mclose=''
     class Server(ProgressMonitor):
-        def send(self, data, typestr):
+        """!@brief Object to handle advanced display in a UI-independent way.
+
+        @long Cadabra makes available to Python a Server object, which
+        contains functions to send output to the user. When running
+        from the command line this simply prints to the screen, but it
+        can talk to a remote client to display images and maths.
+        """
+        
+        def send(self, data, typestr, parent_id, last_in_sequence):
+            """ Send a message to the client; 'typestr' indicates the cell type,
+            'parent_id', if non-null, indicates the serial number of the parent
+            cell.
+            """
             print(data)
+            return 0
 
         def architecture(self):
             return "terminal"
@@ -78,28 +101,41 @@ except ImportError:
 import io
 import base64
 
+## @brief Generic display function which handles local as well as remote clients.
+#
 # The 'display' function is a replacement for 'str', in the sense that
 # it will generate human-readable output. However, in contrast to
 # 'str', it knows about what the front-end ('server') can display, and
 # will adapt the output to that. For instance, if
 # server.handles('latex_view') is true, it will generate LaTeX output,
 # while it will generate just plain text otherwise.
-#
+# 
 # Once it has figured out which display is accepted by 'server', it
 # will call server.send() with data depending on the object type it is
 # being fed. Data types the server object can support are:
-#
-#  - "latex_view": text-mode LaTeX string.
-#  - "image_png":  base64 encoded png image.
-#  - "verbatim":   ascii string to be displayed verbatim.
+# 
+# - "latex_view": text-mode LaTeX string.
+# - "image_png":  base64 encoded png image.
+# - "verbatim":   ascii string to be displayed verbatim.
 
 def display(obj, delay_send=False):
+    """
+    Generalised 'print' function which knows how to display objects in the 
+    best possible way on the used interface, be it a console or graphical
+    notebook. In particular, it knows how to display Cadabra expressions
+    in typeset form whenever LaTeX functionality is available. Can also be
+    used to display matplotlib plots.
+
+    When using a Cadabra front-end (command line or notebook), an expression
+    with a trailing semi-colon ';' will automatically be wrapped in a 
+    'display' function call so that the expression is displayed immediately.
+    """
     if 'matplotlib' in sys.modules and isinstance(obj, matplotlib.figure.Figure):
         imgstring = io.BytesIO()
         obj.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_png")
+        server.send(b64, "image_png", 0, False)
         # FIXME: Use the 'handles' query method on the Server object
         # to figure out whether it can do something useful
         # with a particular data type.
@@ -110,7 +146,7 @@ def display(obj, delay_send=False):
         f.savefig(imgstring,format='png')
         imgstring.seek(0)
         b64 = base64.b64encode(imgstring.getvalue())
-        server.send(b64, "image_png")
+        server.send(b64, "image_png", 0, False)
 
     elif hasattr(obj,'_backend'):
         if hasattr(obj._backend,'fig'):
@@ -119,7 +155,7 @@ def display(obj, delay_send=False):
             f.savefig(imgstring,format='png')
             imgstring.seek(0)
             b64 = base64.b64encode(imgstring.getvalue())
-            server.send(b64, "image_png")
+            server.send(b64, "image_png", 0, False)
 
     elif 'vtk' in sys.modules and isinstance(obj, vtk.vtkRenderer):
         # Vtk renderer, see http://nbviewer.ipython.org/urls/bitbucket.org/somada141/pyscience/raw/master/20140917_RayTracing/Material/PythonRayTracingEarthSun.ipynb
@@ -134,9 +170,12 @@ def display(obj, delay_send=False):
             if delay_send:
                 return ret
             else:
-                server.send(ret, "latex_view")
+                id=server.send(ret, "latex_view", 0, False)
+                # print(id)
+                # Make a child cell of the above with input form content.
+                server.send(obj.input_form(), "input_form", id, False)                
         else:
-            server.send(str(obj), "plain")
+            server.send(str(obj), "plain", 0, False)
 
     elif isinstance(obj, Property):
         if server.handles('latex_view'):
@@ -144,9 +183,11 @@ def display(obj, delay_send=False):
             if delay_send:
                 return ret
             else:
-                server.send(ret , "latex_view")
+                server.send(ret , "latex_view", 0, False)
+                # Not yet available.
+                # server.send(obj.input_form(), "input_form", 0, False)
         else:
-            server.send(str(obj), "plain")
+            server.send(str(obj), "plain", 0, False)
             
     elif type(obj)==list:
         out="{}$\\big[$"
@@ -158,10 +199,11 @@ def display(obj, delay_send=False):
                 first=False
             out+= display(elm, True)
         out+="$\\big]$";
-        server.send(out, "latex_view")
+        server.send(out, "latex_view", 0, False)
+        # FIXME: send input_form version.
         
     elif hasattr(obj, "__module__") and hasattr(obj.__module__, "find") and obj.__module__.find("sympy")!=-1:
-        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view")
+        server.send("\\begin{dmath*}{}"+latex(obj)+"\\end{dmath*}", "latex_view", 0, False)
         
     else:
         # Failing all else, just dump a str representation to the notebook, asking
@@ -170,7 +212,7 @@ def display(obj, delay_send=False):
         if delay_send:
             return "\\verb|"+str(obj)+"|"
         else:
-            server.send(str(obj), "verbatim")
+            server.send(str(obj), "verbatim", 0, False)
     
 __cdbkernel__.server=server
 __cdbkernel__.display=display
