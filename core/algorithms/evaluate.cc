@@ -13,7 +13,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-//#define DEBUG 1
+#define DEBUG 1
 
 using namespace cadabra;
 
@@ -619,12 +619,17 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				}
 			
 			// All indices on \partial can take any of the values of the
-			// dependencies, EXCEPT when the index is a dummy index. In
-			// the latter case, we firstly need to ensure that both
-			// indices in the dummy pair take the same value (this is
-			// done with d2p). Secondly, we need to ensure that if the
-			// second index sits on the argument, we only use the value
-			// of that index as given in the 'iv' list.
+			// dependencies, EXCEPT when the index is a dummy index OR
+			// when the index on the partial is a Coordinate.
+			//
+			// In the 1st exceptional case, we firstly need to ensure
+			// that both indices in the dummy pair take the same value
+			// (this is done with d2p). Secondly, we need to ensure that
+			// if the second index sits on the argument, we only use the
+			// value of that index as given in the 'iv' list.
+			//
+			// In the 2nd exceptional case, we just need to determine if
+			// the particular derivative does not annihilate the argument.
 
 			// Need all combinations of values, with repetition (multiple
 			// pick) allowed.
@@ -761,7 +766,19 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			return true;
 			});
 
-   one(it->multiplier);
+	#ifdef DEBUG
+	std::cerr << tr.number_of_children(ivalues) << " nonzero components in this derivative" << std::endl;
+	#endif
+	if(tr.number_of_children(ivalues)==0) {
+		// All components of the derivative evaluated to zero because
+		// there were no dependencies. Replace this derivative node with
+		// a zero and return;
+		node_zero(it);
+		return it;
+		}
+
+	one(it->multiplier);
+
 	// std::cerr << "now " << Ex(it) << std::endl;
 
 
@@ -898,7 +915,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
 			const Coordinate *cd = kernel.properties.get<Coordinate>(nd);
-			if(cd) {
+			if(cd && nd->fl.parent_rel==str_node::p_none) {
 				Ex cpy(nd);
 				cpy.begin()->fl.bracket=str_node::b_none;
 				cpy.begin()->fl.parent_rel=str_node::p_none;
@@ -910,10 +927,10 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 
 	// Determine implicit dependence via Depends.
 #ifdef DEBUG
-	std::cerr << "deps for " << *it->name << std::endl;
+	std::cerr << "deps for " << Ex(it) << std::endl;
 #endif
 
-	const DependsBase *dep = kernel.properties.get<DependsBase>(it);
+	const DependsBase *dep = kernel.properties.get<DependsBase>(it, true);
 	if(dep) {
 #ifdef DEBUG
 		std::cerr << "implicit deps" << std::endl;
@@ -957,6 +974,11 @@ Ex::iterator evaluate::handle_prod(iterator it)
 		sibling_iterator nxt=sib;
 		++nxt;
 
+		if(*sib->multiplier==0) { // zero factors make the entire product zero.
+			node_zero(it);
+			return it;
+			}
+		
 		if(is_component(sib)==false) {
 			index_map_t empty;
 			handle_factor(sib, empty);

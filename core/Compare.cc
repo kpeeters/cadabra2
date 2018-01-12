@@ -18,8 +18,8 @@
 #include "properties/SortOrder.hh"
 
 // In order to enable/disable debug output, also flip the swith in 'report' below.
-//#define DEBUG(ln) ln
-#define DEBUG(ln)
+#define DEBUG(ln) ln
+//#define DEBUG(ln)
 
 namespace cadabra {
 
@@ -396,7 +396,7 @@ std::string Ex_comparator::tab() const
 
 Ex_comparator::match_t Ex_comparator::report(Ex_comparator::match_t r) const
 	{
-	return r;
+//	return r;
 
 	std::cerr << tab() << "result = ";
 	switch(r) {
@@ -587,6 +587,25 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 						DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; )
 						t2=properties.get<Indices>(two, false);
 						DEBUG( std::cerr << tab() << t2 << std::endl; );
+						// It is still possible that t2 is a Coordinate and
+						// t1 an Index which can take the value of the
+						// coordinate. This happens when 'm' is an index
+						// taking values {t,...}, you declare X^{m} to have
+						// a property and then later ask if X^{t} has that
+						// property. In that case X^{m} is object 1 and
+						// X^{t} object 2, and we end up here (NOT in the
+						// branch with both exchanged, which happens when
+						// evaluate tries to determine if a rule for X^{t}
+						// applies to an expression X^{m}).
+						if(t1!=0 && t2!=t1) {
+							auto ivals = std::find_if(t1->values.begin(), t1->values.end(), 
+															  [&](const Ex& a) {
+																  if(subtree_compare(&properties, a.begin(), two, 0)==0) return true;
+																  else return false;
+															  });
+							if(ivals!=t1->values.end()) 
+								t2=t1;
+							}
 						}
 					else
 						t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.

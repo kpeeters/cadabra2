@@ -1,3 +1,4 @@
+*.bak
 doxygen
 .DS_Store
 *~
