@@ -87,7 +87,7 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\frac" && ( child=="\\sum" || child=="\\prod" || (*child_it->multiplier!=1 && child_num>0) )) return true;
 
-	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum") ) return true;
+	if(parent=="\\pow" && ( (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) || (child=="\\prod" || child=="\\sum") )) return true;
 
 //	if(parent=="\\pow" && child_num>0 && *child_it->multiplier!=1 ) return true;
 
@@ -437,14 +437,18 @@ void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator sib=tree.begin(it);
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
+//	if(needs_brackets(sib))
+//		str << "(";
 	dispatch(str, sib);
+//	if(needs_brackets(sib))
+//		str << ")";
 	str << "**";
 	++sib;
-	if(needs_brackets(sib))
-		str << "(";
+//	if(needs_brackets(sib))
+//		str << "(";
 	dispatch(str, sib);
-	if(needs_brackets(sib))
-		str << ")";
+//	if(needs_brackets(sib))
+//		str << ")";
 	}
 
 void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)
