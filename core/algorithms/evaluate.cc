@@ -62,7 +62,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 						walk = handle_epsilon(walk);
 						}
 					else if(*walk->name!="\\equals" && walk->is_index()==false) {
-						if(! (only_rhs && tr.is_head(walk)==false && *(tr.parent(walk)->name)=="\\equals" && tr.index(walk)==0) ) {
+						if(! (only_rhs && tr.is_head(walk)==false && ( *(tr.parent(walk)->name)=="\\equals" || *(tr.parent(walk)->name)=="\\arrow" ) && tr.index(walk)==0) ) {
 							index_map_t empty;
 							sibling_iterator tmp(walk);
 #ifdef DEBUG
