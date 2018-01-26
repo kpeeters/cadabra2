@@ -42,7 +42,7 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y cmake python3-dev
      g++ libpcre3 libpcre3-dev libgmp3-dev uuid-dev python3-pip; fi
    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install -y libgtkmm-3.0-dev
-     libjsoncpp-dev libboost-all-dev libgmp-dev libsqlite3-dev; fi
+     libjsoncpp-dev libboost-regex-dev libboost-system-dev libboost-program-options-dev libboost-date-time-dev libboost-filesystem-dev libgmp-dev libsqlite3-dev; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew unlink json-c; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated cmake || brew upgrade cmake; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated boost || travis_wait brew upgrade boost; fi
