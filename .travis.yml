@@ -5,10 +5,17 @@ branches:
   
 os:
    - linux
+     addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"	
    - osx
 
 compiler:
-   - clang
    - gcc
 
 language: cpp
