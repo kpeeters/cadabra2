@@ -155,9 +155,13 @@ bool DisplayMMA::needs_brackets(Ex::iterator it)
 	// FIXME: write as individual parent/current tests
 	if(tree.is_valid(tree.parent(it))==false) return false;
 
+	std::string parent=*tree.parent(it)->name;
+	std::string child =*it->name;
+
+	
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*it->name=="\\sum" || *it->name=="\\prod") return true;
-		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
+		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || *it->name=="\\prod")  ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) {
 		if(*it->name=="\\sum") return false;
