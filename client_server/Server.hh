@@ -7,7 +7,8 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/common/functional.hpp>
 #include <future>
-#include <boost/python.hpp>
+#include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
 
 #include "Stopwatch.hh"
 #include "ProgressMonitor.hh"
@@ -171,8 +172,9 @@ class Server : public ProgressMonitor {
 		void dispatch_message(websocketpp::connection_hdl, const std::string& json_string);
 
 		// Python global info.
-		boost::python::object main_module;
-		boost::python::object main_namespace;
+		pybind11::scoped_interpreter guard;
+		pybind11::module             main_module;
+		pybind11::object             main_namespace;
 
 		int cells_ran;
 };

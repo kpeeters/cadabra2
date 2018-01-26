@@ -1,70 +1,14 @@
 
-cmake_minimum_required(VERSION 2.8)
-
+cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
-
+message("------------------------------------------------------------------------\nConfiguring 'core'")
 
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
-message("-- CMake version = ${CMAKE_VERSION}")
-
-if (POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW)
-endif()
-if (POLICY CMP0054)
-  cmake_policy(SET CMP0054 NEW)
-endif()
-
-
-# Locate python. On Apple the standard CMake PythonLibs.cmake does not
-# work correctly, because it will always give some paths which point
-# to the Apple-supplied Python libraries. We need the Homebrew
-# installed ones. In order to achieve this, we use CMake scripts which
-# were taken from Nikolaus Dremmel's repo at github.com/NikolausDemmel/CMake.
-
-
-if(USE_PYTHON_3)
-  set(Python_ADDITIONAL_VERSIONS 3.4 3.5 3.6)
-  set(PythonInterp_ADDITIONAL_VERSIONS 3.4 3.5 3.6)
-  find_package(PythonInterp 3.4 REQUIRED)
-  if(APPLE)
-     find_package(PythonLibsOSX 3.4 REQUIRED)
-  else()
-     find_package(PythonLibs 3.4 REQUIRED)
-  endif()
-else()
-  set(Python_ADDITIONAL_VERSIONS 2.7)
-  set(PythonInterp_ADDITIONAL_VERSIONS 2.7)
-  find_package(PythonInterp 2.7 REQUIRED)
-  if(APPLE)
-     find_package(PythonLibsOSX 2.7 REQUIRED)
-  else()
-     find_package(PythonLibs 2.7 REQUIRED)
-  endif()
-endif()
-message("-- Python version = ${PYTHONLIBS_VERSION_STRING}")
-
-# Locate Boost and Boost.Python.
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
-if(USE_PYTHON_3)
-  find_package(Boost 1.53.0 COMPONENTS python3 regex)
-  if(NOT Boost_PYTHON3_FOUND)
-    if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.4")
-      find_package(Boost 1.53.0 COMPONENTS python-py34 regex REQUIRED)
-    else()
-      find_package(Boost 1.53.0 COMPONENTS python-py35 regex REQUIRED)
-    endif()
-  endif()
-else()
-  find_package(Boost 1.53.0 COMPONENTS python regex)
-endif()
-
 # Locate Mathematica (optional)
 set(Mathematica_USE_STATIC_LIBRARIES TRUE)
-find_package(Mathematica COMPONENTS WSTP)
+#find_package(Mathematica COMPONENTS WSTP)
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
@@ -85,8 +29,16 @@ find_library(GMPXX_LIB gmpxx REQUIRED)
 message("-- Found gmp ${GMP_LIB}")
 message("-- Found gmpxx ${GMPXX_LIB}")
 message("-- Found python ${PYTHON_LIBRARIES}")
-include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIRS})
+include_directories(${PYTHON_INCLUDE_DIRS})
+
+# Locate Boost
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.53.0 COMPONENTS regex)
+
 message("-- Python include dirs: ${PYTHON_INCLUDE_DIRS}")
+message("-- Boost include dirs: ${Boost_INCLUDE_DIRS}")
 
 # Mathematica WSTP test
 if(MATHEMATICA_FOUND)
@@ -265,21 +217,20 @@ configure_file("${PROJECT_SOURCE_DIR}/cadabra2.in"             "${PROJECT_SOURCE
 
 install(PROGRAMS "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
 
-
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
-add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
-set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
+pybind11_add_module(cadabra2 SHARED ${LOCAL_SRC_FILES})
+target_link_libraries(cadabra2 PRIVATE ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES})
+#add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
+#set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
-
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
 add_executable(test_multiindex   test_multiindex.cc)
 add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
-target_link_libraries(cadabra2python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-
-target_link_libraries(cadabra2 ${PCRE_LIBRARIES} ${GMPXX_LIB} ${GMP_LIB} ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+target_link_libraries(cadabra2python ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+set_target_properties(cadabra2 PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
 if(MATHEMATICA_FOUND)
-  target_link_libraries(cadabra2 ${Mathematica_WSTP_LIBRARIES})
+  target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
 endif()
 
 install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
@@ -289,6 +240,7 @@ install(DIRECTORY DESTINATION bin DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE O
 install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
                                                         GROUP_READ GROUP_EXECUTE
                                                         WORLD_READ WORLD_EXECUTE)
+
 
 
 # Convert packages from cdb to python.

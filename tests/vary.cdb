@@ -14,7 +14,7 @@ def test01():
 test01()
 
 def test02():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
     integrate_by_parts(ex, $\epsilon$);
@@ -26,7 +26,7 @@ def test02():
 test02()
     
 def test03():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } }{x};
     integrate_by_parts(ex, $\delta{\phi}$);
@@ -37,7 +37,7 @@ def test03():
 test03()
     
 def test04():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } + \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
     integrate_by_parts(ex, $\delta{\phi}$);
@@ -48,7 +48,7 @@ def test04():
 test04()
 
 def test05():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } \Phi \Chi }{x};
     integrate_by_parts(ex, $\delta{\phi}$);
@@ -59,7 +59,7 @@ def test05():
 test05()
 
 def test06():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     x::Coordinate;
     \phi::Depends(x);
     \delta{\phi}::Depends(x);
@@ -73,7 +73,7 @@ def test06():
 test06()
 
 def test07():
-    __cdbkernel__=create_scope();
+    __cdbkernel__=create_scope()
     ex:= \commutator{a}{b};
     vary(_, $a -> \delta{a}, b->\delta{b}$)
     tst:= \commutator{\delta{a}}{b} + \commutator{a}{\delta{b}} - @(ex);
@@ -83,7 +83,7 @@ def test07():
 test07()
 
 # def test08():
-#     __cdbkernel__=create_scope();
+#     __cdbkernel__=create_scope()
 #     ex:= \log(a);
 #     vary(_, $a -> \delta{a}$)
 #     tst:= \log(\delta{a}) - @(ex);

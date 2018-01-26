@@ -1,5 +1,6 @@
 
-#include <boost/python.hpp>
+#include <pybind11/pybind11.h>
+#include <sstream>
 #include "Functional.hh"
 #include "SympyCdb.hh"
 #include "PreClean.hh"
@@ -45,13 +46,13 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	std::cerr << "feeding " << str.str() << std::endl;
 #endif	
 
-	auto module = boost::python::import("sympy.parsing.sympy_parser");
+	auto module = pybind11::module::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
-	boost::python::object obj = parse(str.str());
+	pybind11::object obj = parse(str.str());
 	//std::cerr << "converting result to string" << std::endl;
 	auto __str__ = obj.attr("__str__");
-	boost::python::object res = __str__();
-	std::string result = boost::python::extract<std::string>(res);
+	pybind11::object res = __str__();
+	std::string result = res.cast<std::string>();
 #ifdef DEBUG	
 	std::cerr << "result " << result << std::endl;
 #endif	

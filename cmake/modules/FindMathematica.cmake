@@ -2783,8 +2783,9 @@ if (DEFINED Mathematica_SYSTEM_IDS_LAST)
 	# not the initial find invocation
 	_cleanup_cache()
 endif()
-_setup_mathematica_base_directory()
-_setup_mathematica_userbase_directory()
+# KP: following two lines disabled; don't need them.
+#_setup_mathematica_base_directory()
+#_setup_mathematica_userbase_directory()
 _find_mathematica()
 _setup_mathematica_version_variables()
 

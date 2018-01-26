@@ -127,7 +127,7 @@ void     half(rset_t::iterator&);
 /// contain. All property dependent algorithms acting on Ex
 /// objects are in Algorithm.hh.
 
-class Ex : public tree<str_node> {
+class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
 	public:
 		Ex();
 //		Ex(const tree<str_node>&);

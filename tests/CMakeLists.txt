@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-
-project(CadabraTests)
-
-message("-- Configuring self-tests")
+project(Cadabra)
+message("------------------------------------------------------------------------\nConfiguring 'self-tests'")
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
@@ -73,7 +71,6 @@ set(RTESTS
   vary
   young
   )
-find_package(Mathematica COMPONENTS WSTP)
 if(MATHEMATICA_FOUND)
   set(RTESTS ${RTESTS} mma)
 endif()

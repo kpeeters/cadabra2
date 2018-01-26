@@ -4,15 +4,12 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
-//#include <future>
-//#include <chrono>
-#include <boost/regex.hpp>
+#include <regex>
+
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <boost/algorithm/string/replace.hpp>
 #include <json/json.h>  
-//#include <boost/shared_ptr.hpp>
-//#include <boost/make_shared.hpp>
 
 #include "Snoop.hh"
 #include "CdbPython.hh"
@@ -25,14 +22,14 @@ using websocketpp::lib::bind;
 
 // Wrap the 'totals' member of ProgressMonitor to return a Python list.
 
-boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
-	{
-	boost::python::list list;
-	auto totals = self.totals();
-	for(auto& total: totals)
-		list.append(total);
-	return list;
-	}
+// pybind11::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+// 	{
+// 	pybind11::list list;
+// 	auto totals = self.totals();
+// 	for(auto& total: totals)
+// 		list.append(total);
+// 	return list;
+// 	}
 
 Server::Server()
 	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
@@ -88,45 +85,15 @@ void Server::init()
 	{
 	started=false;
 
-	Py_Initialize();
-	main_module = boost::python::import("__main__");
+	main_module = pybind11::module::import("__main__");
 	main_namespace = main_module.attr("__dict__");
 
-	// Make the C++ CatchOutput class visible on the Python side.
-
-   boost::python::class_<Server::CatchOutput>("CatchOutput")
-	   .def("write", &Server::CatchOutput::write)
-	   .def("clear", &Server::CatchOutput::clear)
-    	;
-
-	// FIXME: Why does 's=Stopwatch()' not work in a notebook cell?
-	boost::python::class_<Stopwatch>("Stopwatch")
-		.def("start", &Stopwatch::start)
-		.def("stop",  &Stopwatch::stop)
-		.def("reset", &Stopwatch::reset)
-		.def("seconds", &Stopwatch::seconds)
-		.def("useconds", &Stopwatch::useconds);
-	
-	try {
-		// Expose both the interface (abstract base class) ProgressMonitor and the Server class to Python.
-		// PythonCdb.cc gets a reference to the ProgressMonitor base, and can then call into the
-		// group/progress functions.
-		cells_ran=0;
-		// For some reason we need to re-export ProgressMonitor here, despite the fact that it has
-		// already been done in the cadabra2 module.
-		boost::python::class_<ProgressMonitor, boost::noncopyable>("ProgressMonitor")
-			.def("print", &ProgressMonitor::print)
-			.def("totals", &ProgressMonitor_totals_helper);
-
-		boost::python::class_<Server, boost::python::bases<ProgressMonitor>, boost::noncopyable>("Server")
-			.def("send", &Server::send)
-			.def("handles", &Server::handles)
-			.def("architecture", &Server::architecture);
-		}
-	catch(boost::python::error_already_set& ex) {
-		PyErr_Print();
-		}
-
+// 	// Make the C++ CatchOutput class visible on the Python side.
+// 
+//    pybind11::class_<Server::CatchOutput>("CatchOutput")
+// 	   .def("write", &Server::CatchOutput::write)
+// 	   .def("clear", &Server::CatchOutput::clear)
+//     	;
 
 	std::string stdOutErr =
 		"import sys\n"
@@ -141,11 +108,11 @@ void Server::init()
 	// Setup the C++ output catching objects and setup the Python side to
 	// use these as stdout and stderr streams.
 
-	boost::python::object setup_catch = main_module.attr("setup_catch");
+	pybind11::object setup_catch = main_module.attr("setup_catch");
 	try {
-		setup_catch(boost::ref(catchOut), boost::ref(catchErr), boost::ref(*this));
+		setup_catch(std::ref(catchOut), std::ref(catchErr), std::ref(*this));
 		}
-	catch(boost::python::error_already_set& ex) {
+	catch(pybind11::error_already_set& ex) {
 		snoop::log(snoop::fatal) << "Failed to initialise Python bridge." << snoop::flush;
 		PyErr_Print();
 		throw;
@@ -154,9 +121,11 @@ void Server::init()
 
 	// Call the Cadabra default initialisation script.
 
-//	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py')";
-//	std::string startup = "import imp; execfile(imp.find_module('cadabra2_defaults')[1])";
-	std::string startup = "import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close()"; 
+	std::string startup =
+		"import imp; "
+		"f=open(imp.find_module('cadabra2_defaults')[1]); "
+		"code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); "
+		"exec(code); f.close()"; 
 	run_string(startup);
 	}
 
@@ -175,40 +144,24 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 
 	// Run block. Catch output.
 	try {
-		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
-		std::string object_classname = boost::python::extract<std::string>(ignored.attr("__class__").attr("__name__"));
-		// snoop::log("info") << "Run finished" << snoop::flush;
-//		std::cout << "exec returned a " << object_classname << std::endl;
-		/*
-		boost::python::object catchobj = main_module.attr("catchOut");
-		boost::python::object valueobj = catchobj.attr("value");
-		result = boost::python::extract<std::string>(valueobj);
-		catchobj.attr("clear")();
-		*/
+		pybind11::object ignored = pybind11::eval(newblk.c_str(), main_namespace);
+		std::string object_classname = ignored.attr("__class__").attr("__name__").cast<std::string>();
 
 		if(handle_output) {
 			result = catchOut.str();
 			catchOut.clear();
 			}
 		}
-	catch(boost::python::error_already_set& ex) {
+	catch(pybind11::error_already_set& ex) {
 		// Make Python print error to stderr and catch it.
 		PyErr_Print();
-		/*
-		  boost::python::object catchobj = main_module.attr("catchErr");
-		  boost::python::object valueobj = catchobj.attr("value");
-		  std::string err = boost::python::extract<std::string>(valueobj);
-		*/
 		std::string err;
 		if(handle_output) {
 			err = catchErr.str();
 			catchErr.clear();
-			// std::cerr << "ERROR: " << err << std::endl;
-//		catchobj.attr("clear")();
 			}
 		throw std::runtime_error(err);
 		}
-//   std::cerr << "------------" << std::endl;
 
 	server_stopwatch.stop();
 	return result;

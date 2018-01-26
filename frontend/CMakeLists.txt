@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
-
+cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
+message("------------------------------------------------------------------------\nConfiguring 'frontend'")
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTKMM3 gtkmm-3.0)
