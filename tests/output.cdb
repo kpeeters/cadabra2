@@ -1,0 +1,23 @@
+
+def test01():
+    ex:=(2/3)**(1/5).
+    res=ex.mma_form()
+    assert(res=="(2/3)^(1/5)")
+    res=ex.sympy_form()
+    assert(res=="(2/3)**(1/5)")
+    res=ex.input_form()
+    assert(res=="( 2/3 )**( 1/5 )")
+    print("Test 01 passed")
+
+test01()
+
+def test02():
+    ex:=(2/3 p q)**(2 a + b);
+    res=ex.mma_form()
+    assert(res=="(2/3*p*q)^((2*a+b))")
+    res=ex.sympy_form()
+    assert(res=="(2/3*p*q)**((2*a+b))")
+    print("Test 02 passed")
+
+test02()
+
