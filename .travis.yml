@@ -49,7 +49,6 @@ before_install:
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated gmp || brew upgrade gmp; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew outdated pkgconfig || brew upgrade pkgconfig; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install jsoncpp python3 gtkmm3 gnome-icon-theme; fi
-   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install boost-python --with-python3; fi
    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sudo pip3 install matplotlib sympy; fi
    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then if [[ "`${CC} --version |grep gcc`" != "" ]]; then sudo apt-get install --yes doxygen graphviz texlive-font-utils; ./config/publish-doxygen; fi; fi; fi
 
