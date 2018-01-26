@@ -64,6 +64,7 @@ set(RTESTS
   paper
   basic
   numerical
+  output
   substitute
   canonicalise
   derivative
