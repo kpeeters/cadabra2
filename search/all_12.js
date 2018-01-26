@@ -72,7 +72,7 @@ var searchData=
   ['rewrite_5findices_2ecc',['rewrite_indices.cc',['../rewrite__indices_8cc.html',1,'']]],
   ['rewrite_5findices_2ehh',['rewrite_indices.hh',['../rewrite__indices_8hh.html',1,'']]],
   ['rho',['rho',['../Symbols_8cc.html#acb752c9dac416b93a1db8e81aef7b443',1,'rho():&#160;Symbols.cc'],['../Symbols_8cc.html#ac84a7e9ff48cf6ca5405b8519218fab3',1,'Rho():&#160;Symbols.cc']]],
-  ['rhs',['rhs',['../PythonCdb_8cc.html#a469687c60c7e1c55907c020b47a9c0c0',1,'PythonCdb.cc']]],
+  ['rhs',['rhs',['../PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d',1,'PythonCdb.cc']]],
   ['rhs_5fcontains_5fdummies',['rhs_contains_dummies',['../classcadabra_1_1substitute.html#aa6588285835faccf09a121e0e9efe133',1,'cadabra::substitute']]],
   ['riemanntensor',['RiemannTensor',['../classcadabra_1_1RiemannTensor.html#a0fc927d13a399efa0d81c84471aa2055',1,'cadabra::RiemannTensor']]],
   ['riemanntensor',['RiemannTensor',['../classcadabra_1_1RiemannTensor.html',1,'cadabra']]],
@@ -90,5 +90,6 @@ var searchData=
   ['runner',['runner',['../classServer.html#a2f7c69d01db7d1c0fb61dc0550084b89',1,'Server']]],
   ['running',['running',['../classcadabra_1_1DataCell.html#a2399d86186985e6d0cb013d0a852707c',1,'cadabra::DataCell']]],
   ['running_5fcells',['running_cells',['../classcadabra_1_1ComputeThread.html#ab28adc355af224d1545f187cffb28594',1,'cadabra::ComputeThread']]],
-  ['runtimeexception',['RuntimeException',['../classRuntimeException.html',1,'RuntimeException'],['../classRuntimeException.html#a0bb07d4ec6362fe5c312434721d605b6',1,'RuntimeException::RuntimeException()']]]
+  ['runtimeexception',['RuntimeException',['../classRuntimeException.html',1,'RuntimeException'],['../classRuntimeException.html#a0bb07d4ec6362fe5c312434721d605b6',1,'RuntimeException::RuntimeException()']]],
+  ['runtimeexceptiontype',['RuntimeExceptionType',['../PythonCdb_8cc.html#a8d6519013bb1de3db946fd2892894592',1,'PythonCdb.cc']]]
 ];

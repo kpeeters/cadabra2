@@ -20,6 +20,7 @@ var searchData=
   ['arg',['arg',['../classcadabra_1_1drop__keep__weight.html#adc68ddc74bd124a07c2dbd65a49c2473',1,'cadabra::drop_keep_weight']]],
   ['argloc_5f2_5ftreeloc',['argloc_2_treeloc',['../classcadabra_1_1sym.html#a253afebd68be3c9a7bbfefb8c4badf13',1,'cadabra::sym']]],
   ['args',['args',['../classcadabra_1_1substitute.html#a8503deea7c9cd36d1fc2bb95cae7c55d',1,'cadabra::substitute::args()'],['../classcadabra_1_1vary.html#a9e469228af80a2737cd78a29d28bd36c',1,'cadabra::vary::args()']]],
+  ['argumentexceptiontype',['ArgumentExceptionType',['../PythonCdb_8cc.html#a15be08e78140330ba2d8df78b4b035c2',1,'PythonCdb.cc']]],
   ['asym_5franges',['asym_ranges',['../classcadabra_1_1decompose__product.html#aabd7726903de5128d1e8d76633bc275e',1,'cadabra::decompose_product::asym_ranges()'],['../classcadabra_1_1young__project.html#ad56acc6324c8b7d3f0c407af5909edac',1,'cadabra::young_project::asym_ranges()']]],
   ['away_5ffrom',['away_from',['../classcadabra_1_1integrate__by__parts.html#a550443358ef8feb53b20a2878bfd78da',1,'cadabra::integrate_by_parts']]]
 ];

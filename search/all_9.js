@@ -91,6 +91,7 @@ var searchData=
   ['integrate_5fby_5fparts_2ehh',['integrate_by_parts.hh',['../integrate__by__parts_8hh.html',1,'']]],
   ['internal_5fproperty_5fmap_5ft',['internal_property_map_t',['../classcadabra_1_1Properties_1_1registered__property__map__t.html#a1f8e69da233f1f6acc5ea4747c7db27b',1,'cadabra::Properties::registered_property_map_t']]],
   ['internalerror',['InternalError',['../classInternalError.html',1,'InternalError'],['../classInternalError.html#ac7f68ccea6c0934c86f88eb70df296fc',1,'InternalError::InternalError()']]],
+  ['internalerrortype',['InternalErrorType',['../PythonCdb_8cc.html#a5dc592f07bcb79a492ce2736ed52d068',1,'PythonCdb.cc']]],
   ['interrupted',['interrupted',['../classcadabra_1_1Algorithm.html#a35858fd2c0dbfa8e094f7291d8e1f3d9',1,'cadabra::Algorithm']]],
   ['interruptionexception',['InterruptionException',['../classInterruptionException.html',1,'InterruptionException'],['../classInterruptionException.html#ac883ce80e617007985dfc38699081fa3',1,'InterruptionException::InterruptionException()']]],
   ['intersection_5fnumber',['intersection_number',['../classcadabra_1_1Algorithm.html#aed056dd485d3ebf1e43dcf701ce0f07c',1,'cadabra::Algorithm']]],
@@ -100,7 +101,7 @@ var searchData=
   ['inversemetric_2ecc',['InverseMetric.cc',['../InverseMetric_8cc.html',1,'']]],
   ['inversemetric_2ehh',['InverseMetric.hh',['../InverseMetric_8hh.html',1,'']]],
   ['invert_5fmatrix',['invert_matrix',['../group__scalar.html#gae6c200fc6d852a1db0d8bf6099691f43',1,'sympy']]],
-  ['iota',['Iota',['../Symbols_8cc.html#a5babef3ff82f82a181d45f3fb2afc6d3',1,'Iota():&#160;Symbols.cc'],['../Symbols_8cc.html#a3d40533ca7d963dd247fa567d4f0717d',1,'iota():&#160;Symbols.cc']]],
+  ['iota',['iota',['../Symbols_8cc.html#a3d40533ca7d963dd247fa567d4f0717d',1,'iota():&#160;Symbols.cc'],['../Symbols_8cc.html#a5babef3ff82f82a181d45f3fb2afc6d3',1,'Iota():&#160;Symbols.cc']]],
   ['ip_5faddress',['ip_address',['../classsnoop_1_1Snoop_1_1AppEntry.html#a1a3d4e89062c3e6ef75eb13b6bcf22a2',1,'snoop::Snoop::AppEntry']]],
   ['is_5fallowed_5fby_5fweight_5fconstraints',['is_allowed_by_weight_constraints',['../classcombin_1_1combinations__base.html#a3021e8edef630eccaa767e085fddbf6e',1,'combin::combinations_base']]],
   ['is_5falready_5fbracketed_5f',['is_already_bracketed_',['../classpreprocessor.html#a24fec60b9042c07a0e730febcdc58998',1,'preprocessor']]],
@@ -145,8 +146,9 @@ var searchData=
   ['is_5funsimplified_5frational',['is_unsimplified_rational',['../classcadabra_1_1str__node.html#a56c4a211c80715537167340fb0b98bf8',1,'cadabra::str_node']]],
   ['is_5fzero',['is_zero',['../classcadabra_1_1str__node.html#abde7610c6c529a751b5321a23d577cc5',1,'cadabra::str_node']]],
   ['it',['it',['../classcadabra_1_1indexsort_1_1less__indexed__treenode.html#ac5751be91f697e9dc3e410a4dbfbe04b',1,'cadabra::indexsort::less_indexed_treenode']]],
-  ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
+  ['iterable_5fconverter',['iterable_converter',['../classiterable__converter.html',1,'']]],
   ['iterator',['iterator',['../classcadabra_1_1Algorithm.html#a20ea288ae41c197be1f767653aac3c1b',1,'cadabra::Algorithm::iterator()'],['../classcadabra_1_1keyval__t.html#a85e9d1ab7689870ba69b5cd856c62f53',1,'cadabra::keyval_t::iterator()'],['../classcadabra_1_1Properties_1_1registered__property__map__t.html#a246fe2117fc20ee44cb7ab14e7e0dfe8',1,'cadabra::Properties::registered_property_map_t::iterator()'],['../classyngtab_1_1filled__tableau_1_1iterator.html#ac046a484b8762d3c08187b85d47e2598',1,'yngtab::filled_tableau::iterator::iterator()']]],
+  ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fbase',['iterator_base',['../classyngtab_1_1filled__tableau_1_1iterator__base.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fcategory',['iterator_category',['../classyngtab_1_1filled__tableau_1_1iterator__base.html#ab11be0dad33e55a845b007ff4130c974',1,'yngtab::filled_tableau::iterator_base']]]
 ];

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['label',['label',['../classcadabra_1_1labelled__property.html#a8570ac0337a5783bbf52bc3098d7ff74',1,'cadabra::labelled_property::label()'],['../classcadabra_1_1drop__keep__weight.html#a5ff1dde15a3e64c5c9cd333ecb95e6a6',1,'cadabra::drop_keep_weight::label()']]],
-  ['lambda',['Lambda',['../Symbols_8cc.html#a59c976e8298c661b04fe0d35e108060f',1,'Lambda():&#160;Symbols.cc'],['../Symbols_8cc.html#ac259ae998de521bde760249671021c08',1,'lambda():&#160;Symbols.cc']]],
+  ['lambda',['lambda',['../Symbols_8cc.html#ac259ae998de521bde760249671021c08',1,'lambda():&#160;Symbols.cc'],['../Symbols_8cc.html#a59c976e8298c661b04fe0d35e108060f',1,'Lambda():&#160;Symbols.cc']]],
   ['language',['language',['../classechokernel_1_1EchoKernel.html#a672b70e5af041dd889755297c313490b',1,'echokernel::EchoKernel']]],
   ['language_5finfo',['language_info',['../classechokernel_1_1EchoKernel.html#a57f4895cab51d1d3d6c435b8d8dad018',1,'echokernel::EchoKernel']]],
   ['language_5fversion',['language_version',['../classechokernel_1_1EchoKernel.html#a40fa38419e6b354956d64645fe0cc1e5',1,'echokernel::EchoKernel']]],

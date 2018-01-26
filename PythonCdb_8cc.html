@@ -117,10 +117,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;<a class="el" href="PreClean_8hh_source.html">PreClean.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="PythonException_8hh_source.html">PythonException.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="ProgressMonitor_8hh_source.html">ProgressMonitor.hh</a>&quot;</code><br/>
-<code>#include &lt;pybind11/pybind11.h&gt;</code><br/>
-<code>#include &lt;pybind11/embed.h&gt;</code><br/>
-<code>#include &lt;pybind11/operators.h&gt;</code><br/>
-<code>#include &lt;pybind11/stl.h&gt;</code><br/>
+<code>#include &lt;boost/python/implicit.hpp&gt;</code><br/>
+<code>#include &lt;boost/parameter/preprocessor.hpp&gt;</code><br/>
+<code>#include &lt;boost/mpl/vector.hpp&gt;</code><br/>
+<code>#include &lt;boost/python/enum.hpp&gt;</code><br/>
+<code>#include &lt;boost/python/def.hpp&gt;</code><br/>
+<code>#include &lt;boost/python/module.hpp&gt;</code><br/>
+<code>#include &lt;boost/python/stl_iterator.hpp&gt;</code><br/>
+<code>#include &lt;boost/python/slice.hpp&gt;</code><br/>
+<code>#include &lt;boost/python/suite/indexing/vector_indexing_suite.hpp&gt;</code><br/>
 <code>#include &lt;boost/algorithm/string/replace.hpp&gt;</code><br/>
 <code>#include &lt;sstream&gt;</code><br/>
 <code>#include &quot;<a class="el" href="Accent_8hh_source.html">properties/Accent.hh</a>&quot;</code><br/>
@@ -220,60 +225,59 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classPyProgressMonitor.html">PyProgressMonitor</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classiterable__converter.html">iterable_converter</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a4af004eadfa089fb37e7f8f346e39243"><td class="memItemLeft" align="right" valign="top">pybind11::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a4af004eadfa089fb37e7f8f346e39243">ProgressMonitor_totals_helper</a> (<a class="el" href="classProgressMonitor.html">ProgressMonitor</a> &amp;self)</td></tr>
-<tr class="separator:a4af004eadfa089fb37e7f8f346e39243"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0051f189faaf2e171afd89623b92dd7"><td class="memItemLeft" align="right" valign="top">pybind11::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ab0051f189faaf2e171afd89623b92dd7">terms</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="separator:ab0051f189faaf2e171afd89623b92dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47601233e0651b3f5171b240bd434049"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a47601233e0651b3f5171b240bd434049">lhs</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="separator:a47601233e0651b3f5171b240bd434049"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a469687c60c7e1c55907c020b47a9c0c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a469687c60c7e1c55907c020b47a9c0c0">rhs</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="separator:a469687c60c7e1c55907c020b47a9c0c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac037270c218c25b6629232ed2042acfa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ac037270c218c25b6629232ed2042acfa">Ex_getslice</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, pybind11::slice slice)</td></tr>
-<tr class="separator:ac037270c218c25b6629232ed2042acfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a64a5521d7ebd2cc0ad62bb167898746b">to_std_vector</a> (const boost::python::list &amp;iterable)</td></tr>
+<tr class="separator:a64a5521d7ebd2cc0ad62bb167898746b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2bd4ca603346eb93c8e620b2ea319ac"><td class="memItemLeft" align="right" valign="top">boost::python::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ae2bd4ca603346eb93c8e620b2ea319ac">ProgressMonitor_totals_helper</a> (<a class="el" href="classProgressMonitor.html">ProgressMonitor</a> &amp;self)</td></tr>
+<tr class="separator:ae2bd4ca603346eb93c8e620b2ea319ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8aa7a6b2d258e2b2a135c0b2cb50a33d"><td class="memItemLeft" align="right" valign="top">boost::python::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a8aa7a6b2d258e2b2a135c0b2cb50a33d">terms</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:a8aa7a6b2d258e2b2a135c0b2cb50a33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb82474fc15c3cdaebe18f1b00e8fd92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#adb82474fc15c3cdaebe18f1b00e8fd92">lhs</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:adb82474fc15c3cdaebe18f1b00e8fd92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7a4f494704b6ab899167b48aeb89b2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ab7a4f494704b6ab899167b48aeb89b2d">rhs</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:ab7a4f494704b6ab899167b48aeb89b2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af02b56b4c20187a862f762314ed6587e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af02b56b4c20187a862f762314ed6587e">Ex_getslice</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, boost::python::slice slice)</td></tr>
+<tr class="separator:af02b56b4c20187a862f762314ed6587e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfad8edee4f862ef375b818fbaa08b3b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#abfad8edee4f862ef375b818fbaa08b3b">Ex_getitem</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, int index)</td></tr>
 <tr class="separator:abfad8edee4f862ef375b818fbaa08b3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfe28f30dd4bbe50647aa8efb997677d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#acfe28f30dd4bbe50647aa8efb997677d">Ex_setitem</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, int index, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> val)</td></tr>
 <tr class="separator:acfe28f30dd4bbe50647aa8efb997677d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6ad8ac9c4ab59df32689d6d704d9662"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ad6ad8ac9c4ab59df32689d6d704d9662">Ex_len</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
 <tr class="separator:ad6ad8ac9c4ab59df32689d6d704d9662"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab0c3f68db92cdfc4d141b8e8c82ca5d4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gab0c3f68db92cdfc4d141b8e8c82ca5d4">Ex_str_</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="memdesc:gab0c3f68db92cdfc4d141b8e8c82ca5d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() and repr() representation of the Ex object.  <a href="group__pythoncore.html#gab0c3f68db92cdfc4d141b8e8c82ca5d4">More...</a><br/></td></tr>
-<tr class="separator:gab0c3f68db92cdfc4d141b8e8c82ca5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ac49622d48c74830e56052346402156"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a7ac49622d48c74830e56052346402156">Ex_to_input</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="separator:a7ac49622d48c74830e56052346402156"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa98675ab4e040470f7ababfdab9b67a9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gaa98675ab4e040470f7ababfdab9b67a9">Ex_latex_</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="memdesc:gaa98675ab4e040470f7ababfdab9b67a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Python 'print' function always calls the 'str' member on objects to be printed.  <a href="group__pythoncore.html#gaa98675ab4e040470f7ababfdab9b67a9">More...</a><br/></td></tr>
-<tr class="separator:gaa98675ab4e040470f7ababfdab9b67a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0784e2ae999bcca06411f1688c654f1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ac0784e2ae999bcca06411f1688c654f1">Ex_repr_</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="separator:ac0784e2ae999bcca06411f1688c654f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29184d1cf4b650a43d7df09d32b7c1c1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a29184d1cf4b650a43d7df09d32b7c1c1">Ex_to_Sympy_string</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="memdesc:a29184d1cf4b650a43d7df09d32b7c1c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression.  <a href="#a29184d1cf4b650a43d7df09d32b7c1c1">More...</a><br/></td></tr>
-<tr class="separator:a29184d1cf4b650a43d7df09d32b7c1c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga7d0b52f46d8205101333cbc89610f7f8"><td class="memItemLeft" align="right" valign="top">pybind11::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#ga7d0b52f46d8205101333cbc89610f7f8">Ex_to_Sympy</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="memdesc:ga7d0b52f46d8205101333cbc89610f7f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' as a Sympy expression.  <a href="group__scalar.html#ga7d0b52f46d8205101333cbc89610f7f8">More...</a><br/></td></tr>
-<tr class="separator:ga7d0b52f46d8205101333cbc89610f7f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad8255f72516ce5c017170de099b7cbba"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ad8255f72516ce5c017170de099b7cbba">Ex_to_MMA</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, bool use_unicode)</td></tr>
-<tr class="separator:ad8255f72516ce5c017170de099b7cbba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacd1f688bf110e3b4e7230772aea74b8"><td class="memItemLeft" align="right" valign="top">pybind11::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#aacd1f688bf110e3b4e7230772aea74b8">get_locals</a> ()</td></tr>
-<tr class="separator:aacd1f688bf110e3b4e7230772aea74b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5261b0ac276077da081b852d49a2925a"><td class="memItemLeft" align="right" valign="top">pybind11::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a5261b0ac276077da081b852d49a2925a">get_globals</a> ()</td></tr>
-<tr class="separator:a5261b0ac276077da081b852d49a2925a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8a28af5339c592b6266bdd5a86e856bf"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga8a28af5339c592b6266bdd5a86e856bf">Ex_str_</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:ga8a28af5339c592b6266bdd5a86e856bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() and repr() representation of the Ex object.  <a href="group__pythoncore.html#ga8a28af5339c592b6266bdd5a86e856bf">More...</a><br/></td></tr>
+<tr class="separator:ga8a28af5339c592b6266bdd5a86e856bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94d2dd53254fb7995bbfbf052d94e910"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a94d2dd53254fb7995bbfbf052d94e910">Ex_to_input</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:a94d2dd53254fb7995bbfbf052d94e910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga57a377f3ca30ab263f335b6236bdc894"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga57a377f3ca30ab263f335b6236bdc894">Ex_latex_</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:ga57a377f3ca30ab263f335b6236bdc894"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Python 'print' function always calls the 'str' member on objects to be printed.  <a href="group__pythoncore.html#ga57a377f3ca30ab263f335b6236bdc894">More...</a><br/></td></tr>
+<tr class="separator:ga57a377f3ca30ab263f335b6236bdc894"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa7280e0886f1ca4a1e7b9ea8149df36"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#afa7280e0886f1ca4a1e7b9ea8149df36">Ex_repr_</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="separator:afa7280e0886f1ca4a1e7b9ea8149df36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1e099005d6266fa60b1ca2b4705653c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af1e099005d6266fa60b1ca2b4705653c">Ex_to_Sympy_string</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:af1e099005d6266fa60b1ca2b4705653c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression.  <a href="#af1e099005d6266fa60b1ca2b4705653c">More...</a><br/></td></tr>
+<tr class="separator:af1e099005d6266fa60b1ca2b4705653c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafd911392f791a94aa633d4cdb1670bda"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">Ex_to_Sympy</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:gafd911392f791a94aa633d4cdb1670bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' as a Sympy expression.  <a href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">More...</a><br/></td></tr>
+<tr class="separator:gafd911392f791a94aa633d4cdb1670bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae779b8038857729b9abb7b5ae0e68758"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ae779b8038857729b9abb7b5ae0e68758">Ex_to_MMA</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, bool use_unicode)</td></tr>
+<tr class="separator:ae779b8038857729b9abb7b5ae0e68758"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a0a4ace1e0bde4ab74e7333dd33b1af14">fetch_from_python</a> (const std::string &amp;nm)</td></tr>
 <tr class="memdesc:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch an Ex object from the Python side using its Python identifier.  <a href="#a0a4ace1e0bde4ab74e7333dd33b1af14">More...</a><br/></td></tr>
 <tr class="separator:a0a4ace1e0bde4ab74e7333dd33b1af14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae3c073e58fb380270c642a38f34d403b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gae3c073e58fb380270c642a38f34d403b">__eq__Ex_Ex</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; one, std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; other)</td></tr>
-<tr class="memdesc:gae3c073e58fb380270c642a38f34d403b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#gae3c073e58fb380270c642a38f34d403b">More...</a><br/></td></tr>
-<tr class="separator:gae3c073e58fb380270c642a38f34d403b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga5009b9373d971962b2b5c85f333ed4f5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga5009b9373d971962b2b5c85f333ed4f5">__eq__Ex_int</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; one, int other)</td></tr>
-<tr class="memdesc:ga5009b9373d971962b2b5c85f333ed4f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#ga5009b9373d971962b2b5c85f333ed4f5">More...</a><br/></td></tr>
-<tr class="separator:ga5009b9373d971962b2b5c85f333ed4f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6314afdb8287bf4ff10117f45ff2a7a7"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a6314afdb8287bf4ff10117f45ff2a7a7">make_Ex_from_string</a> (const std::string &amp;ex_, bool make_ref, <a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> *kernel)</td></tr>
-<tr class="separator:a6314afdb8287bf4ff10117f45ff2a7a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga002f295d20d22e0cb3817d2d3cf2f460"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga002f295d20d22e0cb3817d2d3cf2f460">__eq__Ex_Ex</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;one, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;other)</td></tr>
+<tr class="memdesc:ga002f295d20d22e0cb3817d2d3cf2f460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#ga002f295d20d22e0cb3817d2d3cf2f460">More...</a><br/></td></tr>
+<tr class="separator:ga002f295d20d22e0cb3817d2d3cf2f460"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga58b2fddbe79461c5a4c7a4b5198f34ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga58b2fddbe79461c5a4c7a4b5198f34ef">__eq__Ex_int</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;one, int other)</td></tr>
+<tr class="memdesc:ga58b2fddbe79461c5a4c7a4b5198f34ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#ga58b2fddbe79461c5a4c7a4b5198f34ef">More...</a><br/></td></tr>
+<tr class="separator:ga58b2fddbe79461c5a4c7a4b5198f34ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bf759b16ec857fe53da1cf78354d54d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a0bf759b16ec857fe53da1cf78354d54d">make_Ex_from_string</a> (const std::string &amp;ex_, bool make_ref=true)</td></tr>
+<tr class="separator:a0bf759b16ec857fe53da1cf78354d54d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82d0c54f0e9cd6e21a4660fb8ce240b2"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a82d0c54f0e9cd6e21a4660fb8ce240b2">construct_Ex_from_string</a> (const std::string &amp;ex_)</td></tr>
 <tr class="separator:a82d0c54f0e9cd6e21a4660fb8ce240b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af32e39105715f53ea89da6c3d77aa88a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af32e39105715f53ea89da6c3d77aa88a">construct_Ex_from_string_2</a> (const std::string &amp;ex_, bool add_ref)</td></tr>
@@ -284,16 +288,34 @@ Functions</h2></td></tr>
 <tr class="separator:a12a5e6ab9213f9349ed536428ab8f1c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e21a7c31decef3e6ca1bd5ae9093add"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a2e21a7c31decef3e6ca1bd5ae9093add">construct_Ex_from_int_2</a> (int num, bool add_ref)</td></tr>
 <tr class="separator:a2e21a7c31decef3e6ca1bd5ae9093add"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08795992d9bc703945805ba08f67ff7b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a08795992d9bc703945805ba08f67ff7b">operator+</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex1, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex2)</td></tr>
-<tr class="separator:a08795992d9bc703945805ba08f67ff7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a451a7e76ea37c0c9d4e18bc53af164ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a451a7e76ea37c0c9d4e18bc53af164ce">operator-</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex1, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex2)</td></tr>
-<tr class="separator:a451a7e76ea37c0c9d4e18bc53af164ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gac00ef36dd5d0995f1f8349666f02ad5b">operator+</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex1, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex2)</td></tr>
+<tr class="memdesc:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add two expressions, adding a top-level  node if required.  <a href="group__pythoncore.html#gac00ef36dd5d0995f1f8349666f02ad5b">More...</a><br/></td></tr>
+<tr class="separator:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae90926b7cc6ca53302ebaf3a5a49148e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gae90926b7cc6ca53302ebaf3a5a49148e">operator-</a> (const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex1, const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex2)</td></tr>
+<tr class="memdesc:gae90926b7cc6ca53302ebaf3a5a49148e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract two expressions, adding a top-level  node if required.  <a href="group__pythoncore.html#gae90926b7cc6ca53302ebaf3a5a49148e">More...</a><br/></td></tr>
+<tr class="separator:gae90926b7cc6ca53302ebaf3a5a49148e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4da81b58246fcb4b2a2e0c9a8fce95c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ad4da81b58246fcb4b2a2e0c9a8fce95c">init_ipython</a> ()</td></tr>
 <tr class="separator:ad4da81b58246fcb4b2a2e0c9a8fce95c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4563505d1ad62f20b6070e112c7a314"><td class="memItemLeft" align="right" valign="top">pybind11::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ad4563505d1ad62f20b6070e112c7a314">list_properties</a> ()</td></tr>
-<tr class="separator:ad4563505d1ad62f20b6070e112c7a314"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac217f28bc50ad9cc2d209be157fe4af4"><td class="memItemLeft" align="right" valign="top">boost::python::list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ac217f28bc50ad9cc2d209be157fe4af4">list_properties</a> ()</td></tr>
+<tr class="separator:ac217f28bc50ad9cc2d209be157fe4af4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1fd0bbec8125e394f10b7030327814e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af1fd0bbec8125e394f10b7030327814e">print_tree</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> *ex)</td></tr>
 <tr class="separator:af1fd0bbec8125e394f10b7030327814e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaaa2fd40b08f8958535c9a94a466347a"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#aaaa2fd40b08f8958535c9a94a466347a">createExceptionClass</a> (const char *name, PyObject *baseTypeObj=PyExc_Exception)</td></tr>
+<tr class="separator:aaaa2fd40b08f8958535c9a94a466347a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd1e248b6386a794b8864bdc1e06b709"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#abd1e248b6386a794b8864bdc1e06b709">translate_ArgumentException</a> (const <a class="el" href="classArgumentException.html">ArgumentException</a> &amp;x)</td></tr>
+<tr class="separator:abd1e248b6386a794b8864bdc1e06b709"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43d75187ebdf25289ef87240a2d0ee7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a43d75187ebdf25289ef87240a2d0ee7c">translate_ConsistencyException</a> (const <a class="el" href="classConsistencyException.html">ConsistencyException</a> &amp;x)</td></tr>
+<tr class="separator:a43d75187ebdf25289ef87240a2d0ee7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a381c20ab5d72688caa9ccbd9dadf8d68"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a381c20ab5d72688caa9ccbd9dadf8d68">translate_ParseException</a> (const <a class="el" href="classParseException.html">ParseException</a> &amp;e)</td></tr>
+<tr class="separator:a381c20ab5d72688caa9ccbd9dadf8d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e13631fd61db534808c4802c020de07"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a1e13631fd61db534808c4802c020de07">translate_RuntimeException</a> (const <a class="el" href="classRuntimeException.html">RuntimeException</a> &amp;e)</td></tr>
+<tr class="separator:a1e13631fd61db534808c4802c020de07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1a5442f7e8fca0e50293d7f343ffc92"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#af1a5442f7e8fca0e50293d7f343ffc92">translate_NonScalarException</a> (const <a class="el" href="classNonScalarException.html">NonScalarException</a> &amp;e)</td></tr>
+<tr class="separator:af1a5442f7e8fca0e50293d7f343ffc92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8295e68aa959a2799038598172215e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#aa8295e68aa959a2799038598172215e4">translate_InternalError</a> (const <a class="el" href="classInternalError.html">InternalError</a> &amp;e)</td></tr>
+<tr class="separator:aa8295e68aa959a2799038598172215e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacb2cc8c7d8eb8a504a19e5e3e7dbc66"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#aacb2cc8c7d8eb8a504a19e5e3e7dbc66">translate_NotYetImplemented</a> (const <a class="el" href="classNotYetImplemented.html">NotYetImplemented</a> &amp;e)</td></tr>
+<tr class="separator:aacb2cc8c7d8eb8a504a19e5e3e7dbc66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0c8c2a3117606eba18715481dcd89ef1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga0c8c2a3117606eba18715481dcd89ef1">get_kernel_from_scope</a> ()</td></tr>
 <tr class="memdesc:ga0c8c2a3117606eba18715481dcd89ef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the currently visible kernel.  <a href="group__pythoncore.html#ga0c8c2a3117606eba18715481dcd89ef1">More...</a><br/></td></tr>
 <tr class="separator:ga0c8c2a3117606eba18715481dcd89ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -307,34 +329,37 @@ Functions</h2></td></tr>
 <tr class="memitem:gabf1c5b28c69e9bd1f1cd50a4b6ea8adc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gabf1c5b28c69e9bd1f1cd50a4b6ea8adc">inject_defaults</a> (<a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> *<a class="el" href="passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9">k</a>)</td></tr>
 <tr class="memdesc:gabf1c5b28c69e9bd1f1cd50a4b6ea8adc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inject properties directly into the Kernel, even if the kernel is not yet on the Python stack (needed when we create a new local scope: in this case we create the kernel and pass it back to be turned into local <b>cdbkernel</b> by Python, but we want to populate the kernel with defaults before we hand it back).  <a href="group__pythoncore.html#gabf1c5b28c69e9bd1f1cd50a4b6ea8adc">More...</a><br/></td></tr>
 <tr class="separator:gabf1c5b28c69e9bd1f1cd50a4b6ea8adc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3ababd77f8fa9056ecca23f1169d248"><td class="memTemplParams" colspan="2">template&lt;class F &gt; </td></tr>
-<tr class="memitem:ab3ababd77f8fa9056ecca23f1169d248"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ab3ababd77f8fa9056ecca23f1169d248">dispatch_base</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, F &amp;algo, bool deep, bool repeat, unsigned int depth, bool pre_order)</td></tr>
-<tr class="separator:ab3ababd77f8fa9056ecca23f1169d248"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a141748c846fd7a527f9021c41fadf0"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a7a141748c846fd7a527f9021c41fadf0">map_sympy_wrapper</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, std::string head)</td></tr>
-<tr class="separator:a7a141748c846fd7a527f9021c41fadf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gacac0b74845b7ea33cd22df62eedf9e91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gacac0b74845b7ea33cd22df62eedf9e91">call_post_process</a> (<a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;kernel, std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex)</td></tr>
-<tr class="memdesc:gacac0b74845b7ea33cd22df62eedf9e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the post-process Python function (if defined) on the given expression.  <a href="group__pythoncore.html#gacac0b74845b7ea33cd22df62eedf9e91">More...</a><br/></td></tr>
-<tr class="separator:gacac0b74845b7ea33cd22df62eedf9e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdda23fd4503ae180c0bf5c73c8e2e56"><td class="memTemplParams" colspan="2">template&lt;class F &gt; </td></tr>
-<tr class="memitem:acdda23fd4503ae180c0bf5c73c8e2e56"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#acdda23fd4503ae180c0bf5c73c8e2e56">dispatch_ex</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, bool deep, bool repeat, unsigned int depth)</td></tr>
-<tr class="separator:acdda23fd4503ae180c0bf5c73c8e2e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48e43650595ce3b2862a8b0e7380d091"><td class="memTemplParams" colspan="2">template&lt;class F , typename Arg1 &gt; </td></tr>
-<tr class="memitem:a48e43650595ce3b2862a8b0e7380d091"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a48e43650595ce3b2862a8b0e7380d091">dispatch_ex</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)</td></tr>
-<tr class="separator:a48e43650595ce3b2862a8b0e7380d091"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add0960fc2fb8376b22a9a67aa25c7185"><td class="memTemplParams" colspan="2">template&lt;class F , typename Arg1 , typename Arg2 &gt; </td></tr>
-<tr class="memitem:add0960fc2fb8376b22a9a67aa25c7185"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#add0960fc2fb8376b22a9a67aa25c7185">dispatch_ex</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)</td></tr>
-<tr class="separator:add0960fc2fb8376b22a9a67aa25c7185"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf8b58f4ff468c80c0b70581753b843b"><td class="memTemplParams" colspan="2">template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </td></tr>
-<tr class="memitem:adf8b58f4ff468c80c0b70581753b843b"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#adf8b58f4ff468c80c0b70581753b843b">dispatch_ex</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt; ex, Arg1 arg1, Arg2 arg2, Arg3 arg3, bool deep, bool repeat, unsigned int depth)</td></tr>
-<tr class="separator:adf8b58f4ff468c80c0b70581753b843b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a47f276614746e676857bb438446caee0"><td class="memTemplParams" colspan="2">template&lt;class F &gt; </td></tr>
-<tr class="memitem:a47f276614746e676857bb438446caee0"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a47f276614746e676857bb438446caee0">def_algo_1</a> (const std::string &amp;name, pybind11::module &amp;m)</td></tr>
-<tr class="separator:a47f276614746e676857bb438446caee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d0ea9f4a0a659adf09b822a053d88a2"><td class="memTemplParams" colspan="2">template&lt;class P &gt; </td></tr>
-<tr class="memitem:a6d0ea9f4a0a659adf09b822a053d88a2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a6d0ea9f4a0a659adf09b822a053d88a2">def_prop</a> (pybind11::module &amp;m)</td></tr>
-<tr class="separator:a6d0ea9f4a0a659adf09b822a053d88a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a481a989818f6c70f57d8c76f86bf4a84"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a481a989818f6c70f57d8c76f86bf4a84">PYBIND11_MODULE</a> (cadabra2, m)</td></tr>
-<tr class="separator:a481a989818f6c70f57d8c76f86bf4a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f48ce4770f50e8547f50c575a58921d"><td class="memTemplParams" colspan="2">template&lt;class F &gt; </td></tr>
+<tr class="memitem:a5f48ce4770f50e8547f50c575a58921d"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a5f48ce4770f50e8547f50c575a58921d">dispatch_base</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, F &amp;algo, bool deep, bool repeat, unsigned int depth, bool pre_order)</td></tr>
+<tr class="separator:a5f48ce4770f50e8547f50c575a58921d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a257b7ec0e566fe19e70d8d66be8db1e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a257b7ec0e566fe19e70d8d66be8db1e2">map_sympy_wrapper</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, std::string head)</td></tr>
+<tr class="separator:a257b7ec0e566fe19e70d8d66be8db1e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga82c40aaba90049ed7cf7be1fc60152ac">call_post_process</a> (<a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> &amp;kernel, <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex)</td></tr>
+<tr class="memdesc:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the post-process Python function (if defined) on the given expression.  <a href="group__pythoncore.html#ga82c40aaba90049ed7cf7be1fc60152ac">More...</a><br/></td></tr>
+<tr class="separator:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d23964b8048363b31be553f7407b0f9"><td class="memTemplParams" colspan="2">template&lt;class F &gt; </td></tr>
+<tr class="memitem:a7d23964b8048363b31be553f7407b0f9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a7d23964b8048363b31be553f7407b0f9">dispatch_ex</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, bool deep, bool repeat, unsigned int depth)</td></tr>
+<tr class="separator:a7d23964b8048363b31be553f7407b0f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b6fb61794a2acdb502c34038b21d09a"><td class="memTemplParams" colspan="2">template&lt;class F , typename Arg1 &gt; </td></tr>
+<tr class="memitem:a8b6fb61794a2acdb502c34038b21d09a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a8b6fb61794a2acdb502c34038b21d09a">dispatch_ex</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)</td></tr>
+<tr class="separator:a8b6fb61794a2acdb502c34038b21d09a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a644dacf1bd2a4da4e61f2fe25f17f309"><td class="memTemplParams" colspan="2">template&lt;class F , typename Arg1 , typename Arg2 &gt; </td></tr>
+<tr class="memitem:a644dacf1bd2a4da4e61f2fe25f17f309"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a644dacf1bd2a4da4e61f2fe25f17f309">dispatch_ex</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)</td></tr>
+<tr class="separator:a644dacf1bd2a4da4e61f2fe25f17f309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80b26c89361ec23c4dce6792f6f13d0e"><td class="memTemplParams" colspan="2">template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </td></tr>
+<tr class="memitem:a80b26c89361ec23c4dce6792f6f13d0e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a80b26c89361ec23c4dce6792f6f13d0e">dispatch_ex</a> (<a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;ex, Arg1 arg1, Arg2 arg2, Arg3 arg3, bool deep, bool repeat, unsigned int depth)</td></tr>
+<tr class="separator:a80b26c89361ec23c4dce6792f6f13d0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5f569df0dd1f489d1454e4e8b773829"><td class="memTemplParams" colspan="2">template&lt;class F , typename... Args&gt; </td></tr>
+<tr class="memitem:ac5f569df0dd1f489d1454e4e8b773829"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ac5f569df0dd1f489d1454e4e8b773829">dispatch_string</a> (const std::string &amp;ex, Args...args, bool deep, bool repeat, unsigned int depth)</td></tr>
+<tr class="separator:ac5f569df0dd1f489d1454e4e8b773829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0faaf97782adb937278d0660459ef4d2"><td class="memTemplParams" colspan="2">template&lt;class F &gt; </td></tr>
+<tr class="memitem:a0faaf97782adb937278d0660459ef4d2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a0faaf97782adb937278d0660459ef4d2">def_algo_1</a> (const std::string &amp;name)</td></tr>
+<tr class="separator:a0faaf97782adb937278d0660459ef4d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51cbb86696b71c4d6112a4b5a1f4af6a"><td class="memTemplParams" colspan="2">template&lt;class P &gt; </td></tr>
+<tr class="memitem:a51cbb86696b71c4d6112a4b5a1f4af6a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a51cbb86696b71c4d6112a4b5a1f4af6a">def_prop</a> ()</td></tr>
+<tr class="separator:a51cbb86696b71c4d6112a4b5a1f4af6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37ff0574884af8cf395027bf679d29a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a37ff0574884af8cf395027bf679d29a2">BOOST_PYTHON_MODULE</a> (cadabra2)</td></tr>
+<tr class="separator:a37ff0574884af8cf395027bf679d29a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -342,10 +367,40 @@ Variables</h2></td></tr>
 <tr class="separator:a17f4ca8d5574ae9c9d35b26b3462d44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac690888937da1cc3ede9915f16610f9b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ac690888937da1cc3ede9915f16610f9b">post_process_enabled</a> =true</td></tr>
 <tr class="separator:ac690888937da1cc3ede9915f16610f9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae98b2e345ddb18d03f95bde4e507ab47"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ae98b2e345ddb18d03f95bde4e507ab47">ParseExceptionType</a> = NULL</td></tr>
+<tr class="separator:ae98b2e345ddb18d03f95bde4e507ab47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15be08e78140330ba2d8df78b4b035c2"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a15be08e78140330ba2d8df78b4b035c2">ArgumentExceptionType</a> = 0</td></tr>
+<tr class="separator:a15be08e78140330ba2d8df78b4b035c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2aa585d1b2cc6912bb73e08326741d3d"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a2aa585d1b2cc6912bb73e08326741d3d">ConsistencyExceptionType</a> = 0</td></tr>
+<tr class="separator:a2aa585d1b2cc6912bb73e08326741d3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d6519013bb1de3db946fd2892894592"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a8d6519013bb1de3db946fd2892894592">RuntimeExceptionType</a> = 0</td></tr>
+<tr class="separator:a8d6519013bb1de3db946fd2892894592"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c191879421828dc6e2e8502e253ae7b"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a4c191879421828dc6e2e8502e253ae7b">NonScalarExceptionType</a> = NULL</td></tr>
+<tr class="separator:a4c191879421828dc6e2e8502e253ae7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dc592f07bcb79a492ce2736ed52d068"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#a5dc592f07bcb79a492ce2736ed52d068">InternalErrorType</a> = NULL</td></tr>
+<tr class="separator:a5dc592f07bcb79a492ce2736ed52d068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7143b05eaaf70c822886bd5ca25993c"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ab7143b05eaaf70c822886bd5ca25993c">NotYetImplementedType</a> = NULL</td></tr>
+<tr class="separator:ab7143b05eaaf70c822886bd5ca25993c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7e1e6ebc0e777a2bf7bbfbcd14f361c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classProgressMonitor.html">ProgressMonitor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8cc.html#ac7e1e6ebc0e777a2bf7bbfbcd14f361c">pm</a> =0</td></tr>
 <tr class="separator:ac7e1e6ebc0e777a2bf7bbfbcd14f361c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="a37ff0574884af8cf395027bf679d29a2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOST_PYTHON_MODULE </td>
+          <td>(</td>
+          <td class="paramtype">cadabra2&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a12a5e6ab9213f9349ed536428ab8f1c8"></a>
 <div class="memitem">
 <div class="memproto">
@@ -460,23 +515,21 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a47f276614746e676857bb438446caee0"></a>
+<a class="anchor" id="aaaa2fd40b08f8958535c9a94a466347a"></a>
 <div class="memitem">
 <div class="memproto">
-<div class="memtemplate">
-template&lt;class F &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void def_algo_1 </td>
+          <td class="memname">PyObject* createExceptionClass </td>
           <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">pybind11::module &amp;&#160;</td>
-          <td class="paramname"><em>m</em>&#160;</td>
+          <td class="paramtype">PyObject *&#160;</td>
+          <td class="paramname"><em>baseTypeObj</em> = <code>PyExc_Exception</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -488,7 +541,25 @@ template&lt;class F &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a6d0ea9f4a0a659adf09b822a053d88a2"></a>
+<a class="anchor" id="a0faaf97782adb937278d0660459ef4d2"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class F &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void def_algo_1 </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a51cbb86696b71c4d6112a4b5a1f4af6a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
@@ -497,8 +568,7 @@ template&lt;class P &gt; </div>
         <tr>
           <td class="memname">void def_prop </td>
           <td>(</td>
-          <td class="paramtype">pybind11::module &amp;&#160;</td>
-          <td class="paramname"><em>m</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -506,16 +576,16 @@ template&lt;class P &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab3ababd77f8fa9056ecca23f1169d248"></a>
+<a class="anchor" id="a5f48ce4770f50e8547f50c575a58921d"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class F &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcadabra_1_1Ex.html">Ex</a>&gt; dispatch_base </td>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* dispatch_base </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
@@ -558,16 +628,16 @@ template&lt;class F &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="acdda23fd4503ae180c0bf5c73c8e2e56"></a>
+<a class="anchor" id="a7d23964b8048363b31be553f7407b0f9"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class F &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcadabra_1_1Ex.html">Ex</a>&gt; dispatch_ex </td>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* dispatch_ex </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
@@ -598,16 +668,16 @@ template&lt;class F &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a48e43650595ce3b2862a8b0e7380d091"></a>
+<a class="anchor" id="a8b6fb61794a2acdb502c34038b21d09a"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class F , typename Arg1 &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcadabra_1_1Ex.html">Ex</a>&gt; dispatch_ex </td>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* dispatch_ex </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
@@ -644,16 +714,16 @@ template&lt;class F , typename Arg1 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="add0960fc2fb8376b22a9a67aa25c7185"></a>
+<a class="anchor" id="a644dacf1bd2a4da4e61f2fe25f17f309"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class F , typename Arg1 , typename Arg2 &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcadabra_1_1Ex.html">Ex</a>&gt; dispatch_ex </td>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* dispatch_ex </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
@@ -696,16 +766,16 @@ template&lt;class F , typename Arg1 , typename Arg2 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="adf8b58f4ff468c80c0b70581753b843b"></a>
+<a class="anchor" id="a80b26c89361ec23c4dce6792f6f13d0e"></a>
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcadabra_1_1Ex.html">Ex</a>&gt; dispatch_ex </td>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* dispatch_ex </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
@@ -725,6 +795,52 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
           <td></td>
           <td class="paramtype">Arg3&#160;</td>
           <td class="paramname"><em>arg3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>deep</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>repeat</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>depth</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ac5f569df0dd1f489d1454e4e8b773829"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class F , typename... Args&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* dispatch_string </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ex</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Args...&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -780,20 +896,20 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac037270c218c25b6629232ed2042acfa"></a>
+<a class="anchor" id="af02b56b4c20187a862f762314ed6587e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> Ex_getslice </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">pybind11::slice&#160;</td>
+          <td class="paramtype">boost::python::slice&#160;</td>
           <td class="paramname"><em>slice</em>&#160;</td>
         </tr>
         <tr>
@@ -822,14 +938,14 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ac0784e2ae999bcca06411f1688c654f1"></a>
+<a class="anchor" id="afa7280e0886f1ca4a1e7b9ea8149df36"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">std::string Ex_repr_ </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
           <td></td>
         </tr>
@@ -870,14 +986,14 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a7ac49622d48c74830e56052346402156"></a>
+<a class="anchor" id="a94d2dd53254fb7995bbfbf052d94e910"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">std::string Ex_to_input </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
           <td></td>
         </tr>
@@ -886,14 +1002,14 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad8255f72516ce5c017170de099b7cbba"></a>
+<a class="anchor" id="ae779b8038857729b9abb7b5ae0e68758"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">std::string Ex_to_MMA </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
@@ -912,14 +1028,14 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a29184d1cf4b650a43d7df09d32b7c1c1"></a>
+<a class="anchor" id="af1e099005d6266fa60b1ca2b4705653c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">std::string Ex_to_Sympy_string </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -948,36 +1064,6 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a5261b0ac276077da081b852d49a2925a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">pybind11::object get_globals </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aacd1f688bf110e3b4e7230772aea74b8"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">pybind11::object get_locals </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a class="anchor" id="ad4da81b58246fcb4b2a2e0c9a8fce95c"></a>
 <div class="memitem">
 <div class="memproto">
@@ -993,14 +1079,14 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a47601233e0651b3f5171b240bd434049"></a>
+<a class="anchor" id="adb82474fc15c3cdaebe18f1b00e8fd92"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> lhs </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1009,12 +1095,12 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ad4563505d1ad62f20b6070e112c7a314"></a>
+<a class="anchor" id="ac217f28bc50ad9cc2d209be157fe4af4"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">pybind11::list list_properties </td>
+          <td class="memname">boost::python::list list_properties </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -1050,7 +1136,7 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a6314afdb8287bf4ff10117f45ff2a7a7"></a>
+<a class="anchor" id="a0bf759b16ec857fe53da1cf78354d54d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1064,13 +1150,7 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>make_ref</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classcadabra_1_1Kernel.html">Kernel</a> *&#160;</td>
-          <td class="paramname"><em>kernel</em>&#160;</td>
+          <td class="paramname"><em>make_ref</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1082,14 +1162,14 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a7a141748c846fd7a527f9021c41fadf0"></a>
+<a class="anchor" id="a257b7ec0e566fe19e70d8d66be8db1e2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classcadabra_1_1Ex.html">Ex</a>&gt; map_sympy_wrapper </td>
+          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a>* map_sympy_wrapper </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em>, </td>
         </tr>
         <tr>
@@ -1097,58 +1177,6 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
           <td></td>
           <td class="paramtype">std::string&#160;</td>
           <td class="paramname"><em>head</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a08795992d9bc703945805ba08f67ff7b"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> operator+ </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>ex1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>ex2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a451a7e76ea37c0c9d4e18bc53af164ce"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> operator- </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>ex1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
-          <td class="paramname"><em>ex2</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1176,12 +1204,12 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a4af004eadfa089fb37e7f8f346e39243"></a>
+<a class="anchor" id="ae2bd4ca603346eb93c8e620b2ea319ac"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">pybind11::list ProgressMonitor_totals_helper </td>
+          <td class="memname">boost::python::list ProgressMonitor_totals_helper </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classProgressMonitor.html">ProgressMonitor</a> &amp;&#160;</td>
           <td class="paramname"><em>self</em></td><td>)</td>
@@ -1192,40 +1220,14 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a481a989818f6c70f57d8c76f86bf4a84"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">PYBIND11_MODULE </td>
-          <td>(</td>
-          <td class="paramtype">cadabra2&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">m&#160;</td>
-          <td class="paramname">&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a469687c60c7e1c55907c020b47a9c0c0"></a>
+<a class="anchor" id="ab7a4f494704b6ab899167b48aeb89b2d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classcadabra_1_1Ex.html">Ex</a> rhs </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1234,15 +1236,145 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="ab0051f189faaf2e171afd89623b92dd7"></a>
+<a class="anchor" id="a8aa7a6b2d258e2b2a135c0b2cb50a33d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">pybind11::list terms </td>
+          <td class="memname">boost::python::list terms </td>
           <td>(</td>
-          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &gt;&#160;</td>
+          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">Ex</a> &amp;&#160;</td>
           <td class="paramname"><em>ex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a64a5521d7ebd2cc0ad62bb167898746b"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;T&gt; to_std_vector </td>
+          <td>(</td>
+          <td class="paramtype">const boost::python::list &amp;&#160;</td>
+          <td class="paramname"><em>iterable</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="abd1e248b6386a794b8864bdc1e06b709"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_ArgumentException </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classArgumentException.html">ArgumentException</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a43d75187ebdf25289ef87240a2d0ee7c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_ConsistencyException </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classConsistencyException.html">ConsistencyException</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aa8295e68aa959a2799038598172215e4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_InternalError </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classInternalError.html">InternalError</a> &amp;&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="af1a5442f7e8fca0e50293d7f343ffc92"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_NonScalarException </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classNonScalarException.html">NonScalarException</a> &amp;&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="aacb2cc8c7d8eb8a504a19e5e3e7dbc66"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_NotYetImplemented </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classNotYetImplemented.html">NotYetImplemented</a> &amp;&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a381c20ab5d72688caa9ccbd9dadf8d68"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_ParseException </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classParseException.html">ParseException</a> &amp;&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a1e13631fd61db534808c4802c020de07"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void translate_RuntimeException </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classRuntimeException.html">RuntimeException</a> &amp;&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1251,12 +1383,84 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a class="anchor" id="a15be08e78140330ba2d8df78b4b035c2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* ArgumentExceptionType = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a2aa585d1b2cc6912bb73e08326741d3d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* ConsistencyExceptionType = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a5dc592f07bcb79a492ce2736ed52d068"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* InternalErrorType = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="a4c191879421828dc6e2e8502e253ae7b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* NonScalarExceptionType = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ab7143b05eaaf70c822886bd5ca25993c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* NotYetImplementedType = NULL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a17f4ca8d5574ae9c9d35b26b3462d44f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool output_ipython =false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a class="anchor" id="ae98b2e345ddb18d03f95bde4e507ab47"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* ParseExceptionType = NULL</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1287,10 +1491,22 @@ template&lt;class F , typename Arg1 , typename Arg2 , typename Arg3 &gt; </div>
 
 </div>
 </div>
+<a class="anchor" id="a8d6519013bb1de3db946fd2892894592"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PyObject* RuntimeExceptionType = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 26 2018 17:48:31 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 26 2018 21:52:26 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
