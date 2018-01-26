@@ -374,6 +374,9 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 
 void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
+	if(needs_brackets(it)) 
+		str << "(";
+
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
 		Ex::sibling_iterator st=tree.begin(it);
@@ -408,7 +411,8 @@ void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, cons
 		previous_bracket_=current_bracket_;
 		}
 
-//	if(close_bracket) str << ")";
+	if(needs_brackets(it)) 
+		str << ")";
 	}
 
 void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it) 
@@ -556,6 +560,8 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 	if(*it->name=="1") {
 		if(*it->multiplier==1 || (*it->multiplier==-1)) // this would print nothing altogether.
 			str << "1";
+		if(needs_brackets(it))
+			str << ")";
 		return;
 		}
 	
