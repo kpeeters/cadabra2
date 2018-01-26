@@ -40,7 +40,7 @@
 #include <pybind11/operators.h>
 #include <pybind11/stl.h>
 #include <boost/algorithm/string/replace.hpp>
-
+#include <memory>
 #include <sstream>
 
 // Properties.
