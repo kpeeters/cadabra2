@@ -15,6 +15,7 @@ var searchData=
   ['goal',['goal',['../classcadabra_1_1complete.html#a6f8ec013c99f39d19f50e1622a1963ec',1,'cadabra::complete']]],
   ['greek',['greek',['../namespacecadabra_1_1symbols.html#aa12e330caef517e6c2376d060cc2ccb1',1,'cadabra::symbols']]],
   ['greekmap',['greekmap',['../classcadabra_1_1DisplayTerminal.html#afd4f7b8fe4ce4269638ab21f1e849e13',1,'cadabra::DisplayTerminal']]],
+  ['guard',['guard',['../classServer.html#acb18b9eae2cd618b19f6ce4ca4c2c806',1,'Server']]],
   ['gui',['gui',['../classcadabra_1_1ComputeThread.html#aa7b3af2f59b272a71fc092bccb201cee',1,'cadabra::ComputeThread::gui()'],['../classcadabra_1_1DocumentThread.html#a874fae5211b2cceaf626ef6e808668fe',1,'cadabra::DocumentThread::gui()']]],
   ['gui_5fthread_5fid',['gui_thread_id',['../classcadabra_1_1ComputeThread.html#a2be0a78247610d267c7c75f82e12ff32',1,'cadabra::ComputeThread']]]
 ];

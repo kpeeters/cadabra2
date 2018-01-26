@@ -19,7 +19,6 @@ var searchData=
   ['internalerror',['InternalError',['../classInternalError.html',1,'']]],
   ['interruptionexception',['InterruptionException',['../classInterruptionException.html',1,'']]],
   ['inversemetric',['InverseMetric',['../classcadabra_1_1InverseMetric.html',1,'cadabra']]],
-  ['iterable_5fconverter',['iterable_converter',['../classiterable__converter.html',1,'']]],
   ['iterator',['iterator',['../classyngtab_1_1filled__tableau_1_1iterator.html',1,'yngtab::filled_tableau']]],
   ['iterator_5fbase',['iterator_base',['../classyngtab_1_1filled__tableau_1_1iterator__base.html',1,'yngtab::filled_tableau']]]
 ];

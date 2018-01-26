@@ -23,7 +23,6 @@ var searchData=
   ['block_5favailable_5fmutex',['block_available_mutex',['../classServer.html#ac04e9d62fc1c569a19511cd25d0e182b',1,'Server']]],
   ['block_5flength',['block_length',['../classcombin_1_1combinations__base.html#a0732a540a346d00487126de2ad539d64',1,'combin::combinations_base::block_length()'],['../classcombin_1_1symmetriser.html#af76adb538cca04d208c2662b093f421f',1,'combin::symmetriser::block_length()']]],
   ['block_5fqueue',['block_queue',['../classServer.html#ad3d4c0f7e5fd2a643ae26a9cdf76e143',1,'Server']]],
-  ['boost_5fpython_5fmodule',['BOOST_PYTHON_MODULE',['../ptest_8cc.html#a3d667ca54e497fa31e492d34a4ae3d45',1,'BOOST_PYTHON_MODULE(example):&#160;ptest.cc'],['../PythonCdb_8cc.html#a37ff0574884af8cf395027bf679d29a2',1,'BOOST_PYTHON_MODULE(cadabra2):&#160;PythonCdb.cc']]],
   ['boost_5fspirit_5fthreadsafe',['BOOST_SPIRIT_THREADSAFE',['../Snoop_8cc.html#ab07969225d898805b009f4a619f2450d',1,'Snoop.cc']]],
   ['bottomline',['bottomline',['../classcadabra_1_1NotebookCanvas.html#a340ecdda8f3f5d271b9f1d77863a2413',1,'cadabra::NotebookCanvas']]],
   ['box_5frow',['box_row',['../classyngtab_1_1filled__tableau.html#a34d5a3517e68c71620babfc072f4b05e',1,'yngtab::filled_tableau']]],

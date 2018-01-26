@@ -26,6 +26,5 @@ var searchData=
   ['flip_5fsign',['flip_sign',['../namespacecadabra.html#a44b4ff05df2251dda5c2d48e3de4d111',1,'cadabra']]],
   ['force_5fprod_5fwrap',['force_prod_wrap',['../classcadabra_1_1Algorithm.html#a4aba1acb2add44dbb688c6632b5cb058',1,'cadabra::Algorithm']]],
   ['from_5fjson',['from_json',['../classsnoop_1_1Snoop_1_1AppEntry.html#ac262314ff5c82bfbf8b02587e0eeb403',1,'snoop::Snoop::AppEntry::from_json()'],['../classsnoop_1_1Snoop_1_1LogEntry.html#a5517ca03b656f997bd486e32062905c8',1,'snoop::Snoop::LogEntry::from_json()']]],
-  ['from_5fpython',['from_python',['../classiterable__converter.html#abbd3315bef5ea3217e2e852f3ef7d533',1,'iterable_converter']]],
-  ['fun',['fun',['../passing_8cc.html#a8943051bc4b0bd6cac138ae008b4f640',1,'fun(int *&amp;p):&#160;passing.cc'],['../ptest_8cc.html#ad6557b4a82b64d9dc4c4545ae55f1600',1,'fun():&#160;ptest.cc']]]
+  ['fun',['fun',['../passing_8cc.html#a8943051bc4b0bd6cac138ae008b4f640',1,'passing.cc']]]
 ];

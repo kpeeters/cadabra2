@@ -12,7 +12,8 @@ var searchData=
   ['product_5frule',['product_rule',['../classcadabra_1_1product__rule.html',1,'cadabra']]],
   ['progressmonitor',['ProgressMonitor',['../classProgressMonitor.html',1,'']]],
   ['properties',['Properties',['../classcadabra_1_1Properties.html',1,'cadabra']]],
-  ['property',['property',['../classcadabra_1_1property.html',1,'cadabra']]],
   ['property',['Property',['../classProperty.html',1,'']]],
-  ['propertyinherit',['PropertyInherit',['../classcadabra_1_1PropertyInherit.html',1,'cadabra']]]
+  ['property',['property',['../classcadabra_1_1property.html',1,'cadabra']]],
+  ['propertyinherit',['PropertyInherit',['../classcadabra_1_1PropertyInherit.html',1,'cadabra']]],
+  ['pyprogressmonitor',['PyProgressMonitor',['../classPyProgressMonitor.html',1,'']]]
 ];

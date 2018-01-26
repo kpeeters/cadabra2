@@ -101,7 +101,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">PythonCdb.hh File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;boost/python.hpp&gt;</code><br/>
+<div class="textblock"><code>#include &lt;pybind11/pybind11.h&gt;</code><br/>
 <code>#include &lt;stdexcept&gt;</code><br/>
 <code>#include &quot;<a class="el" href="Storage_8hh_source.html">Storage.hh</a>&quot;</code><br/>
 <code>#include &quot;<a class="el" href="Kernel_8hh_source.html">Kernel.hh</a>&quot;</code><br/>
@@ -120,35 +120,35 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga002f295d20d22e0cb3817d2d3cf2f460"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga002f295d20d22e0cb3817d2d3cf2f460">__eq__Ex_Ex</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;, const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
-<tr class="memdesc:ga002f295d20d22e0cb3817d2d3cf2f460"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#ga002f295d20d22e0cb3817d2d3cf2f460">More...</a><br/></td></tr>
-<tr class="separator:ga002f295d20d22e0cb3817d2d3cf2f460"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga58b2fddbe79461c5a4c7a4b5198f34ef"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga58b2fddbe79461c5a4c7a4b5198f34ef">__eq__Ex_int</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;, int)</td></tr>
-<tr class="memdesc:ga58b2fddbe79461c5a4c7a4b5198f34ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#ga58b2fddbe79461c5a4c7a4b5198f34ef">More...</a><br/></td></tr>
-<tr class="separator:ga58b2fddbe79461c5a4c7a4b5198f34ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae3c073e58fb380270c642a38f34d403b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gae3c073e58fb380270c642a38f34d403b">__eq__Ex_Ex</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;, std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;)</td></tr>
+<tr class="memdesc:gae3c073e58fb380270c642a38f34d403b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#gae3c073e58fb380270c642a38f34d403b">More...</a><br/></td></tr>
+<tr class="separator:gae3c073e58fb380270c642a38f34d403b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5009b9373d971962b2b5c85f333ed4f5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga5009b9373d971962b2b5c85f333ed4f5">__eq__Ex_int</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;, int)</td></tr>
+<tr class="memdesc:ga5009b9373d971962b2b5c85f333ed4f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Comparison operator for Ex objects in Python.  <a href="group__pythoncore.html#ga5009b9373d971962b2b5c85f333ed4f5">More...</a><br/></td></tr>
+<tr class="separator:ga5009b9373d971962b2b5c85f333ed4f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6cca7e074b177106fd9e7ae7a350935"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8hh.html#ae6cca7e074b177106fd9e7ae7a350935">fetch_from_python</a> (const std::string &amp;nm)</td></tr>
 <tr class="memdesc:ae6cca7e074b177106fd9e7ae7a350935"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fetch an Ex object from the Python side using its Python identifier.  <a href="#ae6cca7e074b177106fd9e7ae7a350935">More...</a><br/></td></tr>
 <tr class="separator:ae6cca7e074b177106fd9e7ae7a350935"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga8a28af5339c592b6266bdd5a86e856bf"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga8a28af5339c592b6266bdd5a86e856bf">Ex_str_</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
-<tr class="memdesc:ga8a28af5339c592b6266bdd5a86e856bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() and repr() representation of the Ex object.  <a href="group__pythoncore.html#ga8a28af5339c592b6266bdd5a86e856bf">More...</a><br/></td></tr>
-<tr class="separator:ga8a28af5339c592b6266bdd5a86e856bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a716f302a1f9c5f65d1266f3222e9a1e5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8hh.html#a716f302a1f9c5f65d1266f3222e9a1e5">Ex_repr_</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
-<tr class="separator:a716f302a1f9c5f65d1266f3222e9a1e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga57a377f3ca30ab263f335b6236bdc894"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga57a377f3ca30ab263f335b6236bdc894">Ex_latex_</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
-<tr class="memdesc:ga57a377f3ca30ab263f335b6236bdc894"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Python 'print' function always calls the 'str' member on objects to be printed.  <a href="group__pythoncore.html#ga57a377f3ca30ab263f335b6236bdc894">More...</a><br/></td></tr>
-<tr class="separator:ga57a377f3ca30ab263f335b6236bdc894"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gafd911392f791a94aa633d4cdb1670bda"><td class="memItemLeft" align="right" valign="top">boost::python::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">Ex_to_Sympy</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
-<tr class="memdesc:gafd911392f791a94aa633d4cdb1670bda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' as a Sympy expression.  <a href="group__scalar.html#gafd911392f791a94aa633d4cdb1670bda">More...</a><br/></td></tr>
-<tr class="separator:gafd911392f791a94aa633d4cdb1670bda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa32e703d0b8e48c4aeebc6b12ac631ba"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8hh.html#aa32e703d0b8e48c4aeebc6b12ac631ba">Ex_to_Sympy_string</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;)</td></tr>
-<tr class="memdesc:aa32e703d0b8e48c4aeebc6b12ac631ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression.  <a href="#aa32e703d0b8e48c4aeebc6b12ac631ba">More...</a><br/></td></tr>
-<tr class="separator:aa32e703d0b8e48c4aeebc6b12ac631ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gac00ef36dd5d0995f1f8349666f02ad5b">operator+</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;ex1, const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;ex2)</td></tr>
-<tr class="memdesc:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add two expressions, adding a top-level  node if required.  <a href="group__pythoncore.html#gac00ef36dd5d0995f1f8349666f02ad5b">More...</a><br/></td></tr>
-<tr class="separator:gac00ef36dd5d0995f1f8349666f02ad5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gae90926b7cc6ca53302ebaf3a5a49148e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gae90926b7cc6ca53302ebaf3a5a49148e">operator-</a> (const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;ex1, const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;ex2)</td></tr>
-<tr class="memdesc:gae90926b7cc6ca53302ebaf3a5a49148e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract two expressions, adding a top-level  node if required.  <a href="group__pythoncore.html#gae90926b7cc6ca53302ebaf3a5a49148e">More...</a><br/></td></tr>
-<tr class="separator:gae90926b7cc6ca53302ebaf3a5a49148e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gab0c3f68db92cdfc4d141b8e8c82ca5d4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gab0c3f68db92cdfc4d141b8e8c82ca5d4">Ex_str_</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;)</td></tr>
+<tr class="memdesc:gab0c3f68db92cdfc4d141b8e8c82ca5d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate the Python str() and repr() representation of the Ex object.  <a href="group__pythoncore.html#gab0c3f68db92cdfc4d141b8e8c82ca5d4">More...</a><br/></td></tr>
+<tr class="separator:gab0c3f68db92cdfc4d141b8e8c82ca5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab419b38de37668896c546ec029e59ab8"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8hh.html#ab419b38de37668896c546ec029e59ab8">Ex_repr_</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;)</td></tr>
+<tr class="separator:ab419b38de37668896c546ec029e59ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa98675ab4e040470f7ababfdab9b67a9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gaa98675ab4e040470f7ababfdab9b67a9">Ex_latex_</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;)</td></tr>
+<tr class="memdesc:gaa98675ab4e040470f7ababfdab9b67a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Python 'print' function always calls the 'str' member on objects to be printed.  <a href="group__pythoncore.html#gaa98675ab4e040470f7ababfdab9b67a9">More...</a><br/></td></tr>
+<tr class="separator:gaa98675ab4e040470f7ababfdab9b67a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7d0b52f46d8205101333cbc89610f7f8"><td class="memItemLeft" align="right" valign="top">pybind11::object&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__scalar.html#ga7d0b52f46d8205101333cbc89610f7f8">Ex_to_Sympy</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;)</td></tr>
+<tr class="memdesc:ga7d0b52f46d8205101333cbc89610f7f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outputs a <a class="el" href="classCadabra.html" title="The Cadabra notebook application. ">Cadabra</a> 'Ex' as a Sympy expression.  <a href="group__scalar.html#ga7d0b52f46d8205101333cbc89610f7f8">More...</a><br/></td></tr>
+<tr class="separator:ga7d0b52f46d8205101333cbc89610f7f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fbaa37c733b2b49615ab9b69f5d8464"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="PythonCdb_8hh.html#a8fbaa37c733b2b49615ab9b69f5d8464">Ex_to_Sympy_string</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;)</td></tr>
+<tr class="memdesc:a8fbaa37c733b2b49615ab9b69f5d8464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Similar to Ex_to_Sympy, but only producing a string which can be parsed by Sympy, instead of a full-fledged Sympy expression.  <a href="#a8fbaa37c733b2b49615ab9b69f5d8464">More...</a><br/></td></tr>
+<tr class="separator:a8fbaa37c733b2b49615ab9b69f5d8464"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga14584cd406336690ef5a3e6a5b54c7a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga14584cd406336690ef5a3e6a5b54c7a2">operator+</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt; ex1, std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt; ex2)</td></tr>
+<tr class="memdesc:ga14584cd406336690ef5a3e6a5b54c7a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add two expressions, adding a top-level  node if required.  <a href="group__pythoncore.html#ga14584cd406336690ef5a3e6a5b54c7a2">More...</a><br/></td></tr>
+<tr class="separator:ga14584cd406336690ef5a3e6a5b54c7a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf9118e0ed1f5d8d4adb899c77f1efaf7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gaf9118e0ed1f5d8d4adb899c77f1efaf7">operator-</a> (std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt; ex1, std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt; ex2)</td></tr>
+<tr class="memdesc:gaf9118e0ed1f5d8d4adb899c77f1efaf7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subtract two expressions, adding a top-level  node if required.  <a href="group__pythoncore.html#gaf9118e0ed1f5d8d4adb899c77f1efaf7">More...</a><br/></td></tr>
+<tr class="separator:gaf9118e0ed1f5d8d4adb899c77f1efaf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9b54285bfe404739bf12bff27a943fd7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga9b54285bfe404739bf12bff27a943fd7">create_scope</a> ()</td></tr>
 <tr class="memdesc:ga9b54285bfe404739bf12bff27a943fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup of kernels in current scope, callable from Python.  <a href="group__pythoncore.html#ga9b54285bfe404739bf12bff27a943fd7">More...</a><br/></td></tr>
 <tr class="separator:ga9b54285bfe404739bf12bff27a943fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,9 +162,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga0c8c2a3117606eba18715481dcd89ef1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga0c8c2a3117606eba18715481dcd89ef1">get_kernel_from_scope</a> ()</td></tr>
 <tr class="memdesc:ga0c8c2a3117606eba18715481dcd89ef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the currently visible kernel.  <a href="group__pythoncore.html#ga0c8c2a3117606eba18715481dcd89ef1">More...</a><br/></td></tr>
 <tr class="separator:ga0c8c2a3117606eba18715481dcd89ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#ga82c40aaba90049ed7cf7be1fc60152ac">call_post_process</a> (<a class="el" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a> &amp;, <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;ex)</td></tr>
-<tr class="memdesc:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the post-process Python function (if defined) on the given expression.  <a href="group__pythoncore.html#ga82c40aaba90049ed7cf7be1fc60152ac">More...</a><br/></td></tr>
-<tr class="separator:ga82c40aaba90049ed7cf7be1fc60152ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacac0b74845b7ea33cd22df62eedf9e91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__pythoncore.html#gacac0b74845b7ea33cd22df62eedf9e91">call_post_process</a> (<a class="el" href="classcadabra_1_1Kernel.html">cadabra::Kernel</a> &amp;, std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt; ex)</td></tr>
+<tr class="memdesc:gacac0b74845b7ea33cd22df62eedf9e91"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the post-process Python function (if defined) on the given expression.  <a href="group__pythoncore.html#gacac0b74845b7ea33cd22df62eedf9e91">More...</a><br/></td></tr>
+<tr class="separator:gacac0b74845b7ea33cd22df62eedf9e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="aeb0ff207c18bbcd712eac450b11522ed"></a>
@@ -197,14 +197,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a716f302a1f9c5f65d1266f3222e9a1e5"></a>
+<a class="anchor" id="ab419b38de37668896c546ec029e59ab8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">std::string Ex_repr_ </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;&#160;</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -213,14 +213,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa32e703d0b8e48c4aeebc6b12ac631ba"></a>
+<a class="anchor" id="a8fbaa37c733b2b49615ab9b69f5d8464"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">std::string Ex_to_Sympy_string </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &amp;&#160;</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classcadabra_1_1Ex.html">cadabra::Ex</a> &gt;&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
@@ -252,7 +252,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jan 21 2018 13:25:31 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Jan 26 2018 15:59:21 for Cadabra by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

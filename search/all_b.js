@@ -2,7 +2,7 @@ var searchData=
 [
   ['k',['k',['../passing_8cc.html#ab66ed8e0098c0a86b458672a55a9cca9',1,'passing.cc']]],
   ['k_5funichar_5fto_5futf8',['k_unichar_to_utf8',['../DisplayTeX_8cc.html#af4a07164631b2e1f57fbf885c4094b56',1,'DisplayTeX.cc']]],
-  ['kappa',['kappa',['../Symbols_8cc.html#a53e114df0344d27442892fa07f8a3520',1,'kappa():&#160;Symbols.cc'],['../Symbols_8cc.html#a716787dafa0c18cd8de7e47e0c16855b',1,'Kappa():&#160;Symbols.cc']]],
+  ['kappa',['Kappa',['../Symbols_8cc.html#a716787dafa0c18cd8de7e47e0c16855b',1,'Kappa():&#160;Symbols.cc'],['../Symbols_8cc.html#a53e114df0344d27442892fa07f8a3520',1,'kappa():&#160;Symbols.cc']]],
   ['keep_5fafter_5feval',['keep_after_eval',['../structcadabra_1_1str__node_1_1flag__t.html#aa39034d2cd309f2426243babb08513fb',1,'cadabra::str_node::flag_t']]],
   ['keep_5fterms',['keep_terms',['../classcadabra_1_1keep__terms.html#ae705ad3af82c228ac205717fe9223208',1,'cadabra::keep_terms']]],
   ['keep_5fterms',['keep_terms',['../classcadabra_1_1keep__terms.html',1,'cadabra']]],

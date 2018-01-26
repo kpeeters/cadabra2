@@ -10,7 +10,7 @@ var searchData=
   ['epsilon',['Epsilon',['../Symbols_8cc.html#ab9dc09a3a581e694c349538a321d6a43',1,'Epsilon():&#160;Symbols.cc'],['../Symbols_8cc.html#aa5a114dec1675e43d6a7235d20402c40',1,'epsilon():&#160;Symbols.cc']]],
   ['epsilons',['epsilons',['../classcadabra_1_1epsilon__to__delta.html#ac141f844229c5c91ba0011d23b49e7bf',1,'cadabra::epsilon_to_delta']]],
   ['error',['error',['../classServer_1_1Block.html#ae59e1457b887dcdaacbac13d73974057',1,'Server::Block::error()'],['../namespacesnoop.html#afed6cad118b299290114f820ecf4e2e5',1,'snoop::error()']]],
-  ['eta',['eta',['../Symbols_8cc.html#a86f17e01842c561ef2abe23cdd3ace88',1,'eta():&#160;Symbols.cc'],['../Symbols_8cc.html#ad52b4804814a7ba427094dd93a6f062e',1,'Eta():&#160;Symbols.cc']]],
+  ['eta',['Eta',['../Symbols_8cc.html#ad52b4804814a7ba427094dd93a6f062e',1,'Eta():&#160;Symbols.cc'],['../Symbols_8cc.html#a86f17e01842c561ef2abe23cdd3ace88',1,'eta():&#160;Symbols.cc']]],
   ['expand',['expand',['../classcadabra_1_1join__gamma.html#a200a70fd08b7c83718144d19eb867f79',1,'cadabra::join_gamma']]],
   ['extra_5fbrackets_5ffor_5fsymbols',['extra_brackets_for_symbols',['../classcadabra_1_1DisplayTeX.html#a0ad607bf84299bbbacc1ea56ee010346',1,'cadabra::DisplayTeX']]],
   ['extra_5fsign',['extra_sign',['../structcadabra_1_1exchange_1_1identical__tensors__t.html#a0c2da55db38ead57e4d001774eadf191',1,'cadabra::exchange::identical_tensors_t']]]

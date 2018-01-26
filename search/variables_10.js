@@ -2,7 +2,6 @@ var searchData=
 [
   ['parent_5fname',['parent_name',['../classcadabra_1_1Indices.html#a8bb501069b0329235dc51af8b32cb27b',1,'cadabra::Indices']]],
   ['parent_5frel',['parent_rel',['../structcadabra_1_1str__node_1_1flag__t.html#af34bfec52f2a64390d8270f091761ad6',1,'cadabra::str_node::flag_t']]],
-  ['parseexceptiontype',['ParseExceptionType',['../PythonCdb_8cc.html#ae98b2e345ddb18d03f95bde4e507ab47',1,'PythonCdb.cc']]],
   ['part1_5fclass',['part1_class',['../classcadabra_1_1split__index.html#aad74991726799304e9d91ce57e2cea9a',1,'cadabra::split_index']]],
   ['part1_5fcoord',['part1_coord',['../classcadabra_1_1split__index.html#a25289feb326aa1ba647575517d80e81a',1,'cadabra::split_index']]],
   ['part1_5fcoord_5fnode',['part1_coord_node',['../classcadabra_1_1split__index.html#a38b0b30fc1298f3f8326c9eff4f803a0',1,'cadabra::split_index']]],
