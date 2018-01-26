@@ -200,12 +200,6 @@ set(IMAGES
   ../images/cadabra.png
 )
 
-if("${PYTHON_SITE_PATH}" STREQUAL "")
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
-                  OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif()
-
-message("-- Python site path at ${PYTHON_SITE_PATH}")
 install(FILES
   "${PROJECT_BINARY_DIR}/cadabra2.so"
   "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" DESTINATION "${PYTHON_SITE_PATH}")

@@ -11,6 +11,7 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <json/json.h>  
 
+#include "Config.hh"
 #include "Snoop.hh"
 #include "CdbPython.hh"
 #include "Server.hh"
@@ -22,14 +23,14 @@ using websocketpp::lib::bind;
 
 // Wrap the 'totals' member of ProgressMonitor to return a Python list.
 
-pybind11::list ProgressMonitor_totals_helper(ProgressMonitor& self)
-	{
-	pybind11::list list;
-	auto totals = self.totals();
-	for(auto& total: totals)
-		list.append(total);
-	return list;
-	}
+//pybind11::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+//	{
+//	pybind11::list list;
+//	auto totals = self.totals();
+//	for(auto& total: totals)
+//		list.append(total);
+//	return list;
+//	}
 
 Server::Server()
 	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
@@ -61,13 +62,13 @@ Server::CatchOutput::CatchOutput(const CatchOutput&)
 
 void Server::CatchOutput::write(const std::string& str)
 	{
-//	std::cout << "Python wrote: " << str << std::endl;
+	// std::cerr << "Python wrote: " << str << std::endl;
 	collect+=str;
    }
 
 void Server::CatchOutput::clear()
 	{
-//	std::cout << "Python clear" << std::endl;
+	// std::cerr << "Python clear" << std::endl;
 	collect="";
    }
 
@@ -86,9 +87,9 @@ pybind11::class_<Server::CatchOutput>(m, "CatchOutput")
 	.def("write", &Server::CatchOutput::write)
 	.def("clear", &Server::CatchOutput::clear)
 	;
-pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")
-	.def("print", &ProgressMonitor::print)
-	.def("totals", &ProgressMonitor_totals_helper);
+// pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")
+// 	.def("print", &ProgressMonitor::print)
+// 	.def("totals", &ProgressMonitor_totals_helper);
 
 pybind11::class_<Server, ProgressMonitor>(m, "Server")
 	.def("send", &Server::send)
@@ -106,7 +107,8 @@ void Server::init()
  	// Make the C++ CatchOutput class visible on the Python side.
 
 	std::string stdOutErr =
-		"from cadabra2_internal import Server, ProgressMonitor, CatchOutput\n"
+		"from cadabra2 import ProgressMonitor\n"
+		"from cadabra2_internal import Server, CatchOutput\n"
 		"import sys\n"
 		"server=0\n"
 		"def setup_catch(cO, cE, sE):\n"
@@ -132,8 +134,9 @@ void Server::init()
 
 	// Call the Cadabra default initialisation script.
 
-	HERE: should use pybind11::eval_file instead, much simpler.
-	
+//	pybind11::eval_file(PYTHON_SITE_PATH"/cadabra2_defaults.py");
+//	HERE: should use pybind11::eval_file instead, much simpler.
+//	
 	std::string startup =
 		"import imp; "
 		"f=open(imp.find_module('cadabra2_defaults')[1]); "
@@ -144,7 +147,7 @@ void Server::init()
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
-	std::cerr << "RUN_STRING" << std::endl;
+	//std::cerr << "RUN_STRING" << std::endl;
 	// snoop::log("run") << blk << snoop::flush;
 
 	std::string result;
@@ -152,13 +155,15 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	// Preparse input block.
 	auto newblk = cadabra::cdb2python(blk);
 
-	std::cerr << "PREPARSED:\n " << newblk << std::endl;
+	std::cerr << "PREPARSED:\n" << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
 	try {
-		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
-		std::cerr << "exec done" << std::endl;
+//		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
+		// std::cerr << "executing..." << std::endl;
+		pybind11::exec(newblk.c_str(), main_namespace);
+		// std::cerr << "exec done" << std::endl;
 //		std::string object_classname = ignored.attr("__class__").attr("__name__").cast<std::string>();
 //		std::cerr << "" << std::endl;		
 
@@ -226,6 +231,8 @@ void Server::wait_for_job()
 
 	// snoop::log(snoop::info) << "Waiting for blocks" << snoop::flush;
 
+	pybind11::gil_scoped_acquire acquire;
+	
 	while(true) {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		while(block_queue.size()==0) 
@@ -471,7 +478,8 @@ void Server::run()
 		
 		// std::cerr << "cadabra-server: spawning job thread "  << std::endl;
 		runner = std::thread(std::bind(&Server::wait_for_job, this));
-		
+
+		pybind11::gil_scoped_release release;
 		wserver.run();
 		}
 	catch(websocketpp::exception& ex) {

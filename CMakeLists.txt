@@ -20,10 +20,6 @@ enable_testing()
 
 find_package(Mathematica COMPONENTS WSTP)
 
-# Generate config file with CMake variables.
-configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
-include_directories(${PROJECT_BINARY_DIR}/core)
-
 #---------------------------------------------------------------------------
 # User options.
 #---------------------------------------------------------------------------
@@ -72,6 +68,11 @@ option(ENABLE_FRONTEND "Enable the UI frontend" ON)
 # Configure the various parts of Cadabra.
 #---------------------------------------------------------------------------
 
+# Generate config file with CMake variables.
+configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
+include_directories(${PROJECT_BINARY_DIR}/core)
+
+# Add all sub-projects to build process.
 add_subdirectory(libs/pybind11)
 add_subdirectory(core)
 add_subdirectory(client_server)

@@ -15,3 +15,5 @@
 
 #cmakedefine MATHEMATICA_FOUND
 #define Mathematica_KERNEL_EXECUTABLE "@Mathematica_KERNEL_EXECUTABLE@"
+
+#define PYTHON_SITE_PATH      "@PYTHON_SITE_PATH@"
