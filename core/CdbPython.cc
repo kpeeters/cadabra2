@@ -17,9 +17,9 @@ std::string cadabra::cdb2python(const std::string& blk)
 	std::stringstream str(blk);
 	std::string line;
 	std::string newblk;
-	std::string lhs, rhs, indent;
+	std::string lhs, rhs, op, indent;
 	while(std::getline(str, line, '\n')) {
-		std::string res=cadabra::convert_line(line, lhs, rhs, indent);
+		std::string res=cadabra::convert_line(line, lhs, rhs, op, indent);
 		// std::cerr << "preparsed : " + res << std::endl;
 		if(res!="::empty")
 			newblk += res+'\n';
@@ -27,7 +27,7 @@ std::string cadabra::cdb2python(const std::string& blk)
 	return newblk;
 	}
 
-std::string cadabra::convert_line(const std::string& line, std::string& lhs, std::string& rhs, std::string& indent)
+std::string cadabra::convert_line(const std::string& line, std::string& lhs, std::string& rhs, std::string& op, std::string& indent)
 	{
 	std::string ret;
 	
@@ -64,11 +64,17 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 			rhs += line_stripped;
 			ret = indent + lhs + " = Ex(r'" + escape_quotes(rhs) + "')";
+			if(op==":=") {
+				if(ret[ret.size()-1]!=';')
+					ret+=";";
+				ret+=" _="+lhs;
+				}
 			if(lastchar!=".")
 				ret = ret + "; display("+lhs+")";
 			indent="";
 			lhs="";
 			rhs="";
+			op="";
 			return ret;
 			}
 		}
@@ -105,6 +111,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			indent=indent_line;
 			lhs=line_stripped.substr(0,found);
 			rhs=line_stripped.substr(found+2);
+			op=":=";
 			return "::empty";
 			}
 		else {
@@ -112,6 +119,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
 				+ escape_quotes(line_stripped.substr(found+2)) + "')";
 			std::string objname = line_stripped.substr(0,found);
+			ret = ret + "; _="+objname;
 			if(lastchar==";" && indent_line.size()==0)
 				ret = ret + "; display("+objname+")";
 			}

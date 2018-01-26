@@ -14,6 +14,6 @@ namespace cadabra {
 
 	// As above, but for a single line; for private use only.
 
-	std::string convert_line(const std::string&, std::string& lhs, std::string& rhs, std::string& indent);	
+	std::string convert_line(const std::string&, std::string& lhs, std::string& rhs, std::string& op, std::string& indent);	
 
 }
