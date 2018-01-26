@@ -1498,8 +1498,10 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
+	special.push_back("Dominic Price (for the conversion to pybind)");	
 	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("Software Sustainability Institute");
+	special.push_back("Institute of Advanced Study");	
 	about.add_credit_section("Special thanks", special);
 	about.run();
 	}
