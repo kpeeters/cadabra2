@@ -21,3 +21,15 @@ def test02():
 
 test02()
 
+def test03():
+    ex:=(a**b)**c;
+    res=ex.input_form();
+    assert(res=="((a)**(b))**(c)")
+    res=ex.mma_form();
+    assert(res=="((a)^(b))^(c)")
+    res=ex.sympy_form();
+    assert(res=="((a)**(b))**(c)")
+    print("Test 03 passed")
+
+test03()
+

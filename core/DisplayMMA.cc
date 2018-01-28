@@ -161,7 +161,7 @@ bool DisplayMMA::needs_brackets(Ex::iterator it)
 	
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*it->name=="\\sum" || *it->name=="\\prod") return true;
-		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || *it->name=="\\prod")  ) return true;
+		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || child=="\\sum" || child=="\\prod" || child=="\\pow")  ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) {
 		if(*it->name=="\\sum") return false;
@@ -469,6 +469,9 @@ void DisplayMMA::print_sumlike(std::ostream& str, Ex::iterator it)
 
 void DisplayMMA::print_powlike(std::ostream& str, Ex::iterator it)
 	{
+	if(needs_brackets(it))
+		str << "(";
+	
 	Ex::sibling_iterator sib=tree.begin(it);
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
@@ -477,6 +480,9 @@ void DisplayMMA::print_powlike(std::ostream& str, Ex::iterator it)
 	++sib;
 	dispatch(str, sib);
 	str << ")";
+
+	if(needs_brackets(it))
+		str << ")";
 	}
 
 void DisplayMMA::print_intlike(std::ostream& str, Ex::iterator it)

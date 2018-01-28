@@ -70,6 +70,10 @@ DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e, bool uuc)
 	};
 	}
 
+// Logic: each node should check whether it needs to have brackets printed around
+// all of itself. The function below will determine that by inspecting the parent
+// node. Nodes should NOT print brackets for children.
+
 bool DisplayTerminal::needs_brackets(Ex::iterator it)
 	{
 	// FIXME: may need looking at properties
@@ -87,7 +91,7 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\frac" && ( child=="\\sum" || child=="\\prod" || (*child_it->multiplier!=1 && child_num>0) )) return true;
 
-	if(parent=="\\pow" && ( !it->is_integer() || child=="\\prod" || child=="\\sum")  ) return true;
+	if(parent=="\\pow" && ( !it->is_integer() || child=="\\prod" || child=="\\sum" || child=="\\pow")  ) return true;
 
 //	if(parent=="\\pow" && child_num>0 && *child_it->multiplier!=1 ) return true;
 
@@ -438,11 +442,12 @@ void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it)
 
 void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 	{
+	if(needs_brackets(it))
+		str << "(";
+
 	Ex::sibling_iterator sib=tree.begin(it);
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-//	if(needs_brackets(sib))
-//		str << "(";
 	dispatch(str, sib);
 //	if(needs_brackets(sib))
 //		str << ")";
@@ -451,8 +456,9 @@ void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 //	if(needs_brackets(sib))
 //		str << "(";
 	dispatch(str, sib);
-//	if(needs_brackets(sib))
-//		str << ")";
+
+	if(needs_brackets(it))
+		str << ")";
 	}
 
 void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)

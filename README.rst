@@ -3,8 +3,6 @@ Cadabra
 
 |Build status| |DOI|
 
-.. |Build status| image:: https://secure.travis-ci.org/kpeeters/cadabra2.svg?branch=master
-   :target: http://travis-ci.org/kpeeters/cadabra2
 .. |DOI| image:: https://zenodo.org/badge/45484302.svg
    :target: https://zenodo.org/badge/latestdoi/45484302
 				
@@ -95,7 +93,7 @@ Install the dependencies with::
 
     sudo dnf install git python3-devel cmake gcc-c++ \
          pcre-devel gmp-devel libuuid-devel sqlite-devel \
-         gtkmm30-devel boost-devel boost-python3-devel \
+         gtkmm30-devel boost-devel \
          texlive python3-matplotlib \
          python3-pip
     sudo pip3 install sympy
@@ -173,7 +171,7 @@ After that, dependencies can be installed with::
                   gtkmm3-devel  \
                   texlive python3-matplotlib \
                   python3-pip \
-                  boost_1_61-devel libboost_python3-1_61_0
+                  boost_1_61-devel 
     sudo pip3 install sympy
 
 This platform receives less testing so please get in touch if you run
@@ -228,13 +226,12 @@ Linux, first install the dependencies by doing::
     sudo eopkg install sqlite3-devel texlive python3-devel
     sudo eopkg install git cmake make g++
 
-It seems that Solus does not have a version of boost.python linked to 
-python3, so for the time being you need to configure with::
+Then configure and build with::
 
     cd cadabra2
     mkdir build
     cd build
-    cmake .. -DUSE_PYTHON_3=OFF -DCMAKE_INSTALL_PREFIX=/usr
+    cmake .. -DCMAKE_INSTALL_PREFIX=/usr
     make
     sudo make install
 
@@ -258,15 +255,12 @@ permissions; best to first do::
 to clean that up. Then install the required dependencies with::
 
     brew install cmake boost pcre gmp python3 
-    brew uninstall boost-python
-    brew install boost-python --with-python3
     brew install pkgconfig 
     brew install gtkmm3 adwaita-icon-theme
     sudo pip3 install sympy
 
-The uninstall of boost-python in the 2nd line is to ensure that you
-have a version with python3 support. If the lines above prompt you to
-install XCode, go ahead and let it do that.
+If the lines above prompt you to install XCode, go ahead and let it do
+that.
 
 You also need a TeX installation such as MacTeX,
 http://tug.org/mactex/ .  *Any* TeX will do, as long as 'latex' and

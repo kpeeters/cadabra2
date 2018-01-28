@@ -98,7 +98,7 @@ bool DisplaySympy::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow") {
 		if(child=="\\sum") return true;
-		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || *it->name=="\\prod")  ) return true;
+		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || child=="\\sum" || child=="\\prod" || child=="\\pow")  ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) {
 		if(*it->name=="\\sum") return false;
@@ -402,6 +402,9 @@ void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it)
 
 void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	{
+	if(needs_brackets(it))
+		str << "(";
+
 	Ex::sibling_iterator sib=tree.begin(it);
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
@@ -410,6 +413,9 @@ void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	++sib;
 	dispatch(str, sib);
 	str << ")";
+
+	if(needs_brackets(it))
+		str << ")";
 	}
 
 void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
