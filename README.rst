@@ -1,8 +1,6 @@
 Cadabra
 =======
 
-|Build status| |DOI|
-
 .. |DOI| image:: https://zenodo.org/badge/45484302.svg
    :target: https://zenodo.org/badge/latestdoi/45484302
 				
