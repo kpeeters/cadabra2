@@ -25,7 +25,7 @@ namespace sympy {
    /// keep these two completely separate.
 
 	cadabra::Ex::iterator apply(const cadabra::Kernel&, cadabra::Ex&, cadabra::Ex::iterator&,
-										 const std::vector<std::string>& wrap, const std::string& args, const std::string& method);
+										 const std::vector<std::string>& wrap, std::vector<std::string> args, const std::string& method);
 
 //    /// \ingroup scalar
 //    ///

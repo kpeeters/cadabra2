@@ -871,9 +871,9 @@ void evaluate::simplify_components(iterator it)
 #ifndef USE_TREETRACKER
 //			wrap.push_back("together");
 			wrap.push_back("simplify");
-			sympy::apply(kernel, tr, nd, wrap, "", "");
+			sympy::apply(kernel, tr, nd, wrap, std::vector<std::string>(), "");
 #else
-			sympy::apply(kernel, tr, nd, wrap, "", "");
+			sympy::apply(kernel, tr, nd, wrap, std::vector<std::string>(), "");
 #endif
 			if(pm) pm->group();
 			

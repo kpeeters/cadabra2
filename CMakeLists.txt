@@ -68,6 +68,9 @@ option(ENABLE_FRONTEND "Enable the UI frontend" ON)
 # Configure the various parts of Cadabra.
 #---------------------------------------------------------------------------
 
+# Include packaging logic.
+include(cmake/packaging.cmake)
+
 # Generate config file with CMake variables.
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
 include_directories(${PROJECT_BINARY_DIR}/core)

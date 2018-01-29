@@ -12,9 +12,9 @@
 
 using namespace cadabra;
 
-// #define DEBUG
+#define DEBUG
 
-Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, const std::string& args, 
+Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args, 
 								  const std::string& method)
 	{
    // We first need to print the sub-expression using DisplaySympy,
@@ -30,8 +30,10 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	ds.output(str, it);
 
 	if(wrap.size()>0)
-		if(args.size()>0) 
-			str << ", " << args << ")";
+		if(args.size()>0) {
+			for(size_t i=0; i<args.size(); ++i)
+				str << ", " << args[i];
+			}
 	for(size_t i=1; i<wrap.size(); ++i)
 		str << ")";
 	str << method;
@@ -137,7 +139,7 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 	
 	auto top=matrix.begin();
 	std::vector<std::string> wrap;
-	sympy::apply(kernel, matrix, top, wrap, "", ".inv()");
+	sympy::apply(kernel, matrix, top, wrap, std::vector<std::string>(), ".inv()");
 	//matrix.print_recursive_treeform(std::cerr, top);
 
 	Ex::iterator ruleslist=rules.begin();

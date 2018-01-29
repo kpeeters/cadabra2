@@ -855,9 +855,12 @@ std::shared_ptr<Ex> dispatch_base(std::shared_ptr<Ex> ex, F& algo, bool deep, bo
 	return ex;
 	}
 
-std::shared_ptr<Ex> map_sympy_wrapper(std::shared_ptr<Ex> ex, std::string head)
+std::shared_ptr<Ex> map_sympy_wrapper(std::shared_ptr<Ex> ex, std::string head, pybind11::args args)
 	{
-	map_sympy algo(*get_kernel_from_scope(), *ex, head);
+	std::vector<std::string> av;
+	for(auto& arg: args)
+		av.push_back(arg.cast<std::string>());
+	map_sympy algo(*get_kernel_from_scope(), *ex, head, av);
 	return dispatch_base(ex, algo, true, false, 0, true);
 	}
 
