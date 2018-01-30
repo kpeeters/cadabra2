@@ -7,13 +7,13 @@
 #include "treetracker.h"
 
 cadabra::Ex::iterator sympy::apply(const cadabra::Kernel& kernel, cadabra::Ex& ex, cadabra::Ex::iterator& it,
-								  const std::string& head, const std::string& args, 
-								  const std::string& method)
+											  const std::vector<std::string>& head, const std::string& args, 
+											  const std::string& method)
 	{
 	std::ostringstream str;
 
 	if(head.size()>0)
-		str << head << "(";
+		str << head[0] << "(";
 
 	cadabra::DisplaySympy ds(kernel, ex);
 	ds.output(str, it);

@@ -129,11 +129,6 @@ multiplier_t Ex::to_rational() const
 
 std::ostream& Ex::print_python(std::ostream& str, Ex::iterator it)
 	{
-	if((*it).fl.bracket   ==str_node::b_round)       str << "(";
-	else if((*it).fl.bracket   ==str_node::b_square) str << "[";
-	else if((*it).fl.bracket   ==str_node::b_curly)  str << "{";
-	else if((*it).fl.bracket   ==str_node::b_pointy) str << "<";
-	else if((*it).fl.bracket   ==str_node::b_none && is_head(it)==false)   str << "{";
 	std::string name(*(*it).name);
 	std::string res;
 	if(*it->multiplier!=1)
@@ -145,29 +140,77 @@ std::ostream& Ex::print_python(std::ostream& str, Ex::iterator it)
 		else                   res+=name[i];
 		}
 	str << res;
-
 	
 	Ex::sibling_iterator beg=it.begin();
 	Ex::sibling_iterator fin=it.end();
-
+	str_node::bracket_t    current_bracket=str_node::b_invalid;
+	str_node::parent_rel_t current_parent_rel=str_node::p_invalid;
+	
 	while(beg!=fin) {
-		switch((*beg).fl.parent_rel) {
-			case str_node::p_super: str << "^"; break;
-			case str_node::p_sub:   str << "_"; break;
-			case str_node::p_property: str << "$"; break;
-			case str_node::p_exponent: str << "&"; break;
-			default: break;
+		if(beg==it.begin() || current_parent_rel!=(*beg).fl.parent_rel) {
+			switch((*beg).fl.parent_rel) {
+				case str_node::p_super: str << "^"; break;
+				case str_node::p_sub:   str << "_"; break;
+				case str_node::p_property: str << "$"; break;
+				case str_node::p_exponent: str << "&"; break;
+				default: break;
+				}
+			current_parent_rel=(*beg).fl.parent_rel;
 			}
+		if(beg==it.begin() || current_bracket!=(*beg).fl.bracket || current_parent_rel!=(*beg).fl.parent_rel) {
+			switch((*beg).fl.bracket) {
+				case str_node::b_round:       str << "("; break;
+				case str_node::b_square:      str << "["; break;
+				case str_node::b_curly:       str << "{"; break;		
+				case str_node::b_pointy:      str << "<"; break;
+				case str_node::b_none: {
+					if((*beg).fl.parent_rel==str_node::p_none) str << "("; 
+					else                                       str << "{"; 
+					}
+					break;
+				default: break;					
+				}
+			current_bracket=(*beg).fl.bracket;
+			}
+		
 		print_python(str, beg);
+
+		auto nxt=beg;
+		++nxt;
+		if(nxt!=fin) {
+			if((*beg).fl.parent_rel!=str_node::p_none)
+				str << " ";
+			}
+		if(nxt==fin || (*nxt).fl.bracket!=(*beg).fl.bracket || (*beg).fl.parent_rel==str_node::p_none) {
+			current_bracket=str_node::b_invalid;
+			current_parent_rel=str_node::p_invalid;
+			switch((*beg).fl.bracket) {
+				case str_node::b_round:       str << ")"; break;
+				case str_node::b_square:      str << "]"; break;
+				case str_node::b_curly:       str << "}";	break;			
+				case str_node::b_pointy:      str << ">"; break;
+				case str_node::b_none: {
+					if((*beg).fl.parent_rel==str_node::p_none) str << ")"; 
+					else                                       str << "}"; 
+					}
+					break;
+				default: break;					
+				}
+			}
 		++beg;
 		}
-
-	if((*it).fl.bracket   ==str_node::b_round)       str << ")";
-	else if((*it).fl.bracket   ==str_node::b_square) str << "]";
-	else if((*it).fl.bracket   ==str_node::b_curly)  str << "}";
-	else if((*it).fl.bracket   ==str_node::b_pointy) str << ">";
-	else if((*it).fl.bracket   ==str_node::b_none && is_head(it)==false)   str << "}";
 	
+	return str;
+	}
+
+std::ostream& Ex::print_repr(std::ostream& str, Ex::iterator it) const
+	{
+	str << *it->name;
+	sibling_iterator sib=it.begin();
+	while(sib!=it.end()) {
+		print_repr(str, sib);
+		++sib;
+		}
 	return str;
 	}
 	

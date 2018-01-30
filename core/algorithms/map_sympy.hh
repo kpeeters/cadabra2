@@ -13,13 +13,14 @@ namespace cadabra {
 
 class map_sympy : public Algorithm {
 	public:
-		map_sympy(const Kernel&, Ex&, const std::string& head);
+		map_sympy(const Kernel&, Ex&, const std::string& head, std::vector<std::string> args);
 
 		virtual bool     can_apply(iterator);
 		virtual result_t apply(iterator&);
 
 	private:
 		std::string               head_;
+		std::vector<std::string>  args_;
 		std::vector<Ex::iterator> left;
 		std::set<Ex::iterator>    index_factors;
 };

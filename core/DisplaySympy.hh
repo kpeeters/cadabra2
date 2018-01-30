@@ -8,6 +8,8 @@
 
 typedef uint32_t kunichar;
 
+namespace cadabra {
+
 /// \ingroup display
 ///
 /// Class to display expressions in a format that Sympy can
@@ -15,8 +17,6 @@ typedef uint32_t kunichar;
 /// understood by Sympy. Can also convert expressions back to Cadabra
 /// notation. This class contains the printing logic that you see in
 /// action when you call the '__sympy__' method on an Ex object.
-
-namespace cadabra {
 
 class DisplaySympy : public DisplayBase {
 	public:

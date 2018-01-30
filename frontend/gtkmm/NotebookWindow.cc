@@ -68,6 +68,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	css_provider = Gtk::CssProvider::create();
 	// padding-left: 20px; does not work on some versions of gtk, so we use margin in CodeInput
 	// We use CSS selectors for old-style and new-style (post 3.20) simultaneously.
+	// Run program with 'GTK_DEBUG=interactive' environment variable and press Ctrl-Shift-D
+	// to inspect.
 	Glib::ustring data = "";
 	data += "textview text { color: blue; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "GtkTextView { color: blue; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
@@ -112,6 +114,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add( Gtk::Action::create("MenuEdit", "_Edit") );
 	actiongroup->add( Gtk::Action::create("EditUndo", Gtk::Stock::UNDO), Gtk::AccelKey("<control>Z"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_undo) );
+	action_copy = Gtk::Action::create("EditCopy", Gtk::Stock::COPY);
+	actiongroup->add( action_copy, Gtk::AccelKey("<control>C"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_copy) );
+	action_copy->set_sensitive(false);
+	actiongroup->add( Gtk::Action::create("EditPaste", Gtk::Stock::PASTE), Gtk::AccelKey("<control>V"),
+							sigc::mem_fun(*this, &NotebookWindow::on_edit_paste) );
 	actiongroup->add( Gtk::Action::create("EditInsertAbove", "Insert cell above"), Gtk::AccelKey("<alt>Up"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_above) );
 	actiongroup->add( Gtk::Action::create("EditInsertBelow", "Insert cell below"), Gtk::AccelKey("<alt>Down"),
@@ -199,6 +207,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		ui_info+=
 		"    <menu action='MenuEdit'>"
 		"      <menuitem action='EditUndo' />"
+		"      <separator/>"
+		"      <menuitem action='EditCopy' />"
+//		"      <menuitem action='EditPaste' />"			
 		"      <separator/>"
 		"      <menuitem action='EditInsertAbove' />"
 		"      <menuitem action='EditInsertBelow' />"
@@ -471,14 +482,14 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 
 	if(is_ctrl_up) {
  		std::shared_ptr<ActionBase> actionpos =
-			std::make_shared<ActionPositionCursor>(current_cell, ActionPositionCursor::Position::previous);
+			std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::previous);
 		queue_action(actionpos);
 		process_todo_queue();
 		return true;
 		} 
 	else if(is_ctrl_down) {
  		std::shared_ptr<ActionBase> actionpos =
-			std::make_shared<ActionPositionCursor>(current_cell, ActionPositionCursor::Position::next);
+			std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::next);
 		queue_action(actionpos);
 		process_todo_queue();
 		return true;
@@ -534,6 +545,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.outbox->rbox.set_reveal_child(true);
 #endif				
 				w=newcell.outbox;
+				newcell.outbox->signal_button_press_event().connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
 				break;
 				}
 			case DataCell::CellType::latex_view:
@@ -551,6 +564,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 #endif				
 				
 				w=newcell.outbox;
+				newcell.outbox->signal_button_press_event().connect( 
+					sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
 				break;
 
 			case DataCell::CellType::python:
@@ -592,57 +607,63 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				w=newcell.imagebox;
 				break;
 				}
-
+			case DataCell::CellType::input_form:
+				// This cell is there only for cutnpaste functionality; do not display.
+				break;
+				
 			default:
 				throw std::logic_error("Unimplemented datacell type");
 			}
 		
+
+		if(w!=0) {
+			canvasses[i]->visualcells[&(*it)]=newcell;
 		
-		canvasses[i]->visualcells[&(*it)]=newcell;
+			// Document cells are easy; just add. They have no parent in the DTree.
+
+			if(it->cell_type==DataCell::CellType::document) {
+				canvasses[i]->scroll.add(*w);
+				w->show_all(); // FIXME: if you drop this, the whole document remains invisible
+				continue;
+				}
+			
 		
-		// Document cells are easy; just add. They have no parent in the DTree.
-
-		if(it->cell_type==DataCell::CellType::document) {
-			canvasses[i]->scroll.add(*w);
-			w->show_all(); // FIXME: if you drop this, the whole document remains invisible
-			continue;
-			}
-
-		// Figure out where to store this new VisualCell in the GUI widget
-		// tree by exploring the DTree near the new DataCell. 
-		// First determine the parent cell and the corresponding Gtk::Box
-		// so that we can determine where to pack_start this cell. At this
-		// stage, all cells have parents.
-
-		DTree::iterator parent = DTree::parent(it);
-		assert(tr.is_valid(parent));
-
-		VisualCell& parent_visual = canvasses[i]->visualcells[&(*parent)];
-		Gtk::VBox *parentbox=0;
-		int offset=0;
-		if(parent->cell_type==DataCell::CellType::document)
-			parentbox=parent_visual.document;
-		else {
-			// FIXME: Since we are adding children of input cells to the vbox in which
-			// the exp_input_tv widget is the 0th cell, we have to offset. Would be
-			// cleaner to have a separate 'children' vbox in CodeInput (or in fact
-			// every widget that can potentially contain children).
-			offset=1;
-			parentbox=parent_visual.inbox;
-			}
-
+			// Figure out where to store this new VisualCell in the GUI widget
+			// tree by exploring the DTree near the new DataCell. 
+			// First determine the parent cell and the corresponding Gtk::Box
+			// so that we can determine where to pack_start this cell. At this
+			// stage, all cells have parents.
+			
+			DTree::iterator parent = DTree::parent(it);
+			assert(tr.is_valid(parent));
+			
+			VisualCell& parent_visual = canvasses[i]->visualcells[&(*parent)];
+			Gtk::VBox *parentbox=0;
+			int offset=0;
+			if(parent->cell_type==DataCell::CellType::document)
+				parentbox=parent_visual.document;
+			else {
+				// FIXME: Since we are adding children of input cells to the vbox in which
+				// the exp_input_tv widget is the 0th cell, we have to offset. Would be
+				// cleaner to have a separate 'children' vbox in CodeInput (or in fact
+				// every widget that can potentially contain children).
+				offset=1;
+				parentbox=parent_visual.inbox;
+				}
+			
 //		std::cout << "adding cell to canvas " << i << std::endl;
-		parentbox->pack_start(*w, false, false);	
-		unsigned int index    =tr.index(it)+offset;
-		unsigned int index_gui=parentbox->get_children().size()-1;
+			parentbox->pack_start(*w, false, false);	
+			unsigned int index    =tr.index(it)+offset;
+			unsigned int index_gui=parentbox->get_children().size()-1;
 //		std::cout << "is index " << index << " vs " << index_gui << std::endl;
-		if(index!=index_gui) {
+			if(index!=index_gui) {
 //			std::cout << "need to re-order" << std::endl;
-			parentbox->reorder_child(*w, index);
-			}
-		if(visible) {
-			w->show_all();
-			w->show_now();
+				parentbox->reorder_child(*w, index);
+				}
+			if(visible) {
+				w->show_all();
+				w->show_now();
+				}
 			}
 		
 		}
@@ -866,6 +887,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
  bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
  	{
 	modified=true;
+	unselect_output_cell();
 	update_title();
 
  	// FIXME: need to keep track of individual characters inserted, otherwise we
@@ -887,8 +909,9 @@ bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DT
 	{
 	if(disable_stacks) return false;
 
+	unselect_output_cell();
 	//std::cerr << "cell_content_insert" << std::endl;
-	std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(it, pos, content);	
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionInsertText>(it->id(), pos, content);	
 	queue_action(action);
 	process_todo_queue();
 
@@ -899,8 +922,9 @@ bool NotebookWindow::cell_content_erase(int start, int end, DTree::iterator it, 
 	{
 	if(disable_stacks) return false;
 
+	unselect_output_cell();
 	//std::cerr << "cell_content_erase" << std::endl;
-	std::shared_ptr<ActionBase> action = std::make_shared<ActionEraseText>(it, start, end);
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionEraseText>(it->id(), start, end);
 	queue_action(action);
 	process_todo_queue();
 
@@ -929,6 +953,8 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	current_cell=it;
 	current_canvas=canvas_number;
 
+	unselect_output_cell(); // cell_got_focus is an input cell, so output cells should not be selected anymore.
+	
 	return false;
 	}
 
@@ -958,7 +984,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	dim_output_cells(it);
 	while(sib!=doc.end(it)) {
 		// std::cout << "cadabra-client: scheduling output cell for removal" << std::endl;
-		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib);
+		std::shared_ptr<ActionBase> action = std::make_shared<ActionRemoveCell>(sib->id());
 		queue_action(action);
 		++sib;
 		}
@@ -1274,13 +1300,28 @@ void NotebookWindow::on_edit_undo()
 	undo();
 	}
 
+void NotebookWindow::on_edit_copy()
+	{
+	if(selected_cell!=doc.end()) {
+		Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_CLIPBOARD);	
+		on_outbox_copy(clipboard, selected_cell);
+		}
+	if(current_cell!=doc.end()) {
+		// FIXME: handle other cell types.
+		}
+	}
+
+void NotebookWindow::on_edit_paste()
+	{
+	}
+
 void NotebookWindow::on_edit_insert_above()
 	{
 	if(current_cell==doc.end()) return;
 
 	DataCell newcell(DataCell::CellType::python, "");
 	std::shared_ptr<ActionBase> action = 
-		std::make_shared<ActionAddCell>(newcell, current_cell, ActionAddCell::Position::before);
+		std::make_shared<ActionAddCell>(newcell, current_cell->id(), ActionAddCell::Position::before);
 	queue_action(action);
 	process_data();
 	}
@@ -1291,7 +1332,7 @@ void NotebookWindow::on_edit_insert_below()
 
 	DataCell newcell(DataCell::CellType::python, "");
 	std::shared_ptr<ActionBase> action = 
-		std::make_shared<ActionAddCell>(newcell, current_cell, ActionAddCell::Position::after);
+		std::make_shared<ActionAddCell>(newcell, current_cell->id(), ActionAddCell::Position::after);
 	queue_action(action);
 	process_data();
 	}
@@ -1300,21 +1341,23 @@ void NotebookWindow::on_edit_delete()
 	{
 	if(current_cell==doc.end()) return;
 
+	if(current_cell->running) return; // we are still expecting results, don't delete
+	
 	DTree::sibling_iterator nxt=doc.next_sibling(current_cell);
 	if(current_cell->textbuf=="" && doc.is_valid(nxt)==false) return; // Do not delete last cell if it is empty.
 
 	std::shared_ptr<ActionBase> action = 
-		std::make_shared<ActionPositionCursor>(current_cell, ActionPositionCursor::Position::next);
+		std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::next);
 	queue_action(action);
 	std::shared_ptr<ActionBase> action2 = 
-		std::make_shared<ActionRemoveCell>(current_cell);
+		std::make_shared<ActionRemoveCell>(current_cell->id());
 	queue_action(action2);
 	process_data();
 	}
 
 void NotebookWindow::on_edit_split()
 	{
-	std::shared_ptr<ActionBase> action = std::make_shared<ActionSplitCell>(current_cell);
+	std::shared_ptr<ActionBase> action = std::make_shared<ActionSplitCell>(current_cell->id());
 	queue_action(action);
 	process_data();
 	}
@@ -1455,8 +1498,10 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
+	special.push_back("Dominic Price (for the conversion to pybind)");	
 	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("Software Sustainability Institute");
+	special.push_back("Institute of Advanced Study");	
 	about.add_credit_section("Special thanks", special);
 	about.run();
 	}
@@ -1535,4 +1580,82 @@ bool NotebookWindow::idle_handler()
 	to_reveal.clear();
 #endif	
 	return false; // disconnect
+	}
+
+void NotebookWindow::unselect_output_cell()
+	{
+	if(selected_cell==doc.end()) return;
+	
+	for(unsigned int i=0; i<canvasses.size(); ++i) {
+		if(canvasses[i]->visualcells.find(&(*selected_cell))!=canvasses[i]->visualcells.end()) {
+			auto& outbox = canvasses[i]->visualcells[&(*selected_cell)].outbox;
+			outbox->image.set_state(Gtk::STATE_NORMAL);
+			}
+		}
+	selected_cell=doc.end();
+	action_copy->set_sensitive(false);
+	}
+
+bool NotebookWindow::handle_outbox_select(GdkEventButton *, DTree::iterator it)
+	{
+	unselect_output_cell();
+
+	// Colour the background of the selected cell, in all canvasses.
+	for(int i=0; i<(int)canvasses.size(); ++i) {
+		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
+			auto& outbox = canvasses[i]->visualcells[&(*it)].outbox;
+			outbox->image.set_state(Gtk::STATE_SELECTED);
+			// if(i==current_canvas)
+			//	outbox->grab_focus();
+			// FIXME: need to remove focus from any CodeInput widget; the above does not do that.
+			}
+		}
+	selected_cell=it;
+	action_copy->set_sensitive(true);
+	
+	Glib::RefPtr<Gtk::Clipboard> clipboard = Gtk::Clipboard::get(GDK_SELECTION_PRIMARY);	
+	on_outbox_copy(clipboard, selected_cell);
+	return true;
+	}
+
+void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it)
+	{
+	std::string cpystring=(*it).textbuf;
+
+	// Find the child cell which contains the input_form data.
+	auto sib=doc.begin(it);
+	while(sib!=doc.end(it)) {
+		if(sib->cell_type==DataCell::CellType::input_form) {
+			clipboard_cdb = sib->textbuf;
+			// std::cerr << "found input form " << clipboard_cdb << std::endl;
+			break;
+			}
+		++sib;
+		}
+	
+	// Setup clipboard handling
+	clipboard_txt = cpystring;
+	std::vector<Gtk::TargetEntry> listTargets;
+	if(clipboard_cdb.size()>0) 
+		listTargets.push_back( Gtk::TargetEntry("cadabra") ); 
+	listTargets.push_back( Gtk::TargetEntry("UTF8_STRING") ); 
+	listTargets.push_back( Gtk::TargetEntry("TEXT") ); 
+	refClipboard->set( listTargets, 
+							 sigc::mem_fun(this, &NotebookWindow::on_clipboard_get), 
+							 sigc::mem_fun(this, &NotebookWindow::on_clipboard_clear) );
+	}
+
+void NotebookWindow::on_clipboard_get(Gtk::SelectionData& selection_data, guint info) 
+	{ 
+	const Glib::ustring target = selection_data.get_target(); 
+	
+	if(target == "cadabra")
+		selection_data.set("cadabra", clipboard_cdb);
+	else if(target == "UTF8_STRING" || target=="TEXT") {
+		selection_data.set_text(clipboard_txt);
+		}
+	}
+
+void NotebookWindow::on_clipboard_clear()
+	{
 	}

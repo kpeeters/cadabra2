@@ -1,39 +1,28 @@
-cmake_minimum_required(VERSION 2.8.11)
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
-
+cmake_minimum_required(VERSION 3.1)
+set(CMAKE_CXX_STANDARD 14)
 project(Cadabra)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#---------------------------------------------------------------------------
+# Preamble
+#---------------------------------------------------------------------------
 
-set(CADABRA_VERSION_MAJOR 2)
-set(CADABRA_VERSION_MINOR 1)
-set(CADABRA_VERSION_PATCH 7)
-set(COPYRIGHT_YEARS "2001-2017")
-execute_process(COMMAND git rev-parse --short HEAD OUTPUT_VARIABLE GIT_SHORT_SHA     OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND git rev-list --count HEAD  OUTPUT_VARIABLE GIT_COMMIT_SERIAL OUTPUT_STRIP_TRAILING_WHITESPACE)
-execute_process(COMMAND git log -1 --date=short --pretty=format:%cd  OUTPUT_VARIABLE GIT_COMMIT_DATE OUTPUT_STRIP_TRAILING_WHITESPACE)
-if(GIT_SHORT_SHA)
-  set(CADABRA_VERSION_BUILD "${GIT_COMMIT_SERIAL}.${GIT_SHORT_SHA}")
-else()
-  set(CADABRA_VERSION_BUILD "private")
-endif()
-if(GIT_COMMIT_DATE)
-  set(CADABRA_VERSION_DATE "${GIT_COMMIT_DATE}")
-else()
-  string(TIMESTAMP THE_DATE "%Y-%m-%d" UTC)
-  set(CADABRA_VERSION_DATE "${THE_DATE}") 
-endif()
+# Set path to additional cmake files
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+
+# Get version information. 
+include(cmake/version.cmake)
 message("-- Building ${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH}")
 message("-- Build id ${CADABRA_VERSION_BUILD} dated ${CADABRA_VERSION_DATE}")
 
+# Allows tests to be built in all subdirectories.
 enable_testing()
 
-set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+find_package(Mathematica COMPONENTS WSTP)
 
-# Generate config file with CMake variables.
-configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
-include_directories(${PROJECT_BINARY_DIR}/core)
+#---------------------------------------------------------------------------
+# User options.
+#---------------------------------------------------------------------------
 
 # Provide option to build with Python 3 (default) or Python 2.
 option(USE_PYTHON_3 "Use Python 3 if ON, or fall back to Python 2 if OFF" ON)
@@ -54,6 +43,8 @@ else()
   message("-- User mode")
 endif()
 
+include(cmake/locate_python.cmake)
+
 # Ensure that all installed binaries have an RPATH setting
 # which enables them to find libtexengine, libcadabra_client and
 # libcadabra_server without any ld.so.conf settings.
@@ -63,97 +54,6 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-# Determine what type of system we are on, for packaging.
-set(LINUX_NAME "")
-if(EXISTS "/etc/redhat-release")
-   file(READ "/etc/redhat-release" LINUX_ISSUE)
-   if(LINUX_ISSUE MATCHES "CentOS")
-       set(CPACK_GENERATOR "RPM")
-       set(CPACK_SYSTEM_NAME "centos")
-		 set(CPACK_RPM_PACKAGE_REQUIRES   "python3-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python3-matplotlib, dvipng, texlive")
-       message("-- This is a CentOS system")
-   endif(LINUX_ISSUE MATCHES "CentOS")
-   if(LINUX_ISSUE MATCHES "Fedora")
-       set(CPACK_GENERATOR   "RPM")
-		 if(LINUX_ISSUE MATCHES "26")
-			message("-- This is a Fedora 26 system")
-			set(CPACK_RPM_PACKAGE_REQUIRES   "python3-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python3-matplotlib, dvipng, texlive")
-			set(CPACK_SYSTEM_NAME "fedora26")
-		 elseif(LINUX_ISSUE MATCHES "24")
-			message("-- This is a Fedora 24 system")
-			set(CPACK_RPM_PACKAGE_REQUIRES   "python3-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python3-matplotlib, dvipng, texlive")
-			set(CPACK_SYSTEM_NAME "fedora24")
-		 else()	
-			message("-- This is a Fedora <24 system")
-			set(CPACK_RPM_PACKAGE_REQUIRES   "python-libs, pcre, gmp, libuuid, sqlite, gtkmm30, boost-system, boost-filesystem, boost-program-options, boost-regex, libstdc++, python-matplotlib, dvipng, texlive")
-			set(CPACK_SYSTEM_NAME "fedora")
-		 endif()
-   endif()
-else()
-   if(EXISTS "/etc/issue")
-      file(READ "/etc/issue" LINUX_ISSUE)
-      if(LINUX_ISSUE MATCHES "openSUSE")
-		  if(LINUX_ISSUE MATCHES "42.1")
-   		 set(CPACK_SYSTEM_NAME "leap421")
-			 set(CPACK_GENERATOR   "RPM")
-			 message("-- This is an openSUSE Leap 42.1 system")
-			 set(CPACK_RPM_PACKAGE_REQUIRES   "libpython3_4m1_0, libpcre1, libgmp10, libuuid1, libsqlite3-0, libgtkmm-3_0-1, libboost_system1_61_0, libboost_filesystem1_61_0, libboost_program_options1_61_0, libboost_regex1_61_0, libstdc++6, python3-matplotlib, texlive-dvipng, texlive")
-		  endif()
-      endif()
-      if(LINUX_ISSUE MATCHES "Debian")
-        set(CPACK_GENERATOR   "DEB")
-		  if(PACKAGING_MODE)
-			 set(PYTHON_SITE_PATH  "/usr/lib/python3/dist-packages")
-			 set(INSTALL_LATEX_DIR  "/usr/share/texmf")
-		  endif()
-		  if(LINUX_ISSUE MATCHES "8")
-   		 set(CPACK_SYSTEM_NAME "jessie")
-			 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.55.0, libboost-system1.55.0, libboost-filesystem1.55.0, libboost-program-options1.55.0, libboost-regex1.55.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
-   		 message("-- This is a Debian 8.6 system")
-		  endif()
-		endif()
-      if(LINUX_ISSUE MATCHES "Ubuntu")
-        set(CPACK_GENERATOR   "DEB")
-		  if(PACKAGING_MODE)
-			 set(PYTHON_SITE_PATH  "/usr/lib/python3/dist-packages")
-			 set(INSTALL_LATEX_DIR  "/usr/share/texmf")
-		  endif()
-		  if(LINUX_ISSUE MATCHES "14.04")
-   		 set(CPACK_SYSTEM_NAME "trusty")
-			 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
-   		 message("-- This is an Ubuntu 14.04 system")
-		  endif()
-		  if(LINUX_ISSUE MATCHES "16.04")
-   		 set(CPACK_SYSTEM_NAME "xenial")
-			 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0v5, libgmpxx4ldbl, libboost-python1.58.0, libboost-system1.58.0, libboost-filesystem1.58.0, libboost-program-options1.58.0, libboost-regex1.58.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1v5, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
-   	  message("-- This is an Ubuntu 16.04 system")
-		  endif()
-		  if(LINUX_ISSUE MATCHES "17.10")
-   		 set(CPACK_SYSTEM_NAME "artful")
-			 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0v5, libgmpxx4ldbl, libboost-python1.62.0, libboost-system1.62.0, libboost-filesystem1.62.0, libboost-program-options1.62.0, libboost-regex1.62.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1v5, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
-   	  message("-- This is an Ubuntu 17.10 system")
-		  endif()
-      endif(LINUX_ISSUE MATCHES "Ubuntu")
-      if(LINUX_ISSUE MATCHES "Mint")
-        set(CPACK_GENERATOR "DEB")
-		  if(PACKAGING_MODE)
-			 set(PYTHON_SITE_PATH   "/usr/lib/python3/dist-packages")
-			 set(INSTALL_LATEX_DIR  "/usr/share/texmf")
-		  endif()
-		  if(LINUX_ISSUE MATCHES "18")
-   		 message("-- This is a Linux Mint 18 system")
-   		 set(CPACK_SYSTEM_NAME "sarah")
-			 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0v5, libgmpxx4ldbl, libboost-python1.58.0, libboost-system1.58.0, libboost-filesystem1.58.0, libboost-program-options1.58.0, libboost-regex1.58.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1v5, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python3-sympy")
-		  endif()
-		  if(LINUX_ISSUE MATCHES "17")
-   		 set(CPACK_SYSTEM_NAME "qiana")
-   		 message("-- This is a Linux Mint 17 system")
-			 set(CPACK_DEBIAN_PACKAGE_DEPENDS "python3, libpcre3, libpcrecpp0, libgmpxx4ldbl, libboost-python1.54.0, libboost-system1.54.0, libboost-filesystem1.54.0, libboost-program-options1.54.0, libboost-regex1.54.0, libstdc++6, uuid-runtime, libgtkmm-3.0-1, texlive, texlive-latex-extra, python3-matplotlib, python3-mpmath, dvipng, python-sympy")
-		  endif()
-      endif()
-   endif()
-endif()
-
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/config/postinst.in" "${CMAKE_CURRENT_BINARY_DIR}/postinst" @ONLY)
 
 if(USE_PYTHON_3)
@@ -162,48 +62,21 @@ else()
   message("-- Building for use with Python 2 (consider upgrading!)")
 endif()
 
-# Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
-# 
-include (InstallRequiredSystemLibraries)
-set(CPACK_SET_DESTDIR true)
-set(CPACK_INSTALL_PREFIX /usr)
-set(CPACK_PACKAGE_NAME           "cadabra2")
-set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/doc/license.txt")
-set(CPACK_RPM_PACKAGE_LICENSE    "GPLv3")
-set(CPACK_PACKAGE_VERSION_MAJOR  "${CADABRA_VERSION_MAJOR}")
-set(CPACK_PACKAGE_VERSION_MINOR  "${CADABRA_VERSION_MINOR}")
-set(CPACK_PACKAGE_VERSION_PATCH  "${CADABRA_VERSION_PATCH}")
-set(CPACK_PACKAGE_VENDOR         "Kasper Peeters")
-set(CPACK_PACKAGE_CONTACT        "Kasper Peeters <kasper.peeters@phi-sci.com>")
-set(CPACK_STRIP_FILES            ON)
-set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
-set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
-#set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
-set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
-
-#xdg-desktop-menu install <install>/share/applications/MyApp.desktop
-
-set(CPACK_DEBIAN_PACKAGE_SECTION "math")
-set(CPACK_RPM_PACKAGE_GROUP      "Applications/Productivity")
-
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "field-theory motivated computer algebra system")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/doc/description)
-include(CPack)
-
-if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
-endif()
-
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
-endif()
-
-
-# Set path to additional cmake files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
-
 option(ENABLE_FRONTEND "Enable the UI frontend" ON)
 
+#---------------------------------------------------------------------------
+# Configure the various parts of Cadabra.
+#---------------------------------------------------------------------------
+
+# Include packaging logic.
+include(cmake/packaging.cmake)
+
+# Generate config file with CMake variables.
+configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
+include_directories(${PROJECT_BINARY_DIR}/core)
+
+# Add all sub-projects to build process.
+add_subdirectory(libs/pybind11)
 add_subdirectory(core)
 add_subdirectory(client_server)
 if(ENABLE_FRONTEND)

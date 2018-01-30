@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-
 project(CadabraGtkmm)
+message("-- Configuring gtkmm frontend")
 
 if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -std=c++11 -Wno-unused-but-set-variable -D_WEBSOCKETPP_CPP11_STL_")

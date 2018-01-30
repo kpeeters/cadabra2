@@ -5,16 +5,18 @@
 
 using namespace cadabra;
 
-DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e)
-	: DisplayBase(k, e)
+DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e, bool uuc)
+	: DisplayBase(k, e), use_unicode(uuc)
 	{
 	symmap = {
 		{"\\cos", "cos"},
 		{"\\sin", "sin"},
 		{"\\tan", "tan"},
 		{"\\int", "∫" },
-		{"\\sum", "∑" },
+		{"\\sum", "∑" }
+	};
 
+	greekmap = {
 		{"\\alpha",   "α" },
 		{"\\beta",    "β" },  // beta seems to be reserved
 		{"\\gamma",   "γ" }, // gamma seems to be reserved 
@@ -68,6 +70,10 @@ DisplayTerminal::DisplayTerminal(const Kernel& k, const Ex& e)
 	};
 	}
 
+// Logic: each node should check whether it needs to have brackets printed around
+// all of itself. The function below will determine that by inspecting the parent
+// node. Nodes should NOT print brackets for children.
+
 bool DisplayTerminal::needs_brackets(Ex::iterator it)
 	{
 	// FIXME: may need looking at properties
@@ -85,7 +91,7 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\frac" && ( child=="\\sum" || child=="\\prod" || (*child_it->multiplier!=1 && child_num>0) )) return true;
 
-	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum") ) return true;
+	if(parent=="\\pow" && ( !it->is_integer() || child=="\\prod" || child=="\\sum" || child=="\\pow")  ) return true;
 
 //	if(parent=="\\pow" && child_num>0 && *child_it->multiplier!=1 ) return true;
 
@@ -134,7 +140,7 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int skip) 
 	{
 	str_node::bracket_t    previous_bracket_   =str_node::b_invalid;
-	str_node::parent_rel_t previous_parent_rel_=str_node::p_none;
+	str_node::parent_rel_t previous_parent_rel_=str_node::p_invalid;
 
 	int number_of_nonindex_children=0;
 	int number_of_index_children=0;
@@ -296,6 +302,7 @@ void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
 		case str_node::p_components: break;
+		case str_node::p_invalid: break;
 		}
 	}
 
@@ -371,6 +378,9 @@ void DisplayTerminal::print_fraclike(std::ostream& str, Ex::iterator it)
 
 void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
+	if(needs_brackets(it)) 
+		str << "(";
+
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
 		Ex::sibling_iterator st=tree.begin(it);
@@ -405,7 +415,8 @@ void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, cons
 		previous_bracket_=current_bracket_;
 		}
 
-//	if(close_bracket) str << ")";
+	if(needs_brackets(it)) 
+		str << ")";
 	}
 
 void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it) 
@@ -431,16 +442,22 @@ void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it)
 
 void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 	{
+	if(needs_brackets(it))
+		str << "(";
+
 	Ex::sibling_iterator sib=tree.begin(it);
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 	dispatch(str, sib);
+//	if(needs_brackets(sib))
+//		str << ")";
 	str << "**";
 	++sib;
-	if(needs_brackets(sib))
-		str << "(";
+//	if(needs_brackets(sib))
+//		str << "(";
 	dispatch(str, sib);
-	if(needs_brackets(sib))
+
+	if(needs_brackets(it))
 		str << ")";
 	}
 
@@ -491,6 +508,11 @@ void DisplayTerminal::print_commutator(std::ostream& str, Ex::iterator it, bool 
 
 void DisplayTerminal::print_components(std::ostream& str, Ex::iterator it)
 	{
+	if( ! (use_unicode && getenv("CADABRA_NO_UNICODE")==0) ) {
+		print_other(str, it);
+		return;
+		}
+
 	str << R"(□)";
 	auto sib=tree.begin(it);
 	auto end=tree.end(it);
@@ -544,6 +566,8 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 	if(*it->name=="1") {
 		if(*it->multiplier==1 || (*it->multiplier==-1)) // this would print nothing altogether.
 			str << "1";
+		if(needs_brackets(it))
+			str << ")";
 		return;
 		}
 	
@@ -559,11 +583,17 @@ void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it)
 //		}
 	
 	if(needs_extra_brackets) str << "{"; // to prevent double sup/sub script errors
-	auto rn = symmap.find(*it->name);
-	if(rn!=symmap.end() && 	getenv("CADABRA_NO_UNICODE")==0)
-		str << rn->second;
-	else
-		str << *it->name;
+	std::string sbit=*it->name;
+	if(use_unicode && getenv("CADABRA_NO_UNICODE")==0) {
+		auto rn1 = symmap.find(sbit);
+		if(rn1!=symmap.end())
+			sbit = rn1->second;
+		auto rn = greekmap.find(sbit);
+		if(rn!=greekmap.end())
+			sbit = rn->second;
+		}
+	str << sbit;
+		
 	if(needs_extra_brackets) str << "}";
 
 	print_children(str, it);

@@ -44,6 +44,7 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	const Derivative *der=kernel.properties.get<Derivative>(it);
 
 	if(parent=="\\pow") {
+		if(tree.index(it)==0 && !it->is_integer() && *it->multiplier!=1) return true;
 		int nc = Ex::number_of_children(it);
 		int ic = Algorithm::number_of_direct_indices(it);
 		if(nc-ic>0) {
@@ -107,6 +108,8 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 	if(*it->name=="1") {
 		if(*it->multiplier==1 || (*it->multiplier==-1)) // this would print nothing altogether.
 			str << "1";
+		if(needs_brackets(it))
+			str << "\\right)";
 		return;
 		}
 	
@@ -342,6 +345,7 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
 		case str_node::p_components: break;
+		case str_node::p_invalid:    throw std::logic_error("DisplayTeX: p_invalid not handled.");
 		}
 	// Prevent line break after this character.
 	str << zwnbsp;
@@ -439,12 +443,14 @@ void DisplayTeX::print_fraclike(std::ostream& str, Ex::iterator it)
 
 void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
-	if(*it->multiplier!=1) {
-		print_multiplier(str, it);
-		}
-
 	if(needs_brackets(it)) 
 		str << "\\left(";
+
+	// The multiplier needs to be inside the brackets, otherwise things like
+	// \pow{ 2/3 \prod{a}{b} }{c} do not print correctly.
+	
+	if(*it->multiplier!=1) 
+		print_multiplier(str, it);
 
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
 	// If there is any sum as child, and if the sum children do not

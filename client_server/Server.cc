@@ -4,16 +4,14 @@
 #include <fstream>
 #include <sstream>
 #include <thread>
-//#include <future>
-//#include <chrono>
-#include <boost/regex.hpp>
+#include <regex>
+
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <boost/algorithm/string/replace.hpp>
 #include <json/json.h>  
-//#include <boost/shared_ptr.hpp>
-//#include <boost/make_shared.hpp>
 
+#include "Config.hh"
 #include "Snoop.hh"
 #include "CdbPython.hh"
 #include "Server.hh"
@@ -25,16 +23,17 @@ using websocketpp::lib::bind;
 
 // Wrap the 'totals' member of ProgressMonitor to return a Python list.
 
-boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
-	{
-	boost::python::list list;
-	auto totals = self.totals();
-	for(auto& total: totals)
-		list.append(total);
-	return list;
-	}
+//pybind11::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+//	{
+//	pybind11::list list;
+//	auto totals = self.totals();
+//	for(auto& total: totals)
+//		list.append(total);
+//	return list;
+//	}
 
 Server::Server()
+	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
 	// FIXME: we do not actually do anything with this.
 	socket_name="tcp://localhost:5454";
@@ -42,6 +41,7 @@ Server::Server()
 	}
 
 Server::Server(const std::string& socket)
+	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)	
 	{
 	socket_name=socket;
 	init();
@@ -62,13 +62,13 @@ Server::CatchOutput::CatchOutput(const CatchOutput&)
 
 void Server::CatchOutput::write(const std::string& str)
 	{
-//	std::cout << "Python wrote: " << str << std::endl;
+	// std::cerr << "Python wrote: " << str << std::endl;
 	collect+=str;
    }
 
 void Server::CatchOutput::clear()
 	{
-//	std::cout << "Python clear" << std::endl;
+	// std::cerr << "Python clear" << std::endl;
 	collect="";
    }
 
@@ -82,51 +82,33 @@ std::string Server::architecture() const
 	return "client-server";
 	}
 
+PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m) {	
+pybind11::class_<Server::CatchOutput>(m, "CatchOutput")
+	.def("write", &Server::CatchOutput::write)
+	.def("clear", &Server::CatchOutput::clear)
+	;
+// pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")
+// 	.def("print", &ProgressMonitor::print)
+// 	.def("totals", &ProgressMonitor_totals_helper);
+
+pybind11::class_<Server, ProgressMonitor>(m, "Server")
+	.def("send", &Server::send)
+	.def("handles", &Server::handles)
+	.def("architecture", &Server::architecture);
+}
+
 void Server::init()
 	{
 	started=false;
 
-	Py_Initialize();
-	main_module = boost::python::import("__main__");
+	main_module = pybind11::module::import("__main__");
 	main_namespace = main_module.attr("__dict__");
 
-	// Make the C++ CatchOutput class visible on the Python side.
-
-   boost::python::class_<Server::CatchOutput>("CatchOutput")
-	   .def("write", &Server::CatchOutput::write)
-	   .def("clear", &Server::CatchOutput::clear)
-    	;
-
-	// FIXME: Why does 's=Stopwatch()' not work in a notebook cell?
-	boost::python::class_<Stopwatch>("Stopwatch")
-		.def("start", &Stopwatch::start)
-		.def("stop",  &Stopwatch::stop)
-		.def("reset", &Stopwatch::reset)
-		.def("seconds", &Stopwatch::seconds)
-		.def("useconds", &Stopwatch::useconds);
-	
-	try {
-		// Expose both the interface (abstract base class) ProgressMonitor and the Server class to Python.
-		// PythonCdb.cc gets a reference to the ProgressMonitor base, and can then call into the
-		// group/progress functions.
-		cells_ran=0;
-		// For some reason we need to re-export ProgressMonitor here, despite the fact that it has
-		// already been done in the cadabra2 module.
-		boost::python::class_<ProgressMonitor, boost::noncopyable>("ProgressMonitor")
-			.def("print", &ProgressMonitor::print)
-			.def("totals", &ProgressMonitor_totals_helper);
-
-		boost::python::class_<Server, boost::python::bases<ProgressMonitor>, boost::noncopyable>("Server")
-			.def("send", &Server::send)
-			.def("handles", &Server::handles)
-			.def("architecture", &Server::architecture);
-		}
-	catch(boost::python::error_already_set& ex) {
-		PyErr_Print();
-		}
-
+ 	// Make the C++ CatchOutput class visible on the Python side.
 
 	std::string stdOutErr =
+		"from cadabra2 import ProgressMonitor\n"
+		"from cadabra2_internal import Server, CatchOutput\n"
 		"import sys\n"
 		"server=0\n"
 		"def setup_catch(cO, cE, sE):\n"
@@ -139,11 +121,11 @@ void Server::init()
 	// Setup the C++ output catching objects and setup the Python side to
 	// use these as stdout and stderr streams.
 
-	boost::python::object setup_catch = main_module.attr("setup_catch");
+	pybind11::object setup_catch = main_module.attr("setup_catch");
 	try {
-		setup_catch(boost::ref(catchOut), boost::ref(catchErr), boost::ref(*this));
+		setup_catch(std::ref(catchOut), std::ref(catchErr), std::ref(*this));
 		}
-	catch(boost::python::error_already_set& ex) {
+	catch(pybind11::error_already_set& ex) {
 		snoop::log(snoop::fatal) << "Failed to initialise Python bridge." << snoop::flush;
 		PyErr_Print();
 		throw;
@@ -152,15 +134,20 @@ void Server::init()
 
 	// Call the Cadabra default initialisation script.
 
-//	std::string startup = "import site; execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py')";
-//	std::string startup = "import imp; execfile(imp.find_module('cadabra2_defaults')[1])";
-	std::string startup = "import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close()"; 
+//	pybind11::eval_file(PYTHON_SITE_PATH"/cadabra2_defaults.py");
+//	HERE: should use pybind11::eval_file instead, much simpler.
+//	
+	std::string startup =
+		"import imp; "
+		"f=open(imp.find_module('cadabra2_defaults')[1]); "
+		"code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); "
+		"exec(code); f.close()"; 
 	run_string(startup);
 	}
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
 	{
-//	std::cerr << "RUN_STRING" << std::endl;
+	//std::cerr << "RUN_STRING" << std::endl;
 	// snoop::log("run") << blk << snoop::flush;
 
 	std::string result;
@@ -168,45 +155,34 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	// Preparse input block.
 	auto newblk = cadabra::cdb2python(blk);
 
-	// std::cerr << "PREPARSED:\n " << newblk << std::endl;
+//	std::cerr << "PREPARSED:\n" << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
 	try {
-		boost::python::object ignored = boost::python::exec(newblk.c_str(), main_namespace);
-		std::string object_classname = boost::python::extract<std::string>(ignored.attr("__class__").attr("__name__"));
-		// snoop::log("info") << "Run finished" << snoop::flush;
-//		std::cout << "exec returned a " << object_classname << std::endl;
-		/*
-		boost::python::object catchobj = main_module.attr("catchOut");
-		boost::python::object valueobj = catchobj.attr("value");
-		result = boost::python::extract<std::string>(valueobj);
-		catchobj.attr("clear")();
-		*/
+//		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
+		// std::cerr << "executing..." << std::endl;
+		pybind11::exec(newblk.c_str(), main_namespace);
+		// std::cerr << "exec done" << std::endl;
+//		std::string object_classname = ignored.attr("__class__").attr("__name__").cast<std::string>();
+//		std::cerr << "" << std::endl;		
 
 		if(handle_output) {
 			result = catchOut.str();
 			catchOut.clear();
 			}
 		}
-	catch(boost::python::error_already_set& ex) {
+	catch(pybind11::error_already_set& ex) {
+		std::cerr << "already set" << std::endl;
 		// Make Python print error to stderr and catch it.
 		PyErr_Print();
-		/*
-		  boost::python::object catchobj = main_module.attr("catchErr");
-		  boost::python::object valueobj = catchobj.attr("value");
-		  std::string err = boost::python::extract<std::string>(valueobj);
-		*/
 		std::string err;
 		if(handle_output) {
 			err = catchErr.str();
 			catchErr.clear();
-			// std::cerr << "ERROR: " << err << std::endl;
-//		catchobj.attr("clear")();
 			}
 		throw std::runtime_error(err);
 		}
-//   std::cerr << "------------" << std::endl;
 
 	server_stopwatch.stop();
 	return result;
@@ -255,6 +231,8 @@ void Server::wait_for_job()
 
 	// snoop::log(snoop::info) << "Waiting for blocks" << snoop::flush;
 
+	pybind11::gil_scoped_acquire acquire;
+	
 	while(true) {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		while(block_queue.size()==0) 
@@ -378,7 +356,7 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 
 void Server::on_block_finished(Block blk)
 	{
-	send(blk.output, "output");
+	send(blk.output, "output", 0, true); // last in sequence
 	}
 
 bool Server::handles(const std::string& otype) const
@@ -387,19 +365,25 @@ bool Server::handles(const std::string& otype) const
 	return false;
 	}
 
-void Server::send(const std::string& output, const std::string& msg_type)
+uint64_t Server::send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last)
 	{
 //	if(msg_type=="output") 
 //		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
 	// Make a JSON message.
 	Json::Value json, content, header;
+
+	++return_cell_id;
+	if(parent_id==0)
+		header["parent_id"]=(Json::Value::UInt64)current_id;
+	else
+		header["parent_id"]=(Json::Value::UInt64)parent_id;
 	
-	header["parent_id"]=(Json::Value::UInt64)current_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=1; //FIXME
+	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
 	header["time_total_microseconds"]=std::to_string(server_stopwatch.seconds()*1e6L + server_stopwatch.useconds());
 	header["time_sympy_microseconds"]=std::to_string(sympy_stopwatch.seconds()*1e6L  + sympy_stopwatch.useconds());
+	header["last_in_sequence"]=last;
 	content["output"]=output;
 
 	json["header"]=header;
@@ -410,6 +394,8 @@ void Server::send(const std::string& output, const std::string& msg_type)
 	str << json << std::endl;
 
 	send_json(str.str());
+
+	return return_cell_id;
 	}
 
 void Server::send_json(const std::string& msg)
@@ -426,10 +412,12 @@ void Server::on_block_error(Block blk)
 	// Make a JSON message.
 	Json::Value json, content, header;
 	
+	++return_cell_id;
 	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=1; // FIXME;
+	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
+	header["last_in_sequence"]=true;	
 	content["output"]=blk.error;
 
 	json["header"]=header;
@@ -449,11 +437,13 @@ void Server::on_kernel_fault(Block blk)
 	
 	// Make a JSON message.
 	Json::Value json, content, header;
-	
+
+	++return_cell_id;
 	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
 	header["parent_origin"]="client";
-	header["cell_id"]=1; // FIXME
+	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
+	header["last_in_sequence"]=true;
 	content["output"]=blk.error;
 
 	json["header"]=header;
@@ -488,7 +478,8 @@ void Server::run()
 		
 		// std::cerr << "cadabra-server: spawning job thread "  << std::endl;
 		runner = std::thread(std::bind(&Server::wait_for_job, this));
-		
+
+		pybind11::gil_scoped_release release;
 		wserver.run();
 		}
 	catch(websocketpp::exception& ex) {

@@ -12,6 +12,7 @@
 #include <gtkmm/cssprovider.h>
 #include <glibmm/dispatcher.h>
 #include <giomm/settings.h>
+#include <gtkmm/action.h>
 
 #include <thread>
 #include <mutex>
@@ -95,7 +96,12 @@ namespace cadabra {
 
 			DTree::iterator current_cell;
 
-      private:
+			bool handle_outbox_select(GdkEventButton *, DTree::iterator it);
+			DTree::iterator selected_cell;
+			void unselect_output_cell();
+			void on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, DTree::iterator it);
+
+	private:
 			Cadabra *cdbapp;
 
 			// Main handler which fires whenever the Client object signals 
@@ -156,6 +162,9 @@ namespace cadabra {
 			bool quit_safeguard(bool quit);
 
 			void on_edit_undo();
+			void on_edit_copy();
+			Glib::RefPtr<Gtk::Action> action_copy, action_paste;
+			void on_edit_paste();						
 			void on_edit_insert_above();
 			void on_edit_insert_below();
 			void on_edit_delete();
@@ -177,6 +186,11 @@ namespace cadabra {
 			void on_help() const;
 
 			void on_kernel_restart();
+
+			/// Clipboard handling
+			void on_clipboard_get(Gtk::SelectionData&, guint info);
+			void on_clipboard_clear();
+			std::string clipboard_txt, clipboard_cdb;
 
 			// FIXME: move to DocumentThread
 			std::string save(const std::string& fn) const;

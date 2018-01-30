@@ -9,22 +9,38 @@
 
 using namespace cadabra;
 
+ActionBase::ActionBase(DataCell::id_t id)
+	: ref_id(id)
+	{
+	}
+
 bool ActionBase::undoable() const 
 	{
 	return true;
 	}
 
-ActionAddCell::ActionAddCell(DataCell cell, DTree::iterator ref_, Position pos_) 
-	: newcell(cell), ref(ref_), pos(pos_)
+void ActionBase::execute(DocumentThread& cl, GUIBase& gb)  
+	{
+	auto it=cl.doc.begin();
+	while(it!=cl.doc.end()) {
+		if((*it).id().id==ref_id.id) {
+			ref=it;
+			return;
+			}
+		++it;
+		}
+	throw std::logic_error("ActionAddCell: cannot find cell with id "+std::to_string(ref_id.id));
+	}
+
+ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_) 
+	: ActionBase(ref_id), newcell(cell), pos(pos_)
 	{
 	}
 
 void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	// std::cout << "ActionAddCell::execute" << std::endl;
-
-//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
-
+	ActionBase::execute(cl, gb);
+	
 	// Insert this DataCell into the DTree document.
 	switch(pos) {
 		case Position::before:
@@ -53,16 +69,14 @@ void ActionAddCell::revert(DocumentThread& cl, GUIBase& gb)
 	}
 
 
-ActionPositionCursor::ActionPositionCursor(DTree::iterator ref_, Position pos_)
-	: needed_new_cell(false), ref(ref_), pos(pos_)
+ActionPositionCursor::ActionPositionCursor(DataCell::id_t ref_id, Position pos_)
+	: ActionBase(ref_id), needed_new_cell(false), pos(pos_)
 	{
 	}
 
 void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	// std::cout << "ActionPositionCursor::execute" << std::endl;
-
-//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+	ActionBase::execute(cl, gb);
 
 	switch(pos) {
 		case Position::in:
@@ -130,8 +144,8 @@ void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)
 	}
 
 
-ActionRemoveCell::ActionRemoveCell(DTree::iterator ref_) 
-	: this_cell(ref_)
+ActionRemoveCell::ActionRemoveCell(DataCell::id_t ref_id)
+	: ActionBase(ref_id)
 	{
 	}
 
@@ -141,12 +155,14 @@ ActionRemoveCell::~ActionRemoveCell()
 
 void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	gb.remove_cell(cl.doc, this_cell);
+	ActionBase::execute(cl, gb);
 
-	reference_parent_cell = cl.doc.parent(this_cell);
-	reference_child_index = cl.doc.index(this_cell);
-	removed_tree=DTree(this_cell);
-	cl.doc.erase(this_cell);
+	gb.remove_cell(cl.doc, ref);
+
+	reference_parent_cell = cl.doc.parent(ref);
+	reference_child_index = cl.doc.index(ref);
+	removed_tree=DTree(ref);
+	cl.doc.erase(ref);
 	}
 
 void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
@@ -167,8 +183,8 @@ void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	}
 
 
-ActionSplitCell::ActionSplitCell(DTree::iterator ref_) 
-	: this_cell(ref_)
+ActionSplitCell::ActionSplitCell(DataCell::id_t ref_id) 
+	: ActionBase(ref_id)
 	{
 	}
 
@@ -176,14 +192,14 @@ ActionSplitCell::~ActionSplitCell()
 	{
 	}
 
-void ActionSplitCell::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionSplitCell::execute(DocumentThread& cl, GUIBase& gb)
 	{
-//	std::lock_guard<std::mutex> guard(cl.dtree_mutex);
+	ActionBase::execute(cl, gb);
 
-	size_t pos = gb.get_cursor_position(cl.doc, this_cell);
+	size_t pos = gb.get_cursor_position(cl.doc, ref);
 
-	std::string segment1=this_cell->textbuf.substr(0, pos);
-	std::string segment2=this_cell->textbuf.substr(pos);
+	std::string segment1=ref->textbuf.substr(0, pos);
+	std::string segment2=ref->textbuf.substr(pos);
 
 	// Strip leading newline in 2nd segment, if any.
 	if(segment2.size()>0) {
@@ -191,12 +207,12 @@ void ActionSplitCell::execute(DocumentThread& cl, GUIBase& gb)
 			segment2=segment2.substr(1);
 		}
 
-	DataCell newcell(this_cell->cell_type, segment2);
-	newref = cl.doc.insert_after(this_cell, newcell);
-	this_cell->textbuf=segment1;
+	DataCell newcell(ref->cell_type, segment2);
+	newref = cl.doc.insert_after(ref, newcell);
+	ref->textbuf=segment1;
 
 	gb.add_cell(cl.doc, newref, true);
-	gb.update_cell(cl.doc, this_cell);
+	gb.update_cell(cl.doc, ref);
 	}
 
 void ActionSplitCell::revert(DocumentThread& cl, GUIBase& gb)
@@ -206,8 +222,8 @@ void ActionSplitCell::revert(DocumentThread& cl, GUIBase& gb)
 
 
 
-ActionSetRunStatus::ActionSetRunStatus(DTree::iterator ref_, bool running) 
-	: this_cell(ref_), new_running_(running)
+ActionSetRunStatus::ActionSetRunStatus(DataCell::id_t ref_id, bool running) 
+	: ActionBase(ref_id), new_running_(running)
 	{
 	}
 
@@ -218,10 +234,12 @@ bool ActionSetRunStatus::undoable() const
 
 void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	gb.update_cell(cl.doc, this_cell);
+	ActionBase::execute(cl, gb);
+	
+	gb.update_cell(cl.doc, ref);
 
-	was_running_=this_cell->running;
-	this_cell->running=new_running_;
+	was_running_=ref->running;
+	ref->running=new_running_;
 	}
 
 void ActionSetRunStatus::revert(DocumentThread& cl, GUIBase& gb)
@@ -229,39 +247,43 @@ void ActionSetRunStatus::revert(DocumentThread& cl, GUIBase& gb)
 	}
 
 
-ActionInsertText::ActionInsertText(DTree::iterator ref_, int pos, const std::string& content)
-	: this_cell(ref_), insert_pos(pos), text(content)
+ActionInsertText::ActionInsertText(DataCell::id_t ref_id, int pos, const std::string& content)
+	: ActionBase(ref_id), insert_pos(pos), text(content)
 	{
 	}
 
 void ActionInsertText::execute(DocumentThread& cl, GUIBase& gb)  
 	{
-	this_cell->textbuf.insert(insert_pos, text);
+	ActionBase::execute(cl, gb);
+	
+	ref->textbuf.insert(insert_pos, text);
 	}
 
 void ActionInsertText::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	this_cell->textbuf.erase(insert_pos, text.size());
-	gb.update_cell(cl.doc, this_cell);
+	ref->textbuf.erase(insert_pos, text.size());
+	gb.update_cell(cl.doc, ref);
 	}
 
 
-ActionEraseText::ActionEraseText(DTree::iterator ref_, int start, int end)
-	: this_cell(ref_), from_pos(start), to_pos(end)
+ActionEraseText::ActionEraseText(DataCell::id_t ref_id, int start, int end)
+	: ActionBase(ref_id), from_pos(start), to_pos(end)
 	{
 	}
 
 void ActionEraseText::execute(DocumentThread& cl, GUIBase& gb)  
 	{
+	ActionBase::execute(cl, gb);
+	
 	//std::cerr << from_pos << ", " << to_pos << std::endl;
-	removed_text=this_cell->textbuf.substr(from_pos, to_pos-from_pos);
-	this_cell->textbuf.erase(from_pos, to_pos-from_pos);
+	removed_text=ref->textbuf.substr(from_pos, to_pos-from_pos);
+	ref->textbuf.erase(from_pos, to_pos-from_pos);
 	}
 
 void ActionEraseText::revert(DocumentThread& cl, GUIBase& gb)
 	{
-	this_cell->textbuf.insert(from_pos, removed_text);
-	gb.update_cell(cl.doc, this_cell);
-	gb.position_cursor(cl.doc, this_cell, from_pos+removed_text.size());
+	ref->textbuf.insert(from_pos, removed_text);
+	gb.update_cell(cl.doc, ref);
+	gb.position_cursor(cl.doc, ref, from_pos+removed_text.size());
 	}
 

@@ -1,5 +1,6 @@
 
-#include <boost/python.hpp>
+#include <pybind11/pybind11.h>
+#include <sstream>
 #include "Functional.hh"
 #include "SympyCdb.hh"
 #include "PreClean.hh"
@@ -11,9 +12,9 @@
 
 using namespace cadabra;
 
-//#define DEBUG
+// #define DEBUG
 
-Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, const std::string& args, 
+Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args, 
 								  const std::string& method)
 	{
    // We first need to print the sub-expression using DisplaySympy,
@@ -29,8 +30,10 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	ds.output(str, it);
 
 	if(wrap.size()>0)
-		if(args.size()>0) 
-			str << ", " << args << ")";
+		if(args.size()>0) {
+			for(size_t i=0; i<args.size(); ++i)
+				str << ", " << args[i];
+			}
 	for(size_t i=1; i<wrap.size(); ++i)
 		str << ")";
 	str << method;
@@ -45,13 +48,13 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	std::cerr << "feeding " << str.str() << std::endl;
 #endif	
 
-	auto module = boost::python::import("sympy.parsing.sympy_parser");
+	auto module = pybind11::module::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
-	boost::python::object obj = parse(str.str());
+	pybind11::object obj = parse(str.str());
 	//std::cerr << "converting result to string" << std::endl;
 	auto __str__ = obj.attr("__str__");
-	boost::python::object res = __str__();
-	std::string result = boost::python::extract<std::string>(res);
+	pybind11::object res = __str__();
+	std::string result = res.cast<std::string>();
 #ifdef DEBUG	
 	std::cerr << "result " << result << std::endl;
 #endif	
@@ -136,7 +139,7 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 	
 	auto top=matrix.begin();
 	std::vector<std::string> wrap;
-	sympy::apply(kernel, matrix, top, wrap, "", ".inv()");
+	sympy::apply(kernel, matrix, top, wrap, std::vector<std::string>(), ".inv()");
 	//matrix.print_recursive_treeform(std::cerr, top);
 
 	Ex::iterator ruleslist=rules.begin();

@@ -3,27 +3,29 @@
 
 #include <memory>
 
-// make boost::python understand std::shared_ptr when compiled with clang.
-// http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
+// // make python understand std::shared_ptr when compiled with clang.
+// // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
+// 
+// // This now works on both Linux and OS X El Capitan, but your mileage may vary. 
+// //
+// #if (defined(__clang__) && defined(__linux__)) 
+// namespace boost {
+//    template<typename T>
+//    T *get_pointer(std::shared_ptr<T> p)
+// 		{
+// 		return p.get();
+// 		}
+//    }
+// #endif
 
-// This now works on both Linux and OS X El Capitan, but your mileage may vary. 
-//
-#if (defined(__clang__) && defined(__linux__)) 
-namespace boost {
-   template<typename T>
-   T *get_pointer(std::shared_ptr<T> p)
-		{
-		return p.get();
-		}
-   }
-#endif
-
+#include "Config.hh"
 #include "PythonCdb.hh"
 #include "SympyCdb.hh"
 
 #include "Parser.hh"
 #include "Bridge.hh"
 #include "Exceptions.hh"
+#include "DisplayMMA.hh"
 #include "DisplayTeX.hh"
 #include "DisplaySympy.hh"
 #include "DisplayTerminal.hh"
@@ -33,19 +35,12 @@ namespace boost {
 #include "ProgressMonitor.hh"
 //#include "ServerWrapper.hh"
 
-#include <boost/python/implicit.hpp>
-#include <boost/parameter/preprocessor.hpp>
-//#include <boost/parameter/python.hpp>
-//#include <boost/python.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/python/enum.hpp>
-#include <boost/python/def.hpp>
-#include <boost/python/module.hpp>
-#include <boost/python/stl_iterator.hpp>
-#include <boost/python/slice.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
+#include <pybind11/operators.h>
+#include <pybind11/stl.h>
 #include <boost/algorithm/string/replace.hpp>
-
+#include <memory>
 #include <sstream>
 
 // Properties.
@@ -127,6 +122,9 @@ namespace boost {
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
 #include "algorithms/lr_tensor.hh"
+#ifdef MATHEMATICA_FOUND
+   #include "algorithms/map_mma.hh"
+#endif
 #include "algorithms/map_sympy.hh"
 #include "algorithms/order.hh"
 #include "algorithms/product_rule.hh"
@@ -151,27 +149,11 @@ namespace boost {
 
 using namespace cadabra;
 
-// TODO: 
-//
-// - Make a list of useful things to pass to functions which are not Ex objects. 
-//   Then abstract a new def_algo from there.
-//
-//        keep_terms:  list of integers
-//        young_project: one list of integers describing tableau shape, one list of integers indicating indices.
-//        
-
-template<typename T>
-std::vector<T> to_std_vector(const boost::python::list& iterable )
-	{
-	return std::vector<T>( boost::python::stl_input_iterator< T >( iterable ),
-								  boost::python::stl_input_iterator< T >( ) );
-	}
-
 // Wrap the 'totals' member of ProgressMonitor to return a Python list.
 
-boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
+pybind11::list ProgressMonitor_totals_helper(ProgressMonitor& self)
 	{
-	boost::python::list list;
+	pybind11::list list;
 	auto totals = self.totals();
 	for(auto& total: totals)
 		list.append(total);
@@ -181,17 +163,17 @@ boost::python::list ProgressMonitor_totals_helper(ProgressMonitor& self)
 
 // Split a 'sum' expression into its individual terms. FIXME: now deprecated because we have operator[]?
 
-boost::python::list terms(const Ex& ex) 
+pybind11::list terms(std::shared_ptr<Ex> ex) 
 	{
-	Ex::iterator it=ex.begin();
+	Ex::iterator it=ex->begin();
 
 	if(*it->name!="\\sum")
 		throw ArgumentException("terms() expected a sum expression.");
 
-	boost::python::list ret;
+	pybind11::list ret;
 
-	auto sib=ex.begin(it);
-	while(sib!=ex.end(it)) {
+	auto sib=ex->begin(it);
+	while(sib!=ex->end(it)) {
 		ret.append(Ex(sib));
 		++sib;
 		}
@@ -199,53 +181,52 @@ boost::python::list terms(const Ex& ex)
 	return ret;
 	}
 
-Ex lhs(const Ex& ex)
+Ex lhs(std::shared_ptr<Ex> ex)
 	{
-	auto it=ex.begin();
-	if(it==ex.end()) 
+	auto it=ex->begin();
+	if(it==ex->end()) 
 		throw ArgumentException("Empty expression passed to 'lhs'.");
 
 	if(*it->name!="\\equals")
 		throw ArgumentException("Cannot take 'lhs' of expression which is not an equation.");
 
-	return Ex(ex.begin(ex.begin()));
+	return Ex(ex->begin(ex->begin()));
 	}
 
-Ex rhs(const Ex& ex)
+Ex rhs(std::shared_ptr<Ex> ex)
 	{
-	auto it=ex.begin();
-	if(it==ex.end()) 
+	auto it=ex->begin();
+	if(it==ex->end()) 
 		throw ArgumentException("Empty expression passed to 'rhs'.");
 
 	if(*it->name!="\\equals")
 		throw ArgumentException("Cannot take 'rhs' of expression which is not an equation.");
 
-	auto sib=ex.begin(ex.begin());
+	auto sib=ex->begin(ex->begin());
 	++sib;
 	return Ex(sib);
 	}
 
-Ex Ex_getslice(Ex &ex, boost::python::slice slice)
+Ex Ex_getslice(std::shared_ptr<Ex> ex, pybind11::slice slice)
 	{
 	Ex result;
 
-	boost::python::slice::range<Ex::sibling_iterator> range;
-	try {
-		range = slice.get_indices(ex.begin(ex.begin()), ex.end(ex.begin()));
-		}
-	catch (std::invalid_argument) {
+	pybind11::size_t start, stop, step, length;
+	slice.compute(ex->size(), &start, &stop, &step, &length);
+	if (length == 0)
 		return result;
-		}
-
+	
 	// Set head
-	auto it = result.set_head(*ex.begin());
-
+	auto it = result.set_head(*ex->begin());
+	
 	// Iterate over fully-closed range.
-	for (; range.start != range.stop; std::advance(range.start, range.step)) {
-		Ex::iterator toadd(range.start);
+	for (; start != stop; start += step) {
+		Ex::iterator toadd(ex->begin());
+		std::advance(toadd, start);
 		result.append_child(it, toadd);
 		}
-	Ex::iterator toadd(range.start);
+	Ex::iterator toadd(ex->begin());
+	std::advance(toadd, start);
 	result.append_child(it, toadd);
 	return result;
 	}
@@ -291,7 +272,7 @@ bool post_process_enabled=true;
 // Output routines in display, input, latex and html formats (the latter two
 // for use with IPython).
 
-std::string Ex_str_(const Ex& ex) 
+std::string Ex_str_(std::shared_ptr<Ex> ex) 
 	{
  	std::ostringstream str;
 // 
@@ -299,29 +280,47 @@ std::string Ex_str_(const Ex& ex)
 // //		str << "(unchanged)" << std::endl;
 // 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
-	DisplayTerminal dt(*get_kernel_from_scope(), ex);
+	DisplayTerminal dt(*get_kernel_from_scope(), *ex, true);
 	dt.output(str);
 
 	return str.str();
 	}
 
-std::string Ex_latex_(const Ex& ex) 
+std::string Ex_to_input(std::shared_ptr<Ex> ex)
 	{
  	std::ostringstream str;
-	DisplayTeX dt(*get_kernel_from_scope(), ex);
+// 
+// //	if(state()==Algorithm::result_t::l_no_action)
+// //		str << "(unchanged)" << std::endl;
+// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+
+	DisplayTerminal dt(*get_kernel_from_scope(), *ex, false);
+	dt.output(str);
+
+	return str.str();
+	}
+
+std::string Ex_latex_(std::shared_ptr<Ex> ex) 
+	{
+	if(!ex) return "";
+ 	std::ostringstream str;
+	DisplayTeX dt(*get_kernel_from_scope(), *ex);
 	dt.output(str);
 	return str.str();
 	}
 
-std::string Ex_repr_(const Ex& ex) 
+std::string Ex_repr_(std::shared_ptr<Ex> ex) 
 	{
-	Ex::iterator it = ex.begin();
+	if(!ex) return "";
+	if(ex->begin()==ex->end()) return "";
+
+	Ex::iterator it = ex->begin();
 	std::ostringstream str;
-	ex.print_entire_tree(str);
+	ex->print_python(str, ex->begin());
 	return str.str();
 	}
 
-boost::python::object Ex_to_Sympy(const Ex& ex)
+std::string Ex_to_Sympy_string(std::shared_ptr<Ex> ex)
 	{
 	// Check to see if the expression is a scalar without dummy indices.
 //	Algorithm::index_map_t ind_free, ind_dummy;
@@ -331,49 +330,75 @@ boost::python::object Ex_to_Sympy(const Ex& ex)
 //	if(ind_free.size()>0) 
 //		throw NonScalarException("Expression contains free indices.");
 
-	// Call sympify on our textual representation.
-	auto module = boost::python::import("sympy.parsing.sympy_parser");
-	auto parse  = module.attr("parse_expr");
+	if(!ex) return "";
 	std::ostringstream str;
-	DisplaySympy dt(*get_kernel_from_scope(), ex);
+	DisplaySympy dt(*get_kernel_from_scope(), *ex);
 	dt.output(str);
+	return str.str();
+	}
 
-	boost::python::object ret=parse(str.str());
-
+pybind11::object Ex_to_Sympy(std::shared_ptr<Ex> ex)
+	{
+	// Generate a string which can be parsed by Sympy.
+	std::string txt = Ex_to_Sympy_string(ex);
+	
+	// Call sympify on a sympy-parseable  textual representation.
+	pybind11::module sympy_parser = pybind11::module::import("sympy.parsing.sympy_parser");
+	auto parse  = sympy_parser.attr("parse_expr");
+	pybind11::object ret=parse(txt);
 	return ret;
 	}
+
+std::string Ex_to_MMA(std::shared_ptr<Ex> ex, bool use_unicode)
+	{
+	// Check to see if the expression is a scalar without dummy indices.
+//	Algorithm::index_map_t ind_free, ind_dummy;
+//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
+//	if(ind_dummy.size()>0) 
+//		throw NonScalarException("Expression contains dummy indices.");
+//	if(ind_free.size()>0) 
+//		throw NonScalarException("Expression contains free indices.");
+
+	std::ostringstream str;
+	DisplayMMA dt(*get_kernel_from_scope(), *ex, use_unicode);
+	dt.output(str);
+
+	return str.str();
+	}
+
+
+pybind11::object get_locals()
+        {
+        return pybind11::reinterpret_borrow<pybind11::object>(PyEval_GetLocals());
+        }
+
+pybind11::object get_globals()
+        {
+        return pybind11::reinterpret_borrow<pybind11::object>(PyEval_GetGlobals());
+        }
+
 
 // Fetch objects from the Python side using their Python identifier.
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 	{
 	try {
-		boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-		boost::python::object obj = locals[nm];
+		pybind11::object locals = get_locals();
+		pybind11::object obj = locals[nm.c_str()];
 
 		if(obj.is_none()) // We never actually get here, an exception will have been thrown.
 			std::cout << "object unknown" << std::endl;
 		else {
 			// We can include this Python object into the expression only if it is an Ex object.
-			boost::python::extract<std::shared_ptr<Ex> > extract_Ex(obj);
-			if(extract_Ex.check()) {
-				std::shared_ptr<Ex> ex = extract_Ex();
-				return ex;
+			try {
+				return obj.cast<std::shared_ptr<Ex>>();
 				}
-			// getting python objects included is tricky because of memory management of the generated Ex.
-			//			boost::python::extract<int> extract_int(obj);
-			//			if(extract_int.check()) {
-			//				int x = extract_int();
-			//				std::ostringstream str;
-			//				str << "Ex('" << x << "')" << std::ends;
-			//				std::cout << "recursive for " << str.str() << std::endl;
-			//				return fetch_from_python(str.str());
-			//				}
-			std::cout << nm << " is not of type cadabra.Ex" << std::endl;
-			return 0;
+			catch(const pybind11::cast_error& e) {
+				std::cout << nm << " is not of type cadabra.Ex" << std::endl;
+				}
 			}
 		}
-	catch(boost::python::error_already_set const &) {
+	catch(pybind11::error_already_set const &) {
 		// In order to prevent the error from propagating, we have to read
 		// it out. And in any case, we want to give some feedback to the user.
 		std::string err = parse_python_exception();
@@ -388,14 +413,14 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 
 
 
-bool __eq__Ex_Ex(const Ex& one, const Ex& other) 
+bool __eq__Ex_Ex(std::shared_ptr<Ex> one, std::shared_ptr<Ex> other) 
 	{
-	return tree_equal(&(get_kernel_from_scope()->properties), one, other);
+	return tree_equal(&(get_kernel_from_scope()->properties), *one, *other);
 	}
 
-bool __eq__Ex_int(const Ex& one, int other) 
+bool __eq__Ex_int(std::shared_ptr<Ex> one, int other) 
 	{
-	Ex ex(other);
+	auto ex=std::make_shared<Ex>(other);
 	return __eq__Ex_Ex(one, ex);
 	}
 
@@ -406,77 +431,52 @@ bool __eq__Ex_int(const Ex& one, int other)
 // of Ex on the Python side, so all creation of Ex objects in Python goes
 // through these two functions.
 
-std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref=true) 
+std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref, Kernel *kernel)
 	{
 	auto ptr = std::make_shared<Ex>();
-
-	// std::cerr << ex_ << std::endl;
-	
 	// Parse the string expression.
-
 	Parser parser(ptr);
 	std::stringstream str(ex_);
 
 	try {
-	  //	  std::cerr << "parsing " << ex_ << std::endl;
 		str >> parser;
-//		Ex::print_recursive_treeform(std::cout, ptr->begin());
 		}
 	catch(std::exception& except) {
-	  //	  std::cerr << "cannot parse " << ex_ << std::endl;
 		throw ParseException("Cannot parse");
 		}
 	parser.finalise();
-	//	std::cerr << "finalised" << std::endl;
 
 	// First pull in any expressions referred to with @(...) notation, because the
 	// full expression may not have consistent indices otherwise.
-	pull_in(ptr);
+	pull_in(ptr, kernel);
 	//	std::cerr << "pulled in" << std::endl;
    
 	// Basic cleanup of rationals and subtractions, followed by
    // cleanup of nested sums and products.
-	Kernel *kernel=get_kernel_from_scope();
 	pre_clean_dispatch_deep(*kernel, *ptr);
 	cleanup_dispatch_deep(*kernel, *ptr);
 	check_index_consistency(*kernel, *ptr, (*ptr).begin());
-	call_post_process(*kernel, *ptr);
+	call_post_process(*kernel, ptr);
 	//	std::cerr << "cleaned up" << std::endl;
 
-	// The local variable stack is not writeable so we cannot insert '_'
-	// as a local variable. Instead, we push it onto the global stack.
-	
-	if(make_ref) {
-	  //	  std::cerr << "making ref" << std::endl;
-	  auto globals_c = PyEval_GetGlobals();
-	  if(globals_c!=NULL) {
-	    // std::cerr << "globals_c non-null" << std::endl;
-	    boost::python::object globals(boost::python::borrowed(globals_c));
-	    // std::cerr << "inserting ref" << std::endl;
-	    globals["_"]=ptr;
-	  }
-	}
-	// std::cerr << "make_ex_from_string done" << std::endl;
 	return ptr;
 	}
 
 std::shared_ptr<Ex> construct_Ex_from_string(const std::string& ex_) 
 	{
-	return make_Ex_from_string(ex_, true);
+	Kernel *k=get_kernel_from_scope();
+	return make_Ex_from_string(ex_, true, k);
 	}
 
 std::shared_ptr<Ex> construct_Ex_from_string_2(const std::string& ex_, bool add_ref) 
 	{
-	return make_Ex_from_string(ex_, add_ref);
+	Kernel *k=get_kernel_from_scope();
+	return make_Ex_from_string(ex_, add_ref, k);
 	}
 
 std::shared_ptr<Ex> make_Ex_from_int(int num, bool make_ref=true)
 	{
 	auto ptr = std::make_shared<Ex>(num);
-	if(make_ref) {
-		boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-		globals["_"]=ptr;
-		}
 	return ptr;
 	}
 
@@ -556,7 +556,7 @@ Ex operator-(const Ex& ex1, const Ex& ex2)
 
 std::string init_ipython()
 	{
-	boost::python::object obj = boost::python::exec("from IPython.display import Math");
+	pybind11::exec("from IPython.display import Math");
 	return "Cadabra typeset output for IPython notebook initialised.";
 	}
 
@@ -564,13 +564,13 @@ std::string init_ipython()
 // (FIXME: should be) displayed in input form, i.e. they can be fed back into Python.
 // FIXME: most of this has nothing to do with Python, factor back into core.
 
-boost::python::list list_properties()
+pybind11::list list_properties()
 	{
 //	std::cout << "listing properties" << std::endl;
 	Kernel *kernel=get_kernel_from_scope();
 	Properties& props=kernel->properties;
 
-	boost::python::list ret;
+	pybind11::list ret;
 	std::string res;
 	bool multi=false;
 	for(auto it=props.pats.begin(); it!=props.pats.end(); ++it) {
@@ -614,7 +614,7 @@ boost::python::list list_properties()
 	return ret;
 	}
 
-//boost::python::list indices() 
+//pybind11::list indices() 
 //	{
 //	Kernel *kernel=get_kernel_from_scope();
 //	}
@@ -628,94 +628,6 @@ std::string print_tree(Ex *ex)
 	return str.str();
 	}
 
-// Setup logic to pass C++ exceptions down to Python properly.
- 
-PyObject *ParseExceptionType = NULL;
-PyObject *ArgumentExceptionType = 0;
-PyObject *ConsistencyExceptionType = 0;
-PyObject *RuntimeExceptionType = 0;
-PyObject *NonScalarExceptionType = NULL;
-PyObject *InternalErrorType = NULL;
-PyObject *NotYetImplementedType = NULL;
-
-// Create a new Python exception class which derives from Exception (as it should to
-// be a good Python exception). Taken from http://stackoverflow.com/questions/11448735.
-PyObject* createExceptionClass(const char* name, PyObject* baseTypeObj = PyExc_Exception)
-	{
-	std::string scope_name = boost::python::extract<std::string>(boost::python::scope().attr("__name__"));
-	std::string qualified0 = scope_name + "." + name;
-	char*       qualified1 = const_cast<char*>(qualified0.c_str());
-	
-	PyObject* typeObj = PyErr_NewException(qualified1, baseTypeObj, 0);
-	if(!typeObj) boost::python::throw_error_already_set();
-	boost::python::scope().attr(name) = boost::python::handle<>(boost::python::borrowed(typeObj));
-	return typeObj;
-	}
-
-// Handler to translate a C++ exception and pass it on as a Python exception
-void translate_ArgumentException(const ArgumentException& x) 
-	{
-	assert(ArgumentExceptionType != 0);
-	boost::python::object exc(x); // wrap the C++ exception
-//	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));
-//	exc_t.attr("cause") = exc; // add the wrapped exception to the Python exception
-	
-//    PyErr_SetString(ArgumentExceptionType, x.what());
-	PyErr_SetObject(ArgumentExceptionType, exc.ptr()); //exc_t.ptr());
-	}
-
-void translate_ConsistencyException(const ConsistencyException& x) 
-	{
-	assert(ConsistencyExceptionType != 0);
-	boost::python::object exc(x); // wrap the C++ exception
-//	boost::python::object exc_t(boost::python::handle<>(boost::python::borrowed(ArgumentExceptionType)));
-//	exc_t.attr("cause") = exc; // add the wrapped exception to the Python exception
-	
-//    PyErr_SetString(ArgumentExceptionType, x.what());
-	PyErr_SetObject(ConsistencyExceptionType, exc.ptr()); //exc_t.ptr());
-	}
-
-void translate_ParseException(const ParseException &e)
-	{
-	assert(ParseExceptionType != NULL);
-	boost::python::object pythonExceptionInstance(e);
-	PyErr_SetObject(ParseExceptionType, pythonExceptionInstance.ptr());
-	}
-
-void translate_RuntimeException(const RuntimeException &e)
-	{
-	assert(RuntimeExceptionType != NULL);
-	boost::python::object pythonExceptionInstance(e);
-	PyErr_SetObject(RuntimeExceptionType, pythonExceptionInstance.ptr());
-	}
-
-//void translate_ArgumentException(const ArgumentException &e)
-//	{
-//	assert(ArgumentExceptionType != NULL);
-//	boost::python::object pythonExceptionInstance(e);
-//	PyErr_SetObject(ArgumentExceptionType, pythonExceptionInstance.ptr());
-//	}
-
-void translate_NonScalarException(const NonScalarException &e)
-	{
-	assert(NonScalarExceptionType != NULL);
-	boost::python::object pythonExceptionInstance(e);
-	PyErr_SetObject(NonScalarExceptionType, pythonExceptionInstance.ptr());
-	}
-
-void translate_InternalError(const InternalError &e)
-	{
-	assert(InternalErrorType != NULL);
-	boost::python::object pythonExceptionInstance(e);
-	PyErr_SetObject(InternalErrorType, pythonExceptionInstance.ptr());
-	}
-
-void translate_NotYetImplemented(const NotYetImplemented &e)
-	{
-	assert(NotYetImplementedType != NULL);
-	boost::python::object pythonExceptionInstance(e);
-	PyErr_SetObject(NotYetImplementedType, pythonExceptionInstance.ptr());
-	}
 
 // Return the kernel (with symbol __cdbkernel__) in local scope if
 // any, or the one in global scope if none is available in local
@@ -723,49 +635,44 @@ void translate_NotYetImplemented(const NotYetImplemented &e)
 
 Kernel *get_kernel_from_scope()
 	{
-	// Lookup the kernel in the local/global scope. 
-	boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
-	Kernel *local_kernel=0;
+	Kernel *kernel=nullptr;
+	
+	// Try and find the kernel in the local scope
 	try {
-		boost::python::object obj = locals["__cdbkernel__"];
-		local_kernel = boost::python::extract<Kernel *>(obj);
+		// Get from the python localcs dict
+		pybind11::object locals = get_locals();
+		kernel = locals["__cdbkernel__"].cast<Kernel*>();
 		}
-	catch(boost::python::error_already_set& err) {
-		std::string err2 = parse_python_exception();
-		local_kernel=0;
+	catch (const pybind11::error_already_set& err) {
+		// __cdbkernel__ not found in locals dict
+		kernel = nullptr;
 		}
-	if(local_kernel!=0)  {
-		return local_kernel;
-		}
-
-	// If there is no kernel in local scope, find one in global scope.
-
- 	boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-	Kernel *global_kernel=0;
-	try {
-		boost::python::object obj = globals["__cdbkernel__"];
-		global_kernel = boost::python::extract<Kernel *>(obj);
-		}
-	catch(boost::python::error_already_set& err) {
-		std::string err2 = parse_python_exception();
-		global_kernel=0;
+	if (kernel)  {
+		// Return if found
+		return kernel;
 		}
 	
-	if(global_kernel!=0) {
-		return global_kernel;
+	// No kernel in local scope, find one in global scope.
+	try {
+		// Get from the python globals dict
+		pybind11::object globals = get_globals();
+		kernel = globals["__cdbkernel__"].cast<Kernel*>();
 		}
-
-	// If there is no kernel in global scope either, construct one.
-
-	global_kernel = new Kernel();
-
-// Store this as a Python object, making sure (using boost::ref) that the
-	// kernel Python refers to by __cdbkernel__ is the same object as the one
-	// we will return to our caller.
-	globals["__cdbkernel__"]=boost::ref(global_kernel);
-	inject_defaults(global_kernel);
-
-	return global_kernel;
+	catch(pybind11::error_already_set& err) {
+		// __cdbkernel__ not found in globals dict
+		kernel = nullptr;
+		}
+	if(kernel) {
+		//Return if found
+		return kernel;
+		}
+	
+	// No kernel in local or global scope, construct a new global one
+	kernel = new Kernel();
+	inject_defaults(kernel);
+	pybind11::object globals = get_globals();
+	globals["__cdbkernel__"] = kernel;
+	return kernel;
 	}
 
 // The following handle setup of local scope for Cadabra properties.
@@ -795,62 +702,62 @@ void inject_defaults(Kernel *k)
 	// Create and inject properties; these then get owned by the kernel.
 	post_process_enabled=false;
 
-	k->inject_property(new Distributable(),      make_Ex_from_string("\\prod{#}",false), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\prod{#}",false), 0);
-	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\prod{#}",false), 0);
-	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new Distributable(),      make_Ex_from_string("\\prod{#}",false, k), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\prod{#}",false, k), 0);
+	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false, k), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\prod{#}",false, k), 0);
+	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\prod{#}",false, k), 0);
 	auto wi2=new WeightInherit();
 	wi2->combination_type = WeightInherit::multiplicative;
-	auto wa2=make_Ex_from_string("label=all, type=multiplicative", false);
-	k->inject_property(wi2,                      make_Ex_from_string("\\prod{#}",false), wa2);
+	auto wa2=make_Ex_from_string("label=all, type=multiplicative", false, k);
+	k->inject_property(wi2,                      make_Ex_from_string("\\prod{#}",false, k), wa2);
 
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\frac{#}",false), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\frac{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\frac{#}",false, k), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\frac{#}",false, k), 0);
 	
-	k->inject_property(new Distributable(),      make_Ex_from_string("\\wedge{#}",false), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false), 0);
+	k->inject_property(new Distributable(),      make_Ex_from_string("\\wedge{#}",false, k), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false, k), 0);
 //	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\wedge{#}",false), 0);
-	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\wedge{#}",false), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\wedge{#}",false, k), 0);
+	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\wedge{#}",false, k), 0);
 	auto wi4=new WeightInherit();
 	wi4->combination_type = WeightInherit::multiplicative;
-	auto wa4=make_Ex_from_string("label=all, type=multiplicative", false);
-	k->inject_property(wi4,                      make_Ex_from_string("\\wedge{#}",false), wa4);
+	auto wa4=make_Ex_from_string("label=all, type=multiplicative", false, k);
+	k->inject_property(wi4,                      make_Ex_from_string("\\wedge{#}",false, k), wa4);
 
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\sum{#}",false), 0);
-	k->inject_property(new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\sum{#}",false), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\sum{#}",false, k), 0);
+	k->inject_property(new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false, k), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\sum{#}",false, k), 0);
 	auto wi=new WeightInherit();
-	auto wa=make_Ex_from_string("label=all, type=additive", false);
-	k->inject_property(wi,                       make_Ex_from_string("\\sum{#}", false), wa);
+	auto wa=make_Ex_from_string("label=all, type=additive", false, k);
+	k->inject_property(wi,                       make_Ex_from_string("\\sum{#}", false, k), wa);
 
 	auto d = new Derivative();
 	d->hidden(true);
-	k->inject_property(d,                        make_Ex_from_string("\\cdbDerivative{#}",false), 0);
+	k->inject_property(d,                        make_Ex_from_string("\\cdbDerivative{#}",false, k), 0);
 	
-	k->inject_property(new Derivative(),         make_Ex_from_string("\\commutator{#}",false), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false), 0);
+	k->inject_property(new Derivative(),         make_Ex_from_string("\\commutator{#}",false, k), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false, k), 0);
 
-	k->inject_property(new Derivative(),         make_Ex_from_string("\\anticommutator{#}",false), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}",false), 0);
+	k->inject_property(new Derivative(),         make_Ex_from_string("\\anticommutator{#}",false, k), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}",false, k), 0);
 
-	k->inject_property(new Distributable(),      make_Ex_from_string("\\indexbracket{#}",false), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}",false), 0);
+	k->inject_property(new Distributable(),      make_Ex_from_string("\\indexbracket{#}",false, k), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}",false, k), 0);
 
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\pow{#}",false), 0);
+	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\pow{#}",false, k), 0);
 	auto wi3=new WeightInherit();
-	auto wa3=make_Ex_from_string("label=all, type=power", false);
-	k->inject_property(wi3,                      make_Ex_from_string("\\pow{#}",false), wa3);
+	auto wa3=make_Ex_from_string("label=all, type=power", false, k);
+	k->inject_property(wi3,                      make_Ex_from_string("\\pow{#}",false, k), wa3);
 
-	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\int{#}",false), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\int{#}",false), 0);
+	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\int{#}",false, k), 0);
+	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\int{#}",false, k), 0);
 
 	// Accents, necessary for proper display.
-	k->inject_property(new Accent(),             make_Ex_from_string("\\hat{#}",false), 0);
-	k->inject_property(new Accent(),             make_Ex_from_string("\\bar{#}",false), 0);
-	k->inject_property(new Accent(),             make_Ex_from_string("\\overline{#}",false), 0);
-	k->inject_property(new Accent(),             make_Ex_from_string("\\tilde{#}",false), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\hat{#}",false, k), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\bar{#}",false, k), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\overline{#}",false, k), 0);
+	k->inject_property(new Accent(),             make_Ex_from_string("\\tilde{#}",false, k), 0);
 
 	post_process_enabled=true;
 //	k->inject_property(new Integral(),           make_Ex_from_string("\\int{#}",false), 0);
@@ -875,7 +782,7 @@ std::string Property<Prop>::str_() const
 	std::ostringstream str;
 	str << "Attached property ";
 	prop->latex(str); // FIXME: this should call 'str' on the property, which does not exist yet
-	str << " to "+Ex_str_(*for_obj)+".";
+	str << " to "+Ex_str_(for_obj)+".";
 	return str.str();
 	}
 
@@ -889,7 +796,7 @@ std::string Property<Prop>::latex_() const
 
 	str << "\\text{Attached property ";
 	prop->latex(str);
-	std::string bare=Ex_latex_(*for_obj);
+	std::string bare=Ex_latex_(for_obj);
 	str << " to~}"+bare+".";
 	return str.str();
 	}
@@ -900,7 +807,7 @@ std::string Property<LaTeXForm>::latex_() const
 	std::ostringstream str;
 	str << "\\text{Attached property ";
 	prop->latex(str);
-	std::string bare=Ex_str_(*for_obj);
+	std::string bare=Ex_str_(for_obj);
 	boost::replace_all(bare, "\\", "$\\backslash{}$}");
 	str << " to {\\tt "+bare+"}.";
 	return str.str();
@@ -923,64 +830,75 @@ std::string Property<Prop>::repr_() const
 ProgressMonitor *pm=0;
 
 template<class F>
-Ex* dispatch_base(Ex& ex, F& algo, bool deep, bool repeat, unsigned int depth, bool pre_order)
+std::shared_ptr<Ex> dispatch_base(std::shared_ptr<Ex> ex, F& algo, bool deep, bool repeat, unsigned int depth, bool pre_order)
 	{
-	Ex::iterator it=ex.begin();
-	if(ex.is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
+	Ex::iterator it=ex->begin();
+	if(ex->is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
 		if(pm==0) {
 			try {
-				boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
-				boost::python::object obj = globals["server"];
-				pm = boost::python::extract<ProgressMonitor *>(obj); 
+				pybind11::object globals=get_globals();
+				pybind11::object obj = globals["server"];
+				pm = obj.cast<ProgressMonitor *>(); 
 				}
-			catch(boost::python::error_already_set& err) {
+			catch(pybind11::error_already_set& err) {
 				std::cerr << "Cannot find ProgressMonitor derived 'server' object." << std::endl;
 				}
 			}
 
 		algo.set_progress_monitor(pm);
 		if(!pre_order)
-			ex.update_state(algo.apply_generic(it, deep, repeat, depth));
+			ex->update_state(algo.apply_generic(it, deep, repeat, depth));
 		else
-			ex.update_state(algo.apply_pre_order(repeat));			
+			ex->update_state(algo.apply_pre_order(repeat));			
 		call_post_process(*get_kernel_from_scope(), ex);
 		}
-	return &ex;
+	return ex;
 	}
 
-Ex* map_sympy_wrapper(Ex& ex, std::string head)
+std::shared_ptr<Ex> map_sympy_wrapper(std::shared_ptr<Ex> ex, std::string head, pybind11::args args)
 	{
-	map_sympy algo(*get_kernel_from_scope(), ex, head);
+	std::vector<std::string> av;
+	for(auto& arg: args)
+		av.push_back(arg.cast<std::string>());
+	map_sympy algo(*get_kernel_from_scope(), *ex, head, av);
 	return dispatch_base(ex, algo, true, false, 0, true);
 	}
 
-void call_post_process(Kernel& kernel, Ex& ex) 
+#ifdef MATHEMATICA_FOUND
+std::shared_ptr<Ex> map_mma_wrapper(std::shared_ptr<Ex> ex, std::string head)
+	{
+	map_mma algo(*get_kernel_from_scope(), *ex, head);
+	return dispatch_base(ex, algo, true, false, 0, true);
+	}
+#endif
+
+void call_post_process(Kernel& kernel, std::shared_ptr<Ex> ex) 
 	{
 	// Find the 'post_process' function, and if found, turn off
 	// post-processing, then call the function on the current Ex.
 	if(post_process_enabled) {
-		if(ex.number_of_children(ex.begin())==0)
+		if(ex->number_of_children(ex->begin())==0)
 			return;
 
 		post_process_enabled=false;
 
-		boost::python::object post_process;
+		pybind11::object post_process;
 		
 		try {
 			// First try the locals.
-			boost::python::object locals(boost::python::borrowed(PyEval_GetLocals()));
+			pybind11::object locals = get_locals();
 			post_process = locals["post_process"];
 			// std::cerr << "local post_process" << std::endl;
 			}
-		catch(boost::python::error_already_set const &exc) {
+		catch(const pybind11::error_already_set& exc) {
 			// In order to prevent the error from propagating, we have to read it out. 			
 			std::string err = parse_python_exception();
 			try {
-				boost::python::object globals(boost::python::borrowed(PyEval_GetGlobals()));
+				pybind11::object globals = get_globals();
 				post_process = globals["post_process"];
 				// std::cerr << "global post_process" << std::endl;				
 				}
-			catch(boost::python::error_already_set const &exc) {
+			catch(const pybind11::error_already_set& exc) {
 				// In order to prevent the error from propagating, we have to read it out. 
 				std::string err = parse_python_exception();
 				post_process_enabled=true;
@@ -988,37 +906,37 @@ void call_post_process(Kernel& kernel, Ex& ex)
 				}
 			}
 		// std::cerr << "calling post-process" << std::endl;
-		post_process(boost::ref(kernel), boost::ref(ex));
+		post_process(std::ref(kernel), ex);
 		post_process_enabled=true;
 		}
 	}
 
 template<class F>
-Ex* dispatch_ex(Ex& ex, bool deep, bool repeat, unsigned int depth)
+std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex);
+	F algo(*get_kernel_from_scope(), *ex);
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
 template<class F, typename Arg1>
-Ex* dispatch_ex(Ex& ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)
+std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex, arg);
+	F algo(*get_kernel_from_scope(), *ex, arg);
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
 template<class F, typename Arg1, typename Arg2>
-Ex* dispatch_ex(Ex& ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
+std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
 	{
-	F algo(*get_kernel_from_scope(), ex, arg1, arg2);
+	F algo(*get_kernel_from_scope(), *ex, arg1, arg2);
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
-template<class F, typename... Args>
-Ex* dispatch_string(const std::string& ex, Args... args, bool deep, bool repeat, unsigned int depth)
+template<class F, typename Arg1, typename Arg2, typename Arg3>
+std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg1, Arg2 arg2, Arg3 arg3, bool deep, bool repeat, unsigned int depth)
 	{
-	auto exobj = make_Ex_from_string(ex, false);
-	return dispatch_ex<F, Args...>(*exobj, args..., deep, repeat, depth);
+	F algo(*get_kernel_from_scope(), *ex, arg1, arg2, arg3);
+	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
 
@@ -1061,39 +979,20 @@ Ex* dispatch_string(const std::string& ex, Args... args, bool deep, bool repeat,
 // First the ones with no argument, just a deep flag.
 
 template<class F>
-void def_algo_1(const std::string& name) 
+void def_algo_1(const std::string& name, pybind11::module& m) 
 	{
-	using namespace boost::python;
+	using namespace pybind11;
 
-	def(name.c_str(),  &dispatch_ex<F>,        (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
-		 return_internal_reference<1>() );
-//	def(name.c_str(),  &dispatch_string<F>, (arg("ex"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
-//		 return_value_policy<manage_new_object>() );
+	m.def(name.c_str(),
+		 &dispatch_ex<F>,
+		 arg("ex"),
+		 arg("deep")=true,
+		 arg("repeat")=false,
+		 arg("depth")=0,
+		 return_value_policy::reference_internal
+		 );
 	}
 
-// // Then the ones which take an additional Ex argument (e.g. substitute).
-// 
-// template<class F>
-// void def_algo_2(const std::string& name) 
-// 	{
-// 	using namespace boost::python;
-// 
-// 	def(name.c_str(),  &dispatch_2_ex_ex<F>,     (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
-// 		 return_internal_reference<1>() );
-// 	
-// 	// The algorithm returns a pointer to the 'ex' argument, which for the 'ex_string' version of the
-// 	// algorithm is something that was already present on the python side. Hence return_internal_reference,
-// 	// not manage_new_object.
-// 
-// 	def(name.c_str(),  &dispatch_2_ex_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
-// 		 return_internal_reference<1>() );
-// 
-// 	// The following does lead to a new object being created from the string, and this new object needs
-// 	// to be managed.
-// 
-// 	def(name.c_str(),  &dispatch_2_string_string<F>, (arg("ex"),arg("args"),arg("deep")=true,arg("repeat")=false,arg("depth")=0), 
-// 		 return_value_policy<manage_new_object>() );
-// 	}
 
 // Declare a property. These take one Ex to which they will be attached, and
 // one optional additional Ex which is a list of parameters. The latter are thus always
@@ -1102,95 +1001,71 @@ void def_algo_1(const std::string& name)
 // we can make this more complicated later). 
 
 template<class P>
-void def_prop()
+void def_prop(pybind11::module& m)
 	{
-	using namespace boost::python;
-	P *p = new P;
+	using namespace pybind11;
 
-	class_<Property<P>, bases<BaseProperty> > pr(p->name().c_str(), init<std::shared_ptr<Ex>, 
-																optional<std::shared_ptr<Ex> > >());
-
-	delete p;
-
-	pr.def("__str__", &Property<P>::str_).def("__repr__", &Property<P>::repr_).def("_latex_", &Property<P>::latex_);
+	class_<Property<P>, std::shared_ptr<Property<P>>, BaseProperty>(m, std::make_unique<P>()->name().c_str())
+		.def(
+			init<std::shared_ptr<Ex>, std::shared_ptr<Ex>>(),
+			arg("ex"),
+			arg("param")
+			  )
+		.def("__str__", &Property<P>::str_)
+		.def("__repr__", &Property<P>::repr_)
+		.def("_latex_", &Property<P>::latex_);
 	}
 
+// All this class does is provide a trampoline class
+// for pybind to properly handle the constructor
+// of ProgressMonitor
 
-// Converter from Python iterables to std::vector and friends.
-// http://stackoverflow.com/questions/15842126/
-
-class iterable_converter {
+class PyProgressMonitor : public ProgressMonitor {
 	public:
-		template <typename Container>
-		iterable_converter&
-		from_python() 
-			{
-			boost::python::converter::registry::push_back(
-				&iterable_converter::convertible,
-				&iterable_converter::construct<Container>,
-				boost::python::type_id<Container>());
-
-			return *this;
-			}
-
-		static void* convertible(PyObject* object)
-			{
-			return PyObject_GetIter(object) ? object : NULL;
-			}
-
-		template <typename Container>
-		static void construct(PyObject* object, boost::python::converter::rvalue_from_python_stage1_data* data)
-			{
-			namespace python = boost::python;
-			// Object is a borrowed reference, so create a handle indicting it is
-			// borrowed for proper reference counting.
-			python::handle<> handle(python::borrowed(object));
-			
-			// Obtain a handle to the memory block that the converter has allocated
-			// for the C++ type.
-			typedef python::converter::rvalue_from_python_storage<Container> storage_type;
-			void* storage = reinterpret_cast<storage_type*>(data)->storage.bytes;
-			
-			typedef python::stl_input_iterator<typename Container::value_type> iterator;
-			
-			// Allocate the C++ type into the converter's memory block, and assign
-			// its handle to the converter's convertible variable.  The C++
-			// container is populated by passing the begin and end iterators of
-			// the python object to the container's constructor.
-			new (storage) Container(
-				iterator(python::object(handle)), // begin
-				iterator());                      // end
-			data->convertible = storage;
-			}
+		using ProgressMonitor::ProgressMonitor;
 };
+
+
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
 // as the various algorithms that can act on these and the properties that can
 // be attached to Cadabra patterns.
-// http://stackoverflow.com/questions/6050996/boost-python-overloaded-functions-with-default-arguments-problem
 
-BOOST_PYTHON_MODULE(cadabra2)
+PYBIND11_MODULE(cadabra2, m)
 	{
-	using namespace boost::python;
-
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
 	// pull that into the interpreter scope in the 'cadabra2_default.py' file.
-	class_<Kernel, boost::noncopyable> pyKernel("Kernel", init<>());
-	boost::python::object kernel=pyKernel();
-	inject_defaults(boost::python::extract<Kernel*>(kernel));
-	boost::python::scope().attr("__cdbkernel__")=kernel;
-
+	pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
+		.def(pybind11::init<>());
+	Kernel* kernel = create_scope();
+	m.attr("__cdbkernel__") = pybind11::cast(kernel);
+	
+	// Interface the Stopwatch class
+	pybind11::class_<Stopwatch>(m, "Stopwatch")
+		.def(pybind11::init<>())
+		.def("start", &Stopwatch::start)
+		.def("stop", &Stopwatch::stop)
+		.def("reset", &Stopwatch::reset)
+		.def("seconds", &Stopwatch::seconds)
+		.def("useconds", &Stopwatch::useconds)
+		.def("__str__", [](const Stopwatch& s) {
+				std::stringstream ss;
+				ss << s;
+				return ss.str();
+				});
+	
 	// Make our profiling class known to the Python world.
-	class_<ProgressMonitor>("ProgressMonitor")
+	pybind11::class_<ProgressMonitor, PyProgressMonitor>(m, "ProgressMonitor")\
+		.def(pybind11::init<>())
 		.def("print", &ProgressMonitor::print)
 		.def("totals", &ProgressMonitor_totals_helper);
 	
-	class_<ProgressMonitor::Total>("Total")
+	pybind11::class_<ProgressMonitor::Total>(m, "Total")
 		.def_readonly("name", &ProgressMonitor::Total::name)
 		.def_readonly("call_count", &ProgressMonitor::Total::call_count)
-		.def_readonly("time_spent", &ProgressMonitor::Total::time_spent_as_long)
+//		.def_readonly("time_spent", &ProgressMonitor::Total::time_spent_as_long)
 		.def_readonly("total_steps", &ProgressMonitor::Total::total_steps)
 		.def("__str__", &ProgressMonitor::Total::str);
 
@@ -1199,18 +1074,21 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// make_Ex_from_... functions, which take care of creating a '_' reference
    // on the Python side as well.
 
-//	class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", boost::python::no_init);
-	class_<Ex, std::shared_ptr<Ex> >("Ex", boost::python::no_init)
-		.def("__init__", boost::python::make_constructor(&construct_Ex_from_string))
-		.def("__init__", boost::python::make_constructor(&construct_Ex_from_string_2))
-		.def("__init__",    boost::python::make_constructor(&construct_Ex_from_int))
-		.def("__init__",    boost::python::make_constructor(&construct_Ex_from_int_2))
+//	pybind11::class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", pybind11::no_init);
+	pybind11::class_<Ex, std::shared_ptr<Ex> >(m, "Ex")
+		.def(pybind11::init(&construct_Ex_from_string))
+		.def(pybind11::init(&construct_Ex_from_string_2))
+		.def(pybind11::init(&construct_Ex_from_int))
+		.def(pybind11::init(&construct_Ex_from_int_2))
 		.def("__str__",     &Ex_str_)
 		.def("_latex_",     &Ex_latex_)
 		.def("__repr__",    &Ex_repr_)
 		.def("__eq__",      &__eq__Ex_Ex)
 		.def("__eq__",      &__eq__Ex_int)
-		.def("_sympy_",     &Ex_to_Sympy)
+		.def("_sympy_",     &Ex_to_Sympy)		
+		.def("sympy_form",  &Ex_to_Sympy_string)
+		.def("mma_form",    &Ex_to_MMA, pybind11::arg("unicode")=true)    // standardize on this
+		.def("input_form",  &Ex_to_input) 
 		.def("__getitem__", &Ex_getitem)
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
@@ -1218,10 +1096,10 @@ BOOST_PYTHON_MODULE(cadabra2)
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)
-		.def(self + self)
-		.def(self - self);
+		.def(pybind11::self + pybind11::self)
+		.def(pybind11::self - pybind11::self);
 	
-	enum_<Algorithm::result_t>("result_t")
+	pybind11::enum_<Algorithm::result_t>(m, "result_t")
 		.value("checkpointed", Algorithm::result_t::l_checkpointed)
 		.value("changed", Algorithm::result_t::l_applied)
 		.value("unchanged", Algorithm::result_t::l_no_action)
@@ -1232,25 +1110,34 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Inspection algorithms and other global functions which do not fit into the C++
    // framework anymore.
 
-	def("tree", &print_tree);
-	def("init_ipython", &init_ipython);
-	def("properties", &list_properties);
-	def("map_sympy", &map_sympy_wrapper, (arg("ex"), arg("function")=""), return_internal_reference<1>());
-
-	def("create_scope", &create_scope, 
-		 return_value_policy<manage_new_object>() );
-	def("create_scope_from_global", &create_scope_from_global, 
-		 return_value_policy<manage_new_object>());
-	def("create_empty_scope", &create_empty_scope,
-		 return_value_policy<manage_new_object>());
+	m.def("tree", &print_tree);
+	m.def("init_ipython", &init_ipython);
+	m.def("properties", &list_properties);
+	m.def("map_sympy", &map_sympy_wrapper,
+			pybind11::arg("ex"),
+			pybind11::arg("function")="",
+			pybind11::return_value_policy::reference_internal);
+#ifdef MATHEMATICA_FOUND
+	m.def("map_mma",   &map_mma_wrapper,
+			pybind11::arg("ex"),
+			pybind11::arg("function")="",
+			pybind11::return_value_policy::reference_internal);
+#endif
+	
+	m.def("create_scope", &create_scope, 
+			pybind11::return_value_policy::take_ownership);
+	m.def("create_scope_from_global", &create_scope_from_global,
+			pybind11::return_value_policy::take_ownership);			
+	m.def("create_empty_scope", &create_empty_scope,
+			pybind11::return_value_policy::take_ownership);			
 
 	// Algorithms which spit out a new Ex (or a list of new Exs), instead of 
 	// modifying the existing one. 
 
-	def("terms", &terms);
+	m.def("terms", &terms);
 
-	def("lhs", &lhs);
-	def("rhs", &rhs);
+	m.def("lhs", &lhs);
+	m.def("rhs", &rhs);
 
 	// We do not use implicitly_convertible to convert a string
 	// parameter to an Ex object automatically (it never
@@ -1260,193 +1147,179 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// Ex declaration.
 
 	// Algorithms with only the Ex as argument.
-	def_algo_1<canonicalise>("canonicalise");
-	def_algo_1<collect_components>("collect_components");
-	def_algo_1<collect_factors>("collect_factors");
- 	def_algo_1<collect_terms>("collect_terms");
- 	def_algo_1<combine>("combine");
-	def_algo_1<decompose_product>("decompose_product");
-	def_algo_1<distribute>("distribute");
-	def_algo_1<eliminate_kronecker>("eliminate_kronecker");
- 	def_algo_1<expand>("expand");
-	def_algo_1<expand_delta>("expand_delta");
-	def_algo_1<expand_diracbar>("expand_diracbar");
-	def_algo_1<expand_power>("expand_power");
-	def_algo_1<flatten_sum>("flatten_sum");
-	def_algo_1<indexsort>("indexsort");
-	def_algo_1<product_rule>("product_rule");
-	def_algo_1<reduce_delta>("reduce_delta");
-//	def_algo_1<reduce_sub>("reduce_sub");
-	def_algo_1<sort_product>("sort_product");
-	def_algo_1<sort_spinors>("sort_spinors");
-	def_algo_1<sort_sum>("sort_sum");
-	def_algo_1<young_project_product>("young_project_product");
+	def_algo_1<canonicalise>("canonicalise", m);
+	def_algo_1<collect_components>("collect_components", m);
+	def_algo_1<collect_factors>("collect_factors", m);
+ 	def_algo_1<collect_terms>("collect_terms", m);
+ 	def_algo_1<combine>("combine", m);
+	def_algo_1<decompose_product>("decompose_product", m);
+	def_algo_1<distribute>("distribute", m);
+	def_algo_1<eliminate_kronecker>("eliminate_kronecker", m);
+ 	def_algo_1<expand>("expand", m);
+	def_algo_1<expand_delta>("expand_delta", m);
+	def_algo_1<expand_diracbar>("expand_diracbar", m);
+	def_algo_1<expand_power>("expand_power", m);
+	def_algo_1<flatten_sum>("flatten_sum", m);
+	def_algo_1<indexsort>("indexsort", m);
+	def_algo_1<lr_tensor>("lr_tensor", m);
+	def_algo_1<product_rule>("product_rule", m);
+	def_algo_1<reduce_delta>("reduce_delta", m);
+//	def_algo_1<reduce_sub>("reduce_sub", m);
+	def_algo_1<sort_product>("sort_product", m);
+	def_algo_1<sort_spinors>("sort_spinors", m);
+	def_algo_1<sort_sum>("sort_sum", m);
+	def_algo_1<young_project_product>("young_project_product", m);
 
-	def("complete", &dispatch_ex<complete, Ex&>, 
-		 (arg("ex"),arg("add"),
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("complete", &dispatch_ex<complete, Ex>, 
+		 pybind11::arg("ex"),pybind11::arg("add"),
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("drop_weight", &dispatch_ex<drop_weight, Ex&>, 
-		 (arg("ex"),arg("condition"),
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("drop_weight", &dispatch_ex<drop_weight, Ex>, 
+		 pybind11::arg("ex"),pybind11::arg("condition"),
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("eliminate_metric", &dispatch_ex<eliminate_metric, Ex&>, 
-	    (arg("ex"),arg("preferred")=new Ex(), 
-	     arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-	    return_internal_reference<1>() );
+	m.def("eliminate_metric", &dispatch_ex<eliminate_metric, Ex>, 
+			pybind11::arg("ex"),
+			pybind11::arg("preferred")=std::make_shared<Ex>(),
+			pybind11::arg("deep")=true,
+			pybind11::arg("repeat")=false,
+			pybind11::arg("depth")=0,
+			pybind11::return_value_policy::reference_internal );
 
-	def("keep_weight", &dispatch_ex<keep_weight, Ex&>, 
-		 (arg("ex"),arg("condition"),
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("keep_weight", &dispatch_ex<keep_weight, Ex>, 
+		 pybind11::arg("ex"),pybind11::arg("condition"),
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex&>, 
-		 (arg("ex"),arg("away_from"),
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex>, 
+		 pybind11::arg("ex"),pybind11::arg("away_from"),
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 
-		 (arg("ex"),arg("modulo_monoterm")=false,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 
+		 pybind11::arg("ex"),pybind11::arg("modulo_monoterm")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("join_gamma",  &dispatch_ex<join_gamma, bool, bool>, 
-		 (arg("ex"),arg("expand")=true,arg("use_gendelta")=false,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("join_gamma",  &dispatch_ex<join_gamma, bool, bool>, 
+		 pybind11::arg("ex"),pybind11::arg("expand")=true,pybind11::arg("use_gendelta")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	// Automatically convert from Python sets and so on of integers to std::vector.
-	iterable_converter().from_python<std::vector<int> >();
-
-	// Automatically convert from C++ vectors to Python lists.
-//	boost::python::class_<std::vector<ProgressMonitor::Total>>("TotalVector")
-	
-//	.def(boost::python::vector_indexing_suite<std::vector<ProgressMonitor::Total>>());
-
-	
-	def("einsteinify", &dispatch_ex<einsteinify, Ex&>,
-	    (arg("ex"), arg("metric")=new Ex(),
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("einsteinify", &dispatch_ex<einsteinify, Ex>,
+			pybind11::arg("ex"), pybind11::arg("metric")=std::make_shared<Ex>(),
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 		  
-	def("evaluate", &dispatch_ex<evaluate, Ex&, bool>,
-		 (arg("ex"), arg("components")=new Ex(), arg("rhsonly")=false,
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("evaluate", &dispatch_ex<evaluate, Ex, bool, bool>,
+			pybind11::arg("ex"), pybind11::arg("components")=Ex(), pybind11::arg("rhsonly")=false, pybind11::arg("simplify")=true,
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 		  
-	def("keep_terms", &dispatch_ex<keep_terms, std::vector<int> >,
-		 (arg("ex"), 
-		  arg("terms"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("keep_terms", &dispatch_ex<keep_terms, std::vector<int> >,
+		 pybind11::arg("ex"), 
+		  pybind11::arg("terms"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("young_project", &dispatch_ex<young_project, std::vector<int>, std::vector<int> >, 
-		 (arg("ex"),
-		  arg("shape"), arg("indices"), 
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("young_project", &dispatch_ex<young_project, std::vector<int>, std::vector<int> >, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("shape"), pybind11::arg("indices"), 
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("order", &dispatch_ex<order, Ex&, bool>, 
-		 (arg("ex"),
-		  arg("factors"), arg("anticommuting")=false,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("order", &dispatch_ex<order, Ex, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("order", &dispatch_ex<order, Ex&, bool>, 
-		 (arg("ex"),
-		  arg("factors"), arg("anticommuting")=false,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("order", &dispatch_ex<order, Ex, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("epsilon_to_delta", &dispatch_ex<epsilon_to_delta, bool>,
-		 (arg("ex"),
-		  arg("reduce")=true,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("epsilon_to_delta", &dispatch_ex<epsilon_to_delta, bool>,
+		 pybind11::arg("ex"),
+		  pybind11::arg("reduce")=true,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("rename_dummies", &dispatch_ex<rename_dummies, std::string, std::string>, 
-		 (arg("ex"),
-		  arg("set")="", arg("to")="",
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("rename_dummies", &dispatch_ex<rename_dummies, std::string, std::string>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("set")="", pybind11::arg("to")="",
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("sym", &dispatch_ex<sym, Ex&, bool>, 
-		 (arg("ex"),
-		  arg("items"), arg("antisymmetric")=false,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("sym", &dispatch_ex<sym, Ex, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("items"), pybind11::arg("antisymmetric")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	def("asym", &dispatch_ex<sym, Ex&, bool>, 
-		 (arg("ex"),
-		  arg("items"), arg("antisymmetric")=true,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("asym", &dispatch_ex<sym, Ex, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("items"), pybind11::arg("antisymmetric")=true,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	// Algorithms which take a second Ex as argument.
-	def_algo_1<lr_tensor>("lr_tensor");
-
-	def("factor_in", &dispatch_ex<factor_in, Ex&>, 
-		 (arg("ex"),
-		  arg("factors"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("factor_out", &dispatch_ex<factor_out, Ex&, bool>, 
-		 (arg("ex"),
-		  arg("factors"),arg("right")=false,
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("fierz", &dispatch_ex<fierz, Ex&>, 
-		 (arg("ex"),
-		  arg("spinors"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("substitute", &dispatch_ex<substitute, Ex&>, 
-		 (arg("ex"),
-		  arg("rules"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("take_match", &dispatch_ex<take_match, Ex&>, 
-		 (arg("ex"),
-		  arg("rules"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("replace_match", &dispatch_ex<replace_match>, 
-		 (arg("ex"),
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex&, Ex&>, 
-		 (arg("ex"),arg("preferred"),arg("converters"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("vary", &dispatch_ex<vary, Ex&>, 
-		 (arg("ex"),
-		  arg("rules"),
-		  arg("deep")=false,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("split_gamma", &dispatch_ex<split_gamma, bool>, 
-		 (arg("ex"),
-		  arg("on_back"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-	def("split_index", &dispatch_ex<split_index, Ex&>, 
-		 (arg("ex"),
-		  arg("rules"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
-
-	def("split_index", &dispatch_ex<split_index, Ex&>, 
-		 (arg("ex"),
-		  arg("rules"),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("factor_in", &dispatch_ex<factor_in, Ex>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("factors"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("factor_out", &dispatch_ex<factor_out, Ex, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("factors"),pybind11::arg("right")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("fierz", &dispatch_ex<fierz, Ex>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("spinors"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("substitute", &dispatch_ex<substitute, Ex>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("rules"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("take_match", &dispatch_ex<take_match, Ex>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("rules"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("replace_match", &dispatch_ex<replace_match>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex, Ex>, 
+		 pybind11::arg("ex"),pybind11::arg("preferred"),pybind11::arg("converters"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("vary", &dispatch_ex<vary, Ex>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("rules"),
+		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("split_gamma", &dispatch_ex<split_gamma, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("on_back"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("split_index", &dispatch_ex<split_index, Ex>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("rules"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 	
-	def("unwrap", &dispatch_ex<unwrap, Ex&>, 
-		 (arg("ex"),
-		  arg("wrapper")=new Ex(),
-		  arg("deep")=true,arg("repeat")=false,arg("depth")=0),
-		 return_internal_reference<1>() );
+	m.def("unwrap", &dispatch_ex<unwrap, Ex>, 
+		 pybind11::arg("ex"),
+			pybind11::arg("wrapper")=Ex(),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 	
 	// Properties are declared as objects on the Python side as well. They all take two
 	// Ex objects as constructor parameters: the first one is the object(s) to which the
@@ -1459,100 +1332,62 @@ BOOST_PYTHON_MODULE(cadabra2)
 	// also has the advantage that we can refer to it again if necessary from the Python side,
 	// and keeps C++ and Python more in sync.
 
-	class_<BaseProperty>("Property", no_init);
+	pybind11::class_<BaseProperty, std::shared_ptr<BaseProperty>>(m, "Property");
 
-	def_prop<Accent>();
-	def_prop<AntiCommuting>();
-	def_prop<AntiSymmetric>();
-	def_prop<Coordinate>();
-	def_prop<Commuting>();
-	def_prop<CommutingAsProduct>();
-	def_prop<CommutingAsSum>();
-	def_prop<DAntiSymmetric>();
-	def_prop<Depends>();
-	def_prop<Derivative>();
-	def_prop<Diagonal>();
-	def_prop<DifferentialForm>();
-	def_prop<Distributable>();
-	def_prop<DiracBar>();
-	def_prop<EpsilonTensor>();
-	def_prop<ExteriorDerivative>();
-	def_prop<FilledTableau>();
-	def_prop<GammaMatrix>();
-	def_prop<ImaginaryI>();	
-	def_prop<ImplicitIndex>();	
-	def_prop<IndexInherit>();
-	def_prop<Indices>();	
-	def_prop<Integer>();
-	def_prop<InverseMetric>();
-	def_prop<KroneckerDelta>();
-	def_prop<LaTeXForm>();
-	def_prop<Matrix>();
-	def_prop<Metric>();
-	def_prop<NonCommuting>();
-	def_prop<NumericalFlat>();
-	def_prop<PartialDerivative>();
-	def_prop<RiemannTensor>();
-	def_prop<SatisfiesBianchi>();
-	def_prop<SelfAntiCommuting>();
-	def_prop<SelfCommuting>();
-	def_prop<SelfNonCommuting>();
-	def_prop<SortOrder>();
-	def_prop<Spinor>();
-	def_prop<Symbol>();
-	def_prop<Symmetric>();
-	def_prop<Tableau>();
-	def_prop<TableauSymmetry>();
-	def_prop<Traceless>();
-	def_prop<Weight>();
-	def_prop<WeightInherit>();
-	def_prop<WeylTensor>();
+	def_prop<Accent>(m);
+	def_prop<AntiCommuting>(m);
+	def_prop<AntiSymmetric>(m);
+	def_prop<Coordinate>(m);
+	def_prop<Commuting>(m);
+	def_prop<CommutingAsProduct>(m);
+	def_prop<CommutingAsSum>(m);
+	def_prop<DAntiSymmetric>(m);
+	def_prop<Depends>(m);
+	def_prop<Derivative>(m);
+	def_prop<Diagonal>(m);
+	def_prop<DifferentialForm>(m);
+	def_prop<Distributable>(m);
+	def_prop<DiracBar>(m);
+	def_prop<EpsilonTensor>(m);
+	def_prop<ExteriorDerivative>(m);
+	def_prop<FilledTableau>(m);
+	def_prop<GammaMatrix>(m);
+	def_prop<ImaginaryI>(m);	
+	def_prop<ImplicitIndex>(m);	
+	def_prop<IndexInherit>(m);
+	def_prop<Indices>(m);	
+	def_prop<Integer>(m);
+	def_prop<InverseMetric>(m);
+	def_prop<KroneckerDelta>(m);
+	def_prop<LaTeXForm>(m);
+	def_prop<Matrix>(m);
+	def_prop<Metric>(m);
+	def_prop<NonCommuting>(m);
+	def_prop<NumericalFlat>(m);
+	def_prop<PartialDerivative>(m);
+	def_prop<RiemannTensor>(m);
+	def_prop<SatisfiesBianchi>(m);
+	def_prop<SelfAntiCommuting>(m);
+	def_prop<SelfCommuting>(m);
+	def_prop<SelfNonCommuting>(m);
+	def_prop<SortOrder>(m);
+	def_prop<Spinor>(m);
+	def_prop<Symbol>(m);
+	def_prop<Symmetric>(m);
+	def_prop<Tableau>(m);
+	def_prop<TableauSymmetry>(m);
+	def_prop<Traceless>(m);
+	def_prop<Weight>(m);
+	def_prop<WeightInherit>(m);
+	def_prop<WeylTensor>(m);
 
-	// Register exceptions. FIXME: This is not right yet: we create a proper 
-	// Python exception object derived from Exception, but then we 
-	// create a _separate_ C++ object with the same name and a Python
-	// wrapper around that. The problem is that PyErr_NewException produces
-	// a PyObject but that is not related to the C++ object.
-
-	ConsistencyExceptionType=createExceptionClass("ConsistencyException");
-	class_<ConsistencyException> pyConsistencyException("ConsistencyException", init<std::string>());
-	pyConsistencyException.def("__str__", &ConsistencyException::what);
-	register_exception_translator<ConsistencyException>(&translate_ConsistencyException);
-
-	ArgumentExceptionType=createExceptionClass("ArgumentException");
-	class_<ArgumentException> pyArgumentException("ArgumentException", init<std::string>());
-	pyArgumentException.def("__str__", &ArgumentException::what);
-	register_exception_translator<ArgumentException>(&translate_ArgumentException);
-
-	ParseExceptionType=createExceptionClass("ParseException");
-	class_<ParseException> pyParseException("ParseException", init<std::string>());
-	pyParseException.def("__str__", &ParseException::what);
-	register_exception_translator<ParseException>(&translate_ParseException);
-
-	RuntimeExceptionType=createExceptionClass("RuntimeException");
-	class_<RuntimeException> pyRuntimeException("RuntimeException", init<std::string>());
-	pyRuntimeException.def("__str__", &RuntimeException::what);
-	register_exception_translator<RuntimeException>(&translate_RuntimeException);
-
-	NonScalarExceptionType=createExceptionClass("NonscalarException");
-	class_<NonScalarException> pyNonScalarException("NonScalarException", init<std::string>());
-	pyNonScalarException.def("__str__", &NonScalarException::py_what);
-	register_exception_translator<NonScalarException>(&translate_NonScalarException);
-
-	InternalErrorType=createExceptionClass("InternalError");
-	class_<InternalError> pyInternalError("InternalError", init<std::string>());
-	pyInternalError.def("__str__", &InternalError::py_what);
-	register_exception_translator<InternalError>(&translate_InternalError);
+	// Register exceptions.
 	
-	NotYetImplementedType=createExceptionClass("NotYetImplemented");
-	class_<NotYetImplemented> pyNotYetImplemented("NotYetImplemented", init<std::string>());
-	pyNotYetImplemented.def("__str__", &NotYetImplemented::py_what);
-	register_exception_translator<NotYetImplemented>(&translate_NotYetImplemented);
-	
-#if BOOST_VERSION >= 106000
-	boost::python::register_ptr_to_python<std::shared_ptr<Ex> >();
-	//	boost::python::register_ptr_to_python<std::shared_ptr<Property> >();
-#endif	
-
-	// How can we give Python access to information stored in properties?
+	pybind11::register_exception<ConsistencyException>(m, "ConsistencyException");
+	pybind11::register_exception<ArgumentException>(m, "ArgumentException");
+	pybind11::register_exception<ParseException>(m, "ParseException");
+	pybind11::register_exception<RuntimeException>(m, "RuntimeException");
+	pybind11::register_exception<NonScalarException>(m, "NonScalarException");
+	pybind11::register_exception<InternalError>(m, "InternalError");
+	pybind11::register_exception<NotYetImplemented>(m, "NotYetImplemented");
 	}

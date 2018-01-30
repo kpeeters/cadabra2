@@ -76,7 +76,12 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 
 		{"\\partial", "Derivative"},
 		{"\\dot",     "dot"},
-		{"\\ddot",    "ddot"}
+		{"\\ddot",    "ddot"},
+
+		// A few symbols are reserved by sympy.
+		{"N", "sympyN"},
+		{"O", "sympyO"},
+		{"S", "sympyS"}
 		};
 	}
 
@@ -88,9 +93,12 @@ bool DisplaySympy::needs_brackets(Ex::iterator it)
 	// FIXME: write as individual parent/current tests
 	if(tree.is_valid(tree.parent(it))==false) return false;
 
-	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
-		if(*it->name=="\\sum") return true;
-		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
+	std::string parent=*tree.parent(it)->name;
+	std::string child =*it->name;
+
+	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow") {
+		if(child=="\\sum") return true;
+		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || child=="\\sum" || child=="\\prod" || child=="\\pow")  ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) {
 		if(*it->name=="\\sum") return false;
@@ -254,6 +262,7 @@ void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr
 		case str_node::p_exponent: str << "**"; break;
 		case str_node::p_none: break;
 		case str_node::p_components: break;
+		case str_node::p_invalid:    throw std::logic_error("DisplaySympy: p_invalid not handled.");
 		}
 	}
 
@@ -393,6 +402,9 @@ void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it)
 
 void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	{
+	if(needs_brackets(it))
+		str << "(";
+
 	Ex::sibling_iterator sib=tree.begin(it);
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
@@ -401,6 +413,9 @@ void DisplaySympy::print_powlike(std::ostream& str, Ex::iterator it)
 	++sib;
 	dispatch(str, sib);
 	str << ")";
+
+	if(needs_brackets(it))
+		str << ")";
 	}
 
 void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)

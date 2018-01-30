@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include <boost/python.hpp>
+#include <pybind11/pybind11.h>
 #include <stdexcept>
 #include "Storage.hh"
 #include "Kernel.hh"
 #include "Algorithm.hh"
+
+
 
 /// \ingroup pythoncore
 ///
@@ -32,13 +34,13 @@
 /// need a Properties object, we cannot have such operator== things in C++,
 /// but we can in Python since we can get the kernel in the current scope.
 
-bool __eq__Ex_Ex(const cadabra::Ex&, const cadabra::Ex&);
+bool __eq__Ex_Ex(std::shared_ptr<cadabra::Ex>, std::shared_ptr<cadabra::Ex>);
 
 /// \ingroup pythoncore
 ///
 /// Comparison operator for Ex objects in Python. See __eq__Ex_Ex for more.
 
-bool __eq__Ex_int(const cadabra::Ex&, int);
+bool __eq__Ex_int(std::shared_ptr<cadabra::Ex>, int);
 
 /// Fetch an Ex object from the Python side using its Python identifier.
 
@@ -48,8 +50,8 @@ std::shared_ptr<cadabra::Ex> fetch_from_python(const std::string& nm);
 ///
 /// Generate the Python str() and repr() representation of the Ex object.
 
-std::string Ex_str_(const cadabra::Ex&);
-std::string Ex_repr_(const cadabra::Ex&);
+std::string Ex_str_(std::shared_ptr<cadabra::Ex>);
+std::string Ex_repr_(std::shared_ptr<cadabra::Ex>);
 
 /// \ingroup pythoncore
 ///
@@ -63,11 +65,11 @@ std::string Ex_repr_(const cadabra::Ex&);
 /// So we have a separate _latex_() member on each object, which 
 ///internally uses DisplayTeX to do the actual printing.
 
-std::string Ex_latex_(const cadabra::Ex&);
+std::string Ex_latex_(std::shared_ptr<cadabra::Ex>);
 
 /// \ingroup scalar
 ///
-/// Convert a Cadabra 'Ex' to a Sympy expression. This first converts the
+/// Outputs a Cadabra 'Ex' as a Sympy expression. This first converts the
 /// Cadabra expression to a string, and then reads that back in by calling
 /// sympy.parsing.sympy_parser.parse_expr. Is mapped to a '_sympy_()' 
 /// function on each Ex object. 
@@ -75,27 +77,32 @@ std::string Ex_latex_(const cadabra::Ex&);
 /// to a Sympy object in 'sympy.sympify' because the latter attempts to 
 /// call __sympy__ on every object that you feed it.
 
-boost::python::object Ex_to_Sympy(const cadabra::Ex&);
+pybind11::object Ex_to_Sympy(std::shared_ptr<cadabra::Ex>);
+
+/// Similar to Ex_to_Sympy, but only producing a string which can be parsed
+/// by Sympy, instead of a full-fledged Sympy expression.
+
+std::string Ex_to_Sympy_string(std::shared_ptr<cadabra::Ex>);
 
 
 /// \ingroup pythoncore
 ///
 /// Add two expressions, adding a top-level \sum node if required.
 
-cadabra::Ex operator+(const cadabra::Ex& ex1, const cadabra::Ex& ex2);
+cadabra::Ex operator+(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
 
 /// \ingroup pythoncore
 ///
 /// Subtract two expressions, adding a top-level \sum node if required.
 
-cadabra::Ex operator-(const cadabra::Ex& ex1, const cadabra::Ex& ex2);
+cadabra::Ex operator-(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
 
 /// \ingroup pythoncore
 ///
 /// Helper class to ensure that all Python property objects derive from the
 /// same base class.
 
-class BaseProperty {
+class BaseProperty : public std::enable_shared_from_this<BaseProperty> {
 };
 
 /// \ingroup pythoncore
@@ -125,7 +132,7 @@ class BaseProperty {
 /// the Python property object). How do we keep it in scope?
 
 template<class T>
-class Property : public BaseProperty {
+class Property : public std::enable_shared_from_this<Property<T>>, public BaseProperty {
 	public:
 		Property(std::shared_ptr<cadabra::Ex> obj, std::shared_ptr<cadabra::Ex> params=0);
 
@@ -241,4 +248,4 @@ cadabra::Kernel *get_kernel_from_scope();
 ///
 /// Run the post-process Python function (if defined) on the given expression.
 
-void call_post_process(cadabra::Kernel&, cadabra::Ex& ex);
+void call_post_process(cadabra::Kernel&, std::shared_ptr<cadabra::Ex> ex);

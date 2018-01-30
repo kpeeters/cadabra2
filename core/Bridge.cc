@@ -5,9 +5,9 @@
 
 using namespace cadabra;
 
-void pull_in(std::shared_ptr<Ex> ex)
+void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 	{
-	collect_terms rr(*get_kernel_from_scope(), *ex);
+	collect_terms rr(*kernel, *ex);
 	
 	bool acted=false;
 	Ex::iterator it=ex->begin();

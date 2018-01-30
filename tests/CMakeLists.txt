@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
-
-project(CadabraTests)
-
-message("-- Configuring self-tests")
+project(Cadabra)
+message("------------------------------------------------------------------------\nConfiguring 'self-tests'")
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
@@ -49,6 +47,7 @@ endforeach()
 #
 set(RTESTS
   packages
+  display
   dummies
   trigonometric
   noncovariant
@@ -63,6 +62,7 @@ set(RTESTS
   paper
   basic
   numerical
+  output
   substitute
   canonicalise
   derivative
@@ -72,6 +72,9 @@ set(RTESTS
   vary
   young
   )
+if(MATHEMATICA_FOUND)
+  set(RTESTS ${RTESTS} mma)
+endif()
 foreach(RTEST ${RTESTS})
   add_test(${RTEST}  ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/${RTEST}.cdb)
   # We need to set the Python path so that we pick up the correct cadabra2.so Python module

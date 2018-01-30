@@ -83,6 +83,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/properties/FilledTableau.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/GammaMatrix.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/GammaTraceless.cc
+  ${CMAKE_SOURCE_DIR}/../core/properties/ImaginaryI.cc  
   ${CMAKE_SOURCE_DIR}/../core/properties/ImplicitIndex.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/Indices.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/Integer.cc

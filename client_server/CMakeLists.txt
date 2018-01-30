@@ -1,10 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
-
-project(CadabraServer)
-
-if (POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW)
-endif(POLICY CMP0042)
+cmake_minimum_required(VERSION 3.1)
+project(Cadabra)
+message("------------------------------------------------------------------------\nConfiguring 'client_server'")
 
 # Now using boost::regex, so we can get away with gcc 4.8.
 #
@@ -17,29 +13,6 @@ endif(POLICY CMP0042)
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
 
-# Locate python
-
-if(USE_PYTHON_3)
-  set(Python_ADDITIONAL_VERSIONS 3.4 3.5 3.6)
-  set(PythonInterp_ADDITIONAL_VERSIONS 3.4 3.5 3.6)
-  find_package(PythonInterp 3.4 REQUIRED)
-  if(APPLE)
-     find_package(PythonLibsOSX 3.4 REQUIRED)
-  else()
-     find_package(PythonLibs 3.4 REQUIRED)
-  endif()
-else()
-  set(Python_ADDITIONAL_VERSIONS 2.7)
-  set(PythonInterp_ADDITIONAL_VERSIONS 2.7)
-  find_package(PythonInterp 2.7 REQUIRED)
-  if(APPLE)
-     find_package(PythonLibsOSX 2.7 REQUIRED)
-  else()
-     find_package(PythonLibs 2.7 REQUIRED)
-  endif()
-endif()
-message("-- Found python ${PYTHON_LIBRARIES}")
-
 # Locate glibmm (for spawning processes)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIBMM3 REQUIRED glibmm-2.4)
@@ -47,40 +20,22 @@ include_directories(${GLIBMM3_INCLUDE_DIRS})
 link_directories(${GLIBMM3_LIBRARY_DIRS})
 add_definitions(${GLIBMM3_CFLAGS_OTHER})
 
+# Locate sqlite3.
+find_package(SQLite3)
 
 # Locate Boost
-if(USE_PYTHON_3)
-  find_package(Boost 1.53.0 COMPONENTS python3)
-  if(Boost_PYTHON3_FOUND)
-    find_package(Boost 1.53.0 COMPONENTS python3 system regex program_options REQUIRED)
-  else()
-    if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.4")
-      find_package(Boost 1.53.0 COMPONENTS python-py34 system regex program_options REQUIRED)
-    else()
-		if("${PYTHONLIBS_VERSION_STRING}" MATCHES "^3.5")    
-		  find_package(Boost 1.53.0 COMPONENTS python-py35 system regex program_options REQUIRED)
-		else()
-		  find_package(Boost 1.53.0 COMPONENTS python-py36 system regex program_options REQUIRED)
-		endif()
-    endif()
-  endif()
-else()
-  find_package(Boost 1.53.0 COMPONENTS python system regex program_options REQUIRED)
-endif()
-set(Boost_USE_STATIC_LIBS OFF)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
+find_package(Boost 1.53.0 COMPONENTS system regex program_options date_time filesystem REQUIRED)
 find_package(PkgConfig REQUIRED)
-include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR} ../core)
+include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR} ${SQLITE3_INCLUDE_DIR} ../core)
 #pkg_check_modules(UUID uuid REQUIRED)
 #include_directories("${UUID_INCLUDE_DIRS}")
+include_directories(".")
 
 # Snoop for logging. At the moment the required Snoop.cc|.hh are included
 # in the Cadabra sources so we do not need to look for this. However, we
 # do need to find sqlite3 for this to work.
 
 # find_package(Snoop REQUIRED)
-find_library(sqlite3 sqlite3 required)
 
 
 if(CMAKE_COMPILER_IS_GNUCXX)
@@ -91,14 +46,15 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 # Create the server library
 #link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp ../core/CdbPython.cc ../core/Stopwatch.cc ../core/ProgressMonitor.cc)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+target_link_libraries(cadabra_server pybind11::embed)
 if (WIN32)
    target_link_libraries(cadabra_server ws2_32 mswsock)
 endif()
 
 # Create the client library.
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} sqlite3 ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
 if (WIN32)
    target_link_libraries(cadabra_client ws2_32)
 endif()

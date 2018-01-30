@@ -16,7 +16,6 @@ import site
 from code import InteractiveConsole
 import code
 import re
-import readline
 import rlcompleter
 import os
 
@@ -44,7 +43,6 @@ class Shell(InteractiveConsole):
         self.lhs      = "";
         self.rhs      = "";
         self.operator = "";
-#        readline.set_completer(rlcompleter.Completer(vars).complete)
         InteractiveConsole.__init__(self)
         return
 
@@ -109,6 +107,10 @@ class Shell(InteractiveConsole):
                 line_stripped=line_stripped[:-1]
                 self.rhs += line_stripped
                 rewrite = self.indent + self.lhs + " = Ex(r'" + self.rhs+"')"
+                if self.operator==':=':
+                    if rewrite[-1]!=';':
+                        rewrite+=';'						  
+                    rewrite += " _="+self.lhs	
                 if lastchar!='.' and len(self.indent)==0:
                     rewrite += "; display("+self.lhs+")"
                 rewrite = rewrite+"\n"
@@ -150,6 +152,7 @@ class Shell(InteractiveConsole):
                 rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:-1]+"')"
 
                 objname=line_stripped[:found]
+                rewrite = rewrite + "; _="+objname
                 if lastchar!='.' and len(indent_line)==0:
                     rewrite = rewrite + "; display(" + objname+")"
                 line=rewrite

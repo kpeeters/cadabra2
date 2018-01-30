@@ -8,6 +8,13 @@ request other things to that cell before the delete has happened. Or can it? Wit
 calling perform, you always run on the gui thread. This thread should just execute
 all actions immediately, all the way down to the gui update.
 
+LATER: It's worse: you can set a cell to execute, then delete it while the cell
+is still running. When the return data comes in and the computethread wants to
+add the child output cell, the original one has gone and the pointer is stale => segfault.
+You can't avoid this with doing actions in sync. You can prevent it by requiring that
+a delete can only happen on cells which are not executing.
+
+
  -> maybe the best is to make 'perform' execute all the way through, and make
     a separate member, only accessible to the client, which does actions by
     waking.

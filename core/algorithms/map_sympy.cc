@@ -8,8 +8,8 @@ using namespace cadabra;
 
 //#define DEBUG 1
 
-map_sympy::map_sympy(const Kernel& k, Ex& tr, const std::string& head)
-	: Algorithm(k, tr), head_(head)
+map_sympy::map_sympy(const Kernel& k, Ex& tr, const std::string& head, std::vector<std::string> args=std::vector<std::string>() )
+	: Algorithm(k, tr), head_(head), args_(args)
 	{
 	}
 
@@ -93,7 +93,7 @@ Algorithm::result_t map_sympy::apply(iterator& it)
 			prod.append_child(prod.begin(), fac);
 		auto top=prod.begin();
 		// std::cerr << "Feeding to sympy " << prod << std::endl;
-		sympy::apply(kernel, prod, top, wrap, "", "");
+		sympy::apply(kernel, prod, top, wrap, args_, "");
 		// Now remove the non-index carrying factors and replace with
 		// the factors of 'prod' just simplified.
 		tr.insert_subtree(*left.begin(), top);
@@ -105,7 +105,7 @@ Algorithm::result_t map_sympy::apply(iterator& it)
 		return result_t::l_applied;
 		}
 	else {
-		sympy::apply(kernel, tr, it, wrap, "", "");
+		sympy::apply(kernel, tr, it, wrap, args_, "");
 		it.skip_children();
 		return result_t::l_applied;
 		}

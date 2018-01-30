@@ -110,7 +110,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}{\\rm d}{\\#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}d{\\#}.\\end{dmath*}"
 				}
 			],
 			"source" : "d{#}::ExteriorDerivative;\nd{#}::LaTeXForm(\"{\\rm d}\")."
@@ -266,7 +266,7 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left\\{a, \\linebreak[0] b, \\linebreak[0] c\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -346,11 +346,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Some more random assorted ramblings below, not finished yet."
+					"source" : "Some more random assorted ramblings below, not finished yet!!!"
 				}
 			],
 			"hidden" : true,
-			"source" : "Some more random assorted ramblings below, not finished yet."
+			"source" : "Some more random assorted ramblings below, not finished yet!!!"
 		},
 		{
 			"cell_origin" : "client",

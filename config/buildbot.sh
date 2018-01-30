@@ -53,7 +53,7 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-# runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
+runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
 # runbuild "Fedora_24_build" ".rpm" 7001 fedora24
 # runbuild "Mint_18" ".deb" 7002 mint18
 # runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
@@ -62,4 +62,5 @@ function runbuild {
 # runbuild "Fedora_26" ".rpm" 7011 fedora26
 # runbuild "Ubuntu_17.10" ".deb" 7012 ubuntu1710
 # runbuild "Debian86" ".deb" 7006 debian86
-runbuild "Scientific_Linux_74" ".rpm" 7013 scientific74
+# runbuild "Scientific_Linux_74" ".rpm" 7013 scientific74
+# runbuild "Debian_921" ".deb" 7014 debian9

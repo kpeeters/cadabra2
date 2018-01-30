@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 #include <unistd.h>
+#include <map>
 
 //#define DEBUG
 
@@ -21,6 +22,71 @@ double TeXEngine::millimeter_per_inch = 25.4;
 TeXEngine::TeXException::TeXException(const std::string& str)
 	: std::logic_error(str)
 	{
+	}
+
+std::string TeXEngine::convert_unicode_to_tex(const std::string& orig) const
+	{
+	static std::map<std::string, std::string> symmap = {
+		{"α", "\\alpha"    },
+		{"β", "\\beta"     },
+		{"γ", "\\gamma"    },
+		{"δ", "\\delta"    },
+		{"ε", "\\epsilon"  },
+		{"ζ", "\\zeta"     },
+		{"η", "\\eta"      },
+		{"θ", "\\theta"    },
+		{"ι", "\\iota"     },
+		{"κ", "\\kappa"    },
+		{"λ", "\\lambda"   },
+		{"μ", "\\mu"       },
+		{"ν", "\\nu"       },
+		{"ξ", "\\xi"       },
+		{"ο", "\\omicron"  },
+		{"π", "\\pi"       },
+		{"ρ", "\\rho"      },
+		{"σ", "\\sigma"    },
+		{"τ", "\\tau"      },
+		{"υ", "\\upsilon"  },
+		{"φ", "\\phi"      },
+		{"χ", "\\chi"      },
+		{"ψ", "\\psi"      },
+		{"ω", "\\omega"    },
+
+		{"Α", "\\Alpha"    },
+		{"Β", "\\Beta"     },
+		{"Γ", "\\Gamma"    },
+		{"Δ", "\\Delta"    },
+		{"Ε", "\\Epsilon"  },
+		{"Ζ", "\\Zeta"     },
+		{"Η", "\\Eta"      },
+		{"ϴ", "\\Theta"    },
+		{"Ι", "\\Iota"     },
+		{"Κ", "\\Kappa"    },
+		{"Λ", "\\Lambda"   },
+		{"Μ", "\\Mu"       },
+		{"Ν", "\\Nu"       },
+		{"Ξ", "\\Xi"       },
+		{"Ο", "\\Omicron"  },
+		{"Π", "\\Pi"       },
+		{"Ρ", "\\Rho"      },
+		{"Σ", "\\Sigma"    },
+		{"Τ", "\\Tau"      },
+		{"Υ", "\\Upsilon"  },
+		{"Φ", "\\Phi"      },
+		{"Χ", "\\Chi"      },
+		{"Ψ", "\\Psi"      },
+		{"Ω", "\\Omega"    }
+	};
+
+	std::string ret=orig;
+	auto it=symmap.begin();
+	while(it!=symmap.end()) {
+		std::cerr << "*** replacing " << (*it).first << std::endl;
+		boost::replace_all(ret, (*it).first, (*it).second);
+		++it;
+		}
+	std::cerr << ret << std::endl;
+	return ret;
 	}
 
 unsigned TeXEngine::TeXRequest::width() const
@@ -315,12 +381,15 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		}
 	total << "\\end{document}\n";
 
+	// Make sure there are no greek unicode characters.
+	std::string ltx = total.str(); // convert_unicode_to_tex(total.str());
+	
 	// Now write the 'total' buffer to the .tex file
 
 	// std::cerr << total.str() << std::endl;
 	ssize_t start=0;
 	do {
-		ssize_t written=write(fd, &(total.str().c_str()[start]), total.str().size()-start);
+		ssize_t written=write(fd, &(ltx.c_str()[start]), ltx.size()-start);
 		if(written>=0)
 			start+=written;
 		else {
@@ -333,7 +402,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	close(fd);
 #ifdef DEBUG
 	std::cerr  << templ << std::endl;
-	std::cerr << "---\n" << total.str() << "\n---" << std::endl;
+	std::cerr << "---\n" << ltx << "\n---" << std::endl;
 #endif
 
 	std::string nf=std::string(templ)+".tex";
