@@ -1,7 +1,7 @@
 
 //	STL-like templated tree class.
 //
-// Copyright (C) 2001-2016 Kasper Peeters <kasper@phi-sci.com>
+// Copyright (C) 2001-2018 Kasper Peeters <kasper@phi-sci.com>
 // Distributed under the GNU General Public License version 3.
 //
 // Special permission to use tree.hh under the conditions of a 
@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.6
-    \date     13-Jun-2016
+    \version  3.7
+    \date     30-Jan-2018
     \see      http://tree.phi-sci.com/
     \see      http://tree.phi-sci.com/ChangeLog
 

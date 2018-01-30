@@ -130,6 +130,7 @@
 #include "algorithms/product_rule.hh"
 #include "algorithms/reduce_delta.hh"
 #include "algorithms/rename_dummies.hh"
+#include "algorithms/simplify.hh"
 #include "algorithms/sort_product.hh"
 #include "algorithms/sort_spinors.hh"
 #include "algorithms/sort_sum.hh"
@@ -1235,6 +1236,13 @@ PYBIND11_MODULE(cadabra2, m)
 		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
 		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
+
+	m.def("simplify", &dispatch_ex<simplify>, 
+			pybind11::arg("ex"),
+			pybind11::arg("deep")=false,
+			pybind11::arg("repeat")=false,
+			pybind11::arg("depth")=0,
+			pybind11::return_value_policy::reference_internal );
 
 	m.def("order", &dispatch_ex<order, Ex, bool>, 
 		 pybind11::arg("ex"),

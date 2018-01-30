@@ -1,0 +1,6 @@
+
+{m,n}::Indices;
+ex:= \sin(x)**2 + \cos(x)**2 + A_{m} A^{m};
+simplify(ex);
+
+map_sympy(ex, "simplify");
