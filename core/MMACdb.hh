@@ -20,7 +20,7 @@ class MMA {
 		/// two completely separate.
 		
 		static cadabra::Ex::iterator apply_mma(const cadabra::Kernel&, cadabra::Ex&, cadabra::Ex::iterator&,
-															const std::vector<std::string>& wrap, const std::string& args,
+															const std::vector<std::string>& wrap, std::vector<std::string> args,
 															const std::string& method);
 
 

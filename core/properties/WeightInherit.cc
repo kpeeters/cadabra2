@@ -20,7 +20,8 @@ bool WeightInherit::parse(const Kernel& k, keyval_t& kv)
 	if(tpit!=kv.end()) {
 		if(*tpit->second->name=="multiplicative") combination_type=multiplicative;
 		else if(*tpit->second->name=="additive")  combination_type=additive;
-		else                                      combination_type=power;
+		else if(*tpit->second->name=="power")     combination_type=power;
+		else throw ArgumentException("weight type must be 'multiplicative', 'additive' or 'power'.");
 		}
 	else combination_type=multiplicative;
 

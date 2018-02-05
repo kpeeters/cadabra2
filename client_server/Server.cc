@@ -173,7 +173,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			}
 		}
 	catch(pybind11::error_already_set& ex) {
-		std::cerr << "already set" << std::endl;
+		std::cerr << "already set " << ex.what() << std::endl;
 		// Make Python print error to stderr and catch it.
 		PyErr_Print();
 		std::string err;

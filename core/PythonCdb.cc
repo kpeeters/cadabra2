@@ -1038,8 +1038,16 @@ PYBIND11_MODULE(cadabra2, m)
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
 	// pull that into the interpreter scope in the 'cadabra2_default.py' file.
+	pybind11::enum_<Kernel::scalar_backend_t>(m, "scalar_backend_t")
+		.value("sympy",       Kernel::scalar_backend_t::sympy)
+		.value("mathematica", Kernel::scalar_backend_t::mathematica)
+		.export_values()
+		;
+
 	pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
-		.def(pybind11::init<>());
+		.def(pybind11::init<>())
+		.def_readonly("scalar_backend", &Kernel::scalar_backend);
+	
 	Kernel* kernel = create_scope();
 	m.attr("__cdbkernel__") = pybind11::cast(kernel);
 	
@@ -1111,6 +1119,21 @@ PYBIND11_MODULE(cadabra2, m)
 	// Inspection algorithms and other global functions which do not fit into the C++
    // framework anymore.
 
+	m.def("kernel", [](pybind11::kwargs dict) {
+			Kernel *k=get_kernel_from_scope();			
+			for(auto& item: dict) {
+				std::string key=item.first.cast<std::string>();
+				std::string val=item.second.cast<std::string>();				
+				if(key=="scalar_backend") {
+					if(val=="sympy")            k->scalar_backend=Kernel::scalar_backend_t::sympy;
+					else if(val=="mathematica") k->scalar_backend=Kernel::scalar_backend_t::mathematica;
+					else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
+					}
+				else {
+					throw ArgumentException("unknown argument '"+key+"'.");
+					}
+				}
+			});
 	m.def("tree", &print_tree);
 	m.def("init_ipython", &init_ipython);
 	m.def("properties", &list_properties);

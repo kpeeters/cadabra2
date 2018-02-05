@@ -1,4 +1,7 @@
-
+# The scalar backend used for these component tests can be switched
+# using either one of
+#
+# kernel(scalar_backend="sympy")
 
 # Testing a substitution rule in which an abstract index in the 
 # expression is matched against a coordinate in the pattern.
@@ -11,6 +14,7 @@
 
 def test01():
     __cdbkernel__=create_scope()
+    print(__cdbkernel__.scalar_backend)
     {r,t}::Coordinate.
     {m,n}::Indices(values={t,r}, position=fixed).
     ex:= A_{m};
@@ -93,9 +97,10 @@ def test03():
     # Finally, the Kretschmann scalar.
     K:= K = R^{\mu}_{\nu\rho\sigma} R^{\lambda}_{\kappa\gamma\chi} g_{\mu\lambda} g^{\nu\kappa} g^{\rho\gamma} g^{\sigma\chi};
     substitute(K, rm)
-    evaluate(K, ss)
+    evaluate(K, ss);
     tmp=rhs(K)
     tst:= 48 M**2/r**6 - @(tmp);
+    simplify(tst)
     assert(tst==0)
     print("Test 03 passed")
     
@@ -199,6 +204,7 @@ def test08():
     rl:= { A_{t}^{r} -> S, A_{t}^{t} -> 3, A_{r}^{r} -> r };
     evaluate(ex, rl)
     tst:= (r+3)**2 - @(ex);
+    simplify(tst)
     assert(tst==0)
     print("Test 08 passed")
 
@@ -254,7 +260,7 @@ def test12():
     ex:=A_{\mu} A_{\mu};
     rl:= A_{0} -> -\xi_{0}, A_{1} -> \xi_{1}, A_{2} -> -\xi_{2}, A_{3} -> \xi_{3};
     evaluate(ex, rl)
-    tst:= \xi_{0}**2 + \xi_{1}**2 + \xi_{2}**2 + \xi_{3}**2 - @(ex);
+    tst:= \xi_{0}\xi_{0} + \xi_{1}\xi_{1} + \xi_{2}\xi_{2} + \xi_{3}\xi_{3} - @(ex);
     assert(tst==0)
     print("Test 12 passed")
 
@@ -278,8 +284,8 @@ def test14():
     \partial{#}::PartialDerivative;
     ex:= F^{\mu} \partial_{\mu}{ f };
     rl:= F^{t} = A, F^{x} = B, F^{z} = C;
-    evaluate(ex, rl)
-    canonicalise(ex)
+    evaluate(ex, rl);
+    canonicalise(ex);
     tst:= A \partial_{t}{f} + B \partial_{x}{f} + C \partial_{z}{f} - @(ex);
     assert(tst==0)
     print("Test 14 passed")
@@ -511,6 +517,7 @@ def test26():
     tst:= X^{0 0} Y_{0 0} + X^{0 1} Y_{0 1} + X^{0 2} Y_{0 2}
         + X^{1 0} Y_{1 0} + X^{1 1} Y_{1 1} + X^{1 2} Y_{1 2}
         + X^{2 0} Y_{2 0} + X^{2 1} Y_{2 1} + X^{2 2} Y_{2 2} - @(ex):
+    sort_product(tst)
     assert(tst==0)
     print("Test 26 passed")
 
@@ -536,5 +543,5 @@ def test27():
 
 #test27()
         
-
+print(list(map(lambda x: str(x), server.totals())))
     

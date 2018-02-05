@@ -20,8 +20,6 @@ class simplify : public Algorithm {
 		virtual result_t apply(iterator&);
 
 	private:
-		enum class backend_t { sympy, mathematica } backend;
-		
 		std::vector<Ex::iterator> left;
 		std::set<Ex::iterator>    index_factors;
 };

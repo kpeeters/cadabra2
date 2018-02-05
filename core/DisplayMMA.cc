@@ -640,7 +640,7 @@ void DisplayMMA::import(Ex& ex)
 			
 			// Move child nodes of partial to the right place.
 			if(*it->name=="\\partial") {
-				// std::cerr << Ex(it) << std::endl;
+				std::cerr << "to convert: " << Ex(it) << std::endl;
 				auto args = ex.begin(it);
 				++args;
 				while(args!=ex.end(it)) {

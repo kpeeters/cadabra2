@@ -3,8 +3,9 @@
 #include "Cleanup.hh"
 #include "Permutations.hh"
 #include "MultiIndex.hh"
-#include "SympyCdb.hh"
+//#include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
+#include "algorithms/simplify.hh"
 #include "algorithms/substitute.hh"
 #include "properties/EpsilonTensor.hh"
 #include "properties/PartialDerivative.hh"
@@ -860,21 +861,18 @@ void evaluate::simplify_components(iterator it)
 	// We feed it the components and wrap in a 'simplify'.
 	sibling_iterator lst = tr.end(it);
 	--lst;
+
+	cadabra::simplify simp(kernel, tr);
+	simp.set_progress_monitor(pm);
 	
 	cadabra::do_list(tr, lst, [&](Ex::iterator eqs) {
 			assert(*eqs->name=="\\equals");
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
-			if(pm) pm->group("sympy");
-			std::vector<std::string> wrap;
-#ifndef USE_TREETRACKER
-//			wrap.push_back("together");
-			wrap.push_back("simplify");
-			sympy::apply(kernel, tr, nd, wrap, std::vector<std::string>(), "");
-#else
-			sympy::apply(kernel, tr, nd, wrap, std::vector<std::string>(), "");
-#endif
+			if(pm) pm->group("scalar_backend");
+			std::cerr << "simplify at " << Ex(nd) << std::endl;
+			simp.apply_generic(nd, false, false, 0);
 			if(pm) pm->group();
 			
 			if(nd->is_zero())

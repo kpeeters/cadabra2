@@ -308,7 +308,7 @@ void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t
 
 void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it) 
 	{
-	if(*it->name=="\\prod")            print_productlike(str, it, "*");
+	if(*it->name=="\\prod")            print_productlike(str, it, " ");
 	else if(*it->name=="\\sum")        print_sumlike(str, it);
 	else if(*it->name=="\\frac")       print_fraclike(str, it);
 	else if(*it->name=="\\comma")      print_commalike(str, it);
@@ -429,7 +429,7 @@ void DisplayTerminal::print_sumlike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator ch=tree.begin(it);
 	while(ch!=tree.end(it)) {
 		if(*ch->multiplier>=0 && ch!=tree.begin(it))
-			str << "+"; 
+			str << " + "; 
 
 		dispatch(str, ch);
 		++ch;

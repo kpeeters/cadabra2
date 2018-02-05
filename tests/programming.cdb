@@ -18,3 +18,18 @@ def test01():
     assert(tst==0)
 
 test01()
+
+def test02():
+    def orderx(var, n):
+        cn=Ex(n)
+        drop_weight(var, $field=@(cn)$)
+        return var
+
+    {A,B,C}::Weight(label=field, value=1);
+    ex:=A B C + A B + A A + A C + A B C D;
+    orderx(ex, 2);
+    tst:= A B C + A B C D - @(ex);
+    assert(tst==0)
+    print("Test 02 passed")
+
+test02()

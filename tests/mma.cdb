@@ -47,3 +47,16 @@ def test03():
 
 #ex:= (a*\cos{\theta})**2;
 #map_mma(ex);
+
+def test04():
+    __cdbkernel__=create_scope()
+    kernel(scalar_backend="mathematica")
+    ex:=\sin(x)**2 + \cos(x)**2;
+    simplify(_)
+    assert(ex==1)
+    print("Test 04 passed")
+
+
+ex:=\sinh(x)**2 + \cosh(x)**2;
+kernel(scalar_backend="mathematica")
+simplify(_);

@@ -4,11 +4,12 @@
 #include "properties/Coordinate.hh"
 #include "properties/Symbol.hh"
 #include "SympyCdb.hh"
+#include "MMACdb.hh"
 
 using namespace cadabra;
 
 simplify::simplify(const Kernel& k, Ex& tr)
-	: Algorithm(k, tr), backend(backend_t::sympy)
+	: Algorithm(k, tr)
 	{
 	}
 
@@ -80,7 +81,6 @@ bool simplify::can_apply(iterator st)
 Algorithm::result_t simplify::apply(iterator& it)
 	{
 	std::vector<std::string> wrap;
-	wrap.push_back("simplify");
 	std::vector<std::string> args_;
 
 	if(left.size()>0) {
@@ -89,12 +89,19 @@ Algorithm::result_t simplify::apply(iterator& it)
 			prod.append_child(prod.begin(), fac);
 		auto top=prod.begin();
 		// std::cerr << "Feeding to sympy " << prod << std::endl;
-		switch(backend) {
-			case backend_t::sympy:
+		switch(kernel.scalar_backend) {
+			case Kernel::scalar_backend_t::sympy:
+				wrap.push_back("simplify");
+				if(pm) pm->group("sympy");
 				sympy::apply(kernel, prod, top, wrap, args_, "");
+				if(pm) pm->group();
 				break;
-			case backend_t::mathematica:
-				MMA::apply_mma(kernel, prod, top, wrap, "", "");
+			case Kernel::scalar_backend_t::mathematica:
+				wrap.push_back("FullSimplify");
+//				args_.push_back("Trig -> False");				
+				if(pm) pm->group("mathematica");
+				MMA::apply_mma(kernel, prod, top, wrap, args_, "");
+				if(pm) pm->group();
 				break;
 			}
 		// Now remove the non-index carrying factors and replace with
@@ -108,12 +115,19 @@ Algorithm::result_t simplify::apply(iterator& it)
 		return result_t::l_applied;
 		}
 	else {
-		switch(backend) {
-			case backend_t::sympy:
-				sympy::apply(kernel, prod, top, wrap, args_, "");
+		switch(kernel.scalar_backend) {
+			case Kernel::scalar_backend_t::sympy:
+				wrap.push_back("simplify");
+				if(pm) pm->group("sympy");				
+				sympy::apply(kernel, tr, it, wrap, args_, "");
+				if(pm) pm->group();				
 				break;
-			case backend_t::mathematica:
-				MMA::apply_mma(kernel, prod, top, wrap, "", "");
+			case Kernel::scalar_backend_t::mathematica:
+				wrap.push_back("FullSimplify");
+//				args_.push_back("Trig -> False");
+				if(pm) pm->group("mathematica");
+				MMA::apply_mma(kernel, tr, it, wrap, args_, "");
+				if(pm) pm->group();				
 				break;
 			}
 		it.skip_children();
