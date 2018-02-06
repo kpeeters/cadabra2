@@ -43,7 +43,8 @@ else()
   message("-- User mode")
 endif()
 
-include(cmake/locate_python.cmake)
+# alread taken care of by 
+#include(cmake/locate_python.cmake)
 
 # Ensure that all installed binaries have an RPATH setting
 # which enables them to find libtexengine, libcadabra_client and
