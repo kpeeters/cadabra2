@@ -43,9 +43,6 @@ else()
   message("-- User mode")
 endif()
 
-# alread taken care of by 
-#include(cmake/locate_python.cmake)
-
 # Ensure that all installed binaries have an RPATH setting
 # which enables them to find libtexengine, libcadabra_client and
 # libcadabra_server without any ld.so.conf settings.
@@ -78,11 +75,21 @@ include_directories(${PROJECT_BINARY_DIR}/core)
 
 # Add all sub-projects to build process.
 add_subdirectory(libs/pybind11)
+if(WIN32)
+  set(STATIC_LIB_SUFFIX "lib")
+  set(SHARED_LIB_SUFFIX "dll")
+  set(PYTHON_MOD_SUFFIX "pyd")
+else()
+  set(STATIC_LIB_SUFFIX "a")
+  set(SHARED_LIB_SUFFIX "so")
+  set(PYTHON_MOD_SUFFIX "so")
+endif()
 if("${PYTHON_SITE_PATH}" STREQUAL "")
   execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
                   OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
 endif()
 message("-- Python site path at ${PYTHON_SITE_PATH}")
+message("-- Python module suffix \".${PYTHON_MOD_SUFFIX}\"")
 
 add_subdirectory(core)
 add_subdirectory(client_server)
