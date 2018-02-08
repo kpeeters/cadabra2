@@ -18,8 +18,6 @@ message("-- Build id ${CADABRA_VERSION_BUILD} dated ${CADABRA_VERSION_DATE}")
 # Allows tests to be built in all subdirectories.
 enable_testing()
 
-find_package(Mathematica COMPONENTS WSTP)
-
 #---------------------------------------------------------------------------
 # User options.
 #---------------------------------------------------------------------------
@@ -60,11 +58,16 @@ else()
   message("-- Building for use with Python 2 (consider upgrading!)")
 endif()
 
-option(ENABLE_FRONTEND "Enable the UI frontend" ON)
+option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
+option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
 #---------------------------------------------------------------------------
 # Configure the various parts of Cadabra.
 #---------------------------------------------------------------------------
+
+if(ENABLE_MATHEMATICA)
+  find_package(Mathematica COMPONENTS WSTP)
+endif()
 
 # Include packaging logic.
 include(cmake/packaging.cmake)
