@@ -211,6 +211,16 @@ class Ex_comparator {
 
 		void    clear();
 
+		/// Determine whether Coordinates in the pattern (first argument
+		/// to functions below) can match against Indices in the object
+		/// (second argument). That is to say, whether the pattern
+		/// \partial_{t}{A} matches against the expression
+		/// \partial_{\mu}{A} when \mu can take the value t. This is
+		/// used in 'evaluate', but should generically be turned off for
+		/// 'substitute'.
+
+		void    set_value_matches_index(bool);
+
 		/// Match two subtrees taking into account symbol
 		/// properties. 'i1' can be a pattern.
 		/// Returns subtree_match or one of the no_match
@@ -307,6 +317,8 @@ class Ex_comparator {
 
 	protected:
 		const Properties& properties;
+
+		bool value_matches_index;
 
 		/// Internal entry point. This comparison function tries to match
 		/// a single node in the tree, except when the node is an

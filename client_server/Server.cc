@@ -173,7 +173,6 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			}
 		}
 	catch(pybind11::error_already_set& ex) {
-		// std::cerr << "already set |" << ex.what() << "|" << std::endl;
 		throw std::runtime_error(ex.what());
 		}
 
