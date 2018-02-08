@@ -50,6 +50,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 #endif			
 			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
+			else if(*(walk->name)=="\\pow")   return walk; // this is a scalar, will get handled elsewhere
 			else if(is_component(walk)) return walk;
 			else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
 			else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge" || *(walk->name)=="\\frac")  
@@ -216,6 +217,22 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 		sib=wrap_scalar_in_components_node(sib);
 		// std::cerr << "wrapped scalar as tensor" << std::endl;
 		return sib;
+		}
+	// If the indices are all Coordinates, this is a scalar, not a tensor.
+	// It then needs simple wrapping just like a 'proper' scalar handed above.
+	if(ind_dummy.size()==0 && ind_free.size()!=0) {
+		bool all_coordinates=true;
+		for(auto& ind: ind_free) {
+			const Coordinate *crd = kernel.properties.get<Coordinate>(ind.second);
+			if(!crd) {
+				all_coordinates=false;
+				break;
+				}
+			}
+		if(all_coordinates) {
+			sib=wrap_scalar_in_components_node(sib);
+			return sib;
+			}
 		}
 	
 	// Attempt to apply each component substitution rule on this term.
