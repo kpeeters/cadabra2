@@ -123,7 +123,7 @@ void MMA::setup_link()
 	{
 	if(lp!=0) return; // already setup
 	
-	char argvi[4][80] = { "-linkname", Mathematica_KERNEL_EXECUTABLE " -mathlink", "-linkmode", "launch" };
+	char argvi[4][512] = { "-linkname", Mathematica_KERNEL_EXECUTABLE " -mathlink", "-linkmode", "launch" };
 	char *argv[4];
 	for (size_t i=0; i<4; ++i)
 		argv[i] = argvi[i];
