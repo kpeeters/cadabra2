@@ -7,6 +7,9 @@ project(Cadabra)
 # Preamble
 #---------------------------------------------------------------------------
 
+# Debug messaging function
+include(cmake/debug_message.cmake)
+
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
@@ -17,8 +20,6 @@ message("-- Build id ${CADABRA_VERSION_BUILD} dated ${CADABRA_VERSION_DATE}")
 
 # Allows tests to be built in all subdirectories.
 enable_testing()
-
-find_package(Mathematica COMPONENTS WSTP)
 
 #---------------------------------------------------------------------------
 # User options.
@@ -43,8 +44,6 @@ else()
   message("-- User mode")
 endif()
 
-include(cmake/locate_python.cmake)
-
 # Ensure that all installed binaries have an RPATH setting
 # which enables them to find libtexengine, libcadabra_client and
 # libcadabra_server without any ld.so.conf settings.
@@ -62,11 +61,53 @@ else()
   message("-- Building for use with Python 2 (consider upgrading!)")
 endif()
 
-option(ENABLE_FRONTEND "Enable the UI frontend" ON)
+option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
+option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
+
+#################
+# Compiler flags
+#################
+
+# - Set the C++ standard to C++14
+# - Turn optimizations on
+# - Turn off warnings we don't need
+
+debug_message("Initial compiler flags: ${CMAKE_CXX_FLAGS}")
+
+# GCC
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wno-unused-but-set-variable")
+endif()
+
+# Clang
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  # For Clang, need to additionally check version to avoid compiler bugs
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
+    message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused")
+endif() 
+
+# Visual Studio
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /O2")
+  # Force to always compile with /w (disables warnings)
+  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    string(REGEX REPLACE "/W[0-4]" "/w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w")
+  endif()
+endif()
+
+debug_message("Final compiler flags: ${CMAKE_CXX_FLAGS}")
 
 #---------------------------------------------------------------------------
 # Configure the various parts of Cadabra.
 #---------------------------------------------------------------------------
+
+if(ENABLE_MATHEMATICA)
+  find_package(Mathematica COMPONENTS WSTP)
+endif()
 
 # Include packaging logic.
 include(cmake/packaging.cmake)
@@ -77,6 +118,22 @@ include_directories(${PROJECT_BINARY_DIR}/core)
 
 # Add all sub-projects to build process.
 add_subdirectory(libs/pybind11)
+if(WIN32)
+  set(STATIC_LIB_SUFFIX "lib")
+  set(SHARED_LIB_SUFFIX "dll")
+  set(PYTHON_MOD_SUFFIX "pyd")
+else()
+  set(STATIC_LIB_SUFFIX "a")
+  set(SHARED_LIB_SUFFIX "so")
+  set(PYTHON_MOD_SUFFIX "so")
+endif()
+if("${PYTHON_SITE_PATH}" STREQUAL "")
+  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
+                  OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+message("-- Python site path at ${PYTHON_SITE_PATH}")
+message("-- Python module suffix \".${PYTHON_MOD_SUFFIX}\"")
+
 add_subdirectory(core)
 add_subdirectory(client_server)
 if(ENABLE_FRONTEND)
