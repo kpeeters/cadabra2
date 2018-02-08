@@ -523,11 +523,23 @@ def test26():
 
 test26()
 
+{r,t}::Coordinate;        
+{m,n}::Indices(position=fixed, values={r,t});
+{\sigma,\tau}::Coordinate;        
+X^{m}::Depends(\sigma,\tau);
+\partial{#}::PartialDerivative;
+ex:=\partial_{\tau}{X^{m}};
+evaluate(ex);
+tst:=\components^{m}{\comma{ \comma{t} = X^{t} }{ \comma{r} = X^{r} } } - @(ex);
+collect_components(_);
+assert(tst==0);
+    
+        
 import cdb.relativity as rel
 # the line below does not work on Travis, so we state the metric here explicitly.
 #import cdb.relativity.schwarzschild as ss
 
-def test27():
+def test28():
     g:={g_{t t} = -1+2M/r, g_{r r} = 1/(1-2M/r), g_{\theta\theta} = r**2, g_{\phi\phi} = r**2*sin(\theta)**2};
     complete(g,$g^{\mu\nu}$);
     ch=rel.christoffel_from_metric();
@@ -545,3 +557,11 @@ def test27():
         
 print(list(map(lambda x: str(x), server.totals())))
     
+
+
+{t,x}::Coordinate:
+{m,n}::Indices(position=fixed, values={t,x});
+a::Depends(t,x);
+\partial{#}::PartialDerivative;
+ex:= (\partial_{t}{a})**2/a**3+a;
+evaluate(ex);
