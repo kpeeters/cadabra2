@@ -226,6 +226,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 //			std::cerr << "attempting rule " << rule << " on " << obj << std::endl;
 			// rule is a single rule, we walk the list.
 			substitute subs(kernel, obj, rule);
+			subs.comparator.set_value_matches_index(true);
 			iterator oit=obj.begin();
 			if(subs.can_apply(oit)) {
 				has_acted=true;

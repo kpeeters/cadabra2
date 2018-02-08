@@ -382,8 +382,13 @@ Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterato
 	}
 
 Ex_comparator::Ex_comparator(const Properties& k)
-	: properties(k)
+	: properties(k), value_matches_index(false)
 	{
+	}
+
+void Ex_comparator::set_value_matches_index(bool v)
+	{
+	value_matches_index=v;
 	}
 
 std::string Ex_comparator::tab() const
@@ -703,7 +708,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			DEBUG( std::cerr << tab() << t2 << std::endl; );
 			}
 
-		if(t2) {
+		if(value_matches_index && t2) {
 			// std::cerr << "coordinate " << *one->name << " versus index " << *two->name << std::endl;
 			// If the 'two' index type is fixed or independent, ensure
 			// that the parent relation matches!

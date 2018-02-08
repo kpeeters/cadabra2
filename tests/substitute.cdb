@@ -297,3 +297,16 @@ def test110():
 
 test110()
 
+def test111():
+    __cdbkernel__=create_scope()        
+    {t,x}::Coordinate;        
+    {\mu, \nu, \rho, \sigma}::Indices(values={t,x}, position=fixed);
+    \partial{#}::PartialDerivative;
+    ex:= \partial_{\mu}{ g_{\rho\sigma} };
+    rl:= \partial_{t}{ g_{\mu\nu} } -> C_{\mu\nu};
+    substitute(ex, rl);
+    tst:= \partial_{\mu}{ g_{\rho\sigma} } - @(ex);
+    assert(tst==0)
+    print("Test 111 passed")
+
+test111()
