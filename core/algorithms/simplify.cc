@@ -4,7 +4,9 @@
 #include "properties/Coordinate.hh"
 #include "properties/Symbol.hh"
 #include "SympyCdb.hh"
-#include "MMACdb.hh"
+#ifdef MATHEMATICA_FOUND
+   #include "MMACdb.hh"
+#endif
 
 using namespace cadabra;
 
@@ -97,11 +99,13 @@ Algorithm::result_t simplify::apply(iterator& it)
 				if(pm) pm->group();
 				break;
 			case Kernel::scalar_backend_t::mathematica:
+#ifdef MATHEMATICA_FOUND
 				wrap.push_back("FullSimplify");
 //				args_.push_back("Trig -> False");				
 				if(pm) pm->group("mathematica");
 				MMA::apply_mma(kernel, prod, top, wrap, args_, "");
 				if(pm) pm->group();
+#endif				
 				break;
 			}
 		// Now remove the non-index carrying factors and replace with
@@ -123,11 +127,13 @@ Algorithm::result_t simplify::apply(iterator& it)
 				if(pm) pm->group();				
 				break;
 			case Kernel::scalar_backend_t::mathematica:
+#ifdef MATHEMATICA_FOUND				
 				wrap.push_back("FullSimplify");
 //				args_.push_back("Trig -> False");
 				if(pm) pm->group("mathematica");
 				MMA::apply_mma(kernel, tr, it, wrap, args_, "");
 				if(pm) pm->group();				
+#endif
 				break;
 			}
 		it.skip_children();

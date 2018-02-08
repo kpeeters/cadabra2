@@ -7,6 +7,9 @@ project(Cadabra)
 # Preamble
 #---------------------------------------------------------------------------
 
+# Debug messaging function
+include(cmake/debug_message.cmake)
+
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
@@ -60,6 +63,43 @@ endif()
 
 option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
+
+#################
+# Compiler flags
+#################
+
+# - Set the C++ standard to C++14
+# - Turn optimizations on
+# - Turn off warnings we don't need
+
+debug_message("Initial compiler flags: ${CMAKE_CXX_FLAGS}")
+
+# GCC
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wno-unused-but-set-variable")
+endif()
+
+# Clang
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+  # For Clang, need to additionally check version to avoid compiler bugs
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 3.5)
+    message(FATAL_ERROR "Clang version must be at least 3.5 to avoid known bugs.")
+  endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O2 -Wall -Wextra -Wunused")
+endif() 
+
+# Visual Studio
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /O2")
+  # Force to always compile with /w (disables warnings)
+  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    string(REGEX REPLACE "/W[0-4]" "/w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /w")
+  endif()
+endif()
+
+debug_message("Final compiler flags: ${CMAKE_CXX_FLAGS}")
 
 #---------------------------------------------------------------------------
 # Configure the various parts of Cadabra.

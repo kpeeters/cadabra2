@@ -14,7 +14,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-//#define DEBUG 1
+#define DEBUG 1
 
 using namespace cadabra;
 
@@ -117,7 +117,7 @@ Ex::iterator evaluate::handle_components(iterator it)
 
 Ex::iterator evaluate::handle_sum(iterator it)
 	{
-	// std::cerr << "handle sum" << Ex(it) << std::endl;
+	std::cerr << "handle sum" << Ex(it) << std::endl;
 
 	index_map_t full_ind_free, full_ind_dummy;
 
@@ -127,6 +127,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 	classify_indices(it, full_ind_free, full_ind_dummy);
 	for(auto i: full_ind_free) {
+		std::cerr << "finding prop for " << Ex(i.second) << std::endl;
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
 		if(prop==0) {
 			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second);
@@ -134,8 +135,8 @@ Ex::iterator evaluate::handle_sum(iterator it)
 				throw ArgumentException("evaluate: Index "+*(i.second->name)
 												+" does not have an Indices property.");
 			}
-		
-		if(prop->values.size()==0)
+
+		if(prop!=0 && prop->values.size()==0)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
 	
@@ -161,11 +162,15 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	auto sib2=sib1;
 	++sib2;
 	while(sib2!=tr.end(it)) {
-//		std::cerr << "merging components " << Ex(sib1) << " and " << Ex(sib2) << std::endl;
+		std::cerr << "merging components " << Ex(sib1) << " and " << Ex(sib2) << std::endl;
 		merge_components(sib1, sib2);
+		std::cerr << "done" << std::endl;
 		sib2=tr.erase(sib2);
+		std::cerr << "erased" << std::endl;
 		}
+	std::cerr << "cleaning up" << std::endl;		
 	cleanup_components(sib1);
+	std::cerr << "cleaned up" << std::endl;			
 
 	it=tr.flatten_and_erase(it);
 
@@ -871,7 +876,7 @@ void evaluate::simplify_components(iterator it)
 			++rhs1;
 			iterator nd=rhs1;
 			if(pm) pm->group("scalar_backend");
-			std::cerr << "simplify at " << Ex(nd) << std::endl;
+			// std::cerr << "simplify at " << Ex(nd) << std::endl;
 			simp.apply_generic(nd, false, false, 0);
 			if(pm) pm->group();
 			
