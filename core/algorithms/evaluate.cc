@@ -668,7 +668,11 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			cb.multiple_pick=true;
 			cb.block_length=1;
 			for(size_t n=0; n<ni; ++n) {
-				Ex iname(tr.child(it,n));
+				// If this child is a coordinate, take it out of the combinatorics.
+				if(kernel.properties.get<Coordinate>(tr.child(it, n))!=0)
+					continue;
+
+				Ex iname(tr.child(it,n)); // FIXME: does not handle Accented objects
 				if(ind_dummy.find(iname)!=ind_dummy.end()) {
 					// If this dummy has one leg on the argument of the derivative,
 					// take it out of the combinatorics, because its value will
@@ -691,6 +695,10 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				}
 			if(cb.sublengths.size()>0) // only if not all indices are fixed
 				cb.permute();
+
+			#ifdef DEBUG
+			std::cerr << cb.size() << " permutations of indices" << std::endl;
+			#endif
 			
 			// Note: indices on partial may be dummies, in which case the
 			// values cannot be arbitrary. This is a self-contraction,
@@ -735,13 +743,17 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				auto pch=tr.begin(it);
 				iterator arg=tr.begin(rhs);
 				for(size_t j=0, cb_j=0; j<ni; ++j) {
-					// std::cerr << j << " : ";
+					#ifdef DEBUG
+					std::cerr << j << " : ";
+					#endif
 					bool done=false;
 					for(auto& d: dummy_positions) {
 						if(d.first==j) {
 							// This index is forced to a value because it is a dummy of which the partner
 							// is fixed by the argument on which the derivative acts.
-							// std::cerr << "fixed" << std::endl;
+							#ifdef DEBUG
+							std::cerr << "fixed" << std::endl;
+							#endif
 							eqcopy.insert_subtree(rhs.begin(), tr.child(lhs,d.second))->fl.parent_rel=str_node::p_sub;
 							done=true;
 							break;
