@@ -925,6 +925,13 @@ std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg, bool deep, boo
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
 	}
 
+template<class F, typename Arg1>
+std::shared_ptr<Ex> dispatch_ex_preorder(std::shared_ptr<Ex> ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)
+	{
+	F algo(*get_kernel_from_scope(), *ex, arg);
+	return dispatch_base(ex, algo, deep, repeat, depth, true);
+	}
+
 template<class F, typename Arg1, typename Arg2>
 std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
 	{
@@ -1299,7 +1306,7 @@ PYBIND11_MODULE(cadabra2, m)
 		 pybind11::arg("ex"),pybind11::arg("preferred"),pybind11::arg("converters"),
 		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
-	m.def("vary", &dispatch_ex<vary, Ex>, 
+	m.def("vary", &dispatch_ex_preorder<vary, Ex>, 
 		 pybind11::arg("ex"),
 		  pybind11::arg("rules"),
 		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
