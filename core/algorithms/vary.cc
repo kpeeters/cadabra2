@@ -46,16 +46,20 @@ bool vary::can_apply(iterator it)
 	if(*it->name=="\\sum") return true;
 	if(*it->name=="\\pow") return true;
 	if(*it->name=="\\int") return true;
+	if(*it->name=="\\equals") return false;
 	if(is_single_term(it)) return true;
 	if(is_nonprod_factor_in_prod(it)) return true;
 	const Derivative *der = kernel.properties.get<Derivative>(it);
 	if(der) return true;
-	der = kernel.properties.get<Derivative>(tr.parent(it));
-	if(der) return true;
 	const Accent *acc = kernel.properties.get<Accent>(it);
 	if(acc) return true;
-	acc = kernel.properties.get<Accent>(tr.parent(it));
-	if(acc) return true;
+	
+	if(!tr.is_head(it)) {
+	  der = kernel.properties.get<Derivative>(tr.parent(it));
+	  if(der) return true;
+	  acc = kernel.properties.get<Accent>(tr.parent(it));
+	  if(acc) return true;
+	}
 	return false;
 	}
 
