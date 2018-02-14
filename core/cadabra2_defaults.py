@@ -12,6 +12,8 @@ import sys
 import cadabra2
 from cadabra2 import *
 __cdbkernel__=cadabra2.__cdbkernel__
+import os
+os.environ.setdefault('PATH', '')
 
 #sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 
