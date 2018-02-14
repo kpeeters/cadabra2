@@ -246,10 +246,23 @@ Algorithm::result_t vary::apply(iterator& it)
 		return result_t::l_no_action;
 		}
 
-	// If we get here, we are talking about a single term for which we do 
-   // not know (yet) how to take a variational derivative. For instance
-	// some unknown function f(a) varied wrt. a. This should spit out
-	// \delta{f(a)}{\delta{a}}\delta{a} or something like that.
+	// If we get here, we are talking about a single term, e.g.
+	// ex:= x_{m};
+
+	if(is_single_term(it)) {
+		substitute subs(kernel, tr, args);
+		if(subs.can_apply(it)) {
+			if(subs.apply(it)==result_t::l_applied) {
+				return result_t::l_applied;
+				}
+			}
+		return result_t::l_no_action;
+		}
+
+	// If we get here we have a single term for which we do not know
+   // (yet) how to take a variational derivative. For instance some
+   // unknown function f(a) varied wrt. a. This should spit out
+   // \delta{f(a)}{\delta{a}}\delta{a} or something like that.
 
 	throw RuntimeException("Do not yet know how to vary that expression.");
 //	std::cerr << "No idea how to vary single term " << Ex(it) << std::endl;

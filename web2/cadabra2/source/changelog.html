@@ -22,8 +22,12 @@
   <li>Optionally build with support for mathematica scalar
 	 backend; see <tt><a href="/manual/map_mma.html">map_mma</a></tt>.</li>
   <li>Many bugfixes for expression display and sympy conversion.</li>
-  <li>Now using pybind instead of boost.python.</li>
+  <li>Now using pybind instead of boost.python, in preparation for
+  Windows port, and to enable building against Anaconda.</li>
   <li>Copy/paste of output cells added.</li>
+  <li>Fixed: vary on single-term expressions (github/57)</li>
+  <li>Fixed: evaluat with dense factors and no 'values' property on
+	 indices (github/68)</li>
 </ul>
 
 <a name="2.1.7"></a>
