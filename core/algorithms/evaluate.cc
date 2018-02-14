@@ -330,10 +330,13 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 		if(!id)
 			throw RuntimeException("No Indices property for index.");
 
+		if(id->values.size()==0)
+			throw RuntimeException("No 'values' property on Indices declaration, cannot sum.");
+				
 		std::vector<Ex> values;
 		for(const auto& ex: id->values) 
 			values.push_back(ex);
-
+		
 		mi.values.push_back(values);
 		++fi;
 		}
