@@ -7,6 +7,7 @@
 using namespace cadabra;
 
 Kernel::Kernel()
+	: scalar_backend(scalar_backend_t::sympy)
 	{
 //	std::cerr << "Kernel() " << this << std::endl;
 	}

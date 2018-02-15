@@ -106,7 +106,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	result_t ret=result_t::l_no_action;
 
 	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
-	// std::cerr << "apply_generic at " << *it->name << " " << *start->name << std::endl;
+	// std::cerr << "apply_generic at " << it.node << " " << *it->name << " " << *start->name << std::endl;
 
 	while(tr.is_valid(start)) {
 //		std::cerr << "evaluate main loop at " << *start->name << std::endl;
@@ -120,10 +120,14 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 //			std::cerr << "next = " << *next->name << std::endl;
 		do {
 //			std::cout << "apply at " << *enter->name << std::endl;
+			bool work_is_topnode=(enter==it);
 			if(deep && depth==0) 
 				thisret = apply_deep(enter);
 			else
 				thisret = apply_once(enter);
+
+			if(work_is_topnode)
+				it=enter;
 			
 			// FIXME: handle l_error or remove
 			if(thisret==result_t::l_applied)
@@ -140,6 +144,8 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 		start=next;
 		} 
 
+	// std::cerr << "pre-exit node " << it.node << std::endl;
+
 	// If we are acting at fixed depth, we will not have gone up in the
 	// tree, so missed one cleanup action. Do it now.
 	if(depth>0) {
@@ -153,6 +159,8 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 			if(cpy) it=work;
 			}
 		}
+
+	// std::cerr << "exit node " << it.node << std::endl;
 	
 //	if(tr.is_valid(it)) {
 //		std::cerr << "exit " << *it->name << std::endl;
@@ -165,6 +173,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 
 Algorithm::result_t Algorithm::apply_once(Ex::iterator& it)
 	{
+	// std::cerr << "=== apply_once ===" << std::endl;
 	if(can_apply(it)) {
 		result_t res=apply(it);
 		// std::cerr << "apply algorithm at " << *it->name << std::endl;
@@ -188,7 +197,7 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 	// the tree are nodes at a lower level than the simplification
 	// node.
 
-//	std::cout << "=== apply_deep ===" << std::endl;
+	// std::cout << "=== apply_deep ===" << std::endl;
 //	tr.print_recursive_treeform(std::cout, it);
 
 	post_order_iterator current=it;

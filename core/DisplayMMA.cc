@@ -609,6 +609,20 @@ void DisplayMMA::import(Ex& ex)
 					break;
 					}
 				}
+
+			// Move child nodes of partial to the right place.
+			if(*it->name=="\\partial") {
+				std::cerr << "to convert: " << Ex(it) << std::endl;
+				auto args = ex.begin(it);
+				++args;
+				while(args!=ex.end(it)) {
+					auto nxt=args;
+					++nxt;
+					ex.move_before(ex.begin(it), args)->fl.parent_rel=str_node::p_sub;
+					args=nxt;
+					}
+				}
+
 			// See if we have added dependencies to this symbol (lookup in map).
 			// If yes, strip them off again.
 			auto fnd = depsyms.find(it->name);
@@ -638,21 +652,6 @@ void DisplayMMA::import(Ex& ex)
 //				ex.erase(ex.begin(it));
 				}
 			
-			// Move child nodes of partial to the right place.
-			if(*it->name=="\\partial") {
-				// std::cerr << Ex(it) << std::endl;
-				auto args = ex.begin(it);
-				++args;
-				while(args!=ex.end(it)) {
-					auto nxt=args;
-					++nxt;
-					ex.move_before(ex.begin(it), args)->fl.parent_rel=str_node::p_sub;
-					args=nxt;
-					}
-//				ex.flatten(comma);
-//				ex.erase(comma);
-//				}
-				}
 
 			return it;
 			});

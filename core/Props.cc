@@ -43,7 +43,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 	// Special case for range wildcards.
 	// FIXME: move this to Compare.cc (see the FIXME there)
 
-//	 std::cerr << "Attempting to match " << Ex(it) << " to " << obj << std::endl;
+	// std::cerr << "Attempting to match " << Ex(it) << " to " << Ex(obj) << std::endl;
 
 	if(it->name==obj.begin()->name && children_wildcard()) {
 		Ex::iterator hm=obj.begin(obj.begin());
@@ -101,7 +101,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 																 Ex_comparator::useprops_t::not_at_top, 
 																 ignore_parent_rel);
 
-	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << obj << " = " << res << std::endl;
+	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << Ex(obj) << " = " << static_cast<int>(res) << std::endl;
 
 	if(is_in(res, 
 				 { Ex_comparator::match_t::subtree_match,

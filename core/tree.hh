@@ -1,7 +1,7 @@
 
 //	STL-like templated tree class.
 //
-// Copyright (C) 2001-2016 Kasper Peeters <kasper@phi-sci.com>
+// Copyright (C) 2001-2018 Kasper Peeters <kasper@phi-sci.com>
 // Distributed under the GNU General Public License version 3.
 //
 // Special permission to use tree.hh under the conditions of a 
@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.6
-    \date     13-Jun-2016
+    \version  3.7
+    \date     30-Jan-2018
     \see      http://tree.phi-sci.com/
     \see      http://tree.phi-sci.com/ChangeLog
 
@@ -1696,15 +1696,27 @@ template <typename iter> iter tree<T, tree_node_allocator>::move_ontop(iter targ
 
 	// take src out of the tree
 	if(src->prev_sibling!=0) src->prev_sibling->next_sibling=src->next_sibling;
-	else                     src->parent->first_child=src->next_sibling;
+	else {
+		assert(src->parent!=0);
+		src->parent->first_child=src->next_sibling;
+		}
 	if(src->next_sibling!=0) src->next_sibling->prev_sibling=src->prev_sibling;
-	else                     src->parent->last_child=src->prev_sibling;
+	else {
+		assert(src->parent!=0);
+		src->parent->last_child=src->prev_sibling;
+		}
 
 	// connect it to the new point
 	if(b_prev_sibling!=0) b_prev_sibling->next_sibling=src;
-	else                  b_parent->first_child=src;
+	else {
+		assert(b_parent!=0);
+		b_parent->first_child=src;
+		}
 	if(b_next_sibling!=0) b_next_sibling->prev_sibling=src;
-	else                  b_parent->last_child=src;
+	else {
+		assert(b_parent!=0);
+		b_parent->last_child=src;
+		}
 	src->prev_sibling=b_prev_sibling;
 	src->next_sibling=b_next_sibling;
 	src->parent=b_parent;

@@ -1,20 +1,21 @@
 
-#include "algorithms/map_mma.hh"
-#include "MMACdb.hh"
+#include "simplify.hh"
+#include "Cleanup.hh"
 #include "properties/Coordinate.hh"
 #include "properties/Symbol.hh"
 #include "SympyCdb.hh"
+#ifdef MATHEMATICA_FOUND
+   #include "MMACdb.hh"
+#endif
 
 using namespace cadabra;
 
-//#define DEBUG 1
-
-map_mma::map_mma(const Kernel& k, Ex& tr, const std::string& head)
-	: Algorithm(k, tr), head_(head)
+simplify::simplify(const Kernel& k, Ex& tr)
+	: Algorithm(k, tr)
 	{
 	}
 
-bool map_mma::can_apply(iterator st)
+bool simplify::can_apply(iterator st)
 	{
 	// For \components nodes we need to map at the level of the individual
 	// component values, not the top \components node.
@@ -79,15 +80,10 @@ bool map_mma::can_apply(iterator st)
 	return false;
 	}
 
-Algorithm::result_t map_mma::apply(iterator& it)
+Algorithm::result_t simplify::apply(iterator& it)
 	{
-	#ifdef DEBUG
-	std::cerr << "map_mma on " << Ex(it) << std::endl;
-	#endif
-	
-	std::vector<std::string> wrap, args;
-	if(head_.size()>0)
-		wrap.push_back(head_);
+	std::vector<std::string> wrap;
+	std::vector<std::string> args_;
 
 	if(left.size()>0) {
 		Ex prod("\\prod");
@@ -95,7 +91,23 @@ Algorithm::result_t map_mma::apply(iterator& it)
 			prod.append_child(prod.begin(), fac);
 		auto top=prod.begin();
 		// std::cerr << "Feeding to sympy " << prod << std::endl;
-		MMA::apply_mma(kernel, prod, top, wrap, args, "");
+		switch(kernel.scalar_backend) {
+			case Kernel::scalar_backend_t::sympy:
+				wrap.push_back("simplify");
+				if(pm) pm->group("sympy");
+				sympy::apply(kernel, prod, top, wrap, args_, "");
+				if(pm) pm->group();
+				break;
+			case Kernel::scalar_backend_t::mathematica:
+#ifdef MATHEMATICA_FOUND
+				wrap.push_back("FullSimplify");
+//				args_.push_back("Trig -> False");				
+				if(pm) pm->group("mathematica");
+				MMA::apply_mma(kernel, prod, top, wrap, args_, "");
+				if(pm) pm->group();
+#endif				
+				break;
+			}
 		// Now remove the non-index carrying factors and replace with
 		// the factors of 'prod' just simplified.
 		tr.insert_subtree(*left.begin(), top);
@@ -107,7 +119,23 @@ Algorithm::result_t map_mma::apply(iterator& it)
 		return result_t::l_applied;
 		}
 	else {
-		MMA::apply_mma(kernel, tr, it, wrap, args, "");
+		switch(kernel.scalar_backend) {
+			case Kernel::scalar_backend_t::sympy:
+				wrap.push_back("simplify");
+				if(pm) pm->group("sympy");				
+				sympy::apply(kernel, tr, it, wrap, args_, "");
+				if(pm) pm->group();				
+				break;
+			case Kernel::scalar_backend_t::mathematica:
+#ifdef MATHEMATICA_FOUND				
+				wrap.push_back("FullSimplify");
+//				args_.push_back("Trig -> False");
+				if(pm) pm->group("mathematica");
+				MMA::apply_mma(kernel, tr, it, wrap, args_, "");
+				if(pm) pm->group();				
+#endif
+				break;
+			}
 		it.skip_children();
 		return result_t::l_applied;
 		}

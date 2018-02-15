@@ -6,9 +6,8 @@
 /// \ingroup core
 ///
 /// Cadabra kernel that keeps all state information that needs to be passed
-/// around to algorithms and properties. At the moment only stores property
-/// information, but could also store global settings and the like at some
-/// later stage.
+/// around to algorithms and properties. Stores property information and
+/// global settings.
 
 namespace cadabra {
 
@@ -26,6 +25,10 @@ class Kernel {
 		
 		
 		Properties properties;
+
+		/// Settings.
+		enum class scalar_backend_t { sympy, mathematica } scalar_backend;
+	  		
 };
 
 }

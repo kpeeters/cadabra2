@@ -1,4 +1,4 @@
-Doxyfile.bak
+*.bak
 doxygen
 .DS_Store
 *~

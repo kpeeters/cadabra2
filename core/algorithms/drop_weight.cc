@@ -33,7 +33,7 @@ bool drop_keep_weight::can_apply(iterator st)
 	++argit;
 	weight=*argit->multiplier;
 	
-	//std::cerr << "dk: " << label << " = " << weight << std::endl;
+	// std::cerr << "dk: " << label << " = " << weight << std::endl;
 
 	const WeightInherit *gmnpar=0;
 	const Weight        *wghpar=0;

@@ -130,6 +130,7 @@
 #include "algorithms/product_rule.hh"
 #include "algorithms/reduce_delta.hh"
 #include "algorithms/rename_dummies.hh"
+#include "algorithms/simplify.hh"
 #include "algorithms/sort_product.hh"
 #include "algorithms/sort_spinors.hh"
 #include "algorithms/sort_sum.hh"
@@ -1044,8 +1045,16 @@ PYBIND11_MODULE(cadabra2, m)
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
 	// pull that into the interpreter scope in the 'cadabra2_default.py' file.
+	pybind11::enum_<Kernel::scalar_backend_t>(m, "scalar_backend_t")
+		.value("sympy",       Kernel::scalar_backend_t::sympy)
+		.value("mathematica", Kernel::scalar_backend_t::mathematica)
+		.export_values()
+		;
+
 	pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
-		.def(pybind11::init<>());
+		.def(pybind11::init<>())
+		.def_readonly("scalar_backend", &Kernel::scalar_backend);
+	
 	Kernel* kernel = create_scope();
 	m.attr("__cdbkernel__") = pybind11::cast(kernel);
 	
@@ -1117,6 +1126,21 @@ PYBIND11_MODULE(cadabra2, m)
 	// Inspection algorithms and other global functions which do not fit into the C++
    // framework anymore.
 
+	m.def("kernel", [](pybind11::kwargs dict) {
+			Kernel *k=get_kernel_from_scope();			
+			for(auto& item: dict) {
+				std::string key=item.first.cast<std::string>();
+				std::string val=item.second.cast<std::string>();				
+				if(key=="scalar_backend") {
+					if(val=="sympy")            k->scalar_backend=Kernel::scalar_backend_t::sympy;
+					else if(val=="mathematica") k->scalar_backend=Kernel::scalar_backend_t::mathematica;
+					else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
+					}
+				else {
+					throw ArgumentException("unknown argument '"+key+"'.");
+					}
+				}
+			});
 	m.def("tree", &print_tree);
 	m.def("init_ipython", &init_ipython);
 	m.def("properties", &list_properties);
@@ -1242,6 +1266,13 @@ PYBIND11_MODULE(cadabra2, m)
 		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
 		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
+
+	m.def("simplify", &dispatch_ex<simplify>, 
+			pybind11::arg("ex"),
+			pybind11::arg("deep")=false,
+			pybind11::arg("repeat")=false,
+			pybind11::arg("depth")=0,
+			pybind11::return_value_policy::reference_internal );
 
 	m.def("order", &dispatch_ex<order, Ex, bool>, 
 		 pybind11::arg("ex"),

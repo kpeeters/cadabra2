@@ -3,8 +3,9 @@
 #include "Cleanup.hh"
 #include "Permutations.hh"
 #include "MultiIndex.hh"
-#include "SympyCdb.hh"
+//#include "SympyCdb.hh"
 #include "algorithms/evaluate.hh"
+#include "algorithms/simplify.hh"
 #include "algorithms/substitute.hh"
 #include "properties/EpsilonTensor.hh"
 #include "properties/PartialDerivative.hh"
@@ -13,7 +14,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -49,6 +50,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 #endif			
 			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
+			else if(*(walk->name)=="\\pow")   return walk; // this is a scalar, will get handled elsewhere
 			else if(is_component(walk)) return walk;
 			else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
 			else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge" || *(walk->name)=="\\frac")  
@@ -126,6 +128,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 	classify_indices(it, full_ind_free, full_ind_dummy);
 	for(auto i: full_ind_free) {
+		// std::cerr << "finding prop for " << Ex(i.second) << std::endl;
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
 		if(prop==0) {
 			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second);
@@ -133,8 +136,8 @@ Ex::iterator evaluate::handle_sum(iterator it)
 				throw ArgumentException("evaluate: Index "+*(i.second->name)
 												+" does not have an Indices property.");
 			}
-		
-		if(prop->values.size()==0)
+
+		if(prop!=0 && prop->values.size()==0)
 			throw ArgumentException("evaluate: Do not know values of index "+*(i.second->name)+".");
 		}
 	
@@ -160,7 +163,9 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	auto sib2=sib1;
 	++sib2;
 	while(sib2!=tr.end(it)) {
-//		std::cerr << "merging components " << Ex(sib1) << " and " << Ex(sib2) << std::endl;
+		#ifdef DEBUG
+		std::cerr << "merging components " << Ex(sib1) << " and " << Ex(sib2) << std::endl;
+		#endif
 		merge_components(sib1, sib2);
 		sib2=tr.erase(sib2);
 		}
@@ -210,6 +215,22 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 		sib=wrap_scalar_in_components_node(sib);
 		// std::cerr << "wrapped scalar as tensor" << std::endl;
 		return sib;
+		}
+	// If the indices are all Coordinates, this is a scalar, not a tensor.
+	// It then needs simple wrapping just like a 'proper' scalar handed above.
+	if(ind_dummy.size()==0 && ind_free.size()!=0) {
+		bool all_coordinates=true;
+		for(auto& ind: ind_free) {
+			const Coordinate *crd = kernel.properties.get<Coordinate>(ind.second);
+			if(!crd) {
+				all_coordinates=false;
+				break;
+				}
+			}
+		if(all_coordinates) {
+			sib=wrap_scalar_in_components_node(sib);
+			return sib;
+			}
 		}
 	
 	// Attempt to apply each component substitution rule on this term.
@@ -623,12 +644,17 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				}
 			
 			// All indices on \partial can take any of the values of the
-			// dependencies, EXCEPT when the index is a dummy index. In
-			// the latter case, we firstly need to ensure that both
-			// indices in the dummy pair take the same value (this is
-			// done with d2p). Secondly, we need to ensure that if the
-			// second index sits on the argument, we only use the value
-			// of that index as given in the 'iv' list.
+			// dependencies, EXCEPT when the index is a dummy index OR
+			// when the index on the partial is a Coordinate.
+			//
+			// In the 1st exceptional case, we firstly need to ensure
+			// that both indices in the dummy pair take the same value
+			// (this is done with d2p). Secondly, we need to ensure that
+			// if the second index sits on the argument, we only use the
+			// value of that index as given in the 'iv' list.
+			//
+			// In the 2nd exceptional case, we just need to determine if
+			// the particular derivative does not annihilate the argument.
 
 			// Need all combinations of values, with repetition (multiple
 			// pick) allowed.
@@ -643,7 +669,11 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			cb.multiple_pick=true;
 			cb.block_length=1;
 			for(size_t n=0; n<ni; ++n) {
-				Ex iname(tr.child(it,n));
+				// If this child is a coordinate, take it out of the combinatorics.
+				if(kernel.properties.get<Coordinate>(tr.child(it, n))!=0)
+					continue;
+
+				Ex iname(tr.child(it,n)); // FIXME: does not handle Accented objects
 				if(ind_dummy.find(iname)!=ind_dummy.end()) {
 					// If this dummy has one leg on the argument of the derivative,
 					// take it out of the combinatorics, because its value will
@@ -666,6 +696,10 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				}
 			if(cb.sublengths.size()>0) // only if not all indices are fixed
 				cb.permute();
+
+			#ifdef DEBUG
+			std::cerr << cb.size() << " permutations of indices" << std::endl;
+			#endif
 			
 			// Note: indices on partial may be dummies, in which case the
 			// values cannot be arbitrary. This is a self-contraction,
@@ -710,17 +744,27 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				auto pch=tr.begin(it);
 				iterator arg=tr.begin(rhs);
 				for(size_t j=0, cb_j=0; j<ni; ++j) {
-					// std::cerr << j << " : ";
+					#ifdef DEBUG
+					std::cerr << j << " : ";
+					#endif
 					bool done=false;
 					for(auto& d: dummy_positions) {
 						if(d.first==j) {
 							// This index is forced to a value because it is a dummy of which the partner
 							// is fixed by the argument on which the derivative acts.
-							// std::cerr << "fixed" << std::endl;
+							#ifdef DEBUG
+							std::cerr << "fixed" << std::endl;
+							#endif
 							eqcopy.insert_subtree(rhs.begin(), tr.child(lhs,d.second))->fl.parent_rel=str_node::p_sub;
 							done=true;
 							break;
 							}
+						}
+					// std::cerr << "testing index " << j << " of \n" << Ex(it) << std::endl;
+					if(kernel.properties.get<Coordinate>(tr.child(it, j))!=0) {
+						// std::cerr << "Coordinate, so need straight copy" << std::endl;
+						eqcopy.insert_subtree(rhs.begin(), tr.child(it,j))->fl.parent_rel=str_node::p_sub;
+						done=true;
 						}
 					if(!done) {
 						size_t fromj=cb_j;
@@ -765,18 +809,36 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			return true;
 			});
 
-   one(it->multiplier);
-	// std::cerr << "now " << Ex(it) << std::endl;
+	#ifdef DEBUG
+	std::cerr << tr.number_of_children(ivalues) << " nonzero components in this derivative" << std::endl;
+	#endif
+	if(tr.number_of_children(ivalues)==0) {
+		// All components of the derivative evaluated to zero because
+		// there were no dependencies. Replace this derivative node with
+		// a zero and return;
+		node_zero(it);
+		return it;
+		}
+
+	one(it->multiplier);
+
+	#ifdef DEBUG
+	std::cerr << "now " << Ex(it) << std::endl;
+	#endif
 
 
-	// Now move the free (but not the internal dummy!) partial indices
-   //	to the components node, and then unwrap the partial node.
+	// Now move the free (but not the internal dummy or Coordinate!)
+   //	partial indices to the components node, and then unwrap the
+   //	partial node.
 	
 	auto pch=tr.begin(it);
 	for(size_t n=0; n<ni; ++n) {
 		sibling_iterator nxt=pch;
 		++nxt;
 		if(ind_dummy.find(Ex(pch))!=ind_dummy.end()) {
+			tr.erase(pch);
+			}
+		else if(kernel.properties.get<Coordinate>(pch)!=0) {
 			tr.erase(pch);
 			}
 		else
@@ -860,29 +922,32 @@ void evaluate::simplify_components(iterator it)
 	{
 	assert(*it->name=="\\components");
 
-	// Simplify the components of the now single \component node by calling sympy.
-	// We feed it the components and wrap in a 'simplify'.
+	// Simplify the components of the now single \component node by
+	// calling the scalar backend.  We feed it the components
+	// individually.
 	sibling_iterator lst = tr.end(it);
 	--lst;
+
+	cadabra::simplify simp(kernel, tr);
+	simp.set_progress_monitor(pm);
 	
 	cadabra::do_list(tr, lst, [&](Ex::iterator eqs) {
 			assert(*eqs->name=="\\equals");
 			auto rhs1 = tr.begin(eqs);
 			++rhs1;
 			iterator nd=rhs1;
-			if(pm) pm->group("sympy");
-			std::vector<std::string> wrap;
-#ifndef USE_TREETRACKER
-//			wrap.push_back("together");
-			wrap.push_back("simplify");
-			sympy::apply(kernel, tr, nd, wrap, std::vector<std::string>(), "");
-#else
-			sympy::apply(kernel, tr, nd, wrap, std::vector<std::string>(), "");
-#endif
+			if(pm) pm->group("scalar_backend");
+			// std::cerr << "simplify at " << Ex(nd) << std::endl;
+			simp.apply_generic(nd, false, false, 0);
 			if(pm) pm->group();
-			
-			if(nd->is_zero())
+
+			if(nd->is_zero()) {
+				// std::cerr << "component zero " << nd.node << std::endl;
 				tr.erase(eqs);
+				}
+			else {
+				// std::cerr << "component non-zero " << nd.node << std::endl;				
+				}
 			return true;
 			});
 
@@ -902,7 +967,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
 			const Coordinate *cd = kernel.properties.get<Coordinate>(nd);
-			if(cd) {
+			if(cd && nd->fl.parent_rel==str_node::p_none) {
 				Ex cpy(nd);
 				cpy.begin()->fl.bracket=str_node::b_none;
 				cpy.begin()->fl.parent_rel=str_node::p_none;
@@ -914,10 +979,10 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 
 	// Determine implicit dependence via Depends.
 #ifdef DEBUG
-	std::cerr << "deps for " << *it->name << std::endl;
+	std::cerr << "deps for " << Ex(it) << std::endl;
 #endif
 
-	const DependsBase *dep = kernel.properties.get<DependsBase>(it);
+	const DependsBase *dep = kernel.properties.get<DependsBase>(it, true);
 	if(dep) {
 #ifdef DEBUG
 		std::cerr << "implicit deps" << std::endl;
@@ -961,6 +1026,11 @@ Ex::iterator evaluate::handle_prod(iterator it)
 		sibling_iterator nxt=sib;
 		++nxt;
 
+		if(*sib->multiplier==0) { // zero factors make the entire product zero.
+			node_zero(it);
+			return it;
+			}
+		
 		if(is_component(sib)==false) {
 			index_map_t empty;
 			handle_factor(sib, empty);
