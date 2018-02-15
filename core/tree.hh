@@ -1696,15 +1696,27 @@ template <typename iter> iter tree<T, tree_node_allocator>::move_ontop(iter targ
 
 	// take src out of the tree
 	if(src->prev_sibling!=0) src->prev_sibling->next_sibling=src->next_sibling;
-	else                     src->parent->first_child=src->next_sibling;
+	else {
+		assert(src->parent!=0);
+		src->parent->first_child=src->next_sibling;
+		}
 	if(src->next_sibling!=0) src->next_sibling->prev_sibling=src->prev_sibling;
-	else                     src->parent->last_child=src->prev_sibling;
+	else {
+		assert(src->parent!=0);
+		src->parent->last_child=src->prev_sibling;
+		}
 
 	// connect it to the new point
 	if(b_prev_sibling!=0) b_prev_sibling->next_sibling=src;
-	else                  b_parent->first_child=src;
+	else {
+		assert(b_parent!=0);
+		b_parent->first_child=src;
+		}
 	if(b_next_sibling!=0) b_next_sibling->prev_sibling=src;
-	else                  b_parent->last_child=src;
+	else {
+		assert(b_parent!=0);
+		b_parent->last_child=src;
+		}
 	src->prev_sibling=b_prev_sibling;
 	src->next_sibling=b_next_sibling;
 	src->parent=b_parent;

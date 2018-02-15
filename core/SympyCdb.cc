@@ -77,9 +77,17 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 
 
 	Ex::iterator first=parser.tree->begin();
-	// std::cerr << "reparsed " << Ex(first) << std::endl;
+#ifdef DEBUG
+	std::cerr << "reparsed " << first.node << "\n" << Ex(first) << std::endl;
+	std::cerr << "before " << it.node << "\n" << Ex(it) << std::endl;
+#endif
    it = ex.move_ontop(it, first);
+#ifdef DEBUG
+   std::cerr << "after " << Ex(it) << std::endl;
+   std::cerr << "top node " << it.node << std::endl;
+#endif
 
+   
 	return it;
 	}
 

@@ -101,7 +101,7 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 																 Ex_comparator::useprops_t::not_at_top, 
 																 ignore_parent_rel);
 
-	std::cerr << "*** Comparing " << Ex(it) <<  " with " << Ex(obj) << " = " << static_cast<int>(res) << std::endl;
+	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << Ex(obj) << " = " << static_cast<int>(res) << std::endl;
 
 	if(is_in(res, 
 				 { Ex_comparator::match_t::subtree_match,

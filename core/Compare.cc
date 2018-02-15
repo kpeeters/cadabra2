@@ -18,8 +18,8 @@
 #include "properties/SortOrder.hh"
 
 // In order to enable/disable debug output, also flip the swith in 'report' below.
-#define DEBUG(ln) ln
-//#define DEBUG(ln)
+//#define DEBUG(ln) ln
+#define DEBUG(ln)
 
 namespace cadabra {
 
@@ -401,7 +401,7 @@ std::string Ex_comparator::tab() const
 
 Ex_comparator::match_t Ex_comparator::report(Ex_comparator::match_t r) const
 	{
-//	return r;
+	return r;
 
 	std::cerr << tab() << "result = ";
 	switch(r) {

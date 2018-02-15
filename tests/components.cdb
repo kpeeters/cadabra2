@@ -19,7 +19,7 @@ def test01():
     {m,n}::Indices(values={t,r}, position=fixed).
     ex:= A_{m};
     rl:= A_{t} = 3;
-    evaluate(ex, rl)
+    evaluate(ex, rl, simplify=True)
     tst:= \components_{m}( \comma{ \comma{t} = 3  } ) - @(ex);
     collect_components(_)
     assert(tst==0)
@@ -97,7 +97,7 @@ def test03():
     # Finally, the Kretschmann scalar.
     K:= K = R^{\mu}_{\nu\rho\sigma} R^{\lambda}_{\kappa\gamma\chi} g_{\mu\lambda} g^{\nu\kappa} g^{\rho\gamma} g^{\sigma\chi};
     substitute(K, rm)
-    evaluate(K, ss);
+    evaluate(K, ss)
     tmp=rhs(K)
     tst:= 48 M**2/r**6 - @(tmp);
     simplify(tst)
@@ -284,8 +284,8 @@ def test14():
     \partial{#}::PartialDerivative;
     ex:= F^{\mu} \partial_{\mu}{ f };
     rl:= F^{t} = A, F^{x} = B, F^{z} = C;
-    evaluate(ex, rl);
-    canonicalise(ex);
+    evaluate(ex, rl)
+    canonicalise(ex)
     tst:= A \partial_{t}{f} + B \partial_{x}{f} + C \partial_{z}{f} - @(ex);
     assert(tst==0)
     print("Test 14 passed")
@@ -523,16 +523,21 @@ def test26():
 
 test26()
 
-{r,t}::Coordinate;        
-{m,n}::Indices(position=fixed, values={r,t});
-{\sigma,\tau}::Coordinate;        
-X^{m}::Depends(\sigma,\tau);
-\partial{#}::PartialDerivative;
-ex:=\partial_{\tau}{X^{m}};
-evaluate(ex);
-tst:=\components^{m}{\comma{ \comma{t} = X^{t} }{ \comma{r} = X^{r} } } - @(ex);
-collect_components(_);
-assert(tst==0);
+def test27():
+    __cdbkernel__=create_scope()        
+    {r,t}::Coordinate;        
+    {m,n}::Indices(position=fixed, values={r,t});
+    {\sigma,\tau}::Coordinate;        
+    X^{m}::Depends(\sigma,\tau);
+    \partial{#}::PartialDerivative;
+    ex:=\partial_{\tau}{X^{m}};
+    evaluate(ex)
+    tst:=\components^{m}{\comma{ \comma{t} = \partial_{\tau}{X^{t}} }{ \comma{r} = \partial_{\tau}{X^{r}} } } - @(ex);
+    collect_components(_)
+    assert(tst==0)
+    print("Test 27 passed")
+
+test27()
     
         
 import cdb.relativity as rel
@@ -555,13 +560,20 @@ def test28():
 
 #test27()
         
-print(list(map(lambda x: str(x), server.totals())))
     
+def test28():
+    __cdbkernel__=create_scope()
+    {t,x}::Coordinate:
+    {m,n}::Indices(position=fixed, values={t,x});
+    a::Depends(t,x);
+    \partial{#}::PartialDerivative;
+    ex:= (\partial_{t}{a})**2/a**3+a;
+    evaluate(ex)
+    tst:= (\partial_{t}{a})**2/a**3+a - @(ex);
+    assert(tst==0)
+    print("Test 28 passed")
+
+test28()
 
 
-{t,x}::Coordinate:
-{m,n}::Indices(position=fixed, values={t,x});
-a::Depends(t,x);
-\partial{#}::PartialDerivative;
-ex:= (\partial_{t}{a})**2/a**3+a;
-evaluate(ex);
+print(list(map(lambda x: str(x), server.totals())))

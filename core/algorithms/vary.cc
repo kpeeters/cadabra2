@@ -46,16 +46,20 @@ bool vary::can_apply(iterator it)
 	if(*it->name=="\\sum") return true;
 	if(*it->name=="\\pow") return true;
 	if(*it->name=="\\int") return true;
+	if(*it->name=="\\equals") return false;
 	if(is_single_term(it)) return true;
 	if(is_nonprod_factor_in_prod(it)) return true;
 	const Derivative *der = kernel.properties.get<Derivative>(it);
 	if(der) return true;
-	der = kernel.properties.get<Derivative>(tr.parent(it));
-	if(der) return true;
 	const Accent *acc = kernel.properties.get<Accent>(it);
 	if(acc) return true;
-	acc = kernel.properties.get<Accent>(tr.parent(it));
-	if(acc) return true;
+	
+	if(!tr.is_head(it)) {
+	  der = kernel.properties.get<Derivative>(tr.parent(it));
+	  if(der) return true;
+	  acc = kernel.properties.get<Accent>(tr.parent(it));
+	  if(acc) return true;
+	}
 	return false;
 	}
 
@@ -242,10 +246,23 @@ Algorithm::result_t vary::apply(iterator& it)
 		return result_t::l_no_action;
 		}
 
-	// If we get here, we are talking about a single term for which we do 
-   // not know (yet) how to take a variational derivative. For instance
-	// some unknown function f(a) varied wrt. a. This should spit out
-	// \delta{f(a)}{\delta{a}}\delta{a} or something like that.
+	// If we get here, we are talking about a single term, e.g.
+	// ex:= x_{m};
+
+	if(is_single_term(it)) {
+		substitute subs(kernel, tr, args);
+		if(subs.can_apply(it)) {
+			if(subs.apply(it)==result_t::l_applied) {
+				return result_t::l_applied;
+				}
+			}
+		return result_t::l_no_action;
+		}
+
+	// If we get here we have a single term for which we do not know
+   // (yet) how to take a variational derivative. For instance some
+   // unknown function f(a) varied wrt. a. This should spit out
+   // \delta{f(a)}{\delta{a}}\delta{a} or something like that.
 
 	throw RuntimeException("Do not yet know how to vary that expression.");
 //	std::cerr << "No idea how to vary single term " << Ex(it) << std::endl;

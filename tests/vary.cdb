@@ -7,7 +7,7 @@ def test01():
     \phi::Depends(x);
     \partial{#}::PartialDerivative;
     ex:= \int{ \partial_{\mu}{ \epsilon^{\mu} \phi } }{x};
-    integrate_by_parts(ex, $\epsilon$);
+    integrate_by_parts(ex, $\epsilon$)
     assert(ex==0)
     print('Test 01 passed')
 
@@ -17,8 +17,8 @@ def test02():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
-    integrate_by_parts(ex, $\epsilon$);
-    integrate_by_parts(ex, $\delta{\phi}$, repeat=True);
+    integrate_by_parts(ex, $\epsilon$)
+    integrate_by_parts(ex, $\delta{\phi}$, repeat=True)
     tst:= \int{ \delta{\phi} \partial_{\mu}{  \phi \chi } }{x} + @(ex);
     assert(tst==0)
     print('Test 02 passed')
@@ -29,7 +29,7 @@ def test03():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } }{x};
-    integrate_by_parts(ex, $\delta{\phi}$);
+    integrate_by_parts(ex, $\delta{\phi}$)
     tst:= \int{ \partial_{\mu}{\phi \chi}  \delta{\phi} }{x} + @(ex);
     assert(tst==0)
     print('Test 03 passed')
@@ -40,7 +40,7 @@ def test04():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } + \partial_{\mu}{ \delta{\phi} } \phi \chi }{x};
-    integrate_by_parts(ex, $\delta{\phi}$);
+    integrate_by_parts(ex, $\delta{\phi}$)
     tst:= \int{ -\partial_{\mu}{ \phi \chi } \delta{\phi} - \delta{\phi} \partial_{\mu}{ \phi \chi } }{x} - @(ex);
     assert(tst==0)
     print('Test 04 passed')
@@ -51,7 +51,7 @@ def test05():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:= \int{ \phi \chi \partial_{\mu}{ \delta{\phi} } \Phi \Chi }{x};
-    integrate_by_parts(ex, $\delta{\phi}$);
+    integrate_by_parts(ex, $\delta{\phi}$)
     tst:=\int{ -\partial_{\mu}{ \phi \chi } \delta{\phi} \Phi \Chi - \phi \chi \delta{\phi} \partial_{\mu}{ \Phi \Chi} }{x} - @(ex);
     assert(tst==0)
     print('Test 05 passed')
@@ -65,7 +65,7 @@ def test06():
     \delta{\phi}::Depends(x);
     \partial{#}::PartialDerivative;
     ex:= -1/2 \int{m**2 \phi**2}{x};
-    vary(_, $\phi -> \delta{\phi}$);
+    vary(_, $\phi -> \delta{\phi}$)
     tst:= - \int{m**2 \delta{\phi}\phi}{x} - @(ex);
     assert(tst)
     print('Test 06 passed')
@@ -101,3 +101,25 @@ def test08():
     print("Test 08 passed")
 
 test08()
+ 
+def test09():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex:= S = \int{ Q + R +  A \partial{B} C }{x};
+    vary(_, $B -> b$)
+    tst:= (S = \int{ A \partial{b} C }{x}) - @(ex);
+    assert(tst==0)
+    print("Test 09 passed")
+
+test09()
+
+def test10():
+    __cdbkernel__=create_scope()
+    ex:=x_{m};
+    vary(_, $x_{m} -> b_{m}$);
+    tst:=b_{m} - @(ex);        
+    assert(tst==0)
+    print("Test 10 passed")
+
+test10()
+        

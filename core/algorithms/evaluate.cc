@@ -14,7 +14,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -118,7 +118,7 @@ Ex::iterator evaluate::handle_components(iterator it)
 
 Ex::iterator evaluate::handle_sum(iterator it)
 	{
-	std::cerr << "handle sum" << Ex(it) << std::endl;
+	// std::cerr << "handle sum" << Ex(it) << std::endl;
 
 	index_map_t full_ind_free, full_ind_dummy;
 
@@ -128,7 +128,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 	classify_indices(it, full_ind_free, full_ind_dummy);
 	for(auto i: full_ind_free) {
-		std::cerr << "finding prop for " << Ex(i.second) << std::endl;
+		// std::cerr << "finding prop for " << Ex(i.second) << std::endl;
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
 		if(prop==0) {
 			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second);
@@ -163,15 +163,13 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	auto sib2=sib1;
 	++sib2;
 	while(sib2!=tr.end(it)) {
+		#ifdef DEBUG
 		std::cerr << "merging components " << Ex(sib1) << " and " << Ex(sib2) << std::endl;
+		#endif
 		merge_components(sib1, sib2);
-		std::cerr << "done" << std::endl;
 		sib2=tr.erase(sib2);
-		std::cerr << "erased" << std::endl;
 		}
-	std::cerr << "cleaning up" << std::endl;		
 	cleanup_components(sib1);
-	std::cerr << "cleaned up" << std::endl;			
 
 	it=tr.flatten_and_erase(it);
 
@@ -353,10 +351,13 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 		if(!id)
 			throw RuntimeException("No Indices property for index.");
 
+		if(id->values.size()==0)
+			throw RuntimeException("No 'values' property on Indices declaration, cannot sum.");
+				
 		std::vector<Ex> values;
 		for(const auto& ex: id->values) 
 			values.push_back(ex);
-
+		
 		mi.values.push_back(values);
 		++fi;
 		}
@@ -759,6 +760,12 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 							break;
 							}
 						}
+					// std::cerr << "testing index " << j << " of \n" << Ex(it) << std::endl;
+					if(kernel.properties.get<Coordinate>(tr.child(it, j))!=0) {
+						// std::cerr << "Coordinate, so need straight copy" << std::endl;
+						eqcopy.insert_subtree(rhs.begin(), tr.child(it,j))->fl.parent_rel=str_node::p_sub;
+						done=true;
+						}
 					if(!done) {
 						size_t fromj=cb_j;
 						Ex iname(tr.child(it,j));
@@ -815,17 +822,23 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 
 	one(it->multiplier);
 
-	// std::cerr << "now " << Ex(it) << std::endl;
+	#ifdef DEBUG
+	std::cerr << "now " << Ex(it) << std::endl;
+	#endif
 
 
-	// Now move the free (but not the internal dummy!) partial indices
-   //	to the components node, and then unwrap the partial node.
+	// Now move the free (but not the internal dummy or Coordinate!)
+   //	partial indices to the components node, and then unwrap the
+   //	partial node.
 	
 	auto pch=tr.begin(it);
 	for(size_t n=0; n<ni; ++n) {
 		sibling_iterator nxt=pch;
 		++nxt;
 		if(ind_dummy.find(Ex(pch))!=ind_dummy.end()) {
+			tr.erase(pch);
+			}
+		else if(kernel.properties.get<Coordinate>(pch)!=0) {
 			tr.erase(pch);
 			}
 		else
@@ -909,8 +922,9 @@ void evaluate::simplify_components(iterator it)
 	{
 	assert(*it->name=="\\components");
 
-	// Simplify the components of the now single \component node by calling sympy.
-	// We feed it the components and wrap in a 'simplify'.
+	// Simplify the components of the now single \component node by
+	// calling the scalar backend.  We feed it the components
+	// individually.
 	sibling_iterator lst = tr.end(it);
 	--lst;
 
@@ -926,9 +940,14 @@ void evaluate::simplify_components(iterator it)
 			// std::cerr << "simplify at " << Ex(nd) << std::endl;
 			simp.apply_generic(nd, false, false, 0);
 			if(pm) pm->group();
-			
-			if(nd->is_zero())
+
+			if(nd->is_zero()) {
+				// std::cerr << "component zero " << nd.node << std::endl;
 				tr.erase(eqs);
+				}
+			else {
+				// std::cerr << "component non-zero " << nd.node << std::endl;				
+				}
 			return true;
 			});
 
