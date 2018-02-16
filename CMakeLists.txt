@@ -64,13 +64,14 @@ endif()
 option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
-#################
-# Compiler flags
-#################
-
+#---------------------------------------------------------------------------
+# Compiler flags.
+#---------------------------------------------------------------------------
 # - Set the C++ standard to C++14
 # - Turn optimizations on
 # - Turn off warnings we don't need
+
+include(cmake/winlibs.cmake)
 
 debug_message("Initial compiler flags: ${CMAKE_CXX_FLAGS}")
 
