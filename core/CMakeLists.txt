@@ -26,9 +26,9 @@ if(APPLE)
 endif()
 find_package(GMPXX REQUIRED)
 #find_library(GMPXX_LIB gmpxx REQUIRED)
-#message("-- Found gmp ${GMP_LIB}")
-#message("-- Found gmpxx ${GMPXX_LIB}")
-#message("-- Found python ${PYTHON_LIBRARIES}")
+message("-- Found gmp ${GMP_LIB}")
+message("-- Found gmpxx ${GMPXX_LIB}")
+message("-- Found python ${PYTHON_LIBRARIES}")
 #include_directories(${PYTHON_INCLUDE_DIRS})
 
 # Locate Boost
