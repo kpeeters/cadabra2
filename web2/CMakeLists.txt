@@ -60,6 +60,7 @@ set(ALGOS
   reduce_delta
   rename_dummies
   rewrite_indices
+  simplify
   sort_product
   sort_spinors
   sort_sum

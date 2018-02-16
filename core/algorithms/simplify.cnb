@@ -1,0 +1,87 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{simplify}{Simplify the scalar part of an expression.}\n\nWhen expressions (or sub-expressions) involve scalars, simplification of such expressions can be\n`outsourced' to an external scalar computer algebra system, at present either Sympy or Mathematica.\nThe \\algo{simplify} algorithm finds all scalar sub-expressions and runs the simplification algorithm\nof one of these systems on them."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{simplify}{Simplify the scalar part of an expression.}\n\nWhen expressions (or sub-expressions) involve scalars, simplification of such expressions can be\n`outsourced' to an external scalar computer algebra system, at present either Sympy or Mathematica.\nThe \\algo{simplify} algorithm finds all scalar sub-expressions and runs the simplification algorithm\nof one of these systems on them."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "((\\sin(x))**2 + (\\cos(x))**2) A_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left({\\left(\\sin{x}\\right)}^{2}+{\\left(\\cos{x}\\right)}^{2}\\right) A_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= (\\sin{x}**2 + \\cos{x}**2) A_{m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "simplify(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "By default it will use the Sympy backend, but if you have compiled Cadabra on a system which has Mathematica installed, \nyou can also switch it to use Mathematica instead, by using"
+				}
+			],
+			"hidden" : true,
+			"source" : "By default it will use the Sympy backend, but if you have compiled Cadabra on a system which has Mathematica installed, \nyou can also switch it to use Mathematica instead, by using"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "kernel(scalar_backend=\"mathematica\")"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

@@ -282,6 +282,9 @@ div.python > div.source {
 	 border-left: 1px solid blue;
 	 tab-size: 3;
 }
+div.input_form {
+	 display: none;
+}
 
 div.view_options {
 	 margin-left: 20px;
