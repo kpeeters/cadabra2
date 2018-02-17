@@ -82,20 +82,19 @@ std::string Server::architecture() const
 	return "client-server";
 	}
 
-PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m) {	
-pybind11::class_<Server::CatchOutput>(m, "CatchOutput")
-	.def("write", &Server::CatchOutput::write)
-	.def("clear", &Server::CatchOutput::clear)
-	;
-// pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")
-// 	.def("print", &ProgressMonitor::print)
-// 	.def("totals", &ProgressMonitor_totals_helper);
-
-pybind11::class_<Server, ProgressMonitor>(m, "Server")
-	.def("send", &Server::send)
-	.def("handles", &Server::handles)
-	.def("architecture", &Server::architecture);
-}
+PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m)
+   {
+   auto cadabra_module = pybind11::module::import("cadabra2");
+   
+   pybind11::class_<Server::CatchOutput>(m, "CatchOutput")
+	   .def("write", &Server::CatchOutput::write)
+	   .def("clear", &Server::CatchOutput::clear)
+	   ;
+   pybind11::class_<Server, ProgressMonitor>(m, "Server")
+	   .def("send", &Server::send)
+	   .def("handles", &Server::handles)
+	   .def("architecture", &Server::architecture);
+   }
 
 void Server::init()
 	{
@@ -107,7 +106,6 @@ void Server::init()
  	// Make the C++ CatchOutput class visible on the Python side.
 
 	std::string stdOutErr =
-		"from cadabra2 import ProgressMonitor\n"
 		"from cadabra2_internal import Server, CatchOutput\n"
 		"import sys\n"
 		"server=0\n"
