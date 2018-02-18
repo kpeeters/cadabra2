@@ -1013,7 +1013,7 @@ void def_prop(pybind11::module& m)
 	{
 	using namespace pybind11;
 
-	class_<Property<P>, std::shared_ptr<Property<P>>, BaseProperty>(m, std::make_unique<P>()->name().c_str())
+	class_<Property<P>, std::shared_ptr<Property<P>>, BaseProperty>(m, std::make_shared<P>()->name().c_str())
 		.def(
 			init<std::shared_ptr<Ex>, std::shared_ptr<Ex>>(),
 			arg("ex"),
