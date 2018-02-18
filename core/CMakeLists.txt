@@ -214,7 +214,7 @@ install(PROGRAMS "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
 # Create Python dynamic library 'cadabra' without lib prefix.
 include_directories(".")
 pybind11_add_module(cadabra2 SHARED ${LOCAL_SRC_FILES})
-target_link_libraries(cadabra2 PRIVATE ${PCRE_LIBRARIES} ${GMPXX_LIBRARIES} ${GMP_LIB} ${Boost_LIBRARIES})
+target_link_libraries(cadabra2 PRIVATE ${PCRE_LIBRARIES} ${GMPXX_LIBRARIES} ${Boost_LIBRARIES})
 #add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
 #set_target_properties(cadabra2 PROPERTIES PREFIX "" SUFFIX ".so" IMPORT_SUFFIX ".so")
 set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}")
