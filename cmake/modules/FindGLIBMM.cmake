@@ -10,7 +10,7 @@
 #    glibmm and its dependencies
 
 if(WIN32)
-  windows_find_library(GLIBMM "glibmm" "glibmm.dll" "glib;sigc++")
+  windows_find_library(GLIBMM "glibmm.dll" "glib;sigc++")
   set(GLIBMM3_LIBRARIES ${GLIBMM_LIBRARIES})
 else()
   find_package(PkgConfig REQUIRED)
