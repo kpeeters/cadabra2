@@ -13,7 +13,7 @@
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
 
-#include <unistd.h>
+#include <internal/unistd.h>
 #include <sys/types.h>
 #include <glibmm/miscutils.h>
 

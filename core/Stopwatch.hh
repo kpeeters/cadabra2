@@ -23,7 +23,7 @@
 
 extern "C" {
 #include <sys/time.h>
-#include <unistd.h>
+#include <internal/unistd.h>
 #include <signal.h>
 }
 

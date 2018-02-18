@@ -17,12 +17,16 @@
 #include <json/json.h>
 #include <set>
 
-#include <unistd.h>
 #include <sys/types.h>
 #if !defined(_WIN32) && !defined(_WIN64)
    #include <pwd.h>
+   #include <unistd.h>
 #else
    #include <windows.h>
+   #include <io.h>
+   #include <process.h>
+   #include <direct.h>
+   #define pid_t int
 #endif
 #include <glibmm/miscutils.h>
 

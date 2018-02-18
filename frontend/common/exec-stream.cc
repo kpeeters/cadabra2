@@ -48,7 +48,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <errno.h>
 #include <string.h>
-#include <unistd.h>
+#include <internal/unistd.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <sys/time.h>

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <stdexcept>
 #include <iostream>
-#include <unistd.h>
+#include <internal/unistd.h>
 #include <sstream>
 #include "PreProcessor.hh"
 
