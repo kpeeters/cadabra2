@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include <unistd.h>
+#include <internal/unistd.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
