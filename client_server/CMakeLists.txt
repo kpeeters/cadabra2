@@ -25,7 +25,7 @@ find_package(SQLite3)
 
 # Locate Boost
 find_package(Boost 1.53.0 COMPONENTS system regex program_options date_time filesystem REQUIRED)
-find_package(PkgConfig REQUIRED)
+# find_package(PkgConfig REQUIRED)
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR} ${SQLITE3_INCLUDE_DIR} ../core)
 #pkg_check_modules(UUID uuid REQUIRED)
 #include_directories("${UUID_INCLUDE_DIRS}")
