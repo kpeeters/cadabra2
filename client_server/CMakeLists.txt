@@ -19,6 +19,9 @@ find_package(GLIBMM)
 # Locate sqlite3.
 find_package(SQLite3)
 
+# Ensure we link to the relevant threads library.
+find_package(Threads)
+
 # Locate Boost
 find_package(Boost 1.53.0 COMPONENTS system regex program_options date_time filesystem REQUIRED)
 # find_package(PkgConfig REQUIRED)
@@ -42,7 +45,7 @@ add_definitions("-D_WEBSOCKETPP_CPP11_STL_ -DBOOST_ASIO_HAS_STD_CHRONO")
 # Create the server library
 #link_directories(${UUID_LIBRARY_DIRS})
 add_library(cadabra_server SHARED Server.cc Snoop.cc jsoncpp/jsoncpp.cpp ../core/CdbPython.cc ../core/Stopwatch.cc ../core/ProgressMonitor.cc)
-target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+target_link_libraries(cadabra_server ${Boost_LIBRARIES} ${SNOOP_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES} Threads::Threads)
 target_link_libraries(cadabra_server pybind11::embed)
 if (WIN32)
    target_link_libraries(cadabra_server ws2_32 mswsock)
@@ -50,7 +53,7 @@ endif()
 
 # Create the client library.
 add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc Snoop.cc jsoncpp/jsoncpp.cpp)
-target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES})
+target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES} Threads::Threads)
 if (WIN32)
    target_link_libraries(cadabra_client ws2_32)
 endif()
