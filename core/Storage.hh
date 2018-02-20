@@ -292,3 +292,4 @@ bool is_in(const T& val, const std::initializer_list<T>& list)
 /// DisplayTerminal.
 
 std::ostream& operator<<(std::ostream&, const cadabra::Ex&);
+std::ostream& operator<<(std::ostream&, cadabra::Ex::iterator);
