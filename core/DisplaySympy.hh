@@ -30,7 +30,9 @@ class DisplaySympy : public DisplayBase {
 
 		void import(Ex&);
 
-	protected:
+		std::string preparse_import(const std::string&);
+
+   protected:
 		virtual bool needs_brackets(Ex::iterator it) override;
 
 	private:
@@ -78,7 +80,8 @@ class DisplaySympy : public DisplayBase {
 
 		/// Map from Cadabra symbols to Sympy symbols.
 		std::map<std::string, std::string> symmap;
-
+		std::multimap<std::string, std::string> regex_map;
+      
 		/// Map from symbols which have had dependencies added
 		/// to an expression containing these dependencies.
 		std::map<nset_t::iterator, Ex, nset_it_less> depsyms;

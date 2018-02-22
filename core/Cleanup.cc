@@ -31,16 +31,14 @@ void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 			// once we hit zero, there is nothing to simplify anymore
 			break;
 			}
-		// std::cerr << "zero " << changed << std::endl;
+		if(*it->name=="\\pow")                           res = cleanup_powlike(kernel, tr, it);
+		changed = changed || res;
 		if(*it->name=="\\prod" || *it->name=="\\wedge")  res = cleanup_productlike(kernel, tr, it);
 		changed = changed || res;
-		// std::cerr << "product " << changed << std::endl;
-		if(*it->name=="\\sum")   res = cleanup_sumlike(kernel, tr, it);
+		if(*it->name=="\\sum")                           res = cleanup_sumlike(kernel, tr, it);
 		changed = changed || res;
-		// std::cerr << "sum " << changed << std::endl;
-		if(*it->name=="\\components") res = cleanup_components(kernel, tr, it);
+		if(*it->name=="\\components")                    res = cleanup_components(kernel, tr, it);
 		changed = changed || res;
-		// std::cerr << "components " << changed << std::endl;
 		
 		const Derivative *der = kernel.properties.get<Derivative>(it);
 		if(der) { 
@@ -96,6 +94,37 @@ void check_index_consistency(const Kernel& k, Ex& tr, Ex::iterator it)
 	ct.check_degree_consistency(it); // FIXME: needs to be implemented in Algorithm.
 	}
 
+bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
+   {
+   // Turn (numerical)**(-1) into a multiplier.
+   auto arg=tr.begin(it);
+   auto exp=arg;
+   ++exp;
+   if(*arg->name=="1")
+	   if(*exp->name=="1" && *exp->multiplier==-1) {
+		   multiply(it->multiplier, multiplier_t(1)/(*arg->multiplier));
+		   tr.erase_children(it);
+		   it->name = name_set.insert("1").first;
+		   return true;
+		   }
+
+   // Turn \pow{\pow{A}{B}}{C} into \pow{A}{B*C}.
+   auto ipow=tr.begin(it);
+   if(*ipow->name=="\\pow") {
+	   auto iA=tr.begin(ipow);
+	   auto iB=iA;   ++iB;
+	   auto iC=ipow; ++iC;
+
+	   Ex::iterator expprod=tr.wrap(iB, str_node("\\prod"));
+	   tr.move_after(iB, iC);
+	   it=tr.flatten_and_erase(it);
+	   cleanup_productlike(k, tr, expprod);
+	   return true;
+	   }
+   
+   return false;
+   }
+	
 bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	{
 	bool ret=false;

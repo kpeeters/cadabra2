@@ -116,10 +116,37 @@ test09()
 def test10():
     __cdbkernel__=create_scope()
     ex:=x_{m};
-    vary(_, $x_{m} -> b_{m}$);
+    vary(_, $x_{m} -> b_{m}$)
     tst:=b_{m} - @(ex);        
     assert(tst==0)
     print("Test 10 passed")
 
 test10()
         
+def test11():
+    __cdbkernel__=create_scope()
+    \partial{#}::Derivative;
+    ex:= A \partial{A C + B} + D A;
+    vary(ex, $A->a, B->b, C->c, D->d$)
+    tst:= a\partial{A C + B} + A\partial{a C + A c + b} + d A + D a - @(ex);
+    assert(tst==0)
+    print("Test 11 passed")
+
+test11()
+
+def test12():
+    __cdbkernel__=create_scope()
+    ex:= A/B + A B;
+    vary(ex, $A->a, B->b$);
+    tst:= a/B - A/B**2 b + a B + A b - @(ex);
+    assert(tst==0)
+    print("Test 12 passed")
+
+test12()
+        
+\partial{#}::PartialDerivative;
+\delta{#}::Accent;
+ex:=\int{ \sqrt{A \partial{B} + B \partial{C} } }{x};
+vary(ex, $B->b$);
+distribute(_);
+integrate_by_parts(_, $b$);

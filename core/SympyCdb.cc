@@ -63,6 +63,8 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
    // After that, we construct a new sub-expression from this string by using our
    // own parser, and replace the original.
 
+	result = ds.preparse_import(result);
+	
 	auto ptr = std::make_shared<Ex>();
 	cadabra::Parser parser(ptr);
 	std::stringstream istr(result);

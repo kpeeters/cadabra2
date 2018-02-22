@@ -10,6 +10,7 @@ void pre_clean_dispatch(const Kernel& kernel, Ex& ex, Ex::iterator& it)
 	
 	if(*it->name=="\\frac")                      cleanup_frac(kernel, ex, it);
 	else if(*it->name=="\\sub")                  cleanup_sub(kernel, ex, it);
+	else if(*it->name=="\\sqrt")                 cleanup_sqrt(kernel, ex, it);
 	else if(*it->name=="UP" || *it->name=="DN")  cleanup_updown(kernel, ex, it);
 
 	cleanup_indexbracket(kernel, ex, it);
@@ -48,52 +49,69 @@ void cleanup_frac(const Kernel& k, Ex& tr, Ex::iterator& st)
 		tr.insert(tr.begin(st), str_node("1"));
 		}
 
-	assert(tr.number_of_children(st)>1);
-	Ex::sibling_iterator it=tr.begin(st);
-	multiplier_t rat;
+	// Turn this into a \prod node. Everything except the first child
+	// should be wrapped in a \pow{..}{-1} node.
 
-	bool allnumerical=true;
-	rat=*(it->multiplier);
-	if(it->is_rational()==false) 
-		allnumerical=false;
+	auto sib=tr.begin(st);
+	++sib;
+	while(sib!=tr.end(st)) {
+		sib = tr.wrap(sib, str_node("\\pow"));
+		multiply( tr.append_child(sib, str_node("1"))->multiplier, -1 );
+		++sib;
+		}
+	st->name=name_set.insert("\\prod").first;
+	
+	
+//	assert(tr.number_of_children(st)>1);
+//	Ex::sibling_iterator it=tr.begin(st);
+//	multiplier_t rat;
+//
+//	bool allnumerical=true;
+//	rat=*(it->multiplier);
+//	if(it->is_rational()==false) 
+//		allnumerical=false;
+//
+//	one(it->multiplier);
+//	++it;
+//	while(it!=tr.end(st)) {
+//		if(*it->multiplier==0) {
+//			// CHECK: do these zeroes get handled correctly elsewhere?
+//			return;
+//			}
+//		rat/=*it->multiplier;
+//		one(it->multiplier);
+//		if(it->is_rational()==false) allnumerical=false;
+//		++it;
+//		}
+//	if(allnumerical) { // can remove the \frac altogether
+//		tr.erase_children(st);
+//		st->name=name_set.insert("1").first;
+//		}
+//	else { // just remove the all-numerical child nodes
+//		it=tr.begin(st);
+//		++it;
+//		while(it!=tr.end(st)) {
+//			if(it->is_rational()) 
+//				it=tr.erase(it);
+//			else ++it;
+//			}
+//		if(tr.number_of_children(st)==1) {
+//			tr.begin(st)->fl.bracket=st->fl.bracket;
+//			tr.begin(st)->fl.parent_rel=st->fl.parent_rel;
+//			multiply(tr.begin(st)->multiplier, *st->multiplier);
+//			tr.flatten(st);
+//			st=tr.erase(st);
+//			}
+//		}
+//	multiply(st->multiplier, rat);
 
-	one(it->multiplier);
-	++it;
-	while(it!=tr.end(st)) {
-		if(*it->multiplier==0) {
-			// CHECK: do these zeroes get handled correctly elsewhere?
-			return;
-			}
-		rat/=*it->multiplier;
-		one(it->multiplier);
-		if(it->is_rational()==false) allnumerical=false;
-		++it;
-		}
-	if(allnumerical) { // can remove the \frac altogether
-		tr.erase_children(st);
-		st->name=name_set.insert("1").first;
-		}
-	else { // just remove the all-numerical child nodes
-		it=tr.begin(st);
-		++it;
-		while(it!=tr.end(st)) {
-			if(it->is_rational()) 
-				it=tr.erase(it);
-			else ++it;
-			}
-		if(tr.number_of_children(st)==1) {
-			tr.begin(st)->fl.bracket=st->fl.bracket;
-			tr.begin(st)->fl.parent_rel=st->fl.parent_rel;
-			multiply(tr.begin(st)->multiplier, *st->multiplier);
-			tr.flatten(st);
-			st=tr.erase(st);
-			}
-		}
-//	expression_modified=true;
-	multiply(st->multiplier, rat);
-//	pushup_multiplier(st);
-//	return l_applied;
 	}
+
+void cleanup_sqrt(const Kernel& k, Ex& tr, Ex::iterator& st)
+   {
+   st->name=name_set.insert("\\pow").first;
+   multiply(tr.append_child(st, str_node("1"))->multiplier, multiplier_t(1)/2);
+   }
 
 void cleanup_sub(const Kernel& k, Ex& tr, Ex::iterator& it)
 	{

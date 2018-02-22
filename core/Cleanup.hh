@@ -65,6 +65,7 @@ void cleanup_dispatch_deep(const Kernel& k, Ex&, Ex::iterator& it, dispatcher_t 
 /// allowed to modify anything except the node and nodes below (in
 /// particular, they will leave sibling nodes untouched).
 
+bool cleanup_powlike(const Kernel& k, Ex&, Ex::iterator& it);	
 bool cleanup_productlike(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_sumlike(const Kernel& k, Ex&, Ex::iterator& it);
 bool cleanup_derivative(const Kernel& k, Ex&, Ex::iterator& it);

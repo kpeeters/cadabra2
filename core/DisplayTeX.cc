@@ -44,6 +44,9 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	const Derivative *der=kernel.properties.get<Derivative>(it);
 
 	if(parent=="\\pow") {
+		Ex::sibling_iterator sib=it;
+		++sib;
+		if(tree.index(it)==0 && *sib->name=="1" && *sib->multiplier==multiplier_t(1)/2) return false; // \sqrt{this}
 		if(tree.index(it)==0 && !it->is_integer() && *it->multiplier!=1) return true;
 		int nc = Ex::number_of_children(it);
 		int ic = Algorithm::number_of_direct_indices(it);
@@ -360,7 +363,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\arrow")          print_arrowlike(str, it);
 	else if(*it->name=="\\pow")            print_powlike(str, it);
 	else if(*it->name=="\\int")            print_intlike(str, it);
-	else if(*it->name=="\\equals")         print_equalitylike(str, it);
+	else if(*it->name=="\\equals" || *it->name=="\\unequals")         print_equalitylike(str, it);
 	else if(*it->name=="\\commutator")     print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\components")     print_components(str, it);
@@ -523,20 +526,27 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 
 void DisplayTeX::print_powlike(std::ostream& str, Ex::iterator it)
 	{
-	Ex::sibling_iterator sib=tree.begin(it);
-	assert(sib!=tree.end(it));
+	auto arg=tree.begin(it);
+	assert(arg!=tree.end(it));
+	auto exp=arg; ++exp;
+	assert(exp!=tree.end(it));
 
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
 
+	bool is_sqrt=false;
+	if(exp->is_rational() && *exp->multiplier==multiplier_t(1)/2) {
+		str << "\\sqrt";
+		is_sqrt=true;
+		}
+			
 	str << "{";
-	dispatch(str, sib);
-	++sib;
-
+	dispatch(str, arg);
 	str << "}";
-	if(sib!=tree.end(it)) {
+
+	if(!is_sqrt) {
 		str << "^{";
-		dispatch(str, sib);
+		dispatch(str, exp);
 		str << "}";
 		}
 	}
@@ -596,7 +606,9 @@ void DisplayTeX::print_equalitylike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << " = ";
+	str << " ";
+	if(*it->name=="\\unequals") str << "\\not";
+	str << "= ";
 	++sib;
 	if(sib==tree.end(it)) 
 		throw ConsistencyException("Found equals node with only one child node.");

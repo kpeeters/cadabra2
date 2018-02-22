@@ -9,29 +9,7 @@
 
 using namespace cadabra;
 
-/*  bug: cadabra-34.
-
-    Vary should take into account the depth of an object in a more clever way than
-	 is currently done. Consider an expression
-
-         A \partial{ A C + B } + D A;
-
-    and A->a, B->b etc. This should vary to
-
-         a  \partial{ A C + B } + A \partial{ a C + A c + b } + d A + a D;
-
-    Right now it produces a total mess for the partial derivative, because it does
-	 not understand that the depth counting for factors inside the partial involves
-	 knowing about the top-level product.
-
-    So what we should do is introduce a 'factor depth' and a 'sum index', which equal
-
-         A \partial{ A C + B } + D A;
-         1           1 1   1     1 1
-			1           1 1   1     2 2
-
-    For all 
- */
+#define DEBUG 1
 
 vary::vary(const Kernel& k, Ex& tr, Ex& args_)
 	: Algorithm(k, tr), args(args_)
@@ -77,8 +55,6 @@ Algorithm::result_t vary::apply(iterator& it)
 	
 	if(*it->name=="\\prod" || *it->name=="\\commutator" || *it->name=="\\anticommutator") {
 		Ex result;
-//		result.set_head(str_node("\\expression"));
-//		iterator newsum=result.append_child(result.begin(), str_node("\\sum"));
 		result.set_head(str_node("\\sum"));
 		iterator newsum=result.begin();
 		
@@ -256,7 +232,6 @@ Algorithm::result_t vary::apply(iterator& it)
 				return result_t::l_applied;
 				}
 			}
-		return result_t::l_no_action;
 		}
 
 	// If we get here we have a single term for which we do not know

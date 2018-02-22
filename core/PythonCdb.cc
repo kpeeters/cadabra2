@@ -1226,7 +1226,7 @@ PYBIND11_MODULE(cadabra2, m)
 
 	m.def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex>, 
 		 pybind11::arg("ex"),pybind11::arg("away_from"),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
 
 	m.def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 
