@@ -144,14 +144,14 @@ def test12():
 
 test12()
 
-def test13():
-    __cdbkernel__=create_scope()
-\partial{#}::PartialDerivative;
-\delta{#}::Accent;
-x::Coordinate;
-{A,B}::Depends(x);
-ex:=\int{ \sqrt{A \partial_{x}{B} + B \partial_{x}{C} } }{x};
-vary(ex, $B->b$);
-distribute(_);
-integrate_by_parts(_, $b$);
-map_sympy(_, "simplify");
+# def test13():
+#     __cdbkernel__=create_scope()
+#     \partial{#}::PartialDerivative;
+#     \delta{#}::Accent;
+#     x::Coordinate;
+#     {A,B}::Depends(x);
+#     ex:=\int{ \sqrt{A \partial_{x}{B} + B \partial_{x}{C} } }{x};
+#     vary(ex, $B->b$);
+#     distribute(_);
+#     integrate_by_parts(_, $b$);
+#     map_sympy(_, "simplify");
