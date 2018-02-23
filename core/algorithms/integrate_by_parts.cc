@@ -43,7 +43,7 @@ Algorithm::result_t integrate_by_parts::apply(iterator& it)
 			else {
 				iterator ti(sib);
 				ret=handle_term(it, ti);
-				if(ret==result_t::l_applied)
+				if(ret==result_t::l_applied) 
 					cleanup_dispatch(kernel, tr, ti);
 				}
 			break;
@@ -51,6 +51,7 @@ Algorithm::result_t integrate_by_parts::apply(iterator& it)
 		++sib;
 		}
 
+	cleanup_dispatch(kernel, tr, it);
 	return ret;
 	}
 
@@ -84,10 +85,18 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 	// Or this is a product, in which case we need to scan factors for a Derivative
 	// and figure out whether it contains the searched-for expression.
 
+// The logic SHOULD be that if we find a multiple partial derivative,
+// we split off the outermost
+	// derivative and then act on that (if, of course, the bit that is left matches
+	// what we want to integrate away from). So we always ever have one integration by
+	// parts in one step.
+	
+	std::cerr << "acting at " << it << std::endl;
+	
 	const Derivative *dtop=kernel.properties.get<Derivative>(it);
 	if(dtop) {
 		if(int_and_derivative_related(int_it, it)) {
-			zero(it->multiplier);
+			zero(int_it->multiplier);
 			return result_t::l_applied;
 			}
 		}
@@ -126,15 +135,21 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 						from = tr.wrap(from, to, str_node("\\prod"));
 
 					auto der_arg = tr.begin(fac);
-					while(der_arg->is_index() && der_arg!=tr.end(fac))
+					int number_of_derivatives=0;
+					while(der_arg->is_index() && der_arg!=tr.end(fac)) {
+						++number_of_derivatives;
 						++der_arg;
+						}
 
 					if(der_arg==tr.end(fac)) 
 						throw ConsistencyException("integrate_by_parts: Derivative without argument encountered.");
 
+					std::cerr << "der_arg " << der_arg << std::endl;
+					std::cerr << "from    " << from << std::endl;
+					std::cerr << "fac     " << fac << std::endl;										
 					tr.swap(der_arg, from);
 					tr.swap(fac, der_arg);
-					multiply(it->multiplier, -1);
+					multiply(it->multiplier, (number_of_derivatives%2==0?1:-1));
 					iterator tmp(fac);
 					cleanup_dispatch(kernel, tr, tmp);
 					return result_t::l_applied;
