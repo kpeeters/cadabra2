@@ -27,6 +27,9 @@ class integrate_by_parts : public Algorithm {
 		// Are the given integral and derivative inverses of each-other?
 		bool int_and_derivative_related(iterator int_it, iterator der_it) const;
 
+      // Split one derivative from a multiple derivative.
+      void split_off_single_derivative(iterator int_it, iterator der_it);
+      
 		// Wrap the indicated range of factor nodes inside the product node in 
       // the derivative.
 		Ex wrap(iterator, sibling_iterator, sibling_iterator) const;

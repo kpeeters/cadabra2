@@ -7,7 +7,7 @@ def test01():
     \phi::Depends(x);
     \partial{#}::PartialDerivative;
     ex:= \int{ \partial_{\mu}{ \epsilon^{\mu} \phi } }{x};
-    integrate_by_parts(ex, $\epsilon$)
+    integrate_by_parts(ex, $\epsilon^{\mu}$)
     assert(ex==0)
     print('Test 01 passed')
 
@@ -137,16 +137,21 @@ test11()
 def test12():
     __cdbkernel__=create_scope()
     ex:= A/B + A B;
-    vary(ex, $A->a, B->b$);
+    vary(ex, $A->a, B->b$)
     tst:= a/B - A/B**2 b + a B + A b - @(ex);
     assert(tst==0)
     print("Test 12 passed")
 
 test12()
-        
-\partial{#}::PartialDerivative;
-\delta{#}::Accent;
-ex:=\int{ \sqrt{A \partial{B} + B \partial{C} } }{x};
-vary(ex, $B->b$);
-distribute(_);
-integrate_by_parts(_, $b$);
+
+# def test13():
+#     __cdbkernel__=create_scope()
+#     \partial{#}::PartialDerivative;
+#     \delta{#}::Accent;
+#     x::Coordinate;
+#     {A,B}::Depends(x);
+#     ex:=\int{ \sqrt{A \partial_{x}{B} + B \partial_{x}{C} } }{x};
+#     vary(ex, $B->b$);
+#     distribute(_);
+#     integrate_by_parts(_, $b$);
+#     map_sympy(_, "simplify");

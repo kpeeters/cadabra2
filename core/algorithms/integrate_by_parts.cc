@@ -43,7 +43,7 @@ Algorithm::result_t integrate_by_parts::apply(iterator& it)
 			else {
 				iterator ti(sib);
 				ret=handle_term(it, ti);
-				if(ret==result_t::l_applied)
+				if(ret==result_t::l_applied) 
 					cleanup_dispatch(kernel, tr, ti);
 				}
 			break;
@@ -51,6 +51,7 @@ Algorithm::result_t integrate_by_parts::apply(iterator& it)
 		++sib;
 		}
 
+	cleanup_dispatch(kernel, tr, it);
 	return ret;
 	}
 
@@ -61,22 +62,39 @@ bool integrate_by_parts::int_and_derivative_related(iterator int_it, iterator de
 
 bool integrate_by_parts::derivative_acting_on_arg(iterator der_it) const
 	{
-	auto stop=der_it;
-	stop.skip_children();
-	++stop;
-	
-	++der_it;
+	sibling_iterator arg=tr.begin(der_it);
+	while(arg->is_index())
+		++arg;
+
 	Ex_comparator comp(kernel.properties);
 	auto top=away_from.begin();
-	while(der_it!=stop) {
-		if( is_in( comp.equal_subtree(der_it, top) , 
-					  { Ex_comparator::match_t::subtree_match,
-						  Ex_comparator::match_t::match_index_less,
-						  Ex_comparator::match_t::match_index_greater } ) ) return true;
-		++der_it;
-		}
+	if( is_in( comp.equal_subtree(arg, top) , 
+	           { Ex_comparator::match_t::subtree_match,
+		           Ex_comparator::match_t::match_index_less,
+		           Ex_comparator::match_t::match_index_greater } ) ) return true;
 	return false;
 	}
+
+void integrate_by_parts::split_off_single_derivative(iterator int_it, iterator der_it)
+   {
+   auto ni=number_of_direct_indices(der_it);
+   if(ni==0 || ni==1) return;
+
+   sibling_iterator sib=tr.begin(der_it);
+   ++sib;
+   sibling_iterator arg=sib;
+   while(arg!=tr.end(der_it) && arg->is_index())
+	   ++arg;
+   if(arg==tr.end(der_it))
+	   throw ConsistencyException("Derivative without argument encountered");
+   auto wrap=tr.wrap(arg, str_node(der_it->name));
+   while(sib!=wrap) {
+	   auto nxt=sib;
+	   ++nxt;
+	   tr.move_before(tr.begin(wrap), sib);
+	   sib=nxt;
+	   }
+   }
 
 Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& it)
 	{
@@ -84,10 +102,11 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 	// Or this is a product, in which case we need to scan factors for a Derivative
 	// and figure out whether it contains the searched-for expression.
 
+	
 	const Derivative *dtop=kernel.properties.get<Derivative>(it);
 	if(dtop) {
 		if(int_and_derivative_related(int_it, it)) {
-			zero(it->multiplier);
+			zero(int_it->multiplier);
 			return result_t::l_applied;
 			}
 		}
@@ -100,6 +119,9 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 	while(fac!=tr.end(it)) {
 		const Derivative *der=kernel.properties.get<Derivative>(fac);
 		if(der) {
+			// If this is a multiple partial derivative, we split off the
+			// outermost derivative and then look at the remaining argument.
+			split_off_single_derivative(int_it, fac);
 			if(int_and_derivative_related(int_it, fac) && derivative_acting_on_arg(fac) ) {
 				// Generate one term with the derivative acting on all
 				// factors which come before the derivative node (if
@@ -126,8 +148,9 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 						from = tr.wrap(from, to, str_node("\\prod"));
 
 					auto der_arg = tr.begin(fac);
-					while(der_arg->is_index() && der_arg!=tr.end(fac))
-						++der_arg;
+					++der_arg;
+					// This _has_ to be the argument because we have peeled off a single derivative.
+					assert(der_arg->is_index()==false);
 
 					if(der_arg==tr.end(fac)) 
 						throw ConsistencyException("integrate_by_parts: Derivative without argument encountered.");
@@ -198,6 +221,11 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 //						std::cerr << pat.second->obj << std::endl;
 //						}
 //					}
+				}
+			else {
+				// Undo the split-off.
+				iterator tmp=fac;
+				cleanup_dispatch(kernel, tr, tmp);
 				}
 			}
 		++fac;
