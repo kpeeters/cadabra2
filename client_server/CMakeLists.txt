@@ -2,16 +2,11 @@ cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
 message("------------------------------------------------------------------------\nConfiguring 'client_server'")
 
-# Now using boost::regex, so we can get away with gcc 4.8.
-#
-# if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-#     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-#         message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
-#     endif()
-# endif()
-
-# Set path to additional cmake files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
+    message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
+  endif()
+endif()
 
 # Locate glibmm.
 find_package(GLIBMM)
