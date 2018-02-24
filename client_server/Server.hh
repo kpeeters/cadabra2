@@ -7,7 +7,7 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/common/functional.hpp>
 #include <future>
-#ifdef(_WIN32)
+#if defined(_WIN32)
   #define NOMINMAX
 #endif
 #include <pybind11/pybind11.h>
