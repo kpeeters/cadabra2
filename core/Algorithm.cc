@@ -89,14 +89,8 @@ Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned in
 
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
-	if(pm) {
-		char *realname;
-		int status;
-		realname = abi::__cxa_demangle(typeid(*this).name(), 0, 0, &status);
-		pm->group(realname);
-		free(realname);
-		}
-	
+	if(pm)
+		pm->group(boost::core::demangle(typeid(*this).name()).c_str());		
 
 	result_t ret=result_t::l_no_action;
 
