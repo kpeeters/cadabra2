@@ -28,7 +28,8 @@ Building with vcpkg
 
   The latter will spit out a CMAKE toolchain path, you need that in a minute.
 
-- vcpkg install --triplet=x64-windows glibmm mpir boost-system boost-regex boost-filesystem 
+- vcpkg install --triplet=x64-windows glibmm mpir boost-system
+boost-regex boost-filesystem boost-timer boost-uuid
   [instructions on which packages to install]
 
   The '--triplet' is important, otherwise you may end up with 32 bits

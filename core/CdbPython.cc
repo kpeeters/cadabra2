@@ -1,13 +1,14 @@
 
 #include "CdbPython.hh"
-#include <boost/regex.hpp>
+#include <regex>
 #include <boost/algorithm/string/replace.hpp>
+#include <sstream>
 
 std::string cadabra::escape_quotes(const std::string& line)
 	{
 	return "''"+line+"''";
-//	std::string ret=boost::replace_all_copy(line, "'", "\\'");
-//	boost::replace_all(ret, "\"", "\\\"");
+//	std::string ret=std::replace_all_copy(line, "'", "\\'");
+//	std::replace_all(ret, "\"", "\\\"");
 //	return ret;
 	}
 
@@ -31,11 +32,11 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	{
 	std::string ret;
 	
-	boost::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
-	boost::cmatch mres;
+	std::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
+	std::cmatch mres;
 	
 	std::string indent_line, end_of_line, line_stripped;
-	if(boost::regex_match(line.c_str(), mres, imatch)) {
+	if(std::regex_match(line.c_str(), mres, imatch)) {
 		indent_line=std::string(mres[1].first, mres[1].second);
 		end_of_line=std::string(mres[3].first, mres[3].second);
 		line_stripped=std::string(mres[2]);
@@ -88,17 +89,17 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 		}
 
    // Add '__cdbkernel__' as first argument of post_process if it doesn't have that already.
-	boost::regex postprocmatch(R"(def post_process\(([^_]))");
-	line_stripped = boost::regex_replace(line_stripped, postprocmatch, "def post_process(__cdbkernel__, $1");
+	std::regex postprocmatch(R"(def post_process\(([^_]))");
+	line_stripped = std::regex_replace(line_stripped, postprocmatch, "def post_process(__cdbkernel__, $1");
 	
 	// Replace $...$ with Ex(...).
-	boost::regex dollarmatch(R"(\$([^\$]*)\$)");
-	line_stripped = boost::regex_replace(line_stripped, dollarmatch, "Ex\\(r'''$1''', False\\)", boost::match_default | boost::format_all);
+	std::regex dollarmatch(R"(\$([^\$]*)\$)");
+	line_stripped = std::regex_replace(line_stripped, dollarmatch, "Ex\\(r'''$1''', False\\)", std::regex_constants::match_default | std::regex_constants::format_default | std::regex_constants::format_sed);
 	
 	// Replace 'converge(ex):' with 'server.progress('converge'); ex.reset(); while ex.changed(): server.progress(); server.end_progress();' properly indented.
-	boost::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
-	boost::smatch converge_res;
-	if(boost::regex_match(line_stripped, converge_res, converge_match)) {
+	std::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
+	std::smatch converge_res;
+	if(std::regex_match(line_stripped, converge_res, converge_match)) {
 		ret = indent_line+std::string(converge_res[1])+std::string(converge_res[2])+".reset(); _="+std::string(converge_res[2])+"\n"
 			 + indent_line+std::string(converge_res[1])+"while "+std::string(converge_res[2])+".changed():";
 		return ret;
@@ -127,10 +128,10 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	else { // {a,b,c}::Indices(real, parent=holo);
 		found = line_stripped.find("::");
 		if(found!=std::string::npos) {
-			boost::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
-			boost::smatch ares;
+			std::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
+			std::smatch ares;
 			std::string subline=line_stripped.substr(found+2); // need to store the copy, not feed it straight into regex_match!
-			if(boost::regex_match(subline, ares, amatch)) {
+			if(std::regex_match(subline, ares, amatch)) {
 				auto propname = std::string(ares[1]);
 				auto argument = std::string(ares[2]);
 				if(argument.size()>0) { // declaration with arguments
