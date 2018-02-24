@@ -34,7 +34,7 @@ message("-- Found python ${PYTHON_LIBRARIES}")
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.53 COMPONENTS regex)
+find_package(Boost 1.53 COMPONENTS regex system)
 
 message("-- Python include dirs: ${PYTHON_INCLUDE_DIRS}")
 message("-- Boost include dirs: ${Boost_INCLUDE_DIRS}")
@@ -212,7 +212,7 @@ configure_file("${PROJECT_SOURCE_DIR}/cadabra2.in"             "${PROJECT_SOURCE
 install(PROGRAMS "${PROJECT_SOURCE_DIR}/cadabra2" DESTINATION bin)
 
 # Create Python dynamic library 'cadabra' without lib prefix.
-include_directories(".")
+include_directories("." "../client_server/jsoncpp")
 pybind11_add_module(cadabra2 SHARED ${LOCAL_SRC_FILES})
 target_link_libraries(cadabra2 PRIVATE ${PCRE_LIBRARIES} ${GMPXX_LIBRARIES} ${Boost_LIBRARIES})
 #add_library(cadabra2 SHARED ${LOCAL_SRC_FILES})
@@ -221,7 +221,9 @@ set_target_properties(cadabra2 PROPERTIES PUBLIC_HEADER "${PUBLIC_HEADER_FILES}"
 add_executable(test_preprocessor test_preprocessor.cc PreProcessor.cc)
 add_executable(test_multiindex   test_multiindex.cc)
 add_executable(cadabra2python cadabra2python.cc CdbPython.cc)
+add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc ../client_server/jsoncpp/jsoncpp.cpp)
 target_link_libraries(cadabra2python ${PYTHON_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES})
 set_target_properties(cadabra2 PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
 if(MATHEMATICA_FOUND)
   target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
