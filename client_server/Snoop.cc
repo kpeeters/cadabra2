@@ -31,7 +31,7 @@
 #include <glibmm/miscutils.h>
 
 #define BOOST_SPIRIT_THREADSAFE
-#include <boost/signal.hpp>
+#include <boost/signals2.hpp>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/config.hpp>
