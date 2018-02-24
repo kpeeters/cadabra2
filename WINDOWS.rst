@@ -24,36 +24,26 @@ Building with vcpkg
 - Run the bootstrap script::
 
 	 cd vcpkg
-	 bootstrap-vcpkg.bat
+    bootstrap-vcpkg.bat
+    vcpkg.exe integrate install
 
   The latter will spit out a CMAKE toolchain path, you need that in a minute.
 
-- vcpkg install --triplet=x64-windows glibmm mpir boost-system
-boost-regex boost-filesystem boost-timer boost-uuid
-  [instructions on which packages to install]
+- vcpkg install mpir:x64-windows glibmm:x64-windows   (go have a coffee)
+- vcpkg install boost:x64-windows                     (go for dinner)
 
-  The '--triplet' is important, otherwise you may end up with 32 bits
-  versions of all software.
+Then configure as::
 
-vcpkg.exe integrate install
-  
-cmake
-mpir
+    cd cadabra2/build
+    cmake -DCMAKE_TOOLCHAIN_FILE=C:/Users/kasper/Development/git.others/vcpkg/scripts/buildsystems/vcpkg.cmake
+          -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF
+          -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
 
-
-Then configure as:
-
-  cd cadabra2/build
-  cmake
-  -DCMAKE_TOOLCHAIN_FILE=C:/Users/kasper/Development/git.others/vcpkg/scripts/buildsystems/vcpkg.cmake
-  -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF
-  -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
-
-[Does
+(the latter all on one line). Finally build with::
 		
-cmake --build .
+    cmake --build .
 
-  
+	 
 
 		
 

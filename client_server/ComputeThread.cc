@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <signal.h>
 #include <glibmm/spawn.h>
+#include "internal/unistd.h"
 
 using namespace cadabra;
 typedef websocketpp::client<websocketpp::config::asio_client> client;
