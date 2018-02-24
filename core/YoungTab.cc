@@ -167,7 +167,7 @@ std::ostream& operator<<(std::ostream& str, const tableau& tab)
 //	}
 
 #ifndef __CYGWIN__
-	#ifndef _WIN32__
+	#ifndef _WIN32
 template<>
 void add_box(tableau& tab1, unsigned int row1,
 				 const tableau& tab2, unsigned int row2, unsigned int col2)
