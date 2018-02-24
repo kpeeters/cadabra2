@@ -48,6 +48,8 @@ function runbuild {
 # scripts asking for passwords). Copy the ~/.ssh/buildbots_rsa.pub to
 # ~/.ssh/authorized_keys on the build VM.
 #
+# For RPM-based systems, install rpm-build.
+#
 # Then install 'git', install all cadabra2 dependencies, and clone the
 # github repo into ~/cadabra2.
 
@@ -55,11 +57,12 @@ function runbuild {
 
 runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
 # runbuild "Fedora_24_build" ".rpm" 7001 fedora24
+# runbuild "Fedora_26" ".rpm" 7011 fedora26
+# runbuild "Fedora_27" ".rpm" 7015 fedora27
 # runbuild "Mint_18" ".deb" 7002 mint18
 # runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
 # runbuild "CentOS_7" ".rpm" 7004 centos7
 # runbuild "Ubuntu_14.04_build" ".deb" 7005 ubuntu1404
-# runbuild "Fedora_26" ".rpm" 7011 fedora26
 # runbuild "Ubuntu_17.10" ".deb" 7012 ubuntu1710
 # runbuild "Debian86" ".deb" 7006 debian86
 # runbuild "Scientific_Linux_74" ".rpm" 7013 scientific74

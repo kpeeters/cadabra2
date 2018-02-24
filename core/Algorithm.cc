@@ -1282,9 +1282,10 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 						throw ConsistencyException("Power with free indices not allowed.");
 						}
 					}
-				ind_free_here.clear();
+//				ind_free_here.clear();
 				}
 			// FIXME: add test for overlap
+			ind_free.insert(ind_free_here.begin(), ind_free_here.end());
 			ind_dummy.insert(ind_dummy_here.begin(), ind_dummy_here.end());
 			++sib;
 			}

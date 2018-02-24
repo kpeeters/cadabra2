@@ -1013,7 +1013,7 @@ void def_prop(pybind11::module& m)
 	{
 	using namespace pybind11;
 
-	class_<Property<P>, std::shared_ptr<Property<P>>, BaseProperty>(m, std::make_unique<P>()->name().c_str())
+	class_<Property<P>, std::shared_ptr<Property<P>>, BaseProperty>(m, std::make_shared<P>()->name().c_str())
 		.def(
 			init<std::shared_ptr<Ex>, std::shared_ptr<Ex>>(),
 			arg("ex"),
@@ -1024,15 +1024,15 @@ void def_prop(pybind11::module& m)
 		.def("_latex_", &Property<P>::latex_);
 	}
 
-// All this class does is provide a trampoline class
-// for pybind to properly handle the constructor
-// of ProgressMonitor
-
-class PyProgressMonitor : public ProgressMonitor {
-	public:
-		using ProgressMonitor::ProgressMonitor;
-};
-
+// // All this class does is provide a trampoline class
+// // for pybind to properly handle the constructor
+// // of ProgressMonitor
+// 
+// class PyProgressMonitor : public ProgressMonitor {
+// 	public:
+// 		using ProgressMonitor::ProgressMonitor;
+// };
+// 
 
 
 // Entry point for registration of the Cadabra Python module. 
@@ -1073,7 +1073,7 @@ PYBIND11_MODULE(cadabra2, m)
 				});
 	
 	// Make our profiling class known to the Python world.
-	pybind11::class_<ProgressMonitor, PyProgressMonitor>(m, "ProgressMonitor")\
+	pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")\
 		.def(pybind11::init<>())
 		.def("print", &ProgressMonitor::print)
 		.def("totals", &ProgressMonitor_totals_helper);
@@ -1226,7 +1226,7 @@ PYBIND11_MODULE(cadabra2, m)
 
 	m.def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex>, 
 		 pybind11::arg("ex"),pybind11::arg("away_from"),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
 
 	m.def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 

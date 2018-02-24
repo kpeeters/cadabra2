@@ -942,3 +942,10 @@ std::ostream& operator<<(std::ostream& str, const cadabra::Ex& ex)
 	return str;
 	}
 
+std::ostream& operator<<(std::ostream& str, cadabra::Ex::iterator it) 
+	{
+	cadabra::Ex::print_recursive_treeform(str, it);
+//	ex.print_python(str, ex.begin());	
+	return str;
+	}
+

@@ -47,6 +47,7 @@ endforeach()
 #
 set(RTESTS
   packages
+  integrals
   display
   dummies
   trigonometric

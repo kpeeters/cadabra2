@@ -1,0 +1,47 @@
+
+def test01():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    a::Depends(\partial{#});
+    ex:= \int{ \partial_{0}{a} \partial_{0}{a} }{x};
+    integrate_by_parts(_, $a$);
+    tst:= \int{ -a \partial_{0 0}{a} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 01 passed")
+
+test01()
+        
+def test02():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    a::Depends(\partial{#});
+    ex:= \int{ a \partial_{0}{\partial_{0}{a}} }{x};
+    integrate_by_parts(_, $\partial_{0}{a}$);
+    tst:= \int{ - \partial_{0}{a} \partial_{0}{a} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 02 passed")
+
+test02()
+
+def test03():
+    __cdbkernel__=create_scope()
+    \nabla{#}::Derivative;
+    a::Depends(\nabla{#});
+    ex:= \int{ a \nabla_{0}{\nabla_{0}{a}} }{x};
+    integrate_by_parts(_, $a$);
+    tst:= \int{ a \nabla_{0}{\nabla_{0}{a}} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
+
+test03()
+
+def test04():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;        
+    ex:= \int{ a \partial_{0 0}{b} c }{x};
+    integrate_by_parts(_, $b$);
+    tst:= \int{ a \partial_{0 0}{b} c }{x} - @(ex);
+    assert(tst==0)
+    print("Test 04 passed")
+
+test04()

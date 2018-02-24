@@ -4,6 +4,7 @@
 #include "DisplaySympy.hh"
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
+#include <regex>
 
 using namespace cadabra;
 
@@ -83,6 +84,11 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		{"O", "sympyO"},
 		{"S", "sympyS"}
 		};
+
+	regex_map = {
+		{"Integral",   "\\int"   },
+	};
+
 	}
 
 //TODO: complete this list (take from Sympy)
@@ -516,6 +522,15 @@ bool DisplaySympy::children_have_brackets(Ex::iterator ch) const
 	if(childbr==str_node::b_none || childbr==str_node::b_no)
 		return false;
 	else return true;
+	}
+
+std::string DisplaySympy::preparse_import(const std::string& in)
+	{
+	std::string ret = in;
+	for(auto& r: regex_map) {
+		ret = std::regex_replace(ret, std::regex(r.second), r.first);
+		}
+	return ret;
 	}
 
 void DisplaySympy::import(Ex& ex)

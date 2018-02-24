@@ -9,8 +9,8 @@
 #include "properties/Derivative.hh"
 #include "properties/AntiCommuting.hh"
 
-//#define DEBUG 1
-//#define XPERM_DEBUG 1
+// #define DEBUG 1
+// #define XPERM_DEBUG 1
 
 using namespace cadabra;
 
@@ -135,7 +135,7 @@ bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const
 Algorithm::result_t canonicalise::apply(iterator& it)
 	{
 #ifdef DEBUG
-	std::cerr << "canonicalise at " << Ex(it) << std::endl;
+	std::cerr << "canonicalise at " << it << std::endl;
 #endif	
 	// std::cerr << is_single_term(it) << std::endl;
 
@@ -222,16 +222,29 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	std::vector<Ex::iterator> num_to_it_map(total_number_of_indices);
 	std::vector<Ex>           num_to_tree_map;
 
+#ifdef DEBUG
+	std::cerr << "indices:" << std::endl;
+	auto ii=begin_index(it);
+	while(ii!=end_index(it)) {
+		std::cerr << ii << std::endl;
+		++ii;
+		}
+#endif
+
+	
 	// Handle free indices.
 	
+#ifdef DEBUG
+	std::cerr << "found " << ind_free.size() << " free indices" << std::endl;
+#endif
 	index_map_t::iterator sorted_it=ind_free.begin();
 	int curr_index=0;
 	while(sorted_it!=ind_free.end()) {
 		index_position_map_t::iterator ii=ind_pos_free.find(sorted_it->second);
-		num_to_it_map[ii->second]=ii->first;
+		num_to_it_map.at(ii->second)=ii->first;
 		num_to_tree_map.push_back(Ex(ii->first));
 #ifdef DEBUG
-		std::cerr << Ex(sorted_it->second) << " at pos " << ii->second+1 << std::endl;
+		std::cerr << sorted_it->second << " free at pos " << ii->second+1 << std::endl;
 #endif
 		vec_perm.push_back(ii->second+1);
 		
@@ -249,7 +262,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 	typedef std::map<std::string, std::vector<int> > dummy_set_t;
 	dummy_set_t dummy_sets;
-
+#ifdef DEBUG
+	std::cerr << "found " << ind_dummy.size() << " dummies" << std::endl;
+#endif
 	sorted_it=ind_dummy.begin();
 	while(sorted_it!=ind_dummy.end()) {
 		// We insert the dummy indices in pairs (canonicalise only acts on
@@ -332,8 +347,13 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 //				indexpos_to_indextype[kk]=index_sets.begin()->first;
 //		}
 //
-	
-	// Construct the generating set.
+
+	// TRACE: remove later THIS DOES NOT SOLVE THE PROBLEM, ITERATORS ABOVE SEEM TO BE WRONG.
+	//	prod_unwrap_single_term(it);		
+	//	return result_t::l_no_action;
+
+
+   // Construct the generating set.
 
 	std::vector<unsigned int> base_here;
 
@@ -440,6 +460,14 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 #ifdef XPERM_DEBUG
 	std::cerr << "generating set size = " << generating_set.size() << " multiplier " << *it->multiplier << std::endl;
 #endif
+
+	// Even if generating_set.size()==0 we still need to continue,
+	// because we still need to do simple index relabelling.
+//	if(generating_set.size()==0) {
+//		prod_unwrap_single_term(it);		
+//		return result_t::l_no_action;
+//		}
+	
 	if(*it->multiplier!=0) {
 		// Fill data for the xperm routines.
 		int *gs=0;

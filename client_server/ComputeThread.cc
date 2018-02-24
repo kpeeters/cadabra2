@@ -177,8 +177,10 @@ void ComputeThread::try_spawn_server()
 #endif
 	Glib::Pid pid;
 	std::string wd("");
-	
-	Glib::spawn_async_with_pipes(wd, argv, envp,
+
+	// See https://bugs.launchpad.net/inkscape/+bug/1662531 for things related to
+	// the 'envp' argument in the call below.
+	Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
 										  Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
 										  sigc::slot<void>(),
 										  &pid,
