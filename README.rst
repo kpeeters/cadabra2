@@ -335,7 +335,7 @@ The last line will spit out a CMAKE toolchain path; write it down, you need that
 Now configure as::
 
     cd cadabra2/build
-    cmake -DCMAKE_TOOLCHAIN_FILE=C:/Users/kasper/Development/git.others/vcpkg/scripts/buildsystems/vcpkg.cmake
+    cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
           -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF -DCMAKE_INSTALL_PREFIX=C:\Cadabra
           -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
 
