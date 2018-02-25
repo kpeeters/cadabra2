@@ -67,6 +67,7 @@ option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 #---------------------------------------------------------------------------
 # Compiler flags.
 #---------------------------------------------------------------------------
+
 # - Set the C++ standard to C++14
 # - Turn optimizations on
 # - Turn off warnings we don't need

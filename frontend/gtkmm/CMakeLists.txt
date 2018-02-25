@@ -21,7 +21,7 @@ include_directories("${Boost_INCLUDE_DIRS}")
 #pkg_check_modules(UUID uuid REQUIRED)
 #link_directories(${UUID_LIBRARY_DIRS})
 
-include_directories("." "../../client_server" "../../client_server/jsoncpp" "../../client_server/websocketpp")
+include_directories("." "../../core" "../../client_server" "../../client_server/jsoncpp" "../../client_server/websocketpp")
 
 add_executable(cadabra2-gtk main.cc 
   NotebookWindow.cc 
