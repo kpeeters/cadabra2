@@ -16,7 +16,7 @@ endif()
 #
 set(CNBIN   ${CMAKE_SOURCE_DIR}/examples)
 set(CDBOUT  ${CMAKE_BINARY_DIR}/tests)
-set(DC      ${CMAKE_SOURCE_DIR}/client_server/cadabra2html.cc ${CMAKE_SOURCE_DIR}/client_server/DataCell.hh ${CMAKE_SOURCE_DIR}/client_server/DataCell.cc)
+set(DC      ${CMAKE_SOURCE_DIR}/client_server/cadabra2html.cc ${CMAKE_SOURCE_DIR}/core/DataCell.hh ${CMAKE_SOURCE_DIR}/core/DataCell.cc)
 set(NBTESTS
   quickstart
   beginners

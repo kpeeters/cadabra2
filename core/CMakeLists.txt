@@ -215,7 +215,6 @@ set_target_properties(cadabra2
 target_link_libraries(cadabra2 PRIVATE
   ${GMPXX_LIBRARIES} 
   ${Boost_LIBRARIES} 
-  cadabra_server
 )
 
 # Test preprocessor executable
