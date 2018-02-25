@@ -77,7 +77,7 @@ if(MATHEMATICA_FOUND)
   set(RTESTS ${RTESTS} mma)
 endif()
 foreach(RTEST ${RTESTS})
-  add_test(${RTEST}  ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/${RTEST}.cdb)
+  add_test(${RTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/${RTEST}.cdb)
   # We need to set the Python path so that we pick up the correct cadabra2.so Python module
   # even if we did not do 'make install' yet.
   set_tests_properties(${RTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")
