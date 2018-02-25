@@ -56,6 +56,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
 
+#---------------------------------------------------------------------------
+# Enumerate files and directories.
+#---------------------------------------------------------------------------
+
 set(LOCAL_SRC_FILES
   PythonCdb.cc
   ProgressMonitor.cc
@@ -199,6 +203,19 @@ set(PUBLIC_HEADER_FILES
 set(IMAGES
   ../images/cadabra.png
 )
+# Convert packages from cdb to python.
+set(PACKAGES
+  relativity/__init__
+  relativity/schwarzschild
+  gauge_theory/__init__
+  gauge_theory/instantons
+  )
+set(PDIRS
+  relativity
+  gauge_theory
+  )
+
+
 
 install(FILES
   "${PROJECT_BINARY_DIR}/cadabra2.so"
@@ -239,17 +256,6 @@ install(DIRECTORY DESTINATION ${PYTHON_SITE_PATH} DIRECTORY_PERMISSIONS OWNER_RE
 
 
 
-# Convert packages from cdb to python.
-set(PACKAGES
-  relativity/__init__
-  relativity/schwarzschild
-  gauge_theory/__init__
-  gauge_theory/instantons
-  )
-set(PDIRS
-  relativity
-  gauge_theory
-  )
 set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages/cdb)
 message("-- Packages built in ${PACKAGEDIR}")
 file(MAKE_DIRECTORY ${PACKAGEDIR})
@@ -259,13 +265,6 @@ foreach(PDIR ${PDIRS})
                      COMMENT "Creating package ${PDIR}...")
 endforeach()
 
-foreach(PACKAGE ${PACKAGES})
-	string(REGEX REPLACE "/" "_" PACKAGETARGET ${PACKAGE})
-	message("--    ${PACKAGETARGET}")					  
-   add_custom_target("${PACKAGETARGET}" ALL
-	                  COMMAND cadabra2python ${CMAKE_SOURCE_DIR}/core/packages/cdb/${PACKAGE}.cdb ${PACKAGEDIR}/${PACKAGE}.py
-                     COMMENT "Creating ${PACKAGE}.py...")
-endforeach()
 																		
 # Install packages.
 set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
@@ -281,3 +280,81 @@ install(DIRECTORY DESTINATION ${PYTHON_CDB_PACKAGE_PATH} DIRECTORY_PERMISSIONS O
 # Install conversion program.
 install(TARGETS cadabra2python DESTINATION bin)
 
+#---------------------------------------------------------------------------
+# Install files.
+#---------------------------------------------------------------------------
+
+# Python module
+install(
+  FILES
+    "${PROJECT_BINARY_DIR}/cadabra2.${PYTHON_MOD_SUFFIX}"
+    "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
+  DESTINATION 
+    "${PYTHON_SITE_PATH}"
+)
+install(
+  DIRECTORY DESTINATION 
+    ${PYTHON_SITE_PATH} 
+  DIRECTORY_PERMISSIONS 
+    OWNER_READ 
+	OWNER_WRITE 
+	OWNER_EXECUTE
+    GROUP_READ 
+	GROUP_EXECUTE
+    WORLD_READ 
+	WORLD_EXECUTE
+)
+
+# CLI
+install(
+  PROGRAMS 
+    "${PROJECT_SOURCE_DIR}/cadabra2" 
+  DESTINATION 
+    bin
+)
+install(
+  DIRECTORY DESTINATION 
+    bin 
+  DIRECTORY_PERMISSIONS 
+    OWNER_READ 
+	 OWNER_WRITE 
+	 OWNER_EXECUTE
+	 GROUP_READ
+	 GROUP_EXECUTE
+	 WORLD_READ
+	 WORLD_EXECUTE
+)
+
+# Packages
+foreach(PACKAGE ${PACKAGES})
+  get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
+  install(
+    FILES 
+      "${PACKAGEDIR}/${PACKAGE}.py" 
+    DESTINATION 
+      ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL}
+  )
+endforeach()
+install(
+  DIRECTORY DESTINATION 
+    ${PYTHON_CDB_PACKAGE_PATH} 
+  DIRECTORY_PERMISSIONS 
+    OWNER_READ 
+	OWNER_WRITE 
+	OWNER_EXECUTE
+	GROUP_READ 
+	GROUP_EXECUTE
+    WORLD_READ 
+	WORLD_EXECUTE
+)
+
+# cadabra2python
+install(
+  TARGETS 
+    cadabra2python 
+  DESTINATION 
+    bin
+)
+
+# Shared libraries
+install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/core_install_dlls.cmake")

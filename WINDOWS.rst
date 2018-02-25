@@ -41,7 +41,7 @@ Then configure as::
 
 (the latter all on one line). Finally build with::
 		
-    cmake --build .
+    cmake --build . --target install
 
 	 
 
