@@ -299,9 +299,6 @@ development platform.
 Windows
 -------
 
-Windows build instructions
-==========================
-
 On Windows the main constraint on the build process is that we want to
 link to Anaconda's Python, which has been built with Visual
 Studio. The recommended way to build Cadabra is thus to build against
@@ -320,12 +317,12 @@ Edition from https://www.visualstudio.com/downloads/ and install
 Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
 We will build using the Visual Studio 'x64 Native Tools Command
 Prompt' (not the GUI). First, clone the vcpkg repository::
-	 
-	 git clone https://github.com/Microsoft/vcpkg
+
+    git clone https://github.com/Microsoft/vcpkg
 
 Run the bootstrap script to set things up::
 
-	 cd vcpkg
+    cd vcpkg
     bootstrap-vcpkg.bat
 
 Install all the dependencies with::
@@ -343,8 +340,8 @@ Now configure as::
           -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
 
 the latter all on one line, in which you replace the
-CMAKE_TOOLCHAIN_PATH with the path produced by the `vcpkg integrate
-install` step. Finally build with::
+CMAKE_TOOLCHAIN_PATH with the path produced by the ``vcpkg integrate
+install`` step. Finally build with::
 		
     cmake --build . --target install
 
