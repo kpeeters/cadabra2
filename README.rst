@@ -307,10 +307,9 @@ link to Anaconda's Python, which has been built with Visual
 Studio. The recommended way to build Cadabra is thus to build against
 libraries which are all built using Visual Studio as well. It is
 practically impossible to build all dependencies yourself, but
-fortunately that is not necessary because of the `VCPKG library
-<https://github.com/Microsoft/vcpkg>`_ collection. This contains all
-dependencies (boost, gtkmm, sqlite and various others) in ready-to-use
-form.
+fortunately that is not necessary because of the VCPKG library at
+https://github.com/Microsoft/vcpkg. This contains all dependencies
+(boost, gtkmm, sqlite and various others) in ready-to-use form.
 
 
 Building with vcpkg
