@@ -276,9 +276,10 @@ endforeach()
 #---------------------------------------------------------------------------
 
 # Python module
+# https://stackoverflow.com/questions/21198030/installfiles-cmake-cfg-intdir-abc-win-dll-destination-bin
 install(
   FILES
-    "${PROJECT_BINARY_DIR}/${MWEB_CMAKE_CFG_INTDIR}/cadabra2.${PYTHON_MOD_SUFFIX}"
+    "${CMAKE_CURRENT_BINARY_DIR}/cadabra2.${PYTHON_MOD_SUFFIX}"
     "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
   DESTINATION 
     "${PYTHON_SITE_PATH}"
