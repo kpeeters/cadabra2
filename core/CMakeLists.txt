@@ -26,7 +26,7 @@ find_package(Boost 1.53 COMPONENTS system regex)
 # GMPXX
 find_package(GMPXX REQUIRED)
 message("-- Found gmpxx  ${GMPXX_LIBRARIES}")
-message("-- Found gmp    ${GMP_LIB}")
+message("-- Found gmp    ${GMP_LIBRARIES}")
 message("-- Found python ${PYTHON_LIBRARIES}")
 
 #---------------------------------------------------------------------------
@@ -217,7 +217,7 @@ set_target_properties(cadabra2
 )
 target_link_libraries(cadabra2 PRIVATE
   ${GMPXX_LIBRARIES}
-  ${GMP_LIB}   
+  ${GMP_LIBRARIES}   
   ${Boost_LIBRARIES} 
 )
 if(MATHEMATICA_FOUND)
