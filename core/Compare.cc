@@ -4,7 +4,7 @@
 #include "Compare.hh"
 #include "Algorithm.hh" // FIXME: only needed because index_iterator is in there
 #include <sstream>
-#include "pcrecpp.h"
+#include <regex>
 #include "properties/Indices.hh"
 #include "properties/Coordinate.hh"
 #include "properties/ImplicitIndex.hh"
@@ -1448,8 +1448,8 @@ bool Ex_comparator::satisfies_conditions(Ex::iterator conditions, std::string& e
 			std::string pat=(*rhs->name).substr(1,(*rhs->name).size()-2);
 //			txtout << "matching " << *comp.replacement_map[lhs->name]
 //					 << " with pattern " << pat << std::endl;
-			pcrecpp::RE reg(pat);
-			if(reg.FullMatch(*(replacement_map[Ex(lhs)].begin()->name))==false)
+			std::regex reg(pat);
+			if (!std::regex_match(*(replacement_map[Ex(lhs)].begin()->name), reg))
 				return false;
 			}
 		// V2: FIXME: re-enable searching for properties
