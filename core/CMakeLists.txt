@@ -24,7 +24,10 @@ configure_file(
 find_package(Boost 1.53 COMPONENTS system regex)
 
 # GMPXX
-find_package(GMPXX)
+find_package(GMPXX REQUIRED)
+message("-- Found gmpxx  ${GMPXX_LIBRARIES}")
+message("-- Found gmp    ${GMP_LIB}")
+message("-- Found python ${PYTHON_LIBRARIES}")
 
 #---------------------------------------------------------------------------
 # Enumerate input files and directories.
@@ -213,9 +216,13 @@ set_target_properties(cadabra2
 	SUFFIX ".${PYTHON_MOD_SUFFIX}" 
 )
 target_link_libraries(cadabra2 PRIVATE
-  ${GMPXX_LIBRARIES} 
+  ${GMPXX_LIBRARIES}
+  ${GMP_LIB}   
   ${Boost_LIBRARIES} 
 )
+if(MATHEMATICA_FOUND)
+  target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
+endif()
 
 # Test preprocessor executable
 add_executable(test_preprocessor 
