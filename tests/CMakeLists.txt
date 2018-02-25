@@ -39,7 +39,7 @@ foreach(NBTEST ${NBTESTS})
 	 ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
 	 COMMENT "Creating ${NBTEST} notebook...")
   add_custom_target("${NBTEST}_test" ALL echo -n DEPENDS ${CDBOUT}/${NBTEST}.cdb)
-  add_test(${NBTEST}  ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
+  add_test(${NBTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
   set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH}")
 endforeach()
 
