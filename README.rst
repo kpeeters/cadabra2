@@ -297,7 +297,7 @@ development platform.
 
 
 Windows
--------
+~~~~~~~
 
 On Windows the main constraint on the build process is that we want to
 link to Anaconda's Python, which has been built with Visual
@@ -309,7 +309,8 @@ https://github.com/Microsoft/vcpkg. This contains all dependencies
 (boost, gtkmm, sqlite and various others) in ready-to-use form.
 
 
-^Building with vcpkg^
+Building with vcpkg
+^^^^^^^^^^^^^^^^^^^
 
 If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
@@ -352,7 +353,8 @@ line version with::
 We are still working on making the GUI build.
 	 
 	 
-^Building with MSYS2^
+Building with MSYS2
+^^^^^^^^^^^^^^^^^^^
 
 Warning: building with MSYS2 does not work at the moment. Even if it
 can be made to work again, it will use the MSYS2 Python, not any
