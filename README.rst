@@ -345,7 +345,7 @@ install`` step. Finally build with::
 		
     cmake --build . --target install
 
-This will install in C:\Cadabra, and you can now fire up the command
+This will install in ``C:\Cadabra``, and you can now fire up the command
 line version with::
 
     python C:\Cadabra\bin\cadabra2
