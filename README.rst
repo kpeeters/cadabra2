@@ -332,8 +332,10 @@ Install all the dependencies with::
     vcpkg integrate install
 
 The last line will spit out a CMAKE toolchain path; write it down, you need that shortly.
-Now configure as::
+Now clone the cadabra repository and configure as::
 
+    cd ..
+    git clone https://github.com/kpeeters/cadabra2
     cd cadabra2/build
     cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
           -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF -DCMAKE_INSTALL_PREFIX=C:\Cadabra
