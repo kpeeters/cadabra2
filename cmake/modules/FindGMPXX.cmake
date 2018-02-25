@@ -8,7 +8,7 @@
 if (WIN32)
   windows_find_library(MPIR "mpir" "")
   set(GMPXX_LIBRARIES ${MPIR_LIBRARIES})
-  set(GMP_LIBRARIES   "")
+  set(GMP_LIBRARIES   ${MPIR_LIBRARIES})
   set(GMPXX_BINARIES  ${MPIR_BINARIES})
 else()
   find_library(GMP_LIBRARIES   gmp   REQUIRED)
