@@ -43,6 +43,7 @@ if(PACKAGING_MODE)
 else()
   message("-- User mode")
 endif()
+message("-- CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
 
 # Ensure that all installed binaries have an RPATH setting
 # which enables them to find libtexengine, libcadabra_client and

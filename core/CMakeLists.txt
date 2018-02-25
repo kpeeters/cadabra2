@@ -283,6 +283,15 @@ install(
   DESTINATION 
     "${PYTHON_SITE_PATH}"
 )
+if(WIN32)
+# FIXME: should simply link statically to mpir to avoid the extra dll.
+install(
+  FILES
+    "${PROJECT_BINARY_DIR}/mpir.dll"
+  DESTINATION 
+    "${PYTHON_SITE_PATH}"
+)
+endif()
 install(
   DIRECTORY DESTINATION 
     ${PYTHON_SITE_PATH} 
