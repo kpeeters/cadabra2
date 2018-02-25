@@ -278,7 +278,7 @@ endforeach()
 # Python module
 install(
   FILES
-    "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_CONFIG_NAME}/cadabra2.${PYTHON_MOD_SUFFIX}"
+    "${PROJECT_BINARY_DIR}/${MWEB_CMAKE_CFG_INTDIR}/cadabra2.${PYTHON_MOD_SUFFIX}"
     "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
   DESTINATION 
     "${PYTHON_SITE_PATH}"
@@ -287,7 +287,7 @@ if(WIN32)
 # FIXME: should simply link statically to mpir to avoid the extra dll.
 install(
   FILES
-    "${PROJECT_BINARY_DIR}/${CMAKE_INSTALL_CONFIG_NAME}/mpir.dll"
+    "${PROJECT_BINARY_DIR}/${MWEB_CMAKE_CFG_INTDIR}/mpir.dll"
   DESTINATION 
     "${PYTHON_SITE_PATH}"
 )
