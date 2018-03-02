@@ -21,7 +21,7 @@ configure_file(
 #---------------------------------------------------------------------------
 
 # Boost.regex, Boost.system
-find_package(Boost 1.53 COMPONENTS system regex)
+find_package(Boost 1.53 COMPONENTS system)
 
 # GMPXX
 find_package(GMPXX REQUIRED)

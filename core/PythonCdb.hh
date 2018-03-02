@@ -250,3 +250,5 @@ cadabra::Kernel *get_kernel_from_scope();
 /// Run the post-process Python function (if defined) on the given expression.
 
 void call_post_process(cadabra::Kernel&, std::shared_ptr<cadabra::Ex> ex);
+
+std::string replace_all(std::string, const std::string& old, const std::string& nw);

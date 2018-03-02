@@ -101,6 +101,7 @@ namespace cadabra {
 			static std::mutex             serial_mutex;
 			id_t                          serial_number;
 			static uint64_t               max_serial_number; // on the client, server keeps track separately.
+
 	};
 
 	typedef tree<DataCell> DTree;
@@ -139,4 +140,6 @@ namespace cadabra {
 	std::string export_as_python(const DTree& doc);
 	void        python_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str);
 
+	/// Replace all occurrences of a substring in the original string.
+	std::string replace_all(std::string, const std::string& old, const std::string& nw);
 }

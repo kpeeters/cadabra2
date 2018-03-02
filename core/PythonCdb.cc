@@ -33,7 +33,6 @@
 #include "PreClean.hh"
 #include "PythonException.hh"
 #include "ProgressMonitor.hh"
-//#include "ServerWrapper.hh"
 
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
@@ -809,7 +808,7 @@ std::string Property<LaTeXForm>::latex_() const
 	str << "\\text{Attached property ";
 	prop->latex(str);
 	std::string bare=Ex_str_(for_obj);
-	boost::replace_all(bare, "\\", "$\\backslash{}$}");
+	replace_all(bare, "\\", "$\\backslash{}$}");
 	str << " to {\\tt "+bare+"}.";
 	return str.str();
 	}
@@ -1429,3 +1428,15 @@ PYBIND11_MODULE(cadabra2, m)
 	pybind11::register_exception<InternalError>(m, "InternalError");
 	pybind11::register_exception<NotYetImplemented>(m, "NotYetImplemented");
 	}
+
+std::string replace_all(std::string str, const std::string& old, const std::string& new_s)
+   {
+   if(!old.empty()){
+	   size_t pos = str.find(old);
+	   while ((pos = str.find(old, pos)) != std::string::npos) {
+		   str=str.replace(pos, old.length(), new_s);
+		   pos += new_s.length();
+		   }
+	   }
+    return str;
+   }
