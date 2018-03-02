@@ -36,6 +36,7 @@ too. Select your system from the list bel
 - `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Linux (Solus)`_
+- `OpenBSD`_
 - `Mac OS X`_
 - `Windows`_
 
@@ -240,6 +241,29 @@ libraries there.
 Any feedback on these instructions is welcome.
 
 
+OpenBSD
+~~~~~~~
+
+Install the dependencies with::
+
+  pkg_add git cmake boost python-3.6.2 gtk3mm
+
+We will build using the default clang-4.0.0 compiler; building with
+the alternative g++-4.9.4 leads to trouble when linking against the
+libraries added with pkg_add.
+
+Configure and build with::
+
+  cd cadabra2
+  mkdir build
+  cd build
+  cmake -DENABLE_MATHEMATICA=OFF ..
+
+
+
+
+
+	 
 Mac OS X
 ~~~~~~~~
 
