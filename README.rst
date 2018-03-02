@@ -258,7 +258,7 @@ Configure and build with::
   mkdir build
   cd build
   cmake -DENABLE_MATHEMATICA=OFF ..
-
+  sudo make install
 
 
 
