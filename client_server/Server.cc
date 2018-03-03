@@ -1,7 +1,7 @@
 
+#include <signal.h>
 #include "Server.hh"
 
-#include <signal.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
