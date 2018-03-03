@@ -86,7 +86,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		};
 
 	regex_map = {
-		{"Integral",   "\\int"   },
+		{"Integral",   "\\\\int"   },
 	};
 
 	}
@@ -528,7 +528,7 @@ std::string DisplaySympy::preparse_import(const std::string& in)
 	{
 	std::string ret = in;
 	for(auto& r: regex_map) {
-		ret = std::regex_replace(ret, std::regex(r.second), r.first, std::regex_constants::format_sed);
+		ret = std::regex_replace(ret, std::regex(r.second), r.first);
 		}
 	return ret;
 	}
