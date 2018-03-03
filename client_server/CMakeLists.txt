@@ -56,6 +56,7 @@ include_directories(
   "websocketpp" 
   "jsoncpp"
   "../libs/internal/include"
+  ${PROJECT_BINARY_DIR}/../core
   ${Boost_INCLUDE_DIRS}
   ${PYTHON_INCLUDE_DIRS}
   ${SQLITE3_INCLUDE_DIR}

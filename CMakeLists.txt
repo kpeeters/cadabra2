@@ -118,7 +118,7 @@ include(cmake/packaging.cmake)
 
 # Generate config file with CMake variables.
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
-include_directories(${PROJECT_BINARY_DIR}/core ${PROJECT_SOURCE_DIR}/libs/internal/include)
+#include_directories(${PROJECT_BINARY_DIR}/core ${PROJECT_SOURCE_DIR}/libs/internal/include)
 
 # Add all sub-projects to build process.
 add_subdirectory(libs/pybind11)

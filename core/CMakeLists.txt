@@ -193,9 +193,12 @@ set(PDIRS
 
 include_directories(
   "."
+  ${PROJECT_BINARY_DIR}
+  "../libs/internal/include"
   "../client_server/jsoncpp"
   ${Boost_INCLUDE_DIRS}
   )
+# FIXME: 2nd line is to find Config.hh
 # FIXME: the client_server bit should go back to client_server eventually
 
 add_definitions(
