@@ -2,23 +2,14 @@ cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
 message("------------------------------------------------------------------------\nConfiguring 'client_server'")
 
-# Now using boost::regex, so we can get away with gcc 4.8.
-#
-# if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-#     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-#         message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
-#     endif()
-# endif()
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
+    message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
+  endif()
+endif()
 
-# Set path to additional cmake files
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../cmake/modules")
-
-# Locate glibmm (for spawning processes)
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GLIBMM3 REQUIRED glibmm-2.4)
-include_directories(${GLIBMM3_INCLUDE_DIRS})
-link_directories(${GLIBMM3_LIBRARY_DIRS})
-add_definitions(${GLIBMM3_CFLAGS_OTHER})
+# Locate glibmm.
+find_package(GLIBMM)
 
 # Locate sqlite3.
 find_package(SQLite3)
@@ -27,8 +18,7 @@ find_package(SQLite3)
 find_package(Threads)
 
 # Locate Boost
-find_package(Boost 1.53.0 COMPONENTS system regex program_options date_time filesystem REQUIRED)
-find_package(PkgConfig REQUIRED)
+find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 include_directories("${Boost_INCLUDE_DIRS}" ${PYTHON_INCLUDE_DIR} ${SQLITE3_INCLUDE_DIR} ../core)
 #pkg_check_modules(UUID uuid REQUIRED)
 #include_directories("${UUID_INCLUDE_DIRS}")
@@ -56,7 +46,7 @@ if (WIN32)
 endif()
 
 # Create the client library.
-add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc DataCell.cc Actions.cc Snoop.cc jsoncpp/jsoncpp.cpp)
+add_library(cadabra_client SHARED ComputeThread.cc DocumentThread.cc ../core/DataCell.cc Actions.cc Snoop.cc jsoncpp/jsoncpp.cpp)
 target_link_libraries(cadabra_client ${Boost_LIBRARIES} ${SQLITE3_LIBRARIES} ${PYTHON_LIBRARIES} ${GLIBMM3_LIBRARIES} Threads::Threads)
 if (WIN32)
    target_link_libraries(cadabra_client ws2_32)
@@ -65,13 +55,14 @@ endif()
 # Create server binary
 include_directories("." "./websocketpp" "./jsoncpp")
 add_executable(cadabra-server cadabra-server.cc)
-add_executable(cadabra2html cadabra2html.cc DataCell.cc)
-add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc)
+add_executable(cadabra2html cadabra2html.cc ../core/DataCell.cc)
+#add_executable(cadabra2html cadabra2html.cc DataCell.cc)
+#add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc)
 #add_executable(test_talk_to_server test_talk_to_server.cc)
 #add_executable(regexp_tester regexp_tester.cc)
 target_link_libraries(cadabra-server cadabra_server)
 target_link_libraries(cadabra2html cadabra_client)
-target_link_libraries(cadabra2cadabra cadabra_client)
+#target_link_libraries(cadabra2cadabra cadabra_client)
 #target_link_libraries(test_talk_to_server ${Boost_LIBRARIES} -lpthread)
 
 # The preamble 'notebook.tex' should be kept in sync with the one in

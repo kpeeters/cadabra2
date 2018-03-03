@@ -27,8 +27,9 @@ graphical interface are available.
 Installation
 -------------
 
-Cadabra builds on Linux and Mac OS X, and might soon build on Windows
-too. Select your system from the list bel
+Cadabra builds on Linux, Mac OS X, OpenBSD and Windows (command line
+only for now). Select your system from the list below for detailed
+instructions.
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
@@ -36,6 +37,7 @@ too. Select your system from the list bel
 - `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Linux (Solus)`_
+- `OpenBSD`_
 - `Mac OS X`_
 - `Windows`_
 
@@ -240,6 +242,35 @@ libraries there.
 Any feedback on these instructions is welcome.
 
 
+OpenBSD
+~~~~~~~
+
+Install the dependencies with::
+
+  pkg_add git cmake boost python-3.6.2 gtk3mm texlive_texmf-full py3-sympy
+
+We will build using the default clang-4.0.0 compiler; building with
+the alternative g++-4.9.4 leads to trouble when linking against the
+libraries added with pkg_add.
+
+Configure and build with::
+
+  cd cadabra2
+  mkdir build
+  cd build
+  cmake -DENABLE_MATHEMATICA=OFF ..
+  make
+  su
+  make install
+
+The command-line version is now available as ``cadabra2`` and the
+notebook interface as ``cadabra2-gtk``.
+
+Any feedback on this platform is welcome as this is not our
+development platform and testing is done only occasionally.
+
+
+	 
 Mac OS X
 ~~~~~~~~
 
@@ -267,9 +298,9 @@ to build Cadabra, otherwise the Cadabra style files will not be
 installed in the appropriate place. Make sure 'latex' works from the
 terminal in which you will build Cadabra.
 
-From 6-Feb-2018 you should be able to build against an Anaconda Python
-installation (in case you prefer Anaconda over the Homebrew
-Python). If you encounter trouble with this, please let me know.
+You can build against an Anaconda Python installation (in case you
+prefer Anaconda over the Homebrew Python); cmake will automaticaly
+pick this up if available.
 
 You need to clone the cadabra2 git repository (if you download the
 .zip file you will not have all data necessary to build). So do::
@@ -288,35 +319,105 @@ After that you can build with the standard::
 This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. 
 
-I am still planning a native OS X interface, but because building the
-Gtk interface is so easy and the result looks relatively decent, this
-has been put on hold for the time being.
-
-Feedback from OS X users is *very* welcome because this is not my main
+Feedback from OS X users is *very* welcome because this is not the main
 development platform.
 
 
 Windows
--------
+~~~~~~~
 
-Building on Windows does not work yet completely, but here is
-something to get things at least roughly in the right
-direction. First, install MSYS2 from http://msys2.github.io. Once you
-have a working MSYS2 shell, do the following to install various
-packages (all from an MSYS2 shell!)::
+On Windows the main constraint on the build process is that we want to
+link to Anaconda's Python, which has been built with Visual
+Studio. The recommended way to build Cadabra is thus to build against
+libraries which are all built using Visual Studio as well (if you are
+happy to not use Anaconda, you can also build with the excellent MSYS2
+system from http://www.msys2.org/; see below). It is practically
+impossible to build all dependencies yourself without going crazy, but
+fortunately that is not necessary because of the VCPKG library at
+https://github.com/Microsoft/vcpkg. This contains all dependencies
+(boost, gtkmm, sqlite and various others) in ready-to-use form.
+
+
+Building with vcpkg (recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you do not already have it, first install Visual Studio Community
+Edition from https://www.visualstudio.com/downloads/ and install
+Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
+The instructions below are for building using the Visual Studio 'x64
+Native Tools Command Prompt' (not the GUI). First, clone the vcpkg
+repository::
+
+    git clone https://github.com/Microsoft/vcpkg
+
+Run the bootstrap script to set things up::
+
+    cd vcpkg
+    bootstrap-vcpkg.bat
+
+Install all the dependencies with::
+  
+    vcpkg install mpir:x64-windows glibmm:x64-windows   (go have a coffee)
+    vcpkg install sqlite3:x64-windows boost:x64-windows (go for dinner)
+    vcpkg integrate install
+
+The last line will spit out a CMAKE toolchain path; write it down, you need that shortly.
+Now clone the cadabra repository and configure as::
+
+    cd ..
+    git clone https://github.com/kpeeters/cadabra2
+    cd cadabra2/build
+    cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
+          -DCMAKE_BUILD_TYPE=Release
+          -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF -DCMAKE_INSTALL_PREFIX=C:\Cadabra
+          -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
+
+the latter all on one line, in which you replace the
+CMAKE_TOOLCHAIN_PATH with the path produced by the ``vcpkg integrate
+install`` step. Finally build with::
+		
+    cmake --build . --config Release --target install
+
+This will install in ``C:\Cadabra``. The self-tests can be run by
+doing::
+
+    ctest
+
+(still fails tensor_monomials, bianchi_identities, paper and young
+when in Release build).
+
+Finally, the command-line version of Cadabra can now be started with::
+
+    python C:\Cadabra\bin\cadabra2
+
+We are still working on making the GUI build and run.
+
+
+Building with MSYS2 (not recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Warning: the instructions below are just for guidance, we have not
+tried this for quite a while.**
+
+If you are happy with a Cadabra which cannot access an Anaconda Python
+distribution, it is possible to build using MSYS2. First, install
+MSYS2 from http://www.msys2.org. Once you have a working MSYS2
+shell, do the following to install various packages (all from an MSYS2
+shell!)::
 
     pacman -S mingw-w64-x86_64-gcc
     pacman -S mingw-w64-x86_64-gtkmm3
     pacman -S mingw-w64-x86_64-boost
     pacman -S gmp gmp-devel pcre-devel
     pacman -S mingw-w64-x86_64-cmake
-    pacman -S mingw-w64-x86_64-sqlite3
+	 pacman -S mingw-w64-x86_64-sqlite3
+    pacman -S mingw-w64-x86_64-python3  
     pacman -S mingw-w64-x86_64-adwaita-icon-theme
 
 Then close the MSYS2 shell and open the MINGW64 shell. Run::
   
     cd cadabra2/build
-    cmake -G "MinGW Makefiles" -DUSE_PYTHON_3=NO -DCMAKE_INSTALL_PREFIX=/home/[user] ..
+    cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=/home/[user] ..
     mingw32-make
 
 Replace '[user]' with your user name.
@@ -372,7 +473,8 @@ Special thanks
 
 Special thanks to José M. Martín-García (for the xPerm
 canonicalisation code), James Allen (for writing much of the factoring
-code), Dominic Price (for the conversion to pybind), the Software
-Sustainability Institute and the Institute of Advanced Study. Thanks
-to the many people who have sent me bug reports (keep 'm coming), and
-thanks to all of you who cited the Cadabra papers.
+code), Dominic Price (for the conversion to pybind and the Windows
+port), the Software Sustainability Institute and the Institute of
+Advanced Study. Thanks to the many people who have sent me bug reports
+(keep 'm coming), and thanks to all of you who cited the Cadabra
+papers.

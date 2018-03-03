@@ -8,11 +8,12 @@
 #include "Actions.hh"
 #include "popen2.hh"
 #include <sys/types.h>
-#include <signal.h>
 #include <glibmm/spawn.h>
+#include "internal/unistd.h"
+
+typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 using namespace cadabra;
-typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 ComputeThread::ComputeThread()
 	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0), 

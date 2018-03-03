@@ -268,7 +268,7 @@ std::ostream& Ex::print_recursive_treeform(std::ostream& str, Ex::iterator it, u
 		}
 //	str << "  (" << calc_hash(it) << ")";
 //	str << "  (" << depth(it) << ")";
-	str << "  (" << &(*it) << ")";
+	str << "  (" << it->fl.bracket << " " << &(*it) << ")";
 	if(!compact_tree) str << std::endl;
 
 	while(beg!=fin) {

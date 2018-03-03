@@ -57,7 +57,7 @@ bool drop_keep_weight::can_apply(iterator st)
 
 Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 	{
-	Algorithm::result_t res;
+	Algorithm::result_t res=result_t::l_no_action;
 
 	if(gmn) {
 		if(gmn->combination_type==WeightInherit::multiplicative) {

@@ -43,6 +43,7 @@ if(PACKAGING_MODE)
 else()
   message("-- User mode")
 endif()
+message("-- CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
 
 # Ensure that all installed binaries have an RPATH setting
 # which enables them to find libtexengine, libcadabra_client and
@@ -64,14 +65,17 @@ endif()
 option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
-#################
-# Compiler flags
-#################
+#---------------------------------------------------------------------------
+# Compiler flags.
+#---------------------------------------------------------------------------
 
 # - Set the C++ standard to C++14
 # - Turn optimizations on
 # - Turn off warnings we don't need
 
+include(cmake/winlibs.cmake)
+
+debug_message("Available build types : ${CMAKE_CONFIGURATION_TYPES}")
 debug_message("Initial compiler flags: ${CMAKE_CXX_FLAGS}")
 
 # GCC
@@ -114,7 +118,7 @@ include(cmake/packaging.cmake)
 
 # Generate config file with CMake variables.
 configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
-include_directories(${PROJECT_BINARY_DIR}/core)
+include_directories(${PROJECT_BINARY_DIR}/core ${PROJECT_SOURCE_DIR}/libs/internal/include)
 
 # Add all sub-projects to build process.
 add_subdirectory(libs/pybind11)
@@ -128,15 +132,20 @@ else()
   set(PYTHON_MOD_SUFFIX "so")
 endif()
 if("${PYTHON_SITE_PATH}" STREQUAL "")
-  execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
-                  OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  if(WIN32)
+	 execute_process(COMMAND ${PYTHON_EXECUTABLE} -m site --user-site
+		OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  else()
+    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
+      OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
 endif()
 message("-- Python site path at ${PYTHON_SITE_PATH}")
 message("-- Python module suffix \".${PYTHON_MOD_SUFFIX}\"")
 
 add_subdirectory(core)
-add_subdirectory(client_server)
 if(ENABLE_FRONTEND)
+  add_subdirectory(client_server)
   add_subdirectory(frontend)
 endif()
 add_subdirectory(tests)

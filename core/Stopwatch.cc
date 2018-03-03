@@ -1,7 +1,7 @@
 /* 
 
 	Cadabra: a field-theory motivated computer algebra system.
-	Copyright (C) 2001-2011  Kasper Peeters <kasper.peeters@aei.mpg.de>
+	Copyright (C) 2001-2018  Kasper Peeters <kasper.peeters@aei.mpg.de>
 
    This program is free software: you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -18,26 +18,24 @@
  
 */
 
+#include <ratio>
 #include "Stopwatch.hh"
-#include <assert.h>
 
 Stopwatch::Stopwatch()
-	: diffsec(0), diffusec(0), stopped_(true)
+   : elapsed_(0), stopped_(true)
 	{
-   gettimeofday(&tv1,&tz);	// the time since the counter has been running, if stopped_=false
 	}
 
 void Stopwatch::reset()
 	{
-	diffsec=0;
-	diffusec=0;
-   gettimeofday(&tv1,&tz);	
+	elapsed_=0;
+	start_=clock::now();
 	}
 
 void Stopwatch::start()
 	{
-   gettimeofday(&tv1,&tz);	
 	stopped_=false;
+	start_=clock::now();
 	}
 
 void Stopwatch::stop()
@@ -53,35 +51,26 @@ bool Stopwatch::stopped() const
 
 void Stopwatch::checkpoint_() const
 	{
-   gettimeofday(&tv2,&tz);
-   diffsec  += tv2.tv_sec-tv1.tv_sec;
-   diffusec += tv2.tv_usec-tv1.tv_usec;
-	tv1=tv2;
-   if(diffusec < 0) {
-		diffsec--;
-		diffusec+=1000000L;
-		}
-	if(diffusec>1000000L) {
-		diffsec+=diffusec/1000000L;
-		diffusec%=1000000L;
-		}
+	using namespace std::chrono;
+	clock::time_point stop_ = clock::now();
+	elapsed_ += duration_cast<duration<long, std::micro>>(stop_ - start_).count();
+	start_ = stop_;
 	}
 
 long Stopwatch::seconds() const
 	{
-	if(stopped_==false) checkpoint_();
-	return diffsec;
+	if(!stopped_) checkpoint_();
+	return elapsed_ / s_to_us;
 	}
 
 long Stopwatch::useconds() const
 	{
-	if(stopped_==false) checkpoint_();
-	return diffusec;
+	if(!stopped_) checkpoint_();
+	return elapsed_ % s_to_us;
 	}
 
-std::ostream& operator<<(std::ostream& os, const Stopwatch& mt)
+std::ostream& operator<<(std::ostream& lhs, const Stopwatch& rhs)
 	{
-   os << mt.diffsec << " sec and " << mt.diffusec << " microsec";
-	return os;
+	return lhs << rhs.seconds() << "s and " << rhs.useconds() << "us";
 	}
 

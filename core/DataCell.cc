@@ -3,10 +3,9 @@
 #include "DataCell.hh"
 #include <sstream>
 #include <fstream>
-#include <boost/regex.hpp>
+#include <regex>
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
-//#include <regex>
 #include <iostream>
 
 using namespace cadabra;
@@ -75,67 +74,67 @@ std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::s
 
 std::string cadabra::latex_to_html(const std::string& str)
 	{
-	boost::regex section(R"(\\section\*\{([^\}]*)\})");
-	boost::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
-	boost::regex verb(R"(\\verb\|([^\|]*)\|)");
-	boost::regex url(R"(\\url\{([^\}]*)\})");
-	boost::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
-	boost::regex begin_verbatim(R"(\\begin\{verbatim\})");
-	boost::regex end_verbatim(R"(\\end\{verbatim\})");
-	boost::regex begin_dmath(R"(\\begin\{dmath\*\})");
-	boost::regex end_dmath(R"(\\end\{dmath\*\})");
-	boost::regex tilde("~");
-	boost::regex less("<");
-	boost::regex greater(">");
-	boost::regex latex(R"(\\LaTeX\{\})");
-	boost::regex tex(R"(\\TeX\{\})");
-	boost::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
-	boost::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
-	boost::regex algo(R"(\\algo\{([^\}]*)\})");
-	boost::regex prop(R"(\\prop\{([^\}]*)\})");
-	boost::regex underscore(R"(\\_)");
-	boost::regex e_aigu(R"(\\'e)");
-	boost::regex ldots(R"(\\ldots)");
-	boost::regex dquote(R"(``([^']*)'')");
-	boost::regex squote(R"(`([^']*)')");
-	boost::regex linebreak(R"(\\linebreak\[0\])");
-	boost::regex tableau(R"(\\tableau\{(\{[^\}]*\})*\})");
-	boost::regex ftableau(R"(\\ftableau\{(\{[^\}]*\}[,]?)*\})");		
+	std::regex section(R"(\\section\*\{([^\}]*)\})");
+	std::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
+	std::regex verb(R"(\\verb\|([^\|]*)\|)");
+	std::regex url(R"(\\url\{([^\}]*)\})");
+	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
+	std::regex begin_verbatim(R"(\\begin\{verbatim\})");
+	std::regex end_verbatim(R"(\\end\{verbatim\})");
+	std::regex begin_dmath(R"(\\begin\{dmath\*\})");
+	std::regex end_dmath(R"(\\end\{dmath\*\})");
+	std::regex tilde("~");
+	std::regex less("<");
+	std::regex greater(">");
+	std::regex latex(R"(\\LaTeX\{\})");
+	std::regex tex(R"(\\TeX\{\})");
+	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
+	std::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
+	std::regex algo(R"(\\algo\{([^\}]*)\})");
+	std::regex prop(R"(\\prop\{([^\}]*)\})");
+	std::regex underscore(R"(\\_)");
+	std::regex e_aigu(R"(\\'e)");
+	std::regex ldots(R"(\\ldots)");
+	std::regex dquote(R"(``([^']*)'')");
+	std::regex squote(R"(`([^']*)')");
+	std::regex linebreak(R"(\\linebreak\[0\])");
+	std::regex tableau(R"(\\tableau\{(\{[^\}]*\})*\})");
+	std::regex ftableau(R"(\\ftableau\{(\{[^\}]*\}[,]?)*\})");		
 	std::string res;
 
 	try {
-		res = boost::regex_replace(str, begin_dmath, R"(\\(\\displaystyle)");
-		boost::replace_all(res, "\\discretionary{}{}{}", "");
-		boost::replace_all(res, "\\discretionary{}{}{}", "");
-//		boost::replace_all(res, "\\left", "");
-//		boost::replace_all(res, "\\right", "");
-		res = boost::regex_replace(res, end_dmath, R"(\\))");
-		res = boost::regex_replace(res, tilde, " ");
-		res = boost::regex_replace(res, less, "&lt;");
-		res = boost::regex_replace(res, tilde, "&gt;");
-		res = boost::regex_replace(res, begin_verbatim, "<pre class='output'>");
-		res = boost::regex_replace(res, end_verbatim, "</pre>");
-		res = boost::regex_replace(res, section, "<h1>$1</h1>");
-		res = boost::regex_replace(res, subsection, "<h2>$1</h2>");
-		res = boost::regex_replace(res, verb, "<code>$1</code>");
-		res = boost::regex_replace(res, url, "<a href=\"$1\">$1</a>");
-		res = boost::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-		res = boost::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
-		res = boost::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
-		res = boost::regex_replace(res, algo, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
-		res = boost::regex_replace(res, prop, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
-		res = boost::regex_replace(res, underscore, "_");
-		res = boost::regex_replace(res, latex, "LaTeX");
-		res = boost::regex_replace(res, tex, "TeX");
-		res = boost::regex_replace(res, e_aigu, "é");
-		res = boost::regex_replace(res, ldots, "...");
-		res = boost::regex_replace(res, dquote, "\"$1\"");
-		res = boost::regex_replace(res, squote,  "'$1'");
-		res = boost::regex_replace(res, linebreak, "\\\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
-		res = boost::regex_replace(res, tableau, "\\\\)<div class=\"young_box\"></div>\\\\(\\\\displaystyle");
-		res = boost::regex_replace(res, ftableau, "\\\\)<div class=\"young_box filled\"></div>\\\\(\\\\displaystyle");		
+		res = std::regex_replace(str, begin_dmath, R"(\\(\\displaystyle)");
+		replace_all(res, "\\discretionary{}{}{}", "");
+		replace_all(res, "\\discretionary{}{}{}", "");
+//		replace_all(res, "\\left", "");
+//		replace_all(res, "\\right", "");
+		res = std::regex_replace(res, end_dmath, R"(\\))");
+		res = std::regex_replace(res, tilde, " ");
+		res = std::regex_replace(res, less, "&lt;");
+		res = std::regex_replace(res, tilde, "&gt;");
+		res = std::regex_replace(res, begin_verbatim, "<pre class='output'>");
+		res = std::regex_replace(res, end_verbatim, "</pre>");
+		res = std::regex_replace(res, section, "<h1>$1</h1>");
+		res = std::regex_replace(res, subsection, "<h2>$1</h2>");
+		res = std::regex_replace(res, verb, "<code>$1</code>");
+		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
+		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
+		res = std::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, algo, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
+		res = std::regex_replace(res, prop, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
+		res = std::regex_replace(res, underscore, "_");
+		res = std::regex_replace(res, latex, "LaTeX");
+		res = std::regex_replace(res, tex, "TeX");
+		res = std::regex_replace(res, e_aigu, "é");
+		res = std::regex_replace(res, ldots, "...");
+		res = std::regex_replace(res, dquote, "\"$1\"");
+		res = std::regex_replace(res, squote,  "'$1'");
+		res = std::regex_replace(res, linebreak, "\\\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
+		res = std::regex_replace(res, tableau, "\\\\)<div class=\"young_box\"></div>\\\\(\\\\displaystyle");
+		res = std::regex_replace(res, ftableau, "\\\\)<div class=\"young_box filled\"></div>\\\\(\\\\displaystyle");		
 		}
-	catch(boost::regex_error& ex) {
+	catch(std::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;
 		}
 
@@ -202,7 +201,7 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				}
 			}
 		}
-	catch(boost::regex_error& ex) {
+	catch(std::regex_error& ex) {
 		std::cerr << "regex error doing latex_to_html on " << it->textbuf << std::endl;
 		throw;
 		}
@@ -530,15 +529,15 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
 			std::string lr(it->textbuf);
 			// Make sure to sync these with the same in TeXEngine.cc !!!
-			boost::replace_all(lr, "\\left(", "\\brwrap{(}{");
-			boost::replace_all(lr, "\\right)", "}{)}");
-			boost::replace_all(lr, "\\left[", "\\brwrap{[}{");
-			boost::replace_all(lr, "\\right]", "}{]}");
-			boost::replace_all(lr, "\\left\\{", "\\brwrap{\\{}{");
-			boost::replace_all(lr, "\\right\\}", "}{\\}}");
-			boost::replace_all(lr, "\\right.", "}{.}");
-			boost::replace_all(lr, "\\begin{dmath*}", "\\begin{adjustwidth}{1em}{0cm}$");
-			boost::replace_all(lr, "\\end{dmath*}", "$\\\\\\end{adjustwidth}");
+			replace_all(lr, "\\left(", "\\brwrap{(}{");
+			replace_all(lr, "\\right)", "}{)}");
+			replace_all(lr, "\\left[", "\\brwrap{[}{");
+			replace_all(lr, "\\right]", "}{]}");
+			replace_all(lr, "\\left\\{", "\\brwrap{\\{}{");
+			replace_all(lr, "\\right\\}", "}{\\}}");
+			replace_all(lr, "\\right.", "}{.}");
+			replace_all(lr, "\\begin{dmath*}", "\\begin{adjustwidth}{1em}{0cm}$");
+			replace_all(lr, "\\end{dmath*}", "$\\\\\\end{adjustwidth}");
 			str << lr << "\n";
 			}
 		}
@@ -611,3 +610,15 @@ void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostrings
 			}
 		}
 	}
+
+std::string cadabra::replace_all(std::string str, const std::string& old, const std::string& new_s)
+   {
+   if(!old.empty()){
+	   size_t pos = str.find(old);
+	   while ((pos = str.find(old, pos)) != std::string::npos) {
+		   str=str.replace(pos, old.length(), new_s);
+		   pos += new_s.length();
+		   }
+	   }
+   return str;
+   }

@@ -20,6 +20,12 @@
 #include <json/json.h>
 #include <thread>
 
+#ifdef _MSC_VER
+  #define pid_t int
+#else
+  #include <unistd.h>
+#endif
+
 namespace snoop {
 
 	class SnoopImpl;

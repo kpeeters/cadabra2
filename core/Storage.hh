@@ -70,12 +70,21 @@ class str_node { // size: 9 bytes (32 bit arch), can be reduced to 5 bytes.
 		nset_t::iterator name;
 		rset_t::iterator multiplier;
 
+#ifdef _WIN32      
+		struct flag_t { 
+				bool            keep_after_eval ; 
+				bracket_t       bracket         ; 
+				parent_rel_t    parent_rel      ; 
+				bool            line_per_node   ;
+		};
+#else
 		struct flag_t { // kept inside 8 bits for speed and size
 				bool            keep_after_eval : 1; 
 				bracket_t       bracket         : 3; 
 				parent_rel_t    parent_rel      : 3; 
 				bool            line_per_node   : 1;
-		}; 
+		};
+#endif
 
 		flag_t fl;
 

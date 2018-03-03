@@ -86,7 +86,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		};
 
 	regex_map = {
-		{"Integral",   "\\int"   },
+		{"Integral",   "\\\\int"   },
 	};
 
 	}
