@@ -16,7 +16,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../../cmake/modu
 # Locate Boost
 find_package(Boost 1.45.0 COMPONENTS system filesystem)
 include_directories(
-  ${PROJECT_BINARY_DIR}/../../core
+  ../../core
+  ../../libs/internal/include
   "${Boost_INCLUDE_DIRS}"
   )
 set(Boost_USE_STATIC_LIBS OFF)
