@@ -27,8 +27,9 @@ graphical interface are available.
 Installation
 -------------
 
-Cadabra builds on Linux and Mac OS X, and might soon build on Windows
-too. Select your system from the list bel
+Cadabra builds on Linux, Mac OS X, OpenBSD and Windows (command line
+only for now). Select your system from the list below for detailed
+instructions.
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
@@ -259,9 +260,14 @@ Configure and build with::
   cd build
   cmake -DENABLE_MATHEMATICA=OFF ..
   make
-  sudo make install
+  su
+  make install
 
+The command-line version is now available as ``cadabra2`` and the
+notebook interface as ``cadabra2-gtk``.
 
+Any feedback on this platform is welcome as this is not our
+development platform and testing is done only occasionally.
 
 
 	 
@@ -292,9 +298,9 @@ to build Cadabra, otherwise the Cadabra style files will not be
 installed in the appropriate place. Make sure 'latex' works from the
 terminal in which you will build Cadabra.
 
-From 6-Feb-2018 you should be able to build against an Anaconda Python
-installation (in case you prefer Anaconda over the Homebrew
-Python). If you encounter trouble with this, please let me know.
+You can build against an Anaconda Python installation (in case you
+prefer Anaconda over the Homebrew Python); cmake will automaticaly
+pick this up if available.
 
 You need to clone the cadabra2 git repository (if you download the
 .zip file you will not have all data necessary to build). So do::
@@ -313,11 +319,7 @@ After that you can build with the standard::
 This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. 
 
-I am still planning a native OS X interface, but because building the
-Gtk interface is so easy and the result looks relatively decent, this
-has been put on hold for the time being.
-
-Feedback from OS X users is *very* welcome because this is not my main
+Feedback from OS X users is *very* welcome because this is not the main
 development platform.
 
 
@@ -342,8 +344,9 @@ Building with vcpkg (recommended)
 If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
 Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
-We will build using the Visual Studio 'x64 Native Tools Command
-Prompt' (not the GUI). First, clone the vcpkg repository::
+The instructions below are for building using the Visual Studio 'x64
+Native Tools Command Prompt' (not the GUI). First, clone the vcpkg
+repository::
 
     git clone https://github.com/Microsoft/vcpkg
 
@@ -381,7 +384,9 @@ doing::
     ctest
 
 (still fails tensor_monomials, bianchi_identities, paper and young
-when in Release build). The command-line version can be started with::
+when in Release build).
+
+Finally, the command-line version of Cadabra can now be started with::
 
     python C:\Cadabra\bin\cadabra2
 
