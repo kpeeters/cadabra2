@@ -279,24 +279,26 @@ endforeach()
 # 
 # https://stackoverflow.com/questions/21198030/installfiles-cmake-cfg-intdir-abc-win-dll-destination-bin
 if(WIN32)
-# FIXME: need to get the 'Debug' from a variable (CMAKE_CFG_INTDIR does not contain that...)
-#        and link statically to mpir.
-install(
-  FILES
-    "${PROJECT_BINARY_DIR}/Debug/cadabra2.${PYTHON_MOD_SUFFIX}"
+  set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
+  if(${CADABRA_BUILD_TYPE}=="")
+	 set(CADABRA_BUILD_TYPE "Debug")
+  endif()
+  install(
+	 FILES
+    "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cadabra2.${PYTHON_MOD_SUFFIX}"
     "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
-    "${PROJECT_BINARY_DIR}/Debug/mpir.dll"
-  DESTINATION 
+    "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/mpir.dll"
+	 DESTINATION 
     "${PYTHON_SITE_PATH}"
 	 )
 else()
-install(
-  FILES
+  install(
+	 FILES
     "${PROJECT_BINARY_DIR}/cadabra2.${PYTHON_MOD_SUFFIX}"
     "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
-  DESTINATION 
+	 DESTINATION 
     "${PYTHON_SITE_PATH}"
-)
+	 )
 endif()
 install(
   DIRECTORY DESTINATION 

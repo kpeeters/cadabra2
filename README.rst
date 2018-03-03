@@ -363,6 +363,7 @@ Now clone the cadabra repository and configure as::
     git clone https://github.com/kpeeters/cadabra2
     cd cadabra2/build
     cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
+          -DCMAKE_BUILD_TYPE=Release
           -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF -DCMAKE_INSTALL_PREFIX=C:\Cadabra
           -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
 
