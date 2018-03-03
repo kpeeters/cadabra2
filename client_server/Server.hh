@@ -4,12 +4,12 @@
 #if defined(_WIN32)
   #define NOMINMAX
 #endif
-#include <string>
-#include <signal.h>
-#include <boost/uuid/uuid.hpp>
 #include <websocketpp/server.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/common/functional.hpp>
+#include <string>
+#include <signal.h>
+#include <boost/uuid/uuid.hpp>
 #include <future>
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>

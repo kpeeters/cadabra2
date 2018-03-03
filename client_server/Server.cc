@@ -1,4 +1,5 @@
 
+#include "Server.hh"
 
 #include <signal.h>
 #include <iostream>
@@ -15,7 +16,6 @@
 #include "Config.hh"
 #include "Snoop.hh"
 #include "CdbPython.hh"
-#include "Server.hh"
 #include "SympyCdb.hh"
 
 using websocketpp::lib::placeholders::_1;

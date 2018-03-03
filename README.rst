@@ -368,7 +368,7 @@ Now clone the cadabra repository and configure as::
     git clone https://github.com/kpeeters/cadabra2
     cd cadabra2/build
     cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
-          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
           -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF -DCMAKE_INSTALL_PREFIX=C:\Cadabra
           -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
 
@@ -376,7 +376,7 @@ the latter all on one line, in which you replace the
 CMAKE_TOOLCHAIN_PATH with the path produced by the ``vcpkg integrate
 install`` step. Finally build with::
 		
-    cmake --build . --config Release --target install
+    cmake --build . --config RelWithDebInfo --target install
 
 This will install in ``C:\Cadabra``. The self-tests can be run by
 doing::
