@@ -246,7 +246,7 @@ OpenBSD
 
 Install the dependencies with::
 
-  pkg_add git cmake boost python-3.6.2 gtk3mm texlive_base
+  pkg_add git cmake boost python-3.6.2 gtk3mm texlive_texmf-full py3-sympy
 
 We will build using the default clang-4.0.0 compiler; building with
 the alternative g++-4.9.4 leads to trouble when linking against the
@@ -258,6 +258,7 @@ Configure and build with::
   mkdir build
   cd build
   cmake -DENABLE_MATHEMATICA=OFF ..
+  make
   sudo make install
 
 
