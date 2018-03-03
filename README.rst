@@ -327,15 +327,17 @@ Windows
 On Windows the main constraint on the build process is that we want to
 link to Anaconda's Python, which has been built with Visual
 Studio. The recommended way to build Cadabra is thus to build against
-libraries which are all built using Visual Studio as well. It is
-practically impossible to build all dependencies yourself, but
+libraries which are all built using Visual Studio as well (if you are
+happy to not use Anaconda, you can also build with the excellent MSYS2
+system from http://www.msys2.org/; see below). It is practically
+impossible to build all dependencies yourself without going crazy, but
 fortunately that is not necessary because of the VCPKG library at
 https://github.com/Microsoft/vcpkg. This contains all dependencies
 (boost, gtkmm, sqlite and various others) in ready-to-use form.
 
 
-Building with vcpkg
-^^^^^^^^^^^^^^^^^^^
+Building with vcpkg (recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
@@ -371,27 +373,32 @@ the latter all on one line, in which you replace the
 CMAKE_TOOLCHAIN_PATH with the path produced by the ``vcpkg integrate
 install`` step. Finally build with::
 		
-    cmake --build . --target install
+    cmake --build . --config Release --target install
 
-This will install in ``C:\Cadabra``, and you can now fire up the command
-line version with::
+This will install in ``C:\Cadabra``. The self-tests can be run by
+doing::
+
+    ctest
+
+(still fails tensor_monomials, bianchi_identities, paper and young
+when in Release build). The command-line version can be started with::
 
     python C:\Cadabra\bin\cadabra2
 
-We are still working on making the GUI build.
-	 
-	 
-Building with MSYS2
-^^^^^^^^^^^^^^^^^^^
+We are still working on making the GUI build and run.
 
-Warning: building with MSYS2 does not work at the moment. Even if it
-can be made to work again, it will use the MSYS2 Python, not any
-Anaconda installation. The instructions below are for reference only,
-do not expect to get a working Cadabra out of it.
 
-First, install MSYS2 from http://msys2.github.io. Once you
-have a working MSYS2 shell, do the following to install various
-packages (all from an MSYS2 shell!)::
+Building with MSYS2 (not recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**Warning: the instructions below are just for guidance, we have not
+tried this for quite a while.**
+
+If you are happy with a Cadabra which cannot access an Anaconda Python
+distribution, it is possible to build using MSYS2. First, install
+MSYS2 from http://www.msys2.org. Once you have a working MSYS2
+shell, do the following to install various packages (all from an MSYS2
+shell!)::
 
     pacman -S mingw-w64-x86_64-gcc
     pacman -S mingw-w64-x86_64-gtkmm3
@@ -422,6 +429,7 @@ things into there. In addition you need::
 
 This fails to start the server with 'The application has requested the
 Runtime to terminate it in an unusual way'.
+
 
 
 Tutorials and other help
