@@ -75,6 +75,7 @@ option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
 include(cmake/winlibs.cmake)
 
+debug_message("Available build types : ${CMAKE_CONFIGURATION_TYPES}")
 debug_message("Initial compiler flags: ${CMAKE_CXX_FLAGS}")
 
 # GCC
