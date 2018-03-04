@@ -89,7 +89,13 @@ add_definitions(
 # Server executable
 add_executable(cadabra-server cadabra-server.cc ${CADABRA_SERVER_SRC})
 # target_link_libraries(cadabra-server cadabra_server)
-target_link_libraries(cadabra-server pybind11::embed)
+target_link_libraries(cadabra-server
+  pybind11::embed
+  ${Boost_LIBRARIES}
+  ${SQLITE3_LIBRARIES}
+  ${PYTHON_LIBRARIES}
+  ${GLIBMM3_LIBRARIES} 
+  )
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock)
 endif()
