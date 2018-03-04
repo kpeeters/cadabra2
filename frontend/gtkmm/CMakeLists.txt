@@ -11,7 +11,7 @@ else()
 endif()
 
 # Gtkmm-3.0 dependencies. 
-find_package(GTKMM)
+find_package(GTKMM3)
 find_package(Boost 1.45.0 COMPONENTS system)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
