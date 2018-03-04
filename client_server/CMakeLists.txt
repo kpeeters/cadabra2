@@ -95,6 +95,7 @@ target_link_libraries(cadabra-server
   ${SQLITE3_LIBRARIES}
   ${PYTHON_LIBRARIES}
   ${GLIBMM3_LIBRARIES} 
+  Threads::Threads
   )
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock)

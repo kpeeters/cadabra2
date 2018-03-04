@@ -29,7 +29,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 # Create library
-include_directories(".")
+include_directories("." "../../libs/internal/include")
 add_library(texengine SHARED TeXEngine.cc lodepng.cc exec-stream.cc)
 target_link_libraries(texengine ${Boost_LIBRARIES} pthread)
 add_executable(test_tex test_tex.cc)
