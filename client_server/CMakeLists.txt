@@ -135,18 +135,15 @@ install(TARGETS cadabra2html DESTINATION bin)
 install(TARGETS cadabra_client LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
-# Shared libraries on Windows
+# Shared libraries on Windows. Do by hand, cmake is a mess...
 if(WIN32)
-  file(
-	 GLOB 
-    client_server_dlls
-	 RELATIVE 
-    ${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/
-	 "*.dll"
-	 )
-  message("-- Installing DLLs: ${client_server_dlls}")
-  
-  install(FILES ${client_server_dlls} DESTINATION bin)
+  install(
+	 FILES
+	   boost_system-vc141-mt-x64-1_66.dll
+	   boost_program_options-vc141-mt-x64-1_66.dll
+	   glibmm.dll
+	 DESTINATION
+	   bin)
 endif()
 
 
