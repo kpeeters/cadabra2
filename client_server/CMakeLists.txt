@@ -133,7 +133,7 @@ install(FILES  notebook.html DESTINATION ${INSTALL_LATEX_DIR})
 #set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 install(TARGETS cadabra-server DESTINATION bin)
 install(TARGETS cadabra2html DESTINATION bin)
-install(TARGETS cadabra_client RUNTIME DESTINATION bin LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+install(TARGETS cadabra_client RUNTIME DESTINATION bin COMPONENT runtime LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
 # Shared libraries on Windows. Do by hand, cmake is a mess...
