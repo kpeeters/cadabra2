@@ -355,10 +355,12 @@ Run the bootstrap script to set things up::
     cd vcpkg
     bootstrap-vcpkg.bat
 
-Install all the dependencies with::
+Install all the dependencies with (this is a *very* slow process, be
+warned, it can easily take several hours, but at least it's automatic)::
   
     vcpkg install mpir:x64-windows glibmm:x64-windows   (go have a coffee)
     vcpkg install sqlite3:x64-windows boost:x64-windows (go for dinner)
+    vcpkg install gtkmm:x64-windows                     (run overnight)
     vcpkg integrate install
 
 The last line will spit out a CMAKE toolchain path; write it down, you need that shortly.

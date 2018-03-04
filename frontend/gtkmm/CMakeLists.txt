@@ -10,15 +10,24 @@ else()
   add_definitions("-DBOOST_LOG_DYN_LINK")
 endif()
 
-# Gtkmm-3.0 dependencies. 
+# Dependencies.
+find_package(SQLite3)
 find_package(GTKMM3)
 find_package(Boost 1.45.0 COMPONENTS system)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-include_directories("${Boost_INCLUDE_DIRS}")
 
-include_directories("." "../../core" "../../libs/internal/include" "../../client_server" "../../client_server/jsoncpp" "../../client_server/websocketpp")
+include_directories(
+  "."
+  "../../core"
+  "../../libs/internal/include"
+  "../../client_server"
+  "../../client_server/jsoncpp"
+  "../../client_server/websocketpp"
+  ${Boost_INCLUDE_DIRS}
+  ${SQLITE3_INCLUDE_DIR}  
+  )
 
 add_executable(cadabra2-gtk main.cc 
   NotebookWindow.cc 
@@ -33,9 +42,9 @@ add_executable(cadabra2-gtk main.cc
 # along with our binary. 
 if(WIN32)
   target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} Threads::Threads)
 else()
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
 endif()
 
 
