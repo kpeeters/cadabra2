@@ -35,6 +35,6 @@ include_directories("." "../../libs/internal/include")
 # target_link_libraries(texengine ${Boost_LIBRARIES} Threads::Threads)
 
 add_executable(test_tex test_tex.cc TeXEngine.cc lodepng.cc exec-stream.cc)
-target_link_libraries(test_tex texengine ${Boost_LIBRARIES} Threads::Threads)
-install(TARGETS texengine ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+target_link_libraries(test_tex ${Boost_LIBRARIES} Threads::Threads)
+# install(TARGETS texengine ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
