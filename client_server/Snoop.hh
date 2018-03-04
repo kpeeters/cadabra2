@@ -92,8 +92,7 @@ namespace snoop {
 
 			/// C++ representation of a run entry.
 
-         class AppEntry;
-	         {
+         class AppEntry {
 				public:
 					AppEntry();
 					AppEntry(const std::string& uuid_, uint64_t create_millis_, uint64_t receive_millis_, uint64_t pid_, 
