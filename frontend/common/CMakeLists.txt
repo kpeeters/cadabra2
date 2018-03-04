@@ -29,11 +29,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -Wno-unused-but-set-variable")
 endif()
 
-# Create library
+# Create library; disabled to make life easier on Windows
 include_directories("." "../../libs/internal/include")
-add_library(texengine SHARED TeXEngine.cc lodepng.cc exec-stream.cc)
-target_link_libraries(texengine ${Boost_LIBRARIES} Threads::Threads)
-add_executable(test_tex test_tex.cc)
-target_link_libraries(test_tex texengine)
+# add_library(texengine SHARED TeXEngine.cc lodepng.cc exec-stream.cc)
+# target_link_libraries(texengine ${Boost_LIBRARIES} Threads::Threads)
+
+add_executable(test_tex test_tex.cc TeXEngine.cc lodepng.cc exec-stream.cc)
+target_link_libraries(test_tex texengine ${Boost_LIBRARIES} Threads::Threads)
 install(TARGETS texengine ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 

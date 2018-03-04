@@ -36,18 +36,13 @@ add_executable(cadabra2-gtk main.cc
   CodeInput.cc 
   ImageView.cc
   Cadabra.cc
-  ../common/TeXEngine.cc)
+  ../common/TeXEngine.cc
+  ../common/lodepng.cc
+  ../common/exec-stream.cc
+  )
 
-# On Windows we need to link statically in order to avoid having to copy dll's 
-# along with our binary. 
-if(WIN32)
-  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} Threads::Threads)
-else()
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
-endif()
-
-
+#  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
+target_link_libraries(cadabra2-gtk cadabra_client ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
 
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
