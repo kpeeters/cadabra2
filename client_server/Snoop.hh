@@ -20,9 +20,7 @@
 #include <json/json.h>
 #include <thread>
 
-#ifdef _MSC_VER
-  #define pid_t int
-#else
+#ifndef _MSC_VER
   #include <unistd.h>
 #endif
 
@@ -92,12 +90,13 @@ namespace snoop {
 			void sync_logs_with_server(bool from_wsthread=false);
 			
 
-			/// C++ representation of an run entry.
+			/// C++ representation of a run entry.
 
-			class AppEntry {
+         class AppEntry;
+	         {
 				public:
 					AppEntry();
-					AppEntry(const std::string& uuid_, uint64_t create_millis_, uint64_t receive_millis_, pid_t pid_, 
+					AppEntry(const std::string& uuid_, uint64_t create_millis_, uint64_t receive_millis_, uint64_t pid_, 
 								const std::string& ip_address_, const std::string& machine_id_, 
 								const std::string& app_name_,   const std::string& app_version_,
 								const std::string& user_id_,
@@ -110,7 +109,7 @@ namespace snoop {
 					std::string uuid;
 					uint64_t    create_millis;
 					uint64_t    receive_millis;
-					pid_t       pid;
+					uint64_t    pid;
 					std::string ip_address;
 					std::string machine_id;
 					std::string app_name;
