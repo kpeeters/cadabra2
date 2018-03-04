@@ -3,7 +3,7 @@
 #include "Config.hh"
 
 #include <iostream>
-#include <boost/filesystem.hpp>
+#include <cstdio>
 #include <boost/algorithm/string.hpp>
 #include "exec-stream.h"
 #include "lodepng.h"
@@ -106,7 +106,7 @@ const std::vector<unsigned char>& TeXEngine::TeXRequest::image() const
 
 void TeXEngine::erase_file(const std::string& nm) const
 	{
-	boost::filesystem::remove(nm);
+	std::remove(nm.c_str());
 	}
 
 std::string TeXEngine::handle_latex_errors(const std::string& result, int exit_code) const
@@ -302,7 +302,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	if(chdir("/tmp")==-1)
 		throw TeXException("Failed to chdir to /tmp.");
 
-	char templ[]="/tmp/cdbXXXXXX";
+//	char templ[]="/tmp/cdbXXXXXX";
 
 	// The size in mm or inches which we use will in the end determine how large
 	// the font will come out. 
@@ -330,9 +330,11 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// them by a page eject.
 
 	std::ostringstream total;
-	int fd = mkstemp(templ);
-	if(fd == -1) 
-		 throw TeXException("Failed to create temporary file in /tmp.");
+	std::string tmppath=std::tmpnam(0);
+	std::ofstream outstr(tmppath);
+//	int fd = mkstemp(templ);
+//	if(fd == -1) 
+//		 throw TeXException("Failed to create temporary file in /tmp.");
 
 	total << "\\documentclass[11pt]{article}\n"
 			<< "\\usepackage[dvips,verbose,voffset=0pt,hoffset=0pt,textwidth="
@@ -387,26 +389,29 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Now write the 'total' buffer to the .tex file
 
 	// std::cerr << total.str() << std::endl;
-	ssize_t start=0;
-	do {
-		ssize_t written=write(fd, &(ltx.c_str()[start]), ltx.size()-start);
-		if(written>=0)
-			start+=written;
-		else {
-			if(errno != EINTR) {
-				close(fd);
-				throw TeXException("Failed to write LaTeX temporary file.");
-				}
-			} 
-		} while(start<static_cast<ssize_t>(total.str().size()));
-	close(fd);
+
+	outstr << ltx;
+	
+//	ssize_t start=0;
+//	do {
+//		ssize_t written=write(fd, &(ltx.c_str()[start]), ltx.size()-start);
+//		if(written>=0)
+//			start+=written;
+//		else {
+//			if(errno != EINTR) {
+//				close(fd);
+//				throw TeXException("Failed to write LaTeX temporary file.");
+//				}
+//			} 
+//		} while(start<static_cast<ssize_t>(total.str().size()));
+//	close(fd);
 #ifdef DEBUG
-	std::cerr  << templ << std::endl;
+	std::cerr  << tmppath << std::endl;
 	std::cerr << "---\n" << ltx << "\n---" << std::endl;
 #endif
 
-	std::string nf=std::string(templ)+".tex";
-	rename(templ, nf.c_str());
+	std::string nf=tmppath+".tex";
+	std::rename(tmppath.c_str(), nf.c_str());
 
 #ifdef __CYGWIN__
 	// MikTeX does not see /tmp, it needs \cygwin\tmp
@@ -428,9 +433,9 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		latex_proc.close();
 		//std::cerr << "cadabra-client: latex done" << std::endl;
 
-		erase_file(std::string(templ)+".aux");
-		erase_file(std::string(templ)+".log");
-		erase_file(std::string(templ)+".out");
+		erase_file(tmppath+".aux");
+		erase_file(tmppath+".log");
+		erase_file(tmppath+".out");
 #ifdef DEBUG		
 		std::cerr << result << std::endl;
 #endif
@@ -441,24 +446,24 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			reqit=reqs.begin();
 			while(reqit!=reqs.end()) 
 				(*reqit++)->needs_generating=false;
-			 erase_file(std::string(templ)+".dvi");
+			 erase_file(tmppath+".dvi");
 			 if(chdir(olddir)==-1)
 				 throw TeXException(err+" (and cannot chdir back to original "+olddir+").");
 			 else err+=".";
-			 err += " See "+std::string(templ)+".tex to debug this.";
+			 err += " See "+tmppath+".tex to debug this.";
 			 throw TeXException(err); 
 			}
-		erase_file(std::string(templ)+".tex");
+		erase_file(tmppath+".tex");
 		}
 	catch(std::exception& err) {
 		std::cerr << "cadabra-client: Exception running LaTeX." << std::endl;
 		latex_proc.close();
 
 		// erase_file(std::string(templ)+".tex");
-		erase_file(std::string(templ)+".dvi");
-		erase_file(std::string(templ)+".aux");
-		erase_file(std::string(templ)+".log");
-		erase_file(std::string(templ)+".out");
+		erase_file(tmppath+".dvi");
+		erase_file(tmppath+".aux");
+		erase_file(tmppath+".log");
+		erase_file(tmppath+".out");
 		
 		std::string latex_err=handle_latex_errors(result, latex_proc.exit_code());
 		reqit=reqs.begin();
@@ -468,7 +473,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		if(latex_err.size()>0) {
 			 if(chdir(olddir)==-1)
 				 throw TeXException(latex_err+" (and cannot chdir back to original "+olddir+"). ");
-			 latex_err += " See "+std::string(templ)+".tex to debug this.";
+			 latex_err += " See "+tmppath+".tex to debug this.";
 			 throw TeXException(latex_err); 
 			 }
 
@@ -496,7 +501,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	//std::cerr << "cadabra-client: convert to png" << std::endl;
 	try {
-		dvipng_proc.start("dvipng", "-T tight -bg Transparent -D "+resspec.str()+" "+std::string(templ)+".dvi");
+		dvipng_proc.start("dvipng", "-T tight -bg Transparent -D "+resspec.str()+" "+tmppath+".dvi");
 		std::string s, result;
 		while( std::getline( dvipng_proc.out(), s ).good() ) {
 			result+=s;
@@ -507,13 +512,13 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		}
 	catch(std::logic_error& ex) {
 		// Erase all dvi and png files and put empty pixbufs into the TeXRequests.
-		erase_file(std::string(templ)+".dvi");
+		erase_file(tmppath+".dvi");
 		reqit=reqs.begin();
 		int pagenum=1;
 		while(reqit!=reqs.end()) {
 			if((*reqit)->needs_generating) {
 				std::ostringstream pngname;
-				pngname << std::string(templ) << pagenum << ".png";
+				pngname << tmppath << pagenum << ".png";
 				erase_file(pngname.str());
 				(*reqit)->image_.clear();
 				(*reqit)->needs_generating=true;
@@ -527,7 +532,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		throw TeXException(std::string("Cannot run dvipng, is it installed?\n\n")+ex.what());
 		}
 
-	erase_file(std::string(templ)+".dvi");
+	erase_file(tmppath+".dvi");
 
 	// Conversion completed successfully, now convert all resulting PNG files to Pixbuf images.
 
@@ -537,7 +542,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	while(reqit!=reqs.end()) {
 		if((*reqit)->needs_generating) {
 			std::ostringstream pngname;
-			pngname << std::string(templ) << pagenum << ".png";
+			pngname << tmppath << pagenum << ".png";
 			std::ifstream tst(pngname.str().c_str());
 			if(tst.good()) {
 				(*reqit)->image_.clear();
