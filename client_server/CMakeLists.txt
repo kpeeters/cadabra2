@@ -76,22 +76,22 @@ add_definitions(
 #---------------------------------------------------------------------------
 
 # Server library
-add_library(cadabra_server SHARED ${CADABRA_SERVER_SRC} )
-target_link_libraries(cadabra_server
-  ${Boost_LIBRARIES}
-  ${SNOOP_LIBRARIES}
-  ${SQLITE3_LIBRARIES}
-  ${PYTHON_LIBRARIES}
-  ${GLIBMM3_LIBRARIES} 
-  Threads::Threads
-  )
+# add_library(cadabra_server SHARED ${CADABRA_SERVER_SRC} )
+# target_link_libraries(cadabra_server
+#   ${Boost_LIBRARIES}
+#   ${SNOOP_LIBRARIES}
+#   ${SQLITE3_LIBRARIES}
+#   ${PYTHON_LIBRARIES}
+#   ${GLIBMM3_LIBRARIES} 
+#   Threads::Threads
+#   )
 
 # Server executable
-add_executable(cadabra-server cadabra-server.cc)
-target_link_libraries(cadabra-server cadabra_server)
-target_link_libraries(cadabra_server pybind11::embed)
+add_executable(cadabra-server cadabra-server.cc ${CADABRA_SERVER_SRC})
+# target_link_libraries(cadabra-server cadabra_server)
+target_link_libraries(cadabra-server pybind11::embed)
 if(WIN32)
-   target_link_libraries(cadabra_server ws2_32 mswsock)
+   target_link_libraries(cadabra-server ws2_32 mswsock)
 endif()
 
 # cadabra2html
@@ -127,7 +127,7 @@ install(FILES  notebook.html DESTINATION ${INSTALL_LATEX_DIR})
 install(TARGETS cadabra-server DESTINATION bin)
 install(TARGETS cadabra2html DESTINATION bin)
 install(TARGETS cadabra_client LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
-install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+# install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
 # Shared libraries
 # install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/client_server_install_dlls.cmake")
