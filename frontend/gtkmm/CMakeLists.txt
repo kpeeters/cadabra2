@@ -11,18 +11,12 @@ else()
 endif()
 
 # Gtkmm-3.0 dependencies. 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
-include_directories(${GTKMM3_INCLUDE_DIRS})
-link_directories(${GTKMM3_LIBRARY_DIRS})
-add_definitions(${GTKMM3_CFLAGS_OTHER})
+find_package(GTKMM)
 find_package(Boost 1.45.0 COMPONENTS system)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 include_directories("${Boost_INCLUDE_DIRS}")
-#pkg_check_modules(UUID uuid REQUIRED)
-#link_directories(${UUID_LIBRARY_DIRS})
 
 include_directories("." "../../core" "../../libs/internal/include" "../../client_server" "../../client_server/jsoncpp" "../../client_server/websocketpp")
 
