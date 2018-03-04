@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
 message("------------------------------------------------------------------------\nConfiguring 'frontend'")
 
-find_package(GTKMM)
+find_package(GTKMM3)
 subdirs(common)
 if(GTKMM3_FOUND)
    subdirs(gtkmm)
