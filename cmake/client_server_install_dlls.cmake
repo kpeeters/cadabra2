@@ -2,9 +2,9 @@ file(
   GLOB 
     core_dlls
   RELATIVE 
-    ${CMAKE_BINARY_DIR}/core
-  "*.dll"
-)
+    ${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/
+	 "*.dll"
+  )
 
 install(
   FILES

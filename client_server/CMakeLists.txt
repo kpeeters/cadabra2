@@ -136,4 +136,4 @@ install(TARGETS cadabra_client LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATI
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
 # Shared libraries
-# install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/client_server_install_dlls.cmake")
+install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/client_server_install_dlls.cmake")
