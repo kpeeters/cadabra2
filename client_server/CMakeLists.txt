@@ -139,9 +139,9 @@ install(TARGETS cadabra_client LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATI
 if(WIN32)
   install(
 	 FILES
-	   boost_system-vc141-mt-x64-1_66.dll
-	   boost_program_options-vc141-mt-x64-1_66.dll
-	   glibmm.dll
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/boost_system-vc141-mt-x64-1_66.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/boost_program_options-vc141-mt-x64-1_66.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glibmm.dll"
 	 DESTINATION
 	   bin)
 endif()
