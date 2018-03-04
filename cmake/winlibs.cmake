@@ -53,7 +53,6 @@ if(WIN32)
 			  set(${libname}_INCLUDE_DIRS "${${libname}_ROOT_DIR}/include;${${libname}_ROOT_DIR}/include/${libname}")
 			  set(${libname}_LIB_DIRS "${${libname}_ROOT_DIR}/lib")
 			  set(${libname}_BIN_DIRS "${${libname}_ROOT_DIR}/bin")
-			  set(${libname}_FOUND 1)
 			  debug_message("Directories for ${libname} set")
 		    else()
 		      set(${libname}_ROOT_DIR ${libname}_ROOT_DIR-NOTFOUND)
@@ -92,6 +91,8 @@ if(WIN32)
 			debug_message("Adding link directories for ${libname}: ${${libname}_LIB_DIRS}")
 			# KP: we do not actually need this with 'vcpkg integrate install'!
 			link_directories(${${libname}_LIB_DIRS})
+			# KP: add flag
+			set(${libname}_FOUND 1)
 
 		  set(${libname}_LIBRARIES ${libfiles})
 		  foreach(DEPENDENCY ${dependencies})
