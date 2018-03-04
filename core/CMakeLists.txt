@@ -281,10 +281,6 @@ endforeach()
 # 
 # https://stackoverflow.com/questions/21198030/installfiles-cmake-cfg-intdir-abc-win-dll-destination-bin
 if(WIN32)
-  set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
-  if(${CADABRA_BUILD_TYPE}=="")
-	 set(CADABRA_BUILD_TYPE "Debug")
-  endif()
   install(
 	 FILES
     "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cadabra2.${PYTHON_MOD_SUFFIX}"

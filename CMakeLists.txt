@@ -113,6 +113,14 @@ if(ENABLE_MATHEMATICA)
   find_package(Mathematica COMPONENTS WSTP)
 endif()
 
+# Make sure the build type is non-empty.
+if(WIN32)
+  set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
+  if(${CADABRA_BUILD_TYPE}=="")
+	 set(CADABRA_BUILD_TYPE "Debug")
+  endif()
+endif()
+
 # Include packaging logic.
 include(cmake/packaging.cmake)
 
