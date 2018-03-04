@@ -135,5 +135,18 @@ install(TARGETS cadabra2html DESTINATION bin)
 install(TARGETS cadabra_client LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
-# Shared libraries
-install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/client_server_install_dlls.cmake")
+# Shared libraries on Windows
+if(WIN32)
+  file(
+	 GLOB 
+    client_server_dlls
+	 RELATIVE 
+    ${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/
+	 "*.dll"
+	 )
+  message("-- Installing DLLs: ${client_server_dlls}")
+  
+  install(FILES ${client_server_dlls} DESTINATION bin)
+endif()
+
+
