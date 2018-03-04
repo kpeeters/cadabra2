@@ -142,6 +142,15 @@ if(WIN32)
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/boost_system-vc141-mt-x64-1_66.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/boost_program_options-vc141-mt-x64-1_66.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glibmm.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glib-2.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gmodule-2.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gobject-2.dll"						
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/sigc-2.0.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pcre.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libiconv.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libintl.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libffi.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libcharset.dll"										
 	 DESTINATION
 	   bin)
 endif()
