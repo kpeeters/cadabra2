@@ -89,7 +89,6 @@ if(WIN32)
 			# KP: we do not actually need this with 'vcpkg integrate install'!
 			# include_directories(${${libname}_INCLUDE_DIRS})
 			debug_message("Adding link directories for ${libname}: ${${libname}_LIB_DIRS}")
-			# KP: we do not actually need this with 'vcpkg integrate install'!
 			link_directories(${${libname}_LIB_DIRS})
 			# KP: add flag
 			set(${libname}_FOUND 1)
