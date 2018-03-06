@@ -11,7 +11,7 @@
 
 if(WIN32)
 #  windows_find_library(GTKMM3 "gtkmm.dll" "glib;sigc++;pango")
-  set(GTKMM3_LIBRARIES gtkmm sigc-2.0 glib-2.0 gobject-2.0 glibmm cairomm-1.0 pangomm)
+  set(GTKMM3_LIBRARIES gtkmm sigc-2.0 glib-2.0 gobject-2.0 glibmm cairomm-1.0 pangomm gdk-3.0 gdkmm gio-2.0 gio-2.0)
   set(GTKMM3_FOUND 1)
 else()
   find_package(PkgConfig REQUIRED)
