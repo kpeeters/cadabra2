@@ -344,6 +344,10 @@ Building with vcpkg (recommended)
 If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
 Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
+You also need a TeX distribution, for instance MiKTeX from
+http://miktex.org. You need all three before you can start building
+Cadabra.
+
 The instructions below are for building using the Visual Studio 'x64
 Native Tools Command Prompt' (not the GUI). First, clone the vcpkg
 repository::

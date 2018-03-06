@@ -106,7 +106,7 @@ add_executable(cadabra2html cadabra2html.cc ../core/DataCell.cc)
 target_link_libraries(cadabra2html cadabra_client)
 
 # Client library
-add_library(cadabra_client SHARED ${CADABRA_CLIENT_SRC})
+add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
 target_link_libraries(cadabra_client
   ${Boost_LIBRARIES}
   ${SQLITE3_LIBRARIES}
