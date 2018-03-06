@@ -142,3 +142,31 @@ install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2-gtk.desktop       D
 install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
 install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFIX}/share/icons/hicolor)")
 install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+
+# Shared libraries on Windows. Do by hand, cmake is a mess...
+if(WIN32)
+  install(
+	 FILES
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gtk-3.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gdk-3.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gdk_pixbuf-2.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pangocairo-1.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pango-1.dll"				
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/atk-1.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gio-2.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gobject-2.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gmodule-2.dll"				
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glib-2.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cairo-gobject.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cairo.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libintl.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/atkmm.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/ciaromm-1.dll"												
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gdkmm.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/giomm.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glibmm.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gktmm.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pangomm.dll"								
+	 DESTINATION
+	   bin)
+endif()

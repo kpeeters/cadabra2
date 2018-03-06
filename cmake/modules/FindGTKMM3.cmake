@@ -17,8 +17,10 @@ set(GTKMM3_LIBRARIES
   gdk-3.0
   gdk_pixbuf-2.0
   pangocairo-1.0
-  pango-1.0 atk-1.0
-  gio-2.0 gobject-2.0
+  pango-1.0
+  atk-1.0
+  gio-2.0
+  gobject-2.0
   gmodule-2.0
   glib-2.0
   cairo-gobject
