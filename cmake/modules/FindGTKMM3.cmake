@@ -10,7 +10,7 @@
 #    glibmm and its dependencies
 
 if(WIN32)
-  windows_find_library(GTKMM3 "gtkmm.dll" "glib;sigc++")
+  windows_find_library(GTKMM3 "gtkmm.dll" "glib;sigc++;pango")
 else()
   find_package(PkgConfig REQUIRED)
   pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
