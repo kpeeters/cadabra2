@@ -161,11 +161,11 @@ if(WIN32)
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cairo.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libintl.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/atkmm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/ciaromm-1.dll"												
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/ciaromm-1.0.dll"												
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gdkmm.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/giomm.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glibmm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gktmm.dll"
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gtkmm.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pangomm.dll"								
 	 DESTINATION
 	   bin)
