@@ -13,6 +13,7 @@ endif()
 # Dependencies.
 find_package(Threads)
 find_package(SQLite3)
+find_package(GLIBMM)
 find_package(GTKMM3)
 find_package(Boost 1.45.0 COMPONENTS system)
 set(Boost_USE_STATIC_LIBS OFF)
