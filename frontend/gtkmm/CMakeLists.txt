@@ -43,6 +43,7 @@ add_executable(cadabra2-gtk main.cc
   )
 
 #  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
+message("***** Gtk libraries: ${GTKMM3_LIBRARIES}")
 target_link_libraries(cadabra2-gtk cadabra_client ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
 
 # Create installation directories with correct permissions.
