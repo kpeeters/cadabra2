@@ -23,7 +23,7 @@ set(GTKMM3_LIBRARIES
   glib-2.0
   cairo-gobject
   cairo
-  intl
+  libintl
   atkmm
   cairomm-1.0
   gdkmm
