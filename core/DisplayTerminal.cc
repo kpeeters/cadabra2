@@ -465,7 +465,7 @@ void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	if(getenv("CADABRA_NO_UNICODE")!=0)
+	if(use_unicode && getenv("CADABRA_NO_UNICODE")!=0)
 		str << *it->name << "(";
 	else
 		str << symmap[*it->name] << "(";
