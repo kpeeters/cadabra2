@@ -200,6 +200,7 @@ void ComputeThread::try_spawn_server()
 		}
 	catch(Glib::SpawnError& err) {
 		std::cerr << "Failed to start server " << argv[0] << ": " << err.what() << std::endl;
+		// FIXME: cannot just fall through, the server is not up!
 		}
 	}
 

@@ -151,7 +151,9 @@ if(WIN32)
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libiconv.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libintl.dll"
 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libffi.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libcharset.dll"										
+	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libcharset.dll"
+		"${_VCPKG_ROOT_DIR}/installed/x64-windows/tools/glib/gspawn-w64-helper.exe"		
+		"${_VCPKG_ROOT_DIR}/installed/x64-windows/tools/glib/gspawn-w64-helper-console.exe"
 	 DESTINATION
 	   bin)
 endif()

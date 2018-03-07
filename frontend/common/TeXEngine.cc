@@ -299,8 +299,12 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	char olddir[1024];
 	if(getcwd(olddir, 1023)==NULL)
 		 olddir[0]=0;
-	if(chdir("/tmp")==-1)
-		throw TeXException("Failed to chdir to /tmp.");
+	std::string tmpdir="/tmp";
+#ifdef(_WIN32)
+	tmpdir=getenv("TEMP");
+#endif
+	if(chdir(tmpdir)==-1)
+		throw TeXException("Failed to chdir to "+tmpdir+".");
 
 //	char templ[]="/tmp/cdbXXXXXX";
 
