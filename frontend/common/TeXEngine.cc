@@ -303,7 +303,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 #if defined(_WIN32)
 	tmpdir=getenv("TEMP");
 #endif
-	if(chdir(tmpdir)==-1)
+	if(chdir(tmpdir.c_str())==-1)
 		throw TeXException("Failed to chdir to "+tmpdir+".");
 
 //	char templ[]="/tmp/cdbXXXXXX";
