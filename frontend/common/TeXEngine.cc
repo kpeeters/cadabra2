@@ -460,7 +460,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		erase_file(tmppath+".tex");
 		}
 	catch(std::exception& err) {
-		std::cerr << "cadabra-client: Exception running LaTeX." << std::endl;
+		std::cerr << "cadabra-client: Exception running LaTeX. " << ex.what() << std::endl;
 		latex_proc.close();
 
 		// erase_file(std::string(templ)+".tex");
