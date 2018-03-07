@@ -181,21 +181,26 @@ void ComputeThread::try_spawn_server()
 
 	// See https://bugs.launchpad.net/inkscape/+bug/1662531 for things related to
 	// the 'envp' argument in the call below.
-	Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
-										  Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
-										  sigc::slot<void>(),
-										  &pid,
-										  0,
-										  &server_stdout,
-										  0); // We need to see stderr on the console
+	try {
+		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
+		                             Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
+		                             sigc::slot<void>(),
+		                             &pid,
+		                             0,
+		                             &server_stdout,
+		                             0); // We need to see stderr on the console
 //										  &server_stderr);
-	
-	char buffer[100];
-	FILE *f = fdopen(server_stdout, "r");
-	if(fscanf(f, "%100s", buffer)!=1) {
-		throw std::logic_error("Failed to read port from server.");
+		
+		char buffer[100];
+		FILE *f = fdopen(server_stdout, "r");
+		if(fscanf(f, "%100s", buffer)!=1) {
+			throw std::logic_error("Failed to read port from server.");
+			}
+		port = atoi(buffer);
 		}
-	port = atoi(buffer);
+	catch(Glib::SpawnError& err) {
+		std::cerr << "Failed to start server " << argv[0] << ": " << err.what() << std::endl;
+		}
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 

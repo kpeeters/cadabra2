@@ -144,6 +144,7 @@ install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFI
 install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
 
 # Shared libraries on Windows. Do by hand, cmake is a mess...
+# https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
 if(WIN32)
   install(
 	 FILES
