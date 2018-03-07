@@ -300,7 +300,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	if(getcwd(olddir, 1023)==NULL)
 		 olddir[0]=0;
 	std::string tmpdir="/tmp";
-#ifdef(_WIN32)
+#if defined(_WIN32)
 	tmpdir=getenv("TEMP");
 #endif
 	if(chdir(tmpdir)==-1)
