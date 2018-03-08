@@ -12,7 +12,7 @@
 #include <internal/unistd.h>
 #include <map>
 
-#define DEBUG
+//#define DEBUG
 
 using namespace cadabra;
 
