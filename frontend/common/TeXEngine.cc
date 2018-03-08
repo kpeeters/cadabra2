@@ -440,6 +440,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	try {
 //		latex_proc.start("latex", "--interaction nonstopmode "+nf);
 		//std::cerr << "cadabra-client: starting latex" << std::endl;
+		latex_proc.set_timeout(exec_stream_t::s_child, 5000); // windows is a dog...
 		latex_proc.start("latex", "-halt-on-error "+nf);
  		std::string line; 
 		while( std::getline( latex_proc.out(), line ).good() ) 
