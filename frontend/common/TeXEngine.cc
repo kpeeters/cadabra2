@@ -300,12 +300,17 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	if(getcwd(olddir, 1023)==NULL)
 		 olddir[0]=0;
 	std::string tmpdir="/tmp";
+	std::string tmppath=std::tmpnam(0);
 #if defined(_WIN32)
 	tmpdir=getenv("TEMP");
 #endif
 	if(chdir(tmpdir.c_str())==-1)
 		throw TeXException("Failed to chdir to "+tmpdir+".");
-
+#ifdef DEBUG
+	std::cerr << "tmpdir  = " << tmpdir << std::endl;
+	std::cerr << "tmppath = " << tmppath << std::endl;	
+#endif
+	
 //	char templ[]="/tmp/cdbXXXXXX";
 
 	// The size in mm or inches which we use will in the end determine how large
@@ -334,7 +339,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// them by a page eject.
 
 	std::ostringstream total;
-	std::string tmppath=std::tmpnam(0);
 	std::ofstream outstr(tmppath);
 //	int fd = mkstemp(templ);
 //	if(fd == -1) 
