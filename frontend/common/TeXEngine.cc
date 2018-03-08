@@ -307,6 +307,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	auto sl=tmppath.find_last_of('\\');
 	if(sl!=std::string::npos)
 		tmppath=tmppath.substr(sl+1);
+	tmpdir+="\\";
 #endif
 	if(chdir(tmpdir.c_str())==-1)
 		throw TeXException("Failed to chdir to "+tmpdir+".");
@@ -423,8 +424,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 #endif
 
 	std::string nf=tmppath+".tex";
-	if(std::rename(tmppath.c_str(), nf.c_str())!=0)
-		throw std::logic_error("Failed to rename "+tmppath+" to "+nf+" in folder "+tmpdir);
+	if(std::rename((tmpdir+tmppath).c_str(), (tmpdir+nf).c_str())!=0)
+		throw TeXException("Failed to rename "+tmppath+" to "+nf+" in folder "+tmpdir);
 
 #ifdef __CYGWIN__
 	// MikTeX does not see /tmp, it needs \cygwin\tmp
