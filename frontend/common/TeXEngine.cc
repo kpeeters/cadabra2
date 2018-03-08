@@ -423,7 +423,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 #endif
 
 	std::string nf=tmppath+".tex";
-	std::rename(tmppath.c_str(), nf.c_str());
+	if(std::rename(tmppath.c_str(), nf.c_str())!=0)
+		throw std::logic_error("Failed to rename "+tmppath+" to "+nf+" in folder "+tmpdir);
 
 #ifdef __CYGWIN__
 	// MikTeX does not see /tmp, it needs \cygwin\tmp
