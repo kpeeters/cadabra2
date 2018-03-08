@@ -404,6 +404,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// std::cerr << total.str() << std::endl;
 
 	outstr << ltx;
+	outstr.close(); // to flush the buffer and allow us to rename
 	
 //	ssize_t start=0;
 //	do {
