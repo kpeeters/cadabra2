@@ -303,6 +303,10 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	std::string tmppath=std::tmpnam(0);
 #if defined(_WIN32)
 	tmpdir=getenv("TEMP");
+	// strip tmpdir from tmppath to get just the file
+	auto sl=tmppath.find_last_of('\\');
+	if(sl!=std::string::npos)
+		tmppath=tmppath.substr(sl+1);
 #endif
 	if(chdir(tmpdir.c_str())==-1)
 		throw TeXException("Failed to chdir to "+tmpdir+".");
