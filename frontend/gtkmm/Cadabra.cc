@@ -7,7 +7,7 @@
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
 #endif
-#include <gtmm/settings.h>
+#include <gtkmm/settings.h>
 #include "Snoop.hh"
 #include "Config.hh"
 
