@@ -138,20 +138,9 @@ install(TARGETS cadabra_client RUNTIME DESTINATION bin COMPONENT runtime LIBRARY
 
 # Shared libraries on Windows. Do by hand, cmake is a mess...
 if(WIN32)
+  install(DIRECTORY "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/" DESTINATION bin FILES_MATCHING PATTERN "*.dll")  
   install(
 	 FILES
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/boost_system-vc141-mt-x64-1_66.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/boost_program_options-vc141-mt-x64-1_66.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glibmm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glib-2.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gmodule-2.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gobject-2.dll"						
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/sigc-2.0.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pcre.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libiconv.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libintl.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libffi.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libcharset.dll"
 		"${_VCPKG_ROOT_DIR}/installed/x64-windows/tools/glib/gspawn-win64-helper.exe"		
 		"${_VCPKG_ROOT_DIR}/installed/x64-windows/tools/glib/gspawn-win64-helper-console.exe"
 	 DESTINATION
