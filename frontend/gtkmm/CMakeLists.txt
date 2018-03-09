@@ -143,30 +143,15 @@ install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX}/share/icons/hicol
 install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFIX}/share/icons/hicolor)")
 install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
 
-# Shared libraries on Windows. Do by hand, cmake is a mess...
+# Install shared libraries on Windows. 
 # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
 if(WIN32)
-  install(
-	 FILES
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gtk-3.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gdk-3.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gdk_pixbuf-2.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pangocairo-1.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pango-1.dll"				
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/atk-1.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gio-2.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gobject-2.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gmodule-2.dll"				
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glib-2.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cairo-gobject.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cairo.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/libintl.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/atkmm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gdkmm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/giomm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/glibmm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/gtkmm.dll"
-	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/pangomm.dll"								
-	 DESTINATION
-	   bin)
+  # The 'client_server' module already copies everything, but just to be sure.
+  install(DIRECTORY "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/" DESTINATION bin FILES_MATCHING PATTERN "*.dll")
+#   # There is one dll which 
+#   install(
+# 	 FILES
+# 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cairomm-1.0.dll"
+# 	 DESTINATION
+# 	   bin)
 endif()

@@ -136,7 +136,7 @@ install(TARGETS cadabra2html DESTINATION bin)
 install(TARGETS cadabra_client RUNTIME DESTINATION bin COMPONENT runtime LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
-# Shared libraries on Windows. Do by hand, cmake is a mess...
+# Install shared libraries and gtk helpers on Windows.
 if(WIN32)
   install(DIRECTORY "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/" DESTINATION bin FILES_MATCHING PATTERN "*.dll")  
   install(
