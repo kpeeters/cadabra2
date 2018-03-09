@@ -33,6 +33,10 @@ Cadabra::Cadabra(int argc, char **argv)
 							 Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
 	  compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
+	// https://stackoverflow.com/questions/43886686/how-does-one-make-gtk3-look-native-on-windows-7
+#if defined(_WIN32)
+	Gtk::Settings.get_default().gtk_theme_name = "win32";
+#endif
 	}
 
 Cadabra::~Cadabra()

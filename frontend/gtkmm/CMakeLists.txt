@@ -146,12 +146,5 @@ install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/
 # Install shared libraries on Windows. 
 # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
 if(WIN32)
-  # The 'client_server' module already copies everything, but just to be sure.
   install(DIRECTORY "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/" DESTINATION bin FILES_MATCHING PATTERN "*.dll")
-#   # There is one dll which 
-#   install(
-# 	 FILES
-# 	   "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cairomm-1.0.dll"
-# 	 DESTINATION
-# 	   bin)
 endif()
