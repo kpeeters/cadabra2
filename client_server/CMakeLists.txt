@@ -70,6 +70,10 @@ add_definitions(
   -DNOMINMAX
   -DJSON_DLL_BUILD
   )
+if(MSVC)
+  #  set_target_properties(cadabra2-gtk PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS" LINK_FLAGS "/ENTRY:mainCRTStartup")
+  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+endif()
 
 #---------------------------------------------------------------------------
 # Make targets.
