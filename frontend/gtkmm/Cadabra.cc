@@ -35,6 +35,7 @@ Cadabra::Cadabra(int argc, char **argv)
 	  compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
 	// https://stackoverflow.com/questions/43886686/how-does-one-make-gtk3-look-native-on-windows-7
+	//	https://github.com/shoes/shoes3/wiki/Changing-Gtk-theme-on-Windows	
 #if defined(_WIN32)
 	Gtk::Settings::get_default()->property_gtk_theme_name()="win32";
 #endif

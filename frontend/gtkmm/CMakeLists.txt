@@ -146,5 +146,10 @@ install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/
 # Install shared libraries on Windows. 
 # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
 if(WIN32)
+  # All things to make GTK apps work and look decent on Windows 10.
+  install(FILES     config/gschemas.compiled ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)
+  install(FILES     config/settings.ini      ${CMAKE_INSTALL_PREFIX}/etc/gtk-3.0/)  
+  install(DIRECTORY theme/Windows10          ${CMAKE_INSTALL_PREFIX}/share/themes)
+  # All shared libraries.
   install(DIRECTORY "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/" DESTINATION bin FILES_MATCHING PATTERN "*.dll")
 endif()
