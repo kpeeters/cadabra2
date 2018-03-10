@@ -375,7 +375,8 @@ Now clone the cadabra repository and configure as::
     cd cadabra2/build
     cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
-          -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF -DCMAKE_INSTALL_PREFIX=C:\Cadabra
+			 -DVCPKG_TARGET_TRIPLET=x64-windows
+			 -DCMAKE_INSTALL_PREFIX=C:\Cadabra
           -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
 
 the latter all on one line, in which you replace the
@@ -396,7 +397,11 @@ Finally, the command-line version of Cadabra can now be started with::
 
     python C:\Cadabra\bin\cadabra2
 
-We are still working on making the GUI build and run.
+and you can start the notebook interface with::
+
+  C:\Cadabra\bin\cadabra2-gtk
+
+We are still working on making a nice installer.
 
 
 Building with MSYS2 (not recommended)
