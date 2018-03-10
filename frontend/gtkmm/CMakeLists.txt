@@ -10,11 +10,6 @@ else()
   add_definitions("-DBOOST_LOG_DYN_LINK")
 endif()
 
-# Do not pop up a console window
-if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /SUBSYSTEM:WINDOWS")
-endif()
-
 # Dependencies.
 find_package(Threads)
 find_package(SQLite3)
@@ -52,6 +47,11 @@ add_executable(cadabra2-gtk main.cc
 # message("***** Gtkmm  libraries: ${GTKMM3_LIBRARIES}")
 # message("***** Glibmm libraries: ${GLIBMM_LIBRARIES}")
 target_link_libraries(cadabra2-gtk cadabra_client ${Boost_LIBRARIES} ${GLIBMM_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
+# Do not pop up a console window
+if(MSVC)
+  set_target_properties(cadabra2-gtk PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS")
+endif()
+
 
 # Create installation directories with correct permissions.
 set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
