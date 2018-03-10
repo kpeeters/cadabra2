@@ -12,7 +12,7 @@ endif()
 
 # Do not pop up a console window
 if(MSVC)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /SUBSYSTEM:Windows")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /SUBSYSTEM:WINDOWS")
 endif()
 
 # Dependencies.
