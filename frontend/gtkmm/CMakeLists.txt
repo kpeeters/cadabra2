@@ -49,7 +49,7 @@ add_executable(cadabra2-gtk main.cc
 target_link_libraries(cadabra2-gtk cadabra_client ${Boost_LIBRARIES} ${GLIBMM_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
 # Do not pop up a console window
 if(MSVC)
-  set_target_properties(cadabra2-gtk PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS;/ENTRY:mainCRTStartup")
+  set_target_properties(cadabra2-gtk PROPERTIES LINK_FLAGS "/SUBSYSTEM:WINDOWS" LINK_FLAGS "/ENTRY:mainCRTStartup")
 endif()
 
 
