@@ -441,7 +441,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 //		latex_proc.start("latex", "--interaction nonstopmode "+nf);
 		//std::cerr << "cadabra-client: starting latex" << std::endl;
 		latex_proc.set_wait_timeout(exec_stream_t::s_all | exec_stream_t::s_child, 10000); // windows is a dog...
-		latex_proc.start("latex", "-halt-on-error "+nf);
+		latex_proc.start("latex", "-halt-on-error --quiet "+nf);
  		std::string line; 
 		while( std::getline( latex_proc.out(), line ).good() ) 
 			result+=line+"\n";
@@ -518,7 +518,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	//std::cerr << "cadabra-client: convert to png" << std::endl;
 	try {
 		dvipng_proc.set_wait_timeout(exec_stream_t::s_all | exec_stream_t::s_child, 10000); // windows is a dog...		
-		dvipng_proc.start("dvipng", "-T tight -bg Transparent -D "+resspec.str()+" "+tmppath+".dvi");
+		dvipng_proc.start("dvipng", "-q -T tight -bg Transparent -D "+resspec.str()+" "+tmppath+".dvi");
 		std::string s, result;
 		while( std::getline( dvipng_proc.out(), s ).good() ) {
 			result+=s;
