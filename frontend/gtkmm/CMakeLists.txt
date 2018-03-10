@@ -10,6 +10,11 @@ else()
   add_definitions("-DBOOST_LOG_DYN_LINK")
 endif()
 
+# Do not pop up a console window
+if(MSVC)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /SUBSYSTEM:Windows")
+endif()
+
 # Dependencies.
 find_package(Threads)
 find_package(SQLite3)
@@ -44,8 +49,8 @@ add_executable(cadabra2-gtk main.cc
   )
 
 #  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
-message("***** Gtkmm  libraries: ${GTKMM3_LIBRARIES}")
-message("***** Glibmm libraries: ${GLIBMM_LIBRARIES}")
+# message("***** Gtkmm  libraries: ${GTKMM3_LIBRARIES}")
+# message("***** Glibmm libraries: ${GLIBMM_LIBRARIES}")
 target_link_libraries(cadabra2-gtk cadabra_client ${Boost_LIBRARIES} ${GLIBMM_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
 
 # Create installation directories with correct permissions.
@@ -147,6 +152,11 @@ install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/
 # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
 if(WIN32)
   # All things to make GTK apps work and look decent on Windows 10.
+  # We always need the Adwaita theme for fallback icons, but VCPKG
+  # does not yet distribute it, so we include it here (also see
+  # https://github.com/Microsoft/vcpkg/pull/693). The Windows 10 theme
+  # comes from https://github.com/B00merang-Project/Windows-10.
+  # Settings as suggested by Luca Bacci on gtk-devel-list.
   install(FILES     config/gschemas.compiled DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)
   install(FILES     config/settings.ini      DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/gtk-3.0/)  
   install(DIRECTORY theme/Windows10          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/themes)
