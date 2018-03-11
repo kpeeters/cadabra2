@@ -1501,7 +1501,7 @@ void NotebookWindow::on_help_about()
 	special.push_back("Dominic Price (for the conversion to pybind and most of the Windows port)");	
 	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("Software Sustainability Institute");
-	special.push_back("Institute of Advanced Study");	
+	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");	
 	about.add_credit_section("Special thanks", special);
 	about.run();
 	}

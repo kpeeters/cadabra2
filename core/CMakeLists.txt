@@ -194,6 +194,7 @@ set(PDIRS
 include_directories(
   "."
   "../libs/internal/include"
+  "../libs/whereami"
   "../client_server/jsoncpp"
   ${Boost_INCLUDE_DIRS}
   )
@@ -243,7 +244,7 @@ target_link_libraries(cadabra2python
   )
 
 # cadabra2cadabra
-add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc ../client_server/jsoncpp/jsoncpp.cpp)
+add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc ../client_server/jsoncpp/jsoncpp.cpp ../libs/whereami/whereami.c)
 target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES})
 
 # Mathematica WSTP test

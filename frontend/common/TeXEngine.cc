@@ -308,9 +308,19 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	if(sl!=std::string::npos)
 		tmppath=tmppath.substr(sl+1);
 	tmpdir+="\\";
+#else
+	// strip tmpdir from tmppath to get just the file
+	auto sl=tmppath.find_last_of('/');
+	if(sl!=std::string::npos) {
+		tmpdir=tmppath.substr(0, sl);
+		tmppath=tmppath.substr(sl+1);
+		}
+	tmpdir+="/";
 #endif
+	
 	if(chdir(tmpdir.c_str())==-1)
 		throw TeXException("Failed to chdir to "+tmpdir+".");
+
 #ifdef DEBUG
 	std::cerr << "tmpdir  = " << tmpdir << std::endl;
 	std::cerr << "tmppath = " << tmppath << std::endl;	

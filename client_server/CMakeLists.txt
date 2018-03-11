@@ -42,6 +42,7 @@ set(CADABRA_CLIENT_SRC
   Actions.cc 
   Snoop.cc 
   jsoncpp/jsoncpp.cpp
+  ../libs/whereami/whereami.c
 #  ../libs/sqlite3/sqlite3.c
 )
 
@@ -56,6 +57,7 @@ include_directories(
   "websocketpp" 
   "jsoncpp"
   "../libs/internal/include"
+  "../libs/whereami"
   ${Boost_INCLUDE_DIRS}
   ${PYTHON_INCLUDE_DIRS}
   ${SQLITE3_INCLUDE_DIR}
