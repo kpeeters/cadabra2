@@ -2845,7 +2845,7 @@ scrollbar button:active:hover {
     border-radius: 0;
     min-height: 12px;
     min-width: 1px;
-    padding: none;
+    padding: 0;
     box-shadow: none;
     background-color: transparent;
     background-image: none;
@@ -2877,7 +2877,7 @@ scrollbar.vertical slider:active {
     border-color: transparent;
     background-color: shade(@theme_bg_color, 0.5); }
 
-  scrollbar slider.fine-tune:prelight:active {
+  scrollbar slider.fine-tune:hover:active {
     border-width: 2px;
     border-color: transparent; }
 
@@ -2888,10 +2888,10 @@ scrollbar.vertical slider:active {
     -gtk-icon-source: -gtk-icontheme("pan-up-symbolic"); }
 
   scrollbar.horizontal button.down {
-    -gtk-icon-source: -gtk-icontheme("pan-right-symbolic"); }
+    -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
   scrollbar.horizontal button.up {
-    -gtk-icon-source: -gtk-icontheme("pan-left-symbolic"); }
+    -gtk-icon-source: -gtk-icontheme("pan-start-symbolic"); }
 
 treeview ~ scrollbar.vertical {
   border-top: 1px solid @borders;
