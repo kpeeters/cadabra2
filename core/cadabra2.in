@@ -23,7 +23,7 @@ import os
 # installed in ../share/cadabra2/python relative to the location
 # of the 'cadabra2' script.
 install_prefix=os.path.realpath(sys.argv[0])
-install_prefix=install_prefix.replace('/bin/cadabra2','/share/cadabra2/python')
+install_prefix=install_prefix.replace(os.sep+'bin'+os.sep+'cadabra2', os.sep+'share'+os.sep+'cadabra2'+os.sep+'python')
 print("Module path ", install_prefix)
 sys.path.append(install_prefix)
 
