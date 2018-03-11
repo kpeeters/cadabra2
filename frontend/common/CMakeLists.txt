@@ -22,6 +22,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 include_directories(
   ../../core
   ../../libs/internal/include
+  ../../libs/whereami
   "${Boost_INCLUDE_DIRS}"
   )
 
@@ -34,7 +35,7 @@ include_directories("." "../../libs/internal/include")
 # add_library(texengine SHARED TeXEngine.cc lodepng.cc exec-stream.cc)
 # target_link_libraries(texengine ${Boost_LIBRARIES} Threads::Threads)
 
-add_executable(test_tex test_tex.cc TeXEngine.cc lodepng.cc exec-stream.cc)
+add_executable(test_tex test_tex.cc TeXEngine.cc lodepng.cc exec-stream.cc ../../core/InstallPrefix.cc ../../libs/whereami/whereami.c)
 target_link_libraries(test_tex ${Boost_LIBRARIES} Threads::Threads)
 # install(TARGETS texengine ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 

@@ -1,6 +1,7 @@
 
 #include "TeXEngine.hh"
 #include "Config.hh"
+#include "InstallPrefix.hh"
 
 #include <iostream>
 #include <cstdio>
@@ -171,7 +172,7 @@ TeXEngine::TeXEngine()
 	latex_packages.push_back("hyperref");
 
 	// Load the pre-amble from file.
-	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/texengine/preamble.tex";
+	std::string pname = cadabra::install_prefix()+"/share/cadabra2/latex/preamble.tex";
 	std::ifstream preamble(pname);
 	if(!preamble)
 		throw std::logic_error("Cannot open TeXEngine preamble at "+pname);
@@ -447,6 +448,14 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Run LaTeX on the .tex file.
 	exec_stream_t latex_proc;
 	std::string result;
+	std::string texinputs=cadabra::install_prefix()+"/share/cadabra2/latex/preamble.tex";
+	std::string oldtexinputs;
+	char *oti = getenv("TEXINPUTS");
+	if(oti)
+		oldtexinputs=std::string(oti);
+	if(oldtexinputs.size()>0)
+		texinputs=":"+std::string(oldtexinputs);
+	setenv("TEXINPUTS", texinputs.c_str(), 1);
 	try {
 //		latex_proc.start("latex", "--interaction nonstopmode "+nf);
 		//std::cerr << "cadabra-client: starting latex" << std::endl;
@@ -484,6 +493,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	catch(std::exception& err) {
 		std::cerr << "cadabra-client: Exception running LaTeX. " << err.what() << std::endl;
 		latex_proc.close();
+		setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
 
 		// erase_file(std::string(templ)+".tex");
 		erase_file(tmppath+".dvi");
@@ -509,7 +519,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			throw TeXException("Cannot start LaTeX, is it installed? (and cannot chdir back to original)");
 		throw TeXException("Cannot start LaTeX, is it installed?");
 		}
-
+	setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
+		
 	// Convert the entire dvi file to png files.
 	//
 	std::ostringstream resspec;

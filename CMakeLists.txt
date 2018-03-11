@@ -138,16 +138,17 @@ else()
   set(SHARED_LIB_SUFFIX "so")
   set(PYTHON_MOD_SUFFIX "so")
 endif()
-if("${PYTHON_SITE_PATH}" STREQUAL "")
-  if(WIN32)
-	 execute_process(COMMAND ${PYTHON_EXECUTABLE} -m site --user-site
-		OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-  else()
-    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
-      OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-  endif()
-endif()
-message("-- Python site path at ${PYTHON_SITE_PATH}")
+set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/share/cadabra2/python)
+# if("${PYTHON_SITE_PATH}" STREQUAL "")
+#   if(WIN32)
+# 	 execute_process(COMMAND ${PYTHON_EXECUTABLE} -m site --user-site
+# 		OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+#   else()
+#     execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
+#       OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+#   endif()
+# endif()
+message("-- Python packages to be installed at ${PYTHON_SITE_PATH}")
 message("-- Python module suffix \".${PYTHON_MOD_SUFFIX}\"")
 
 add_subdirectory(core)

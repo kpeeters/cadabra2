@@ -8,7 +8,7 @@ message("-----------------------------------------------------------------------
 #---------------------------------------------------------------------------
 
 set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
-set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages/cdb)
+set(PACKAGEDIR              ${CMAKE_BINARY_DIR}/core/packages/cdb)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/cadabra2.in"
@@ -244,7 +244,7 @@ target_link_libraries(cadabra2python
   )
 
 # cadabra2cadabra
-add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc ../client_server/jsoncpp/jsoncpp.cpp ../libs/whereami/whereami.c)
+add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc ../client_server/jsoncpp/jsoncpp.cpp ../libs/whereami/whereami.c InstallPrefix.cc)
 target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES})
 
 # Mathematica WSTP test

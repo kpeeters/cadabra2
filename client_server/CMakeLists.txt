@@ -32,6 +32,8 @@ set(CADABRA_SERVER_SRC
   ../core/CdbPython.cc 
   ../core/Stopwatch.cc 
   ../core/ProgressMonitor.cc
+  ../libs/whereami/whereami.c
+  ../core/InstallPrefix.cc
 #  ../libs/sqlite3/sqlite3.c  FIXME: only on windows
 )
 
@@ -43,6 +45,7 @@ set(CADABRA_CLIENT_SRC
   Snoop.cc 
   jsoncpp/jsoncpp.cpp
   ../libs/whereami/whereami.c
+  ../core/InstallPrefix.cc
 #  ../libs/sqlite3/sqlite3.c
 )
 

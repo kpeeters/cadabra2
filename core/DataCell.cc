@@ -1,4 +1,5 @@
 
+#include "InstallPrefix.hh"
 #include "Config.hh"
 #include "DataCell.hh"
 #include <sstream>
@@ -7,7 +8,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <iostream>
-#include <whereami.h>
 
 using namespace cadabra;
 
@@ -58,22 +58,7 @@ DataCell::DataCell(const DataCell& other)
 std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::string title)
 	{
 	// Load the pre-amble from file.
-
-	std::string install_prefix;
-	int dirname_length;
-	auto length = wai_getExecutablePath(NULL, 0, &dirname_length);
-	if(length > 0) {
-		char *path = (char*)malloc(length + 1);
-		if (!path)
-			throw std::logic_error("Cannot determine installation path.");
-		wai_getExecutablePath(path, length, &dirname_length);
-		path[length] = '\0';
-		path[dirname_length] = '\0';
-		install_prefix=std::string(path);
-		free(path);
-		}
-	
-	std::string pname = install_prefix+"/share/cadabra2/notebook.html";
+	std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.html";
 	std::ifstream preamble(pname);
 	if(!preamble)
 		throw std::logic_error("Cannot open HTML preamble at "+pname);
@@ -479,7 +464,7 @@ DataCell::id_t DataCell::id() const
 std::string cadabra::export_as_LaTeX(const DTree& doc)
 	{
 	// Load the pre-amble from file.
-	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/notebook.tex";
+	std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.tex";
 	std::ifstream preamble(pname);
 	if(!preamble)
 		throw std::logic_error("Cannot open LaTeX preamble at "+pname);

@@ -3,6 +3,7 @@
 #include "Actions.hh"
 #include "Cadabra.hh"
 #include "Config.hh"
+#include "InstallPrefix.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
 #include <gtkmm/box.h>
@@ -37,12 +38,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
 	// Set the window icon.
-//#ifdef __APPLE__
 	set_icon_name("cadabra2-gtk");
-//#else
-//	std::cerr << CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png" << std::endl;
-//	set_icon_from_file("/usr/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg");
-//#endif
 
 	// Query high-dpi settings. For now only for cinnamon.
 	scale = 1.0;
@@ -1461,12 +1457,11 @@ void NotebookWindow::on_help() const
 	snoop::log("help") << help_topic << snoop::flush;
 	
 	bool ret=false;
+	std::string pref = cadabra::install_prefix()+"/share/cadabra2/manual/";
 	if(help_type==help_t::algorithm)
-		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb",
-									 help_topic);
+		ret=cdbapp->open_help(pref+"algorithms/"+help_topic+".cnb", help_topic);
 	if(help_type==help_t::property)
-		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/properties/"+help_topic+".cnb",
-									 help_topic);
+		ret=cdbapp->open_help(pref+"properties/"+help_topic+".cnb", help_topic);
 
 	if(!ret) {
 		Gtk::MessageDialog md("No help available", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
@@ -1479,7 +1474,7 @@ void NotebookWindow::on_help() const
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(cadabra::install_prefix()+"/share/cadabra2/images/cadabra2-gtk.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);
