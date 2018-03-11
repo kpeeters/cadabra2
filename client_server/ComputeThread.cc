@@ -89,7 +89,7 @@ void ComputeThread::try_connect()
 
 	our_connection_hdl = connection->get_handle();
 	wsclient.connect(connection);
-	std::cerr << "cadabra-client: connect done" << std::endl;
+	// std::cerr << "cadabra-client: connect done" << std::endl;
 	}
 
 void ComputeThread::run()
@@ -169,7 +169,7 @@ void ComputeThread::try_spawn_server()
 	// starting server, then use this UUID to get access to the server
 	// port.
 
-	std::cerr << "cadabra-client: spawning server" << std::endl;
+	// std::cerr << "cadabra-client: spawning server" << std::endl;
 
 	std::vector<std::string> argv, envp;
 #if defined(_WIN32) || defined(_WIN64)
@@ -234,7 +234,7 @@ void ComputeThread::on_open(websocketpp::connection_hdl hdl)
 
 void ComputeThread::on_close(websocketpp::connection_hdl hdl) 
 	{
-	std::cerr << "cadabra-client: connection closed" << std::endl;
+	// std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
 	all_cells_nonrunning();	
 	if(gui) {
@@ -495,7 +495,7 @@ void ComputeThread::restart_kernel()
 	// FIXME: set all running flags to false
 	gui->on_kernel_runstatus(false);
 
-	std::cerr << "cadabra-client: restarting kernel" << std::endl;
+	// std::cerr << "cadabra-client: restarting kernel" << std::endl;
 	Json::Value req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="exit";
