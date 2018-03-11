@@ -173,7 +173,7 @@ void ComputeThread::try_spawn_server()
 
 	std::vector<std::string> argv, envp;
 #if defined(_WIN32) || defined(_WIN64)
-	argv.push_back(cadabra::install_prefix+"\\bin\\cadabra-server.exe");
+	argv.push_back(cadabra::install_prefix()+"\\bin\\cadabra-server.exe");
 #else
 	argv.push_back("cadabra-server");
 #endif
