@@ -18,6 +18,19 @@
 using namespace cadabra;
 
 
+#if defined(WIN32)
+int setenv(const char *name, const char *value, int overwrite)
+   {
+   int errcode = 0;
+   if(!overwrite) {
+	   size_t envsize = 0;
+	   errcode = getenv_s(&envsize, NULL, 0, name);
+	   if(errcode || envsize) return errcode;
+	   }
+   return _putenv_s(name, value);
+   }
+#endif
+
 double TeXEngine::millimeter_per_inch = 25.4;
 
 TeXEngine::TeXException::TeXException(const std::string& str)
