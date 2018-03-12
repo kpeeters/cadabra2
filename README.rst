@@ -381,7 +381,7 @@ Now clone the cadabra repository and configure as::
 
 the latter all on one line, in which you replace the
 CMAKE_TOOLCHAIN_PATH with the path produced by the ``vcpkg integrate
-install`` step. Finally build with::
+install`` step. You can ignore warnings (but not errors) about Boost. Finally build with::
 		
     cmake --build . --config RelWithDebInfo --target install
 
