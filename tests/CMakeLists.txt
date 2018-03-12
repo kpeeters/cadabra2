@@ -5,11 +5,11 @@ message("-----------------------------------------------------------------------
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
 if(WIN32)
-  set(PYTHONPATH ${CMAKE_SOURCE_DIR}/core;${CMAKE_BINARY_DIR}/core/packages;${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE})
+  set(PYTHONPATH "${CMAKE_SOURCE_DIR}/core;${CMAKE_BINARY_DIR}/core/packages;${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE};$ENV{PYTHONPATH}")
 else()
-  set(PYTHONPATH ${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE})
+  set(PYTHONPATH "${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}:$ENV{PYTHONPATH}")
 endif()
-message("-- Set PYTHONPATH for testing to ${PYTHONPATH}:$ENV{PYTHONPATH}")
+message("-- Set PYTHONPATH for testing to ${PYTHONPATH}")
 
 if (!WIN32)
   add_test(comparison     test_comparison)
@@ -44,7 +44,7 @@ foreach(NBTEST ${NBTESTS})
 	 COMMENT "Creating ${NBTEST} notebook...")
   add_custom_target("${NBTEST}_test" ALL echo -n DEPENDS ${CDBOUT}/${NBTEST}.cdb)
   add_test(${NBTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
-  set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH};LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
+  set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=\"${PYTHONPATH}\";LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
 endforeach()
 
 # The main test suite.
