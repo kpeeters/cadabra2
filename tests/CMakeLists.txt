@@ -4,7 +4,11 @@ message("-----------------------------------------------------------------------
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
-set(PYTHONPATH ${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE})
+if(WIN32)
+  set(PYTHONPATH ${CMAKE_SOURCE_DIR}\core:${CMAKE_BINARY_DIR}\core\packages:${CMAKE_BINARY_DIR}\core\${CADABRA_BUILD_TYPE})
+else()
+  set(PYTHONPATH ${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE})
+endif()
 message("-- Set PYTHONPATH for testing to ${PYTHONPATH}:$ENV{PYTHONPATH}")
 
 if (!WIN32)
