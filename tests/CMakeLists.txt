@@ -44,7 +44,8 @@ foreach(NBTEST ${NBTESTS})
 	 COMMENT "Creating ${NBTEST} notebook...")
   add_custom_target("${NBTEST}_test" ALL echo -n DEPENDS ${CDBOUT}/${NBTEST}.cdb)
   add_test(${NBTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
-  set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=\"${PYTHONPATH}\";LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
+  set(ENV{PYTHONPATH}                 "${PYTHONPATH}")
+  set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
 endforeach()
 
 # The main test suite.
@@ -84,7 +85,8 @@ foreach(RTEST ${RTESTS})
   add_test(${RTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CMAKE_SOURCE_DIR}/tests/${RTEST}.cdb)
   # We need to set the Python path so that we pick up the correct cadabra2.so Python module
   # even if we did not do 'make install' yet.
-  set_tests_properties(${RTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}:$ENV{PYTHONPATH};LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
+  set(ENV{PYTHONPATH}                 "${PYTHONPATH}")  
+  set_tests_properties(${RTEST}      PROPERTIES ENVIRONMENT "LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
 endforeach()
 
 # This does not work properly, and on OSX it fails because we do not
