@@ -304,9 +304,22 @@ def test111():
     \partial{#}::PartialDerivative;
     ex:= \partial_{\mu}{ g_{\rho\sigma} };
     rl:= \partial_{t}{ g_{\mu\nu} } -> C_{\mu\nu};
-    substitute(ex, rl);
+    substitute(ex, rl)
     tst:= \partial_{\mu}{ g_{\rho\sigma} } - @(ex);
     assert(tst==0)
     print("Test 111 passed")
 
 test111()
+
+def test112():
+    __cdbkernel__=create_scope()
+    {m,n,p,q}::Indices;        
+    ex:=A B_{m n} C;
+    rl:=A?_{p q} -> - 2 A?_{p q};
+    substitute(ex, rl)
+    tst:=-2 A B_{m n} C - @(ex);
+    assert(tst==0)
+    print("Test 112 passed")
+
+test112()
+

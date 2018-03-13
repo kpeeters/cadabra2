@@ -185,8 +185,9 @@ Algorithm::result_t substitute::apply(iterator& st)
             // a?_{i j k} type patterns should only replace the head
 				// TODO: should we replace brackets here too?
 				it->name=(*loc).second.begin()->name;
-				it->multiplier=(*loc).second.begin()->multiplier;
+				multiply(it->multiplier, *(*loc).second.begin()->multiplier);
 				it->fl=(*loc).second.begin()->fl;
+				// std::cerr << "replaced: \n" << it << std::endl;
 				}
 			else {
 				// Careful with the multiplier: the object has been matched to the pattern
