@@ -857,7 +857,10 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 
 				int sign=1;
 				if(factor_locations.size()>0) {
-					sign=can_move_adjacent(st, factor_locations.back(), start);
+					DEBUG(std::cerr << "--- can move?     ---" << std::endl; )
+					Ex_comparator comparator(properties);
+					sign=comparator.can_move_adjacent(st, factor_locations.back(), start);
+					DEBUG(std::cerr << "--- done can move ---" << std::endl; )					
 					}
 				if(sign==0) { // object found, but we cannot move it in the right order
 					replacement_map=backup_replacements;
