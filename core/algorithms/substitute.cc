@@ -138,11 +138,15 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement rule, and then replace nodes and subtrees in there
 	// based on how the pattern matching went.
    Ex repl(rhs);
-//	repl.wrap(repl.begin(), str_node("\\expression"));
    index_map_t ind_free, ind_dummy, ind_forced;
 
-	if(rhs_contains_dummies[use_rule])
+	if(rhs_contains_dummies[use_rule]) {
 		classify_indices(repl.begin(), ind_free, ind_dummy);
+		std::cerr << "rhs contains dummies " << ind_dummy.size() << std::endl;
+		}
+	else {
+		std::cerr << "rhs does not contain dummies" << std::endl;
+		}
 	
 	// Replace all patterns on the rhs of the rule with the objects they matched.  
 	// Keep track of all indices which _have_ to stay what they are, in ind_forced.
@@ -229,12 +233,13 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// 
 	// Note: the dummies which clash with other factors in a product are
 	// not replaced here, but rather in the next step.
+	std::cerr << ind_dummy.size() << std::endl;
 	if(ind_dummy.size()>0) {
 		index_map_t must_be_empty;
 		determine_intersection(ind_forced, ind_dummy, must_be_empty);
 		index_map_t::iterator indit=must_be_empty.begin();
 		index_map_t added_dummies;
-//		txtout << must_be_empty.size() << " dummies have to be relabelled" << std::endl;
+		std::cerr << must_be_empty.size() << " dummies have to be relabelled" << std::endl;
 		while(indit!=must_be_empty.end()) {
 			Ex the_key=indit->first;
 			const Indices *dums=kernel.properties.get<Indices>(indit->second, true);
@@ -246,7 +251,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			Ex relabel=get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
 			added_dummies.insert(index_map_t::value_type(relabel,(*indit).second));
 			do {
-				//std::cerr << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
+				std::cerr << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
 				tr.replace_index(indit->second,relabel.begin(), true);
 				++indit;
 //				txtout << *(indit->first.begin()->name) << " vs " << *(the_key.begin()->name) << std::endl;
@@ -256,9 +261,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 	// After all replacements have been done, we need to cleanup the 
 	// replacement tree.
-	//std::cerr << "repl before: \n" << repl << std::endl;
+	std::cerr << "repl before: \n" << repl << std::endl;
 	cleanup_dispatch_deep(kernel, repl);
-	// std::cerr << "repl after: \n" << repl << std::endl;
+	 std::cerr << "repl after: \n" << repl << std::endl;
 
 	// Remove the wrapping "\expression" node, not needed anymore.
 //	repl.flatten(repl.begin());
@@ -333,7 +338,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 //	// FIXME: still needed?
 //	cleanup_dispatch(kernel, tr, st);
 
-	//std::cerr << tr << std::endl;
+	std::cerr << tr << std::endl;
 
 	// Cleanup nests on all insertion points and on the top node.
 	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {
