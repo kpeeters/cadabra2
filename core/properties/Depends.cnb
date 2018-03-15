@@ -61,9 +61,35 @@
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}\\phi.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\nabla_{m}(\\phi c \\sin(y))"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\nabla_{m}\\left(\\phi c \\sin{y}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "c \\sin(y) \\nabla_{m}(\\phi)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}c \\sin{y} \\nabla_{m}{\\phi}\\end{dmath*}"
 				}
 			],
-			"source" : "\\nabla{#}::Derivative;\n\\phi::Depends(\\nabla{#});"
+			"source" : "\\nabla{#}::Derivative;\n\\phi::Depends(\\nabla{#});\nex:=\\nabla_{m}{\\phi c \\sin{y}};\nunwrap(_);"
 		},
 		{
 			"cell_origin" : "client",
@@ -81,13 +107,66 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "To make a tensor with any type and number of indices \\prop{Depend} on something else,\nuse"
+				}
+			],
+			"hidden" : true,
+			"source" : "To make a tensor with any type and number of indices \\prop{Depend} on something else,\nuse"
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left(m, \\linebreak[0] n, \\linebreak[0] p, \\linebreak[0] q\\right).\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}h\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\nabla_{m}(c d h^{0 t} h_{t 0} h^{0}_{0})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\nabla_{m}\\left(c d h^{0 t} h_{t 0} h^{0}\\,_{0}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "c d \\nabla_{m}(h^{0 t} h_{t 0} h^{0}_{0})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}c d \\nabla_{m}\\left(h^{0 t} h_{t 0} h^{0}\\,_{0}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "h{#}::Depends(\\nabla{#});\nex:=\\nabla_{m}{ c d h^{0 t} h_{t 0} h^{0}_{0} };\nunwrap(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -105,11 +184,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Taking objects out of derivatives (because they do not depend on them)\nis handled using the \\algo{unwrap} algorithm.\n\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+					"source" : "\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
 				}
 			],
 			"hidden" : true,
-			"source" : "Taking objects out of derivatives (because they do not depend on them)\nis handled using the \\algo{unwrap} algorithm.\n\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
+			"source" : "\nIf you want to make an object depend on more than one thing, you need\nto specify them all in one \\prop{Depends} property. If you specify\nthem in two separate properties, the last property will overwrite\nthe previous one. Therefore, you get"
 		},
 		{
 			"cell_origin" : "client",
