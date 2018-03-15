@@ -658,3 +658,16 @@ def test39():
     print("Test 39 passed")        
 
 test39()
+
+# def test40():
+#     __cdbkernel__=create_scope()
+#     {m,n,p,q}::Indices();
+#     \partial{#}::PartialDerivative;
+#     \phi::Depends(m);
+#     ex:=\partial_{m}{ c \phi };
+#     unwrap(_)
+#     tst:= c \partial_{m}{\phi} - @(ex);
+#     assert(tst==0)
+#     print("Test 40 passed")
+# 
+# test40()

@@ -87,6 +87,7 @@ bool substitute::can_apply(iterator st)
 			
 			Ex_comparator::match_t ret;
 			comparator.lhs_contains_dummies=lhs_contains_dummies[arrow];
+			// std::cerr << "lhs_contains_dummies " << comparator.lhs_contains_dummies << std::endl;
 			
 			//	HERE: we need to have one entry point for matching, which dispatches depending 
 			// on whether we have a normal node, a product, a sum or a sibling range with
@@ -123,8 +124,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 	{
 	// std::cerr << "substitute::apply at " << Ex(st) << std::endl;
 
-	// for(auto& rule: comparator.replacement_map) 
-   //	std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
+	//for(auto& rule: comparator.replacement_map) 
+	//	std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
 
    sibling_iterator arrow=use_rule;
    iterator lhs=tr.begin(arrow);
@@ -138,11 +139,15 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// replacement rule, and then replace nodes and subtrees in there
 	// based on how the pattern matching went.
    Ex repl(rhs);
-//	repl.wrap(repl.begin(), str_node("\\expression"));
    index_map_t ind_free, ind_dummy, ind_forced;
 
-	if(rhs_contains_dummies[use_rule])
+	if(rhs_contains_dummies[use_rule]) {
 		classify_indices(repl.begin(), ind_free, ind_dummy);
+		//std::cerr << "rhs contains dummies " << ind_dummy.size() << std::endl;
+		}
+	else {
+		//std::cerr << "rhs does not contain dummies" << std::endl;
+		}
 	
 	// Replace all patterns on the rhs of the rule with the objects they matched.  
 	// Keep track of all indices which _have_ to stay what they are, in ind_forced.
@@ -165,10 +170,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 			 is_stripped=true;
 			 }
 
-		// std::cerr << "consider " << Ex(it) << std::endl;
+		//std::cerr << "consider element of repl " << Ex(it) << std::endl;
 
 		if(loc!=comparator.replacement_map.end()) { // name wildcards
-			// std::cerr << "rule: " << Ex(loc->first) << " -> " << Ex(loc->second) << std::endl;
+			//std::cerr << "rule: " << Ex(loc->first) << " -> " << Ex(loc->second) << std::endl;
 
 			// When a replacement is made here, and the index is actually
 			// a dummy in the replacement, we screw up the ind_dummy
@@ -205,7 +210,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			}
 		else if( (sloc=comparator.subtree_replacement_map.find(it->name)) 
 					!=comparator.subtree_replacement_map.end()) { // object wildcards
-			// std::cerr << "srule : " << Ex(it) << std::endl;
+			//std::cerr << "srule : " << Ex(it) << std::endl;
 			multiplier_t tmpmult=*it->multiplier; // remember target multiplier
 			iterator tmp= tr.insert_subtree(it, (*sloc).second);
 			tmp->fl.bracket=it->fl.bracket;
@@ -229,12 +234,13 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// 
 	// Note: the dummies which clash with other factors in a product are
 	// not replaced here, but rather in the next step.
+	// std::cerr << ind_dummy.size() << std::endl;
 	if(ind_dummy.size()>0) {
 		index_map_t must_be_empty;
 		determine_intersection(ind_forced, ind_dummy, must_be_empty);
 		index_map_t::iterator indit=must_be_empty.begin();
 		index_map_t added_dummies;
-//		txtout << must_be_empty.size() << " dummies have to be relabelled" << std::endl;
+		// std::cerr << must_be_empty.size() << " dummies have to be relabelled" << std::endl;
 		while(indit!=must_be_empty.end()) {
 			Ex the_key=indit->first;
 			const Indices *dums=kernel.properties.get<Indices>(indit->second, true);
@@ -246,7 +252,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 			Ex relabel=get_dummy(dums, &ind_dummy, &ind_forced, &added_dummies);
 			added_dummies.insert(index_map_t::value_type(relabel,(*indit).second));
 			do {
-				//std::cerr << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
+				// std::cerr << "replace index " << *(indit->second->name) << " with " << *(relabel.begin()->name) << std::endl;
 				tr.replace_index(indit->second,relabel.begin(), true);
 				++indit;
 //				txtout << *(indit->first.begin()->name) << " vs " << *(the_key.begin()->name) << std::endl;
@@ -256,7 +262,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 	// After all replacements have been done, we need to cleanup the 
 	// replacement tree.
-	//std::cerr << "repl before: \n" << repl << std::endl;
+	// std::cerr << "repl before: \n" << repl << std::endl;
 	cleanup_dispatch_deep(kernel, repl);
 	// std::cerr << "repl after: \n" << repl << std::endl;
 
@@ -333,7 +339,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 //	// FIXME: still needed?
 //	cleanup_dispatch(kernel, tr, st);
 
-	//std::cerr << tr << std::endl;
+	// std::cerr << tr << std::endl;
 
 	// Cleanup nests on all insertion points and on the top node.
 	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {

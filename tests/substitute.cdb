@@ -323,3 +323,37 @@ def test112():
 
 test112()
 
+def test113():
+    # spotted by Leo Brewin 15-Mar-2018.
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s}::Indices(position=fixed).
+    ex := A^{f} A^{m} B_{g f} G^{a}_{m e} G^{e}_{b d}.
+    substitute(_, $A^{e} B_{c e} G^{a}_{b d} -> A^{f} B_{f} R^{a}_{b c d}$)
+    tst:= A^{f} B_{f} R^{a}_{m g e} A^{m} G^{e}_{b d} - @(ex);
+    assert(tst==0)
+    print("Test 113 passed")
+
+test113()
+
+def test114():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s}::Indices(position=fixed).       
+    ex := B^{c}_{a d} A^{d} A^{e}.
+    substitute(ex, $A^{c} A^{b} B^{a}_{d b} -> A^{b} A^{c} C^{a}_{b d}$)
+    tst:= A^{d} A^{e} C^{c}_{d a} - @(ex);
+    assert(tst==0)
+    print("Test 114 passed")
+
+test114()
+
+def test115():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s}::Indices(position=fixed).
+    ex := B^{c}_{a d} A^{d} A^{e}.
+    substitute(ex, $B^{a}_{d b} A^{c} A^{b} -> A^{b} A^{c} C^{a}_{b d}$)
+    tst:= A^{d} A^{e} C^{c}_{d a} - @(ex);
+    assert(tst==0)
+    print("Test 115 passed")
+
+test115()
+
