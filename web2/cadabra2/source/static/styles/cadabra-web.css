@@ -378,6 +378,26 @@ div.literal {
 	 line-height: 20px;
 	 margin-left: 50px;
 }
+
+div.packages {
+	 margin-left: 50px;
+}
+div.distrotype {
+	 margin-bottom: 40px;
+}
+div.distrotype img {
+	 max-width: 200px;
+	 max-height: 80px;
+	 margin-bottom: 20px;
+}
+div.distrotxt {
+	 margin-top: 10px;
+	 margin-left: 30px;
+}
+div.distronum {
+	 margin-left: 20px;
+}
+
 table.packages {
 	 border-collapse: separate;
     border-spacing:  5px 10px;
@@ -398,11 +418,12 @@ table.packages td {
 }
 table.packages tr {
 }
-table.packages code {
+div.distrotxt code {
+	 display: block;
 	 font-size: 12px;
 	 margin-left: 10px;
-	 margin-top: 0px;
-	 margin-bottom:0px;
+	 margin-top: 5px;
+	 margin-bottom:5px;
 }
 
 /* Young tableaux */

@@ -8,10 +8,11 @@
 
 <h1>Download and install</h1>
 
-<h2>Linux</h2>
+<h2>Binary packages</h2>
 <p>
-  Packages for various Linux distributions are available for download
-  here. They get updated on a semi-regular basis by yours truly.  
+  Packages for various Linux distributions and for Windows (beta!) are
+  available for download here. They get updated on a semi-regular
+  basis by yours truly.
 </p>
 <p>
   Note that if your distribution has a <code>cadabra</code> package, this
@@ -22,72 +23,85 @@
   they will not interfere with each other.
 </p>
 
-<table class="packages">
-  <tr><th>distribution</th></tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/ubuntu1404">Ubuntu Trusty Tahr 14.04</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/ubuntu1604">Ubuntu Xenial Xerus 16.04</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/ubuntu1710">Ubuntu Artful Aardvark 17.10</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/fedora24">Fedora 24</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/fedora26">Fedora 26</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/fedora27">Fedora 27</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/mint18">Mint Sarah 18</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/centos7">CentOS 7</a></td>
-  </tr>
-  <tr>
-	 <td colspan=2 class="instructions">
-		After installation you also need to run<br/>
-	 <code>sudo yum install epel-release; sudo yum
-	 install python-pip; sudo pip install sympy</code><br/>
-	 in order to enable component computations.
-	 </td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/scientific7x">Scientific
-		  Linux 7x</a></td>
-  </tr>
-  <tr>
-	 <td colspan=2 class="instructions">
-		After installation you also need to run<br/>
-	 <code>sudo yum install epel-release; sudo yum
-	 install python-pip; sudo pip install sympy</code><br/>
-	 in order to enable component computations.
-	 </td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/opensuse421">OpenSUSE Leap 42.1</a></td>
-  </tr>
-  <tr>
-	 <td colspan=2 class="instructions">
+<div class="packages">
+  <div class="distrotype">
+	 <img src="static/images/ubuntulogo.png"/>
+	 <div class="distronum"><a href="/packages/ubuntu1404">Ubuntu Trusty Tahr 14.04</a></div>
+	 <div class="distronum"><a href="/packages/ubuntu1604">Ubuntu Xenial Xerus 16.04</a></div>
+	 <div class="distronum"><a href="/packages/ubuntu1710">Ubuntu Artful Aardvark 17.10</a></div>
+	 <div class="distrotxt">
+	 </div>
+  </div>
+
+  <div class="distrotype">
+	 <img src="static/images/fedora-logo.png"/>
+	 <div class="distronum"><a href="/packages/fedora24">Fedora 24</a></div>
+	 <div class="distronum"><a href="/packages/fedora26">Fedora 26</a></div>
+	 <div class="distronum"><a href="/packages/fedora27">Fedora 27</a></div>
+	 <div class="distrotxt">
+	 </div>
+  </div>
+
+  <div class="distrotype">
+	 <img src="static/images/mintlogo.png"/>
+	 <div class="distronum"><a href="/packages/mint18">Mint Sarah
+		  18</a></div>
+	 <div class="distrotxt">
+		This should work on all Mint distributions in the 18.x series.
+	 </div>
+  </div>
+
+  <div class="distrotype">
+	 <img src="static/images/centoslogo.png"/>
+	 <div class="distronum"><a href="/packages/centos7">CentOS 7</a></div>
+	 <div class="distrotxt">
+		After installation you also need to run
+		<code>sudo yum install epel-release; sudo yum
+		  install python-pip; sudo pip install sympy</code>
+		in order to enable component computations.
+	 </div>
+  </div>
+
+  <div class="distrotype">
+	 <img src="static/images/scientific_linux_logo.png"/>
+	 <div class="distronum"><a href="/packages/scientific7x">Scientific Linux 7x</a></div>
+	 <div class="distrotxt">
+		After installation you also need to run
+		<code>sudo yum install epel-release; sudo yum
+		  install python-pip; sudo pip install sympy</code>
+		in order to enable component computations.
+	 </div>
+  </div>
+
+  <div class="distrotype">
+	 <img src="static/images/opensuse_logo.png"/>
+	 <div class="distronum"><a href="/packages/opensuse421">OpenSUSE Leap 42.1</a></div>
+	 <div class="distrotxt">
 		On OpenSUSE you first need to add the devel:libraries:c_c++
 		repository before you can install the cadabra rpm. Start YaST,
 		go to Software/Software Repositories/Add/Add by URL.  Enter
 		<tt>http://download.opensuse.org/repositories/devel:/libraries:/c_c++/openSUSE_Leap_42.1</tt>
 		and confirm.
-	 </td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/debian86">Debian Jessie 8.6</a></td>
-  </tr>
-  <tr>
-	 <td class="system">&bullet; <a href="/packages/debian9">Debian Stretch 9</a></td>
-  </tr>
+	 </div>
+  </div>
 
-</table>
+  <div class="distrotype">
+	 <img src="static/images/debian-logo.jpg"/>
+	 <div class="distronum"><a href="/packages/debian86">Debian Jessie 8.6</a></div>
+	 <div class="distronum"><a href="/packages/debian9">Debian Stretch 9</a></div>
+  </div>
+
+  <div class="distrotype">
+	 <img src="static/images/windows_logo.png"/>
+	 <div class="distronum"><a href="/packages/windows">Windows 10
+		  (beta!)</a></div>
+	 <div class="distrotxt">
+		The Windows port and this binary installer are in beta right now, please report any
+		problems.
+	 </div>
+  </div>
+</div>
+
 <p>
   (In case you wonder:  in the package number <code>2.0.bbb.ggggggg</code>
   the <code>bbb</code> is the build number and
@@ -121,14 +135,8 @@
   or pick it from the 'Education' menu.
 </p> -->
 
-<h2>OS X</h2>
-<p>
-  For the time being you will need to compile from source to install
-  on OS X.
-</p>
 
-
-<h2>Build from source (Linux or OS X)</h2>
+<h2>Build from source (Linux/OS X; Windows coming soon)</h2>
 <p>
   Alternatively, you can compile Cadabra from source yourself (not difficult). The source
   is distributed via github, see the
