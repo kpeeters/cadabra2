@@ -59,6 +59,7 @@ set(ALGOS
   product_rule
   reduce_delta
   rename_dummies
+  replace_match
   rewrite_indices
   simplify
   sort_product
@@ -67,6 +68,7 @@ set(ALGOS
   split_gamma
   split_index
   substitute
+  take_match
   unwrap
   vary
   young_project_product

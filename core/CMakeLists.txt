@@ -108,6 +108,7 @@ set(LOCAL_SRC_FILES
   properties/TableauBase.cc
   properties/TableauSymmetry.cc
   properties/Traceless.cc
+  properties/Vielbein.cc
   properties/Weight.cc
   properties/WeightInherit.cc
   properties/WeylTensor.cc

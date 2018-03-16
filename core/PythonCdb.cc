@@ -88,6 +88,7 @@
 #include "properties/Tableau.hh"
 #include "properties/TableauSymmetry.hh"
 #include "properties/Traceless.hh"
+#include "properties/Vielbein.hh"
 #include "properties/Weight.hh"
 #include "properties/WeightInherit.hh"
 #include "properties/WeylTensor.hh"
@@ -1414,6 +1415,8 @@ PYBIND11_MODULE(cadabra2, m)
 	def_prop<Tableau>(m);
 	def_prop<TableauSymmetry>(m);
 	def_prop<Traceless>(m);
+	def_prop<Vielbein>();
+	def_prop<InverseVielbein>();		
 	def_prop<Weight>(m);
 	def_prop<WeightInherit>(m);
 	def_prop<WeylTensor>(m);

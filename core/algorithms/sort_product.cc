@@ -20,7 +20,19 @@ void sort_product::dont_cleanup()
 
 bool sort_product::can_apply(iterator st) 
 	{
-	if(*st->name=="\\prod" || *st->name=="\\dot" || *st->name=="\\wedge") return true;
+	if(*st->name=="\\prod" || *st->name=="\\dot" || *st->name=="\\wedge") {
+		// ensure that there are no factors with object or name wildcards, as we
+		// cannot know what they would match to (in general, sort_product does
+		// not make much sense acting on patterns).
+
+		sibling_iterator sib=tr.begin(st);
+		while(sib!=tr.end(st)) {
+			if(sib->is_name_wildcard() || sib->is_object_wildcard())
+				return false;
+			++sib;
+			}
+		return true;
+		}
 	else return false;
 	}
 
