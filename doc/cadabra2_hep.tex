@@ -6,7 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[urlcolor=blue,colorlinks]{hyperref}
+\usepackage[urlcolor=blue,citecolor=blue,colorlinks]{hyperref}
 \usepackage{fleqn}
 \usepackage{xspace}
 \usepackage[bottom]{footmisc}
@@ -205,9 +205,10 @@ Finally, the source code of the program is freely available, with
 extensive documentation on how to extend it with new algorithms and
 new data types (e.g.~twistor variables are planned for an upcoming
 release). The program is completely independent of commercial software
-and relies only on a few other open source libraries and
-programs. Versions for Linux and Mac~OS~X can be downloaded from the
-web site.
+and relies only on a few other open source libraries and programs. It
+runs on Linux, Mac~OS~X, Windows and various BSD flavours and the
+source code as well as binary packages can be downloaded from the web
+site.
 
 \medskip
 
@@ -777,17 +778,17 @@ substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$
 collect_factors(_)
 sort_product(_)
 converge(todo):
-	substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
-	eliminate_kronecker(_)
-	canonicalise(_)
-   ;
+   substitute(_, $h_{m1 m2} h^{m3 m2} -> \delta_{m1}^{m3}$, repeat=True )
+   eliminate_kronecker(_)
+   canonicalise(_)
 \end{cdbcont}
 \begin{cdbcom}
 Finally, we replace the derivative of the gauge field with the field
 strength,
 \end{cdbcom}
 \begin{cdbcont}
-substitute(_, $\partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}} + 1/2*F_{n m} + 1/2*\partial_{m}{A_{n}}$ )
+substitute(_, $\partial_{n}{A_{m}} -> 1/2*\partial_{n}{A_{m}}
+               + 1/2*F_{n m} + 1/2*\partial_{m}{A_{n}}$ )
 distribute(_)
 sort_product(_)
 canonicalise(_)
@@ -814,8 +815,8 @@ of input by adding a number of default simplification rules; an
 example of such default rules will be discussed in the next section. 
 We will end here the discussion of purely bosonic problems and move on
 to fermions and anti-commuting tensors.
-\bigskip
 
+\vfill\eject
 \section{Fermions, Dirac algebra and Fierz transformations}
 \label{s:fermions}
 \subsection{Simple gamma matrix algebra}
@@ -875,6 +876,10 @@ for i in range(3):
    join_gamma(_)
    distribute(_)
 \end{cdbcont}
+\begin{cdbcom}
+  Note once more how we are mixing ordinary Python loop constructions
+  with Cadabra code here. 
+\end{cdbcom}
 \begin{cdbout}
 \label{e:gam1}
 -18 \Gamma_{kl} d + 8 \Gamma_{kl} d d + 12 \Gamma_{kl} - 3\delta_{kl}
@@ -903,7 +908,6 @@ spinor indices back in, and use explicit indices. For this purpose,
 \Cdb knows the concept of an ``index bracket'', which associates
 indices to matrix objects like the gamma matrices above, or to
 e.g.~vectors or spinors. Here is a somewhat simpler example:
-\vfill\eject
 \toprule
 \begin{cdbin}
 {a,b,c,d#}::Indices(spinor).
@@ -968,7 +972,7 @@ requires little more than defining symbols properly and inputting the
 expression on the left-hand side as one would type it in a
 paper. Moreover, reading off the output is simple as well, because \Cdb produces
 output which is virtually identical to the right-hand side of the
-equation above. The notebook with comments is displayed below.\vfill\eject
+equation above. The notebook with comments is displayed below.
 \toprule
 \begin{cdbin}
 {\mu,\nu,\rho}::Indices(curved, position=fixed).
@@ -1112,7 +1116,6 @@ of the functionality of \Cdb discussed above, and also shows how to
 handle variational problems, especially those involving fermionic
 objects. An example is the variation of a Lagrangian under
 supersymmetry transformations.  Consider the following sample calculation,
-\vfill\eject
 \toprule
 \begin{cdbin}
 def post_process(ex):
@@ -1150,7 +1153,7 @@ Declaration of fermionic fields,
 { \psi_{\mu\nu}, \psi_{\mu}, \epsilon }::AntiCommuting.
 { \psi_{\mu}, \psi_{\mu\nu} }::SelfAntiCommuting.
 { \epsilon, \psi_{\mu}, \psi_{\mu\nu} }::SortOrder.
-\Gamma_{#}::Depends(\bar).
+\Gamma_{#}::Depends(\bar{#}).
 \psi_{\mu\nu}::AntiSymmetric.
 \end{cdbcont}
 \begin{cdbcom}
@@ -1160,7 +1163,7 @@ matrices are flat,
 \begin{cdbcont}
 L:= -1/2 e e^{n \nu} e^{m \mu} R_{\mu\nu n m} 
                  - 1/2 e \bar{\psi_\mu} \Gamma^{\mu\nu\rho} D_{\nu}{\psi_{\rho}}:
-@rewrite_indices!(%){ \Gamma^{m n p} }{ e^{n \mu} };
+rewrite_indices(_, $\Gamma^{m n p}$, $e^{n \mu}$);
 \end{cdbcont}
 \begin{cdbout}
 L := -\frac{1}{2} R_{\mu\nu n m} e e^{m\mu} e^{n \nu} - \frac{1}{2}
@@ -1178,11 +1181,11 @@ susy:= { e^{n \mu} -> -\bar{\epsilon} \Gamma^m \psi_\nu e^{m \mu} e^{n \nu},
 \end{cdbcont}
 \begin{cdbcom}
 Varying under supersymmetry is now a simple matter of using the
-\verb|@vary| command, giving it the rules defined above. This will
+\verb|vary| command, giving it the rules defined above. This will
 automatically assume infinitesimal variations.
 \end{cdbcom}
 \begin{cdbcont}
-@vary!(L)( @(susy) );
+vary(L, susy);
 \end{cdbcont}
 \begin{cdbout}
 \begin{aligned}
@@ -1238,10 +1241,11 @@ the steps one would follow with pencil and paper.
 
 The program is entirely built on freely distributable software
 libraries, i.e.~it does not make use of any proprietary computer
-algebra system.  The system is available in source code as well as in
-binary form for Linux, Mac OS~X and Windows computers; the reader is
-referred to the web site~\url{http://cadabra.science} for download and
-installation instructions as well as the address of the mailing list.
+algebra system.  The system is available in source code for all
+supported platforms, as well as in binary form for Linux and Windows
+computers; the reader is referred to the web
+site~\url{http://cadabra.science} for download and installation
+instructions as well as the help forum.
 
 Given the program's scope and size, and the fact that this is only the
 first public release, there of course remains quite some room for
@@ -1249,7 +1253,6 @@ improvements and additions. Planned future enhancements include
 e.g.~two-component spinors, automatic canonicalisation using
 Fierz identities, and twistor objects. 
 
-\vfill\eject
 
 \section*{Acknowledgements}
 

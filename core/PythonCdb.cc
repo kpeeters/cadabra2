@@ -3,21 +3,6 @@
 
 #include <memory>
 
-// // make python understand std::shared_ptr when compiled with clang.
-// // http://stackoverflow.com/questions/13986581/using-boost-python-stdshared-ptr
-// 
-// // This now works on both Linux and OS X El Capitan, but your mileage may vary. 
-// //
-// #if (defined(__clang__) && defined(__linux__)) 
-// namespace boost {
-//    template<typename T>
-//    T *get_pointer(std::shared_ptr<T> p)
-// 		{
-// 		return p.get();
-// 		}
-//    }
-// #endif
-
 #include "Config.hh"
 #include "PythonCdb.hh"
 #include "SympyCdb.hh"
@@ -1415,8 +1400,8 @@ PYBIND11_MODULE(cadabra2, m)
 	def_prop<Tableau>(m);
 	def_prop<TableauSymmetry>(m);
 	def_prop<Traceless>(m);
-	def_prop<Vielbein>();
-	def_prop<InverseVielbein>();		
+	def_prop<Vielbein>(m);
+	def_prop<InverseVielbein>(m);		
 	def_prop<Weight>(m);
 	def_prop<WeightInherit>(m);
 	def_prop<WeylTensor>(m);

@@ -357,14 +357,17 @@ def test115():
 
 test115()
 
-D{#}::Derivative;
-{\epsilon, \psi_{\mu},\psi_{\mu\nu} }::Spinor(dimension=4, type=Majorana);
-\Gamma_{#}::GammaMatrix(metric=\delta);
-ex:= \bar{D_{\mu}{\epsilon}} \Gamma^{m n p} D_{\nu}{\psi_{\rho}} e e_{m}^{\mu} e_{n}^{\nu} e_{p}^{\rho} + Q;
-pat:= \bar{D_{\mu}{\epsilon}} A??;
-sort_product(_)
-# The above should leave the A?? on the right in the product!
-    FIXME: disable sorting of products if there is even a single wildcard among the factors,
-    object or name.
-take_match(ex, pat);
+def test116():
+    __cdbkernel__=create_scope()
+    D{#}::Derivative;
+    {\epsilon, \psi_{\mu},\psi_{\mu\nu} }::Spinor(dimension=4, type=Majorana);
+    \Gamma_{#}::GammaMatrix(metric=\delta);
+    ex:= \bar{D_{\mu}{\epsilon}} \Gamma^{m n p} D_{\nu}{\psi_{\rho}} e e_{m}^{\mu} e_{n}^{\nu} e_{p}^{\rho} + Q;
+    pat:= \bar{D_{\mu}{\epsilon}} A??;
+    sort_product(_)
+    take_match(ex, pat)
+    tst:= \bar{D_{\mu}{\epsilon}} \Gamma^{m n p} D_{\nu}{\psi_{\rho}} e e_{m}^{\mu} e_{n}^{\nu} e_{p}^{\rho} - @(ex);
+    assert(tst==0)
+    print("Test 116 passed")
 
+test116()

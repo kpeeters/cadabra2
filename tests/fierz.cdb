@@ -1,15 +1,15 @@
 
 def test01():
-__cdbkernel__=create_scope()
-{m,n,p,q,r,s}::Indices(position=fixed);
-{m,n,p,q,r,s}::Integer(0..3);
-\Gamma{#}::GammaMatrix;
-\bar{#}::DiracBar;
-{\theta, \lambda, \psi, \chi}::Spinor;
-ex:=\bar{\theta} \Gamma_{m} \chi \bar{\psi} \Gamma^{m} \lambda;
-fierz(_, $\theta, \lambda, \psi, \chi$)
-tst:=-1/4 \bar{\theta} \Gamma_{m} \Gamma^{m} \lambda \bar{\psi}\chi - 1/4 \bar{\theta}\Gamma_{m}\Gamma^{n}\Gamma^{m} \lambda \bar{\psi}\Gamma_{n}\chi - 1/8 \bar{\theta}\Gamma_{m}\Gamma^{n p}\Gamma^{m}\lambda \bar{\psi}\Gamma_{p n}\chi - @(ex);
-assert(tst==0)
-print("Test 01 passed")
+    __cdbkernel__=create_scope()
+    {m,n,p,q,r,s}::Indices(position=fixed);
+    {m,n,p,q,r,s}::Integer(0..3);
+    \Gamma{#}::GammaMatrix;
+    \bar{#}::DiracBar;
+    {\theta, \lambda, \psi, \chi}::Spinor;
+    ex:=\bar{\theta} \Gamma_{m} \chi \bar{\psi} \Gamma^{m} \lambda;
+    fierz(_, $\theta, \lambda, \psi, \chi$)
+    tst:=-1/4 \bar{\theta} \Gamma_{m} \Gamma^{m} \lambda \bar{\psi}\chi - 1/4 \bar{\theta}\Gamma_{m}\Gamma^{n}\Gamma^{m} \lambda \bar{\psi}\Gamma_{n}\chi - 1/8 \bar{\theta}\Gamma_{m}\Gamma^{n p}\Gamma^{m}\lambda \bar{\psi}\Gamma_{p n}\chi - @(ex);
+    assert(tst==0)
+    print("Test 01 passed")
     
 test01()
