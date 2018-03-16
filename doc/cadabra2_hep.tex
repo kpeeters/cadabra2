@@ -989,11 +989,11 @@ input (minus) the left-hand side of~\eqref{e:fierzthing}, and do a Fierz
 transformation to bring the~$\theta$ and~$\epsilon$ spinors together,
 \end{cdbcom}
 \begin{cdbcont}
-T^{\mu\nu\rho} e_{\nu}^{s}
+ex:= T^{\mu\nu\rho} e_{\nu}^{s}
      \bar{\theta} \Gamma^{r s} \psi_{\rho}
      \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
 
-@fierz!(%)( \theta, \epsilon, \psi_{\mu}, \psi_{\nu} );
+fierz(ex, $\theta, \epsilon, \psi_{\mu}, \psi_{\rho}$ );
 \end{cdbcont}
 \begin{cdbout}
 \begin{aligned}
@@ -1017,19 +1017,17 @@ T^{\mu\nu\rho} e_{\nu}^{s}
 \end{cdbout}
 \begin{cdbcom}
 This is not yet in the desired form, so we join gamma matrices
-twice and canonicalise the resulting expression,
+and canonicalise the resulting expression,
 \end{cdbcom}
 \begin{cdbcont}
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@join!(%){expand}:
-@distribute!(%):
-@eliminate_kr!(%):
-@collect_terms!(%):
-@canonicalise!(%): 
-@rename_dummies!(%):
-@collect_terms!(%);
+converge(ex):
+    join_gamma(ex)
+    distribute(ex)
+    eliminate_kronecker(ex)
+    eliminate_metric(ex)
+
+canonicalise(ex)
+rename_dummies(ex);
 \end{cdbcont}
 \begin{cdbout}
 \begin{aligned}
@@ -1075,16 +1073,16 @@ functionality: \toprule
 \begin{cdbin}
 \psi_{\mu}::SelfAntiCommuting.
 { \chi, \psi_{\mu} }::AntiCommuting.
-\chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
+ex:= \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
 \end{cdbin}
 \begin{cdbout}
 \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
 \end{cdbout}
 \begin{cdbin}
-@substitute!(%)( \psi_{\mu} \psi_{nu} -> B_{\mu\nu} );
+substitute(_, $\psi_{\mu} \psi_{nu} -> B_{\mu\nu}$ );
 \end{cdbin}
 \begin{cdbout}
-(-1) \chi \, A^{\mu \nu} \, B_{\mu \nu} \, \chi;
+- \chi \, A^{\mu \nu} \, B_{\mu \nu} \, \chi;
 \end{cdbout}
 \begin{cdbcom}
 By declaring $\chi$ and $\psi_{\mu}$ to be mutually anti-commuting, 
@@ -1092,20 +1090,12 @@ By declaring $\chi$ and $\psi_{\mu}$ to be mutually anti-commuting,
 substitution. 
 
 In order to illustrate the meaning of \verb|SelfAntiCommuting|, we
-undo the substitution command above,
-\end{cdbcom}
-\begin{cdbin}
-@pop(%);
-\end{cdbin}
-\begin{cdbout}
-\chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
-\end{cdbout}
-\begin{cdbcom}
-Now we declare $A^{\mu\nu}$ to be symmetric and canonicalise the expression,
+start afresh and declare the $A^{\mu\nu}$ tensor to be symmetric,
 \end{cdbcom}
 \begin{cdbin}
 A^{\mu\nu}::Symmetric.
-@canonicalise!(%);
+ex:= \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
+canonicalise(_);
 \end{cdbin}
 \begin{cdbout}
 0;
@@ -1116,9 +1106,6 @@ program knows that $\psi_{\mu}\psi_{\nu}$ is anti-symmetric in its two
 indices, and has used this to simplify the expression.
 \end{cdbcom}
 \botrule
-Incidentally, the \verb|@pop| command provides an undo facility which
-allows one to go back any arbitrary number of steps in the calculation
-(by simply applying it multiple times).
 
 To conclude, let us discuss one more calculation which combines some
 of the functionality of \Cdb discussed above, and also shows how to
@@ -1249,8 +1236,8 @@ the steps one would follow with pencil and paper.
 The program is entirely built on freely distributable software
 libraries, i.e.~it does not make use of any proprietary computer
 algebra system.  The system is available in source code as well as in
-binary form for Linux and Mac OS~X computers; the reader is referred
-to the web site~\url{http://cadabra.science} for download and
+binary form for Linux, Mac OS~X and Windows computers; the reader is
+referred to the web site~\url{http://cadabra.science} for download and
 installation instructions as well as the address of the mailing list.
 
 Given the program's scope and size, and the fact that this is only the

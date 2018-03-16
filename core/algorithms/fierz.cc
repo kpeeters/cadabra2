@@ -10,6 +10,9 @@
 
 using namespace cadabra;
 
+// #define DEBUG(ln) ln
+#define DEBUG(ln)
+
 fierz::fierz(const Kernel& k, Ex& e, Ex& args)
 	: Algorithm(k, e), spinor_list(Ex(args.begin()))
 	{
@@ -32,7 +35,7 @@ bool fierz::can_apply(iterator it)
 	while(sib!=tr.end(it)) {
 		const DiracBar *db=kernel.properties.get_composite<DiracBar>(sib);
 		if(db) {
-			// std::cerr << "found db" << Ex(sib) << std::endl;
+			DEBUG( std::cerr << "found db" << sib << std::endl; );
 			spin1=sib;
 			prop1=kernel.properties.get_composite<Spinor>(spin1);
 			sibling_iterator ch=sib;
@@ -46,7 +49,7 @@ bool fierz::can_apply(iterator it)
 				spnxt=kernel.properties.get_composite<Spinor>(ch);
 				} while(gmnxt==0 && spnxt==0);
 			if(gmnxt) {
-				// std::cerr << "found gam" << Ex(ch) << std::endl;
+				DEBUG( std::cerr << "found gamma " << ch << std::endl; );
 				// FIXME: should also work when there is a unit matrix in between.
 				indit=kernel.properties.get_composite<Integer>(ch.begin(), true);
 				indprop=kernel.properties.get_composite<Indices>(ch.begin(), true);
@@ -65,7 +68,7 @@ bool fierz::can_apply(iterator it)
 					} while(gmnxt==0 && spnxt==0);
 				prop2=spnxt;
 				if(prop2) { // one fermi bilinear found.
-					// std::cerr << "found spin2 " << Ex(ch) << std::endl;
+					DEBUG( std::cerr << "found spin2 " << Ex(ch) << std::endl; );
 					spin2=ch;
 					// Skip to next spinor-index carrying object
 					do {
@@ -76,7 +79,7 @@ bool fierz::can_apply(iterator it)
 						} while(gmnxt==0 && spnxt==0);
 					db=kernel.properties.get_composite<DiracBar>(ch);
 					if(db) {
-						// std::cerr << "found db2" << std::endl;
+						DEBUG( std::cerr << "found db2" << std::endl; );
 						spin3=ch;
 						prop3=spnxt;
 						// Skip to next spinor-index carrying object
@@ -88,7 +91,7 @@ bool fierz::can_apply(iterator it)
 							} while(gmnxt==0 && spnxt==0);
 						if(gmnxt) {
 							gam2=ch;
-							// std::cerr << "found gam2: " << Ex(gam2) << std::endl;
+							DEBUG( std::cerr << "found gam2: " << gam2 << std::endl; );
 							// Skip to next spinor-index carrying object
 							do {
 								++ch;
@@ -98,7 +101,7 @@ bool fierz::can_apply(iterator it)
 								} while(gmnxt==0 && spnxt==0);
 							prop4=spnxt;
 							if(prop4) {
-								// std::cerr << "found spin4" << std::endl;
+								DEBUG( std::cerr << "found spin4" << std::endl; );
 								spin4=ch;
 								return true;
 								}
@@ -124,7 +127,7 @@ Algorithm::result_t fierz::apply(iterator& it)
 			if(subtree_equal(&kernel.properties, tr.begin(spin3), spt)) {
 				++spt;
 				if(subtree_equal(&kernel.properties, spin4, spt)) {
-//					txtout << "found term in right order" << std::endl;
+					DEBUG( std::cerr << "Found term with spinors in correct order already" << std::endl; );
 					return result_t::l_no_action;
 					}
 				}
@@ -141,13 +144,16 @@ Algorithm::result_t fierz::apply(iterator& it)
 			if(subtree_equal(&kernel.properties, tr.begin(spin3), spt)) {
 				++spt;
 				if(subtree_equal(&kernel.properties, spin2, spt)) {
-//					txtout << "found term in wrong order" << std::endl;
+					DEBUG( std::cerr << "Found term with spinors wrong order" << std::endl; );
 					doit=true;
 					}
 				}
 			}
 		}
-	if(!doit) return result_t::l_no_action;
+	if(!doit) {
+		DEBUG( std::cerr << "Spinors in this factor do not match algorithm list." << std::endl; );
+		return result_t::l_no_action;
+		}
 
 //	txtout << "going to Fierz" << std::endl;
 
@@ -161,7 +167,7 @@ Algorithm::result_t fierz::apply(iterator& it)
 		maxind/=2;
 
 	for(int i=0; i<=maxind; ++i) {
-//		std::cerr << i << " of " << maxind << std::endl;
+		DEBUG( std::cerr << i << " of " << maxind << std::endl; );
 
 		// Make a copy of this term, moving the gamma matrices into the 
 		// first factor and inserting projector gamma matrices as well.
@@ -193,8 +199,8 @@ Algorithm::result_t fierz::apply(iterator& it)
 				locgam2=tmpit;
 				if(i==0) cpyterm.erase(locgam2);
 				else 		cpyterm.erase_children(locgam2);
-//				if(i>0)
-//					std::cerr << "New gamma reads " << Ex(locgam2) << std::endl;
+				if(i>0)
+					DEBUG( std::cerr << "New gamma reads " << Ex(locgam2) << std::endl; );
 				}
 			
 			++cpit;
@@ -206,14 +212,14 @@ Algorithm::result_t fierz::apply(iterator& it)
 			Ex newdum=get_dummy(indprop, &ind_free, &ind_dummy, &ind_added);
 			iterator loc1=cpyterm.append_child(locgam1, newdum.begin());
 			ind_added.insert(index_map_t::value_type(newdum, loc1));
-			if(indprop->position_type==Indices::free)
-				loc1->fl.parent_rel=str_node::p_sub;
-			else
-				loc1->fl.parent_rel=str_node::p_super;
+			loc1->fl.parent_rel=str_node::p_super;
 			// Add the indices in opposite order in the second gamma matrix
 //			std::cerr << "inserting " << newdum << " at " << Ex(locgam2) << std::endl;
 			iterator loc2=cpyterm.prepend_child(locgam2, newdum.begin());
-			loc2->fl.parent_rel=str_node::p_sub;
+			if(indprop->position_type==Indices::free)
+				loc1->fl.parent_rel=str_node::p_super;
+			else
+				loc2->fl.parent_rel=str_node::p_sub;
 			}
 		
 //		std::cerr << cpyterm << std::endl;

@@ -1,4 +1,5 @@
 
+#include "Config.hh"
 #include "Snoop.hh"
 #include "Server.hh"
 
@@ -6,7 +7,7 @@
 
 int main()
 	{
-	snoop::log.init("CadabraServer", "2.0", "log.cadabra.science");
+	snoop::log.init("CadabraServer", CADABRA_VERSION_FULL, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
 //	snoop::log(snoop::info) << "Starting" << snoop::flush;
 

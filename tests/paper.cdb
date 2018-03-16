@@ -177,6 +177,8 @@ def test09():
 
 print(timeit.timeit(test09,number=1))
 
+#-------
+
 def test10():
     __cdbkernel__=create_scope()
     {M, N, P}::Indices(space).
@@ -189,6 +191,8 @@ def test10():
     print('Test 10 passed')
 
 print(timeit.timeit(test10,number=1))
+
+#-------
 
 def test11():
     __cdbkernel__=create_scope()
@@ -210,44 +214,101 @@ def test11():
 
 print(timeit.timeit(test11,number=1))
 
-{\mu,\nu,\rho}::Indices(curved, position=fixed).
-{m,n,p,q,r,s,t#}::Indices(flat, position=independent).
-{m,n,p,q,r,s,t#}::Integer(0..10).
-T^{#{\mu}}::AntiSymmetric.
-\psi_{\mu}::SelfAntiCommuting.
-\psi_{\mu}::Spinor(dimension=11, type=Majorana).
-\theta::Spinor(dimension=11, type=Majorana).
-\epsilon::Spinor(dimension=11, type=Majorana).
-{\theta,\epsilon,\psi_{\mu}}::AntiCommuting.
+#-------
+
+def test12():
+    __cdbkernel__=create_scope()
+    {\mu,\nu,\rho}::Indices(curved, position=fixed).
+    {m,n,p,q,r,s,t}::Indices(flat, position=free).
+    {m,n,p,q,r,s,t}::Integer(0..10).
+    T^{#{\mu}}::AntiSymmetric.
+    \psi_{\mu}::SelfAntiCommuting.
+    \psi_{\mu}::Spinor(dimension=11, type=Majorana).
+    \theta::Spinor(dimension=11, type=Majorana).
+    \epsilon::Spinor(dimension=11, type=Majorana).
+    {\theta,\epsilon,\psi_{\mu}}::AntiCommuting.
+    \bar{#}::DiracBar.
+    \delta{#}::KroneckerDelta.
+    \Gamma^{#{m}}::GammaMatrix(metric=\delta).
+
+    obj:= T^{\mu\nu\rho} e_{\nu}^{s}
+        \bar{\theta} \Gamma^{r s} \psi_{\rho}
+        \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
+
+    fierz(_, $\theta, \epsilon, \psi_{\mu}, \psi_{\rho}$ );
+    converge(obj):
+        join_gamma(obj)
+        distribute(obj)
+        eliminate_kronecker(obj)
+        eliminate_metric(obj)
+
+    canonicalise(_)
+    rename_dummies(_)
+    tst:=1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n}
+        \epsilon \bar{\psi_{\nu}} \Gamma^{n} \psi_{\rho} 
+        + 5/16 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \epsilon
+        \bar{\psi_{\nu}} \Gamma^{m} \psi_{\rho} 
+        + 3/32 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n p} \epsilon
+        \bar{\psi_{\nu}} \Gamma^{n p} \psi_{\rho} 
+        + 1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{n}
+        \epsilon \bar{\psi_{\nu}} \Gamma^{m n} \psi_{\rho} 
+        + 1/384 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta}
+        \Gamma^{n p q r} \epsilon \bar{\psi_{\nu}} \Gamma^{m n p q r} \psi_{\rho}
+        - @(obj);
+    rename_dummies(tst);
+    assert(tst==0)
+    print("Test 12 passed")
+
+print(timeit.timeit(test12,number=1))
+
+#-------
+
+def test13():
+    __cdbkernel__=create_scope()
+    \psi_{\mu}::SelfAntiCommuting.
+    {\chi, \psi_{\mu} }::AntiCommuting.
+    ex:= \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
+    substitute(_, $\psi_{\mu} \psi_{nu} -> B_{\mu\nu}$ );
+    tst:= - \chi A^{\mu\nu} B_{\mu\nu} \chi - @(ex);
+    assert(tst==0)
+    print("Test 13a passed")
+    A^{\mu\nu}::Symmetric;
+    ex:= \chi A^{\mu\nu} \psi_{\mu} \chi \psi_{\nu};
+    canonicalise(_)
+    assert(ex==0)
+    print("Test 13b passed")
+
+print(timeit.timeit(test13,number=1))
+
+#-------
+
+D{#}::Derivative.
 \bar{#}::DiracBar.
-\delta^{m n}::KroneckerDelta.
-\Gamma^{#{m}}::GammaMatrix(metric=\delta).
+\delta{A??}::Derivative.
+{m,n,p,q,r,s,t,u,m#}::Indices(flat).
+{m,n,p,q,r,s,t,u,m#}::Integer(0..3).
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\alpha,\beta}::Indices(curved,position=fixed).
+{\mu,\nu,\rho,\sigma,\kappa,\lambda,\alpha,\beta}::Integer(0..3).
 
-obj:= T^{\mu\nu\rho} e_{\nu}^{s}
-     \bar{\theta} \Gamma^{r s} \psi_{\rho}
-     \bar{\psi_{\mu}} \Gamma^{r} \epsilon;
+e^{m \mu}::Vielbein.
+e_{m \mu}::InverseVielbein.
+g^{\mu\nu}::InverseMetric.
+g_{\mu\nu}::Metric.
 
-fierz(_, $\theta, \epsilon, \psi_{\mu}, \psi_{\nu}$ );
-join_gamma(_)
-distribute(_)
-eliminate_kronecker(_)
-join_gamma(_)
-distribute(_)
-eliminate_kronecker(_)
-canonicalise(_)
-rename_dummies(_);
+{ \epsilon,\psi_{\mu},\psi_{\mu\nu} }::Spinor(dimension=4, type=Majorana).
+\Gamma_{#{m}}::GammaMatrix(metric=\delta).
+{ \psi_{\mu\nu}, \psi_{\mu}, \epsilon }::AntiCommuting.
+{ \psi_{\mu}, \psi_{\mu\nu} }::SelfAntiCommuting.
+{ \epsilon, \psi_{\mu}, \psi_{\mu\nu} }::SortOrder.
+\Gamma_{#}::Depends(\bar).
+\psi_{\mu\nu}::AntiSymmetric.
 
-tst:=1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n}
-\epsilon \bar{\psi_{\nu}} \Gamma_{n} \psi_{\rho} 
-+ 5/16 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \epsilon
-\bar{\psi_{\nu}} \Gamma_{m} \psi_{\rho} 
-+ 3/32 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{m n p} \epsilon
-\bar{\psi_{\nu}} \Gamma_{n p} \psi_{\rho} 
-+ 1/4 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta} \Gamma^{n}
-\epsilon \bar{\psi_{\nu}} \Gamma_{m n} \psi_{\rho} 
-+ 1/384 T^{\mu \nu \rho} e_{\mu}^{m} \bar{\theta}
-\Gamma^{n p q r} \epsilon \bar{\psi_{\nu}} \Gamma_{m n p q r} \psi_{\rho}
-- @(obj);
+L:= -1/2 e e^{n \nu} e^{m \mu} R_{\mu\nu n m}
+- 1/2 e \bar{\psi_\mu} \Gamma^{\mu\nu\rho} D_{\nu}{\psi_{\rho}}:
+rewrite_indices(_, $\Gamma^{m n p}$, $e^{n \mu}$ );
 
+susy:= { e^{n \mu} -> -\bar{\epsilon} \Gamma^m \psi_\nu e^{m \mu} e^{n \nu},
+         e         -> e \bar{\epsilon} \Gamma^n \psi_\mu e^{n\mu},
+         \psi_\mu -> D_{\mu}{\epsilon} };
 
-
+vary(L, susy);
