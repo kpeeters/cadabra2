@@ -16,6 +16,7 @@ def test01():
     tst:= \GAMMA^{m} \GAMMA^{n p q} \GAMMA^{n p q m c} \delta^{a b} - @(ex);
     display(tst)
     assert(tst==0)
+    print("Test 01 passed")
 
 test01()
 
@@ -27,9 +28,22 @@ def test02():
 
     {A,B,C}::Weight(label=field, value=1);
     ex:=A B C + A B + A A + A C + A B C D;
-    orderx(ex, 2);
+    orderx(ex, 2)
     tst:= A B C + A B C D - @(ex);
     assert(tst==0)
     print("Test 02 passed")
 
 test02()
+
+def test03():
+    __cdbkernel__ = create_scope()
+    ex:= Q Q Q Q Q Q;
+    converge(ex):
+        substitute(_, $Q->A+B, A B->3$, repeat=True)
+        distribute(_)
+        
+    tst:= A A A A A A + 18 A A A A + 135 A A + 540 + 18 B B B B + 135 B B + B B B B B B - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
+
+test03()

@@ -135,7 +135,8 @@ class Shell(InteractiveConsole):
         # Replace 'converge(ex):' with 'ex.reset(); while ex.changed():' properly indented.
         imatch = re.match(r'([ ]*)converge\(([^\)]*)\):', line_stripped)
         if imatch:
-            ret  = indent_line+imatch.group(1)+imatch.group(2)+".reset(); _="+imatch.group(2)+"\n"
+            ret  = indent_line+imatch.group(1)+imatch.group(2)+".reset()\n"
+            ret += indent_line+"_="+imatch.group(2)+"\n"
             ret += indent_line+imatch.group(1)+"while "+imatch.group(2)+".changed():\n"
             return ret
         
@@ -187,13 +188,15 @@ class Shell(InteractiveConsole):
 
         line = self.preprocess(line, True)
         if self.lhs == "":
-            # print('executing: ')
-            # print(line)
+            #print('executing: ')
+            #print(line)
+				# 'line' may actually be multiple lines.
 
             # Now feed the pre-parsed input to Python.
             self.get_output()
             sys.ps1='> '
-            ret=InteractiveConsole.push(self,line)
+            for single in line.splitlines():
+               ret=InteractiveConsole.push(self, single)
             self.return_output()
             output = self.cache.flush()
             for line in output:

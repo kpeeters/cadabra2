@@ -61,6 +61,7 @@ set(RTESTS
   selecting
   kaluza_klein
   paper
+  programming
   basic
   numerical
   output
