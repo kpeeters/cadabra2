@@ -329,7 +329,7 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 		return Gtk::Window::on_delete_event(event);
 		}
 	else
-		return false;
+		return true;
 	}
 
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
