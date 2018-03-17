@@ -111,7 +111,7 @@ void Server::init()
 	
 	std::string stdOutErr =
 		"import sys\n"
-		"sys.path.append('"+python_path+"')\n"
+		"sys.path.append(r'"+python_path+"')\n"
 
 		"from cadabra2_internal import Server, CatchOutput\n"
 		"server=0\n"
