@@ -229,15 +229,7 @@ namespace cadabra {
 
 			int             last_configure_width;
 			DTree::iterator follow_cell;
-			
-			class Prefs {
-				public:
-					Prefs();
 
-					int font_step;
-			};
-
-			Prefs prefs;
 			bool  is_configured;
 
 

@@ -20,10 +20,6 @@
 
 using namespace cadabra;
 
-NotebookWindow::Prefs::Prefs()
-	: font_step(0)
-	{
-	}
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
@@ -329,6 +325,7 @@ NotebookWindow::~NotebookWindow()
 bool NotebookWindow::on_delete_event(GdkEventAny* event)
 	{
 	if(quit_safeguard(true)) {
+		prefs.save();
 		return Gtk::Window::on_delete_event(event);
 		}
 	else

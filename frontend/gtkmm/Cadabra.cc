@@ -71,7 +71,7 @@ void Cadabra::on_activate()
 	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;	
 	snoop::log("start") << version << snoop::flush;
 	
-	if(!nw->is_registered()) {
+	if(!nw->prefs.is_registered) {
 		Gtk::Dialog md("Welcome to Cadabra!", *nw, Gtk::MESSAGE_WARNING);
 		md.set_transient_for(*nw);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
