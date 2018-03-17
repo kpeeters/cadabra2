@@ -181,7 +181,7 @@ namespace cadabra {
 			void on_run_stop();
 			
 			void on_prefs_font_size(int num);
-
+			void on_prefs_highlight_syntax(int on);
 			void on_help_about();
 			void on_help() const;
 
@@ -229,6 +229,7 @@ namespace cadabra {
 
 			int             last_configure_width;
 			DTree::iterator follow_cell;
+
 
 			bool  is_configured;
 
