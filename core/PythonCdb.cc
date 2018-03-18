@@ -252,6 +252,13 @@ size_t Ex_len(Ex& ex)
 	return ex.number_of_children(it);
 	}
 
+std::string Ex_head(Ex& ex)
+   {
+   if(ex.begin()==ex.end())
+	   throw ArgumentException("Expression is empty, no head.");
+   return *ex.begin()->name;
+   }
+
 bool output_ipython=false;
 bool post_process_enabled=true;
 
@@ -1094,6 +1101,7 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
 		.def("__len__",     &Ex_len)
+		.def("head",        &Ex_head)
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)
