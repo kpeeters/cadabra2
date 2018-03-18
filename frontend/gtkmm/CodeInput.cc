@@ -4,6 +4,7 @@
 #include <gtkmm/messagedialog.h>
 #include <gdk/gdkkeysyms.h>
 #include <iostream>
+#include <regex>
 
 using namespace cadabra;
 
@@ -33,20 +34,20 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 //	init();
 //	}
 
-CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, int font_step)
+CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, int font_step, bool highlight)
 	: buffer(tb), edit(it, tb, s)
 	{
-	init(font_step);
+	init(font_step, highlight);
 	}
 
-CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, int font_step)
+CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, int font_step, bool highlight)
 	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s)
 	{
 	buffer->set_text(txt);
-	init(font_step);
+	init(font_step, highlight);
 	}
 
-void CodeInput::init(int font_step) 
+void CodeInput::init(int font_step, bool highlight) 
 	{
 //	scroll_.set_size_request(-1,200);
 //	scroll_.set_border_width(1);
@@ -86,19 +87,134 @@ void CodeInput::init(int font_step)
 		tabs.set_tab(i, Pango::TAB_LEFT, 4*8*i);
 	edit.set_tabs(tabs);
 
-	edit.signal_button_press_event().connect(sigc::mem_fun(this, 
-																				&CodeInput::handle_button_press), 
-															 false);
-
+	edit.signal_button_press_event().connect(sigc::mem_fun(this, &CodeInput::handle_button_press), false);
 	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true);
 	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(this, &CodeInput::handle_erase), false);
-
+	if (highlight) {
+		switch (edit.datacell->cell_type) {
+		case DataCell::CellType::python:
+			enable_python_highlighting();
+			break;
+		case DataCell::CellType::latex:
+			enable_latex_highlighting();
+			break;
+		default:
+			break;
+		}
+	}
 	edit.set_can_focus(true);
 
 	add(edit);
 //	set_border_width(3);
 	show_all();
+}
+
+void CodeInput::tag_by_regex(const std::string& tag, const std::string& regex_str)
+{
+	auto buf = edit.get_buffer();
+	std::string text = static_cast<std::string>(buf->get_text());
+	std::size_t cur_pos = 0;
+	std::regex r(regex_str);
+	std::smatch sm;
+
+	while (std::regex_search(text, sm, r)) {
+		auto beg_it = buf->begin();
+		beg_it.forward_chars(sm.position() + cur_pos);
+		auto end_it = beg_it;
+		end_it.forward_chars(sm.length());
+		buf->apply_tag_by_name(tag, beg_it, end_it);
+		cur_pos += sm.position() + sm.length();
+		text = sm.suffix();
 	}
+}
+
+void CodeInput::highlight_python()
+{
+	using namespace std::string_literals;
+	static const std::string keywords = "False|None|True|and|as|assert|break|class|continue|def|del|elif|else|except"
+										"|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise"
+										"|return|try|while|with|yield"s;
+
+	static const std::string builtins = "abs|all|any|ascii|bin|bool|bytearray|bytes|callable|chr|classmethod|compile"
+										"|complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format"
+										"|frozenset|getattr|globals|hashattr|hash|help|hex|id|input|int|isinstance"
+										"|issubclass|iter|len|list|locals|map|max|memoryview|min|next|object"
+										"|oct|open|ord|pow|print|property|range|repr|reversed|round|set|setattr"
+										"|slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip|__import__"s;
+	
+	// Remove all tags that are currently set
+	edit.get_buffer()->remove_all_tags(
+		edit.get_buffer()->begin(),
+		edit.get_buffer()->end()
+	);
+
+	// Regex find things to highlight. Stolen with thanks from
+	// https://wiki.python.org/moin/PyQt/Python%20syntax%20highlighting
+	tag_by_regex("keyword", "\\b(" + keywords + ")\\b");
+	tag_by_regex("function", "\\b(" + builtins + ")\\b");
+	tag_by_regex("operator", "=|==|!=|<|<=|>|>=|\\+|-|\\*|\\/|\\/\\/|\\%|\\*\\*|\\+=|-=|\\*=|\\/=|\\%=|\\^|\\||\\&|\\~|>>|<<");
+	tag_by_regex("brace", "(\\{|\\}|\\(|\\)|\\[|\\])");
+	tag_by_regex("string", "\"[^\"\\\\]*(\\\\.[^\"\\\\] * )*\"");
+	tag_by_regex("string", "'[^'\\\\]*(\\\\.[^'\\\\]*)*'");
+	tag_by_regex("comment", "#[^\\n]*");
+	tag_by_regex("number", "\\b[+-]?[0-9]+[lL]?\\b");
+	tag_by_regex("number", "\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b");
+	tag_by_regex("number", "\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b");
+}
+
+void CodeInput::highlight_latex()
+{
+	//Stubbed out for now
+}
+
+void CodeInput::enable_python_highlighting()
+{
+	// Create tags
+	auto keyword_tag = edit.get_buffer()->create_tag("keyword");
+	keyword_tag->property_foreground() = "blue";
+	keyword_tag->property_weight() = PANGO_WEIGHT_BOLD;
+	edit.get_buffer()->create_tag("operator")->property_foreground() = "darkBlue";
+	edit.get_buffer()->create_tag("brace")->property_foreground() = "darkGray";
+	edit.get_buffer()->create_tag("string")->property_foreground() = "gray";
+	edit.get_buffer()->create_tag("comment")->property_foreground() = "darkGreen";
+	edit.get_buffer()->create_tag("number")->property_foreground() = "red";
+	edit.get_buffer()->create_tag("function")->property_foreground() = "magenta";
+
+	// Setup callback
+	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::highlight_python));
+
+	// And perform an initial highlight
+	highlight_python();
+}
+
+void CodeInput::enable_latex_highlighting()
+{
+	// Create tags
+	// ...well I haven't actually got round to this yet
+
+	// Setup callback
+	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::highlight_latex));
+
+	// And perform an initial highlight
+	highlight_latex();
+}
+
+void CodeInput::disable_highlighting()
+{	
+	// Remove all tags that are currently set
+	edit.get_buffer()->remove_all_tags(
+		edit.get_buffer()->begin(),
+		edit.get_buffer()->end()
+	);
+
+	// Clear the tag table
+	for (const std::string& tag : { "keyword", "operator", "brace", "string", "comment", "number", "function" })
+		edit.get_buffer()->get_tag_table()->remove(edit.get_buffer()->get_tag_table()->lookup(tag));
+
+	// Disconnect the signal
+	if (hl_conn.connected())
+		hl_conn.disconnect();
+}
 
 bool CodeInput::exp_input_tv::on_key_press_event(GdkEventKey* event)
 	{

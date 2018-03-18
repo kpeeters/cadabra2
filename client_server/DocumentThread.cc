@@ -10,13 +10,11 @@
 #include <fstream>
 
 #include <boost/config.hpp>
-#include <boost/program_options/detail/config_file.hpp>
-#include <boost/program_options/parsers.hpp>
 
 #include <internal/unistd.h>
 #include <sys/types.h>
 #include <glibmm/miscutils.h>
-
+#include <json/json.h>
 #include "Snoop.hh"
 #include "Config.hh"
 
@@ -31,29 +29,6 @@ DocumentThread::DocumentThread(GUIBase* g)
 	snoop::log.set_sync_immediately(true);
 //	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 
-	std::string configdir = Glib::get_user_config_dir();
-	std::ifstream config(configdir + std::string("/cadabra.conf"));
-	if(config) {
-		// std::cerr << "cadabra-client: reading config file" << std::endl;
-		std::set<std::string> options;
-		options.insert("registered");
-
-		for(boost::program_options::detail::config_file_iterator i(config, options), e ; i != e; ++i) {
-			// FIXME: http://stackoverflow.com/questions/24701547/how-to-parse-boolean-option-in-config-file
-			if(i->string_key=="registered") registered=(i->value[0]=="true");
-			}
-		}
-	else {
-		// First time run; create config file.
-		std::ofstream config(configdir + std::string("/cadabra.conf"));		
-		registered=false;
-		if(config) {
-			// config file written.
-			}
-		else {
-			throw std::logic_error("cadabra-client: Cannot write "+configdir+"/cadabra.conf");
-			}
-		}
 	}
 
 void DocumentThread::set_compute_thread(ComputeThread *cl)
@@ -169,10 +144,46 @@ void DocumentThread::process_action_queue()
 	stack_mutex.unlock();
 	}
 
-bool DocumentThread::is_registered() const
-	{
-	return registered;
+
+DocumentThread::Prefs::Prefs()
+{
+	config_path = std::string(Glib::get_user_config_dir()) + "/cadabra2.conf";
+	std::ifstream f(config_path);
+	if (f)
+		f >> data;
+	else {
+		// Backwards compatibility, check to see if cadabra.conf exists
+		// and if so take the is_registered variable from there
+		std::ifstream old_f(std::string(Glib::get_user_config_dir()) + "/cadabra.conf");
+		if (old_f) {
+			std::string line;
+			while (old_f.good()) {
+				std::getline(old_f, line);
+				if (line.find("registered=true") != std::string::npos) {
+					data["is_registered"] = true;
+					break;
+				}
+			}
+		}
 	}
+	font_step = data.get("font_step", 0).asInt();
+	highlight = data.get("highlight", false).asBool();
+	is_registered = data.get("is_registered", false).asBool();
+}
+
+
+void DocumentThread::Prefs::save()
+{
+	std::ofstream f(config_path);
+	if (f) {
+		data["font_step"] = font_step;
+		data["highlight"] = highlight;
+		data["is_registered"] = is_registered;
+		f << data << '\n';
+	}
+	else
+		std::cerr << "Warning: could not write to config file\n";
+}
 
 void DocumentThread::set_user_details(const std::string& name, const std::string& email, const std::string& affiliation) 
 	{
@@ -181,9 +192,7 @@ void DocumentThread::set_user_details(const std::string& name, const std::string
 	snoop::log("affiliation") << affiliation << snoop::flush;	
 
 	// FIXME: make this a generic function to write all our config data.
-	std::string configdir = Glib::get_user_config_dir();
-	std::ofstream config(configdir + std::string("/cadabra.conf"));
-	config << "registered=true" << std::endl;
+	prefs.is_registered = true;
 	}
 
 bool DocumentThread::help_type_and_topic(const std::string& before, const std::string& after,

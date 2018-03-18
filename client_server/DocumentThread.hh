@@ -88,10 +88,18 @@ namespace cadabra {
 			friend ActionInsertText;
 			friend ActionEraseText;
 	
-			/// Determine if a user has been registered with the Cadabra
-			/// log server. 
-
-			bool is_registered() const;
+			class Prefs {
+			public:
+				Prefs();
+				void save();
+				int font_step;
+				bool highlight;
+				bool is_registered;
+			private:
+				Json::Value data;
+				std::string config_path;
+			};
+			Prefs prefs;
 
 			/// Set user details which will be sent to the Cadabra log
 			/// server.
@@ -128,8 +136,6 @@ namespace cadabra {
          void                                             process_action_queue();
 
 
-			/// Configuration options read from ~/.config/cadabra.conf.
-			bool  registered;
 
 			/// Help system 
 			enum class help_t { algorithm, property, latex, none };
