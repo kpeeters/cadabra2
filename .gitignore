@@ -7,3 +7,4 @@ build
 install
 __pycache__
 .vscode
+.vs
