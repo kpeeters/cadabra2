@@ -95,9 +95,11 @@ namespace cadabra {
 				int font_step;
 				bool highlight;
 				bool is_registered;
+				std::map<std::string, std::string> colour_map;
 			private:
 				Json::Value data;
 				std::string config_path;
+				std::map<std::string, std::string> get_default_colours();
 			};
 			Prefs prefs;
 

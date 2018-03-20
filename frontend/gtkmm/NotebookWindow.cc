@@ -583,10 +583,10 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf,scale,prefs.font_step, prefs.highlight);
+					ci = new CodeInput(it, it->textbuf,scale,prefs);
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer,scale,prefs.font_step, prefs.highlight);
+				else ci = new CodeInput(it, global_buffer,scale,prefs);
 				if(read_only)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -1594,14 +1594,14 @@ void NotebookWindow::on_prefs_highlight_syntax(int on)
 
 			case DataCell::CellType::python:
 				if (on)
-					visualcell.second.inbox->enable_python_highlighting();
+					visualcell.second.inbox->enable_python_highlighting(prefs.colour_map);
 				else
 					visualcell.second.inbox->disable_highlighting();
 				break;
 
 			case DataCell::CellType::latex:
 				if (on)
-					visualcell.second.inbox->enable_latex_highlighting();
+					visualcell.second.inbox->enable_latex_highlighting(prefs.colour_map);
 				else
 					visualcell.second.inbox->disable_highlighting();
 				break;

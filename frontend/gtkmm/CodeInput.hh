@@ -2,6 +2,7 @@
 #pragma once
 
 #include "DataCell.hh"
+#include "DocumentThread.hh"
 #include <gtkmm/box.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/separator.h>
@@ -15,19 +16,20 @@ namespace cadabra {
 
 	class CodeInput : public Gtk::VBox {
 		public:
+			using Prefs = cadabra::DocumentThread::Prefs;
 			/// Initialise with existing TextBuffer and a pointer to the Datacell
 			/// corresponding to this CodeInput widget. CodeInput is not allowed
 			/// to modify this DataCell directly, but can read properties from
 			/// it (e.g. in order to know when to display a 'busy' indicator).
 			/// The scale parameter refers to hdpi scaling.
 
-			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, int font_step, bool highlight);
+			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, const Prefs& prefs);
 
 			/// Initialise with a new TextBuffer (to be created by
 			/// CodeInput), filling it with the content of the given
 			/// string.
 
-			CodeInput(DTree::iterator, const std::string&, double scale, int font_step, bool highlight);
+			CodeInput(DTree::iterator, const std::string&, double scale, const Prefs& prefs);
 			
 			/// The actual text widget used by CodeInput. 
 
@@ -58,8 +60,8 @@ namespace cadabra {
 			
 			void set_font_size(int num);
 
-			void enable_python_highlighting();
-			void enable_latex_highlighting();
+			void enable_python_highlighting(const std::map<std::string, std::string>& colour_map);
+			void enable_latex_highlighting(const std::map<std::string, std::string>& colour_map);
 			void disable_highlighting();
 
 			/// Handle mouse buttons.
@@ -101,7 +103,7 @@ namespace cadabra {
 			exp_input_tv                  edit;
 
 		private:
-			void init(int font_step, bool highlight);
+			void init(const Prefs& prefs);
 
 			void tag_by_regex(const std::string& regex_str, const std::string& tag);
 			void highlight_python();

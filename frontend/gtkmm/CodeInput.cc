@@ -5,6 +5,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <iostream>
 #include <regex>
+#include <map>
 
 using namespace cadabra;
 
@@ -34,26 +35,26 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 //	init();
 //	}
 
-CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, int font_step, bool highlight)
+CodeInput::CodeInput(DTree::iterator it, Glib::RefPtr<Gtk::TextBuffer> tb, double s, const Prefs& prefs)
 	: buffer(tb), edit(it, tb, s)
 	{
-	init(font_step, highlight);
+	init(prefs);
 	}
 
-CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, int font_step, bool highlight)
+CodeInput::CodeInput(DTree::iterator it, const std::string& txt, double s, const Prefs& prefs)
 	: buffer(Gtk::TextBuffer::create()), edit(it, buffer, s)
 	{
 	buffer->set_text(txt);
-	init(font_step, highlight);
+	init(prefs);
 	}
 
-void CodeInput::init(int font_step, bool highlight) 
+void CodeInput::init(const Prefs& prefs)
 	{
 //	scroll_.set_size_request(-1,200);
 //	scroll_.set_border_width(1);
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
 #ifndef __APPLE__
-	set_font_size(font_step);
+	set_font_size(prefs.font_step);
 #endif
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 
@@ -90,13 +91,13 @@ void CodeInput::init(int font_step, bool highlight)
 	edit.signal_button_press_event().connect(sigc::mem_fun(this, &CodeInput::handle_button_press), false);
 	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true);
 	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(this, &CodeInput::handle_erase), false);
-	if (highlight) {
+	if (prefs.highlight) {
 		switch (edit.datacell->cell_type) {
 		case DataCell::CellType::python:
-			enable_python_highlighting();
+			enable_python_highlighting(prefs.colour_map);
 			break;
 		case DataCell::CellType::latex:
-			enable_latex_highlighting();
+			enable_latex_highlighting(prefs.colour_map);
 			break;
 		default:
 			break;
@@ -131,17 +132,33 @@ void CodeInput::tag_by_regex(const std::string& tag, const std::string& regex_st
 void CodeInput::highlight_python()
 {
 	using namespace std::string_literals;
-	static const std::string keywords = "False|None|True|and|as|assert|break|class|continue|def|del|elif|else|except"
-										"|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise"
-										"|return|try|while|with|yield"s;
+	static const std::string keywords =	
+		"False|None|True|and|as|assert|break|class|continue|def|del|elif|else|except|"
+		"finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|"
+		"return|try|while|with|yield";
 
-	static const std::string builtins = "abs|all|any|ascii|bin|bool|bytearray|bytes|callable|chr|classmethod|compile"
-										"|complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format"
-										"|frozenset|getattr|globals|hashattr|hash|help|hex|id|input|int|isinstance"
-										"|issubclass|iter|len|list|locals|map|max|memoryview|min|next|object"
-										"|oct|open|ord|pow|print|property|range|repr|reversed|round|set|setattr"
-										"|slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip|__import__"s;
-	
+	static const std::string builtins = 
+		"abs|all|any|ascii|bin|bool|bytearray|bytes|callable|chr|classmethod|compile|"
+		"complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format|"
+		"frozenset|getattr|globals|hashattr|hash|help|hex|id|input|int|isinstance|"
+		"issubclass|iter|len|list|locals|map|max|memoryview|min|next|object|"
+		"oct|open|ord|pow|print|property|range|repr|reversed|round|set|setattr|"
+		"slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip|__import__"s;
+
+	static const std::string algorithms = 
+		"asym|canonicalise|collect_factors|collect_terms|combine|complete|decompose_product|"
+		"distribute|drop_weight|eliminate_kronecker|eliminate_metric|epsilon_to_delta|"
+		"evaluate|expand|expand_delta|expand_diracbar|expand_power|factor_in|factor_out|"
+		"fierz|integrate_by_parts|join_gamma|keep_weight|lr_tensor|map_sympy|product_rule|"
+		"reduce_delta|rename_dummies|rewrite_indices|simplify|sort_products|sort_sum|"
+		"split_gamma|split_index|substitute|unwrap|vary|young_project_product|young_project_tensor";
+
+	static const std::string properties =
+		"Accent|AntiCommuting|AntiSymmetric|Commuting|CommutingAsProduct|CommutingAsSum|"
+		"Coordinate|DAntiSymmetric|Depends|Derivative|Diagonal|DiracBar|EpsilonTensor|FilledTableau|GammaMatrix|ImplicitIndex|"
+		"Indices|Integer|InverseMetric|KroneckerDelta|LaTeXForm|Metric|NonCommuting|PartialDerivative|RiemannTensor|SatisfiesBianchi|"
+		"SelfAntiCommuting|SelfCommuting|SelfNonCommuting|SortOrder|Spinor|Symbol|Symmetric|Tableau|TableauSymmetry|WeightInherit";
+
 	// Remove all tags that are currently set
 	edit.get_buffer()->remove_all_tags(
 		edit.get_buffer()->begin(),
@@ -152,6 +169,8 @@ void CodeInput::highlight_python()
 	// https://wiki.python.org/moin/PyQt/Python%20syntax%20highlighting
 	tag_by_regex("keyword", "\\b(" + keywords + ")\\b");
 	tag_by_regex("function", "\\b(" + builtins + ")\\b");
+	tag_by_regex("algorithm", "\\b(" + algorithms + ")\\b");
+	tag_by_regex("property", "\\b(" + properties + ")\\b");
 	tag_by_regex("operator", "=|==|!=|<|<=|>|>=|\\+|-|\\*|\\/|\\/\\/|\\%|\\*\\*|\\+=|-=|\\*=|\\/=|\\%=|\\^|\\||\\&|\\~|>>|<<");
 	tag_by_regex("brace", "(\\{|\\}|\\(|\\)|\\[|\\])");
 	tag_by_regex("string", "\"[^\"\\\\]*(\\\\.[^\"\\\\] * )*\"");
@@ -167,32 +186,36 @@ void CodeInput::highlight_latex()
 	//Stubbed out for now
 }
 
-void CodeInput::enable_python_highlighting()
+void CodeInput::enable_python_highlighting(const std::map<std::string, std::string>& colour_map)
 {
 	// Create tags
-	auto keyword_tag = edit.get_buffer()->create_tag("keyword");
-	keyword_tag->property_foreground() = "blue";
-	keyword_tag->property_weight() = PANGO_WEIGHT_BOLD;
-	edit.get_buffer()->create_tag("operator")->property_foreground() = "darkBlue";
-	edit.get_buffer()->create_tag("brace")->property_foreground() = "darkGray";
-	edit.get_buffer()->create_tag("string")->property_foreground() = "gray";
-	edit.get_buffer()->create_tag("comment")->property_foreground() = "darkGreen";
-	edit.get_buffer()->create_tag("number")->property_foreground() = "red";
-	edit.get_buffer()->create_tag("function")->property_foreground() = "magenta";
+	for (auto elem : colour_map) {
+		if (elem.first.find("py_") != std::string::npos) {
+			std::string tag_name = elem.first.substr(3);
+			if (edit.get_buffer()->get_tag_table()->lookup(tag_name)) // Already set
+				edit.get_buffer()->get_tag_table()->lookup(tag_name)->property_foreground() = elem.second;
+			else // Need to create
+				edit.get_buffer()->create_tag(tag_name)->property_foreground() = elem.second;
+		}
+	}
 
 	// Setup callback
+	if (hl_conn.connected())
+		hl_conn.disconnect();
 	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::highlight_python));
 
 	// And perform an initial highlight
 	highlight_python();
 }
 
-void CodeInput::enable_latex_highlighting()
+void CodeInput::enable_latex_highlighting(const std::map<std::string, std::string>& colour_map)
 {
 	// Create tags
 	// ...well I haven't actually got round to this yet
 
 	// Setup callback
+	if (hl_conn.connected())
+		hl_conn.disconnect();
 	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::highlight_latex));
 
 	// And perform an initial highlight
@@ -206,10 +229,6 @@ void CodeInput::disable_highlighting()
 		edit.get_buffer()->begin(),
 		edit.get_buffer()->end()
 	);
-
-	// Clear the tag table
-	for (const std::string& tag : { "keyword", "operator", "brace", "string", "comment", "number", "function" })
-		edit.get_buffer()->get_tag_table()->remove(edit.get_buffer()->get_tag_table()->lookup(tag));
 
 	// Disconnect the signal
 	if (hl_conn.connected())
