@@ -155,6 +155,7 @@ set(LOCAL_SRC_FILES
   algorithms/split_index.cc
   algorithms/substitute.cc
   algorithms/sym.cc
+  algorithms/tab_dimension.cc  
   algorithms/tab_basics.cc
   algorithms/take_match.cc
   algorithms/replace_match.cc

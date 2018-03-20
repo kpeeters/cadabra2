@@ -35,9 +35,9 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	std::string parent=*tree.parent(it)->name;
 	std::string child =*it->name;
 
-	if(parent=="\\partial" && child=="\\sum") return false; // Always handled by the functional argument. Was: true;
+	if(parent=="\\partial" && (child=="\\sum" || child=="\\oplus")) return false; // Always handled by the functional argument. Was: true;
 
-	if(parent=="\\int" && child=="\\sum") return true;
+	if(parent=="\\int" && (child=="\\sum" || child=="\\oplus")) return true;
 
 	if(parent=="\\indexbracket" && child=="\\prod") return false;
 
@@ -60,18 +60,19 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 			}
 		}
 
-	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum" || der)) return  true;
+	if(parent=="\\pow" && (child=="\\prod" || child=="\\sum" || child=="\\oplus" || der)) return  true;
 
 	
 	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow" || parent=="\\wedge") {
-		if(*tree.parent(it)->name!="\\frac" && *it->name=="\\sum") return true;
+		if(*tree.parent(it)->name!="\\frac" && (*it->name=="\\sum" || *it->name=="\\oplus")) return true;
 //		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
 		}
 	else if(it->fl.parent_rel==str_node::p_none) { // function argument
-		if(*it->name=="\\sum" || *it->name=="\\pow") return false;
+		if(*it->name=="\\sum" || *it->name=="\\oplus" || *it->name=="\\pow") return false;
 		}
 	else {
 		if(*it->name=="\\sum")  return true;
+		if(*it->name=="\\oplus")  return true;		
 		if(*it->name=="\\prod") return true;
 		}
 	return false;
@@ -357,7 +358,7 @@ void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, 
 void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it) 
 	{
 	if(*it->name=="\\prod")                print_productlike(str, it, " ");
-	else if(*it->name=="\\sum")            print_sumlike(str, it);
+	else if(*it->name=="\\sum" || *it->name=="\\oplus") print_sumlike(str, it);
 	else if(*it->name=="\\frac")           print_fraclike(str, it);
 	else if(*it->name=="\\comma")          print_commalike(str, it);
 	else if(*it->name=="\\arrow")          print_arrowlike(str, it);
@@ -512,8 +513,12 @@ void DisplayTeX::print_sumlike(std::ostream& str, Ex::iterator it)
 			steps=0;
 			str << "%\n"; // prevent LaTeX overflow.
 			}
-		if(*ch->multiplier>=0 && ch!=tree.begin(it))
-			str << "+"; 
+		if(*ch->multiplier>=0 && ch!=tree.begin(it)) {
+			if(*it->name=="\\sum")
+				str << "+";
+			else
+				str << *it->name << "{}";
+			}
 
 		dispatch(str, ch);
 		++ch;

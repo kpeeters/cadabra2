@@ -123,6 +123,7 @@
 #include "algorithms/split_index.hh"
 #include "algorithms/substitute.hh"
 #include "algorithms/sym.hh"
+#include "algorithms/tab_dimension.hh"
 #include "algorithms/take_match.hh"
 #include "algorithms/replace_match.hh"
 #include "algorithms/rewrite_indices.hh"
@@ -1192,6 +1193,7 @@ PYBIND11_MODULE(cadabra2, m)
 	def_algo_1<sort_product>("sort_product", m);
 	def_algo_1<sort_spinors>("sort_spinors", m);
 	def_algo_1<sort_sum>("sort_sum", m);
+	def_algo_1<tabdimension>("tab_dimension", m);	
 	def_algo_1<young_project_product>("young_project_product", m);
 
 	m.def("complete", &dispatch_ex<complete, Ex>, 

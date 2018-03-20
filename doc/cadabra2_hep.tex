@@ -32,7 +32,7 @@
 \newcommand{\botrulem}{\noindent\hspace{25pt}\rule{435pt}{.1pt}}
 \newenvironment{cdbin}{\fvset{firstnumber=1}\color[named]{Blue}\Verbatim}{\endVerbatim}
 \newenvironment{cdbcont}{\fvset{firstnumber=last}\color[named]{Blue}\Verbatim}{\endVerbatim}
-\newenvironment{cdbout}{\vspace{-1ex}\begin{equation}}{\end{equation}\vspace{-1ex}}
+\newenvironment{cdbout}{\vspace{-1.4ex}\begin{equation}}{\end{equation}\vspace{-1.4ex}}
 \newenvironment{cdbcom}{\begin{hanging}}{\end{hanging}}
 \setlength{\abovedisplayskip}{0pt}
 \setlength{\abovedisplayshortskip}{0pt}
@@ -49,7 +49,7 @@
 %ITP-UU-06/56\\
 hep-th/0701238\\
 25 January 2007\\
-8 August 2017 (updated for v2)
+21 March 2018 (update for v2 syntax)
 \end{flushright}
 \vskip 7ex
 
@@ -491,6 +491,7 @@ internally can also be used directly. There are properties both for
 filled and unfilled tableaux. The following example shows an example
 of the latter, together with the Littlewood-Richardson algorithm and
 the use of the hook formula to compute dimensions of representations,
+\eject
 
 \toprule
 \begin{cdbin}
@@ -499,13 +500,13 @@ ex:=\ftableau{0,0}{1,1} \ftableau{a,a}{b,b}:
 lr_tensor(_);
 \end{cdbin}
 \begin{cdbout}
-\ftableau{{0}{0}{a}{a},{1}{1}{b}{b}} + \ftableau{{0}{0}{a}{a},{1}{1}{b},{b}} + \ftableau{{0}{0}{a}{a},{1}{1},{b}{b}} + \ftableau{{0}{0}{a},{1}{1}{b},{a},{b}} + \ftableau{{0}{0}{a},{1}{1},{a}{b},{b}} + \ftableau{{0}{0},{1}{1},{a}{a},{b}{b}};
+\ftableau{{0}{0}{a}{a},{1}{1}{b}{b}} \oplus \ftableau{{0}{0}{a}{a},{1}{1}{b},{b}} \oplus \ftableau{{0}{0}{a}{a},{1}{1},{b}{b}} \oplus \ftableau{{0}{0}{a},{1}{1}{b},{a},{b}} \oplus \ftableau{{0}{0}{a},{1}{1},{a}{b},{b}} \oplus \ftableau{{0}{0},{1}{1},{a}{a},{b}{b}};
 \end{cdbout}
 \begin{cdbcont}
-@tabdimension!(%);
+tab_dimension(_);
 \end{cdbcont}
 \begin{cdbout}
-70785 + 235950 + 154440 + 101640 + 103950 + 13860;
+70785 \oplus 235950 \oplus 154440 \oplus 101640 \oplus 103950 \oplus 13860;
 \end{cdbout}
 \botrule
 
@@ -1115,7 +1116,10 @@ To conclude, let us discuss one more calculation which combines some
 of the functionality of \Cdb discussed above, and also shows how to
 handle variational problems, especially those involving fermionic
 objects. An example is the variation of a Lagrangian under
-supersymmetry transformations.  Consider the following sample calculation,
+supersymmetry transformations.  Consider the following sample
+calculation,
+\eject
+
 \toprule
 \begin{cdbin}
 def post_process(ex):
@@ -1247,12 +1251,10 @@ computers; the reader is referred to the web
 site~\url{http://cadabra.science} for download and installation
 instructions as well as the help forum.
 
-Given the program's scope and size, and the fact that this is only the
-first public release, there of course remains quite some room for
-improvements and additions. Planned future enhancements include
-e.g.~two-component spinors, automatic canonicalisation using
-Fierz identities, and twistor objects. 
-
+Given the program's scope and size, there of course remains quite some
+room for improvements and additions. An upcoming paper will describe
+the improvements introduced in the 2.x series.
+\vfill\eject
 
 \section*{Acknowledgements}
 
