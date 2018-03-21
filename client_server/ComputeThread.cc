@@ -6,6 +6,7 @@
 #include "DocumentThread.hh"
 #include "GUIBase.hh"
 #include "Actions.hh"
+#include "InstallPrefix.hh"
 #include "popen2.hh"
 #include <sys/types.h>
 #include <glibmm/spawn.h>
@@ -88,7 +89,7 @@ void ComputeThread::try_connect()
 
 	our_connection_hdl = connection->get_handle();
 	wsclient.connect(connection);
-	std::cerr << "cadabra-client: connect done" << std::endl;
+	// std::cerr << "cadabra-client: connect done" << std::endl;
 	}
 
 void ComputeThread::run()
@@ -168,11 +169,11 @@ void ComputeThread::try_spawn_server()
 	// starting server, then use this UUID to get access to the server
 	// port.
 
-	std::cerr << "cadabra-client: spawning server" << std::endl;
+	// std::cerr << "cadabra-client: spawning server" << std::endl;
 
 	std::vector<std::string> argv, envp;
 #if defined(_WIN32) || defined(_WIN64)
-	argv.push_back("cadabra-server.exe");
+	argv.push_back(cadabra::install_prefix()+"\\bin\\cadabra-server.exe");
 #else
 	argv.push_back("cadabra-server");
 #endif
@@ -181,21 +182,27 @@ void ComputeThread::try_spawn_server()
 
 	// See https://bugs.launchpad.net/inkscape/+bug/1662531 for things related to
 	// the 'envp' argument in the call below.
-	Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
-										  Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
-										  sigc::slot<void>(),
-										  &pid,
-										  0,
-										  &server_stdout,
-										  0); // We need to see stderr on the console
+	try {
+		Glib::spawn_async_with_pipes(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
+		                             Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
+		                             sigc::slot<void>(),
+		                             &pid,
+		                             0,
+		                             &server_stdout,
+		                             0); // We need to see stderr on the console
 //										  &server_stderr);
-	
-	char buffer[100];
-	FILE *f = fdopen(server_stdout, "r");
-	if(fscanf(f, "%100s", buffer)!=1) {
-		throw std::logic_error("Failed to read port from server.");
+		
+		char buffer[100];
+		FILE *f = fdopen(server_stdout, "r");
+		if(fscanf(f, "%100s", buffer)!=1) {
+			throw std::logic_error("Failed to read port from server.");
+			}
+		port = atoi(buffer);
 		}
-	port = atoi(buffer);
+	catch(Glib::SpawnError& err) {
+		std::cerr << "Failed to start server " << argv[0] << ": " << err.what() << std::endl;
+		// FIXME: cannot just fall through, the server is not up!
+		}
 	}
 
 void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
@@ -227,7 +234,7 @@ void ComputeThread::on_open(websocketpp::connection_hdl hdl)
 
 void ComputeThread::on_close(websocketpp::connection_hdl hdl) 
 	{
-	std::cerr << "cadabra-client: connection closed" << std::endl;
+	// std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
 	all_cells_nonrunning();	
 	if(gui) {
@@ -488,7 +495,7 @@ void ComputeThread::restart_kernel()
 	// FIXME: set all running flags to false
 	gui->on_kernel_runstatus(false);
 
-	std::cerr << "cadabra-client: restarting kernel" << std::endl;
+	// std::cerr << "cadabra-client: restarting kernel" << std::endl;
 	Json::Value req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="exit";

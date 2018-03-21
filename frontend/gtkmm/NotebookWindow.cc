@@ -3,6 +3,7 @@
 #include "Actions.hh"
 #include "Cadabra.hh"
 #include "Config.hh"
+#include "InstallPrefix.hh"
 #include "NotebookWindow.hh"
 #include "DataCell.hh"
 #include <gtkmm/box.h>
@@ -19,10 +20,6 @@
 
 using namespace cadabra;
 
-NotebookWindow::Prefs::Prefs()
-	: font_step(0)
-	{
-	}
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
@@ -37,12 +34,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	dispatcher.connect(sigc::mem_fun(*this, &NotebookWindow::process_todo_queue));
 
 	// Set the window icon.
-//#ifdef __APPLE__
 	set_icon_name("cadabra2-gtk");
-//#else
-//	std::cerr << CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png" << std::endl;
-//	set_icon_from_file("/usr/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg");
-//#endif
 
 	// Query high-dpi settings. For now only for cinnamon.
 	scale = 1.0;
@@ -333,10 +325,11 @@ NotebookWindow::~NotebookWindow()
 bool NotebookWindow::on_delete_event(GdkEventAny* event)
 	{
 	if(quit_safeguard(true)) {
+		prefs.save();
 		return Gtk::Window::on_delete_event(event);
 		}
 	else
-		return false;
+		return true;
 	}
 
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
@@ -1461,12 +1454,11 @@ void NotebookWindow::on_help() const
 	snoop::log("help") << help_topic << snoop::flush;
 	
 	bool ret=false;
+	std::string pref = cadabra::install_prefix()+"/share/cadabra2/manual/";
 	if(help_type==help_t::algorithm)
-		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/algorithms/"+help_topic+".cnb",
-									 help_topic);
+		ret=cdbapp->open_help(pref+"algorithms/"+help_topic+".cnb", help_topic);
 	if(help_type==help_t::property)
-		ret=cdbapp->open_help(CMAKE_INSTALL_PREFIX"/share/cadabra2/manual/properties/"+help_topic+".cnb",
-									 help_topic);
+		ret=cdbapp->open_help(pref+"properties/"+help_topic+".cnb", help_topic);
 
 	if(!ret) {
 		Gtk::MessageDialog md("No help available", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
@@ -1479,7 +1471,7 @@ void NotebookWindow::on_help() const
 
 void NotebookWindow::on_help_about()
 	{
-	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(CMAKE_INSTALL_PREFIX"/share/cadabra2/images/cadabra2-gtk.png");
+	Glib::RefPtr<Gdk::Pixbuf> logo=Gdk::Pixbuf::create_from_file(cadabra::install_prefix()+"/share/cadabra2/images/cadabra2-gtk.png");
 
 	Gtk::AboutDialog about;
 	about.set_transient_for(*this);
@@ -1498,10 +1490,10 @@ void NotebookWindow::on_help_about()
 	about.set_logo(logo);
 	std::vector<Glib::ustring> special;
 	special.push_back("José M. Martín-García (for the xPerm canonicalisation code)");
-	special.push_back("Dominic Price (for the conversion to pybind)");	
+	special.push_back("Dominic Price (for the conversion to pybind and most of the Windows port)");	
 	special.push_back("James Allen (for writing much of the factoring code)");
 	special.push_back("Software Sustainability Institute");
-	special.push_back("Institute of Advanced Study");	
+	special.push_back("Institute of Advanced Study (for a Christopherson/Knott fellowship)");	
 	about.add_credit_section("Special thanks", special);
 	about.run();
 	}

@@ -27,7 +27,6 @@
    #include <io.h>
    #include <process.h>
    #include <direct.h>
-   #define pid_t int
 #endif
 #include <glibmm/miscutils.h>
 
@@ -958,7 +957,7 @@ Snoop::AppEntry::AppEntry()
 	{
 	}
 
-Snoop::AppEntry::AppEntry(const std::string& uuid_, uint64_t create_millis_, uint64_t receive_millis_, pid_t pid_, 
+Snoop::AppEntry::AppEntry(const std::string& uuid_, uint64_t create_millis_, uint64_t receive_millis_, uint64_t pid_, 
 								  const std::string& ip_address_, const std::string& machine_id_, 
 								  const std::string& app_name_,   const std::string& app_version_,
 								  const std::string& user_id_,
@@ -1024,7 +1023,7 @@ void Snoop::AppEntry::from_json(const Json::Value& entry)
 	id            = entry["id"].asInt();
 	uuid          = entry["uuid"].asString();
 	create_millis = entry["create_millis"].asUInt64();
-	pid           = entry["pid"].asInt();
+	pid           = entry["pid"].asUInt64();
 	ip_address    = entry["ip_address"].asString();
 	machine_id    = entry["machine_id"].asString();
 	app_name      = entry["app_name"].asString();

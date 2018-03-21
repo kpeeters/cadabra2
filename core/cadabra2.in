@@ -19,6 +19,14 @@ import re
 import rlcompleter
 import os
 
+# Make sure we can find the cadabra2 python module; is always
+# installed in ../share/cadabra2/python relative to the location
+# of the 'cadabra2' script.
+install_prefix=os.path.realpath(sys.argv[0])
+install_prefix=install_prefix.replace(os.sep+'bin'+os.sep+'cadabra2', os.sep+'share'+os.sep+'cadabra2'+os.sep+'python')
+print("Module path ", install_prefix)
+sys.path.append(install_prefix)
+
 from cadabra2 import *
 
 class FileCacher:
@@ -224,8 +232,6 @@ if __name__ == '__main__':
             #print('executing '+rs)
             os.system(rs)
         else:
-#           execfile(site.getsitepackages()[0]+'/cadabra2_defaults.py');
-#            execfile(imp.find_module('cadabra2_defaults')[1])
             with open(imp.find_module('cadabra2_defaults')[1]) as f:
                 code = compile(f.read(), "cadabra2_defaults.py", 'exec')
                 exec(code)
@@ -244,5 +250,5 @@ if __name__ == '__main__':
                 # pulling in the right locals/globals
                 #            sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
     else:
-        sh.runsource("print('Cadabra @CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@.@CADABRA_VERSION_PATCH@ (build @CADABRA_VERSION_BUILD@ dated @CADABRA_VERSION_DATE@)'); print ('Copyright (C) @COPYRIGHT_YEARS@  Kasper Peeters <kasper.peeters@phi-sci.com>'); import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close(); print('Using SymPy version '+sympy.__version__);")
+        sh.runsource("import os; import sys; install_prefix=os.path.realpath(sys.argv[0]); install_prefix=install_prefix.replace('/bin/cadabra2','/share/cadabra2/python'); sys.path.append(install_prefix); print('Cadabra @CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@.@CADABRA_VERSION_PATCH@ (build @CADABRA_VERSION_BUILD@ dated @CADABRA_VERSION_DATE@)'); print ('Copyright (C) @COPYRIGHT_YEARS@  Kasper Peeters <kasper.peeters@phi-sci.com>'); import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close(); print('Using SymPy version '+sympy.__version__);")
         sh.interact(banner='Info at http://cadabra.science/\nAvailable under the terms of the GNU General Public License v3\n')

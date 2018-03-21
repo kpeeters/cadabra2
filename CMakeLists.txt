@@ -113,12 +113,19 @@ if(ENABLE_MATHEMATICA)
   find_package(Mathematica COMPONENTS WSTP)
 endif()
 
+# Make sure the build type is non-empty.
+if(WIN32)
+  set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
+  if(${CADABRA_BUILD_TYPE}=="")
+	 set(CADABRA_BUILD_TYPE "Debug")
+  endif()
+endif()
+
 # Include packaging logic.
 include(cmake/packaging.cmake)
 
 # Generate config file with CMake variables.
-configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_BINARY_DIR}/core/Config.hh")
-include_directories(${PROJECT_BINARY_DIR}/core ${PROJECT_SOURCE_DIR}/libs/internal/include)
+configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_SOURCE_DIR}/core/Config.hh")
 
 # Add all sub-projects to build process.
 add_subdirectory(libs/pybind11)
@@ -131,21 +138,22 @@ else()
   set(SHARED_LIB_SUFFIX "so")
   set(PYTHON_MOD_SUFFIX "so")
 endif()
-if("${PYTHON_SITE_PATH}" STREQUAL "")
-  if(WIN32)
-	 execute_process(COMMAND ${PYTHON_EXECUTABLE} -m site --user-site
-		OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-  else()
-    execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
-      OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
-  endif()
-endif()
-message("-- Python site path at ${PYTHON_SITE_PATH}")
+set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/share/cadabra2/python)
+# if("${PYTHON_SITE_PATH}" STREQUAL "")
+#   if(WIN32)
+# 	 execute_process(COMMAND ${PYTHON_EXECUTABLE} -m site --user-site
+# 		OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+#   else()
+#     execute_process(COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
+#       OUTPUT_VARIABLE PYTHON_SITE_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+#   endif()
+# endif()
+message("-- Python packages to be installed at ${PYTHON_SITE_PATH}")
 message("-- Python module suffix \".${PYTHON_MOD_SUFFIX}\"")
 
 add_subdirectory(core)
+add_subdirectory(client_server)
 if(ENABLE_FRONTEND)
-  add_subdirectory(client_server)
   add_subdirectory(frontend)
 endif()
 add_subdirectory(tests)

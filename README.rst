@@ -344,6 +344,10 @@ Building with vcpkg (recommended)
 If you do not already have it, first install Visual Studio Community
 Edition from https://www.visualstudio.com/downloads/ and install
 Anaconda (a 64 bit version!) from https://www.anaconda.com/download/.
+You also need a TeX distribution, for instance MiKTeX from
+http://miktex.org. You need all three before you can start building
+Cadabra.
+
 The instructions below are for building using the Visual Studio 'x64
 Native Tools Command Prompt' (not the GUI). First, clone the vcpkg
 repository::
@@ -355,10 +359,12 @@ Run the bootstrap script to set things up::
     cd vcpkg
     bootstrap-vcpkg.bat
 
-Install all the dependencies with::
+Install all the dependencies with (this is a *very* slow process, be
+warned, it can easily take several hours, but at least it's automatic)::
   
     vcpkg install mpir:x64-windows glibmm:x64-windows   (go have a coffee)
     vcpkg install sqlite3:x64-windows boost:x64-windows (go for dinner)
+    vcpkg install gtkmm:x64-windows                     (run overnight)
     vcpkg integrate install
 
 The last line will spit out a CMAKE toolchain path; write it down, you need that shortly.
@@ -368,15 +374,16 @@ Now clone the cadabra repository and configure as::
     git clone https://github.com/kpeeters/cadabra2
     cd cadabra2/build
     cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
-          -DCMAKE_BUILD_TYPE=Release
-          -DVCPKG_TARGET_TRIPLET=x64-windows -DENABLE_FRONTEND=OFF -DCMAKE_INSTALL_PREFIX=C:\Cadabra
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+			 -DVCPKG_TARGET_TRIPLET=x64-windows
+			 -DCMAKE_INSTALL_PREFIX=C:\Cadabra
           -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
 
 the latter all on one line, in which you replace the
 CMAKE_TOOLCHAIN_PATH with the path produced by the ``vcpkg integrate
-install`` step. Finally build with::
+install`` step. You can ignore warnings (but not errors) about Boost. Finally build with::
 		
-    cmake --build . --config Release --target install
+    cmake --build . --config RelWithDebInfo --target install
 
 This will install in ``C:\Cadabra``. The self-tests can be run by
 doing::
@@ -390,7 +397,11 @@ Finally, the command-line version of Cadabra can now be started with::
 
     python C:\Cadabra\bin\cadabra2
 
-We are still working on making the GUI build and run.
+and you can start the notebook interface with::
+
+  C:\Cadabra\bin\cadabra2-gtk
+
+We are still working on making a nice installer.
 
 
 Building with MSYS2 (not recommended)

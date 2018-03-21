@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
 message("------------------------------------------------------------------------\nConfiguring 'frontend'")
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTKMM3 gtkmm-3.0)
+find_package(GTKMM3)
 subdirs(common)
 if(GTKMM3_FOUND)
    subdirs(gtkmm)
@@ -19,37 +18,14 @@ endif(GTKMM3_FOUND)
 #    message("-- Not building native OSX interface")
 # endif(APPLE)
 
-if(PACKAGING_MODE)
-  message("-- Using system wide package default paths for LaTeX")
-else()
-  execute_process(COMMAND kpsewhich -var-value=TEXMFLOCAL OUTPUT_VARIABLE INSTALL_LATEX_DIR OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif()
-# Get the last path in the LaTeX install dir, if there is more than one separated by a ':'.
-#string(REPLACE ":" ";" INSTALL_LATEX_DIR "${INSTALL_LATEX_DIR}")
-#list(GET INSTALL_LATEX_DIR -1 INSTALL_LATEX_DIR)
-set(INSTALL_LATEX_DIR "${INSTALL_LATEX_DIR}/tex/latex/cadabra2")
+set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/latex")
 message("-- Installing LaTeX style files in ${INSTALL_LATEX_DIR}")
 install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
-install(FILES    
-  ${PROJECT_SOURCE_DIR}/latex/tableaux.sty 
-#  ${PROJECT_SOURCE_DIR}/latex/msabm.sym
-#  ${PROJECT_SOURCE_DIR}/latex/mathstyle.sty 
-#  ${PROJECT_SOURCE_DIR}/latex/mathptmx.sym
-#  ${PROJECT_SOURCE_DIR}/latex/mathpazo.sym 
-#  ${PROJECT_SOURCE_DIR}/latex/flexisym.sty 
-#  ${PROJECT_SOURCE_DIR}/latex/cmbase.sym 
-#  ${PROJECT_SOURCE_DIR}/latex/breqn.sty 
-  DESTINATION ${INSTALL_LATEX_DIR})
 
-install(SCRIPT   ${PROJECT_SOURCE_DIR}/latex/install.cmake)
-
-set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/texengine/")
-install(FILES  ${PROJECT_SOURCE_DIR}/common/preamble.tex DESTINATION ${INSTALL_LATEX_DIR})
-install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
+install(FILES ${PROJECT_SOURCE_DIR}/latex/tableaux.sty  DESTINATION ${INSTALL_LATEX_DIR})
+install(FILES ${PROJECT_SOURCE_DIR}/common/preamble.tex DESTINATION ${INSTALL_LATEX_DIR})
 
 set(INSTALL_MAN_DIR      "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual")
 set(INSTALL_MAN_ALGO_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/manual/algorithms")

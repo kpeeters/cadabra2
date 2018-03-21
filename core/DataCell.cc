@@ -1,4 +1,5 @@
 
+#include "InstallPrefix.hh"
 #include "Config.hh"
 #include "DataCell.hh"
 #include <sstream>
@@ -57,7 +58,7 @@ DataCell::DataCell(const DataCell& other)
 std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::string title)
 	{
 	// Load the pre-amble from file.
-	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/notebook.html";
+	std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.html";
 	std::ifstream preamble(pname);
 	if(!preamble)
 		throw std::logic_error("Cannot open HTML preamble at "+pname);
@@ -463,7 +464,7 @@ DataCell::id_t DataCell::id() const
 std::string cadabra::export_as_LaTeX(const DTree& doc)
 	{
 	// Load the pre-amble from file.
-	std::string pname = CMAKE_INSTALL_PREFIX"/share/cadabra2/notebook.tex";
+	std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.tex";
 	std::ifstream preamble(pname);
 	if(!preamble)
 		throw std::logic_error("Cannot open LaTeX preamble at "+pname);

@@ -5,23 +5,31 @@ message("-- Configuring gtkmm frontend")
 if(CMAKE_COMPILER_IS_GNUCXX)
   add_definitions("-Wall -g -std=c++11 -Wno-unused-but-set-variable -D_WEBSOCKETPP_CPP11_STL_")
 endif()
-add_definitions("-DBOOST_LOG_DYN_LINK")
+if(WIN32)
+else()
+  add_definitions("-DBOOST_LOG_DYN_LINK")
+endif()
 
-# Gtkmm-3.0 dependencies. 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTKMM3 REQUIRED gtkmm-3.0)
-include_directories(${GTKMM3_INCLUDE_DIRS})
-link_directories(${GTKMM3_LIBRARY_DIRS})
-add_definitions(${GTKMM3_CFLAGS_OTHER})
+# Dependencies.
+find_package(Threads)
+find_package(SQLite3)
+find_package(GLIBMM)
+find_package(GTKMM3)
 find_package(Boost 1.45.0 COMPONENTS system)
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
-include_directories("${Boost_INCLUDE_DIRS}")
-#pkg_check_modules(UUID uuid REQUIRED)
-#link_directories(${UUID_LIBRARY_DIRS})
 
-include_directories("." "../../core" "../../client_server" "../../client_server/jsoncpp" "../../client_server/websocketpp")
+include_directories(
+  "."
+  "../../core"
+  "../../libs/internal/include"
+  "../../client_server"
+  "../../client_server/jsoncpp"
+  "../../client_server/websocketpp"
+  ${Boost_INCLUDE_DIRS}
+  ${SQLITE3_INCLUDE_DIR}  
+  )
 
 add_executable(cadabra2-gtk main.cc 
   NotebookWindow.cc 
@@ -30,17 +38,19 @@ add_executable(cadabra2-gtk main.cc
   CodeInput.cc 
   ImageView.cc
   Cadabra.cc
-  ../common/TeXEngine.cc)
+  ../common/TeXEngine.cc
+  ../common/lodepng.cc
+  ../common/exec-stream.cc
+  )
 
-# On Windows we need to link statically in order to avoid having to copy dll's 
-# along with our binary. 
-if(WIN32)
-  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
-else()
-  target_link_libraries(cadabra2-gtk cadabra_client texengine ${Boost_LIBRARIES} ${GTKMM3_LIBRARIES} -lpthread)
+#  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
+# message("***** Gtkmm  libraries: ${GTKMM3_LIBRARIES}")
+# message("***** Glibmm libraries: ${GLIBMM_LIBRARIES}")
+target_link_libraries(cadabra2-gtk cadabra_client ${Boost_LIBRARIES} ${GLIBMM_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
+# Do not pop up a console window
+if(MSVC)
+#  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
 endif()
-
 
 
 # Create installation directories with correct permissions.
@@ -137,3 +147,21 @@ install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2-gtk.desktop       D
 install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
 install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFIX}/share/icons/hicolor)")
 install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+
+# Install shared libraries on Windows. 
+# https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
+if(WIN32)
+  # All things to make GTK apps work and look decent on Windows 10.
+  # We always need the Adwaita theme for fallback icons, but VCPKG
+  # does not yet distribute it, so we include it here (also see
+  # https://github.com/Microsoft/vcpkg/pull/693). The Windows 10 theme
+  # comes from https://github.com/B00merang-Project/Windows-10.
+  # Settings as suggested by Luca Bacci on gtk-devel-list.
+  install(FILES     config/gschemas.compiled DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0/schemas)
+  install(FILES     config/settings.ini      DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/gtk-3.0/)  
+  install(DIRECTORY theme/Windows10          DESTINATION ${CMAKE_INSTALL_PREFIX}/share/themes)
+  install(DIRECTORY icons/Adwaita            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
+  install(DIRECTORY icons/hicolor            DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)  
+  # All shared libraries.
+  install(DIRECTORY "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/" DESTINATION bin FILES_MATCHING PATTERN "*.dll")
+endif()

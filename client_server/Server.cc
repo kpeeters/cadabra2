@@ -1,6 +1,8 @@
 
-
 #include <signal.h>
+#include "Server.hh"
+#include "InstallPrefix.hh"
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -15,7 +17,6 @@
 #include "Config.hh"
 #include "Snoop.hh"
 #include "CdbPython.hh"
-#include "Server.hh"
 #include "SympyCdb.hh"
 
 using websocketpp::lib::placeholders::_1;
@@ -106,9 +107,13 @@ void Server::init()
 
  	// Make the C++ CatchOutput class visible on the Python side.
 
+	auto python_path = cadabra::install_prefix()+"/share/cadabra2/python";
+	
 	std::string stdOutErr =
-		"from cadabra2_internal import Server, CatchOutput\n"
 		"import sys\n"
+		"sys.path.append(r'"+python_path+"')\n"
+
+		"from cadabra2_internal import Server, CatchOutput\n"
 		"server=0\n"
 		"def setup_catch(cO, cE, sE):\n"
 		"   global server\n"

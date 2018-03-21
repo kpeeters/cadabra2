@@ -7,6 +7,7 @@
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
 #endif
+#include <gtkmm/settings.h>
 #include "Snoop.hh"
 #include "Config.hh"
 
@@ -33,6 +34,11 @@ Cadabra::Cadabra(int argc, char **argv)
 							 Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
 	  compute_thread(&cadabra::ComputeThread::run, &compute)
 	{
+	// https://stackoverflow.com/questions/43886686/how-does-one-make-gtk3-look-native-on-windows-7
+	//	https://github.com/shoes/shoes3/wiki/Changing-Gtk-theme-on-Windows	
+#if defined(_WIN32)
+	// Gtk::Settings::get_default()->property_gtk_theme_name()="win32";
+#endif
 	}
 
 Cadabra::~Cadabra()
@@ -65,7 +71,7 @@ void Cadabra::on_activate()
 	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;	
 	snoop::log("start") << version << snoop::flush;
 	
-	if(!nw->is_registered()) {
+	if(!nw->prefs.is_registered) {
 		Gtk::Dialog md("Welcome to Cadabra!", *nw, Gtk::MESSAGE_WARNING);
 		md.set_transient_for(*nw);
 		md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);

@@ -8,7 +8,7 @@ message("-----------------------------------------------------------------------
 #---------------------------------------------------------------------------
 
 set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
-set(PACKAGEDIR  ${CMAKE_BINARY_DIR}/core/packages/cdb)
+set(PACKAGEDIR              ${CMAKE_BINARY_DIR}/core/packages/cdb)
 
 configure_file(
   "${PROJECT_SOURCE_DIR}/cadabra2.in"
@@ -195,9 +195,12 @@ set(PDIRS
 
 include_directories(
   "."
+  "../libs/internal/include"
+  "../libs/whereami"
   "../client_server/jsoncpp"
   ${Boost_INCLUDE_DIRS}
   )
+# FIXME: 2nd line is to find Config.hh
 # FIXME: the client_server bit should go back to client_server eventually
 
 add_definitions(
@@ -243,7 +246,7 @@ target_link_libraries(cadabra2python
   )
 
 # cadabra2cadabra
-add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc ../client_server/jsoncpp/jsoncpp.cpp)
+add_executable(cadabra2cadabra cadabra2cadabra.cc DataCell.cc ../client_server/jsoncpp/jsoncpp.cpp ../libs/whereami/whereami.c InstallPrefix.cc)
 target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES})
 
 # Mathematica WSTP test
@@ -281,10 +284,6 @@ endforeach()
 # 
 # https://stackoverflow.com/questions/21198030/installfiles-cmake-cfg-intdir-abc-win-dll-destination-bin
 if(WIN32)
-  set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
-  if(${CADABRA_BUILD_TYPE}=="")
-	 set(CADABRA_BUILD_TYPE "Debug")
-  endif()
   install(
 	 FILES
     "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cadabra2.${PYTHON_MOD_SUFFIX}"
