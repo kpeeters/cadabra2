@@ -27,9 +27,8 @@ graphical interface are available.
 Installation
 -------------
 
-Cadabra builds on Linux, Mac OS X, OpenBSD and Windows (command line
-only for now). Select your system from the list below for detailed
-instructions.
+Cadabra builds on Linux, Mac OS X, OpenBSD and Windows. Select your
+system from the list below for detailed instructions.
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
@@ -401,7 +400,9 @@ and you can start the notebook interface with::
 
   C:\Cadabra\bin\cadabra2-gtk
 
-We are still working on making a nice installer.
+It should be possible to simply copy the C:\Cadabra folder to a
+different machine and run it there (that is essentially what the
+binary installer does).
 
 
 Building with MSYS2 (not recommended)
