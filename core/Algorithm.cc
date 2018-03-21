@@ -68,7 +68,7 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 		pm->group(boost::core::demangle(typeid(*this).name()).c_str());
 #else
 	if(pm) 
-		pm->group(typeid(*this).name().c_str());
+		pm->group(typeid(*this).name());
 #endif
 	
 	result_t ret=result_t::l_no_action;
@@ -97,8 +97,13 @@ Algorithm::result_t Algorithm::apply_generic(bool deep, bool repeat, unsigned in
 
 Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool repeat, unsigned int depth)
 	{
-	if(pm)
-		pm->group(boost::core::demangle(typeid(*this).name()).c_str());		
+#if BOOST_VERSION > 105500
+	if(pm) 
+		pm->group(boost::core::demangle(typeid(*this).name()).c_str());
+#else
+	if(pm) 
+		pm->group(typeid(*this).name());
+#endif
 
 	result_t ret=result_t::l_no_action;
 
