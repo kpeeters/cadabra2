@@ -63,8 +63,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// Run program with 'GTK_DEBUG=interactive' environment variable and press Ctrl-Shift-D
 	// to inspect.
 	Glib::ustring data = "";
-	data += "textview text { color: black; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
-	data += "GtkTextView { color: black; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "textview text { color: blue; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "GtkTextView { color: blue; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
 	data += "*:focus { background-color: #eee; }\n";
 	data += "*:selected { background-color: #ccc; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
@@ -154,19 +154,6 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add( font_action3, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 4));
 	if(prefs.font_step==4) font_action3->set_active();
 
-	Gtk::RadioAction::Group group_highlight_syntax;
-	actiongroup->add(Gtk::Action::create("MenuHighlightSyntax", "Highlight Syntax"));
-
-	auto highlight_syntax_action0 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOff", "Off");
-	highlight_syntax_action0->property_value() = 0;
-	actiongroup->add(highlight_syntax_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), 0));
-	if (prefs.highlight == false) highlight_syntax_action0->set_active();
-
-	auto highlight_syntax_action1 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOn", "On");
-	highlight_syntax_action1->property_value() = 1;
-	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), 1));
-	if (prefs.highlight == true) highlight_syntax_action1->set_active();
-
 	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
  	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
 							sigc::mem_fun(*this, &NotebookWindow::on_run_cell) );
@@ -233,11 +220,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"         <menuitem action='FontMedium'/>"
 		"         <menuitem action='FontLarge'/>"
 		"         <menuitem action='FontExtraLarge'/>"
-        "      </menu>"
-		"      <menu action='MenuHighlightSyntax'>"
-		"        <menuitem action='HighlightSyntaxOff'/>"
-		"        <menuitem action='HighlightSyntaxOn'/>"
-		"      </menu>"
+      "      </menu>"
 		"    </menu>"
 		"    <menu action='MenuEvaluate'>"
 		"      <menuitem action='EvaluateCell' />"
@@ -341,11 +324,11 @@ NotebookWindow::~NotebookWindow()
 
 bool NotebookWindow::on_delete_event(GdkEventAny* event)
 	{
-	if (quit_safeguard(true)) {
+	if(quit_safeguard(true)) {
 		prefs.save();
 		return Gtk::Window::on_delete_event(event);
-	}
-	else 
+		}
+	else
 		return true;
 	}
 
@@ -583,10 +566,10 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf,scale,prefs.font_step, prefs.highlight);
+					ci = new CodeInput(it, it->textbuf,scale,prefs.font_step);
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer,scale,prefs.font_step, prefs.highlight);
+				else ci = new CodeInput(it, global_buffer,scale,prefs.font_step);
 				if(read_only)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -1301,7 +1284,7 @@ void NotebookWindow::on_file_quit()
 	{
 	// FIXME: this needs to not just close the current window, but also all
 	// other ones.
-	if (quit_safeguard(true))
+	if(quit_safeguard(true)) 
 		hide();
 	}
 
@@ -1579,39 +1562,6 @@ void NotebookWindow::on_prefs_font_size(int num)
 //		queue_draw();
 //		}
 	}
-
-void NotebookWindow::on_prefs_highlight_syntax(int on)
-{
-	if (prefs.highlight == on) return;
-	prefs.highlight = on;
-
-	for (auto& canvas : canvasses) {
-		for (auto& visualcell : canvas->visualcells) {
-			// Need to be careful to only try and do this on latex or
-			// python cells to avoid an exception being raised when
-			// trying to edit an immutable cell type
-			switch (visualcell.first->cell_type) {
-
-			case DataCell::CellType::python:
-				if (on)
-					visualcell.second.inbox->enable_python_highlighting();
-				else
-					visualcell.second.inbox->disable_highlighting();
-				break;
-
-			case DataCell::CellType::latex:
-				if (on)
-					visualcell.second.inbox->enable_latex_highlighting();
-				else
-					visualcell.second.inbox->disable_highlighting();
-				break;
-
-			default:
-				break;
-			}
-		}
-	}
-}
 
 bool NotebookWindow::idle_handler()
 	{

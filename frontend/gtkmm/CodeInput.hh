@@ -21,13 +21,13 @@ namespace cadabra {
 			/// it (e.g. in order to know when to display a 'busy' indicator).
 			/// The scale parameter refers to hdpi scaling.
 
-			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, int font_step, bool highlight);
+			CodeInput(DTree::iterator, Glib::RefPtr<Gtk::TextBuffer>, double scale, int font_step);
 
 			/// Initialise with a new TextBuffer (to be created by
 			/// CodeInput), filling it with the content of the given
 			/// string.
 
-			CodeInput(DTree::iterator, const std::string&, double scale, int font_step, bool highlight);
+			CodeInput(DTree::iterator, const std::string&, double scale, int font_step);
 			
 			/// The actual text widget used by CodeInput. 
 
@@ -58,14 +58,10 @@ namespace cadabra {
 			
 			void set_font_size(int num);
 
-			void enable_python_highlighting();
-			void enable_latex_highlighting();
-			void disable_highlighting();
-
 			/// Handle mouse buttons.
 
 			bool handle_button_press(GdkEventButton *);
-
+			
 			/// Handle an insert event, which can consist of one or more
 			/// inserted characters. This function will just massage that
 			/// data and then feed it through to the notebook window class
@@ -101,13 +97,7 @@ namespace cadabra {
 			exp_input_tv                  edit;
 
 		private:
-			void init(int font_step, bool highlight);
-
-			void tag_by_regex(const std::string& regex_str, const std::string& tag);
-			void highlight_python();
-			void highlight_latex();
-
-			sigc::connection hl_conn; // Connection holding the syntax highlighting signal
+			void init(int font_step);
 	};
 
 }
