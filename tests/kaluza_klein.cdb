@@ -43,11 +43,11 @@ substitute(_, $g^{4 4} -> \phi**{-1} + \phi A_{m} h^{m n} A_{n}$ )
 substitute(_, $g^{m 4} -> - \phi h^{m n} A_{n}$ )
 substitute(_, $g^{4 m} -> - \phi h^{m n} A_{n}$ )
 substitute(_, $g^{m n} -> \phi h^{m n}$ );
-distribute(_)
-product_rule(_)
-distribute(_)
-product_rule(_)
-canonicalise(_)
+converge(todo):
+    distribute(_)
+    product_rule(_)
+    canonicalise(_)
+;
 substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
 collect_factors(_)
 sort_product(_)

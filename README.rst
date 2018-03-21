@@ -32,7 +32,7 @@ system from the list below for detailed instructions.
 
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
-- `Linux (older Fedora/CentOS/Scientific Linux)`_
+- `Linux (CentOS/Scientific Linux)`_
 - `Linux (OpenSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Linux (Solus)`_
@@ -83,10 +83,10 @@ the 'Education' menu.
 Linux (Fedora 24 and later)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Fedora 24 is the first Fedora to have Python 3 by default; for older
-Fedora versions see below. This platform receives less testing so
-please get in touch if you run into any issues. You can use either g++
-or the clang++ compiler.
+Fedora 24 is the first Fedora to have Python 3; you can build Cadabra
+using Python 2 but you are strongly encouraged to upgrade. The Fedora
+platform receives less testing so please get in touch if you run into
+any issues. You can use either g++ or the clang++ compiler.
 
 Install the dependencies with::
 
@@ -115,19 +115,32 @@ This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. You can also find the latter
 when searching for the 'Cadabra' app from the 'Activities' menu.
 
-
-Linux (older Fedora/CentOS/Scientific Linux)
+Linux (CentOS/Scientific Linux)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On Fedora/CentOS/Scientific Linux you can install the dependencies with::
+On CentOS/Scientific Linux we need to activate The Software
+Collections (SCL) and Extra Packages for Enterprise Linux (EPEL) to
+get access to a modern C++ compiler, Python3 and all required build
+tools. So first do::
 
-    sudo yum install epel-release python-devel cmake gcc-c++ \
-             pcre-devel gmp-devel libuuid-devel sqlite-devel \
-             gtkmm30-devel boost-devel \
-             texlive python-matplotlib
+    sudo yum install centos-release-scl epel-release
 
-There is no Python 3 by default on this platform, so the instructions
-here will build Cadabra for use with Python 2. You also need to
+Now install all build dependencies with::
+  
+    sudo yum install devtoolset-7 rh-python36 cmake3 \
+	          gmp-devel libuuid-devel sqlite-devel \
+             gtkmm30-devel boost-devel git \
+	          texlive python-matplotlib
+
+You need to enable the Python3 and C++ compiler which you just
+installed with::
+
+    scl enable rh-python36 bash					
+    scl enable devtoolset-7 bash
+
+(note: do *not* use sudo here!).
+	 
+You also need to
 install sympy by hand::
 
     sudo yum install python-pip
@@ -145,7 +158,7 @@ Building is then done with the standard::
     cd cadabra2
     mkdir build
     cd build
-    cmake .. -DUSE_PYTHON_3=OFF
+    cmake3 .. 
     make
     sudo make install
 

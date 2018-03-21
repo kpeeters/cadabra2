@@ -24,7 +24,10 @@
 #include "Props.hh"
 #include "Cleanup.hh"
 #include <typeinfo>
-#include <boost/core/demangle.hpp>
+#include <boost/version.hpp>
+#if BOOST_VERSION > 105500
+  #include <boost/core/demangle.hpp>
+#endif
 
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
@@ -60,9 +63,14 @@ void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
 
 Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	{
+#if BOOST_VERSION > 105500
 	if(pm) 
 		pm->group(boost::core::demangle(typeid(*this).name()).c_str());
-
+#else
+	if(pm) 
+		pm->group(typeid(*this).name().c_str());
+#endif
+	
 	result_t ret=result_t::l_no_action;
 	Ex::iterator start=tr.begin();
 	while(start!=tr.end()) {
