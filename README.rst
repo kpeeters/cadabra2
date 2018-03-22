@@ -118,7 +118,7 @@ when searching for the 'Cadabra' app from the 'Activities' menu.
 Linux (CentOS/Scientific Linux)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-On CentOS/Scientific Linux we need to activate The Software
+On CentOS/Scientific Linux you need to activate The Software
 Collections (SCL) and Extra Packages for Enterprise Linux (EPEL) to
 get access to a modern C++ compiler, Python3 and all required build
 tools. So first do::
@@ -140,16 +140,12 @@ installed with::
 
 (note: do *not* use sudo here!).
 	 
-You also need to
-install sympy by hand::
+You also need to install sympy by hand::
 
-    sudo yum install python-pip
-    sudo pip install sympy
+    sudo pip3 install sympy
 
-This platform receives less testing so please get in touch if you run
-into any issues. You can use either g++ or the clang++ compiler. You
-need to clone the cadabra2 git repository (if you download the .zip
-file you will not have all data necessary to build). So first do::
+Now need to clone the cadabra2 git repository (if you download the
+.zip file you will not have all data necessary to build)::
 
     git clone https://github.com/kpeeters/cadabra2
 
@@ -165,6 +161,7 @@ Building is then done with the standard::
 This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
+
 
 Linux (OpenSUSE)
 ~~~~~~~~~~~~~~~~
