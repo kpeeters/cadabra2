@@ -13,7 +13,7 @@
 #include <internal/unistd.h>
 #include <map>
 
-//#define DEBUG
+// #define DEBUG
 
 using namespace cadabra;
 
@@ -461,14 +461,18 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Run LaTeX on the .tex file.
 	exec_stream_t latex_proc;
 	std::string result;
-	std::string texinputs=cadabra::install_prefix()+"/share/cadabra2/latex/preamble.tex";
+	std::string texinputs=cadabra::install_prefix()+"/share/cadabra2/latex/";
 	std::string oldtexinputs;
 	char *oti = getenv("TEXINPUTS");
 	if(oti)
 		oldtexinputs=std::string(oti);
 	if(oldtexinputs.size()>0)
 		texinputs=":"+std::string(oldtexinputs);
+	texinputs+=":";
 	setenv("TEXINPUTS", texinputs.c_str(), 1);
+#ifdef DEBUG
+	std::cerr << "TEXINPUTS = " << texinputs << std::endl;
+#endif
 	try {
 //		latex_proc.start("latex", "--interaction nonstopmode "+nf);
 		//std::cerr << "cadabra-client: starting latex" << std::endl;
