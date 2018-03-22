@@ -298,10 +298,10 @@ substitute(_, $V_{a_{2}} -> M_{a_{2} a_{1}} N_{a_{1}}$ );
 \begin{cdbout}
 M_{a_{1} a_{2}} \, N_{a_{2}} \, W_{a_{1}};
 \end{cdbout}
-\botrule
-The input format is a mixture of Cadabra's own LaTeX-like language for
-the description of mathematical expressions, and Python. The
-underscore symbol `\verb|_|' always refers to the last-used expression.
+\botrule As this example shows in some more detail, the input format
+is a mixture of Cadabra's own LaTeX-like language for the description
+of mathematical expressions, and Python. The underscore symbol
+`\verb|_|' always refers to the last-used expression.
 
 A guiding principle in \Cdb is that nothing ever has to be declared
 unless this is absolutely needed. This is in contrast to many other
@@ -363,7 +363,7 @@ example to illustrate all this: \toprule
 \nabla{#}::Derivative.
 \partial{#}::PartialDerivative.
 A_{m n}::AntiSymmetric.
-V_{m}::Depends(\nabla).
+V_{m}::Depends(\nabla{#}).
 
 ex:= \partial_{m p}( A_{q r} V_{n} ) A^{p m};
 \end{cdbin}
@@ -774,6 +774,11 @@ converge(todo):
    product_rule(_)
    canonicalise(_)
 \end{cdbcont}
+\begin{cdbcom}
+The above shows the use of a Cadabra extension \verb|converge|, which
+applies a list of algorithms to an expression until it no longer
+changes. We now rewrite derivatives of inverse metrics,
+\end{cdbcom}
 \begin{cdbcont}
 substitute(_, $\partial_{p}{h^{n m}} h_{q m} -> - \partial_{p}{h_{q m}} h^{n m}$ )
 collect_factors(_)
@@ -896,7 +901,7 @@ collect_factors(_)
 \end{cdbout}
 \botrule 
 The key ingredient here is the \verb|join_gamma| algorithm, which
-takes two adjacent gamma matrices and expands their product in terms of
+takes two adjacent generalised gamma matrices and expands their product in terms of
 a basis of fully antisymmetrised gamma matrices. In the step
 before~\eqref{e:gam1} the Python loop performs such a join three times
 and expands out the resulting product. 
