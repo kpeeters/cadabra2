@@ -14,7 +14,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-// #define DEBUG 1
+#define DEBUG 1
 
 using namespace cadabra;
 
@@ -31,14 +31,15 @@ bool evaluate::can_apply(iterator it)
 Algorithm::result_t evaluate::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
+	
+	// The first pass is top-down.
 
-	// std::cerr << "evaluate::apply at " << *it->name << std::endl;
-
-	// Descend down the tree. The general logic of the routines this
-	// calls is that, instead of looping over all possible index value
-	// sets, we look straight at the substitution rules, and check that
-	// these are required for some index values (this is where symmetry
-	// arguments should come in as well).
+	
+	// The second pass is bottom-up. The general logic of the routines
+	// this calls is that, instead of looping over all possible index
+	// value sets, we look straight at the substitution rules, and
+	// check that these are required for some index values (this is
+	// where symmetry arguments should come in as well).
    //
 	// The logic in Compare.cc helps us by matching component A_{t r}
 	// in the rule to an abstract tensor A_{m n} in the expression, storing
@@ -50,7 +51,10 @@ Algorithm::result_t evaluate::apply(iterator& it)
 #endif			
 			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
-			else if(*(walk->name)=="\\pow")   return walk; // this is a scalar, will get handled elsewhere
+			// FIXME: currently \pow is the only function for which we go straight up without
+			// evaluating. For this reason, its children do not get wrapped in a \components node
+			// in handle_factor. This needs to be extended to other function as well.
+			else if(*(walk->name)=="\\pow")   /*HERE: remove \components from arguments, if anything.*/ return walk; // this is a scalar, will get handled elsewhere
 			else if(is_component(walk)) return walk;
 			else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
 			else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge" || *(walk->name)=="\\frac")  
@@ -91,6 +95,12 @@ Algorithm::result_t evaluate::apply(iterator& it)
 
 bool evaluate::is_component(iterator it) const
 	{
+	// FIXME: The fact that this is called in the main loop above
+	// prevents any evaluation of tensorial expressions which appear
+	// inside components. Such things could in principle appear if, in
+	// an existing components node, a scalar was replaced with an
+	// object built from a tensor.
+	
 	iterator cpy=it;
 	do {
 		if(*it->name=="\\components") {
@@ -150,8 +160,12 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	while(sib!=tr.end(it)) {
 		sibling_iterator nxt=sib;
 		++nxt;
-		handle_factor(sib, full_ind_free);
-		sib=nxt;
+		if(sib->is_zero())
+			sib=tr.erase(sib);
+		else {
+			handle_factor(sib, full_ind_free);
+			sib=nxt;
+			}
 		}
 
 	// Now all terms in the sum (which has its top node at 'it') are
@@ -178,7 +192,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& full_ind_free)
 	{
-#ifdef DEBUG
+#ifdef DEBUG 
 	std::cerr << "handle_factor " << Ex(sib) << std::endl;
 #endif	
 	if(*sib->name=="\\components") return sib;
@@ -212,8 +226,12 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.
 	if(ind_free.size()==0 && ind_dummy.size()==0) {
-		sib=wrap_scalar_in_components_node(sib);
-		// std::cerr << "wrapped scalar as tensor" << std::endl;
+		if(*tr.parent(sib)->name!="\\pow") {
+			sib=wrap_scalar_in_components_node(sib);
+#ifdef DEBUG		
+			std::cerr << "wrapped scalar" << std::endl;
+#endif
+			}
 		return sib;
 		}
 	// If the indices are all Coordinates, this is a scalar, not a tensor.
@@ -228,7 +246,12 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 				}
 			}
 		if(all_coordinates) {
-			sib=wrap_scalar_in_components_node(sib);
+			if(*tr.parent(sib)->name!="\\pow") {
+				sib=wrap_scalar_in_components_node(sib);
+#ifdef DEBUG		
+				std::cerr << "wrapped scalar with component derivatives" << std::endl;
+#endif
+				}
 			return sib;
 			}
 		}
