@@ -260,6 +260,18 @@ std::string Ex_head(Ex& ex)
    return *ex.begin()->name;
    }
 
+pybind11::object Ex_mult(Ex& ex)
+   {
+   if(ex.begin()==ex.end())
+	   throw ArgumentException("Expression is empty, no head.");
+	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+	auto m = *ex.begin()->multiplier;
+//	return mpq(2,3);
+	
+	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
+	return mult;
+   }
+
 bool output_ipython=false;
 bool post_process_enabled=true;
 
@@ -1103,6 +1115,7 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__setitem__", &Ex_setitem)
 		.def("__len__",     &Ex_len)
 		.def("head",        &Ex_head)
+		.def("mult",        &Ex_mult)		
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)
