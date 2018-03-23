@@ -293,6 +293,10 @@ if(WIN32)
     "${PYTHON_SITE_PATH}"
 	 )
 else()
+  # Remove any old cadabra2.so files in the global site-wide path which may have been
+  # left there from a previous install.
+  install(CODE     "execute_process(COMMAND rm -f ${OLD_PYTHON_SITE_PATH}/cadabra2.${PYTHON_MOD_SUFFIX})")
+  install(CODE     "execute_process(COMMAND rm -f ${OLD_PYTHON_SITE_PATH}/cadabra2_defaults.py)")  
   install(
 	 FILES
     "${PROJECT_BINARY_DIR}/cadabra2.${PYTHON_MOD_SUFFIX}"
@@ -337,6 +341,8 @@ install(
 # Packages
 foreach(PACKAGE ${PACKAGES})
   get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
+  # FIXME: remove old packages in the global site path
+  # install(CODE     "execute_process(COMMAND rm -f ${OLD_PYTHON_SITE_PATH}/cdbcadabra2.${PYTHON_MOD_SUFFIX})")
   install(
     FILES 
       "${PACKAGEDIR}/${PACKAGE}.py" 
