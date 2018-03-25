@@ -47,3 +47,31 @@ def test03():
     print("Test 03 passed")
 
 test03()
+
+
+
+\partial{#}::PartialDerivative;        
+ex:=A_{m n} \partial_{r}{ B^{m n} } \partial^{r}{ Q };  
+num=1
+for q in ex["\\partial"]:
+    q.name="k"+str(num)
+    num+=1
+
+ex;
+    
+
+\partial{#}::PartialDerivative;        
+ex:=A_{m n} \partial_{r}{ B^{m n} };
+print(tree(ex))
+num=1
+for prod in ex["\\prod"]:
+    for partial in prod["\\partial"]:
+        partial.name="k"+str(num)
+        arg = ex.flatten(partial.last());
+        ex.append_child(arg, "k"+str(num))
+        num+=1
+
+ex;
+print(tree(ex))
+    
+

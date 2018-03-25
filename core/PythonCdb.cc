@@ -235,6 +235,102 @@ Ex Ex_getitem(Ex &ex, int index)
 		}
 	}
 
+
+/// ExNode is a combination of an Ex::iterator and an interface which
+/// we can use to manipulate the data pointed to by this iterator.
+/// In this way, we can use
+///
+///   for it in ex:
+///      ...
+///
+/// loops and still use 'it' to do things like insertion etc.
+/// which requires knowing the Ex::iterator.
+///
+/// Iterators are much safer than C++, because they carry the
+/// tree modification interface themselves, and can thus compute
+/// their next value for any destructive operation.
+
+class ExNode {
+   public:
+      ExNode(Ex&);
+      
+      Ex&          ex;
+      Ex::iterator it;
+
+      ExNode& iter();
+      ExNode& next();
+      
+      std::string get_name() const;
+      void        set_name(std::string);
+
+      /// Take a child argument out of the node and
+      /// add as child of current.
+      ExNode      unwrap(ExNode child);
+      
+      /// Get a new iterator which always stays
+      /// below the current one.
+      ExNode      getitem_string(std::string tag);
+      
+      
+      std::string tag;
+
+      void update(bool first);
+      Ex::iterator nxtit;
+};
+
+std::string ExNode::get_name() const
+   {
+   return *it->name;
+   }
+
+void ExNode::set_name(std::string nm)
+   {
+   it->name = name_set.insert(nm).first;
+   }
+
+ExNode::ExNode(Ex& ex_)
+   : ex(ex_)
+   {
+   }
+
+ExNode& ExNode::iter()
+   {
+   return *this;
+   }
+
+void ExNode::update(bool first)
+   {
+   if(first) {
+	   nxtit=ex.begin();
+	   first=false;
+	   }
+   else ++nxtit;
+   while(nxtit!=ex.end()) {
+	   if(*nxtit->name==tag)
+		   return;
+	   ++nxtit;
+	   }
+   }
+
+ExNode& ExNode::next()
+   {
+   if(nxtit==ex.end())
+	   throw pybind11::stop_iteration();
+
+   it=nxtit;
+   update(false);
+   return *this;
+   }
+
+ExNode Ex_getitem_string(Ex &ex, std::string tag)
+	{
+	ExNode ret(ex);
+	ret.tag=tag;
+	ret.ex=ex;
+	ret.update(true);
+	return ret;
+	}
+
 void Ex_setitem(Ex &ex, int index, Ex val)
 	{
 	Ex::iterator it=ex.begin();
@@ -1111,16 +1207,26 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("mma_form",    &Ex_to_MMA, pybind11::arg("unicode")=true)    // standardize on this
 		.def("input_form",  &Ex_to_input) 
 		.def("__getitem__", &Ex_getitem)
+		.def("__getitem__", &Ex_getitem_string)		
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
 		.def("__len__",     &Ex_len)
 		.def("head",        &Ex_head)
-		.def("mult",        &Ex_mult)		
+		.def("mult",        &Ex_mult)
+		.def("__iter__", [](std::shared_ptr<Ex> ex) {
+				return pybind11::make_iterator(ex->begin(), ex->end());
+				})
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)
 		.def(pybind11::self + pybind11::self)
 		.def(pybind11::self - pybind11::self);
+
+	pybind11::class_<ExNode>(m, "ExNode")
+		.def("__iter__",        &ExNode::iter)
+		.def("__next__",        &ExNode::next, pybind11::return_value_policy::reference_internal)
+		.def_property("name",   &ExNode::get_name, &ExNode::set_name)
+		;
 	
 	pybind11::enum_<Algorithm::result_t>(m, "result_t")
 		.value("checkpointed", Algorithm::result_t::l_checkpointed)
