@@ -378,7 +378,7 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, const std::s
 	{
 	const T* ret=0;
 	bool inherits=false;
-	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit=props.equal_range(it->name);
+	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit=props.equal_range(it->name_only());
 
 	// First look for properties of the node itself. Go through the loop twice:
 	// once looking for patterns which do not have wildcards, and then looking
@@ -442,8 +442,8 @@ const T* Properties::get_composite(Ex::iterator it1, Ex::iterator it2, int& seri
 	bool found=false;
 
 	bool inherits1=false, inherits2=false;
-	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit1=props.equal_range(it1->name);
-	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit2=props.equal_range(it2->name);
+	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit1=props.equal_range(it1->name_only());
+	std::pair<property_map_t::const_iterator, property_map_t::const_iterator> pit2=props.equal_range(it2->name_only());
 
 	property_map_t::const_iterator walk1=pit1.first;
 	while(walk1!=pit1.second) {
