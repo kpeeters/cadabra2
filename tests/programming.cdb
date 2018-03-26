@@ -51,24 +51,20 @@ test03()
 
 
 \partial{#}::PartialDerivative;        
-ex:=A_{m n} \partial_{r}{ B^{m n} } \partial^{r}{ Q };  
+ex:=A_{m n} \partial_{r}{ B^{m n} } \partial^{r}{ Q } + \partial_{m}{ A^{m} } R;  
 num=1
-for q in ex["\\partial"]:
-    q.name="k"+str(num)
+for partial in ex["\\partial"]:
+    partial.name="k"+str(num)
     num+=1
 
 ex;
     
-
-\partial{#}::PartialDerivative;        
-ex:=A_{m n} \partial_{r}{ B^{m n} };
-print(tree(ex))
-num=1
+# this one still not working?! Does not stop and restart at second product.
+ex:=A_{m n} \partial_{r}{ B^{m n} } \partial^{r}{ Q } + \partial_{m}{ A^{m} } R;  
 for prod in ex["\\prod"]:
+    num=1
     for partial in prod["\\partial"]:
         partial.name="k"+str(num)
-        arg = ex.flatten(partial.last());
-        ex.append_child(arg, "k"+str(num))
         num+=1
 
 ex;

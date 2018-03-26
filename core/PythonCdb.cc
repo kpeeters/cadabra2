@@ -265,7 +265,7 @@ class ExNode {
 
       /// Take a child argument out of the node and
       /// add as child of current.
-      ExNode      unwrap(ExNode child);
+//      ExNode      unwrap(ExNode child);
       
       /// Get a new iterator which always stays
       /// below the current one.
@@ -276,7 +276,21 @@ class ExNode {
 
       void update(bool first);
       Ex::iterator nxtit;
+      Ex::iterator topit, stopit;
 };
+
+ExNode ExNode::getitem_string(std::string tag)
+   {
+   ExNode ret(ex);
+   ret.tag=tag;
+   ret.ex=ex;
+   ret.topit=it;
+   ret.stopit=topit;
+   ret.stopit.skip_children();
+   ++ret.stopit;
+   ret.update(true);
+   return ret;
+   }
 
 std::string ExNode::get_name() const
    {
@@ -300,21 +314,19 @@ ExNode& ExNode::iter()
 
 void ExNode::update(bool first)
    {
-   if(first) {
-	   nxtit=ex.begin();
-	   first=false;
-	   }
-   else ++nxtit;
-   while(nxtit!=ex.end()) {
-	   if(*nxtit->name==tag)
+   if(first) nxtit=topit;
+   else      ++nxtit;
+   while(nxtit!=stopit) {
+	   if(*nxtit->name==tag) {
 		   return;
+		   }
 	   ++nxtit;
 	   }
    }
 
 ExNode& ExNode::next()
    {
-   if(nxtit==ex.end())
+   if(nxtit==stopit)
 	   throw pybind11::stop_iteration();
 
    it=nxtit;
@@ -327,6 +339,8 @@ ExNode Ex_getitem_string(Ex &ex, std::string tag)
 	ExNode ret(ex);
 	ret.tag=tag;
 	ret.ex=ex;
+	ret.topit=ex.begin();
+	ret.stopit=ex.end();
 	ret.update(true);
 	return ret;
 	}
@@ -1225,6 +1239,7 @@ PYBIND11_MODULE(cadabra2, m)
 	pybind11::class_<ExNode>(m, "ExNode")
 		.def("__iter__",        &ExNode::iter)
 		.def("__next__",        &ExNode::next, pybind11::return_value_policy::reference_internal)
+		.def("__getitem__",     &ExNode::getitem_string)
 		.def_property("name",   &ExNode::get_name, &ExNode::set_name)
 		;
 	
