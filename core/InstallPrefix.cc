@@ -1,10 +1,16 @@
 
 #include "InstallPrefix.hh"
-#include "whereami.h"
+#if !defined(__OpenBSD__)
+  #include "whereami.h"
+#endif
 #include <stdexcept>
 
 std::string cadabra::install_prefix()
    {
+#if defined(__OpenBSD__)
+   std::string ret(CMAKE_INSTALL_PREFIX);
+   return ret;
+#else
    std::string ret;
    int dirname_length;
    auto length = wai_getExecutablePath(NULL, 0, &dirname_length);
@@ -20,5 +26,6 @@ std::string cadabra::install_prefix()
 		ret=ret.substr(0, ret.size()-4); // strip '/bin'
 		}
 	return ret;
+#endif
    }
 	
