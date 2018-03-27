@@ -1,4 +1,5 @@
 
+#include "Config.hh"
 #include "InstallPrefix.hh"
 #if !defined(__OpenBSD__)
   #include "whereami.h"
