@@ -275,6 +275,10 @@ class ExNode {
       /// Insert a subtree as previous sibling of the current node.
       void        insert(Ex&    ins);
       void        insert_it(ExNode ins);
+
+      /// Append a subtree as a child.
+      void        append_child(Ex&);
+      void        append_child_it(ExNode ins);
       
       /// Erase the current node, iterator becomes invalid!
       void        erase();
@@ -291,12 +295,17 @@ class ExNode {
 		/// arguments (non-indices).
 		ExNode      args();
       
+		/// Get a new iterator which iterates over all first-level
+		/// children (a sibling iterator, in other words).
+		ExNode      children();
+      
       std::string tag;
 		bool        indices_only, args_only;
 
       void update(bool first);
       Ex::iterator         nxtit;
 		Ex::sibling_iterator sibnxtit;
+      bool                 use_sibling_iterator;
       Ex::iterator         topit, stopit;
 };
 
@@ -318,6 +327,7 @@ ExNode ExNode::indices()
 	ExNode ret(ex);
 	ret.topit=it;
 	ret.indices_only=true;
+	ret.use_sibling_iterator=true;
 	ret.update(true);
 	return ret;
 	}
@@ -327,9 +337,19 @@ ExNode ExNode::args()
 	ExNode ret(ex);
 	ret.topit=it;
 	ret.args_only=true;
+	ret.use_sibling_iterator=true;	
 	ret.update(true);
 	return ret;
 	}
+
+ExNode ExNode::children()
+   {
+	ExNode ret(ex);
+	ret.topit=it;
+	ret.use_sibling_iterator=true;	
+	ret.update(true);
+	return ret;
+   }
 
 void ExNode::replace(Ex& rep)
 	{
@@ -344,6 +364,16 @@ void ExNode::insert(Ex& rep)
 void ExNode::insert_it(ExNode rep)
 	{
 	ex.insert_subtree(it, rep.it);
+	}
+
+void ExNode::append_child(Ex& rep)
+	{
+	ex.append_child(it, rep.begin());
+	}
+
+void ExNode::append_child_it(ExNode rep)
+	{
+	ex.append_child(it, rep.it);
 	}
 
 void ExNode::erase()
@@ -362,7 +392,7 @@ void ExNode::set_name(std::string nm)
    }
 
 ExNode::ExNode(Ex& ex_)
-   : ex(ex_), indices_only(false), args_only(false)
+   : ex(ex_), indices_only(false), args_only(false), use_sibling_iterator(false)
    {
    }
 
@@ -373,10 +403,12 @@ ExNode& ExNode::iter()
 
 void ExNode::update(bool first)
    {
-	if(indices_only || args_only) {
+   if(use_sibling_iterator) {
 		if(first) sibnxtit=ex.begin(topit);
 		else      ++sibnxtit;
 
+		if(!indices_only && !args_only) return; // any sibling is ok.
+		
 		while(sibnxtit!=ex.end(topit)) {
 			if(indices_only) 
 				if(sibnxtit->fl.parent_rel==str_node::p_sub || sibnxtit->fl.parent_rel==str_node::p_super) 
@@ -392,7 +424,7 @@ void ExNode::update(bool first)
 		else      ++nxtit;
 
 		while(nxtit!=stopit) {
-			if(*nxtit->name==tag)
+			if(tag=="" || *nxtit->name==tag)
 				return;
 			++nxtit;
 			}
@@ -401,7 +433,7 @@ void ExNode::update(bool first)
 
 ExNode& ExNode::next()
    {
-   if(indices_only || args_only) {
+   if(use_sibling_iterator) {
 		if(sibnxtit==ex.end(topit))
 			throw pybind11::stop_iteration();			
 		it=sibnxtit;
@@ -1323,10 +1355,13 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__next__",        &ExNode::next, pybind11::return_value_policy::reference_internal)
 		.def("__getitem__",     &ExNode::getitem_string)
 		.def("indices",         &ExNode::indices)
-		.def("args",            &ExNode::args)				
+		.def("args",            &ExNode::args)
+		.def("children",        &ExNode::children)						
 		.def("replace",         &ExNode::replace)
 		.def("insert",          &ExNode::insert)
-		.def("insert",          &ExNode::insert_it)		
+		.def("insert",          &ExNode::insert_it)
+		.def("append_child",    &ExNode::append_child)
+		.def("append_child",    &ExNode::append_child_it)		
 		.def("erase",           &ExNode::erase)				
 		.def_property("name",   &ExNode::get_name, &ExNode::set_name)
 		;
