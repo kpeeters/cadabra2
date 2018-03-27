@@ -235,6 +235,230 @@ Ex Ex_getitem(Ex &ex, int index)
 		}
 	}
 
+
+/// ExNode is a combination of an Ex::iterator and an interface which
+/// we can use to manipulate the data pointed to by this iterator.
+/// In this way, we can use
+///
+///   for it in ex:
+///      ...
+///
+/// loops and still use 'it' to do things like insertion etc.
+/// which requires knowing the Ex::iterator.
+///
+/// Iterators are much safer than in C++, because they carry the
+/// tree modification interface themselves, and can thus compute
+/// their next value for any destructive operation.
+
+class ExNode {
+   public:
+      ExNode(Ex&);
+      
+      Ex&          ex;
+      Ex::iterator it;
+
+      ExNode& iter();
+      ExNode& next();
+      
+      std::string get_name() const;
+      void        set_name(std::string);
+
+      /// Take a child argument out of the node and
+      /// add as child of current.
+//      ExNode      unwrap(ExNode child);
+
+		/// Replace the subtree at the current node with the given
+		/// expression. Updates the iterator so that it points to the
+		/// replacement subtree.
+		void        replace(Ex& rep);
+
+      /// Insert a subtree as previous sibling of the current node.
+      void        insert(Ex&    ins);
+      void        insert_it(ExNode ins);
+
+      /// Append a subtree as a child.
+      void        append_child(Ex&);
+      void        append_child_it(ExNode ins);
+      
+      /// Erase the current node, iterator becomes invalid!
+      void        erase();
+      
+      /// Get a new iterator which always stays
+      /// below the current one.
+      ExNode      getitem_string(std::string tag);
+
+		/// Get a new iterator which only iterates over all first-level
+		/// indices.
+		ExNode      indices();
+      
+		/// Get a new iterator which only iterates over all first-level
+		/// arguments (non-indices).
+		ExNode      args();
+      
+		/// Get a new iterator which iterates over all first-level
+		/// children (a sibling iterator, in other words).
+		ExNode      children();
+      
+      std::string tag;
+		bool        indices_only, args_only;
+
+      void update(bool first);
+      Ex::iterator         nxtit;
+		Ex::sibling_iterator sibnxtit;
+      bool                 use_sibling_iterator;
+      Ex::iterator         topit, stopit;
+};
+
+ExNode ExNode::getitem_string(std::string tag)
+   {
+   ExNode ret(ex);
+   ret.tag=tag;
+   ret.ex=ex;
+   ret.topit=it;
+   ret.stopit=it;
+   ret.stopit.skip_children();
+   ++ret.stopit;
+   ret.update(true);
+   return ret;
+   }
+
+ExNode ExNode::indices()
+	{
+	ExNode ret(ex);
+	ret.topit=it;
+	ret.indices_only=true;
+	ret.use_sibling_iterator=true;
+	ret.update(true);
+	return ret;
+	}
+
+ExNode ExNode::args()
+	{
+	ExNode ret(ex);
+	ret.topit=it;
+	ret.args_only=true;
+	ret.use_sibling_iterator=true;	
+	ret.update(true);
+	return ret;
+	}
+
+ExNode ExNode::children()
+   {
+	ExNode ret(ex);
+	ret.topit=it;
+	ret.use_sibling_iterator=true;	
+	ret.update(true);
+	return ret;
+   }
+
+void ExNode::replace(Ex& rep)
+	{
+	it=ex.replace(it, rep.begin());
+	}
+
+void ExNode::insert(Ex& rep)
+	{
+	ex.insert_subtree(it, rep.begin());
+	}
+
+void ExNode::insert_it(ExNode rep)
+	{
+	ex.insert_subtree(it, rep.it);
+	}
+
+void ExNode::append_child(Ex& rep)
+	{
+	ex.append_child(it, rep.begin());
+	}
+
+void ExNode::append_child_it(ExNode rep)
+	{
+	ex.append_child(it, rep.it);
+	}
+
+void ExNode::erase()
+	{
+	ex.erase(it);
+	}
+
+std::string ExNode::get_name() const
+   {
+   return *it->name;
+   }
+
+void ExNode::set_name(std::string nm)
+   {
+   it->name = name_set.insert(nm).first;
+   }
+
+ExNode::ExNode(Ex& ex_)
+   : ex(ex_), indices_only(false), args_only(false), use_sibling_iterator(false)
+   {
+   }
+
+ExNode& ExNode::iter()
+   {
+   return *this;
+   }
+
+void ExNode::update(bool first)
+   {
+   if(use_sibling_iterator) {
+		if(first) sibnxtit=ex.begin(topit);
+		else      ++sibnxtit;
+
+		if(!indices_only && !args_only) return; // any sibling is ok.
+		
+		while(sibnxtit!=ex.end(topit)) {
+			if(indices_only) 
+				if(sibnxtit->fl.parent_rel==str_node::p_sub || sibnxtit->fl.parent_rel==str_node::p_super) 
+					return;
+			if(args_only)
+				if(sibnxtit->fl.parent_rel==str_node::p_none)
+					return;
+			++sibnxtit;
+			}
+		}
+	else {
+		if(first) nxtit=topit;
+		else      ++nxtit;
+
+		while(nxtit!=stopit) {
+			if(tag=="" || *nxtit->name==tag)
+				return;
+			++nxtit;
+			}
+		}
+   }
+
+ExNode& ExNode::next()
+   {
+   if(use_sibling_iterator) {
+		if(sibnxtit==ex.end(topit))
+			throw pybind11::stop_iteration();			
+		it=sibnxtit;
+		}
+	else {
+		if(nxtit==stopit)
+			throw pybind11::stop_iteration();
+		it=nxtit;		
+		}
+
+   update(false);
+   return *this;
+   }
+
+ExNode Ex_getitem_string(Ex &ex, std::string tag)
+	{
+	ExNode ret(ex);
+	ret.tag=tag;
+	ret.ex=ex;
+	ret.topit=ex.begin();
+	ret.stopit=ex.end();
+	ret.update(true);
+	return ret;
+	}
+
 void Ex_setitem(Ex &ex, int index, Ex val)
 	{
 	Ex::iterator it=ex.begin();
@@ -1111,16 +1335,36 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("mma_form",    &Ex_to_MMA, pybind11::arg("unicode")=true)    // standardize on this
 		.def("input_form",  &Ex_to_input) 
 		.def("__getitem__", &Ex_getitem)
+		.def("__getitem__", &Ex_getitem_string)		
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
 		.def("__len__",     &Ex_len)
 		.def("head",        &Ex_head)
-		.def("mult",        &Ex_mult)		
+		.def("mult",        &Ex_mult)
+		.def("__iter__", [](std::shared_ptr<Ex> ex) {
+				return pybind11::make_iterator(ex->begin(), ex->end());
+				})
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)
 		.def(pybind11::self + pybind11::self)
 		.def(pybind11::self - pybind11::self);
+
+	pybind11::class_<ExNode>(m, "ExNode")
+		.def("__iter__",        &ExNode::iter)
+		.def("__next__",        &ExNode::next, pybind11::return_value_policy::reference_internal)
+		.def("__getitem__",     &ExNode::getitem_string)
+		.def("indices",         &ExNode::indices)
+		.def("args",            &ExNode::args)
+		.def("children",        &ExNode::children)						
+		.def("replace",         &ExNode::replace)
+		.def("insert",          &ExNode::insert)
+		.def("insert",          &ExNode::insert_it)
+		.def("append_child",    &ExNode::append_child)
+		.def("append_child",    &ExNode::append_child_it)		
+		.def("erase",           &ExNode::erase)				
+		.def_property("name",   &ExNode::get_name, &ExNode::set_name)
+		;
 	
 	pybind11::enum_<Algorithm::result_t>(m, "result_t")
 		.value("checkpointed", Algorithm::result_t::l_checkpointed)
