@@ -47,3 +47,72 @@ def test03():
     print("Test 03 passed")
 
 test03()
+
+
+# 
+# \partial{#}::PartialDerivative;        
+# ex:=A_{m n} \partial_{r}{ B^{m n} } \partial^{r}{ Q } + \partial_{m}{ A^{m} } R;  
+# num=1
+# for partial in ex["\\partial"]:
+#     partial.name="k"+str(num)
+#     num+=1
+# 
+# ex;
+#     
+# # this one still not working?! Does not stop and restart at second product.
+# \partial{#}::PartialDerivative;        
+# ex:=A_{m n} \partial_{r}{ B^{m n} } \partial^{r}{ Q } + \partial_{m}{ A^{m} } R;  
+# for prod in ex["\\prod"]:
+#     num=1
+#     for partial in prod["\\partial"]:
+#         partial.name="k"+str(num)
+#         num+=1
+# 
+# ex;
+# print(tree(ex))
+#     
+# 
+# \partial{#}::PartialDerivative;        
+# ex:=A_{m n} \partial_{r}{ 3 B^{m n} } \partial^{r}{ 2 Q } + \partial_{m}{ 5 A^{m} } R;  
+# for prod in ex["\\prod"]:
+#     num=1
+#     for partial in prod["\\partial"]:
+#         for index in partial.indices():
+#             print(index)
+#             num+=1
+# 
+# ex;
+# print(tree(ex))
+#   
+
+def test04():
+    __cdbkernel__ = create_scope()
+    \partial{#}::PartialDerivative;        
+    ex:=A_{m n} \partial_{r}{ B_{p q} } \partial_{s}{ C } ;
+    for prod in ex["\\prod"]:
+        num=1
+        for factor in prod.children():
+            if factor.name=="\\partial":
+                for index in factor.indices():
+                    k = Ex("k"+str(num)+"_{"+index.name+"}")
+                    factor.insert(k)
+                for arg in factor.args():
+                    arg.append_child(Ex("k"+str(num)))
+                    factor.insert(arg)
+                factor.erase()
+            else:
+                factor.append_child(Ex("k"+str(num)))
+            num+=1
+    
+    tst:= A_{m n}(k1) k2_{r} B_{p q}(k2) k3_{s} C(k3) - @(ex);
+    assert(tst==0)
+    print("Test 04 passed")
+
+test04()
+        
+
+# ex:=A + B + C;
+# for sum in ex["\\sum"]:
+#     for term in sum[""]:
+#         print(term.name)
+# 
