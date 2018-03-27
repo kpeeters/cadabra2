@@ -86,11 +86,15 @@ print(tree(ex))
   
 
 \partial{#}::PartialDerivative;        
-ex:=A_{m n} \partial_{r}{ B_{p q} } ;
+ex:=A_{m n} \partial_{r}{ B_{p q} } \partial_{s}{ C } ;
 for prod in ex["\\prod"]:
+    num=1
     for partial in prod["\\partial"]:
         for index in partial.indices():
-            print("index "+index.name)
+            k = Ex("k"+str(num)+"_{"+index.name+"}")
+            partial.insert(k)
         for arg in partial.args():
-            print("arg "+arg.name)
+            partial.insert(arg)
+        partial.erase()
 
+ex;

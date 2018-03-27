@@ -271,7 +271,14 @@ class ExNode {
 		/// expression. Updates the iterator so that it points to the
 		/// replacement subtree.
 		void        replace(Ex& rep);
-		
+
+      /// Insert a subtree as previous sibling of the current node.
+      void        insert(Ex&    ins);
+      void        insert_it(ExNode ins);
+      
+      /// Erase the current node, iterator becomes invalid!
+      void        erase();
+      
       /// Get a new iterator which always stays
       /// below the current one.
       ExNode      getitem_string(std::string tag);
@@ -327,6 +334,21 @@ ExNode ExNode::args()
 void ExNode::replace(Ex& rep)
 	{
 	it=ex.replace(it, rep.begin());
+	}
+
+void ExNode::insert(Ex& rep)
+	{
+	ex.insert_subtree(it, rep.begin());
+	}
+
+void ExNode::insert_it(ExNode rep)
+	{
+	ex.insert_subtree(it, rep.it);
+	}
+
+void ExNode::erase()
+	{
+	ex.erase(it);
 	}
 
 std::string ExNode::get_name() const
@@ -1303,6 +1325,9 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("indices",         &ExNode::indices)
 		.def("args",            &ExNode::args)				
 		.def("replace",         &ExNode::replace)
+		.def("insert",          &ExNode::insert)
+		.def("insert",          &ExNode::insert_it)		
+		.def("erase",           &ExNode::erase)				
 		.def_property("name",   &ExNode::get_name, &ExNode::set_name)
 		;
 	
