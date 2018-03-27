@@ -556,7 +556,7 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
 }
 
 #elif defined(__DragonFly__) || defined(__FreeBSD__) || \
-      defined(__FreeBSD_kernel__) || defined(__NetBSD__)
+	defined(__FreeBSD_kernel__) || defined(__NetBSD__) 
 
 #include <limits.h>
 #include <stdlib.h>
@@ -660,6 +660,78 @@ int WAI_PREFIX(getModulePath)(char* out, int capacity, int* dirname_length)
   return length;
 }
 
+#elif defined(__OpenBSD__)
+	
+// 
+// /* thanks to https://stackoverflow.com/questions/31494901/how-to-get-the-executable-path-on-openbsd */
+// 	
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+// 
+// #include <limits.h>
+// #include <unistd.h>
+// #include <sys/sysctl.h>
+// #include <sys/stat.h>
+// 
+// WAI_FUNCSPEC
+// int WAI_PREFIX(getExecutablePath)(char* epath, int capacity, int* dirname_length)
+//    {
+//    int mib[4];
+//    char **argv;
+//    size_t len;
+//    const char *comm;
+//    int ok = 0;
+//    
+//    mib[0] = CTL_KERN;
+//    mib[1] = KERN_PROC_ARGS;
+//    mib[2] = getpid();
+//    mib[3] = KERN_PROC_ARGV;
+//    
+//    if (sysctl(mib, 4, NULL, &len, NULL, 0) < 0)
+// 	   abort();
+//    
+//    if (!(argv = malloc(len)))
+// 	   abort();
+//    
+//    if (sysctl(mib, 4, argv, &len, NULL, 0) < 0)
+// 	   abort();
+//    
+//    comm = argv[0];
+//    
+//    if (*comm == '/' || *comm == '.') {
+// 	   if (realpath(comm, epath))
+// 		   ok = 1;
+// 	   } else {
+// 	   char *sp;
+//     char *xpath = strdup(getenv("PATH"));
+//     char *path = strtok_r(xpath, ":", &sp);
+//     struct stat st;
+// 
+//     if (!xpath)
+// 	    abort();
+//     
+//     while (path) {
+// 	    snprintf(epath, PATH_MAX, "%s/%s", path, comm);
+// 	    
+// 	    if (!stat(epath, &st) && (st.st_mode & S_IXUSR)) {
+// 		    ok = 1;
+// 		    break;
+// 		    }
+// 	    
+// 	    path = strtok_r(NULL, ":", &sp);
+// 	    }
+//     
+//     free(xpath);
+// 	   }
+//    
+//    if (ok)
+// 	   *strrchr(epath, '/') = '\0';
+//    
+//    free(argv);
+//    return ok ? epath : NULL;
+//    }
+	
 #else
 
 #error unsupported platform

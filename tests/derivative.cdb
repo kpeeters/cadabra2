@@ -652,7 +652,7 @@ def test39():
     A2::DifferentialForm(degree=2).
     A3::DifferentialForm(degree=3).        
     ex:= A3 ^ A1 - A1 ^ A3 + A2 ^ A2 ^ A0;
-    sort_product(_);
+    sort_product(_)
     tst:= - 2 A1 ^ A3 + A0 ^ A2 ^ A2 - @(ex);
     assert(tst==0)
     print("Test 39 passed")        

@@ -308,3 +308,26 @@ def test35():
     
 test35()
 
+def test36():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e}::Indices;
+    x^{a}::Weight(label=field);
+    ex:= x^{a} + A_{b} x^{a} x^{b} + A_{b c} x^{a} x^{b} x^{c};
+    keep_weight(_, $field=2$);
+    tst:= A_{b} x^{a} x^{b} - @(ex);
+    assert(tst==0)
+    print("Test 36 passed")
+
+test36()
+
+def test37():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e}::Indices;
+    x1^{a}::Weight(label=field);
+    ex:= x1^{a} + A_{b} x1^{a} x1^{b} + A_{b c} x1^{a} x1^{b} x1^{c};
+    keep_weight(_, $field=2$);
+    tst:= A_{b} x1^{a} x1^{b} - @(ex);
+    assert(tst==0)
+    print("Test 37 passed")
+
+test37()
