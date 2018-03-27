@@ -60,6 +60,7 @@ for partial in ex["\\partial"]:
 ex;
     
 # this one still not working?! Does not stop and restart at second product.
+\partial{#}::PartialDerivative;        
 ex:=A_{m n} \partial_{r}{ B^{m n} } \partial^{r}{ Q } + \partial_{m}{ A^{m} } R;  
 for prod in ex["\\prod"]:
     num=1
@@ -70,4 +71,26 @@ for prod in ex["\\prod"]:
 ex;
 print(tree(ex))
     
+
+\partial{#}::PartialDerivative;        
+ex:=A_{m n} \partial_{r}{ 3 B^{m n} } \partial^{r}{ 2 Q } + \partial_{m}{ 5 A^{m} } R;  
+for prod in ex["\\prod"]:
+    num=1
+    for partial in prod["\\partial"]:
+        for index in partial.indices():
+            print(index)
+            num+=1
+
+ex;
+print(tree(ex))
+  
+
+\partial{#}::PartialDerivative;        
+ex:=A_{m n} \partial_{r}{ B_{p q} } ;
+for prod in ex["\\prod"]:
+    for partial in prod["\\partial"]:
+        for index in partial.indices():
+            print("index "+index.name)
+        for arg in partial.args():
+            print("arg "+arg.name)
 

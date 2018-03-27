@@ -246,7 +246,7 @@ Ex Ex_getitem(Ex &ex, int index)
 /// loops and still use 'it' to do things like insertion etc.
 /// which requires knowing the Ex::iterator.
 ///
-/// Iterators are much safer than C++, because they carry the
+/// Iterators are much safer than in C++, because they carry the
 /// tree modification interface themselves, and can thus compute
 /// their next value for any destructive operation.
 
@@ -266,17 +266,31 @@ class ExNode {
       /// Take a child argument out of the node and
       /// add as child of current.
 //      ExNode      unwrap(ExNode child);
-      
+
+		/// Replace the subtree at the current node with the given
+		/// expression. Updates the iterator so that it points to the
+		/// replacement subtree.
+		void        replace(Ex& rep);
+		
       /// Get a new iterator which always stays
       /// below the current one.
       ExNode      getitem_string(std::string tag);
+
+		/// Get a new iterator which only iterates over all first-level
+		/// indices.
+		ExNode      indices();
       
+		/// Get a new iterator which only iterates over all first-level
+		/// arguments (non-indices).
+		ExNode      args();
       
       std::string tag;
+		bool        indices_only, args_only;
 
       void update(bool first);
-      Ex::iterator nxtit;
-      Ex::iterator topit, stopit;
+      Ex::iterator         nxtit;
+		Ex::sibling_iterator sibnxtit;
+      Ex::iterator         topit, stopit;
 };
 
 ExNode ExNode::getitem_string(std::string tag)
@@ -285,12 +299,35 @@ ExNode ExNode::getitem_string(std::string tag)
    ret.tag=tag;
    ret.ex=ex;
    ret.topit=it;
-   ret.stopit=topit;
+   ret.stopit=it;
    ret.stopit.skip_children();
    ++ret.stopit;
    ret.update(true);
    return ret;
    }
+
+ExNode ExNode::indices()
+	{
+	ExNode ret(ex);
+	ret.topit=it;
+	ret.indices_only=true;
+	ret.update(true);
+	return ret;
+	}
+
+ExNode ExNode::args()
+	{
+	ExNode ret(ex);
+	ret.topit=it;
+	ret.args_only=true;
+	ret.update(true);
+	return ret;
+	}
+
+void ExNode::replace(Ex& rep)
+	{
+	it=ex.replace(it, rep.begin());
+	}
 
 std::string ExNode::get_name() const
    {
@@ -303,7 +340,7 @@ void ExNode::set_name(std::string nm)
    }
 
 ExNode::ExNode(Ex& ex_)
-   : ex(ex_)
+   : ex(ex_), indices_only(false), args_only(false)
    {
    }
 
@@ -314,22 +351,45 @@ ExNode& ExNode::iter()
 
 void ExNode::update(bool first)
    {
-   if(first) nxtit=topit;
-   else      ++nxtit;
-   while(nxtit!=stopit) {
-	   if(*nxtit->name==tag) {
-		   return;
-		   }
-	   ++nxtit;
-	   }
+	if(indices_only || args_only) {
+		if(first) sibnxtit=ex.begin(topit);
+		else      ++sibnxtit;
+
+		while(sibnxtit!=ex.end(topit)) {
+			if(indices_only) 
+				if(sibnxtit->fl.parent_rel==str_node::p_sub || sibnxtit->fl.parent_rel==str_node::p_super) 
+					return;
+			if(args_only)
+				if(sibnxtit->fl.parent_rel==str_node::p_none)
+					return;
+			++sibnxtit;
+			}
+		}
+	else {
+		if(first) nxtit=topit;
+		else      ++nxtit;
+
+		while(nxtit!=stopit) {
+			if(*nxtit->name==tag)
+				return;
+			++nxtit;
+			}
+		}
    }
 
 ExNode& ExNode::next()
    {
-   if(nxtit==stopit)
-	   throw pybind11::stop_iteration();
+   if(indices_only || args_only) {
+		if(sibnxtit==ex.end(topit))
+			throw pybind11::stop_iteration();			
+		it=sibnxtit;
+		}
+	else {
+		if(nxtit==stopit)
+			throw pybind11::stop_iteration();
+		it=nxtit;		
+		}
 
-   it=nxtit;
    update(false);
    return *this;
    }
@@ -1240,6 +1300,9 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__iter__",        &ExNode::iter)
 		.def("__next__",        &ExNode::next, pybind11::return_value_policy::reference_internal)
 		.def("__getitem__",     &ExNode::getitem_string)
+		.def("indices",         &ExNode::indices)
+		.def("args",            &ExNode::args)				
+		.def("replace",         &ExNode::replace)
 		.def_property("name",   &ExNode::get_name, &ExNode::set_name)
 		;
 	
