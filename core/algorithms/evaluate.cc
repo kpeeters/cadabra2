@@ -14,7 +14,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-#define DEBUG 1
+//#define DEBUG 1
 
 using namespace cadabra;
 
@@ -27,6 +27,12 @@ bool evaluate::can_apply(iterator it)
 	{
 	return tr.is_head(it); // only act at top level, we descend ourselves
 	}
+
+bool evaluate::is_scalar_function(iterator it) const
+   {
+   if(*it->name=="\\pow") return true;
+   return false;
+   }
 
 Algorithm::result_t evaluate::apply(iterator& it)
 	{
@@ -54,7 +60,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 			// FIXME: currently \pow is the only function for which we go straight up without
 			// evaluating. For this reason, its children do not get wrapped in a \components node
 			// in handle_factor. This needs to be extended to other function as well.
-			else if(*(walk->name)=="\\pow")   /*HERE: remove \components from arguments, if anything.*/ return walk; // this is a scalar, will get handled elsewhere
+			else if(is_scalar_function(walk)) { unwrap_scalar_in_components_node(walk); return walk; } // this is a scalar
 			else if(is_component(walk)) return walk;
 			else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
 			else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge" || *(walk->name)=="\\frac")  
@@ -1036,6 +1042,20 @@ Algorithm::iterator evaluate::wrap_scalar_in_components_node(iterator sib)
 	sib=tr.wrap(eq, str_node("\\components"));
 	return sib;
 	}
+
+void evaluate::unwrap_scalar_in_components_node(iterator it)
+   {
+   // To apply to a scalar function: remove all scalars wrapped in
+   // components nodes and make them normal scalars again.
+   auto sib=tr.begin(it);
+   while(sib!=tr.end(it)) {
+	   if(*sib->name=="\\components") {
+		   iterator tmp=sib;
+		   ::cleanup_components(kernel, tr, tmp);
+		   }
+	   ++sib;
+	   }
+   }
 
 Ex::iterator evaluate::handle_prod(iterator it)
 	{

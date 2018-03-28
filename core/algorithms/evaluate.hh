@@ -94,6 +94,7 @@ class evaluate : public Algorithm {
 		bool only_rhs, call_sympy;
 
 		bool is_component(iterator it) const;
+      bool is_scalar_function(iterator it) const;
 
 		iterator handle_components(iterator it);
 		iterator handle_sum(iterator it);
@@ -126,6 +127,9 @@ class evaluate : public Algorithm {
 
 		/// Wrap a non-component scalar node in a 'components' node.
 		iterator wrap_scalar_in_components_node(iterator sib);
+
+		/// Inverse of the above.
+		void     unwrap_scalar_in_components_node(iterator sib);
 
 		/// Determine all the Coordinate dependencies of the object at 'it'. For the
 		/// time being this can only be a 'components' node.

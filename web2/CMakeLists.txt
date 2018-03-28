@@ -127,7 +127,7 @@ add_custom_target(prop_toc ALL
 foreach(ALGO ${ALGOS})
    add_custom_command(OUTPUT  ${MANOUTDIR}/${ALGO}.html
 	                   DEPENDS ${ALGODIR}/${ALGO}.cnb ${DC}
-                      COMMAND cadabra2html
+                      COMMAND ${CMAKE_INSTALL_PREFIX}/bin/cadabra2html
                       ARGS    --segment ${ALGODIR}/${ALGO}.cnb ${MANOUTDIR}/${ALGO}.html
                       COMMENT "Creating ${ALGO} manual page...")
    add_custom_target("${ALGO}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${ALGO}.html)
@@ -137,7 +137,7 @@ endforeach()
 foreach(PROP ${PROPS})
    add_custom_command(OUTPUT  ${MANOUTDIR}/${PROP}.html
 	                   DEPENDS ${PROPDIR}/${PROP}.cnb ${DC}
-                      COMMAND cadabra2html
+                      COMMAND ${CMAKE_INSTALL_PREFIX}/bin/cadabra2html
                       ARGS    --segment ${PROPDIR}/${PROP}.cnb ${MANOUTDIR}/${PROP}.html
                       COMMENT "Creating ${PROP} manual page...")
    add_custom_target("${PROP}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PROP}.html)
@@ -146,7 +146,7 @@ endforeach()
 foreach(TUT ${TUTORIALS})
   add_custom_command(OUTPUT  ${HTMLOUTDIR}/${TUT}.html
                      DEPENDS ${CNBDIR}/${TUT}.cnb ${DC}
-                     COMMAND cadabra2html 
+                     COMMAND ${CMAKE_INSTALL_PREFIX}/bin/cadabra2html 
                      ARGS    --segment ${CNBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.html 
                      COMMENT "Creating ${TUT}.html")
   add_custom_target("${TUT}_html" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html)		
