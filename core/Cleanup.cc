@@ -100,13 +100,20 @@ bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
    auto arg=tr.begin(it);
    auto exp=arg;
    ++exp;
-   if(*arg->name=="1")
+   if(*arg->name=="1") {
+	   if(*arg->multiplier==1) { // 1**anything = 1 
+		   one(it->multiplier);
+		   tr.erase_children(it);
+		   it->name=name_set.insert("1").first;
+		   return true;
+		   }
 	   if(*exp->name=="1" && *exp->multiplier==-1) {
 		   multiply(it->multiplier, multiplier_t(1)/(*arg->multiplier));
 		   tr.erase_children(it);
 		   it->name = name_set.insert("1").first;
 		   return true;
 		   }
+	   }
 
    // Turn \pow{\pow{A}{B}}{C} into \pow{A}{B*C}.
    auto ipow=tr.begin(it);

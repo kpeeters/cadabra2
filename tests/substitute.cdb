@@ -371,3 +371,10 @@ def test116():
     print("Test 116 passed")
 
 test116()
+
+{p,q,r,s,t,u,v,w}::Indices.
+ex := s**2 y^{r} y^{s} A_{r s};
+substitute(ex, $s->1$);
+tst:= y^{r} y^{s} A_{r s} - @(ex);
+assert(tst==0)
+print("Test 117 passed")
