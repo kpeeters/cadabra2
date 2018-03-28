@@ -567,6 +567,67 @@ test28()
 
 print(list(map(lambda x: str(x), server.totals())))
 
+def test29():
+    __cdbkernel__=create_scope()
+    {t,r}::Coordinate;
+    {\mu,\nu,\rho}::Indices(values={r,t});
+    ex:= T_{\mu\nu} = T_{\mu\nu};
+    rl:= { T_{r t} = Q, T_{t t} = N M };
+    evaluate(ex, rl, rhsonly=True);
+    # Double evaluation should not introduce additional \components wrappers
+    # around scalars.
+    evaluate(ex, rl, rhsonly=True);
+    ex2=ex[1];
+    tst:= \components_{\mu\nu}{\comma{ \comma{r}{t} = Q }{ \comma{t}{t} = N M } } - @(ex2);
+    collect_components(tst)        
+    assert(tst==0)
+    print("Test 29 passed")
+
+test29()
+
+def test30():
+    __cdbkernel__=create_scope()
+{r,t}::Coordinate;
+A::Depends(t);        
+\partial{#}::PartialDerivative;
+ex:=\partial_{t}{A};
+evaluate(ex);
+tst:=\partial_{t}{A} - @(ex);
+assert(tst==0)
+print("Test 30a passed")
+ex2:= \partial_{t}{ A**2 };
+evaluate(ex2);
+tst2:= 2A\partial_{t}{A} - @(ex2);
+assert(tst2==0)
+print("Test 30b passed")
+
+test30()
+
+def test31():
+    __cdbkernel__=create_scope()
+    {r,t}::Coordinate;
+    A::Depends(t);
+    \partial{#}::PartialDerivative;
+    {\mu,\nu,\rho}::Indices(values={r,t});
+    ex:= T_{\mu\nu} = T_{\mu\nu};
+    rl:= { T_{r t} = Q, T_{t t} = M };
+    glrl:= { g_{r r} = N, g_{t t} = B };
+    Rrl:= R = \partial_{t}{A};
+    evaluate(ex, rl, rhsonly=True);
+    ex2:= T_{\mu\nu} - g_{\mu\nu} R;
+    substitute(ex2, ex);
+    substitute(ex2, Rrl);
+    evaluate(ex2, glrl);
+    tst:= \components_{\mu\nu}{\comma{ \comma{r}{t} = Q }{ \comma{t}{t} = -B \partial_{t}{A} + M }{ \comma{r}{r} = - N \partial_{t}{A} }} - @(ex2);
+    assert(tst!=0)
+    collect_components(tst)
+    assert(tst==0)
+    print("Test 31 passed")
+
+test31()
+
+        
+
 # def test20():
 # __cdbkernel__=create_scope()
 # {a,b,c,d}::Indices(values={0,1,2}, position=fixed);
