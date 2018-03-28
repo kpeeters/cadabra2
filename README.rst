@@ -386,7 +386,7 @@ Now clone the cadabra repository and configure as::
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
 			 -DVCPKG_TARGET_TRIPLET=x64-windows
 			 -DCMAKE_INSTALL_PREFIX=C:\Cadabra
-          -DCMAKE_VERBOSE_OUTPUT=ON -G "Visual Studio 15 2017 Win64" ..
+          -G "Visual Studio 15 2017 Win64" ..
 
 the latter all on one line, in which you replace the
 CMAKE_TOOLCHAIN_PATH with the path produced by the ``vcpkg integrate
