@@ -21,7 +21,7 @@ AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
-LicenseFile=Cadabra\LICENSE.txt
+LicenseFile=..\LICENSE.txt
 ; File showing the prerequesties etc...
 InfoBeforeFile=pre_install.rtf 
 ; File shown after installation, linking to docs etc...

@@ -60,8 +60,11 @@ On Debian/Ubuntu you can install all that is needed with::
           python3-matplotlib python3-mpmath python3-pip python3-setuptools
     sudo pip3 install sympy
 
+(on Ubuntu 14.04 you need to replace `cmake` with `cmake3` and also
+install g++-4.9; get in touch if you don't know how to do this).
+	 
 This is the development platform and issues are typically first fixed
-here. You can use either g++ or the clang++ compiler. You need to
+here. You can use either g++ or the clang++ compiler to build. You need to
 clone the cadabra2 git repository (if you download the .zip file you
 will not have all data necessary to build). So first do::
 
@@ -394,7 +397,7 @@ install`` step. You can ignore warnings (but not errors) about Boost. Finally bu
 		
     cmake --build . --config RelWithDebInfo --target install
 
-This will install in ``C:\Cadabra``. The self-tests can be run by
+This will build and then install in ``C:\Cadabra``. The self-tests can be run by
 doing::
 
     ctest
