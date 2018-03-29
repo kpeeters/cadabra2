@@ -33,7 +33,7 @@ system from the list below for detailed instructions.
 - `Linux (Debian/Ubuntu/Mint)`_
 - `Linux (Fedora 24 and later)`_
 - `Linux (CentOS/Scientific Linux)`_
-- `Linux (OpenSUSE)`_
+- `Linux (openSUSE)`_
 - `Linux (Arch/Manjaro)`_
 - `Linux (Solus)`_
 - `OpenBSD`_
@@ -170,7 +170,7 @@ notebook interface ``cadabra2-gtk``. You can also find the latter in
 the 'Education' menu.
 
 
-Linux (OpenSUSE)
+Linux (openSUSE)
 ~~~~~~~~~~~~~~~~
 
 For OpenSUSE (tested on 'Leap', probably also fine with minor changes

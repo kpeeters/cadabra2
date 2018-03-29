@@ -383,6 +383,9 @@ div.packages {
 	 margin-left: 50px;
 }
 div.distrotype {
+	 border-top: 1px solid #bbb;
+	 margin-top: 10px;
+	 padding-top: 15px;
 	 margin-bottom: 40px;
 }
 div.distrotype img {
