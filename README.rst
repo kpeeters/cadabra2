@@ -124,10 +124,14 @@ Linux (CentOS/Scientific Linux)
 On CentOS/Scientific Linux you need to activate The Software
 Collections (SCL) and Extra Packages for Enterprise Linux (EPEL) to
 get access to a modern C++ compiler, Python3 and all required build
-tools. So first do::
+tools. On CentOS first do::
 
     sudo yum install centos-release-scl epel-release
 
+On Scientific Linux the equivalent is::
+
+    sudo yum install yum-conf-softwarecollections epel-release
+	 
 Now install all build dependencies with::
   
     sudo yum install devtoolset-7 rh-python36 cmake3 \
