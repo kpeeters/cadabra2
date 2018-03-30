@@ -328,10 +328,13 @@ After that you can build with the standard::
     cd cadabra2
     mkdir build
     cd build
-    cmake ..
+    cmake -DENABLE_MATHEMATICA=OFF ..
     make
     sudo make install
 
+(*note* the `-DENABLE_MATHEMATICA=OFF` in the `cmake` line above; the
+Mathematica scalar backend does not yet work on OS X).
+  
 This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. 
 
