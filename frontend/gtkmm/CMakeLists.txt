@@ -126,7 +126,7 @@ install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png DES
 #     there anyway.
 #   - gtk-update-icon-cache is broken and only works half of the time.
 
-if(APPLE)
+if(APPLE OR ${CMAKE_SYSTEM_NAME} MATCHES ".*BSD|DragonFly")
   set(ICON_PREFIX "${CMAKE_INSTALL_PREFIX}")
 else()
   set(ICON_PREFIX "/usr")
