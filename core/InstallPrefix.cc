@@ -5,10 +5,11 @@
   #include "whereami.h"
 #endif
 #include <stdexcept>
+#include <stdlib.h>
 
 std::string cadabra::install_prefix()
    {
-#if defined(__OpenBSD__)
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
    std::string ret(CMAKE_INSTALL_PREFIX);
    return ret;
 #else
