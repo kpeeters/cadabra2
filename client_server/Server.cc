@@ -466,7 +466,7 @@ void Server::run()
 		
 		wserver.init_asio();
 		wserver.set_reuse_addr(true);
-		wserver.listen(0);
+		wserver.listen(websocketpp::lib::asio::ip::tcp::v4(), 0);
 		wserver.start_accept();
 		websocketpp::lib::asio::error_code ec;
 		auto p = wserver.get_local_endpoint(ec);

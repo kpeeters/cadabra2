@@ -104,12 +104,12 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::string res;
 
 	try {
-		res = std::regex_replace(str, begin_dmath, R"(\\(\\displaystyle)");
+		res = std::regex_replace(str, begin_dmath, R"(\(\displaystyle)");
 		replace_all(res, "\\discretionary{}{}{}", "");
 		replace_all(res, "\\discretionary{}{}{}", "");
 //		replace_all(res, "\\left", "");
 //		replace_all(res, "\\right", "");
-		res = std::regex_replace(res, end_dmath, R"(\\))");
+		res = std::regex_replace(res, end_dmath, R"(\))");
 		res = std::regex_replace(res, tilde, " ");
 		res = std::regex_replace(res, less, "&lt;");
 		res = std::regex_replace(res, tilde, "&gt;");
@@ -131,9 +131,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, ldots, "...");
 		res = std::regex_replace(res, dquote, "\"$1\"");
 		res = std::regex_replace(res, squote,  "'$1'");
-		res = std::regex_replace(res, linebreak, "\\\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
-		res = std::regex_replace(res, tableau, "\\\\)<div class=\"young_box\"></div>\\\\(\\\\displaystyle");
-		res = std::regex_replace(res, ftableau, "\\\\)<div class=\"young_box filled\"></div>\\\\(\\\\displaystyle");		
+		res = std::regex_replace(res, linebreak, "\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
+		res = std::regex_replace(res, tableau, "\\)<div class=\"young_box\"></div>\\(\\displaystyle");
+		res = std::regex_replace(res, ftableau, "\\)<div class=\"young_box filled\"></div>\\(\\displaystyle");		
 		}
 	catch(std::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;

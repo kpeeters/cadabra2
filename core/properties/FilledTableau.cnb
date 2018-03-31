@@ -28,10 +28,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\ftab((a, b, c) (d, e) f)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\ftableau((a, b, c) (d, e) f)\\end{dmath*}"
 				}
 			],
-			"source" : "\\ftab{#}::FilledTableau.\nex:=\\ftab{a,b,c}{d,e}{f};"
+			"source" : "\\ftableau{#}::FilledTableau.\nex:=\\ftableau{a,b,c}{d,e}{f};"
 		},
 		
 		{
