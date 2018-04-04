@@ -76,6 +76,7 @@ std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::s
 std::string cadabra::latex_to_html(const std::string& str)
 	{
 	std::regex section(R"(\\section\*\{([^\}]*)\})");
+	std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 	std::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
 	std::regex verb(R"(\\verb\|([^\|]*)\|)");
 	std::regex url(R"(\\url\{([^\}]*)\})");
@@ -105,10 +106,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 
 	try {
 		res = std::regex_replace(str, begin_dmath, R"(\(\displaystyle)");
-		replace_all(res, "\\discretionary{}{}{}", "");
-		replace_all(res, "\\discretionary{}{}{}", "");
-//		replace_all(res, "\\left", "");
-//		replace_all(res, "\\right", "");
+		res = std::regex_replace(res, discretionary, " ");
 		res = std::regex_replace(res, end_dmath, R"(\))");
 		res = std::regex_replace(res, tilde, " ");
 		res = std::regex_replace(res, less, "&lt;");
@@ -527,18 +525,20 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 	if(it->textbuf.size()>0) {
 		if(it->cell_type==DataCell::CellType::image_png)
 			str << it->textbuf;
-		else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
+		else if(it->cell_type!=DataCell::CellType::document
+		        && it->cell_type!=DataCell::CellType::latex
+		        && it->cell_type!=DataCell::CellType::input_form) {
 			std::string lr(it->textbuf);
 			// Make sure to sync these with the same in TeXEngine.cc !!!
-			replace_all(lr, "\\left(", "\\brwrap{(}{");
-			replace_all(lr, "\\right)", "}{)}");
-			replace_all(lr, "\\left[", "\\brwrap{[}{");
-			replace_all(lr, "\\right]", "}{]}");
-			replace_all(lr, "\\left\\{", "\\brwrap{\\{}{");
-			replace_all(lr, "\\right\\}", "}{\\}}");
-			replace_all(lr, "\\right.", "}{.}");
-			replace_all(lr, "\\begin{dmath*}", "\\begin{adjustwidth}{1em}{0cm}$");
-			replace_all(lr, "\\end{dmath*}", "$\\\\\\end{adjustwidth}");
+			lr=std::regex_replace(lr, std::regex(R"(\\left\()"),            "\\brwrap{(}{");
+			lr=std::regex_replace(lr, std::regex(R"(\\right\))"),           "}{)}");
+			lr=std::regex_replace(lr, std::regex(R"(\\left\[)"),            "\\brwrap{[}{");
+			lr=std::regex_replace(lr, std::regex(R"(\\right\])"),           "}{]}");
+			lr=std::regex_replace(lr, std::regex(R"(\\left\\\{)"),            "\\brwrap{\\{}{");
+			lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
+			lr=std::regex_replace(lr, std::regex(R"(\\right.)"),            "}{.}");
+			lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
+			lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
 			str << lr << "\n";
 			}
 		}
@@ -612,14 +612,14 @@ void cadabra::python_recurse(const DTree& doc, DTree::iterator it, std::ostrings
 		}
 	}
 
-std::string cadabra::replace_all(std::string str, const std::string& old, const std::string& new_s)
-   {
-   if(!old.empty()){
-	   size_t pos = str.find(old);
-	   while ((pos = str.find(old, pos)) != std::string::npos) {
-		   str=str.replace(pos, old.length(), new_s);
-		   pos += new_s.length();
-		   }
-	   }
-   return str;
-   }
+// std::string cadabra::replace_all(std::string str, const std::string& old, const std::string& new_s)
+//    {
+//    if(!old.empty()){
+// 	   size_t pos = 0;
+// 	   while ((pos = str.find(old, pos)) != std::string::npos) {
+// 		   str=str.replace(pos, old.length(), new_s);
+// 		   pos += new_s.length();
+// 		   }
+// 	   }
+//    return str;
+//    }

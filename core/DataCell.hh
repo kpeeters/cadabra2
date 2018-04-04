@@ -141,5 +141,5 @@ namespace cadabra {
 	void        python_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str);
 
 	/// Replace all occurrences of a substring in the original string.
-	std::string replace_all(std::string, const std::string& old, const std::string& nw);
+	// std::string replace_all(std::string, const std::string& old, const std::string& nw);
 }

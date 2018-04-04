@@ -26,6 +26,7 @@
 #include <boost/algorithm/string/replace.hpp>
 #include <memory>
 #include <sstream>
+#include <regex>
 
 // Properties.
 
@@ -1054,7 +1055,8 @@ std::string Property<LaTeXForm>::latex_() const
 	str << "\\text{Attached property ";
 	prop->latex(str);
 	std::string bare=Ex_str_(for_obj);
-	replace_all(bare, "\\", "$\\backslash{}$}");
+	bare = std::regex_replace(bare, std::regex(R"(\\)"), "$\\backslash{}$}");
+	bare = std::regex_replace(bare, std::regex(R"(#)"), "\\#");
 	str << " to {\\tt "+bare+"}.";
 	return str.str();
 	}
@@ -1701,14 +1703,3 @@ PYBIND11_MODULE(cadabra2, m)
 	pybind11::register_exception<NotYetImplemented>(m, "NotYetImplemented");
 	}
 
-std::string replace_all(std::string str, const std::string& old, const std::string& new_s)
-   {
-   if(!old.empty()){
-	   size_t pos = str.find(old);
-	   while ((pos = str.find(old, pos)) != std::string::npos) {
-		   str=str.replace(pos, old.length(), new_s);
-		   pos += new_s.length();
-		   }
-	   }
-    return str;
-   }

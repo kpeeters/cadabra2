@@ -251,4 +251,4 @@ cadabra::Kernel *get_kernel_from_scope();
 
 void call_post_process(cadabra::Kernel&, std::shared_ptr<cadabra::Ex> ex);
 
-std::string replace_all(std::string, const std::string& old, const std::string& nw);
+
