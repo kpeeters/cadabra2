@@ -194,12 +194,6 @@ Ex rhs(std::shared_ptr<Ex> ex)
 	return Ex(sib);
 	}
 
-ExNode Ex_children(std::shared_ptr<Ex> ex)
-   {
-   ExNode ret(*ex);
-   ret.it=ex.begin();WRONG
-   }
-
 Ex Ex_getslice(std::shared_ptr<Ex> ex, pybind11::slice slice)
 	{
 	Ex result;
@@ -460,6 +454,14 @@ ExNode& ExNode::next()
 
    update(false);
    return *this;
+   }
+
+bool Ex_matches(std::shared_ptr<Ex> ex, ExNode& other)
+   {
+   Ex_comparator comp(get_kernel_from_scope()->properties);
+   auto ret=comp.equal_subtree(ex->begin(), other.it);
+   if(ret==Ex_comparator::match_t::no_match_less || ret==Ex_comparator::match_t::no_match_greater) return false;
+   return true;
    }
 
 ExNode Ex_getitem_string(Ex &ex, std::string tag)
@@ -1358,7 +1360,7 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__iter__", [](std::shared_ptr<Ex> ex) {
 				return pybind11::make_iterator(ex->begin(), ex->end());
 				})
-		.def("children",    &Ex_children)
+		.def("matches",     &Ex_matches)
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)

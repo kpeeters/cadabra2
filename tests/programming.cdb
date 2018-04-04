@@ -88,8 +88,9 @@ test03()
 def test04():
     __cdbkernel__ = create_scope()
     \partial{#}::PartialDerivative;
-    \dot{#}::Accent;    
-    ex:=Q_{m n \dot{r} p q s_{2} k} + A_{m n} \partial_{\dot{r}}{ B_{p q} } \partial_{s_{2}}{ C } \partial_{0}{D_{k}} ;
+    \dot{#}::Accent;
+    NoMomList= [ Ex(r'A_{a? b?}'), Ex(r'S'), Ex(r'a**2') ]
+    ex:=Q_{m n \dot{r} p q s_{2} k} + a**2 A_{m n} \partial_{\dot{r}}{ B_{p q} } S \partial_{s_{2}}{ C } \partial_{0}{D_{k}} ;
     terms=ex["\\sum"].__next__().children()
     for term in terms:
         if term.name=="\\prod":
@@ -100,16 +101,21 @@ def test04():
                         k = Ex("k"+str(num))
                         factor.insert(k).append_child(index)
                     for arg in factor.args():
-                        arg.append_child(Ex("k"+str(num)))
-                        factor.insert(arg)
+                        matches = map(lambda x: x.matches(factor), NoMomList)
+                        if not True in matches:
+                             arg.append_child(Ex("k"+str(num)))
+                             factor.insert(arg)
                     factor.erase()
+                    num+=1
                 else:
-                    factor.append_child(Ex("k"+str(num)))
-                num+=1
+                     matches = map(lambda x: x.matches(factor), NoMomList)
+                     if not True in matches:
+                        factor.append_child(Ex("k"+str(num)))
+                        num+=1
         else:
             term.append_child(Ex("k1"))
     
-    tst:= Q_{m n \dot{r} p q s_{2} k}(k1) + A_{m n}(k1) k2_{\dot{r}} B_{p q}(k2) k3_{s_{2}} C(k3) k4_{0} D_{k}(k4) - @(ex);
+    tst:= Q_{m n \dot{r} p q s_{2} k}(k1) + a**2 A_{m n} k1_{\dot{r}} B_{p q}(k1) S k2_{s_{2}} C(k2) k3_{0} D_{k}(k3) - @(ex);
     assert(tst==0)
     print("Test 04 passed")
 
