@@ -87,24 +87,29 @@ test03()
 
 def test04():
     __cdbkernel__ = create_scope()
-    \partial{#}::PartialDerivative;        
-    ex:=A_{m n} \partial_{r}{ B_{p q} } \partial_{s}{ C } ;
-    for prod in ex["\\prod"]:
-        num=1
-        for factor in prod.children():
-            if factor.name=="\\partial":
-                for index in factor.indices():
-                    k = Ex("k"+str(num)+"_{"+index.name+"}")
-                    factor.insert(k)
-                for arg in factor.args():
-                    arg.append_child(Ex("k"+str(num)))
-                    factor.insert(arg)
-                factor.erase()
-            else:
-                factor.append_child(Ex("k"+str(num)))
-            num+=1
+    \partial{#}::PartialDerivative;
+    \dot{#}::Accent;    
+    ex:=Q_{m n \dot{r} p q s_{2} k} + A_{m n} \partial_{\dot{r}}{ B_{p q} } \partial_{s_{2}}{ C } \partial_{0}{D_{k}} ;
+    terms=ex["\\sum"].__next__().children()
+    for term in terms:
+        if term.name=="\\prod":
+            num=1
+            for factor in term.children():
+                if factor.name=="\\partial":
+                    for index in factor.indices():
+                        k = Ex("k"+str(num))
+                        factor.insert(k).append_child(index)
+                    for arg in factor.args():
+                        arg.append_child(Ex("k"+str(num)))
+                        factor.insert(arg)
+                    factor.erase()
+                else:
+                    factor.append_child(Ex("k"+str(num)))
+                num+=1
+        else:
+            term.append_child(Ex("k1"))
     
-    tst:= A_{m n}(k1) k2_{r} B_{p q}(k2) k3_{s} C(k3) - @(ex);
+    tst:= Q_{m n \dot{r} p q s_{2} k}(k1) + A_{m n}(k1) k2_{\dot{r}} B_{p q}(k2) k3_{s_{2}} C(k3) k4_{0} D_{k}(k4) - @(ex);
     assert(tst==0)
     print("Test 04 passed")
 

@@ -194,6 +194,12 @@ Ex rhs(std::shared_ptr<Ex> ex)
 	return Ex(sib);
 	}
 
+ExNode Ex_children(std::shared_ptr<Ex> ex)
+   {
+   ExNode ret(*ex);
+   ret.it=ex.begin();WRONG
+   }
+
 Ex Ex_getslice(std::shared_ptr<Ex> ex, pybind11::slice slice)
 	{
 	Ex result;
@@ -273,12 +279,12 @@ class ExNode {
 		void        replace(Ex& rep);
 
       /// Insert a subtree as previous sibling of the current node.
-      void        insert(Ex&    ins);
-      void        insert_it(ExNode ins);
+      ExNode      insert(Ex&    ins);
+      ExNode      insert_it(ExNode ins);
 
-      /// Append a subtree as a child.
-      void        append_child(Ex&);
-      void        append_child_it(ExNode ins);
+      /// Append a subtree as a child. Return an ExNode pointing to the new child.
+      ExNode      append_child(Ex&);
+      ExNode      append_child_it(ExNode ins);
       
       /// Erase the current node, iterator becomes invalid!
       void        erase();
@@ -356,24 +362,32 @@ void ExNode::replace(Ex& rep)
 	it=ex.replace(it, rep.begin());
 	}
 
-void ExNode::insert(Ex& rep)
+ExNode ExNode::insert(Ex& rep)
 	{
-	ex.insert_subtree(it, rep.begin());
+	ExNode ret(ex);
+	ret.it=ex.insert_subtree(it, rep.begin());
+	return ret;
 	}
 
-void ExNode::insert_it(ExNode rep)
+ExNode ExNode::insert_it(ExNode rep)
 	{
-	ex.insert_subtree(it, rep.it);
+	ExNode ret(ex);
+	ret.it=ex.insert_subtree(it, rep.it);
+	return ret;
 	}
 
-void ExNode::append_child(Ex& rep)
+ExNode ExNode::append_child(Ex& rep)
 	{
-	ex.append_child(it, rep.begin());
+	ExNode ret(ex);
+	ret.it=ex.append_child(it, rep.begin());
+	return ret;
 	}
 
-void ExNode::append_child_it(ExNode rep)
+ExNode ExNode::append_child_it(ExNode rep)
 	{
-	ex.append_child(it, rep.it);
+	ExNode ret(ex);
+	ret.it=ex.append_child(it, rep.it);
+	return ret;
 	}
 
 void ExNode::erase()
@@ -1344,6 +1358,7 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__iter__", [](std::shared_ptr<Ex> ex) {
 				return pybind11::make_iterator(ex->begin(), ex->end());
 				})
+		.def("children",    &Ex_children)
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)
