@@ -1,4 +1,5 @@
 
+#include "Config.hh"
 #include "simplify.hh"
 #include "Cleanup.hh"
 #include "properties/Coordinate.hh"
