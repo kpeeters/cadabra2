@@ -8,3 +8,4 @@ install
 __pycache__
 .vscode
 .vs
+CMakeSettings.json
