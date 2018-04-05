@@ -98,6 +98,7 @@ namespace cadabra {
 			int font_step;
 			bool highlight;
 			bool is_registered;
+			bool is_anonymous;
 			std::map<std::string, ColorMap> colours;
 		private:
 			Json::Value data;
