@@ -64,7 +64,7 @@ endif()
 
 option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
-
+option (MINIMUM_INSTALLATION "Only copy compiled filed to install dir" OFF)
 #---------------------------------------------------------------------------
 # Compiler flags.
 #---------------------------------------------------------------------------

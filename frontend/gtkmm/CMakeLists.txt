@@ -32,6 +32,7 @@ include_directories(
   )
 
 add_executable(cadabra2-gtk main.cc 
+  ChooseColoursDialog.cc
   NotebookWindow.cc 
   NotebookCanvas.cc 
   TeXView.cc 
@@ -152,7 +153,7 @@ install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/
 
 # Install shared libraries on Windows. 
 # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
-if(WIN32)
+if(WIN32 AND NOT MINIMUM_INSTALLATION)
   # All things to make GTK apps work and look decent on Windows 10.
   # We always need the Adwaita theme for fallback icons, but VCPKG
   # does not yet distribute it, so we include it here (also see
