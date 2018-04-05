@@ -13,6 +13,7 @@
 #include <gtkmm/radioaction.h>
 #include <gtkmm/scrollbar.h>
 #include <fstream>
+#include <gtkmm/entry.h>
 #if GTKMM_MINOR_VERSION < 10
 #include <gtkmm/main.h>
 #endif
@@ -143,6 +144,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	font_action1->property_value()= 0;
 	actiongroup->add( font_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_font_size), 0));
 	if(prefs.font_step==0) font_action1->set_active();
+	default_actions.push_back(font_action1);
 
 	auto font_action2=Gtk::RadioAction::create(group_font_size, "FontLarge", "Large");
 	font_action2->property_value()= 2;
@@ -157,15 +159,18 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	Gtk::RadioAction::Group group_highlight_syntax;
 	actiongroup->add(Gtk::Action::create("MenuHighlightSyntax", "Highlight Syntax"));
 
-	auto highlight_syntax_action0 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOff", "Off");
+	auto highlight_syntax_action0 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOff", "Off (default)");
 	highlight_syntax_action0->property_value() = 0;
 	actiongroup->add(highlight_syntax_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), 0));
 	if (prefs.highlight == false) highlight_syntax_action0->set_active();
+	default_actions.push_back(highlight_syntax_action0);
 
 	auto highlight_syntax_action1 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOn", "On");
 	highlight_syntax_action1->property_value() = 1;
 	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), 1));
 	if (prefs.highlight == true) highlight_syntax_action1->set_active();
+
+	actiongroup->add(Gtk::Action::create("ViewUseDefaultSettings", "Use Default Settings"), sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults));
 
 	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
  	actiongroup->add( Gtk::Action::create("EvaluateCell", "Evaluate cell"), Gtk::AccelKey("<shift>Return"),
@@ -187,6 +192,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 							sigc::mem_fun(*this, &NotebookWindow::on_help_about) );
 	actiongroup->add( Gtk::Action::create("HelpContext", Gtk::Stock::HELP, "Contextual help"),
 							sigc::mem_fun(*this, &NotebookWindow::on_help) );
+	menu_help_register = Gtk::Action::create("HelpRegister", "Register");
+	actiongroup->add(menu_help_register, sigc::mem_fun(*this, &NotebookWindow::on_help_register));
+	menu_help_register->set_sensitive(!prefs.is_registered);
 
 	uimanager = Gtk::UIManager::create();
 	uimanager->insert_action_group(actiongroup);
@@ -238,6 +246,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"        <menuitem action='HighlightSyntaxOff'/>"
 		"        <menuitem action='HighlightSyntaxOn'/>"
 		"      </menu>"
+		"      <menuitem action='ViewUseDefaultSettings'/>"
 		"    </menu>"
 		"    <menu action='MenuEvaluate'>"
 		"      <menuitem action='EvaluateCell' />"
@@ -254,6 +263,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 //		"      <menuitem action='HelpNotebook' />"
 		"      <menuitem action='HelpAbout' />"
 		"      <menuitem action='HelpContext' />"
+		"      <menuitem action='HelpRegister' />"
 		"    </menu>"
 		"  </menubar>"
 		"  <toolbar name='ToolBar'>"
@@ -1514,6 +1524,74 @@ void NotebookWindow::on_help_about()
 	about.add_credit_section("Special thanks", special);
 	about.run();
 	}
+
+void NotebookWindow::on_help_register()
+{
+	Gtk::Dialog md("Welcome to Cadabra!", *this, Gtk::MESSAGE_WARNING);
+	md.set_transient_for(*this);
+	md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+	Gtk::Box *box = md.get_content_area();
+	Gtk::Label txt;
+	txt.set_markup("<span font_size=\"large\" font_weight=\"bold\">Welcome to Cadabra!</span>\n\nWriting this software takes an incredible amount of spare time,\nand it is extremely difficult to get funding for its development.\n\nPlease show your support by registering your email address,\nso I can convince the bean-counters that this software is of interest.\n\nI will only use this address to count users and to email you,\nroughly once every half a year, with a bit of news about Cadabra.\n\nMany thanks for your support!\n\nKasper Peeters, <a href=\"mailto:info@cadabra.science\">info@cadabra.science</a>");
+	txt.set_line_wrap();
+	txt.set_margin_top(10);
+	txt.set_margin_left(10);
+	txt.set_margin_right(10);
+	txt.set_margin_bottom(10);
+	box->pack_start(txt, Gtk::PACK_EXPAND_WIDGET);
+
+	Gtk::Grid grid;
+	grid.set_column_homogeneous(false);
+	grid.set_hexpand(true);
+	grid.set_margin_left(10);
+	grid.set_margin_right(10);
+	box->pack_start(grid, Gtk::PACK_EXPAND_WIDGET);
+
+	Gtk::Label name_label("Name:");
+	Gtk::Entry name;
+	name_label.set_alignment(0, 0.5);
+	name.set_hexpand(true);
+	grid.attach(name_label, 0, 0, 1, 1);
+	grid.attach(name, 1, 0, 1, 1);
+	Gtk::Label email_label("Email address:");
+	email_label.set_alignment(0, 0.5);
+	Gtk::Entry email;
+	email.set_hexpand(true);
+	grid.attach(email_label, 0, 1, 1, 1);
+	grid.attach(email, 1, 1, 1, 1);
+	Gtk::Label affiliation_label("Affiliation:");
+	Gtk::Entry affiliation;
+	affiliation_label.set_alignment(0, 0.5);
+	affiliation.set_hexpand(true);
+	grid.attach(affiliation_label, 0, 2, 1, 1);
+	grid.attach(affiliation, 1, 2, 1, 1);
+
+	Gtk::HBox hbox;
+	box->pack_end(hbox, Gtk::PACK_SHRINK);
+	Gtk::Button reg("Register my support"), nothanks("I prefer to stay anonymous"), alreadyset("I am already registered");
+	hbox.pack_end(reg, Gtk::PACK_SHRINK, 10);
+	hbox.pack_start(nothanks, Gtk::PACK_SHRINK, 10);
+	hbox.pack_start(alreadyset, Gtk::PACK_SHRINK, 10);
+	reg.signal_clicked().connect([&]() {
+		set_user_details(name.get_text(), email.get_text(), affiliation.get_text());
+		prefs.is_anonymous = false;
+		prefs.is_registered = true;
+		md.hide();
+	});
+	nothanks.signal_clicked().connect([&]() {
+		prefs.is_anonymous = true;
+		prefs.is_registered = false;
+		md.hide();
+	});
+	alreadyset.signal_clicked().connect([&]() {
+		prefs.is_registered = true;
+		prefs.is_anonymous = false;
+		md.hide();
+	});
+	box->show_all();
+	md.run();
+	menu_help_register->set_sensitive(!prefs.is_registered);
+}
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{

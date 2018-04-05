@@ -145,23 +145,25 @@ void DocumentThread::process_action_queue()
 	}
 
 
-DocumentThread::Prefs::Prefs()
+DocumentThread::Prefs::Prefs(bool use_defaults)
+	: config_path(std::string(Glib::get_user_config_dir()) + "/cadabra2.conf")
 {
-	config_path = std::string(Glib::get_user_config_dir()) + "/cadabra2.conf";
-	std::ifstream f(config_path);
-	if (f)
-		f >> data;
-	else {
-		// Backwards compatibility, check to see if cadabra.conf exists
-		// and if so take the is_registered variable from there
-		std::ifstream old_f(std::string(Glib::get_user_config_dir()) + "/cadabra.conf");
-		if (old_f) {
-			std::string line;
-			while (old_f.good()) {
-				std::getline(old_f, line);
-				if (line.find("registered=true") != std::string::npos) {
-					data["is_registered"] = true;
-					break;
+	if (!use_defaults) {
+		std::ifstream f(config_path);
+		if (f) 
+			f >> data;
+		else {
+			// Backwards compatibility, check to see if cadabra.conf exists
+			// and if so take the is_registered variable from there
+			std::ifstream old_f(std::string(Glib::get_user_config_dir()) + "/cadabra.conf");
+			if (old_f) {
+				std::string line;
+				while (old_f.good()) {
+					std::getline(old_f, line);
+					if (line.find("registered=true") != std::string::npos) {
+						data["is_registered"] = true;
+						break;
+					}
 				}
 			}
 		}
@@ -169,6 +171,7 @@ DocumentThread::Prefs::Prefs()
 	font_step = data.get("font_step", 0).asInt();
 	highlight = data.get("highlight", false).asBool();
 	is_registered = data.get("is_registered", false).asBool();
+	is_anonymous = data.get("is_anonymous", false).asBool();
 	colour_map = get_default_colours();
 	if (data.isMember("colour_map")) {
 		Json::Value json_cmap = data["colour_map"];
@@ -180,15 +183,15 @@ DocumentThread::Prefs::Prefs()
 std::map<std::string, std::string> DocumentThread::Prefs::get_default_colours()
 {
 	return {
-		{"py_keyword", "RoyalBlue"},
-		{"py_operator", "SlateGray"},
-		{"py_brace", "SlateGray"},
-		{"py_string", "ForestGreen"},
-		{"py_comment", "Silver"},
-		{"py_number", "Sienna"},
-		{"py_function", "FireBrick"},
-		{"py_algorithm", "DarkViolet"},
-		{"py_property", "MediumOrchid"}
+	{"py_keyword", "RoyalBlue"},
+	{"py_operator", "SlateGray"},
+	{"py_brace", "SlateGray"},
+	{"py_string", "ForestGreen"},
+	{"py_comment", "Silver"},
+	{"py_number", "Sienna"},
+	{"py_function", "FireBrick"},
+	{"py_algorithm", "DarkViolet"},
+	{"py_property", "MediumOrchid"}
 	};
 }
 
@@ -200,6 +203,7 @@ void DocumentThread::Prefs::save()
 		data["font_step"] = font_step;
 		data["highlight"] = highlight;
 		data["is_registered"] = is_registered;
+		data["is_anonymous"] = is_anonymous;
 		Json::Value json_cmap;
 		for (auto it = colour_map.begin(); it != colour_map.end(); ++it)
 			json_cmap[it->first] = it->second;
@@ -215,9 +219,6 @@ void DocumentThread::set_user_details(const std::string& name, const std::string
 	snoop::log("name") << name << snoop::flush;	
 	snoop::log("email") << email << snoop::flush;	
 	snoop::log("affiliation") << affiliation << snoop::flush;	
-
-	// FIXME: make this a generic function to write all our config data.
-	prefs.is_registered = true;
 	}
 
 bool DocumentThread::help_type_and_topic(const std::string& before, const std::string& after,

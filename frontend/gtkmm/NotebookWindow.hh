@@ -88,6 +88,7 @@ namespace cadabra {
 
 			void load_file(const std::string& notebook_contents);
 
+			void on_help_register();
 
 		protected:
 			virtual bool on_key_press_event(GdkEventKey*) override;
@@ -103,6 +104,8 @@ namespace cadabra {
 
 	private:
 			Cadabra *cdbapp;
+
+			std::vector<Glib::RefPtr<Gtk::Action>> default_actions;
 
 			// Main handler which fires whenever the Client object signals 
 			// that the document is changing or the network status is modified.
@@ -182,6 +185,7 @@ namespace cadabra {
 			
 			void on_prefs_font_size(int num);
 			void on_prefs_highlight_syntax(int on);
+			void on_prefs_use_defaults();
 			void on_help_about();
 			void on_help() const;
 
@@ -233,6 +237,7 @@ namespace cadabra {
 
 			bool  is_configured;
 
+			Glib::RefPtr<Gtk::Action> menu_help_register;
 
 			// Transition animations.
 #if GTKMM_MINOR_VERSION>=10
