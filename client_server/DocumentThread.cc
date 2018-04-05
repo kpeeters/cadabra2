@@ -180,6 +180,7 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	colours["python"]["string"] = Gdk::RGBA(python_colours.get("string", "ForestGreen").asString());
 	colours["python"]["comment"] = Gdk::RGBA(python_colours.get("comment", "Silver").asString());
 	colours["python"]["number"] = Gdk::RGBA(python_colours.get("number", "Sienna").asString());
+	colours["python"]["maths"] = Gdk::RGBA(python_colours.get("maths", "Olive").asString());
 	colours["python"]["function"] = Gdk::RGBA(python_colours.get("function", "FireBrick").asString());
 	colours["python"]["algorithm"] = Gdk::RGBA(python_colours.get("algorithm", "DarkViolet").asString());
 	colours["python"]["property"] = Gdk::RGBA(python_colours.get("property", "MediumOrchid").asString());
