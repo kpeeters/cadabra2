@@ -22,22 +22,22 @@ using namespace cadabra;
 
 DocumentThread::DocumentThread(GUIBase* g)
 	: gui(g), compute(0), disable_stacks(false)
-	{
+{
 	// Setup logging.
 	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
 	snoop::log.init("Cadabra", version, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
-//	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
+	//	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
 
-	}
+}
 
 void DocumentThread::set_compute_thread(ComputeThread *cl)
-	{
+{
 	compute = cl;
-	}
+}
 
 void DocumentThread::new_document()
-	{
+{
 	// Setup a single-cell document. This operation itself cannot be undone,
 	// so we do it directly on the doc, not using Actions.
 
@@ -57,26 +57,26 @@ void DocumentThread::new_document()
 	std::shared_ptr<ActionBase> actionpos =
 		std::make_shared<ActionPositionCursor>(one_it->id(), ActionPositionCursor::Position::in);
 	queue_action(actionpos);
-	}
+}
 
 void DocumentThread::load_from_string(const std::string& json)
-	{
+{
 	std::lock_guard<std::mutex> guard(stack_mutex);
 	pending_actions=std::queue<std::shared_ptr<ActionBase> >(); // clear queue
 	doc.clear();
 	JSON_deserialise(json, doc);
 	gui->remove_all_cells();
 	build_visual_representation();
-	}
+}
 
 void DocumentThread::undo()
-	{
+{
 	stack_mutex.lock();
 	if(undo_stack.size()==0) {
 		//std::cerr << "no entries left on the stack" << std::endl;
 		stack_mutex.unlock();
 		return;
-		}
+	}
 
 	disable_stacks=true;
 	auto ua = undo_stack.top();
@@ -88,39 +88,39 @@ void DocumentThread::undo()
 	disable_stacks=false;
 
 	stack_mutex.unlock();
-	}
+}
 
 void DocumentThread::build_visual_representation()
-	{
+{
 	// Because the add_cell method figures out by itself where to generate the VisualCell,
 	// we only have feed all cells in turn.
 
 	DTree::iterator doc_it=doc.begin();
 	while(doc_it!=doc.end()) {
-//		std::cout << doc_it->textbuf << std::endl;
+		//		std::cout << doc_it->textbuf << std::endl;
 		gui->add_cell(doc, doc_it, false);
 		++doc_it;
-		}
 	}
+}
 
 //const DTree& DocumentThread::dtree() 
 //	{
 //	return doc;
 //	}
 
-void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab) 
-	{
+void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
+{
 	std::lock_guard<std::mutex> guard(stack_mutex);
 	pending_actions.push(ab);
-	}
+}
 
 
 void DocumentThread::process_action_queue()
-	{
+{
 	// FIXME: we certainly do not want any two threads to run this at the same time,
 	// but that is not guaranteed. Actions should always be run on the GUI thread.
 	// This absolutely has to be run on the main GUI thread.
-//	assert(main_thread_id==std::this_thread::get_id());
+	//	assert(main_thread_id==std::this_thread::get_id());
 
 
 	stack_mutex.lock();
@@ -140,9 +140,9 @@ void DocumentThread::process_action_queue()
 		if(ab->undoable())
 			undo_stack.push(ab);
 		pending_actions.pop();
-		}
-	stack_mutex.unlock();
 	}
+	stack_mutex.unlock();
+}
 
 
 DocumentThread::Prefs::Prefs(bool use_defaults)
@@ -172,29 +172,25 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	highlight = data.get("highlight", false).asBool();
 	is_registered = data.get("is_registered", false).asBool();
 	is_anonymous = data.get("is_anonymous", false).asBool();
-	colour_map = get_default_colours();
-	if (data.isMember("colour_map")) {
-		Json::Value json_cmap = data["colour_map"];
-		for (auto it = json_cmap.begin(); it != json_cmap.end(); ++it)
-			colour_map[it.key().asString()] = json_cmap[it.key().asString()].asString();
-	}
-}
+	// Get the colours for syntax highlighting. 
+	auto& python_colours = data.get("colours", Json::Value()).get("python", Json::Value());
+	colours["python"]["keyword"] = Gdk::RGBA(python_colours.get("keyword", "RoyalBlue").asString());
+	colours["python"]["operator"] = Gdk::RGBA(python_colours.get("operator", "SlateGray").asString());
+	colours["python"]["brace"] = Gdk::RGBA(python_colours.get("brace", "SlateGray").asString());
+	colours["python"]["string"] = Gdk::RGBA(python_colours.get("string", "ForestGreen").asString());
+	colours["python"]["comment"] = Gdk::RGBA(python_colours.get("comment", "Silver").asString());
+	colours["python"]["number"] = Gdk::RGBA(python_colours.get("number", "Sienna").asString());
+	colours["python"]["function"] = Gdk::RGBA(python_colours.get("function", "FireBrick").asString());
+	colours["python"]["algorithm"] = Gdk::RGBA(python_colours.get("algorithm", "DarkViolet").asString());
+	colours["python"]["property"] = Gdk::RGBA(python_colours.get("property", "MediumOrchid").asString());
 
-std::map<std::string, std::string> DocumentThread::Prefs::get_default_colours()
-{
-	return {
-	{"py_keyword", "RoyalBlue"},
-	{"py_operator", "SlateGray"},
-	{"py_brace", "SlateGray"},
-	{"py_string", "ForestGreen"},
-	{"py_comment", "Silver"},
-	{"py_number", "Sienna"},
-	{"py_function", "FireBrick"},
-	{"py_algorithm", "DarkViolet"},
-	{"py_property", "MediumOrchid"}
-	};
+	auto& latex_colours = data.get("colours", Json::Value()).get("latex", Json::Value());
+	colours["latex"]["command"] = Gdk::RGBA(latex_colours.get("command", "rgb(52,101,164)").asString());
+	colours["latex"]["parameter"] = Gdk::RGBA(latex_colours.get("brace", "rgb(245,121,0)").asString());
+	colours["latex"]["comment"] = Gdk::RGBA(latex_colours.get("comment", "Silver").asString());
+	colours["latex"]["number"] = Gdk::RGBA(latex_colours.get("number", "Sienna").asString());
+	colours["latex"]["maths"] = Gdk::RGBA(latex_colours.get("maths", "Sienna").asString());
 }
-
 
 void DocumentThread::Prefs::save()
 {
@@ -204,56 +200,56 @@ void DocumentThread::Prefs::save()
 		data["highlight"] = highlight;
 		data["is_registered"] = is_registered;
 		data["is_anonymous"] = is_anonymous;
-		Json::Value json_cmap;
-		for (auto it = colour_map.begin(); it != colour_map.end(); ++it)
-			json_cmap[it->first] = it->second;
-		data["colour_map"] = json_cmap;
+		for (const auto& lang : colours) {
+			for (const auto& kw : lang.second)
+				data["colours"][lang.first][kw.first] = kw.second.to_string().data();
+		}
 		f << data << '\n';
 	}
 	else
 		std::cerr << "Warning: could not write to config file\n";
 }
 
-void DocumentThread::set_user_details(const std::string& name, const std::string& email, const std::string& affiliation) 
-	{
-	snoop::log("name") << name << snoop::flush;	
-	snoop::log("email") << email << snoop::flush;	
-	snoop::log("affiliation") << affiliation << snoop::flush;	
-	}
+void DocumentThread::set_user_details(const std::string& name, const std::string& email, const std::string& affiliation)
+{
+	snoop::log("name") << name << snoop::flush;
+	snoop::log("email") << email << snoop::flush;
+	snoop::log("affiliation") << affiliation << snoop::flush;
+}
 
 bool DocumentThread::help_type_and_topic(const std::string& before, const std::string& after,
-													  help_t& help_type, std::string& help_topic) const
-	{
+	help_t& help_type, std::string& help_topic) const
+{
 	help_t objtype=help_t::algorithm;
 	if(! (before.size()==0 && after.size()==0) ) {
-		 // We provide help for properties, algorithms and reserved node
-       // names.  Properties are delimited to the left by '::' and to
-       // the right by anything non-alnum. Algorithms are delimited to
-       // the left by non-alnum except '_' and to the right by '('. Reserved node
-       // names are TeX symbols, starting with '\'.
-		 // 
-		 // So scan the 'before' string for a left-delimiter and the 'after' string
-		 // for a right-delimiter.
-		 
+		// We provide help for properties, algorithms and reserved node
+		// names.  Properties are delimited to the left by '::' and to
+		// the right by anything non-alnum. Algorithms are delimited to
+		// the left by non-alnum except '_' and to the right by '('. Reserved node
+		// names are TeX symbols, starting with '\'.
+		// 
+		// So scan the 'before' string for a left-delimiter and the 'after' string
+		// for a right-delimiter.
+
 		int lpos=before.size()-1;
 		while(lpos>=0) {
 			if(before[lpos]==':' && lpos>0 && before[lpos-1]==':') {
 				objtype=help_t::property;
 				break;
-				}
+			}
 			if(before[lpos]=='\\') {
 				objtype=help_t::latex;
 				break;
-				}
+			}
 			if(isalnum(before[lpos])==0 && before[lpos]!='_') {
 				objtype=help_t::algorithm;
 				break;
-				}
-			--lpos;
 			}
+			--lpos;
+		}
 		if(objtype==help_t::none) return false;
 		++lpos;
-		
+
 		size_t rpos=0;
 		while(rpos<after.size()) {
 			if(objtype==help_t::property) {

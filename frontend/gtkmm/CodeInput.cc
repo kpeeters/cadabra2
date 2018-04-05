@@ -92,12 +92,12 @@ void CodeInput::init(const Prefs& prefs)
 	edit.get_buffer()->signal_insert().connect(sigc::mem_fun(this, &CodeInput::handle_insert), true);
 	edit.get_buffer()->signal_erase().connect(sigc::mem_fun(this, &CodeInput::handle_erase), false);
 	if (prefs.highlight) {
+		using namespace std::string_literals;
 		switch (edit.datacell->cell_type) {
+		// Fallthrough
 		case DataCell::CellType::python:
-			enable_python_highlighting(prefs.colour_map);
-			break;
 		case DataCell::CellType::latex:
-			enable_latex_highlighting(prefs.colour_map);
+			enable_highlighting(edit.datacell->cell_type, prefs);
 			break;
 		default:
 			break;
@@ -183,44 +183,57 @@ void CodeInput::highlight_python()
 
 void CodeInput::highlight_latex()
 {
-	//Stubbed out for now
+	// Remove all tags that are currently set
+	edit.get_buffer()->remove_all_tags(
+		edit.get_buffer()->begin(),
+		edit.get_buffer()->end()
+	);
+
+	tag_by_regex("command", "\\\\(\\w)+");
+	tag_by_regex("comment", "%[^\\n]*");
+	tag_by_regex("number", "\\b[0-9]+\\b");
+	tag_by_regex("parameter", "\\{(\\w)+\\}");
+	tag_by_regex("parameter", "\\[[^\\[\\]]+\\]");
+	tag_by_regex("maths", "\\$[^\\$]+\\$");
 }
 
-void CodeInput::enable_python_highlighting(const std::map<std::string, std::string>& colour_map)
+void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs)
 {
+	std::string map_idx;
+	void (CodeInput::*callback)();
+
+	switch (cell_type)
+	{
+	case DataCell::CellType::python:
+		map_idx = "python";
+		callback = &CodeInput::highlight_python;
+		break;
+	case DataCell::CellType::latex:
+		map_idx = "latex";
+		callback = &CodeInput::highlight_latex;
+		break;
+	default:
+		break;
+	}
+
 	// Create tags
-	for (auto elem : colour_map) {
-		if (elem.first.find("py_") != std::string::npos) {
-			std::string tag_name = elem.first.substr(3);
-			if (edit.get_buffer()->get_tag_table()->lookup(tag_name)) // Already set
-				edit.get_buffer()->get_tag_table()->lookup(tag_name)->property_foreground() = elem.second;
-			else // Need to create
-				edit.get_buffer()->create_tag(tag_name)->property_foreground() = elem.second;
-		}
+	for (const auto& elem : prefs.colours.at(map_idx)) {
+		if (edit.get_buffer()->get_tag_table()->lookup(elem.first)) // Already set
+			edit.get_buffer()->get_tag_table()->lookup(elem.first)->property_foreground_rgba() = elem.second;
+		else // Need to create
+			edit.get_buffer()->create_tag(elem.first)->property_foreground_rgba() = elem.second;
 	}
 
 	// Setup callback
 	if (hl_conn.connected())
 		hl_conn.disconnect();
-	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::highlight_python));
+
+	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(*this, callback));
 
 	// And perform an initial highlight
-	highlight_python();
+	(this->*callback)();
 }
 
-void CodeInput::enable_latex_highlighting(const std::map<std::string, std::string>& colour_map)
-{
-	// Create tags
-	// ...well I haven't actually got round to this yet
-
-	// Setup callback
-	if (hl_conn.connected())
-		hl_conn.disconnect();
-	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &CodeInput::highlight_latex));
-
-	// And perform an initial highlight
-	highlight_latex();
-}
 
 void CodeInput::disable_highlighting()
 {	

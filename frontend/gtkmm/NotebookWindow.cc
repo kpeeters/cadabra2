@@ -18,6 +18,7 @@
 #include <gtkmm/main.h>
 #endif
 #include "Snoop.hh"
+#include "ChooseColoursDialog.hh"
 
 using namespace cadabra;
 
@@ -170,6 +171,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), 1));
 	if (prefs.highlight == true) highlight_syntax_action1->set_active();
 
+	actiongroup->add(Gtk::Action::create("HighlightSyntaxChoose", "Choose Colours..."), sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours));
+	
 	actiongroup->add(Gtk::Action::create("ViewUseDefaultSettings", "Use Default Settings"), sigc::mem_fun(*this, &NotebookWindow::on_prefs_use_defaults));
 
 	actiongroup->add( Gtk::Action::create("MenuEvaluate", "_Evaluate") );
@@ -245,6 +248,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"      <menu action='MenuHighlightSyntax'>"
 		"        <menuitem action='HighlightSyntaxOff'/>"
 		"        <menuitem action='HighlightSyntaxOn'/>"
+		"        <menuitem action='HighlightSyntaxChoose'/>"
 		"      </menu>"
 		"      <menuitem action='ViewUseDefaultSettings'/>"
 		"    </menu>"
@@ -1390,6 +1394,7 @@ void NotebookWindow::on_edit_cell_is_python()
 		current_cell->cell_type = DataCell::CellType::python;
 		update_cell(doc, current_cell);
 		}
+	refresh_highlighting();
 	}
 
 void NotebookWindow::on_edit_cell_is_latex()
@@ -1400,6 +1405,7 @@ void NotebookWindow::on_edit_cell_is_latex()
 		current_cell->cell_type = DataCell::CellType::latex;
 		update_cell(doc, current_cell);
 		}
+	refresh_highlighting();
 	}
 
 void NotebookWindow::on_view_split()
@@ -1669,25 +1675,49 @@ void NotebookWindow::on_prefs_highlight_syntax(int on)
 			// python cells to avoid an exception being raised when
 			// trying to edit an immutable cell type
 			switch (visualcell.first->cell_type) {
-
+			// Fallthrough
 			case DataCell::CellType::python:
-				if (on)
-					visualcell.second.inbox->enable_python_highlighting(prefs.colour_map);
-				else
-					visualcell.second.inbox->disable_highlighting();
-				break;
-
 			case DataCell::CellType::latex:
 				if (on)
-					visualcell.second.inbox->enable_latex_highlighting(prefs.colour_map);
+					visualcell.second.inbox->enable_highlighting(visualcell.first->cell_type, prefs);
 				else
 					visualcell.second.inbox->disable_highlighting();
 				break;
-
 			default:
 				break;
 			}
 		}
+	}
+}
+
+void NotebookWindow::on_prefs_choose_colours()
+{
+	cadabra::ChooseColoursDialog dialog(prefs, *this);
+	dialog.run();
+	prefs.save();
+}
+
+void NotebookWindow::on_prefs_use_defaults()
+{
+	Gtk::MessageDialog sure("Use Default settings?", false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+	sure.set_transient_for(*this);
+	sure.set_secondary_text("This will effect font size and colour schemes.");
+	int response = sure.run();
+	if (response == Gtk::RESPONSE_YES) {
+		prefs = Prefs(true);
+		for (auto& action : default_actions)
+			action->activate();
+		refresh_highlighting();
+		menu_help_register->set_sensitive(!prefs.is_registered);
+		prefs.save();
+	}
+}
+
+void NotebookWindow::refresh_highlighting()
+{
+	if (prefs.highlight) {
+		on_prefs_highlight_syntax(false);
+		on_prefs_highlight_syntax(true);
 	}
 }
 

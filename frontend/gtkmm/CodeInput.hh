@@ -6,6 +6,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/separator.h>
+#include <json/json.h>
 
 namespace cadabra {
 
@@ -59,9 +60,7 @@ namespace cadabra {
 			/// Set the font size, 0 being default, negative smaller, positive larger.
 			
 			void set_font_size(int num);
-
-			void enable_python_highlighting(const std::map<std::string, std::string>& colour_map);
-			void enable_latex_highlighting(const std::map<std::string, std::string>& colour_map);
+			void enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs);
 			void disable_highlighting();
 
 			/// Handle mouse buttons.

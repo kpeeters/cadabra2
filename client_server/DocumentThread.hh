@@ -5,6 +5,7 @@
 #include <mutex>
 #include <stack>
 #include <map>
+#include <gdkmm/rgba.h>
 
 #include "DataCell.hh"
 #include "tree.hh"
@@ -91,17 +92,16 @@ namespace cadabra {
 
 		class Prefs {
 		public:
+			using ColorMap = std::map<std::string, Gdk::RGBA>;
 			Prefs(bool use_defaults = false);
 			void save();
 			int font_step;
 			bool highlight;
 			bool is_registered;
-			bool is_anonymous;
-			std::map<std::string, std::string> colour_map;
+			std::map<std::string, ColorMap> colours;
 		private:
 			Json::Value data;
 			std::string config_path;
-			std::map<std::string, std::string> get_default_colours();
 		};
 		Prefs prefs;
 
