@@ -6,6 +6,10 @@
 #include <gtkmm/label.h>
 #include <glibmm/spawn.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 // Cadabra frontend with GTK+ interface (using gtkmm). 
 // Makes use of the client classes in the client_server directory.
 
@@ -24,3 +28,10 @@ int main(int argc, char **argv)
 	  std::cerr << ex.what() << std::endl;
 		}
 	}
+
+#ifdef _WIN32
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	main(0, 0);
+}
+#endif

@@ -31,7 +31,8 @@ include_directories(
   ${SQLITE3_INCLUDE_DIR}  
   )
 
-add_executable(cadabra2-gtk main.cc 
+set(cadabra_gtk_src 
+  main.cc 
   ChooseColoursDialog.cc
   NotebookWindow.cc 
   NotebookCanvas.cc 
@@ -42,7 +43,13 @@ add_executable(cadabra2-gtk main.cc
   ../common/TeXEngine.cc
   ../common/lodepng.cc
   ../common/exec-stream.cc
-  )
+)
+
+if (MSVC)
+  add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
+else()
+  add_executable(cadabra2-gtk ${cadabra_gtk_src})
+endif()
 
 #  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
 # message("***** Gtkmm  libraries: ${GTKMM3_LIBRARIES}")

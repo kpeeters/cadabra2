@@ -3,6 +3,10 @@
 #include "Snoop.hh"
 #include "Server.hh"
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 // Run a simple Cadabra server on a local port.
 
 int main()
@@ -17,3 +21,11 @@ int main()
 //	snoop::log(snoop::info) << "Terminating" << snoop::flush;
 	snoop::log.sync_with_server();
 	}
+
+
+#ifdef _WIN32
+int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+	main();
+}
+#endif

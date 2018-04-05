@@ -95,7 +95,12 @@ endif()
 #   )
 
 # Server executable
-add_executable(cadabra-server cadabra-server.cc ${CADABRA_SERVER_SRC})
+if (MSVC)
+  add_executable(cadabra-server WIN32 cadabra-server.cc ${CADABRA_SERVER_SRC})
+else()
+  add_executable(cadabra-server cadabra-server.cc ${CADABRA_SERVER_SRC}) 
+endif()
+
 # target_link_libraries(cadabra-server cadabra_server)
 target_link_libraries(cadabra-server
   pybind11::embed
