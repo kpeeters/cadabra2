@@ -440,10 +440,12 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		content["code"]=dc.textbuf;
 		req["content"]=content;
 
+		gui->on_kernel_runstatus(true);
 		std::ostringstream str;
 		str << req << std::endl;
 		wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
-		gui->on_kernel_runstatus(true);
+		// NOTE: we can get a return message in on_message at any point after this,
+		// it will come in on a different thread!
 		}
 
 	// For a LaTeX cell, immediately request a new latex output cell to be displayed.
