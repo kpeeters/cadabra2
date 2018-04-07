@@ -100,7 +100,7 @@ bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
    auto arg=tr.begin(it);
    auto exp=arg;
    ++exp;
-   if(exp==tr.end(it)) return false;
+//   if(exp==tr.end(it)) return false;
    
    if(*arg->name=="1") {
 	   if(*arg->multiplier==1) { // 1**anything = 1 
@@ -137,33 +137,33 @@ bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
    // and can then either be absorbed into the overall multiplier, or needs
    // a second factor.
    auto ipow=tr.begin(it);
-   if(false && *ipow->name=="\\pow") {
+   if(*ipow->name=="\\pow") {
 	   auto iA=tr.begin(ipow);
 	   auto iB=iA;   ++iB;
 	   auto iC=ipow; ++iC;
 	   std::cerr << it << std::endl;
-	   if(iC->is_integer() || k.properties.get<Integer>(iC)) {
-		   if(iC->is_integer()) { // newmult = (mult)^C;
-			   mpz_class nw_n, nw_d;
-			   std::cerr << "doing " << *ipow->multiplier << "**" << *iC->multiplier << std::endl;
-			   long Cexp=to_long(*iC->multiplier);
-			   mpz_pow_ui(nw_n.get_mpz_t(), ipow->multiplier->get_num().get_mpz_t(), std::abs(Cexp));
-			   mpz_pow_ui(nw_d.get_mpz_t(), ipow->multiplier->get_den().get_mpz_t(), std::abs(Cexp));
-			   if(Cexp<0)
-				   std::swap(nw_n, nw_d);
-			   multiplier_t newmult=multiplier_t(nw_n, nw_d);
-			   std::cerr << "new multiplier " << newmult << std::endl;
-			   ipow->multiplier=rat_set.insert(newmult).first;
-			   }
-		   else { // need to generate (mult)^C as a separate factor.
-			   std::cerr << "generate separate factor for " << *ipow->multiplier << "**" << iC << std::endl;
-			   Ex nw("\\pow");
-			   nw.append_child(nw.begin(), str_node("1"))->multiplier=ipow->multiplier;
-			   nw.append_child(nw.begin(), Ex::iterator(iC));
-			   tr.wrap(it, str_node("\\prod"));
-			   tr.insert_subtree(it, nw.begin());
-			   one(ipow->multiplier);
-			   }
+	   if(true || iC->is_integer() || k.properties.get<Integer>(iC)) {
+		   //if(iC->is_integer()) { // newmult = (mult)^C;
+			//   mpz_class nw_n, nw_d;
+			//   std::cerr << "doing " << *ipow->multiplier << "**" << *iC->multiplier << std::endl;
+			//   long Cexp=to_long(*iC->multiplier);
+			//   mpz_pow_ui(nw_n.get_mpz_t(), ipow->multiplier->get_num().get_mpz_t(), std::abs(Cexp));
+			//   mpz_pow_ui(nw_d.get_mpz_t(), ipow->multiplier->get_den().get_mpz_t(), std::abs(Cexp));
+			//   if(Cexp<0)
+			//	   std::swap(nw_n, nw_d);
+			//   multiplier_t newmult=multiplier_t(nw_n, nw_d);
+			//   std::cerr << "new multiplier " << newmult << std::endl;
+			//   ipow->multiplier=rat_set.insert(newmult).first;
+			//   }
+		   //else { // need to generate (mult)^C as a separate factor.
+			//   std::cerr << "generate separate factor for " << *ipow->multiplier << "**" << iC << std::endl;
+			//   Ex nw("\\pow");
+			//   nw.append_child(nw.begin(), str_node("1"))->multiplier=ipow->multiplier;
+			//   nw.append_child(nw.begin(), Ex::iterator(iC));
+			//   tr.wrap(it, str_node("\\prod"));
+			//   tr.insert_subtree(it, nw.begin());
+			//   one(ipow->multiplier);
+			//   }
 		   Ex::iterator expprod=tr.wrap(iB, str_node("\\prod"));
 		   tr.move_after(iB, iC);
 		   it=tr.flatten_and_erase(it);
