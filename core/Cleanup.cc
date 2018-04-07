@@ -118,7 +118,7 @@ bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 	   }
 
    // Turn \pow{mA A}{B} with mA the multiplier for A into mA^B \pow{A}{B}
-   if(exp->is_integer() && *arg->multiplier!=1) {
+   if(false && exp->is_integer() && *arg->multiplier!=1) {
 	   mpz_class nw_n, nw_d;
 	   std::cerr << "also doing " << *arg->multiplier << "**" << *exp->multiplier << std::endl;
 	   long Cexp=to_long(*exp->multiplier);
