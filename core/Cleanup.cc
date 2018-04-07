@@ -4,6 +4,7 @@
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
 #include "properties/SelfAntiCommuting.hh"
+#include "properties/Integer.hh"
 #include "properties/Diagonal.hh"
 #include "properties/ExteriorDerivative.hh"
 #include "properties/DifferentialForm.hh"
@@ -96,10 +97,11 @@ void check_index_consistency(const Kernel& k, Ex& tr, Ex::iterator it)
 
 bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
    {
-   // Turn (numerical)**(-1) into a multiplier.
    auto arg=tr.begin(it);
    auto exp=arg;
    ++exp;
+   if(exp==tr.end(it)) return false;
+   
    if(*arg->name=="1") {
 	   if(*arg->multiplier==1) { // 1**anything = 1 
 		   one(it->multiplier);
@@ -107,7 +109,7 @@ bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 		   it->name=name_set.insert("1").first;
 		   return true;
 		   }
-	   if(*exp->name=="1" && *exp->multiplier==-1) {
+	   if(*exp->name=="1" && *exp->multiplier==-1) {    // Turn (numerical)**(-1) into a multiplier.
 		   multiply(it->multiplier, multiplier_t(1)/(*arg->multiplier));
 		   tr.erase_children(it);
 		   it->name = name_set.insert("1").first;
@@ -115,18 +117,48 @@ bool cleanup_powlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 		   }
 	   }
 
-   // Turn \pow{\pow{A}{B}}{C} into \pow{A}{B*C}.
+   // Turn \pow{mA A}{B} with mA the multiplier for A into mA^B \pow{A}{B}
+   if(exp->is_integer() && *arg->multiplier!=1) {
+	   mpz_class nw_n, nw_d;
+	   mpz_pow_ui(nw_n.get_mpz_t(), arg->multiplier->get_num().get_mpz_t(), to_long(*exp->multiplier));
+	   mpz_pow_ui(nw_d.get_mpz_t(), arg->multiplier->get_den().get_mpz_t(), to_long(*exp->multiplier));
+	   multiplier_t newmult=multiplier_t(nw_n, nw_d);
+	   it->multiplier=rat_set.insert(newmult).first;
+	   one(arg->multiplier);
+	   return true;
+	   }
+   
+   // Turn \pow{mult \pow{A}{B}}{C} into \pow{A}{B*C} if C is an integer.
+   // A bit tricky with the multiplier of \pow{A}{B}, as that becomes mult^C
+   // and can then either be absorbed into the overall multiplier, or needs
+   // a second factor.
    auto ipow=tr.begin(it);
    if(*ipow->name=="\\pow") {
 	   auto iA=tr.begin(ipow);
 	   auto iB=iA;   ++iB;
 	   auto iC=ipow; ++iC;
-
-	   Ex::iterator expprod=tr.wrap(iB, str_node("\\prod"));
-	   tr.move_after(iB, iC);
-	   it=tr.flatten_and_erase(it);
-	   cleanup_productlike(k, tr, expprod);
-	   return true;
+	   if(iC->is_integer() || k.properties.get<Integer>(iC)) {
+		   if(iC->is_integer()) { // newmult = (mult)^C;
+			   mpz_class nw_n, nw_d;
+			   mpz_pow_ui(nw_n.get_mpz_t(), ipow->multiplier->get_num().get_mpz_t(), to_long(*iC->multiplier));
+			   mpz_pow_ui(nw_d.get_mpz_t(), ipow->multiplier->get_den().get_mpz_t(), to_long(*iC->multiplier));
+			   multiplier_t newmult=multiplier_t(nw_n, nw_d);
+			   ipow->multiplier=rat_set.insert(newmult).first;
+			   }
+		   else { // need to generate (mult)^C as a separate factor.
+			   Ex nw("\\pow");
+			   nw.append_child(nw.begin(), str_node("1"))->multiplier=ipow->multiplier;
+			   nw.append_child(nw.begin(), Ex::iterator(iC));
+			   tr.wrap(it, str_node("\\prod"));
+			   tr.insert_subtree(it, nw.begin());
+			   one(ipow->multiplier);
+			   }
+		   Ex::iterator expprod=tr.wrap(iB, str_node("\\prod"));
+		   tr.move_after(iB, iC);
+		   it=tr.flatten_and_erase(it);
+		   cleanup_productlike(k, tr, expprod);
+		   return true;
+		   }
 	   }
    
    return false;

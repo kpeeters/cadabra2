@@ -32,4 +32,28 @@ def test02():
 
 test02()
 
-    
+def test03():
+    __cdbkernel__=create_scope()
+    ex:= (2 r**2)**6;
+    tst:= 64 r**(12) - @(ex);
+    assert(tst==0)
+    print("Test 03a passed")
+    a::Integer;    
+    ex:= (2 r**2)**a;
+    tst:= 2**a r**(2 a) - @(ex);
+    assert(tst==0)
+    print("Test 03b passed")
+    ex:= (2 r**2)**b;
+    tst:= (2 r**2)**b - @(ex);
+    assert(tst==0)
+    print("Test 03c passed")
+    ex:= (2 r)**6;
+    tst:= 64 r**6 - @(ex);
+    assert(tst==0)
+    print("Test 03d passed")
+    ex:= (2 (3 r)**2)**6;
+    tst:= 34012224 r**(12) - @(ex);
+    assert(tst==0)
+    print("Test 03e passed")
+
+test03()
