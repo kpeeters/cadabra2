@@ -114,7 +114,7 @@ class Shell(InteractiveConsole):
             if self.lhs!="":
                 line_stripped=line_stripped[:-1]
                 self.rhs += line_stripped
-                rewrite = self.indent + self.lhs + " = Ex(r'" + self.rhs+"')"
+                rewrite = self.indent + self.lhs + ' = Ex(r"' + self.rhs+'")'
                 if self.operator==':=':
                     if rewrite[-1]!=';':
                         rewrite+=';'						  
@@ -158,7 +158,7 @@ class Shell(InteractiveConsole):
                 self.rhs = line_stripped[found+2:]
                 return ""
             else:
-                rewrite = indent_line + line_stripped[:found] + " = Ex(r'" + line_stripped[found+2:-1]+"')"
+                rewrite = indent_line + line_stripped[:found] + ' = Ex(r"' + line_stripped[found+2:-1]+'")'
 
                 objname=line_stripped[:found]
                 rewrite = rewrite + "; _="+objname
@@ -175,9 +175,9 @@ class Shell(InteractiveConsole):
                         last = match.group(2)[1:-1]
                         if len(last)>0 and last[-1]==')':
                             last=last[:-1]
-                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+"(Ex(r'"+line_stripped[:found]+"'), Ex(r'"+last+"') )"
+                        rewrite = indent_line + "__cdbtmp__ = "+match.group(1)+'(Ex(r"'+line_stripped[:found]+'"), Ex(r"""'+last+' """) )'
                     else:
-                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+"(Ex(r'"+line_stripped[:found]+"'))"
+                        rewrite = indent_line + "__cdbtmp__ = "+line_stripped[found+2:]+'(Ex(r"'+line_stripped[:found]+'"))'
                     objname="__cdbtmp__"
                     # print the expression if we are at top level (not in a function) and the last char is not '.'
                     if lastchar!='.' and len(indent_line)==0:

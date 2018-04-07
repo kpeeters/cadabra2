@@ -22,6 +22,7 @@ def test02():
 test02()
 
 def test03():
+    c::Integer;
     ex:=(a**b)**c;
     res=ex.input_form();
     assert(res=="(a)**(b c)")
