@@ -55,5 +55,9 @@ def test03():
     tst:= 34012224 r**(12) - @(ex);
     assert(tst==0)
     print("Test 03e passed")
-
+    ex:= (2 r**2)**(-6);
+    tst:= 1/64 r**(-12) - @(ex);
+    assert(tst==0)
+    print("Test 03f passed")
+    
 test03()
