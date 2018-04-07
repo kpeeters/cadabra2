@@ -47,34 +47,34 @@ test02()
 
 def test03():
     __cdbkernel__=create_scope()
-{r,t,\phi,\theta}::Coordinate.
-{\mu,\nu,\rho,\sigma,\lambda,\kappa,\gamma,\chi}::Indices(values={t,r,\phi,\theta}, position=fixed).
-\partial{#}::PartialDerivative.
-g_{\mu\nu}::Metric.
-g^{\mu\nu}::InverseMetric.         
-ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
-        g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
-complete(ss, $g^{\mu\nu}$)
-ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
-                                            +\partial_{\nu}{g_{\rho\sigma}}
-                                            -\partial_{\sigma}{g_{\nu\rho}} );
-evaluate(ch, ss, rhsonly=True)
-chtst=rhs(ch)
-    # Check against e.g. arxiv:0904.4184.
-tst:=\components^{\mu}_{\nu\rho}{ {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
-                            {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
-                            {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
-                            {r,t,t}            =  M/r**2 (1-2 M/r),
-                            {r,\theta,\theta}  = -r (1-2M/r),
-                            {r,\phi,\phi}      = - (r-2M) \sin(\theta)**2,
-                            {\theta,\theta,r}  = 1/r,
-                            {\theta,r,\theta}  = 1/r,
-                            {\phi,\phi,r}      = 1/r,
-                            {\phi,r,\phi}      = 1/r,
-                            {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
-                            {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
-                            {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
-                        } - @(chtst);
+    {r,t,\phi,\theta}::Coordinate.
+    {\mu,\nu,\rho,\sigma,\lambda,\kappa,\gamma,\chi}::Indices(values={t,r,\phi,\theta}, position=fixed).
+    \partial{#}::PartialDerivative.
+    g_{\mu\nu}::Metric.
+    g^{\mu\nu}::InverseMetric.         
+    ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
+            g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+    complete(ss, $g^{\mu\nu}$)
+    ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
+                                                +\partial_{\nu}{g_{\rho\sigma}}
+                                                -\partial_{\sigma}{g_{\nu\rho}} );
+    evaluate(ch, ss, rhsonly=True)
+    chtst=rhs(ch)
+        # Check against e.g. arxiv:0904.4184.
+    tst:=\components^{\mu}_{\nu\rho}{ {t,r,t}          =  M/r**2 (1-2 M/r)**(-1),
+                                {t,t,r}            =  M/r**2 (1-2 M/r)**(-1),
+                                {r,r,r}            = -M/r**2 (1-2 M/r)**(-1),
+                                {r,t,t}            =  M/r**2 (1-2 M/r),
+                                {r,\theta,\theta}  = -r (1-2M/r),
+                                {r,\phi,\phi}      = - (r-2M) \sin(\theta)**2,
+                                {\theta,\theta,r}  = 1/r,
+                                {\theta,r,\theta}  = 1/r,
+                                {\phi,\phi,r}      = 1/r,
+                                {\phi,r,\phi}      = 1/r,
+                                {\theta,\phi,\phi} = -\sin(\theta)\cos(\theta),
+                                {\phi,\theta,\phi} = \cos(\theta)/\sin(\theta),
+                                {\phi,\phi,\theta} = \cos(\theta)/\sin(\theta)
+                            } - @(chtst);
     collect_components(_)
     assert(tst==0)
     print("Test 03a passed")
@@ -565,19 +565,17 @@ def test28():
 test28()
 
 
-print(list(map(lambda x: str(x), server.totals())))
-
 def test29():
     __cdbkernel__=create_scope()
     {t,r}::Coordinate;
     {\mu,\nu,\rho}::Indices(values={r,t});
     ex:= T_{\mu\nu} = T_{\mu\nu};
     rl:= { T_{r t} = Q, T_{t t} = N M };
-    evaluate(ex, rl, rhsonly=True);
+    evaluate(ex, rl, rhsonly=True)
     # Double evaluation should not introduce additional \components wrappers
     # around scalars.
-    evaluate(ex, rl, rhsonly=True);
-    ex2=ex[1];
+    evaluate(ex, rl, rhsonly=True)
+    ex2=ex[1]
     tst:= \components_{\mu\nu}{\comma{ \comma{r}{t} = Q }{ \comma{t}{t} = N M } } - @(ex2);
     collect_components(tst)        
     assert(tst==0)
@@ -587,19 +585,19 @@ test29()
 
 def test30():
     __cdbkernel__=create_scope()
-{r,t}::Coordinate;
-A::Depends(t);        
-\partial{#}::PartialDerivative;
-ex:=\partial_{t}{A};
-evaluate(ex);
-tst:=\partial_{t}{A} - @(ex);
-assert(tst==0)
-print("Test 30a passed")
-ex2:= \partial_{t}{ A**2 };
-evaluate(ex2);
-tst2:= 2A\partial_{t}{A} - @(ex2);
-assert(tst2==0)
-print("Test 30b passed")
+    {r,t}::Coordinate;
+    A::Depends(t);        
+    \partial{#}::PartialDerivative;
+    ex:=\partial_{t}{A};
+    evaluate(ex)
+    tst:=\partial_{t}{A} - @(ex);
+    assert(tst==0)
+    print("Test 30a passed")
+    ex2:= \partial_{t}{ A**2 };
+    evaluate(ex2)
+    tst2:= 2A\partial_{t}{A} - @(ex2);
+    assert(tst2==0)
+    print("Test 30b passed")
 
 test30()
 
@@ -613,11 +611,11 @@ def test31():
     rl:= { T_{r t} = Q, T_{t t} = M };
     glrl:= { g_{r r} = N, g_{t t} = B };
     Rrl:= R = \partial_{t}{A};
-    evaluate(ex, rl, rhsonly=True);
+    evaluate(ex, rl, rhsonly=True)
     ex2:= T_{\mu\nu} - g_{\mu\nu} R;
-    substitute(ex2, ex);
-    substitute(ex2, Rrl);
-    evaluate(ex2, glrl);
+    substitute(ex2, ex)
+    substitute(ex2, Rrl)
+    evaluate(ex2, glrl)
     tst:= \components_{\mu\nu}{\comma{ \comma{r}{t} = Q }{ \comma{t}{t} = -B \partial_{t}{A} + M }{ \comma{r}{r} = - N \partial_{t}{A} }} - @(ex2);
     assert(tst!=0)
     collect_components(tst)
@@ -627,6 +625,8 @@ def test31():
 test31()
 
         
+print(list(map(lambda x: str(x), server.totals())))
+
 
 # def test20():
 # __cdbkernel__=create_scope()
