@@ -20,6 +20,7 @@ set(TUTORIALS
   poincare_algebra
   string_states
   bianchi_identities
+  sphere
   schwarzschild
   exterior
   kaluza_klein

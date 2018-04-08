@@ -639,3 +639,19 @@ print(list(map(lambda x: str(x), server.totals())))
 # evaluate(ex, rl);
 # tst:= 6 \Gamma^{0 1 2} - @(ex);
 # assert(tst)
+
+# def test32():
+#     # https://github.com/kpeeters/cadabra2/issues/86    
+#     __cdbkernel__=create_scope()
+#     {r,t}::Coordinate.
+#     {m,n}::Indices(values={t,r}, position=fixed).
+#     ex:= A_{m} = A_{m};
+#     rl:= A_{t} = 3;
+#     evaluate(ex, rl, rhsonly=True, simplify=True)
+#     ex2:= A_{m};
+#     evaluate(ex2, ex);
+#     tst:= \components_{m}( \comma{ \comma{t} = 3  } ) - @(ex2);
+#     collect_components(_)
+#     assert(tst==0)
+#     print("Test 32 passed")
+

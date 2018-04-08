@@ -23,7 +23,10 @@ a {
 a:hover {
   color: #209020;
   background-color: #e0e0e0;
-  }
+}
+#logobar a:hover {
+	 background-color: white !important;
+}
 hr {
     border: 0;
     height: 1px;
@@ -43,10 +46,10 @@ div#logobar {
 	 padding-bottom: 20px;
 }
 div#logobar div#cadabra_logo {
-	 width: 38px;
+	 width: 42px;
 	 position: relative;
-	 top: 4px;
-	 margin-left: 3px;
+	 top: 3px;
+	 margin-left: 0px;
 	 margin-right: 10px;
 	 vertical-align: middle;
 	 display: inline-block;
@@ -315,12 +318,15 @@ div.view_options {
 	 margin-top: -10px;
 	 margin-bottom: 10px;
 }
+div.view_options span::before {
+    content: "• ";
+}
 div.view_options span {
 	 display: inline-block;
 	 margin-left: 40px;
 	 font-style: italic;
-	 min-width: 200px;
-	 width: 200px;
+	 min-width: 300px;
+	 width: 300px;
 }
 div.download_options {
 	 margin-left: 50px;
@@ -484,6 +490,15 @@ h2.blog {
 }
 p.blog {
 	 width: 60%;
+}
+
+/* Search */
+
+#gsc-i-id1 {
+	 font-size: 14px;
+}
+#gs_tti50 {
+	 padding-top: 0px !important;
 }
 
 /* Small screens */
