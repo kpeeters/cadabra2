@@ -50,19 +50,38 @@
 	 {% block head %}{% endblock %}
   </head>
   <body>
+    <div id="topflex">
 	 <div id="logobar">
 		<a href="/">
+		  <div id="cadabra_logo">
+			 <img src="/static/icons/cadabra2.png" />
+		  </div>
 		  <div id="cadabra">
 			 Cadabra
 		  </div>
 		</a>
 		<div id="subtext">
-		  a field theory motivated approach to computer algebra
+		  a field-theory motivated approach to computer algebra
 		</div>
 		<!--		<div id="author">
 					Kasper Peeters<br/>
 					cadabra@phi-sci.com
 					</div> -->
+	 </div>
+	 <div id="search">
+<script>
+  (function() {
+    var cx = '016915739931163127408:1ha2sk1dyg0';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+	 </div>
 	 </div>
 	 <hr id="below_logo"/>
 	 <div id="menubar">
@@ -161,5 +180,15 @@
 	 </div>
 	 
 	 <script src="/static/scripts/hyphenator.js"></script>
+
+	 <script type="application/ld+json">
+		{
+		"@context": "http://schema.org",
+		"@type": "Organization",
+		"url": "https://cadabra.science",
+		"logo": "https://cadabra.science/static/icons/cadabra2.png"
+		}
+	 </script>
+
   </body>
 </html>
