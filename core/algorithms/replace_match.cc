@@ -25,12 +25,19 @@ Algorithm::result_t replace_match::apply(iterator& it)
 	// std::cerr << "current: " << current << std::endl;
 	// std::cerr << "old: " << tr << std::endl;
 
+	// FIXME: we should store the point at which take_match acted in the history,
+	// because it may not have been the first point where can_apply returned true.
 	it=tr.begin();
+	bool acted_at_head=true;
 	while(it!=tr.end()) {
-		if(*it->name=="\\sum")
+		if(tr.is_head(it) && (*it->name=="\\sum" || *it->name=="\\comma")) break;
+		if(*it->name=="\\sum" && *tr.parent(it)->name=="\\int") {
+			acted_at_head=false;
 			break;
+			}
 		++it;
 		}
+	
 	substitute subs(kernel, tr, rules);
 
 	auto sumnode=it;
@@ -43,7 +50,16 @@ Algorithm::result_t replace_match::apply(iterator& it)
 			if(!replaced) {
 				// Replace the first term that matches with 'current'.
 				replaced=true;
-				iterator ci = tr.insert_subtree(sib, current.begin());
+				iterator ci;
+				if(acted_at_head) 
+					ci = tr.insert_subtree(sib, current.begin());
+				else {
+					// FIXME: make this more robust.
+					auto findsum=current.begin(current.begin());
+					while(findsum->fl.parent_rel!=str_node::parent_rel_t::p_none)
+						++findsum;
+					ci = tr.insert_subtree(sib, findsum);
+					}
 				cleanup_dispatch(kernel, tr, ci);
 				}
 			}

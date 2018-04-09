@@ -33,3 +33,16 @@ def test02():
 
 test02()
 
+def test03():
+    # take_match should also work to select terms in an integral
+    # and then replace them later.
+    __cdbkernel__=create_scope()
+    ex:= \int{A+B M+C N+D}{dx};
+    take_match(_, $B Q??$)
+    substitute(_, $B->P$)
+    replace_match(_)
+    tst:= \int{A + P M + C N + D}{dx} - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
+
+test03()

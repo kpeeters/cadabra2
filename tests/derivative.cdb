@@ -671,3 +671,7 @@ test39()
 #     print("Test 40 passed")
 # 
 # test40()
+
+# {dx,dp}::DifferentialForm(degree=1);
+# ex:= dp ^ ( p dx );
+# sort_product(ex);

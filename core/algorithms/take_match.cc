@@ -12,7 +12,14 @@ take_match::take_match(const Kernel& k, Ex& e, Ex& rules_)
 
 bool take_match::can_apply(iterator it) 
 	{
-	if(*it->name=="\\sum" || *it->name=="\\comma") return true;
+	// Apply only on terms in a top-level sum or elements of a top-level list,
+	// or on terms inside an integral.
+	// The second condition can be relaxed in the future to cover other
+	// operators which distribute over sums; for now let's be conservative.
+	// Note that any changes here need corresponding changes in replace_match.
+	
+	if(tr.is_head(it) && (*it->name=="\\sum" || *it->name=="\\comma")) return true;
+	if(*it->name=="\\sum" && *tr.parent(it)->name=="\\int") return true;
 	return false;
 	}
 

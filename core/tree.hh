@@ -373,8 +373,10 @@ class tree {
 
 		/// Merge with other tree, creating new branches and leaves only if they are not already present.
 		void     merge(sibling_iterator, sibling_iterator, sibling_iterator, sibling_iterator, 
-							bool duplicate_leaves=false);
-		/// Sort (std::sort only moves values of nodes, this one moves children as well).
+		               bool duplicate_leaves=false);
+		/// As above, but using two trees with a single top node at the 'to' and 'from' positions.
+		void     merge(iterator to, iterator from, bool duplicate_leaves);
+      /// Sort (std::sort only moves values of nodes, this one moves children as well).
 		void     sort(sibling_iterator from, sibling_iterator to, bool deep=false);
 		template<class StrictWeakOrdering>
 		void     sort(sibling_iterator from, sibling_iterator to, StrictWeakOrdering comp, bool deep=false);
@@ -1860,6 +1862,19 @@ void tree<T, tree_node_allocator>::merge(sibling_iterator to1,   sibling_iterato
 			}
 		++from1;
 		}
+	}
+
+template <class T, class tree_node_allocator>
+void tree<T, tree_node_allocator>::merge(iterator to, iterator from, bool duplicate_leaves)
+	{
+	sibling_iterator to1(to);
+	sibling_iterator to2=to1;
+	++to2;
+	sibling_iterator from1(from);
+	sibling_iterator from2=from1;
+	++from2;
+
+	merge(to1, to2, from1, from2, duplicate_leaves);
 	}
 
 
