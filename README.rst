@@ -508,5 +508,5 @@ canonicalisation code), James Allen (for writing much of the factoring
 code), Dominic Price (for the conversion to pybind and the Windows
 port), the Software Sustainability Institute and the Institute of
 Advanced Study. Thanks to the many people who have sent me bug reports
-(keep 'm coming), and thanks to all of you who cited the Cadabra
-papers.
+(keep 'm coming), and thanks to all of you who uses cadabra, sent
+feedback or cited the Cadabra papers.

@@ -89,8 +89,8 @@ def test04():
     __cdbkernel__ = create_scope()
     \partial{#}::PartialDerivative;
     \dot{#}::Accent;
-    NoMomList= [ Ex(r'A_{a? b?}'), Ex(r'S(t)'), Ex(r'a**2'), Ex(r"V'(\phi)"), Ex(r"\partial_{0}{a}") ]
-    ex:=Q_{m n \dot{r} p q s_{2} k} + a**2 \partial_{0}{a} A_{m n} \partial_{\dot{r}}{ B_{p q} } S(t) V'(\phi) \partial_{s_{2}}{ C } \partial_{0}{D_{k}} ;
+    NoMomList= [ Ex(r'A_{a? b?}'), Ex(r'T{#}'), Ex(r'S(t)'), Ex(r'a**2'), Ex(r"V'(\phi)"), Ex(r"\partial_{0}{a}") ]
+    ex:=Q_{m n \dot{r} p q s_{2} k} + T_{m n \dot{r} p q s_{2} k} + a**2 \partial_{0}{a} A_{m n} \partial_{\dot{r}}{ B_{p q} } S(t) V'(\phi) \partial_{s_{2}}{ C } \partial_{0}{D_{k}} ;
     terms=ex["\\sum"].__next__().children()
     for term in terms:
         if term.name=="\\prod":
@@ -114,9 +114,11 @@ def test04():
                         factor.append_child(Ex("k"+str(num)))
                         num+=1
         else:
-            term.append_child(Ex("k1"))
+            matches = map(lambda x: x.matches(term), NoMomList)
+            if not True in matches:
+                term.append_child(Ex("k1"))
     
-    tst:= Q_{m n \dot{r} p q s_{2} k}(k1) + a**2 \partial_{0}{a} A_{m n} k1_{\dot{r}} I B_{p q}(k1) S(t) V'(\phi) k2_{s_{2}} I C(k2) k3_{0} I D_{k}(k3) - @(ex);
+    tst:= Q_{m n \dot{r} p q s_{2} k}(k1) + T_{m n \dot{r} p q s_{2} k} + a**2 \partial_{0}{a} A_{m n} k1_{\dot{r}} I B_{p q}(k1) S(t) V'(\phi) k2_{s_{2}} I C(k2) k3_{0} I D_{k}(k3) - @(ex);
     assert(tst==0)
     print("Test 04 passed")
 
