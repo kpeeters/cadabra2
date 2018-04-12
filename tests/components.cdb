@@ -625,8 +625,6 @@ def test31():
 test31()
 
         
-print(list(map(lambda x: str(x), server.totals())))
-
 
 # def test20():
 # __cdbkernel__=create_scope()
@@ -654,4 +652,23 @@ print(list(map(lambda x: str(x), server.totals())))
 #     collect_components(_)
 #     assert(tst==0)
 #     print("Test 32 passed")
+
+def test32():
+    __cdbkernel__=create_scope()
+    {x,y,\xi}::Coordinate;
+    {i,j,k}::Indices(values={x,y,\xi});
+    \partial{#}::PartialDerivative;
+    F_{i j}::Depends(x,\xi);
+    ex:=\partial_{i}{F_{i k}} + m**2 A_{k};
+    evaluate(ex);
+    tst:=\components_{k}{ \comma{ \comma{\xi} = m**2 A_{\xi} + \partial_{x}{F_{x \xi}} + \partial_{\xi}{F_{\xi \xi}} }{ \comma{y}=m**2 A_{y} + \partial_{x}{F_{x y}} + \partial_{\xi}{F_{\xi y}}}{ \comma{x} = m**2 A_{x} + \partial_{x}{F_{x x}} + \partial_{\xi}{F_{\xi x}} } - @(ex);
+    collect_components(tst)
+    assert(tst==0)
+    print("Test 31 passed")
+
+test32()
+                          
+
+
+print(list(map(lambda x: str(x), server.totals())))
 

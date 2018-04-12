@@ -672,6 +672,6 @@ test39()
 # 
 # test40()
 
-# {dx,dp}::DifferentialForm(degree=1);
-# ex:= dp ^ ( p dx );
-# sort_product(ex);
+{dx,dp}::DifferentialForm(degree=1);
+ex:= ( x dp ) ^ ( p dx ) + ( p dx ) ^ ( x dp );
+sort_product(ex);

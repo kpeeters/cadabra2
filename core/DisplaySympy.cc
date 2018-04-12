@@ -182,14 +182,14 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip)
 			if(first) first=false;
 			else      str << ", ";
 			if(ch->fl.parent_rel==str_node::p_super) 
-				str << "UP(";
+				str << "UP";
 			if(ch->fl.parent_rel==str_node::p_sub) 
-				str << "DN(";
+				str << "DN";
 
 			dispatch(str, ch);
 
-			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub) 
-				str << ")";
+//			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub) 
+//				str << ")";
 			++ch;
 			}
 		if(dep) {

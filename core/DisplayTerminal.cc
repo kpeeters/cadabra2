@@ -316,6 +316,7 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\arrow")      print_arrowlike(str, it);
 	else if(*it->name=="\\pow")        print_powlike(str, it);
+	else if(*it->name=="\\wedge")      print_productlike(str, it, " ^ ");
 	else if(*it->name=="\\int")        print_intlike(str, it);
 	else if(*it->name=="\\sum")        print_intlike(str, it);
 	else if(*it->name=="\\equals")     print_equalitylike(str, it);

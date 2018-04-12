@@ -304,11 +304,11 @@ void TeXEngine::convert_one(std::shared_ptr<TeXRequest> req)
 
 void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	{
-	// We now follow
+	// We now no longer follow
 	// 
 	// https://www.securecoding.cert.org/confluence/display/seccode/FI039-C.+Create+temporary+files+securely
 	// 
-	// for temporary files.
+	// for temporary files; it needs to work on all platforms...
 
 	char olddir[1024];
 	if(getcwd(olddir, 1023)==NULL)

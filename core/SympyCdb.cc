@@ -12,7 +12,7 @@
 
 using namespace cadabra;
 
-// #define DEBUG
+//#define DEBUG
 
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args, 
 								  const std::string& method)

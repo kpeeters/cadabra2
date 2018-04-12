@@ -375,3 +375,8 @@ def test05():
 
 test05()
 
+{\alpha,\beta}::Indices(position=fixed);
+\gamma{#}::Matrix;
+\lambda::ImplicitIndex;
+ex:=\lambda^{\alpha} (\gamma^{m})_{\alpha \beta};
+combine(ex);

@@ -126,6 +126,8 @@ Algorithm::result_t combine::apply(iterator& it)
 		++dums1;
 		}
 
+	std::cerr << it << std::endl;
+
 //	prodflatten pf(tr, tr.end());
 //	pf.apply_recursive(it, false);
 
