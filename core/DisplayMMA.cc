@@ -2,6 +2,7 @@
 #include "Algorithm.hh"
 #include "Functional.hh"
 #include "DisplayMMA.hh"
+#include "PreClean.hh"
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
 #include <regex>
@@ -93,57 +94,57 @@ DisplayMMA::DisplayMMA(const Kernel& kernel, const Ex& e, bool uuc)
 		};
 
 	regex_map = {
-		{"\\alpha",   "\\[Alpha]"   },
-		{"\\beta",    "\\[Beta]"    },
-		{"\\gamma",   "\\[Gamma]"   }, 
-		{"\\delta",   "\\[Delta]"   },
-		{"\\epsilon", "\\[Epsilon]" },
-		{"\\zeta",    "\\[Zeta]"    },
-		{"\\eta",     "\\[Eta]"     },
-		{"\\theta",   "\\[Theta]"   },
-		{"\\iota",    "\\[Iota]"    },
-		{"\\kappa",   "\\[Kappa]"   },
-		{"\\lambda",  "\\[Lamda]"   }, 
-		{"\\mu",      "\\[Mu]"      },
-		{"\\nu",      "\\[Nu]"      },
-		{"\\xi",      "\\[Xi]"      },
-		{"\\omicron", "\\[Omicron]" },
-		{"\\pi",      "\\[Pi]"      },
-		{"\\pi",      "Pi"          },
-		{"\\rho",     "\\[Rho]"     },
-		{"\\sigma",   "\\[Sigma]"   },
-		{"\\tau",     "\\[Tau]"     },
-		{"\\upsilon", "\\[Upsilon]" },
-		{"\\phi",     "\\[Phi]"     },
-		{"\\varphi",  "\\[CurlyPhi]"},		
-		{"\\chi",     "\\[Chi]"     },
-		{"\\psi",     "\\[Psi]"     },
-		{"\\omega",   "\\[Omega]"   },
+		{"\\alpha",   R"(\[Alpha])"   },
+		{"\\beta",    R"(\[Beta])"    },
+		{"\\gamma",   R"(\[Gamma])"   }, 
+		{"\\delta",   R"(\[Delta])"   },
+		{"\\epsilon", R"(\[Epsilon])" },
+		{"\\zeta",    R"(\[Zeta])"    },
+		{"\\eta",     R"(\[Eta])"     },
+		{"\\theta",   R"(\[Theta])"   },
+		{"\\iota",    R"(\[Iota])"    },
+		{"\\kappa",   R"(\[Kappa])"   },
+		{"\\lambda",  R"(\[Lamda])"   }, 
+		{"\\mu",      R"(\[Mu])"      },
+		{"\\nu",      R"(\[Nu])"      },
+		{"\\xi",      R"(\[Xi])"      },
+		{"\\omicron", R"(\[Omicron])" },
+		{"\\pi",      R"(\[Pi])"      },
+		{"\\pi",      R"(Pi)"              },
+		{"\\rho",     R"(\[Rho])"     },
+		{"\\sigma",   R"(\[Sigma])"   },
+		{"\\tau",     R"(\[Tau])"     },
+		{"\\upsilon", R"(\[Upsilon])" },
+		{"\\phi",     R"(\[Phi])"     },
+		{"\\varphi",  R"(\[CurlyPhi])"},		
+		{"\\chi",     R"(\[Chi])"     },
+		{"\\psi",     R"(\[Psi])"     },
+		{"\\omega",   R"(\[Omega])"   },
 
-		{"\\Alpha",   "\\[CapitalAlpha]"   },
-		{"\\Beta",    "\\[CapitalBeta]"    },
-		{"\\Gamma",   "\\[CapitalGamma]"   },
-		{"\\Delta",   "\\[CapitalDelta]"   },
-		{"\\Epsilon", "\\[CapitalEpsilon]" },
-		{"\\Zeta",    "\\[CapitalZeta]"    },
-		{"\\Eta",     "\\[CapitalEta]"     },
-		{"\\Theta",   "\\[CapitalTheta]"   },
-		{"\\Iota",    "\\[CapitalIota]"    },
-		{"\\Kappa",   "\\[CapitalKappa]"   },
-		{"\\Lambda",  "\\[CapitalLamda]"   },
-		{"\\Mu",      "\\[CapitalMu]"      },
-		{"\\Nu",      "\\[CapitalNu]"      },
-		{"\\Xi",      "\\[CapitalXi]"      },
-		{"\\Omicron", "\\[CapitalOmicron]" },
-		{"\\Pi",      "\\[CapitalPi]"      },
-		{"\\Rho",     "\\[CapitalRho]"     },
-		{"\\Sigma",   "\\[CapitalSigma]"   },
-		{"\\Tau",     "\\[CapitalTau]"     },
-		{"\\Upsilon", "\\[CapitalUpsilon]" },
-		{"\\Phi",     "\\[CapitalPhi]"     },
-		{"\\Chi",     "\\[CapitalChi]"     },
-		{"\\Psi",     "\\[CapitalPsi]"     },
-		{"\\Omega",   "\\[CapitalOmega]"   },
+		{"\\Alpha",   R"(\[CapitalAlpha])"   },
+		{"\\Beta",    R"(\[CapitalBeta])"    },
+		{"\\Gamma",   R"(\[CapitalGamma])"   },
+		{"\\Delta",   R"(\[CapitalDelta])"   },
+		{"\\Epsilon", R"(\[CapitalEpsilon])" },
+		{"\\Zeta",    R"(\[CapitalZeta])"    },
+		{"\\Eta",     R"(\[CapitalEta])"     },
+		{"\\Theta",   R"(\[CapitalTheta])"   },
+		{"\\Iota",    R"(\[CapitalIota])"    },
+		{"\\Kappa",   R"(\[CapitalKappa])"   },
+		{"\\Lambda",  R"(\[CapitalLamda])"   },
+		{"\\Mu",      R"(\[CapitalMu])"      },
+		{"\\Nu",      R"(\[CapitalNu])"      },
+		{"\\Xi",      R"(\[CapitalXi])"      },
+		{"\\Omicron", R"(\[CapitalOmicron])" },
+		{"\\Pi",      R"(\[CapitalPi])"      },
+		{"\\Rho",     R"(\[CapitalRho])"     },
+		{"\\Sigma",   R"(\[CapitalSigma])"   },
+		{"\\Tau",     R"(\[CapitalTau])"     },
+		{"\\Upsilon", R"(\[CapitalUpsilon])" },
+		{"\\Phi",     R"(\[CapitalPhi])"     },
+		{"\\Chi",     R"(\[CapitalChi])"     },
+		{"\\Psi",     R"(\[CapitalPsi])"     },
+		{"\\Omega",   R"(\[CapitalOmega])"   },
 	};
 	}
 
@@ -245,14 +246,14 @@ void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int skip)
 			if(first) first=false;
 			else      str << ", ";
 			if(ch->fl.parent_rel==str_node::p_super) 
-				str << "UP[";
+				str << "UP";
 			if(ch->fl.parent_rel==str_node::p_sub) 
-				str << "DN[";
+				str << "DN";
 
 			dispatch(str, ch);
 
-			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub) 
-				str << "]";
+//			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub) 
+//				str << "]";
 			++ch;
 			}
 		if(dep) {
@@ -589,7 +590,7 @@ std::string DisplayMMA::preparse_import(const std::string& in)
 	{
 	std::string ret = in;
 	for(auto& r: regex_map) {
-		ret = std::regex_replace(ret, std::regex(r.second), r.first);
+		ret = replace_all(ret, r.second, r.first);
 		}
 	return ret;
 	}

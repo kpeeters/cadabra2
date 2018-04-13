@@ -36,4 +36,7 @@ void cleanup_sub(const Kernel& k, Ex&, Ex::iterator& it);
 /// indexbracket node.
 void cleanup_indexbracket(const Kernel& k, Ex&, Ex::iterator& it);
 
+/// Replace all occurrances of 'from' with 'to', return result (does not replace in-place).	
+std::string replace_all(std::string const& original, std::string const& from, std::string const& to );
+	
 }

@@ -44,7 +44,7 @@ def test03():
     assert(tst==0)
     print("Test 03 passed")
 
-
+test03()
 #ex:= (a*\cos{\theta})**2;
 #map_mma(ex);
 
@@ -56,7 +56,5 @@ def test04():
     assert(ex==1)
     print("Test 04 passed")
 
-
-ex:=\sinh(x)**2 + \cosh(x)**2;
-kernel(scalar_backend="mathematica")
-simplify(_);
+test04()
+        

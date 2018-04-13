@@ -655,6 +655,7 @@ test31()
 
 def test32():
     __cdbkernel__=create_scope()
+#kernel(scalar_backend="mathematica")
     {x,y,\xi}::Coordinate;
     {i,j,k}::Indices(values={x,y,\xi});
     \partial{#}::PartialDerivative;

@@ -16,7 +16,7 @@ using namespace cadabra;
 WSLINK        MMA::lp = 0;
 WSEnvironment MMA::stdenv = 0;
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap,
 									 std::vector<std::string> args, const std::string& method)
@@ -98,7 +98,11 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 	
 	result = ds.preparse_import(result);
 	
-	auto ptr = std::make_shared<Ex>();
+#ifdef DEBUG
+	std::cerr << "preparsed: " << result << std::endl;
+#endif
+	
+   auto ptr = std::make_shared<Ex>();
 	cadabra::Parser parser(ptr);
 	std::stringstream istr(result);
 	istr >> parser;
