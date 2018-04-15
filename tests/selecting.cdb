@@ -37,12 +37,39 @@ def test03():
     # take_match should also work to select terms in an integral
     # and then replace them later.
     __cdbkernel__=create_scope()
-    ex:= \int{A+B M+C N+D}{dx};
+    ex:= 5\int{A+3 B M + C N+D}{dx};
     take_match(_, $B Q??$)
-    substitute(_, $B->P$)
+    substitute(_, $B->2 P$)
     replace_match(_)
-    tst:= \int{A + P M + C N + D}{dx} - @(ex);
+    tst:= 5\int{A + 6 P M + C N + D}{dx} - @(ex);
     assert(tst==0)
     print("Test 03 passed")
 
 test03()
+
+def test04():
+    # take_match should also work to select terms in an integral
+    # and then replace them later.
+    __cdbkernel__=create_scope()
+    ex:= 5\int{A+3 B M + C N+D}{dx};
+    take_match(_, $B Q??$)
+    substitute(_, $B->0$)
+    replace_match(_)
+    tst:= 5\int{A + C N + D}{dx} - @(ex);
+    assert(tst==0)
+    print("Test 04 passed")
+
+test04()
+
+def test05():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex:=\int{A_{i} h_{j} + \partial_{i}{B_{j}} D }{x};
+    take_match(_, $\partial_{i}{B_{j}} Q??$);
+    substitute(_, $D -> E$);
+    replace_match(_);
+    tst:=\int{A_{i} h_{j} + \partial_{i}{B_{j}} E}{x} - @(ex);
+    assert(tst==0)
+    print("Test 05 passed")
+
+test05()
