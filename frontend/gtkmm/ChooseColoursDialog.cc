@@ -7,19 +7,12 @@
 
 namespace cadabra
 {
-	template <typename T>
-	void do_something(T)
-	{
-		std::cout << "doming something\n";
-	}
-
-
 	std::string capitalize_first(std::string in)
 	{
 		if (in.empty())
 			return in;
 		in[0] = std::toupper(in[0]);
-		for (auto i = 1; i < in.size() - 1; ++i) {
+		for (int i = 1; i < (int)in.size() - 1; ++i) {
 			if (in[i] == ' ')
 				in[i + 1] = std::toupper(in[i + 1]);
 		}
@@ -50,7 +43,7 @@ namespace cadabra
 				// Make the label and give it the colour that type of keyword is currently highlighted as
 				auto kw_label = std::make_unique<Gtk::Label>(capitalize_first(jt->first));
 				auto kw_button = std::make_unique<Gtk::ColorButton>();
-				kw_button->property_rgba() = jt->second;
+				kw_button->property_rgba() = Gdk::RGBA(jt->second);
 				kw_button->set_title("Choosing colours for "s + capitalize_first(it->first) + ": " + capitalize_first(jt->first));
 				kw_button->signal_color_set().connect(sigc::mem_fun(this, &ChooseColoursDialog::on_color_set));
 				sec_grid->attach(*kw_label, 0, row, 1, 1);
@@ -73,7 +66,7 @@ namespace cadabra
 	{
 		for (auto& language : colour_buttons) {
 			for (auto& kw : language.second) {
-				prefs.colours[language.first][kw.first] = kw.second->get_rgba();
+				prefs.colours[language.first][kw.first] = kw.second->get_rgba().to_string();
 			}
 		}
 		parent.refresh_highlighting();

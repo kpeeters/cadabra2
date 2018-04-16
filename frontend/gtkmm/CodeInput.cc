@@ -3,6 +3,7 @@
 #include <gdkmm/general.h>
 #include <gtkmm/messagedialog.h>
 #include <gdk/gdkkeysyms.h>
+#include <gdkmm/rgba.h>
 #include <iostream>
 #include <regex>
 #include <map>
@@ -201,7 +202,7 @@ void CodeInput::highlight_latex()
 void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs)
 {
 	std::string map_idx;
-	void (CodeInput::*callback)();
+	void (CodeInput::*callback)()=0;
 
 	switch (cell_type)
 	{
@@ -220,9 +221,9 @@ void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& p
 	// Create tags
 	for (const auto& elem : prefs.colours.at(map_idx)) {
 		if (edit.get_buffer()->get_tag_table()->lookup(elem.first)) // Already set
-			edit.get_buffer()->get_tag_table()->lookup(elem.first)->property_foreground_rgba() = elem.second;
+			edit.get_buffer()->get_tag_table()->lookup(elem.first)->property_foreground_rgba() = Gdk::RGBA(elem.second);
 		else // Need to create
-			edit.get_buffer()->create_tag(elem.first)->property_foreground_rgba() = elem.second;
+			edit.get_buffer()->create_tag(elem.first)->property_foreground_rgba() = Gdk::RGBA(elem.second);
 	}
 
 	// Setup callback
@@ -232,7 +233,8 @@ void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& p
 	hl_conn = edit.get_buffer()->signal_changed().connect(sigc::mem_fun(*this, callback));
 
 	// And perform an initial highlight
-	(this->*callback)();
+	if(callback!=0)
+		(this->*callback)();
 }
 
 

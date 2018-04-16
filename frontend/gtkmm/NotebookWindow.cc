@@ -64,19 +64,9 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// We use CSS selectors for old-style and new-style (post 3.20) simultaneously.
 	// Run program with 'GTK_DEBUG=interactive' environment variable and press Ctrl-Shift-D
 	// to inspect.
-	Glib::ustring data = "";
-	data += "textview text { color: black; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
-	data += "GtkTextView { color: black; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
-	data += "*:focus { background-color: #eee; }\n";
-	data += "*:selected { background-color: #ccc; }\n";
-	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
-	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
-	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
+	if(prefs.highlight) load_css("black");
+	else                load_css("blue");	
 
-	if(!css_provider->load_from_data(data)) {
-	  std::cerr << "Cannot parse internal CSS." << std::endl;
-		throw std::logic_error("Failed to parse widget CSS information.");
-		}
 	auto screen = Gdk::Screen::get_default();
 	// std::cerr << "cadabra-client: scale = " << screen->get_monitor_scale_factor(0) << std::endl;
 	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -352,6 +342,23 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 NotebookWindow::~NotebookWindow()
 	{
 	}
+
+void NotebookWindow::load_css(const std::string& text_colour)
+   {
+	Glib::ustring data = "";
+	data += "textview text { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "GtkTextView { color: "+text_colour+"; background-color: white; -GtkWidget-cursor-aspect-ratio: 0.2; }\n";
+	data += "*:focus { background-color: #eee; }\n";
+	data += "*:selected { background-color: #ccc; }\n";
+	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
+	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
+	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
+
+	if(!css_provider->load_from_data(data)) {
+	  std::cerr << "Cannot parse internal CSS." << std::endl;
+		throw std::logic_error("Failed to parse widget CSS information.");
+		}
+   }
 
 bool NotebookWindow::on_delete_event(GdkEventAny* event)
 	{
@@ -1668,7 +1675,8 @@ void NotebookWindow::on_prefs_highlight_syntax(int on)
 {
 	if (prefs.highlight == on) return;
 	prefs.highlight = on;
-
+	prefs.save();
+	
 	for (auto& canvas : canvasses) {
 		for (auto& visualcell : canvas->visualcells) {
 			// Need to be careful to only try and do this on latex or
@@ -1678,10 +1686,14 @@ void NotebookWindow::on_prefs_highlight_syntax(int on)
 			// Fallthrough
 			case DataCell::CellType::python:
 			case DataCell::CellType::latex:
-				if (on)
+				if(on) {
+					load_css("black");
 					visualcell.second.inbox->enable_highlighting(visualcell.first->cell_type, prefs);
-				else
+					}
+				else {
+					load_css("blue");
 					visualcell.second.inbox->disable_highlighting();
+					}
 				break;
 			default:
 				break;

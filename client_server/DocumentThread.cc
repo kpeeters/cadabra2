@@ -172,25 +172,25 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	highlight = data.get("highlight", false).asBool();
 	is_registered = data.get("is_registered", false).asBool();
 	is_anonymous = data.get("is_anonymous", false).asBool();
-	// Get the colours for syntax highlighting. 
-	auto& python_colours = data.get("colours", Json::Value()).get("python", Json::Value());
-	colours["python"]["keyword"] = Gdk::RGBA(python_colours.get("keyword", "RoyalBlue").asString());
-	colours["python"]["operator"] = Gdk::RGBA(python_colours.get("operator", "SlateGray").asString());
-	colours["python"]["brace"] = Gdk::RGBA(python_colours.get("brace", "SlateGray").asString());
-	colours["python"]["string"] = Gdk::RGBA(python_colours.get("string", "ForestGreen").asString());
-	colours["python"]["comment"] = Gdk::RGBA(python_colours.get("comment", "Silver").asString());
-	colours["python"]["number"] = Gdk::RGBA(python_colours.get("number", "Sienna").asString());
-	colours["python"]["maths"] = Gdk::RGBA(python_colours.get("maths", "Olive").asString());
-	colours["python"]["function"] = Gdk::RGBA(python_colours.get("function", "FireBrick").asString());
-	colours["python"]["algorithm"] = Gdk::RGBA(python_colours.get("algorithm", "DarkViolet").asString());
-	colours["python"]["property"] = Gdk::RGBA(python_colours.get("property", "MediumOrchid").asString());
+	// Get the colours for syntax highlighting.
+	auto python_colours = data.get("colours", Json::Value()).get("python", Json::Value());
+	colours["python"]["keyword"] = (python_colours.get("keyword", "RoyalBlue").asString());
+	colours["python"]["operator"] = (python_colours.get("operator", "SlateGray").asString());
+	colours["python"]["brace"] = (python_colours.get("brace", "SlateGray").asString());
+	colours["python"]["string"] = (python_colours.get("string", "ForestGreen").asString());
+	colours["python"]["comment"] = (python_colours.get("comment", "Silver").asString());
+	colours["python"]["number"] = (python_colours.get("number", "Sienna").asString());
+	colours["python"]["maths"] = (python_colours.get("maths", "Olive").asString());
+	colours["python"]["function"] = (python_colours.get("function", "FireBrick").asString());
+	colours["python"]["algorithm"] = (python_colours.get("algorithm", "DarkViolet").asString());
+	colours["python"]["property"] = (python_colours.get("property", "MediumOrchid").asString());
 
-	auto& latex_colours = data.get("colours", Json::Value()).get("latex", Json::Value());
-	colours["latex"]["command"] = Gdk::RGBA(latex_colours.get("command", "rgb(52,101,164)").asString());
-	colours["latex"]["parameter"] = Gdk::RGBA(latex_colours.get("brace", "rgb(245,121,0)").asString());
-	colours["latex"]["comment"] = Gdk::RGBA(latex_colours.get("comment", "Silver").asString());
-	colours["latex"]["number"] = Gdk::RGBA(latex_colours.get("number", "Sienna").asString());
-	colours["latex"]["maths"] = Gdk::RGBA(latex_colours.get("maths", "Sienna").asString());
+	auto latex_colours = data.get("colours", Json::Value()).get("latex", Json::Value());
+	colours["latex"]["command"] = (latex_colours.get("command", "rgb(52,101,164)").asString());
+	colours["latex"]["parameter"] = (latex_colours.get("brace", "rgb(245,121,0)").asString());
+	colours["latex"]["comment"] = (latex_colours.get("comment", "Silver").asString());
+	colours["latex"]["number"] = (latex_colours.get("number", "Sienna").asString());
+	colours["latex"]["maths"] = (latex_colours.get("maths", "Sienna").asString());
 }
 
 void DocumentThread::Prefs::save()
@@ -203,7 +203,7 @@ void DocumentThread::Prefs::save()
 		data["is_anonymous"] = is_anonymous;
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)
-				data["colours"][lang.first][kw.first] = kw.second.to_string().data();
+				data["colours"][lang.first][kw.first] = kw.second;
 		}
 		f << data << '\n';
 	}

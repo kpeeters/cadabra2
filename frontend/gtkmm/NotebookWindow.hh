@@ -227,7 +227,7 @@ namespace cadabra {
 		bool on_tex_error(const std::string&, DTree::iterator);
 
 		// Styling through CSS
-		void                           setup_css_provider();
+	   void                           load_css(const std::string&);
 		Glib::RefPtr<Gtk::CssProvider> css_provider;
 		Glib::RefPtr<Gio::Settings>    settings;
 		void on_text_scaling_factor_changed(const std::string& key);
