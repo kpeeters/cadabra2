@@ -304,6 +304,20 @@ def test25():
     print("Test 25 passed")
 
 test25()        
+
+def test26():
+    __cdbkernel__=create_scope()
+    A = Ex(0)
+    B = Ex(0)
+    tst:= @(A) - @(B);
+    assert(tst==0)
+    A = Ex(0)
+    B = Ex(0)
+    tst:= @(A) + @(B);
+    assert(tst==0)
+    print("Test 26 passed")
+
+test26()
         
   
 # \bar{#}::Accent.

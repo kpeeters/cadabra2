@@ -138,14 +138,19 @@ void cleanup_sub(const Kernel& k, Ex& tr, Ex::iterator& it)
 		}
 
 	// Single-term situation: remove the \sum.
-	assert(tr.number_of_children(it)>0);
-	if(tr.number_of_children(it)==1) {
-		sit=tr.begin(it);
-		sit->fl.parent_rel=it->fl.parent_rel;
-		sit->fl.bracket=it->fl.bracket;
-		multiply(sit->multiplier, *it->multiplier);
-		tr.flatten(it);
-		it=tr.erase(it);
+	if(tr.number_of_children(it)==0) {
+		zero(it->multiplier);
+		it->name=name_set.insert("1").first;
+		}
+	else {
+		if(tr.number_of_children(it)==1) {
+			sit=tr.begin(it);
+			sit->fl.parent_rel=it->fl.parent_rel;
+			sit->fl.bracket=it->fl.bracket;
+			multiply(sit->multiplier, *it->multiplier);
+			tr.flatten(it);
+			it=tr.erase(it);
+			}
 		}
 	}
 
