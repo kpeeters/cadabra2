@@ -6,7 +6,7 @@ def test01():
     expand_delta(_);
     distribute(_);
     tst1:= a*\delta^{i1 j1}\delta^{i2 j2}-a*\delta^{i2 j1}\delta^{i1 j2}-@(obj1);
-    assert(tst1==0);
+    assert(tst1==0)
     print('Test 01 passed')
 
 test01()
@@ -42,9 +42,24 @@ def test04():
     drop_weight(_, $field=3$)
     tst:= A B + B - @(ex);
     assert(tst==0)
+    print("Test 04 passed")
 
 test04()
 
+def test05():
+    __cdbkernel__=create_scope()
+    \delta{#}::KroneckerDelta;
+    {r,s,t}::Indices(position=fixed);
+    \partial{#}::PartialDerivative;
+    ex:=\partial^{r}{a} \partial_{r}{a};
+    substitute(ex, $\partial^{r}{a} = \delta^{r}_{0} \partial^{0}{a}, \partial_{r}{a} = \delta_{r}^{0} \partial_{0}{a}$)
+    eliminate_kronecker(ex)
+    tst:= \partial^{0}{a} \partial_{0}{a} - @(ex);
+    assert(tst==0)
+    print("Test 05 passed")
+
+test05()
+        
 \delta{#}::KroneckerDelta.
 \eps_{#}::EpsilonTensor(delta=\delta).
 F_{q r s a b c}::TableauSymmetry(shape={1,1}, indices={0,1}, shape={1,1,1}, indices={3,4,5}).

@@ -100,6 +100,8 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 					}
 				if(replaced) {
 					ret=result_t::l_applied;
+					iterator tmp=oi;
+					cleanup_dispatch(kernel, tr, tmp);
 					it=tr.erase(it);
 					}
 				else ++it;
