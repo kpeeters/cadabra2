@@ -137,7 +137,7 @@ std::string TeXEngine::handle_latex_errors(const std::string& result, int exit_c
 	
 	pos=result.find("! Dimension too large");
 	if(pos != std::string::npos) {
-		 return "Output cell too large (breqn dimension too large), output suppressed.";
+		 return "Output cell too large (dimension too large), output suppressed.";
 		 }
 	
 	pos=result.find("! Double superscript.");
@@ -361,7 +361,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 //#endif
 
 	//(int)(millimeter_per_inch*horizontal_pixels/100.0); //140;
-	const double vertical_mm=10*horizontal_mm;
+	const double vertical_mm=std::min(10*horizontal_mm, 3000.0);
 
 
 	// Write each string in the set of requests into a buffer, separating
