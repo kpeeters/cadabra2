@@ -64,13 +64,13 @@ def test06():
     __cdbkernel__=create_scope()
     {a,b,c}::Indices(name=A, position=free);
     {m,n,p}::Indices(name=B, position=fixed);
-    ex:=A_{a b m} B^{a b m};
+    ex:=A_{a b 3 m} B^{a b m};
     lower_free_indices(_)
-    tst:=A_{a b m} B_{a b}^{m} - @(ex);
+    tst:=A_{a b 3 m} B_{a b}^{m} - @(ex);
     assert(tst==0)
     print("Test 06a passed")
     raise_free_indices(ex)
-    tst:=A^{a b}_{m} B^{a b m} - @(ex);
+    tst:=A^{a b}_{3 m} B^{a b m} - @(ex);
     assert(tst==0)
     print("Test 06b passed")
 
