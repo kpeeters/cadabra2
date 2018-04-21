@@ -1,0 +1,92 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{lower_free_indices}{Make all free indices in an expression subscripts.}\n\nFree indicies (indices declared with the \\verb|Indices(position=free)| property) can appear as subscripts or superscripts,\nbut sometimes it is useful to move them all into the same position. "
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{lower_free_indices}{Make all free indices in an expression subscripts.}\n\nFree indicies (indices declared with the \\verb|Indices(position=free)| property) can appear as subscripts or superscripts,\nbut sometimes it is useful to move them all into the same position. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{a b m} B^{a b m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{a b m} B^{a b m}\\end{dmath*}"
+				}
+			],
+			"source" : "{a,b,c}::Indices(name=A, position=free);\n{m,n,p}::Indices(name=B, position=fixed);\nex:=A_{a b m} B^{a b m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{a b m} B_{a b}^{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{a b m} B_{a b}\\,^{m}\\end{dmath*}"
+				}
+			],
+			"source" : "lower_free_indices(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The opposite of this is \\algo{raise_free_indices}, which moves all indices to be superscripts."
+				}
+			],
+			"hidden" : true,
+			"source" : "The opposite of this is \\algo{raise_free_indices}, which moves all indices to be superscripts."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

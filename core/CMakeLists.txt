@@ -140,6 +140,7 @@ set(LOCAL_SRC_FILES
   algorithms/integrate_by_parts.cc
   algorithms/join_gamma.cc
   algorithms/keep_terms.cc
+  algorithms/lower_free_indices.cc
   algorithms/lr_tensor.cc
   algorithms/map_sympy.cc
   algorithms/order.cc

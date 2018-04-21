@@ -107,6 +107,7 @@
 #include "algorithms/integrate_by_parts.hh"
 #include "algorithms/join_gamma.hh"
 #include "algorithms/keep_terms.hh"
+#include "algorithms/lower_free_indices.hh"
 #include "algorithms/lr_tensor.hh"
 #ifdef MATHEMATICA_FOUND
    #include "algorithms/map_mma.hh"
@@ -1462,7 +1463,7 @@ PYBIND11_MODULE(cadabra2, m)
 	def_algo_1<expand_power>("expand_power", m);
 	def_algo_1<flatten_sum>("flatten_sum", m);
 	def_algo_1<indexsort>("indexsort", m);
-	def_algo_1<lr_tensor>("lr_tensor", m);
+	def_algo_1<lr_tensor>("lr_tensor", m);	
 	def_algo_1<product_rule>("product_rule", m);
 	def_algo_1<reduce_delta>("reduce_delta", m);
 //	def_algo_1<reduce_sub>("reduce_sub", m);
@@ -1494,6 +1495,16 @@ PYBIND11_MODULE(cadabra2, m)
 		 pybind11::arg("ex"),pybind11::arg("condition"),
 		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
+
+	m.def("lower_free_indices", &dispatch_ex<lower_free_indices, bool>,
+	      pybind11::arg("ex"), pybind11::arg("lower")=true,
+	      pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+	      pybind11::return_value_policy::reference_internal );
+
+	m.def("raise_free_indices", &dispatch_ex<lower_free_indices, bool>,
+	      pybind11::arg("ex"), pybind11::arg("lower")=false,
+	      pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+	      pybind11::return_value_policy::reference_internal );
 
 	m.def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex>, 
 		 pybind11::arg("ex"),pybind11::arg("away_from"),

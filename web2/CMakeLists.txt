@@ -55,9 +55,11 @@ set(ALGOS
   integrate_by_parts
   join_gamma
   keep_weight
+  lower_free_indices
   lr_tensor
   map_sympy
   product_rule
+  raise_free_indices
   reduce_delta
   rename_dummies
   replace_match
