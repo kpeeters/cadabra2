@@ -254,9 +254,9 @@ Ex Ex_getitem(Ex &ex, int index)
 
 class ExNode {
    public:
-      ExNode(Ex&);
+      ExNode(std::shared_ptr<Ex>);
       
-      Ex&          ex;
+      std::shared_ptr<Ex>          ex;
       Ex::iterator it;
 
       ExNode& iter();
@@ -265,6 +265,12 @@ class ExNode {
       std::string get_name() const;
       void        set_name(std::string);
 
+      str_node::parent_rel_t get_parent_rel() const;
+      void                   set_parent_rel(str_node::parent_rel_t);
+
+      pybind11::object get_multiplier() const;
+      void             set_multiplier(pybind11::object);
+
       /// Take a child argument out of the node and
       /// add as child of current.
 //      ExNode      unwrap(ExNode child);
@@ -272,14 +278,14 @@ class ExNode {
 		/// Replace the subtree at the current node with the given
 		/// expression. Updates the iterator so that it points to the
 		/// replacement subtree.
-		void        replace(Ex& rep);
+		void        replace(std::shared_ptr<Ex> rep);
 
       /// Insert a subtree as previous sibling of the current node.
-      ExNode      insert(Ex&    ins);
+      ExNode      insert(std::shared_ptr<Ex>    ins);
       ExNode      insert_it(ExNode ins);
 
       /// Append a subtree as a child. Return an ExNode pointing to the new child.
-      ExNode      append_child(Ex&);
+      ExNode      append_child(std::shared_ptr<Ex>);
       ExNode      append_child_it(ExNode ins);
       
       /// Erase the current node, iterator becomes invalid!
@@ -353,42 +359,42 @@ ExNode ExNode::children()
 	return ret;
    }
 
-void ExNode::replace(Ex& rep)
+void ExNode::replace(std::shared_ptr<Ex> rep)
 	{
-	it=ex.replace(it, rep.begin());
+	it=ex->replace(it, rep->begin());
 	}
 
-ExNode ExNode::insert(Ex& rep)
+ExNode ExNode::insert(std::shared_ptr<Ex> rep)
 	{
 	ExNode ret(ex);
-	ret.it=ex.insert_subtree(it, rep.begin());
+	ret.it=ex->insert_subtree(it, rep->begin());
 	return ret;
 	}
 
 ExNode ExNode::insert_it(ExNode rep)
 	{
 	ExNode ret(ex);
-	ret.it=ex.insert_subtree(it, rep.it);
+	ret.it=ex->insert_subtree(it, rep.it);
 	return ret;
 	}
 
-ExNode ExNode::append_child(Ex& rep)
+ExNode ExNode::append_child(std::shared_ptr<Ex> rep)
 	{
 	ExNode ret(ex);
-	ret.it=ex.append_child(it, rep.begin());
+	ret.it=ex->append_child(it, rep->begin());
 	return ret;
 	}
 
 ExNode ExNode::append_child_it(ExNode rep)
 	{
 	ExNode ret(ex);
-	ret.it=ex.append_child(it, rep.it);
+	ret.it=ex->append_child(it, rep.it);
 	return ret;
 	}
 
 void ExNode::erase()
 	{
-	ex.erase(it);
+	ex->erase(it);
 	}
 
 std::string ExNode::get_name() const
@@ -401,7 +407,34 @@ void ExNode::set_name(std::string nm)
    it->name = name_set.insert(nm).first;
    }
 
-ExNode::ExNode(Ex& ex_)
+str_node::parent_rel_t ExNode::get_parent_rel() const
+   {
+   return it->fl.parent_rel;
+   }
+
+void ExNode::set_parent_rel(str_node::parent_rel_t pr) 
+   {
+   it->fl.parent_rel=pr;
+   }
+
+pybind11::object ExNode::get_multiplier() const
+   {
+	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+	auto m = *it->multiplier;
+	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
+	return mult;
+   }
+
+void ExNode::set_multiplier(pybind11::object obj) 
+   {
+//	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
+//	auto m = *it->multiplier;
+//	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
+//	return mult;
+   }
+
+
+ExNode::ExNode(std::shared_ptr<Ex> ex_)
    : ex(ex_), indices_only(false), args_only(false), use_sibling_iterator(false)
    {
    }
@@ -414,12 +447,12 @@ ExNode& ExNode::iter()
 void ExNode::update(bool first)
    {
    if(use_sibling_iterator) {
-		if(first) sibnxtit=ex.begin(topit);
+		if(first) sibnxtit=ex->begin(topit);
 		else      ++sibnxtit;
 
 		if(!indices_only && !args_only) return; // any sibling is ok.
 		
-		while(sibnxtit!=ex.end(topit)) {
+		while(sibnxtit!=ex->end(topit)) {
 			if(indices_only) 
 				if(sibnxtit->fl.parent_rel==str_node::p_sub || sibnxtit->fl.parent_rel==str_node::p_super) 
 					return;
@@ -444,7 +477,7 @@ void ExNode::update(bool first)
 ExNode& ExNode::next()
    {
    if(use_sibling_iterator) {
-		if(sibnxtit==ex.end(topit))
+		if(sibnxtit==ex->end(topit))
 			throw pybind11::stop_iteration();			
 		it=sibnxtit;
 		}
@@ -458,6 +491,16 @@ ExNode& ExNode::next()
    return *this;
    }
 
+ExNode Ex_iter(std::shared_ptr<Ex> ex)
+   {
+   ExNode ret(ex);
+   ret.ex=ex;
+   ret.topit=ex->begin();
+   ret.stopit=ex->end();
+   ret.update(true);
+   return ret;
+   }
+
 bool Ex_matches(std::shared_ptr<Ex> ex, ExNode& other)
    {
    Ex_comparator comp(get_kernel_from_scope()->properties);
@@ -466,48 +509,48 @@ bool Ex_matches(std::shared_ptr<Ex> ex, ExNode& other)
    return true;
    }
 
-ExNode Ex_getitem_string(Ex &ex, std::string tag)
+ExNode Ex_getitem_string(std::shared_ptr<Ex> ex, std::string tag)
 	{
 	ExNode ret(ex);
 	ret.tag=tag;
 	ret.ex=ex;
-	ret.topit=ex.begin();
-	ret.stopit=ex.end();
+	ret.topit=ex->begin();
+	ret.stopit=ex->end();
 	ret.update(true);
 	return ret;
 	}
 
-void Ex_setitem(Ex &ex, int index, Ex val)
+void Ex_setitem(std::shared_ptr<Ex> ex, int index, Ex val)
 	{
-	Ex::iterator it=ex.begin();
+	Ex::iterator it=ex->begin();
 
-	size_t num=ex.number_of_children(it);
+	size_t num=ex->number_of_children(it);
 	if(index>=0 && (size_t)index<num) 
-		ex.replace(ex.child(it, index), val.begin());
+		ex->replace(ex->child(it, index), val.begin());
 	else 
 		throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
 	}
 
-size_t Ex_len(Ex& ex)
+size_t Ex_len(std::shared_ptr<Ex> ex)
 	{
-	Ex::iterator it=ex.begin();
+	Ex::iterator it=ex->begin();
 
-	return ex.number_of_children(it);
+	return ex->number_of_children(it);
 	}
 
-std::string Ex_head(Ex& ex)
+std::string Ex_head(std::shared_ptr<Ex> ex)
    {
-   if(ex.begin()==ex.end())
+   if(ex->begin()==ex->end())
 	   throw ArgumentException("Expression is empty, no head.");
-   return *ex.begin()->name;
+   return *ex->begin()->name;
    }
 
-pybind11::object Ex_mult(Ex& ex)
+pybind11::object Ex_mult(std::shared_ptr<Ex> ex)
    {
-   if(ex.begin()==ex.end())
+   if(ex->begin()==ex->end())
 	   throw ArgumentException("Expression is empty, no head.");
 	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
-	auto m = *ex.begin()->multiplier;
+	auto m = *ex->begin()->multiplier;
 //	return mpq(2,3);
 	
 	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
@@ -739,63 +782,63 @@ std::shared_ptr<Ex> construct_Ex_from_int_2(int num, bool add_ref)
 	}
 
 
-Ex operator+(const Ex& ex1, const Ex& ex2)
+std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
 	{
-	if(ex1.size()==0) return ex2;
-	if(ex2.size()==0) return ex1;
+	if(ex1->size()==0) return ex2;
+	if(ex2->size()==0) return ex1;
 
-	bool comma1 = (*ex1.begin()->name=="\\comma");
-	bool comma2 = (*ex2.begin()->name=="\\comma");
+	bool comma1 = (*ex1->begin()->name=="\\comma");
+	bool comma2 = (*ex2->begin()->name=="\\comma");
 
 	if(comma1 || comma2) {
 		if(comma1) {
-			Ex ret(ex1);
-			auto loc = ret.append_child(ret.begin(), ex2.begin());
+			auto ret=std::make_shared<Ex>(*ex1);
+			auto loc = ret->append_child(ret->begin(), ex2->begin());
 			if(comma2)
-				ret.flatten_and_erase(loc);
+				ret->flatten_and_erase(loc);
 			return ret;
 			}
 		else {
-			Ex ret(ex2);
-			auto loc = ret.prepend_child(ret.begin(), ex1.begin());
+			auto ret=std::make_shared<Ex>(*ex2);
+			auto loc = ret->prepend_child(ret->begin(), ex1->begin());
 			if(comma1)
-				ret.flatten_and_erase(loc);
+				ret->flatten_and_erase(loc);
 			return ret;
 			}
 		}
 	else {
-		Ex ret(ex1);
-		if(*ret.begin()->name!="\\sum") 
-			ret.wrap(ret.begin(), str_node("\\sum"));
-		ret.append_child(ret.begin(), ex2.begin());
+		auto ret=std::make_shared<Ex>(*ex1);
+		if(*ret->begin()->name!="\\sum") 
+			ret->wrap(ret->begin(), str_node("\\sum"));
+		ret->append_child(ret->begin(), ex2->begin());
 		
-		auto it=ret.begin();
-		cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+		auto it=ret->begin();
+		cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 		return ret;
 		}
 	}
 
-Ex operator-(const Ex& ex1, const Ex& ex2)
+std::shared_ptr<Ex> operator-(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
 	{
-	if(ex1.size()==0) {
-		if(ex2.size()!=0) {
-			Ex ret(ex2);
-			multiply(ex2.begin()->multiplier, -1);
-			auto it=ret.begin();
-			cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+	if(ex1->size()==0) {
+		if(ex2->size()!=0) {
+			auto ret=std::make_shared<Ex>(*ex2);
+			multiply(ex2->begin()->multiplier, -1);
+			auto it=ret->begin();
+			cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 			return ret;
 			}
 		else return ex2;
 		}
-	if(ex2.size()==0) return ex1;
+	if(ex2->size()==0) return ex1;
 
-	Ex ret(ex1);
-	if(*ret.begin()->name!="\\sum") 
-		ret.wrap(ret.begin(), str_node("\\sum"));
-	multiply( ret.append_child(ret.begin(), ex2.begin())->multiplier, -1 );
+	auto ret=std::make_shared<Ex>(*ex1);
+	if(*ret->begin()->name!="\\sum") 
+		ret->wrap(ret->begin(), str_node("\\sum"));
+	multiply( ret->append_child(ret->begin(), ex2->begin())->multiplier, -1 );
 
-	auto it=ret.begin();
-	cleanup_dispatch(*get_kernel_from_scope(), ret, it);
+	auto it=ret->begin();
+	cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 	
 	return ret;
 	}
@@ -1299,6 +1342,13 @@ PYBIND11_MODULE(cadabra2, m)
 		.export_values()
 		;
 
+	pybind11::enum_<str_node::parent_rel_t>(m, "parent_rel_t")
+		.value("sub",         str_node::parent_rel_t::p_sub)
+		.value("super",       str_node::parent_rel_t::p_super)
+		.value("none",        str_node::parent_rel_t::p_none)		
+		.export_values()
+		;
+
 	pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
 		.def(pybind11::init<>())
 		.def_readonly("scalar_backend", &Kernel::scalar_backend);
@@ -1360,15 +1410,18 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__len__",     &Ex_len)
 		.def("head",        &Ex_head)
 		.def("mult",        &Ex_mult)
-		.def("__iter__", [](std::shared_ptr<Ex> ex) {
-				return pybind11::make_iterator(ex->begin(), ex->end());
-				})
+		.def("__iter__",    &Ex_iter)
 		.def("matches",     &Ex_matches)
 		.def("state",       &Ex::state)
 		.def("reset",       &Ex::reset_state)
 		.def("changed",     &Ex::changed_state)
-		.def(pybind11::self + pybind11::self)
-		.def(pybind11::self - pybind11::self);
+		.def("__add__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
+				return a + b;
+				}, pybind11::is_operator())		
+		.def("__sub__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
+				return a - b;
+				}, pybind11::is_operator())
+		;
 
 	pybind11::class_<ExNode>(m, "ExNode")
 		.def("__iter__",        &ExNode::iter)
@@ -1384,6 +1437,8 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("append_child",    &ExNode::append_child_it)		
 		.def("erase",           &ExNode::erase)				
 		.def_property("name",   &ExNode::get_name, &ExNode::set_name)
+		.def_property("parent_rel",   &ExNode::get_parent_rel, &ExNode::set_parent_rel)
+		.def_property("multiplier",   &ExNode::get_multiplier, &ExNode::set_multiplier) 
 		;
 	
 	pybind11::enum_<Algorithm::result_t>(m, "result_t")

@@ -123,7 +123,14 @@ def test04():
     print("Test 04 passed")
 
 test04()
-        
+
+ex:= A_{m n} B^{0 m} + C_{n};
+for n in ex:
+    print(n.name)
+    print(n.parent_rel)
+    print(n.multiplier)
+    if n.multiplier==0 and n.parent_rel==parent_rel_t.super:
+        print("todo!")
 
 # ex:=A + B + C;
 # for sum in ex["\\sum"]:

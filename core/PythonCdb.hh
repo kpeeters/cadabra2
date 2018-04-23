@@ -90,13 +90,13 @@ std::string Ex_to_Sympy_string(std::shared_ptr<cadabra::Ex>);
 ///
 /// Add two expressions, adding a top-level \sum node if required.
 
-cadabra::Ex operator+(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
+std::shared_ptr<cadabra::Ex> operator+(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
 
 /// \ingroup pythoncore
 ///
 /// Subtract two expressions, adding a top-level \sum node if required.
 
-cadabra::Ex operator-(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
+std::shared_ptr<cadabra::Ex> operator-(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
 
 /// \ingroup pythoncore
 ///

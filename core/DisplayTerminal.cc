@@ -93,6 +93,9 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 
 	if(parent=="\\pow" && ( !it->is_integer() || child=="\\prod" || child=="\\sum" || child=="\\pow")  ) return true;
 
+	// negative and fractional exponents need brackets.
+	if(parent=="\\pow" && (*it->multiplier < 0 || !it->is_integer()) ) return true;
+
 //	if(parent=="\\pow" && child_num>0 && *child_it->multiplier!=1 ) return true;
 
 	if(parent=="\\prod" && child=="\\sum") return true;
