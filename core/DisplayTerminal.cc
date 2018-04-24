@@ -469,18 +469,18 @@ void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)
 	{
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	if(use_unicode && getenv("CADABRA_NO_UNICODE")!=0)
-		str << *it->name << "(";
+	if(!use_unicode || getenv("CADABRA_NO_UNICODE")!=0)
+		str << *it->name << "{";
 	else
 		str << symmap[*it->name] << "(";
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
 	if(tree.is_valid(sib)) {
-		str << ", ";
+		str << "}{";
 		dispatch(str, sib);
 		}
-	str << ")";
+	str << "}";
 	}
 
 void DisplayTerminal::print_equalitylike(std::ostream& str, Ex::iterator it)

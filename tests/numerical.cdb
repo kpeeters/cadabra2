@@ -61,3 +61,8 @@ def test03():
     print("Test 03f passed")
     
 test03()
+
+\partial{#}::PartialDerivative;
+t::Coordinate;
+ex:= - 2\frac{\partial_{t}{a}**3}{a**3};
+tst:= -2 \partial_{t}{

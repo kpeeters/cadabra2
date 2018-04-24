@@ -1463,6 +1463,14 @@ void NotebookWindow::on_run_runall()
 
 void NotebookWindow::on_run_runtocursor()
 	{
+	// FIXME: move to DocumentThread
+
+	DTree::sibling_iterator sib=doc.begin(doc.begin());
+	while(sib!=current_cell && sib!=doc.end(doc.begin())) {
+		if(sib->cell_type==DataCell::CellType::python) 
+			cell_content_execute(DTree::iterator(sib), current_canvas, false);
+		++sib;
+		}
 	}
 
 void NotebookWindow::on_run_stop()
