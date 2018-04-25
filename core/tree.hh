@@ -1,4 +1,4 @@
-
+#include <iostream>
 //	STL-like templated tree class.
 //
 // Copyright (C) 2001-2018 Kasper Peeters <kasper@phi-sci.com>
@@ -9,8 +9,8 @@
 
 /** \mainpage tree.hh
     \author   Kasper Peeters
-    \version  3.7
-    \date     30-Jan-2018
+    \version  3.9
+    \date     25-Apr-2018
     \see      http://tree.phi-sci.com/
     \see      http://tree.phi-sci.com/ChangeLog
 
@@ -281,6 +281,12 @@ class tree {
       /// Return leaf end iterator for the subtree at the given node.
       leaf_iterator   end_leaf(const iterator_base& top) const;
 
+		typedef std::vector<int> path_t;
+		/// Return a path corresponding to a node in the tree.
+		path_t          path_from_iterator(const iterator_base& iter) const;
+		/// Return an iterator given a path.
+		iterator        iterator_from_path(const path_t&) const;
+				
 		/// Return iterator to the parent of a node.
 		template<typename	iter> static iter parent(iter);
 		/// Return iterator to the previous sibling of a node.
@@ -373,10 +379,10 @@ class tree {
 
 		/// Merge with other tree, creating new branches and leaves only if they are not already present.
 		void     merge(sibling_iterator, sibling_iterator, sibling_iterator, sibling_iterator, 
-		               bool duplicate_leaves=false);
+							bool duplicate_leaves=false);
 		/// As above, but using two trees with a single top node at the 'to' and 'from' positions.
 		void     merge(iterator to, iterator from, bool duplicate_leaves);
-      /// Sort (std::sort only moves values of nodes, this one moves children as well).
+		/// Sort (std::sort only moves values of nodes, this one moves children as well).
 		void     sort(sibling_iterator from, sibling_iterator to, bool deep=false);
 		template<class StrictWeakOrdering>
 		void     sort(sibling_iterator from, sibling_iterator to, StrictWeakOrdering comp, bool deep=false);
@@ -794,6 +800,10 @@ typename tree<T, tree_node_allocator>::fixed_depth_iterator tree<T, tree_node_al
 		++curdepth;
 		}
 
+	// Now walk back to the first sibling in this range.
+	while(tmp->prev_sibling!=0)
+		tmp=tmp->prev_sibling;	
+	
 	ret.node=tmp;
 	return ret;
 	}
@@ -850,6 +860,43 @@ typename tree<T, tree_node_allocator>::leaf_iterator tree<T, tree_node_allocator
    {
    return leaf_iterator(feet);
    }
+
+template <class T, class tree_node_allocator>
+typename tree<T, tree_node_allocator>::path_t tree<T, tree_node_allocator>::path_from_iterator(const iterator_base& iter) const
+	{
+	path_t path;
+	tree_node *walk=iter.node;
+		
+	do {
+		if(path.size()>0)
+			walk=walk->parent;
+		int num=0;
+		while(walk->prev_sibling!=0 && walk->prev_sibling!=head) {
+			++num;
+			walk=walk->prev_sibling;
+			}
+		path.push_back(num);
+		} while(walk->parent!=0);
+
+	std::reverse(path.begin(), path.end());
+	return path;
+	}
+
+template <class T, class tree_node_allocator>
+typename tree<T, tree_node_allocator>::iterator tree<T, tree_node_allocator>::iterator_from_path(const path_t& path) const
+	{
+	iterator it=begin();
+	tree_node *walk=it.node;
+
+	for(size_t step=0; step<path.size(); ++step) {
+		if(step>0)
+			walk=walk->first_child;
+		for(int i=0; i<path[step]; ++i)
+			walk=walk->next_sibling;
+		}
+	it.node=walk;
+	return it;
+	}
 
 template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::leaf_iterator tree<T, tree_node_allocator>::begin_leaf(const iterator_base& top) const
@@ -2313,6 +2360,7 @@ void tree<T, tree_node_allocator>::debug_verify_consistency() const
 	{
 	iterator it=begin();
 	while(it!=end()) {
+		// std::cerr << *it << " (" << it.node << ")" << std::endl;
 		if(it.node->parent!=0) {
 			if(it.node->prev_sibling==0) 
 				assert(it.node->parent->first_child==it.node);

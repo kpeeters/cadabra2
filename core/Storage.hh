@@ -251,11 +251,13 @@ class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
 		bool operator==(const Ex& other) const;
 
 		/// Push a copy of the current state of the expression onto the history stack.
-		void push_history(Ex selector);
+      /// Returns a handle to a container in which to store paths to the elements
+      /// that will be kept in the next history step.
+      std::vector<Ex::path_t>& push_history();
 
 		/// Pop the most recent state of the expression off the history stack; returns
-		/// the selector that got us there.
-		Ex   pop_history();
+		/// the set of paths that we are replacing.
+      std::vector<Ex::path_t> pop_history();
 
 		/// Return the size of the history; 0 means no history, just the current
 		/// expression.
@@ -266,7 +268,7 @@ class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
 
 		std::vector<tree<str_node> > history;
       /// Patterns which describe how to get from one history step to the next.
-		std::vector<tree<str_node> > selectors; 
+      std::vector<std::vector<Ex::path_t> > terms;
 };
 
 

@@ -19,63 +19,46 @@ bool replace_match::can_apply(iterator it)
 Algorithm::result_t replace_match::apply(iterator& it)
 	{
 	Ex current(tr); // preserve the expression before popping
-	Ex rules=tr.pop_history();
+	auto to_keep=tr.pop_history();
 
-	// std::cerr << "rules: " << rules << std::endl;
-	// std::cerr << "current: " << current << std::endl;
-	// std::cerr << "old: " << tr << std::endl;
-
-	// FIXME: we should store the point at which take_match acted in the history,
-	// because it may not have been the first point where can_apply returned true.
-	it=tr.begin();
-	bool acted_at_head=true;
-	multiplier_t intmult=1;
-	while(it!=tr.end()) {
-		if(tr.is_head(it) && (*it->name=="\\sum" || *it->name=="\\comma")) break;
-		if(*it->name=="\\sum" && *tr.parent(it)->name=="\\int") {
-			intmult=*(tr.parent(it)->multiplier);
-			acted_at_head=false;
-			break;
-			}
-		++it;
-		}
+// FIXME: re-do the replacement logic.
 	
-	substitute subs(kernel, tr, rules);
-
-	auto sumnode=it;
-	sibling_iterator sib=tr.begin(sumnode);
-	bool replaced=false;
-	while(sib!=tr.end(sumnode)) {
-		if(subs.can_apply(sib)) {
-			// std::cerr << "applying" << std::endl;
-			if(!replaced) {
-				// Replace the first term that matches with 'current'.
-				replaced=true;
-				iterator ci=tr.end();
-				if(acted_at_head) {
-					ci = tr.insert_subtree(sib, current.begin());
-					}
-				else {
-					// FIXME: make this more robust.
-					auto findsum=current.begin();
-					if(findsum!=current.end()) { // ensure the replacement is not zero
-						if(*findsum->name=="\\int") {
-							findsum=tr.begin(findsum);
-							while(findsum->fl.parent_rel!=str_node::parent_rel_t::p_none) 
-								++findsum;
-							}
-//						std::cerr << "replacement tree " << 
-						ci = tr.insert_subtree(sib, findsum);
-						multiply(ci->multiplier, *current.begin()->multiplier/intmult);
-						}
-					}
-				if(ci!=tr.end())
-					cleanup_dispatch(kernel, tr, ci);
-				}
-			sib=tr.erase(sib);
-			}
-		else ++sib;
-		}
+//	substitute subs(kernel, tr, Ex());
+//
+//	auto sumnode=it;
+//	sibling_iterator sib=tr.begin(sumnode);
+//	bool replaced=false;
+//	while(sib!=tr.end(sumnode)) {
+//		if(subs.can_apply(sib)) {
+//			// std::cerr << "applying" << std::endl;
+//			if(!replaced) {
+//				// Replace the first term that matches with 'current'.
+//				replaced=true;
+//				iterator ci=tr.end();
+//				if(acted_at_head) {
+//					ci = tr.insert_subtree(sib, current.begin());
+//					}
+//				else {
+//					// FIXME: make this more robust.
+//					auto findsum=current.begin();
+//					if(findsum!=current.end()) { // ensure the replacement is not zero
+//						if(*findsum->name=="\\int") {
+//							findsum=tr.begin(findsum);
+//							while(findsum->fl.parent_rel!=str_node::parent_rel_t::p_none) 
+//								++findsum;
+//							}
+////						std::cerr << "replacement tree " << 
+//						ci = tr.insert_subtree(sib, findsum);
+//						multiply(ci->multiplier, *current.begin()->multiplier/intmult);
+//						}
+//					}
+//				if(ci!=tr.end())
+//					cleanup_dispatch(kernel, tr, ci);
+//				}
+//			sib=tr.erase(sib);
+//			}
+//		else ++sib;
+//		}
 
 	// std::cerr << tr << std::endl;
 

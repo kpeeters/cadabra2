@@ -613,18 +613,19 @@ bool Ex::operator==(const Ex& other) const
 	return equal_subtree(begin(), other.begin());
 	}
 
-void Ex::push_history(Ex selector)
+std::vector<Ex::path_t>& Ex::push_history()
 	{
 	history.push_back(*this);
-	selectors.push_back(selector);
+	terms.push_back(std::vector<Ex::path_t>() );
+	return terms.back();
 	}
 
-Ex Ex::pop_history()
+std::vector<Ex::path_t> Ex::pop_history()
 	{
 	tree<str_node>::operator=(history.back());
 	history.pop_back();
-	Ex ret(selectors.back().begin());
-	selectors.pop_back();
+	auto ret(terms.back());
+	terms.pop_back();
 	return ret;
 	}
 

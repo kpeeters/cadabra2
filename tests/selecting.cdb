@@ -1,9 +1,9 @@
 
 def test01():
     __cdbkernel__=create_scope()
-    ex:=A + B D G + C D A;
-    take_match(_, $D Q??$)
-    substitute(_, $A = Q$)
+ex:=A + B D G + C D A;
+take_match(_, $D Q??$)
+substitute(_, $A = Q$)
     replace_match(_)
     tst:= A + B D G + C D Q - @(ex);
     assert(tst==0)
