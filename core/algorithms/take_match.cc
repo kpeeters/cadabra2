@@ -18,13 +18,17 @@ bool take_match::can_apply(iterator it)
 	// operators which distribute over sums; for now let's be conservative.
 	// Note that any changes here need corresponding changes in replace_match.
 	
-	if(tr.is_head(it) && (*it->name=="\\sum" || *it->name=="\\comma")) return true;
-	if(*it->name=="\\sum" && *tr.parent(it)->name=="\\int") return true;
+	if(tr.is_head(it) && (*it->name=="\\sum" || *it->name=="\\comma")) return true; // sums at top level
+	if(!tr.is_head(it)) {
+		if(*it->name=="\\sum" && *tr.parent(it)->name=="\\int") return true; // sums as arguments of integrals
+		if(*it->name=="\\sum" && *tr.parent(it)->name=="\\equals") return true; // sum as lhs or rhs of equation
+		}
 	return false;
 	}
 
 Algorithm::result_t take_match::apply(iterator& it)
 	{
+	std::cerr << "applying at " << it << std::endl;
 	// Push a copy of the expression onto the history stack.
 
 	auto wrap = rules.wrap(rules.begin(), str_node("\\arrow"));
