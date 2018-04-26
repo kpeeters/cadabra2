@@ -107,7 +107,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 
 	result_t ret=result_t::l_no_action;
 
-	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth);
+	Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth, false);
 	// std::cerr << "apply_generic at " << it.node << " " << *it->name << " " << *start->name << std::endl;
 
 	while(tr.is_valid(start)) {
@@ -151,7 +151,7 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 	// If we are acting at fixed depth, we will not have gone up in the
 	// tree, so missed one cleanup action. Do it now.
 	if(depth>0) {
-		Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth-1);
+		Ex::fixed_depth_iterator start=tr.begin_fixed(it, depth-1, false);
 		while(tr.is_valid(start)) {
 			Ex::iterator work=start;
 			++start;

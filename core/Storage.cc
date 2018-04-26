@@ -613,11 +613,10 @@ bool Ex::operator==(const Ex& other) const
 	return equal_subtree(begin(), other.begin());
 	}
 
-std::vector<Ex::path_t>& Ex::push_history()
+void Ex::push_history(const std::vector<Ex::path_t>& paths)
 	{
 	history.push_back(*this);
-	terms.push_back(std::vector<Ex::path_t>() );
-	return terms.back();
+	terms.push_back(paths);
 	}
 
 std::vector<Ex::path_t> Ex::pop_history()

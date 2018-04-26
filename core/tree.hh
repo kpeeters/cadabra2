@@ -1,4 +1,4 @@
-#include <iostream>
+
 //	STL-like templated tree class.
 //
 // Copyright (C) 2001-2018 Kasper Peeters <kasper@phi-sci.com>
@@ -261,7 +261,9 @@ class tree {
 		/// Return post-order end iterator of the tree.
 		post_order_iterator  end_post() const;
 		/// Return fixed-depth iterator to the first node at a given depth from the given iterator.
-		fixed_depth_iterator begin_fixed(const iterator_base&, unsigned int) const;
+		/// If 'walk_back=true', a depth=0 iterator will be taken from the beginning of the sibling
+		/// range, not the current node.
+      fixed_depth_iterator begin_fixed(const iterator_base&, unsigned int, bool walk_back=true) const;
 		/// Return fixed-depth end iterator.
 		fixed_depth_iterator end_fixed(const iterator_base&, unsigned int) const;
 		/// Return breadth-first iterator to the first node at a given depth.
@@ -774,7 +776,7 @@ typename tree<T, tree_node_allocator>::post_order_iterator tree<T, tree_node_all
 	}
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::fixed_depth_iterator tree<T, tree_node_allocator>::begin_fixed(const iterator_base& pos, unsigned int dp) const
+typename tree<T, tree_node_allocator>::fixed_depth_iterator tree<T, tree_node_allocator>::begin_fixed(const iterator_base& pos, unsigned int dp, bool walk_back) const
 	{
 	typename tree<T, tree_node_allocator>::fixed_depth_iterator ret;
 	ret.top_node=pos.node;
@@ -801,8 +803,9 @@ typename tree<T, tree_node_allocator>::fixed_depth_iterator tree<T, tree_node_al
 		}
 
 	// Now walk back to the first sibling in this range.
-	while(tmp->prev_sibling!=0)
-		tmp=tmp->prev_sibling;	
+	if(walk_back)
+		while(tmp->prev_sibling!=0)
+			tmp=tmp->prev_sibling;	
 	
 	ret.node=tmp;
 	return ret;

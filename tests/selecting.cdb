@@ -1,13 +1,40 @@
 
 def test01():
     __cdbkernel__=create_scope()
-ex:=A + B D G + C D A;
-take_match(_, $D Q??$)
-substitute(_, $A = Q$)
+    ex:= A + B D G + C D A;
+    take_match(_, $D Q??$)
+    substitute(_, $A = Q$)
     replace_match(_)
     tst:= A + B D G + C D Q - @(ex);
     assert(tst==0)
-    print("Test 01 passed")
+    print("Test 01a passed")
+    ex:= A + B D G + C D A;
+    take_match(_, $D Q??$)
+    substitute(_, $D = 0$)
+    replace_match(_)
+    tst:= A - @(ex);
+    assert(tst==0)
+    print("Test 01b passed")
+    ex:= R = \int{A + B D G + C D A}{x};
+    take_match(_, $D Q??$)
+    substitute(_, $A = Q$)
+    replace_match(_)
+    tst:= ( R = \int{A + B D G + C D Q}{x} ) - @(ex);
+    print("Test 01c passed")
+    ex:= R = \int{A + B D G + C D A}{x};
+    take_match(_, $D Q??$)
+    substitute(_, $A = 0$)
+    replace_match(_)
+    tst:= ( R = \int{A + B D G}{x} ) - @(ex);
+    assert(tst==0)
+    print("Test 01d passed")
+    ex:= R + S = \int{A + B D G + C D A}{x};
+    take_match(_, $D Q??$)
+    substitute(_, $A = 0$)
+    replace_match(_)
+    tst:= ( R + S = \int{A + B D G}{x} ) - @(ex);
+    assert(tst==0)
+    print("Test 01e passed")
 
 test01()
 
@@ -41,7 +68,7 @@ def test03():
     take_match(_, $B Q??$)
     substitute(_, $B->2 P$)
     replace_match(_)
-    tst:= 5\int{A + 6 P M + C N + D}{dx} - @(ex);
+    tst:= 5\int{A + C N + D + 6 P M}{dx} - @(ex);
     assert(tst==0)
     print("Test 03 passed")
 
@@ -65,11 +92,18 @@ def test05():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
     ex:=\int{A_{i} h_{j} + \partial_{i}{B_{j}} D }{x};
-    take_match(_, $\partial_{i}{B_{j}} Q??$);
-    substitute(_, $D -> E$);
-    replace_match(_);
+    take_match(_, $\partial_{i}{B_{j}} Q??$)
+    substitute(_, $D -> E$)
+    replace_match(_)
     tst:=\int{A_{i} h_{j} + \partial_{i}{B_{j}} E}{x} - @(ex);
     assert(tst==0)
     print("Test 05 passed")
 
 test05()
+
+
+# ex:= \sin( 3 \int{ A E + B_{m} C^{m} + Q D }{x} ) + \cos( \int{ A K + B E }{x} );
+# take_match(_, $A Q??$);
+# substitute(_, $E->1$);
+# tst:= \sin( 3 \int{ A + B_{m} C^{m} + Q D }{x} ) + \cos( \int{ A K + B E }{x} ) - @(ex);
+       
