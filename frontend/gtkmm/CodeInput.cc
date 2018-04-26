@@ -179,7 +179,7 @@ void CodeInput::highlight_python()
 	tag_by_regex("string", "\"[^\"\\\\(\\r?\\n)]*(\\\\.[^\"\\\\] * )*\"");
 	tag_by_regex("string", "'[^'\\\\(\\r?\\n)]*(\\\\.[^'\\\\]*)*'");
 	tag_by_regex("maths", "\\$[^\\$]+\\$");
-	tag_by_regex("comment", "#[^\\n]*");
+	tag_by_regex("comment", "(^|\\n)#[^\\n]*");
 	tag_by_regex("number", "\\b[+-]?[0-9]+[lL]?\\b");
 	tag_by_regex("number", "\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b");
 	tag_by_regex("number", "\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b");
