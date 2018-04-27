@@ -62,45 +62,46 @@ endif()
 
 
 # Create installation directories with correct permissions.
-set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
-set(INSTALL_IMAGES_DIR    share/cadabra2/images  CACHE PATH "Installation directory for image files.")
-set(INSTALL_DESKTOP_DIR   share/applications     CACHE PATH "Installation directory for .desktop files.")
-set(INSTALL_ICONS_DIR     share/icons            CACHE PATH "Installation directory for icons.")
+if (NOT MINIMUM_INSTALLATION)
+  set(INSTALL_SHARE_DIR     share/cadabra2         CACHE PATH "Installation directory for shared files.")
+  set(INSTALL_IMAGES_DIR    share/cadabra2/images  CACHE PATH "Installation directory for image files.")
+  set(INSTALL_DESKTOP_DIR   share/applications     CACHE PATH "Installation directory for .desktop files.")
+  set(INSTALL_ICONS_DIR     share/icons            CACHE PATH "Installation directory for icons.")
 
-install(DIRECTORY DESTINATION ${INSTALL_SHARE_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_IMAGES_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_DESKTOP_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/64x64 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/256x256 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/64x64/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/256x256/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
-                                                             GROUP_READ GROUP_EXECUTE 
-                                                             WORLD_READ WORLD_EXECUTE)
-
+  install(DIRECTORY DESTINATION ${INSTALL_SHARE_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_IMAGES_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_DESKTOP_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/64x64 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/256x256 DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/64x64/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/256x256/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+  install(DIRECTORY DESTINATION ${INSTALL_ICONS_DIR}/hicolor/scalable/apps DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
+                                                              GROUP_READ GROUP_EXECUTE 
+                                                              WORLD_READ WORLD_EXECUTE)
+endif()
 
 # Remove old versions of files which we no longer need, to avoid confusion.
 if(NOT PACKAGING_MODE)
@@ -149,14 +150,16 @@ endif()
 #   message("-- Will copy index.theme from /usr/share/icons/hicolor/index.theme")
 #	install(CODE     "execute_process(COMMAND cp /usr/share/icons/hicolor/index.theme ${ICON_THEME})")
 #endif()
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/256x256/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra2-gtk.svg           DESTINATION ${ICON_PREFIX}/share/icons/hicolor/scalable/apps)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2-gtk.desktop       DESTINATION ${ICON_PREFIX}/share/applications)
-install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
-install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFIX}/share/icons/hicolor)")
-install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+if (NOT MINIMUM_INSTALLATION)
+  install(FILES    ${PROJECT_SOURCE_DIR}/../../images/64x64/cadabra2-gtk.png     DESTINATION ${ICON_PREFIX}/share/icons/hicolor/64x64/apps)
+  install(FILES    ${PROJECT_SOURCE_DIR}/../../images/128x128/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/128x128/apps)
+  install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png   DESTINATION ${ICON_PREFIX}/share/icons/hicolor/256x256/apps)
+  install(FILES    ${PROJECT_SOURCE_DIR}/../../images/cadabra2-gtk.svg           DESTINATION ${ICON_PREFIX}/share/icons/hicolor/scalable/apps)
+  install(FILES    ${PROJECT_SOURCE_DIR}/../../config/cadabra2-gtk.desktop       DESTINATION ${ICON_PREFIX}/share/applications)
+  install(CODE     "execute_process(COMMAND touch ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+  install(CODE     "execute_process(COMMAND gtk-update-icon-cache-3.0 ${ICON_PREFIX}/share/icons/hicolor)")
+  install(CODE     "execute_process(COMMAND chmod go+r ${ICON_PREFIX}/share/icons/hicolor/icon-theme.cache)")
+endif()
 
 # Install shared libraries on Windows. 
 # https://stackoverflow.com/questions/32662215/how-do-you-install-gtk-3-0-on-windows
