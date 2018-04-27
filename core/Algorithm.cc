@@ -1275,8 +1275,8 @@ void Algorithm::classify_indices(iterator it, index_map_t& ind_free, index_map_t
 			classify_indices(sib, ind_free_here, ind_dummy_here);
 			if(ind_free_here.size()>0) {
 				for(auto& di: ind_free_here) {
-					const Coordinate *cdn=kernel.properties.get<Coordinate>(di.second);
-					const Symbol     *smb=kernel.properties.get<Symbol>(di.second);
+					const Coordinate *cdn=kernel.properties.get<Coordinate>(di.second, true);
+					const Symbol     *smb=kernel.properties.get<Symbol>(di.second, true);
 					if(! (cdn || smb || di.second->is_integer()) ) {
 #ifdef DEBUG
 						std::cerr << di.first << std::endl;

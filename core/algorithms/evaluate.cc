@@ -147,7 +147,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 		// std::cerr << "finding prop for " << Ex(i.second) << std::endl;
 		const Indices *prop = kernel.properties.get<Indices>(i.second);
 		if(prop==0) {
-			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second);
+			const Coordinate *crd = kernel.properties.get<Coordinate>(i.second, true);
 			if(crd==0) 
 				throw ArgumentException("evaluate: Index "+*(i.second->name)
 												+" does not have an Indices property.");
@@ -245,7 +245,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	if(ind_dummy.size()==0 && ind_free.size()!=0) {
 		bool all_coordinates=true;
 		for(auto& ind: ind_free) {
-			const Coordinate *crd = kernel.properties.get<Coordinate>(ind.second);
+			const Coordinate *crd = kernel.properties.get<Coordinate>(ind.second, true);
 			if(!crd) {
 				all_coordinates=false;
 				break;
@@ -699,7 +699,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 			cb.block_length=1;
 			for(size_t n=0; n<ni; ++n) {
 				// If this child is a coordinate, take it out of the combinatorics.
-				if(kernel.properties.get<Coordinate>(tr.child(it, n))!=0)
+				if(kernel.properties.get<Coordinate>(tr.child(it, n), true)!=0)
 					continue;
 
 				Ex iname(tr.child(it,n)); // FIXME: does not handle Accented objects
@@ -790,7 +790,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 							}
 						}
 					// std::cerr << "testing index " << j << " of \n" << Ex(it) << std::endl;
-					if(kernel.properties.get<Coordinate>(tr.child(it, j))!=0) {
+					if(kernel.properties.get<Coordinate>(tr.child(it, j), true)!=0) {
 						// std::cerr << "Coordinate, so need straight copy" << std::endl;
 						eqcopy.insert_subtree(rhs.begin(), tr.child(it,j))->fl.parent_rel=str_node::p_sub;
 						done=true;
@@ -867,7 +867,7 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		if(ind_dummy.find(Ex(pch))!=ind_dummy.end()) {
 			tr.erase(pch);
 			}
-		else if(kernel.properties.get<Coordinate>(pch)!=0) {
+		else if(kernel.properties.get<Coordinate>(pch, true)!=0) {
 			tr.erase(pch);
 			}
 		else
@@ -995,7 +995,7 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	// parent_rel=p_none arguments which carry a Coordinate property.
 	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
-			const Coordinate *cd = kernel.properties.get<Coordinate>(nd);
+			const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
 			if(cd && nd->fl.parent_rel==str_node::p_none) {
 				Ex cpy(nd);
 				cpy.begin()->fl.bracket=str_node::b_none;

@@ -445,7 +445,7 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 	// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
 	// 'one' is the substitute pattern, 'two' the expression under consideration.
 	
-	DEBUG( std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << std::endl; )
+	DEBUG( std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << ", ignore_parent_rel = " << ignore_parent_rel << std::endl; )
 
 	if(nobrackets==false && one->fl.bracket != two->fl.bracket) 
 		return report( (one->fl.bracket < two->fl.bracket)?match_t::no_match_less:match_t::no_match_greater );
@@ -806,8 +806,11 @@ Ex_comparator::match_t Ex_comparator::compare(const Ex::iterator& one,
 			}
 		
 		if(one->name==two->name) {
-			if(nobrackets || (one->multiplier == two->multiplier) ) 
-				return report( match_t::node_match );
+			if(nobrackets || (one->multiplier == two->multiplier) ) {
+				if(ignore_parent_rel || one->fl.parent_rel==two->fl.parent_rel) return report( match_t::node_match );
+				report( (one->fl.parent_rel < two->fl.parent_rel)
+				        ?match_t::no_match_indexpos_less:match_t::no_match_indexpos_greater );
+				}
 
 			if(*one->multiplier < *two->multiplier) return report(match_t::no_match_less);
 			else                                    return report(match_t::no_match_greater);

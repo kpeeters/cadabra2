@@ -21,6 +21,13 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
 			rhs.skip_children();
 			++rhs;
 
+			if(*lhs->name=="") { // replacing a sub or superscript
+				lhs=tr.flatten_and_erase(lhs);
+				}
+			if(*rhs->name=="") { // replacing with a sub or superscript
+				rhs=tr.flatten_and_erase(rhs);				
+				}
+
 			try {
 				if(*lhs->multiplier!=1) {
 					throw ArgumentException("substitute: No numerical pre-factors allowed on lhs of replacement rule.");
@@ -69,7 +76,7 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
 
 bool substitute::can_apply(iterator st)
 	{
-	// std::cerr << "attempting to match at " << Ex(st) << std::endl;
+	// std::cerr << "attempting to match at " << st << std::endl;
 
 	Ex::iterator found = cadabra::find_in_list(args, args.begin(), [&](Ex::iterator arrow) {
 			comparator.clear();

@@ -62,7 +62,14 @@ def test03():
     
 test03()
 
-\partial{#}::PartialDerivative;
-t::Coordinate;
-ex:= - 2\frac{\partial_{t}{a}**3}{a**3};
-tst:= -2 \partial_{t}{
+def test04():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    t::Coordinate;
+    ex:= - 2\frac{\partial_{t}{a**2}**3}{a**3};
+    product_rule(_)
+    tst:= -16 (a \partial_{t}{a} )**3 a**(-3) - @(ex);
+    assert(tst==0)
+    print("Test 04 passed")
+
+test04()

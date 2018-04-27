@@ -244,7 +244,7 @@ test106()
 def test107():
     __cdbkernel__=create_scope()
     ex:= A_{m n} - B_{m n};
-    substitute(ex, $m -> 2$)
+    substitute(ex, $_{m} -> _{2}$)
     tst:= A_{2 n} - B_{2 n} - @(ex);
     assert(tst==0)
     print("Test 107 passed")
@@ -372,12 +372,28 @@ def test116():
 
 test116()
 
-# ex:= s A_{s};
-# substitute(ex, $_{s} -> _{1}$)
-# 
-# {p,q,r,s,t,u,v,w}::Indices.
-# ex := s**2 y^{r} y^{s} A_{r s};
-# substitute(ex, $s->1$);
-# tst:= y^{r} y^{s} A_{r s} - @(ex);
-# assert(tst==0)
-# print("Test 117 passed")
+def test117():
+    __cdbkernel__=create_scope()
+    ex:= s A_{s};
+    substitute(ex, $s -> 1$)
+    tst:= A_{s} - @(ex);
+    assert(tst==0)
+    print("Test 117a passed")
+    {p,q,r,s,t,u,v,w}::Indices.
+    ex := s**2 y^{r} y^{s} A_{r s};
+    substitute(ex, $s->1$)
+    tst:= y^{r} y^{s} A_{r s} - @(ex);
+    assert(tst==0)
+    print("Test 117b passed")
+
+test117()
+
+def test118():
+    __cdbkernel__=create_scope()
+    ex:= s A_{s};
+    substitute(ex, $_{s} -> _{1}$)
+    tst:= s A_{1} - @(ex);
+    assert(tst==0)
+    print("Test 118 passed")
+
+test118()
