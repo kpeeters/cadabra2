@@ -232,7 +232,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 	// Pure scalar nodes need to be wrapped in a \component node to make life
 	// easier for the rest of the algorithm.
 	if(ind_free.size()==0 && ind_dummy.size()==0) {
-		if(*tr.parent(sib)->name!="\\pow") {
+		if(!tr.is_head(sib) && *tr.parent(sib)->name!="\\pow") {
 			sib=wrap_scalar_in_components_node(sib);
 #ifdef DEBUG		
 			std::cerr << "wrapped scalar" << std::endl;
@@ -377,15 +377,18 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 		comp.append_child(comp.begin(), fi->first.begin());
 		// Look up which values this index takes.
 		auto *id = kernel.properties.get<Indices>(fi->second);
-		if(!id)
-			throw RuntimeException("No Indices property for index.");
-
-		if(id->values.size()==0)
-			throw RuntimeException("No 'values' property on Indices declaration, cannot sum.");
-				
 		std::vector<Ex> values;
-		for(const auto& ex: id->values) 
-			values.push_back(ex);
+		if(!id || id->values.size()==0) {
+			// No index property known, or not known which values the index
+			// takes, so keep this index unexpanded.
+			auto val=Ex(fi->second);
+			val.begin()->fl.parent_rel=str_node::parent_rel_t::p_none;
+			values.push_back(val);
+			}
+		else {
+			for(const auto& ex: id->values) 
+				values.push_back(ex);
+			}
 		
 		mi.values.push_back(values);
 		++fi;
