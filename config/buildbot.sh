@@ -63,7 +63,8 @@ function runbuild {
 # runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
 # runbuild "CentOS_7" ".rpm" 7004 centos7
 # ## runbuild "Ubuntu_14.04_build" ".deb" 7005 ubuntu1404
-runbuild "Ubuntu_17.10" ".deb" 7012 ubuntu1710
+# runbuild "Ubuntu_17.10" ".deb" 7012 ubuntu1710
 # ## runbuild "Debian86" ".deb" 7006 debian86
 # ## runbuild "Scientific_Linux_74" ".rpm" 7013 scientific74
 # runbuild "Debian_921" ".deb" 7014 debian9
+runbuild "Ubuntu_18.04" ".deb" 7017 ubuntu1804

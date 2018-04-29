@@ -669,25 +669,25 @@ def test32():
 
 test32()
 
-{\sigma,\tau}::Coordinate;                          
-{a,b,c}::Indices(worldsheet, values={\sigma, \tau});
-#{\mu,\nu,\rho}::Indices(targetspace, values={0,1,2,3} );
-#{\mu,\nu,\rho}::Indices(targetspace);
-\partial{#}::PartialDerivative;
-X^{a?}::Depends(\sigma, \tau);
-X^{\mu}::Depends(\sigma, \tau);    
-ex:= \eta^{a b} \partial_{a}{ X^{\mu} } \partial_{b}{ X^{\nu} } g_{\mu\nu};
-mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
-evaluate(ex, mink);
-
-ex:= \eta^{a b} \partial_{a}{ X^{\mu} } \partial_{b}{ X^{\nu} };
-mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
-evaluate(ex, mink);
-# HERE: a components node with one 'values' entry in which the values of the
-# indices match the index names themselves should simply reduce to the
-# value of the component.
-
-    
+# {\sigma,\tau}::Coordinate;                          
+# {a,b,c}::Indices(worldsheet, values={\sigma, \tau});
+# #{\mu,\nu,\rho}::Indices(targetspace, values={0,1,2,3} );
+# #{\mu,\nu,\rho}::Indices(targetspace);
+# \partial{#}::PartialDerivative;
+# X^{a?}::Depends(\sigma, \tau);
+# X^{\mu}::Depends(\sigma, \tau);    
+# ex:= \eta^{a b} \partial_{a}{ X^{\mu} } \partial_{b}{ X^{\nu} } g_{\mu\nu};
+# mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
+# evaluate(ex, mink);
+# 
+# ex:= \eta^{a b} \partial_{a}{ X^{\mu} } \partial_{b}{ X^{\nu} };
+# mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
+# evaluate(ex, mink);
+# # HERE: a components node with one 'values' entry in which the values of the
+# # indices match the index names themselves should simply reduce to the
+# # value of the component.
+# 
+#     
 
 print(list(map(lambda x: str(x), server.totals())))
 
