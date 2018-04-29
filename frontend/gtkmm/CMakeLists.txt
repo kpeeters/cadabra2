@@ -27,6 +27,7 @@ include_directories(
   "../../client_server"
   "../../client_server/jsoncpp"
   "../../client_server/websocketpp"
+  "../../libs/tiny-process-library"
   ${Boost_INCLUDE_DIRS}
   ${SQLITE3_INCLUDE_DIR}  
   )
@@ -42,10 +43,10 @@ set(cadabra_gtk_src
   Cadabra.cc
   ../common/TeXEngine.cc
   ../common/lodepng.cc
-  ../common/exec-stream.cc
+#  ../common/exec-stream.cc
 )
 
-if (MSVC)
+if(MSVC)
   add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
 else()
   add_executable(cadabra2-gtk ${cadabra_gtk_src})

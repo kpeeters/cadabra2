@@ -6,17 +6,16 @@
 #include <iostream>
 #include <cstdio>
 #include <boost/algorithm/string.hpp>
-#include "exec-stream.h"
 #include "lodepng.h"
 #include <fstream>
 #include <sstream>
 #include <internal/unistd.h>
 #include <map>
+#include <glibmm/spawn.h>
 
 //#define DEBUG
 
 using namespace cadabra;
-
 
 #if defined(WIN32)
 int setenv(const char *name, const char *value, int overwrite)
@@ -459,7 +458,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 #endif
 
 	// Run LaTeX on the .tex file.
-	exec_stream_t latex_proc;
 	std::string result;
 	std::string texinputs=cadabra::install_prefix()+"/share/cadabra2/latex/";
 	std::string oldtexinputs;
@@ -474,18 +472,21 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	std::cerr << "TEXINPUTS = " << texinputs << std::endl;
 #endif
 	try {
-//		latex_proc.start("latex", "--interaction nonstopmode "+nf);
-		//std::cerr << "cadabra-client: starting latex" << std::endl;
-#if defined(WIN32)
-		latex_proc.set_wait_timeout(exec_stream_t::s_all | exec_stream_t::s_child, 10000); // windows is a dog...
-#endif		
-		latex_proc.start("latex", "-halt-on-error --quiet "+nf);
- 		std::string line; 
-		while( std::getline( latex_proc.out(), line ).good() ) 
-			result+=line+"\n";
-
-		latex_proc.close();
-		//std::cerr << "cadabra-client: latex done" << std::endl;
+		std::string wd("");
+		std::vector<std::string> argv, envp;
+		argv.push_back("latex");
+		argv.push_back("-halt-on-error");
+		argv.push_back("--quiet");
+		argv.push_back(nf);
+		std::string latex_stdout, latex_stderr;
+		int latex_exit_status;
+		
+		Glib::spawn_sync(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
+		                 Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
+		                 sigc::slot<void>(),
+		                 &latex_stdout,
+		                 &latex_stderr,
+		                 &latex_exit_status);
 
 		erase_file(tmppath+".aux");
 		erase_file(tmppath+".log");
@@ -494,7 +495,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		std::cerr << result << std::endl;
 #endif
 
-		std::string err=handle_latex_errors(result, latex_proc.exit_code());
+		std::string err=handle_latex_errors(result, latex_exit_status);
 
 		if(err.size()>0) {
 			reqit=reqs.begin();
@@ -511,7 +512,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		}
 	catch(std::exception& err) {
 		std::cerr << "cadabra-client: Exception running LaTeX. " << err.what() << std::endl;
-		latex_proc.close();
 		setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
 
 		// erase_file(std::string(templ)+".tex");
@@ -520,7 +520,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		erase_file(tmppath+".log");
 		erase_file(tmppath+".out");
 		
-		std::string latex_err=handle_latex_errors(result, latex_proc.exit_code());
+		std::string latex_err=handle_latex_errors(result, -1);
 		reqit=reqs.begin();
 		while(reqit!=reqs.end()) 
 			(*reqit++)->needs_generating=false;
@@ -544,7 +544,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	//
 	std::ostringstream resspec;
 	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch; 
-	exec_stream_t dvipng_proc;
 //	dvipng_proc << "-T" << "tight" << "-bg" << "Transparent"; // << "-fg";
 //	rgbspec << "\"rgb "
 //			  << foreground_colour.get_red()/65536.0 << " "
@@ -557,15 +556,26 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	//std::cerr << "cadabra-client: convert to png" << std::endl;
 	try {
-#if defined(WIN32)	
-		dvipng_proc.set_wait_timeout(exec_stream_t::s_all | exec_stream_t::s_child, 10000); // windows is a dog...
-#endif
-		dvipng_proc.set_wait_timeout(exec_stream_t::s_all | exec_stream_t::s_child, 10000); // for very large notebooks...
-		dvipng_proc.start("dvipng", "-T tight -bg Transparent -D "+resspec.str()+" "+tmppath+".dvi");
-		std::string s, result;
-		while( std::getline( dvipng_proc.out(), s ).good() ) {
-			result+=s;
-			}		
+		std::string wd("");
+		std::vector<std::string> argv, envp;
+		argv.push_back("dvipng");
+		argv.push_back("-T");
+		argv.push_back("tight");
+		argv.push_back("-bg");
+		argv.push_back("transparent");
+		argv.push_back("-D");
+		argv.push_back(resspec.str());
+		argv.push_back(tmppath+".dvi");
+		std::string dvipng_stdout, dvipng_stderr;
+		int dvipng_exit_status;
+		
+		Glib::spawn_sync(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
+		                 Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
+		                 sigc::slot<void>(),
+		                 &dvipng_stdout,
+		                 &dvipng_stderr,
+		                 &dvipng_exit_status);
+
 #ifdef DEBUG
 	std::cerr << result << std::endl;
 #endif
