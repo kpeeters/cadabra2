@@ -103,7 +103,8 @@ Process::id_type Process::open(const string_type &command, const string_type &pa
   process_command+="\"";
 #endif
 
-  BOOL bSuccess = CreateProcess(nullptr, process_command.empty()?nullptr:&process_command[0], nullptr, nullptr, TRUE, 0,
+  BOOL bSuccess = CreateProcess(nullptr, process_command.empty()?nullptr:&process_command[0], nullptr, nullptr, TRUE,
+                                CREATE_NO_WINDOW,
                                 nullptr, path.empty()?nullptr:path.c_str(), &startup_info, &process_info);
 
   if(!bSuccess)
