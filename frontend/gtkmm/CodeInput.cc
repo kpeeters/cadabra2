@@ -111,22 +111,23 @@ void CodeInput::init(const Prefs& prefs)
 	show_all();
 }
 
-void CodeInput::tag_by_regex(const std::string& tag, const std::string& regex_str)
+void CodeInput::tag_by_regex(const std::string& tag, const std::string& regex_str, std::string& text)
 {
 	auto buf = edit.get_buffer();
-	std::string text = static_cast<std::string>(buf->get_text());
 	std::size_t cur_pos = 0;
 	std::regex r(regex_str);
 	std::smatch sm;
+	std::string temp = text;
 
-	while (std::regex_search(text, sm, r)) {
+	while (std::regex_search(temp, sm, r)) {
 		auto beg_it = buf->begin();
 		beg_it.forward_chars(sm.position() + cur_pos);
 		auto end_it = beg_it;
 		end_it.forward_chars(sm.length());
 		buf->apply_tag_by_name(tag, beg_it, end_it);
+		text.replace(sm.position() + cur_pos, sm.length(), sm.length(), '_');
 		cur_pos += sm.position() + sm.length();
-		text = sm.suffix();
+		temp = sm.suffix();
 	}
 }
 
@@ -166,21 +167,27 @@ void CodeInput::highlight_python()
 		edit.get_buffer()->end()
 	);
 
+	std::string text = edit.get_buffer()->get_text();
+
 	// Regex find things to highlight. Stolen with thanks from
 	// https://wiki.python.org/moin/PyQt/Python%20syntax%20highlighting
-	tag_by_regex("keyword", "\\b(" + keywords + ")\\b");
-	tag_by_regex("function", "\\b(" + builtins + ")\\b");
-	tag_by_regex("algorithm", "\\b(" + algorithms + ")\\b");
-	tag_by_regex("property", "\\b(" + properties + ")\\b");
-	tag_by_regex("operator", "=|==|!=|<|<=|>|>=|\\+|-|\\*|\\/|\\/\\/|\\%|\\*\\*|\\+=|-=|\\*=|\\/=|\\%=|\\^|\\||\\&|\\~|>>|<<");
-	tag_by_regex("brace", "(\\{|\\}|\\(|\\)|\\[|\\])");
-	tag_by_regex("string", "\"[^\"\\\\]*(\\\\.[^\"\\\\] * )*\"");
-	tag_by_regex("string", "'[^'\\\\]*(\\\\.[^'\\\\]*)*'");
-	tag_by_regex("maths", "\\$[^\\$]+\\$");
-	tag_by_regex("comment", "#[^\\n]*");
-	tag_by_regex("number", "\\b[+-]?[0-9]+[lL]?\\b");
-	tag_by_regex("number", "\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b");
-	tag_by_regex("number", "\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b");
+	// Regexes are listed in order of priority such that anything that matches two items in the list
+	// will only be highlighted according to the category that is higher up in this list
+	tag_by_regex("comment", "(^|\\n)#[^\\n]*", text); // Single line comment
+	tag_by_regex("string", "\"\"\"[^\"\\\\]*(\\\\.[^\"\\\\] * )*\"\"\"", text); // Triple double-quoted string
+	tag_by_regex("string", "'''[^'\\\\]*(\\\\.[^'\\\\]*)*'''", text); // Triple single-quoted string
+	tag_by_regex("string", "\"[^\"\\\\(\\r?\\n)]*(\\\\.[^\"\\\\] * )*\"", text); // Double-quoted string
+	tag_by_regex("string", "'[^'\\\\(\\r?\\n)]*(\\\\.[^'\\\\]*)*'", text); // Single-quoted string
+	tag_by_regex("keyword", "\\b(" + keywords + ")\\b", text); // Python keywords deliminated by word boundry
+	tag_by_regex("function", "\\b(" + builtins + ")\\b", text); // Python builtins deliminated by word boundry
+	tag_by_regex("algorithm", "\\b(" + algorithms + ")\\b", text); // Cadabra algorithms deliminated by word boundry
+	tag_by_regex("property", "\\b(" + properties + ")\\b", text); // Cadabra properties deliminated by word boundry
+	tag_by_regex("operator", "=|==|!=|<|<=|>|>=|\\+|-|\\*|\\/|\\/\\/|\\%|\\*\\*|\\+=|-=|\\*=|\\/=|\\%=|\\^|\\||\\&|\\~|>>|<<", text); // Python operators
+	tag_by_regex("brace", "(\\{|\\}|\\(|\\)|\\[|\\])", text); // Braces
+	tag_by_regex("maths", "\\$[^\\$]+\\$", text); // Latex-style inline maths
+	tag_by_regex("number", "\\b[+-]?[0-9]+[lL]?\\b", text); // Integers 
+	tag_by_regex("number", "\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b", text); // Hexadecimals
+	tag_by_regex("number", "\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b", text); // Floats
 }
 
 void CodeInput::highlight_latex()
@@ -191,12 +198,14 @@ void CodeInput::highlight_latex()
 		edit.get_buffer()->end()
 	);
 
-	tag_by_regex("command", "\\\\(\\w)+");
-	tag_by_regex("comment", "%[^\\n]*");
-	tag_by_regex("number", "\\b[0-9]+\\b");
-	tag_by_regex("parameter", "\\{(\\w)+\\}");
-	tag_by_regex("parameter", "\\[[^\\[\\]]+\\]");
-	tag_by_regex("maths", "\\$[^\\$]+\\$");
+	std::string text = edit.get_buffer()->get_text();
+
+	tag_by_regex("comment", "%[^\\n]*", text); // Single line comment
+	tag_by_regex("maths", "\\$[^\\$]+\\$", text); // Inline maths
+	tag_by_regex("parameter", "\\{(\\w)+\\}", text); // Curly-brace paramater list
+	tag_by_regex("parameter", "\\[[^\\[\\]]+\\]", text); // Square-brace parameter list
+	tag_by_regex("command", "\\\\(\\w)+", text); // Command 
+	tag_by_regex("number", "\\b[+-]?[0-9]+[lL]?\\b", text); // Integers 
 }
 
 void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs)
