@@ -42,13 +42,20 @@ set(cadabra_gtk_src
   ImageView.cc
   Cadabra.cc
   ../common/TeXEngine.cc
+  ../../libs/tiny-process-library/process.cpp
   ../common/lodepng.cc
 #  ../common/exec-stream.cc
 )
 
 if(MSVC)
+  list(APPEND cadabra_gtk_src
+	 ../../libs/tiny-process-library/process_win.cpp
+	 )
   add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
 else()
+  list(APPEND cadabra_gtk_src
+	 ../../libs/tiny-process-library/process_unix.cpp
+	 )
   add_executable(cadabra2-gtk ${cadabra_gtk_src})
 endif()
 

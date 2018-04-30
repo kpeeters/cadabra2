@@ -12,9 +12,11 @@
 #include <internal/unistd.h>
 #include <map>
 #include <glibmm/spawn.h>
+#include "process.hpp"
 
 //#define DEBUG
 
+namespace tpl = TinyProcessLib;
 using namespace cadabra;
 
 #if defined(WIN32)
@@ -472,6 +474,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	std::cerr << "TEXINPUTS = " << texinputs << std::endl;
 #endif
 	try {
+/* GLIBMM:
 		std::string wd("");
 		std::vector<std::string> argv, envp;
 		argv.push_back("latex");
@@ -481,13 +484,25 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		std::string latex_stdout, latex_stderr;
 		int latex_exit_status;
 		
-		Glib::spawn_sync(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
+		Glib::spawn_sync(wd, argv,
 		                 Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
 		                 sigc::slot<void>(),
 		                 &latex_stdout,
 		                 &latex_stderr,
 		                 &latex_exit_status);
+*/
 
+		std::string latex_stdout, latex_stderr;
+		tpl::Process latex_proc("latex -halt-on-error --quiet "+nf, "",
+		                        [&](const char *bytes, size_t n) {
+			                        latex_stdout=std::string(bytes,n);
+			                        },
+		                        [&](const char *bytes, size_t n) {
+			                        latex_stderr=std::string(bytes,n);
+			                        }
+		                        );
+		auto latex_exit_status=latex_proc.get_exit_status();
+	
 		erase_file(tmppath+".aux");
 		erase_file(tmppath+".log");
 		erase_file(tmppath+".out");
@@ -511,7 +526,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		erase_file(tmppath+".tex");
 		}
 	catch(std::exception& err) {
-		std::cerr << "cadabra-client: Exception running LaTeX. " << err.what() << std::endl;
+//		std::cerr << "cadabra-client: Exception running LaTeX. " << err.what() << std::endl;
 		setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
 
 		// erase_file(std::string(templ)+".tex");
@@ -556,6 +571,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	//std::cerr << "cadabra-client: convert to png" << std::endl;
 	try {
+/* GLIBMM:
 		std::string wd("");
 		std::vector<std::string> argv, envp;
 		argv.push_back("dvipng");
@@ -569,12 +585,24 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		std::string dvipng_stdout, dvipng_stderr;
 		int dvipng_exit_status;
 		
-		Glib::spawn_sync(wd, argv, /* envp, WITH envp, Fedora 27 fails to start python properly */
+		Glib::spawn_sync(wd, argv,
 		                 Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
 		                 sigc::slot<void>(),
 		                 &dvipng_stdout,
 		                 &dvipng_stderr,
 		                 &dvipng_exit_status);
+*/
+		
+		std::string dvipng_stdout, dvipng_stderr;
+		tpl::Process dvipng_proc("dvipng -T tight -bg transparent -D "+resspec.str()+" "+tmppath+".dvi", "",
+		                        [&](const char *bytes, size_t n) {
+			                        dvipng_stdout=std::string(bytes,n);
+			                        },
+		                        [&](const char *bytes, size_t n) {
+			                        dvipng_stderr=std::string(bytes,n);
+			                        }
+		                        );
+		//auto dvipng_exit_status=dvipng_proc.get_exit_status();
 
 #ifdef DEBUG
 	std::cerr << result << std::endl;
