@@ -233,6 +233,15 @@ if(MATHEMATICA_FOUND)
   target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})
 endif()
 
+# Make sure mpir.dll is copied into the build directory on Windows
+if (WIN32)
+  add_custom_command(TARGET cadabra2 POST_BUILD 
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	${MPIR_ROOT_DIR}/bin/mpir.dll
+	${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/mpir.dll
+  )
+endif()
+
 # Test preprocessor executable
 add_executable(test_preprocessor 
   test_preprocessor.cc 
