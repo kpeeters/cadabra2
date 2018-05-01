@@ -21,6 +21,26 @@ message("-- Build id ${CADABRA_VERSION_BUILD} dated ${CADABRA_VERSION_DATE}")
 # Allows tests to be built in all subdirectories.
 enable_testing()
 
+# Provide sensible defaults on Windows
+if (WIN32)
+  if (NOT DEFINED CMAKE_BUILD_TYPE)
+    if (DEFINED CMAKE_CONFIGURATION_TYPES)
+	  set(CMAKE_BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
+	  message(" -- No build type specified, defaulting to ${CMAKE_CONFIGURATION_TYPES} specified in CMAKE_CONFIGURATION_TYPES")
+	else()
+      set(CMAKE_BUILD_TYPE RelWithDebInfo)
+	  message(" -- No build type specified, defaulting to RelWithDebInfo")
+	endif()
+  endif()
+  if (NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+    message(" -- CMAKE_TOOLCAHIN_FILE not specified, attempting to find vcpkg.cmake")
+    find_file(CMAKE_TOOLCHAIN_FILE vcpkg.cmake HINTS $ENV{userprofile} $ENV{systemdrive} PATH_SUFFIXES vcpkg/scripts/buildsystems)
+  endif()
+  if (NOT CMAKE_TOOLCHAIN_FILE)
+    message(FATAL_ERROR " -- Could not find vcpkg. Currently building Cadabra on Windows requires vcpkg, please set the path to vcpkg.cmake using the -DCMAKE_TOOLCHAIN_FILE flag")
+  endif()
+endif()
+
 #---------------------------------------------------------------------------
 # User options.
 #---------------------------------------------------------------------------
