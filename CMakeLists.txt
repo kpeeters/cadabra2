@@ -23,15 +23,13 @@ enable_testing()
 
 # Provide sensible defaults on Windows
 if (WIN32)
-  if (NOT DEFINED CMAKE_BUILD_TYPE)
-    if (DEFINED CMAKE_CONFIGURATION_TYPES)
-	  set(CMAKE_BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
-	  message(" -- No build type specified, defaulting to ${CMAKE_CONFIGURATION_TYPES} specified in CMAKE_CONFIGURATION_TYPES")
-	else()
-      set(CMAKE_BUILD_TYPE RelWithDebInfo)
-	  message(" -- No build type specified, defaulting to RelWithDebInfo")
-	endif()
+  # If only one configuration type is given, set the build type to be equal to this
+  list(LENGTH CMAKE_CONFIGURATION_TYPES N_CONFIGURATION_TYPES)
+  if (${N_CONFIGURATION_TYPES} EQUAL 1)
+    set(CMAKE_BUILD_TYPE ${CMAKE_CONFIGURATION_TYPES})
+	message(" -- CMAKE_BUILD_TYPE set to ${CMAKE_BUILD_TYPE} as this is the only supported configuration")
   endif()
+
   if (NOT DEFINED CMAKE_TOOLCHAIN_FILE)
     message(" -- CMAKE_TOOLCAHIN_FILE not specified, attempting to find vcpkg.cmake")
     find_file(CMAKE_TOOLCHAIN_FILE vcpkg.cmake HINTS $ENV{userprofile} $ENV{systemdrive} PATH_SUFFIXES vcpkg/scripts/buildsystems)
