@@ -27,13 +27,28 @@ std::string cadabra::cdb2python(const std::string& blk)
 	return newblk;
 	}
 
-std::string cadabra::convert_line(const std::string& line, std::string& lhs, std::string& rhs, std::string& op, std::string& indent)
+std::string cadabra::convert_line(const std::string& the_line, std::string& lhs, std::string& rhs, std::string& op, std::string& indent)
 	{
 	std::string ret;
-	
+
+	// ------------------------------------------------------------------
+	// Strip in line comments by deleting all text after and including the first instance (if any) of " #".
+	// This will cause syntax errors if users precede any # character with a space in a property declaration.
+	std::string line;
+	std::regex the_regex("(.*?)( +#)");	 // regex = any text terminated by " #"
+	std::cmatch the_match;
+
+	if(std::regex_search(the_line.c_str(), the_match, the_regex)) {
+		line=std::string(the_match[1]);	 // found the match, delete comment
+	}
+	else {
+		line=the_line;	 // no comment, return line unchanged
+	}
+	// ------------------------------------------------------------------
+
 	std::regex imatch("([\\s]*)([^\\s].*[^\\s])([\\s]*)");
 	std::cmatch mres;
-	
+
 	std::string indent_line, end_of_line, line_stripped;
 	if(std::regex_match(line.c_str(), mres, imatch)) {
 		indent_line=std::string(mres[1].first, mres[1].second);
@@ -45,14 +60,14 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 		end_of_line="\n";
 		line_stripped=line;
 		}
-	
+
 	if(line_stripped.size()==0) {
 		return "";
 		}
 
 	// Do not do anything with comment lines.
-	if(line_stripped[0]=='#') return line; 
-	
+	if(line_stripped[0]=='#') return line;
+
 	// Bare ';' gets replaced with 'display(_)'.
 	if(line_stripped==";") return indent_line+"display(_)";
 
@@ -78,7 +93,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			return ret;
 			}
 		}
-	else { 
+	else {
 		// If we are a Cadabra continuation, add to the rhs without further processing
 		// and return an empty line immediately.
 		if(lhs!="") {
@@ -90,11 +105,11 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
    // Add '__cdbkernel__' as first argument of post_process if it doesn't have that already.
 	std::regex postprocmatch(R"(def post_process\(([^_]))");
 	line_stripped = std::regex_replace(line_stripped, postprocmatch, "def post_process(__cdbkernel__, $1");
-	
+
 	// Replace $...$ with Ex(...).
 	std::regex dollarmatch(R"(\$([^\$]*)\$)");
 	line_stripped = std::regex_replace(line_stripped, dollarmatch, "Ex(r'''$1''', False)", std::regex_constants::match_default | std::regex_constants::format_default );
-	
+
 	// Replace 'converge(ex):' with 'server.progress('converge'); ex.reset(); while ex.changed(): server.progress(); server.end_progress();' properly indented.
 	std::regex converge_match(R"(([ ]*)converge\(([^\)]*)\):)");
 	std::smatch converge_res;
@@ -103,7 +118,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			 + indent_line+std::string(converge_res[1])+"while "+std::string(converge_res[2])+".changed():";
 		return ret;
 		}
-	
+
 	size_t found = line_stripped.find(":=");
 	if(found!=std::string::npos) {
 		// If the last character is not a Cadabra terminator, start a capture process.
@@ -116,7 +131,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			}
 		else {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
-			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'" 
+			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'"
 				+ escape_quotes(line_stripped.substr(found+2)) + "')";
 			std::string objname = line_stripped.substr(0,found);
 			ret = ret + "; _="+objname;
@@ -142,10 +157,10 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 				else {
 					// no arguments
 					line_stripped=line_stripped.substr(0,line_stripped.size()-1);
-					ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2) 
+					ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2)
 						+ "(Ex(r'"+escape_quotes(line_stripped.substr(0,found))+"'))";
 					}
-				if(lastchar==";") 
+				if(lastchar==";")
 					ret += "; display(__cdbtmp__)";
 				}
 			else {
@@ -154,7 +169,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 				}
 			}
 		else {
-			if(lastchar==";") 
+			if(lastchar==";")
 				ret = indent_line + "_ = " + line_stripped + " display(_)";
 			else
 				ret = indent_line + line_stripped;
