@@ -252,7 +252,7 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 				}
 			}
 		if(all_coordinates) {
-			if(*tr.parent(sib)->name!="\\pow") {
+			if(!tr.is_head(sib) && *tr.parent(sib)->name!="\\pow") {
 				sib=wrap_scalar_in_components_node(sib);
 #ifdef DEBUG		
 				std::cerr << "wrapped scalar with component derivatives" << std::endl;

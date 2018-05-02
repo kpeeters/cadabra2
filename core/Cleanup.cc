@@ -3,6 +3,7 @@
 #include "Functional.hh"
 #include "Algorithm.hh"
 #include "algorithms/collect_terms.hh"
+#include "properties/Coordinate.hh"
 #include "properties/SelfAntiCommuting.hh"
 #include "properties/Integer.hh"
 #include "properties/Diagonal.hh"
@@ -443,34 +444,60 @@ bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 					ret=true;
 					zero(it->multiplier);
 					}
-				// Still check if there is only one component value, and if
-				// that component value has index values which match the index
-				// names.
-				if(tr.number_of_children(comma)==1) {
-					auto equals   = tr.begin(comma);
+				// Still check if there is a component value for which the index
+				// values exactly match the index names. In that case, replace
+				// the entire components node with the component value.
+				auto equals   = tr.begin(comma);
+				while(equals != tr.end(comma)) {
 					auto valcomma = tr.begin(equals);
 					auto valindices=tr.begin(valcomma);
 					auto expindices=tr.begin(it);
 					Ex_comparator comp(k.properties);
+					bool foundmatch=true;
 					while(valindices!=tr.end(valcomma)) {
 						auto match = comp.equal_subtree(valindices, expindices, Ex_comparator::useprops_t::not_at_top, true);
-						if(! (match==Ex_comparator::match_t::node_match || match==Ex_comparator::match_t::subtree_match))
-							return ret;
+						if(! (match==Ex_comparator::match_t::node_match || match==Ex_comparator::match_t::subtree_match)) {
+							foundmatch=false;
+							break;
+							}
 						++expindices;
 						++valindices;
 						}
-					// Yep, we can unwrap this component and replace it with the
-					// single value.
-					auto erase=tr.begin(it);
-					while(erase!=comma)
-						erase=tr.erase(erase);
-					tr.flatten(comma);     // unwrap comma
-					comma=tr.erase(comma); // erase comma
-					tr.flatten(comma);     // unwrap equals
-					comma=tr.erase(comma); // erase equals
-					comma=tr.erase(comma); // remove comma node (plus its children) for index values
-					tr.flatten(it); // remove components node
-					it=tr.erase(it);
+					if(foundmatch) {
+						// Yep, we can unwrap this component and replace it with the
+						// single value.
+						auto erase=tr.begin(it);
+						while(erase!=comma)    // erase indices from \components
+							erase=tr.erase(erase);
+						auto eit=tr.begin(comma);
+						while(eit!=tr.end(comma)) { // erase all component values which we do not need.
+							if(eit==equals) ++eit;
+							else            eit=tr.erase(eit);
+							}
+						tr.flatten(comma);     // unwrap comma
+						comma=tr.erase(comma); // erase comma
+						tr.flatten(comma);     // unwrap equals
+						comma=tr.erase(comma); // erase equals
+						comma=tr.erase(comma); // remove comma node (plus its children) for index values
+						tr.flatten(it); // remove components node
+						it=tr.erase(it);
+						return true;
+						}
+					++equals;
+					}
+				// None of the index value sets match the index names. If the index names are
+				// coordinates, this means that the value of this component is zero.
+				auto expindices=tr.begin(it);
+				bool all_coordinates=true;
+				while(*expindices->name!="\\comma") {
+					if(expindices->is_integer()==false && k.properties.get<Coordinate>(expindices, true)==0) {
+						all_coordinates=false;
+						break;
+						}
+					++expindices;
+					}
+				if(all_coordinates) {
+					zero(it->multiplier);
 					return true;
 					}
 				return ret;
