@@ -10,7 +10,7 @@ namespace cadabra {
 		public:
 			virtual std::string name() const override;
 			virtual void        latex(std::ostream&) const override;
-			virtual bool        parse(const Kernel&, keyval_t& keyvals) override;
+			virtual bool        parse(Kernel&, keyval_t& keyvals) override;
 			Ex metric;
 	};
 

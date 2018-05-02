@@ -14,7 +14,7 @@ std::string Depends::name() const
 	return "Depends";
 	}
 
-bool Depends::parse(const Kernel& kernel, keyval_t& kv)
+bool Depends::parse(Kernel& kernel, keyval_t& kv)
 	{
 	const Properties& pr=kernel.properties;
 

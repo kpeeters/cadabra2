@@ -11,7 +11,7 @@ namespace cadabra {
 	class DifferentialForm : public ImplicitIndex, public IndexInherit, public DifferentialFormBase {
 		public:
 			virtual std::string name() const override;
-			virtual bool parse(const Kernel&, keyval_t&) override;
+			virtual bool parse(Kernel&, keyval_t&) override;
 			
 			virtual Ex degree(const Properties&, Ex::iterator) const override;
 			

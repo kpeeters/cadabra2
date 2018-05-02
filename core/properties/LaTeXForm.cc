@@ -13,7 +13,7 @@ std::string LaTeXForm::unnamed_argument() const
 	return "latex";
 	}
 
-bool LaTeXForm::parse(const Kernel&, keyval_t& keyvals)
+bool LaTeXForm::parse(Kernel&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator kv=keyvals.find("latex");
 	if(kv!=keyvals.end()) {

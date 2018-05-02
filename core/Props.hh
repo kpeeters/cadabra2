@@ -129,7 +129,7 @@ class property {
 		// Throw an error if validation fails. Needs access to all other
 		// declared properties so that it can understand what the pattern
 		// means (which objects are indices etc.).
-		virtual void        validate(Kernel&, const Ex&) const;
+		virtual void        validate(const Kernel&, const Ex&) const;
 
 		/// Display the property on the stream
 //		virtual void        display(std::ostream&) const;
@@ -344,7 +344,7 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 			++walk;
 			}
 		if(!wildcards && !ret) {
-//			std::cout << "not yet found, switching to wildcards" << std::endl;
+//			std::cerr << "not yet found, switching to wildcards" << std::endl;
 			wildcards=true;
 			}
 		else {
@@ -413,7 +413,7 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, const std::s
 				}
 			++walk;
 			}
-		if(!wildcards) wildcards=true;
+		if(!wildcards && !ret) wildcards=true;
 		else break;
 		}
 		

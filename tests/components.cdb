@@ -110,10 +110,10 @@ def test04():
     __cdbkernel__=create_scope()
     {r,t,\theta,\phi}::Coordinate.
     {m,n,p,q}::Indices(position=fixed,values={t,r,\theta,\phi}).
-    rl:= { X^{t} -> X^{t}, g_{t t}=1, g_{r r}=3 };
+    rl:= { X^{t} -> X^{t}, g_{t t}=-1, g_{r r}=3 };
     ex:= g_{m n} X^{n};
     evaluate(ex, rl)
-    tst:= \components_{m}{ \comma{ \comma{t} = X^{t} } } - @(ex);
+    tst:= \components_{m}{ \comma{ \comma{t} = -X^{t} } } - @(ex);
     collect_components(_)
     assert(tst==0)
     print("Test 04 passed")
@@ -661,7 +661,7 @@ def test32():
     \partial{#}::PartialDerivative;
     F_{i j}::Depends(x,\xi);
     ex:=\partial_{i}{F_{i k}} + m**2 A_{k};
-    evaluate(ex);
+    evaluate(ex)
     tst:=\components_{k}{ \comma{ \comma{\xi} = m**2 A_{\xi} + \partial_{x}{F_{x \xi}} + \partial_{\xi}{F_{\xi \xi}} }{ \comma{y}=m**2 A_{y} + \partial_{x}{F_{x y}} + \partial_{\xi}{F_{\xi y}}}{ \comma{x} = m**2 A_{x} + \partial_{x}{F_{x x}} + \partial_{\xi}{F_{\xi x}} } - @(ex);
     collect_components(tst)
     assert(tst==0)
@@ -680,7 +680,7 @@ def test33():
     X^{\mu}::Depends(\sigma, \tau);    
     ex:= \eta^{a b} \partial_{a}{ X^{\mu} } \partial_{b}{ X^{\nu} } g_{\mu\nu};
     mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
-    evaluate(ex, mink);
+    evaluate(ex, mink)
     tst:= - g_{\mu\nu}\partial_{\tau}{X^{\mu}}\partial_{\tau}{X^{\nu}} + g_{\mu\nu}\partial_{\sigma}{X^{\mu}}\partial_{\sigma}{X^{\nu}} - @(ex);
     assert(tst==0)
     print("Test 33 passed")
@@ -696,30 +696,30 @@ def test34():
     X^{\mu}::Depends(\sigma, \tau);    
     ex:= \eta^{a b} \partial_{a}{ X^{\mu} } \partial_{b}{ X^{\nu} };
     mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
-    evaluate(ex, mink);
+    evaluate(ex, mink)
     tst:= - \partial_{\tau}{X^{\nu}}\partial_{\tau}{X^{\mu}} + \partial_{\sigma}{X^{\nu}}\partial_{\sigma}{X^{\mu}} - @(ex);
     assert(tst==0)
     print("Test 34 passed")
 
 test34()
 
-def test35():
-    __cdbkernel__=create_scope()
-{\sigma,\tau}::Coordinate;                          
-{a,b,c}::Indices(worldsheet, values={\sigma, \tau});
-{\mu,\nu,\rho}::Indices(targetspace, values={0,1,2,3} );
-{\mu,\nu,\rho}::Integer(0..3);
-\partial{#}::PartialDerivative;
-X^{a?}::Depends(\sigma, \tau);
-X^{\mu}::Depends(\sigma, \tau);    
-ex:= \partial_{a}{ X^{\mu} };
-mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
-evaluate(ex, mink);
-tst:= - g_{\mu\nu}\partial_{\tau}{X^{\mu}}\partial_{\tau}{X^{\nu}} + g_{\mu\nu}\partial_{\sigma}{X^{\mu}}\partial_{\sigma}{X^{\nu}} - @(ex);
-    assert(tst==0)
-    print("Test 33 passed")
+# def test35():
+#     __cdbkernel__=create_scope()
+#     {\sigma,\tau}::Coordinate;                          
+#     {a,b,c}::Indices(worldsheet, values={\sigma, \tau});
+#     {\mu,\nu,\rho}::Indices(targetspace, values={0,1,2,3} );
+#     {\mu,\nu,\rho}::Integer(0..3);
+#     \partial{#}::PartialDerivative;
+#     X^{a?}::Depends(\sigma, \tau);
+#     X^{\mu}::Depends(\sigma, \tau);    
+#     ex:= \partial_{a}{ X^{\mu} };
+#     mink:= { \eta^{\tau\tau}=-1, \eta^{\sigma\sigma}=1 };
+#     evaluate(ex, mink)
+#     tst:= - g_{\mu\nu}\partial_{\tau}{X^{\mu}}\partial_{\tau}{X^{\nu}} + g_{\mu\nu}\partial_{\sigma}{X^{\mu}}\partial_{\sigma}{X^{\nu}} - @(ex);
+#     assert(tst==0)
+#     print("Test 35 passed")
 
-test35()
+#test35()
         
 #  HERE: a components node with one 'values' entry in which the values of the
 #  indices match the index names themselves should simply reduce to the

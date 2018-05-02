@@ -11,7 +11,7 @@ std::string Integer::name() const
 	return "Integer";
 	}
 
-bool Integer::parse(const Kernel& kernel, keyval_t& keyvals)
+bool Integer::parse(Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("range");
 	if(kv!=keyvals.end()) {

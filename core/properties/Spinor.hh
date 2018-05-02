@@ -11,7 +11,7 @@ namespace cadabra {
 			virtual ~Spinor() {};
 			virtual std::string name() const override;
 //		virtual void        display(std::ostream&) const;
-			virtual bool        parse(const Kernel&, keyval_t& keyvals) override;
+			virtual bool        parse(Kernel&, keyval_t& keyvals) override;
 			
 			int  dimension;
 			bool weyl;

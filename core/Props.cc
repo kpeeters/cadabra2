@@ -27,7 +27,7 @@
 #include <sstream>
 #include "properties/Indices.hh"
 
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -229,15 +229,16 @@ bool property::hidden() const
 	return hidden_;
 	}
 
-bool property::parse(const Kernel& kernel, keyval_t& keyvals)
+bool property::parse(Kernel& kernel, keyval_t& keyvals)
 	{
-	auto ex=std::make_shared<Ex>();
-	return parse(kernel, ex, keyvals);
+	return true;
 	}
 
-bool property::parse(const Kernel&, std::shared_ptr<Ex> ex, keyval_t& keyvals)
+bool property::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
    {
-   return true;
+   // The default is to run the 'parse' without 'ex', as most properties
+   // do not implement the new interface.
+	return parse(kernel, keyvals);
    }
 
 void property::validate(const Kernel&, const Ex&) const
@@ -305,7 +306,7 @@ property::match_t property::equals(const property *) const
 	return exact_match;
 	}
 
-bool labelled_property::parse(const Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
+bool labelled_property::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator lit=keyvals.find("label");
 	if(lit!=keyvals.end()) {

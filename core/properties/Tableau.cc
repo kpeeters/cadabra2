@@ -8,7 +8,7 @@ std::string Tableau::name() const
 	return "Tableau";
 	}
 
-bool Tableau::parse(const Kernel& kernel, keyval_t& keyvals)
+bool Tableau::parse(Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator kv=keyvals.find("dimension");
 	if(kv!=keyvals.end()) dimension=to_long(*(kv->second->multiplier));

@@ -14,7 +14,7 @@ void GammaMatrix::latex(std::ostream& str) const
 	Matrix::latex(str);
 	}
 
-bool GammaMatrix::parse(const Kernel& kernel, keyval_t& keyvals)
+bool GammaMatrix::parse(Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::iterator kv=keyvals.find("metric");
 	if(kv!=keyvals.end()) {

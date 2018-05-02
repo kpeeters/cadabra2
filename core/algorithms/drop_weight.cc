@@ -28,6 +28,7 @@ drop_keep_weight::drop_keep_weight(const Kernel& k, Ex& tr, Ex& a)
 
 bool drop_keep_weight::can_apply(iterator st)
 	{
+	// std::cerr << "can act? at " << st << std::endl;
 	sibling_iterator argit=arg.begin(arg.begin());
 	label=*argit->name;
 	++argit;
@@ -52,6 +53,7 @@ bool drop_keep_weight::can_apply(iterator st)
 		return ret;
 		}
 
+	// std::cerr << "cannot apply" << std::endl;
 	return false;
 	}
 

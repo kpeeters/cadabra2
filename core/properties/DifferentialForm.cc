@@ -8,7 +8,7 @@ std::string DifferentialForm::name() const
 	return "DifferentialForm";
 	}
 
-bool DifferentialForm::parse(const Kernel&, keyval_t& keyvals)
+bool DifferentialForm::parse(Kernel&, keyval_t& keyvals)
 	{
 	for(auto& kv: keyvals) {
 		if(kv.first=="degree") {

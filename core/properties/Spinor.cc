@@ -15,7 +15,7 @@ std::string Spinor::name() const
 	return "Spinor";
 	}
 
-bool Spinor::parse(const Kernel& kernel, keyval_t& keyvals)
+bool Spinor::parse(Kernel& kernel, keyval_t& keyvals)
 	{
 	keyval_t::iterator ki=keyvals.find("dimension");
 	if(ki!=keyvals.end()) {

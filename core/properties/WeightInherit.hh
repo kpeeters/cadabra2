@@ -15,7 +15,7 @@ namespace cadabra {
 					WeightException(const std::string&);
 			};
 			
-			virtual bool          parse(const Kernel&, keyval_t&) override;
+	      virtual bool          parse(Kernel&, std::shared_ptr<Ex>, keyval_t&) override;
 			virtual multiplier_t  value(const Kernel&, Ex::iterator, const std::string& forcedlabel) const override;
 			virtual std::string   unnamed_argument() const override { return "type"; };
 			virtual std::string   name() const override;

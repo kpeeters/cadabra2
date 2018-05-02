@@ -10,7 +10,7 @@ namespace cadabra {
 		public:
 			virtual ~TableauSymmetry();
 			
-			virtual bool         parse(const Kernel&, keyval_t&) override;
+			virtual bool         parse(Kernel&, keyval_t&) override;
 			virtual std::string  name() const override;
 			virtual void         latex(std::ostream&) const override;
 			virtual unsigned int size(const Properties&, Ex&, Ex::iterator) const override;

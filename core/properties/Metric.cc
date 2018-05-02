@@ -17,7 +17,7 @@ std::string Metric::name() const
 	return "Metric";
 	}
 
-bool Metric::parse(const Kernel&, keyval_t& keyvals) 
+bool Metric::parse(Kernel&, keyval_t& keyvals) 
 	{
 	keyval_t::const_iterator kv=keyvals.find("signature");
 	signature=1;

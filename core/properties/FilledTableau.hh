@@ -8,7 +8,7 @@ namespace cadabra {
 		public:
 			virtual ~FilledTableau() {};
 			virtual std::string name() const;
-	      virtual bool        parse(const Kernel&, keyval_t& keyvals) override;
+	      virtual bool        parse(Kernel&, keyval_t& keyvals) override;
 			
 			int dimension;
 	};

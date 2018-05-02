@@ -14,7 +14,7 @@ WeightInherit::WeightException::WeightException(const std::string& str)
 	{
 	}
 
-bool WeightInherit::parse(const Kernel& k, keyval_t& kv)
+bool WeightInherit::parse(Kernel& k, std::shared_ptr<Ex> ex, keyval_t& kv)
 	{
 	keyval_t::const_iterator tpit=kv.find("type");
 	if(tpit!=kv.end()) {
@@ -31,7 +31,7 @@ bool WeightInherit::parse(const Kernel& k, keyval_t& kv)
 		}
 	else value_self=0;
 
-	auto ret = WeightBase::parse(k, kv);
+	auto ret = WeightBase::parse(k, ex, kv);
 	return ret;
 	}
 

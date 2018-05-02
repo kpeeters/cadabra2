@@ -14,7 +14,7 @@ namespace cadabra {
 		public:
 			virtual ~Integer() {};
 			virtual std::string name() const override;
-			virtual bool        parse(const Kernel&, keyval_t& keyvals) override;
+			virtual bool        parse(Kernel&, keyval_t& keyvals) override;
 //		virtual bool parse(Ex&, Ex::iterator, Ex::iterator, keyval_t&);
 			virtual void display(std::ostream&) const;
 			virtual std::string unnamed_argument() const  override { return "range"; };

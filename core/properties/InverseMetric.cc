@@ -18,7 +18,7 @@ std::string InverseMetric::name() const
 	return "InverseMetric";
 	}
 
-bool InverseMetric::parse(const Kernel&, keyval_t& keyvals) 
+bool InverseMetric::parse(Kernel&, keyval_t& keyvals) 
 	{
 	keyval_t::const_iterator kv=keyvals.find("signature");
 	signature=1;
