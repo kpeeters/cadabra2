@@ -27,6 +27,8 @@
 #include <sstream>
 #include "properties/Indices.hh"
 
+#define DEBUG 1
+
 using namespace cadabra;
 
 pattern::pattern()
@@ -101,7 +103,9 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 																 Ex_comparator::useprops_t::not_at_top, 
 																 ignore_parent_rel);
 
-	// std::cerr << "*** Comparing " << Ex(it) <<  " with " << Ex(obj) << " = " << static_cast<int>(res) << std::endl;
+#ifdef DEBUG
+	std::cerr << "*** Comparing " << Ex(it) <<  " with " << Ex(obj) << " = " << static_cast<int>(res) << std::endl;
+#endif
 
 	if(is_in(res, 
 				 { Ex_comparator::match_t::subtree_match,
@@ -225,14 +229,16 @@ bool property::hidden() const
 	return hidden_;
 	}
 
-bool property::parse(const Kernel&, keyval_t& keyvals)
+bool property::parse(const Kernel& kernel, keyval_t& keyvals)
 	{
-	return true;
-
-//	if(tr.number_of_children(arg)==0) return true;
-//	txtout << name() << ": should not have any arguments." << std::endl;
-//	return false;
+	auto ex=std::make_shared<Ex>();
+	return parse(kernel, ex, keyvals);
 	}
+
+bool property::parse(const Kernel&, std::shared_ptr<Ex> ex, keyval_t& keyvals)
+   {
+   return true;
+   }
 
 void property::validate(const Kernel&, const Ex&) const
 	{
@@ -299,7 +305,7 @@ property::match_t property::equals(const property *) const
 	return exact_match;
 	}
 
-bool labelled_property::parse(const Kernel&, keyval_t& keyvals)
+bool labelled_property::parse(const Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator lit=keyvals.find("label");
 	if(lit!=keyvals.end()) {

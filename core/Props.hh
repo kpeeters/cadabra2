@@ -118,13 +118,18 @@ class property {
 		// still calls this only once.
 		// FIXME: failure to call
 		// into superclass may lead to problems for labelled properties.
-		virtual bool        parse(const Kernel&, keyval_t& keyvals);
+		virtual bool        parse(Kernel&, keyval_t& keyvals);
+
+      // New entry point, which also passes the Ex of the pattern, so that
+      // the property itself can inject other properties automatically (e.g.
+      // declare an InverseMetric if a Metric is declared).
+      virtual bool        parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals);      
 
 		// Check whether the property can be associated with the pattern.
 		// Throw an error if validation fails. Needs access to all other
 		// declared properties so that it can understand what the pattern
 		// means (which objects are indices etc.).
-		virtual void        validate(const Kernel&, const Ex&) const;
+		virtual void        validate(Kernel&, const Ex&) const;
 
 		/// Display the property on the stream
 //		virtual void        display(std::ostream&) const;
@@ -158,7 +163,7 @@ class property {
 
 class labelled_property : virtual public property {
 	public:
-		virtual bool parse(const Kernel&, keyval_t&) override;
+      virtual bool parse(Kernel&, std::shared_ptr<Ex>, keyval_t&) override;
 		std::string label;
 };
 

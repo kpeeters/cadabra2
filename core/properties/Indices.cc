@@ -1,5 +1,7 @@
 
+#include "Kernel.hh"
 #include "properties/Indices.hh"
+#include "properties/Integer.hh"
 #include "Exceptions.hh"
 #include "Functional.hh"
 
@@ -30,7 +32,7 @@ property::match_t Indices::equals(const property *other) const
 	return property::equals(other);
 	}
 
-bool Indices::parse(const Kernel&, keyval_t& keyvals)
+bool Indices::parse(const Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator ki=keyvals.begin();
 	while(ki!=keyvals.end()) {
@@ -63,6 +65,10 @@ bool Indices::parse(const Kernel&, keyval_t& keyvals)
 		else if(ki->first=="values") { 
 			//std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
 			collect_index_values(ki->second);
+
+			// If all values are indices, add an `Integer' property for the object,
+			// listing these integers.
+			kernel.inject_property(new Integer(), ex, std::make_shared<Ex>());
 			}
 		else throw ConsistencyException("Property 'Indices' does not accept key '"+ki->first+"'.");
 		++ki;

@@ -417,7 +417,7 @@ bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 	// std::cerr << "components cleanup: " << Ex(it) << std::endl;
 
 	auto comma=tr.begin(it);
-	if(*comma->name=="\\comma") {
+	if(*comma->name=="\\comma") { // If the first child is \comma, there are no indices: scalar.
 		if(tr.number_of_children(comma)==0) {
 			// Totally empty component node, can happen after an
 			// evaluate with no rules matching.
@@ -442,6 +442,36 @@ bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 				if(tr.number_of_children(comma)==0) {
 					ret=true;
 					zero(it->multiplier);
+					}
+				// Still check if there is only one component value, and if
+				// that component value has index values which match the index
+				// names.
+				if(tr.number_of_children(comma)==1) {
+					auto equals   = tr.begin(comma);
+					auto valcomma = tr.begin(equals);
+					auto valindices=tr.begin(valcomma);
+					auto expindices=tr.begin(it);
+					Ex_comparator comp(k.properties);
+					while(valindices!=tr.end(valcomma)) {
+						auto match = comp.equal_subtree(valindices, expindices, Ex_comparator::useprops_t::not_at_top, true);
+						if(! (match==Ex_comparator::match_t::node_match || match==Ex_comparator::match_t::subtree_match))
+							return ret;
+						++expindices;
+						++valindices;
+						}
+					// Yep, we can unwrap this component and replace it with the
+					// single value.
+					auto erase=tr.begin(it);
+					while(erase!=comma)
+						erase=tr.erase(erase);
+					tr.flatten(comma);     // unwrap comma
+					comma=tr.erase(comma); // erase comma
+					tr.flatten(comma);     // unwrap equals
+					comma=tr.erase(comma); // erase equals
+					comma=tr.erase(comma); // remove comma node (plus its children) for index values
+					tr.flatten(it); // remove components node
+					it=tr.erase(it);
+					return true;
 					}
 				return ret;
 				}

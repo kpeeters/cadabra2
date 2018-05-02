@@ -25,7 +25,7 @@ void Kernel::inject_property(property *prop, std::shared_ptr<Ex> ex, std::shared
 		// std::cerr << "property with " << *param << std::endl;
 		keyval_t keyvals;
 		prop->parse_to_keyvals(*param, keyvals);
-		prop->parse(*this, keyvals);
+		prop->parse(*this, ex, keyvals);
 		}
 	prop->validate(*this, Ex(it));
 	properties.master_insert(Ex(it), prop);
