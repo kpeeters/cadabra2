@@ -1,0 +1,190 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{einsteinify}{Raise or lower indices of pairs which are both upper or lower.}\n\nIn an expression containing dummy indices at the same position\n(i.e.~either both subscripts or both superscripts), raise or lower one of the\nindices."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{einsteinify}{Raise or lower indices of pairs which are both upper or lower.}\n\nIn an expression containing dummy indices at the same position\n(i.e.~either both subscripts or both superscripts), raise or lower one of the\nindices."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m} A_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m} A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A^{m} A_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A^{m} A_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A_{m} A_{m};\neinsteinify(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A^{m} A^{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A^{m} A^{m}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m} A^{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m} A^{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A^{m} A^{m};\neinsteinify(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "If an additional argument is given to this algorithm, it instead inserts\n``inverse metric'' objects, with the name as indicated by the\nadditional argument."
+				}
+			],
+			"hidden" : true,
+			"source" : "If an additional argument is given to this algorithm, it instead inserts\n``inverse metric'' objects, with the name as indicated by the\nadditional argument."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m} A_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m} A_{m}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m} A_{n} \\eta^{m n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m} A_{n} \\eta^{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n}::Indices.\nex:= A_{m} A_{m};\neinsteinify(_, $\\eta$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A^{m} A^{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A^{m} A^{m}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m} A_{n} \\eta^{m n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m} A_{n} \\eta^{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A^{m} A^{m};\neinsteinify(_, $\\eta$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that the second form requires that there are enough dummy indices\ndefined through the use of \\prop{Indices}."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that the second form requires that there are enough dummy indices\ndefined through the use of \\prop{Indices}."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

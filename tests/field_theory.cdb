@@ -94,3 +94,35 @@ def test07():
     assert(ex==0)
 
 test07()
+        
+
+def test08():
+    __cdbkernel__=create_scope() 
+    ex:= A_{m} A_{m};
+    einsteinify(_)
+    tst:= A^{m} A_{m} - @(ex);
+    assert(tst==0)
+    print("Test 08a passed")        
+    ex:= A^{m} A^{m};
+    einsteinify(_)
+    tst:= A_{m} A^{m} - @(ex);
+    assert(tst==0)
+    print("Test 08b passed")        
+    {m,n,p,q}::Indices.
+    ex:= A_{m} A_{m};
+    einsteinify(_, $\eta$)
+    tst:= A_{m} A_{n} \eta^{m n} - @(ex);
+    assert(tst==0)
+    print("Test 08c passed")        
+    ex:= A^{m} A^{m};
+    einsteinify(_, $\eta$)
+    tst:= A_{m} A_{n} \eta^{m n} - @(ex);
+    assert(tst==0)
+    print("Test 08d passed")        
+    ex:= A_{m n} A_{m n};
+    einsteinify(_, $\eta$)
+    tst:= A_{m n} A_{p q} \eta^{m p} \eta^{n q} - @(ex);
+    assert(tst==0)
+    print("Test 08e passed")        
+
+test08()

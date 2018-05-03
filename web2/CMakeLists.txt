@@ -41,6 +41,7 @@ set(ALGOS
   decompose_product
   distribute
   drop_weight
+  einsteinify
   eliminate_kronecker
   eliminate_metric
   epsilon_to_delta

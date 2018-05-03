@@ -19,8 +19,9 @@ Algorithm::result_t einsteinify::apply(iterator& it)
 	result_t res=result_t::l_no_action;
 
 	bool insert_metric=false;
-	if(*metric.begin()->name!="")
-		insert_metric=true;
+	if(metric.begin()!=metric.end())
+		if(*metric.begin()->name!="")
+			insert_metric=true;
 
 	index_map_t ind_free, ind_dummy;
 	classify_indices(it, ind_free, ind_dummy);
@@ -48,7 +49,7 @@ Algorithm::result_t einsteinify::apply(iterator& it)
 				tmpit=tr.append_child(invmet, dum.begin());
 				tmpit->fl.bracket=str_node::b_none;
 				tmpit->fl.parent_rel=str_node::p_super;
-				tr.replace_index((*dit).second,dum.begin());
+				tr.replace_index((*dit).second,dum.begin())->fl.parent_rel=str_node::p_sub;
 
 				res=result_t::l_applied;
 				}
