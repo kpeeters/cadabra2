@@ -137,3 +137,12 @@ for n in ex:
 #     for term in sum[""]:
 #         print(term.name)
 # 
+
+ex:= ( Q* ( A_{m n} + B_{m n} ) ) C + D_{m n};
+for term in ex.top().terms():
+    print("term:")
+    for factor in term.factors():
+        print("factor:")
+        print(factor)
+
+

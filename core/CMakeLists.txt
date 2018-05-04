@@ -35,6 +35,7 @@ message("-- Found python ${PYTHON_LIBRARIES}")
 
 set(LOCAL_SRC_FILES
   PythonCdb.cc
+  ExNode.cc
   ProgressMonitor.cc
   Bridge.cc
   Algorithm.cc
