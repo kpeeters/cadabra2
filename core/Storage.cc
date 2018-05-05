@@ -486,6 +486,7 @@ bool Ex::is_hidden(iterator it) const
 	   if(is_head(it)) break;
 	   it=parent(it);
 	   } while(true);
+   return false;
    }
 	
 Ex::iterator Ex::procedure_by_name(nset_t::iterator nit) const
