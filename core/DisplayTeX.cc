@@ -373,7 +373,8 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else if(*it->name=="\\indexbracket")   print_indexbracket(str, it);
 	else if(*it->name=="\\tableau")        print_tableau(str, it);
-	else if(*it->name=="\\ftableau")       print_ftableau(str, it);	
+	else if(*it->name=="\\ftableau")       print_ftableau(str, it);
+	else if(*it->name=="\\ldots")          print_dots(str, it);		
 	else                                   print_other(str, it);
 	}
 
@@ -638,6 +639,18 @@ void DisplayTeX::print_commutator(std::ostream& str, Ex::iterator it, bool comm)
 	if(comm) str << "\\right]{}";
 	else     str << "\\right\\}{}";
 	}
+
+void DisplayTeX::print_dots(std::ostream& str, Ex::iterator it)
+   {
+   if(tree.is_head(it)==false) {
+	   if(*tree.parent(it)->name=="\\sum")
+		   str << " \\ldots ";
+	   else
+		   str << " \\cdots ";
+	   }
+   else
+	   str << " \\ldots ";
+   }
 
 void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 	{

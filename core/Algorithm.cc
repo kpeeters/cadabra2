@@ -48,7 +48,8 @@ Algorithm::Algorithm(const Kernel& k, Ex& tr_)
 	  discard_command_node(false),
 	  kernel(k),
 	  tr(tr_),
-	  pm(0)
+    pm(0),
+    traverse_ldots(false)
 	{
 	}
 
@@ -74,11 +75,13 @@ Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	result_t ret=result_t::l_no_action;
 	Ex::iterator start=tr.begin();
 	while(start!=tr.end()) {
-		if(start->is_index()==false && apply_once(start)==result_t::l_applied) {
-			ret=result_t::l_applied;
-			// Need to cleanup on the entire tree above us.
-			
-			start.skip_children();
+		if(traverse_ldots || !tr.is_hidden(start)) {
+			if(start->is_index()==false && apply_once(start)==result_t::l_applied) {
+				ret=result_t::l_applied;
+				// Need to cleanup on the entire tree above us.
+				
+				start.skip_children();
+				}
 			}
 		++start;
 		}
@@ -176,15 +179,17 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 Algorithm::result_t Algorithm::apply_once(Ex::iterator& it)
 	{
 	// std::cerr << "=== apply_once ===" << std::endl;
-	if(can_apply(it)) {
-		result_t res=apply(it);
-		// std::cerr << "apply algorithm at " << *it->name << std::endl;
-		if(res==result_t::l_applied) {
-			cleanup_dispatch(kernel, tr, it);
-			return res;
+	if(traverse_ldots || !tr.is_hidden(it)) {
+		if(can_apply(it)) {
+			result_t res=apply(it);
+			// std::cerr << "apply algorithm at " << *it->name << std::endl;
+			if(res==result_t::l_applied) {
+				cleanup_dispatch(kernel, tr, it);
+				return res;
+				}
 			}
 		}
-
+	
 	return result_t::l_no_action;
 	}
 
@@ -238,7 +243,7 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 			deepest_action = tr.depth(current); // needs to propagate upwards
 			}
 		
-		if(can_apply(current)) {
+		if((traverse_ldots || !tr.is_hidden(current)) && can_apply(current)) {
 #ifdef DEBUG
 			std::cout << "acting at " << *current->name << std::endl;
 #endif

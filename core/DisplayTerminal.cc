@@ -324,6 +324,7 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\sum")        print_intlike(str, it);
 	else if(*it->name=="\\equals")     print_equalitylike(str, it);
 	else if(*it->name=="\\components") print_components(str, it);
+	else if(*it->name=="\\ldots")      print_dots(str, it);
 	else                               print_other(str, it);
 	}
 
@@ -557,6 +558,11 @@ bool DisplayTerminal::children_have_brackets(Ex::iterator ch) const
 		return false;
 	else return true;
 	}
+
+void DisplayTerminal::print_dots(std::ostream& str, Ex::iterator it)
+   {
+   str << " ... ";
+   }
 
 void DisplayTerminal::print_other(std::ostream& str, Ex::iterator it) 
 	{

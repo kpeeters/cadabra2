@@ -479,6 +479,15 @@ Ex::iterator Ex::equation_by_name(nset_t::iterator nit, unsigned int& tmp) const
 	return end();
 	}
 
+bool Ex::is_hidden(iterator it) const
+   {
+   do {
+	   if(*it->name=="\\ldots") return true;
+	   if(is_head(it)) break;
+	   it=parent(it);
+	   } while(true);
+   }
+	
 Ex::iterator Ex::procedure_by_name(nset_t::iterator nit) const
 	{
 	iterator it=begin();
