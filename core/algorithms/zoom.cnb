@@ -1,0 +1,166 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{zoom}{Only show selected terms in a sum, and restrict subsequent algorithms to these terms.}\n\nOften you want manipulations to only apply to a selected subset of terms in a large sum. The \\algo{zoom} \nalgorithm makes only certain terms visible, representing the remaining terms with dots.\n\nHere is an expression with a 5 terms,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{zoom}{Only show selected terms in a sum, and restrict subsequent algorithms to these terms.}\n\nOften you want manipulations to only apply to a selected subset of terms in a large sum. The \\algo{zoom} \nalgorithm makes only certain terms visible, representing the remaining terms with dots.\n\nHere is an expression with a 5 terms,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{A_{m n} + B_{m n} C + D_{m} F_{n} C + T_{m n} + B_{m n} R}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left(A_{m n}+B_{m n} C+D_{m} F_{n} C+T_{m n}+B_{m n} R\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=\\int{ A_{m n} + B_{m n} C + D_{m} F_{n} C  + T_{m n} + B_{m n} R}{x};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In order to restrict attention only to the terms containing a $B_{m n}$ factor, we use"
+				}
+			],
+			"hidden" : true,
+			"source" : "In order to restrict attention only to the terms containing a $B_{m n}$ factor, we use"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{ ...  + B_{m n} C +  ...  + B_{m n} R}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left( \\ldots +B_{m n} C+ \\ldots +B_{m n} R\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "zoom(_, $B_{m n} Q??$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Subsequent algorithms only work on the visible terms above, not on the terms hidden inside the dots,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Subsequent algorithms only work on the visible terms above, not on the terms hidden inside the dots,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{ ...  + B_{m n} Q +  ...  + B_{m n} R}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left( \\ldots +B_{m n} Q+ \\ldots +B_{m n} R\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $C->Q$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "To make the hidden terms visible again, use \\algo{unzoom},"
+				}
+			],
+			"hidden" : true,
+			"source" : "To make the hidden terms visible again, use \\algo{unzoom},"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{A_{m n} + B_{m n} C + D_{m} F_{n} C + T_{m n} + B_{m n} R}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left(A_{m n}+B_{m n} C+D_{m} F_{n} C+T_{m n}+B_{m n} R\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "unzoom(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The \\algo{zoom}/\\algo{unzoom} combination is somewhat similar to the old deprecated \\algo{take_match}/\\algo{replace_match}\nalgorithms, but makes it more clear that terms have been suppressed."
+				}
+			],
+			"hidden" : true,
+			"source" : "The \\algo{zoom}/\\algo{unzoom} combination is somewhat similar to the old deprecated \\algo{take_match}/\\algo{replace_match}\nalgorithms, but makes it more clear that terms have been suppressed."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

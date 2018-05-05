@@ -162,10 +162,12 @@ set(LOCAL_SRC_FILES
   algorithms/take_match.cc
   algorithms/replace_match.cc
   algorithms/unwrap.cc
+  algorithms/unzoom.cc    
   algorithms/vary.cc
   algorithms/young_project.cc
   algorithms/young_project_product.cc
   algorithms/young_project_tensor.cc
+  algorithms/zoom.cc  
 )
 if(MATHEMATICA_FOUND)
   set(LOCAL_SRC_FILES ${LOCAL_SRC_FILES}

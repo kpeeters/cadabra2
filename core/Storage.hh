@@ -216,6 +216,9 @@ class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
 		std::string      equation_number_or_name(iterator it, unsigned int last_used_equation) const;
 		iterator         procedure_by_name(nset_t::iterator it) const;
 
+      // Determine whether a node has an '\ldots' parent (not necessarily direct).
+      bool is_hidden(iterator) const; 
+      
 		/// Replace the index-like object (originally intended to
 		/// replace indices only, but now used also for e.g. normal
 		/// function arguments, as in \f[ \partial_{z}{ A(z) } \f] with
@@ -253,10 +256,12 @@ class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
 		/// Push a copy of the current state of the expression onto the
       /// history stack.  Also pushes a set of paths to terms which
       /// will be kept in the next history step.
+      /// DEPRECATED, only used by take_match/replace_match.
       void push_history(const std::vector<Ex::path_t>&);
 
 		/// Pop the most recent state of the expression off the history stack; returns
 		/// the set of paths that we are replacing.
+      /// DEPRECATED, only used by take_match/replace_match.
       std::vector<Ex::path_t> pop_history();
 
 		/// Return the size of the history; 0 means no history, just the current

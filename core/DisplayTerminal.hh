@@ -57,6 +57,7 @@ class DisplayTerminal : public DisplayBase {
 		void print_equalitylike(std::ostream&, Ex::iterator);
 		void print_commutator(std::ostream& str, Ex::iterator it, bool comm);
 		void print_components(std::ostream&, Ex::iterator);
+		void print_dots(std::ostream&, Ex::iterator);      
 		void print_other(std::ostream&, Ex::iterator);
 
 		bool children_have_brackets(Ex::iterator ch) const;

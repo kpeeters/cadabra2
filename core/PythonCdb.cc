@@ -131,11 +131,12 @@
 #include "algorithms/replace_match.hh"
 #include "algorithms/rewrite_indices.hh"
 #include "algorithms/unwrap.hh"
+#include "algorithms/unzoom.hh"
 #include "algorithms/vary.hh"
 #include "algorithms/young_project.hh"
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
-
+#include "algorithms/zoom.hh"
 
 using namespace cadabra;
 
@@ -765,6 +766,9 @@ void inject_defaults(Kernel *k)
 	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\int{#}",false, k), 0);
 	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\int{#}",false, k), 0);
 
+	// Hidden nodes.
+	k->inject_property(new Accent(),             make_Ex_from_string("\\ldots{#}",false, k), 0);
+	
 	// Accents, necessary for proper display.
 	k->inject_property(new Accent(),             make_Ex_from_string("\\hat{#}",false, k), 0);
 	k->inject_property(new Accent(),             make_Ex_from_string("\\bar{#}",false, k), 0);
@@ -1395,6 +1399,15 @@ PYBIND11_MODULE(cadabra2, m)
 	m.def("replace_match", &dispatch_ex<replace_match>, 
 		 pybind11::arg("ex"),
 		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("zoom", &dispatch_ex<zoom, Ex>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("rules"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+	m.def("unzoom", &dispatch_ex<unzoom>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
 	m.def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex, Ex>, 
 		 pybind11::arg("ex"),pybind11::arg("preferred"),pybind11::arg("converters"),

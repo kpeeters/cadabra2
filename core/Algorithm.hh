@@ -250,7 +250,12 @@ class Algorithm {
 		/// Find an index in the set, not taking into account index position.
 		index_map_t::iterator find_modulo_parent_rel(iterator it, index_map_t& imap) const;
 
-	private:
+
+   protected:
+      bool traverse_ldots;
+
+   private:
+      
 		// Single or deep-scan apply operations. Do not call directly.
 		result_t apply_once(Ex::iterator& it);
 		result_t apply_deep(Ex::iterator& it);
