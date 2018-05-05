@@ -138,7 +138,7 @@ for n in ex:
 #         print(term.name)
 # 
 
-ex:= ( Q* ( A_{m n} + B_{m n} ) ) C + D_{m n};
+ex:= Q ( A_{m n} (Q+S) + B_{m n} ) + D_{m n};
 for term in ex.top().terms():
     print("term:")
     for factor in term.factors():
