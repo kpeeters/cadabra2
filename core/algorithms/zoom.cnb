@@ -114,11 +114,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "To make the hidden terms visible again, use \\algo{unzoom},"
+					"source" : "To make the hidden terms visible again, use \\algo{unzoom}, and note that the third term below has remained unaffected\nby the substitution above,"
 				}
 			],
 			"hidden" : true,
-			"source" : "To make the hidden terms visible again, use \\algo{unzoom},"
+			"source" : "To make the hidden terms visible again, use \\algo{unzoom}, and note that the third term below has remained unaffected\nby the substitution above,"
 		},
 		{
 			"cell_origin" : "client",
@@ -133,10 +133,10 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\int{A_{m n} + B_{m n} C + D_{m} F_{n} C + T_{m n} + B_{m n} R}{x}"
+							"source" : "\\int{A_{m n} + B_{m n} Q + D_{m} F_{n} C + T_{m n} + B_{m n} R}{x}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\int \\left(A_{m n}+B_{m n} C+D_{m} F_{n} C+T_{m n}+B_{m n} R\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\int \\left(A_{m n}+B_{m n} Q+D_{m} F_{n} C+T_{m n}+B_{m n} R\\right)\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "unzoom(_);"

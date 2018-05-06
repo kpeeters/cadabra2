@@ -105,9 +105,10 @@ test08()
 def test09():
     __cdbkernel__=create_scope()
     \partial{#}::PartialDerivative;
+    \delta{#}::Accent;    
     ex:= S = \int{ Q + R +  A \partial{B} C }{x};
-    vary(_, $B -> b$)
-    tst:= (S = \int{ A \partial{b} C }{x}) - @(ex);
+    vary(_, $S -> \delta{S}, B -> b$)
+    tst:= (\delta{S} = \int{ A \partial{b} C }{x}) - @(ex);
     assert(tst==0)
     print("Test 09 passed")
 

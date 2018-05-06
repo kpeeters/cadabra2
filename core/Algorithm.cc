@@ -1431,12 +1431,15 @@ bool Algorithm::is_factorlike(iterator it)
 	return false;
 	}
 
+// This only returns true if the indicated node is a single non-reserved node (non-prod, non-sum, ...)
+// at the top level of an expression (real top, top of equation lhs/rhs, top of integral argument, ...).
+
 bool Algorithm::is_single_term(iterator it)
 	{
 	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit"
 	   && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
 
-		if(tr.is_head(it) || *tr.parent(it)->name=="\\equals") return true;
+		if(tr.is_head(it) || *tr.parent(it)->name=="\\equals" || *tr.parent(it)->name=="\\int") return true;
 		else {
 			if(*tr.parent(it)->name=="\\sum")
 				return true;

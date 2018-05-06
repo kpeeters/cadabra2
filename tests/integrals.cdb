@@ -45,3 +45,25 @@ def test04():
     print("Test 04 passed")
 
 test04()
+
+def test05():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex:=  \int{  A_{i j} }{x};
+    integrate_by_parts(_, $h$)  
+    tst:= \int{  A_{i j} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 05a passed")
+    ex:= \int{ h A_{i j} }{x};
+    integrate_by_parts(_, $h$)
+    tst:= \int{ h A_{i j} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 05b passed")
+    \partial{#}::PartialDerivative;
+    ex:=  \int{  A_{i j} + \partial_{i j}{h} }{x};
+    integrate_by_parts(_, $h$)
+    tst:=  \int{  A_{i j} }{x} - @(ex);
+    assert(tst==0)
+    print("Test 05c passed")
+
+test05()

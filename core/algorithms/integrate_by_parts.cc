@@ -102,11 +102,12 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 	// Or this is a product, in which case we need to scan factors for a Derivative
 	// and figure out whether it contains the searched-for expression.
 
+	if(*it->name=="\\ldots") return result_t::l_no_action;
 	
 	const Derivative *dtop=kernel.properties.get<Derivative>(it);
 	if(dtop) {
 		if(int_and_derivative_related(int_it, it)) {
-			zero(int_it->multiplier);
+			zero(it->multiplier);
 			return result_t::l_applied;
 			}
 		}
@@ -133,7 +134,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 
 				if(fac==tr.begin(it) || std::next(fac)==tr.end(it)) {
 					// Derivative is first or last factor in product; generate one term only.
-					
+					// Note: total derivatives have already been handled!
+
 					sibling_iterator from, to;
 					if(fac==tr.begin(it)) {
 						from=fac;

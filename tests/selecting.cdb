@@ -120,5 +120,18 @@ def test06():
 
 test06()
 
+def test07():
+    __cdbkernel__=create_scope()
+    \partial{#}::PartialDerivative;
+    ex:=  \int{ 3 h A_{i j} + 2 \partial_{i}{\partial_{j}{h}}}{x};
+    zoom(_, $A_{i j} Q??$)
+    substitute(_,$A_{i j} -> B_{i j}$)
+    integrate_by_parts(_, $h$)  
+    unzoom(_)
+    tst:= \int{ 3 h B_{i j} + 2 \partial_{i}{\partial_{j}{h}}}{x} - @(ex);
+    assert(tst==0)
+    print("Test 07 passed")
+
+test07()
 
 

@@ -77,6 +77,7 @@ set(ALGOS
   vary
   young_project_product
   young_project_tensor
+  zoom
 )
 set(PROPS
   Accent
