@@ -1433,15 +1433,14 @@ bool Algorithm::is_factorlike(iterator it)
 
 bool Algorithm::is_single_term(iterator it)
 	{
-	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit" && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
-		if(tr.is_head(it)==false) {
+	if(*it->name!="\\prod" && *it->name!="\\sum" && *it->name!="\\asymimplicit"
+	   && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
+
+		if(tr.is_head(it) || *tr.parent(it)->name=="\\equals") return true;
+		else {
 			if(*tr.parent(it)->name=="\\sum")
 				return true;
-//			if(*tr.parent(it)->name!="\\prod" && 
-//				it->fl.parent_rel==str_node::p_none) // object is an argument of a wrapping object, not an index
-//				return true;
 			}
-		else return true;
 		}
 	return false;
 	}

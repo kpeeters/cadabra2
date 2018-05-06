@@ -126,3 +126,26 @@ def test08():
     print("Test 08e passed")        
 
 test08()
+
+def test09():
+    __cdbkernel__=create_scope() 
+    N::Integer;
+    {i,j}::Indices(vector);
+    {i,j}::Integer(1..N);
+    g_{i j}::Metric;
+    g^{i j}::InverseMetric;
+    g_{i}^{j}::KroneckerDelta;
+    ex:= g_{i}^{i}:
+    eliminate_kronecker(_)
+    tst:= N - @(ex);
+    assert(tst==0)
+    print("Test 09a passed")        
+    ex:= N = g_{i}^{i};
+    eliminate_kronecker(_)
+    tst:= (N = N) - @(ex);
+    assert(tst==0)
+    print("Test 09b passed")
+
+test09()
+
+        
