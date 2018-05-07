@@ -92,15 +92,15 @@ class Shell(InteractiveConsole):
     # property objects using their readable form; addresses one issue report).
 
     def preprocess(self, the_line, shell):
-	    # ------------------------------------------------------------------
-	    # Strip in line comments by deleting all text after and including the first instance (if any) of " #".
-	    # This will cause syntax errors if users precede any # character with a space in a property declaration.
+        # ------------------------------------------------------------------
+        # Strip in line comments by deleting all text after and including the first instance (if any) of " #".
+        # This will cause syntax errors if users precede any # character with a space in a property declaration.
         imatch = re.search(r'(.*?)( +#)', the_line)   # regex = any text terminated by " #"
         if imatch:
             line=imatch.group(1)+"\n"    # found the match, delete comment
         else:
             line=the_line                # no comment, return line unchanged
-	    # ------------------------------------------------------------------
+        # ------------------------------------------------------------------
         # print '='+line+"=="
         imatch = re.search('([\s]*)([^\s].*[^\s])([\s]*)', line)
         if imatch:
