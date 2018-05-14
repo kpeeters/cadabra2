@@ -26,6 +26,10 @@ set(TUTORIALS
   kaluza_klein
   plotting
   scalar_manipulations
+
+  input_format
+  ref_properties
+  ref_indices
 )
 
 # Manual pages; just add the algorithm or property name to the lists below

@@ -156,3 +156,9 @@ test12()
 #     distribute(_);
 #     integrate_by_parts(_, $b$);
 #     map_sympy(_, "simplify");
+
+# \partial{#}::PartialDerivative;
+# {\mu,\nu,\rho}::Indices;
+# \delta{#}::Accent;    
+# ex:=  \int{ -1/2 g^{\mu\nu}\partial_{\mu}{\phi} \partial_{\nu}{\phi} + V(\phi) }{x};
+# vary(ex, $\phi-> \delta{\phi}$);

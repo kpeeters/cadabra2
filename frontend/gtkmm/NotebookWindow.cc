@@ -114,7 +114,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
-	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Python"), Gtk::AccelKey("<control><shift>P"),
+	actiongroup->add( Gtk::Action::create("EditMakeCellPython", "Cell is Cadabra/Python"), Gtk::AccelKey("<control><shift>P"),
 							sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_python) );
 
 	actiongroup->add( Gtk::Action::create("MenuView", "_View") );

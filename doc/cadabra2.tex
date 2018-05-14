@@ -1436,8 +1436,8 @@ allowed keys and the one which is taken as the default.
 Finally, there is a concept of ``inherited properties''. Consider
 e.g.~a sum of spinors, declared as\index{properties!inheritance}
 \begin{screen}{1,2}
-{\psi1, \psi2, \psi3}::Spinor.
-\psi1 + \psi2 + \psi3;
+{\psi_1, \psi_2, \psi_3}::Spinor.
+\psi_1 + \psi_2 + \psi_33;
 \end{screen}
 Here the sum has inherited the property ``Spinor'', even though it does
 not have normal or intrinsic property of this type. Properties can
@@ -2478,113 +2478,113 @@ algorithms to expressions.
 \end{multicols}
 \vfill\eject
 
-\subsection{Built-in core algorithms}
-
-\label{s:builtin}
-There is a very small number of properties and algorithms built into
-the core program. These have to do with global memory management and
-global output settings.
-\bigskip
-
-\begin{props}
-\input{properties/KeepHistory.tex}
-\input{properties/PreDefaultRules.tex}
-\input{properties/PostDefaultRules.tex}
-\end{props}
-\bigskip
-
-\begin{algs}
-\input{algorithms/pop.tex}
-\input{algorithms/amnesia.tex}
-\input{algorithms/algorithms.tex}
-\input{algorithms/properties.tex}
-\input{algorithms/timing.tex}
-\input{algorithms/output_format.tex}
-\input{algorithms/quit.tex}
-\input{algorithms/end.tex}
-\input{algorithms/reset.tex}
-\input{algorithms/xterm_title.tex}
-%\item[\cdbcommand{utf8\_output\{true|false\}}{}] Determines whether
-%the output should contain UTF8 encoded Unicode control characters for 
-%line-breaking and object grouping. This output format is used by the
-%graphical front-end.
-\end{algs}
-
-\vfill\eject
-
-
-\subsection{Rationals, complex numbers and other numerics}
-
-\begin{props}
-%\item[\cdbprop{ImaginaryI}{}] Indicates that the object squares to
-%  $-1$. 
-%\item[\cdbprop{Real}{}]
-%\item[\cdbprop{Imaginary}{}]
-%\item[\cdbprop{Complex}{}]
-\input{properties/Integer.tex}
-\input{properties/NumericalFlat.tex}
-\end{props}
-\bigskip
-\begin{algs}
-%\item[\cdbcommand{eval\_factorial}{}] Evaluate the numerical value of 
-%a factorial expression, e.g.~turn $5!$ into $120$.\kcomment{KP}{Not
-%yet implemented}
-\input{algorithms/numerical_flatten.tex}
-\end{algs}
-
-\vfill\eject
-
-\subsection{Sums and products}
-
-\label{m:algebra}
-This module handles expansion of sums and products as well as
-distributing products over sums and similar algorithms. It recognises
-\bigskip
-\begin{props}
-\input{properties/Matrix.tex}
-\input{properties/ImplicitIndex.tex}
-\input{properties/Diagonal.tex}
-\input{properties/SelfAntiCommuting.tex}
-\input{properties/SelfNonCommuting.tex}
-\input{properties/SelfCommuting.tex}
-\input{properties/Distributable.tex}
-\input{properties/AntiSymmetric.tex}
-\input{properties/Symmetric.tex}
-\input{properties/TableauSymmetry.tex}
-\input{properties/DAntiSymmetric.tex}
-\input{properties/Commuting.tex}
-\input{properties/NonCommuting.tex}
-\input{properties/AntiCommuting.tex}
-\input{properties/CommutingAsProduct.tex}
-\input{properties/CommutingAsSum.tex}
-\input{properties/Traceless.tex}
-\input{properties/KroneckerDelta.tex}
-\input{properties/EpsilonTensor.tex}
-\input{properties/SortOrder.tex}
-\input{properties/Derivative.tex}
-\input{properties/PartialDerivative.tex}
-\end{props}
-\begin{algs}
-\input{algorithms/prodflatten.tex}
-\input{algorithms/sumflatten.tex}
-\input{algorithms/remove_indexbracket.tex}
-\input{algorithms/expand_power.tex}
-%\input{algorithms/drop.tex}
-\input{algorithms/drop_weight.tex}
-\input{algorithms/keep_weight.tex}
-\input{algorithms/distribute.tex}
-\input{algorithms/prodrule.tex}
-\input{algorithms/sumsort.tex}
-\input{algorithms/sort_product.tex}
-\input{algorithms/collect_factors.tex}
-\input{algorithms/collect_terms.tex}
-\input{algorithms/factor_out.tex}
-\input{algorithms/factor_in.tex}
-\input{algorithms/canonicalise.tex}
-\input{algorithms/reduce.tex}
-\input{algorithms/young_project.tex}
-\input{algorithms/all_contractions.tex}
-\end{algs}
+% \subsection{Built-in core algorithms}
+% 
+% \label{s:builtin}
+% There is a very small number of properties and algorithms built into
+% the core program. These have to do with global memory management and
+% global output settings.
+% \bigskip
+% 
+% \begin{props}
+% \input{properties/KeepHistory.tex}
+% \input{properties/PreDefaultRules.tex}
+% \input{properties/PostDefaultRules.tex}
+% \end{props}
+% \bigskip
+% 
+% \begin{algs}
+% \input{algorithms/pop.tex}
+% \input{algorithms/amnesia.tex}
+% \input{algorithms/algorithms.tex}
+% \input{algorithms/properties.tex}
+% \input{algorithms/timing.tex}
+% \input{algorithms/output_format.tex}
+% \input{algorithms/quit.tex}
+% \input{algorithms/end.tex}
+% \input{algorithms/reset.tex}
+% \input{algorithms/xterm_title.tex}
+% %\item[\cdbcommand{utf8\_output\{true|false\}}{}] Determines whether
+% %the output should contain UTF8 encoded Unicode control characters for 
+% %line-breaking and object grouping. This output format is used by the
+% %graphical front-end.
+% \end{algs}
+% 
+% \vfill\eject
+% 
+% 
+% \subsection{Rationals, complex numbers and other numerics}
+% 
+% \begin{props}
+% %\item[\cdbprop{ImaginaryI}{}] Indicates that the object squares to
+% %  $-1$. 
+% %\item[\cdbprop{Real}{}]
+% %\item[\cdbprop{Imaginary}{}]
+% %\item[\cdbprop{Complex}{}]
+% \input{properties/Integer.tex}
+% \input{properties/NumericalFlat.tex}
+% \end{props}
+% \bigskip
+% \begin{algs}
+% %\item[\cdbcommand{eval\_factorial}{}] Evaluate the numerical value of 
+% %a factorial expression, e.g.~turn $5!$ into $120$.\kcomment{KP}{Not
+% %yet implemented}
+% \input{algorithms/numerical_flatten.tex}
+% \end{algs}
+% 
+% \vfill\eject
+% 
+% \subsection{Sums and products}
+% 
+% \label{m:algebra}
+% This module handles expansion of sums and products as well as
+% distributing products over sums and similar algorithms. It recognises
+% \bigskip
+% \begin{props}
+% \input{properties/Matrix.tex}
+% \input{properties/ImplicitIndex.tex}
+% \input{properties/Diagonal.tex}
+% \input{properties/SelfAntiCommuting.tex}
+% \input{properties/SelfNonCommuting.tex}
+% \input{properties/SelfCommuting.tex}
+% \input{properties/Distributable.tex}
+% \input{properties/AntiSymmetric.tex}
+% \input{properties/Symmetric.tex}
+% \input{properties/TableauSymmetry.tex}
+% \input{properties/DAntiSymmetric.tex}
+% \input{properties/Commuting.tex}
+% \input{properties/NonCommuting.tex}
+% \input{properties/AntiCommuting.tex}
+% \input{properties/CommutingAsProduct.tex}
+% \input{properties/CommutingAsSum.tex}
+% \input{properties/Traceless.tex}
+% \input{properties/KroneckerDelta.tex}
+% \input{properties/EpsilonTensor.tex}
+% \input{properties/SortOrder.tex}
+% \input{properties/Derivative.tex}
+% \input{properties/PartialDerivative.tex}
+% \end{props}
+% \begin{algs}
+% \input{algorithms/prodflatten.tex}
+% \input{algorithms/sumflatten.tex}
+% \input{algorithms/remove_indexbracket.tex}
+% \input{algorithms/expand_power.tex}
+% %\input{algorithms/drop.tex}
+% \input{algorithms/drop_weight.tex}
+% \input{algorithms/keep_weight.tex}
+% \input{algorithms/distribute.tex}
+% \input{algorithms/prodrule.tex}
+% \input{algorithms/sumsort.tex}
+% \input{algorithms/sort_product.tex}
+% \input{algorithms/collect_factors.tex}
+% \input{algorithms/collect_terms.tex}
+% \input{algorithms/factor_out.tex}
+% \input{algorithms/factor_in.tex}
+% \input{algorithms/canonicalise.tex}
+% \input{algorithms/reduce.tex}
+% \input{algorithms/young_project.tex}
+% \input{algorithms/all_contractions.tex}
+% \end{algs}
 
 \vfill\eject
 \subsection{Young tableaux}
@@ -2598,19 +2598,19 @@ labelled boxes is called a ``FilledTableau'' in \cdb, while a tableau
 without any labels in the boxes is a ``Tableau''.
 \bigskip
 
-\begin{props}
-\input{properties/Tableau.tex}
-\input{properties/FilledTableau.tex}
-\end{props}
-
-\begin{algs}
-\input{algorithms/tabdimension.tex}
-\input{algorithms/tabcanonicalise.tex}
-\input{algorithms/tabstandardform.tex}
-\input{algorithms/lr_tensor.tex}
-\input{algorithms/decompose.tex}
-\input{algorithms/decompose_product.tex}
-\end{algs}
+% \begin{props}
+% \input{properties/Tableau.tex}
+% \input{properties/FilledTableau.tex}
+% \end{props}
+% 
+% \begin{algs}
+% \input{algorithms/tabdimension.tex}
+% \input{algorithms/tabcanonicalise.tex}
+% \input{algorithms/tabstandardform.tex}
+% \input{algorithms/lr_tensor.tex}
+% \input{algorithms/decompose.tex}
+% \input{algorithms/decompose_product.tex}
+% \end{algs}
 
 \vfill\eject
 
@@ -2636,15 +2636,15 @@ A+B+C+D;
 in which case the first expression gets replaced by its length.
 \medskip
 
-\begin{algs}
-\input{algorithms/length.tex}
-\input{algorithms/take.tex}
-\input{algorithms/range.tex}
-\input{algorithms/inner.tex}
-\input{algorithms/list_sum.tex}
-\input{algorithms/listflatten.tex}
-\input{algorithms/permute.tex}
-\end{algs}
+% \begin{algs}
+% \input{algorithms/length.tex}
+% \input{algorithms/take.tex}
+% \input{algorithms/range.tex}
+% \input{algorithms/inner.tex}
+% \input{algorithms/list_sum.tex}
+% \input{algorithms/listflatten.tex}
+% \input{algorithms/permute.tex}
+% \end{algs}
 
 \vfill\eject
 
@@ -2663,10 +2663,10 @@ in which case the first expression gets replaced by its length.
 \subsection{Properties}
 
 \label{s:properties}
-\begin{props}
-\input{properties/PropertyInherit.tex}
-\input{properties/IndexInherit.tex}
-\end{props}
+% \begin{props}
+% \input{properties/PropertyInherit.tex}
+% \input{properties/IndexInherit.tex}
+% \end{props}
 %\begin{algs}
 %\item[\cdbcommand{extract\_properties}{}] An algorithm mainly useful 
 %in internal routines: it extracts properties attached to a symbol and
@@ -2691,12 +2691,12 @@ dummy index \emph{sets}, and all algorithms can request new dummy
 indices very easily. This is handled through the {\tt dummies} module. 
 \bigskip
 
-\begin{props}
-\input{properties/Indices.tex}
-\end{props}
-\begin{algs}
-\input{algorithms/rename_dummies.tex}
-\end{algs}
+% \begin{props}
+% \input{properties/Indices.tex}
+% \end{props}
+% \begin{algs}
+% \input{algorithms/rename_dummies.tex}
+% \end{algs}
 
 \vfill\eject
 
@@ -2713,13 +2713,13 @@ differ only by certain symmetrisations or anti-symmetrisations.
 %\url{http://dogma.net/markn/articles/Permutations/}
 \bigskip
 
-\begin{algs}
-\input{algorithms/sym.tex}
-\input{algorithms/asym.tex}
-\input{algorithms/canonicalorder.tex}
-\input{algorithms/impose_asym.tex}
-\input{algorithms/asymprop.tex}
-\end{algs}
+% \begin{algs}
+% \input{algorithms/sym.tex}
+% \input{algorithms/asym.tex}
+% \input{algorithms/canonicalorder.tex}
+% \input{algorithms/impose_asym.tex}
+% \input{algorithms/asymprop.tex}
+% \end{algs}
 
 \vfill\eject
 
@@ -2728,34 +2728,34 @@ differ only by certain symmetrisations or anti-symmetrisations.
 \label{s:tensor}
 
 \bigskip
-\begin{props}
-\input{properties/SelfDual.tex}
-\input{properties/AntiSelfDual.tex}
-\input{properties/Depends.tex}
-\input{properties/DependsInherit.tex}
-\input{properties/Weight.tex}
-\input{properties/WeightInherit.tex}
-\input{properties/Symbol.tex}
-\input{properties/Coordinate.tex}
-\input{properties/Accent.tex}
-\input{properties/SatisfiesBianchi.tex}
-\end{props}
-\bigskip
-\begin{algs}
-\input{algorithms/unwrap.tex}
-\input{algorithms/eliminate_kronecker.tex}
-\input{algorithms/eliminateeps.tex}
-\input{algorithms/epsprod2gendelta.tex}
-\input{algorithms/dualise_tensor.tex}
-\input{algorithms/reduce_gendelta.tex}
-\input{algorithms/product_shorthand.tex}
-\input{algorithms/expand_product_shorthand.tex}
-\input{algorithms/pintegrate.tex}
-\input{algorithms/impose_bianchi.tex}
-\input{algorithms/einsteinify.tex}
-\input{algorithms/combine.tex}
-\input{algorithms/expand.tex}
-\end{algs}
+% \begin{props}
+% \input{properties/SelfDual.tex}
+% \input{properties/AntiSelfDual.tex}
+% \input{properties/Depends.tex}
+% \input{properties/DependsInherit.tex}
+% \input{properties/Weight.tex}
+% \input{properties/WeightInherit.tex}
+% \input{properties/Symbol.tex}
+% \input{properties/Coordinate.tex}
+% \input{properties/Accent.tex}
+% \input{properties/SatisfiesBianchi.tex}
+% \end{props}
+% \bigskip
+% \begin{algs}
+% \input{algorithms/unwrap.tex}
+% \input{algorithms/eliminate_kronecker.tex}
+% \input{algorithms/eliminateeps.tex}
+% \input{algorithms/epsprod2gendelta.tex}
+% \input{algorithms/dualise_tensor.tex}
+% \input{algorithms/reduce_gendelta.tex}
+% \input{algorithms/product_shorthand.tex}
+% \input{algorithms/expand_product_shorthand.tex}
+% \input{algorithms/pintegrate.tex}
+% \input{algorithms/impose_bianchi.tex}
+% \input{algorithms/einsteinify.tex}
+% \input{algorithms/combine.tex}
+% \input{algorithms/expand.tex}
+% \end{algs}
 ~
 
 \vfill\eject
@@ -2779,18 +2779,18 @@ convert a \cdb tree to a tree which can be understood by Maple or
 Mathematica).
 \bigskip
 
-\begin{props}
-\input{properties/LaTeXForm.tex}
-\end{props}
-\bigskip
-\begin{algs}
-\input{algorithms/depprint.tex}
-\input{algorithms/print.tex}
-\input{algorithms/number_of_terms.tex}
-\input{algorithms/proplist.tex}
-\input{algorithms/assert.tex}
-\end{algs}
-\bigskip\bigskip
+% \begin{props}
+% \input{properties/LaTeXForm.tex}
+% \end{props}
+% \bigskip
+% \begin{algs}
+% \input{algorithms/depprint.tex}
+% \input{algorithms/print.tex}
+% \input{algorithms/number_of_terms.tex}
+% \input{algorithms/proplist.tex}
+% \input{algorithms/assert.tex}
+% \end{algs}
+% \bigskip\bigskip
 
 \noindent Furthermore, there are a few algorithms which are mainly useful for
 debugging purposes, as they display information about the internal
@@ -2799,10 +2799,10 @@ internal data structures can be found in
 section~\ref{s:internal_storage}.
 \bigskip
 
-\begin{algs}
-\input{algorithms/tree.tex}
-\input{algorithms/indexlist.tex}
-\end{algs}
+% \begin{algs}
+% \input{algorithms/tree.tex}
+% \input{algorithms/indexlist.tex}
+% \end{algs}
 
 \vfill\eject
 
@@ -2872,24 +2872,24 @@ This module deals with special tensors relevant for general
 relativity. See in particular also the {\tt canonicalise} algorithm in
 section~\ref{m:algebra}.
 \bigskip
-\begin{props}
-\input{properties/Metric.tex}
-\input{properties/InverseMetric.tex}
-\input{properties/Vielbein.tex}
-\input{properties/InverseVielbein.tex}
-\input{properties/RiemannTensor.tex}
-\input{properties/WeylTensor.tex}
-\end{props}
-\bigskip
-\begin{algs}
-\input{algorithms/rewrite_indices.tex}
-\input{algorithms/riemann_index_regroup.tex}
-%\input{algorithms/ricci_can_order.tex}
-\input{algorithms/split_index.tex}
-\input{algorithms/split_index.tex}
-\input{algorithms/eliminate_vielbein.tex}
-\input{algorithms/eliminate_metric.tex}
-\end{algs}
+% \begin{props}
+% \input{properties/Metric.tex}
+% \input{properties/InverseMetric.tex}
+% \input{properties/Vielbein.tex}
+% \input{properties/InverseVielbein.tex}
+% \input{properties/RiemannTensor.tex}
+% \input{properties/WeylTensor.tex}
+% \end{props}
+% \bigskip
+% \begin{algs}
+% \input{algorithms/rewrite_indices.tex}
+% \input{algorithms/riemann_index_regroup.tex}
+% %\input{algorithms/ricci_can_order.tex}
+% \input{algorithms/split_index.tex}
+% \input{algorithms/split_index.tex}
+% \input{algorithms/eliminate_vielbein.tex}
+% \input{algorithms/eliminate_metric.tex}
+% \end{algs}
 
 \vfill\eject
 
@@ -2932,19 +2932,19 @@ F_{m n} G_{n q};
 F_{n p} G_{p q};
 \end{screen}
 ~
-\input{algorithms/substitute.tex}
-\input{algorithms/vary.tex}
-\input{algorithms/take_match.tex}
-\input{algorithms/replace_match.tex}
+% \input{algorithms/substitute.tex}
+% \input{algorithms/vary.tex}
+% \input{algorithms/take_match.tex}
+% \input{algorithms/replace_match.tex}
 \end{algs}
 
 \vfill\eject
 
 \subsection{Linear algebra}
 
-\begin{algs}
-\input{algorithms/lsolve.tex}
-\end{algs}
+% \begin{algs}
+% \input{algorithms/lsolve.tex}
+% \end{algs}
 
 \vfill\eject
 
@@ -2956,22 +2956,22 @@ follows the conventions of Sevrin's appendix~1.5, except for the fact
 that we call the time-like component zero and the product of all gamma
 matrices~$\tilde\Gamma$.
 \bigskip
-\begin{props}
-\input{properties/Spinor.tex}
-\input{properties/DiracBar.tex}
-\input{properties/GammaMatrix.tex}
-\input{properties/GammaTraceless.tex}
-\input{properties/SigmaMatrix.tex}
-\input{properties/SigmaBarMatrix.tex}
-\end{props}
-\bigskip
-\begin{algs}
-\input{algorithms/join_gamma.tex}
-\input{algorithms/gammasplit.tex}
-\input{algorithms/rewrite_diracbar.tex}
-\input{algorithms/projweyl.tex}
-\input{algorithms/spinorsort.tex}
-\end{algs}
+% \begin{props}
+% \input{properties/Spinor.tex}
+% \input{properties/DiracBar.tex}
+% \input{properties/GammaMatrix.tex}
+% \input{properties/GammaTraceless.tex}
+% \input{properties/SigmaMatrix.tex}
+% \input{properties/SigmaBarMatrix.tex}
+% \end{props}
+% \bigskip
+% \begin{algs}
+% \input{algorithms/join_gamma.tex}
+% \input{algorithms/gammasplit.tex}
+% \input{algorithms/rewrite_diracbar.tex}
+% \input{algorithms/projweyl.tex}
+% \input{algorithms/spinorsort.tex}
+% \end{algs}
 
 
 \vfill\eject
@@ -2986,25 +2986,25 @@ expressive ways to store tensors. The {\tt convert} module provides
 conversion algorithms from and to these two formats.
 \bigskip
 
-\begin{algs}
-\input{algorithms/run.tex}
-\input{algorithms/maxima.tex}
-\input{algorithms/maple.tex}
-\item[{\cdbcommand{from\_math}{}[expression]}] Reads mathematica input
-format as used by GAMMA~\cite{Gran:2001yh}. Fully anti-symmetric
-tensors are denoted with
-\begin{screen}{0}
-Tensor[name,{indices}]
-\end{screen}
-Tensors with property ``weyltensor'' are printed as
-\begin{screen}{1}
-W_{r1 r2 r3 r4}  
-Weyl[{r1,r2}, {r3,r4}]
-\end{screen}
-(warning, this removes the tensor name).
-\item[{\cdbcommand{to\_math}{}[expression]}] Converts the mathematica expression
-to a \cdb one. See above for details about the conversion process.
-\end{algs}
+% \begin{algs}
+% \input{algorithms/run.tex}
+% \input{algorithms/maxima.tex}
+% \input{algorithms/maple.tex}
+% \item[{\cdbcommand{from\_math}{}[expression]}] Reads mathematica input
+% format as used by GAMMA~\cite{Gran:2001yh}. Fully anti-symmetric
+% tensors are denoted with
+% \begin{screen}{0}
+% Tensor[name,{indices}]
+% \end{screen}
+% Tensors with property ``weyltensor'' are printed as
+% \begin{screen}{1}
+% W_{r1 r2 r3 r4}  
+% Weyl[{r1,r2}, {r3,r4}]
+% \end{screen}
+% (warning, this removes the tensor name).
+% \item[{\cdbcommand{to\_math}{}[expression]}] Converts the mathematica expression
+% to a \cdb one. See above for details about the conversion process.
+% \end{algs}
 
 
 

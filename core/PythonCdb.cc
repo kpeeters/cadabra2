@@ -1308,7 +1308,7 @@ PYBIND11_MODULE(cadabra2, m)
 
 	m.def("einsteinify", &dispatch_ex<einsteinify, Ex>,
 			pybind11::arg("ex"), pybind11::arg("metric")=std::make_shared<Ex>(),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
 		  
 	m.def("evaluate", &dispatch_ex<evaluate, Ex, bool, bool>,

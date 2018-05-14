@@ -165,7 +165,7 @@ std::string TeXEngine::handle_latex_errors(const std::string& result, int exit_c
 			  return "Undefined control sequence (failed to parse LaTeX output).";
 
 		 std::string undefd=result.substr(backslashpos-1,undefpos-pos-30);
-		 return "Undefined control sequence:\n\n" +undefd+"\nNote that all symbols which you use in cadabra have to be valid LaTeX expressions. If they are not, you can still use the LaTeXForm property to make them print correctly; see the manual for more information.";
+		 return "Undefined control sequence:\n\n" +undefd+"\nNote that all symbols which you use in cadabra have to be valid LaTeX expressions.\nIf they are not, you can still use the LaTeXForm property\nto make them print correctly; see the manual for more information.";
 		 }
 
 	if(exit_code!=0) {
@@ -431,19 +431,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	outstr << ltx;
 	outstr.close(); // to flush the buffer and allow us to rename
 	
-//	ssize_t start=0;
-//	do {
-//		ssize_t written=write(fd, &(ltx.c_str()[start]), ltx.size()-start);
-//		if(written>=0)
-//			start+=written;
-//		else {
-//			if(errno != EINTR) {
-//				close(fd);
-//				throw TeXException("Failed to write LaTeX temporary file.");
-//				}
-//			} 
-//		} while(start<static_cast<ssize_t>(total.str().size()));
-//	close(fd);
 #ifdef DEBUG
 	std::cerr  << tmppath << std::endl;
 	std::cerr << "---\n" << ltx << "\n---" << std::endl;
@@ -460,7 +447,6 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 #endif
 
 	// Run LaTeX on the .tex file.
-	std::string result;
 	std::string texinputs=cadabra::install_prefix()+"/share/cadabra2/latex/";
 	std::string oldtexinputs;
 	char *oti = getenv("TEXINPUTS");
@@ -470,145 +456,58 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		texinputs=":"+std::string(oldtexinputs);
 	texinputs+=":";
 	setenv("TEXINPUTS", texinputs.c_str(), 1);
-#ifdef DEBUG
-	std::cerr << "TEXINPUTS = " << texinputs << std::endl;
-#endif
-	try {
-/* GLIBMM:
-		std::string wd("");
-		std::vector<std::string> argv, envp;
-		argv.push_back("latex");
-		argv.push_back("-halt-on-error");
-		argv.push_back("--quiet");
-		argv.push_back(nf);
-		std::string latex_stdout, latex_stderr;
-		int latex_exit_status;
-		
-		Glib::spawn_sync(wd, argv,
-		                 Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
-		                 sigc::slot<void>(),
-		                 &latex_stdout,
-		                 &latex_stderr,
-		                 &latex_exit_status);
-*/
 
-		std::string latex_stdout, latex_stderr;
-		tpl::Process latex_proc("latex -halt-on-error --quiet "+nf, "",
-		                        [&](const char *bytes, size_t n) {
-			                        latex_stdout=std::string(bytes,n);
-			                        },
-		                        [&](const char *bytes, size_t n) {
-			                        latex_stderr=std::string(bytes,n);
-			                        }
-		                        );
-		auto latex_exit_status=latex_proc.get_exit_status();
+	std::string latex_stdout, latex_stderr;
+	tpl::Process latex_proc("latex -halt-on-error --quiet "+nf, "",
+	                        [&](const char *bytes, size_t n) {
+		                        latex_stdout=std::string(bytes,n);
+		                        },
+	                        [&](const char *bytes, size_t n) {
+		                        latex_stderr=std::string(bytes,n);
+		                        }
+	                        );
+	auto latex_exit_status=latex_proc.get_exit_status();
 	
-		erase_file(tmppath+".aux");
-		erase_file(tmppath+".log");
-		erase_file(tmppath+".out");
-#ifdef DEBUG		
-		std::cerr << result << std::endl;
-#endif
-
-		std::string err=handle_latex_errors(result, latex_exit_status);
-
-		if(err.size()>0) {
-			reqit=reqs.begin();
-			while(reqit!=reqs.end()) 
-				(*reqit++)->needs_generating=false;
-			 erase_file(tmppath+".dvi");
-			 if(chdir(olddir)==-1)
-				 throw TeXException(err+" (and cannot chdir back to original "+olddir+").");
-			 else err+=".";
-			 err += " See "+tmppath+".tex to debug this.";
-			 throw TeXException(err); 
-			}
-		erase_file(tmppath+".tex");
-		}
-	catch(std::exception& err) {
-//		std::cerr << "cadabra-client: Exception running LaTeX. " << err.what() << std::endl;
-		setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
-
-		// erase_file(std::string(templ)+".tex");
-		erase_file(tmppath+".dvi");
-		erase_file(tmppath+".aux");
-		erase_file(tmppath+".log");
-		erase_file(tmppath+".out");
-		
-		std::string latex_err=handle_latex_errors(result, -1);
+	erase_file(tmppath+".aux");
+	erase_file(tmppath+".log");
+	erase_file(tmppath+".out");
+	
+	std::string err=handle_latex_errors(latex_stdout+latex_stderr, latex_exit_status);
+	setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
+	
+	if(err.size()>0) {
 		reqit=reqs.begin();
 		while(reqit!=reqs.end()) 
 			(*reqit++)->needs_generating=false;
-
-		if(latex_err.size()>0) {
-			 if(chdir(olddir)==-1)
-				 throw TeXException(latex_err+" (and cannot chdir back to original "+olddir+"). ");
-			 latex_err += " See "+tmppath+".tex to debug this.";
-			 throw TeXException(latex_err); 
-			 }
-
-		// Even if we cannot find an explicit error in the output, we have to terminate
-		// since LaTeX has thrown an exception.
+		erase_file(tmppath+".dvi");
 		if(chdir(olddir)==-1)
-			throw TeXException("Cannot start LaTeX, is it installed? (and cannot chdir back to original)");
-		throw TeXException("Cannot start LaTeX, is it installed?");
+			throw TeXException(err+" (and cannot chdir back to original "+olddir+").");
+		else err+=".";
+		err += " See "+tmppath+".tex to debug this.\n\n";
+		err += "TEXINPUTS = "+texinputs+"\n";
+		err += "TMPDIR = "+tmpdir+"\n";
+		throw TeXException(err); 
 		}
-	setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
+
+	erase_file(tmppath+".tex");
 		
 	// Convert the entire dvi file to png files.
 	//
 	std::ostringstream resspec;
 	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch; 
-//	dvipng_proc << "-T" << "tight" << "-bg" << "Transparent"; // << "-fg";
-//	rgbspec << "\"rgb "
-//			  << foreground_colour.get_red()/65536.0 << " "
-//			  << foreground_colour.get_green()/65536.0 << " "
-//			  << foreground_colour.get_blue()/65536.0 << "\"";
-//	dvipng_proc << rgbspec.str();
-//	dvipng_proc << "-D";
-//	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch;
-//	dvipng_proc << resspec.str() << std::string(templ)+".dvi";
-
-	//std::cerr << "cadabra-client: convert to png" << std::endl;
-	try {
-/* GLIBMM:
-		std::string wd("");
-		std::vector<std::string> argv, envp;
-		argv.push_back("dvipng");
-		argv.push_back("-T");
-		argv.push_back("tight");
-		argv.push_back("-bg");
-		argv.push_back("transparent");
-		argv.push_back("-D");
-		argv.push_back(resspec.str());
-		argv.push_back(tmppath+".dvi");
-		std::string dvipng_stdout, dvipng_stderr;
-		int dvipng_exit_status;
 		
-		Glib::spawn_sync(wd, argv,
-		                 Glib::SPAWN_DEFAULT|Glib::SPAWN_SEARCH_PATH,
-		                 sigc::slot<void>(),
-		                 &dvipng_stdout,
-		                 &dvipng_stderr,
-		                 &dvipng_exit_status);
-*/
-		
-		std::string dvipng_stdout, dvipng_stderr;
-		tpl::Process dvipng_proc("dvipng -T tight -bg transparent -D "+resspec.str()+" "+tmppath+".dvi", "",
-		                        [&](const char *bytes, size_t n) {
-			                        dvipng_stdout=std::string(bytes,n);
-			                        },
-		                        [&](const char *bytes, size_t n) {
-			                        dvipng_stderr=std::string(bytes,n);
-			                        }
-		                        );
-		//auto dvipng_exit_status=dvipng_proc.get_exit_status();
+	std::string dvipng_stdout, dvipng_stderr;
+	tpl::Process dvipng_proc("dvipng -T tight -bg transparent -D "+resspec.str()+" "+tmppath+".dvi", "",
+	                         [&](const char *bytes, size_t n) {
+		                         dvipng_stdout=std::string(bytes,n);
+		                         },
+	                         [&](const char *bytes, size_t n) {
+		                         dvipng_stderr=std::string(bytes,n);
+		                         }
+	                         );
+	auto dvipng_exit_status=dvipng_proc.get_exit_status();
 
-#ifdef DEBUG
-	std::cerr << result << std::endl;
-#endif
-		}
-	catch(std::logic_error& ex) {
+	if(dvipng_exit_status!=0) {
 		// Erase all dvi and png files and put empty pixbufs into the TeXRequests.
 		erase_file(tmppath+".dvi");
 		reqit=reqs.begin();
@@ -626,8 +525,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			}
 		if(chdir(olddir)==-1)
 			throw TeXException(
-				std::string("Cannot run dvipng, is it installed? (and cannot chdir back to original)\n\n")+ex.what());
-		throw TeXException(std::string("Cannot run dvipng, is it installed?\n\n")+ex.what());
+				std::string("Cannot run dvipng, is it installed? (and cannot chdir back to original)\n\n")+dvipng_stdout+dvipng_stderr);
+		throw TeXException(std::string("Cannot run dvipng, is it installed?\n\n")+dvipng_stdout+dvipng_stderr);
 		}
 
 	erase_file(tmppath+".dvi");
