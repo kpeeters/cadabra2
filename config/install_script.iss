@@ -44,6 +44,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "C:\Cadabra\bin\cadabra2-gtk.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "C:\Cadabra\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\Users\kasper\Anaconda3\DLLs\sqlite3.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
