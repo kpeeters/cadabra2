@@ -132,6 +132,16 @@ if(WIN32)
 endif()
 
 
+# Make sure mpir.dll is copied into the build directory on Windows
+if (WIN32)
+  add_custom_command(TARGET cadabra_client POST_BUILD 
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	${SQLITE3_ROOT_DIR}/bin/sqlite3.dll
+	${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/sqlite3.dll
+  )
+endif()
+
+
 #---------------------------------------------------------------------------
 # Installation.
 #---------------------------------------------------------------------------
