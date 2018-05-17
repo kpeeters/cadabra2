@@ -16,9 +16,9 @@ endif()
 # Locate libraries.
 #---------------------------------------------------------------------------
 
-find_package(GLIBMM)
-find_package(SQLite3)
-find_package(Threads)
+find_package(GLIBMM  REQUIRED)
+find_package(SQLite3 REQUIRED)
+find_package(Threads REQUIRED)
 find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 
 #---------------------------------------------------------------------------
@@ -132,7 +132,7 @@ if(WIN32)
 endif()
 
 
-# Make sure mpir.dll is copied into the build directory on Windows
+# Make sure sqlite3.dll is copied into the build directory on Windows.
 if (WIN32)
   add_custom_command(TARGET cadabra_client POST_BUILD 
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
