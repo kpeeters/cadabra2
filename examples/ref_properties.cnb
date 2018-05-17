@@ -1,0 +1,469 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Object properties and declaration}\n\\subsection*{Generic properties}\n\nSymbols in Cadabra have no a-priori ``meaning''. If you write\n\\verb|\\Gamma|, the program will not know that it is supposed to be,\nfor instance, a Clifford algebra generator.  You will have to declare\nthe properties of symbols, i.e.~you have to tell Cadabra explicitly that\nif you write \\verb|\\Gamma|, you actually mean a Clifford algebra\ngenerator. This indirect way of attaching a meaning to a symbol has\nthe advantage that you can use whatever notation you like; if you\nprefer to write \\verb|\\gamma|, or perhaps even \\verb|\\rho| if your\npaper uses that, then this is perfectly possible (object properties\nare a bit like ``attributes'' in {\\tt Mathematica} or ``domains'' in\n{\\tt Axiom} and {\\tt MuPAD}).\n\nProperties are all written using capitals to separate words, as in\n{\\tt AntiSymmetric}. This makes it easier to distinguish them from\ncommands. Properties of objects are declared by using the ``::''\ncharacters.  This can be done ``at first use'', i.e.~by just adding\nthe property to the object when it first appears in the input. As an\nexample, one can write"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Object properties and declaration}\n\\subsection*{Generic properties}\n\nSymbols in Cadabra have no a-priori ``meaning''. If you write\n\\verb|\\Gamma|, the program will not know that it is supposed to be,\nfor instance, a Clifford algebra generator.  You will have to declare\nthe properties of symbols, i.e.~you have to tell Cadabra explicitly that\nif you write \\verb|\\Gamma|, you actually mean a Clifford algebra\ngenerator. This indirect way of attaching a meaning to a symbol has\nthe advantage that you can use whatever notation you like; if you\nprefer to write \\verb|\\gamma|, or perhaps even \\verb|\\rho| if your\npaper uses that, then this is perfectly possible (object properties\nare a bit like ``attributes'' in {\\tt Mathematica} or ``domains'' in\n{\\tt Axiom} and {\\tt MuPAD}).\n\nProperties are all written using capitals to separate words, as in\n{\\tt AntiSymmetric}. This makes it easier to distinguish them from\ncommands. Properties of objects are declared by using the ``::''\ncharacters.  This can be done ``at first use'', i.e.~by just adding\nthe property to the object when it first appears in the input. As an\nexample, one can write"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}F_{m n p}.\\end{dmath*}"
+				}
+			],
+			"source" : "F_{m n p}::AntiSymmetric;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This declares the object to be anti-symmetric in its indices. The property\ninformation is stored separately, so that further appearances of the\n``\\verb|F_{m n p}|'' object will automatically share this property. \nA list of all properties is available from the manual pages on the web site.\n\nNote that properties are attached to patterns, Therefore, you can have"
+				}
+			],
+			"hidden" : true,
+			"source" : "This declares the object to be anti-symmetric in its indices. The property\ninformation is stored separately, so that further appearances of the\n``\\verb|F_{m n p}|'' object will automatically share this property. \nA list of all properties is available from the manual pages on the web site.\n\nNote that properties are attached to patterns, Therefore, you can have"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Symmetric to~}R_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}R_{m n p q}.\\end{dmath*}"
+				}
+			],
+			"source" : "R_{m n}::Symmetric;\nR_{m n p q}::RiemannTensor;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "at the same time. The program will not warn you if you use\nincompatible properties, so if you make a declaration like above and\nthen later on do"
+				}
+			],
+			"hidden" : true,
+			"source" : "at the same time. The program will not warn you if you use\nincompatible properties, so if you make a declaration like above and\nthen later on do"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiSymmetric to~}R_{m n}.\\end{dmath*}"
+				}
+			],
+			"source" : "R_{m n}::AntiSymmetric;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "this may lead to undefined results."
+				}
+			],
+			"hidden" : true,
+			"source" : "this may lead to undefined results."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The fact that objects are attached to patterns also means that you can\nuse something like wildcards. In the following declaration,"
+				}
+			],
+			"hidden" : true,
+			"source" : "The fact that objects are attached to patterns also means that you can\nuse something like wildcards. In the following declaration,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m\\#,~\\discretionary{}{}{} n\\#\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{m#, n#}::Indices(vector);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "the entire infinite set of objects $m1, m2, m3, \\ldots$ and $n1, n2,\nn3, \\ldots$ are declared to be in the dummy index set\n``vector'' (this way of declaring ranges of objects is\nsimilar to the ``autodeclare'' declaration method of FORM). "
+				}
+			],
+			"hidden" : true,
+			"source" : "the entire infinite set of objects $m1, m2, m3, \\ldots$ and $n1, n2,\nn3, \\ldots$ are declared to be in the dummy index set\n``vector'' (this way of declaring ranges of objects is\nsimilar to the ``autodeclare'' declaration method of FORM). "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Properties can be assigned to an entire list of symbols with one\ncommand, namely by attaching the property to the list. For example,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Properties can be assigned to an entire list of symbols with one\ncommand, namely by attaching the property to the list. For example,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[n,~\\discretionary{}{}{} m,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{n, m, p, q}::Integer(1..d);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This associates the property ``Integer'' to each and every symbol in\nthe list.  However, there is also a concept of ``list properties'',\nwhich are properties which are associated to the list as a\nwhole. Examples of list properties are ``AntiCommuting'' or\n``Indices''."
+				}
+			],
+			"hidden" : true,
+			"source" : "This associates the property ``Integer'' to each and every symbol in\nthe list.  However, there is also a concept of ``list properties'',\nwhich are properties which are associated to the list as a\nwhole. Examples of list properties are ``AntiCommuting'' or\n``Indices''."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Objects can have more than one property attached to them, and one\nshould therefore not confuse properties with the ``type'' of the\nobject. Consider for instance"
+				}
+			],
+			"hidden" : true,
+			"source" : "Objects can have more than one property attached to them, and one\nshould therefore not confuse properties with the ``type'' of the\nobject. Consider for instance"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetryWeylTensor to~}W_{m n p q}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}W_{m n p q}.\\end{dmath*}"
+				}
+			],
+			"source" : "x::Coordinate;\nW_{m n p q}::WeylTensor;\nW_{m n p q}::Depends(x);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This attaches two completely independent properties to the pattern\n$W_{m n p q}$."
+				}
+			],
+			"hidden" : true,
+			"source" : "This attaches two completely independent properties to the pattern\n$W_{m n p q}$."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In the examples above, several properties had arguments\n(e.g. ``\\verb|vector|'' or ``\\verb|1..d|''). The general form of these\narguments is a set of key-value pairs, as in\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "In the examples above, several properties had arguments\n(e.g. ``\\verb|vector|'' or ``\\verb|1..d|''). The general form of these\narguments is a set of key-value pairs, as in\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}T_{m n p q}.\\end{dmath*}"
+				}
+			],
+			"source" : "T_{m n p q}::TableauSymmetry(shape={2,1}, indices={0,2,1});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In the simple cases discussed so far, the key and the equal sign was\nsuppressed. This is allowed because one of the keys plays the role of\nthe default key. Therefore, the following two are equivalent,\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "In the simple cases discussed so far, the key and the equal sign was\nsuppressed. This is allowed because one of the keys plays the role of\nthe default key. Therefore, the following two are equivalent,\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{ m, n }::Integer(range=0..d);\n{ m, n }::Integer(0..d);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "See the detailed documentation of the individual properties for\nallowed keys and the one which is taken as the default."
+				}
+			],
+			"hidden" : true,
+			"source" : "See the detailed documentation of the individual properties for\nallowed keys and the one which is taken as the default."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Finally, there is a concept of ``inherited properties''. Consider\ne.g.~a sum of spinors, declared as"
+				}
+			],
+			"hidden" : true,
+			"source" : "Finally, there is a concept of ``inherited properties''. Consider\ne.g.~a sum of spinors, declared as"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Spinor to~}\\left[\\psi_{1},~\\discretionary{}{}{} \\psi_{2},~\\discretionary{}{}{} \\psi_{3}\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\psi_{1} + \\psi_{2} + \\psi_{3}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\psi_{1}+\\psi_{2}+\\psi_{3}\\end{dmath*}"
+				}
+			],
+			"source" : "{\\psi_1, \\psi_2, \\psi_3}::Spinor;\nex:= \\psi_1 + \\psi_2 + \\psi_3;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Here the sum has inherited the property ``Spinor'', even though it does\nnot have normal or intrinsic property of this type. Properties can\nalso inherit from each other, e.g."
+				}
+			],
+			"hidden" : true,
+			"source" : "Here the sum has inherited the property ``Spinor'', even though it does\nnot have normal or intrinsic property of this type. Properties can\nalso inherit from each other, e.g."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\Gamma_{p o i u y}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\Gamma_{p o i u y}\\end{dmath*}"
+				}
+			],
+			"source" : "\\Gamma_{#}::GammaMatrix.\nex:=\\Gamma_{p o i u y};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-\\Gamma_{i o p u y}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-\\Gamma_{i o p u y}\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The \\prop{GammaMatrix} property inherits from\n\\prop{AntiSymmetric} property, and therefore the \\verb|\\Gamma| object is automatically anti-symmetric in its\nindices. \nindices. "
+				}
+			],
+			"hidden" : true,
+			"source" : "The \\prop{GammaMatrix} property inherits from\n\\prop{AntiSymmetric} property, and therefore the \\verb|\\Gamma| object is automatically anti-symmetric in its\nindices. \nindices. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{List properties and symbol groups}\n\nSome properties are not naturally associated to a single symbol or\nobject, but have to do with collections of them. A simple example of\nsuch a property is \\prop{AntiCommuting}. Although it sometimes\nmakes sense to say that ``$\\psi_m$ is anticommuting'' (meaning that\n$\\psi_m \\psi_n = - \\psi_n \\psi_m$), it happens just as often that you\nwant to say ``$\\psi$ and $\\chi$ anticommute'' (meaning that $\\psi\\chi\n= - \\chi\\psi$). The latter property is clearly relating two different\nobjects. \n\nAnother example is dummy indices. While it may make sense to say that\n``$m$ is a dummy index'', this does not allow the program to\nsubstitute $m$ with another index when a clash of dummy index names\noccurs (e.g.~upon substitution of one expression into another). More\nuseful is to say that ``$m$, $n$, and $p$ are dummy indices of the\nsame type'', so that the program can relabel a pair of $m$'s into a\npair of $p$'s when necessary.\n\nIn Cadabra such properties are called ``list properties''. You can\nassociate a list property to a list of symbols by simply writing,\ne.g.~for the first example above,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{List properties and symbol groups}\n\nSome properties are not naturally associated to a single symbol or\nobject, but have to do with collections of them. A simple example of\nsuch a property is \\prop{AntiCommuting}. Although it sometimes\nmakes sense to say that ``$\\psi_m$ is anticommuting'' (meaning that\n$\\psi_m \\psi_n = - \\psi_n \\psi_m$), it happens just as often that you\nwant to say ``$\\psi$ and $\\chi$ anticommute'' (meaning that $\\psi\\chi\n= - \\chi\\psi$). The latter property is clearly relating two different\nobjects. \n\nAnother example is dummy indices. While it may make sense to say that\n``$m$ is a dummy index'', this does not allow the program to\nsubstitute $m$ with another index when a clash of dummy index names\noccurs (e.g.~upon substitution of one expression into another). More\nuseful is to say that ``$m$, $n$, and $p$ are dummy indices of the\nsame type'', so that the program can relabel a pair of $m$'s into a\npair of $p$'s when necessary.\n\nIn Cadabra such properties are called ``list properties''. You can\nassociate a list property to a list of symbols by simply writing,\ne.g.~for the first example above,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property AntiCommuting to~}\\left[\\psi,~\\discretionary{}{}{} \\chi\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{ \\psi, \\chi }::AntiCommuting;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that you can also attach normal properties to multiple symbols in one go using this\nnotation. The program will figure out automatically whether you want\nto associate a normal property or a list property to the symbols in\nthe list.\n\nLists are ordered, although the ordering does not necessarily mean\nanything for all list properties (it is relevant for\ne.g.~\\prop{SortOrder} but irrelevant for e.g.~\\prop{AntiCommuting}).\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that you can also attach normal properties to multiple symbols in one go using this\nnotation. The program will figure out automatically whether you want\nto associate a normal property or a list property to the symbols in\nthe list.\n\nLists are ordered, although the ordering does not necessarily mean\nanything for all list properties (it is relevant for\ne.g.~\\prop{SortOrder} but irrelevant for e.g.~\\prop{AntiCommuting}).\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

@@ -1,0 +1,54 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Graphical user interface}\n\nThe graphical notebook user interface of Cadabra is called \\verb|cadabra2-gtk|. \nContext-sensitive help is available : if you put your\ncursor on a command or property name and press F1 or the help button,\nyou will get a help screen (which is essentially the corresponding\nsection in this manual)."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Graphical user interface}\n\nThe graphical notebook user interface of Cadabra is called \\verb|cadabra2-gtk|. \nContext-sensitive help is available : if you put your\ncursor on a command or property name and press F1 or the help button,\nyou will get a help screen (which is essentially the corresponding\nsection in this manual)."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Cell types}\n\nThere are \\emph{two} input cell types and \\emph{two} output cell\ntypes. Normal input cells contain Cadabra input. \\LaTeX{} input cells\ncontain comments which you can add to the notebook but which will not\nbe sent to Cadabra. Output cells can be either verbatim output, such as\nstatus messages, or \\LaTeX{} output of expressions. Output cells are\nassociated to input cells, so if you delete an input cell all the\nassociated output cells will be removed too. You can switch a cell from one\ntype to the other by using the `Edit' menu.\n\nIn the current version there is no visual separation between\ncells. When you start a new blank notebook, your cursor is in the\nfirst input cell. After entering an expression there and pressing {\\tt\n  shift-enter}, this input cell will be evaluated and all output will\nbe placed below it in the first output cell. In addition, a new input\ncell will be created below the output cell.\n\nThe ``edit'' menu can be used to add input cells or delete them, and\nalso shows keyboard shortcuts.\n"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Cell types}\n\nThere are \\emph{two} input cell types and \\emph{two} output cell\ntypes. Normal input cells contain Cadabra input. \\LaTeX{} input cells\ncontain comments which you can add to the notebook but which will not\nbe sent to Cadabra. Output cells can be either verbatim output, such as\nstatus messages, or \\LaTeX{} output of expressions. Output cells are\nassociated to input cells, so if you delete an input cell all the\nassociated output cells will be removed too. You can switch a cell from one\ntype to the other by using the `Edit' menu.\n\nIn the current version there is no visual separation between\ncells. When you start a new blank notebook, your cursor is in the\nfirst input cell. After entering an expression there and pressing {\\tt\n  shift-enter}, this input cell will be evaluated and all output will\nbe placed below it in the first output cell. In addition, a new input\ncell will be created below the output cell.\n\nThe ``edit'' menu can be used to add input cells or delete them, and\nalso shows keyboard shortcuts.\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Editing, loading, saving, printing, exporting}\n\nThe notebook file format (preferred extension \\verb|.cnb|) is a JSON file (in contrast to the format in 1.x, which was \\LaTeX{}). \nYou can export your notebook for viewing on any modern browser by exporting to standalone HTML. \n\nNotebooks can also be exported to a normal Cadabra text input file (preferred extension \\verb|.cdb|), which can be read by the command line version.\nYou can feed it by simply using\n\n\\begin{verbatim}\ncadabra2 < filename.cdb\n\\end{verbatim}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Editing, loading, saving, printing, exporting}\n\nThe notebook file format (preferred extension \\verb|.cnb|) is a JSON file (in contrast to the format in 1.x, which was \\LaTeX{}). \nYou can export your notebook for viewing on any modern browser by exporting to standalone HTML. \n\nNotebooks can also be exported to a normal Cadabra text input file (preferred extension \\verb|.cdb|), which can be read by the command line version.\nYou can feed it by simply using\n\n\\begin{verbatim}\ncadabra2 < filename.cdb\n\\end{verbatim}"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

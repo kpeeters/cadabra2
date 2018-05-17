@@ -1,0 +1,91 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "ex:= A_{m n} + B_{m} = 0;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "results in an error message."
+				}
+			],
+			"hidden" : true,
+			"source" : "results in an error message."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The location of indices is, by default, not considered to be\nrelevant. That is, you can write"
+				}
+			],
+			"hidden" : true,
+			"source" : "The location of indices is, by default, not considered to be\nrelevant. That is, you can write"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "error",
+					"source" : "{\\color{red}{\\begin{verbatim}ConsistencyException: Free indices in different terms in a sum do not match.\n\nAt:\n  <string>(3): <module>\n\\end{verbatim}}}"
+				}
+			],
+			"source" : "{m, n}::Indices(position=free);\nex:=A_{m} + A^{m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{tabular}{rlll}\nargument    & whitespace  & dummy       & example \\\\[1ex]\n\\verb|{}|  & product      &            & \\verb|\\frac{a b}{c} = \\frac{a * b}{c}|\\\\ \n\\verb|()|  & product      &            & \\verb|sin(a b) = sin(a * b)|\\\\\n\\verb|_{}| & separator    & yes        & \\verb|M_{a b}  = M_{a}_{b}|\\\\\n\\verb|^{}| & separator    & yes        & \\verb|M^{a b}  = M^{a}^{b}|\\\\\n\\verb|_()| & separator    &            & \\verb|M_(a b)  = M_(a)_(b)|\\\\\n\\verb|^()| & separator    &            & \\verb|M^(a b)  = M^(a)^(b)|\\\\\n\\verb|[]|  & product      &            & \\verb|[a b, c] = [a * b, c]|\n\\end{tabular}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\begin{tabular}{rlll}\nargument    & whitespace  & dummy       & example \\\\[1ex]\n\\verb|{}|  & product      &            & \\verb|\\frac{a b}{c} = \\frac{a * b}{c}|\\\\ \n\\verb|()|  & product      &            & \\verb|sin(a b) = sin(a * b)|\\\\\n\\verb|_{}| & separator    & yes        & \\verb|M_{a b}  = M_{a}_{b}|\\\\\n\\verb|^{}| & separator    & yes        & \\verb|M^{a b}  = M^{a}^{b}|\\\\\n\\verb|_()| & separator    &            & \\verb|M_(a b)  = M_(a)_(b)|\\\\\n\\verb|^()| & separator    &            & \\verb|M^(a b)  = M^(a)^(b)|\\\\\n\\verb|[]|  & product      &            & \\verb|[a b, c] = [a * b, c]|\n\\end{tabular}"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
