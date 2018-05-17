@@ -15,10 +15,6 @@
 # SQLITE3_LIBRARIES	- List of libraries when using sqlite.
 # SQLITE3_FOUND	- True if sqlite found.
 
-if (WIN32)
-  windows_find_library(sqlite3 "sqlite3")
-else()
-
 
 # Look for the header file.
 FIND_PATH(SQLITE3_INCLUDE_DIR NAMES sqlite3.h)
@@ -30,6 +26,7 @@ FIND_LIBRARY(SQLITE3_LIBRARY NAMES sqlite3)
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SQLITE3 DEFAULT_MSG SQLITE3_LIBRARY SQLITE3_INCLUDE_DIR)
 
+
 # Copy the results to the output variables.
 IF(SQLITE3_FOUND)
 	SET(SQLITE3_LIBRARIES ${SQLITE3_LIBRARY})
@@ -39,6 +36,7 @@ ELSE(SQLITE3_FOUND)
 	SET(SQLITE3_INCLUDE_DIRS)
 ENDIF(SQLITE3_FOUND)
 
+
 MARK_AS_ADVANCED(SQLITE3_INCLUDE_DIRS SQLITE3_LIBRARIES)
 
-endif()
+
