@@ -458,7 +458,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	setenv("TEXINPUTS", texinputs.c_str(), 1);
 
 	std::string latex_stdout, latex_stderr;
-	tpl::Process latex_proc("latex -halt-on-error --quiet "+nf, "",
+	tpl::Process latex_proc("latex -halt-on-error "+nf, "",
 	                        [&](const char *bytes, size_t n) {
 		                        latex_stdout=std::string(bytes,n);
 		                        },

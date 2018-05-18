@@ -131,7 +131,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, squote,  "'$1'");
 		res = std::regex_replace(res, linebreak, "\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
 		res = std::regex_replace(res, tableau, "\\)<div class=\"young_box\"></div>\\(\\displaystyle");
-		res = std::regex_replace(res, ftableau, "\\)<div class=\"young_box filled\"></div>\\(\\displaystyle");		
+		res = std::regex_replace(res, ftableau, "\\)<div class=\"young_box filled\"></div>\\(\\displaystyle");
+		res = std::regex_replace(res, std::regex(R"(\{\\tt ([^\}]*)\})"), "<tt>$1</tt>");
 		}
 	catch(std::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;
