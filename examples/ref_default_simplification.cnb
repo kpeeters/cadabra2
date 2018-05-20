@@ -1,0 +1,109 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Default simplification}\n\nBy default, Cadabra does very few things ``by itself'' with your\nexpressions. It only collects equal terms, but even that can be turned\noff if you want to. The logic is that all simplification steps are contained\nin a function \\verb|post_process|, which is executed on every new input and on every completion of\nan algorithm. It can contain arbitrary code, but by default it reads"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Default simplification}\n\nBy default, Cadabra does very few things ``by itself'' with your\nexpressions. It only collects equal terms, but even that can be turned\noff if you want to. The logic is that all simplification steps are contained\nin a function \\verb|post_process|, which is executed on every new input and on every completion of\nan algorithm. It can contain arbitrary code, but by default it reads"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n    collect_terms(ex)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "which simply collects equal terms. You can for instance apply a substitution on every input automatically,"
+				}
+			],
+			"hidden" : true,
+			"source" : "which simply collects equal terms. You can for instance apply a substitution on every input automatically,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n    distribute(ex)\n    substitute(ex, $A_{m n} -> B_{m q} B_{q n}$)\n    collect_terms(ex)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Symmetric to~}B_{m q} B_{q n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "B_{m q} B_{q n} B_{n p} B_{p m} + B_{m q} B_{q n} C_{n m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}B_{m q} B_{q n} B_{n p} B_{p m}+B_{m q} B_{q n} C_{n m}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q}::Indices(vector);\nA_{m n}::Symmetric;\nex:=A_{m n} ( A_{n m} + C_{n m});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "As usual dummy indices have been relabelled appropriately."
+				}
+			],
+			"hidden" : true,
+			"source" : "As usual dummy indices have been relabelled appropriately."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The \\verb|post_process| function can be redefined on-the-fly in the middle of a notebook."
+				}
+			],
+			"hidden" : true,
+			"source" : "The \\verb|post_process| function can be redefined on-the-fly in the middle of a notebook."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

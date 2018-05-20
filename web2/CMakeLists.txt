@@ -30,6 +30,8 @@ set(TUTORIALS
   input_format
   ref_properties
   ref_indices
+  ref_derivatives
+  ref_default_simplification
 )
 
 # Manual pages; just add the algorithm or property name to the lists below
