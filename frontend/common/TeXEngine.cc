@@ -457,8 +457,12 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	texinputs+=":";
 	setenv("TEXINPUTS", texinputs.c_str(), 1);
 
+	// The options below are chosen so they are compatible with MikTeX (https://docs.miktex.org/manual/pdftex.html),
+	// standard TeXLive on Linux and OSX. We use pdflatex because several latex distributions do not seem to have
+	// a 'latex' command anymore which supports all these options (e.g. MikTeX).
+	
 	std::string latex_stdout, latex_stderr;
-	tpl::Process latex_proc("latex -halt-on-error "+nf, "",
+	tpl::Process latex_proc("pdflatex --quiet --halt-on-error --output-format=dvi "+nf, "",
 	                        [&](const char *bytes, size_t n) {
 		                        latex_stdout=std::string(bytes,n);
 		                        },
