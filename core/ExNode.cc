@@ -114,6 +114,9 @@ ExNode ExNode::factors()
 ExNode ExNode::own_indices()
 	{
 	ExNode ret(kernel, ex);
+	free_ind.clear();
+	dummy_ind.clear();
+	classify_
 	ret.topit=it;
 	ret.indices_only=true;
 	ret.use_sibling_iterator=true;

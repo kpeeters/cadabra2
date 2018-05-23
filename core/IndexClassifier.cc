@@ -6,6 +6,7 @@
 #include "properties/Symbol.hh"
 #include "properties/Coordinate.hh"
 #include "properties/IndexInherit.hh"
+#include <sstream>
 
 using namespace cadabra;
 
@@ -165,11 +166,11 @@ void IndexClassifier::classify_add_index(Ex::iterator it, index_map_t& ind_free,
 void IndexClassifier::classify_indices_up(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy)  const
 	{
 	loopie:
-	if(tr.is_head(it)) return;
+	if(Ex::is_head(it)) return;
 	Ex::iterator par=Ex::parent(it);
-	if(tr.is_valid(par)==false || par==tr.end()) { // reached the top
-		return;
-		}
+//	if(Ex::is_valid(par)==false || par==tr.end()) { // reached the top
+//		return;
+//		}
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(par);
 
 	if(*par->name=="\\sum" || *par->name=="\\equals") {
@@ -396,8 +397,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 		// does something with this (e.g. product_rule) will need to relabel once the expression
 		// gets down to A_{m} A^{m} itself. Note that the classifier will mark numerical indices
 		// and coordinate indices as free.
-		auto sib=tr.begin(it);
-		while(sib!=tr.end(it)) {
+		auto sib=it.begin();
+		while(sib!=it.end()) {
 			index_map_t ind_free_here, ind_dummy_here;
 			classify_indices(sib, ind_free_here, ind_dummy_here);
 			if(ind_free_here.size()>0) {

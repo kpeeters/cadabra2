@@ -429,7 +429,7 @@ class tree {
 		bool     is_in_subtree(const iterator_base& position, const iterator_base& begin, 
 									  const iterator_base& end) const;
 		/// Determine whether the iterator is an 'end' iterator and thus not actually pointing to a node.
-		bool     is_valid(const iterator_base&) const;
+		bool is_valid(const iterator_base&) const;
 		/// Determine whether the iterator is one of the 'head' nodes at the top level, i.e. has no parent.
 		static   bool is_head(const iterator_base&);
 		/// Find the lowest common ancestor of two nodes, that is, the deepest node such that
