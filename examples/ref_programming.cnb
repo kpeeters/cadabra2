@@ -1,0 +1,39 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Programming in Python}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Programming in Python}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Accessing elements of an expression}\n\n"
+				}
+			],
+			"source" : "\\subsection*{Accessing elements of an expression}\n\n"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

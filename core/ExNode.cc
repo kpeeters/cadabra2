@@ -1,5 +1,6 @@
 
 #include "ExNode.hh"
+#include "Cleanup.hh"
 #include "PythonCdb.hh"
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
@@ -12,9 +13,15 @@
 
 using namespace cadabra;
 
+ExNode::ExNode(const Kernel& k, std::shared_ptr<Ex> ex_)
+   : IndexClassifier(k), ex(ex_), indices_only(false), args_only(false), terms_only(false), factors_only(false),
+     indnxtit(get_kernel_from_scope()->properties), use_sibling_iterator(false), use_index_iterator(false)
+   {
+   }
+
 ExNode ExNode::getitem_string(std::string tag)
    {
-   ExNode ret(ex);
+   ExNode ret(kernel, ex);
    ret.tag=tag;
    ret.ex=ex;
    ret.topit=it;
@@ -25,9 +32,66 @@ ExNode ExNode::getitem_string(std::string tag)
    return ret;
    }
 
+ExNode ExNode::getitem_iterator(ExNode it)
+   {
+	std::cerr << "Returning ex by iterator into ExNode" << std::endl;
+	if(it.ex!=ex)
+		std::cerr << "Need to convert iterator" << std::endl;
+
+	ExNode ret=it;
+   return ret;
+   }
+
+void ExNode::setitem_string(std::string tag, std::shared_ptr<Ex> val)
+	{
+//   ExNode ret(ex);
+//   ret.tag=tag;
+//   ret.ex=ex;
+//   ret.topit=it;
+//   ret.stopit=it;
+//   ret.stopit.skip_children();
+//   ++ret.stopit;
+//   ret.update(true);
+//
+	std::cerr << "will set iterator range to value" << std::endl;
+////	Ex::iterator it=ex->begin();
+////
+////	size_t num=ex->number_of_children(it);
+////	if(index>=0 && (size_t)index<num) 
+////		ex->replace(ex->child(it, index), val.begin());
+////	else 
+////		throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
+//
+//   return ret;
+	}
+
+void ExNode::setitem_iterator(ExNode en, std::shared_ptr<Ex> val)
+	{
+	std::cerr << "Setitem iterator" << std::endl;
+
+	Ex::iterator use;
+	if(en.ex!=ex) {
+		std::cerr << "Setitem need to convert iterator" << std::endl;
+		auto path=en.ex->path_from_iterator(en.it, en.topit);
+		for(auto v: path)
+			std::cerr << v << std::endl;
+		use=ex->iterator_from_path(path, topit);
+		}
+	else {
+		use=en.it;
+		}
+		
+	Ex::iterator top=val->begin();
+	if(*top->name=="") {
+		std::cerr << "top is empty" << std::endl;
+		top=val->begin(top);
+		}
+	ex->replace(use, top);
+	}
+
 ExNode ExNode::terms()
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.topit=it;
 	ret.terms_only=true;
 	ret.factors_only=false;
@@ -38,7 +102,7 @@ ExNode ExNode::terms()
 
 ExNode ExNode::factors()
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.topit=it;
 	ret.terms_only=false;
 	ret.factors_only=true;
@@ -47,9 +111,9 @@ ExNode ExNode::factors()
 	return ret;
 	}
 
-ExNode ExNode::indices()
+ExNode ExNode::own_indices()
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.topit=it;
 	ret.indices_only=true;
 	ret.use_sibling_iterator=true;
@@ -57,9 +121,19 @@ ExNode ExNode::indices()
 	return ret;
 	}
 
+ExNode ExNode::indices()
+	{
+	ExNode ret(kernel, ex);
+	ret.topit=it;
+	ret.indices_only=true;
+	ret.use_index_iterator=true;
+	ret.update(true);
+	return ret;
+	}
+
 ExNode ExNode::args()
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.topit=it;
 	ret.args_only=true;
 	ret.use_sibling_iterator=true;	
@@ -69,7 +143,7 @@ ExNode ExNode::args()
 
 ExNode ExNode::children()
    {
-	ExNode ret(ex);
+   ExNode ret(kernel, ex);
 	ret.topit=it;
 	ret.use_sibling_iterator=true;	
 	ret.update(true);
@@ -83,31 +157,49 @@ void ExNode::replace(std::shared_ptr<Ex> rep)
 
 ExNode ExNode::insert(std::shared_ptr<Ex> rep)
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.it=ex->insert_subtree(it, rep->begin());
 	return ret;
 	}
 
 ExNode ExNode::insert_it(ExNode rep)
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.it=ex->insert_subtree(it, rep.it);
 	return ret;
 	}
 
 ExNode ExNode::append_child(std::shared_ptr<Ex> rep)
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.it=ex->append_child(it, rep->begin());
 	return ret;
 	}
 
 ExNode ExNode::append_child_it(ExNode rep)
 	{
-	ExNode ret(ex);
+	ExNode ret(kernel, ex);
 	ret.it=ex->append_child(it, rep.it);
 	return ret;
 	}
+
+ExNode ExNode::add_ex(std::shared_ptr<cadabra::Ex> other)
+   {
+   // std::cerr << it << std::endl;
+   // std::cerr << "- - - " << std::endl;
+   // std::cerr << ex->begin() << std::endl;
+   if(ex->is_head(it) || *(ex->parent(it)->name)!="\\sum") 
+	   ex->wrap(it, str_node("\\sum"));
+   auto sumnode=ex->parent(it);
+   ExNode ret(kernel, ex);
+   // std::cerr << ex->begin() << std::endl;
+   ret.it=ex->insert_subtree_after(it, other->begin());
+   cleanup_dispatch(*get_kernel_from_scope(), *ex, sumnode);
+   // std::cerr << "----" << std::endl;
+   // std::cerr << ex->begin() << std::endl;
+   // std::cerr << "====" << std::endl;   
+   return *this;
+   }
 
 void ExNode::erase()
 	{
@@ -150,11 +242,6 @@ void ExNode::set_multiplier(pybind11::object obj)
 //	return mult;
    }
 
-
-ExNode::ExNode(std::shared_ptr<Ex> ex_)
-   : ex(ex_), indices_only(false), args_only(false), terms_only(false), factors_only(false), use_sibling_iterator(false)
-   {
-   }
 
 ExNode& ExNode::iter()
    {
@@ -201,6 +288,10 @@ void ExNode::update(bool first)
 			++sibnxtit;
 			}
 		}
+   else if(use_index_iterator) {
+	   if(first) indnxtit=cadabra::index_iterator::begin(get_kernel_from_scope()->properties, topit);
+	   else      ++indnxtit;
+	   }
 	else {
 		if(first) nxtit=topit;
 		else      ++nxtit;
@@ -220,6 +311,11 @@ ExNode& ExNode::next()
 			throw pybind11::stop_iteration();			
 		it=sibnxtit;
 		}
+   else if(use_index_iterator) {
+	   if(indnxtit==cadabra::index_iterator::end(get_kernel_from_scope()->properties, topit))
+			throw pybind11::stop_iteration();			
+	   it=indnxtit;
+	   }
 	else {
 		if(nxtit==stopit)
 			throw pybind11::stop_iteration();
@@ -255,7 +351,7 @@ std::string ExNode::_latex_() const
 
 ExNode Ex_iter(std::shared_ptr<Ex> ex)
    {
-   ExNode ret(ex);
+   ExNode ret(*get_kernel_from_scope(), ex);
    ret.ex=ex;
    ret.topit=ex->begin();
    ret.stopit=ex->end();
@@ -265,7 +361,7 @@ ExNode Ex_iter(std::shared_ptr<Ex> ex)
 
 ExNode Ex_top(std::shared_ptr<Ex> ex)
    {
-   ExNode ret(ex);
+   ExNode ret(*get_kernel_from_scope(), ex);
    ret.ex=ex;
    ret.topit=ex->begin();
    ret.stopit=ex->end();
@@ -283,8 +379,21 @@ bool Ex_matches(std::shared_ptr<Ex> ex, ExNode& other)
 
 ExNode Ex_getitem_string(std::shared_ptr<Ex> ex, std::string tag)
 	{
-	ExNode ret(ex);
+	ExNode ret(*get_kernel_from_scope(), ex);
 	ret.tag=tag;
+	ret.ex=ex;
+	ret.topit=ex->begin();
+	ret.stopit=ex->end();
+	ret.update(true);
+	return ret;
+	}
+
+ExNode Ex_getitem_iterator(std::shared_ptr<Ex> ex, ExNode it)
+	{
+	std::cerr << "Returning ex by iterator" << std::endl;
+	if(it.ex!=ex)
+		std::cerr << "Need to convert iterator" << std::endl;
+	ExNode ret(*get_kernel_from_scope(), ex);
 	ret.ex=ex;
 	ret.topit=ex->begin();
 	ret.stopit=ex->end();

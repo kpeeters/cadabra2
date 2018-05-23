@@ -28,6 +28,7 @@ set(TUTORIALS
   scalar_manipulations
 
   input_format
+  ref_printing
   ref_properties
   ref_indices
   ref_derivatives

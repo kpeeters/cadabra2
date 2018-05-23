@@ -1,7 +1,10 @@
 
 #pragma once
 
+#include "Kernel.hh"
 #include "Storage.hh"
+#include "IndexIterator.hh"
+#include "IndexClassifier.hh"
 #include <memory>
 #include <pybind11/pybind11.h>
 
@@ -19,9 +22,9 @@
 /// tree modification interface themselves, and can thus compute
 /// their next value for any destructive operation.
 
-class ExNode {
+class ExNode : public cadabra::IndexClassifier {
    public:
-      ExNode(std::shared_ptr<cadabra::Ex>);
+      ExNode(const cadabra::Kernel&, std::shared_ptr<cadabra::Ex>);
       
       std::shared_ptr<cadabra::Ex>          ex;
       cadabra::Ex::iterator it;
@@ -57,6 +60,9 @@ class ExNode {
       /// Append a subtree as a child. Return an ExNode pointing to the new child.
       ExNode      append_child(std::shared_ptr<cadabra::Ex>);
       ExNode      append_child_it(ExNode ins);
+
+      /// Add an expression to the given node, adding a sum parent if necessary.
+      ExNode      add_ex(std::shared_ptr<cadabra::Ex>);
       
       /// Erase the current node, iterator becomes invalid!
       void        erase();
@@ -64,6 +70,11 @@ class ExNode {
       /// Get a new iterator which always stays
       /// below the current one.
       ExNode      getitem_string(std::string tag);
+      ExNode      getitem_iterator(ExNode);
+
+      /// Set all elements with the indicated tag to the given value.
+      void        setitem_string(std::string tag, std::shared_ptr<cadabra::Ex> val);
+      void        setitem_iterator(ExNode, std::shared_ptr<cadabra::Ex> val);      
 
 		/// Get a new iterator which only iterates over all first-level
 		/// terms. If the first-level is not a sum, the iterator will
@@ -75,8 +86,13 @@ class ExNode {
       /// only return the single node and then end.
 		ExNode      factors();
 
-      /// Get a new iterator which only iterates over all first-level
-		/// indices.
+      /// Get a new iterator which only iterates over all first-level indices
+      /// (that is, does not iterate over inherited indices; use 'indices' for that).
+      ExNode      own_indices();
+      
+      /// Get a new iterator which only iterates over all indices (whether direct
+      /// or inherited). Uses an index_iterator internally (see its documentation
+      /// for details on behaviour).
 		ExNode      indices();
       
 		/// Get a new iterator which only iterates over all first-level
@@ -90,11 +106,22 @@ class ExNode {
       std::string tag;
       bool        indices_only, args_only, terms_only, factors_only;
 
+      /// Internal function to update the iterator to the next value.
+      /// Switches behaviour depending on use_sibling_iterator, use_index_iterator,
+      /// indices_only, args_only, terms_only, factors_only;
       void update(bool first);
+
       cadabra::Ex::iterator         nxtit;
 		cadabra::Ex::sibling_iterator sibnxtit;
-      bool                 use_sibling_iterator;
+      cadabra::index_iterator       indnxtit;
+      
+      bool                          use_sibling_iterator;
+      bool                          use_index_iterator;
       cadabra::Ex::iterator         topit, stopit;
+
+      index_map_t                   free_ind, dummy_ind;
+
+   private:
 };
 
 
@@ -102,6 +129,7 @@ ExNode Ex_iter(std::shared_ptr<cadabra::Ex> ex);
 ExNode Ex_top(std::shared_ptr<cadabra::Ex> ex);
 bool   Ex_matches(std::shared_ptr<cadabra::Ex> ex, ExNode& other);
 ExNode Ex_getitem_string(std::shared_ptr<cadabra::Ex> ex, std::string tag);
+ExNode Ex_getitem_iterator(std::shared_ptr<cadabra::Ex> ex, ExNode);
 
 
  

@@ -91,12 +91,20 @@ std::string Ex_to_Sympy_string(std::shared_ptr<cadabra::Ex>);
 /// Add two expressions, adding a top-level \sum node if required.
 
 std::shared_ptr<cadabra::Ex> operator+(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
+std::shared_ptr<cadabra::Ex> add_ex(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2, cadabra::Ex::iterator top2);
+
+/// \ingroup pythoncore
+///
+/// Multiply two expressions, adding a top-level \prod node if required.
+std::shared_ptr<cadabra::Ex> operator*(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
+std::shared_ptr<cadabra::Ex> mult_ex(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2, cadabra::Ex::iterator top2);
 
 /// \ingroup pythoncore
 ///
 /// Subtract two expressions, adding a top-level \sum node if required.
 
 std::shared_ptr<cadabra::Ex> operator-(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2);
+std::shared_ptr<cadabra::Ex> sub_ex(std::shared_ptr<cadabra::Ex> ex1, std::shared_ptr<cadabra::Ex> ex2, cadabra::Ex::iterator top2);
 
 /// \ingroup pythoncore
 ///

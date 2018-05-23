@@ -28,6 +28,7 @@
 #include "Kernel.hh"
 #include "IndexIterator.hh"
 #include "ProgressMonitor.hh"
+#include "IndexClassifier.hh"
 
 #include <map>
 #include <fstream>
@@ -55,7 +56,7 @@ namespace cadabra {
 /// The algorithm is, however, allowed to change the node itself or
 /// replace it with another one, as long as it updates the iterator.
 
-class Algorithm {
+class Algorithm : public IndexClassifier {
 	public:
 		/// Initialise the algorithm with a reference to the expression
 		/// tree, but do not yet do anything with this tree. Algorithms
@@ -130,19 +131,8 @@ class Algorithm {
 		bool     rename_replacement_dummies(iterator, bool still_inside_algo=false);
 
 
-		/// A map from a pattern to the position where it occurs in the tree. The comparator
-		/// is such that we store indices exactly, apart from their multiplicative factor.
-		/// This means that the index in A_{n} and in A_{-n} are stored in the same way,
-		/// and one needs to lookup the expression in the tree to find this multiplier.
-		/// See basic.cdb test 26 for an example that uses this.
-		typedef std::multimap<Ex, Ex::iterator, tree_exact_less_for_indexmap_obj> index_map_t;
-
-		/// A map from the position of each index to the sequential index.
-		typedef std::map<Ex::iterator, int, Ex::iterator_base_less>    index_position_map_t;
-
 
 	protected:
-		const Kernel&  kernel;
 		Ex& tr;
 		ProgressMonitor *pm;
 
@@ -221,34 +211,6 @@ class Algorithm {
 		void     node_one(iterator);
 		void     node_integer(iterator, int);
 
-		/// Index manipulation and classification
-		///
-		/// Routines to find and classify all indices in an expression, taking into account
-		/// sums and products. Note that dummy indices do not always come in pairs, for 
-		/// instance in expressions like
-		///            a_{m n} ( b^{n p} + q^{n p} ) .
-		/// Similarly, free indices can appear multiple times, as in
-		///            a_{m} + b_{m} . 
-		void     fill_index_position_map(iterator, const index_map_t&, index_position_map_t&) const;
-		void     fill_map(index_map_t&, sibling_iterator, sibling_iterator) const;
-		void     print_classify_indices(std::ostream&, iterator) const;
-		void     determine_intersection(index_map_t& one, index_map_t& two, index_map_t& target,
-										  bool move_out=false) const; 
-		void     classify_add_index(iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const;
-		void     classify_indices_up(iterator, index_map_t& ind_free, index_map_t& ind_dummy) const;
-		void     classify_indices(iterator, index_map_t& ind_free, index_map_t& ind_dummy) const;
-		int      max_numbered_name_one(const std::string& nm, const index_map_t * one) const;
-		int      max_numbered_name(const std::string&, const index_map_t *m1, const index_map_t *m2=0,
-											const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const;
-		Ex get_dummy(const list_property *, const index_map_t *m1, const index_map_t *m2=0,
-											const index_map_t *m3=0, const index_map_t *m4=0, const index_map_t *m5=0) const;
-		Ex get_dummy(const list_property *, iterator) const;
-		Ex get_dummy(const list_property *, iterator, iterator) const;
-
-		bool index_in_set(Ex, const index_map_t *) const;
-
-		/// Find an index in the set, not taking into account index position.
-		index_map_t::iterator find_modulo_parent_rel(iterator it, index_map_t& imap) const;
 
 
    protected:
@@ -267,7 +229,6 @@ class Algorithm {
 		/// node, beyond which this routine is not allowed to touch the
 		/// tree (i.e. the 2nd iterator will always remain valid).
 		void     propagate_zeroes(post_order_iterator&, const iterator&);
-		void     dumpmap(std::ostream&, const index_map_t&) const;
 
 //		bool cleanup_anomalous_products(Ex& tr, Ex::iterator& it);
 };

@@ -28,10 +28,10 @@ Algorithm::result_t replace_match::apply(iterator& it)
 
 	// Remove the terms which we will replace, by converting
 	// the 'to_keep' paths above to iterators, then removing.
-	iterator sum_node = tr.parent(tr.iterator_from_path(to_keep[0]));
+	iterator sum_node = tr.parent(tr.iterator_from_path(to_keep[0], tr.begin()));
 	std::vector<iterator> to_erase;
 	for(const auto& p: to_keep)
-		to_erase.push_back( tr.iterator_from_path(p) );
+		to_erase.push_back( tr.iterator_from_path(p, tr.begin()) );
 	for(auto& erase: to_erase)
 		tr.erase(erase);
 
@@ -41,7 +41,7 @@ Algorithm::result_t replace_match::apply(iterator& it)
 		// We already have an iterator to the sum node in the now-current
 		// expression (sum_node). We also need one to the sum node in the
 		// replacement sum.
-		iterator replacement_sum_node = current.iterator_from_path(tr.path_from_iterator(sum_node));
+		iterator replacement_sum_node = current.iterator_from_path(tr.path_from_iterator(sum_node, tr.begin()), current.begin());
 		
 		// If the original sum has disappeared (because subsequent manipulations
 		// made all but one terms vanish), wrap it again in a sum.

@@ -52,6 +52,7 @@ set(LOCAL_SRC_FILES
   Exchange.cc
   Functional.cc
   IndexIterator.cc
+  IndexClassifier.cc
   Kernel.cc
   Parser.cc
   PreClean.cc

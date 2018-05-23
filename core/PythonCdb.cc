@@ -253,6 +253,33 @@ void Ex_setitem(std::shared_ptr<Ex> ex, int index, Ex val)
 		throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
 	}
 
+void Ex_setitem_iterator(std::shared_ptr<Ex> ex, ExNode en, std::shared_ptr<Ex> val)
+	{
+	Ex::iterator use;
+	if(en.ex!=ex) {
+//		std::cerr << "Setitem need to convert iterator of" << std::endl;
+//		std::cerr << en.it << std::endl;
+//		std::cerr << "in " << en.topit << std::endl;
+//		std::cerr << "of " << en.ex->begin() << std::endl;
+		auto path=en.ex->path_from_iterator(en.it, en.topit);
+//		for(auto v: path)
+//			std::cerr << v << std::endl;
+//		std::cerr << "for " << ex->begin() << std::endl;
+		use=ex->iterator_from_path(path, ex->begin());
+//		std::cerr << "which is " << use << std::endl;
+		}
+	else {
+		use=en.it;
+		}
+		
+	Ex::iterator top=val->begin();
+	if(*top->name=="") {
+//		std::cerr << "top is empty" << std::endl;
+		top=val->begin(top);
+		}
+	ex->replace(use, top);
+	}
+
 size_t Ex_len(std::shared_ptr<Ex> ex)
 	{
 	Ex::iterator it=ex->begin();
@@ -407,7 +434,14 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 				return obj.cast<std::shared_ptr<Ex>>();
 				}
 			catch(const pybind11::cast_error& e) {
-				std::cout << nm << " is not of type cadabra.Ex" << std::endl;
+				try {
+					auto exnode = obj.cast<ExNode>();
+					auto ret = std::make_shared<Ex>( exnode.it );
+					return ret;
+					}
+				catch(const pybind11::cast_error& e) {
+					std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
+					}
 				}
 			}
 		}
@@ -504,7 +538,18 @@ std::shared_ptr<Ex> construct_Ex_from_int_2(int num, bool add_ref)
 	}
 
 
+std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const ExNode ex2)
+   {
+   return add_ex(ex1, ex2.ex, ex2.it);
+
+	}
+
 std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
+	{
+	return add_ex(ex1, ex2, ex2->begin());
+	}
+
+std::shared_ptr<Ex> add_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2, Ex::iterator top2)
 	{
 	if(ex1->size()==0) return ex2;
 	if(ex2->size()==0) return ex1;
@@ -515,13 +560,13 @@ std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const std::shared_p
 	if(comma1 || comma2) {
 		if(comma1) {
 			auto ret=std::make_shared<Ex>(*ex1);
-			auto loc = ret->append_child(ret->begin(), ex2->begin());
+			auto loc = ret->append_child(ret->begin(), top2);
 			if(comma2)
 				ret->flatten_and_erase(loc);
 			return ret;
 			}
 		else {
-			auto ret=std::make_shared<Ex>(*ex2);
+			auto ret=std::make_shared<Ex>(top2);
 			auto loc = ret->prepend_child(ret->begin(), ex1->begin());
 			if(comma1)
 				ret->flatten_and_erase(loc);
@@ -532,7 +577,7 @@ std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const std::shared_p
 		auto ret=std::make_shared<Ex>(*ex1);
 		if(*ret->begin()->name!="\\sum") 
 			ret->wrap(ret->begin(), str_node("\\sum"));
-		ret->append_child(ret->begin(), ex2->begin());
+		ret->append_child(ret->begin(), top2);
 		
 		auto it=ret->begin();
 		cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
@@ -540,7 +585,39 @@ std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const std::shared_p
 		}
 	}
 
+std::shared_ptr<Ex> operator*(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
+   {
+   return mult_ex(ex1, ex2, ex2->begin());
+	}
+
+
+std::shared_ptr<Ex> mult_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2, Ex::iterator top2)
+	{
+	if(ex1->size()==0) return ex2;
+	if(ex2->size()==0) return ex1;
+
+	auto ret=std::make_shared<Ex>(*ex1);
+	if(*ret->begin()->name!="\\prod") 
+		ret->wrap(ret->begin(), str_node("\\prod"));
+	ret->append_child(ret->begin(), top2);
+	
+	auto it=ret->begin();
+	cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
+	return ret;
+	}
+
+std::shared_ptr<Ex> operator-(const std::shared_ptr<Ex> ex1, const ExNode ex2)
+   {
+   return sub_ex(ex1, ex2.ex, ex2.it);
+
+	}
+
 std::shared_ptr<Ex> operator-(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
+	{
+	return sub_ex(ex1, ex2, ex2->begin());
+	}
+
+std::shared_ptr<Ex> sub_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2, Ex::iterator top2)
 	{
 	if(ex1->size()==0) {
 		if(ex2->size()!=0) {
@@ -557,7 +634,7 @@ std::shared_ptr<Ex> operator-(const std::shared_ptr<Ex> ex1, const std::shared_p
 	auto ret=std::make_shared<Ex>(*ex1);
 	if(*ret->begin()->name!="\\sum") 
 		ret->wrap(ret->begin(), str_node("\\sum"));
-	multiply( ret->append_child(ret->begin(), ex2->begin())->multiplier, -1 );
+	multiply( ret->append_child(ret->begin(), top2)->multiplier, -1 );
 
 	auto it=ret->begin();
 	cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
@@ -1129,9 +1206,11 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("mma_form",    &Ex_to_MMA, pybind11::arg("unicode")=true)    // standardize on this
 		.def("input_form",  &Ex_to_input) 
 		.def("__getitem__", &Ex_getitem)
-		.def("__getitem__", &Ex_getitem_string)		
+		.def("__getitem__", &Ex_getitem_string)
+		.def("__getitem__", &Ex_getitem_iterator)				
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
+		.def("__setitem__", &Ex_setitem_iterator)
 		.def("__len__",     &Ex_len)
 		.def("head",        &Ex_head)
 		.def("mult",        &Ex_mult)
@@ -1144,20 +1223,33 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("__add__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
 				return a + b;
 				}, pybind11::is_operator())		
+		.def("__add__", [](std::shared_ptr<Ex> a, ExNode b) {
+				return a + b;
+				}, pybind11::is_operator())		
 		.def("__sub__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
 				return a - b;
 				}, pybind11::is_operator())
+		.def("__sub__", [](std::shared_ptr<Ex> a, ExNode b) {
+				return a - b;
+				}, pybind11::is_operator())		
+		.def("__mul__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
+				return a * b;
+				}, pybind11::is_operator())		
 		;
 
 	pybind11::class_<ExNode>(m, "ExNode")
 		.def("__iter__",              &ExNode::iter)
 		.def("__next__",              &ExNode::next, pybind11::return_value_policy::reference_internal)
 		.def("__getitem__",           &ExNode::getitem_string)
+		.def("__getitem__",           &ExNode::getitem_iterator)		
+		.def("__setitem__",           &ExNode::setitem_string)
+		.def("__setitem__",           &ExNode::setitem_iterator)				
 		.def("_latex_",               &ExNode::_latex_)
 		.def("__str__",               &ExNode::__str__)		
 		.def("terms",                 &ExNode::terms)
 		.def("factors",               &ExNode::factors)		
-		.def("indices",               &ExNode::indices)
+		.def("own_indices",           &ExNode::own_indices)
+		.def("indices",               &ExNode::indices)		
 		.def("args",                  &ExNode::args)
 		.def("children",              &ExNode::children)						
 		.def("replace",               &ExNode::replace)
@@ -1169,6 +1261,9 @@ PYBIND11_MODULE(cadabra2, m)
 		.def_property("name",         &ExNode::get_name, &ExNode::set_name)
 		.def_property("parent_rel",   &ExNode::get_parent_rel, &ExNode::set_parent_rel)
 		.def_property("multiplier",   &ExNode::get_multiplier, &ExNode::set_multiplier) 
+		.def("__add__", [](ExNode a, std::shared_ptr<Ex> b) {
+				return a.add_ex(b);
+				}, pybind11::is_operator())		
 		;
 
 	pybind11::enum_<Algorithm::result_t>(m, "result_t")

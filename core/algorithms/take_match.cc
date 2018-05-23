@@ -36,7 +36,7 @@ bool take_match::can_apply(iterator it)
 				if(subs.can_apply(sib)==false)
 					to_erase.push_back(sib);
 				else
-					to_keep.push_back(tr.path_from_iterator(sib));
+					to_keep.push_back(tr.path_from_iterator(sib, tr.begin()));
 				++sib;
 				}
 			
@@ -53,7 +53,7 @@ Algorithm::result_t take_match::apply(iterator& it)
 	// Push a copy of the expression onto the history stack. The
 	// 'to_keep' is a reference to the paths vector on the associated
 	// stack.
-	auto itpath = tr.path_from_iterator(it);
+	auto itpath = tr.path_from_iterator(it, tr.begin());
 	tr.push_history(to_keep);
 	
 	// Now erase what we do not want anymore, the cleanup

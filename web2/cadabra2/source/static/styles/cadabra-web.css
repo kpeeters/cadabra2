@@ -487,6 +487,10 @@ div.young_row {
 	 height: 10px;
 }
 
+ol.table_of_contents {
+	 margin-left: 40px;
+}
+
 /* Blog */
 
 h2.blog {

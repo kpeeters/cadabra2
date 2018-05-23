@@ -146,3 +146,7 @@ for term in ex.top().terms():
         print(factor)
 
 
+\nabla{#}::Derivative;        
+ex:= \nabla_{q}{ T_{m n}^{p} };
+for term in ex.top().terms():
+    

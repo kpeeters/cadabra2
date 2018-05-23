@@ -34,7 +34,7 @@
 #include <queue>
 #include <algorithm>
 #include <cstddef>
-
+#include <iostream>
 
 /// A node in the tree, combining links to other nodes as well as the actual data.
 template<class T>
@@ -284,10 +284,12 @@ class tree {
       leaf_iterator   end_leaf(const iterator_base& top) const;
 
 		typedef std::vector<int> path_t;
-		/// Return a path corresponding to a node in the tree.
-		path_t          path_from_iterator(const iterator_base& iter) const;
-		/// Return an iterator given a path.
-		iterator        iterator_from_path(const path_t&) const;
+		/// Return a path (to be taken from the 'top' node) corresponding to a node in the tree.
+		/// The first integer in path_t is the number of steps you need to go 'right' in the sibling
+		/// chain (so 0 if we go straight to the children).
+		path_t          path_from_iterator(const iterator_base& iter, const iterator_base& top) const;
+		/// Return an iterator given a path from the 'top' node.
+		iterator        iterator_from_path(const path_t&, const iterator_base& top) const;
 				
 		/// Return iterator to the parent of a node.
 		template<typename	iter> static iter parent(iter);
@@ -865,7 +867,7 @@ typename tree<T, tree_node_allocator>::leaf_iterator tree<T, tree_node_allocator
    }
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::path_t tree<T, tree_node_allocator>::path_from_iterator(const iterator_base& iter) const
+typename tree<T, tree_node_allocator>::path_t tree<T, tree_node_allocator>::path_from_iterator(const iterator_base& iter, const iterator_base& top) const
 	{
 	path_t path;
 	tree_node *walk=iter.node;
@@ -874,21 +876,21 @@ typename tree<T, tree_node_allocator>::path_t tree<T, tree_node_allocator>::path
 		if(path.size()>0)
 			walk=walk->parent;
 		int num=0;
-		while(walk->prev_sibling!=0 && walk->prev_sibling!=head) {
+		while(walk!=top.node && walk->prev_sibling!=0 && walk->prev_sibling!=head) {
 			++num;
 			walk=walk->prev_sibling;
 			}
 		path.push_back(num);
-		} while(walk->parent!=0);
+		} while(walk->parent!=0 && walk!=top.node);
 
 	std::reverse(path.begin(), path.end());
 	return path;
 	}
 
 template <class T, class tree_node_allocator>
-typename tree<T, tree_node_allocator>::iterator tree<T, tree_node_allocator>::iterator_from_path(const path_t& path) const
+typename tree<T, tree_node_allocator>::iterator tree<T, tree_node_allocator>::iterator_from_path(const path_t& path, const iterator_base& top) const
 	{
-	iterator it=begin();
+	iterator it=top;
 	tree_node *walk=it.node;
 
 	for(size_t step=0; step<path.size(); ++step) {

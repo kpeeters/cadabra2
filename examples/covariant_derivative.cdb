@@ -1,0 +1,42 @@
+ex:= A_{m n} B_{n} + C_{m n p} D_{n p};
+for i in ex.top().indices():
+    print(i)
+print("---")
+for term in ex.top().terms():
+    print(str(term)+" has indices:")
+    for i in term.indices():
+        print(i)
+        
+    
+
+
+def expand_covd(ex):
+    for nabla in ex["\\nabla"]:
+        nabla.name="\\partial"
+        dindex = nabla.indices().__next__()   # need .index() to give direct single index without __next()__.
+        for arg in nabla.args():              # need .arg() to give direct single argument without __next()__.
+            ret:=0;
+            for index in arg.indices():
+                t2:= @(arg);
+                if index.parent_rel==sub:
+                    t1:= -\Gamma^{p}_{@(dindex) @(index)};
+                    t2[index]:= _{p};
+                else:
+                    t1:=  \Gamma^{@(index)}_{@(dindex) p};
+                    t2[index]:= ^{p};
+                ret += t1 * t2
+            nabla += ret
+    return ex
+
+\nabla{#}::Derivative;
+\hat{#}::Accent;
+ex:= \nabla_{a}{ h^{b}_{c} }; 
+expand_covd(ex);
+    
+
+    
+ex:= \nabla_{\hat{a}}{ h_{b c} v_{d} } + \nabla_{b}{ h_{\hat{a} c d } } + T_{\hat{a} b c d};
+expand_covd(ex);
+
+    
+

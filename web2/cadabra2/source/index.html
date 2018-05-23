@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block title %}Cadabra: a field theory motivated approach to computer algebra{% endblock %}
+{% block title %}Cadabra: a field-theory motivated approach to computer algebra{% endblock %}
 
 {% block head %}
 <meta name="description" content="Cadabra is a symbolic computer
@@ -121,6 +121,22 @@
   the spectrum, and as a general rule keeps your expression untouched, 
   unless you explicitly ask for something to be done to it.
 </p>
+<p  class="hyphenate">
+  Another key issue in the design of symbolic computer algebra systems has
+  always been whether or not there should be a distinction between the
+  'data language' (the language used to write down mathematical
+  expressions), the 'manipulation language' (the language used to write
+  down what you want to do with those expressions) and the
+  'implementation language' (the language used to implement algorithms
+  which act on mathematical expressions). Many computer algebra systems
+  take the approach in which these languages are the same (Axiom,
+  Reduce, Sympy) or mostly the same apart from a small core which uses a
+  different implementation language (Mathematica, Maple). The Cadabra
+  project is rooted in the idea that for many applications, it is better
+  to keep a clean distinction between these three languages. Cadabra
+  writes mathematics using LaTeX, is programmable in Python, and is
+  under the hood largely written in C++.
+</p>
 <br/>
 
 <h1>History</h1>
@@ -133,7 +149,7 @@
   release <a href="https://arxiv.org/abs/hep-th/0701238">in 2007</a>.
   During the years that followed, it became clear that several design
   decisions were not ideal, such as the use of a custom programming
-  language and the lack functionality for component computations. Over
+  language and the lack of functionality for component computations. Over
   the course of 2015-2016 a large rewrite took place, which resulted
   in Cadabra 2.x.  This new version is programmable in Python and does
   both abstract and component computations. This new web site, with
