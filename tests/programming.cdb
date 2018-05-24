@@ -99,7 +99,7 @@ def test04():
                 matches = map(lambda x: x.matches(factor), NoMomList)
                 if not True in matches:
                     if factor.name=="\\partial":
-                        for index in factor.indices():
+                        for index in factor.own_indices():
                             k = Ex("k"+str(num))
                             factor.insert(k).append_child(index)
                             factor.insert(Ex("I"))
@@ -117,36 +117,46 @@ def test04():
             matches = map(lambda x: x.matches(term), NoMomList)
             if not True in matches:
                 term.append_child(Ex("k1"))
-    
+
     tst:= Q_{m n \dot{r} p q s_{2} k}(k1) + T_{m n \dot{r} p q s_{2} k} + a**2 \partial_{0}{a} A_{m n} k1_{\dot{r}} I B_{p q}(k1) S(t) V'(\phi) k2_{s_{2}} I C(k2) k3_{0} I D_{k}(k3) - @(ex);
     assert(tst==0)
     print("Test 04 passed")
 
 test04()
 
-ex:= A_{m n} B^{0 m} + C_{n};
-for n in ex:
-    print(n.name)
-    print(n.parent_rel)
-    print(n.multiplier)
-    if n.multiplier==0 and n.parent_rel==parent_rel_t.super:
-        print("todo!")
+def test05():
+    ex:= A_{m n} B^{0 m} + C_{n};
+    lst=[]
+    for n in ex:
+        lst.append(str(n))
+    
+    tst=['A_{m n} B^{0 m} + C_{n}', 'A_{m n} B^{0 m}', 'A_{m n}', 'm', 'n', 'B^{0 m}', '0', 'm', 'C_{n}', 'n']
+    assert(tst==lst)
+    print("Test 05 passed")
+
+test05()
 
 # ex:=A + B + C;
+# lst=[]
 # for sum in ex["\\sum"]:
-#     for term in sum[""]:
-#         print(term.name)
+#     for term in sum:
+#         lst.append(term.name)
 # 
+# assert(lst==["A", "B", "C"])
+# print("Test 05 passed")
+        
+ 
 
-ex:= Q ( A_{m n} (Q+S) + B_{m n} ) + D_{m n};
-for term in ex.top().terms():
-    print("term:")
-    for factor in term.factors():
-        print("factor:")
-        print(factor)
-
-
-\nabla{#}::Derivative;        
-ex:= \nabla_{q}{ T_{m n}^{p} };
-for term in ex.top().terms():
-    
+# ex:= Q ( A_{m n} (Q+S) + B_{m n} ) + D_{m n};
+# for term in ex.top().terms():
+#     print("term:")
+#     for factor in term.factors():
+#         print("factor:")
+#         print(factor)
+# 
+#
+        
+# \nabla{#}::Derivative;        
+# ex:= \nabla_{q}{ T_{m n}^{p} };
+# for term in ex.top().terms():
+#     

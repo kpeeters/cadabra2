@@ -273,11 +273,10 @@ void Ex_setitem_iterator(std::shared_ptr<Ex> ex, ExNode en, std::shared_ptr<Ex> 
 		}
 		
 	Ex::iterator top=val->begin();
-	if(*top->name=="") {
-//		std::cerr << "top is empty" << std::endl;
+	if(*top->name=="") 
 		top=val->begin(top);
-		}
-	ex->replace(use, top);
+
+	ex->replace_index(use, top, true);
 	}
 
 size_t Ex_len(std::shared_ptr<Ex> ex)
@@ -1249,7 +1248,8 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("terms",                 &ExNode::terms)
 		.def("factors",               &ExNode::factors)		
 		.def("own_indices",           &ExNode::own_indices)
-		.def("indices",               &ExNode::indices)		
+		.def("indices",               &ExNode::indices)
+		.def("free_indices",          &ExNode::free_indices)				
 		.def("args",                  &ExNode::args)
 		.def("children",              &ExNode::children)						
 		.def("replace",               &ExNode::replace)

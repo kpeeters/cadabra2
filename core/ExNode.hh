@@ -95,6 +95,11 @@ class ExNode : public cadabra::IndexClassifier {
       /// for details on behaviour).
 		ExNode      indices();
       
+      /// Get a new iterator which only iterates over all free indices (whether direct
+      /// or inherited). Uses an index_iterator internally (see its documentation
+      /// for details on behaviour).
+		ExNode      free_indices();
+      
 		/// Get a new iterator which only iterates over all first-level
 		/// arguments (non-indices).
 		ExNode      args();
@@ -119,7 +124,8 @@ class ExNode : public cadabra::IndexClassifier {
       bool                          use_index_iterator;
       cadabra::Ex::iterator         topit, stopit;
 
-      index_map_t                   free_ind, dummy_ind;
+      index_map_t                   ind_free, ind_dummy;
+      index_position_map_t          ind_pos_dummy;
 
    private:
 };

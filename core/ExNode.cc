@@ -34,10 +34,11 @@ ExNode ExNode::getitem_string(std::string tag)
 
 ExNode ExNode::getitem_iterator(ExNode it)
    {
-	std::cerr << "Returning ex by iterator into ExNode" << std::endl;
-	if(it.ex!=ex)
+   if(it.ex!=ex) {
+	   
 		std::cerr << "Need to convert iterator" << std::endl;
-
+	   }
+   
 	ExNode ret=it;
    return ret;
    }
@@ -73,17 +74,13 @@ void ExNode::setitem_iterator(ExNode en, std::shared_ptr<Ex> val)
 	if(en.ex!=ex) {
 		std::cerr << "Setitem need to convert iterator" << std::endl;
 		auto path=en.ex->path_from_iterator(en.it, en.topit);
-		for(auto v: path)
-			std::cerr << v << std::endl;
 		use=ex->iterator_from_path(path, topit);
 		}
-	else {
-		use=en.it;
-		}
+	else use=en.it;
 		
 	Ex::iterator top=val->begin();
 	if(*top->name=="") {
-		std::cerr << "top is empty" << std::endl;
+		// std::cerr << "top is empty" << std::endl;
 		top=val->begin(top);
 		}
 	ex->replace(use, top);
@@ -114,9 +111,6 @@ ExNode ExNode::factors()
 ExNode ExNode::own_indices()
 	{
 	ExNode ret(kernel, ex);
-	free_ind.clear();
-	dummy_ind.clear();
-	classify_
 	ret.topit=it;
 	ret.indices_only=true;
 	ret.use_sibling_iterator=true;
@@ -128,6 +122,22 @@ ExNode ExNode::indices()
 	{
 	ExNode ret(kernel, ex);
 	ret.topit=it;
+	ind_free.clear();
+	ind_dummy.clear();
+	ret.indices_only=true;
+	ret.use_index_iterator=true;
+	ret.update(true);
+	return ret;
+	}
+
+ExNode ExNode::free_indices()
+	{
+	ExNode ret(kernel, ex);
+	ret.topit=it;
+	ind_free.clear();
+	ind_dummy.clear();
+	classify_indices(it, ret.ind_free, ret.ind_dummy);
+	fill_index_position_map(it, ret.ind_dummy, ret.ind_pos_dummy);
 	ret.indices_only=true;
 	ret.use_index_iterator=true;
 	ret.update(true);
@@ -294,6 +304,13 @@ void ExNode::update(bool first)
    else if(use_index_iterator) {
 	   if(first) indnxtit=cadabra::index_iterator::begin(get_kernel_from_scope()->properties, topit);
 	   else      ++indnxtit;
+	   // Test if this is a dummy index.
+	   Ex::iterator tofind=indnxtit;
+	   while(ind_pos_dummy.find(tofind)!=ind_pos_dummy.end()) {
+		   ++indnxtit;
+		   if(indnxtit==cadabra::index_iterator::end(get_kernel_from_scope()->properties, topit))
+			   break;
+		   }
 	   }
 	else {
 		if(first) nxtit=topit;
@@ -391,16 +408,29 @@ ExNode Ex_getitem_string(std::shared_ptr<Ex> ex, std::string tag)
 	return ret;
 	}
 
-ExNode Ex_getitem_iterator(std::shared_ptr<Ex> ex, ExNode it)
+ExNode Ex_getitem_iterator(std::shared_ptr<Ex> ex, ExNode en)
 	{
-	std::cerr << "Returning ex by iterator" << std::endl;
-	if(it.ex!=ex)
-		std::cerr << "Need to convert iterator" << std::endl;
+	Ex::iterator use;
+	if(en.ex!=ex) {
+//		std::cerr << "Need to convert iterator " << en.it << std::endl;
+//		std::cerr << "for " << en.topit << std::endl;
+//		std::cerr << "to one for " << ex->begin() << std::endl;
+		auto path=en.ex->path_from_iterator(en.it, en.topit);
+		use=ex->iterator_from_path(path, ex->begin());
+		}
+	else use=en.it;
+//	use=ex->begin();  This does not help
+
 	ExNode ret(*get_kernel_from_scope(), ex);
 	ret.ex=ex;
-	ret.topit=ex->begin();
-	ret.stopit=ex->end();
+	ret.topit=use;
+	ret.it=use;
+	use.skip_children();
+	++use;
+	ret.stopit=use;
 	ret.update(true);
+//	std::cerr << "Set to go" << std::endl;
+//	std::cerr << ret.topit << std::endl;
 	return ret;
 	}
 

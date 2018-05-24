@@ -896,8 +896,14 @@ typename tree<T, tree_node_allocator>::iterator tree<T, tree_node_allocator>::it
 	for(size_t step=0; step<path.size(); ++step) {
 		if(step>0)
 			walk=walk->first_child;
-		for(int i=0; i<path[step]; ++i)
+		if(walk==0)
+			throw std::range_error("tree::iterator_from_path: no more nodes at step "+std::to_string(step));
+		
+		for(int i=0; i<path[step]; ++i) {
 			walk=walk->next_sibling;
+			if(walk==0)
+				throw std::range_error("tree::iterator_from_path: out of siblings at step "+std::to_string(step));
+			}
 		}
 	it.node=walk;
 	return it;

@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Programming in Python}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
+					"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Programming in Python}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
+			"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
 		},
 		{
 			"cell_origin" : "client",
@@ -23,10 +23,111 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\subsection*{Accessing elements of an expression}\n\n"
+					"source" : "\\subsection*{Traversing the expression tree}\n\nYou can traverse the elements of an expression by using a simple iterator obtained in the usual\nPython way, as the example below shows:"
 				}
 			],
-			"source" : "\\subsection*{Accessing elements of an expression}\n\n"
+			"hidden" : true,
+			"source" : "\\subsection*{Traversing the expression tree}\n\nYou can traverse the elements of an expression by using a simple iterator obtained in the usual\nPython way, as the example below shows:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + B + C_{m} D^{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+B+C_{m} D^{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A + B + C_{m} D^{m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}A + B + C_{m} D^{m}\nA\nB\nC_{m} D^{m}\nC_{m}\nm\nD^{m}\nm\n\\end{verbatim}"
+				}
+			],
+			"source" : "for n in ex:\n\tprint(str(n))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}\\sum\nA\nB\n\\prod\nC\nm\nD\nm\n\\end{verbatim}"
+				}
+			],
+			"source" : "for n in ex:\n\tprint(str(n.name))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Arguments and indices}\n\nThere are various ways to obtain iterators which iterate over all arguments or all indices\nof an expression. The following example, with a derivative acting on a product, prints the \nargument of the derivative as well as all free indices."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Arguments and indices}\n\nThere are various ways to obtain iterators which iterate over all arguments or all indices\nof an expression. The following example, with a derivative acting on a product, prints the \nargument of the derivative as well as all free indices."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\nabla{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\nabla_{m}(A^{n}_{p} V^{p})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\nabla_{m}\\left(A^{n}\\,_{p} V^{p}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "\\nabla{#}::Derivative;\nex:= \\nabla_{m}{ A^{n}_{p} V^{p} };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "output",
+					"source" : "\\begin{verbatim}A^{n}_{p} V^{p}\nm\nn\n\\end{verbatim}"
+				}
+			],
+			"source" : "for nabla in ex[r'\\nabla']:\n\tfor arg in nabla.args():\n\t\tprint(str(arg))\n\tfor i in nabla.free_indices():\n\t\tprint(str(i))"
 		},
 		{
 			"cell_origin" : "client",
