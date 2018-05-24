@@ -13,8 +13,8 @@ for term in ex.top().terms():
         
     
 def expand_nabla(ex):
-    for nabla in ex["\\nabla"]:
-        nabla.name="\\partial"
+    for nabla in ex[r'\nabla']:
+        nabla.name=r'\partial'
         dindex = nabla.indices().__next__()   # need .index() to give direct single index without __next()__.
         for arg in nabla.args():              # need .arg() to give direct single argument without __next()__.
             ret:=0;
