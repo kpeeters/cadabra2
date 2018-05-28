@@ -1,0 +1,22 @@
+
+{m,n,p,q,r,s,t,u,v,w,a,b,c,d,e,f}::Indices(vector);
+W_{m n p q}::WeylTensor;
+W1:= W_{m n a b} W_{n p b c} W_{p s c d} W_{s m d a};
+W2:= W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a};
+W3:= W_{m n a b} W_{p s b a} W_{m n c d} W_{p s d c};
+W4:= W_{m n a b} W_{m n b a} W_{p s c d} W_{p s d c};
+W5:= W_{m n a b} W_{n p b a} W_{p s c d} W_{s m d c};
+W6:= W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c};
+W7:= W_{m n}^{m n} W_{p q}^{p q} W_{r s}^{r s} W_{t u}^{t u};
+# @asym!(%){^{m},^{n},^{p},^{q},^{r},^{s},^{t},^{u}}:
+# @substitute!(%){W_{a b}^{c d} -> W_{a b c d}}:
+
+asym(W7, $^{m},^{n},^{p},^{q},^{r},^{s},^{t},^{u}$)
+substitute(W7, $W_{a b}^{c d} -> W_{a b c d}$)
+canonicalise(W7);
+
+
+basisW4:= { @(W1), @(W2), @(W3), @(W4), @(W5), @(W6), @(W7) };
+
+ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w};
+decompose(ex, basisW4);

@@ -3,6 +3,8 @@
 
 using namespace cadabra;
 
+// #define DEBUG 1
+
 sym::sym(const Kernel& k, Ex& tr, Ex& objs, bool s)
 	: Algorithm(k, tr), objects(objs), sign(s)
 	{
@@ -109,6 +111,10 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 
 	raw_ints.permute(start_, end_);
 
+#ifdef DEBUG
+	std::cerr << "Computed all permutations: " << raw_ints.size() << std::endl;
+#endif
+	
 	// Build replacement tree.
 	Ex rep;
 	sibling_iterator top=rep.set_head(str_node("\\sum"));
@@ -167,6 +173,10 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 		iterator tmp=copytree.begin();
 		prod_unwrap_single_term(tmp);
 		rep.insert_subtree(dummy, copytree.begin());
+#ifdef DEBUG
+		if(i%1000==0)
+			std::cerr << i << std::endl;
+#endif
 		}
 	rep.erase(dummy);
 

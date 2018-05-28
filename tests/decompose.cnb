@@ -1,0 +1,215 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q,~\\discretionary{}{}{} r,~\\discretionary{}{}{} s,~\\discretionary{}{}{} t,~\\discretionary{}{}{} u,~\\discretionary{}{}{} v,~\\discretionary{}{}{} w,~\\discretionary{}{}{} a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d,~\\discretionary{}{}{} e,~\\discretionary{}{}{} f\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetryWeylTensor to~}W_{m n p q}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{m n a b} W_{n p b c} W_{p s c d} W_{s m d a}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{m n a b} W_{n p b c} W_{p s c d} W_{s m d a}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{m n a b} W_{p s b a} W_{m n c d} W_{p s d c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{m n a b} W_{p s b a} W_{m n c d} W_{p s d c}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{m n a b} W_{m n b a} W_{p s c d} W_{p s d c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{m n a b} W_{m n b a} W_{p s c d} W_{p s d c}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{m n a b} W_{n p b a} W_{p s c d} W_{s m d c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{m n a b} W_{n p b a} W_{p s c d} W_{s m d c}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{m n}^{m n} W_{p q}^{p q} W_{r s}^{r s} W_{t u}^{t u}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{m n}\\,^{m n} W_{p q}\\,^{p q} W_{r s}\\,^{r s} W_{t u}\\,^{t u}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q,r,s,t,u,v,w,a,b,c,d,e,f}::Indices(vector);\nW_{m n p q}::WeylTensor;\nW1:= W_{m n a b} W_{n p b c} W_{p s c d} W_{s m d a};\nW2:= W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a};\nW3:= W_{m n a b} W_{p s b a} W_{m n c d} W_{p s d c};\nW4:= W_{m n a b} W_{m n b a} W_{p s c d} W_{p s d c};\nW5:= W_{m n a b} W_{n p b a} W_{p s c d} W_{s m d c};\nW6:= W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c};\nW7:= W_{m n}^{m n} W_{p q}^{p q} W_{r s}^{r s} W_{t u}^{t u};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "asym(W7, $^{m},^{n},^{p},^{q},^{r},^{s},^{t},^{u}$)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "substitute(W7, $W_{a b}^{c d} -> W_{a b c d}$)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : " 1/840 W_{m n p q} W_{m n p q} W_{r s t u} W_{r s t u} -  2/105 W_{m n p q} W_{m n p r} W_{q s t u} W_{r s t u} +  1/420 W_{m n p q} W_{m n r s} W_{p q t u} W_{r s t u} -  4/105 W_{m n p q} W_{m n r s} W_{p t r u} W_{q u s t} +  2/105 W_{m n p q} W_{m r p s} W_{n t q u} W_{r t s u} -  4/105 W_{m n p q} W_{m r p s} W_{n t r u} W_{q t s u}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\frac{1}{840}W_{m n p q} W_{m n p q} W_{r s t u} W_{r s t u} - \\frac{2}{105}W_{m n p q} W_{m n p r} W_{q s t u} W_{r s t u}+\\frac{1}{420}W_{m n p q} W_{m n r s} W_{p q t u} W_{r s t u} - \\frac{4}{105}W_{m n p q} W_{m n r s} W_{p t r u} W_{q u s t}+\\frac{2}{105}W_{m n p q} W_{m r p s} W_{n t q u} W_{r t s u} - \\frac{4}{105}W_{m n p q} W_{m r p s} W_{n t r u} W_{q t s u}\\end{dmath*}"
+				}
+			],
+			"source" : "canonicalise(W7);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{W_{m n a b} W_{n p b c} W_{p s c d} W_{s m d a}, W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}, W_{m n a b} W_{p s b a} W_{m n c d} W_{p s d c}, W_{m n a b} W_{m n b a} W_{p s c d} W_{p s d c}, W_{m n a b} W_{n p b a} W_{p s c d} W_{s m d c}, W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c},  1/840 W_{m n p q} W_{m n p q} W_{r s t u} W_{r s t u} -  2/105 W_{m n p q} W_{m n p r} W_{q s t u} W_{r s t u} +  1/420 W_{m n p q} W_{m n r s} W_{p q t u} W_{r s t u} -  4/105 W_{m n p q} W_{m n r s} W_{p t r u} W_{q u s t} +  2/105 W_{m n p q} W_{m r p s} W_{n t q u} W_{r t s u} -  4/105 W_{m n p q} W_{m r p s} W_{n t r u} W_{q t s u}}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[W_{m n a b} W_{n p b c} W_{p s c d} W_{s m d a},~\\discretionary{}{}{} W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a},~\\discretionary{}{}{} W_{m n a b} W_{p s b a} W_{m n c d} W_{p s d c},~\\discretionary{}{}{} W_{m n a b} W_{m n b a} W_{p s c d} W_{p s d c},~\\discretionary{}{}{} W_{m n a b} W_{n p b a} W_{p s c d} W_{s m d c},~\\discretionary{}{}{} W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c},~\\discretionary{}{}{} \\frac{1}{840}W_{m n p q} W_{m n p q} W_{r s t u} W_{r s t u} - \\frac{2}{105}W_{m n p q} W_{m n p r} W_{q s t u} W_{r s t u}+\\frac{1}{420}W_{m n p q} W_{m n r s} W_{p q t u} W_{r s t u} - \\frac{4}{105}W_{m n p q} W_{m n r s} W_{p t r u} W_{q u s t}+\\frac{2}{105}W_{m n p q} W_{m r p s} W_{n t q u} W_{r t s u} - \\frac{4}{105}W_{m n p q} W_{m r p s} W_{n t r u} W_{q t s u}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "basisW4:= { @(W1), @(W2), @(W3), @(W4), @(W5), @(W6), @(W7) };"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w}-W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w}-W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{ 1/4 ,  1/2 ,  1/32 ,  1/64 ,  -  1/4 ,  1/8 ,  -  105/8 } + { -  1/4 ,  1/2 ,  -  1/32 ,  -  1/64 ,  1/4 ,  -  3/8 ,  105/8 }"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\frac{1}{4},~\\discretionary{}{}{} \\frac{1}{2},~\\discretionary{}{}{} \\frac{1}{32},~\\discretionary{}{}{} \\frac{1}{64},~\\discretionary{}{}{}  - \\frac{1}{4},~\\discretionary{}{}{} \\frac{1}{8},~\\discretionary{}{}{}  - \\frac{105}{8}\\right]+\\left[ - \\frac{1}{4},~\\discretionary{}{}{} \\frac{1}{2},~\\discretionary{}{}{}  - \\frac{1}{32},~\\discretionary{}{}{}  - \\frac{1}{64},~\\discretionary{}{}{} \\frac{1}{4},~\\discretionary{}{}{}  - \\frac{3}{8},~\\discretionary{}{}{} \\frac{105}{8}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "decompose(ex, basisW4, deep=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

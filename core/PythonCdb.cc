@@ -88,6 +88,7 @@
 #include "algorithms/collect_terms.hh"
 #include "algorithms/combine.hh"
 #include "algorithms/complete.hh"
+#include "algorithms/decompose.hh"
 #include "algorithms/decompose_product.hh"
 #include "algorithms/distribute.hh"
 #include "algorithms/drop_weight.hh"
@@ -1357,6 +1358,11 @@ PYBIND11_MODULE(cadabra2, m)
 		 pybind11::arg("ex"),pybind11::arg("add"),
 		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
+
+	m.def("decompose", &dispatch_ex<decompose, Ex>, 
+	      pybind11::arg("ex"),pybind11::arg("basis"),
+	      pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+	      pybind11::return_value_policy::reference_internal );
 
 	m.def("drop_weight", &dispatch_ex<drop_weight, Ex>, 
 		 pybind11::arg("ex"),pybind11::arg("condition"),

@@ -14,12 +14,16 @@
 #include "properties/PartialDerivative.hh"
 #include "properties/ImaginaryI.hh"
 
+// #define DEBUG 1
+
 namespace cadabra {
 
 void cleanup_dispatch(const Kernel& kernel, Ex& tr, Ex::iterator& it)
 	{
-	//std::cerr << "cleanup at " << *it->name << std::endl;
-
+#ifdef DEBUG
+	std::cerr << "cleanup at " << *it->name << std::endl;
+#endif
+	
 	// Run the cleanup as long as the expression changes.
 
 	bool changed;

@@ -65,6 +65,20 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that this prints the sub-expression below each node that it visits. If you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that this prints the sub-expression below each node that it visits. If you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[

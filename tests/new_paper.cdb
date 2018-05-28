@@ -1,0 +1,52 @@
+
+{t,r,\phi,\theta}::Coordinate;
+{\mu,\nu,\rho,\lambda}::Indices(values={t,r,\phi,\theta});
+\partial{#}::PartialDerivative;
+ex:= \partial_{\tau\tau}{X^{\mu} + \Gamma^{\mu}_{\nu\rho} \partial_{\tau}{X^{\nu}}\partial_{\tau}{X^{\nu}};
+evaluate(_);
+
+def fourier_transform(ex):
+    expand_power(ex);
+    for term in ex.iterator().terms():
+        num=1
+        for factor in term.factors():
+            k = Ex("I k"+str(num))
+            if factor.name=="\\partial":
+                for index in factor.indices():
+                     factor.insert(k).append_child(index)
+                for arg in factor.args():
+                     arg.append_child(k)
+                     factor.insert(arg)
+                factor.erase()
+            else:
+                factor.append_child(k)
+            num+=1
+    return ex
+
+def fourier_transform(ex):
+    expand_power(ex);
+    terms=ex["\\sum"].__next__().children()
+    for term in terms:
+        if term.name=="\\prod":
+            num=1
+            for factor in term.children():
+                if factor.name=="\\partial":
+                    for index in factor.indices():
+                         k = Ex("k"+str(num))
+                         factor.insert(k).append_child(index)
+                         factor.insert(Ex("I"))
+                    for arg in factor.args():
+                         arg.append_child(Ex("k"+str(num)))
+                         factor.insert(arg)
+                    factor.erase()
+                else:
+                    factor.append_child(Ex("k"+str(num)))
+                num+=1
+        else:
+            term.append_child(Ex("k1"))
+    return ex
+
+\partial{#}::PartialDerivative;
+A_{\mu}, \phi}::Depends(\partial{#});
+ex:= \partial_{\mu}{A_{\nu}} \partial_{\mu}{A_{\nu}} + \partial_{\mu}{\phi}\partial_{\mu}{\phi} - m**2 \phi**2;
+fourier_transform(ex);

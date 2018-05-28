@@ -54,6 +54,7 @@ set(LOCAL_SRC_FILES
   IndexIterator.cc
   IndexClassifier.cc
   Kernel.cc
+  Linear.cc
   Parser.cc
   PreClean.cc
   PreProcessor.cc
@@ -121,6 +122,7 @@ set(LOCAL_SRC_FILES
   algorithms/collect_terms.cc
   algorithms/combine.cc
   algorithms/complete.cc
+  algorithms/decompose.cc
   algorithms/decompose_product.cc
   algorithms/distribute.cc
   algorithms/drop_weight.cc
