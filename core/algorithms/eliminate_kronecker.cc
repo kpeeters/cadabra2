@@ -33,10 +33,10 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 		bool replaced=false;
 		// std::cerr << *it->name << std::endl;
 		const KroneckerDelta *kr=kernel.properties.get<KroneckerDelta>(it);
-		if(kr && tr.number_of_children(it)==2) {
+		if(kr && number_of_indices(it)==2) {
 			// std::cerr << "KD " << Ex(it) << std::endl;
-			sibling_iterator ii1=tr.begin(it);
-			sibling_iterator ii2=ii1; ++ii2;
+			index_iterator ii1=begin_index(it);
+			index_iterator ii2=ii1; ++ii2;
 			if(subtree_compare(&kernel.properties, ii1, ii2, 1, false, -2, true)==0) { // a self-contracted Kronecker delta
 				// std::cerr << "self-contracted delta with " << Ex(ii1) << " = " << Ex(ii2) << std::endl;
 				const Integer *itg1=kernel.properties.get<Integer>(ii1, true);

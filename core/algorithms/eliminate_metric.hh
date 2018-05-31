@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Algorithm.hh"
+#include "IndexIterator.hh"
 
 namespace cadabra {
 
@@ -18,7 +19,7 @@ class eliminate_converter : public Algorithm {
 	private:
 		Ex          preferred;
 		index_map_t ind_dummy, ind_free;
-		bool handle_one_index(iterator, iterator, iterator, sibling_iterator);
+		bool handle_one_index(index_iterator, index_iterator, iterator, sibling_iterator);
 };
 
 

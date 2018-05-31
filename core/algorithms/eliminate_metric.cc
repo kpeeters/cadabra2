@@ -31,7 +31,7 @@ bool eliminate_converter::can_apply(iterator it)
 	return false;
 	}
 
-bool eliminate_converter::handle_one_index(iterator ind1, iterator ind2, iterator fit, sibling_iterator objs)
+bool eliminate_converter::handle_one_index(index_iterator ind1, index_iterator ind2, iterator fit, sibling_iterator objs)
 	{
 	bool replaced=false;
 
@@ -104,7 +104,7 @@ Algorithm::result_t eliminate_converter::apply(iterator& it)
 	sibling_iterator fit=tr.begin(it);
 	while(fit!=tr.end(it)) {
 		if(is_conversion_object(fit)) {
-			sibling_iterator ind1=tr.begin(fit), ind2=ind1;
+			index_iterator ind1=index_iterator::begin(kernel.properties, fit), ind2=ind1;
 			++ind2;
 
          // 1st index to 2nd index conversion?

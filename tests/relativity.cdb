@@ -135,3 +135,21 @@ def test11():
 
 test11()
 
+def test12():
+    __cdbkernel__=create_scope()  
+    x::Coordinate.
+    {a, b}::Indices(position=fixed).
+    {a, b}::Integer(0..3).
+    g_{a b}::Metric.
+    g^{a b}::InverseMetric.
+    g^{\mu?}_{\nu?}::KroneckerDelta.
+    g_{\mu?}^{\nu?}::KroneckerDelta.
+    \hat{#}::Accent.
+    ex:=\hat{g^{a b}} \hat{g_{a b}};
+    eliminate_metric(_);
+    eliminate_kronecker(_);
+    tst:= 4 - @(ex);
+    assert(tst==0)
+    print("Test 12 passed")
+
+test12()
