@@ -23,7 +23,7 @@ int main()
 	}
 
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(NDEBUG)
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	main();

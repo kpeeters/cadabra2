@@ -95,7 +95,8 @@ endif()
 #   )
 
 # Server executable
-if (MSVC)
+string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type_lowercase)
+if (MSVC AND NOT build_type_lowercase STREQUAL "debug")
   add_executable(cadabra-server WIN32 cadabra-server.cc ${CADABRA_SERVER_SRC})
 else()
   add_executable(cadabra-server cadabra-server.cc ${CADABRA_SERVER_SRC}) 
@@ -160,7 +161,7 @@ install(TARGETS cadabra_client RUNTIME DESTINATION bin COMPONENT runtime LIBRARY
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
 # Install shared libraries and gtk helpers on Windows.
-if(WIN32)
+if(WIN32 AND NOT MINIMUM_INSTALLATION)
   install(DIRECTORY "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/" DESTINATION bin FILES_MATCHING PATTERN "*.dll")  
   install(
 	 FILES

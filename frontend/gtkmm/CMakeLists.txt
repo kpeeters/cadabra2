@@ -51,7 +51,12 @@ if(MSVC)
   list(APPEND cadabra_gtk_src
 	 ../../libs/tiny-process-library/process_win.cpp
 	 )
-  add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
+  string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type_lowercase)
+  if (NOT build_type_lowercase STREQUAL "debug")
+    add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
+  else()
+    add_executable(cadabra2-gtk ${cadabra_gtk_src})
+  endif()
 else()
   list(APPEND cadabra_gtk_src
 	 ../../libs/tiny-process-library/process_unix.cpp
@@ -131,7 +136,9 @@ endif()
 # Install programs.
 #find_program(XDG-DESKTOP-MENU_EXECUTABLE xdg-desktop-menu REQUIRED)
 install(TARGETS  cadabra2-gtk     DESTINATION bin)
-install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png DESTINATION ${INSTALL_IMAGES_DIR})
+if (NOT MINIMUM_INSTALLATION)
+  install(FILES    ${PROJECT_SOURCE_DIR}/../../images/256x256/cadabra2-gtk.png DESTINATION ${INSTALL_IMAGES_DIR})
+endif()
 #xdg-desktop-menu messes up the file permissions, so we just install things by hand...
 #install(CODE "execute_process(COMMAND ${XDG-DESKTOP-MENU_EXECUTABLE} install --novendor ${PROJECT_SOURCE_DIR}/../../config/cadabra2.desktop)")
 
