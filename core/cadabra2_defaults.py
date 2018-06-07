@@ -15,6 +15,32 @@ __cdbkernel__=cadabra2.__cdbkernel__
 import os
 os.environ.setdefault('PATH', '')
 
+class PackageCompiler(object):
+	def find_module(self, fullname, path=None):
+		# Top-level import if path=None
+		if path is None or path == "":
+			path = [os.getcwd()]
+		# Get unqualified package name
+		if '.' in fullname:
+			*parents, name = fullname.split('.')
+		else:
+			name = fullname
+		# Go through path and try to find a notebook. If found, compile
+		for entry in path:
+			if os.path.isfile(os.path.join(entry, name + ".cnb")):
+				compile_package__(os.path.join(entry, name))
+				break;
+			
+		
+		# Always return None. This passes on the onus of actually importing
+		# the package to Python, which can do this much more efficiently
+		return None
+
+# Prepend to sys.meta_path, so that all imports will first be checked in
+# case they are notebooks that need compiling
+sys.meta_path.insert(0, PackageCompiler())
+
+
 #sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 
 # Attempt to import sympy; if not, setup logic so that the

@@ -34,6 +34,8 @@ message("-- Found python ${PYTHON_LIBRARIES}")
 #---------------------------------------------------------------------------
 
 set(LOCAL_SRC_FILES
+  CdbPython.cc
+  ../client_server/jsoncpp/jsoncpp.cpp
   PythonCdb.cc
   ExNode.cc
   ProgressMonitor.cc

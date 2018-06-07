@@ -1,12 +1,13 @@
-
-
-
 #include <memory>
 
 #include "Config.hh"
 #include "PythonCdb.hh"
 #include "ExNode.hh"
 #include "SympyCdb.hh"
+
+#include <json/json.h>
+#include "CdbPython.hh"
+
 
 #include "Parser.hh"
 #include "Bridge.hh"
@@ -1127,6 +1128,48 @@ void def_prop(pybind11::module& m)
 // };
 // 
 
+void compile_package(const std::string& name)
+{
+	// Only compile if the notebook is newer than the compiled package
+	struct stat f1, f2;
+	if (stat(std::string(name + ".cnb").c_str(), &f1) == 0 && stat(std::string(name + ".py").c_str(), &f2) == 0) {
+		if (f1.st_mtime < f2.st_mtime)
+			return;
+	}
+
+	// Read the file into a Json object and get the cells
+	std::ifstream ifs(name + ".cnb");
+	Json::Value nb;
+	ifs >> nb;
+	Json::Value& cells = nb["cells"];
+
+	// Loop over input cells, compile them and write to python file
+	std::ofstream ofs(name + ".py");
+	std::time_t t = std::time(nullptr);
+	std::tm tm = *std::localtime(&t);
+	ofs << "# cadabra2 package, auto-compiled " << std::put_time(&tm, "%F %T") << '\n'
+		<< "import cadabra2\n"
+		<< "from cadabra2 import *\n"
+		<< "__cdbkernel__ = cadabra2.__cdbkernel__\n"
+		<< "temp__all__ = dir() + ['temp__all__']\n\n";
+	for (auto cell : cells) {
+		if (cell["cell_type"] == "input") {
+			std::stringstream s, temp;
+			s << cell["source"].asString();
+			std::string line, lhs, rhs, op, indent;
+			while (std::getline(s, line))
+				ofs << convert_line(line, lhs, rhs, op, indent) << '\n';
+		}
+	}
+	// Ensure only symbols defined in this file get exported
+	ofs << '\n'
+		<< "try:\n"
+		<< "    __all__\n"
+		<< "except NameError:\n"
+		<< "    __all__  = list(set(dir()) - set(temp__all__))\n";
+}
+
+
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
@@ -1135,6 +1178,8 @@ void def_prop(pybind11::module& m)
 
 PYBIND11_MODULE(cadabra2, m)
 	{
+	m.def("compile_package__", &compile_package);
+
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
 	// pull that into the interpreter scope in the 'cadabra2_default.py' file.
