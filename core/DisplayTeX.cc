@@ -117,7 +117,7 @@ void DisplayTeX::print_other(std::ostream& str, Ex::iterator it)
 		return;
 		}
 	
-	const LaTeXForm *lf=kernel.properties.get<LaTeXForm>(it);
+	const LaTeXForm *lf=kernel.properties.get<LaTeXForm>(it, true);  // get property, ignore parent rel!
 	bool needs_extra_brackets=false;
 	const Accent *ac=kernel.properties.get<Accent>(it);
 	if(!ac && extra_brackets_for_symbols) { // accents should never get additional curly brackets, {\bar}{g} does not print.
