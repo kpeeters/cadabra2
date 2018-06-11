@@ -40,6 +40,8 @@ class PackageCompiler(object):
 # case they are notebooks that need compiling
 sys.meta_path.insert(0, PackageCompiler())
 
+# Add current directory to Python module import path.
+sys.path.append(".")
 
 #sys.path.insert(0,'/home/kasper/Development/git.others/sympy') 
 
