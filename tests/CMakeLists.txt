@@ -51,6 +51,7 @@ endforeach()
 #
 set(RTESTS
   packages
+  modules
   integrals
   display
   dummies

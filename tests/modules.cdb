@@ -1,0 +1,36 @@
+
+from module01 import *
+
+display(ex)
+
+ex0:=\partial_{m}{A_{n p}}:
+
+def test01():
+    tst:= \partial_{m}{A_{n p}} - @(ex0);
+    assert(tst==0)
+    print("Test 01a passed")
+    tst:= \partial_{m}{A_{n p}} - @(ex);
+    assert(tst==0)
+    print("Test 01b passed")
+    
+test01()
+
+from module01 import ex as ex3
+
+def test02():
+    tst:= \partial_{m}{A_{n p}} - @(ex3);
+    assert(tst==0)
+    print("Test 02 passed")
+    
+test02()
+
+
+
+# import module02
+# 
+# def test02():
+#     tst:= \nabla_{m}{B_{q}} - @(module02.ex2);
+#     assert(tst==0)
+#     print("Test 02 passed")
+# 
+# test02()

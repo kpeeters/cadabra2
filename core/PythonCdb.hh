@@ -46,6 +46,7 @@ bool __eq__Ex_int(std::shared_ptr<cadabra::Ex>, int);
 /// Fetch an Ex object from the Python side using its Python identifier.
 
 std::shared_ptr<cadabra::Ex> fetch_from_python(const std::string& nm);
+std::shared_ptr<cadabra::Ex> fetch_from_python(const std::string& nm, pybind11::object scope);
 
 /// \ingroup pythoncore
 ///

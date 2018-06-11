@@ -425,39 +425,51 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 	{
 	try {
 		pybind11::object locals = get_locals();
-		pybind11::object obj = locals[nm.c_str()];
-
-		if(obj.is_none()) // We never actually get here, an exception will have been thrown.
-			std::cout << "object unknown" << std::endl;
-		else {
-			// We can include this Python object into the expression only if it is an Ex object.
-			try {
-				return obj.cast<std::shared_ptr<Ex>>();
-				}
-			catch(const pybind11::cast_error& e) {
-				try {
-					auto exnode = obj.cast<ExNode>();
-					auto ret = std::make_shared<Ex>( exnode.it );
-					return ret;
-					}
-				catch(const pybind11::cast_error& e) {
-					std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
-					}
-				}
-			}
+		return fetch_from_python(nm, locals);
 		}
 	catch(pybind11::error_already_set const &) {
-		// In order to prevent the error from propagating, we have to read
-		// it out. And in any case, we want to give some feedback to the user.
-		std::string err = parse_python_exception();
-		if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
-			std::cout << nm << " is not of type cadabra.Ex." << std::endl;
-		else 
-			std::cout << nm << " is not defined." << std::endl;
+		try {
+			pybind11::object globals = get_globals();
+			return fetch_from_python(nm, globals);
+			}
+		catch(pybind11::error_already_set const &) {
+			// In order to prevent the error from propagating, we have to read
+			// it out. And in any case, we want to give some feedback to the user.
+			std::string err = parse_python_exception();
+			if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
+				std::cout << nm << " is not of type cadabra.Ex." << std::endl;
+			else 
+				std::cout << nm << " is not defined." << std::endl;
+			}
 		}
-
 	return 0;
 	}
+
+std::shared_ptr<Ex> fetch_from_python(const std::string& nm, pybind11::object scope)
+   {
+   pybind11::object obj = scope[nm.c_str()];
+   
+   if(obj.is_none()) // We never actually get here, an exception will have been thrown.
+	   std::cout << "object unknown" << std::endl;
+   else {
+	   // We can include this Python object into the expression only if it is an Ex object.
+	   try {
+		   return obj.cast<std::shared_ptr<Ex>>();
+		   }
+	   catch(const pybind11::cast_error& e) {
+		   try {
+			   auto exnode = obj.cast<ExNode>();
+			   auto ret = std::make_shared<Ex>( exnode.it );
+			   return ret;
+			   }
+		   catch(const pybind11::cast_error& e) {
+			   std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
+			   }
+		   }
+	   }
+   
+   return 0;
+   }
 
 
 
@@ -1148,10 +1160,18 @@ void compile_package(const std::string& name)
 	std::time_t t = std::time(nullptr);
 	std::tm tm = *std::localtime(&t);
 	ofs << "# cadabra2 package, auto-compiled " << std::put_time(&tm, "%F %T") << '\n'
-		<< "import cadabra2\n"
-		<< "from cadabra2 import *\n"
-		<< "__cdbkernel__ = cadabra2.__cdbkernel__\n"
-		<< "temp__all__ = dir() + ['temp__all__']\n\n";
+	    << "import cadabra2\n"
+	    << "import imp\n"
+	    << "from cadabra2 import *\n"
+	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
+	    << "temp__all__ = dir() + ['temp__all__']\n\n"
+	    << "def display(ex):\n"
+	    << "   pass\n\n";
+
+//	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
+//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
+//	    << "   exec(code)\n\n";
+
 	for (auto cell : cells) {
 		if (cell["cell_type"] == "input") {
 			std::stringstream s, temp;
@@ -1163,10 +1183,11 @@ void compile_package(const std::string& name)
 	}
 	// Ensure only symbols defined in this file get exported
 	ofs << '\n'
-		<< "try:\n"
-		<< "    __all__\n"
-		<< "except NameError:\n"
-		<< "    __all__  = list(set(dir()) - set(temp__all__))\n";
+	    << "del locals()['display']\n\n"
+	    << "try:\n"
+	    << "    __all__\n"
+	    << "except NameError:\n"
+	    << "    __all__  = list(set(dir()) - set(temp__all__))\n";
 }
 
 
