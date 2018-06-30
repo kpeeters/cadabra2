@@ -1,16 +1,13 @@
 cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
-message("------------------------------------------------------------------------\nConfiguring 'client_server'")
+
 
 #---------------------------------------------------------------------------
 # Preamble.
 #---------------------------------------------------------------------------
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.9)
-    message(FATAL_ERROR "GCC version must be at least 4.9 for regex support! See http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu and then set the environment variables CXX to g++-4.9 and CC to gcc-4.9. You may have to erase the build directory before re-running cmake.")
-  endif()
-endif()
+print_header("Configuring client-server")
+
 
 #---------------------------------------------------------------------------
 # Locate libraries.
@@ -21,32 +18,33 @@ find_package(SQLite3 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Boost 1.53.0 COMPONENTS system program_options date_time filesystem REQUIRED)
 
+
 #---------------------------------------------------------------------------
 # Enumerate input files.
 #---------------------------------------------------------------------------
 
 set(CADABRA_SERVER_SRC
+  cadabra-server.cc
   Server.cc 
   Snoop.cc 
-  jsoncpp/jsoncpp.cpp 
-  ../core/CdbPython.cc 
-  ../core/Stopwatch.cc 
-  ../core/ProgressMonitor.cc
-  ../libs/whereami/whereami.c
-  ../core/InstallPrefix.cc
-#  ../libs/sqlite3/sqlite3.c  FIXME: only on windows
+  ${CADABRA_CORE_DIR}/InstallPrefix.cc
+  ${CADABRA_CORE_DIR}/CdbPython.cc 
+  ${CADABRA_CORE_DIR}/Stopwatch.cc 
+  ${CADABRA_CORE_DIR}/ProgressMonitor.cc
+  ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
+  ${CADABRA_LIBS_DIR}/whereami/whereami.c
 )
 
 set(CADABRA_CLIENT_SRC
   ComputeThread.cc 
   DocumentThread.cc 
-  ../core/DataCell.cc 
   Actions.cc 
   Snoop.cc 
-  jsoncpp/jsoncpp.cpp
-  ../libs/whereami/whereami.c
-  ../core/InstallPrefix.cc
-#  ../libs/sqlite3/sqlite3.c
+  ${CADABRA_CORE_DIR}/DataCell.cc 
+  ${CADABRA_CORE_DIR}/InstallPrefix.cc
+  ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
+  ${CADABRA_LIBS_DIR}/whereami/whereami.c
+  
 )
 
 #---------------------------------------------------------------------------
@@ -55,51 +53,32 @@ set(CADABRA_CLIENT_SRC
 
 include_directories(
   "." 
-  "../core"
-  "../libs/pybind11/include"
-  "websocketpp" 
-  "jsoncpp"
-  "../libs/internal/include"
-  "../libs/whereami"
+  "${CADABRA_CORE_DIR}"
+  "${CADABRA_LIBS_DIR}/pybind11/include"
+  "${CADABRA_LIBS_DIR}/websocketpp" 
+  "${CADABRA_LIBS_DIR}/jsoncpp"
+  "${CADABRA_LIBS_DIR}/internal/include"
+  "${CADABRA_LIBS_DIR}/whereami"
   ${Boost_INCLUDE_DIRS}
   ${PYTHON_INCLUDE_DIRS}
   ${SQLITE3_INCLUDE_DIR}
 )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-  add_definitions("-Wall -g -Wno-unused-but-set-variable")
-endif()
 add_definitions(
   -D_WEBSOCKETPP_CPP11_STL_
   -DBOOST_ASIO_HAS_STD_CHRONO
-  -DNOMINMAX
-  -DJSON_DLL_BUILD
   )
-if(MSVC)
-#  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-endif()
 
 #---------------------------------------------------------------------------
 # Make targets.
 #---------------------------------------------------------------------------
 
-# Server library
-# add_library(cadabra_server SHARED ${CADABRA_SERVER_SRC} )
-# target_link_libraries(cadabra_server
-#   ${Boost_LIBRARIES}
-#   ${SNOOP_LIBRARIES}
-#   ${SQLITE3_LIBRARIES}
-#   ${PYTHON_LIBRARIES}
-#   ${GLIBMM3_LIBRARIES} 
-#   Threads::Threads
-#   )
-
 # Server executable
 string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type_lowercase)
 if (MSVC AND NOT build_type_lowercase STREQUAL "debug")
-  add_executable(cadabra-server WIN32 cadabra-server.cc ${CADABRA_SERVER_SRC})
+  add_executable(cadabra-server WIN32 ${CADABRA_SERVER_SRC})
 else()
-  add_executable(cadabra-server cadabra-server.cc ${CADABRA_SERVER_SRC}) 
+  add_executable(cadabra-server ${CADABRA_SERVER_SRC}) 
 endif()
 
 # target_link_libraries(cadabra-server cadabra_server)
@@ -116,7 +95,10 @@ if(WIN32)
 endif()
 
 # cadabra2html
-add_executable(cadabra2html cadabra2html.cc ../core/DataCell.cc)
+add_executable(cadabra2html 
+  cadabra2html.cc 
+  ${CADABRA_CORE_DIR}/DataCell.cc
+)
 target_link_libraries(cadabra2html cadabra_client)
 
 # Client library

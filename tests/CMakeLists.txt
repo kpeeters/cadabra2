@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 project(Cadabra)
-message("------------------------------------------------------------------------\nConfiguring 'self-tests'")
+
+
+#---------------------------------------------------------------------------
+# Preamble.
+#---------------------------------------------------------------------------
+
+print_header("Configuring tests")
+
 
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 

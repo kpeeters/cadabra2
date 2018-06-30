@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 2.8)
-
 project(TeXEngine)
+
+
+#---------------------------------------------------------------------------
+# Preamble.
+#---------------------------------------------------------------------------
+
+print_subheader("Configuring frontend - common")
 
 if (POLICY CMP0042)
   cmake_policy(SET CMP0042 NEW)
 endif(POLICY CMP0042)
-
-if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
 
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/../../cmake/modules")
@@ -26,9 +28,6 @@ include_directories(
   "${Boost_INCLUDE_DIRS}"
   )
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-  add_definitions("-Wall -g -Wno-unused-but-set-variable")
-endif()
 
 # Create library; disabled to make life easier on Windows
 include_directories("." "../../libs/internal/include")

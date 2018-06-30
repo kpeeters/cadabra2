@@ -1,16 +1,18 @@
 cmake_minimum_required(VERSION 2.8)
 project(CadabraGtkmm)
-message("-- Configuring gtkmm frontend")
 
-if(CMAKE_COMPILER_IS_GNUCXX)
-  add_definitions("-Wall -g -std=c++11 -Wno-unused-but-set-variable -D_WEBSOCKETPP_CPP11_STL_")
-endif()
-if(WIN32)
-else() 
-  add_definitions("-DBOOST_LOG_DYN_LINK")
-endif()
 
-# Dependencies.
+#---------------------------------------------------------------------------
+# Preamble.
+#---------------------------------------------------------------------------
+
+message(STATUS "Using GTKMM frontend")
+
+
+#---------------------------------------------------------------------------
+# Locate libraries.
+#---------------------------------------------------------------------------
+
 find_package(Threads)
 find_package(SQLite3)
 find_package(GLIBMM)
@@ -20,17 +22,10 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
-include_directories(
-  "."
-  "../../core"
-  "../../libs/internal/include"
-  "../../client_server"
-  "../../client_server/jsoncpp"
-  "../../client_server/websocketpp"
-  "../../libs/tiny-process-library"
-  ${Boost_INCLUDE_DIRS}
-  ${SQLITE3_INCLUDE_DIR}  
-  )
+
+#---------------------------------------------------------------------------
+# Enumerate input files and directories.
+#---------------------------------------------------------------------------
 
 set(cadabra_gtk_src 
   main.cc 
@@ -42,38 +37,65 @@ set(cadabra_gtk_src
   ImageView.cc
   Cadabra.cc
   ../common/TeXEngine.cc
-  ../../libs/tiny-process-library/process.cpp
   ../common/lodepng.cc
-#  ../common/exec-stream.cc
+# ../common/exec-stream.cc
+  ${CADABRA_LIBS_DIR}/tiny-process-library/process.cpp
+)
+if (MSVC)
+	list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)
+else()
+	list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_unix.cpp)
+endif()
+
+
+#---------------------------------------------------------------------------
+# Include directories and preprocessor definitions.
+#---------------------------------------------------------------------------
+
+include_directories(
+  "."
+  "${CADABRA_CORE_DIR}"
+  "${CADABRA_CLIENT_SERVER_DIR}"
+  "${CADABRA_LIBS_DIR}/internal/include"
+  "${CADABRA_LIBS_DIR}/jsoncpp"
+  "${CADABRA_LIBS_DIR}/websocketpp"
+  "${CADABRA_LIBS_DIR}/tiny-process-library"
+  ${Boost_INCLUDE_DIRS}
+  ${SQLITE3_INCLUDE_DIR}  
+  )
+
+add_definitions(
+	"-D_WEBSOCKETPP_CPP11_STL_"
+	"-DBOOST_LOG_DYN_LINK"
 )
 
+#---------------------------------------------------------------------------
+# Targets.
+#---------------------------------------------------------------------------
+
 if(MSVC)
-  list(APPEND cadabra_gtk_src
-	 ../../libs/tiny-process-library/process_win.cpp
-	 )
-  string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type_lowercase)
-  if (NOT build_type_lowercase STREQUAL "debug")
-    add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
-  else()
+  if(CMAKE_BUILD_TYPE MATCHES "^Debug$")
     add_executable(cadabra2-gtk ${cadabra_gtk_src})
+  else()
+    add_executable(cadabra2-gtk WIN32 ${cadabra_gtk_src})
   endif()
 else()
-  list(APPEND cadabra_gtk_src
-	 ../../libs/tiny-process-library/process_unix.cpp
-	 )
   add_executable(cadabra2-gtk ${cadabra_gtk_src})
 endif()
 
-#  target_link_libraries(cadabra2-gtk -static-libstdc++ -static-libgcc)
-# message("***** Gtkmm  libraries: ${GTKMM3_LIBRARIES}")
-# message("***** Glibmm libraries: ${GLIBMM_LIBRARIES}")
-# message("***** SQlite3_Libraries: ${SQLITE3_LIBRARIES}")
-target_link_libraries(cadabra2-gtk cadabra_client ${Boost_LIBRARIES} ${GLIBMM_LIBRARIES} ${GTKMM3_LIBRARIES} ${SQLITE3_LIBRARIES} Threads::Threads)
-# Do not pop up a console window
-if(MSVC)
-#  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
-endif()
+target_link_libraries(cadabra2-gtk 
+  cadabra_client 
+  ${Boost_LIBRARIES} 
+  ${GLIBMM_LIBRARIES} 
+  ${GTKMM3_LIBRARIES} 
+  ${SQLITE3_LIBRARIES} 
+  Threads::Threads
+)
 
+
+#---------------------------------------------------------------------------
+# Installation.
+#---------------------------------------------------------------------------
 
 # Create installation directories with correct permissions.
 if (NOT MINIMUM_INSTALLATION)

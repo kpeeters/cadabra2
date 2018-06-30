@@ -6,11 +6,23 @@
 # vcpkg).
 
 if (WIN32)
-  windows_find_library(MPIR "mpir" "")
-  set(GMPXX_LIBRARIES ${MPIR_LIBRARIES})
-  set(GMP_LIBRARIES   ${MPIR_LIBRARIES})
-  set(GMPXX_BINARIES  ${MPIR_BINARIES})
+  windows_find_library(GMP_LIBRARIES mpir)
+  if (GMP_LIBRARIES)
+    set(GMP_FOUND TRUE)
+  endif()
+  windows_find_library(GMPXX_LIBRARIES mpir)
+  if (GMPXX_LIBRARIES)
+    set(GMPXX_FOUND TRUE)
+  endif()
 else()
   find_library(GMP_LIBRARIES   gmp   REQUIRED)
   find_library(GMPXX_LIBRARIES gmpxx REQUIRED)
+endif()
+
+if (GMP_FOUND)
+  message(STATUS "Found gmp")
+endif()
+
+if (GMPXX_FOUND)
+  message(STATUS "Found gmpxx")
 endif()

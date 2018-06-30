@@ -1,15 +1,24 @@
 cmake_minimum_required(VERSION 3.1)
 project(Cadabra)
-message("------------------------------------------------------------------------\nConfiguring 'frontend'")
+
+
+#---------------------------------------------------------------------------
+# Preamble.
+#---------------------------------------------------------------------------
+
+print_header("Configuring frontend")
+
+
+#---------------------------------------------------------------------------
+# Locate libraries.
+#---------------------------------------------------------------------------
 
 find_package(GTKMM3)
-subdirs(common)
 if(GTKMM3_FOUND)
-   subdirs(gtkmm)
-   message("-- Building GTK3 user interface")
-else(GTKMM3_FOUND)
-   message("-- Not building GTK3 user interface")
-endif(GTKMM3_FOUND)
+   add_subdirectory(gtkmm)
+else()
+	message(FATAL_ERROR "ENABLE_FRONTEND is set to ON, but no supported frontend libraries were found")
+endif()
 
 # if(APPLE)
 #    subdirs(osx)
@@ -18,8 +27,13 @@ endif(GTKMM3_FOUND)
 #    message("-- Not building native OSX interface")
 # endif(APPLE)
 
+
+#---------------------------------------------------------------------------
+# Installation.
+#---------------------------------------------------------------------------
+
 set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2/latex")
-message("-- Installing LaTeX style files in ${INSTALL_LATEX_DIR}")
+message(STATUS "Installing LaTeX style files in ${INSTALL_LATEX_DIR}")
 install(DIRECTORY DESTINATION ${INSTALL_LATEX_DIR} DIRECTORY_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE 
                                                              GROUP_READ GROUP_EXECUTE 
                                                              WORLD_READ WORLD_EXECUTE)
