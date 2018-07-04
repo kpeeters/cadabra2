@@ -45,6 +45,68 @@ if (VCPKG_TOOLCHAIN)
 		)
 	endif()
 
+	function(windows_find_file VAR FNAME FEXT)
+		set(TMPVAR "")
+		foreach (DIR ${VCPKG_LIB_DIRS})
+			# If a debug build is specified, first try and find the library name
+			# with a debug marker
+			if(CMAKE_BUILD_TYPE MATCHES "^Debug$" OR NOT DEFINED CMAKE_BUILD_TYPE)
+				if ("${TMPVAR}" STREQUAL "") # name-d.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}-d.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # named.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}d.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # name-<version-number>-d.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}-[0-9]*-d.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # name-<version-number>d.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}-[0-9]*-d.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # name<version-number>-d.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}[0-9]*-d.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # name<version-number>d.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}[0-9]*d.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # name-d-<version-number>.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}-d-[0-9]*.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # named-<version-number>.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}d-[0-9]*.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # name-d<version-number>.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}-d[0-9]*.${FEXT}")
+				endif()
+				if ("${TMPVAR}" STREQUAL "") # named<version-number>.lib
+					file(GLOB TMPVAR "${DIR}/${FNAME}d[0-9]*.${FEXT}")
+				endif()
+			endif()
+			# Attempt to find library name without debug marker
+			if ("${TMPVAR}" STREQUAL "") # name.lib
+				file(GLOB TMPVAR "${DIR}/${FNAME}.${FEXT}")
+			endif()
+			if ("${TMPVAR}" STREQUAL "") # name-<version-number>.lib
+				file(GLOB TMPVAR "${DIR}/${FNAME}-[0-9]*.${FEXT}")
+			endif()
+			if ("${TMPVAR}" STREQUAL "") # name<version-number>.lib
+				file(GLOB TMPVAR "${DIR}/${FNAME}[0-9]*.${FEXT}")
+			endif()
+		endforeach()
+		# Assign the result of the search to VAR
+		if ("${TMPVAR}" STREQUAL "")
+			# Couldn't find it, set to NOTFOUND
+			set(${VAR} "${VAR}-NOTFOUND" PARENT_SCOPE)
+		else()
+			# GLOB could return a list of matching filenames, in which case
+			# we choose the latest version (i.e. the one which is alphabetically
+			# last)
+			list(SORT TMPVAR)
+			list(REVERSE TMPVAR)
+			list(GET TMPVAR 0 TMPVAR)
+			set(${VAR} "${TMPVAR}")
+		endif()
+	endfunction()
 
 	function(windows_find_library VAR)
 		# Avoid some horrible indirections by using a local variable

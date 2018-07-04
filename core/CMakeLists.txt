@@ -274,7 +274,7 @@ endif()
 if(WIN32)
   install(
 	 FILES
-    "${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/cadabra2.${PYTHON_MOD_SUFFIX}"
+    "${PROJECT_BINARY_DIR}/cadabra2.${PYTHON_MOD_SUFFIX}"
     "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
     #"${PROJECT_BINARY_DIR}/${CADABRA_BUILD_TYPE}/mpir.dll"
 	 DESTINATION 
