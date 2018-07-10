@@ -11,7 +11,6 @@
 # one can generate back traces etc.
 
 import sys
-import imp
 import site
 from code import InteractiveConsole
 import code
@@ -225,14 +224,15 @@ if __name__ == '__main__':
 
     if len(sys.argv)>1:
         if '-d' in sys.argv:
-            rs = "gdb -q -ex r --args ${PYTHON_EXECUTABLE} "+sys.argv[0];
+            rs = "lldb -ex r --args ${PYTHON_EXECUTABLE} "+sys.argv[0];
+            #rs = "gdb -q -ex r --args ${PYTHON_EXECUTABLE} "+sys.argv[0];
             for a in sys.argv[1:]:
                 if a!='-d':
                     rs += " "+a
             #print('executing '+rs)
             os.system(rs)
         else:
-            with open(imp.find_module('cadabra2_defaults')[1]) as f:
+            with open("${PYTHON_SITE_PATH}/cadabra2_defaults.py") as f:
                 code = compile(f.read(), "cadabra2_defaults.py", 'exec')
                 exec(code)
 
@@ -250,5 +250,5 @@ if __name__ == '__main__':
                 # pulling in the right locals/globals
                 #            sh.interact(banner='Info at http://cadabra.phi-sci.com/\nAvailable under the terms of the GNU General Public License v3\n', locals(), globals())
     else:
-        sh.runsource("import os; import sys; install_prefix=os.path.realpath(sys.argv[0]); install_prefix=install_prefix.replace('/bin/cadabra2','/share/cadabra2/python'); sys.path.append(install_prefix); print('Cadabra @CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@.@CADABRA_VERSION_PATCH@ (build @CADABRA_VERSION_BUILD@ dated @CADABRA_VERSION_DATE@)'); print ('Copyright (C) @COPYRIGHT_YEARS@  Kasper Peeters <kasper.peeters@phi-sci.com>'); import imp; f=open(imp.find_module('cadabra2_defaults')[1]); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close(); print('Using SymPy version '+sympy.__version__);")
+        sh.runsource("import os; import sys; install_prefix=os.path.realpath(sys.argv[0]); install_prefix=install_prefix.replace('/bin/cadabra2','/share/cadabra2/python'); sys.path.append(install_prefix); print('Cadabra @CADABRA_VERSION_MAJOR@.@CADABRA_VERSION_MINOR@.@CADABRA_VERSION_PATCH@ (build @CADABRA_VERSION_BUILD@ dated @CADABRA_VERSION_DATE@)'); print ('Copyright (C) @COPYRIGHT_YEARS@  Kasper Peeters <kasper.peeters@phi-sci.com>'); f=open('${PYTHON_SITE_PATH}/cadabra2_defaults.py'); code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); exec(code); f.close(); print('Using SymPy version '+sympy.__version__);")
         sh.interact(banner='Info at http://cadabra.science/\nAvailable under the terms of the GNU General Public License v3\n')

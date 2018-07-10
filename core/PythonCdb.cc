@@ -423,51 +423,36 @@ pybind11::object get_globals()
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
 	{
-	try {
-		pybind11::object locals = get_locals();
-		return fetch_from_python(nm, locals);
-		}
-	catch(pybind11::error_already_set const &) {
-		try {
-			pybind11::object globals = get_globals();
-			return fetch_from_python(nm, globals);
-			}
-		catch(pybind11::error_already_set const &) {
-			// In order to prevent the error from propagating, we have to read
-			// it out. And in any case, we want to give some feedback to the user.
-			std::string err = parse_python_exception();
-			if(err.substr(0,29)=="<type 'exceptions.TypeError'>")
-				std::cout << nm << " is not of type cadabra.Ex." << std::endl;
-			else 
-				std::cout << nm << " is not defined." << std::endl;
-			}
-		}
-	return 0;
+	auto locals = get_locals();
+	auto ret=fetch_from_python(nm, locals);
+	if(!ret) {
+	  auto globals = get_globals();
+	  ret=fetch_from_python(nm, globals);
+	}
+	return ret;
 	}
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm, pybind11::object scope)
    {
-   pybind11::object obj = scope[nm.c_str()];
-   
-   if(obj.is_none()) // We never actually get here, an exception will have been thrown.
-	   std::cout << "object unknown" << std::endl;
-   else {
-	   // We can include this Python object into the expression only if it is an Ex object.
-	   try {
-		   return obj.cast<std::shared_ptr<Ex>>();
-		   }
-	   catch(const pybind11::cast_error& e) {
-		   try {
-			   auto exnode = obj.cast<ExNode>();
-			   auto ret = std::make_shared<Ex>( exnode.it );
-			   return ret;
-			   }
-		   catch(const pybind11::cast_error& e) {
-			   std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
-			   }
-		   }
-	   }
-   
+     // std::cerr << "fetch from python " << nm << std::endl;
+     if(!scope_has(scope, nm.c_str())) {
+       // std::cerr << "not present" << std::endl;
+       return 0;
+     }
+     auto obj=scope[nm.c_str()];
+     try {
+       return obj.cast<std::shared_ptr<Ex>>();
+     }
+     catch(const pybind11::cast_error& e) {
+       try {
+	 auto exnode = obj.cast<ExNode>();
+	 auto ret = std::make_shared<Ex>( exnode.it );
+	 return ret;
+       }
+       catch(const pybind11::cast_error& e) {
+	 std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
+       }
+     }
    return 0;
    }
 
@@ -736,44 +721,35 @@ std::string print_tree(Ex *ex)
 // any, or the one in global scope if none is available in local
 // scope.
 
+bool scope_has(const pybind11::dict& dict, const std::string& obj)
+{
+  for(const auto& item: dict)
+    if(item.first.cast<std::string>()==obj)
+      return true;
+  return false;
+}
+
 Kernel *get_kernel_from_scope()
 	{
 	Kernel *kernel=nullptr;
 	
 	// Try and find the kernel in the local scope
-	try {
-		// Get from the python localcs dict
-		pybind11::object locals = get_locals();
-		kernel = locals["__cdbkernel__"].cast<Kernel*>();
-		}
-	catch (const pybind11::error_already_set& err) {
-		// __cdbkernel__ not found in locals dict
-		kernel = nullptr;
-		}
-	if (kernel)  {
-		// Return if found
-		return kernel;
-		}
-	
+	auto locals = get_locals();
+	if(scope_has(locals, "__cdbkernel__")) {
+	  kernel = locals["__cdbkernel__"].cast<Kernel*>();
+	  return kernel;
+	}
+
 	// No kernel in local scope, find one in global scope.
-	try {
-		// Get from the python globals dict
-		pybind11::object globals = get_globals();
-		kernel = globals["__cdbkernel__"].cast<Kernel*>();
-		}
-	catch(pybind11::error_already_set& err) {
-		// __cdbkernel__ not found in globals dict
-		kernel = nullptr;
-		}
-	if(kernel) {
-		//Return if found
-		return kernel;
-		}
-	
+	pybind11::dict globals = get_globals();
+	if(scope_has(globals, "__cdbkernel__")) {
+	  kernel = globals["__cdbkernel__"].cast<Kernel*>();
+	  return kernel;
+	}
+
 	// No kernel in local or global scope, construct a new global one
 	kernel = new Kernel();
 	inject_defaults(kernel);
-	pybind11::object globals = get_globals();
 	globals["__cdbkernel__"] = kernel;
 	return kernel;
 	}
@@ -984,38 +960,26 @@ void call_post_process(Kernel& kernel, std::shared_ptr<Ex> ex)
 	// Find the 'post_process' function, and if found, turn off
 	// post-processing, then call the function on the current Ex.
 	if(post_process_enabled) {
-		if(ex->number_of_children(ex->begin())==0)
-			return;
-
-		post_process_enabled=false;
-
-		pybind11::object post_process;
-		
-		try {
-			// First try the locals.
-			pybind11::object locals = get_locals();
-			post_process = locals["post_process"];
-			// std::cerr << "local post_process" << std::endl;
-			}
-		catch(const pybind11::error_already_set& exc) {
-			// In order to prevent the error from propagating, we have to read it out. 			
-			std::string err = parse_python_exception();
-			try {
-				pybind11::object globals = get_globals();
-				post_process = globals["post_process"];
-				// std::cerr << "global post_process" << std::endl;				
-				}
-			catch(const pybind11::error_already_set& exc) {
-				// In order to prevent the error from propagating, we have to read it out. 
-				std::string err = parse_python_exception();
-				post_process_enabled=true;
-				return;
-				}
-			}
-		// std::cerr << "calling post-process" << std::endl;
-		post_process(std::ref(kernel), ex);
-		post_process_enabled=true;
-		}
+	  if(ex->number_of_children(ex->begin())==0)
+	    return;
+	  
+	  post_process_enabled=false;
+	  pybind11::object post_process;
+	  
+	  auto locals = get_locals();
+	  if(scope_has(locals, "post_process")) {
+	    post_process = locals["post_process"];
+	  } else {
+	    auto globals = get_globals();
+	    if(scope_has(globals, "post_process"))
+	      post_process = globals["post_process"];
+	  }
+	  if(post_process) {
+	    // std::cerr << "calling post-process" << std::endl;
+	    post_process(std::ref(kernel), ex);
+	  }
+	  post_process_enabled=true;
+	}
 	}
 
 template<class F>

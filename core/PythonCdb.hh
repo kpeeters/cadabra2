@@ -249,6 +249,9 @@ cadabra::Kernel *create_empty_scope();
 
 void    inject_defaults(cadabra::Kernel *);
 
+/// Determine if a dict contains a particular key.
+bool scope_has(const pybind11::dict& dict, const std::string& obj);
+
 /// \ingroup pythoncore
 ///
 /// Get a pointer to the currently visible kernel.
