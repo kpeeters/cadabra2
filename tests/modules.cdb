@@ -6,6 +6,7 @@ display(ex)
 ex0:=\partial_{m}{A_{n p}}:
 
 def test01():
+    bla:= T_{m n p} + @(ex);
     tst:= \partial_{m}{A_{n p}} - @(ex0);
     assert(tst==0)
     print("Test 01a passed")
