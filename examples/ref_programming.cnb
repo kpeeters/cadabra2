@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
+					"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. At the most basic level this means that you can make functions\nwhich combine various Cadabra algorithms together, or write loops which repeat certain Cadabra algorithms.\nAt a more advanced level, you can inspect the expression tree and manipulate individual subexpressions,\nor construct expressions from elementary building blocks. "
 				}
 			],
 			"hidden" : true,
-			"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. You can make functions which combine various Cadabra algorithms together,\nbut you can also inspect the expression tree and manipulate individual subexpressions."
+			"source" : "\\section*{Programming in Cadabra}\n\nCadabra is fully programmable in Python. At the most basic level this means that you can make functions\nwhich combine various Cadabra algorithms together, or write loops which repeat certain Cadabra algorithms.\nAt a more advanced level, you can inspect the expression tree and manipulate individual subexpressions,\nor construct expressions from elementary building blocks. "
 		},
 		{
 			"cell_origin" : "client",
@@ -23,11 +23,194 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\subsection*{Traversing the expression tree}\n\nYou can traverse the elements of an expression by using a simple iterator obtained in the usual\nPython way, as the example below shows:"
+					"source" : "\\subsection*{Fundamental Cadabra objects: Ex and ExNode}\n\nThe two fundamental Cadabra objects are the \\verb|Ex| and the \\verb|ExNode|. An object of type \\verb|Ex| \nrepresents a mathematical expression, and is what is generated if you type a line containing \\verb|:=|, as in"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\subsection*{Traversing the expression tree}\n\nYou can traverse the elements of an expression by using a simple iterator obtained in the usual\nPython way, as the example below shows:"
+			"source" : "\\subsection*{Fundamental Cadabra objects: Ex and ExNode}\n\nThe two fundamental Cadabra objects are the \\verb|Ex| and the \\verb|ExNode|. An object of type \\verb|Ex| \nrepresents a mathematical expression, and is what is generated if you type a line containing \\verb|:=|, as in"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + B"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+B\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}<class 'cadabra2.Ex'>\\end{verbatim}"
+				}
+			],
+			"source" : "ex:=A+B;\ntype(ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "An object of type \\verb|ExNode| is best thought of as an iterator. It can be used to walk an expression\ntree, and modify it in place. The most trivial way to get an iterator is to call the \\verb|top| member of\nan \\verb|Ex| object; think of this as returning a pointer to the topmost node of an expression,"
+				}
+			],
+			"hidden" : true,
+			"source" : "An object of type \\verb|ExNode| is best thought of as an iterator. It can be used to walk an expression\ntree, and modify it in place. The most trivial way to get an iterator is to call the \\verb|top| member of\nan \\verb|Ex| object; think of this as returning a pointer to the topmost node of an expression,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}A + B\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
+				}
+			],
+			"source" : "ex.top();\ntype(ex.top());"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "You will also encounter \\verb|ExNode|s when you do a standard Python iteration\nover the elements of an \\verb|Ex|, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "You will also encounter \\verb|ExNode|s when you do a standard Python iteration\nover the elements of an \\verb|Ex|, as in"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}A + B\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}A\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}<class 'cadabra2.ExNode'>\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}B\\end{verbatim}"
+				}
+			],
+			"source" : "for n in ex:\n\ttype(n);\n\tdisplay(n)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "As you can see, this `iterates' over the elements of the expression, but in a perhaps somewhat unexpected\nway. We will discuss this in more detail in the next section. Important to remember from the example above\nis that the `pointers' to the individual elements of the expression are \\verb|ExNode| objects. \nThere are various other ways to obtain such pointers, using various types of `filtering', more on that\nbelow as well.\n\nOnce you have an \\verb|ExNode| pointing to a subexpression in an expression, you can query it further\nfor details about that subexpression. "
+				}
+			],
+			"hidden" : true,
+			"source" : "As you can see, this `iterates' over the elements of the expression, but in a perhaps somewhat unexpected\nway. We will discuss this in more detail in the next section. Important to remember from the example above\nis that the `pointers' to the individual elements of the expression are \\verb|ExNode| objects. \nThere are various other ways to obtain such pointers, using various types of `filtering', more on that\nbelow as well.\n\nOnce you have an \\verb|ExNode| pointing to a subexpression in an expression, you can query it further\nfor details about that subexpression. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}m\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}n\\end{verbatim}"
+				}
+			],
+			"source" : "ex:= A_{m n};\nfor i in ex.top().free_indices():\n\tdisplay(i)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The example above shows how, starting from an iterator which points to the top of the expression, you can\nget a new iterator which can iterate over all free indices. "
+				}
+			],
+			"hidden" : true,
+			"source" : "The example above shows how, starting from an iterator which points to the top of the expression, you can\nget a new iterator which can iterate over all free indices. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Traversing the expression tree}\n\nThe \\verb|ExNode| iterator can be instructed to traverse expressions in various ways. The most basic\niterator is obtained by using standard Python iteration with a \\verb|for| loop,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Traversing the expression tree}\n\nThe \\verb|ExNode| iterator can be instructed to traverse expressions in various ways. The most basic\niterator is obtained by using standard Python iteration with a \\verb|for| loop,"
 		},
 		{
 			"cell_origin" : "client",
@@ -71,11 +254,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Note that this prints the sub-expression below each node that it visits. If you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
+					"source" : "The iterator obtained in this way traverses the expression tree node by node, and when you ask it\nto print what it is pointing to, it prints the entire subtree of the node it is currently visiting.\nIf you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
 				}
 			],
 			"hidden" : true,
-			"source" : "Note that this prints the sub-expression below each node that it visits. If you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
+			"source" : "The iterator obtained in this way traverses the expression tree node by node, and when you ask it\nto print what it is pointing to, it prints the entire subtree of the node it is currently visiting.\nIf you are only interested in the name of the node, not the\nentire expression below it, you can use the \\verb|.name| member of the iterator:"
 		},
 		{
 			"cell_origin" : "client",
@@ -89,6 +272,97 @@
 				}
 			],
 			"source" : "for n in ex:\n\tprint(str(n.name))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Often, this kind of `brute force' iteration over expression elements is not very useful. A more powerful\niterator is obtained by asking for all nodes in the subtree which have a certain name. This can be the name of \na tensor, or the name of a special node, such as a product or sum,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Often, this kind of `brute force' iteration over expression elements is not very useful. A more powerful\niterator is obtained by asking for all nodes in the subtree which have a certain name. This can be the name of \na tensor, or the name of a special node, such as a product or sum,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}C_{m}\\end{verbatim}"
+				}
+			],
+			"source" : "for n in ex[\"C\"]:\n\tdisplay(n)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}C_{m} D^{m}\\end{verbatim}"
+				}
+			],
+			"source" : "for n in ex[\"\\\\prod\"]:\n\tdisplay(n)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The above two examples used an iterator obtained directly from an \\verb|Ex| object. \nVarious ways of obtaining iterators over special nodes can be obtained by using member functions of\n\\verb|ExNode| objects themselves. So one often uses a construction in which one first asks for an iterator\nto the top of an expression, and then requests from that iterator a new one which can iterate over\nvarious special nodes. The example below obtains an iterator over all top-level terms in an expression, and\nthen loops over its values."
+				}
+			],
+			"hidden" : true,
+			"source" : "The above two examples used an iterator obtained directly from an \\verb|Ex| object. \nVarious ways of obtaining iterators over special nodes can be obtained by using member functions of\n\\verb|ExNode| objects themselves. So one often uses a construction in which one first asks for an iterator\nto the top of an expression, and then requests from that iterator a new one which can iterate over\nvarious special nodes. The example below obtains an iterator over all top-level terms in an expression, and\nthen loops over its values."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}A\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}B\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}C_{m} D^{m}\\end{verbatim}"
+				}
+			],
+			"source" : "for n in ex.top().terms():\n\tdisplay(n)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Two special types of iterators are those which iterate only over all arguments or only over all indices\nof a sub-expression. These are discussed in the next section."
+				}
+			],
+			"hidden" : true,
+			"source" : "Two special types of iterators are those which iterate only over all arguments or only over all indices\nof a sub-expression. These are discussed in the next section."
 		},
 		{
 			"cell_origin" : "client",
