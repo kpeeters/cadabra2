@@ -1,0 +1,26 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Elementary operations on expressions}\n\nThe package \\verb|cdb.core| and its various sub-packages contain a number of useful\nhelper functions to manipulate expressions in elementary ways. This includes things\nlike moving terms from one side of an equation or inequality to the other side, or multiplying\nboth sides of an equation by the same factor. "
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Elementary operations on expressions}\n\nThe package \\verb|cdb.core| and its various sub-packages contain a number of useful\nhelper functions to manipulate expressions in elementary ways. This includes things\nlike moving terms from one side of an equation or inequality to the other side, or multiplying\nboth sides of an equation by the same factor. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

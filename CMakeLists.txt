@@ -142,9 +142,6 @@ endif()
 # Include packaging logic.
 include(cmake/packaging.cmake)
 
-# Generate config file with CMake variables.
-configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_SOURCE_DIR}/core/Config.hh")
-
 # Add all sub-projects to build process.
 add_subdirectory(libs/pybind11)
 if(WIN32)
@@ -175,6 +172,9 @@ if(ENABLE_FRONTEND)
 endif()
 add_subdirectory(tests)
 add_subdirectory(web2 EXCLUDE_FROM_ALL)
+
+# Generate config file with CMake variables.
+configure_file("${PROJECT_SOURCE_DIR}/core/Config.hh.in" "${PROJECT_SOURCE_DIR}/core/Config.hh")
 
 # Provide uninstall target.
 configure_file(

@@ -1,0 +1,107 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Importing notebooks into other notebooks}\n\nWith Cadabra you can write your own packages, containing functionality which you would like\nto re-use in other projects. Packages are ordinary Cadabra notebooks, which you can import\ninto other notebooks by using standard Python import logic. "
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Importing notebooks into other notebooks}\n\nWith Cadabra you can write your own packages, containing functionality which you would like\nto re-use in other projects. Packages are ordinary Cadabra notebooks, which you can import\ninto other notebooks by using standard Python import logic. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Example}\n\nLet us say we have a notebook \\verb|library.cnb|, which contains a single cell with the following \ncontent:\n\\begin{verbatim}\n   {m,n,p,q,r}::Indices;\n   ex:=A_{q r} A_{q r};\n\\end{verbatim}\nYou can now import this into another notebook by simply using"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Example}\n\nLet us say we have a notebook \\verb|library.cnb|, which contains a single cell with the following \ncontent:\n\\begin{verbatim}\n   {m,n,p,q,r}::Indices;\n   ex:=A_{q r} A_{q r};\n\\end{verbatim}\nYou can now import this into another notebook by simply using"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "from library import *"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "You can see that this worked by e.g. the following:"
+				}
+			],
+			"hidden" : true,
+			"source" : "You can see that this worked by e.g. the following:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{q r} A_{q r}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{q r} A_{q r}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m n} A_{m n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m n} A_{m n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex;\nrename_dummies(ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that the import has thus not only imported the \\verb|ex| expression, but also the property \ninformation about the index set, which enabled the \\verb|rename_dummies| to work."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that the import has thus not only imported the \\verb|ex| expression, but also the property \ninformation about the index set, which enabled the \\verb|rename_dummies| to work."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
