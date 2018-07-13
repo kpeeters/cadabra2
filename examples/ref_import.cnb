@@ -98,6 +98,20 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Behind the scenes, what happens is that the import statement looks for a file \\verb|library.cnb|. If it\nfinds this, it will first convert that file to a proper Python file (remember the \\verb|library.cnb| file is a \nCadabra notebook, not a Python file). It then uses the standard Python logic to do the import."
+				}
+			],
+			"hidden" : true,
+			"source" : "Behind the scenes, what happens is that the import statement looks for a file \\verb|library.cnb|. If it\nfinds this, it will first convert that file to a proper Python file (remember the \\verb|library.cnb| file is a \nCadabra notebook, not a Python file). It then uses the standard Python logic to do the import."
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
 		}
