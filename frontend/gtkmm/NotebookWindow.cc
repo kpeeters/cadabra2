@@ -566,21 +566,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 
 			case DataCell::CellType::output:
 			case DataCell::CellType::error:
-			case DataCell::CellType::verbatim: {
-				// FIXME: would be good to share the input and output of TeXView too.
-				// Right now nothing is shared...
-				//if(it->cell_type==DataCell::CellType::error) 
-				//   std::cerr << "error cell" << std::endl;
-				newcell.outbox = manage( new TeXView(engine, it) );
-#if GTKMM_MINOR_VERSION>=10
-				newcell.outbox->rbox.set_reveal_child(true);
-#endif				
-				w=newcell.outbox;
-				newcell.outbox->signal_button_press_event().connect( 
-					sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
-				break;
-				}
-			case DataCell::CellType::latex_view:
+			case DataCell::CellType::verbatim: 
+			case DataCell::CellType::latex_view: {
 				// FIXME: would be good to share the input and output of TeXView too.
 				// Right now nothing is shared...
 				newcell.outbox = manage( new TeXView(engine, it) );
@@ -598,7 +585,7 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				newcell.outbox->signal_button_press_event().connect( 
 					sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
 				break;
-
+				}
 			case DataCell::CellType::python:
 			case DataCell::CellType::latex: {
 				CodeInput *ci;

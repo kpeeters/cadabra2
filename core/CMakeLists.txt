@@ -186,6 +186,7 @@ set(IMAGES
 )
 
 set(PACKAGES
+  #core/manip
   relativity/__init__
   relativity/schwarzschild
   gauge_theory/__init__
