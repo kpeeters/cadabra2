@@ -35,6 +35,7 @@ set(TUTORIALS
   ref_default_simplification
   ref_programming
   ref_import
+  ref_selecting
 )
 
 # Manual pages; just add the algorithm or property name to the lists below
