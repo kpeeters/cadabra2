@@ -1,0 +1,165 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Selecting parts of expressions}\n\nIn many other computer algebra systems, you can select parts of results using the mouse, paste\nthem into a new input cell, and then continue the computation. Naively this sounds like a nice\nfeature to have, and it is indeed quite useful for quick computations. However, for larger projects,\nthis feature quickly becomes a major source of trouble.  Once you use the cut-n-paste technique, you\nare no longer able to make any changes in cells before the one with pasted content. Or rather, you can make\nchanges, but they will not automatically propagate to into the pasted cell. Any effect of the \nchange at the top of the notebook will have to be evaluated until the point of the cut-n-paste, and then\nyou have to do the cut-n-paste again by hand.\n\nNow this is fine if you just do a quick computation, as you will probably know precisely what you want\nto cut-n-paste. But if you give your notebook to someone else, this may no longer be clear. Worse, \nif you do not look at your notebook for some time, and then return after a few months (or years), you\nwill most likely have forgotten completely what was the logic for the particular cut. \n\nFor this reason, Cadabra does not support cut-n-paste of output. But that does not mean that you cannot\nselect parts of expressions for subsequent computation. For that, Cadabra has a more systematic logic,\nwhich is built around the \\algo{zoom} and \\algo{unzoom} commands."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Selecting parts of expressions}\n\nIn many other computer algebra systems, you can select parts of results using the mouse, paste\nthem into a new input cell, and then continue the computation. Naively this sounds like a nice\nfeature to have, and it is indeed quite useful for quick computations. However, for larger projects,\nthis feature quickly becomes a major source of trouble.  Once you use the cut-n-paste technique, you\nare no longer able to make any changes in cells before the one with pasted content. Or rather, you can make\nchanges, but they will not automatically propagate to into the pasted cell. Any effect of the \nchange at the top of the notebook will have to be evaluated until the point of the cut-n-paste, and then\nyou have to do the cut-n-paste again by hand.\n\nNow this is fine if you just do a quick computation, as you will probably know precisely what you want\nto cut-n-paste. But if you give your notebook to someone else, this may no longer be clear. Worse, \nif you do not look at your notebook for some time, and then return after a few months (or years), you\nwill most likely have forgotten completely what was the logic for the particular cut. \n\nFor this reason, Cadabra does not support cut-n-paste of output. But that does not mean that you cannot\nselect parts of expressions for subsequent computation. For that, Cadabra has a more systematic logic,\nwhich is built around the \\algo{zoom} and \\algo{unzoom} commands."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Zooming into an expression}\n\nIf you have a large expression, and want to select a part of it for further manipulation, while\ntemporarily ignoring the rest, use the \\algo{zoom} command. It takes an expression and a pattern, \nand then suppresses all terms in the expression which do not match the pattern. An example:"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Zooming into an expression}\n\nIf you have a large expression, and want to select a part of it for further manipulation, while\ntemporarily ignoring the rest, use the \\algo{zoom} command. It takes an expression and a pattern, \nand then suppresses all terms in the expression which do not match the pattern. An example:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{c A + (c)**2 B + c D + (c)**2 A}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left(c A+{c}^{2} B+c D+{c}^{2} A\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= \\int{ c A + c**2 B + c D + c**2 A }{x};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{c A +  ...  + c D +  ... }{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left(c A+ \\ldots +c D+ \\ldots \\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "zoom(_, $c Q??$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This has selected all terms with a single factor of $c$, and suppressed the other ones (but keeping\na reminder that those terms are still there, in the form of the dots). You can now work on the visible \nterms as usual, e.g. doing a substitution, "
+				}
+			],
+			"hidden" : true,
+			"source" : "This has selected all terms with a single factor of $c$, and suppressed the other ones (but keeping\na reminder that those terms are still there, in the form of the dots). You can now work on the visible \nterms as usual, e.g. doing a substitution, "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{c E +  ...  + c D +  ... }{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left(c E+ \\ldots +c D+ \\ldots \\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(_, $A -> E$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In order to get back to the full expression, use \\algo{unzoom},"
+				}
+			],
+			"source" : "In order to get back to the full expression, use \\algo{unzoom},"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{c E + (c)**2 B + c D + (c)**2 A}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\int \\left(c E+{c}^{2} B+c D+{c}^{2} A\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "unzoom(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "As you can see, the substitution has only changed the terms which were visible at the time."
+				}
+			],
+			"hidden" : true,
+			"source" : "As you can see, the substitution has only changed the terms which were visible at the time."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
