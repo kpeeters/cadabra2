@@ -313,6 +313,6 @@ install(
     bin
 )
 
-if (MSVC)
+if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("core")
 endif()

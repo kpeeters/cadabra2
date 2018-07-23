@@ -8,6 +8,8 @@ project(Cadabra)
 
 print_header("Configuring client-server")
 
+set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2")
+
 
 #---------------------------------------------------------------------------
 # Locate libraries.
@@ -130,11 +132,13 @@ endif()
 # The preamble 'notebook.tex' should be kept in sync with the one in
 # ../frontend/common/texengine; this one is meant for printing so
 # slightly different, but cadabra-specific macros should be copied.
-set(INSTALL_LATEX_DIR "${CMAKE_INSTALL_PREFIX}/share/cadabra2")
-install(FILES  notebook.tex  DESTINATION ${INSTALL_LATEX_DIR})
-install(FILES  notebook.html DESTINATION ${INSTALL_LATEX_DIR})
 
+if (NOT INSTALL_TARGETS_ONLY)
+	install(FILES  notebook.tex  DESTINATION ${INSTALL_LATEX_DIR})
+	install(FILES  notebook.html DESTINATION ${INSTALL_LATEX_DIR})
+endif()
 #set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
+
 install(TARGETS cadabra-server DESTINATION bin)
 install(TARGETS cadabra2html DESTINATION bin)
 install(
@@ -145,7 +149,7 @@ install(
 )
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
-if (MSVC)
+if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("client_server")
 	# GTK helpers
 	install(

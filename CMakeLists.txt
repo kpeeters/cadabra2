@@ -18,21 +18,12 @@ if (MSVC)
 endif()
 
 # Make sure the build type is non-empty.
-if(WIN32)
-	if (NOT DEFINED CMAKE_BUILD_TYPE)
-		set(CMAKE_BUILD_TYPE "Debug")
-	endif()
-	set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
-	if (CMAKE_BUILD_TYPE MATCHES "^Debug$")
-		set(CADABRA_DEBUG_BUILD TRUE)
-	endif()
+if (NOT DEFINED CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE "Debug")
 endif()
-
-# Notify about install directory
-if ("${CMAKE_INSTALL_PREFIX}" STREQUAL "")
-	message(STATUS "Install directory not set")
-else()
-	message(STATUS "Install directory set to ${CMAKE_INSTALL_PREFIX}")
+set(CADABRA_BUILD_TYPE "${CMAKE_BUILD_TYPE}")
+if (CMAKE_BUILD_TYPE MATCHES "^Debug$")
+	set(CADABRA_DEBUG_BUILD TRUE)
 endif()
 
 # Set path to additional cmake files
@@ -43,6 +34,13 @@ include(cmake/version.cmake)
 print_header("Building Cadabra version ${CADABRA_VERSION_MAJOR}.${CADABRA_VERSION_MINOR}.${CADABRA_VERSION_PATCH} (${SYSTEM_BITS}-bit)")
 message(STATUS "Build id '${CADABRA_VERSION_BUILD}' dated ${CADABRA_VERSION_DATE}")
 message(STATUS "Build mode is set to '${CMAKE_BUILD_TYPE}'")
+
+# Notify about install directory
+if ("${CMAKE_INSTALL_PREFIX}" STREQUAL "")
+	message(STATUS "Install directory not set")
+else()
+	message(STATUS "Install directory set to ${CMAKE_INSTALL_PREFIX}")
+endif()
 
 # Include packaging logic.
 include(cmake/packaging.cmake)
@@ -56,7 +54,7 @@ set(CADABRA_IMAGES_DIR ${CADABRA_ROOT_DIR}/images)
 set(CADABRA_LIBS_DIR ${CADABRA_ROOT_DIR}/libs)
 
 #---------------------------------------------------------------------------
-# User options.
+# User options and other notifications
 #---------------------------------------------------------------------------
 
 # Provide option to build with Python 3 (default) or Python 2.
@@ -75,6 +73,7 @@ endif()
 
 option(BUILD_TESTS "Build tests" ON)
 if (BUILD_TESTS)
+	message(STATUS "Building tests")
 	# Allows tests to be built in all subdirectories.
 	enable_testing()
 endif()
@@ -83,6 +82,10 @@ option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
+option(INSTALL_TARGETS_ONLY "Only install targets; skipping icons, shared libraries etc..." OFF)
+if (INSTALL_TARGETS_ONLY)
+	message(STATUS "INSTALL_TARGETS_ONLY is enabled, please make sure all auxillary files and programs Cadabra requires are already installed")
+endif()
 
 #---------------------------------------------------------------------------
 # Compiler flags.
