@@ -774,10 +774,10 @@ evaluate(_);
 print(list(map(lambda x: str(x), server.totals())))
 
 
-{i,j}::Indices(name=space, position=free);
-{r,t}::Coordinate.
-{m,n}::Indices(name=all, values={t,i}, position=free);
-ex:= A_{m} A_{m};
-rl:= A_{t} = 3, A_{i} = B_{i};
-evaluate(ex, rl, simplify=True)
-    tst:= \components_{m}( \comma{ \comma{t} = 3  } ) - @(ex);
+# {i,j}::Indices(name=space, position=free);
+# {r,t}::Coordinate.
+# {m,n}::Indices(name=all, values={t,i}, position=free);
+# ex:= A_{m} A_{m};
+# rl:= A_{t} = 3, A_{i} = B_{i};
+# evaluate(ex, rl, simplify=True)
+#     tst:= \components_{m}( \comma{ \comma{t} = 3  } ) - @(ex);

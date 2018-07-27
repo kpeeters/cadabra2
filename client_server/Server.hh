@@ -1,9 +1,6 @@
 
 #pragma once
 
-#if defined(_WIN32)
-  #define NOMINMAX
-#endif
 #include <websocketpp/server.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/common/functional.hpp>
