@@ -48,7 +48,7 @@ if (NOT INSTALL_TARGETS_ONLY)
 	install_directory_permissions("${INSTALL_MAN_ALGO_DIR}")
 	install_directory_permissions("${INSTALL_MAN_PROP_DIR}")
 
-	install(FILES ${PROJECT_SOURCE_DIR}/latex/tableaux.sty  DESTINATION ${INSTALL_LATEX_DIR})
+#	install(FILES ${PROJECT_SOURCE_DIR}/latex/tableaux.sty  DESTINATION ${INSTALL_LATEX_DIR})
 	install(FILES ${PROJECT_SOURCE_DIR}/common/preamble.tex DESTINATION ${INSTALL_LATEX_DIR})
 	install(FILES ${man_algorithms} DESTINATION ${INSTALL_MAN_ALGO_DIR})
 	install(FILES ${man_properties} DESTINATION ${INSTALL_MAN_PROP_DIR})
