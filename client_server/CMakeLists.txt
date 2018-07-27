@@ -111,7 +111,7 @@ target_link_libraries(cadabra_client
 	Threads::Threads
 )
 if(WIN32)
-	target_link_libraries(cadabra_client ws2_32 bcrypt)
+   target_link_libraries(cadabra_client ws2_32 bcrypt)
 endif()
 
 
