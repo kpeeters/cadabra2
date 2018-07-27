@@ -53,7 +53,7 @@ Algorithm::result_t evaluate::apply(iterator& it)
 	
 	it = cadabra::do_subtree(tr, it, [&](Ex::iterator walk) -> Ex::iterator {
 #ifdef DEBUG
-			std::cerr << "evaluate at " << *walk->name << std::endl;
+			std::cerr << "evaluate at " << walk << std::endl;
 #endif			
 			
 			if(*(walk->name)=="\\components") walk = handle_components(walk);
@@ -136,6 +136,29 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	{
 	// std::cerr << "handle sum" << Ex(it) << std::endl;
 
+	// pre-scan: remove zero nodes from evaluate having processed
+	// nodes at lower level, and ensure child nodes are \component
+	// nodes.
+	sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		sibling_iterator nxt=sib;
+		++nxt;
+
+		if(*sib->multiplier==0) { // zero terms can be removed
+			tr.erase(sib);
+			}
+		else if(is_component(sib)==false) {
+			index_map_t empty;
+			handle_factor(sib, empty);
+			}
+
+		sib=nxt;
+		}
+	if(tr.number_of_children(it)==0) {
+		node_zero(it);
+		return it;
+		}
+
 	index_map_t full_ind_free, full_ind_dummy;
 
 	// First find the values that all indices will need to take. We do not loop over
@@ -162,7 +185,7 @@ Ex::iterator evaluate::handle_sum(iterator it)
 	// evaluated. We send them all to handle_factor, which will return immediately on the
 	// first node type, and convert the second type to the first.
 
-	sibling_iterator sib=tr.begin(it);
+	sib=tr.begin(it);
 	while(sib!=tr.end(it)) {
 		sibling_iterator nxt=sib;
 		++nxt;

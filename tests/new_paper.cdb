@@ -1,10 +1,32 @@
 
+{\tau}::Coordinate;
 {t,r,\phi,\theta}::Coordinate;
 {\mu,\nu,\rho,\lambda}::Indices(values={t,r,\phi,\theta});
+X^{\mu}::Depends(\tau);
 \partial{#}::PartialDerivative;
-ex:= \partial_{\tau\tau}{X^{\mu} + \Gamma^{\mu}_{\nu\rho} \partial_{\tau}{X^{\nu}}\partial_{\tau}{X^{\nu}};
+ex:= \partial_{\tau\tau}{X^{\mu}} + \Gamma^{\mu}_{\nu\rho} \partial_{\tau}{X^{\nu}}\partial_{\tau}{X^{\rho}};
+evaluate(_, simplify=False);
+
+{\tau}::Coordinate;
+{t,r,\phi,\theta}::Coordinate;
+{\mu,\nu,\rho,\sigma,\lambda,\kappa,\gamma,\chi}::Indices(values={t,r,\phi,\theta}, position=fixed).
+X^{\mu}::Depends(\tau);
+\partial{#}::PartialDerivative;
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.         
+ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
+       g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+complete(ss, $g^{\mu\nu}$)
+ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
+                                                +\partial_{\nu}{g_{\rho\sigma}}
+                                                -\partial_{\sigma}{g_{\nu\rho}} );
+evaluate(ch, ss, rhsonly=True)
+
+ex:= \partial_{\tau\tau}{X^{\mu}} + \Gamma^{\mu}_{\nu\rho} \partial_{\tau}{X^{\nu}}\partial_{\tau}{X^{\rho}};
+substitute(ex, ch)
 evaluate(_);
 
+    
 def fourier_transform(ex):
     expand_power(ex);
     for term in ex.iterator().terms():

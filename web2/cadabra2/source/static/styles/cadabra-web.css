@@ -178,6 +178,9 @@ div#main h3 {
 	 color: green;
 	 font-size: 16px;
 }
+.latex_view h3 {
+	 margin-left: 0px !important;
+}
 div#main h1 span.date {
 	 margin-top: 10px;
 	 float: right;

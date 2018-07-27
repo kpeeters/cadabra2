@@ -78,6 +78,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex section(R"(\\section\*\{([^\}]*)\})");
 	std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 	std::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
+	std::regex subsubsection(R"(\\subsubsection\*\{([^\}]*)\})");	
 	std::regex verb(R"(\\verb\|([^\|]*)\|)");
 	std::regex url(R"(\\url\{([^\}]*)\})");
 	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
@@ -115,6 +116,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, end_verbatim, "</pre>");
 		res = std::regex_replace(res, section, "<h1>$1</h1>");
 		res = std::regex_replace(res, subsection, "<h2>$1</h2>");
+		res = std::regex_replace(res, subsubsection, "<h3>$1</h3>");		
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
