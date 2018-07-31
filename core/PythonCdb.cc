@@ -138,6 +138,7 @@
 #include "algorithms/young_project.hh"
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
+#include "algorithms/young_reduce.hh"
 #include "algorithms/zoom.hh"
 
 using namespace cadabra;
@@ -1383,6 +1384,7 @@ PYBIND11_MODULE(cadabra2, m)
 	def_algo_1<sort_sum>("sort_sum", m);
 	def_algo_1<tabdimension>("tab_dimension", m);	
 	def_algo_1<young_project_product>("young_project_product", m);
+	def_algo_1<young_reduce>("young_reduce", m);
 
 	m.def("complete", &dispatch_ex<complete, Ex>, 
 		 pybind11::arg("ex"),pybind11::arg("add"),

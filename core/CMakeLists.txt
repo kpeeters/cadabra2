@@ -83,6 +83,7 @@ SET(ALGORITHM_SRC_FILES
 	algorithms/young_project.cc
 	algorithms/young_project_product.cc
 	algorithms/young_project_tensor.cc
+	algorithms/young_reduce.cc
 	algorithms/zoom.cc  
 )
 
