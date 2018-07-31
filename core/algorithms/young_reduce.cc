@@ -1,6 +1,5 @@
 #include <map>
-#include <sstream>
-#include "DisplayTerminal.hh"
+
 #include "Compare.hh"
 #include "Cleanup.hh"
 
@@ -8,16 +7,9 @@
 #include "algorithms/young_project_tensor.hh"
 #include "algorithms/sort_sum.hh"
 #include "algorithms/collect_terms.hh"
+#include "algorithms/distribute.hh"
 
 using namespace cadabra;
-
-std::string to_string(const Ex& ex, const Kernel& k)
-{
-	std::stringstream ss;
-	DisplayTerminal dt(k, ex, false);
-	dt.output(ss);
-	return ss.str();
-}
 
 // Precalculates the iterators for all children of a node
 struct get_children_iterators
@@ -44,6 +36,7 @@ private:
 	std::vector<iterator> its;
 };
 
+
 multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
 {
 	if (num.begin().number_of_children() != den.begin().number_of_children())
@@ -63,42 +56,106 @@ multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
 				return 0;
 			}
 		}
+		else {
+			return 0;
+		}
 	}
 	return factor;
 }
 
-std::map<Ex, std::vector<Ex::iterator>> all_combinations(const Kernel& kernel, std::map<Ex::iterator, Ex> map, Ex::iterator exclude)
-{
-	std::map<Ex, std::vector<Ex::iterator>> ret;
-	map.erase(exclude);
 
-	for (int n_terms = 1; n_terms <= map.size(); ++n_terms) {
+struct NotProjectableException : public std::exception {};
+
+struct Projection
+{
+	Projection(const Kernel& kernel, Ex::iterator child)
+		: it(child), ex(child)
+	{
+		bool is_projected = false;
+
+		young_project_tensor ypt(kernel, ex, false);
+		if (ypt.can_apply(ex.begin())) {
+			ypt.apply(ex.begin());
+			is_projected = true;
+		}
+		else if (*ex.begin()->name == "\\prod") {
+			for (Ex::iterator i : get_children_iterators(ex, ex.begin())) {
+				if (ypt.can_apply(i)) {
+					ypt.apply(i);
+					is_projected |= true;
+				}
+			}
+			distribute d(kernel, ex);
+			if (d.can_apply(ex.begin())) d.apply(ex.begin());
+		}
+
+		if (!is_projected)
+			throw NotProjectableException();
+
+		sort_sum ss(kernel, ex);
+		if (ss.can_apply(ex.begin()))
+			ss.apply(ex.begin());
+	}
+
+	bool operator == (const Projection& other) { return it == other.it; }
+
+	Ex::iterator it;
+	Ex ex;
+};
+
+
+struct Combination
+{
+	Combination() : ex("\\sum") {}
+	
+	void add_projection(const Projection& projection) 
+	{ 
+		ex.append_child(ex.begin(), projection.ex.begin());
+		its.push_back(projection.it);
+	}
+
+	void cleanup(const Kernel& kernel)
+	{
+		cleanup_dispatch(kernel, ex, ex.begin());
+
+		collect_terms ct(kernel, ex);
+		if (ct.can_apply(ex.begin())) 
+			ct.apply(ex.begin());
+
+		sort_sum ss(kernel, ex);
+		if (ss.can_apply(ex.begin())) 
+			ss.apply(ex.begin());
+	}
+
+	Ex ex;
+	std::vector<Ex::iterator> its;
+};
+
+
+std::vector<Combination> all_combinations(const Kernel& kernel, std::vector<Projection> projections, Projection exclude)
+{
+	std::vector<Combination> combinations;
+	projections.erase(std::remove(projections.begin(), projections.end(), exclude), projections.end());
+
+	for (int n_terms = 1; n_terms <= projections.size(); ++n_terms) {
 		// Initialize vector containing a bitmask of the terms we are going
 		// to combine
-		std::vector<bool> v(map.size(), false);
+		std::vector<bool> v(projections.size(), false);
 		std::fill(v.begin(), v.begin() + n_terms, true);
 
 		// Loop over all arrangements of bitmaskings
 		do {
-			Ex ex("\\sum");
-			std::vector<Ex::iterator> its;
+			Combination combination;
 			// Loop over the bitmask, appending that combination of terms to the output
 			for (int k = 0; k < v.size(); ++k) {
-				if (v[k]) {
-					ex.append_child(ex.begin(), std::next(map.begin(), k)->second.begin());
-					its.push_back(std::next(map.begin(), k)->first);
-				}
+				if (v[k])
+					combination.add_projection(projections[k]);
 			}
-			// 'Canonicalise'ish
-			cleanup_dispatch(kernel, ex, ex.begin());
-			collect_terms ct(kernel, ex);
-			if (ct.can_apply(ex.begin())) ct.apply(ex.begin());
-			sort_sum ss(kernel, ex);
-			if (ss.can_apply(ex.begin())) ss.apply(ex.begin());
-			ret[ex] = its;
+			combination.cleanup(kernel);
+			combinations.push_back(combination);
 		} while (std::prev_permutation(v.begin(), v.end()));
 	}
-	return ret;
+	return combinations;
 }
 
 
@@ -115,58 +172,39 @@ bool young_reduce::can_apply(iterator it)
 
 young_reduce::result_t young_reduce::apply(iterator& it)
 {
-	while (can_apply(it)) {
-		std::map<iterator, Ex> projections;
+	bool is_modified = true;
+	while (is_modified && can_apply(it)) {
+		is_modified = false;
+
+		// Create projections
+		std::vector<Projection> projections;
 		for (auto child : get_children_iterators(tr, it)) {
-			Ex ex(child);
-			bool is_projected = false;
-			young_project_tensor ypt(kernel, ex, false);
-			if (ypt.can_apply(ex.begin())) {
-				ypt.apply(ex.begin());
-				is_projected = true;
+			try {
+				Projection projection(kernel, child);
+				projections.push_back(projection);
 			}
-			else if (*ex.begin()->name == "\\prod") {
-				// Product of terms, project all child nodes
-				for (iterator i : get_children_iterators(ex, ex.begin())) {
-					if (ypt.can_apply(i)) {
-						ypt.apply(i);
-						is_projected |= true;
-					}
-				}
-			}
-			if (is_projected) {
-				sort_sum ss(kernel, ex);
-				if (ss.can_apply(ex.begin())) ss.apply(ex.begin());
-				projections[child] = ex;
+			catch (const NotProjectableException& npe) {
+				// Don't add
 			}
 		}
-
-		bool is_modified = false;
-		std::vector<iterator> invalid_nodes;
-		for (const auto& pair : projections) {
-			if (is_modified)
+		
+		for (const auto& projection : projections) {
+			if (is_modified) // Break as soon as the tree has been modified, iterators are now invalid
 				break;
-			if (std::find(invalid_nodes.begin(), invalid_nodes.end(), pair.first) != invalid_nodes.end())
-				continue;
-			for (const auto& combination : all_combinations(kernel, projections, pair.first)) {
-				multiplier_t fact = linear_divide(kernel, combination.first, pair.second);
+
+			auto combinations = all_combinations(kernel, projections, projection);
+			for (const auto& combination : combinations) {
+				multiplier_t fact = linear_divide(kernel, combination.ex, projection.ex);
 				if (fact != 0) {
-					std::cerr << to_string(combination.first, kernel) << " is " << fact << " * " << to_string(pair.second, kernel) << '\n';
-					std::cerr << "Multiplying " << to_string(pair.first, kernel) << " by " << (1 + fact) << '\n';
-					multiply(pair.first->multiplier, 1 + fact);
-					for (auto old : combination.second) {
+					multiply(projection.it->multiplier, 1 + fact);
+					for (auto old : combination.its)
 						tr.erase(old);
-						invalid_nodes.push_back(old);
-					}
 					cleanup_dispatch(kernel, tr, it);
 					is_modified = true;
 					break;
 				}
 			}
 		}
-		std::cerr << "Pass finished, we now have " << to_string(Ex(it), kernel);
-		if (!is_modified)
-			break;
 	}
 
 	return result_t::l_applied;
