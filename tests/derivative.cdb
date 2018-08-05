@@ -672,6 +672,9 @@ test39()
 # 
 # test40()
 
-{dx,dp}::DifferentialForm(degree=1);
-ex:= ( x dp ) ^ ( p dx ) + ( p dx ) ^ ( x dp );
-sort_product(ex);
+# {dx,dp}::DifferentialForm(degree=1);
+# ex:= ( x dp ) ^ ( p dx ) + ( p dx ) ^ ( x dp );
+# sort_product(ex);
+
+\partial{#}::PartialDerivative;
+c1:= \partial_{\alpha}{\partial_{\beta}{h_{\mu \nu}}} - \partial_{\beta}{\partial_{\alpha}{h_{\mu \nu}}};
