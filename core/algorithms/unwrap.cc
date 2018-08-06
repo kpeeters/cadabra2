@@ -146,17 +146,28 @@ Algorithm::result_t unwrap::apply(iterator& it)
 						Ex deps=dep->dependencies(kernel, factor /* it */);
 						sibling_iterator depobjs=deps.begin(deps.begin());
 						while(depobjs!=deps.end(deps.begin())) {
-							// std::cerr << "?" << *it->name << " == " << *depobjs->name << std::endl;
+#ifdef DEBUG
+							std::cerr << "?" << *old_it->name << " == " << *depobjs->name << std::endl;
+#endif
 							if(old_it->name == depobjs->name) {
 								move_out=false;
 								break;
 								}
 							else {
 								// compare all indices
+#ifdef DEBUG
+								std::cerr << "comparing indices" << std::endl;
+#endif
 								sibling_iterator indit=tr.begin(old_it);
 								while(indit!=tr.end(old_it)) {
 									if(indit->is_index()) {
-										if(subtree_exact_equal(&kernel.properties, indit, depobjs)) {
+#ifdef DEBUG
+										std::cerr << "compare " << *indit->name << " to " << *depobjs->name << std::endl;
+#endif
+										if(subtree_compare(&kernel.properties, indit, depobjs, 0, false, 0, false)==0) {
+#ifdef DEBUG
+											std::cerr << "not moving out" << std::endl;
+#endif
 											move_out=false;
 											break;
 											}

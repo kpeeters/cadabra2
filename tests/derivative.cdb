@@ -676,5 +676,19 @@ test39()
 # ex:= ( x dp ) ^ ( p dx ) + ( p dx ) ^ ( x dp );
 # sort_product(ex);
 
-\partial{#}::PartialDerivative;
-c1:= \partial_{\alpha}{\partial_{\beta}{h_{\mu \nu}}} - \partial_{\beta}{\partial_{\alpha}{h_{\mu \nu}}};
+def test40():
+    {x,y}::Coordinate.
+    \partial{#}::PartialDerivative.
+    f::Depends(x);
+    g::Depends(y);
+    ex:=\partial_{x}{A*f*g};
+    unwrap(_);
+    tst:= A g \partial_{x}{f} - @(ex);
+    assert(tst==0)
+    ex:=\partial_{y}{A*f*g};
+    unwrap(_);
+    tst:= A f \partial_{y}{g} - @(ex);
+    assert(tst==0)
+
+test40()
+
