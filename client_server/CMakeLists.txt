@@ -91,7 +91,7 @@ target_link_libraries(cadabra-server
 Threads::Threads
 )
 if(WIN32)
-   target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
+   target_link_libraries(cadabra-server ws2_32 mswsock bcrypt python36)
 endif()
 
 # cadabra2html
