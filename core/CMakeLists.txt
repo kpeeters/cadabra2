@@ -225,7 +225,7 @@ set_target_properties(cadabra2 PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
 target_link_libraries(cadabra2 PRIVATE
 	${GMPXX_LIBRARIES}
 	${GMP_LIBRARIES}   
-	${Boost_LIBRARIES} 
+	${Boost_LIBRARIES}
 )
 if(MATHEMATICA_FOUND)
 	target_link_libraries(cadabra2 PRIVATE ${Mathematica_WSTP_LIBRARIES})

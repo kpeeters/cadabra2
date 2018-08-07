@@ -91,7 +91,7 @@ target_link_libraries(cadabra-server
 Threads::Threads
 )
 if(WIN32)
-   target_link_libraries(cadabra-server ws2_32 mswsock bcrypt python36)
+   target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
 endif()
 
 # cadabra2html
@@ -158,5 +158,12 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 			"${_VCPKG_ROOT_DIR}/installed/x64-windows/tools/glib/gspawn-win64-helper-console.exe"
 		DESTINATION
 			bin
-	)
+			)
+	# Python (for some reason this is not copied in)
+   get_filename_component(PYTHON_BASE ${PYTHON_LIBRARIES} NAME_WE)
+   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
+   install(FILES ${PYTHON_PATH}/${PYTHON_BASE}.dll
+      DESTINATION    bin
+      CONFIGURATIONS Release RelWithDebInfo
+   )
 endif()
