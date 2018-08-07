@@ -160,10 +160,11 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 			bin
 			)
 	# Python (for some reason this is not copied in)
-   get_filename_component(PYTHON_BASE ${PYTHON_LIBRARIES} NAME_WE)
-   get_filename_component(PYTHON_PATH ${PYTHON_LIBRARIES} PATH)
-   install(FILES ${PYTHON_PATH}/${PYTHON_BASE}.dll
-      DESTINATION    bin
-      CONFIGURATIONS Release RelWithDebInfo
+   get_filename_component(CDB_PYTHON_BASE ${PYTHON_LIBRARIES} NAME_WE)
+   get_filename_component(CDB_PYTHON_PATH ${PYTHON_LIBRARIES} DIRECTORY)
+	message("--- Python directory: ${CDB_PYTHON_PATH}")
+	message("--- Python library:   ${CDB_PYTHON_BASE}.dll")	
+   install(FILES "${CDB_PYTHON_PATH}/${CDB_PYTHON_BASE}.dll"
+     DESTINATION    bin
    )
 endif()
