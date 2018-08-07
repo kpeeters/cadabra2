@@ -163,7 +163,8 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
    get_filename_component(CDB_PYTHON_BASE ${PYTHON_LIBRARIES} NAME_WE)
    get_filename_component(CDB_PYTHON_PATH ${PYTHON_LIBRARIES} DIRECTORY)
 	message("--- Python directory: ${CDB_PYTHON_PATH}")
-	message("--- Python library:   ${CDB_PYTHON_BASE}.dll")	
+	message("--- Python library:   ${CDB_PYTHON_BASE}.dll")
+	string(TOLOWER ${CDB_PYTHON_BASE} CDB_PYTHON_BASE)
    install(FILES "${CDB_PYTHON_PATH}/${CDB_PYTHON_BASE}.dll"
      DESTINATION    bin
    )
