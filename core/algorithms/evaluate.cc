@@ -1018,16 +1018,26 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	std::set<Ex, tree_exact_less_obj> ret(comp);
 
 	// Determine explicit dependence on Coordinates, that is, collect
-	// parent_rel=p_none arguments which carry a Coordinate property.
+	// parent_rel=p_none arguments, and add them directly if they
+	// carry a Coordinate property, or run the algorithm recursively
+	// if not (to catch e.g. exp(F(r)) depending on 'r'.
 	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
-			const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
-			if(cd && nd->fl.parent_rel==str_node::p_none) {
-				Ex cpy(nd);
-				cpy.begin()->fl.bracket=str_node::b_none;
-				cpy.begin()->fl.parent_rel=str_node::p_none;
-				one(cpy.begin()->multiplier);
-				ret.insert(cpy);
+			if(nd->fl.parent_rel==str_node::p_none) {
+				const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
+				if(cd) {
+					Ex cpy(nd);
+					cpy.begin()->fl.bracket=str_node::b_none;
+					cpy.begin()->fl.parent_rel=str_node::p_none;
+					one(cpy.begin()->multiplier);
+					ret.insert(cpy);
+					}
+				else {
+					auto arg_deps=dependencies(nd);
+					if(arg_deps.size()>0)
+						for(const auto& new_dep: arg_deps)
+							ret.insert(new_dep);
+					}
 				}
 			return nd;
 			});
