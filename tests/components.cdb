@@ -724,7 +724,18 @@ def test35():
 
 test35()
 
+def test36():
+    {r,t}::Coordinate;
+    {i,j}::Indices(values={r,t});
+    F::Depends(r);
+    \partial{#}::PartialDerivative;
+    ex:=\partial_{i}{\exp(F)};
+    evaluate(ex)
+    tst:=\components_{i}( \comma{ \comma{r} = \exp(F) \partial_{r}{F}  } ) - @(ex);
+    collect_components(tst)
+    assert(tst==0)
 
+test36()
 
     
 \tau::Coordinate;        

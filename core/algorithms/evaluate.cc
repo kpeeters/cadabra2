@@ -30,7 +30,7 @@ bool evaluate::can_apply(iterator it)
 
 bool evaluate::is_scalar_function(iterator it) const
    {
-   if(*it->name=="\\pow") return true;
+   if(*it->name=="\\pow" || *it->name=="\\exp" || *it->name=="\\sin" || *it->name=="\\cos" ) return true;
    return false;
    }
 
@@ -1017,12 +1017,23 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 	tree_exact_less_obj comp(&kernel.properties);
 	std::set<Ex, tree_exact_less_obj> ret(comp);
 
+	// Is this node a coordinate itself? If so, add it.
+	const Coordinate *cd = kernel.properties.get<Coordinate>(it, true);
+	if(cd) {
+		Ex cpy(it);
+		cpy.begin()->fl.bracket=str_node::b_none;
+		cpy.begin()->fl.parent_rel=str_node::p_none;
+		one(cpy.begin()->multiplier);
+		ret.insert(cpy);
+		}
+
 	// Determine explicit dependence on Coordinates, that is, collect
 	// parent_rel=p_none arguments, and add them directly if they
 	// carry a Coordinate property, or run the algorithm recursively
 	// if not (to catch e.g. exp(F(r)) depending on 'r'.
 	
 	cadabra::do_subtree(tr, it, [&](Ex::iterator nd) -> Ex::iterator {
+			if(nd==it) return nd; // skip node itself, leads to indefinite recursion
 			if(nd->fl.parent_rel==str_node::p_none) {
 				const Coordinate *cd = kernel.properties.get<Coordinate>(nd, true);
 				if(cd) {
