@@ -32,7 +32,6 @@ set(CADABRA_SERVER_SRC
 	${CADABRA_CORE_DIR}/InstallPrefix.cc
 	${CADABRA_CORE_DIR}/CdbPython.cc 
 	${CADABRA_CORE_DIR}/Stopwatch.cc 
-	${CADABRA_CORE_DIR}/ProgressMonitor.cc
 	${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
 )

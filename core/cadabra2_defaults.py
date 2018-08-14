@@ -81,7 +81,7 @@ if 'server' in globals():
 else:
     mopen=''
     mclose=''
-    class Server(ProgressMonitor):
+    class Server:
         """!@brief Object to handle advanced display in a UI-independent way.
 
         @long Cadabra makes available to Python a Server object, which

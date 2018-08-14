@@ -25,17 +25,6 @@ using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
 
-// Wrap the 'totals' member of ProgressMonitor to return a Python list.
-
-//pybind11::list ProgressMonitor_totals_helper(ProgressMonitor& self)
-//	{
-//	pybind11::list list;
-//	auto totals = self.totals();
-//	for(auto& total: totals)
-//		list.append(total);
-//	return list;
-//	}
-
 Server::Server()
 	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
@@ -88,21 +77,14 @@ std::string Server::architecture() const
 
 PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m)
    {
-   auto cadabra_module = pybind11::module::import("cadabra2");
+//   auto cadabra_module = pybind11::module::import("cadabra2");
    
    pybind11::class_<Server::CatchOutput>(m, "CatchOutput")
 	   .def("write", &Server::CatchOutput::write)
 	   .def("clear", &Server::CatchOutput::clear)
 	   ;
 
-// 	// We really want this module to know about the ProgressMonitor
-// 	// class in 'cadabra2' which we just imported. This does not work!
-// 	pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")\
-// 		.def(pybind11::init<>())
-// 		.def("print", &ProgressMonitor::print);
-// //		.def("totals", &ProgressMonitor_totals_helper);
-	
-   pybind11::class_<Server, ProgressMonitor>(m, "Server")
+   pybind11::class_<Server>(m, "Server")
 	   .def("send", &Server::send)
 	   .def("handles", &Server::handles)
 	   .def("architecture", &Server::architecture);

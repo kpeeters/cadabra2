@@ -754,6 +754,25 @@ Kernel *get_kernel_from_scope()
 	return kernel;
 	}
 
+ProgressMonitor *get_progress_monitor()
+   {
+   ProgressMonitor *pm=nullptr;
+
+   try {
+	   pybind11::dict globals = get_globals();
+	   if(scope_has(globals, "__cdb_progress_monitor__")) {
+		   pm = globals["__cdb_progress_monitor__"].cast<ProgressMonitor*>();
+		   return pm;
+		   }
+	   pm = new ProgressMonitor();
+	   globals["__cdb_progress_monitor__"] = pm;
+	   }
+	catch(pybind11::error_already_set& ex) {
+		std::cerr << "*!?!?" << ex.what() << std::endl;
+	   }
+	return pm;
+   }
+
 // The following handle setup of local scope for Cadabra properties.
 
 Kernel *create_scope()
@@ -910,24 +929,12 @@ std::string Property<Prop>::repr_() const
 // declaration of 'join_gamma' below for an example of how to declare
 // those additional arguments).
 
-ProgressMonitor *pm=0;
-
 template<class F>
 std::shared_ptr<Ex> dispatch_base(std::shared_ptr<Ex> ex, F& algo, bool deep, bool repeat, unsigned int depth, bool pre_order)
 	{
 	Ex::iterator it=ex->begin();
 	if(ex->is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
-		if(pm==0) {
-			try {
-				pybind11::object globals=get_globals();
-				pybind11::object obj = globals["server"];
-				pm = obj.cast<ProgressMonitor *>(); 
-				}
-			catch(pybind11::error_already_set& err) {
-				std::cerr << "Cannot find ProgressMonitor derived 'server' object." << std::endl;
-				}
-			}
-
+		ProgressMonitor *pm = get_progress_monitor();
 		algo.set_progress_monitor(pm);
 		if(!pre_order)
 			ex->update_state(algo.apply_generic(it, deep, repeat, depth));
@@ -1093,16 +1100,6 @@ void def_prop(pybind11::module& m)
 		.def("__repr__", &Property<P>::repr_)
 		.def("_latex_", &Property<P>::latex_);
 	}
-
-// // All this class does is provide a trampoline class
-// // for pybind to properly handle the constructor
-// // of ProgressMonitor
-// 
-// class PyProgressMonitor : public ProgressMonitor {
-// 	public:
-// 		using ProgressMonitor::ProgressMonitor;
-// };
-// 
 
 void compile_package(const std::string& name)
 {

@@ -12,8 +12,8 @@ class ProgressMonitor {
 		ProgressMonitor();
 		virtual ~ProgressMonitor();
 
-		virtual void group(std::string name=""); 
-		virtual void progress(int n, int total);
+		void group(std::string name=""); 
+		void progress(int n, int total);
 
 		void print() const;
 

@@ -12,7 +12,6 @@
 #include <pybind11/embed.h>
 
 #include "Stopwatch.hh"
-#include "ProgressMonitor.hh"
 
 /// \ingroup clientserver
 ///
@@ -30,7 +29,7 @@
 /// When the Python code finishes (or when it is interrupted), this thread
 /// locks the socket_mutex and calls on_block_finished().
 
-class Server : public ProgressMonitor {
+class Server {
 	public:
 		Server();
 		Server(const Server&)=delete;
