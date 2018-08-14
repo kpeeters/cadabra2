@@ -19,6 +19,8 @@
 #include "CdbPython.hh"
 #include "SympyCdb.hh"
 
+// #define DEBUG 1
+
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
 using websocketpp::lib::bind;
@@ -92,6 +94,14 @@ PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m)
 	   .def("write", &Server::CatchOutput::write)
 	   .def("clear", &Server::CatchOutput::clear)
 	   ;
+
+// 	// We really want this module to know about the ProgressMonitor
+// 	// class in 'cadabra2' which we just imported. This does not work!
+// 	pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")\
+// 		.def(pybind11::init<>())
+// 		.def("print", &ProgressMonitor::print);
+// //		.def("totals", &ProgressMonitor_totals_helper);
+	
    pybind11::class_<Server, ProgressMonitor>(m, "Server")
 	   .def("send", &Server::send)
 	   .def("handles", &Server::handles)
@@ -164,9 +174,13 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	// Run block. Catch output.
 	try {
 //		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
-		// std::cerr << "executing..." << std::endl;
+#ifdef DEBUG
+		std::cerr << "executing..." << std::endl;
+#endif
 		pybind11::exec(newblk.c_str(), main_namespace);
-		// std::cerr << "exec done" << std::endl;
+#ifdef DEBUG
+		std::cerr << "exec done" << std::endl;
+#endif
 //		std::string object_classname = ignored.attr("__class__").attr("__name__").cast<std::string>();
 //		std::cerr << "" << std::endl;		
 
@@ -176,6 +190,10 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			}
 		}
 	catch(pybind11::error_already_set& ex) {
+#ifdef DEBUG
+		std::cerr << "Server::run_string: exception " << ex.what() << std::endl;
+#endif
+		// on macOS this just hangs, and so does a plain return "";
 		throw std::runtime_error(ex.what());
 		}
 
@@ -251,10 +269,16 @@ void Server::wait_for_job()
 			on_block_finished(block);
 			}
 		catch(std::runtime_error& ex) {
+#ifdef DEBUG
+			std::cerr << "Exception caught, acquiring lock" << std::endl;
+#endif
 			server_stopwatch.stop();
 			// snoop::log(snoop::info) << "Python runtime exception" << snoop::flush;
 			// On error we remove all other blocks from the queue.
 			lock.lock();
+#ifdef DEBUG
+			std::cerr << "Lock acquired" << std::endl;
+#endif
 			std::queue<Block> empty;
 			std::swap(block_queue, empty);
 			lock.unlock();
