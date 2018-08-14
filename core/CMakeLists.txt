@@ -285,12 +285,22 @@ endif()
 
 install_directory_permissions(${PYTHON_SITE_PATH})
 
-install(
-	TARGETS
-		cadabra2
-	DESTINATION 
-		bin
-)
+if (MSVC)
+  install(
+	 TARGETS
+	 cadabra2
+	 DESTINATION 
+	 bin
+	 )
+else()
+  install(
+	 TARGETS
+	 cadabra2
+	 DESTINATION 
+	 ${PYTHON_SITE_PATH}
+	 )
+endif()
+
 install(
 	FILES "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
 	DESTINATION "${PYTHON_SITE_PATH}"

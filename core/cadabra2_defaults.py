@@ -107,7 +107,10 @@ else:
         def handles(self, otype):
             if(otype=="plain"):
                 return True
-            return False            
+            return False
+
+        def totals(self):
+            return __cdb_progress_monitor__.totals()
             
     server = Server()
 
