@@ -51,6 +51,7 @@ NAMESPACE_BEGIN(PYBIND11_NAMESPACE)
 class cpp_function : public function {
 public:
     cpp_function() { }
+    cpp_function(std::nullptr_t) { }
 
     /// Construct a cpp_function from a vanilla function pointer
     template <typename Return, typename... Args, typename... Extra>
@@ -93,7 +94,6 @@ protected:
     template <typename Func, typename Return, typename... Args, typename... Extra>
     void initialize(Func &&f, Return (*)(Args...), const Extra&... extra) {
         using namespace detail;
-
         struct capture { remove_reference_t<Func> f; };
 
         /* Store the function including any extra state it might have (e.g. a lambda capture object) */
@@ -145,7 +145,7 @@ protected:
             capture *cap = const_cast<capture *>(reinterpret_cast<const capture *>(data));
 
             /* Override policy for rvalues -- usually to enforce rvp::move on an rvalue */
-            const auto policy = return_value_policy_override<Return>::policy(call.func.policy);
+            return_value_policy policy = return_value_policy_override<Return>::policy(call.func.policy);
 
             /* Function scope guard -- defaults to the compile-to-nothing `void_type` */
             using Guard = extract_guard_t<Extra...>;
@@ -164,10 +164,11 @@ protected:
         process_attributes<Extra...>::init(extra..., rec);
 
         /* Generate a readable signature describing the function's arguments and return value types */
-        PYBIND11_DESCR signature = _("(") + cast_in::arg_names() + _(") -> ") + cast_out::name();
+        static constexpr auto signature = _("(") + cast_in::arg_names + _(") -> ") + cast_out::name;
+        PYBIND11_DESCR_CONSTEXPR auto types = decltype(signature)::types();
 
         /* Register the function with Python from generic (non-templated) code */
-        initialize_generic(rec, signature.text(), signature.types(), sizeof...(Args));
+        initialize_generic(rec, signature.text, types.data(), sizeof...(Args));
 
         if (cast_in::has_args) rec->has_args = true;
         if (cast_in::has_kwargs) rec->has_kwargs = true;
@@ -217,34 +218,30 @@ protected:
 
         /* Generate a proper function signature */
         std::string signature;
-        size_t type_depth = 0, char_index = 0, type_index = 0, arg_index = 0;
-        while (true) {
-            char c = text[char_index++];
-            if (c == '\0')
-                break;
+        size_t type_index = 0, arg_index = 0;
+        for (auto *pc = text; *pc != '\0'; ++pc) {
+            const auto c = *pc;
 
             if (c == '{') {
-                // Write arg name for everything except *args, **kwargs and return type.
-                if (type_depth == 0 && text[char_index] != '*' && arg_index < args) {
-                    if (!rec->args.empty() && rec->args[arg_index].name) {
-                        signature += rec->args[arg_index].name;
-                    } else if (arg_index == 0 && rec->is_method) {
-                        signature += "self";
-                    } else {
-                        signature += "arg" + std::to_string(arg_index - (rec->is_method ? 1 : 0));
-                    }
-                    signature += ": ";
+                // Write arg name for everything except *args and **kwargs.
+                if (*(pc + 1) == '*')
+                    continue;
+
+                if (arg_index < rec->args.size() && rec->args[arg_index].name) {
+                    signature += rec->args[arg_index].name;
+                } else if (arg_index == 0 && rec->is_method) {
+                    signature += "self";
+                } else {
+                    signature += "arg" + std::to_string(arg_index - (rec->is_method ? 1 : 0));
                 }
-                ++type_depth;
+                signature += ": ";
             } else if (c == '}') {
-                --type_depth;
-                if (type_depth == 0) {
-                    if (arg_index < rec->args.size() && rec->args[arg_index].descr) {
-                        signature += "=";
-                        signature += rec->args[arg_index].descr;
-                    }
-                    arg_index++;
+                // Write default value if available.
+                if (arg_index < rec->args.size() && rec->args[arg_index].descr) {
+                    signature += " = ";
+                    signature += rec->args[arg_index].descr;
                 }
+                arg_index++;
             } else if (c == '%') {
                 const std::type_info *t = types[type_index++];
                 if (!t)
@@ -269,13 +266,8 @@ protected:
                 signature += c;
             }
         }
-        if (type_depth != 0 || types[type_index] != nullptr)
+        if (arg_index != args || types[type_index] != nullptr)
             pybind11_fail("Internal error while parsing type signature (2)");
-
-        #if !defined(PYBIND11_CONSTEXPR_DESCR)
-            delete[] types;
-            delete[] text;
-        #endif
 
 #if PY_MAJOR_VERSION < 3
         if (strcmp(rec->name, "__next__") == 0) {
@@ -314,7 +306,7 @@ protected:
             rec->def = new PyMethodDef();
             std::memset(rec->def, 0, sizeof(PyMethodDef));
             rec->def->ml_name = rec->name;
-            rec->def->ml_meth = reinterpret_cast<PyCFunction>(*dispatcher);
+            rec->def->ml_meth = reinterpret_cast<PyCFunction>(reinterpret_cast<void (*) (void)>(*dispatcher));
             rec->def->ml_flags = METH_VARARGS | METH_KEYWORDS;
 
             capsule rec_capsule(rec, [](void *ptr) {
@@ -961,18 +953,18 @@ protected:
         tinfo->get_buffer_data = get_buffer_data;
     }
 
+    // rec_func must be set for either fget or fset.
     void def_property_static_impl(const char *name,
                                   handle fget, handle fset,
-                                  detail::function_record *rec_fget) {
-        const auto is_static = !(rec_fget->is_method && rec_fget->scope);
-        const auto has_doc = rec_fget->doc && pybind11::options::show_user_defined_docstrings();
-
+                                  detail::function_record *rec_func) {
+        const auto is_static = rec_func && !(rec_func->is_method && rec_func->scope);
+        const auto has_doc = rec_func && rec_func->doc && pybind11::options::show_user_defined_docstrings();
         auto property = handle((PyObject *) (is_static ? get_internals().static_property_type
                                                        : &PyProperty_Type));
         attr(name) = property(fget.ptr() ? fget : none(),
                               fset.ptr() ? fset : none(),
                               /*deleter*/none(),
-                              pybind11::str(has_doc ? rec_fget->doc : ""));
+                              pybind11::str(has_doc ? rec_func->doc : ""));
     }
 };
 
@@ -1004,10 +996,18 @@ template <typename /*Derived*/, typename F>
 auto method_adaptor(F &&f) -> decltype(std::forward<F>(f)) { return std::forward<F>(f); }
 
 template <typename Derived, typename Return, typename Class, typename... Args>
-auto method_adaptor(Return (Class::*pmf)(Args...)) -> Return (Derived::*)(Args...) { return pmf; }
+auto method_adaptor(Return (Class::*pmf)(Args...)) -> Return (Derived::*)(Args...) {
+    static_assert(detail::is_accessible_base_of<Class, Derived>::value,
+        "Cannot bind an inaccessible base class method; use a lambda definition instead");
+    return pmf;
+}
 
 template <typename Derived, typename Return, typename Class, typename... Args>
-auto method_adaptor(Return (Class::*pmf)(Args...) const) -> Return (Derived::*)(Args...) const { return pmf; }
+auto method_adaptor(Return (Class::*pmf)(Args...) const) -> Return (Derived::*)(Args...) const {
+    static_assert(detail::is_accessible_base_of<Class, Derived>::value,
+        "Cannot bind an inaccessible base class method; use a lambda definition instead");
+    return pmf;
+}
 
 template <typename type_, typename... options>
 class class_ : public detail::generic_type {
@@ -1198,7 +1198,7 @@ public:
     /// Uses cpp_function's return_value_policy by default
     template <typename... Extra>
     class_ &def_property_readonly(const char *name, const cpp_function &fget, const Extra& ...extra) {
-        return def_property(name, fget, cpp_function(), extra...);
+        return def_property(name, fget, nullptr, extra...);
     }
 
     /// Uses return_value_policy::reference by default
@@ -1210,7 +1210,7 @@ public:
     /// Uses cpp_function's return_value_policy by default
     template <typename... Extra>
     class_ &def_property_readonly_static(const char *name, const cpp_function &fget, const Extra& ...extra) {
-        return def_property_static(name, fget, cpp_function(), extra...);
+        return def_property_static(name, fget, nullptr, extra...);
     }
 
     /// Uses return_value_policy::reference_internal by default
@@ -1240,21 +1240,25 @@ public:
     template <typename... Extra>
     class_ &def_property_static(const char *name, const cpp_function &fget, const cpp_function &fset, const Extra& ...extra) {
         auto rec_fget = get_function_record(fget), rec_fset = get_function_record(fset);
-        char *doc_prev = rec_fget->doc; /* 'extra' field may include a property-specific documentation string */
-        detail::process_attributes<Extra...>::init(extra..., rec_fget);
-        if (rec_fget->doc && rec_fget->doc != doc_prev) {
-            free(doc_prev);
-            rec_fget->doc = strdup(rec_fget->doc);
+        auto *rec_active = rec_fget;
+        if (rec_fget) {
+           char *doc_prev = rec_fget->doc; /* 'extra' field may include a property-specific documentation string */
+           detail::process_attributes<Extra...>::init(extra..., rec_fget);
+           if (rec_fget->doc && rec_fget->doc != doc_prev) {
+              free(doc_prev);
+              rec_fget->doc = strdup(rec_fget->doc);
+           }
         }
         if (rec_fset) {
-            doc_prev = rec_fset->doc;
+            char *doc_prev = rec_fset->doc;
             detail::process_attributes<Extra...>::init(extra..., rec_fset);
             if (rec_fset->doc && rec_fset->doc != doc_prev) {
                 free(doc_prev);
                 rec_fset->doc = strdup(rec_fset->doc);
             }
+            if (! rec_active) rec_active = rec_fset;
         }
-        def_property_static_impl(name, fget, fset, rec_fget);
+        def_property_static_impl(name, fget, fset, rec_active);
         return *this;
     }
 
@@ -1267,25 +1271,25 @@ private:
             auto sh = std::dynamic_pointer_cast<typename holder_type::element_type>(
                     v_h.value_ptr<type>()->shared_from_this());
             if (sh) {
-                new (&v_h.holder<holder_type>()) holder_type(std::move(sh));
+                new (std::addressof(v_h.holder<holder_type>())) holder_type(std::move(sh));
                 v_h.set_holder_constructed();
             }
         } catch (const std::bad_weak_ptr &) {}
 
         if (!v_h.holder_constructed() && inst->owned) {
-            new (&v_h.holder<holder_type>()) holder_type(v_h.value_ptr<type>());
+            new (std::addressof(v_h.holder<holder_type>())) holder_type(v_h.value_ptr<type>());
             v_h.set_holder_constructed();
         }
     }
 
     static void init_holder_from_existing(const detail::value_and_holder &v_h,
             const holder_type *holder_ptr, std::true_type /*is_copy_constructible*/) {
-        new (&v_h.holder<holder_type>()) holder_type(*reinterpret_cast<const holder_type *>(holder_ptr));
+        new (std::addressof(v_h.holder<holder_type>())) holder_type(*reinterpret_cast<const holder_type *>(holder_ptr));
     }
 
     static void init_holder_from_existing(const detail::value_and_holder &v_h,
             const holder_type *holder_ptr, std::false_type /*is_copy_constructible*/) {
-        new (&v_h.holder<holder_type>()) holder_type(std::move(*const_cast<holder_type *>(holder_ptr)));
+        new (std::addressof(v_h.holder<holder_type>())) holder_type(std::move(*const_cast<holder_type *>(holder_ptr)));
     }
 
     /// Initialize holder object, variant 2: try to construct from existing holder object, if possible
@@ -1295,7 +1299,7 @@ private:
             init_holder_from_existing(v_h, holder_ptr, std::is_copy_constructible<holder_type>());
             v_h.set_holder_constructed();
         } else if (inst->owned || detail::always_construct_holder<holder_type>::value) {
-            new (&v_h.holder<holder_type>()) holder_type(v_h.value_ptr<type>());
+            new (std::addressof(v_h.holder<holder_type>())) holder_type(v_h.value_ptr<type>());
             v_h.set_holder_constructed();
         }
     }
@@ -1360,6 +1364,7 @@ detail::initimpl::pickle_factory<GetState, SetState> pickle(GetState &&g, SetSta
 template <typename Type> class enum_ : public class_<Type> {
 public:
     using class_<Type>::def;
+    using class_<Type>::def_property_readonly;
     using class_<Type>::def_property_readonly_static;
     using Scalar = typename std::underlying_type<Type>::type;
 
@@ -1372,15 +1377,37 @@ public:
         auto m_entries_ptr = m_entries.inc_ref().ptr();
         def("__repr__", [name, m_entries_ptr](Type value) -> pybind11::str {
             for (const auto &kv : reinterpret_borrow<dict>(m_entries_ptr)) {
-                if (pybind11::cast<Type>(kv.second) == value)
+                if (pybind11::cast<Type>(kv.second[int_(0)]) == value)
                     return pybind11::str("{}.{}").format(name, kv.first);
             }
             return pybind11::str("{}.???").format(name);
         });
-        def_property_readonly_static("__members__", [m_entries_ptr](object /* self */) {
+        def_property_readonly("name", [m_entries_ptr](Type value) -> pybind11::str {
+            for (const auto &kv : reinterpret_borrow<dict>(m_entries_ptr)) {
+                if (pybind11::cast<Type>(kv.second[int_(0)]) == value)
+                    return pybind11::str(kv.first);
+            }
+            return pybind11::str("???");
+        });
+        def_property_readonly_static("__doc__", [m_entries_ptr](handle self_) {
+            std::string docstring;
+            const char *tp_doc = ((PyTypeObject *) self_.ptr())->tp_doc;
+            if (tp_doc)
+                docstring += std::string(tp_doc) + "\n\n";
+            docstring += "Members:";
+            for (const auto &kv : reinterpret_borrow<dict>(m_entries_ptr)) {
+                auto key = std::string(pybind11::str(kv.first));
+                auto comment = kv.second[int_(1)];
+                docstring += "\n\n  " + key;
+                if (!comment.is_none())
+                    docstring += " : " + (std::string) pybind11::str(comment);
+            }
+            return docstring;
+        });
+        def_property_readonly_static("__members__", [m_entries_ptr](handle /* self_ */) {
             dict m;
             for (const auto &kv : reinterpret_borrow<dict>(m_entries_ptr))
-                m[kv.first] = kv.second;
+                m[kv.first] = kv.second[int_(0)];
             return m;
         }, return_value_policy::copy);
         def(init([](Scalar i) { return static_cast<Type>(i); }));
@@ -1428,15 +1455,15 @@ public:
     /// Export enumeration entries into the parent scope
     enum_& export_values() {
         for (const auto &kv : m_entries)
-            m_parent.attr(kv.first) = kv.second;
+            m_parent.attr(kv.first) = kv.second[int_(0)];
         return *this;
     }
 
     /// Add an enumeration entry
-    enum_& value(char const* name, Type value) {
+    enum_& value(char const* name, Type value, const char *doc = nullptr) {
         auto v = pybind11::cast(value, return_value_policy::copy);
         this->attr(name) = v;
-        m_entries[pybind11::str(name)] = v;
+        m_entries[pybind11::str(name)] = std::make_pair(v, doc);
         return *this;
     }
 
@@ -1747,7 +1774,7 @@ class gil_scoped_acquire {
 public:
     PYBIND11_NOINLINE gil_scoped_acquire() {
         auto const &internals = detail::get_internals();
-        tstate = (PyThreadState *) PyThread_get_key_value(internals.tstate);
+        tstate = (PyThreadState *) PYBIND11_TLS_GET_VALUE(internals.tstate);
 
         if (!tstate) {
             tstate = PyThreadState_New(internals.istate);
@@ -1756,10 +1783,7 @@ public:
                     pybind11_fail("scoped_acquire: could not create thread state!");
             #endif
             tstate->gilstate_counter = 0;
-            #if PY_MAJOR_VERSION < 3
-                PyThread_delete_key_value(internals.tstate);
-            #endif
-            PyThread_set_key_value(internals.tstate, tstate);
+            PYBIND11_TLS_REPLACE_VALUE(internals.tstate, tstate);
         } else {
             release = detail::get_thread_state_unchecked() != tstate;
         }
@@ -1798,7 +1822,7 @@ public:
             #endif
             PyThreadState_Clear(tstate);
             PyThreadState_DeleteCurrent();
-            PyThread_delete_key_value(detail::get_internals().tstate);
+            PYBIND11_TLS_DELETE_VALUE(detail::get_internals().tstate);
             release = false;
         }
     }
@@ -1823,11 +1847,7 @@ public:
         tstate = PyEval_SaveThread();
         if (disassoc) {
             auto key = internals.tstate;
-            #if PY_MAJOR_VERSION < 3
-                PyThread_delete_key_value(key);
-            #else
-                PyThread_set_key_value(key, nullptr);
-            #endif
+            PYBIND11_TLS_DELETE_VALUE(key);
         }
     }
     ~gil_scoped_release() {
@@ -1836,10 +1856,7 @@ public:
         PyEval_RestoreThread(tstate);
         if (disassoc) {
             auto key = detail::get_internals().tstate;
-            #if PY_MAJOR_VERSION < 3
-                PyThread_delete_key_value(key);
-            #endif
-            PyThread_set_key_value(key, tstate);
+            PYBIND11_TLS_REPLACE_VALUE(key, tstate);
         }
     }
 private:
@@ -1867,6 +1884,7 @@ class gil_scoped_release { };
 
 error_already_set::~error_already_set() {
     if (type) {
+        error_scope scope;
         gil_scoped_acquire gil;
         type.release().dec_ref();
         value.release().dec_ref();
@@ -1950,18 +1968,18 @@ template <class T> function get_overload(const T *this_ptr, const char *name) {
     }
 
 #define PYBIND11_OVERLOAD_NAME(ret_type, cname, name, fn, ...) \
-    PYBIND11_OVERLOAD_INT(ret_type, cname, name, __VA_ARGS__) \
+    PYBIND11_OVERLOAD_INT(PYBIND11_TYPE(ret_type), PYBIND11_TYPE(cname), name, __VA_ARGS__) \
     return cname::fn(__VA_ARGS__)
 
 #define PYBIND11_OVERLOAD_PURE_NAME(ret_type, cname, name, fn, ...) \
-    PYBIND11_OVERLOAD_INT(ret_type, cname, name, __VA_ARGS__) \
-    pybind11::pybind11_fail("Tried to call pure virtual function \"" #cname "::" name "\"");
+    PYBIND11_OVERLOAD_INT(PYBIND11_TYPE(ret_type), PYBIND11_TYPE(cname), name, __VA_ARGS__) \
+    pybind11::pybind11_fail("Tried to call pure virtual function \"" PYBIND11_STRINGIFY(cname) "::" name "\"");
 
 #define PYBIND11_OVERLOAD(ret_type, cname, fn, ...) \
-    PYBIND11_OVERLOAD_NAME(ret_type, cname, #fn, fn, __VA_ARGS__)
+    PYBIND11_OVERLOAD_NAME(PYBIND11_TYPE(ret_type), PYBIND11_TYPE(cname), #fn, fn, __VA_ARGS__)
 
 #define PYBIND11_OVERLOAD_PURE(ret_type, cname, fn, ...) \
-    PYBIND11_OVERLOAD_PURE_NAME(ret_type, cname, #fn, fn, __VA_ARGS__)
+    PYBIND11_OVERLOAD_PURE_NAME(PYBIND11_TYPE(ret_type), PYBIND11_TYPE(cname), #fn, fn, __VA_ARGS__)
 
 NAMESPACE_END(PYBIND11_NAMESPACE)
 
