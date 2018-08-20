@@ -134,7 +134,7 @@ void Server::init()
 //	HERE: should use pybind11::eval_file instead, much simpler.
 //	
 	std::string startup =
-		"f=open('" PYTHON_SITE_PATH "/cadabra2_defaults.py'); "
+		"f=open(r'" + python_path + "/cadabra2_defaults.py'); "
 		"code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); "
 		"exec(code); f.close()"; 
 	run_string(startup);
