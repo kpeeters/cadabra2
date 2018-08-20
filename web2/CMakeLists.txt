@@ -48,6 +48,7 @@ set(ALGOS
   collect_terms
   combine
   complete
+  decompose
   decompose_product
   distribute
   drop_weight

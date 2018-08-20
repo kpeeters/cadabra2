@@ -1,0 +1,82 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{decompose}{Decompose a tensor monomial on a given basis of monomials.}\n\n The basis\nshould be given in the second argument. All tensor symmetries,\nincluding those implied by Young tableau Garnir symmetries, are taken\ninto account. Example,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{decompose}{Decompose a tensor monomial on a given basis of monomials.}\n\n The basis\nshould be given in the second argument. All tensor symmetries,\nincluding those implied by Young tableau Garnir symmetries, are taken\ninto account. Example,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "R_{m n q p} R_{m p n q}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}R_{m n q p} R_{m p n q}\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p,q}::Indices(vector).\n{m,n,p,q}::Integer(0..10).\nR_{m n p q}::RiemannTensor.\n\nex:=R_{m n q p} R_{m p n q};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{ -  1/2 }"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[ - \\frac{1}{2}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "decompose(ex, $R_{m n p q} R_{m n p q}$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that this algorithm does not yet take into account\ndimension-dependent identities, but it is nevertheless already\nrequired that the index range is specified."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that this algorithm does not yet take into account\ndimension-dependent identities, but it is nevertheless already\nrequired that the index range is specified."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
