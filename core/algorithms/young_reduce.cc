@@ -1,5 +1,3 @@
-#include <map>
-
 #include "Compare.hh"
 #include "Cleanup.hh"
 
@@ -8,19 +6,19 @@
 #include "algorithms/sort_sum.hh"
 #include "algorithms/collect_terms.hh"
 #include "algorithms/distribute.hh"
+#include "algorithms/rename_dummies.hh"
 
 #include <sstream>
 #include "DisplayTerminal.hh"
 
 using namespace cadabra;
 
-//std::string to_string(const Ex& ex, const Kernel& k)
-//{
-//	std::stringstream ss;
-//	DisplayTerminal dt(k, ex, false);
-//	dt.output(ss);
-//	return ss.str();
-//}
+// Forward declarations of all internals
+struct get_children_iterators;
+multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den);
+bool is_index_permutation(const Kernel& kernel, Ex::iterator lhs, Ex::iterator rhs);
+bool is_index_permutation(const Kernel& kernel, Ex& lhs, Ex& rhs);
+Ex project(const Kernel& kernel, Ex ex);
 
 // Precalculates the iterators for all children of a node
 struct get_children_iterators
@@ -46,49 +44,6 @@ struct get_children_iterators
 private:
 	std::vector<iterator> its;
 };
-
-bool can_recursive_project(const Kernel& kernel, Ex& ex, Ex::iterator it)
-{
-	if (*it->name == "\\sum" || *it->name == "\\prod") {
-		for (auto child : get_children_iterators(ex, it)) {
-			if (!can_recursive_project(kernel, ex, child)) return false;
-		}
-		return true;
-	}
-	else {
-		young_project_tensor ypt(kernel, ex, false);
-		return ypt.can_apply(it);
-	}
-
-}
-
-void recursive_project(const Kernel& kernel, Ex& ex, Ex::iterator it)
-{
-	if (*it->name == "\\sum" || *it->name == "\\prod") {
-		std::vector<Ex> children;
-		for (auto child : get_children_iterators(ex, it)) {
-			Ex tmp(child);
-			recursive_project(kernel, tmp, tmp.begin());
-			children.push_back(tmp);
-		}
-		ex.erase_children(it);
-		for (const auto& child : children)
-			ex.append_child(it, child.begin());
-	}
-	else {
-		young_project_tensor ypt(kernel, ex, false);
-		if (ypt.can_apply(it)) ypt.apply(it);
-	}
-
-	cleanup_dispatch(kernel, ex, it);
-	distribute dist(kernel, ex);
-	if (dist.can_apply(ex.begin())) dist.apply(ex.begin());
-	collect_terms ct(kernel, ex);
-	if (ct.can_apply(ex.begin())) ct.apply(ex.begin());
-	sort_sum ss(kernel, ex);
-	if (ss.can_apply(ex.begin())) ss.apply(ex.begin());
-}
-
 
 multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
 {
@@ -165,43 +120,101 @@ std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
 	return permutations;
 }
 
-bool is_index_permutation(const Kernel& kernel, Ex::iterator lhs, Ex::iterator rhs)
+bool is_index_permutation(const Kernel& kernel, Ex& lhs, Ex& rhs)
 {
-	if (*lhs->name == "\\prod") {
-		if (*rhs->name != "\\prod") return false;
-		if (lhs.number_of_children() != rhs.number_of_children()) return false;
-		Ex elhs(lhs), erhs(rhs);
-		for (Ex::sibling_iterator lit = elhs.child(elhs.begin(), 0), rit = erhs.child(erhs.begin(), 0); elhs.is_valid(lit); ++lit, ++rit) {
-			if (!is_index_permutation(kernel, lit, rit)) return false;
+	if (lhs.begin()->name == rhs.begin()->name) {
+		if (lhs.number_of_children(lhs.begin()) != rhs.number_of_children(rhs.begin()))
+			return false;
+
+		Ex::sibling_iterator lit = lhs.child(lhs.begin(), 0);
+		Ex::sibling_iterator rit = rhs.child(rhs.begin(), 0);
+
+		if (lit->is_index()) {
+			std::vector<std::string> lnames, rnames;
+			while (lhs.is_valid(lit) && rhs.is_valid(rit)) {
+				lnames.push_back(*lit->name);
+				rnames.push_back(*rit->name);
+				++lit, ++rit;
+			}
+			std::sort(lnames.begin(), lnames.end());
+			std::sort(rnames.begin(), rnames.end());
+			return lnames == rnames;
 		}
-		return true;
+		else {
+			while (lhs.is_valid(lit) && rhs.is_valid(rit)) {
+				if (!is_index_permutation(kernel, lit, rit))
+					return false;
+				++lit, ++rit;
+			}
+			return true;
+		}
 	}
 	else {
-		Ex_comparator comp(kernel.properties);
-		auto ret = comp.equal_subtree(lhs, rhs, Ex_comparator::useprops_t::never);
-		return 
-			ret == Ex_comparator::match_t::match_index_greater ||
-			ret == Ex_comparator::match_t::subtree_match;
+		return false;
 	}
 }
 
-multiplier_t check_equivalence(const Kernel& kernel, Ex lhs, Ex rhs)
+bool is_index_permutation(const Kernel& kernel, Ex::iterator lhs, Ex::iterator rhs)
 {
-	recursive_project(kernel, lhs, lhs.begin());
-	recursive_project(kernel, rhs, rhs.begin());
-	return linear_divide(kernel, lhs, rhs);
+	return is_index_permutation(kernel, Ex(lhs), Ex(rhs));
 }
 
-bool is_zero(const Kernel& kernel, Ex ex)
+Ex project(const Kernel& kernel, Ex ex)
 {
-	recursive_project(kernel, ex, ex.begin());
-	return ex == 0;
+	std::cerr << "Entering project\n";
+	std::cerr << "In\t" << to_string(ex, kernel) << '\n';
+
+	young_project_tensor ypt(kernel, ex, false);
+	ypt.apply_generic();
+
+	distribute dist(kernel, ex);
+	dist.apply_generic();
+
+	rename_dummies rd(kernel, ex, "", "");
+	rd.apply_generic();
+
+	collect_terms ct(kernel, ex);
+	ct.apply_generic();
+
+	sort_sum ss(kernel, ex);
+	ss.apply_generic();
+	std::cerr << "\nOut\t" << to_string(ex, kernel) << '\n';
+
+	return ex;
 }
 
-young_reduce::young_reduce(const Kernel& kernel, Ex& ex)
+std::vector<Ex::iterator> find_terms(const Kernel& kernel, Ex& ex, Ex::iterator& it, const Ex& pattern)
+{
+	std::vector<Ex::iterator> its;
+
+	for (auto child : get_children_iterators(ex, it)) {
+		if (is_index_permutation(kernel, child, pattern.begin())) 
+			its.push_back(child);
+	}
+
+	return its;
+}
+
+young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern, mode_t mode)
 	: Algorithm(kernel, ex)
+	, mode(mode)
+	, pattern(pattern)
 {
 
+}
+
+young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern, const std::string& mode_)
+	: Algorithm(kernel, ex)
+	, pattern(pattern)
+{
+	if (mode_ == "eliminate")
+		mode = mode_t::eliminate;
+	else if (mode_ == "collapse")
+		mode = mode_t::collapse;
+	else if (mode_ == "permute")
+		mode = mode_t::permute;
+	else
+		mode = mode_t::any;
 }
 
 bool young_reduce::can_apply(iterator it)
@@ -209,74 +222,222 @@ bool young_reduce::can_apply(iterator it)
 	return *it->name == "\\sum";
 }
 
+void young_reduce::cleanup(iterator& it)
+{
+	cleanup_dispatch(kernel, tr, it);
+}
+
 young_reduce::result_t young_reduce::apply(iterator& it)
 {
-	result_t ret = result_t::l_no_action;
+	auto res = delegate(it);
+	cleanup(it);
+	return res;
+}
 
-	std::vector<std::vector<Ex::iterator>> sets;
+young_reduce::result_t young_reduce::delegate(iterator& it)
+{
+	auto its = find_terms(kernel, tr, it, pattern);
 
-	for (auto child : get_children_iterators(tr, it)) {
-		if (can_recursive_project(kernel, tr, child)) {
-			bool found_set = false;
-			for (auto& collection : sets) {
-				if (is_index_permutation(kernel, child, collection[0])) {
-					collection.push_back(child);
-					found_set = true;
-					break;
+	switch (mode) {
+	case mode_t::eliminate:
+		return eliminate(it, its);
+	case mode_t::collapse:
+		return collapse(it, its);
+	case mode_t::permute:
+		return permute(it, its);
+	case mode_t::any:
+		return any(it, its);
+	default:
+		return result_t::l_no_action;
+	}
+}
+
+struct get_combinations
+{
+public:
+	struct iterator
+	{
+	public:
+		struct Combination
+		{
+			Ex ex;
+			std::vector<Ex::iterator> its;
+		};
+
+		using value = Combination;
+		using reference = const value&;
+		using pointer = const value*;
+
+		bool operator == (const iterator& other)
+		{
+			return (n_terms == other.n_terms) && (v == other.v);
+		}
+
+		bool operator != (const iterator& other)
+		{
+			return !(*this == other);
+		}
+
+		iterator& operator ++ ()
+		{
+			// Check for end iterator
+			if (n_terms == 1)
+				return *this;
+
+			if (!std::prev_permutation(v.begin(), v.end())) {
+				--n_terms;
+				v = std::vector<bool>(n_terms, false);
+				std::fill(v.begin(), v.begin() + n_terms, true);
+			}
+
+			construct_combination();
+			return *this;
+		}
+
+		iterator operator ++ (int)
+		{
+			iterator other = *this;
+			++(*this);
+			return other;
+		}
+
+		reference operator * () const
+		{
+			return combination;
+		}
+
+		pointer operator -> () const
+		{
+			return &combination;
+		}
+
+	private:
+		// Construct begin iterator
+		iterator(const std::vector<Ex::iterator>& its)
+			: its(its)
+			, n_terms(its.size())
+			, v(its.size(), true)
+		{
+			construct_combination();
+		}
+
+		// Construct end iterator
+		iterator(const std::vector<Ex::iterator>& its, bool)
+			: its(its)
+			, n_terms(1)
+			, v(1, true)
+		{
+
+		}
+
+		void construct_combination()
+		{
+			combination.ex = Ex("\\sum");
+
+			combination.its.clear();
+			for (size_t k = 0; k < v.size(); ++k) {
+				if (v[k]) {
+					combination.ex.append_child(combination.ex.begin(), its[k]);
+					combination.its.push_back(its[k]);
 				}
 			}
-			if (!found_set)
-				sets.push_back(std::vector<Ex::iterator>(1, child));
+			std::cerr << combination.ex;
+		}
+
+		friend struct get_combinations;
+		const std::vector<Ex::iterator>& its;
+		int n_terms;
+		std::vector<bool> v;
+		Combination combination;
+	};
+
+	get_combinations(const std::vector<Ex::iterator>& its)
+		: its(its)
+	{
+
+	}
+
+	iterator begin()
+	{
+		return iterator(its);
+	}
+
+	iterator end()
+	{
+		return iterator(its, false);
+	}
+
+private:
+	const std::vector<Ex::iterator>& its;
+};
+
+young_reduce::result_t young_reduce::eliminate(iterator& it, const std::vector<Ex::iterator>& its)
+{
+	for (const auto& combination : get_combinations(its)) {
+		Ex projected_combination = project(kernel, combination.ex);
+		if (projected_combination == 0) {
+			for (auto& old : combination.its)
+				tr.erase(old);
+			if (tr.number_of_children(it) == 0)
+				tr.append_child(it, str_node("0"));
+			return result_t::l_applied;
 		}
 	}
 
-	int i = 0;
-	for (const auto& set : sets) {
-		++i;
-		bool replacement_made = false;
-		for (auto permutation : all_index_permutations(set[0], kernel)) {
-			if (replacement_made)
-				break;
+	return result_t::l_no_action;
+}
 
-			for (int n_terms = set.size(); n_terms > 1; --n_terms) {
-				if (replacement_made)
-					break;
+young_reduce::result_t young_reduce::collapse(iterator& it, const std::vector<Ex::iterator>& its)
+{
+	for (auto combination : get_combinations(its)) {
+		Ex projected_combination = project(kernel, combination.ex);
+		for (auto& cur_it : its) {
+			Ex cur(cur_it);
+			Ex projected_cur = project(kernel, cur);
+			multiplier_t factor = linear_divide(kernel, projected_combination, projected_cur);
+			if (factor != 0) {
+				for (auto& old : combination.its) {
+					if (old != cur_it)
+						tr.erase(old);
+				}
+				multiply(cur_it->multiplier, factor);
+				return result_t::l_applied;
+			}
+		}
+	}
+	return result_t::l_no_action;
+}
 
-				std::vector<bool> v(set.size(), false);
-				std::fill(v.begin(), v.begin() + n_terms, true);
-
-				do {
-					Ex combination("\\sum");
-					for (size_t k = 0; k < v.size(); ++k) {
-						if (v[k]) 
-							combination.append_child(combination.begin(), set[k]);
-					}
-					if (is_zero(kernel, combination)) {
-						replacement_made = true;
-						for (size_t k = 0; k < v.size(); ++k) {
-							if (v[k])
-								tr.erase(set[k]);
-						}
-						tr.append_child(it, str_node("0"));
-					}
-					else {
-						multiplier_t factor = check_equivalence(kernel, combination, permutation);
-						if (factor != 0) {
-							replacement_made = true;
-							for (size_t k = 0; k < v.size(); ++k) {
-								if (v[k])
-									tr.erase(set[k]);
-							}
-							multiply(permutation.begin()->multiplier, factor);
-							tr.append_child(it, permutation.begin());
-							ret = result_t::l_applied;
-
-						}
-					}
-				} while (std::prev_permutation(v.begin(), v.end()));
+young_reduce::result_t young_reduce::permute(iterator& it, const std::vector<Ex::iterator>& its)
+{
+	for (const auto& combination : get_combinations(its)) {
+		Ex projected_combination = project(kernel, combination.ex);
+		for (const auto& permutation : all_index_permutations(its[0], kernel)) {
+			Ex projected_permutation = project(kernel, permutation);
+			multiplier_t factor = linear_divide(kernel, projected_combination, projected_permutation);
+			if (factor != 0) {
+				for (auto& old : combination.its)
+					tr.erase(old);
+				iterator r = tr.append_child(it, permutation.begin());
+				multiply(r->multiplier, factor);
+				return result_t::l_applied;
 			}
 		}
 	}
 
-	return ret;
+	return result_t::l_no_action;
+}
+
+young_reduce::result_t young_reduce::any(iterator& it, const std::vector<Ex::iterator>& its)
+{
+	if (eliminate(it, its) == result_t::l_applied)
+		return result_t::l_applied;
+
+	if (collapse(it, its) == result_t::l_applied)
+		return result_t::l_applied;
+
+	if (permute(it, its) == result_t::l_applied)
+		return result_t::l_applied;
+
+	return result_t::l_no_action;
 }

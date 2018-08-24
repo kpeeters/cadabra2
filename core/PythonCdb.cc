@@ -1384,7 +1384,6 @@ PYBIND11_MODULE(cadabra2, m)
 	def_algo_1<sort_sum>("sort_sum", m);
 	def_algo_1<tabdimension>("tab_dimension", m);	
 	def_algo_1<young_project_product>("young_project_product", m);
-	def_algo_1<young_reduce>("young_reduce", m);
 
 	m.def("complete", &dispatch_ex<complete, Ex>, 
 		 pybind11::arg("ex"),pybind11::arg("add"),
@@ -1460,6 +1459,16 @@ PYBIND11_MODULE(cadabra2, m)
 		  pybind11::arg("shape"), pybind11::arg("indices"), 
 		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
+
+	m.def("young_reduce", &dispatch_ex<young_reduce, const Ex&, const std::string&>,
+		pybind11::arg("ex"),
+		pybind11::arg("pattern"),
+		pybind11::arg("mode") = "any",
+		pybind11::arg("deep") = true,
+		pybind11::arg("repeat") = false,
+		pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal
+	);
 
 	m.def("order", &dispatch_ex<order, Ex, bool>, 
 		 pybind11::arg("ex"),
