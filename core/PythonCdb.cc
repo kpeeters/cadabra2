@@ -1460,10 +1460,10 @@ PYBIND11_MODULE(cadabra2, m)
 		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
 		 pybind11::return_value_policy::reference_internal );
 
-	m.def("young_reduce", &dispatch_ex<young_reduce, const Ex&, const std::string&>,
+	m.def("young_reduce", &dispatch_ex<young_reduce, const Ex&, bool>,
 		pybind11::arg("ex"),
 		pybind11::arg("pattern"),
-		pybind11::arg("mode") = "any",
+		pybind11::arg("search_permutations") = false,
 		pybind11::arg("deep") = true,
 		pybind11::arg("repeat") = false,
 		pybind11::arg("depth") = 0,
