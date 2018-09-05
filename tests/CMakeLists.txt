@@ -85,6 +85,7 @@ set(RTESTS
   symmetry
   vary
   young
+  youngreduce
   )
 if(MATHEMATICA_FOUND)
   set(RTESTS ${RTESTS} mma)
