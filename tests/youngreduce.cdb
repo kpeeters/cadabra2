@@ -11,6 +11,8 @@ def test01():
 	assert(ex1 == $-A_{a b c}$)
 	print("Test 1 passed")
 
+test01()
+
 # Sum or products of two symmetric terms
 def test02():
 	__cdbkernel__ = create_scope()
@@ -20,6 +22,8 @@ def test02():
 	young_reduce(ex2, $B_{a b c}B_{a b c}$);
 	assert(ex2 == $2B_{a b c}B_{b a c}$)
 	print("Test 2 passed")
+
+test02()
 
 # Riemann cyclic, should equal 3/2R_abcd R_abcd
 def test03():
@@ -31,6 +35,8 @@ def test03():
 	assert(ex3 == $3/2 R_{a b c d} R_{a b c d}$)
 	print("Test 3 passed")
 
+test03()
+
 #Riemann cyclic, should equal 0
 def test04():
 	__cdbkernel__ = create_scope()
@@ -39,6 +45,8 @@ def test04():
 	ex4 := 2R_{a b c d}R_{a c b d} - R_{a b c d}R_{a b c d};
 	young_reduce(ex4, $R_{a b c d}R_{a b c d}$);
 	assert(ex4 == 0)
+
+test04()
 
 # Riemann cyclic, should equal 0
 def test05():
@@ -50,6 +58,8 @@ def test05():
 	assert(ex5 == 0)
 	print("Test 5 passed")
 
+test05()
+
 # Riemann cyclic, should equal 0
 def test06():
 	__cdbkernel__ = create_scope()
@@ -59,3 +69,5 @@ def test06():
 	young_reduce(ex6, $R_{a b c d}R_{a b c d}$);
 	assert(ex6 == 0)
 	print("Test 6 passed")
+
+test06()
