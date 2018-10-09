@@ -1,0 +1,22 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def attach_lower(symbol, *indices):\n\tstr_list = \" \".join([index._latex_() for index in indices])\n\treturn Ex('{}_{{ {} }}'.format(symbol._latex_(), str_list))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def attach_upper(symbol, *indices):\n\tstr_list = \" \".join([index._latex_() for index in indices])\n\treturn Ex('{}^{{ {} }}'.format(symbol._latex_(), str_list))"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

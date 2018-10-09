@@ -1,0 +1,32 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "import cdb.internal as _internal"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def is_index_set(idx_set):\n\t\"\"\"Returns True if ex is an index set\"\"\"\n\tfor arg in idx_set.top().args():\n\t\tif _internal.n_children(arg) != 0:\n\t\t\treturn False\n\treturn idx_set.top().name == r'\\comma'"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def n_indices(idx_set):\n\t\"\"\"Returns the number of indices defined in the index set ex\"\"\"\n\treturn _internal.n_args(idx_set.top())"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def get_index(idx_set, n = 0):\n\t\"\"\"Returns the nth index from the index set ex\"\"\"\n\tif n > n_indices(idx_set):\n\t\traise IndexError(\"Index set does not contain enough indices\")\n\tindex = _internal.get_nth_arg(idx_set.top(), n)\n\treturn $@(index)$"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
