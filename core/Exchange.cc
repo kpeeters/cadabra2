@@ -108,6 +108,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 		if(i==idts.size()) {
 			identical_tensors_t ngr;
 			ngr.comm=properties.get_composite<SelfCommutingBehaviour>(sib, true);
+//			if(ngr.comm)
+//				std::cerr << "selfcomm " << ngr.comm->sign() << " for " << sib << std::endl;
 			ngr.spino=properties.get_composite<Spinor>(sib);
 			ngr.tab=properties.get_composite<TableauBase>(sib);
 			ngr.traceless=properties.get_composite<Traceless>(sib);

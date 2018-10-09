@@ -692,3 +692,16 @@ def test40():
 
 test40()
 
+{\mu,\nu,\rho,\sigma}::Indices;        
+\partial{#}::Derivative;
+\psi_{\mu}::SelfAntiCommuting;    
+ex:= \psi_{\nu} \psi_{\mu} + \psi_{\mu} \psi_{\nu};
+sort_product(_);
+ex:= \partial_{\mu}{\psi_{\nu}} \psi_{\rho} + \psi_{\rho} \partial_{\mu}{\psi_{\nu}};
+sort_product(_);
+
+ex:= \partial{\psi_{\nu}} \partial{\psi_{\mu}} + \psi_{\nu} \psi_{\mu};
+canonicalise(_);
+
+ex:= \partial{\psi_{\nu}} \partial{\psi_{\mu}} + \psi_{\nu} \psi_{\mu};
+sort_product(_);
