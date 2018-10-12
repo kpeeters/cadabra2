@@ -8,7 +8,6 @@
 #include <json/json.h>
 #include "CdbPython.hh"
 
-
 #include "Parser.hh"
 #include "Bridge.hh"
 #include "Exceptions.hh"
@@ -113,7 +112,7 @@
 #include "algorithms/lower_free_indices.hh"
 #include "algorithms/lr_tensor.hh"
 #ifdef MATHEMATICA_FOUND
-   #include "algorithms/map_mma.hh"
+#include "algorithms/map_mma.hh"
 #endif
 #include "algorithms/map_sympy.hh"
 #include "algorithms/order.hh"
@@ -145,329 +144,329 @@ using namespace cadabra;
 // Wrap the 'totals' member of ProgressMonitor to return a Python list.
 
 pybind11::list ProgressMonitor_totals_helper(ProgressMonitor& self)
-	{
+{
 	pybind11::list list;
 	auto totals = self.totals();
-	for(auto& total: totals)
+	for (auto& total : totals)
 		list.append(total);
 	return list;
-	}
+}
 
 
 // Split a 'sum' expression into its individual terms. FIXME: now deprecated because we have operator[]?
 
-pybind11::list terms(std::shared_ptr<Ex> ex) 
-	{
-	Ex::iterator it=ex->begin();
+pybind11::list terms(std::shared_ptr<Ex> ex)
+{
+	Ex::iterator it = ex->begin();
 
-	if(*it->name!="\\sum")
+	if (*it->name != "\\sum")
 		throw ArgumentException("terms() expected a sum expression.");
 
 	pybind11::list ret;
 
-	auto sib=ex->begin(it);
-	while(sib!=ex->end(it)) {
+	auto sib = ex->begin(it);
+	while (sib != ex->end(it)) {
 		ret.append(Ex(sib));
 		++sib;
-		}
-	
-	return ret;
 	}
 
+	return ret;
+}
+
 Ex lhs(std::shared_ptr<Ex> ex)
-	{
-	auto it=ex->begin();
-	if(it==ex->end()) 
+{
+	auto it = ex->begin();
+	if (it == ex->end())
 		throw ArgumentException("Empty expression passed to 'lhs'.");
 
-	if(*it->name!="\\equals")
+	if (*it->name != "\\equals")
 		throw ArgumentException("Cannot take 'lhs' of expression which is not an equation.");
 
 	return Ex(ex->begin(ex->begin()));
-	}
+}
 
 Ex rhs(std::shared_ptr<Ex> ex)
-	{
-	auto it=ex->begin();
-	if(it==ex->end()) 
+{
+	auto it = ex->begin();
+	if (it == ex->end())
 		throw ArgumentException("Empty expression passed to 'rhs'.");
 
-	if(*it->name!="\\equals")
+	if (*it->name != "\\equals")
 		throw ArgumentException("Cannot take 'rhs' of expression which is not an equation.");
 
-	auto sib=ex->begin(ex->begin());
+	auto sib = ex->begin(ex->begin());
 	++sib;
 	return Ex(sib);
-	}
+}
 
 Ex Ex_getslice(std::shared_ptr<Ex> ex, pybind11::slice slice)
-	{
+{
 	Ex result;
 
 	pybind11::size_t start, stop, step, length;
 	slice.compute(ex->size(), &start, &stop, &step, &length);
 	if (length == 0)
 		return result;
-	
+
 	// Set head
 	auto it = result.set_head(*ex->begin());
-	
+
 	// Iterate over fully-closed range.
 	for (; start != stop; start += step) {
 		Ex::iterator toadd(ex->begin());
 		std::advance(toadd, start);
 		result.append_child(it, toadd);
-		}
+	}
 	Ex::iterator toadd(ex->begin());
 	std::advance(toadd, start);
 	result.append_child(it, toadd);
 	return result;
-	}
+}
 
 Ex Ex_getitem(Ex &ex, int index)
-	{
-	Ex::iterator it=ex.begin();
+{
+	Ex::iterator it = ex.begin();
 
-	size_t num=ex.number_of_children(it);
-	if(index>=0 && (size_t)index<num)
+	size_t num = ex.number_of_children(it);
+	if (index >= 0 && (size_t)index<num)
 		return Ex(ex.child(it, index));
 	else {
-//		if(num==0 && index==0) {
-//			std::cerr << "returning " << ex << std::endl;
-//			return Ex(ex);
-//			}
-//		else
-			throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
-		}
+		//		if(num==0 && index==0) {
+		//			std::cerr << "returning " << ex << std::endl;
+		//			return Ex(ex);
+		//			}
+		//		else
+		throw ArgumentException("index " + std::to_string(index) + " out of range, must be smaller than " + std::to_string(num));
 	}
+}
 
 
 
 
 void Ex_setitem(std::shared_ptr<Ex> ex, int index, Ex val)
-	{
-	Ex::iterator it=ex->begin();
+{
+	Ex::iterator it = ex->begin();
 
-	size_t num=ex->number_of_children(it);
-	if(index>=0 && (size_t)index<num) 
+	size_t num = ex->number_of_children(it);
+	if (index >= 0 && (size_t)index<num)
 		ex->replace(ex->child(it, index), val.begin());
-	else 
-		throw ArgumentException("index "+std::to_string(index)+" out of range, must be smaller than "+std::to_string(num));
-	}
+	else
+		throw ArgumentException("index " + std::to_string(index) + " out of range, must be smaller than " + std::to_string(num));
+}
 
 void Ex_setitem_iterator(std::shared_ptr<Ex> ex, ExNode en, std::shared_ptr<Ex> val)
-	{
+{
 	Ex::iterator use;
-	if(en.ex!=ex) {
-//		std::cerr << "Setitem need to convert iterator of" << std::endl;
-//		std::cerr << en.it << std::endl;
-//		std::cerr << "in " << en.topit << std::endl;
-//		std::cerr << "of " << en.ex->begin() << std::endl;
-		auto path=en.ex->path_from_iterator(en.it, en.topit);
-//		for(auto v: path)
-//			std::cerr << v << std::endl;
-//		std::cerr << "for " << ex->begin() << std::endl;
-		use=ex->iterator_from_path(path, ex->begin());
-//		std::cerr << "which is " << use << std::endl;
-		}
+	if (en.ex != ex) {
+		//		std::cerr << "Setitem need to convert iterator of" << std::endl;
+		//		std::cerr << en.it << std::endl;
+		//		std::cerr << "in " << en.topit << std::endl;
+		//		std::cerr << "of " << en.ex->begin() << std::endl;
+		auto path = en.ex->path_from_iterator(en.it, en.topit);
+		//		for(auto v: path)
+		//			std::cerr << v << std::endl;
+		//		std::cerr << "for " << ex->begin() << std::endl;
+		use = ex->iterator_from_path(path, ex->begin());
+		//		std::cerr << "which is " << use << std::endl;
+	}
 	else {
-		use=en.it;
-		}
-		
-	Ex::iterator top=val->begin();
-	if(*top->name=="") 
-		top=val->begin(top);
+		use = en.it;
+	}
+
+	Ex::iterator top = val->begin();
+	if (*top->name == "")
+		top = val->begin(top);
 
 	ex->replace_index(use, top, true);
-	}
+}
 
 size_t Ex_len(std::shared_ptr<Ex> ex)
-	{
-	Ex::iterator it=ex->begin();
+{
+	Ex::iterator it = ex->begin();
 
 	return ex->number_of_children(it);
-	}
+}
 
 std::string Ex_head(std::shared_ptr<Ex> ex)
-   {
-   if(ex->begin()==ex->end())
-	   throw ArgumentException("Expression is empty, no head.");
-   return *ex->begin()->name;
-   }
+{
+	if (ex->begin() == ex->end())
+		throw ArgumentException("Expression is empty, no head.");
+	return *ex->begin()->name;
+}
 
 pybind11::object Ex_mult(std::shared_ptr<Ex> ex)
-   {
-   if(ex->begin()==ex->end())
-	   throw ArgumentException("Expression is empty, no head.");
+{
+	if (ex->begin() == ex->end())
+		throw ArgumentException("Expression is empty, no head.");
 	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
 	auto m = *ex->begin()->multiplier;
-//	return mpq(2,3);
-	
+	//	return mpq(2,3);
+
 	pybind11::object mult = mpq(m.get_num().get_si(), m.get_den().get_si());
 	return mult;
-   }
+}
 
-bool output_ipython=false;
-bool post_process_enabled=true;
+bool output_ipython = false;
+bool post_process_enabled = true;
 
 // Output routines in display, input, latex and html formats (the latter two
 // for use with IPython).
 
-std::string Ex_str_(std::shared_ptr<Ex> ex) 
-	{
- 	std::ostringstream str;
-// 
-// //	if(state()==Algorithm::result_t::l_no_action)
-// //		str << "(unchanged)" << std::endl;
-// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+std::string Ex_str_(std::shared_ptr<Ex> ex)
+{
+	std::ostringstream str;
+	// 
+	// //	if(state()==Algorithm::result_t::l_no_action)
+	// //		str << "(unchanged)" << std::endl;
+	// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
 	DisplayTerminal dt(*get_kernel_from_scope(), *ex, true);
 	dt.output(str);
 
 	return str.str();
-	}
+}
 
 std::string Ex_to_input(std::shared_ptr<Ex> ex)
-	{
- 	std::ostringstream str;
-// 
-// //	if(state()==Algorithm::result_t::l_no_action)
-// //		str << "(unchanged)" << std::endl;
-// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
+{
+	std::ostringstream str;
+	// 
+	// //	if(state()==Algorithm::result_t::l_no_action)
+	// //		str << "(unchanged)" << std::endl;
+	// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
 
 	DisplayTerminal dt(*get_kernel_from_scope(), *ex, false);
 	dt.output(str);
 
 	return str.str();
-	}
+}
 
-std::string Ex_latex_(std::shared_ptr<Ex> ex) 
-	{
-	if(!ex) return "";
- 	std::ostringstream str;
+std::string Ex_latex_(std::shared_ptr<Ex> ex)
+{
+	if (!ex) return "";
+	std::ostringstream str;
 	DisplayTeX dt(*get_kernel_from_scope(), *ex);
 	dt.output(str);
 	return str.str();
-	}
+}
 
-std::string Ex_repr_(std::shared_ptr<Ex> ex) 
-	{
-	if(!ex) return "";
-	if(ex->begin()==ex->end()) return "";
+std::string Ex_repr_(std::shared_ptr<Ex> ex)
+{
+	if (!ex) return "";
+	if (ex->begin() == ex->end()) return "";
 
 	Ex::iterator it = ex->begin();
 	std::ostringstream str;
 	ex->print_python(str, ex->begin());
 	return str.str();
-	}
+}
 
 std::string Ex_to_Sympy_string(std::shared_ptr<Ex> ex)
-	{
+{
 	// Check to see if the expression is a scalar without dummy indices.
-//	Algorithm::index_map_t ind_free, ind_dummy;
-//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
-//	if(ind_dummy.size()>0) 
-//		throw NonScalarException("Expression contains dummy indices.");
-//	if(ind_free.size()>0) 
-//		throw NonScalarException("Expression contains free indices.");
+	//	Algorithm::index_map_t ind_free, ind_dummy;
+	//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
+	//	if(ind_dummy.size()>0) 
+	//		throw NonScalarException("Expression contains dummy indices.");
+	//	if(ind_free.size()>0) 
+	//		throw NonScalarException("Expression contains free indices.");
 
-	if(!ex) return "";
+	if (!ex) return "";
 	std::ostringstream str;
 	DisplaySympy dt(*get_kernel_from_scope(), *ex);
 	dt.output(str);
 	return str.str();
-	}
+}
 
 pybind11::object Ex_to_Sympy(std::shared_ptr<Ex> ex)
-	{
+{
 	// Generate a string which can be parsed by Sympy.
 	std::string txt = Ex_to_Sympy_string(ex);
-	
+
 	// Call sympify on a sympy-parseable  textual representation.
 	pybind11::module sympy_parser = pybind11::module::import("sympy.parsing.sympy_parser");
-	auto parse  = sympy_parser.attr("parse_expr");
-	pybind11::object ret=parse(txt);
+	auto parse = sympy_parser.attr("parse_expr");
+	pybind11::object ret = parse(txt);
 	return ret;
-	}
+}
 
 std::string Ex_to_MMA(std::shared_ptr<Ex> ex, bool use_unicode)
-	{
+{
 	// Check to see if the expression is a scalar without dummy indices.
-//	Algorithm::index_map_t ind_free, ind_dummy;
-//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
-//	if(ind_dummy.size()>0) 
-//		throw NonScalarException("Expression contains dummy indices.");
-//	if(ind_free.size()>0) 
-//		throw NonScalarException("Expression contains free indices.");
+	//	Algorithm::index_map_t ind_free, ind_dummy;
+	//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
+	//	if(ind_dummy.size()>0) 
+	//		throw NonScalarException("Expression contains dummy indices.");
+	//	if(ind_free.size()>0) 
+	//		throw NonScalarException("Expression contains free indices.");
 
 	std::ostringstream str;
 	DisplayMMA dt(*get_kernel_from_scope(), *ex, use_unicode);
 	dt.output(str);
 
 	return str.str();
-	}
+}
 
 
 pybind11::object get_locals()
-        {
-        return pybind11::reinterpret_borrow<pybind11::object>(PyEval_GetLocals());
-        }
+{
+	return pybind11::reinterpret_borrow<pybind11::object>(PyEval_GetLocals());
+}
 
 pybind11::object get_globals()
-        {
-        return pybind11::reinterpret_borrow<pybind11::object>(PyEval_GetGlobals());
-        }
+{
+	return pybind11::reinterpret_borrow<pybind11::object>(PyEval_GetGlobals());
+}
 
 
 // Fetch objects from the Python side using their Python identifier.
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm)
-	{
+{
 	auto locals = get_locals();
-	auto ret=fetch_from_python(nm, locals);
-	if(!ret) {
-	  auto globals = get_globals();
-	  ret=fetch_from_python(nm, globals);
+	auto ret = fetch_from_python(nm, locals);
+	if (!ret) {
+		auto globals = get_globals();
+		ret = fetch_from_python(nm, globals);
 	}
 	return ret;
-	}
+}
 
 std::shared_ptr<Ex> fetch_from_python(const std::string& nm, pybind11::object scope)
-   {
-     // std::cerr << "fetch from python " << nm << std::endl;
-     if(!scope_has(scope, nm.c_str())) {
-       // std::cerr << "not present" << std::endl;
-       return 0;
-     }
-     auto obj=scope[nm.c_str()];
-     try {
-       return obj.cast<std::shared_ptr<Ex>>();
-     }
-     catch(const pybind11::cast_error& e) {
-       try {
-	 auto exnode = obj.cast<ExNode>();
-	 auto ret = std::make_shared<Ex>( exnode.it );
-	 return ret;
-       }
-       catch(const pybind11::cast_error& e) {
-	 std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
-       }
-     }
-   return 0;
-   }
+{
+	// std::cerr << "fetch from python " << nm << std::endl;
+	if (!scope_has(scope, nm.c_str())) {
+		// std::cerr << "not present" << std::endl;
+		return 0;
+	}
+	auto obj = scope[nm.c_str()];
+	try {
+		return obj.cast<std::shared_ptr<Ex>>();
+	}
+	catch (const pybind11::cast_error& e) {
+		try {
+			auto exnode = obj.cast<ExNode>();
+			auto ret = std::make_shared<Ex>(exnode.it);
+			return ret;
+		}
+		catch (const pybind11::cast_error& e) {
+			std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
+		}
+	}
+	return 0;
+}
 
 
 
-bool __eq__Ex_Ex(std::shared_ptr<Ex> one, std::shared_ptr<Ex> other) 
-	{
+bool __eq__Ex_Ex(std::shared_ptr<Ex> one, std::shared_ptr<Ex> other)
+{
 	return tree_equal(&(get_kernel_from_scope()->properties), *one, *other);
-	}
+}
 
-bool __eq__Ex_int(std::shared_ptr<Ex> one, int other) 
-	{
-	auto ex=std::make_shared<Ex>(other);
+bool __eq__Ex_int(std::shared_ptr<Ex> one, int other)
+{
+	auto ex = std::make_shared<Ex>(other);
 	return __eq__Ex_Ex(one, ex);
-	}
+}
 
 
 // Functions to construct an Ex object and then create an additional
@@ -477,7 +476,7 @@ bool __eq__Ex_int(std::shared_ptr<Ex> one, int other)
 // through these two functions.
 
 std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref, Kernel *kernel)
-	{
+{
 	auto ptr = std::make_shared<Ex>();
 	// Parse the string expression.
 	Parser parser(ptr);
@@ -485,19 +484,19 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref, K
 
 	try {
 		str >> parser;
-		}
-	catch(std::exception& except) {
+	}
+	catch (std::exception& except) {
 		throw ParseException("Cannot parse");
-		}
+	}
 	parser.finalise();
 
 	// First pull in any expressions referred to with @(...) notation, because the
 	// full expression may not have consistent indices otherwise.
 	pull_in(ptr, kernel);
 	//	std::cerr << "pulled in" << std::endl;
-   
+
 	// Basic cleanup of rationals and subtractions, followed by
-   // cleanup of nested sums and products.
+	// cleanup of nested sums and products.
 	pre_clean_dispatch_deep(*kernel, *ptr);
 	cleanup_dispatch_deep(*kernel, *ptr);
 	check_index_consistency(*kernel, *ptr, (*ptr).begin());
@@ -505,202 +504,202 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref, K
 	//	std::cerr << "cleaned up" << std::endl;
 
 	return ptr;
-	}
+}
 
-std::shared_ptr<Ex> construct_Ex_from_string(const std::string& ex_) 
-	{
-	Kernel *k=get_kernel_from_scope();
+std::shared_ptr<Ex> construct_Ex_from_string(const std::string& ex_)
+{
+	Kernel *k = get_kernel_from_scope();
 	return make_Ex_from_string(ex_, true, k);
-	}
+}
 
-std::shared_ptr<Ex> construct_Ex_from_string_2(const std::string& ex_, bool add_ref) 
-	{
-	Kernel *k=get_kernel_from_scope();
+std::shared_ptr<Ex> construct_Ex_from_string_2(const std::string& ex_, bool add_ref)
+{
+	Kernel *k = get_kernel_from_scope();
 	return make_Ex_from_string(ex_, add_ref, k);
-	}
+}
 
-std::shared_ptr<Ex> make_Ex_from_int(int num, bool make_ref=true)
-	{
+std::shared_ptr<Ex> make_Ex_from_int(int num, bool make_ref = true)
+{
 	auto ptr = std::make_shared<Ex>(num);
 	return ptr;
-	}
+}
 
 std::shared_ptr<Ex> construct_Ex_from_int(int num)
-	{
+{
 	return make_Ex_from_int(num, true);
-	}
+}
 
 std::shared_ptr<Ex> construct_Ex_from_int_2(int num, bool add_ref)
-	{
+{
 	return make_Ex_from_int(num, add_ref);
-	}
+}
 
 
 std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const ExNode ex2)
-   {
-   return add_ex(ex1, ex2.ex, ex2.it);
+{
+	return add_ex(ex1, ex2.ex, ex2.it);
 
-	}
+}
 
 std::shared_ptr<Ex> operator+(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
-	{
+{
 	return add_ex(ex1, ex2, ex2->begin());
-	}
+}
 
 std::shared_ptr<Ex> add_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2, Ex::iterator top2)
-	{
-	if(ex1->size()==0) return ex2;
-	if(ex2->size()==0) return ex1;
+{
+	if (ex1->size() == 0) return ex2;
+	if (ex2->size() == 0) return ex1;
 
-	bool comma1 = (*ex1->begin()->name=="\\comma");
-	bool comma2 = (*ex2->begin()->name=="\\comma");
+	bool comma1 = (*ex1->begin()->name == "\\comma");
+	bool comma2 = (*ex2->begin()->name == "\\comma");
 
-	if(comma1 || comma2) {
-		if(comma1) {
-			auto ret=std::make_shared<Ex>(*ex1);
+	if (comma1 || comma2) {
+		if (comma1) {
+			auto ret = std::make_shared<Ex>(*ex1);
 			auto loc = ret->append_child(ret->begin(), top2);
-			if(comma2)
+			if (comma2)
 				ret->flatten_and_erase(loc);
 			return ret;
-			}
-		else {
-			auto ret=std::make_shared<Ex>(top2);
-			auto loc = ret->prepend_child(ret->begin(), ex1->begin());
-			if(comma1)
-				ret->flatten_and_erase(loc);
-			return ret;
-			}
 		}
+		else {
+			auto ret = std::make_shared<Ex>(top2);
+			auto loc = ret->prepend_child(ret->begin(), ex1->begin());
+			if (comma1)
+				ret->flatten_and_erase(loc);
+			return ret;
+		}
+	}
 	else {
-		auto ret=std::make_shared<Ex>(*ex1);
-		if(*ret->begin()->name!="\\sum") 
+		auto ret = std::make_shared<Ex>(*ex1);
+		if (*ret->begin()->name != "\\sum")
 			ret->wrap(ret->begin(), str_node("\\sum"));
 		ret->append_child(ret->begin(), top2);
-		
-		auto it=ret->begin();
+
+		auto it = ret->begin();
 		cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 		return ret;
-		}
 	}
+}
 
 std::shared_ptr<Ex> operator*(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
-   {
-   return mult_ex(ex1, ex2, ex2->begin());
-	}
+{
+	return mult_ex(ex1, ex2, ex2->begin());
+}
 
 
 std::shared_ptr<Ex> mult_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2, Ex::iterator top2)
-	{
-	if(ex1->size()==0) return ex2;
-	if(ex2->size()==0) return ex1;
+{
+	if (ex1->size() == 0) return ex2;
+	if (ex2->size() == 0) return ex1;
 
-	auto ret=std::make_shared<Ex>(*ex1);
-	if(*ret->begin()->name!="\\prod") 
+	auto ret = std::make_shared<Ex>(*ex1);
+	if (*ret->begin()->name != "\\prod")
 		ret->wrap(ret->begin(), str_node("\\prod"));
 	ret->append_child(ret->begin(), top2);
-	
-	auto it=ret->begin();
+
+	auto it = ret->begin();
 	cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 	return ret;
-	}
+}
 
 std::shared_ptr<Ex> operator-(const std::shared_ptr<Ex> ex1, const ExNode ex2)
-   {
-   return sub_ex(ex1, ex2.ex, ex2.it);
+{
+	return sub_ex(ex1, ex2.ex, ex2.it);
 
-	}
+}
 
 std::shared_ptr<Ex> operator-(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2)
-	{
+{
 	return sub_ex(ex1, ex2, ex2->begin());
-	}
+}
 
 std::shared_ptr<Ex> sub_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<Ex> ex2, Ex::iterator top2)
-	{
-	if(ex1->size()==0) {
-		if(ex2->size()!=0) {
-			auto ret=std::make_shared<Ex>(*ex2);
+{
+	if (ex1->size() == 0) {
+		if (ex2->size() != 0) {
+			auto ret = std::make_shared<Ex>(*ex2);
 			multiply(ex2->begin()->multiplier, -1);
-			auto it=ret->begin();
+			auto it = ret->begin();
 			cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 			return ret;
-			}
-		else return ex2;
 		}
-	if(ex2->size()==0) return ex1;
-
-	auto ret=std::make_shared<Ex>(*ex1);
-	if(*ret->begin()->name!="\\sum") 
-		ret->wrap(ret->begin(), str_node("\\sum"));
-	multiply( ret->append_child(ret->begin(), top2)->multiplier, -1 );
-
-	auto it=ret->begin();
-	cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
-	
-	return ret;
+		else return ex2;
 	}
+	if (ex2->size() == 0) return ex1;
+
+	auto ret = std::make_shared<Ex>(*ex1);
+	if (*ret->begin()->name != "\\sum")
+		ret->wrap(ret->begin(), str_node("\\sum"));
+	multiply(ret->append_child(ret->begin(), top2)->multiplier, -1);
+
+	auto it = ret->begin();
+	cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
+
+	return ret;
+}
 
 // Initialise mathematics typesetting for IPython.
 
 std::string init_ipython()
-	{
+{
 	pybind11::exec("from IPython.display import Math");
 	return "Cadabra typeset output for IPython notebook initialised.";
-	}
+}
 
 // Generate a Python list of all properties declared in the current scope. These will
 // (FIXME: should be) displayed in input form, i.e. they can be fed back into Python.
 // FIXME: most of this has nothing to do with Python, factor back into core.
 
 pybind11::list list_properties()
-	{
-//	std::cout << "listing properties" << std::endl;
-	Kernel *kernel=get_kernel_from_scope();
-	Properties& props=kernel->properties;
+{
+	//	std::cout << "listing properties" << std::endl;
+	Kernel *kernel = get_kernel_from_scope();
+	Properties& props = kernel->properties;
 
 	pybind11::list ret;
 	std::string res;
-	bool multi=false;
-	for(auto it=props.pats.begin(); it!=props.pats.end(); ++it) {
-		if(it->first->hidden()) continue;
-		
+	bool multi = false;
+	for (auto it = props.pats.begin(); it != props.pats.end(); ++it) {
+		if (it->first->hidden()) continue;
+
 		// print the property name if we are at the end or if the next entry is for
 		// a different property.
-		decltype(it) nxt=it;
+		decltype(it) nxt = it;
 		++nxt;
-		if(res=="" && (nxt!=props.pats.end() && it->first==nxt->first)) {
-			res+="{";
-			multi=true;
-			}
+		if (res == "" && (nxt != props.pats.end() && it->first == nxt->first)) {
+			res += "{";
+			multi = true;
+		}
 
 
 		//std::cerr << Ex(it->second->obj) << std::endl;
-//		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
+		//		DisplayTeX dt(*get_kernel_from_scope(), it->second->obj);
 		std::ostringstream str;
 		// std::cerr << "displaying" << std::endl;
-//		dt.output(str);
+		//		dt.output(str);
 
 		str << it->second->obj;
-		
+
 		// std::cerr << "displayed " << str.str() << std::endl;
 		res += str.str();
 
-		if(nxt==props.pats.end() || it->first!=nxt->first) {
-			if(multi)
-				res+="}";
-			multi=false;
+		if (nxt == props.pats.end() || it->first != nxt->first) {
+			if (multi)
+				res += "}";
+			multi = false;
 			res += "::";
-			res +=(*it).first->name();
+			res += (*it).first->name();
 			ret.append(res);
-			res="";
-			}
-		else {
-			res+=", ";
-			}
+			res = "";
 		}
+		else {
+			res += ", ";
+		}
+	}
 
 	return ret;
-	}
+}
 
 //pybind11::list indices() 
 //	{
@@ -710,11 +709,11 @@ pybind11::list list_properties()
 // Debug function to display an expression in tree form.
 
 std::string print_tree(Ex *ex)
-	{
+{
 	std::ostringstream str;
 	ex->print_entire_tree(str);
 	return str.str();
-	}
+}
 
 
 // Return the kernel (with symbol __cdbkernel__) in local scope if
@@ -723,28 +722,28 @@ std::string print_tree(Ex *ex)
 
 bool scope_has(const pybind11::dict& dict, const std::string& obj)
 {
-  for(const auto& item: dict)
-    if(item.first.cast<std::string>()==obj)
-      return true;
-  return false;
+	for (const auto& item : dict)
+		if (item.first.cast<std::string>() == obj)
+			return true;
+	return false;
 }
 
 Kernel *get_kernel_from_scope()
-	{
-	Kernel *kernel=nullptr;
-	
+{
+	Kernel *kernel = nullptr;
+
 	// Try and find the kernel in the local scope
 	auto locals = get_locals();
-	if(scope_has(locals, "__cdbkernel__")) {
-	  kernel = locals["__cdbkernel__"].cast<Kernel*>();
-	  return kernel;
+	if (scope_has(locals, "__cdbkernel__")) {
+		kernel = locals["__cdbkernel__"].cast<Kernel*>();
+		return kernel;
 	}
 
 	// No kernel in local scope, find one in global scope.
 	pybind11::dict globals = get_globals();
-	if(scope_has(globals, "__cdbkernel__")) {
-	  kernel = globals["__cdbkernel__"].cast<Kernel*>();
-	  return kernel;
+	if (scope_has(globals, "__cdbkernel__")) {
+		kernel = globals["__cdbkernel__"].cast<Kernel*>();
+		return kernel;
 	}
 
 	// No kernel in local or global scope, construct a new global one
@@ -752,175 +751,175 @@ Kernel *get_kernel_from_scope()
 	inject_defaults(kernel);
 	globals["__cdbkernel__"] = kernel;
 	return kernel;
-	}
+}
 
 ProgressMonitor *get_progress_monitor()
-   {
-   ProgressMonitor *pm=nullptr;
+{
+	ProgressMonitor *pm = nullptr;
 
-   try {
-	   pybind11::dict globals = get_globals();
-	   if(scope_has(globals, "__cdb_progress_monitor__")) {
-		   pm = globals["__cdb_progress_monitor__"].cast<ProgressMonitor*>();
-		   return pm;
-		   }
-	   pm = new ProgressMonitor();
-	   globals["__cdb_progress_monitor__"] = pm;
-	   }
-	catch(pybind11::error_already_set& ex) {
+	try {
+		pybind11::dict globals = get_globals();
+		if (scope_has(globals, "__cdb_progress_monitor__")) {
+			pm = globals["__cdb_progress_monitor__"].cast<ProgressMonitor*>();
+			return pm;
+		}
+		pm = new ProgressMonitor();
+		globals["__cdb_progress_monitor__"] = pm;
+	}
+	catch (pybind11::error_already_set& ex) {
 		std::cerr << "*!?!?" << ex.what() << std::endl;
-	   }
+	}
 	return pm;
-   }
+}
 
 // The following handle setup of local scope for Cadabra properties.
 
 Kernel *create_scope()
-	{
-	Kernel *k=create_empty_scope();
+{
+	Kernel *k = create_empty_scope();
 	inject_defaults(k);
 	return k;
-	}
+}
 
 Kernel *create_scope_from_global()
-	{
-	Kernel *k=create_empty_scope();
+{
+	Kernel *k = create_empty_scope();
 	// FIXME: copy global properties
 	return k;
-	}
+}
 
 Kernel *create_empty_scope()
-	{
+{
 	Kernel *k = new Kernel();
 	return k;
-	}
+}
 
 void inject_defaults(Kernel *k)
-	{
+{
 	// Create and inject properties; these then get owned by the kernel.
-	post_process_enabled=false;
+	post_process_enabled = false;
 
-	k->inject_property(new Distributable(),      make_Ex_from_string("\\prod{#}",false, k), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\prod{#}",false, k), 0);
-	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false, k), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\prod{#}",false, k), 0);
-	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\prod{#}",false, k), 0);
-	auto wi2=new WeightInherit();
+	k->inject_property(new Distributable(), make_Ex_from_string("\\prod{#}", false, k), 0);
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\prod{#}", false, k), 0);
+	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}", false, k), 0);
+	k->inject_property(new DependsInherit(), make_Ex_from_string("\\prod{#}", false, k), 0);
+	k->inject_property(new NumericalFlat(), make_Ex_from_string("\\prod{#}", false, k), 0);
+	auto wi2 = new WeightInherit();
 	wi2->combination_type = WeightInherit::multiplicative;
-	auto wa2=make_Ex_from_string("label=all, type=multiplicative", false, k);
-	k->inject_property(wi2,                      make_Ex_from_string("\\prod{#}",false, k), wa2);
+	auto wa2 = make_Ex_from_string("label=all, type=multiplicative", false, k);
+	k->inject_property(wi2, make_Ex_from_string("\\prod{#}", false, k), wa2);
 
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\frac{#}",false, k), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\frac{#}",false, k), 0);
-	
-	k->inject_property(new Distributable(),      make_Ex_from_string("\\wedge{#}",false, k), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\wedge{#}",false, k), 0);
-//	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\wedge{#}",false, k), 0);
-	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\wedge{#}",false, k), 0);
-	auto wi4=new WeightInherit();
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\frac{#}", false, k), 0);
+	k->inject_property(new DependsInherit(), make_Ex_from_string("\\frac{#}", false, k), 0);
+
+	k->inject_property(new Distributable(), make_Ex_from_string("\\wedge{#}", false, k), 0);
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\wedge{#}", false, k), 0);
+	//	k->inject_property(new CommutingAsProduct(), make_Ex_from_string("\\prod{#}",false), 0);
+	k->inject_property(new DependsInherit(), make_Ex_from_string("\\wedge{#}", false, k), 0);
+	k->inject_property(new NumericalFlat(), make_Ex_from_string("\\wedge{#}", false, k), 0);
+	auto wi4 = new WeightInherit();
 	wi4->combination_type = WeightInherit::multiplicative;
-	auto wa4=make_Ex_from_string("label=all, type=multiplicative", false, k);
-	k->inject_property(wi4,                      make_Ex_from_string("\\wedge{#}",false, k), wa4);
+	auto wa4 = make_Ex_from_string("label=all, type=multiplicative", false, k);
+	k->inject_property(wi4, make_Ex_from_string("\\wedge{#}", false, k), wa4);
 
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\sum{#}",false, k), 0);
-	k->inject_property(new CommutingAsSum(),     make_Ex_from_string("\\sum{#}",false, k), 0);
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\sum{#}",false, k), 0);
-	auto wi=new WeightInherit();
-	auto wa=make_Ex_from_string("label=all, type=additive", false, k);
-	k->inject_property(wi,                       make_Ex_from_string("\\sum{#}", false, k), wa);
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\sum{#}", false, k), 0);
+	k->inject_property(new CommutingAsSum(), make_Ex_from_string("\\sum{#}", false, k), 0);
+	k->inject_property(new DependsInherit(), make_Ex_from_string("\\sum{#}", false, k), 0);
+	auto wi = new WeightInherit();
+	auto wa = make_Ex_from_string("label=all, type=additive", false, k);
+	k->inject_property(wi, make_Ex_from_string("\\sum{#}", false, k), wa);
 
 	auto d = new Derivative();
 	d->hidden(true);
-	k->inject_property(d,                        make_Ex_from_string("\\cdbDerivative{#}",false, k), 0);
-	
-	k->inject_property(new Derivative(),         make_Ex_from_string("\\commutator{#}",false, k), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\commutator{#}",false, k), 0);
+	k->inject_property(d, make_Ex_from_string("\\cdbDerivative{#}", false, k), 0);
 
-	k->inject_property(new Derivative(),         make_Ex_from_string("\\anticommutator{#}",false, k), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\anticommutator{#}",false, k), 0);
+	k->inject_property(new Derivative(), make_Ex_from_string("\\commutator{#}", false, k), 0);
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\commutator{#}", false, k), 0);
 
-	k->inject_property(new Distributable(),      make_Ex_from_string("\\indexbracket{#}",false, k), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\indexbracket{#}",false, k), 0);
+	k->inject_property(new Derivative(), make_Ex_from_string("\\anticommutator{#}", false, k), 0);
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\anticommutator{#}", false, k), 0);
 
-	k->inject_property(new DependsInherit(),     make_Ex_from_string("\\pow{#}",false, k), 0);
-	auto wi3=new WeightInherit();
-	auto wa3=make_Ex_from_string("label=all, type=power", false, k);
-	k->inject_property(wi3,                      make_Ex_from_string("\\pow{#}",false, k), wa3);
+	k->inject_property(new Distributable(), make_Ex_from_string("\\indexbracket{#}", false, k), 0);
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\indexbracket{#}", false, k), 0);
 
-	k->inject_property(new NumericalFlat(),      make_Ex_from_string("\\int{#}",false, k), 0);
-	k->inject_property(new IndexInherit(),       make_Ex_from_string("\\int{#}",false, k), 0);
+	k->inject_property(new DependsInherit(), make_Ex_from_string("\\pow{#}", false, k), 0);
+	auto wi3 = new WeightInherit();
+	auto wa3 = make_Ex_from_string("label=all, type=power", false, k);
+	k->inject_property(wi3, make_Ex_from_string("\\pow{#}", false, k), wa3);
+
+	k->inject_property(new NumericalFlat(), make_Ex_from_string("\\int{#}", false, k), 0);
+	k->inject_property(new IndexInherit(), make_Ex_from_string("\\int{#}", false, k), 0);
 
 	// Hidden nodes.
-	k->inject_property(new Accent(),             make_Ex_from_string("\\ldots{#}",false, k), 0);
-	
-	// Accents, necessary for proper display.
-	k->inject_property(new Accent(),             make_Ex_from_string("\\hat{#}",false, k), 0);
-	k->inject_property(new Accent(),             make_Ex_from_string("\\bar{#}",false, k), 0);
-	k->inject_property(new Accent(),             make_Ex_from_string("\\overline{#}",false, k), 0);
-	k->inject_property(new Accent(),             make_Ex_from_string("\\tilde{#}",false, k), 0);
+	k->inject_property(new Accent(), make_Ex_from_string("\\ldots{#}", false, k), 0);
 
-	post_process_enabled=true;
-//	k->inject_property(new Integral(),           make_Ex_from_string("\\int{#}",false), 0);
-	}
+	// Accents, necessary for proper display.
+	k->inject_property(new Accent(), make_Ex_from_string("\\hat{#}", false, k), 0);
+	k->inject_property(new Accent(), make_Ex_from_string("\\bar{#}", false, k), 0);
+	k->inject_property(new Accent(), make_Ex_from_string("\\overline{#}", false, k), 0);
+	k->inject_property(new Accent(), make_Ex_from_string("\\tilde{#}", false, k), 0);
+
+	post_process_enabled = true;
+	//	k->inject_property(new Integral(),           make_Ex_from_string("\\int{#}",false), 0);
+}
 
 
 // Property constructor and display members for Python purposes.
 
 template<class Prop>
-Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param) 
-	{
+Property<Prop>::Property(std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)
+{
 	for_obj = ex;
-	Kernel *kernel=get_kernel_from_scope();
+	Kernel *kernel = get_kernel_from_scope();
 	prop = new Prop(); // we keep a pointer, but the kernel owns it.
-//	std::cerr << "Declaring property " << prop->name() << " in kernel " << kernel << std::endl;
+					   //	std::cerr << "Declaring property " << prop->name() << " in kernel " << kernel << std::endl;
 	kernel->inject_property(prop, ex, param);
-	}
+}
 
 template<class Prop>
 std::string Property<Prop>::str_() const
-	{
+{
 	std::ostringstream str;
 	str << "Attached property ";
 	prop->latex(str); // FIXME: this should call 'str' on the property, which does not exist yet
-	str << " to "+Ex_str_(for_obj)+".";
+	str << " to " + Ex_str_(for_obj) + ".";
 	return str.str();
-	}
+}
 
 template<class Prop>
 std::string Property<Prop>::latex_() const
-	{
+{
 	std::ostringstream str;
 
-//	HERE: this text should go away, property should just print itself in a python form,
-//   the decorating text should be printed in a separate place.
+	//	HERE: this text should go away, property should just print itself in a python form,
+	//   the decorating text should be printed in a separate place.
 
 	str << "\\text{Attached property ";
 	prop->latex(str);
-	std::string bare=Ex_latex_(for_obj);
-	str << " to~}"+bare+".";
+	std::string bare = Ex_latex_(for_obj);
+	str << " to~}" + bare + ".";
 	return str.str();
-	}
+}
 
 template<>
 std::string Property<LaTeXForm>::latex_() const
-	{
+{
 	std::ostringstream str;
 	str << "\\text{Attached property ";
 	prop->latex(str);
-	std::string bare=Ex_str_(for_obj);
+	std::string bare = Ex_str_(for_obj);
 	bare = std::regex_replace(bare, std::regex(R"(\\)"), "$\\backslash{}$}");
 	bare = std::regex_replace(bare, std::regex(R"(#)"), "\\#");
-	str << " to {\\tt "+bare+"}.";
+	str << " to {\\tt " + bare + "}.";
 	return str.str();
-	}
+}
 
 template<class Prop>
 std::string Property<Prop>::repr_() const
-	{
+{
 	// FIXME: this needs work, it does not output things which can be fed back into python.
-	return "Property::repr: "+prop->name();
-	}
+	return "Property::repr: " + prop->name();
+}
 
 // Templates to dispatch function calls in Python to algorithms in
 // C++.  All algorithms take the 'deep' and 'repeat' boolean
@@ -931,98 +930,99 @@ std::string Property<Prop>::repr_() const
 
 template<class F>
 std::shared_ptr<Ex> dispatch_base(std::shared_ptr<Ex> ex, F& algo, bool deep, bool repeat, unsigned int depth, bool pre_order)
-	{
-	Ex::iterator it=ex->begin();
-	if(ex->is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
+{
+	Ex::iterator it = ex->begin();
+	if (ex->is_valid(it)) { // This may be called on an empty expression; just safeguard against that.
 		ProgressMonitor *pm = get_progress_monitor();
 		algo.set_progress_monitor(pm);
-		if(!pre_order)
+		if (!pre_order)
 			ex->update_state(algo.apply_generic(it, deep, repeat, depth));
 		else
-			ex->update_state(algo.apply_pre_order(repeat));			
+			ex->update_state(algo.apply_pre_order(repeat));
 		call_post_process(*get_kernel_from_scope(), ex);
-		}
-	return ex;
 	}
+	return ex;
+}
 
 std::shared_ptr<Ex> map_sympy_wrapper(std::shared_ptr<Ex> ex, std::string head, pybind11::args args)
-	{
+{
 	std::vector<std::string> av;
-	for(auto& arg: args)
+	for (auto& arg : args)
 		av.push_back(arg.cast<std::string>());
 	map_sympy algo(*get_kernel_from_scope(), *ex, head, av);
 	return dispatch_base(ex, algo, true, false, 0, true);
-	}
+}
 
 #ifdef MATHEMATICA_FOUND
 std::shared_ptr<Ex> map_mma_wrapper(std::shared_ptr<Ex> ex, std::string head)
-	{
+{
 	map_mma algo(*get_kernel_from_scope(), *ex, head);
 	return dispatch_base(ex, algo, true, false, 0, true);
-	}
+}
 #endif
 
-void call_post_process(Kernel& kernel, std::shared_ptr<Ex> ex) 
-	{
+void call_post_process(Kernel& kernel, std::shared_ptr<Ex> ex)
+{
 	// Find the 'post_process' function, and if found, turn off
 	// post-processing, then call the function on the current Ex.
-	if(post_process_enabled) {
-	  if(ex->number_of_children(ex->begin())==0)
-	    return;
-	  
-	  post_process_enabled=false;
-	  pybind11::object post_process;
-	  
-	  auto locals = get_locals();
-	  if(scope_has(locals, "post_process")) {
-	    post_process = locals["post_process"];
-	  } else {
-	    auto globals = get_globals();
-	    if(scope_has(globals, "post_process"))
-	      post_process = globals["post_process"];
-	  }
-	  if(post_process) {
-	    // std::cerr << "calling post-process" << std::endl;
-	    post_process(std::ref(kernel), ex);
-	  }
-	  post_process_enabled=true;
+	if (post_process_enabled) {
+		if (ex->number_of_children(ex->begin()) == 0)
+			return;
+
+		post_process_enabled = false;
+		pybind11::object post_process;
+
+		auto locals = get_locals();
+		if (scope_has(locals, "post_process")) {
+			post_process = locals["post_process"];
+		}
+		else {
+			auto globals = get_globals();
+			if (scope_has(globals, "post_process"))
+				post_process = globals["post_process"];
+		}
+		if (post_process) {
+			// std::cerr << "calling post-process" << std::endl;
+			post_process(std::ref(kernel), ex);
+		}
+		post_process_enabled = true;
 	}
-	}
+}
 
 template<class F>
 std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, bool deep, bool repeat, unsigned int depth)
-	{
+{
 	F algo(*get_kernel_from_scope(), *ex);
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
-	}
+}
 
 template<class F, typename Arg1>
 std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)
-	{
+{
 	F algo(*get_kernel_from_scope(), *ex, arg);
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
-	}
+}
 
 template<class F, typename Arg1>
 std::shared_ptr<Ex> dispatch_ex_preorder(std::shared_ptr<Ex> ex, Arg1 arg, bool deep, bool repeat, unsigned int depth)
-	{
+{
 	F algo(*get_kernel_from_scope(), *ex, arg);
 	return dispatch_base(ex, algo, deep, repeat, depth, true);
-	}
+}
 
 template<class F, typename Arg1, typename Arg2>
 std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
-	{
+{
 	F algo(*get_kernel_from_scope(), *ex, arg1, arg2);
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
-	}
+}
 
 template<class F, typename Arg1, typename Arg2, typename Arg3>
 std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg1, Arg2 arg2, Arg3 arg3, bool deep, bool repeat, unsigned int depth)
-	{
+{
 	F algo(*get_kernel_from_scope(), *ex, arg1, arg2, arg3);
 	return dispatch_base(ex, algo, deep, repeat, depth, false);
-	}
+}
 
 
 // template<class F, typename Arg1>
@@ -1063,20 +1063,22 @@ std::shared_ptr<Ex> dispatch_ex(std::shared_ptr<Ex> ex, Arg1 arg1, Arg2 arg2, Ar
 // Templated function which declares various forms of the algorithm entry points in one shot.
 // First the ones with no argument, just a deep flag.
 
+#include <cstdarg>
+
 template<class F>
-void def_algo_1(const std::string& name, pybind11::module& m) 
-	{
+void def_algo_1(const std::string& name, pybind11::module& m)
+{
 	using namespace pybind11;
 
 	m.def(name.c_str(),
-		 &dispatch_ex<F>,
-		 arg("ex"),
-		 arg("deep")=true,
-		 arg("repeat")=false,
-		 arg("depth")=0,
-		 return_value_policy::reference_internal
-		 );
-	}
+		&dispatch_ex<F>,
+		arg("ex"),
+		arg("deep") = true,
+		arg("repeat") = false,
+		arg("depth") = 0,
+		return_value_policy::reference_internal
+	);
+}
 
 
 // Declare a property. These take one Ex to which they will be attached, and
@@ -1087,7 +1089,7 @@ void def_algo_1(const std::string& name, pybind11::module& m)
 
 template<class P>
 void def_prop(pybind11::module& m)
-	{
+{
 	using namespace pybind11;
 
 	class_<Property<P>, std::shared_ptr<Property<P>>, BaseProperty>(m, std::make_shared<P>()->name().c_str())
@@ -1095,43 +1097,45 @@ void def_prop(pybind11::module& m)
 			init<std::shared_ptr<Ex>, std::shared_ptr<Ex>>(),
 			arg("ex"),
 			arg("param")
-			  )
+		)
 		.def("__str__", &Property<P>::str_)
 		.def("__repr__", &Property<P>::repr_)
 		.def("_latex_", &Property<P>::latex_);
-	}
+}
 
-void compile_package(const std::string& name)
+void compile_package(const std::string& in_name, const std::string& out_name)
 {
+	// Get current time info
+	std::time_t t = std::time(nullptr);
+	std::tm tm = *std::localtime(&t);
+
 	// Only compile if the notebook is newer than the compiled package
 	struct stat f1, f2;
-	if (stat(std::string(name + ".cnb").c_str(), &f1) == 0 && stat(std::string(name + ".py").c_str(), &f2) == 0) {
-		if (f1.st_mtime < f2.st_mtime)
-			return;
-	}
+	if (stat(in_name.c_str(), &f1) == 0 && stat(out_name.c_str(), &f2) == 0 && f1.st_mtime < f2.st_mtime)
+		return;
 
 	// Read the file into a Json object and get the cells
-	std::ifstream ifs(name + ".cnb");
+	std::ifstream ifs(in_name);
 	Json::Value nb;
 	ifs >> nb;
 	Json::Value& cells = nb["cells"];
 
 	// Loop over input cells, compile them and write to python file
-	std::ofstream ofs(name + ".py");
-	std::time_t t = std::time(nullptr);
-	std::tm tm = *std::localtime(&t);
+	std::ofstream ofs(out_name);
 	ofs << "# cadabra2 package, auto-compiled " << std::put_time(&tm, "%F %T") << '\n'
-	    << "import cadabra2\n"
-	    << "import imp\n"
-	    << "from cadabra2 import *\n"
-	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
-	    << "temp__all__ = dir() + ['temp__all__']\n\n"
-	    << "def display(ex):\n"
-	    << "   pass\n\n";
+		<< "# Do not modify - changing the timestamp of this file may cause import errors\n"
+		<< "# Original file location: " << in_name << '\n'
+		<< "import cadabra2\n"
+		<< "import imp\n"
+		<< "from cadabra2 import *\n"
+		<< "__cdbkernel__ = cadabra2.__cdbkernel__\n"
+		<< "temp__all__ = dir() + ['temp__all__']\n\n"
+		<< "def display(ex):\n"
+		<< "   pass\n\n";
 
-//	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
-//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
-//	    << "   exec(code)\n\n";
+	//	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
+	//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
+	//	    << "   exec(code)\n\n";
 
 	for (auto cell : cells) {
 		if (cell["cell_type"] == "input") {
@@ -1144,11 +1148,11 @@ void compile_package(const std::string& name)
 	}
 	// Ensure only symbols defined in this file get exported
 	ofs << '\n'
-	    << "del locals()['display']\n\n"
-	    << "try:\n"
-	    << "    __all__\n"
-	    << "except NameError:\n"
-	    << "    __all__  = list(set(dir()) - set(temp__all__))\n";
+		<< "del locals()['display']\n\n"
+		<< "try:\n"
+		<< "    __all__\n"
+		<< "except NameError:\n"
+		<< "    __all__  = list(set(dir()) - set(temp__all__))\n";
 }
 
 
@@ -1159,32 +1163,32 @@ void compile_package(const std::string& name)
 // be attached to Cadabra patterns.
 
 PYBIND11_MODULE(cadabra2, m)
-	{
+{
 	m.def("compile_package__", &compile_package);
 
 	// Declare the Kernel object for Python so we can store it in the local Python context.
 	// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
 	// pull that into the interpreter scope in the 'cadabra2_default.py' file.
 	pybind11::enum_<Kernel::scalar_backend_t>(m, "scalar_backend_t")
-		.value("sympy",       Kernel::scalar_backend_t::sympy)
+		.value("sympy", Kernel::scalar_backend_t::sympy)
 		.value("mathematica", Kernel::scalar_backend_t::mathematica)
 		.export_values()
 		;
 
 	pybind11::enum_<str_node::parent_rel_t>(m, "parent_rel_t")
-		.value("sub",         str_node::parent_rel_t::p_sub)
-		.value("super",       str_node::parent_rel_t::p_super)
-		.value("none",        str_node::parent_rel_t::p_none)		
+		.value("sub", str_node::parent_rel_t::p_sub)
+		.value("super", str_node::parent_rel_t::p_super)
+		.value("none", str_node::parent_rel_t::p_none)
 		.export_values()
 		;
 
 	pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
 		.def(pybind11::init<>())
 		.def_readonly("scalar_backend", &Kernel::scalar_backend);
-	
+
 	Kernel* kernel = create_scope();
 	m.attr("__cdbkernel__") = pybind11::cast(kernel);
-	
+
 	// Interface the Stopwatch class
 	pybind11::class_<Stopwatch>(m, "Stopwatch")
 		.def(pybind11::init<>())
@@ -1194,104 +1198,104 @@ PYBIND11_MODULE(cadabra2, m)
 		.def("seconds", &Stopwatch::seconds)
 		.def("useconds", &Stopwatch::useconds)
 		.def("__str__", [](const Stopwatch& s) {
-				std::stringstream ss;
-				ss << s;
-				return ss.str();
-				});
-	
+		std::stringstream ss;
+		ss << s;
+		return ss.str();
+	});
+
 	// Make our profiling class known to the Python world.
 	pybind11::class_<ProgressMonitor>(m, "ProgressMonitor")\
 		.def(pybind11::init<>())
 		.def("print", &ProgressMonitor::print)
 		.def("totals", &ProgressMonitor_totals_helper);
-	
+
 	pybind11::class_<ProgressMonitor::Total>(m, "Total")
 		.def_readonly("name", &ProgressMonitor::Total::name)
 		.def_readonly("call_count", &ProgressMonitor::Total::call_count)
-//		.def_readonly("time_spent", &ProgressMonitor::Total::time_spent_as_long)
+		//		.def_readonly("time_spent", &ProgressMonitor::Total::time_spent_as_long)
 		.def_readonly("total_steps", &ProgressMonitor::Total::total_steps)
 		.def("__str__", &ProgressMonitor::Total::str);
 
 	// Declare the Ex object to store expressions and manipulate on the Python side.
 	// We do not allow initialisation/construction except through the two 
 	// make_Ex_from_... functions, which take care of creating a '_' reference
-   // on the Python side as well.
+	// on the Python side as well.
 
-//	pybind11::class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", pybind11::no_init);
+	//	pybind11::class_<Ex, std::shared_ptr<Ex> > pyEx("Ex", pybind11::no_init);
 	pybind11::class_<Ex, std::shared_ptr<Ex> >(m, "Ex")
 		.def(pybind11::init(&construct_Ex_from_string))
 		.def(pybind11::init(&construct_Ex_from_string_2))
 		.def(pybind11::init(&construct_Ex_from_int))
 		.def(pybind11::init(&construct_Ex_from_int_2))
-		.def("__str__",     &Ex_str_)
-		.def("_latex_",     &Ex_latex_)
-		.def("__repr__",    &Ex_repr_)
-		.def("__eq__",      &__eq__Ex_Ex)
-		.def("__eq__",      &__eq__Ex_int)
-		.def("_sympy_",     &Ex_to_Sympy)		
-		.def("sympy_form",  &Ex_to_Sympy_string)
-		.def("mma_form",    &Ex_to_MMA, pybind11::arg("unicode")=true)    // standardize on this
-		.def("input_form",  &Ex_to_input) 
+		.def("__str__", &Ex_str_)
+		.def("_latex_", &Ex_latex_)
+		.def("__repr__", &Ex_repr_)
+		.def("__eq__", &__eq__Ex_Ex)
+		.def("__eq__", &__eq__Ex_int)
+		.def("_sympy_", &Ex_to_Sympy)
+		.def("sympy_form", &Ex_to_Sympy_string)
+		.def("mma_form", &Ex_to_MMA, pybind11::arg("unicode") = true)    // standardize on this
+		.def("input_form", &Ex_to_input)
 		.def("__getitem__", &Ex_getitem)
 		.def("__getitem__", &Ex_getitem_string)
-		.def("__getitem__", &Ex_getitem_iterator)				
+		.def("__getitem__", &Ex_getitem_iterator)
 		.def("__getitem__", &Ex_getslice)
 		.def("__setitem__", &Ex_setitem)
 		.def("__setitem__", &Ex_setitem_iterator)
-		.def("__len__",     &Ex_len)
-		.def("head",        &Ex_head)
-		.def("mult",        &Ex_mult)
-		.def("__iter__",    &Ex_iter)
-		.def("top",         &Ex_top)
-		.def("matches",     &Ex_matches)
-		.def("state",       &Ex::state)
-		.def("reset",       &Ex::reset_state)
-		.def("changed",     &Ex::changed_state)
+		.def("__len__", &Ex_len)
+		.def("head", &Ex_head)
+		.def("mult", &Ex_mult)
+		.def("__iter__", &Ex_iter)
+		.def("top", &Ex_top)
+		.def("matches", &Ex_matches)
+		.def("state", &Ex::state)
+		.def("reset", &Ex::reset_state)
+		.def("changed", &Ex::changed_state)
 		.def("__add__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
-				return a + b;
-				}, pybind11::is_operator())		
+		return a + b;
+	}, pybind11::is_operator())
 		.def("__add__", [](std::shared_ptr<Ex> a, ExNode b) {
-				return a + b;
-				}, pybind11::is_operator())		
+		return a + b;
+	}, pybind11::is_operator())
 		.def("__sub__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
-				return a - b;
-				}, pybind11::is_operator())
+		return a - b;
+	}, pybind11::is_operator())
 		.def("__sub__", [](std::shared_ptr<Ex> a, ExNode b) {
-				return a - b;
-				}, pybind11::is_operator())		
+		return a - b;
+	}, pybind11::is_operator())
 		.def("__mul__", [](std::shared_ptr<Ex> a, std::shared_ptr<Ex> b) {
-				return a * b;
-				}, pybind11::is_operator())		
+		return a * b;
+	}, pybind11::is_operator())
 		;
 
 	pybind11::class_<ExNode>(m, "ExNode")
-		.def("__iter__",              &ExNode::iter)
-		.def("__next__",              &ExNode::next, pybind11::return_value_policy::reference_internal)
-		.def("__getitem__",           &ExNode::getitem_string)
-		.def("__getitem__",           &ExNode::getitem_iterator)		
-		.def("__setitem__",           &ExNode::setitem_string)
-		.def("__setitem__",           &ExNode::setitem_iterator)				
-		.def("_latex_",               &ExNode::_latex_)
-		.def("__str__",               &ExNode::__str__)		
-		.def("terms",                 &ExNode::terms)
-		.def("factors",               &ExNode::factors)		
-		.def("own_indices",           &ExNode::own_indices)
-		.def("indices",               &ExNode::indices)
-		.def("free_indices",          &ExNode::free_indices)				
-		.def("args",                  &ExNode::args)
-		.def("children",              &ExNode::children)						
-		.def("replace",               &ExNode::replace)
-		.def("insert",                &ExNode::insert)
-		.def("insert",                &ExNode::insert_it)
-		.def("append_child",          &ExNode::append_child)
-		.def("append_child",          &ExNode::append_child_it)		
-		.def("erase",                 &ExNode::erase)				
-		.def_property("name",         &ExNode::get_name, &ExNode::set_name)
-		.def_property("parent_rel",   &ExNode::get_parent_rel, &ExNode::set_parent_rel)
-		.def_property("multiplier",   &ExNode::get_multiplier, &ExNode::set_multiplier) 
+		.def("__iter__", &ExNode::iter)
+		.def("__next__", &ExNode::next, pybind11::return_value_policy::reference_internal)
+		.def("__getitem__", &ExNode::getitem_string)
+		.def("__getitem__", &ExNode::getitem_iterator)
+		.def("__setitem__", &ExNode::setitem_string)
+		.def("__setitem__", &ExNode::setitem_iterator)
+		.def("_latex_", &ExNode::_latex_)
+		.def("__str__", &ExNode::__str__)
+		.def("terms", &ExNode::terms)
+		.def("factors", &ExNode::factors)
+		.def("own_indices", &ExNode::own_indices)
+		.def("indices", &ExNode::indices)
+		.def("free_indices", &ExNode::free_indices)
+		.def("args", &ExNode::args)
+		.def("children", &ExNode::children)
+		.def("replace", &ExNode::replace)
+		.def("insert", &ExNode::insert)
+		.def("insert", &ExNode::insert_it)
+		.def("append_child", &ExNode::append_child)
+		.def("append_child", &ExNode::append_child_it)
+		.def("erase", &ExNode::erase)
+		.def_property("name", &ExNode::get_name, &ExNode::set_name)
+		.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
+		.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)
 		.def("__add__", [](ExNode a, std::shared_ptr<Ex> b) {
-				return a.add_ex(b);
-				}, pybind11::is_operator())		
+		return a.add_ex(b);
+	}, pybind11::is_operator())
 		;
 
 	pybind11::enum_<Algorithm::result_t>(m, "result_t")
@@ -1303,43 +1307,43 @@ PYBIND11_MODULE(cadabra2, m)
 		;
 
 	// Inspection algorithms and other global functions which do not fit into the C++
-   // framework anymore.
+	// framework anymore.
 
 	m.def("kernel", [](pybind11::kwargs dict) {
-			Kernel *k=get_kernel_from_scope();			
-			for(auto& item: dict) {
-				std::string key=item.first.cast<std::string>();
-				std::string val=item.second.cast<std::string>();				
-				if(key=="scalar_backend") {
-					if(val=="sympy")            k->scalar_backend=Kernel::scalar_backend_t::sympy;
-					else if(val=="mathematica") k->scalar_backend=Kernel::scalar_backend_t::mathematica;
-					else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
-					}
-				else {
-					throw ArgumentException("unknown argument '"+key+"'.");
-					}
-				}
-			});
+		Kernel *k = get_kernel_from_scope();
+		for (auto& item : dict) {
+			std::string key = item.first.cast<std::string>();
+			std::string val = item.second.cast<std::string>();
+			if (key == "scalar_backend") {
+				if (val == "sympy")            k->scalar_backend = Kernel::scalar_backend_t::sympy;
+				else if (val == "mathematica") k->scalar_backend = Kernel::scalar_backend_t::mathematica;
+				else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
+			}
+			else {
+				throw ArgumentException("unknown argument '" + key + "'.");
+			}
+		}
+	});
 	m.def("tree", &print_tree);
 	m.def("init_ipython", &init_ipython);
 	m.def("properties", &list_properties);
 	m.def("map_sympy", &map_sympy_wrapper,
-			pybind11::arg("ex"),
-			pybind11::arg("function")="",
-			pybind11::return_value_policy::reference_internal);
+		pybind11::arg("ex"),
+		pybind11::arg("function") = "",
+		pybind11::return_value_policy::reference_internal);
 #ifdef MATHEMATICA_FOUND
-	m.def("map_mma",   &map_mma_wrapper,
-			pybind11::arg("ex"),
-			pybind11::arg("function")="",
-			pybind11::return_value_policy::reference_internal);
+	m.def("map_mma", &map_mma_wrapper,
+		pybind11::arg("ex"),
+		pybind11::arg("function") = "",
+		pybind11::return_value_policy::reference_internal);
 #endif
-	
-	m.def("create_scope", &create_scope, 
-			pybind11::return_value_policy::take_ownership);
+
+	m.def("create_scope", &create_scope,
+		pybind11::return_value_policy::take_ownership);
 	m.def("create_scope_from_global", &create_scope_from_global,
-			pybind11::return_value_policy::take_ownership);			
+		pybind11::return_value_policy::take_ownership);
 	m.def("create_empty_scope", &create_empty_scope,
-			pybind11::return_value_policy::take_ownership);			
+		pybind11::return_value_policy::take_ownership);
 
 	// Algorithms which spit out a new Ex (or a list of new Exs), instead of 
 	// modifying the existing one. 
@@ -1360,217 +1364,217 @@ PYBIND11_MODULE(cadabra2, m)
 	def_algo_1<canonicalise>("canonicalise", m);
 	def_algo_1<collect_components>("collect_components", m);
 	def_algo_1<collect_factors>("collect_factors", m);
- 	def_algo_1<collect_terms>("collect_terms", m);
- 	def_algo_1<combine>("combine", m);
+	def_algo_1<collect_terms>("collect_terms", m);
+	def_algo_1<combine>("combine", m);
 	def_algo_1<decompose_product>("decompose_product", m);
 	def_algo_1<distribute>("distribute", m);
 	def_algo_1<eliminate_kronecker>("eliminate_kronecker", m);
- 	def_algo_1<expand>("expand", m);
+	def_algo_1<expand>("expand", m);
 	def_algo_1<expand_delta>("expand_delta", m);
 	def_algo_1<expand_diracbar>("expand_diracbar", m);
 	def_algo_1<expand_power>("expand_power", m);
 	def_algo_1<flatten_sum>("flatten_sum", m);
 	def_algo_1<indexsort>("indexsort", m);
-	def_algo_1<lr_tensor>("lr_tensor", m);	
+	def_algo_1<lr_tensor>("lr_tensor", m);
 	def_algo_1<product_rule>("product_rule", m);
 	def_algo_1<reduce_delta>("reduce_delta", m);
-//	def_algo_1<reduce_sub>("reduce_sub", m);
+	//	def_algo_1<reduce_sub>("reduce_sub", m);
 	def_algo_1<sort_product>("sort_product", m);
 	def_algo_1<sort_spinors>("sort_spinors", m);
 	def_algo_1<sort_sum>("sort_sum", m);
-	def_algo_1<tabdimension>("tab_dimension", m);	
+	def_algo_1<tabdimension>("tab_dimension", m);
 	def_algo_1<young_project_product>("young_project_product", m);
 
-	m.def("complete", &dispatch_ex<complete, Ex>, 
-		 pybind11::arg("ex"),pybind11::arg("add"),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("complete", &dispatch_ex<complete, Ex>,
+		pybind11::arg("ex"), pybind11::arg("add"),
+		pybind11::arg("deep") = false, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("decompose", &dispatch_ex<decompose, Ex>, 
-	      pybind11::arg("ex"),pybind11::arg("basis"),
-	      pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-	      pybind11::return_value_policy::reference_internal );
+	m.def("decompose", &dispatch_ex<decompose, Ex>,
+		pybind11::arg("ex"), pybind11::arg("basis"),
+		pybind11::arg("deep") = false, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("drop_weight", &dispatch_ex<drop_weight, Ex>, 
-		 pybind11::arg("ex"),pybind11::arg("condition"),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("drop_weight", &dispatch_ex<drop_weight, Ex>,
+		pybind11::arg("ex"), pybind11::arg("condition"),
+		pybind11::arg("deep") = false, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("eliminate_metric", &dispatch_ex<eliminate_metric, Ex>, 
-			pybind11::arg("ex"),
-			pybind11::arg("preferred")=std::make_shared<Ex>(),
-			pybind11::arg("deep")=true,
-			pybind11::arg("repeat")=false,
-			pybind11::arg("depth")=0,
-			pybind11::return_value_policy::reference_internal );
+	m.def("eliminate_metric", &dispatch_ex<eliminate_metric, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("preferred") = std::make_shared<Ex>(),
+		pybind11::arg("deep") = true,
+		pybind11::arg("repeat") = false,
+		pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("keep_weight", &dispatch_ex<keep_weight, Ex>, 
-		 pybind11::arg("ex"),pybind11::arg("condition"),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("keep_weight", &dispatch_ex<keep_weight, Ex>,
+		pybind11::arg("ex"), pybind11::arg("condition"),
+		pybind11::arg("deep") = false, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
 	m.def("lower_free_indices", &dispatch_ex<lower_free_indices, bool>,
-	      pybind11::arg("ex"), pybind11::arg("lower")=true,
-	      pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-	      pybind11::return_value_policy::reference_internal );
+		pybind11::arg("ex"), pybind11::arg("lower") = true,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
 	m.def("raise_free_indices", &dispatch_ex<lower_free_indices, bool>,
-	      pybind11::arg("ex"), pybind11::arg("lower")=false,
-	      pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-	      pybind11::return_value_policy::reference_internal );
+		pybind11::arg("ex"), pybind11::arg("lower") = false,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex>, 
-		 pybind11::arg("ex"),pybind11::arg("away_from"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("integrate_by_parts", &dispatch_ex<integrate_by_parts, Ex>,
+		pybind11::arg("ex"), pybind11::arg("away_from"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>, 
-		 pybind11::arg("ex"),pybind11::arg("modulo_monoterm")=false,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("young_project_tensor", &dispatch_ex<young_project_tensor, bool>,
+		pybind11::arg("ex"), pybind11::arg("modulo_monoterm") = false,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("join_gamma",  &dispatch_ex<join_gamma, bool, bool>, 
-		 pybind11::arg("ex"),pybind11::arg("expand")=true,pybind11::arg("use_gendelta")=false,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("join_gamma", &dispatch_ex<join_gamma, bool, bool>,
+		pybind11::arg("ex"), pybind11::arg("expand") = true, pybind11::arg("use_gendelta") = false,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
 	m.def("einsteinify", &dispatch_ex<einsteinify, Ex>,
-			pybind11::arg("ex"), pybind11::arg("metric")=std::make_shared<Ex>(),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-		  
+		pybind11::arg("ex"), pybind11::arg("metric") = std::make_shared<Ex>(),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+
 	m.def("evaluate", &dispatch_ex<evaluate, Ex, bool, bool>,
-			pybind11::arg("ex"), pybind11::arg("components")=Ex(), pybind11::arg("rhsonly")=false, pybind11::arg("simplify")=true,
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-		  
+		pybind11::arg("ex"), pybind11::arg("components") = Ex(), pybind11::arg("rhsonly") = false, pybind11::arg("simplify") = true,
+		pybind11::arg("deep") = false, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+
 	m.def("keep_terms", &dispatch_ex<keep_terms, std::vector<int> >,
-		 pybind11::arg("ex"), 
-		  pybind11::arg("terms"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+		pybind11::arg("ex"),
+		pybind11::arg("terms"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("young_project", &dispatch_ex<young_project, std::vector<int>, std::vector<int> >, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("shape"), pybind11::arg("indices"), 
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("young_project", &dispatch_ex<young_project, std::vector<int>, std::vector<int> >,
+		pybind11::arg("ex"),
+		pybind11::arg("shape"), pybind11::arg("indices"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("order", &dispatch_ex<order, Ex, bool>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("order", &dispatch_ex<order, Ex, bool>,
+		pybind11::arg("ex"),
+		pybind11::arg("factors"), pybind11::arg("anticommuting") = false,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("simplify", &dispatch_ex<simplify>, 
-			pybind11::arg("ex"),
-			pybind11::arg("deep")=false,
-			pybind11::arg("repeat")=false,
-			pybind11::arg("depth")=0,
-			pybind11::return_value_policy::reference_internal );
+	m.def("simplify", &dispatch_ex<simplify>,
+		pybind11::arg("ex"),
+		pybind11::arg("deep") = false,
+		pybind11::arg("repeat") = false,
+		pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("order", &dispatch_ex<order, Ex, bool>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("order", &dispatch_ex<order, Ex, bool>,
+		pybind11::arg("ex"),
+		pybind11::arg("factors"), pybind11::arg("anticommuting") = false,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
 	m.def("epsilon_to_delta", &dispatch_ex<epsilon_to_delta, bool>,
-		 pybind11::arg("ex"),
-		  pybind11::arg("reduce")=true,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+		pybind11::arg("ex"),
+		pybind11::arg("reduce") = true,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("rename_dummies", &dispatch_ex<rename_dummies, std::string, std::string>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("set")="", pybind11::arg("to")="",
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("rename_dummies", &dispatch_ex<rename_dummies, std::string, std::string>,
+		pybind11::arg("ex"),
+		pybind11::arg("set") = "", pybind11::arg("to") = "",
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("sym", &dispatch_ex<sym, Ex, bool>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("items"), pybind11::arg("antisymmetric")=false,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("sym", &dispatch_ex<sym, Ex, bool>,
+		pybind11::arg("ex"),
+		pybind11::arg("items"), pybind11::arg("antisymmetric") = false,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("asym", &dispatch_ex<sym, Ex, bool>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("items"), pybind11::arg("antisymmetric")=true,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
+	m.def("asym", &dispatch_ex<sym, Ex, bool>,
+		pybind11::arg("ex"),
+		pybind11::arg("items"), pybind11::arg("antisymmetric") = true,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
 
-	m.def("factor_in", &dispatch_ex<factor_in, Ex>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("factors"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("factor_out", &dispatch_ex<factor_out, Ex, bool>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("factors"),pybind11::arg("right")=false,
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("fierz", &dispatch_ex<fierz, Ex>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("spinors"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("substitute", &dispatch_ex<substitute, Ex>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("rules"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("take_match", &dispatch_ex<take_match, Ex>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("rules"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("replace_match", &dispatch_ex<replace_match>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("zoom", &dispatch_ex<zoom, Ex>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("rules"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("unzoom", &dispatch_ex<unzoom>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex, Ex>, 
-		 pybind11::arg("ex"),pybind11::arg("preferred"),pybind11::arg("converters"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("vary", &dispatch_ex_preorder<vary, Ex>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("rules"),
-		  pybind11::arg("deep")=false,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("split_gamma", &dispatch_ex<split_gamma, bool>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("on_back"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	m.def("split_index", &dispatch_ex<split_index, Ex>, 
-		 pybind11::arg("ex"),
-		  pybind11::arg("rules"),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	
-	m.def("unwrap", &dispatch_ex<unwrap, Ex>, 
-		 pybind11::arg("ex"),
-			pybind11::arg("wrapper")=Ex(),
-		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
-		 pybind11::return_value_policy::reference_internal );
-	
+	m.def("factor_in", &dispatch_ex<factor_in, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("factors"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("factor_out", &dispatch_ex<factor_out, Ex, bool>,
+		pybind11::arg("ex"),
+		pybind11::arg("factors"), pybind11::arg("right") = false,
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("fierz", &dispatch_ex<fierz, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("spinors"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("substitute", &dispatch_ex<substitute, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("rules"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("take_match", &dispatch_ex<take_match, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("rules"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("replace_match", &dispatch_ex<replace_match>,
+		pybind11::arg("ex"),
+		pybind11::arg("deep") = false, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("zoom", &dispatch_ex<zoom, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("rules"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("unzoom", &dispatch_ex<unzoom>,
+		pybind11::arg("ex"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("rewrite_indices", &dispatch_ex<rewrite_indices, Ex, Ex>,
+		pybind11::arg("ex"), pybind11::arg("preferred"), pybind11::arg("converters"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("vary", &dispatch_ex_preorder<vary, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("rules"),
+		pybind11::arg("deep") = false, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("split_gamma", &dispatch_ex<split_gamma, bool>,
+		pybind11::arg("ex"),
+		pybind11::arg("on_back"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+	m.def("split_index", &dispatch_ex<split_index, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("rules"),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+
+	m.def("unwrap", &dispatch_ex<unwrap, Ex>,
+		pybind11::arg("ex"),
+		pybind11::arg("wrapper") = Ex(),
+		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
+		pybind11::return_value_policy::reference_internal);
+
 	// Properties are declared as objects on the Python side as well. They all take two
 	// Ex objects as constructor parameters: the first one is the object(s) to which the
 	// property is attached, the second one is the argument list (represented as an Ex).
 	// 
 	// It might have been more logical to make property declarations through a function,
 	// so that we have Indices(ex=Ex('{a,b,c,}'), name='vector') being a function that takes
-   // one expression and a number of arguments. From the Python point of view this would be
-   // added to a map in the cadabra2.Kernel object. However, keeping control over an object 
+	// one expression and a number of arguments. From the Python point of view this would be
+	// added to a map in the cadabra2.Kernel object. However, keeping control over an object 
 	// also has the advantage that we can refer to it again if necessary from the Python side,
 	// and keeps C++ and Python more in sync.
 
@@ -1594,10 +1598,10 @@ PYBIND11_MODULE(cadabra2, m)
 	def_prop<ExteriorDerivative>(m);
 	def_prop<FilledTableau>(m);
 	def_prop<GammaMatrix>(m);
-	def_prop<ImaginaryI>(m);	
-	def_prop<ImplicitIndex>(m);	
+	def_prop<ImaginaryI>(m);
+	def_prop<ImplicitIndex>(m);
 	def_prop<IndexInherit>(m);
-	def_prop<Indices>(m);	
+	def_prop<Indices>(m);
 	def_prop<Integer>(m);
 	def_prop<InverseMetric>(m);
 	def_prop<KroneckerDelta>(m);
@@ -1620,13 +1624,13 @@ PYBIND11_MODULE(cadabra2, m)
 	def_prop<TableauSymmetry>(m);
 	def_prop<Traceless>(m);
 	def_prop<Vielbein>(m);
-	def_prop<InverseVielbein>(m);		
+	def_prop<InverseVielbein>(m);
 	def_prop<Weight>(m);
 	def_prop<WeightInherit>(m);
 	def_prop<WeylTensor>(m);
 
 	// Register exceptions.
-	
+
 	pybind11::register_exception<ConsistencyException>(m, "ConsistencyException");
 	pybind11::register_exception<ArgumentException>(m, "ArgumentException");
 	pybind11::register_exception<ParseException>(m, "ParseException");
@@ -1634,5 +1638,5 @@ PYBIND11_MODULE(cadabra2, m)
 	pybind11::register_exception<NonScalarException>(m, "NonScalarException");
 	pybind11::register_exception<InternalError>(m, "InternalError");
 	pybind11::register_exception<NotYetImplemented>(m, "NotYetImplemented");
-	}
+}
 
