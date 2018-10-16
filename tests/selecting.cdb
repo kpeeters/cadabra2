@@ -134,4 +134,13 @@ def test07():
 
 test07()
 
+def test08():
+
+# 
+# \epsilon::Weight(label=field, value=1);
+# Exp:=\epsilon**4+\epsilon*(\epsilon**3+5);
+# zoom(_, $\epsilon * A??$);
+# distribute(_);
+# unzoom(_);
+# drop_weight(_, $field=4$);
 
