@@ -52,6 +52,9 @@ def scan_file(prevcat, dir, filename, ext):
                     prevcat=cat
                 if is_multi:
                     cat=''
+                m2 = re.search('(.*)\(.*', algo)
+                if m2:
+                    algo = m2.group(1)
                 print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
                 print('<td>'+desc+'</td></tr>')
             m = re.search('\\\\property{(.*)}{(.*)}', src)
