@@ -4,7 +4,7 @@
 #include "PythonCdb.hh"
 #include "ExNode.hh"
 #include "SympyCdb.hh"
-#include <json/json.h>
+#include "json/json.h"
 #include "CdbPython.hh"
 
 #include "Parser.hh"

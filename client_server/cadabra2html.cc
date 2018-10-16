@@ -13,16 +13,20 @@ int main(int argc, char **argv)
 
 	std::string cdb_file, html_file;
 	bool segment_only=false;
+	bool strip_code=false;
 	int n=1;
 	while(n<argc) {
 		if(std::string(argv[n])=="--segment")
 			segment_only=true;
+		else if(std::string(argv[n])=="--strip-code")
+			strip_code=true;
 		else if(cdb_file=="")
 			cdb_file=argv[n];
 		else
 			html_file=argv[n];
 		++n;
 		}
+	std::cerr << "stripping code: " << strip_code << std::endl;
 
 	auto from=cdb_file.find_last_of("/");
 	++from; 
@@ -38,7 +42,7 @@ int main(int argc, char **argv)
 
 	cadabra::DTree doc;
 	JSON_deserialise(content, doc);
-	std::string html = export_as_HTML(doc, segment_only, title);
+	std::string html = export_as_HTML(doc, segment_only, strip_code, title);
 
 	if(html_file!="") {
 		std::ofstream htmlfile(html_file);

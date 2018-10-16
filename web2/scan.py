@@ -14,29 +14,62 @@ def scan_file(prevcat, dir, filename, ext):
         data = json.load(jsonfile)
         jsonfile.close()
 
-        src = data["cells"][0]["cells"][0]["source"]
-        m = re.search('\\\\algorithm{(.*)}{(.*)}', src)
-        if m:
-            algo=m.group(1)
-            desc=m.group(2)
-            cat=algo[0].upper()
-            if cat==prevcat:
-                cat=''
-            else:
-                prevcat=cat
-            print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
-            print('<td>'+desc+'</td></tr>')
-        m = re.search('\\\\property{(.*)}{(.*)}', src)
-        if m:
-            algo=m.group(1)
-            desc=m.group(2)
-            cat=algo[0].upper()
-            if cat==prevcat:
-                cat=''
-            else:
-                prevcat=cat
-            print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
-            print('<td>'+desc+'</td></tr>')
+        # is this a multi-algorithm file?
+        count=0
+        for cell in data["cells"]:
+            if not "cells" in cell:
+                continue
+            src = cell["cells"][0]["source"]
+            m = re.search('\\\\algorithm{(.*)}{(.*)}', src)
+            if m:
+                count+=1
+            m = re.search('\\\\property{(.*)}{(.*)}', src)
+            if m:
+                count+=1
+            m = re.search('\\\\package{(.*)}{(.*)}', src)
+            if m:
+                package_name=m.group(1)
+                package_desc=m.group(2)
+        is_multi = (count>1)
+
+        if is_multi:
+            print('<h3>'+package_name+'</h3>')
+            print('<p>'+package_desc+'</p>')
+            print('<table>')
+        
+        for cell in data["cells"]:
+            if not "cells" in cell:
+                continue
+            src = cell["cells"][0]["source"]
+            m = re.search('\\\\algorithm{(.*)}{(.*)}', src)
+            if m:
+                algo=m.group(1)
+                desc=m.group(2)
+                cat=algo[0].upper()
+                if cat==prevcat:
+                    cat=''
+                else:
+                    prevcat=cat
+                if is_multi:
+                    cat=''
+                print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
+                print('<td>'+desc+'</td></tr>')
+            m = re.search('\\\\property{(.*)}{(.*)}', src)
+            if m:
+                algo=m.group(1)
+                desc=m.group(2)
+                cat=algo[0].upper()
+                if cat==prevcat:
+                    cat=''
+                else:
+                    prevcat=cat
+                if is_multi:
+                    cat=''
+                print('<tr><td>'+cat+'<td></td><td><a href="manual/'+filename+'.html">'+algo+'</a></td>')
+                print('<td>'+desc+'</td></tr>')
+
+        if is_multi:
+            print('</table>')
 
     return prevcat
 

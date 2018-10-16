@@ -4,7 +4,7 @@
 #include <sstream>
 #include <sys/stat.h>
 #include <fstream>
-#include <json/json.h>
+#include "json/json.h"
 #include <iomanip>
 
 std::string cadabra::escape_quotes(const std::string& line)

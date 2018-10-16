@@ -175,7 +175,7 @@ foreach(PACKAGE ${PACKAGES})
    add_custom_command(OUTPUT  ${MANOUTDIR}/${PACKAGE}.html
 	                   DEPENDS ${PACKAGEDIR}/${PACKAGE}.cnb ${DC}
                       COMMAND ${CMAKE_INSTALL_PREFIX}/bin/cadabra2html
-                      ARGS    --segment ${PACKAGEDIR}/${PACKAGE}.cnb ${MANOUTDIR}/${PACKAGE}.html
+                      ARGS    --segment --strip-code ${PACKAGEDIR}/${PACKAGE}.cnb ${MANOUTDIR}/${PACKAGE}.html
                       COMMENT "Creating ${PACKAGE} manual page...")
 	string(REPLACE "/" "_" MANGLED ${PACKAGE})
    add_custom_target("${MANGLED}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PACKAGE}.html)

@@ -55,7 +55,7 @@ DataCell::DataCell(const DataCell& other)
 	serial_number = other.serial_number;
 	}
 
-std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::string title)
+std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, bool strip_code, std::string title)
 	{
 	// Load the pre-amble from file.
 	std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.html";
@@ -68,7 +68,7 @@ std::string cadabra::export_as_HTML(const DTree& doc, bool for_embedding, std::s
 	std::string preamble_string = buffer.str();
 
 	std::ostringstream str;
-	HTML_recurse(doc, doc.begin(), str, preamble_string, for_embedding, title);
+	HTML_recurse(doc, doc.begin(), str, preamble_string, for_embedding, strip_code, title);
 
 	return str.str();
 	}
@@ -93,6 +93,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex tex(R"(\\TeX\{\})");
 	std::regex algorithm(R"(\\algorithm\{([^\}]*)\}\{([^\}]*)\})");
 	std::regex property(R"(\\property\{([^\}]*)\}\{([^\}]*)\})");
+	std::regex package(R"(\\package\{([^\}]*)\}\{([^\}]*)\})");
 	std::regex algo(R"(\\algo\{([^\}]*)\})");
 	std::regex prop(R"(\\prop\{([^\}]*)\})");
 	std::regex underscore(R"(\\_)");
@@ -120,8 +121,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
-		res = std::regex_replace(res, algorithm, "<h1>$1</h1><div class=\"summary\">$2</div>");
-		res = std::regex_replace(res, property, "<h1>$1</h1><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, algorithm, "<h2>$1</h2><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, property, "<h2>$1</h2><div class=\"summary\">$2</div>");
+		res = std::regex_replace(res, package, "<h1>$1</h1><div class=\"summary\">$2</div>");
 		res = std::regex_replace(res, algo, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
 		res = std::regex_replace(res, prop, "<a href=\"/manual/$1.html\"><code>$1</code></a>");
 		res = std::regex_replace(res, underscore, "_");
@@ -145,9 +147,10 @@ std::string cadabra::latex_to_html(const std::string& str)
 
 void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
 									const std::string& preamble_string,
-									bool for_embedding,
+									bool for_embedding, bool strip_code,
 									std::string title)
 	{
+	bool strip_this=false;
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
 			if(!for_embedding) {
@@ -163,6 +166,8 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 				}
 			break;
 		case DataCell::CellType::python:
+			if(strip_code && (it->textbuf.substr(0,4)=="def " || it->textbuf.substr(0,5)=="from "))
+				strip_this=true;
 			str << "<div class='python'>";
 			break;
 		case DataCell::CellType::output:
@@ -188,30 +193,32 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 			break;
 		}	
 
-	try {
-		if(it->textbuf.size()>0) {
-			if(it->cell_type==DataCell::CellType::image_png)
-				str << it->textbuf;
-			else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
-				std::string out;
-				if(it->cell_type==DataCell::CellType::python)
-					out=it->textbuf;
-				else
-					out=latex_to_html(it->textbuf);
-				if(out.size()>0)
-					str << "<div class=\"source donthyphenate\">"+out+"</div>";
+	if(!strip_this) {
+		try {
+			if(it->textbuf.size()>0) {
+				if(it->cell_type==DataCell::CellType::image_png)
+					str << it->textbuf;
+				else if(it->cell_type!=DataCell::CellType::document && it->cell_type!=DataCell::CellType::latex) {
+					std::string out;
+					if(it->cell_type==DataCell::CellType::python)
+						out=it->textbuf;
+					else
+						out=latex_to_html(it->textbuf);
+					if(out.size()>0)
+						str << "<div class=\"source donthyphenate\">"+out+"</div>";
+					}
 				}
 			}
+		catch(std::regex_error& ex) {
+			std::cerr << "regex error doing latex_to_html on " << it->textbuf << std::endl;
+			throw;
+			}
 		}
-	catch(std::regex_error& ex) {
-		std::cerr << "regex error doing latex_to_html on " << it->textbuf << std::endl;
-		throw;
-		}
-
+	
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
 		while(sib!=doc.end(it)) {
-			HTML_recurse(doc, sib, str, preamble_string);
+			HTML_recurse(doc, sib, str, preamble_string, false, strip_code);
 			++sib;
 			}
 		}

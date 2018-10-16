@@ -244,11 +244,11 @@ add_executable(test_preprocessor
 add_executable(cadabra2python 
 	cadabra2python.cc 
 	CdbPython.cc
+	${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
 )
 target_link_libraries(cadabra2python 
 	${Boost_LIBRARIES} 
 	${PYTHON_LIBRARIES}
-	${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
 )
 
 # cadabra2cadabra
