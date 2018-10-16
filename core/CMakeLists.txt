@@ -304,7 +304,7 @@ endif()
 install(
 	FILES 
 		"${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
-		"${CADABRA_LIBS_DIR}/appdirs/appdirs.py"
+		"${CADABRA_LIBS_DIR}/appdirs/cdb_appdirs.py"
 	DESTINATION 
 		"${PYTHON_SITE_PATH}"
 )

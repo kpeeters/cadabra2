@@ -13,7 +13,7 @@ import cadabra2
 from cadabra2 import *
 from importlib.machinery import PathFinder, ModuleSpec, SourceFileLoader
 from importlib.abc import MetaPathFinder
-from appdirs import user_config_dir
+from cdb_appdirs import user_config_dir
 import datetime
 
 __cdbkernel__=cadabra2.__cdbkernel__
