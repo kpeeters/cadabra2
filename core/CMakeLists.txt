@@ -306,8 +306,11 @@ else()
 endif()
 
 install(
-	FILES "${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
-	DESTINATION "${PYTHON_SITE_PATH}"
+	FILES 
+		"${PROJECT_SOURCE_DIR}/cadabra2_defaults.py" 
+#		"${CADABRA_LIBS_DIR}/appdirs/appdirs.py"
+	DESTINATION 
+		"${PYTHON_SITE_PATH}"
 )
 
 # CLI

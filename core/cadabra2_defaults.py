@@ -11,34 +11,52 @@
 import sys
 import cadabra2
 from cadabra2 import *
+from importlib.machinery import PathFinder, ModuleSpec, SourceFileLoader
+from importlib.abc import MetaPathFinder
+from appdirs import user_config_dir
+import datetime
+
 __cdbkernel__=cadabra2.__cdbkernel__
 import os
 os.environ.setdefault('PATH', '')
 
-class PackageCompiler(object):
-	def find_module(self, fullname, path=None):
+class PackageCompiler(MetaPathFinder):
+	@classmethod
+	def find_module(cls, fullname, path):
+		return find_spec(fullname, path, None)
+
+	@classmethod
+	def find_spec(cls, fullname, path, target=None):
+		#log_("Finding {}, path=[{}]".format(fullname, ', '.join(f'"{p}"' for p in path) if path is not None else ""))
 		# Top-level import if path=None
 		if path is None or path == "":
-			path = [os.getcwd()]
+			path = sys.path
 		# Get unqualified package name
 		if '.' in fullname:
-			*parents, name = fullname.split('.')
+			*parents, name = fullname.split('.')	
 		else:
 			name = fullname
-		# Go through path and try to find a notebook. If found, compile
+		# Go through path and try to find a notebook.
 		for entry in path:
 			if os.path.isfile(os.path.join(entry, name + ".cnb")):
-				compile_package__(os.path.join(entry, name))
-				break;
-			
+				# Notebook was found. Create a version of it in the temporary directory, then
+				# return a ModuleSpec object to allow Python to load that file
+				pkg_path = os.path.join(user_config_dir(), "cadabra_packages", *parents)
+				# Crete the path if it doesn't exist
+				if not os.path.exists(pkg_path):
+					os.makedirs(pkg_path)
+				compile_package__(os.path.join(entry, name + ".cnb"), os.path.join(pkg_path, name + ".py"))
+				return ModuleSpec(
+					fullname, 
+					SourceFileLoader(fullname, os.path.join(pkg_path, name + ".py")), 
+					origin=os.path.join(pkg_path, name + ".py"))
 		
-		# Always return None. This passes on the onus of actually importing
-		# the package to Python, which can do this much more efficiently
+		# Return none if no notebook was found
 		return None
 
 # Prepend to sys.meta_path, so that all imports will first be checked in
 # case they are notebooks that need compiling
-sys.meta_path.insert(0, PackageCompiler())
+sys.meta_path.insert(0, PackageCompiler)
 
 # Add current directory to Python module import path.
 sys.path.append(".")

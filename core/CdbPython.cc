@@ -167,38 +167,33 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	return ret+end_of_line;
 	}
 
-std::string cadabra::cnb2python(const std::string& name)
+std::string cadabra::cnb2python(const std::string& in_name)
 	{
-	// Only compile if the notebook is newer than the compiled package
-	struct stat f1, f2;
-	if (stat(std::string(name + ".cnb").c_str(), &f1) == 0 && stat(std::string(name + ".py").c_str(), &f2) == 0) {
-		if (f1.st_mtime < f2.st_mtime)
-			return "";
-		}
-	
 	// Read the file into a Json object and get the cells
-	std::ifstream ifs(name + ".cnb");
+	std::ifstream ifs(in_name);
 	Json::Value nb;
 	ifs >> nb;
 	Json::Value& cells = nb["cells"];
 
-	// Loop over input cells, compile them and write to python file
-	
-	std::ostringstream ofs;
 	std::time_t t = std::time(nullptr);
 	std::tm tm = *std::localtime(&t);
+	
+	// Loop over input cells, compile them and write to python file
+	std::ostringstream ofs;
 	ofs << "# cadabra2 package, auto-compiled " << std::put_time(&tm, "%F %T") << '\n'
-	    << "import cadabra2\n"
-	    << "import imp\n"
-	    << "from cadabra2 import *\n"
-	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
-	    << "temp__all__ = dir() + ['temp__all__']\n\n"
-	    << "def display(ex):\n"
-	    << "   pass\n\n";
+		<< "# Do not modify - changing the timestamp of this file may cause import errors\n"
+		<< "# Original file location: " << in_name << '\n'
+		<< "import cadabra2\n"
+		<< "import imp\n"
+		<< "from cadabra2 import *\n"
+		<< "__cdbkernel__ = cadabra2.__cdbkernel__\n"
+		<< "temp__all__ = dir() + ['temp__all__']\n\n"
+		<< "def display(ex):\n"
+		<< "   pass\n\n";
 
-//	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
-//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
-//	    << "   exec(code)\n\n";
+	//	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
+	//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
+	//	    << "   exec(code)\n\n";
 
 	for (auto cell : cells) {
 		if (cell["cell_type"] == "input") {
@@ -211,12 +206,66 @@ std::string cadabra::cnb2python(const std::string& name)
 	}
 	// Ensure only symbols defined in this file get exported
 	ofs << '\n'
-	    << "del locals()['display']\n\n"
-	    << "try:\n"
-	    << "    __all__\n"
-	    << "except NameError:\n"
-	    << "    __all__  = list(set(dir()) - set(temp__all__))\n";
+		<< "del locals()['display']\n\n"
+		<< "try:\n"
+		<< "    __all__\n"
+		<< "except NameError:\n"
+		<< "    __all__  = list(set(dir()) - set(temp__all__))\n";
 
 	return ofs.str();
-	}
+}
 
+
+// std::string cadabra::cnb2python(const std::string& name)
+// 	{
+// 	// Only compile if the notebook is newer than the compiled package
+// 	struct stat f1, f2;
+// 	if (stat(std::string(name + ".cnb").c_str(), &f1) == 0 && stat(std::string(name + ".py").c_str(), &f2) == 0) {
+// 		if (f1.st_mtime < f2.st_mtime)
+// 			return "";
+// 		}
+// 	
+// 	// Read the file into a Json object and get the cells
+// 	std::ifstream ifs(name + ".cnb");
+// 	Json::Value nb;
+// 	ifs >> nb;
+// 	Json::Value& cells = nb["cells"];
+// 
+// 	// Loop over input cells, compile them and write to python file
+// 	
+// 	std::ostringstream ofs;
+// 	std::time_t t = std::time(nullptr);
+// 	std::tm tm = *std::localtime(&t);
+// 	ofs << "# cadabra2 package, auto-compiled " << std::put_time(&tm, "%F %T") << '\n'
+// 	    << "import cadabra2\n"
+// 	    << "import imp\n"
+// 	    << "from cadabra2 import *\n"
+// 	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
+// 	    << "temp__all__ = dir() + ['temp__all__']\n\n"
+// 	    << "def display(ex):\n"
+// 	    << "   pass\n\n";
+// 
+// //	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
+// //	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
+// //	    << "   exec(code)\n\n";
+// 
+// 	for (auto cell : cells) {
+// 		if (cell["cell_type"] == "input") {
+// 			std::stringstream s, temp;
+// 			s << cell["source"].asString();
+// 			std::string line, lhs, rhs, op, indent;
+// 			while (std::getline(s, line))
+// 				ofs << convert_line(line, lhs, rhs, op, indent) << '\n';
+// 		}
+// 	}
+// 	// Ensure only symbols defined in this file get exported
+// 	ofs << '\n'
+// 	    << "del locals()['display']\n\n"
+// 	    << "try:\n"
+// 	    << "    __all__\n"
+// 	    << "except NameError:\n"
+// 	    << "    __all__  = list(set(dir()) - set(temp__all__))\n";
+// 
+// 	return ofs.str();
+// 	}
+// 

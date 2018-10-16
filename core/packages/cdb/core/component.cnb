@@ -18,17 +18,17 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "import cdb.internal as _internal"
+			"source" : "from cdb.utils.node import nth_arg, n_args"
 		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def get_component(ex, components):\n\t\"\"\"Gets a particular component of an expression\"\"\"\n\t# The components paramater needs to have a head '\\comma' node\n\t# so let's quickly make sure that's true.\n\tif components.head() != r'\\comma':\n\t\tbit = $@(components)$\n\t\tcomponents.top().name = r'\\comma'\n\t\tcomponents.top().append_child(bit)\n\n\t# If this module is imported, Cadabra might complain that the components are \n\t# free indices, so we need to tell it that the the components are coordinates\n\t#Coordinate(components, $ $)\t\n\n\t# Extract when components is the head object\n\tif ex.head() == r'\\components':\n\t\t# Sift through all the '\\equals' nodes until we\n\t\t# find the one we want\n\t\tfor node in ex.top()[r'\\equals']:\n\t\t\targ = _internal.get_nth_arg(node, 0)\n\t\t\tif $@(arg)$ == components:\n\t\t\t\tres = _internal.get_nth_arg(node, 1)\n\t\t\t\treturn $@(res)$\n\t\t# Couldn't find that component :(\n\t\traise Exception(\"Component {} not found in expression\".format(str(components)))\n\t# Extract from something multiterm\n\telse:\n\t\t# Start the expression as a comma for convenience, we will change\n\t\t# this to the head node of the expression at the end\n\t\tres = $\\comma$\n\t\tfor node in ex.top().args():\n\t\t\tif node.name == r'\\components':\n\t\t\t\tterm = get_component($@(node)$, components)\n\t\t\telse:\n\t\t\t\tterm = $@(node)$\n\t\t\tres.top().append_child(term)\n\t\tres.top().name = ex.top().name\n\t\treturn res"
+			"source" : "def get_component(ex, components):\n\t\"\"\"Gets a particular component of an expression\"\"\"\n\t# The components paramater needs to have a head '\\comma' node\n\t# so let's quickly make sure that's true.\n\tif components.head() != r'\\comma':\n\t\tbit = $@(components)$\n\t\tcomponents.top().name = r'\\comma'\n\t\tcomponents.top().append_child(bit)\n\n\t# If this module is imported, Cadabra might complain that the components are \n\t# free indices, so we need to tell it that the the components are coordinates\n\t#Coordinate(components, $ $)\t\n\n\t# Extract when components is the head object\n\tif ex.head() == r'\\components':\n\t\t# Sift through all the '\\equals' nodes until we\n\t\t# find the one we want\n\t\tfor node in ex.top()[r'\\equals']:\n\t\t\targ = nth_arg(node, 0)\n\t\t\tif $@(arg)$ == components:\n\t\t\t\tres = nth_arg(node, 1)\n\t\t\t\treturn $@(res)$\n\t\t# Couldn't find that component :(\n\t\traise Exception(\"Component {} not found in expression\".format(str(components)))\n\t# Extract from something multiterm\n\telse:\n\t\t# Start the expression as a comma for convenience, we will change\n\t\t# this to the head node of the expression at the end\n\t\tres = $\\comma$\n\t\tfor node in ex.top().args():\n\t\t\tif node.name == r'\\components':\n\t\t\t\tterm = get_component($@(node)$, components)\n\t\t\telse:\n\t\t\t\tterm = $@(node)$\n\t\t\tres.top().append_child(term)\n\t\tres.top().name = ex.top().name\n\t\treturn res"
 		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def remove_zero_components(ex):\n\t\"\"\"Removes all components of an expression that are equal to 0\"\"\"\n\tfor node in ex[r'\\equals']:\n\t\tif _internal.get_nth_arg(node, 0).name == r'\\comma':\n\t\t\tif _internal.get_nth_arg(node, 1).multiplier == 0:\n\t\t\t\tnode.erase()\n\treturn ex"
+			"source" : "def remove_zero_components(ex):\n\t\"\"\"Removes all components of an expression that are equal to 0\"\"\"\n\tfor node in ex[r'\\equals']:\n\t\tif nth_arg(node, 0).name == r'\\comma':\n\t\t\tif nth_arg(node, 1).multiplier == 0:\n\t\t\t\tnode.erase()\n\treturn ex"
 		},
 		{
 			"cell_origin" : "client",
