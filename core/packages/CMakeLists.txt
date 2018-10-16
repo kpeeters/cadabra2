@@ -24,10 +24,10 @@ set(OLDPACKAGES
 )
 
 set(PACKAGES
-  core/manip
-  core/indices
   core/component
-  core/indexset
+  core/manip
+  core/solve
+  utils/node
   )
 
 set(PDIRS
