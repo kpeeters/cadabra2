@@ -1104,8 +1104,6 @@ void def_prop(pybind11::module& m)
 
 void compile_package(const std::string& in_name, const std::string& out_name)
 	{
-	std::cerr << "attempting to compile package " << in_name << std::endl;
-
 	// Get current time info
 	std::time_t t = std::time(nullptr);
 	std::tm tm = *std::localtime(&t);
