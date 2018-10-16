@@ -139,13 +139,16 @@ set(PROPERTY_SRC_FILES
 	properties/WeylTensor.cc
 )
 
-set(PACKAGES
-  #core/manip
-  relativity/__init__
-  relativity/schwarzschild
-  gauge_theory/__init__
-  gauge_theory/instantons
-  )
+# Packages are now handled by a CMakeLists.txt in the
+# packages directory.
+#
+# set(PACKAGES
+#   core/manip
+#   relativity/__init__
+#   relativity/schwarzschild
+#   gauge_theory/__init__
+#   gauge_theory/instantons
+#   )
 
 set(LOCAL_SRC_FILES
 	CdbPython.cc
@@ -245,6 +248,7 @@ add_executable(cadabra2python
 target_link_libraries(cadabra2python 
 	${Boost_LIBRARIES} 
 	${PYTHON_LIBRARIES}
+	${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
 )
 
 # cadabra2cadabra

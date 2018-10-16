@@ -16,4 +16,9 @@ namespace cadabra {
 
 	std::string convert_line(const std::string&, std::string& lhs, std::string& rhs, std::string& op, std::string& indent);	
 
+	// Convert a Cadabra notebook file to pure Python. This gets
+	// called on-the-fly when importing Cadabra notebooks written by
+	// users, and at install time for all system-supplied packages.
+
+	std::string cnb2python(const std::string&);
 }

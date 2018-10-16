@@ -9,19 +9,26 @@ project(Cadabra)
 print_header("Configuring packages")
 
 set(PYTHON_CDB_PACKAGE_PATH ${PYTHON_SITE_PATH}/cdb)
+set(SOURCE_PACKAGEDIR       ${CMAKE_SOURCE_DIR}/core/packages/cdb)
 set(PACKAGEDIR              ${CMAKE_BINARY_DIR}/core/packages/cdb)
-
 
 #---------------------------------------------------------------------------
 # Enumerate packages
 #---------------------------------------------------------------------------
 
-set(PACKAGES
+set(OLDPACKAGES
   relativity/__init__
   relativity/schwarzschild
   gauge_theory/__init__
   gauge_theory/instantons
 )
+
+set(PACKAGES
+  core/manip
+  core/indices
+  core/component
+  core/indexset
+  )
 
 set(PDIRS
   relativity
@@ -40,7 +47,7 @@ foreach(PDIR ${PDIRS})
 	             COMMAND ${CMAKE_COMMAND} -E make_directory ${PACKAGEDIR}/${PDIR}
                      COMMENT "Creating package ${PDIR}...")
 endforeach()
-foreach(PACKAGE ${PACKAGES})
+foreach(PACKAGE ${OLDPACKAGES})
 	string(REGEX REPLACE "/" "_" PACKAGETARGET ${PACKAGE})
 	message(STATUS "\t${PACKAGETARGET}")					  
    add_custom_target("${PACKAGETARGET}" ALL
@@ -53,13 +60,23 @@ endforeach()
 # Install packages
 #---------------------------------------------------------------------------
 
-foreach(PACKAGE ${PACKAGES})
+foreach(PACKAGE ${OLDPACKAGES})
   get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
   # FIXME: remove old packages in the global site path
   # install(CODE     "execute_process(COMMAND rm -f ${OLD_PYTHON_SITE_PATH}/cdbcadabra2.${PYTHON_MOD_SUFFIX})")
   install(
     FILES 
       "${PACKAGEDIR}/${PACKAGE}.py" 
+    DESTINATION 
+      ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL}
+  )
+endforeach()
+
+foreach(PACKAGE ${PACKAGES})
+  get_filename_component(PINSTALL ${PACKAGE} DIRECTORY)
+  install(
+    FILES 
+      "${SOURCE_PACKAGEDIR}/${PACKAGE}.cnb" 
     DESTINATION 
       ${PYTHON_CDB_PACKAGE_PATH}/${PINSTALL}
   )

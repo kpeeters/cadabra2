@@ -4,6 +4,7 @@ set(MANOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/manual)
 set(CNBDIR     ${CMAKE_SOURCE_DIR}/examples)
 set(ALGODIR    ${CMAKE_SOURCE_DIR}/core/algorithms)
 set(PROPDIR    ${CMAKE_SOURCE_DIR}/core/properties)
+set(PACKAGEDIR ${CMAKE_SOURCE_DIR}/core/packages)
 set(DC         ${CMAKE_SOURCE_DIR}/client_server/cadabra2html.cc ${CMAKE_SOURCE_DIR}/core/DataCell.hh ${CMAKE_SOURCE_DIR}/core/DataCell.cc)
 
 
@@ -129,16 +130,26 @@ set(PROPS
   WeightInherit
 )
 
+# Packages
+
+set(PACKAGES
+  cdb/core/manip
+  cdb/core/component
+  )
+
+# Table of contents
+
 set(SCAN ${CMAKE_SOURCE_DIR}/web2/scan.py)
 
-#add_custom_command(
-#add_custom_target(algo_toc ALL echo -n DEPENDS ${TOCOUTDIR}/algo_toc.html ${SCAN})
 add_custom_target(algo_toc ALL 
                   COMMAND ${SCAN} ${ALGODIR} ${ALGOS} > ${TOCOUTDIR}/algo_toc.html
                   COMMENT "Creating algorithms table-of-contents...")
 add_custom_target(prop_toc ALL 
                   COMMAND ${SCAN} ${PROPDIR} ${PROPS} > ${TOCOUTDIR}/prop_toc.html
                   COMMENT "Creating properties table-of-contents...")
+add_custom_target(package_toc ALL 
+                  COMMAND ${SCAN} ${PACKAGEDIR} ${PACKAGES} > ${TOCOUTDIR}/packages_toc.html
+                  COMMENT "Creating packages table-of-contents...")
 
 foreach(ALGO ${ALGOS})
    add_custom_command(OUTPUT  ${MANOUTDIR}/${ALGO}.html
@@ -147,7 +158,6 @@ foreach(ALGO ${ALGOS})
                       ARGS    --segment ${ALGODIR}/${ALGO}.cnb ${MANOUTDIR}/${ALGO}.html
                       COMMENT "Creating ${ALGO} manual page...")
    add_custom_target("${ALGO}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${ALGO}.html)
-#   add_dependencies(algo_toc ${ALGODIR}/${ALGO}.cnb)
 endforeach()
 
 foreach(PROP ${PROPS})
@@ -157,6 +167,18 @@ foreach(PROP ${PROPS})
                       ARGS    --segment ${PROPDIR}/${PROP}.cnb ${MANOUTDIR}/${PROP}.html
                       COMMENT "Creating ${PROP} manual page...")
    add_custom_target("${PROP}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PROP}.html)
+endforeach()
+
+foreach(PACKAGE ${PACKAGES})
+   get_filename_component(THISDESTPATH ${MANOUTDIR}/${PACKAGE}.html DIRECTORY)
+   file(MAKE_DIRECTORY ${THISDESTPATH})
+   add_custom_command(OUTPUT  ${MANOUTDIR}/${PACKAGE}.html
+	                   DEPENDS ${PACKAGEDIR}/${PACKAGE}.cnb ${DC}
+                      COMMAND ${CMAKE_INSTALL_PREFIX}/bin/cadabra2html
+                      ARGS    --segment ${PACKAGEDIR}/${PACKAGE}.cnb ${MANOUTDIR}/${PACKAGE}.html
+                      COMMENT "Creating ${PACKAGE} manual page...")
+	string(REPLACE "/" "_" MANGLED ${PACKAGE})
+   add_custom_target("${MANGLED}_manual" ALL echo -n DEPENDS ${MANOUTDIR}/${PACKAGE}.html)
 endforeach()
 
 foreach(TUT ${TUTORIALS})

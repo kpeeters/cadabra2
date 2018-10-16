@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 	{
 	if(argc<2) {
 		std::cerr << "Usage: cadabra2python [cadabra file] [python file]\n\n";
-		std::cerr << "Convert a Cadabra v2 input file (not notebook!) to a Python file.\n"
+		std::cerr << "Convert a Cadabra v2 input file or notebook to a pure Python file.\n"
 					 << "If the Python file name is not given, output goes to standard out.\n";
 		return -1;
 		}

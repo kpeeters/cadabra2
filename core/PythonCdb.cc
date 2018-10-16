@@ -5,9 +5,7 @@
 #include "ExNode.hh"
 #include "SympyCdb.hh"
 
-#include <json/json.h>
 #include "CdbPython.hh"
-
 
 #include "Parser.hh"
 #include "Bridge.hh"
@@ -1102,56 +1100,14 @@ void def_prop(pybind11::module& m)
 	}
 
 void compile_package(const std::string& name)
-{
-	// Only compile if the notebook is newer than the compiled package
-	struct stat f1, f2;
-	if (stat(std::string(name + ".cnb").c_str(), &f1) == 0 && stat(std::string(name + ".py").c_str(), &f2) == 0) {
-		if (f1.st_mtime < f2.st_mtime)
-			return;
-	}
-
-	// Read the file into a Json object and get the cells
-	std::ifstream ifs(name + ".cnb");
-	Json::Value nb;
-	ifs >> nb;
-	Json::Value& cells = nb["cells"];
-
-	// Loop over input cells, compile them and write to python file
-	std::ofstream ofs(name + ".py");
-	std::time_t t = std::time(nullptr);
-	std::tm tm = *std::localtime(&t);
-	ofs << "# cadabra2 package, auto-compiled " << std::put_time(&tm, "%F %T") << '\n'
-	    << "import cadabra2\n"
-	    << "import imp\n"
-	    << "from cadabra2 import *\n"
-	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
-	    << "temp__all__ = dir() + ['temp__all__']\n\n"
-	    << "def display(ex):\n"
-	    << "   pass\n\n";
-
-//	    << "with open(imp.find_module('cadabra2_defaults')[1]) as f:\n"
-//	    << "   code = compile(f.read(), 'cadabra2_defaults.py', 'exec')\n"
-//	    << "   exec(code)\n\n";
-
-	for (auto cell : cells) {
-		if (cell["cell_type"] == "input") {
-			std::stringstream s, temp;
-			s << cell["source"].asString();
-			std::string line, lhs, rhs, op, indent;
-			while (std::getline(s, line))
-				ofs << convert_line(line, lhs, rhs, op, indent) << '\n';
+	{
+	std::cerr << "attempting to compile package " << name << std::endl;
+	std::string pystr = cadabra::cnb2python(name);
+	if(pystr!="") {
+		std::ofstream ofs(name+".py");
+		ofs << pystr;
 		}
 	}
-	// Ensure only symbols defined in this file get exported
-	ofs << '\n'
-	    << "del locals()['display']\n\n"
-	    << "try:\n"
-	    << "    __all__\n"
-	    << "except NameError:\n"
-	    << "    __all__  = list(set(dir()) - set(temp__all__))\n";
-}
-
-
 
 // Entry point for registration of the Cadabra Python module. 
 // This registers the main Ex class which wraps Cadabra expressions, as well
