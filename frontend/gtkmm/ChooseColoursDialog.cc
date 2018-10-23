@@ -21,13 +21,14 @@ namespace cadabra
 
 	ChooseColoursDialog::ChooseColoursDialog(DocumentThread::Prefs& prefs, NotebookWindow& parent)
 		: Gtk::Dialog("Choose syntax highlighting colours", parent, true)
-		, prefs(prefs), parent(parent)
+		, prefs(prefs), button_ok("Ok"), parent(parent)
 	{
 		using namespace std::string_literals;
 
 		set_transient_for(parent);
 		set_modal(true);
-		get_content_area()->pack_start(main_grid);
+		get_content_area()->pack_start(main_vbox);
+		main_vbox.pack_start(main_grid);
 		int col = 0;
 		for (auto it = prefs.colours.begin(); it != prefs.colours.end(); ++it, ++col) {
 			// Display the name of the language to highlight for
@@ -59,7 +60,15 @@ namespace cadabra
 		main_grid.set_column_spacing(30);
 		main_grid.set_margin_start(30);
 		main_grid.set_margin_end(30);
-		main_grid.show_all();
+		main_grid.set_margin_top(10);
+		main_grid.set_margin_bottom(10);		
+
+		main_vbox.pack_start(bottom_button_box);
+		bottom_button_box.pack_start(button_ok);
+
+		button_ok.signal_clicked().connect( [&]() { close(); } );
+		
+		main_vbox.show_all();
 	}
 
 	void ChooseColoursDialog::on_color_set()
