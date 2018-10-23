@@ -21,6 +21,9 @@ configure_file(
 # Boost.regex, Boost.system
 find_package(Boost 1.53 COMPONENTS system)
 
+# Find glibmm (for base64)
+find_package(GLIBMM  REQUIRED)
+
 # GMPXX
 find_package(GMPXX REQUIRED)
 
@@ -257,9 +260,9 @@ add_executable(cadabra2cadabra
 	DataCell.cc 
 	InstallPrefix.cc
 	${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
-	${CADABRA_LIBS_DIR}/whereami/whereami.c 
+	${CADABRA_LIBS_DIR}/whereami/whereami.c
 )
-target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES})
+target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES})
 
 # Mathematica WSTP test
 if(MATHEMATICA_FOUND)

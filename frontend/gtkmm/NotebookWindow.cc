@@ -1194,7 +1194,10 @@ void NotebookWindow::on_file_export_latex()
 		case(Gtk::RESPONSE_OK): {
 			std::string name = dialog.get_filename();			
 			std::ofstream temp(name);
-			temp << export_as_LaTeX(doc);
+			std::size_t dotpos = name.rfind('.');
+			std::string base = name.substr(0, dotpos);
+			std::cerr << base << std::endl;
+			temp << export_as_LaTeX(doc, base);
 			}
 		}
 	}

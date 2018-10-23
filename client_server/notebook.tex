@@ -14,7 +14,8 @@
 \usepackage{etoolbox}
 \usepackage{amssymb}
 \usepackage[parfill]{parskip}
-\usepackage{tableaux}
+\usepackage{graphicx}
+%\usepackage{tableaux}
 \def\specialcolon{\mathrel{\mathop{:}}\hspace{-.5em}}
 \renewcommand{\bar}[1]{\overline{#1}}
 \newcommand{\algorithm}[2]{{\tt\Large\detokenize{#1}}\\[1ex]
@@ -74,3 +75,102 @@
 % between lines.
 \lineskiplimit=0mm
 \lineskip=1.5ex
+
+% Typesetting Young tableaux, originally in a separate style
+% file, now included to avoid path searching problems. 
+% Some internals for the typesetting macros below; nothing
+% user-servicable here; please read on.
+
+\def\@tabforc#1#2#3{\expandafter\tabf@rc\expandafter#1{#2 \^}{#3}}
+\def\tabf@@rc#1#2#3\tabf@@rc#4{\def#1{#2}#4\tabf@rc#1{#3}{#4}}
+\long\def\ReturnAfterFi#1\fi{\fi#1}
+    \def\tabf@rc#1#2#3{%
+      \def\temp@ty{#2}%
+      \ifx\@empty\temp@ty
+      \else
+        \ReturnAfterFi{%
+          \tabf@@rc#1#2\tabf@@rc{#3}%
+        }%
+      \fi
+    }%
+
+% Sorry, some global registers for sizes and keeping track of
+% measurements.
+    
+\newdimen\ytsize\ytsize=2mm
+\newdimen\ytfsize\ytfsize=4mm
+\newcount\repcnt
+\newdimen\acchspace
+\newdimen\accvspace
+\newdimen\raiseh
+\newdimen\maxw
+
+\newcommand\phrule[1]{\hbox{\vbox to0pt{\hrule height .2pt width#1\vss}}}
+
+% Typeset a Young tableau with filled boxes. Takes a single 
+% argument which is a string of symbols for each row,
+% separated by commas. Examples:
+%
+%   \ftableau{abc,de}
+%   \ftableau{ab{d_2},f{g_3}}
+
+\newcommand\ftableau[1]{%
+\def\ctest{,}
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\vbox{\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to
+		 0pt{\vrule height \ytfsize\hss}}}\kern\acchspace\kern-\maxw}
+ \else\ifx\thisel\ctest
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hbox to 0pt{\vrule height \ytfsize\hss}}}%
+     \kern\acchspace\acchspace=0ex
+	  \advance\accvspace by -\ytfsize
+ \else
+     \setbox3=\hbox{$\thisel$}%
+	  \raiseh=\ytfsize%
+	  \advance\raiseh by -1ex%
+	  \divide\raiseh by 2%
+     \advance\acchspace by-\ytfsize%
+     \raisebox{\accvspace}{\vbox to \ytfsize{\hrule\hbox to%
+        \ytfsize{\vrule height \ytfsize\hskip.5ex%
+         \raisebox{\raiseh}{\tiny$\thisel$}\hss}\vss\phrule{\ytfsize}}}%
+ \fi\fi}}}}
+
+% Typeset a Young tableau with unlabelled boxes. Takes a single 
+% argument which is a string of numbers, one for the length of
+% each row of the tableau. Example:
+%
+%   \tableau{{10}{8}{3}}
+%
+% typesets a tableau with 10 boxes in the 1st row, 8 in the 2nd
+% and 3 in the 3rd. Curly brackets can be omitted if numbers
+% are less than 10.
+
+\newcommand\tableau[1]{%
+\def\stest{ }
+\def\Ktest{\^}
+\acchspace=0ex
+\accvspace=0ex
+\maxw=0ex
+\hbox{%
+\@tabforc\thisel{#1}{%
+ \ifx\thisel\Ktest{}
+ \else
+     \repcnt=\thisel%
+     \loop{}%
+     \advance\acchspace by-\ytsize%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hrule \hbox to%
+			\ytsize{\vrule height \ytsize\hss}\vss\phrule{\ytsize}}}%
+     \advance\repcnt by -1\ifnum\repcnt>1{}\repeat%
+     \ifnum\maxw=0\maxw=\acchspace\fi%
+     \raisebox{\accvspace}{\vbox to \ytsize{\hbox to 0pt{\vrule height \ytsize\hss}}}%
+     \kern\acchspace\acchspace=0ex%
+	  \advance\accvspace by -\ytsize%
+ \fi}\kern-\maxw}}
+ 

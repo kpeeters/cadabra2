@@ -8,6 +8,7 @@
 #include <gtkmm/main.h>
 #endif
 #include <gtkmm/settings.h>
+#include <giomm.h>
 #include "Snoop.hh"
 #include "Config.hh"
 
@@ -31,34 +32,76 @@ Glib::RefPtr<Cadabra> Cadabra::create(int argc, char **argv)
 
 Cadabra::Cadabra(int argc, char **argv)
 	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra", 
-							 Gio::APPLICATION_HANDLES_OPEN | Gio::APPLICATION_NON_UNIQUE),
-	  compute_thread(&cadabra::ComputeThread::run, &compute)
+							 Gio::APPLICATION_HANDLES_OPEN |
+							 Gio::APPLICATION_NON_UNIQUE),
+	compute(0), compute_thread(0),
+	server_port(0)
 	{
 	// https://stackoverflow.com/questions/43886686/how-does-one-make-gtk3-look-native-on-windows-7
 	//	https://github.com/shoes/shoes3/wiki/Changing-Gtk-theme-on-Windows	
 #if defined(_WIN32)
 	// Gtk::Settings::get_default()->property_gtk_theme_name()="win32";
 #endif
+
+	//https://github.com/GNOME/gtkmm-documentation/blob/master/examples/book/application/command_line_handling/exampleapplication.cc
+
+	signal_handle_local_options().connect(
+		sigc::mem_fun(*this, &Cadabra::on_handle_local_options), false);
+	
+	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_INT,
+								 "server-port",
+								 's',
+								 "Connect to running server on given port.",
+								 "number");
+	}
+
+template <typename T_ArgType>
+static bool get_arg_value(const Glib::RefPtr<Glib::VariantDict>& options, const Glib::ustring& arg_name, T_ArgType& arg_value)
+	{
+	arg_value = T_ArgType();
+	if(options->lookup_value(arg_name, arg_value)) return true;
+	else return false;
 	}
 
 Cadabra::~Cadabra()
 	{
    // The app is going away; stop the compute logic and join that
 	// thread waiting for it to complete.
-	compute.terminate();
-	compute_thread.join();
+
+	if(compute)
+		compute->terminate();
+	if(compute_thread)
+		compute_thread->join();
+	if(compute)
+		delete compute;
+	if(compute_thread)
+		delete compute_thread;
 
 //	for(auto w: windows)
 //		delete w;
 	}
 
+
+int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& options)
+	{
+	if(!options)
+		return -1;
+	
+	get_arg_value(options, "server-port", server_port);
+//	std::cerr << server_port << std::endl;
+	return -1;
+	}
+
 void Cadabra::on_activate()
 	{
+	compute = new cadabra::ComputeThread(server_port);
+	compute_thread = new std::thread(&cadabra::ComputeThread::run, compute);
+
 	auto nw = new cadabra::NotebookWindow(this);
-	compute.set_master(nw, nw);
+	compute->set_master(nw, nw);
 
 	// Connect the two threads.
-	nw->set_compute_thread(&compute);
+	nw->set_compute_thread(compute);
 	
 	// Setup ctrl-C handler so we can shut down gracefully (i.e. ask
 	// for confirmation, shut down server).

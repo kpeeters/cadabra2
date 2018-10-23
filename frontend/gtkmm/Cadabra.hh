@@ -18,10 +18,14 @@ class Cadabra : public Gtk::Application {
 		Cadabra(int, char**);
 		virtual ~Cadabra();
 
-		void on_activate() override;
-		void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
+		virtual void on_activate() override;
+		virtual void on_open(const Gio::Application::type_vec_files& files, const Glib::ustring& hint) override;
+
+		int on_handle_local_options(const Glib::RefPtr<Glib::VariantDict> &);
 
 	private:
-		cadabra::ComputeThread                 compute;
-		std::thread                            compute_thread;
+		cadabra::ComputeThread                *compute;
+		std::thread                           *compute_thread;
+
+		int server_port;
 };

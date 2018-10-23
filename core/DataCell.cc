@@ -8,6 +8,7 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string.hpp>
 #include <iostream>
+#include <glibmm/base64.h>
 
 using namespace cadabra;
 
@@ -469,7 +470,7 @@ DataCell::id_t DataCell::id() const
 	return serial_number;
 	}
 
-std::string cadabra::export_as_LaTeX(const DTree& doc)
+std::string cadabra::export_as_LaTeX(const DTree& doc, const std::string& image_file_base)
 	{
 	// Load the pre-amble from file.
 	std::string pname = cadabra::install_prefix()+"/share/cadabra2/notebook.tex";
@@ -483,31 +484,19 @@ std::string cadabra::export_as_LaTeX(const DTree& doc)
 
 	// Open the LaTeX file for writing.
 	std::ostringstream str;
-	LaTeX_recurse(doc, doc.begin(), str, preamble_string);
+	int image_num=0;
+	LaTeX_recurse(doc, doc.begin(), str, preamble_string, image_file_base, image_num);
 
 	return str.str();
 	}
 
-void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str, const std::string& preamble_string)
+void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
+									 const std::string& preamble_string, const std::string& image_file_base,
+									 int& image_num)
 	{
 	switch(it->cell_type) {
 		case DataCell::CellType::document:
 			str << preamble_string;
-//			str << "\\documentclass[10pt]{article}\n"
-//				 << "\\usepackage[scale=.8]{geometry}\n"
-//				 << "\\usepackage[fleqn]{amsmath}\n"
-//				 << "\\usepackage{listings}\n"
-//				 << "\\usepackage{amssymb}\n"
-//				 << "\\usepackage{inconsolata}\n"
-//				 << "\\usepackage{color}\n"
-//				 << "\\usepackage{tableaux}\n"
-//				 << "\\newcommand{\\algorithm}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
-//				 << "\\newcommand{\\property}[2]{{\\tt\\Large\\detokenize{#1}}\\\\[1ex]\n{\\emph{#2}}\\\\[-1ex]\n}"
-//				 << "\\newcommand{\\algo}[1]{{\\tt #1}}\n"
-//				 << "\\newcommand{\\prop}[1]{{\\tt #1}}\n"
-//				 << "\\setlength{\\mathindent}{1em}\n"
-//				 << "\\lstnewenvironment{python}[1][]\n"
-//				 << "{\\lstset{language=Python, columns=fullflexible, xleftmargin=1em, basicstyle=\\small\\ttfamily\\color{blue}, keywordstyle={}}}{}\n"
 			str << "\\begin{document}\n";
 			break;
 		case DataCell::CellType::python:
@@ -517,7 +506,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 			str << "\\begin{python}\n";
 			break;
 		case DataCell::CellType::verbatim:
-			str << "\\begin{python}\n";
+			str << "\\begin{verbatim}\n";
 			break;
 		case DataCell::CellType::latex:
 			break;
@@ -528,36 +517,51 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		case DataCell::CellType::input_form:
 			break;
 		case DataCell::CellType::image_png:
-			str << "(image)";
+			std::size_t pos=image_file_base.rfind('/');
+			std::string fileonly=image_file_base.substr(pos+1);
+			str << "\\begin{center}\n\\includegraphics[width=.6\\textwidth]{"
+				 << fileonly+std::to_string(image_num)+"}\n"
+				 << "\\end{center}\n";
 			break;
 		}	
 
-	if(it->textbuf.size()>0) {
-		if(it->cell_type==DataCell::CellType::image_png)
-			str << it->textbuf;
-		else if(it->cell_type!=DataCell::CellType::document
-		        && it->cell_type!=DataCell::CellType::latex
-		        && it->cell_type!=DataCell::CellType::input_form) {
-			std::string lr(it->textbuf);
-			// Make sure to sync these with the same in TeXEngine.cc !!!
-			lr=std::regex_replace(lr, std::regex(R"(\\left\()"),            "\\brwrap{(}{");
-			lr=std::regex_replace(lr, std::regex(R"(\\right\))"),           "}{)}");
-			lr=std::regex_replace(lr, std::regex(R"(\\left\[)"),            "\\brwrap{[}{");
-			lr=std::regex_replace(lr, std::regex(R"(\\right\])"),           "}{]}");
-			lr=std::regex_replace(lr, std::regex(R"(\\left\\\{)"),            "\\brwrap{\\{}{");
-			lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
-			lr=std::regex_replace(lr, std::regex(R"(\\right.)"),            "}{.}");
-			lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
-			lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
-			str << lr << "\n";
+	if(it->cell_type==DataCell::CellType::image_png) {
+		// Images have to be saved to disk as separate files as
+		// LaTeX has no concept of images embedded in the .tex file.
+		std::ofstream out(image_file_base+std::to_string(image_num)+".png");
+		out << Glib::Base64::decode(it->textbuf);
+		++image_num;
+		}
+	else {
+		if(it->textbuf.size()>0) {
+			if(it->cell_type!=DataCell::CellType::document
+				&& it->cell_type!=DataCell::CellType::latex
+				&& it->cell_type!=DataCell::CellType::input_form) {
+				std::string lr(it->textbuf);
+				// Make sure to sync these with the same in TeXEngine.cc !!!
+				lr=std::regex_replace(lr, std::regex(R"(\\left\()"),            "\\brwrap{(}{");
+				lr=std::regex_replace(lr, std::regex(R"(\\right\))"),           "}{)}");
+				lr=std::regex_replace(lr, std::regex(R"(\\left\[)"),            "\\brwrap{[}{");
+				lr=std::regex_replace(lr, std::regex(R"(\\right\])"),           "}{]}");
+				lr=std::regex_replace(lr, std::regex(R"(\\left\\\{)"),            "\\brwrap{\\{}{");
+				lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
+				lr=std::regex_replace(lr, std::regex(R"(\\right.)"),            "}{.}");
+				lr=std::regex_replace(lr, std::regex(R"(\\begin\{verbatim\})"), "");
+				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");				
+				lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
+				lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
+				str << lr << "\n";
+				}
 			}
 		}
-
+	
 	switch(it->cell_type) {
 		case DataCell::CellType::python:
 		case DataCell::CellType::output:
-		case DataCell::CellType::verbatim:
 			str << "\\end{python}\n";
+			break;
+		case DataCell::CellType::verbatim:
+			str << "\\end{verbatim}\n";
 			break;
 		case DataCell::CellType::document:
 		case DataCell::CellType::latex:
@@ -571,7 +575,7 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
 		while(sib!=doc.end(it)) {
-			LaTeX_recurse(doc, sib, str, preamble_string);
+			LaTeX_recurse(doc, sib, str, preamble_string, image_file_base, image_num);
 			++sib;
 			}
 		}

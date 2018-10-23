@@ -37,7 +37,7 @@ namespace cadabra {
 			/// If the ComputeThread is constructed with a null pointer to the
 			/// gui, there will be no gui updates, just DTree updates.
 			
-			ComputeThread();
+			ComputeThread(int server_port=0);
 			ComputeThread(const ComputeThread& )=delete; // You cannot copy this object
 			~ComputeThread();
 
@@ -126,6 +126,7 @@ namespace cadabra {
 			Glib::Pid       server_pid;
 			int             server_stdout, server_stderr;
 			unsigned short  port;
+			int             forced_server_port;
 	};
 
 }
