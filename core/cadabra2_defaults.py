@@ -36,13 +36,14 @@ class PackageCompiler(MetaPathFinder):
 			*parents, name = fullname.split('.')	
 		else:
 			name = fullname
+			parents = []
 		# Go through path and try to find a notebook.
 		for entry in path:
 			if os.path.isfile(os.path.join(entry, name + ".cnb")):
 				# Notebook was found. Create a version of it in the temporary directory, then
 				# return a ModuleSpec object to allow Python to load that file
 				pkg_path = os.path.join(user_config_dir(), "cadabra_packages", *parents)
-				# Crete the path if it doesn't exist
+				# Create the path if it doesn't exist
 				if not os.path.exists(pkg_path):
 					os.makedirs(pkg_path)
 				compile_package__(os.path.join(entry, name + ".cnb"), os.path.join(pkg_path, name + ".py"))

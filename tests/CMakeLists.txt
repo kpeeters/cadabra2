@@ -12,9 +12,9 @@ print_header("Configuring tests")
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
 if(WIN32)
-  set(PYTHONPATH "${CMAKE_SOURCE_DIR}/core\\;${CMAKE_BINARY_DIR}/core/packages\\;${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}\\;$ENV{PYTHONPATH}")
+  set(PYTHONPATH "${CMAKE_SOURCE_DIR}/libs/appdirs\\;${CMAKE_SOURCE_DIR}/core\\;${CMAKE_BINARY_DIR}/core/packages\\;${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}\\;${CMAKE_SOURCE_DIR}/tests\\;$ENV{PYTHONPATH}")
 else()
-  set(PYTHONPATH "${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}:$ENV{PYTHONPATH}")
+  set(PYTHONPATH "${CMAKE_SOURCE_DIR}/libs/appdirs:${CMAKE_SOURCE_DIR}/core:${CMAKE_BINARY_DIR}/core/packages:${CMAKE_BINARY_DIR}/core/${CADABRA_BUILD_TYPE}:${CMAKE_SOURCE_DIR}/tests:$ENV{PYTHONPATH}")
 endif()
 message("-- Set PYTHONPATH for testing to ${PYTHONPATH}")
 
