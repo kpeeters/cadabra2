@@ -1,0 +1,304 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[n,~\\discretionary{}{}{} m,~\\discretionary{}{}{} p\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property SelfAntiCommuting to~}a_{n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property SelfAntiCommuting to~}ad_{n}.\\end{dmath*}"
+				}
+			],
+			"source" : "{n,m,p}::Indices(position=free);\na_{n}::SelfAntiCommuting;\nad_{n}::SelfAntiCommuting;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "ad_{n}::LaTeXForm(\"a^\\dagger\")."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left[a_{n},~\\discretionary{}{}{} a^\\dagger_{m}\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{a_{n},ad_{m} }::NonCommuting;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{n} a_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{n} a_{m}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-a_{m} a_{n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-a_{m} a_{n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex1:= a_{n} a_{m};\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex2:= a_{n} a_{n};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{n} ad_{n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{n} a^\\dagger_{n}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{n} ad_{n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{n} a^\\dagger_{n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex3:= a_{n} ad_{n};\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "ad_{n} a_{n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a^\\dagger_{n} a_{n}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "ad_{n} a_{n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a^\\dagger_{n} a_{n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex3:= ad_{n} a_{n};\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{n} ad_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{n} a^\\dagger_{m}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{n} ad_{m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{n} a^\\dagger_{m}\\end{dmath*}"
+				}
+			],
+			"source" : "ex4:= a_{n} ad_{m};\nsort_product(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property KroneckerDelta to~}\\delta_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{m} ad_{n} → -ad_{n} a_{m} + \\delta_{n m}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{m} a^\\dagger_{n} \\rightarrow -a^\\dagger_{n} a_{m}+\\delta_{n m}\\end{dmath*}"
+				}
+			],
+			"source" : "\\delta_{m n}::KroneckerDelta;\nrl:= a_{m} ad_{n} -> - ad_{n} a_{m} + \\delta_{n m};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{n} a_{m} ad_{m} a_{n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{n} a_{m} a^\\dagger_{m} a_{n}\\end{dmath*}"
+				}
+			],
+			"source" : "ex5:= a_{n} a_{m} ad_{m} a_{n};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-(-ad_{m} a_{n} + \\delta_{m n}) a_{m} a_{n}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-\\left(-a^\\dagger_{m} a_{n}+\\delta_{m n}\\right) a_{m} a_{n}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(ex5, rl);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def post_process(ex):\n   # move all a^\\dagger operators to the right\n   converge(ex):\n      substitute(ex, rl)\n      distribute(ex)\n      eliminate_kronecker(ex)\n   sort_product(ex)\n   collect_terms(ex)"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-ad_{m} a_{m} a_{p} + \\delta_{m m} a_{p}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-a^\\dagger_{m} a_{m} a_{p}+\\delta_{m m} a_{p}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= a_{n} ad_{p} a_{m} ad_{m} a_{n};"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
