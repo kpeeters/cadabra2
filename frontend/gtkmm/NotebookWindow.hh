@@ -19,6 +19,7 @@
 
 #include "DocumentThread.hh"
 #include "ComputeThread.hh"
+#include "Console.hh"
 #include "GUIBase.hh"
 #include "NotebookCanvas.hh"
 #include "../common/TeXEngine.hh"
@@ -90,6 +91,10 @@ namespace cadabra {
 		void refresh_highlighting();
 		void on_help_register();
 
+		virtual void set_compute_thread(ComputeThread* compute) override;
+
+		virtual void on_interactive_output(const Json::Value& msg) override;
+
 	protected:
 		virtual bool on_key_press_event(GdkEventKey*) override;
 		virtual bool on_delete_event(GdkEventAny*) override;
@@ -123,6 +128,9 @@ namespace cadabra {
 		Gtk::VBox                      mainbox;
 		//			Gtk::HBox                      buttonbox;
 		Gtk::HBox                      statusbarbox;
+
+		Console console;
+		Gtk::Dialog console_win;
 
 		// All canvasses which are stored in the ...
 		// These pointers are managed by gtkmm.
@@ -183,6 +191,7 @@ namespace cadabra {
 		void on_run_runtocursor();
 		void on_run_stop();
 
+		void on_prefs_set_cv(int vis);
 		void on_prefs_font_size(int num);
 		void on_prefs_highlight_syntax(int on);
 		void on_prefs_choose_colours();
@@ -219,6 +228,8 @@ namespace cadabra {
 		bool cell_content_erase(int, int, DTree::iterator, int);
 		bool cell_content_execute(DTree::iterator, int, bool shift_enter_pressed);
 		bool cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number);
+
+		bool interactive_execute(const std::string& line);
 
 		void dim_output_cells(DTree::iterator it);
 

@@ -41,6 +41,7 @@ set(cadabra_gtk_src
 	CodeInput.cc 
 	ImageView.cc
 	Cadabra.cc
+	Console.cc
 	../common/TeXEngine.cc
 	../common/lodepng.cc
 	# ../common/exec-stream.cc

@@ -268,6 +268,30 @@ def display(obj, delay_send=False):
     
 __cdbkernel__.server=server
 __cdbkernel__.display=display
+
+class Console(object):
+	"""
+	The interactive console works in the same Python context as 
+	the notebook cells to allow evaluation of expressions for 
+	debugging/logging purposes
+	"""
+	def log(self, obj):
+		"""
+		Sends a string representation of obj to the console
+		"""
+		if server.architecture() == "terminal":
+			print(text)
+		elif server.architecture() == "client-server":
+			server.send(str(obj), "csl_out", 0, False)
+
+	def clear(self):
+		"""
+		Clears the output of the console window
+		"""
+		if server.architecture() == "client-server":
+			server.send("", "csl_clear", 0, False)
+
+console = Console()
     
 # Set display hooks to catch certain objects and print them
 # differently. Should probably eventually be done cleaner.

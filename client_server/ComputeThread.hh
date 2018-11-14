@@ -65,6 +65,10 @@ namespace cadabra {
 
 			void execute_cell(DTree::iterator);
 
+			void execute_interactive(const std::string& code);
+
+			void register_interactive_cell(uint64_t id);
+
 			/// Stop the current cell execution on the server and remove
 			/// all other cells from the run queue as well.
 
@@ -121,6 +125,8 @@ namespace cadabra {
 			/// report the status of each cell to the GUI.
 			void all_cells_nonrunning();
 
+			uint64_t interactive_cell;
+			std::vector<uint64_t> console_child_ids;
 
 			// Self-started server
 			Glib::Pid       server_pid;

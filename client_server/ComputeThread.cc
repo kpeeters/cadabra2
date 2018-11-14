@@ -293,99 +293,110 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	else
 		cell_id.created_by_client=false;
 	// std::cerr << "received cell with id " << cell_id.id << std::endl;
+	if (parent_id.id == interactive_cell) {
+		docthread->on_interactive_output(root);
+		console_child_ids.push_back(cell_id.id);
+	}
+	else if (cell_id.id == interactive_cell || std::find(console_child_ids.begin(), console_child_ids.end(), parent_id.id) != console_child_ids.end()) {
+		docthread->on_interactive_output(root);
+	}
+	else if (msg_type.asString().find("csl_") == 0) {
+		root["header"]["from_server"] = true;
+		docthread->on_interactive_output(root);
+	}
+	else {
+		try {
+			bool finished = header["last_in_sequence"].asBool();
 
-	
-	try {
-		bool finished=header["last_in_sequence"].asBool(); 
-
-		if(finished) {
-			std::shared_ptr<ActionBase> rs_action = 
-				std::make_shared<ActionSetRunStatus>(parent_id, false);
-			docthread->queue_action(rs_action);
-			cell_finished_running(parent_id);
+			if (finished) {
+				std::shared_ptr<ActionBase> rs_action =
+					std::make_shared<ActionSetRunStatus>(parent_id, false);
+				docthread->queue_action(rs_action);
+				cell_finished_running(parent_id);
 			}
 
-		if(content["output"].asString().size()>0) {
-			if(msg_type.asString()=="output") {
-				std::string output = "\\begin{verbatim}"+content["output"].asString()+"\\end{verbatim}";
-				
-				// Stick an AddCell action onto the stack. We instruct the
-				// action to add this result output cell as a child of the
-				// corresponding input cell.
-				DataCell result(cell_id, DataCell::CellType::output, output);
-				
-				// Finally, the action to add the output cell.
-				std::shared_ptr<ActionBase> action = 
-					std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
-				docthread->queue_action(action);
+			if (content["output"].asString().size() > 0) {
+				if (msg_type.asString() == "output") {
+					std::string output = "\\begin{verbatim}" + content["output"].asString() + "\\end{verbatim}";
+
+					// Stick an AddCell action onto the stack. We instruct the
+					// action to add this result output cell as a child of the
+					// corresponding input cell.
+					DataCell result(cell_id, DataCell::CellType::output, output);
+
+					// Finally, the action to add the output cell.
+					std::shared_ptr<ActionBase> action =
+						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
 				}
-			else if(msg_type.asString()=="verbatim") {
-				std::string output = "\\begin{verbatim}"+content["output"].asString()+"\\end{verbatim}";
-				
-				// Stick an AddCell action onto the stack. We instruct the
-				// action to add this result output cell as a child of the
-				// corresponding input cell.
-				DataCell result(cell_id, DataCell::CellType::verbatim, output);
-				
-				// Finally, the action to add the output cell.
-				std::shared_ptr<ActionBase> action = 
-					std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
-				docthread->queue_action(action);
+				else if (msg_type.asString() == "verbatim") {
+					std::string output = "\\begin{verbatim}" + content["output"].asString() + "\\end{verbatim}";
+
+					// Stick an AddCell action onto the stack. We instruct the
+					// action to add this result output cell as a child of the
+					// corresponding input cell.
+					DataCell result(cell_id, DataCell::CellType::verbatim, output);
+
+					// Finally, the action to add the output cell.
+					std::shared_ptr<ActionBase> action =
+						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
 				}
-			else if(msg_type.asString()=="latex_view") {
-				// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
-				DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
-				std::shared_ptr<ActionBase> action = 
-					std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
-				docthread->queue_action(action);
+				else if (msg_type.asString() == "latex_view") {
+					// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
+					DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
+					std::shared_ptr<ActionBase> action =
+						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
 				}
-			else if(msg_type.asString()=="input_form") {
-				DataCell result(cell_id, DataCell::CellType::input_form, content["output"].asString());
-				std::shared_ptr<ActionBase> action = 
-					std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
-				docthread->queue_action(action);
+				else if (msg_type.asString() == "input_form") {
+					DataCell result(cell_id, DataCell::CellType::input_form, content["output"].asString());
+					std::shared_ptr<ActionBase> action =
+						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
 				}
-			else if(msg_type.asString()=="error") {
-				std::string error = "{\\color{red}{\\begin{verbatim}"+content["output"].asString()
-					+"\\end{verbatim}}}";
-				if(msg_type.asString()=="fault") {
-					error = "{\\color{red}{Kernel fault}}\\begin{small}"+error+"\\end{small}";
+				else if (msg_type.asString() == "error") {
+					std::string error = "{\\color{red}{\\begin{verbatim}" + content["output"].asString()
+						+ "\\end{verbatim}}}";
+					if (msg_type.asString() == "fault") {
+						error = "{\\color{red}{Kernel fault}}\\begin{small}" + error + "\\end{small}";
 					}
-				
-				// Stick an AddCell action onto the stack. We instruct the
-				// action to add this result output cell as a child of the
-				// corresponding input cell.
-				DataCell result(cell_id, DataCell::CellType::error, error);
-				
-				// Finally, the action.
-				std::shared_ptr<ActionBase> action = 
-					std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
-				docthread->queue_action(action);
-				
-				// Position the cursor in the cell that generated the error. All other cells on 
-				// the execute queue have been cancelled by the server.
-				std::shared_ptr<ActionBase> actionpos =
-					std::make_shared<ActionPositionCursor>(parent_id, ActionPositionCursor::Position::in);
-				docthread->queue_action(actionpos);
-				
-				// FIXME: iterate over all cells and set the running flag to false.
+
+					// Stick an AddCell action onto the stack. We instruct the
+					// action to add this result output cell as a child of the
+					// corresponding input cell.
+					DataCell result(cell_id, DataCell::CellType::error, error);
+
+					// Finally, the action.
+					std::shared_ptr<ActionBase> action =
+						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
+
+					// Position the cursor in the cell that generated the error. All other cells on 
+					// the execute queue have been cancelled by the server.
+					std::shared_ptr<ActionBase> actionpos =
+						std::make_shared<ActionPositionCursor>(parent_id, ActionPositionCursor::Position::in);
+					docthread->queue_action(actionpos);
+
+					// FIXME: iterate over all cells and set the running flag to false.
 				}
-			else if(msg_type.asString()=="image_png") {
-				DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
-				std::shared_ptr<ActionBase> action = 
-					std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
-				docthread->queue_action(action);
+				else if (msg_type.asString() == "image_png") {
+					DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
+					std::shared_ptr<ActionBase> action =
+						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					docthread->queue_action(action);
 				}
-			else {
-				std::cerr << "cadabra-client: received cell we did not expect: " 
-							 << msg_type.asString() << std::endl;
+				else {
+					std::cerr << "cadabra-client: received cell we did not expect: "
+						<< msg_type.asString() << std::endl;
 				}
 			}
 		}
-	catch(std::logic_error& ex) {
-		// WARNING: if the server sends
-		std::cerr << "cadabra-client: trouble processing server response: " << ex.what() << std::endl;
+		catch (std::logic_error& ex) {
+			// WARNING: if the server sends
+			std::cerr << "cadabra-client: trouble processing server response: " << ex.what() << std::endl;
 		}
+	}
 
 	// Update kernel busy indicator depending on number of running cells.
 	if(number_of_cells_executing()>0)
@@ -394,6 +405,36 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		gui->on_kernel_runstatus(false);
 
 	gui->process_data();
+	}
+
+	void ComputeThread::execute_interactive(const std::string& code)
+	{
+		assert(gui_thread_id == std::this_thread::get_id());
+
+		if (!connection_is_open || interactive_cell == 0)
+			return;
+
+		if (code.substr(0, 7) == "reset()")
+			return restart_kernel();
+
+		Json::Value req, header, content;
+
+		header["msg_type"] = "execute_request";
+		header["cell_id"] = interactive_cell;
+		header["interactive"] = true;
+		content["code"] = code.c_str();
+
+		req["header"] = header;
+		req["content"] = content;
+
+		std::ostringstream oss;
+		oss << req << std::endl;
+		wsclient.send(our_connection_hdl, oss.str(), websocketpp::frame::opcode::text);
+}
+
+	void ComputeThread::register_interactive_cell(uint64_t id)
+	{
+		interactive_cell = id;
 	}
 
 void ComputeThread::execute_cell(DTree::iterator it)
@@ -508,6 +549,7 @@ void ComputeThread::restart_kernel()
 	Json::Value req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="exit";
+	header["from_server"] = true;
 	req["header"]=header;
 
 	std::ostringstream str;
@@ -516,4 +558,5 @@ void ComputeThread::restart_kernel()
 //	std::cerr << str.str() << std::endl;
 
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
+	docthread->on_interactive_output(req);
 	}

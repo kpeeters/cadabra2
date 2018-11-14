@@ -50,7 +50,7 @@ namespace cadabra {
 		/// can send cells for evaluation. Notebook does NOT own this
 		/// pointer.
 
-		void set_compute_thread(ComputeThread *);
+		virtual void set_compute_thread(ComputeThread *);
 
 		/// Ensure that the gui has an up-to-date representation of the
 		/// dtree. Traverses the entire tree so is expensive to run and
@@ -76,6 +76,8 @@ namespace cadabra {
 		/// existing notebook (if present) first.
 
 		void load_from_string(const std::string&);
+
+		virtual void on_interactive_output(const Json::Value& msg);
 
 		/// One undo step.
 		void undo();

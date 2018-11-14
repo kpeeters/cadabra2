@@ -25,6 +25,7 @@ using namespace cadabra;
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
+	  console(sigc::mem_fun(this, &NotebookWindow::interactive_execute)),
 	  current_cell(doc.end()),
 	  cdbapp(c),
 	  current_canvas(0),
@@ -122,6 +123,23 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 							sigc::mem_fun(*this, &NotebookWindow::on_view_split) );
 	actiongroup->add( Gtk::Action::create("ViewClose", "Close view"),
 							sigc::mem_fun(*this, &NotebookWindow::on_view_close) );
+
+	Gtk::RadioAction::Group group_cv;
+	actiongroup->add(Gtk::Action::create("MenuConsoleVisibility", "Console"));
+	
+	auto cv_action_hide = Gtk::RadioAction::create(group_cv, "ConsoleHide", "Hide");
+	cv_action_hide->property_value() = 0;
+	actiongroup->add(cv_action_hide, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_set_cv), 0));
+	cv_action_hide->set_active();
+
+	auto cv_action_show = Gtk::RadioAction::create(group_cv, "ConsoleDock", "Dock");
+	cv_action_show->property_value() = 1;
+	actiongroup->add(cv_action_show, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_set_cv), 1));
+
+	auto cv_action_float = Gtk::RadioAction::create(group_cv, "ConsoleFloat", "Float");
+	cv_action_float->property_value() = 2;
+	actiongroup->add(cv_action_float, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_set_cv), 2));
+
 
 	Gtk::RadioAction::Group group_font_size;
 
@@ -239,6 +257,11 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"        <menuitem action='HighlightSyntaxOff'/>"
 		"        <menuitem action='HighlightSyntaxOn'/>"
 		"        <menuitem action='HighlightSyntaxChoose'/>"
+		"      </menu>"
+		"      <menu action='MenuConsoleVisibility'>"
+		"        <menuitem action='ConsoleHide'/>"
+		"        <menuitem action='ConsoleDock'/>"
+		"        <menuitem action='ConsoleFloat'/>"
 		"      </menu>"
 		"      <menuitem action='ViewUseDefaultSettings'/>"
 		"    </menu>"
@@ -370,6 +393,42 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 		return true;
 	}
 
+void NotebookWindow::on_prefs_set_cv(int vis)
+{
+	// Unparent from whatever we're currently a child of
+	if (console.get_parent() == nullptr) {
+		// Hidden, do nothing
+	}
+	else if (console.get_parent() == &mainbox) {
+		// Docked
+		mainbox.remove(console);
+	}
+	else {
+		// Floating
+		console_win.get_vbox()->remove(console);
+		console_win.hide();
+	}
+
+	// Add to the required container
+	if (vis == 1) {
+		console.set_height(200);
+		mainbox.pack_end(console, false, 5);
+		console.show();
+	}
+	else if (vis == 2) {
+		console_win.set_transient_for(*this);
+		console_win.set_resizable(false);
+		console_win.set_size_request(900, 300);
+		console_win.set_title("Interactive Console");
+		console_win.get_vbox()->add(console);
+		console_win.signal_response().connect([this](int i) {
+			actiongroup->get_action("ConsoleHide")->activate();
+		});
+		console.set_height(300); 
+		console_win.show_all();
+	}
+}
+
 bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 	{
 //	std::cerr << "cadabra-client: on_configure_event " << cfg->width << " x " << cfg->height << std::endl;
@@ -498,6 +557,11 @@ void NotebookWindow::process_todo_queue()
 		md.set_secondary_text("The kernel crashed unexpectedly, and has been restarted. You will need to re-run all cells.");
 		md.signal_response().connect(sigc::mem_fun(*this, &NotebookWindow::on_crash_window_closed));
 		md.run();
+		
+		Json::Value req;
+		req["msg_type"] = "exit";
+		req["header"]["from_server"] = true;
+		on_interactive_output(req);
 		}
 	}
 
@@ -692,6 +756,11 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 //	if(current_cell!=doc.end()) 
 //		setup_focus_after_allocate(it);
 	}
+
+void NotebookWindow::on_interactive_output(const Json::Value& msg)
+{
+	console.signal_message(msg);
+}
 
 void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 	{
@@ -975,6 +1044,12 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	
 	return false;
 	}
+
+bool NotebookWindow::interactive_execute(const std::string& code)
+{
+	compute->execute_interactive(code);
+	return true;
+}
 
 bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool shift_enter_pressed)
 	{
@@ -1506,6 +1581,13 @@ void NotebookWindow::on_help() const
 		md.run();
 		}
 	}
+
+void NotebookWindow::set_compute_thread(ComputeThread* cthread)
+{
+	DocumentThread::set_compute_thread(cthread);
+	compute->register_interactive_cell(console.get_id());
+	console.initialize();
+}
 
 void NotebookWindow::on_help_about()
 	{
