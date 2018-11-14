@@ -97,7 +97,7 @@ bool TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 	return ret;
 }
 
-Console::Console(sigc::slot<bool, const Glib::ustring&> run_slot)
+Console::Console(sigc::slot<void> run_slot)
 	: input(*this)
 	, id_(generate_uuid())
 	, needs_focus(false)
@@ -199,12 +199,20 @@ void Console::send_input(const std::string& code)
 	if (send) {
 		prompt(false, true);
 		needs_focus = true;
-		run(collect);
+		run_queue.push(collect);
 		collect.clear();
+		run();
 	}
 	else {
 		prompt(true, true);
 	}
+}
+
+std::string Console::grab_input()
+{
+	std::string ret = run_queue.front();
+	run_queue.pop();
+	return ret;
 }
 
 void Console::signal_message(const Json::Value& message)

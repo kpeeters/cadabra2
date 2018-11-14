@@ -229,7 +229,7 @@ namespace cadabra {
 		bool cell_content_execute(DTree::iterator, int, bool shift_enter_pressed);
 		bool cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number);
 
-		bool interactive_execute(const std::string& line);
+		void interactive_execute();
 
 		void dim_output_cells(DTree::iterator it);
 

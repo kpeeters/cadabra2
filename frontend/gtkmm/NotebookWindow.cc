@@ -494,6 +494,7 @@ void NotebookWindow::on_connect()
 	std::lock_guard<std::mutex> guard(status_mutex);
 	kernel_string = "connected";
 	dispatcher.emit();
+	console.initialize();
 	}
 
 void NotebookWindow::on_disconnect(const std::string& reason)
@@ -1045,10 +1046,9 @@ bool NotebookWindow::cell_got_focus(DTree::iterator it, int canvas_number)
 	return false;
 	}
 
-bool NotebookWindow::interactive_execute(const std::string& code)
+void NotebookWindow::interactive_execute()
 {
-	compute->execute_interactive(code);
-	return true;
+	compute->execute_interactive(console.grab_input());
 }
 
 bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool shift_enter_pressed)
@@ -1586,7 +1586,6 @@ void NotebookWindow::set_compute_thread(ComputeThread* cthread)
 {
 	DocumentThread::set_compute_thread(cthread);
 	compute->register_interactive_cell(console.get_id());
-	console.initialize();
 }
 
 void NotebookWindow::on_help_about()

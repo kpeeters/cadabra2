@@ -27,12 +27,13 @@ namespace cadabra
 	class Console : public Gtk::Box
 	{
 	public:
-		Console(sigc::slot<bool, const Glib::ustring&> run_slot);
+		Console(sigc::slot<void> run_slot);
 		~Console();
 
 		void initialize();
 
 		void set_input(const Glib::ustring& line, size_t range_start = std::string::npos, size_t range_end = std::string::npos);
+		std::string grab_input();
 		void send_input(const std::string& code);
 		void signal_message(const Json::Value& msg);
 
@@ -50,12 +51,13 @@ namespace cadabra
 		void process_message_queue();
 
 		Glib::Dispatcher dispatch_message;
-		sigc::signal1<bool, const Glib::ustring&> run;
+		Glib::Dispatcher run;
 		uint64_t id_;
 
 		bool needs_focus;
 		std::string collect;
 		std::queue<Json::Value> message_queue;
+		std::queue<std::string> run_queue;
 		Gtk::ScrolledWindow win;
 		TextViewProxy input;
 		Gtk::TextView tv;
