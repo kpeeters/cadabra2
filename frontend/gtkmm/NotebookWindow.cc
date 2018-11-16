@@ -25,9 +25,9 @@ using namespace cadabra;
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
-	  console(sigc::mem_fun(this, &NotebookWindow::interactive_execute)),
 	  current_cell(doc.end()),
 	  cdbapp(c),
+	  console(sigc::mem_fun(this, &NotebookWindow::interactive_execute)),
 	  current_canvas(0),
 //	  b_help(Gtk::Stock::HELP), b_stop(Gtk::Stock::STOP), b_undo(Gtk::Stock::UNDO), b_redo(Gtk::Stock::REDO), 
 	  kernel_spinner_status(false), title_prefix("Cadabra: "),
@@ -374,7 +374,7 @@ void NotebookWindow::load_css(const std::string& text_colour)
 	data += "*:focus { background-color: #eee; }\n";
 	data += "*:selected { background-color: #ccc; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
-	data += "#ImageView { background-color: white; transition-property: padding, background-color; transition-duration: 1s; }\n";
+	data += "#ImageView { background-color: yellow; transition-property: padding, background-color; transition-duration: 1s; }\n";
 	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
 	if(!css_provider->load_from_data(data)) {

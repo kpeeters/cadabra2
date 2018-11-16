@@ -420,7 +420,7 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 		Json::Value req, header, content;
 
 		header["msg_type"] = "execute_request";
-		header["cell_id"] = interactive_cell;
+		header["cell_id"] = static_cast<Json::UInt64>(interactive_cell);
 		header["interactive"] = true;
 		content["code"] = code.c_str();
 

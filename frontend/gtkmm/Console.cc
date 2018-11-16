@@ -21,9 +21,9 @@ bool is_empty(const std::string& str)
 }
 
 TextViewProxy::TextViewProxy(Console& parent)
-	: parent(parent)
+	: history_max_length(50)
+	, parent(parent)
 	, history_ptr(history.begin())
-	, history_max_length(50)
 {
 
 }
@@ -98,9 +98,9 @@ bool TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 }
 
 Console::Console(sigc::slot<void> run_slot)
-	: input(*this)
-	, id_(generate_uuid())
+	: id_(generate_uuid())
 	, needs_focus(false)
+	, input(*this)
 {
 	tv.set_left_margin(5);
 	tv.set_top_margin(5);

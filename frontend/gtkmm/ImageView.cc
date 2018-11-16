@@ -8,19 +8,60 @@
 using namespace cadabra;
 
 ImageView::ImageView()
+	: sizing(false), prev_x(0), prev_y(0), height_at_press(0), width_at_press(0)
 	{
-	add(image);
+	add(vbox);
+	vbox.add(image);
 	image.set_halign(Gtk::ALIGN_START);
-	set_events(Gdk::ENTER_NOTIFY_MASK|Gdk::LEAVE_NOTIFY_MASK);
+	set_events(Gdk::ENTER_NOTIFY_MASK
+				  | Gdk::LEAVE_NOTIFY_MASK
+				  | Gdk::BUTTON_PRESS_MASK
+				  | Gdk::BUTTON_RELEASE_MASK
+				  | Gdk::POINTER_MOTION_MASK);
+
 	set_name("ImageView"); // to be able to style it with CSS
 	show_all();
-	//set_size_request(300, 300);
 	}
 
 ImageView::~ImageView()
 	{
 	}
- 
+
+bool ImageView::on_motion_notify_event(GdkEventMotion *event)
+	{
+//	std::cerr << event->x << ", " << event->y << std::endl;
+	if(sizing) {
+		auto cw = width_at_press  + (event->x - prev_x);
+		auto ratio = pixbuf->get_width() / ((double)pixbuf->get_height());
+		set_size_request( width_at_press  + (event->x - prev_x),
+								height_at_press + (event->y - prev_y) );
+		
+		image.set(pixbuf->scale_simple(cw, cw/ratio, Gdk::INTERP_BILINEAR));
+		}
+	return true;
+	}
+
+bool ImageView::on_button_press_event(GdkEventButton *event)
+	{
+	if(event->type==GDK_BUTTON_PRESS) {
+		sizing=true;
+		prev_x=event->x;
+		prev_y=event->y;
+		width_at_press=image.get_allocated_width();
+		height_at_press=image.get_allocated_height();
+		}
+	return true;
+	}
+
+bool ImageView::on_button_release_event(GdkEventButton *event)
+	{
+	if(event->type==GDK_BUTTON_RELEASE) {
+		sizing=false;
+		}
+	
+	return true;
+	}
+
 void ImageView::set_image_from_base64(const std::string& b64)
 	{
 	auto str = Gio::MemoryInputStream::create();
@@ -33,11 +74,11 @@ void ImageView::set_image_from_base64(const std::string& b64)
 	std::string dec=Glib::Base64::decode(b64);
 	str->add_data(dec.c_str(), dec.size()); 
 
-	Glib::RefPtr<Gdk::Pixbuf> pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str,400,-1,true);
+	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str,-1,-1,true);
 	if(!pixbuf)
 		std::cerr << "cadabra-client: unable to create image from data" << std::endl;
 	else {
-//		pixbuf->scale_simple(400,300,Gdk::INTERP_BILINEAR);
 		image.set(pixbuf);
+		image.set_size_request( pixbuf->get_width(), pixbuf->get_height() );
 		}
 	}
