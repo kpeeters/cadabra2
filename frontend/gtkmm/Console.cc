@@ -102,10 +102,7 @@ Console::Console(sigc::slot<void> run_slot)
 	, needs_focus(false)
 	, input(*this)
 {
-	tv.set_left_margin(5);
-	tv.set_top_margin(5);
-	tv.set_right_margin(5);
-	tv.set_bottom_margin(5);
+   set_name("Console");
 
 	input_begin = get_buffer()->create_mark(get_buffer()->begin());
 	prompt_begin = get_buffer()->create_mark(get_buffer()->begin());
@@ -175,7 +172,9 @@ void Console::set_height(int px)
 {
 	set_size_request(-1, px);
 	win.set_min_content_height(px);
+#if GTKMM_MINOR_VERSION>=22	
 	win.set_max_content_height(px);
+#endif
 }
 
 void Console::send_input(const std::string& code)
