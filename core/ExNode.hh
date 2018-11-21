@@ -32,6 +32,8 @@ class ExNode : public cadabra::IndexClassifier {
       ExNode& iter();
       ExNode& next();
 
+		ExNode copy() const;
+		
       std::string __str__() const;
       std::string _latex_() const;      
       
@@ -134,6 +136,8 @@ class ExNode : public cadabra::IndexClassifier {
 ExNode Ex_iter(std::shared_ptr<cadabra::Ex> ex);
 ExNode Ex_top(std::shared_ptr<cadabra::Ex> ex);
 bool   Ex_matches(std::shared_ptr<cadabra::Ex> ex, ExNode& other);
+bool   ExNode_less(ExNode& one, ExNode& two);
+bool   ExNode_greater(ExNode& one, ExNode& two);
 ExNode Ex_getitem_string(std::shared_ptr<cadabra::Ex> ex, std::string tag);
 ExNode Ex_getitem_iterator(std::shared_ptr<cadabra::Ex> ex, ExNode);
 

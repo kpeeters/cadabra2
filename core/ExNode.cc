@@ -19,6 +19,34 @@ ExNode::ExNode(const Kernel& k, std::shared_ptr<Ex> ex_)
    {
    }
 
+ExNode ExNode::copy() const
+	{
+	ExNode ret(kernel, ex);
+
+	ret.it=it;
+	ret.tag=tag;
+	ret.indices_only=indices_only;
+	ret.args_only=args_only;
+	ret.terms_only=terms_only;
+	ret.factors_only=factors_only;
+
+	ret.nxtit=nxtit;
+	ret.sibnxtit=sibnxtit;	
+	ret.indnxtit=indnxtit;
+
+	ret.use_sibling_iterator=use_sibling_iterator;
+	ret.use_index_iterator=use_index_iterator;
+
+	ret.topit=topit;
+	ret.stopit=stopit;
+
+	ret.ind_free=ind_free;
+	ret.ind_dummy=ind_dummy;
+	ret.ind_pos_dummy=ind_pos_dummy;
+	
+	return ret;
+	}
+
 ExNode ExNode::getitem_string(std::string tag)
    {
    ExNode ret(kernel, ex);
@@ -395,6 +423,22 @@ bool Ex_matches(std::shared_ptr<Ex> ex, ExNode& other)
    auto ret=comp.equal_subtree(ex->begin(), other.it);
    if(ret==Ex_comparator::match_t::no_match_less || ret==Ex_comparator::match_t::no_match_greater) return false;
    return true;
+   }
+
+bool ExNode_less(ExNode& one, ExNode& two)
+   {
+   Ex_comparator comp(get_kernel_from_scope()->properties);
+   auto ret=comp.equal_subtree(one.it, two.it);
+   if(ret==Ex_comparator::match_t::no_match_less) return true;
+   return false;
+   }
+
+bool ExNode_greater(ExNode& one, ExNode& two)
+   {
+   Ex_comparator comp(get_kernel_from_scope()->properties);
+   auto ret=comp.equal_subtree(one.it, two.it);
+   if(ret==Ex_comparator::match_t::no_match_greater) return true;
+   return false;
    }
 
 ExNode Ex_getitem_string(std::shared_ptr<Ex> ex, std::string tag)
