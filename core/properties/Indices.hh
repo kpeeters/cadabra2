@@ -17,7 +17,7 @@ class Indices : public list_property {
 		virtual void latex(std::ostream&) const override; 
 		
 		std::string set_name, parent_name;
-		enum position_t { free, fixed, independent } position_type;
+		enum position_t { free=0, fixed=1, independent=2 } position_type;
 
 		// List of possible values that indices of this type can take.
 		std::vector<Ex> values;

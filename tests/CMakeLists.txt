@@ -57,6 +57,7 @@ endforeach()
 # The main test suite.
 #
 set(RTESTS
+  index_positions
   packages
   modules
   integrals

@@ -188,7 +188,7 @@ class Ex : public std::enable_shared_from_this<Ex>, public tree<str_node> {
 		iterator     named_parent(iterator it, const std::string&) const;
 		iterator     erase_expression(iterator it);
 
-		/// Calculate the hash value for the subtree starting at 'it'
+		/// Calculate the hash value for the subtree starting at 'it'.
 		hashval_t    calc_hash(iterator it) const;
 
 		/// Quick access to arguments or argument lists for A(B)(C,D) type nodes.

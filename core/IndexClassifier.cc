@@ -274,49 +274,67 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 		index_map_t first_free;
 		Ex::sibling_iterator sit=it.begin();
 		bool is_first_term=true;
+
+		// Determine whether all indices in 'one' are also present in 'two' (but not the
+		// other way around). Takes care of matching non-equal parent_rel if the index
+		// is free. Indices in 'one' which are integers, symbols or coordinates do not
+		// need to match indices in 'two'.
+
+		auto free_index_set_contains = [&](const index_map_t& one, const index_map_t& two) {
+			index_map_t::const_iterator i1=one.begin();
+			while(i1!=one.end()) {
+				const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(i1->second, true);
+				const Symbol     *smb=kernel.properties.get_composite<Symbol>(i1->second, true);
+				// Integer, coordinate or symbol indices always ok.
+				if(i1->second->is_integer()==false && !cdn && !smb) {
+					// Check whether there is a corresponding free index in the current term.
+					if(two.count((*i1).first)==0) {
+						// std::cerr << "did not find Symbol for " << i1->second << std::endl;
+						// Not found. However, if this index is free, it is
+						// allowed to appear with opposite parent rel. Check
+						// that too.
+						const Indices *idc = kernel.properties.get<Indices>(i1->second, true);
+						bool trouble=true;
+						// if(idc)
+						// 	std::cerr << "Have indices " << idc->position_type << std::endl;
+						if(idc && idc->position_type==Indices::position_t::free) {
+							Ex cpy((*i1).first);
+							cpy.begin()->flip_parent_rel();
+							if(two.count(cpy)!=0) {
+								trouble=false;
+								// std::cerr << "Narrow escape" << std::endl;
+								}
+							}
+						if(trouble) return false;
+						}
+					}
+				++i1;
+				}
+			return true;
+		};
+		
+		// Look at the first term to determine the free index
+		// content. Then consider all other terms in turn, and check
+		// that their free index content matches.
 		while(sit!=it.end()) {
-			if(*sit->multiplier!=0) { // zeroes are always ok
+			if(*sit->multiplier!=0) { // A zero term is always ok.
+				// Classify the indices of this term in the sum.
 				index_map_t term_free, term_dummy;
-				// print_classify_indices(std::cerr, sit);
 				classify_indices(sit, term_free, term_dummy);
 				if(!is_first_term) {
-					index_map_t::iterator fri=first_free.begin();
-					while(fri!=first_free.end()) {
-						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
-						const Symbol     *smb=kernel.properties.get_composite<Symbol>(fri->second, true);
-                  // integer, coordinate or symbol indices always ok
-						if(fri->second->is_integer()==false && !cdn && !smb) { 
-							if(term_free.count((*fri).first)==0) {
-								// std::cerr << (*fri).first << std::endl;
-								// std::cerr << "did not find Symbol for " << fri->second << std::endl;
-								if(*it->name=="\\sum") 
-									throw ConsistencyException("Free indices in different terms in a sum do not match.");
-								else
-									throw ConsistencyException("Free indices on lhs and rhs do not match.");
-								}
-							}
-						++fri;
-						}
-					fri=term_free.begin();
-					while(fri!=term_free.end()) {
-						const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(fri->second, true);
-						const Symbol     *smb=kernel.properties.get_composite<Symbol>(fri->second, true); //Symbol::get(kernel.properties, fri->second, true);
-                  // integer, coordinate or symbol indices always ok
-						if(fri->second->is_integer()==false && !cdn && !smb) { 
-							if(first_free.count((*fri).first)==0) {
-								if(*it->name=="\\sum") {
-									// std::cerr << (*fri).first << " not in first term" << std::endl;
-									// std::cerr << Ex(it) << std::endl;
-									throw ConsistencyException("Free indices in different terms in a sum do not match.");
-									}
-								else
-									throw ConsistencyException("Free indices on lhs and rhs do not match.");
-								}
-							}
-						++fri;
+					bool ok=true;
+					ok = ok && free_index_set_contains(first_free, term_free);
+					ok = ok && free_index_set_contains(term_free, first_free);
+					if(!ok) {
+						if(*it->name=="\\sum") 
+							throw ConsistencyException("Free indices in different terms in a sum do not match.");
+						else
+							throw ConsistencyException("Free indices on lhs and rhs do not match.");
 						}
 					}
 				else {
+					// This is the first term; remember the free indices as we need
+					// to check that all other terms have the same indices free.
 					first_free=term_free;
 					is_first_term=false;
 					}
@@ -324,7 +342,7 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 				ind_dummy.insert(term_dummy.begin(), term_dummy.end());
 				ind_free.insert(term_free.begin(), term_free.end());
 				}
-			++sit;
+			++sit; // next term in sum or \equals node
 			}
 		}
 	else if(inh) {
