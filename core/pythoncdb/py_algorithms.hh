@@ -2,6 +2,7 @@
 
 #include <pybind11/pybind11.h>
 #include "py_ex.hh"
+#include "py_helpers.hh"
 #include "py_kernel.hh"
 #include "py_progress.hh"
 
@@ -32,6 +33,7 @@ namespace cadabra
 			  pybind11::arg("deep") = deep,
 			  pybind11::arg("repeat") = repeat,
 			  pybind11::arg("depth") = depth,
+			  pybind11::doc(read_manual("algorithms", name).c_str()),
 			  pybind11::return_value_policy::reference_internal);
 		}
 
@@ -60,6 +62,7 @@ namespace cadabra
 			  pybind11::arg("deep") = deep,
 			  pybind11::arg("repeat") = repeat,
 			  pybind11::arg("depth") = depth,
+			  pybind11::doc(read_manual("algorithms", name).c_str()),
 			  pybind11::return_value_policy::reference_internal);
 		}
 
