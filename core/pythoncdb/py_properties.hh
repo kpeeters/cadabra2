@@ -6,6 +6,7 @@
 #include <memory>
 #include <pybind11/pybind11.h>
 #include "py_ex.hh"
+#include "py_kernel.hh"
 #include "properties/LaTeXForm.hh"
 
 namespace cadabra

@@ -96,15 +96,15 @@ namespace cadabra
 		def_algo<complete, Ex>(m, "complete", false, false, 0, py::arg("add"));
 		def_algo<decompose, Ex>(m, "decompose", false, false, 0, py::arg("basis"));
 		def_algo<drop_weight, Ex>(m, "drop_weight", false, false, 0, py::arg("condition"));
-		def_algo<eliminate_metric, Ex>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex_ptr());
+		def_algo<eliminate_metric, Ex>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex{});
 		def_algo<keep_weight, Ex>(m, "keep_weight", false, false, 0, py::arg("condition"));
 		def_algo<lower_free_indices, bool>(m, "lower_free_indices", true, false, 0, py::arg("lower") = true);
 		def_algo<lower_free_indices, bool>(m, "raise_free_indices", true, false, 0, py::arg("lower") = false);
 		def_algo<integrate_by_parts, Ex>(m, "integrate_by_parts", true, false, 0, py::arg("away_from"));
 		def_algo<young_project_tensor, bool>(m, "young_project_tensor", true, false, 0, py::arg("modulo_monoterm") = false);
 		def_algo<join_gamma, bool, bool>(m, "join_gamma", true, false, 0, py::arg("expand") = true, py::arg("use_gendelta") = false);
-		def_algo<einsteinify, Ex>(m, "einsteinify", true, false, 0, py::arg("metric") = Ex_ptr());
-		def_algo<evaluate, Ex, bool, bool>(m, "evaluate", false, false, 0, py::arg("components") = Ex_ptr(), py::arg("rhsonly") = false, py::arg("simplify") = true);
+		def_algo<einsteinify, Ex>(m, "einsteinify", true, false, 0, py::arg("metric") = Ex{});
+		def_algo<evaluate, Ex, bool, bool>(m, "evaluate", false, false, 0, py::arg("components") = Ex{}, py::arg("rhsonly") = false, py::arg("simplify") = true);
 		def_algo<keep_terms, std::vector<int>>(m, "keep_terms", true, false, 0, py::arg("terms"));
 		def_algo<young_project, std::vector<int>, std::vector<int>>(m, "young_project", true, false, 0, py::arg("shape"), py::arg("indices"));
 		def_algo<simplify>(m, "simplify", false, false, 0);
@@ -125,7 +125,7 @@ namespace cadabra
 		def_algo_preorder<vary, Ex>(m, "vary", false, false, 0, py::arg("rules"));
 		def_algo<split_gamma, bool>(m, "split_gamma", true, false, 0, py::arg("on_back"));
 		def_algo<split_index, Ex>(m, "split_index", true, false, 0, py::arg("rules"));
-		def_algo<unwrap, Ex>(m, "unwrap", true, false, 0, py::arg("wrapper") = Ex_ptr());
+		def_algo<unwrap, Ex>(m, "unwrap", true, false, 0, py::arg("wrapper") = Ex{});
 
 		}
 	}
