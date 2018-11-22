@@ -1,5 +1,5 @@
 
-#include "PythonCdb.hh"
+#include "pythoncdb/py_ex.hh"
 #include "Bridge.hh"
 #include "algorithms/collect_terms.hh"
 

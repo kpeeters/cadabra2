@@ -156,9 +156,21 @@ set(PROPERTY_SRC_FILES
 #   gauge_theory/instantons
 #   )
 
+set(MODULE_SRC_FILES
+	pythoncdb/py_algorithms.cc
+	pythoncdb/py_ex.cc
+	pythoncdb/py_globals.cc
+	pythoncdb/py_helpers.cc
+	pythoncdb/py_kernel.cc
+	pythoncdb/py_module.cc
+	pythoncdb/py_packages.cc
+	pythoncdb/py_progress.cc
+	pythoncdb/py_properties.cc
+	pythoncdb/py_stopwatch.cc
+)
+
 set(LOCAL_SRC_FILES
 	CdbPython.cc
-	PythonCdb.cc
 	ExNode.cc
 	ProgressMonitor.cc
 	Bridge.cc
@@ -229,6 +241,7 @@ include_directories(
 # Cadabra2 python module
 pybind11_add_module(cadabra2 SHARED 
 	${LOCAL_SRC_FILES}
+	${MODULE_SRC_FILES}
 )
 set_target_properties(cadabra2 PROPERTIES SUFFIX ".${PYTHON_MOD_SUFFIX}")
 target_link_libraries(cadabra2 PRIVATE
