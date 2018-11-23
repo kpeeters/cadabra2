@@ -350,6 +350,8 @@ bool CodeInput::exp_input_tv::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	{
 	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(Gtk::TEXT_WINDOW_TEXT);
 
+//	std::cerr << "on draw for " << get_buffer()->get_text() << std::endl;
+	
 	bool ret=Gtk::TextView::on_draw(cr);
 
 	int w, h, x, y;
