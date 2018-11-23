@@ -136,6 +136,7 @@
 #include "algorithms/young_project.hh"
 #include "algorithms/young_project_product.hh"
 #include "algorithms/young_project_tensor.hh"
+#include "algorithms/young_reduce.hh"
 #include "algorithms/zoom.hh"
 
 using namespace cadabra;
@@ -1417,35 +1418,45 @@ PYBIND11_MODULE(cadabra2, m)
 		pybind11::return_value_policy::reference_internal);
 
 	m.def("keep_terms", &dispatch_ex<keep_terms, std::vector<int> >,
-		pybind11::arg("ex"),
-		pybind11::arg("terms"),
-		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
-		pybind11::return_value_policy::reference_internal);
+		 pybind11::arg("ex"), 
+		  pybind11::arg("terms"),
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	m.def("young_project", &dispatch_ex<young_project, std::vector<int>, std::vector<int> >,
-		pybind11::arg("ex"),
-		pybind11::arg("shape"), pybind11::arg("indices"),
-		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
-		pybind11::return_value_policy::reference_internal);
+	m.def("young_project", &dispatch_ex<young_project, std::vector<int>, std::vector<int> >, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("shape"), pybind11::arg("indices"), 
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
-	m.def("order", &dispatch_ex<order, Ex, bool>,
+	m.def("young_reduce", &dispatch_ex<young_reduce, const Ex&, bool>,
 		pybind11::arg("ex"),
-		pybind11::arg("factors"), pybind11::arg("anticommuting") = false,
-		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
-		pybind11::return_value_policy::reference_internal);
-
-	m.def("simplify", &dispatch_ex<simplify>,
-		pybind11::arg("ex"),
-		pybind11::arg("deep") = false,
+		pybind11::arg("pattern"),
+		pybind11::arg("search_permutations") = false,
+		pybind11::arg("deep") = true,
 		pybind11::arg("repeat") = false,
 		pybind11::arg("depth") = 0,
-		pybind11::return_value_policy::reference_internal);
+		pybind11::return_value_policy::reference_internal
+	);
 
-	m.def("order", &dispatch_ex<order, Ex, bool>,
-		pybind11::arg("ex"),
-		pybind11::arg("factors"), pybind11::arg("anticommuting") = false,
-		pybind11::arg("deep") = true, pybind11::arg("repeat") = false, pybind11::arg("depth") = 0,
-		pybind11::return_value_policy::reference_internal);
+	m.def("order", &dispatch_ex<order, Ex, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
+
+	m.def("simplify", &dispatch_ex<simplify>, 
+			pybind11::arg("ex"),
+			pybind11::arg("deep")=false,
+			pybind11::arg("repeat")=false,
+			pybind11::arg("depth")=0,
+			pybind11::return_value_policy::reference_internal );
+
+	m.def("order", &dispatch_ex<order, Ex, bool>, 
+		 pybind11::arg("ex"),
+		  pybind11::arg("factors"), pybind11::arg("anticommuting")=false,
+		  pybind11::arg("deep")=true,pybind11::arg("repeat")=false,pybind11::arg("depth")=0,
+		 pybind11::return_value_policy::reference_internal );
 
 	m.def("epsilon_to_delta", &dispatch_ex<epsilon_to_delta, bool>,
 		pybind11::arg("ex"),
