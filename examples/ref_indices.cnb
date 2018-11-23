@@ -72,7 +72,7 @@
 					"source" : "\\begin{dmath*}{}A_{m}+A^{m}\\end{dmath*}"
 				}
 			],
-			"source" : "{m, n}::Indices;\nex:=A_{m} + A^{m};"
+			"source" : "{m, n}::Indices(name=\"free\");\nex:=A_{m} + A^{m};"
 		},
 		{
 			"cell_origin" : "client",
@@ -131,10 +131,10 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d\\right].\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d,~\\discretionary{}{}{} e,~\\discretionary{}{}{} f\\right].\\end{dmath*}"
 				}
 			],
-			"source" : "{a,b,c,d}::Indices(position=fixed);"
+			"source" : "{a,b,c,d,e,f}::Indices(name=\"fixed\", position=fixed);"
 		},
 		{
 			"cell_origin" : "client",
@@ -195,6 +195,7 @@
 					"source" : "If upper and lower indices should remain untouched at all times, there is a third index position type,\ncalled `independent',"
 				}
 			],
+			"hidden" : true,
 			"source" : "If upper and lower indices should remain untouched at all times, there is a third index position type,\ncalled `independent',"
 		},
 		{
@@ -234,7 +235,7 @@
 					"source" : "\\begin{dmath*}{}G_{q r} F^{q r}+G^{q r} F_{q r}\\end{dmath*}"
 				}
 			],
-			"source" : "{q,r,s}::Indices(position=independent);\nex:= G_{q r} F^{q r} + G^{q r} F_{q r};\ncanonicalise(_);"
+			"source" : "{q,r,s}::Indices(name=\"independent\", position=independent);\nex:= G_{q r} F^{q r} + G^{q r} F_{q r};\ncanonicalise(_);"
 		},
 		{
 			"cell_origin" : "client",
@@ -297,8 +298,16 @@
 				},
 				{
 					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}ConsistencyException: Failed to find dummy property for $a$ while renaming dummies.\n\nAt:\n  <string>(4): <module>\n\\end{verbatim}}}"
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "G_{a b} F_{c d} F^{c d}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}G_{a b} F_{c d} F^{c d}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:= G_{a b} Q;\nrl:= Q-> F_{a b} F^{a b};\nsubstitute(ex, rl);"
