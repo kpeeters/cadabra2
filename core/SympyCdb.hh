@@ -42,8 +42,17 @@ namespace sympy {
    /// sparse components. Will return a set of Cadabra rules for the
    /// inverse matrix.
 
-	cadabra::Ex invert_matrix(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules);
+	void invert_matrix(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules, const cadabra::Ex& tocompute);
 
+	/// \ingroup scalar
+	///
+	/// Use Sympy to compute the determinant of a matrix, given a set of rules determining
+	/// its sparse components. Will add the rules to the list.
+
+	void determinant(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules, const cadabra::Ex& tocompute);
+	void trace(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules, const cadabra::Ex& tocompute);
+
+	cadabra::Ex fill_matrix(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules);
 //	extern Stopwatch sympy_stopwatch;
 	
 };

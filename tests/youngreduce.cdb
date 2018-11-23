@@ -3,13 +3,13 @@
 
 # Sum of single terms
 def test01():
-	__cdbkernel__ = create_scope()
+        __cdbkernel__ = create_scope()
         {a, b, c, d, e, f, g}::Indices(position=fixed);
         A_{a b c}::AntiSymmetric;
-	ex1 := A_{a b c} + A_{b a c} - A_{c a b};
-	young_reduce(ex1, $A_{a b c}$);
-	assert(ex1 == $-A_{a b c}$)
-	print("Test 1 passed")
+        ex1 := A_{a b c} + A_{b a c} - A_{c a b};
+        young_reduce(ex1, $A_{a b c}$);
+        assert(ex1 == $-A_{a b c}$)
+        print("Test 1 passed")
 
 test01()
 

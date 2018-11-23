@@ -12,7 +12,7 @@
 
 using namespace cadabra;
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args, 
 								  const std::string& method)
@@ -93,7 +93,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	return it;
 	}
 
-Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
+Ex sympy::fill_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 	{
 	// check that object has two children only.
 	if(ex.number_of_children(ex.begin())!=2) {
@@ -102,12 +102,6 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 
 	Ex::iterator ind1=ex.child(ex.begin(), 0);
 	Ex::iterator ind2=ex.child(ex.begin(), 1);
-
-	str_node::parent_rel_t prel;
-	if(ind1->fl.parent_rel==str_node::p_sub)   prel=str_node::p_super;
-	if(ind1->fl.parent_rel==str_node::p_super) prel=str_node::p_sub;
-
-	Ex ret;
 
 	// Get Indices property and from there Coordinates.
 
@@ -130,10 +124,8 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 			Ex c(ex.begin());
 			Ex::iterator cit1=c.child(c.begin(), 0);
 			Ex::iterator cit2=c.child(c.begin(), 1);
-			cit1=c.replace(cit1, prop1->values[c1].begin());
-			cit2=c.replace(cit2, prop1->values[c2].begin());
-			cit1->fl.parent_rel=prel;
-			cit2->fl.parent_rel=prel;
+			cit1=c.replace_index(cit1, prop1->values[c1].begin(), true);
+			cit2=c.replace_index(cit2, prop1->values[c2].begin(), true);
 
 			Ex::iterator cit=c.begin();
 			substitute subs(kernel, c, rules);
@@ -146,31 +138,47 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 				}
 			}
 		}
+
+	return matrix;
+	}
+
+void sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& tocompute)
+	{
+	if(ex.number_of_children(ex.begin())!=2) {
+		throw ConsistencyException("Object should have exactly two indices.");
+		}
 	
+	auto matrix = fill_matrix(kernel, ex, rules);
+
 	auto top=matrix.begin();
 	std::vector<std::string> wrap;
 	sympy::apply(kernel, matrix, top, wrap, std::vector<std::string>(), ".inv()");
 	//matrix.print_recursive_treeform(std::cerr, top);
 
+	Ex::iterator ind1=ex.child(ex.begin(), 0);
+	Ex::iterator ind2=ex.child(ex.begin(), 1);
+	const Indices *prop1 = kernel.properties.get<Indices>(ind1);
+	const Indices *prop2 = kernel.properties.get<Indices>(ind2);
+
 	Ex::iterator ruleslist=rules.begin();
 
 	// Now we need to iterate over the components again and construct sparse rules.
-	cols=matrix.begin(matrix.begin()); // outer comma
+	auto cols=matrix.begin(matrix.begin()); // outer comma
 	auto row=matrix.begin(cols); // first inner comma
 	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
 		auto el =matrix.begin(row);  // first element of first inner comma
 		for(unsigned c2=0; c2<prop2->values.size(); ++c2) {
 			if(el->is_zero()==false) {
 				Ex rule("\\equals");
-				auto rit  = rule.append_child(rule.begin(), ex.begin());
+				auto rit  = rule.append_child(rule.begin(), tocompute.begin());
 				auto cvit = rule.append_child(rule.begin(), Ex::iterator(el));
 				auto i = rule.begin(rit);
 				//std::cerr << c1 << ", " << c2 << std::endl;
-				i = rule.replace(i, prop1->values[c1].begin());
-				i->fl.parent_rel=ind1->fl.parent_rel;
+				i = rule.replace_index(i, prop1->values[c1].begin(), true);
+//				i->fl.parent_rel=ind1->fl.parent_rel;
 				++i;
-				i = rule.replace(i, prop1->values[c2].begin());
-				i->fl.parent_rel=ind1->fl.parent_rel;
+				i = rule.replace_index(i, prop1->values[c2].begin(), true);
+//				i->fl.parent_rel=ind1->fl.parent_rel;
 				rules.append_child(ruleslist, rule.begin());
 				//rule.print_recursive_treeform(std::cerr, rule.begin());
 				}
@@ -178,6 +186,32 @@ Ex sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 			}
 		++row;
 		}
+	}
 
-	return ret;
+void sympy::determinant(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& tocompute)
+	{
+	auto matrix = fill_matrix(kernel, ex, rules);
+
+	auto top=matrix.begin();
+	std::vector<std::string> wrap;
+	sympy::apply(kernel, matrix, top, wrap, std::vector<std::string>(), ".det()");
+
+	Ex rule("\\equals");
+	rule.append_child(rule.begin(), tocompute.begin());
+	rule.append_child(rule.begin(), matrix.begin());
+	rules.append_child(rules.begin(), rule.begin());
+	}
+
+void sympy::trace(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& tocompute)
+	{
+	auto matrix = fill_matrix(kernel, ex, rules);
+
+	auto top=matrix.begin();
+	std::vector<std::string> wrap;
+	sympy::apply(kernel, matrix, top, wrap, std::vector<std::string>(), ".tr()");
+
+	Ex rule("\\equals");
+	rule.append_child(rule.begin(), tocompute.begin());
+	rule.append_child(rule.begin(), matrix.begin());
+	rules.append_child(rules.begin(), rule.begin());
 	}

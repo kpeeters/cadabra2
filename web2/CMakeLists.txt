@@ -102,6 +102,7 @@ set(PROPS
   DAntiSymmetric
   Depends
   Derivative
+  Determinant
   Diagonal
   DiracBar
   EpsilonTensor

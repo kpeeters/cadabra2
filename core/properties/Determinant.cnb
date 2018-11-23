@@ -1,0 +1,110 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Determinant}{Declares an object to be the determinant of a matrix or metric.}\n\nIn order to declare the name associated to the determinant of a matrix or metric, give it the\n\\prop{Determinant} property, indicating the matrix or metric as an argument. This is mainly used\nto compute determinants in components, but the property can also be used by algorithms which\nonly deal with purely abstract properties, e.g.~covariant derivatives.\n\nThe following example shows how to declare a metric and its components, and then compute\nthe determinant from there."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Determinant}{Declares an object to be the determinant of a matrix or metric.}\n\nIn order to declare the name associated to the determinant of a matrix or metric, give it the\n\\prop{Determinant} property, indicating the matrix or metric as an argument. This is mainly used\nto compute determinants in components, but the property can also be used by algorithms which\nonly deal with purely abstract properties, e.g.~covariant derivatives.\n\nThe following example shows how to declare a metric and its components, and then compute\nthe determinant from there."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[t,~\\discretionary{}{}{} r,~\\discretionary{}{}{} \\phi\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p,~\\discretionary{}{}{} q\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Metric to~}g_{m n}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{g_{t t} = -1, g_{r r} = 1, g_{\\phi \\phi} = (r)**2}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[g_{t t} = -1,~\\discretionary{}{}{} g_{r r} = 1,~\\discretionary{}{}{} g_{\\phi \\phi} = {r}^{2}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "{t,r,\\phi}::Coordinate;\n{m,n,p,q}::Indices(position=fixed, values={t,r,\\phi});\ng_{m n}::Metric;\nrl:= g_{t t} = -1, g_{r r} = 1, g_{\\phi \\phi} = r**2;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Now we declare that $g$ denotes the determinant of the metric $g_{m n}$, and use \\algo{complete} to compute it\ngiven the metric components."
+				}
+			],
+			"hidden" : true,
+			"source" : "Now we declare that $g$ denotes the determinant of the metric $g_{m n}$, and use \\algo{complete} to compute it\ngiven the metric components."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Determinant to~}g.\\end{dmath*}"
+				}
+			],
+			"source" : "g::Determinant(g_{m n});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{g_{t t} = -1, g_{r r} = 1, g_{\\phi \\phi} = (r)**2, g = -(r)**2}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[g_{t t} = -1,~\\discretionary{}{}{} g_{r r} = 1,~\\discretionary{}{}{} g_{\\phi \\phi} = {r}^{2},~\\discretionary{}{}{} g = -{r}^{2}\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "complete(rl, $g$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

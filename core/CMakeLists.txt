@@ -103,6 +103,7 @@ set(PROPERTY_SRC_FILES
 	properties/Depends.cc
 	properties/DependsInherit.cc
 	properties/Derivative.cc
+	properties/Determinant.cc
 	properties/Diagonal.cc
 	properties/DifferentialForm.cc
 	properties/DiracBar.cc
@@ -136,6 +137,7 @@ set(PROPERTY_SRC_FILES
 	properties/Tableau.cc
 	properties/TableauBase.cc
 	properties/TableauSymmetry.cc
+	properties/Trace.cc	
 	properties/Traceless.cc
 	properties/Vielbein.cc
 	properties/Weight.cc
