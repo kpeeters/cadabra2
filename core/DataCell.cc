@@ -104,7 +104,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex squote(R"(`([^']*)')");
 	std::regex linebreak(R"(\\linebreak\[0\])");
 	std::regex tableau(R"(\\tableau\{(\{[^\}]*\})*\})");
-	std::regex ftableau(R"(\\ftableau\{(\{[^\}]*\}[,]?)*\})");		
+	std::regex ftableau(R"(\\ftableau\{(\{[^\}]*\}[,]?)*\})");
+	std::regex begin_tabular(R"(\\begin\{tabular\}\{[^\}]*\})");
+	std::regex end_tabular(R"(\\end\{tabular\})");	
 	std::string res;
 
 	try {
@@ -137,6 +139,8 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, linebreak, "\\mmlToken{mo}[linebreak=\"goodbreak\"]{}");
 		res = std::regex_replace(res, tableau, "\\)<div class=\"young_box\"></div>\\(\\displaystyle");
 		res = std::regex_replace(res, ftableau, "\\)<div class=\"young_box filled\"></div>\\(\\displaystyle");
+		res = std::regex_replace(res, begin_tabular, "<table>");
+		res = std::regex_replace(res, end_tabular, "</table>");		
 		res = std::regex_replace(res, std::regex(R"(\{\\tt ([^\}]*)\})"), "<tt>$1</tt>");
 		}
 	catch(std::regex_error& ex) {

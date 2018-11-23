@@ -1,0 +1,24 @@
+
+# This tests whether free, fixed and independent indices
+# are treated correctly.
+
+{x,y,z}::Symbol;
+{a,b,c}::Indices(name="free_indices", position=free);
+{m,n,p}::Indices(name="fixed_indices", position=fixed);
+print(properties())
+
+ex:= A_{x} + A_{y};
+print("Test 01 passed")
+
+ex:= A_{a} + A^{a};
+lower_free_indices(_);
+tst:= 2 A_{a} - @(ex);
+assert(tst==0)
+print("Test 02 passed")
+
+try:
+    ex:= A_{m} + A^{m};
+    assert(1==0)
+except:
+    print("Test 03 passed")
+
