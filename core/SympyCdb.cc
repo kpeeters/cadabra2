@@ -208,7 +208,7 @@ void sympy::trace(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& tocompute)
 
 	auto top=matrix.begin();
 	std::vector<std::string> wrap;
-	sympy::apply(kernel, matrix, top, wrap, std::vector<std::string>(), ".tr()");
+	sympy::apply(kernel, matrix, top, wrap, std::vector<std::string>(), ".trace()");
 
 	Ex rule("\\equals");
 	rule.append_child(rule.begin(), tocompute.begin());

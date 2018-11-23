@@ -738,22 +738,24 @@ def test36():
 test36()
 
 def test37():
-    {r,t,\phi,\theta}::Coordinate.
-    {\mu,\nu,\rho,\sigma,\lambda,\kappa,\gamma,\chi}::Indices(values={t,r,\phi,\theta}, position=fixed).
-    \partial{#}::PartialDerivative.
-    g_{\mu\nu}::Metric.
-    g^{\mu\nu}::InverseMetric.
-    g::Determinant(g_{\mu\nu}).
-    gt::Trace(g_{\mu\nu}).
-    ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
-           g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
-    complete(ss, $g$)
-#complete(ss, $gt$)
+{r,t,\phi,\theta}::Coordinate.
+{\mu,\nu,\rho,\sigma,\lambda,\kappa,\gamma,\chi}::Indices(values={t,r,\phi,\theta}, position=fixed).
+\partial{#}::PartialDerivative.
+g_{\mu\nu}::Metric.
+g^{\mu\nu}::InverseMetric.
+g::Determinant(g_{\mu\nu}).
+gt::Trace(g_{\mu\nu}).
+ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
+       g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+complete(ss, $g$)
+complete(ss, $gt$)
     ex:= g;
     substitute(ex, ss);
     tst:= -r**4 \sin(\theta)**2 - @(ex);
     assert(tst==0)
     print("Test 37 passed")
+    ex:= gt;
+    substitute(ex, ss);
     
 \tau::Coordinate;        
 {X,Y}::Depends(\tau);        
