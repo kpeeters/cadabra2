@@ -702,7 +702,7 @@ def test34():
     print("Test 34 passed")
 
 test34()
-        
+
 def test35():
     __cdbkernel__=create_scope()
     {r,t,\phi,\theta}::Coordinate.
@@ -711,7 +711,7 @@ def test35():
     g_{\mu\nu}::Metric.
     g^{\mu\nu}::InverseMetric.         
     ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
-            g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+           g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
     complete(ss, $g^{\mu\nu}$)
     ch:= \Gamma^{\mu}_{\nu\rho} = 1/2 g^{\mu\sigma} ( \partial_{\rho}{g_{\nu\sigma}}
                                                 +\partial_{\nu}{g_{\rho\sigma}}
@@ -738,17 +738,17 @@ def test36():
 test36()
 
 def test37():
-{r,t,\phi,\theta}::Coordinate.
-{\mu,\nu,\rho,\sigma,\lambda,\kappa,\gamma,\chi}::Indices(values={t,r,\phi,\theta}, position=fixed).
-\partial{#}::PartialDerivative.
-g_{\mu\nu}::Metric.
-g^{\mu\nu}::InverseMetric.
-g::Determinant(g_{\mu\nu}).
-gt::Trace(g_{\mu\nu}).
-ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
-       g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
-complete(ss, $g$)
-complete(ss, $gt$)
+    {r,t,\phi,\theta}::Coordinate.
+    {\mu,\nu,\rho,\sigma,\lambda,\kappa,\gamma,\chi}::Indices(values={t,r,\phi,\theta}, position=fixed).
+    \partial{#}::PartialDerivative.
+    g_{\mu\nu}::Metric.
+    g^{\mu\nu}::InverseMetric.
+    g::Determinant(g_{\mu\nu}).
+    gt::Trace(g_{\mu\nu}).
+    ss:= { g_{t t} = -(1-2 M/r),  g_{r r} = 1/(1-2 M/r),
+           g_{\theta\theta} = r**2,  g_{\phi\phi}=r**2 \sin(\theta)**2 };
+    complete(ss, $g$)
+    complete(ss, $gt$)
     ex:= g;
     substitute(ex, ss);
     tst:= -r**4 \sin(\theta)**2 - @(ex);
@@ -757,11 +757,11 @@ complete(ss, $gt$)
     ex:= gt;
     substitute(ex, ss);
     
-\tau::Coordinate;        
-{X,Y}::Depends(\tau);        
-\partial{#}::PartialDerivative;
-ex:=\partial_{\tau}{X} \partial_{\tau}{Y};
-evaluate(_);    
+# \tau::Coordinate;        
+# {X,Y}::Depends(\tau);        
+# \partial{#}::PartialDerivative;
+# ex:=\partial_{\tau}{X} \partial_{\tau}{Y};
+# evaluate(_);    
         
 # def test35():
 #     __cdbkernel__=create_scope()
