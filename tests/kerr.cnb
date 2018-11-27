@@ -1,3 +1,5 @@
+kernel(scalar_backend="mathematica")
+
 {t,r,\theta,\phi}::Coordinate;
 {\mu,\nu,\rho,\sigma,\kappa,\lambda}::Indices(values={t,r,\phi,\theta}, position=fixed).
 rs::LaTeXForm("r_s").
@@ -17,8 +19,14 @@ kerr:= { g_{t t}            = - (1 - rs r / \Sigma),
 
 complete(kerr, $g^{\mu\nu}$);
 
-import cdb.relativity as gr
+DeltaSigma:= { \Delta = r**2 - 2 m r + a**2, \Sigma = r**2 + a**2 \cos(\theta)**2 };
 
-ch = gr.christoffel_from_metric()
-evaluate(ch, kerr, rhsonly=True);
+substitute(kerr, DeltaSigma)
+simplify(kerr);
+display(kerr)
+
+# import cdb.relativity as gr
+# 
+# ch = gr.christoffel_from_metric()
+# evaluate(ch, kerr, rhsonly=True);
 
