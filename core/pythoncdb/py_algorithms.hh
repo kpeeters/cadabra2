@@ -25,7 +25,7 @@ namespace cadabra
 		}
 
 	template<class Algo, typename... Args, typename... PyArgs>
-	void def_algo(pybind11::module& m, const char* name, bool deep = true, bool repeat = false, unsigned int depth = 0, PyArgs... args)
+	void def_algo(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... args)
 		{
 		m.def(name,
 			  &apply_algo<Algo, Args...>,

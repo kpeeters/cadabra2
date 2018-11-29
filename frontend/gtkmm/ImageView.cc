@@ -33,10 +33,8 @@ bool ImageView::on_motion_notify_event(GdkEventMotion *event)
 	if(sizing) {
 		auto cw = width_at_press  + (event->x - prev_x);
 		auto ratio = pixbuf->get_width() / ((double)pixbuf->get_height());
-		set_size_request( width_at_press  + (event->x - prev_x),
-								height_at_press + (event->y - prev_y) );
-		
 		image.set(pixbuf->scale_simple(cw, cw/ratio, Gdk::INTERP_BILINEAR));
+		set_size_request( cw, cw/ratio );
 		}
 	return true;
 	}
