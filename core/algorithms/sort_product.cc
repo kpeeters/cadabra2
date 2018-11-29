@@ -62,11 +62,11 @@ Algorithm::result_t sort_product::apply(iterator& st)
 			compare.clear();
 			auto es = compare.equal_subtree(one, two);
 			if(compare.should_swap(one, es)) {
-//				std::cerr << "should swap " << *(one->name) << " with " << *(two->name) << std::endl;
+				// std::cerr << "should swap " << *(one->name) << " with " << *(two->name) << std::endl;
 				int canswap=compare.can_swap(one, two, es);
-//				std::cerr << "can swap? " << *(one->name) << " with " << *(two->name) << std::endl;
+				// std::cerr << "can swap? " << *(one->name) << " with " << *(two->name) << std::endl;
 				if(canswap!=0) {
-//					std::cerr << "swapping " << Ex(one) << " with " << Ex(two) << std::endl;
+					// std::cerr << "swapping " << Ex(one) << " with " << Ex(two) << std::endl;
 					tr.swap(one);
 					std::swap(one,two);  // put the iterators back in order
 					if(canswap==-1) {

@@ -374,7 +374,7 @@ void NotebookWindow::load_css(const std::string& text_colour)
 	data += "*:focus { background-color: #eee; }\n";
 	data += "*:selected { background-color: #ccc; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
-	data += "#ImageView { background-color: yellow; transition-property: padding, background-color; transition-duration: 1s; }\n";
+	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#Console   { padding: 5px; }\n";
 	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 

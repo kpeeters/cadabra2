@@ -10,6 +10,7 @@
 #include "properties/ExteriorDerivative.hh"
 #include "properties/DifferentialForm.hh"
 #include "properties/KroneckerDelta.hh"
+#include "properties/Matrix.hh"
 #include "properties/NumericalFlat.hh"
 #include "properties/PartialDerivative.hh"
 #include "properties/ImaginaryI.hh"
@@ -246,7 +247,8 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 			}
 		}
 
-	// Turn wedge products containing two identical siblings of odd degree to zero.
+	// Turn wedge products containing two identical siblings of odd degree to zero
+	// if they are not matrix objects.
 	if(nm=="\\wedge") {
 		auto s1=tr.begin(it);
 		auto s2=s1;
@@ -255,7 +257,9 @@ bool cleanup_productlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 			if(subtree_compare(0, s1, s2)==0) {
 				auto df1 = k.properties.get<DifferentialForm>(s1);
 				auto df2 = k.properties.get<DifferentialForm>(s2);
-				if(df1 && df2) {
+				auto mat1 = k.properties.get<Matrix>(s1);
+				auto mat2 = k.properties.get<Matrix>(s2);
+				if(df1 && df2 && !(mat1 && mat2) ) {
 					auto degree1 = df1->degree(k.properties, s1);
 					auto degree2 = df2->degree(k.properties, s2);
 					if(degree1.is_rational() && degree2.is_rational()) {

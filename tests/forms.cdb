@@ -1,0 +1,12 @@
+
+A::Matrix;
+A::DifferentialForm(degree=1);
+F::DifferentialForm(degree=2);
+
+ex:= A ^ A ^ A;
+assert(ex!=0)
+print("Test 01 passed")
+
+ex:= A ^ F ^ A;
+sort_product(_);
+

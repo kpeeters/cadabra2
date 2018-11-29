@@ -58,6 +58,7 @@ endforeach()
 #
 set(RTESTS
   index_positions
+  forms
   packages
   modules
   integrals
