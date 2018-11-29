@@ -15,7 +15,8 @@ namespace cadabra
 
 		Ex::iterator it = ex->begin();
 		if (ex->is_valid(it)) {
-			//ProgressMonitor* pm = get_progress_monitor();
+			ProgressMonitor* pm = get_progress_monitor();
+			algo.set_progress_monitor(pm);
 			ex->update_state(algo.apply_generic(it, deep, repeat, depth));
 			call_post_process(*get_kernel_from_scope(), ex);
 			}
