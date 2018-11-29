@@ -30,10 +30,10 @@ namespace cadabra
 		m.def(name,
 			  &apply_algo<Algo, Args...>,
 			  pybind11::arg("ex"),
-			  std::forward<PyArgs>(args)...,
 			  pybind11::arg("deep") = deep,
 			  pybind11::arg("repeat") = repeat,
 			  pybind11::arg("depth") = depth,
+			  std::forward<PyArgs>(args)...,
 			  pybind11::doc(read_manual("algorithms", name).c_str()),
 			  pybind11::return_value_policy::reference_internal);
 		}
@@ -60,10 +60,10 @@ namespace cadabra
 		m.def(name,
 			  &apply_algo_preorder<Algo, Args...>,
 			  pybind11::arg("ex"),
-			  std::forward<PyArgs>(args)...,
 			  pybind11::arg("deep") = deep,
 			  pybind11::arg("repeat") = repeat,
 			  pybind11::arg("depth") = depth,
+			  std::forward<PyArgs>(args)...,
 			  pybind11::doc(read_manual("algorithms", name).c_str()),
 			  pybind11::return_value_policy::reference_internal);
 		}
