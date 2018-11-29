@@ -9,7 +9,7 @@
 namespace cadabra
 	{
 	template <class Algo, typename... Args>
-	Ex_ptr apply_algo(Ex_ptr ex, Args... args, bool deep, bool repeat, unsigned int depth)
+	Ex_ptr apply_algo(Ex_ptr ex, bool deep, bool repeat, unsigned int depth, Args... args)
 		{
 		Algo algo(*get_kernel_from_scope(), *ex, args...);
 
@@ -39,13 +39,14 @@ namespace cadabra
 		}
 
 	template <class Algo, typename... Args>
-	Ex_ptr apply_algo_preorder(Ex_ptr ex, Args... args, bool deep, bool repeat, unsigned int depth)
+	Ex_ptr apply_algo_preorder(Ex_ptr ex, bool deep, bool repeat, unsigned int depth, Args... args)
 		{
 		Algo algo(*get_kernel_from_scope(), *ex, args...);
 
 		Ex::iterator it = ex->begin();
 		if (ex->is_valid(it)) {
-			//ProgressMonitor* pm = get_progress_monitor();
+			ProgressMonitor* pm = get_progress_monitor();
+			algo.set_progress_monitor(pm);
 			ex->update_state(algo.apply_pre_order(repeat));
 			call_post_process(*get_kernel_from_scope(), ex);
 			}
