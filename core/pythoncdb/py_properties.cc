@@ -9,6 +9,7 @@
 #include "properties/Depends.hh"
 #include "properties/DependsInherit.hh"
 #include "properties/Derivative.hh"
+#include "properties/Determinant.hh"
 #include "properties/DifferentialForm.hh"
 #include "properties/DiracBar.hh"
 #include "properties/GammaMatrix.hh"
@@ -44,6 +45,7 @@
 #include "properties/Symmetric.hh"
 #include "properties/Tableau.hh"
 #include "properties/TableauSymmetry.hh"
+#include "properties/Trace.hh"
 #include "properties/Traceless.hh"
 #include "properties/Vielbein.hh"
 #include "properties/Weight.hh"
@@ -137,6 +139,7 @@ namespace cadabra
 		def_prop<DAntiSymmetric>(m);
 		def_prop<Depends>(m);
 		def_prop<Derivative>(m);
+		def_prop<Determinant>(m);
 		def_prop<Diagonal>(m);
 		def_prop<DifferentialForm>(m);
 		def_prop<Distributable>(m);
@@ -169,6 +172,7 @@ namespace cadabra
 		def_prop<Symmetric>(m);
 		def_prop<Tableau>(m);
 		def_prop<TableauSymmetry>(m);
+		def_prop<Trace>(m);
 		def_prop<Traceless>(m);
 		def_prop<Vielbein>(m);
 		def_prop<InverseVielbein>(m);
