@@ -1,7 +1,7 @@
 
 #include "ExNode.hh"
 #include "Cleanup.hh"
-#include "PythonCdb.hh"
+#include "pythoncdb/py_kernel.hh"
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 #include <pybind11/operators.h>
