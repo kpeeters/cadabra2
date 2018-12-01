@@ -8,21 +8,51 @@
 
 namespace cadabra
 	{
-	template <class Algo, typename... Args>
-	Ex_ptr apply_algo(Ex_ptr ex, Args... args, bool deep, bool repeat, unsigned int depth)
+	template <class Algo>
+	Ex_ptr apply_algo_base(Algo& algo, Ex_ptr ex, bool deep, bool repeat, unsigned int depth, bool pre_order=false)
 		{
-		Algo algo(*get_kernel_from_scope(), *ex, args...);
-
 		Ex::iterator it = ex->begin();
 		if (ex->is_valid(it)) {
 			ProgressMonitor* pm = get_progress_monitor();
 			algo.set_progress_monitor(pm);
-			ex->update_state(algo.apply_generic(it, deep, repeat, depth));
+			if(pre_order)
+				ex->update_state(algo.apply_pre_order(repeat));				
+			else 
+				ex->update_state(algo.apply_generic(it, deep, repeat, depth));
 			call_post_process(*get_kernel_from_scope(), ex);
 			}
 
 		return ex;
 		}
+		
+	template <class Algo>
+	Ex_ptr apply_algo(Ex_ptr ex, bool deep, bool repeat, unsigned int depth)
+		{
+		Algo algo(*get_kernel_from_scope(), *ex);
+		return apply_algo_base(algo, ex, deep, repeat, depth, false);
+		}
+
+	template <class Algo, typename Arg1>
+	Ex_ptr apply_algo(Ex_ptr ex, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
+		{
+		Algo algo(*get_kernel_from_scope(), *ex, arg1);
+		return apply_algo_base(algo, ex, deep, repeat, depth, false);
+		}
+
+	template <class Algo, typename Arg1, typename Arg2>
+	Ex_ptr apply_algo(Ex_ptr ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
+		{
+		Algo algo(*get_kernel_from_scope(), *ex, arg1, arg2);
+		return apply_algo_base(algo, ex, deep, repeat, depth, false);
+		}
+
+	template <class Algo, typename Arg1, typename Arg2, typename Arg3>
+	Ex_ptr apply_algo(Ex_ptr ex, Arg1 arg1, Arg2 arg2, Arg3 arg3, bool deep, bool repeat, unsigned int depth)
+		{
+		Algo algo(*get_kernel_from_scope(), *ex, arg1, arg2, arg3);
+		return apply_algo_base(algo, ex, deep, repeat, depth, false);
+		}
+
 
 	template<class Algo, typename... Args, typename... PyArgs>
 	void def_algo(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... pyargs)
@@ -38,20 +68,18 @@ namespace cadabra
 			  pybind11::return_value_policy::reference_internal);
 		}
 
-	template <class Algo, typename... Args>
-	Ex_ptr apply_algo_preorder(Ex_ptr ex, Args... args, bool deep, bool repeat, unsigned int depth)
+	template <class Algo, typename Arg1>
+	Ex_ptr apply_algo_preorder(Ex_ptr ex, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
 		{
-		Algo algo(*get_kernel_from_scope(), *ex, args...);
+		Algo algo(*get_kernel_from_scope(), *ex, arg1);
+		return apply_algo_base(algo, ex, deep, repeat, depth, true);
+		}
 
-		Ex::iterator it = ex->begin();
-		if (ex->is_valid(it)) {
-			ProgressMonitor* pm = get_progress_monitor();
-			algo.set_progress_monitor(pm);
-			ex->update_state(algo.apply_pre_order(repeat));
-			call_post_process(*get_kernel_from_scope(), ex);
-			}
-
-		return ex;
+	template <class Algo, typename Arg1, typename Arg2>
+	Ex_ptr apply_algo_preorder(Ex_ptr ex, Arg1 arg1, Arg2 arg2, bool deep, bool repeat, unsigned int depth)
+		{
+		Algo algo(*get_kernel_from_scope(), *ex, arg1, arg2);
+		return apply_algo_base(algo, ex, deep, repeat, depth, true);
 		}
 
 	template<class Algo, typename... Args, typename... PyArgs>
