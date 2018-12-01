@@ -1,3 +1,6 @@
+
+#include "Config.hh"
+
 #include "py_ex.hh"
 #include "py_helpers.hh"
 #include "py_globals.hh"
@@ -502,17 +505,8 @@ namespace cadabra
 		std::vector<std::string> av;
 		for (auto& arg : args)
 			av.push_back(arg.cast<std::string>());
-		return apply_algo_preorder<map_sympy, std::string, std::vector<std::string>>(ex, true, false, 0, head, av);
+		return apply_algo_preorder<map_sympy, std::string, std::vector<std::string>>(ex, head, av, true, false, 0);
 		}
-
-#ifdef MATHEMATICA_FOUND
-	Ex_ptr map_mma_wrapper(Ex_ptr ex, std::string head)
-		{
-		map_mma algo(*get_kernel_from_scope(), *ex, head);
-		return dispatch_base(ex, algo, true, false, 0, true);
-		}
-#endif
-
 
 	void init_ex(py::module& m)
 		{
@@ -589,12 +583,9 @@ namespace cadabra
 			  pybind11::arg("ex"),
 			  pybind11::arg("function") = "",
 			  pybind11::return_value_policy::reference_internal);
-	#ifdef MATHEMATICA_FOUND
-		m.def("map_mma", &map_mma_wrapper,
-			  pybind11::arg("ex"),
-			  pybind11::arg("function") = "",
-			  pybind11::return_value_policy::reference_internal);
-	#endif
+#ifdef MATHEMATICA_FOUND
+		def_algo<map_mma, std::string>(m, "map_mma", false, false, 0, pybind11::arg("function") = "");
+#endif
 
 		m.def("terms", &terms);
 

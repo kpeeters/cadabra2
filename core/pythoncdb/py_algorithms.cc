@@ -1,4 +1,7 @@
 #include "py_algorithms.hh"
+
+#include <pybind11/stl.h>
+
 #include "../Algorithm.hh"
 
 #include "../algorithms/canonicalise.hh"
@@ -93,9 +96,9 @@ namespace cadabra
 		def_algo<sort_sum>(m, "sort_sum", true, false, 0);
 		def_algo<tabdimension>(m, "tab_dimension", true, false, 0);
 		def_algo<young_project_product>(m, "young_project_product", true, false, 0);
+		def_algo<drop_weight, Ex>(m, "drop_weight", false, false, 0, py::arg("condition") = Ex{});
 		def_algo<complete, Ex>(m, "complete", false, false, 0, py::arg("add"));
 		def_algo<decompose, Ex>(m, "decompose", false, false, 0, py::arg("basis"));
-		def_algo<drop_weight, Ex>(m, "drop_weight", false, false, 0, py::arg("condition"));
 		def_algo<eliminate_metric, Ex>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex{});
 		def_algo<keep_weight, Ex>(m, "keep_weight", false, false, 0, py::arg("condition"));
 		def_algo<lower_free_indices, bool>(m, "lower_free_indices", true, false, 0, py::arg("lower") = true);
@@ -126,6 +129,5 @@ namespace cadabra
 		def_algo<split_gamma, bool>(m, "split_gamma", true, false, 0, py::arg("on_back"));
 		def_algo<split_index, Ex>(m, "split_index", true, false, 0, py::arg("rules"));
 		def_algo<unwrap, Ex>(m, "unwrap", true, false, 0, py::arg("wrapper") = Ex{});
-
 		}
 	}

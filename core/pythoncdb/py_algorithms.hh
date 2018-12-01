@@ -9,7 +9,7 @@
 namespace cadabra
 	{
 	template <class Algo, typename... Args>
-	Ex_ptr apply_algo(Ex_ptr ex, bool deep, bool repeat, unsigned int depth, Args... args)
+	Ex_ptr apply_algo(Ex_ptr ex, Args... args, bool deep, bool repeat, unsigned int depth)
 		{
 		Algo algo(*get_kernel_from_scope(), *ex, args...);
 
@@ -25,21 +25,21 @@ namespace cadabra
 		}
 
 	template<class Algo, typename... Args, typename... PyArgs>
-	void def_algo(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... args)
+	void def_algo(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... pyargs)
 		{
 		m.def(name,
-			  &apply_algo<Algo, Args...>,
+   		  &apply_algo<Algo, Args...>,
 			  pybind11::arg("ex"),
+			  std::forward<PyArgs>(pyargs)...,
 			  pybind11::arg("deep") = deep,
 			  pybind11::arg("repeat") = repeat,
 			  pybind11::arg("depth") = depth,
-			  std::forward<PyArgs>(args)...,
 			  pybind11::doc(read_manual("algorithms", name).c_str()),
 			  pybind11::return_value_policy::reference_internal);
 		}
 
 	template <class Algo, typename... Args>
-	Ex_ptr apply_algo_preorder(Ex_ptr ex, bool deep, bool repeat, unsigned int depth, Args... args)
+	Ex_ptr apply_algo_preorder(Ex_ptr ex, Args... args, bool deep, bool repeat, unsigned int depth)
 		{
 		Algo algo(*get_kernel_from_scope(), *ex, args...);
 
@@ -55,15 +55,15 @@ namespace cadabra
 		}
 
 	template<class Algo, typename... Args, typename... PyArgs>
-	void def_algo_preorder(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... args)
+	void def_algo_preorder(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... pyargs)
 		{
 		m.def(name,
 			  &apply_algo_preorder<Algo, Args...>,
 			  pybind11::arg("ex"),
+			  std::forward<PyArgs>(pyargs)...,
 			  pybind11::arg("deep") = deep,
 			  pybind11::arg("repeat") = repeat,
 			  pybind11::arg("depth") = depth,
-			  std::forward<PyArgs>(args)...,
 			  pybind11::doc(read_manual("algorithms", name).c_str()),
 			  pybind11::return_value_policy::reference_internal);
 		}
