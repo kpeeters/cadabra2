@@ -173,22 +173,17 @@ the 'Education' menu.
 Linux (openSUSE)
 ~~~~~~~~~~~~~~~~
 
-For OpenSUSE (tested on 'Leap', probably also fine with minor changes
-for 'Tumbleweed') you first need to add the `devel:libraries:c_c++`
-repository. To do this, start YaST, go to Software/Software
-Repositories/Add/Add by URL.  Use the URL
+For OpenSUSE (tested on 'Leap 15.0', probably also fine with minor
+changes for 'Tumbleweed') you first need to install the dependencies
+with::
 
-    http://download.opensuse.org/repositories/devel:/libraries:/c_c++/openSUSE_Leap_42.1
-
-After that, dependencies can be installed with::
-
-    sudo zypper install cmake python3-devel gcc-c++ \
+    sudo zypper install git cmake python3-devel gcc-c++ \
                   pcre-devel gmp-devel libuuid-devel sqlite-devel \
                   gtkmm3-devel  \
                   texlive python3-matplotlib \
-                  python3-pip \
-                  boost_1_61-devel 
-    sudo pip3 install sympy
+                  python3-sympy \
+                  libboost_system1_66_0-devel libboost_filesystem1_66_0-devel \
+                  libboost_date_time1_66_0-devel libboost_program_options1_66_0-devel 
 
 This platform receives less testing so please get in touch if you run
 into any issues. You need to clone the cadabra2 git repository (if you
