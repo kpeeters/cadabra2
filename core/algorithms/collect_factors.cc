@@ -30,7 +30,8 @@ void collect_factors::fill_hash_map(iterator it)
 		sibling_iterator chsib=tr.begin(sib);
 		bool dontcollect=false;
 		while(chsib!=tr.end(sib)) {
-			 const Symbol     *smb=kernel.properties.get<Symbol>(chsib);
+			const Symbol     *smb=kernel.properties.get<Symbol>(chsib, true);
+			// std::cerr << chsib << ": " << smb << std::endl;
 			 if((chsib->fl.parent_rel==str_node::p_sub || chsib->fl.parent_rel==str_node::p_super) &&
 				 chsib->is_rational()==false && smb==0) {
 				dontcollect=true;

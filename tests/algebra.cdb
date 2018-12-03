@@ -318,6 +318,22 @@ def test26():
     print("Test 26 passed")
 
 test26()
+
+def test27():
+    __cdbkernel__=create_scope()
+    \dagger::Symbol;
+    ex:= A^{\dagger} A^{\dagger};
+    collect_factors(_)
+    tst:= (A^{\dagger})**2 - @(ex);
+    assert(tst==0)
+    print("Test 27a passed")
+    ex:= B^{m} B^{m};
+    collect_factors(_)
+    tst:= B^{m} B^{m} - @(ex);
+    assert(tst==0)
+    print("Test 27b passed")
+
+test27()
         
   
 # \bar{#}::Accent.
