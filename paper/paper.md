@@ -57,7 +57,7 @@ correspondence [@christensen; @buchel; @koile], and general relativity
 [@durkee], to name a few. The software is supported by an on-line Q\&A
 forum, a collection of tutorials and on-line manual pages, and has an
 active user base. The source code for ``Cadabra2`` has been archived
-to Zenodo with the DOI [@cadabra_zenodo].
+to Zenodo with the DOI listed in [@cadabra_zenodo].
 
 # Acknowledgements
 
