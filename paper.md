@@ -59,5 +59,12 @@ forum, a collection of tutorials and on-line manual pages, and has an
 active user base. The source code for ``Cadabra2`` has been archived
 to Zenodo with the DOI [@cadabra_zenodo].
 
+# Acknowledgements
+
+Special thanks to José M. Martín-García, James Allen and Dominic Price
+for various contributions to the code, and the Software Sustainability
+Institute and the Institute of Advanced Study at Durham University for
+support.
+
 # References
 
