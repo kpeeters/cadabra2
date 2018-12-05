@@ -1,10 +1,11 @@
 ---
-title: 'Cadabra2: A field-theory motivated approach to computer algebra'
+title: 'Cadabra2: computer algebra for field theory revisited'
 tags:
   - C++
   - Python
   - field theory
-  - tensor field theory
+  - tensor algebra
+  - physics
 authors:
   - name: Kasper Peeters
     orcid: 0000-0002-3077-8193
@@ -18,24 +19,24 @@ bibliography: paper.bib
 
 # Summary
 
-Tensor field theory is an area of mathematics required in a wide range
-of theoretical physics problems, from general relativity to
-high-energy particle physics and condensed matter theory. Symbolic
-computations in this field tend to be difficult to do with mainstream
-computer algebra systems, because the required algorithmic
-functionality is often simply not avaiable, but also because the
-standard notation tends to hide a lot of implicit mathematical
-structure which cannot easily be hidden.  ``Cadabra2`` is an open
-source computer algebra system specifically written for the solution
-of tensor field theory problems. It enables manipulation of
-Lagrangians, computation of equations of motion, analysis of
-symmetries and so on in an interactive notebook interface, using an
-input format which closely resembles standard mathematical notation,
-combined with a familiar Python language to manipulate expressions.
+Field theory is an area of mathematics required in a wide range of
+theoretical physics problems, from general relativity to high-energy
+particle physics and condensed matter theory. Symbolic computations in
+this field tend to be difficult to do with mainstream computer algebra
+systems, because the required algorithmic functionality is often
+simply not available, but also because the standard notation tends to
+hide a lot of implicit mathematical structure which cannot easily be
+represented.  ``Cadabra2`` is an open source computer algebra system
+specifically written for the solution of tensor field theory
+problems. It enables manipulation of Lagrangians, computation of
+equations of motion, analysis of symmetries and so on in an
+interactive notebook interface, using an input format which closely
+resembles standard mathematical notation, combined with a familiar
+Python environment to manipulate expressions.
 
 The core of ``Cadabra2`` consists of a set of algorithms for tensor
 field theory written in C++, which are in part based on functionality
-of an earlier version of the software [@cadabrahep, @Peeters:2006kp].
+of an earlier version of the software [@cadabra_hep; @cadabra_cpc].
 These algorithms take care of specific tensor aspects of computer
 algebra, such as dummy indices, implicit coordinate dependence,
 implicit index lines and commutativity properties. All standard scalar
@@ -49,17 +50,14 @@ client, as well as a graphical cell-based notebook built using gtkmm,
 with TeX-driven maths typesetting.  The software builds and runs on
 Linux, macOS and Windows.
 
-``Cadabra2`` has been used to derive results in a variety of recent
-papers, in areas such as supergravity [@geissbuhler2011double,
-@butter2017component], cosmology [@malik2009cosmological],
-applications of the string/gauge theory correspondence
-[@christensen2014boundary,@buchel2008universal,koile2015hadron], and
-general relativity [@durkee2010generalization]. The software is
-supported by an on-line Q\&A forum and an active user base.
-
-
-# Acknowledgements
-
-
+``Cadabra2`` has been used to derive or verify results in a variety of
+recent papers, in areas such as supergravity [@geissbuhler; @butter],
+cosmology [@malik], applications of the string/gauge theory
+correspondence [@christensen; @buchel; @koile], and general relativity
+[@durkee], to name a few. The software is supported by an on-line Q\&A
+forum, a collection of tutorials and on-line manual pages, and has an
+active user base. The source code for ``Cadabra2`` has been archived
+to Zenodo with the DOI [@cadabra_zenodo].
 
 # References
+
