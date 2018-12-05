@@ -1,0 +1,17 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+		"Kasper Peeters"
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/kpeeters/cadabra2",
+  "datePublished": "2018-12-05",
+  "dateModified": "2018-12-05",
+  "dateCreated": "2018-12-05",
+  "description": "Computer algebra for field theory revisited",
+  "keywords": "physics, field theory, tensors, computer algebra",
+  "license": "GPL v3.0",
+  "title": "Cadabra2",
+  "version": "https://doi.org/10.5281/zenodo.1842262"
+}
