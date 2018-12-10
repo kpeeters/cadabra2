@@ -246,6 +246,9 @@ void IndexClassifier::classify_indices_up(Ex::iterator it, index_map_t& ind_free
 		// reaching a comma node is like reaching the top of an expression.
 		return;
 		}
+	else if(!inh) {
+		return;
+		}
 
 // FIXME: do something with these warnings!!
 //	txtout << "Index classification for this expression failed because of " 

@@ -37,7 +37,7 @@
 
 #include <sstream>
 
-//#define DEBUG
+#define DEBUG
 
 using namespace cadabra;
 
@@ -614,7 +614,9 @@ void Algorithm::report_progress(const std::string& str, int todo, int done, int 
 
 bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo) 
 	{
-//	std::cerr << "renaming in " << Ex(two) << std::endl;
+#ifdef DEBUG
+	std::cerr << "renaming in " << two << std::endl;
+#endif
 //	std::cout << "full story " << *two->name << std::endl;
 //	print_classify_indices(two);
 //	std::cout << "replacement" << std::endl;
@@ -631,10 +633,14 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
 		}
 	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
-	// std::cerr << "dummies of " << *two->name << std::endl;
-	// for(auto& ii: ind_dummy) {
-	// 	std::cerr << ii.first << std::endl;
-	// 	}
+#ifdef DEBUG
+	std::cerr << "dummies of " << *two->name << std::endl;
+	for(auto& ii: ind_dummy) 
+	 	std::cerr << ii.first << std::endl;
+	std::cerr << "free indices above us" << std::endl;
+	for(auto& ii: ind_free_full) 
+	 	std::cerr << ii.first << std::endl;
+#endif
 
 	index_map_t must_be_empty;
 	index_map_t newly_generated;
