@@ -149,6 +149,9 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 
 bool Cadabra::open_help(const std::string& nm, const std::string& title) 
 	{
+#ifdef DEBUG
+	std::cerr << "Opening help file " << nm << std::endl;
+#endif
 	std::ifstream fl(nm);
 	if(fl) {
 		auto nw = new cadabra::NotebookWindow(this, true);

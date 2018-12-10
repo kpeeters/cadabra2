@@ -37,7 +37,7 @@
 
 #include <sstream>
 
-#define DEBUG
+// #define DEBUG
 
 using namespace cadabra;
 

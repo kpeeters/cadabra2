@@ -1260,10 +1260,68 @@ int Ex_comparator::can_swap_ilist_ilist(Ex::iterator obj1, Ex::iterator obj2)
 	return sign;
 	}
 
+bool Ex_comparator::can_swap_different_indexsets(Ex::iterator obj1, Ex::iterator obj2) 
+	{
+	std::set<const Indices *> index_sets1;
+	// std::cerr << "Are " << obj1 << " and " << obj2 << " swappable?" << std::endl;
+
+	index_iterator it1=index_iterator::begin(properties, obj1);
+	while(it1!=index_iterator::end(properties, obj1)) {
+		auto ind = properties.get<Indices>(it1, true);
+		if(!ind) return false;
+		index_sets1.insert(ind);
+		++it1;
+		}
+	index_iterator it2=index_iterator::begin(properties, obj2);
+	while(it2!=index_iterator::end(properties, obj2)) {
+		auto ind = properties.get<Indices>(it2, true);
+		if(!ind) return false;
+		if(index_sets1.find(ind)!=index_sets1.end()) {
+			// std::cerr << "NO" << std::endl;
+			return false;
+			}
+		++it2;
+		}
+	// std::cerr << "YES" << std::endl;		
+	return true;
+	}
+
 int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_comparison,
-										 bool ignore_implicit_indices) 
+									 bool ignore_implicit_indices) 
 	{
 	// std::cerr << "can_swap " << *one->name << " " << *two->name << " " << ignore_implicit_indices << std::endl;
+
+	// Explicitly declared commutation behaviour goes first.
+	const CommutingBehaviour *com = properties.get_composite<CommutingBehaviour>(one, two, true);
+	if(com) 
+		return com->sign();
+
+
+	// If both objects have implicit indices, we cannot swap the
+	// objects because that would re-order the index line. The sole
+	// exception is when these indices are explicitly stated to be in
+	// different sets.
+	
+	const ImplicitIndex *ii1 = properties.get_composite<ImplicitIndex>(one);
+	const ImplicitIndex *ii2 = properties.get_composite<ImplicitIndex>(two);
+	if(!ignore_implicit_indices) {
+		if(ii1) {
+			if(ii1->explicit_form.size()==0) {
+				if(ii2) return 0; // nothing known about explicit form
+				}
+			else one=ii1->explicit_form.begin();
+			}
+		if(ii2) {
+			if(ii2->explicit_form.size()==0) {
+				if(ii1) return 0; // nothing known about explicit form
+				}
+			else two=ii2->explicit_form.begin();
+			}
+		// Check that indices in one and two are in mutually exclusive sets.
+		if(ii1 && ii2) 
+			if(!can_swap_different_indexsets(one, two))
+				return false;
+		}
 
 	// Differential forms in a product cannot be moved through each
 	// other except when the degree of one of them is zero.  In a wedge
@@ -1285,43 +1343,6 @@ int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_
 				if( (d1*d2) % 2 == 1) return -1;
 				return 1;
 				}
-			}
-		}
-	
-	const ImplicitIndex *ii1 = properties.get_composite<ImplicitIndex>(one);
-	const ImplicitIndex *ii2 = properties.get_composite<ImplicitIndex>(two);
-
-	// When both objects carry an implicit index but the index lines are not connected,
-	// we should not be using explicit commutation rules, as this would mess up the
-	// index lines and make the expression meaningless.
-	// FIXME: this would ideally make use of index and conjugate index lines.
-
-	const DiracBar *db2 = properties.get_composite<DiracBar>(two);
-	if(! (ii1 && ii2 && db2) ) {
-
-		// First of all, check whether there is an explicit declaration for the commutativity 
-		// of these two symbols.
-//		std::cout << *one->name << " explicit " << *two->name << std::endl;
-		const CommutingBehaviour *com = properties.get_composite<CommutingBehaviour>(one, two, true);
-		
-		if(com) {
-//			std::cout << typeid(com).name() << std::endl;
-//			std::cout << "explicit " << com->sign() << std::endl;
-			return com->sign();
-			}
-		}
-	
-	if(ignore_implicit_indices==false) {
-		// Two implicit-index objects cannot move through each other if they have the
-		// same type of implicit index.
-//		std::cout << "can_swap " << *one->name << " " << *two->name << std::endl;
-
-		if(ii1 && ii2) {
-			if(ii1->set_names.size()==0 && ii2->set_names.size()==0) return 0; // empty index name
-			for(size_t n1=0; n1<ii1->set_names.size(); ++n1)
-				for(size_t n2=0; n2<ii2->set_names.size(); ++n2)
-					if(ii1->set_names[n1]==ii2->set_names[n2])
-						return 0;
 			}
 		}
 

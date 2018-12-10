@@ -71,6 +71,7 @@ set(RTESTS
   factor
   field_theory
   gamma_paper
+  implicit
   fierz
   selecting
   kaluza_klein

@@ -399,8 +399,8 @@ test21()
 
 def test22():
     __cdbkernel__=create_scope()
-    {\alpha,\beta,\gamma}::Indices(spinor).
-    {\theta,\lambda}::ImplicitIndex(spinor).
+    {\alpha,\beta,\gamma}::Indices().
+    {\theta,\lambda}::ImplicitIndex().
     {\alpha,\beta,\gamma,\theta,\lambda}::AntiCommuting.
     D{#}::Derivative.
     obj22:= D_{\alpha}{\theta \lambda};
