@@ -29,6 +29,7 @@
   #include <boost/core/demangle.hpp>
 #endif
 
+#include "properties/Accent.hh"
 #include "properties/Derivative.hh"
 #include "properties/Indices.hh"
 #include "properties/Coordinate.hh"
@@ -807,9 +808,12 @@ bool Algorithm::is_single_term(iterator it)
 	   && *it->name!="\\comma" && *it->name!="\\equals" && *it->name!="\\arrow") {
 
 		if(tr.is_head(it) || *tr.parent(it)->name=="\\equals" || *tr.parent(it)->name=="\\int") return true;
-		else {
-			if(*tr.parent(it)->name=="\\sum")
-				return true;
+		else if(*tr.parent(it)->name=="\\sum")
+			return true;
+		else if(*tr.parent(it)->name!="\\prod" && it->fl.parent_rel==str_node::parent_rel_t::p_none
+				  && kernel.properties.get<Accent>(tr.parent(it))==0 ) {
+			std::cerr << "Found single term in " << tr.parent(it) << std::endl;
+			return true;
 			}
 		}
 	return false;

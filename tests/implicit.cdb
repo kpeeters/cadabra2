@@ -14,21 +14,31 @@ def test01():
 
 test01()
 
-{a,b,c,d}::Indices(spinor);
-Tr{#}::Trace(indices=spinor);
-#A::ImplicitIndex(A_{a b});
-#B::ImplicitIndex(B_{a b});    
-ex:= Tr( A B A C B );
-untrace(_);
+def test02():
+    __cdbkernel__=create_scope()
+    {a,b,c,d}::Indices(spinor);
+    Tr{#}::Trace(indices=spinor);
+    A::ImplicitIndex(A_{a b});
+    B::ImplicitIndex(B_{a b});    
+    ex:= Tr( A B A C B ) - Tr( C );
+    untrace(_);
+    tst:= C Tr( A B A B ) - C Tr(1) - @(ex);
+    assert(tst==0)
+    print("Test 02 passed")
 
-
-{a,b,c,d}::Indices(spinor);
-\sigma^{\mu}::ImplicitIndex(\sigma^{\mu a}_{b});    
-Tr{#}::Trace(indices=spinor);
-ex:= Tr( \sigma^{\mu} q \sigma^{\nu} );
-untrace(_);
+test02()
+        
+def test03():
+    __cdbkernel__=create_scope()
+    {a,b,c,d}::Indices(spinor);
+    \sigma^{\mu}::ImplicitIndex(\sigma^{\mu a}_{b});    
+    Tr{#}::Trace(indices=spinor);
+    ex:= Tr( \sigma^{\mu} q \sigma^{\nu} );
+    untrace(_);
+    tst:= q Tr( \sigma^{\mu} \sigma^{\nu} ) - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
     
-    
-
-
+test03()
+        
 

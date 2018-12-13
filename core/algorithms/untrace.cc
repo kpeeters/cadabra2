@@ -19,7 +19,7 @@ bool untrace::can_apply(iterator st)
 		auto sib=tr.begin(st);
 		if(sib==tr.end(st))      return false;
 		if(*sib->name=="\\prod") return true;
-		if(is_single_term(sib))   return true;
+		if(is_single_term(sib))  return true;
 		}
 	return false;
 	}
