@@ -23,6 +23,9 @@ bool Trace::parse(Kernel&, keyval_t& keyvals)
 	keyval_t::const_iterator kv=keyvals.find("object");
 	if(kv!=keyvals.end())
 		obj = kv->second;
+	kv=keyvals.find("indices");
+	if(kv!=keyvals.end()) 
+		index_set_name=*(kv->second->name);
 	return true;
 	}
 

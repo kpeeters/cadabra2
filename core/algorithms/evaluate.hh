@@ -14,6 +14,8 @@
 	See tests/components.cdb for basic samples. 
 
 	Components nodes have the following structure:
+	
+	\verbatim
 
      \components
         _{m}            // index names/types
@@ -35,13 +37,19 @@
      vals:= { A_{t t} -> r, A_{r r} -> r**2, A_{t \phi} -> t, B_{t t} -> 1 };
      evaluate(ex, crds, vals);
      tst:= r * ( r + 1 ) + r**2 * r**2 + t*t - @(ex);
+	  
+	\endverbatim
 
 	The algorithm performs
 	the following steps.  First, all free and dummy indices are
 	classified using members of Algorithm (maybe later?). For all indices, the 'crds'
 	argument to the algorithm is scanned for a
 
+	\verbatim
+
         m -> { a,b,c }
+
+	\endverbatim
 
    type pattern. 
 
@@ -60,8 +68,12 @@
      In a product node, find all dummies and free indices. Create a 
      set of all index value sets, e.g.
 
+	  \verbatim 
+
         {m, n, p} ->
          { {t, t, t}, {r,t,t}, {t,r,t}, ... }
+
+	  \endverbatim
 
      For each such index value set, lookup replacement rules.
 

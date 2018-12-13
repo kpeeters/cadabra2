@@ -16,6 +16,7 @@ namespace cadabra {
 			virtual void        latex(std::ostream&) const override;
 			
 			Ex obj;
+			std::string index_set_name; // refers to Indices::set_name
 	};
 
 }

@@ -1,0 +1,34 @@
+
+def test01():
+    __cdbkernel__=create_scope()
+    {a,b,c,d}::Indices(type1);
+    {m,n,p,q}::Indices(type2);
+    A::ImplicitIndex(A_{m n});
+    C::ImplicitIndex(C_{m n});
+    D::ImplicitIndex(D_{a b});
+    ex:= D C A D;
+    sort_product(_)
+    tst:= C A D D - @(ex);
+    assert(tst==0)
+    print("Test 01 passed")
+
+test01()
+
+{a,b,c,d}::Indices(spinor);
+Tr{#}::Trace(indices=spinor);
+#A::ImplicitIndex(A_{a b});
+#B::ImplicitIndex(B_{a b});    
+ex:= Tr( A B A C B );
+untrace(_);
+
+
+{a,b,c,d}::Indices(spinor);
+\sigma^{\mu}::ImplicitIndex(\sigma^{\mu a}_{b});    
+Tr{#}::Trace(indices=spinor);
+ex:= Tr( \sigma^{\mu} q \sigma^{\nu} );
+untrace(_);
+    
+    
+
+
+

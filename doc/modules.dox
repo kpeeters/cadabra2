@@ -38,17 +38,19 @@
 ///
 /// \defgroup scalar Scalar algebra
 /// \ingroup core
-/// Functionality to make Cadabra interface with the scalar computer
-/// algebra systems (e.g. Sympy and Mathematica). It converts scalar
+/// Functionality to make Cadabra interface with scalar computer
+/// algebra systems. It converts scalar
 /// parts of Cadabra expressions ('things without indices') to one of
 /// these systems, runs them through, and then converts back to Cadabra
-/// notation.
+/// notation. Currently available are SymPy and Mathematica backends.
 ///
 /// \defgroup sympy Sympy bridge
 /// \ingroup scalar
+/// Functions to pass scalar expressions to/from SymPy and manipulate them there.
 ///
 /// \defgroup mma Mathematica bridge
 /// \ingroup scalar
+/// Functions to pass scalar expressions to/from Mathematica and manipulate them there.
 ///
 /// \defgroup algorithms Algorithms
 /// \ingroup core

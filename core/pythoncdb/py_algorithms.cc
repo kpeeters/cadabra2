@@ -55,6 +55,7 @@
 #include "../algorithms/take_match.hh"
 #include "../algorithms/unwrap.hh"
 #include "../algorithms/unzoom.hh"
+#include "../algorithms/untrace.hh"
 #include "../algorithms/vary.hh"
 #include "../algorithms/young_project.hh"
 #include "../algorithms/young_project_product.hh"
@@ -124,6 +125,7 @@ namespace cadabra
 		def_algo<replace_match>(m, "replace_match", false, false, 0);
 		def_algo<zoom, Ex>(m, "zoom", true, false, 0, py::arg("rules"));
 		def_algo<unzoom>(m, "unzoom", true, false, 0);
+		def_algo<untrace>(m, "untrace", true, false, 0);		
 		def_algo<rewrite_indices, Ex, Ex>(m, "rewrite_indices", true, false, 0, py::arg("preferred"), py::arg("converters"));
 		def_algo_preorder<vary, Ex>(m, "vary", false, false, 0, py::arg("rules"));
 		def_algo<split_gamma, bool>(m, "split_gamma", true, false, 0, py::arg("on_back"));

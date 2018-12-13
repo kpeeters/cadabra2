@@ -48,7 +48,7 @@ class DisplayTeX : public DisplayBase {
 		/// For every object encountered, dispatch will figure out the
 		/// most appropriate way to convert it into a LaTeX
 		/// expression. This may be done by simply looking at the
-		/// object's name (e.g. \prod will print as a product) but may
+		/// object's name (e.g. `\prod` will print as a product) but may
 		/// also involve looking up properties and deciding on the best
 		/// course of action based on the attached properties.
 
@@ -84,8 +84,8 @@ class DisplayTeX : public DisplayBase {
 		/// Determine whether the indicated object 'obj', when acting on
 		/// the single argument 'arg', reads as an operator, and therefore
 		/// 'arg' does not need to be wrapped in brackets. 
-		/// Example: the tree \\partial{A} can be displayed as '\\partial A'
-		/// (or rather, '\\partial{A}', instead of '\\partial(A)'. 
+		/// Example: the tree `\partial{A}` can be displayed as `\partial A`
+		/// (or rather, `\partial{A}`, instead of `\partial(A)`. 
 	  
 		bool reads_as_operator(Ex::iterator obj, Ex::iterator arg) const;
 
@@ -93,7 +93,7 @@ class DisplayTeX : public DisplayBase {
 		std::map<std::string, std::string> symmap;
 
 		/// List of operators which need all arguments fed with curly brackets, not 
-		/// round ones (e.g. \\sqrt).
+		/// round ones (e.g. `\sqrt`).
 		std::set<std::string> curly_bracket_operators;
 
 };

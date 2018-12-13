@@ -41,7 +41,7 @@ typedef void (*dispatcher_t)(const Kernel& k, Ex&, Ex::iterator& it);
 /// first layer of child nodes, but do NOT descend deeper down the
 /// tree, UNLESS that would leave the tree in an inconsistent
 /// state. An example is acting at the top node of
-/// \prod{4}{\sum{a}{b}}, which would push the 4 to the multiplier of
+/// `\prod{4}{\sum{a}{b}}`, which would push the 4 to the multiplier of
 /// the sum, but that is not allowed, so it needs to go further down.
 /// Sibling nodes of 'it' remain untouched as well.
 

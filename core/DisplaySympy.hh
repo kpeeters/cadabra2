@@ -16,7 +16,7 @@ namespace cadabra {
 /// parse. Will throw an exception if a Cadabra Ex object cannot be
 /// understood by Sympy. Can also convert expressions back to Cadabra
 /// notation. This class contains the printing logic that you see in
-/// action when you call the '__sympy__' method on an Ex object.
+/// action when you call the `__sympy__` method on an Ex object.
 
 class DisplaySympy : public DisplayBase {
 	public:
@@ -24,7 +24,7 @@ class DisplaySympy : public DisplayBase {
 
       /// Rewrite the output of sympy back into a notation used by
       /// Cadabra. This in particular involves converting 'sin' and
-      /// friends to '\sin' and so on, as well as converting all the
+      /// friends to `\sin` and so on, as well as converting all the
       /// greek symbols.  Currently only acts node-by-node, does not
       /// do anything complicated with trees.
 
@@ -51,7 +51,7 @@ class DisplaySympy : public DisplayBase {
 		/// For every object encountered, dispatch will figure out the
 		/// most appropriate way to convert it into a LaTeX
 		/// expression. This may be done by simply looking at the
-		/// object's name (e.g. \prod will print as a product) but may
+		/// object's name (e.g. `\prod` will print as a product) but may
 		/// also involve looking up properties and deciding on the best
 		/// course of action based on the attached properties.
 

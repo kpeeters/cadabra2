@@ -44,9 +44,11 @@ Algorithm::result_t complete::apply(iterator& it)
 		}
 	const Trace *trace = kernel.properties.get<Trace>(bg);
 	if(trace) {
-		Ex metric(trace->obj);
-		sympy::trace(kernel, metric, tr, bg);
-		res = result_t::l_applied;
+		if(trace->obj.size()>0) {
+			Ex metric(trace->obj);
+			sympy::trace(kernel, metric, tr, bg);
+			res = result_t::l_applied;
+			}
 		}
 
 	return res;

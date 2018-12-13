@@ -7,7 +7,7 @@ namespace cadabra {
 
 /// \ingroup algorithms
 ///
-/// Collect \components terms inside a sum, merging their substitution rules.
+/// Collect `\components` terms inside a sum, merging their substitution rules.
 
 class collect_components : public Algorithm {
 	public:

@@ -41,6 +41,7 @@
 ///
 /// Example C++ usage:
 ///
+/// ~~~~~~~{.cc}
 /// #include <iostream>
 /// #include <vector>
 /// #include "Stopwatch.hh"
@@ -71,10 +72,11 @@
 ///   std::cout << "Doing other stuff takes " << s.useconds() << "us\n"; //Assuming do_other_stuff() takes < 1s
 ///   return 0;
 /// }
-///
+/// ~~~~~~~
 ///
 /// Example python usage:
 ///
+/// ~~~~~~~{.py}
 /// from cadabra2 import Stopwatch
 ///
 /// def do_other_stuff():
@@ -100,7 +102,7 @@
 /// do_other_stuff()
 /// s.stop()
 /// print("Doing other stuff takes {}us".format(s.useconds())) #Assuming do_other_stuff() takes < 1s
-
+/// ~~~~~~~
 
 class Stopwatch {
 	public:

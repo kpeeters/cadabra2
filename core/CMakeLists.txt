@@ -81,7 +81,8 @@ SET(ALGORITHM_SRC_FILES
 	algorithms/take_match.cc
 	algorithms/replace_match.cc
 	algorithms/unwrap.cc
-	algorithms/unzoom.cc    
+	algorithms/unzoom.cc
+	algorithms/untrace.cc
 	algorithms/vary.cc
 	algorithms/young_project.cc
 	algorithms/young_project_product.cc

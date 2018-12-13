@@ -23,7 +23,7 @@ class DisplayMMA : public DisplayBase {
 
       /// Rewrite the output of mathematica back into a notation used by
       /// Cadabra. This in particular involves converting 'Sin' and
-      /// friends to '\sin' and so on, as well as converting all the
+      /// friends to `\sin` and so on, as well as converting all the
       /// greek symbols.  Currently only acts node-by-node, does not
       /// do anything complicated with trees.
 
@@ -52,7 +52,7 @@ class DisplayMMA : public DisplayBase {
 		/// For every object encountered, dispatch will figure out the
 		/// most appropriate way to convert it into a LaTeX
 		/// expression. This may be done by simply looking at the
-		/// object's name (e.g. \prod will print as a product) but may
+		/// object's name (e.g. `\prod` will print as a product) but may
 		/// also involve looking up properties and deciding on the best
 		/// course of action based on the attached properties.
 
@@ -81,8 +81,8 @@ class DisplayMMA : public DisplayBase {
 
 		/// Map from Cadabra symbols to Mathematica symbols.
 		/// This is a bit tricky because MathLink does not pass
-		/// \[Alpha] and friends transparently. So we feed it UTF8
-		/// α and so on, but then we get \[Alpha] back, and that
+		/// `\[Alpha]` and friends transparently. So we feed it UTF8
+		/// α and so on, but then we get `\[Alpha]` back, and that
 		/// needs to be regex-replaced before we feed it to our
 		/// parser as ours does not swallow that kind of bracketing.
 		std::map<std::string, std::string>      symmap;

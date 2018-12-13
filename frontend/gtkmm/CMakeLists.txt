@@ -115,22 +115,6 @@ if (NOT INSTALL_TARGETS_ONLY)
 	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/256x256/apps")
 	install_directory_permissions("${INSTALL_ICONS_DIR}/hicolor/scalable/apps")
 
-	# Remove old versions of files which we no longer need, to avoid confusion.
-	if(NOT PACKAGING_MODE)
-		remove_file("${CMAKE_INSTALL_PREFIX}/bin/cadabra-gtk")
-		remove_file("${CMAKE_INSTALL_PREFIX}/bin/cadabra-qt5")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2.desktop")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/applications/cadabra2-gtk.desktop")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps/cadabra2.png")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps/cadabra2.png")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps/cadabra2.png")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/cadabra2.svg")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps/cadabra2-gtk.png")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps/cadabra2-gtk.png")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps/cadabra2-gtk.png")
-		remove_file("${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/cadabra2-gtk.svg")
-	endif()
-
 	install(FILES ${CADABRA_IMAGES_DIR}/256x256/cadabra2-gtk.png DESTINATION ${INSTALL_IMAGES_DIR})
 
 	#xdg-desktop-menu messes up the file permissions, so we just install things by hand...
