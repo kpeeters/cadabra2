@@ -812,7 +812,9 @@ bool Algorithm::is_single_term(iterator it)
 			return true;
 		else if(*tr.parent(it)->name!="\\prod" && it->fl.parent_rel==str_node::parent_rel_t::p_none
 				  && kernel.properties.get<Accent>(tr.parent(it))==0 ) {
+#ifdef DEBUG			
 			std::cerr << "Found single term in " << tr.parent(it) << std::endl;
+#endif
 			return true;
 			}
 		}
