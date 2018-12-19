@@ -6,25 +6,74 @@
 
 {% block main %}
 
-<h1>Developers</h1>
+<h1>How to contribute</h1>
 <p>
   If you want to help out with Cadabra, or think you can contribute a
-  useful add-on package or perhaps even just a sample notebook, please
-  get in touch at <a href="mailto:info@cadabra.science">info@cadabra.science</a>.
+  useful add-on package or perhaps just a sample notebook or a bit of
+  documentation, you are more than welcome! Even just dropping us a
+  note with some details about what computations you do with Cadabra
+  is a useful contribution, and helps to get a better idea of what
+  people expect from the software. 
+</p>
+<p>
+  Below are some tips on how to get started contributing to
+  Cadabra. For any questions, please post in
+  the <a href="/qa">questions&amp;answers</a> forum or get in touch
+  directly via email
+  at <a href="mailto:info@cadabra.science">info@cadabra.science</a>.
+</p>
+<h2>Get familiar with the software</h2>
+<p>
+  The first thing to do is to get familiar with how the software works,
+  by playing with the <a href="/tutorials.html">tutorials</a>. Details
+  of the software, including some of the logic that is behind its
+  inner workings, are described in the <a href="/help.html">reference
+	 guide</a>, and documentation is available separately for all
+  <a href="/man.html">properties and algorithms</a>. If you get
+  stuck, do not hesitate to post a question on
+  the <a href="/qa">questions&amp;answers</a> site. If you want to
+  contribute at the level of the C++ core, or if you are simply
+  interested in how things work behind the scenes, you will find the
+  <a href="/doxygen/html/">doxygen</a> documentation useful.
+</p>
+
+<h2>Identify something to work on</h2>
+<p>
+  Most likely you will have used (or will have tried to use) Cadabra
+  for a concrete project, and found that you see room for
+  improvement. This can be as simple as reporting a bug, perhaps even
+  fixing it, or adding a tutorial or other documentation, providing
+  add-on functionality in the form of packages, or helping with the
+  core. We are also always interested to hear about issues installing
+  Cadabra on new systems. 
+</p>
+
+<h2>Setup your development environment</h2>
+<p>
+  Contributions in any form are welcome, but if you want to submit
+  substantial code contributions, it is useful to get familiar with
+  the git version control system. This is used to track software
+  changes over time and to effectively manage contributions from
+  different authors. We also
+  utilise <a href="https://github.com/kpeeters/cadabra2">github</a>, a
+  web interface to git, extensively and use it for communication,
+  issue tracking, merging patches (pull requests) and so on. Check out
+  the source code from there and follow the instructions on how to
+  build it.
 </p>
 
 <h1>Source code documentation</h1>
 <p>
   The source code is documented in quite some detail and the resulting
-  <a href="https://cadabra.science/doxygen/html/index.html">Cadabra
-  doxygen documentation</a> is worth consulting if you want to become
-  a developer. This is automatically generated from the latest status
-  of the master branch on github.
+  <a href="/doxygen/html/">Cadabra doxygen documentation</a> is worth
+  consulting if you want to become a developer. This is automatically
+  generated from the latest status of the master branch on github.
 </p>
 <p>
   You can also generate this doxygen tree yourself in your own working
-  copy by running <code>doxygen</code> in the project root. The
-  documentation then ends up in the <code>doxygen/html</code> folder.
+  copy by running <code>make doc</code> in the project root (not
+  the <code>build</code> folder). The documentation then ends up in
+  the <code>doxygen/html</code> folder.
 </p>
 
 
