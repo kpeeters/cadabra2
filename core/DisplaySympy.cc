@@ -6,6 +6,8 @@
 #include "properties/Accent.hh"
 #include <regex>
 
+//#define DEBUG 1
+
 using namespace cadabra;
 
 DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
@@ -587,14 +589,20 @@ void DisplaySympy::import(Ex& ex)
 					// 2nd order derivative.
 
 					if(*loc->name=="\\comma") {
+						#ifdef DEBUG
+						std::cerr << loc << std::endl;
+						#endif
 						auto x=ex.begin(loc);
 						auto n=x; ++n;
 						if(! n->is_integer()) 
 							throw RuntimeException("DisplaySympy::import received un-parseable Derivative expression.");
 						int nn=to_long(*n->multiplier);
 						for(int k=0; k<nn; ++k)
-							ex.insert_subtree(loc, x);
+							ex.insert_subtree(loc, x)->fl.parent_rel=str_node::p_sub;
 						ex.erase(loc);
+						#ifdef DEBUG
+						std::cerr << it << std::endl;
+						#endif
 						}
 					
 					
