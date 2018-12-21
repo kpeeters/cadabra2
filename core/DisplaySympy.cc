@@ -574,13 +574,30 @@ void DisplaySympy::import(Ex& ex)
 			
 			// Move child nodes of partial to the right place.
 			if(*it->name=="\\partial") {
-				// std::cerr << Ex(it) << std::endl;
 				auto args = ex.begin(it);
 				++args;
 				while(args!=ex.end(it)) {
 					auto nxt=args;
 					++nxt;
-					ex.move_before(ex.begin(it), args)->fl.parent_rel=str_node::p_sub;
+					auto loc = ex.move_before(ex.begin(it), args);
+					loc->fl.parent_rel=str_node::p_sub;
+
+					// If the argument is \comma{x}{n} expand this to 'n' arguments 'x'.
+					// This is to handle Sympy returning 'Derivative(f(x), (x,2))' for the
+					// 2nd order derivative.
+
+					if(*loc->name=="\\comma") {
+						auto x=ex.begin(loc);
+						auto n=x; ++n;
+						if(! n->is_integer()) 
+							throw RuntimeException("DisplaySympy::import received un-parseable Derivative expression.");
+						int nn=to_long(*n->multiplier);
+						for(int k=0; k<nn; ++k)
+							ex.insert_subtree(loc, x);
+						ex.erase(loc);
+						}
+					
+					
 					args=nxt;
 					}
 //				ex.flatten(comma);
