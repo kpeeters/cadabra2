@@ -53,6 +53,11 @@ set(CADABRA_FRONTEND_DIR ${CADABRA_ROOT_DIR}/frontend)
 set(CADABRA_IMAGES_DIR ${CADABRA_ROOT_DIR}/images)
 set(CADABRA_LIBS_DIR ${CADABRA_ROOT_DIR}/libs)
 
+if(ENABLE_JUPYTER)
+  # Currently only possible when building against Conda.
+  set(CONDA_FOUND 1)
+endif()
+
 #---------------------------------------------------------------------------
 # User options and other notifications
 #---------------------------------------------------------------------------
@@ -213,12 +218,12 @@ endif()
 #---------------------------------------------------------------------------
 
 # Core/packages
+add_subdirectory(client_server)
 add_subdirectory(core)
 add_subdirectory(core/packages)
 
 # Frontend
 if(ENABLE_FRONTEND)
-  add_subdirectory(client_server)
   add_subdirectory(frontend)
 endif()
 

@@ -272,14 +272,16 @@ target_link_libraries(cadabra2python
 )
 
 # cadabra2cadabra
-add_executable(cadabra2cadabra 
-	cadabra2cadabra.cc 
-	DataCell.cc 
-	InstallPrefix.cc
-	${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
-	${CADABRA_LIBS_DIR}/whereami/whereami.c
-)
-target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES})
+if(!CONDA_FOUND)
+  add_executable(cadabra2cadabra 
+	 cadabra2cadabra.cc 
+	 DataCell.cc 
+	 InstallPrefix.cc
+	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
+	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+	 )
+  target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES})
+endif()
 
 # Mathematica WSTP test
 if(MATHEMATICA_FOUND)
@@ -351,12 +353,14 @@ install(
 )
 
 # cadabra2cadabra
-install(
-  TARGETS 
+if(!CONDA_FOUND)
+  install(
+	 TARGETS 
     cadabra2cadabra
-  DESTINATION 
+	 DESTINATION 
     bin
-)
+	 )
+endif()
 
 if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("core")

@@ -1,0 +1,12 @@
+
+{a,b,c,d,e}::Indices;
+R_{a b c d}::RiemannTensor;
+ex:= R_{a b c d} + R_{a c d b} + R_{a d b c};
+young_reduce(_);
+
+ex:= R_{a b c d} + R_{a c d b};
+young_reduce(_);
+
+ex:= 2 R_{a b c d} R_{a c b d} - R_{a b c d} R_{a b c d};
+young_reduce(_);
+
