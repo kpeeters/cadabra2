@@ -1,131 +1,183 @@
-
 {
 	"cells" : 
 	[
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property DiracBar to~}\\bar{#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property DiracBar to~}\\bar{\\#}.\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Spinor to~}\\psi.\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}\\Gamma{#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property GammaMatrix to~}\\Gamma\\left(\\#\\right).\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\bar{\\Gamma^{m n p} \\psi}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\bar{\\Gamma^{m n p} \\psi}\\end{dmath*}"
 				}
 			],
 			"source" : "\\bar{#}::DiracBar;\n\\psi::Spinor(dimension=10);\n\\Gamma{#}::GammaMatrix;\nex:=\\bar{\\Gamma^{m n p} \\psi};"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\bar{\\psi} \\Gamma^{m n p}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\bar{\\psi} \\Gamma^{m n p}\\end{dmath*}"
 				}
 			],
 			"source" : "expand_diracbar(ex);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "\\xi::Spinor(dimension =4, type=Dirac).\n\n\\bar{#}::DiracBar.\n\\xi::Depends(\\bar).\n\\gamma_{#}::GammaMatrix(metric=\\delta).\n\\delta{#}::KroneckerDelta.\n\n\\gamma{#}::Depends(\\bar).\n\n{\\xi, \\phi}::Commuting."
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\bar{\\gamma_{m} \\xi \\phi}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\bar{\\gamma_{m} \\xi \\phi}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\bar{\\gamma_{m} \\xi \\phi}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\bar{\\gamma_{m} \\xi \\phi}\\end{dmath*}"
 				}
 			],
 			"source" : "test := \\bar{\\gamma_{m}\\xi \\phi};\nexpand_diracbar(test);  "
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\bar{\\gamma_{m} \\xi \\phi}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\bar{\\gamma_{m} \\xi \\phi}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\phi \\bar{\\gamma_{m} \\xi}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\phi \\bar{\\gamma_{m} \\xi}\\end{dmath*}"
 				}
 			],
 			"source" : "test := \\bar{\\gamma_{m}\\xi \\phi};\nunwrap(test);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\bar{\\gamma_{m} \\xi \\phi}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\bar{\\gamma_{m} \\xi \\phi}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\phi \\bar{\\gamma_{m} \\xi}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\phi \\bar{\\gamma_{m} \\xi}\\end{dmath*}"
 				},
-				
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-\\phi \\bar{\\xi} \\gamma_{m}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}-\\phi \\bar{\\xi} \\gamma_{m}\\end{dmath*}"
 				}
 			],
 			"source" : "test := \\bar{\\gamma_{m}\\xi \\phi};\nunwrap(test);\nexpand_diracbar(test);"
 		},
-		
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
@@ -133,6 +185,5 @@
 		}
 	],
 	"description" : "Cadabra JSON notebook format",
-	"version" : 1.0
+	"version" : 1
 }
-
