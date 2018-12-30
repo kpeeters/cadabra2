@@ -54,7 +54,14 @@ set(CADABRA_CLIENT_SRC
 set(JUPYTER_KERNEL_SRC
     cadabra-jupyter-kernel.cc
     cadabra-jupyter-kernel.hh
-    cadabra-jupyter-main.cc)
+    cadabra-jupyter-main.cc
+	 Server.cc
+	 ${CADABRA_CORE_DIR}/InstallPrefix.cc
+	 ${CADABRA_CORE_DIR}/CdbPython.cc 
+	 ${CADABRA_CORE_DIR}/Stopwatch.cc 
+	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
+	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+	 )
   
 
 # set(CONNECTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/connection.json)
@@ -146,7 +153,7 @@ if(ENABLE_JUPYTER)
   include_directories(${XTL_INCLUDE_DIR} ${NLOHMANN_JSON_INCLUDE_DIR})
   add_executable(cadabra-jupyter-kernel ${JUPYTER_KERNEL_SRC})
   message("-- UUID library at ${UUID_LIBRARIES}")
-  target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid)#${UUID_LIBRARIES})
+  target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 else()
   print_header("Not building Jupyter kernel")
 endif()

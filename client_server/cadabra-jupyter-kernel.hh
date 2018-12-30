@@ -2,6 +2,7 @@
 #pragma once
 
 #include "xeus/xinterpreter.hpp"
+#include "Server.hh"
 
 using xeus::xinterpreter;
 using xeus::xjson;
@@ -14,12 +15,18 @@ namespace cadabra {
 	/// pre-processor to enable input as in the Gtk notebook frontend.
 	/// Built using Xeus.
 	
-	class CadabraJupyter : public xinterpreter {
+	class CadabraJupyter : public xinterpreter, public Server {
 		public:
 			
 			CadabraJupyter() = default;
 			virtual ~CadabraJupyter() = default;
 
+		public:
+			virtual uint64_t send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last);
+
+			int current_counter;
+			bool finished=true;
+			
 		private:
 			
 			void configure_impl() override;
