@@ -1,8 +1,11 @@
 Cadabra
 =======
 
-.. |DOI| image:: https://zenodo.org/badge/45484302.svg
-   :target: https://zenodo.org/badge/latestdoi/45484302
+.. image:: http://joss.theoj.org/papers/10.21105/joss.01118/status.svg
+   :target: https://doi.org/10.21105/joss.01118
+
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.2500762.svg
+   :target: https://doi.org/10.5281/zenodo.2500762
 				
 *A field-theory motivated approach to computer algebra.*
 

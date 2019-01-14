@@ -140,12 +140,14 @@ endif()
 
 install(TARGETS cadabra-server DESTINATION bin)
 install(TARGETS cadabra2html DESTINATION bin)
-install(
-	TARGETS cadabra_client 
-	RUNTIME DESTINATION bin COMPONENT runtime 
-	LIBRARY ARCHIVE DESTINATION lib 
-	LIBRARY DESTINATION lib
-)
+# We don't need to install the libcadabra_client library as it is statically
+# linked with our binaries anyway.
+# install(
+# 	TARGETS cadabra_client 
+# 	RUNTIME DESTINATION bin COMPONENT runtime 
+# 	LIBRARY ARCHIVE DESTINATION lib 
+# 	LIBRARY DESTINATION lib
+# )
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
 
 if (MSVC AND NOT INSTALL_TARGETS_ONLY)

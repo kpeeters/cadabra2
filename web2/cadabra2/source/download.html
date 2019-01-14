@@ -11,8 +11,9 @@
 <h2>Binary packages</h2>
 <p>
   Packages for various Linux distributions and for Windows (beta!) are
-  available for download here. They get updated on a semi-regular
-  basis by yours truly.
+  available for download here. Installation on macOS can be done
+  through HomeBrew; see below. All these packages get updated on a
+  semi-regular basis by yours truly; if you run into trouble, email me.
 </p>
 <p>
   Note that if your distribution has a <code>cadabra</code> package, this
@@ -50,7 +51,7 @@
 	 26</a></div> -->
 	 <div class="distronum"><a href="https://cadabra.science/packages/fedora27">Fedora 27</a></div>
 	 <div class="distronum"><a href="https://cadabra.science/packages/fedora28">Fedora 28</a></div>
-	 <div class="distronum"><a href="https://cadabra.science/packages/fedora28">Fedora 29</a></div>	 	 
+	 <div class="distronum"><a href="https://cadabra.science/packages/fedora29">Fedora 29</a></div>	 	 
 	 <div class="distrotxt">
 	 </div>
   </div>
@@ -96,20 +97,29 @@
 
   <div class="distrotype">
 	 <img src="static/images/debian-logo.jpg"/>
-	 <div class="distronum"><a href="https://cadabra.science/packages/debian86">Debian
-	 Jessie 8.6</a></div>
+	 <div class="distronum"><a href="https://cadabra.science/packages/debian86">Debian Jessie 8.6</a></div>
 	 <div class="distronum"><a href="https://cadabra.science/packages/debian9">Debian Stretch 9</a></div>
+	 <div class="distronum"><a href="https://cadabra.science/packages/debian10">Debian Buster 10</a></div>
   </div>
 
-<!--  <div class="distrotype">
+  <div class="distrotype">
 	 <img src="static/images/apple_logo.png"/>
 	 <div class="distronum">macOS</a></div>
 	 <div class="distrotxt">
-		Cadabra is available via the Homebrew package manager; just type
+		Cadabra is available via the Homebrew package manager. First
+		make sure that you have MacTeX installed, either by installing
+		it directly, or by using homebrew with
+		<code>brew tap caskroom/cask</code>
+		<code>brew cask install mactex</code>
+		After that, you can install Cadabra using
+		<code>brew tap kpeeters/repo</code>		
 		<code>brew install cadabra2</code>
-		to take care of installation.
+		Please not that this has not yet received a lot of testing; if
+		you encounter problems, please
+		email <a href="mailto:info@cadabra.science">info@cadabra.science</a>
+		so they can be fixed and other people can benefit from it.
 	 </div>
-  </div> -->
+  </div>
 
   <div class="distrotype">
 	 <img src="static/images/windows_logo.png"/>
