@@ -3,10 +3,11 @@
 
 #include "Props.hh"
 #include "properties/Symmetric.hh"
+#include "properties/Distributable.hh"
 
 namespace cadabra {
 
-	class Trace : virtual public property {
+	class Trace : public Distributable, virtual public property {
 		public:
 			Trace();
 			virtual std::string name() const override;
