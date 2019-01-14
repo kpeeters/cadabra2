@@ -62,8 +62,10 @@ function runbuild {
 # runbuild "Fedora_28" ".rpm" 7020 fedora28
 # # Fedora 29
 # runbuild "Mint_18" ".deb" 7002 mint18
-runbuild "Mint_19" ".deb" 7022 mint19
-# runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
+# runbuild "Mint_19" ".deb" 7022 mint19
+# # runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421
+runbuild "OpenSUSE_15" ".rpm" 7024 opensuse150
+# runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw
 # runbuild "CentOS_7" ".rpm" 7004 centos7
 # runbuild "Scientific_Linux_74" ".rpm" 7013 scientific74
 # runbuild "Debian86" ".deb" 7006 debian86
