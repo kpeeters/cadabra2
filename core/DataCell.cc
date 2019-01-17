@@ -546,10 +546,11 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 				lr=std::regex_replace(lr, std::regex(R"(\\left\()"),            "\\brwrap{(}{");
 				lr=std::regex_replace(lr, std::regex(R"(\\right\))"),           "}{)}");
 				lr=std::regex_replace(lr, std::regex(R"(\\left\[)"),            "\\brwrap{[}{");
+				lr=std::regex_replace(lr, std::regex(R"(\\left\.)"),            "\\brwrap{.}{");
 				lr=std::regex_replace(lr, std::regex(R"(\\right\])"),           "}{]}");
 				lr=std::regex_replace(lr, std::regex(R"(\\left\\\{)"),            "\\brwrap{\\{}{");
 				lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
-				lr=std::regex_replace(lr, std::regex(R"(\\right.)"),            "}{.}");
+				lr=std::regex_replace(lr, std::regex(R"(\\right\.)"),            "}{.}");
 				lr=std::regex_replace(lr, std::regex(R"(\\begin\{verbatim\})"), "");
 				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");				
 				lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
