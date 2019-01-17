@@ -12,7 +12,6 @@
 					"source" : "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
 				}
 			],
-			"hidden" : true,
 			"source" : "\\section*{Indices, dummy indices and automatic index renaming}\n\nIn Cadabra, all objects which occur as subscripts or superscripts\nare considered to be ``indices''. The names of indices are understood\nto be irrelevant when they occur in a pair, and automatic relabelling\nwill take place whenever necessary in order to avoid index clashes. \n\nCadabra knows about the differences between free and dummy indices. It \nchecks the input for consistency and displays a warning when the\nindex structure does not make sense. Thus, the input"
 		},
 		{
