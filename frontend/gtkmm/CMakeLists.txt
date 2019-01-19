@@ -130,12 +130,15 @@ if (NOT INSTALL_TARGETS_ONLY)
 	#   - In order to avoid all that, just use /usr/share/icons on Linux; package managers will install it
 	#     there anyway.
 	#   - gtk-update-icon-cache is broken and only works half of the time.
-
-	if(APPLE OR ${CMAKE_SYSTEM_NAME} MATCHES ".*BSD|DragonFly")
+	#
+	# BUT: package managers really do not like this approach, so we're back to doing the proper thing and
+	# hope window managers will eventually fix this.
+	
+#	if(APPLE OR ${CMAKE_SYSTEM_NAME} MATCHES ".*BSD|DragonFly")
 	set(ICON_PREFIX "${CMAKE_INSTALL_PREFIX}")
-	else()
-	set(ICON_PREFIX "/usr")
-	endif()
+#	else()
+#	set(ICON_PREFIX "/usr")
+#	endif()
 
 	#set(ICON_THEME ${ICON_PREFIX}/share/icons/hicolor/index.theme)
 	#if(EXISTS "${ICON_THEME}")
