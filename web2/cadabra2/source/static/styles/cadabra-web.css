@@ -130,6 +130,9 @@ div#main > dl dt {
 	 font-style: oblique;
 	 font-size: smaller;
 }
+div#main > dl dd {
+	 margin-bottom: 10px;
+}
 .quote {
 	 width: 80%;
 	 margin-left: auto !important;
