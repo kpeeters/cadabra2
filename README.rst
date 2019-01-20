@@ -176,7 +176,7 @@ the 'Education' menu.
 Linux (openSUSE)
 ~~~~~~~~~~~~~~~~
 
-For OpenSUSE (tested on 'Leap 15.0', probably also fine with minor
+For openSUSE (tested on 'Leap 15.0', probably also fine with minor
 changes for 'Tumbleweed') you first need to install the dependencies
 with::
 
