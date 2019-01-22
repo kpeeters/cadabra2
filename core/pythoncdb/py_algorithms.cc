@@ -23,6 +23,7 @@
 #include "../algorithms/expand_delta.hh"
 #include "../algorithms/expand_diracbar.hh"
 #include "../algorithms/expand_power.hh"
+#include "../algorithms/explicit_indices.hh"
 #include "../algorithms/factor_in.hh"
 #include "../algorithms/factor_out.hh"
 #include "../algorithms/fierz.hh"
@@ -87,6 +88,7 @@ namespace cadabra
 		def_algo<expand_delta>(m, "expand_delta", true, false, 0);
 		def_algo<expand_diracbar>(m, "expand_diracbar", true, false, 0);
 		def_algo<expand_power>(m, "expand_power", true, false, 0);
+		def_algo<explicit_indices>(m, "explicit_indices", true, false, 0);		
 		def_algo<flatten_sum>(m, "flatten_sum", true, false, 0);
 		def_algo<indexsort>(m, "indexsort", true, false, 0);
 		def_algo<lr_tensor>(m, "lr_tensor", true, false, 0);

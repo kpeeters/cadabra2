@@ -51,6 +51,7 @@ SET(ALGORITHM_SRC_FILES
 	algorithms/expand_delta.cc
 	algorithms/expand_diracbar.cc
 	algorithms/expand_power.cc
+	algorithms/explicit_indices.cc
 	algorithms/factor_in.cc
 	algorithms/factor_out.cc
 	algorithms/fierz.cc
