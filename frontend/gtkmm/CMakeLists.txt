@@ -174,3 +174,13 @@ if (NOT INSTALL_TARGETS_ONLY)
 		install_dlls_from("frontend/gtkmm")
 	endif()
 endif()
+
+# manual pages
+if(NOT MSVC)
+  install(
+	 FILES
+	 ../../man/man1/cadabra2-gtk.1
+	 DESTINATION
+	 man/man1
+	 )
+endif()

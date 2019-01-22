@@ -361,3 +361,13 @@ install(
 if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("core")
 endif()
+
+# manual pages
+if(NOT MSVC)
+  install(
+	 FILES
+	 ../man/man1/cadabra2.1
+	 DESTINATION
+	 man/man1
+	 )
+endif()

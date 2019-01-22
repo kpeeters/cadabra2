@@ -1,0 +1,53 @@
+.TH CADABRA2 1 "Jan 22, 2019" "" ""
+.\"
+.\" Man page written by Kasper Peeters <info@cadabra.science>
+.\"
+.\"	This program is free software; you can redistribute it and/or modify
+.\"	it under the terms of the GNU General Public License as published by
+.\"	the Free Software Foundation; either version 3 of the License, or
+.\"	(at your option) any later version.
+.\"
+.\"	This program is distributed in the hope that it will be useful,
+.\"	but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\"	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\"	GNU General Public License for more details.
+.\"
+.\"	You should have received a copy of the GNU General Public License
+.\"	along with this program; if not, write to the Free Software
+.\"	Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+.\"
+.\"
+.SH NAME
+cadabra2 \- field\-theory motivated computer algebra system, 2.x series
+.SH SYNOPSIS
+.BR "cadabra2 [-d] [input file (.cdb)]"
+.SH DESCRIPTION
+.B Cadabra2
+is a computer algebra system for the solution of (quantum) field
+theory problems. 
+
+This is the command-line client for the Cadabra2 computer algebra
+system for field theory problems. 
+
+.SH OPTIONS
+.TP
+\fB \-d\fR
+Runs under control of the default debugger. 
+
+.SH ENVIRONMENT VARIABLES
+The following variables toggle various features on or off, depending
+on whether the variable is set or not:
+.TP 
+\fB CADABRA_NO_UNICODE\fR
+Do not use UTF8 characters to display greek characters and
+mathematical symbols. Instead, use their LaTeX equivalent, so
+that the output is pure ASCII.
+.SH SEE ALSO
+.BR cadabra2-gtk (1).
+
+See the web page at
+.BR "https://cadabra.science/"
+for binaries, example calculations and the full manual.
+.SH AUTHORS
+Kasper Peeters <info@cadabra.science>
+
