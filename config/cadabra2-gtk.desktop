@@ -6,7 +6,7 @@ GenericName=Computer algebra system
 Comment=Computer algebra system for field theory problems
 Icon=cadabra2-gtk
 Categories=Math;Science;Education;
-Exec=cadabra2-gtk
+Exec=cadabra2-gtk %f
 Terminal=false
 MimeType=application/cadabra;application/x-cadabra;
 
