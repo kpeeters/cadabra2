@@ -170,3 +170,13 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
      DESTINATION    bin
    )
 endif()
+
+# manual pages
+if(NOT MSVC)
+  install(
+	 FILES
+	 ../man/man1/cadabra-server.1
+	 DESTINATION
+	 man/man1
+	 )
+endif()
