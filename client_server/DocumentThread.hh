@@ -95,12 +95,13 @@ namespace cadabra {
 		public:
 	      using ColorMap = std::map<std::string, std::string>;
 			Prefs(bool use_defaults = false);
-		      void save();
-		      int font_step;
-		      bool highlight;
-		      bool is_registered;
-		      bool is_anonymous;
-		      std::map<std::string, ColorMap> colours;
+				void save();
+				int font_step;
+				bool highlight;
+				bool is_registered;
+				bool is_anonymous;
+				std::map<std::string, ColorMap> colours;
+				std::string git_path;
 		private:
 			Json::Value data;
 			std::string config_path;

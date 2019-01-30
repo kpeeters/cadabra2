@@ -91,6 +91,14 @@ namespace cadabra {
 		void refresh_highlighting();
 		void on_help_register();
 
+		void select_git_path();
+		void compare_to_file();
+		void compare_git_latest();
+		void compare_git_choose();
+		void compare_git_specific();
+		void compare_git(const std::string& commit_hash);
+		std::string run_git_command(const std::string& args);
+
 		virtual void set_compute_thread(ComputeThread* compute) override;
 
 		virtual void on_interactive_output(const Json::Value& msg) override;

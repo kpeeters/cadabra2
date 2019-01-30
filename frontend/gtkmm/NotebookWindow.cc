@@ -19,6 +19,10 @@
 #endif
 #include "Snoop.hh"
 #include "ChooseColoursDialog.hh"
+#include "SelectFileDialog.hh"
+#include "DiffViewer.hh"
+#include "process.hpp"
+#include <internal/string_tools.h>
 
 using namespace cadabra;
 
@@ -196,6 +200,20 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"),
 							sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
 
+	actiongroup->add(Gtk::Action::create("MenuCompare", "Compare"));
+	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"), 
+					 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
+	actiongroup->add(Gtk::Action::create("CompareGit", "Compare with Git"));
+	actiongroup->add(Gtk::Action::create("CompareGitLatest", "Latest commit"),
+					 sigc::mem_fun(*this, &NotebookWindow::compare_git_latest));
+	actiongroup->add(Gtk::Action::create("CompareGitChoose", "Select commit from list"),
+					 sigc::mem_fun(*this, &NotebookWindow::compare_git_choose));
+	actiongroup->add(Gtk::Action::create("CompareGitSpecific", "Manually enter commit hash"),
+					 sigc::mem_fun(*this, &NotebookWindow::compare_git_specific));
+
+	actiongroup->add(Gtk::Action::create("CompareSelectGit", "Select Git Executable"), 
+					 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
+
 	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
 //	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
 //							sigc::mem_fun(*this, &NotebookWindow::on_help_notebook) );
@@ -253,6 +271,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"         <menuitem action='FontLarge'/>"
 		"         <menuitem action='FontExtraLarge'/>"
         "      </menu>"
+		"      <separator/>"
 		"      <menu action='MenuHighlightSyntax'>"
 		"        <menuitem action='HighlightSyntaxOff'/>"
 		"        <menuitem action='HighlightSyntaxOn'/>"
@@ -276,6 +295,16 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		"      <menuitem action='KernelRestart' />"
 			"    </menu>";
 	ui_info+=
+		"    <menu action='MenuCompare'>"
+		"      <menuitem action='CompareFile'/>"
+		"      <menu action='CompareGit'>"
+		"        <menuitem action='CompareGitLatest'/>"
+		"        <menuitem action='CompareGitChoose'/>"
+		"        <menuitem action='CompareGitSpecific'/>"
+		"        <separator/>"
+		"        <menuitem action='CompareSelectGit'/>"
+		"      </menu>"
+		"    </menu>"
 		"    <menu action='MenuHelp'>"
 //		"      <menuitem action='HelpNotebook' />"
 		"      <menuitem action='HelpAbout' />"
@@ -376,6 +405,10 @@ void NotebookWindow::load_css(const std::string& text_colour)
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#Console   { padding: 5px; }\n";
+	data += ".diffcell frame.added { border: 3px solid rgb(200, 255, 200); }\n";
+	data += ".diffcell frame.removed { border: 3px solid rgb(255, 200, 200); }\n";
+
+
 	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
 	if(!css_provider->load_from_data(data)) {
@@ -1702,6 +1735,185 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 			}
 		}
 	}
+
+void NotebookWindow::select_git_path()
+{
+	SelectFileDialog dialog("Select git executable", *this, true);
+	dialog.set_transient_for(*this);
+	dialog.set_text(prefs.git_path);
+	
+	if (dialog.run() == Gtk::RESPONSE_OK) 
+		prefs.git_path = dialog.get_text();
+}
+
+void NotebookWindow::compare_to_file()
+{
+	SelectFileDialog dialog("Select file to compare", *this, true);
+	dialog.set_transient_for(*this);
+	
+	if (dialog.run() == Gtk::RESPONSE_OK) {
+		std::ifstream a(dialog.get_text());
+		if (!a.is_open()) {
+			Gtk::MessageDialog error_dialog(*this, "The file '" + dialog.get_text() + "' could not be opened for reading", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+			error_dialog.set_title("Could not open file");
+			error_dialog.run();
+			return;
+		}
+
+		std::stringstream b;
+		b << JSON_serialise(doc);
+
+		DiffViewer viewer(a, b);
+		viewer.run();
+	}
+}
+
+std::string NotebookWindow::run_git_command(const std::string& args)
+{
+	using namespace TinyProcessLib;
+
+	auto split_pos = name.find_last_of("\\/");
+	if (split_pos == std::string::npos)
+		throw std::runtime_error("File must be in a valid git directory");
+	std::string path = name.substr(0, split_pos);
+	std::string output;
+
+	Process git(
+		prefs.git_path + " " + args,
+		path,
+		[&output](const char* bytes, size_t n) { output += std::string(bytes, n); },
+		[&output](const char* bytes, size_t n) { output += std::string(bytes, n); }
+	);
+
+	if (git.get_exit_status())
+		throw std::runtime_error(output);
+	else
+		return output;
+}
+
+void NotebookWindow::compare_git(const std::string& commit_hash)
+{
+	auto split_pos = name.find_last_of("\\/");
+	if (split_pos == std::string::npos || split_pos == name.size() - 1)
+		throw std::runtime_error("A valid file must be open");
+
+	auto contents = run_git_command("show " + commit_hash + ":" + name.substr(split_pos + 1));
+
+	std::stringstream a, b;
+	a << contents;
+	b << JSON_serialise(doc);
+
+	DiffViewer d(a, b);
+	d.run();
+}
+
+void NotebookWindow::compare_git_latest()
+{
+	try {
+		// Get latest commit hash
+		auto commit = run_git_command("log --pretty=format:%h -n 1");
+		compare_git(trim(commit));
+	}
+	catch (const std::runtime_error& ex) {
+		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		error_dialog.set_transient_for(*this);
+		error_dialog.set_title("Git error");
+		error_dialog.run();
+	}
+}
+
+class GitChooseModelColumns : public Gtk::TreeModel::ColumnRecord
+{
+public:
+	GitChooseModelColumns()
+	{
+		add(commit_hash);
+		add(author);
+		add(timestamp);
+		add(description);
+	}
+
+	Gtk::TreeModelColumn<std::string> commit_hash;
+	Gtk::TreeModelColumn<std::string> author;
+	Gtk::TreeModelColumn<std::string> timestamp;
+	Gtk::TreeModelColumn<std::string> description;
+};
+
+
+void NotebookWindow::compare_git_choose()
+{
+	try {
+		std::string max_entries = "15";
+		auto commits = string_to_vec(run_git_command("log --pretty=format:%h -n " + max_entries));
+		auto authors = string_to_vec(run_git_command("log --pretty=format:%an -n " + max_entries));
+		auto times = string_to_vec(run_git_command("log --pretty=format:%ar -n " + max_entries));
+		auto descriptions = string_to_vec(run_git_command("log --pretty=format:%s -n " + max_entries));
+
+		Gtk::TreeView tree_view;
+		GitChooseModelColumns columns;
+		Glib::RefPtr<Gtk::ListStore> list_store = Gtk::ListStore::create(columns);
+
+		for (int i = 0; i < commits.size(); ++i) {
+			Gtk::TreeModel::Row row = *(list_store->append());
+			row[columns.commit_hash] = commits[i];
+			row[columns.author] = authors[i];
+			row[columns.timestamp] = times[i];
+			row[columns.description] = descriptions[i];
+		}
+
+		tree_view.set_model(list_store);
+		tree_view.append_column("Commit Hash", columns.commit_hash);
+		tree_view.append_column("Author", columns.author);
+		tree_view.append_column("Commit Time", columns.timestamp);
+		tree_view.append_column("Description", columns.description);
+
+		Gtk::ScrolledWindow scrolled_window;
+		scrolled_window.add(tree_view);
+		scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+		scrolled_window.set_min_content_height(400);
+
+		Gtk::Dialog select_dialog("Select a commit to compare", *this, true);
+		select_dialog.set_transient_for(*this);
+		select_dialog.get_content_area()->add(scrolled_window);
+		select_dialog.add_button("Compare", Gtk::RESPONSE_OK);
+		select_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+		select_dialog.show_all();
+
+		if (select_dialog.run() == Gtk::RESPONSE_OK) {
+			auto commit_hash = tree_view.get_selection()->get_selected()->get_value(columns.commit_hash);
+			compare_git(trim(commit_hash));
+		}
+	}
+	catch (const std::runtime_error& ex) {
+		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		error_dialog.set_transient_for(*this);
+		error_dialog.set_title("Git error");
+		error_dialog.run();
+	}
+}
+
+void NotebookWindow::compare_git_specific()
+{
+	try {
+		Gtk::Entry entry;
+		Gtk::Dialog entry_dialog("Enter hash of commit to compare against", *this, true);
+		entry_dialog.set_transient_for(*this);
+		entry_dialog.get_content_area()->add(entry);
+		entry_dialog.add_button("Compare", Gtk::RESPONSE_OK);
+		entry_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+		entry_dialog.show_all();
+
+		if (entry_dialog.run() == Gtk::RESPONSE_OK) {
+			compare_git(trim(entry.get_text()));
+		}
+	}
+	catch (const std::runtime_error& ex) {
+		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
+		error_dialog.set_transient_for(*this);
+		error_dialog.set_title("Git error");
+		error_dialog.run();
+	}
+}
 
 void NotebookWindow::on_prefs_font_size(int num)
 	{

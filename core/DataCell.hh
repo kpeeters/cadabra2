@@ -97,11 +97,7 @@ namespace cadabra {
 			id_t                          id() const;
 			
 		private:
-
-			static std::mutex             serial_mutex;
 			id_t                          serial_number;
-			static uint64_t               max_serial_number; // on the client, server keeps track separately.
-
 	};
 
 	typedef tree<DataCell> DTree;

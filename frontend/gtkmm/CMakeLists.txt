@@ -35,8 +35,10 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 set(cadabra_gtk_src 
 	main.cc 
 	ChooseColoursDialog.cc
+	DiffViewer.cc
 	NotebookWindow.cc 
 	NotebookCanvas.cc 
+	SelectFileDialog.cc
 	TeXView.cc 
 	CodeInput.cc 
 	ImageView.cc
