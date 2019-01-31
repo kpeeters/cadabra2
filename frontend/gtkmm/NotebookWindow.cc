@@ -405,9 +405,6 @@ void NotebookWindow::load_css(const std::string& text_colour)
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
 	data += "#Console   { padding: 5px; }\n";
-	data += ".diffcell frame.added { border: 3px solid rgb(200, 255, 200); }\n";
-	data += ".diffcell frame.removed { border: 3px solid rgb(255, 200, 200); }\n";
-
 
 	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
@@ -1804,6 +1801,7 @@ void NotebookWindow::compare_git(const std::string& commit_hash)
 	b << JSON_serialise(doc);
 
 	DiffViewer d(a, b);
+	d.set_transient_for(*this);
 	d.run();
 }
 
@@ -1853,7 +1851,7 @@ void NotebookWindow::compare_git_choose()
 		GitChooseModelColumns columns;
 		Glib::RefPtr<Gtk::ListStore> list_store = Gtk::ListStore::create(columns);
 
-		for (int i = 0; i < commits.size(); ++i) {
+		for (size_t i = 0; i < commits.size(); ++i) {
 			Gtk::TreeModel::Row row = *(list_store->append());
 			row[columns.commit_hash] = commits[i];
 			row[columns.author] = authors[i];

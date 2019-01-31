@@ -21,7 +21,7 @@ bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	}
 
 DataCell::id_t::id_t()
-	: id(generate_uuid())
+	: id(generate_uuid<Json::UInt64>())
 	, created_by_client(true)
 	{
 	}
@@ -367,7 +367,7 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 	try {
 		for(unsigned int c=0; c<cells.size(); ++c) {
 			const Json::Value celltype    = cells[c]["cell_type"];
-			const Json::Value cell_id     = cells[c].get("cell_id", generate_uuid()).asUInt64();
+			const Json::Value cell_id     = cells[c].get("cell_id", generate_uuid<Json::UInt64>()).asUInt64();
 			const Json::Value cell_origin = cells[c]["cell_origin"];
 			const Json::Value textbuf     = cells[c]["source"];
 			const Json::Value hidden      = cells[c]["hidden"];

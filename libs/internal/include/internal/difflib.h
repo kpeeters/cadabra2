@@ -27,7 +27,7 @@
 #include <map> // std::map
 #include <set> // std::set
 #include <algorithm> // std::sort, std::max, std::min
-#include <iosfwd> // std::ostream
+#include <iostream> // std::ostream
 #include <locale> // std::isspace
 
 namespace difflib
@@ -62,12 +62,6 @@ namespace difflib
 				.base(),
 				s.end());
 		}
-	}
-
-	template <typename CharT>
-	bool NO_JUNK(const CharT&)
-	{
-		return false;
 	}
 
 	enum class tag_t
@@ -154,7 +148,7 @@ namespace difflib
 
 		// Construct a SequenceMatcher
 		//
-		// Optional arg isjunk is No_JUNK (the default), or a one - argument
+		// Optional arg isjunk is nullptr (the default), or a one - argument
 		// function that takes a sequence element and returns true iff the
 		// element is junk. NO_JUNK is equivalent to passing "return false", i.e.
 		// no elements are considered to be junk.
@@ -169,7 +163,7 @@ namespace difflib
 		// "automatic junk heuristic" that treats popular elements as junk
 		// (see module documentation for more information).
 		SequenceMatcher(
-			JunkPred is_junk = NO_JUNK,
+			JunkPred is_junk = nullptr,
 			const string_type& a = "",
 			const string_type& b = "",
 			bool auto_junk = true
@@ -184,7 +178,7 @@ namespace difflib
 
 		// Construct a SequenceMatcher with no junk
 		SequenceMatcher(const string_type& a, const string_type& b)
-			: SequenceMatcher(NO_JUNK, a, b, false)
+			: SequenceMatcher(nullptr, a, b, false)
 		{
 
 		}
@@ -475,12 +469,12 @@ namespace difflib
 
 										// Build b2j ignoring junk
 			b2j.clear();
-			for (int i = 0; i < b.size(); ++i)
+			for (size_t i = 0; i < b.size(); ++i)
 				b2j[b[i]].push_back(i);
 
 			// Purge junk elements
 			b_junk.clear();
-			if (is_junk != NO_JUNK) {
+			if (is_junk) {
 				for (const auto& pair : b2j) {
 					if (is_junk(pair.first))
 						b_junk.insert(pair.first);
@@ -508,13 +502,13 @@ namespace difflib
 			return b_junk.find(s) != b_junk.end();
 		}
 
+		JunkPred is_junk; // User supplied function that takes a sequence element and returns true if the element is junk
 		const string_type* a_; // First sequence
 		const string_type* b_; // Second sequence
 		std::map<char_type, std::vector<size_t>> b2j; // List of non-junk indices into b where each element of b appears
 		std::map<char_type, size_t> full_b_count; // Number of times each element in b appears
 		std::vector<OpCode> opcodes; // List of opcodes
 		std::vector<Block> matching_blocks; // List of matching blocks
-		JunkPred is_junk; // User supplied function that takes a sequence element and returns true if the element is junk
 		std::set<char_type> b_junk; // Items in b for which is_junk returns true
 		std::set<char_type> b_popular; // Nonjunk element in b treated as junk by the heuristic (if enabled)
 		bool auto_junk; // If true, heuristic junk collection is enabled
@@ -530,7 +524,7 @@ namespace difflib
 
 		std::vector<std::pair<double, string_type>> result;
 
-		SequenceMatcher s;
+		SequenceMatcher<string_type> s;
 		s.set_seq2(word);
 		while (begin != end) {
 			s.set_seq1(*begin);
@@ -562,7 +556,7 @@ namespace difflib
 		using LineJunkPred = bool(*)(const string_type&);
 		using CharJunkPred = bool(*)(const char_type&);
 
-		Differ(LineJunkPred line_junk = NO_JUNK, CharJunkPred char_junk = NO_JUNK, double cutoff = 0.75)
+		Differ(LineJunkPred line_junk = nullptr, CharJunkPred char_junk = nullptr, double cutoff = 0.75)
 			: line_junk(line_junk)
 			, char_junk(char_junk)
 			, a_ptr(nullptr)
@@ -649,11 +643,11 @@ namespace difflib
 		{
 			SequenceMatcher<string_type> cruncher(char_junk);
 			double best_ratio = 0.74;
-			size_t eq_i;
-			size_t eq_j;
+			size_t eq_i = 0;
+			size_t eq_j = 0;
 			bool eq_found = false;
-			size_t best_i;
-			size_t best_j;
+			size_t best_i = 0;
+			size_t best_j = 0;
 
 			for (size_t j = j1; j < j2; ++j) {
 				const string_type& b_j = b[j];

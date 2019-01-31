@@ -98,7 +98,7 @@ bool TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 }
 
 Console::Console(sigc::slot<void> run_slot)
-	: id_(generate_uuid())
+	: id_(generate_uuid<Json::UInt64>())
 	, needs_focus(false)
 	, input(*this)
 {

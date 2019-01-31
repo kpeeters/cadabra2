@@ -52,7 +52,7 @@ namespace cadabra {
 				public:
 					id_t();
 
-					uint64_t  id;
+					Json::UInt64  id;
 					bool      created_by_client;
 
 					bool operator<(const id_t& other) const;
