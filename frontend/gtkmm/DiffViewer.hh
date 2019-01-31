@@ -1,4 +1,5 @@
 #include <gtkmm.h>
+#include <gtkmm/frame.h>
 #include <string>
 #include <istream>
 
@@ -6,10 +7,9 @@ class DiffTextView : public Gtk::TextView
 {
 public:
 	DiffTextView();
-	virtual bool on_draw(const Cairo::RefPtr<Cairo::Context>&) override;
 };
 
-class CellDiff : public Gtk::Box
+class CellDiff : public Gtk::Frame
 {
 public:
 	CellDiff(const std::string& a, const std::string& b);
@@ -19,14 +19,12 @@ protected:
 	Gtk::Grid grid;
 	DiffTextView tv_lhs, tv_rhs;
 	Gtk::ScrolledWindow sw_lhs, sw_rhs;
-	Glib::RefPtr<Gtk::TextBuffer> buf_lhs, buf_rhs;
-	Glib::RefPtr<Gtk::CssProvider> css;
 };
 
 class DiffViewer : public Gtk::Dialog
 {
 public:
-	DiffViewer(std::istream& a, std::istream& b);
+	DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent);
 
 protected:	
 	using Cells = std::pair<std::vector<std::string>, std::vector<std::string>>;

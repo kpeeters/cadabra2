@@ -1760,7 +1760,8 @@ void NotebookWindow::compare_to_file()
 		std::stringstream b;
 		b << JSON_serialise(doc);
 
-		DiffViewer viewer(a, b);
+		DiffViewer viewer(a, b, *this);
+		viewer.set_transient_for(*this);
 		viewer.run();
 	}
 }
@@ -1800,7 +1801,7 @@ void NotebookWindow::compare_git(const std::string& commit_hash)
 	a << contents;
 	b << JSON_serialise(doc);
 
-	DiffViewer d(a, b);
+	DiffViewer d(a, b, *this);
 	d.set_transient_for(*this);
 	d.run();
 }

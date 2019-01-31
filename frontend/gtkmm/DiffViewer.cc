@@ -6,77 +6,42 @@
 
 const Gdk::RGBA color_insert("rgb(200, 255, 200)");
 const Gdk::RGBA color_delete("rgb(255, 200, 200)");
-const Gdk::RGBA color_blank("rgb(150, 150, 150)");
+const Gdk::RGBA color_offwhite("rgb(240, 240, 240)");
+const Gdk::RGBA color_white("rgb(255, 255, 255)");
 
 DiffTextView::DiffTextView()
 {
 	auto buffer = get_buffer();
 	buffer->create_tag("insert")->property_background_rgba() = color_insert;
 	buffer->create_tag("delete")->property_background_rgba() = color_delete;
-	buffer->create_tag("blank")->property_background_rgba() = color_blank;
 
-	set_margin_left(5);
-	set_margin_right(5);
-	set_margin_bottom(5);
-	set_margin_top(5);
-
+	set_border_width(5);
 	set_editable(false);
 	set_hexpand(true);
 	set_monospace(true);
 }
 
-bool DiffTextView::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
-{
-	Glib::RefPtr<Gdk::Window> win = Gtk::TextView::get_window(Gtk::TEXT_WINDOW_TEXT);
-
-//	std::cerr << "on draw for " << get_buffer()->get_text() << std::endl;
-	
-	bool ret=Gtk::TextView::on_draw(cr);
-
-	int w, h, x, y;
-	win->get_geometry(x,y,w,h);
-
-	// paint the background
-	cr->set_source_rgba(1.0, 1.0, 1.0, 1.0);
-//	cr->rectangle(5,3,8,h-3);
-//	cr->fill();
-
-	cr->set_source_rgba(.2, .7, .2, 1.0);
-	double line_width=5.0;
-	cr->set_line_width(line_width);
-	cr->set_antialias(Cairo::ANTIALIAS_NONE);
-	int hor=5;
-	cr->move_to(5+hor,line_width);
-	cr->line_to(5,line_width);
-	cr->line_to(5,h-line_width); 
-	cr->line_to(5+hor,h-line_width); 
-	cr->stroke();
-
-	return ret;
-}
-
 CellDiff::CellDiff(const std::string& a, const std::string& b)
 {
-	grid.set_column_homogeneous(true);
-	add(grid);
-
 	set_border_width(5);
 	set_margin_top(5);
 	set_margin_bottom(5);
 	set_margin_left(5);
 	set_margin_right(5);
-	override_background_color(color_blank);
-	grid.set_hexpand(true);
-	set_homogeneous(true);
 
+	grid.set_hexpand(true);
 	grid.attach(sw_lhs, 1, 0, 1, 1);
 	grid.attach(sw_rhs, 3, 0, 1, 1);
+	grid.set_column_homogeneous(true);
+	add(grid);
 
 	sw_lhs.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER);
 	sw_rhs.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_NEVER);
-
 	sw_lhs.add(tv_lhs);
 	sw_rhs.add(tv_rhs);
+
+	tv_lhs.override_background_color(color_offwhite);
+	tv_rhs.override_background_color(color_white);
 
 	compare(a, b);
 
@@ -88,15 +53,20 @@ void CellDiff::compare(const std::string& a_, const std::string& b_)
 	auto a = string_to_vec(a_);
 	auto b = string_to_vec(b_);
 
+	auto buf_lhs = tv_lhs.get_buffer();
+	auto buf_rhs = tv_rhs.get_buffer();
+
 	if (a_.empty() && !b_.empty()) {
 		// Insert only
 		for (size_t i = 0; i < b.size(); ++i) {
+			tv_rhs.override_background_color(color_insert);
 			buf_rhs->insert(buf_rhs->end(), b[i]);
 		}
 	}
 	else if (b_.empty() && !a_.empty()) {
 		// Delete only
 		for (size_t i = 0; i < a.size(); ++i) {
+			tv_lhs.override_background_color(color_delete);
 			buf_lhs->insert(buf_lhs->end(), a[i]);
 		}
 	}
@@ -152,13 +122,13 @@ void CellDiff::compare(const std::string& a_, const std::string& b_)
 
 }
 
-DiffViewer::DiffViewer(std::istream& a, std::istream& b)
-	: box(Gtk::ORIENTATION_VERTICAL)
+DiffViewer::DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent)
+	: Gtk::Dialog("Comparing notebooks", parent)
+	, box(Gtk::ORIENTATION_VERTICAL)
 {
-	set_title("Comparing Notebook");
 	set_border_width(5);
 	set_default_size(1000, 600);
-
+	
 	get_content_area()->add(scrolled_window);
 
 	scrolled_window.add(box);
@@ -166,9 +136,6 @@ DiffViewer::DiffViewer(std::istream& a, std::istream& b)
 	scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
 
 	populate(a, b);
-
-	for (auto& cell : cells)
-		box.add(cell);
 
 	show_all();
 }
@@ -196,6 +163,9 @@ void DiffViewer::populate(std::istream& a, std::istream& b)
 			cells.emplace_back(lhs_cells.second[std::distance(lhs_cells.first.begin(), pos_a)], rhs_cells.second[std::distance(rhs_cells.first.begin(), pos_b)]);
 		}
 	}
+
+	for (auto& cell : cells)
+		box.add(cell);
 }
 
 DiffViewer::Cells DiffViewer::make_cells(std::istream& stream)
