@@ -141,6 +141,13 @@ DiffViewer::DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent)
 	show_all();
 }
 
+void DiffViewer::run_noblock()
+{
+	signal_response().connect([this](int response_id) { hide(); });
+	show();
+	present();
+}
+
 void DiffViewer::populate(std::istream& a, std::istream& b)
 {
 	using namespace difflib;

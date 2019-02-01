@@ -23,6 +23,7 @@
 #include "GUIBase.hh"
 #include "NotebookCanvas.hh"
 #include "../common/TeXEngine.hh"
+#include "DiffViewer.hh"
 
 /// \defgroup gtkmm Gtk+ 
 /// \ingroup frontend
@@ -139,6 +140,8 @@ namespace cadabra {
 
 		Console console;
 		Gtk::Dialog console_win;
+
+		std::unique_ptr<DiffViewer> diffviewer;
 
 		// All canvasses which are stored in the ...
 		// These pointers are managed by gtkmm.

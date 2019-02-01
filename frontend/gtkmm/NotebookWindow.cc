@@ -20,7 +20,6 @@
 #include "Snoop.hh"
 #include "ChooseColoursDialog.hh"
 #include "SelectFileDialog.hh"
-#include "DiffViewer.hh"
 #include "process.hpp"
 #include <internal/string_tools.h>
 
@@ -1746,15 +1745,14 @@ void NotebookWindow::select_git_path()
 void NotebookWindow::compare_to_file()
 {
 	std::string filename;
-	{
-		SelectFileDialog dialog("Select file to compare", *this, true);
-		dialog.set_transient_for(*this);
-
-		if (dialog.run() == Gtk::RESPONSE_OK)
-			filename = dialog.get_text();
-		else
-			return;
-	}
+	
+	SelectFileDialog dialog("Select file to compare", *this, true);
+	dialog.set_transient_for(*this);
+	if (dialog.run() == Gtk::RESPONSE_OK)
+		filename = dialog.get_text();
+	else
+		return;
+	
 	std::ifstream a(filename);
 	if (!a.is_open()) {
 		Gtk::MessageDialog error_dialog(*this, "The file '" + filename + "' could not be opened for reading", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
@@ -1765,9 +1763,9 @@ void NotebookWindow::compare_to_file()
 		std::stringstream b;
 		b << JSON_serialise(doc);
 
-		DiffViewer d(a, b, *this);
-		d.set_transient_for(*this);
-		d.run_nonmodal();
+		diffviewer = std::make_unique<DiffViewer>(a, b, *this);
+		//diffviewer->set_transient_for(*this);
+		diffviewer->run_noblock();
 	}
 }
 
@@ -1807,10 +1805,9 @@ void NotebookWindow::compare_git(const std::string& commit_hash)
 	a << contents;
 	b << JSON_serialise(doc);
 
-	DiffViewer d(a, b, *this);
-	d.set_transient_for(*this);
-	d.show();
-	d.present();
+	diffviewer = std::make_unique<DiffViewer>(a, b, *this);
+	//diffviewer->set_transient_for(*this);
+	diffviewer->run_noblock();
 }
 
 void NotebookWindow::compare_git_latest()
@@ -1850,48 +1847,47 @@ void NotebookWindow::compare_git_choose()
 {
 	try {
 		std::string commit_hash;
-		{
-			std::string max_entries = "15";
-			auto commits = string_to_vec(run_git_command("log --pretty=format:%h -n " + max_entries));
-			auto authors = string_to_vec(run_git_command("log --pretty=format:%an -n " + max_entries));
-			auto times = string_to_vec(run_git_command("log --pretty=format:%ar -n " + max_entries));
-			auto descriptions = string_to_vec(run_git_command("log --pretty=format:%s -n " + max_entries));
+		std::string max_entries = "15";
+		auto commits = string_to_vec(run_git_command("log --pretty=format:%h -n " + max_entries));
+		auto authors = string_to_vec(run_git_command("log --pretty=format:%an -n " + max_entries));
+		auto times = string_to_vec(run_git_command("log --pretty=format:%ar -n " + max_entries));
+		auto descriptions = string_to_vec(run_git_command("log --pretty=format:%s -n " + max_entries));
 
-			Gtk::TreeView tree_view;
-			GitChooseModelColumns columns;
-			Glib::RefPtr<Gtk::ListStore> list_store = Gtk::ListStore::create(columns);
+		Gtk::TreeView tree_view;
+		GitChooseModelColumns columns;
+		Glib::RefPtr<Gtk::ListStore> list_store = Gtk::ListStore::create(columns);
 
-			for (size_t i = 0; i < commits.size(); ++i) {
-				Gtk::TreeModel::Row row = *(list_store->append());
-				row[columns.commit_hash] = commits[i];
-				row[columns.author] = authors[i];
-				row[columns.timestamp] = times[i];
-				row[columns.description] = descriptions[i];
-			}
-
-			tree_view.set_model(list_store);
-			tree_view.append_column("Commit Hash", columns.commit_hash);
-			tree_view.append_column("Author", columns.author);
-			tree_view.append_column("Commit Time", columns.timestamp);
-			tree_view.append_column("Description", columns.description);
-
-			Gtk::ScrolledWindow scrolled_window;
-			scrolled_window.add(tree_view);
-			scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
-			scrolled_window.set_min_content_height(400);
-
-			Gtk::Dialog select_dialog("Select a commit to compare", *this, true);
-			select_dialog.set_transient_for(*this);
-			select_dialog.get_content_area()->add(scrolled_window);
-			select_dialog.add_button("Compare", Gtk::RESPONSE_OK);
-			select_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-			select_dialog.show_all();
-
-			if (select_dialog.run() == Gtk::RESPONSE_OK) 
-				commit_hash = tree_view.get_selection()->get_selected()->get_value(columns.commit_hash);
-			else
-				return;
+		for (size_t i = 0; i < commits.size(); ++i) {
+			Gtk::TreeModel::Row row = *(list_store->append());
+			row[columns.commit_hash] = commits[i];
+			row[columns.author] = authors[i];
+			row[columns.timestamp] = times[i];
+			row[columns.description] = descriptions[i];
 		}
+
+		tree_view.set_model(list_store);
+		tree_view.append_column("Commit Hash", columns.commit_hash);
+		tree_view.append_column("Author", columns.author);
+		tree_view.append_column("Commit Time", columns.timestamp);
+		tree_view.append_column("Description", columns.description);
+
+		Gtk::ScrolledWindow scrolled_window;
+		scrolled_window.add(tree_view);
+		scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
+		scrolled_window.set_min_content_height(400);
+
+		Gtk::Dialog select_dialog("Select a commit to compare", *this, true);
+		select_dialog.set_transient_for(*this);
+		select_dialog.get_content_area()->add(scrolled_window);
+		select_dialog.add_button("Compare", Gtk::RESPONSE_OK);
+		select_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+		select_dialog.show_all();
+
+		if (select_dialog.run() == Gtk::RESPONSE_OK) 
+			commit_hash = tree_view.get_selection()->get_selected()->get_value(columns.commit_hash);
+		else
+			return;
+		
 		compare_git(trim(commit_hash));
 	}
 	catch (const std::runtime_error& ex) {
@@ -1906,20 +1902,19 @@ void NotebookWindow::compare_git_specific()
 {
 	try {
 		std::string commit_hash;
-		{
-			Gtk::Entry entry;
-			Gtk::Dialog entry_dialog("Enter hash of commit to compare against", *this, true);
-			entry_dialog.set_transient_for(*this);
-			entry_dialog.get_content_area()->add(entry);
-			entry_dialog.add_button("Compare", Gtk::RESPONSE_OK);
-			entry_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
-			entry_dialog.show_all();
+		Gtk::Entry entry;
+		Gtk::Dialog entry_dialog("Enter hash of commit to compare against", *this, true);
+		entry_dialog.set_transient_for(*this);
+		entry_dialog.get_content_area()->add(entry);
+		entry_dialog.add_button("Compare", Gtk::RESPONSE_OK);
+		entry_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
+		entry_dialog.show_all();
 
-			if (entry_dialog.run() == Gtk::RESPONSE_OK)
-				commit_hash = entry.get_text();
-			else
-				return;
-		}
+		if (entry_dialog.run() == Gtk::RESPONSE_OK)
+			commit_hash = entry.get_text();
+		else
+			return;
+	
 		compare_git(trim(commit_hash));
 	}
 	catch (const std::runtime_error& ex) {

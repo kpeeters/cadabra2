@@ -25,7 +25,7 @@ class DiffViewer : public Gtk::Dialog
 {
 public:
 	DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent);
-
+	void run_noblock();
 protected:	
 	using Cells = std::pair<std::vector<std::string>, std::vector<std::string>>;
 
