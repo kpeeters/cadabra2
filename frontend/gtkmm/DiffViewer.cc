@@ -134,6 +134,7 @@ DiffViewer::DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent)
 	scrolled_window.add(box);
 	scrolled_window.set_vexpand(true);
 	scrolled_window.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
+	add_button("Close", Gtk::RESPONSE_CLOSE);
 
 	populate(a, b);
 
