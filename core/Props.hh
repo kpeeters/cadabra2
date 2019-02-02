@@ -262,6 +262,9 @@ class Properties {
 		template<class T> const T*  get_composite(Ex::iterator, Ex::iterator, bool ignore_parent_rel=false) const;
 		template<class T> const T*  get_composite(Ex::iterator, Ex::iterator, int&, int&, bool ignore_parent_rel=false) const;
 
+		template<class T>
+		std::pair<const T*, const pattern *> get_with_pattern(Ex::iterator, int& serialnum, bool doserial=true, bool ignore_parent_rel=false) const;
+
 		// Get the outermost node which has the given property attached, i.e. go down through
 		// all (if any) nodes which have just inherited the property.
 		template<class T> Ex::iterator head(Ex::iterator, bool ignore_parent_rel=false) const;
@@ -302,7 +305,16 @@ const T* Properties::get_composite(Ex::iterator it, bool ignore_parent_rel) cons
 template<class T>
 const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doserial, bool ignore_parent_rel) const
 	{
-	const T* ret=0;
+	auto ret = get_with_pattern<T>(it, serialnum, doserial, ignore_parent_rel);
+	return ret.first;
+	}
+	
+template<class T>
+std::pair<const T*, const pattern *> Properties::get_with_pattern(Ex::iterator it, int& serialnum, bool doserial, bool ignore_parent_rel) const
+	{
+	std::pair<const T*, const pattern *> ret;
+	ret.first=0;
+	ret.second=0;
 	bool inherits=false;
 
 	//std::cerr << *it->name_only() << std::endl;
@@ -318,9 +330,10 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 		while(walk!=pit.second) {
 			if(wildcards==(*walk).second.first->children_wildcard()) {
 				// First check property type; a dynamic cast is much faster than a pattern match.
-				ret=dynamic_cast<const T *>((*walk).second.second);
-				if(ret) {
+				ret.first=dynamic_cast<const T *>((*walk).second.second);
+				if(ret.first) {
 					if((*walk).second.first->match(*this, it, ignore_parent_rel)) {
+						ret.second=(*walk).second.first;
 						if(doserial) {
 							std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator> 
 								pm=pats.equal_range((*walk).second.second);
@@ -335,7 +348,7 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 						break;
 						}
 					}
-				ret=0;
+				ret.first=0;
 				if(dynamic_cast<const PropertyInherit *>((*walk).second.second)) 
 					inherits=true;
 				else if(dynamic_cast<const Inherit<T> *>((*walk).second.second)) 
@@ -343,7 +356,7 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 				}
 			++walk;
 			}
-		if(!wildcards && !ret) {
+		if(!wildcards && !ret.first) {
 //			std::cerr << "not yet found, switching to wildcards" << std::endl;
 			wildcards=true;
 			}
@@ -354,12 +367,12 @@ const T* Properties::get_composite(Ex::iterator it, int& serialnum, bool doseria
 		} 
 
 	// If no property was found, figure out whether a property is inherited from a child node.
-	if(!ret && inherits) {
+	if(!ret.first && inherits) {
 //		std::cout << "no match but perhaps inheritance?" << std::endl;
 		Ex::sibling_iterator sib=it.begin();
 		while(sib!=it.end()) {
-			const T* tmp=get_composite<T>((Ex::iterator)(sib), serialnum, doserial);
-			if(tmp) {
+			std::pair<const T*, const pattern *> tmp=get_with_pattern<T>((Ex::iterator)(sib), serialnum, doserial);
+			if(tmp.first) {
 				ret=tmp;
 				break;
 				}

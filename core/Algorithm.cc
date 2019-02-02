@@ -837,15 +837,24 @@ bool Algorithm::is_nonprod_factor_in_prod(iterator it)
 bool Algorithm::prod_wrap_single_term(iterator& it)
 	{
 	if(is_single_term(it)) {
-		force_prod_wrap(it);
+		force_node_wrap(it, "\\prod");
 		return true;
 		}
 	else return false;
 	}
 
-void Algorithm::force_prod_wrap(iterator& it)
+bool Algorithm::sum_wrap_single_term(iterator& it)
 	{
-	iterator prodnode=tr.insert(it, str_node("\\prod"));
+	if(is_single_term(it)) {
+		force_node_wrap(it, "\\sum");
+		return true;
+		}
+	else return false;
+	}
+
+void Algorithm::force_node_wrap(iterator& it, std::string nm)
+	{
+	iterator prodnode=tr.insert(it, str_node(nm));
 	sibling_iterator fr=it, to=it;
 	++to;
 	tr.reparent(prodnode, fr, to);
@@ -859,6 +868,21 @@ void Algorithm::force_prod_wrap(iterator& it)
 bool Algorithm::prod_unwrap_single_term(iterator& it)
 	{
 	if((*it->name)=="\\prod") {
+		if(tr.number_of_children(it)==1) {
+			multiply(tr.begin(it)->multiplier, *it->multiplier);
+			tr.begin(it)->fl.bracket=it->fl.bracket;
+			tr.begin(it)->multiplier=it->multiplier;
+			tr.flatten(it);
+			it=tr.erase(it);
+			return true;
+			}
+		}
+	return false;
+	}
+
+bool Algorithm::sum_unwrap_single_term(iterator& it)
+	{
+	if((*it->name)=="\\sum") {
 		if(tr.number_of_children(it)==1) {
 			multiply(tr.begin(it)->multiplier, *it->multiplier);
 			tr.begin(it)->fl.bracket=it->fl.bracket;

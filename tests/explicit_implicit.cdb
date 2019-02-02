@@ -1,0 +1,16 @@
+
+{m,n,p}::Indices(spacetime, position=fixed);
+{a,b,c,d}::Indices(spinor, position=fixed);
+\sigma^{p}::ImplicitIndex(\sigma^{p a}_{b});
+\psi::ImplicitIndex(\psi_{a});
+\chi::ImplicitIndex(\chi_{a});
+\bpsi::ImplicitIndex(\bpsi^{a});
+\bchi::ImplicitIndex(\bchi^{a});
+
+
+ex:= \psi \sigma^{m} \sigma^{n} \chi \lambda^{a} + \lambda_{b} \chi^{b} T^{m n}\chi^{a};
+explicit_indices(_);
+
+ex:= \psi \sigma^{m} \chi + \chi \sigma^{m} \chi;
+explicit_indices(_);
+

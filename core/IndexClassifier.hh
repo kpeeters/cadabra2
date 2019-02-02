@@ -35,8 +35,16 @@ class IndexClassifier {
 		void     fill_index_position_map(Ex::iterator, const index_map_t&, index_position_map_t&) const;
       void     fill_map(index_map_t&, Ex::sibling_iterator, Ex::sibling_iterator) const;
 		void     print_classify_indices(std::ostream&, Ex::iterator) const;
+
+      /// Determine those indices in 'two' which have a name which is identical to
+      /// an index name occurring in 'one'. Store these indices of 'two' in target.
+      /// If 'move_out' is true, instead move both the indices in 'one' and 'two' 
+      /// (i.e. move instead of copy, and also store the 'one' index).
+      /// One exception: numerical, coordinate and symbol indices are always kept in 'one'.
+
 		void     determine_intersection(index_map_t& one, index_map_t& two, index_map_t& target,
-										  bool move_out=false) const; 
+										  bool move_out=false) const;
+		
 		void     classify_add_index(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const;
 		void     classify_indices_up(Ex::iterator, index_map_t& ind_free, index_map_t& ind_dummy) const;
 		void     classify_indices(Ex::iterator, index_map_t& ind_free, index_map_t& ind_dummy) const;

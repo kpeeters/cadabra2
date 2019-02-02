@@ -51,13 +51,6 @@ void IndexClassifier::fill_map(index_map_t& mp, Ex::sibling_iterator st, Ex::sib
 		}
 	}
 
-// Determine those indices in 'two' which have a name which is identical to
-// an index name occurring in 'one'. Store these indices of 'two' in target.
-// If 'move_out' is true, instead move both the indices in 'one' and 'two' 
-// (i.e. move instead of copy, and also store the 'one' index).
-//
-// One exception: numerical, coordinate and symbol indices are always kept in 'one'.
-//
 void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two, index_map_t& target, bool move_out)  const
 	{
 	index_map_t::iterator it1=one.begin();

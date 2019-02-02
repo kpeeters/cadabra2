@@ -177,10 +177,14 @@ class Algorithm : public IndexClassifier {
 		bool     is_nonprod_factor_in_prod(iterator);
 		bool     prod_wrap_single_term(iterator&);
 		bool     prod_unwrap_single_term(iterator&);
+		bool     sum_wrap_single_term(iterator&);
+		bool     sum_unwrap_single_term(iterator&);		
 
-		/// Wrap a term in a product, irrespective of its parent (it usually makes
-		/// more sense to call the safer prod_wrap_single_term above).
-		void     force_prod_wrap(iterator&);
+		/// Wrap a term in a product or sum in a node with indicated
+		/// name, irrespective of its parent (it usually makes more
+		/// sense to call the safer prod_wrap_single_term or
+		/// sum_wrap_single_term above).
+    	void     force_node_wrap(iterator&, std::string);
 
 		/// Figure out whether two objects (commonly indices) are separated by a derivative
 		/// operator, as in \f[ \partial_{a}{A_{b}} C^{b} \f].

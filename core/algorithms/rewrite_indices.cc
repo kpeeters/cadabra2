@@ -43,7 +43,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 
 	result_t res=result_t::l_no_action;
 
-	if(is_derivative_argument) force_prod_wrap(it);
+	if(is_derivative_argument) force_node_wrap(it, "\\prod");
 	else                       prod_wrap_single_term(it);
 
 	index_map_t ind_free, ind_dummy;
