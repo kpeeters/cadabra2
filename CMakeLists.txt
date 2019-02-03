@@ -82,6 +82,8 @@ option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
 
 option(ENABLE_FRONTEND    "Enable the UI frontend" ON)
 
+option(ENABLE_SYSTEM_JSONCPP "Use the system-provided jsoncpp library" OFF)
+
 option(INSTALL_TARGETS_ONLY "Only install targets; skipping icons, shared libraries etc..." OFF)
 if (INSTALL_TARGETS_ONLY)
 	message(STATUS "INSTALL_TARGETS_ONLY is enabled, please make sure all auxillary files and programs Cadabra requires are already installed")
