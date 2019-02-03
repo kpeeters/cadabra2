@@ -1,0 +1,835 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Einstein equations from a variational principle}\n\n\\author{Mattia Scomparin}\\email{mattia.scompa@gmail.com}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Einstein equations from a variational principle}\n\n\\author{Mattia Scomparin}\\email{mattia.scompa@gmail.com}"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This notebook derives the Einstein equations by starting from the Einstein-Hilbert action, and requiring that\nits variational derivative with respect to the metric vanishes. "
+				}
+			],
+			"hidden" : true,
+			"source" : "This notebook derives the Einstein equations by starting from the Einstein-Hilbert action, and requiring that\nits variational derivative with respect to the metric vanishes. "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "import cdb.core.manip as manip"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We first of all need to declare the indices which we will use, as well as the symbols we use for the metric and Kronecker delta."
+				}
+			],
+			"hidden" : true,
+			"source" : "We first of all need to declare the indices which we will use, as well as the symbols we use for the metric and Kronecker delta."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=independent) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\alpha,~\\discretionary{}{}{} \\beta,~\\discretionary{}{}{} \\gamma,~\\discretionary{}{}{} \\lambda,~\\discretionary{}{}{} \\tau,~\\discretionary{}{}{} \\pi,~\\discretionary{}{}{} \\xi,~\\discretionary{}{}{} \\iota,~\\discretionary{}{}{} \\omega,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\psi,~\\discretionary{}{}{} \\chi,~\\discretionary{}{}{} \\epsilon,~\\discretionary{}{}{} \\upsilon\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{\\mu,\\nu,\\rho,\\sigma,\\alpha,\\beta,\\gamma,\\lambda,\\tau,\\pi,\\xi,\\iota,\\omega,\\kappa,\\psi,\\chi,\\epsilon,\\upsilon}::Indices(position=independent);\ng_{\\mu\\nu}::Metric.\ng^{\\mu\\nu}::InverseMetric.\n{\\delta{#},g_{\\mu}^{\\nu},g^{\\mu}_{\\nu}}::KroneckerDelta."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Make various symbols display in a more readable form,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Make various symbols display in a more readable form,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "\\Lm::LaTeXForm(\"\\mathcal{L}_{\\text{mat}}\").    \t\t\n\\Dg::LaTeXForm(\"\\sqrt{-g}\").          \n\\dg{#}::LaTeXForm(\"\\delta g\").  \t\t"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "\\dLm::LaTeXForm(\"\\delta\\mathcal{L}_{\\text{mat}}\").  \n\\d::LaTeXForm(\"\\delta\").\n\\dDg::LaTeXForm(\"\\delta\\sqrt{-g}\").   \n\\dCn{#}::LaTeXForm(\"\\delta\\Gamma\").         \n\\dR{#}::LaTeXForm(\"\\delta R\")."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The Christoffel symbols and their variations are symmetric in the two lower indices,"
+				}
+			],
+			"hidden" : true,
+			"source" : "The Christoffel symbols and their variations are symmetric in the two lower indices,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "\\Gamma^{\\alpha}_{\\mu\\nu}::TableauSymmetry(shape={2}, indices={1,2}).\n\\dGamma^{\\alpha}_{\\mu\\nu}::TableauSymmetry(shape={2}, indices={1,2})."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We need to declare which symbols to use for derivatives,"
+				}
+			],
+			"hidden" : true,
+			"source" : "We need to declare which symbols to use for derivatives,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\left[\\nabla{\\#},~\\discretionary{}{}{} \\delta{\\#}\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "{\\partial{#}}::PartialDerivative;\n{\\nabla{#},\\delta{#}}::Derivative;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We now need to define the Christoffel connection in terms of the metric, and the Riemann tensor in terms of the Christoffel connection,\nas well as the Ricci tensor and scalar and Einstein tensor. These are also available in a Cadabra package, but for clarity we spell\nthem out here."
+				}
+			],
+			"hidden" : true,
+			"source" : "We now need to define the Christoffel connection in terms of the metric, and the Riemann tensor in terms of the Christoffel connection,\nas well as the Ricci tensor and scalar and Einstein tensor. These are also available in a Cadabra package, but for clarity we spell\nthem out here."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\Gamma^{\\mu}_{\\nu \\rho} =  1/2 g^{\\mu \\sigma} (\\partial_{\\rho}(g_{\\nu \\sigma}) + \\partial_{\\nu}(g_{\\rho \\sigma})-\\partial_{\\sigma}(g_{\\nu \\rho}))"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\Gamma^{\\mu}\\,_{\\nu \\rho} = \\frac{1}{2}g^{\\mu \\sigma} \\left(\\partial_{\\rho}{g_{\\nu \\sigma}}+\\partial_{\\nu}{g_{\\rho \\sigma}}-\\partial_{\\sigma}{g_{\\nu \\rho}}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "R^{\\rho}_{\\sigma \\mu \\nu} = \\partial_{\\mu}(\\Gamma^{\\rho}_{\\nu \\sigma})-\\partial_{\\nu}(\\Gamma^{\\rho}_{\\mu \\sigma}) + \\Gamma^{\\rho}_{\\mu \\lambda} \\Gamma^{\\lambda}_{\\nu \\sigma}-\\Gamma^{\\rho}_{\\nu \\lambda} \\Gamma^{\\lambda}_{\\mu \\sigma}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\partial_{\\nu}{\\Gamma^{\\rho}\\,_{\\mu \\sigma}}+\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\Gamma^{\\lambda}\\,_{\\nu \\sigma}-\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\Gamma^{\\lambda}\\,_{\\mu \\sigma}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "R_{\\sigma \\nu} = R^{\\rho}_{\\sigma \\rho \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}R_{\\sigma \\nu} = R^{\\rho}\\,_{\\sigma \\rho \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "R = R_{\\sigma \\nu} g^{\\sigma \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}R = R_{\\sigma \\nu} g^{\\sigma \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "G_{\\mu \\nu} = R_{\\mu \\nu} -  1/2 g_{\\mu \\nu} R"
+						}
+					],
+					"source" : "\\begin{dmath*}{}G_{\\mu \\nu} = R_{\\mu \\nu} - \\frac{1}{2}g_{\\mu \\nu} R\\end{dmath*}"
+				}
+			],
+			"source" : "connection       := \\Gamma^{\\mu}_{\\nu\\rho} = 1/2 g^{\\mu\\sigma} ( \\partial_{\\rho}{g_{\\nu\\sigma}} +\\partial_{\\nu}{g_{\\rho\\sigma}} -\\partial_{\\sigma}{g_{\\nu\\rho}} );\nriemannTensor    := R^{\\rho}_{\\sigma\\mu\\nu} = \\partial_{\\mu}{\\Gamma^{\\rho}_{\\nu\\sigma}} -\\partial_{\\nu}{\\Gamma^{\\rho}_{\\mu\\sigma}} \n                                              +\\Gamma^{\\rho}_{\\mu\\lambda} \\Gamma^{\\lambda}_{\\nu\\sigma} -\\Gamma^{\\rho}_{\\nu\\lambda} \\Gamma^{\\lambda}_{\\mu\\sigma};\nricciTensor      := R_{\\sigma\\nu} = R^{\\rho}_{\\sigma\\rho\\nu};\nscalarCurvature  := R = R_{\\sigma\\nu} g^{\\sigma\\nu};      \neinsteinTensor   := G_{\\mu\\nu} = R_{\\mu\\nu} - 1/2 g_{\\mu\\nu} R;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We are now ready to address the variational problem. The action we use is the Einstein-Hilbert action, amended with \na cosmological constant term."
+				}
+			],
+			"hidden" : true,
+			"source" : "We are now ready to address the variational problem. The action we use is the Einstein-Hilbert action, amended with \na cosmological constant term."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "S = \\int{\\Dg ( 1/2 (\\kappa)**(-1) (R-2\\Lambda) + \\Lm)}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}S = \\int \\sqrt{-g} \\left(\\frac{1}{2}{\\kappa}^{-1} \\left(R-2\\Lambda\\right)+\\mathcal{L}_{\\text{mat}}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "S = \\int{ 1/2 \\Dg (\\kappa)**(-1) R-\\Dg (\\kappa)**(-1) \\Lambda + \\Dg \\Lm}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}S = \\int \\left(\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} R-\\sqrt{-g} {\\kappa}^{-1} \\Lambda+\\sqrt{-g} \\mathcal{L}_{\\text{mat}}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "action := S = \\int{\\Dg*[1/2*1/\\kappa*(R-2\\Lambda)+\\Lm]}{x};\ndistribute(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Before we vary this, we need to construct the variation of the various objects in this action step by step. The variation of the metric determinant is given by"
+				}
+			],
+			"hidden" : true,
+			"source" : "Before we vary this, we need to construct the variation of the various objects in this action step by step. The variation of the metric determinant is given by"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(\\Dg) =  -  1/2 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{\\sqrt{-g}} =  - \\frac{1}{2}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu}\\end{dmath*}"
+				}
+			],
+			"source" : "deltaMetricDeterminant := \\delta(\\Dg) = -\\frac{1}{2}*\\Dg*g_{\\mu\\nu}\\dg^{\\mu\\nu}; "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "By definition the variation of the matter Lagrangian gives the stress tensor; we rewrite it here slightly for later purposes."
+				}
+			],
+			"hidden" : true,
+			"source" : "By definition the variation of the matter Lagrangian gives the stress tensor; we rewrite it here slightly for later purposes."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\Dg T_{\\mu \\nu} \\dg^{\\mu \\nu} = -2\\delta(\\Dg \\Lm)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\sqrt{-g} T_{\\mu \\nu} \\delta g^{\\mu \\nu} = -2\\delta\\left(\\sqrt{-g} \\mathcal{L}_{\\text{mat}}\\right)\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} \\Lm-2\\Dg \\delta(\\Lm) = \\Dg T_{\\mu \\nu} \\dg^{\\mu \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} \\mathcal{L}_{\\text{mat}}-2\\sqrt{-g} \\delta{\\mathcal{L}_{\\text{mat}}} = \\sqrt{-g} T_{\\mu \\nu} \\delta g^{\\mu \\nu}\\end{dmath*}"
+				}
+			],
+			"source" : "energyMomentumTensor := \\Dg T_{\\mu\\nu}\\dg^{\\mu\\nu} = -2\\delta(\\Dg*\\Lm);\nproduct_rule(_)\ndistribute(_)\nsubstitute(_,deltaMetricDeterminant)\nmatterLagrangianVariation = manip.swap_sides(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Next comes the variation of the Christoffel symbols. We then rewrite these in such a way that we isolate the derivative\nof the variation, as that object will appear once we start varying the Riemann tensor."
+				}
+			],
+			"hidden" : true,
+			"source" : "Next comes the variation of the Christoffel symbols. We then rewrite these in such a way that we isolate the derivative\nof the variation, as that object will appear once we start varying the Riemann tensor."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\nabla_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho}) = \\partial_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho}) + \\Gamma^{\\mu}_{\\sigma \\alpha} \\dCn^{\\alpha}_{\\nu \\rho}-\\Gamma^{\\alpha}_{\\sigma \\nu} \\dCn^{\\mu}_{\\alpha \\rho}-\\Gamma^{\\alpha}_{\\sigma \\rho} \\dCn^{\\mu}_{\\nu \\alpha}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\nabla_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}} = \\partial_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}}+\\Gamma^{\\mu}\\,_{\\sigma \\alpha} \\delta\\Gamma^{\\alpha}\\,_{\\nu \\rho}-\\Gamma^{\\alpha}\\,_{\\sigma \\nu} \\delta\\Gamma^{\\mu}\\,_{\\alpha \\rho}-\\Gamma^{\\alpha}\\,_{\\sigma \\rho} \\delta\\Gamma^{\\mu}\\,_{\\nu \\alpha}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = \\partial_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho}) + \\Gamma^{\\mu}_{\\sigma \\alpha} \\dCn^{\\alpha}_{\\nu \\rho}-\\Gamma^{\\alpha}_{\\sigma \\nu} \\dCn^{\\mu}_{\\alpha \\rho}-\\Gamma^{\\alpha}_{\\sigma \\rho} \\dCn^{\\mu}_{\\nu \\alpha}-\\nabla_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0 = \\partial_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}}+\\Gamma^{\\mu}\\,_{\\sigma \\alpha} \\delta\\Gamma^{\\alpha}\\,_{\\nu \\rho}-\\Gamma^{\\alpha}\\,_{\\sigma \\nu} \\delta\\Gamma^{\\mu}\\,_{\\alpha \\rho}-\\Gamma^{\\alpha}\\,_{\\sigma \\rho} \\delta\\Gamma^{\\mu}\\,_{\\nu \\alpha}-\\nabla_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-\\partial_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho}) = \\Gamma^{\\mu}_{\\sigma \\alpha} \\dCn^{\\alpha}_{\\nu \\rho}-\\Gamma^{\\alpha}_{\\sigma \\nu} \\dCn^{\\mu}_{\\alpha \\rho}-\\Gamma^{\\alpha}_{\\sigma \\rho} \\dCn^{\\mu}_{\\nu \\alpha}-\\nabla_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-\\partial_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}} = \\Gamma^{\\mu}\\,_{\\sigma \\alpha} \\delta\\Gamma^{\\alpha}\\,_{\\nu \\rho}-\\Gamma^{\\alpha}\\,_{\\sigma \\nu} \\delta\\Gamma^{\\mu}\\,_{\\alpha \\rho}-\\Gamma^{\\alpha}\\,_{\\sigma \\rho} \\delta\\Gamma^{\\mu}\\,_{\\nu \\alpha}-\\nabla_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\partial_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho}) = -\\Gamma^{\\mu}_{\\sigma \\alpha} \\dCn^{\\alpha}_{\\nu \\rho} + \\Gamma^{\\alpha}_{\\sigma \\nu} \\dCn^{\\mu}_{\\alpha \\rho} + \\Gamma^{\\alpha}_{\\sigma \\rho} \\dCn^{\\mu}_{\\nu \\alpha} + \\nabla_{\\sigma}(\\dCn^{\\mu}_{\\nu \\rho})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\partial_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}} = -\\Gamma^{\\mu}\\,_{\\sigma \\alpha} \\delta\\Gamma^{\\alpha}\\,_{\\nu \\rho}+\\Gamma^{\\alpha}\\,_{\\sigma \\nu} \\delta\\Gamma^{\\mu}\\,_{\\alpha \\rho}+\\Gamma^{\\alpha}\\,_{\\sigma \\rho} \\delta\\Gamma^{\\mu}\\,_{\\nu \\alpha}+\\nabla_{\\sigma}{\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho}}\\end{dmath*}"
+				}
+			],
+			"source" : "covariantDerivativeCn := \\nabla_{\\sigma}(\\dCn^{\\mu}_{\\nu\\rho}) = \\partial_{\\sigma}(\\dCn^{\\mu}_{\\nu\\rho})\n                        +\\Gamma^{\\mu}_{\\sigma\\alpha}\\dCn^{\\alpha}_{\\nu\\rho}-\\Gamma^{\\alpha}_{\\sigma\\nu}\\dCn^{\\mu}_{\\alpha\\rho}\n                        -\\Gamma^{\\alpha}_{\\sigma\\rho}\\dCn^{\\mu}_{\\nu\\alpha}; \ncovariantDerivativeCn1 = manip.to_rhs(_, $\\nabla_{\\sigma}{A??}$);\ncovariantDerivativeCn2 = manip.to_lhs(_, $\\partial_{\\sigma}{A??}$);\npartialDerivativeCn = manip.multiply_through(covariantDerivativeCn2, $-1$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The variation of the Riemann tensor comes next. With a few steps this is rewritten to a form which only \ninvolves covariant derivatives of the variation of the Christoffel connection."
+				}
+			],
+			"hidden" : true,
+			"source" : "The variation of the Riemann tensor comes next. With a few steps this is rewritten to a form which only \ninvolves covariant derivatives of the variation of the Christoffel connection."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR^{\\rho}_{\\sigma \\mu \\nu} = \\partial_{\\mu}(\\dCn^{\\rho}_{\\nu \\sigma})-\\partial_{\\nu}(\\dCn^{\\rho}_{\\mu \\sigma}) + \\dCn^{\\rho}_{\\mu \\lambda} \\Gamma^{\\lambda}_{\\nu \\sigma} + \\Gamma^{\\rho}_{\\mu \\lambda} \\dCn^{\\lambda}_{\\nu \\sigma}-\\dCn^{\\rho}_{\\nu \\lambda} \\Gamma^{\\lambda}_{\\mu \\sigma}-\\Gamma^{\\rho}_{\\nu \\lambda} \\dCn^{\\lambda}_{\\mu \\sigma}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\partial_{\\mu}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\partial_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\mu \\sigma}}+\\delta\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\Gamma^{\\lambda}\\,_{\\nu \\sigma}+\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\delta\\Gamma^{\\lambda}\\,_{\\nu \\sigma}-\\delta\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\Gamma^{\\lambda}\\,_{\\mu \\sigma}-\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\delta\\Gamma^{\\lambda}\\,_{\\mu \\sigma}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR^{\\rho}_{\\sigma \\mu \\nu} = \\partial_{\\mu}(\\dCn^{\\rho}_{\\nu \\sigma})-\\partial_{\\nu}(\\dCn^{\\rho}_{\\mu \\sigma}) + \\Gamma^{\\lambda}_{\\nu \\sigma} \\dCn^{\\rho}_{\\mu \\lambda} + \\Gamma^{\\rho}_{\\mu \\lambda} \\dCn^{\\lambda}_{\\nu \\sigma}-\\Gamma^{\\lambda}_{\\mu \\sigma} \\dCn^{\\rho}_{\\nu \\lambda}-\\Gamma^{\\rho}_{\\nu \\lambda} \\dCn^{\\lambda}_{\\mu \\sigma}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\partial_{\\mu}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\partial_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\mu \\sigma}}+\\Gamma^{\\lambda}\\,_{\\nu \\sigma} \\delta\\Gamma^{\\rho}\\,_{\\mu \\lambda}+\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\delta\\Gamma^{\\lambda}\\,_{\\nu \\sigma}-\\Gamma^{\\lambda}\\,_{\\mu \\sigma} \\delta\\Gamma^{\\rho}\\,_{\\nu \\lambda}-\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\delta\\Gamma^{\\lambda}\\,_{\\mu \\sigma}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR^{\\rho}_{\\sigma \\mu \\nu} = -\\Gamma^{\\rho}_{\\mu \\alpha} \\dCn^{\\alpha}_{\\nu \\sigma} + \\Gamma^{\\alpha}_{\\mu \\nu} \\dCn^{\\rho}_{\\alpha \\sigma} + \\Gamma^{\\alpha}_{\\mu \\sigma} \\dCn^{\\rho}_{\\nu \\alpha} + \\nabla_{\\mu}(\\dCn^{\\rho}_{\\nu \\sigma}) + \\Gamma^{\\rho}_{\\nu \\alpha} \\dCn^{\\alpha}_{\\mu \\sigma}-\\Gamma^{\\alpha}_{\\nu \\mu} \\dCn^{\\rho}_{\\alpha \\sigma}-\\Gamma^{\\alpha}_{\\nu \\sigma} \\dCn^{\\rho}_{\\mu \\alpha}-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\mu \\sigma}) + \\Gamma^{\\lambda}_{\\nu \\sigma} \\dCn^{\\rho}_{\\mu \\lambda} + \\Gamma^{\\rho}_{\\mu \\lambda} \\dCn^{\\lambda}_{\\nu \\sigma}-\\Gamma^{\\lambda}_{\\mu \\sigma} \\dCn^{\\rho}_{\\nu \\lambda}-\\Gamma^{\\rho}_{\\nu \\lambda} \\dCn^{\\lambda}_{\\mu \\sigma}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R^{\\rho}\\,_{\\sigma \\mu \\nu} = -\\Gamma^{\\rho}\\,_{\\mu \\alpha} \\delta\\Gamma^{\\alpha}\\,_{\\nu \\sigma}+\\Gamma^{\\alpha}\\,_{\\mu \\nu} \\delta\\Gamma^{\\rho}\\,_{\\alpha \\sigma}+\\Gamma^{\\alpha}\\,_{\\mu \\sigma} \\delta\\Gamma^{\\rho}\\,_{\\nu \\alpha}+\\nabla_{\\mu}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}}+\\Gamma^{\\rho}\\,_{\\nu \\alpha} \\delta\\Gamma^{\\alpha}\\,_{\\mu \\sigma}-\\Gamma^{\\alpha}\\,_{\\nu \\mu} \\delta\\Gamma^{\\rho}\\,_{\\alpha \\sigma}-\\Gamma^{\\alpha}\\,_{\\nu \\sigma} \\delta\\Gamma^{\\rho}\\,_{\\mu \\alpha}-\\nabla_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\mu \\sigma}}+\\Gamma^{\\lambda}\\,_{\\nu \\sigma} \\delta\\Gamma^{\\rho}\\,_{\\mu \\lambda}+\\Gamma^{\\rho}\\,_{\\mu \\lambda} \\delta\\Gamma^{\\lambda}\\,_{\\nu \\sigma}-\\Gamma^{\\lambda}\\,_{\\mu \\sigma} \\delta\\Gamma^{\\rho}\\,_{\\nu \\lambda}-\\Gamma^{\\rho}\\,_{\\nu \\lambda} \\delta\\Gamma^{\\lambda}\\,_{\\mu \\sigma}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR^{\\rho}_{\\sigma \\mu \\nu} = \\Gamma^{\\alpha}_{\\mu \\nu} \\dCn^{\\rho}_{\\alpha \\sigma} + \\nabla_{\\mu}(\\dCn^{\\rho}_{\\nu \\sigma})-\\Gamma^{\\alpha}_{\\nu \\mu} \\dCn^{\\rho}_{\\alpha \\sigma}-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\mu \\sigma})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\Gamma^{\\alpha}\\,_{\\mu \\nu} \\delta\\Gamma^{\\rho}\\,_{\\alpha \\sigma}+\\nabla_{\\mu}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\Gamma^{\\alpha}\\,_{\\nu \\mu} \\delta\\Gamma^{\\rho}\\,_{\\alpha \\sigma}-\\nabla_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\mu \\sigma}}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR^{\\rho}_{\\sigma \\mu \\nu} = \\nabla_{\\mu}(\\dCn^{\\rho}_{\\nu \\sigma})-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\mu \\sigma})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R^{\\rho}\\,_{\\sigma \\mu \\nu} = \\nabla_{\\mu}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\nabla_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\mu \\sigma}}\\end{dmath*}"
+				}
+			],
+			"source" : "deltaRiemannTensor = vary(riemannTensor, $\\Gamma^{\\mu}_{\\nu\\rho}->\\dCn^{\\mu}_{\\nu\\rho}, R^{\\rho}_{\\sigma\\mu\\nu} -> \\dR^{\\rho}_{\\sigma\\mu\\nu}$);\nsort_product(_);\nsubstitute(_,partialDerivativeCn);\nrename_dummies(_);\ncanonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The variation of the Ricci tensor leads to the so-called Palatini identity:"
+				}
+			],
+			"hidden" : true,
+			"source" : "The variation of the Ricci tensor leads to the so-called Palatini identity:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR_{\\sigma \\nu} = \\dR^{\\rho}_{\\sigma \\rho \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R_{\\sigma \\nu} = \\delta R^{\\rho}\\,_{\\sigma \\rho \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR_{\\sigma \\nu} = \\nabla_{\\rho}(\\dCn^{\\rho}_{\\nu \\sigma})-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\rho \\sigma})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R_{\\sigma \\nu} = \\nabla_{\\rho}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\nabla_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\rho \\sigma}}\\end{dmath*}"
+				}
+			],
+			"source" : "deltaRicciTensor = vary(ricciTensor, $R^{\\rho}_{\\sigma\\rho\\nu}->\\dR^{\\rho}_{\\sigma\\rho\\nu}, R_{\\sigma\\nu} -> \\dR_{\\sigma\\nu}$);\nsubstitute(_,deltaRiemannTensor);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We can now vary the scalar curvature."
+				}
+			],
+			"hidden" : true,
+			"source" : "We can now vary the scalar curvature."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR = \\dR_{\\sigma \\nu} g^{\\sigma \\nu} + R_{\\sigma \\nu} \\dg^{\\sigma \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R = \\delta R_{\\sigma \\nu} g^{\\sigma \\nu}+R_{\\sigma \\nu} \\delta g^{\\sigma \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR = (\\nabla_{\\rho}(\\dCn^{\\rho}_{\\nu \\sigma})-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\rho \\sigma})) g^{\\sigma \\nu} + R_{\\sigma \\nu} \\dg^{\\sigma \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R = \\left(\\nabla_{\\rho}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}}-\\nabla_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\rho \\sigma}}\\right) g^{\\sigma \\nu}+R_{\\sigma \\nu} \\delta g^{\\sigma \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR = \\nabla_{\\rho}(\\dCn^{\\rho}_{\\nu \\sigma}) g^{\\sigma \\nu}-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\rho \\sigma}) g^{\\sigma \\nu} + R_{\\sigma \\nu} \\dg^{\\sigma \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R = \\nabla_{\\rho}{\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma}} g^{\\sigma \\nu}-\\nabla_{\\nu}{\\delta\\Gamma^{\\rho}\\,_{\\rho \\sigma}} g^{\\sigma \\nu}+R_{\\sigma \\nu} \\delta g^{\\sigma \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR = \\nabla_{\\rho}(\\dCn^{\\rho}_{\\nu \\sigma} g^{\\sigma \\nu})-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\rho \\sigma} g^{\\sigma \\nu}) + R_{\\sigma \\nu} \\dg^{\\sigma \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R = \\nabla_{\\rho}\\left(\\delta\\Gamma^{\\rho}\\,_{\\nu \\sigma} g^{\\sigma \\nu}\\right)-\\nabla_{\\nu}\\left(\\delta\\Gamma^{\\rho}\\,_{\\rho \\sigma} g^{\\sigma \\nu}\\right)+R_{\\sigma \\nu} \\delta g^{\\sigma \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\dR = \\nabla_{\\nu}(\\dCn^{\\nu}_{\\rho \\sigma} g^{\\rho \\sigma})-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\rho \\sigma} g^{\\nu \\sigma}) + R_{\\nu \\sigma} \\dg^{\\nu \\sigma}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta R = \\nabla_{\\nu}\\left(\\delta\\Gamma^{\\nu}\\,_{\\rho \\sigma} g^{\\rho \\sigma}\\right)-\\nabla_{\\nu}\\left(\\delta\\Gamma^{\\rho}\\,_{\\rho \\sigma} g^{\\nu \\sigma}\\right)+R_{\\nu \\sigma} \\delta g^{\\nu \\sigma}\\end{dmath*}"
+				}
+			],
+			"source" : "deltaScalarCurvature = vary(scalarCurvature, $R-> \\dR, R_{\\sigma\\nu} -> \\dR_{\\sigma\\nu}, g^{\\mu\\nu}->\\dg^{\\mu\\nu}$);\nsubstitute(_,deltaRicciTensor);\ndistribute(_);\nsubstitute(_,$\\nabla_{\\sigma}(\\dCn^{\\mu}_{\\nu\\rho})g^{\\alpha\\beta}->\\nabla_{\\sigma}(\\dCn^{\\mu}_{\\nu\\rho}g^{\\alpha\\beta})$);\ncanonicalise(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "With these ingredients we can now vary the action: simply vary all ingredients and then substitute what we have found\nabove for the variations of the metric, connection and curvature tensors."
+				}
+			],
+			"hidden" : true,
+			"source" : "With these ingredients we can now vary the action: simply vary all ingredients and then substitute what we have found\nabove for the variations of the metric, connection and curvature tensors."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(S) = \\int{ 1/2 \\delta(\\Dg) (\\kappa)**(-1) R +  1/2 \\Dg (\\kappa)**(-1) \\dR-\\delta(\\Dg) (\\kappa)**(-1) \\Lambda + \\delta(\\Dg) \\Lm + \\Dg \\delta(\\Lm)}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{S} = \\int \\left(\\frac{1}{2}\\delta{\\sqrt{-g}} {\\kappa}^{-1} R+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\delta R-\\delta{\\sqrt{-g}} {\\kappa}^{-1} \\Lambda+\\delta{\\sqrt{-g}} \\mathcal{L}_{\\text{mat}}+\\sqrt{-g} \\delta{\\mathcal{L}_{\\text{mat}}}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(S) = \\int{ -  1/4 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) R +  1/2 \\Dg (\\kappa)**(-1) \\dR +  1/2 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) \\Lambda -  1/2 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} \\Lm + \\Dg \\delta(\\Lm)}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{S} = \\int \\left( - \\frac{1}{4}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} R+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\delta R+\\frac{1}{2}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} \\Lambda - \\frac{1}{2}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} \\mathcal{L}_{\\text{mat}}+\\sqrt{-g} \\delta{\\mathcal{L}_{\\text{mat}}}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(S) = \\int{ -  1/4 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) R +  1/2 \\Dg (\\kappa)**(-1) \\dR +  1/2 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) \\Lambda -  1/2 \\Dg T_{\\mu \\nu} \\dg^{\\mu \\nu}}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{S} = \\int \\left( - \\frac{1}{4}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} R+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\delta R+\\frac{1}{2}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} \\Lambda - \\frac{1}{2}\\sqrt{-g} T_{\\mu \\nu} \\delta g^{\\mu \\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(S) = \\int{ -  1/4 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) R +  1/2 \\Dg (\\kappa)**(-1) (\\nabla_{\\nu}(\\dCn^{\\nu}_{\\rho \\sigma} g^{\\rho \\sigma})-\\nabla_{\\nu}(\\dCn^{\\rho}_{\\rho \\sigma} g^{\\nu \\sigma}) + R_{\\nu \\sigma} \\dg^{\\nu \\sigma}) +  1/2 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) \\Lambda -  1/2 \\Dg T_{\\mu \\nu} \\dg^{\\mu \\nu}}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{S} = \\int \\left( - \\frac{1}{4}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} R+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\left(\\nabla_{\\nu}\\left(\\delta\\Gamma^{\\nu}\\,_{\\rho \\sigma} g^{\\rho \\sigma}\\right)-\\nabla_{\\nu}\\left(\\delta\\Gamma^{\\rho}\\,_{\\rho \\sigma} g^{\\nu \\sigma}\\right)+R_{\\nu \\sigma} \\delta g^{\\nu \\sigma}\\right)+\\frac{1}{2}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} \\Lambda - \\frac{1}{2}\\sqrt{-g} T_{\\mu \\nu} \\delta g^{\\mu \\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(S) = \\int{ -  1/4 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) R +  1/2 \\Dg (\\kappa)**(-1) \\nabla_{\\nu}(\\dCn^{\\nu}_{\\rho \\sigma} g^{\\rho \\sigma}) -  1/2 \\Dg (\\kappa)**(-1) \\nabla_{\\nu}(\\dCn^{\\rho}_{\\rho \\sigma} g^{\\nu \\sigma}) +  1/2 \\Dg (\\kappa)**(-1) R_{\\nu \\sigma} \\dg^{\\nu \\sigma} +  1/2 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) \\Lambda -  1/2 \\Dg T_{\\mu \\nu} \\dg^{\\mu \\nu}}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{S} = \\int \\left( - \\frac{1}{4}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} R+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\nabla_{\\nu}\\left(\\delta\\Gamma^{\\nu}\\,_{\\rho \\sigma} g^{\\rho \\sigma}\\right) - \\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\nabla_{\\nu}\\left(\\delta\\Gamma^{\\rho}\\,_{\\rho \\sigma} g^{\\nu \\sigma}\\right)+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} R_{\\nu \\sigma} \\delta g^{\\nu \\sigma}+\\frac{1}{2}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} \\Lambda - \\frac{1}{2}\\sqrt{-g} T_{\\mu \\nu} \\delta g^{\\mu \\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(S) = \\int{ -  1/4 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) R +  1/2 \\Dg (\\kappa)**(-1) \\nabla_{\\mu}(\\dCn^{\\mu}_{\\nu \\rho} g^{\\nu \\rho}) -  1/2 \\Dg (\\kappa)**(-1) \\nabla_{\\rho}(\\dCn^{\\mu}_{\\mu \\nu} g^{\\rho \\nu}) +  1/2 \\Dg (\\kappa)**(-1) R_{\\mu \\nu} \\dg^{\\mu \\nu} +  1/2 \\Dg g_{\\mu \\nu} \\dg^{\\mu \\nu} (\\kappa)**(-1) \\Lambda -  1/2 \\Dg T_{\\mu \\nu} \\dg^{\\mu \\nu}}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{S} = \\int \\left( - \\frac{1}{4}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} R+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\nabla_{\\mu}\\left(\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho} g^{\\nu \\rho}\\right) - \\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} \\nabla_{\\rho}\\left(\\delta\\Gamma^{\\mu}\\,_{\\mu \\nu} g^{\\rho \\nu}\\right)+\\frac{1}{2}\\sqrt{-g} {\\kappa}^{-1} R_{\\mu \\nu} \\delta g^{\\mu \\nu}+\\frac{1}{2}\\sqrt{-g} g_{\\mu \\nu} \\delta g^{\\mu \\nu} {\\kappa}^{-1} \\Lambda - \\frac{1}{2}\\sqrt{-g} T_{\\mu \\nu} \\delta g^{\\mu \\nu}\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\delta(S) = \\int{\\Dg \\dg^{\\mu \\nu} ( -  1/4 g_{\\mu \\nu} (\\kappa)**(-1) R +  1/2 (\\kappa)**(-1) R_{\\mu \\nu} +  1/2 g_{\\mu \\nu} (\\kappa)**(-1) \\Lambda -  1/2 T_{\\mu \\nu}) + \\Dg ( 1/2 (\\kappa)**(-1) \\nabla_{\\mu}(\\dCn^{\\mu}_{\\nu \\rho} g^{\\nu \\rho}) -  1/2 (\\kappa)**(-1) \\nabla_{\\rho}(\\dCn^{\\mu}_{\\mu \\nu} g^{\\rho \\nu}))}{x}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\delta{S} = \\int \\left(\\sqrt{-g} \\delta g^{\\mu \\nu} \\left( - \\frac{1}{4}g_{\\mu \\nu} {\\kappa}^{-1} R+\\frac{1}{2}{\\kappa}^{-1} R_{\\mu \\nu}+\\frac{1}{2}g_{\\mu \\nu} {\\kappa}^{-1} \\Lambda - \\frac{1}{2}T_{\\mu \\nu}\\right)+\\sqrt{-g} \\left(\\frac{1}{2}{\\kappa}^{-1} \\nabla_{\\mu}\\left(\\delta\\Gamma^{\\mu}\\,_{\\nu \\rho} g^{\\nu \\rho}\\right) - \\frac{1}{2}{\\kappa}^{-1} \\nabla_{\\rho}\\left(\\delta\\Gamma^{\\mu}\\,_{\\mu \\nu} g^{\\rho \\nu}\\right)\\right)\\right)\\,\\,{\\rm d}x\\end{dmath*}"
+				}
+			],
+			"source" : "vary(action, $\\Dg->\\delta(\\Dg), R -> \\dR, \\Lm->\\delta(\\Lm), S->\\delta(S)$);\nsubstitute(action, deltaMetricDeterminant);\nsubstitute(action, matterLagrangianVariation);\nsubstitute(action, deltaScalarCurvature);\ndistribute(action);\nrename_dummies(action);\nfactor_out(action, $\\dg^{\\mu\\nu}, \\Dg$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The terms proportional to $\\delta g^{\\mu\\nu}$ are the Einstein equations, the rest is a total derivative.\nWe can rewrite this a bit further to get the familiar form:"
+				}
+			],
+			"hidden" : true,
+			"source" : "The terms proportional to $\\delta g^{\\mu\\nu}$ are the Einstein equations, the rest is a total derivative.\nWe can rewrite this a bit further to get the familiar form:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "2\\kappa ( -  1/4 g_{\\mu \\nu} (\\kappa)**(-1) R +  1/2 (\\kappa)**(-1) R_{\\mu \\nu} +  1/2 g_{\\mu \\nu} (\\kappa)**(-1) \\Lambda -  1/2 T_{\\mu \\nu}) = 0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}2\\kappa \\left( - \\frac{1}{4}g_{\\mu \\nu} {\\kappa}^{-1} R+\\frac{1}{2}{\\kappa}^{-1} R_{\\mu \\nu}+\\frac{1}{2}g_{\\mu \\nu} {\\kappa}^{-1} \\Lambda - \\frac{1}{2}T_{\\mu \\nu}\\right) = 0\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : " -  1/2 g_{\\mu \\nu} R + R_{\\mu \\nu} + g_{\\mu \\nu} \\Lambda = \\kappa T_{\\mu \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{} - \\frac{1}{2}g_{\\mu \\nu} R+R_{\\mu \\nu}+g_{\\mu \\nu} \\Lambda = \\kappa T_{\\mu \\nu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "G_{\\mu \\nu} + g_{\\mu \\nu} \\Lambda = \\kappa T_{\\mu \\nu}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}G_{\\mu \\nu}+g_{\\mu \\nu} \\Lambda = \\kappa T_{\\mu \\nu}\\end{dmath*}"
+				}
+			],
+			"source" : "t1 = action[1][0][0][2]\neom:= 2\\kappa @(t1) = 0;\ndistribute(_)\ncollect_factors(_)\nmanip.to_rhs(_, $- \\kappa T_{\\mu\\nu}$);\nsubstitute(_, manip.swap_sides(einsteinTensor));"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

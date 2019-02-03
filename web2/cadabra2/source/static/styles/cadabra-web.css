@@ -229,6 +229,10 @@ div.icon_background div.icon_text {
 	 font-weight: 400;
 	 transition-duration: 0.5s;  
 }
+div.firstline {
+	 position: relative;
+	 top: 6px;
+}
 /* div.icon_background:hover div.icon_text {
 	 font-size: 15px;
 	 transition-duration: 0.5s;  
