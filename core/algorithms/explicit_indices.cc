@@ -43,10 +43,6 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	// indices cannot be taken from these.
 	index_map_t ind_free_sum, ind_dummy_sum;
 	classify_indices(it, ind_free_sum, ind_dummy_sum);
-	for(auto& k: ind_free_sum)
-		std::cerr << k.first << std::endl;
-	for(auto& k: ind_dummy_sum)
-		std::cerr << k.first << std::endl;
 	
 	sibling_iterator term=tr.begin(it);
 	while(term!=tr.end(it)) {
@@ -56,6 +52,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 
 		// For each index set, keep track of the last used index in
 		// building the explicit index line.
+		index_map_t                             added_this_term;
 		std::map<const Indices *, Ex::iterator> index_lines;
 		
 		sibling_iterator factor=tr.begin(term);
@@ -105,21 +102,29 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 							}
 						++search;
 						}
+					++iit; // Update now, we may be replacing this index.
 					if(found) {
-						// This index was added.
-						// Get a new free index.
-
-						auto ip = kernel.properties.get<Indices>(search->second);
+						// This index was added. 
+						const Indices *ip = kernel.properties.get<Indices>(search->second);
 						if(!ip)
 							throw InternalError("Do not have Indices property for all implicit indices.");
 
-						std::cerr << "getting dummy index" << std::endl;
-						auto di = ic.get_dummy(ip, &ind_free_sum, &ind_dummy_sum);
-						std::cerr << di << std::endl;
-						tr.replace(search->second, di.begin());
+						// Determine if we have an 'active' index line for
+						// this index type.
+						auto line = index_lines.find(ip);
+						if(line==index_lines.end()) {
+							// No active line. Get a new free index.
+							auto di = ic.get_dummy(ip, &ind_free_sum, &ind_dummy_sum, &added_this_term);
+							auto loc = tr.replace_index(search->second, di.begin(), true);
+							added_this_term.insert(index_map_t::value_type(di, loc));
+							index_lines[ip]=loc;
+							}
+						else {
+							// Use the active line index, then unset the active line.
+							auto loc = tr.replace_index(search->second, line->second, true);
+							index_lines.erase(line);
+							}
 						}
-
-					++iit;
 					}
 				}
 			++factor;

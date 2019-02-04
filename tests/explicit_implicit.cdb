@@ -1,6 +1,6 @@
 
 {m,n,p}::Indices(spacetime, position=fixed);
-{a,b,c,d}::Indices(spinor, position=fixed);
+{a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);
 \sigma^{p}::ImplicitIndex(\sigma^{p a}_{b});
 \psi::ImplicitIndex(\psi_{a});
 \chi::ImplicitIndex(\chi_{a});
