@@ -64,6 +64,7 @@ set(RTESTS
   integrals
   display
   dummies
+  explicit_implicit
   trigonometric
   noncovariant
   algebra
