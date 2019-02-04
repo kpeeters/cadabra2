@@ -19,3 +19,38 @@ def test01():
 
 test01()
 
+def test02():
+    __cdbkernel__=create_scope()
+    {m,n,p}::Indices(spacetime, position=fixed);
+    {a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);
+    \sigma^{p}::ImplicitIndex(\sigma^{p a}_{b});
+    \psi::ImplicitIndex(\psi_{a});
+    \chi::ImplicitIndex(\chi^{a});
+    \partial{#}::PartialDerivative;
+    ex:= \psi \sigma^{m} \sigma^{n} \partial_{n}{\chi} \lambda^{a} + \lambda_{b} \chi^{b} T^{m}\chi^{a};
+    explicit_indices(_)
+    tst:= \psi_{c} \sigma^{m c}_{d} \sigma^{n d}_{e} \partial_{n}{\chi^{e}} \lambda^{a} + \lambda_{b} \chi^{b} T^{m}\chi^{a} - @(ex);
+    assert(tst==0)
+    print("Test 02 passed")
+
+test02()
+
+def test03():
+    __cdbkernel__=create_scope()
+    {m,n,p}::Indices(spacetime, position=fixed);
+    {a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);
+    \sigma^{p}::ImplicitIndex(\sigma^{p a}_{b});
+    \psi::ImplicitIndex(\psi_{a});
+    \chi::ImplicitIndex(\chi^{a});
+    
+    ex:= \sigma^{m} \chi \psi \sigma^{n} \chi;
+    explicit_indices(_)
+    tst:= \sigma^{m a}_{b} \chi^{b} \psi_{c} \sigma^{n c}_{d} \chi^{d} - @(ex);
+    assert(tst==0)
+    print("Test 03 passed")
+        
+test03()
+        
+#ex:= \chi \psi \sigma^{n} \chi;
+#explicit_indices(_);
+        

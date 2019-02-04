@@ -3,6 +3,7 @@
 
 #include "algorithms/substitute.hh"
 #include "properties/ImplicitIndex.hh"
+#include "properties/PartialDerivative.hh"
 
 using namespace cadabra;
 
@@ -41,7 +42,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 
 	// Classify all free and dummy indices already present. Any new
 	// indices cannot be taken from these.
-	index_map_t ind_free_sum, ind_dummy_sum;
+	ind_free_sum.clear();
+	ind_dummy_sum.clear();
 	classify_indices(it, ind_free_sum, ind_dummy_sum);
 	
 	sibling_iterator term=tr.begin(it);
@@ -52,80 +54,24 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 
 		// For each index set, keep track of the last used index in
 		// building the explicit index line.
-		index_map_t                             added_this_term;
-		std::map<const Indices *, Ex::iterator> index_lines;
+		added_this_term.clear();
+		index_lines.clear();
 		
 		sibling_iterator factor=tr.begin(term);
 		while(factor!=tr.end(term)) {
-			int tmp;
-			auto ii = kernel.properties.get_with_pattern<ImplicitIndex>(factor, tmp);
-			if(ii.first) {
-				// Determine indices on this factor. Use a copy because we
-				// need this object later.
-				Ex orig(factor);
-				index_map_t factor_ind_free, factor_ind_dummy;
-				classify_indices(orig.begin(), factor_ind_free, factor_ind_dummy);
-
-				// Substitute explcit replacement and rename the indices
-				// already present on the implicit factor.
-				Ex replacement("\\arrow");
-				replacement.append_child(replacement.begin(), ii.second->obj.begin());
-				replacement.append_child(replacement.begin(), ii.first->explicit_form.begin());
-				substitute subs(kernel, tr, replacement);
-				iterator factor_tmp=factor;
-				if(subs.can_apply(factor_tmp)) 
-					subs.apply(factor_tmp);
-				else
-					throw InternalError("Internal inconsistency encountered, aborting.");
-				factor=factor_tmp;
-
-				// Determine indices on the replacement.
-				index_map_t repl_ind_free, repl_ind_dummy;
-				classify_indices(factor, repl_ind_free, repl_ind_dummy);
-
-				// Which indices have been added?
-				index_map_t ind_same;
-				IndexClassifier ic(kernel);
-				ic.determine_intersection(factor_ind_free, repl_ind_free, ind_same, true);
-
-				// Go through indices in order of appearance, determine if they have
-				// been added, and rename. Note: indices do not appear in order in the
-				// index maps above.
-				auto iit=index_iterator::begin(kernel.properties, factor);
-				while(iit!=index_iterator::end(kernel.properties, factor)) {
-					auto search=repl_ind_free.begin();
-					bool found=false;
-					while(search!=repl_ind_free.end()) {
-						if(search->second == (iterator)iit) {
-							found=true;
-							break;
-							}
-						++search;
+			const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(factor);
+			if(pd) {
+				sibling_iterator args=tr.begin(factor);
+				while(args!=tr.end(factor)) {
+					if(args->fl.parent_rel==str_node::p_none) {
+						handle_factor(args);
+						break;
 						}
-					++iit; // Update now, we may be replacing this index.
-					if(found) {
-						// This index was added. 
-						const Indices *ip = kernel.properties.get<Indices>(search->second);
-						if(!ip)
-							throw InternalError("Do not have Indices property for all implicit indices.");
-
-						// Determine if we have an 'active' index line for
-						// this index type.
-						auto line = index_lines.find(ip);
-						if(line==index_lines.end()) {
-							// No active line. Get a new free index.
-							auto di = ic.get_dummy(ip, &ind_free_sum, &ind_dummy_sum, &added_this_term);
-							auto loc = tr.replace_index(search->second, di.begin(), true);
-							added_this_term.insert(index_map_t::value_type(di, loc));
-							index_lines[ip]=loc;
-							}
-						else {
-							// Use the active line index, then unset the active line.
-							auto loc = tr.replace_index(search->second, line->second, true);
-							index_lines.erase(line);
-							}
-						}
+					++args;
 					}
+				}
+			else {
+				handle_factor(factor);
 				}
 			++factor;
 			}
@@ -136,4 +82,84 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		}
 
 	return res;
+	}
+
+void explicit_indices::handle_factor(sibling_iterator& factor)
+	{
+	int tmp;
+	auto ii = kernel.properties.get_with_pattern<ImplicitIndex>(factor, tmp);
+	if(ii.first) {
+		// Determine indices on this factor. Use a copy because we
+		// need this object later.
+		Ex orig(factor);
+		index_map_t factor_ind_free, factor_ind_dummy;
+		classify_indices(orig.begin(), factor_ind_free, factor_ind_dummy);
+
+		// Substitute explcit replacement and rename the indices
+		// already present on the implicit factor.
+		Ex replacement("\\arrow");
+		replacement.append_child(replacement.begin(), ii.second->obj.begin());
+		replacement.append_child(replacement.begin(), ii.first->explicit_form.begin());
+		substitute subs(kernel, tr, replacement);
+		iterator factor_tmp=factor;
+		if(subs.can_apply(factor_tmp)) 
+			subs.apply(factor_tmp);
+		else
+			throw InternalError("Internal inconsistency encountered, aborting.");
+		factor=factor_tmp;
+
+		// Determine indices on the replacement.
+		index_map_t repl_ind_free, repl_ind_dummy;
+		classify_indices(factor, repl_ind_free, repl_ind_dummy);
+
+		// Which indices have been added?
+		index_map_t ind_same;
+		IndexClassifier ic(kernel);
+		ic.determine_intersection(factor_ind_free, repl_ind_free, ind_same, true);
+
+		// Keep track of indices already added in this factor, to avoid making
+		// an index trace on a single factor.
+		std::map<const Indices *, Ex::iterator> index_lines_factor;  
+		
+		// Go through indices in order of appearance, determine if they have
+		// been added, and rename. Note: indices do not appear in order in the
+		// index maps above.
+		auto iit=index_iterator::begin(kernel.properties, factor);
+		while(iit!=index_iterator::end(kernel.properties, factor)) {
+			auto search=repl_ind_free.begin();
+			bool found=false;
+			while(search!=repl_ind_free.end()) {
+				if(search->second == (iterator)iit) {
+					found=true;
+					break;
+					}
+				++search;
+				}
+			++iit; // Update now, we may be replacing this index.
+			if(found) {
+				// This index was added. 
+				const Indices *ip = kernel.properties.get<Indices>(search->second);
+				if(!ip)
+					throw InternalError("Do not have Indices property for all implicit indices.");
+
+				// Determine if we have an 'active' index line for
+				// this index type.
+				auto line        = index_lines.find(ip);
+				auto line_factor = index_lines_factor.find(ip);
+				if(line==index_lines.end() || line_factor!=index_lines_factor.end()) {
+					// No active line. Get a new free index.
+					auto di = ic.get_dummy(ip, &ind_free_sum, &ind_dummy_sum, &added_this_term);
+					auto loc = tr.replace_index(search->second, di.begin(), true);
+					added_this_term.insert(index_map_t::value_type(di, loc));
+					index_lines[ip]=loc;
+					index_lines_factor[ip]=loc;
+					}
+				else {
+					// Use the active line index, then unset the active line.
+					auto loc = tr.replace_index(search->second, line->second, true);
+					index_lines.erase(line);
+					}
+				}
+			}
+		}
 	}
