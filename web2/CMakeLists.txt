@@ -2,6 +2,7 @@ set(HTMLOUTDIR ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/notebooks)
 set(TOCOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/)
 set(MANOUTDIR  ${CMAKE_SOURCE_DIR}/web2/cadabra2/source/manual)
 set(CNBDIR     ${CMAKE_SOURCE_DIR}/examples)
+set(CONTRIBDIR ${CMAKE_SOURCE_DIR}/contrib)
 set(ALGODIR    ${CMAKE_SOURCE_DIR}/core/algorithms)
 set(PROPDIR    ${CMAKE_SOURCE_DIR}/core/properties)
 set(PACKAGEDIR ${CMAKE_SOURCE_DIR}/core/packages)
@@ -37,7 +38,13 @@ set(TUTORIALS
   ref_programming
   ref_import
   ref_selecting
-)
+  )
+
+# 3rd party contributions
+
+set(CONTRIBS
+  einstein_equations
+  )
 
 # Manual pages; just add the algorithm or property name to the lists below
 # and the rest will be taken care of automatically.
@@ -193,6 +200,21 @@ foreach(TUT ${TUTORIALS})
                      DEPENDS ${CNBDIR}/${TUT}.cnb 
                      COMMAND cp
                      ARGS    ${CNBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.cnb
+                     COMMENT "Creating ${TUT}.cnb")
+  add_custom_target("${TUT}_cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )		
+endforeach()
+
+foreach(TUT ${CONTRIBS})
+  add_custom_command(OUTPUT  ${HTMLOUTDIR}/${TUT}.html
+                     DEPENDS ${CONTRIBDIR}/${TUT}.cnb ${DC}
+                     COMMAND ${CMAKE_INSTALL_PREFIX}/bin/cadabra2html 
+                     ARGS    --segment ${CONTRIBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.html 
+                     COMMENT "Creating ${TUT}.html")
+  add_custom_target("${TUT}_html" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html)		
+  add_custom_command(OUTPUT  ${HTMLOUTDIR}/${TUT}.cnb
+                     DEPENDS ${CONTRIBDIR}/${TUT}.cnb 
+                     COMMAND cp
+                     ARGS    ${CONTRIBDIR}/${TUT}.cnb ${HTMLOUTDIR}/${TUT}.cnb
                      COMMENT "Creating ${TUT}.cnb")
   add_custom_target("${TUT}_cnb" ALL echo -n DEPENDS ${HTMLOUTDIR}/${TUT}.html ${HTMLOUTDIR}/${TUT}.cnb )		
 endforeach()

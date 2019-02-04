@@ -63,13 +63,22 @@ include_directories(
 	"${CADABRA_CORE_DIR}"
 	"${CADABRA_CLIENT_SERVER_DIR}"
 	"${CADABRA_LIBS_DIR}/internal/include"
-	"${CADABRA_LIBS_DIR}/jsoncpp"
 	"${CADABRA_LIBS_DIR}/websocketpp"
 	"${CADABRA_LIBS_DIR}/tiny-process-library"
 	${Boost_INCLUDE_DIRS}
 	${SQLITE3_INCLUDE_DIR}  
-)
+	)
 
+if(ENABLE_SYSTEM_JSONCPP)
+  include_directories(
+	 ${JSONCPP_INCLUDE_DIRS}
+	 )
+else()
+  include_directories(
+	  "${CADABRA_LIBS_DIR}/jsoncpp"
+	  )
+endif()
+ 
 add_definitions(
 	"-D_WEBSOCKETPP_CPP11_STL_"
 	"-DBOOST_LOG_DYN_LINK"
