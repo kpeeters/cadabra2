@@ -28,6 +28,14 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "T(B_{m n}) + C_{m n}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}T\\left(B_{m n}\\right)+C_{m n}\\end{dmath*}"
 				}
 			],
@@ -41,11 +49,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported, as in the example below. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term."
+					"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term.\n\nNote that indices which are 'direct indices' of the object still count, of course.\nThis is also visible if you ask for the free indices directly, as the following\nexample shows."
 				}
 			],
 			"hidden" : true,
-			"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported, as in the example below. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term."
+			"source" : "Without the \\prop{IndexInherit} property, the object \n\\verb|T(B_{m n})| would be considered a scalar, without indices, and an index mismatch\nerror would be reported. With the property, the first term has\nexternal indices \\verb|m| and \\verb|n|, just like the second term.\n\nNote that indices which are 'direct indices' of the object still count, of course.\nThis is also visible if you ask for the free indices directly, as the following\nexample shows."
 		},
 		{
 			"cell_origin" : "client",
@@ -54,11 +62,37 @@
 			[
 				{
 					"cell_origin" : "server",
-					"cell_type" : "error",
-					"source" : "{\\color{red}{\\begin{verbatim}Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\ncadabra2.ConsistencyException: Free indices in different terms in a sum do not match.\n\\end{verbatim}}}"
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "T_{m}(A_{n})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}T_{m}\\left(A_{n}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "ex:=Q(B_{m n}) + C_{m n};"
+			"source" : "ex:= T_{m}(A_{n});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}m\\end{verbatim}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "verbatim",
+					"source" : "\\begin{verbatim}n\\end{verbatim}"
+				}
+			],
+			"source" : "for i in ex.top().free_indices(): \n   display(i)"
 		},
 		{
 			"cell_origin" : "client",

@@ -116,6 +116,7 @@ set(PROPS
   FilledTableau
   GammaMatrix
   ImplicitIndex
+  IndexInherit
   Indices
   Integer
   InverseMetric
