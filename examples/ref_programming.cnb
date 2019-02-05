@@ -434,7 +434,7 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def expand_nabla(ex):\n    for nabla in ex[r'\\nabla']:\n        nabla.name=r'\\partial'\n        dindex = nabla.indices().__next__() \n        for arg in nabla.args():             \n            ret:=0;\n            for index in arg.free_indices():\n                t2:= @(arg);\n                if index.parent_rel==sub:\n                    t1:= -\\Gamma^{p}_{@(dindex) @(index)};\n                    t2[index]:= _{p};\n                else:\n                    t1:=  \\Gamma^{@(index)}_{@(dindex) p};\n                    t2[index]:= ^{p};\n                ret += t1 * t2\n            nabla += ret\n    return ex"
+			"source" : "def expand_nabla(ex):\n    for nabla in ex[r'\\nabla']:\n        nabla.name=r'\\partial'\n        dindex = nabla.indices().__next__() \n        for arg in nabla.args():             \n            ret:=0;\n            for index in arg.free_indices():\n                t2:= @(arg);\n                if index.parent_rel==sub:\n                    t1:= -\\Gamma^{p}_{@(dindex) @(index)};\n                    t2[index]:= _{p};\n                else:\n                    t1:=  \\Gamma^{@(index)}_{@(dindex) p};\n                    t2[index]:= ^{p};\n                ret += Ex(str(nabla.multiplier)) * t1 * t2\n            nabla += ret\n    return ex"
 		},
 		{
 			"cell_origin" : "client",
@@ -468,10 +468,10 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\nabla_{a}(h^{b}_{c})"
+							"source" : " 1/2 \\nabla_{a}(h^{b}_{c})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla_{a}{h^{b}\\,_{c}}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\nabla_{a}{h^{b}\\,_{c}}\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -481,13 +481,13 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\partial_{a}(h^{b}_{c}) + \\Gamma^{b}_{a p} h^{p}_{c}-\\Gamma^{p}_{a c} h^{b}_{p}"
+							"source" : " 1/2 \\partial_{a}(h^{b}_{c}) +  1/2 \\Gamma^{b}_{a p} h^{p}_{c} -  1/2 \\Gamma^{p}_{a c} h^{b}_{p}"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\partial_{a}\\left(h^{b}\\,_{c}\\right)+\\Gamma^{b}\\,_{a p} h^{p}\\,_{c}-\\Gamma^{p}\\,_{a c} h^{b}\\,_{p}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{1}{2}\\partial_{a}\\left(h^{b}\\,_{c}\\right)+\\frac{1}{2}\\Gamma^{b}\\,_{a p} h^{p}\\,_{c} - \\frac{1}{2}\\Gamma^{p}\\,_{a c} h^{b}\\,_{p}\\end{dmath*}"
 				}
 			],
-			"source" : "\\nabla{#}::Derivative;\nex:= \\nabla_{a}{ h^{b}_{c} }; \nexpand_nabla(ex);"
+			"source" : "\\nabla{#}::Derivative;\nex:= 1/2 \\nabla_{a}{ h^{b}_{c} }; \nexpand_nabla(ex);"
 		},
 		{
 			"cell_origin" : "client",
@@ -502,10 +502,10 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\nabla_{a}(v_{b} w^{b})"
+							"source" : " 1/4 \\nabla_{a}(v_{b} w^{b})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\nabla_{a}\\left(v_{b} w^{b}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{1}{4}\\nabla_{a}\\left(v_{b} w^{b}\\right)\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -515,13 +515,13 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\partial_{a}(v_{b} w^{b})"
+							"source" : " 1/4 \\partial_{a}(v_{b} w^{b})"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\partial_{a}\\left(v_{b} w^{b}\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\frac{1}{4}\\partial_{a}\\left(v_{b} w^{b}\\right)\\end{dmath*}"
 				}
 			],
-			"source" : "ex:= \\nabla_{a}{ v_{b} w^{b} };\nexpand_nabla(ex);"
+			"source" : "ex:= 1/4 \\nabla_{a}{ v_{b} w^{b} };\nexpand_nabla(ex);"
 		},
 		{
 			"cell_origin" : "client",
