@@ -30,7 +30,7 @@ graphical interface are available.
 Installation
 -------------
 
-Cadabra builds on Linux, Mac OS X, OpenBSD and Windows. Select your
+Cadabra builds on Linux, macOS, OpenBSD and Windows. Select your
 system from the list below for detailed instructions.
 
 - `Linux (Debian/Ubuntu/Mint)`_
@@ -40,7 +40,7 @@ system from the list below for detailed instructions.
 - `Linux (Arch/Manjaro)`_
 - `Linux (Solus)`_
 - `OpenBSD`_
-- `Mac OS X`_
+- `macOS`_
 - `Windows`_
 
 Binaries for these platforms may (or may not) be provided from the
@@ -286,11 +286,11 @@ development platform and testing is done only occasionally.
 
 
 	 
-Mac OS X
-~~~~~~~~
+macOS
+~~~~~
 
 Cadabra builds with the standard Apple compiler, but in order to build
-on OS X you need a number of packages from Homebrew (see
+on macOS you need a number of packages from Homebrew (see
 http://brew.sh). Quite a few Homebrew installations have broken
 permissions; best to first do::
 
@@ -332,12 +332,12 @@ After that you can build with the standard::
     sudo make install
 
 (*note* the `-DENABLE_MATHEMATICA=OFF` in the `cmake` line above; the
-Mathematica scalar backend does not yet work on OS X).
+Mathematica scalar backend does not yet work on macOS).
   
 This will produce the command line app ``cadabra2`` and the Gtk
 notebook interface ``cadabra2-gtk``. 
 
-Feedback from OS X users is *very* welcome because this is not the main
+Feedback from macOS users is *very* welcome because this is not the main
 development platform.
 
 
