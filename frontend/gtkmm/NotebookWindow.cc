@@ -47,7 +47,12 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	  settings = Gio::Settings::create((strcmp(ds, "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
 	  scale = settings->get_double("text-scaling-factor");
 	}
+#else
+	auto screen = Gdk::Screen::get_default();
+	scale = screen->get_monitor_scale_factor(0);
+	std::cerr << "cadabra-client: scale = " << scale << std::endl;
 #endif
+//	std::cerr << "monitor scale factor " << Gdk::Monitor::get_scale_factor() << std::endl;
 	engine.set_scale(scale);
 
 #ifndef __APPLE__
@@ -69,7 +74,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	else                load_css("blue");	
 
 	auto screen = Gdk::Screen::get_default();
-	// std::cerr << "cadabra-client: scale = " << screen->get_monitor_scale_factor(0) << std::endl;
+//	std::cerr << "cadabra-client: scale = " << screen->get_monitor_scale_factor(0) << std::endl;
 	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 	// Setup menu.
