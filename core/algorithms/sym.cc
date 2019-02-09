@@ -8,6 +8,8 @@ using namespace cadabra;
 sym::sym(const Kernel& k, Ex& tr, Ex& objs, bool s)
 	: Algorithm(k, tr), objects(objs), sign(s)
 	{
+	if(objects.size()==0)
+		throw ArgumentException("sym/asym: need a list of objects over which to (anti)symmetrise.");
 	}
 
 bool sym::can_apply(iterator it)
