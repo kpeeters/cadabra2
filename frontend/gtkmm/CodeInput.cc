@@ -28,6 +28,7 @@ CodeInput::exp_input_tv::exp_input_tv(DTree::iterator it, Glib::RefPtr<Gtk::Text
 	set_events(Gdk::STRUCTURE_MASK);
 //	get_buffer()->signal_insert().connect(sigc::mem_fun(this, &exp_input_tv::on_my_insert), false);
 //	get_buffer()->signal_erase().connect(sigc::mem_fun(this, &exp_input_tv::on_my_erase), false);
+	set_name("CodeInput"); // to be able to style it with CSS
 	}
 
 //CodeInput::CodeInput()

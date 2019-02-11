@@ -60,7 +60,8 @@ namespace cadabra {
 
 		// TeX stuff
 		TeXEngine        engine;
-		double           scale; // highdpi scale
+		double           scale; // total scale factor (hdpi and textscale)
+   	double           display_scale; // hdpi scale only
 
 								// Handler for vertical scrollbar changes.
 		bool on_vscroll_changed(Gtk::ScrollType, double);

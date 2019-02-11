@@ -39,22 +39,21 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	// Set the window icon.
 	set_icon_name("cadabra2-gtk");
 
-	// Query high-dpi settings. For now only for cinnamon.
-	scale = 1.0;
+	// Query high-dpi settings. For all systems we can probe the
+	// HiDPI scale, and for some window managers we also probe the
+	// text scale factor.
 	auto screen = Gdk::Screen::get_default();
+	scale = screen->get_monitor_scale_factor(0);
+	display_scale = scale;	
 #ifndef __APPLE__
 	const char *ds = std::getenv("DESKTOP_SESSION");
 	if(ds) {
 	  settings = Gio::Settings::create((strcmp(ds, "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
-	  scale = settings->get_double("text-scaling-factor")*screen->get_monitor_scale_factor(0);
-//	  scale = screen->get_monitor_scale_factor(0);
+	  scale *= settings->get_double("text-scaling-factor");
 	}
-#else
-	scale = screen->get_monitor_scale_factor(0);
-	std::cerr << "cadabra-client: scale = " << scale << std::endl;
 #endif
-//	std::cerr << "monitor scale factor " << Gdk::Monitor::get_scale_factor() << std::endl;
-	engine.set_scale(scale, screen->get_monitor_scale_factor(0));
+
+	engine.set_scale(scale, display_scale);
 
 #ifndef __APPLE__
 	if(ds) {
@@ -381,6 +380,7 @@ void NotebookWindow::load_css(const std::string& text_colour)
 	data += "*:selected { background-color: #ccc; }\n";
 	data += "textview.error { background: transparent; -GtkWidget-cursor-aspect-ratio: 0.2; color: @theme_fg_color; }\n";
 	data += "#ImageView { transition-property: padding, background-color; transition-duration: 1s; }\n";
+	data += "#CodeInput { font-family: monospace; }\n";	
 	data += "#Console   { padding: 5px; }\n";
 	//	data += "scrolledwindow { kinetic-scrolling: false; }\n";
 
@@ -663,10 +663,10 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 				CodeInput *ci;
 				// Ensure that all CodeInput cells share the same text buffer.
 				if(i==0) {
-					ci = new CodeInput(it, it->textbuf,scale,prefs);
+					ci = new CodeInput(it, it->textbuf,scale/display_scale,prefs);
 					global_buffer=ci->buffer;
 					}
-				else ci = new CodeInput(it, global_buffer,scale,prefs);
+				else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
 				if(read_only)
 					ci->edit.set_editable(false);
 				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);

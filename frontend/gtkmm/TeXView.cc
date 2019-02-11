@@ -121,7 +121,7 @@ bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
 	double device_scale_x, device_scale_y;
 	cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
 //	std::cerr << device_scale_x << std::endl;
-	set_size_request(pixbuf->get_width()/device_scale_x, pixbuf->get_height()/device_scale_y);
+	set_size_request(pixbuf->get_width()/device_scale_x, pixbuf->get_height()/device_scale_y+1);
 	cr->scale(1.0/device_scale_x, 1.0/device_scale_y);
 	Gdk::Cairo::set_source_pixbuf(cr, pixbuf, 0, 0);
 	cr->paint();
