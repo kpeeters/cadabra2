@@ -777,17 +777,12 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 
 bool Algorithm::is_termlike(iterator it)
 	{
-	if(tr.is_head(it)) {
-		if(*it->name!="\\sum" && *it->name!="\\equals") return true;
-		return false;
-		}
-	else {
-		if(*tr.parent(it)->name=="\\sum" )
-			return true;
-		else if(*tr.parent(it)->name=="\\equals")
-			return true;
-		return false;
-		}
+	if(!is_factorlike(it))
+		if(*it->name!="\\sum")
+			if(it->fl.parent_rel==str_node::p_none)
+				return true;
+
+	return false;
 	}
 
 bool Algorithm::is_factorlike(iterator it)

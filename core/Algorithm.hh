@@ -167,8 +167,14 @@ class Algorithm : public IndexClassifier {
 		static bool  compare_(const str_node&, const str_node&);
 		
 
-		/// Determine structure (version-2)
+		/// Determines whether the indicated node is 'like a term in a
+		/// sum'.  This requires that the node is not a `\sum` node, not
+		/// a child of a `\prod` node, and that its parent rel is of
+		/// argument-type (p_none).
 		bool     is_termlike(iterator);
+
+		/// Determines whether the indicated node is 'like a factor in a product'.
+		/// This requires that the parent is a `\prod' node. 
 		bool     is_factorlike(iterator);
 		
 		/// Take a single non-product node in a sum and wrap it in a 

@@ -4,6 +4,7 @@
 #include "algorithms/substitute.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/PartialDerivative.hh"
+#include "properties/Trace.hh"
 
 using namespace cadabra;
 
@@ -21,6 +22,8 @@ bool explicit_indices::can_apply(iterator st)
 	// same index names.
 
 	if(*st->name=="\\equals") return false; // switch
+	auto trace = kernel.properties.get<Trace>(st);
+	if(trace)   return false;
 	if(*st->name=="\\sum")    return true;
 	if(is_termlike(st)) {
 		if(tr.is_head(st)) return         true;
@@ -35,6 +38,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
+	std::cerr << "apply at " << it << std::endl;
+	
 	// Ensure that we are always working on a sum, even
 	// if there is only one term.
 	if(is_termlike(it)) 
@@ -48,6 +53,9 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	
 	sibling_iterator term=tr.begin(it);
 	while(term!=tr.end(it)) {
+		iterator nxt=term;
+		++nxt;
+		
 		iterator tmp=term;
 		prod_wrap_single_term(tmp);
 		term=tmp;
@@ -77,8 +85,10 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 			}
 
 		tmp=term;
+		std::cerr << term << std::endl;
 		prod_unwrap_single_term(tmp);
-		++term;
+
+		term=nxt;
 		}
 
 	return res;

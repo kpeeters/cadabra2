@@ -294,7 +294,9 @@ div.latex_view {
 }
 div.MathJax_Display {
     text-align: left !important;	 
-	 margin-bottom: 0px !important;
+	 margin-bottom: 5px !important;
+	 margin-top: 5px !important;
+	 margin-left: 30px;
 	 padding-bottom: 0px !important;
 }
 .mjx-chtml {
@@ -317,7 +319,7 @@ div.python > div.source {
 	 margin-bottom: 10px; 
 	 padding-bottom: 0px;
 	 margin-top: 10px;
-	 white-space: pre; 
+	 white-space: pre-wrap; 
 	 line-height: 20px;
 	 color: blue; 
 	 margin-left: 0px;
