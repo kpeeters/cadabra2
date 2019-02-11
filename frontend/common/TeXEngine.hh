@@ -52,7 +52,14 @@ namespace cadabra {
 			
 			// Set the width and font size for all images to be generated.
 			void set_geometry(int horizontal_pixels);
-			void set_scale(double);
+
+			// Set the scale factor for generating bitmaps. The total scale is
+			// the product of HiDPI scale and any text-scaling factor on top of
+			// that, so that it represents the total scale at which text renders.
+			// The device_scale is just the HiDPI factor; we need to generate
+			// bitmaps at the width times this size.
+			void set_scale(double total_scale, double device_scale);
+			double get_scale() const;
 			void set_font_size(int font_size);
 			std::vector<std::string> latex_packages;
 			
@@ -92,7 +99,7 @@ namespace cadabra {
 			std::string            preamble_string;
 			int                    horizontal_pixels_;
 			int                    font_size_;
-			double                 scale_;
+			double                 total_scale_, device_scale_;
 			
 			void erase_file(const std::string&) const;
 			void convert_one(std::shared_ptr<TeXRequest>);

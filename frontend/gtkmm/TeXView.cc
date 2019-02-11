@@ -1,36 +1,40 @@
 
- #include "TeXView.hh"
- #include <iostream>
+#include "TeXView.hh"
+#include <iostream>
+#include <cairo/cairo.h>
+#include <cairomm/context.h>
+#include <giomm/resource.h>
+#include <gdkmm/general.h> // set_source_pixbuf()
 
- using namespace cadabra;
+using namespace cadabra;
 
- TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
-	 : content(0), datacell(it), vbox(false, 10), hbox(false, hmargin), engine(eng)
-	 {
-	 content = engine.checkin(datacell->textbuf, "", "");
+TeXView::TeXView(TeXEngine& eng, DTree::iterator it, int hmargin)
+	: content(0), datacell(it), vbox(false, 10), hbox(false, hmargin), engine(eng)
+	{
+	content = engine.checkin(datacell->textbuf, "", "");
 
 #if GTKMM_MINOR_VERSION>=10
-	 add(rbox);
-	 rbox.add(vbox);
-	 rbox.set_reveal_child(false);
-	 rbox.set_transition_duration(1000);
-	 rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
+	add(rbox);
+	rbox.add(vbox);
+	rbox.set_reveal_child(false);
+	rbox.set_transition_duration(1000);
+	rbox.set_transition_type(Gtk::REVEALER_TRANSITION_TYPE_CROSSFADE); //SLIDE_DOWN);
 #else
-	 add(vbox);
+	add(vbox);
 #endif		 
-	 vbox.set_margin_top(10);
-	 vbox.set_margin_bottom(0);
-	 vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
-	 hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
+	vbox.set_margin_top(10);
+	vbox.set_margin_bottom(0);
+	vbox.pack_start(hbox, Gtk::PACK_SHRINK, 0);
+	hbox.pack_start(image, Gtk::PACK_SHRINK, hmargin);
 //	 add(image);
-	 override_background_color(Gdk::RGBA("white"));
-	 add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
-	 }
+	override_background_color(Gdk::RGBA("white"));
+	add_events( Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK );
+	}
 
- TeXView::~TeXView()
-	 {
-	 engine.checkout(content);
-	 }
+TeXView::~TeXView()
+	{
+	engine.checkout(content);
+	}
 
 void TeXView::on_show() 
 	{
@@ -60,14 +64,7 @@ void TeXView::convert()
 		
 		if(content->image().data()!=0) {
 			//std::cerr << "SHOULD NOT HAPPEN" << std::endl;
-			Glib::RefPtr<Gdk::Pixbuf> pixbuf = 
-				Gdk::Pixbuf::create_from_data(content->image().data(), Gdk::COLORSPACE_RGB, 
-														true,
-														8, 
-														content->width(), content->height(),
-														4*content->width());
-			
-			image.set(pixbuf);
+			image.update_image(content, engine.get_scale());
 			}
 		}
 	catch(TeXEngine::TeXException& ex) {
@@ -77,27 +74,58 @@ void TeXView::convert()
 
 
 void TeXView::dim(bool d)
-	 {
-	 if(d) image.set_opacity(0.3);
-	 else  image.set_opacity(1.0);
-	 }
+	{
+	if(d) image.set_opacity(0.3);
+	else  image.set_opacity(1.0);
+	}
 
- bool TeXView::on_button_release_event(GdkEventButton *ev)
-	 {
-	 show_hide_requested.emit(datacell);
-	 return true;
-	 }
+bool TeXView::on_button_release_event(GdkEventButton *ev)
+	{
+	show_hide_requested.emit(datacell);
+	return true;
+	}
 
- void TeXView::update_image()
-	 {
-	Glib::RefPtr<Gdk::Pixbuf> pixbuf = 
+void TeXView::update_image()
+	{
+	image.update_image(content, engine.get_scale());
+	}
+
+void TeXView::TeXArea::update_image(std::shared_ptr<TeXEngine::TeXRequest> content, double scale)
+	{
+	pixbuf = 
 		Gdk::Pixbuf::create_from_data(content->image().data(), Gdk::COLORSPACE_RGB, 
 												true,
 												8, 
 												content->width(), content->height(),
 												4*content->width());
 
-	image.set(pixbuf);
+	set_size_request(pixbuf->get_width(), pixbuf->get_height());
+//	update=true;
+	scale_=scale;
+	// HERE
+//	image.set(pixbuf);
 	}
 
 
+bool TeXView::TeXArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr)
+	{
+	if(!pixbuf) return false;
+
+//	Gtk::Allocation allocation = get_allocation();
+//	const int width = allocation.get_width();
+//	const int height = allocation.get_height();
+	auto surface = cr->get_target();
+	auto csurface = surface->cobj();
+//	cairo_surface_set_device_scale(csurface, 1.0, 1.0);
+//	cairo_surface_mark_dirty(csurface);
+	double device_scale_x, device_scale_y;
+	cairo_surface_get_device_scale(csurface, &device_scale_x, &device_scale_y);
+//	std::cerr << device_scale_x << std::endl;
+	set_size_request(pixbuf->get_width()/device_scale_x, pixbuf->get_height()/device_scale_y);
+	cr->scale(1.0/device_scale_x, 1.0/device_scale_y);
+	Gdk::Cairo::set_source_pixbuf(cr, pixbuf, 0, 0);
+	cr->paint();
+	cr->scale(1.0, 1.0);
+	
+	return true;
+	}

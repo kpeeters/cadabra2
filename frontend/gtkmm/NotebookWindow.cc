@@ -41,19 +41,20 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	// Query high-dpi settings. For now only for cinnamon.
 	scale = 1.0;
+	auto screen = Gdk::Screen::get_default();
 #ifndef __APPLE__
 	const char *ds = std::getenv("DESKTOP_SESSION");
 	if(ds) {
 	  settings = Gio::Settings::create((strcmp(ds, "cinnamon") == 0) ? "org.cinnamon.desktop.interface" : "org.gnome.desktop.interface");
-	  scale = settings->get_double("text-scaling-factor");
+	  scale = settings->get_double("text-scaling-factor")*screen->get_monitor_scale_factor(0);
+//	  scale = screen->get_monitor_scale_factor(0);
 	}
 #else
-	auto screen = Gdk::Screen::get_default();
 	scale = screen->get_monitor_scale_factor(0);
 	std::cerr << "cadabra-client: scale = " << scale << std::endl;
 #endif
 //	std::cerr << "monitor scale factor " << Gdk::Monitor::get_scale_factor() << std::endl;
-	engine.set_scale(scale);
+	engine.set_scale(scale, screen->get_monitor_scale_factor(0));
 
 #ifndef __APPLE__
 	if(ds) {
@@ -73,7 +74,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	if(prefs.highlight) load_css("black");
 	else                load_css("blue");	
 
-	auto screen = Gdk::Screen::get_default();
+//	auto screen = Gdk::Screen::get_default();
 //	std::cerr << "cadabra-client: scale = " << screen->get_monitor_scale_factor(0) << std::endl;
 	Gtk::StyleContext::add_provider_for_screen(screen, css_provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
@@ -1693,10 +1694,13 @@ void NotebookWindow::on_help_register()
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{
-	if(key=="text-scaling-factor") {
-		scale = settings->get_double("text-scaling-factor");
-		std::cout << "cadabra-client: text-scaling-factor = " << scale << std::endl;
-		engine.set_scale(scale);
+	std::cerr << key << std::endl;
+	if(key=="text-scaling-factor" || key=="scaling-factor") {
+		auto screen = Gdk::Screen::get_default();
+		scale   = settings->get_double("text-scaling-factor");
+		scale  *= screen->get_monitor_scale_factor(0);		
+		std::cout << "cadabra-client: total scaling-factor = " << scale << std::endl;
+		engine.set_scale(scale, screen->get_monitor_scale_factor(0));
 		engine.invalidate_all();
 		engine.convert_all();
 

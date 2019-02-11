@@ -180,7 +180,7 @@ TeXEngine::~TeXEngine()
 	}
 
 TeXEngine::TeXEngine()
-	: horizontal_pixels_(0), font_size_(12), scale_(1.0)
+	: horizontal_pixels_(0), font_size_(12), total_scale_(1.0), device_scale_(1.0)
 	{
 //	latex_packages.push_back("breqn");
 	latex_packages.push_back("hyperref");
@@ -221,9 +221,9 @@ void TeXEngine::set_font_size(int fontsize)
 	font_size_=fontsize;
 	}
 
-void TeXEngine::set_scale(double scale)
+void TeXEngine::set_scale(double total_scale, double device_scale)
 	{
-	if(scale_!=scale) {
+	if(total_scale_!=total_scale && device_scale_!=device_scale) {
 		// flag all requests as requiring an update
 		std::set<std::shared_ptr<TeXRequest> >::iterator reqit=requests.begin();
 		while(reqit!=requests.end()) {
@@ -231,7 +231,13 @@ void TeXEngine::set_scale(double scale)
 			++reqit;
 			}
 		}
-	scale_=scale;
+	total_scale_=total_scale;
+	device_scale_=device_scale;	
+	}
+
+double TeXEngine::get_scale() const
+	{
+	return total_scale_;
 	}
 
 TeXEngine::TeXRequest::TeXRequest()
@@ -354,7 +360,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Note: the number here has no effect on the size in pixels of the generated 
 	// PDF. That is set with the -D parameter of dvipng.
 
-	const double horizontal_mm=horizontal_pixels_*(12.0/font_size_)/3.94/scale_;
+	const double horizontal_mm=horizontal_pixels_*(12.0/font_size_)/3.94/(total_scale_/device_scale_);
 //#ifdef DEBUG
 //	std::cerr << "tex_it: font_size " << font_size << std::endl
 //				 << "        pixels    " << horizontal_pixels_ << std::endl
@@ -498,7 +504,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// Convert the entire dvi file to png files.
 	//
 	std::ostringstream resspec;
-	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch; 
+	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch*device_scale_; 
 		
 	std::string dvipng_stdout, dvipng_stderr;
 	tpl::Process dvipng_proc("dvipng -T tight -bg transparent -D "+resspec.str()+" "+tmppath+".dvi", "",
