@@ -51,20 +51,35 @@ def test03():
         
 test03()
 
-# def test04():
-#     __cdbkernel__=create_scope()
-# {m,n,p}::Indices(spacetime, position=fixed);
-# {a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);
-# \sigma^{p}::ImplicitIndex(\sigma^{p}_{a b});
-# \tau^{p}::ImplicitIndex(\tau^{p a b});        
-# Tr{#}::Trace(indices=spinor);
-# ex:= Tr( \sigma^{m} \tau^{n} );
-# explicit_indices(_);
-#     tst:= \sigma^{m}_{a b} \tau^{n b a} - @(ex);
-#     assert(tst==0)
-#     print("Test 04 passed")
-#         
-# test04()
+def test04():
+    __cdbkernel__=create_scope()
+    {m,n,p}::Indices(spacetime, position=fixed);
+    {a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);
+    \sigma^{p}::ImplicitIndex(\sigma^{p}_{a b});
+    \tau^{p}::ImplicitIndex(\tau^{p a b});        
+    Tr{#}::Trace(indices=spinor);
+    ex:= Tr( \sigma^{m} \tau^{n} );
+    explicit_indices(_);
+    tst:= \sigma^{m}_{a b} \tau^{n b a} - @(ex);
+    assert(tst==0)
+    print("Test 04 passed")
+        
+test04()
+        
+def test05():
+    __cdbkernel__=create_scope()
+    {m,n,p}::Indices(spacetime, position=fixed);
+    {a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);
+    \sigma^{p}::ImplicitIndex(\sigma^{p}_{a b});
+    \tau^{p}::ImplicitIndex(\tau^{p a b});        
+    Tr{#}::Trace(indices=spinor);
+    ex:= Tr( \sigma^{m} \tau^{n} + \tau^{n} \sigma^{m} );
+    explicit_indices(_);
+    tst:= \sigma^{m}_{a b} \tau^{n b a} + \tau^{n a b} \sigma^{m}_{b a} - @(ex);
+    assert(tst==0)
+    print("Test 05 passed")
+        
+test05()
 
 #ex:= \chi \psi \sigma^{n} \chi;
 #explicit_indices(_);

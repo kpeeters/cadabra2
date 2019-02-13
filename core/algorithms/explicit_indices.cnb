@@ -1,0 +1,204 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{explicit_indices}{Make indices explicit on an expression with implicit indices.}\n\nIn Cadabra you can write expressions which are understood to have indices suppressed, in order\nto get a cleaner notation. This is often used for vector/matrix notation, or when dealing\nwith spinors. In order to inform Cadabra about these implicit indices, you use the\n\\prop{ImplicitIndex} property (which is also necessary to prevent Cadabra from moving\nthese objects through each other when sorting products into canonical form). \nThe \\algo{explicit_indices} algorithm can then make these  indices explicit, which can \nsometimes make them easier to work with, for example when doing substitutions."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{explicit_indices}{Make indices explicit on an expression with implicit indices.}\n\nIn Cadabra you can write expressions which are understood to have indices suppressed, in order\nto get a cleaner notation. This is often used for vector/matrix notation, or when dealing\nwith spinors. In order to inform Cadabra about these implicit indices, you use the\n\\prop{ImplicitIndex} property (which is also necessary to prevent Cadabra from moving\nthese objects through each other when sorting products into canonical form). \nThe \\algo{explicit_indices} algorithm can then make these  indices explicit, which can \nsometimes make them easier to work with, for example when doing substitutions."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In the following example we define two sets of indices, and several objects which are assumed\nto have implicit indices."
+				}
+			],
+			"hidden" : true,
+			"source" : "In the following example we define two sets of indices, and several objects which are assumed\nto have implicit indices."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[m,~\\discretionary{}{}{} n,~\\discretionary{}{}{} p\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c,~\\discretionary{}{}{} d,~\\discretionary{}{}{} e,~\\discretionary{}{}{} f,~\\discretionary{}{}{} g,~\\discretionary{}{}{} h\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ImplicitIndex to~}\\sigma^{p}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ImplicitIndex to~}\\psi.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ImplicitIndex to~}\\chi.\\end{dmath*}"
+				}
+			],
+			"source" : "{m,n,p}::Indices(spacetime, position=fixed);\n{a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);\n\\sigma^{p}::ImplicitIndex(\\sigma^{p a}_{b});\n\\psi::ImplicitIndex(\\psi_{a});\n\\chi::ImplicitIndex(\\chi^{a});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The following is a valid expression for a spinor bilinear,"
+				}
+			],
+			"hidden" : true,
+			"source" : "The following is a valid expression for a spinor bilinear,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\psi \\sigma^{m} \\sigma^{n} \\chi"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\psi \\sigma^{m} \\sigma^{n} \\chi\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= \\psi \\sigma^{m} \\sigma^{n} \\chi;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "We can now make the indices explicit using"
+				}
+			],
+			"hidden" : true,
+			"source" : "We can now make the indices explicit using"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\psi_{a} \\sigma^{m a}_{b} \\sigma^{n b}_{c} \\chi^{c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\psi_{a} \\sigma^{m a}\\,_{b} \\sigma^{n b}\\,_{c} \\chi^{c}\\end{dmath*}"
+				}
+			],
+			"source" : "explicit_indices(ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This also works when there are trace operators, as is illustrated in the following \nexample."
+				}
+			],
+			"hidden" : true,
+			"source" : "This also works when there are trace operators, as is illustrated in the following \nexample."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Trace to~}{\\rm Tr}\\left(\\#\\right).\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "Tr(\\sigma^{m} \\sigma^{n} + \\sigma^{n} \\sigma^{m})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}{\\rm Tr}\\left(\\sigma^{m} \\sigma^{n}+\\sigma^{n} \\sigma^{m}\\right)\\end{dmath*}"
+				}
+			],
+			"source" : "Tr{#}::LaTeXForm(\"{\\rm Tr}\").\nTr{#}::Trace(indices=spinor);\nex:= Tr(\\sigma^{m} \\sigma^{n} + \\sigma^{n} \\sigma^{m});"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\sigma^{m a}_{b} \\sigma^{n b}_{a} + \\sigma^{n a}_{b} \\sigma^{m b}_{a}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\sigma^{m a}\\,_{b} \\sigma^{n b}\\,_{a}+\\sigma^{n a}\\,_{b} \\sigma^{m b}\\,_{a}\\end{dmath*}"
+				}
+			],
+			"source" : "explicit_indices(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

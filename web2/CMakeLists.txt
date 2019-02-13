@@ -69,6 +69,7 @@ set(ALGOS
   expand_delta
   expand_diracbar
   expand_power
+  explicit_indices
   factor_in
   factor_out
   fierz

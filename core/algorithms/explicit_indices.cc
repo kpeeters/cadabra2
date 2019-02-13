@@ -23,11 +23,14 @@ bool explicit_indices::can_apply(iterator st)
 
 	if(*st->name=="\\equals") return false; // switch
 	auto trace = kernel.properties.get<Trace>(st);
-	if(trace)   return false;
-	if(*st->name=="\\sum")    return true;
-	if(is_termlike(st)) {
+	if(trace)   return true;
+	if(is_termlike(st) || *st->name=="\\sum") {
 		if(tr.is_head(st)) return         true;
 		if(*tr.parent(st)->name=="\\sum") return false;
+		auto ptrace = kernel.properties.get<Trace>(tr.parent(st));
+		if(ptrace) return false;
+		auto pderiv = kernel.properties.get<PartialDerivative>(tr.parent(st));
+		if(pderiv) return false;
 		return true;
 		}
 	
@@ -38,9 +41,20 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
-	std::cerr << "apply at " << it << std::endl;
+//	std::cerr << "apply at " << it << std::endl;
 	
-	// Ensure that we are always working on a sum, even
+	auto trace = kernel.properties.get<Trace>(it);
+	iterator parit=it;
+	if(trace)  {
+		// Handle the argument, then at the end, close the index loop
+		// and remove the trace operator.
+		iterator arg=tr.begin(it);
+		if(! (*arg->name=="\\sum" || is_termlike(arg)))
+			return res;
+		it=arg;
+		}
+
+// Ensure that we are always working on a sum, even
 	// if there is only one term.
 	if(is_termlike(it)) 
 		force_node_wrap(it, "\\sum");
@@ -50,10 +64,13 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	ind_free_sum.clear();
 	ind_dummy_sum.clear();
 	classify_indices(it, ind_free_sum, ind_dummy_sum);
+//	std::cerr << "free indices in this term:" << std::endl;
+//	for(const auto& ind: ind_free_sum)
+//		std::cerr << ind.second << std::endl;
 	
 	sibling_iterator term=tr.begin(it);
 	while(term!=tr.end(it)) {
-		iterator nxt=term;
+		sibling_iterator nxt=term;
 		++nxt;
 		
 		iterator tmp=term;
@@ -64,6 +81,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		// building the explicit index line.
 		added_this_term.clear();
 		index_lines.clear();
+		first_index.clear();
+		last_index.clear();
 		
 		sibling_iterator factor=tr.begin(term);
 		while(factor!=tr.end(term)) {
@@ -72,29 +91,40 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 				sibling_iterator args=tr.begin(factor);
 				while(args!=tr.end(factor)) {
 					if(args->fl.parent_rel==str_node::p_none) {
-						handle_factor(args);
+						handle_factor(args, trace!=0);
 						break;
 						}
 					++args;
 					}
 				}
 			else {
-				handle_factor(factor);
+				handle_factor(factor, trace!=0);
 				}
 			++factor;
 			}
+		// If this term is a trace, make indices equal
+		if(trace) {
+			for(auto& li: last_index) {
+				tr.replace_index(li.second, first_index[li.first], true);
+				}
+			}
+		
 
 		tmp=term;
-		std::cerr << term << std::endl;
 		prod_unwrap_single_term(tmp);
 
 		term=nxt;
 		}
 
+	if(trace) {
+		it=parit;
+		it = tr.flatten_and_erase(it);
+		}
+	
 	return res;
 	}
 
-void explicit_indices::handle_factor(sibling_iterator& factor)
+void explicit_indices::handle_factor(sibling_iterator& factor, bool trace_it)
 	{
 	int tmp;
 	auto ii = kernel.properties.get_with_pattern<ImplicitIndex>(factor, tmp);
@@ -163,6 +193,11 @@ void explicit_indices::handle_factor(sibling_iterator& factor)
 					added_this_term.insert(index_map_t::value_type(di, loc));
 					index_lines[ip]=loc;
 					index_lines_factor[ip]=loc;
+					last_index[ip]=loc;
+					auto first = first_index.find(ip);
+					if(first==first_index.end()) {
+						first_index[ip]=loc;
+						}
 					}
 				else {
 					// Use the active line index, then unset the active line.
