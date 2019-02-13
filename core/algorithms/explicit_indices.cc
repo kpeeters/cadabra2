@@ -1,6 +1,8 @@
 
 #include "explicit_indices.hh"
 
+#include "Cleanup.hh"
+
 #include "algorithms/substitute.hh"
 #include "properties/ImplicitIndex.hh"
 #include "properties/PartialDerivative.hh"
@@ -59,6 +61,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	if(is_termlike(it)) 
 		force_node_wrap(it, "\\sum");
 
+//	std::cerr << "after wrap" << it << std::endl;
+	
 	// Classify all free and dummy indices already present. Any new
 	// indices cannot be taken from these.
 	ind_free_sum.clear();
@@ -113,6 +117,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		tmp=term;
 		prod_unwrap_single_term(tmp);
 
+//		std::cerr << "after unwrap" << tmp << std::endl;
+
 		term=nxt;
 		}
 
@@ -120,6 +126,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		it=parit;
 		it = tr.flatten_and_erase(it);
 		}
+	cleanup_dispatch(kernel, tr, it);
 	
 	return res;
 	}

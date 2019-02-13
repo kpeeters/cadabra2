@@ -855,8 +855,10 @@ void Algorithm::force_node_wrap(iterator& it, std::string nm)
 	tr.reparent(prodnode, fr, to);
 	prodnode->fl.bracket=it->fl.bracket;
 	it->fl.bracket=str_node::b_none;
-	prodnode->multiplier=it->multiplier;
-	one(it->multiplier);
+	if(nm!="\\sum") { // multipliers should sit on terms in a sum
+		prodnode->multiplier=it->multiplier;
+		one(it->multiplier);
+		}
 	it=prodnode;
 	}
 

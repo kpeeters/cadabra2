@@ -6,9 +6,9 @@ def test01():
     \sigma^{p}::ImplicitIndex(\sigma^{p a}_{b});
     \psi::ImplicitIndex(\psi_{a});
     \chi::ImplicitIndex(\chi^{a});
-    ex:= \psi \sigma^{m} \sigma^{n} \chi \lambda^{a} + \lambda_{b} \chi^{b} T^{m n}\chi^{a};
+    ex:= \psi \sigma^{m} \sigma^{n} \chi \lambda^{a} + 1/2 \lambda_{b} \chi^{b} T^{m n}\chi^{a};
     explicit_indices(_)
-    tst:= \psi_{c} \sigma^{m c}_{d} \sigma^{n d}_{e} \chi^{e} \lambda^{a} + \lambda_{b} \chi^{b} T^{m n}\chi^{a} - @(ex);
+    tst:= \psi_{c} \sigma^{m c}_{d} \sigma^{n d}_{e} \chi^{e} \lambda^{a} + 1/2 \lambda_{b} \chi^{b} T^{m n}\chi^{a} - @(ex);
     assert(tst==0)
     print("Test 01a passed")
     ex:= \psi \sigma^{m} \chi;
@@ -42,10 +42,9 @@ def test03():
     \sigma^{p}::ImplicitIndex(\sigma^{p a}_{b});
     \psi::ImplicitIndex(\psi_{a});
     \chi::ImplicitIndex(\chi^{a});
-    
-    ex:= \sigma^{m} \chi \psi \sigma^{n} \chi;
+    ex:= 2 \sigma^{m} \chi \psi \sigma^{n} \chi;
     explicit_indices(_)
-    tst:= \sigma^{m a}_{b} \chi^{b} \psi_{c} \sigma^{n c}_{d} \chi^{d} - @(ex);
+    tst:= 2 \sigma^{m a}_{b} \chi^{b} \psi_{c} \sigma^{n c}_{d} \chi^{d} - @(ex);
     assert(tst==0)
     print("Test 03 passed")
         
@@ -73,9 +72,9 @@ def test05():
     \sigma^{p}::ImplicitIndex(\sigma^{p}_{a b});
     \tau^{p}::ImplicitIndex(\tau^{p a b});        
     Tr{#}::Trace(indices=spinor);
-    ex:= Tr( \sigma^{m} \tau^{n} + \tau^{n} \sigma^{m} );
+    ex:= 1/3 Tr( \sigma^{m} \tau^{n} + \tau^{n} \sigma^{m} );
     explicit_indices(_);
-    tst:= \sigma^{m}_{a b} \tau^{n b a} + \tau^{n a b} \sigma^{m}_{b a} - @(ex);
+    tst:= 1/3 \sigma^{m}_{a b} \tau^{n b a} + 1/3 \tau^{n a b} \sigma^{m}_{b a} - @(ex);
     assert(tst==0)
     print("Test 05 passed")
         
