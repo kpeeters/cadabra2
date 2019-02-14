@@ -55,9 +55,7 @@ void CodeInput::init(const Prefs& prefs)
 //	scroll_.set_size_request(-1,200);
 //	scroll_.set_border_width(1);
 //	scroll_.set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_ALWAYS);
-#ifndef __APPLE__
 	set_font_size(prefs.font_step);
-#endif
 	edit.set_wrap_mode(Gtk::WRAP_NONE);
 
 //	edit.override_background_color(Gdk::RGBA("white"), Gtk::STATE_FLAG_ACTIVE);
