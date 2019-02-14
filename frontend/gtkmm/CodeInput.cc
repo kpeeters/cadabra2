@@ -444,7 +444,11 @@ void CodeInput::slice_cell(std::string& before, std::string& after)
 void CodeInput::set_font_size(int num)
 	{
 	std::ostringstream fstr;
-	fstr << "monospace " << 9+(num*2); 
+	float size=9+(num*2);
+#ifdef __APPLE__
+	size*=1.5;
+#endif
+	fstr << "monospace " << size;
 	edit.override_font(Pango::FontDescription(fstr.str()));
 	edit.queue_resize();
 	}

@@ -1730,7 +1730,7 @@ void NotebookWindow::on_prefs_font_size(int num)
 	engine.set_font_size(12+(num*2));
 
 	if(is_configured) {
-		std::cerr << "cadabra-client: re-running TeX to change font size" << std::endl;
+		// std::cerr << "cadabra-client: re-running TeX to change font size" << std::endl;
 		// No point in running TeX on all cells if we have not yet had an
 		// on_configure_event signal; that will come after us and then we will
 		// have to run all again.
