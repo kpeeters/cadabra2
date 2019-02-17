@@ -210,9 +210,9 @@ namespace cadabra {
 		// FIXME: move to DocumentThread
 		std::string save(const std::string& fn) const;
 
-		// Todo deque processing logic. This gets called by the dispatcher, but it
-		// is also allowed to call this from within NotebookWindow itself. The important
-		// thing is that it is run on the GUI thread.
+		/// Todo deque processing logic. This gets called by the dispatcher, but it
+		/// is also allowed to call this from within NotebookWindow itself. The important
+		/// thing is that it is run on the GUI thread.
 		void process_todo_queue();
 
 		void on_crash_window_closed(int);

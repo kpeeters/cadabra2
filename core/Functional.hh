@@ -25,14 +25,6 @@ namespace cadabra {
 	
 	/// \ingroup core
 	///
-   /// Apply a function on every node in the tree at and below the
-   /// given node, depth-first. Return an iterator to the top node,
-	/// which replaces 'it' (may be the same).
-	
-	Ex::iterator do_subtree(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f);
-
-	/// \ingroup core
-	///
 	/// Returns an iterator to the first element for which 'f' does not return tr.end().
 
 	Ex::iterator find_in_list(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f);
@@ -49,4 +41,36 @@ namespace cadabra {
 	
 	Ex make_list(Ex el);
 
+
+
+	/// \ingroup core
+	///
+   /// Apply a function on every node in the tree at and below the
+   /// given node, depth-first. Return an iterator to the top node,
+	/// which replaces 'it' (may be the same).
+
+	template<class T>
+	class T::iterator do_subtree(const T& tr, class T::iterator it, std::function<class T::iterator(class T::iterator)> f)
+		{
+		if(it==tr.end()) return it;
+		
+		class T::post_order_iterator walk=it, last=it;
+		++last;
+		walk.descend_all();
+		
+		do {
+			auto nxt=walk;
+			++nxt;
+			
+			bool cpy=false;
+			if(walk==it) cpy=true;
+			walk = f(walk);
+			if(cpy) it=walk;
+			
+			walk=nxt;
+			} while(walk!=last);
+		
+		return it;
+		}
+	
 };

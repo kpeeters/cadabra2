@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "Actions.hh"
+#include "Functional.hh"
 #include "Cadabra.hh"
 #include "Config.hh"
 #include "InstallPrefix.hh"
@@ -22,6 +23,7 @@
 
 using namespace cadabra;
 
+// #define DEBUG 1
 
 NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	: DocumentThread(this),
@@ -620,6 +622,9 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		// buffer from existing cells.
 
 		if(canvasses[i]->visualcells.find(&(*it))!=canvasses[i]->visualcells.end()) {
+#ifdef DEBUG
+			std::cerr << "found a visualcell for cell " << &(*it) << " in canvas " << i << std::endl;
+#endif
 			if(i==0 && it->cell_type==DataCell::CellType::python) {
 				global_buffer = canvasses[i]->visualcells[&(*it)].inbox->buffer;
 				}
@@ -794,12 +799,18 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 			parentbox=parent_visual.document;
 		else
 			parentbox=parent_visual.inbox;
-		VisualCell& actual = canvasses[i]->visualcells[&(*it)];
 
-//		if(it->cell_type==DataCell::CellType::latex_view) {
-//			actual.outbox->set_reveal_child(false);
-//			}
-//		else {
+		
+		auto fnd = canvasses[i]->visualcells.find(&(*it));
+		// It is possible that there is no visual cell corresponding to this
+		// DTree cell (happens for instance when deleting a cell, undoing,
+		// then re-evaluating: the DTree still has the output cells, while
+		// they have gone from the visual tree).
+		if(fnd==canvasses[i]->visualcells.end())
+			continue;
+
+		VisualCell& actual = fnd->second;//canvasses[i]->visualcells[&(*it)];
+
 		// The pointers are all in a union, and Gtkmm does not care
 		// about the precise type, so we just remove imagebox, knowing
 		// that it may actually be an inbox or outbox.
@@ -809,9 +820,26 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 		// ourselves. Fortunately the container does not try to delete
 		// it again in its destructor.
 		delete actual.imagebox;
-//			}
-		canvasses[i]->visualcells.erase(&(*it));
-		}	
+
+		// The above removes the entire Gtk tree corresponding to the cell at
+		// 'it' and the subtree below it. In order to remove all these from
+		// the visualcells map, we need to walk the tree explicitly.
+		do_subtree(doc, it, [this, i](DTree::iterator rm) {
+#ifdef DEBUG
+				std::cerr << "removing cell " << &(*rm) << " " << rm->textbuf << "\n from canvas " << i << std::endl;
+#endif
+				auto fnd = canvasses[i]->visualcells.find(&(*rm));
+				if(fnd!=canvasses[i]->visualcells.end()) {
+					canvasses[i]->visualcells.erase(fnd);
+					}
+				else {
+#ifdef DEBUG
+					std::cerr << "no visualcell for that one" << std::endl;
+#endif
+					}
+				return rm;
+				});
+		}
 	}
 
 void NotebookWindow::remove_all_cells()
@@ -1694,7 +1722,9 @@ void NotebookWindow::on_help_register()
 
 void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	{
+#ifdef DEBUG
 	std::cerr << key << std::endl;
+#endif
 	if(key=="text-scaling-factor" || key=="scaling-factor") {
 		auto screen = Gdk::Screen::get_default();
 		scale   = settings->get_double("text-scaling-factor");

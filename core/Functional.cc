@@ -30,29 +30,6 @@ int list_size(const Ex& tr, Ex::iterator it)
 		return 1;
 	}
 
-Ex::iterator do_subtree(const Ex& tr, Ex::iterator it, std::function<Ex::iterator(Ex::iterator)> f)
-	{
-	if(it==tr.end()) return it;
-	
-	Ex::post_order_iterator walk=it, last=it;
-	++last;
-	walk.descend_all();
-	
-	do {
-		auto nxt=walk;
-		++nxt;
-
-		bool cpy=false;
-		if(walk==it) cpy=true;
-		walk = f(walk);
-		if(cpy) it=walk;
-
-		walk=nxt;
-		} while(walk!=last);
-
-	return it;
-	}
-
 Ex::iterator find_in_subtree(const Ex& tr, Ex::iterator it, std::function<bool(Ex::iterator)> f, bool including_head)
 	{
 	if(it==tr.end()) return it;

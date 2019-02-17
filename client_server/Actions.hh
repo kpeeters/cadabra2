@@ -1,12 +1,6 @@
 
 #pragma once
 
-// All modifications to the document are done by calling 'perform' with an 
-// action object. This enables us to implement an undo stack. This method
-// will take care of making the actual change to the DTree document, and
-// call back on the 'change' methods above to inform the derived class
-// that a change has been made. 
-
 #include "DataCell.hh"
 #include "DocumentThread.hh"
 
@@ -25,8 +19,14 @@ namespace cadabra {
 	/// undo/redo stacks. All actions run on the GUI thread. The
 	/// update_gui members typically call members of the GUIBase class.
 	/// Action objects are allowed to modify the DTree document doc,
-	/// since they essentially contain code which is part of the 
+	/// since they essentially contain code which is part of the
 	/// DocumentThread object.
+	///
+   /// All modifications to the document are done by calling 'perform' with an 
+   /// action object. This enables us to implement an undo stack. This method
+   /// will take care of making the actual change to the DTree document, and
+   /// call back on the 'change' methods above to inform the derived class
+   /// that a change has been made. 
 
 
 	class ActionBase {

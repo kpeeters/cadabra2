@@ -22,7 +22,11 @@ namespace cadabra {
 
 			virtual void update_cell(const DTree&, DTree::iterator)=0;
 
-			/// Remove a single cell.
+			/// Remove a single cell together with all its child cells.
+			/// Some toolkits (e.g. Gtk) will take care of that entire
+			/// child tree removal automatically, in which case the only
+			/// thing that needs done for the child cells is to remove
+			/// any reference to their VisualCells.
 
 			virtual void remove_cell(const DTree&, DTree::iterator)=0;
 
