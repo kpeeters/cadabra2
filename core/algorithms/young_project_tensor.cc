@@ -64,7 +64,8 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 			iterator newtensor=rep.append_child(rep.begin(), repfac.begin());
 			if(modulo_monoterm) { // still necessary for column exchange
 				indexsort isort(kernel, rep);
-				assert(isort.can_apply(newtensor)); // to set tb
+				auto res=isort.can_apply(newtensor); // to set tb
+				assert(res);
 				isort.apply(newtensor);
 				}
 			}

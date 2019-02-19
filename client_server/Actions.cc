@@ -162,7 +162,7 @@ void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)
 	reference_parent_cell = cl.doc.parent(ref);
 	reference_child_index = cl.doc.index(ref);
 	removed_tree=DTree(ref);
-	std::cerr << "removed has " << cl.doc.number_of_children(ref) << " children" << std::endl;
+//	std::cerr << "removed has " << cl.doc.number_of_children(ref) << " children" << std::endl;
 	cl.doc.erase(ref);
 	}
 
@@ -177,7 +177,7 @@ void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 		auto it = cl.doc.child(reference_parent_cell, reference_child_index);
 //		++it;
 		newcell = cl.doc.insert_subtree(it, removed_tree.begin());
-		std::cerr << "added doc cell " << newcell->textbuf << " at " << &(*newcell) << " before " << it->textbuf << std::endl;
+//		std::cerr << "added doc cell " << newcell->textbuf << " at " << &(*newcell) << " before " << it->textbuf << std::endl;
 		}
 	gb.add_cell(cl.doc, newcell, true);
 	//std::cerr << "added vis rep" << std::endl;
