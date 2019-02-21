@@ -17,7 +17,7 @@ namespace cadabra {
 					bool operator()(unsigned int, unsigned int) const;
 				private:
 					const Kernel&           kernel;
-					Ex&          tr;  
+//					Ex&          tr;  
 					Ex::iterator it;
 			};
 		private:

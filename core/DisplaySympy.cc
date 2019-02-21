@@ -159,7 +159,7 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 		str << ")";
 	}
 
-void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int skip) 
+void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int ) 
 	{
 	// Sympy has no notion of children with different parent relations; it's all 
 	// functions of functions kind of stuff. What we will do is print upper and
@@ -261,7 +261,7 @@ void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t 
 		}
 	}
 
-void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
+void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool )
 	{
 	switch(pr) {
 		case str_node::p_super:    str << "^"; break;
@@ -345,7 +345,7 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-		Ex::sibling_iterator st=tree.begin(it);
+//		Ex::sibling_iterator st=tree.begin(it);
 		}
 
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:

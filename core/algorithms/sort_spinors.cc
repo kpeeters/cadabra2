@@ -51,7 +51,7 @@ bool sort_spinors::can_apply(iterator it)
 	return false;
 	}
 
-Algorithm::result_t sort_spinors::apply(iterator& it)
+Algorithm::result_t sort_spinors::apply(iterator& )
 	{
 	int num1, num2;
 	const SortOrder     *so1=kernel.properties.get_composite<SortOrder>(one,num1);

@@ -239,7 +239,7 @@ void tableaux<T>::remove_nullifying_traces()
 	}
 
 template<class T>
-void tableaux<T>::symmetrise(const T& symtab)
+void tableaux<T>::symmetrise(const T&)
 	{
 //
 //	typename tableau_container_t::iterator thetab=storage.begin();
@@ -949,7 +949,7 @@ void add_box(T1& tab1, unsigned int row1,
 
 template<class T1>
 void add_box(T1& tab1, unsigned int row1, 
-				 const tableau& tab2, unsigned int row2, unsigned int col2) 
+				 const tableau& , unsigned int, unsigned int) 
 	{
 	tab1.add_box(row1);
 	}
@@ -1060,7 +1060,7 @@ void LR_tensor(const Tab& tab1, const Tab& tab2, unsigned int maxrows,
 	}
 
 template<class T, class OutputIterator>
-void LR_tensor(const tableaux<T>&, bool symmetric, unsigned int maxrows, OutputIterator outit)
+void LR_tensor(const tableaux<T>&, bool, unsigned int, OutputIterator )
 	{
 	assert(1==0);
 	}
@@ -1105,7 +1105,7 @@ const T& filled_tableau<T>::operator()(unsigned int row, unsigned int col)  cons
 	}
 
 template<class T>
-const T& filled_tableau<T>::operator[](unsigned int boxnum) const
+const T& filled_tableau<T>::operator[](unsigned int ) const
 	{
 	assert(1==0);
 	assert(this->row<rows.size());

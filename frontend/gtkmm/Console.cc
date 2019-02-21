@@ -136,7 +136,7 @@ Console::Console(sigc::slot<void> run_slot)
 		sigc::mem_fun(&input, &TextViewProxy::on_key_press_event),
 		false);
 
-	tv.signal_size_allocate().connect([this](Gtk::Allocation& alloc) {
+	tv.signal_size_allocate().connect([this](Gtk::Allocation& ) {
 		scroll_to_bottom();
 	});
 

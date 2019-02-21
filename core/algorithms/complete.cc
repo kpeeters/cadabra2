@@ -14,12 +14,12 @@ complete::complete(const Kernel& k, Ex& e, Ex& g)
 	{
 	}
 
-bool complete::can_apply(iterator it) 
+bool complete::can_apply(iterator ) 
 	{
 	return true;
 	}
 
-Algorithm::result_t complete::apply(iterator& it)
+Algorithm::result_t complete::apply(iterator& )
 	{
 	result_t res=result_t::l_no_action;
 

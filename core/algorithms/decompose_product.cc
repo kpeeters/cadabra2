@@ -264,7 +264,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
 
 void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, young_project& yp,
-																		  const TableauBase *tt, iterator ff, 
+																		  const TableauBase *, iterator ff, 
 																		  int ioffset, const TableauBase::tab_t& thetab,
 																		  bool remove_traces)
 	{

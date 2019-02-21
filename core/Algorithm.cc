@@ -63,7 +63,7 @@ void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
 	pm=pm_;
 	}
 
-Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
+Algorithm::result_t Algorithm::apply_pre_order(bool )
 	{
 #if BOOST_VERSION > 105500
 	if(pm) 
@@ -491,7 +491,7 @@ bool Algorithm::check_index_consistency(iterator it) const
 	return true;
 	}
 
-bool Algorithm::check_degree_consistency(iterator it) const
+bool Algorithm::check_degree_consistency(iterator ) const
 	{
 	return true; // FIXME: this needs to be implemented.
 	}
@@ -580,7 +580,7 @@ bool Algorithm::check_consistency(iterator it) const
 	return true;
 	}
 
-void Algorithm::report_progress(const std::string& str, int todo, int done, int count) 
+void Algorithm::report_progress(const std::string&, int , int , int count) 
 	{
 	bool display=false;
 	if(count==2) display=true;

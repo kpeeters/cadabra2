@@ -21,7 +21,7 @@ void pre_clean_dispatch_deep(const Kernel& k, Ex& tr)
 	return cleanup_dispatch_deep(k, tr, &pre_clean_dispatch);
 	}
 
-void cleanup_updown(const Kernel& k, Ex& tr, Ex::iterator& st)
+void cleanup_updown(const Kernel& , Ex& , Ex::iterator& st)
 	{
 	std::string rn=*st->name;
 	bool isup=true;
@@ -37,14 +37,14 @@ void cleanup_updown(const Kernel& k, Ex& tr, Ex::iterator& st)
 	st->name=name_set.insert(rn).first;
 	}
 
-void cleanup_rational(const Kernel& k, Ex& tr, Ex::iterator& st)
+void cleanup_rational(const Kernel& , Ex& , Ex::iterator& st)
 	{
 	multiplier_t num(*st->name);
 	st->name=name_set.insert("1").first;
 	multiply(st->multiplier,num);
 	}
 
-void cleanup_frac(const Kernel& k, Ex& tr, Ex::iterator& st)
+void cleanup_frac(const Kernel& , Ex& tr, Ex::iterator& st)
 	{
 	// Catch \frac{} nodes with one argument; those are supposed to be read as 1/(...).
 	// The only exception is \frac{#}, which needs to stay as it is.
@@ -111,13 +111,13 @@ void cleanup_frac(const Kernel& k, Ex& tr, Ex::iterator& st)
 
 	}
 
-void cleanup_sqrt(const Kernel& k, Ex& tr, Ex::iterator& st)
+void cleanup_sqrt(const Kernel&, Ex& tr, Ex::iterator& st)
    {
    st->name=name_set.insert("\\pow").first;
    multiply(tr.append_child(st, str_node("1"))->multiplier, multiplier_t(1)/2);
    }
 
-void cleanup_sub(const Kernel& k, Ex& tr, Ex::iterator& it)
+void cleanup_sub(const Kernel&, Ex& tr, Ex::iterator& it)
 	{
 	assert(tr.number_of_children(it)>1); // To guarantee that we have really cleaned up that old stuff.
 
@@ -154,7 +154,7 @@ void cleanup_sub(const Kernel& k, Ex& tr, Ex::iterator& it)
 		}
 	}
 
-void cleanup_indexbracket(const Kernel& k, Ex& tr, Ex::iterator& it)
+void cleanup_indexbracket(const Kernel& , Ex& tr, Ex::iterator& it)
 	{
 	if((*it->name).size()==0) {
 		auto sib=tr.begin(it);

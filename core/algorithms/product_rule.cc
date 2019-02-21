@@ -222,7 +222,7 @@ Algorithm::result_t product_rule::apply(iterator& it)
 			  
 			  // Avoid \partial_{a}{\partial_{b} ...} constructions in 
 			  // case this child is a \partial-like too.
-			  iterator repchi=repch;
+//			  iterator repchi=repch;
 
 			  // The 'dummy' iterator points to the \prod node.
 			  cleanup_dispatch(kernel, tr, theD);

@@ -107,7 +107,6 @@ bool evaluate::is_component(iterator it) const
 	// an existing components node, a scalar was replaced with an
 	// object built from a tensor.
 	
-	iterator cpy=it;
 	do {
 		if(*it->name=="\\components") {
 			return true;
@@ -796,8 +795,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 				rhs=eqcopy.wrap(rhs, str_node("\\partial"));
 				multiply(rhs->multiplier, mult);
 				multiply(rhs->multiplier, *it->multiplier);
-				auto pch=tr.begin(it);
-				iterator arg=tr.begin(rhs);
+//				auto pch=tr.begin(it);
+//				iterator arg=tr.begin(rhs);
 				for(size_t j=0, cb_j=0; j<ni; ++j) {
 					#ifdef DEBUG
 					std::cerr << j << " : ";

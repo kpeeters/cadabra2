@@ -60,7 +60,8 @@ namespace cadabra {
 		public:
 			enum class Position { before, after, child };
 			
-			ActionAddCell(DataCell, DataCell::id_t  ref_, Position pos_);			
+			ActionAddCell(DataCell, DataCell::id_t  ref_, Position pos_);
+			virtual ~ActionAddCell() {};
 			
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
@@ -86,7 +87,8 @@ namespace cadabra {
 			enum class Position { in, next, previous };
 
 			ActionPositionCursor(DataCell::id_t ref_id_, Position pos_);
-
+			virtual ~ActionPositionCursor() {};
+			
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
 
@@ -103,7 +105,8 @@ namespace cadabra {
 	class ActionSetRunStatus : public ActionBase {
 		public:
 			ActionSetRunStatus(DataCell::id_t ref_id_, bool running);
-
+			virtual ~ActionSetRunStatus() {};
+			
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
 
@@ -121,7 +124,7 @@ namespace cadabra {
 	class ActionRemoveCell : public ActionBase {
 		public:
 			ActionRemoveCell(DataCell::id_t ref_id_);
-			~ActionRemoveCell();
+			virtual ~ActionRemoveCell();
 			
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
@@ -144,7 +147,7 @@ namespace cadabra {
 	class ActionSplitCell : public ActionBase {
 		public:
 			ActionSplitCell(DataCell::id_t ref_id);
-			~ActionSplitCell();
+			virtual ~ActionSplitCell();
 
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
@@ -166,6 +169,7 @@ namespace cadabra {
 	class ActionInsertText : public ActionBase {
 		public:
 			ActionInsertText(DataCell::id_t ref_id, int pos, const std::string&);
+			virtual ~ActionInsertText() {};
 			
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;
@@ -188,6 +192,7 @@ namespace cadabra {
 	class ActionEraseText : public ActionBase {
 		public:
 			ActionEraseText(DataCell::id_t ref_id, int, int);
+			virtual ~ActionEraseText() {};
 			
 			virtual void execute(DocumentThread&, GUIBase&) override;
 			virtual void revert(DocumentThread&,  GUIBase&) override;

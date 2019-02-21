@@ -32,7 +32,7 @@ property::match_t Indices::equals(const property *other) const
 	return property::equals(other);
 	}
 
-bool Indices::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
+bool Indices::parse(Kernel& , std::shared_ptr<Ex>, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator ki=keyvals.begin();
 	while(ki!=keyvals.end()) {

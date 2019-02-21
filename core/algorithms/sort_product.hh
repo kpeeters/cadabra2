@@ -15,7 +15,7 @@ namespace cadabra {
 			void dont_cleanup();
 			
 		private:
-			bool ignore_numbers_;
+//			bool ignore_numbers_;
 			bool cleanup;
 	};
 	

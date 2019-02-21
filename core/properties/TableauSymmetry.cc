@@ -14,7 +14,7 @@ std::string TableauSymmetry::name() const
 	return "TableauSymmetry";
 	}
 
-bool TableauSymmetry::parse(Kernel& kernel, keyval_t& keyvals)
+bool TableauSymmetry::parse(Kernel& , keyval_t& keyvals)
 	{
    // Scan for the tableaux.
 	keyval_t::const_iterator kvit=keyvals.begin();

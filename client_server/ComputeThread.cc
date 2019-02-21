@@ -143,7 +143,7 @@ void ComputeThread::all_cells_nonrunning()
 	running_cells.clear();
 	}
 
-void ComputeThread::on_fail(websocketpp::connection_hdl hdl) 
+void ComputeThread::on_fail(websocketpp::connection_hdl ) 
 	{
 	std::cerr << "cadabra-client: connection to server on port " << port << " failed" << std::endl;
 	connection_is_open=false;
@@ -212,7 +212,7 @@ void ComputeThread::try_spawn_server()
 		}
 	}
 
-void ComputeThread::on_open(websocketpp::connection_hdl hdl) 
+void ComputeThread::on_open(websocketpp::connection_hdl ) 
 	{
 	connection_is_open=true;
 	restarting_kernel=false;
@@ -239,7 +239,7 @@ void ComputeThread::on_open(websocketpp::connection_hdl hdl)
 //	c->send(hdl, msg, websocketpp::frame::opcode::text);
 	}
 
-void ComputeThread::on_close(websocketpp::connection_hdl hdl) 
+void ComputeThread::on_close(websocketpp::connection_hdl ) 
 	{
 	// std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
@@ -260,7 +260,7 @@ void ComputeThread::cell_finished_running(DataCell::id_t id)
 		throw std::logic_error("Cannot find cell with id = "+std::to_string(id.id));
 		}
 
-	DTree::iterator ret = (*it).second;
+//	DTree::iterator ret = (*it).second;
 	running_cells.erase(it);
 	}
 

@@ -5,7 +5,7 @@
 using namespace cadabra;
 
 sort_product::sort_product(const Kernel&k, Ex& tr)
-	: Algorithm(k, tr), ignore_numbers_(false), cleanup(true)
+	: Algorithm(k, tr), cleanup(true)
 	{
 //	if(has_argument("IgnoreNumbers")) {
 //		txtout << "ignoring numbers" << std::endl;

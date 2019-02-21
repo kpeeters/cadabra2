@@ -29,7 +29,7 @@ bool Trace::parse(Kernel&, keyval_t& keyvals)
 	return true;
 	}
 
-void Trace::validate(const Kernel&, const Ex& tr) const
+void Trace::validate(const Kernel&, const Ex& ) const
 	{
 	}
 

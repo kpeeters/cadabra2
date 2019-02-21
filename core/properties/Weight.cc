@@ -17,7 +17,7 @@ bool Weight::parse(Kernel& k, std::shared_ptr<Ex> ex, keyval_t& kv)
 	return WeightBase::parse(k, ex, kv);
 	}
 
-multiplier_t Weight::value(const Kernel& pr, Ex::iterator, const std::string& forcedlabel) const
+multiplier_t Weight::value(const Kernel&, Ex::iterator, const std::string& forcedlabel) const
 	{
 	if(forcedlabel!=label) return -1;
 	return value_;

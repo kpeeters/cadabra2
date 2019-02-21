@@ -178,6 +178,6 @@ class Server {
 		pybind11::module             main_module;
 		pybind11::object             main_namespace;
 
-		int cells_ran;
+//		int cells_ran;
 };
 

@@ -1,4 +1,5 @@
 
+#include "Storage.hh"
 #include "Algorithm.hh"
 #include "Functional.hh"
 #include "DisplayMMA.hh"
@@ -221,7 +222,7 @@ void DisplayMMA::print_other(std::ostream& str, Ex::iterator it)
 		str << ")";
 	}
 
-void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int skip) 
+void DisplayMMA::print_children(std::ostream& str, Ex::iterator it, int ) 
 	{
 	// Mathematica has no notion of children with different parent relations; it's all 
 	// functions of functions kind of stuff. What we will do is print upper and
@@ -323,7 +324,7 @@ void DisplayMMA::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 		}
 	}
 
-void DisplayMMA::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
+void DisplayMMA::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool )
 	{
 	switch(pr) {
 		case str_node::p_super:    
@@ -405,7 +406,7 @@ void DisplayMMA::print_productlike(std::ostream& str, Ex::iterator it, const std
 
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-		Ex::sibling_iterator st=tree.begin(it);
+//		Ex::sibling_iterator st=tree.begin(it);
 		}
 
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
@@ -597,7 +598,7 @@ std::string DisplayMMA::preparse_import(const std::string& in)
 
 void DisplayMMA::import(Ex& ex)
 	{
-	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
+	cadabra::do_subtree<Ex>(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
 			// Mathematica wraps everything in square brackets, set these to
 			// b_none;
 			it->fl.bracket=str_node::b_none;

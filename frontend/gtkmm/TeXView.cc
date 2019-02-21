@@ -79,7 +79,7 @@ void TeXView::dim(bool d)
 	else  image.set_opacity(1.0);
 	}
 
-bool TeXView::on_button_release_event(GdkEventButton *ev)
+bool TeXView::on_button_release_event(GdkEventButton *)
 	{
 	show_hide_requested.emit(datacell);
 	return true;

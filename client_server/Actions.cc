@@ -19,7 +19,7 @@ bool ActionBase::undoable() const
 	return true;
 	}
 
-void ActionBase::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionBase::execute(DocumentThread& cl, GUIBase& )  
 	{
 	auto it=cl.doc.begin();
 	while(it!=cl.doc.end()) {
@@ -216,7 +216,7 @@ void ActionSplitCell::execute(DocumentThread& cl, GUIBase& gb)
 	gb.update_cell(cl.doc, ref);
 	}
 
-void ActionSplitCell::revert(DocumentThread& cl, GUIBase& gb)
+void ActionSplitCell::revert(DocumentThread& , GUIBase& )
 	{
 	// FIXME: implement
 	}
@@ -243,7 +243,7 @@ void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)
 	ref->running=new_running_;
 	}
 
-void ActionSetRunStatus::revert(DocumentThread& cl, GUIBase& gb)
+void ActionSetRunStatus::revert(DocumentThread& , GUIBase& )
 	{
 	}
 

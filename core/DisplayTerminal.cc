@@ -80,7 +80,7 @@ bool DisplayTerminal::needs_brackets(Ex::iterator it)
 	// FIXME: write as individual parent/current tests
 	if(tree.is_valid(tree.parent(it))==false) return false;
 
-	Ex::iterator parent_it = tree.parent(it);
+//	Ex::iterator parent_it = tree.parent(it);
 	Ex::iterator child_it  = it;
 	int child_num = tree.index(it);
 
@@ -294,7 +294,7 @@ void DisplayTerminal::print_closing_bracket(std::ostream& str, str_node::bracket
 	--(bracket_level);
 	}
 
-void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
+void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool)
 	{
 	switch(pr) {
 		case str_node::p_super:    
@@ -388,7 +388,7 @@ void DisplayTerminal::print_productlike(std::ostream& str, Ex::iterator it, cons
 
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-		Ex::sibling_iterator st=tree.begin(it);
+//		Ex::sibling_iterator st=tree.begin(it);
 		}
 
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
@@ -559,7 +559,7 @@ bool DisplayTerminal::children_have_brackets(Ex::iterator ch) const
 	else return true;
 	}
 
-void DisplayTerminal::print_dots(std::ostream& str, Ex::iterator it)
+void DisplayTerminal::print_dots(std::ostream& str, Ex::iterator )
    {
    str << " ... ";
    }

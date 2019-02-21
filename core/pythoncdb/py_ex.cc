@@ -199,7 +199,7 @@ namespace cadabra
 		if (!ex) return "";
 		if (ex->begin() == ex->end()) return "";
 
-		Ex::iterator it = ex->begin();
+//		Ex::iterator it = ex->begin();
 		std::ostringstream str;
 		ex->print_python(str, ex->begin());
 		return str.str();
@@ -431,7 +431,7 @@ namespace cadabra
 		}
 
 
-	Ex_ptr Ex_from_string(const std::string& ex_, bool make_ref, Kernel *kernel)
+	Ex_ptr Ex_from_string(const std::string& ex_, bool , Kernel *kernel)
 		{
 		if (kernel == nullptr)
 			kernel = get_kernel_from_scope();
@@ -465,7 +465,7 @@ namespace cadabra
 		return ptr;
 		}
 
-	Ex_ptr Ex_from_int(int num, bool make_ref)
+	Ex_ptr Ex_from_int(int num, bool)
 		{
 		auto ptr = std::make_shared<Ex>(num);
 		return ptr;

@@ -10,7 +10,7 @@ replace_match::replace_match(const Kernel& k, Ex& e)
 	{
 	}
 
-bool replace_match::can_apply(iterator it) 
+bool replace_match::can_apply(iterator) 
 	{
 	if(tr.history_size()>0) return true;
 	return false;

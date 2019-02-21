@@ -49,8 +49,8 @@ namespace cadabra {
    /// given node, depth-first. Return an iterator to the top node,
 	/// which replaces 'it' (may be the same).
 
-	template<class T>
-	class T::iterator do_subtree(const T& tr, class T::iterator it, std::function<class T::iterator(class T::iterator)> f)
+	template<typename T>
+	typename T::iterator do_subtree(const T& tr, typename T::iterator it, std::function<typename T::iterator(typename T::iterator)> f)
 		{
 		if(it==tr.end()) return it;
 		

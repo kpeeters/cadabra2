@@ -27,7 +27,7 @@ unsigned int SatisfiesBianchi::size(const Properties& properties, Ex& tr, Ex::it
 	return 1;
 	}
 
-TableauBase::tab_t SatisfiesBianchi::get_tab(const Properties& properties, Ex& tr, Ex::iterator it, unsigned int num) const
+TableauBase::tab_t SatisfiesBianchi::get_tab(const Properties& properties, Ex& tr, Ex::iterator it, unsigned int) const
 	{
 	// Take the tableau of the child, increase all indices by 
 	// one if the derivative index sits on the first position,

@@ -1503,7 +1503,7 @@ void SGSofrepeatedset(int *repes, int rl, int n,
 }
 
 /* Move index in a dummyset. List dummies reordered */
-void movedummyset(int firstd, int *dummies, int dl, int sym) {
+void movedummyset(int firstd, int *dummies, int dl, int) {
 
 	/* Find position of dummy and relative
 	   position of its pair */
@@ -2251,7 +2251,7 @@ void double_coset_rep(int *g, int n, int *base, int bl, int *GS, int m,
 
 void canonical_perm(int *PERM,
 	int SGSQ, int *base, int bl, int *GS, int m, int n,
-	int *freeps, int fl, int *dummyps, int dpl, int ob, int metricQ,
+	int *freeps, int fl, int *dummyps, int dpl, int, int metricQ,
 	int *CPERM) {
 
         int i;

@@ -131,7 +131,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	return res;
 	}
 
-void explicit_indices::handle_factor(sibling_iterator& factor, bool trace_it)
+void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 	{
 	int tmp;
 	auto ii = kernel.properties.get_with_pattern<ImplicitIndex>(factor, tmp);
@@ -208,7 +208,7 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool trace_it)
 					}
 				else {
 					// Use the active line index, then unset the active line.
-					auto loc = tr.replace_index(search->second, line->second, true);
+//					auto loc = tr.replace_index(search->second, line->second, true);
 					index_lines.erase(line);
 					}
 				}

@@ -16,7 +16,7 @@
 
 cadabra::NotebookWindow *signal_window;
 
-void signal_handler(int signal)
+void signal_handler(int)
 	{
 #if GTKMM_MINOR_VERSION >= 10
 	signal_window->close();

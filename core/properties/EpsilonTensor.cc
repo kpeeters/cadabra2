@@ -8,7 +8,7 @@ std::string EpsilonTensor::name() const
 	return "EpsilonTensor";
 	}
 
-bool EpsilonTensor::parse(Kernel& k, keyval_t& keyvals)
+bool EpsilonTensor::parse(Kernel& , keyval_t& keyvals)
 	{
 	keyval_t::const_iterator kv=keyvals.find("metric");
 	if(kv!=keyvals.end()) metric=Ex(kv->second);

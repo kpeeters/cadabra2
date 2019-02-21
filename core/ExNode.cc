@@ -71,7 +71,7 @@ ExNode ExNode::getitem_iterator(ExNode it)
    return ret;
    }
 
-void ExNode::setitem_string(std::string tag, std::shared_ptr<Ex> val)
+void ExNode::setitem_string(std::string, std::shared_ptr<Ex>)
 	{
 //   ExNode ret(ex);
 //   ret.tag=tag;
@@ -275,7 +275,7 @@ pybind11::object ExNode::get_multiplier() const
 	return mult;
    }
 
-void ExNode::set_multiplier(pybind11::object obj) 
+void ExNode::set_multiplier(pybind11::object) 
    {
 //	pybind11::object mpq = pybind11::module::import("gmpy2").attr("mpq");
 //	auto m = *it->multiplier;

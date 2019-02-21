@@ -27,7 +27,7 @@ int Ex_comparator::offset=0;
 
 int subtree_compare(const Properties *properties, 
 						  Ex::iterator one, Ex::iterator two, 
-						  int mod_prel, bool checksets, int compare_multiplier, bool literal_wildcards) 
+						  int mod_prel, bool , int compare_multiplier, bool literal_wildcards) 
 	{
 //	std::cerr << "comparing " << Ex(one) << " with " << Ex(two) << " " << mod_prel << ", " << checksets << std::endl;
 
@@ -1286,7 +1286,7 @@ bool Ex_comparator::can_swap_different_indexsets(Ex::iterator obj1, Ex::iterator
 	return true;
 	}
 
-int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t subtree_comparison,
+int Ex_comparator::can_swap(Ex::iterator one, Ex::iterator two, match_t ,
 									 bool ignore_implicit_indices) 
 	{
 	// std::cerr << "can_swap " << *one->name << " " << *two->name << " " << ignore_implicit_indices << std::endl;

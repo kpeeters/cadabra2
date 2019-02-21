@@ -23,7 +23,7 @@ Algorithm::result_t combine::apply(iterator& it)
 	while(sib!=tr.end(it)) {  // iterate over all factors in the product
 		sibling_iterator ch=tr.begin(sib);
 		while(ch!=tr.end(sib)) { // iterate over all indices of this factor
-			auto parent=tr.parent(sib);
+//			auto parent=tr.parent(sib);
 			if(ch->fl.parent_rel==str_node::p_sub || ch->fl.parent_rel==str_node::p_super) {
 				classify_add_index(ch, ind_free, ind_dummy);
 				}

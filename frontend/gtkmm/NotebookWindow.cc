@@ -430,7 +430,7 @@ void NotebookWindow::on_prefs_set_cv(int vis)
 		console_win.set_size_request(900, 300);
 		console_win.set_title("Interactive Console");
 		console_win.get_vbox()->add(console);
-		console_win.signal_response().connect([this](int i) {
+		console_win.signal_response().connect([this](int) {
 			actiongroup->get_action("ConsoleHide")->activate();
 		});
 		console.set_height(300); 
@@ -852,7 +852,7 @@ void NotebookWindow::remove_all_cells()
 	engine.checkout_all();
 	}
 
-void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
+void NotebookWindow::update_cell(const DTree& , DTree::iterator it)
 	{
 	// We just do a redraw for now, but this may require more work later.
 
@@ -866,7 +866,7 @@ void NotebookWindow::update_cell(const DTree& tr, DTree::iterator it)
 	
 	}
 
-void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int pos)
+void NotebookWindow::position_cursor(const DTree&, DTree::iterator it, int pos)
 	{
 //	if(it==doc.end()) return;
 	// std::cerr << "cadabra-client: positioning cursor at cell " << it->textbuf << std::endl;
@@ -879,7 +879,7 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int p
 
 	VisualCell& target = canvasses[current_canvas]->visualcells[&(*it)];
 
-	Gtk::Allocation alloc=target.inbox->get_allocation();
+//	Gtk::Allocation alloc=target.inbox->get_allocation();
 	target.inbox->edit.grab_focus();
 	
 	if(pos>=0) {
@@ -891,7 +891,7 @@ void NotebookWindow::position_cursor(const DTree& doc, DTree::iterator it, int p
 	current_cell=it;
 	}
 
-size_t NotebookWindow::get_cursor_position(const DTree& doc, DTree::iterator it)
+size_t NotebookWindow::get_cursor_position(const DTree& , DTree::iterator it)
 	{
 	if(canvasses[current_canvas]->visualcells.find(&(*it))==canvasses[current_canvas]->visualcells.end()) {
 		std::cerr << "cadabra-client: Cannot find cell to retrieve cursor position for." << std::endl;
@@ -938,7 +938,7 @@ void NotebookWindow::scroll_current_cell_into_view()
 		}
 	}
 
-bool NotebookWindow::on_vscroll_changed(Gtk::ScrollType st, double v)
+bool NotebookWindow::on_vscroll_changed(Gtk::ScrollType , double )
 	{
 //	std::cerr << "vscroll changed " << std::endl;
 	// FIXME: does not catch scroll wheel events.
@@ -953,7 +953,7 @@ bool NotebookWindow::on_vscroll_changed(Gtk::ScrollType st, double v)
 //	return false;
 //	}
 
-bool NotebookWindow::on_scroll(GdkEventScroll *s)
+bool NotebookWindow::on_scroll(GdkEventScroll *)
 	{
 	// We get here when the user rolls the scroll wheel inside the canvas;
 	// need to disable auto-follow.
@@ -962,7 +962,7 @@ bool NotebookWindow::on_scroll(GdkEventScroll *s)
 	return false;
 	}
 
-void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc)
+void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& )
 	{
 	// The auto-scroll logic is as follows. Whenever a cell is ran (by
 	// user pressing shift-enter only, not by full run), we set to
@@ -979,7 +979,7 @@ void NotebookWindow::on_scroll_size_allocate(Gtk::Allocation& scroll_alloc)
 		}
 	}
 
-bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_number)
+bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 	{
 	// Find the parent node. If that one is a latex cell, toggle visibility of
 	// the CodeInput widget (but not anything else in its vbox).
@@ -1007,7 +1007,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
 	return false;
 	}
 
- bool NotebookWindow::cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number)
+ bool NotebookWindow::cell_content_changed(const std::string& , DTree::iterator , int )
  	{
 	modified=true;
 	unselect_output_cell();
@@ -1028,7 +1028,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int canvas_numbe
  	return false;
  	}
 
-bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DTree::iterator it, int canvas_number)
+bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DTree::iterator it, int)
 	{
 	if(disable_stacks) return false;
 
@@ -1041,7 +1041,7 @@ bool NotebookWindow::cell_content_insert(const std::string& content, int pos, DT
 	return false;
 	}
 
-bool NotebookWindow::cell_content_erase(int start, int end, DTree::iterator it, int canvas_number)
+bool NotebookWindow::cell_content_erase(int start, int end, DTree::iterator it, int )
 	{
 	if(disable_stacks) return false;
 
@@ -1086,7 +1086,7 @@ void NotebookWindow::interactive_execute()
 	compute->execute_interactive(console.grab_input());
 }
 
-bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool shift_enter_pressed)
+bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number, bool )
 	{
 	// This callback runs on the GUI thread. The cell pointed to by 'it' is
 	// guaranteed to be valid.
@@ -1125,7 +1125,7 @@ bool NotebookWindow::cell_content_execute(DTree::iterator it, int canvas_number,
 	return true;
 	}
 
-bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator it)
+bool NotebookWindow::on_tex_error(const std::string& str, DTree::iterator )
 	{
 //	Gtk::Dialog md;
 	Gtk::MessageDialog md("Generic TeX error", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK, true);
@@ -1926,7 +1926,7 @@ void NotebookWindow::on_outbox_copy(Glib::RefPtr<Gtk::Clipboard> refClipboard, D
 							 sigc::mem_fun(this, &NotebookWindow::on_clipboard_clear) );
 	}
 
-void NotebookWindow::on_clipboard_get(Gtk::SelectionData& selection_data, guint info) 
+void NotebookWindow::on_clipboard_get(Gtk::SelectionData& selection_data, guint ) 
 	{ 
 	const Glib::ustring target = selection_data.get_target(); 
 	

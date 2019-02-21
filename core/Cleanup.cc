@@ -520,7 +520,7 @@ bool cleanup_components(const Kernel& k, Ex&tr, Ex::iterator& it)
 	return ret;
 	}
 
-bool cleanup_partialderivative(const Kernel& k, Ex& tr, Ex::iterator& it)
+bool cleanup_partialderivative(const Kernel& , Ex& tr, Ex::iterator& it)
 	{
 	// Nested derivatives with the same name should be flattened, but
 	// only if both the outer derivative and the inner derivative have
@@ -611,7 +611,7 @@ bool cleanup_derivative(const Kernel& k, Ex& tr, Ex::iterator& it)
 	return ret;
 	}
 
-bool cleanup_numericalflat(const Kernel& k, Ex& tr, Ex::iterator& it)
+bool cleanup_numericalflat(const Kernel& , Ex& tr, Ex::iterator& it)
 	{
 	bool ret=false;
 
@@ -646,7 +646,7 @@ bool cleanup_numericalflat(const Kernel& k, Ex& tr, Ex::iterator& it)
 	return ret;
 	}
 
-bool cleanup_diagonal(const Kernel& k, Ex& tr, Ex::iterator& it)
+bool cleanup_diagonal(const Kernel& , Ex& tr, Ex::iterator& it)
 	{
 	bool ret=false;
 
@@ -665,7 +665,7 @@ bool cleanup_diagonal(const Kernel& k, Ex& tr, Ex::iterator& it)
 	return ret;
 	}
 
-bool cleanup_kronecker(const Kernel& k, Ex& tr, Ex::iterator& it)
+bool cleanup_kronecker(const Kernel&, Ex& tr, Ex::iterator& it)
 	{
 	bool ret=false;
 
@@ -713,7 +713,7 @@ void cleanup_dispatch_deep(const Kernel& k, Ex& tr, dispatcher_t dispatch)
 	cleanup_dispatch_deep(k, tr, top, dispatch);
 	}
 	
-void cleanup_dispatch_deep(const Kernel& k, Ex& tr, Ex::iterator& top, dispatcher_t dispatch)
+void cleanup_dispatch_deep(const Kernel& k, Ex& tr, Ex::iterator& , dispatcher_t dispatch)
 	{
 	// Cleanup the entire tree starting from the deepest nodes and
 	// working upwards. 

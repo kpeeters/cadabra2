@@ -8,7 +8,7 @@ lower_free_indices::lower_free_indices(const Kernel& k, Ex& tr, bool lower_)
 	{
 	}
 
-bool lower_free_indices::can_apply(iterator st)
+bool lower_free_indices::can_apply(iterator )
 	{
 	return true;
 	}

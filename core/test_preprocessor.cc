@@ -62,7 +62,7 @@ bool testit(const std::string& input, const std::string& output)
 	return true;
 	}
 
-int main(int argc, char **argv)
+int main(int, char **)
 	{
 	std::stringstream orig, check;
 	preprocessor pp;

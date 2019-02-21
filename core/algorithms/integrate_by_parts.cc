@@ -55,7 +55,7 @@ Algorithm::result_t integrate_by_parts::apply(iterator& it)
 	return ret;
 	}
 
-bool integrate_by_parts::int_and_derivative_related(iterator int_it, iterator der_it) const
+bool integrate_by_parts::int_and_derivative_related(iterator, iterator) const
 	{
 	return true;
 	}
@@ -75,7 +75,7 @@ bool integrate_by_parts::derivative_acting_on_arg(iterator der_it) const
 	return false;
 	}
 
-void integrate_by_parts::split_off_single_derivative(iterator int_it, iterator der_it)
+void integrate_by_parts::split_off_single_derivative(iterator, iterator der_it)
    {
    auto ni=number_of_direct_indices(der_it);
    if(ni==0 || ni==1) return;
@@ -237,7 +237,7 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 	return result_t::l_no_action;
 	}
 
-Ex integrate_by_parts::wrap(iterator prod, sibling_iterator from, sibling_iterator to) const
+Ex integrate_by_parts::wrap(iterator , sibling_iterator , sibling_iterator ) const
 	{
 	return Ex("");
 	}

@@ -183,7 +183,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	return result;
 	}
 
-void Server::on_socket_init(websocketpp::connection_hdl hdl, boost::asio::ip::tcp::socket & s) 
+void Server::on_socket_init(websocketpp::connection_hdl , boost::asio::ip::tcp::socket & s) 
 	{
 	boost::asio::ip::tcp::no_delay option(true);
 	s.set_option(option);
@@ -206,7 +206,7 @@ void Server::on_open(websocketpp::connection_hdl hdl)
 void Server::on_close(websocketpp::connection_hdl hdl)
 	{
 	std::lock_guard<std::mutex> lock(ws_mutex);    
-	auto it = connections.find(hdl);
+//	auto it = connections.find(hdl);
 	// snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
 	connections.erase(hdl);
 	exit(-1);

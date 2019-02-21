@@ -31,7 +31,7 @@ DocumentThread::DocumentThread(GUIBase* g)
 
 }
 
-void DocumentThread::on_interactive_output(const Json::Value& msg)
+void DocumentThread::on_interactive_output(const Json::Value& )
 {
 
 }

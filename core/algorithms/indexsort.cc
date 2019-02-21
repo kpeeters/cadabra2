@@ -18,8 +18,8 @@ bool indexsort::can_apply(iterator st)
 	return false;
 	}
 
-indexsort::less_indexed_treenode::less_indexed_treenode(const Kernel& k, Ex& t, iterator i)
-	: kernel(k), tr(t), it(i)
+indexsort::less_indexed_treenode::less_indexed_treenode(const Kernel& k, Ex& , iterator i)
+	: kernel(k), it(i)
 	{
 	}
 

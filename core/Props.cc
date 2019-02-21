@@ -229,12 +229,12 @@ bool property::hidden() const
 	return hidden_;
 	}
 
-bool property::parse(Kernel& kernel, keyval_t& keyvals)
+bool property::parse(Kernel&, keyval_t&)
 	{
 	return true;
 	}
 
-bool property::parse(Kernel& kernel, std::shared_ptr<Ex> ex, keyval_t& keyvals)
+bool property::parse(Kernel& kernel, std::shared_ptr<Ex>, keyval_t& keyvals)
    {
    // The default is to run the 'parse' without 'ex', as most properties
    // do not implement the new interface.
