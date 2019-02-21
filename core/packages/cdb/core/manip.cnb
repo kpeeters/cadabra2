@@ -61,14 +61,6 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "b + c + d → a"
-						}
-					],
 					"source" : "\\begin{dmath*}{}b+c+d \\rightarrow a\\end{dmath*}"
 				}
 			],
@@ -229,45 +221,22 @@
 		},
 		{
 			"cell_origin" : "client",
-			"cell_type" : "input",
+			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
-					"cell_origin" : "server",
+					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "b = a"
-						}
-					],
-					"source" : "\\begin{dmath*}{}b = a\\end{dmath*}"
+					"source" : "\\algorithm{get_factor(node: ExNode, term: Ex) -> Ex}{Get all multiplicative factors of term in node}"
 				}
 			],
-			"source" : "swap_sides($a=b$);"
+			"hidden" : true,
+			"source" : "\\algorithm{get_factor(node: ExNode, term: Ex) -> Ex}{Get all multiplicative factors of term in node}"
 		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\less(b , a)"
-						}
-					],
-					"source" : "\\begin{dmath*}{}b < a\\end{dmath*}"
-				}
-			],
-			"source" : "swap_sides($a>b$);"
+			"source" : "def get_factor(node, term):\n\t\"\"\"If node is a product containing term, then return node without term. Otherwise, return None\"\"\"\n\tif term.matches(node):\n\t\treturn Ex(node.multiplier / term.top().multiplier)\n\n\tif node.name == r'\\prod':\n\t\tret = $@(node)$\n\t\tfor elem in ret.top().children():\n\t\t\tif term.matches(elem):\n\t\t\t\tfactor = elem.multiplier\n\t\t\t\telem.erase()\n\t\t\t\tret.top().multiplier *= factor\n\t\t\t\treturn ret\n\n\treturn None"
 		},
 		{
 			"cell_origin" : "client",
@@ -277,37 +246,16 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{to_rhs(ex: Ex, part: Ex) -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves \\verb|part| to the right hand side. \n\t\\verb|part| must contain the multiplier of the term to be moved, including minus signs. "
+					"source" : "\\algorithm{to_rhs(ex: Ex, part: Ex, exact: bool = False) -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves \\verb|part| to the right hand side. \n\tIf \\verb|exact| is True then \\verb|part| must contain the multiplier of the term to be moved, including minus signs. "
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{to_rhs(ex: Ex, part: Ex) -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves \\verb|part| to the right hand side. \n\t\\verb|part| must contain the multiplier of the term to be moved, including minus signs. "
+			"source" : "\\algorithm{to_rhs(ex: Ex, part: Ex, exact: bool = False) -> Ex}{Move the indicated term of the expression to the right-hand side.}\n\n\tIf \\verb|ex| is an equation or inequality which contains \\verb|part| on its left hand side, then moves \\verb|part| to the right hand side. \n\tIf \\verb|exact| is True then \\verb|part| must contain the multiplier of the term to be moved, including minus signs. "
 		},
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def to_rhs(ex, part, auto_simplify = True):\n\t\"\"\"Moves part from the left to the right hand side of an equation or inequality\"\"\"\n\n\t# If the part to move is a sum then split into individual terms and call to_rhs on them\n\tif part.head() == r'\\sum':\n\t\tfor arg in part.top().args():\n\t\t\tto_rhs(ex, $@(arg)$, auto_simplify)\n\t\treturn ex\n\n\tif ex.head() not in [r'\\equals', r'\\less', r'\\greater']:\n\t\traise Exception(\"to_lhs called on expression which is not an equation or inequality\")\n\tif n_args(ex.top()) != 2:\n\t\traise Exception(\"to_rhs called on expression whose top node contains {} arguments, 2 required\".format(n_args(ex.top())))\n\n\tlhs = nth_arg(ex.top(), 0)\n\tfound = False\n\n\t# If lhs is a sum, then try to move one of the arguments of that sum\n\tif lhs.name == r'\\sum':\n\t\tfor arg in lhs.args():\n\t\t\tif $@(arg)$ == part:\n\t\t\t\tfound = True\n\t\t\t\trhs = nth_arg(ex.top(), 1)\n\t\t\t\tnth_arg(ex.top(), 1).replace($@(rhs) - @(arg)$)\n\t\t\t\targ.erase()\n\t# If it wasn't found in the sum, then see if the thing we are trying to move is the\n\t# entire left hand side\n\tif not found:\n\t\tif $@(lhs)$ == part:\n\t\t\trhs = nth_arg(ex.top(), 1)\n\t\t\tnth_arg(ex.top(), 1).replace($@(rhs) - @(lhs)$)\n\t\t\tnth_arg(ex.top(), 0).replace($0$)\n\n\treturn ex"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "a = c + d-b"
-						}
-					],
-					"source" : "\\begin{dmath*}{}a = c+d-b\\end{dmath*}"
-				}
-			],
-			"source" : "to_rhs($a+b = c+d$, $b$);"
+			"source" : "def to_rhs(ex, *parts, match_type = \"all\"):\n\t\"\"\"Moves part from the left to the right hand side of an equation or inequality\"\"\"\n\n\tassert(ex.top().name in [r'\\equals', r'\\less', r'\\greater'])\n\tassert(n_args(ex.top()) == 2)\n\n\tif match_type == \"exact\":\n\t\tcomp = lambda ex, node: ex == $@(node)$\n\telif match_type == \"numeric\":\n\t\tcomp = lambda ex, node: ex.matches(node)\n\telif match_type == \"all\":\n\t\tcomp = lambda ex, node: get_factor(node, ex) is not None\n\n\tlhs = nth_arg(ex.top(), 0)\n\trhs = nth_arg(ex.top(), 1)\n\n\tif len(parts) == 0:\n\t\tterms = $@(rhs) - @(lhs)$\n\t\tlhs.replace($0$)\n\t\trhs.replace(terms)\n\telse:\n\t\tfor part in parts:\n\t\t\tterms = $@(rhs)$\n\t\t\tif comp(part, lhs):\n\t\t\t\tterms -= lhs\n\t\t\t\tlhs.replace($0$)\n\t\t\telif lhs.name == r'\\sum':\n\t\t\t\tfor i in reversed(range(n_args(lhs))):\n\t\t\t\t\tnode = nth_arg(lhs, i)\n\t\t\t\t\tif comp(part, node):\n\t\t\t\t\t\tterms -= node\n\t\t\t\t\t\tif n_args(lhs) == 1:\n\t\t\t\t\t\t\tnode.replace($0$)\n\t\t\t\t\t\telse:\n\t\t\t\t\t\t\tnode.erase()\n\t\t\trhs.replace(terms)\n\n\treturn ex"
 		},
 		{
 			"cell_origin" : "client",
@@ -322,13 +270,34 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "a = c + b"
+							"source" : "0 = c + d-2a-b-j b-k b"
 						}
 					],
-					"source" : "\\begin{dmath*}{}a = c+b\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}0 = c+d-2a-b-j b-k b\\end{dmath*}"
 				}
 			],
-			"source" : "to_rhs($a-b = c$, $-b$);"
+			"source" : "to_rhs($2a+b+j*b+k*b = c+d$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = c-a + b"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0 = c-a+b\\end{dmath*}"
+				}
+			],
+			"source" : "to_rhs($a-b = c$);"
 		},
 		{
 			"cell_origin" : "client",
@@ -347,7 +316,54 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def to_lhs(ex, part):\n\t\"\"\"Moves part from the right to the left hand side of an equation or inequality\"\"\"\n\t# to_lhs is the same as to_rhs called on an equation with the sides swapped ;)\n\tswap_sides(ex)\n\tto_rhs(ex, part)\n\tswap_sides(ex)\t\n\treturn ex"
+			"source" : "def to_lhs(ex, *parts, match_type=\"all\"):\n\t\"\"\"Moves part from the right to the left hand side of an equation or inequality\"\"\"\n\t# to_lhs is the same as to_rhs called on an equation with the sides swapped ;)\n\tswap_sides(ex)\n\tto_rhs(ex, part)\n\tswap_sides(ex)\t\n\treturn ex"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{isolate()}{Isolates a term on the left hand side of an equation or inequality}"
+				}
+			],
+			"source" : "\\algorithm{isolate()}{Isolates a term on the left hand side of an equation or inequality}"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "2a + a k-b = c a + b k + a-4"
+						}
+					],
+					"source" : "\\begin{dmath*}{}2a+a k-b = c a+b k+a-4\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a = (b k-4 + b) (k + 1-c)**(-1)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a = \\left(b k-4+b\\right) {\\left(k+1-c\\right)}^{-1}\\end{dmath*}"
+				}
+			],
+			"source" : "def isolate(ex, term, divide_through = True):\n\t\"\"\"Isolates a term on the left hand side of an equation or inequality\"\"\"\n\tassert(ex.top().name in [r'\\equals', r'\\less', r'\\greater'])\n\tassert(n_args(ex.top()) == 2)\n\n\t# Move everything to the rhs\n\tto_rhs(ex)\n\n\tlhs = nth_arg(ex.top(), 0)\n\trhs = nth_arg(ex.top(), 1)\n\n\t# Gather all terms containing the isolating term\n\tfactors = $0$\n\tif get_factor(rhs, term) is not None:\n\t\tfactors -= get_factor(rhs, term)\n\t\trhs.replace($0$)\n\telif rhs.name == r'\\sum':\n\t\tfor i in reversed(range(n_args(rhs))):\n\t\t\tnode = nth_arg(rhs, i)\n\t\t\tfactor = get_factor(node, term)\n\t\t\tif factor is not None:\n\t\t\t\tfactors -= factor\n\t\t\t\tif n_args(rhs) == 1:\n\t\t\t\t\tnode.replace($0$)\n\t\t\t\telse:\n\t\t\t\t\tnode.erase()\n\t# Move the isolated term over to the left hand side\n\tif divide_through:\n\t\tlhs.replace($@(term)$)\n\t\trhs.replace($\\frac{@(rhs)}{@(factors)}$)\n\telse:\n\t\tlhs.replace($@(term) @(factors)$)\n\n\treturn ex\n\nex := 2a + a * k - b = c * a + b * k + a - 4;\nisolate(ex, $a$);\n"
 		},
 		{
 			"cell_origin" : "client",
@@ -375,10 +391,10 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : " = c + d + b-a"
+							"source" : "0 = c + d + b-a"
 						}
 					],
-					"source" : "\\begin{dmath*}{} = c+d+b-a\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}0 = c+d+b-a\\end{dmath*}"
 				},
 				{
 					"cell_origin" : "server",
@@ -388,13 +404,13 @@
 						{
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "-d-b = c-a"
+							"source" : "0 = c + d + b-a"
 						}
 					],
-					"source" : "\\begin{dmath*}{}-d-b = c-a\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}0 = c+d+b-a\\end{dmath*}"
 				}
 			],
-			"source" : "# Moving terms test\nif __name__ == \"__main__\":\n\tex0 := a - b = c + d;\n\tto_rhs(ex0, $-b$);\n\tto_rhs(ex0, $a$);\n\tto_lhs(ex0, $d + b$);"
+			"source" : "# Moving terms test\nif __name__ == \"__main__\":\n\tex0 := a - b = c + d;\n\tto_rhs(ex0, $b$);\n\tto_rhs(ex0, $a$);\n\tto_lhs(ex0, $d + b$);"
 		},
 		{
 			"cell_origin" : "client",

@@ -1,0 +1,22 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def is_relational_operator(node):\n\treturn node.name in [r'\\equals', r'\\less', r'\\greater']"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def is_relational_expression(ex):\n\treturn is_relational_operator(ex.top()) and n_args(ex.top()) == 2"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
