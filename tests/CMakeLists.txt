@@ -8,7 +8,11 @@ project(Cadabra)
 
 print_header("Configuring tests")
 
-
+if (WIN32)
+	set(ECHO_N "")
+else()
+	set(ECHO_N "/bin/echo -n")
+endif()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure)
 
 if(WIN32)
@@ -49,7 +53,7 @@ foreach(NBTEST ${NBTESTS})
 	 COMMAND cadabra2cadabra
 	 ARGS    ${CNBIN}/${NBTEST}.cnb ${CDBOUT}/${NBTEST}.cdb
 	 COMMENT "Creating ${NBTEST} notebook...")
-  add_custom_target("${NBTEST}_test" ALL /bin/echo -n DEPENDS ${CDBOUT}/${NBTEST}.cdb)
+  add_custom_target("${NBTEST}_test" ALL ${ECHO_N} DEPENDS ${CDBOUT}/${NBTEST}.cdb)
   add_test(${NBTEST}  ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/core/cadabra2 ${CDBOUT}/${NBTEST}.cdb)
   set_tests_properties(${NBTEST}      PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH};LANG=en_US.UTF-8;LC_ALL=en_US.UTF-8;PYTHONIOENCODING=utf-8")    
 endforeach()

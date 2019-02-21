@@ -49,6 +49,9 @@ set(cadabra_gtk_src
 )
 if (MSVC)
 	list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_win.cpp)
+	# Configure and add resource file to list of sources
+	configure_file(win_res.rc.in ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc)
+	list(APPEND cadabra_gtk_src ${CMAKE_CURRENT_BINARY_DIR}/win_res.rc)
 else()
 	list(APPEND cadabra_gtk_src ${CADABRA_LIBS_DIR}/tiny-process-library/process_unix.cpp)
 endif()
