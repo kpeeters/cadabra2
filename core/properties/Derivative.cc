@@ -74,6 +74,9 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, Ex& tr, Ex:
 //	std::cout << *argnode->name << std::endl;
 
 	const TableauBase *tb=properties.get<TableauBase>(argnode);
+	if(!tb) {
+		return TableauBase::tab_t(); // empty tableau
+		}
 	assert(tb);
 	unsigned int othertabs=tb->size(properties, tr, argnode);
 	assert(num<othertabs);

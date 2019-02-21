@@ -30,6 +30,8 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 	assert(tb);
 //	txtout << typeid(*tb).name() << std::endl;
 	TableauBase::tab_t tab=tb->get_tab(kernel.properties, tr, it, 0);
+	if(tab.number_of_rows()==0)
+		return result_t::l_no_action;
 //	txtout << tab << std::endl;
 
 	if(modulo_monoterm) {
