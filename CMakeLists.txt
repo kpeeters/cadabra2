@@ -200,15 +200,13 @@ message(STATUS "Found python ${PYTHON_LIBRARIES}")
 
 # We install the python module in our 'share' path, not in
 # the site-wide path as we used to. 
+set(PYTHON_SITE_PATH share/cadabra2/python)
 if(NOT WIN32)
-  set(PYTHON_SITE_PATH share/cadabra2/python)
   execute_process(
 	 COMMAND ${PYTHON_EXECUTABLE} -c "import site; print (site.getsitepackages()[0]);"
 	 OUTPUT_VARIABLE OLD_PYTHON_SITE_PATH 
 	 OUTPUT_STRIP_TRAILING_WHITESPACE
 	 )
-else()
-  set(PYTHON_SITE_PATH ${CMAKE_INSTALL_PREFIX}/share/cadabra2/python)  
 endif()
 
 
