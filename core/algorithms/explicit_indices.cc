@@ -208,7 +208,7 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 					}
 				else {
 					// Use the active line index, then unset the active line.
-//					auto loc = tr.replace_index(search->second, line->second, true);
+					tr.replace_index(search->second, line->second, true);
 					index_lines.erase(line);
 					}
 				}
