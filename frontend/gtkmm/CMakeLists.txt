@@ -42,6 +42,7 @@ set(cadabra_gtk_src
 	ImageView.cc
 	Cadabra.cc
 	Console.cc
+	Keywords.cc 
 	../common/TeXEngine.cc
 	../common/lodepng.cc
 	# ../common/exec-stream.cc
