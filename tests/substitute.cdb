@@ -397,3 +397,32 @@ def test118():
     print("Test 118 passed")
 
 test118()
+
+def test119():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e,f}::Indices(spinor);
+    {m,n,p,q}::Indices(spacetime);
+    \theta^{a}::SelfAntiCommuting;
+    ex:=\theta^{a} \sigma^{m}_{a b} \theta^{b} \tau^{n c d} \sigma^{p}_{d e} \theta^{e} \theta^{f};
+    rl:=\theta^{a} \theta^{b} \theta^{c} \sigma^{m}_{c d} \theta^{d} -> \tau^{m a b};
+    substitute(ex, rl)
+    tst:= \tau^{n c d} \sigma^{p}_{d e} \tau^{m e f} - @(ex);
+    assert(tst==0)
+    print("Test 119 passed")
+
+test119()
+
+def test120():
+    __cdbkernel__=create_scope()
+    {a,b,c,d,e,f}::Indices(spinor);
+    {m,n,p,q}::Indices(spacetime);
+    \theta^{a}::SelfAntiCommuting;
+    ex:=\theta^{b} \sigma^{m}_{a b} \theta^{a} \tau^{n c d} \sigma^{p}_{d e} \theta^{e} \theta^{f};
+    rl:=\theta^{a} \theta^{b} \theta^{c} \sigma^{m}_{c d} \theta^{d} -> \tau^{m a b};
+    substitute(ex, rl)
+    tst:= -\tau^{n c d} \sigma^{p}_{d e} \tau^{m e f} - @(ex);
+    assert(tst==0)
+    print("Test 120 passed")
+
+test120()
+        

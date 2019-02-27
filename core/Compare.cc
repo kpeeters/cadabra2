@@ -860,10 +860,18 @@ Ex_comparator::match_t Ex_comparator::match_subproduct(const Ex& tr,
 
 				int sign=1;
 				if(factor_locations.size()>0) {
-					DEBUG(std::cerr << "--- can move?     ---" << std::endl; )
+					DEBUG(std::cerr << "--- can move?     ---" << std::endl; );
+					// Determining the sign is non-trivial to do step-by step.
+					// Consider an expression
+					//   A B C D E
+					// and a pattern
+					//   D A B
+					// (D, A, B anti-commuting). A can be moved to the right of D
+					// picking up two signs, and B can moved to the right of A with
+					// no sign.
 					Ex_comparator comparator(properties);
-					sign=comparator.can_move_adjacent(st, factor_locations.back(), start);
-					DEBUG(std::cerr << "--- done can move ---" << std::endl; )					
+					sign=comparator.can_move_adjacent(st, factor_locations, start);
+					DEBUG(std::cerr << "--- done can move ---" << sign << std::endl; );					
 					}
 				if(sign==0) { // object found, but we cannot move it in the right order
 					replacement_map=backup_replacements;
@@ -1100,6 +1108,60 @@ int Ex_comparator::can_move_adjacent(Ex::iterator prod,
 	return sign;
 	}
 
+
+// Determine the sign required to move the last factor in 'factors' to
+// the right of the first.  If moving left, do not count signs from
+// moving past any of the other factors.  If moving right, do count
+// those signs. In effect, the logic is that we count signs as if
+// all other factors have already been moved to the right of the first.
+	
+int Ex_comparator::can_move_adjacent(Ex::iterator prod, const std::vector<Ex::sibling_iterator>& factors, Ex::sibling_iterator i2)
+	{
+	if(factors.size()==0) return 1;
+
+	Ex::sibling_iterator i1=factors[0];
+	
+	// Determine whether to move right or left.
+	bool move_right=true;
+	Ex::sibling_iterator probe=i1;
+	while(probe!=prod.end()) {
+		if(probe==i2) {
+			move_right=false;
+			break;
+			}
+		++probe;
+		}
+
+	// Move through all factors.
+	probe=i2;
+	int sign=1;
+	do {
+		if(move_right) ++probe;
+		else           --probe;
+		if(probe==i1)
+			break;
+
+		if(std::find(factors.begin(), factors.end(), probe)!=factors.end())
+			continue;
+		auto es=equal_subtree(i2, probe);
+		sign*=can_swap(i2, probe, es);
+
+		} while(sign!=0);
+
+	if(move_right) {
+		// When moving right, all factors which we have already ordered
+		// sit to the right of the moving one, so we need to swap with them
+		// all.
+		auto f=factors.begin();
+		while(f!=factors.end()) {
+			auto es=equal_subtree(i2, *f);
+			sign*=can_swap(i2, *f, es);
+			++f;
+			}
+		}
+	
+	return sign;
+	}
 
 
 // Should obj and obj+1 be swapped, according to the SortOrder

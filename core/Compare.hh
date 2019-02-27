@@ -315,6 +315,12 @@ class Ex_comparator {
 		int  can_move_adjacent(Ex::iterator prod, Ex::sibling_iterator one, 
 									  Ex::sibling_iterator two, bool fix_one=false) ;
 
+
+		/// Alternative to the above, which handles more complicated versions where we
+		/// need to keep track of previously moved factors (used by algorithms/substitute.cc).
+		
+		int  can_move_adjacent(Ex::iterator prod, const std::vector<Ex::sibling_iterator>& factors, Ex::sibling_iterator to_move);
+		
 	protected:
 		const Properties& properties;
 

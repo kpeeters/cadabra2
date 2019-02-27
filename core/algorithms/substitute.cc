@@ -6,6 +6,8 @@
 //#include "algorithms/prodcollectnum.hh"
 #include "properties/Indices.hh"
 
+//#define DEBUG 1
+
 using namespace cadabra;
 
 substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
@@ -335,8 +337,12 @@ Algorithm::result_t substitute::apply(iterator& st)
 	// The replacement is done now.  What is left is to take into
 	// account any signs caused by moving factors through each other
 	int totsign=1;
-	for(unsigned int i=0; i<comparator.factor_moving_signs.size(); ++i)
+	for(unsigned int i=0; i<comparator.factor_moving_signs.size(); ++i) {
 		totsign*=comparator.factor_moving_signs[i];
+#ifdef DEBUG
+		std::cerr << "factor " << i << " picked up sign " << comparator.factor_moving_signs[i] << std::endl;
+#endif
+		}
 	multiply(st->multiplier, totsign);
 
 //	// Get rid of numerical '1' factors inside products (this will not clean up
