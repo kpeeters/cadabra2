@@ -38,3 +38,64 @@ def test03():
 
 test03()
 
+def test04():
+#    __cdbkernel__=create_scope()
+    {f, i}::Symbol;
+    ex := w_{f} - w_{i} > 2 \pi W_{a b}\beta^{a}\beta^{b};
+    manip.get_lhs(ex)
+    manip.get_rhs(ex)
+    manip.swap_sides(ex)
+    manip.swap_sides(ex)
+    manip.multiply_through(ex, $2n$)
+    exrhs=manip.get_rhs(ex)
+    tst:= 4n \pi W_{a b} \beta^{a} \beta^{b}  - @(exrhs);
+    assert(tst==0)
+    print("Test 04 passed")
+
+test04()
+
+def test05():
+    __cdbkernel__=create_scope()
+    ex:= a, b, c;
+    try:
+        manip.eq_to_subrule(ex)
+        assert(1==0)
+    except Exception as e:
+        print("Test 05a passed")
+    try:
+        manip.get_lhs(ex)
+        assert(1==0)
+    except Exception as e:
+        print("Test 05b passed")
+    try:
+        manip.get_rhs(ex)
+        assert(1==0)
+    except Exception as e:
+        print("Test 05c passed")
+    try:
+        manip.swap_sides(ex)
+        assert(1==0)
+    except Exception as e:
+        print("Test 05d passed")
+    try:
+        manip.to_rhs(ex, $a$)
+        assert(1==0)
+    except Exception as e:
+        print("Test 05e passed")
+    try:
+        manip.to_rhs(ex, $a$)
+        assert(1==0)
+    except Exception as e:
+        print("Test 05f passed")
+    try:
+        t::Coordinate.
+        {i, j}::Indices(values={t}, position=fixed).
+        ex := a_{i};
+        evaluate(ex, ${a_{t} = 1}$)
+        manip.get_component(ex, $x$)
+        manip.to_rhs(ex, $a$)
+        assert(1==0)
+    except Exception as e:
+        print("Test 05g passed")
+
+test05()
