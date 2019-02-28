@@ -301,7 +301,7 @@ to clean that up. Then install the required dependencies with::
     brew install cmake boost pcre gmp python3 
     brew install pkgconfig 
     brew install gtkmm3 adwaita-icon-theme
-    sudo pip3 install sympy
+    pip3 install sympy gmpy2
 
 If the lines above prompt you to install XCode, go ahead and let it do
 that.
