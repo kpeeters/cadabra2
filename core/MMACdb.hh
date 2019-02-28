@@ -11,7 +11,7 @@
 class MMA {
 	public:
 
-		/// \ingroup mma
+		/// \ingroup scalar
 		///
 		/// Functionality to act with Mathematica functions on (parts of)
 		/// Cadabra Ex expressions and read the result back into the same

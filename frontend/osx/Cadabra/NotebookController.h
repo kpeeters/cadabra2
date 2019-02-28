@@ -6,9 +6,6 @@
 //  Copyright (c) 2015 phi-sci. All rights reserved.
 //
 
-/// \defgroup osx OS-X 
-/// \ingroup frontend
-/// Notebook interface implemented using the native OS-X Cocoa toolkit.
 
 #import <Cocoa/Cocoa.h>
 

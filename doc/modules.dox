@@ -25,6 +25,12 @@
 /// This is an important bit of functionality used widely throughout the Cadabra core.
 /// All substitution and component evaluation logic depends on this module.
 ///
+/// \defgroup files Notebooks and packages
+/// \ingroup core
+///
+/// Functionality to store and manipulate Cadabra notebooks and use them as
+/// packages inside other notebooks or scripts. 
+///
 /// \defgroup pythoncore Python Core
 /// \ingroup core
 /// Python wrapper around the C++ core module, making the entire 
@@ -39,18 +45,10 @@
 /// \defgroup scalar Scalar algebra
 /// \ingroup core
 /// Functionality to make Cadabra interface with scalar computer
-/// algebra systems. It converts scalar
+/// algebra systems such as Sympy or Mathematica. It converts scalar
 /// parts of Cadabra expressions ('things without indices') to one of
 /// these systems, runs them through, and then converts back to Cadabra
 /// notation. Currently available are SymPy and Mathematica backends.
-///
-/// \defgroup sympy Sympy bridge
-/// \ingroup scalar
-/// Functions to pass scalar expressions to/from SymPy and manipulate them there.
-///
-/// \defgroup mma Mathematica bridge
-/// \ingroup scalar
-/// Functions to pass scalar expressions to/from Mathematica and manipulate them there.
 ///
 /// \defgroup algorithms Algorithms
 /// \ingroup core
@@ -99,3 +97,8 @@
 /// using the Python frontend. A sample program can be found in
 /// c++lib/simple.cc:
 /// \include c++lib/simple.cc
+///
+///
+/// \defgroup frontend Front-end
+/// All code which implements graphical front-end notebook interfaces.
+

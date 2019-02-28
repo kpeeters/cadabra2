@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\subsection*{Handling Component Expressions}\n\\begin{itemize}\n\\item\n\t\\texttt{get\\_component(ex : Ex, component : Ex) -> Ex} \\\\\n\tGets a component of an expression resulting from an \\texttt{evaluate} command. \n\tThe \\texttt{component} argument for vector-like objects should be e.g. \\texttt{\\textdollar t\\textdollar}, and for higher-rank tensors like e.g. \\texttt{\\textdollar x, t\\textdollar} \\\\\n\t\\quad Example: \\texttt{get\\_component(evaluate(\\textdollar a\\_\\{i\\}\\textdollar, \\textdollar\\{ a\\_\\{t\\} = 1, a\\_\\{x\\} = 2 \\}\\textdollar), \\textdollar t\\textdollar) -> 1}\n\\end{itemize}"
+					"source" : "\\package{cdb.core.component}{Simple access to component expressions}\n\nThis package contains helper functions to access components of tensors, as they are computed by e.g.~\\algo{evaluate}."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\subsection*{Handling Component Expressions}\n\\begin{itemize}\n\\item\n\t\\texttt{get\\_component(ex : Ex, component : Ex) -> Ex} \\\\\n\tGets a component of an expression resulting from an \\texttt{evaluate} command. \n\tThe \\texttt{component} argument for vector-like objects should be e.g. \\texttt{\\textdollar t\\textdollar}, and for higher-rank tensors like e.g. \\texttt{\\textdollar x, t\\textdollar} \\\\\n\t\\quad Example: \\texttt{get\\_component(evaluate(\\textdollar a\\_\\{i\\}\\textdollar, \\textdollar\\{ a\\_\\{t\\} = 1, a\\_\\{x\\} = 2 \\}\\textdollar), \\textdollar t\\textdollar) -> 1}\n\\end{itemize}"
+			"source" : "\\package{cdb.core.component}{Simple access to component expressions}\n\nThis package contains helper functions to access components of tensors, as they are computed by e.g.~\\algo{evaluate}."
 		},
 		{
 			"cell_origin" : "client",
@@ -22,8 +22,101 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{get_component(ex: Ex, component: Ex) -> Ex}{Extract a single component from an expression.}\n\nGets a component of an expression resulting from an \\algo{evaluate} command. \nThe \\verb|component| argument for vector-like objects should be e.g.~\\verb|$t$|,\nand for higher-rank tensors like e.g.~\\verb|$x, t$|."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{get_component(ex: Ex, component: Ex) -> Ex}{Extract a single component from an expression.}\n\nGets a component of an expression resulting from an \\algo{evaluate} command. \nThe \\verb|component| argument for vector-like objects should be e.g.~\\verb|$t$|,\nand for higher-rank tensors like e.g.~\\verb|$x, t$|."
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "def get_component(ex, components):\n\t\"\"\"Gets a particular component of an expression\"\"\"\n\t# The components paramater needs to have a head '\\comma' node\n\t# so let's quickly make sure that's true.\n\tif components.head() != r'\\comma':\n\t\tbit = $@(components)$\n\t\tcomponents.top().name = r'\\comma'\n\t\tcomponents.top().append_child(bit)\n\n\t# If this module is imported, Cadabra might complain that the components are \n\t# free indices, so we need to tell it that the the components are coordinates\n\t#Coordinate(components, $ $)\t\n\n\t# Extract when components is the head object\n\tif ex.head() == r'\\components':\n\t\t# Sift through all the '\\equals' nodes until we\n\t\t# find the one we want\n\t\tfor node in ex.top()[r'\\equals']:\n\t\t\targ = nth_arg(node, 0)\n\t\t\tif $@(arg)$ == components:\n\t\t\t\tres = nth_arg(node, 1)\n\t\t\t\treturn $@(res)$\n\t\t# Couldn't find that component :(\n\t\traise Exception(\"Component {} not found in expression\".format(str(components)))\n\t# Extract from something multiterm\n\telse:\n\t\t# Start the expression as a comma for convenience, we will change\n\t\t# this to the head node of the expression at the end\n\t\tres = $\\comma$\n\t\tfor node in ex.top().args():\n\t\t\tif node.name == r'\\components':\n\t\t\t\tterm = get_component($@(node)$, components)\n\t\t\telse:\n\t\t\t\tterm = $@(node)$\n\t\t\tres.top().append_child(term)\n\t\tres.top().name = ex.top().name\n\t\treturn res"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[t,~\\discretionary{}{}{} x\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[i,~\\discretionary{}{}{} j\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{i}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{i}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\components_{i}({{t} = 1, {x} = 2})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\square{}_{i}\\left\\{\\begin{aligned}\\square{}_{t}= & 1\\\\[-.5ex]\n\\square{}_{x}= & 2\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "{t,x}::Coordinate;\n{i,j}::Indices(values={t,x});\nex:= a_{i};\nevaluate(ex, $a_{t}=1, a_{x}=2$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "2"
+						}
+					],
+					"source" : "\\begin{dmath*}{}2\\end{dmath*}"
+				}
+			],
+			"source" : "get_component(ex, $x$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{remove_zero_components}{Remove all components of an expression that are equal to zero.}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{remove_zero_components}{Remove all components of an expression that are equal to zero.}"
 		},
 		{
 			"cell_origin" : "client",
@@ -35,6 +128,19 @@
 			"cell_type" : "input",
 			"cells" : 
 			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "a_{i} a_{j}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}a_{i} a_{j}\\end{dmath*}"
+				},
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
@@ -75,7 +181,7 @@
 					"source" : "\\begin{dmath*}{}\\square{}_{i}{}_{j}\\left\\{\\begin{aligned}\\square{}_{x}{}_{x}= & {k}^{2}\\\\[-.5ex]\n\\square{}_{x}{}_{y}= & k l\\\\[-.5ex]\n\\square{}_{y}{}_{x}= & k l\\\\[-.5ex]\n\\square{}_{y}{}_{y}= & {l}^{2}\\\\[-.5ex]\n\\square{}_{y}{}_{z}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{y}= & l m\\\\[-.5ex]\n\\square{}_{z}{}_{z}= & {m}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
-			"source" : "if __name__ == \"__main__\":\n\t{x, y, z}::Coordinate.\n\t{i, j}::Indices(values={x, y, z}, position=fixed).\n\tex := a_{i}a_{j};\n\tevaluate(ex, $a_{x} = k, a_{y} = l, a_{z} = m$);\n\tsubstitute(ex, $k m -> 0$);\n\tremove_zero_components(ex);"
+			"source" : "{x, y, z}::Coordinate.\n{i, j}::Indices(values={x, y, z}, position=fixed).\nex := a_{i}a_{j};\nevaluate(ex, $a_{x} = k, a_{y} = l, a_{z} = m$);\nsubstitute(ex, $k m -> 0$);\nremove_zero_components(ex);"
 		},
 		{
 			"cell_origin" : "client",

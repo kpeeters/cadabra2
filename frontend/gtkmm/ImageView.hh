@@ -7,7 +7,7 @@
 
 namespace cadabra {
 
-   /// \ingroup gtkmm
+   /// \ingroup frontend
    ///
    /// An image viewing widget.
 

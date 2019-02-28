@@ -9,7 +9,7 @@
 
 namespace cadabra {
 
-	/// \ingroup clientserver
+	/// \ingroup files
 	///
 	/// DataCells are the basic building blocks for a document. They
 	/// represent visual units in the notebook interface. They

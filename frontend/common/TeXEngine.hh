@@ -7,9 +7,6 @@
 #include <string>
 #include <memory>
 
-/// \defgroup frontend Front-end
-/// All code which implements graphical front-end notebook interfaces.
-
 namespace cadabra {
 
 	/// \ingroup frontend

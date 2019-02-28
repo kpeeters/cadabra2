@@ -24,15 +24,11 @@
 #include "NotebookCanvas.hh"
 #include "../common/TeXEngine.hh"
 
-/// \defgroup gtkmm Gtk+ 
-/// \ingroup frontend
-/// Notebook user interface implemented using gtkmm.
-
 class Cadabra;
 
 namespace cadabra {
 
-	/// \ingroup gtkmm
+	/// \ingroup frontend
 	///
 	/// Each notebook has one main window which controls it. It has a menu bar, a
 	/// status pane and one or more panels that represent a view on the document.

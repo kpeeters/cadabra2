@@ -12,7 +12,7 @@
 
 namespace cadabra {
 
-	/// \ingroup gtkmm
+	/// \ingroup frontend
 	///
 	/// Structure holding a pointer to one of the possible GUI widgets that can 
 	/// appear in a document.

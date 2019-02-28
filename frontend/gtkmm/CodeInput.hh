@@ -10,7 +10,7 @@
 
 namespace cadabra {
 
-	/// \ingroup gtkmm
+	/// \ingroup frontend
 	///
 	/// A text cell editor widget with support for editing Python and LaTeX.
    /// CodeInput is essentially a TextView with some additional i/o logic.

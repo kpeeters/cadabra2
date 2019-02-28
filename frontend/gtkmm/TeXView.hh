@@ -13,6 +13,7 @@
 
 namespace cadabra {
 
+	/// \ingroup frontend
 	/// TeXView is a widget which knows how to turn a string into
 	/// a LaTeX-rendered image and display that. 
 
