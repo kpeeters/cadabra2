@@ -9,11 +9,11 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\package{cdb.core.manip}{Manipulating equations, inequalities and similar expressions}\n\nThis package contains various helper functions to manipulate expressions in elementary ways, e.g.~moving terms\naround or multiplying sides of an expression by a factor. "
+					"source" : "\\package{cdb.core.manip}{Manipulating equations, inequalities and similar expressions}\n\nThis package contains various helper functions to manipulate expressions in elementary ways, e.g.~moving terms\naround or multiplying sides of an expression by a factor. In order to use this package, import it with the standard\nPython import statement: if you do \\verb|import cdb.core.manip as manip| then e.g.~the \\verb|isolate| function is available as\n\\verb|manip.isolate|."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\package{cdb.core.manip}{Manipulating equations, inequalities and similar expressions}\n\nThis package contains various helper functions to manipulate expressions in elementary ways, e.g.~moving terms\naround or multiplying sides of an expression by a factor. "
+			"source" : "\\package{cdb.core.manip}{Manipulating equations, inequalities and similar expressions}\n\nThis package contains various helper functions to manipulate expressions in elementary ways, e.g.~moving terms\naround or multiplying sides of an expression by a factor. In order to use this package, import it with the standard\nPython import statement: if you do \\verb|import cdb.core.manip as manip| then e.g.~the \\verb|isolate| function is available as\n\\verb|manip.isolate|."
 		},
 		{
 			"cell_origin" : "client",
