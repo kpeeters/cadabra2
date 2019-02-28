@@ -60,6 +60,7 @@ set(RTESTS
   index_positions
   forms
   packages
+  manip
   modules
   integrals
   display
