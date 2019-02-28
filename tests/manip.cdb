@@ -4,7 +4,8 @@ import cdb.core.manip as manip
 def test01():
     __cdbkernel__=create_scope()
     ex:= A_{m n} B^{m n} + q = C_{m} D^{m};
-    manip.isolate(ex, $q$);
+    manip.isolate(ex, $q$)
+    display(ex)
     exrhs=rhs(ex)
     tst:= C_{m} D^{m} - A_{m n} B^{m n} - @(exrhs);
     assert(tst==0)

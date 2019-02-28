@@ -1,4 +1,3 @@
-
 #include "CodeInput.hh"
 #include <gdkmm/general.h>
 #include <gtkmm/messagedialog.h>
@@ -6,7 +5,7 @@
 #include <gdkmm/rgba.h>
 #include <iostream>
 #include <regex>
-#include <map>
+#include "Keywords.hh"
 
 using namespace cadabra;
 
@@ -110,101 +109,336 @@ void CodeInput::init(const Prefs& prefs)
 	show_all();
 }
 
-void CodeInput::tag_by_regex(const std::string& tag, const std::string& regex_str, std::string& text)
+gunichar deref(Gtk::TextBuffer::iterator it, size_t n)
 {
-	auto buf = edit.get_buffer();
-	std::size_t cur_pos = 0;
-	std::regex r(regex_str);
-	std::smatch sm;
-	std::string temp = text;
-
-	while (std::regex_search(temp, sm, r)) {
-		auto beg_it = buf->begin();
-		beg_it.forward_chars(sm.position() + cur_pos);
-		auto end_it = beg_it;
-		end_it.forward_chars(sm.length());
-		buf->apply_tag_by_name(tag, beg_it, end_it);
-		text.replace(sm.position() + cur_pos, sm.length(), sm.length(), '_');
-		cur_pos += sm.position() + sm.length();
-		temp = sm.suffix();
-	}
+	it.forward_chars(n);
+	return it.is_end() ? '\0' : *it;
 }
 
 void CodeInput::highlight_python()
 {
-	using namespace std::string_literals;
-	static const std::string keywords =	
-		"False|None|True|and|as|assert|break|class|continue|def|del|elif|else|except|"
-		"finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|"
-		"return|try|while|with|yield";
 
-	static const std::string builtins = 
-		"abs|all|any|ascii|bin|bool|bytearray|bytes|callable|chr|classmethod|compile|"
-		"complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format|"
-		"frozenset|getattr|globals|hashattr|hash|help|hex|id|input|int|isinstance|"
-		"issubclass|iter|len|list|locals|map|max|memoryview|min|next|object|"
-		"oct|open|ord|pow|print|property|range|repr|reversed|round|set|setattr|"
-		"slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip|__import__"s;
-
-	static const std::string algorithms = 
-		"asym|canonicalise|collect_factors|collect_terms|combine|complete|decompose_product|"
-		"distribute|drop_weight|eliminate_kronecker|eliminate_metric|epsilon_to_delta|"
-		"evaluate|expand|expand_delta|expand_diracbar|expand_power|factor_in|factor_out|"
-		"fierz|integrate_by_parts|join_gamma|keep_weight|lr_tensor|map_sympy|product_rule|"
-		"reduce_delta|rename_dummies|rewrite_indices|simplify|sort_products|sort_sum|"
-		"split_gamma|split_index|substitute|unwrap|vary|young_project_product|young_project_tensor";
-
-	static const std::string properties =
-		"Accent|AntiCommuting|AntiSymmetric|Commuting|CommutingAsProduct|CommutingAsSum|"
-		"Coordinate|DAntiSymmetric|Depends|Derivative|Diagonal|DiracBar|EpsilonTensor|FilledTableau|GammaMatrix|ImplicitIndex|"
-		"Indices|Integer|InverseMetric|KroneckerDelta|LaTeXForm|Metric|NonCommuting|PartialDerivative|RiemannTensor|SatisfiesBianchi|"
-		"SelfAntiCommuting|SelfCommuting|SelfNonCommuting|SortOrder|Spinor|Symbol|Symmetric|Tableau|TableauSymmetry|WeightInherit";
+	auto buf = edit.get_buffer();
 
 	// Remove all tags that are currently set
-	edit.get_buffer()->remove_all_tags(
-		edit.get_buffer()->begin(),
-		edit.get_buffer()->end()
-	);
+	buf->remove_all_tags(buf->begin(), buf->end());
 
-	std::string text = edit.get_buffer()->get_text();
+	// 0 = not set
+	// 1 = number
+	// 2 = comment
+	// 3 = name
+	// 4 = single-quoted string
+	// 5 = double-quoted string
+	// 6 = triple single-quoted string
+	// 7 = triple double-quoted string
+	// 8 = multiline math mode
+	// 9 = singleline math mode
 
-	// Regex find things to highlight. Stolen with thanks from
-	// https://wiki.python.org/moin/PyQt/Python%20syntax%20highlighting
-	// Regexes are listed in order of priority such that anything that matches two items in the list
-	// will only be highlighted according to the category that is higher up in this list
-	tag_by_regex("comment", "(^|\\n)#[^\\n]*", text); // Single line comment
-	tag_by_regex("string", "\"\"\"[^\"\\\\]*(\\\\.[^\"\\\\] * )*\"\"\"", text); // Triple double-quoted string
-	tag_by_regex("string", "'''[^'\\\\]*(\\\\.[^'\\\\]*)*'''", text); // Triple single-quoted string
-	tag_by_regex("string", "\"[^\"\\\\(\\r?\\n)]*(\\\\.[^\"\\\\] * )*\"", text); // Double-quoted string
-	tag_by_regex("string", "'[^'\\\\(\\r?\\n)]*(\\\\.[^'\\\\]*)*'", text); // Single-quoted string
-	tag_by_regex("keyword", "\\b(" + keywords + ")\\b", text); // Python keywords deliminated by word boundry
-	tag_by_regex("function", "\\b(" + builtins + ")\\b", text); // Python builtins deliminated by word boundry
-	tag_by_regex("algorithm", "\\b(" + algorithms + ")\\b", text); // Cadabra algorithms deliminated by word boundry
-	tag_by_regex("property", "\\b(" + properties + ")\\b", text); // Cadabra properties deliminated by word boundry
-	tag_by_regex("operator", "=|==|!=|<|<=|>|>=|\\+|-|\\*|\\/|\\/\\/|\\%|\\*\\*|\\+=|-=|\\*=|\\/=|\\%=|\\^|\\||\\&|\\~|>>|<<", text); // Python operators
-	tag_by_regex("brace", "(\\{|\\}|\\(|\\)|\\[|\\])", text); // Braces
-	tag_by_regex("maths", "\\$[^\\$]+\\$", text); // Latex-style inline maths
-	tag_by_regex("number", "\\b[+-]?[0-9]+[lL]?\\b", text); // Integers 
-	tag_by_regex("number", "\\b[+-]?0[xX][0-9A-Fa-f]+[lL]?\\b", text); // Hexadecimals
-	tag_by_regex("number", "\\b[+-]?[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b", text); // Floats
+	auto it = buffer->begin();
+	auto start = it;
+	int wordtype = 0;
+	int count = 0;
+	bool finished = false;
+
+	while (!finished) {
+		if (it.is_end()) 
+			finished = true;
+
+		auto cur = deref(it, 0);
+		auto next = deref(it, 1);
+
+		if (wordtype == 1) { // End on non-number
+			if (g_unichar_isxdigit(cur) || cur == '.' || 
+				cur == 'x' || cur == 'o' || cur == 'j' ||
+				cur == 'X' || cur == 'O' || cur == 'J');
+			else if (cur == 'e' || cur == 'E') {
+				if (next == '+' || next == '-')
+					++it;
+			}
+			else {
+				buf->apply_tag_by_name("number", start, it);
+				wordtype = 0;
+			}
+		}
+		else if (wordtype == 2) { // End on linebreak
+			if (cur == '\n') {
+				buf->apply_tag_by_name("comment", start, it);
+				wordtype = 0;
+			}
+			// We might have mistakenly assumed the line is a comment
+			// due to a # sign; but this could also be in the middle of
+			// the implicit math mode at the start of a property declaration.
+			// Therefore, if inside comment mode we find a :: then we should
+			// exit comment mode and let the line be reformatted accordingly,
+			// even though this does the wrong thing if someone has typed '::' 
+			// in a comment.
+			if (cur == ':' && next == ':') {
+				wordtype = 0;
+			}
+		}
+		else if (wordtype == 3) { // End if not alnum or _
+			if (cur == '_' || g_unichar_isalnum(cur));
+			else {
+				if (*start == '@') {
+					buf->apply_tag_by_name("decorator", start, it);
+				}
+				else {
+					std::string name(start, it);
+					auto tag = get_keyword_group(name);
+					if (tag) {
+						buf->apply_tag_by_name(tag, start, it);
+					}
+				}
+				wordtype = 0;
+			}
+		}
+		else if (wordtype == 4) { // End on ' but skip \'
+			if (cur == '\'') {
+				++it;
+				buf->apply_tag_by_name("string", start, it);
+				wordtype = 0;
+			}
+			else if (cur == '\\' && next == '\'') {
+				++it;
+			}
+		}
+		else if (wordtype == 5) { // End on " but skip \"
+			if (cur == '"') {
+				++it;
+				buf->apply_tag_by_name("string", start, it);
+				wordtype = 0;
+			}
+			else if (cur == '\\' && next == '\"') {
+				++it;
+			}
+		}
+		else if (wordtype == 6) { // End on '''
+			if (cur == '\'') {
+				++count;
+				if (count == 3) {
+					count = 0;
+					++it;
+					buf->apply_tag_by_name("string", start, it);
+					wordtype = 0;
+				}
+			}
+			else {
+				if (cur == '\\' && next == '\'') 
+					++it;
+				count = 0;
+			}
+			
+		}
+		else if (wordtype == 7) { // End on """
+			if (cur == '"') {
+				++count;
+				if (count == 3) {
+					count = 0;
+					++it;
+					buf->apply_tag_by_name("string", start, it);
+					wordtype = 0;
+				}
+			}
+			else {
+				if (cur == '\\' && next == '"') 
+					++it;
+				count = 0;
+			}
+			
+		}
+		else if (wordtype == 8) { // End on :;.
+			if (cur == ':' || cur == ';' || cur == '.') {
+				buf->apply_tag_by_name("maths", start, it);
+				wordtype = 0;
+			}
+		}
+		else if (wordtype == 9) { // End on $
+			if (cur == '$') {
+				++it;
+				buf->apply_tag_by_name("maths", start, it);
+				wordtype = 0;
+			}
+		}
+		else if (wordtype == 10) { // Highlight and move on
+			buf->apply_tag_by_name("brace", start, it);
+			wordtype = 0;
+		}
+		else if (wordtype == 11) { //Highlight and move on
+			buf->apply_tag_by_name("operator", start, it);
+			wordtype = 0;
+		}
+
+		if (wordtype == 0) { 
+			cur = deref(it, 0);
+			next = deref(it, 1);
+
+			// Set word start iterator
+			start = it;
+
+			// Start a number on 0-9, or .[0-9]
+			if (g_unichar_isdigit(cur) || (cur == '.' && g_unichar_isdigit(next))) {
+				wordtype = 1;
+			}
+			// Start a comment on # if the next symbol isn't }
+			else if (cur == '#') {
+				wordtype = 2;
+			}
+			// Start a name on a letter or _ @
+			else if (g_unichar_isalpha(cur) || cur == '_' || cur == '@') {
+				wordtype = 3;
+			}
+			// Start a single quoted string on '
+			else if (cur == '\'') {
+				// Decide if this is triple quoted
+				if (next == '\'' && deref(it, 2) == '\'') {
+					wordtype = 6;
+					it.forward_chars(2);
+				}
+				else {
+					wordtype = 4;
+				}
+			}
+			// Start a double quoted string on "
+			else if (cur == '"') {
+				// Decide if this is triple quoted
+				if (next == '"' && deref(it, 2) == '"') {
+					wordtype = 7;
+					it.forward_chars(2);
+				}
+				else {
+					wordtype = 5;
+				}
+			}
+			// Start multiline math mode on :=
+			else if (cur == ':' && next == '=') {
+				wordtype = 8;
+				it.forward_chars(2);
+				buf->apply_tag_by_name("operator", start, it);
+				start = it;
+			}
+			// Reformat current line as maths if :: found
+			else if (cur == ':' && next == ':') {
+				wordtype = 11;
+				auto line_begin = it;
+				auto line_end = it;
+				line_begin.backward_find_char([](gunichar c) { return c == '\n'; });
+				line_end.forward_to_line_end();
+				buf->remove_all_tags(line_begin, line_end);
+				buf->apply_tag_by_name("maths", line_begin, it);
+			}
+			// Start inline math mode on $
+			else if (cur == '$')
+				wordtype = 9;
+			// Highlight as brace
+			else if (cur == '{' || cur == '[' || cur == '(' ||
+					 cur == '}' || cur == ']' || cur == ')') {
+				wordtype = 10;
+			}
+			else if (g_unichar_ispunct(cur)) {
+				wordtype = 11;
+			}
+		}
+		++it;
+	}
 }
 
 void CodeInput::highlight_latex()
 {
-	// Remove all tags that are currently set
-	edit.get_buffer()->remove_all_tags(
-		edit.get_buffer()->begin(),
-		edit.get_buffer()->end()
-	);
+	auto buf = edit.get_buffer();
+	buf->remove_all_tags(buf->begin(), buf->end());
+	
+	// 0 = none
+	// 1 = comment
+	// 2 = command
+	// 3 = can expect a parameter to begin
+	// 4 = inline math mode
+	auto it = buf->begin();
+	auto start = it;
+	int wordtype = 0;
+	int curly_depth = 0;
+	int square_depth = 0;
+	bool finished = false;
 
-	std::string text = edit.get_buffer()->get_text();
+	while (!finished) {
+		if (it.is_end())
+			finished = true;
 
-	tag_by_regex("comment", "%[^\\n]*", text); // Single line comment
-	tag_by_regex("maths", "\\$[^\\$]+\\$", text); // Inline maths
-	tag_by_regex("parameter", "\\{(\\w)+\\}", text); // Curly-brace paramater list
-	tag_by_regex("parameter", "\\[[^\\[\\]]+\\]", text); // Square-brace parameter list
-	tag_by_regex("command", "\\\\(\\w)+", text); // Command 
-	tag_by_regex("number", "\\b[+-]?[0-9]+[lL]?\\b", text); // Integers 
+		auto cur = deref(it, 0);
+
+		if (wordtype == 1) {
+			if (cur == '\n') {
+				buf->apply_tag_by_name("comment", start, it);
+				start = it; 
+				wordtype = 0;
+			}
+		}
+		else if (wordtype == 2) {
+			if (!g_unichar_isalpha(cur)) {
+				buf->apply_tag_by_name("command", start, it);
+				start = it;
+				wordtype = 5;
+			}
+		}
+		else if (wordtype == 4) {
+			if (cur == '$') {
+				++it;
+				cur = deref(it, 0);
+				buf->apply_tag_by_name("maths", start, it);
+				wordtype = 0;
+			}
+		}
+
+		if (wordtype == 5) {
+			if (cur == '{') {
+				++curly_depth;
+				start = it;
+				++it;
+				cur = deref(it, 0);
+			}
+			else if (cur == '[') {
+				++square_depth;
+				start = it;
+				++it;
+				cur = deref(it, 0);
+			}
+			wordtype = 0;
+		}
+
+		if (wordtype == 0) {
+			if (cur == '}' && curly_depth) {
+				auto next = it;
+				next.forward_char();
+				buf->apply_tag_by_name("parameter", start, next);
+				--curly_depth;
+				wordtype = 5;
+			}
+			else if (cur == ']' && square_depth) {
+				auto next = it;
+				next.forward_char();
+				buf->apply_tag_by_name("parameter", start, next);
+				--square_depth;
+				wordtype = 5;
+			}
+			else if (cur == '\\') {
+				if (curly_depth || square_depth)
+					buf->apply_tag_by_name("parameter", start, it);
+				start = it;
+				wordtype = 2;
+			}
+			else if (cur == '%') {
+				if (curly_depth || square_depth)
+					buf->apply_tag_by_name("parameter", start, it);
+				start = it;
+				wordtype = 1;
+			}
+			else if (cur == '$') {
+				wordtype = 4;
+				start = it;
+			}
+		}
+
+		++it;
+	}
 }
 
 void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs)
@@ -232,6 +466,13 @@ void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& p
 			edit.get_buffer()->get_tag_table()->lookup(elem.first)->property_foreground_rgba() = Gdk::RGBA(elem.second);
 		else // Need to create
 			edit.get_buffer()->create_tag(elem.first)->property_foreground_rgba() = Gdk::RGBA(elem.second);
+	}
+
+	// Error tag
+	if (!edit.get_buffer()->get_tag_table()->lookup("error")) {
+		auto error_tag = edit.get_buffer()->create_tag("error");
+		error_tag->property_underline() = Pango::Underline::UNDERLINE_ERROR;
+		error_tag->property_underline_rgba() = Gdk::RGBA("red");
 	}
 
 	// Setup callback

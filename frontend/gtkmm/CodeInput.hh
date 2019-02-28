@@ -104,7 +104,6 @@ namespace cadabra {
 		private:
 			void init(const Prefs& prefs);
 
-			void tag_by_regex(const std::string& regex_str, const std::string& tag, std::string& text);
 			void highlight_python();
 			void highlight_latex();
 

@@ -184,17 +184,17 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	colours["python"]["brace"] = (python_colours.get("brace", "SlateGray").asString());
 	colours["python"]["string"] = (python_colours.get("string", "ForestGreen").asString());
 	colours["python"]["comment"] = (python_colours.get("comment", "Silver").asString());
+	colours["python"]["object"] = (python_colours.get("object", "DarkGray").asString());
 	colours["python"]["number"] = (python_colours.get("number", "Sienna").asString());
 	colours["python"]["maths"] = (python_colours.get("maths", "Olive").asString());
 	colours["python"]["function"] = (python_colours.get("function", "FireBrick").asString());
-	colours["python"]["algorithm"] = (python_colours.get("algorithm", "DarkViolet").asString());
-	colours["python"]["property"] = (python_colours.get("property", "MediumOrchid").asString());
+	colours["python"]["decorator"] = (python_colours.get("decorator", "DarkViolet").asString());
+	colours["python"]["class"] = (python_colours.get("class", "MediumOrchid").asString());
 
 	auto latex_colours = data.get("colours", Json::Value()).get("latex", Json::Value());
 	colours["latex"]["command"] = (latex_colours.get("command", "rgb(52,101,164)").asString());
 	colours["latex"]["parameter"] = (latex_colours.get("brace", "rgb(245,121,0)").asString());
 	colours["latex"]["comment"] = (latex_colours.get("comment", "Silver").asString());
-	colours["latex"]["number"] = (latex_colours.get("number", "Sienna").asString());
 	colours["latex"]["maths"] = (latex_colours.get("maths", "Sienna").asString());
 }
 
