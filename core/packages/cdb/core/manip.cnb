@@ -61,6 +61,14 @@
 				{
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "b + c + d → a"
+						}
+					],
 					"source" : "\\begin{dmath*}{}b+c+d \\rightarrow a\\end{dmath*}"
 				}
 			],
@@ -329,7 +337,13 @@
 					"source" : "\\algorithm{isolate()}{Isolates a term on the left hand side of an equation or inequality}"
 				}
 			],
+			"hidden" : true,
 			"source" : "\\algorithm{isolate()}{Isolates a term on the left hand side of an equation or inequality}"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def isolate(ex, term, divide_through = True):\n\t\"\"\"Isolates a term on the left hand side of an equation or inequality\"\"\"\n\tassert(ex.top().name in [r'\\equals', r'\\less', r'\\greater'])\n\tassert(n_args(ex.top()) == 2)\n\n\t# Move everything to the rhs\n\tto_rhs(ex)\n\n\tlhs = nth_arg(ex.top(), 0)\n\trhs = nth_arg(ex.top(), 1)\n\n\t# Gather all terms containing the isolating term\n\tfactors = $0$\n\tif get_factor(rhs, term) is not None:\n\t\tfactors -= get_factor(rhs, term)\n\t\trhs.replace($0$)\n\telif rhs.name == r'\\sum':\n\t\tfor i in reversed(range(n_args(rhs))):\n\t\t\tnode = nth_arg(rhs, i)\n\t\t\tfactor = get_factor(node, term)\n\t\t\tif factor is not None:\n\t\t\t\tfactors -= factor\n\t\t\t\tif n_args(rhs) == 1:\n\t\t\t\t\tnode.replace($0$)\n\t\t\t\telse:\n\t\t\t\t\tnode.erase()\n\t# Move the isolated term over to the left hand side\n\tif divide_through:\n\t\tlhs.replace($@(term)$)\n\t\trhs.replace($\\frac{@(rhs)}{@(factors)}$)\n\telse:\n\t\tlhs.replace($@(term) @(factors)$)\n\n\treturn ex"
 		},
 		{
 			"cell_origin" : "client",
@@ -363,140 +377,7 @@
 					"source" : "\\begin{dmath*}{}a = \\left(b k-4+b\\right) {\\left(k+1-c\\right)}^{-1}\\end{dmath*}"
 				}
 			],
-			"source" : "def isolate(ex, term, divide_through = True):\n\t\"\"\"Isolates a term on the left hand side of an equation or inequality\"\"\"\n\tassert(ex.top().name in [r'\\equals', r'\\less', r'\\greater'])\n\tassert(n_args(ex.top()) == 2)\n\n\t# Move everything to the rhs\n\tto_rhs(ex)\n\n\tlhs = nth_arg(ex.top(), 0)\n\trhs = nth_arg(ex.top(), 1)\n\n\t# Gather all terms containing the isolating term\n\tfactors = $0$\n\tif get_factor(rhs, term) is not None:\n\t\tfactors -= get_factor(rhs, term)\n\t\trhs.replace($0$)\n\telif rhs.name == r'\\sum':\n\t\tfor i in reversed(range(n_args(rhs))):\n\t\t\tnode = nth_arg(rhs, i)\n\t\t\tfactor = get_factor(node, term)\n\t\t\tif factor is not None:\n\t\t\t\tfactors -= factor\n\t\t\t\tif n_args(rhs) == 1:\n\t\t\t\t\tnode.replace($0$)\n\t\t\t\telse:\n\t\t\t\t\tnode.erase()\n\t# Move the isolated term over to the left hand side\n\tif divide_through:\n\t\tlhs.replace($@(term)$)\n\t\trhs.replace($\\frac{@(rhs)}{@(factors)}$)\n\telse:\n\t\tlhs.replace($@(term) @(factors)$)\n\n\treturn ex\n\nex := 2a + a * k - b = c * a + b * k + a - 4;\nisolate(ex, $a$);\n"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "a = c + d + b"
-						}
-					],
-					"source" : "\\begin{dmath*}{}a = c+d+b\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "0 = c + d + b-a"
-						}
-					],
-					"source" : "\\begin{dmath*}{}0 = c+d+b-a\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "0 = c + d + b-a"
-						}
-					],
-					"source" : "\\begin{dmath*}{}0 = c+d+b-a\\end{dmath*}"
-				}
-			],
-			"source" : "# Moving terms test\nif __name__ == \"__main__\":\n\tex0 := a - b = c + d;\n\tto_rhs(ex0, $b$);\n\tto_rhs(ex0, $a$);\n\tto_lhs(ex0, $d + b$);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "c → a_{\\mu} a^{\\mu} + b"
-						}
-					],
-					"source" : "\\begin{dmath*}{}c \\rightarrow a_{\\mu} a^{\\mu}+b\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "a_{\\mu} a^{\\mu} + b"
-						}
-					],
-					"source" : "\\begin{dmath*}{}a_{\\mu} a^{\\mu}+b\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "c"
-						}
-					],
-					"source" : "\\begin{dmath*}{}c\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "k_{\\alpha} (a_{\\mu} a^{\\mu} + b) = k_{\\alpha} c"
-						}
-					],
-					"source" : "\\begin{dmath*}{}k_{\\alpha} \\left(a_{\\mu} a^{\\mu}+b\\right) = k_{\\alpha} c\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "k_{\\alpha} c = k_{\\alpha} (a_{\\mu} a^{\\mu} + b)"
-						}
-					],
-					"source" : "\\begin{dmath*}{}k_{\\alpha} c = k_{\\alpha} \\left(a_{\\mu} a^{\\mu}+b\\right)\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "k_{\\alpha} (a_{\\mu} a^{\\mu} + b) = k_{\\alpha} c"
-						}
-					],
-					"source" : "\\begin{dmath*}{}k_{\\alpha} \\left(a_{\\mu} a^{\\mu}+b\\right) = k_{\\alpha} c\\end{dmath*}"
-				}
-			],
-			"source" : "# Equation test\nif __name__ == \"__main__\":\n\tex1 := a_{\\mu}a^{\\mu} + b = c;\n\teq_to_subrule(ex1);\n\tget_lhs(ex1);\n\tget_rhs(ex1);\n\tmultiply_through(ex1, $k_{\\alpha}$);\n\tswap_sides(ex1);\n\tswap_sides(ex1);"
+			"source" : "ex := 2a + a * k - b = c * a + b * k + a - 4;\nisolate(ex, $a$);"
 		},
 		{
 			"cell_origin" : "client",

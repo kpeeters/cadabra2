@@ -5,11 +5,36 @@ def test01():
     __cdbkernel__=create_scope()
     ex:= A_{m n} B^{m n} + q = C_{m} D^{m};
     manip.isolate(ex, $q$)
-    display(ex)
     exrhs=rhs(ex)
     tst:= C_{m} D^{m} - A_{m n} B^{m n} - @(exrhs);
     assert(tst==0)
     print("Test 01 passed")
 
 test01()
+
+def test02():
+    __cdbkernel__=create_scope()
+    ex := a - b = c + d;
+    manip.to_rhs(ex, $b$)
+    manip.to_rhs(ex, $a$)
+    tst:= ( 0 = c + d + b - a ) - @(ex);
+    assert(tst==0)
+    print("Test 02 passed")
+#to_lhs(ex0, $d + b$);
+
+test02()
+
+def test03():
+    __cdbkernel__=create_scope()
+    ex1 := a_{\mu}a^{\mu} + b = c;
+    manip.eq_to_subrule(ex1)
+    manip.get_lhs(ex1)
+    manip.get_rhs(ex1)
+    manip.multiply_through(ex1, $k_{\alpha}$)
+    manip.swap_sides(ex1)
+    tst:= (k_{\alpha} c = k_{\alpha} (a_{\mu} a^{\mu} + b ) ) - @(ex1);
+    assert(tst==0)
+    print("Test 03 passed")
+
+test03()
 
