@@ -33,12 +33,17 @@ endif()
 set(CADABRA_SERVER_SRC
 	cadabra-server.cc
 	Server.cc 
-	Snoop.cc 
 	${CADABRA_CORE_DIR}/InstallPrefix.cc
 	${CADABRA_CORE_DIR}/CdbPython.cc 
 	${CADABRA_CORE_DIR}/Stopwatch.cc 
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
 	)
+if(!CONDA_FOUND)
+  set(CADABRA_SERVER_SRC
+	 ${CADABRA_SERVER_SRC}
+	 Snoop.cc
+	 )
+endif()
 
 set(CADABRA_CLIENT_SRC
 	ComputeThread.cc 
@@ -59,6 +64,29 @@ else()
 	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp
 	 )
 endif() 
+
+set(JUPYTER_KERNEL_SRC
+    cadabra-jupyter-kernel.cc
+    cadabra-jupyter-kernel.hh
+    cadabra-jupyter-main.cc
+	 Server.cc
+	 ${CADABRA_CORE_DIR}/InstallPrefix.cc
+	 ${CADABRA_CORE_DIR}/CdbPython.cc 
+	 ${CADABRA_CORE_DIR}/Stopwatch.cc 
+	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
+	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+	 )
+  
+
+# set(CONNECTION_FILE ${CMAKE_CURRENT_SOURCE_DIR}/connection.json)
+# 
+# add_custom_command(TARGET echo_kernel POST_BUILD
+#                    COMMAND ${CMAKE_COMMAND} -E
+#                    copy "${CONNECTION_FILE}" "${CMAKE_CURRENT_BINARY_DIR}/")
+# 
+# add_custom_command(TARGET echo_kernel POST_BUILD
+#                    COMMAND ${CMAKE_COMMAND} -E
+# 						 copy "${CMAKE_BINARY_DIR}/${XEUS_RUNTIME_FILE}" "${CMAKE_CURRENT_BINARY_DIR}/")
 
 #---------------------------------------------------------------------------
 # Include directories and preprocessor directives.
@@ -108,6 +136,7 @@ target_link_libraries(cadabra-server
 	${SQLITE3_LIBRARIES}
 	${PYTHON_LIBRARIES}
 	${GLIBMM3_LIBRARIES} 
+<<<<<<< HEAD
 	Threads::Threads
 	)
 if(ENABLE_SYSTEM_JSONCPP)
@@ -115,18 +144,25 @@ if(ENABLE_SYSTEM_JSONCPP)
 	 ${JSONCPP_LIBRARIES}
 	 )
 endif()
+=======
+   Threads::Threads
+)
+>>>>>>> feature/jupyter-kernel
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
 endif()
 
 # cadabra2html
-add_executable(cadabra2html 
-	cadabra2html.cc 
-	${CADABRA_CORE_DIR}/DataCell.cc
-)
-target_link_libraries(cadabra2html cadabra_client)
+if(!ENABLE_JUPYTER)
+  add_executable(cadabra2html 
+	 cadabra2html.cc 
+	 ${CADABRA_CORE_DIR}/DataCell.cc
+	 )
+  target_link_libraries(cadabra2html cadabra_client)
+endif()
 
 # Client library
+<<<<<<< HEAD
 add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
 target_link_libraries(cadabra_client
 	${Boost_LIBRARIES}
@@ -142,8 +178,35 @@ if(ENABLE_SYSTEM_JSONCPP)
 endif()
 if(WIN32)
    target_link_libraries(cadabra_client ws2_32 bcrypt)
+=======
+if(!ENABLE_JUPYTER)
+  add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
+  target_link_libraries(cadabra_client
+	 ${Boost_LIBRARIES}
+	 ${SQLITE3_LIBRARIES}
+	 ${PYTHON_LIBRARIES}
+	 ${GLIBMM3_LIBRARIES}
+	 Threads::Threads
+	 )
+  if(WIN32)
+    target_link_libraries(cadabra_client ws2_32 bcrypt)
+  endif()
+>>>>>>> feature/jupyter-kernel
 endif()
 
+# Jupyter kernel
+if(ENABLE_JUPYTER)
+  print_header("Configuring Jupyter kernel build")
+  find_package(xtl REQUIRED)
+  find_package(nlohmann_json REQUIRED)
+  find_library(UUID_LIBRARIES uuid REQUIRED)
+  include_directories(${XTL_INCLUDE_DIR} ${NLOHMANN_JSON_INCLUDE_DIR})
+  add_executable(cadabra-jupyter-kernel ${JUPYTER_KERNEL_SRC})
+  message("-- UUID library at ${UUID_LIBRARIES}")
+  target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+else()
+  print_header("Not building Jupyter kernel")
+endif()
 
 # Make sure sqlite3.dll is copied into the build directory on Windows.
 if (WIN32)
@@ -170,7 +233,9 @@ endif()
 #set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 
 install(TARGETS cadabra-server DESTINATION bin)
-install(TARGETS cadabra2html DESTINATION bin)
+if(!ENABLE_JUPYTER)
+  install(TARGETS cadabra2html DESTINATION bin)
+endif()
 # We don't need to install the libcadabra_client library as it is statically
 # linked with our binaries anyway.
 # install(
@@ -180,6 +245,11 @@ install(TARGETS cadabra2html DESTINATION bin)
 # 	LIBRARY DESTINATION lib
 # )
 # install(TARGETS cadabra_server LIBRARY ARCHIVE DESTINATION lib LIBRARY DESTINATION lib)
+
+if(ENABLE_JUPYTER)
+  install(TARGETS cadabra-jupyter-kernel      DESTINATION bin)
+  install(FILES   kernel.json connection.json DESTINATION share/jupyter/kernels/cadabra)
+endif()
 
 if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("client_server")

@@ -12,5 +12,6 @@ else()
 endif()
 
 if (GLIBMM3_FOUND)
-  message(STATUS "Found glibmm")
+  message(STATUS "Found glibmm; include path ${GLIBMM3_INCLUDE_DIRS}")
+  message(STATUS "Found glibmm; lib ${GLIBMM3_LIBRARIES}")
 endif()

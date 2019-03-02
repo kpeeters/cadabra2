@@ -15,7 +15,9 @@
 #include <json/json.h>
 
 #include "Config.hh"
+#ifndef CONDA_FOUND
 #include "Snoop.hh"
+#endif
 #include "CdbPython.hh"
 #include "SympyCdb.hh"
 
@@ -120,8 +122,11 @@ void Server::init()
 	pybind11::object setup_catch = main_module.attr("setup_catch");
 	try {
 		setup_catch(std::ref(catchOut), std::ref(catchErr), std::ref(*this));
-		} catch(pybind11::error_already_set& ex) {
+		}
+	catch(pybind11::error_already_set& ex) {
+#ifndef CONDA_FOUND
 		snoop::log(snoop::fatal) << "Failed to initialise Python bridge." << snoop::flush;
+#endif
 		PyErr_Print();
 		throw;
 		}
@@ -296,7 +301,9 @@ void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::messag
 
 	auto it = connections.find(hdl);
 	if(it==connections.end()) {
+#ifndef CONDA_FOUND
 		snoop::log(snoop::warn) << "Message from unknown connection." << snoop::flush;
+#endif
 		return;
 		}
 
@@ -313,7 +320,9 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 	Json::Reader reader;
 	bool parsingSuccessful = reader.parse( json_msg, root );
 	if ( !parsingSuccessful ) {
+#ifndef CONDA_FOUND
 		snoop::log(snoop::error) << "Cannot parse message " << json_msg << snoop::flush;
+#endif
 		return;
 		}
 

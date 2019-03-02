@@ -16,11 +16,19 @@
 # SQLITE3_FOUND	- True if sqlite found.
 
 
-# Look for the header file.
-FIND_PATH(SQLITE3_INCLUDE_DIR NAMES sqlite3.h)
-
-# Look for the library.
-FIND_LIBRARY(SQLITE3_LIBRARY NAMES sqlite3)
+if(WIN32)
+  # Look for the header file.
+  FIND_PATH(SQLITE3_INCLUDE_DIR NAMES sqlite3.h)
+  # Look for the library.
+  FIND_LIBRARY(SQLITE3_LIBRARY NAMES sqlite3)
+else()
+  find_package(PkgConfig REQUIRED)
+  pkg_check_modules(SQLITE3 REQUIRED sqlite3)
+  message("-- Found sqlite library path ${SQLITE3_LIBRARIES}")
+  set(SQLITE3_LIBRARY ${SQLITE3_LIBRARIES})
+  set(SQLITE3_INCLUDE_DIR ${SQLITE3_INCLUDE_DIRS})
+  set(SQLTE3_FOUND)
+endif()
 
 # Handle the QUIETLY and REQUIRED arguments and set SQLITE3_FOUND to TRUE if all listed variables are TRUE.
 INCLUDE(FindPackageHandleStandardArgs)

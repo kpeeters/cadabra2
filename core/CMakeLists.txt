@@ -308,23 +308,25 @@ else()
 endif()
 
 # cadabra2cadabra
-if(ENABLE_SYSTEM_JSONCPP)
-  add_executable(cadabra2cadabra 
-	 cadabra2cadabra.cc 
-	 DataCell.cc 
-	 InstallPrefix.cc
-	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
-	 )
-  target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES} ${JSONCPP_LIBRARIES})
-else()
-  add_executable(cadabra2cadabra 
-	 cadabra2cadabra.cc 
-	 DataCell.cc 
-	 InstallPrefix.cc
-	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
-	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
-	 )
-  target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES})
+if(!CONDA_FOUND)
+   if(ENABLE_SYSTEM_JSONCPP)
+     add_executable(cadabra2cadabra 
+   	 cadabra2cadabra.cc 
+   	 DataCell.cc 
+   	 InstallPrefix.cc
+   	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+   	 )
+     target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES} ${JSONCPP_LIBRARIES})
+   else()
+     add_executable(cadabra2cadabra 
+   	 cadabra2cadabra.cc 
+   	 DataCell.cc 
+   	 InstallPrefix.cc
+   	 ${CADABRA_LIBS_DIR}/jsoncpp/jsoncpp.cpp 
+   	 ${CADABRA_LIBS_DIR}/whereami/whereami.c
+   	 )
+     target_link_libraries(cadabra2cadabra ${Boost_LIBRARIES}	${GLIBMM3_LIBRARIES})
+   endif()
 endif()
 
 # Mathematica WSTP test
@@ -397,12 +399,14 @@ install(
 )
 
 # cadabra2cadabra
-install(
-  TARGETS 
+if(!CONDA_FOUND)
+  install(
+	 TARGETS 
     cadabra2cadabra
-  DESTINATION 
+	 DESTINATION 
     bin
-)
+	 )
+endif()
 
 if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("core")

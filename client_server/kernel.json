@@ -1,0 +1,9 @@
+{
+    "display_name": "Cadabra",
+    "language" : "python",
+    "argv": [
+        "cadabra-jupyter-kernel",
+        "-f",
+        "{connection_file}"
+    ]
+}
