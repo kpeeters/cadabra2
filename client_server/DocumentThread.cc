@@ -22,27 +22,27 @@ using namespace cadabra;
 
 DocumentThread::DocumentThread(GUIBase* g)
 	: gui(g), compute(0), disable_stacks(false)
-{
+	{
 	// Setup logging.
 	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
 	snoop::log.init("Cadabra", version, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
-	//	snoop::log(snoop::warn) << "Starting" << snoop::flush;	
+	//	snoop::log(snoop::warn) << "Starting" << snoop::flush;
 
-}
+	}
 
 void DocumentThread::on_interactive_output(const Json::Value& )
-{
+	{
 
-}
+	}
 
 void DocumentThread::set_compute_thread(ComputeThread *cl)
-{
+	{
 	compute = cl;
-}
+	}
 
 void DocumentThread::new_document()
-{
+	{
 	// Setup a single-cell document. This operation itself cannot be undone,
 	// so we do it directly on the doc, not using Actions.
 
@@ -60,28 +60,28 @@ void DocumentThread::new_document()
 	// soon as the GUI is up.
 
 	std::shared_ptr<ActionBase> actionpos =
-		std::make_shared<ActionPositionCursor>(one_it->id(), ActionPositionCursor::Position::in);
+	   std::make_shared<ActionPositionCursor>(one_it->id(), ActionPositionCursor::Position::in);
 	queue_action(actionpos);
-}
+	}
 
 void DocumentThread::load_from_string(const std::string& json)
-{
+	{
 	std::lock_guard<std::mutex> guard(stack_mutex);
 	pending_actions=std::queue<std::shared_ptr<ActionBase> >(); // clear queue
 	doc.clear();
 	JSON_deserialise(json, doc);
 	gui->remove_all_cells();
 	build_visual_representation();
-}
+	}
 
 void DocumentThread::undo()
-{
+	{
 	stack_mutex.lock();
 	if(undo_stack.size()==0) {
 		//std::cerr << "no entries left on the stack" << std::endl;
 		stack_mutex.unlock();
 		return;
-	}
+		}
 
 	disable_stacks=true;
 	auto ua = undo_stack.top();
@@ -93,10 +93,10 @@ void DocumentThread::undo()
 	disable_stacks=false;
 
 	stack_mutex.unlock();
-}
+	}
 
 void DocumentThread::build_visual_representation()
-{
+	{
 	// Because the add_cell method figures out by itself where to generate the VisualCell,
 	// we only have feed all cells in turn.
 
@@ -105,23 +105,23 @@ void DocumentThread::build_visual_representation()
 		//		std::cout << doc_it->textbuf << std::endl;
 		gui->add_cell(doc, doc_it, false);
 		++doc_it;
+		}
 	}
-}
 
-//const DTree& DocumentThread::dtree() 
+//const DTree& DocumentThread::dtree()
 //	{
 //	return doc;
 //	}
 
 void DocumentThread::queue_action(std::shared_ptr<ActionBase> ab)
-{
+	{
 	std::lock_guard<std::mutex> guard(stack_mutex);
 	pending_actions.push(ab);
-}
+	}
 
 
 void DocumentThread::process_action_queue()
-{
+	{
 	// FIXME: we certainly do not want any two threads to run this at the same time,
 	// but that is not guaranteed. Actions should always be run on the GUI thread.
 	// This absolutely has to be run on the main GUI thread.
@@ -145,17 +145,17 @@ void DocumentThread::process_action_queue()
 		if(ab->undoable())
 			undo_stack.push(ab);
 		pending_actions.pop();
-	}
+		}
 	stack_mutex.unlock();
-}
+	}
 
 
 DocumentThread::Prefs::Prefs(bool use_defaults)
 	: config_path(std::string(Glib::get_user_config_dir()) + "/cadabra2.conf")
-{
+	{
 	if (!use_defaults) {
 		std::ifstream f(config_path);
-		if (f) 
+		if (f)
 			f >> data;
 		else {
 			// Backwards compatibility, check to see if cadabra.conf exists
@@ -168,11 +168,11 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 					if (line.find("registered=true") != std::string::npos) {
 						data["is_registered"] = true;
 						break;
+						}
 					}
 				}
 			}
 		}
-	}
 	font_step = data.get("font_step", 0).asInt();
 	highlight = data.get("highlight", false).asBool();
 	is_registered = data.get("is_registered", false).asBool();
@@ -196,10 +196,10 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	colours["latex"]["parameter"] = (latex_colours.get("brace", "rgb(245,121,0)").asString());
 	colours["latex"]["comment"] = (latex_colours.get("comment", "Silver").asString());
 	colours["latex"]["maths"] = (latex_colours.get("maths", "Sienna").asString());
-}
+	}
 
 void DocumentThread::Prefs::save()
-{
+	{
 	std::ofstream f(config_path);
 	if (f) {
 		data["font_step"] = font_step;
@@ -209,23 +209,22 @@ void DocumentThread::Prefs::save()
 		for (const auto& lang : colours) {
 			for (const auto& kw : lang.second)
 				data["colours"][lang.first][kw.first] = kw.second;
-		}
+			}
 		f << data << '\n';
-	}
-	else
+		} else
 		std::cerr << "Warning: could not write to config file\n";
-}
+	}
 
 void DocumentThread::set_user_details(const std::string& name, const std::string& email, const std::string& affiliation)
-{
+	{
 	snoop::log("name") << name << snoop::flush;
 	snoop::log("email") << email << snoop::flush;
 	snoop::log("affiliation") << affiliation << snoop::flush;
-}
+	}
 
 bool DocumentThread::help_type_and_topic(const std::string& before, const std::string& after,
-	help_t& help_type, std::string& help_topic) const
-{
+      help_t& help_type, std::string& help_topic) const
+	{
 	help_t objtype=help_t::algorithm;
 	if(! (before.size()==0 && after.size()==0) ) {
 		// We provide help for properties, algorithms and reserved node
@@ -233,7 +232,7 @@ bool DocumentThread::help_type_and_topic(const std::string& before, const std::s
 		// the right by anything non-alnum. Algorithms are delimited to
 		// the left by non-alnum except '_' and to the right by '('. Reserved node
 		// names are TeX symbols, starting with '\'.
-		// 
+		//
 		// So scan the 'before' string for a left-delimiter and the 'after' string
 		// for a right-delimiter.
 
@@ -242,17 +241,17 @@ bool DocumentThread::help_type_and_topic(const std::string& before, const std::s
 			if(before[lpos]==':' && lpos>0 && before[lpos-1]==':') {
 				objtype=help_t::property;
 				break;
-			}
+				}
 			if(before[lpos]=='\\') {
 				objtype=help_t::latex;
 				break;
-			}
+				}
 			if(isalnum(before[lpos])==0 && before[lpos]!='_') {
 				objtype=help_t::algorithm;
 				break;
-			}
+				}
 			--lpos;
-		}
+			}
 		if(objtype==help_t::none) return false;
 		++lpos;
 
@@ -261,12 +260,10 @@ bool DocumentThread::help_type_and_topic(const std::string& before, const std::s
 			if(objtype==help_t::property) {
 				if(isalnum(after[rpos])==0)
 					break;
-				}
-			else if(objtype==help_t::algorithm) {
+				} else if(objtype==help_t::algorithm) {
 				if(after[rpos]=='(')
 					break;
-				}
-			else if(objtype==help_t::latex) {
+				} else if(objtype==help_t::latex) {
 				if(isalnum(after[rpos])==0 && after[rpos]!='_')
 					break;
 				}

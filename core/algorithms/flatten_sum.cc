@@ -26,19 +26,17 @@ Algorithm::result_t flatten_sum::apply(iterator &it)
 	result_t ret=result_t::l_no_action;
 
 	assert(*it->name=="\\sum");
-	
+
 	long num=tr.number_of_children(it);
 	if(num==1 && ! tr.begin(it)->is_range_wildcard() ) {
 		multiply(tr.begin(it)->multiplier, *it->multiplier);
 		tr.flatten(it);
 		it=tr.erase(it);
 		ret=result_t::l_applied;
-		}
-	else if(num==0) {
+		} else if(num==0) {
 		node_zero(it);
 		ret=result_t::l_applied;
-		}
-	else {
+		} else {
 		sibling_iterator facs=tr.begin(it);
 		str_node::bracket_t btype_par=facs->fl.bracket;
 		while(facs!=tr.end(it)) {
@@ -58,17 +56,15 @@ Algorithm::result_t flatten_sum::apply(iterator &it)
 					while(terms!=tr.end(facs)) {
 						multiply(terms->multiplier,*facs->multiplier);
 						terms->fl.bracket=btype_par;
-//						if(terms->fl.bracket==str_node::b_none)
-//							terms->fl.bracket=facs->fl.bracket;
+						//						if(terms->fl.bracket==str_node::b_none)
+						//							terms->fl.bracket=facs->fl.bracket;
 						++terms;
 						}
 					tr.flatten(facs);
 					tr.erase(facs);
 					facs=tmp;
-					}
-				else ++facs;
-				}
-			else ++facs;
+					} else ++facs;
+				} else ++facs;
 			}
 		}
 	return ret;

@@ -11,7 +11,7 @@ unzoom::unzoom(const Kernel& k, Ex& e)
 	traverse_ldots=true;
 	}
 
-bool unzoom::can_apply(iterator it) 
+bool unzoom::can_apply(iterator it)
 	{
 	if(*it->name=="\\ldots")  return true;
 	return false;

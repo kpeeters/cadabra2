@@ -1,21 +1,21 @@
-/* 
+/*
 
-	Cadabra: a field-theory motivated computer algebra system.
-	Copyright (C) 2001-2011  Kasper Peeters <kasper.peeters@aei.mpg.de>
+Cadabra: a field-theory motivated computer algebra system.
+Copyright (C) 2001-2011  Kasper Peeters <kasper.peeters@aei.mpg.de>
 
-   This program is free software: you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation, either version 3 of the
-   License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+	published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 */
 
 #ifndef stopwatch_hh__
@@ -32,10 +32,10 @@
 /// timing function calls etc... It is possible to stop
 /// the stopwatch for an indefinite amount of time without
 /// losing the current elapsed time period, allowing it
-/// to be used to calculate the actual amount of time 
-/// a function spends performing a task without taking 
+/// to be used to calculate the actual amount of time
+/// a function spends performing a task without taking
 /// into account e.g. time spent being blocked by a mutex.
-/// The class is exported to python in the cadabra2 
+/// The class is exported to python in the cadabra2
 /// module as Stopwatch.
 ///
 ///
@@ -108,19 +108,19 @@ class Stopwatch {
 	public:
 		Stopwatch();
 
-      typedef std::chrono::steady_clock clock;
+		typedef std::chrono::steady_clock clock;
 
-      /// Reset to no-time-elapsed.
+		/// Reset to no-time-elapsed.
 		void reset();
-      /// Continue timing (does not reset).
+		/// Continue timing (does not reset).
 		void start();
-      /// Stop timing.
+		/// Stop timing.
 		void stop();
-      /// Number of seconds elapsed.
+		/// Number of seconds elapsed.
 		long seconds() const;
-      /// Number of micro-seconds elapsed (needs to be added to 'seconds').
+		/// Number of micro-seconds elapsed (needs to be added to 'seconds').
 		long useconds() const;
-      /// Is the stopwatch currently timing?
+		/// Is the stopwatch currently timing?
 		bool stopped() const;
 
 		friend std::ostream& operator<<(std::ostream&, const Stopwatch&);
@@ -128,12 +128,12 @@ class Stopwatch {
 	private:
 		void checkpoint_() const;
 
-      mutable clock::time_point start_;
-      mutable long              elapsed_;
+		mutable clock::time_point start_;
+		mutable long              elapsed_;
 		bool                      stopped_;
 
-      static const long s_to_us = 1000000L;
-};
+		static const long s_to_us = 1000000L;
+	};
 
 /// Print human-readable representation of the time elapsed.
 std::ostream& operator<<(std::ostream&, const Stopwatch&);

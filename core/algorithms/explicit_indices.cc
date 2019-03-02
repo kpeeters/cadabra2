@@ -17,25 +17,34 @@ explicit_indices::explicit_indices(const Kernel& k, Ex& tr)
 
 bool explicit_indices::can_apply(iterator st)
 	{
-	// Work on equals nodes, or single terms (not terms in a sum) or 
+	// Work on equals nodes, or single terms (not terms in a sum) or
 	// sums, provided the latter are not lhs or rhs of an equals node.
 	// All this because when we generate free indices, we need to
 	// ensure that all terms and all sides of an equals node use the
 	// same index names.
 
-	if(*st->name=="\\equals") return false; // switch
+	if(*st->name=="\\equals" || *st->name=="\\arrow") {
+		sibling_iterator lhs=tr.begin(st);
+		if(can_apply(lhs)) {
+			++lhs;
+			if(can_apply(lhs))
+				return true;
+			}
+		return false;
+		}
 	auto trace = kernel.properties.get<Trace>(st);
 	if(trace)   return true;
 	if(is_termlike(st) || *st->name=="\\sum") {
 		if(tr.is_head(st)) return         true;
 		if(*tr.parent(st)->name=="\\sum") return false;
+		if(*tr.parent(st)->name=="\\equals" || *tr.parent(st)->name=="\\arrow") return false;
 		auto ptrace = kernel.properties.get<Trace>(tr.parent(st));
 		if(ptrace) return false;
 		auto pderiv = kernel.properties.get<PartialDerivative>(tr.parent(st));
 		if(pderiv) return false;
 		return true;
 		}
-	
+
 	return false;
 	}
 
@@ -43,11 +52,28 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
-//	std::cerr << "apply at " << it << std::endl;
-	
+	if(*it->name=="\\equals" || *it->name=="\\arrow") {
+		// FIXME: collect existing indices on both sides to avoid
+		// adding new free indices which are already in use on the
+		// other side.
+
+		// Do the lhs, keep track of free indices added there.
+		iterator ch=tr.begin(it);
+		auto lhs_res = apply(ch);
+
+		// Then do the rhs, feeding it the free indices just generated.
+		++ch;
+		auto rhs_res = apply(ch);
+
+		if(lhs_res==result_t::l_applied || rhs_res==result_t::l_applied)
+			return result_t::l_applied;
+		return result_t::l_no_action;
+		}
+
+	// All non-equality and non-rule cases follow.
 	auto trace = kernel.properties.get<Trace>(it);
 	iterator parit=it;
-	if(trace)  {
+	if(trace) {
 		// Handle the argument, then at the end, close the index loop
 		// and remove the trace operator.
 		iterator arg=tr.begin(it);
@@ -56,27 +82,22 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		it=arg;
 		}
 
-// Ensure that we are always working on a sum, even
+	// Ensure that we are always working on a sum, even
 	// if there is only one term.
-	if(is_termlike(it)) 
+	if(is_termlike(it))
 		force_node_wrap(it, "\\sum");
 
-//	std::cerr << "after wrap" << it << std::endl;
-	
 	// Classify all free and dummy indices already present. Any new
 	// indices cannot be taken from these.
 	ind_free_sum.clear();
 	ind_dummy_sum.clear();
 	classify_indices(it, ind_free_sum, ind_dummy_sum);
-//	std::cerr << "free indices in this term:" << std::endl;
-//	for(const auto& ind: ind_free_sum)
-//		std::cerr << ind.second << std::endl;
-	
+
 	sibling_iterator term=tr.begin(it);
 	while(term!=tr.end(it)) {
 		sibling_iterator nxt=term;
 		++nxt;
-		
+
 		iterator tmp=term;
 		prod_wrap_single_term(tmp);
 		term=tmp;
@@ -87,7 +108,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		index_lines.clear();
 		first_index.clear();
 		last_index.clear();
-		
+
 		sibling_iterator factor=tr.begin(term);
 		while(factor!=tr.end(term)) {
 			const PartialDerivative *pd = kernel.properties.get<PartialDerivative>(factor);
@@ -100,8 +121,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 						}
 					++args;
 					}
-				}
-			else {
+				} else {
 				handle_factor(factor, trace!=0);
 				}
 			++factor;
@@ -112,12 +132,12 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 				tr.replace_index(li.second, first_index[li.first], true);
 				}
 			}
-		
+
 
 		tmp=term;
 		prod_unwrap_single_term(tmp);
 
-//		std::cerr << "after unwrap" << tmp << std::endl;
+		//		std::cerr << "after unwrap" << tmp << std::endl;
 
 		term=nxt;
 		}
@@ -127,7 +147,7 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 		it = tr.flatten_and_erase(it);
 		}
 	cleanup_dispatch(kernel, tr, it);
-	
+
 	return res;
 	}
 
@@ -149,7 +169,7 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 		replacement.append_child(replacement.begin(), ii.first->explicit_form.begin());
 		substitute subs(kernel, tr, replacement);
 		iterator factor_tmp=factor;
-		if(subs.can_apply(factor_tmp)) 
+		if(subs.can_apply(factor_tmp))
 			subs.apply(factor_tmp);
 		else
 			throw InternalError("Internal inconsistency encountered, aborting.");
@@ -166,8 +186,8 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 
 		// Keep track of indices already added in this factor, to avoid making
 		// an index trace on a single factor.
-		std::map<const Indices *, Ex::iterator> index_lines_factor;  
-		
+		std::map<const Indices *, Ex::iterator> index_lines_factor;
+
 		// Go through indices in order of appearance, determine if they have
 		// been added, and rename. Note: indices do not appear in order in the
 		// index maps above.
@@ -184,7 +204,7 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 				}
 			++iit; // Update now, we may be replacing this index.
 			if(found) {
-				// This index was added. 
+				// This index was added.
 				const Indices *ip = kernel.properties.get<Indices>(search->second);
 				if(!ip)
 					throw InternalError("Do not have Indices property for all implicit indices.");
@@ -205,8 +225,7 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 					if(first==first_index.end()) {
 						first_index[ip]=loc;
 						}
-					}
-				else {
+					} else {
 					// Use the active line index, then unset the active line.
 					tr.replace_index(search->second, line->second, true);
 					index_lines.erase(line);

@@ -14,82 +14,82 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 	: DisplayBase(kernel, e)
 	{
 	symmap = {
-		{"\\cos", "cos"},
-		{"\\sin", "sin"},
-		{"\\tan", "tan"},
-		{"\\log", "log"},		
-		{"\\int", "integrate" },
-		{"\\matrix", "Matrix" },
-		{"\\sum", "Sum" },
-		{"\\exp", "exp" },
-		{"\\sqrt", "sqrt" },
+			{"\\cos", "cos"},
+			{"\\sin", "sin"},
+			{"\\tan", "tan"},
+			{"\\log", "log"},
+			{"\\int", "integrate" },
+			{"\\matrix", "Matrix" },
+			{"\\sum", "Sum" },
+			{"\\exp", "exp" },
+			{"\\sqrt", "sqrt" },
 
-		{"\\infty", "sympy.oo"},
+			{"\\infty", "sympy.oo"},
 
-		{"\\alpha",   "alpha" },
-		{"\\beta",    "bbeta" },  // beta seems to be reserved
-		{"\\gamma",   "ggamma" }, // gamma seems to be reserved 
-		{"\\delta",   "delta" },
-		{"\\epsilon", "epsilon" },
-		{"\\zeta",    "zeta" },
-		{"\\eta",     "eta" },
-		{"\\theta",   "theta" },
-		{"\\iota",    "iota" },
-		{"\\kappa",   "kappa" },
-		{"\\lambda",  "lamda" }, // lambda is reserved
-		{"\\mu",      "mu" },
-		{"\\nu",      "nu" },
-		{"\\xi",      "xi" },
-		{"\\omicron", "omicron" },
-		{"\\pi",      "pi" },
-		{"\\rho",     "rho" },
-		{"\\sigma",   "sigma" },
-		{"\\tau",     "tau" },
-		{"\\upsilon", "upsilon" },
-		{"\\phi",     "phi" },
-		{"\\varphi",  "varphi" },		
-		{"\\chi",     "chi" },
-		{"\\psi",     "psi" },
-		{"\\omega",   "omega" },
+			{"\\alpha",   "alpha" },
+			{"\\beta",    "bbeta" },  // beta seems to be reserved
+			{"\\gamma",   "ggamma" }, // gamma seems to be reserved
+			{"\\delta",   "delta" },
+			{"\\epsilon", "epsilon" },
+			{"\\zeta",    "zeta" },
+			{"\\eta",     "eta" },
+			{"\\theta",   "theta" },
+			{"\\iota",    "iota" },
+			{"\\kappa",   "kappa" },
+			{"\\lambda",  "lamda" }, // lambda is reserved
+			{"\\mu",      "mu" },
+			{"\\nu",      "nu" },
+			{"\\xi",      "xi" },
+			{"\\omicron", "omicron" },
+			{"\\pi",      "pi" },
+			{"\\rho",     "rho" },
+			{"\\sigma",   "sigma" },
+			{"\\tau",     "tau" },
+			{"\\upsilon", "upsilon" },
+			{"\\phi",     "phi" },
+			{"\\varphi",  "varphi" },
+			{"\\chi",     "chi" },
+			{"\\psi",     "psi" },
+			{"\\omega",   "omega" },
 
-		{"\\Alpha",   "Alpha" },
-		{"\\Beta",    "Beta" },
-		{"\\Gamma",   "Gamma" },
-		{"\\Delta",   "Delta" },
-		{"\\Epsilon", "Epsilon" },
-		{"\\Zeta",    "Zeta" },
-		{"\\Eta",     "Eta" },
-		{"\\Theta",   "Theta" },
-		{"\\Iota",    "Iota" },
-		{"\\Kappa",   "Kappa" },
-		{"\\Lambda",  "Lamda" },
-		{"\\Mu",      "Mu" },
-		{"\\Nu",      "Nu" },
-		{"\\Xi",      "Xi" },
-		{"\\Omicron", "Omicron" },
-		{"\\Pi",      "Pi" },
-		{"\\Rho",     "Rho" },
-		{"\\Sigma",   "Sigma" },
-		{"\\Tau",     "Tau" },
-		{"\\Upsilon", "Upsilon" },
-		{"\\Phi",     "Phi" },
-		{"\\Chi",     "Chi" },
-		{"\\Psi",     "Psi" },
-		{"\\Omega",   "Omega" },
+			{"\\Alpha",   "Alpha" },
+			{"\\Beta",    "Beta" },
+			{"\\Gamma",   "Gamma" },
+			{"\\Delta",   "Delta" },
+			{"\\Epsilon", "Epsilon" },
+			{"\\Zeta",    "Zeta" },
+			{"\\Eta",     "Eta" },
+			{"\\Theta",   "Theta" },
+			{"\\Iota",    "Iota" },
+			{"\\Kappa",   "Kappa" },
+			{"\\Lambda",  "Lamda" },
+			{"\\Mu",      "Mu" },
+			{"\\Nu",      "Nu" },
+			{"\\Xi",      "Xi" },
+			{"\\Omicron", "Omicron" },
+			{"\\Pi",      "Pi" },
+			{"\\Rho",     "Rho" },
+			{"\\Sigma",   "Sigma" },
+			{"\\Tau",     "Tau" },
+			{"\\Upsilon", "Upsilon" },
+			{"\\Phi",     "Phi" },
+			{"\\Chi",     "Chi" },
+			{"\\Psi",     "Psi" },
+			{"\\Omega",   "Omega" },
 
-		{"\\partial", "Derivative"},
-		{"\\dot",     "dot"},
-		{"\\ddot",    "ddot"},
+			{"\\partial", "Derivative"},
+			{"\\dot",     "dot"},
+			{"\\ddot",    "ddot"},
 
 		// A few symbols are reserved by sympy.
-		{"N", "sympyN"},
-		{"O", "sympyO"},
-		{"S", "sympyS"}
+			{"N", "sympyN"},
+			{"O", "sympyO"},
+			{"S", "sympyS"}
 		};
 
 	regex_map = {
-		{"Integral",   "\\\\int"   },
-	};
+			{"Integral",   "\\\\int"   },
+		};
 
 	}
 
@@ -107,11 +107,9 @@ bool DisplaySympy::needs_brackets(Ex::iterator it)
 	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow") {
 		if(child=="\\sum") return true;
 		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || child=="\\sum" || child=="\\prod" || child=="\\pow")  ) return true;
-		}
-	else if(it->fl.parent_rel==str_node::p_none) {
+		} else if(it->fl.parent_rel==str_node::p_none) {
 		if(*it->name=="\\sum") return false;
-		}
-	else {
+		} else {
 		if(*it->name=="\\sum")  return true;
 		if(*it->name=="\\prod") return true;
 		}
@@ -127,7 +125,7 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 	// print multiplier and object name
 	if(*it->multiplier!=1)
 		print_multiplier(str, it);
-	
+
 	if(*it->name=="1") {
 		if(*it->multiplier==1 || (*it->multiplier==-1)) // this would print nothing altogether.
 			str << "1";
@@ -136,17 +134,17 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 			str << ")";
 		return;
 		}
-	
-//	const Accent *ac=properties.get<Accent>(it);
-//	if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
-//		Ex::sibling_iterator sib=tree.begin(it);
-//		while(sib!=tree.end(it)) {
-//			if(sib->is_index()) 
-//				needs_extra_brackets=true;
-//			++sib;
-//			}
-//		}
-	
+
+	//	const Accent *ac=properties.get<Accent>(it);
+	//	if(!ac) { // accents should never get additional curly brackets, {\bar}{g} does not print.
+	//		Ex::sibling_iterator sib=tree.begin(it);
+	//		while(sib!=tree.end(it)) {
+	//			if(sib->is_index())
+	//				needs_extra_brackets=true;
+	//			++sib;
+	//			}
+	//		}
+
 	auto rn = symmap.find(*it->name);
 	if(rn!=symmap.end())
 		str << rn->second;
@@ -159,21 +157,21 @@ void DisplaySympy::print_other(std::ostream& str, Ex::iterator it)
 		str << ")";
 	}
 
-void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int ) 
+void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int )
 	{
-	// Sympy has no notion of children with different parent relations; it's all 
+	// Sympy has no notion of children with different parent relations; it's all
 	// functions of functions kind of stuff. What we will do is print upper and
 	// lower indices as 'UP(..)' and 'DN(..)' type arguments, and then convert
 	// them back later.
 
 	// We need to know if the symbol has implicit dependence on other symbols,
-	// as this needs to be made explicit for sympy. We need to strip this 
+	// as this needs to be made explicit for sympy. We need to strip this
 	// dependence off later again.
 
 	const Depends *dep=kernel.properties.get<Depends>(it);
 	if(dep) {
 		depsyms[it->name]=dep->dependencies(kernel, it);
-//		std::cerr << *it->name << "depends on " << depsyms[it->name] << std::endl;
+		//		std::cerr << *it->name << "depends on " << depsyms[it->name] << std::endl;
 		}
 
 	Ex::sibling_iterator ch=tree.begin(it);
@@ -183,15 +181,15 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int )
 		while(ch!=tree.end(it)) {
 			if(first) first=false;
 			else      str << ", ";
-			if(ch->fl.parent_rel==str_node::p_super) 
+			if(ch->fl.parent_rel==str_node::p_super)
 				str << "UP";
-			if(ch->fl.parent_rel==str_node::p_sub) 
+			if(ch->fl.parent_rel==str_node::p_sub)
 				str << "DN";
 
 			dispatch(str, ch);
 
-//			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub) 
-//				str << ")";
+			//			if(ch->fl.parent_rel==str_node::p_super || ch->fl.parent_rel==str_node::p_sub)
+			//				str << ")";
 			++ch;
 			}
 		if(dep) {
@@ -205,9 +203,9 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int )
 				if(sib!=tree.end(deplist.begin()))
 					str << ", ";
 				}
-//				
-//			DisplaySympy ds(kernel, deplist);
-//			ds.output(str);
+			//
+			//			DisplaySympy ds(kernel, deplist);
+			//			ds.output(str);
 			}
 		str << ")";
 		}
@@ -221,18 +219,16 @@ void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 	if(denom!=1) {
 		if(false && it->multiplier->get_num()<0)
 			str << "(" << it->multiplier->get_num() << ")";
-		else 
+		else
 			str << it->multiplier->get_num();
 		str << "/" << it->multiplier->get_den();
-		}
-	else if(*it->multiplier==-1) {
+		} else if(*it->multiplier==-1) {
 		str << "-";
 		suppress_star=true;
-		}
-	else {
+		} else {
 		str << *it->multiplier;
 		}
-	
+
 	if(!suppress_star && !(*it->name=="1"))
 		str << "*";
 	}
@@ -240,41 +236,74 @@ void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << ")";   break;
-		case str_node::b_pointy: str << "\\<"; break;
-		case str_node::b_curly:  str << "\\{"; break;
-		case str_node::b_round:  str << "(";   break;
-		case str_node::b_square: str << "[";   break;
-		default :	return;
+	case str_node::b_none:
+		str << ")";
+		break;
+	case str_node::b_pointy:
+		str << "\\<";
+		break;
+	case str_node::b_curly:
+		str << "\\{";
+		break;
+	case str_node::b_round:
+		str << "(";
+		break;
+	case str_node::b_square:
+		str << "[";
+		break;
+	default :
+		return;
 		}
 	}
 
 void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-		case str_node::b_none:   str << ")";   break;
-		case str_node::b_pointy: str << "\\>"; break;
-		case str_node::b_curly:  str << "\\}"; break;
-		case str_node::b_round:  str << ")";   break;
-		case str_node::b_square: str << "]";   break;
-		default :	return;
+	case str_node::b_none:
+		str << ")";
+		break;
+	case str_node::b_pointy:
+		str << "\\>";
+		break;
+	case str_node::b_curly:
+		str << "\\}";
+		break;
+	case str_node::b_round:
+		str << ")";
+		break;
+	case str_node::b_square:
+		str << "]";
+		break;
+	default :
+		return;
 		}
 	}
 
 void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool )
 	{
 	switch(pr) {
-		case str_node::p_super:    str << "^"; break;
-		case str_node::p_sub:      str << "_"; break;
-		case str_node::p_property: str << "$"; break;
-		case str_node::p_exponent: str << "**"; break;
-		case str_node::p_none: break;
-		case str_node::p_components: break;
-		case str_node::p_invalid:    throw std::logic_error("DisplaySympy: p_invalid not handled.");
+	case str_node::p_super:
+		str << "^";
+		break;
+	case str_node::p_sub:
+		str << "_";
+		break;
+	case str_node::p_property:
+		str << "$";
+		break;
+	case str_node::p_exponent:
+		str << "**";
+		break;
+	case str_node::p_none:
+		break;
+	case str_node::p_components:
+		break;
+	case str_node::p_invalid:
+		throw std::logic_error("DisplaySympy: p_invalid not handled.");
 		}
 	}
 
-void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it)
 	{
 	// The node names below should only be reserved node names; all others
 	// should be looked up using properties. FIXME
@@ -293,7 +322,7 @@ void DisplaySympy::dispatch(std::ostream& str, Ex::iterator it)
 	else                           print_other(str, it);
 	}
 
-void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
@@ -307,10 +336,10 @@ void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 		++sib;
 		}
 	str << ")";
-	//print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);	
+	//print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);
 	}
 
-void DisplaySympy::print_arrowlike(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::print_arrowlike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	str << "rule(";
@@ -332,7 +361,7 @@ void DisplaySympy::print_fraclike(std::ostream& str, Ex::iterator it)
 	dispatch(str, num);
 
 	str << "/(";
-	
+
 	dispatch(str, den);
 
 	str << ")";
@@ -340,19 +369,19 @@ void DisplaySympy::print_fraclike(std::ostream& str, Ex::iterator it)
 
 void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const std::string& inbetween)
 	{
-	if(needs_brackets(it)) 
+	if(needs_brackets(it))
 		str << "(";
 
 	if(*it->multiplier!=1) {
 		print_multiplier(str, it);
-//		Ex::sibling_iterator st=tree.begin(it);
+		//		Ex::sibling_iterator st=tree.begin(it);
 		}
 
 	// To print \prod{\sum{a}{b}}{\sum{c}{d}} correctly:
 	// If there is any sum as child, and if the sum children do not
 	// all have the same bracket type (different from b_none or b_no),
 	// then print brackets.
-	
+
 	str_node::bracket_t previous_bracket_=str_node::b_invalid;
 	bool beginning_of_group=true;
 	Ex::sibling_iterator ch=tree.begin(it);
@@ -367,7 +396,7 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 		dispatch(str, ch);
 		++ch;
 		if(ch==tree.end(it)) {
-			if(current_bracket_!=str_node::b_none) 
+			if(current_bracket_!=str_node::b_none)
 				print_closing_bracket(str, current_bracket_);
 			}
 
@@ -377,16 +406,16 @@ void DisplaySympy::print_productlike(std::ostream& str, Ex::iterator it, const s
 		previous_bracket_=current_bracket_;
 		}
 
-	if(needs_brackets(it)) 
+	if(needs_brackets(it))
 		str << ")";
-//	if(close_bracket) str << ")";
+	//	if(close_bracket) str << ")";
 	}
 
-void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it) 
+void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it)
 	{
 	assert(*it->multiplier==1);
 
-	if(needs_brackets(it)) 
+	if(needs_brackets(it))
 		str << "(";
 
 	unsigned int steps=0;
@@ -397,13 +426,13 @@ void DisplaySympy::print_sumlike(std::ostream& str, Ex::iterator it)
 			steps=0;
 			}
 		if(*ch->multiplier>=0 && ch!=tree.begin(it))
-			str << "+"; 
+			str << "+";
 
 		dispatch(str, ch);
 		++ch;
 		}
 
-	if(needs_brackets(it)) 
+	if(needs_brackets(it))
 		str << ")";
 	str << std::flush;
 	}
@@ -434,7 +463,7 @@ void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
 	++sib;
-	if(tree.is_valid(sib)) {	
+	if(tree.is_valid(sib)) {
 		str << ", ";
 		dispatch(str, sib);
 		}
@@ -447,7 +476,7 @@ void DisplaySympy::print_equalitylike(std::ostream& str, Ex::iterator it)
 	dispatch(str, sib);
 	str << " = ";
 	++sib;
-	if(sib==tree.end(it)) 
+	if(sib==tree.end(it))
 		throw ConsistencyException("Found equals node with only one child node.");
 	dispatch(str, sib);
 	}
@@ -538,81 +567,84 @@ std::string DisplaySympy::preparse_import(const std::string& in)
 void DisplaySympy::import(Ex& ex)
 	{
 	cadabra::do_subtree(ex, ex.begin(), [&](Ex::iterator it) -> Ex::iterator {
-			for(auto& m: symmap) {
-				// If we have converted the name of this symbol, convert back.
-				if(m.second==*it->name) {
-					it->name=name_set.insert(m.first).first;
-					break;
-					}
+		for(auto& m: symmap)
+			{
+			// If we have converted the name of this symbol, convert back.
+			if(m.second==*it->name) {
+				it->name=name_set.insert(m.first).first;
+				break;
 				}
-			// See if we have added dependencies to this symbol (lookup in map).
-			// If yes, strip them off again.
-			auto fnd = depsyms.find(it->name);
-			if(fnd!=depsyms.end()) {
-				auto args=ex.begin(it);
-				// Strip out only those symbols which have been added.
-				while(args!=ex.end(it)) {
-					if(args->fl.parent_rel==str_node::p_none) {
-						auto findsib=fnd->second.begin(fnd->second.begin());
-						bool removed=false;
-						while(findsib!=fnd->second.end(fnd->second.begin())) {
-							if(subtree_equal(0, findsib, args)) {
-								args=ex.erase(args);
-								removed=true;
-								break;
-								}
-							++findsib;
+			}
+		// See if we have added dependencies to this symbol (lookup in map).
+		// If yes, strip them off again.
+		auto fnd = depsyms.find(it->name);
+		if(fnd!=depsyms.end())
+			{
+			auto args=ex.begin(it);
+			// Strip out only those symbols which have been added.
+			while(args!=ex.end(it)) {
+				if(args->fl.parent_rel==str_node::p_none) {
+					auto findsib=fnd->second.begin(fnd->second.begin());
+					bool removed=false;
+					while(findsib!=fnd->second.end(fnd->second.begin())) {
+						if(subtree_equal(0, findsib, args)) {
+							args=ex.erase(args);
+							removed=true;
+							break;
 							}
-						if(!removed)
-							++args;
+						++findsib;
 						}
-					else
+					if(!removed)
 						++args;
-					}
-//				std::cerr << "stripping from " << *it->name << std::endl;
-////				if(*ex.begin(it)->name=="\\comma")
-//				ex.erase(ex.begin(it));
+					} else
+					++args;
 				}
-			
-			// Move child nodes of partial to the right place.
-			if(*it->name=="\\partial") {
-				auto args = ex.begin(it);
-				++args;
-				while(args!=ex.end(it)) {
-					auto nxt=args;
-					++nxt;
-					auto loc = ex.move_before(ex.begin(it), args);
-					loc->fl.parent_rel=str_node::p_sub;
+			//				std::cerr << "stripping from " << *it->name << std::endl;
+			////				if(*ex.begin(it)->name=="\\comma")
+			//				ex.erase(ex.begin(it));
+			}
 
-					// If the argument is \comma{x}{n} expand this to 'n' arguments 'x'.
-					// This is to handle Sympy returning 'Derivative(f(x), (x,2))' for the
-					// 2nd order derivative.
+		// Move child nodes of partial to the right place.
+		if(*it->name=="\\partial")
+			{
+			auto args = ex.begin(it);
+			++args;
+			while(args!=ex.end(it)) {
+				auto nxt=args;
+				++nxt;
+				auto loc = ex.move_before(ex.begin(it), args);
+				loc->fl.parent_rel=str_node::p_sub;
 
-					if(*loc->name=="\\comma") {
-						#ifdef DEBUG
-						std::cerr << loc << std::endl;
-						#endif
-						auto x=ex.begin(loc);
-						auto n=x; ++n;
-						if(! n->is_integer()) 
-							throw RuntimeException("DisplaySympy::import received un-parseable Derivative expression.");
-						int nn=to_long(*n->multiplier);
-						for(int k=0; k<nn; ++k)
-							ex.insert_subtree(loc, x)->fl.parent_rel=str_node::p_sub;
-						ex.erase(loc);
-						#ifdef DEBUG
-						std::cerr << it << std::endl;
-						#endif
-						}
-					
-					
-					args=nxt;
+				// If the argument is \comma{x}{n} expand this to 'n' arguments 'x'.
+				// This is to handle Sympy returning 'Derivative(f(x), (x,2))' for the
+				// 2nd order derivative.
+
+				if(*loc->name=="\\comma") {
+#ifdef DEBUG
+					std::cerr << loc << std::endl;
+#endif
+					auto x=ex.begin(loc);
+					auto n=x;
+					++n;
+					if(! n->is_integer())
+						throw RuntimeException("DisplaySympy::import received un-parseable Derivative expression.");
+					int nn=to_long(*n->multiplier);
+					for(int k=0; k<nn; ++k)
+						ex.insert_subtree(loc, x)->fl.parent_rel=str_node::p_sub;
+					ex.erase(loc);
+#ifdef DEBUG
+					std::cerr << it << std::endl;
+#endif
 					}
-//				ex.flatten(comma);
-//				ex.erase(comma);
-//				}
-				}
 
-			return it;
-			});
+
+				args=nxt;
+				}
+			//				ex.flatten(comma);
+			//				ex.erase(comma);
+			//				}
+			}
+
+		return it;
+		});
 	}

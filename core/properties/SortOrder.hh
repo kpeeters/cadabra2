@@ -9,6 +9,6 @@ namespace cadabra {
 		public:
 			virtual std::string name() const;
 			virtual match_t equals(const property *) const;
-	};
+		};
 
-}
+	}

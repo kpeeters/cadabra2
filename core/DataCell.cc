@@ -29,7 +29,7 @@ DataCell::id_t::id_t()
 	created_by_client=true;
 	}
 
-DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden) 
+DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden)
 	{
 	cell_type = t;
 	textbuf = str;
@@ -37,7 +37,7 @@ DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden)
 	running=false;
 	}
 
-DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidden) 
+DataCell::DataCell(id_t id_, CellType t, const std::string& str, bool cell_hidden)
 	{
 	cell_type = t;
 	textbuf = str;
@@ -78,10 +78,10 @@ std::string cadabra::latex_to_html(const std::string& str)
 	{
 	std::regex section(R"(\\section\*\{([^\}]*)\})");
 	std::regex author(R"(\\author\{([^\}]*)\})");
-	std::regex email(R"(\\email\{([^\}]*)\})");	
+	std::regex email(R"(\\email\{([^\}]*)\})");
 	std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 	std::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
-	std::regex subsubsection(R"(\\subsubsection\*\{([^\}]*)\})");	
+	std::regex subsubsection(R"(\\subsubsection\*\{([^\}]*)\})");
 	std::regex verb(R"(\\verb\|([^\|]*)\|)");
 	std::regex url(R"(\\url\{([^\}]*)\})");
 	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
@@ -108,7 +108,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex tableau(R"(\\tableau\{(\{[^\}]*\})*\})");
 	std::regex ftableau(R"(\\ftableau\{(\{[^\}]*\}[,]?)*\})");
 	std::regex begin_tabular(R"(\\begin\{tabular\}\{[^\}]*\})");
-	std::regex end_tabular(R"(\\end\{tabular\})");	
+	std::regex end_tabular(R"(\\end\{tabular\})");
 	std::string res;
 
 	try {
@@ -124,7 +124,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, subsection, "<h2>$1</h2>");
 		res = std::regex_replace(res, subsubsection, "<h3>$1</h3>");
 		res = std::regex_replace(res, author, "<div class='author'>$1</div>");
-		res = std::regex_replace(res, email, "<div class='email'>$1</div>");		
+		res = std::regex_replace(res, email, "<div class='email'>$1</div>");
 		res = std::regex_replace(res, verb, "<code>$1</code>");
 		res = std::regex_replace(res, url, "<a href=\"$1\">$1</a>");
 		res = std::regex_replace(res, href, "<a href=\"$1\">$2</a>");
@@ -144,10 +144,9 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, tableau, "\\)<div class=\"young_box\"></div>\\(\\displaystyle");
 		res = std::regex_replace(res, ftableau, "\\)<div class=\"young_box filled\"></div>\\(\\displaystyle");
 		res = std::regex_replace(res, begin_tabular, "<table>");
-		res = std::regex_replace(res, end_tabular, "</table>");		
+		res = std::regex_replace(res, end_tabular, "</table>");
 		res = std::regex_replace(res, std::regex(R"(\{\\tt ([^\}]*)\})"), "<tt>$1</tt>");
-		}
-	catch(std::regex_error& ex) {
+		} catch(std::regex_error& ex) {
 		std::cerr << "regex error on " << str << std::endl;
 		}
 
@@ -155,52 +154,51 @@ std::string cadabra::latex_to_html(const std::string& str)
 	}
 
 void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
-									const std::string& preamble_string,
-									bool for_embedding, bool strip_code,
-									std::string title)
+                           const std::string& preamble_string,
+                           bool for_embedding, bool strip_code,
+                           std::string title)
 	{
 	bool strip_this=false;
 	switch(it->cell_type) {
-		case DataCell::CellType::document:
-			if(!for_embedding) {
-				str << preamble_string << "\n<body>\n";
-				}
-			else {
-				str << "{% extends \"notebook_layout.html\" %}\n"
-					 << "{% block head %}\n"
-					 << " <meta name=\"keywords\" content=\"cadabra, manual\"/>\n"
-					 << "{%- endblock %}\n"
-					 << "{% block main %}\n"
-					 << "{% raw %}\n";
-				}
-			break;
-		case DataCell::CellType::python:
-			if(strip_code && (it->textbuf.substr(0,4)=="def " || it->textbuf.substr(0,5)=="from "))
-				strip_this=true;
-			str << "<div class='python'>";
-			break;
-		case DataCell::CellType::output:
-			str << "<div class='output'>";
-			break;
-		case DataCell::CellType::verbatim:
-			str << "<div class='verbatim'>";
-			break;
-		case DataCell::CellType::latex:
-			str << "<div class='latex'>";
-			break;
-		case DataCell::CellType::latex_view:
-			str << "<div class='latex_view hyphenate'>";
-			break;
-		case DataCell::CellType::error:
-			str << "<div class='error'>";
-			break;
-		case DataCell::CellType::image_png:
-			str << "<div class='image_png'><img src='data:image/png;base64,";
-			break;
-		case DataCell::CellType::input_form:
-			str << "<div class='input_form'>";
-			break;
-		}	
+	case DataCell::CellType::document:
+		if(!for_embedding) {
+			str << preamble_string << "\n<body>\n";
+			} else {
+			str << "{% extends \"notebook_layout.html\" %}\n"
+			    << "{% block head %}\n"
+			    << " <meta name=\"keywords\" content=\"cadabra, manual\"/>\n"
+			    << "{%- endblock %}\n"
+			    << "{% block main %}\n"
+			    << "{% raw %}\n";
+			}
+		break;
+	case DataCell::CellType::python:
+		if(strip_code && (it->textbuf.substr(0,4)=="def " || it->textbuf.substr(0,5)=="from "))
+			strip_this=true;
+		str << "<div class='python'>";
+		break;
+	case DataCell::CellType::output:
+		str << "<div class='output'>";
+		break;
+	case DataCell::CellType::verbatim:
+		str << "<div class='verbatim'>";
+		break;
+	case DataCell::CellType::latex:
+		str << "<div class='latex'>";
+		break;
+	case DataCell::CellType::latex_view:
+		str << "<div class='latex_view hyphenate'>";
+		break;
+	case DataCell::CellType::error:
+		str << "<div class='error'>";
+		break;
+	case DataCell::CellType::image_png:
+		str << "<div class='image_png'><img src='data:image/png;base64,";
+		break;
+	case DataCell::CellType::input_form:
+		str << "<div class='input_form'>";
+		break;
+		}
 
 	if(!strip_this) {
 		try {
@@ -217,13 +215,12 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 						str << "<div class=\"source donthyphenate\">"+out+"</div>";
 					}
 				}
-			}
-		catch(std::regex_error& ex) {
+			} catch(std::regex_error& ex) {
 			std::cerr << "regex error doing latex_to_html on " << it->textbuf << std::endl;
 			throw;
 			}
 		}
-	
+
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
 		while(sib!=doc.end(it)) {
@@ -233,41 +230,40 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		}
 
 	switch(it->cell_type) {
-		case DataCell::CellType::document:
-			if(!for_embedding) {
-				str << "</body>\n";
-				str << "</html>\n";
-				}
-			else {
-				str << "{% endraw %}\n"
-					 << "{%- endblock %}\n"
-					 << "{% block title %}" << title << "{% endblock %}\n";
-				}
-			break;
-		case DataCell::CellType::python:
-			str << "</div>\n";
-			break;
-		case DataCell::CellType::output:
-			str << "</div>\n";
-			break;
-		case DataCell::CellType::verbatim:
-			str << "</div>\n";
-			break;
-		case DataCell::CellType::latex:
-			str << "</div>\n";
-			break;
-		case DataCell::CellType::latex_view:
-			str << "</div>\n";
-			break;
-		case DataCell::CellType::error:
-			str << "</div>\n";
-			break;
-		case DataCell::CellType::image_png:
-			str << "' /></div>\n";
-			break;
-		case DataCell::CellType::input_form:
-			str << "</div>\n";
-		}	
+	case DataCell::CellType::document:
+		if(!for_embedding) {
+			str << "</body>\n";
+			str << "</html>\n";
+			} else {
+			str << "{% endraw %}\n"
+			    << "{%- endblock %}\n"
+			    << "{% block title %}" << title << "{% endblock %}\n";
+			}
+		break;
+	case DataCell::CellType::python:
+		str << "</div>\n";
+		break;
+	case DataCell::CellType::output:
+		str << "</div>\n";
+		break;
+	case DataCell::CellType::verbatim:
+		str << "</div>\n";
+		break;
+	case DataCell::CellType::latex:
+		str << "</div>\n";
+		break;
+	case DataCell::CellType::latex_view:
+		str << "</div>\n";
+		break;
+	case DataCell::CellType::error:
+		str << "</div>\n";
+		break;
+	case DataCell::CellType::image_png:
+		str << "' /></div>\n";
+		break;
+	case DataCell::CellType::input_form:
+		str << "</div>\n";
+		}
 	}
 
 std::string cadabra::JSON_serialise(const DTree& doc)
@@ -284,43 +280,43 @@ std::string cadabra::JSON_serialise(const DTree& doc)
 void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& json)
 	{
 	switch(it->cell_type) {
-		case DataCell::CellType::document:
-			json["description"]="Cadabra JSON notebook format";
-			json["version"]=1.0;
-			break;
-		case DataCell::CellType::python:
-			json["cell_type"]="input";
-			break;
-		case DataCell::CellType::output:
-			json["cell_type"]="output";
-			break;
-		case DataCell::CellType::verbatim:
-			json["cell_type"]="verbatim";
-			break;
-		case DataCell::CellType::latex:
-			json["cell_type"]="latex";
-			break;
-		case DataCell::CellType::latex_view:
-			json["cell_type"]="latex_view";
-			break;
-		case DataCell::CellType::error:
-			json["cell_type"]="error";
-			break;
-		case DataCell::CellType::image_png:
-			json["cell_type"]="image_png";
-			break;
-		case DataCell::CellType::input_form:
-			json["cell_type"]="input_form";
-			break;
-//		case DataCell::CellType::section: {
-//			assert(1==0);
-//			// NOT YET FUNCTIONAL
-//			json["cell_type"]="section";
-//			Json::Value child;
-//			child["content"]="test";
-//			json.append(child);
-//			break;
-//			}
+	case DataCell::CellType::document:
+		json["description"]="Cadabra JSON notebook format";
+		json["version"]=1.0;
+		break;
+	case DataCell::CellType::python:
+		json["cell_type"]="input";
+		break;
+	case DataCell::CellType::output:
+		json["cell_type"]="output";
+		break;
+	case DataCell::CellType::verbatim:
+		json["cell_type"]="verbatim";
+		break;
+	case DataCell::CellType::latex:
+		json["cell_type"]="latex";
+		break;
+	case DataCell::CellType::latex_view:
+		json["cell_type"]="latex_view";
+		break;
+	case DataCell::CellType::error:
+		json["cell_type"]="error";
+		break;
+	case DataCell::CellType::image_png:
+		json["cell_type"]="image_png";
+		break;
+	case DataCell::CellType::input_form:
+		json["cell_type"]="input_form";
+		break;
+		//		case DataCell::CellType::section: {
+		//			assert(1==0);
+		//			// NOT YET FUNCTIONAL
+		//			json["cell_type"]="section";
+		//			Json::Value child;
+		//			child["content"]="test";
+		//			json.append(child);
+		//			break;
+		//			}
 		}
 	if(it->hidden)
 		json["hidden"]=true;
@@ -347,7 +343,7 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 		}
 	}
 
-void cadabra::JSON_deserialise(const std::string& cj, DTree& doc) 
+void cadabra::JSON_deserialise(const std::string& cj, DTree& doc)
 	{
 	Json::Reader reader;
 	Json::Value  root;
@@ -376,7 +372,7 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 			const Json::Value cell_origin = cells[c]["cell_origin"];
 			const Json::Value textbuf     = cells[c]["source"];
 			const Json::Value hidden      = cells[c]["hidden"];
-			
+
 			DTree::iterator last=doc.end();
 			DataCell::id_t id;
 			//id.id=cell_id.asUInt64();
@@ -384,58 +380,49 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 				id.created_by_client=false;
 			else
 				id.created_by_client=true;
-			
+
 			bool hide=false;
-			if(hidden.asBool()) 
+			if(hidden.asBool())
 				hide=true;
-			
+
 			if(celltype.asString()=="input" || celltype.asString()=="code") {
 				std::string res;
 				if(textbuf.isArray()) {
-					for(auto& el: textbuf) 
+					for(auto& el: textbuf)
 						res+=el.asString();
-					}
-				else {
+					} else {
 					res=textbuf.asString();
 					}
 				DataCell dc(id, cadabra::DataCell::CellType::python, res, hide);
 				last=doc.append_child(loc, dc);
-				}
-			else if(celltype.asString()=="output") {
+				} else if(celltype.asString()=="output") {
 				DataCell dc(id, cadabra::DataCell::CellType::output, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
-				}
-			else if(celltype.asString()=="error") {
+				} else if(celltype.asString()=="error") {
 				DataCell dc(id, cadabra::DataCell::CellType::error, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
-				}
-			else if(celltype.asString()=="verbatim") {
+				} else if(celltype.asString()=="verbatim") {
 				DataCell dc(id, cadabra::DataCell::CellType::verbatim, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
-				}
-			else if(celltype.asString()=="input_form") {
+				} else if(celltype.asString()=="input_form") {
 				DataCell dc(id, cadabra::DataCell::CellType::input_form, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
-				}
-			else if(celltype.asString()=="latex_view") {
+				} else if(celltype.asString()=="latex_view") {
 				std::string res;
 				if(textbuf.isArray()) {
-					for(auto& el: textbuf) 
+					for(auto& el: textbuf)
 						res+=el.asString();
-					}
-				else {
+					} else {
 					res=textbuf.asString();
 					}
 				DataCell dc(id, cadabra::DataCell::CellType::latex_view, res, false);
 				last=doc.append_child(loc, dc);
-				}
-			else if(celltype.asString()=="latex" || celltype.asString()=="markdown") {
+				} else if(celltype.asString()=="latex" || celltype.asString()=="markdown") {
 				std::string res;
 				if(textbuf.isArray()) {
-					for(auto& el: textbuf) 
+					for(auto& el: textbuf)
 						res+=el.asString();
-					}
-				else {
+					} else {
 					res=textbuf.asString();
 					}
 				bool hide_jupyter=hide;
@@ -443,23 +430,21 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 
 				DataCell dc(id, cadabra::DataCell::CellType::latex, res, hide_jupyter);
 				last=doc.append_child(loc, dc);
-				
+
 				// IPython/Jupyter notebooks only have the input LaTeX cell, not the output cell,
-				// which we need. 
+				// which we need.
 				if(cells[c].isMember("cells")==false) {
 					DataCell dc(id, cadabra::DataCell::CellType::latex_view, res, hide);
 					doc.append_child(last, dc);
 					}
-				}
-			else if(celltype.asString()=="image_png") {
+				} else if(celltype.asString()=="image_png") {
 				DataCell dc(id, cadabra::DataCell::CellType::image_png, textbuf.asString(), hide);
 				last=doc.append_child(loc, dc);
-				}
-			else {
+				} else {
 				std::cerr << "cadabra-client: found unknown cell type '"+celltype.asString()+"', ignoring" << std::endl;
 				continue;
 				}
-			
+
 			if(last!=doc.end()) {
 				if(cells[c].isMember("cells")) {
 					const Json::Value subcells = cells[c]["cells"];
@@ -467,8 +452,7 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 					}
 				}
 			}
-		}
-	catch(std::exception& ex) {
+		} catch(std::exception& ex) {
 		std::cerr << "cadabra-client: exception reading notebook: " << ex.what() << std::endl;
 		}
 	}
@@ -499,39 +483,39 @@ std::string cadabra::export_as_LaTeX(const DTree& doc, const std::string& image_
 	}
 
 void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringstream& str,
-									 const std::string& preamble_string, const std::string& image_file_base,
-									 int& image_num)
+                            const std::string& preamble_string, const std::string& image_file_base,
+                            int& image_num)
 	{
 	switch(it->cell_type) {
-		case DataCell::CellType::document:
-			str << preamble_string;
-			str << "\\begin{document}\n";
-			break;
-		case DataCell::CellType::python:
-			str << "\\begin{python}\n";
-			break;
-		case DataCell::CellType::output:
-			str << "\\begin{python}\n";
-			break;
-		case DataCell::CellType::verbatim:
-			str << "\\begin{verbatim}\n";
-			break;
-		case DataCell::CellType::latex:
-			break;
-		case DataCell::CellType::latex_view:
-			break;
-		case DataCell::CellType::error:
-			break;
-		case DataCell::CellType::input_form:
-			break;
-		case DataCell::CellType::image_png:
-			std::size_t pos=image_file_base.rfind('/');
-			std::string fileonly=image_file_base.substr(pos+1);
-			str << "\\begin{center}\n\\includegraphics[width=.6\\textwidth]{"
-				 << fileonly+std::to_string(image_num)+"}\n"
-				 << "\\end{center}\n";
-			break;
-		}	
+	case DataCell::CellType::document:
+		str << preamble_string;
+		str << "\\begin{document}\n";
+		break;
+	case DataCell::CellType::python:
+		str << "\\begin{python}\n";
+		break;
+	case DataCell::CellType::output:
+		str << "\\begin{python}\n";
+		break;
+	case DataCell::CellType::verbatim:
+		str << "\\begin{verbatim}\n";
+		break;
+	case DataCell::CellType::latex:
+		break;
+	case DataCell::CellType::latex_view:
+		break;
+	case DataCell::CellType::error:
+		break;
+	case DataCell::CellType::input_form:
+		break;
+	case DataCell::CellType::image_png:
+		std::size_t pos=image_file_base.rfind('/');
+		std::string fileonly=image_file_base.substr(pos+1);
+		str << "\\begin{center}\n\\includegraphics[width=.6\\textwidth]{"
+		    << fileonly+std::to_string(image_num)+"}\n"
+		    << "\\end{center}\n";
+		break;
+		}
 
 	if(it->cell_type==DataCell::CellType::image_png) {
 		// Images have to be saved to disk as separate files as
@@ -539,12 +523,11 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		std::ofstream out(image_file_base+std::to_string(image_num)+".png");
 		out << Glib::Base64::decode(it->textbuf);
 		++image_num;
-		}
-	else {
+		} else {
 		if(it->textbuf.size()>0) {
 			if(it->cell_type!=DataCell::CellType::document
-				&& it->cell_type!=DataCell::CellType::latex
-				&& it->cell_type!=DataCell::CellType::input_form) {
+			      && it->cell_type!=DataCell::CellType::latex
+			      && it->cell_type!=DataCell::CellType::input_form) {
 				std::string lr(it->textbuf);
 				// Make sure to sync these with the same in TeXEngine.cc !!!
 				lr=std::regex_replace(lr, std::regex(R"(\\left\()"),            "\\brwrap{(}{");
@@ -556,30 +539,30 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 				lr=std::regex_replace(lr, std::regex(R"(\\right\\\})"),           "}{\\}}");
 				lr=std::regex_replace(lr, std::regex(R"(\\right\.)"),            "}{.}");
 				lr=std::regex_replace(lr, std::regex(R"(\\begin\{verbatim\})"), "");
-				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");				
+				lr=std::regex_replace(lr, std::regex(R"(\\end\{verbatim\})"),   "");
 				lr=std::regex_replace(lr, std::regex(R"(\\begin\{dmath\*\})"),  "\\begin{adjustwidth}{1em}{0cm}$");
 				lr=std::regex_replace(lr, std::regex(R"(\\end\{dmath\*\})"),    "$\\end{adjustwidth}");
 				str << lr << "\n";
 				}
 			}
 		}
-	
+
 	switch(it->cell_type) {
-		case DataCell::CellType::python:
-		case DataCell::CellType::output:
-			str << "\\end{python}\n";
-			break;
-		case DataCell::CellType::verbatim:
-			str << "\\end{verbatim}\n";
-			break;
-		case DataCell::CellType::document:
-		case DataCell::CellType::latex:
-		case DataCell::CellType::latex_view:
-		case DataCell::CellType::input_form:
-		case DataCell::CellType::error:
-		case DataCell::CellType::image_png:
-			break;
-		}	
+	case DataCell::CellType::python:
+	case DataCell::CellType::output:
+		str << "\\end{python}\n";
+		break;
+	case DataCell::CellType::verbatim:
+		str << "\\end{verbatim}\n";
+		break;
+	case DataCell::CellType::document:
+	case DataCell::CellType::latex:
+	case DataCell::CellType::latex_view:
+	case DataCell::CellType::input_form:
+	case DataCell::CellType::error:
+	case DataCell::CellType::image_png:
+		break;
+		}
 
 	if(doc.number_of_children(it)>0) {
 		DTree::sibling_iterator sib=doc.begin(it);
@@ -590,19 +573,19 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		}
 
 	switch(it->cell_type) {
-		case DataCell::CellType::document:
-			str << "\\end{document}\n";
-			break;
-		case DataCell::CellType::python:
-		case DataCell::CellType::output:
-		case DataCell::CellType::verbatim:
-		case DataCell::CellType::latex:
-		case DataCell::CellType::latex_view:
-		case DataCell::CellType::input_form:
-		case DataCell::CellType::error:
-		case DataCell::CellType::image_png:
-			break;
-		}	
+	case DataCell::CellType::document:
+		str << "\\end{document}\n";
+		break;
+	case DataCell::CellType::python:
+	case DataCell::CellType::output:
+	case DataCell::CellType::verbatim:
+	case DataCell::CellType::latex:
+	case DataCell::CellType::latex_view:
+	case DataCell::CellType::input_form:
+	case DataCell::CellType::error:
+	case DataCell::CellType::image_png:
+		break;
+		}
 
 	}
 

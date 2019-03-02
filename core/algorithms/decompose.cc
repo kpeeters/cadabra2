@@ -9,17 +9,17 @@
 using namespace cadabra;
 
 decompose::decompose(const Kernel& k, Ex& tr, Ex& b)
-   : Algorithm(k, tr), basis(b)
+	: Algorithm(k, tr), basis(b)
 	{
 	}
 
-bool decompose::can_apply(iterator it) 
+bool decompose::can_apply(iterator it)
 	{
 	if(*it->name!="\\prod") return false;
 	return true;
 	}
 
-void decompose::add_element_to_basis(Ex& projterm, Ex::iterator projtermit) 
+void decompose::add_element_to_basis(Ex& projterm, Ex::iterator projtermit)
 	{
 	// Add a new column for the new term in the basis
 	for(unsigned int ii=0; ii<coefficient_matrix.size(); ++ii)
@@ -40,18 +40,17 @@ void decompose::add_element_to_basis(Ex& projterm, Ex::iterator projtermit)
 				}
 			if(!thistermfound) { // new monomial, so add a new row to the coefficient matrix
 				Ex tmp(moreit);
-//				tmp.print_recursive_treeform(txtout, tmp.begin());
+				//				tmp.print_recursive_treeform(txtout, tmp.begin());
 				terms_from_yp.push_back(tmp);
 				std::vector<multiplier_t> crow(coefficient_matrix.size()>0?
-														 coefficient_matrix[0].size():1,0);
+				                               coefficient_matrix[0].size():1,0);
 				crow.back()=remember_mult;
 				coefficient_matrix.push_back(crow);
-//				txtout << "added new monomial" << std::endl;
+				//				txtout << "added new monomial" << std::endl;
 				}
 			++moreit;
 			}
-		}
-	else {
+		} else {
 		multiplier_t remember_mult=*projtermit->multiplier;
 		one(projtermit->multiplier);
 		bool thistermfound=false;
@@ -66,7 +65,7 @@ void decompose::add_element_to_basis(Ex& projterm, Ex::iterator projtermit)
 			Ex tmp(projtermit);
 			terms_from_yp.push_back(tmp);
 			std::vector<multiplier_t> crow(coefficient_matrix.size()>0?
-													 coefficient_matrix[0].size():1,0);
+			                               coefficient_matrix[0].size():1,0);
 			crow.back()=remember_mult;
 			coefficient_matrix.push_back(crow);
 			}
@@ -80,7 +79,7 @@ Algorithm::result_t decompose::apply(iterator& it)
 #ifdef DEBUG
 	std::cerr << "Projecting on basis " << basis.begin() << std::endl;
 #endif
-	
+
 	iterator basisit=basis.begin();
 	if(! (*basisit->name=="\\comma")) {
 		sibling_iterator fr=basis.begin();
@@ -130,10 +129,10 @@ Algorithm::result_t decompose::apply(iterator& it)
 
 			distribute dbt(kernel, projterm);
 			canonicalise can(kernel, projterm);
-//			can.method=canonicalise::xperm;
+			//			can.method=canonicalise::xperm;
 			rename_dummies ren(kernel, projterm);
 			collect_terms ct(kernel, projterm);
-			
+
 			dbt.apply_generic(projtermit, false);// FIXME: URGENT: should check consistency
 			ren.apply_recursive(projtermit, false);  // by far the slowest step
 			if(*projtermit->name=="\\sum")
@@ -145,32 +144,31 @@ Algorithm::result_t decompose::apply(iterator& it)
 #else
 			iterator projtermit=projterm.begin(projterm.begin());
 			young_project_product ypp(kernel, projterm);
-//			sumflatten sf(kernel, projterm);
+			//			sumflatten sf(kernel, projterm);
 			collect_terms ct(kernel, projterm);
 			rename_dummies ren(kernel, projterm, "", "");
 
 			ypp.apply_generic(projtermit, true, false, 0);
-//			sf.apply_recursive(projtermit, false);
+			//			sf.apply_recursive(projtermit, false);
 			ren.apply_generic(projtermit, true, false, 0);  // by far the slowest step
 			if(*projtermit->name=="\\sum")
 				ct.apply(projtermit);
 			sibling_iterator sib2=tr.begin(projtermit);
 			while(sib2!=tr.end(projtermit)) {
-				 sib2->fl.bracket=str_node::b_none;
-				 ++sib2;
-				 }
+				sib2->fl.bracket=str_node::b_none;
+				++sib2;
+				}
 #endif
 			// After young projection, we may get identically zero.
 			if(projtermit->is_zero()) {
-//				txtout << "An element of the basis is identically zero after Young projection." << std::endl;
+				//				txtout << "An element of the basis is identically zero after Young projection." << std::endl;
 				return result_t::l_error;
 				}
 			add_element_to_basis(projterm, projtermit);
 			++sib;
 			}
 		// debugout << "Young-projected basis constructed." << std::endl;
-		}
-	else {
+		} else {
 		// Copy the basis straight into the terms_from_yp.
 		assert(*basisit->name=="\\comma");
 		sibling_iterator sib=tr.begin(basisit);
@@ -179,9 +177,9 @@ Algorithm::result_t decompose::apply(iterator& it)
 			iterator projtermit=projterm.begin();
 			sibling_iterator sib2=tr.begin(projtermit);
 			while(sib2!=tr.end(projtermit)) {
-				 sib2->fl.bracket=str_node::b_none;
-				 ++sib2;
-				 }
+				sib2->fl.bracket=str_node::b_none;
+				++sib2;
+				}
 			add_element_to_basis(projterm, projtermit);
 			++sib;
 			}
@@ -215,14 +213,14 @@ Algorithm::result_t decompose::apply(iterator& it)
 			}
 #else
 		young_project_product ypp(kernel, rhstree);
-//		sumflatten sf(rhstree, rhstree.end());
+		//		sumflatten sf(rhstree, rhstree.end());
 		collect_terms ct(kernel, rhstree);
 		rename_dummies ren(kernel, rhstree, "", "");
 
 		// debugout << "young project rhs." << std::endl;
 		ypp.apply_generic(rhsit, true, false, 0);
 		// debugout << "sumflatten." << std::endl;
-//		sf.apply_recursive(rhsit, false);
+		//		sf.apply_recursive(rhsit, false);
 		// debugout << "rename." << std::endl;
 		ren.apply_generic(rhsit, true, false, 0);  // by far the slowest step
 		// debugout << "collect terms." << std::endl;
@@ -231,11 +229,11 @@ Algorithm::result_t decompose::apply(iterator& it)
 
 		sibling_iterator sib2=rhstree.begin(rhsit);
 		while(sib2!=rhstree.end(rhsit)) {
-			 sib2->fl.bracket=str_node::b_none;
-			 ++sib2;
-			 }
-#endif		
-		}	
+			sib2->fl.bracket=str_node::b_none;
+			++sib2;
+			}
+#endif
+		}
 	// debugout << "Young-projected rhs constructed" << std::endl;
 	// rhstree.print_recursive_treeform(debugout, rhstree.begin());
 
@@ -255,31 +253,30 @@ Algorithm::result_t decompose::apply(iterator& it)
 					}
 				}
 			if(!found_in_basis) {
-//				txtout << "rhs contains a term not present in the basis" << std::endl;
+				//				txtout << "rhs contains a term not present in the basis" << std::endl;
 				return result_t::l_error;
 				}
 			++rhssumit;
 			}
-		}
-	else {
+		} else {
 		// only one term in the rhs
-		 if(rhsit->is_zero()==false) {
-			  bool found_in_basis=false;
-			  multiplier_t rhsmult=*rhsit->multiplier;
-			  one(rhsit->multiplier);
-			  for(unsigned int i=0; i<terms_from_yp.size(); ++i) {
-					if(tr.equal_subtree(terms_from_yp[i].begin(), rhsit)) {
-						 rhs[i]=rhsmult;
-						 found_in_basis=true;
-						 break;
-						 }
+		if(rhsit->is_zero()==false) {
+			bool found_in_basis=false;
+			multiplier_t rhsmult=*rhsit->multiplier;
+			one(rhsit->multiplier);
+			for(unsigned int i=0; i<terms_from_yp.size(); ++i) {
+				if(tr.equal_subtree(terms_from_yp[i].begin(), rhsit)) {
+					rhs[i]=rhsmult;
+					found_in_basis=true;
+					break;
 					}
-			  if(!found_in_basis) {
-//					txtout << "rhs contains a term not present in the basis" << std::endl;
-					return result_t::l_error;
-					}
-			  }
-		 }
+				}
+			if(!found_in_basis) {
+				//					txtout << "rhs contains a term not present in the basis" << std::endl;
+				return result_t::l_error;
+				}
+			}
+		}
 
 	// debugout << "linear problem constructed" << std::endl;
 	// for(unsigned int i=0; i<coefficient_matrix.size(); ++i) {
@@ -287,38 +284,36 @@ Algorithm::result_t decompose::apply(iterator& it)
 	// 		debugout << coefficient_matrix[i][j] << " ";
 	// 	debugout << " " << rhs[i] << std::endl;
 	// 	}
-	// Now decompose 
+	// Now decompose
 
 	if(rhsit->is_zero()) {
-		 // debugout << "rhs is identically zero" << std::endl;
-		 Ex res;
-		 res.set_head(str_node("\\comma"));
-		 for(unsigned int i=0; i<coefficient_matrix[0].size(); ++i) 
-			  res.append_child(res.begin(), str_node("1"))->multiplier=rat_set.insert(0).first;
-		 tr.replace(it, res.begin());
-		 }
-	else {
-		 // debugout << "doing gaussian elimination" << std::endl;
-		 if(linear::gaussian_elimination_inplace(coefficient_matrix, rhs)) {
-			 // for(unsigned int i=0; i<coefficient_matrix.size(); ++i) {
-			 // 		for(unsigned int j=0; j<coefficient_matrix[i].size(); ++j)
-			 // 			 debugout << coefficient_matrix[i][j] << " ";
-			 // 		debugout << " = " << rhs[i] << std::endl;
-			 // 		}
-			  
-			  Ex res;
-			  res.set_head(str_node("\\comma"));
-			  for(unsigned int i=0; i<coefficient_matrix[0].size(); ++i) 
-					res.append_child(res.begin(), str_node("1"))->multiplier=rat_set.insert(rhs[i]).first;
-			  it=tr.replace(it, res.begin());
-			  }
-		 else {
-//			  txtout << "decomposing impossible" << std::endl;
-//		tr.print_recursive_treeform(txtout, it);
-			  return result_t::l_error;
-			  }
-		 }
-	
+		// debugout << "rhs is identically zero" << std::endl;
+		Ex res;
+		res.set_head(str_node("\\comma"));
+		for(unsigned int i=0; i<coefficient_matrix[0].size(); ++i)
+			res.append_child(res.begin(), str_node("1"))->multiplier=rat_set.insert(0).first;
+		tr.replace(it, res.begin());
+		} else {
+		// debugout << "doing gaussian elimination" << std::endl;
+		if(linear::gaussian_elimination_inplace(coefficient_matrix, rhs)) {
+			// for(unsigned int i=0; i<coefficient_matrix.size(); ++i) {
+			// 		for(unsigned int j=0; j<coefficient_matrix[i].size(); ++j)
+			// 			 debugout << coefficient_matrix[i][j] << " ";
+			// 		debugout << " = " << rhs[i] << std::endl;
+			// 		}
+
+			Ex res;
+			res.set_head(str_node("\\comma"));
+			for(unsigned int i=0; i<coefficient_matrix[0].size(); ++i)
+				res.append_child(res.begin(), str_node("1"))->multiplier=rat_set.insert(rhs[i]).first;
+			it=tr.replace(it, res.begin());
+			} else {
+			//			  txtout << "decomposing impossible" << std::endl;
+			//		tr.print_recursive_treeform(txtout, it);
+			return result_t::l_error;
+			}
+		}
+
 
 	return result_t::l_applied;
 	}

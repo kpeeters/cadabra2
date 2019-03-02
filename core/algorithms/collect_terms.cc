@@ -34,7 +34,7 @@ void collect_terms::remove_zeroed_terms(sibling_iterator from, sibling_iterator 
 	// Remove all terms which have zero multiplier.
 	sibling_iterator one=from;
 	while(one!=to) {
-		if(*one->multiplier==0) 
+		if(*one->multiplier==0)
 			one=tr.erase(one);
 		else if(*one->name=="\\sum" && *one->multiplier!=1) {
 			sibling_iterator oneit=tr.begin(one);
@@ -44,8 +44,7 @@ void collect_terms::remove_zeroed_terms(sibling_iterator from, sibling_iterator 
 				}
 			one->multiplier=rat_set.insert(1).first;
 			++one;
-			}
-		else ++one;
+			} else ++one;
 		}
 	}
 
@@ -65,9 +64,8 @@ Algorithm::result_t collect_terms::apply(iterator& st)
 		st=tr.erase(st);
 		// We may have to propagate the multiplier up the tree to make it consistent.
 		pushup_multiplier(st);
-		}
-	else if(tr.number_of_children(st)==0) {
-//		zero(st->multiplier);
+		} else if(tr.number_of_children(st)==0) {
+		//		zero(st->multiplier);
 		node_zero(st);
 		}
 	return res;
@@ -92,13 +90,12 @@ Algorithm::result_t collect_terms::collect_from_hash_map()
 					++tmp;
 					term_hash.erase(thisbin2);
 					thisbin2=tmp;
-					}
-				else ++thisbin2;
+					} else ++thisbin2;
 				}
 			++thisbin1;
 			}
 		ht=thisbin1;
 		}
-		
+
 	return res;
 	}

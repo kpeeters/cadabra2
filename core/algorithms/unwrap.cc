@@ -54,7 +54,7 @@ bool unwrap::can_apply(iterator it)
 			}
 		return true;
 		}
-	
+
 	return false;
 	}
 
@@ -65,25 +65,25 @@ bool unwrap::can_apply(iterator it)
 // ...
 //
 // Should also work for brackets, like
-// 
+//
 //    \poisson( A )( B ) -> 0
 //
 // if either A or B has vanishing poisson bracket, and
 //
 //    \poisson( N1 D1 )( N2 D2 ) -> N1 N2 \poisson( D1 )( D2 ).
 //
-// So all "derivatives" 
+// So all "derivatives"
 
-Algorithm::result_t unwrap::apply(iterator& it) 
+Algorithm::result_t unwrap::apply(iterator& it)
 	{
-#ifdef DEBUG	
+#ifdef DEBUG
 	std::cerr << "Applying unwrap at " << Ex(it) << std::endl;
 #endif
 	result_t res = result_t::l_no_action;
 
 	bool is_accent=kernel.properties.get<Accent>(it);
 	bool is_diracbar=kernel.properties.get<DiracBar>(it);
-	
+
 	// Wrap the 'derivative' in a product node so we can take
 	// child nodes out and stuff them inside the product.
 
@@ -94,7 +94,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 	sibling_iterator acton=tr.begin(old_it);
 	while(acton!=tr.end(old_it)) {
 		// Only look at child nodes which are not indices.
-		if(acton->is_index()==false) { 
+		if(acton->is_index()==false) {
 			sibling_iterator derarg=acton;
 			++acton; // don't use this anymore this loop
 
@@ -103,7 +103,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				continue; // FIXME: Don't know how to handle this yet.
 				}
 
-#ifdef DEBUG			
+#ifdef DEBUG
 			std::cerr << "doing " << *derarg->name << std::endl;
 #endif
 
@@ -111,9 +111,9 @@ Algorithm::result_t unwrap::apply(iterator& it)
 			// into one, so we can handle everything using the same code.
 			if(*derarg->name!="\\prod")
 				derarg=tr.wrap(derarg, str_node("\\prod"));
-			
+
 			// Iterate over all arguments of the product sitting inside
-			// the derivative (but see the comment above). 
+			// the derivative (but see the comment above).
 			sibling_iterator factor=tr.begin(derarg);
 			while(factor!=tr.end(derarg)) {
 				// std::cerr << "checking " << Ex(factor) << std::endl;
@@ -121,7 +121,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 				sibling_iterator nxt=factor;
 				++nxt;
 				bool move_out=true;
-				
+
 				// An object pattern like 'A??' should always be assumed to have
 				// dependence, because we don't yet know what it will match.
 				if(move_out) {
@@ -130,17 +130,17 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					}
 
 				if(move_out) {
-					if(is_diracbar) 
+					if(is_diracbar)
 						if(kernel.properties.get<Spinor>(factor) || kernel.properties.get<GammaMatrix>(factor))
 							move_out=false;
 					}
-				
+
 				// Then figure out whether there is implicit dependence on the operator.
 				// or on the coordinate.
 				if(move_out) {
 					const DependsBase *dep=kernel.properties.get_composite<DependsBase>(factor);
 					if(dep!=0) {
-#ifdef DEBUG						
+#ifdef DEBUG
 						std::cerr << *factor->name << " acted on by " << *old_it->name << "; depends" << std::endl;
 #endif
 						Ex deps=dep->dependencies(kernel, factor /* it */);
@@ -152,8 +152,7 @@ Algorithm::result_t unwrap::apply(iterator& it)
 							if(old_it->name == depobjs->name) {
 								move_out=false;
 								break;
-								}
-							else {
+								} else {
 								// compare all indices
 #ifdef DEBUG
 								std::cerr << "comparing indices" << std::endl;
@@ -180,47 +179,47 @@ Algorithm::result_t unwrap::apply(iterator& it)
 							}
 						}
 					}
-				
+
 				// Finally, there may also be explicit dependence.
 				if(move_out) {
 					// FIXME: This certainly does not handle Y(a,b) correctly
-               sibling_iterator chldit=tr.begin(factor);
-               while(chldit!=tr.end(factor)) {
-                  if(chldit->is_index()==false) {
-                     sibling_iterator indit=tr.begin(old_it);
-                     while(indit!=tr.end(old_it)) {
-                        if(subtree_exact_equal(&kernel.properties, chldit, indit, 0)) {
-                           move_out=false;
-                           break;
-                           }
-                        ++indit;
-                        }
-                     if(!move_out) break;
-                     }
-                  ++chldit;
-                  }
+					sibling_iterator chldit=tr.begin(factor);
+					while(chldit!=tr.end(factor)) {
+						if(chldit->is_index()==false) {
+							sibling_iterator indit=tr.begin(old_it);
+							while(indit!=tr.end(old_it)) {
+								if(subtree_exact_equal(&kernel.properties, chldit, indit, 0)) {
+									move_out=false;
+									break;
+									}
+								++indit;
+								}
+							if(!move_out) break;
+							}
+						++chldit;
+						}
 					}
 
 				// If no dependence found, move this child out of the derivative.
-				if(move_out) { 
-               // FIXME: Does not handle subtree-compare properly, and does not look at the
+				if(move_out) {
+					// FIXME: Does not handle subtree-compare properly, and does not look at the
 					// commutativity property of the index wrt. the derivative is taken.
 					int sign=1;
 					if(factor!=tr.begin(derarg)) {
 						Ex_comparator compare(kernel.properties);
 						sign=compare.can_swap(tr.begin(derarg),factor,Ex_comparator::match_t::no_match_less);
 						}
-					
+
 					res=result_t::l_applied;
 					tr.move_before(old_it, factor);
 					multiply(it->multiplier, sign);
 					}
-				
+
 				factor=nxt;
 				}
 
 			// std::cerr << "after step " << Ex(it) << std::endl;
-			
+
 			// All factors in this argument have been handled now, let's see what's left.
 			unsigned int derarg_num_chldr=tr.number_of_children(derarg);
 			if(derarg_num_chldr==0) {
@@ -229,37 +228,33 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					zero(it->multiplier);
 					break; // we can stop now, the entire expression is zero.
 					}
-				}
-			else {
+				} else {
 				all_arguments_moved_out=false;
 				if(derarg_num_chldr==1) {
-					 derarg=tr.flatten_and_erase(derarg);
+					derarg=tr.flatten_and_erase(derarg);
 					}
 				}
-			}
-		else ++acton;
+			} else ++acton;
 		}
 
 
-	// All non-index arguments have now been handled. 
+	// All non-index arguments have now been handled.
 	if(all_arguments_moved_out && is_accent) {
 		zero(it->multiplier);
-		}
-	else if(*it->multiplier!=0) {
+		} else if(*it->multiplier!=0) {
 		if(tr.number_of_children(it)==1) { // nothing was moved out
 			tr.flatten(it);
 			it=tr.erase(it);
-			}
-		else {
-			 // Moving factors around has potentially led to a top-level product
-			 // which contains children with non-unit multiplier.
+			} else {
+			// Moving factors around has potentially led to a top-level product
+			// which contains children with non-unit multiplier.
 			cleanup_dispatch(kernel, tr, it);
-			
+
 			// If the derivative acts on another derivative, we need
 			// to un-nest the argument of the outer (and this situation
 			// can only happen if there is only one non-index child node)
 			iterator itarg=tr.begin(it);
-			while(itarg->is_index()) 
+			while(itarg->is_index())
 				++itarg;
 
 			cleanup_dispatch(kernel, tr, itarg);

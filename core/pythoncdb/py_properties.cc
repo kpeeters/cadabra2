@@ -53,22 +53,21 @@
 #include "properties/WeylTensor.hh"
 
 
-namespace cadabra
-	{
+namespace cadabra {
 	namespace py = pybind11;
 
 	template<>
 	std::string Property<LaTeXForm>::latex_() const
-	{
-	std::ostringstream str;
-	str << "\\text{Attached property ";
-	prop->latex(str);
-	std::string bare = Ex_as_str(for_obj);
-	bare = std::regex_replace(bare, std::regex(R"(\\)"), "$\\backslash{}$}");
-	bare = std::regex_replace(bare, std::regex(R"(#)"), "\\#");
-	str << " to {\\tt " + bare + "}.";
-	return str.str();
-	}
+		{
+		std::ostringstream str;
+		str << "\\text{Attached property ";
+		prop->latex(str);
+		std::string bare = Ex_as_str(for_obj);
+		bare = std::regex_replace(bare, std::regex(R"(\\)"), "$\\backslash{}$}");
+		bare = std::regex_replace(bare, std::regex(R"(#)"), "\\#");
+		str << " to {\\tt " + bare + "}.";
+		return str.str();
+		}
 
 
 	pybind11::list list_properties()
@@ -112,8 +111,7 @@ namespace cadabra
 				res += (*it).first->name();
 				ret.append(res);
 				res = "";
-				}
-			else {
+				} else {
 				res += ", ";
 				}
 			}

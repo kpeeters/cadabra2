@@ -18,7 +18,7 @@ std::string InverseMetric::name() const
 	return "InverseMetric";
 	}
 
-bool InverseMetric::parse(Kernel&, keyval_t& keyvals) 
+bool InverseMetric::parse(Kernel&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator kv=keyvals.find("signature");
 	signature=1;
@@ -29,6 +29,6 @@ bool InverseMetric::parse(Kernel&, keyval_t& keyvals)
 
 void InverseMetric::validate(const Kernel&, const Ex& tr) const
 	{
-	if(tr.number_of_children(tr.begin())!=2) 
+	if(tr.number_of_children(tr.begin())!=2)
 		throw ArgumentException("InverseMetric: needs exactly 2 indices.");
 	}

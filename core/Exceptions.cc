@@ -7,13 +7,13 @@ CadabraException::CadabraException(std::string s)
 	{
 	}
 
-ParseException::ParseException(std::string s) 
-	: CadabraException(s) 
+ParseException::ParseException(std::string s)
+	: CadabraException(s)
 	{
 	}
 
-ConsistencyException::ConsistencyException(std::string s) 
-	: CadabraException(s) 
+ConsistencyException::ConsistencyException(std::string s)
+	: CadabraException(s)
 	{
 	}
 

@@ -1,21 +1,21 @@
-/* 
+/*
 
-	Cadabra: a field-theory motivated computer algebra system.
-	Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>
+Cadabra: a field-theory motivated computer algebra system.
+Copyright (C) 2001-2014  Kasper Peeters <kasper.peeters@phi-sci.com>
 
-   This program is free software: you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation, either version 3 of the
-   License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
 
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
- 
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 */
 
 #pragma once
@@ -45,24 +45,25 @@ class preprocessor {
 		const static unsigned char  orders[];
 
 		enum order_labels { order_factorial=0,
-								  order_pow,
-								  order_frac,
-								  order_prod,
-								  order_wedge,
-								  order_minus,
-								  order_plus,
-								  order_dot,
-								  order_equals,
-								  order_unequals,
-								  order_less_than,
-								  order_greater_than,
-								  order_conditions,
-								  order_arrow,
-								  order_set_option,
-								  order_colon,
-								  order_comma,
-								  order_tilde };
-		// FIXME: we really need a way to associate multiple characters to a single operator, 
+		                    order_pow,
+		                    order_frac,
+		                    order_prod,
+		                    order_wedge,
+		                    order_minus,
+		                    order_plus,
+		                    order_dot,
+		                    order_equals,
+		                    order_unequals,
+		                    order_less_than,
+		                    order_greater_than,
+		                    order_conditions,
+		                    order_arrow,
+		                    order_set_option,
+		                    order_colon,
+		                    order_comma,
+		                    order_tilde
+		                  	};
+		// FIXME: we really need a way to associate multiple characters to a single operator,
 		// since that would allow for ".." (sequence), ":=" (define), ">=" and so on. The current
 		// '.' is a hack and is treated as such: when it occurs there is an additional check for
 		// a followup '.'.
@@ -108,10 +109,10 @@ class preprocessor {
 				std::vector<std::string> parts;
 				unsigned int             bracket;
 				bool                     is_index; // whether the bracket was prefixed with ^ or _
-		};
+			};
 		mutable accu_t               cur;
 		mutable std::vector<accu_t>  accus;
-};
+	};
 
 std::ostream& operator<<(std::ostream&, const preprocessor&);
 std::istream& operator>>(std::istream&, preprocessor&);

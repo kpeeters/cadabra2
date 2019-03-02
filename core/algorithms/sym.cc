@@ -14,7 +14,7 @@ sym::sym(const Kernel& k, Ex& tr, Ex& objs, bool s)
 
 bool sym::can_apply(iterator it)
 	{
-	if(*it->name!="\\prod") 
+	if(*it->name!="\\prod")
 		if(!is_single_term(it))
 			return false;
 
@@ -29,10 +29,10 @@ Algorithm::result_t sym::apply(iterator& it)
 	{
 	prod_wrap_single_term(it);
 	result_t res=doit(it,sign);
-//	if(res==result_t::l_applied)
-//		it=tr.parent(st);
+	//	if(res==result_t::l_applied)
+	//		it=tr.parent(st);
 
-//IS DOIT not doing that right?
+	//IS DOIT not doing that right?
 
 	return res;
 	}
@@ -46,37 +46,36 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 	sibling_iterator fnd=objects.end(objects.begin());
 	raw_ints.clear();
 	raw_ints.block_length=0;
-	
+
 	for(unsigned int i=0; i<argloc_2_treeloc.size(); ++i)
 		raw_ints.original.push_back(i);
 	while(fst!=fnd) {
 		if(*(fst->name)=="\\comma") {
 			if(raw_ints.block_length==0) raw_ints.block_length=tr.number_of_children(fst);
 			else                         assert(raw_ints.block_length==tr.number_of_children(fst));
-			}
-		else if(fst->name->size()>0 || (fst->name->size()==0 && tr.number_of_children(fst)==1)) {
+			} else if(fst->name->size()>0 || (fst->name->size()==0 && tr.number_of_children(fst)==1)) {
 			if(raw_ints.block_length==0) raw_ints.block_length=1;
 			else                         assert(raw_ints.block_length==1);
 			}
 		++fst;
-		}	
+		}
 	long start_=-1, end_=-1;
 
 
-// FIXME: what was this v1 feature supposed to do?
-//
-//	sibling_iterator other_args=args_begin();
-//	++other_args;
-//	while(other_args!=args_end()) {
-//		if(*(other_args->name)=="\\setoption") {
-//			if(*tr.child(other_args,0)->name=="Start")
-//				start_=to_long(*tr.child(other_args,1)->multiplier);
-//			else if(*tr.child(other_args,0)->name=="End")
-//				end_=to_long(*tr.child(other_args,1)->multiplier);
-//			}
-//		++other_args;
-//		}
-	
+	// FIXME: what was this v1 feature supposed to do?
+	//
+	//	sibling_iterator other_args=args_begin();
+	//	++other_args;
+	//	while(other_args!=args_end()) {
+	//		if(*(other_args->name)=="\\setoption") {
+	//			if(*tr.child(other_args,0)->name=="Start")
+	//				start_=to_long(*tr.child(other_args,1)->multiplier);
+	//			else if(*tr.child(other_args,0)->name=="End")
+	//				end_=to_long(*tr.child(other_args,1)->multiplier);
+	//			}
+	//		++other_args;
+	//		}
+
 	raw_ints.set_unit_sublengths();
 	// Sort within the blocks, if any
 	if(raw_ints.block_length!=1) {
@@ -89,34 +88,34 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 			to+=raw_ints.block_length;
 			}
 		}
-//	txtout << raw_ints.original.size() << " original size" << std::endl;
-//	txtout << raw_ints.block_length << " block length" << std::endl;
+	//	txtout << raw_ints.original.size() << " original size" << std::endl;
+	//	txtout << raw_ints.block_length << " block length" << std::endl;
 
 	// Add output asym ranges.
 	// FIXME: v2: this is probably not very useful for the average user.
-//	if(number_of_args()>1) {
-//		sibling_iterator ai=args_begin();
-//		++ai;
-//		while(ai!=args_end()) {
-//			if(*ai->name=="\\comma") {
-//				sibling_iterator cst=tr.begin(ai);
-//				combin::range_t asymrange;
-//				while(cst!=tr.end(ai)) {
-//					asymrange.push_back(to_long(*cst->multiplier));
-//					++cst;
-//					}
-//				raw_ints.input_asym.push_back(asymrange);
-//				}
-//			++ai;
-//			}
-//		}
+	//	if(number_of_args()>1) {
+	//		sibling_iterator ai=args_begin();
+	//		++ai;
+	//		while(ai!=args_end()) {
+	//			if(*ai->name=="\\comma") {
+	//				sibling_iterator cst=tr.begin(ai);
+	//				combin::range_t asymrange;
+	//				while(cst!=tr.end(ai)) {
+	//					asymrange.push_back(to_long(*cst->multiplier));
+	//					++cst;
+	//					}
+	//				raw_ints.input_asym.push_back(asymrange);
+	//				}
+	//			++ai;
+	//			}
+	//		}
 
 	raw_ints.permute(start_, end_);
 
 #ifdef DEBUG
 	std::cerr << "Computed all permutations: " << raw_ints.size() << std::endl;
 #endif
-	
+
 	// Build replacement tree.
 	Ex rep;
 	sibling_iterator top=rep.set_head(str_node("\\sum"));
@@ -126,12 +125,13 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 		Ex copytree(it);// CORRECT?
 		copytree.begin()->fl.bracket=str_node::b_none;
 		copytree.begin()->fl.parent_rel=str_node::p_none;
-		
+
 		std::map<iterator, iterator, Ex::iterator_base_less> replacement_map;
-		
+
 		for(unsigned int j=0; j<raw_ints[i].size(); ++j) {
 			iterator repl=copytree.begin(), orig=it; // CORRECT?
-			++repl; ++orig;
+			++repl;
+			++orig;
 			for(unsigned int k=0; k<argloc_2_treeloc[raw_ints[i][j]]; ++k)
 				++orig;
 			for(unsigned int k=0; k<argloc_2_treeloc[raw_ints.original[j]]; ++k)
@@ -143,7 +143,7 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 			//
 			//   A_{a b} B_{c};
 			//   @sym!(%){A_{a b}, B_{c}};
-			// 
+			//
 			// so we store iterators first.
 
 			if((*orig->name).size()==0)
@@ -168,7 +168,7 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 		// Some final multiplier stuff and cleanup
 
 		multiply(copytree.begin()->multiplier, 1/multiplier_t(raw_ints.total_permutations()));
-//		multiply(copytree.begin()->multiplier, *st->multiplier);
+		//		multiply(copytree.begin()->multiplier, *st->multiplier);
 		if(sign)
 			multiply(copytree.begin()->multiplier, raw_ints.ordersign(i));
 
@@ -183,14 +183,14 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 	rep.erase(dummy);
 
 	// show replacement tree
-//	txtout << "replacement : " << std::endl;
-//	eo.print_infix(rep.begin());
-//	txtout << std::endl;
+	//	txtout << "replacement : " << std::endl;
+	//	eo.print_infix(rep.begin());
+	//	txtout << std::endl;
 
 	it=tr.replace(it, rep.begin());
-//	if(*(tr.parent(reploc)->name)=="\\sum") {
-//		tr.flatten(reploc);
-//		reploc=tr.erase(reploc);
-//		}
+	//	if(*(tr.parent(reploc)->name)=="\\sum") {
+	//		tr.flatten(reploc);
+	//		reploc=tr.erase(reploc);
+	//		}
 	return result_t::l_applied;
 	}

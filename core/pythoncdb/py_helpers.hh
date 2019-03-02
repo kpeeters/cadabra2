@@ -3,8 +3,7 @@
 #include <pybind11/pybind11.h>
 #include <memory>
 
-namespace cadabra
-	{
+namespace cadabra {
 
 	pybind11::object get_locals();
 	pybind11::object get_globals();

@@ -11,10 +11,10 @@ factor_out::factor_out(const Kernel& k, Ex& e, Ex& args, bool right)
 	: Algorithm(k, e), to_right(right)
 	{
 	cadabra::do_list(args, args.begin(), [&](Ex::iterator arg) {
-			to_factor_out.push_back(Ex(arg));
-			return true;
-			}
-		);
+		to_factor_out.push_back(Ex(arg));
+		return true;
+		}
+	                );
 	}
 
 /// Check if the expression is a sum with more than one term
@@ -79,8 +79,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 						}
 					}
 				} while(fac!=tr.begin(prod));
-			}
-		else {
+			} else {
 			auto fac=tr.begin(prod);
 			while(fac!=tr.end(prod)) {
 				auto next=fac;
@@ -101,15 +100,15 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				fac=next;
 				}
 			}
-		
+
 		tr.erase(dummy);
 		if(tr.number_of_children(prod)==0)
 			tr.append_child(prod, str_node("1"));
 
 		// std::cerr << "product after factoring out " << Ex(prod) << std::endl;
 
-		if(collector.number_of_children(collector.begin())!=0) { 
-			// The stuff factored out of this term is in 'collector'. See if we have 
+		if(collector.number_of_children(collector.begin())!=0) {
+			// The stuff factored out of this term is in 'collector'. See if we have
 			// factored out that thing before. Because we may not always have collected
 			// factors in the same order (the original expression may not have had
 			// its product sorted), we first sort the collector product.
@@ -122,7 +121,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 				}
 			multiply(prod->multiplier, *coltop->multiplier);
 			one(coltop->multiplier);
-			
+
 			// Scan through the things factored out so far.
 			bool found=false;
 			for(auto& nt: new_terms) {
@@ -142,8 +141,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 
 			// All info is now in new_terms; can remove the original.
 			tr.erase(prod);
-			}
-		else {
+			} else {
 			prod_unwrap_single_term(prod);
 			}
 		term=next_term;
@@ -163,8 +161,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 					tr.prepend_child(prod, iterator(ins));
 					--ins;
 					}
-				}
-			else {
+				} else {
 				auto ins = tr.begin(top);
 				while(ins!=tr.end(top)) {
 					tr.append_child(prod, iterator(ins));
@@ -172,25 +169,24 @@ Algorithm::result_t factor_out::apply(iterator& it)
 					}
 				}
 			multiply(prod->multiplier, *(nt.second[0].begin()->multiplier));
-// FIXME: append_children has a BUG! Messes up the tree. But it is needed to
-// handle terms where the sub-factor is not a simple element.
-//			tr.append_children(prod, nt.second[0].begin(top), nt.second[0].end(top));
+			// FIXME: append_children has a BUG! Messes up the tree. But it is needed to
+			// handle terms where the sub-factor is not a simple element.
+			//			tr.append_children(prod, nt.second[0].begin(top), nt.second[0].end(top));
 
 			cleanup_dispatch(kernel, tr, prod);
-			}
-		else {
+			} else {
 			iterator sum;
 			if(to_right)
 				sum = tr.prepend_child(prod, str_node("\\sum"));
 			else
 				sum = tr.append_child(prod, str_node("\\sum"));
-			for(auto& term: nt.second) { 
+			for(auto& term: nt.second) {
 				auto tmp = tr.append_child(sum, term.begin());
 				cleanup_dispatch(kernel, tr, tmp);
 				}
 			}
 		}
-	
+
 	// std::cerr << "end of factor_out: \n" << Ex(it) << std::endl;
 
 	return result;

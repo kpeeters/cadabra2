@@ -24,8 +24,8 @@ bool GammaMatrix::parse(Kernel& kernel, keyval_t& keyvals)
 
 	ImplicitIndex::parse(kernel, keyvals);
 
-//	kv=keyvals.find("delta");
-//	if(kv!=keyvals.end()) delta=Ex(kv->second);
-//
+	//	kv=keyvals.find("delta");
+	//	if(kv!=keyvals.end()) delta=Ex(kv->second);
+	//
 	return true;
 	}

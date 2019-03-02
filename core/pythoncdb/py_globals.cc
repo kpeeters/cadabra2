@@ -1,7 +1,6 @@
 #include "py_globals.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 	bool post_process_enabled = true;
 
 	}

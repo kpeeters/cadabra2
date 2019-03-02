@@ -16,7 +16,7 @@ namespace cadabra {
 	/// \ingroup files
 	/// As above, but for a single line; for private use only.
 
-	std::string convert_line(const std::string&, std::string& lhs, std::string& rhs, std::string& op, std::string& indent);	
+	std::string convert_line(const std::string&, std::string& lhs, std::string& rhs, std::string& op, std::string& indent);
 
 	/// \ingroup files
 	/// Convert a Cadabra notebook file to pure Python. This gets
@@ -24,4 +24,4 @@ namespace cadabra {
 	/// users, and at install time for all system-supplied packages.
 
 	std::string cnb2python(const std::string&);
-}
+	}

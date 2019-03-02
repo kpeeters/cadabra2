@@ -17,10 +17,10 @@ bool Integer::parse(Kernel& kernel, keyval_t& keyvals)
 	if(kv!=keyvals.end()) {
 		from=Ex(Ex::child(kv->second,0));
 		to  =Ex(Ex::child(kv->second,1));
-//	tr.subtree(from, tr.child(seq,0), tr.child(seq,1));
-//	tr.subtree(to,   tr.child(seq,1), tr.end(seq));
-//	from=to_long(*(tr.child(seq,0)->multiplier));
-//	to  =to_long(*(tr.child(seq,1)->multiplier));
+		//	tr.subtree(from, tr.child(seq,0), tr.child(seq,1));
+		//	tr.subtree(to,   tr.child(seq,1), tr.end(seq));
+		//	from=to_long(*(tr.child(seq,0)->multiplier));
+		//	to  =to_long(*(tr.child(seq,1)->multiplier));
 
 		Ex::iterator sm=difference.set_head(str_node("\\sum"));
 		difference.append_child(sm,to.begin())->fl.bracket=str_node::b_round;
@@ -34,16 +34,15 @@ bool Integer::parse(Kernel& kernel, keyval_t& keyvals)
 			if(*sib->name=="\\sum") {
 				difference.flatten(sib);
 				sib=difference.erase(sib);
-				}
-			else ++sib;
+				} else ++sib;
 			}
 
 		collect_terms ct(kernel, difference);
 		ct.apply(sm);
 		}
 
-//	Ex::iterator top=difference.begin();
-//	cleanup_dispatch(kernel, difference, top);
+	//	Ex::iterator top=difference.begin();
+	//	cleanup_dispatch(kernel, difference, top);
 
 	return true;
 	}
@@ -52,7 +51,7 @@ void Integer::display(std::ostream& str) const
 	{
 	str << "Integer";
 	if(from.begin()!=from.end()) {
-		str << "(" << *(from.begin()->multiplier) << ".." 
-			 << *(to.begin()->multiplier) << ")";
+		str << "(" << *(from.begin()->multiplier) << ".."
+		    << *(to.begin()->multiplier) << ")";
 		}
 	}

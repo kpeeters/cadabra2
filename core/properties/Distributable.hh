@@ -9,6 +9,6 @@ namespace cadabra {
 		public:
 			virtual ~Distributable() {};
 			virtual std::string name() const;
-	};
+		};
 
-}
+	}

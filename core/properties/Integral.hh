@@ -10,8 +10,8 @@
 class Integral : public property {
 	public:
 		virtual ~Integral() {};
-		
+
 		virtual std::string name() const;
 		virtual bool        parse(const Properties&, keyval_t& keyvals) override;
 		virtual void        display(std::ostream&) const;
-};
+	};

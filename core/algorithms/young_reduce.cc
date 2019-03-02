@@ -15,35 +15,34 @@ using namespace cadabra;
 
 
 
-struct get_children_iterators
-{
-	using iterator = Ex::iterator;
-	using sibling_iterator = Ex::sibling_iterator;
+struct get_children_iterators {
+		using iterator = Ex::iterator;
+		using sibling_iterator = Ex::sibling_iterator;
 
-	get_children_iterators(Ex& ex, Ex::iterator it)
-	{
-		for (sibling_iterator sib = ex.child(it, 0); ex.is_valid(sib); ++sib)
-			its.push_back(sib);
-	}
+		get_children_iterators(Ex& ex, Ex::iterator it)
+			{
+			for (sibling_iterator sib = ex.child(it, 0); ex.is_valid(sib); ++sib)
+				its.push_back(sib);
+			}
 
-	std::vector<iterator>::iterator begin()
-	{
-		return its.begin();
-	}
-	std::vector<iterator>::iterator end()
-	{
-		return its.end();
-	}
+		std::vector<iterator>::iterator begin()
+			{
+			return its.begin();
+			}
+		std::vector<iterator>::iterator end()
+			{
+			return its.end();
+			}
 
-private:
-	std::vector<iterator> its;
-};
+	private:
+		std::vector<iterator> its;
+	};
 
 multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
-{
+	{
 	if (num.begin().number_of_children() != den.begin().number_of_children()) {
 		return 0;
-	}
+		}
 
 	multiplier_t factor = *(num.child(num.begin(), 0)->multiplier) / *(den.child(den.begin(), 0)->multiplier);
 	for (auto it = num.child(num.begin(), 0), jt = den.child(den.begin(), 0); num.is_valid(it) && den.is_valid(jt); ++it, ++jt) {
@@ -57,14 +56,13 @@ multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
 			multiplier_t result = *it->multiplier / *jt->multiplier;
 			if (factor != result) {
 				return 0;
+				}
+			} else {
+			return 0;
 			}
 		}
-		else {
-			return 0;
-		}
-	}
 	return factor;
-}
+	}
 //
 //struct get_index_permutations
 //{
@@ -136,129 +134,126 @@ multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
 //};
 
 
-struct get_combinations
-{
-public:
-	struct iterator
-	{
+struct get_combinations {
 	public:
-		struct Combination
-		{
-			Ex ex;
-			std::vector<Ex::iterator> its;
-		};
+		struct iterator {
+			public:
+				struct Combination {
+					Ex ex;
+					std::vector<Ex::iterator> its;
+					};
 
-		using value = Combination;
-		using reference = const value&;
-		using pointer = const value*;
+				using value = Combination;
+				using reference = const value&;
+				using pointer = const value*;
 
-		bool operator == (const iterator& other)
-		{
-			return (n_terms == other.n_terms) && (v == other.v);
-		}
+				bool operator == (const iterator& other)
+					{
+					return (n_terms == other.n_terms) && (v == other.v);
+					}
 
-		bool operator != (const iterator& other)
-		{
-			return !(*this == other);
-		}
+				bool operator != (const iterator& other)
+					{
+					return !(*this == other);
+					}
 
-		iterator& operator ++ ()
-		{
-			// Check for end iterator
-			if (n_terms == 1)
-				return *this;
+				iterator& operator ++ ()
+					{
+					// Check for end iterator
+					if (n_terms == 1)
+						return *this;
 
-			if (!std::prev_permutation(v.begin(), v.end())) {
-				--n_terms;
-				v = std::vector<bool>(n_terms, false);
-				std::fill(v.begin(), v.begin() + n_terms, true);
+					if (!std::prev_permutation(v.begin(), v.end())) {
+						--n_terms;
+						v = std::vector<bool>(n_terms, false);
+						std::fill(v.begin(), v.begin() + n_terms, true);
+						}
+
+					construct_combination();
+					return *this;
+					}
+
+				iterator operator ++ (int)
+					{
+					iterator other = *this;
+					++(*this);
+					return other;
+					}
+
+				reference operator * () const
+					{
+					return combination;
+					}
+
+				pointer operator -> () const
+					{
+					return &combination;
+					}
+
+			private:
+				// Construct begin iterator
+				iterator(const std::vector<Ex::iterator>& its)
+					: its(its)
+					, n_terms(its.size())
+					, v(its.size(), true)
+					{
+					construct_combination();
+					}
+
+				// Construct end iterator
+				iterator(const std::vector<Ex::iterator>& its, bool)
+					: its(its)
+					, n_terms(1)
+					, v(1, true)
+					{
+
+					}
+
+				void construct_combination()
+					{
+					combination.ex = Ex("\\sum");
+
+					combination.its.clear();
+					for (size_t k = 0; k < v.size(); ++k) {
+						if (v[k]) {
+							combination.ex.append_child(combination.ex.begin(), its[k]);
+							combination.its.push_back(its[k]);
+							}
+						}
+					std::cerr << combination.ex;
+					}
+
+				friend struct get_combinations;
+				const std::vector<Ex::iterator>& its;
+				int n_terms;
+				std::vector<bool> v;
+				Combination combination;
+			};
+
+		get_combinations(const std::vector<Ex::iterator>& its)
+			: its(its)
+			{
+
 			}
 
-			construct_combination();
-			return *this;
-		}
+		iterator begin()
+			{
+			return iterator(its);
+			}
 
-		iterator operator ++ (int)
-		{
-			iterator other = *this;
-			++(*this);
-			return other;
-		}
-
-		reference operator * () const
-		{
-			return combination;
-		}
-
-		pointer operator -> () const
-		{
-			return &combination;
-		}
+		iterator end()
+			{
+			return iterator(its, false);
+			}
 
 	private:
-		// Construct begin iterator
-		iterator(const std::vector<Ex::iterator>& its)
-			: its(its)
-			, n_terms(its.size())
-			, v(its.size(), true)
-		{
-			construct_combination();
-		}
-
-		// Construct end iterator
-		iterator(const std::vector<Ex::iterator>& its, bool)
-			: its(its)
-			, n_terms(1)
-			, v(1, true)
-		{
-
-		}
-
-		void construct_combination()
-		{
-			combination.ex = Ex("\\sum");
-
-			combination.its.clear();
-			for (size_t k = 0; k < v.size(); ++k) {
-				if (v[k]) {
-					combination.ex.append_child(combination.ex.begin(), its[k]);
-					combination.its.push_back(its[k]);
-				}
-			}
-			std::cerr << combination.ex;
-		}
-
-		friend struct get_combinations;
 		const std::vector<Ex::iterator>& its;
-		int n_terms;
-		std::vector<bool> v;
-		Combination combination;
 	};
-
-	get_combinations(const std::vector<Ex::iterator>& its)
-		: its(its)
-	{
-
-	}
-
-	iterator begin()
-	{
-		return iterator(its);
-	}
-
-	iterator end()
-	{
-		return iterator(its, false);
-	}
-
-private:
-	const std::vector<Ex::iterator>& its;
-};
 
 
 
 std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
-{
+	{
 	std::vector<Ex> permutations;
 	if (*ex.begin()->name == "\\prod") {
 		std::vector<std::vector<Ex>> child_permutations;
@@ -266,7 +261,7 @@ std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
 		for (auto child : get_children_iterators(ex, ex.begin())) {
 			child_permutations.push_back(all_index_permutations(Ex(child), kernel));
 			its.push_back(child_permutations.back().begin());
-		}
+			}
 
 		if (its.empty())
 			return std::vector<Ex>();
@@ -281,10 +276,9 @@ std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
 			for (int i = its.size() - 1; (i > 0) && its[i] == child_permutations[i].end(); --i) {
 				its[i] = child_permutations[i].begin();
 				++its[i - 1];
+				}
 			}
-		}
-	}
-	else {
+		} else {
 		std::vector<Ex> indices;
 
 		for (auto child : get_children_iterators(ex, ex.begin()))
@@ -292,23 +286,27 @@ std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
 
 		ex.erase_children(ex.begin());
 
-		while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {return *lhs.begin()->name < *rhs.begin()->name; }));
-		
+		while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {
+		return *lhs.begin()->name < *rhs.begin()->name;
+			}));
+
 		do {
 			Ex cur = ex;
 			for (auto index : indices)
 				cur.append_child(cur.begin(), index.begin());
 			permutations.push_back(cur);
-		} while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {return *lhs.begin()->name < *rhs.begin()->name; }));
-	}
+			} while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {
+		return *lhs.begin()->name < *rhs.begin()->name;
+			}));
+		}
 
 	return permutations;
-}
+	}
 
 bool is_index_permutation(const Kernel& kernel, Ex::iterator lhs, Ex::iterator rhs);
 
 bool is_index_permutation(const Kernel& kernel, const Ex& lhs, const Ex& rhs)
-{
+	{
 	if (lhs.begin()->name == rhs.begin()->name) {
 		if (lhs.number_of_children(lhs.begin()) != rhs.number_of_children(rhs.begin()))
 			return false;
@@ -322,32 +320,30 @@ bool is_index_permutation(const Kernel& kernel, const Ex& lhs, const Ex& rhs)
 				lnames.push_back(*lit->name);
 				rnames.push_back(*rit->name);
 				++lit, ++rit;
-			}
+				}
 			std::sort(lnames.begin(), lnames.end());
 			std::sort(rnames.begin(), rnames.end());
 			return lnames == rnames;
-		}
-		else {
+			} else {
 			while (lhs.is_valid(lit) && rhs.is_valid(rit)) {
 				if (!is_index_permutation(kernel, lit, rit))
 					return false;
 				++lit, ++rit;
-			}
+				}
 			return true;
+			}
+		} else {
+		return false;
 		}
 	}
-	else {
-		return false;
-	}
-}
 
 bool is_index_permutation(const Kernel& kernel, Ex::iterator lhs, Ex::iterator rhs)
-{
+	{
 	return is_index_permutation(kernel, Ex(lhs), Ex(rhs));
-}
+	}
 
 Ex project(const Kernel& kernel, Ex ex)
-{
+	{
 	young_project_tensor ypt(kernel, ex, false);
 	ypt.apply_generic();
 
@@ -364,40 +360,40 @@ Ex project(const Kernel& kernel, Ex ex)
 	ss.apply_generic();
 
 	return ex;
-}
+	}
 
 std::vector<Ex::iterator> find_matching_terms(const Kernel& kernel, Ex& ex, Ex::iterator& it, const Ex& pattern)
-{
+	{
 	std::vector<Ex::iterator> its;
 
 	for (auto child : get_children_iterators(ex, it)) {
-		if (is_index_permutation(kernel, child, pattern.begin())) 
+		if (is_index_permutation(kernel, child, pattern.begin()))
 			its.push_back(child);
-	}
+		}
 
 	return its;
-}
+	}
 
 young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern, bool search_permutations)
 	: Algorithm(kernel, ex)
 	, search_permutations(search_permutations)
 	, pattern(pattern)
-{
+	{
 
-}
+	}
 
 bool young_reduce::can_apply(iterator it)
-{
+	{
 	return *it->name == "\\sum";
-}
+	}
 
 void young_reduce::cleanup(iterator& it)
-{
+	{
 	cleanup_dispatch(kernel, tr, it);
-}
+	}
 
 young_reduce::result_t young_reduce::apply(iterator& it)
-{
+	{
 	auto its = find_matching_terms(kernel, tr, it, pattern);
 
 	auto res = reduce(it, its);
@@ -407,10 +403,10 @@ young_reduce::result_t young_reduce::apply(iterator& it)
 	if (res != result_t::l_no_action)
 		cleanup(it);
 	return res;
-}
+	}
 
 young_reduce::result_t young_reduce::reduce(iterator& it, const std::vector<Ex::iterator>& its)
-{
+	{
 	for (auto combination : get_combinations(its)) {
 		Ex projected_combination = project(kernel, combination.ex);
 		if (projected_combination == 0) {
@@ -419,8 +415,7 @@ young_reduce::result_t young_reduce::reduce(iterator& it, const std::vector<Ex::
 			if (tr.number_of_children(it) == 0)
 				tr.append_child(it, str_node("0"));
 			return result_t::l_applied;
-		}
-		else {
+			} else {
 			for (auto& cur_it : its) {
 				Ex cur(cur_it);
 				Ex projected_cur = project(kernel, cur);
@@ -429,18 +424,18 @@ young_reduce::result_t young_reduce::reduce(iterator& it, const std::vector<Ex::
 					for (auto& old : combination.its) {
 						if (old != cur_it)
 							tr.erase(old);
-					}
+						}
 					multiply(cur_it->multiplier, factor);
 					return result_t::l_applied;
+					}
 				}
 			}
 		}
-	}
 	return result_t::l_no_action;
-}
+	}
 
 young_reduce::result_t young_reduce::permute(iterator& it, const std::vector<Ex::iterator>& its)
-{
+	{
 	for (const auto& combination : get_combinations(its)) {
 		Ex projected_combination = project(kernel, combination.ex);
 		for (const auto& permutation : all_index_permutations(its[0], kernel)) {
@@ -452,9 +447,9 @@ young_reduce::result_t young_reduce::permute(iterator& it, const std::vector<Ex:
 				iterator r = tr.append_child(it, permutation.begin());
 				multiply(r->multiplier, factor);
 				return result_t::l_applied;
+				}
 			}
 		}
-	}
 
 	return result_t::l_no_action;
-}
+	}

@@ -6,9 +6,9 @@
 namespace cadabra {
 
 	class Matrix : public ImplicitIndex, virtual public property {
-		public: 
+		public:
 			virtual ~Matrix() {};
 			virtual std::string name() const;
-	};
+		};
 
-}
+	}

@@ -29,8 +29,7 @@ Algorithm::result_t split_gamma::apply(iterator& it)
 	if(on_back) {
 		firstgam =work.append_child(prodnode, it);
 		secondgam=work.append_child(prodnode, *it);
-		}
-	else {
+		} else {
 		secondgam=work.append_child(prodnode, *it);
 		firstgam =work.append_child(prodnode, it);
 		}
@@ -38,24 +37,22 @@ Algorithm::result_t split_gamma::apply(iterator& it)
 	if(on_back) {
 		specind=work.end(firstgam);
 		--specind;
-		}
-	else specind=work.begin(firstgam);
+		} else specind=work.begin(firstgam);
 	work.append_child(secondgam, (iterator)(specind));
 	work.erase(specind);
-	
+
 	join_gamma jn(kernel, tr, true, true);
 	const GammaMatrix *gm1=kernel.properties.get<GammaMatrix>(it);
 	jn.gm1=gm1;
 	jn.apply(prodnode);
 
 	// Replace maximally-antisymmetric gamma with the product
-   // in which one gamma is back-split.
+	// in which one gamma is back-split.
 	iterator maxgam=work.begin(prodnode);
 	if(on_back) {
 		specind=work.end(maxgam);
 		--specind;
-		}
-	else specind=work.begin(maxgam);
+		} else specind=work.begin(maxgam);
 	iterator newprod=work.insert(maxgam, str_node("\\prod"));
 	sibling_iterator fr=maxgam, to=fr;
 	++to;
@@ -63,7 +60,7 @@ Algorithm::result_t split_gamma::apply(iterator& it)
 	iterator splitgam;
 	if(on_back) splitgam=work.append_child(newprod, *maxgam);
 	else        splitgam=work.insert(maxgam, *maxgam);
-	work.append_child(splitgam,(iterator)(specind)); 
+	work.append_child(splitgam,(iterator)(specind));
 	work.erase(specind);
 
 	// Flip signs on all other terms.

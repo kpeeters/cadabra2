@@ -8,7 +8,7 @@ DisplayBase::DisplayBase(const Kernel& k, const Ex& e)
 	{
 	}
 
-void DisplayBase::output(std::ostream& str) 
+void DisplayBase::output(std::ostream& str)
 	{
 	Ex::iterator it=tree.begin();
 	if(it==tree.end()) return;
@@ -16,7 +16,7 @@ void DisplayBase::output(std::ostream& str)
 	output(str, it);
 	}
 
-void DisplayBase::output(std::ostream& str, Ex::iterator it) 
+void DisplayBase::output(std::ostream& str, Ex::iterator it)
 	{
 	dispatch(str, it);
 	}

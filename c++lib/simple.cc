@@ -31,8 +31,8 @@ void test1()
 
 	kernel.inject_property(new cadabra::Coordinate(), kernel.ex_from_string("{r,t}"), 0);
 	kernel.inject_property(new cadabra::Indices(),    kernel.ex_from_string("{m,n}"),
-								  kernel.ex_from_string("values={t,r}, position=free"));
-	
+	                       kernel.ex_from_string("values={t,r}, position=free"));
+
 	auto ex = kernel.ex_from_string("A_{m} A^{m}");
 	auto rl = kernel.ex_from_string("A_{t} = 3 + a ");
 	cadabra::evaluate ev(kernel, *ex, *rl);
@@ -56,7 +56,7 @@ void test2()
 	// in the Cadabra notebook.
 
 	cadabra::Kernel kernel;
-	
+
 	auto ind1 = kernel.ex_from_string("{m,n,p,q}");
 	auto ind2 = kernel.ex_from_string("position=free");
 	kernel.inject_property(new cadabra::Indices(), ind1, ind2);

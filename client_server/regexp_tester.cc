@@ -18,12 +18,10 @@ int main(int argc, char **argv)
 			for(unsigned int i=0; i<res.size(); ++i) {
 				std::cout << i << ":\t |" << res[i] << "|" << std::endl;
 				}
-			}
-		else {
+			} else {
 			std::cout << "no match" << std::endl;
 			}
-		}
-	catch(std::exception& ex) {
+		} catch(std::exception& ex) {
 		std::cout << "exception: " << ex.what() << std::endl;
 		}
 	}

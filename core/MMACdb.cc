@@ -19,10 +19,10 @@ WSEnvironment MMA::stdenv = 0;
 //#define DEBUG 1
 
 Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap,
-									 std::vector<std::string> args, const std::string& method)
+                            std::vector<std::string> args, const std::string& method)
 	{
-   // We first need to print the sub-expression using DisplaySympy,
- 	// optionally with the head wrapped around it and the args added
+	// We first need to print the sub-expression using DisplaySympy,
+	// optionally with the head wrapped around it and the args added
 	// (if present).
 	std::ostringstream str;
 
@@ -49,23 +49,23 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 	//ex.print_recursive_treeform(std::cerr, it);
 #ifdef DEBUG
 	std::cerr << "feeding " << str.str() << std::endl;
-#endif	
+#endif
 
 	std::string result;
-	
+
 	// ---------------------
 	setup_link();
 
-	WSPutFunction(lp, "EvaluatePacket", 1L);		
+	WSPutFunction(lp, "EvaluatePacket", 1L);
 	WSPutFunction(lp, "ToString", 1L);
-	WSPutFunction(lp, "FullForm", 1L);		
+	WSPutFunction(lp, "FullForm", 1L);
 	WSPutFunction(lp, "ToExpression", 1L);
 	WSPutUTF8String(lp, (const unsigned char *)str.str().c_str(), str.str().size());
 	WSEndPacket(lp);
 	WSFlush(lp);
 
-	// std::cerr << "flushed" << std::endl;	
-	
+	// std::cerr << "flushed" << std::endl;
+
 	int pkt=0;
 	while( (pkt = WSNextPacket(lp), pkt) && pkt != RETURNPKT ) {
 		// std::cerr << "received packet " << pkt << std::endl;
@@ -75,12 +75,11 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 			}
 		}
 	// std::cerr << "packet now " << pkt << std::endl;
-	
+
 	const char *out;
 	if(! WSGetString(lp, &out)) {
 		throw InternalError("Unable to read from WSTP link");
-		}
-	else {
+		} else {
 		result=out;
 		WSReleaseString(lp, out);
 		if(result=="$Failed") {
@@ -89,37 +88,37 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 		}
 	// -------------------------------
 
-   // After that, we construct a new sub-expression from this string by using our
-   // own parser, and replace the original.
+	// After that, we construct a new sub-expression from this string by using our
+	// own parser, and replace the original.
 
 #ifdef DEBUG
 	std::cerr << "result: " << result << std::endl;
 #endif
-	
+
 	result = ds.preparse_import(result);
-	
+
 #ifdef DEBUG
 	std::cerr << "preparsed: " << result << std::endl;
 #endif
-	
-   auto ptr = std::make_shared<Ex>();
+
+	auto ptr = std::make_shared<Ex>();
 	cadabra::Parser parser(ptr);
 	std::stringstream istr(result);
 	istr >> parser;
 
 	pre_clean_dispatch_deep(kernel, *parser.tree);
-   cleanup_dispatch_deep(kernel, *parser.tree);
+	cleanup_dispatch_deep(kernel, *parser.tree);
 
 	//parser.tree->print_recursive_treeform(std::cerr, parser.tree->begin());
 
 	ds.import(*parser.tree);
 
 	pre_clean_dispatch_deep(kernel, *parser.tree);
-   cleanup_dispatch_deep(kernel, *parser.tree);
+	cleanup_dispatch_deep(kernel, *parser.tree);
 
 	Ex::iterator first=parser.tree->begin();
 	// std::cerr << "reparsed " << Ex(first) << std::endl;
-   it = ex.move_ontop(it, first);
+	it = ex.move_ontop(it, first);
 
 	return it;
 	}
@@ -127,19 +126,19 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 void MMA::setup_link()
 	{
 	if(lp!=0) return; // already setup
-	
+
 	char argvi[4][512] = { "-linkname", Mathematica_KERNEL_EXECUTABLE " -mathlink", "-linkmode", "launch" };
 	char *argv[4];
 	for (size_t i=0; i<4; ++i)
 		argv[i] = argvi[i];
 	int  argc = 4;
-	
+
 	int errno;
 	stdenv = WSInitialize((WSEnvironmentParameter)0);
-	if(stdenv==0) 
+	if(stdenv==0)
 		throw InternalError("Failed to initialise WSTP");
 
-	// std::cerr << "initialised" << std::endl;	
+	// std::cerr << "initialised" << std::endl;
 
 	try {
 		lp = WSOpenArgcArgv(stdenv, argc, argv, &errno);
@@ -149,15 +148,14 @@ void MMA::setup_link()
 			WSDeinitialize(stdenv);
 			throw InternalError("Failed to open Mathematica link");
 			}
-		}
-	catch(std::exception& ex) {
+		} catch(std::exception& ex) {
 		lp=0;
-		WSDeinitialize(stdenv);		
+		WSDeinitialize(stdenv);
 		throw InternalError("Failed to open Mathematica link");
 		}
 
 	// std::cerr << "loopback link open" << std::endl;
-	
+
 	WSActivate(lp);
 	}
 

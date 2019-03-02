@@ -32,7 +32,7 @@ bool decompose_product::can_apply(iterator it)
 	// TableauSymmetry or has one vector index only. Then find the next
 	// indexed object in the product and return true if this is a
 	// one-indexed or TableauSymmetry object, and if the index types
-	// of all indices match. 
+	// of all indices match.
 
 	if(*it->name=="\\prod") {
 		sibling_iterator fc=tr.begin(it);
@@ -54,7 +54,7 @@ bool decompose_product::can_apply(iterator it)
 								Ex index(index_iterator::begin(kernel.properties, fc));
 								index.begin()->fl.parent_rel=str_node::p_none;
 								const Integer *itg=
-									kernel.properties.get<Integer>( index.begin(), true );
+								   kernel.properties.get<Integer>( index.begin(), true );
 								if(itg) {
 									dim=to_long(*itg->difference.begin()->multiplier);
 									if(dim>0)
@@ -71,8 +71,8 @@ bool decompose_product::can_apply(iterator it)
 	return false;
 	}
 
-void decompose_product::fill_asym_ranges(TableauBase::tab_t& tab, int offset, 
-													  combin::range_vector_t& ranges)
+void decompose_product::fill_asym_ranges(TableauBase::tab_t& tab, int offset,
+      combin::range_vector_t& ranges)
 	{
 	// FIXME: we could also look at all other factors, and see if the index
 	// _name_ in the slot is contracted to the index name in an antisymmetric
@@ -86,7 +86,7 @@ void decompose_product::fill_asym_ranges(TableauBase::tab_t& tab, int offset,
 			tmprange.push_back((*ci)+offset);
 			++ci;
 			}
-		if(tmprange.size()>=2) 
+		if(tmprange.size()>=2)
 			ranges.push_back(tmprange);
 		}
 	}
@@ -104,29 +104,27 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 		if(t1->size(kernel.properties, tr, f1)>1)
 			throw ConsistencyException("decompose_product: cannot handle multiple tableau tensors");
 		t1tab=t1->get_tab(kernel.properties, tr, f1, 0);
-		for(unsigned int r=0; r<t1tab.number_of_rows(); ++r) 
+		for(unsigned int r=0; r<t1tab.number_of_rows(); ++r)
 			for(unsigned int c=0; c<t1tab.row_size(r); ++c) {
 				index_iterator tmpii=index_iterator::begin(kernel.properties, f1);
 				tmpii+=t1tab(r,c);
 				m1.add_box(r, tmpii);
 				}
-		}
-	else m1.add_box(0, index_iterator::begin(kernel.properties, f1));
+		} else m1.add_box(0, index_iterator::begin(kernel.properties, f1));
 
 	if(t2) {
 		if(t2->size(kernel.properties, tr, f2)>1)
 			throw ConsistencyException("decompose_product: cannot handle multiple tableau tensors");
 		t2tab=t2->get_tab(kernel.properties, tr, f2, 0);
-		for(unsigned int r=0; r<t2tab.number_of_rows(); ++r) 
+		for(unsigned int r=0; r<t2tab.number_of_rows(); ++r)
 			for(unsigned int c=0; c<t2tab.row_size(r); ++c) {
 				index_iterator tmpii=index_iterator::begin(kernel.properties, f2);
 				tmpii+=t2tab(r,c);
 				m2.add_box(r, tmpii);
 				}
-		}
-	else m2.add_box(0, index_iterator::begin(kernel.properties, f2));
+		} else m2.add_box(0, index_iterator::begin(kernel.properties, f2));
 
-	// Determine the position of the first index of the two 
+	// Determine the position of the first index of the two
 	// factors relative to the product (not to the tensors themselves).
 	index_iterator srch=index_iterator::begin(kernel.properties, it);
 	while(srch!=index_iterator::end(kernel.properties, it)) {
@@ -188,7 +186,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 	// Now create a Young projector sum of terms with the indices
 	// distributed according to the tensor product tableaux.
 
-// 	std::cout << numprod << std::endl;
+	// 	std::cout << numprod << std::endl;
 
 	Ex rep;
 	rep.set_head(str_node("\\tmp"));  // not \sum to prevent auto flattening
@@ -197,20 +195,20 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
 	while(ntt!=numprod.storage.end()) {
 		// TESTINGONLY
-///		++ntt; ++ntt; ++ntt;
+		///		++ntt; ++ntt; ++ntt;
 
-//		txtout << "another tableau" << std::endl;
+		//		txtout << "another tableau" << std::endl;
 		young_project yp(kernel, tr);
 		yp.tab=(*ntt);
 
-//		if(getenv("SMART")) 
+		//		if(getenv("SMART"))
 		yp.asym_ranges=asym_ranges;
 
 		// The asym ranges contain ranges of index locations. What we need
 		// to convert this to is box numbers. This is a value->location
 		// conversion in combinatorics.hh language. This will be done
 		// inside the youngtab.hh routines.
-		
+
 		// Apply the product projector.
 		iterator rr=rep.append_child(rep.begin(), it);
 		auto res=yp.can_apply(rr);
@@ -220,7 +218,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 		// We cannot use any algorithms which re-order indices, as the
 		// order in yp.sym must match the order in the expression. Also,
 		// we cannot remove terms without removing the corresponding entries
-		// in yp.sym. So for the time being we have decided to put this 
+		// in yp.sym. So for the time being we have decided to put this
 		// simplification in young_project.
 
 		// Now apply the symmetries of the original tableaux (if any).
@@ -232,15 +230,15 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
 
 		// TESTINGONLY
-//		txtout << "one ..." << std::flush;
+		//		txtout << "one ..." << std::flush;
 		if(t1) project_onto_initial_symmetries(rep, rr, yp, t1, f1, ioffset1, t1tab, false);
-//		txtout << "done" << std::endl;
-//		txtout << "two ..." << std::flush;
+		//		txtout << "done" << std::endl;
+		//		txtout << "two ..." << std::flush;
 		if(t2) project_onto_initial_symmetries(rep, rr, yp, t2, f2, ioffset2, t2tab, true);
-//		txtout << "done" << std::endl;
+		//		txtout << "done" << std::endl;
 
-//    TESTINGONLY
-///		break; 
+		//    TESTINGONLY
+		///		break;
 
 		++ntt;
 		}
@@ -250,12 +248,12 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 	it=tr.replace(it, rep.begin());
 
 	// flatten sums
-//	txtout << "flattening... " << std::flush;
-//	sumflatten sf(tr, tr.end());
-//	sf.apply_recursive(it, false);
-//	txtout << "done" << std::endl;
+	//	txtout << "flattening... " << std::flush;
+	//	sumflatten sf(tr, tr.end());
+	//	sf.apply_recursive(it, false);
+	//	txtout << "done" << std::endl;
 
-//	tr.print_recursive_treeform(std::cout, it);
+	//	tr.print_recursive_treeform(std::cout, it);
 
 	cleanup_dispatch(kernel, tr, it);
 
@@ -264,9 +262,9 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 
 
 void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, young_project& yp,
-																		  const TableauBase *, iterator ff, 
-																		  int ioffset, const TableauBase::tab_t& thetab,
-																		  bool remove_traces)
+      const TableauBase *, iterator ff,
+      int ioffset, const TableauBase::tab_t& thetab,
+      bool remove_traces)
 	{
 	// Sample: S_{m n} D_{p}{ A_{n q} } with S symmetric and A antisymmetric.
 	// The tensor product contains one tableau which leads to a symmetriser
@@ -277,9 +275,9 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 	// 'm' and 'n' indices have now been moved to slot 2 and 1 respectively.
 	// So we create a [1 1] tableau with numbers 2 and 1 in the boxes,
 	// and apply this tensor projector to the full product tensor.
-	
+
 	unsigned int termnum=0;
-	
+
 	// Run through all terms in this tableau of the tensor product.
 	sibling_iterator term=rep.begin(rr);
 	while(term!=rep.end(rr)) {
@@ -295,13 +293,13 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 		while(ii!=index_iterator::end(kernel.properties, ff)) {
 			unsigned int ipos=ioffset + (*origtabit);
 			assert(termnum<yp.sym.size());
-			
+
 			// Find ipos in the first entry of yp.sym
 			// and store the new position in the tableau.
 			for(unsigned int i=0; i<yp.sym[termnum].size(); ++i) {
 				if(yp.sym[termnum][i]==ipos) {
 					*tabit=yp.sym[0][i];
-//					txtout << ipos << " has moved to " << yp.sym[0][i] << std::endl;
+					//					txtout << ipos << " has moved to " << yp.sym[0][i] << std::endl;
 					break;
 					}
 				}
@@ -309,15 +307,15 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 			++origtabit;
 			++ii;
 			}
-		
+
 		// Now we can finally project.
 		yp.remove_traces=remove_traces;
 
 		if(*term->name=="\\sum") { // apply to all terms in the sum
 			// THIS IS NOT CORRECT?! If we turn on asym_ranges  here
 			// the result breaks.
-//			if(getenv("SMART")) 
-//				ypinitial.asym_ranges=asym_ranges;
+			//			if(getenv("SMART"))
+			//				ypinitial.asym_ranges=asym_ranges;
 			sibling_iterator trmit=tr.begin(term);
 			while(trmit!=tr.end(term)) {
 				iterator tmp=trmit;
@@ -330,10 +328,9 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 				ypinitial.apply(tmp);
 				trmit=nxt2;
 				}
-			}
-		else { // just a single term
-//			if(getenv("SMART")) 
-				ypinitial.asym_ranges=asym_ranges;
+			} else { // just a single term
+			//			if(getenv("SMART"))
+			ypinitial.asym_ranges=asym_ranges;
 			iterator tmp=term;
 			auto res=ypinitial.can_apply(tmp);
 			assert(res);

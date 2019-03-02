@@ -6,12 +6,12 @@
 #include "DataCell.hh"
 
 namespace cadabra {
-	
+
 	/// \ingroup clientserver
 	///
-   /// Abstract base class with methods that need to be implemented
-   /// by any GUI. You need to derive from this class as well as from
-   /// the DocumentThread class.
+	/// Abstract base class with methods that need to be implemented
+	/// by any GUI. You need to derive from this class as well as from
+	/// the DocumentThread class.
 
 	class GUIBase {
 		public:
@@ -32,7 +32,7 @@ namespace cadabra {
 
 			/// Remove all GUI cells from the display (used as a quick way
 			/// to clear all before loading a new document).
-			
+
 			virtual void remove_all_cells()=0;
 
 			/// Add a GUI cell corresponding to the document cell at the
@@ -46,7 +46,7 @@ namespace cadabra {
 
 			virtual void add_cell(const DTree&, DTree::iterator, bool visible)=0;
 
-			/// Position the cursor in the current canvas in the widget 
+			/// Position the cursor in the current canvas in the widget
 			/// corresponding to the indicated cell.
 
 			virtual void position_cursor(const DTree&, DTree::iterator, int)=0;
@@ -56,7 +56,7 @@ namespace cadabra {
 			virtual size_t get_cursor_position(const DTree&, DTree::iterator)=0;
 
 			/// Network status is propagated from the ComputeThread to the
-         /// GUI using the following methods. These get called on the
+			/// GUI using the following methods. These get called on the
 			/// compute thread (as opposed to the functions above, which get
 			/// called on the gui thread).
 
@@ -73,11 +73,11 @@ namespace cadabra {
 			/// stores an ActionBase object on the stack (see the
 			/// DocumenThread class) and then wakes up the GUI thread
 			/// signalling it to process this action. The following member
-			/// should wake up the GUI thread and make it enter the 
+			/// should wake up the GUI thread and make it enter the
 			/// processing part.
 
 			virtual void process_data()=0;
 
-	};
+		};
 
-};
+	};

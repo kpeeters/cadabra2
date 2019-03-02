@@ -11,20 +11,20 @@ NotebookCanvas::NotebookCanvas()
 	// Pack the scroll widget with all document cells into the top pane.
 	pack1(ebox, true, true);
 	ebox.add(scroll);
- 	scroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
- 	scroll.set_border_width(1);
-//	scroll.add(ebox);
-//	ebox.override_background_color(Gdk::RGBA("white"));
+	scroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
+	scroll.set_border_width(1);
+	//	scroll.add(ebox);
+	//	ebox.override_background_color(Gdk::RGBA("white"));
 
 	// Do NOT do the following. This will create areas at the top
 	// and bottom where the content of the scrolledwindow is
 	// covered with white (except when totally at the top or
 	// bottom of the content).
-        // scroll.override_background_color(Gdk::RGBA("white"));
+	// scroll.override_background_color(Gdk::RGBA("white"));
 	(*this).override_background_color(Gdk::RGBA("white"));
 
 	ebox.set_events(Gdk::SCROLL_MASK | Gdk::SMOOTH_SCROLL_MASK | Gdk::BUTTON_PRESS_MASK);
-//	scroll.set_overlay_scrolling(false);
+	//	scroll.set_overlay_scrolling(false);
 	}
 
 NotebookCanvas::~NotebookCanvas()

@@ -8,7 +8,10 @@ namespace cadabra {
 	class Commuting : virtual public CommutingBehaviour {
 		public:
 			virtual std::string name() const;
-			virtual int sign() const { return 1; }
-	};
+			virtual int sign() const
+				{
+				return 1;
+				}
+		};
 
-}
+	}

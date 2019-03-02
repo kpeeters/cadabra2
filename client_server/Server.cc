@@ -12,7 +12,7 @@
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <boost/algorithm/string/replace.hpp>
-#include <json/json.h>  
+#include <json/json.h>
 
 #include "Config.hh"
 #include "Snoop.hh"
@@ -34,7 +34,7 @@ Server::Server()
 	}
 
 Server::Server(const std::string& socket)
-	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)	
+	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
 	socket_name=socket;
 	init();
@@ -42,7 +42,7 @@ Server::Server(const std::string& socket)
 
 Server::~Server()
 	{
-	
+
 	}
 
 Server::CatchOutput::CatchOutput()
@@ -57,13 +57,13 @@ void Server::CatchOutput::write(const std::string& str)
 	{
 	// std::cerr << "Python wrote: " << str << std::endl;
 	collect+=str;
-   }
+	}
 
 void Server::CatchOutput::clear()
 	{
 	// std::cerr << "Python clear" << std::endl;
 	collect="";
-   }
+	}
 
 std::string Server::CatchOutput::str() const
 	{
@@ -76,19 +76,19 @@ std::string Server::architecture() const
 	}
 
 PYBIND11_EMBEDDED_MODULE(cadabra2_internal, m)
-   {
-//   auto cadabra_module = pybind11::module::import("cadabra2");
-   
-   pybind11::class_<Server::CatchOutput>(m, "CatchOutput")
-	   .def("write", &Server::CatchOutput::write)
-	   .def("clear", &Server::CatchOutput::clear)
-	   ;
+	{
+	//   auto cadabra_module = pybind11::module::import("cadabra2");
 
-   pybind11::class_<Server>(m, "Server")
-	   .def("send", &Server::send)
-	   .def("handles", &Server::handles)
-	   .def("architecture", &Server::architecture);
-   }
+	pybind11::class_<Server::CatchOutput>(m, "CatchOutput")
+	.def("write", &Server::CatchOutput::write)
+	.def("clear", &Server::CatchOutput::clear)
+	;
+
+	pybind11::class_<Server>(m, "Server")
+	.def("send", &Server::send)
+	.def("handles", &Server::handles)
+	.def("architecture", &Server::architecture);
+	}
 
 void Server::init()
 	{
@@ -97,21 +97,21 @@ void Server::init()
 	main_module = pybind11::module::import("__main__");
 	main_namespace = main_module.attr("__dict__");
 
- 	// Make the C++ CatchOutput class visible on the Python side.
+	// Make the C++ CatchOutput class visible on the Python side.
 
 	auto python_path = cadabra::install_prefix()+"/share/cadabra2/python";
-	
-	std::string stdOutErr =
-		"import sys\n"
-		"sys.path.append(r'"+python_path+"')\n"
 
-		"from cadabra2_internal import Server, CatchOutput\n"
-		"server=0\n"
-		"def setup_catch(cO, cE, sE):\n"
-		"   global server\n"
-		"   sys.stdout=cO\n"
-		"   sys.stderr=cE\n"
-		"   server=sE\n";
+	std::string stdOutErr =
+	   "import sys\n"
+	   "sys.path.append(r'"+python_path+"')\n"
+
+	   "from cadabra2_internal import Server, CatchOutput\n"
+	   "server=0\n"
+	   "def setup_catch(cO, cE, sE):\n"
+	   "   global server\n"
+	   "   sys.stdout=cO\n"
+	   "   sys.stderr=cE\n"
+	   "   server=sE\n";
 	run_string(stdOutErr, false);
 
 	// Setup the C++ output catching objects and setup the Python side to
@@ -120,8 +120,7 @@ void Server::init()
 	pybind11::object setup_catch = main_module.attr("setup_catch");
 	try {
 		setup_catch(std::ref(catchOut), std::ref(catchErr), std::ref(*this));
-		}
-	catch(pybind11::error_already_set& ex) {
+		} catch(pybind11::error_already_set& ex) {
 		snoop::log(snoop::fatal) << "Failed to initialise Python bridge." << snoop::flush;
 		PyErr_Print();
 		throw;
@@ -130,13 +129,13 @@ void Server::init()
 
 	// Call the Cadabra default initialisation script.
 
-//	pybind11::eval_file(PYTHON_SITE_PATH"/cadabra2_defaults.py");
-//	HERE: should use pybind11::eval_file instead, much simpler.
-//	
+	//	pybind11::eval_file(PYTHON_SITE_PATH"/cadabra2_defaults.py");
+	//	HERE: should use pybind11::eval_file instead, much simpler.
+	//
 	std::string startup =
-		"f=open(r'" + python_path + "/cadabra2_defaults.py'); "
-		"code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); "
-		"exec(code); f.close()"; 
+	   "f=open(r'" + python_path + "/cadabra2_defaults.py'); "
+	   "code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); "
+	   "exec(code); f.close()";
 	run_string(startup);
 	}
 
@@ -150,12 +149,12 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	// Preparse input block.
 	auto newblk = cadabra::cdb2python(blk);
 
-//	std::cerr << "PREPARSED:\n" << newblk << std::endl;
+	//	std::cerr << "PREPARSED:\n" << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;
 
 	// Run block. Catch output.
 	try {
-//		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
+		//		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
 #ifdef DEBUG
 		std::cerr << "executing..." << std::endl;
 #endif
@@ -163,15 +162,14 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 #ifdef DEBUG
 		std::cerr << "exec done" << std::endl;
 #endif
-//		std::string object_classname = ignored.attr("__class__").attr("__name__").cast<std::string>();
-//		std::cerr << "" << std::endl;		
+		//		std::string object_classname = ignored.attr("__class__").attr("__name__").cast<std::string>();
+		//		std::cerr << "" << std::endl;
 
 		if(handle_output) {
 			result = catchOut.str();
 			catchOut.clear();
 			}
-		}
-	catch(pybind11::error_already_set& ex) {
+		} catch(pybind11::error_already_set& ex) {
 #ifdef DEBUG
 		std::cerr << "Server::run_string: exception " << ex.what() << std::endl;
 #endif
@@ -183,7 +181,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	return result;
 	}
 
-void Server::on_socket_init(websocketpp::connection_hdl , boost::asio::ip::tcp::socket & s) 
+void Server::on_socket_init(websocketpp::connection_hdl, boost::asio::ip::tcp::socket & s)
 	{
 	boost::asio::ip::tcp::no_delay option(true);
 	s.set_option(option);
@@ -196,7 +194,7 @@ Server::Connection::Connection()
 
 void Server::on_open(websocketpp::connection_hdl hdl)
 	{
-	std::lock_guard<std::mutex> lock(ws_mutex);    
+	std::lock_guard<std::mutex> lock(ws_mutex);
 	Connection con;
 	con.hdl=hdl;
 	// snoop::log(snoop::info) << "Connection " << con.uuid << " open." << snoop::flush;
@@ -205,8 +203,8 @@ void Server::on_open(websocketpp::connection_hdl hdl)
 
 void Server::on_close(websocketpp::connection_hdl hdl)
 	{
-	std::lock_guard<std::mutex> lock(ws_mutex);    
-//	auto it = connections.find(hdl);
+	std::lock_guard<std::mutex> lock(ws_mutex);
+	//	auto it = connections.find(hdl);
 	// snoop::log(snoop::info) << "Connection " << it->second.uuid << " close." << snoop::flush;
 	connections.erase(hdl);
 	exit(-1);
@@ -221,16 +219,16 @@ int quit(void *)
 void Server::wait_for_job()
 	{
 	// Infinite loop, waiting for the master thread to signal that a new block is
-   // available, and processing it. Blocks are always processed sequentially
+	// available, and processing it. Blocks are always processed sequentially
 	// even though new ones may come in before previous ones have finished.
 
 	// snoop::log(snoop::info) << "Waiting for blocks" << snoop::flush;
 
 	pybind11::gil_scoped_acquire acquire;
-	
+
 	while(true) {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
-		while(block_queue.size()==0) 
+		while(block_queue.size()==0)
 			block_available.wait(lock);
 
 		Block block = block_queue.front();
@@ -239,7 +237,7 @@ void Server::wait_for_job()
 
 		server_stopwatch.reset();
 		server_stopwatch.start();
-	
+
 		try {
 			// We are done with the block_queue; release the lock so that the
 			// master thread can push new blocks onto it.
@@ -249,8 +247,7 @@ void Server::wait_for_job()
 			current_id =block.cell_id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
-			}
-		catch(std::runtime_error& ex) {
+			} catch(std::runtime_error& ex) {
 #ifdef DEBUG
 			std::cerr << "Exception caught, acquiring lock" << std::endl;
 #endif
@@ -266,8 +263,7 @@ void Server::wait_for_job()
 			lock.unlock();
 			block.error = ex.what();
 			on_block_error(block);
-			}
-		catch(std::exception& ex) {
+			} catch(std::exception& ex) {
 			server_stopwatch.stop();
 			// snoop::log(snoop::info) << "System exception" << snoop::flush;
 			lock.lock();
@@ -281,10 +277,10 @@ void Server::wait_for_job()
 		}
 	}
 
-void Server::stop_block() 
+void Server::stop_block()
 	{
 	PyGILState_STATE state = PyGILState_Ensure();
-//	PyThreadState_SetAsyncExc ?
+	//	PyThreadState_SetAsyncExc ?
 	Py_AddPendingCall(&quit, NULL);
 	PyGILState_Release(state);
 	}
@@ -294,9 +290,9 @@ Server::Block::Block(websocketpp::connection_hdl h, const std::string& str, uint
 	{
 	}
 
-void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::message_ptr msg) 
+void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::message_ptr msg)
 	{
-	std::lock_guard<std::mutex> lock(ws_mutex);    
+	std::lock_guard<std::mutex> lock(ws_mutex);
 
 	auto it = connections.find(hdl);
 	if(it==connections.end()) {
@@ -304,14 +300,14 @@ void Server::on_message(websocketpp::connection_hdl hdl, WebsocketServer::messag
 		return;
 		}
 
-//	std::cout << "Message from " << it->second.uuid << std::endl;
-	
+	//	std::cout << "Message from " << it->second.uuid << std::endl;
+
 	dispatch_message(hdl, msg->get_payload());
 	}
 
 void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string& json_msg)
 	{
-//	std::cout << json_msg << std::endl;
+	//	std::cout << json_msg << std::endl;
 
 	Json::Value  root;   // will contains the root value after parsing.
 	Json::Reader reader;
@@ -333,24 +329,21 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		block_queue.push(Block(hdl, code, id));
 		block_available.notify_one();
-		}
-	else if(msg_type=="execute_interrupt") {
+		} else if(msg_type=="execute_interrupt") {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		stop_block();
-//		std::cout << "clearing block queue" << std::endl;
+		//		std::cout << "clearing block queue" << std::endl;
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
 		//snoop::log(snoop::warn) << "Job stop requested." << snoop::flush;
-		}
-	else if(msg_type=="init") {
+		} else if(msg_type=="init") {
 		// Stop any running blocks.
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		stop_block();
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
-		
-		}
-	else if(msg_type=="exit") {
+
+		} else if(msg_type=="exit") {
 		exit(-1);
 		}
 	}
@@ -368,8 +361,8 @@ bool Server::handles(const std::string& otype) const
 
 uint64_t Server::send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last)
 	{
-//	if(msg_type=="output") 
-//		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
+	//	if(msg_type=="output")
+	//		std::cerr << "Cell " << msg_type << " timing: " << server_stopwatch << " (in python: " << sympy_stopwatch << ")" << std::endl;
 	// Make a JSON message.
 	Json::Value json, content, header;
 
@@ -378,7 +371,7 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 		header["parent_id"]=(Json::Value::UInt64)current_id;
 	else
 		header["parent_id"]=(Json::Value::UInt64)parent_id;
-	
+
 	header["parent_origin"]="client";
 	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
@@ -390,7 +383,7 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 	json["header"]=header;
 	json["content"]=content;
 	json["msg_type"]=msg_type;
-	
+
 	std::ostringstream str;
 	str << json << std::endl;
 
@@ -402,23 +395,23 @@ uint64_t Server::send(const std::string& output, const std::string& msg_type, ui
 void Server::send_json(const std::string& msg)
 	{
 	//	std::cerr << "*** sending message " << msg << std::endl;
-	std::lock_guard<std::mutex> lock(ws_mutex);    
+	std::lock_guard<std::mutex> lock(ws_mutex);
 	wserver.send(current_hdl, msg, websocketpp::frame::opcode::text);
 	}
 
 void Server::on_block_error(Block blk)
 	{
-	std::lock_guard<std::mutex> lock(ws_mutex);    
-	
+	std::lock_guard<std::mutex> lock(ws_mutex);
+
 	// Make a JSON message.
 	Json::Value json, content, header;
-	
+
 	++return_cell_id;
 	header["parent_id"]=(Json::Value::UInt64)blk.cell_id;
 	header["parent_origin"]="client";
 	header["cell_id"]=(Json::Value::UInt64)return_cell_id;
 	header["cell_origin"]="server";
-	header["last_in_sequence"]=true;	
+	header["last_in_sequence"]=true;
 	content["output"]=blk.error;
 
 	json["header"]=header;
@@ -434,8 +427,8 @@ void Server::on_block_error(Block blk)
 
 void Server::on_kernel_fault(Block blk)
 	{
-	std::lock_guard<std::mutex> lock(ws_mutex);    
-	
+	std::lock_guard<std::mutex> lock(ws_mutex);
+
 	// Make a JSON message.
 	Json::Value json, content, header;
 
@@ -458,17 +451,17 @@ void Server::on_kernel_fault(Block blk)
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
 
-void Server::run() 
+void Server::run()
 	{
 	try {
 		wserver.clear_access_channels(websocketpp::log::alevel::all);
 		wserver.clear_error_channels(websocketpp::log::elevel::all);
-		
+
 		wserver.set_socket_init_handler(bind(&Server::on_socket_init, this, ::_1,::_2));
 		wserver.set_message_handler(bind(&Server::on_message, this, ::_1, ::_2));
 		wserver.set_open_handler(bind(&Server::on_open,this,::_1));
 		wserver.set_close_handler(bind(&Server::on_close,this,::_1));
-		
+
 		wserver.init_asio();
 		wserver.set_reuse_addr(true);
 		wserver.listen(websocketpp::lib::asio::ip::tcp::v4(), 0);
@@ -476,14 +469,13 @@ void Server::run()
 		websocketpp::lib::asio::error_code ec;
 		auto p = wserver.get_local_endpoint(ec);
 		std::cout << p.port()  << std::endl;
-		
+
 		// std::cerr << "cadabra-server: spawning job thread "  << std::endl;
 		runner = std::thread(std::bind(&Server::wait_for_job, this));
 
 		pybind11::gil_scoped_release release;
 		wserver.run();
-		}
-	catch(websocketpp::exception& ex) {
+		} catch(websocketpp::exception& ex) {
 		std::cerr << "cadabra-server: websocket exception " << ex.code() << " " << ex.what() << std::endl;
 		}
 	}

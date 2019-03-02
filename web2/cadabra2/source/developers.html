@@ -62,18 +62,34 @@
   build it.
 </p>
 
-<h1>Source code documentation</h1>
+<h1>Source code and documentation</h1>
 <p>
   The source code is documented in quite some detail and the resulting
   <a href="/doxygen/html/">Cadabra doxygen documentation</a> is worth
   consulting if you want to become a developer. This is automatically
-  generated from the latest status of the master branch on github.
+  generated from the latest status of the master branch on github
+  whenever this web site is updated.
 </p>
 <p>
   You can also generate this doxygen tree yourself in your own working
   copy by running <code>make doc</code> in the project root (not
   the <code>build</code> folder). The documentation then ends up in
   the <code>doxygen/html</code> folder.
+</p>
+<p>
+  The source code is formatted with the
+  following <a href="http://astyle.sourceforge.net/astyle.html">astyle</a>
+  switches:
+  <pre>
+      --style=k/r
+      --indent=tab=3
+      --recursive
+      --attach-classes
+      --attach-namespaces
+      --indent-classes
+      --indent-namespaces 
+  </pre>
+  This is followed by indenting all curly brackets by one tab.
 </p>
 
 

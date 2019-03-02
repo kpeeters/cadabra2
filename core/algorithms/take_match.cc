@@ -14,7 +14,7 @@ take_match::take_match(const Kernel& k, Ex& e, Ex& rules_)
 	rules.append_child(wrap, str_node("dummy"));
 	}
 
-bool take_match::can_apply(iterator it) 
+bool take_match::can_apply(iterator it)
 	{
 	// Apply only on terms in a top-level sum (NO LONGER: or elements of a top-level list),
 	// or on terms inside an integral.
@@ -24,12 +24,12 @@ bool take_match::can_apply(iterator it)
 
 	if(*it->name=="\\sum") {
 		if(tr.is_head(it) ||
-		   *tr.parent(it)->name=="\\int" ||
-		   *tr.parent(it)->name=="\\equals") {
+		      *tr.parent(it)->name=="\\int" ||
+		      *tr.parent(it)->name=="\\equals") {
 
 			to_keep.clear();
 			to_erase.clear();
-			
+
 			substitute subs(kernel, tr, rules);
 			sibling_iterator sib=tr.begin(it);
 			while(sib!=tr.end(it)) {
@@ -39,7 +39,7 @@ bool take_match::can_apply(iterator it)
 					to_keep.push_back(tr.path_from_iterator(sib, tr.begin()));
 				++sib;
 				}
-			
+
 			// If there is no match whatsoever we cannot apply here.
 			if(to_keep.size()==0) return false;
 			return true;
@@ -55,11 +55,11 @@ Algorithm::result_t take_match::apply(iterator& it)
 	// stack.
 	auto itpath = tr.path_from_iterator(it, tr.begin());
 	tr.push_history(to_keep);
-	
+
 	// Now erase what we do not want anymore, the cleanup
 	for(auto& s: to_erase)
 		tr.erase(s);
 	cleanup_dispatch(kernel, tr, it);
-	
+
 	return result_t::l_applied;
 	}

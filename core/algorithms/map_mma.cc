@@ -20,8 +20,8 @@ bool map_mma::can_apply(iterator st)
 	// component values, not the top \components node.
 	if(*st->name=="\\components") return false;
 	if(*st->name=="\\equals") return false;
-	if(*st->name=="\\comma") return false;		
-	
+	if(*st->name=="\\comma") return false;
+
 	left.clear();
 	index_factors.clear();
 	index_map_t ind_free, ind_dummy;
@@ -40,8 +40,8 @@ bool map_mma::can_apply(iterator st)
 		}
 
 	if(still_ok && ind_dummy.size()==0) return true;
-	
-   // In a product, it is still possible that there is a sub-product which
+
+	// In a product, it is still possible that there is a sub-product which
 	// contains no indices.
 	if(*st->name=="\\prod") {
 		// Find the factors in the product which have a proper index on them. Do this by
@@ -81,10 +81,10 @@ bool map_mma::can_apply(iterator st)
 
 Algorithm::result_t map_mma::apply(iterator& it)
 	{
-	#ifdef DEBUG
+#ifdef DEBUG
 	std::cerr << "map_mma on " << Ex(it) << std::endl;
-	#endif
-	
+#endif
+
 	std::vector<std::string> wrap, args;
 	if(head_.size()>0)
 		wrap.push_back(head_);
@@ -103,10 +103,9 @@ Algorithm::result_t map_mma::apply(iterator& it)
 		for(auto& kl: left)
 			tr.erase(kl);
 		// std::cerr << "After erasing " << Ex(it) << std::endl;
-		
+
 		return result_t::l_applied;
-		}
-	else {
+		} else {
 		MMA::apply_mma(kernel, tr, it, wrap, args, "");
 		it.skip_children();
 		return result_t::l_applied;

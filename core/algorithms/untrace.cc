@@ -27,7 +27,7 @@ bool untrace::can_apply(iterator st)
 Algorithm::result_t untrace::apply(iterator& trloc)
 	{
 	const Trace *trace = kernel.properties.get<Trace>(trloc);
-	
+
 	// ensure we sit in a product
 	auto par=tr.parent(trloc);
 	iterator moveprod=par;
@@ -39,15 +39,15 @@ Algorithm::result_t untrace::apply(iterator& trloc)
 	// ensure the argument is a product
 	iterator prodloc=tr.begin(trloc);
 	prod_wrap_single_term(prodloc);
-	
+
 	// scan arguments of trace
 	sibling_iterator st=tr.begin(prodloc);
 	while(st!=tr.end(prodloc)) {
 		sibling_iterator nxt=st;
 		++nxt;
-		
+
 		bool move_out=true;
-		
+
 		auto imp = kernel.properties.get<ImplicitIndex>(st);
 		if(imp) {
 			// std::cerr << st << " has implicit index" << std::endl;
@@ -63,8 +63,7 @@ Algorithm::result_t untrace::apply(iterator& trloc)
 							move_out=false;
 							break;
 							}
-						}
-					else {
+						} else {
 						// no Indices property known, better be safe.
 						move_out=false;
 						break;
@@ -73,12 +72,12 @@ Algorithm::result_t untrace::apply(iterator& trloc)
 					}
 				}
 			}
-		
+
 		if(move_out) {
 			tr.move_before(trloc, st);
 			//multiply(it->multiplier, sign);
 			}
-		
+
 		st=nxt;
 		}
 

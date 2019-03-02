@@ -36,7 +36,7 @@ Algorithm::result_t order::apply(iterator& st)
 					multiply(st->multiplier, osign);
 					}
 				}
-			
+
 			// \comma{A}{B}}
 			sibling_iterator orig_st=objects.begin(objects.begin());
 

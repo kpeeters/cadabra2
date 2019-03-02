@@ -25,8 +25,7 @@
 #include "DisplaySympy.hh"
 #include "DisplayTerminal.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 
 	namespace py = pybind11;
 
@@ -67,16 +66,14 @@ namespace cadabra
 				if (comma2)
 					ret->flatten_and_erase(loc);
 				return ret;
-				}
-			else {
+				} else {
 				auto ret = std::make_shared<Ex>(top2);
 				auto loc = ret->prepend_child(ret->begin(), ex1->begin());
 				if (comma1)
 					ret->flatten_and_erase(loc);
 				return ret;
 				}
-			}
-		else {
+			} else {
 			auto ret = std::make_shared<Ex>(*ex1);
 			if (*ret->begin()->name != "\\sum")
 				ret->wrap(ret->begin(), str_node("\\sum"));
@@ -129,8 +126,7 @@ namespace cadabra
 				auto it = ret->begin();
 				cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 				return ret;
-				}
-			else return ex2;
+				} else return ex2;
 			}
 		if (ex2->size() == 0) return ex1;
 
@@ -166,14 +162,12 @@ namespace cadabra
 		auto obj = scope[nm.c_str()];
 		try {
 			return obj.cast<Ex_ptr>();
-			}
-		catch (const pybind11::cast_error& e) {
+			} catch (const pybind11::cast_error& e) {
 			try {
 				auto exnode = obj.cast<ExNode>();
 				auto ret = std::make_shared<Ex>(exnode.it);
 				return ret;
-				}
-			catch (const pybind11::cast_error& e) {
+				} catch (const pybind11::cast_error& e) {
 				std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
 				}
 			}
@@ -183,7 +177,7 @@ namespace cadabra
 	std::string Ex_as_str(Ex_ptr ex)
 		{
 		std::ostringstream str;
-		// 
+		//
 		// //	if(state()==Algorithm::result_t::l_no_action)
 		// //		str << "(unchanged)" << std::endl;
 		// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
@@ -199,7 +193,7 @@ namespace cadabra
 		if (!ex) return "";
 		if (ex->begin() == ex->end()) return "";
 
-//		Ex::iterator it = ex->begin();
+		//		Ex::iterator it = ex->begin();
 		std::ostringstream str;
 		ex->print_python(str, ex->begin());
 		return str.str();
@@ -214,7 +208,7 @@ namespace cadabra
 		return str.str();
 		}
 
-	
+
 	pybind11::object Ex_as_sympy(Ex_ptr ex)
 		{
 		// Generate a string which can be parsed by Sympy.
@@ -232,9 +226,9 @@ namespace cadabra
 		// Check to see if the expression is a scalar without dummy indices.
 		//	Algorithm::index_map_t ind_free, ind_dummy;
 		//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
-		//	if(ind_dummy.size()>0) 
+		//	if(ind_dummy.size()>0)
 		//		throw NonScalarException("Expression contains dummy indices.");
-		//	if(ind_free.size()>0) 
+		//	if(ind_free.size()>0)
 		//		throw NonScalarException("Expression contains free indices.");
 
 		if (!ex) return "";
@@ -247,7 +241,7 @@ namespace cadabra
 	std::string Ex_as_input(Ex_ptr ex)
 		{
 		std::ostringstream str;
-		// 
+		//
 		// //	if(state()==Algorithm::result_t::l_no_action)
 		// //		str << "(unchanged)" << std::endl;
 		// 	DisplayTeX dt(get_kernel_from_scope()->properties, ex);
@@ -263,9 +257,9 @@ namespace cadabra
 		// Check to see if the expression is a scalar without dummy indices.
 		//	Algorithm::index_map_t ind_free, ind_dummy;
 		//	Algorithm::classify_indices(ex.begin(), ind_free, ind_dummy);
-		//	if(ind_dummy.size()>0) 
+		//	if(ind_dummy.size()>0)
 		//		throw NonScalarException("Expression contains dummy indices.");
-		//	if(ind_free.size()>0) 
+		//	if(ind_free.size()>0)
 		//		throw NonScalarException("Expression contains free indices.");
 
 		std::ostringstream str;
@@ -374,8 +368,7 @@ namespace cadabra
 			//		std::cerr << "for " << ex->begin() << std::endl;
 			use = ex->iterator_from_path(path, ex->begin());
 			//		std::cerr << "which is " << use << std::endl;
-			}
-		else {
+			} else {
 			use = en.it;
 			}
 
@@ -431,7 +424,7 @@ namespace cadabra
 		}
 
 
-	Ex_ptr Ex_from_string(const std::string& ex_, bool , Kernel *kernel)
+	Ex_ptr Ex_from_string(const std::string& ex_, bool, Kernel *kernel)
 		{
 		if (kernel == nullptr)
 			kernel = get_kernel_from_scope();
@@ -443,8 +436,7 @@ namespace cadabra
 
 		try {
 			str >> parser;
-			}
-		catch (std::exception& except) {
+			} catch (std::exception& except) {
 			throw ParseException("Cannot parse");
 			}
 		parser.finalise();
@@ -485,8 +477,7 @@ namespace cadabra
 			auto locals = get_locals();
 			if (scope_has(locals, "post_process")) {
 				post_process = locals["post_process"];
-				}
-			else {
+				} else {
 				auto globals = get_globals();
 				if (scope_has(globals, "post_process"))
 					post_process = globals["post_process"];
@@ -511,78 +502,80 @@ namespace cadabra
 	void init_ex(py::module& m)
 		{
 		pybind11::enum_<str_node::parent_rel_t>(m, "parent_rel_t")
-			.value("sub", str_node::parent_rel_t::p_sub)
-			.value("super", str_node::parent_rel_t::p_super)
-			.value("none", str_node::parent_rel_t::p_none)
-			.export_values()
-			;
+		.value("sub", str_node::parent_rel_t::p_sub)
+		.value("super", str_node::parent_rel_t::p_super)
+		.value("none", str_node::parent_rel_t::p_none)
+		.export_values()
+		;
 
 		pybind11::class_<Ex, Ex_ptr >(m, "Ex")
-			.def(py::init(&Ex_from_string), py::arg("input_form"), py::arg("make_ref") = true, py::arg("kernel") = nullptr)
-			.def(py::init(&Ex_from_int), py::arg("num"), py::arg("make_ref") = true)
-			.def("__str__", &Ex_as_str)
-			.def("_latex_", &Ex_as_latex)
-			.def("__repr__", &Ex_as_repr)
-			.def("__eq__", static_cast<bool(*)(Ex_ptr, Ex_ptr)>(&Ex_compare))
-			.def("__eq__", static_cast<bool(*)(Ex_ptr, int)>(&Ex_compare))
-			.def("_sympy_", &Ex_as_sympy)
-			.def("sympy_form", &Ex_as_sympy_string)
-			.def("mma_form", &Ex_as_MMA, pybind11::arg("unicode") = true)    // standardize on this
-			.def("input_form", &Ex_as_input)
-			.def("__getitem__", &Ex_getitem)
-			.def("__getitem__", &Ex_getitem_string)
-			.def("__getitem__", &Ex_getitem_iterator)
-			.def("__getitem__", &Ex_getslice)
-			.def("__setitem__", &Ex_setitem)
-			.def("__setitem__", &Ex_setitem_iterator)
-			.def("__len__", &Ex_len)
-			.def("head", &Ex_head)
-			.def("mult", &Ex_get_mult)
-			.def("__iter__", &Ex_iter)
-			.def("top", &Ex_top)
-			.def("matches", &Ex_matches)
-			.def("state", &Ex::state)
-			.def("reset", &Ex::reset_state)
-			.def("changed", &Ex::changed_state)
-			.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_add), py::is_operator{})
-			.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_add), py::is_operator{})
-			.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_sub), py::is_operator{})
-			.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_sub), py::is_operator{})
-			.def("__mul__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_mul), py::is_operator{});
+		.def(py::init(&Ex_from_string), py::arg("input_form"), py::arg("make_ref") = true, py::arg("kernel") = nullptr)
+		.def(py::init(&Ex_from_int), py::arg("num"), py::arg("make_ref") = true)
+		.def("__str__", &Ex_as_str)
+		.def("_latex_", &Ex_as_latex)
+		.def("__repr__", &Ex_as_repr)
+		.def("__eq__", static_cast<bool(*)(Ex_ptr, Ex_ptr)>(&Ex_compare))
+		.def("__eq__", static_cast<bool(*)(Ex_ptr, int)>(&Ex_compare))
+		.def("_sympy_", &Ex_as_sympy)
+		.def("sympy_form", &Ex_as_sympy_string)
+		.def("mma_form", &Ex_as_MMA, pybind11::arg("unicode") = true)    // standardize on this
+		.def("input_form", &Ex_as_input)
+		.def("__getitem__", &Ex_getitem)
+		.def("__getitem__", &Ex_getitem_string)
+		.def("__getitem__", &Ex_getitem_iterator)
+		.def("__getitem__", &Ex_getslice)
+		.def("__setitem__", &Ex_setitem)
+		.def("__setitem__", &Ex_setitem_iterator)
+		.def("__len__", &Ex_len)
+		.def("head", &Ex_head)
+		.def("mult", &Ex_get_mult)
+		.def("__iter__", &Ex_iter)
+		.def("top", &Ex_top)
+		.def("matches", &Ex_matches)
+		.def("state", &Ex::state)
+		.def("reset", &Ex::reset_state)
+		.def("changed", &Ex::changed_state)
+		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_add), py::is_operator{})
+		.def("__add__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_add), py::is_operator{})
+		.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const ExNode)>(&Ex_sub), py::is_operator{})
+		.def("__sub__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_sub), py::is_operator{})
+		.def("__mul__", static_cast<Ex_ptr(*)(const Ex_ptr, const Ex_ptr)>(&Ex_mul), py::is_operator{});
 
 		pybind11::class_<ExNode>(m, "ExNode")
-			.def("__iter__", &ExNode::iter)
-			.def("__next__", &ExNode::next, pybind11::return_value_policy::reference_internal)
-			.def("__getitem__", &ExNode::getitem_string)
-			.def("__getitem__", &ExNode::getitem_iterator)
-			.def("__setitem__", &ExNode::setitem_string)
-			.def("__setitem__", &ExNode::setitem_iterator)
-			.def("_latex_", &ExNode::_latex_)
-			.def("__str__", &ExNode::__str__)
-			.def("terms", &ExNode::terms)
-			.def("factors", &ExNode::factors)
-			.def("own_indices", &ExNode::own_indices)
-			.def("indices", &ExNode::indices)
-			.def("free_indices", &ExNode::free_indices)
-			.def("args", &ExNode::args)
-			.def("children", &ExNode::children)
-			.def("replace", &ExNode::replace)
-			.def("insert", &ExNode::insert)
-			.def("insert", &ExNode::insert_it)
-			.def("append_child", &ExNode::append_child)
-			.def("append_child", &ExNode::append_child_it)
-			.def("erase", &ExNode::erase)
-			.def_property("name", &ExNode::get_name, &ExNode::set_name)
-			.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
-			.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)
-			.def("__add__", [](ExNode a, Ex_ptr b) { return a.add_ex(b); }, pybind11::is_operator{});
+		.def("__iter__", &ExNode::iter)
+		.def("__next__", &ExNode::next, pybind11::return_value_policy::reference_internal)
+		.def("__getitem__", &ExNode::getitem_string)
+		.def("__getitem__", &ExNode::getitem_iterator)
+		.def("__setitem__", &ExNode::setitem_string)
+		.def("__setitem__", &ExNode::setitem_iterator)
+		.def("_latex_", &ExNode::_latex_)
+		.def("__str__", &ExNode::__str__)
+		.def("terms", &ExNode::terms)
+		.def("factors", &ExNode::factors)
+		.def("own_indices", &ExNode::own_indices)
+		.def("indices", &ExNode::indices)
+		.def("free_indices", &ExNode::free_indices)
+		.def("args", &ExNode::args)
+		.def("children", &ExNode::children)
+		.def("replace", &ExNode::replace)
+		.def("insert", &ExNode::insert)
+		.def("insert", &ExNode::insert_it)
+		.def("append_child", &ExNode::append_child)
+		.def("append_child", &ExNode::append_child_it)
+		.def("erase", &ExNode::erase)
+		.def_property("name", &ExNode::get_name, &ExNode::set_name)
+		.def_property("parent_rel", &ExNode::get_parent_rel, &ExNode::set_parent_rel)
+		.def_property("multiplier", &ExNode::get_multiplier, &ExNode::set_multiplier)
+		.def("__add__", [](ExNode a, Ex_ptr b) {
+			return a.add_ex(b);
+			}, pybind11::is_operator{});
 
 		m.def("tree", &print_tree);
 
 		m.def("map_sympy", &map_sympy_wrapper,
-			  pybind11::arg("ex"),
-			  pybind11::arg("function") = "",
-			  pybind11::return_value_policy::reference_internal);
+		      pybind11::arg("ex"),
+		      pybind11::arg("function") = "",
+		      pybind11::return_value_policy::reference_internal);
 #ifdef MATHEMATICA_FOUND
 		def_algo<map_mma, std::string>(m, "map_mma", false, false, 0, pybind11::arg("function") = "");
 #endif

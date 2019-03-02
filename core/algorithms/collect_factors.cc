@@ -32,15 +32,15 @@ void collect_factors::fill_hash_map(iterator it)
 		while(chsib!=tr.end(sib)) {
 			const Symbol     *smb=kernel.properties.get<Symbol>(chsib, true);
 			// std::cerr << chsib << ": " << smb << std::endl;
-			 if((chsib->fl.parent_rel==str_node::p_sub || chsib->fl.parent_rel==str_node::p_super) &&
-				 chsib->is_rational()==false && smb==0) {
+			if((chsib->fl.parent_rel==str_node::p_sub || chsib->fl.parent_rel==str_node::p_super) &&
+			      chsib->is_rational()==false && smb==0) {
 				dontcollect=true;
 				break;
 				}
 			++chsib;
 			}
 		if(!dontcollect) {
-			if(*sib->name=="\\pow") 
+			if(*sib->name=="\\pow")
 				factor_hash.insert(std::pair<hashval_t, sibling_iterator>(tr.calc_hash(tr.begin(sib)), tr.begin(sib)));
 			else
 				factor_hash.insert(std::pair<hashval_t, sibling_iterator>(tr.calc_hash(sib), sib));
@@ -74,8 +74,7 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 				++powch;
 				iterator newch= expsum.append_child(expsumit, iterator(powch));
 				newch->fl.bracket=str_node::b_round;
-				}
-			else {
+				} else {
 				expsum.append_child(expsumit, str_node("1", str_node::b_round));
 				}
 			assert(*((*thisbin1).second->multiplier)==1);
@@ -96,8 +95,7 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 							++powch;
 							iterator newch=expsum.append_child(expsumit, iterator(powch));
 							newch->fl.bracket=str_node::b_round;
-							}
-						else {
+							} else {
 							expsum.append_child(expsumit, str_node("1", str_node::b_round));
 							}
 						factor_hash_iterator_t tmp=thisbin2;
@@ -109,16 +107,14 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 						factor_hash.erase(thisbin2);
 						thisbin2=tmp;
 						res=result_t::l_applied;
-						}
-					else ++thisbin2;
-					}
-				else ++thisbin2;
+						} else ++thisbin2;
+					} else ++thisbin2;
 				}
 			// make the modification to the tree
 			if(expsum.number_of_children(expsum.begin())>1) {
 				iterator top=expsum.begin();
 				cleanup_dispatch(kernel,expsum, top);
-//				cleanup_nests_below(expsum, expsum.begin());
+				//				cleanup_nests_below(expsum, expsum.begin());
 				if(! (expsum.begin()->is_identity()) ) {
 					collect_terms ct(kernel, expsum);
 					iterator tp=expsum.begin();
@@ -128,7 +124,7 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 					if(*(tr.parent(inserthere)->name)=="\\pow")
 						inserthere=tr.parent(inserthere);
 					if(expsum.begin()->is_rational() && (expsum.begin()->is_identity() ||
-																	 expsum.begin()->is_zero() ) ) {
+					                                     expsum.begin()->is_zero() ) ) {
 						if(*(inserthere->name)=="\\pow") {
 							tr.flatten(inserthere);
 							inserthere=tr.erase(inserthere);
@@ -141,8 +137,7 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 							node_one(inserthere);
 							inserthere->multiplier=rem;
 							}
-						}
-					else {
+						} else {
 						Ex repl;
 						repl.set_head(str_node("\\pow"));
 						repl.append_child(repl.begin(), iterator((*thisbin1).second));
@@ -155,7 +150,7 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 						}
 					}
 				}
-//			else txtout << "only one left" << std::endl;
+			//			else txtout << "only one left" << std::endl;
 			++thisbin1;
 			}
 		ht=thisbin1;

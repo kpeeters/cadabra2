@@ -9,14 +9,12 @@
 #include "py_kernel.hh"
 #include "properties/LaTeXForm.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 	/// \ingroup pythoncore
 	///
 	/// Helper class to ensure that all Python property objects derive from the
 	/// same base class.
-	class BaseProperty
-		{
+	class BaseProperty {
 		};
 
 	/// \ingroup pythoncore
@@ -38,15 +36,14 @@ namespace cadabra
 	///
 	/// Cadabra properties cannot be proper Python properties, because we
 	/// need to give the latter names in order to prevent them from going
-	/// out of scope. So Cadabra keeps a list of 'anonymous property objects 
-	/// in the current scope'. 
+	/// out of scope. So Cadabra keeps a list of 'anonymous property objects
+	/// in the current scope'.
 	///
 	/// The question is now what we do when Python keeps a pointer to these
 	/// objects, and let that pointer escape local scope (e.g. by returning
 	/// the Python property object). How do we keep it in scope?
 	template<class T>
-	class Property : public std::enable_shared_from_this<Property<T>>, public BaseProperty
-		{
+	class Property : public std::enable_shared_from_this<Property<T>>, public BaseProperty {
 		public:
 			Property(std::shared_ptr<cadabra::Ex> obj, std::shared_ptr<cadabra::Ex> params = 0);
 
@@ -61,17 +58,17 @@ namespace cadabra
 
 
 		private:
-			// We keep a pointer to the C++ property, so it is possible to 
+			// We keep a pointer to the C++ property, so it is possible to
 			// query properties using the Python interface. However, this C++
 			// object is owned by the C++ kernel and does not get destroyed
 			// when the Python object goes out of scope.
 
 			// When the Python object survives the local scope, results are
-			// undefined. 
+			// undefined.
 			T *prop;
 
 			// We also keep a shared pointer to the expression for which we
-			// have defined this property, so that we can print sensible 
+			// have defined this property, so that we can print sensible
 			// information.
 			std::shared_ptr<cadabra::Ex> for_obj;
 		};
@@ -83,7 +80,7 @@ namespace cadabra
 		for_obj = ex;
 		Kernel *kernel = get_kernel_from_scope();
 		prop = new Prop(); // we keep a pointer, but the kernel owns it.
-						   //	std::cerr << "Declaring property " << prop->name() << " in kernel " << kernel << std::endl;
+		//	std::cerr << "Declaring property " << prop->name() << " in kernel " << kernel << std::endl;
 		kernel->inject_property(prop, ex, param);
 		}
 
@@ -128,15 +125,15 @@ namespace cadabra
 		using namespace pybind11;
 
 		class_<Property<P>, std::shared_ptr<Property<P>>, BaseProperty>(m, std::make_shared<P>()->name().c_str())
-			.def(
-				init<std::shared_ptr<Ex>, std::shared_ptr<Ex>>(),
-				arg("ex"),
-				arg("param"),
-				docstring
-			)
-			.def("__str__", &Property<P>::str_)
-			.def("__repr__", &Property<P>::repr_)
-			.def("_latex_", &Property<P>::latex_);
+		      .def(
+		         init<std::shared_ptr<Ex>, std::shared_ptr<Ex>>(),
+		         arg("ex"),
+		         arg("param"),
+		         docstring
+		      )
+		      .def("__str__", &Property<P>::str_)
+		      .def("__repr__", &Property<P>::repr_)
+		      .def("_latex_", &Property<P>::latex_);
 		}
 
 

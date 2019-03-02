@@ -10,7 +10,7 @@ replace_match::replace_match(const Kernel& k, Ex& e)
 	{
 	}
 
-bool replace_match::can_apply(iterator) 
+bool replace_match::can_apply(iterator)
 	{
 	if(tr.history_size()>0) return true;
 	return false;
@@ -42,12 +42,12 @@ Algorithm::result_t replace_match::apply(iterator& it)
 		// expression (sum_node). We also need one to the sum node in the
 		// replacement sum.
 		iterator replacement_sum_node = current.iterator_from_path(tr.path_from_iterator(sum_node, tr.begin()), current.begin());
-		
+
 		// If the original sum has disappeared (because subsequent manipulations
 		// made all but one terms vanish), wrap it again in a sum.
-		if(*replacement_sum_node->name!="\\sum") 
+		if(*replacement_sum_node->name!="\\sum")
 			replacement_sum_node = current.wrap(replacement_sum_node, str_node("\\sum"));
-		
+
 		// If we are inside an integral, determine the \int multiplier in the original
 		// and in the replacement.
 		multiplier_t rescale=1;
@@ -56,14 +56,14 @@ Algorithm::result_t replace_match::apply(iterator& it)
 			multiplier_t repl_mult = *current.parent(replacement_sum_node)->multiplier;
 			rescale = repl_mult/orig_mult;
 			}
-		
+
 		sibling_iterator repit=current.begin(replacement_sum_node);
 		while(repit!=current.end(replacement_sum_node)) {
 			multiply( tr.append_child(sum_node, iterator(repit))->multiplier, rescale);
 			++repit;
 			}
 		}
-	
+
 	cleanup_dispatch(kernel, tr, it);
 	return result_t::l_applied;
 	}

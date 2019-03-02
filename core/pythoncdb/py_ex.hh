@@ -5,8 +5,7 @@
 #include "../Storage.hh"
 #include "../ExNode.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 	using Ex_ptr = std::shared_ptr<Ex>;
 
 	/// \ingroup pythoncore
@@ -23,8 +22,8 @@ namespace cadabra
 
 	Ex_ptr Ex_add(const Ex_ptr ex1, const ExNode ex2);
 	Ex_ptr Ex_add(const Ex_ptr ex1, const Ex_ptr ex2);
-	Ex_ptr Ex_add(const Ex_ptr ex1, const Ex_ptr ex2, Ex::iterator top2); 
-	
+	Ex_ptr Ex_add(const Ex_ptr ex1, const Ex_ptr ex2, Ex::iterator top2);
+
 	/// \ingroup pythoncore
 	///
 	/// Multiply two expressions, adding a top-level \prod node if required.
@@ -58,8 +57,8 @@ namespace cadabra
 	/// produce proper LaTeX output, this is therefore not the right
 	/// function to use, because Cadabra only reads a restricted subset
 	/// of LaTeX (for instance, we output spacing commands like '\,' but
-	/// do not accept it on input). 
-	/// So we have a separate _latex_() member on each object, which 
+	/// do not accept it on input).
+	/// So we have a separate _latex_() member on each object, which
 	///internally uses DisplayTeX to do the actual printing.
 	std::string Ex_as_latex(Ex_ptr);
 
@@ -67,10 +66,10 @@ namespace cadabra
 	///
 	/// Outputs a Cadabra 'Ex' as a Sympy expression. This first converts the
 	/// Cadabra expression to a string, and then reads that back in by calling
-	/// sympy.parsing.sympy_parser.parse_expr. Is mapped to a '_sympy_()' 
-	/// function on each Ex object. 
+	/// sympy.parsing.sympy_parser.parse_expr. Is mapped to a '_sympy_()'
+	/// function on each Ex object.
 	/// When you feed an Ex object to a Sympy function, the Ex gets converted
-	/// to a Sympy object in 'sympy.sympify' because the latter attempts to 
+	/// to a Sympy object in 'sympy.sympify' because the latter attempts to
 	/// call __sympy__ on every object that you feed it.
 	pybind11::object Ex_as_sympy(Ex_ptr);
 
@@ -95,7 +94,7 @@ namespace cadabra
 	std::string Ex_head(Ex_ptr ex);
 	pybind11::object Ex_get_mult(Ex_ptr ex);
 
-	// Split a 'sum' expression into its individual terms. 
+	// Split a 'sum' expression into its individual terms.
 	// FIXME: now deprecated because we have operator[]?
 	pybind11::list terms(Ex_ptr ex);
 
@@ -105,7 +104,7 @@ namespace cadabra
 	Ex_ptr map_sympy_wrapper(Ex_ptr ex, std::string head, pybind11::args args);
 #ifdef MATHEMATICA_FOUND
 	Ex_ptr map_mma_wrapper(Ex_ptr ex, std::string head);
-	#endif
+#endif
 
 	void call_post_process(Kernel& kernel, Ex_ptr ex);
 

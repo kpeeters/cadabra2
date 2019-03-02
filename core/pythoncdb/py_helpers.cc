@@ -3,8 +3,7 @@
 #include "json/json.h"
 #include "py_helpers.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 
 	namespace py = pybind11;
 

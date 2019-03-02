@@ -38,12 +38,11 @@ void ProgressMonitor::group(std::string name)
 		Total& tot=fnd->second;
 
 		tot.name=blk.name;
-		auto now=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());		
+		auto now=std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
 		tot.time_spent  += (now - blk.started);
 		tot.total_steps += blk.total_steps;
 		call_stack.pop();
-		}
-	else {
+		} else {
 		// Insert an entry on the call stack.
 		Block blk;
 		blk.name=name;
@@ -57,8 +56,7 @@ void ProgressMonitor::group(std::string name)
 			tot.call_count=1;
 			tot.name=name;
 			call_totals[name]=tot;
-			}
-		else {
+			} else {
 			fnd->second.call_count++;
 			}
 		}
@@ -80,16 +78,16 @@ void ProgressMonitor::print() const
 	for(auto& t: call_totals) {
 		const Total& tot=t.second;
 		std::cerr << tot.name << ": "
-					 << tot.call_count << " calls, "
-//					 << (long)tot.time_spent << " ms, "
-					 << tot.total_steps << " steps" << std::endl;
+		          << tot.call_count << " calls, "
+		          //					 << (long)tot.time_spent << " ms, "
+		          << tot.total_steps << " steps" << std::endl;
 		}
 	}
 
 std::vector<ProgressMonitor::Total> ProgressMonitor::totals() const
 	{
 	std::vector<Total> res;
-	for(auto& t: call_totals) 
+	for(auto& t: call_totals)
 		res.push_back(t.second);
 
 	return res;
@@ -98,8 +96,8 @@ std::vector<ProgressMonitor::Total> ProgressMonitor::totals() const
 bool ProgressMonitor::Total::operator==(const Total& other) const
 	{
 	if(name==other.name &&
-		call_count==other.call_count &&
-		time_spent==other.time_spent &&
-		total_steps==other.total_steps) return true;
+	      call_count==other.call_count &&
+	      time_spent==other.time_spent &&
+	      total_steps==other.total_steps) return true;
 	return false;
 	}

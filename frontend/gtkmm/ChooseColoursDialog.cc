@@ -5,24 +5,23 @@
 #include <locale>
 #include <iostream>
 
-namespace cadabra
-{
+namespace cadabra {
 	std::string capitalize_first(std::string in)
-	{
+		{
 		if (in.empty())
 			return in;
 		in[0] = std::toupper(in[0]);
 		for (int i = 1; i < (int)in.size() - 1; ++i) {
 			if (in[i] == ' ')
 				in[i + 1] = std::toupper(in[i + 1]);
-		}
+			}
 		return in;
-	}
+		}
 
 	ChooseColoursDialog::ChooseColoursDialog(DocumentThread::Prefs& prefs, NotebookWindow& parent)
 		: Gtk::Dialog("Choose syntax highlighting colours", parent, true)
 		, prefs(prefs), button_ok("Ok"), parent(parent)
-	{
+		{
 		using namespace std::string_literals;
 
 		set_transient_for(parent);
@@ -51,38 +50,40 @@ namespace cadabra
 				sec_grid->attach(*kw_button, 1, row, 1, 1);
 				anonymous_widgets.push_back(std::move(kw_label));
 				colour_buttons[it->first][jt->first] = std::move(kw_button);
-			}
+				}
 
 			// Move sec_label and sec_grid to class scope so they don't get destroyed
 			anonymous_widgets.push_back(std::move(sec_label));
 			anonymous_widgets.push_back(std::move(sec_grid));
-		}
+			}
 		main_grid.set_column_spacing(30);
 		main_grid.set_margin_start(30);
 		main_grid.set_margin_end(30);
 		main_grid.set_margin_top(10);
-		main_grid.set_margin_bottom(10);		
+		main_grid.set_margin_bottom(10);
 
 		main_vbox.pack_start(bottom_button_box);
 		bottom_button_box.pack_start(button_ok);
 
-		button_ok.signal_clicked().connect( [&]() { close(); } );
-		
+		button_ok.signal_clicked().connect( [&]() {
+			close();
+			} );
+
 		main_vbox.show_all();
-	}
+		}
 
 	void ChooseColoursDialog::on_color_set()
-	{
+		{
 		for (auto& language : colour_buttons) {
 			for (auto& kw : language.second) {
 				prefs.colours[language.first][kw.first] = kw.second->get_rgba().to_string();
+				}
 			}
-		}
 		parent.refresh_highlighting();
 		/*prefs.colours[cur_lang][cur_kw_type] = std::string(colour.to_string());
 		dynamic_cast<Gtk::Label*>(label_widgets[cur_lang + cur_kw_type].get())->set_markup(
 			std::string("<span foreground=\"") + colour.to_string() + "\">" + capitalize_first(cur_kw_type) + "</span>"
 		);
 		label_widgets[cur_lang + cur_kw_type]->show();*/
+		}
 	}
-}

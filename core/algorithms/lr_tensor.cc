@@ -11,7 +11,7 @@ lr_tensor::lr_tensor(const Kernel& k, Ex& tr)
 	{
 	}
 
-bool lr_tensor::can_apply(iterator it) 
+bool lr_tensor::can_apply(iterator it)
 	{
 	if(*it->name=="\\prod") {
 		sibling_iterator sib=tr.begin(it);
@@ -29,7 +29,7 @@ bool lr_tensor::can_apply(iterator it)
 			++sib;
 			}
 		if(tab2!=tr.end(it)) return true;
-		
+
 		sib=tr.begin(it);
 		tab1=tr.end(it);
 		tab2=tr.end(it);
@@ -64,11 +64,11 @@ void lr_tensor::do_filledtableau(iterator& it)
 	bool even_only=false;
 	bool singlet_rules=false;
 
-// FIXME: put arguments back
-//	if(has_argument("EvenOnly"))
-//		 even_only=true;
-//	if(has_argument("SingletRules"))
-//		 singlet_rules=true;
+	// FIXME: put arguments back
+	//	if(has_argument("EvenOnly"))
+	//		 even_only=true;
+	//	if(has_argument("SingletRules"))
+	//		 singlet_rules=true;
 
 	uinttab_t one, two;
 
@@ -90,9 +90,9 @@ void lr_tensor::do_filledtableau(iterator& it)
 
 	sibling_iterator sib=rep.begin(top);
 	while(sib!=rep.end(top)) {
-		 sib->fl.bracket=str_node::b_round;
-		 ++sib;
-		 }
+		sib->fl.bracket=str_node::b_round;
+		++sib;
+		}
 
 	tr.replace(tab1, rep.begin());
 	tr.erase(tab2);
@@ -102,13 +102,13 @@ void lr_tensor::do_filledtableau(iterator& it)
 void lr_tensor::do_tableau(iterator& it)
 	{
 	bool even_only=false;
-// FIXME: put arguments back in
-//	if(has_argument("EvenOnly"))
-//		 even_only=true;
+	// FIXME: put arguments back in
+	//	if(has_argument("EvenOnly"))
+	//		 even_only=true;
 
 	yngtab::tableau one, two;
 	yngtab::tableaux<yngtab::tableau> prod;
-	
+
 	sibling_iterator sib=tr.begin(tab1);
 	while(sib!=tr.end(tab1)) {
 		one.add_row(to_long(*sib->multiplier));
@@ -127,17 +127,18 @@ void lr_tensor::do_tableau(iterator& it)
 	while(tabit!=prod.storage.end()) {
 		// Keep only the diagrams which lead to a singlet if requested.
 		if(even_only)
-			for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r) 
+			for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r)
 				if((*tabit).row_size(r)%2!=0)
 					goto next_tab;
 
-		{iterator tt=tr.append_child(top, str_node(tab1->name));
-		multiply(tt->multiplier, tabit->multiplicity);
-		for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r) 
-			multiply(tr.append_child(tt, str_node("1"))->multiplier, (*tabit).row_size(r));
+			{
+			iterator tt=tr.append_child(top, str_node(tab1->name));
+			multiply(tt->multiplier, tabit->multiplicity);
+			for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r)
+				multiply(tr.append_child(tt, str_node("1"))->multiplier, (*tabit).row_size(r));
 			}
 
-	   next_tab:
+next_tab:
 		++tabit;
 		}
 

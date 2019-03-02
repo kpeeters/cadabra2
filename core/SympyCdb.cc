@@ -14,11 +14,11 @@ using namespace cadabra;
 
 // #define DEBUG 1
 
-Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args, 
-								  const std::string& method)
+Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args,
+                          const std::string& method)
 	{
-   // We first need to print the sub-expression using DisplaySympy,
- 	// optionally with the head wrapped around it and the args added
+	// We first need to print the sub-expression using DisplaySympy,
+	// optionally with the head wrapped around it and the args added
 	// (if present).
 	std::ostringstream str;
 
@@ -46,7 +46,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	//ex.print_recursive_treeform(std::cerr, it);
 #ifdef DEBUG
 	std::cerr << "feeding " << str.str() << std::endl;
-#endif	
+#endif
 
 	auto module = pybind11::module::import("sympy.parsing.sympy_parser");
 	auto parse  = module.attr("parse_expr");
@@ -55,23 +55,23 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	auto __str__ = obj.attr("__str__");
 	pybind11::object res = __str__();
 	std::string result = res.cast<std::string>();
-#ifdef DEBUG	
+#ifdef DEBUG
 	std::cerr << "result " << result << std::endl;
-#endif	
-	
+#endif
 
-   // After that, we construct a new sub-expression from this string by using our
-   // own parser, and replace the original.
+
+	// After that, we construct a new sub-expression from this string by using our
+	// own parser, and replace the original.
 
 	result = ds.preparse_import(result);
-	
+
 	auto ptr = std::make_shared<Ex>();
 	cadabra::Parser parser(ptr);
 	std::stringstream istr(result);
 	istr >> parser;
 
 	pre_clean_dispatch_deep(kernel, *parser.tree);
-   cleanup_dispatch_deep(kernel, *parser.tree);
+	cleanup_dispatch_deep(kernel, *parser.tree);
 
 	//parser.tree->print_recursive_treeform(std::cerr, parser.tree->begin());
 
@@ -83,13 +83,13 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	std::cerr << "reparsed " << first.node << "\n" << Ex(first) << std::endl;
 	std::cerr << "before " << it.node << "\n" << Ex(it) << std::endl;
 #endif
-   it = ex.move_ontop(it, first);
+	it = ex.move_ontop(it, first);
 #ifdef DEBUG
-   std::cerr << "after " << Ex(it) << std::endl;
-   std::cerr << "top node " << it.node << std::endl;
+	std::cerr << "after " << Ex(it) << std::endl;
+	std::cerr << "top node " << it.node << std::endl;
 #endif
 
-   
+
 	return it;
 	}
 
@@ -107,8 +107,8 @@ Ex sympy::fill_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 
 	const Indices *prop1 = kernel.properties.get<Indices>(ind1);
 	const Indices *prop2 = kernel.properties.get<Indices>(ind2);
-	
-	if(prop1!=prop2 || prop1==0) 
+
+	if(prop1!=prop2 || prop1==0)
 		throw ConsistencyException("Need the indices of object to be declared with Indices property.");
 
 	// Run over all values of Coordinates, construct matrix.
@@ -118,7 +118,7 @@ Ex sympy::fill_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 	for(unsigned c1=0; c1<prop1->values.size(); ++c1) {
 		auto row=matrix.append_child(cols, str_node("\\comma"));
 		for(unsigned c2=0; c2<prop1->values.size(); ++c2) {
-			// Generate an expression with this component, apply substitution, then stick 
+			// Generate an expression with this component, apply substitution, then stick
 			// the result into the string that will go to sympy.
 
 			Ex c(ex.begin());
@@ -132,8 +132,7 @@ Ex sympy::fill_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 			if(subs.can_apply(cit)) {
 				subs.apply(cit);
 				matrix.append_child(row, cit);
-				}
-			else {
+				} else {
 				zero( matrix.append_child(row, str_node("1"))->multiplier );
 				}
 			}
@@ -147,7 +146,7 @@ void sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& toc
 	if(ex.number_of_children(ex.begin())!=2) {
 		throw ConsistencyException("Object should have exactly two indices.");
 		}
-	
+
 	auto matrix = fill_matrix(kernel, ex, rules);
 
 	auto top=matrix.begin();
@@ -175,10 +174,10 @@ void sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& toc
 				auto i = rule.begin(rit);
 				//std::cerr << c1 << ", " << c2 << std::endl;
 				i = rule.replace_index(i, prop1->values[c1].begin(), true);
-//				i->fl.parent_rel=ind1->fl.parent_rel;
+				//				i->fl.parent_rel=ind1->fl.parent_rel;
 				++i;
 				i = rule.replace_index(i, prop1->values[c2].begin(), true);
-//				i->fl.parent_rel=ind1->fl.parent_rel;
+				//				i->fl.parent_rel=ind1->fl.parent_rel;
 				rules.append_child(ruleslist, rule.begin());
 				//rule.print_recursive_treeform(std::cerr, rule.begin());
 				}

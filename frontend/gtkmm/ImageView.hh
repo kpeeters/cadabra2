@@ -7,9 +7,9 @@
 
 namespace cadabra {
 
-   /// \ingroup frontend
-   ///
-   /// An image viewing widget.
+	/// \ingroup frontend
+	///
+	/// An image viewing widget.
 
 	class ImageView : public Gtk::EventBox {
 		public:
@@ -21,15 +21,15 @@ namespace cadabra {
 			virtual bool on_motion_notify_event(GdkEventMotion *event) override;
 			virtual bool on_button_press_event(GdkEventButton *event) override;
 			virtual bool on_button_release_event(GdkEventButton *event) override;
-			
+
 		private:
 			Gtk::VBox   vbox;
 			Gtk::Image  image;
-			Glib::RefPtr<Gdk::Pixbuf> pixbuf;			
+			Glib::RefPtr<Gdk::Pixbuf> pixbuf;
 
 			bool   sizing;
 			double prev_x, prev_y;
 			int    height_at_press, width_at_press;
-	};
+		};
 
-};
+	};

@@ -6,7 +6,7 @@
 #include "properties/Symbol.hh"
 #include "SympyCdb.hh"
 #ifdef MATHEMATICA_FOUND
-   #include "MMACdb.hh"
+#include "MMACdb.hh"
 #endif
 
 using namespace cadabra;
@@ -22,8 +22,8 @@ bool simplify::can_apply(iterator st)
 	// component values, not the top \components node.
 	if(*st->name=="\\components") return false;
 	if(*st->name=="\\equals") return false;
-	if(*st->name=="\\comma") return false;		
-	
+	if(*st->name=="\\comma") return false;
+
 	left.clear();
 	index_factors.clear();
 	index_map_t ind_free, ind_dummy;
@@ -42,8 +42,8 @@ bool simplify::can_apply(iterator st)
 		}
 
 	if(still_ok && ind_dummy.size()==0) return true;
-	
-   // In a product, it is still possible that there is a sub-product which
+
+	// In a product, it is still possible that there is a sub-product which
 	// contains no indices.
 	if(*st->name=="\\prod") {
 		// Find the factors in the product which have a proper index on them. Do this by
@@ -93,21 +93,21 @@ Algorithm::result_t simplify::apply(iterator& it)
 		auto top=prod.begin();
 		// std::cerr << "Feeding to sympy " << prod << std::endl;
 		switch(kernel.scalar_backend) {
-			case Kernel::scalar_backend_t::sympy:
-				wrap.push_back("simplify");
-				if(pm) pm->group("sympy");
-				sympy::apply(kernel, prod, top, wrap, args_, "");
-				if(pm) pm->group();
-				break;
-			case Kernel::scalar_backend_t::mathematica:
+		case Kernel::scalar_backend_t::sympy:
+			wrap.push_back("simplify");
+			if(pm) pm->group("sympy");
+			sympy::apply(kernel, prod, top, wrap, args_, "");
+			if(pm) pm->group();
+			break;
+		case Kernel::scalar_backend_t::mathematica:
 #ifdef MATHEMATICA_FOUND
-				wrap.push_back("FullSimplify");
-//				args_.push_back("Trig -> False");				
-				if(pm) pm->group("mathematica");
-				MMA::apply_mma(kernel, prod, top, wrap, args_, "");
-				if(pm) pm->group();
-#endif				
-				break;
+			wrap.push_back("FullSimplify");
+			//				args_.push_back("Trig -> False");
+			if(pm) pm->group("mathematica");
+			MMA::apply_mma(kernel, prod, top, wrap, args_, "");
+			if(pm) pm->group();
+#endif
+			break;
 			}
 		// Now remove the non-index carrying factors and replace with
 		// the factors of 'prod' just simplified.
@@ -116,26 +116,25 @@ Algorithm::result_t simplify::apply(iterator& it)
 		for(auto& kl: left)
 			tr.erase(kl);
 		// std::cerr << "After erasing " << Ex(it) << std::endl;
-		
+
 		return result_t::l_applied;
-		}
-	else {
+		} else {
 		switch(kernel.scalar_backend) {
-			case Kernel::scalar_backend_t::sympy:
-				wrap.push_back("simplify");
-				if(pm) pm->group("sympy");				
-				sympy::apply(kernel, tr, it, wrap, args_, "");
-				if(pm) pm->group();				
-				break;
-			case Kernel::scalar_backend_t::mathematica:
-#ifdef MATHEMATICA_FOUND				
-				wrap.push_back("FullSimplify");
-//				args_.push_back("Trig -> False");
-				if(pm) pm->group("mathematica");
-				MMA::apply_mma(kernel, tr, it, wrap, args_, "");
-				if(pm) pm->group();				
+		case Kernel::scalar_backend_t::sympy:
+			wrap.push_back("simplify");
+			if(pm) pm->group("sympy");
+			sympy::apply(kernel, tr, it, wrap, args_, "");
+			if(pm) pm->group();
+			break;
+		case Kernel::scalar_backend_t::mathematica:
+#ifdef MATHEMATICA_FOUND
+			wrap.push_back("FullSimplify");
+			//				args_.push_back("Trig -> False");
+			if(pm) pm->group("mathematica");
+			MMA::apply_mma(kernel, tr, it, wrap, args_, "");
+			if(pm) pm->group();
 #endif
-				break;
+			break;
 			}
 		it.skip_children();
 		return result_t::l_applied;

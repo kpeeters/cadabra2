@@ -18,10 +18,10 @@ class MMA {
 		/// Ex. This duplicates some of the logic in PythonCdb.hh, in
 		/// particular make_Ex_from_string, but it is best to keep these
 		/// two completely separate.
-		
+
 		static cadabra::Ex::iterator apply_mma(const cadabra::Kernel&, cadabra::Ex&, cadabra::Ex::iterator&,
-															const std::vector<std::string>& wrap, std::vector<std::string> args,
-															const std::string& method);
+		                                       const std::vector<std::string>& wrap, std::vector<std::string> args,
+		                                       const std::string& method);
 
 
 	private:
@@ -30,4 +30,4 @@ class MMA {
 
 		static void setup_link();
 		static void teardown_link();
-};
+	};

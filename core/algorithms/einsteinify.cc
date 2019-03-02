@@ -52,10 +52,9 @@ Algorithm::result_t einsteinify::apply(iterator& it)
 				tr.replace_index((*dit).second,dum.begin())->fl.parent_rel=str_node::p_sub;
 
 				res=result_t::l_applied;
-				}
-			else { // raise one index
+				} else { // raise one index
 				if((*dit).second->fl.parent_rel==(*prev).second->fl.parent_rel) {
-					if((*dit).second->fl.parent_rel==str_node::p_super) 
+					if((*dit).second->fl.parent_rel==str_node::p_super)
 						(*prev).second->fl.parent_rel=str_node::p_sub;
 					else
 						(*prev).second->fl.parent_rel=str_node::p_super;

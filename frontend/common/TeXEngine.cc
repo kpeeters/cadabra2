@@ -21,15 +21,15 @@ using namespace cadabra;
 
 #if defined(WIN32)
 int setenv(const char *name, const char *value, int overwrite)
-   {
-   int errcode = 0;
-   if(!overwrite) {
-	   size_t envsize = 0;
-	   errcode = getenv_s(&envsize, NULL, 0, name);
-	   if(errcode || envsize) return errcode;
-	   }
-   return _putenv_s(name, value);
-   }
+	{
+	int errcode = 0;
+	if(!overwrite) {
+		size_t envsize = 0;
+		errcode = getenv_s(&envsize, NULL, 0, name);
+		if(errcode || envsize) return errcode;
+		}
+	return _putenv_s(name, value);
+	}
 #endif
 
 double TeXEngine::millimeter_per_inch = 25.4;
@@ -42,56 +42,56 @@ TeXEngine::TeXException::TeXException(const std::string& str)
 std::string TeXEngine::convert_unicode_to_tex(const std::string& orig) const
 	{
 	static std::map<std::string, std::string> symmap = {
-		{"α", "\\alpha"    },
-		{"β", "\\beta"     },
-		{"γ", "\\gamma"    },
-		{"δ", "\\delta"    },
-		{"ε", "\\epsilon"  },
-		{"ζ", "\\zeta"     },
-		{"η", "\\eta"      },
-		{"θ", "\\theta"    },
-		{"ι", "\\iota"     },
-		{"κ", "\\kappa"    },
-		{"λ", "\\lambda"   },
-		{"μ", "\\mu"       },
-		{"ν", "\\nu"       },
-		{"ξ", "\\xi"       },
-		{"ο", "\\omicron"  },
-		{"π", "\\pi"       },
-		{"ρ", "\\rho"      },
-		{"σ", "\\sigma"    },
-		{"τ", "\\tau"      },
-		{"υ", "\\upsilon"  },
-		{"φ", "\\phi"      },
-		{"χ", "\\chi"      },
-		{"ψ", "\\psi"      },
-		{"ω", "\\omega"    },
+			{"α", "\\alpha"    },
+			{"β", "\\beta"     },
+			{"γ", "\\gamma"    },
+			{"δ", "\\delta"    },
+			{"ε", "\\epsilon"  },
+			{"ζ", "\\zeta"     },
+			{"η", "\\eta"      },
+			{"θ", "\\theta"    },
+			{"ι", "\\iota"     },
+			{"κ", "\\kappa"    },
+			{"λ", "\\lambda"   },
+			{"μ", "\\mu"       },
+			{"ν", "\\nu"       },
+			{"ξ", "\\xi"       },
+			{"ο", "\\omicron"  },
+			{"π", "\\pi"       },
+			{"ρ", "\\rho"      },
+			{"σ", "\\sigma"    },
+			{"τ", "\\tau"      },
+			{"υ", "\\upsilon"  },
+			{"φ", "\\phi"      },
+			{"χ", "\\chi"      },
+			{"ψ", "\\psi"      },
+			{"ω", "\\omega"    },
 
-		{"Α", "\\Alpha"    },
-		{"Β", "\\Beta"     },
-		{"Γ", "\\Gamma"    },
-		{"Δ", "\\Delta"    },
-		{"Ε", "\\Epsilon"  },
-		{"Ζ", "\\Zeta"     },
-		{"Η", "\\Eta"      },
-		{"ϴ", "\\Theta"    },
-		{"Ι", "\\Iota"     },
-		{"Κ", "\\Kappa"    },
-		{"Λ", "\\Lambda"   },
-		{"Μ", "\\Mu"       },
-		{"Ν", "\\Nu"       },
-		{"Ξ", "\\Xi"       },
-		{"Ο", "\\Omicron"  },
-		{"Π", "\\Pi"       },
-		{"Ρ", "\\Rho"      },
-		{"Σ", "\\Sigma"    },
-		{"Τ", "\\Tau"      },
-		{"Υ", "\\Upsilon"  },
-		{"Φ", "\\Phi"      },
-		{"Χ", "\\Chi"      },
-		{"Ψ", "\\Psi"      },
-		{"Ω", "\\Omega"    }
-	};
+			{"Α", "\\Alpha"    },
+			{"Β", "\\Beta"     },
+			{"Γ", "\\Gamma"    },
+			{"Δ", "\\Delta"    },
+			{"Ε", "\\Epsilon"  },
+			{"Ζ", "\\Zeta"     },
+			{"Η", "\\Eta"      },
+			{"ϴ", "\\Theta"    },
+			{"Ι", "\\Iota"     },
+			{"Κ", "\\Kappa"    },
+			{"Λ", "\\Lambda"   },
+			{"Μ", "\\Mu"       },
+			{"Ν", "\\Nu"       },
+			{"Ξ", "\\Xi"       },
+			{"Ο", "\\Omicron"  },
+			{"Π", "\\Pi"       },
+			{"Ρ", "\\Rho"      },
+			{"Σ", "\\Sigma"    },
+			{"Τ", "\\Tau"      },
+			{"Υ", "\\Upsilon"  },
+			{"Φ", "\\Phi"      },
+			{"Χ", "\\Chi"      },
+			{"Ψ", "\\Psi"      },
+			{"Ω", "\\Omega"    }
+		};
 
 	std::string ret=orig;
 	auto it=symmap.begin();
@@ -128,19 +128,19 @@ std::string TeXEngine::handle_latex_errors(const std::string& result, int exit_c
 	{
 	std::string::size_type pos=result.find("! LaTeX Error");
 	if(pos != std::string::npos) {
-		 return "LaTeX error, probably a missing style file. See the output below.\n\n" +result;
-		 }
-	
+		return "LaTeX error, probably a missing style file. See the output below.\n\n" +result;
+		}
+
 	pos=result.find("! TeX capacity exceeded");
 	if(pos != std::string::npos) {
-		 return "Output cell too large (TeX capacity exceeded), output suppressed.";
-		 }
-	
+		return "Output cell too large (TeX capacity exceeded), output suppressed.";
+		}
+
 	pos=result.find("! Dimension too large");
 	if(pos != std::string::npos) {
-		 return "Output cell too large (dimension too large), output suppressed.";
-		 }
-	
+		return "Output cell too large (dimension too large), output suppressed.";
+		}
+
 	pos=result.find("! Double superscript.");
 	if(pos != std::string::npos) {
 		return "Internal typesetting error: double superscript. Please report a bug.\n\n" + result;
@@ -149,24 +149,24 @@ std::string TeXEngine::handle_latex_errors(const std::string& result, int exit_c
 	if(pos != std::string::npos) {
 		return "Internal typesetting error: double subscript. Please report a bug.\n\n" + result;
 		}
-	
+
 	pos=result.find("! Package breqn Error: ");
 	if(pos != std::string::npos) {
 		return "Typesetting error (breqn.sty related). Please report a bug.\n\n" + result;
 		}
-	
+
 	pos=result.find("! Undefined control sequence");
 	if(pos != std::string::npos) {
-		 std::string::size_type undefpos=result.find("\n", pos+30);
-		 if(undefpos==std::string::npos) 
-			  return "Undefined control sequence (failed to parse LaTeX output).";
-		 std::string::size_type backslashpos=result.rfind("\\", undefpos);
-		 if(backslashpos==std::string::npos || backslashpos < 2) 
-			  return "Undefined control sequence (failed to parse LaTeX output).";
+		std::string::size_type undefpos=result.find("\n", pos+30);
+		if(undefpos==std::string::npos)
+			return "Undefined control sequence (failed to parse LaTeX output).";
+		std::string::size_type backslashpos=result.rfind("\\", undefpos);
+		if(backslashpos==std::string::npos || backslashpos < 2)
+			return "Undefined control sequence (failed to parse LaTeX output).";
 
-		 std::string undefd=result.substr(backslashpos-1,undefpos-pos-30);
-		 return "Undefined control sequence:\n\n" +undefd+"\nNote that all symbols which you use in cadabra have to be valid LaTeX expressions.\nIf they are not, you can still use the LaTeXForm property\nto make them print correctly; see the manual for more information.";
-		 }
+		std::string undefd=result.substr(backslashpos-1,undefpos-pos-30);
+		return "Undefined control sequence:\n\n" +undefd+"\nNote that all symbols which you use in cadabra have to be valid LaTeX expressions.\nIf they are not, you can still use the LaTeXForm property\nto make them print correctly; see the manual for more information.";
+		}
 
 	if(exit_code!=0) {
 		return "Generic typesetting error; LaTeX failed. Please report a bug.\n\n" + result;
@@ -182,7 +182,7 @@ TeXEngine::~TeXEngine()
 TeXEngine::TeXEngine()
 	: horizontal_pixels_(0), font_size_(12), total_scale_(1.0), device_scale_(1.0)
 	{
-//	latex_packages.push_back("breqn");
+	//	latex_packages.push_back("breqn");
 	latex_packages.push_back("hyperref");
 
 	// Load the pre-amble from file.
@@ -191,7 +191,7 @@ TeXEngine::TeXEngine()
 	if(!preamble)
 		throw std::logic_error("Cannot open TeXEngine preamble at "+pname);
 	std::stringstream buffer;
-	buffer << preamble.rdbuf();	
+	buffer << preamble.rdbuf();
 	preamble_string = buffer.str();
 	}
 
@@ -232,7 +232,7 @@ void TeXEngine::set_scale(double total_scale, double device_scale)
 			}
 		}
 	total_scale_=total_scale;
-	device_scale_=device_scale;	
+	device_scale_=device_scale;
 	}
 
 double TeXEngine::get_scale() const
@@ -246,7 +246,7 @@ TeXEngine::TeXRequest::TeXRequest()
 	}
 
 std::shared_ptr<TeXEngine::TeXRequest> TeXEngine::checkin(const std::string& txt,
-																			 const std::string& startwrap, const std::string& endwrap)
+      const std::string& startwrap, const std::string& endwrap)
 	{
 	auto req = std::make_shared<TeXRequest>();
 	req->latex_string=txt;
@@ -312,14 +312,14 @@ void TeXEngine::convert_one(std::shared_ptr<TeXRequest> req)
 void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	{
 	// We now no longer follow
-	// 
+	//
 	// https://www.securecoding.cert.org/confluence/display/seccode/FI039-C.+Create+temporary+files+securely
-	// 
+	//
 	// for temporary files; it needs to work on all platforms...
 
 	char olddir[1024];
 	if(getcwd(olddir, 1023)==NULL)
-		 olddir[0]=0;
+		olddir[0]=0;
 	std::string tmpdir="/tmp";
 	std::string tmppath=std::tmpnam(0);
 #if defined(_WIN32)
@@ -338,34 +338,34 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		}
 	tmpdir+="/";
 #endif
-	
+
 	if(chdir(tmpdir.c_str())==-1)
 		throw TeXException("Failed to chdir to "+tmpdir+".");
 
 #ifdef DEBUG
 	std::cerr << "tmpdir  = " << tmpdir << std::endl;
-	std::cerr << "tmppath = " << tmppath << std::endl;	
+	std::cerr << "tmppath = " << tmppath << std::endl;
 #endif
-	
-//	char templ[]="/tmp/cdbXXXXXX";
+
+	//	char templ[]="/tmp/cdbXXXXXX";
 
 	// The size in mm or inches which we use will in the end determine how large
-	// the font will come out. 
+	// the font will come out.
 	//
 	// For given horizontal size, we stretch this up to the full window
 	// width using horizontal_pixels/(horizontal_size/millimeter_per_inch) dots per inch.
-	// The appropriate horizontal size in mm is determined by trial and error, 
+	// The appropriate horizontal size in mm is determined by trial and error,
 	// and of course scales with the number of horizontal pixels.
-	
-	// Note: the number here has no effect on the size in pixels of the generated 
+
+	// Note: the number here has no effect on the size in pixels of the generated
 	// PDF. That is set with the -D parameter of dvipng.
 
 	const double horizontal_mm=horizontal_pixels_*(12.0/font_size_)/3.94/(total_scale_/device_scale_);
-//#ifdef DEBUG
-//	std::cerr << "tex_it: font_size " << font_size << std::endl
-//				 << "        pixels    " << horizontal_pixels_ << std::endl
-//				 << "        mm        " << horizontal_mm << std::endl;
-//#endif
+	//#ifdef DEBUG
+	//	std::cerr << "tex_it: font_size " << font_size << std::endl
+	//				 << "        pixels    " << horizontal_pixels_ << std::endl
+	//				 << "        mm        " << horizontal_mm << std::endl;
+	//#endif
 
 	//(int)(millimeter_per_inch*horizontal_pixels/100.0); //140;
 	const double vertical_mm=std::min(10*horizontal_mm, 3000.0);
@@ -376,18 +376,18 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	std::ostringstream total;
 	std::ofstream outstr(tmppath);
-//	int fd = mkstemp(templ);
-//	if(fd == -1) 
-//		 throw TeXException("Failed to create temporary file in /tmp.");
+	//	int fd = mkstemp(templ);
+	//	if(fd == -1)
+	//		 throw TeXException("Failed to create temporary file in /tmp.");
 
 	total << "\\documentclass[11pt]{article}\n"
-			<< "\\usepackage[dvips,verbose,voffset=0pt,hoffset=0pt,textwidth="
-			<< horizontal_mm << "mm,textheight="
-			<< vertical_mm << "mm]{geometry}\n"
+	      << "\\usepackage[dvips,verbose,voffset=0pt,hoffset=0pt,textwidth="
+	      << horizontal_mm << "mm,textheight="
+	      << vertical_mm << "mm]{geometry}\n"
 #ifndef __APPLE__
-	  //			<< "\\usepackage{inconsolata}\n"
+	      //			<< "\\usepackage{inconsolata}\n"
 #endif
-		;
+	      ;
 
 	for(size_t i=0; i<latex_packages.size(); ++i)
 		total << "\\usepackage{" << latex_packages[i] << "}\n";
@@ -401,7 +401,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			if((*reqit)->latex_string.size()>100000)
 				total << "Expression too long, output suppressed.\n";
 			else {
-				if((*reqit)->start_wrap.size()>0) 
+				if((*reqit)->start_wrap.size()>0)
 					total << (*reqit)->start_wrap;
 
 				std::string lr=(*reqit)->latex_string;
@@ -429,14 +429,14 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 
 	// Make sure there are no greek unicode characters.
 	std::string ltx = total.str(); // convert_unicode_to_tex(total.str());
-	
+
 	// Now write the 'total' buffer to the .tex file
 
 	// std::cerr << total.str() << std::endl;
 
 	outstr << ltx;
 	outstr.close(); // to flush the buffer and allow us to rename
-	
+
 #ifdef DEBUG
 	std::cerr  << tmppath << std::endl;
 	std::cerr << "---\n" << ltx << "\n---" << std::endl;
@@ -466,28 +466,28 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 	// The options below are chosen so they are compatible with MikTeX (https://docs.miktex.org/manual/pdftex.html),
 	// standard TeXLive on Linux and OSX. We use pdflatex because several latex distributions do not seem to have
 	// a 'latex' command anymore which supports all these options (e.g. MikTeX).
-	
+
 	std::string latex_stdout, latex_stderr;
 	tpl::Process latex_proc("pdflatex --quiet --halt-on-error --output-format=dvi "+nf, "",
-	                        [&](const char *bytes, size_t n) {
-		                        latex_stdout=std::string(bytes,n);
-		                        },
-	                        [&](const char *bytes, size_t n) {
-		                        latex_stderr=std::string(bytes,n);
-		                        }
-	                        );
+	[&](const char *bytes, size_t n) {
+		latex_stdout=std::string(bytes,n);
+		},
+	[&](const char *bytes, size_t n) {
+		latex_stderr=std::string(bytes,n);
+		}
+	                       );
 	auto latex_exit_status=latex_proc.get_exit_status();
-	
+
 	erase_file(tmppath+".aux");
 	erase_file(tmppath+".log");
 	erase_file(tmppath+".out");
-	
+
 	std::string err=handle_latex_errors(latex_stdout+latex_stderr, latex_exit_status);
 	setenv("TEXINPUTS", oldtexinputs.c_str(), 1);
-	
+
 	if(err.size()>0) {
 		reqit=reqs.begin();
-		while(reqit!=reqs.end()) 
+		while(reqit!=reqs.end())
 			(*reqit++)->needs_generating=false;
 		erase_file(tmppath+".dvi");
 		if(chdir(olddir)==-1)
@@ -496,25 +496,25 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 		err += " See "+tmppath+".tex to debug this.\n\n";
 		err += "TEXINPUTS = "+texinputs+"\n";
 		err += "TMPDIR = "+tmpdir+"\n";
-		throw TeXException(err); 
+		throw TeXException(err);
 		}
 
 	erase_file(tmppath+".tex");
-		
+
 	// Convert the entire dvi file to png files.
 	//
 	std::ostringstream resspec;
-	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch*device_scale_; 
-		
+	resspec << horizontal_pixels_/(1.0*horizontal_mm)*millimeter_per_inch*device_scale_;
+
 	std::string dvipng_stdout, dvipng_stderr;
 	tpl::Process dvipng_proc("dvipng -T tight -bg transparent -D "+resspec.str()+" "+tmppath+".dvi", "",
-	                         [&](const char *bytes, size_t n) {
-		                         dvipng_stdout=std::string(bytes,n);
-		                         },
-	                         [&](const char *bytes, size_t n) {
-		                         dvipng_stderr=std::string(bytes,n);
-		                         }
-	                         );
+	[&](const char *bytes, size_t n) {
+		dvipng_stdout=std::string(bytes,n);
+		},
+	[&](const char *bytes, size_t n) {
+		dvipng_stderr=std::string(bytes,n);
+		}
+	                        );
 	auto dvipng_exit_status=dvipng_proc.get_exit_status();
 
 	if(dvipng_exit_status!=0) {
@@ -535,7 +535,7 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			}
 		if(chdir(olddir)==-1)
 			throw TeXException(
-				std::string("Cannot run dvipng, is it installed? (and cannot chdir back to original)\n\n")+dvipng_stdout+dvipng_stderr);
+			   std::string("Cannot run dvipng, is it installed? (and cannot chdir back to original)\n\n")+dvipng_stdout+dvipng_stderr);
 		throw TeXException(std::string("Cannot run dvipng, is it installed?\n\n")+dvipng_stdout+dvipng_stderr);
 		}
 
@@ -553,8 +553,8 @@ void TeXEngine::convert_set(std::set<std::shared_ptr<TeXRequest> >& reqs)
 			std::ifstream tst(pngname.str().c_str());
 			if(tst.good()) {
 				(*reqit)->image_.clear();
-				unsigned error = lodepng::decode((*reqit)->image_, (*reqit)->width_, 
-															(*reqit)->height_, pngname.str());
+				unsigned error = lodepng::decode((*reqit)->image_, (*reqit)->width_,
+				                                 (*reqit)->height_, pngname.str());
 				if(error!=0)
 					throw TeXException("PNG conversion error");
 				(*reqit)->needs_generating=false;

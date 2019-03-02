@@ -9,6 +9,6 @@ namespace cadabra {
 		public:
 			virtual ~GammaTraceless() {};
 			virtual std::string name() const;
-	};
+		};
 
-}
+	}

@@ -13,7 +13,7 @@ namespace cadabra {
 	/// \ingroup frontend
 	///
 	/// A text cell editor widget with support for editing Python and LaTeX.
-   /// CodeInput is essentially a TextView with some additional i/o logic.
+	/// CodeInput is essentially a TextView with some additional i/o logic.
 
 	class CodeInput : public Gtk::VBox {
 		public:
@@ -31,8 +31,8 @@ namespace cadabra {
 			/// string.
 
 			CodeInput(DTree::iterator, const std::string&, double scale, const Prefs& prefs);
-			
-			/// The actual text widget used by CodeInput. 
+
+			/// The actual text widget used by CodeInput.
 
 			class exp_input_tv : public Gtk::TextView {
 				public:
@@ -43,7 +43,7 @@ namespace cadabra {
 					virtual void on_show() override;
 
 					void         shift_enter_pressed();
-					
+
 					sigc::signal1<bool, DTree::iterator>                   content_execute;
 					sigc::signal2<bool, std::string, DTree::iterator>      content_changed;
 					sigc::signal3<bool, std::string, int, DTree::iterator> content_insert;
@@ -55,10 +55,10 @@ namespace cadabra {
 				private:
 					double scale_;
 					DTree::iterator datacell;
-			};
+				};
 
 			/// Set the font size, 0 being default, negative smaller, positive larger.
-			
+
 			void set_font_size(int num);
 			void enable_highlighting(DataCell::CellType cell_type, const Prefs& prefs);
 			void disable_highlighting();
@@ -85,7 +85,7 @@ namespace cadabra {
 			/// Ensure that the visual representation matches the DTree
 			/// cell.
 
-			void update_buffer(); 
+			void update_buffer();
 
 			/// Return two strings corresponding to the text before and
 			/// after the current cursor position.
@@ -108,6 +108,6 @@ namespace cadabra {
 			void highlight_latex();
 
 			sigc::connection hl_conn; // Connection holding the syntax highlighting signal
-	};
+		};
 
-}
+	}

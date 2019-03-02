@@ -2,7 +2,7 @@
 #include "Permutations.hh"
 #include <iostream>
 
-int main() 
+int main()
 	{
 	std::vector<int> one{ 3,6,8,9,2 };
 	std::vector<int> two{ 8,6,9,2,3 };

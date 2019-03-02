@@ -18,13 +18,13 @@ class MultiIndex {
 			current_pos=std::vector<std::size_t>(values.size(), 0);
 			end_=false;
 			}
-		
+
 		bool end() const
 			{
 			return end_;
 			}
-		
-		MultiIndex& operator++() 
+
+		MultiIndex& operator++()
 			{
 			current_pos[0]++;
 			std::size_t ci=0;
@@ -43,10 +43,10 @@ class MultiIndex {
 			{
 			return values[i][current_pos[i]];
 			}
-		
+
 	private:
 		std::vector<std::size_t> current_pos;
 		bool end_;
-};
+	};
 
 

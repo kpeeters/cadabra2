@@ -8,9 +8,12 @@ namespace cadabra {
 			virtual std::string name() const override;
 			virtual bool parse(Kernel&, keyval_t&) override;
 			virtual Ex dependencies(const Kernel&, Ex::iterator) const override;
-			virtual std::string unnamed_argument() const override { return "dependants"; };
+			virtual std::string unnamed_argument() const override
+				{
+				return "dependants";
+				};
 		private:
 			Ex dependencies_;
-	};
+		};
 
-}
+	}

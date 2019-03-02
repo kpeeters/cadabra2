@@ -5,9 +5,12 @@
 
 namespace cadabra {
 
-class IndexInherit : virtual public property {
-	public: 
-		virtual std::string name() const { return std::string("IndexInherit"); };
-};
+	class IndexInherit : virtual public property {
+		public:
+			virtual std::string name() const
+				{
+				return std::string("IndexInherit");
+				};
+		};
 
-}
+	}

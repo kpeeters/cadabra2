@@ -5,7 +5,7 @@
 
 using namespace cadabra;
 
-indexsort::indexsort(const Kernel& k, Ex& tr) 
+indexsort::indexsort(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr), tb(0)
 	{
 	}
@@ -18,23 +18,23 @@ bool indexsort::can_apply(iterator st)
 	return false;
 	}
 
-indexsort::less_indexed_treenode::less_indexed_treenode(const Kernel& k, Ex& , iterator i)
+indexsort::less_indexed_treenode::less_indexed_treenode(const Kernel& k, Ex&, iterator i)
 	: kernel(k), it(i)
 	{
 	}
 
 bool indexsort::less_indexed_treenode::operator()(unsigned int i1, unsigned int i2) const
 	{
-	return subtree_exact_less(&kernel.properties, 
-									  index_iterator::begin(kernel.properties, it, i1), 
-									  index_iterator::begin(kernel.properties, it,i2) );
+	return subtree_exact_less(&kernel.properties,
+	                          index_iterator::begin(kernel.properties, it, i1),
+	                          index_iterator::begin(kernel.properties, it,i2) );
 	}
 
 Algorithm::result_t indexsort::apply(iterator& st)
 	{
-//	txtout << "indexsort acting on " << *st->name << std::endl;
-//	txtout << properties::get<TableauBase>(st) << std::endl;
-	
+	//	txtout << "indexsort acting on " << *st->name << std::endl;
+	//	txtout << properties::get<TableauBase>(st) << std::endl;
+
 	result_t res=result_t::l_no_action;
 	Ex backup(st);
 
@@ -47,9 +47,9 @@ Algorithm::result_t indexsort::apply(iterator& st)
 		TableauSymmetry::tab_t::iterator it2=tmptab.begin();
 		while(it2!=tmptab.end()) {
 			if(*it1!=*it2) {
-				tr.replace_index(index_iterator::begin(kernel.properties,st,*it1), 
-									  index_iterator::begin(kernel.properties,backup.begin(),*it2) );
-//				tr.tensor_index(st,*it1)->multiplier=backup.tensor_index(backup.begin(),*it2)->multiplier;
+				tr.replace_index(index_iterator::begin(kernel.properties,st,*it1),
+				                 index_iterator::begin(kernel.properties,backup.begin(),*it2) );
+				//				tr.tensor_index(st,*it1)->multiplier=backup.tensor_index(backup.begin(),*it2)->multiplier;
 				res = result_t::l_applied;
 				}
 			++it1;
@@ -58,8 +58,7 @@ Algorithm::result_t indexsort::apply(iterator& st)
 		if(*(tr.parent(st)->name)=="\\prod") {
 			multiply(tr.parent(st)->multiplier, tmptab.multiplicity*origtab.multiplicity);
 			pushup_multiplier(tr.parent(st));
-			}
-		else {
+			} else {
 			multiply(st->multiplier, tmptab.multiplicity*origtab.multiplicity);
 			pushup_multiplier(st);
 			}

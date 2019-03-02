@@ -23,7 +23,7 @@ TableauBase::tab_t Symmetric::get_tab(const Properties& pr, Ex& tr, Ex::iterator
 		if(!pd)
 			it=tr.begin(it);
 		else break;
-		} 
+		}
 
 	tab_t tab;
 	for(unsigned int i=0; i<tr.number_of_children(it); ++i)

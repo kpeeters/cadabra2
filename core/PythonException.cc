@@ -11,13 +11,12 @@ std::string parse_python_exception()
 	PyErr_Fetch(&type_ptr, &value_ptr, &traceback_ptr);
 
 	std::string ret("Unfetchable Python error");
-	if(type_ptr != NULL){
+	if(type_ptr != NULL) {
 		pybind11::handle h_type(type_ptr);
 		pybind11::str    type_pstr(h_type);
 		try {
 			ret = type_pstr.cast<std::string>();
-			}
-		catch(const pybind11::value_error& e) {
+			} catch(const pybind11::value_error& e) {
 			ret = "Unknown exception type";
 			}
 		}
@@ -26,14 +25,13 @@ std::string parse_python_exception()
 		pybind11::str    a(h_val);
 		try {
 			ret += a.cast<std::string>();
-			}
-		catch(const pybind11::value_error &e) {
+			} catch(const pybind11::value_error &e) {
 			ret += ": Unparseable Python error: ";
 			}
 		}
-	
+
 	// Parse lines from the traceback using the Python traceback module
-	if(traceback_ptr){
+	if(traceback_ptr) {
 		pybind11::handle h_tb(traceback_ptr);
 		// Load the traceback module and the format_tb function
 		pybind11::object tb(pybind11::module::import("traceback"));
@@ -44,8 +42,7 @@ std::string parse_python_exception()
 		try {
 			for(auto &s: tb_list)
 				ret += s.cast<std::string>();
-			}
-		catch(const pybind11::value_error &e) {
+			} catch(const pybind11::value_error &e) {
 			ret += ": Unparseable Python traceback";
 			}
 		}

@@ -10,13 +10,13 @@ namespace cadabra {
 			Spinor();
 			virtual ~Spinor() {};
 			virtual std::string name() const override;
-//		virtual void        display(std::ostream&) const;
+			//		virtual void        display(std::ostream&) const;
 			virtual bool        parse(Kernel&, keyval_t& keyvals) override;
-			
+
 			int  dimension;
 			bool weyl;
 			enum { positive, negative } chirality;  // only in combination with weyl
 			bool majorana;
-	};
+		};
 
-}
+	}

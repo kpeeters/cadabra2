@@ -9,6 +9,6 @@ namespace cadabra {
 		public:
 			virtual std::string name() const override;
 			virtual int sign() const override;
-	};
+		};
 
-}
+	}

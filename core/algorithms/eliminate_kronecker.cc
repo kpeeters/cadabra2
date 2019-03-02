@@ -13,7 +13,7 @@ eliminate_kronecker::eliminate_kronecker(const Kernel& k, Ex& tr)
 
 bool eliminate_kronecker::can_apply(iterator st)
 	{
-	if(*st->name!="\\prod") 
+	if(*st->name!="\\prod")
 		if(!is_single_term(st))
 			return false;
 
@@ -36,7 +36,8 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 		if(kr && number_of_indices(it)==2) {
 			// std::cerr << "KD " << Ex(it) << std::endl;
 			index_iterator ii1=begin_index(it);
-			index_iterator ii2=ii1; ++ii2;
+			index_iterator ii2=ii1;
+			++ii2;
 			if(subtree_compare(&kernel.properties, ii1, ii2, 1, false, -2, true)==0) { // a self-contracted Kronecker delta
 				// std::cerr << "self-contracted delta with " << Ex(ii1) << " = " << Ex(ii2) << std::endl;
 				const Integer *itg1=kernel.properties.get<Integer>(ii1, true);
@@ -46,17 +47,13 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 						if(itg1->difference.begin()->name==onept) {
 							multiply(st->multiplier, *itg1->difference.begin()->multiplier);
 							it=tr.erase(it);
-							}
-						else {
+							} else {
 							it=tr.replace(it, itg1->difference.begin());
 							}
 						ret=result_t::l_applied;
-						}
-					else ++it;
-					}
-				else ++it;
-				}
-			else {
+						} else ++it;
+					} else ++it;
+				} else {
 				sibling_iterator oi=tr.begin(st);
 				++looping;
 				// iterate over all factors in the product
@@ -73,15 +70,14 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 								if(! (replaced && doing2) ) {
 									multiplier_t mt=(*ind->multiplier) / (*ii1->multiplier);
 									iterator rep=tr.replace_index(ind, ii2);
-									rep->fl.parent_rel=ii2->fl.parent_rel; 
+									rep->fl.parent_rel=ii2->fl.parent_rel;
 									multiply(rep->multiplier, mt);
 									replaced=true;
 									doing1=true;
 									}
-								// cannot 'break' here because that would miss cases when the 
+								// cannot 'break' here because that would miss cases when the
 								// delta multiplies a sum.
-								}
-							else if(ii2->is_rational()==false && subtree_compare(&kernel.properties, ind, ii2, 1, false, -2, true)==0) {
+								} else if(ii2->is_rational()==false && subtree_compare(&kernel.properties, ind, ii2, 1, false, -2, true)==0) {
 								if(! (replaced && doing1) ) {
 									multiplier_t mt=(*ind->multiplier) / (*ii2->multiplier);
 									iterator rep=tr.replace_index(ind, ii1);
@@ -95,7 +91,7 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 							ind=nxt;
 							}
 						}
-					if(!replaced) 
+					if(!replaced)
 						++oi;
 					}
 				if(replaced) {
@@ -103,23 +99,20 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 					iterator tmp=oi;
 					cleanup_dispatch(kernel, tr, tmp);
 					it=tr.erase(it);
-					}
-				else ++it;
+					} else ++it;
 				}
-			}
-		else ++it;
+			} else ++it;
 		}
-	
+
 	// the product may have reduced to a single term or even just a constant
-//	txtout << "exiting eliminate" << std::endl;
-//	prod_unwrap_single_term(st);
-//	txtout << st.node << " " << tr.parent(st).node << std::endl;
-//	txtout << *st->name << " " << *(tr.parent(st)->name) << std::endl;
+	//	txtout << "exiting eliminate" << std::endl;
+	//	prod_unwrap_single_term(st);
+	//	txtout << st.node << " " << tr.parent(st).node << std::endl;
+	//	txtout << *st->name << " " << *(tr.parent(st)->name) << std::endl;
 	sibling_iterator ff=tr.begin(st);
 	if(ff==tr.end(st)) {
 		st->name=onept;
-		}
-	else {
+		} else {
 		++ff;
 		if(ff==tr.end(st)) {
 			tr.begin(st)->fl.bracket=st->fl.bracket;
@@ -130,8 +123,8 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 			}
 		}
 	cleanup_dispatch(kernel, tr, st);
-//	cleanup_sums_products(tr, st);
-//	txtout << "looped " << looping << std::endl;
+	//	cleanup_sums_products(tr, st);
+	//	txtout << "looped " << looping << std::endl;
 
 	return ret;
 	}

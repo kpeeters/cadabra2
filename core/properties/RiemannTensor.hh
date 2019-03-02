@@ -8,6 +8,6 @@ namespace cadabra {
 			RiemannTensor();
 			virtual std::string name() const override;
 			virtual void        validate(const Kernel&, const Ex&) const override;
-	};
+		};
 
-}
+	}

@@ -14,12 +14,12 @@ ActionBase::ActionBase(DataCell::id_t id)
 	{
 	}
 
-bool ActionBase::undoable() const 
+bool ActionBase::undoable() const
 	{
 	return true;
 	}
 
-void ActionBase::execute(DocumentThread& cl, GUIBase& )  
+void ActionBase::execute(DocumentThread& cl, GUIBase& )
 	{
 	auto it=cl.doc.begin();
 	while(it!=cl.doc.end()) {
@@ -32,26 +32,26 @@ void ActionBase::execute(DocumentThread& cl, GUIBase& )
 	throw std::logic_error("ActionAddCell: cannot find cell with id "+std::to_string(ref_id.id));
 	}
 
-ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_) 
+ActionAddCell::ActionAddCell(DataCell cell, DataCell::id_t ref_id, Position pos_)
 	: ActionBase(ref_id), newcell(cell), pos(pos_)
 	{
 	}
 
-void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
-	
+
 	// Insert this DataCell into the DTree document.
 	switch(pos) {
-		case Position::before:
-			newref = cl.doc.insert(ref, newcell);
-			break;
-		case Position::after:
-			newref = cl.doc.insert_after(ref, newcell);
-			break;
-		case Position::child:
-			newref = cl.doc.append_child(ref, newcell);
-			break;
+	case Position::before:
+		newref = cl.doc.insert(ref, newcell);
+		break;
+	case Position::after:
+		newref = cl.doc.insert_after(ref, newcell);
+		break;
+	case Position::child:
+		newref = cl.doc.append_child(ref, newcell);
+		break;
 		}
 	child_num=cl.doc.index(newref);
 	gb.add_cell(cl.doc, newref, true);
@@ -74,55 +74,54 @@ ActionPositionCursor::ActionPositionCursor(DataCell::id_t ref_id, Position pos_)
 	{
 	}
 
-void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
 
 	switch(pos) {
-		case Position::in:
-			// std::cerr << "in" << std::endl;
-			newref = ref;
-			break;
-		case Position::next: {
-			DTree::sibling_iterator sib=ref;
-			bool found=false;
-			while(cl.doc.is_valid(++sib)) {
-				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
-					if(!sib->hidden) {
-						newref=sib;
-						found=true;
-						break;
-						}
+	case Position::in:
+		// std::cerr << "in" << std::endl;
+		newref = ref;
+		break;
+	case Position::next: {
+		DTree::sibling_iterator sib=ref;
+		bool found=false;
+		while(cl.doc.is_valid(++sib)) {
+			if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
+				if(!sib->hidden) {
+					newref=sib;
+					found=true;
+					break;
 					}
 				}
-			if(!found) {
-				if(ref->textbuf=="") { // If the last cell is empty, stay where we are.
-					newref=ref;
-					}
-				else {
-					DataCell newcell(DataCell::CellType::python, "");
-					newref = cl.doc.insert(sib, newcell);
-					needed_new_cell=true;
-					}
-				}
-			break;
 			}
-		case Position::previous: {
-			bool found=false;
-			DTree::sibling_iterator sib=ref;
-			while(cl.doc.is_valid(--sib)) {
-				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
-					if(!sib->hidden) {
-						newref=sib;
-						found=true;
-						break;
-						}
+		if(!found) {
+			if(ref->textbuf=="") { // If the last cell is empty, stay where we are.
+				newref=ref;
+				} else {
+				DataCell newcell(DataCell::CellType::python, "");
+				newref = cl.doc.insert(sib, newcell);
+				needed_new_cell=true;
+				}
+			}
+		break;
+		}
+	case Position::previous: {
+		bool found=false;
+		DTree::sibling_iterator sib=ref;
+		while(cl.doc.is_valid(--sib)) {
+			if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
+				if(!sib->hidden) {
+					newref=sib;
+					found=true;
+					break;
 					}
 				}
-			if(!found) 
-				newref=ref; // No previous sibling cell. FIXME: walk tree structure
-			break;
 			}
+		if(!found)
+			newref=ref; // No previous sibling cell. FIXME: walk tree structure
+		break;
+		}
 		}
 
 	// Update GUI.
@@ -134,7 +133,7 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 	gb.position_cursor(cl.doc, newref, -1);
 	}
 
-void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)  
+void ActionPositionCursor::revert(DocumentThread& cl, GUIBase& gb)
 	{
 	if(needed_new_cell) {
 		gb.remove_cell(cl.doc, newref);
@@ -153,7 +152,7 @@ ActionRemoveCell::~ActionRemoveCell()
 	{
 	}
 
-void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
 
@@ -162,7 +161,7 @@ void ActionRemoveCell::execute(DocumentThread& cl, GUIBase& gb)
 	reference_parent_cell = cl.doc.parent(ref);
 	reference_child_index = cl.doc.index(ref);
 	removed_tree=DTree(ref);
-//	std::cerr << "removed has " << cl.doc.number_of_children(ref) << " children" << std::endl;
+	//	std::cerr << "removed has " << cl.doc.number_of_children(ref) << " children" << std::endl;
 	cl.doc.erase(ref);
 	}
 
@@ -172,19 +171,18 @@ void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	DTree::iterator newcell;
 	if(cl.doc.number_of_children(reference_parent_cell)==0) {
 		newcell = cl.doc.append_child(reference_parent_cell, removed_tree.begin());
-		} 
-	else {
+		} else {
 		auto it = cl.doc.child(reference_parent_cell, reference_child_index);
-//		++it;
+		//		++it;
 		newcell = cl.doc.insert_subtree(it, removed_tree.begin());
-//		std::cerr << "added doc cell " << newcell->textbuf << " at " << &(*newcell) << " before " << it->textbuf << std::endl;
+		//		std::cerr << "added doc cell " << newcell->textbuf << " at " << &(*newcell) << " before " << it->textbuf << std::endl;
 		}
 	gb.add_cell(cl.doc, newcell, true);
 	//std::cerr << "added vis rep" << std::endl;
 	}
 
 
-ActionSplitCell::ActionSplitCell(DataCell::id_t ref_id) 
+ActionSplitCell::ActionSplitCell(DataCell::id_t ref_id)
 	: ActionBase(ref_id)
 	{
 	}
@@ -216,34 +214,34 @@ void ActionSplitCell::execute(DocumentThread& cl, GUIBase& gb)
 	gb.update_cell(cl.doc, ref);
 	}
 
-void ActionSplitCell::revert(DocumentThread& , GUIBase& )
+void ActionSplitCell::revert(DocumentThread&, GUIBase& )
 	{
 	// FIXME: implement
 	}
 
 
 
-ActionSetRunStatus::ActionSetRunStatus(DataCell::id_t ref_id, bool running) 
+ActionSetRunStatus::ActionSetRunStatus(DataCell::id_t ref_id, bool running)
 	: ActionBase(ref_id), new_running_(running)
 	{
 	}
 
-bool ActionSetRunStatus::undoable() const 
+bool ActionSetRunStatus::undoable() const
 	{
 	return false;
 	}
 
-void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionSetRunStatus::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
-	
+
 	gb.update_cell(cl.doc, ref);
 
 	was_running_=ref->running;
 	ref->running=new_running_;
 	}
 
-void ActionSetRunStatus::revert(DocumentThread& , GUIBase& )
+void ActionSetRunStatus::revert(DocumentThread&, GUIBase& )
 	{
 	}
 
@@ -253,10 +251,10 @@ ActionInsertText::ActionInsertText(DataCell::id_t ref_id, int pos, const std::st
 	{
 	}
 
-void ActionInsertText::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionInsertText::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
-	
+
 	ref->textbuf.insert(insert_pos, text);
 	}
 
@@ -272,10 +270,10 @@ ActionEraseText::ActionEraseText(DataCell::id_t ref_id, int start, int end)
 	{
 	}
 
-void ActionEraseText::execute(DocumentThread& cl, GUIBase& gb)  
+void ActionEraseText::execute(DocumentThread& cl, GUIBase& gb)
 	{
 	ActionBase::execute(cl, gb);
-	
+
 	//std::cerr << from_pos << ", " << to_pos << std::endl;
 	removed_text=ref->textbuf.substr(from_pos, to_pos-from_pos);
 	ref->textbuf.erase(from_pos, to_pos-from_pos);

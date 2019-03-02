@@ -9,6 +9,6 @@ namespace cadabra {
 	class Diagonal : public Symmetric {
 		public:
 			virtual std::string name() const;
-	};
+		};
 
-}
+	}

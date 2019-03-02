@@ -11,9 +11,9 @@
 using namespace cadabra;
 
 IndexClassifier::IndexClassifier(const Kernel& k)
-   : kernel(k)
-   {
-   }
+	: kernel(k)
+	{
+	}
 
 // For each iterator in the original map, find the sequential position of the index.
 // That is, the index 'd' has position '3' in A_{a b} C_{c} D_{d}.
@@ -36,9 +36,9 @@ void IndexClassifier::fill_index_position_map(Ex::iterator prodnode, const index
 			++current_pos;
 			++indexit;
 			}
-		if(!found) 
+		if(!found)
 			throw ConsistencyException("Internal error in fill_index_position_map; cannot find index "
-											+ *(imit->first.begin()->name)+".");
+			                           + *(imit->first.begin()->name)+".");
 		++imit;
 		}
 	}
@@ -62,11 +62,11 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
 				if(tree_exact_equal(&kernel.properties, (*it1).first,(*it2).first,1,true,-2,true)) {
-//					const Indices *ind=kernel.properties.get<Indices>(it1->second);
-//					if(ind && ind->position_type==Indices::fixed && it1->second->fl.parent_rel==it2->second->fl.parent_rel) {
-//						std::cerr << tr << std::endl;
-//						throw ConsistencyException("Fixed index pair with two upper or two lower indices "+ *it1->second->name + " found.");
-//						}
+					//					const Indices *ind=kernel.properties.get<Indices>(it1->second);
+					//					if(ind && ind->position_type==Indices::fixed && it1->second->fl.parent_rel==it2->second->fl.parent_rel) {
+					//						std::cerr << tr << std::endl;
+					//						throw ConsistencyException("Fixed index pair with two upper or two lower indices "+ *it1->second->name + " found.");
+					//						}
 					target.insert((*it2));
 					if(move_out) {
 						index_map_t::iterator nxt=it2;
@@ -74,10 +74,8 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 						two.erase(it2);
 						it2=nxt;
 						move_this_one=true;
-						}
-					else ++it2;
-					}
-				else ++it2;
+						} else ++it2;
+					} else ++it2;
 				}
 			Ex the_key=(*it1).first;
 			if(move_this_one && move_out) {
@@ -86,8 +84,7 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 				target.insert(*it1);
 				one.erase(it1);
 				it1=nxt;
-				}
-			else ++it1;
+				} else ++it1;
 			// skip all indices in two with the same name
 			while(it1!=one.end() && tree_exact_equal(&kernel.properties, (*it1).first,the_key,1,true,-2,true)) {
 				if(move_this_one && move_out) {
@@ -96,11 +93,9 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 					target.insert(*it1);
 					one.erase(it1);
 					it1=nxt;
-					}
-				else ++it1;
+					} else ++it1;
 				}
-			}
-		else ++it1;
+			} else ++it1;
 		}
 	}
 
@@ -116,54 +111,53 @@ IndexClassifier::index_map_t::iterator IndexClassifier::find_modulo_parent_rel(E
 	return fnd;
 	}
 
-// Directly add an index to the free/dummy sets, as appropriate (only add if this really is an 
+// Directly add an index to the free/dummy sets, as appropriate (only add if this really is an
 // index!)
 
 void IndexClassifier::classify_add_index(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
 	{
 	if((it->fl.parent_rel==str_node::p_sub || it->fl.parent_rel==str_node::p_super) &&
-		it->fl.bracket==str_node::b_none /* && it->is_integer()==false */) {
+	      it->fl.bracket==str_node::b_none /* && it->is_integer()==false */) {
 		const Coordinate *cdn=kernel.properties.get<Coordinate>(it, true);
 		const Symbol     *smb=Symbol::get(kernel.properties, it, true);
-		 if(it->is_integer() || cdn || smb)
-			  ind_free.insert(index_map_t::value_type(Ex(it), it));
-		 else {
-			 index_map_t::iterator fnd=find_modulo_parent_rel(it, ind_free);
-			 if(fnd!=ind_free.end()) {
-				 // std::cerr << "found in free indices" << std::endl;
- 				 // check consistency: one up and one down if index position is fixed.
-				 const Indices *ind=kernel.properties.get<Indices>(it);
-				 if(ind && ind->position_type==Indices::fixed && it->fl.parent_rel==fnd->second->fl.parent_rel)  {
-					 throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
-					 }
-				 ind_dummy.insert(*fnd);
-				 ind_dummy.insert(index_map_t::value_type(Ex(it), it));
-				 ind_free.erase(fnd);
-				 }
-			 else {
-				 // std::cerr << "not yet found; after insertion" << std::endl;
-				 if(ind_dummy.count(it)>0) {
-					 throw ConsistencyException("Triple index occurred.");
-					 }
-				 ind_free.insert(index_map_t::value_type(Ex(it), it));
-				 // for(auto& n: ind_free)
-				 //	 std::cerr << n.first << std::endl;
-				 }
-			 }
-		 }
+		if(it->is_integer() || cdn || smb)
+			ind_free.insert(index_map_t::value_type(Ex(it), it));
+		else {
+			index_map_t::iterator fnd=find_modulo_parent_rel(it, ind_free);
+			if(fnd!=ind_free.end()) {
+				// std::cerr << "found in free indices" << std::endl;
+				// check consistency: one up and one down if index position is fixed.
+				const Indices *ind=kernel.properties.get<Indices>(it);
+				if(ind && ind->position_type==Indices::fixed && it->fl.parent_rel==fnd->second->fl.parent_rel) {
+					throw ConsistencyException("Fixed index pair with two upper or two lower indices found.");
+					}
+				ind_dummy.insert(*fnd);
+				ind_dummy.insert(index_map_t::value_type(Ex(it), it));
+				ind_free.erase(fnd);
+				} else {
+				// std::cerr << "not yet found; after insertion" << std::endl;
+				if(ind_dummy.count(it)>0) {
+					throw ConsistencyException("Triple index occurred.");
+					}
+				ind_free.insert(index_map_t::value_type(Ex(it), it));
+				// for(auto& n: ind_free)
+				//	 std::cerr << n.first << std::endl;
+				}
+			}
+		}
 	}
 
 // This classifies indices bottom-up, that is, given a node, it goes up the tree to find
 // all free and dummy indices in the product in which this node would end up if a full
-// distribute would be done on the entire expression. 
+// distribute would be done on the entire expression.
 void IndexClassifier::classify_indices_up(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy)  const
 	{
-	loopie:
+loopie:
 	if(Ex::is_head(it)) return;
 	Ex::iterator par=Ex::parent(it);
-//	if(Ex::is_valid(par)==false || par==tr.end()) { // reached the top
-//		return;
-//		}
+	//	if(Ex::is_valid(par)==false || par==tr.end()) { // reached the top
+	//		return;
+	//		}
 	const IndexInherit *inh=kernel.properties.get<IndexInherit>(par);
 
 	if(*par->name=="\\sum" || *par->name=="\\equals") {
@@ -171,38 +165,36 @@ void IndexClassifier::classify_indices_up(Ex::iterator it, index_map_t& ind_free
 		// factor; therefore, just go up.
 		it=par;
 		goto loopie;
-		}
-	else if(*par->name=="\\fermibilinear" || inh) {
+		} else if(*par->name=="\\fermibilinear" || inh) {
 		// For each _other_ child in this product, do a top-down classify for all non-sub/super
-      // children; add the indices thus found to the maps since they will end up in our factor.
+		// children; add the indices thus found to the maps since they will end up in our factor.
 		Ex::sibling_iterator sit=par.begin();
 		while(sit!=par.end()) {
 			if(sit!=Ex::sibling_iterator(it)) {
 				if(sit->is_index()==false) {
 					index_map_t factor_free, factor_dummy;
 					classify_indices(sit, factor_free, factor_dummy);
-					
+
 					// Test for absence of triple or quadruple indices
 					index_map_t must_be_empty;
 					determine_intersection(factor_free, ind_dummy, must_be_empty);
 					if(must_be_empty.size()>0)
 						throw ConsistencyException("Triple index occurred.");
-					
+
 					// Test for absence of double index pairs
 					must_be_empty.clear();
 					determine_intersection(factor_dummy, ind_dummy, must_be_empty);
 					if(must_be_empty.size()>0)
 						throw ConsistencyException("Double index pair occurred.");
-					
+
 					ind_dummy.insert(factor_dummy.begin(), factor_dummy.end());
 					index_map_t new_dummy;
 					determine_intersection(factor_free, ind_free, new_dummy, true);
 					ind_free.insert(factor_free.begin(), factor_free.end());
 					ind_dummy.insert(new_dummy.begin(), new_dummy.end());
-					}
-				else {
-//					ind_free.insert(free_so_far.begin(), free_so_far.end());
-//					free_so_far.clear();
+					} else {
+					//					ind_free.insert(free_so_far.begin(), free_so_far.end());
+					//					free_so_far.clear();
 					classify_add_index(sit, ind_free, ind_dummy);
 					}
 				}
@@ -210,43 +202,39 @@ void IndexClassifier::classify_indices_up(Ex::iterator it, index_map_t& ind_free
 			}
 		it=par;
 		goto loopie;
-		}
-	else if((*par->name).size()>0 && (*par->name)[0]=='@') { // command nodes swallow everything
+		} else if((*par->name).size()>0 && (*par->name)[0]=='@') { // command nodes swallow everything
 		return;
-		}
-	else if(*par->name=="\\tie") { // tie lists do not care about indices
+		} else if(*par->name=="\\tie") { // tie lists do not care about indices
 		ind_free.clear();
 		ind_dummy.clear();
 		it=par;
 		goto loopie;
-		}
-	else if(*par->name=="\\arrow") { // rules can have different indices on lhs and rhs
-//		ind_free.clear();
-//		ind_dummy.clear();
+		} else if(*par->name=="\\arrow") { // rules can have different indices on lhs and rhs
+		//		ind_free.clear();
+		//		ind_dummy.clear();
 		it=par;
 		goto loopie;
 		}
-//	else if(*par->name=="\\indexbracket") { // it's really just a bracket, so go up
-//		Ex::sibling_iterator sit=tr.begin(par);
-//		++sit;
-//		while(sit!=tr.end(par)) {
-//			++sit;
-//			}
-//		it=par;
-//		goto loopie;
-//		} 
+	//	else if(*par->name=="\\indexbracket") { // it's really just a bracket, so go up
+	//		Ex::sibling_iterator sit=tr.begin(par);
+	//		++sit;
+	//		while(sit!=tr.end(par)) {
+	//			++sit;
+	//			}
+	//		it=par;
+	//		goto loopie;
+	//		}
 	else if(*par->name=="\\comma") { // comma lists can contain anything NO: [a_{mu}, b_{nu}]
 		// reaching a comma node is like reaching the top of an expression.
 		return;
-		}
-	else if(!inh) {
+		} else if(!inh) {
 		return;
 		}
 
-// FIXME: do something with these warnings!!
-//	txtout << "Index classification for this expression failed because of " 
-//			 << *par->name << " node, disabling index checking." << std::endl;
-//	assert(1==0);
+	// FIXME: do something with these warnings!!
+	//	txtout << "Index classification for this expression failed because of "
+	//			 << *par->name << " node, disabling index checking." << std::endl;
+	//	assert(1==0);
 	ind_free.clear();
 	ind_dummy.clear();
 	}
@@ -261,7 +249,7 @@ void IndexClassifier::dumpmap(std::ostream& str, const index_map_t& mp) const
 	str << std::endl;
 	}
 
-// This classifies indices top-down, that is, finds the free indices and all dummy 
+// This classifies indices top-down, that is, finds the free indices and all dummy
 // index pairs used in the full subtree below a given node.
 void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, index_map_t& ind_dummy) const
 	{
@@ -307,8 +295,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 				++i1;
 				}
 			return true;
-		};
-		
+			};
+
 		// Look at the first term to determine the free index
 		// content. Then consider all other terms in turn, and check
 		// that their free index content matches.
@@ -324,25 +312,22 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 					if(!ok) {
 						if(*it->name=="\\sum") {
 							throw ConsistencyException("Free indices in different terms in a sum do not match.");
-							}
-						else
+							} else
 							throw ConsistencyException("Free indices on lhs and rhs do not match.");
 						}
-					}
-				else {
+					} else {
 					// This is the first term; remember the free indices as we need
 					// to check that all other terms have the same indices free.
 					first_free=term_free;
 					is_first_term=false;
 					}
-				
+
 				ind_dummy.insert(term_dummy.begin(), term_dummy.end());
 				ind_free.insert(term_free.begin(), term_free.end());
 				}
 			++sit; // next term in sum or \equals node
 			}
-		}
-	else if(inh) {
+		} else if(inh) {
 		index_map_t free_so_far;
 		Ex::sibling_iterator sit=it.begin();
 		while(sit!=it.end()) {
@@ -350,63 +335,61 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 			if(sit->is_index()==false) {
 				index_map_t factor_free, factor_dummy;
 				classify_indices(sit, factor_free, factor_dummy);
-				
+
 				// Test for absence of triple or quadruple indices
 				index_map_t must_be_empty;
 				determine_intersection(factor_free, ind_dummy, must_be_empty);
-				if(must_be_empty.size()>0) 
-					 throw ConsistencyException("Triple index " 
-													 + *(must_be_empty.begin()->second->name) 
-													 + " inside a single factor found.");
-				
+				if(must_be_empty.size()>0)
+					throw ConsistencyException("Triple index "
+					                           + *(must_be_empty.begin()->second->name)
+					                           + " inside a single factor found.");
+
 				// Test for absence of double index pairs
 				must_be_empty.clear();
 				determine_intersection(factor_dummy, ind_dummy, must_be_empty);
 				if(must_be_empty.size()>0)
-					throw ConsistencyException("Double index pair " 
-													+ *(must_be_empty.begin()->second->name) 
-													+ " inside a single factor found.");
-				
+					throw ConsistencyException("Double index pair "
+					                           + *(must_be_empty.begin()->second->name)
+					                           + " inside a single factor found.");
+
 				ind_dummy.insert(factor_dummy.begin(), factor_dummy.end());
 				index_map_t new_dummy;
-//				for(auto& ii: factor_free)
-//					std::cerr << "factor_free " << Ex(ii.second) << std::endl;
-//				for(auto& ii: free_so_far)
-//					std::cerr << "free_so_far " << Ex(ii.second) << std::endl;
+				//				for(auto& ii: factor_free)
+				//					std::cerr << "factor_free " << Ex(ii.second) << std::endl;
+				//				for(auto& ii: free_so_far)
+				//					std::cerr << "free_so_far " << Ex(ii.second) << std::endl;
 				determine_intersection(factor_free, free_so_far, new_dummy, true);
-//				for(auto& ii: new_dummy)
-//					std::cerr << "new dummy " << Ex(ii.second) << std::endl;
+				//				for(auto& ii: new_dummy)
+				//					std::cerr << "new dummy " << Ex(ii.second) << std::endl;
 				free_so_far.insert(factor_free.begin(), factor_free.end());
 				ind_dummy.insert(new_dummy.begin(), new_dummy.end());
-				}
-			else {
-//				ind_free.insert(free_so_far.begin(), free_so_far.end());
-//				free_so_far.clear();
+				} else {
+				//				ind_free.insert(free_so_far.begin(), free_so_far.end());
+				//				free_so_far.clear();
 				//std::cerr << "adding index " << Ex(sit) << std::endl;
 				classify_add_index(sit, free_so_far, ind_dummy);
 				}
 			++sit;
-//			const Derivative *der=kernel.properties.get<Derivative>(it);
-//			if(*it->name=="\\indexbracket" || der) { // the other children are indices themselves
-//				ind_free.insert(free_so_far.begin(), free_so_far.end());
-//				free_so_far.clear();
-//				while(sit!=it.end()) {
-//					classify_add_index(sit, ind_free, ind_dummy);
-//					++sit;
-//					}
-//				break;
-//				}
+			//			const Derivative *der=kernel.properties.get<Derivative>(it);
+			//			if(*it->name=="\\indexbracket" || der) { // the other children are indices themselves
+			//				ind_free.insert(free_so_far.begin(), free_so_far.end());
+			//				free_so_far.clear();
+			//				while(sit!=it.end()) {
+			//					classify_add_index(sit, ind_free, ind_dummy);
+			//					++sit;
+			//					}
+			//				break;
+			//				}
 			}
 		ind_free.insert(free_so_far.begin(), free_so_far.end());
 		}
-//	else if(tr.is_valid(tr.parent(it))==false) {
-//		classify_indices(it.begin(), ind_free, ind_dummy);
-//		}
+	//	else if(tr.is_valid(tr.parent(it))==false) {
+	//		classify_indices(it.begin(), ind_free, ind_dummy);
+	//		}
 	else if(*it->name=="\\tie") {
 		ind_free.clear();
 		ind_dummy.clear();
-		}
-	else if(*it->name=="\\pow") {
+		} else if(*it->name=="\\pow") {
 		// Power nodes can have dummies in all arguments, but no free indices. We allow for
 		// \pow{ A_{m} A^{m} }{2} type of things, in the understanding that any algorithm that
 		// does something with this (e.g. product_rule) will need to relabel once the expression
@@ -427,26 +410,24 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 						throw ConsistencyException("Power with free indices not allowed.");
 						}
 					}
-//				ind_free_here.clear();
+				//				ind_free_here.clear();
 				}
 			// FIXME: add test for overlap
 			ind_free.insert(ind_free_here.begin(), ind_free_here.end());
 			ind_dummy.insert(ind_dummy_here.begin(), ind_dummy_here.end());
 			++sib;
 			}
-		}
-	else if((*it->name).size()>0 && (*it->name)[0]=='@') {
+		} else if((*it->name).size()>0 && (*it->name)[0]=='@') {
 		// This is an active node that has not been replaced yet; since
 		// we do not know anything about what this will become, do not return
 		// any index information (clashes will be resolved when the active
 		// node gets replaced).
-		}
-	else {
+		} else {
 		Ex::sibling_iterator sit=it.begin();
 		index_map_t item_free;
 		index_map_t item_dummy;
 		while(sit!=it.end()) {
-//			std::cout << *sit->name << std::endl;
+			//			std::cout << *sit->name << std::endl;
 			if((sit->fl.parent_rel==str_node::p_sub || sit->fl.parent_rel==str_node::p_super) && sit->fl.bracket==str_node::b_none) {
 				if(*sit->name!="??") {
 					const Coordinate *cdn=kernel.properties.get<Coordinate>(sit, true);
@@ -456,49 +437,47 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 						// Note: even integers need to be stored as indices, because we expect e.g. canonicalise
 						// to re-order even numerical indices. They should just never be flagged as dummies.
 						item_free.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
-						}
-					else {
+						} else {
 						index_map_t::iterator fnd=find_modulo_parent_rel(sit, item_free);
-//						index_map_t::iterator fnd=item_free.find(Ex(sit));
+						//						index_map_t::iterator fnd=item_free.find(Ex(sit));
 						if(fnd!=item_free.end()) {
-//							std::cerr << *sit->name << " already in free set" << std::endl;
-//							if(item_dummy.find(Ex(sit))!=item_dummy.end())
+							//							std::cerr << *sit->name << " already in free set" << std::endl;
+							//							if(item_dummy.find(Ex(sit))!=item_dummy.end())
 							if(find_modulo_parent_rel(sit, item_dummy)!=item_dummy.end())
 								throw ConsistencyException("Triple index " + *sit->name + " inside a single factor found.");
 							item_dummy.insert(*fnd);
 							item_free.erase(fnd);
 							item_dummy.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
-//							std::cout << item_dummy.size() << " " << item_free.size() << std::endl;
-							}
-						else {
-//							std::cerr << *sit->name << " is new" << std::endl;
+							//							std::cout << item_dummy.size() << " " << item_free.size() << std::endl;
+							} else {
+							//							std::cerr << *sit->name << " is new" << std::endl;
 							item_free.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
 							}
 						}
 					}
 				}
-//			else {
-//				item_free.insert(index_map_t::value_type(sit->name, Ex::iterator(sit)));
-//				}
+			//			else {
+			//				item_free.insert(index_map_t::value_type(sit->name, Ex::iterator(sit)));
+			//				}
 			++sit;
 			}
 		ind_free.insert(item_free.begin(), item_free.end());
 		ind_dummy.insert(item_dummy.begin(), item_dummy.end());
 		}
-//	std::cout << "ind_free: " << ind_free.size() << std::endl;
-//	std::cout << "ind_dummy: " << ind_dummy.size() << std::endl;
+	//	std::cout << "ind_free: " << ind_free.size() << std::endl;
+	//	std::cout << "ind_dummy: " << ind_dummy.size() << std::endl;
 
 	}
 
 Ex IndexClassifier::get_dummy(const list_property *dums,
-												  const index_map_t * one, 
-												  const index_map_t * two,
-												  const index_map_t * three,
-												  const index_map_t * four,
-												  const index_map_t * five) const
+                              const index_map_t * one,
+                              const index_map_t * two,
+                              const index_map_t * three,
+                              const index_map_t * four,
+                              const index_map_t * five) const
 	{
 	std::pair<Properties::pattern_map_t::const_iterator, Properties::pattern_map_t::const_iterator>
-		pr=kernel.properties.pats.equal_range(dums);
+	pr=kernel.properties.pats.equal_range(dums);
 
 	// std::cerr << "finding index not in: " << std::endl;
 	// if(one)
@@ -516,7 +495,7 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 	// if(five)
 	// 	for(auto& i: *five)
 	// 		std::cerr << i.first << std::endl;
-	
+
 	while(pr.first!=pr.second) {
 		// std::cerr << "trying " << pr.first->second->obj << std::endl;
 		if(pr.first->second->obj.begin()->is_autodeclare_wildcard()) {
@@ -524,21 +503,20 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 			int used=max_numbered_name(base, one, two, three, four, five);
 			std::ostringstream str;
 			str << base << used+1;
-//			txtout << "going to use " << str.str() << std::endl;
+			//			txtout << "going to use " << str.str() << std::endl;
 			nset_t::iterator newnm=name_set.insert(str.str()).first;
 			Ex ret;
 			ret.set_head(str_node(newnm));
 			return ret;
-			}
-		else {
+			} else {
 			const Ex& inm=(*pr.first).second->obj;
 			// BUG: even if only _{a} is in the used map, we should not
 			// accept ^{a}. But since ...
 			if(index_in_set(inm, one)==false   &&
-				index_in_set(inm, two)==false   &&
-				index_in_set(inm, three)==false &&
-				index_in_set(inm, four)==false  &&
-				index_in_set(inm, five)==false) {
+			      index_in_set(inm, two)==false   &&
+			      index_in_set(inm, three)==false &&
+			      index_in_set(inm, four)==false  &&
+			      index_in_set(inm, five)==false) {
 				// std::cerr << "ok to use " << inm << std::endl;
 				return inm;
 				}
@@ -556,7 +534,7 @@ Ex IndexClassifier::get_dummy(const list_property *dums, Ex::iterator it) const
 	index_map_t one, two, three, four, five;
 	classify_indices_up(it, one, two);
 	classify_indices(it, three, four);
-	
+
 	return get_dummy(dums, &one, &two, &three, &four, 0);
 	}
 
@@ -570,7 +548,7 @@ Ex IndexClassifier::get_dummy(const list_property *dums, Ex::iterator it1, Ex::i
 	classify_indices_up(it2, one, two);
 	classify_indices(it1, three, four);
 	classify_indices(it2, three, four);
-	
+
 	return get_dummy(dums, &one, &two, &three, &four, 0);
 	}
 
@@ -579,7 +557,7 @@ void IndexClassifier::print_classify_indices(std::ostream& str, Ex::iterator st)
 	str << "for node " << Ex(st) << std::endl;
 	index_map_t ind_free, ind_dummy;
 	classify_indices(st, ind_free, ind_dummy);
-	
+
 	index_map_t::iterator it=ind_free.begin();
 	index_map_t::iterator prev=ind_free.end();
 	str << "free indices: " << std::endl;
@@ -611,10 +589,10 @@ int IndexClassifier::max_numbered_name_one(const std::string& nm, const index_ma
 	while(it!=one->end()) {
 		size_t pos=(*it->first.begin()->name).find_first_of("0123456789");
 		if(pos!=std::string::npos) {
-//			txtout << (*it->first).substr(0,pos) << std::endl;
+			//			txtout << (*it->first).substr(0,pos) << std::endl;
 			if((*it->first.begin()->name).substr(0,pos) == nm) {
 				int thenum=atoi((*it->first.begin()->name).substr(pos).c_str());
-//				txtout << "num = " << thenum << std::endl;
+				//				txtout << "num = " << thenum << std::endl;
 				themax=std::max(themax, thenum);
 				}
 			}
@@ -623,12 +601,12 @@ int IndexClassifier::max_numbered_name_one(const std::string& nm, const index_ma
 	return themax;
 	}
 
-int IndexClassifier::max_numbered_name(const std::string& nm, 
-											const index_map_t * one, 
-											const index_map_t * two,
-											const index_map_t * three,
-											const index_map_t * four,
-											const index_map_t * five) const
+int IndexClassifier::max_numbered_name(const std::string& nm,
+                                       const index_map_t * one,
+                                       const index_map_t * two,
+                                       const index_map_t * three,
+                                       const index_map_t * four,
+                                       const index_map_t * five) const
 	{
 	int themax=0;
 	if(one) {

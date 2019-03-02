@@ -3,7 +3,7 @@
 
 using namespace cadabra;
 
-std::string Weight::name() const 
+std::string Weight::name() const
 	{
 	return "Weight";
 	}

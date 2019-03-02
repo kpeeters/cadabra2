@@ -16,7 +16,7 @@ vary::vary(const Kernel& k, Ex& tr, Ex& args_)
 	{
 	}
 
-bool vary::can_apply(iterator it) 
+bool vary::can_apply(iterator it)
 	{
 	if(*it->name=="\\prod") return true;
 	if(*it->name=="\\commutator") return true;
@@ -31,47 +31,47 @@ bool vary::can_apply(iterator it)
 	if(der) return true;
 	const Accent *acc = kernel.properties.get<Accent>(it);
 	if(acc) return true;
-	
+
 	if(!tr.is_head(it)) {
-	  der = kernel.properties.get<Derivative>(tr.parent(it));
-	  if(der) return true;
-	  acc = kernel.properties.get<Accent>(tr.parent(it));
-	  if(acc) return true;
-	}
+		der = kernel.properties.get<Derivative>(tr.parent(it));
+		if(der) return true;
+		acc = kernel.properties.get<Accent>(tr.parent(it));
+		if(acc) return true;
+		}
 	return false;
 	}
 
 /*
 
-      D(A) C + D(A);
-      @vary(%)( 
+D(A) C + D(A);
+@vary(%)(
 
 
- */
+*/
 
 Algorithm::result_t vary::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
-	
+
 	if(*it->name=="\\prod" || *it->name=="\\commutator" || *it->name=="\\anticommutator") {
 		Ex result;
 		result.set_head(str_node("\\sum"));
 		iterator newsum=result.begin();
-		
+
 		// Iterate over all factors, attempting a substitute. If this
 		// succeeds, copy the term to the "result" tree. Then restore the
 		// original. We have to do the substitute on the original tree so
 		// that index relabelling takes into account the rest of the tree.
-		
+
 		Ex prodcopy(it); // keep a copy to restore after each substitute
-		
+
 		vary varyfac(kernel, tr, args);
 		int pos=0;
-		for(;;) { 
+		for(;;) {
 			sibling_iterator fcit=tr.begin(it);
 			fcit+=pos;
 			if(fcit==tr.end(it)) break;
-			
+
 			iterator fcit2(fcit);
 			if(varyfac.can_apply(fcit2)) {
 				result_t res = varyfac.apply(fcit2);
@@ -89,8 +89,7 @@ Algorithm::result_t vary::apply(iterator& it)
 			}
 		if(tr.number_of_children(newsum)>0) {
 			it=tr.move_ontop(it, newsum);
-			}
-		else { // varying any of the factors produces nothing, variation is zero
+			} else { // varying any of the factors produces nothing, variation is zero
 			zero(it->multiplier);
 			}
 		cleanup_dispatch(kernel, tr, it);
@@ -135,8 +134,7 @@ Algorithm::result_t vary::apply(iterator& it)
 			++sib;
 			if(vry.can_apply(app)) {
 				res = vry.apply(app);
-				}
-			else {
+				} else {
 				// remove this term
 				res=result_t::l_applied;
 				node_zero(app);
@@ -156,7 +154,7 @@ Algorithm::result_t vary::apply(iterator& it)
 		return res;
 		}
 
-	if(*it->name=="\\pow") { 
+	if(*it->name=="\\pow") {
 		Ex backup(it);
 		// Wrap the power in a \cdbDerivative and then call @prodrule.
 		it=tr.wrap(it, str_node("\\cdbDerivative"));
@@ -189,7 +187,7 @@ Algorithm::result_t vary::apply(iterator& it)
 	if(tr.is_head(it)==false) {
 		der = kernel.properties.get<Derivative>(tr.parent(it));
 		acc = kernel.properties.get<Accent>(tr.parent(it));
-		
+
 		if(der || acc || is_single_term(it)) { // easy: just vary this term by substitution
 			// std::cerr << "single term " << *it->name << std::endl;
 			substitute subs(kernel, tr, args);
@@ -198,7 +196,7 @@ Algorithm::result_t vary::apply(iterator& it)
 					return result_t::l_applied;
 					}
 				}
-			
+
 			if(is_termlike(it)) {
 				zero(it->multiplier);
 				return result_t::l_applied;
@@ -235,12 +233,12 @@ Algorithm::result_t vary::apply(iterator& it)
 		}
 
 	// If we get here we have a single term for which we do not know
-   // (yet) how to take a variational derivative. For instance some
-   // unknown function f(a) varied wrt. a. This should spit out
-   // \delta{f(a)}{\delta{a}}\delta{a} or something like that.
+	// (yet) how to take a variational derivative. For instance some
+	// unknown function f(a) varied wrt. a. This should spit out
+	// \delta{f(a)}{\delta{a}}\delta{a} or something like that.
 
 	throw RuntimeException("Do not yet know how to vary that expression.");
-//	std::cerr << "No idea how to vary single term " << Ex(it) << std::endl;
+	//	std::cerr << "No idea how to vary single term " << Ex(it) << std::endl;
 
 	return res;
 	}

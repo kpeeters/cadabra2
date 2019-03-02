@@ -5,15 +5,15 @@
 
 namespace cadabra {
 
-/// \ingroup properties
-	
+	/// \ingroup properties
+
 	class EpsilonTensor : public AntiSymmetric, virtual public property {
 		public:
 			virtual ~EpsilonTensor() {};
 			virtual bool parse(Kernel&, keyval_t&) override;
 			virtual std::string name() const override;
-			
-			Ex metric, krdelta;
-	};
 
-}
+			Ex metric, krdelta;
+		};
+
+	}

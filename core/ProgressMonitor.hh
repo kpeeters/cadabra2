@@ -12,15 +12,15 @@ class ProgressMonitor {
 		ProgressMonitor();
 		virtual ~ProgressMonitor();
 
-		void group(std::string name=""); 
+		void group(std::string name="");
 		void progress(int n, int total);
 
 		void print() const;
 
 		class Total {
-			public: 
+			public:
 				Total();
-				
+
 				std::string               name;
 				size_t                    call_count;
 				std::chrono::milliseconds time_spent;
@@ -31,10 +31,10 @@ class ProgressMonitor {
 				bool operator==(const Total& other) const;
 
 				std::string               str() const;
-		};
+			};
 
 		std::vector<Total> totals() const;
-		
+
 	private:
 		class Block {
 			public:
@@ -43,10 +43,10 @@ class ProgressMonitor {
 				std::string               name;
 				std::chrono::milliseconds started;
 				int                       step, total_steps;
-		};
+			};
 
 		std::stack<Block>            call_stack;
 		std::map<std::string, Total> call_totals;
-};
+	};
 
 

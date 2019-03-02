@@ -4,13 +4,12 @@
 #include "py_algorithms.hh"
 #include "py_ex.hh"
 #include "py_kernel.hh"
-#include "py_packages.hh"	
+#include "py_packages.hh"
 #include "py_progress.hh"
 #include "py_properties.hh"
 #include "py_stopwatch.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 	namespace py = pybind11;
 
 	std::string init_ipython()

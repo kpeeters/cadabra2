@@ -5,9 +5,9 @@
 
 namespace cadabra {
 
-class ImaginaryI : public property {
-	public:
-		virtual std::string name() const override;
-};
+	class ImaginaryI : public property {
+		public:
+			virtual std::string name() const override;
+		};
 
-}
+	}

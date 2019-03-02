@@ -16,12 +16,12 @@ class MyClient : public cadabra::Client {
 		void on_progress();
 		void before_tree_change(ActionBase&);
 		void after_tree_change(ActionBase&);
-};
+	};
 
 class UI {
 	public:
 		void run();
-};
+	};
 
 MyClient client;
 UI       ui;
@@ -32,12 +32,12 @@ MyClient::MyClient()
 	{
 	}
 
-void MyClient::on_connect() 
+void MyClient::on_connect()
 	{
 	std::cout << "connected to server" << std::endl;
 	}
 
-void MyClient::on_disconnect() 
+void MyClient::on_disconnect()
 	{
 	std::cout << "disconnected from server" << std::endl;
 	}
@@ -47,7 +47,7 @@ void MyClient::on_network_error()
 	std::cout << "network error" << std::endl;
 	}
 
-void MyClient::on_progress() 
+void MyClient::on_progress()
 	{
 	}
 
@@ -59,20 +59,19 @@ void MyClient::after_tree_change(ActionBase& ab)
 	{
 	}
 
-void UI::run() 
+void UI::run()
 	{
 	int i;
 	std::cin >> i;
-	
+
 	cadabra::Client::iterator it=client.dtree().begin();
 	auto cell = std::make_shared<cadabra::Client::DataCell>();
 	auto ac = std::make_shared<cadabra::Client::ActionAddCell>(cell, it, cadabra::Client::ActionAddCell::Position::child);
-	
+
 	try {
 		std::cout << "calling perform" << std::endl;
 		client.perform(ac);
-		}
-	catch(std::error_code& ex) {
+		} catch(std::error_code& ex) {
 		std::cout << ex.message() << std::endl;
 		}
 	std::cout << "perform called" << std::endl;
@@ -82,19 +81,18 @@ void UI::run()
 
 int main(int, char **)
 	{
-//	client.init();
+	//	client.init();
 	std::cout << "client connected" << std::endl;
 
 	try {
 		// Spawn two threads.
 		std::thread client_thread(&MyClient::run, std::ref(client));
 		std::thread ui_thread(&UI::run, ui);
-		
+
 		// Wait for all threads to finish.
 		client_thread.join();
 		ui_thread.join();
-		}
-	catch(std::error_code& ex) {
+		} catch(std::error_code& ex) {
 		std::cout << ex.message() << std::endl;
 		}
 

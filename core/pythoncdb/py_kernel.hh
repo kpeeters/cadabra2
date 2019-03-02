@@ -4,8 +4,7 @@
 
 #include "../Kernel.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 
 	/// \ingroup pythoncore
 	///
@@ -25,10 +24,10 @@ namespace cadabra
 	///   Python object.} A more fundamental problem is that properties can be
 	/// attached to patterns, and those patterns can involve more than just
 	/// the symbols which one passes into a function.
-	/// 
+	///
 	/// In order to not burden the user, properties are therefore by default
 	/// global variables, stored in a single global Cadabra object
-	/// \verb|__cdbkernel__| which is initialised at import of the Cadabra module. 
+	/// \verb|__cdbkernel__| which is initialised at import of the Cadabra module.
 	/// If you add new properties inside a function scope, these will go
 	/// into this already existing \emph{global} property list by default.
 	/// If you want to create a local scope for your computations, create a
@@ -38,7 +37,7 @@ namespace cadabra
 	///    __cdbkernel__ = cadabra.create_scope();
 	///    [your code here]
 	/// \end{verbatim}
-	/// Now computations will not see the global properties at all. 
+	/// Now computations will not see the global properties at all.
 	/// If you want to import the global properties, use instead
 	/// \begin{verbatim}
 	/// def fun():
@@ -46,12 +45,12 @@ namespace cadabra
 	///    [your code here]
 	/// \end{verbatim}
 	/// It is crucial that the
-	/// \verb|__cdbkernel__| symbol is referenced from within Python and visible to the bytecompiler, because 
+	/// \verb|__cdbkernel__| symbol is referenced from within Python and visible to the bytecompiler, because
 	/// it is not possible to create new variables on the local stack at runtime.
 	/// Internally, the second version above fetches, at runtime, the
 	/// \verb|__cdbkernel__| from the globals stack, copies all properties in there
-	/// into a new kernel, and returns the latter. 
-	/// 
+	/// into a new kernel, and returns the latter.
+	///
 	/// Both versions above do populate the newly created kernel with
 	/// Cadabra's default properties. If you want a completely clean slate
 	/// (for e.g.~testing purposes, or because you really do not want default
@@ -63,11 +62,11 @@ namespace cadabra
 	/// \end{verbatim}
 	/// Note that in all these cases, changes to properties remain local and
 	/// do not leak into the global property list.
-	/// 
+	///
 	/// All Cadabra algorithms, when called from Python, will first look for a
 	/// kernel on the locals stack (i.e.~what \verb|locals()| produces). If
 	/// there is no kernel available locally, they will then revert to using
-	/// the global kernel. 
+	/// the global kernel.
 	Kernel *create_scope();
 	Kernel *create_scope_from_global();
 	Kernel *create_empty_scope();

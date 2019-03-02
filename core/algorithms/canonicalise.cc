@@ -15,11 +15,11 @@
 using namespace cadabra;
 
 canonicalise::canonicalise(const Kernel& k, Ex& tr)
-	: Algorithm(k, tr), reuse_generating_set(false) 
+	: Algorithm(k, tr), reuse_generating_set(false)
 	{
 	}
 
-bool canonicalise::can_apply(iterator it) 
+bool canonicalise::can_apply(iterator it)
 	{
 	if(*(it->name)!="\\prod")
 		if(is_single_term(it)==false)
@@ -28,10 +28,10 @@ bool canonicalise::can_apply(iterator it)
 	// Canonicalise requires strict monomial structure: no products which contain
 	// sums as factors. Products as factors are ok, they do not lead to multiple
 	// identically named free indices.
-	
+
 	auto sum_or_prod = find_in_subtree(tr, it, [](Ex::iterator tst) {
-			if(*tst->name=="\\sum") return true;
-			return false;
+		if(*tst->name=="\\sum") return true;
+		return false;
 		}, false);
 	if(sum_or_prod!=tr.end()) {
 #ifdef DEBUG
@@ -39,7 +39,7 @@ bool canonicalise::can_apply(iterator it)
 #endif
 		return false;
 		}
-	
+
 	return true;
 	}
 
@@ -57,8 +57,7 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 				if(countmap.find(Ex(indit))==countmap.end()) {
 					countmap.insert(Ex(indit));
 					++indit;
-					}
-				else {
+					} else {
 					zero(it->multiplier);
 					return true;
 					}
@@ -78,10 +77,10 @@ bool canonicalise::remove_vanishing_numericals(iterator& it)
 		if(dgl) {
 			index_iterator indit=begin_index(facit);
 			if(indit->is_rational()) {
-				index_iterator indit2=indit; 
+				index_iterator indit2=indit;
 				++indit2;
 				while(indit2!=end_index(facit)) {
-					if(indit2->is_rational()==false) 
+					if(indit2->is_rational()==false)
 						break;
 					if(indit2->multiplier!=indit->multiplier) {
 						zero(it->multiplier);
@@ -92,14 +91,14 @@ bool canonicalise::remove_vanishing_numericals(iterator& it)
 				}
 			}
 		++facit;
-		}	
+		}
 	return false;
 	}
 
 Indices::position_t canonicalise::position_type(iterator it) const
 	{
 	const Indices *ind=kernel.properties.get<Indices>(it, true);
-	if(ind) 
+	if(ind)
 		return ind->position_type;
 	return Indices::free;
 	}
@@ -109,12 +108,11 @@ std::string canonicalise::get_index_set_name(iterator it) const
 	const Indices *ind=kernel.properties.get<Indices>(it, true);
 	if(ind) {
 		return ind->set_name;
-// TODO: The logic was once as below, but it is no longer clear to
-// me why that would ever make sense.
-//		if(ind->parent_name!="") return ind->parent_name;
-//		else                     return ind->set_name;
-		}
-	else return " undeclared";
+		// TODO: The logic was once as below, but it is no longer clear to
+		// me why that would ever make sense.
+		//		if(ind->parent_name!="") return ind->parent_name;
+		//		else                     return ind->set_name;
+		} else return " undeclared";
 	}
 
 bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const
@@ -136,13 +134,13 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	{
 #ifdef DEBUG
 	std::cerr << "canonicalise at " << it << std::endl;
-#endif	
+#endif
 	// std::cerr << is_single_term(it) << std::endl;
 
 	Stopwatch totalsw;
 	totalsw.start();
 	prod_wrap_single_term(it);
-	
+
 	if(remove_traceless_traces(it)) {
 		cleanup_dispatch(kernel, tr, it);
 		return result_t::l_applied;
@@ -152,7 +150,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		cleanup_dispatch(kernel, tr, it);
 		return result_t::l_applied;
 		}
-	
+
 
 	// Now the real thing...
 	index_map_t ind_free, ind_dummy;
@@ -163,11 +161,11 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	const unsigned int total_number_of_indices=ind_free.size()+ind_dummy.size();
 
 #ifdef DEBUG
-//	std::cerr << "free index position map:\n";
-//	for(auto& ip: ind_pos_free)
-//		std::cerr << Ex(ip.first) << " @ " << ip.second << std::endl;;
-#endif	
-	
+	//	std::cerr << "free index position map:\n";
+	//	for(auto& ip: ind_pos_free)
+	//		std::cerr << Ex(ip.first) << " @ " << ip.second << std::endl;;
+#endif
+
 	// If there are no indices, there is nothing to do here...
 	if(total_number_of_indices==0) {
 #ifdef DEBUG
@@ -187,24 +185,24 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// canonicalise.
 
 #ifdef DEBUG
-//	std::cerr << "dummies:\n";
-//	for(auto& dummy: ind_dummy)
-//		std::cerr << dummy.first;
-//	std::cerr << "free:\n";
-//	for(auto& fr: ind_free)
-//		std::cerr << fr.first;
-#endif	
-	
+	//	std::cerr << "dummies:\n";
+	//	for(auto& dummy: ind_dummy)
+	//		std::cerr << dummy.first;
+	//	std::cerr << "free:\n";
+	//	for(auto& fr: ind_free)
+	//		std::cerr << fr.first;
+#endif
+
 	for(auto& dummy: ind_dummy)
 		if(ind_dummy.count(dummy.first)>2)
 			return result_t::l_no_action;
 
 	// PROGRESS
-//	for(auto& free: ind_free)
-//		if(ind_free.count(free.first)>1) {
-//			std::cerr << "bailing out" << std::endl;
-//			return result_t::l_no_action;
-//			}
+	//	for(auto& free: ind_free)
+	//		if(ind_free.count(free.first)>1) {
+	//			std::cerr << "bailing out" << std::endl;
+	//			return result_t::l_no_action;
+	//			}
 
 	result_t res=result_t::l_no_action;
 
@@ -212,11 +210,11 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// Also construct the free and dummy lists.
 	// And a map from index number to iterator (for later).
 	std::vector<int> vec_perm;
-	
 
-	// We need two arrays: one which maps from the order in which slots appear in 
+
+	// We need two arrays: one which maps from the order in which slots appear in
 	//	the tensor to the corresponding iterator (this is provided by the standard
-	// index routines already), and one which maps from the order in which the indices 
+	// index routines already), and one which maps from the order in which the indices
 	// appear in the base map to an Ex object (so that we can replace).
 
 	std::vector<Ex::iterator> num_to_it_map(total_number_of_indices);
@@ -231,9 +229,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		}
 #endif
 
-	
+
 	// Handle free indices.
-	
+
 #ifdef DEBUG
 	std::cerr << "found " << ind_free.size() << " free indices" << std::endl;
 #endif
@@ -247,7 +245,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		std::cerr << sorted_it->second << " free at pos " << ii->second+1 << std::endl;
 #endif
 		vec_perm.push_back(ii->second+1);
-		
+
 		++sorted_it;
 		}
 	curr_index=0;
@@ -270,7 +268,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		// We insert the dummy indices in pairs (canonicalise only acts on
 		// expressions which have dummies coming in doublets, not the more
 		// general cadabra dummy concept).
-		// The lower index come first, and then the upper index. 
+		// The lower index come first, and then the upper index.
 
 		index_position_map_t::const_iterator ii=ind_pos_dummy.find(sorted_it->second);
 		index_map_t::const_iterator          next_it=sorted_it;
@@ -282,22 +280,22 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 #endif
 
 		switch(ii->first->fl.parent_rel) {
-			case str_node::p_super:
-			case str_node::p_none:
-//				vec_perm.push_back(ii->second+1);
-//				vec_perm.push_back(i2->second+1);
-//				num_to_tree_map.push_back(Ex(ii->first));
-//				num_to_tree_map.push_back(Ex(i2->first));
-				break;
-			case str_node::p_sub:
-				std::swap(ii, i2);
-//				vec_perm.push_back(i2->second+1);
-//				vec_perm.push_back(ii->second+1);
-//				num_to_tree_map.push_back(Ex(i2->first));
-//				num_to_tree_map.push_back(Ex(ii->first));
-				break;
-			default:
-				break;
+		case str_node::p_super:
+		case str_node::p_none:
+			//				vec_perm.push_back(ii->second+1);
+			//				vec_perm.push_back(i2->second+1);
+			//				num_to_tree_map.push_back(Ex(ii->first));
+			//				num_to_tree_map.push_back(Ex(i2->first));
+			break;
+		case str_node::p_sub:
+			std::swap(ii, i2);
+			//				vec_perm.push_back(i2->second+1);
+			//				vec_perm.push_back(ii->second+1);
+			//				num_to_tree_map.push_back(Ex(i2->first));
+			//				num_to_tree_map.push_back(Ex(ii->first));
+			break;
+		default:
+			break;
 			}
 
 		vec_perm.push_back(ii->second+1);
@@ -308,25 +306,23 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		num_to_it_map[ii->second]=ii->first;
 		num_to_it_map[i2->second]=i2->first;
 
-		// If the indices are not in canonical order and they are separated 
+		// If the indices are not in canonical order and they are separated
 		// by a Derivative, we cannot raise/lower, so they should stay in this order.
 		// Have to do this by putting those indices in a different set and then
 		// setting the metric flag to 0. Ditto when only one index is on a derivative
 		// (canonicalising usually makes the expression uglier in that case).
 		iterator tmp;
-		if( ( (separated_by_derivative(tr.parent(ii->first), tr.parent(i2->first),tmp) 
-				 || only_one_on_derivative(ii->first, i2->first) )
-				&& position_type(ii->first)==Indices::fixed ) ||
-			 position_type(ii->first)==Indices::independent ) {
+		if( ( (separated_by_derivative(tr.parent(ii->first), tr.parent(i2->first),tmp)
+		       || only_one_on_derivative(ii->first, i2->first) )
+		      && position_type(ii->first)==Indices::fixed ) ||
+		      position_type(ii->first)==Indices::independent ) {
 			dummy_sets[" NR "+get_index_set_name(ii->first)].push_back(ii->second+1);
 			dummy_sets[" NR "+get_index_set_name(i2->first)].push_back(i2->second+1);
-			}
-		else {
+			} else {
 			if( kernel.properties.get<AntiCommuting>(ii->first, true) != 0 ) {
 				dummy_sets[" AC "+get_index_set_name(ii->first)].push_back(ii->second+1);
 				dummy_sets[" AC "+get_index_set_name(i2->first)].push_back(i2->second+1);
-				}
-			else {
+				} else {
 				dummy_sets[get_index_set_name(ii->first)].push_back(ii->second+1);
 				dummy_sets[get_index_set_name(i2->first)].push_back(i2->second+1);
 				}
@@ -340,20 +336,20 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 	// in Integer properties. This one does NOT work when there is more than
 	// one index set; we would need more clever logic to figure out which
 	// index type the numerical index corresponds to.
-//	debugout << index_sets.size() << std::endl;
-//	if(index_sets.size()==1) {
-//		for(unsigned int kk=0; kk<indexpos_to_indextype.size(); ++kk) 
-//			if(indexpos_to_indextype[kk]=="numerical")
-//				indexpos_to_indextype[kk]=index_sets.begin()->first;
-//		}
-//
+	//	debugout << index_sets.size() << std::endl;
+	//	if(index_sets.size()==1) {
+	//		for(unsigned int kk=0; kk<indexpos_to_indextype.size(); ++kk)
+	//			if(indexpos_to_indextype[kk]=="numerical")
+	//				indexpos_to_indextype[kk]=index_sets.begin()->first;
+	//		}
+	//
 
 	// TRACE: remove later THIS DOES NOT SOLVE THE PROBLEM, ITERATORS ABOVE SEEM TO BE WRONG.
-	//	prod_unwrap_single_term(it);		
+	//	prod_unwrap_single_term(it);
 	//	return result_t::l_no_action;
 
 
-   // Construct the generating set.
+	// Construct the generating set.
 
 	std::vector<unsigned int> base_here;
 
@@ -370,9 +366,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 				// Add indices to the base. We used to add everything except the last one, but that
 				// seems to be the wrong thing to do after the XPERM -> XPERM_EXT upgrade (see Jose's email).
-				for(unsigned int kk=0; kk<num_ind; ++kk) 
+				for(unsigned int kk=0; kk<num_ind; ++kk)
 					base_here.push_back(curr_pos+kk+1);
-				
+
 				// loop over tabs
 				for(unsigned int ti=0; ti<tba->size(kernel.properties, tr, facit); ++ti) {
 					TableauBase::tab_t tmptab=tba->get_tab(kernel.properties, tr,facit,ti);
@@ -382,14 +378,14 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 							if(tmptab.column_size(col)>1) {
 								// all pairs NEW: SGS
 								for(unsigned int indnum1=0; indnum1<tmptab.column_size(col)-1; ++indnum1) {
-//								for(unsigned int indnum2=indnum1+1; indnum2<tmptab.column_size(col); ++indnum2) {
+									//								for(unsigned int indnum2=indnum1+1; indnum2<tmptab.column_size(col); ++indnum2) {
 									std::vector<int> permute(total_number_of_indices+2);
 									for(unsigned int kk=0; kk<permute.size(); ++kk)
 										permute[kk]=kk+1;
 									std::swap(permute[tmptab(indnum1,col)+curr_pos],
-												 permute[tmptab(indnum1+1,col)+curr_pos]);
+									          permute[tmptab(indnum1+1,col)+curr_pos]);
 									std::swap(permute[total_number_of_indices+1],
-												 permute[total_number_of_indices]); // anti-symmetry
+									          permute[total_number_of_indices]); // anti-symmetry
 									generating_set.push_back(permute);
 									}
 								}
@@ -398,16 +394,15 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 					if(tmptab.number_of_rows()==1 && tmptab.row_size(0)>1) { // symmetry, if all cols of size 1
 						// all pairs
 						for(unsigned int indnum1=0; indnum1<tmptab.row_size(0)-1; ++indnum1) {
-//						for(unsigned int indnum2=indnum1+1; indnum2<tmptab.row_size(0); ++indnum2) {
+							//						for(unsigned int indnum2=indnum1+1; indnum2<tmptab.row_size(0); ++indnum2) {
 							std::vector<int> permute(total_number_of_indices+2);
 							for(unsigned int kk=0; kk<permute.size(); ++kk)
 								permute[kk]=kk+1;
 							std::swap(permute[tmptab(0,indnum1)+curr_pos],
-										 permute[tmptab(0,indnum1+1)+curr_pos]);
+							          permute[tmptab(0,indnum1+1)+curr_pos]);
 							generating_set.push_back(permute);
 							}
-						}
-					else if(tmptab.number_of_rows()>0) { // find symmetry under equal-length column exchange
+						} else if(tmptab.number_of_rows()>0) { // find symmetry under equal-length column exchange
 						unsigned int column_height=tmptab.column_size(0);
 						unsigned int this_set_start=0;
 						for(unsigned int col=1; col<=tmptab.row_size(0); ++col) {
@@ -415,34 +410,33 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 								if(col-this_set_start>1) {
 									// two or more equal-length columns found, make generating set
 									for(unsigned int col1=this_set_start; col1+1<=col-1; ++col1) {
-//									for(unsigned int col2=this_set_start+1; col2<col; ++col2) {
+										//									for(unsigned int col2=this_set_start+1; col2<col; ++col2) {
 										std::vector<int> permute(total_number_of_indices+2);
 										for(unsigned int kk=0; kk<permute.size(); ++kk)
 											permute[kk]=kk+1;
 										for(unsigned int row=0; row<column_height; ++row) {
-//										txtout << row << " " << col1 << std::endl;
+											//										txtout << row << " " << col1 << std::endl;
 											std::swap(permute[tmptab(row,col1)+curr_pos],
-														 permute[tmptab(row,col1+1)+curr_pos]);
+											          permute[tmptab(row,col1+1)+curr_pos]);
 											}
 										generating_set.push_back(permute);
 										}
 									}
 								this_set_start=col;
-								if(col<tmptab.row_size(0)) 
+								if(col<tmptab.row_size(0))
 									column_height=tmptab.column_size(col);
 								}
 							}
 						}
 					}
-//					txtout << "loop over tabs done" << std::endl;
+				//					txtout << "loop over tabs done" << std::endl;
 				curr_pos+=num_ind;
-				}
-			else {
+				} else {
 				unsigned int num_ind=number_of_indices(facit);
 				if(num_ind==1)
 					base_here.push_back(curr_pos+1);
 				else {
-					for(unsigned int kk=0; kk<num_ind; ++kk) 
+					for(unsigned int kk=0; kk<num_ind; ++kk)
 						base_here.push_back(curr_pos+kk+1);
 					}
 				curr_pos+=number_of_indices(facit); // even if tba=0, this factor may contain indices
@@ -463,11 +457,11 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 
 	// Even if generating_set.size()==0 we still need to continue,
 	// because we still need to do simple index relabelling.
-//	if(generating_set.size()==0) {
-//		prod_unwrap_single_term(it);		
-//		return result_t::l_no_action;
-//		}
-	
+	//	if(generating_set.size()==0) {
+	//		prod_unwrap_single_term(it);
+	//		return result_t::l_no_action;
+	//		}
+
 	if(*it->multiplier!=0) {
 		// Fill data for the xperm routines.
 		int *gs=0;
@@ -479,14 +473,14 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 					gs[i*(total_number_of_indices+2)+j]=generating_set[i][j];
 #ifdef XPERM_DEBUG
 					std::cerr << gs[i*(total_number_of_indices+2)+j] << " ";
-#endif				
+#endif
 					}
 #ifdef XPERM_DEBUG
 				std::cerr << std::endl;
 #endif
 				}
 			}
-		
+
 		// Setup the arrays for xperm from our own data structures.
 
 		int    *base=new int[base_here.size()];
@@ -496,7 +490,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		for(unsigned int i=0; i<base_here.size(); ++i)
 			base[i]=base_here[i];
 		assert(vec_perm.size()==total_number_of_indices);
-		for(unsigned int i=0; i<total_number_of_indices; ++i) 
+		for(unsigned int i=0; i<total_number_of_indices; ++i)
 			perm[i]=vec_perm[i];
 		perm[total_number_of_indices]=total_number_of_indices+1;
 		perm[total_number_of_indices+1]=total_number_of_indices+2;
@@ -504,12 +498,12 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		int  *lengths_of_dummy_sets=new int[dummy_sets.size()];
 		int  *dummies              =new int[ind_dummy.size()];
 		int  *metric_signatures    =new int[dummy_sets.size()];
-		int  dsi=0; 
+		int  dsi=0;
 		int  cdi=0;
 		dummy_set_t::iterator ds=dummy_sets.begin();
 		while(ds!=dummy_sets.end()) {
 			lengths_of_dummy_sets[dsi]=ds->second.size();
-			for(unsigned int k=0; k<ds->second.size(); ++k) 
+			for(unsigned int k=0; k<ds->second.size(); ++k)
 				dummies[cdi++]=(ds->second)[k];
 			if(ds->first.substr(0,4)==" NR ")
 				metric_signatures[dsi]=0;
@@ -539,7 +533,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			while(fi!=ind_free.end()) {
 				int len=1;
 				while(fi!=ind_free.end() && fi->first==prev->first) {
-					if(len==1) 
+					if(len==1)
 						ind_repeated.push_back(prev->second);
 					ind_repeated.push_back(fi->second);
 					++len;
@@ -556,8 +550,8 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 				}
 			}
 
-      // free_indices stores a list of index slots which contain a free
-      // index.
+		// free_indices stores a list of index slots which contain a free
+		// index.
 		int              *free_indices=new int[ind_free.size()];
 		sorted_it=ind_free.begin();
 		curr_index=0;
@@ -567,18 +561,18 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			++sorted_it;
 			}
 
-//		std::cerr << "repeated sets:\n";
-//		for(auto& f: ind_repeated)
-//			std::cerr << *(f->multiplier) << " ";
-//		std::cerr << "\nrepeated lengths:\n";
-//		for(auto& i: ind_repeated_lengths)
-//			std::cerr << i << " ";
-//		std::cerr << std::endl;
+		//		std::cerr << "repeated sets:\n";
+		//		for(auto& f: ind_repeated)
+		//			std::cerr << *(f->multiplier) << " ";
+		//		std::cerr << "\nrepeated lengths:\n";
+		//		for(auto& i: ind_repeated_lengths)
+		//			std::cerr << i << " ";
+		//		std::cerr << std::endl;
 
 		int *repeated_indices         = new int[ind_repeated.size()];
 		int *lengths_of_repeated_sets = new int[ind_repeated_lengths.size()];
 
-      // repeated_indices contains a list of slots which contain repeated indices.
+		// repeated_indices contains a list of slots which contain repeated indices.
 		for(size_t i=0; i<ind_repeated.size(); ++i) {
 			auto pos=ind_pos_free.find(ind_repeated[i]);
 			repeated_indices[i]=pos->second+1;
@@ -587,41 +581,41 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 			lengths_of_repeated_sets[i]=ind_repeated_lengths[i];
 
 #ifdef XPERM_DEBUG
-			std::cerr << "perm:" << std::endl;
-			for(unsigned int i=0; i<total_number_of_indices+2; ++i)
-			std::cerr << perm[i] << " "; 
-			std::cerr << std::endl;
-			std::cerr << "base:" << std::endl;
-			for(unsigned int i=0; i<base_here.size(); ++i)
-			std::cerr << base[i] << " "; 
-			std::cerr << std::endl;
-			std::cerr << "free indices in slots:" << std::endl;
-			for(unsigned int i=0; i<ind_free.size(); ++i)
-				std::cerr << free_indices[i] << " "; 
-			std::cerr << std::endl;
-			std::cerr << "lengths_of_dummy_sets:" << std::endl;
-			for(unsigned int i=0; i<dummy_sets.size(); ++i)
-				std::cerr << lengths_of_dummy_sets[i] 
-						 << " (metric=" << metric_signatures[i] << ") "; 
-			std::cerr << std::endl;
-			std::cerr << "dummies in slots:" << std::endl;
-			for(unsigned int i=0; i<ind_dummy.size(); ++i)
-				std::cerr << dummies[i] << " "; 
-			std::cerr << std::endl;
-			std::cerr << "lengths_of_repeated_sets:" << std::endl;
-			for(unsigned int i=0; i<ind_repeated_lengths.size(); ++i)
-				std::cerr << lengths_of_repeated_sets[i];
-			std::cerr << std::endl;
-			std::cerr << "repeated indices in slots:" << std::endl;
-			for(unsigned int i=0; i<ind_repeated.size(); ++i)
-				std::cerr << repeated_indices[i];
-			std::cerr << std::endl;
+		std::cerr << "perm:" << std::endl;
+		for(unsigned int i=0; i<total_number_of_indices+2; ++i)
+			std::cerr << perm[i] << " ";
+		std::cerr << std::endl;
+		std::cerr << "base:" << std::endl;
+		for(unsigned int i=0; i<base_here.size(); ++i)
+			std::cerr << base[i] << " ";
+		std::cerr << std::endl;
+		std::cerr << "free indices in slots:" << std::endl;
+		for(unsigned int i=0; i<ind_free.size(); ++i)
+			std::cerr << free_indices[i] << " ";
+		std::cerr << std::endl;
+		std::cerr << "lengths_of_dummy_sets:" << std::endl;
+		for(unsigned int i=0; i<dummy_sets.size(); ++i)
+			std::cerr << lengths_of_dummy_sets[i]
+			          << " (metric=" << metric_signatures[i] << ") ";
+		std::cerr << std::endl;
+		std::cerr << "dummies in slots:" << std::endl;
+		for(unsigned int i=0; i<ind_dummy.size(); ++i)
+			std::cerr << dummies[i] << " ";
+		std::cerr << std::endl;
+		std::cerr << "lengths_of_repeated_sets:" << std::endl;
+		for(unsigned int i=0; i<ind_repeated_lengths.size(); ++i)
+			std::cerr << lengths_of_repeated_sets[i];
+		std::cerr << std::endl;
+		std::cerr << "repeated indices in slots:" << std::endl;
+		for(unsigned int i=0; i<ind_repeated.size(); ++i)
+			std::cerr << repeated_indices[i];
+		std::cerr << std::endl;
 #endif
 
 		Stopwatch sw;
 		sw.start();
 
-		// JMM now uses a different convention. 
+		// JMM now uses a different convention.
 		int *perm1 = new int[total_number_of_indices+2];
 		int *perm2 = new int[total_number_of_indices+2];
 		int *free_indices_new_order = new int[ind_free.size()];
@@ -649,9 +643,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		// Jose's xPerm paper (not yet updated to reflect the _ext version which allows
 		// for multiple dummy sets; see below for repeated (numerical) indices):
 		//
-      // expression        = R_{b}^{1d1} R_{c}^{bac}
+		// expression        = R_{b}^{1d1} R_{c}^{bac}
 		//
-      // sorted_index_set  = {a,d,b,-b,c,-c,1,1}
+		// sorted_index_set  = {a,d,b,-b,c,-c,1,1}
 		// base              = {1,2,3, 4,5, 6,7,8}
 		// dummies           = {3,4,5,6}
 		//    sorted_index_set[3] and [4] is a dummy pair
@@ -669,18 +663,18 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		//    these slots contain free indices ?
 		//
 		// perm = {4,7,2,8,6,3,1,5,9,10}
-      //    1st slot contains sorted_index_set[4] ( = -b )
-      //    2nd slot contains sorted_index_set[7] ( = 1 )
-      //    etc.
-      //
-      // perm1 = {p1[1], p1[2], ...}
+		//    1st slot contains sorted_index_set[4] ( = -b )
+		//    2nd slot contains sorted_index_set[7] ( = 1 )
+		//    etc.
+		//
+		// perm1 = {p1[1], p1[2], ...}
 		//
 		//    1st index sits in slot p1[1] ?
 		//
 		// cperm = {1,3,4,5,2,7,6,8,9,10}
 		//
 		//    1st slot gets sorted_index_set[1] ( = a )
-      //    2nd slot gets sorted_index_set[3] ( = b )
+		//    2nd slot gets sorted_index_set[3] ( = b )
 		//    ...
 		//
 		// for the repeated set logic:
@@ -691,7 +685,7 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		//    perm: 6
 		//    2 3 1 4 5 6  (slot 3 gets index name 1, slot 1 index 2, slot 3 index 3, slot 4 index 4)
 		//    base: 4
-		//    1 2 3 4 
+		//    1 2 3 4
 		//    free: 1
 		//    1            (index name 1 is free)
 		//    number of repes: 3
@@ -706,27 +700,27 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		//    1             (index name 1 is free)
 		//    number of repes: 3
 		//    2 3 4         (2nd, 3rd and 4th index names are repeated: index 1, 3 and 4)
-		
+
 
 		canonical_perm_ext(perm1,                       // permutation to be canonicalised
-								 total_number_of_indices+2,  // degree (+2 for the overall sign)
-								 1,                          // is this a strong generating set?
-								 base,                       // base for the strong generating set
-								 base_here.size(),           //    its length
-								 gs,                         // generating set
-								 generating_set.size(),      //    its size
-								 free_indices_new_order,     // free indices
-								 ind_free.size(),            // number of free indices
-								 lengths_of_dummy_sets,      // list of lengths of dummy sets
-								 dummy_sets.size(),          //    its length
-								 dummies_new_order,          // list with pairs of dummies
-								 ind_dummy.size(),           //    its length
-								 metric_signatures,          // list of symmetries of metric
-								 lengths_of_repeated_sets,   // list of lengths of repeated-sets
-								 ind_repeated_lengths.size(),//    its length
-								 repeated_new_order,         // list with repeated indices
-								 ind_repeated.size(),        //    its length
-								 perm2);                     // output
+		                   total_number_of_indices+2,  // degree (+2 for the overall sign)
+		                   1,                          // is this a strong generating set?
+		                   base,                       // base for the strong generating set
+		                   base_here.size(),           //    its length
+		                   gs,                         // generating set
+		                   generating_set.size(),      //    its size
+		                   free_indices_new_order,     // free indices
+		                   ind_free.size(),            // number of free indices
+		                   lengths_of_dummy_sets,      // list of lengths of dummy sets
+		                   dummy_sets.size(),          //    its length
+		                   dummies_new_order,          // list with pairs of dummies
+		                   ind_dummy.size(),           //    its length
+		                   metric_signatures,          // list of symmetries of metric
+		                   lengths_of_repeated_sets,   // list of lengths of repeated-sets
+		                   ind_repeated_lengths.size(),//    its length
+		                   repeated_new_order,         // list with repeated indices
+		                   ind_repeated.size(),        //    its length
+		                   perm2);                     // output
 
 		if (perm2[0] != 0) inverse(perm2, cperm, total_number_of_indices+2);
 		else copy_list(perm2, cperm, total_number_of_indices+2);
@@ -738,9 +732,9 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		delete [] perm2;
 
 		sw.stop();
-//		std::cerr << "xperm took " << sw << std::endl;
+		//		std::cerr << "xperm took " << sw << std::endl;
 
-#ifdef XPERM_DEBUG		
+#ifdef XPERM_DEBUG
 		std::cerr << "cperm:" << std::endl;
 		for(unsigned int i=0; i<total_number_of_indices+2; ++i)
 			std::cerr << cperm[i] << " ";
@@ -760,35 +754,34 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 					flip_sign(it->multiplier);
 					}
 				res = result_t::l_applied;
-				
+
 				for(unsigned int i=0; i<total_number_of_indices; ++i) {
 					// In the new final permutation, e.g.
-					// 
+					//
 					// 1 5 6 8 7 2 3 4 10 9
-					//  
+					//
 					// we place first the first index (m), which goes to the first slot. Then
 					// we put n, which can only go the fifth slot. Then we put p, which can go
 					// to 6,7,8, so that it goes to 6. Then we put r (not q), which can go to 7
 					// and 8, and so we put it at 7, etc.
 
-#ifdef XPERM_DEBUG					
-					std::cerr << "putting index " << i+1 << "(" << *num_to_tree_map[i].begin()->name 
-							 << ", " << num_to_tree_map[i].begin()->fl.parent_rel 
-							 << ") in slot " << cperm[i] << std::endl;
+#ifdef XPERM_DEBUG
+					std::cerr << "putting index " << i+1 << "(" << *num_to_tree_map[i].begin()->name
+					          << ", " << num_to_tree_map[i].begin()->fl.parent_rel
+					          << ") in slot " << cperm[i] << std::endl;
 #endif
-					
+
 					iterator ri = tr.replace_index(num_to_it_map[cperm[i]-1], num_to_tree_map[i].begin());
-//					assert(ri->fl.parent_rel==num_to_tree_map[i].begin()->fl.parent_rel);
+					//					assert(ri->fl.parent_rel==num_to_tree_map[i].begin()->fl.parent_rel);
 					ri->fl.parent_rel=num_to_tree_map[i].begin()->fl.parent_rel;
 					}
 				}
-			}
-		else {
+			} else {
 			zero(it->multiplier);
 			res = result_t::l_applied;
 			}
-		
-		if(gs) 
+
+		if(gs)
 			delete [] gs;
 		delete [] base;
 
@@ -802,14 +795,14 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		delete [] free_indices;
 		}
 #ifdef DEBUG
-   std::cerr << "=====\n";
+	std::cerr << "=====\n";
 #endif
-	
+
 	cleanup_dispatch(kernel, tr, it);
 
 
 	totalsw.stop();
-//	std::cerr << "total canonicalise took " << totalsw << std::endl;
-	
+	//	std::cerr << "total canonicalise took " << totalsw << std::endl;
+
 	return res;
 	}

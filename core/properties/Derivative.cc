@@ -21,7 +21,7 @@ unsigned int Derivative::size(const Properties& properties, Ex& tr, Ex::iterator
 multiplier_t Derivative::value(const Kernel& kernel, Ex::iterator it, const std::string& forcedlabel) const
 	{
 	const Properties& properties=kernel.properties;
-//	txtout << "!?!?" << std::endl;
+	//	txtout << "!?!?" << std::endl;
 	multiplier_t ret=0;
 
 	Ex::sibling_iterator sib=it.begin();
@@ -31,7 +31,7 @@ multiplier_t Derivative::value(const Kernel& kernel, Ex::iterator it, const std:
 			multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
 			if(sib->is_index()) ret-=tmp;
 			else                ret+=tmp;
-//			txtout << *sib->name << " = " << tmp << std::endl;
+			//			txtout << *sib->name << " = " << tmp << std::endl;
 			}
 		++sib;
 		}
@@ -42,16 +42,16 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, Ex& tr, Ex:
 	{
 	it=properties.head<Derivative>(it);
 
-//	std::cout << *it->name << " is Derivative" << std::endl;
-//	tr.print_recursive_treeform(std::cout, it);
+	//	std::cout << *it->name << " is Derivative" << std::endl;
+	//	tr.print_recursive_treeform(std::cout, it);
 
 	bool indices_first=tr.begin(it)->is_index();
 	Ex::sibling_iterator argnode=tr.begin(it);
 	unsigned int number_of_indices=0; // number of indices before the argument
-	while(argnode->is_index()) { 
-//		std::cout << *argnode->name << std::endl;
-		++argnode; 
-		++number_of_indices; 
+	while(argnode->is_index()) {
+		//		std::cout << *argnode->name << std::endl;
+		++argnode;
+		++number_of_indices;
 		}
 
 	// Right now we only propagate information of a child node if it does
@@ -61,17 +61,17 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, Ex& tr, Ex:
 	// still make things tricky when it comes to object exchange).
 
 	// FIXME: should really use index iterators
-//	unsigned int arg_indices=tr.number_of_children(argnode);
-//	txtout << "for : " << *it->name << std::endl;
-//	txtout << "indices first " << indices_first << std::endl;
-//	txtout << arg_indices << " indices on argument" << std::endl;
-//	txtout << number_of_indices << " direct indices" << std::endl;
+	//	unsigned int arg_indices=tr.number_of_children(argnode);
+	//	txtout << "for : " << *it->name << std::endl;
+	//	txtout << "indices first " << indices_first << std::endl;
+	//	txtout << arg_indices << " indices on argument" << std::endl;
+	//	txtout << number_of_indices << " direct indices" << std::endl;
 
 
-   // symmetry of the argument on which \diff acts
-//		txtout << "computing rettab" << std::endl;
+	// symmetry of the argument on which \diff acts
+	//		txtout << "computing rettab" << std::endl;
 
-//	std::cout << *argnode->name << std::endl;
+	//	std::cout << *argnode->name << std::endl;
 
 	const TableauBase *tb=properties.get<TableauBase>(argnode);
 	if(!tb) {
@@ -85,7 +85,7 @@ TableauBase::tab_t Derivative::get_tab(const Properties& properties, Ex& tr, Ex:
 		for(unsigned int rows=0; rows<rettab.number_of_rows(); ++rows)
 			for(unsigned int cols=0; cols<rettab.row_size(rows); ++cols) {
 				rettab(rows,cols)+=number_of_indices;
-//				txtout << "C " << rows << "," << cols << ": " << rettab(rows,cols) << std::endl;
+				//				txtout << "C " << rows << "," << cols << ": " << rettab(rows,cols) << std::endl;
 				}
 		}
 	return rettab;

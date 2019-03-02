@@ -9,12 +9,12 @@ using namespace cadabra;
 Kernel::Kernel()
 	: scalar_backend(scalar_backend_t::sympy)
 	{
-//	std::cerr << "Kernel() " << this << std::endl;
+	//	std::cerr << "Kernel() " << this << std::endl;
 	}
 
 Kernel::~Kernel()
 	{
-//	std::cerr << "~Kernel() " << this << std::endl;
+	//	std::cerr << "~Kernel() " << this << std::endl;
 	}
 
 void Kernel::inject_property(property *prop, std::shared_ptr<Ex> ex, std::shared_ptr<Ex> param)

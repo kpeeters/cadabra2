@@ -2,21 +2,21 @@
 #include "Config.hh"
 #include "InstallPrefix.hh"
 #if !defined(__OpenBSD__) && !defined(__FreeBSD__)
-  #include "whereami.h"
+#include "whereami.h"
 #endif
 #include <stdexcept>
 
 std::string cadabra::install_prefix()
-   {
+	{
 #if defined(__FreeBSD__) || defined(__OpenBSD__)
-   std::string ret(CMAKE_INSTALL_PREFIX);
-   return ret;
+	std::string ret(CMAKE_INSTALL_PREFIX);
+	return ret;
 #else
-   std::string ret;
-   int dirname_length;
-   auto length = wai_getExecutablePath(NULL, 0, &dirname_length);
-   if(length > 0) {
-	   char *path = (char*)malloc(length + 1);
+	std::string ret;
+	int dirname_length;
+	auto length = wai_getExecutablePath(NULL, 0, &dirname_length);
+	if(length > 0) {
+		char *path = (char*)malloc(length + 1);
 		if (!path)
 			throw std::logic_error("Cannot determine installation path.");
 		wai_getExecutablePath(path, length, &dirname_length);
@@ -28,5 +28,5 @@ std::string cadabra::install_prefix()
 		}
 	return ret;
 #endif
-   }
-	
+	}
+

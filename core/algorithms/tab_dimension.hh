@@ -6,18 +6,18 @@
 
 namespace cadabra {
 
-class tabdimension : public Algorithm {
-	public:
-      tabdimension(const Kernel&, Ex&);
+	class tabdimension : public Algorithm {
+		public:
+			tabdimension(const Kernel&, Ex&);
 
-		virtual bool     can_apply(iterator);
-		virtual result_t apply(iterator&);
+			virtual bool     can_apply(iterator);
+			virtual result_t apply(iterator&);
 
-		const Tableau *tab;
-		const FilledTableau *ftab;
-		int dimension;
-};
+			const Tableau *tab;
+			const FilledTableau *ftab;
+			int dimension;
+		};
 
 
 
-}
+	}

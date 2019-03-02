@@ -17,10 +17,10 @@ typedef websocketpp::client<websocketpp::config::asio_client> client;
 using namespace cadabra;
 
 ComputeThread::ComputeThread(int server_port)
-	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0), 
+	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0),
 	  server_stdout(0), server_stderr(0), forced_server_port(server_port)
 	{
-   // The ComputeThread constructor (but _not_ the run() member!) is
+	// The ComputeThread constructor (but _not_ the run() member!) is
 	// always run on the gui thread, so we can grab the gui thread id
 	// here.
 
@@ -45,7 +45,7 @@ void ComputeThread::set_master(GUIBase *b, DocumentThread *d)
 	docthread=d;
 	}
 
-void ComputeThread::init() 
+void ComputeThread::init()
 	{
 	// Setup the WebSockets client.
 
@@ -61,22 +61,22 @@ void ComputeThread::try_connect()
 	// https://svn.boost.org/trac/boost/ticket/2456
 	// Not sure why this works here, as the compiler claims this statement does
 	// not have any effect.
-   // No longer necessary with websocketpp-0.6.0.
+	// No longer necessary with websocketpp-0.6.0.
 	//
 	// boost::asio::ip::resolver_query_base::flags(0);
 
 	wsclient.clear_access_channels(websocketpp::log::alevel::all);
 	wsclient.clear_error_channels(websocketpp::log::elevel::all);
 
-	wsclient.set_open_handler(bind(&ComputeThread::on_open, 
-											 this, websocketpp::lib::placeholders::_1));
-	wsclient.set_fail_handler(bind(&ComputeThread::on_fail, 
-											 this, websocketpp::lib::placeholders::_1));
-	wsclient.set_close_handler(bind(&ComputeThread::on_close, 
-											  this, websocketpp::lib::placeholders::_1));
-	wsclient.set_message_handler(bind(&ComputeThread::on_message, this, 
-												 websocketpp::lib::placeholders::_1,
-												 websocketpp::lib::placeholders::_2));
+	wsclient.set_open_handler(bind(&ComputeThread::on_open,
+	                               this, websocketpp::lib::placeholders::_1));
+	wsclient.set_fail_handler(bind(&ComputeThread::on_fail,
+	                               this, websocketpp::lib::placeholders::_1));
+	wsclient.set_close_handler(bind(&ComputeThread::on_close,
+	                                this, websocketpp::lib::placeholders::_1));
+	wsclient.set_message_handler(bind(&ComputeThread::on_message, this,
+	                                  websocketpp::lib::placeholders::_1,
+	                                  websocketpp::lib::placeholders::_2));
 
 	std::ostringstream uristr;
 	uristr << "ws://127.0.0.1:" << port;
@@ -108,7 +108,7 @@ void ComputeThread::terminate()
 	{
 	wsclient.stop();
 
-	// If we have started the server ourselves, stop it now so we do 
+	// If we have started the server ourselves, stop it now so we do
 	// not leave mess behind.
 	// http://riccomini.name/posts/linux/2012-09-25-kill-subprocesses-linux-bash/
 
@@ -123,17 +123,17 @@ void ComputeThread::terminate()
 			server_stdout=0;
 			server_stderr=0;
 			}
-//		kill(server_pid, SIGKILL);
-// 		if(server_stdout)
-//			pclose2(server_stdout, server_pid); 
+		//		kill(server_pid, SIGKILL);
+		// 		if(server_stdout)
+		//			pclose2(server_stdout, server_pid);
 		}
 	}
 
 void ComputeThread::all_cells_nonrunning()
 	{
 	for(auto it: running_cells) {
-		std::shared_ptr<ActionBase> rs_action = 
-			std::make_shared<ActionSetRunStatus>(it.second->id(), false);
+		std::shared_ptr<ActionBase> rs_action =
+		   std::make_shared<ActionSetRunStatus>(it.second->id(), false);
 		docthread->queue_action(rs_action);
 		}
 	if(gui) {
@@ -143,7 +143,7 @@ void ComputeThread::all_cells_nonrunning()
 	running_cells.clear();
 	}
 
-void ComputeThread::on_fail(websocketpp::connection_hdl ) 
+void ComputeThread::on_fail(websocketpp::connection_hdl )
 	{
 	std::cerr << "cadabra-client: connection to server on port " << port << " failed" << std::endl;
 	connection_is_open=false;
@@ -152,7 +152,7 @@ void ComputeThread::on_fail(websocketpp::connection_hdl )
 		close(server_stdout);
 		// close(server_stderr);
 		Glib::spawn_close_pid(server_pid);
-//		kill(server_pid, SIGKILL);
+		//		kill(server_pid, SIGKILL);
 		server_pid=0;
 		server_stdout=0;
 		server_stderr=0;
@@ -177,7 +177,7 @@ void ComputeThread::try_spawn_server()
 		port=forced_server_port;
 		return;
 		}
-	
+
 	std::vector<std::string> argv, envp;
 #if defined(_WIN32) || defined(_WIN64)
 	argv.push_back(cadabra::install_prefix()+"\\bin\\cadabra-server.exe");
@@ -197,53 +197,52 @@ void ComputeThread::try_spawn_server()
 		                             0,
 		                             &server_stdout,
 		                             0); // We need to see stderr on the console
-//										  &server_stderr);
-		
+		//										  &server_stderr);
+
 		char buffer[100];
 		FILE *f = fdopen(server_stdout, "r");
 		if(fscanf(f, "%100s", buffer)!=1) {
 			throw std::logic_error("Failed to read port from server.");
 			}
 		port = atoi(buffer);
-		}
-	catch(Glib::SpawnError& err) {
+		} catch(Glib::SpawnError& err) {
 		std::cerr << "Failed to start server " << argv[0] << ": " << err.what() << std::endl;
 		// FIXME: cannot just fall through, the server is not up!
 		}
 	}
 
-void ComputeThread::on_open(websocketpp::connection_hdl ) 
+void ComputeThread::on_open(websocketpp::connection_hdl )
 	{
 	connection_is_open=true;
 	restarting_kernel=false;
 	if(gui)
 		gui->on_connect();
 
-//	// now it is safe to use the connection
-//	std::string msg;
-//
-////	if(stopit) {
-////		msg = 
-////			"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_interrupt\" },"
-////			"  \"content\":  { \"code\": \"print(42)\n\"} "
-////			"}";
-////		} 
-////	else {
-//		msg = 
-//			"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
-//			"  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
-//			"}";
-////		}
-//
-////	c->send(hdl, "import time\nfor i in range(0,10):\n   print('this is python talking '+str(i))\nex=Ex('A_{m n}')\nprint(str(ex))", websocketpp::frame::opcode::text);
-//	c->send(hdl, msg, websocketpp::frame::opcode::text);
+	//	// now it is safe to use the connection
+	//	std::string msg;
+	//
+	////	if(stopit) {
+	////		msg =
+	////			"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_interrupt\" },"
+	////			"  \"content\":  { \"code\": \"print(42)\n\"} "
+	////			"}";
+	////		}
+	////	else {
+	//		msg =
+	//			"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
+	//			"  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
+	//			"}";
+	////		}
+	//
+	////	c->send(hdl, "import time\nfor i in range(0,10):\n   print('this is python talking '+str(i))\nex=Ex('A_{m n}')\nprint(str(ex))", websocketpp::frame::opcode::text);
+	//	c->send(hdl, msg, websocketpp::frame::opcode::text);
 	}
 
-void ComputeThread::on_close(websocketpp::connection_hdl ) 
+void ComputeThread::on_close(websocketpp::connection_hdl )
 	{
 	// std::cerr << "cadabra-client: connection closed" << std::endl;
 	connection_is_open=false;
-	all_cells_nonrunning();	
+	all_cells_nonrunning();
 	if(gui) {
 		if(restarting_kernel) gui->on_disconnect("restarting kernel");
 		else                  gui->on_disconnect("not connected");
@@ -260,14 +259,14 @@ void ComputeThread::cell_finished_running(DataCell::id_t id)
 		throw std::logic_error("Cannot find cell with id = "+std::to_string(id.id));
 		}
 
-//	DTree::iterator ret = (*it).second;
+	//	DTree::iterator ret = (*it).second;
 	running_cells.erase(it);
 	}
 
-void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg) 
+void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	{
 	client::connection_ptr con = wsclient.get_con_from_hdl(hdl);
-//	std::cerr << msg->get_payload() << std::endl;
+	//	std::cerr << msg->get_payload() << std::endl;
 
 	// Parse the JSON message.
 	Json::Value  root;
@@ -296,24 +295,21 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	if (parent_id.id == interactive_cell) {
 		docthread->on_interactive_output(root);
 		console_child_ids.push_back(cell_id.id);
-	}
-	else if (cell_id.id == interactive_cell || std::find(console_child_ids.begin(), console_child_ids.end(), parent_id.id) != console_child_ids.end()) {
+		} else if (cell_id.id == interactive_cell || std::find(console_child_ids.begin(), console_child_ids.end(), parent_id.id) != console_child_ids.end()) {
 		docthread->on_interactive_output(root);
-	}
-	else if (msg_type.asString().find("csl_") == 0) {
+		} else if (msg_type.asString().find("csl_") == 0) {
 		root["header"]["from_server"] = true;
 		docthread->on_interactive_output(root);
-	}
-	else {
+		} else {
 		try {
 			bool finished = header["last_in_sequence"].asBool();
 
 			if (finished) {
 				std::shared_ptr<ActionBase> rs_action =
-					std::make_shared<ActionSetRunStatus>(parent_id, false);
+				   std::make_shared<ActionSetRunStatus>(parent_id, false);
 				docthread->queue_action(rs_action);
 				cell_finished_running(parent_id);
-			}
+				}
 
 			if (content["output"].asString().size() > 0) {
 				if (msg_type.asString() == "output") {
@@ -326,10 +322,9 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 
 					// Finally, the action to add the output cell.
 					std::shared_ptr<ActionBase> action =
-						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-				}
-				else if (msg_type.asString() == "verbatim") {
+					} else if (msg_type.asString() == "verbatim") {
 					std::string output = "\\begin{verbatim}" + content["output"].asString() + "\\end{verbatim}";
 
 					// Stick an AddCell action onto the stack. We instruct the
@@ -339,28 +334,25 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 
 					// Finally, the action to add the output cell.
 					std::shared_ptr<ActionBase> action =
-						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-				}
-				else if (msg_type.asString() == "latex_view") {
+					} else if (msg_type.asString() == "latex_view") {
 					// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
 					DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
 					std::shared_ptr<ActionBase> action =
-						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-				}
-				else if (msg_type.asString() == "input_form") {
+					} else if (msg_type.asString() == "input_form") {
 					DataCell result(cell_id, DataCell::CellType::input_form, content["output"].asString());
 					std::shared_ptr<ActionBase> action =
-						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-				}
-				else if (msg_type.asString() == "error") {
+					} else if (msg_type.asString() == "error") {
 					std::string error = "{\\color{red}{\\begin{verbatim}" + content["output"].asString()
-						+ "\\end{verbatim}}}";
+					                    + "\\end{verbatim}}}";
 					if (msg_type.asString() == "fault") {
 						error = "{\\color{red}{Kernel fault}}\\begin{small}" + error + "\\end{small}";
-					}
+						}
 
 					// Stick an AddCell action onto the stack. We instruct the
 					// action to add this result output cell as a child of the
@@ -369,34 +361,31 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 
 					// Finally, the action.
 					std::shared_ptr<ActionBase> action =
-						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
 
-					// Position the cursor in the cell that generated the error. All other cells on 
+					// Position the cursor in the cell that generated the error. All other cells on
 					// the execute queue have been cancelled by the server.
 					std::shared_ptr<ActionBase> actionpos =
-						std::make_shared<ActionPositionCursor>(parent_id, ActionPositionCursor::Position::in);
+					   std::make_shared<ActionPositionCursor>(parent_id, ActionPositionCursor::Position::in);
 					docthread->queue_action(actionpos);
 
 					// FIXME: iterate over all cells and set the running flag to false.
-				}
-				else if (msg_type.asString() == "image_png") {
+					} else if (msg_type.asString() == "image_png") {
 					DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
 					std::shared_ptr<ActionBase> action =
-						std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
+					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-				}
-				else {
+					} else {
 					std::cerr << "cadabra-client: received cell we did not expect: "
-						<< msg_type.asString() << std::endl;
+					          << msg_type.asString() << std::endl;
+					}
 				}
-			}
-		}
-		catch (std::logic_error& ex) {
+			} catch (std::logic_error& ex) {
 			// WARNING: if the server sends
 			std::cerr << "cadabra-client: trouble processing server response: " << ex.what() << std::endl;
+			}
 		}
-	}
 
 	// Update kernel busy indicator depending on number of running cells.
 	if(number_of_cells_executing()>0)
@@ -407,34 +396,34 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	gui->process_data();
 	}
 
-	void ComputeThread::execute_interactive(const std::string& code)
+void ComputeThread::execute_interactive(const std::string& code)
 	{
-		assert(gui_thread_id == std::this_thread::get_id());
+	assert(gui_thread_id == std::this_thread::get_id());
 
-		if (!connection_is_open || interactive_cell == 0)
-			return;
+	if (!connection_is_open || interactive_cell == 0)
+		return;
 
-		if (code.substr(0, 7) == "reset()")
-			return restart_kernel();
+	if (code.substr(0, 7) == "reset()")
+		return restart_kernel();
 
-		Json::Value req, header, content;
+	Json::Value req, header, content;
 
-		header["msg_type"] = "execute_request";
-		header["cell_id"] = static_cast<Json::UInt64>(interactive_cell);
-		header["interactive"] = true;
-		content["code"] = code.c_str();
+	header["msg_type"] = "execute_request";
+	header["cell_id"] = static_cast<Json::UInt64>(interactive_cell);
+	header["interactive"] = true;
+	content["code"] = code.c_str();
 
-		req["header"] = header;
-		req["content"] = content;
+	req["header"] = header;
+	req["content"] = content;
 
-		std::ostringstream oss;
-		oss << req << std::endl;
-		wsclient.send(our_connection_hdl, oss.str(), websocketpp::frame::opcode::text);
-}
+	std::ostringstream oss;
+	oss << req << std::endl;
+	wsclient.send(our_connection_hdl, oss.str(), websocketpp::frame::opcode::text);
+	}
 
-	void ComputeThread::register_interactive_cell(uint64_t id)
+void ComputeThread::register_interactive_cell(uint64_t id)
 	{
-		interactive_cell = id;
+	interactive_cell = id;
 	}
 
 void ComputeThread::execute_cell(DTree::iterator it)
@@ -452,28 +441,28 @@ void ComputeThread::execute_cell(DTree::iterator it)
 	if((it->textbuf).substr(0,7)=="reset()") {
 		restart_kernel();
 
-		std::shared_ptr<ActionBase> action = 
-			std::make_shared<ActionPositionCursor>(it->id(), ActionPositionCursor::Position::next);
+		std::shared_ptr<ActionBase> action =
+		   std::make_shared<ActionPositionCursor>(it->id(), ActionPositionCursor::Position::next);
 
 		docthread->queue_action(action);
 		return;
 		}
 
-	// Position the cursor in the next cell so this one will not 
+	// Position the cursor in the next cell so this one will not
 	// accidentally get executed twice.
 	std::shared_ptr<ActionBase> actionpos =
-		std::make_shared<ActionPositionCursor>(it->id(), ActionPositionCursor::Position::next);
+	   std::make_shared<ActionPositionCursor>(it->id(), ActionPositionCursor::Position::next);
 	docthread->queue_action(actionpos);
 	gui->process_data();
-	
+
 	// For a code cell, construct a server request message and then
 	// send the cell to the server.
 	if(it->cell_type==DataCell::CellType::python) {
 		running_cells[dc.id()]=it;
 
 		// Schedule an action to update the running status of this cell.
-		std::shared_ptr<ActionBase> rs_action = 
-			std::make_shared<ActionSetRunStatus>(it->id(), true);
+		std::shared_ptr<ActionBase> rs_action =
+		   std::make_shared<ActionSetRunStatus>(it->id(), true);
 		docthread->queue_action(rs_action);
 
 		Json::Value req, header, content;
@@ -502,9 +491,9 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		// action to add this result output cell as a child of the
 		// corresponding input cell.
 		DataCell result(DataCell::CellType::latex_view, it->textbuf);
-		
-		std::shared_ptr<ActionBase> action = 
-			std::make_shared<ActionAddCell>(result, it->id(), ActionAddCell::Position::child);
+
+		std::shared_ptr<ActionBase> action =
+		   std::make_shared<ActionAddCell>(result, it->id(), ActionAddCell::Position::child);
 		docthread->queue_action(action);
 		}
 	}
@@ -526,8 +515,8 @@ void ComputeThread::stop()
 
 	std::ostringstream str;
 	str << req << std::endl;
-	
-//	std::cerr << str.str() << std::endl;
+
+	//	std::cerr << str.str() << std::endl;
 
 	server_pid=0;
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
@@ -554,8 +543,8 @@ void ComputeThread::restart_kernel()
 
 	std::ostringstream str;
 	str << req << std::endl;
-	
-//	std::cerr << str.str() << std::endl;
+
+	//	std::cerr << str.str() << std::endl;
 
 	wsclient.send(our_connection_hdl, str.str(), websocketpp::frame::opcode::text);
 	docthread->on_interactive_output(req);

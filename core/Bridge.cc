@@ -8,7 +8,7 @@ using namespace cadabra;
 void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 	{
 	collect_terms rr(*kernel, *ex);
-	
+
 	bool acted=false;
 	Ex::iterator it=ex->begin();
 	while(it!=ex->end()) {
@@ -31,17 +31,16 @@ void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 						} while(walk!=ex->begin(topnode_it));
 					}
 				// FIXME: prepend_children is broken!
-            //				ex->prepend_children(it, ex->begin(topnode_it), ex->end(topnode_it)); // add children of ex
+				//				ex->prepend_children(it, ex->begin(topnode_it), ex->end(topnode_it)); // add children of ex
 				multiply(it->multiplier, mult);
 				rr.rename_replacement_dummies(it, false);
-				}
-			else throw ArgumentException("Python object '"+pobj+"' does not exist.");
+				} else throw ArgumentException("Python object '"+pobj+"' does not exist.");
 			}
 		++it;
 		}
 
-//	if(acted)
-//		std::cerr << "pull_in done: " << *ex << std::endl;
+	//	if(acted)
+	//		std::cerr << "pull_in done: " << *ex << std::endl;
 
 	return;
 	}

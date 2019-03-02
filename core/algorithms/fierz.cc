@@ -23,7 +23,7 @@ fierz::fierz(const Kernel& k, Ex& e, Ex& args)
 		throw ArgumentException("fierz: need a list of 4 spinors.");
 	}
 
-bool fierz::can_apply(iterator it) 
+bool fierz::can_apply(iterator it)
 	{
 	if(*it->name!="\\prod") return false;
 
@@ -57,7 +57,7 @@ bool fierz::can_apply(iterator it)
 				dim=to_long(*indit->difference.begin()->multiplier);
 				if(dim==1)
 					return false;
-				
+
 				gam1=ch;
 				// Skip to next spinor-index carrying object
 				do {
@@ -155,21 +155,21 @@ Algorithm::result_t fierz::apply(iterator& it)
 		return result_t::l_no_action;
 		}
 
-//	txtout << "going to Fierz" << std::endl;
+	//	txtout << "going to Fierz" << std::endl;
 
 	Ex rep("\\sum");
-	
-	index_map_t ind_free, ind_dummy; 
+
+	index_map_t ind_free, ind_dummy;
 	classify_indices(it, ind_free, ind_dummy);
 	spinordim=(1 << dim/2);
 	int maxind=dim;
-	if(prop1->weyl || dim%2==1) 
+	if(prop1->weyl || dim%2==1)
 		maxind/=2;
 
 	for(int i=0; i<=maxind; ++i) {
 		DEBUG( std::cerr << i << " of " << maxind << std::endl; );
 
-		// Make a copy of this term, moving the gamma matrices into the 
+		// Make a copy of this term, moving the gamma matrices into the
 		// first factor and inserting projector gamma matrices as well.
 		Ex cpyterm("\\prod");
 		cpyterm.begin()->multiplier=it->multiplier;
@@ -182,7 +182,7 @@ Algorithm::result_t fierz::apply(iterator& it)
 		iterator locgam1,  locgam2;  // locations of the projector gammas
 		while(cpit!=tr.end(it)) {
 			iterator tmpit;
-			if(cpit==spin2) 
+			if(cpit==spin2)
 				tmpit=cpyterm.append_child(cpyterm.begin(), spin4);
 			else if(cpit==spin4)
 				tmpit=cpyterm.append_child(cpyterm.begin(), spin2);
@@ -202,31 +202,31 @@ Algorithm::result_t fierz::apply(iterator& it)
 				if(i>0)
 					DEBUG( std::cerr << "New gamma reads " << Ex(locgam2) << std::endl; );
 				}
-			
+
 			++cpit;
 			}
 
 		// Insert the indices on the projector gammas.
 		index_map_t ind_added;
-		for(int j=1; j<=i; ++j) { 
+		for(int j=1; j<=i; ++j) {
 			Ex newdum=get_dummy(indprop, &ind_free, &ind_dummy, &ind_added);
 			iterator loc1=cpyterm.append_child(locgam1, newdum.begin());
 			ind_added.insert(index_map_t::value_type(newdum, loc1));
 			loc1->fl.parent_rel=str_node::p_super;
 			// Add the indices in opposite order in the second gamma matrix
-//			std::cerr << "inserting " << newdum << " at " << Ex(locgam2) << std::endl;
+			//			std::cerr << "inserting " << newdum << " at " << Ex(locgam2) << std::endl;
 			iterator loc2=cpyterm.prepend_child(locgam2, newdum.begin());
 			if(indprop->position_type==Indices::free)
 				loc1->fl.parent_rel=str_node::p_super;
 			else
 				loc2->fl.parent_rel=str_node::p_sub;
 			}
-		
-//		std::cerr << cpyterm << std::endl;
+
+		//		std::cerr << cpyterm << std::endl;
 		rep.append_child(rep.begin(), cpyterm.begin());
 		}
 
-//	std::cerr << rep << std::endl;
+	//	std::cerr << rep << std::endl;
 
 	it=tr.replace(it, rep.begin());
 	cleanup_dispatch(kernel, tr, it);

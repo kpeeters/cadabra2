@@ -8,7 +8,7 @@ std::string Symbol::name() const
 	return "Symbol";
 	}
 
-const Symbol *Symbol::get(const Properties& properties, Ex::iterator it, bool ignore_parent_rel) 
+const Symbol *Symbol::get(const Properties& properties, Ex::iterator it, bool ignore_parent_rel)
 	{
 	if(*it->name=="\\sum") {
 		// Check whether all siblings have the Symbol property.
@@ -21,6 +21,5 @@ const Symbol *Symbol::get(const Properties& properties, Ex::iterator it, bool ig
 			++sib;
 			}
 		return s;
-		}
-	else return properties.get<Symbol>(it, ignore_parent_rel);
+		} else return properties.get<Symbol>(it, ignore_parent_rel);
 	}

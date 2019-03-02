@@ -31,14 +31,14 @@ Glib::RefPtr<Cadabra> Cadabra::create(int argc, char **argv)
 	}
 
 Cadabra::Cadabra(int argc, char **argv)
-	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra", 
-							 Gio::APPLICATION_HANDLES_OPEN |
-							 Gio::APPLICATION_NON_UNIQUE),
-	compute(0), compute_thread(0),
-	server_port(0)
+	: Gtk::Application(argc, argv, "com.phi-sci.cadabra.Cadabra",
+	                   Gio::APPLICATION_HANDLES_OPEN |
+	                   Gio::APPLICATION_NON_UNIQUE),
+	  compute(0), compute_thread(0),
+	  server_port(0)
 	{
 	// https://stackoverflow.com/questions/43886686/how-does-one-make-gtk3-look-native-on-windows-7
-	//	https://github.com/shoes/shoes3/wiki/Changing-Gtk-theme-on-Windows	
+	//	https://github.com/shoes/shoes3/wiki/Changing-Gtk-theme-on-Windows
 #if defined(_WIN32)
 	// Gtk::Settings::get_default()->property_gtk_theme_name()="win32";
 #endif
@@ -46,13 +46,13 @@ Cadabra::Cadabra(int argc, char **argv)
 	//https://github.com/GNOME/gtkmm-documentation/blob/master/examples/book/application/command_line_handling/exampleapplication.cc
 
 	signal_handle_local_options().connect(
-		sigc::mem_fun(*this, &Cadabra::on_handle_local_options), false);
-	
+	   sigc::mem_fun(*this, &Cadabra::on_handle_local_options), false);
+
 	add_main_option_entry(Gio::Application::OptionType::OPTION_TYPE_INT,
-								 "server-port",
-								 's',
-								 "Connect to running server on given port.",
-								 "number");
+	                      "server-port",
+	                      's',
+	                      "Connect to running server on given port.",
+	                      "number");
 	}
 
 template <typename T_ArgType>
@@ -65,7 +65,7 @@ static bool get_arg_value(const Glib::RefPtr<Glib::VariantDict>& options, const 
 
 Cadabra::~Cadabra()
 	{
-   // The app is going away; stop the compute logic and join that
+	// The app is going away; stop the compute logic and join that
 	// thread waiting for it to complete.
 
 	if(compute)
@@ -77,8 +77,8 @@ Cadabra::~Cadabra()
 	if(compute_thread)
 		delete compute_thread;
 
-//	for(auto w: windows)
-//		delete w;
+	//	for(auto w: windows)
+	//		delete w;
 	}
 
 
@@ -86,9 +86,9 @@ int Cadabra::on_handle_local_options(const Glib::RefPtr<Glib::VariantDict>& opti
 	{
 	if(!options)
 		return -1;
-	
+
 	get_arg_value(options, "server-port", server_port);
-//	std::cerr << server_port << std::endl;
+	//	std::cerr << server_port << std::endl;
 	return -1;
 	}
 
@@ -102,18 +102,18 @@ void Cadabra::on_activate()
 
 	// Connect the two threads.
 	nw->set_compute_thread(compute);
-	
+
 	// Setup ctrl-C handler so we can shut down gracefully (i.e. ask
 	// for confirmation, shut down server).
 	signal_window = nw;
 	signal(SIGINT, signal_handler);
 
-   add_window(*nw);
+	add_window(*nw);
 	nw->show();
 
-	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;	
+	std::string version=std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR+"."+CADABRA_VERSION_PATCH;
 	snoop::log("start") << version << snoop::flush;
-	
+
 	if(!nw->prefs.is_registered && !nw->prefs.is_anonymous) {
 		nw->on_help_register();
 		}
@@ -133,8 +133,7 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 				}
 			g_free(contents);
 			}
-		}
-	catch (const Glib::Error& ex) {
+		} catch (const Glib::Error& ex) {
 		std::cerr << ex.what() << std::endl;
 		return;
 		}
@@ -147,7 +146,7 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 	Gtk::Application::on_open(files, hint);
 	}
 
-bool Cadabra::open_help(const std::string& nm, const std::string& title) 
+bool Cadabra::open_help(const std::string& nm, const std::string& title)
 	{
 #ifdef DEBUG
 	std::cerr << "Opening help file " << nm << std::endl;
@@ -163,6 +162,5 @@ bool Cadabra::open_help(const std::string& nm, const std::string& title)
 		nw->load_file(buffer.str());
 		nw->show();
 		return true;
-		}
-	else return false;
+		} else return false;
 	}

@@ -14,7 +14,7 @@ FILE * popen2(std::string command, std::string type, int & pid)
 	int fd[2];
 	if(pipe(fd)==-1)
 		throw std::logic_error("popen2 failed constructing pipe");
-	
+
 	if((child_pid = fork()) == -1) {
 		perror("fork");
 		exit(1);
@@ -25,37 +25,34 @@ FILE * popen2(std::string command, std::string type, int & pid)
 		if (type == "r") {
 			close(fd[READ]);    //Close the READ end of the pipe since the child's fd is write-only
 			dup2(fd[WRITE], 1); //Redirect stdout to pipe
-			}
-		else {
+			} else {
 			close(fd[WRITE]);    //Close the WRITE end of the pipe since the child's fd is read-only
 			dup2(fd[READ], 0);   //Redirect stdin to pipe
 			}
-		
+
 		execl("/bin/sh", "/bin/sh", "-c", command.c_str(), NULL);
 		exit(0);
-		}
-	else {
+		} else {
 		if (type == "r") {
 			close(fd[WRITE]); //Close the WRITE end of the pipe since parent's fd is read-only
-			}
-		else {
+			} else {
 			close(fd[READ]); //Close the READ end of the pipe since parent's fd is write-only
 			}
 		}
-	
+
 	pid = child_pid;
-	
+
 	if (type == "r") {
 		return fdopen(fd[READ], "r");
 		}
-	
+
 	return fdopen(fd[WRITE], "w");
 	}
 
 int pclose2(FILE * fp, pid_t pid)
 	{
 	int stat;
-	
+
 	fclose(fp);
 	while (waitpid(pid, &stat, 0) == -1) {
 		if (errno != EINTR) {
@@ -63,7 +60,7 @@ int pclose2(FILE * fp, pid_t pid)
 			break;
 			}
 		}
-	
+
 	return stat;
 	}
 

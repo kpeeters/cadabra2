@@ -4,15 +4,14 @@
 
 #include "py_packages.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 
 
 	void compile_package(const std::string& in_name, const std::string& out_name)
 		{
 		// Get current time info
-//		std::time_t t = std::time(nullptr);
-//		std::tm tm = *std::localtime(&t);
+		//		std::time_t t = std::time(nullptr);
+		//		std::tm tm = *std::localtime(&t);
 
 		// Only compile if the notebook is newer than the compiled package
 		struct stat f1, f2;

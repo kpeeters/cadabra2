@@ -13,14 +13,14 @@ flatten_product::flatten_product(const Kernel& k, Ex& tr)
 bool flatten_product::can_apply(iterator it)
 	{
 	is_diff=false;
-	if(*it->name!="\\prod") 
-		 return false;
+	if(*it->name!="\\prod")
+		return false;
 
-// FIXME: acting on PartialDerivative has been disabled because
-// it really does not make sense anymore.
-//		 if(properties::get<PartialDerivative>(it)==0)
-//			  return false;
-//		 else is_diff=true;
+	// FIXME: acting on PartialDerivative has been disabled because
+	// it really does not make sense anymore.
+	//		 if(properties::get<PartialDerivative>(it)==0)
+	//			  return false;
+	//		 else is_diff=true;
 
 	if(!is_diff && tr.number_of_children(it)==1) return true;
 	sibling_iterator facs=tr.begin(it);
@@ -36,7 +36,7 @@ bool flatten_product::can_apply(iterator it)
 
 Algorithm::result_t flatten_product::apply(iterator& it)
 	{
-//	debugout << "acting with flatten_product at " << *it->name << std::endl;
+	//	debugout << "acting with flatten_product at " << *it->name << std::endl;
 	if(!is_diff && tr.number_of_children(it)==1) {
 		tr.begin(it)->fl.bracket = it->fl.bracket;
 		multiply(tr.begin(it)->multiplier, *it->multiplier);
@@ -67,10 +67,8 @@ Algorithm::result_t flatten_product::apply(iterator& it)
 				pushup_multiplier(it);
 				facs=tmp;
 				ret=result_t::l_applied;
-				}
-			else ++facs;
-			}
-		else ++facs;
+				} else ++facs;
+			} else ++facs;
 		if(is_diff) break;
 		}
 	return ret;

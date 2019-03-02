@@ -12,19 +12,19 @@ rename_dummies::rename_dummies(const Kernel& k, Ex& tr, std::string d1, std::str
 
 bool rename_dummies::can_apply(iterator st)
 	{
-//	std::cerr << "---" << std::endl << Ex(st);
+	//	std::cerr << "---" << std::endl << Ex(st);
 
 	if(*st->name=="\\equals") {
 		// special case: rename all free indices on lhs and rhs.
 		// FIXME: add flag to class to disable this when called as rename_dummies.
 		return true;
 		}
-	
-	if(*st->name!="\\prod") // && *st->name!="\\sum") 
+
+	if(*st->name!="\\prod") // && *st->name!="\\sum")
 		if(!is_single_term(st))
 			return false;
 
-//	if(*st->name=="\\prod" && tr.is_head(st)==false && *(tr.parent(st)->name)=="\\sum") return false;
+	//	if(*st->name=="\\prod" && tr.is_head(st)==false && *(tr.parent(st)->name)=="\\sum") return false;
 	return true;
 	}
 
@@ -32,22 +32,22 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 	{
 	result_t res=result_t::l_no_action;
 
-//	if(*st->name=="\\equals") {
-//		
-//		}
-			
-//	std::cerr << Ex(st);
+	//	if(*st->name=="\\equals") {
+	//
+	//		}
+
+	//	std::cerr << Ex(st);
 	prod_wrap_single_term(st);
-//	std::cerr << Ex(st);
-	
+	//	std::cerr << Ex(st);
+
 	// First do a normal classify_indices both downwards and upwards.
 	//
 	index_map_t ind_free, ind_dummy, ind_free_up, ind_dummy_up;
 	classify_indices(st, ind_free, ind_dummy);
 	classify_indices_up(st, ind_free_up, ind_dummy_up);
 
-//	print_classify_indices(std::cerr, st);
-	
+	//	print_classify_indices(std::cerr, st);
+
 	// Run through all indices once more, in order. If an index
 	// occurs in the ind_dummy set, and there is no entry in repmap,
 	// find the index type and get a new dummy. If the index already
@@ -94,7 +94,7 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 			repmap_t::iterator rmi=repmap.find(Ex(ii));
 			if(rmi==repmap.end()) {
 				Ex other_parent_rel(ii);
-				if(other_parent_rel.begin()->fl.parent_rel==str_node::p_super) 
+				if(other_parent_rel.begin()->fl.parent_rel==str_node::p_super)
 					other_parent_rel.begin()->fl.parent_rel=str_node::p_sub;
 				else
 					other_parent_rel.begin()->fl.parent_rel=str_node::p_super;
@@ -104,7 +104,7 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 				const Indices *dums=kernel.properties.get<Indices>(ii, true);
 				if(!dums)
 					throw ConsistencyException("No index set for index "+*ii->name+" known.");
-				
+
 				// only rename dummies from dset1.
 				if(dset1=="" || dums->set_name==dset1) {
 					if(dset2!="") dums=ind2; // replace with dummies from set 2
@@ -117,13 +117,12 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 						tr.replace_index(ii, relabel.begin(), true);
 						}
 					}
-				}
-			else {
+				} else {
 				// std::cerr << "already encountered => " << rmi->second << std::endl;
-//				index_iterator tmp(ii);
-//				++tmp;
+				//				index_iterator tmp(ii);
+				//				++tmp;
 				tr.replace_index(ii, (*rmi).second.begin(), true);
-//				ii=tmp;
+				//				ii=tmp;
 				}
 			}
 		++iim;
@@ -131,19 +130,19 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 
 	// Now rename free indices.
 
-//	if(*st->name=="\\equals") {
-//		auto fit = ind_free.begin();
-//		while(fit!=ind_free.end()) {
-//			std::cerr << "renaming " << fit->first << std::endl;
-//			Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
-//			++fit;
-//			}
-//		std::cerr << "----" << std::endl;
-//		}
-	
-//	std::cerr << Ex(st);
+	//	if(*st->name=="\\equals") {
+	//		auto fit = ind_free.begin();
+	//		while(fit!=ind_free.end()) {
+	//			std::cerr << "renaming " << fit->first << std::endl;
+	//			Ex relabel=get_dummy(dums, &ind_free, &ind_free_up, &ind_dummy_up, &added_dummies);
+	//			++fit;
+	//			}
+	//		std::cerr << "----" << std::endl;
+	//		}
+
+	//	std::cerr << Ex(st);
 	prod_unwrap_single_term(st);
-//	std::cerr << Ex(st);
-	
+	//	std::cerr << Ex(st);
+
 	return res;
 	}

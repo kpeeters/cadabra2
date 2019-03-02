@@ -10,9 +10,9 @@ young_project::young_project(const Kernel& k, Ex& tr)
 	// For internal use in which one fills the young tableau structures directly.
 	}
 
-young_project::young_project(const Kernel& k, Ex& tr, 
-									  const std::vector<int>& shape,
-									  const std::vector<int>& indices)
+young_project::young_project(const Kernel& k, Ex& tr,
+                             const std::vector<int>& shape,
+                             const std::vector<int>& indices)
 	: Algorithm(k,tr), remove_traces(false)
 	{
 	int count=0;
@@ -72,11 +72,11 @@ Algorithm::result_t young_project::apply(iterator& it)
 	{
 	prod_wrap_single_term(it);
 	sym.clear();
-	
+
 	if(asym_ranges.size()>0) {
 		// Convert index locations to box numbers.
 		combin::range_vector_t sublengths_scattered;
-//		txtout << "asym_ranges: ";
+		//		txtout << "asym_ranges: ";
 		for(unsigned int i=0; i<asym_ranges.size(); ++i) {
 			combin::range_t newr;
 			for(unsigned int j=0; j<asym_ranges[i].size(); ++j) {
@@ -86,7 +86,7 @@ Algorithm::result_t young_project::apply(iterator& it)
 				while(tt!=tab.end()) {
 					if((*tt)==asym_ranges[i][j]) {
 						newr.push_back(offs);
-//						txtout << asym_ranges[i][j] << " ";
+						//						txtout << asym_ranges[i][j] << " ";
 						break;
 						}
 					++tt;
@@ -94,13 +94,12 @@ Algorithm::result_t young_project::apply(iterator& it)
 					}
 				}
 			sublengths_scattered.push_back(newr);
-//			txtout << std::endl;
-			} 
+			//			txtout << std::endl;
+			}
 		tab.projector(sym, sublengths_scattered);
-		}
-	else tab.projector(sym);
+		} else tab.projector(sym);
 
-	// FIXME: We can also compress the result by sorting all 
+	// FIXME: We can also compress the result by sorting all
 	// locations which belong to the same asym set. This could actually
 	// be done in combinatorics already.
 
@@ -114,7 +113,7 @@ Algorithm::result_t young_project::apply(iterator& it)
 			index_iterator dst_fd=index_iterator::begin(kernel.properties, repfac.begin());
 			src_fd+=sym[i][j];        // take the index at location sym[i][j]
 			dst_fd+=sym.original[j];  // and store it in location sym.original[j]
-			tr.replace_index(dst_fd, src_fd); 
+			tr.replace_index(dst_fd, src_fd);
 			}
 		// Remove traces of antisymmetric objects. This can really
 		// only be done here, since combinatorics.hh does not know
@@ -137,16 +136,19 @@ Algorithm::result_t young_project::apply(iterator& it)
 							}
 						}
 					}
-				} 
+				}
 			}
 
-		{ multiply(repfac.begin()->multiplier, sym.signature(i));
-		multiply(repfac.begin()->multiplier, tab.projector_normalisation());
-		iterator repfactop=repfac.begin();
-		prod_unwrap_single_term(repfactop);
-		rep.append_child(rep.begin(), repfac.begin()); }
+			{
+			multiply(repfac.begin()->multiplier, sym.signature(i));
+			multiply(repfac.begin()->multiplier, tab.projector_normalisation());
+			iterator repfactop=repfac.begin();
+			prod_unwrap_single_term(repfactop);
+			rep.append_child(rep.begin(), repfac.begin());
+			}
 
-	   traceterm: ;
+traceterm:
+		;
 		}
 	it=tr.replace(it,rep.begin());
 

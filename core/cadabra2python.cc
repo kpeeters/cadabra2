@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 	if(argc<2) {
 		std::cerr << "Usage: cadabra2python [cadabra file] [python file]\n\n";
 		std::cerr << "Convert a Cadabra v2 input file or notebook to a pure Python file.\n"
-					 << "If the Python file name is not given, output goes to standard out.\n";
+		          << "If the Python file name is not given, output goes to standard out.\n";
 		return -1;
 		}
 
@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 		}
 
 	auto from=cdb_file.find_last_of("/");
-	++from; 
+	++from;
 	auto to  =cdb_file.find_last_of(".");
 	std::string t=cdb_file.substr(from, to-from);
 	t[0]=toupper(t[0]);
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 		return -1;
 		}
 	std::string content, line;
-	while(std::getline(file, line)) 
+	while(std::getline(file, line))
 		content+=line+"\n";
 
 	auto python = cadabra::cdb2python(content);
@@ -46,8 +46,7 @@ int main(int argc, char **argv)
 	if(python_file!="") {
 		std::ofstream pythonfile(python_file);
 		pythonfile << python;
-		}
-	else {
+		} else {
 		std::cout << python;
 		}
 

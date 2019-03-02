@@ -12,5 +12,5 @@ int main()
 	tree_exact_less_for_indexmap_obj compare;
 
 	std::cerr << compare(a2, a1) << std::endl;
-	assert(compare(a1, a2)!=compare(a2,a1)); 
+	assert(compare(a1, a2)!=compare(a2,a1));
 	}

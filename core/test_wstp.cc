@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 		std::cerr << "Failed to initialise WSTP" << std::endl;
 		return -1;
 		}
-//	auto lp = WSLoopbackOpen(stdenv, &errno);
+	//	auto lp = WSLoopbackOpen(stdenv, &errno);
 	auto lp = WSOpenArgcArgv(stdenv, argc, argv, &errno);
 	if(lp==0 || errno!=WSEOK) {
 		std::cerr << "Failed to open loopback link " << WSErrorMessage(lp) << std::endl;
@@ -36,14 +36,14 @@ int main(int argc, char **argv)
 	res = WSLogStreamToFile(lp, fileName);
 	std::cerr << "Logging to " << fileName << std::endl;
 
-	WSPutFunction(lp, "EvaluatePacket", 1L);		
-	WSPutFunction(lp, "ToString", 1L);	
+	WSPutFunction(lp, "EvaluatePacket", 1L);
+	WSPutFunction(lp, "ToString", 1L);
 	WSPutFunction(lp, "FullSimplify", 1L);
 	WSPutFunction(lp, "ToExpression", 1L);
 	WSPutString(lp, "Sin[x]^2 + Cos[x]^2 + Cos[x] Sin[x]");
-//	WSPutFunction(lp, "Plus", 2);
-//	WSPutInteger(lp, 3);
-//	WSPutInteger(lp, 8);	
+	//	WSPutFunction(lp, "Plus", 2);
+	//	WSPutInteger(lp, 3);
+	//	WSPutInteger(lp, 8);
 	WSEndPacket(lp);
 	WSFlush(lp);
 
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 			}
 		}
 	std::cerr << "packet now " << pkt << std::endl;
-	
+
 	const char *out;
 	if(! WSGetString(lp, &out)) {
 		printf("Unable to read from link\n");

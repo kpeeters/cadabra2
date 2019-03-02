@@ -9,9 +9,9 @@ namespace cadabra {
 		public:
 			virtual ~Tableau() {};
 			virtual std::string name() const override;
-	      virtual bool        parse(Kernel&, keyval_t& keyvals) override;
-			
-			int dimension;
-	};
+			virtual bool        parse(Kernel&, keyval_t& keyvals) override;
 
-}
+			int dimension;
+		};
+
+	}

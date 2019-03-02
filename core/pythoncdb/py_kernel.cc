@@ -13,8 +13,7 @@
 #include "py_kernel.hh"
 #include "py_ex.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 	Kernel *create_scope()
 		{
 		Kernel *k = create_empty_scope();
@@ -80,7 +79,7 @@ namespace cadabra
 
 		k->inject_property(new Distributable(), Ex_from_string("\\wedge{#}", false, k), 0);
 		k->inject_property(new IndexInherit(), Ex_from_string("\\wedge{#}", false, k), 0);
-		
+
 		k->inject_property(new DependsInherit(), Ex_from_string("\\wedge{#}", false, k), 0);
 		k->inject_property(new NumericalFlat(), Ex_from_string("\\wedge{#}", false, k), 0);
 		auto wi4 = new WeightInherit();
@@ -132,16 +131,16 @@ namespace cadabra
 	void init_kernel(pybind11::module& m)
 		{
 		// Declare the Kernel object for Python so we can store it in the local Python context.
-		// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will 
+		// We add a 'cadabra2.__cdbkernel__' object to the main module scope, and will
 		// pull that into the interpreter scope in the 'cadabra2_default.py' file.
 		pybind11::enum_<Kernel::scalar_backend_t>(m, "scalar_backend_t")
-			.value("sympy", Kernel::scalar_backend_t::sympy)
-			.value("mathematica", Kernel::scalar_backend_t::mathematica)
-			.export_values();
+		.value("sympy", Kernel::scalar_backend_t::sympy)
+		.value("mathematica", Kernel::scalar_backend_t::mathematica)
+		.export_values();
 
 		pybind11::class_<Kernel>(m, "Kernel", pybind11::dynamic_attr())
-			.def(pybind11::init<>())
-			.def_readonly("scalar_backend", &Kernel::scalar_backend);
+		.def(pybind11::init<>())
+		.def_readonly("scalar_backend", &Kernel::scalar_backend);
 
 		Kernel* kernel = create_scope();
 		m.attr("__cdbkernel__") = pybind11::cast(kernel);
@@ -155,19 +154,18 @@ namespace cadabra
 					if (val == "sympy")            k->scalar_backend = Kernel::scalar_backend_t::sympy;
 					else if (val == "mathematica") k->scalar_backend = Kernel::scalar_backend_t::mathematica;
 					else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
-					}
-				else {
+					} else {
 					throw ArgumentException("unknown argument '" + key + "'.");
 					}
 				}
 			});
 
 		m.def("create_scope", &create_scope,
-			  pybind11::return_value_policy::take_ownership);
+		      pybind11::return_value_policy::take_ownership);
 		m.def("create_scope_from_global", &create_scope_from_global,
-			  pybind11::return_value_policy::take_ownership);
+		      pybind11::return_value_policy::take_ownership);
 		m.def("create_empty_scope", &create_empty_scope,
-			  pybind11::return_value_policy::take_ownership);
+		      pybind11::return_value_policy::take_ownership);
 
 		}
 

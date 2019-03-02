@@ -10,7 +10,7 @@ rewrite_indices::rewrite_indices(const Kernel& k, Ex& e, Ex& pref, Ex& conv)
 	: Algorithm(k, e), preferred(pref), converters(conv)
 	{
 	auto c=converters.begin();
-	if(*c->name!="\\comma") 
+	if(*c->name!="\\comma")
 		converters.wrap(c, str_node("\\comma"));
 
 	auto p=preferred.begin();
@@ -18,7 +18,7 @@ rewrite_indices::rewrite_indices(const Kernel& k, Ex& e, Ex& pref, Ex& conv)
 		preferred.wrap(p, str_node("\\comma"));
 	}
 
-bool rewrite_indices::can_apply(iterator it) 
+bool rewrite_indices::can_apply(iterator it)
 	{
 	is_derivative_argument=false;
 	if(*it->name=="\\prod" || is_single_term(it))
@@ -37,7 +37,7 @@ bool rewrite_indices::can_apply(iterator it)
 	return false;
 	}
 
-Algorithm::result_t rewrite_indices::apply(iterator& it) 
+Algorithm::result_t rewrite_indices::apply(iterator& it)
 	{
 	// std::cerr << "apply at " << Ex(it) << std::endl;
 
@@ -56,15 +56,15 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 
 	// Determine which conversion types are possible by determining
 	// the index sets in which the two indices of the converter sit.
-	// itype1 and itype2 are the index types of the 1st and 2nd index of the 
+	// itype1 and itype2 are the index types of the 1st and 2nd index of the
 	// converter (i.e. vielbein or metric).
-	
+
 	sibling_iterator vbind=tr.begin(vielb);
 	const Indices *itype1=kernel.properties.get<Indices>(vbind, true);
 	str_node::parent_rel_t pr1=vbind->fl.parent_rel;
 	++vbind;
 	const Indices *itype2=kernel.properties.get<Indices>(vbind, true);
-	str_node::parent_rel_t pr2=vbind->fl.parent_rel;	
+	str_node::parent_rel_t pr2=vbind->fl.parent_rel;
 
 	// FIXME: should we even continue if one of itype1 or itype2 is 0?
 
@@ -87,7 +87,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 		//std::cerr << "** considering index " << Ex(dit->second) << std::endl;
 		sibling_iterator par=tr.parent(dit->second);
 		for(sibling_iterator prefit=tr.begin(objs); prefit!=tr.end(objs); ++prefit) {
-			// std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl; 
+			// std::cerr << "one " << Ex(par) << ", " << Ex(prefit) << std::endl;
 
 			// We want to determine whether the 'par' object is the same
 			// as the 'prefit' object, but the index types are different
@@ -99,28 +99,29 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 			Ex_comparator comp(kernel.properties);
 			Ex_comparator::match_t fnd = comp.equal_subtree(par, prefit, Ex_comparator::useprops_t::never);
 
-			if(is_in(fnd, { Ex_comparator::match_t::subtree_match, 
-						Ex_comparator::match_t::match_index_less, 
-						Ex_comparator::match_t::match_index_greater,
-						Ex_comparator::match_t::no_match_indexpos_less,
-						Ex_comparator::match_t::no_match_indexpos_greater })) {
+			if(is_in(fnd, { Ex_comparator::match_t::subtree_match,
+			                Ex_comparator::match_t::match_index_less,
+			                Ex_comparator::match_t::match_index_greater,
+			                Ex_comparator::match_t::no_match_indexpos_less,
+			                Ex_comparator::match_t::no_match_indexpos_greater
+			              	})) {
 				//std::cerr << "found " << *par->name << std::endl;
 
 				// Determine whether the indices are of preferred type or not.
 				int num=std::distance(tr.begin(par), (sibling_iterator)dit->second);
 				const Indices *origtype=kernel.properties.get<Indices>(dit->second, true);
-				if(!origtype) 
+				if(!origtype)
 					throw ArgumentException("Need to know about the index type of index "+*dit->second->name+".");
 
 				// 'walk' is the index on the preferred form of the tensor, corresponding
-				// to the index on the original tensor which is currently under consideration 
+				// to the index on the original tensor which is currently under consideration
 				// for change. We need to preserve the parent rel of this index on the preferred form.
 				sibling_iterator walk=begin_index(prefit);
 				while(num-- > 0)
 					++walk;
 
 				const Indices *newtype=kernel.properties.get<Indices>(walk, true);
-				if(!newtype) 
+				if(!newtype)
 					throw ArgumentException("Need to know about the index type of index "+*walk->name+".");
 
 				if(newtype->set_name == origtype->set_name) {
@@ -129,8 +130,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 						// Position is also already fine.
 						//std::cerr << "index position already fine" << std::endl;
 						continue; // already fine, no need for conversion
-						}
-					else {
+						} else {
 						//std::cerr << "index position wrong" << std::endl;
 						}
 					}
@@ -139,7 +139,8 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 
 				Ex repvb(vielb);
 				sibling_iterator vbi1=repvb.begin(repvb.begin());
-				sibling_iterator vbi2=vbi1; ++vbi2;
+				sibling_iterator vbi2=vbi1;
+				++vbi2;
 
 				// Set the indices on the vielbein/converter which we are going to insert.
 				if(origtype->set_name == itype1->set_name && newtype->set_name == itype2->set_name) {
@@ -152,12 +153,9 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 							nl->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->flip_parent_rel();
-							}
-						else continue;
-						}
-					else continue;
-					}
-				else if(origtype->set_name == itype2->set_name && newtype->set_name == itype1->set_name) {
+							} else continue;
+						} else continue;
+					} else if(origtype->set_name == itype2->set_name && newtype->set_name == itype1->set_name) {
 					if( itype2->position_type==Indices::free || dit->second->fl.parent_rel == pr2 ) {
 						if( itype1->position_type==Indices::free || walk->fl.parent_rel != pr1 ) {
 							tr.replace_index(vbi2, dit->second);
@@ -167,12 +165,9 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 							nl->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->flip_parent_rel();
-							}
-						else continue;
-						}
-					else continue;
-					}
-				else {
+							} else continue;
+						} else continue;
+					} else {
 					// std::cerr << "Uh, cannot convert?" << std::endl;
 					continue; // next index
 					}
@@ -185,8 +180,7 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 					par->fl.bracket=str_node::b_none;
 					vbit=tr.append_child(prod, repvb.begin());
 					res=result_t::l_applied;
-					}
-				else {
+					} else {
 					assert(*tr.parent(par)->name=="\\prod");
 					vbit=tr.append_child((iterator)tr.parent(par), repvb.begin());
 					vbit->fl.bracket=par->fl.bracket;

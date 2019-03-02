@@ -10,13 +10,13 @@
 #define Cadabra_NotebookCanvas_hh
 
 namespace cadabra {
-    
-    class NotebookCanvas {
-    public:
-        std::map<DataCell *, NSTextView *> visualcells;
-    };
-    
-}
+
+	class NotebookCanvas {
+		public:
+			std::map<DataCell *, NSTextView *> visualcells;
+		};
+
+	}
 
 
 #endif

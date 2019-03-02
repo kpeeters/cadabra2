@@ -5,11 +5,11 @@
 
 namespace cadabra {
 
-	class Traceless : virtual public property  {
+	class Traceless : virtual public property {
 		public:
 			virtual ~Traceless() {};
 			virtual std::string name() const;
-	};
+		};
 
-}
+	}
 

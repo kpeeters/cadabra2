@@ -14,10 +14,10 @@ ImageView::ImageView()
 	vbox.add(image);
 	image.set_halign(Gtk::ALIGN_START);
 	set_events(Gdk::ENTER_NOTIFY_MASK
-				  | Gdk::LEAVE_NOTIFY_MASK
-				  | Gdk::BUTTON_PRESS_MASK
-				  | Gdk::BUTTON_RELEASE_MASK
-				  | Gdk::POINTER_MOTION_MASK);
+	           | Gdk::LEAVE_NOTIFY_MASK
+	           | Gdk::BUTTON_PRESS_MASK
+	           | Gdk::BUTTON_RELEASE_MASK
+	           | Gdk::POINTER_MOTION_MASK);
 
 	set_name("ImageView"); // to be able to style it with CSS
 	show_all();
@@ -29,7 +29,7 @@ ImageView::~ImageView()
 
 bool ImageView::on_motion_notify_event(GdkEventMotion *event)
 	{
-//	std::cerr << event->x << ", " << event->y << std::endl;
+	//	std::cerr << event->x << ", " << event->y << std::endl;
 	if(sizing) {
 		auto cw = width_at_press  + (event->x - prev_x);
 		auto ratio = pixbuf->get_width() / ((double)pixbuf->get_height());
@@ -56,7 +56,7 @@ bool ImageView::on_button_release_event(GdkEventButton *event)
 	if(event->type==GDK_BUTTON_RELEASE) {
 		sizing=false;
 		}
-	
+
 	return true;
 	}
 
@@ -64,13 +64,13 @@ void ImageView::set_image_from_base64(const std::string& b64)
 	{
 	auto str = Gio::MemoryInputStream::create();
 
-	// The data is ok: 
+	// The data is ok:
 	// std::ofstream tst("out2.png");
 	// tst << Glib::Base64::decode(b64);
 	// tst.close();
-	
+
 	std::string dec=Glib::Base64::decode(b64);
-	str->add_data(dec.c_str(), dec.size()); 
+	str->add_data(dec.c_str(), dec.size());
 
 	pixbuf = Gdk::Pixbuf::create_from_stream_at_scale(str,-1,-1,true);
 	if(!pixbuf)

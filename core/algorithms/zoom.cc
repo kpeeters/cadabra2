@@ -14,7 +14,7 @@ zoom::zoom(const Kernel& k, Ex& e, Ex& rules_)
 	rules.append_child(wrap, str_node("dummy"));
 	}
 
-bool zoom::can_apply(iterator it) 
+bool zoom::can_apply(iterator it)
 	{
 	// Apply only on terms in a top-level sum (NO LONGER: or elements of a top-level list),
 	// or on terms inside an integral.
@@ -24,8 +24,8 @@ bool zoom::can_apply(iterator it)
 
 	if(*it->name=="\\sum") {
 		if(tr.is_head(it) ||
-		   *tr.parent(it)->name=="\\int" ||
-		   *tr.parent(it)->name=="\\equals") {
+		      *tr.parent(it)->name=="\\int" ||
+		      *tr.parent(it)->name=="\\equals") {
 
 			return true;
 			}
@@ -36,7 +36,7 @@ bool zoom::can_apply(iterator it)
 Algorithm::result_t zoom::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
-	
+
 	// Wrap all things which we want to remove from view in an
 	// \ldots node.
 
@@ -53,22 +53,20 @@ Algorithm::result_t zoom::apply(iterator& it)
 			if(!hiding) {
 				current_ldots=tr.insert(sib, str_node("\\ldots"));
 				hiding=true;
-				}
-			else {
+				} else {
 				if(*current_ldots->name!="\\sum") // wrap single term in new sum node.
 					current_ldots=tr.wrap(tr.begin(current_ldots), str_node("\\sum"));
 				}
 			tr.reparent(current_ldots, sib, nxt);
 			sib=nxt;
-			}
-		else {
+			} else {
 			// Keep this term/factor visible.
 			hiding=false;
 			++sib;
 			}
 		}
-	
+
 	cleanup_dispatch(kernel, tr, it);
-	
+
 	return res;
 	}

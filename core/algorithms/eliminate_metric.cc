@@ -11,11 +11,11 @@ eliminate_metric::eliminate_metric(const Kernel& k, Ex& e, Ex& pref)
 	{
 	}
 
-bool eliminate_metric::is_conversion_object(iterator fit) const 
+bool eliminate_metric::is_conversion_object(iterator fit) const
 	{
 	const Metric        *vb=kernel.properties.get<Metric>(fit);
 	const InverseMetric *ivb=kernel.properties.get<InverseMetric>(fit);
-	
+
 	if(vb || ivb)  return true;
 	else return false;
 	}
@@ -55,8 +55,7 @@ bool eliminate_converter::handle_one_index(index_iterator ind1, index_iterator i
 						tr.move_ontop(locs.first->second, iterator(ind2))->fl.parent_rel=ind2->fl.parent_rel;;
 						fit=tr.erase(fit);
 						replaced=true;
-						}
-					else { // yes
+						} else { // yes
 						iterator par=tr.parent(locs.first->second);
 						sibling_iterator prefit=tr.begin(objs);
 						while(prefit!=tr.end(objs)) {
@@ -71,7 +70,7 @@ bool eliminate_converter::handle_one_index(index_iterator ind1, index_iterator i
 						}
 					}
 				}
-			if(replaced) 
+			if(replaced)
 				return true;
 			++locs.first;
 			}
@@ -107,12 +106,12 @@ Algorithm::result_t eliminate_converter::apply(iterator& it)
 			index_iterator ind1=index_iterator::begin(kernel.properties, fit), ind2=ind1;
 			++ind2;
 
-         // 1st index to 2nd index conversion?
+			// 1st index to 2nd index conversion?
 			if(handle_one_index(ind1, ind2, fit, objs)) {
 				res=result_t::l_applied;
 				break;
 				}
-			
+
 			// 2nd index to 1st index conversion?
 			if(handle_one_index(ind2, ind1, fit, objs)) {
 				res=result_t::l_applied;

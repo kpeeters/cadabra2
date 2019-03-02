@@ -12,7 +12,7 @@ expand_diracbar::expand_diracbar(const Kernel& k, Ex& e)
 	{
 	}
 
-bool expand_diracbar::can_apply(iterator it) 
+bool expand_diracbar::can_apply(iterator it)
 	{
 	const DiracBar *db=kernel.properties.get<DiracBar>(it);
 	if(db) {
@@ -35,7 +35,7 @@ Algorithm::result_t expand_diracbar::apply(iterator& it)
 
 	sibling_iterator prodnode=tr.begin(it);
 	sibling_iterator gamnode =tr.begin(prodnode);
-	sibling_iterator spinnode=gamnode; 
+	sibling_iterator spinnode=gamnode;
 	++spinnode;
 
 	iterator newprod=tr.wrap(it, str_node("\\prod"));
@@ -55,6 +55,6 @@ Algorithm::result_t expand_diracbar::apply(iterator& it)
 
 	it=newprod;
 	cleanup_dispatch(kernel, tr, it);
-					  
+
 	return result_t::l_applied;
 	}

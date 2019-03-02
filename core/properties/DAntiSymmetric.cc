@@ -23,7 +23,7 @@ TableauBase::tab_t DAntiSymmetric::get_tab(const Properties& properties, Ex& tr,
 		if(!pd)
 			it=tr.begin(it);
 		else break;
-		} 
+		}
 
 	tab_t tab;
 	tab.add_box(0,1);

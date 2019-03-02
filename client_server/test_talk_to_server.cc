@@ -13,34 +13,33 @@ typedef websocketpp::config::asio_client::message_type::ptr message_ptr;
 
 bool stopit=false;
 
-void on_open(client* c, websocketpp::connection_hdl hdl) 
+void on_open(client* c, websocketpp::connection_hdl hdl)
 	{
 	// now it is safe to use the connection
 	std::cout << "connection ready" << std::endl;
-	
+
 	std::string msg;
 
 	if(stopit) {
-		msg = 
-			"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_interrupt\" },"
-			"  \"content\":  { \"code\": \"print(42)\n\"} "
-			"}";
-		} 
-	else {
-		msg = 
-			"{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
-			"  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
-			"}";
+		msg =
+		   "{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_interrupt\" },"
+		   "  \"content\":  { \"code\": \"print(42)\n\"} "
+		   "}";
+		} else {
+		msg =
+		   "{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
+		   "  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "
+		   "}";
 		}
 
-//	c->send(hdl, "import time\nfor i in range(0,10):\n   print('this is python talking '+str(i))\nex=Ex('A_{m n}')\nprint(str(ex))", websocketpp::frame::opcode::text);
+	//	c->send(hdl, "import time\nfor i in range(0,10):\n   print('this is python talking '+str(i))\nex=Ex('A_{m n}')\nprint(str(ex))", websocketpp::frame::opcode::text);
 	c->send(hdl, msg, websocketpp::frame::opcode::text);
 	}
 
-void on_message(client* c, websocketpp::connection_hdl hdl, message_ptr msg) 
+void on_message(client* c, websocketpp::connection_hdl hdl, message_ptr msg)
 	{
 	client::connection_ptr con = c->get_con_from_hdl(hdl);
-	
+
 	std::cout << "received message on channel " << con->get_resource() << std::endl;
 	std::cout << msg->get_payload() << std::endl;
 	}
@@ -65,7 +64,7 @@ int main(int argc, char **argv)
 	c.connect(con);
 
 	std::cout << "connected" << std::endl;
-	
+
 	// Start the ASIO io_service run loop
 	c.run();
 

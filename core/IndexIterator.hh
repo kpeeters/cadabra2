@@ -6,37 +6,37 @@
 
 namespace cadabra {
 
-/// \ingroup core
-///
-/// An iterator which iterates over indices even if they are at lower
-/// levels, i.e. taking into account the "Inherit" property of
-/// nodes. Needs access to Properties in the current scope in order to
-/// determine which objects are indices.
+	/// \ingroup core
+	///
+	/// An iterator which iterates over indices even if they are at lower
+	/// levels, i.e. taking into account the "Inherit" property of
+	/// nodes. Needs access to Properties in the current scope in order to
+	/// determine which objects are indices.
 
-class index_iterator : public Ex::iterator_base {
-	public:
-		index_iterator(const Properties&);
-		index_iterator(const index_iterator&);
-		
-		static index_iterator create(const Properties&, const iterator_base&);
-		
-		static index_iterator begin(const Properties&, const iterator_base&, int offset=0);
-		static index_iterator end(const Properties&, const iterator_base&);
-		
-		index_iterator& operator=(const index_iterator&);
-		bool    operator==(const index_iterator&) const;
-		bool    operator!=(const index_iterator&) const;
-		index_iterator&  operator++();
-		index_iterator   operator++(int);
-		index_iterator&  operator+=(unsigned int);
-		
-		Ex::iterator halt, walk, roof;
-	private:
-		const Properties *properties;
-		
-		bool is_index(Ex::iterator) const;
-};
+	class index_iterator : public Ex::iterator_base {
+		public:
+			index_iterator(const Properties&);
+			index_iterator(const index_iterator&);
 
-//size_t number_of_indices(const Properties&, Ex::iterator);
+			static index_iterator create(const Properties&, const iterator_base&);
 
-}
+			static index_iterator begin(const Properties&, const iterator_base&, int offset=0);
+			static index_iterator end(const Properties&, const iterator_base&);
+
+			index_iterator& operator=(const index_iterator&);
+			bool    operator==(const index_iterator&) const;
+			bool    operator!=(const index_iterator&) const;
+			index_iterator&  operator++();
+			index_iterator   operator++(int);
+			index_iterator&  operator+=(unsigned int);
+
+			Ex::iterator halt, walk, roof;
+		private:
+			const Properties *properties;
+
+			bool is_index(Ex::iterator) const;
+		};
+
+	//size_t number_of_indices(const Properties&, Ex::iterator);
+
+	}

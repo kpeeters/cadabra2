@@ -15,9 +15,9 @@ namespace cadabra {
 			virtual bool        parse(Kernel&, keyval_t&) override;
 			virtual void        validate(const Kernel&, const Ex&) const override;
 			virtual void        latex(std::ostream&) const override;
-			
+
 			Ex obj;
 			std::string index_set_name; // refers to Indices::set_name
-	};
+		};
 
-}
+	}

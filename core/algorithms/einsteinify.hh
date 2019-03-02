@@ -5,16 +5,16 @@
 
 namespace cadabra {
 
-/// \ingroup algorithms
+	/// \ingroup algorithms
 
-class einsteinify : public Algorithm {
-	public:
-		einsteinify(const Kernel&, Ex&, Ex&);
+	class einsteinify : public Algorithm {
+		public:
+			einsteinify(const Kernel&, Ex&, Ex&);
 
-		virtual bool     can_apply(iterator) override;
-		virtual result_t apply(iterator&) override;
-	private:
-		Ex metric;
-};
+			virtual bool     can_apply(iterator) override;
+			virtual result_t apply(iterator&) override;
+		private:
+			Ex metric;
+		};
 
-}
+	}

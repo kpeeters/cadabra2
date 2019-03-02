@@ -24,7 +24,7 @@ TableauBase::tab_t AntiSymmetric::get_tab(const Properties& pr, Ex& tr, Ex::iter
 		if(!pd)
 			it=tr.begin(it);
 		else break;
-		} 
+		}
 
 	tab_t tab;
 	for(unsigned int i=0; i<Ex::number_of_children(it); ++i)

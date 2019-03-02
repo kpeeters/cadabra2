@@ -14,7 +14,7 @@ complete::complete(const Kernel& k, Ex& e, Ex& g)
 	{
 	}
 
-bool complete::can_apply(iterator ) 
+bool complete::can_apply(iterator )
 	{
 	return true;
 	}
@@ -31,9 +31,9 @@ Algorithm::result_t complete::apply(iterator& )
 		Ex::iterator ind1=metric.child(metric.begin(), 0);
 		Ex::iterator ind2=metric.child(metric.begin(), 1);
 		ind1->flip_parent_rel();
-		ind2->flip_parent_rel();		
-		
-      sympy::invert_matrix(kernel, metric, tr, bg);
+		ind2->flip_parent_rel();
+
+		sympy::invert_matrix(kernel, metric, tr, bg);
 		res = result_t::l_applied;
 		}
 	const Determinant *det = kernel.properties.get<Determinant>(bg);

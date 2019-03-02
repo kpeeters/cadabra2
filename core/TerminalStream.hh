@@ -13,19 +13,21 @@ namespace cadabra {
 			TerminalStream& operator<<(std::shared_ptr<Ex>);
 
 			template<class T>
-			TerminalStream& operator<<(const T& obj) {
-			   out_ << obj;
-			   return *this;
-			}
+			TerminalStream& operator<<(const T& obj)
+				{
+				out_ << obj;
+				return *this;
+				}
 
-			TerminalStream& operator <<(std::ostream& (*os)(std::ostream&)) {
-			   out_ << os;
-			   return *this;
-			}
-	   private:
+			TerminalStream& operator <<(std::ostream& (*os)(std::ostream&))
+				{
+				out_ << os;
+				return *this;
+				}
+		private:
 			const Kernel& kernel;
-	      std::ostream& out_;
-	};
+			std::ostream& out_;
+		};
 
 
-}
+	}

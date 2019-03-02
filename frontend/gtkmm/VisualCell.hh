@@ -14,7 +14,7 @@ namespace cadabra {
 
 	/// \ingroup frontend
 	///
-	/// Structure holding a pointer to one of the possible GUI widgets that can 
+	/// Structure holding a pointer to one of the possible GUI widgets that can
 	/// appear in a document.
 
 	class VisualCell {
@@ -24,11 +24,11 @@ namespace cadabra {
 			/// of these cells below should derive from Gtk::VBox.
 
 			union {
-					Gtk::VBox    *document; // top-level cell; only one ever occurs in a document
-					CodeInput    *inbox;
-					TeXView      *outbox;
-					ImageView    *imagebox;
-			};
-	};
-	
-}
+				Gtk::VBox    *document; // top-level cell; only one ever occurs in a document
+				CodeInput    *inbox;
+				TeXView      *outbox;
+				ImageView    *imagebox;
+				};
+		};
+
+	}

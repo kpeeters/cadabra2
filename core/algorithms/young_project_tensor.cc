@@ -18,21 +18,21 @@ young_project_tensor::young_project_tensor(const Kernel& k, Ex& tr, bool modmono
 bool young_project_tensor::can_apply(iterator it)
 	{
 	tb=kernel.properties.get_composite<TableauBase>(it);
-	if(tb) 
+	if(tb)
 		return true;
-	else 
+	else
 		return false;
 	}
 
 Algorithm::result_t young_project_tensor::apply(iterator& it)
 	{
-//	std::cout << "at " << *it->name << std::endl;
+	//	std::cout << "at " << *it->name << std::endl;
 	assert(tb);
-//	txtout << typeid(*tb).name() << std::endl;
+	//	txtout << typeid(*tb).name() << std::endl;
 	TableauBase::tab_t tab=tb->get_tab(kernel.properties, tr, it, 0);
 	if(tab.number_of_rows()==0)
 		return result_t::l_no_action;
-//	txtout << tab << std::endl;
+	//	txtout << tab << std::endl;
 
 	if(modulo_monoterm) {
 		if(tab.number_of_rows()==1) // Nothing happends with fully symmetric tensors modulo monoterm.
@@ -47,18 +47,18 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 	if(tab.row_size(0)>0) {
 		sym.clear();
 		tab.projector(sym); //, modulo_monoterm);
-	
-//		txtout << sym.size() << std::endl;
+
+		//		txtout << sym.size() << std::endl;
 		for(unsigned int i=0; i<sym.size(); ++i) {
 			Ex repfac(it);
 			for(unsigned int j=0; j<sym[i].size(); ++j) {
 				index_iterator src_fd=index_iterator::begin(kernel.properties, it);
 				index_iterator dst_fd=index_iterator::begin(kernel.properties, repfac.begin());
-//			txtout << sym[i][j] << " " << sym.original[j] << std::endl;
+				//			txtout << sym[i][j] << " " << sym.original[j] << std::endl;
 				src_fd+=sym[i][j];
 				dst_fd+=sym.original[j];
-//			txtout << *src_fd->name  << std::endl;
-//			txtout << *dst_fd->name  << std::endl;
+				//			txtout << *src_fd->name  << std::endl;
+				//			txtout << *dst_fd->name  << std::endl;
 				dst_fd->name=src_fd->name;
 				}
 			multiply(repfac.begin()->multiplier, sym.signature(i));
@@ -74,17 +74,16 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 		collect_terms cterms(kernel, rep);
 		iterator rephead=rep.begin();
 		cterms.apply(rephead);
-		}
-	else {
+		} else {
 		rep.append_child(rep.begin(), it);
 		}
 
 	// If there is a selfdual or anti-selfdual component, we need to add a term
-	// for each generated term, which contains an epsilon. In the generated term, 
+	// for each generated term, which contains an epsilon. In the generated term,
 	// find the positions of the indices which originally sat on the selfdual tensor,
 	// then replace these with dummies which are repeated on the epsilon tensor.
 
-   //	We should do all of this _here_, not before the Young projector, because we
+	//	We should do all of this _here_, not before the Young projector, because we
 	// want to avoid using indexsort.
 
 	if(tab.selfdual_column!=0) {
@@ -109,13 +108,13 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 			Ex repfac(tt);
 			iterator prodit=repfac.wrap(repfac.begin(), str_node("\\prod"));
 			iterator tensit=repfac.begin(prodit);
-         // FIXME: take care of Euclidean signature cases.
-         //			repfac.insert(repfac.begin(prodit), str_node("I"));
+			// FIXME: take care of Euclidean signature cases.
+			//			repfac.insert(repfac.begin(prodit), str_node("I"));
 			iterator epsit =repfac.append_child(prodit, str_node("\\epsilon"));
 
 			// Normalise the epsilon term appropriately.
-			multiply(prodit->multiplier, 
-						multiplier_t(1)/combin::factorial(to_long(*(itg->difference.begin()->multiplier)/2)));
+			multiply(prodit->multiplier,
+			         multiplier_t(1)/combin::factorial(to_long(*(itg->difference.begin()->multiplier)/2)));
 			if(tab.selfdual_column<0)
 				flip_sign(prodit->multiplier);
 
@@ -126,9 +125,9 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 				iit=index_iterator::begin(kernel.properties, tensit);
 				index_iterator iit_orig=index_iterator::begin(kernel.properties, it);
 				iit_orig+=tab(row, abs(tab.selfdual_column)-1);
-				while(subtree_exact_equal(&kernel.properties, iit, iit_orig)==false) 
+				while(subtree_exact_equal(&kernel.properties, iit, iit_orig)==false)
 					++iit;
-				
+
 				Ex dum=get_dummy(ind, &one, &two, &three, &four, &added_dummies);
 				repfac.append_child(epsit, iterator(iit)); // move index to eps
 				iterator repind=rep.replace_index(iterator(iit), dum.begin()); // replace index on tens

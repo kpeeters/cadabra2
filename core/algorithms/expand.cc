@@ -13,7 +13,7 @@ expand::expand(const Kernel& k, Ex& e)
 
 bool expand::can_apply(iterator it)
 	{
-	if(*it->name=="\\indexbracket") 
+	if(*it->name=="\\indexbracket")
 		if(*tr.begin(it)->name=="\\prod") {
 			// If we have only one external index, determine whether the first
 			// or the last object should be the one with only one index. We
@@ -33,20 +33,18 @@ bool expand::can_apply(iterator it)
 				const ImplicitIndex *impi=kernel.properties.get_composite<ImplicitIndex>(sib);
 				if(impi) {
 					const Matrix *mat=kernel.properties.get_composite<Matrix>(sib);
-					if(mat) { 
+					if(mat) {
 						if(index_open==0) {
 							mx_first=sib;
 							index_open=2;
 							}
 						mx_last=sib;
-						}
-					else {
+						} else {
 						if(index_open==0) {
 							ii_first=sib;
 							mx_first=tr.end();
 							index_open=1;
-							}
-						else {
+							} else {
 							ii_last=sib;
 							mx_last=tr.end();
 							--index_open;
@@ -55,7 +53,7 @@ bool expand::can_apply(iterator it)
 					}
 				++sib;
 				}
-			
+
 			if(index_open+1==tr.number_of_children(it)) return true;
 			}
 	return false;
@@ -68,7 +66,7 @@ Algorithm::result_t expand::apply(iterator& it)
 	// Figure out the type of the indices to be inserted.
 	sibling_iterator origind=prod;
 	++origind;
-	const Indices *dums=kernel.properties.get<Indices>(origind, true);		
+	const Indices *dums=kernel.properties.get<Indices>(origind, true);
 	if(!dums)
 		throw ConsistencyException("No information about the index types known.");
 
@@ -101,26 +99,22 @@ Algorithm::result_t expand::apply(iterator& it)
 				if(origobj==mx_last) {
 					tr.append_child(sib, origind);
 					origind=tr.erase(origind);
-					}
-				else {
+					} else {
 					dum=get_dummy(dums, sib);
 					iterator tmpit=tr.append_child((iterator)(sib), dum.begin());
 					tmpit->fl.bracket=str_node::b_none;
 					tmpit->fl.parent_rel=str_node::p_sub;
 					}
-				}
-			else { // one-index object
+				} else { // one-index object
 				if(origobj==ii_first) {
 					dum=get_dummy(dums, sib);
 					iterator tmpit=tr.append_child((iterator)(sib), dum.begin());
 					tmpit->fl.bracket=str_node::b_none;
 					tmpit->fl.parent_rel=str_node::p_sub;
-					}
-				else dum.clear(); 
+					} else dum.clear();
 				}
 			++sib;
-			}
-		else ++sib;
+			} else ++sib;
 		}
 
 	it->name=name_set.insert("\\prod").first;

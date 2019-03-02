@@ -18,7 +18,7 @@ std::string Determinant::unnamed_argument() const
 	return "object";
 	}
 
-bool Determinant::parse(Kernel&, keyval_t& keyvals) 
+bool Determinant::parse(Kernel&, keyval_t& keyvals)
 	{
 	keyval_t::const_iterator kv=keyvals.find("object");
 	if(kv!=keyvals.end())

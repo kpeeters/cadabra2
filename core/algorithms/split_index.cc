@@ -9,10 +9,9 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	{
 	iterator top=triple.begin();
 	if(*(top->name)!="\\comma") {
-		std::cout << "not comma" << std::endl;		
+		std::cout << "not comma" << std::endl;
 		throw ArgumentException("split_index: Need a list of three index names.");
-		}
-	else if(triple.number_of_children(top)!=3) {
+		} else if(triple.number_of_children(top)!=3) {
 		std::cout << "not 3" << std::endl;
 		throw ArgumentException("split_index: Need a list of three (no more, no less) index names.");
 		}
@@ -23,8 +22,7 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	if(iname->is_integer()) {
 		part1_is_number=true;
 		num1=to_long(*(iname->multiplier));
-		}
-	else {
+		} else {
 		part1_class=kernel.properties.get<Indices>(iname, true);
 		part1_coord=kernel.properties.get<Coordinate>(iname, true);
 		if(part1_coord) part1_coord_node=iname;
@@ -33,15 +31,14 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	if(iname->is_integer()) {
 		part2_is_number=true;
 		num2=to_long(*(iname->multiplier));
-		}
-	else {
+		} else {
 		part2_class=kernel.properties.get<Indices>(iname, true);
 		part2_coord=kernel.properties.get<Coordinate>(iname, true);
 		if(part2_coord) part2_coord_node=iname;
 		}
 	if(full_class && (part1_is_number || part1_class || part1_coord) && (part2_is_number || part2_class || part2_coord) )
 		return;
-	
+
 	throw ArgumentException("split_index: The index types of (some of) these indices are not known.");
 	}
 
@@ -57,14 +54,14 @@ Algorithm::result_t split_index::apply(iterator& it)
 	Ex rep;
 	rep.set_head(str_node("\\sum"));
 	Ex workcopy(it); // so we can make changes without spoiling the big tree
-//	assert(*it->multiplier==1); // see if this made a difference
+	//	assert(*it->multiplier==1); // see if this made a difference
 
 	// std::cerr << "split index acting at " << *(it->name) << std::endl;
 
 	// we only replace summed indices, so first find them.
 	index_map_t ind_free, ind_dummy;
 	classify_indices(workcopy.begin(), ind_free, ind_dummy);
-//	txtout << "indices classified" << std::endl;
+	//	txtout << "indices classified" << std::endl;
 
 	index_map_t::iterator prs=ind_dummy.begin();
 	while(prs!=ind_dummy.end()) {
@@ -78,44 +75,40 @@ Algorithm::result_t split_index::apply(iterator& it)
 				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part1_is_number) {
 						node_integer(current->second, num1);
-//						(*prs).second->name=name_set.insert(to_string(num1)).first;
-						}
-					else if(part1_coord) {
+						//						(*prs).second->name=name_set.insert(to_string(num1)).first;
+						} else if(part1_coord) {
 						(*current).second=tr.replace_index((*current).second, part1_coord_node, true);
-						}
-					else {
-//						txtout << "going to replace" << std::endl;
+						} else {
+						//						txtout << "going to replace" << std::endl;
 						(*current).second=tr.replace_index((*current).second, dum1.begin(), true);
-//						txtout << "replaced" << std::endl;
+						//						txtout << "replaced" << std::endl;
 						}
 					// Important: restoring (*prs).second in the line above.
 					++current;
 					}
 				rep.append_child(rep.begin(), workcopy.begin());
 				current=prs;
-				if(!part2_is_number && !part2_coord) 
+				if(!part2_is_number && !part2_coord)
 					dum2=get_dummy(part2_class, it);
 				while(current!=ind_dummy.end() && tree_exact_equal(&kernel.properties, (*prs).first,(*current).first,true)) {
 					if(part2_is_number) {
 						node_integer(current->second, num2);
-//						(*prs).second->name=name_set.insert(to_string(num2)).first;
-						}
-					else if(part2_coord) {
+						//						(*prs).second->name=name_set.insert(to_string(num2)).first;
+						} else if(part2_coord) {
 						(*current).second=tr.replace_index((*current).second, part2_coord_node, true);
-						}
-					else tr.replace_index((*current).second,dum2.begin(), true);
+						} else tr.replace_index((*current).second,dum2.begin(), true);
 					++current;
 					}
 				rep.append_child(rep.begin(), workcopy.begin());
 				// Do not copy the multiplier; it has already been copied by cloning the original into workcopy.
-            //	rep.begin()->multiplier=it->multiplier;
-//				txtout << "cleaning up" << std::endl;
-//				rep.print_recursive_treeform(txtout, rep.begin());
+				//	rep.begin()->multiplier=it->multiplier;
+				//				txtout << "cleaning up" << std::endl;
+				//				rep.print_recursive_treeform(txtout, rep.begin());
 				it=tr.replace(it, rep.begin());
 
 				// FIXME: need to cleanup nests
 
-//				cleanup_nests(tr, it);
+				//				cleanup_nests(tr, it);
 
 				ret=result_t::l_applied;
 				break;

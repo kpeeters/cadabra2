@@ -12,11 +12,11 @@ namespace cadabra {
 		public:
 			virtual std::string name() const override;
 			virtual bool parse(Kernel&, keyval_t&) override;
-			
+
 			virtual Ex degree(const Properties&, Ex::iterator) const override;
-			
+
 		private:
 			Ex degree_;
-	};
+		};
 
-}
+	}

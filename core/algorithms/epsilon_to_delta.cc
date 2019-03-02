@@ -27,7 +27,7 @@ bool epsilon_to_delta::can_apply(iterator st)
 			// FIXME: what if the epsilons are not all the same type?
 			if(eps->metric.begin()!=eps->metric.end()) {
 				const Metric *met=kernel.properties.get<Metric>(eps->metric.begin());
-				if(met) 
+				if(met)
 					signature=met->signature;
 				}
 			if(eps->krdelta.begin()!=eps->krdelta.end())
@@ -51,7 +51,7 @@ Algorithm::result_t epsilon_to_delta::apply(iterator& st)
 	iterator delta=rep.begin();
 
 	// std::cerr << Ex(st) << std::endl;
-	
+
 	sibling_iterator eps1=tr.begin(epsilons[0]);
 	sibling_iterator eps2=tr.begin(epsilons[1]);
 	while(eps1!=tr.end(epsilons[0])) {
@@ -63,18 +63,18 @@ Algorithm::result_t epsilon_to_delta::apply(iterator& st)
 	multiply(st->multiplier, *epsilons[0]->multiplier);
 	multiply(st->multiplier, *epsilons[1]->multiplier);
 	tr.erase(epsilons[0]);
-//	std::cerr << tr.number_of_children(epsilons[1]) << std::endl;
-//	std::cerr << " -> " << *st->multiplier << " * " << combin::fact(multiplier_t(tr.number_of_children(epsilons[1]))) << std::endl;
+	//	std::cerr << tr.number_of_children(epsilons[1]) << std::endl;
+	//	std::cerr << " -> " << *st->multiplier << " * " << combin::fact(multiplier_t(tr.number_of_children(epsilons[1]))) << std::endl;
 	multiply(st->multiplier, combin::fact(multiplier_t(tr.number_of_children(epsilons[1]))));
-//	std::cerr << "A:" << *st->multiplier << std::endl;
+	//	std::cerr << "A:" << *st->multiplier << std::endl;
 	multiply(st->multiplier, signature);
-//	std::cerr << "B:" << *st->multiplier << std::endl;
+	//	std::cerr << "B:" << *st->multiplier << std::endl;
 
 	iterator gend=tr.replace(epsilons[1], rep.begin());
-//	std::cerr << "B2:" << *st->multiplier << std::endl;
+	//	std::cerr << "B2:" << *st->multiplier << std::endl;
 
 	if(reduce) {
-//		std::cerr << "reducing" << std::endl;
+		//		std::cerr << "reducing" << std::endl;
 		reduce_delta rg(kernel, tr);
 		if(rg.can_apply(gend))
 			rg.apply(gend);
@@ -83,13 +83,13 @@ Algorithm::result_t epsilon_to_delta::apply(iterator& st)
 			return result_t::l_applied;
 			}
 		}
-	
+
 	if(*gend->multiplier!=1) {
-//		std::cerr << "B3:" << *st->multiplier << std::endl;
-//		std::cerr << "B3:" << *gend->multiplier << std::endl;
+		//		std::cerr << "B3:" << *st->multiplier << std::endl;
+		//		std::cerr << "B3:" << *gend->multiplier << std::endl;
 		multiply(tr.parent(gend)->multiplier, *gend->multiplier);
 		one(gend->multiplier);
-//		std::cerr << "C:" << *st->multiplier << std::endl;
+		//		std::cerr << "C:" << *st->multiplier << std::endl;
 		}
 
 	if(tr.number_of_children(st)==1) {
@@ -98,7 +98,7 @@ Algorithm::result_t epsilon_to_delta::apply(iterator& st)
 		st=tr.erase(st);
 		}
 
-//	std::cerr << Ex(st) << std::endl;
+	//	std::cerr << Ex(st) << std::endl;
 
 	return result_t::l_applied;
 	}

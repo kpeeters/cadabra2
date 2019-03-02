@@ -21,8 +21,7 @@ bool Spinor::parse(Kernel& kernel, keyval_t& keyvals)
 	if(ki!=keyvals.end()) {
 		dimension=to_long(*ki->second->multiplier);
 		keyvals.erase(ki);
-		}
-	else                  dimension=10;
+		} else                  dimension=10;
 
 	ki=keyvals.find("type");
 	if(ki!=keyvals.end()) {
@@ -41,19 +40,19 @@ bool Spinor::parse(Kernel& kernel, keyval_t& keyvals)
 				return false;
 				}
 			}
-		if(*ki->second->name=="MajoranaWeyl") { 
+		if(*ki->second->name=="MajoranaWeyl") {
 			if(dimension%8==2) {
-//				txtout << "setting to MajoranaWeyl" << std::endl;
-				weyl=true; majorana=true; 
-				}
-			else {
+				//				txtout << "setting to MajoranaWeyl" << std::endl;
+				weyl=true;
+				majorana=true;
+				} else {
 				throw ConsistencyException("Majorana-Weyl spinors require the dimension to be 2 mod 8.");
 				return false;
 				}
 			}
 		keyvals.erase(ki);
 		}
-	
+
 	ki=keyvals.find("chirality");
 	if(ki!=keyvals.end()) {
 		if(*ki->second->name=="Positive") chirality=positive;
@@ -62,7 +61,7 @@ bool Spinor::parse(Kernel& kernel, keyval_t& keyvals)
 		}
 
 	ImplicitIndex::parse(kernel, keyvals);
-	
+
 	return true;
 	}
 

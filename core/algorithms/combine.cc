@@ -23,7 +23,7 @@ Algorithm::result_t combine::apply(iterator& it)
 	while(sib!=tr.end(it)) {  // iterate over all factors in the product
 		sibling_iterator ch=tr.begin(sib);
 		while(ch!=tr.end(sib)) { // iterate over all indices of this factor
-//			auto parent=tr.parent(sib);
+			//			auto parent=tr.parent(sib);
 			if(ch->fl.parent_rel==str_node::p_sub || ch->fl.parent_rel==str_node::p_super) {
 				classify_add_index(ch, ind_free, ind_dummy);
 				}
@@ -35,8 +35,8 @@ Algorithm::result_t combine::apply(iterator& it)
 
 	index_map_t::iterator dums1=ind_dummy.begin(), dums2;
 	while(dums1!=ind_dummy.end()) {
-//		txtout << "analysing " << std::endl;
-//		txtout << *(dums1->second->name) << std::endl;
+		//		txtout << "analysing " << std::endl;
+		//		txtout << *(dums1->second->name) << std::endl;
 		dums2=dums1;
 		++dums2;
 
@@ -46,21 +46,21 @@ Algorithm::result_t combine::apply(iterator& it)
 		if(mat1)
 			ismatorvec1=true;
 		else if(*(tr.parent(dums1->second)->name)=="\\indexbracket") {
-			ismatorvec1=true; isbrack1=true;
-			}
-		else if(tr.number_of_children(tr.parent(dums1->second))==1) 
+			ismatorvec1=true;
+			isbrack1=true;
+			} else if(tr.number_of_children(tr.parent(dums1->second))==1)
 			ismatorvec1=true;
 		const Matrix *mat2=kernel.properties.get<Matrix>(tr.parent(dums2->second));
 		if(mat2)
 			ismatorvec2=true;
 		else if(*(tr.parent(dums2->second)->name)=="\\indexbracket") {
-			ismatorvec2=true; isbrack2=true;
-			}
-		else if(tr.number_of_children(tr.parent(dums2->second))==1) 
+			ismatorvec2=true;
+			isbrack2=true;
+			} else if(tr.number_of_children(tr.parent(dums2->second))==1)
 			ismatorvec2=true;
 
 		if(ismatorvec1 && ismatorvec2) {
-//			txtout << "gluing " << *(dums2->second->name) << std::endl;
+			//			txtout << "gluing " << *(dums2->second->name) << std::endl;
 			// create new indexbracket with product node
 			iterator outerbrack=tr.insert(tr.parent(dums1->second), str_node("\\indexbracket"));
 			iterator brackprod=tr.append_child(outerbrack, str_node("\\prod"));
@@ -77,7 +77,7 @@ Algorithm::result_t combine::apply(iterator& it)
 					tr.append_child(outerbrack, iterator(ind1));
 					}
 				++ind1;
-//				ind1=tr.erase(ind1);
+				//				ind1=tr.erase(ind1);
 				}
 			tr.erase(dums1->second);
 			sibling_iterator ind2=tr.begin(tr.parent(dums2->second));
@@ -89,7 +89,7 @@ Algorithm::result_t combine::apply(iterator& it)
 					tr.append_child(outerbrack, iterator(ind2));
 					}
 				++ind2;
-//				ind2=tr.erase(ind2);
+				//				ind2=tr.erase(ind2);
 				}
 			tr.erase(dums2->second);
 
@@ -97,29 +97,27 @@ Algorithm::result_t combine::apply(iterator& it)
 			if(isbrack1) {
 				sibling_iterator nxt=tr.begin(parn1);
 				++nxt;
-//				tr.begin(parn1)->fl.bracket=str_node::b_round;
+				//				tr.begin(parn1)->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod, tr.begin(parn1), nxt);
 				multiply(brackprod->multiplier, *parn1->multiplier);
 				tr.erase(parn1);
-				}
-			else {
+				} else {
 				sibling_iterator nxt=parn1;
 				++nxt;
-//				parn1->fl.bracket=str_node::b_round;
+				//				parn1->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod,parn1,nxt);
 				}
 			if(isbrack2) {
 				sibling_iterator nxt=tr.begin(parn2);
 				++nxt;
-//				tr.begin(parn2)->fl.bracket=str_node::b_round;
+				//				tr.begin(parn2)->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod, tr.begin(parn2), nxt);
 				multiply(brackprod->multiplier, *parn2->multiplier);
 				tr.erase(parn2);
-				}
-			else {
+				} else {
 				sibling_iterator nxt=parn2;
 				++nxt;
-//				parn2->fl.bracket=str_node::b_round;
+				//				parn2->fl.bracket=str_node::b_round;
 				tr.reparent(brackprod,parn2,nxt);
 				}
 			}
@@ -129,8 +127,8 @@ Algorithm::result_t combine::apply(iterator& it)
 
 	std::cerr << it << std::endl;
 
-//	prodflatten pf(tr, tr.end());
-//	pf.apply_recursive(it, false);
+	//	prodflatten pf(tr, tr.end());
+	//	pf.apply_recursive(it, false);
 
 	cleanup_dispatch(kernel, tr, it);
 

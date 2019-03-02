@@ -28,4 +28,4 @@ class Cadabra : public Gtk::Application {
 		std::thread                           *compute_thread;
 
 		int server_port;
-};
+	};

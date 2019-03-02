@@ -24,22 +24,22 @@
 namespace cadabra {
 
 	class NotebookWindow;
-	
+
 	class NotebookCanvas : public Gtk::VPaned {
 		public:
 			NotebookCanvas();
 			~NotebookCanvas();
-			
+
 			std::map<DataCell *, VisualCell> visualcells;
 
-//			Gtk::EventBox             ebox;
-//			Gtk::VBox                 ebox;
+			//			Gtk::EventBox             ebox;
+			//			Gtk::VBox                 ebox;
 			Gtk::EventBox             ebox;
 			Gtk::ScrolledWindow       scroll;
 			Gtk::HSeparator           bottomline;
 
 			void refresh_all();
 
-	};
+		};
 
-}
+	}

@@ -63,18 +63,17 @@
 #include "../algorithms/young_project_tensor.hh"
 #include "../algorithms/zoom.hh"
 
-namespace cadabra
-	{
+namespace cadabra {
 	namespace py = pybind11;
 
 	void init_algorithms(py::module& m)
 		{
 		pybind11::enum_<Algorithm::result_t>(m, "result_t")
-			.value("checkpointed", Algorithm::result_t::l_checkpointed)
-			.value("changed", Algorithm::result_t::l_applied)
-			.value("unchanged", Algorithm::result_t::l_no_action)
-			.value("error", Algorithm::result_t::l_error)
-			.export_values();
+		.value("checkpointed", Algorithm::result_t::l_checkpointed)
+		.value("changed", Algorithm::result_t::l_applied)
+		.value("unchanged", Algorithm::result_t::l_no_action)
+		.value("error", Algorithm::result_t::l_error)
+		.export_values();
 
 		def_algo<canonicalise>(m, "canonicalise", true, false, 0);
 		def_algo<collect_components>(m, "collect_components", true, false, 0);
@@ -88,7 +87,7 @@ namespace cadabra
 		def_algo<expand_delta>(m, "expand_delta", true, false, 0);
 		def_algo<expand_diracbar>(m, "expand_diracbar", true, false, 0);
 		def_algo<expand_power>(m, "expand_power", true, false, 0);
-		def_algo<explicit_indices>(m, "explicit_indices", true, false, 0);		
+		def_algo<explicit_indices>(m, "explicit_indices", true, false, 0);
 		def_algo<flatten_sum>(m, "flatten_sum", true, false, 0);
 		def_algo<indexsort>(m, "indexsort", true, false, 0);
 		def_algo<lr_tensor>(m, "lr_tensor", true, false, 0);
@@ -127,7 +126,7 @@ namespace cadabra
 		def_algo<replace_match>(m, "replace_match", false, false, 0);
 		def_algo<zoom, Ex>(m, "zoom", true, false, 0, py::arg("rules"));
 		def_algo<unzoom>(m, "unzoom", true, false, 0);
-		def_algo<untrace>(m, "untrace", true, false, 0);		
+		def_algo<untrace>(m, "untrace", true, false, 0);
 		def_algo<rewrite_indices, Ex, Ex>(m, "rewrite_indices", true, false, 0, py::arg("preferred"), py::arg("converters"));
 		def_algo_preorder<vary, Ex>(m, "vary", false, false, 0, py::arg("rules"));
 		def_algo<split_gamma, bool>(m, "split_gamma", true, false, 0, py::arg("on_back"));

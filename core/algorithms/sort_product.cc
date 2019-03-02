@@ -7,10 +7,10 @@ using namespace cadabra;
 sort_product::sort_product(const Kernel&k, Ex& tr)
 	: Algorithm(k, tr), cleanup(true)
 	{
-//	if(has_argument("IgnoreNumbers")) {
-//		txtout << "ignoring numbers" << std::endl;
-//		ignore_numbers_=true;
-//		}
+	//	if(has_argument("IgnoreNumbers")) {
+	//		txtout << "ignoring numbers" << std::endl;
+	//		ignore_numbers_=true;
+	//		}
 	}
 
 void sort_product::dont_cleanup()
@@ -18,7 +18,7 @@ void sort_product::dont_cleanup()
 	cleanup=false;
 	}
 
-bool sort_product::can_apply(iterator st) 
+bool sort_product::can_apply(iterator st)
 	{
 	if(*st->name=="\\prod" || *st->name=="\\dot" || *st->name=="\\wedge") {
 		// ensure that there are no factors with object or name wildcards, as we
@@ -32,11 +32,10 @@ bool sort_product::can_apply(iterator st)
 			++sib;
 			}
 		return true;
-		}
-	else return false;
+		} else return false;
 	}
 
-Algorithm::result_t sort_product::apply(iterator& st) 
+Algorithm::result_t sort_product::apply(iterator& st)
 	{
 	// This could have been done using STL's sort, but then you have to worry
 	// about using stable_sort, and then the tree.sort() doesn't do that,
@@ -49,15 +48,16 @@ Algorithm::result_t sort_product::apply(iterator& st)
 	Ex_comparator compare(kernel.properties);
 	compare.set_value_matches_index(true);
 
-//	std::cerr << "sorting\n" << Ex(st) << std::endl;
-//	std::cout << "entering sort" << std::endl;
-//	tr.print_recursive_treeform(std::cout, st);
+	//	std::cerr << "sorting\n" << Ex(st) << std::endl;
+	//	std::cout << "entering sort" << std::endl;
+	//	tr.print_recursive_treeform(std::cout, st);
 
 	unsigned int num=tr.number_of_children(st);
 	for(unsigned int i=1; i<num; ++i) {
 		one=tr.begin(st);
-		two=one; ++two;
-//		for(unsigned int j=i+1; j<=num; ++j) { // this loops too many times, no?
+		two=one;
+		++two;
+		//		for(unsigned int j=i+1; j<=num; ++j) { // this loops too many times, no?
 		while(two!=tr.end(st)) {
 			compare.clear();
 			auto es = compare.equal_subtree(one, two);
@@ -70,7 +70,7 @@ Algorithm::result_t sort_product::apply(iterator& st)
 					tr.swap(one);
 					std::swap(one,two);  // put the iterators back in order
 					if(canswap==-1) {
-//						std::cout << "MINUS" << std::endl;
+						//						std::cout << "MINUS" << std::endl;
 						flip_sign(st->multiplier);
 						}
 					ret=result_t::l_applied;
@@ -83,6 +83,6 @@ Algorithm::result_t sort_product::apply(iterator& st)
 
 	if(cleanup)
 		cleanup_dispatch(kernel, tr, st);
-	
+
 	return ret;
 	}

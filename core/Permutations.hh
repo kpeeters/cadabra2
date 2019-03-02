@@ -10,14 +10,14 @@
 /// confusion.
 ///
 /// Example: 1->4, 4->3, 3->1, 5->6, 6->5
-/// 
+///
 ///    Perm(   3, 2, 4, 1, 6, 5 )
 ///    Images( 4, 2, 1, 3, 6, 5 )
 
 class PermutationException : std::logic_error {
 	public:
 		PermutationException(const std::string& ex) : std::logic_error(ex) {};
-};
+	};
 
 class Perm {
 	public:
@@ -32,7 +32,7 @@ class Perm {
 		template<class iterator>
 		void apply(iterator start1, iterator end1);
 
-};
+	};
 
 class Images {
 	public:
@@ -41,7 +41,7 @@ class Images {
 		/// Find the permutation that takes [start1, end1> to [start2, end2>.
 		template<class iterator>
 		void find(iterator start1, iterator end1, iterator start2, iterator end2);
-};
+	};
 
 
 
@@ -64,7 +64,7 @@ void Perm::find(iterator start1, iterator end1, iterator start2, iterator end2)
 			}
 		if(it==end1)
 			throw PermutationException("Sets do not contain the same elements.");
-		
+
 		++start2;
 		}
 	}
@@ -84,7 +84,7 @@ void Perm::apply(iterator start, iterator end)
 	// std::cerr << orig.size() << ", " << perm.size() << std::endl;
 	if(orig.size()!=perm.size()) {
 		std::cerr << "Perm::apply: orig.size()=" << orig.size() << ", "
-					 << "perm.size()=" << perm.size() << std::endl;
+		          << "perm.size()=" << perm.size() << std::endl;
 		assert(orig.size()==perm.size());
 		}
 
@@ -113,7 +113,7 @@ void Images::find(iterator start1, iterator end1, iterator start2, iterator end2
 			}
 		if(it==end2)
 			throw PermutationException("Sets do not contain the same elements.");
-		
+
 		++start1;
 		}
 	}
