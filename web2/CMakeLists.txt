@@ -37,6 +37,7 @@ set(TUTORIALS
   ref_default_simplification
   ref_programming
   ref_import
+  ref_implicit_versus_explicit
   ref_selecting
   )
 

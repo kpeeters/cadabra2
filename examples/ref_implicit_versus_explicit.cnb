@@ -12,7 +12,6 @@
 					"source" : "\\section*{Implicit versus explicit indices}\n\nWhen writing expressions which involves vectors, spinors and matrices,\none often employs an implicit notation in which some or all of the\nindices are suppressed. Examples are\n$$ a = M b\\,, \\quad \\bar{\\psi}\\gamma^{m}\\chi\\,,$$\nwhere $a$ and $b$  are vectors, $\\psi$ and~$\\chi$ are spinors and~$M$\nand~$\\gamma^{m}$ are matrices. Clearly, the computer cannot know this\nwithout some further information. In Cadabra objects can carry implicit\nindices, through the \\prop{ImplicitIndex} property. There are\nderived forms of this, e.g.~\\prop{Matrix} and~\\prop{Spinor}.\nThe following example shows how implicit indices ensure that objects\ndo not get moved through each other when sorting expressions."
 				}
 			],
-			"hidden" : true,
 			"source" : "\\section*{Implicit versus explicit indices}\n\nWhen writing expressions which involves vectors, spinors and matrices,\none often employs an implicit notation in which some or all of the\nindices are suppressed. Examples are\n$$ a = M b\\,, \\quad \\bar{\\psi}\\gamma^{m}\\chi\\,,$$\nwhere $a$ and $b$  are vectors, $\\psi$ and~$\\chi$ are spinors and~$M$\nand~$\\gamma^{m}$ are matrices. Clearly, the computer cannot know this\nwithout some further information. In Cadabra objects can carry implicit\nindices, through the \\prop{ImplicitIndex} property. There are\nderived forms of this, e.g.~\\prop{Matrix} and~\\prop{Spinor}.\nThe following example shows how implicit indices ensure that objects\ndo not get moved through each other when sorting expressions."
 		},
 		{
@@ -200,6 +199,91 @@
 				}
 			],
 			"source" : "Tr{#}::Trace(indices=vector);\nex:= Tr( M c M );\nuntrace(_);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Converting between implicit and explicit}\n\nIt is possible to convert from implicit indices to explicit indices, that is, make Cadabra write out all implicit indices explicitly.\nFor this to work you need to have declared an \\prop{ImplicitIndex} property which lists the explicit indices of the object.\nCadabra will then take care of creating index lines."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Converting between implicit and explicit}\n\nIt is possible to convert from implicit indices to explicit indices, that is, make Cadabra write out all implicit indices explicitly.\nFor this to work you need to have declared an \\prop{ImplicitIndex} property which lists the explicit indices of the object.\nCadabra will then take care of creating index lines."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[i,~\\discretionary{}{}{} j,~\\discretionary{}{}{} k\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ImplicitIndex to~}a.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property ImplicitIndex to~}M.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "M a"
+						}
+					],
+					"source" : "\\begin{dmath*}{}M a\\end{dmath*}"
+				}
+			],
+			"source" : "{i,j,k}::Indices;\na::ImplicitIndex(a^{i});\nM::ImplicitIndex(M^{i}_{j});\nex:= M a;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "M^{i}_{j} a^{j}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}M^{i}\\,_{j} a^{j}\\end{dmath*}"
+				}
+			],
+			"source" : "explicit_indices(ex);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note how dummy indices were introduced automatically."
+				}
+			],
+			"hidden" : true,
+			"source" : "Note how dummy indices were introduced automatically."
 		},
 		{
 			"cell_origin" : "client",
