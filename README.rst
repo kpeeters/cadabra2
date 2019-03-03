@@ -477,7 +477,7 @@ Building a Jupyter kernel
 The Cadabra build scripts are now able to build a Jupyter kernel for
 Cadabra, so that you can use the Cadabra notation inside a Jupyter
 notebook session. For full instructions, see
-[building a Cadabra Jupyter kernel](JUPYTER.rst). This is
+`building a Jupyter kernel <https://github.com/kpeeters/cadabra2/blob/master/JUPYTER.rst>`_. This is
 *experimental* at the moment; all feedback is welcome.
 
 
@@ -502,10 +502,10 @@ your own C++ programs, you can build Cadabra as a shared library. To
 do this::
 
     cd c++lib
-	 mkdir build
-	 cmake ..
-	 make
-	 sudo make install
+    mkdir build
+    cmake ..
+    make
+    sudo make install
 
 There is a sample program `simple.cc
 <https://github.com/kpeeters/cadabra2/blob/master/c%2B%2Blib/simple.cc>`_
