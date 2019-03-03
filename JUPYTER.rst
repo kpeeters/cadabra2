@@ -36,15 +36,15 @@ and if you don't think this is a problem, see e.g.::
 
 Anyway, on to building. First activate your miniconda distribution::
 
-  source ~/miniconda3/etc/profile.d/conda.sh
+    source ~/miniconda3/etc/profile.d/conda.sh
 
 All dependencies for Cadabra's Jupyter kernel can then be installed from
 Conda directly, with::
 
     conda config --add channels conda-forge
-	 conda install xeus -c QuantStack -c conda-forge
+    conda install xeus -c QuantStack -c conda-forge
     conda install cmake pkg-config zeromq cppzmq xtl cryptopp sqlite util-linux
-	 conda install nlohmann_json -c conda-forge/label/gcc7
+    conda install nlohmann_json -c conda-forge/label/gcc7
     conda install sympy jupyter
 	 
 Now it is time to do the Cadabra build. Configure with options which
@@ -56,8 +56,8 @@ any 'normal' build you may have sitting around::
     cmake -DENABLE_JUPYTER=ON -DENABLE_FRONTEND=OFF \
                               -DCMAKE_INCLUDE_PATH=${HOME}/miniconda3/include \
                               -DCMAKE_LIBRARY_PATH=${HOME}/miniconda3/lib \
-										-DCMAKE_INSTALL_PREFIX=${HOME}/miniconda3
-										..
+                              -DCMAKE_INSTALL_PREFIX=${HOME}/miniconda3
+                              ..
 
 You should see that it has configured using the Conda Python; look for
 the `Configuring Python` block, which should be something like::
@@ -74,7 +74,7 @@ the `Configuring Python` block, which should be something like::
 Note the reference to the Conda installation path. Further down you
 should then also see a block for the Jupyter kernel::
 
-	 -------------------------------------------
+    -------------------------------------------
       Configuring Jupyter kernel build
     -------------------------------------------
  
