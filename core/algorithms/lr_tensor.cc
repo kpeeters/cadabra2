@@ -123,6 +123,7 @@ void lr_tensor::do_tableau(iterator& it)
 
 	Ex rep;
 	iterator top=rep.set_head(str_node("\\oplus"));
+	iterator tt;
 	yngtab::tableaux<yngtab::tableau>::tableau_container_t::iterator tabit=prod.storage.begin();
 	while(tabit!=prod.storage.end()) {
 		// Keep only the diagrams which lead to a singlet if requested.
@@ -131,13 +132,11 @@ void lr_tensor::do_tableau(iterator& it)
 				if((*tabit).row_size(r)%2!=0)
 					goto next_tab;
 
-			{
-			iterator tt=tr.append_child(top, str_node(tab1->name));
-			multiply(tt->multiplier, tabit->multiplicity);
-			for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r)
-				multiply(tr.append_child(tt, str_node("1"))->multiplier, (*tabit).row_size(r));
-			}
-
+		tt=tr.append_child(top, str_node(tab1->name));
+		multiply(tt->multiplier, tabit->multiplicity);
+		for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r)
+			multiply(tr.append_child(tt, str_node("1"))->multiplier, (*tabit).row_size(r));
+	
 next_tab:
 		++tabit;
 		}

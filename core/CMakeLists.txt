@@ -12,6 +12,10 @@ configure_file(
 	"${PROJECT_SOURCE_DIR}/cadabra2.in"
 	"${PROJECT_SOURCE_DIR}/cadabra2"
 )
+configure_file(
+	"${PROJECT_SOURCE_DIR}/cadabra2_defaults.py.in"
+	"${PROJECT_SOURCE_DIR}/cadabra2_defaults.py"
+)
 
 
 #---------------------------------------------------------------------------

@@ -38,7 +38,7 @@ set(CADABRA_SERVER_SRC
 	${CADABRA_CORE_DIR}/Stopwatch.cc 
 	${CADABRA_LIBS_DIR}/whereami/whereami.c
 	)
-if(!CONDA_FOUND)
+if(NOT CONDA_FOUND)
   set(CADABRA_SERVER_SRC
 	 ${CADABRA_SERVER_SRC}
 	 Snoop.cc
@@ -136,7 +136,6 @@ target_link_libraries(cadabra-server
 	${SQLITE3_LIBRARIES}
 	${PYTHON_LIBRARIES}
 	${GLIBMM3_LIBRARIES} 
-<<<<<<< HEAD
 	Threads::Threads
 	)
 if(ENABLE_SYSTEM_JSONCPP)
@@ -144,16 +143,12 @@ if(ENABLE_SYSTEM_JSONCPP)
 	 ${JSONCPP_LIBRARIES}
 	 )
 endif()
-=======
-   Threads::Threads
-)
->>>>>>> feature/jupyter-kernel
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
 endif()
 
 # cadabra2html
-if(!ENABLE_JUPYTER)
+if(NOT ENABLE_JUPYTER)
   add_executable(cadabra2html 
 	 cadabra2html.cc 
 	 ${CADABRA_CORE_DIR}/DataCell.cc
@@ -162,24 +157,7 @@ if(!ENABLE_JUPYTER)
 endif()
 
 # Client library
-<<<<<<< HEAD
-add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
-target_link_libraries(cadabra_client
-	${Boost_LIBRARIES}
-	${SQLITE3_LIBRARIES}
-	${PYTHON_LIBRARIES}
-	${GLIBMM3_LIBRARIES}
-	Threads::Threads
-)
-if(ENABLE_SYSTEM_JSONCPP)
-  target_link_libraries(cadabra_client
-	 ${JSONCPP_LIBRARIES}
-	 )
-endif()
-if(WIN32)
-   target_link_libraries(cadabra_client ws2_32 bcrypt)
-=======
-if(!ENABLE_JUPYTER)
+if(NOT ENABLE_JUPYTER)
   add_library(cadabra_client STATIC ${CADABRA_CLIENT_SRC})
   target_link_libraries(cadabra_client
 	 ${Boost_LIBRARIES}
@@ -191,7 +169,6 @@ if(!ENABLE_JUPYTER)
   if(WIN32)
     target_link_libraries(cadabra_client ws2_32 bcrypt)
   endif()
->>>>>>> feature/jupyter-kernel
 endif()
 
 # Jupyter kernel
@@ -200,7 +177,8 @@ if(ENABLE_JUPYTER)
   find_package(xtl REQUIRED)
   find_package(nlohmann_json REQUIRED)
   find_library(UUID_LIBRARIES uuid REQUIRED)
-  include_directories(${XTL_INCLUDE_DIR} ${NLOHMANN_JSON_INCLUDE_DIR})
+  include_directories(${CMAKE_INSTALL_PREFIX}/include ${XTL_INCLUDE_DIR} ${NLOHMANN_JSON_INCLUDE_DIR})
+  link_directories(${CMAKE_INSTALL_PREFIX}/lib)
   add_executable(cadabra-jupyter-kernel ${JUPYTER_KERNEL_SRC})
   message("-- UUID library at ${UUID_LIBRARIES}")
   target_link_libraries(cadabra-jupyter-kernel xeus Threads::Threads uuid ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
@@ -233,7 +211,7 @@ endif()
 #set(INSTALL_LIB_DIR     lib           CACHE PATH "Installation directory for libraries")
 
 install(TARGETS cadabra-server DESTINATION bin)
-if(!ENABLE_JUPYTER)
+if(NOT ENABLE_JUPYTER)
   install(TARGETS cadabra2html DESTINATION bin)
 endif()
 # We don't need to install the libcadabra_client library as it is statically

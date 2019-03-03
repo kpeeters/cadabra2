@@ -15,6 +15,7 @@
 #define COPYRIGHT_YEARS       "@COPYRIGHT_YEARS@"
 
 #cmakedefine CONDA_FOUND
+#cmakedefine ENABLE_JUPYTER
 
 #cmakedefine MATHEMATICA_FOUND
 #define Mathematica_KERNEL_EXECUTABLE "@Mathematica_KERNEL_EXECUTABLE@"

@@ -51,6 +51,9 @@ See `Building Cadabra as C++ library`_ for instructions on how to
 build the entire Cadabra functionality as a library which you can use
 in a C++ program.
 
+See `Building a Jupyter kernel`_  for instructions on how to build a
+Jupyter kernel for Cadabra sessions.
+
 
 Linux (Debian/Ubuntu/Mint)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -467,6 +470,15 @@ things into there. In addition you need::
 This fails to start the server with 'The application has requested the
 Runtime to terminate it in an unusual way'.
 
+
+Building a Jupyter kernel
+-------------------------
+
+The Cadabra build scripts are now able to build a Jupyter kernel for
+Cadabra, so that you can use the Cadabra notation inside a Jupyter
+notebook session. For full instructions, see
+[building a Cadabra Jupyter kernel](JUPYTER.rst). This is
+*experimental* at the moment; all feedback is welcome.
 
 
 Tutorials and other help

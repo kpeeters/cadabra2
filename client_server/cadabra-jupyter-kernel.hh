@@ -22,7 +22,7 @@ namespace cadabra {
 			virtual ~CadabraJupyter() = default;
 
 		public:
-			virtual uint64_t send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last);
+			virtual uint64_t send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last) override;
 
 			int current_counter;
 			bool finished=true;

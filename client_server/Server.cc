@@ -142,6 +142,10 @@ void Server::init()
 	   "code=compile(f.read(), 'cadabra2_defaults.py', 'exec'); "
 	   "exec(code); f.close()";
 	run_string(startup);
+
+#ifdef DEBUG
+	std::cerr << "Server::init: completed" << std::endl;
+#endif
 	}
 
 std::string Server::run_string(const std::string& blk, bool handle_output)
@@ -162,6 +166,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		//		pybind11::object ignored = pybind11::eval<pybind11::eval_statements>(newblk.c_str(), main_namespace);
 #ifdef DEBUG
 		std::cerr << "executing..." << std::endl;
+		std::cerr << newblk << std::endl;
 #endif
 		pybind11::exec(newblk.c_str(), main_namespace);
 #ifdef DEBUG

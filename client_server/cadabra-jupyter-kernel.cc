@@ -5,13 +5,15 @@
 #include "xeus/xguid.hpp"
 #include <boost/algorithm/string.hpp>
 
+// #define DEBUG
+
 void cadabra::CadabraJupyter::configure_impl()
 	{
 	auto handle_comm_opened = [](xeus::xcomm&& comm, const xeus::xmessage&) {
-		std::cout << "Comm opened for target: " << comm.target().name() << std::endl;
+		std::cerr << "Comm opened for target: " << comm.target().name() << std::endl;
 	};
 	comm_manager().register_comm_target("echo_target", handle_comm_opened);
-	using function_type = std::function<void(xeus::xcomm&&, const xeus::xmessage&)>;
+//	using function_type = std::function<void(xeus::xcomm&&, const xeus::xmessage&)>;
 	}
 	
 xjson cadabra::CadabraJupyter::execute_request_impl(int execution_counter,
@@ -21,13 +23,15 @@ xjson cadabra::CadabraJupyter::execute_request_impl(int execution_counter,
 																	 xjson /* user_expressions */,
 																	 bool allow_stdin)
 	{
-	std::cout << "Received execute_request" << std::endl;
-	std::cout << "execution_counter: " << execution_counter << std::endl;
-	std::cout << "code: " << code << std::endl;
-	std::cout << "silent: " << silent << std::endl;
-	std::cout << "store_history: " << store_history << std::endl;
-	std::cout << "allow_stdin: " << allow_stdin << std::endl;
-	std::cout << std::endl;
+#ifdef DEBUG
+	std::cerr << "Received execute_request" << std::endl;
+	std::cerr << "execution_counter: " << execution_counter << std::endl;
+	std::cerr << "code: " << code << std::endl;
+	std::cerr << "silent: " << silent << std::endl;
+	std::cerr << "store_history: " << store_history << std::endl;
+	std::cerr << "allow_stdin: " << allow_stdin << std::endl;
+	std::cerr << std::endl;
+#endif
 
 	std::string out = run_string(code);
 	
@@ -42,7 +46,9 @@ xjson cadabra::CadabraJupyter::execute_request_impl(int execution_counter,
 
 uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last)
 	{
+#ifdef DEBUG
 	std::cerr << "received: " << msg_type << " " << output << std::endl;
+#endif
 	if(!last && output.size()>0) {
 		if(msg_type=="verbatim") {
 			xjson pub_data;
@@ -58,15 +64,18 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 			publish_execution_result(1, std::move(pub_data), xjson());
 			}
 		}
+	return 0; // FIXME
 	}
 
 xjson cadabra::CadabraJupyter::complete_request_impl(const std::string& code,
 																	  int cursor_pos)
 	{
-	std::cout << "Received complete_request" << std::endl;
-	std::cout << "code: " << code << std::endl;
-	std::cout << "cursor_pos: " << cursor_pos << std::endl;
-	std::cout << std::endl;
+#ifdef DEBUG
+	std::cerr << "Received complete_request" << std::endl;
+	std::cerr << "code: " << code << std::endl;
+	std::cerr << "cursor_pos: " << cursor_pos << std::endl;
+	std::cerr << std::endl;
+#endif
 	xjson result;
 	result["status"] = "ok";
 	result["matches"] = {"a.echo1"};
@@ -79,11 +88,13 @@ xjson cadabra::CadabraJupyter::inspect_request_impl(const std::string& code,
 																	 int cursor_pos,
 																	 int detail_level)
 	{
-	std::cout << "Received inspect_request" << std::endl;
-	std::cout << "code: " << code << std::endl;
-	std::cout << "cursor_pos: " << cursor_pos << std::endl;
-	std::cout << "detail_level: " << detail_level << std::endl;
-	std::cout << std::endl;
+#ifdef DEBUG
+	std::cerr << "Received inspect_request" << std::endl;
+	std::cerr << "code: " << code << std::endl;
+	std::cerr << "cursor_pos: " << cursor_pos << std::endl;
+	std::cerr << "detail_level: " << detail_level << std::endl;
+	std::cerr << std::endl;
+#endif
 	xjson result;
 	result["status"] = "ok";
 	result["found"] = false;
@@ -92,9 +103,11 @@ xjson cadabra::CadabraJupyter::inspect_request_impl(const std::string& code,
 
 xjson cadabra::CadabraJupyter::is_complete_request_impl(const std::string& code)
 	{
-	std::cout << "Received is_complete_request" << std::endl;
-	std::cout << "code: " << code << std::endl;
-	std::cout << std::endl;
+#ifdef DEBUG
+	std::cerr << "Received is_complete_request" << std::endl;
+	std::cerr << "code: " << code << std::endl;
+	std::cerr << std::endl;
+#endif
 	xjson result;
 	result["status"] = "complete";
 	return result;

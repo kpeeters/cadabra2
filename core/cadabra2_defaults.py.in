@@ -20,6 +20,11 @@ __cdbkernel__=cadabra2.__cdbkernel__
 import os
 os.environ.setdefault('PATH', '')
 
+if "@ENABLE_JUPYTER@" == "OFF":
+   discr = "\\discretionary{}{}{} "
+else:
+   discr = ""
+   
 class PackageCompiler(MetaPathFinder):
 	@classmethod
 	def find_module(cls, fullname, path):
@@ -246,7 +251,7 @@ def display(obj, delay_send=False):
         first=True
         for elm in obj:
             if first==False:
-                out+=",\discretionary{}{}{} "
+                out+=","+discr
             else:
                 first=False
             out+= display(elm, True)

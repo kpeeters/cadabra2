@@ -65,18 +65,17 @@ void tab_basics::tabs_to_singlet_rules(uinttabs_t& tabs, iterator top)
 
 	while(tabit!=tabs.storage.end()) {
 		// Keep only the diagrams which lead to a singlet.
+		iterator tprod;
 		for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r)
 			if((*tabit).row_size(r)%2!=0)
 				goto next_tab;
 
-			{
-			iterator tprod=tr.append_child(top, str_node("\\prod"));
-			for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r) {
-				for(unsigned int c=0; c<(*tabit).row_size(r); ++c) {
-					iterator tt=tr.append_child(tprod, str_node("\\delta"));
-					tr.append_child(tt, num_to_it[(*tabit)(r,c++)]);
-					tr.append_child(tt, num_to_it[(*tabit)(r,c)]);
-					}
+		tprod=tr.append_child(top, str_node("\\prod"));
+		for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r) {
+			for(unsigned int c=0; c<(*tabit).row_size(r); ++c) {
+				iterator tt=tr.append_child(tprod, str_node("\\delta"));
+				tr.append_child(tt, num_to_it[(*tabit)(r,c++)]);
+				tr.append_child(tt, num_to_it[(*tabit)(r,c)]);
 				}
 			}
 
@@ -92,26 +91,25 @@ void tab_basics::tabs_to_tree(uinttabs_t& tabs, iterator top, iterator tabpat, b
 
 	while(tabit!=tabs.storage.end()) {
 		// Keep only the diagrams which lead to a singlet if requested.
+		iterator tt;
 		if(even_only)
 			for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r)
 				if((*tabit).row_size(r)%2!=0)
 					goto next_tab;
 
-			{
-			iterator tt=tr.append_child(top, str_node(tabpat->name));
-			multiply(tt->multiplier, tabit->multiplicity);
-			for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r) {
-				unsigned int rs=(*tabit).row_size(r);
-				if(rs==1)
-					tr.append_child(tt, num_to_it[(*tabit)(r,0)]);
-				else {
-					iterator tmp=tr.append_child(tt, str_node("\\comma"));
-					for(unsigned int c=0; c<rs; ++c)
-						tr.append_child(tmp, num_to_it[(*tabit)(r,c)]);
+		tt=tr.append_child(top, str_node(tabpat->name));
+		multiply(tt->multiplier, tabit->multiplicity);
+		for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r) {
+			unsigned int rs=(*tabit).row_size(r);
+			if(rs==1)
+				tr.append_child(tt, num_to_it[(*tabit)(r,0)]);
+			else {
+				iterator tmp=tr.append_child(tt, str_node("\\comma"));
+				for(unsigned int c=0; c<rs; ++c)
+					tr.append_child(tmp, num_to_it[(*tabit)(r,c)]);
 					}
-				}
 			}
-
+	
 next_tab:
 		++tabit;
 		}

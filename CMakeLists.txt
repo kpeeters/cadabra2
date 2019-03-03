@@ -53,10 +53,6 @@ set(CADABRA_FRONTEND_DIR ${CADABRA_ROOT_DIR}/frontend)
 set(CADABRA_IMAGES_DIR ${CADABRA_ROOT_DIR}/images)
 set(CADABRA_LIBS_DIR ${CADABRA_ROOT_DIR}/libs)
 
-if(ENABLE_JUPYTER)
-  # Currently only possible when building against Conda.
-  set(CONDA_FOUND 1)
-endif()
 
 #---------------------------------------------------------------------------
 # User options and other notifications
@@ -81,6 +77,17 @@ if (BUILD_TESTS)
 	message(STATUS "Building tests")
 	# Allows tests to be built in all subdirectories.
 	enable_testing()
+endif()
+
+option(ENABLE_JUPYTER "Enable building the Jupyter kernel" OFF)
+
+if(ENABLE_JUPYTER)
+  message(STATUS "Building the Jupyter kernel")
+  # Currently only possible when building against Conda.
+  set(CONDA_FOUND TRUE)
+else()
+  set(CONDA_FOUND FALSE)
+  message(STATUS "Not building the Jupyter kernel")
 endif()
 
 option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
