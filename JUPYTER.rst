@@ -26,11 +26,11 @@ When building against Conda, Cadabra will build only the Python module
 and the cadabra-jupyter-kernel binary. It is not possible to build
 many of the other parts of Cadabra using Conda, for various reasons:
 Conda's glibmm is not built with c++11 enabled, there is no gtkmm
-library, and probably others. For a discussion on this, see::
+library, and probably others. For a discussion on this, see
 
   https://groups.google.com/a/continuum.io/d/msg/anaconda/oHtExJU9oiM/oMZLGpn1CAAJ
 
-and if you don't think this is a problem, see e.g.::
+and if you don't think this is a problem, see e.g.
 
   https://unix.stackexchange.com/questions/414904/anaconda-qt-vs-system-qt
 
