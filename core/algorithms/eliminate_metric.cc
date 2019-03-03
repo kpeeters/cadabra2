@@ -55,7 +55,8 @@ bool eliminate_converter::handle_one_index(index_iterator ind1, index_iterator i
 						tr.move_ontop(locs.first->second, iterator(ind2))->fl.parent_rel=ind2->fl.parent_rel;;
 						fit=tr.erase(fit);
 						replaced=true;
-						} else { // yes
+						}
+					else {   // yes
 						iterator par=tr.parent(locs.first->second);
 						sibling_iterator prefit=tr.begin(objs);
 						while(prefit!=tr.end(objs)) {

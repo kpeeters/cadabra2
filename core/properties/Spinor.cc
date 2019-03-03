@@ -21,7 +21,8 @@ bool Spinor::parse(Kernel& kernel, keyval_t& keyvals)
 	if(ki!=keyvals.end()) {
 		dimension=to_long(*ki->second->multiplier);
 		keyvals.erase(ki);
-		} else                  dimension=10;
+		}
+	else                  dimension=10;
 
 	ki=keyvals.find("type");
 	if(ki!=keyvals.end()) {
@@ -45,7 +46,8 @@ bool Spinor::parse(Kernel& kernel, keyval_t& keyvals)
 				//				txtout << "setting to MajoranaWeyl" << std::endl;
 				weyl=true;
 				majorana=true;
-				} else {
+				}
+			else {
 				throw ConsistencyException("Majorana-Weyl spinors require the dimension to be 2 mod 8.");
 				return false;
 				}

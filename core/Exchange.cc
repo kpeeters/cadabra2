@@ -79,7 +79,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 						++tmpit;
 						gmnxt=properties.get_composite<GammaMatrix>(tmpit);
 						spnxt=properties.get_composite<Spinor>(tmpit);
-						} while(gmnxt==0 && spnxt==0);
+						}
+					while(gmnxt==0 && spnxt==0);
 					if(tmpit==sib) {
 						//						txtout << "using fermi exchange" << std::endl;
 						idts[i].extra_sign++;
@@ -93,7 +94,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 							++tmpit;
 							gmnxt=properties.get_composite<GammaMatrix>(tmpit);
 							spnxt=properties.get_composite<Spinor>(tmpit);
-							} while(gmnxt==0 && spnxt==0);
+							}
+						while(gmnxt==0 && spnxt==0);
 						if(tmpit==sib) { // yes, it's a proper Majorana spinor pair.
 							//							txtout << "using fermi exchange with gamma " << numind << std::endl;
 							if( ((numind*(numind+1))/2)%2 == 0 )
@@ -101,7 +103,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 							break;
 							}
 						}
-					} else break;
+					}
+				else break;
 				}
 			}
 		if(i==idts.size()) {
@@ -120,7 +123,8 @@ int exchange::collect_identical_tensors(const Properties& properties, Ex& tr, Ex
 			total_number_of_indices+=ngr.number_of_indices;
 			if(ngr.spino==0 || ngr.spino->majorana==true)
 				idts.push_back(ngr);
-			} else {
+			}
+		else {
 			idts[i].tensors.push_back(sib);
 			idts[i].seq_numbers_of_first_indices.push_back(total_number_of_indices);
 			total_number_of_indices+=idts[i].number_of_indices;
@@ -169,7 +173,8 @@ bool exchange::get_node_gs(const Properties& properties, Ex& tr, Ex::iterator it
 					if(idts[i].spino && idts[i].number_of_indices==0) {
 						if(gsel[total_number_of_indices+1]==total_number_of_indices+1)
 							return false;
-						} else gs.push_back(gsel);
+						}
+					else gs.push_back(gsel);
 					}
 				}
 			}

@@ -69,7 +69,8 @@ substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
 				classify_indices(rhs, ind_free, ind_dummy);
 				rhs_contains_dummies[arrow]=ind_dummy.size()>0;
 				}
-			} catch(std::exception& er) {
+			}
+		catch(std::exception& er) {
 			throw ArgumentException(std::string("substitute: Index error in replacement rule. ")+er.what());
 			}
 		return true;
@@ -88,7 +89,8 @@ bool substitute::can_apply(iterator st)
 			conditions=lhs;
 			conditions.skip_children();
 			++conditions;
-			} else conditions=tr.end();
+			}
+		else conditions=tr.end();
 
 		if(lhs->name!=st->name && !lhs->is_object_wildcard() && !lhs->is_name_wildcard() && lhs->name->size()>0)
 			return args.end();
@@ -152,7 +154,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 	if(rhs_contains_dummies[use_rule]) {
 		classify_indices(repl.begin(), ind_free, ind_dummy);
 		//std::cerr << "rhs contains dummies " << ind_dummy.size() << std::endl;
-		} else {
+		}
+	else {
 		//std::cerr << "rhs does not contain dummies" << std::endl;
 		}
 
@@ -200,7 +203,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 				multiply(it->multiplier, *(*loc).second.begin()->multiplier);
 				it->fl=(*loc).second.begin()->fl;
 				// std::cerr << "replaced: \n" << it << std::endl;
-				} else {
+				}
+			else {
 				// Careful with the multiplier: the object has been matched to the pattern
 				// without taking into account the top-level multiplier. So keep the multiplier
 				// of the thing we are replacing.
@@ -213,8 +217,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 				ind_forced.insert(index_map_t::value_type(Ex(it), it));
 			++it;
 
-			} else if( (sloc=comparator.subtree_replacement_map.find(it->name))
-		           !=comparator.subtree_replacement_map.end()) { // object wildcards
+			}
+		else if( (sloc=comparator.subtree_replacement_map.find(it->name))
+		         !=comparator.subtree_replacement_map.end()) { // object wildcards
 			//std::cerr << "srule : " << Ex(it) << std::endl;
 			multiplier_t tmpmult=*it->multiplier; // remember target multiplier
 			iterator tmp= tr.insert_subtree(it, (*sloc).second);
@@ -229,7 +234,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 			classify_indices(tmp, ind_subtree_free, ind_subtree_dummy);
 			ind_forced.insert(ind_subtree_free.begin(), ind_subtree_free.end());
 			ind_forced.insert(ind_subtree_dummy.begin(), ind_subtree_dummy.end());
-			} else ++it;
+			}
+		else ++it;
 		}
 
 	// If the replacement contains dummies, avoid clashes introduced when
@@ -260,7 +266,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 				tr.replace_index(indit->second,relabel.begin(), true);
 				++indit;
 				//				txtout << *(indit->first.begin()->name) << " vs " << *(the_key.begin()->name) << std::endl;
-				} while(indit!=must_be_empty.end() && tree_exact_equal(&kernel.properties, indit->first,the_key,-1));
+				}
+			while(indit!=must_be_empty.end() && tree_exact_equal(&kernel.properties, indit->first,the_key,-1));
 			}
 		}
 
@@ -302,7 +309,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 			tr.flatten(st);
 			st=tr.erase(st);
 			}
-		} else if(*lhs->name=="\\sum") {
+		}
+	else if(*lhs->name=="\\sum") {
 		for(unsigned int i=1; i<comparator.factor_locations.size(); ++i)
 			tr.erase(comparator.factor_locations[i]);
 
@@ -317,7 +325,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 			rename_replacement_dummies_called=true;
 			}
 
-		} else {
+		}
+	else {
 		multiply(repl.begin()->multiplier, *st->multiplier);
 		auto keep_parent_rel=st->fl.parent_rel;
 		st=tr.move_ontop(st, repl.begin()); // no need to keep the original repl tree

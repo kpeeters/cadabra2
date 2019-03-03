@@ -32,7 +32,8 @@ Algorithm::result_t collect_components::apply(iterator& st)
 					eval.merge_components(s1,s2);
 					s2=tr.erase(s2);
 					res=result_t::l_applied;
-					} else ++s2;
+					}
+				else ++s2;
 				}
 			break;
 			}

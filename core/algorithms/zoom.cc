@@ -53,13 +53,15 @@ Algorithm::result_t zoom::apply(iterator& it)
 			if(!hiding) {
 				current_ldots=tr.insert(sib, str_node("\\ldots"));
 				hiding=true;
-				} else {
+				}
+			else {
 				if(*current_ldots->name!="\\sum") // wrap single term in new sum node.
 					current_ldots=tr.wrap(tr.begin(current_ldots), str_node("\\sum"));
 				}
 			tr.reparent(current_ldots, sib, nxt);
 			sib=nxt;
-			} else {
+			}
+		else {
 			// Keep this term/factor visible.
 			hiding=false;
 			++sib;

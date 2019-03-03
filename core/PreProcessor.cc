@@ -116,7 +116,8 @@ unsigned int preprocessor::current_bracket_(bool deep) const
 		do {
 			if(accus[--i].bracket)
 				return accus[i].bracket;
-			} while(i>0 && deep);
+			}
+		while(i>0 && deep);
 		}
 	return 0;
 	}
@@ -242,11 +243,13 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 					++cur_pos;
 					c=tok_siblings;
 					return '@'; // FIXME: worst hack of them all, we're running out of tricks...
-					} else {
+					}
+				else {
 					cur_str[cur_pos]=tok_sequence;
 					c=tok_sequence; // FIXME: Another hack... (sequence)
 					}
-				} else return c;
+				}
+			else return c;
 			}
 
 		//	HERE: how do we force get_token to return a '*' for the space separating .... and b ?
@@ -256,11 +259,13 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 			if(candidate==0) candidate=' ';
 			++cur_pos;
 			continue;
-			} else if(c=='^' && candidate==' ') { // Isolated '^' with space prefixing it.
+			}
+		else if(c=='^' && candidate==' ') {   // Isolated '^' with space prefixing it.
 			cur_str[cur_pos]=tok_wedge;
 			++cur_pos;
 			return tok_wedge;
-			} else if(is_infix_operator_(c)) {
+			}
+		else if(is_infix_operator_(c)) {
 			if(candidate && candidate!=' ') {
 				--cur_pos;
 				return candidate;
@@ -270,7 +275,8 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 			candidate=c;
 			++cur_pos;
 			continue;
-			} else if(c=='@' && isdigit(cur_str[cur_pos+1]) ) { // eat labels completely
+			}
+		else if(c=='@' && isdigit(cur_str[cur_pos+1]) ) {   // eat labels completely
 			while(isdigit(cur_str[++cur_pos]));
 			continue;
 			}
@@ -283,7 +289,8 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 			--cur_pos;
 			if(candidate==' ' && default_is_product_()) return '*';
 			return candidate;
-			} else {
+			}
+		else {
 			std::string acplusone=cur.accu + (char)(c);
 			if( ( is_closing_bracket_(prev_token) && is_opening_bracket_(c) && cur.head_is_generated ) ||
 			      ( is_closing_bracket_(prev_token) && !is_infix_operator_(c) && !is_bracket_(c) && !is_link_(c) ) ||
@@ -355,7 +362,8 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 					show_and_throw_("Bracket mismatch.");
 					}
 				}
-			} else {
+			}
+		else {
 			// if we are unwinding to reach a different operator level, never unwind beyond
 			// a bracket (in that case, we have to push up again).
 			if(current_bracket_())
@@ -367,7 +375,8 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 		if(cb==0 || !usebracket || (onum==sizeof(orders) && bracket_reached && accus.back().accu.size()>0)) {
 			obrack="{";
 			cbrack="}";
-			} else bracket_strings_(cb, obrack, cbrack);
+			}
+		else bracket_strings_(cb, obrack, cbrack);
 
 		if(cur.parts.size()>1 || cur.order==order_factorial) { // More than one argument to the function.
 			if(cur.order<sizeof(orders)) {
@@ -384,17 +393,20 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 						else {
 							if(special) {
 								if(k>0) tmp+=obrack;
-								} else
+								}
+							else
 								tmp+=obrack;
 							tmp+=cur.parts[k];
 							if(special) {
 								if(k<cur.parts.size()-1) tmp+=cbrack;
-								} else
+								}
+							else
 								tmp+=cbrack;
 							}
 						}
 				generated_head=true;
-				} else {
+				}
+			else {
 				tmp=obrack;
 				for(unsigned int k=0; k<cur.parts.size(); ++k) {
 					tmp+=cur.parts[k];
@@ -402,7 +414,8 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 					}
 				tmp+=cbrack;
 				}
-			} else { // Function with only one argument.
+			}
+		else {   // Function with only one argument.
 			if(cur.parts.size()>0) {
 				bracket_strings_(cb, obrack, cbrack);
 				//				std::cout << cur.parts[0] << " : " << is_already_bracketed_(cur.parts[0]) << std::endl;
@@ -441,13 +454,16 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 					cur.accu+=obrack;
 					cur.accu+=tmp;
 					cur.accu+=cbrack;
-					} else
+					}
+				else
 					cur.accu+=tmp;
 				}
 			generated_head=false;
-			} else cur.accu+=tmp;
+			}
+		else cur.accu+=tmp;
 
-		} while(cur.order<onum && !bracket_reached);
+		}
+	while(cur.order<onum && !bracket_reached);
 
 	// Reset the head_is_generated flag, otherwise we end up with
 	// situations where e.g. a \prod{}{} node pushed into the parts
@@ -550,7 +566,8 @@ void preprocessor::parse_internal_()
 					cur.accu.erase();
 					cur.head_is_generated=false;
 					//					print_stack();
-					} else if(onum<cur.order) {
+					}
+				else if(onum<cur.order) {
 					std::string tmp=cur.accu;
 					cur.accu.erase();
 					cur.head_is_generated=false;
@@ -562,7 +579,8 @@ void preprocessor::parse_internal_()
 					cur.parts.push_back(tmp);
 					cur.order=onum;
 					//					std::cerr << "next character:" << cur_str[cur_pos+1] << std::endl;
-					} else {
+					}
+				else {
 					//					std::cerr << "need to unwind from " << cur.order << " to " << onum << std::endl;
 					if(unwind_(onum, 0, false) || onum<cur.order) {
 						//						std::cerr << "lifting up again, previous was " << cur.accu << ", " << cur.order << std::endl;
@@ -602,7 +620,8 @@ void preprocessor::parse_internal_()
 			else                     cur.is_index=false;
 			cur.erase();
 			cur.bracket=0;
-			} else if((ind=is_closing_bracket_(c))) {
+			}
+		else if((ind=is_closing_bracket_(c))) {
 			//			std::cerr << "closing bracket encountered " << ind << " " << (char)cur.bracket << " " << (char)current_bracket_() << std::endl;
 			if(ind==1 && cur.accu.size()==0 && cur.parts.size()==0)
 				cur.parts.push_back(cur.accu); // empty lists count
@@ -611,14 +630,16 @@ void preprocessor::parse_internal_()
 			//			std::cerr << "is index now " << cur.is_index << std::endl;
 			cur.bracket=0;
 			//			cur.is_index=false; // TEST
-			} else if(c==' ') {
+			}
+		else if(c==' ') {
 			//			std::cout << "space\n";
 			if(cur.accu.size()>0) {
 				cur.parts.push_back(cur.accu);
 				cur.accu.erase();
 				cur.head_is_generated=false;
 				}
-			} else cur.accu+=c;
+			}
+		else cur.accu+=c;
 		if(c=='\"')
 			verbatim_=true;
 

@@ -578,7 +578,8 @@ namespace yngtab {
 		if(column_number==0) {
 			--row_number;
 			column_number=tab->rows[row_number].size()-1;
-			} else --column_number;
+			}
+		else --column_number;
 		return (*this);
 		}
 
@@ -589,7 +590,8 @@ namespace yngtab {
 		if(column_number==0) {
 			--row_number;
 			column_number=tab->rows[row_number].size()-1;
-			} else --column_number;
+			}
+		else --column_number;
 		return tmp;
 		}
 
@@ -614,7 +616,8 @@ namespace yngtab {
 			if(column_number==0) {
 				--row_number;
 				column_number=tab->rows[row_number].size()-1;
-				} else --column_number;
+				}
+			else --column_number;
 			--n;
 			}
 		return (*this);
@@ -721,7 +724,8 @@ namespace yngtab {
 				if((*this)(r,c) > (*this)(r,c+1) )
 					return std::pair<int, int>(r,c);
 				}
-			} while(r>0);
+			}
+		while(r>0);
 		return std::pair<int,int>(-1,-1);
 		}
 
@@ -755,7 +759,8 @@ namespace yngtab {
 					add_tableau(ntab);
 					}
 				thetab=storage.erase(thetab);
-				} else ++thetab;
+				}
+			else ++thetab;
 			}
 		return already_standard;
 		}
@@ -811,7 +816,8 @@ namespace yngtab {
 				newmult*=combin::factorial(column_size(c));
 			for(unsigned int i=0; i<sym.size(); ++i)
 				sym.set_multiplicity(i, sym.signature(i)*newmult);
-			} else {
+			}
+		else {
 			sym.permute_blocks.clear();
 			for(unsigned int c=0; c<row_size(0); ++c) {
 				unsigned int r=0;

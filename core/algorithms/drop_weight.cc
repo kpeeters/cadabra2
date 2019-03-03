@@ -67,7 +67,8 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 			      (keepthem==false && weight==gmn->value(kernel, it, label))) {
 				zero(it->multiplier);
 				}
-			} else {
+			}
+		else {
 			sibling_iterator sib=tr.begin(it);
 			while(sib!=tr.end(it)) {
 				const WeightBase *gnb=kernel.properties.get_composite<WeightBase>(sib, label);
@@ -78,7 +79,8 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 					try {
 						val=gnb->value(kernel, sib, label);
 						// std::cerr << *sib->name << " has weight " << val << std::endl;
-						} catch(WeightInherit::WeightException& we) {
+						}
+					catch(WeightInherit::WeightException& we) {
 						// std::cerr << *sib->name << " has undeterminable weight " << std::endl;
 						// If we cannot determine the weight of this term because this is a sum of
 						// terms with different weights: keep when in @drop, drop when in @keep.
@@ -87,12 +89,15 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 					if( (no_val==false && ( (keepthem==true && weight!=val) || (keepthem==false && weight==val) ) )
 					      || (no_val==true && keepthem==true) ) {
 						sib=tr.erase(sib);
-						} else ++sib;
-					} else {
+						}
+					else ++sib;
+					}
+				else {
 					// std::cerr << "NO WeightBase for child " << Ex(sib) << std::endl;
 					if( (keepthem==true && weight!=0) || (keepthem==false && weight==0) ) {
 						sib=tr.erase(sib);
-						} else ++sib;
+						}
+					else ++sib;
 					}
 				}
 			if(tr.number_of_children(it)==0)
@@ -103,7 +108,8 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 				}
 			res=result_t::l_applied;
 			}
-		} else {
+		}
+	else {
 		assert(wgh);
 		if((keepthem==true && weight!=wgh->value(kernel, it, label)) ||
 		      (keepthem==false && weight==wgh->value(kernel, it, label))) {

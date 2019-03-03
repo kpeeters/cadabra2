@@ -153,7 +153,8 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 			++number_of_nonindex_children;
 			if(*ch->name=="\\prod")
 				++number_of_nonindex_children;
-			} else ++number_of_index_children;
+			}
+		else ++number_of_index_children;
 		++ch;
 		}
 
@@ -191,7 +192,8 @@ void DisplayTerminal::print_children(std::ostream& str, Ex::iterator it, int ski
 				                             current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_),
 				                      current_parent_rel_);
 			else str  << "}";
-			} else str << " ";
+			}
+		else str << " ";
 
 		previous_bracket_=current_bracket_;
 		previous_parent_rel_=current_parent_rel_;
@@ -209,9 +211,11 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int m
 			mult *= -1;
 			}
 		str << " " << mult * it->multiplier->get_num() << "/" << it->multiplier->get_den() << " ";
-		} else if(mult * (*it->multiplier)==-1) {
+		}
+	else if(mult * (*it->multiplier)==-1) {
 		str << "-";
-		} else {
+		}
+	else {
 		str << mult * (*it->multiplier);
 		}
 
@@ -224,35 +228,35 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int m
 					if(denom!=1) {
 						str << "\\frac{" << -(it->multiplier->get_num()) << "}{"
 						 << it->multiplier->get_den() << "}";
-						}
+							}
 					else {
 						str << -(*it->multiplier);
+							}
 						}
-					}
 				else                    turned_one=true;
-				}
+					}
 			else	{
 				if(denom!=1) {
 					str << "(\\frac{" << it->multiplier->get_num() << "}{"
 					 << it->multiplier->get_den() << "})";
-					}
+						}
 				else if(*it->multiplier==-1) {
 					str << "-";
 				turned_one=true;
-					}
+						}
 				else {
 					str << "(" << *it->multiplier << ")";
+						}
 					}
 				}
-			}
 		else {
 			if(denom!=1) {
 				str << "\\frac{" << it->multiplier->get_num() << "}{"
 				 << it->multiplier->get_den() << "}";
-				}
+					}
 			else
 				str << *it->multiplier;
-			}
+				}
 
 		if(!turned_one && !(*it->name=="1"))
 		str << "*"; */

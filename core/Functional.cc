@@ -16,7 +16,8 @@ namespace cadabra {
 					return;
 				sib=nxt;
 				}
-			} else {
+			}
+		else {
 			f(it);
 			}
 		}
@@ -48,7 +49,8 @@ namespace cadabra {
 
 			if(including_head==false && walk==it)
 				break;
-			} while(walk!=last);
+			}
+		while(walk!=last);
 
 		return tr.end();
 		}
@@ -65,7 +67,8 @@ namespace cadabra {
 				++sib;
 				}
 			return tr.end();
-			} else {
+			}
+		else {
 			return f(it);
 			}
 		}

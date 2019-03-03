@@ -227,9 +227,9 @@ void print_array(int *array, int m, int n, int nl)
 int equal_list(int *list1, int *list2, int n) {
 	while(n--) { * Run from n-1 to 0 *
 	if(*(list1+n) != *(list2+n)) return(0); * different *
-	}
+		}
 	return(1); * equal *
-	}
+		}
 */
 
 /* KP, 7 May 2006 */
@@ -250,7 +250,7 @@ int equal_list(int *list1, int *list2, int n)
 /* Old code
 void copy_list(int *list1, int *list2, int n) {
 	while(n--) *(list2+n) = *(list1+n);
-	}
+		}
 */
 
 /* KP, 7 May 2006 */
@@ -312,7 +312,7 @@ int position_list(int *matrix, int m, int *row, int n)
 /* Old code
 void zeros(int *list, int n) {
 	while(n--) *(list+n) = 0;
-	}
+		}
 */
 
 /* KP, 7 May 2006 */
@@ -961,7 +961,8 @@ int perm_member(int *p, int *base, int bl, int *GS, int m, int n)
 			product(p, ip, pp, n);
 			stabilizer(base, 1, GS, m, n, stab, &sl);
 			ret = perm_member(pp, base+1, bl-1, stab,sl,n);
-			} else ret = 0;
+			}
+		else ret = 0;
 
 		free(pp);
 		free(ip);
@@ -1169,7 +1170,8 @@ void schreier_sims_step(int *base, int bl, int *GS, int m, int n,
 		if (position(gamma, oldDeltai, oldDeltail)) {
 			copy_list(T, genset, mm*n);
 			gensetl=mm;
-			} else {
+			}
+		else {
 			copy_list(Si, genset, Sil*n);
 			gensetl=Sil;
 			}
@@ -1489,7 +1491,8 @@ void SGSofdummyset(int *dummies, int dl, int sym, int n,
 			/* Keep positive sign */
 			}
 		*KDl = 2*dpl-1;
-		} else if (sym == -1) {
+		}
+	else if (sym == -1) {
 		for (i=0; i<dpl; i++) {
 			/* Copy the identity */
 			copy_list(range_perm, KD2+i*n, n);
@@ -1501,10 +1504,12 @@ void SGSofdummyset(int *dummies, int dl, int sym, int n,
 			KD2[i*n+n-1] = n-1;
 			}
 		*KDl = 2*dpl-1;
-		} else if (sym == 0) {
+		}
+	else if (sym == 0) {
 		/* Do nothing */
 		*KDl = dpl-1;
-		} else {
+		}
+	else {
 		/* Unknown value of sym */
 		}
 	/* KD */
@@ -1580,12 +1585,14 @@ void movedummyset(int firstd, int *dummies, int dl, int)
 	pos = position(firstd, dummies, dl)-1;
 	if (pos==-1) { /* firstd not in dummies */
 		/* Do nothing */
-		} else {
+		}
+	else {
 		int tmp;
 		/* Swap all pairs if firstd found as second */
 		if (pos%2==0) {
 			/* 1st member: Do nothing */
-			} else {
+			}
+		else {
 			pos=pos-1;
 			/* 2nd member: Swap all pairs */
 			for (j=0; j<dl/2; j++) {
@@ -1597,7 +1604,8 @@ void movedummyset(int firstd, int *dummies, int dl, int)
 		/* Exchange position of pair with first pair */
 		if (pos==0) {
 			/* 1st pair: Do nothing */
-			} else {
+			}
+		else {
 			/* Exchange two pairs of dummies */
 			tmp=dummies[0];
 			dummies[0]=firstd;
@@ -1627,10 +1635,12 @@ void moverepeatedset(int firstd, int *repes, int rl)
 	pos = position(firstd, repes, rl)-1;
 	if (pos==-1) { /* firstd not in repes */
 		/* Do nothing */
-		} else {
+		}
+	else {
 		if (pos==0) {
 			/* 1st index: Do nothing */
-			} else {
+			}
+		else {
 			/* Exchange two positions */
 			repes[pos] = repes[0];
 			repes[0] = firstd;
@@ -2124,7 +2134,8 @@ void double_coset_rep(int *g, int n, int *base, int bl, int *GS, int m,
 			SGSD(vds, vdsl, dummies, dl, mQ,
 			     vrs, vrsl, repes, rl, n,
 			     p[i-1], KD, &KDl, bD, &bDl);
-			} else { /* Do nothing */
+			}
+		else {   /* Do nothing */
 #ifdef VERBOSE_DOUBLE						/*PPC*/
 			printf("Rearrangement of base of D not required.\n");	/*PPC*/
 #endif								/*PPC*/
@@ -2273,7 +2284,8 @@ void double_coset_rep(int *g, int n, int *base, int bl, int *GS, int m,
 	/* Result */
 	if (result==0) {
 		zeros(perm1, n);
-		} else {
+		}
+	else {
 		l=ALPHAstep[i-1];
 		F2(ALPHA[l].s, g, ALPHA[l].d, perm1, n);
 		}
@@ -2464,7 +2476,8 @@ void canonical_perm_ext(int *PERM, int n,
 		                 tmpbase, &tmpbl);
 		schreier_sims(tmpbase, tmpbl, GS, m, n,
 		              newbase, &newbl, newGS, &newm, &num);
-		} else {
+		}
+	else {
 		copy_list(base, newbase, bl);
 		newbl=bl;
 		copy_list(GS, *newGS, m*n);
@@ -2494,7 +2507,8 @@ void canonical_perm_ext(int *PERM, int n,
 
 	if (dl+rl==0) { /* No drummy indices */
 		copy_list(PERM1, CPERM, n);
-		} else {
+		}
+	else {
 
 		complement(newbase, newbl, freeps, fl, 1, tmpbase, &tmpbl);
 		copy_list(tmpbase, newbase, tmpbl);

@@ -43,7 +43,8 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 		indent_line=std::string(mres[1].first, mres[1].second);
 		end_of_line=std::string(mres[3].first, mres[3].second);
 		line_stripped=std::string(mres[2]);
-		} else {
+		}
+	else {
 		indent_line="";
 		end_of_line="\n";
 		line_stripped=line;
@@ -80,7 +81,8 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			op="";
 			return ret;
 			}
-		} else {
+		}
+	else {
 		// If we are a Cadabra continuation, add to the rhs without further processing
 		// and return an empty line immediately.
 		if(lhs!="") {
@@ -115,7 +117,8 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			rhs=line_stripped.substr(found+2);
 			op=":=";
 			return "::empty";
-			} else {
+			}
+		else {
 			line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 			ret = indent_line + line_stripped.substr(0,found) + " = Ex(r'"
 			      + escape_quotes(line_stripped.substr(found+2)) + "')";
@@ -124,7 +127,8 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			if(lastchar==";" && indent_line.size()==0)
 				ret = ret + "; display("+objname+")";
 			}
-		} else { // {a,b,c}::Indices(real, parent=holo);
+		}
+	else {   // {a,b,c}::Indices(real, parent=holo);
 		found = line_stripped.find("::");
 		if(found!=std::string::npos) {
 			std::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
@@ -138,7 +142,8 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 					ret = indent_line + "__cdbtmp__ = "+propname
 					      +"(Ex(r'"+escape_quotes(line_stripped.substr(0,found))
 					      +"'), Ex(r'" +escape_quotes(argument) + "') )";
-					} else {
+					}
+				else {
 					// no arguments
 					line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 					ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2)
@@ -146,11 +151,13 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 					}
 				if(lastchar==";")
 					ret += "; display(__cdbtmp__)";
-				} else {
+				}
+			else {
 				// inconsistent, who knows what will happen...
 				ret = line; // inconsistent; you are asking for trouble.
 				}
-			} else {
+			}
+		else {
 			if(lastchar==";")
 				ret = indent_line + "_ = " + line_stripped + " display(_)";
 			else

@@ -103,7 +103,8 @@ Algorithm::result_t map_sympy::apply(iterator& it)
 		// std::cerr << "After erasing " << Ex(it) << std::endl;
 
 		return result_t::l_applied;
-		} else {
+		}
+	else {
 		sympy::apply(kernel, tr, it, wrap, args_, "");
 		it.skip_children();
 		return result_t::l_applied;

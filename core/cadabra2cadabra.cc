@@ -40,7 +40,8 @@ int main(int argc, char **argv)
 	if(py_file!="") {
 		std::ofstream pyfile(py_file);
 		pyfile << pycode;
-		} else {
+		}
+	else {
 		std::cout << pycode;
 		}
 

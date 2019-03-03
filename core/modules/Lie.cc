@@ -38,7 +38,8 @@ unsigned int exchange::possible_singlets(exptree& tr, exptree::iterator it)
 				topleth.push_back(thetab.row_size(rws));
 			lie.plethysm(topleth, single_tensor_rep, idts[i].traceless!=0,
 			             (thetab.selfdual_column==0)?0:thetab.selfdual_column/abs(thetab.selfdual_column));
-			} else { // vector representation
+			}
+		else {   // vector representation
 			LiE::LiE_t::rep_t tmp;
 			tmp.weight.resize(lie.algebra_dim,0);
 			tmp.weight[0]=1;
@@ -62,7 +63,8 @@ unsigned int exchange::possible_singlets(exptree& tr, exptree::iterator it)
 
 		if(idts[i].tensors.size()==1) { // we're done
 			groupreps.push_back(single_tensor_rep);
-			} else {
+			}
+		else {
 			LiE::LiE_t::reps_t multi_tensor_rep;
 			int sign=idts[i].extra_sign + (idts[i].spino!=0);
 			if(idts[i].comm && idts[i].comm->sign()==-1)

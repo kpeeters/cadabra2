@@ -66,14 +66,16 @@ namespace cadabra {
 				if (comma2)
 					ret->flatten_and_erase(loc);
 				return ret;
-				} else {
+				}
+			else {
 				auto ret = std::make_shared<Ex>(top2);
 				auto loc = ret->prepend_child(ret->begin(), ex1->begin());
 				if (comma1)
 					ret->flatten_and_erase(loc);
 				return ret;
 				}
-			} else {
+			}
+		else {
 			auto ret = std::make_shared<Ex>(*ex1);
 			if (*ret->begin()->name != "\\sum")
 				ret->wrap(ret->begin(), str_node("\\sum"));
@@ -126,7 +128,8 @@ namespace cadabra {
 				auto it = ret->begin();
 				cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 				return ret;
-				} else return ex2;
+				}
+			else return ex2;
 			}
 		if (ex2->size() == 0) return ex1;
 
@@ -162,12 +165,14 @@ namespace cadabra {
 		auto obj = scope[nm.c_str()];
 		try {
 			return obj.cast<Ex_ptr>();
-			} catch (const pybind11::cast_error& e) {
+			}
+		catch (const pybind11::cast_error& e) {
 			try {
 				auto exnode = obj.cast<ExNode>();
 				auto ret = std::make_shared<Ex>(exnode.it);
 				return ret;
-				} catch (const pybind11::cast_error& e) {
+				}
+			catch (const pybind11::cast_error& e) {
 				std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
 				}
 			}
@@ -368,7 +373,8 @@ namespace cadabra {
 			//		std::cerr << "for " << ex->begin() << std::endl;
 			use = ex->iterator_from_path(path, ex->begin());
 			//		std::cerr << "which is " << use << std::endl;
-			} else {
+			}
+		else {
 			use = en.it;
 			}
 
@@ -436,7 +442,8 @@ namespace cadabra {
 
 		try {
 			str >> parser;
-			} catch (std::exception& except) {
+			}
+		catch (std::exception& except) {
 			throw ParseException("Cannot parse");
 			}
 		parser.finalise();
@@ -477,7 +484,8 @@ namespace cadabra {
 			auto locals = get_locals();
 			if (scope_has(locals, "post_process")) {
 				post_process = locals["post_process"];
-				} else {
+				}
+			else {
 				auto globals = get_globals();
 				if (scope_has(globals, "post_process"))
 					post_process = globals["post_process"];

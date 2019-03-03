@@ -179,7 +179,8 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 			result = catchOut.str();
 			catchOut.clear();
 			}
-		} catch(pybind11::error_already_set& ex) {
+		}
+	catch(pybind11::error_already_set& ex) {
 #ifdef DEBUG
 		std::cerr << "Server::run_string: exception " << ex.what() << std::endl;
 #endif
@@ -234,12 +235,27 @@ void Server::wait_for_job()
 
 	// snoop::log(snoop::info) << "Waiting for blocks" << snoop::flush;
 
+#ifdef DEBUG
+	std::cerr << "Server::wait_for__job: start" << std::endl;
+#endif
+
+#ifndef ENABLE_JUPYTER
+	// FIXME: why do we need this for the normal Cadabra server, but does
+	// it hang in the Jupyter server?
 	pybind11::gil_scoped_acquire acquire;
+#endif
 
 	while(true) {
+#ifdef DEBUG
+		std::cerr << "Server::wait_for__job: locking" << std::endl;
+#endif
 		std::unique_lock<std::mutex> lock(block_available_mutex);
-		while(block_queue.size()==0)
+		while(block_queue.size()==0) {
+#ifdef DEBUG
+			std::cerr << "Server::wait_for__job: waiting" << std::endl;
+#endif
 			block_available.wait(lock);
+			}
 
 		Block block = block_queue.front();
 		block_queue.pop();
@@ -257,7 +273,8 @@ void Server::wait_for_job()
 			current_id =block.cell_id;
 			block.output = run_string(block.input);
 			on_block_finished(block);
-			} catch(std::runtime_error& ex) {
+			}
+		catch(std::runtime_error& ex) {
 #ifdef DEBUG
 			std::cerr << "Exception caught, acquiring lock" << std::endl;
 #endif
@@ -273,7 +290,8 @@ void Server::wait_for_job()
 			lock.unlock();
 			block.error = ex.what();
 			on_block_error(block);
-			} catch(std::exception& ex) {
+			}
+		catch(std::exception& ex) {
 			server_stopwatch.stop();
 			// snoop::log(snoop::info) << "System exception" << snoop::flush;
 			lock.lock();
@@ -343,21 +361,24 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		block_queue.push(Block(hdl, code, id));
 		block_available.notify_one();
-		} else if(msg_type=="execute_interrupt") {
+		}
+	else if(msg_type=="execute_interrupt") {
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		stop_block();
 		//		std::cout << "clearing block queue" << std::endl;
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
 		//snoop::log(snoop::warn) << "Job stop requested." << snoop::flush;
-		} else if(msg_type=="init") {
+		}
+	else if(msg_type=="init") {
 		// Stop any running blocks.
 		std::unique_lock<std::mutex> lock(block_available_mutex);
 		stop_block();
 		std::queue<Block> empty;
 		std::swap(block_queue, empty);
 
-		} else if(msg_type=="exit") {
+		}
+	else if(msg_type=="exit") {
 		exit(-1);
 		}
 	}
@@ -489,7 +510,8 @@ void Server::run()
 
 		pybind11::gil_scoped_release release;
 		wserver.run();
-		} catch(websocketpp::exception& ex) {
+		}
+	catch(websocketpp::exception& ex) {
 		std::cerr << "cadabra-server: websocket exception " << ex.code() << " " << ex.what() << std::endl;
 		}
 	}

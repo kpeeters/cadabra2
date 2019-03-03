@@ -30,7 +30,8 @@ void tab_basics::tree_to_numerical_tab(iterator tab1, uinttab_t& one)
 				num_to_it.push_back(sib2);
 				++sib2;
 				}
-			} else {
+			}
+		else {
 			num_to_it.push_back(sib);
 			}
 		++sib;
@@ -51,7 +52,8 @@ void tab_basics::tree_to_numerical_tab(iterator tab1, uinttab_t& one)
 				one.add_box(currow, find_obj(Ex(sib2)) );
 				++sib2;
 				}
-			} else {
+			}
+		else {
 			one.add_box(currow, find_obj(Ex(sib)) );
 			}
 		++sib;
@@ -107,9 +109,9 @@ void tab_basics::tabs_to_tree(uinttabs_t& tabs, iterator top, iterator tabpat, b
 				iterator tmp=tr.append_child(tt, str_node("\\comma"));
 				for(unsigned int c=0; c<rs; ++c)
 					tr.append_child(tmp, num_to_it[(*tabit)(r,c)]);
-					}
+				}
 			}
-	
+
 next_tab:
 		++tabit;
 		}

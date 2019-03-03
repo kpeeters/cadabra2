@@ -39,7 +39,8 @@ TableauBase::tab_t PartialDerivative::get_tab(const Properties& properties, Ex& 
 			++indit;
 			}
 		return tab;
-		} else {
+		}
+	else {
 		return Derivative::get_tab(properties, tr, it, num-1);
 		}
 	}

@@ -105,7 +105,8 @@ Algorithm::result_t map_mma::apply(iterator& it)
 		// std::cerr << "After erasing " << Ex(it) << std::endl;
 
 		return result_t::l_applied;
-		} else {
+		}
+	else {
 		MMA::apply_mma(kernel, tr, it, wrap, args, "");
 		it.skip_children();
 		return result_t::l_applied;

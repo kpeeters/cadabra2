@@ -64,7 +64,8 @@ Algorithm::result_t evaluate::apply(iterator& it)
 			{
 			unwrap_scalar_in_components_node(walk);   // this is a scalar
 			return walk;
-			} else if(is_component(walk)) return walk;
+			}
+		else if(is_component(walk)) return walk;
 		else if(*(walk->name)=="\\sum")   walk = handle_sum(walk);
 		else if(*(walk->name)=="\\prod" || *(walk->name)=="\\wedge" || *(walk->name)=="\\frac")
 			walk = handle_prod(walk);
@@ -76,7 +77,8 @@ Algorithm::result_t evaluate::apply(iterator& it)
 				const EpsilonTensor *eps = kernel.properties.get<EpsilonTensor>(walk);
 				if(eps) {
 					walk = handle_epsilon(walk);
-					} else if(*walk->name!="\\equals" && walk->is_index()==false) {
+					}
+				else if(*walk->name!="\\equals" && walk->is_index()==false) {
 					if(! (only_rhs && tr.is_head(walk)==false && ( *(tr.parent(walk)->name)=="\\equals" || *(tr.parent(walk)->name)=="\\arrow" ) && tr.index(walk)==0) ) {
 						index_map_t empty;
 						sibling_iterator tmp(walk);
@@ -115,7 +117,8 @@ bool evaluate::is_component(iterator it) const
 			return true;
 			}
 		it=tr.parent(it);
-		} while(tr.is_valid(it));
+		}
+	while(tr.is_valid(it));
 	return false;
 	}
 
@@ -148,7 +151,8 @@ Ex::iterator evaluate::handle_sum(iterator it)
 
 		if(*sib->multiplier==0) { // zero terms can be removed
 			tr.erase(sib);
-			} else if(is_component(sib)==false) {
+			}
+		else if(is_component(sib)==false) {
 			index_map_t empty;
 			handle_factor(sib, empty);
 			}
@@ -334,7 +338,8 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 					while(fi!=ind_free.end() && fiold->first==fi->first)
 						++fi;
 					}
-				} else {
+				}
+			else {
 				while(fi!=full_ind_free.end()) {
 					for(auto& r: subs.comparator.index_value_map) {
 						if(fi->first == r.first) {
@@ -351,7 +356,8 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 			repl.append_child(el, obj.begin());
 
 			return true; // Cannot yet abort the do_list loop.
-			} else {
+			}
+		else {
 			// TRACE: There is no rule which matches this factor. This means that
 			// we want to keep all components?
 			}
@@ -364,7 +370,8 @@ Ex::iterator evaluate::handle_factor(sibling_iterator sib, const index_map_t& fu
 		std::cerr << "No single rule matched " << Ex(sib) << std::endl;
 #endif
 		sib=dense_factor(sib, ind_free, ind_dummy);
-		} else {
+		}
+	else {
 		merge_component_children(repl.begin());
 
 #ifdef DEBUG
@@ -405,7 +412,8 @@ Ex::iterator evaluate::dense_factor(iterator it, const index_map_t& ind_free, co
 			auto val=Ex(fi->second);
 			val.begin()->fl.parent_rel=str_node::parent_rel_t::p_none;
 			values.push_back(val);
-			} else {
+			}
+		else {
 			for(const auto& ex: id->values)
 				values.push_back(ex);
 			}
@@ -486,7 +494,8 @@ void evaluate::merge_component_children(iterator it)
 					tv1=tr.wrap(tv1, str_node("\\sum"));
 				tr.append_child(tv1, tv2);
 				cv2=tr.erase(cv2);
-				} else ++cv2;
+				}
+			else ++cv2;
 			}
 		++cv1;
 		}
@@ -826,7 +835,8 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 						fromj = (*fi).second;
 						if(fromj == cb_j)
 							++cb_j;
-						} else {
+						}
+					else {
 						++cb_j;
 						}
 					// std::cerr << "cb: " << i << ", " << fromj << std::endl;
@@ -888,9 +898,11 @@ Ex::iterator evaluate::handle_derivative(iterator it)
 		++nxt;
 		if(ind_dummy.find(Ex(pch))!=ind_dummy.end()) {
 			tr.erase(pch);
-			} else if(kernel.properties.get<Coordinate>(pch, true)!=0) {
+			}
+		else if(kernel.properties.get<Coordinate>(pch, true)!=0) {
 			tr.erase(pch);
-			} else
+			}
+		else
 			tr.move_before(ivalues, pch);
 		pch=nxt;
 		}
@@ -993,7 +1005,8 @@ void evaluate::simplify_components(iterator it)
 		if(nd->is_zero()) {
 			// std::cerr << "component zero " << nd.node << std::endl;
 			tr.erase(eqs);
-			} else {
+			}
+		else {
 			// std::cerr << "component non-zero " << nd.node << std::endl;
 			}
 		return true;
@@ -1036,7 +1049,8 @@ std::set<Ex, tree_exact_less_obj> evaluate::dependencies(iterator it)
 				cpy.begin()->fl.parent_rel=str_node::p_none;
 				one(cpy.begin()->multiplier);
 				ret.insert(cpy);
-				} else {
+				}
+			else {
 				auto arg_deps=dependencies(nd);
 				if(arg_deps.size()>0)
 					for(const auto& new_dep: arg_deps)
@@ -1263,7 +1277,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 				if(tr.equal_subtree(ivalue1,ivalue2)) {
 					tr.erase(ivalue1);
 					tr.erase(ivalue2);
-					} else {
+					}
+				else {
 					tr.erase(it1);
 					}
 				return true;

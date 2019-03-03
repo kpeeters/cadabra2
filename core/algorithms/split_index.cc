@@ -11,7 +11,8 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	if(*(top->name)!="\\comma") {
 		std::cout << "not comma" << std::endl;
 		throw ArgumentException("split_index: Need a list of three index names.");
-		} else if(triple.number_of_children(top)!=3) {
+		}
+	else if(triple.number_of_children(top)!=3) {
 		std::cout << "not 3" << std::endl;
 		throw ArgumentException("split_index: Need a list of three (no more, no less) index names.");
 		}
@@ -22,7 +23,8 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	if(iname->is_integer()) {
 		part1_is_number=true;
 		num1=to_long(*(iname->multiplier));
-		} else {
+		}
+	else {
 		part1_class=kernel.properties.get<Indices>(iname, true);
 		part1_coord=kernel.properties.get<Coordinate>(iname, true);
 		if(part1_coord) part1_coord_node=iname;
@@ -31,7 +33,8 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 	if(iname->is_integer()) {
 		part2_is_number=true;
 		num2=to_long(*(iname->multiplier));
-		} else {
+		}
+	else {
 		part2_class=kernel.properties.get<Indices>(iname, true);
 		part2_coord=kernel.properties.get<Coordinate>(iname, true);
 		if(part2_coord) part2_coord_node=iname;
@@ -76,9 +79,11 @@ Algorithm::result_t split_index::apply(iterator& it)
 					if(part1_is_number) {
 						node_integer(current->second, num1);
 						//						(*prs).second->name=name_set.insert(to_string(num1)).first;
-						} else if(part1_coord) {
+						}
+					else if(part1_coord) {
 						(*current).second=tr.replace_index((*current).second, part1_coord_node, true);
-						} else {
+						}
+					else {
 						//						txtout << "going to replace" << std::endl;
 						(*current).second=tr.replace_index((*current).second, dum1.begin(), true);
 						//						txtout << "replaced" << std::endl;
@@ -94,9 +99,11 @@ Algorithm::result_t split_index::apply(iterator& it)
 					if(part2_is_number) {
 						node_integer(current->second, num2);
 						//						(*prs).second->name=name_set.insert(to_string(num2)).first;
-						} else if(part2_coord) {
+						}
+					else if(part2_coord) {
 						(*current).second=tr.replace_index((*current).second, part2_coord_node, true);
-						} else tr.replace_index((*current).second,dum2.begin(), true);
+						}
+					else tr.replace_index((*current).second,dum2.begin(), true);
 					++current;
 					}
 				rep.append_child(rep.begin(), workcopy.begin());

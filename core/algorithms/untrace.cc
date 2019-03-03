@@ -63,7 +63,8 @@ Algorithm::result_t untrace::apply(iterator& trloc)
 							move_out=false;
 							break;
 							}
-						} else {
+						}
+					else {
 						// no Indices property known, better be safe.
 						move_out=false;
 						break;

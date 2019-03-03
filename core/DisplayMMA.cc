@@ -164,9 +164,11 @@ bool DisplayMMA::needs_brackets(Ex::iterator it)
 	if(*tree.parent(it)->name=="\\prod" || *tree.parent(it)->name=="\\frac" || *tree.parent(it)->name=="\\pow") {
 		if(*it->name=="\\sum" || *it->name=="\\prod") return true;
 		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || child=="\\sum" || child=="\\prod" || child=="\\pow")  ) return true;
-		} else if(it->fl.parent_rel==str_node::p_none) {
+		}
+	else if(it->fl.parent_rel==str_node::p_none) {
 		if(*it->name=="\\sum") return false;
-		} else {
+		}
+	else {
 		if(*it->name=="\\sum")  return true;
 		if(*it->name=="\\prod") return true;
 		}
@@ -285,10 +287,12 @@ void DisplayMMA::print_multiplier(std::ostream& str, Ex::iterator it)
 		else
 			str << it->multiplier->get_num();
 		str << "/" << it->multiplier->get_den();
-		} else if(*it->multiplier==-1) {
+		}
+	else if(*it->multiplier==-1) {
 		str << "-";
 		suppress_star=true;
-		} else {
+		}
+	else {
 		str << *it->multiplier;
 		}
 
@@ -667,7 +671,8 @@ void DisplayMMA::import(Ex& ex)
 						}
 					if(!removed)
 						++args;
-					} else
+					}
+				else
 					++args;
 				}
 			//				std::cerr << "stripping from " << *it->name << std::endl;

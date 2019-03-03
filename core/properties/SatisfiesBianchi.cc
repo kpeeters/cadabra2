@@ -54,7 +54,8 @@ TableauBase::tab_t SatisfiesBianchi::get_tab(const Properties& properties, Ex& t
 			for(unsigned int c=0; c<thetab.row_size(r); ++c)
 				thetab(r,c)+=1;
 		thetab.add_box(0, 0);
-		} else {
+		}
+	else {
 		index_iterator ii=index_iterator::begin(properties, it);
 		unsigned int pos=0;
 		while(ii!=index_iterator::end(properties, it)) {

@@ -29,7 +29,8 @@ Algorithm::result_t split_gamma::apply(iterator& it)
 	if(on_back) {
 		firstgam =work.append_child(prodnode, it);
 		secondgam=work.append_child(prodnode, *it);
-		} else {
+		}
+	else {
 		secondgam=work.append_child(prodnode, *it);
 		firstgam =work.append_child(prodnode, it);
 		}
@@ -37,7 +38,8 @@ Algorithm::result_t split_gamma::apply(iterator& it)
 	if(on_back) {
 		specind=work.end(firstgam);
 		--specind;
-		} else specind=work.begin(firstgam);
+		}
+	else specind=work.begin(firstgam);
 	work.append_child(secondgam, (iterator)(specind));
 	work.erase(specind);
 
@@ -52,7 +54,8 @@ Algorithm::result_t split_gamma::apply(iterator& it)
 	if(on_back) {
 		specind=work.end(maxgam);
 		--specind;
-		} else specind=work.begin(maxgam);
+		}
+	else specind=work.begin(maxgam);
 	iterator newprod=work.insert(maxgam, str_node("\\prod"));
 	sibling_iterator fr=maxgam, to=fr;
 	++to;

@@ -74,7 +74,8 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 				++powch;
 				iterator newch= expsum.append_child(expsumit, iterator(powch));
 				newch->fl.bracket=str_node::b_round;
-				} else {
+				}
+			else {
 				expsum.append_child(expsumit, str_node("1", str_node::b_round));
 				}
 			assert(*((*thisbin1).second->multiplier)==1);
@@ -95,7 +96,8 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 							++powch;
 							iterator newch=expsum.append_child(expsumit, iterator(powch));
 							newch->fl.bracket=str_node::b_round;
-							} else {
+							}
+						else {
 							expsum.append_child(expsumit, str_node("1", str_node::b_round));
 							}
 						factor_hash_iterator_t tmp=thisbin2;
@@ -107,8 +109,10 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 						factor_hash.erase(thisbin2);
 						thisbin2=tmp;
 						res=result_t::l_applied;
-						} else ++thisbin2;
-					} else ++thisbin2;
+						}
+					else ++thisbin2;
+					}
+				else ++thisbin2;
 				}
 			// make the modification to the tree
 			if(expsum.number_of_children(expsum.begin())>1) {
@@ -137,7 +141,8 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 							node_one(inserthere);
 							inserthere->multiplier=rem;
 							}
-						} else {
+						}
+					else {
 						Ex repl;
 						repl.set_head(str_node("\\pow"));
 						repl.append_child(repl.begin(), iterator((*thisbin1).second));

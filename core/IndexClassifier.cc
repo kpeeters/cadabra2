@@ -74,8 +74,10 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 						two.erase(it2);
 						it2=nxt;
 						move_this_one=true;
-						} else ++it2;
-					} else ++it2;
+						}
+					else ++it2;
+					}
+				else ++it2;
 				}
 			Ex the_key=(*it1).first;
 			if(move_this_one && move_out) {
@@ -84,7 +86,8 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 				target.insert(*it1);
 				one.erase(it1);
 				it1=nxt;
-				} else ++it1;
+				}
+			else ++it1;
 			// skip all indices in two with the same name
 			while(it1!=one.end() && tree_exact_equal(&kernel.properties, (*it1).first,the_key,1,true,-2,true)) {
 				if(move_this_one && move_out) {
@@ -93,9 +96,11 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 					target.insert(*it1);
 					one.erase(it1);
 					it1=nxt;
-					} else ++it1;
+					}
+				else ++it1;
 				}
-			} else ++it1;
+			}
+		else ++it1;
 		}
 	}
 
@@ -134,7 +139,8 @@ void IndexClassifier::classify_add_index(Ex::iterator it, index_map_t& ind_free,
 				ind_dummy.insert(*fnd);
 				ind_dummy.insert(index_map_t::value_type(Ex(it), it));
 				ind_free.erase(fnd);
-				} else {
+				}
+			else {
 				// std::cerr << "not yet found; after insertion" << std::endl;
 				if(ind_dummy.count(it)>0) {
 					throw ConsistencyException("Triple index occurred.");
@@ -165,7 +171,8 @@ loopie:
 		// factor; therefore, just go up.
 		it=par;
 		goto loopie;
-		} else if(*par->name=="\\fermibilinear" || inh) {
+		}
+	else if(*par->name=="\\fermibilinear" || inh) {
 		// For each _other_ child in this product, do a top-down classify for all non-sub/super
 		// children; add the indices thus found to the maps since they will end up in our factor.
 		Ex::sibling_iterator sit=par.begin();
@@ -192,7 +199,8 @@ loopie:
 					determine_intersection(factor_free, ind_free, new_dummy, true);
 					ind_free.insert(factor_free.begin(), factor_free.end());
 					ind_dummy.insert(new_dummy.begin(), new_dummy.end());
-					} else {
+					}
+				else {
 					//					ind_free.insert(free_so_far.begin(), free_so_far.end());
 					//					free_so_far.clear();
 					classify_add_index(sit, ind_free, ind_dummy);
@@ -202,14 +210,17 @@ loopie:
 			}
 		it=par;
 		goto loopie;
-		} else if((*par->name).size()>0 && (*par->name)[0]=='@') { // command nodes swallow everything
+		}
+	else if((*par->name).size()>0 && (*par->name)[0]=='@') {   // command nodes swallow everything
 		return;
-		} else if(*par->name=="\\tie") { // tie lists do not care about indices
+		}
+	else if(*par->name=="\\tie") {   // tie lists do not care about indices
 		ind_free.clear();
 		ind_dummy.clear();
 		it=par;
 		goto loopie;
-		} else if(*par->name=="\\arrow") { // rules can have different indices on lhs and rhs
+		}
+	else if(*par->name=="\\arrow") {   // rules can have different indices on lhs and rhs
 		//		ind_free.clear();
 		//		ind_dummy.clear();
 		it=par;
@@ -227,7 +238,8 @@ loopie:
 	else if(*par->name=="\\comma") { // comma lists can contain anything NO: [a_{mu}, b_{nu}]
 		// reaching a comma node is like reaching the top of an expression.
 		return;
-		} else if(!inh) {
+		}
+	else if(!inh) {
 		return;
 		}
 
@@ -312,10 +324,12 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 					if(!ok) {
 						if(*it->name=="\\sum") {
 							throw ConsistencyException("Free indices in different terms in a sum do not match.");
-							} else
+							}
+						else
 							throw ConsistencyException("Free indices on lhs and rhs do not match.");
 						}
-					} else {
+					}
+				else {
 					// This is the first term; remember the free indices as we need
 					// to check that all other terms have the same indices free.
 					first_free=term_free;
@@ -327,7 +341,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 				}
 			++sit; // next term in sum or \equals node
 			}
-		} else if(inh) {
+		}
+	else if(inh) {
 		index_map_t free_so_far;
 		Ex::sibling_iterator sit=it.begin();
 		while(sit!=it.end()) {
@@ -363,7 +378,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 				//					std::cerr << "new dummy " << Ex(ii.second) << std::endl;
 				free_so_far.insert(factor_free.begin(), factor_free.end());
 				ind_dummy.insert(new_dummy.begin(), new_dummy.end());
-				} else {
+				}
+			else {
 				//				ind_free.insert(free_so_far.begin(), free_so_far.end());
 				//				free_so_far.clear();
 				//std::cerr << "adding index " << Ex(sit) << std::endl;
@@ -389,7 +405,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 	else if(*it->name=="\\tie") {
 		ind_free.clear();
 		ind_dummy.clear();
-		} else if(*it->name=="\\pow") {
+		}
+	else if(*it->name=="\\pow") {
 		// Power nodes can have dummies in all arguments, but no free indices. We allow for
 		// \pow{ A_{m} A^{m} }{2} type of things, in the understanding that any algorithm that
 		// does something with this (e.g. product_rule) will need to relabel once the expression
@@ -417,12 +434,14 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 			ind_dummy.insert(ind_dummy_here.begin(), ind_dummy_here.end());
 			++sib;
 			}
-		} else if((*it->name).size()>0 && (*it->name)[0]=='@') {
+		}
+	else if((*it->name).size()>0 && (*it->name)[0]=='@') {
 		// This is an active node that has not been replaced yet; since
 		// we do not know anything about what this will become, do not return
 		// any index information (clashes will be resolved when the active
 		// node gets replaced).
-		} else {
+		}
+	else {
 		Ex::sibling_iterator sit=it.begin();
 		index_map_t item_free;
 		index_map_t item_dummy;
@@ -437,7 +456,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 						// Note: even integers need to be stored as indices, because we expect e.g. canonicalise
 						// to re-order even numerical indices. They should just never be flagged as dummies.
 						item_free.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
-						} else {
+						}
+					else {
 						index_map_t::iterator fnd=find_modulo_parent_rel(sit, item_free);
 						//						index_map_t::iterator fnd=item_free.find(Ex(sit));
 						if(fnd!=item_free.end()) {
@@ -449,7 +469,8 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 							item_free.erase(fnd);
 							item_dummy.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
 							//							std::cout << item_dummy.size() << " " << item_free.size() << std::endl;
-							} else {
+							}
+						else {
 							//							std::cerr << *sit->name << " is new" << std::endl;
 							item_free.insert(index_map_t::value_type(Ex(sit), Ex::iterator(sit)));
 							}
@@ -508,7 +529,8 @@ Ex IndexClassifier::get_dummy(const list_property *dums,
 			Ex ret;
 			ret.set_head(str_node(newnm));
 			return ret;
-			} else {
+			}
+		else {
 			const Ex& inm=(*pr.first).second->obj;
 			// BUG: even if only _{a} is in the used map, we should not
 			// accept ^{a}. But since ...

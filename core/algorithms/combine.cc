@@ -48,7 +48,8 @@ Algorithm::result_t combine::apply(iterator& it)
 		else if(*(tr.parent(dums1->second)->name)=="\\indexbracket") {
 			ismatorvec1=true;
 			isbrack1=true;
-			} else if(tr.number_of_children(tr.parent(dums1->second))==1)
+			}
+		else if(tr.number_of_children(tr.parent(dums1->second))==1)
 			ismatorvec1=true;
 		const Matrix *mat2=kernel.properties.get<Matrix>(tr.parent(dums2->second));
 		if(mat2)
@@ -56,7 +57,8 @@ Algorithm::result_t combine::apply(iterator& it)
 		else if(*(tr.parent(dums2->second)->name)=="\\indexbracket") {
 			ismatorvec2=true;
 			isbrack2=true;
-			} else if(tr.number_of_children(tr.parent(dums2->second))==1)
+			}
+		else if(tr.number_of_children(tr.parent(dums2->second))==1)
 			ismatorvec2=true;
 
 		if(ismatorvec1 && ismatorvec2) {
@@ -101,7 +103,8 @@ Algorithm::result_t combine::apply(iterator& it)
 				tr.reparent(brackprod, tr.begin(parn1), nxt);
 				multiply(brackprod->multiplier, *parn1->multiplier);
 				tr.erase(parn1);
-				} else {
+				}
+			else {
 				sibling_iterator nxt=parn1;
 				++nxt;
 				//				parn1->fl.bracket=str_node::b_round;
@@ -114,7 +117,8 @@ Algorithm::result_t combine::apply(iterator& it)
 				tr.reparent(brackprod, tr.begin(parn2), nxt);
 				multiply(brackprod->multiplier, *parn2->multiplier);
 				tr.erase(parn2);
-				} else {
+				}
+			else {
 				sibling_iterator nxt=parn2;
 				++nxt;
 				//				parn2->fl.bracket=str_node::b_round;

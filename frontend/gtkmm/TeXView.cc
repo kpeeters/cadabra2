@@ -66,7 +66,8 @@ void TeXView::convert()
 			//std::cerr << "SHOULD NOT HAPPEN" << std::endl;
 			image.update_image(content, engine.get_scale());
 			}
-		} catch(TeXEngine::TeXException& ex) {
+		}
+	catch(TeXEngine::TeXException& ex) {
 		tex_error.emit(ex.what());
 		}
 	}

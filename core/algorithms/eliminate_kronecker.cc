@@ -47,13 +47,17 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 						if(itg1->difference.begin()->name==onept) {
 							multiply(st->multiplier, *itg1->difference.begin()->multiplier);
 							it=tr.erase(it);
-							} else {
+							}
+						else {
 							it=tr.replace(it, itg1->difference.begin());
 							}
 						ret=result_t::l_applied;
-						} else ++it;
-					} else ++it;
-				} else {
+						}
+					else ++it;
+					}
+				else ++it;
+				}
+			else {
 				sibling_iterator oi=tr.begin(st);
 				++looping;
 				// iterate over all factors in the product
@@ -77,7 +81,8 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 									}
 								// cannot 'break' here because that would miss cases when the
 								// delta multiplies a sum.
-								} else if(ii2->is_rational()==false && subtree_compare(&kernel.properties, ind, ii2, 1, false, -2, true)==0) {
+								}
+							else if(ii2->is_rational()==false && subtree_compare(&kernel.properties, ind, ii2, 1, false, -2, true)==0) {
 								if(! (replaced && doing1) ) {
 									multiplier_t mt=(*ind->multiplier) / (*ii2->multiplier);
 									iterator rep=tr.replace_index(ind, ii1);
@@ -99,9 +104,11 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 					iterator tmp=oi;
 					cleanup_dispatch(kernel, tr, tmp);
 					it=tr.erase(it);
-					} else ++it;
+					}
+				else ++it;
 				}
-			} else ++it;
+			}
+		else ++it;
 		}
 
 	// the product may have reduced to a single term or even just a constant
@@ -112,7 +119,8 @@ Algorithm::result_t eliminate_kronecker::apply(iterator& st)
 	sibling_iterator ff=tr.begin(st);
 	if(ff==tr.end(st)) {
 		st->name=onept;
-		} else {
+		}
+	else {
 		++ff;
 		if(ff==tr.end(st)) {
 			tr.begin(st)->fl.bracket=st->fl.bracket;

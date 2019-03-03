@@ -39,12 +39,14 @@ bool expand::can_apply(iterator it)
 							index_open=2;
 							}
 						mx_last=sib;
-						} else {
+						}
+					else {
 						if(index_open==0) {
 							ii_first=sib;
 							mx_first=tr.end();
 							index_open=1;
-							} else {
+							}
+						else {
 							ii_last=sib;
 							mx_last=tr.end();
 							--index_open;
@@ -99,22 +101,26 @@ Algorithm::result_t expand::apply(iterator& it)
 				if(origobj==mx_last) {
 					tr.append_child(sib, origind);
 					origind=tr.erase(origind);
-					} else {
+					}
+				else {
 					dum=get_dummy(dums, sib);
 					iterator tmpit=tr.append_child((iterator)(sib), dum.begin());
 					tmpit->fl.bracket=str_node::b_none;
 					tmpit->fl.parent_rel=str_node::p_sub;
 					}
-				} else { // one-index object
+				}
+			else {   // one-index object
 				if(origobj==ii_first) {
 					dum=get_dummy(dums, sib);
 					iterator tmpit=tr.append_child((iterator)(sib), dum.begin());
 					tmpit->fl.bracket=str_node::b_none;
 					tmpit->fl.parent_rel=str_node::p_sub;
-					} else dum.clear();
+					}
+				else dum.clear();
 				}
 			++sib;
-			} else ++sib;
+			}
+		else ++sib;
 		}
 
 	it->name=name_set.insert("\\prod").first;

@@ -152,7 +152,8 @@ Algorithm::result_t unwrap::apply(iterator& it)
 							if(old_it->name == depobjs->name) {
 								move_out=false;
 								break;
-								} else {
+								}
+							else {
 								// compare all indices
 #ifdef DEBUG
 								std::cerr << "comparing indices" << std::endl;
@@ -228,24 +229,28 @@ Algorithm::result_t unwrap::apply(iterator& it)
 					zero(it->multiplier);
 					break; // we can stop now, the entire expression is zero.
 					}
-				} else {
+				}
+			else {
 				all_arguments_moved_out=false;
 				if(derarg_num_chldr==1) {
 					derarg=tr.flatten_and_erase(derarg);
 					}
 				}
-			} else ++acton;
+			}
+		else ++acton;
 		}
 
 
 	// All non-index arguments have now been handled.
 	if(all_arguments_moved_out && is_accent) {
 		zero(it->multiplier);
-		} else if(*it->multiplier!=0) {
+		}
+	else if(*it->multiplier!=0) {
 		if(tr.number_of_children(it)==1) { // nothing was moved out
 			tr.flatten(it);
 			it=tr.erase(it);
-			} else {
+			}
+		else {
 			// Moving factors around has potentially led to a top-level product
 			// which contains children with non-unit multiplier.
 			cleanup_dispatch(kernel, tr, it);

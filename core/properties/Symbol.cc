@@ -21,5 +21,6 @@ const Symbol *Symbol::get(const Properties& properties, Ex::iterator it, bool ig
 			++sib;
 			}
 		return s;
-		} else return properties.get<Symbol>(it, ignore_parent_rel);
+		}
+	else return properties.get<Symbol>(it, ignore_parent_rel);
 	}

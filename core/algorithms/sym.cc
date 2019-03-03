@@ -53,7 +53,8 @@ Algorithm::result_t sym::doit(iterator& it, bool sign)
 		if(*(fst->name)=="\\comma") {
 			if(raw_ints.block_length==0) raw_ints.block_length=tr.number_of_children(fst);
 			else                         assert(raw_ints.block_length==tr.number_of_children(fst));
-			} else if(fst->name->size()>0 || (fst->name->size()==0 && tr.number_of_children(fst)==1)) {
+			}
+		else if(fst->name->size()>0 || (fst->name->size()==0 && tr.number_of_children(fst)==1)) {
 			if(raw_ints.block_length==0) raw_ints.block_length=1;
 			else                         assert(raw_ints.block_length==1);
 			}

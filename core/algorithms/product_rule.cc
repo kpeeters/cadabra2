@@ -64,11 +64,13 @@ Algorithm::result_t product_rule::apply(iterator& it)
 				if(indices_at_front) rep.move_before(sm, (iterator)sib);
 				else                 rep.move_after(sm, (iterator)sib);
 				sib=nxt;
-				} else ++sib;
+				}
+			else ++sib;
 			if(sib==tr.end(it))
 				throw ConsistencyException("product_rule: Error isolating derivative indices.");
 			}
-		} else {
+		}
+	else {
 		sm=rep.set_head(str_node("\\sum"));
 		if(tr.begin(it)->is_index()==false)
 			indices_at_front=false;
@@ -115,21 +117,24 @@ Algorithm::result_t product_rule::apply(iterator& it)
 				iterator nn=rep.move_after(pref, iterator(tr.begin(pref)));
 				multiply(nn->multiplier, *pref->multiplier);
 				rep.erase(pref);
-				} else {
+				}
+			else {
 				pw2=tr.begin(pref);
 				++pw2;
 				add(pw2->multiplier, -1);
 				}
 			//			  txtout << "after all done " << std::endl;
 			//			  tr.print_recursive_treeform(txtout, rep.begin());
-			} else {
+			}
+		else {
 			pw2=tr.begin(pref);
 			++pw2;
 			if(*pw2->name=="\\sum") {
 				iterator tmp=rep.append_child(pw2, str_node("1"));
 				tmp->fl.bracket=rep.begin(pw2)->fl.bracket;
 				multiply(tmp->multiplier, -1);
-				} else {
+				}
+			else {
 				iterator sumn=rep.wrap(pw2, str_node("\\sum"));
 				iterator tmp=rep.append_child(sumn, str_node("1"));
 				multiply(tmp->multiplier, -1);
@@ -138,7 +143,8 @@ Algorithm::result_t product_rule::apply(iterator& it)
 
 		iterator top=rep.begin();
 		cleanup_dispatch(kernel, tr, top);
-		} else {
+		}
+	else {
 		// replace the '\diff' with a '\sum' of diffs.
 		unsigned int num=0;
 		sibling_iterator chl=tr.begin(prodnode); // pointer to current factor in the product

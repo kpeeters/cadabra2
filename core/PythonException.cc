@@ -16,7 +16,8 @@ std::string parse_python_exception()
 		pybind11::str    type_pstr(h_type);
 		try {
 			ret = type_pstr.cast<std::string>();
-			} catch(const pybind11::value_error& e) {
+			}
+		catch(const pybind11::value_error& e) {
 			ret = "Unknown exception type";
 			}
 		}
@@ -25,7 +26,8 @@ std::string parse_python_exception()
 		pybind11::str    a(h_val);
 		try {
 			ret += a.cast<std::string>();
-			} catch(const pybind11::value_error &e) {
+			}
+		catch(const pybind11::value_error &e) {
 			ret += ": Unparseable Python error: ";
 			}
 		}
@@ -42,7 +44,8 @@ std::string parse_python_exception()
 		try {
 			for(auto &s: tb_list)
 				ret += s.cast<std::string>();
-			} catch(const pybind11::value_error &e) {
+			}
+		catch(const pybind11::value_error &e) {
 			ret += ": Unparseable Python traceback";
 			}
 		}

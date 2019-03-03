@@ -15,7 +15,7 @@ int main()
 	snoop::log.init("CadabraServer", CADABRA_VERSION_FULL, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
 #endif
-	
+
 	Server server;
 	server.run();
 

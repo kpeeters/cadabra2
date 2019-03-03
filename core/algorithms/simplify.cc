@@ -118,7 +118,8 @@ Algorithm::result_t simplify::apply(iterator& it)
 		// std::cerr << "After erasing " << Ex(it) << std::endl;
 
 		return result_t::l_applied;
-		} else {
+		}
+	else {
 		switch(kernel.scalar_backend) {
 		case Kernel::scalar_backend_t::sympy:
 			wrap.push_back("simplify");

@@ -46,7 +46,8 @@ int main(int argc, char **argv)
 	if(python_file!="") {
 		std::ofstream pythonfile(python_file);
 		pythonfile << python;
-		} else {
+		}
+	else {
 		std::cout << python;
 		}
 

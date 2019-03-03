@@ -130,7 +130,8 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 						// Position is also already fine.
 						//std::cerr << "index position already fine" << std::endl;
 						continue; // already fine, no need for conversion
-						} else {
+						}
+					else {
 						//std::cerr << "index position wrong" << std::endl;
 						}
 					}
@@ -153,9 +154,12 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 							nl->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->flip_parent_rel();
-							} else continue;
-						} else continue;
-					} else if(origtype->set_name == itype2->set_name && newtype->set_name == itype1->set_name) {
+							}
+						else continue;
+						}
+					else continue;
+					}
+				else if(origtype->set_name == itype2->set_name && newtype->set_name == itype1->set_name) {
 					if( itype2->position_type==Indices::free || dit->second->fl.parent_rel == pr2 ) {
 						if( itype1->position_type==Indices::free || walk->fl.parent_rel != pr1 ) {
 							tr.replace_index(vbi2, dit->second);
@@ -165,9 +169,12 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 							nl->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->fl.parent_rel=walk->fl.parent_rel;
 							vielbein_index->flip_parent_rel();
-							} else continue;
-						} else continue;
-					} else {
+							}
+						else continue;
+						}
+					else continue;
+					}
+				else {
 					// std::cerr << "Uh, cannot convert?" << std::endl;
 					continue; // next index
 					}
@@ -180,7 +187,8 @@ Algorithm::result_t rewrite_indices::apply(iterator& it)
 					par->fl.bracket=str_node::b_none;
 					vbit=tr.append_child(prod, repvb.begin());
 					res=result_t::l_applied;
-					} else {
+					}
+				else {
 					assert(*tr.parent(par)->name=="\\prod");
 					vbit=tr.append_child((iterator)tr.parent(par), repvb.begin());
 					vbit->fl.bracket=par->fl.bracket;

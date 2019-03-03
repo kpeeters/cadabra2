@@ -51,7 +51,8 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 					rep.append_child(prod, iterator(trm));
 					++trm;
 					}
-				} else {
+				}
+			else {
 				// Distribute this projected factor over all existing terms in rep,
 				sibling_iterator trm=rep.begin(topsum);
 				while(trm!=rep.end(topsum)) {
@@ -107,14 +108,16 @@ Algorithm::result_t young_project_product::apply(iterator& it)
 				if(*topsum->name!="\\sum")
 					topsum=tr.wrap(topsum, str_node("\\sum"));
 				}
-			} else {
+			}
+		else {
 			if(first) {
 				first=false;
 				iterator prod=rep.append_child(topsum, str_node("\\prod"));
 				prod->fl.bracket=str_node::b_round;
 				prod->multiplier=it->multiplier;
 				rep.append_child(prod, iterator(sib));
-				} else {
+				}
+			else {
 				// just multiply all terms with this factor
 				sibling_iterator trm=rep.begin(topsum);
 				while(trm!=rep.end(topsum)) {

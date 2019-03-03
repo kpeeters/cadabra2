@@ -54,10 +54,12 @@ bool sort_sum::should_swap(iterator obj, int subtree_comparison) const
 	if(so1==0 || so2==0) { // No sort order known
 		if(subtree_comparison<0) return true;
 		return false;
-		} else if(abs(subtree_comparison)<=1) { // Identical up to index names
+		}
+	else if(abs(subtree_comparison)<=1) {   // Identical up to index names
 		if(subtree_comparison==-1) return true;
 		return false;
-		} else {
+		}
+	else {
 		if(so1==so2) {
 			if(num1>num2) return true;
 			return false;

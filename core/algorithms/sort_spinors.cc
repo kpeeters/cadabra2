@@ -80,7 +80,9 @@ Algorithm::result_t sort_spinors::apply(iterator& )
 				pushup_multiplier(one);
 				}
 			return result_t::l_applied;
-			} else return result_t::l_no_action;
-		} else return result_t::l_no_action;
+			}
+		else return result_t::l_no_action;
+		}
+	else return result_t::l_no_action;
 	}
 

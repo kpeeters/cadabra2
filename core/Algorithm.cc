@@ -138,12 +138,14 @@ Algorithm::result_t Algorithm::apply_generic(Ex::iterator& it, bool deep, bool r
 			// FIXME: handle l_error or remove
 			if(thisret==result_t::l_applied)
 				ret=result_t::l_applied;
-			} while(depth==0 && repeat && thisret==result_t::l_applied);
+			}
+		while(depth==0 && repeat && thisret==result_t::l_applied);
 
 		if(depth==0) {
 			// std::cerr << "break " << std::endl;
 			break;
-			} else {
+			}
+		else {
 			// std::cerr << "no break " << std::endl;
 			}
 		start=next;
@@ -282,7 +284,8 @@ Algorithm::result_t Algorithm::apply_deep(Ex::iterator& it)
 			// The algorithm may have replaced the 'work' node, so instead of walking from
 			// there, we continue at the node which was next in line before we called 'apply'.
 			current=next;
-			} else {
+			}
+		else {
 			++current;
 			}
 
@@ -316,12 +319,14 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 		it=walk;
 		propagate_zeroes(it, topnode);
 		// Removing happens in the next step.
-		} else if(*walk->name=="\\pow") {
+		}
+	else if(*walk->name=="\\pow") {
 		if(tr.index(it)==0) { // the argument
 			walk->multiplier=rat_set.insert(0).first;
 			it=walk;
 			propagate_zeroes(it, topnode);
-			} else { // the exponent
+			}
+		else {   // the exponent
 			rset_t::iterator rem=walk->multiplier;
 			tr.erase(it);
 			tr.flatten(walk);
@@ -329,17 +334,20 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 			node_one(it);
 			it->multiplier=rem;
 			}
-		} else if(*walk->name=="\\sum") {
+		}
+	else if(*walk->name=="\\sum") {
 		if(tr.number_of_children(walk)>2) {
 			if(tr.is_valid(tr.next_sibling(it))) {
 				it=tr.erase(it);
 				it.descend_all();
-				} else {
+				}
+			else {
 				iterator ret=tr.parent(it);
 				tr.erase(it);
 				it=ret;
 				}
-			} else {
+			}
+		else {
 			// If the sum is the top node, we cannot flatten it because
 			// we are not allowed to invalidate the topnode iterator
 			if(walk==topnode) {
@@ -366,7 +374,8 @@ void Algorithm::propagate_zeroes(post_order_iterator& it, const iterator& topnod
 				it=tr.erase(it);
 				}
 			}
-		} else {
+		}
+	else {
 		iterator nn=tr.insert_after(it, str_node("1"));
 		nn->fl.parent_rel=it->fl.parent_rel;
 		nn->fl.bracket=it->fl.bracket;
@@ -394,7 +403,8 @@ void Algorithm::pushup_multiplier(iterator it)
 				++sib;
 				}
 			::one(it->multiplier);
-			} else {
+			}
+		else {
 			//			txtout << "PUSHUP: " << *it->name << std::endl;
 			if(tr.is_valid(tr.parent(it))) {
 				//				txtout << "test propinherit" << std::endl;
@@ -533,7 +543,8 @@ bool Algorithm::check_consistency(iterator it) const
 					++sumch;
 					}
 				}
-			} else if(*it->name=="\\prod") {
+			}
+		else if(*it->name=="\\prod") {
 			if(Ex::number_of_children(it)<=1)
 				throw ConsistencyException("Found \\prod node with only 0 or 1 children.");
 			sibling_iterator ch=it.begin();
@@ -557,7 +568,8 @@ bool Algorithm::check_consistency(iterator it) const
 					}
 				++ch;
 				}
-			} else if(*it->name=="\\sequence") {
+			}
+		else if(*it->name=="\\sequence") {
 			if(Ex::number_of_children(it)!=2)
 				throw ConsistencyException("Found \\sequence node with incorrect (non-2) number of children.");
 			}
@@ -577,7 +589,8 @@ void Algorithm::report_progress(const std::string&, int, int, int count)
 		if(report_progress_stopwatch.stopped()) {
 			display=true;
 			report_progress_stopwatch.start();
-			} else {
+			}
+		else {
 			if(report_progress_stopwatch.seconds()>0 || report_progress_stopwatch.useconds()>300000L) {
 				display=true;
 				report_progress_stopwatch.reset();
@@ -617,7 +630,8 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 	if(still_inside_algo) {
 		if(tr.is_head(two)==false)
 			classify_indices_up(tr.parent(two), ind_free_full, ind_dummy_full);
-		} else {
+		}
+	else {
 		classify_indices_up(two, ind_free_full, ind_dummy_full); // the indices in everything except the replacement
 		}
 	classify_indices(two, ind_free, ind_dummy); // the indices in the replacement subtree
@@ -652,7 +666,8 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 			tr.replace_index((*it).second, relabel.begin(), true);
 			//			(*it).second->name=relabel;
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
+			}
+		while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	// Catch triple indices (two cases: dummy pair in replacement, free index elsewhere and
@@ -679,7 +694,8 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		do {
 			tr.replace_index((*it).second, relabel.begin(), true);
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
+			}
+		while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	must_be_empty.clear();
@@ -700,7 +716,8 @@ bool Algorithm::rename_replacement_dummies(iterator two, bool still_inside_algo)
 		do {
 			tr.replace_index((*it).second, relabel.begin(), true);
 			++it;
-			} while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
+			}
+		while(it!=must_be_empty.end() && tree_exact_equal(&kernel.properties, (*it).first,the_key, 1, true, -2, true));
 		}
 
 	return true;
@@ -750,7 +767,8 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 		while(findthese!=nd) {
 			if(contains((*ranit).first, (*ranit).second, findthese)) {
 				++findthese;
-				} else {
+				}
+			else {
 				contained=false;
 				break;
 				}
@@ -820,7 +838,8 @@ bool Algorithm::prod_wrap_single_term(iterator& it)
 	if(is_single_term(it)) {
 		force_node_wrap(it, "\\prod");
 		return true;
-		} else return false;
+		}
+	else return false;
 	}
 
 bool Algorithm::sum_wrap_single_term(iterator& it)
@@ -828,7 +847,8 @@ bool Algorithm::sum_wrap_single_term(iterator& it)
 	if(is_single_term(it)) {
 		force_node_wrap(it, "\\sum");
 		return true;
-		} else return false;
+		}
+	else return false;
 	}
 
 void Algorithm::force_node_wrap(iterator& it, std::string nm)
@@ -900,7 +920,8 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 							while(depobjs!=deps.end(deps.begin())) {
 								if(walk->name == depobjs->name) {
 									return true;
-									} else {
+									}
+								else {
 									// compare all indices
 									sibling_iterator indit=tr.begin(walk);
 									while(indit!=tr.end(walk)) {
@@ -914,10 +935,13 @@ bool Algorithm::separated_by_derivative(iterator i1, iterator i2, iterator check
 								++depobjs;
 								}
 							return false; // Dependence found but not relevant here.
-							} else return false; // No dependence property found at all.
-						} else return true; // Should not check for dependence.
+							}
+						else return false;   // No dependence property found at all.
+						}
+					else return true;   // Should not check for dependence.
 					}
-				} while(walk != lca);
+				}
+			while(walk != lca);
 			return false;
 			}
 		} one_run;
@@ -995,7 +1019,8 @@ bool Algorithm::locate_object_set(const Ex& objs,
 			// when we want to symmetrise in index pairs).
 			if(locate_object_set(aim, st, nd, store)==false)
 				return false;
-			} else {
+			}
+		else {
 			if((*aim->name).size()==0 && tr.number_of_children(aim)==1)
 				aim=tr.begin(aim);
 			if(locate_single_object(aim, st, nd, store)!=1)

@@ -33,7 +33,8 @@ bool testit(const std::string& input, const std::string& output)
 	try {
 		orig >> pp;
 		res << pp;
-		} catch(std::exception& ex) {
+		}
+	catch(std::exception& ex) {
 		if(output.size()==0) {
 			std::cout << "ok (threw exception)." << std::endl;
 			return true;
@@ -297,7 +298,8 @@ int main(int, char **)
 		pp.erase();
 		orig  >> pp;
 		check << pp;
-		} catch(std::exception& ex) {
+		}
+	catch(std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 		exit(1);
 		}

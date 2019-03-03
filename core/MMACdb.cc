@@ -79,7 +79,8 @@ Ex::iterator MMA::apply_mma(const Kernel& kernel, Ex& ex, Ex::iterator& it, cons
 	const char *out;
 	if(! WSGetString(lp, &out)) {
 		throw InternalError("Unable to read from WSTP link");
-		} else {
+		}
+	else {
 		result=out;
 		WSReleaseString(lp, out);
 		if(result=="$Failed") {
@@ -148,7 +149,8 @@ void MMA::setup_link()
 			WSDeinitialize(stdenv);
 			throw InternalError("Failed to open Mathematica link");
 			}
-		} catch(std::exception& ex) {
+		}
+	catch(std::exception& ex) {
 		lp=0;
 		WSDeinitialize(stdenv);
 		throw InternalError("Failed to open Mathematica link");

@@ -401,7 +401,8 @@ namespace cadabra {
 		if(*it->name=="\\comma") {
 			assert(Ex::number_of_children(it)>num);
 			return Ex::child(it,num);
-			} else return it;
+			}
+		else return it;
 		}
 
 	unsigned int Ex::arg_size(sibling_iterator sib)
@@ -530,7 +531,8 @@ found:
 			if(*it->name=="\\ldots") return true;
 			if(is_head(it)) break;
 			it=parent(it);
-			} while(true);
+			}
+		while(true);
 		return false;
 		}
 
@@ -630,11 +632,13 @@ found:
 			int eqno=static_cast<int>(it->multiplier->get_d());
 			real_eqno=eqno;
 			ret=equation_by_number(eqno);
-			} else {
+			}
+		else {
 			if(*it->name=="%") {
 				ret=equation_by_number(last_used_equation);
 				real_eqno=last_used_equation;
-				} else {
+				}
+			else {
 				ret=equation_by_name(it->name, real_eqno);
 				}
 			}
@@ -653,7 +657,8 @@ found:
 		if(it->is_rational()) {
 			int eqno=static_cast<int>(it->multiplier->get_d());
 			ss << eqno;
-			} else {
+			}
+		else {
 			if(*it->name=="%") ss << last_used_equation;
 			else               ss << *it->name;
 			}
@@ -790,7 +795,8 @@ found:
 				if((*name).size()>1) {
 					if((*name)[1]!='@')
 						return true;
-					} else return true;
+					}
+				else return true;
 				}
 		return false;
 		}
@@ -811,7 +817,8 @@ found:
 				if(name->size()>1) {
 					if((*name)[name->size()-2]!='?')
 						return true;
-					} else return true;
+					}
+				else return true;
 				}
 		return false;
 		}
@@ -883,14 +890,17 @@ found:
 		if(is_name_wildcard()) {
 			std::string tmp=(*name).substr(0, name->size()-1);
 			return name_set.insert(tmp).first;
-			} else if(is_object_wildcard()) {
+			}
+		else if(is_object_wildcard()) {
 			std::string tmp=(*name).substr(0, name->size()-2);
 			return name_set.insert(tmp).first;
-			} else if(is_autodeclare_wildcard()) {
+			}
+		else if(is_autodeclare_wildcard()) {
 			size_t pos=name->find('#');
 			std::string tmp=(*name).substr(0, pos);
 			return name_set.insert(tmp).first;
-			} else if(is_numbered_symbol()) {
+			}
+		else if(is_numbered_symbol()) {
 			size_t pos=name->find_first_of("0123456789");
 			std::string tmp=(*name).substr(0, pos);
 			return name_set.insert(tmp).first;

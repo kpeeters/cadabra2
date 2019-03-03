@@ -47,7 +47,8 @@ bool fierz::can_apply(iterator it)
 				if(ch==tr.end(it)) break;
 				gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
 				spnxt=kernel.properties.get_composite<Spinor>(ch);
-				} while(gmnxt==0 && spnxt==0);
+				}
+			while(gmnxt==0 && spnxt==0);
 			if(gmnxt) {
 				DEBUG( std::cerr << "found gamma " << ch << std::endl; );
 				// FIXME: should also work when there is a unit matrix in between.
@@ -65,7 +66,8 @@ bool fierz::can_apply(iterator it)
 					if(ch==tr.end(it)) break;
 					spnxt=kernel.properties.get_composite<Spinor>(ch);
 					gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
-					} while(gmnxt==0 && spnxt==0);
+					}
+				while(gmnxt==0 && spnxt==0);
 				prop2=spnxt;
 				if(prop2) { // one fermi bilinear found.
 					DEBUG( std::cerr << "found spin2 " << Ex(ch) << std::endl; );
@@ -76,7 +78,8 @@ bool fierz::can_apply(iterator it)
 						if(ch==tr.end(it)) break;
 						spnxt=kernel.properties.get_composite<Spinor>(ch);
 						gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
-						} while(gmnxt==0 && spnxt==0);
+						}
+					while(gmnxt==0 && spnxt==0);
 					db=kernel.properties.get_composite<DiracBar>(ch);
 					if(db) {
 						DEBUG( std::cerr << "found db2" << std::endl; );
@@ -88,7 +91,8 @@ bool fierz::can_apply(iterator it)
 							if(ch==tr.end(it)) break;
 							spnxt=kernel.properties.get_composite<Spinor>(ch);
 							gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
-							} while(gmnxt==0 && spnxt==0);
+							}
+						while(gmnxt==0 && spnxt==0);
 						if(gmnxt) {
 							gam2=ch;
 							DEBUG( std::cerr << "found gam2: " << gam2 << std::endl; );
@@ -98,7 +102,8 @@ bool fierz::can_apply(iterator it)
 								if(ch==tr.end(it)) break;
 								spnxt=kernel.properties.get_composite<Spinor>(ch);
 								gmnxt=kernel.properties.get_composite<GammaMatrix>(ch);
-								} while(gmnxt==0 && spnxt==0);
+								}
+							while(gmnxt==0 && spnxt==0);
 							prop4=spnxt;
 							if(prop4) {
 								DEBUG( std::cerr << "found spin4" << std::endl; );

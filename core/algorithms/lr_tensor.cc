@@ -136,7 +136,7 @@ void lr_tensor::do_tableau(iterator& it)
 		multiply(tt->multiplier, tabit->multiplicity);
 		for(unsigned int r=0; r<(*tabit).number_of_rows(); ++r)
 			multiply(tr.append_child(tt, str_node("1"))->multiplier, (*tabit).row_size(r));
-	
+
 next_tab:
 		++tabit;
 		}

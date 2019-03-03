@@ -16,9 +16,11 @@ bool ImplicitIndex::parse(Kernel&, keyval_t& keyvals)
 		//		std::cout << "ImplicitIndex: " << ki->first << " = " << *ki->second->name << std::endl;
 		if(ki->first=="name") {
 			throw std::logic_error("ImplicitIndex: argument 'name' no longer supported");
-			} else if(ki->first=="explicit") {
+			}
+		else if(ki->first=="explicit") {
 			explicit_form=ki->second;
-			} else throw ConsistencyException("Property 'ImplicitIndex' does not accept key '"+ki->first+"'.");
+			}
+		else throw ConsistencyException("Property 'ImplicitIndex' does not accept key '"+ki->first+"'.");
 		++ki;
 		}
 

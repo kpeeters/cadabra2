@@ -133,7 +133,8 @@ void Cadabra::on_open(const Gio::Application::type_vec_files& files, const Glib:
 				}
 			g_free(contents);
 			}
-		} catch (const Glib::Error& ex) {
+		}
+	catch (const Glib::Error& ex) {
 		std::cerr << ex.what() << std::endl;
 		return;
 		}
@@ -162,5 +163,6 @@ bool Cadabra::open_help(const std::string& nm, const std::string& title)
 		nw->load_file(buffer.str());
 		nw->show();
 		return true;
-		} else return false;
+		}
+	else return false;
 	}

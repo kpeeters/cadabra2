@@ -28,13 +28,15 @@ void pull_in(std::shared_ptr<Ex> ex, Kernel *kernel)
 					do {
 						--walk;
 						ex->prepend_child(it, (Ex::iterator)walk);
-						} while(walk!=ex->begin(topnode_it));
+						}
+					while(walk!=ex->begin(topnode_it));
 					}
 				// FIXME: prepend_children is broken!
 				//				ex->prepend_children(it, ex->begin(topnode_it), ex->end(topnode_it)); // add children of ex
 				multiply(it->multiplier, mult);
 				rr.rename_replacement_dummies(it, false);
-				} else throw ArgumentException("Python object '"+pobj+"' does not exist.");
+				}
+			else throw ArgumentException("Python object '"+pobj+"' does not exist.");
 			}
 		++it;
 		}

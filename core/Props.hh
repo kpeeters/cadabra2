@@ -365,7 +365,8 @@ namespace cadabra {
 			if(!wildcards && !ret.first) {
 				//			std::cerr << "not yet found, switching to wildcards" << std::endl;
 				wildcards=true;
-				} else {
+				}
+			else {
 				//			std::cout << "all searches done" << std::endl;
 				break;
 				}
@@ -516,10 +517,12 @@ namespace cadabra {
 						}
 					if(!inherits2 || ++sib2==it2.end())
 						keepgoing2=false;
-					} while(keepgoing2);
+					}
+				while(keepgoing2);
 				if(!inherits1 || ++sib1==it1.end())
 					keepgoing1=false;
-				} while(keepgoing1);
+				}
+			while(keepgoing1);
 			}
 
 done:
@@ -550,7 +553,8 @@ done:
 		for(;;) {
 			if(get<PropertyInherit>(dn, ignore_parent_rel)) {
 				dn=dn.begin();
-				} else {
+				}
+			else {
 				assert(get<T>(dn));
 				break;
 				}

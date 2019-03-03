@@ -154,7 +154,8 @@ namespace cadabra {
 					if (val == "sympy")            k->scalar_backend = Kernel::scalar_backend_t::sympy;
 					else if (val == "mathematica") k->scalar_backend = Kernel::scalar_backend_t::mathematica;
 					else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
-					} else {
+					}
+				else {
 					throw ArgumentException("unknown argument '" + key + "'.");
 					}
 				}

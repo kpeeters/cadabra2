@@ -211,7 +211,8 @@ void DocumentThread::Prefs::save()
 				data["colours"][lang.first][kw.first] = kw.second;
 			}
 		f << data << '\n';
-		} else
+		}
+	else
 		std::cerr << "Warning: could not write to config file\n";
 	}
 
@@ -260,10 +261,12 @@ bool DocumentThread::help_type_and_topic(const std::string& before, const std::s
 			if(objtype==help_t::property) {
 				if(isalnum(after[rpos])==0)
 					break;
-				} else if(objtype==help_t::algorithm) {
+				}
+			else if(objtype==help_t::algorithm) {
 				if(after[rpos]=='(')
 					break;
-				} else if(objtype==help_t::latex) {
+				}
+			else if(objtype==help_t::latex) {
 				if(isalnum(after[rpos])==0 && after[rpos]!='_')
 					break;
 				}

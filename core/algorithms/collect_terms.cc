@@ -44,7 +44,8 @@ void collect_terms::remove_zeroed_terms(sibling_iterator from, sibling_iterator 
 				}
 			one->multiplier=rat_set.insert(1).first;
 			++one;
-			} else ++one;
+			}
+		else ++one;
 		}
 	}
 
@@ -64,7 +65,8 @@ Algorithm::result_t collect_terms::apply(iterator& st)
 		st=tr.erase(st);
 		// We may have to propagate the multiplier up the tree to make it consistent.
 		pushup_multiplier(st);
-		} else if(tr.number_of_children(st)==0) {
+		}
+	else if(tr.number_of_children(st)==0) {
 		//		zero(st->multiplier);
 		node_zero(st);
 		}
@@ -90,7 +92,8 @@ Algorithm::result_t collect_terms::collect_from_hash_map()
 					++tmp;
 					term_hash.erase(thisbin2);
 					thisbin2=tmp;
-					} else ++thisbin2;
+					}
+				else ++thisbin2;
 				}
 			++thisbin1;
 			}

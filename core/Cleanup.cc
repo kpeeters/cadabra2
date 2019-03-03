@@ -88,7 +88,8 @@ namespace cadabra {
 				changed = changed || res;
 				}
 
-			} while(changed);
+			}
+		while(changed);
 
 		//	std::cerr << Ex(it) << std::endl;
 		}
@@ -162,7 +163,8 @@ namespace cadabra {
 					multiplier_t newmult=multiplier_t(nw_n, nw_d);
 					// std::cerr << "new multiplier " << newmult << std::endl;
 					ipow->multiplier=rat_set.insert(newmult).first;
-					} else { // need to generate (mult)^C as a separate factor, if mult!=1.
+					}
+				else {   // need to generate (mult)^C as a separate factor, if mult!=1.
 					if(*ipow->multiplier!=1) {
 						// std::cerr << "generate separate factor for " << *ipow->multiplier << "**" << iC << std::endl;
 						Ex nw("\\pow");
@@ -200,7 +202,8 @@ namespace cadabra {
 				tr.flatten(sib);
 				sib=tr.erase(sib);
 				ret=true;
-				} else ++sib;
+				}
+			else ++sib;
 			}
 
 		if(tr.number_of_children(it)==1)
@@ -290,7 +293,8 @@ namespace cadabra {
 			tr.flatten(it);
 			it=tr.erase(it);
 			push_down_multiplier(k, tr, it);
-			} else if(tr.number_of_children(it)==0) { // i.e. from '3*4*7*9'
+			}
+		else if(tr.number_of_children(it)==0) {   // i.e. from '3*4*7*9'
 			ret=true;
 			it->name=name_set.insert("1").first;
 			}
@@ -311,7 +315,8 @@ namespace cadabra {
 			if(sib->is_zero()) {
 				ret=true;
 				sib=tr.erase(sib);
-				} else
+				}
+			else
 				++sib;
 			}
 
@@ -331,7 +336,8 @@ namespace cadabra {
 			multiply(tr.begin(it)->multiplier, *it->multiplier);
 			tr.flatten(it);
 			it=tr.erase(it);
-			} else {
+			}
+		else {
 			auto facs=tr.begin(it);
 			str_node::bracket_t btype_par=facs->fl.bracket;
 			while(facs!=tr.end(it)) {
@@ -355,7 +361,8 @@ namespace cadabra {
 					tr.flatten(facs);
 					tr.erase(facs);
 					facs=tmp;
-					} else ++facs;
+					}
+				else ++facs;
 				}
 			}
 
@@ -383,7 +390,8 @@ namespace cadabra {
 			if(*it->multiplier!=1)
 				ret=true;
 			one(it->multiplier);
-			} else if(*it->name=="\\components") {
+			}
+		else if(*it->name=="\\components") {
 			Ex::sibling_iterator sib=tr.end(it);
 			--sib;
 			// Examine all index value sets and push the multiplier
@@ -439,7 +447,8 @@ namespace cadabra {
 			tr.flatten(it); // remove components node
 			it=tr.erase(it);
 			// std::cerr << Ex(it) << std::endl;
-			} else {
+			}
+		else {
 			while(comma!=tr.end(it)) {
 				if(*comma->name=="\\comma") {
 					if(tr.number_of_children(comma)==0) {
@@ -584,7 +593,8 @@ namespace cadabra {
 							tr.insert_subtree(lhs, sib2);
 							tr.insert_subtree(rhs, sib2);
 							sib2=tr.erase(sib2);
-							} else ++sib2;
+							}
+						else ++sib2;
 						}
 
 					it=tr.flatten(it);
@@ -622,13 +632,15 @@ namespace cadabra {
 					facs=tr.erase(facs);
 					if(facs==tr.end())
 						facs=tr.end(it);
-					} else {
+					}
+				else {
 					if(*facs->multiplier!=1)
 						ret=true;
 					one(facs->multiplier);
 					++facs;
 					}
-				} else ++facs;
+				}
+			else ++facs;
 			}
 		if(factor!=1)
 			ret=true;
@@ -670,7 +682,8 @@ namespace cadabra {
 			if(c1->multiplier != c2->multiplier) {
 				ret=true;
 				zero(it->multiplier);
-				} else {
+				}
+			else {
 				//			::one(it->multiplier);
 				tr.erase_children(it);
 				ret=true;

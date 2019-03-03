@@ -61,7 +61,8 @@ int main(int argc, char **argv)
 	if(! WSGetString(lp, &out)) {
 		printf("Unable to read from link\n");
 		return -1;
-		} else {
+		}
+	else {
 		std::cerr << out << std::endl;
 		WSReleaseString(lp, out);
 		}

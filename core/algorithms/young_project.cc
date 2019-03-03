@@ -97,7 +97,8 @@ Algorithm::result_t young_project::apply(iterator& it)
 			//			txtout << std::endl;
 			}
 		tab.projector(sym, sublengths_scattered);
-		} else tab.projector(sym);
+		}
+	else tab.projector(sym);
 
 	// FIXME: We can also compress the result by sorting all
 	// locations which belong to the same asym set. This could actually

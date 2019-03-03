@@ -250,7 +250,8 @@ bool Parser::string2tree(const std::string& inp)
 					current_parent_rel.push_back(pr);
 					current_mode.push_back(m_childgroup);
 					advance(i);
-					} else {
+					}
+				else {
 					current_bracket.push_back(str_node::b_none);
 					current_parent_rel.push_back(pr);
 					if(pr==str_node::p_property)
@@ -259,7 +260,8 @@ bool Parser::string2tree(const std::string& inp)
 						current_mode.push_back(m_singlecharname);
 					}
 				break;
-				} else {
+				}
+			else {
 				str_node::bracket_t br=is_opening_bracket(c);
 				if(br!=str_node::b_no) {
 					current_bracket.push_back(br);
@@ -267,7 +269,8 @@ bool Parser::string2tree(const std::string& inp)
 					current_mode.push_back(m_childgroup);
 					advance(i);
 					break;
-					} else {
+					}
+				else {
 					current_mode.pop_back();
 					current_mode.push_back(m_skipwhite);
 					current_parent=tree->parent(current_parent);
@@ -288,7 +291,8 @@ bool Parser::string2tree(const std::string& inp)
 				current_mode.push_back(m_backslashname);
 				advance(i);
 				break;
-				} else {
+				}
+			else {
 				tree->append_child(current_parent,str_node(tmp,
 				                   str_node::b_none, /* current_bracket.back(), */
 				                   current_parent_rel.back()));
@@ -305,7 +309,8 @@ bool Parser::string2tree(const std::string& inp)
 				current_bracket.pop_back();
 				current_parent_rel.pop_back();
 				current_parent=tree->parent(current_parent);
-				} else if(is_opening_bracket(c)) {
+				}
+			else if(is_opening_bracket(c)) {
 				if(tmp.size()>0) {
 					current_parent=tree->append_child(current_parent,str_node(tmp,
 					                                  current_bracket.back(),
@@ -347,7 +352,8 @@ bool Parser::string2tree(const std::string& inp)
 				current_parent_rel.pop_back();
 				advance(i);
 				break;
-				} else {
+				}
+			else {
 				current_mode.push_back(m_name);
 				current_mode.push_back(m_skipwhite);
 				break;

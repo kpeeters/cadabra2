@@ -42,7 +42,8 @@ void ProgressMonitor::group(std::string name)
 		tot.time_spent  += (now - blk.started);
 		tot.total_steps += blk.total_steps;
 		call_stack.pop();
-		} else {
+		}
+	else {
 		// Insert an entry on the call stack.
 		Block blk;
 		blk.name=name;
@@ -56,7 +57,8 @@ void ProgressMonitor::group(std::string name)
 			tot.call_count=1;
 			tot.name=name;
 			call_totals[name]=tot;
-			} else {
+			}
+		else {
 			fnd->second.call_count++;
 			}
 		}

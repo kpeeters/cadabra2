@@ -67,8 +67,10 @@ Algorithm::result_t flatten_product::apply(iterator& it)
 				pushup_multiplier(it);
 				facs=tmp;
 				ret=result_t::l_applied;
-				} else ++facs;
-			} else ++facs;
+				}
+			else ++facs;
+			}
+		else ++facs;
 		if(is_diff) break;
 		}
 	return ret;

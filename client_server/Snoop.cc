@@ -211,7 +211,8 @@ std::string SnoopImpl::get_user_uuid(const std::string& appname)
 			user_uuid = str.str();
 
 			config << "user = " << user_uuid << std::endl;
-			} else {
+			}
+		else {
 			std::cerr << "Snoop: cannot write " << configpath << std::endl;
 			}
 		}
@@ -368,7 +369,8 @@ bool SnoopImpl::store_app_entry_without_lock(Snoop::AppEntry& app)
 		app.id = sqlite3_last_insert_rowid(db);
 
 		return true;
-		} else {
+		}
+	else {
 		throw std::logic_error("Failed to prepare insertion");
 		}
 	}
@@ -433,7 +435,8 @@ bool SnoopImpl::store_log_entry(Snoop::LogEntry& log_entry, bool avoid_server_du
 		sqlite3_reset(insert_statement);
 
 		return true;
-		} else {
+		}
+	else {
 		throw std::logic_error("Failed to insert log entry");
 		}
 
@@ -564,7 +567,8 @@ void SnoopImpl::sync_runs_with_server(bool from_wsthread)
 	if(sres==SQLITE_OK) {
 		sqlite3_step(statement);
 		sqlite3_finalize(statement);
-		} else {
+		}
+	else {
 		sqlite3_finalize(statement);
 		return;
 		}
@@ -644,7 +648,8 @@ void SnoopImpl::sync_logs_with_server(bool from_wsthread)
 	if(sres==SQLITE_OK) {
 		sqlite3_step(statement);
 		sqlite3_finalize(statement);
-		} else {
+		}
+	else {
 		sqlite3_finalize(statement);
 		return;
 		}
@@ -698,7 +703,8 @@ std::vector<Snoop::AppEntry> SnoopImpl::get_app_registrations(std::string uuid_f
 				}
 				}
 			}
-		} else throw std::logic_error("Failed to prepare statement for get_app_registrations");
+		}
+	else throw std::logic_error("Failed to prepare statement for get_app_registrations");
 
 	sqlite3_finalize(statement);
 

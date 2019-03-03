@@ -50,7 +50,8 @@ void decompose::add_element_to_basis(Ex& projterm, Ex::iterator projtermit)
 				}
 			++moreit;
 			}
-		} else {
+		}
+	else {
 		multiplier_t remember_mult=*projtermit->multiplier;
 		one(projtermit->multiplier);
 		bool thistermfound=false;
@@ -168,7 +169,8 @@ Algorithm::result_t decompose::apply(iterator& it)
 			++sib;
 			}
 		// debugout << "Young-projected basis constructed." << std::endl;
-		} else {
+		}
+	else {
 		// Copy the basis straight into the terms_from_yp.
 		assert(*basisit->name=="\\comma");
 		sibling_iterator sib=tr.begin(basisit);
@@ -258,7 +260,8 @@ Algorithm::result_t decompose::apply(iterator& it)
 				}
 			++rhssumit;
 			}
-		} else {
+		}
+	else {
 		// only one term in the rhs
 		if(rhsit->is_zero()==false) {
 			bool found_in_basis=false;
@@ -293,7 +296,8 @@ Algorithm::result_t decompose::apply(iterator& it)
 		for(unsigned int i=0; i<coefficient_matrix[0].size(); ++i)
 			res.append_child(res.begin(), str_node("1"))->multiplier=rat_set.insert(0).first;
 		tr.replace(it, res.begin());
-		} else {
+		}
+	else {
 		// debugout << "doing gaussian elimination" << std::endl;
 		if(linear::gaussian_elimination_inplace(coefficient_matrix, rhs)) {
 			// for(unsigned int i=0; i<coefficient_matrix.size(); ++i) {
@@ -307,7 +311,8 @@ Algorithm::result_t decompose::apply(iterator& it)
 			for(unsigned int i=0; i<coefficient_matrix[0].size(); ++i)
 				res.append_child(res.begin(), str_node("1"))->multiplier=rat_set.insert(rhs[i]).first;
 			it=tr.replace(it, res.begin());
-			} else {
+			}
+		else {
 			//			  txtout << "decomposing impossible" << std::endl;
 			//		tr.print_recursive_treeform(txtout, it);
 			return result_t::l_error;

@@ -53,16 +53,19 @@ bool TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 		// Move up the history
 		if (history_ptr == history.begin()) {
 			// Do nothing
-			} else {
+			}
+		else {
 			--history_ptr;
 			buf->set_text(*history_ptr);
 			}
 		ret = true;
-		} else if (key_event->keyval == GDK_KEY_Down) {
+		}
+	else if (key_event->keyval == GDK_KEY_Down) {
 		// Move down the history
 		if (history_ptr == history.end()) {
 			buf->set_text("");
-			} else {
+			}
+		else {
 			++history_ptr;
 			if (history_ptr == history.end())
 				buf->set_text(temp_in);
@@ -70,7 +73,8 @@ bool TextViewProxy::on_key_press_event(GdkEventKey* key_event)
 				buf->set_text(*history_ptr);
 			}
 		ret = true;
-		} else {
+		}
+	else {
 		// Process the keystroke
 		ret = Gtk::TextView::on_key_press_event(key_event);
 		if (history_ptr == history.end())
@@ -183,7 +187,8 @@ void Console::send_input(const std::string& code)
 			collect += '\n';
 		else
 			send = true;
-		} else {
+		}
+	else {
 		if (is_empty(code))
 			send = true;
 		else
@@ -196,7 +201,8 @@ void Console::send_input(const std::string& code)
 		run_queue.push(collect);
 		collect.clear();
 		run();
-		} else {
+		}
+	else {
 		prompt(true, true);
 		}
 	}
@@ -240,24 +246,31 @@ void Console::process_message_queue()
 		// Process message
 		if (msg_type == "exit") {
 			insert_text("Restarting kernel...", warning_tag);
-			} else if (
+			}
+		else if (
 		   msg_type == "output" ||
 		   msg_type == "verbatim" ||
 		   msg_type == "input_form" ||
 		   msg_type == "csl_out") {
 			insert_text(content, output_tag);
-			} else if (msg_type == "csl_clear") {
+			}
+		else if (msg_type == "csl_clear") {
 			get_buffer()->set_text("");
 			prompt(false);
-			} else if (msg_type == "latex_view") {
+			}
+		else if (msg_type == "latex_view") {
 			// Don't handle latex output
-			} else if (msg_type == "error") {
+			}
+		else if (msg_type == "error") {
 			insert_text(content, error_tag);
-			} else if (msg_type == "warning") {
+			}
+		else if (msg_type == "warning") {
 			insert_text(content, warning_tag);
-			} else if (msg_type == "image_png") {
+			}
+		else if (msg_type == "image_png") {
 			insert_graphic(content);
-			} else {
+			}
+		else {
 			insert_text("cadabra-client (console): received cell we did not expect: " + msg_type, error_tag);
 			}
 

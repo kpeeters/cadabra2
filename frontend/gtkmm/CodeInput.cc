@@ -154,11 +154,13 @@ void CodeInput::highlight_python()
 			else if (cur == 'e' || cur == 'E') {
 				if (next == '+' || next == '-')
 					++it;
-				} else {
+				}
+			else {
 				buf->apply_tag_by_name("number", start, it);
 				wordtype = 0;
 				}
-			} else if (wordtype == 2) { // End on linebreak
+			}
+		else if (wordtype == 2) {   // End on linebreak
 			if (cur == '\n') {
 				buf->apply_tag_by_name("comment", start, it);
 				wordtype = 0;
@@ -173,12 +175,14 @@ void CodeInput::highlight_python()
 			if (cur == ':' && next == ':') {
 				wordtype = 0;
 				}
-			} else if (wordtype == 3) { // End if not alnum or _
+			}
+		else if (wordtype == 3) {   // End if not alnum or _
 			if (cur == '_' || g_unichar_isalnum(cur));
 			else {
 				if (*start == '@') {
 					buf->apply_tag_by_name("decorator", start, it);
-					} else {
+					}
+				else {
 					std::string name(start, it);
 					auto tag = get_keyword_group(name);
 					if (tag) {
@@ -187,23 +191,28 @@ void CodeInput::highlight_python()
 					}
 				wordtype = 0;
 				}
-			} else if (wordtype == 4) { // End on ' but skip \'
+			}
+		else if (wordtype == 4) {   // End on ' but skip \'
 			if (cur == '\'') {
 				++it;
 				buf->apply_tag_by_name("string", start, it);
 				wordtype = 0;
-				} else if (cur == '\\' && next == '\'') {
+				}
+			else if (cur == '\\' && next == '\'') {
 				++it;
 				}
-			} else if (wordtype == 5) { // End on " but skip \"
+			}
+		else if (wordtype == 5) {   // End on " but skip \"
 			if (cur == '"') {
 				++it;
 				buf->apply_tag_by_name("string", start, it);
 				wordtype = 0;
-				} else if (cur == '\\' && next == '\"') {
+				}
+			else if (cur == '\\' && next == '\"') {
 				++it;
 				}
-			} else if (wordtype == 6) { // End on '''
+			}
+		else if (wordtype == 6) {   // End on '''
 			if (cur == '\'') {
 				++count;
 				if (count == 3) {
@@ -212,13 +221,15 @@ void CodeInput::highlight_python()
 					buf->apply_tag_by_name("string", start, it);
 					wordtype = 0;
 					}
-				} else {
+				}
+			else {
 				if (cur == '\\' && next == '\'')
 					++it;
 				count = 0;
 				}
 
-			} else if (wordtype == 7) { // End on """
+			}
+		else if (wordtype == 7) {   // End on """
 			if (cur == '"') {
 				++count;
 				if (count == 3) {
@@ -227,27 +238,32 @@ void CodeInput::highlight_python()
 					buf->apply_tag_by_name("string", start, it);
 					wordtype = 0;
 					}
-				} else {
+				}
+			else {
 				if (cur == '\\' && next == '"')
 					++it;
 				count = 0;
 				}
 
-			} else if (wordtype == 8) { // End on :;.
+			}
+		else if (wordtype == 8) {   // End on :;.
 			if (cur == ':' || cur == ';' || cur == '.') {
 				buf->apply_tag_by_name("maths", start, it);
 				wordtype = 0;
 				}
-			} else if (wordtype == 9) { // End on $
+			}
+		else if (wordtype == 9) {   // End on $
 			if (cur == '$') {
 				++it;
 				buf->apply_tag_by_name("maths", start, it);
 				wordtype = 0;
 				}
-			} else if (wordtype == 10) { // Highlight and move on
+			}
+		else if (wordtype == 10) {   // Highlight and move on
 			buf->apply_tag_by_name("brace", start, it);
 			wordtype = 0;
-			} else if (wordtype == 11) { //Highlight and move on
+			}
+		else if (wordtype == 11) {   //Highlight and move on
 			buf->apply_tag_by_name("operator", start, it);
 			wordtype = 0;
 			}
@@ -277,7 +293,8 @@ void CodeInput::highlight_python()
 				if (next == '\'' && deref(it, 2) == '\'') {
 					wordtype = 6;
 					it.forward_chars(2);
-					} else {
+					}
+				else {
 					wordtype = 4;
 					}
 				}
@@ -287,7 +304,8 @@ void CodeInput::highlight_python()
 				if (next == '"' && deref(it, 2) == '"') {
 					wordtype = 7;
 					it.forward_chars(2);
-					} else {
+					}
+				else {
 					wordtype = 5;
 					}
 				}
@@ -317,7 +335,8 @@ void CodeInput::highlight_python()
 			else if (cur == '{' || cur == '[' || cur == '(' ||
 			         cur == '}' || cur == ']' || cur == ')') {
 				wordtype = 10;
-				} else if (g_unichar_ispunct(cur)) {
+				}
+			else if (g_unichar_ispunct(cur)) {
 				wordtype = 11;
 				}
 			}
@@ -354,13 +373,15 @@ void CodeInput::highlight_latex()
 				start = it;
 				wordtype = 0;
 				}
-			} else if (wordtype == 2) {
+			}
+		else if (wordtype == 2) {
 			if (!g_unichar_isalpha(cur)) {
 				buf->apply_tag_by_name("command", start, it);
 				start = it;
 				wordtype = 5;
 				}
-			} else if (wordtype == 4) {
+			}
+		else if (wordtype == 4) {
 			if (cur == '$') {
 				++it;
 				cur = deref(it, 0);
@@ -375,7 +396,8 @@ void CodeInput::highlight_latex()
 				start = it;
 				++it;
 				cur = deref(it, 0);
-				} else if (cur == '[') {
+				}
+			else if (cur == '[') {
 				++square_depth;
 				start = it;
 				++it;
@@ -391,23 +413,27 @@ void CodeInput::highlight_latex()
 				buf->apply_tag_by_name("parameter", start, next);
 				--curly_depth;
 				wordtype = 5;
-				} else if (cur == ']' && square_depth) {
+				}
+			else if (cur == ']' && square_depth) {
 				auto next = it;
 				next.forward_char();
 				buf->apply_tag_by_name("parameter", start, next);
 				--square_depth;
 				wordtype = 5;
-				} else if (cur == '\\') {
+				}
+			else if (cur == '\\') {
 				if (curly_depth || square_depth)
 					buf->apply_tag_by_name("parameter", start, it);
 				start = it;
 				wordtype = 2;
-				} else if (cur == '%') {
+				}
+			else if (cur == '%') {
 				if (curly_depth || square_depth)
 					buf->apply_tag_by_name("parameter", start, it);
 				start = it;
 				wordtype = 1;
-				} else if (cur == '$') {
+				}
+			else if (cur == '$') {
 				wordtype = 4;
 				start = it;
 				}
@@ -534,7 +560,8 @@ bool CodeInput::handle_button_press(GdkEventButton* button)
 		if(sah[i]=="cadabra") {
 			hascadabra=true;
 			break;
-			} else if(sah[i]=="TEXT")
+			}
+		else if(sah[i]=="TEXT")
 			hastext=true;
 		else if(sah[i]=="STRING")
 			hasstring=true;

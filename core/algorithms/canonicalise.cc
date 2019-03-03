@@ -57,7 +57,8 @@ bool canonicalise::remove_traceless_traces(iterator& it)
 				if(countmap.find(Ex(indit))==countmap.end()) {
 					countmap.insert(Ex(indit));
 					++indit;
-					} else {
+					}
+				else {
 					zero(it->multiplier);
 					return true;
 					}
@@ -112,7 +113,8 @@ std::string canonicalise::get_index_set_name(iterator it) const
 		// me why that would ever make sense.
 		//		if(ind->parent_name!="") return ind->parent_name;
 		//		else                     return ind->set_name;
-		} else return " undeclared";
+		}
+	else return " undeclared";
 	}
 
 bool canonicalise::only_one_on_derivative(iterator i1, iterator i2) const
@@ -318,11 +320,13 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 		      position_type(ii->first)==Indices::independent ) {
 			dummy_sets[" NR "+get_index_set_name(ii->first)].push_back(ii->second+1);
 			dummy_sets[" NR "+get_index_set_name(i2->first)].push_back(i2->second+1);
-			} else {
+			}
+		else {
 			if( kernel.properties.get<AntiCommuting>(ii->first, true) != 0 ) {
 				dummy_sets[" AC "+get_index_set_name(ii->first)].push_back(ii->second+1);
 				dummy_sets[" AC "+get_index_set_name(i2->first)].push_back(i2->second+1);
-				} else {
+				}
+			else {
 				dummy_sets[get_index_set_name(ii->first)].push_back(ii->second+1);
 				dummy_sets[get_index_set_name(i2->first)].push_back(i2->second+1);
 				}
@@ -402,7 +406,8 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 							          permute[tmptab(0,indnum1+1)+curr_pos]);
 							generating_set.push_back(permute);
 							}
-						} else if(tmptab.number_of_rows()>0) { // find symmetry under equal-length column exchange
+						}
+					else if(tmptab.number_of_rows()>0) {   // find symmetry under equal-length column exchange
 						unsigned int column_height=tmptab.column_size(0);
 						unsigned int this_set_start=0;
 						for(unsigned int col=1; col<=tmptab.row_size(0); ++col) {
@@ -431,7 +436,8 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 					}
 				//					txtout << "loop over tabs done" << std::endl;
 				curr_pos+=num_ind;
-				} else {
+				}
+			else {
 				unsigned int num_ind=number_of_indices(facit);
 				if(num_ind==1)
 					base_here.push_back(curr_pos+1);
@@ -776,7 +782,8 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 					ri->fl.parent_rel=num_to_tree_map[i].begin()->fl.parent_rel;
 					}
 				}
-			} else {
+			}
+		else {
 			zero(it->multiplier);
 			res = result_t::l_applied;
 			}

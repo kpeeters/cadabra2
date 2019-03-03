@@ -71,7 +71,8 @@ found:
 			dim=to_long(*itg->difference.begin()->multiplier);
 		else
 			throw ConsistencyException("Summation range for index is not an integer.");
-		} else throw ConsistencyException("No dimension known for summation index.");
+		}
+	else throw ConsistencyException("No dimension known for summation index.");
 
 	int mult=flip*(dim-tr.number_of_children(dl)/2+1);
 	multiply(dl->multiplier, (multiplier_t)(mult));

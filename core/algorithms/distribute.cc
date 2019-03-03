@@ -87,7 +87,8 @@ Algorithm::result_t distribute::apply(iterator& prod)
 				//				rep.replace(se, sep1, termrep.begin(termrep.begin()), termrep.end(termrep.begin()));
 				se=nxt;
 				}
-			} else {
+			}
+		else {
 			sibling_iterator se=rep.begin(top);
 			while(se!=rep.end(top)) {
 				if(interrupted)

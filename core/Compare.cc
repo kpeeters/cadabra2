@@ -66,7 +66,8 @@ namespace cadabra {
 					if(*one->name < *two->name) return mult;
 					else return -mult;
 					}
-				} else if( one->is_name_wildcard()==false && two->is_name_wildcard()==false ) {
+				}
+			else if( one->is_name_wildcard()==false && two->is_name_wildcard()==false ) {
 				if(*one->name < *two->name) return mult;
 				else return -mult;
 				}
@@ -479,7 +480,8 @@ namespace cadabra {
 				implicit_pattern=true;
 			else
 				is_coordinate=true;
-			} else if(one->is_integer())
+			}
+		else if(one->is_integer())
 			is_number=true;
 
 		// Various cases to be distinguished now:
@@ -570,7 +572,8 @@ namespace cadabra {
 				if(cmp==0)      return report(match_t::subtree_match);
 				else if(cmp>0)  return report(match_t::no_match_less);
 				else            return report(match_t::no_match_greater);
-				} else {
+				}
+			else {
 				// This index/pattern was not encountered earlier. If this node is an index,
 				// check that the index types in pattern and object agree (if known,
 				// otherwise assume they match).
@@ -608,7 +611,8 @@ namespace cadabra {
 								if(ivals!=t1->values.end())
 									t2=t1;
 								}
-							} else
+							}
+						else
 							t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.
 						}
 
@@ -637,7 +641,8 @@ namespace cadabra {
 									if((*t1).set_name < (*t2).set_name) return report(match_t::no_match_less);
 									else                                return report(match_t::no_match_greater);
 									}
-								} else {
+								}
+							else {
 								// If we get here, 'one' or 'two' has an Indices property, and
 								// the other one doesn't. So we do not know how to compare them,
 								// except by name. Note that we should return something which is
@@ -702,15 +707,19 @@ namespace cadabra {
 				if(xc==0) return report(match_t::subtree_match);
 				if(xc>0)  return report(match_t::match_index_less);
 				return report(match_t::match_index_greater);
-				} else return report(match_t::node_match);
-			} else if(objectpattern) {
+				}
+			else return report(match_t::node_match);
+			}
+		else if(objectpattern) {
 			subtree_replacement_map_t::iterator loc=subtree_replacement_map.find(one->name);
 			if(loc!=subtree_replacement_map.end()) {
 				return report(equal_subtree((*loc).second,two));
-				} else subtree_replacement_map[one->name]=two;
+				}
+			else subtree_replacement_map[one->name]=two;
 
 			return report(match_t::subtree_match);
-			} else if(is_coordinate || is_number) { // Check if the coordinate can come from an index.
+			}
+		else if(is_coordinate || is_number) {   // Check if the coordinate can come from an index.
 			const Indices *t2=0;
 			if(use_props==useprops_t::always) {
 				DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; )
@@ -759,7 +768,8 @@ namespace cadabra {
 
 					index_value_map[two]=one;
 					return report(match_t::node_match);
-					} else {
+					}
+				else {
 					// The index 'one' is not known to be able to take value 'two'. So this is not
 					// a match. Compare lexographically; this should be symmetric if one and two had
 					// been exchanged.
@@ -767,7 +777,8 @@ namespace cadabra {
 					if(dc<0) return report(match_t::no_match_less);
 					else     return report(match_t::no_match_greater);
 					}
-				} else {
+				}
+			else {
 				// What's left is the possibility that both indices are Coordinates, in which case they
 				// need to match exactly.
 				int cmp=subtree_compare(&properties, one, two, -2);
@@ -775,13 +786,15 @@ namespace cadabra {
 				else if(cmp>0)  return report(match_t::no_match_less);
 				else            return report(match_t::no_match_greater);
 				}
-			} else { // object is not dummy nor objectpattern nor coordinate
+			}
+		else {   // object is not dummy nor objectpattern nor coordinate
 
 			if(one->is_rational() && two->is_rational()) {
 				if(one->multiplier!=two->multiplier) {
 					if(*one->multiplier < *two->multiplier) return report(match_t::no_match_less);
 					else                                    return report(match_t::no_match_greater);
-					} else {
+					}
+				else {
 					// Equal numerical factors with different parent rel _never_ match, because
 					// we cannot determine if index raising/lowering is allowed if we do not
 					// know the bundle type.
@@ -801,7 +814,8 @@ namespace cadabra {
 
 				if(*one->multiplier < *two->multiplier) return report(match_t::no_match_less);
 				else                                    return report(match_t::no_match_greater);
-				} else {
+				}
+			else {
 				if( *one->name < *two->name ) return report(match_t::no_match_less);
 				else                          return report(match_t::no_match_greater);
 				}
@@ -862,7 +876,8 @@ namespace cadabra {
 					if(sign==0) { // object found, but we cannot move it in the right order
 						replacement_map=backup_replacements;
 						subtree_replacement_map=backup_subtree_replacements;
-						} else {
+						}
+					else {
 						factor_locations.push_back(start);
 						factor_moving_signs.push_back(sign);
 
@@ -878,13 +893,15 @@ namespace cadabra {
 								replacement_map=backup_replacements;
 								subtree_replacement_map=backup_subtree_replacements;
 								}
-							} else {
+							}
+						else {
 							// Found all factors in sub-product, now check the conditions.
 							std::string error;
 							if(conditions==tr.end()) return match_t::subtree_match;
 							if(satisfies_conditions(conditions, error)) {
 								return match_t::subtree_match;
-								} else {
+								}
+							else {
 								factor_locations.pop_back();
 								factor_moving_signs.pop_back();
 								replacement_map=backup_replacements;
@@ -892,7 +909,8 @@ namespace cadabra {
 								}
 							}
 						}
-					} else {
+					}
+				else {
 					//				txtout << tofind.node << "does not match" << std::endl;
 					replacement_map=backup_replacements;
 					subtree_replacement_map=backup_subtree_replacements;
@@ -941,7 +959,8 @@ namespace cadabra {
 					if(this_ratio!=term_ratio) {
 						replacement_map=backup_replacements;
 						subtree_replacement_map=backup_subtree_replacements;
-						} else {
+						}
+					else {
 						factor_locations.push_back(start);
 
 						Ex::sibling_iterator nxt=tofind;
@@ -954,20 +973,23 @@ namespace cadabra {
 								replacement_map=backup_replacements;
 								subtree_replacement_map=backup_subtree_replacements;
 								}
-							} else {
+							}
+						else {
 							// Found all factors in sub-product, now check the conditions.
 							std::string error;
 							if(conditions==tr.end()) return match_t::subtree_match;
 							if(satisfies_conditions(conditions, error)) {
 								return match_t::subtree_match;
-								} else {
+								}
+							else {
 								factor_locations.pop_back();
 								replacement_map=backup_replacements;
 								subtree_replacement_map=backup_subtree_replacements;
 								}
 							}
 						}
-					} else {
+					}
+				else {
 					//				txtout << tofind.node << "does not match" << std::endl;
 					replacement_map=backup_replacements;
 					subtree_replacement_map=backup_subtree_replacements;
@@ -1069,7 +1091,8 @@ namespace cadabra {
 					if(sign==0) break;
 					--probe;
 					}
-				} else {
+				}
+			else {
 				probe=one;
 				++probe;
 				while(probe!=two) {
@@ -1123,7 +1146,8 @@ namespace cadabra {
 			auto es=equal_subtree(i2, probe);
 			sign*=can_swap(i2, probe, es);
 
-			} while(sign!=0);
+			}
+		while(sign!=0);
 
 		if(move_right) {
 			// When moving right, all factors which we have already ordered
@@ -1347,12 +1371,14 @@ namespace cadabra {
 			if(ii1) {
 				if(ii1->explicit_form.size()==0) {
 					if(ii2) return 0; // nothing known about explicit form
-					} else one=ii1->explicit_form.begin();
+					}
+				else one=ii1->explicit_form.begin();
 				}
 			if(ii2) {
 				if(ii2->explicit_form.size()==0) {
 					if(ii1) return 0; // nothing known about explicit form
-					} else two=ii2->explicit_form.begin();
+					}
+				else two=ii2->explicit_form.begin();
 				}
 			// Check that indices in one and two are in mutually exclusive sets.
 			if(ii1 && ii2)
@@ -1436,7 +1462,8 @@ namespace cadabra {
 				if(tree_exact_equal(&properties, replacement_map[Ex(lhs)], replacement_map[Ex(rhs)])) {
 					return false;
 					}
-				} else if(*cond->name=="\\greater" || *cond->name=="\\less") {
+				}
+			else if(*cond->name=="\\greater" || *cond->name=="\\less") {
 				Ex::sibling_iterator lhs=cond.begin();
 				Ex::sibling_iterator rhs=lhs;
 				++rhs;
@@ -1452,11 +1479,13 @@ namespace cadabra {
 							error="Replacement not numerical.";
 							return false;
 							}
-						} else {
+						}
+					else {
 						error="Can only compare objects which evaluate to numbers.";
 						return false;
 						}
-					} else mlhs=*lhs->multiplier;
+					}
+				else mlhs=*lhs->multiplier;
 
 				// FIXME: abstract into Storage
 				multiplier_t mrhs;
@@ -1470,15 +1499,18 @@ namespace cadabra {
 							error="Replacement not numerical.";
 							return false;
 							}
-						} else {
+						}
+					else {
 						error="Can only compare objects which evaluate to numbers.";
 						return false;
 						}
-					} else mrhs=*rhs->multiplier;
+					}
+				else mrhs=*rhs->multiplier;
 
 				if(*cond->name=="\\greater" && mlhs <= mrhs) return false;
 				if(*cond->name=="\\less"    && mlhs >= mrhs) return false;
-				} else if(*cond->name=="\\indexpairs") {
+				}
+			else if(*cond->name=="\\indexpairs") {
 				int countpairs=0;
 				replacement_map_t::const_iterator it=replacement_map.begin(),it2;
 				while(it!=replacement_map.end()) {
@@ -1496,7 +1528,8 @@ namespace cadabra {
 				//			txtout << countpairs << " pairs" << std::endl;
 				if(countpairs!=*(cond.begin()->multiplier))
 					return false;
-				} else if(*cond->name=="\\regex") {
+				}
+			else if(*cond->name=="\\regex") {
 				//			txtout << "regex matching..." << std::endl;
 				Ex::sibling_iterator lhs=cond.begin();
 				Ex::sibling_iterator rhs=lhs;

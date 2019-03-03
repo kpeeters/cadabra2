@@ -33,10 +33,12 @@ Algorithm::result_t flatten_sum::apply(iterator &it)
 		tr.flatten(it);
 		it=tr.erase(it);
 		ret=result_t::l_applied;
-		} else if(num==0) {
+		}
+	else if(num==0) {
 		node_zero(it);
 		ret=result_t::l_applied;
-		} else {
+		}
+	else {
 		sibling_iterator facs=tr.begin(it);
 		str_node::bracket_t btype_par=facs->fl.bracket;
 		while(facs!=tr.end(it)) {
@@ -63,8 +65,10 @@ Algorithm::result_t flatten_sum::apply(iterator &it)
 					tr.flatten(facs);
 					tr.erase(facs);
 					facs=tmp;
-					} else ++facs;
-				} else ++facs;
+					}
+				else ++facs;
+				}
+			else ++facs;
 			}
 		}
 	return ret;

@@ -103,7 +103,8 @@ void ExNode::setitem_iterator(ExNode en, std::shared_ptr<Ex> val)
 		std::cerr << "Setitem need to convert iterator" << std::endl;
 		auto path=en.ex->path_from_iterator(en.it, en.topit);
 		use=ex->iterator_from_path(path, topit);
-		} else use=en.it;
+		}
+	else use=en.it;
 
 	Ex::iterator top=val->begin();
 	if(*top->name=="") {
@@ -295,19 +296,23 @@ void ExNode::update(bool first)
 			if(*topit->name=="\\sum") {
 				if(first) sibnxtit=ex->begin(topit);
 				else      ++sibnxtit;
-				} else {
+				}
+			else {
 				if(first) sibnxtit=topit;
 				else      sibnxtit=ex->end(topit);
 				}
-			} else if(factors_only) {
+			}
+		else if(factors_only) {
 			if(*topit->name=="\\prod") {
 				if(first) sibnxtit=ex->begin(topit);
 				else      ++sibnxtit;
-				} else {
+				}
+			else {
 				if(first) sibnxtit=topit;
 				else      sibnxtit=ex->end(topit);
 				}
-			} else {
+			}
+		else {
 			if(first) sibnxtit=ex->begin(topit);
 			else      ++sibnxtit;
 			}
@@ -323,7 +328,8 @@ void ExNode::update(bool first)
 					return;
 			++sibnxtit;
 			}
-		} else if(use_index_iterator) {
+		}
+	else if(use_index_iterator) {
 		if(first) indnxtit=cadabra::index_iterator::begin(get_kernel_from_scope()->properties, topit);
 		else      ++indnxtit;
 		// Test if this is a dummy index.
@@ -333,7 +339,8 @@ void ExNode::update(bool first)
 			if(indnxtit==cadabra::index_iterator::end(get_kernel_from_scope()->properties, topit))
 				break;
 			}
-		} else {
+		}
+	else {
 		if(first) nxtit=topit;
 		else      ++nxtit;
 
@@ -351,11 +358,13 @@ ExNode& ExNode::next()
 		if(sibnxtit==ex->end(topit))
 			throw pybind11::stop_iteration();
 		it=sibnxtit;
-		} else if(use_index_iterator) {
+		}
+	else if(use_index_iterator) {
 		if(indnxtit==cadabra::index_iterator::end(get_kernel_from_scope()->properties, topit))
 			throw pybind11::stop_iteration();
 		it=indnxtit;
-		} else {
+		}
+	else {
 		if(nxtit==stopit)
 			throw pybind11::stop_iteration();
 		it=nxtit;
@@ -452,7 +461,8 @@ ExNode Ex_getitem_iterator(std::shared_ptr<Ex> ex, ExNode en)
 		//		std::cerr << "to one for " << ex->begin() << std::endl;
 		auto path=en.ex->path_from_iterator(en.it, en.topit);
 		use=ex->iterator_from_path(path, ex->begin());
-		} else use=en.it;
+		}
+	else use=en.it;
 	//	use=ex->begin();  This does not help
 
 	ExNode ret(*get_kernel_from_scope(), ex);

@@ -19,10 +19,12 @@ int main(int argc, char **argv)
 		auto application = Cadabra::create(argc, argv);
 		const int status = application->run();
 		return status;
-		} catch(Glib::Error& er) {
+		}
+	catch(Glib::Error& er) {
 		std::cerr << er.what() << std::endl;
 		return -1;
-		} catch(std::exception& ex) {
+		}
+	catch(std::exception& ex) {
 		std::cerr << ex.what() << std::endl;
 		}
 	}

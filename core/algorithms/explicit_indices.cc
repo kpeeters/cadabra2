@@ -121,7 +121,8 @@ Algorithm::result_t explicit_indices::apply(iterator& it)
 						}
 					++args;
 					}
-				} else {
+				}
+			else {
 				handle_factor(factor, trace!=0);
 				}
 			++factor;
@@ -225,7 +226,8 @@ void explicit_indices::handle_factor(sibling_iterator& factor, bool )
 					if(first==first_index.end()) {
 						first_index[ip]=loc;
 						}
-					} else {
+					}
+				else {
 					// Use the active line index, then unset the active line.
 					tr.replace_index(search->second, line->second, true);
 					index_lines.erase(line);

@@ -22,12 +22,14 @@ bool WeightInherit::parse(Kernel& k, std::shared_ptr<Ex> ex, keyval_t& kv)
 		else if(*tpit->second->name=="additive")  combination_type=additive;
 		else if(*tpit->second->name=="power")     combination_type=power;
 		else throw ArgumentException("weight type must be 'multiplicative', 'additive' or 'power'.");
-		} else combination_type=multiplicative;
+		}
+	else combination_type=multiplicative;
 
 	tpit = kv.find("self");
 	if(tpit!=kv.end()) {
 		value_self=*tpit->second->multiplier;
-		} else value_self=0;
+		}
+	else value_self=0;
 
 	auto ret = WeightBase::parse(k, ex, kv);
 	return ret;
@@ -62,7 +64,8 @@ multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const s
 				if(first_term) {
 					first_term=false;
 					ret=thisone;
-					} else if(ret!=thisone) { // the weights in the sum are not uniform
+					}
+				else if(ret!=thisone) {   // the weights in the sum are not uniform
 					throw WeightException("Encountered sum with un-equal weight terms.");
 					}
 				}

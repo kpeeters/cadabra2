@@ -39,7 +39,8 @@ Algorithm::result_t integrate_by_parts::apply(iterator& it)
 				// Cleanup nested sums
 				iterator tmp(sib);
 				cleanup_dispatch(kernel, tr, tmp);
-				} else {
+				}
+			else {
 				iterator ti(sib);
 				ret=handle_term(it, ti);
 				if(ret==result_t::l_applied)
@@ -141,7 +142,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 						from=fac;
 						++from;
 						to=tr.end(it);
-						} else {
+						}
+					else {
 						from=tr.begin(it);
 						to=fac;
 						}
@@ -162,7 +164,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					iterator tmp(fac);
 					cleanup_dispatch(kernel, tr, tmp);
 					return result_t::l_applied;
-					} else {
+					}
+				else {
 					// Two terms needed.
 					Ex sum("\\sum");
 					auto t1prod = sum.append_child(sum.begin(), it);
@@ -221,7 +224,8 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 				//						std::cerr << pat.second->obj << std::endl;
 				//						}
 				//					}
-				} else {
+				}
+			else {
 				// Undo the split-off.
 				iterator tmp=fac;
 				cleanup_dispatch(kernel, tr, tmp);

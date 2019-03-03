@@ -141,7 +141,8 @@ namespace cadabra {
 		if(tr.number_of_children(it)==0) {
 			zero(it->multiplier);
 			it->name=name_set.insert("1").first;
-			} else {
+			}
+		else {
 			if(tr.number_of_children(it)==1) {
 				sit=tr.begin(it);
 				sit->fl.parent_rel=it->fl.parent_rel;
@@ -167,7 +168,8 @@ namespace cadabra {
 					++sib;
 					}
 				}
-			} else if(*it->name=="\\prod" || *it->name=="\\sum") {
+			}
+		else if(*it->name=="\\prod" || *it->name=="\\sum") {
 			auto sib=tr.begin(it);
 			while(sib!=tr.end(it)) {
 				if(sib->fl.parent_rel==str_node::p_super || sib->fl.parent_rel==str_node::p_sub) {
@@ -181,7 +183,8 @@ namespace cadabra {
 						if(sib->fl.parent_rel==str_node::p_super || sib->fl.parent_rel==str_node::p_sub) {
 							tr.append_child(ibrack,*sib);
 							sib=tr.erase(sib);
-							} else ++sib;
+							}
+						else ++sib;
 						}
 					it=ibrack;
 					return;

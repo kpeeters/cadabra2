@@ -205,7 +205,8 @@ void ComputeThread::try_spawn_server()
 			throw std::logic_error("Failed to read port from server.");
 			}
 		port = atoi(buffer);
-		} catch(Glib::SpawnError& err) {
+		}
+	catch(Glib::SpawnError& err) {
 		std::cerr << "Failed to start server " << argv[0] << ": " << err.what() << std::endl;
 		// FIXME: cannot just fall through, the server is not up!
 		}
@@ -295,12 +296,15 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 	if (parent_id.id == interactive_cell) {
 		docthread->on_interactive_output(root);
 		console_child_ids.push_back(cell_id.id);
-		} else if (cell_id.id == interactive_cell || std::find(console_child_ids.begin(), console_child_ids.end(), parent_id.id) != console_child_ids.end()) {
+		}
+	else if (cell_id.id == interactive_cell || std::find(console_child_ids.begin(), console_child_ids.end(), parent_id.id) != console_child_ids.end()) {
 		docthread->on_interactive_output(root);
-		} else if (msg_type.asString().find("csl_") == 0) {
+		}
+	else if (msg_type.asString().find("csl_") == 0) {
 		root["header"]["from_server"] = true;
 		docthread->on_interactive_output(root);
-		} else {
+		}
+	else {
 		try {
 			bool finished = header["last_in_sequence"].asBool();
 
@@ -324,7 +328,8 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-					} else if (msg_type.asString() == "verbatim") {
+					}
+				else if (msg_type.asString() == "verbatim") {
 					std::string output = "\\begin{verbatim}" + content["output"].asString() + "\\end{verbatim}";
 
 					// Stick an AddCell action onto the stack. We instruct the
@@ -336,18 +341,21 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-					} else if (msg_type.asString() == "latex_view") {
+					}
+				else if (msg_type.asString() == "latex_view") {
 					// std::cerr << "received latex cell " << content["output"].asString() << std::endl;
 					DataCell result(cell_id, DataCell::CellType::latex_view, content["output"].asString());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-					} else if (msg_type.asString() == "input_form") {
+					}
+				else if (msg_type.asString() == "input_form") {
 					DataCell result(cell_id, DataCell::CellType::input_form, content["output"].asString());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-					} else if (msg_type.asString() == "error") {
+					}
+				else if (msg_type.asString() == "error") {
 					std::string error = "{\\color{red}{\\begin{verbatim}" + content["output"].asString()
 					                    + "\\end{verbatim}}}";
 					if (msg_type.asString() == "fault") {
@@ -371,17 +379,20 @@ void ComputeThread::on_message(websocketpp::connection_hdl hdl, message_ptr msg)
 					docthread->queue_action(actionpos);
 
 					// FIXME: iterate over all cells and set the running flag to false.
-					} else if (msg_type.asString() == "image_png") {
+					}
+				else if (msg_type.asString() == "image_png") {
 					DataCell result(cell_id, DataCell::CellType::image_png, content["output"].asString());
 					std::shared_ptr<ActionBase> action =
 					   std::make_shared<ActionAddCell>(result, parent_id, ActionAddCell::Position::child);
 					docthread->queue_action(action);
-					} else {
+					}
+				else {
 					std::cerr << "cadabra-client: received cell we did not expect: "
 					          << msg_type.asString() << std::endl;
 					}
 				}
-			} catch (std::logic_error& ex) {
+			}
+		catch (std::logic_error& ex) {
 			// WARNING: if the server sends
 			std::cerr << "cadabra-client: trouble processing server response: " << ex.what() << std::endl;
 			}

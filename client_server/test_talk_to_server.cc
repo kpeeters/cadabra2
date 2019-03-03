@@ -25,7 +25,8 @@ void on_open(client* c, websocketpp::connection_hdl hdl)
 		   "{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_interrupt\" },"
 		   "  \"content\":  { \"code\": \"print(42)\n\"} "
 		   "}";
-		} else {
+		}
+	else {
 		msg =
 		   "{ \"header\":   { \"uuid\": \"none\", \"msg_type\": \"execute_request\" },"
 		   "  \"content\":  { \"code\": \"import time\nprint(42)\ntime.sleep(10)\n\"} "

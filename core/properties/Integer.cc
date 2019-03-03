@@ -34,7 +34,8 @@ bool Integer::parse(Kernel& kernel, keyval_t& keyvals)
 			if(*sib->name=="\\sum") {
 				difference.flatten(sib);
 				sib=difference.erase(sib);
-				} else ++sib;
+				}
+			else ++sib;
 			}
 
 		collect_terms ct(kernel, difference);

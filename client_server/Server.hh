@@ -89,6 +89,11 @@ class Server {
 		bool handles(const std::string& otype) const;
 		std::string              architecture() const;
 
+		/// Start a thread which waits for blocks to appear on the block queue, and
+		/// executes them in turn.
+
+		void wait_for_job();
+
 	protected:
 		void init();
 
@@ -126,7 +131,6 @@ class Server {
 		std::thread             runner;
 		std::mutex              block_available_mutex;
 		std::condition_variable block_available;
-		void wait_for_job();
 
 		// Data and connection info for a single block of code.
 		class Block {

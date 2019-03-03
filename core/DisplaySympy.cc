@@ -107,9 +107,11 @@ bool DisplaySympy::needs_brackets(Ex::iterator it)
 	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow") {
 		if(child=="\\sum") return true;
 		if(parent=="\\pow" && ( (tree.index(it)==0 && !it->is_integer()) || child=="\\sum" || child=="\\prod" || child=="\\pow")  ) return true;
-		} else if(it->fl.parent_rel==str_node::p_none) {
+		}
+	else if(it->fl.parent_rel==str_node::p_none) {
 		if(*it->name=="\\sum") return false;
-		} else {
+		}
+	else {
 		if(*it->name=="\\sum")  return true;
 		if(*it->name=="\\prod") return true;
 		}
@@ -222,10 +224,12 @@ void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 		else
 			str << it->multiplier->get_num();
 		str << "/" << it->multiplier->get_den();
-		} else if(*it->multiplier==-1) {
+		}
+	else if(*it->multiplier==-1) {
 		str << "-";
 		suppress_star=true;
-		} else {
+		}
+	else {
 		str << *it->multiplier;
 		}
 
@@ -596,7 +600,8 @@ void DisplaySympy::import(Ex& ex)
 						}
 					if(!removed)
 						++args;
-					} else
+					}
+				else
 					++args;
 				}
 			//				std::cerr << "stripping from " << *it->name << std::endl;

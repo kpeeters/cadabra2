@@ -71,7 +71,8 @@ void UI::run()
 	try {
 		std::cout << "calling perform" << std::endl;
 		client.perform(ac);
-		} catch(std::error_code& ex) {
+		}
+	catch(std::error_code& ex) {
 		std::cout << ex.message() << std::endl;
 		}
 	std::cout << "perform called" << std::endl;
@@ -92,7 +93,8 @@ int main(int, char **)
 		// Wait for all threads to finish.
 		client_thread.join();
 		ui_thread.join();
-		} catch(std::error_code& ex) {
+		}
+	catch(std::error_code& ex) {
 		std::cout << ex.message() << std::endl;
 		}
 

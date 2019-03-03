@@ -48,26 +48,26 @@ bool index_iterator::operator==(const index_iterator& other) const
 // we have to collect indices at multiple levels.
 
 /*
-	\bar{?}::Accent.
-	\bar{\diff{\diff{A_\mu}_{\nu}}_{\rho}};
+		\bar{?}::Accent.
+		\bar{\diff{\diff{A_\mu}_{\nu}}_{\rho}};
 @indexlist(%);
-	\diff{\diff{A_{\mu}}_{\nu}}_{\rho};
+		\diff{\diff{A_{\mu}}_{\nu}}_{\rho};
 @indexlist(%);
-	\diff{\diff{A}_{\nu}}_{\rho};
+		\diff{\diff{A}_{\nu}}_{\rho};
 @indexlist(%);
-	\bar{\psi_{m}} * \Gamma_{q n p} * \psi_{m} * H_{n p q};
+		\bar{\psi_{m}} * \Gamma_{q n p} * \psi_{m} * H_{n p q};
 @indexlist(%);
 q*A_{d c b a};
 @indexlist(%);
 A_{d c b a}*q;
 @indexlist(%);
-	\diff{\phi}_s A_\mu \diff{\phi}_t;
+		\diff{\phi}_s A_\mu \diff{\phi}_t;
 @indexlist(%);
-	\Gamma_{a b c};
+		\Gamma_{a b c};
 @indexlist(%);
-	\diff{\sin(x_\mu)}_{\nu};
+		\diff{\sin(x_\mu)}_{\nu};
 @indexlist(%);
-	\equals{A_{i}}{B_{i j} Z_{j}};
+		\equals{A_{i}}{B_{i j} Z_{j}};
 @indexlist(%);
 
 */
@@ -111,7 +111,8 @@ index_iterator& index_iterator::operator++()
 	if(walk==halt) {
 		this->node=0;
 		return *this;
-		} else {
+		}
+	else {
 		this->node=walk.node;
 		}
 

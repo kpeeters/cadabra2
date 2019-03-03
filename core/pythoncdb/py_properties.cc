@@ -111,7 +111,8 @@ namespace cadabra {
 				res += (*it).first->name();
 				ret.append(res);
 				res = "";
-				} else {
+				}
+			else {
 				res += ", ";
 				}
 			}

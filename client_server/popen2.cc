@@ -25,17 +25,20 @@ FILE * popen2(std::string command, std::string type, int & pid)
 		if (type == "r") {
 			close(fd[READ]);    //Close the READ end of the pipe since the child's fd is write-only
 			dup2(fd[WRITE], 1); //Redirect stdout to pipe
-			} else {
+			}
+		else {
 			close(fd[WRITE]);    //Close the WRITE end of the pipe since the child's fd is read-only
 			dup2(fd[READ], 0);   //Redirect stdin to pipe
 			}
 
 		execl("/bin/sh", "/bin/sh", "-c", command.c_str(), NULL);
 		exit(0);
-		} else {
+		}
+	else {
 		if (type == "r") {
 			close(fd[WRITE]); //Close the WRITE end of the pipe since parent's fd is read-only
-			} else {
+			}
+		else {
 			close(fd[READ]); //Close the READ end of the pipe since parent's fd is write-only
 			}
 		}

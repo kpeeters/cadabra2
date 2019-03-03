@@ -117,7 +117,8 @@ Algorithm::result_t rename_dummies::apply(iterator& st)
 						tr.replace_index(ii, relabel.begin(), true);
 						}
 					}
-				} else {
+				}
+			else {
 				// std::cerr << "already encountered => " << rmi->second << std::endl;
 				//				index_iterator tmp(ii);
 				//				++tmp;

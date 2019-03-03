@@ -74,7 +74,8 @@ Algorithm::result_t young_project_tensor::apply(iterator& it)
 		collect_terms cterms(kernel, rep);
 		iterator rephead=rep.begin();
 		cterms.apply(rephead);
-		} else {
+		}
+	else {
 		rep.append_child(rep.begin(), it);
 		}
 

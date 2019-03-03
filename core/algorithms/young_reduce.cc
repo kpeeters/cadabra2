@@ -57,7 +57,8 @@ multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
 			if (factor != result) {
 				return 0;
 				}
-			} else {
+			}
+		else {
 			return 0;
 			}
 		}
@@ -278,7 +279,8 @@ std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
 				++its[i - 1];
 				}
 			}
-		} else {
+		}
+	else {
 		std::vector<Ex> indices;
 
 		for (auto child : get_children_iterators(ex, ex.begin()))
@@ -295,7 +297,8 @@ std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
 			for (auto index : indices)
 				cur.append_child(cur.begin(), index.begin());
 			permutations.push_back(cur);
-			} while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {
+			}
+		while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {
 		return *lhs.begin()->name < *rhs.begin()->name;
 			}));
 		}
@@ -324,7 +327,8 @@ bool is_index_permutation(const Kernel& kernel, const Ex& lhs, const Ex& rhs)
 			std::sort(lnames.begin(), lnames.end());
 			std::sort(rnames.begin(), rnames.end());
 			return lnames == rnames;
-			} else {
+			}
+		else {
 			while (lhs.is_valid(lit) && rhs.is_valid(rit)) {
 				if (!is_index_permutation(kernel, lit, rit))
 					return false;
@@ -332,7 +336,8 @@ bool is_index_permutation(const Kernel& kernel, const Ex& lhs, const Ex& rhs)
 				}
 			return true;
 			}
-		} else {
+		}
+	else {
 		return false;
 		}
 	}
@@ -415,7 +420,8 @@ young_reduce::result_t young_reduce::reduce(iterator& it, const std::vector<Ex::
 			if (tr.number_of_children(it) == 0)
 				tr.append_child(it, str_node("0"));
 			return result_t::l_applied;
-			} else {
+			}
+		else {
 			for (auto& cur_it : its) {
 				Ex cur(cur_it);
 				Ex projected_cur = project(kernel, cur);

@@ -73,9 +73,11 @@ bool DisplayTeX::needs_brackets(Ex::iterator it)
 	if(parent=="\\prod" || parent=="\\frac" || parent=="\\pow" || parent=="\\wedge") {
 		if(*tree.parent(it)->name!="\\frac" && (*it->name=="\\sum" || *it->name=="\\oplus")) return true;
 		//		if(*tree.parent(it)->name=="\\pow" && (*it->multiplier<0 || (*it->multiplier!=1 && *it->name!="1")) ) return true;
-		} else if(it->fl.parent_rel==str_node::p_none) { // function argument
+		}
+	else if(it->fl.parent_rel==str_node::p_none) {   // function argument
 		if(*it->name=="\\sum" || *it->name=="\\oplus" || *it->name=="\\pow") return false;
-		} else {
+		}
+	else {
 		if(*it->name=="\\sum")  return true;
 		if(*it->name=="\\oplus")  return true;
 		if(*it->name=="\\prod") return true;
@@ -194,7 +196,8 @@ void DisplayTeX::print_ftableau(std::ostream& str, Ex::iterator it)
 			str << "{";
 			dispatch(str, sib);
 			str << "}";
-			} else {
+			}
+		else {
 			auto sib2=tree.begin(sib);
 			while(sib2!=tree.end(sib)) {
 				str << "{";
@@ -238,7 +241,8 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 			++number_of_nonindex_children;
 			if(*ch->name=="\\prod")
 				++number_of_nonindex_children;
-			} else ++number_of_index_children;
+			}
+		else ++number_of_index_children;
 		++ch;
 		}
 
@@ -279,7 +283,8 @@ void DisplayTeX::print_children(std::ostream& str, Ex::iterator it, int skip)
 				                             current_parent_rel_!=str_node::p_super ? str_node::b_round:current_bracket_),
 				                      current_parent_rel_);
 			else str  << "}";
-			} else str << nbsp;
+			}
+		else str << nbsp;
 
 		previous_bracket_=current_bracket_;
 		previous_parent_rel_=current_parent_rel_;
@@ -297,9 +302,11 @@ void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 			mult *= -1;
 			}
 		str << "\\frac{" << mult * it->multiplier->get_num() << "}{" << it->multiplier->get_den() << "}";
-		} else if(mult * (*it->multiplier)==-1) {
+		}
+	else if(mult * (*it->multiplier)==-1) {
 		str << "-";
-		} else {
+		}
+	else {
 		str << mult * (*it->multiplier);
 		}
 	}
@@ -511,7 +518,8 @@ void DisplayTeX::print_productlike(std::ostream& str, Ex::iterator it, const std
 			if(print_star) {
 				if(tight_star) str << inbetween;
 				else str << " " << inbetween << " ";
-				} else {
+				}
+			else {
 				str << " ";
 				}
 			}
@@ -627,7 +635,8 @@ void DisplayTeX::print_intlike(std::ostream& str, Ex::iterator it)
 		str << "\\,{\\rm d}";
 		if(*sib->name=="\\comma") {
 			dispatch(str, tree.child(sib,0));
-			} else {
+			}
+		else {
 			dispatch(str, sib);
 			}
 		++sib;
@@ -673,7 +682,8 @@ void DisplayTeX::print_dots(std::ostream& str, Ex::iterator it)
 			str << " \\ldots ";
 		else
 			str << " \\cdots ";
-		} else
+		}
+	else
 		str << " \\ldots ";
 	}
 

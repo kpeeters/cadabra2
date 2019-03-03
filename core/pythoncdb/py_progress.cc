@@ -28,7 +28,8 @@ namespace cadabra {
 				}
 			pm = new ProgressMonitor();
 			globals["__cdb_progress_monitor__"] = pm;
-			} catch (pybind11::error_already_set& ex) {
+			}
+		catch (pybind11::error_already_set& ex) {
 			std::cerr << "*!?!?" << ex.what() << std::endl;
 			}
 		return pm;

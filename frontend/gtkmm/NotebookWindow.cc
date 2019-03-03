@@ -360,7 +360,8 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		statusbarbox.hide();
 		progressbar.hide();
 		toolbar->hide();
-		} else {
+		}
+	else {
 		// Buttons
 		set_stop_sensitive(false);
 		}
@@ -396,7 +397,8 @@ bool NotebookWindow::on_delete_event(GdkEventAny* event)
 	if (quit_safeguard(true)) {
 		prefs.save();
 		return Gtk::Window::on_delete_event(event);
-		} else
+		}
+	else
 		return true;
 	}
 
@@ -405,10 +407,12 @@ void NotebookWindow::on_prefs_set_cv(int vis)
 	// Unparent from whatever we're currently a child of
 	if (console.get_parent() == nullptr) {
 		// Hidden, do nothing
-		} else if (console.get_parent() == &mainbox) {
+		}
+	else if (console.get_parent() == &mainbox) {
 		// Docked
 		mainbox.remove(console);
-		} else {
+		}
+	else {
 		// Floating
 		console_win.get_vbox()->remove(console);
 		console_win.hide();
@@ -419,7 +423,8 @@ void NotebookWindow::on_prefs_set_cv(int vis)
 		console.set_height(200);
 		mainbox.pack_end(console, false, 5);
 		console.show();
-		} else if (vis == 2) {
+		}
+	else if (vis == 2) {
 		console_win.set_transient_for(*this);
 		console_win.set_resizable(false);
 		console_win.set_size_request(900, 300);
@@ -449,7 +454,8 @@ bool NotebookWindow::on_configure_event(GdkEventConfigure *cfg)
 			engine.convert_all();
 			for(unsigned int i=0; i<canvasses.size(); ++i)
 				canvasses[i]->refresh_all();
-			} catch(TeXEngine::TeXException& ex) {
+			}
+		catch(TeXEngine::TeXException& ex) {
 			on_tex_error(ex.what(), doc.end());
 			}
 		}
@@ -469,7 +475,8 @@ void NotebookWindow::update_title()
 			set_title(title_prefix+name+"*");
 		else
 			set_title(title_prefix+name);
-		} else {
+		}
+	else {
 		if(modified)
 			set_title("Cadabra*");
 		else
@@ -537,7 +544,8 @@ void NotebookWindow::process_todo_queue()
 		if(kernel_spinner_status) {
 			kernel_spinner.show();
 			kernel_spinner.start();
-			} else {
+			}
+		else {
 			kernel_spinner.stop();
 			kernel_spinner.hide();
 			}
@@ -583,13 +591,15 @@ bool NotebookWindow::on_key_press_event(GdkEventKey* event)
 		queue_action(actionpos);
 		process_todo_queue();
 		return true;
-		} else if(is_ctrl_down) {
+		}
+	else if(is_ctrl_down) {
 		std::shared_ptr<ActionBase> actionpos =
 		   std::make_shared<ActionPositionCursor>(current_cell->id(), ActionPositionCursor::Position::next);
 		queue_action(actionpos);
 		process_todo_queue();
 		return true;
-		} else {
+		}
+	else {
 		return Gtk::Window::on_key_press_event(event);
 		}
 	}
@@ -660,7 +670,8 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 			if(i==0) {
 				ci = new CodeInput(it, it->textbuf,scale/display_scale,prefs);
 				global_buffer=ci->buffer;
-				} else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
+				}
+			else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
 			if(read_only)
 				ci->edit.set_editable(false);
 			ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -820,7 +831,8 @@ void NotebookWindow::remove_cell(const DTree& doc, DTree::iterator it)
 			auto fnd = canvasses[i]->visualcells.find(&(*rm));
 			if(fnd!=canvasses[i]->visualcells.end()) {
 				canvasses[i]->visualcells.erase(fnd);
-				} else {
+				}
+			else {
 #ifdef DEBUG
 				std::cerr << "no visualcell for that one" << std::endl;
 #endif
@@ -981,10 +993,12 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 			auto vis = canvasses[i]->visualcells.find(&(*parent));
 			if(vis==canvasses[i]->visualcells.end()) {
 				throw std::logic_error("Cannot find visual cell.");
-				} else {
+				}
+			else {
 				if(parent->hidden) {
 					(*vis).second.inbox->edit.hide();
-					} else
+					}
+				else
 					(*vis).second.inbox->edit.show();
 				}
 			}
@@ -1215,11 +1229,13 @@ void NotebookWindow::on_file_save()
 			md.set_secondary_text(res);
 			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 			md.run();
-			} else {
+			}
+		else {
 			modified=false;
 			update_title();
 			}
-		} else on_file_save_as();
+		}
+	else on_file_save_as();
 	}
 
 void NotebookWindow::on_file_save_as()
@@ -1243,7 +1259,8 @@ void NotebookWindow::on_file_save_as()
 			md.set_secondary_text(res);
 			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
 			md.run();
-			} else {
+			}
+		else {
 			modified=false;
 			update_title();
 			}
@@ -1351,7 +1368,8 @@ std::string NotebookWindow::save(const std::string& fn) const
 				temp << ln << "\n";
 				if(!temp) return "Error writing backup file";
 				}
-			} else {
+			}
+		else {
 			return "Failed to create backup file";
 			}
 		}
@@ -1369,7 +1387,8 @@ bool NotebookWindow::quit_safeguard(bool quit)
 		if(quit) {
 			if(name.size()>0) mes="Save changes to "+name+" before closing?";
 			else              mes="Save changes before closing?";
-			} else {
+			}
+		else {
 			if(name.size()>0) mes="Save changes to "+name+" before continuing?";
 			else              mes="Save changes before continuing?";
 			}
@@ -1393,7 +1412,8 @@ bool NotebookWindow::quit_safeguard(bool quit)
 		case 3:
 			return true;
 			}
-		} else return true;
+		}
+	else return true;
 
 	return false;
 	}
@@ -1788,7 +1808,8 @@ void NotebookWindow::on_prefs_highlight_syntax(int on)
 				if(on) {
 					load_css("black");
 					visualcell.second.inbox->enable_highlighting(visualcell.first->cell_type, prefs);
-					} else {
+					}
+				else {
 					load_css("blue");
 					visualcell.second.inbox->disable_highlighting();
 					}

@@ -32,7 +32,8 @@ bool sort_product::can_apply(iterator st)
 			++sib;
 			}
 		return true;
-		} else return false;
+		}
+	else return false;
 	}
 
 Algorithm::result_t sort_product::apply(iterator& st)

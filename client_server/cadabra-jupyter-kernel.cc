@@ -5,23 +5,33 @@
 #include "xeus/xguid.hpp"
 #include <boost/algorithm/string.hpp>
 
-// #define DEBUG
+// #define DEBUG 1
+
+cadabra::CadabraJupyter::CadabraJupyter()
+	: Server()
+	{
+	runner = std::thread(std::bind(&Server::wait_for_job, this));
+	pybind11::gil_scoped_release release;
+	}
 
 void cadabra::CadabraJupyter::configure_impl()
 	{
 	auto handle_comm_opened = [](xeus::xcomm&& comm, const xeus::xmessage&) {
 		std::cerr << "Comm opened for target: " << comm.target().name() << std::endl;
-	};
+		};
 	comm_manager().register_comm_target("echo_target", handle_comm_opened);
 //	using function_type = std::function<void(xeus::xcomm&&, const xeus::xmessage&)>;
+#ifdef DEBUG
+	std::cerr << "CadabraJupyter configured" << std::endl;
+#endif
 	}
-	
+
 xjson cadabra::CadabraJupyter::execute_request_impl(int execution_counter,
-																	 const std::string& code,
-																	 bool silent,
-																	 bool store_history,
-																	 xjson /* user_expressions */,
-																	 bool allow_stdin)
+      const std::string& code,
+      bool silent,
+      bool store_history,
+      xjson /* user_expressions */,
+      bool allow_stdin)
 	{
 #ifdef DEBUG
 	std::cerr << "Received execute_request" << std::endl;
@@ -33,11 +43,15 @@ xjson cadabra::CadabraJupyter::execute_request_impl(int execution_counter,
 	std::cerr << std::endl;
 #endif
 
-	std::string out = run_string(code);
-	
-//	xjson pub_data;
-//	pub_data["text/plain"] = out;
-//	publish_execution_result(execution_counter, std::move(pub_data), xjson());
+	std::unique_lock<std::mutex> lock(block_available_mutex);
+	websocketpp::connection_hdl hdl;
+	block_queue.push(Block(hdl, code, execution_counter));
+	block_available.notify_one();
+
+	// The 'wait_for_job' function which runs in a separate thread will take
+	// care of executing the 'code'. If anything in 'code' uses 'display',
+	// it will run the 'send' function below. At the end of the code
+	// execution, a final output block will be sent by 'Server::on_block_finished'.
 
 	xjson result;
 	result["status"] = "ok";
@@ -49,11 +63,11 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 #ifdef DEBUG
 	std::cerr << "received: " << msg_type << " " << output << std::endl;
 #endif
-	if(!last && output.size()>0) {
-		if(msg_type=="verbatim") {
+	if(output.size()>0) {
+		if(msg_type=="verbatim" || msg_type=="output") {
 			xjson pub_data;
 			pub_data["text/markdown"] = output;
-			publish_execution_result(1, std::move(pub_data), xjson());
+			publish_execution_result(current_id, std::move(pub_data), xjson());
 			}
 		else if(msg_type=="latex_view") {
 			xjson pub_data;
@@ -61,14 +75,14 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 			boost::replace_all(tmp, "\\begin{dmath*}", "$");
 			boost::replace_all(tmp, "\\end{dmath*}", "$");
 			pub_data["text/markdown"] = tmp;
-			publish_execution_result(1, std::move(pub_data), xjson());
+			publish_execution_result(current_id, std::move(pub_data), xjson());
 			}
 		}
-	return 0; // FIXME
+	return current_id;
 	}
 
 xjson cadabra::CadabraJupyter::complete_request_impl(const std::string& code,
-																	  int cursor_pos)
+      int cursor_pos)
 	{
 #ifdef DEBUG
 	std::cerr << "Received complete_request" << std::endl;
@@ -85,8 +99,8 @@ xjson cadabra::CadabraJupyter::complete_request_impl(const std::string& code,
 	}
 
 xjson cadabra::CadabraJupyter::inspect_request_impl(const std::string& code,
-																	 int cursor_pos,
-																	 int detail_level)
+      int cursor_pos,
+      int detail_level)
 	{
 #ifdef DEBUG
 	std::cerr << "Received inspect_request" << std::endl;
@@ -118,7 +132,7 @@ xjson cadabra::CadabraJupyter::kernel_info_request_impl()
 	xjson result;
 	result["implementation"] = "Cadabra";
 	result["implementation_version"] = std::string(CADABRA_VERSION_MAJOR)+"."+CADABRA_VERSION_MINOR
-		+"."+CADABRA_VERSION_PATCH;
+	                                   +"."+CADABRA_VERSION_PATCH;
 	result["language_info"]["name"] = "cadabra";
 	result["language_info"]["version"] = "2.0.0";
 	result["language_info"]["mimetype"] = "text/cadabra";

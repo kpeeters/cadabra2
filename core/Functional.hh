@@ -68,7 +68,8 @@ namespace cadabra {
 			if(cpy) it=walk;
 
 			walk=nxt;
-			} while(walk!=last);
+			}
+		while(walk!=last);
 
 		return it;
 		}

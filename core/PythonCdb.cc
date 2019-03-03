@@ -270,7 +270,8 @@ void Ex_setitem_iterator(std::shared_ptr<Ex> ex, ExNode en, std::shared_ptr<Ex> 
 		//		std::cerr << "for " << ex->begin() << std::endl;
 		use = ex->iterator_from_path(path, ex->begin());
 		//		std::cerr << "which is " << use << std::endl;
-		} else {
+		}
+	else {
 		use = en.it;
 		}
 
@@ -442,12 +443,14 @@ std::shared_ptr<Ex> fetch_from_python(const std::string& nm, pybind11::object sc
 	auto obj = scope[nm.c_str()];
 	try {
 		return obj.cast<std::shared_ptr<Ex>>();
-		} catch (const pybind11::cast_error& e) {
+		}
+	catch (const pybind11::cast_error& e) {
 		try {
 			auto exnode = obj.cast<ExNode>();
 			auto ret = std::make_shared<Ex>(exnode.it);
 			return ret;
-			} catch (const pybind11::cast_error& e) {
+			}
+		catch (const pybind11::cast_error& e) {
 			std::cout << nm << " is not of type cadabra.Ex or cadabra.ExNode" << std::endl;
 			}
 		}
@@ -483,7 +486,8 @@ std::shared_ptr<Ex> make_Ex_from_string(const std::string& ex_, bool make_ref, K
 
 	try {
 		str >> parser;
-		} catch (std::exception& except) {
+		}
+	catch (std::exception& except) {
 		throw ParseException("Cannot parse");
 		}
 	parser.finalise();
@@ -559,14 +563,16 @@ std::shared_ptr<Ex> add_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<
 			if (comma2)
 				ret->flatten_and_erase(loc);
 			return ret;
-			} else {
+			}
+		else {
 			auto ret = std::make_shared<Ex>(top2);
 			auto loc = ret->prepend_child(ret->begin(), ex1->begin());
 			if (comma1)
 				ret->flatten_and_erase(loc);
 			return ret;
 			}
-		} else {
+		}
+	else {
 		auto ret = std::make_shared<Ex>(*ex1);
 		if (*ret->begin()->name != "\\sum")
 			ret->wrap(ret->begin(), str_node("\\sum"));
@@ -619,7 +625,8 @@ std::shared_ptr<Ex> sub_ex(const std::shared_ptr<Ex> ex1, const std::shared_ptr<
 			auto it = ret->begin();
 			cleanup_dispatch(*get_kernel_from_scope(), *ret, it);
 			return ret;
-			} else return ex2;
+			}
+		else return ex2;
 		}
 	if (ex2->size() == 0) return ex1;
 
@@ -687,7 +694,8 @@ pybind11::list list_properties()
 			res += (*it).first->name();
 			ret.append(res);
 			res = "";
-			} else {
+			}
+		else {
 			res += ", ";
 			}
 		}
@@ -759,7 +767,8 @@ ProgressMonitor *get_progress_monitor()
 			}
 		pm = new ProgressMonitor();
 		globals["__cdb_progress_monitor__"] = pm;
-		} catch (pybind11::error_already_set& ex) {
+		}
+	catch (pybind11::error_already_set& ex) {
 		std::cerr << "*!?!?" << ex.what() << std::endl;
 		}
 	return pm;
@@ -968,7 +977,8 @@ void call_post_process(Kernel& kernel, std::shared_ptr<Ex> ex)
 		auto locals = get_locals();
 		if (scope_has(locals, "post_process")) {
 			post_process = locals["post_process"];
-			} else {
+			}
+		else {
 			auto globals = get_globals();
 			if (scope_has(globals, "post_process"))
 				post_process = globals["post_process"];
@@ -1279,7 +1289,8 @@ PYBIND11_MODULE(cadabra2, m)
 				if (val == "sympy")            k->scalar_backend = Kernel::scalar_backend_t::sympy;
 				else if (val == "mathematica") k->scalar_backend = Kernel::scalar_backend_t::mathematica;
 				else throw ArgumentException("scalar_backend must be 'sympy' or 'mathematica'.");
-				} else {
+				}
+			else {
 				throw ArgumentException("unknown argument '" + key + "'.");
 				}
 			}

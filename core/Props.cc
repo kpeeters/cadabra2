@@ -65,7 +65,8 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 				++seqarg;
 				}
 			ind=properties.get<Indices>(stt, true);
-			} else seqarg=hmarg;
+			}
+		else seqarg=hmarg;
 
 		if(seqarg!=hm) {
 			Ex::sibling_iterator seqit=seqarg.begin();
@@ -254,11 +255,13 @@ bool property::parse_one_argument(Ex::iterator arg, keyval_t& keyvals)
 		++val;
 		if(val==arg.end()) return false;
 		keyvals.push_back(keyval_t::value_type(*arg.begin()->name, val));
-		} else {
+		}
+	else {
 		if(unnamed_argument()!="") {
 			// std::cerr << unnamed_argument() << " unnamed " << *arg->name << std::endl;
 			keyvals.push_back(keyval_t::value_type(unnamed_argument(), arg));
-			} else return false;
+			}
+		else return false;
 		}
 	return true;
 	}
@@ -273,7 +276,8 @@ bool property::parse_to_keyvals(const Ex& tr, keyval_t& keyvals)
 	if(*(it)->name!="\\comma") { // one argument
 		if(parse_one_argument(it, keyvals)==false)
 			return false;
-		} else {
+		}
+	else {
 		Ex::sibling_iterator sib=tr.begin(it);
 		while(sib!=tr.end(it)) {
 			if(parse_one_argument(sib, keyvals)==false)
@@ -309,7 +313,8 @@ bool labelled_property::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 	if(lit!=keyvals.end()) {
 		label=*lit->second->name;
 		return true;
-		} else {
+		}
+	else {
 		// FIXME: not all labelled properties have an actual label, e.g.
 		// Derivative derives from WeightBase but not all derivatives need
 		// a label. If we throw an exception here, those properties fail
@@ -531,26 +536,26 @@ int Properties::serial_number(const property *listprop, const pattern *pat) cons
 
 /*
 
-	{a,b,c,d,e}::Indices(vector).
-	{a,b,c}::Indices(spinor).
+		{a,b,c,d,e}::Indices(vector).
+		{a,b,c}::Indices(spinor).
 
 This should make a,b,c spinor indices, and keep d,e as vector indices.
 
 
-	{a,b,c}::Indices(vector).
-	{d,e}::Indices(vector).
+		{a,b,c}::Indices(vector).
+		{d,e}::Indices(vector).
 
 This should make all of a,b,c,d,e vector indices.
 
 
-	{a,b,c}::Indices(vector).
-	{a,b,c,d,e,f}::Indices(spinor).
+		{a,b,c}::Indices(vector).
+		{a,b,c,d,e,f}::Indices(spinor).
 
 This should make all indices spinor indices.
 
 
-	{a,b,c,d,e}::Indices(vector, position=free).
-	{a,b,c}::Indices(vector, position=fixed).
+		{a,b,c,d,e}::Indices(vector, position=free).
+		{a,b,c}::Indices(vector, position=fixed).
 
 You can only have one type of index for each name, so this declaration implies that
 d,e should have their property removed.
@@ -600,10 +605,12 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 				objs2.push_back(obj2);
 				}
 			insert_list_prop(objs2, thelistprop);
-			} else {
+			}
+		else {
 			insert_list_prop(objs, thelistprop);
 			}
-		} else { // a normal property
+		}
+	else {   // a normal property
 		property *theprop=thepropbase;
 		assert(theprop);
 		if(*st->name=="\\comma") {
@@ -615,7 +622,8 @@ std::string Properties::master_insert(Ex proptree, property *thepropbase)
 					}
 				++sib;
 				}
-			} else {
+			}
+		else {
 			insert_prop(Ex(st), theprop);
 			}
 		}

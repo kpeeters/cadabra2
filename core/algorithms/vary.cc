@@ -89,7 +89,8 @@ Algorithm::result_t vary::apply(iterator& it)
 			}
 		if(tr.number_of_children(newsum)>0) {
 			it=tr.move_ontop(it, newsum);
-			} else { // varying any of the factors produces nothing, variation is zero
+			}
+		else {   // varying any of the factors produces nothing, variation is zero
 			zero(it->multiplier);
 			}
 		cleanup_dispatch(kernel, tr, it);
@@ -134,7 +135,8 @@ Algorithm::result_t vary::apply(iterator& it)
 			++sib;
 			if(vry.can_apply(app)) {
 				res = vry.apply(app);
-				} else {
+				}
+			else {
 				// remove this term
 				res=result_t::l_applied;
 				node_zero(app);

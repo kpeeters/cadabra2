@@ -132,7 +132,8 @@ Ex sympy::fill_matrix(const Kernel& kernel, Ex& ex, Ex& rules)
 			if(subs.can_apply(cit)) {
 				subs.apply(cit);
 				matrix.append_child(row, cit);
-				} else {
+				}
+			else {
 				zero( matrix.append_child(row, str_node("1"))->multiplier );
 				}
 			}

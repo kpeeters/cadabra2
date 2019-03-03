@@ -78,8 +78,10 @@ Algorithm::result_t factor_out::apply(iterator& it)
 							}
 						}
 					}
-				} while(fac!=tr.begin(prod));
-			} else {
+				}
+			while(fac!=tr.begin(prod));
+			}
+		else {
 			auto fac=tr.begin(prod);
 			while(fac!=tr.end(prod)) {
 				auto next=fac;
@@ -141,7 +143,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 
 			// All info is now in new_terms; can remove the original.
 			tr.erase(prod);
-			} else {
+			}
+		else {
 			prod_unwrap_single_term(prod);
 			}
 		term=next_term;
@@ -161,7 +164,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 					tr.prepend_child(prod, iterator(ins));
 					--ins;
 					}
-				} else {
+				}
+			else {
 				auto ins = tr.begin(top);
 				while(ins!=tr.end(top)) {
 					tr.append_child(prod, iterator(ins));
@@ -174,7 +178,8 @@ Algorithm::result_t factor_out::apply(iterator& it)
 			//			tr.append_children(prod, nt.second[0].begin(top), nt.second[0].end(top));
 
 			cleanup_dispatch(kernel, tr, prod);
-			} else {
+			}
+		else {
 			iterator sum;
 			if(to_right)
 				sum = tr.prepend_child(prod, str_node("\\sum"));

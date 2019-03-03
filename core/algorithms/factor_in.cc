@@ -19,7 +19,8 @@ bool factor_in::can_apply(iterator st)
 			return true;
 			});
 		return true;
-		} else return false;
+		}
+	else return false;
 	}
 
 hashval_t factor_in::calc_restricted_hash(iterator it) const
@@ -34,7 +35,8 @@ hashval_t factor_in::calc_restricted_hash(iterator it) const
 			if(first) {
 				first=false;
 				ret=tr.calc_hash(sib);
-				} else {
+				}
+			else {
 				ret*=17;
 				ret+=tr.calc_hash(sib);
 				}
@@ -67,7 +69,8 @@ bool factor_in::compare_prod_nonprod(iterator prod, iterator nonprod) const
 			if(nonprod->name==it->name) { // FIXME: subtree_equal
 				if(found) return false; // already found
 				else found=true;
-				} else return false;
+				}
+			else return false;
 			}
 		++it;
 		}
@@ -98,7 +101,8 @@ bool factor_in::compare_restricted(iterator one, iterator two) const
 				++it2;
 				}
 			}
-		} else {
+		}
+	else {
 		if(*one->name=="\\prod" && *two->name!="\\prod")
 			return compare_prod_nonprod(one,two);
 		else if(*one->name!="\\prod" && *two->name=="\\prod")
@@ -149,7 +153,8 @@ Algorithm::result_t factor_in::apply(iterator& it)
 					prefacprod=prefac.erase(prefacprod);
 					break;
 					}
-				} else { // just insert the constant
+				}
+			else {   // just insert the constant
 				str_node pf("1", str_node::b_round);
 				pf.multiplier=thisbin1->second->multiplier;
 				prefac.append_child(prefac.begin(), pf);
@@ -179,7 +184,8 @@ Algorithm::result_t factor_in::apply(iterator& it)
 					++tmp;
 					term_hash.erase(thisbin2);
 					thisbin2=tmp;
-					} else ++thisbin2;
+					}
+				else ++thisbin2;
 				}
 			++thisbin1;
 			}
@@ -201,7 +207,8 @@ Algorithm::result_t factor_in::apply(iterator& it)
 					tr.append_child(prodnode, prefit->first); // FIXME: we need a 'move'
 					tr.erase(prefit->first);
 					inserthere=tr.begin(prodnode);
-					} else one(prefit->first->multiplier);
+					}
+				else one(prefit->first->multiplier);
 				tr.insert_subtree(inserthere, (*prefit).second.begin());
 				}
 			++prefit;
@@ -224,7 +231,8 @@ Algorithm::result_t factor_in::apply(iterator& it)
 				}
 			one->multiplier=rat_set.insert(1).first;
 			++one;
-			} else ++one;
+			}
+		else ++one;
 		}
 
 	// If there is only one term left, flatten the tree.
@@ -233,7 +241,8 @@ Algorithm::result_t factor_in::apply(iterator& it)
 		tr.begin(it)->fl.parent_rel=it->fl.parent_rel;
 		tr.flatten(it);
 		it=tr.erase(it);
-		} else if(tr.number_of_children(it)==0) {
+		}
+	else if(tr.number_of_children(it)==0) {
 		it->multiplier=rat_set.insert(0).first;
 		}
 

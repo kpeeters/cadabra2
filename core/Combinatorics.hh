@@ -232,7 +232,8 @@ namespace combin {
 				if( (*it)==(*b1) && crossedoff[otherpos]==false) {
 					crossedoff[otherpos]=true;
 					break;
-					} else {
+					}
+				else {
 					if(!crossedoff[otherpos])
 						sign=-sign;
 					}
@@ -362,7 +363,8 @@ namespace combin {
 			if(weight_conditions.size()==0)
 				weight_conditions.resize(weights.size(), weight_equals);
 			else assert(weight_conditions.size()==weights.size());
-			} else assert(weight_conditions.size()==0);
+			}
+		else assert(weight_conditions.size()==0);
 
 		// Sublength handling.
 		assert(sublengths.size()!=0);
@@ -496,7 +498,8 @@ namespace combin {
 					// FIXME: for each overlap thus found, divide out by a factor
 					// due to the fact that output asym ranges can overlap.
 					// well, that's not right either.
-					} else ++current;
+					}
+				else ++current;
 				}
 			}
 
@@ -594,7 +597,8 @@ namespace combin {
 							}
 						if(discard) break;
 						}
-					} else discard=true;
+					}
+				else discard=true;
 				if(!discard)
 					if(i+1>lowest_in_group) {
 						algehad[i]=true;
@@ -660,7 +664,8 @@ namespace combin {
 						++tmpit;
 						hashmap.erase(thisbin2);
 						thisbin2=tmpit;
-						} else ++thisbin2;
+						}
+					else ++thisbin2;
 					}
 				++thisbin1;
 				}
@@ -723,7 +728,8 @@ namespace combin {
 				// to adjust the multiplicity of all the originals.
 				//		for(unsigned int i=0; i<current_; ++i)
 				//				multiplicity[i] *= svh_.current_multiplicity;
-				} else {
+				}
+			else {
 				// However, when there is input_asym or sublength_scattered
 				// are present, we cannot just do the permutation on the
 				// values and then put them into all existing sets, since the
@@ -857,7 +863,8 @@ namespace combin {
 					//				break;
 					}
 				}
-			} else {                       // permute by location
+			}
+		else {                         // permute by location
 			assert(value_permute.size()==0);
 			assert(permute_blocks.size()>0);
 			// When permuting by location, we have to apply the permutation
@@ -939,7 +946,8 @@ namespace combin {
 		++this->vector_generated_called_;
 		if(first_one) {
 			first_one=false;
-			} else {
+			}
+		else {
 			if((this->start_==-1 || this->vector_generated_called_ >= this->start_) &&
 			      (this->end_==-1   || this->vector_generated_called_ < this->end_)) {
 
@@ -1004,7 +1012,8 @@ namespace combin {
 		++this->vector_generated_called_;
 		if(first_one) {
 			first_one=false;
-			} else {
+			}
+		else {
 			if((this->start_==-1 || this->vector_generated_called_ >= this->start_) &&
 			      (this->end_==-1   || this->vector_generated_called_ < this->end_)) {
 

@@ -110,7 +110,8 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 				tmpii+=t1tab(r,c);
 				m1.add_box(r, tmpii);
 				}
-		} else m1.add_box(0, index_iterator::begin(kernel.properties, f1));
+		}
+	else m1.add_box(0, index_iterator::begin(kernel.properties, f1));
 
 	if(t2) {
 		if(t2->size(kernel.properties, tr, f2)>1)
@@ -122,7 +123,8 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 				tmpii+=t2tab(r,c);
 				m2.add_box(r, tmpii);
 				}
-		} else m2.add_box(0, index_iterator::begin(kernel.properties, f2));
+		}
+	else m2.add_box(0, index_iterator::begin(kernel.properties, f2));
 
 	// Determine the position of the first index of the two
 	// factors relative to the product (not to the tensors themselves).
@@ -328,7 +330,8 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 				ypinitial.apply(tmp);
 				trmit=nxt2;
 				}
-			} else { // just a single term
+			}
+		else {   // just a single term
 			//			if(getenv("SMART"))
 			ypinitial.asym_ranges=asym_ranges;
 			iterator tmp=term;

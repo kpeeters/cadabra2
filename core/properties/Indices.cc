@@ -45,13 +45,15 @@ bool Indices::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 				if(set_name[0]=='\"' && set_name[set_name.size()-1]=='\"')
 					set_name=set_name.substr(1,set_name.size()-2);
 				}
-			} else if(ki->first=="parent") {
+			}
+		else if(ki->first=="parent") {
 			parent_name=*ki->second->name;
 			if(parent_name.size()>0) {
 				if(parent_name[0]=='\"' && parent_name[set_name.size()-1]=='\"')
 					parent_name=parent_name.substr(1,parent_name.size()-2);
 				}
-			} else if(ki->first=="position") {
+			}
+		else if(ki->first=="position") {
 			if(*ki->second->name=="free")
 				position_type=free;
 			else if(*ki->second->name=="fixed")
@@ -59,7 +61,8 @@ bool Indices::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 			else if(*ki->second->name=="independent")
 				position_type=independent;
 			else throw ConsistencyException("Position type should be fixed, free or independent.");
-			} else if(ki->first=="values") {
+			}
+		else if(ki->first=="values") {
 			//std::cerr << "got values keyword " << *(ki->second->name) << std::endl;
 			collect_index_values(ki->second);
 
@@ -77,7 +80,8 @@ bool Indices::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
 			//				std::cerr << "Injecting Integer property" << std::endl;
 			//				kernel.inject_property(new Integer(), ex, std::make_shared<Ex>("0..4"));
 			//				}
-			} else throw ConsistencyException("Property 'Indices' does not accept key '"+ki->first+"'.");
+			}
+		else throw ConsistencyException("Property 'Indices' does not accept key '"+ki->first+"'.");
 		++ki;
 		}
 

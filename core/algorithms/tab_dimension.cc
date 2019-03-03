@@ -46,13 +46,15 @@ Algorithm::result_t tabdimension::apply(iterator& it)
 					one.add_box(currow, Ex(sib2));
 					++sib2;
 					}
-				} else one.add_box(currow, Ex(sib));
+				}
+			else one.add_box(currow, Ex(sib));
 			++sib;
 			++currow;
 			}
 		node_one(it);
 		multiply(it->multiplier, one.dimension(dimension));
-		} else {
+		}
+	else {
 		yngtab::tableau one;
 		sibling_iterator sib=tr.begin(it);
 		while(sib!=tr.end(it)) {

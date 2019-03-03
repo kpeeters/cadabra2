@@ -58,7 +58,8 @@ Algorithm::result_t indexsort::apply(iterator& st)
 		if(*(tr.parent(st)->name)=="\\prod") {
 			multiply(tr.parent(st)->multiplier, tmptab.multiplicity*origtab.multiplicity);
 			pushup_multiplier(tr.parent(st));
-			} else {
+			}
+		else {
 			multiply(st->multiplier, tmptab.multiplicity*origtab.multiplicity);
 			pushup_multiplier(st);
 			}

@@ -98,7 +98,8 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 		if(!found) {
 			if(ref->textbuf=="") { // If the last cell is empty, stay where we are.
 				newref=ref;
-				} else {
+				}
+			else {
 				DataCell newcell(DataCell::CellType::python, "");
 				newref = cl.doc.insert(sib, newcell);
 				needed_new_cell=true;
@@ -171,7 +172,8 @@ void ActionRemoveCell::revert(DocumentThread& cl, GUIBase& gb)
 	DTree::iterator newcell;
 	if(cl.doc.number_of_children(reference_parent_cell)==0) {
 		newcell = cl.doc.append_child(reference_parent_cell, removed_tree.begin());
-		} else {
+		}
+	else {
 		auto it = cl.doc.child(reference_parent_cell, reference_child_index);
 		//		++it;
 		newcell = cl.doc.insert_subtree(it, removed_tree.begin());

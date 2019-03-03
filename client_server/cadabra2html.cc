@@ -47,7 +47,8 @@ int main(int argc, char **argv)
 	if(html_file!="") {
 		std::ofstream htmlfile(html_file);
 		htmlfile << html;
-		} else {
+		}
+	else {
 		std::cout << html;
 		}
 

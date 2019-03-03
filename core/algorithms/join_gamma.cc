@@ -98,7 +98,8 @@ void join_gamma::append_prod_(const std::vector<Ex>& r1, const std::vector<Ex>& 
 		if(tree_exact_less(&kernel.properties, r1[j+num1-i], r2[j+num2-i]) || use_generalised_delta_) {
 			rep.append_child(delt, r1[j+num1-i].begin());
 			rep.append_child(delt, r2[j+num2-i].begin());
-			} else {
+			}
+		else {
 			rep.append_child(delt, r2[j+num2-i].begin());
 			rep.append_child(delt, r1[j+num1-i].begin());
 			}
@@ -168,7 +169,8 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 			if(ipr->difference.begin()->is_integer()) {
 				number_of_dimensions=std::max(number_of_dimensions, to_long(*ipr->difference.begin()->multiplier));
 				}
-			} else {
+			}
+		else {
 			number_of_dimensions=-1;
 			break;
 			}
@@ -182,7 +184,8 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 				if(ipr->difference.begin()->is_integer()) {
 					number_of_dimensions=std::max(number_of_dimensions, to_long(*ipr->difference.begin()->multiplier));
 					}
-				} else {
+				}
+			else {
 				number_of_dimensions=-1;
 				break;
 				}
@@ -216,7 +219,8 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 		//		debugout << "join: contracting " << i << " indices..." << std::endl;
 		if(!expand) {
 			append_prod_(r1, r2, num1, num2, i, mult, rep, top);
-			} else {
+			}
+		else {
 			combin::combinations<Ex> c1(r1);
 			combin::combinations<Ex> c2(r2);
 			if(num1-i>0)
@@ -292,7 +296,8 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 	if(rep.number_of_children(rep.begin())==0) {
 		multiply(st->multiplier,0);
 		return result_t::l_applied;
-		} else if(rep.number_of_children(rep.begin())==1) {
+		}
+	else if(rep.number_of_children(rep.begin())==1) {
 		rep.flatten(rep.begin());
 		rep.erase(rep.begin());
 		}
@@ -301,7 +306,8 @@ Algorithm::result_t join_gamma::apply(iterator& st)
 		multiply(rep.begin()->multiplier, *gam1->multiplier);
 		multiply(rep.begin()->multiplier, *gam2->multiplier);
 		tr.replace(tr.erase(gam1), rep.begin());
-		} else {
+		}
+	else {
 		multiply(rep.begin()->multiplier, *st->multiplier);
 		st = tr.replace(st, rep.begin());
 		}
