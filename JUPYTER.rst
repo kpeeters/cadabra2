@@ -92,4 +92,8 @@ and the JSON configuration files in::
     ${HOME}/miniconda3/share/jupyter/kernels/cadabra/
 
 If you now start Jupyter, you should be able to choose a Cadabra
-kernel.
+kernel::
+
+    ${HOME}/miniconda3/bin/jupyter notebook
+
+There is a sample `schwarzschild.ipynb` in the `examples` directory.	
