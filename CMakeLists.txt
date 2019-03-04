@@ -72,13 +72,6 @@ else()
 	message(STATUS "Building in user mode")
 endif()
 
-option(BUILD_TESTS "Build tests" ON)
-if (BUILD_TESTS)
-	message(STATUS "Building tests")
-	# Allows tests to be built in all subdirectories.
-	enable_testing()
-endif()
-
 option(ENABLE_JUPYTER "Enable building the Jupyter kernel" OFF)
 
 if(ENABLE_JUPYTER)
@@ -88,6 +81,17 @@ if(ENABLE_JUPYTER)
 else()
   set(CONDA_FOUND FALSE)
   message(STATUS "Not building the Jupyter kernel")
+endif()
+
+if(NOT ENABLE_JUPYTER)
+  option(BUILD_TESTS "Build tests" ON)
+  if (BUILD_TESTS)
+  	message(STATUS "Building tests")
+  	# Allows tests to be built in all subdirectories.
+  	enable_testing()
+ endif()
+else()
+  set(BUILD_TESTS OFF)
 endif()
 
 option(ENABLE_MATHEMATICA "Enable Mathematica support" ON)
