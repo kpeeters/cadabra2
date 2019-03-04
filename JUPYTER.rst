@@ -37,13 +37,14 @@ and if you don't think this is a problem, see e.g.
 Anyway, on to building. First activate your miniconda distribution::
 
     source ~/miniconda3/etc/profile.d/conda.sh
+	 export PATH="${HOME}/miniconda3/bin:$PATH"
 
 All dependencies for Cadabra's Jupyter kernel can then be installed from
 Conda directly, with::
 
     conda config --add channels conda-forge
     conda install xeus -c QuantStack -c conda-forge
-    conda install cmake pkg-config zeromq cppzmq xtl cryptopp sqlite util-linux
+    conda install cmake pkg-config glibmm zeromq cppzmq xtl cryptopp sqlite util-linux
     conda install nlohmann_json -c conda-forge/label/gcc7
     conda install sympy jupyter
 	 

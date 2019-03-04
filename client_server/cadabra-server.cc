@@ -11,7 +11,7 @@
 
 int main()
 	{
-#ifndef CONDA_FOUND
+#ifndef ENABLE_JUPYTER
 	snoop::log.init("CadabraServer", CADABRA_VERSION_FULL, "log.cadabra.science");
 	snoop::log.set_sync_immediately(true);
 #endif
@@ -20,7 +20,7 @@ int main()
 	server.run();
 
 //	snoop::log(snoop::info) << "Terminating" << snoop::flush;
-#ifndef CONDA_FOUND
+#ifndef ENABLE_JUPYTER
 	snoop::log.sync_with_server();
 #endif
 	}

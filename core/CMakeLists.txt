@@ -312,7 +312,7 @@ else()
 endif()
 
 # cadabra2cadabra
-if(!CONDA_FOUND)
+if(NOT ENABLE_JUPYTER)
    if(ENABLE_SYSTEM_JSONCPP)
      add_executable(cadabra2cadabra 
    	 cadabra2cadabra.cc 
@@ -403,7 +403,7 @@ install(
 )
 
 # cadabra2cadabra
-if(!CONDA_FOUND)
+if(NOT ENABLE_JUPYTER)
   install(
 	 TARGETS 
     cadabra2cadabra
