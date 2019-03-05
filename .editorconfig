@@ -1,0 +1,13 @@
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# Matches multiple files with brace expansion notation
+[*.{cc,hh}]
+charset = utf-8
+indent_style = tab
+indent_size = 3
+trim_trailing_whitespace = true
+
