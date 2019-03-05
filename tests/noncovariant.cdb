@@ -23,3 +23,22 @@ def test02():
 
 test02()
 
+def test03():
+   __cdbkernel__=create_scope()
+   {\mu, \nu, \rho, \sigma, \alpha, \beta, \gamma, \delta, \tau}::Indices(full);
+   {t, r, \theta, \phi}::Coordinate;
+   {a, b, c, d, e, f, g, h, i, j, k, l, m, n, s}::Indices(space1, values={t, r});
+   {A, B, C, E, F, G, H}::Indices(space2, values={\theta, \phi});
+   {\theta, \phi}::Coordinate;
+   D{#}::Derivative;
+   \partial{#}::PartialDerivative;
+   duRaA:=duR_{\mu a A \sigma} = \frac{1}{2} e_{\mu a}^{\alpha \beta} R_{\alpha \beta A \sigma};
+   ex:=K_{a A} = D_{\tau}{D_{\sigma}{\Theta}} duR^{\tau}_{a A}^{\sigma};
+   substitute(ex, duRaA)
+   split_index(_, $\mu, a, A$)
+   tst:= (K_{a A} = 1/2 D_{\tau}{D_{\sigma}{\Theta}} e^{\tau}_{a}^{b \beta} R_{b \beta A}^{\sigma}
+       + 1/2 D_{\tau}{D_{\sigma}{\Theta}} e^{\tau}_{a}^{B \beta} R_{B \beta A}^{\sigma}) - @(ex);
+   assert(tst==0)
+   print("Test 03 passed")
+
+test03()

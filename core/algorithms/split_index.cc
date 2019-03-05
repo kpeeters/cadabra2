@@ -1,6 +1,8 @@
 
 #include "algorithms/split_index.hh"
 
+// #define DEBUG 1
+
 using namespace cadabra;
 
 split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
@@ -47,7 +49,20 @@ split_index::split_index(const Kernel& k, Ex& tr, Ex& triple)
 
 bool split_index::can_apply(iterator it)
 	{
-	return is_termlike(it);
+	if((tr.is_head(it) && (*it->name!="\\equals" && *it->name!="\\sum"))) return true;
+	if(!tr.is_head(it)) {
+		if((*tr.parent(it)->name=="\\equals" && *it->name!="\\sum") ||
+			(*tr.parent(it)->name=="\\sum") )
+			return true;
+		}
+
+	return false;
+
+	// This does not work well:
+   //	  return is_termlike(it);
+	// The problem is that split_index has a very restricted applicability,
+	// which is less than on what the core thinks is 'term-like'. Hence
+	// the hard-coded logic above.
 	}
 
 Algorithm::result_t split_index::apply(iterator& it)
@@ -59,7 +74,9 @@ Algorithm::result_t split_index::apply(iterator& it)
 	Ex workcopy(it); // so we can make changes without spoiling the big tree
 	//	assert(*it->multiplier==1); // see if this made a difference
 
-	// std::cerr << "split index acting at " << *(it->name) << std::endl;
+#ifdef DEBUG
+	std::cerr << "split index acting at " << it << std::endl;
+#endif
 
 	// we only replace summed indices, so first find them.
 	index_map_t ind_free, ind_dummy;
