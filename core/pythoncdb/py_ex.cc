@@ -25,6 +25,8 @@
 #include "DisplaySympy.hh"
 #include "DisplayTerminal.hh"
 
+// #define DEBUG 1
+
 namespace cadabra {
 
 	namespace py = pybind11;
@@ -222,6 +224,9 @@ namespace cadabra {
 		// Call sympify on a sympy-parseable  textual representation.
 		pybind11::module sympy_parser = pybind11::module::import("sympy.parsing.sympy_parser");
 		auto parse = sympy_parser.attr("parse_expr");
+#ifdef DEBUG
+	std::cerr << "Feeding sympy: " << txt << std::endl;
+#endif
 		pybind11::object ret = parse(txt);
 		return ret;
 		}

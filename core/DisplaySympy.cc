@@ -6,7 +6,7 @@
 #include "properties/Accent.hh"
 #include <regex>
 
-//#define DEBUG 1
+#define DEBUG 1
 
 using namespace cadabra;
 
@@ -88,7 +88,8 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		};
 
 	regex_map = {
-			{"Integral",   "\\\\int"   },
+			{"Integral",   "\\int"   },
+			{"Eq",         "\\equals" },
 		};
 
 	}
@@ -476,13 +477,15 @@ void DisplaySympy::print_intlike(std::ostream& str, Ex::iterator it)
 
 void DisplaySympy::print_equalitylike(std::ostream& str, Ex::iterator it)
 	{
+	str << "Eq(";
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << " = ";
+	str << ", ";
 	++sib;
 	if(sib==tree.end(it))
 		throw ConsistencyException("Found equals node with only one child node.");
 	dispatch(str, sib);
+	str << ")";
 	}
 
 void DisplaySympy::print_components(std::ostream& str, Ex::iterator it)
@@ -561,9 +564,15 @@ bool DisplaySympy::children_have_brackets(Ex::iterator ch) const
 
 std::string DisplaySympy::preparse_import(const std::string& in)
 	{
+#ifdef DEBUG
+	std::cerr << "DisplaySympy::preparse_import" << std::endl;
+#endif
 	std::string ret = in;
 	for(auto& r: regex_map) {
-		ret = std::regex_replace(ret, std::regex(r.second), r.first);
+#ifdef DEBUG
+		std::cerr << "Replacing " << r.first << " with " << r.second << std::endl;
+#endif
+		ret = std::regex_replace(ret, std::regex(r.first), r.second);
 		}
 	return ret;
 	}
