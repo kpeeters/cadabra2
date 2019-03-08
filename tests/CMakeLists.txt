@@ -86,6 +86,7 @@ set(RTESTS
   derivative
   relativity
   spinors
+  sympy
   symmetry
   vary
   young

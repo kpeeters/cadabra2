@@ -1,18 +1,26 @@
-{r,t}::Coordinate;
-f::Depends(r,t);
-ex:=f*A;
-ex._sympy_()
 
-\partial{#}::PartialDerivative;
-ex:= \partial_{r}{ f };
-ex._sympy_()
-
-\partial{#}::PartialDerivative;
-ex:= \partial_{r}{ (\sin(r)**2)**2 };
-
-ex:=3x + x**2 + a x**2 + b x;
-q=SympyBridge(ex)
-q.to_sympy()
-q.from_sympy( str(sympy.collect(q.to_sympy(), $x$)) )
-ex;
     
+def test01():
+   __cdbkernel__=create_scope()    
+   ex:=3x + x**2 + a x**2 + b x;
+   q=SympyBridge(ex)
+   q.from_sympy( str(sympy.collect(q.to_sympy(), $x$)) )
+   tst:= x**2 (a + 1) + x ( b + 3) - @(ex);
+   assert(tst==0)
+   print("Test 01 passed")
+    
+test01()
+
+def test02():
+   __cdbkernel__=create_scope()
+   {r,t}::Coordinate;
+   f::Depends(r,t);
+   ex:=f*A;
+   \partial{#}::PartialDerivative;
+   ex:= \partial_{r}{ f + (\sin(r)**2)**2 };
+   map_sympy(ex)
+   tst:= \partial_{r}{f} + 4 \sin(r)**3 \cos(r) - @(ex);
+   assert(tst==0)
+   print("Test 02 passed")
+
+test02()

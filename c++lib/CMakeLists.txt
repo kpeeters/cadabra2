@@ -177,7 +177,7 @@ FILE(GLOB PROP_HEADERS ${CMAKE_SOURCE_DIR}/../core/properties/*.hh)
 include_directories("${CMAKE_SOURCE_DIR}/../core" "." "${PROJECT_BINARY_DIR}/c++lib")
 
 # Scalar backend options.
-option(USE_TREETRACKER "Use the TreeTracker scalar backend" ON)
+option(USE_TREETRACKER "Use the TreeTracker scalar backend" OFF)
 set(PATH_TREETRACKER   "./treetracker" CACHE STRING "Path to the TreeTracker library")
 if(USE_TREETRACKER)
   add_definitions(-DUSE_TREETRACKER)
