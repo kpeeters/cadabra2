@@ -6,7 +6,7 @@
 #include "properties/Accent.hh"
 #include <regex>
 
-#define DEBUG 1
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -23,6 +23,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 			{"\\sum", "Sum" },
 			{"\\exp", "exp" },
 			{"\\sqrt", "sqrt" },
+			{"\\equals", "Eq" },
 
 			{"\\infty", "sympy.oo"},
 
@@ -88,8 +89,7 @@ DisplaySympy::DisplaySympy(const Kernel& kernel, const Ex& e)
 		};
 
 	regex_map = {
-			{"Integral",   "\\int"   },
-			{"Eq",         "\\equals" },
+			{"Integral",   "\\int"   }
 		};
 
 	}

@@ -17,6 +17,7 @@
 #include "PreClean.hh"
 #include "Cleanup.hh"
 #include "Bridge.hh"
+#include "SympyCdb.hh"
 
 // Includes for display routines
 #include <sstream>
@@ -434,7 +435,12 @@ namespace cadabra {
 		return ret;
 		}
 
-
+	std::shared_ptr<sympy::SympyBridge> SympyBridge_init(std::shared_ptr<Ex> ex)
+		{
+		auto sb = std::make_shared<sympy::SympyBridge>(*get_kernel_from_scope(), ex);
+		return sb;
+		}
+	
 	Ex_ptr Ex_from_string(const std::string& ex_, bool, Kernel *kernel)
 		{
 		if (kernel == nullptr)
@@ -583,6 +589,12 @@ namespace cadabra {
 			return a.add_ex(b);
 			}, pybind11::is_operator{});
 
+		pybind11::class_<sympy::SympyBridge, std::shared_ptr<sympy::SympyBridge> >(m, "SympyBridge")
+			.def(py::init(&SympyBridge_init))
+			.def("to_sympy", &sympy::SympyBridge::export_ex)
+			.def("from_sympy", &sympy::SympyBridge::import_ex)
+			;
+		
 		m.def("tree", &print_tree);
 
 		m.def("map_sympy", &map_sympy_wrapper,

@@ -5,9 +5,25 @@
 #include "Storage.hh"
 #include "Kernel.hh"
 #include "Stopwatch.hh"
+#include "DisplaySympy.hh"
+
+#include <pybind11/pybind11.h>
 
 namespace sympy {
 
+	/// Helper class to enable output of 
+	
+	class SympyBridge : public cadabra::DisplaySympy {
+		public:
+			SympyBridge(const cadabra::Kernel&, std::shared_ptr<cadabra::Ex>);
+			
+			pybind11::object export_ex();
+			void             import_ex(const std::string&);
+
+		private:
+			std::shared_ptr<cadabra::Ex> ex;
+	};
+	
 	/// \ingroup scalar
 	///
 	/// Functionality to act with Sympy on all scalar parts of an expression, and

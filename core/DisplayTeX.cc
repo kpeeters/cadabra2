@@ -96,7 +96,7 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 		if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
 
-	if(*obj->name=="\\cos" || *obj->name=="\\sin" || *obj->name=="\\tan") {
+	if(*obj->name=="\\cos" || *obj->name=="\\sin" || *obj->name=="\\tan" || *obj->name=="\\exp") {
 		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
 		if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}

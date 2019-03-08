@@ -14,6 +14,45 @@ using namespace cadabra;
 
 // #define DEBUG 1
 
+sympy::SympyBridge::SympyBridge(const Kernel& k, std::shared_ptr<Ex> ex)
+	: DisplaySympy(k, *ex), ex(ex)
+	{
+	}
+
+pybind11::object sympy::SympyBridge::export_ex()
+	{
+	std::ostringstream str;
+	output(str);
+	pybind11::module sympy_parser = pybind11::module::import("sympy.parsing.sympy_parser");
+	auto parse = sympy_parser.attr("parse_expr");
+	pybind11::object ret = parse(str.str());
+
+	return ret;
+	}
+
+void sympy::SympyBridge::import_ex(const std::string& s)
+	{
+	preparse_import(s);
+#ifdef DEBUG
+	std::cerr << s << std::endl;
+#endif
+	auto ptr = std::make_shared<Ex>();
+	cadabra::Parser parser(ptr);
+	std::stringstream istr(s);
+	istr >> parser;
+
+	pre_clean_dispatch_deep(kernel, *parser.tree);
+	cleanup_dispatch_deep(kernel, *parser.tree);
+#ifdef DEBUG
+	std::cerr << "importing " << parser.tree->begin() << std::endl;
+#endif
+	import(*parser.tree);
+	Ex::iterator first=parser.tree->begin();
+	Ex::iterator orig=tree.begin();
+	ex->move_ontop(orig, first);
+	}
+
+
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args,
                           const std::string& method)
 	{

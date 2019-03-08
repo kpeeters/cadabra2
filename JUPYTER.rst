@@ -42,11 +42,9 @@ Anyway, on to building. First activate your miniconda distribution::
 All dependencies for Cadabra's Jupyter kernel can then be installed from
 Conda directly, with::
 
-    conda config --add channels conda-forge
-    conda install xeus -c QuantStack -c conda-forge
+    conda config --add channels conda-forge/label/gcc7
     conda install cmake pkg-config glibmm zeromq cppzmq xtl cryptopp sqlite util-linux
-    conda install nlohmann_json -c conda-forge/label/gcc7
-    conda install sympy jupyter
+    conda install xeus nlohmann_json sympy jupyter
 	 
 Now it is time to do the Cadabra build. Configure with options which
 ensure that CMake picks up the Conda libraries first, and make it

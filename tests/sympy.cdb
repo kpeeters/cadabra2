@@ -9,3 +9,10 @@ ex._sympy_()
 
 \partial{#}::PartialDerivative;
 ex:= \partial_{r}{ (\sin(r)**2)**2 };
+
+ex:=3x + x**2 + a x**2 + b x;
+q=SympyBridge(ex)
+q.to_sympy()
+q.from_sympy( str(sympy.collect(q.to_sympy(), $x$)) )
+ex;
+    
