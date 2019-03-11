@@ -146,6 +146,7 @@ set(PROPS
 set(PACKAGES
   cdb/core/manip
   cdb/core/component
+  cdb/sympy/solvers
   )
 
 # Table of contents

@@ -28,6 +28,7 @@ set(PACKAGES
   core/manip
   core/solve
   utils/node
+  sympy/solvers
   )
 
 set(PDIRS

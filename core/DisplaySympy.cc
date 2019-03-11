@@ -331,7 +331,7 @@ void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	bool first=true;
-	str << "(";
+	str << "[";
 	while(sib!=tree.end(it)) {
 		if(first)
 			first=false;
@@ -340,7 +340,7 @@ void DisplaySympy::print_commalike(std::ostream& str, Ex::iterator it)
 		dispatch(str, sib);
 		++sib;
 		}
-	str << ")";
+	str << "]";
 	//print_closing_bracket(str, (*it).fl.bracket, str_node::p_none);
 	}
 
