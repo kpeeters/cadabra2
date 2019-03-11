@@ -1,0 +1,446 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\package{cdb.sympy.solvers}{Access to Sympy solver functions.}\n\nThese are simple wrappers to make Sympy solvers available from Cadabra, using\nCadabra expressions. There are some differences in the input and output of these\nfunctions with respect to Sympy, mainly to make things more consistent."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\package{cdb.sympy.solvers}{Access to Sympy solver functions.}\n\nThese are simple wrappers to make Sympy solvers available from Cadabra, using\nCadabra expressions. There are some differences in the input and output of these\nfunctions with respect to Sympy, mainly to make things more consistent."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{dsolve(Ex: equation, Ex: function) -> Ex}{Solve a single ordinary differential equation.}\n\nGiven a single differential equation and a function to be solved for, return the solution. Functions can\nhave implicit dependence on the independent variable, as in the example below, where $f$ depends on $x$\nbut that dependence is not spelled out again explicitly in the equation."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{dsolve(Ex: equation, Ex: function) -> Ex}{Solve a single ordinary differential equation.}\n\nGiven a single differential equation and a function to be solved for, return the solution. Functions can\nhave implicit dependence on the independent variable, as in the example below, where $f$ depends on $x$\nbut that dependence is not spelled out again explicitly in the equation."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "import sympy"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def dsolve(ex, obj):\n   ret = $@(ex)$\n   sb = SympyBridge(ret)\n   sb.from_sympy( str(sympy.dsolve( sb.to_sympy(), obj._sympy_())) )\n   return ret"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}x.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}f.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\partial_{x x}(f) + \\partial_{x}(f) = \\sin(x)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\partial_{x x}{f}+\\partial_{x}{f} = \\sin{x}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "f = C1 + C2 \\exp(-x) -  1/2 \\sin(x) -  1/2 \\cos(x)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}f = C1+C2 \\exp\\left(-x\\right) - \\frac{1}{2}\\sin{x} - \\frac{1}{2}\\cos{x}\\end{dmath*}"
+				}
+			],
+			"source" : "x::Coordinate;\nf::Depends(x);\n\\partial{#}::PartialDerivative;\nex:= \\partial_{x x}{f} + \\partial_{x}{f} = \\sin(x);\nsol=dsolve(ex, $f$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\partial_{x x}((C1 + C2 \\exp(-x) -  1/2 \\sin(x) -  1/2 \\cos(x))) + \\partial_{x}((C1 + C2 \\exp(-x) -  1/2 \\sin(x) -  1/2 \\cos(x))) = \\sin(x)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\partial_{x x}\\left(C1+C2 \\exp\\left(-x\\right) - \\frac{1}{2}\\sin{x} - \\frac{1}{2}\\cos{x}\\right)+\\partial_{x}\\left(C1+C2 \\exp\\left(-x\\right) - \\frac{1}{2}\\sin{x} - \\frac{1}{2}\\cos{x}\\right) = \\sin{x}\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(ex, sol);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\sin(x) = \\sin(x)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\sin{x} = \\sin{x}\\end{dmath*}"
+				}
+			],
+			"source" : "map_sympy(ex, \"simplify\");"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{linsolve(Ex: equations, Ex: objects) -> Ex}{Solve a linear system for unknowns.}\n\nGiven an expression containing one or more linear equations, and an second expression containing\nthe variables to solve for, determine the solutions. Returns list with one element, which is a\nlist of substitution rules for the variables that have been solved for (the output is a nested\nlist to ensure that it is similar to the output of \\algo{nonlinsolve})."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{linsolve(Ex: equations, Ex: objects) -> Ex}{Solve a linear system for unknowns.}\n\nGiven an expression containing one or more linear equations, and an second expression containing\nthe variables to solve for, determine the solutions. Returns list with one element, which is a\nlist of substitution rules for the variables that have been solved for (the output is a nested\nlist to ensure that it is similar to the output of \\algo{nonlinsolve})."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def linsolve(exs, objs):\n   ret = $@(exs)$\n   obl = $@(objs)$\n   if ret.head()!=r\"\\comma\":\n      ret = $\\comma{ @(ret) }$\n   if obl.head()!=r\"\\comma\":\n      obl = $\\comma{ @(obl) }$\n   sb = SympyBridge(ret)\n   sb.from_sympy( str(sympy.linsolve( sb.to_sympy(), obl._sympy_())) )\n   # The result is a list of solutions. Turn this into a list of\n   # rules.\n   if ret.head()!=r\"\\comma\":\n      ret = $ \\\\comma{ \\comma{ @(objs) -> @(ret) } } $\n   else:\n      nret = $\\\\comma{}$\n      for i in range(len(ret)):\n         tmpv=objs[i]\n         tmps=ret[i]\n         nret.top().append_child($ @(tmpv) -> @(tmps) $)\n      ret=$ \\comma{ @(nret) }$\n   return ret"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "x + a = 0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}x+a = 0\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{{x → -a}}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\left[x \\rightarrow -a\\right]\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=  x + a = 0;\nsol=linsolve(ex, $x$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = 0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0 = 0\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(ex, sol[0]);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{x + 1 = 0, y +  4/3 x + 2a = 0}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[x+1 = 0,~\\discretionary{}{}{} y+\\frac{4}{3}x+2a = 0\\right]\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{{x → -1, y → -2a +  4/3 }}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\left[x \\rightarrow -1,~\\discretionary{}{}{} y \\rightarrow -2a+\\frac{4}{3}\\right]\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= x + 1 = 0, y + 4/3 x + 2 a = 0;\nsol=linsolve(ex, $x,y$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{0 = 0, 0 = 0}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[0 = 0,~\\discretionary{}{}{} 0 = 0\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(ex, sol[0]);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "x A_{m} C^{m} + b D_{n p} G^{n p} = 0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}x A_{m} C^{m}+b D_{n p} G^{n p} = 0\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{{x → -b D_{n p} G^{n p} (A_{m} C^{m})**(-1)}}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\left[x \\rightarrow -b D_{n p} G^{n p} {\\left(A_{m} C^{m}\\right)}^{-1}\\right]\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= x A_{m} C^{m} + b D_{n p} G^{n p} = 0;\nlinsolve(ex, $x$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{nonlinsolve}{Solve a system of non-linear equations.}\n\nGiven an expression containing one or more linear equations, and an second expression containing\nthe variables to solve for, determine the solutions. Returns a substitution rule or a list of\nsubstitution rules for the variables that have been solved for."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{nonlinsolve}{Solve a system of non-linear equations.}\n\nGiven an expression containing one or more linear equations, and an second expression containing\nthe variables to solve for, determine the solutions. Returns a list of substitution rules for the \nvariables that have been solved for."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def nonlinsolve(exs, objs):\n   ret = $@(exs)$\n   obl = $@(objs)$\n   if ret.head()!=r\"\\comma\":\n      ret = $\\comma{ @(ret) }$\n   if obl.head()!=r\"\\comma\":\n      obl = $\\comma{ @(obl) }$\n   sb = SympyBridge(ret)\n   sb.from_sympy( str(sympy.nonlinsolve( sb.to_sympy(), objs._sympy_())) )\n   # The result is a list of solutions. Turn this into a list of\n   # rules.\n   if len(obl)==1:\n      nret = $\\\\comma{}$\n      for i in range(len(ret)):\n         tmps=ret[i]\n         nret.top().append_child($ \\comma{ @(objs) -> @(tmps) } $)\n      ret=nret\n   else:\n      nret = $\\\\comma{}$\n      for i in range(len(ret)):\n         tsol=$\\\\comma{}$\n         for v in range(len(objs)):\n            tmpv=objs[v]\n            tmps=ret[i][v]\n            tsol.top().append_child($ @(tmpv) -> @(tmps) $)\n         nret.top().append_child(tsol)\n      ret=nret\n   return ret"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "(x)**2-1"
+						}
+					],
+					"source" : "\\begin{dmath*}{}{x}^{2}-1\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{{x → -1}, {x → 1}}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\left[x \\rightarrow -1\\right],~\\discretionary{}{}{} \\left[x \\rightarrow 1\\right]\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= x**2-1;\nsol=nonlinsolve(ex, $x$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "substitute(ex, sol[0]);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "(x)**2 + A_{m} B^{m} = 0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}{x}^{2}+A_{m} B^{m} = 0\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{{x → -(-A_{m} B^{m})**( 1/2 )}, {x → (-A_{m} B^{m})**( 1/2 )}}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\left[x \\rightarrow -\\sqrt{-A_{m} B^{m}}\\right],~\\discretionary{}{}{} \\left[x \\rightarrow \\sqrt{-A_{m} B^{m}}\\right]\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= x**2 + A_{m} B^{m} = 0;\nsol=nonlinsolve(ex, $x$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{(x)**2-1 = 0, (y)**2-2 = 0}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[{x}^{2}-1 = 0,~\\discretionary{}{}{} {y}^{2}-2 = 0\\right]\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{{x → -1, y → -2**( 1/2 )}, {x → -1, y → 2**( 1/2 )}, {x → 1, y → -2**( 1/2 )}, {x → 1, y → 2**( 1/2 )}}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\left[x \\rightarrow -1,~\\discretionary{}{}{} y \\rightarrow -\\sqrt{2}\\right],~\\discretionary{}{}{} \\left[x \\rightarrow -1,~\\discretionary{}{}{} y \\rightarrow \\sqrt{2}\\right],~\\discretionary{}{}{} \\left[x \\rightarrow 1,~\\discretionary{}{}{} y \\rightarrow -\\sqrt{2}\\right],~\\discretionary{}{}{} \\left[x \\rightarrow 1,~\\discretionary{}{}{} y \\rightarrow \\sqrt{2}\\right]\\right]\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= { x**2 - 1 = 0, y**2 - 2 =0 }; \nnonlinsolve(ex, $x,y$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
