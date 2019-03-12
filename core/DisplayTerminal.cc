@@ -375,7 +375,10 @@ void DisplayTerminal::print_arrowlike(std::ostream& str, Ex::iterator it)
 	{
 	Ex::sibling_iterator sib=tree.begin(it);
 	dispatch(str, sib);
-	str << " → ";
+	if(use_unicode)
+		str << " → ";
+	else
+		str << " -> ";
 	++sib;
 	dispatch(str, sib);
 	}
