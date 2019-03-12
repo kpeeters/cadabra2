@@ -306,6 +306,11 @@ namespace cadabra {
 
 	bool cleanup_sumlike(const Kernel& k, Ex&tr, Ex::iterator& it)
 		{
+#ifdef DEBUG
+		std::cerr << "cleanup_sumlike, before: " << it << std::endl;
+		if(tr.number_of_children(it)==0)
+			std::cerr << "zero children on sum; " << it.node << ", tree = " << tr.begin() << std::endl;
+#endif
 		assert(*it->name=="\\sum");
 		bool ret=false;
 
@@ -368,6 +373,9 @@ namespace cadabra {
 
 		ret = ret || push_down_multiplier(k, tr, it);
 
+#ifdef DEBUG
+		std::cerr << "cleanup_sumlike, after, " << ret << ": " << it << std::endl;
+#endif
 		return ret;
 		}
 

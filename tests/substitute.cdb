@@ -425,4 +425,22 @@ def test120():
     print("Test 120 passed")
 
 test120()
-        
+
+def test121():
+    __cdbkernel__=create_scope()
+    {\dagger}::Symbol.
+    {a,n,\sigma,\tau}::Symbol;
+    {\Gamma^{\dagger}_{\tau?}, N_{a? \tau?}, G_{n? \sigma?}}::NonCommuting.
+    {\Gamma^{\dagger}_{\tau?}, N_{a? \tau?}}::Depends(\commutator{#});
+    rule:= N_{a? \tau?} G_{n?? \sigma?} -> n?? G_{(n??-1) \sigma?}
+             \commutator{N_{a? \tau?}}{\Gamma^{\dagger}_{\sigma?}}
+           + 1/2 n?? (n??-1)
+              \commutator{\commutator{N_{a? \tau?}}{\Gamma^{\dagger}_{\sigma?}}}{\Gamma^{\dagger}_{\sigma?}} G_{(n??-2) \sigma?};
+    ex:=N_{a \tau} G_{{n-1} \sigma};
+    substitute(_,rule)
+    tst:= (n-1) G_{{n-2} \sigma} \commutator{ N_{a \tau} }{ \Gamma^{\dagger}_{\sigma} } +
+          1/2 (n-1) (n-2) \commutator{ \commutator{ N_{a \tau} }{ \Gamma^{\dagger}_{\sigma} }}{ \Gamma^{\dagger}_{\sigma} } G_{{n-3} \sigma} - @(ex);
+    assert(tst==0)
+    print("Test 121 passed")
+
+test121()

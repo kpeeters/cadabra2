@@ -8,6 +8,8 @@
 #include "properties/IndexInherit.hh"
 #include <sstream>
 
+// #define DEBUG
+
 using namespace cadabra;
 
 IndexClassifier::IndexClassifier(const Kernel& k)
@@ -57,7 +59,8 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 	while(it1!=one.end()) {
 		const Coordinate *cdn=kernel.properties.get<Coordinate>(it1->second, true);
 		const Symbol     *smb=Symbol::get(kernel.properties, it1->second, true);
-		if(it1->second->is_integer()==false && !cdn && !smb && !it1->second->is_name_wildcard() && !it1->second->is_object_wildcard() ) {
+		if(it1->second->is_integer()==false && !cdn && !smb && !it1->second->is_name_wildcard() && !it1->second->is_object_wildcard() &&
+			!(*it1->second->name=="\\sum")) {
 			bool move_this_one=false;
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
@@ -281,8 +284,9 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 			while(i1!=one.end()) {
 				const Coordinate *cdn=kernel.properties.get_composite<Coordinate>(i1->second, true);
 				const Symbol     *smb=kernel.properties.get_composite<Symbol>(i1->second, true);
-				// Integer, coordinate or symbol indices, or pattern objects, are always ok.
-				if(i1->second->is_integer()==false && !cdn && !smb && !i1->second->is_name_wildcard() && !i1->second->is_object_wildcard() ) {
+				// Integer, coordinate or symbol indices, or pattern objects, or '\sum' nodes, are always ok.
+				if(i1->second->is_integer()==false && !cdn && !smb && !i1->second->is_name_wildcard() && !i1->second->is_object_wildcard()
+					&& !(*i1->second->name=="\\sum")) {
 					// Check whether there is a corresponding free index in the current term.
 					if(two.count((*i1).first)==0) {
 						// std::cerr << "did not find Symbol for " << i1->second << std::endl;
@@ -323,6 +327,14 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 					ok = ok && free_index_set_contains(term_free, first_free);
 					if(!ok) {
 						if(*it->name=="\\sum") {
+#ifdef DEBUG
+							std::cerr << "--- first:" << std::endl;
+							for(auto& ii: first_free)
+								std::cerr << ii.first << std::endl;
+							std::cerr << "--- term:" << std::endl;
+							for(auto& ii: term_free)
+								std::cerr << ii.first << std::endl;
+#endif
 							throw ConsistencyException("Free indices in different terms in a sum do not match.");
 							}
 						else

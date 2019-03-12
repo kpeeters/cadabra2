@@ -3,10 +3,9 @@
 #include "Cleanup.hh"
 #include "Functional.hh"
 #include "algorithms/substitute.hh"
-//#include "algorithms/prodcollectnum.hh"
 #include "properties/Indices.hh"
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 using namespace cadabra;
 
@@ -273,7 +272,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 	// After all replacements have been done, we need to cleanup the
 	// replacement tree.
-	// std::cerr << "repl before: \n" << repl << std::endl;
+#ifdef DEBUG
+	std::cerr << "substitute: repl before: \n" << repl << std::endl;
+#endif
 	cleanup_dispatch_deep(kernel, repl);
 	// std::cerr << "repl after: \n" << repl << std::endl;
 
@@ -354,17 +355,24 @@ Algorithm::result_t substitute::apply(iterator& st)
 	//	// FIXME: still needed?
 	//	cleanup_dispatch(kernel, tr, st);
 
-	// std::cerr << tr << std::endl;
+#ifdef DEBUG
+	std::cerr << "substitute: before final cleanup: " << tr.begin() << std::endl;
+	std::cerr << "substitute: we have " << subtree_insertion_points.size() << " insertion points" << std::endl;
+#endif
 
 	// Cleanup nests on all insertion points and on the top node.
-	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {
-		iterator ip=subtree_insertion_points[i];
-		//std::cerr << *ip->name << std::endl;
-		cleanup_dispatch(kernel, tr, ip);
-		}
-
+//	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {
+//		iterator ip=subtree_insertion_points[i];
+//		//std::cerr << *ip->name << std::endl;
+//		cleanup_dispatch(kernel, tr, ip);
+//		}
+//
 	cleanup_dispatch(kernel, tr, st);
 
+#ifdef DEBUG
+	std::cerr << "substitute: complete" << std::endl;
+#endif
+	
 	return result_t::l_applied;
 	}
 
