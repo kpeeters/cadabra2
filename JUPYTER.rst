@@ -12,11 +12,12 @@ against a Conda python, simply because that enables us to build on the
 Building using Conda
 --------------------
 
-If you intend to use the Cadabra Jupyter kernel with Jupyter
-distributed through Conda, then you will need to build the Cadabra
-kernel against Conda libraries, not system-provided ones
-(mix-and-match will also not work). If you do not have Conda yet, get
-it from
+The following instructions have been tested on a clean Ubuntu 18.04
+installation.
+
+The Cadabra Jupyter kernel uses the Xeus library, which is most easily
+obtained by getting it from Conda. If you do not have Conda yet, get
+a minimal installation (MiniConda) from
 
   https://docs.conda.io/en/latest/miniconda.html
 
@@ -25,7 +26,7 @@ it from
 When building against Conda, Cadabra will build only the Python module
 and the cadabra-jupyter-kernel binary. It is not possible to build
 many of the other parts of Cadabra using Conda, for various reasons:
-Conda's glibmm is not built with c++11 enabled, there is no gtkmm
+Conda's glibmm is not built with C++11 enabled, there is no gtkmm
 library, and probably others. For a discussion on this, see
 
   https://groups.google.com/a/continuum.io/d/msg/anaconda/oHtExJU9oiM/oMZLGpn1CAAJ
@@ -34,23 +35,28 @@ and if you don't think this is a problem, see e.g.
 
   https://unix.stackexchange.com/questions/414904/anaconda-qt-vs-system-qt
 
-Anyway, on to building. First activate your miniconda distribution::
+Anyway, on to building. First ensure you have your build tools::
 
-    source ~/miniconda3/etc/profile.d/conda.sh
-	 export PATH="${HOME}/miniconda3/bin:$PATH"
+    sudo apt install g++ make libboost-all-dev
+  
+Then activate your miniconda distribution::
+
+    source ~/miniconda3/bin/activate
 
 All dependencies for Cadabra's Jupyter kernel can then be installed from
 Conda directly, with::
 
-    conda config --add channels conda-forge/label/gcc7
-    conda install cmake pkg-config glibmm zeromq cppzmq xtl cryptopp sqlite util-linux
-    conda install xeus nlohmann_json sympy jupyter
+    conda install cmake pkg-config glibmm zeromq cppzmq xtl cryptopp \
+	               sqlite util-linux xeus nlohmann_json sympy \
+						jupyter -c conda-forge
 	 
 Now it is time to do the Cadabra build. Configure with options which
 ensure that CMake picks up the Conda libraries first, and make it
 install the Cadabra things in a place which does not interfere with
 any 'normal' build you may have sitting around::
 
+    cd cadabra2
+    mkdir build
     cd build
     cmake -DENABLE_JUPYTER=ON -DENABLE_FRONTEND=OFF \
                               -DCMAKE_INCLUDE_PATH=${HOME}/miniconda3/include \

@@ -67,7 +67,7 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 		if(msg_type=="verbatim" || msg_type=="output") {
 			xjson pub_data;
 			pub_data["text/markdown"] = output;
-			publish_execution_result(current_id, std::move(pub_data), xjson());
+			publish_execution_result(current_id, std::move(pub_data), 0);
 			}
 		else if(msg_type=="latex_view") {
 			xjson pub_data;
@@ -75,7 +75,7 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 			boost::replace_all(tmp, "\\begin{dmath*}", "$");
 			boost::replace_all(tmp, "\\end{dmath*}", "$");
 			pub_data["text/markdown"] = tmp;
-			publish_execution_result(current_id, std::move(pub_data), xjson());
+			publish_execution_result(current_id, std::move(pub_data), 0);
 			}
 		}
 	return current_id;
