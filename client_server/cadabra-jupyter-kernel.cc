@@ -58,6 +58,22 @@ xjson cadabra::CadabraJupyter::execute_request_impl(int execution_counter,
 	return result;
 	}
 
+void cadabra::CadabraJupyter::on_block_error(Block blk)
+	{
+#ifdef DEBUG
+	std::cerr << "error: " << blk.error << std::endl;
+#endif
+	std::vector<std::string> traceback;
+	// FIXME: This does not show the error, for some reason...
+	publish_execution_error("Exception", blk.error, traceback);	
+	xjson pub_data;
+	pub_data["text/markdown"] = blk.error;
+	xjson extra_data;
+	extra_data["dummy"] = "dummy";
+	// FIXME: ... so we send it again as a message.
+	publish_execution_result(current_id, std::move(pub_data), std::move(extra_data));
+	}
+
 uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last)
 	{
 #ifdef DEBUG
@@ -67,7 +83,9 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 		if(msg_type=="verbatim" || msg_type=="output") {
 			xjson pub_data;
 			pub_data["text/markdown"] = output;
-			publish_execution_result(current_id, std::move(pub_data), 0);
+			xjson extra_data;
+			extra_data["dummy"] = "dummy";			
+			publish_execution_result(current_id, std::move(pub_data), std::move(extra_data));
 			}
 		else if(msg_type=="latex_view") {
 			xjson pub_data;
@@ -75,7 +93,9 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 			boost::replace_all(tmp, "\\begin{dmath*}", "$");
 			boost::replace_all(tmp, "\\end{dmath*}", "$");
 			pub_data["text/markdown"] = tmp;
-			publish_execution_result(current_id, std::move(pub_data), 0);
+			xjson extra_data;
+			extra_data["dummy"] = "dummy";
+			publish_execution_result(current_id, std::move(pub_data), std::move(extra_data));
 			}
 		}
 	return current_id;

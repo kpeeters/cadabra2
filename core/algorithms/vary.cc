@@ -9,7 +9,7 @@
 
 using namespace cadabra;
 
-#define DEBUG 1
+// #define DEBUG 1
 
 vary::vary(const Kernel& k, Ex& tr, Ex& args_)
 	: Algorithm(k, tr), args(args_)

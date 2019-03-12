@@ -184,7 +184,12 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 #ifdef DEBUG
 		std::cerr << "Server::run_string: exception " << ex.what() << std::endl;
 #endif
-		// on macOS this just hangs, and so does a plain return "";
+		// On macOS and with the current conda tools,
+		// you can never exit from this block: throwing or simply
+		// exiting with 'return ""' makes things hang.
+		// The solution is to ex.restore(), see
+		//    https://github.com/pybind/pybind11/issues/1490
+		ex.restore();
 		throw std::runtime_error(ex.what());
 		}
 

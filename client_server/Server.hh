@@ -157,9 +157,9 @@ class Server {
 		/// this block has finished executing. Will send an empty string
 		/// if there has been no output 'print'ed.
 
-		void                     on_block_finished(Block);
-		void                     on_block_error(Block);
-		void                     on_kernel_fault(Block);
+		virtual void             on_block_finished(Block);
+		virtual void             on_block_error(Block);
+		virtual void             on_kernel_fault(Block);
 
 
 

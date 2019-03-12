@@ -21,12 +21,14 @@ namespace cadabra {
 			CadabraJupyter();
 			virtual ~CadabraJupyter() = default;
 
-		public:
 			virtual uint64_t send(const std::string& output, const std::string& msg_type, uint64_t parent_id, bool last) override;
 
 			int current_counter;
 			bool finished=true;
 
+		protected:
+			virtual void   on_block_error(Block) override;
+			
 		private:
 
 			void configure_impl() override;
