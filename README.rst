@@ -394,11 +394,13 @@ Now clone the cadabra repository and configure as::
 
     cd ..
     git clone https://github.com/kpeeters/cadabra2
-    cd cadabra2/build
+    cd cadabra2
+    mkdir build
+    cd build
     cmake -DCMAKE_TOOLCHAIN_FILE=[the path obtained in the last step]
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
-			 -DVCPKG_TARGET_TRIPLET=x64-windows
-			 -DCMAKE_INSTALL_PREFIX=C:\Cadabra
+    		 -DVCPKG_TARGET_TRIPLET=x64-windows
+    		 -DCMAKE_INSTALL_PREFIX=C:\Cadabra
           -G "Visual Studio 15 2017 Win64" ..
 
 the latter all on one line, in which you replace the
