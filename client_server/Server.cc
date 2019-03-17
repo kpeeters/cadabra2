@@ -21,7 +21,7 @@
 #include "CdbPython.hh"
 #include "SympyCdb.hh"
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -190,6 +190,8 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		// exiting with 'return ""' makes things hang.
 		// The solution is to ex.restore(), see
 		//    https://github.com/pybind/pybind11/issues/1490
+		// Note: the restore() has the side effect of making the
+		// error come back on any future pybind11::exec() call.
 		std::string reason=ex.what();
 		ex.restore();
 		throw std::runtime_error(reason);

@@ -17,8 +17,8 @@ webup:
 	cd web2/cadabra2; clay build; rsync -avz --chmod=+rx build/ cadabra_web:/var/www/cadabra2/;  rsync -avz --chmod=+rx source/static/styles/ cadabra_web:/var/www/cadabra2/static/styles; rsync -avz --chmod=+rx source/static/images/ cadabra_web:/var/www/cadabra2/static/images/; rsync -avz --chmod=+rx source/static/icons/ cadabra_web:/var/www/cadabra2/static/icons/; rsync -avz --chmod=+rx source/static/pdf/ cadabra_web:/var/www/cadabra2/static/pdf/; rsync -avz --chmod=+rx source/static/scripts/ cadabra_web:/var/www/cadabra2/static/scripts/; rsync -avz --chmod=+r robots.txt cadabra_web:/var/www/cadabra2
 
 format:
-	astyle --style=k/r --indent=tab=3 --recursive --attach-classes --attach-namespaces --indent-classes --indent-namespaces --break-closing-braces '*.hh'
-	astyle --style=k/r --indent=tab=3 --recursive --attach-classes --attach-namespaces --indent-classes --indent-namespaces --break-closing-braces '*.cc'
+	astyle --style=k/r --indent=tab=3 --recursive --attach-classes --attach-namespaces --indent-classes --indent-namespaces --indent-switches --break-closing-braces '*.hh'
+	astyle --style=k/r --indent=tab=3 --recursive --attach-classes --attach-namespaces --indent-classes --indent-namespaces --indent-switches --break-closing-braces '*.cc'
 	find . -name "*.cc" -exec sed -i -e 's/^\([ \t]*\)\([\{\}]\)/\1\t\2/' '{}' ';'
 	find . -name "*.hh" -exec sed -i -e 's/^\([ \t]*\)\([\{\}]\)/\1\t\2/' '{}' ';'
 

@@ -1243,6 +1243,7 @@ void NotebookWindow::on_file_save_as()
 	Gtk::FileChooserDialog dialog("Please choose a file name to save this notebook",
 	                              Gtk::FILE_CHOOSER_ACTION_SAVE);
 
+	dialog.set_do_overwrite_confirmation(true);
 	dialog.set_transient_for(*this);
 	dialog.add_button("_Cancel", Gtk::RESPONSE_CANCEL);
 	dialog.add_button("Select", Gtk::RESPONSE_OK);
@@ -1250,22 +1251,22 @@ void NotebookWindow::on_file_save_as()
 	int result=dialog.run();
 
 	switch(result) {
-	case(Gtk::RESPONSE_OK): {
-		name = dialog.get_filename();
-		std::string res=save(name);
-		if(res.size()>0) {
-			Gtk::MessageDialog md("Error saving notebook "+name);
-			md.set_transient_for(*this);
-			md.set_secondary_text(res);
-			md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
-			md.run();
+		case(Gtk::RESPONSE_OK): {
+			name = dialog.get_filename();
+			std::string res=save(name);
+			if(res.size()>0) {
+				Gtk::MessageDialog md("Error saving notebook "+name);
+				md.set_transient_for(*this);
+				md.set_secondary_text(res);
+				md.set_type_hint(Gdk::WINDOW_TYPE_HINT_DIALOG);
+				md.run();
+				}
+			else {
+				modified=false;
+				update_title();
+				}
+			break;
 			}
-		else {
-			modified=false;
-			update_title();
-			}
-		break;
-		}
 		}
 	}
 
