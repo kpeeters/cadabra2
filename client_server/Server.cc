@@ -21,7 +21,7 @@
 #include "CdbPython.hh"
 #include "SympyCdb.hh"
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -168,6 +168,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		std::cerr << "executing..." << std::endl;
 		std::cerr << newblk << std::endl;
 #endif
+		PyErr_Clear(); 
 		pybind11::exec(newblk.c_str(), main_namespace);
 #ifdef DEBUG
 		std::cerr << "exec done" << std::endl;
@@ -189,8 +190,9 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		// exiting with 'return ""' makes things hang.
 		// The solution is to ex.restore(), see
 		//    https://github.com/pybind/pybind11/issues/1490
+		std::string reason=ex.what();
 		ex.restore();
-		throw std::runtime_error(ex.what());
+		throw std::runtime_error(reason);
 		}
 
 	server_stopwatch.stop();
