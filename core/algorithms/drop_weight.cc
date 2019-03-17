@@ -71,6 +71,11 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 		else {
 			sibling_iterator sib=tr.begin(it);
 			while(sib!=tr.end(it)) {
+				if(*sib->name=="\\ldots") {
+					++sib;
+					continue;
+					}
+				
 				const WeightBase *gnb=kernel.properties.get_composite<WeightBase>(sib, label);
 				if(gnb) {
 					// std::cerr << "WeightBase for child " << Ex(sib) << std::endl;
