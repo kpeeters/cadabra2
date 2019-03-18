@@ -11,6 +11,8 @@
 #include "DisplayTerminal.hh"
 #include <sstream>
 
+// #define DEBUG 1
+
 using namespace cadabra;
 
 ExNode::ExNode(const Kernel& k, std::shared_ptr<Ex> ex_)
@@ -193,6 +195,19 @@ ExNode ExNode::children()
 
 void ExNode::replace(std::shared_ptr<Ex> rep)
 	{
+#ifdef DEBUG
+	std::cerr << "next at " << nxtit << std::endl;
+#endif
+	while(nxtit!=stopit && ex->is_in_subtree(nxtit, it))
+		update(false);
+#ifdef DEBUG
+	std::cerr << nxtit.node << std::endl;
+	std::cerr << stopit.node << std::endl;
+	if(nxtit==stopit)
+		std::cerr << "updated next to be at stopit" << std::endl;
+	else
+		std::cerr << "updated next at " << nxtit << std::endl;
+#endif
 	it=ex->replace(it, rep->begin());
 	}
 
@@ -341,10 +356,20 @@ void ExNode::update(bool first)
 			}
 		}
 	else {
+#ifdef DEBUG
+		std::cerr << "update normal iterator" << std::endl;
+#endif
 		if(first) nxtit=topit;
 		else      ++nxtit;
 
+#ifdef DEBUG
+		if(nxtit==stopit)
+			std::cerr << "update reached end" << std::endl;
+#endif
 		while(nxtit!=stopit) {
+#ifdef DEBUG
+			std::cerr << "update at " << nxtit << std::endl;
+#endif
 			if(tag=="" || *nxtit->name==tag)
 				return;
 			++nxtit;

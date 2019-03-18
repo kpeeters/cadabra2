@@ -160,3 +160,29 @@ test05()
 # ex:= \nabla_{q}{ T_{m n}^{p} };
 # for term in ex.top().terms():
 #     
+
+def test_expand(ex):
+   tst:= (A??)^{\dagger};
+   for node in ex:
+      if tst.matches( node ):
+         rep=$P$
+         lst=[]
+         for prod in node["\\prod"]:
+            for factor in prod.factors():
+               lst.append($ @(factor) $)
+         for factor in list(reversed(lst)):
+            rep.top().append_child($ @(factor)^{\dagger} $)
+         rep.top().name=r"\prod"
+         node.replace(rep)
+   return ex
+
+def test06():
+    __cdbkernel__ = create_scope()
+    \dagger::Symbol;
+    ex:= (A B C)^{\dagger} + Q + (D E)^{\dagger};
+    test_expand(ex)
+    tst:= C^{\dagger} B^{\dagger} A^{\dagger} + Q + E^{\dagger} D^{\dagger} - @(ex);
+    assert(tst==0)
+    print("Test 06 passed")
+
+test06()
