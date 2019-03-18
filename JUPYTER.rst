@@ -61,7 +61,7 @@ any 'normal' build you may have sitting around::
     cmake -DENABLE_JUPYTER=ON -DENABLE_FRONTEND=OFF \
                               -DCMAKE_INCLUDE_PATH=${HOME}/miniconda3/include \
                               -DCMAKE_LIBRARY_PATH=${HOME}/miniconda3/lib \
-                              -DCMAKE_INSTALL_PREFIX=${HOME}/miniconda3
+                              -DCMAKE_INSTALL_PREFIX=${HOME}/miniconda3 \
                               ..
 
 You should see that it has configured using the Conda Python; look for
