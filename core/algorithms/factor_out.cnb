@@ -49,6 +49,59 @@
 				{
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
+					"source" : "If you have non-commuting objects and want to factor out to the right, use the \\verb|right=True| option, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "If you have non-commuting objects and want to factor out to the right, use the \\verb|right=True| option, as in"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left[A,~\\discretionary{}{}{} B,~\\discretionary{}{}{} C,~\\discretionary{}{}{} D\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A B C D + B A C D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A B C D+B A C D\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "(A B C + B A C) D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left(A B C+B A C\\right) D\\end{dmath*}"
+				}
+			],
+			"source" : "{A,B,C,D}::NonCommuting;\nex:= A B C D + B A C D;\nfactor_out(ex, $D$, right=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
 					"source" : "In case you are familiar with FORM, \\algo{factor_out} is like its \\verb|bracket| statement. \nIf you add more factors to factor out, it works as in the following example."
 				}
 			],
