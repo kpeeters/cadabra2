@@ -5,7 +5,9 @@ doxygen
 *~
 *.o
 build
+jbuild
 install
+.ipynb_checkpoints
 __pycache__
 .vscode
 .vs

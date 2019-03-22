@@ -28,10 +28,17 @@
   to convert expressions with implicit indices to their explicit
 	 form.</li>
   <li>Add option to build a Jupyter kernel.</li>
-  <li>Fix bug in <tt>split_index</tt> (acted on wrong parts of expressions).</li>
+  <li>Fix bug in <tt>split_index</tt> (acted on wrong parts of
+	 expressions).</li>
+  <li>Fix bug with substitute not checking constraints for
+	 single-factor patterns.</li>
+  <li>Add <tt>partial</tt> option
+  to <a href="/manual/substitute.html">substitute</a> to require that
+  products or sums match all terms, not just a partial sum or partial
+  product.</li>
 </ul>
 
-<a name="2.2.4"></a>
+<a name="2.2.5"></a>
 <h3>2.2.5 (released 05-Feb-2019)</h3>
 <ul>
   <li>Fix issues with <tt>Derivative</tt> objects going through Sympy.</li>

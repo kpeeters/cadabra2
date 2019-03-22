@@ -125,6 +125,188 @@
 		},
 		{
 			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Substitute can match sub-products and sub-sums, and you do not have to specify terms or factors in the order in which they appear,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Substitute can match sub-products and sub-sums, and you do not have to specify terms or factors in the order in which they appear,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + B + C + D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+B+C+D\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "Q + B + D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}Q+B+D\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A + B + C + D;\nsubstitute(_, $A+C=Q$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A B C D"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A B C D\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A Q C"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A Q C\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A B C D;\nsubstitute(_, $B D = Q$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "However, you can request that the match is for the full sum or product, "
+				}
+			],
+			"source" : "However, you can request that the match is for the full sum or product, "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A B C D + A B C D E F"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A B C D+A B C D E F\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "1 + A B C D E F"
+						}
+					],
+					"source" : "\\begin{dmath*}{}1+A B C D E F\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A B C D  + A B C D E F;\nsubstitute(_, $A B C D = 1$, partial=False);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "It will respect non-commuting objects and will not match if that would require moving non-commuting objects through each other,"
+				}
+			],
+			"hidden" : true,
+			"source" : "It will respect non-commuting objects and will not match if that would require moving non-commuting objects through each other,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property NonCommuting to~}\\left[Q,~\\discretionary{}{}{} R,~\\discretionary{}{}{} S,~\\discretionary{}{}{} T\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "Q R S T"
+						}
+					],
+					"source" : "\\begin{dmath*}{}Q R S T\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "Q R S T"
+						}
+					],
+					"source" : "\\begin{dmath*}{}Q R S T\\end{dmath*}"
+				}
+			],
+			"source" : "{Q,R,S,T}::NonCommuting;\nex:= Q R S T;\nsubstitute(_, $S Q = 1$);"
+		},
+		{
+			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
 		}

@@ -9,8 +9,8 @@
 
 using namespace cadabra;
 
-substitute::substitute(const Kernel& k, Ex& tr, Ex& args_)
-	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr)
+substitute::substitute(const Kernel& k, Ex& tr, Ex& args_, bool partial)
+	: Algorithm(k, tr), comparator(k.properties), args(args_), sort_product_(k, tr), partial(partial)
 	{
 	cadabra::do_list(args, args.begin(), [&](Ex::iterator arrow) {
 		//args.print_recursive_treeform(std::cerr, arrow);
@@ -112,13 +112,24 @@ bool substitute::can_apply(iterator st)
 		else                         ret=comparator.match_subtree(tr, lhs, st, conditions);
 
 		if(ret == Ex_comparator::match_t::subtree_match ||
-		      ret == Ex_comparator::match_t::match_index_less ||
-		      ret == Ex_comparator::match_t::match_index_greater) {
+			ret == Ex_comparator::match_t::match_index_less ||
+			ret == Ex_comparator::match_t::match_index_greater) {
 			use_rule=arrow;
-			// std::cerr << "can apply rule" << std::endl;
-			return arrow;
-			}
 
+			// If we are not matching a partial sum or partial product, need to check that all
+			// terms or factors are accounted for.
+			if(!partial) {
+#ifdef DEBUG
+				std::cerr << comparator.factor_locations.size() << " vs "
+							 << tr.number_of_children(st) << std::endl;
+#endif
+				if(comparator.factor_locations.size()!=tr.number_of_children(st))
+					return args.end();
+				}
+			
+			return arrow;
+		}
+		
 		return args.end();
 		});
 	//	if(found!=args.end())

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   inkscape:export-ydpi="268.37686"
+   inkscape:export-xdpi="268.37686"
+   inkscape:export-filename="/home/kasper/git/cadabra2/web2/cadabra2/source/static/icons/cadabra2.png"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   sodipodi:docname="cadabra2-cloud.svg"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:version="0.32"
+   id="svg2"
+   height="174"
+   width="174">
+  <sodipodi:namedview
+     inkscape:window-maximized="0"
+     fit-margin-bottom="0"
+     fit-margin-right="0"
+     fit-margin-left="0"
+     fit-margin-top="0"
+     inkscape:window-y="265"
+     inkscape:window-x="571"
+     inkscape:window-height="1738"
+     inkscape:window-width="2855"
+     showgrid="false"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     inkscape:cy="91.387033"
+     inkscape:cx="-9.3420866"
+     inkscape:zoom="4.124823"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     objecttolerance="10"
+     guidetolerance="10"
+     gridtolerance="10000"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient2385">
+      <stop
+         style="stop-color:#36a236;stop-opacity:1;"
+         offset="0"
+         id="stop2387" />
+      <stop
+         style="stop-color:#008000;stop-opacity:0;"
+         offset="1"
+         id="stop2389" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <linearGradient
+       gradientTransform="matrix(0.9720098,0,0,1.3048107,4.1869506,-109.36257)"
+       inkscape:collect="always"
+       xlink:href="#linearGradient2385"
+       id="linearGradient2391"
+       x1="251.42857"
+       y1="323.79074"
+       x2="371.42856"
+       y2="392.36218"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-208.5714,-230.36216)"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#209020;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.30114079;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect2383"
+       width="171.69885"
+       height="171.69885"
+       x="209.72197"
+       y="231.51273"
+       inkscape:export-filename="/home/kasper/git/cadabra2/web2/cadabra2/source/static/icons/cadabra2.png"
+       inkscape:export-xdpi="268.37686"
+       inkscape:export-ydpi="268.37686" />
+    <g
+       word-spacing="normal"
+       letter-spacing="normal"
+       font-size-adjust="none"
+       font-stretch="normal"
+       font-weight="normal"
+       font-variant="normal"
+       font-style="normal"
+       fill-rule="even-odd"
+       stroke-miterlimit="10.433"
+       xml:space="preserve"
+       transform="matrix(2.0896471,0,0,-2.1149163,-980.28289,1215.8492)"
+       id="content-6"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"><path
+         id="path2407-7"
+         d="m 493.86,440.62 v 0.02 0.01 0.02 l -0.01,0.02 v 0.01 0.02 l -0.01,0.02 v 0.02 l -0.01,0.02 -0.01,0.02 -0.01,0.02 -0.01,0.02 -0.01,0.02 -0.01,0.02 -0.01,0.02 -0.02,0.02 -0.01,0.02 -0.02,0.02 -0.02,0.02 -0.02,0.02 -0.02,0.02 -0.02,0.01 -0.03,0.02 -0.03,0.01 -0.02,0.01 -0.02,0.01 h -0.01 l -0.02,0.01 h -0.02 l -0.01,0.01 h -0.02 l -0.02,0.01 h -0.01 -0.02 -0.02 -0.02 l -0.02,0.01 h -0.02 -0.02 c -0.15,0 -0.2,-0.05 -0.75,-0.6 l -3.49,-3.84 c -0.44,0.7 -2.73,4.44 -8.26,4.44 -11.11,0 -22.32,-11.01 -22.32,-22.57 0,-8.22 5.88,-13.65 13.5,-13.65 4.33,0 8.12,2 10.76,4.29 4.63,4.08 5.48,8.61 5.48,8.77 0,0.49 -0.5,0.49 -0.6,0.49 -0.3,0 -0.55,-0.09 -0.65,-0.49 -0.44,-1.45 -1.59,-4.99 -5.03,-7.87 -3.43,-2.79 -6.57,-3.64 -9.16,-3.64 -4.49,0 -9.77,2.59 -9.77,10.36 0,2.84 1.05,10.91 6.03,16.74 3.04,3.53 7.72,6.02 12.16,6.02 5.08,0 8.02,-3.83 8.02,-9.61 0,-1.99 -0.16,-2.04 -0.16,-2.54 0,-0.5 0.55,-0.5 0.75,-0.5 0.65,0 0.65,0.1 0.9,1 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-opacity:1"
+         inkscape:connector-curvature="0" /><path
+         id="path2409-5"
+         d="m 501.29,414.17 -0.49,-0.14 -0.47,-0.15 -0.45,-0.16 -0.45,-0.19 -0.43,-0.2 -0.41,-0.22 -0.4,-0.22 -0.39,-0.25 -0.37,-0.25 -0.35,-0.27 -0.35,-0.28 -0.32,-0.29 -0.32,-0.3 -0.29,-0.31 -0.29,-0.31 -0.26,-0.33 -0.26,-0.33 -0.23,-0.34 -0.22,-0.34 -0.21,-0.35 -0.19,-0.35 -0.17,-0.35 -0.16,-0.36 -0.14,-0.36 -0.13,-0.36 -0.11,-0.36 -0.09,-0.35 -0.08,-0.36 -0.05,-0.36 -0.05,-0.35 -0.02,-0.35 -0.01,-0.35 c 0,-3.69 2.82,-6.1 6.27,-6.1 l 0.07,0.98 c -1.92,0 -3.8,1.25 -3.8,4.15 0,2.3 1.33,8.33 6.21,9.52 v 0 c 0.98,-1.57 2.23,-3.59 2.23,-6.11 0,-2.85 -1.71,-7.56 -4.64,-7.56 l -0.07,-0.98 c 4.22,0 7.5,4.95 7.5,10.04 0,3.39 -1.81,5.37 -2.89,6.56 -1.3,1.46 -3.91,4.32 -3.91,5.93 0,0.45 0.49,1.46 1.92,1.46 1.18,0 2.16,-0.56 2.93,-0.98 0.31,-0.17 1.57,-0.9 2.09,-0.9 0.84,0 1.46,0.77 1.46,1.46 0,0.87 -0.45,0.94 -2.33,1.33 -0.42,0.07 -2.03,0.42 -3.14,0.42 -2.62,0 -4.08,-1.54 -4.08,-3.67 0,-1.84 1.12,-3.97 2.34,-6.06 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-opacity:1"
+         inkscape:connector-curvature="0" /><path
+         id="path2411-3"
+         d="m 512.5,393.18 v -0.02 l -0.01,-0.02 v -0.02 l -0.01,-0.01 v -0.02 l -0.01,-0.01 v -0.02 -0.01 l -0.01,-0.02 v -0.01 L 512.45,393 v -0.01 -0.02 l -0.01,-0.03 -0.01,-0.02 v -0.02 l -0.01,-0.02 v -0.02 -0.02 l -0.01,-0.01 v -0.02 -0.01 -0.02 l -0.01,-0.01 v -0.01 -0.01 -0.01 -0.01 -0.01 -0.01 -0.01 -0.01 -0.01 -0.01 -0.02 c 0,-0.42 0.45,-0.42 0.55,-0.42 0.53,0 0.53,0.07 0.73,0.91 0.77,3.07 1.54,6.17 2.34,9.24 1.08,-2.58 3.7,-3.8 6.35,-3.8 v 0.98 c -3.21,0 -5.62,2.09 -5.62,5.09 0,0.07 0,0.63 0.15,1.32 0.06,0.18 1.91,7.71 2.19,8.72 1.01,3.38 4.74,7.88 9.24,7.88 1.78,0 2.76,-1.11 2.76,-2.79 0,-0.66 -0.29,-2.3 -0.84,-3.66 -0.63,-1.53 -1.68,-2.44 -1.85,-2.44 -0.07,0 -0.17,0.03 -0.31,0.07 -0.91,0.28 -1.71,0.28 -2.37,0.28 l -0.04,-0.98 c 0.25,0 0.94,0 1.43,-0.14 -0.7,-0.28 -1.18,-0.28 -1.74,-0.28 -0.56,0 -1.05,0.04 -1.64,0.14 v 0 c 0.38,0.18 0.62,0.28 1.95,0.28 l 0.04,0.98 c -1.02,0 -3.21,0 -3.21,-1.29 0,-1.05 1.64,-1.08 2.82,-1.08 0.8,0 1.71,0 3.07,0.52 v 0 c 0.9,-0.87 1.12,-2.06 1.12,-2.97 0,-0.2 -0.18,-4.28 -2.37,-7.11 -0.88,-1.15 -2.62,-2.54 -4.78,-2.54 v -0.98 c 5.23,0 10.04,4.74 10.04,9.45 0,1.92 -0.91,3.73 -2.48,4.85 3,2.05 3.7,4.46 3.7,5.96 0,2.58 -1.99,4.71 -5.23,4.71 -4.57,0 -9.35,-4.12 -10.67,-9.45 z"
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:0;stroke-opacity:1"
+         inkscape:connector-curvature="0" /></g>    <g
+       id="g4402"
+       transform="matrix(4.4252287,0,0,5.0624153,-31.304669,141.96961)"
+       style="fill:#ffffff;fill-opacity:1"
+       inkscape:export-filename="/home/kasper/git/cadabra2/web2/cadabra2/source/static/icons/cadabra2.png"
+       inkscape:export-xdpi="268.37686"
+       inkscape:export-ydpi="268.37686">
+      <g
+         word-spacing="normal"
+         letter-spacing="normal"
+         font-size-adjust="none"
+         font-stretch="normal"
+         font-weight="normal"
+         font-variant="normal"
+         font-style="normal"
+         stroke-miterlimit="10.433"
+         xml:space="preserve"
+         transform="matrix(0.24857143,0,0,-0.24857143,-43.5,130.5)"
+         id="g4404"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"><path
+           id="path4406"
+           d="m 498.44,439.52 0.01,0.05 0.01,0.05 0.01,0.04 0.02,0.05 0.02,0.1 0.01,0.05 0.01,0.04 0.02,0.05 0.01,0.05 0.01,0.05 v 0.06 l 0.01,0.05 0.01,0.05 v 0.05 0.03 0.03 c 0,0.7 -0.7,0.7 -1.25,0.7 l -4.63,-3.59 c -2.29,2.54 -5.67,3.59 -9.11,3.59 -16.04,0 -24.86,-12.21 -24.86,-22.42 0,-9.41 7.52,-13.45 16.24,-13.45 4.18,0 8.42,1.3 12.2,4.09 4.84,3.58 5.73,8.17 5.73,8.42 0,0.7 -0.7,0.7 -1.14,0.7 -0.95,0 -1,-0.11 -1.25,-0.95 -2.04,-6.33 -8.52,-9.91 -14.2,-9.91 -3.03,0 -5.73,0.69 -7.77,2.29 -2.69,2.04 -2.89,5.42 -2.89,6.77 0,1.44 0.8,10.76 5.73,16.54 2.69,3.19 7.52,5.58 13,5.58 6.08,0 8.62,-4.59 8.62,-8.97 0,-0.55 -0.15,-1.25 -0.15,-1.74 0,-0.75 0.65,-0.75 1.35,-0.75 1.09,0 1.14,0.05 1.39,1.1 z"
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0" /><path
+           id="path4408"
+           d="m 506.15,421.32 0.02,0.04 0.02,0.04 0.05,0.08 0.05,0.07 0.06,0.07 0.05,0.06 0.05,0.06 0.06,0.05 0.06,0.05 0.05,0.05 0.06,0.04 0.06,0.04 0.06,0.03 0.06,0.03 0.05,0.03 0.06,0.03 0.06,0.02 0.06,0.02 0.05,0.02 0.06,0.01 0.05,0.02 0.05,0.01 0.05,0.01 h 0.05 l 0.05,0.01 h 0.05 l 0.04,0.01 h 0.04 0.04 0.04 0.03 0.03 0.03 c 1.22,0 2.09,-0.63 3.04,-1.36 0.83,-0.59 1.91,-1.29 2.68,-1.29 1.22,0 2.09,1.26 2.09,2.13 0,0.8 -0.52,1.15 -0.7,1.25 -0.41,0.28 -5.79,1.26 -6.38,1.26 -1.88,0 -4.15,-1.39 -4.15,-3.94 0,-1.92 1.47,-4.46 2.37,-5.82 -6.79,-1.57 -8.71,-6.8 -8.71,-9.59 0,-4.29 3.62,-6.31 7.98,-6.31 l 0.14,1.6 c -0.63,0 -2.09,0.14 -2.93,0.87 -0.87,0.73 -1.11,1.54 -1.11,2.69 0,1.32 0.63,4.32 1.67,6.13 0.8,1.33 1.99,2.48 4.05,3.04 v 0 c 1.35,-1.99 2.3,-3.59 2.3,-5.9 0,-2.54 -1.33,-6.83 -3.98,-6.83 l -0.14,-1.6 c 4.71,0 8.51,4.88 8.51,10.74 0,3.52 -1.74,5.26 -3.1,6.41 -1.29,1.09 -2.17,1.82 -3.18,2.83 -1.81,1.77 -1.91,2.16 -2.05,2.79 z"
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0" /><path
+           id="path4410"
+           d="m 521,393 2.12,8.61 c 0.67,-0.87 3,-3.06 7.92,-3.06 l -0.03,1.6 c -2.97,0 -6.84,1.36 -6.84,4.95 0,0.67 0.35,2.1 0.63,3.11 0.17,0.76 1.29,5.23 1.36,5.54 0.31,1.22 0.91,3.59 3.69,5.68 2.87,2.16 5.62,2.45 6.88,2.45 2.37,0 2.37,-1.54 2.37,-2.1 0,-0.83 -0.63,-4.01 -1.54,-5.58 v 0 c -1.32,0.28 -2.51,0.28 -3.21,0.28 l -0.1,-1.6 c 0.56,0 1.01,0 1.64,-0.14 -0.77,-0.42 -1.5,-0.42 -2.13,-0.42 -1.04,0 -1.15,0.04 -1.85,0.21 v 0 c 0.46,0.21 0.77,0.35 2.34,0.35 l 0.1,1.6 c -1.5,0 -4.67,0 -4.67,-2.09 0,-1.64 2.3,-1.68 4.01,-1.68 1.01,0 2.44,0 4.29,0.74 0.31,-0.49 0.42,-1.22 0.42,-1.85 0,-1.22 -0.73,-5.06 -2.06,-6.9 -1.25,-1.71 -3.17,-2.55 -5.33,-2.55 l 0.03,-1.6 c 7.81,0 11.79,5.3 11.79,9.69 0,2.02 -0.81,3.63 -2.37,4.74 1.53,1.26 2.64,3.49 2.64,5.55 0,2.82 -2.02,4.95 -6.2,4.95 -5.16,0 -11.37,-3.28 -12.76,-8.93 l -5.27,-21.09 c -0.14,-0.49 -0.14,-0.56 -0.14,-0.6 0,-0.63 0.59,-0.63 1.12,-0.63 0.7,0 0.97,0 1.15,0.77 z"
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff;fill-opacity:1;stroke-width:0" /></g>    </g>
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 268.21031,391.27068 c 35.74918,0.83859 79.27614,1.45461 79.27614,1.45461 2.90922,1.21218 24.47866,-15.34538 -0.72729,-29.57702 -3.63131,-28.61402 -30.30434,-18.66747 -30.30434,-18.1826 -7.95876,-17.67378 -38.76922,-13.66602 -42.91094,11.87929 -19.70229,4.35228 -24.35475,23.88975 -5.33357,34.42572 z"
+       id="path22"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 327.60681,338.41994 c -12.60661,-42.18363 -51.63858,-21.0531 -53.57806,-10.90956 -22.31028,-8.80498 -33.69841,10.90956 -33.45598,23.27373 -5.81843,-1.69704 -31.27407,19.15233 -1.69704,35.63789 l 16.24312,0.7273 c -2.31786,-4.64747 -13.30701,-27.70126 16.00068,-34.18328 0.42729,-19.83417 30.72856,-31.99751 47.27476,-12.36417 z"
+       id="path89"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccc" />
+  </g>
+</svg>

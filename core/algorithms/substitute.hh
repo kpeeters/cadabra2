@@ -12,7 +12,7 @@ namespace cadabra {
 
 	class substitute : public Algorithm {
 		public:
-			substitute(const Kernel&, Ex& tr, Ex& args);
+			substitute(const Kernel&, Ex& tr, Ex& args, bool partial=true);
 
 			/// Match the lhs of the replacement rule to the subtree 'st' under consideration.
 			/// This will fill the replacement_map giving a map from objects appearing in the
@@ -45,6 +45,7 @@ namespace cadabra {
 
 			// For object swap testing routines:
 			sort_product    sort_product_;
+			bool            partial;
 		};
 
 	}

@@ -455,3 +455,29 @@ def test122():
     print("Test 122 passed")
 
 test122()
+
+def test123():
+    __cdbkernel__=create_scope()
+    {A, B, C, D, E, F}::NonCommuting;
+    ex:= A B C D E F + B C A D E F;
+    substitute(_, $C D E -> Q$)
+    tst:= A B F + B C A D E F - @(ex);
+    assert(tst==0)
+    print("Test 123a passed")        
+    ex:= A B C D E F + B C A D E F;
+    substitute(_, $C D E -> Q$, partial=False)
+    tst:= A B C D E F + B C A D E F - @(ex);
+    assert(tst==0)
+    print("Test 123b passed")
+    ex:= A + B + C + D;
+    substitute(_, $A + C = Q$);
+    tst:= Q + B + D - @(ex);
+    assert(tst==0)
+    print("Test 123c passed")
+    ex:= A + B + C + D;
+    substitute(_, $A + C = Q$, partial=False);
+    tst:= A + B + C + D - @(ex);
+    assert(tst==0)
+    print("Test 123d passed")
+        
+# substitute(_, $A C?* F -> F A B C?* $, partial=False);        
