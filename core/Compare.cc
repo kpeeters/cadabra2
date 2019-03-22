@@ -279,6 +279,20 @@ namespace cadabra {
 		factor_moving_signs.clear();
 		}
 
+	Ex_comparator::match_t Ex_comparator::match_subtree(const Ex& tr, Ex::iterator i1, Ex::iterator i2, Ex::iterator conditions)
+		{
+		auto ret = equal_subtree(i1, i2);
+		if(ret==match_t::subtree_match || ret==match_t::node_match) {
+			if(conditions==tr.end()) return ret;
+			std::string error;
+			if(satisfies_conditions(conditions, error)) 
+				return ret;
+			else
+				return match_t::no_match_greater; // FIXME: is that the right thing to do?
+			}
+		else return ret;
+		}
+
 	Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2,
 	      useprops_t use_props, bool ignore_parent_rel)
 		{
@@ -1446,8 +1460,10 @@ namespace cadabra {
 
 	bool Ex_comparator::satisfies_conditions(Ex::iterator conditions, std::string& error)
 		{
+//		std::cerr << "satisfies_conditions" << std::endl;
 		for(unsigned int i=0; i<Ex::arg_size(conditions); ++i) {
 			Ex::iterator cond=Ex::arg(conditions, i);
+//			std::cerr << "condition " << cond << std::endl;
 			if(*cond->name=="\\unequals") {
 				Ex::sibling_iterator lhs=cond.begin();
 				Ex::sibling_iterator rhs=lhs;
@@ -1471,8 +1487,10 @@ namespace cadabra {
 				multiplier_t mlhs;
 				if(lhs->is_rational()==false) {
 					auto fnd=replacement_map.find(Ex(lhs));
+//					std::cerr << "finding " << lhs << std::endl;
 					if(fnd!=replacement_map.end()) {
 						auto tn=fnd->second.begin();
+//						std::cerr << tn << std::endl;
 						if(tn->is_rational())
 							mlhs=*tn->multiplier;
 						else {

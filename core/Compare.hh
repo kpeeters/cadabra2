@@ -233,6 +233,11 @@ namespace cadabra {
 			match_t equal_subtree(Ex::iterator i1, Ex::iterator i2,
 			                      useprops_t use_props=useprops_t::always, bool ignore_parent_rel=false);
 
+			/// Match two subtrees, new-style equal_subtree that handles conditions; this is
+			/// what substitute uses.
+			
+			match_t match_subtree(const Ex&, Ex::iterator i1, Ex::iterator i2, Ex::iterator conditions);
+
 			/// Find a sub-product in a product. The 'lhs' iterator points to the product which
 			/// we want to find, the 'tofind' iterator to the current factor which we are looking
 			/// for. The product in which to search is pointed to by 'st'.

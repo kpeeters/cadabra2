@@ -347,6 +347,8 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\arrow")      print_arrowlike(str, it);
 	else if(*it->name=="\\pow")        print_powlike(str, it);
 	else if(*it->name=="\\wedge")      print_productlike(str, it, " ^ ");
+	else if(*it->name=="\\conditional")    print_conditional(str, it);
+	else if(*it->name=="\\greater" || *it->name=="\\less")  print_relation(str, it);
 	else if(*it->name=="\\int")        print_intlike(str, it);
 	else if(*it->name=="\\sum")        print_intlike(str, it);
 	else if(*it->name=="\\equals")     print_equalitylike(str, it);
@@ -494,6 +496,25 @@ void DisplayTerminal::print_powlike(std::ostream& str, Ex::iterator it)
 
 	if(needs_brackets(it))
 		str << ")";
+	}
+
+void DisplayTerminal::print_conditional(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	dispatch(str, sib);
+	str << " with ";
+	++sib;
+	dispatch(str, sib);
+	}
+
+void DisplayTerminal::print_relation(std::ostream& str, Ex::iterator it)
+	{
+	auto sib=tree.begin(it);
+	dispatch(str, sib);
+	if(*it->name=="\\greater") str << " > ";
+	if(*it->name=="\\less")    str << " < ";
+	++sib;
+	dispatch(str, sib);
 	}
 
 void DisplayTerminal::print_intlike(std::ostream& str, Ex::iterator it)

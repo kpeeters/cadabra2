@@ -109,7 +109,7 @@ bool substitute::can_apply(iterator st)
 
 		if(*lhs->name=="\\prod")     ret=comparator.match_subproduct(tr, lhs, tr.begin(lhs), st, conditions);
 		else if(*lhs->name=="\\sum") ret=comparator.match_subsum(tr, lhs, tr.begin(lhs), st, conditions);
-		else                         ret=comparator.equal_subtree(lhs, st);
+		else                         ret=comparator.match_subtree(tr, lhs, st, conditions);
 
 		if(ret == Ex_comparator::match_t::subtree_match ||
 		      ret == Ex_comparator::match_t::match_index_less ||

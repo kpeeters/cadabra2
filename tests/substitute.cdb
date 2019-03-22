@@ -444,3 +444,14 @@ def test121():
     print("Test 121 passed")
 
 test121()
+
+def test122():        
+    __cdbkernel__=create_scope()
+    ex:= L_{0 1} + L_{4 5};
+    rl:= L_{a? b?} | a? > 3 -> Q_{a? b?};
+    substitute(ex, rl)
+    tst:= L_{0 1} + Q_{4 5} - @(ex);
+    assert(tst==0)
+    print("Test 122 passed")
+
+test122()

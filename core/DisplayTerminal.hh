@@ -54,6 +54,8 @@ namespace cadabra {
 			void print_arrowlike(std::ostream&, Ex::iterator);
 			void print_powlike(std::ostream&, Ex::iterator);
 			void print_intlike(std::ostream&, Ex::iterator);
+			void print_conditional(std::ostream&, Ex::iterator);
+			void print_relation(std::ostream&, Ex::iterator);						
 			void print_equalitylike(std::ostream&, Ex::iterator);
 			void print_commutator(std::ostream& str, Ex::iterator it, bool comm);
 			void print_components(std::ostream&, Ex::iterator);
