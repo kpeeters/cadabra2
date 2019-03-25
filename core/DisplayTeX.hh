@@ -76,6 +76,7 @@ namespace cadabra {
 			void print_wedgeproduct(std::ostream&, Ex::iterator);
 			void print_tableau(std::ostream&, Ex::iterator);
 			void print_ftableau(std::ostream&, Ex::iterator);
+			void print_dot(std::ostream& str, Ex::iterator it);			
 			void print_dots(std::ostream& str, Ex::iterator it);
 			void print_other(std::ostream& str, Ex::iterator it);
 

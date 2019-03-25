@@ -345,6 +345,7 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\commutator") print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\arrow")      print_arrowlike(str, it);
+	else if(*it->name=="\\dot")        print_dot(str, it);	
 	else if(*it->name=="\\pow")        print_powlike(str, it);
 	else if(*it->name=="\\wedge")      print_productlike(str, it, " ^ ");
 	else if(*it->name=="\\conditional")    print_conditional(str, it);
@@ -381,6 +382,18 @@ void DisplayTerminal::print_arrowlike(std::ostream& str, Ex::iterator it)
 		str << " → ";
 	else
 		str << " -> ";
+	++sib;
+	dispatch(str, sib);
+	}
+
+void DisplayTerminal::print_dot(std::ostream& str, Ex::iterator it)
+	{
+	Ex::sibling_iterator sib=tree.begin(it);
+	dispatch(str, sib);
+	if(use_unicode)
+		str << "·";
+	else
+		str << ".";
 	++sib;
 	dispatch(str, sib);
 	}
