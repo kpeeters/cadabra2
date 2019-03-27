@@ -99,3 +99,14 @@ def test05():
         print("Test 05g passed")
 
 test05()
+
+def test06():
+    __cdbkernel__=create_scope()
+    ex:= 2a+b+j*b+k*b = c+d;
+    manip.to_lhs(ex)
+    tst := (2a+b+j*b+k*b-c-d = 0) - @(ex);
+    assert(tst==0)
+    print("Test 06 passed")
+
+test06()
+

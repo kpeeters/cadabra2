@@ -324,7 +324,7 @@
 		{
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def to_lhs(ex, *parts, match_type=\"all\"):\n\t\"\"\"Moves part from the right to the left hand side of an equation or inequality\"\"\"\n\t# to_lhs is the same as to_rhs called on an equation with the sides swapped ;)\n\tswap_sides(ex)\n\tto_rhs(ex, part)\n\tswap_sides(ex)\t\n\treturn ex"
+			"source" : "def to_lhs(ex, *parts, match_type=\"all\"):\n\t\"\"\"Moves part from the right to the left hand side of an equation or inequality\"\"\"\n\t# to_lhs is the same as to_rhs called on an equation with the sides swapped ;)\n\tswap_sides(ex)\n\tto_rhs(ex, *parts)\n\tswap_sides(ex)\t\n\treturn ex"
 		},
 		{
 			"cell_origin" : "client",
