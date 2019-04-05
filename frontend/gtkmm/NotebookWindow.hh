@@ -23,6 +23,7 @@
 #include "GUIBase.hh"
 #include "NotebookCanvas.hh"
 #include "../common/TeXEngine.hh"
+#include "DiffViewer.hh"
 
 class Cadabra;
 
@@ -88,6 +89,15 @@ namespace cadabra {
 			void refresh_highlighting();
 			void on_help_register();
 
+			/// Functionality for the diff viewer.
+			void select_git_path();
+			void compare_to_file();
+			void compare_git_latest();
+			void compare_git_choose();
+			void compare_git_specific();
+			void compare_git(const std::string& commit_hash);
+			std::string run_git_command(const std::string& args);
+
 			virtual void set_compute_thread(ComputeThread* compute) override;
 
 			virtual void on_interactive_output(const Json::Value& msg) override;
@@ -129,6 +139,8 @@ namespace cadabra {
 			Console console;
 			Gtk::Dialog console_win;
 
+			std::unique_ptr<DiffViewer> diffviewer;
+			
 			// All canvasses which are stored in the ...
 			// These pointers are managed by gtkmm.
 			std::vector<NotebookCanvas *>  canvasses;

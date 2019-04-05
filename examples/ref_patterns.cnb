@@ -1,0 +1,544 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures.\n\nName patterns are constructed by writing a single question mark behind\nthe name, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures.\n\nName patterns are constructed by writing a single question mark behind\nthe name, as in"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"cells" : 
+							[
+								{
+									"cell_origin" : "server",
+									"cell_type" : "input_form",
+									"source" : "A_{\\mu} B_{\\nu} C_{\\nu} D_{\\mu}"
+								}
+							],
+							"source" : "Q + R"
+						}
+					],
+					"source" : "\\begin{dmath*}{}Q+R\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"cells" : 
+							[
+								{
+									"cell_origin" : "server",
+									"cell_type" : "input_form",
+									"source" : "A.D B.C"
+								}
+							],
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= Q + R;\nsubstitute(_, $A? + B? -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "which matches all sums with two terms, each of which is a single\nsymbol without indices or arguments. If you want to match instead any\nobject, with or without indices or arguments, use the double question\nmark instead. To see the difference more explicitly, compare the two\nsubstitute commands in the following example"
+				}
+			],
+			"hidden" : true,
+			"source" : "which matches all sums with two terms, each of which is a single\nsymbol without indices or arguments. If you want to match instead any\nobject, with or without indices or arguments, use the double question\nmark instead. To see the difference more explicitly, compare the two\nsubstitute commands in the following example"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n}+B_{m n}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n}+B_{m n}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex:=A_{m n} + B_{m n};\nsubstitute(_, $A? + B? -> 0$ );\nsubstitute(_, $A?? + B?? -> 0$ );"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Note that it does not make sense to add arguments or indices to object\npatterns; a construction of the type \\verb|A??_{\\mu}(x)| is\nmeaningless and will be flagged as an error.\n\nThere is a special handling of objects which are dummy objects. Objects of this type do not need the question\nmark, as their explicit name is never relevant. You can therefore\nwrite"
+				}
+			],
+			"hidden" : true,
+			"source" : "Note that it does not make sense to add arguments or indices to object\npatterns; a construction of the type \\verb|A??_{\\mu}(x)| is\nmeaningless and will be flagged as an error.\n\nThere is a special handling of objects which are dummy objects. Objects of this type do not need the question\nmark, as their explicit name is never relevant. You can therefore\nwrite"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A_{m n};\nsubstitute(_, $A_{p q}->0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "to set all occurrances of the tensor~$A$ with two subscript indices to\nzero, regardless of the names of the indices (as you can see, this command sets\n$A_{p q}$ to zero). When index sets are declared using the \\prop{Indices} property,\nthese will be taken into account when matching."
+				}
+			],
+			"hidden" : true,
+			"source" : "to set all occurrances of the tensor~$A$ with two subscript indices to\nzero, regardless of the names of the indices (as you can see, this command sets\n$A_{p q}$ to zero). When index sets are declared using the \\prop{Indices} property,\nthese will be taken into account when matching."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "When replacing object wildcards with something else that involves\nthese objects, use the question mark notation also on the right-hand\nside of the rule. For instance,"
+				}
+			],
+			"hidden" : true,
+			"source" : "When replacing object wildcards with something else that involves\nthese objects, use the question mark notation also on the right-hand\nside of the rule. For instance,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}C+D+E+F\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "C C + E E"
+						}
+					],
+					"source" : "\\begin{dmath*}{}C C+E E\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= C + D + E + F;\nsubstitute(_, $A? + B? -> A? A?$, repeat=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "replaces every consecutive two terms in a sum by the square of the first\nterm. The following example shows the difference between the\npresence or absence of question marks on the right-hand side:"
+				}
+			],
+			"hidden" : true,
+			"source" : "replaces every consecutive two terms in a sum by the square of the first\nterm. The following example shows the difference between the\npresence or absence of question marks on the right-hand side:"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}C\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= C + D;\nsubstitute(_, $A? + B? -> A?$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A A\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= C + D;\nsubstitute(_, $A? + B? -> A A$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to some other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
+				}
+			],
+			"hidden" : true,
+			"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to some other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma\\right].\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{\\mu} B_{\\nu} C_{\\nu} D_{\\mu}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A \\cdot D B \\cdot C\\end{dmath*}"
+				}
+			],
+			"source" : "{\\mu, \\nu, \\rho, \\sigma}::Indices(vector);\nex:= A_{\\mu} B_{\\nu} C_{\\nu} D_{\\mu};\nsubstitute(_, $A?_{\\rho} B?_{\\rho} -> \\dot{A?}{B?}$, repeat=True);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\subsection*{Conditionals}\n\nIn many algorithms, patterns can be supplemented by so-called\nconditionals. These are constraints on the objects that appear in the\npattern. In the example below, the substitution is not carried out,\nas the rule applies only to patterns where the $n$ and $p$ indices are not \nequal,"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\subsection*{Conditionals}\n\nIn many algorithms, patterns can be supplemented by so-called\nconditionals. These are constraints on the objects that appear in the\npattern. In the example below, the substitution is not carried out,\nas the rule applies only to patterns where the $n$ and $p$ indices are not \nequal,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}A_{m n} B_{n q}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m n} B_{n q}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m n} B_{n q}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m n} B_{n q}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m n} B_{n q}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A_{m n} B_{n q};\nsubstitute(_, $ A_{m n} B_{p q} | n != p -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Without the conditional, the substitution does apply,"
+				}
+			],
+			"hidden" : true,
+			"source" : "Without the conditional, the substitution does apply,"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A_{m n} B_{n q}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A_{m n} B_{n q}\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A_{m n} B_{n q};\nsubstitute(_, $ A_{m n} B_{p q} -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : " Note that the conditional follows\ndirectly after the pattern, not after the full substitution rule. A\nway to think about this is that the conditional is part of the\npattern, not of the rule. The reason why the conditional follows the\nfull pattern, and not directly the symbol to which it relates, is\nclear from the example above: the conditional is a ``global''\nconstraint on the pattern, not a local one on a single index.\n\nThese conditions can be used to match names of objects using regular\nexpressions. In the following example, the pattern \\verb|M?| will match\nagainst \\verb|C7|, "
+				}
+			],
+			"hidden" : true,
+			"source" : " Note that the conditional follows\ndirectly after the pattern, not after the full substitution rule. A\nway to think about this is that the conditional is part of the\npattern, not of the rule. The reason why the conditional follows the\nfull pattern, and not directly the symbol to which it relates, is\nclear from the example above: the conditional is a ``global''\nconstraint on the pattern, not a local one on a single index.\n\nThese conditions can be used to match names of objects using regular\nexpressions. In the following example, the pattern \\verb|M?| will match\nagainst \\verb|C7|, "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + B3 + C7"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+B3+C7\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\sin(C7 B3) (B3)**(-1)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\sin\\left(C7 B3\\right) {B3}^{-1}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A + B3 + C7;\nsubstitute(_, $A + M? + N? | \\regex{M?}{\"[A-Z]7\"} -> \\sin(M? N?)/N?$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "Without the condition, the first match of \\verb|M?| would be against \\verb|B3|, "
+				}
+			],
+			"hidden" : true,
+			"source" : "Without the condition, the first match of \\verb|M?| would be against \\verb|B3|, "
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A + B3 + C7"
+						}
+					],
+					"source" : "\\begin{dmath*}{}A+B3+C7\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\sin(B3 C7) (C7)**(-1)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\sin\\left(B3 C7\\right) {C7}^{-1}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= A + B3 + C7;\nsubstitute(_, $A + M? + N?  -> \\sin(M? N?)/N?$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "B B"
+						}
+					],
+					"source" : "\\begin{dmath*}{}B B\\end{dmath*}"
+				},
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "B B"
+						}
+					],
+					"source" : "\\begin{dmath*}{}B B\\end{dmath*}"
+				}
+			],
+			"source" : "Q::.\nex:= \\lambda \\chi + \\Q Q + B B;\nsubstitute(_, $Q?? Q?? | \\hasprop{Q??}{SelfAntiCommuting} -> 0$);"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "B B"
+						}
+					],
+					"source" : "\\begin{dmath*}{}B B\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= Q Q + B B;"
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

@@ -52,7 +52,7 @@ namespace cadabra {
 				public:
 					id_t();
 
-					uint64_t  id;
+					Json::UInt64  id;
 					bool      created_by_client;
 
 					bool operator<(const id_t& other) const;
@@ -97,12 +97,8 @@ namespace cadabra {
 			id_t                          id() const;
 
 		private:
-
-			static std::mutex             serial_mutex;
 			id_t                          serial_number;
-			static uint64_t               max_serial_number; // on the client, server keeps track separately.
-
-		};
+	};
 
 	typedef tree<DataCell> DTree;
 

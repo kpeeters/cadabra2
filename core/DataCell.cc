@@ -9,11 +9,9 @@
 #include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <glibmm/base64.h>
+#include <internal/uuid.h>
 
 using namespace cadabra;
-
-uint64_t DataCell::max_serial_number=1; // 0 is intended to mean 'not set'
-std::mutex DataCell::serial_mutex;
 
 bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	{
@@ -23,10 +21,9 @@ bool DataCell::id_t::operator<(const DataCell::id_t& other) const
 	}
 
 DataCell::id_t::id_t()
+	: id(generate_uuid<Json::UInt64>())
+	, created_by_client(true)
 	{
-	std::lock_guard<std::mutex> guard(serial_mutex);
-	id=max_serial_number++;
-	created_by_client=true;
 	}
 
 DataCell::DataCell(CellType t, const std::string& str, bool cell_hidden)
@@ -325,6 +322,8 @@ void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& js
 	if(it->hidden)
 		json["hidden"]=true;
 
+	json["cell_id"] = it->id().id;
+
 	if(it->cell_type!=DataCell::CellType::document) {
 		json["source"]  =it->textbuf;
 		if(it->id().created_by_client)
@@ -372,14 +371,14 @@ void cadabra::JSON_in_recurse(DTree& doc, DTree::iterator loc, const Json::Value
 	try {
 		for(unsigned int c=0; c<cells.size(); ++c) {
 			const Json::Value celltype    = cells[c]["cell_type"];
-			//const Json::Value cell_id     = cells[c]["cell_id"];
+			const Json::Value cell_id     = cells[c].get("cell_id", generate_uuid<Json::UInt64>()).asUInt64();
 			const Json::Value cell_origin = cells[c]["cell_origin"];
 			const Json::Value textbuf     = cells[c]["source"];
 			const Json::Value hidden      = cells[c]["hidden"];
 
 			DTree::iterator last=doc.end();
 			DataCell::id_t id;
-			//id.id=cell_id.asUInt64();
+			id.id=cell_id.asUInt64();
 			if(cell_origin=="server")
 				id.created_by_client=false;
 			else

@@ -15,11 +15,12 @@ namespace cadabra
 		}
 	}
 
-	inline uint64_t generate_uuid()
+	template <typename IntegerT>
+	IntegerT generate_uuid()
 	{
 		static bool seeded = false;
 		static std::mt19937 rng;
-		static std::uniform_int_distribution<uint64_t> uni(1);
+		static std::uniform_int_distribution<IntegerT> uni(1);
 
 		if (!seeded) {
 			rng.seed(detail::get_seed());

@@ -177,6 +177,9 @@ DocumentThread::Prefs::Prefs(bool use_defaults)
 	highlight = data.get("highlight", false).asBool();
 	is_registered = data.get("is_registered", false).asBool();
 	is_anonymous = data.get("is_anonymous", false).asBool();
+	git_path = data.get("git_path", "").asString();
+	if(git_path=="")
+		git_path="/usr/bin/git";
 	// Get the colours for syntax highlighting.
 	auto python_colours = data.get("colours", Json::Value()).get("python", Json::Value());
 	colours["python"]["keyword"] = (python_colours.get("keyword", "RoyalBlue").asString());
@@ -210,6 +213,7 @@ void DocumentThread::Prefs::save()
 			for (const auto& kw : lang.second)
 				data["colours"][lang.first][kw.first] = kw.second;
 			}
+		data["git_path"] = git_path;
 		f << data << '\n';
 		}
 	else
