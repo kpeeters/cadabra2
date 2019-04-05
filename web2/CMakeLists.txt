@@ -31,6 +31,7 @@ set(TUTORIALS
 
   input_format
   ref_printing
+  ref_patterns
   ref_properties
   ref_indices
   ref_derivatives
