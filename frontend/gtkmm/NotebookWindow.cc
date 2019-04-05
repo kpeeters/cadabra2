@@ -1036,23 +1036,11 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 	return false;
 	}
 
-bool NotebookWindow::cell_content_changed(const std::string&, DTree::iterator, int )
+bool NotebookWindow::cell_content_changed(DTree::iterator, int i)
 	{
 	modified=true;
 	unselect_output_cell();
 	update_title();
-
-	// FIXME: need to keep track of individual characters inserted, otherwise we
-	// cannot build an undo stack. The it->textbuf=content needs to be replaced
-	// with an ActionAddText. CodeInput::handle_changed
-
-	// 	current_canvas=canvas_number;
-	// 	if(it->textbuf!=content) {
-	// 		it->textbuf=content;
-	// 		dim_output_cells(it);
-	// 		modified=true;
-	// 		update_title();
-	// 		}
 
 	return false;
 	}

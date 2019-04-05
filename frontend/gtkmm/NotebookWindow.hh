@@ -236,7 +236,7 @@ namespace cadabra {
 			bool cell_content_insert(const std::string&, int, DTree::iterator, int);
 			bool cell_content_erase(int, int, DTree::iterator, int);
 			bool cell_content_execute(DTree::iterator, int, bool shift_enter_pressed);
-			bool cell_content_changed(const std::string& content, DTree::iterator it, int canvas_number);
+			bool cell_content_changed(DTree::iterator it, int i);
 
 			void interactive_execute();
 
