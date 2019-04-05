@@ -228,35 +228,35 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int m
 					if(denom!=1) {
 						str << "\\frac{" << -(it->multiplier->get_num()) << "}{"
 						 << it->multiplier->get_den() << "}";
-							}
+								}
 					else {
 						str << -(*it->multiplier);
+								}
 							}
-						}
 				else                    turned_one=true;
-					}
+						}
 			else	{
 				if(denom!=1) {
 					str << "(\\frac{" << it->multiplier->get_num() << "}{"
 					 << it->multiplier->get_den() << "})";
-						}
+							}
 				else if(*it->multiplier==-1) {
 					str << "-";
 				turned_one=true;
-						}
+							}
 				else {
 					str << "(" << *it->multiplier << ")";
+							}
 						}
 					}
-				}
 		else {
 			if(denom!=1) {
 				str << "\\frac{" << it->multiplier->get_num() << "}{"
 				 << it->multiplier->get_den() << "}";
-					}
+						}
 			else
 				str << *it->multiplier;
-				}
+					}
 
 		if(!turned_one && !(*it->name=="1"))
 		str << "*"; */
@@ -265,24 +265,24 @@ void DisplayTerminal::print_multiplier(std::ostream& str, Ex::iterator it, int m
 void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-	case str_node::b_none:
-		if(pr==str_node::p_none)     str << "(";
-		else                         str << "{";
-		break;
-	case str_node::b_pointy:
-		str << "<";
-		break;
-	case str_node::b_curly:
-		str << "{";
-		break;
-	case str_node::b_round:
-		str << "(";
-		break;
-	case str_node::b_square:
-		str << "[";
-		break;
-	default :
-		return;
+		case str_node::b_none:
+			if(pr==str_node::p_none)     str << "(";
+			else                         str << "{";
+			break;
+		case str_node::b_pointy:
+			str << "<";
+			break;
+		case str_node::b_curly:
+			str << "{";
+			break;
+		case str_node::b_round:
+			str << "(";
+			break;
+		case str_node::b_square:
+			str << "[";
+			break;
+		default :
+			return;
 		}
 	++(bracket_level);
 	}
@@ -290,24 +290,24 @@ void DisplayTerminal::print_opening_bracket(std::ostream& str, str_node::bracket
 void DisplayTerminal::print_closing_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-	case str_node::b_none:
-		if(pr==str_node::p_none)     str << ")";
-		else                         str << "}";
-		break;
-	case str_node::b_pointy:
-		str << ">";
-		break;
-	case str_node::b_curly:
-		str << "}";
-		break;
-	case str_node::b_round:
-		str << ")";
-		break;
-	case str_node::b_square:
-		str << "]";
-		break;
-	default :
-		return;
+		case str_node::b_none:
+			if(pr==str_node::p_none)     str << ")";
+			else                         str << "}";
+			break;
+		case str_node::b_pointy:
+			str << ">";
+			break;
+		case str_node::b_curly:
+			str << "}";
+			break;
+		case str_node::b_round:
+			str << ")";
+			break;
+		case str_node::b_square:
+			str << "]";
+			break;
+		default :
+			return;
 		}
 	--(bracket_level);
 	}
@@ -315,24 +315,24 @@ void DisplayTerminal::print_closing_bracket(std::ostream& str, str_node::bracket
 void DisplayTerminal::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool)
 	{
 	switch(pr) {
-	case str_node::p_super:
-		str << "^";
-		break;
-	case str_node::p_sub:
-		str << "_";
-		break;
-	case str_node::p_property:
-		str << "$";
-		break;
-	case str_node::p_exponent:
-		str << "**";
-		break;
-	case str_node::p_none:
-		break;
-	case str_node::p_components:
-		break;
-	case str_node::p_invalid:
-		break;
+		case str_node::p_super:
+			str << "^";
+			break;
+		case str_node::p_sub:
+			str << "_";
+			break;
+		case str_node::p_property:
+			str << "$";
+			break;
+		case str_node::p_exponent:
+			str << "**";
+			break;
+		case str_node::p_none:
+			break;
+		case str_node::p_components:
+			break;
+		case str_node::p_invalid:
+			break;
 		}
 	}
 
@@ -345,7 +345,7 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\commutator") print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\arrow")      print_arrowlike(str, it);
-	else if(*it->name=="\\dot")        print_dot(str, it);	
+	else if(*it->name=="\\dot")        print_dot(str, it);
 	else if(*it->name=="\\pow")        print_powlike(str, it);
 	else if(*it->name=="\\wedge")      print_productlike(str, it, " ^ ");
 	else if(*it->name=="\\conditional")    print_conditional(str, it);

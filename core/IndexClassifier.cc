@@ -60,7 +60,7 @@ void IndexClassifier::determine_intersection(index_map_t& one, index_map_t& two,
 		const Coordinate *cdn=kernel.properties.get<Coordinate>(it1->second, true);
 		const Symbol     *smb=Symbol::get(kernel.properties, it1->second, true);
 		if(it1->second->is_integer()==false && !cdn && !smb && !it1->second->is_name_wildcard() && !it1->second->is_object_wildcard() &&
-			!(*it1->second->name=="\\sum")) {
+		      !(*it1->second->name=="\\sum")) {
 			bool move_this_one=false;
 			index_map_t::iterator it2=two.begin();
 			while(it2!=two.end()) {
@@ -286,7 +286,7 @@ void IndexClassifier::classify_indices(Ex::iterator it, index_map_t& ind_free, i
 				const Symbol     *smb=kernel.properties.get_composite<Symbol>(i1->second, true);
 				// Integer, coordinate or symbol indices, or pattern objects, or '\sum' nodes, are always ok.
 				if(i1->second->is_integer()==false && !cdn && !smb && !i1->second->is_name_wildcard() && !i1->second->is_object_wildcard()
-					&& !(*i1->second->name=="\\sum")) {
+				      && !(*i1->second->name=="\\sum")) {
 					// Check whether there is a corresponding free index in the current term.
 					if(two.count((*i1).first)==0) {
 						// std::cerr << "did not find Symbol for " << i1->second << std::endl;

@@ -226,7 +226,7 @@ namespace cadabra {
 		pybind11::module sympy_parser = pybind11::module::import("sympy.parsing.sympy_parser");
 		auto parse = sympy_parser.attr("parse_expr");
 #ifdef DEBUG
-	std::cerr << "Feeding sympy: " << txt << std::endl;
+		std::cerr << "Feeding sympy: " << txt << std::endl;
 #endif
 		pybind11::object ret = parse(txt);
 		return ret;
@@ -440,7 +440,7 @@ namespace cadabra {
 		auto sb = std::make_shared<sympy::SympyBridge>(*get_kernel_from_scope(), ex);
 		return sb;
 		}
-	
+
 	Ex_ptr Ex_from_string(const std::string& ex_, bool, Kernel *kernel)
 		{
 		if (kernel == nullptr)
@@ -590,11 +590,11 @@ namespace cadabra {
 			}, pybind11::is_operator{});
 
 		pybind11::class_<sympy::SympyBridge, std::shared_ptr<sympy::SympyBridge> >(m, "SympyBridge")
-			.def(py::init(&SympyBridge_init))
-			.def("to_sympy", &sympy::SympyBridge::export_ex)
-			.def("from_sympy", &sympy::SympyBridge::import_ex)
-			;
-		
+		.def(py::init(&SympyBridge_init))
+		.def("to_sympy", &sympy::SympyBridge::export_ex)
+		.def("from_sympy", &sympy::SympyBridge::import_ex)
+		;
+
 		m.def("tree", &print_tree);
 
 		m.def("map_sympy", &map_sympy_wrapper,

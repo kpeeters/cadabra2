@@ -98,7 +98,7 @@ namespace cadabra {
 
 		private:
 			id_t                          serial_number;
-	};
+		};
 
 	typedef tree<DataCell> DTree;
 

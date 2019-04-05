@@ -168,7 +168,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 		std::cerr << "executing..." << std::endl;
 		std::cerr << newblk << std::endl;
 #endif
-		PyErr_Clear(); 
+		PyErr_Clear();
 		pybind11::exec(newblk.c_str(), main_namespace);
 #ifdef DEBUG
 		std::cerr << "exec done" << std::endl;

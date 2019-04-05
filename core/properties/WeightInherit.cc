@@ -47,43 +47,43 @@ multiplier_t WeightInherit::value(const Kernel& kernel, Ex::iterator it, const s
 	while(sib!=it.end()) {
 		if(!sib->is_index()) {
 			switch(combination_type) {
-			case multiplicative: {
-				const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
-				// std::cerr << "finding weight for " << Ex(sib) << std::endl;
-				if(gnb) {
-					multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
-					ret+=tmp;
+				case multiplicative: {
+					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					// std::cerr << "finding weight for " << Ex(sib) << std::endl;
+					if(gnb) {
+						multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
+						ret+=tmp;
+						}
 					}
-				}
-			break;
-			case additive: {
-				multiplier_t thisone=0;
-				const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
-				if(gnb) thisone=gnb->value(kernel, sib, forcedlabel);
-				else    thisone=0;
-				if(first_term) {
-					first_term=false;
-					ret=thisone;
+				break;
+				case additive: {
+					multiplier_t thisone=0;
+					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					if(gnb) thisone=gnb->value(kernel, sib, forcedlabel);
+					else    thisone=0;
+					if(first_term) {
+						first_term=false;
+						ret=thisone;
+						}
+					else if(ret!=thisone) {   // the weights in the sum are not uniform
+						throw WeightException("Encountered sum with un-equal weight terms.");
+						}
 					}
-				else if(ret!=thisone) {   // the weights in the sum are not uniform
-					throw WeightException("Encountered sum with un-equal weight terms.");
-					}
-				}
-			break;
-			case power: {
-				const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
-				if(gnb) {
-					multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
-					++sib;
-					if(sib==it.end() || sib->is_rational()==false)
-						throw RuntimeException("Can only handle numerical exponents for weight counting.");
+				break;
+				case power: {
+					const WeightBase *gnb=properties.get_composite<WeightBase>(sib, forcedlabel);
+					if(gnb) {
+						multiplier_t tmp=gnb->value(kernel, sib, forcedlabel);
+						++sib;
+						if(sib==it.end() || sib->is_rational()==false)
+							throw RuntimeException("Can only handle numerical exponents for weight counting.");
 
-					ret+=(*sib->multiplier)*tmp;
-					sib=it.end();
-					continue;
+						ret+=(*sib->multiplier)*tmp;
+						sib=it.end();
+						continue;
+						}
 					}
-				}
-			break;
+				break;
 				}
 			}
 		++sib;

@@ -93,21 +93,21 @@ Algorithm::result_t simplify::apply(iterator& it)
 		auto top=prod.begin();
 		// std::cerr << "Feeding to sympy " << prod << std::endl;
 		switch(kernel.scalar_backend) {
-		case Kernel::scalar_backend_t::sympy:
-			wrap.push_back("simplify");
-			if(pm) pm->group("sympy");
-			sympy::apply(kernel, prod, top, wrap, args_, "");
-			if(pm) pm->group();
-			break;
-		case Kernel::scalar_backend_t::mathematica:
+			case Kernel::scalar_backend_t::sympy:
+				wrap.push_back("simplify");
+				if(pm) pm->group("sympy");
+				sympy::apply(kernel, prod, top, wrap, args_, "");
+				if(pm) pm->group();
+				break;
+			case Kernel::scalar_backend_t::mathematica:
 #ifdef MATHEMATICA_FOUND
-			wrap.push_back("FullSimplify");
-			//				args_.push_back("Trig -> False");
-			if(pm) pm->group("mathematica");
-			MMA::apply_mma(kernel, prod, top, wrap, args_, "");
-			if(pm) pm->group();
+				wrap.push_back("FullSimplify");
+				//				args_.push_back("Trig -> False");
+				if(pm) pm->group("mathematica");
+				MMA::apply_mma(kernel, prod, top, wrap, args_, "");
+				if(pm) pm->group();
 #endif
-			break;
+				break;
 			}
 		// Now remove the non-index carrying factors and replace with
 		// the factors of 'prod' just simplified.
@@ -121,21 +121,21 @@ Algorithm::result_t simplify::apply(iterator& it)
 		}
 	else {
 		switch(kernel.scalar_backend) {
-		case Kernel::scalar_backend_t::sympy:
-			wrap.push_back("simplify");
-			if(pm) pm->group("sympy");
-			sympy::apply(kernel, tr, it, wrap, args_, "");
-			if(pm) pm->group();
-			break;
-		case Kernel::scalar_backend_t::mathematica:
+			case Kernel::scalar_backend_t::sympy:
+				wrap.push_back("simplify");
+				if(pm) pm->group("sympy");
+				sympy::apply(kernel, tr, it, wrap, args_, "");
+				if(pm) pm->group();
+				break;
+			case Kernel::scalar_backend_t::mathematica:
 #ifdef MATHEMATICA_FOUND
-			wrap.push_back("FullSimplify");
-			//				args_.push_back("Trig -> False");
-			if(pm) pm->group("mathematica");
-			MMA::apply_mma(kernel, tr, it, wrap, args_, "");
-			if(pm) pm->group();
+				wrap.push_back("FullSimplify");
+				//				args_.push_back("Trig -> False");
+				if(pm) pm->group("mathematica");
+				MMA::apply_mma(kernel, tr, it, wrap, args_, "");
+				if(pm) pm->group();
 #endif
-			break;
+				break;
 			}
 		it.skip_children();
 		return result_t::l_applied;

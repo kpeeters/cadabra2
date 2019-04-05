@@ -282,22 +282,22 @@ Algorithm::result_t canonicalise::apply(iterator& it)
 #endif
 
 		switch(ii->first->fl.parent_rel) {
-		case str_node::p_super:
-		case str_node::p_none:
-			//				vec_perm.push_back(ii->second+1);
-			//				vec_perm.push_back(i2->second+1);
-			//				num_to_tree_map.push_back(Ex(ii->first));
-			//				num_to_tree_map.push_back(Ex(i2->first));
-			break;
-		case str_node::p_sub:
-			std::swap(ii, i2);
-			//				vec_perm.push_back(i2->second+1);
-			//				vec_perm.push_back(ii->second+1);
-			//				num_to_tree_map.push_back(Ex(i2->first));
-			//				num_to_tree_map.push_back(Ex(ii->first));
-			break;
-		default:
-			break;
+			case str_node::p_super:
+			case str_node::p_none:
+				//				vec_perm.push_back(ii->second+1);
+				//				vec_perm.push_back(i2->second+1);
+				//				num_to_tree_map.push_back(Ex(ii->first));
+				//				num_to_tree_map.push_back(Ex(i2->first));
+				break;
+			case str_node::p_sub:
+				std::swap(ii, i2);
+				//				vec_perm.push_back(i2->second+1);
+				//				vec_perm.push_back(ii->second+1);
+				//				num_to_tree_map.push_back(Ex(i2->first));
+				//				num_to_tree_map.push_back(Ex(ii->first));
+				break;
+			default:
+				break;
 			}
 
 		vec_perm.push_back(ii->second+1);

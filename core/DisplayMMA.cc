@@ -303,60 +303,60 @@ void DisplayMMA::print_multiplier(std::ostream& str, Ex::iterator it)
 void DisplayMMA::print_opening_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-	case str_node::b_pointy:
-	case str_node::b_curly:
-		throw NotYetImplemented("curly/pointy bracket type");
-	case str_node::b_none:
-		str << "[";
-		break;
-	case str_node::b_round:
-		str << "[";
-		break;
-	case str_node::b_square:
-		str << "[";
-		break;
-	default :
-		return;
+		case str_node::b_pointy:
+		case str_node::b_curly:
+			throw NotYetImplemented("curly/pointy bracket type");
+		case str_node::b_none:
+			str << "[";
+			break;
+		case str_node::b_round:
+			str << "[";
+			break;
+		case str_node::b_square:
+			str << "[";
+			break;
+		default :
+			return;
 		}
 	}
 
 void DisplayMMA::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-	case str_node::b_pointy:
-	case str_node::b_curly:
-		throw NotYetImplemented("curly/pointy bracket type");
-	case str_node::b_none:
-		str << "]";
-		break;
-	case str_node::b_round:
-		str << "]";
-		break;
-	case str_node::b_square:
-		str << "]";
-		break;
-	default :
-		return;
+		case str_node::b_pointy:
+		case str_node::b_curly:
+			throw NotYetImplemented("curly/pointy bracket type");
+		case str_node::b_none:
+			str << "]";
+			break;
+		case str_node::b_round:
+			str << "]";
+			break;
+		case str_node::b_square:
+			str << "]";
+			break;
+		default :
+			return;
 		}
 	}
 
 void DisplayMMA::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool )
 	{
 	switch(pr) {
-	case str_node::p_super:
-	case str_node::p_sub:
-		throw NotYetImplemented("MMA print of indices");
-	case str_node::p_property:
-		throw NotYetImplemented("MMA print of properties");
-	case str_node::p_exponent:
-		str << "^";
-		break;
-	case str_node::p_none:
-		break;
-	case str_node::p_components:
-		break;
-	case str_node::p_invalid:
-		throw std::logic_error("DisplayMMA: p_invalid not handled.");
+		case str_node::p_super:
+		case str_node::p_sub:
+			throw NotYetImplemented("MMA print of indices");
+		case str_node::p_property:
+			throw NotYetImplemented("MMA print of properties");
+		case str_node::p_exponent:
+			str << "^";
+			break;
+		case str_node::p_none:
+			break;
+		case str_node::p_components:
+			break;
+		case str_node::p_invalid:
+			throw std::logic_error("DisplayMMA: p_invalid not handled.");
 		}
 	}
 

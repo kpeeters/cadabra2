@@ -207,18 +207,18 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                  sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
 
 	actiongroup->add(Gtk::Action::create("MenuCompare", "Compare"));
-	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"), 
-					 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
+	actiongroup->add(Gtk::Action::create("CompareFile", "Compare to file"),
+	                 sigc::mem_fun(*this, &NotebookWindow::compare_to_file));
 	actiongroup->add(Gtk::Action::create("CompareGit", "Compare with Git"));
 	actiongroup->add(Gtk::Action::create("CompareGitLatest", "Latest commit"),
-					 sigc::mem_fun(*this, &NotebookWindow::compare_git_latest));
+	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_latest));
 	actiongroup->add(Gtk::Action::create("CompareGitChoose", "Select commit from list"),
-					 sigc::mem_fun(*this, &NotebookWindow::compare_git_choose));
+	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_choose));
 	actiongroup->add(Gtk::Action::create("CompareGitSpecific", "Manually enter commit hash"),
-					 sigc::mem_fun(*this, &NotebookWindow::compare_git_specific));
+	                 sigc::mem_fun(*this, &NotebookWindow::compare_git_specific));
 
-	actiongroup->add(Gtk::Action::create("CompareSelectGit", "Select Git Executable"), 
-					 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
+	actiongroup->add(Gtk::Action::create("CompareSelectGit", "Select Git Executable"),
+	                 sigc::mem_fun(*this, &NotebookWindow::select_git_path));
 
 	actiongroup->add( Gtk::Action::create("MenuHelp", "_Help") );
 	//	actiongroup->add( Gtk::Action::create("HelpNotebook", Gtk::Stock::HELP, "How to use the notebook"),
@@ -277,7 +277,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "         <menuitem action='FontLarge'/>"
 		   "         <menuitem action='FontExtraLarge'/>"
 		   "      </menu>"
-			"      <separator/>"
+		   "      <separator/>"
 		   "      <menu action='MenuHighlightSyntax'>"
 		   "        <menuitem action='HighlightSyntaxOff'/>"
 		   "        <menuitem action='HighlightSyntaxOn'/>"
@@ -301,16 +301,16 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 		   "      <menuitem action='KernelRestart' />"
 		   "    </menu>";
 	ui_info+=
-		"    <menu action='MenuCompare'>"
-		"      <menuitem action='CompareFile'/>"
-		"      <menu action='CompareGit'>"
-		"        <menuitem action='CompareGitLatest'/>"
-		"        <menuitem action='CompareGitChoose'/>"
-		"        <menuitem action='CompareGitSpecific'/>"
-		"        <separator/>"
-		"        <menuitem action='CompareSelectGit'/>"
-		"      </menu>"
-		"    </menu>"
+	   "    <menu action='MenuCompare'>"
+	   "      <menuitem action='CompareFile'/>"
+	   "      <menu action='CompareGit'>"
+	   "        <menuitem action='CompareGitLatest'/>"
+	   "        <menuitem action='CompareGitChoose'/>"
+	   "        <menuitem action='CompareGitSpecific'/>"
+	   "        <separator/>"
+	   "        <menuitem action='CompareSelectGit'/>"
+	   "      </menu>"
+	   "    </menu>"
 	   "    <menu action='MenuHelp'>"
 	   //		"      <menuitem action='HelpNotebook' />"
 	   "      <menuitem action='HelpAbout' />"
@@ -665,78 +665,78 @@ void NotebookWindow::add_cell(const DTree& tr, DTree::iterator it, bool visible)
 		VisualCell newcell;
 		Gtk::Widget *w=0;
 		switch(it->cell_type) {
-		case DataCell::CellType::document:
-			newcell.document = manage( new Gtk::VBox() );
-			w=newcell.document;
-			break;
+			case DataCell::CellType::document:
+				newcell.document = manage( new Gtk::VBox() );
+				w=newcell.document;
+				break;
 
-		case DataCell::CellType::output:
-		case DataCell::CellType::error:
-		case DataCell::CellType::verbatim:
-		case DataCell::CellType::latex_view: {
-			// FIXME: would be good to share the input and output of TeXView too.
-			// Right now nothing is shared...
-			newcell.outbox = manage( new TeXView(engine, it) );
-			newcell.outbox->tex_error.connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
+			case DataCell::CellType::output:
+			case DataCell::CellType::error:
+			case DataCell::CellType::verbatim:
+			case DataCell::CellType::latex_view: {
+				// FIXME: would be good to share the input and output of TeXView too.
+				// Right now nothing is shared...
+				newcell.outbox = manage( new TeXView(engine, it) );
+				newcell.outbox->tex_error.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::on_tex_error), it ) );
 
-			newcell.outbox->show_hide_requested.connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
+				newcell.outbox->show_hide_requested.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_toggle_visibility), i ) );
 
 #if GTKMM_MINOR_VERSION>=10
-			to_reveal.push_back(&newcell.outbox->rbox);
+				to_reveal.push_back(&newcell.outbox->rbox);
 #endif
 
-			w=newcell.outbox;
-			newcell.outbox->signal_button_press_event().connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
-			break;
-			}
-		case DataCell::CellType::python:
-		case DataCell::CellType::latex: {
-			CodeInput *ci;
-			// Ensure that all CodeInput cells share the same text buffer.
-			if(i==0) {
-				ci = new CodeInput(it, it->textbuf,scale/display_scale,prefs);
-				global_buffer=ci->buffer;
+				w=newcell.outbox;
+				newcell.outbox->signal_button_press_event().connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::handle_outbox_select), it ) );
+				break;
 				}
-			else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
-			if(read_only)
-				ci->edit.set_editable(false);
-			ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+			case DataCell::CellType::python:
+			case DataCell::CellType::latex: {
+				CodeInput *ci;
+				// Ensure that all CodeInput cells share the same text buffer.
+				if(i==0) {
+					ci = new CodeInput(it, it->textbuf,scale/display_scale,prefs);
+					global_buffer=ci->buffer;
+					}
+				else ci = new CodeInput(it, global_buffer,scale/display_scale,prefs);
+				if(read_only)
+					ci->edit.set_editable(false);
+				ci->get_style_context()->add_provider(css_provider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-			ci->edit.content_changed.connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
-			ci->edit.content_insert.connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_insert), i ) );
-			ci->edit.content_erase.connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_erase), i ) );
+				ci->edit.content_changed.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_changed), i ) );
+				ci->edit.content_insert.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_insert), i ) );
+				ci->edit.content_erase.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_erase), i ) );
 
-			ci->edit.content_execute.connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i, true ) );
-			ci->edit.cell_got_focus.connect(
-			   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
+				ci->edit.content_execute.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_content_execute), i, true ) );
+				ci->edit.cell_got_focus.connect(
+				   sigc::bind( sigc::mem_fun(this, &NotebookWindow::cell_got_focus), i ) );
 
-			newcell.inbox = manage( ci );
-			w=newcell.inbox;
+				newcell.inbox = manage( ci );
+				w=newcell.inbox;
 
-			break;
-			}
-		case DataCell::CellType::image_png: {
-			// FIXME: horribly memory inefficient
-			ImageView *iv=new ImageView();
+				break;
+				}
+			case DataCell::CellType::image_png: {
+				// FIXME: horribly memory inefficient
+				ImageView *iv=new ImageView();
 
-			iv->set_image_from_base64(it->textbuf);
-			newcell.imagebox = manage( iv );
-			w=newcell.imagebox;
-			break;
-			}
-		case DataCell::CellType::input_form:
-			// This cell is there only for cutnpaste functionality; do not display.
-			break;
+				iv->set_image_from_base64(it->textbuf);
+				newcell.imagebox = manage( iv );
+				w=newcell.imagebox;
+				break;
+				}
+			case DataCell::CellType::input_form:
+				// This cell is there only for cutnpaste functionality; do not display.
+				break;
 
-		default:
-			throw std::logic_error("Unimplemented datacell type");
+			default:
+				throw std::logic_error("Unimplemented datacell type");
 			}
 
 
@@ -1216,19 +1216,19 @@ void NotebookWindow::on_file_open()
 	int result=dialog.run();
 
 	switch(result) {
-	case(Gtk::RESPONSE_OK): {
-		name = dialog.get_filename();
-		snoop::log("open") << name << snoop::flush;
-		std::ifstream file(name);
-		std::string content, line;
+		case(Gtk::RESPONSE_OK): {
+			name = dialog.get_filename();
+			snoop::log("open") << name << snoop::flush;
+			std::ifstream file(name);
+			std::string content, line;
 
-		while(std::getline(file, line))
-			content+=line;
+			while(std::getline(file, line))
+				content+=line;
 
-		compute->restart_kernel();
-		load_file(content);
-		break;
-		}
+			compute->restart_kernel();
+			load_file(content);
+			break;
+			}
 		}
 	}
 
@@ -1311,11 +1311,11 @@ void NotebookWindow::on_file_export_html()
 	int result=dialog.run();
 
 	switch(result) {
-	case(Gtk::RESPONSE_OK): {
-		std::string name = dialog.get_filename();
-		std::ofstream temp(name);
-		temp << export_as_HTML(doc);
-		}
+		case(Gtk::RESPONSE_OK): {
+			std::string name = dialog.get_filename();
+			std::ofstream temp(name);
+			temp << export_as_HTML(doc);
+			}
 		}
 	}
 
@@ -1331,14 +1331,14 @@ void NotebookWindow::on_file_export_latex()
 	int result=dialog.run();
 
 	switch(result) {
-	case(Gtk::RESPONSE_OK): {
-		std::string name = dialog.get_filename();
-		std::ofstream temp(name);
-		std::size_t dotpos = name.rfind('.');
-		std::string base = name.substr(0, dotpos);
-		std::cerr << base << std::endl;
-		temp << export_as_LaTeX(doc, base);
-		}
+		case(Gtk::RESPONSE_OK): {
+			std::string name = dialog.get_filename();
+			std::ofstream temp(name);
+			std::size_t dotpos = name.rfind('.');
+			std::string base = name.substr(0, dotpos);
+			std::cerr << base << std::endl;
+			temp << export_as_LaTeX(doc, base);
+			}
 		}
 	}
 
@@ -1354,11 +1354,11 @@ void NotebookWindow::on_file_export_python()
 	int result=dialog.run();
 
 	switch(result) {
-	case(Gtk::RESPONSE_OK): {
-		std::string name = dialog.get_filename();
-		std::ofstream temp(name);
-		temp << export_as_python(doc);
-		}
+		case(Gtk::RESPONSE_OK): {
+			std::string name = dialog.get_filename();
+			std::ofstream temp(name);
+			temp << export_as_python(doc);
+			}
 		}
 	}
 
@@ -1375,11 +1375,11 @@ void NotebookWindow::on_file_export_html_segment()
 	int result=dialog.run();
 
 	switch(result) {
-	case(Gtk::RESPONSE_OK): {
-		std::string name = dialog.get_filename();
-		std::ofstream temp(name);
-		temp << export_as_HTML(doc, true);
-		}
+		case(Gtk::RESPONSE_OK): {
+			std::string name = dialog.get_filename();
+			std::ofstream temp(name);
+			temp << export_as_HTML(doc, true);
+			}
 		}
 	}
 
@@ -1434,13 +1434,13 @@ bool NotebookWindow::quit_safeguard(bool quit)
 			md.add_button("No need to save", 3);
 		int action=md.run();
 		switch(action) {
-		case 1:
-			on_file_save();
-			return true;
-		case 2:
-			break;
-		case 3:
-			return true;
+			case 1:
+				on_file_save();
+				return true;
+			case 2:
+				break;
+			case 3:
+				return true;
 			}
 		}
 	else return true;
@@ -1773,44 +1773,44 @@ void NotebookWindow::on_text_scaling_factor_changed(const std::string& key)
 	}
 
 void NotebookWindow::select_git_path()
-{
+	{
 	SelectFileDialog dialog("Select git executable", *this, true);
 	dialog.set_transient_for(*this);
 	dialog.set_text(prefs.git_path);
-	
-	if (dialog.run() == Gtk::RESPONSE_OK) 
+
+	if (dialog.run() == Gtk::RESPONSE_OK)
 		prefs.git_path = dialog.get_text();
-}
+	}
 
 void NotebookWindow::compare_to_file()
-{
+	{
 	std::string filename;
-	
+
 	SelectFileDialog dialog("Select file to compare", *this, true);
 	dialog.set_transient_for(*this);
 	if (dialog.run() == Gtk::RESPONSE_OK)
 		filename = dialog.get_text();
 	else
 		return;
-	
+
 	std::ifstream a(filename);
 	if (!a.is_open()) {
 		Gtk::MessageDialog error_dialog(*this, "The file '" + filename + "' could not be opened for reading", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_title("Could not open file");
 		error_dialog.run();
 		return;
-	
+
 		std::stringstream b;
 		b << JSON_serialise(doc);
 
 		diffviewer = std::make_unique<DiffViewer>(a, b, *this);
 		//diffviewer->set_transient_for(*this);
 		diffviewer->run_noblock();
+		}
 	}
-}
 
 std::string NotebookWindow::run_git_command(const std::string& args)
-{
+	{
 	using namespace TinyProcessLib;
 
 	auto split_pos = name.find_last_of("\\/");
@@ -1820,20 +1820,24 @@ std::string NotebookWindow::run_git_command(const std::string& args)
 	std::string output;
 
 	Process git(
-		prefs.git_path + " " + args,
-		path,
-		[&output](const char* bytes, size_t n) { output += std::string(bytes, n); },
-		[&output](const char* bytes, size_t n) { output += std::string(bytes, n); }
+	   prefs.git_path + " " + args,
+	   path,
+	[&output](const char* bytes, size_t n) {
+		output += std::string(bytes, n);
+		},
+	[&output](const char* bytes, size_t n) {
+		output += std::string(bytes, n);
+		}
 	);
 
 	if (git.get_exit_status())
 		throw std::runtime_error(output);
 	else
 		return output;
-}
+	}
 
 void NotebookWindow::compare_git(const std::string& commit_hash)
-{
+	{
 	auto split_pos = name.find_last_of("\\/");
 	if (split_pos == std::string::npos || split_pos == name.size() - 1)
 		throw std::runtime_error("A valid file must be open");
@@ -1848,43 +1852,42 @@ void NotebookWindow::compare_git(const std::string& commit_hash)
 	diffviewer = std::make_unique<DiffViewer>(a, b, *this);
 	//diffviewer->set_transient_for(*this);
 	diffviewer->run_noblock();
-}
+	}
 
 void NotebookWindow::compare_git_latest()
-{
+	{
 	try {
 		// Get latest commit hash
 		auto commit = run_git_command("log --pretty=format:%h -n 1");
 		compare_git(trim(commit));
-	}
+		}
 	catch (const std::runtime_error& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
 		error_dialog.run();
-	}
-}
-
-class GitChooseModelColumns : public Gtk::TreeModel::ColumnRecord
-{
-public:
-	GitChooseModelColumns()
-	{
-		add(commit_hash);
-		add(author);
-		add(timestamp);
-		add(description);
+		}
 	}
 
-	Gtk::TreeModelColumn<std::string> commit_hash;
-	Gtk::TreeModelColumn<std::string> author;
-	Gtk::TreeModelColumn<std::string> timestamp;
-	Gtk::TreeModelColumn<std::string> description;
-};
+class GitChooseModelColumns : public Gtk::TreeModel::ColumnRecord {
+	public:
+		GitChooseModelColumns()
+			{
+			add(commit_hash);
+			add(author);
+			add(timestamp);
+			add(description);
+			}
+
+		Gtk::TreeModelColumn<std::string> commit_hash;
+		Gtk::TreeModelColumn<std::string> author;
+		Gtk::TreeModelColumn<std::string> timestamp;
+		Gtk::TreeModelColumn<std::string> description;
+	};
 
 
 void NotebookWindow::compare_git_choose()
-{
+	{
 	try {
 		std::string commit_hash;
 		std::string max_entries = "15";
@@ -1903,7 +1906,7 @@ void NotebookWindow::compare_git_choose()
 			row[columns.author] = authors[i];
 			row[columns.timestamp] = times[i];
 			row[columns.description] = descriptions[i];
-		}
+			}
 
 		tree_view.set_model(list_store);
 		tree_view.append_column("Commit Hash", columns.commit_hash);
@@ -1923,23 +1926,23 @@ void NotebookWindow::compare_git_choose()
 		select_dialog.add_button("Cancel", Gtk::RESPONSE_CANCEL);
 		select_dialog.show_all();
 
-		if (select_dialog.run() == Gtk::RESPONSE_OK) 
+		if (select_dialog.run() == Gtk::RESPONSE_OK)
 			commit_hash = tree_view.get_selection()->get_selected()->get_value(columns.commit_hash);
 		else
 			return;
-		
+
 		compare_git(trim(commit_hash));
-	}
+		}
 	catch (const std::runtime_error& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
 		error_dialog.run();
+		}
 	}
-}
 
 void NotebookWindow::compare_git_specific()
-{
+	{
 	try {
 		std::string commit_hash;
 		Gtk::Entry entry;
@@ -1954,16 +1957,16 @@ void NotebookWindow::compare_git_specific()
 			commit_hash = entry.get_text();
 		else
 			return;
-	
+
 		compare_git(trim(commit_hash));
-	}
+		}
 	catch (const std::runtime_error& ex) {
 		Gtk::MessageDialog error_dialog(ex.what(), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_OK, true);
 		error_dialog.set_transient_for(*this);
 		error_dialog.set_title("Git error");
 		error_dialog.run();
+		}
 	}
-}
 
 void NotebookWindow::on_prefs_font_size(int num)
 	{
@@ -2025,20 +2028,20 @@ void NotebookWindow::on_prefs_highlight_syntax(int on)
 			// python cells to avoid an exception being raised when
 			// trying to edit an immutable cell type
 			switch (visualcell.first->cell_type) {
-			// Fallthrough
-			case DataCell::CellType::python:
-			case DataCell::CellType::latex:
-				if(on) {
-					load_css("black");
-					visualcell.second.inbox->enable_highlighting(visualcell.first->cell_type, prefs);
-					}
-				else {
-					load_css("blue");
-					visualcell.second.inbox->disable_highlighting();
-					}
-				break;
-			default:
-				break;
+				// Fallthrough
+				case DataCell::CellType::python:
+				case DataCell::CellType::latex:
+					if(on) {
+						load_css("black");
+						visualcell.second.inbox->enable_highlighting(visualcell.first->cell_type, prefs);
+						}
+					else {
+						load_css("blue");
+						visualcell.second.inbox->disable_highlighting();
+						}
+					break;
+				default:
+					break;
 				}
 			}
 		}

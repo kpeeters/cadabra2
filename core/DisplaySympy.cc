@@ -241,70 +241,70 @@ void DisplaySympy::print_multiplier(std::ostream& str, Ex::iterator it)
 void DisplaySympy::print_opening_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-	case str_node::b_none:
-		str << ")";
-		break;
-	case str_node::b_pointy:
-		str << "\\<";
-		break;
-	case str_node::b_curly:
-		str << "\\{";
-		break;
-	case str_node::b_round:
-		str << "(";
-		break;
-	case str_node::b_square:
-		str << "[";
-		break;
-	default :
-		return;
+		case str_node::b_none:
+			str << ")";
+			break;
+		case str_node::b_pointy:
+			str << "\\<";
+			break;
+		case str_node::b_curly:
+			str << "\\{";
+			break;
+		case str_node::b_round:
+			str << "(";
+			break;
+		case str_node::b_square:
+			str << "[";
+			break;
+		default :
+			return;
 		}
 	}
 
 void DisplaySympy::print_closing_bracket(std::ostream& str, str_node::bracket_t br)
 	{
 	switch(br) {
-	case str_node::b_none:
-		str << ")";
-		break;
-	case str_node::b_pointy:
-		str << "\\>";
-		break;
-	case str_node::b_curly:
-		str << "\\}";
-		break;
-	case str_node::b_round:
-		str << ")";
-		break;
-	case str_node::b_square:
-		str << "]";
-		break;
-	default :
-		return;
+		case str_node::b_none:
+			str << ")";
+			break;
+		case str_node::b_pointy:
+			str << "\\>";
+			break;
+		case str_node::b_curly:
+			str << "\\}";
+			break;
+		case str_node::b_round:
+			str << ")";
+			break;
+		case str_node::b_square:
+			str << "]";
+			break;
+		default :
+			return;
 		}
 	}
 
 void DisplaySympy::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool )
 	{
 	switch(pr) {
-	case str_node::p_super:
-		str << "^";
-		break;
-	case str_node::p_sub:
-		str << "_";
-		break;
-	case str_node::p_property:
-		str << "$";
-		break;
-	case str_node::p_exponent:
-		str << "**";
-		break;
-	case str_node::p_none:
-		break;
-	case str_node::p_components:
-		break;
-	case str_node::p_invalid:
-		throw std::logic_error("DisplaySympy: p_invalid not handled.");
+		case str_node::p_super:
+			str << "^";
+			break;
+		case str_node::p_sub:
+			str << "_";
+			break;
+		case str_node::p_property:
+			str << "$";
+			break;
+		case str_node::p_exponent:
+			str << "**";
+			break;
+		case str_node::p_none:
+			break;
+		case str_node::p_components:
+			break;
+		case str_node::p_invalid:
+			throw std::logic_error("DisplaySympy: p_invalid not handled.");
 		}
 	}
 

@@ -181,188 +181,188 @@ bool Parser::string2tree(const std::string& inp)
 			}
 		unsigned char c=get_token(i);
 		switch(current_mode.back()) {
-		case m_skipwhite:
-			// std::cerr << "m_skipwhite" << " " << c << std::endl;
-			if(c!=' ' && c!='\n') current_mode.pop_back();
-			else                  advance(i);
-			break;
-		case m_name: {
-			// std::cerr << "m_name" << " " << c << std::endl;
-			if(is_opening_bracket(c)!=str_node::b_no ||
-			      ( is_link(c)!=str_node::p_none && ( tmp.size()==0 ||
-			            !(tmp[0]=='@' || (tmp[0]=='\\' && tmp[1]=='@'))) )) {
-				// std::cerr << "appending " << tmp << " as child of " << *current_parent->name << std::endl;
-				current_parent=tree->append_child(current_parent,str_node(tmp,
-				                                  current_bracket.back(),
-				                                  current_parent_rel.back()));
-				current_mode.push_back(m_findchildren);
-				tmp="";
+			case m_skipwhite:
+				// std::cerr << "m_skipwhite" << " " << c << std::endl;
+				if(c!=' ' && c!='\n') current_mode.pop_back();
+				else                  advance(i);
 				break;
-				}
-			if(is_closing_bracket(c)!=str_node::b_no) {
-				if(tmp.size()>0) {
-					tree->append_child(current_parent,str_node(tmp,
-					                   current_bracket.back(),
-					                   current_parent_rel.back()));
-					tmp="";
-					}
-				current_mode.pop_back();
-				break;
-				}
-			if(tmp.size()>0) {
-				if(c=='+' || c=='-' || c=='*' || c=='/' || c=='\\' || c==' ' || c=='\n') {
-					tree->append_child(current_parent,str_node(tmp,
-					                   current_bracket.back(),
-					                   current_parent_rel.back()));
-					tmp="";
-					if(c==' ' || c=='\n')
-						advance(i);
-					current_mode.pop_back();
-					break;
-					}
-				}
-			if(c=='+' || c=='-' || c=='*' || c=='/') {
-				tmp+=c;
-				tree->append_child(current_parent,str_node(tmp,
-				                   current_bracket.back(),
-				                   current_parent_rel.back()));
-				tmp="";
-				advance(i);
-				current_mode.pop_back();
-				break;
-				}
-			assert(c!=' ' && c!='\n');
-			tmp+=c;
-			advance(i);
-			if(c=='\"')
-				current_mode.push_back(m_verbatim);
-			break;
-			}
-		case m_findchildren: {
-			// std::cerr << "m_findchildren" << " " << c << std::endl;
-			str_node::parent_rel_t pr=is_link(c);
-			if(pr!=str_node::p_none) {
-				advance(i);
-				int cc=get_token(i);
-				str_node::bracket_t br=is_opening_bracket(cc);
-				if(br!=str_node::b_no) {
-					current_bracket.push_back(br);
-					current_parent_rel.push_back(pr);
-					current_mode.push_back(m_childgroup);
-					advance(i);
-					}
-				else {
-					current_bracket.push_back(str_node::b_none);
-					current_parent_rel.push_back(pr);
-					if(pr==str_node::p_property)
-						current_mode.push_back(m_property);
-					else
-						current_mode.push_back(m_singlecharname);
-					}
-				break;
-				}
-			else {
-				str_node::bracket_t br=is_opening_bracket(c);
-				if(br!=str_node::b_no) {
-					current_bracket.push_back(br);
-					current_parent_rel.push_back(str_node::p_none);
-					current_mode.push_back(m_childgroup);
-					advance(i);
-					break;
-					}
-				else {
-					current_mode.pop_back();
-					current_mode.push_back(m_skipwhite);
-					current_parent=tree->parent(current_parent);
-					//				 		advance(i);
-					break;
-					}
-				}
-			break;
-			}
-		case m_singlecharname:
-			// This is for names 'a' or '\aaa' that appear as (...)^a
-			// or (...)^\aaa .
-
-			// std::cerr << "m_singlecharname" << " " << c << std::endl;
-			tmp+=c;
-			if(c=='\\') {
-				current_mode.pop_back();
-				current_mode.push_back(m_backslashname);
-				advance(i);
-				break;
-				}
-			else {
-				tree->append_child(current_parent,str_node(tmp,
-				                   str_node::b_none, /* current_bracket.back(), */
-				                   current_parent_rel.back()));
-				advance(i);
-				tmp="";
-				current_mode.pop_back();
-				current_bracket.pop_back();
-				current_parent_rel.pop_back();
-				break;
-				}
-		case m_property: // properties do not need brackets
-			if(c==' ' || c=='\n') {
-				current_mode.pop_back();
-				current_bracket.pop_back();
-				current_parent_rel.pop_back();
-				current_parent=tree->parent(current_parent);
-				}
-			else if(is_opening_bracket(c)) {
-				if(tmp.size()>0) {
+			case m_name: {
+				// std::cerr << "m_name" << " " << c << std::endl;
+				if(is_opening_bracket(c)!=str_node::b_no ||
+				      ( is_link(c)!=str_node::p_none && ( tmp.size()==0 ||
+				            !(tmp[0]=='@' || (tmp[0]=='\\' && tmp[1]=='@'))) )) {
+					// std::cerr << "appending " << tmp << " as child of " << *current_parent->name << std::endl;
 					current_parent=tree->append_child(current_parent,str_node(tmp,
 					                                  current_bracket.back(),
 					                                  current_parent_rel.back()));
+					current_mode.push_back(m_findchildren);
+					tmp="";
+					break;
 					}
-				current_mode.push_back(m_childgroup);
-				}
-			advance(i);
-			tmp+=c;
-			break;
-		case m_verbatim:
-			if(c=='\"')
-				current_mode.pop_back();
-			tmp+=c;
-			advance(i);
-			break;
-		case m_backslashname:
-			//				std::cerr << "m_backslashname" << " " << c << std::endl;
-			if(c==' ' || c=='\n' || c=='\\' || is_link(c)!=str_node::p_none
-			      || is_closing_bracket(c)!=str_node::b_no) {
-				current_mode.pop_back();
-				tree->append_child(current_parent,str_node(tmp,
-				                   current_bracket.back(),
-				                   current_parent_rel.back()));
-				tmp="";
+				if(is_closing_bracket(c)!=str_node::b_no) {
+					if(tmp.size()>0) {
+						tree->append_child(current_parent,str_node(tmp,
+						                   current_bracket.back(),
+						                   current_parent_rel.back()));
+						tmp="";
+						}
+					current_mode.pop_back();
+					break;
+					}
+				if(tmp.size()>0) {
+					if(c=='+' || c=='-' || c=='*' || c=='/' || c=='\\' || c==' ' || c=='\n') {
+						tree->append_child(current_parent,str_node(tmp,
+						                   current_bracket.back(),
+						                   current_parent_rel.back()));
+						tmp="";
+						if(c==' ' || c=='\n')
+							advance(i);
+						current_mode.pop_back();
+						break;
+						}
+					}
+				if(c=='+' || c=='-' || c=='*' || c=='/') {
+					tmp+=c;
+					tree->append_child(current_parent,str_node(tmp,
+					                   current_bracket.back(),
+					                   current_parent_rel.back()));
+					tmp="";
+					advance(i);
+					current_mode.pop_back();
+					break;
+					}
+				assert(c!=' ' && c!='\n');
+				tmp+=c;
+				advance(i);
+				if(c=='\"')
+					current_mode.push_back(m_verbatim);
 				break;
 				}
-			tmp+=c;
-			advance(i);
-			if(c=='\"')
-				current_mode.push_back(m_verbatim);
-			break;
-		case m_childgroup:
-			// std::cerr << "m_childgroup" << " " << c << std::endl;
-			if(is_closing_bracket(c)!=str_node::b_no) {
-				// std::cerr << "leaving group" << std::endl;
-				current_mode.pop_back();
-				current_bracket.pop_back();
-				current_parent_rel.pop_back();
+			case m_findchildren: {
+				// std::cerr << "m_findchildren" << " " << c << std::endl;
+				str_node::parent_rel_t pr=is_link(c);
+				if(pr!=str_node::p_none) {
+					advance(i);
+					int cc=get_token(i);
+					str_node::bracket_t br=is_opening_bracket(cc);
+					if(br!=str_node::b_no) {
+						current_bracket.push_back(br);
+						current_parent_rel.push_back(pr);
+						current_mode.push_back(m_childgroup);
+						advance(i);
+						}
+					else {
+						current_bracket.push_back(str_node::b_none);
+						current_parent_rel.push_back(pr);
+						if(pr==str_node::p_property)
+							current_mode.push_back(m_property);
+						else
+							current_mode.push_back(m_singlecharname);
+						}
+					break;
+					}
+				else {
+					str_node::bracket_t br=is_opening_bracket(c);
+					if(br!=str_node::b_no) {
+						current_bracket.push_back(br);
+						current_parent_rel.push_back(str_node::p_none);
+						current_mode.push_back(m_childgroup);
+						advance(i);
+						break;
+						}
+					else {
+						current_mode.pop_back();
+						current_mode.push_back(m_skipwhite);
+						current_parent=tree->parent(current_parent);
+						//				 		advance(i);
+						break;
+						}
+					}
+				break;
+				}
+			case m_singlecharname:
+				// This is for names 'a' or '\aaa' that appear as (...)^a
+				// or (...)^\aaa .
+
+				// std::cerr << "m_singlecharname" << " " << c << std::endl;
+				tmp+=c;
+				if(c=='\\') {
+					current_mode.pop_back();
+					current_mode.push_back(m_backslashname);
+					advance(i);
+					break;
+					}
+				else {
+					tree->append_child(current_parent,str_node(tmp,
+					                   str_node::b_none, /* current_bracket.back(), */
+					                   current_parent_rel.back()));
+					advance(i);
+					tmp="";
+					current_mode.pop_back();
+					current_bracket.pop_back();
+					current_parent_rel.pop_back();
+					break;
+					}
+			case m_property: // properties do not need brackets
+				if(c==' ' || c=='\n') {
+					current_mode.pop_back();
+					current_bracket.pop_back();
+					current_parent_rel.pop_back();
+					current_parent=tree->parent(current_parent);
+					}
+				else if(is_opening_bracket(c)) {
+					if(tmp.size()>0) {
+						current_parent=tree->append_child(current_parent,str_node(tmp,
+						                                  current_bracket.back(),
+						                                  current_parent_rel.back()));
+						}
+					current_mode.push_back(m_childgroup);
+					}
+				advance(i);
+				tmp+=c;
+				break;
+			case m_verbatim:
+				if(c=='\"')
+					current_mode.pop_back();
+				tmp+=c;
 				advance(i);
 				break;
-				}
-			else {
+			case m_backslashname:
+				//				std::cerr << "m_backslashname" << " " << c << std::endl;
+				if(c==' ' || c=='\n' || c=='\\' || is_link(c)!=str_node::p_none
+				      || is_closing_bracket(c)!=str_node::b_no) {
+					current_mode.pop_back();
+					tree->append_child(current_parent,str_node(tmp,
+					                   current_bracket.back(),
+					                   current_parent_rel.back()));
+					tmp="";
+					break;
+					}
+				tmp+=c;
+				advance(i);
+				if(c=='\"')
+					current_mode.push_back(m_verbatim);
+				break;
+			case m_childgroup:
+				// std::cerr << "m_childgroup" << " " << c << std::endl;
+				if(is_closing_bracket(c)!=str_node::b_no) {
+					// std::cerr << "leaving group" << std::endl;
+					current_mode.pop_back();
+					current_bracket.pop_back();
+					current_parent_rel.pop_back();
+					advance(i);
+					break;
+					}
+				else {
+					current_mode.push_back(m_name);
+					current_mode.push_back(m_skipwhite);
+					break;
+					}
+				break;
+			case m_initialgroup:
 				current_mode.push_back(m_name);
 				current_mode.push_back(m_skipwhite);
 				break;
-				}
-			break;
-		case m_initialgroup:
-			current_mode.push_back(m_name);
-			current_mode.push_back(m_skipwhite);
-			break;
 			}
 		}
 	return true;

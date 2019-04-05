@@ -28,7 +28,7 @@ namespace cadabra {
 
 		protected:
 			virtual void   on_block_error(Block) override;
-			
+
 		private:
 
 			void configure_impl() override;

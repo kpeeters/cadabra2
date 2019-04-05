@@ -140,7 +140,7 @@ namespace cadabra {
 			Gtk::Dialog console_win;
 
 			std::unique_ptr<DiffViewer> diffviewer;
-			
+
 			// All canvasses which are stored in the ...
 			// These pointers are managed by gtkmm.
 			std::vector<NotebookCanvas *>  canvasses;

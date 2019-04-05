@@ -65,7 +65,7 @@ void cadabra::CadabraJupyter::on_block_error(Block blk)
 #endif
 	std::vector<std::string> traceback;
 	// FIXME: This does not show the error, for some reason...
-	publish_execution_error("Exception", blk.error, traceback);	
+	publish_execution_error("Exception", blk.error, traceback);
 	xjson pub_data;
 	pub_data["text/markdown"] = blk.error;
 //	xjson extra_data;
@@ -84,7 +84,7 @@ uint64_t cadabra::CadabraJupyter::send(const std::string& output, const std::str
 			xjson pub_data;
 			pub_data["text/markdown"] = output;
 //			xjson extra_data;
-//			extra_data["dummy"] = "dummy";			
+//			extra_data["dummy"] = "dummy";
 			publish_execution_result(current_id, std::move(pub_data), 0); // std::move(extra_data));
 			}
 		else if(msg_type=="latex_view") {

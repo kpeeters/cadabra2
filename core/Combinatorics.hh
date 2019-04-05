@@ -523,16 +523,16 @@ namespace combin {
 		{
 		for(unsigned int cn=0; cn<current_weight.size(); ++cn) {
 			switch(weight_conditions[cn]) {
-			case weight_equals:
-				if(current_weight[cn]!=max_weights[cn])
-					return false;
-				break;
-			case weight_less:
-				break;
-			case weight_greater:
-				if(current_weight[cn]<=max_weights[cn])
-					return false;
-				break;
+				case weight_equals:
+					if(current_weight[cn]!=max_weights[cn])
+						return false;
+					break;
+				case weight_less:
+					break;
+				case weight_greater:
+					if(current_weight[cn]<=max_weights[cn])
+						return false;
+					break;
 				}
 			}
 		return true;

@@ -8,11 +8,11 @@
 // different license can be requested from the author.
 
 /** \mainpage tree.hh
- 		\author   Kasper Peeters
- 		\version  3.0
- 		\date     25-Dec-2014
- 		\see      http://tree.phi-sci.com/
- 		\see      http://tree.phi-sci.com/ChangeLog
+ 			\author   Kasper Peeters
+ 			\version  3.0
+ 			\date     25-Dec-2014
+ 			\see      http://tree.phi-sci.com/
+ 			\see      http://tree.phi-sci.com/ChangeLog
 
 The tree.hh library for C++ provides an STL-like container class
 for n-ary trees, templated over the data stored at the

@@ -15,20 +15,20 @@ See tests/components.cdb for basic samples.
 
 Components nodes have the following structure:
 
-		\verbatim
+			\verbatim
 
-  		\components
+  			\components
      _{m}            // index names/types
      _{n}
-     		\comma          // last child
-         		\equals
-            		\comma   // list of index values
+     			\comma          // last child
+         			\equals
+            			\comma   // list of index values
                 	r
                 	t
             [value]  // value of tensor for above values of indices
-         		\equals
+         			\equals
             	...
-         		\equals
+         			\equals
             	...
 
 
@@ -38,18 +38,18 @@ Components nodes have the following structure:
   	evaluate(ex, crds, vals);
   	tst:= r * ( r + 1 ) + r**2 * r**2 + t*t - @(ex);
 
-		\endverbatim
+			\endverbatim
 
 The algorithm performs
 	the following steps.  First, all free and dummy indices are
 	classified using members of Algorithm (maybe later?). For all indices, the 'crds'
 	argument to the algorithm is scanned for a
 
-		\verbatim
+			\verbatim
 
      	m -> { a,b,c }
 
-		\endverbatim
+			\endverbatim
 
 	type pattern.
 
@@ -68,12 +68,12 @@ Do a dept-first scan until the first sum or product node.
   In a product node, find all dummies and free indices. Create a
   	set of all index value sets, e.g.
 
-  		\verbatim
+  			\verbatim
 
-     		{m, n, p} ->
-      		{ {t, t, t}, {r,t,t}, {t,r,t}, ... }
+     			{m, n, p} ->
+      			{ {t, t, t}, {r,t,t}, {t,r,t}, ... }
 
-  		\endverbatim
+  			\endverbatim
 
   For each such index value set, lookup replacement rules.
 

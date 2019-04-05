@@ -105,9 +105,9 @@ namespace cadabra {
 				private:
 					Json::Value data;
 					std::string config_path;
-			};
+				};
 			Prefs prefs;
-			
+
 			/// Set user details which will be sent to the Cadabra log
 			/// server.
 

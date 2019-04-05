@@ -525,32 +525,32 @@ void SnoopImpl::sync_runs_with_server(bool from_wsthread)
 		while(go) {
 			int ret = sqlite3_step(statement);
 			switch(ret) {
-			case SQLITE_BUSY:
-				throw std::logic_error("Unexpected SQLITE_BUSY in sync_runs_with_server");
-				break;
-			case SQLITE_ROW: {
-				Snoop::AppEntry ae;
-				// FIXME: isolate this in a separate function so we can fetch individual records more easily
-				ae.id               = sqlite3_column_int(statement, 0);
-				ae.uuid             = safestring(sqlite3_column_text(statement, 1));
-				ae.create_millis    = sqlite3_column_int64(statement, 2);
-				ae.receive_millis   = sqlite3_column_int64(statement, 3);
-				ae.pid              = sqlite3_column_int(statement, 4);
-				ae.ip_address       = safestring(sqlite3_column_text(statement, 5));
-				ae.machine_id       = safestring(sqlite3_column_text(statement, 6));
-				ae.app_name         = safestring(sqlite3_column_text(statement, 7));
-				ae.app_version      = safestring(sqlite3_column_text(statement, 8));
-				ae.user_id          = safestring(sqlite3_column_text(statement, 9));
-				ae.server_status    = sqlite3_column_int(statement, 10);
-				if(!first) pack << ", \n";
-				else       first=false;
-				pack << ae.to_json(false);
-				break;
-				}
-			case SQLITE_DONE: {
-				go=false;
-				break;
-				}
+				case SQLITE_BUSY:
+					throw std::logic_error("Unexpected SQLITE_BUSY in sync_runs_with_server");
+					break;
+				case SQLITE_ROW: {
+					Snoop::AppEntry ae;
+					// FIXME: isolate this in a separate function so we can fetch individual records more easily
+					ae.id               = sqlite3_column_int(statement, 0);
+					ae.uuid             = safestring(sqlite3_column_text(statement, 1));
+					ae.create_millis    = sqlite3_column_int64(statement, 2);
+					ae.receive_millis   = sqlite3_column_int64(statement, 3);
+					ae.pid              = sqlite3_column_int(statement, 4);
+					ae.ip_address       = safestring(sqlite3_column_text(statement, 5));
+					ae.machine_id       = safestring(sqlite3_column_text(statement, 6));
+					ae.app_name         = safestring(sqlite3_column_text(statement, 7));
+					ae.app_version      = safestring(sqlite3_column_text(statement, 8));
+					ae.user_id          = safestring(sqlite3_column_text(statement, 9));
+					ae.server_status    = sqlite3_column_int(statement, 10);
+					if(!first) pack << ", \n";
+					else       first=false;
+					pack << ae.to_json(false);
+					break;
+					}
+				case SQLITE_DONE: {
+					go=false;
+					break;
+					}
 				}
 			}
 		}
@@ -607,31 +607,31 @@ void SnoopImpl::sync_logs_with_server(bool from_wsthread)
 		while(go) {
 			int ret = sqlite3_step(statement);
 			switch(ret) {
-			case SQLITE_BUSY:
-				throw std::logic_error("Unexpected SQLITE_BUSY in sync_runs_with_server");
-				break;
-			case SQLITE_ROW: {
-				Snoop::LogEntry le;
-				le.log_id           = sqlite3_column_int(statement, 0);
-				le.client_log_id    = sqlite3_column_int(statement, 1);
-				le.id               = sqlite3_column_int(statement, 2);
-				le.uuid             = this_app_.uuid; // FIXME: this is wrong, we may still have log entries from a previous run!
-				le.create_millis    = sqlite3_column_int64(statement, 3);
-				le.loc_file         = safestring(sqlite3_column_text(statement, 4));
-				le.loc_line         = sqlite3_column_int(statement, 5);
-				le.loc_method       = safestring(sqlite3_column_text(statement, 6));
-				le.type             = safestring(sqlite3_column_text(statement, 7));
-				le.message          = safestring(sqlite3_column_text(statement, 8));
-				le.server_status    = sqlite3_column_int(statement, 9);
-				if(!first) pack << ", \n";
-				else       first=false;
-				pack << le.to_json(false);
-				break;
-				}
-			case SQLITE_DONE: {
-				go=false;
-				break;
-				}
+				case SQLITE_BUSY:
+					throw std::logic_error("Unexpected SQLITE_BUSY in sync_runs_with_server");
+					break;
+				case SQLITE_ROW: {
+					Snoop::LogEntry le;
+					le.log_id           = sqlite3_column_int(statement, 0);
+					le.client_log_id    = sqlite3_column_int(statement, 1);
+					le.id               = sqlite3_column_int(statement, 2);
+					le.uuid             = this_app_.uuid; // FIXME: this is wrong, we may still have log entries from a previous run!
+					le.create_millis    = sqlite3_column_int64(statement, 3);
+					le.loc_file         = safestring(sqlite3_column_text(statement, 4));
+					le.loc_line         = sqlite3_column_int(statement, 5);
+					le.loc_method       = safestring(sqlite3_column_text(statement, 6));
+					le.type             = safestring(sqlite3_column_text(statement, 7));
+					le.message          = safestring(sqlite3_column_text(statement, 8));
+					le.server_status    = sqlite3_column_int(statement, 9);
+					if(!first) pack << ", \n";
+					else       first=false;
+					pack << le.to_json(false);
+					break;
+					}
+				case SQLITE_DONE: {
+					go=false;
+					break;
+					}
 				}
 			}
 		}
@@ -681,26 +681,26 @@ std::vector<Snoop::AppEntry> SnoopImpl::get_app_registrations(std::string uuid_f
 		while(go) {
 			int ret = sqlite3_step(statement);
 			switch(ret) {
-			case SQLITE_ROW: {
-				Snoop::AppEntry ae;
-				ae.id               = sqlite3_column_int(statement, 0);
-				ae.uuid             = safestring(sqlite3_column_text(statement, 1));
-				ae.create_millis    = sqlite3_column_int64(statement, 2);
-				ae.receive_millis   = sqlite3_column_int64(statement, 3);
-				ae.pid              = sqlite3_column_int(statement, 4);
-				ae.ip_address       = safestring(sqlite3_column_text(statement, 5));
-				ae.machine_id       = safestring(sqlite3_column_text(statement, 6));
-				ae.app_name         = safestring(sqlite3_column_text(statement, 7));
-				ae.app_version      = safestring(sqlite3_column_text(statement, 8));
-				ae.user_id          = safestring(sqlite3_column_text(statement, 9));
-				ae.server_status    = sqlite3_column_int(statement, 10);
-				entries.push_back(ae);
-				break;
-				}
-			case SQLITE_DONE: {
-				go=false;
-				break;
-				}
+				case SQLITE_ROW: {
+					Snoop::AppEntry ae;
+					ae.id               = sqlite3_column_int(statement, 0);
+					ae.uuid             = safestring(sqlite3_column_text(statement, 1));
+					ae.create_millis    = sqlite3_column_int64(statement, 2);
+					ae.receive_millis   = sqlite3_column_int64(statement, 3);
+					ae.pid              = sqlite3_column_int(statement, 4);
+					ae.ip_address       = safestring(sqlite3_column_text(statement, 5));
+					ae.machine_id       = safestring(sqlite3_column_text(statement, 6));
+					ae.app_name         = safestring(sqlite3_column_text(statement, 7));
+					ae.app_version      = safestring(sqlite3_column_text(statement, 8));
+					ae.user_id          = safestring(sqlite3_column_text(statement, 9));
+					ae.server_status    = sqlite3_column_int(statement, 10);
+					entries.push_back(ae);
+					break;
+					}
+				case SQLITE_DONE: {
+					go=false;
+					break;
+					}
 				}
 			}
 		}

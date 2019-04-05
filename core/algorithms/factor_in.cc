@@ -144,14 +144,14 @@ Algorithm::result_t factor_in::apply(iterator& it)
 					}
 				prefacprod->multiplier=thisbin1->second->multiplier;
 				switch(prefac.number_of_children(prefacprod)) {
-				case 0:
-					prefacprod->name=name_set.insert("1").first;
-					break;
-				case 1:
-					multiply(prefac.begin(prefacprod)->multiplier, *(prefacprod->multiplier));
-					prefac.flatten(prefacprod);
-					prefacprod=prefac.erase(prefacprod);
-					break;
+					case 0:
+						prefacprod->name=name_set.insert("1").first;
+						break;
+					case 1:
+						multiply(prefac.begin(prefacprod)->multiplier, *(prefacprod->multiplier));
+						prefac.flatten(prefacprod);
+						prefacprod=prefac.erase(prefacprod);
+						break;
 					}
 				}
 			else {   // just insert the constant

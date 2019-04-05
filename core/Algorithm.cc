@@ -782,7 +782,7 @@ Algorithm::range_vector_t::iterator Algorithm::find_arg_superset(range_vector_t&
 bool Algorithm::is_termlike(iterator it)
 	{
 	if(*it->name=="\\equals") return false;
-	
+
 	if(!is_factorlike(it))
 		if(*it->name!="\\sum")
 			if(it->fl.parent_rel==str_node::p_none)

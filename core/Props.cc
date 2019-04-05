@@ -536,26 +536,26 @@ int Properties::serial_number(const property *listprop, const pattern *pat) cons
 
 /*
 
-		{a,b,c,d,e}::Indices(vector).
-		{a,b,c}::Indices(spinor).
+			{a,b,c,d,e}::Indices(vector).
+			{a,b,c}::Indices(spinor).
 
 This should make a,b,c spinor indices, and keep d,e as vector indices.
 
 
-		{a,b,c}::Indices(vector).
-		{d,e}::Indices(vector).
+			{a,b,c}::Indices(vector).
+			{d,e}::Indices(vector).
 
 This should make all of a,b,c,d,e vector indices.
 
 
-		{a,b,c}::Indices(vector).
-		{a,b,c,d,e,f}::Indices(spinor).
+			{a,b,c}::Indices(vector).
+			{a,b,c,d,e,f}::Indices(spinor).
 
 This should make all indices spinor indices.
 
 
-		{a,b,c,d,e}::Indices(vector, position=free).
-		{a,b,c}::Indices(vector, position=fixed).
+			{a,b,c,d,e}::Indices(vector, position=free).
+			{a,b,c}::Indices(vector, position=fixed).
 
 You can only have one type of index for each name, so this declaration implies that
 d,e should have their property removed.

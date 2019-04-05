@@ -235,7 +235,7 @@ namespace cadabra {
 
 			/// Match two subtrees, new-style equal_subtree that handles conditions; this is
 			/// what substitute uses.
-			
+
 			match_t match_subtree(const Ex&, Ex::iterator i1, Ex::iterator i2, Ex::iterator conditions);
 
 			/// Find a sub-product in a product. The 'lhs' iterator points to the product which

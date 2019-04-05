@@ -43,15 +43,15 @@ void ActionAddCell::execute(DocumentThread& cl, GUIBase& gb)
 
 	// Insert this DataCell into the DTree document.
 	switch(pos) {
-	case Position::before:
-		newref = cl.doc.insert(ref, newcell);
-		break;
-	case Position::after:
-		newref = cl.doc.insert_after(ref, newcell);
-		break;
-	case Position::child:
-		newref = cl.doc.append_child(ref, newcell);
-		break;
+		case Position::before:
+			newref = cl.doc.insert(ref, newcell);
+			break;
+		case Position::after:
+			newref = cl.doc.insert_after(ref, newcell);
+			break;
+		case Position::child:
+			newref = cl.doc.append_child(ref, newcell);
+			break;
 		}
 	child_num=cl.doc.index(newref);
 	gb.add_cell(cl.doc, newref, true);
@@ -79,50 +79,50 @@ void ActionPositionCursor::execute(DocumentThread& cl, GUIBase& gb)
 	ActionBase::execute(cl, gb);
 
 	switch(pos) {
-	case Position::in:
-		// std::cerr << "in" << std::endl;
-		newref = ref;
-		break;
-	case Position::next: {
-		DTree::sibling_iterator sib=ref;
-		bool found=false;
-		while(cl.doc.is_valid(++sib)) {
-			if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
-				if(!sib->hidden) {
-					newref=sib;
-					found=true;
-					break;
+		case Position::in:
+			// std::cerr << "in" << std::endl;
+			newref = ref;
+			break;
+		case Position::next: {
+			DTree::sibling_iterator sib=ref;
+			bool found=false;
+			while(cl.doc.is_valid(++sib)) {
+				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
+					if(!sib->hidden) {
+						newref=sib;
+						found=true;
+						break;
+						}
 					}
 				}
-			}
-		if(!found) {
-			if(ref->textbuf=="") { // If the last cell is empty, stay where we are.
-				newref=ref;
-				}
-			else {
-				DataCell newcell(DataCell::CellType::python, "");
-				newref = cl.doc.insert(sib, newcell);
-				needed_new_cell=true;
-				}
-			}
-		break;
-		}
-	case Position::previous: {
-		bool found=false;
-		DTree::sibling_iterator sib=ref;
-		while(cl.doc.is_valid(--sib)) {
-			if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
-				if(!sib->hidden) {
-					newref=sib;
-					found=true;
-					break;
+			if(!found) {
+				if(ref->textbuf=="") { // If the last cell is empty, stay where we are.
+					newref=ref;
+					}
+				else {
+					DataCell newcell(DataCell::CellType::python, "");
+					newref = cl.doc.insert(sib, newcell);
+					needed_new_cell=true;
 					}
 				}
+			break;
 			}
-		if(!found)
-			newref=ref; // No previous sibling cell. FIXME: walk tree structure
-		break;
-		}
+		case Position::previous: {
+			bool found=false;
+			DTree::sibling_iterator sib=ref;
+			while(cl.doc.is_valid(--sib)) {
+				if(sib->cell_type==DataCell::CellType::python || sib->cell_type==DataCell::CellType::latex) {
+					if(!sib->hidden) {
+						newref=sib;
+						found=true;
+						break;
+						}
+					}
+				}
+			if(!found)
+				newref=ref; // No previous sibling cell. FIXME: walk tree structure
+			break;
+			}
 		}
 
 	// Update GUI.

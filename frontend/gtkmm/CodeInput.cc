@@ -93,13 +93,13 @@ void CodeInput::init(const Prefs& prefs)
 	if (prefs.highlight) {
 		using namespace std::string_literals;
 		switch (edit.datacell->cell_type) {
-		// Fallthrough
-		case DataCell::CellType::python:
-		case DataCell::CellType::latex:
-			enable_highlighting(edit.datacell->cell_type, prefs);
-			break;
-		default:
-			break;
+			// Fallthrough
+			case DataCell::CellType::python:
+			case DataCell::CellType::latex:
+				enable_highlighting(edit.datacell->cell_type, prefs);
+				break;
+			default:
+				break;
 			}
 		}
 	edit.set_can_focus(true);
@@ -449,16 +449,16 @@ void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& p
 	void (CodeInput::*callback)()=0;
 
 	switch (cell_type) {
-	case DataCell::CellType::python:
-		map_idx = "python";
-		callback = &CodeInput::highlight_python;
-		break;
-	case DataCell::CellType::latex:
-		map_idx = "latex";
-		callback = &CodeInput::highlight_latex;
-		break;
-	default:
-		break;
+		case DataCell::CellType::python:
+			map_idx = "python";
+			callback = &CodeInput::highlight_python;
+			break;
+		case DataCell::CellType::latex:
+			map_idx = "latex";
+			callback = &CodeInput::highlight_latex;
+			break;
+		default:
+			break;
 		}
 
 	// Create tags

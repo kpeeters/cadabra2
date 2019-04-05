@@ -227,9 +227,9 @@ void print_array(int *array, int m, int n, int nl)
 int equal_list(int *list1, int *list2, int n) {
 	while(n--) { * Run from n-1 to 0 *
 	if(*(list1+n) != *(list2+n)) return(0); * different *
-		}
+			}
 	return(1); * equal *
-		}
+			}
 */
 
 /* KP, 7 May 2006 */
@@ -250,7 +250,7 @@ int equal_list(int *list1, int *list2, int n)
 /* Old code
 void copy_list(int *list1, int *list2, int n) {
 	while(n--) *(list2+n) = *(list1+n);
-		}
+			}
 */
 
 /* KP, 7 May 2006 */
@@ -312,7 +312,7 @@ int position_list(int *matrix, int m, int *row, int n)
 /* Old code
 void zeros(int *list, int n) {
 	while(n--) *(list+n) = 0;
-		}
+			}
 */
 
 /* KP, 7 May 2006 */

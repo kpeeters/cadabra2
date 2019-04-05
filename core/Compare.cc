@@ -285,7 +285,7 @@ namespace cadabra {
 		if(ret==match_t::subtree_match || ret==match_t::node_match) {
 			if(conditions==tr.end()) return ret;
 			std::string error;
-			if(satisfies_conditions(conditions, error)) 
+			if(satisfies_conditions(conditions, error))
 				return ret;
 			else
 				return match_t::no_match_greater; // FIXME: is that the right thing to do?
@@ -319,73 +319,73 @@ namespace cadabra {
 			//		DEBUG( std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl; )
 			first_call=false;
 			switch(mm) {
-			case match_t::no_match_indexpos_less:
-			case match_t::no_match_indexpos_greater:
-				worst_mismatch=mm;
-				// FIXME: at the moment skipping children is the right thing to do
-				// as we are assuming that the no_match_indexpos_... is the worst
-				// thing that could have happened for this child subtree. See
-				// also the FIXME below.
-				i1.skip_children();
-				i2.skip_children();
-				break;
-			case match_t::no_match_less:
-			case match_t::no_match_greater:
-				// As soon as we get a mismatch, return.
-				return report(mm);
-			case match_t::node_match: {
-				size_t num1=Ex::number_of_children(i1);
-				size_t num2=Ex::number_of_children(i2);
-
-				if(num1==1 && i1.begin()->is_range_wildcard()) {
-					//				std::cerr << "comparing " << *i1->name << " with " << *i2->name << " " << num1 << " " << num2 << std::endl;
-					return match_t::subtree_match;
-					}
-
-				// TODO: this is where we should decide what to do with
-				// nodes which have sibling wildcards. Make a
-				// 'compare_siblings'. We also need a
-				// siblings_replacement_map in which we can store a
-				// sibling range for a given sibling wildcard symbol,
-				// e.g. a... -> i j k.  This matching routine should walk
-				// to the first non-range object in the pattern, and match
-				// that. Once it is matched, it should store the resulting
-				// map for any range object to the left. Then continue,
-				// recursively, finding the second non-range object, and
-				// again storing the range object map.  Once a no-match
-				// comes back, pop the match objects from the stack and
-				// try to find the non-range object to the right of the match
-				// reported earlier.
-
-				// This slightly oversearches (we could keep track of how
-				// many non-range objects are still to be matched in order
-				// to restrict how far to the right a search should go), but in
-				// practise this is probably not relevant (and can always be added).
-
-				if(num1 < num2)      return report(match_t::no_match_less);
-				else if(num1 > num2) return report(match_t::no_match_greater);
-				break;
-				}
-			case match_t::match_index_less:
-			case match_t::match_index_greater:
-				// If we have a match but different index names, remember this
-				// mismatch, because it will determine our total result value.
-				if(worst_mismatch==match_t::subtree_match)
+				case match_t::no_match_indexpos_less:
+				case match_t::no_match_indexpos_greater:
 					worst_mismatch=mm;
-				// If indices by type but not name, we do not need to go
-				// further down the tree. E.g. W_{\hat{\theta_1}} vs
-				// W_{\hat{\theta_2}} compared at the index position.
-				// The 'compare' has done a comparison of the entire
-				// tree of the indices, no need to go down.
-				i1.skip_children();
-				i2.skip_children();
-				break;
-			case match_t::subtree_match:
-				// If a match of the entire subtrees at i1 and i2 has been found,
-				// we do not need to go down the child nodes of i1 and i2 anymore.
-				i1.skip_children();
-				i2.skip_children();
-				break;
+					// FIXME: at the moment skipping children is the right thing to do
+					// as we are assuming that the no_match_indexpos_... is the worst
+					// thing that could have happened for this child subtree. See
+					// also the FIXME below.
+					i1.skip_children();
+					i2.skip_children();
+					break;
+				case match_t::no_match_less:
+				case match_t::no_match_greater:
+					// As soon as we get a mismatch, return.
+					return report(mm);
+				case match_t::node_match: {
+					size_t num1=Ex::number_of_children(i1);
+					size_t num2=Ex::number_of_children(i2);
+
+					if(num1==1 && i1.begin()->is_range_wildcard()) {
+						//				std::cerr << "comparing " << *i1->name << " with " << *i2->name << " " << num1 << " " << num2 << std::endl;
+						return match_t::subtree_match;
+						}
+
+					// TODO: this is where we should decide what to do with
+					// nodes which have sibling wildcards. Make a
+					// 'compare_siblings'. We also need a
+					// siblings_replacement_map in which we can store a
+					// sibling range for a given sibling wildcard symbol,
+					// e.g. a... -> i j k.  This matching routine should walk
+					// to the first non-range object in the pattern, and match
+					// that. Once it is matched, it should store the resulting
+					// map for any range object to the left. Then continue,
+					// recursively, finding the second non-range object, and
+					// again storing the range object map.  Once a no-match
+					// comes back, pop the match objects from the stack and
+					// try to find the non-range object to the right of the match
+					// reported earlier.
+
+					// This slightly oversearches (we could keep track of how
+					// many non-range objects are still to be matched in order
+					// to restrict how far to the right a search should go), but in
+					// practise this is probably not relevant (and can always be added).
+
+					if(num1 < num2)      return report(match_t::no_match_less);
+					else if(num1 > num2) return report(match_t::no_match_greater);
+					break;
+					}
+				case match_t::match_index_less:
+				case match_t::match_index_greater:
+					// If we have a match but different index names, remember this
+					// mismatch, because it will determine our total result value.
+					if(worst_mismatch==match_t::subtree_match)
+						worst_mismatch=mm;
+					// If indices by type but not name, we do not need to go
+					// further down the tree. E.g. W_{\hat{\theta_1}} vs
+					// W_{\hat{\theta_2}} compared at the index position.
+					// The 'compare' has done a comparison of the entire
+					// tree of the indices, no need to go down.
+					i1.skip_children();
+					i2.skip_children();
+					break;
+				case match_t::subtree_match:
+					// If a match of the entire subtrees at i1 and i2 has been found,
+					// we do not need to go down the child nodes of i1 and i2 anymore.
+					i1.skip_children();
+					i2.skip_children();
+					break;
 				}
 			// Continue walking the tree downwards.
 			++i1;
@@ -419,30 +419,30 @@ namespace cadabra {
 
 		std::cerr << tab() << "result = ";
 		switch(r) {
-		case match_t::node_match:
-			std::cerr << "node_match";
-			break;
-		case match_t::subtree_match:
-			std::cerr << "subtree_match";
-			break;
-		case match_t::match_index_less:
-			std::cerr << "match_index_less";
-			break;
-		case match_t::match_index_greater:
-			std::cerr << "match_index_greater";
-			break;
-		case match_t::no_match_indexpos_less:
-			std::cerr << "no_match_indexpos_less";
-			break;
-		case match_t::no_match_indexpos_greater:
-			std::cerr << "no_match_indexpos_greater";
-			break;
-		case match_t::no_match_less:
-			std::cerr << "no_match_less";
-			break;
-		case match_t::no_match_greater:
-			std::cerr << "no_match_greater";
-			break;
+			case match_t::node_match:
+				std::cerr << "node_match";
+				break;
+			case match_t::subtree_match:
+				std::cerr << "subtree_match";
+				break;
+			case match_t::match_index_less:
+				std::cerr << "match_index_less";
+				break;
+			case match_t::match_index_greater:
+				std::cerr << "match_index_greater";
+				break;
+			case match_t::no_match_indexpos_less:
+				std::cerr << "no_match_indexpos_less";
+				break;
+			case match_t::no_match_indexpos_greater:
+				std::cerr << "no_match_indexpos_greater";
+				break;
+			case match_t::no_match_less:
+				std::cerr << "no_match_less";
+				break;
+			case match_t::no_match_greater:
+				std::cerr << "no_match_greater";
+				break;
 			}
 		std::cerr << std::endl;
 		--offset;
@@ -1642,15 +1642,15 @@ bool operator<(const cadabra::Ex& e1, const cadabra::Ex& e2)
 std::ostream& operator<<(std::ostream& s, cadabra::Ex_comparator::useprops_t up)
 	{
 	switch(up) {
-	case cadabra::Ex_comparator::useprops_t::always:
-		s << "always";
-		break;
-	case cadabra::Ex_comparator::useprops_t::not_at_top:
-		s << "not_at_top";
-		break;
-	case cadabra::Ex_comparator::useprops_t::never:
-		s << "never";
-		break;
+		case cadabra::Ex_comparator::useprops_t::always:
+			s << "always";
+			break;
+		case cadabra::Ex_comparator::useprops_t::not_at_top:
+			s << "not_at_top";
+			break;
+		case cadabra::Ex_comparator::useprops_t::never:
+			s << "never";
+			break;
 		}
 	return s;
 	}

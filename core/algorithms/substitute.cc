@@ -112,8 +112,8 @@ bool substitute::can_apply(iterator st)
 		else                         ret=comparator.match_subtree(tr, lhs, st, conditions);
 
 		if(ret == Ex_comparator::match_t::subtree_match ||
-			ret == Ex_comparator::match_t::match_index_less ||
-			ret == Ex_comparator::match_t::match_index_greater) {
+		      ret == Ex_comparator::match_t::match_index_less ||
+		      ret == Ex_comparator::match_t::match_index_greater) {
 			use_rule=arrow;
 
 			// If we are not matching a partial sum or partial product, need to check that all
@@ -121,15 +121,15 @@ bool substitute::can_apply(iterator st)
 			if(!partial) {
 #ifdef DEBUG
 				std::cerr << comparator.factor_locations.size() << " vs "
-							 << tr.number_of_children(st) << std::endl;
+				          << tr.number_of_children(st) << std::endl;
 #endif
 				if(comparator.factor_locations.size()!=tr.number_of_children(st))
 					return args.end();
 				}
-			
+
 			return arrow;
-		}
-		
+			}
+
 		return args.end();
 		});
 	//	if(found!=args.end())
@@ -383,7 +383,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 #ifdef DEBUG
 	std::cerr << "substitute: complete" << std::endl;
 #endif
-	
+
 	return result_t::l_applied;
 	}
 

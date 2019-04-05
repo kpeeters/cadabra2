@@ -87,15 +87,15 @@ namespace cadabra {
 	void Ex::update_state(Ex::result_t newstate)
 		{
 		switch(newstate) {
-		case Ex::result_t::l_error:
-			state_=newstate;
-			break;
-		case Ex::result_t::l_applied:
-			if(state_!=Ex::result_t::l_error)
+			case Ex::result_t::l_error:
 				state_=newstate;
-			break;
-		default:
-			break;
+				break;
+			case Ex::result_t::l_applied:
+				if(state_!=Ex::result_t::l_error)
+					state_=newstate;
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -149,44 +149,44 @@ namespace cadabra {
 		while(beg!=fin) {
 			if(beg==it.begin() || current_parent_rel!=(*beg).fl.parent_rel) {
 				switch((*beg).fl.parent_rel) {
-				case str_node::p_super:
-					str << "^";
-					break;
-				case str_node::p_sub:
-					str << "_";
-					break;
-				case str_node::p_property:
-					str << "$";
-					break;
-				case str_node::p_exponent:
-					str << "&";
-					break;
-				default:
-					break;
+					case str_node::p_super:
+						str << "^";
+						break;
+					case str_node::p_sub:
+						str << "_";
+						break;
+					case str_node::p_property:
+						str << "$";
+						break;
+					case str_node::p_exponent:
+						str << "&";
+						break;
+					default:
+						break;
 					}
 				current_parent_rel=(*beg).fl.parent_rel;
 				}
 			if(beg==it.begin() || current_bracket!=(*beg).fl.bracket || current_parent_rel!=(*beg).fl.parent_rel) {
 				switch((*beg).fl.bracket) {
-				case str_node::b_round:
-					str << "(";
+					case str_node::b_round:
+						str << "(";
+						break;
+					case str_node::b_square:
+						str << "[";
+						break;
+					case str_node::b_curly:
+						str << "{";
+						break;
+					case str_node::b_pointy:
+						str << "<";
+						break;
+					case str_node::b_none: {
+						if((*beg).fl.parent_rel==str_node::p_none) str << "(";
+						else                                       str << "{";
+						}
 					break;
-				case str_node::b_square:
-					str << "[";
-					break;
-				case str_node::b_curly:
-					str << "{";
-					break;
-				case str_node::b_pointy:
-					str << "<";
-					break;
-				case str_node::b_none: {
-					if((*beg).fl.parent_rel==str_node::p_none) str << "(";
-					else                                       str << "{";
-					}
-				break;
-				default:
-					break;
+					default:
+						break;
 					}
 				current_bracket=(*beg).fl.bracket;
 				}
@@ -203,25 +203,25 @@ namespace cadabra {
 				current_bracket=str_node::b_invalid;
 				current_parent_rel=str_node::p_invalid;
 				switch((*beg).fl.bracket) {
-				case str_node::b_round:
-					str << ")";
+					case str_node::b_round:
+						str << ")";
+						break;
+					case str_node::b_square:
+						str << "]";
+						break;
+					case str_node::b_curly:
+						str << "}";
+						break;
+					case str_node::b_pointy:
+						str << ">";
+						break;
+					case str_node::b_none: {
+						if((*beg).fl.parent_rel==str_node::p_none) str << ")";
+						else                                       str << "}";
+						}
 					break;
-				case str_node::b_square:
-					str << "]";
-					break;
-				case str_node::b_curly:
-					str << "}";
-					break;
-				case str_node::b_pointy:
-					str << ">";
-					break;
-				case str_node::b_none: {
-					if((*beg).fl.parent_rel==str_node::p_none) str << ")";
-					else                                       str << "}";
-					}
-				break;
-				default:
-					break;
+					default:
+						break;
 					}
 				}
 			++beg;
@@ -245,20 +245,20 @@ namespace cadabra {
 		{
 		unsigned int num=1;
 		switch((*it).fl.parent_rel) {
-		case str_node::p_super:
-			str << "^";
-			break;
-		case str_node::p_sub:
-			str << "_";
-			break;
-		case str_node::p_property:
-			str << "$";
-			break;
-		case str_node::p_exponent:
-			str << "&";
-			break;
-		default:
-			break;
+			case str_node::p_super:
+				str << "^";
+				break;
+			case str_node::p_sub:
+				str << "_";
+				break;
+			case str_node::p_property:
+				str << "$";
+				break;
+			case str_node::p_exponent:
+				str << "&";
+				break;
+			default:
+				break;
 			}
 		return print_recursive_treeform(str, it, num);
 		}
@@ -318,20 +318,20 @@ namespace cadabra {
 				for(int i=offset; i<depth(beg); ++i)
 					str << "  ";
 			switch((*beg).fl.parent_rel) {
-			case str_node::p_super:
-				str << "^";
-				break;
-			case str_node::p_sub:
-				str << "_";
-				break;
-			case str_node::p_property:
-				str << "$";
-				break;
-			case str_node::p_exponent:
-				str << "&";
-				break;
-			default:
-				break;
+				case str_node::p_super:
+					str << "^";
+					break;
+				case str_node::p_sub:
+					str << "_";
+					break;
+				case str_node::p_property:
+					str << "$";
+					break;
+				case str_node::p_exponent:
+					str << "&";
+					break;
+				default:
+					break;
 				}
 			if(num) ++num;
 			print_recursive_treeform(str, beg, num);

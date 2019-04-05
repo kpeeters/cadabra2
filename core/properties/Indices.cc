@@ -92,15 +92,15 @@ void Indices::latex(std::ostream& str) const
 	{
 	str << "Indices";
 	switch(position_type) {
-	case free:
-		str << "(position=free)";
-		break;
-	case fixed:
-		str << "(position=fixed)";
-		break;
-	case independent:
-		str << "(position=independent)";
-		break;
+		case free:
+			str << "(position=free)";
+			break;
+		case fixed:
+			str << "(position=fixed)";
+			break;
+		case independent:
+			str << "(position=independent)";
+			break;
 		}
 	}
 

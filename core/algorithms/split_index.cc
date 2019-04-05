@@ -52,14 +52,14 @@ bool split_index::can_apply(iterator it)
 	if((tr.is_head(it) && (*it->name!="\\equals" && *it->name!="\\sum"))) return true;
 	if(!tr.is_head(it)) {
 		if((*tr.parent(it)->name=="\\equals" && *it->name!="\\sum") ||
-			(*tr.parent(it)->name=="\\sum") )
+		      (*tr.parent(it)->name=="\\sum") )
 			return true;
 		}
 
 	return false;
 
 	// This does not work well:
-   //	  return is_termlike(it);
+	//	  return is_termlike(it);
 	// The problem is that split_index has a very restricted applicability,
 	// which is less than on what the core thinks is 'term-like'. Hence
 	// the hard-coded logic above.

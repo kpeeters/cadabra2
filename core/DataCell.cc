@@ -158,45 +158,45 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 	{
 	bool strip_this=false;
 	switch(it->cell_type) {
-	case DataCell::CellType::document:
-		if(!for_embedding) {
-			str << preamble_string << "\n<body>\n";
-			}
-		else {
-			str << "{% extends \"notebook_layout.html\" %}\n"
-			    << "{% block head %}\n"
-			    << " <meta name=\"keywords\" content=\"cadabra, manual\"/>\n"
-			    << "{%- endblock %}\n"
-			    << "{% block main %}\n"
-			    << "{% raw %}\n";
-			}
-		break;
-	case DataCell::CellType::python:
-		if(strip_code && (it->textbuf.substr(0,4)=="def " || it->textbuf.substr(0,5)=="from "))
-			strip_this=true;
-		str << "<div class='python'>";
-		break;
-	case DataCell::CellType::output:
-		str << "<div class='output'>";
-		break;
-	case DataCell::CellType::verbatim:
-		str << "<div class='verbatim'>";
-		break;
-	case DataCell::CellType::latex:
-		str << "<div class='latex'>";
-		break;
-	case DataCell::CellType::latex_view:
-		str << "<div class='latex_view hyphenate'>";
-		break;
-	case DataCell::CellType::error:
-		str << "<div class='error'>";
-		break;
-	case DataCell::CellType::image_png:
-		str << "<div class='image_png'><img src='data:image/png;base64,";
-		break;
-	case DataCell::CellType::input_form:
-		str << "<div class='input_form'>";
-		break;
+		case DataCell::CellType::document:
+			if(!for_embedding) {
+				str << preamble_string << "\n<body>\n";
+				}
+			else {
+				str << "{% extends \"notebook_layout.html\" %}\n"
+				    << "{% block head %}\n"
+				    << " <meta name=\"keywords\" content=\"cadabra, manual\"/>\n"
+				    << "{%- endblock %}\n"
+				    << "{% block main %}\n"
+				    << "{% raw %}\n";
+				}
+			break;
+		case DataCell::CellType::python:
+			if(strip_code && (it->textbuf.substr(0,4)=="def " || it->textbuf.substr(0,5)=="from "))
+				strip_this=true;
+			str << "<div class='python'>";
+			break;
+		case DataCell::CellType::output:
+			str << "<div class='output'>";
+			break;
+		case DataCell::CellType::verbatim:
+			str << "<div class='verbatim'>";
+			break;
+		case DataCell::CellType::latex:
+			str << "<div class='latex'>";
+			break;
+		case DataCell::CellType::latex_view:
+			str << "<div class='latex_view hyphenate'>";
+			break;
+		case DataCell::CellType::error:
+			str << "<div class='error'>";
+			break;
+		case DataCell::CellType::image_png:
+			str << "<div class='image_png'><img src='data:image/png;base64,";
+			break;
+		case DataCell::CellType::input_form:
+			str << "<div class='input_form'>";
+			break;
 		}
 
 	if(!strip_this) {
@@ -230,40 +230,40 @@ void cadabra::HTML_recurse(const DTree& doc, DTree::iterator it, std::ostringstr
 		}
 
 	switch(it->cell_type) {
-	case DataCell::CellType::document:
-		if(!for_embedding) {
-			str << "</body>\n";
-			str << "</html>\n";
-			}
-		else {
-			str << "{% endraw %}\n"
-			    << "{%- endblock %}\n"
-			    << "{% block title %}" << title << "{% endblock %}\n";
-			}
-		break;
-	case DataCell::CellType::python:
-		str << "</div>\n";
-		break;
-	case DataCell::CellType::output:
-		str << "</div>\n";
-		break;
-	case DataCell::CellType::verbatim:
-		str << "</div>\n";
-		break;
-	case DataCell::CellType::latex:
-		str << "</div>\n";
-		break;
-	case DataCell::CellType::latex_view:
-		str << "</div>\n";
-		break;
-	case DataCell::CellType::error:
-		str << "</div>\n";
-		break;
-	case DataCell::CellType::image_png:
-		str << "' /></div>\n";
-		break;
-	case DataCell::CellType::input_form:
-		str << "</div>\n";
+		case DataCell::CellType::document:
+			if(!for_embedding) {
+				str << "</body>\n";
+				str << "</html>\n";
+				}
+			else {
+				str << "{% endraw %}\n"
+				    << "{%- endblock %}\n"
+				    << "{% block title %}" << title << "{% endblock %}\n";
+				}
+			break;
+		case DataCell::CellType::python:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::output:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::verbatim:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::latex:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::latex_view:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::error:
+			str << "</div>\n";
+			break;
+		case DataCell::CellType::image_png:
+			str << "' /></div>\n";
+			break;
+		case DataCell::CellType::input_form:
+			str << "</div>\n";
 		}
 	}
 
@@ -281,43 +281,43 @@ std::string cadabra::JSON_serialise(const DTree& doc)
 void cadabra::JSON_recurse(const DTree& doc, DTree::iterator it, Json::Value& json)
 	{
 	switch(it->cell_type) {
-	case DataCell::CellType::document:
-		json["description"]="Cadabra JSON notebook format";
-		json["version"]=1.0;
-		break;
-	case DataCell::CellType::python:
-		json["cell_type"]="input";
-		break;
-	case DataCell::CellType::output:
-		json["cell_type"]="output";
-		break;
-	case DataCell::CellType::verbatim:
-		json["cell_type"]="verbatim";
-		break;
-	case DataCell::CellType::latex:
-		json["cell_type"]="latex";
-		break;
-	case DataCell::CellType::latex_view:
-		json["cell_type"]="latex_view";
-		break;
-	case DataCell::CellType::error:
-		json["cell_type"]="error";
-		break;
-	case DataCell::CellType::image_png:
-		json["cell_type"]="image_png";
-		break;
-	case DataCell::CellType::input_form:
-		json["cell_type"]="input_form";
-		break;
-		//		case DataCell::CellType::section: {
-		//			assert(1==0);
-		//			// NOT YET FUNCTIONAL
-		//			json["cell_type"]="section";
-		//			Json::Value child;
-		//			child["content"]="test";
-		//			json.append(child);
-		//			break;
-		//			}
+		case DataCell::CellType::document:
+			json["description"]="Cadabra JSON notebook format";
+			json["version"]=1.0;
+			break;
+		case DataCell::CellType::python:
+			json["cell_type"]="input";
+			break;
+		case DataCell::CellType::output:
+			json["cell_type"]="output";
+			break;
+		case DataCell::CellType::verbatim:
+			json["cell_type"]="verbatim";
+			break;
+		case DataCell::CellType::latex:
+			json["cell_type"]="latex";
+			break;
+		case DataCell::CellType::latex_view:
+			json["cell_type"]="latex_view";
+			break;
+		case DataCell::CellType::error:
+			json["cell_type"]="error";
+			break;
+		case DataCell::CellType::image_png:
+			json["cell_type"]="image_png";
+			break;
+		case DataCell::CellType::input_form:
+			json["cell_type"]="input_form";
+			break;
+			//		case DataCell::CellType::section: {
+			//			assert(1==0);
+			//			// NOT YET FUNCTIONAL
+			//			json["cell_type"]="section";
+			//			Json::Value child;
+			//			child["content"]="test";
+			//			json.append(child);
+			//			break;
+			//			}
 		}
 	if(it->hidden)
 		json["hidden"]=true;
@@ -502,34 +502,34 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
                             int& image_num)
 	{
 	switch(it->cell_type) {
-	case DataCell::CellType::document:
-		str << preamble_string;
-		str << "\\begin{document}\n";
-		break;
-	case DataCell::CellType::python:
-		str << "\\begin{python}\n";
-		break;
-	case DataCell::CellType::output:
-		str << "\\begin{python}\n";
-		break;
-	case DataCell::CellType::verbatim:
-		str << "\\begin{verbatim}\n";
-		break;
-	case DataCell::CellType::latex:
-		break;
-	case DataCell::CellType::latex_view:
-		break;
-	case DataCell::CellType::error:
-		break;
-	case DataCell::CellType::input_form:
-		break;
-	case DataCell::CellType::image_png:
-		std::size_t pos=image_file_base.rfind('/');
-		std::string fileonly=image_file_base.substr(pos+1);
-		str << "\\begin{center}\n\\includegraphics[width=.6\\textwidth]{"
-		    << fileonly+std::to_string(image_num)+"}\n"
-		    << "\\end{center}\n";
-		break;
+		case DataCell::CellType::document:
+			str << preamble_string;
+			str << "\\begin{document}\n";
+			break;
+		case DataCell::CellType::python:
+			str << "\\begin{python}\n";
+			break;
+		case DataCell::CellType::output:
+			str << "\\begin{python}\n";
+			break;
+		case DataCell::CellType::verbatim:
+			str << "\\begin{verbatim}\n";
+			break;
+		case DataCell::CellType::latex:
+			break;
+		case DataCell::CellType::latex_view:
+			break;
+		case DataCell::CellType::error:
+			break;
+		case DataCell::CellType::input_form:
+			break;
+		case DataCell::CellType::image_png:
+			std::size_t pos=image_file_base.rfind('/');
+			std::string fileonly=image_file_base.substr(pos+1);
+			str << "\\begin{center}\n\\includegraphics[width=.6\\textwidth]{"
+			    << fileonly+std::to_string(image_num)+"}\n"
+			    << "\\end{center}\n";
+			break;
 		}
 
 	if(it->cell_type==DataCell::CellType::image_png) {
@@ -564,20 +564,20 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		}
 
 	switch(it->cell_type) {
-	case DataCell::CellType::python:
-	case DataCell::CellType::output:
-		str << "\\end{python}\n";
-		break;
-	case DataCell::CellType::verbatim:
-		str << "\\end{verbatim}\n";
-		break;
-	case DataCell::CellType::document:
-	case DataCell::CellType::latex:
-	case DataCell::CellType::latex_view:
-	case DataCell::CellType::input_form:
-	case DataCell::CellType::error:
-	case DataCell::CellType::image_png:
-		break;
+		case DataCell::CellType::python:
+		case DataCell::CellType::output:
+			str << "\\end{python}\n";
+			break;
+		case DataCell::CellType::verbatim:
+			str << "\\end{verbatim}\n";
+			break;
+		case DataCell::CellType::document:
+		case DataCell::CellType::latex:
+		case DataCell::CellType::latex_view:
+		case DataCell::CellType::input_form:
+		case DataCell::CellType::error:
+		case DataCell::CellType::image_png:
+			break;
 		}
 
 	if(doc.number_of_children(it)>0) {
@@ -589,18 +589,18 @@ void cadabra::LaTeX_recurse(const DTree& doc, DTree::iterator it, std::ostringst
 		}
 
 	switch(it->cell_type) {
-	case DataCell::CellType::document:
-		str << "\\end{document}\n";
-		break;
-	case DataCell::CellType::python:
-	case DataCell::CellType::output:
-	case DataCell::CellType::verbatim:
-	case DataCell::CellType::latex:
-	case DataCell::CellType::latex_view:
-	case DataCell::CellType::input_form:
-	case DataCell::CellType::error:
-	case DataCell::CellType::image_png:
-		break;
+		case DataCell::CellType::document:
+			str << "\\end{document}\n";
+			break;
+		case DataCell::CellType::python:
+		case DataCell::CellType::output:
+		case DataCell::CellType::verbatim:
+		case DataCell::CellType::latex:
+		case DataCell::CellType::latex_view:
+		case DataCell::CellType::input_form:
+		case DataCell::CellType::error:
+		case DataCell::CellType::image_png:
+			break;
 		}
 
 	}

@@ -7,7 +7,7 @@
 namespace cadabra {
 
 	/**
-			\ingroup properties
+				\ingroup properties
 
 	Turns a symbol into an accent. Accented objects inherit all properties
 	and indices from the objects which they wrap.

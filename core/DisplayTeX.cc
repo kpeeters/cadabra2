@@ -98,7 +98,7 @@ bool DisplayTeX::reads_as_operator(Ex::iterator obj, Ex::iterator arg) const
 
 	if(*obj->name=="\\cos" || *obj->name=="\\sin" || *obj->name=="\\tan" || *obj->name=="\\exp") {
 		const LaTeXForm *lf = kernel.properties.get<LaTeXForm>(arg);
-		if(*arg->multiplier==1) 
+		if(*arg->multiplier==1)
 			if((*arg->name).size()==1 || lf || cadabra::symbols::greek.find(*arg->name)!=cadabra::symbols::greek.end()) return true;
 		}
 
@@ -315,24 +315,24 @@ void DisplayTeX::print_multiplier(std::ostream& str, Ex::iterator it, int mult)
 void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-	case str_node::b_none:
-		if(pr==str_node::p_none)     str << "\\left(";
-		else                         str << "{";
-		break;
-	case str_node::b_pointy:
-		str << "\\<";
-		break;
-	case str_node::b_curly:
-		str << "\\left\\{";
-		break;
-	case str_node::b_round:
-		str << "\\left(";
-		break;
-	case str_node::b_square:
-		str << "\\left[";
-		break;
-	default :
-		return;
+		case str_node::b_none:
+			if(pr==str_node::p_none)     str << "\\left(";
+			else                         str << "{";
+			break;
+		case str_node::b_pointy:
+			str << "\\<";
+			break;
+		case str_node::b_curly:
+			str << "\\left\\{";
+			break;
+		case str_node::b_round:
+			str << "\\left(";
+			break;
+		case str_node::b_square:
+			str << "\\left[";
+			break;
+		default :
+			return;
 		}
 	++(bracket_level);
 	}
@@ -340,24 +340,24 @@ void DisplayTeX::print_opening_bracket(std::ostream& str, str_node::bracket_t br
 void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br, str_node::parent_rel_t pr)
 	{
 	switch(br) {
-	case str_node::b_none:
-		if(pr==str_node::p_none)     str << "\\right)";
-		else                         str << "}";
-		break;
-	case str_node::b_pointy:
-		str << "\\>";
-		break;
-	case str_node::b_curly:
-		str << "\\right\\}";
-		break;
-	case str_node::b_round:
-		str << "\\right)";
-		break;
-	case str_node::b_square:
-		str << "\\right]";
-		break;
-	default :
-		return;
+		case str_node::b_none:
+			if(pr==str_node::p_none)     str << "\\right)";
+			else                         str << "}";
+			break;
+		case str_node::b_pointy:
+			str << "\\>";
+			break;
+		case str_node::b_curly:
+			str << "\\right\\}";
+			break;
+		case str_node::b_round:
+			str << "\\right)";
+			break;
+		case str_node::b_square:
+			str << "\\right]";
+			break;
+		default :
+			return;
 		}
 	--(bracket_level);
 	}
@@ -365,26 +365,26 @@ void DisplayTeX::print_closing_bracket(std::ostream& str, str_node::bracket_t br
 void DisplayTeX::print_parent_rel(std::ostream& str, str_node::parent_rel_t pr, bool first)
 	{
 	switch(pr) {
-	case str_node::p_super:
-		if(!first && latex_spacing) str << "\\,";
-		str << "^";
-		break;
-	case str_node::p_sub:
-		if(!first && latex_spacing) str << "\\,";
-		str << "_";
-		break;
-	case str_node::p_property:
-		str << "$";
-		break;
-	case str_node::p_exponent:
-		str << "**";
-		break;
-	case str_node::p_none:
-		break;
-	case str_node::p_components:
-		break;
-	case str_node::p_invalid:
-		throw std::logic_error("DisplayTeX: p_invalid not handled.");
+		case str_node::p_super:
+			if(!first && latex_spacing) str << "\\,";
+			str << "^";
+			break;
+		case str_node::p_sub:
+			if(!first && latex_spacing) str << "\\,";
+			str << "_";
+			break;
+		case str_node::p_property:
+			str << "$";
+			break;
+		case str_node::p_exponent:
+			str << "**";
+			break;
+		case str_node::p_none:
+			break;
+		case str_node::p_components:
+			break;
+		case str_node::p_invalid:
+			throw std::logic_error("DisplayTeX: p_invalid not handled.");
 		}
 	// Prevent line break after this character.
 	str << zwnbsp;
@@ -397,7 +397,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\frac")           print_fraclike(str, it);
 	else if(*it->name=="\\comma")          print_commalike(str, it);
 	else if(*it->name=="\\arrow")          print_arrowlike(str, it);
-	else if(*it->name=="\\dot")            print_dot(str, it);	
+	else if(*it->name=="\\dot")            print_dot(str, it);
 	else if(*it->name=="\\pow")            print_powlike(str, it);
 	else if(*it->name=="\\int")            print_intlike(str, it);
 	else if(*it->name=="\\equals" || *it->name=="\\unequals")         print_equalitylike(str, it);

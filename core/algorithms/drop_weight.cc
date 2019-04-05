@@ -75,7 +75,7 @@ Algorithm::result_t drop_keep_weight::do_apply(iterator& it, bool keepthem)
 					++sib;
 					continue;
 					}
-				
+
 				const WeightBase *gnb=kernel.properties.get_composite<WeightBase>(sib, label);
 				if(gnb) {
 					// std::cerr << "WeightBase for child " << Ex(sib) << std::endl;
