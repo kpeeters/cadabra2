@@ -488,7 +488,7 @@ Tutorials and other help
 ------------------------
 
 Please consult http://cadabra.science/ for tutorial-style notebooks
-and all other documentation, and http://kpeeters.github.io/cadabra2
+and all other documentation, and http://cadabra.science/doxygen/html/
 for doxygen documentation of the current master branch. The latter can
 also be generated locally; you will need (on Debian and derivatives)::
 
