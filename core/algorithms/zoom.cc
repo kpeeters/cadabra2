@@ -30,6 +30,9 @@ bool zoom::can_apply(iterator it)
 			return true;
 			}
 		}
+	if(*it->name=="\\ldots")
+		return true;
+	
 	return false;
 	}
 
@@ -37,6 +40,15 @@ Algorithm::result_t zoom::apply(iterator& it)
 	{
 	result_t res=result_t::l_no_action;
 
+	if(*it->name=="\\ldots") {
+		// Simply wrap in another ldots node.
+		sibling_iterator sib=it, nxt=it;
+		++nxt;
+		auto ldots = tr.insert(sib, str_node("\\ldots"));
+		tr.reparent(ldots, sib, nxt);
+		return res;
+		}
+	
 	// Wrap all things which we want to remove from view in an
 	// \ldots node.
 

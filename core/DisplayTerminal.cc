@@ -345,7 +345,7 @@ void DisplayTerminal::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\commutator") print_commutator(str, it, true);
 	else if(*it->name=="\\anticommutator") print_commutator(str, it, false);
 	else if(*it->name=="\\arrow")      print_arrowlike(str, it);
-	else if(*it->name=="\\dot")        print_dot(str, it);
+	else if(*it->name=="\\inner")      print_dot(str, it);
 	else if(*it->name=="\\pow")        print_powlike(str, it);
 	else if(*it->name=="\\wedge")      print_productlike(str, it, " ^ ");
 	else if(*it->name=="\\conditional")    print_conditional(str, it);

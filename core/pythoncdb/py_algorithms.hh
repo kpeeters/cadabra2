@@ -67,6 +67,13 @@ namespace cadabra {
 		      pybind11::return_value_policy::reference_internal);
 		}
 
+	template <class Algo>
+	Ex_ptr apply_algo_preorder(Ex_ptr ex, bool deep, bool repeat, unsigned int depth)
+		{
+		Algo algo(*get_kernel_from_scope(), *ex);
+		return apply_algo_base(algo, ex, deep, repeat, depth, true);
+		}
+
 	template <class Algo, typename Arg1>
 	Ex_ptr apply_algo_preorder(Ex_ptr ex, Arg1 arg1, bool deep, bool repeat, unsigned int depth)
 		{

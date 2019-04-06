@@ -134,6 +134,34 @@ def test07():
 
 test07()
 
+def test08():
+    __cdbkernel__=create_scope()
+    ex:= A + B D + E B + C Q + D;
+    cp1:= @(ex);        
+    zoom(ex, $B Q??$)
+    cp2:= @(ex);        
+    zoom(ex, $E Q??$)
+    unzoom(ex)
+    tst:= @(cp2) - @(ex);
+    assert(tst==0)
+    print("Test 08a passed")
+    unzoom(ex)
+    tst:= @(cp1) - @(ex);
+    assert(tst==0)
+    print("Test 08b passed")
+    ex:= A + B D + E B + C Q + D;
+    cp1:= @(ex)        
+    zoom(ex, $B Q??$)
+    cp2:= @(ex)        
+    zoom(ex, $E Q??$)
+    unzoom(ex, repeat=True)
+    tst:= @(cp1) - @(ex);
+    assert(tst==0)
+    print("Test 08c passed")
+
+test08()        
+            
+        
 #def test08():
 
 # 

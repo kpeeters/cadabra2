@@ -189,8 +189,8 @@ with::
                   gtkmm3-devel  \
                   texlive python3-matplotlib \
                   python3-sympy \
-                  libboost_system1_66_0-devel libboost_filesystem1_66_0-devel \
-                  libboost_date_time1_66_0-devel libboost_program_options1_66_0-devel 
+                  libboost_system-devel libboost_filesystem-devel \
+                  libboost_date_time-devel libboost_program_options-devel 
 
 This platform receives less testing so please get in touch if you run
 into any issues. You need to clone the cadabra2 git repository (if you

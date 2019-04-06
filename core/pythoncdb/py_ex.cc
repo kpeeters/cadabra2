@@ -515,7 +515,7 @@ namespace cadabra {
 		std::vector<std::string> av;
 		for (auto& arg : args)
 			av.push_back(arg.cast<std::string>());
-		return apply_algo_preorder<map_sympy, std::string, std::vector<std::string>>(ex, head, av, true, false, 0);
+		return apply_algo_preorder<map_sympy, std::string, std::vector<std::string>>(ex, head, av, false, false, 0);
 		}
 
 	void init_ex(py::module& m)

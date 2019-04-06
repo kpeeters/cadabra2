@@ -63,7 +63,7 @@ void Algorithm::set_progress_monitor(ProgressMonitor *pm_)
 	pm=pm_;
 	}
 
-Algorithm::result_t Algorithm::apply_pre_order(bool )
+Algorithm::result_t Algorithm::apply_pre_order(bool repeat)
 	{
 #if BOOST_VERSION > 105500
 	if(pm)
@@ -81,10 +81,16 @@ Algorithm::result_t Algorithm::apply_pre_order(bool )
 				ret=result_t::l_applied;
 				// Need to cleanup on the entire tree above us.
 
-				start.skip_children();
+				if(!repeat) {
+					start.skip_children();
+					++start;
+					}
 				}
+			else ++start;
 			}
-		++start;
+		else {
+			++start;
+			}
 		}
 
 	cleanup_dispatch_deep(kernel, tr);

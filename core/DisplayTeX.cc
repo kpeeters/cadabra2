@@ -397,7 +397,7 @@ void DisplayTeX::dispatch(std::ostream& str, Ex::iterator it)
 	else if(*it->name=="\\frac")           print_fraclike(str, it);
 	else if(*it->name=="\\comma")          print_commalike(str, it);
 	else if(*it->name=="\\arrow")          print_arrowlike(str, it);
-	else if(*it->name=="\\dot")            print_dot(str, it);
+	else if(*it->name=="\\inner")          print_dot(str, it);
 	else if(*it->name=="\\pow")            print_powlike(str, it);
 	else if(*it->name=="\\int")            print_intlike(str, it);
 	else if(*it->name=="\\equals" || *it->name=="\\unequals")         print_equalitylike(str, it);
