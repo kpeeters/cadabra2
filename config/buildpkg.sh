@@ -22,7 +22,7 @@ else
     cmake -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
 fi
 make
-if [ -n "${centos}" ]; then
+if [ -n "${centos}" -o -n "${scilin}"  ]; then
     sudo cpack3
 else
 	 sudo cpack
