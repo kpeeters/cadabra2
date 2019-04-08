@@ -55,25 +55,24 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-# runbuild "Ubuntu_18.04" ".deb" 7017 ubuntu1804
-# # # Ubuntu 18.10
-# runbuild "Fedora_27" ".rpm" 7015 fedora27               ERROR
-# runbuild "Fedora_28" ".rpm" 7020 fedora28
-# runbuild "Fedora_29" ".rpm" 7025 fedora29               
-# runbuild "Mint_19" ".deb" 7022 mint19
-# runbuild "OpenSUSE_15" ".rpm" 7024 opensuse150
-runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw   ERROR
-# runbuild "CentOS_7" ".rpm" 7004 centos7                 ERROR
+# runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
+# runbuild "Fedora_28"           ".rpm" 7020 fedora28
+# runbuild "Fedora_29"           ".rpm" 7025 fedora29               
+# runbuild "Mint_19"             ".deb" 7022 mint19
+# runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
+# runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw   
+runbuild "CentOS_7" ".rpm" 7004 centos7                 ERROR
 # runbuild "Scientific_Linux_74" ".rpm" 7013 scientific74 ERROR
-# runbuild "Debian86" ".deb" 7006 debian86                ERROR
-# runbuild "Debian_921" ".deb" 7014 debian9
-# runbuild "Debian_Buster" ".deb" 7021 debian10           ERROR (VM broken)
+# runbuild "Debian_921"          ".deb" 7014 debian9
+# runbuild "Debian_Buster"       ".deb" 7021 debian10     ERROR (VM broken)
 
 # Outdated versions:
 # runbuild "Mint_18" ".deb" 7002 mint18                   ERROR
+# runbuild "Fedora_27" ".rpm" 7015 fedora27               ERROR
 # runbuild "Fedora_24_build" ".rpm" 7001 fedora24
 # runbuild "Fedora_26" ".rpm" 7011 fedora26
 # runbuild "Ubuntu_14.04_build" ".deb" 7005 ubuntu1404
 # runbuild "Ubuntu_16.04_build" ".deb" 7000 ubuntu1604
 # runbuild "Ubuntu_17.10" ".deb" 7012 ubuntu1710
+# runbuild "Debian86"            ".deb" 7006 debian86     ERROR
 # runbuild "OpenSUSE_Leap" ".rpm" 7003 opensuse421

@@ -144,7 +144,7 @@ Now install all build dependencies with::
     sudo yum install devtoolset-7 rh-python36 cmake3 \
 	          gmp-devel libuuid-devel sqlite-devel \
              gtkmm30-devel boost-devel git \
-	          texlive python-matplotlib
+	          texlive python-matplotlib 
 
 You need to enable the Python3 and C++ compiler which you just
 installed with::
@@ -189,8 +189,8 @@ with::
                   gtkmm3-devel  \
                   texlive python3-matplotlib \
                   python3-sympy \
-                  libboost_system-devel libboost_filesystem-devel \
-                  libboost_date_time-devel libboost_program_options-devel 
+                  libboost_system1_69_0-devel libboost_filesystem1_69_0-devel \
+                  libboost_date_time1_69_0-devel libboost_program_options1_69_0-devel
 
 This platform receives less testing so please get in touch if you run
 into any issues. You need to clone the cadabra2 git repository (if you

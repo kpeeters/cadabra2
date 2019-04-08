@@ -171,7 +171,7 @@ set(CPACK_STRIP_FILES            ON)
 set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA ${CMAKE_CURRENT_BINARY_DIR}/postinst)
 set(CPACK_RPM_POST_INSTALL_SCRIPT_FILE ${CMAKE_CURRENT_BINARY_DIR}/postinst)
 #set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST /usr /usr/lib64 /usr/lib64/python2.7 /usr/bin /usr/lib /usr/share /usr/share/texlive)
-set(CPACK_RPM_PACKAGE_RELOCATABLE OFF)
+unset(CPACK_RPM_PACKAGE_RELOCATABLE)
 
 #xdg-desktop-menu install <install>/share/applications/MyApp.desktop
 
