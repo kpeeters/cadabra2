@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+
 #sudo rm -Rf ${HOME}/cadabra2
 #git clone https://github.com/kpeeters/cadabra2
 cd ${HOME}/cadabra2
