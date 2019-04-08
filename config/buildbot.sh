@@ -61,10 +61,10 @@ function runbuild {
 # runbuild "Mint_19"             ".deb" 7022 mint19
 # runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
 # runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw   
-runbuild "CentOS_7" ".rpm" 7004 centos7                 ERROR
-# runbuild "Scientific_Linux_74" ".rpm" 7013 scientific74 ERROR
+# runbuild "CentOS_7"            ".rpm" 7004 centos7     
+runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x ERROR
 # runbuild "Debian_921"          ".deb" 7014 debian9
-# runbuild "Debian_Buster"       ".deb" 7021 debian10     ERROR (VM broken)
+# runbuild "Debian_Buster"       ".deb" 7021 debian10
 
 # Outdated versions:
 # runbuild "Mint_18" ".deb" 7002 mint18                   ERROR
