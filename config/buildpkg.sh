@@ -21,5 +21,9 @@ else
    cmake -DPACKAGING_MODE=ON -DCMAKE_INSTALL_PREFIX=/usr ..
 fi
 make
-sudo cpack
+if [ -n "${centos}" ]; then
+    sudo cpack3
+else
+	 sudo cpack
+fi
 exit
