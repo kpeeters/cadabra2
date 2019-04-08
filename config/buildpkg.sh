@@ -7,7 +7,7 @@ cd ${HOME}/cadabra2
 sudo ls 
 git pull origin
 sudo rm -Rf build/*
-mkdir build
+mkdir -p build
 cd build
 if [ -f /etc/redhat-release ]; then 
     centos="`cat /etc/redhat-release | grep CentOS`"
