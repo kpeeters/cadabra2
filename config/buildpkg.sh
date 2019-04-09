@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 #sudo rm -Rf ${HOME}/cadabra2
 #git clone https://github.com/kpeeters/cadabra2
@@ -7,7 +6,7 @@ cd ${HOME}/cadabra2
 sudo ls 
 git pull origin
 sudo rm -Rf build/*
-mkdir -p build
+mkdir build
 cd build
 if [ -f /etc/redhat-release ]; then
     centos="`cat /etc/redhat-release | grep CentOS`"
