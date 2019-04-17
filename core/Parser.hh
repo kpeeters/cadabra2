@@ -55,8 +55,8 @@ namespace cadabra {
 
 			std::shared_ptr<Ex> tree;
 		private:
-			Ex::iterator parts;
-			std::string       str;
+			Ex::iterator   parts;
+			std::u32string str;
 
 			enum mode_t { m_skipwhite, m_name, m_findchildren,
 			              m_singlecharname, m_backslashname,
@@ -64,11 +64,11 @@ namespace cadabra {
 			            	};
 
 			void                   advance(unsigned int& i);
-			unsigned char          get_token(unsigned int i);
-			bool                   is_number(const std::string& str) const;
-			str_node::bracket_t    is_closing_bracket(const unsigned char& br) const;
-			str_node::bracket_t    is_opening_bracket(const unsigned char& br) const;
-			str_node::parent_rel_t is_link(const unsigned char& ln) const;
+			char32_t               get_token(unsigned int i);
+			bool                   is_number(const std::u32string& str) const;
+			str_node::bracket_t    is_closing_bracket(const char32_t& br) const;
+			str_node::bracket_t    is_opening_bracket(const char32_t& br) const;
+			str_node::parent_rel_t is_link(const char32_t& ln) const;
 
 			std::vector<mode_t>                 current_mode;
 			std::vector<str_node::bracket_t>    current_bracket;

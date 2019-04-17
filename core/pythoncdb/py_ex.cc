@@ -26,6 +26,9 @@
 #include "DisplaySympy.hh"
 #include "DisplayTerminal.hh"
 
+#include <ios>
+#include <iomanip>
+
 // #define DEBUG 1
 
 namespace cadabra {
@@ -455,7 +458,10 @@ namespace cadabra {
 			str >> parser;
 			}
 		catch (std::exception& except) {
-			throw ParseException("Cannot parse");
+			for(size_t i=0; i<ex_.size(); ++i)
+				std::cerr << static_cast<int>(static_cast<uint8_t>(ex_[i])) << " ";
+			std::cerr << std::endl;
+			throw ParseException(std::string("Cannot parse: ")+except.what());
 			}
 		parser.finalise();
 

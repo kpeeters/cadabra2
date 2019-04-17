@@ -63,6 +63,7 @@ namespace cadabra {
 			str_node(void);
 			str_node(nset_t::iterator name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
 			str_node(const std::string& name, bracket_t btype=b_none, parent_rel_t ptype=p_none);
+			str_node(const std::u32string& name, bracket_t btype=b_none, parent_rel_t ptype=p_none);			
 
 			bool operator==(const str_node&) const;
 			bool operator<(const str_node&) const;

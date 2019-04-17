@@ -22,7 +22,10 @@ You should have received a copy of the GNU General Public License
 #include "PreProcessor.hh"
 
 #include <sstream>
-
+#include <locale>
+#include <codecvt>
+#include <iostream>
+#include <typeinfo>
 
 std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 	{
@@ -33,6 +36,13 @@ std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 		// just one line.
 		if(inp[inp.size()-1]=='.') inp=inp.substr(0,inp.size()-1);
 		//		std::cout << "[" << inp << "]" << std::endl;
+
+//		std::cerr << inp.size() << std::endl;
+//		std::cerr << inp << std::endl;
+//		std::cerr << nw.size() << " " << typeid(nw[0]).name() << std::endl;
+//		std::string res=conv.to_bytes(nw);
+//		std::cerr << res << std::endl;
+		
 		pa.string2tree(inp);
 		}
 	// Remove the expression head.
@@ -50,7 +60,7 @@ using namespace cadabra;
 //	return str;
 //	}
 
-str_node::bracket_t Parser::is_closing_bracket(const unsigned char& br) const
+str_node::bracket_t Parser::is_closing_bracket(const char32_t& br) const
 	{
 	if(br==')')     return str_node::b_none;
 	if(br==']')     return str_node::b_square;
@@ -60,7 +70,7 @@ str_node::bracket_t Parser::is_closing_bracket(const unsigned char& br) const
 	return str_node::b_no;
 	}
 
-str_node::bracket_t Parser::is_opening_bracket(const unsigned char& br) const
+str_node::bracket_t Parser::is_opening_bracket(const char32_t& br) const
 	{
 	if(br=='(')     return str_node::b_none;
 	if(br=='[')     return str_node::b_square;
@@ -70,7 +80,7 @@ str_node::bracket_t Parser::is_opening_bracket(const unsigned char& br) const
 	return str_node::b_no;
 	}
 
-str_node::parent_rel_t Parser::is_link(const unsigned char& ln) const
+str_node::parent_rel_t Parser::is_link(const char32_t& ln) const
 	{
 	if(ln=='^') return str_node::p_super;
 	if(ln=='_') return str_node::p_sub;
@@ -143,7 +153,7 @@ void Parser::advance(unsigned int& i)
 	++i;
 	}
 
-unsigned char Parser::get_token(unsigned int i)
+char32_t Parser::get_token(unsigned int i)
 	{
 	if(str[i]=='\\')
 		if(is_opening_bracket(str[i+1])!=str_node::b_no || is_closing_bracket(str[i+1])!=str_node::b_no)
@@ -161,7 +171,10 @@ bool Parser::string2tree(const std::string& inp)
 	preprocessor pp;
 	ss >> pp;
 	ss2 << pp;
-	str="  "+ss2.str()+"  "; // for lookahead
+	std::string str8="  "+ss2.str()+"  "; // for lookahead
+
+	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+	str=conv.from_bytes(str8);
 
 	//	std::cout << str << std::endl;
 
@@ -170,7 +183,7 @@ bool Parser::string2tree(const std::string& inp)
 	current_mode.push_back(m_initialgroup);
 	current_bracket.push_back((*parts).fl.bracket);
 	current_parent_rel.push_back((*parts).fl.parent_rel);
-	std::string tmp;  // buffer for object name
+	std::u32string tmp;  // buffer for object name
 	//	str_node ss;
 
 	Ex::iterator current_parent=parts;
@@ -179,7 +192,8 @@ bool Parser::string2tree(const std::string& inp)
 		if(current_mode.size()==0) {
 			return false;
 			}
-		unsigned char c=get_token(i);
+		char32_t c=get_token(i);
+		std::cerr << i << " " << (int)c << "\n" << std::endl;
 		switch(current_mode.back()) {
 			case m_skipwhite:
 				// std::cerr << "m_skipwhite" << " " << c << std::endl;
@@ -196,7 +210,7 @@ bool Parser::string2tree(const std::string& inp)
 					                                  current_bracket.back(),
 					                                  current_parent_rel.back()));
 					current_mode.push_back(m_findchildren);
-					tmp="";
+					tmp.clear();
 					break;
 					}
 				if(is_closing_bracket(c)!=str_node::b_no) {
@@ -204,7 +218,7 @@ bool Parser::string2tree(const std::string& inp)
 						tree->append_child(current_parent,str_node(tmp,
 						                   current_bracket.back(),
 						                   current_parent_rel.back()));
-						tmp="";
+						tmp.clear();
 						}
 					current_mode.pop_back();
 					break;
@@ -214,7 +228,7 @@ bool Parser::string2tree(const std::string& inp)
 						tree->append_child(current_parent,str_node(tmp,
 						                   current_bracket.back(),
 						                   current_parent_rel.back()));
-						tmp="";
+						tmp.clear();
 						if(c==' ' || c=='\n')
 							advance(i);
 						current_mode.pop_back();
@@ -226,7 +240,7 @@ bool Parser::string2tree(const std::string& inp)
 					tree->append_child(current_parent,str_node(tmp,
 					                   current_bracket.back(),
 					                   current_parent_rel.back()));
-					tmp="";
+					tmp.clear();
 					advance(i);
 					current_mode.pop_back();
 					break;
@@ -297,7 +311,7 @@ bool Parser::string2tree(const std::string& inp)
 					                   str_node::b_none, /* current_bracket.back(), */
 					                   current_parent_rel.back()));
 					advance(i);
-					tmp="";
+					tmp.clear();
 					current_mode.pop_back();
 					current_bracket.pop_back();
 					current_parent_rel.pop_back();
@@ -335,7 +349,7 @@ bool Parser::string2tree(const std::string& inp)
 					tree->append_child(current_parent,str_node(tmp,
 					                   current_bracket.back(),
 					                   current_parent_rel.back()));
-					tmp="";
+					tmp.clear();
 					break;
 					}
 				tmp+=c;
@@ -368,7 +382,7 @@ bool Parser::string2tree(const std::string& inp)
 	return true;
 	}
 
-bool Parser::is_number(const std::string& str) const
+bool Parser::is_number(const std::u32string& str) const
 	{
 	for(unsigned int i=0; i<str.size(); ++i)
 		if(!isdigit(str[i])) return false;

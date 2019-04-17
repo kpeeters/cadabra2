@@ -42,7 +42,7 @@ class preprocessor {
 		void erase();
 		void strip_outer_brackets() const;
 
-		const static unsigned char  orders[];
+		const static char32_t  orders[];
 
 		enum order_labels { order_factorial=0,
 		                    order_pow,
@@ -67,36 +67,36 @@ class preprocessor {
 		// since that would allow for ".." (sequence), ":=" (define), ">=" and so on. The current
 		// '.' is a hack and is treated as such: when it occurs there is an additional check for
 		// a followup '.'.
-		const static char *const    order_names[];
+		const static char32_t *const    order_names[];
 	private:
-		void parse_(const std::string&);
+		void parse_(const std::u32string&);
 		void parse_internal_();
 		bool verbatim_;
 		bool next_is_product_;
 		bool eat_initial_whitespace_;
 		bool unwind_(unsigned int tolevel, unsigned int bracketgoal=0, bool usebracket=true) const;
-		unsigned char get_token_(unsigned char prev_token);
+		char32_t get_token_(char32_t prev_token);
 		void show_and_throw_(const std::string& str) const;
 
-		void         bracket_strings_(unsigned int cb, std::string& obrack, std::string& cbrack) const;
-		bool         is_infix_operator_(unsigned char c) const;
-		bool         is_link_(unsigned char c) const;
-		unsigned int is_opening_bracket_(unsigned char c) const;
-		unsigned int is_closing_bracket_(unsigned char c) const;
-		unsigned int is_bracket_(unsigned char c) const;
-		bool         is_already_bracketed_(const std::string& str) const;
-		bool         is_digits_(const std::string& str) const;
+		void         bracket_strings_(char32_t cb, std::u32string& obrack, std::u32string& cbrack) const;
+		bool         is_infix_operator_(char32_t c) const;
+		bool         is_link_(char32_t c) const;
+		unsigned int is_opening_bracket_(char32_t c) const;
+		unsigned int is_closing_bracket_(char32_t c) const;
+		unsigned int is_bracket_(char32_t c) const;
+		bool         is_already_bracketed_(const std::u32string& str) const;
+		bool         is_digits_(const std::u32string& str) const;
 		unsigned int current_bracket_(bool deep=false) const;
 		void         print_stack() const; // for debuggging purposes
 
 		bool default_is_product_() const;
-		unsigned int cur_pos;
-		std::string  cur_str;
+		unsigned int    cur_pos;
+		std::u32string  cur_str;
 
 		// A backslash followed by a bracket is also a bracket (gets code
 		// of the bracket plus 128).
-		const static unsigned char open_brackets[];
-		const static unsigned char close_brackets[];
+		const static char32_t open_brackets[];
+		const static char32_t close_brackets[];
 
 		class accu_t {
 			public:
@@ -104,9 +104,9 @@ class preprocessor {
 				void erase();
 
 				bool                     head_is_generated;  // when infix -> postfix has occurred
-				std::string              accu;
+				std::u32string           accu;
 				unsigned int             order;
-				std::vector<std::string> parts;
+				std::vector<std::u32string> parts;
 				unsigned int             bracket;
 				bool                     is_index; // whether the bracket was prefixed with ^ or _
 			};

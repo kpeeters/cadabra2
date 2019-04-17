@@ -670,14 +670,19 @@ void CodeInput::handle_insert(const Gtk::TextIter& pos, const Glib::ustring& tex
 	// warning: pos contains the cursor pos, and because we get to this handler
 	// _after_ the default handler has run, the cursor will have moved by
 	// the length of the insertion.
-	edit.content_insert(text, std::distance(buf->begin(), pos)-bytes, edit.datacell);
+   //	std::cerr << text << ", " << text.bytes() << "; " << pos.get_line_index() << ", " << std::distance(buf->begin(), pos) << ",  " << pos.get_offset() << ", " << bytes << std::endl;
+	// there is no quick way to get the byte offset for the iterator, so we do:
+	int ipos = buf->get_slice(buf->begin(), pos).bytes();
+	edit.content_insert(text, ipos-bytes, edit.datacell);
 	}
 
 void CodeInput::handle_erase(const Gtk::TextIter& start, const Gtk::TextIter& end)
 	{
 	//std::cerr << "handle_erase: " << start << ", " << end << std::endl;
 	Glib::RefPtr<Gtk::TextBuffer> buf=edit.get_buffer();
-	edit.content_erase(std::distance(buf->begin(), start), std::distance(buf->begin(), end), edit.datacell);
+	int spos = buf->get_slice(buf->begin(), start).bytes();
+	int epos = buf->get_slice(buf->begin(), end).bytes();	
+	edit.content_erase(spos, epos, edit.datacell);
 	}
 
 void CodeInput::slice_cell(std::string& before, std::string& after)

@@ -195,8 +195,8 @@ class Shell(InteractiveConsole):
 
         line = self.preprocess(line, True)
         if self.lhs == "":
-            #print('executing: ')
-            #print(line)
+            # print('executing: ')
+            # print(line)
 				# 'line' may actually be multiple lines.
 
             # Now feed the pre-parsed input to Python.

@@ -23,8 +23,11 @@ You should have received a copy of the GNU General Public License
 #include "Exceptions.hh"
 #include <iomanip>
 #include <sstream>
+#include <locale>
+#include <codecvt>
 #include <pcrecpp.h>
 
+//#define DEBUG 1
 
 namespace cadabra {
 
@@ -709,6 +712,20 @@ found:
 		//	fl.mark=0;
 		}
 
+	str_node::str_node(const std::u32string& nm, bracket_t br, parent_rel_t pr)
+		{
+		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+		std::string nm8=conv.to_bytes(nm);
+#ifdef DEBUG
+		std::cerr << "str_node: " << nm8 << std::endl;
+#endif
+		multiplier=rat_set.insert(1).first;
+		name=name_set.insert(nm8).first;
+		//	fl.modifier=m_none;
+		fl.bracket=br;
+		fl.parent_rel=pr;
+		}
+	
 	str_node::str_node(const std::string& nm, bracket_t br, parent_rel_t pr)
 		{
 		multiplier=rat_set.insert(1).first;

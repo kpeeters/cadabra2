@@ -33,29 +33,33 @@ Remember: we want brackets around infix operators to be around every child,
 #include <ctype.h>
 #include <stdexcept>
 #include <sstream>
+#include <locale>
+#include <codecvt>
 #include "PreProcessor.hh"
 
-const unsigned char preprocessor::orders[]     = { '!', tok_pow, '/', '*', tok_wedge,
+const char32_t preprocessor::orders[]     = { '!', tok_pow, '/', '*', tok_wedge,
                                                    '-', '+', tok_sequence, '=', tok_unequals,
                                                    '<', '>', '|', tok_arrow, tok_set_option,
                                                    tok_declare, ',', '~', 0
                                                  	};
-const char * const  preprocessor::order_names[]= { "\\factorial",
-                                                   "\\pow", "\\frac", "\\prod", "\\wedge",
-                                                   "\\sub", "\\sum", "\\sequence",
-                                                   "\\equals", "\\unequals", "\\less",
-                                                   "\\greater", "\\conditional",
-                                                   "\\arrow", "\\setoption", "\\declare",
-                                                   "\\comma", "\\tie", 0
-                                                 	};
-const unsigned char preprocessor::open_brackets[]    = { '{', '(', '[' };
-const unsigned char preprocessor::close_brackets[]   = { '}', ')', ']' };
+const char32_t * const  preprocessor::order_names[]= { U"\\factorial",
+																		 U"\\pow", U"\\frac", U"\\prod", U"\\wedge",
+																		 U"\\sub", U"\\sum", U"\\sequence",
+																		 U"\\equals", U"\\unequals", U"\\less",
+																		 U"\\greater", U"\\conditional",
+																		 U"\\arrow", U"\\setoption", U"\\declare",
+																		 U"\\comma", U"\\tie", 0
+};
+const char32_t preprocessor::open_brackets[]    = { '{', '(', '[' };
+const char32_t preprocessor::close_brackets[]   = { '}', ')', ']' };
 
 std::istream& operator>>(std::istream& s, preprocessor& p)
 	{
 	std::string inp;
+	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
 	while(std::getline(s,inp)) {
-		p.parse_(inp);
+		std::u32string inp32=conv.from_bytes(inp);
+		p.parse_(inp32);
 		}
 	return s;
 	}
@@ -63,10 +67,12 @@ std::istream& operator>>(std::istream& s, preprocessor& p)
 std::ostream& operator<<(std::ostream& s, const preprocessor& p)
 	{
 	while(p.accus.size()>0)
-		p.unwind_(sizeof(preprocessor::orders));
-	p.unwind_(sizeof(preprocessor::orders));
+		p.unwind_(sizeof(preprocessor::orders)/sizeof(char32_t));
+	p.unwind_(sizeof(preprocessor::orders)/sizeof(char32_t));
 	p.strip_outer_brackets();
-	s << p.cur.accu;
+	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+	auto ac8 = conv.to_bytes(p.cur.accu);
+	s << ac8;
 	return s;
 	}
 
@@ -75,38 +81,38 @@ preprocessor::preprocessor()
 	{
 	}
 
-bool preprocessor::is_link_(unsigned char c) const
+bool preprocessor::is_link_(char32_t c) const
 	{
 	return (c=='_' || c=='^' || c=='$' || c=='&');
 	}
 
-bool preprocessor::is_infix_operator_(unsigned char c) const
+bool preprocessor::is_infix_operator_(char32_t c) const
 	{
-	for(unsigned int i=0; i<sizeof(orders); ++i)
+	for(unsigned int i=0; i<sizeof(orders)/sizeof(char32_t); ++i)
 		if(orders[i]==c) return true;
 	return false;
 	}
 
 void preprocessor::print_stack() const
 	{
-	for(unsigned int i=0; i<accus.size(); ++i) {
-		std::cerr << "LEVEL " << i << std::endl
-		          << "  head gen= " << accus[i].head_is_generated << std::endl
-		          << "  bracket = " << accus[i].bracket << std::endl
-		          << "  order   = " << accus[i].order << std::endl
-		          << "  parts   = " << accus[i].parts.size() << std::endl;
-		for(unsigned int k=0; k<accus[i].parts.size(); ++k)
-			std::cerr << "             " << accus[i].parts[k] << std::endl;
-		std::cerr << "  accu    = " << accus[i].accu << std::endl;
-		}
-	std::cerr << "CURRENT "  << std::endl
-	          << "  head gen= " << cur.head_is_generated << std::endl
-	          << "  bracket = " << cur.bracket << std::endl
-	          << "  order   = " << cur.order << std::endl
-	          << "  parts   = " << cur.parts.size() << std::endl;
-	for(unsigned int k=0; k<cur.parts.size(); ++k)
-		std::cerr << "             " << cur.parts[k] << std::endl;
-	std::cerr << "  accu    = " << cur.accu << std::endl;
+//	for(unsigned int i=0; i<accus.size(); ++i) {
+//		std::cerr << "LEVEL " << i << std::endl
+//		          << "  head gen= " << accus[i].head_is_generated << std::endl
+//		          << "  bracket = " << accus[i].bracket << std::endl
+//		          << "  order   = " << accus[i].order << std::endl
+//		          << "  parts   = " << accus[i].parts.size() << std::endl;
+//		for(unsigned int k=0; k<accus[i].parts.size(); ++k)
+//			std::cerr << "             " << accus[i].parts[k] << std::endl;
+//		std::cerr << "  accu    = " << accus[i].accu << std::endl;
+//		}
+//	std::cerr << "CURRENT "  << std::endl
+//	          << "  head gen= " << cur.head_is_generated << std::endl
+//	          << "  bracket = " << cur.bracket << std::endl
+//	          << "  order   = " << cur.order << std::endl
+//	          << "  parts   = " << cur.parts.size() << std::endl;
+//	for(unsigned int k=0; k<cur.parts.size(); ++k)
+//		std::cerr << "             " << cur.parts[k] << std::endl;
+//	std::cerr << "  accu    = " << cur.accu << std::endl;
 	}
 
 unsigned int preprocessor::current_bracket_(bool deep) const
@@ -132,7 +138,7 @@ bool preprocessor::default_is_product_() const
 	return (n==2 || n==3 || n==0 || (n==1 && cur.is_index==false) );
 	}
 
-bool preprocessor::is_digits_(const std::string& str) const
+bool preprocessor::is_digits_(const std::u32string& str) const
 	{
 	if(str.size()==0) return false;
 	for(unsigned int i=0; i<str.size(); ++i)
@@ -140,32 +146,32 @@ bool preprocessor::is_digits_(const std::string& str) const
 	return true;
 	}
 
-unsigned int preprocessor::is_closing_bracket_(unsigned char c) const
+unsigned int preprocessor::is_closing_bracket_(char32_t c) const
 	{
-	for(unsigned int i=0; i<sizeof(close_brackets); ++i) {
+	for(unsigned int i=0; i<sizeof(close_brackets)/sizeof(char32_t); ++i) {
 		if(c==close_brackets[i]) return i+1;
 		if(c==close_brackets[i]+128) return i+1+128;
 		}
 	return 0;
 	}
 
-unsigned int preprocessor::is_opening_bracket_(unsigned char c) const
+unsigned int preprocessor::is_opening_bracket_(char32_t c) const
 	{
-	for(unsigned int i=0; i<sizeof(open_brackets); ++i) {
+	for(unsigned int i=0; i<sizeof(open_brackets)/sizeof(char32_t); ++i) {
 		if(c==open_brackets[i])     return i+1;
 		if(c==open_brackets[i]+128) return i+1+128;
 		}
 	return 0;
 	}
 
-unsigned int preprocessor::is_bracket_(unsigned char c) const
+unsigned int preprocessor::is_bracket_(char32_t c) const
 	{
 	unsigned int ret;
 	if((ret=is_opening_bracket_(c))) return ret;
 	return is_closing_bracket_(c);
 	}
 
-bool preprocessor::is_already_bracketed_(const std::string& str) const
+bool preprocessor::is_already_bracketed_(const std::u32string& str) const
 	{
 	if(str.size()>=2)
 		if(is_bracket_(str[0])) // && str[0]!='{')
@@ -174,9 +180,9 @@ bool preprocessor::is_already_bracketed_(const std::string& str) const
 	return false;
 	}
 
-unsigned char preprocessor::get_token_(unsigned char prev_token)
+char32_t preprocessor::get_token_(char32_t prev_token)
 	{
-	unsigned char candidate=0;
+	char32_t candidate=0;
 	// Candidate is set to the code of an infix operator if
 	// encountered. Because we have to treat spaces as multiplication
 	// operators, yet these can also just denote spaces by themselves if
@@ -202,7 +208,7 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 			}
 		}
 	while(cur_pos<cur_str.size()) {
-		unsigned char c=cur_str[cur_pos];
+		char32_t c=cur_str[cur_pos];
 		//		std::cerr << "|" << c << "|" << std::endl;
 		if(c==':' && cur_str[cur_pos+1]=='=') { // ':' and ':=' are the same thing
 			++cur_pos;
@@ -291,7 +297,7 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 			return candidate;
 			}
 		else {
-			std::string acplusone=cur.accu + (char)(c);
+			std::u32string acplusone=cur.accu + (char32_t)(c);
 			if( ( is_closing_bracket_(prev_token) && is_opening_bracket_(c) && cur.head_is_generated ) ||
 			      ( is_closing_bracket_(prev_token) && !is_infix_operator_(c) && !is_bracket_(c) && !is_link_(c) ) ||
 			      ( is_digits_(cur.accu) && !is_digits_(acplusone) && !is_link_(c) && !is_closing_bracket_(c) ) ||
@@ -315,14 +321,14 @@ unsigned char preprocessor::get_token_(unsigned char prev_token)
 	throw std::range_error("get_token out of range");
 	}
 
-void preprocessor::bracket_strings_(unsigned int cb, std::string& obrack, std::string& cbrack) const
+void preprocessor::bracket_strings_(char32_t cb, std::u32string& obrack, std::u32string& cbrack) const
 	{
-	obrack="";
-	cbrack="";
+	obrack=U"";
+	cbrack=U"";
 	if(cb==0) return;
 	if(cb>128) {
-		obrack="\\";
-		cbrack="\\";
+		obrack=U"\\";
+		cbrack=U"\\";
 		cb-=128;
 		}
 	obrack+=open_brackets[cb-1];
@@ -345,7 +351,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 		generated_head=false;
 		bracket_reached=false;
 
-		std::string tmp;
+		std::u32string tmp;
 		if(cur.accu.size()>0)
 			cur.parts.push_back(cur.accu);
 		unsigned int cb=current_bracket_();
@@ -353,7 +359,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 		//		std::cout << "current bracket = " << cb << std::endl;
 		//		print_stack();
 
-		if(onum==sizeof(orders) && bracketgoal) {
+		if(onum==sizeof(orders)/sizeof(char32_t) && bracketgoal) {
 			if(cb!=0) {
 				if(cb==bracketgoal)
 					bracket_reached=true;
@@ -371,16 +377,16 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 			}
 
 
-		std::string obrack, cbrack;
-		if(cb==0 || !usebracket || (onum==sizeof(orders) && bracket_reached && accus.back().accu.size()>0)) {
-			obrack="{";
-			cbrack="}";
+		std::u32string obrack, cbrack;
+		if(cb==0 || !usebracket || (onum==sizeof(orders)/sizeof(char32_t) && bracket_reached && accus.back().accu.size()>0)) {
+			obrack=U"{";
+			cbrack=U"}";
 			}
 		else bracket_strings_(cb, obrack, cbrack);
 
 		if(cur.parts.size()>1 || cur.order==order_factorial) { // More than one argument to the function.
-			if(cur.order<sizeof(orders)) {
-				bool special=((cb==2 || cb==3) && std::string(order_names[cur.order])=="\\comma" && accus.size()>0 && accus.back().accu!="");
+			if(cur.order<sizeof(orders)/sizeof(char32_t)) {
+				bool special=((cb==2 || cb==3) && std::u32string(order_names[cur.order])==U"\\comma" && accus.size()>0 && accus.back().accu.size()!=0);
 				if(!special)
 					tmp+=order_names[cur.order];
 				else
@@ -410,7 +416,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 				tmp=obrack;
 				for(unsigned int k=0; k<cur.parts.size(); ++k) {
 					tmp+=cur.parts[k];
-					if(k!=cur.parts.size()-1) tmp+=" ";
+					if(k!=cur.parts.size()-1) tmp+=U" ";
 					}
 				tmp+=cbrack;
 				}
@@ -419,7 +425,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 			if(cur.parts.size()>0) {
 				bracket_strings_(cb, obrack, cbrack);
 				//				std::cout << cur.parts[0] << " : " << is_already_bracketed_(cur.parts[0]) << std::endl;
-				if(onum!=sizeof(orders) ||
+				if(onum!=sizeof(orders)/sizeof(char32_t) ||
 				      ( is_already_bracketed_(cur.parts[0]) && ( cur.parts[0][0]==obrack[0] || obrack[0]=='{')))
 					tmp=cur.parts[0];
 				else {
@@ -436,7 +442,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 			cur.accu=tmp;
 			break;
 			}
-		if(onum!=sizeof(orders) && bracket_reached) {
+		if(onum!=sizeof(orders)/sizeof(char32_t) && bracket_reached) {
 			cur.accu=tmp;
 			cur.parts.clear();
 			break;
@@ -472,7 +478,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 	// head generated too.
 	cur.head_is_generated=false;
 
-	if(onum!=sizeof(orders) && cur.accu.size()>0 && onum>=cur.order && !bracket_reached) {
+	if(onum!=sizeof(orders)/sizeof(char32_t) && cur.accu.size()>0 && onum>=cur.order && !bracket_reached) {
 		//		std::cout << cur.accu.size() << std::endl;
 		cur.parts.push_back(cur.accu);
 		cur.accu.erase();
@@ -483,7 +489,7 @@ bool preprocessor::unwind_(unsigned int onum, unsigned int bracketgoal, bool use
 	}
 
 preprocessor::accu_t::accu_t()
-	: head_is_generated(false), order(sizeof(orders)), bracket(0), is_index(false)
+	: head_is_generated(false), order(sizeof(orders)/sizeof(char32_t)), bracket(0), is_index(false)
 	{
 	}
 
@@ -491,7 +497,7 @@ void preprocessor::accu_t::erase()
 	{
 	head_is_generated=false;
 	accu.erase();
-	order=sizeof(orders);
+	order=sizeof(orders)/sizeof(char32_t);
 	parts.clear();
 	bracket=0;
 	}
@@ -511,7 +517,7 @@ void preprocessor::erase()
 	next_is_product_=false;
 	}
 
-void preprocessor::parse_(const std::string& str)
+void preprocessor::parse_(const std::u32string& str)
 	{
 	cur_str=str;
 	parse_internal_();
@@ -520,7 +526,8 @@ void preprocessor::parse_(const std::string& str)
 void preprocessor::show_and_throw_(const std::string& str) const
 	{
 	std::stringstream ss;
-	ss << std::endl << cur_str << std::endl;
+	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+	ss << std::endl << conv.to_bytes(cur_str) << std::endl;
 	for(unsigned int i=0; i<cur_pos; ++i)
 		ss << " ";
 	ss << "^" << std::endl
@@ -534,7 +541,7 @@ void preprocessor::parse_internal_()
 	{
 	static long chars_parsed=0;
 	cur_pos=0;
-	unsigned char c=0, prev_token=0;
+	char32_t c=0, prev_token=0;
 	while(cur_pos<cur_str.size()) {
 		unsigned onum=0;
 		prev_token=c;
@@ -549,15 +556,15 @@ void preprocessor::parse_internal_()
 			cur.accu+=c;
 			goto loopdone;
 			}
-		for(; onum<sizeof(orders); ++onum) {
+		for(; onum<sizeof(orders)/sizeof(char32_t); ++onum) {
 			if(c==orders[order_factorial] && cur.accu.size()>0 && cur.accu[0]=='@')
 				break; // keep the '!' in '@command!(foobar)'
 			if(c==orders[onum]) {
-				if(cur.order==sizeof(orders) || onum==cur.order) {
+				if(cur.order==sizeof(orders)/sizeof(char32_t) || onum==cur.order) {
 					//					std::cerr << "same order, was " << cur.order << " now " << onum << std::endl;
 					// FIXME: this is a hack
 					if(onum==order_minus && cur.accu.size()==0)
-						cur.accu="0";
+						cur.accu=U"0";
 					cur.order=onum;
 					++chars_parsed;
 					//					if(chars_parsed%(100L)==0)
@@ -568,11 +575,11 @@ void preprocessor::parse_internal_()
 					//					print_stack();
 					}
 				else if(onum<cur.order) {
-					std::string tmp=cur.accu;
+					std::u32string tmp=cur.accu;
 					cur.accu.erase();
 					cur.head_is_generated=false;
 					if(tmp.size()==0 && onum==order_minus) // hack for "foo: -a-b"
-						tmp="0";
+						tmp=U"0";
 					//					std::cerr << "pushing up |" << tmp << "| to " << orders[onum] << std::endl;
 					accus.push_back(cur);
 					cur.erase();
@@ -584,7 +591,7 @@ void preprocessor::parse_internal_()
 					//					std::cerr << "need to unwind from " << cur.order << " to " << onum << std::endl;
 					if(unwind_(onum, 0, false) || onum<cur.order) {
 						//						std::cerr << "lifting up again, previous was " << cur.accu << ", " << cur.order << std::endl;
-						std::string tmp(cur.accu);
+						std::u32string tmp(cur.accu);
 						cur.accu.erase();
 						// for "a = b c + e" we need to push back
 						// for "[a b, c]"    we don't.
@@ -604,7 +611,7 @@ void preprocessor::parse_internal_()
 				goto loopdone;
 				}
 			}
-		if(c==' ' && cur.order!=sizeof(orders)) {
+		if(c==' ' && cur.order!=sizeof(orders)/sizeof(char32_t)) {
 			if(cur_pos==cur_str.size()-1)
 				goto loopdone;
 			else show_and_throw_("Whitespace encountered at unexpected location.");
@@ -626,7 +633,7 @@ void preprocessor::parse_internal_()
 			if(ind==1 && cur.accu.size()==0 && cur.parts.size()==0)
 				cur.parts.push_back(cur.accu); // empty lists count
 			//			std::cerr << "on accu: " << accus.back().is_index << std::endl;
-			unwind_(sizeof(orders), ind);
+			unwind_(sizeof(orders)/sizeof(char32_t), ind);
 			//			std::cerr << "is index now " << cur.is_index << std::endl;
 			cur.bracket=0;
 			//			cur.is_index=false; // TEST
