@@ -149,7 +149,7 @@ void Parser::finalise()
 
 void Parser::advance(unsigned int& i)
 	{
-	if(get_token(i)>128) ++i;
+//	if(get_token(i)>128) ++i;
 	++i;
 	}
 
@@ -193,7 +193,7 @@ bool Parser::string2tree(const std::string& inp)
 			return false;
 			}
 		char32_t c=get_token(i);
-		std::cerr << i << " " << (int)c << "\n" << std::endl;
+		// std::cerr << i << " " << (int)c << "\n" << std::endl;
 		switch(current_mode.back()) {
 			case m_skipwhite:
 				// std::cerr << "m_skipwhite" << " " << c << std::endl;

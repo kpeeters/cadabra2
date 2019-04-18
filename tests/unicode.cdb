@@ -1,0 +1,8 @@
+
+def test01():
+
+A{#}::Symmetric;
+ex:= A_{α β};
+ex:= A_{α β} - A_{β α};
+substitute(ex, $A_{a? b?} -> Ω_{a? b?}$);
+
