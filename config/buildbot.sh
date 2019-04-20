@@ -7,8 +7,8 @@ function runbuild {
 	 # Start the VM and wait for it to come up.
 	 echo "Starting build bot for $1, ssh port $3"
 	 ssh buildbothost "nohup VBoxHeadless -s '$1' > /tmp/buildbot.out 2> /tmp/buildbot.err < /dev/null &"
-	 echo "Waiting 10 seconds for VM to start up..."
-	 sleep 10
+	 echo "Waiting 20 seconds for VM to start up..."
+	 sleep 20
 
 	 # Setup the tunnel to the VM; a local port $3 gets mapped
 	 # to a port $3 on the build host, which is forwarded by 
@@ -57,16 +57,16 @@ function runbuild {
 
 # Parameters: VM name, package type, local ssh port, folder name on web server.
 
-runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
-runbuild "Fedora_28"           ".rpm" 7020 fedora28
-runbuild "Fedora_29"           ".rpm" 7025 fedora29               
-runbuild "Mint_19"             ".deb" 7022 mint19
-runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150
-runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw   
-runbuild "CentOS_7"            ".rpm" 7004 centos7     
-runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x
-runbuild "Debian_921"          ".deb" 7014 debian9
-runbuild "Debian_Buster"       ".deb" 7021 debian10
+#runbuild "Ubuntu_18.04"        ".deb" 7017 ubuntu1804
+#runbuild "Fedora_28"           ".rpm" 7020 fedora28
+#runbuild "Fedora_29"           ".rpm" 7025 fedora29               
+#runbuild "Mint_19"             ".deb" 7022 mint19
+runbuild "OpenSUSE_15"         ".rpm" 7024 opensuse150  ssh error
+#runbuild "OpenSUSE_Tumbleweed" ".rpm" 7023 opensusetw   ssh error
+#runbuild "CentOS_7"            ".rpm" 7004 centos7      cmake/packaging clash
+#runbuild "Scientific_Linux_74" ".rpm" 7013 scientific7x
+#runbuild "Debian_921"          ".deb" 7014 debian9
+#runbuild "Debian_Buster"       ".deb" 7021 debian10
 
 # Outdated versions:
 # runbuild "Mint_18" ".deb" 7002 mint18                   ERROR

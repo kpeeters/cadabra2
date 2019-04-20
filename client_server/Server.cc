@@ -21,7 +21,7 @@
 #include "CdbPython.hh"
 #include "SympyCdb.hh"
 
-// #define DEBUG 1
+//#define DEBUG 1
 
 using websocketpp::lib::placeholders::_1;
 using websocketpp::lib::placeholders::_2;
@@ -204,7 +204,8 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 void Server::on_socket_init(websocketpp::connection_hdl, boost::asio::ip::tcp::socket & s)
 	{
 	boost::asio::ip::tcp::no_delay option(true);
-	s.set_option(option);
+	// FIXME: this used to work in older websocketpp
+//	s.lowest_layer().set_option(option);
 	}
 
 Server::Connection::Connection()
@@ -501,14 +502,21 @@ void Server::run()
 		wserver.clear_access_channels(websocketpp::log::alevel::all);
 		wserver.clear_error_channels(websocketpp::log::elevel::all);
 
+		wserver.init_asio();
+		wserver.set_reuse_addr(true);
+
 		wserver.set_socket_init_handler(bind(&Server::on_socket_init, this, ::_1,::_2));
 		wserver.set_message_handler(bind(&Server::on_message, this, ::_1, ::_2));
 		wserver.set_open_handler(bind(&Server::on_open,this,::_1));
 		wserver.set_close_handler(bind(&Server::on_close,this,::_1));
 
-		wserver.init_asio();
-		wserver.set_reuse_addr(true);
+#ifdef DEBUG
+		std::cerr << "going to listen" << std::endl;
+#endif
 		wserver.listen(websocketpp::lib::asio::ip::tcp::v4(), 0);
+#ifdef DEBUG
+		std::cerr << "going to accept" << std::endl;
+#endif
 		wserver.start_accept();
 		websocketpp::lib::asio::error_code ec;
 		auto p = wserver.get_local_endpoint(ec);

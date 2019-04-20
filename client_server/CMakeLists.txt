@@ -122,6 +122,12 @@ add_definitions(
 # Make targets.
 #---------------------------------------------------------------------------
 
+# add_executable(tst tst.cc)
+# target_link_libraries(tst
+# 	${Boost_LIBRARIES}
+# 	Threads::Threads
+# 	)
+
 # Server executable
 if(MSVC AND CADABRA_DEBUG_BUILD)
 	add_executable(cadabra-server ${CADABRA_SERVER_SRC})
