@@ -22,8 +22,7 @@ You should have received a copy of the GNU General Public License
 #include "PreProcessor.hh"
 
 #include <sstream>
-#include <locale>
-#include <codecvt>
+#include <internal/uniconv.h>
 #include <iostream>
 #include <typeinfo>
 
@@ -173,8 +172,8 @@ bool Parser::string2tree(const std::string& inp)
 	ss2 << pp;
 	std::string str8="  "+ss2.str()+"  "; // for lookahead
 
-	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-	str=conv.from_bytes(str8);
+	utf_converter conv;
+	str=conv.to_utf32(str8);
 
 	//	std::cout << str << std::endl;
 
