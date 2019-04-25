@@ -1,21 +1,27 @@
+#include <memory>
+
 #include "Algorithm.hh"
 
 namespace cadabra {
+
 	class young_reduce : public Algorithm {
 		public:
-			young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern, bool search_permutations = false);
+			using index_t = short;
+			using indices_t = std::vector<index_t>;
+			using tableau_t = std::vector<indices_t>;
+			using decomposition_t = std::map<Indices, mpq_class>;
 
-			virtual bool can_apply(iterator it);
-			virtual result_t apply(iterator& it);
+			young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern);
+
+			virtual bool can_apply(iterator it) override;
+			virtual result_t apply(iterator& it) override;
 
 		private:
-			void cleanup(iterator& it);
+			class Flyweight;
+			std::unique_ptr<Flyweight> name_map, index_map;
 
-			result_t reduce(iterator& it, const std::vector<Ex::iterator>& its);
-			result_t permute(iterator& it, const std::vector<Ex::iterator>& its);
-
-			bool search_permutations;
-			const Ex& pattern;
+			class Tensor;
+			std::unique_ptr<Tensor> pat;
 		};
 
 	}
