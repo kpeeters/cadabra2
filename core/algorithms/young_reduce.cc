@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <numeric>
 #include <regex>
-#include <gmpxx.h>
 #include <sstream>
 
 #include "Compare.hh"
@@ -14,14 +13,12 @@
 #include "algorithms/young_reduce.hh"
 #include "properties/TableauSymmetry.hh"
 
-using cadabra::young_reduce;
-using cadabra::Ex;
-using cadabra::TableauSymmetry;
+using namespace cadabra;
 
 using index_t = young_reduce::index_t;
 using indices_t = young_reduce::indices_t;
 using tableau_t = TableauSymmetry::tab_t;
-using terms_t = std::map<indices_t, mpq_class>;
+using terms_t = young_reduce::terms_t;
 
 template <typename ValueT>
 std::map<ValueT, std::vector<size_t>> invert_vector(const std::vector<ValueT>& vec)
@@ -32,36 +29,6 @@ std::map<ValueT, std::vector<size_t>> invert_vector(const std::vector<ValueT>& v
 	return ret;
 }
 
-
-//----------------------------------------
-class young_reduce::Flyweight
-{
-public:
-	Flyweight() {}
-
-	void reset()
-	{
-		data_.clear();
-	}
-
-	index_t insert(const std::string& t)
-	{
-		auto pos = std::find(data_.begin(), data_.end(), t);
-		if (pos == data_.end()) {
-			data_.push_back(t);
-			return static_cast<index_t>(data_.size());
-		}
-		return static_cast<index_t>(std::distance(data_.begin(), pos) + 1);
-	}
-
-	const std::string& lookup(index_t idx) const
-	{
-		return data_[idx - 1];
-	}
-
-private:
-	std::vector<std::string> data_;
-};
 
 //----------------------------------------
 class Symmetry
@@ -80,7 +47,7 @@ public:
 		reset();
 	}
 
-	std::vector<Symmetry> Symmetry::enumerate_tableau(tableau_t& tab)
+	static std::vector<Symmetry> Symmetry::enumerate_tableau(tableau_t& tab)
 	{
 		std::vector<Symmetry> syms;
 
@@ -166,96 +133,6 @@ void swap_indices(indices_t& in, index_t beg_1, index_t beg_2, index_t n)
 	}
 }
 
-
-//----------------------------------------
-class young_reduce::Tensor
-{
-public:
-	Tensor(Ex::iterator it)
-	{
-		size_t cur_idx = 0;
-	}
-
-private:
-
-
-	terms_t terms;
-};
-
-class Tensor2
-{
-public:
-	terms_t symmetrize() const
-	{
-		indices_t identity(indices.size(), -1);
-		for (size_t i = 0; i < identity.size(); ++i) {
-			if (identity[i] >= 0) {
-				continue;
-			}
-			auto pos = std::distance(indices.begin(), std::find(indices.begin() + i + 1, indices.end(), indices[i]));
-			if (pos == indices.size()) {
-				identity[i] = -indices[i];
-			}
-			else {
-				identity[i] = static_cast<index_t>(pos);
-				identity[pos] = static_cast<index_t>(i);
-			}
-		}
-
-		std::map<indices_t, mpq_class> terms;
-		terms[identity] = 1;
-
-		// Symmetrize in identical tensors
-		index_t pos_i = 0;
-		for (auto i = 0; i < names.size(); ++i) {
-			index_t pos_j = pos_i + names[i].second;
-			for (auto j = i + 1; j < names.size(); ++j) {
-				if (names[i] == names[j]) {
-					std::map<indices_t, mpq_class> new_terms;
-					for (const auto& term : terms) {
-						// Halve contribution
-						new_terms[term.first] = term.second / 2;
-						// Make new term
-						auto new_term = term.first;
-						// Apply symmetry
-						swap_indices(new_term, pos_i, pos_j, names[i].second);
-						// Insert
-						new_terms[new_term] = term.second / 2;
-					}
-					terms = new_terms;
-				}
-			}
-			pos_i += names[i].second;
-		}
-
-		// Young project
-		for (auto symmetry : symmetries) {
-			terms_t new_terms;
-			for (const auto& term : terms) {
-				// Divide contribution
-				new_terms[term.first] += term.second / symmetry.n_perms();
-				// Make new terms
-				symmetry.reset();
-				while (symmetry.next()) {
-					auto new_term = symmetry.apply(term.first);
-					new_terms[new_term.first] += new_term.second * term.second / symmetry.n_perms();
-					if (new_terms[new_term.first] == 0) {
-						new_terms.erase(new_term.first);
-					}
-				}
-			}
-			terms = new_terms;
-		}
-		return terms;
-	}
-
-private:
-	std::vector<std::pair<index_t, index_t>> names; // Name + number of owned indices
-	std::vector<index_t> indices;
-	std::vector<Symmetry> symmetries;
-};
-
-
 //----------------------------------------
 mpq_class linear_compare(const terms_t& a, const terms_t& b)
 {
@@ -272,51 +149,190 @@ mpq_class linear_compare(const terms_t& a, const terms_t& b)
 	return factor;
 }
 
-//----------------------------------------
-terms_t symmetrize(Ex::iterator it)
-{
-	std::vector<std::pair<index_t, size_t>> names;
-	indices_t indices;
-	std::vector<Symmetry> symmetries;
-}
-
 
 //----------------------------------------
 young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern)
 	: Algorithm(kernel, ex)
-	, name_map(std::make_unique<young_reduce::Flyweight>())
-	, index_map(std::make_unique<young_reduce::Flyweight>())
+	, pat(pattern)
 {
-	// Stuff pattern into pat
+	std::cerr << "Constructing young_reduce object with ex:\n" << ex << "\npattern:\n" << pattern << '\n';
+	pat_decomp = symmetrize(pattern.begin());
 }
+
+//----------------------------------------
+terms_t young_reduce::symmetrize(Ex::iterator it)
+{
+	std::cerr << "Symmetrizing\n" << Ex(it) << '\n';
+	std::vector<std::pair<nset_t::iterator, size_t>> names;
+	indices_t indices;
+	std::vector<Symmetry> symmetries;
+
+	Ex::iterator beg, end;
+	if (*it->name == "\\prod") {
+		beg = it.begin();
+		end = it.end();
+	}
+	else {
+		beg = it;
+		end = it;
+		++end;
+	}
+
+	// Iterate over terms in product, or just `it` if no product, and populate
+	// `names`, `indices` and `symmetries`
+	while (beg != end) {
+		// Populate `symmetries`
+		auto tb = kernel.properties.get_composite<TableauBase>(beg);
+		if (tb) {
+			auto tab = tb->get_tab(kernel.properties, tr, beg, 0);
+			auto syms = Symmetry::enumerate_tableau(tab);
+			for (auto& sym : syms)
+				sym.add_offset(indices.size());
+			symmetries.insert(symmetries.end(), syms.begin(), syms.end());
+		}
+
+		size_t n_indices = 0;
+		//Iterate over children to populate `indices`
+		for (auto idx = beg.begin(), edx = beg.end(); idx != edx; ++idx) {
+			if (idx->is_index()) {
+				++n_indices;
+				auto pos = std::find(index_map.begin(), index_map.end(), beg->name);
+				if (pos == index_map.end()) {
+					indices.push_back(index_map.size());
+					index_map.push_back(beg->name);
+				}
+				else {
+					indices.push_back(std::distance(index_map.begin(), pos));
+				}
+			}
+		}
+		// Populate `names`
+		names.emplace_back(beg->name, n_indices);
+
+		++beg;
+	}
+
+	indices_t identity(indices.size(), -1);
+	for (size_t i = 0; i < identity.size(); ++i) {
+		if (identity[i] >= 0) {
+			continue;
+		}
+		auto pos = std::distance(indices.begin(), std::find(indices.begin() + i + 1, indices.end(), indices[i]));
+		if (pos == indices.size()) {
+			identity[i] = -indices[i];
+		}
+		else {
+			identity[i] = static_cast<index_t>(pos);
+			identity[pos] = static_cast<index_t>(i);
+		}
+	}
+
+	terms_t terms;
+	terms[identity] = 1;
+
+	// Symmetrize in identical tensors
+	index_t pos_i = 0;
+	for (auto i = 0; i < names.size(); ++i) {
+		index_t pos_j = pos_i + (index_t)names[i].second;
+		for (auto j = i + 1; j < names.size(); ++j) {
+			if (names[i] == names[j]) {
+				terms_t new_terms;
+				for (const auto& term : terms) {
+					// Halve contribution
+					new_terms[term.first] = term.second / 2;
+					// Make new term
+					auto new_term = term.first;
+					// Apply symmetry
+					swap_indices(new_term, pos_i, pos_j, (index_t)names[i].second);
+					// Insert
+					new_terms[new_term] = term.second / 2;
+				}
+				terms = new_terms;
+			}
+		}
+		pos_i += (index_t)names[i].second;
+	}
+
+	// Young project
+	for (auto symmetry : symmetries) {
+		terms_t new_terms;
+		for (const auto& term : terms) {
+			// Divide contribution
+			new_terms[term.first] += term.second / symmetry.n_perms();
+			// Make new terms
+			symmetry.reset();
+			while (symmetry.next()) {
+				auto new_term = symmetry.apply(term.first);
+				new_terms[new_term.first] += new_term.second * term.second / symmetry.n_perms();
+				if (new_terms[new_term.first] == 0) {
+					new_terms.erase(new_term.first);
+				}
+			}
+		}
+		terms = new_terms;
+	}
+	return terms;
+}
+
+
 
 bool young_reduce::can_apply(iterator it)
 {
+	std::cerr << "Checking can_apply on \n" << Ex(it);
 	// Either at a node which looks like pat, or a node which
 	// is a sum of terms which look like pat
 
 	Ex_comparator comp(kernel.properties);
 
 	if (*it->name == "\\sum") {
-		auto begin = it.begin(), end = it.end();
-		while (begin != end) {
-			auto match = comp.equal_subtree(pat.begin(), it);
-			++begin;
+		auto cur = it.begin(), end = it.end();
+		while (cur != end) {
+			auto match = comp.equal_subtree(pat.begin(), cur);
+			if (match != Ex_comparator::match_t::match_index_greater &&
+				match != Ex_comparator::match_t::match_index_less) {
+				std::cerr << "...no\n";
+				return false;
+			}
+			++cur;
 		}
+		std::cerr << "...yes\n";
+		return true;
 	}
-	
-	//auto match = comp.equal_subtree(pat->begin(), it);
-	//return
-	//	match == Ex_comparator::match_t::match_index_greater ||
-	//	match == Ex_comparator::match_t::match_index_less;
+	else {
+		auto match = comp.equal_subtree(pat.begin(), it);
+		auto ret = match == Ex_comparator::match_t::match_index_greater ||
+			match == Ex_comparator::match_t::match_index_less;
+		std::cerr << "..." << (ret ? "yes" : "no") << '\n';
+		return ret;
+	}
 }
 
 young_reduce::result_t young_reduce::apply(iterator& it)
 {
-	std::vector<std::pair<index_t, size_t>> names;
-	std::vector<indices_t> indices;
-	std::vector<Symmetry> symmetries;
-	sizeof(nset_t::iterator);
-	// Create a representation of the tensor
+	std::cerr << "Applying on " << Ex(it);
+	terms_t decomp;
+	if (*it->name == "\\sum") {
+		for (auto beg = it.begin(), end = it.end(); beg != end; ++beg) {
+			auto d = symmetrize(beg);
+			for (const auto& kv : d) {
+				decomp[kv.first] += kv.second;
+			}
+		}
+	}
+	else {
+		decomp = symmetrize(it);
+	}
+
+	auto fact = linear_compare(decomp, pat_decomp);
+	if (fact == 0) {
+		std::cerr << "No match!\n";
+		return result_t::l_no_action;
+	}
+	else {
+		std::cerr << "Matched\n" << Ex(it) << "with factor " << fact << '\n';
+		it = tr.replace(it, pat.begin());
+		multiply(it->multiplier, fact);
+		return result_t::l_applied;
+	}
 }
 
