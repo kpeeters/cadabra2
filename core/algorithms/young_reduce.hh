@@ -1,21 +1,28 @@
+#include <memory>
+#include <gmpxx.h>
+
 #include "Algorithm.hh"
 
 namespace cadabra {
+
 	class young_reduce : public Algorithm {
-		public:
-			young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern, bool search_permutations = false);
+	public:
+		using index_t = short;
+		using indices_t = std::vector<index_t>;
+		using tableau_t = std::vector<indices_t>;
+		using terms_t = std::map<indices_t, mpq_class>;
 
-			virtual bool can_apply(iterator it);
-			virtual result_t apply(iterator& it);
+		young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern);
 
-		private:
-			void cleanup(iterator& it);
+		virtual bool can_apply(iterator it) override;
+		virtual result_t apply(iterator& it) override;
 
-			result_t reduce(iterator& it, const std::vector<Ex::iterator>& its);
-			result_t permute(iterator& it, const std::vector<Ex::iterator>& its);
+	private:
+		terms_t symmetrize(Ex::iterator);
 
-			bool search_permutations;
-			const Ex& pattern;
-		};
+		Ex pat;
+		terms_t pat_decomp;
+		std::vector<nset_t::iterator> index_map;
+	};
 
-	}
+}

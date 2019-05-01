@@ -1,461 +1,338 @@
+#include <iostream>
+#include <iomanip>
+#include <map>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+#include <regex>
+#include <sstream>
+
 #include "Compare.hh"
 #include "Cleanup.hh"
-
-#include "algorithms/young_reduce.hh"
-#include "algorithms/young_project_tensor.hh"
-#include "algorithms/sort_sum.hh"
-#include "algorithms/collect_terms.hh"
-#include "algorithms/distribute.hh"
-#include "algorithms/rename_dummies.hh"
-
-#include <sstream>
 #include "DisplayTerminal.hh"
+#include "algorithms/young_reduce.hh"
+#include "properties/TableauSymmetry.hh"
 
 using namespace cadabra;
 
+using index_t = young_reduce::index_t;
+using indices_t = young_reduce::indices_t;
+using tableau_t = TableauSymmetry::tab_t;
+using terms_t = young_reduce::terms_t;
+
+template <typename ValueT>
+std::map<ValueT, std::vector<size_t>> invert_vector(const std::vector<ValueT>& vec)
+{
+	std::map<ValueT, std::vector<size_t>> ret;
+	for (size_t i = 0; i < vec.size(); ++i)
+		ret[vec[i]].push_back(i);
+	return ret;
+}
 
 
-struct get_children_iterators {
-		using iterator = Ex::iterator;
-		using sibling_iterator = Ex::sibling_iterator;
-
-		get_children_iterators(Ex& ex, Ex::iterator it)
-			{
-			for (sibling_iterator sib = ex.child(it, 0); ex.is_valid(sib); ++sib)
-				its.push_back(sib);
-			}
-
-		std::vector<iterator>::iterator begin()
-			{
-			return its.begin();
-			}
-		std::vector<iterator>::iterator end()
-			{
-			return its.end();
-			}
-
-	private:
-		std::vector<iterator> its;
-	};
-
-multiplier_t linear_divide(const Kernel& kernel, const Ex& num, const Ex& den)
+//----------------------------------------
+class Symmetry
+{
+public:
+	Symmetry(bool antisymmetric)
+		: antisymmetric{ antisymmetric }
 	{
-	if (num.begin().number_of_children() != den.begin().number_of_children()) {
+		reset();
+	}
+
+	Symmetry(const indices_t& indices, bool antisymmetric)
+		: antisymmetric{ antisymmetric }
+	{
+		set_indices(indices);
+		reset();
+	}
+
+	static std::vector<Symmetry> Symmetry::enumerate_tableau(tableau_t& tab)
+	{
+		std::vector<Symmetry> syms;
+
+		for (size_t row = 0; row < tab.number_of_rows(); ++row)
+			syms.emplace_back(indices_t(tab.begin_row(row), tab.end_row(row)), false);
+
+		for (size_t col = 0; col < tab.row_size(0); ++col)
+			syms.emplace_back(indices_t(tab.begin_column(col), tab.end_column(col)), true);
+
+		return syms;
+	}
+
+
+	void set_indices(const indices_t& new_indices)
+	{
+		indices = new_indices;
+		std::sort(indices.begin(), indices.end());
+		reset();
+	}
+
+	void add_offset(int n)
+	{
+		for (size_t i = 0; i < indices.size(); ++i) {
+			indices[i] += n;
+			perm[i] += n;
+		}
+	}
+
+	size_t n_perms() const
+	{
+		size_t ret = 1;
+		for (size_t i = 1; i <= indices.size(); ++i)
+			ret *= i;
+		return ret;
+	}
+
+	bool next()
+	{
+		if (antisymmetric && (flip = !flip))
+			parity *= -1;
+		return std::next_permutation(indices.begin(), indices.end());
+	}
+
+	void reset()
+	{
+		perm = indices;
+		flip = false;
+		parity = 1;
+	}
+
+	std::pair<indices_t, int> apply(const indices_t & original) const
+	{
+		auto ret = std::make_pair(original, parity);
+		for (int i = 0; i < indices.size(); ++i) {
+			ret.first[indices[i]] = original[perm[i]];
+		}
+		for (auto index : indices) {
+			if (ret.first[index] >= 0)
+				ret.first[ret.first[index]] = index;
+		}
+		return ret;
+	}
+
+	indices_t indices, perm;
+	bool antisymmetric : 1;
+	bool flip : 1;
+	int parity : 2;
+};
+
+
+//----------------------------------------
+void swap_indices(indices_t& in, index_t beg_1, index_t beg_2, index_t n)
+{
+	for (index_t i = 0; i < n; ++i) {
+		// 
+		if (in[beg_1] != beg_2 && in[beg_2] != beg_1) {
+			std::swap(in[beg_1 + i], in[beg_2 + i]);
+			if (in[beg_1 + i] >= 0)
+				in[in[beg_1 + i]] = beg_1 + i;
+			if (in[beg_2 + i] >= 0)
+				in[in[beg_2 + i]] = beg_2 + i;
+		}
+	}
+}
+
+//----------------------------------------
+mpq_class linear_compare(const terms_t& a, const terms_t& b)
+{
+	if (a.empty() || a.size() != b.size())
 		return 0;
-		}
 
-	multiplier_t factor = *(num.child(num.begin(), 0)->multiplier) / *(den.child(den.begin(), 0)->multiplier);
-	for (auto it = num.child(num.begin(), 0), jt = den.child(den.begin(), 0); num.is_valid(it) && den.is_valid(jt); ++it, ++jt) {
-		Ex ex1(it);
-		Ex ex2(jt);
-		one(ex1.begin()->multiplier);
-		one(ex2.begin()->multiplier);
-		Ex_comparator comp(kernel.properties);
-		auto res = comp.equal_subtree(ex1.begin(), ex2.begin(), Ex_comparator::useprops_t::never);
-		if (res == Ex_comparator::match_t::subtree_match) {
-			multiplier_t result = *it->multiplier / *jt->multiplier;
-			if (factor != result) {
-				return 0;
-				}
-			}
-		else {
+	auto a_it = a.begin(), b_it = b.begin(), a_end = a.end();
+	mpq_class factor = a_it->second / b_it->second;
+	while (a_it != a_end) {
+		if (a_it->second / b_it->second != factor)
 			return 0;
-			}
-		}
+		++a_it, ++b_it;
+	}
 	return factor;
-	}
-//
-//struct get_index_permutations
-//{
-//public:
-//	struct iterator
-//	{
-//	public:
-//		using value = Ex;
-//		using reference = const value&;
-//		using pointer = const value*;
-//
-//		bool operator == (const iterator& other)
-//		{
-//			return cur == other.cur;
-//		}
-//	private:
-//		friend struct get_index_permutations;
-//
-//		iterator(get_index_permutations& parent)
-//			: parent(parent)
-//		{
-//		}
-//
-//		void construct_ex()
-//		{
-//			size_t cur_idx = 0;
-//			for (auto node : parent.nodes) {
-//				for (auto it : node.first) {
-//					it.
-//				}
-//			}
-//		}
-//		get_index_permutations& parent;
-//	};
-//
-//	get_index_permutations(const Kernel& kernel, const Ex& ex)
-//		: base(ex)
-//	{
-//		if (*ex.begin()->name == "\\prod") {
-//			for (auto child : get_children_iterators(base, base.begin()))
-//				add_node(child);
-//		}
-//		else {
-//			add_node(base.begin());
-//		}
-//	}
-//
-//	iterator begin()
-//	{
-//		// Reset the indices vector to its first permutation
-//		while (std::next_permutation(indices.begin(), indices.end()));
-//
-//		return iterator();
-//	}
-//
-//private:
-//	void add_node(Ex::iterator pos)
-//	{
-//		nodes.push_back({ pos, base.number_of_children(pos) });
-//		for (auto it : get_children_iterators(base, pos)) {
-//			indices.push_back(Ex(it));
-//			base.erase(it);
-//		}
-//	}
-//
-//	Ex base;
-//	std::vector<Ex> indices;
-//	std::vector<std::pair<Ex::iterator, size_t>> nodes;
-//};
+}
 
 
-struct get_combinations {
-	public:
-		struct iterator {
-			public:
-				struct Combination {
-					Ex ex;
-					std::vector<Ex::iterator> its;
-					};
-
-				using value = Combination;
-				using reference = const value&;
-				using pointer = const value*;
-
-				bool operator == (const iterator& other)
-					{
-					return (n_terms == other.n_terms) && (v == other.v);
-					}
-
-				bool operator != (const iterator& other)
-					{
-					return !(*this == other);
-					}
-
-				iterator& operator ++ ()
-					{
-					// Check for end iterator
-					if (n_terms == 1)
-						return *this;
-
-					if (!std::prev_permutation(v.begin(), v.end())) {
-						--n_terms;
-						v = std::vector<bool>(n_terms, false);
-						std::fill(v.begin(), v.begin() + n_terms, true);
-						}
-
-					construct_combination();
-					return *this;
-					}
-
-				iterator operator ++ (int)
-					{
-					iterator other = *this;
-					++(*this);
-					return other;
-					}
-
-				reference operator * () const
-					{
-					return combination;
-					}
-
-				pointer operator -> () const
-					{
-					return &combination;
-					}
-
-			private:
-				// Construct begin iterator
-				iterator(const std::vector<Ex::iterator>& its)
-					: its(its)
-					, n_terms(its.size())
-					, v(its.size(), true)
-					{
-					construct_combination();
-					}
-
-				// Construct end iterator
-				iterator(const std::vector<Ex::iterator>& its, bool)
-					: its(its)
-					, n_terms(1)
-					, v(1, true)
-					{
-
-					}
-
-				void construct_combination()
-					{
-					combination.ex = Ex("\\sum");
-
-					combination.its.clear();
-					for (size_t k = 0; k < v.size(); ++k) {
-						if (v[k]) {
-							combination.ex.append_child(combination.ex.begin(), its[k]);
-							combination.its.push_back(its[k]);
-							}
-						}
-					std::cerr << combination.ex;
-					}
-
-				friend struct get_combinations;
-				const std::vector<Ex::iterator>& its;
-				int n_terms;
-				std::vector<bool> v;
-				Combination combination;
-			};
-
-		get_combinations(const std::vector<Ex::iterator>& its)
-			: its(its)
-			{
-
-			}
-
-		iterator begin()
-			{
-			return iterator(its);
-			}
-
-		iterator end()
-			{
-			return iterator(its, false);
-			}
-
-	private:
-		const std::vector<Ex::iterator>& its;
-	};
-
-
-
-std::vector<Ex> all_index_permutations(Ex ex, const Kernel& kernel)
-	{
-	std::vector<Ex> permutations;
-	if (*ex.begin()->name == "\\prod") {
-		std::vector<std::vector<Ex>> child_permutations;
-		std::vector<std::vector<Ex>::iterator> its;
-		for (auto child : get_children_iterators(ex, ex.begin())) {
-			child_permutations.push_back(all_index_permutations(Ex(child), kernel));
-			its.push_back(child_permutations.back().begin());
-			}
-
-		if (its.empty())
-			return std::vector<Ex>();
-
-		while (its[0] != child_permutations[0].end()) {
-			Ex cur("\\prod");
-			for (auto it : its)
-				cur.append_child(cur.begin(), it->begin());
-			permutations.push_back(cur);
-
-			++its.back();
-			for (int i = its.size() - 1; (i > 0) && its[i] == child_permutations[i].end(); --i) {
-				its[i] = child_permutations[i].begin();
-				++its[i - 1];
-				}
-			}
-		}
-	else {
-		std::vector<Ex> indices;
-
-		for (auto child : get_children_iterators(ex, ex.begin()))
-			indices.push_back(Ex(child));
-
-		ex.erase_children(ex.begin());
-
-		while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {
-		return *lhs.begin()->name < *rhs.begin()->name;
-			}));
-
-		do {
-			Ex cur = ex;
-			for (auto index : indices)
-				cur.append_child(cur.begin(), index.begin());
-			permutations.push_back(cur);
-			}
-		while (std::next_permutation(indices.begin(), indices.end(), [](const Ex& lhs, const Ex& rhs) {
-		return *lhs.begin()->name < *rhs.begin()->name;
-			}));
-		}
-
-	return permutations;
-	}
-
-bool is_index_permutation(const Kernel& kernel, Ex::iterator lhs, Ex::iterator rhs);
-
-bool is_index_permutation(const Kernel& kernel, const Ex& lhs, const Ex& rhs)
-	{
-	if (lhs.begin()->name == rhs.begin()->name) {
-		if (lhs.number_of_children(lhs.begin()) != rhs.number_of_children(rhs.begin()))
-			return false;
-
-		Ex::sibling_iterator lit = lhs.child(lhs.begin(), 0);
-		Ex::sibling_iterator rit = rhs.child(rhs.begin(), 0);
-
-		if (lit->is_index()) {
-			std::vector<std::string> lnames, rnames;
-			while (lhs.is_valid(lit) && rhs.is_valid(rit)) {
-				lnames.push_back(*lit->name);
-				rnames.push_back(*rit->name);
-				++lit, ++rit;
-				}
-			std::sort(lnames.begin(), lnames.end());
-			std::sort(rnames.begin(), rnames.end());
-			return lnames == rnames;
-			}
-		else {
-			while (lhs.is_valid(lit) && rhs.is_valid(rit)) {
-				if (!is_index_permutation(kernel, lit, rit))
-					return false;
-				++lit, ++rit;
-				}
-			return true;
-			}
-		}
-	else {
-		return false;
-		}
-	}
-
-bool is_index_permutation(const Kernel& kernel, Ex::iterator lhs, Ex::iterator rhs)
-	{
-	return is_index_permutation(kernel, Ex(lhs), Ex(rhs));
-	}
-
-Ex project(const Kernel& kernel, Ex ex)
-	{
-	young_project_tensor ypt(kernel, ex, false);
-	ypt.apply_generic();
-
-	distribute dist(kernel, ex);
-	dist.apply_generic();
-
-	rename_dummies rd(kernel, ex, "", "");
-	rd.apply_generic();
-
-	collect_terms ct(kernel, ex);
-	ct.apply_generic();
-
-	sort_sum ss(kernel, ex);
-	ss.apply_generic();
-
-	return ex;
-	}
-
-std::vector<Ex::iterator> find_matching_terms(const Kernel& kernel, Ex& ex, Ex::iterator& it, const Ex& pattern)
-	{
-	std::vector<Ex::iterator> its;
-
-	for (auto child : get_children_iterators(ex, it)) {
-		if (is_index_permutation(kernel, child, pattern.begin()))
-			its.push_back(child);
-		}
-
-	return its;
-	}
-
-young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern, bool search_permutations)
+//----------------------------------------
+young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex& pattern)
 	: Algorithm(kernel, ex)
-	, search_permutations(search_permutations)
-	, pattern(pattern)
-	{
+	, pat(pattern)
+{
+	std::cerr << "Constructing young_reduce object with ex:\n" << ex << "\npattern:\n" << pattern << '\n';
+	pat_decomp = symmetrize(pattern.begin());
+}
 
+//----------------------------------------
+terms_t young_reduce::symmetrize(Ex::iterator it)
+{
+	std::cerr << "Symmetrizing\n" << Ex(it) << '\n';
+	std::vector<std::pair<nset_t::iterator, size_t>> names;
+	indices_t indices;
+	std::vector<Symmetry> symmetries;
+
+	Ex::iterator beg, end;
+	if (*it->name == "\\prod") {
+		beg = it.begin();
+		end = it.end();
 	}
+	else {
+		beg = it;
+		end = it;
+		++end;
+	}
+
+	// Iterate over terms in product, or just `it` if no product, and populate
+	// `names`, `indices` and `symmetries`
+	while (beg != end) {
+		// Populate `symmetries`
+		auto tb = kernel.properties.get_composite<TableauBase>(beg);
+		if (tb) {
+			auto tab = tb->get_tab(kernel.properties, tr, beg, 0);
+			auto syms = Symmetry::enumerate_tableau(tab);
+			for (auto& sym : syms)
+				sym.add_offset(indices.size());
+			symmetries.insert(symmetries.end(), syms.begin(), syms.end());
+		}
+
+		size_t n_indices = 0;
+		//Iterate over children to populate `indices`
+		for (auto idx = beg.begin(), edx = beg.end(); idx != edx; ++idx) {
+			if (idx->is_index()) {
+				++n_indices;
+				auto pos = std::find(index_map.begin(), index_map.end(), beg->name);
+				if (pos == index_map.end()) {
+					indices.push_back(index_map.size());
+					index_map.push_back(beg->name);
+				}
+				else {
+					indices.push_back(std::distance(index_map.begin(), pos));
+				}
+			}
+		}
+		// Populate `names`
+		names.emplace_back(beg->name, n_indices);
+
+		++beg;
+	}
+
+	indices_t identity(indices.size(), -1);
+	for (size_t i = 0; i < identity.size(); ++i) {
+		if (identity[i] >= 0) {
+			continue;
+		}
+		auto pos = std::distance(indices.begin(), std::find(indices.begin() + i + 1, indices.end(), indices[i]));
+		if (pos == indices.size()) {
+			identity[i] = -indices[i];
+		}
+		else {
+			identity[i] = static_cast<index_t>(pos);
+			identity[pos] = static_cast<index_t>(i);
+		}
+	}
+
+	terms_t terms;
+	terms[identity] = 1;
+
+	// Symmetrize in identical tensors
+	index_t pos_i = 0;
+	for (auto i = 0; i < names.size(); ++i) {
+		index_t pos_j = pos_i + (index_t)names[i].second;
+		for (auto j = i + 1; j < names.size(); ++j) {
+			if (names[i] == names[j]) {
+				terms_t new_terms;
+				for (const auto& term : terms) {
+					// Halve contribution
+					new_terms[term.first] = term.second / 2;
+					// Make new term
+					auto new_term = term.first;
+					// Apply symmetry
+					swap_indices(new_term, pos_i, pos_j, (index_t)names[i].second);
+					// Insert
+					new_terms[new_term] = term.second / 2;
+				}
+				terms = new_terms;
+			}
+		}
+		pos_i += (index_t)names[i].second;
+	}
+
+	// Young project
+	for (auto symmetry : symmetries) {
+		terms_t new_terms;
+		for (const auto& term : terms) {
+			// Divide contribution
+			new_terms[term.first] += term.second / symmetry.n_perms();
+			// Make new terms
+			symmetry.reset();
+			while (symmetry.next()) {
+				auto new_term = symmetry.apply(term.first);
+				new_terms[new_term.first] += new_term.second * term.second / symmetry.n_perms();
+				if (new_terms[new_term.first] == 0) {
+					new_terms.erase(new_term.first);
+				}
+			}
+		}
+		terms = new_terms;
+	}
+	return terms;
+}
+
+
 
 bool young_reduce::can_apply(iterator it)
-	{
-	return *it->name == "\\sum";
-	}
+{
+	std::cerr << "Checking can_apply on \n" << Ex(it);
+	// Either at a node which looks like pat, or a node which
+	// is a sum of terms which look like pat
 
-void young_reduce::cleanup(iterator& it)
-	{
-	cleanup_dispatch(kernel, tr, it);
+	Ex_comparator comp(kernel.properties);
+
+	if (*it->name == "\\sum") {
+		auto cur = it.begin(), end = it.end();
+		while (cur != end) {
+			auto match = comp.equal_subtree(pat.begin(), cur);
+			if (match != Ex_comparator::match_t::match_index_greater &&
+				match != Ex_comparator::match_t::match_index_less) {
+				std::cerr << "...no\n";
+				return false;
+			}
+			++cur;
+		}
+		std::cerr << "...yes\n";
+		return true;
 	}
+	else {
+		auto match = comp.equal_subtree(pat.begin(), it);
+		auto ret = match == Ex_comparator::match_t::match_index_greater ||
+			match == Ex_comparator::match_t::match_index_less;
+		std::cerr << "..." << (ret ? "yes" : "no") << '\n';
+		return ret;
+	}
+}
 
 young_reduce::result_t young_reduce::apply(iterator& it)
-	{
-	auto its = find_matching_terms(kernel, tr, it, pattern);
-
-	auto res = reduce(it, its);
-	if (res == result_t::l_no_action && search_permutations)
-		res = permute(it, its);
-
-	if (res != result_t::l_no_action)
-		cleanup(it);
-	return res;
-	}
-
-young_reduce::result_t young_reduce::reduce(iterator& it, const std::vector<Ex::iterator>& its)
-	{
-	for (auto combination : get_combinations(its)) {
-		Ex projected_combination = project(kernel, combination.ex);
-		if (projected_combination == 0) {
-			for (auto& old : combination.its)
-				tr.erase(old);
-			if (tr.number_of_children(it) == 0)
-				tr.append_child(it, str_node("0"));
-			return result_t::l_applied;
-			}
-		else {
-			for (auto& cur_it : its) {
-				Ex cur(cur_it);
-				Ex projected_cur = project(kernel, cur);
-				multiplier_t factor = linear_divide(kernel, projected_combination, projected_cur);
-				if (factor != 0) {
-					for (auto& old : combination.its) {
-						if (old != cur_it)
-							tr.erase(old);
-						}
-					multiply(cur_it->multiplier, factor);
-					return result_t::l_applied;
-					}
-				}
+{
+	std::cerr << "Applying on " << Ex(it);
+	terms_t decomp;
+	if (*it->name == "\\sum") {
+		for (auto beg = it.begin(), end = it.end(); beg != end; ++beg) {
+			auto d = symmetrize(beg);
+			for (const auto& kv : d) {
+				decomp[kv.first] += kv.second;
 			}
 		}
-	return result_t::l_no_action;
+	}
+	else {
+		decomp = symmetrize(it);
 	}
 
-young_reduce::result_t young_reduce::permute(iterator& it, const std::vector<Ex::iterator>& its)
-	{
-	for (const auto& combination : get_combinations(its)) {
-		Ex projected_combination = project(kernel, combination.ex);
-		for (const auto& permutation : all_index_permutations(its[0], kernel)) {
-			Ex projected_permutation = project(kernel, permutation);
-			multiplier_t factor = linear_divide(kernel, projected_combination, projected_permutation);
-			if (factor != 0) {
-				for (auto& old : combination.its)
-					tr.erase(old);
-				iterator r = tr.append_child(it, permutation.begin());
-				multiply(r->multiplier, factor);
-				return result_t::l_applied;
-				}
-			}
-		}
-
-	return result_t::l_no_action;
+	auto fact = linear_compare(decomp, pat_decomp);
+	if (fact == 0) {
+		std::cerr << "No match!\n";
+		return result_t::l_no_action;
 	}
+	else {
+		std::cerr << "Matched\n" << Ex(it) << "with factor " << fact << '\n';
+		it = tr.replace(it, pat.begin());
+		multiply(it->multiplier, fact);
+		return result_t::l_applied;
+	}
+}
+

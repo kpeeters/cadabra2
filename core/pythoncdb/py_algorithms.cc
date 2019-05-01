@@ -61,6 +61,7 @@
 #include "../algorithms/young_project.hh"
 #include "../algorithms/young_project_product.hh"
 #include "../algorithms/young_project_tensor.hh"
+#include "../algorithms/young_reduce.hh"
 #include "../algorithms/zoom.hh"
 
 namespace cadabra {
@@ -132,5 +133,6 @@ namespace cadabra {
 		def_algo<split_gamma, bool>(m, "split_gamma", true, false, 0, py::arg("on_back"));
 		def_algo<split_index, Ex>(m, "split_index", true, false, 0, py::arg("rules"));
 		def_algo<unwrap, Ex>(m, "unwrap", true, false, 0, py::arg("wrapper") = Ex{});
+		def_algo<young_reduce, Ex>(m, "young_reduce", true, false, 0, py::arg("pattern"));
 		}
 	}
