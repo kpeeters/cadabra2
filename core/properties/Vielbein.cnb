@@ -1,0 +1,26 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\property{Vielbein}{Convert indices from one type to another}\n\nIndicates that an object can be used to convert indices from one type\nto another, i.e.~is a vielbein or tetrad. For more information, see\n\\verb|eliminate_vielbein|."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\property{Vielbein}{Convert indices from one type to another}\n\nIndicates that an object can be used to convert indices from one type\nto another, i.e.~is a vielbein or tetrad. For more information, see\n\\verb|eliminate_vielbein|."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
