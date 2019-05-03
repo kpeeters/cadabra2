@@ -166,6 +166,12 @@ def test13():
     print("Test 13 passed")
 
 test13()
-        
 
-    
+        
+# { m, n, p }::Indices(flat).
+# { \mu, \nu, \rho }::Indices(curved).
+# e^{m}_{\mu}::Vielbein.
+# e_{m}^{\mu}::InverseVielbein.
+# ex:= e_{m}^{\mu} e^{m}_{\nu};
+# eliminate_vielbein(_);
+

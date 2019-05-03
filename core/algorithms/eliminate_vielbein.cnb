@@ -1,21 +1,80 @@
 {
+	"cell_id" : 11106264074822655606,
 	"cells" : 
 	[
 		{
+			"cell_id" : 7416860080608086163,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1537526125551451146,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\algorithm{eliminate_vielbein}{Eliminates vielbein objects.}\n\nNot implemented yet in \\verb|Cadabra2|."
+					"source" : "\\algorithm{eliminate_vielbein}{Eliminates vielbein objects.}\n\nIndices of one type can be converted to another type by using a vielbein or inverse \nvielbein object."
 				}
 			],
 			"hidden" : true,
-			"source" : "\\algorithm{eliminate_vielbein}{Eliminates vielbein objects.}\n\nNot implemented yet in \\verb|Cadabra2|."
+			"source" : "\\algorithm{eliminate_vielbein}{Eliminates vielbein objects.}\n\nIndices of one type can be converted to another type by using a vielbein or inverse \nvielbein object."
 		},
 		{
+			"cell_id" : 13229131517806571971,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775809,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775810,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "H_{m n p} e^{m}_{\\mu} e^{p}_{\\rho}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}H_{m n p} e^{m}\\,_{\\mu} e^{p}\\,_{\\rho}\\end{dmath*}"
+				},
+				{
+					"cell_id" : 9223372036854775811,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775812,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "H_{\\mu n \\rho}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}H_{\\mu n \\rho}\\end{dmath*}"
+				}
+			],
+			"source" : "{ m, n, p }::Indices(flat).\n{ \\mu, \\nu, \\rho }::Indices(curved).\ne^{m}_{\\mu}::Vielbein.\nex:= H_{m n p} e^{m}_{\\mu} e^{p}_{\\rho};\neliminate_vielbein(_, repeat=True);"
+		},
+		{
+			"cell_id" : 11698189436523020544,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 13335616640459284672,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "This is similar to \\algo{eliminate_metric}."
+				}
+			],
+			"hidden" : true,
+			"source" : "This is similar to \\algo{eliminate_metric}."
+		},
+		{
+			"cell_id" : 12210912534254123318,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
