@@ -1,0 +1,26 @@
+{
+	"cells" : 
+	[
+		{
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{eliminate_vielbein}{Eliminates vielbein objects.}\n\nNot implemented yet in \\verb|Cadabra2|."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{eliminate_vielbein}{Eliminates vielbein objects.}\n\nNot implemented yet in \\verb|Cadabra2|."
+		},
+		{
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}
