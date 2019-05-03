@@ -4,6 +4,8 @@
 #include "properties/Metric.hh"
 #include "properties/InverseMetric.hh"
 
+//#define DEBUG 1
+
 using namespace cadabra;
 
 eliminate_metric::eliminate_metric(const Kernel& k, Ex& e, Ex& pref)
@@ -35,15 +37,29 @@ bool eliminate_converter::handle_one_index(index_iterator ind1, index_iterator i
 	{
 	bool replaced=false;
 
+#ifdef DEBUG
+	std::cerr << "handling " << ind1 << ", " << ind2 << ", " << fit << std::endl;
+#endif
+	
 	// For a conversion to be possible, we need one upper and one lower index
 	// (for position!=free) or two indices (for position=free).
 
-	auto locs= ind_dummy.equal_range(Ex(ind1));
+#ifdef DEBUG
+	std::cerr << "dummies: " << std::endl;
+	for(const auto& d: ind_dummy)
+		std::cerr << d.second << std::endl;
+#endif
+	
+	auto locs= ind_dummy.equal_range(Ex(ind1)); 
 	int num1=std::distance(locs.first, locs.second);
 	Ex other(ind1);
-	other.begin()->flip_parent_rel();
+	other.begin()->flip_parent_rel(); 
 	locs = ind_dummy.equal_range(other);
 	int num2=std::distance(locs.first, locs.second);
+
+#ifdef DEBUG
+	std::cerr << "num1 = " << num1 << ", num2 = " << num2 << std::endl;
+#endif
 
 	if(num1==1 && num2==1) {
 		while(locs.first!=locs.second) {
@@ -52,11 +68,17 @@ bool eliminate_converter::handle_one_index(index_iterator ind1, index_iterator i
 				// (if there is no preferred form, always eliminate)
 				if(separated_by_derivative(locs.first->second, ind2, fit)==false) {
 					if(objs==preferred.end()) { // no
+#ifdef DEBUG
+						std::cerr << "Eliminate regardless" << std::endl;
+#endif
 						tr.move_ontop(locs.first->second, iterator(ind2))->fl.parent_rel=ind2->fl.parent_rel;;
 						fit=tr.erase(fit);
 						replaced=true;
 						}
 					else {   // yes
+#ifdef DEBUG
+						std::cerr << "Index on preferred form tensor" << std::endl;
+#endif
 						iterator par=tr.parent(locs.first->second);
 						sibling_iterator prefit=tr.begin(objs);
 						while(prefit!=tr.end(objs)) {

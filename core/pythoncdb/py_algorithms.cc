@@ -17,6 +17,7 @@
 #include "../algorithms/einsteinify.hh"
 #include "../algorithms/eliminate_kronecker.hh"
 #include "../algorithms/eliminate_metric.hh"
+#include "../algorithms/eliminate_vielbein.hh"
 #include "../algorithms/epsilon_to_delta.hh"
 #include "../algorithms/evaluate.hh"
 #include "../algorithms/expand.hh"
@@ -103,6 +104,7 @@ namespace cadabra {
 		def_algo<complete, Ex>(m, "complete", false, false, 0, py::arg("add"));
 		def_algo<decompose, Ex>(m, "decompose", false, false, 0, py::arg("basis"));
 		def_algo<eliminate_metric, Ex>(m, "eliminate_metric", true, false, 0, py::arg("preferred") = Ex{});
+		def_algo<eliminate_vielbein, Ex>(m, "eliminate_vielbein", true, false, 0, py::arg("preferred") = Ex{});		
 		def_algo<keep_weight, Ex>(m, "keep_weight", false, false, 0, py::arg("condition"));
 		def_algo<lower_free_indices, bool>(m, "lower_free_indices", true, false, 0, py::arg("lower") = true);
 		def_algo<lower_free_indices, bool>(m, "raise_free_indices", true, false, 0, py::arg("lower") = false);

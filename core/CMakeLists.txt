@@ -54,6 +54,7 @@ SET(ALGORITHM_SRC_FILES
 	algorithms/einsteinify.cc
 	algorithms/eliminate_kronecker.cc
 	algorithms/eliminate_metric.cc
+	algorithms/eliminate_vielbein.cc   
 	algorithms/epsilon_to_delta.cc
 	algorithms/evaluate.cc
 	algorithms/expand.cc

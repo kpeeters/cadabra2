@@ -19,7 +19,15 @@ namespace cadabra {
 		private:
 			Ex          preferred;
 			index_map_t ind_dummy, ind_free;
-			bool handle_one_index(index_iterator, index_iterator, iterator, sibling_iterator);
+
+			/// See if the conversion which turns index 'i1' into index
+			/// 'i2' can be applied on the expression, so that it gets a
+			/// factor in the expression closer to the 'fit' form.
+			/// The two indices 'i1' and 'i2' are objects on the convertor
+			/// object, so they need to appear with opposite parent rel
+			/// in the expression if they are to be applied (if the index
+			/// position type is 'fixed').
+			bool handle_one_index(index_iterator i1, index_iterator i2, iterator fit, sibling_iterator objs);
 		};
 
 

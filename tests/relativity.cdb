@@ -153,3 +153,19 @@ def test12():
     print("Test 12 passed")
 
 test12()
+
+def test13():
+    __cdbkernel__=create_scope()  
+    { m, n, p }::Indices(flat).
+    { \mu, \nu, \rho }::Indices(curved).
+    e^{m}_{\mu}::Vielbein.
+    ex:= H_{m n p} e^{m}_{\mu} e^{p}_{\rho};
+    eliminate_vielbein(_, repeat=True);
+    tst:= H_{\mu n \rho} - @(ex);
+    assert(tst==0)
+    print("Test 13 passed")
+
+test13()
+        
+
+    

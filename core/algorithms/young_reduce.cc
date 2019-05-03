@@ -47,7 +47,7 @@ public:
 		reset();
 	}
 
-	static std::vector<Symmetry> Symmetry::enumerate_tableau(tableau_t& tab)
+	static std::vector<Symmetry> enumerate_tableau(tableau_t& tab)
 	{
 		std::vector<Symmetry> syms;
 
@@ -101,7 +101,7 @@ public:
 	std::pair<indices_t, int> apply(const indices_t & original) const
 	{
 		auto ret = std::make_pair(original, parity);
-		for (int i = 0; i < indices.size(); ++i) {
+		for (size_t i = 0; i < indices.size(); ++i) {
 			ret.first[indices[i]] = original[perm[i]];
 		}
 		for (auto index : indices) {
@@ -217,7 +217,7 @@ terms_t young_reduce::symmetrize(Ex::iterator it)
 		if (identity[i] >= 0) {
 			continue;
 		}
-		auto pos = std::distance(indices.begin(), std::find(indices.begin() + i + 1, indices.end(), indices[i]));
+		size_t pos = std::distance(indices.begin(), std::find(indices.begin() + i + 1, indices.end(), indices[i]));
 		if (pos == indices.size()) {
 			identity[i] = -indices[i];
 		}
@@ -232,9 +232,9 @@ terms_t young_reduce::symmetrize(Ex::iterator it)
 
 	// Symmetrize in identical tensors
 	index_t pos_i = 0;
-	for (auto i = 0; i < names.size(); ++i) {
+	for (size_t i = 0; i < names.size(); ++i) {
 		index_t pos_j = pos_i + (index_t)names[i].second;
-		for (auto j = i + 1; j < names.size(); ++j) {
+		for (size_t j = i + 1; j < names.size(); ++j) {
 			if (names[i] == names[j]) {
 				terms_t new_terms;
 				for (const auto& term : terms) {
