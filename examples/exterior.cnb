@@ -1,12 +1,15 @@
 {
+	"cell_id" : 17942456533940163234,
 	"cells" : 
 	[
 		{
+			"cell_id" : 11340042467900394662,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9417804978734591005,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\section*{Differential forms}\n\nCadabra can handle the calculus of differential forms. Differential forms are declared by attaching\nthe property \\prop{DifferentialForm} to an object, as in the example below, where we declare\nfour forms, with degree 0 to 3, and one form with symbolic degree $p$."
@@ -16,31 +19,37 @@
 			"source" : "\\section*{Differential forms}\n\nCadabra can handle the calculus of differential forms. Differential forms are declared by attaching\nthe property \\prop{DifferentialForm} to an object, as in the example below, where we declare\nfour forms, with degree 0 to 3, and one form with symbolic degree $p$."
 		},
 		{
+			"cell_id" : 8887426986920168478,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775809,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(0)}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775810,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(1)}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775811,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(2)}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775812,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}A^{(3)}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775813,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}B^{(p)}.\\end{dmath*}"
@@ -49,11 +58,13 @@
 			"source" : "A0::LaTeXForm(\"A^{(0)}\").\nA1::LaTeXForm(\"A^{(1)}\").\nA2::LaTeXForm(\"A^{(2)}\").\nA3::LaTeXForm(\"A^{(3)}\").\nBp::LaTeXForm(\"B^{(p)}\").\nA0::DifferentialForm(degree=0);\nA1::DifferentialForm(degree=1);\nA2::DifferentialForm(degree=2);\nA3::DifferentialForm(degree=3);\nBp::DifferentialForm(degree=p);"
 		},
 		{
+			"cell_id" : 9245929567340263576,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 10731088970142001207,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The exterior product (or wedge product) of forms is denoted with a \\verb|^| symbol (make sure to put a space\nbefore and after this symbol to avoid confusion with a superscript)."
@@ -63,19 +74,22 @@
 			"source" : "The exterior product (or wedge product) of forms is denoted with a \\verb|^| symbol (make sure to put a space\nbefore and after this symbol to avoid confusion with a superscript)."
 		},
 		{
+			"cell_id" : 4953780234914878080,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775815,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 9223372036854775816,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\wedge(A1 , A2) + \\wedge(A2 , A1)"
+							"source" : "A1 ^ A2 + A2 ^ A1"
 						}
 					],
 					"source" : "\\begin{dmath*}{}A^{(1)}\\wedge A^{(2)}+A^{(2)}\\wedge A^{(1)}\\end{dmath*}"
@@ -84,19 +98,22 @@
 			"source" : "ex:=A1 ^ A2 + A2 ^ A1;"
 		},
 		{
+			"cell_id" : 1319382506597754390,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775818,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 9223372036854775819,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "2\\wedge(A1 , A2)"
+							"source" : "2A1 ^ A2"
 						}
 					],
 					"source" : "\\begin{dmath*}{}2A^{(1)}\\wedge A^{(2)}\\end{dmath*}"
@@ -105,29 +122,34 @@
 			"source" : "sort_product(_);"
 		},
 		{
+			"cell_id" : 9265232820241736682,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775821,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 9223372036854775822,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\wedge(A1 , A2 , A1)"
+							"source" : "A1 ^ A2 ^ A1"
 						}
 					],
 					"source" : "\\begin{dmath*}{}A^{(1)}\\wedge A^{(2)}\\wedge A^{(1)}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775823,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 9223372036854775824,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "0"
@@ -139,45 +161,43 @@
 			"source" : "ex:=A1 ^ A2 ^ A1;\nsort_product(_);"
 		},
 		{
+			"cell_id" : 4020737267376578434,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775826,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 9223372036854775827,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\wedge(A3 , A2 , A1 , A2)"
+							"source" : "A3 ^ A2 ^ A1 ^ A2"
 						}
 					],
 					"source" : "\\begin{dmath*}{}A^{(3)}\\wedge A^{(2)}\\wedge A^{(1)}\\wedge A^{(2)}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775828,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "-\\wedge(A1 , A2 , A2 , A3)"
-						}
-					],
 					"source" : "\\begin{dmath*}{}-A^{(1)}\\wedge A^{(2)}\\wedge A^{(2)}\\wedge A^{(3)}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:= A3 ^ A2 ^ A1 ^ A2;\nsort_product(_);"
 		},
 		{
+			"cell_id" : 14722099834296306032,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 15780429776499677377,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "An exterior derivative can be declared by using the \\prop{ExteriorDerivative} property. Applying an exterior\nderivative twice produces zero, and it obeys the product rule taking into account the degree of differential forms."
@@ -187,11 +207,13 @@
 			"source" : "An exterior derivative can be declared by using the \\prop{ExteriorDerivative} property. Applying an exterior\nderivative twice produces zero, and it obeys the product rule taking into account the degree of differential forms."
 		},
 		{
+			"cell_id" : 15528343336642185683,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775831,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}d{\\#}.\\end{dmath*}"
@@ -200,76 +222,133 @@
 			"source" : "d{#}::ExteriorDerivative;\nd{#}::LaTeXForm(\"{\\rm d}\")."
 		},
 		{
+			"cell_id" : 1144807404142193736,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775833,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}2{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}\\right)\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775834,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-d(A1 ^ A2 ^ A2 ^ A3)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}\\wedge A^{(2)}\\wedge A^{(3)}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex2:= d{ @(ex) };"
 		},
 		{
+			"cell_id" : 12023467755791252355,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775836,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}2{\\rm d}{A^{(1)}}\\wedge A^{(2)}-2A^{(1)}\\wedge {\\rm d}{A^{(2)}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775837,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-d(A1) ^ A2 ^ A2 ^ A3 + A1 ^ d(A2) ^ A2 ^ A3 + A1 ^ A2 ^ d(A2) ^ A3 + A1 ^ A2 ^ A2 ^ d(A3)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-{\\rm d}{A^{(1)}}\\wedge A^{(2)}\\wedge A^{(2)}\\wedge A^{(3)}+A^{(1)}\\wedge {\\rm d}{A^{(2)}}\\wedge A^{(2)}\\wedge A^{(3)}+A^{(1)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(2)}}\\wedge A^{(3)}+A^{(1)}\\wedge A^{(2)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(3)}}\\end{dmath*}"
 				}
 			],
 			"source" : "product_rule(_);"
 		},
 		{
+			"cell_id" : 8520254541109020363,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775839,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775840,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "d(A1 ^ A2 ^ d(A3))"
+						}
+					],
 					"source" : "\\begin{dmath*}{}{\\rm d}\\left(A^{(1)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(3)}}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex:= d{ A1 ^ A2 ^ d{ A3 } };"
 		},
 		{
+			"cell_id" : 9883512770807428270,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775842,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775843,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "d(A1) ^ A2 ^ d(A3)-A1 ^ d(A2) ^ d(A3)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}{\\rm d}{A^{(1)}}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(3)}}-A^{(1)}\\wedge {\\rm d}{A^{(2)}}\\wedge {\\rm d}{A^{(3)}}\\end{dmath*}"
 				}
 			],
 			"source" : "product_rule(_);"
 		},
 		{
+			"cell_id" : 3882037680778395718,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775845,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775846,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A2 ^ d(A1) ^ d(A3)-A1 ^ d(A2) ^ d(A3)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}A^{(2)}\\wedge {\\rm d}{A^{(1)}}\\wedge {\\rm d}{A^{(3)}}-A^{(1)}\\wedge {\\rm d}{A^{(2)}}\\wedge {\\rm d}{A^{(3)}}\\end{dmath*}"
 				}
 			],
 			"source" : "sort_product(_);"
 		},
 		{
+			"cell_id" : 7388374175146732527,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7893177832322756865,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Two forms in a product can only be swapped around if one of their degrees is zero:"
@@ -279,29 +358,52 @@
 			"source" : "Two forms in a product can only be swapped around if one of their degrees is zero:"
 		},
 		{
+			"cell_id" : 7517601938794019119,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775848,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775849,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A2 A0 + A0 A2"
+						}
+					],
 					"source" : "\\begin{dmath*}{}A^{(2)} A^{(0)}+A^{(0)} A^{(2)}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775850,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775851,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "2A0 A2"
+						}
+					],
 					"source" : "\\begin{dmath*}{}2A^{(0)} A^{(2)}\\end{dmath*}"
 				}
 			],
 			"source" : "ex4:= A2 A0 + A0 A2;\nsort_product(_);"
 		},
 		{
+			"cell_id" : 4180056803145046336,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4007756470112194266,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "In a wedge product, forms can be swapped around taking into account their degree:"
@@ -311,29 +413,52 @@
 			"source" : "In a wedge product, forms can be swapped around taking into account their degree:"
 		},
 		{
+			"cell_id" : 1994676414667850866,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775853,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775854,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "A3 ^ A1-A1 ^ A3 + A2 ^ A2 ^ A0"
+						}
+					],
 					"source" : "\\begin{dmath*}{}A^{(3)}\\wedge A^{(1)}-A^{(1)}\\wedge A^{(3)}+A^{(2)}\\wedge A^{(2)}\\wedge A^{(0)}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775855,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775856,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-2A1 ^ A3 + A0 ^ A2 ^ A2"
+						}
+					],
 					"source" : "\\begin{dmath*}{}-2A^{(1)}\\wedge A^{(3)}+A^{(0)}\\wedge A^{(2)}\\wedge A^{(2)}\\end{dmath*}"
 				}
 			],
 			"source" : "ex5:= A3 ^ A1 - A1 ^ A3 + A2 ^ A2 ^ A0;\nsort_product(_);"
 		},
 		{
+			"cell_id" : 3478897637566888729,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1174853405546436749,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Differential forms can have tensor indices, e.g.~for vielbeine or spin connections:"
@@ -343,91 +468,169 @@
 			"source" : "Differential forms can have tensor indices, e.g.~for vielbeine or spin connections:"
 		},
 		{
+			"cell_id" : 16323106096533524039,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775858,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[a,~\\discretionary{}{}{} b,~\\discretionary{}{}{} c\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775859,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}e^{a}.\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}\\omega^{a}\\,_{b}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}\\left[e^{a},~\\discretionary{}{}{} \\omega^{a}\\,_{b}\\right].\\end{dmath*}"
 				}
 			],
-			"source" : "{a,b,c}::Indices;\ne^{a}::DifferentialForm(degree=1);\n\\omega^{a}_{b}::DifferentialForm(degree=2);"
+			"source" : "{a,b,c}::Indices;\n{e^{a}, \\omega^{a}_{b}}::DifferentialForm(degree=1);"
 		},
 		{
+			"cell_id" : 569944791880263975,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775861,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775862,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "d(e^{a}) = -\\omega^{a}_{b} ^ e^{b}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}{\\rm d}{e^{a}} = -\\omega^{a}\\,_{b}\\wedge e^{b}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=d{e^{a}} = - \\omega^{a}_{b} ^ e^{b};"
 		},
 		{
+			"cell_id" : 15096640937298439073,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775864,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775865,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = -d(\\omega^{a}_{b} ^ e^{b})"
+						}
+					],
 					"source" : "\\begin{dmath*}{}0 = -{\\rm d}\\left(\\omega^{a}\\,_{b}\\wedge e^{b}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "cv:= d{ @(ex) };"
 		},
 		{
+			"cell_id" : 2802247552303887267,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775867,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775868,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = -d(\\omega^{a}_{b} ^ e^{b})"
+						}
+					],
 					"source" : "\\begin{dmath*}{}0 = -{\\rm d}\\left(\\omega^{a}\\,_{b}\\wedge e^{b}\\right)\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775869,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}0 = -{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge {\\rm d}{e^{b}}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775870,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = -d(\\omega^{a}_{b}) ^ e^{b} + \\omega^{a}_{b} ^ d(e^{b})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0 = -{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}+\\omega^{a}\\,_{b}\\wedge {\\rm d}{e^{b}}\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(cv);\nproduct_rule(cv);"
 		},
 		{
+			"cell_id" : 16406542458279560327,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775872,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}0 = -{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}+\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}\\wedge e^{c}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775873,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = -d(\\omega^{a}_{b}) ^ e^{b}-\\omega^{a}_{b} ^ \\omega^{b}_{c} ^ e^{c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0 = -{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}\\wedge e^{c}\\end{dmath*}"
 				}
 			],
 			"source" : "substitute(cv, ex);"
 		},
 		{
+			"cell_id" : 10258893899376774313,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775878,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775879,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "0 = -d(\\omega^{a}_{b}) ^ e^{b}-\\omega^{a}_{b} ^ \\omega^{b}_{c} ^ e^{c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}0 = -{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}\\wedge e^{c}\\end{dmath*}"
+				}
+			],
+			"source" : "rename_dummies(cv);"
+		},
+		{
+			"cell_id" : 16913818003335919797,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6957951781041518552,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Some more random assorted ramblings below, not finished yet!!!"
@@ -437,122 +640,214 @@
 			"source" : "Some more random assorted ramblings below, not finished yet!!!"
 		},
 		{
+			"cell_id" : 5914123710050700613,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775875,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775876,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "d(-2A1 ^ A3 + A0 ^ A2 ^ A2)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}{\\rm d}\\left(-2A^{(1)}\\wedge A^{(3)}+A^{(0)}\\wedge A^{(2)}\\wedge A^{(2)}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex4:= d{ @(ex5) };"
 		},
 		{
+			"cell_id" : 6700747750860875507,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775878,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775879,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-2d(A1 ^ A3) + d(A0 ^ A2 ^ A2)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}-2{\\rm d}\\left(A^{(1)}\\wedge A^{(3)}\\right)+{\\rm d}\\left(A^{(0)}\\wedge A^{(2)}\\wedge A^{(2)}\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(_);"
 		},
 		{
+			"cell_id" : 15415966661854912494,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775881,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775882,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-2d(A1) ^ A3 + 2A1 ^ d(A3) + d(A0) ^ A2 ^ A2 + A0 ^ d(A2) ^ A2 + A0 ^ A2 ^ d(A2)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}-2{\\rm d}{A^{(1)}}\\wedge A^{(3)}+2A^{(1)}\\wedge {\\rm d}{A^{(3)}}+{\\rm d}{A^{(0)}}\\wedge A^{(2)}\\wedge A^{(2)}+A^{(0)}\\wedge {\\rm d}{A^{(2)}}\\wedge A^{(2)}+A^{(0)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(2)}}\\end{dmath*}"
 				}
 			],
 			"source" : "product_rule(_);"
 		},
 		{
+			"cell_id" : 4457834258149327361,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775884,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775885,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-2A3 ^ d(A1) + 2A1 ^ d(A3) + A2 ^ A2 ^ d(A0) + 2A0 ^ A2 ^ d(A2)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}-2A^{(3)}\\wedge {\\rm d}{A^{(1)}}+2A^{(1)}\\wedge {\\rm d}{A^{(3)}}+A^{(2)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(0)}}+2A^{(0)}\\wedge A^{(2)}\\wedge {\\rm d}{A^{(2)}}\\end{dmath*}"
 				}
 			],
 			"source" : "sort_product(_);"
 		},
 		{
+			"cell_id" : 4984116761811257240,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775809,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left\\{i, \\linebreak[0] j, \\linebreak[0] k, \\linebreak[0] l\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[i,~\\discretionary{}{}{} j,~\\discretionary{}{}{} k,~\\discretionary{}{}{} l\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775810,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left\\{i, \\linebreak[0] j, \\linebreak[0] k, \\linebreak[0] l\\right\\}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property Integer to~}\\left[i,~\\discretionary{}{}{} j,~\\discretionary{}{}{} k,~\\discretionary{}{}{} l\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775811,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property EpsilonTensor to~}\\epsilon^{i j k}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775812,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}{\\rm d}{\\#}.\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property ExteriorDerivative to~}d{\\#}.\\end{dmath*}"
 				}
 			],
 			"source" : "{i,j,k,l}::Indices(values={1,2,3});\n{i,j,k,l}::Integer(1..3);\n\\epsilon^{i j k}::EpsilonTensor;\nd{#}::ExteriorDerivative;\nd{#}::LaTeXForm(\"{\\rm d}\")."
 		},
 		{
+			"cell_id" : 6955768955919678707,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775814,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775815,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\epsilon^{i j k}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\epsilon^{i j k}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=\\epsilon^{i j k};"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"source" : "evaluate(_, $$);"
-		},
-		{
+			"cell_id" : 146115869353297447,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775817,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\left\\{\\Sigma^{1} = \\cos{\\psi} {\\rm d}{\\theta}+\\sin{\\psi} \\sin{\\theta} {\\rm d}{\\phi}, \\linebreak[0] \\Sigma^{2} = -\\sin{\\psi} {\\rm d}{\\theta}+\\cos{\\psi} \\sin{\\theta} {\\rm d}{\\phi}, \\linebreak[0] \\Sigma^{3} = \\cos{\\theta} {\\rm d}{\\phi}+{\\rm d}{\\psi}\\right\\}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775818,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\components^{i j k}({{1, 2, 3} = 1, {1, 3, 2} = -1, {2, 1, 3} = -1, {2, 3, 1} = 1, {3, 1, 2} = 1, {3, 2, 1} = -1})"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\square{}^{i}{}^{j}{}^{k}\\left\\{\\begin{aligned}\\square{}^{1}{}^{2}{}^{3}= & 1\\\\[-.5ex]\n\\square{}^{1}{}^{3}{}^{2}= & -1\\\\[-.5ex]\n\\square{}^{2}{}^{1}{}^{3}= & -1\\\\[-.5ex]\n\\square{}^{2}{}^{3}{}^{1}= & 1\\\\[-.5ex]\n\\square{}^{3}{}^{1}{}^{2}= & 1\\\\[-.5ex]\n\\square{}^{3}{}^{2}{}^{1}= & -1\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
+				}
+			],
+			"source" : "evaluate(_, $$);"
+		},
+		{
+			"cell_id" : 6999986821528213344,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775820,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775821,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{\\Sigma^{1} = \\cos(\\psi) d(\\theta) + \\sin(\\psi) \\sin(\\theta) d(\\phi), \\Sigma^{2} = -\\sin(\\psi) d(\\theta) + \\cos(\\psi) \\sin(\\theta) d(\\phi), \\Sigma^{3} = \\cos(\\theta) d(\\phi) + d(\\psi)}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left[\\Sigma^{1} = \\cos{\\psi} {\\rm d}{\\theta}+\\sin{\\psi} \\sin{\\theta} {\\rm d}{\\phi},~\\discretionary{}{}{} \\Sigma^{2} = -\\sin{\\psi} {\\rm d}{\\theta}+\\cos{\\psi} \\sin{\\theta} {\\rm d}{\\phi},~\\discretionary{}{}{} \\Sigma^{3} = \\cos{\\theta} {\\rm d}{\\phi}+{\\rm d}{\\psi}\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "rl:= { \\Sigma^{1} =  \\cos{\\psi} d{\\theta} + \\sin{\\psi} \\sin{\\theta} d{\\phi},\n       \\Sigma^{2} = -\\sin{\\psi} d{\\theta} + \\cos{\\psi} \\sin{\\theta} d{\\phi},\n       \\Sigma^{3} =  \\cos{\\theta} d{\\phi} + d{\\psi} };"
 		},
 		{
+			"cell_id" : 2266077326488286745,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775823,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{} - \\frac{1}{2}\\epsilon^{i j k} \\Sigma^{j}\\wedge \\Sigma^{k}\\end{dmath*}"
@@ -561,11 +856,13 @@
 			"source" : "tst:= -1/2 \\epsilon^{i j k} \\Sigma^{j} ^ \\Sigma^{k};"
 		},
 		{
+			"cell_id" : 11941205435825729702,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775826,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}0\\end{dmath*}"
@@ -574,6 +871,7 @@
 			"source" : "evaluate(tst, rl);"
 		},
 		{
+			"cell_id" : 8836380534498282216,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
