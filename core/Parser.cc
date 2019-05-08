@@ -27,6 +27,8 @@ You should have received a copy of the GNU General Public License
 #include <iostream>
 #include <typeinfo>
 
+// #define DEBUG 1
+
 std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 	{
 	std::string inp;
@@ -37,11 +39,9 @@ std::istream& operator>>(std::istream& str, cadabra::Parser& pa)
 		if(inp[inp.size()-1]=='.') inp=inp.substr(0,inp.size()-1);
 		//		std::cout << "[" << inp << "]" << std::endl;
 
-//		std::cerr << inp.size() << std::endl;
-//		std::cerr << inp << std::endl;
-//		std::cerr << nw.size() << " " << typeid(nw[0]).name() << std::endl;
-//		std::string res=conv.to_bytes(nw);
-//		std::cerr << res << std::endl;
+#ifdef DEBUG
+		std::cerr << inp << std::endl;
+#endif
 		
 		pa.string2tree(inp);
 		}
