@@ -1,5 +1,5 @@
 {
-	"cell_id" : 1417818710180402631,
+	"cell_id" : 14643089922803689914,
 	"cells" : 
 	[
 		{
@@ -390,14 +390,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9876826404430152262,
+					"cell_id" : 4549200947217648772,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "The above result, when written in tensorial components, isthe well-known\n\\emph{differential} Bianchi identity:\n\\begin{equation*}\n  R^\\mu{}_{\\nu\\lambda\\rho;\\sigma} + R^\\mu{}_{\\nu\\sigma\\lambda;\\rho} + R^\\mu{}_{\\nu\\rho\\sigma;\\lambda} = 0.\n\\end{equation*}"
+					"source" : "The above result, when written in tensorial components, is the well-known\n\\emph{differential} Bianchi identity:\n\\begin{equation*}\n  R^\\mu{}_{\\nu\\lambda\\rho;\\sigma} + R^\\mu{}_{\\nu\\sigma\\lambda;\\rho} + R^\\mu{}_{\\nu\\rho\\sigma;\\lambda} = 0.\n\\end{equation*}"
 				}
 			],
 			"hidden" : true,
-			"source" : "The above result, when written in tensorial components, isthe well-known\n\\emph{differential} Bianchi identity:\n\\begin{equation*}\n  R^\\mu{}_{\\nu\\lambda\\rho;\\sigma} + R^\\mu{}_{\\nu\\sigma\\lambda;\\rho} + R^\\mu{}_{\\nu\\rho\\sigma;\\lambda} = 0.\n\\end{equation*}"
+			"source" : "The above result, when written in tensorial components, is the well-known\n\\emph{differential} Bianchi identity:\n\\begin{equation*}\n  R^\\mu{}_{\\nu\\lambda\\rho;\\sigma} + R^\\mu{}_{\\nu\\sigma\\lambda;\\rho} + R^\\mu{}_{\\nu\\rho\\sigma;\\lambda} = 0.\n\\end{equation*}"
 		},
 		{
 			"cell_id" : 13682950063533411677,

@@ -15,6 +15,9 @@ See tests/components.cdb for basic samples.
 
 Components nodes have the following structure:
 
+  \components_{a b ... n}({t,t,...r}=value, {t,t,...r}=value, ...)
+
+
 			\verbatim
 
   			\components

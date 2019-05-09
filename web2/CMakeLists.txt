@@ -46,6 +46,7 @@ set(TUTORIALS
 
 set(CONTRIBS
   einstein_equations
+  structure_equations_and_bianchi
   )
 
 # Manual pages; just add the algorithm or property name to the lists below
