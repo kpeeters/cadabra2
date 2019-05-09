@@ -1,5 +1,5 @@
 {
-	"cell_id" : 8723663301882487515,
+	"cell_id" : 1417818710180402631,
 	"cells" : 
 	[
 		{
@@ -9,30 +9,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 13566077905728163112,
+					"cell_id" : 18043264383205729330,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "\\part*{Cartan structural equations and Bianchi identity}\n\n\\author{Oscar Castillo-Felisola}\n\n\\section*{Theoretical background}\n\nLet $M$ be a manifold, and $g$ a (semi)Riemannian metric defined on $M$. Then the line element for the metric $g$ is\n\\begin{equation*}\n  d{s}^2(g) = g_{\\mu\\nu} d{x}^\\mu \\otimes d{x}^\\nu.\n\\end{equation*}\nNonetheless, the information about the metric structure of the manifold can be translate to the languages of frames,\n\\begin{equation*}\n  \\begin{split}\n    d{s}^2(g)\n    &= g_{\\mu\\nu} d{x}^\\mu \\otimes d{x}^\\nu \\\\\n    &= \\eta_{ab} \\; e^{a}_{\\mu}(x) \\, e^{b}_{\\nu}(x) \\; d{x}^\\mu \\otimes d{x}^\\nu \\\\\n    &= \\eta_{ab} \\; e^{a} \\otimes e^{b}.\n  \\end{split}\n\\end{equation*}\nTherefore, the vielbein, $e^{a}$, is the fields equivalent to the metric tensor. \nIn order to complete the structure, one needs information about the transport of \ngeometrical objects lying on bundles based on $M$. That information is encoded on \nthe spin connection, $\\omega^{a}{}_{b}$. Using these quantities one finds  the \ngeneralisation of the structure equations of Cartan,\n\\begin{align}\n  d e^{a} + \\omega^{a}{}_{b} \\wedge e^{b} & = T^{a},\n  \\label{firstSE}\\\\\n  d \\omega^{a}{}_{c} + \\omega^{a}{}_{b} \\wedge \\omega^{b}{}_{c} & = R^{a}{}_{c}\n  \\label{secondSE}.\n\\end{align}\nIn the sense of the previous lesson, the torsion 2-form, $T^{a}$, and the curvature 2-form,\n$R^{a}{}_{c}$, measure the impossibility of endow an Euclidean structure on $M$."
+					"source" : "\\newcommand*{\\de}[1]{\\mathop{\\mathrm{d}#1}\\nolimits}\n\\newcommand{\\vi}[2]{e^{#1}_{#2}}\n\\newcommand\\vif[1]{\\mathrm{e}^{{#1}}}\n\\newcommand\\spif[2]{{\\mathrm{\\omega}}^{{#1}}{}_{{#2}}}\n\\newcommand{\\Rif}[2]{\\mathrm{R}^{{#1}}{}_{{#2}}}\n\\newcommand{\\Tf}[1]{\\mathrm{T}^{#1}}\n\\newcommand{\\we}{\\mathop{\\scriptstyle\\wedge}}\n\n\\part*{Cartan structural equations and Bianchi identity}\n\n\\author{Oscar Castillo-Felisola}\n\n\\section*{Theoretical background}\n\nLet $M$ be a manifold, and $g$ a (semi)Riemannian metric defined on $M$. Then the line element for the metric $g$ is\n\\begin{equation*}\n  \\de{s}^2(g) = g_{\\mu\\nu} \\de{x}^\\mu \\otimes \\de{x}^\\nu.\n\\end{equation*}\nNonetheless, the information about the metric structure of the manifold can be translated to the language of frames,\n\\begin{equation*}\n  \\begin{split}\n    \\de{s}^2(g)\n    & = g_{\\mu\\nu} \\de{x}^\\mu \\otimes \\de{x}^\\nu \\\\\n    & = \\eta_{ab} \\; \\vi{a}{\\mu}(x) \\, \\vi{b}{\\nu}(x) \\; \\de{x}^\\mu \\otimes \\de{x}^\\nu \\\\\n    & = \\eta_{ab} \\; \\vif{a} \\otimes \\vif{b}.\n  \\end{split}\n\\end{equation*}\nTherefore, the vielbein 1-form, $\\vif{a} \\equiv \\vi{a}{\\mu}(x) \\de{x}^\\mu$, encodes the information of the metric tensor.\nIn order to complete the structure, one needs information about the transport of geometrical objects lying on bundles\nbased on $M$. That information is encoded on the spin connection 1-form, $\\spif{a}{b}$. Using these quantities one finds\nthe generalisation of the structure equations of Cartan,\n\\begin{align}\n  \\de{\\vif{a}} + \\spif{a}{b} \\we \\vif{b} & = \\Tf{a},\n  \\label{firstSE}\\\\\n  \\de{\\spif{a}{c}} + \\spif{a}{b} \\we \\spif{b}{c} & = \\Rif{a}{c}\n  \\label{secondSE}.\n\\end{align}\nThe torsion 2-form, $\\Tf{a}$, and the curvature 2-form, $\\Rif{a}{c}$, measure the impossibility of endowing $M$ with\nan Euclidean structure.\n\n\\section*{Manipulation of the structural equations}\n\n\\subsection*{Definitions}"
 				}
 			],
 			"hidden" : true,
-			"source" : "\\part*{Cartan structural equations and Bianchi identity}\n\n\\author{Oscar Castillo-Felisola}\n\n\\section*{Theoretical background}\n\nLet $M$ be a manifold, and $g$ a (semi)Riemannian metric defined on $M$. Then the line element for the metric $g$ is\n\\begin{equation*}\n  d{s}^2(g) = g_{\\mu\\nu} d{x}^\\mu \\otimes d{x}^\\nu.\n\\end{equation*}\nNonetheless, the information about the metric structure of the manifold can be translate to the languages of frames,\n\\begin{equation*}\n  \\begin{split}\n    d{s}^2(g)\n    &= g_{\\mu\\nu} d{x}^\\mu \\otimes d{x}^\\nu \\\\\n    &= \\eta_{ab} \\; e^{a}_{\\mu}(x) \\, e^{b}_{\\nu}(x) \\; d{x}^\\mu \\otimes d{x}^\\nu \\\\\n    &= \\eta_{ab} \\; e^{a} \\otimes e^{b}.\n  \\end{split}\n\\end{equation*}\nTherefore, the vielbein, $e^{a}$, is the fields equivalent to the metric tensor. \nIn order to complete the structure, one needs information about the transport of \ngeometrical objects lying on bundles based on $M$. That information is encoded on \nthe spin connection, $\\omega^{a}{}_{b}$. Using these quantities one finds  the \ngeneralisation of the structure equations of Cartan,\n\\begin{align}\n  d e^{a} + \\omega^{a}{}_{b} \\wedge e^{b} & = T^{a},\n  \\label{firstSE}\\\\\n  d \\omega^{a}{}_{c} + \\omega^{a}{}_{b} \\wedge \\omega^{b}{}_{c} & = R^{a}{}_{c}\n  \\label{secondSE}.\n\\end{align}\nIn the sense of the previous lesson, the torsion 2-form, $T^{a}$, and the curvature 2-form,\n$R^{a}{}_{c}$, measure the impossibility of endow an Euclidean structure on $M$."
-		},
-		{
-			"cell_id" : 6636631804659548633,
-			"cell_origin" : "client",
-			"cell_type" : "latex",
-			"cells" : 
-			[
-				{
-					"cell_id" : 696216625188839963,
-					"cell_origin" : "client",
-					"cell_type" : "latex_view",
-					"source" : "\\section*{Manipulation of the structural equations}\n\n\\subsection*{Definitions}"
-				}
-			],
-			"hidden" : true,
-			"source" : "\\section*{Manipulation of the structural equations}\n\n\\subsection*{Definitions}"
+			"source" : "\\newcommand*{\\de}[1]{\\mathop{\\mathrm{d}#1}\\nolimits}\n\\newcommand{\\vi}[2]{e^{#1}_{#2}}\n\\newcommand\\vif[1]{\\mathrm{e}^{{#1}}}\n\\newcommand\\spif[2]{{\\mathrm{\\omega}}^{{#1}}{}_{{#2}}}\n\\newcommand{\\Rif}[2]{\\mathrm{R}^{{#1}}{}_{{#2}}}\n\\newcommand{\\Tf}[1]{\\mathrm{T}^{#1}}\n\\newcommand{\\we}{\\mathop{\\scriptstyle\\wedge}}\n\n\\part*{Cartan structural equations and Bianchi identity}\n\n\\author{Oscar Castillo-Felisola}\n\n\\section*{Theoretical background}\n\nLet $M$ be a manifold, and $g$ a (semi)Riemannian metric defined on $M$. Then the line element for the metric $g$ is\n\\begin{equation*}\n  \\de{s}^2(g) = g_{\\mu\\nu} \\de{x}^\\mu \\otimes \\de{x}^\\nu.\n\\end{equation*}\nNonetheless, the information about the metric structure of the manifold can be translated to the language of frames,\n\\begin{equation*}\n  \\begin{split}\n    \\de{s}^2(g)\n    & = g_{\\mu\\nu} \\de{x}^\\mu \\otimes \\de{x}^\\nu \\\\\n    & = \\eta_{ab} \\; \\vi{a}{\\mu}(x) \\, \\vi{b}{\\nu}(x) \\; \\de{x}^\\mu \\otimes \\de{x}^\\nu \\\\\n    & = \\eta_{ab} \\; \\vif{a} \\otimes \\vif{b}.\n  \\end{split}\n\\end{equation*}\nTherefore, the vielbein 1-form, $\\vif{a} \\equiv \\vi{a}{\\mu}(x) \\de{x}^\\mu$, encodes the information of the metric tensor.\nIn order to complete the structure, one needs information about the transport of geometrical objects lying on bundles\nbased on $M$. That information is encoded on the spin connection 1-form, $\\spif{a}{b}$. Using these quantities one finds\nthe generalisation of the structure equations of Cartan,\n\\begin{align}\n  \\de{\\vif{a}} + \\spif{a}{b} \\we \\vif{b} & = \\Tf{a},\n  \\label{firstSE}\\\\\n  \\de{\\spif{a}{c}} + \\spif{a}{b} \\we \\spif{b}{c} & = \\Rif{a}{c}\n  \\label{secondSE}.\n\\end{align}\nThe torsion 2-form, $\\Tf{a}$, and the curvature 2-form, $\\Rif{a}{c}$, measure the impossibility of endowing $M$ with\nan Euclidean structure.\n\n\\section*{Manipulation of the structural equations}\n\n\\subsection*{Definitions}"
 		},
 		{
 			"cell_id" : 13528271774984453456,
@@ -41,19 +25,19 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775813,
+					"cell_id" : 9223372036854775809,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}\\left[e^{a},~\\discretionary{}{}{} \\omega^{a}\\,_{b}\\right].\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775814,
+					"cell_id" : 9223372036854775810,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}\\left[T^{a},~\\discretionary{}{}{} R^{a}\\,_{b}\\right].\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\text{Attached property DifferentialForm to~}\\left[\\mathrm{T}^{a},~\\discretionary{}{}{} \\mathrm{R}^{a}\\,_{b}\\right].\\end{dmath*}"
 				}
 			],
-			"source" : "{a,b,c,l,m,n}::Indices.\nd{#}::ExteriorDerivative;.\nd{#}::LaTeXForm(\"{\\rm d}\").\n{e^{a}, \\omega^{a}_{b}}::DifferentialForm(degree=1); \n{T^{a}, R^{a}_{b}}::DifferentialForm(degree=2);"
+			"source" : "{a,b,c,l,m,n}::Indices.\nd{#}::ExteriorDerivative;.\nd{#}::LaTeXForm(\"\\mathrm{d}\").\nT{#}::LaTeXForm(\"\\mathrm{T}\").\nR{#}::LaTeXForm(\"\\mathrm{R}\").\n{e^{a}, \\omega^{a}_{b}}::DifferentialForm(degree=1); \n{T^{a}, R^{a}_{b}}::DifferentialForm(degree=2);"
 		},
 		{
 			"cell_id" : 12238953187398236596,
@@ -78,19 +62,19 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775816,
+					"cell_id" : 9223372036854775812,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775817,
+							"cell_id" : 9223372036854775813,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "d(e^{a}) + \\omega^{a}_{b} ^ e^{b}-T^{a} = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}{\\rm d}{e^{a}}+\\omega^{a}\\,_{b}\\wedge e^{b}-T^{a} = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{d}{e^{a}}+\\omega^{a}\\,_{b}\\wedge e^{b}-\\mathrm{T}^{a} = 0\\end{dmath*}"
 				}
 			],
 			"source" : "struc1 := d{e^{a}} + \\omega^{a}_{b} ^ e^{b} - T^{a} = 0;"
@@ -102,22 +86,86 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775819,
+					"cell_id" : 9223372036854775815,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775820,
+							"cell_id" : 9223372036854775816,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "d(\\omega^{a}_{c}) + \\omega^{a}_{b} ^ \\omega^{b}_{c}-R^{a}_{c} = 0"
+							"source" : "d(\\omega^{a}_{b}) + \\omega^{a}_{m} ^ \\omega^{m}_{b}-R^{a}_{b} = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}{\\rm d}{\\omega^{a}\\,_{c}}+\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}-R^{a}\\,_{c} = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{d}{\\omega^{a}\\,_{b}}+\\omega^{a}\\,_{m}\\wedge \\omega^{m}\\,_{b}-\\mathrm{R}^{a}\\,_{b} = 0\\end{dmath*}"
 				}
 			],
-			"source" : "struc2 := d{\\omega^{a}_{c}} + \\omega^{a}_{b} ^ \\omega^{b}_{c} - R^{a}_{c} = 0;"
+			"source" : "struc2 := d{\\omega^{a}_{b}} + \\omega^{a}_{m} ^ \\omega^{m}_{b} - R^{a}_{b} = 0;"
+		},
+		{
+			"cell_id" : 5906705874232891115,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 7464233204901409597,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In the following, we will also use the structural equations as definitions of the\nexterior derivatives of the vielbein and spin connection 1-forms. Therefore, we shall\nutilise the \\algo{isolate} algorithm---from the \\algo{cdb.core.manip} library---to \ndefine substitution rules."
+				}
+			],
+			"hidden" : true,
+			"source" : "In the following, we will also use the structural equations as definitions of the\nexterior derivatives of the vielbein and spin connection 1-forms. Therefore, we shall\nutilise the \\algo{isolate} algorithm---from the \\algo{cdb.core.manip} library---to \ndefine substitution rules."
+		},
+		{
+			"cell_id" : 14872820092824926673,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775818,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775819,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "d(e^{a}) = -\\omega^{a}_{b} ^ e^{b} + T^{a}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\mathrm{d}{e^{a}} = -\\omega^{a}\\,_{b}\\wedge e^{b}+\\mathrm{T}^{a}\\end{dmath*}"
+				}
+			],
+			"source" : "from cdb.core.manip import *\nde:= @(struc1):\nisolate(de, $d{e^{a}}$);"
+		},
+		{
+			"cell_id" : 11514586735070898136,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775821,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775822,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "d(\\omega^{a}_{b}) = -\\omega^{a}_{m} ^ \\omega^{m}_{b} + R^{a}_{b}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\mathrm{d}{\\omega^{a}\\,_{b}} = -\\omega^{a}\\,_{m}\\wedge \\omega^{m}\\,_{b}+\\mathrm{R}^{a}\\,_{b}\\end{dmath*}"
+				}
+			],
+			"source" : "domega := @(struc2):\nisolate(domega, $d{\\omega^{a}_{b}}$);"
 		},
 		{
 			"cell_id" : 13650837369708637637,
@@ -126,14 +174,14 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 202950397372684813,
+					"cell_id" : 13513964711918699242,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "The bianchi identities are obtained by applying the exterior derivative to the structural\n equations.\n\n\\subsection*{First Bianchi identity}"
+					"source" : "\\section*{Bianchi identities}\n\nThe bianchi identities are obtained by applying the exterior derivative to the structural\n equations.\n\n\\subsection*{First Bianchi identity}"
 				}
 			],
 			"hidden" : true,
-			"source" : "The bianchi identities are obtained by applying the exterior derivative to the structural\n equations.\n\n\\subsection*{First Bianchi identity}"
+			"source" : "\\section*{Bianchi identities}\n\nThe bianchi identities are obtained by applying the exterior derivative to the structural\n equations.\n\n\\subsection*{First Bianchi identity}"
 		},
 		{
 			"cell_id" : 10781709412135246056,
@@ -142,19 +190,19 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775822,
+					"cell_id" : 9223372036854775824,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775823,
+							"cell_id" : 9223372036854775825,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "d(d(e^{a}) + \\omega^{a}_{b} ^ e^{b}-T^{a}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}{\\rm d}\\left({\\rm d}{e^{a}}+\\omega^{a}\\,_{b}\\wedge e^{b}-T^{a}\\right) = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{d}\\left(\\mathrm{d}{e^{a}}+\\omega^{a}\\,_{b}\\wedge e^{b}-\\mathrm{T}^{a}\\right) = 0\\end{dmath*}"
 				}
 			],
 			"source" : "Bianchi1 :=  d{ @(struc1) };"
@@ -166,19 +214,19 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775825,
+					"cell_id" : 9223372036854775827,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775826,
+							"cell_id" : 9223372036854775828,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "d(\\omega^{a}_{b}) ^ e^{b}-\\omega^{a}_{b} ^ d(e^{b})-d(T^{a}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge {\\rm d}{e^{b}}-{\\rm d}{T^{a}} = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{d}{\\omega^{a}\\,_{b}}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge \\mathrm{d}{e^{b}}-\\mathrm{d}{\\mathrm{T}^{a}} = 0\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(Bianchi1)\nproduct_rule(_);"
@@ -190,46 +238,62 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775828,
+					"cell_id" : 9223372036854775830,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775829,
+							"cell_id" : 9223372036854775831,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "d(\\omega^{a}_{b}) ^ e^{b} + \\omega^{a}_{b} ^ \\omega^{b}_{c} ^ e^{c}-\\omega^{a}_{b} ^ T^{b}-d(T^{a}) = 0"
+							"source" : "-\\omega^{a}_{m} ^ \\omega^{m}_{b} ^ e^{b} + R^{a}_{b} ^ e^{b} + \\omega^{a}_{b} ^ \\omega^{b}_{c} ^ e^{c}-\\omega^{a}_{b} ^ T^{b}-d(T^{a}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}{\\rm d}{\\omega^{a}\\,_{b}}\\wedge e^{b}+\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}\\wedge e^{c}-\\omega^{a}\\,_{b}\\wedge T^{b}-{\\rm d}{T^{a}} = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}-\\omega^{a}\\,_{m}\\wedge \\omega^{m}\\,_{b}\\wedge e^{b}+\\mathrm{R}^{a}\\,_{b}\\wedge e^{b}+\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}\\wedge e^{c}-\\omega^{a}\\,_{b}\\wedge \\mathrm{T}^{b}-\\mathrm{d}{\\mathrm{T}^{a}} = 0\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(Bianchi1, $d{e^{a}} -> - \\omega^{a}_{b} ^ e^{b} + T^{a}$)\ndistribute(_);"
+			"source" : "substitute(Bianchi1, de, repeat=True)\nsubstitute(Bianchi1, domega, repeat=True)\ndistribute(_);"
 		},
 		{
-			"cell_id" : 3924843063471288484,
+			"cell_id" : 12361525078320634286,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775831,
+					"cell_id" : 9223372036854775833,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775832,
+							"cell_id" : 9223372036854775834,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "R^{a}_{b} ^ e^{b}-\\omega^{a}_{b} ^ T^{b}-d(T^{a}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}R^{a}\\,_{b}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge T^{b}-{\\rm d}{T^{a}} = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{R}^{a}\\,_{b}\\wedge e^{b}-\\omega^{a}\\,_{b}\\wedge \\mathrm{T}^{b}-\\mathrm{d}{\\mathrm{T}^{a}} = 0\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(Bianchi1, $d{\\omega^{a}_{b}} -> R^{a}_{b} - \\omega^{a}_{c} ^ \\omega^{c}_{b}$)\ndistribute(_)\nrename_dummies(_);"
+			"source" : "rename_dummies(Bianchi1);"
+		},
+		{
+			"cell_id" : 3384034677461271825,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 13291494998090488942,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "In the absence of torsion, the above expression is the well-known \\emph{algebraic} Bianchi identity\n\\begin{equation*}\nR^\\mu{}_{\\nu\\lambda\\rho} + R^\\mu{}_{\\lambda\\rho\\nu} + R^\\mu{}_{\\rho\\nu\\lambda} = 0.\n\\end{equation*}"
+				}
+			],
+			"hidden" : true,
+			"source" : "In the absence of torsion, the above expression is the well-known \\emph{algebraic} Bianchi identity\n\\begin{equation*}\nR^\\mu{}_{\\nu\\lambda\\rho} + R^\\mu{}_{\\lambda\\rho\\nu} + R^\\mu{}_{\\rho\\nu\\lambda} = 0.\n\\end{equation*}"
 		},
 		{
 			"cell_id" : 3283601467486312560,
@@ -254,19 +318,19 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775834,
+					"cell_id" : 9223372036854775836,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775835,
+							"cell_id" : 9223372036854775837,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "d(d(\\omega^{a}_{c}) + \\omega^{a}_{b} ^ \\omega^{b}_{c}-R^{a}_{c}) = 0"
+							"source" : "d(d(\\omega^{a}_{b}) + \\omega^{a}_{m} ^ \\omega^{m}_{b}-R^{a}_{b}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}{\\rm d}\\left({\\rm d}{\\omega^{a}\\,_{c}}+\\omega^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}-R^{a}\\,_{c}\\right) = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{d}\\left(\\mathrm{d}{\\omega^{a}\\,_{b}}+\\omega^{a}\\,_{m}\\wedge \\omega^{m}\\,_{b}-\\mathrm{R}^{a}\\,_{b}\\right) = 0\\end{dmath*}"
 				}
 			],
 			"source" : "Bianchi2 := d{ @(struc2) };"
@@ -278,19 +342,19 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775837,
+					"cell_id" : 9223372036854775839,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775838,
+							"cell_id" : 9223372036854775840,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "d(\\omega^{a}_{b}) ^ \\omega^{b}_{c}-\\omega^{a}_{b} ^ d(\\omega^{b}_{c})-d(R^{a}_{c}) = 0"
+							"source" : "d(\\omega^{a}_{m}) ^ \\omega^{m}_{b}-\\omega^{a}_{m} ^ d(\\omega^{m}_{b})-d(R^{a}_{b}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}{\\rm d}{\\omega^{a}\\,_{b}}\\wedge \\omega^{b}\\,_{c}-\\omega^{a}\\,_{b}\\wedge {\\rm d}{\\omega^{b}\\,_{c}}-{\\rm d}{R^{a}\\,_{c}} = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{d}{\\omega^{a}\\,_{m}}\\wedge \\omega^{m}\\,_{b}-\\omega^{a}\\,_{m}\\wedge \\mathrm{d}{\\omega^{m}\\,_{b}}-\\mathrm{d}{\\mathrm{R}^{a}\\,_{b}} = 0\\end{dmath*}"
 				}
 			],
 			"source" : "distribute(Bianchi2)\nproduct_rule(_);"
@@ -302,25 +366,41 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775840,
+					"cell_id" : 9223372036854775842,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
-							"cell_id" : 9223372036854775841,
+							"cell_id" : 9223372036854775843,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "R^{a}_{b} ^ \\omega^{b}_{c}-\\omega^{a}_{b} ^ R^{b}_{c}-d(R^{a}_{c}) = 0"
+							"source" : "R^{a}_{c} ^ \\omega^{c}_{b}-\\omega^{a}_{c} ^ R^{c}_{b}-d(R^{a}_{b}) = 0"
 						}
 					],
-					"source" : "\\begin{dmath*}{}R^{a}\\,_{b}\\wedge \\omega^{b}\\,_{c}-\\omega^{a}\\,_{b}\\wedge R^{b}\\,_{c}-{\\rm d}{R^{a}\\,_{c}} = 0\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\mathrm{R}^{a}\\,_{c}\\wedge \\omega^{c}\\,_{b}-\\omega^{a}\\,_{c}\\wedge \\mathrm{R}^{c}\\,_{b}-\\mathrm{d}{\\mathrm{R}^{a}\\,_{b}} = 0\\end{dmath*}"
 				}
 			],
-			"source" : "substitute(Bianchi2, $d{\\omega^{a}_{b}} -> R^{a}_{b} - \\omega^{a}_{c} ^ \\omega^{c}_{b}$)\ndistribute(_)\nrename_dummies(_);"
+			"source" : "substitute(Bianchi2, domega, repeat=True)\ndistribute(_)\nrename_dummies(_);"
 		},
 		{
 			"cell_id" : 4167877586568113468,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9876826404430152262,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "The above result, when written in tensorial components, isthe well-known\n\\emph{differential} Bianchi identity:\n\\begin{equation*}\n  R^\\mu{}_{\\nu\\lambda\\rho;\\sigma} + R^\\mu{}_{\\nu\\sigma\\lambda;\\rho} + R^\\mu{}_{\\nu\\rho\\sigma;\\lambda} = 0.\n\\end{equation*}"
+				}
+			],
+			"hidden" : true,
+			"source" : "The above result, when written in tensorial components, isthe well-known\n\\emph{differential} Bianchi identity:\n\\begin{equation*}\n  R^\\mu{}_{\\nu\\lambda\\rho;\\sigma} + R^\\mu{}_{\\nu\\sigma\\lambda;\\rho} + R^\\mu{}_{\\nu\\rho\\sigma;\\lambda} = 0.\n\\end{equation*}"
+		},
+		{
+			"cell_id" : 13682950063533411677,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
