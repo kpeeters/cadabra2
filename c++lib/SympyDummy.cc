@@ -4,10 +4,13 @@
 #include "PreClean.hh"
 #include "SympyCdb.hh"
 #include "DisplaySympy.hh"
+#ifdef USE_TREETRACKER
 #include "treetracker.h"
+#endif
+#include <sstream>
 
 cadabra::Ex::iterator sympy::apply(const cadabra::Kernel& kernel, cadabra::Ex& ex, cadabra::Ex::iterator& it,
-                                   const std::vector<std::string>& head, const std::string& args,
+                                   const std::vector<std::string>& head, std::vector<std::string> args,
                                    const std::string& method)
 	{
 	std::ostringstream str;
@@ -20,7 +23,7 @@ cadabra::Ex::iterator sympy::apply(const cadabra::Kernel& kernel, cadabra::Ex& e
 
 	if(head.size()>0)
 		if(args.size()>0)
-			str << ", " << args << ")";
+			str << ", " << args[0] << ")";
 	str << method;
 
 	if(head.size()>0)
@@ -50,7 +53,18 @@ cadabra::Ex::iterator sympy::apply(const cadabra::Kernel& kernel, cadabra::Ex& e
 	return it;
 	}
 
-cadabra::Ex sympy::invert_matrix(const cadabra::Kernel& kernel, cadabra::Ex& ex, cadabra::Ex& rules)
+void sympy::invert_matrix(const cadabra::Kernel& kernel, cadabra::Ex& ex,
+								  cadabra::Ex& rules, const cadabra::Ex& tocompute)
 	{
 	throw std::logic_error("Not implemented: sympy::invert_matrix");
+	}
+
+void sympy::determinant(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules, const cadabra::Ex& tocompute)
+	{
+	throw std::logic_error("Not implemented: sympy::determinant");
+	}
+
+void sympy::trace(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules, const cadabra::Ex& tocompute)
+	{
+	throw std::logic_error("Not implemented: sympy::trace");
 	}

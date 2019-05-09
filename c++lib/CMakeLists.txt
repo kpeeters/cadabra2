@@ -53,10 +53,12 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/Exchange.cc
   ${CMAKE_SOURCE_DIR}/../core/Functional.cc
   ${CMAKE_SOURCE_DIR}/../core/IndexIterator.cc
+  ${CMAKE_SOURCE_DIR}/../core/IndexClassifier.cc  
   ${CMAKE_SOURCE_DIR}/../core/Kernel.cc
   ${CMAKE_SOURCE_DIR}/../core/Parser.cc
   ${CMAKE_SOURCE_DIR}/../core/PreClean.cc
   ${CMAKE_SOURCE_DIR}/../core/PreProcessor.cc
+  ${CMAKE_SOURCE_DIR}/../core/ProgressMonitor.cc  
   ${CMAKE_SOURCE_DIR}/../core/Props.cc
   ${CMAKE_SOURCE_DIR}/../core/Stopwatch.cc
   ${CMAKE_SOURCE_DIR}/../core/Storage.cc
@@ -74,6 +76,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/properties/Depends.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/DependsInherit.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/Derivative.cc
+  ${CMAKE_SOURCE_DIR}/../core/properties/Determinant.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/Diagonal.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/DifferentialForm.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/DiracBar.cc
@@ -107,6 +110,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/properties/Tableau.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/TableauBase.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/TableauSymmetry.cc
+  ${CMAKE_SOURCE_DIR}/../core/properties/Trace.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/Traceless.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/Weight.cc
   ${CMAKE_SOURCE_DIR}/../core/properties/WeightInherit.cc
@@ -145,6 +149,7 @@ set(LOCAL_SRC_FILES
   ${CMAKE_SOURCE_DIR}/../core/algorithms/reduce_delta.cc
   ${CMAKE_SOURCE_DIR}/../core/algorithms/rename_dummies.cc
   ${CMAKE_SOURCE_DIR}/../core/algorithms/rewrite_indices.cc
+  ${CMAKE_SOURCE_DIR}/../core/algorithms/simplify.cc
   ${CMAKE_SOURCE_DIR}/../core/algorithms/sort_product.cc
   ${CMAKE_SOURCE_DIR}/../core/algorithms/sort_sum.cc
   ${CMAKE_SOURCE_DIR}/../core/algorithms/split_gamma.cc

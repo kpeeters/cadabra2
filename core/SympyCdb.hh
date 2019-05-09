@@ -7,11 +7,14 @@
 #include "Stopwatch.hh"
 #include "DisplaySympy.hh"
 
+#ifndef NO_SYMPY
 #include <pybind11/pybind11.h>
+#endif
 
 namespace sympy {
 
-	/// Helper class to enable output of
+#ifndef NO_SYMPY
+	/// Helper class to enable conversion from/to sympy.
 
 	class SympyBridge : public cadabra::DisplaySympy {
 		public:
@@ -23,6 +26,7 @@ namespace sympy {
 		private:
 			std::shared_ptr<cadabra::Ex> ex;
 		};
+#endif
 
 	/// \ingroup scalar
 	///
@@ -71,4 +75,4 @@ namespace sympy {
 	cadabra::Ex fill_matrix(const cadabra::Kernel&, cadabra::Ex& ex, cadabra::Ex& rules);
 	//	extern Stopwatch sympy_stopwatch;
 
-	};
+};
