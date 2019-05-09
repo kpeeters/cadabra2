@@ -93,7 +93,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                  sigc::mem_fun(*this, &NotebookWindow::on_file_close) );
 	actiongroup->add( Gtk::Action::create("Save", Gtk::Stock::SAVE), Gtk::AccelKey("<control>S"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_file_save) );
-	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS),
+	actiongroup->add( Gtk::Action::create("SaveAs", Gtk::Stock::SAVE_AS), Gtk::AccelKey("<control><shift>S"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_file_save_as) );
 	actiongroup->add( Gtk::Action::create("ExportHtml", "Export to standalone HTML"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_file_export_html) );
@@ -121,7 +121,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_insert_below) );
 	actiongroup->add( Gtk::Action::create("EditDelete", "Delete cell"), Gtk::AccelKey("<ctrl>Delete"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_delete) );
-	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"),
+	actiongroup->add( Gtk::Action::create("EditSplit", "Split cell"), Gtk::AccelKey("<control>Return"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_split) );
 	actiongroup->add( Gtk::Action::create("EditMakeCellTeX", "Cell is LaTeX"), Gtk::AccelKey("<control><shift>L"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_edit_cell_is_latex) );
@@ -203,7 +203,7 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 	actiongroup->add( Gtk::Action::create("EvaluateStop", Gtk::Stock::STOP, "Stop"), Gtk::AccelKey('.', Gdk::MOD1_MASK),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_run_stop) );
 	actiongroup->add( Gtk::Action::create("MenuKernel", "_Kernel") );
-	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"),
+	actiongroup->add( Gtk::Action::create("KernelRestart", Gtk::Stock::REFRESH, "Restart"), Gtk::AccelKey("<control><alt>R"),
 	                  sigc::mem_fun(*this, &NotebookWindow::on_kernel_restart) );
 
 	actiongroup->add(Gtk::Action::create("MenuCompare", "Compare"));
