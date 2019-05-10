@@ -201,7 +201,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	return result;
 	}
 
-void Server::on_socket_init(websocketpp::connection_hdl, boost::asio::ip::tcp::socket & s)
+void Server::on_socket_init(websocketpp::connection_hdl, boost::asio::ip::tcp::socket & /* s */)
 	{
 	boost::asio::ip::tcp::no_delay option(true);
 	// FIXME: this used to work in older websocketpp

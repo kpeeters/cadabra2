@@ -1036,7 +1036,7 @@ bool NotebookWindow::cell_toggle_visibility(DTree::iterator it, int )
 	return false;
 	}
 
-bool NotebookWindow::cell_content_changed(DTree::iterator, int i)
+bool NotebookWindow::cell_content_changed(DTree::iterator, int /* i */)
 	{
 	modified=true;
 	unselect_output_cell();

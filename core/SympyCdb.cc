@@ -14,8 +14,14 @@ using namespace cadabra;
 
 // #define DEBUG 1
 
+#ifndef NO_SYMPY
+
 sympy::SympyBridge::SympyBridge(const Kernel& k, std::shared_ptr<Ex> ex)
 	: DisplaySympy(k, *ex), ex(ex)
+	{
+	}
+
+sympy::SympyBridge::~SympyBridge()
 	{
 	}
 
@@ -52,6 +58,7 @@ void sympy::SympyBridge::import_ex(const std::string& s)
 	ex->move_ontop(orig, first);
 	}
 
+#endif
 
 Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const std::vector<std::string>& wrap, std::vector<std::string> args,
                           const std::string& method)
@@ -210,7 +217,7 @@ void sympy::invert_matrix(const Kernel& kernel, Ex& ex, Ex& rules, const Ex& toc
 			if(el->is_zero()==false) {
 				Ex rule("\\equals");
 				auto rit  = rule.append_child(rule.begin(), tocompute.begin());
-				auto cvit = rule.append_child(rule.begin(), Ex::iterator(el));
+				/* auto cvit = */ rule.append_child(rule.begin(), Ex::iterator(el));
 				auto i = rule.begin(rit);
 				//std::cerr << c1 << ", " << c2 << std::endl;
 				i = rule.replace_index(i, prop1->values[c1].begin(), true);

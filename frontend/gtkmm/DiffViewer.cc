@@ -143,7 +143,7 @@ DiffViewer::DiffViewer(std::istream& a, std::istream& b, Gtk::Window& parent)
 
 void DiffViewer::run_noblock()
 	{
-	signal_response().connect([this](int response_id) {
+	signal_response().connect([this](int /* response_id */) {
 		hide();
 		});
 	show();

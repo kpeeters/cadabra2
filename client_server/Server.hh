@@ -34,7 +34,7 @@ class Server {
 		Server();
 		Server(const Server&)=delete;
 		Server(const std::string& socket);
-		~Server();
+		virtual ~Server();
 
 		/// The only user-visible part: just instantiate a server object and
 		/// start it with run(). This will not return until the server has

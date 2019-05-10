@@ -19,6 +19,7 @@ namespace sympy {
 	class SympyBridge : public cadabra::DisplaySympy {
 		public:
 			SympyBridge(const cadabra::Kernel&, std::shared_ptr<cadabra::Ex>);
+			virtual ~SympyBridge();
 
 			pybind11::object export_ex();
 			void             import_ex(const std::string&);
