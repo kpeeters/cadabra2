@@ -67,3 +67,17 @@ def test05():
     print("Test 05c passed")
 
 test05()
+
+def test06():
+    __cdbkernel__=create_scope()        
+    \partial{#}::Derivative;
+    \tau::Coordinate;
+    {t,r}::Depends(\partial{#});
+    \delta{#}::Accent;
+    ex:=\int{ \partial{\delta{t}} \partial{t} r }{\tau};
+    integrate_by_parts(ex, $\delta{t}$);
+    tst:= - \int{ \delta{t} \partial{ \partial{t} r} }{\tau} - @(ex);
+    assert(tst==0)
+    print("Test 06 passed")
+
+test06()

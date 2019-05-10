@@ -1,0 +1,53 @@
+{
+	"cell_id" : 7004405290148921668,
+	"cells" : 
+	[
+		{
+			"cell_id" : 9654385100491360099,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775809,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[t,~\\discretionary{}{}{} r,~\\discretionary{}{}{} \\phi,~\\discretionary{}{}{} \\theta\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id" : 9223372036854775810,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa\\right].\\end{dmath*}"
+				},
+				{
+					"cell_id" : 9223372036854775811,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Metric to~}g_{\\mu \\nu}.\\end{dmath*}"
+				},
+				{
+					"cell_id" : 9223372036854775812,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property TableauSymmetry to~}g^{\\mu \\nu}.\\end{dmath*}"
+				}
+			],
+			"source" : "{t,r,\\phi,\\theta}::Coordinate;\n{\\mu,\\nu,\\rho,\\sigma,\\kappa}::Indices(position=fixed, values={t,r,\\phi,\\theta});\ng_{\\mu\\nu}::Metric;\ng^{\\mu\\nu}::InverseMetric;"
+		},
+		{
+			"cell_id" : 12571913938303989352,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def metric():\n    ret := { g_{t t} = -(1-2 M/r), \n             g_{r r} = 1/(1-2 M/r), \n             g_{\\theta \\theta} = r**2,\n             g_{\\phi \\phi} = r**2 \\sin(\\theta)**2 \n           };\n    return ret"
+		},
+		{
+			"cell_id" : 6301629692701616073,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

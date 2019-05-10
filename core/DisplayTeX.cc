@@ -29,7 +29,8 @@ DisplayTeX::DisplayTeX(const Kernel& k, const Ex& e)
 		};
 
 	curly_bracket_operators = {
-		"\\sqrt"
+		"\\sqrt",
+		"\\dot"
 		};
 	}
 

@@ -18,7 +18,7 @@ namespace cadabra {
 		if (stat(in_name.c_str(), &f1) == 0 && stat(out_name.c_str(), &f2) == 0 && f1.st_mtime < f2.st_mtime)
 			return;
 
-		std::string pystr = cadabra::cnb2python(in_name);
+		std::string pystr = cadabra::cnb2python(in_name, false);
 		if (pystr != "") {
 			std::ofstream ofs(out_name);
 			//		std::ofstream ofs(name+".py");

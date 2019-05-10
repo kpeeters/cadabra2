@@ -150,14 +150,19 @@ Algorithm::result_t integrate_by_parts::handle_term(iterator int_it, iterator& i
 					if(std::next(from)!=to)
 						from = tr.wrap(from, to, str_node("\\prod"));
 
+					// Find the argument of the derivative. Needs to handle derivatives with
+					// a single index, and derivatives with no index at all.
 					auto der_arg = tr.begin(fac);
-					++der_arg;
-					// This _has_ to be the argument because we have peeled off a single derivative.
-					assert(der_arg->is_index()==false);
-
 					if(der_arg==tr.end(fac))
 						throw ConsistencyException("integrate_by_parts: Derivative without argument encountered.");
 
+					if(der_arg->is_index()) {
+						++der_arg;
+						// This _has_ to be the argument because we have peeled off a single derivative.
+						if(der_arg==tr.end(fac))
+							throw ConsistencyException("integrate_by_parts: Derivative without argument encountered.");
+						}
+					
 					tr.swap(der_arg, from);
 					tr.swap(fac, der_arg);
 					multiply(it->multiplier, -1);

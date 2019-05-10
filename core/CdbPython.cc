@@ -16,14 +16,14 @@ std::string cadabra::escape_quotes(const std::string& line)
 	}
 
 
-std::string cadabra::cdb2python(const std::string& blk)
+std::string cadabra::cdb2python(const std::string& blk, bool display)
 	{
 	std::stringstream str(blk);
 	std::string line;
 	std::string newblk;
 	std::string lhs, rhs, op, indent;
 	while(std::getline(str, line, '\n')) {
-		std::string res=cadabra::convert_line(line, lhs, rhs, op, indent);
+		std::string res=cadabra::convert_line(line, lhs, rhs, op, indent, display);
 		// std::cerr << "preparsed : " + res << std::endl;
 		if(res!="::empty")
 			newblk += res+'\n';
@@ -31,7 +31,7 @@ std::string cadabra::cdb2python(const std::string& blk)
 	return newblk;
 	}
 
-std::string cadabra::convert_line(const std::string& line, std::string& lhs, std::string& rhs, std::string& op, std::string& indent)
+std::string cadabra::convert_line(const std::string& line, std::string& lhs, std::string& rhs, std::string& op, std::string& indent, bool display)
 	{
 	std::string ret;
 
@@ -58,7 +58,12 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	if(line_stripped[0]=='#') return line;
 
 	// Bare ';' gets replaced with 'display(_)'.
-	if(line_stripped==";") return indent_line+"display(_)";
+	if(line_stripped==";") {
+		if(display)
+			return indent_line+"display(_)";
+		else
+			return indent_line;
+		}
 
 	// 'lastchar' is either a Cadabra termination character, or empty.
 	// 'line_stripped' will have that character stripped, if present.
@@ -74,7 +79,8 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 				ret+=" _="+lhs;
 				}
 			if(lastchar!=".")
-				ret = ret + "; display("+lhs+")";
+				if(display)
+					ret = ret + "; display("+lhs+")";
 			indent="";
 			lhs="";
 			rhs="";
@@ -124,7 +130,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 			      + escape_quotes(line_stripped.substr(found+2)) + "')";
 			std::string objname = line_stripped.substr(0,found);
 			ret = ret + "; _="+objname;
-			if(lastchar==";" && indent_line.size()==0)
+			if(lastchar==";" && indent_line.size()==0 && display)
 				ret = ret + "; display("+objname+")";
 			}
 		}
@@ -149,7 +155,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 					ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2)
 					      + "(Ex(r'"+escape_quotes(line_stripped.substr(0,found))+"'))";
 					}
-				if(lastchar==";")
+				if(lastchar==";" && display)
 					ret += "; display(__cdbtmp__)";
 				}
 			else {
@@ -158,7 +164,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 				}
 			}
 		else {
-			if(lastchar==";")
+			if(lastchar==";" && display)
 				ret = indent_line + "_ = " + line_stripped + " display(_)";
 			else
 				ret = indent_line + line_stripped;
@@ -167,7 +173,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	return ret+end_of_line;
 	}
 
-std::string cadabra::cnb2python(const std::string& in_name)
+std::string cadabra::cnb2python(const std::string& in_name, bool display)
 	{
 	// Read the file into a Json object and get the cells
 	std::ifstream ifs(in_name);
@@ -200,8 +206,11 @@ std::string cadabra::cnb2python(const std::string& in_name)
 			std::stringstream s, temp;
 			s << cell["source"].asString();
 			std::string line, lhs, rhs, op, indent;
-			while (std::getline(s, line))
-				ofs << convert_line(line, lhs, rhs, op, indent) << '\n';
+			while (std::getline(s, line)) {
+				auto res = convert_line(line, lhs, rhs, op, indent, display);
+				if(res!="::empty")
+					ofs << res << '\n';
+				}
 			}
 		}
 	// Ensure only symbols defined in this file get exported

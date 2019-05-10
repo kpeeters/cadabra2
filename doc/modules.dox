@@ -39,8 +39,12 @@
 /// It contains the display function to show Cadabra objects to the user
 /// in a UI-independent way (e.g. switching between a text representation
 /// on the command line and a LaTeX representation when running in a notebook).
-/// The other part is core/PythonCdb.cc, which builds the cadabra2 module
-/// for python, to be imported with 'from cadabra2 import *'.
+/// The other part are the various files in core/pythoncdb, which build
+/// the cadabra2 module for python, to be imported with 'from cadabra2 import *'.
+///
+/// The Python module has functionality to import Cadabra notebooks using
+/// standard Python import syntax. This functionality is part of the
+/// \ref files module and described there.
 ///
 /// \defgroup scalar Scalar algebra
 /// \ingroup core

@@ -774,6 +774,7 @@ WARN_LOGFILE           =
 INPUT                  = doc/main.md \
                          c++lib \
                          core \
+                         core/pythoncdb \
                          core/cadabra2 \
                          doc/modules.dox \
                          core/cadabra2_defaults.py \

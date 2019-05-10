@@ -17,8 +17,8 @@ set(PACKAGEDIR              ${CMAKE_BINARY_DIR}/core/packages/cdb)
 #---------------------------------------------------------------------------
 
 set(OLDPACKAGES
-  relativity/__init__
-  relativity/schwarzschild
+#  relativity/__init__
+#  relativity/schwarzschild
   gauge_theory/__init__
   gauge_theory/instantons
 )
@@ -29,6 +29,7 @@ set(PACKAGES
   core/solve
   utils/node
   sympy/solvers
+  relativity/schwarzschild
   )
 
 set(PDIRS

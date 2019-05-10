@@ -7,6 +7,13 @@
 #include "py_progress.hh"
 
 namespace cadabra {
+	
+	/// \ingroup pythoncore
+	///
+	/// Generic internal entry point for the Python side to execute a
+	/// C++ algorithm. This gets called by the various apply_algo
+	/// functions below, which in turn get called by the def_algo
+	/// functions.
 	template <class Algo>
 	Ex_ptr apply_algo_base(Algo& algo, Ex_ptr ex, bool deep, bool repeat, unsigned int depth, bool pre_order=false)
 		{
@@ -53,6 +60,14 @@ namespace cadabra {
 		}
 
 
+	/// \ingroup pythoncore
+	///
+	/// Method to declare a Python function with variable number of
+	/// arguments, and make that call a C++ algorithm as specified in
+	/// the Algo template parameter.  This will make the algorithm
+	/// traverse post-order, that is to say, first on the innermost
+	/// child (or leaf) of an expression tree, and then, if that fails,
+	/// on parent nodes, and so on.
 	template<class Algo, typename... Args, typename... PyArgs>
 	void def_algo(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... pyargs)
 		{
@@ -88,6 +103,13 @@ namespace cadabra {
 		return apply_algo_base(algo, ex, deep, repeat, depth, true);
 		}
 
+	/// \ingroup pythoncore
+	///
+	/// Method to declare a Python function with variable number of arguments, and
+	/// make that call a C++ algorithm as specified in the Algo template parameter.
+	/// In contrast to def_algo, this one will apply the algorithm in pre-order
+	/// traversal style, that is, it will first attempt to apply on a node itself
+	/// before traversing further down the child nodes and attempting there.
 	template<class Algo, typename... Args, typename... PyArgs>
 	void def_algo_preorder(pybind11::module& m, const char* name, bool deep, bool repeat, unsigned int depth, PyArgs... pyargs)
 		{

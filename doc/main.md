@@ -25,8 +25,9 @@ cadabra::Algorithm, act on the cadabra::Ex objects, transforming their
 content by making use of the property information.
 
 The C++ objects and algorithms can be accessed via Python (via the
-cadabra2 Python module built in PyCdb.cc), or they can be used
-directly through the use of Cadabra-as-a-library.
+cadabra2 Python module built with the various files of the \ref
+pythoncore module), or they can be used directly through the use of
+Cadabra-as-a-library.
 
 To get started with the source code documentation, navigate to the
 \ref modules overview.
