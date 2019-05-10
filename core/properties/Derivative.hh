@@ -28,6 +28,13 @@ namespace cadabra {
 			virtual unsigned int size(const Properties&, Ex&, Ex::iterator) const override;
 			virtual tab_t        get_tab(const Properties&, Ex&, Ex::iterator, unsigned int) const override;
 			virtual multiplier_t value(const Kernel&, Ex::iterator, const std::string& forcedlabel) const override;
+			virtual bool         parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals) override;
+			virtual std::string unnamed_argument() const override
+				{
+				return "to";
+				};
+	
+			Ex with_respect_to;
 		};
 
 	}

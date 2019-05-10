@@ -143,13 +143,19 @@ Algorithm::result_t unwrap::apply(iterator& it)
 #ifdef DEBUG
 						std::cerr << *factor->name << " acted on by " << *old_it->name << "; depends" << std::endl;
 #endif
+						auto derivative=kernel.properties.get<Derivative>(old_it);
 						Ex deps=dep->dependencies(kernel, factor /* it */);
 						sibling_iterator depobjs=deps.begin(deps.begin());
 						while(depobjs!=deps.end(deps.begin())) {
 #ifdef DEBUG
 							std::cerr << "?" << *old_it->name << " == " << *depobjs->name << std::endl;
 #endif
+							// FIXME: need to compare more than the name
 							if(old_it->name == depobjs->name) {
+								move_out=false;
+								break;
+								}
+							else if(derivative && derivative->with_respect_to.size()>0 && derivative->with_respect_to.begin()->name==depobjs->name) {
 								move_out=false;
 								break;
 								}

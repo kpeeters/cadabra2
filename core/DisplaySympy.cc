@@ -4,6 +4,7 @@
 #include "DisplaySympy.hh"
 #include "properties/Depends.hh"
 #include "properties/Accent.hh"
+#include "properties/Derivative.hh"
 #include <regex>
 
 // #define DEBUG 1
@@ -201,6 +202,9 @@ void DisplaySympy::print_children(std::ostream& str, Ex::iterator it, int )
 			// deplist is always a \comma node
 			auto sib=tree.begin(deplist.begin());
 			while(sib!=tree.end(deplist.begin())) {
+				const Derivative *dep_is_derivative=kernel.properties.get<Derivative>(sib);
+				if(dep_is_derivative)
+					throw RuntimeException("Dependencies on derivatives are not yet handled in the SymPy bridge");
 				dispatch(str, sib);
 				++sib;
 				if(sib!=tree.end(deplist.begin()))
@@ -522,6 +526,16 @@ void DisplaySympy::print_partial(std::ostream& str, Ex::iterator it)
 			}
 		++sib;
 		}
+	// write the implicit direction of the derivative, if any.
+	const Derivative *derivative = kernel.properties.get<Derivative>(it);
+	if(derivative) {
+		if(derivative->with_respect_to.size()>0) {
+			str << ", ";
+			dispatch(str, derivative->with_respect_to.begin());
+			}
+		}
+	
+	// write the explicit direction(s) of the derivative.
 	sib=tree.begin(it);
 	while(sib!=tree.end(it)) {
 		if(sib->fl.parent_rel!=str_node::p_none) {
@@ -654,11 +668,55 @@ void DisplaySympy::import(Ex& ex)
 
 				args=nxt;
 				}
+
+			// Strip subscripts which are the same as the 'with_respect_to' member of the
+			// derivative (if any), as these are implicit in Cadabra. This is tricky, because
+			// a multiple derivative with respect to this argument needs to be replaced
+			// with a multiple nesting of the derivative operator itself, e.g.
+			//   \partial{\partial{r}} -> diff(diff(r(t),t),t) -> diff(r(t),t,t)
+		  
+			const Derivative *derivative = kernel.properties.get<Derivative>(it);
+			if(derivative) {
+#ifdef DEBUG
+				std::cerr << "is proper derivative" << std::endl;
+#endif
+				if(derivative->with_respect_to.size()>0) {
+					auto it_copy=it;
+					args=ex.begin(it_copy);
+					bool first=true;
+					while(args!=ex.end(it_copy)) {
+#ifdef DEBUG
+						std::cerr << "Comparing: " << args << std::endl
+									 << "and " << derivative->with_respect_to.begin()
+									 << std::endl;
+#endif
+						 
+						if(subtree_equal(0, args, derivative->with_respect_to.begin(), 0) ) {
+							args=ex.erase(args);
+							if(first) {
+								first=false;
+								}
+							else {
+								it=ex.wrap(it, str_node(it->name));
+								}
+							}
+						else
+							++args;
+						}
+					}
+				}
+			else {
+#ifdef DEBUG
+				std::cerr << it << " is not a proper derivative" << std::endl;
+#endif
+				
+				}
+			
 			//				ex.flatten(comma);
 			//				ex.erase(comma);
 			//				}
 			}
 
 		return it;
-		});
+			});
 	}

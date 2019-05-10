@@ -31,6 +31,9 @@ pybind11::object sympy::SympyBridge::export_ex()
 	output(str);
 	pybind11::module sympy_parser = pybind11::module::import("sympy.parsing.sympy_parser");
 	auto parse = sympy_parser.attr("parse_expr");
+#ifdef DEBUG
+	std::cerr << str.str() << std::endl;
+#endif
 	pybind11::object ret = parse(str.str());
 
 	return ret;

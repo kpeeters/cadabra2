@@ -25,4 +25,25 @@ def test02():
 
 test02()
 
-      
+def test03():
+   __cdbkernel__=create_scope() 
+   \tau::Coordinate;
+   \partial{#}::Derivative(\tau);
+   r::Depends(\tau);
+   ex:=\partial{r};
+   q=SympyBridge(ex)
+   q.from_sympy(str(q.to_sympy()))
+   tst:= \partial{r} - @(ex);
+   assert(tst==0)
+   print("Test 03a passed")
+
+   ex:=\partial{\partial{r}};
+   q=SympyBridge(ex)
+   q.from_sympy(str(q.to_sympy()))
+   tst:= \partial{\partial{r}} - @(ex);
+   assert(tst==0)
+   print("Test 03b passed")
+
+test03()
+
+

@@ -5,6 +5,18 @@
 
 using namespace cadabra;
 
+bool Derivative::parse(Kernel&, std::shared_ptr<Ex>, keyval_t& keyvals)
+	{
+	keyval_t::const_iterator ki=keyvals.begin();
+	while(ki!=keyvals.end()) {
+		if(ki->first=="to") {
+			with_respect_to=ki->second;
+			}
+		++ki;
+		}
+	return true;
+	}
+			
 unsigned int Derivative::size(const Properties& properties, Ex& tr, Ex::iterator it) const
 	{
 	it=properties.head<Derivative>(it);
