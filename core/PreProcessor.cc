@@ -33,8 +33,7 @@ Remember: we want brackets around infix operators to be around every child,
 #include <ctype.h>
 #include <stdexcept>
 #include <sstream>
-#include <locale>
-#include <codecvt>
+#include <internal/uniconv.h>
 #include "PreProcessor.hh"
 
 const char32_t preprocessor::orders[]     = { '!', tok_pow, '/', '*', tok_wedge,
@@ -56,9 +55,10 @@ const char32_t preprocessor::close_brackets[]   = { '}', ')', ']' };
 std::istream& operator>>(std::istream& s, preprocessor& p)
 	{
 	std::string inp;
-	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+
+	utf_converter conv;
 	while(std::getline(s,inp)) {
-		std::u32string inp32=conv.from_bytes(inp);
+		std::u32string inp32=conv.to_utf32(inp);
 		p.parse_(inp32);
 		}
 	return s;
@@ -70,8 +70,8 @@ std::ostream& operator<<(std::ostream& s, const preprocessor& p)
 		p.unwind_(sizeof(preprocessor::orders)/sizeof(char32_t));
 	p.unwind_(sizeof(preprocessor::orders)/sizeof(char32_t));
 	p.strip_outer_brackets();
-	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-	auto ac8 = conv.to_bytes(p.cur.accu);
+	utf_converter conv;
+	auto ac8 = conv.to_utf8(p.cur.accu);
 	s << ac8;
 	return s;
 	}
@@ -203,7 +203,7 @@ char32_t preprocessor::get_token_(char32_t prev_token)
 		//			}
 		}
 	if(is_opening_bracket_(prev_token)) {
-		while(isblank(cur_str[cur_pos])) {
+		while (std::isblank(cur_str[cur_pos], std::locale{})) {
 			++cur_pos;
 			}
 		}
@@ -260,7 +260,7 @@ char32_t preprocessor::get_token_(char32_t prev_token)
 
 		//	HERE: how do we force get_token to return a '*' for the space separating .... and b ?
 
-		if(isblank(c)) {
+		if (std::isblank(c, std::locale{})) {
 			//			std::cout << "blank " << (int)(c) << "\n";
 			if(candidate==0) candidate=' ';
 			++cur_pos;
@@ -526,8 +526,8 @@ void preprocessor::parse_(const std::u32string& str)
 void preprocessor::show_and_throw_(const std::string& str) const
 	{
 	std::stringstream ss;
-	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
-	ss << std::endl << conv.to_bytes(cur_str) << std::endl;
+	utf_converter conv;
+	ss << std::endl << conv.to_utf8(cur_str) << std::endl;
 	for(unsigned int i=0; i<cur_pos; ++i)
 		ss << " ";
 	ss << "^" << std::endl
