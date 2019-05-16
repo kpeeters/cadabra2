@@ -56,8 +56,64 @@
 namespace cadabra {
 	namespace py = pybind11;
 
+	template <typename PropT, typename... ParentTs>
+	BoundProperty<PropT, ParentTs...>::BoundProperty()
+		: prop(nullptr)
+		, for_obj(nullptr)
+	{
+
+	}
+
+	template <typename PropT, typename... ParentTs>
+	BoundProperty<PropT, ParentTs...>::BoundProperty(Ex_ptr ex, Ex_ptr param)
+	{
+		Kernel* kernel = get_kernel_from_scope();
+		auto prop_ = new PropT(); // we keep a pointer, but the kernel owns it.
+		//	std::cerr << "Declaring property " << prop->name() << " in kernel " << kernel << std::endl;
+		kernel->inject_property(prop_, ex, param);
+
+		prop = prop_;
+		for_obj = ex;
+	}
+
+	template <typename PropT, typename... ParentTs>
+	std::string BoundProperty<PropT, ParentTs...>::str_() const
+	{
+		std::ostringstream str;
+		str << "Attached property ";
+		prop->latex(str); // FIXME: this should call 'str' on the property, which does not exist yet
+		str << " to " + Ex_as_str(for_obj) + ".";
+		return str.str();
+	}
+
+	template <typename PropT, typename... ParentTs>
+	std::string BoundProperty<PropT, ParentTs...>::latex_() const
+	{
+		std::ostringstream str;
+
+		//	HERE: this text should go away, property should just print itself in a python form,
+		//   the decorating text should be printed in a separate place.
+
+		str << "\\text{Attached property ";
+		prop->latex(str);
+		std::string bare = Ex_as_latex(for_obj);
+		str << " to~}" + bare + ".";
+		return str.str();
+	}
+
+	template <>
+	std::string BoundProperty<LaTeXForm>::latex_() const;
+
+	template <typename PropT, typename... ParentTs>
+	std::string BoundProperty<PropT, ParentTs...>::repr_() const
+	{
+		// FIXME: this needs work, it does not output things which can be fed back into python.
+		return "Property::repr: " + prop->name();
+	}
+
+
 	template<>
-	std::string Property<LaTeXForm>::latex_() const
+	std::string BoundProperty<LaTeXForm>::latex_() const
 		{
 		std::ostringstream str;
 		str << "\\text{Attached property ";
@@ -68,6 +124,56 @@ namespace cadabra {
 		str << " to {\\tt " + bare + "}.";
 		return str.str();
 		}
+
+	template <typename PropT, typename... ParentTs>
+	BoundProperty<PropT, ParentTs...> BoundProperty<PropT, ParentTs...>::get_from_it(Ex::iterator it, bool ignore_parent_rel)
+	{
+		int tmp;
+		auto res = get_kernel_from_scope()->properties.get_with_pattern<PropT>(
+			it,
+			tmp,
+			false,
+			ignore_parent_rel
+			);
+
+		BoundProperty ret;
+		ret.prop = res.first;
+		if (res.second)
+			ret.for_obj = std::make_shared<Ex>(res.second->obj);
+		return ret;
+	}
+
+	template <typename PropT, typename... ParentTs>
+	BoundProperty<PropT, ParentTs...> BoundProperty<PropT, ParentTs...>::get_from_ex(Ex_ptr ex, bool ignore_parent_rel)
+	{
+		return get_from_it(ex->begin(), ignore_parent_rel);
+	}
+
+	template <typename PropT, typename... ParentTs>
+	BoundProperty<PropT, ParentTs...> BoundProperty<PropT, ParentTs...>::get_from_exnode(ExNode exnode, bool ignore_parent_rel)
+	{
+		return get_from_it(exnode.it, ignore_parent_rel);
+	}
+
+	template <typename PropT, typename... ParentTs>
+	PyProperty<PropT, ParentTs...> def_prop(pybind11::module& m, const char* docstring)
+	{
+		using namespace pybind11;
+
+		return PyProperty<PropT, ParentTs...>(m, std::make_shared<PropT>()->name().c_str())
+			.def(
+				init<std::shared_ptr<Ex>, std::shared_ptr<Ex>>(),
+				arg("ex"),
+				arg("param"),	
+				docstring
+			)
+			.def("__str__", &BoundProperty<PropT, ParentTs...>::str_)
+			.def("__repr__", &BoundProperty<PropT, ParentTs...>::repr_)
+			.def("_latex_", &BoundProperty<PropT, ParentTs...>::latex_)
+			.def_static("get", &BoundProperty<PropT, ParentTs...>::get_from_ex, py::arg("ex"), py::arg("ignore_parent_rel") = false)
+			.def_static("get", &BoundProperty<PropT, ParentTs...>::get_from_exnode, py::arg("exnode"), py::arg("ignore_parent_rel") = false);
+	}
+
 
 
 	pybind11::list list_properties()
@@ -123,7 +229,7 @@ namespace cadabra {
 
 	void init_properties(py::module& m)
 		{
-		py::class_<BaseProperty, std::shared_ptr<BaseProperty>>(m, "Property");
+		py::class_<BoundPropertyBase, std::shared_ptr<BoundPropertyBase>>(m, "Property");
 
 		m.def("properties", &list_properties);
 
