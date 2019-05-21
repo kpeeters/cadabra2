@@ -83,3 +83,18 @@ test05()
 #ex:= \chi \psi \sigma^{n} \chi;
 #explicit_indices(_);
         
+# Normally index contraction aims for adjacent indices.
+# With 'eager=True', contractions are generated as much
+# as possible, even if that does not lead to adjacent indices.
+
+
+# 
+# {m,n,p}::Indices(spacetime, position=fixed);
+# {a,b,c,d,e,f,g,h}::Indices(spinor, position=fixed);
+# \sigma^{p}::ImplicitIndex(\sigma^{p}_{a b});
+# \tau^{p}::ImplicitIndex(\tau^{p a b});
+# \theta::ImplicitIndex(\theta^{a});
+# 
+# ex := \sigma^{p} \theta \tau^{m};
+# tst:= \sigma^{p}_{a b} \theta^{b} \tau^{m a c};
+#         

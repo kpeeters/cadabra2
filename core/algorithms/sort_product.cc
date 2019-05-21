@@ -4,6 +4,8 @@
 
 using namespace cadabra;
 
+#define DEBUG 1
+
 sort_product::sort_product(const Kernel&k, Ex& tr)
 	: Algorithm(k, tr), cleanup(true)
 	{
@@ -63,9 +65,13 @@ Algorithm::result_t sort_product::apply(iterator& st)
 			compare.clear();
 			auto es = compare.equal_subtree(one, two);
 			if(compare.should_swap(one, es)) {
-				// std::cerr << "should swap " << *(one->name) << " with " << *(two->name) << std::endl;
+#ifdef DEBUG
+				std::cerr << "should swap " << *(one->name) << " with " << *(two->name) << std::endl;
+#endif
 				int canswap=compare.can_swap(one, two, es);
-				// std::cerr << "can swap? " << *(one->name) << " with " << *(two->name) << std::endl;
+#ifdef DEBUG
+				std::cerr << "can swap? " << *(one->name) << " with " << *(two->name) << std::endl;
+#endif
 				if(canswap!=0) {
 					// std::cerr << "swapping " << Ex(one) << " with " << Ex(two) << std::endl;
 					tr.swap(one);
