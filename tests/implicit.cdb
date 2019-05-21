@@ -41,4 +41,13 @@ def test03():
     
 test03()
         
+def test04():
+    __cdbkernel__=create_scope()
+    {a,b,c,d}::Indices(spinor);
+    Tr{#}::Trace(indices=spinor);
+    ex:=Tr( V^{m} ) + W^{m};
+    print("Test 04 passed")
 
+test04()
+        
+    
