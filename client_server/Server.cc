@@ -30,10 +30,9 @@ using websocketpp::lib::bind;
 Server::Server()
 	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
-	// FIXME: we do not actually do anything with this.
-	auto gen = boost::uuids::random_generator();
-	auto authentication_uuid = gen();
+	boost::uuids::uuid authentication_uuid = boost::uuids::random_generator()();
 	authentication_token = boost::uuids::to_string( authentication_uuid );
+	// FIXME: we do not actually do anything with this.
 	socket_name="tcp://localhost:5454";
 	init();
 	}

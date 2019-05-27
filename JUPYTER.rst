@@ -104,10 +104,46 @@ kernel::
 There is a sample `schwarzschild.ipynb` in the `examples` directory.	
 
 
+
 Setting up a Jupyterhub server for Cadabra
 ------------------------------------------
 
-First install miniconda as per the instructions above. Then do::
+The following instructions setup a JupyterHub installation using 'The
+Littlest JupyterHub' (TLJH). These instructions have been tested on a
+clean Ubuntu 18.04 installation.
 
-    conda install jupyterhub
+First install TLJH as per the instructions at::
+
+    https://the-littlest-jupyterhub.readthedocs.io/en/latest/install/custom-server.html
+
+(note that you *first* need to do a sudo command, otherwise the
+installer will ask for the password but you won't see that prompt,
+making it look like the installation process hangs).
+
+Become root (you cannot write into `/opt/tljh` otherwise) and set the
+conda path using::
+
+    sudo su
+    export PATH=/opt/tljh/user/bin:${PATH}
+
+Install the prerequisites with::
+
+    conda install cmake pkg-config glibmm zeromq cppzmq xtl cryptopp \
+	               sqlite util-linux xeus nlohmann_json sympy \
+						-c conda-forge
+	 
+Build the Cadabra Jupyter kernel with::
+  
+    cd cadabra2
+    mkdir build
+    cd build
+    cmake -DENABLE_JUPYTER=ON -DENABLE_FRONTEND=OFF \
+                              -DCMAKE_INCLUDE_PATH=/opt/tljh/user/include \
+                              -DCMAKE_LIBRARY_PATH=/opt/tljh/user/lib \
+                              -DCMAKE_INSTALL_PREFIX=/opt/tljh/user/ \
+                              ..
+    make install
+
+The 'new' button in the Jupyterhub file browser should now offer you
+the option of creating a new Cadabra notebook.
 

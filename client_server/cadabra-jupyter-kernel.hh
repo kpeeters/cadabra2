@@ -2,6 +2,7 @@
 #pragma once
 
 #include "xeus/xinterpreter.hpp"
+#include "xeus/xjson.hpp"
 #include "Server.hh"
 
 using xeus::xinterpreter;
