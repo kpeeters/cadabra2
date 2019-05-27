@@ -102,3 +102,12 @@ kernel::
     ${HOME}/miniconda3/bin/jupyter notebook
 
 There is a sample `schwarzschild.ipynb` in the `examples` directory.	
+
+
+Setting up a Jupyterhub server for Cadabra
+------------------------------------------
+
+First install miniconda as per the instructions above. Then do::
+
+    conda install jupyterhub
+

@@ -31,6 +31,9 @@ Server::Server()
 	: return_cell_id(std::numeric_limits<uint64_t>::max()/2)
 	{
 	// FIXME: we do not actually do anything with this.
+	auto gen = boost::uuids::random_generator();
+	auto authentication_uuid = gen();
+	authentication_token = boost::uuids::to_string( authentication_uuid );
 	socket_name="tcp://localhost:5454";
 	init();
 	}
@@ -359,8 +362,15 @@ void Server::dispatch_message(websocketpp::connection_hdl hdl, const std::string
 		return;
 		}
 
-	const Json::Value content = root["content"];
-	const Json::Value header  = root["header"];
+	// Check that this message is authenticated.
+	std::string auth_token = root["auth_token"].asString();
+	if(auth_token!=authentication_token) {
+		std::cerr << "Received block with incorrect authentication token: " << auth_token << "." << std::endl;
+		return;
+		}
+
+	const Json::Value content    = root["content"];
+	const Json::Value header     = root["header"];
 	std::string msg_type = header["msg_type"].asString();
 	// std::cerr << "received msg_type |" << msg_type << "|" << std::endl;
 
@@ -521,6 +531,7 @@ void Server::run()
 		websocketpp::lib::asio::error_code ec;
 		auto p = wserver.get_local_endpoint(ec);
 		std::cout << p.port()  << std::endl;
+		std::cout << authentication_token << std::endl;
 
 		// std::cerr << "cadabra-server: spawning job thread "  << std::endl;
 		runner = std::thread(std::bind(&Server::wait_for_job, this));

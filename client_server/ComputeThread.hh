@@ -132,6 +132,7 @@ namespace cadabra {
 			Glib::Pid       server_pid;
 			int             server_stdout, server_stderr;
 			unsigned short  port;
+			std::string     authentication_token;
 			int             forced_server_port;
 		};
 

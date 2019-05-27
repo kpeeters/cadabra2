@@ -110,6 +110,7 @@ class Server {
 		// the server, but they all have access to the same Python
 		// scope. With multiple connections, one can inspect the Python
 		// stack from a different client (e.g. for debugging purposes).
+		// All connections share the same authentication token.
 
 		class Connection {
 			public:
@@ -121,6 +122,10 @@ class Server {
 		typedef std::map<websocketpp::connection_hdl, Connection,
 		        std::owner_less<websocketpp::connection_hdl>> ConnectionMap;
 		ConnectionMap connections;
+
+		// Authentication token, needs to be sent along with any message.
+		// Gets set when the server announces its port.
+		std::string  authentication_token;
 
 		// Mutex to be able to use the websocket layer from both the
 		// main loop and the python-running thread.

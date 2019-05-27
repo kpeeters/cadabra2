@@ -205,6 +205,11 @@ void ComputeThread::try_spawn_server()
 			throw std::logic_error("Failed to read port from server.");
 			}
 		port = atoi(buffer);
+		if(fscanf(f, "%100s", buffer)!=1) {
+			throw std::logic_error("Failed to read authentication token from server.");
+			}
+		authentication_token=std::string(buffer);
+		// std::cerr << "auth token: " << authentication_token << std::endl;
 		}
 	catch(Glib::SpawnError& err) {
 		std::cerr << "Failed to start server " << argv[0] << ": " << err.what() << std::endl;
@@ -424,8 +429,9 @@ void ComputeThread::execute_interactive(const std::string& code)
 	header["interactive"] = true;
 	content["code"] = code.c_str();
 
-	req["header"] = header;
-	req["content"] = content;
+	req["auth_token"] = authentication_token;
+	req["header"]     = header;
+	req["content"]    = content;
 
 	std::ostringstream oss;
 	oss << req << std::endl;
@@ -484,6 +490,7 @@ void ComputeThread::execute_cell(DTree::iterator it)
 		else
 			header["cell_origin"]="server";
 		header["msg_type"]="execute_request";
+		req["auth_token"]=authentication_token;
 		req["header"]=header;
 		content["code"]=dc.textbuf;
 		req["content"]=content;
@@ -522,6 +529,7 @@ void ComputeThread::stop()
 	Json::Value req, header, content;
 	header["uuid"]="none";
 	header["msg_type"]="execute_interrupt";
+	req["auth_token"]=authentication_token;
 	req["header"]=header;
 
 	std::ostringstream str;
@@ -550,6 +558,7 @@ void ComputeThread::restart_kernel()
 	header["uuid"]="none";
 	header["msg_type"]="exit";
 	header["from_server"] = true;
+	req["auth_token"]=authentication_token;
 	req["header"]=header;
 
 	std::ostringstream str;
