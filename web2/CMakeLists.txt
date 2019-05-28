@@ -149,6 +149,8 @@ set(PACKAGES
   cdb/core/manip
   cdb/core/component
   cdb/sympy/solvers
+  cdb/relativity/abstract
+  cdb/relativity/schwarzschild
   )
 
 # Table of contents

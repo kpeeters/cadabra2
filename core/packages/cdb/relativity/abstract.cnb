@@ -1,0 +1,165 @@
+{
+	"cell_id" : 10246630462622169684,
+	"cells" : 
+	[
+		{
+			"cell_id" : 3324461703110413508,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 14419213666533296135,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\package{cdb.relativity.abstract}{Core general relativity package, mainly a library of various standard expressions.}\n\nImporting this library will make \\verb|\\partial| a partial derivative and will also declare the\ngreek indices to be space-time indices."
+				}
+			],
+			"hidden" : true,
+			"source" : "\\package{cdb.relativity.abstract}{Core general relativity package, mainly a library of various standard expressions.}\n\nImporting this library will make \\verb|\\partial| a partial derivative and will also declare the\ngreek indices to be space-time indices."
+		},
+		{
+			"cell_id" : 12613540530229412949,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775835,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
+				},
+				{
+					"cell_id" : 9223372036854775836,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=fixed) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma,~\\discretionary{}{}{} \\kappa,~\\discretionary{}{}{} \\gamma,~\\discretionary{}{}{} \\lambda\\right].\\end{dmath*}"
+				}
+			],
+			"source" : "\\partial{#}::PartialDerivative;\n{\\mu,\\nu,\\rho,\\sigma,\\kappa,\\gamma,\\lambda}::Indices(spacetime, position=fixed);"
+		},
+		{
+			"cell_id" : 11955494087904535027,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 15119378517043388215,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{riemann_from_christoffel(R: Ex, c: Ex) -> Ex}{Generates an equality which determines the Riemann tensor in terms of the Christoffel symbols.}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{riemann_from_christoffel(R: Ex, c: Ex) -> Ex}{Generates an equality which determines the Riemann tensor in terms of the Christoffel symbols.}"
+		},
+		{
+			"cell_id" : 14094191732391016476,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def riemann_from_christoffel(R=$R$, c=$\\Gamma$):\n    ex:= @(R)^{\\rho}_{\\sigma\\mu\\nu} = \\partial_{\\mu}{@(c)^{\\rho}_{\\nu\\sigma}} \n                                     -\\partial_{\\nu}{@(c)^{\\rho}_{\\mu\\sigma}} \n                                     + @(c)^{\\rho}_{\\mu\\lambda} @(c)^{\\lambda}_{\\nu\\sigma} \n                                     - @(c)^{\\rho}_{\\nu\\lambda} @(c)^{\\lambda}_{\\mu\\sigma}:\n    return ex"
+		},
+		{
+			"cell_id" : 17711059759552177114,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 2943028165866679465,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{christoffel_from_metric(c: Ex, g: Ex) -> Ex}{Generates an equality which determines the Christoffel symbols in terms of the metric.}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{christoffel_from_metric(c: Ex, g: Ex) -> Ex}{Generates an equality which determines the Christoffel symbols in terms of the metric.}"
+		},
+		{
+			"cell_id" : 16328687583199300518,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def christoffel_from_metric(c=$\\Gamma$, g=$g$):\n    ex:= @(c)^{\\lambda}_{\\mu\\nu} = 1/2 g^{\\lambda\\kappa} ( \\partial_{\\mu}{ g_{\\kappa\\nu} }\n                                                           + \\partial_{\\nu}{ g_{\\kappa\\mu} } - \\partial_{\\kappa}{ g_{\\mu\\nu} } ).\n    return ex\n"
+		},
+		{
+			"cell_id" : 17531443358799556997,
+			"cell_origin" : "client",
+			"cell_type" : "latex",
+			"cells" : 
+			[
+				{
+					"cell_id" : 16528097175233509746,
+					"cell_origin" : "client",
+					"cell_type" : "latex_view",
+					"source" : "\\algorithm{riemann_to_ricci}{Convert contractions of Riemann tensors to Ricci tensors or scalars.}"
+				}
+			],
+			"hidden" : true,
+			"source" : "\\algorithm{riemann_to_ricci}{Convert contractions of Riemann tensors to Ricci tensors or scalars.}"
+		},
+		{
+			"cell_id" : 6890929525873944922,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : "def riemann_to_ricci(ex, R=$R$):\n    rl1:= @(R)^{a?}_{b? a? c?}     =  @(R)_{b? c?}, @(R)^{a?}_{b? c? a?}     = -@(R)_{b? c?}.\n    rl2:= @(R)_{a?}_{b?}^{a?}_{c?} =  @(R)_{b? c?}, @(R)_{a?}_{b? c?}^{a?}   = -@(R)_{b? c?}.\n    rl3:= @(R)_{b?}^{a?}_{c? a?}   =  @(R)_{b? c?}, @(R)_{b?}^{a?}_{a? c?}   = -@(R)_{b? c?}.\n    rl4:= @(R)_{b?}_{a?}^{c? a?}   =  @(R)_{b?}^{c?}.\n    rl5:= @(R)^{a?}_{a?} = @(R), @(R)_{a?}^{a?} = @(R).\n    rl6:= @(R)^{a?}_{a? b? c?} = R_{\n\n    substitute(ex, rl1+rl2+rl3+rl4+rl5, repeat=True)\n    return ex"
+		},
+		{
+			"cell_id" : 3773496488914727547,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775849,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775850,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "R^{a}_{b c a}-R^{a}_{b a c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}R^{a}\\,_{b c a}-R^{a}\\,_{b a c}\\end{dmath*}"
+				}
+			],
+			"source" : "ex:= R^{a}_{b c a} - R^{a}_{b a c};"
+		},
+		{
+			"cell_id" : 2143829647108705411,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"cells" : 
+			[
+				{
+					"cell_id" : 9223372036854775852,
+					"cell_origin" : "server",
+					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775853,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "-2R_{b c}"
+						}
+					],
+					"source" : "\\begin{dmath*}{}-2R_{b c}\\end{dmath*}"
+				}
+			],
+			"source" : "riemann_to_ricci(ex);"
+		},
+		{
+			"cell_id" : 8133262252432645091,
+			"cell_origin" : "client",
+			"cell_type" : "input",
+			"source" : ""
+		}
+	],
+	"description" : "Cadabra JSON notebook format",
+	"version" : 1
+}

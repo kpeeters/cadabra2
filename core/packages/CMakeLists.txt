@@ -29,6 +29,7 @@ set(PACKAGES
   core/solve
   utils/node
   sympy/solvers
+  relativity/abstract
   relativity/schwarzschild
   )
 

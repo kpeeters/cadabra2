@@ -79,6 +79,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 	std::regex discretionary(R"(\\discretionary\{\}\{\}\{\})");
 	std::regex subsection(R"(\\subsection\*\{([^\}]*)\})");
 	std::regex subsubsection(R"(\\subsubsection\*\{([^\}]*)\})");
+	std::regex emph(R"(\\emph\{([^\}]*)\})");	
 	std::regex verb(R"(\\verb\|([^\|]*)\|)");
 	std::regex url(R"(\\url\{([^\}]*)\})");
 	std::regex href(R"(\\href\{([^\}]*)\}\{([^\}]*)\})");
@@ -120,6 +121,7 @@ std::string cadabra::latex_to_html(const std::string& str)
 		res = std::regex_replace(res, section, "<h1>$1</h1>");
 		res = std::regex_replace(res, subsection, "<h2>$1</h2>");
 		res = std::regex_replace(res, subsubsection, "<h3>$1</h3>");
+		res = std::regex_replace(res, emph, "<i>$1</i>");
 		res = std::regex_replace(res, author, "<div class='author'>$1</div>");
 		res = std::regex_replace(res, email, "<div class='email'>$1</div>");
 		res = std::regex_replace(res, verb, "<code>$1</code>");

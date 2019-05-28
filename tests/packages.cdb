@@ -1,5 +1,5 @@
 
-import cdb.relativity as rel
+import cdb.relativity.abstract as rel
 
 def test01():
     __cdbkernel__=create_scope()
