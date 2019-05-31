@@ -1,12 +1,15 @@
 {
+	"cell_id" : 36207891471477439,
 	"cells" : 
 	[
 		{
+			"cell_id" : 160332340275216323,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1081564940559116795,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures.\n\nName patterns are constructed by writing a single question mark behind\nthe name, as in"
@@ -16,21 +19,25 @@
 			"source" : "\\section*{Patterns, conditionals and regular expressions}\n\nPatterns in Cadabra are quite a bit different from those in other\ncomputer algebra systems, because they are more tuned towards the\npattern matching of objects common in tensorial expressions, rather\nthan generic tree structures.\n\nName patterns are constructed by writing a single question mark behind\nthe name, as in"
 		},
 		{
+			"cell_id" : 5668875961888500930,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 13960115787003236366,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 3708297858094532487,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"cells" : 
 							[
 								{
+									"cell_id" : 1229282945087443221,
 									"cell_origin" : "server",
 									"cell_type" : "input_form",
 									"source" : "A_{\\mu} B_{\\nu} C_{\\nu} D_{\\mu}"
@@ -42,16 +49,19 @@
 					"source" : "\\begin{dmath*}{}Q+R\\end{dmath*}"
 				},
 				{
+					"cell_id" : 12197231632325460728,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 16887165575769121425,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"cells" : 
 							[
 								{
+									"cell_id" : 11491248247421756962,
 									"cell_origin" : "server",
 									"cell_type" : "input_form",
 									"source" : "A.D B.C"
@@ -66,11 +76,13 @@
 			"source" : "ex:= Q + R;\nsubstitute(_, $A? + B? -> 0$);"
 		},
 		{
+			"cell_id" : 3619463572002503546,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 17173534587798199961,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "which matches all sums with two terms, each of which is a single\nsymbol without indices or arguments. If you want to match instead any\nobject, with or without indices or arguments, use the double question\nmark instead. To see the difference more explicitly, compare the two\nsubstitute commands in the following example"
@@ -80,26 +92,31 @@
 			"source" : "which matches all sums with two terms, each of which is a single\nsymbol without indices or arguments. If you want to match instead any\nobject, with or without indices or arguments, use the double question\nmark instead. To see the difference more explicitly, compare the two\nsubstitute commands in the following example"
 		},
 		{
+			"cell_id" : 14917233983301461690,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 851671363394498868,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A_{m n}+B_{m n}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 15300988521595408158,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A_{m n}+B_{m n}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 8305897878697697888,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 6711582851069011695,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "0"
@@ -111,11 +128,13 @@
 			"source" : "ex:=A_{m n} + B_{m n};\nsubstitute(_, $A? + B? -> 0$ );\nsubstitute(_, $A?? + B?? -> 0$ );"
 		},
 		{
+			"cell_id" : 1548096958967764772,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 17237064159072365431,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note that it does not make sense to add arguments or indices to object\npatterns; a construction of the type \\verb|A??_{\\mu}(x)| is\nmeaningless and will be flagged as an error.\n\nThere is a special handling of objects which are dummy objects. Objects of this type do not need the question\nmark, as their explicit name is never relevant. You can therefore\nwrite"
@@ -125,21 +144,25 @@
 			"source" : "Note that it does not make sense to add arguments or indices to object\npatterns; a construction of the type \\verb|A??_{\\mu}(x)| is\nmeaningless and will be flagged as an error.\n\nThere is a special handling of objects which are dummy objects. Objects of this type do not need the question\nmark, as their explicit name is never relevant. You can therefore\nwrite"
 		},
 		{
+			"cell_id" : 17559663130956505781,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6393363001452145379,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A_{m n}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 18051833814223758217,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 3781010789145072044,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "0"
@@ -151,11 +174,13 @@
 			"source" : "ex:= A_{m n};\nsubstitute(_, $A_{p q}->0$);"
 		},
 		{
+			"cell_id" : 2304946575859691588,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14478863707372105107,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "to set all occurrances of the tensor~$A$ with two subscript indices to\nzero, regardless of the names of the indices (as you can see, this command sets\n$A_{p q}$ to zero). When index sets are declared using the \\prop{Indices} property,\nthese will be taken into account when matching."
@@ -165,11 +190,13 @@
 			"source" : "to set all occurrances of the tensor~$A$ with two subscript indices to\nzero, regardless of the names of the indices (as you can see, this command sets\n$A_{p q}$ to zero). When index sets are declared using the \\prop{Indices} property,\nthese will be taken into account when matching."
 		},
 		{
+			"cell_id" : 17259612194753747914,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 13604024212525675809,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "When replacing object wildcards with something else that involves\nthese objects, use the question mark notation also on the right-hand\nside of the rule. For instance,"
@@ -179,21 +206,25 @@
 			"source" : "When replacing object wildcards with something else that involves\nthese objects, use the question mark notation also on the right-hand\nside of the rule. For instance,"
 		},
 		{
+			"cell_id" : 12165135534023690358,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4536590401243995744,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}C+D+E+F\\end{dmath*}"
 				},
 				{
+					"cell_id" : 16463888681458270115,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 4371196331352705148,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "C C + E E"
@@ -205,11 +236,13 @@
 			"source" : "ex:= C + D + E + F;\nsubstitute(_, $A? + B? -> A? A?$, repeat=True);"
 		},
 		{
+			"cell_id" : 4646325867102889543,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4115972840328460125,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "replaces every consecutive two terms in a sum by the square of the first\nterm. The following example shows the difference between the\npresence or absence of question marks on the right-hand side:"
@@ -219,11 +252,13 @@
 			"source" : "replaces every consecutive two terms in a sum by the square of the first\nterm. The following example shows the difference between the\npresence or absence of question marks on the right-hand side:"
 		},
 		{
+			"cell_id" : 17284231611431975125,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 17680887810981044123,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}C\\end{dmath*}"
@@ -232,11 +267,13 @@
 			"source" : "ex:= C + D;\nsubstitute(_, $A? + B? -> A?$);"
 		},
 		{
+			"cell_id" : 5518090621855640396,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6574956570807452306,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A A\\end{dmath*}"
@@ -245,11 +282,13 @@
 			"source" : "ex:= C + D;\nsubstitute(_, $A? + B? -> A A$);"
 		},
 		{
+			"cell_id" : 6344951086991989254,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9706677170689892845,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to some other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
@@ -259,21 +298,25 @@
 			"source" : "So be aware that the full pattern symbol needs to be used on the right-hand side (in contrast to some other computer algebra systems).\n\nNote that you can also use patterns to remove or add indices or\narguments, as in"
 		},
 		{
+			"cell_id" : 6969189981675113763,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6909503829459483239,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu,~\\discretionary{}{}{} \\rho,~\\discretionary{}{}{} \\sigma\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 7101854853080106618,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A_{\\mu} B_{\\nu} C_{\\nu} D_{\\mu}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 6725697538764802288,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A \\cdot D B \\cdot C\\end{dmath*}"
@@ -282,11 +325,13 @@
 			"source" : "{\\mu, \\nu, \\rho, \\sigma}::Indices(vector);\nex:= A_{\\mu} B_{\\nu} C_{\\nu} D_{\\mu};\nsubstitute(_, $A?_{\\rho} B?_{\\rho} -> \\dot{A?}{B?}$, repeat=True);"
 		},
 		{
+			"cell_id" : 1410572859323089449,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3514767732742718053,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Conditionals}\n\nIn many algorithms, patterns can be supplemented by so-called\nconditionals. These are constraints on the objects that appear in the\npattern. In the example below, the substitution is not carried out,\nas the rule applies only to patterns where the $n$ and $p$ indices are not \nequal,"
@@ -296,21 +341,25 @@
 			"source" : "\\subsection*{Conditionals}\n\nIn many algorithms, patterns can be supplemented by so-called\nconditionals. These are constraints on the objects that appear in the\npattern. In the example below, the substitution is not carried out,\nas the rule applies only to patterns where the $n$ and $p$ indices are not \nequal,"
 		},
 		{
+			"cell_id" : 13217375379356257896,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11476516092071049407,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}A_{m n} B_{n q}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 13818680780710531400,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 17140124354176370676,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{m n} B_{n q}"
@@ -319,11 +368,13 @@
 					"source" : "\\begin{dmath*}{}A_{m n} B_{n q}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9925616895114408234,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 15412877322844514269,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{m n} B_{n q}"
@@ -335,11 +386,13 @@
 			"source" : "ex:= A_{m n} B_{n q};\nsubstitute(_, $ A_{m n} B_{p q} | n != p -> 0$);"
 		},
 		{
+			"cell_id" : 16749439394296118935,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 424721681098162354,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Without the conditional, the substitution does apply,"
@@ -349,16 +402,19 @@
 			"source" : "Without the conditional, the substitution does apply,"
 		},
 		{
+			"cell_id" : 14737000889023458641,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3744872940974267052,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 12778923625152294774,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{m n} B_{n q}"
@@ -367,11 +423,13 @@
 					"source" : "\\begin{dmath*}{}A_{m n} B_{n q}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 17526282296812661903,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 8491059974968594584,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "0"
@@ -383,11 +441,13 @@
 			"source" : "ex:= A_{m n} B_{n q};\nsubstitute(_, $ A_{m n} B_{p q} -> 0$);"
 		},
 		{
+			"cell_id" : 12339261926069898099,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 18358307655016490823,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : " Note that the conditional follows\ndirectly after the pattern, not after the full substitution rule. A\nway to think about this is that the conditional is part of the\npattern, not of the rule. The reason why the conditional follows the\nfull pattern, and not directly the symbol to which it relates, is\nclear from the example above: the conditional is a ``global''\nconstraint on the pattern, not a local one on a single index.\n\nThese conditions can be used to match names of objects using regular\nexpressions. In the following example, the pattern \\verb|M?| will match\nagainst \\verb|C7|, "
@@ -397,16 +457,19 @@
 			"source" : " Note that the conditional follows\ndirectly after the pattern, not after the full substitution rule. A\nway to think about this is that the conditional is part of the\npattern, not of the rule. The reason why the conditional follows the\nfull pattern, and not directly the symbol to which it relates, is\nclear from the example above: the conditional is a ``global''\nconstraint on the pattern, not a local one on a single index.\n\nThese conditions can be used to match names of objects using regular\nexpressions. In the following example, the pattern \\verb|M?| will match\nagainst \\verb|C7|, "
 		},
 		{
+			"cell_id" : 15788446307630031338,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 17841106604022727636,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 12539220342371751604,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A + B3 + C7"
@@ -415,11 +478,13 @@
 					"source" : "\\begin{dmath*}{}A+B3+C7\\end{dmath*}"
 				},
 				{
+					"cell_id" : 5463861062569268585,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 10905253291236236086,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\sin(C7 B3) (B3)**(-1)"
@@ -431,11 +496,13 @@
 			"source" : "ex:= A + B3 + C7;\nsubstitute(_, $A + M? + N? | \\regex{M?}{\"[A-Z]7\"} -> \\sin(M? N?)/N?$);"
 		},
 		{
+			"cell_id" : 3753229044937802099,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9545837581022606915,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Without the condition, the first match of \\verb|M?| would be against \\verb|B3|, "
@@ -445,16 +512,19 @@
 			"source" : "Without the condition, the first match of \\verb|M?| would be against \\verb|B3|, "
 		},
 		{
+			"cell_id" : 7591537786226289179,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1014881019794128833,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 7641752179517260524,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A + B3 + C7"
@@ -463,11 +533,13 @@
 					"source" : "\\begin{dmath*}{}A+B3+C7\\end{dmath*}"
 				},
 				{
+					"cell_id" : 4964873268024997035,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 18381665047210341127,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "\\sin(B3 C7) (C7)**(-1)"
@@ -479,61 +551,7 @@
 			"source" : "ex:= A + B3 + C7;\nsubstitute(_, $A + M? + N?  -> \\sin(M? N?)/N?$);"
 		},
 		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "B B"
-						}
-					],
-					"source" : "\\begin{dmath*}{}B B\\end{dmath*}"
-				},
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "B B"
-						}
-					],
-					"source" : "\\begin{dmath*}{}B B\\end{dmath*}"
-				}
-			],
-			"source" : "Q::.\nex:= \\lambda \\chi + \\Q Q + B B;\nsubstitute(_, $Q?? Q?? | \\hasprop{Q??}{SelfAntiCommuting} -> 0$);"
-		},
-		{
-			"cell_origin" : "client",
-			"cell_type" : "input",
-			"cells" : 
-			[
-				{
-					"cell_origin" : "server",
-					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "B B"
-						}
-					],
-					"source" : "\\begin{dmath*}{}B B\\end{dmath*}"
-				}
-			],
-			"source" : "ex:= Q Q + B B;"
-		},
-		{
+			"cell_id" : 6270675271635601456,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
