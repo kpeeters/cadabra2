@@ -203,7 +203,7 @@ char32_t preprocessor::get_token_(char32_t prev_token)
 		//			}
 		}
 	if(is_opening_bracket_(prev_token)) {
-		while (std::isblank(cur_str[cur_pos], std::locale{})) {
+		while(cur_str[cur_pos]==' ' || cur_str[cur_pos]=='\t' || cur_str[cur_pos]=='\n' /* std::isblank(cur_str[cur_pos], std::locale("en_US.UTF-8"))*/ ) {
 			++cur_pos;
 			}
 		}
@@ -260,7 +260,7 @@ char32_t preprocessor::get_token_(char32_t prev_token)
 
 		//	HERE: how do we force get_token to return a '*' for the space separating .... and b ?
 
-		if (std::isblank(c, std::locale{})) {
+		if(c==' ' || c=='\t' || c=='\n' /*std::isblank(c, std::locale("en_US.UTF-8")*/ ) {
 			//			std::cout << "blank " << (int)(c) << "\n";
 			if(candidate==0) candidate=' ';
 			++cur_pos;

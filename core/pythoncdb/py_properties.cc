@@ -10,6 +10,7 @@
 #include "properties/DependsInherit.hh"
 #include "properties/Derivative.hh"
 #include "properties/Determinant.hh"
+#include "properties/Diagonal.hh"
 #include "properties/DifferentialForm.hh"
 #include "properties/DiracBar.hh"
 #include "properties/GammaMatrix.hh"
@@ -445,6 +446,11 @@ namespace cadabra {
 		def_prop<Py_SelfAntiCommuting>(m);
 		def_prop<Py_SelfCommuting>(m);
 		def_prop<Py_SelfNonCommuting>(m);
+
+		using Py_Diagonal = BoundProperty<Diagonal, Py_Symmetric>;
+		def_prop<Py_Diagonal>(m);
+
+
 		auto py_spinor = def_prop<Py_Spinor>(m)
 			.def_property_readonly("dimension", [](const Py_Spinor& p) { return p.get_prop()->dimension; })
 			.def_property_readonly("weyl", [](const Py_Spinor& p) { return p.get_prop()->weyl; })

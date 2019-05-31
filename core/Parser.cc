@@ -166,16 +166,28 @@ bool Parser::string2tree(const std::string& inp)
 		return true;
 
 	// Run the preprocessor.
+#ifdef DEBUG
+	std::cout << "running preprocessor" << std::endl;
+#endif
 	std::stringstream ss(inp), ss2;
 	preprocessor pp;
 	ss >> pp;
+#ifdef DEBUG
+	std::cout << "running preprocessor done" << std::endl;
+#endif
 	ss2 << pp;
 	std::string str8="  "+ss2.str()+"  "; // for lookahead
+
+#ifdef DEBUG
+	std::cout << "converting to utf32" << std::endl;
+#endif
 
 	utf_converter conv;
 	str=conv.to_utf32(str8);
 
-	//	std::cout << str << std::endl;
+#ifdef DEBUG
+	std::cout << "converted to utf32" << std::endl;
+#endif
 
 	// Initialise the parser.
 	unsigned int i=0;

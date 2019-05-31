@@ -4,7 +4,7 @@
 
 using namespace cadabra;
 
-#define DEBUG 1
+// #define DEBUG 1
 
 sort_product::sort_product(const Kernel&k, Ex& tr)
 	: Algorithm(k, tr), cleanup(true)
