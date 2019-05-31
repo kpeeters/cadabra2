@@ -154,7 +154,7 @@ namespace cadabra {
 	{
 		auto new_prop = new cpp_type();
 		get_kernel_from_scope()->inject_property(new_prop, ex, param);
-		prop = new_prop;
+		BoundPropertyBase::prop = new_prop;
 	}
 
 
@@ -180,7 +180,7 @@ namespace cadabra {
 	template <typename PropT, typename... ParentTs>
 	const PropT* BoundProperty<PropT, ParentTs...>::get_prop() const
 	{
-		return dynamic_cast<const PropT*>(prop);
+	return dynamic_cast<const PropT*>(BoundPropertyBase::prop);
 	}
 
 

@@ -137,7 +137,12 @@ namespace yngtab {
 				typedef std::random_access_iterator_tag iterator_category;
 			};
 
-
+			class const_iterator;
+			class in_column_iterator;
+			class in_column_const_iterator;
+			class in_row_iterator;
+			class in_row_const_iterator;						
+			
 			/// An iterator which stays inside a given column of a tableau.
 			class in_column_iterator : public iterator_base {
 				public:
@@ -167,6 +172,7 @@ namespace yngtab {
 					unsigned int       column_number, row_number;
 				};
 
+			/// A const iterator which stays inside a given column of a tableau.
 			class in_column_const_iterator : public const_iterator_base {
 			public:
 				in_column_const_iterator(unsigned int r, unsigned int c, const filled_tableau<T>*);
@@ -194,7 +200,6 @@ namespace yngtab {
 				const filled_tableau<T>* tab;
 				unsigned int       column_number, row_number;
 			};
-
 
 			/// An iterator which stays inside a given row of a tableau.
 			class in_row_iterator : public iterator_base {
