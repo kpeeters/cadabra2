@@ -3,6 +3,11 @@
 
 using namespace cadabra;
 
+std::string TableauBase::name() const
+{
+	return "TableauBase";
+}
+
 int TableauBase::get_indexgroup(const Properties& pr, Ex& tr, Ex::iterator it, int indexnum) const
 	{
 	const TableauBase *pd;

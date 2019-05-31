@@ -15,7 +15,7 @@ namespace cadabra {
 
 			int  dimension;
 			bool weyl;
-			enum { positive, negative } chirality;  // only in combination with weyl
+			enum Chirality { positive, negative } chirality;  // only in combination with weyl
 			bool majorana;
 		};
 

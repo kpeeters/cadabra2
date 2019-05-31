@@ -1,11 +1,11 @@
 #include <sstream>
 #include "py_tableau.hh"
 #include "../YoungTab.hh"
-
+#include "../properties/TableauBase.hh"
 namespace cadabra {
 
 	namespace py = pybind11;
-	using tab_t = yngtab::filled_tableau<unsigned int>;
+	using tab_t = TableauBase::tab_t;
 
 	std::string tab_str(const tab_t& tab)
 	{
