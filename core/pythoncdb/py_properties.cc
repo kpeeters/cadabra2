@@ -183,20 +183,37 @@ namespace cadabra {
 	return dynamic_cast<const PropT*>(BoundPropertyBase::prop);
 	}
 
-
+	template <typename PropT, typename... ParentTs>
+	std::string BoundProperty<PropT, ParentTs...>::str_() const
+		{
+		return BoundPropertyBase::str_();
+		}
+	
+	template <typename PropT, typename... ParentTs>
+	std::string BoundProperty<PropT, ParentTs...>::latex_() const
+		{
+		return BoundPropertyBase::latex_();
+		}
+	
+	template <typename PropT, typename... ParentTs>
+	std::string BoundProperty<PropT, ParentTs...>::repr_() const
+		{
+		return BoundPropertyBase::str_();
+		}
+	
 	template <typename BoundPropT>
 	typename BoundPropT::py_type def_abstract_prop(pybind11::module& m, const std::string& name)
 	{
 		using base_type = BoundPropT;
-		using cpp_type = typename base_type::cpp_type;
+//		using cpp_type = typename base_type::cpp_type;
 		using py_type = typename base_type::py_type;
 
 		return py_type(m, name.c_str(), py::multiple_inheritance())
 			.def_static("get", [](Ex_ptr ex, bool ipr) { return base_type::get_from_kernel(ex->begin(), ipr); }, py::arg("ex"), py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, bool ipr) { return base_type::get_from_kernel(node.it, ipr); }, py::arg("exnode"), py::arg("ignore_parent_rel") = false)
-			.def("__str__", &base_type::str_)
-			.def("__repr__", &base_type::repr_)
-			.def("_latex_", &base_type::latex_);
+			.def("__str__", &BoundPropT::str_)
+			.def("__repr__", &BoundPropT::repr_)
+			.def("_latex_", &BoundPropT::latex_);
 	}
 
 	template <typename BoundPropT>
@@ -210,9 +227,9 @@ namespace cadabra {
 			.def(py::init<Ex_ptr, Ex_ptr>(), py::arg("ex"), py::arg("param"))
 			.def_static("get", [](Ex_ptr ex, bool ipr) { return base_type::get_from_kernel(ex->begin(), ipr); }, py::arg("ex"), py::arg("ignore_parent_rel") = false)
 			.def_static("get", [](ExNode node, bool ipr) { return base_type::get_from_kernel(node.it, ipr); }, py::arg("exnode"), py::arg("ignore_parent_rel") = false)
-			.def("__str__", &base_type::str_)
-			.def("__repr__", &base_type::repr_)
-			.def("_latex_", &base_type::latex_);
+			.def("__str__", &BoundPropT::str_)
+			.def("__repr__", &BoundPropT::repr_)
+			.def("_latex_", &BoundPropT::latex_);
 	}
 
 

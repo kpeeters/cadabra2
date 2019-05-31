@@ -60,6 +60,13 @@ namespace cadabra {
 			// Construct from existing cpp property object
 			BoundProperty(const PropT* prop, Ex_ptr for_obj);
 
+			/// Human-readable form in text, i.e. no special formatting.
+			std::string str_() const;
+			/// Human-readable form using LaTeX markup.
+			std::string latex_() const;
+			/// Python-parseable form. FIXME: not correct right now.
+			std::string repr_() const;
+			
 			// Get existing cpp property by querying kernel
 			static std::shared_ptr<BoundProperty> get_from_kernel(Ex::iterator ex, bool ignore_parent_rel);
 
