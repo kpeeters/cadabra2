@@ -23,7 +23,7 @@ namespace cadabra {
 				};
 			virtual std::string   name() const override;
 
-			enum { multiplicative, additive, power } combination_type;
+			enum CombinationType { multiplicative, additive, power } combination_type;
 
 			multiplier_t value_self;
 		};

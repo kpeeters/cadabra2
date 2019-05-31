@@ -9,11 +9,11 @@ using namespace cadabra;
 
 decompose_product::decompose_product(const Kernel& k, Ex&tr)
 	: Algorithm(k, tr), t1(0), t2(0)
-	{
-	}
+{
+}
 
 const Indices *decompose_product::indices_equivalent(iterator it) const
-	{
+{
 	index_iterator ii=index_iterator::begin(kernel.properties, it);
 	const Indices *ret=0, *tmp=0;
 	while(ii!=index_iterator::end(kernel.properties, it)) {
@@ -22,12 +22,12 @@ const Indices *decompose_product::indices_equivalent(iterator it) const
 		if(ret==0) ret=tmp;
 		else if(ret!=tmp) return 0;
 		++ii;
-		}
-	return ret;
 	}
+	return ret;
+}
 
 bool decompose_product::can_apply(iterator it)
-	{
+{
 	// Act on products. Find the first object which either has a
 	// TableauSymmetry or has one vector index only. Then find the next
 	// indexed object in the product and return true if this is a
@@ -59,21 +59,21 @@ bool decompose_product::can_apply(iterator it)
 									dim=to_long(*itg->difference.begin()->multiplier);
 									if(dim>0)
 										return true;
-									}
 								}
 							}
 						}
 					}
 				}
-			++fc;
 			}
+			++fc;
 		}
-	return false;
 	}
+	return false;
+}
 
 void decompose_product::fill_asym_ranges(TableauBase::tab_t& tab, int offset,
       combin::range_vector_t& ranges)
-	{
+{
 	// FIXME: we could also look at all other factors, and see if the index
 	// _name_ in the slot is contracted to the index name in an antisymmetric
 	// slot range. But that is more tricky, because index names move, whereas
@@ -85,14 +85,14 @@ void decompose_product::fill_asym_ranges(TableauBase::tab_t& tab, int offset,
 		while(ci!=tab.end_column(i)) {
 			tmprange.push_back((*ci)+offset);
 			++ci;
-			}
+		}
 		if(tmprange.size()>=2)
 			ranges.push_back(tmprange);
-		}
 	}
+}
 
 Algorithm::result_t decompose_product::apply(iterator& it)
-	{
+{
 	// Create the tensor product Young tableaux.
 	sibtab_t  m1,m2;
 	sibtabs_t prod;
@@ -109,8 +109,8 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 				index_iterator tmpii=index_iterator::begin(kernel.properties, f1);
 				tmpii+=t1tab(r,c);
 				m1.add_box(r, tmpii);
-				}
-		}
+			}
+	}
 	else m1.add_box(0, index_iterator::begin(kernel.properties, f1));
 
 	if(t2) {
@@ -122,8 +122,8 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 				index_iterator tmpii=index_iterator::begin(kernel.properties, f2);
 				tmpii+=t2tab(r,c);
 				m2.add_box(r, tmpii);
-				}
-		}
+			}
+	}
 	else m2.add_box(0, index_iterator::begin(kernel.properties, f2));
 
 	// Determine the position of the first index of the two
@@ -134,14 +134,14 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 			break;
 		++ioffset1;
 		++srch;
-		}
+	}
 	srch=index_iterator::begin(kernel.properties, it);
 	while(srch!=index_iterator::end(kernel.properties, it)) {
 		if(iterator(srch)==iterator(index_iterator::begin(kernel.properties, f2)))
 			break;
 		++ioffset2;
 		++srch;
-		}
+	}
 
 	// Determine slot ranges which are anti-symmetric.
 
@@ -173,17 +173,17 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 				if(iterator(fnd) == (*si)) {
 					*ni=inum;
 					break;
-					}
+				}
 				++inum;
 				++fnd;
-				}
+			}
 			assert(inum!=number_of_indices(kernel.properties, it));
 			++ni;
 			++si;
-			}
+		}
 		numprod.storage.push_back(tmptab);
 		++tt;
-		}
+	}
 
 	// Now create a Young projector sum of terms with the indices
 	// distributed according to the tensor product tableaux.
@@ -243,7 +243,7 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 		///		break;
 
 		++ntt;
-		}
+	}
 
 	rep.begin()->name=name_set.insert("\\sum").first;
 
@@ -260,14 +260,14 @@ Algorithm::result_t decompose_product::apply(iterator& it)
 	cleanup_dispatch(kernel, tr, it);
 
 	return result_t::l_applied;
-	}
+}
 
 
 void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, young_project& yp,
       const TableauBase *, iterator ff,
       int ioffset, const TableauBase::tab_t& thetab,
       bool remove_traces)
-	{
+{
 	// Sample: S_{m n} D_{p}{ A_{n q} } with S symmetric and A antisymmetric.
 	// The tensor product contains one tableau which leads to a symmetriser
 	// with as first entry 0 3 2 1 4. This means that the 'm' and 'n' index
@@ -287,7 +287,7 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 		young_project ypinitial(kernel, tr);
 		ypinitial.tab.copy_shape(thetab);
 		numtab_t::iterator tabit=ypinitial.tab.begin();
-		numtab_t::iterator origtabit=thetab.begin();
+		numtab_t::const_iterator origtabit=thetab.begin();
 
 		sibling_iterator nxt=term;
 		++nxt;
@@ -303,12 +303,12 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 					*tabit=yp.sym[0][i];
 					//					txtout << ipos << " has moved to " << yp.sym[0][i] << std::endl;
 					break;
-					}
 				}
+			}
 			++tabit;
 			++origtabit;
 			++ii;
-			}
+		}
 
 		// Now we can finally project.
 		yp.remove_traces=remove_traces;
@@ -329,8 +329,8 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 				assert(res);
 				ypinitial.apply(tmp);
 				trmit=nxt2;
-				}
 			}
+		}
 		else {   // just a single term
 			//			if(getenv("SMART"))
 			ypinitial.asym_ranges=asym_ranges;
@@ -338,9 +338,9 @@ void decompose_product::project_onto_initial_symmetries(Ex& rep, iterator rr, yo
 			auto res=ypinitial.can_apply(tmp);
 			assert(res);
 			ypinitial.apply(tmp);
-			}
+		}
 
 		++termnum;
 		term=nxt;
-		}
 	}
+}

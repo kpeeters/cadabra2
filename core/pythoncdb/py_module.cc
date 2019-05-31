@@ -8,6 +8,7 @@
 #include "py_progress.hh"
 #include "py_properties.hh"
 #include "py_stopwatch.hh"
+#include "py_tableau.hh"
 
 namespace cadabra {
 	namespace py = pybind11;
@@ -29,6 +30,7 @@ namespace cadabra {
 		init_progress_monitor(m);
 		init_stopwatch(m);
 		init_ex(m);
+		init_tableau(m);
 		init_algorithms(m);
 		init_properties(m);
 		}

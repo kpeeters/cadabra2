@@ -179,6 +179,7 @@ set(MODULE_SRC_FILES
 	pythoncdb/py_progress.cc
 	pythoncdb/py_properties.cc
 	pythoncdb/py_stopwatch.cc
+	pythoncdb/py_tableau.cc
 )
 
 set(LOCAL_SRC_FILES

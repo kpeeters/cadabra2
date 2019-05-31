@@ -127,6 +127,17 @@ namespace yngtab {
 					typedef std::random_access_iterator_tag iterator_category;
 				};
 
+			class const_iterator_base {
+			public:
+				typedef T                               value_type;
+				typedef const T* pointer;
+				typedef const T& reference;
+				typedef size_t                          size_type;
+				typedef ptrdiff_t                       difference_type;
+				typedef std::random_access_iterator_tag iterator_category;
+			};
+
+
 			/// An iterator which stays inside a given column of a tableau.
 			class in_column_iterator : public iterator_base {
 				public:
@@ -150,10 +161,40 @@ namespace yngtab {
 					bool                operator!=(const in_column_iterator&) const;
 
 					friend class filled_tableau<T>;
+					friend class filled_tableau<T>::in_column_const_iterator;
 				private:
 					filled_tableau<T> *tab;
 					unsigned int       column_number, row_number;
 				};
+
+			class in_column_const_iterator : public const_iterator_base {
+			public:
+				in_column_const_iterator(unsigned int r, unsigned int c, const filled_tableau<T>*);
+				in_column_const_iterator(const in_column_iterator& other);
+				const T& operator*() const;
+				const T* operator->() const;
+				in_column_const_iterator& operator++();
+				in_column_const_iterator  operator++(int);
+				in_column_const_iterator& operator--();
+				in_column_const_iterator  operator--(int);
+				in_column_const_iterator  operator+(unsigned int);
+				in_column_const_iterator  operator-(unsigned int);
+				in_column_const_iterator& operator+=(unsigned int);
+				in_column_const_iterator& operator-=(unsigned int);
+				bool                operator<(const in_column_const_iterator& other) const;
+				bool                operator>(const in_column_const_iterator& other) const;
+				bool                operator<=(const in_column_const_iterator& other) const;
+				bool                operator>=(const in_column_const_iterator& other) const;
+				ptrdiff_t           operator-(const in_column_const_iterator&) const;
+				bool                operator==(const in_column_const_iterator&) const;
+				bool                operator!=(const in_column_const_iterator&) const;
+
+				friend class filled_tableau<T>;
+			private:
+				const filled_tableau<T>* tab;
+				unsigned int       column_number, row_number;
+			};
+
 
 			/// An iterator which stays inside a given row of a tableau.
 			class in_row_iterator : public iterator_base {
@@ -178,8 +219,37 @@ namespace yngtab {
 				bool                operator!=(const in_row_iterator&) const;
 
 				friend class filled_tableau<T>;
+				friend class filled_tableau<T>::in_row_const_iterator;
 			private:
 				filled_tableau<T>* tab;
+				unsigned int       column_number, row_number;
+			};
+
+			class in_row_const_iterator : public const_iterator_base {
+			public:
+				in_row_const_iterator(unsigned int r, unsigned int c, const filled_tableau<T>*);
+				in_row_const_iterator(const in_row_iterator& other);
+				const T& operator*() const;
+				const T* operator->() const;
+				in_row_const_iterator& operator++();
+				in_row_const_iterator  operator++(int);
+				in_row_const_iterator& operator--();
+				in_row_const_iterator  operator--(int);
+				in_row_const_iterator  operator+(unsigned int);
+				in_row_const_iterator  operator-(unsigned int);
+				in_row_const_iterator& operator+=(unsigned int);
+				in_row_const_iterator& operator-=(unsigned int);
+				bool                operator<(const in_row_const_iterator& other) const;
+				bool                operator>(const in_row_const_iterator& other) const;
+				bool                operator<=(const in_row_const_iterator& other) const;
+				bool                operator>=(const in_row_const_iterator& other) const;
+				ptrdiff_t           operator-(const in_row_const_iterator&) const;
+				bool                operator==(const in_row_const_iterator&) const;
+				bool                operator!=(const in_row_const_iterator&) const;
+
+				friend class filled_tableau<T>;
+			private:
+				const filled_tableau<T>* tab;
 				unsigned int       column_number, row_number;
 			};
 
@@ -204,18 +274,57 @@ namespace yngtab {
 					bool                operator!=(const iterator&) const;
 
 					friend class filled_tableau<T>;
+					friend class filled_tableau<T>::const_iterator;
 				private:
 					filled_tableau<T> *tab;
 					unsigned int       column_number, row_number;
 				};
 
+			class const_iterator : public const_iterator_base {
+			public:
+				const_iterator(unsigned int r, unsigned int c, const filled_tableau<T>*);
+				const_iterator(const iterator& other);
+				const T& operator*() const;
+				const T* operator->() const;
+				const_iterator&				operator++();
+				const_iterator            operator++(int);
+				const_iterator&				operator--();
+				const_iterator            operator--(int);
+				const_iterator            operator+(unsigned int);
+				const_iterator            operator-(unsigned int);
+				const_iterator&				 operator+=(unsigned int);
+				const_iterator&				operator-=(unsigned int);
+				bool			               operator<(const const_iterator& other) const;
+				bool					        operator>(const const_iterator& other) const;
+				ptrdiff_t					  operator-(const const_iterator&) const;
+				bool			             operator==(const const_iterator&) const;
+				bool					        operator!=(const const_iterator&) const;
+
+				friend class filled_tableau<T>;
+			private:
+				const filled_tableau<T>* tab;
+				unsigned int       column_number, row_number;
+			};
+
 
 			in_column_iterator   begin_column(unsigned int column_number);
 			in_column_iterator   end_column(unsigned int column_number);
+			in_column_const_iterator   begin_column(unsigned int column_number) const;
+			in_column_const_iterator   end_column(unsigned int column_number) const;
+			in_column_const_iterator   cbegin_column(unsigned int column_number) const;
+			in_column_const_iterator   cend_column(unsigned int column_number) const;
 			in_row_iterator		begin_row(unsigned int row_number);
 			in_row_iterator		end_row(unsigned int row_number);
-			iterator             begin() const;
-			iterator             end() const;
+			in_row_const_iterator		begin_row(unsigned int row_number) const;
+			in_row_const_iterator		end_row(unsigned int row_number) const;
+			in_row_const_iterator		cbegin_row(unsigned int row_number) const;
+			in_row_const_iterator		cend_row(unsigned int row_number) const;
+			iterator begin();
+			iterator end();
+			const_iterator             begin() const;
+			const_iterator             end() const;
+			const_iterator             cbegin() const;
+			const_iterator             cend() const;
 
 			template<class OutputIterator>
 			OutputIterator       Garnir_set(OutputIterator, unsigned int, unsigned int) const;
@@ -537,6 +646,142 @@ namespace yngtab {
 		}
 
 	//---------------------------------------------------------------------------
+// in_column_const_iterator
+
+	template<class T>
+	filled_tableau<T>::in_column_const_iterator::in_column_const_iterator(unsigned int r, unsigned int c, const filled_tableau<T>* t)
+		: tab(t), column_number(c), row_number(r)
+	{
+	}
+
+	template<class T>
+	filled_tableau<T>::in_column_const_iterator::in_column_const_iterator(const filled_tableau<T>::in_column_iterator& other)
+		: tab(other.tab), column_number(other.column_number), row_number(other.row_number)
+	{
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::in_column_const_iterator::operator+(unsigned int n)
+	{
+		typename filled_tableau<T>::in_column_const_iterator it2(*this);
+		it2 += n;
+		return it2;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::in_column_const_iterator::operator-(unsigned int n)
+	{
+		typename filled_tableau<T>::in_column_const_iterator it2(*this);
+		it2 -= n;
+		return it2;
+	}
+
+	template<class T>
+	ptrdiff_t filled_tableau<T>::in_column_const_iterator::operator-(const in_column_const_iterator& other) const
+	{
+		return row_number - other.row_number;
+	}
+
+	template<class T>
+	const T& filled_tableau<T>::in_column_const_iterator::operator*() const
+	{
+		return (*tab)(row_number, column_number);
+	}
+
+	template<class T>
+	const T* filled_tableau<T>::in_column_const_iterator::operator->() const
+	{
+		return &((*tab)(row_number, column_number));
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator& filled_tableau<T>::in_column_const_iterator::operator++()
+	{
+		++row_number;
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator& filled_tableau<T>::in_column_const_iterator::operator+=(unsigned int n)
+	{
+		row_number += n;
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator& filled_tableau<T>::in_column_const_iterator::operator--()
+	{
+		--row_number;
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::in_column_const_iterator::operator--(int)
+	{
+		in_column_const_iterator tmp(*this);
+		--row_number;
+		return tmp;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::in_column_const_iterator::operator++(int)
+	{
+		in_column_const_iterator tmp(*this);
+		++row_number;
+		return tmp;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator& filled_tableau<T>::in_column_const_iterator::operator-=(unsigned int n)
+	{
+		row_number -= n;
+		return (*this);
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_column_const_iterator::operator==(const in_column_const_iterator& other) const
+	{
+		if (tab == other.tab && row_number == other.row_number && column_number == other.column_number)
+			return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_column_const_iterator::operator<=(const in_column_const_iterator & other) const
+	{
+		if (row_number <= other.row_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_column_const_iterator::operator>=(const in_column_const_iterator & other) const
+	{
+		if (row_number >= other.row_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_column_const_iterator::operator<(const in_column_const_iterator & other) const
+	{
+		if (row_number < other.row_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_column_const_iterator::operator>(const in_column_const_iterator & other) const
+	{
+		if (row_number > other.row_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_column_const_iterator::operator!=(const in_column_const_iterator & other) const
+	{
+		return !((*this) == other);
+	}
+
+
+	//---------------------------------------------------------------------------
 	// in_row_iterator
 
 	template<class T>
@@ -664,6 +909,143 @@ namespace yngtab {
 	{
 		return !((*this) == other);
 	}
+
+	//---------------------------------------------------------------------------
+// in_row_const_iterator
+
+	template<class T>
+	filled_tableau<T>::in_row_const_iterator::in_row_const_iterator(unsigned int r, unsigned int c, const filled_tableau<T>* t)
+		: tab(t), column_number(c), row_number(r)
+	{
+	}
+
+	template<class T>
+	filled_tableau<T>::in_row_const_iterator::in_row_const_iterator(const filled_tableau<T>::in_row_iterator& other)
+		: tab(other.tab), column_number(other.column_number), row_number(other.row_number)
+	{
+	}
+
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::in_row_const_iterator::operator+(unsigned int n)
+	{
+		typename filled_tableau<T>::in_row_const_iterator it2(*this);
+		it2 += n;
+		return it2;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::in_row_const_iterator::operator-(unsigned int n)
+	{
+		typename filled_tableau<T>::in_row_const_iterator it2(*this);
+		it2 -= n;
+		return it2;
+	}
+
+	template<class T>
+	ptrdiff_t filled_tableau<T>::in_row_const_iterator::operator-(const in_row_const_iterator& other) const
+	{
+		return column_number - other.column_number;
+	}
+
+	template<class T>
+	const T& filled_tableau<T>::in_row_const_iterator::operator*() const
+	{
+		return (*tab)(row_number, column_number);
+	}
+
+	template<class T>
+	const T* filled_tableau<T>::in_row_const_iterator::operator->() const
+	{
+		return &((*tab)(row_number, column_number));
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator& filled_tableau<T>::in_row_const_iterator::operator++()
+	{
+		++column_number;
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator& filled_tableau<T>::in_row_const_iterator::operator+=(unsigned int n)
+	{
+		column_number += n;
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator& filled_tableau<T>::in_row_const_iterator::operator--()
+	{
+		--column_number;
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::in_row_const_iterator::operator--(int)
+	{
+		in_row_const_iterator tmp(*this);
+		--column_number;
+		return tmp;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::in_row_const_iterator::operator++(int)
+	{
+		in_row_const_iterator tmp(*this);
+		++column_number;
+		return tmp;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator& filled_tableau<T>::in_row_const_iterator::operator-=(unsigned int n)
+	{
+		column_number -= n;
+		return (*this);
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_row_const_iterator::operator==(const in_row_const_iterator& other) const
+	{
+		if (tab == other.tab && row_number == other.row_number && column_number == other.column_number)
+			return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_row_const_iterator::operator<=(const in_row_const_iterator & other) const
+	{
+		if (column_number <= other.column_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_row_const_iterator::operator>=(const in_row_const_iterator & other) const
+	{
+		if (column_number >= other.column_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_row_const_iterator::operator<(const in_row_const_iterator & other) const
+	{
+		if (column_number < other.column_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_row_const_iterator::operator>(const in_row_const_iterator & other) const
+	{
+		if (column_number > other.column_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::in_row_const_iterator::operator!=(const in_row_const_iterator & other) const
+	{
+		return !((*this) == other);
+	}
+
 
 
 	//---------------------------------------------------------------------------
@@ -811,20 +1193,199 @@ namespace yngtab {
 		return !((*this)==other);
 		}
 
+
+
+	//---------------------------------------------------------------------------
+	// const_iterator
+
+	template<class T>
+	filled_tableau<T>::const_iterator::const_iterator(unsigned int r, unsigned int c, const filled_tableau<T>* t)
+		: tab(t), column_number(c), row_number(r)
+	{
+	}
+
+	template<class T>
+	filled_tableau<T>::const_iterator::const_iterator(const filled_tableau<T>::iterator& other)
+		: tab(other.tab), column_number(other.column_number), row_number(other.row_number)
+	{
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::const_iterator::operator+(unsigned int n)
+	{
+		typename filled_tableau<T>::const_iterator it2(*this);
+		it2 += n;
+		return it2;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::const_iterator::operator-(unsigned int n)
+	{
+		typename filled_tableau<T>::const_iterator it2(*this);
+		it2 -= n;
+		return it2;
+	}
+
+	template<class T>
+	ptrdiff_t filled_tableau<T>::const_iterator::operator-(const const_iterator& other) const
+	{
+		return row_number - other.row_number;
+	}
+
+	template<class T>
+	const T& filled_tableau<T>::const_iterator::operator*() const
+	{
+		return (*tab)(row_number, column_number);
+	}
+
+	template<class T>
+	const T* filled_tableau<T>::const_iterator::operator->() const
+	{
+		return &((*tab)(row_number, column_number));
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator& filled_tableau<T>::const_iterator::operator++()
+	{
+		if (++column_number == tab->rows[row_number].size()) {
+			column_number = 0;
+			++row_number;
+		}
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator& filled_tableau<T>::const_iterator::operator+=(unsigned int n)
+	{
+		while (n > 0) {
+			if (++column_number == tab->rows[row_number]) {
+				column_number = 0;
+				++row_number;
+			}
+			--n;
+		}
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator& filled_tableau<T>::const_iterator::operator--()
+	{
+		if (column_number == 0) {
+			--row_number;
+			column_number = tab->rows[row_number].size() - 1;
+		}
+		else --column_number;
+		return (*this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::const_iterator::operator--(int)
+	{
+		const_iterator tmp(*this);
+		if (column_number == 0) {
+			--row_number;
+			column_number = tab->rows[row_number].size() - 1;
+		}
+		else --column_number;
+		return tmp;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::const_iterator::operator++(int)
+	{
+		const_iterator tmp(*this);
+		while (this->n > 0) {
+			if (++column_number == tab->rows[row_number]) {
+				column_number = 0;
+				++row_number;
+			}
+			--this->n;
+		}
+		return tmp;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator& filled_tableau<T>::const_iterator::operator-=(unsigned int n)
+	{
+		while (n > 0) {
+			if (column_number == 0) {
+				--row_number;
+				column_number = tab->rows[row_number].size() - 1;
+			}
+			else --column_number;
+			--n;
+		}
+		return (*this);
+	}
+
+	template<class T>
+	bool filled_tableau<T>::const_iterator::operator==(const const_iterator& other) const
+	{
+		if (tab == other.tab && row_number == other.row_number && column_number == other.column_number)
+			return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::const_iterator::operator<(const const_iterator & other) const
+	{
+		if (row_number < other.row_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::const_iterator::operator>(const const_iterator & other) const
+	{
+		if (row_number > other.row_number) return true;
+		return false;
+	}
+
+	template<class T>
+	bool filled_tableau<T>::const_iterator::operator!=(const const_iterator & other) const
+	{
+		return !((*this) == other);
+	}
+
+
 	//---
 	// other
 
 	template<class T>
-	typename filled_tableau<T>::iterator filled_tableau<T>::begin() const
+	typename filled_tableau<T>::iterator filled_tableau<T>::begin()
+	{
+		return iterator(0, 0, this);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::iterator filled_tableau<T>::end()
+	{
+		return iterator(rows.size(), 0, this);
+	}
+
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::cbegin() const
 		{
-		return iterator(0,0,const_cast<filled_tableau<T> *>(this));
+		return const_iterator(0,0,this);
 		}
 
 	template<class T>
-	typename filled_tableau<T>::iterator filled_tableau<T>::end() const
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::cend() const
 		{
-		return iterator(rows.size(), 0, const_cast<filled_tableau<T> *>(this));
+		return const_iterator(rows.size(), 0, this);
 		}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::begin() const
+	{
+		return cbegin();
+	}
+
+	template<class T>
+	typename filled_tableau<T>::const_iterator filled_tableau<T>::end() const
+	{
+		return cend();
+	}
 
 	template<class T>
 	typename filled_tableau<T>::in_column_iterator filled_tableau<T>::begin_column(unsigned int column)
@@ -848,6 +1409,39 @@ namespace yngtab {
 		return it;
 		}
 
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::cbegin_column(unsigned int column) const
+	{
+		typename filled_tableau<T>::in_column_const_iterator it(0, column, this);
+		assert(number_of_rows() > 0);
+		assert(column < row_size(0));
+		return it;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::cend_column(unsigned int column) const
+	{
+		unsigned int r = 0;
+		while (r < number_of_rows()) {
+			if (row_size(r) <= column)
+				break;
+			++r;
+		}
+		typename filled_tableau<T>::in_column_const_iterator it(r, column, this);
+		return it;
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::begin_column(unsigned int column) const
+	{
+		return cbegin_column(column);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_column_const_iterator filled_tableau<T>::end_column(unsigned int column) const
+	{
+		return cend_column(column);
+	}
 
 	template<class T>
 	typename filled_tableau<T>::in_row_iterator filled_tableau<T>::begin_row(unsigned int row)
@@ -860,6 +1454,32 @@ namespace yngtab {
 	{
 		return in_row_iterator{ row, row_size(row), this };
 	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::cbegin_row(unsigned int row) const
+	{
+		return in_row_const_iterator{ row, 0, this };
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::cend_row(unsigned int row) const
+	{
+		return in_row_const_iterator{ row, row_size(row), this };
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::begin_row(unsigned int row) const
+	{
+		return cbegin_row(row);
+	}
+
+	template<class T>
+	typename filled_tableau<T>::in_row_const_iterator filled_tableau<T>::end_row(unsigned int row) const
+	{
+		return cend_row(row);
+	}
+
+
 
 
 	template<class T>
@@ -1281,12 +1901,16 @@ rule_violated:
 		}
 
 	template<class T>
-	const T& filled_tableau<T>::operator[](unsigned int ) const
+	const T& filled_tableau<T>::operator[](unsigned int boxnum) const
 		{
-		assert(1==0);
-		assert(this->row<rows.size());
-		assert(this->col<rows[this->row].size());
-		return rows[this->row][this->col];
+		unsigned int row = 0;
+		while (true) {
+			if (boxnum < row_size(row))
+				break;
+			boxnum -= row_size(row);
+			++row;
+		}
+		return rows[row][boxnum];
 		}
 
 	template<class T>
