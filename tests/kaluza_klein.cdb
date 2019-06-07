@@ -61,7 +61,7 @@ distribute(_)
 sort_product(_)
 canonicalise(_)
 rename_dummies(_);
-
+    
 tst:= - 1/4 * \partial_{m}{\phi} * \partial_{n}{\phi} * \phi**(-1) + 1/4 * \partial_{p}{\phi} * \partial_{n}{h_{m q}} * h^{p q} - 1/2 * \partial_{m n}{\phi} + 1/4 * F_{m p} * F_{n q} * \phi**3 * h^{p q} + 1/4 * \partial_{p}{\phi} * \partial_{q}{\phi} * \phi**(-1) * h_{m n} * h^{p q} - 1/4 * \partial_{p}{\phi} * \partial_{q}{h_{m n}} * h^{p q} + 1/4 * \partial_{p}{\phi} * \partial_{m}{h_{n q}} * h^{p q} - @(todo);
 
 assert(tst==0)

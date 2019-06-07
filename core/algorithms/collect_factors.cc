@@ -26,10 +26,10 @@ void collect_factors::fill_hash_map(iterator it)
 	factor_hash.clear();
 	sibling_iterator sib=tr.begin(it);
 	unsigned int factors=0;
-	while(sib!=tr.end(it)) {
+	while(sib!=tr.end(it)) { // iterate over all factors in the product
 		sibling_iterator chsib=tr.begin(sib);
 		bool dontcollect=false;
-		while(chsib!=tr.end(sib)) {
+		while(chsib!=tr.end(sib)) { // iterate over all child nodes of a factor
 			const Symbol     *smb=kernel.properties.get<Symbol>(chsib, true);
 			// std::cerr << chsib << ": " << smb << std::endl;
 			if((chsib->fl.parent_rel==str_node::p_sub || chsib->fl.parent_rel==str_node::p_super) &&
@@ -40,8 +40,10 @@ void collect_factors::fill_hash_map(iterator it)
 			++chsib;
 			}
 		if(!dontcollect) {
-			if(*sib->name=="\\pow")
-				factor_hash.insert(std::pair<hashval_t, sibling_iterator>(tr.calc_hash(tr.begin(sib)), tr.begin(sib)));
+			if(*sib->name=="\\pow") {
+				if(tr.begin(sib)->is_rational()==false) // do not collect exponents of numbers
+					factor_hash.insert(std::pair<hashval_t, sibling_iterator>(tr.calc_hash(tr.begin(sib)), tr.begin(sib)));
+				}
 			else
 				factor_hash.insert(std::pair<hashval_t, sibling_iterator>(tr.calc_hash(sib), sib));
 			++factors;
@@ -78,6 +80,11 @@ Algorithm::result_t collect_factors::apply(iterator& st)
 			else {
 				expsum.append_child(expsumit, str_node("1", str_node::b_round));
 				}
+			// FIXME: If the multiplier of this factor is non-zero, we
+			// have (pure number)**(exp). We need to catch this
+			// separately.  std::cerr << (*thisbin1).second << std::endl;
+			// For now, we have disabled collecting such factors; sympy
+			// can do it anyway.
 			assert(*((*thisbin1).second->multiplier)==1);
 			// find the other, identical factors
 			while(thisbin2!=factor_hash.end() && thisbin2->first==curr) {

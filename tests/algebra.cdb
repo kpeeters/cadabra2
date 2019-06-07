@@ -576,3 +576,12 @@ test27()
 # tst38:= A - B + C - D + E - @(obj37);
 # @collect_terms!(%);
 # @assert(tst38);
+
+def test28():
+    ex:=k^{a}n_{c a}+2**{1/2} k_{c} 2**{1/2};
+    collect_factors(_);
+    tst:=k^{a}n_{c a}+2**{1/2} k_{c} 2**{1/2} - @(ex);
+    assert(tst==0)
+    print("Test 28 passed")
+
+test28()
