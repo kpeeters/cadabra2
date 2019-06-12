@@ -1,12 +1,15 @@
 {
+	"cell_id" : 8781633447072324819,
 	"cells" : 
 	[
 		{
+			"cell_id" : 18335642165121633802,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 18438625418858246260,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\section*{Using multiple files and notebooks}\n\nAt some point, you will encounter computations which are best separated out into their\nown notebook. Or you will do a computation which takes a long time, and you want to write\nan intermediate result into a file so that you can read it back later easily. There are \ntwo options for this in Cadabra: importing notebooks into other notebooks, or writing \nindividual expressions to a file and reading them back."
@@ -16,11 +19,13 @@
 			"source" : "\\section*{Using multiple files and notebooks}\n\nAt some point, you will encounter computations which are best separated out into their\nown notebook. Or you will do a computation which takes a long time, and you want to write\nan intermediate result into a file so that you can read it back later easily. There are \ntwo options for this in Cadabra: importing notebooks into other notebooks, or writing \nindividual expressions to a file and reading them back."
 		},
 		{
+			"cell_id" : 8213440041221983394,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7789347635294861682,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Importing a notebook into another one}\n\nThe simplest way to separate functionality is to simply write a separate notebook with the\nproperties and expressions which you want to re-use elsewhere. In this way, writing a \n`package' for Cadabra is nothing else but writing a separate notebook. You can import any \nnotebook into another one by using the standard Python import logic."
@@ -30,11 +35,13 @@
 			"source" : "\\subsection*{Importing a notebook into another one}\n\nThe simplest way to separate functionality is to simply write a separate notebook with the\nproperties and expressions which you want to re-use elsewhere. In this way, writing a \n`package' for Cadabra is nothing else but writing a separate notebook. You can import any \nnotebook into another one by using the standard Python import logic."
 		},
 		{
+			"cell_id" : 1942692638989080526,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11079700572726959640,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsubsection*{Example}\n\nLet us say we have a notebook \\verb|library.cnb|, which contains a single cell with the following \ncontent:\n\\begin{verbatim}\n   {m,n,p,q,r}::Indices;\n   ex:=A_{q r} A_{q r};\n\\end{verbatim}\nYou can now import this into another notebook by simply using"
@@ -44,35 +51,41 @@
 			"source" : "\\subsubsection*{Example}\n\nLet us say we have a notebook \\verb|library.cnb|, which contains a single cell with the following \ncontent:\n\\begin{verbatim}\n   {m,n,p,q,r}::Indices;\n   ex:=A_{q r} A_{q r};\n\\end{verbatim}\nYou can now import this into another notebook by simply using"
 		},
 		{
+			"cell_id" : 3561489114726530089,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "from library import *"
 		},
 		{
+			"cell_id" : 1316256212347283961,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 11518391810218108451,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
-					"source" : "You can see that this worked by e.g. the following:"
+					"source" : "Cadabra looks for the \\verb|library.cnb| notebook in your \\verb|PYTHONPATH| (just as in ordinary Python programs),\n as well as in the current directory. You can see that this worked by e.g. the following:"
 				}
 			],
 			"hidden" : true,
-			"source" : "You can see that this worked by e.g. the following:"
+			"source" : "Cadabra looks for the \\verb|library.cnb| notebook in your \\verb|PYTHONPATH| (just as in ordinary Python programs),\n as well as in the current directory. You can see that this worked by e.g. the following:"
 		},
 		{
+			"cell_id" : 37268896913279161,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 16774845059730372451,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 15291342196228748438,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{q r} A_{q r}"
@@ -81,11 +94,13 @@
 					"source" : "\\begin{dmath*}{}A_{q r} A_{q r}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 10215936131369656133,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 2008929433626558299,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{m n} A_{m n}"
@@ -97,11 +112,13 @@
 			"source" : "ex;\nrename_dummies(ex);"
 		},
 		{
+			"cell_id" : 8355013287855316724,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 5820656270542915781,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note that the import has thus not only imported the \\verb|ex| expression, but also the property \ninformation about the index set, which enabled the \\verb|rename_dummies| to work."
@@ -111,11 +128,13 @@
 			"source" : "Note that the import has thus not only imported the \\verb|ex| expression, but also the property \ninformation about the index set, which enabled the \\verb|rename_dummies| to work."
 		},
 		{
+			"cell_id" : 14481788688662175832,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3233447126429706603,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Behind the scenes, what happens is that the import statement looks for a file \\verb|library.cnb|. If it\nfinds this, it will first convert that file to a proper Python file (remember the \\verb|library.cnb| file is a \nCadabra notebook, not a Python file). It then uses the standard Python logic to do the import."
@@ -125,11 +144,13 @@
 			"source" : "Behind the scenes, what happens is that the import statement looks for a file \\verb|library.cnb|. If it\nfinds this, it will first convert that file to a proper Python file (remember the \\verb|library.cnb| file is a \nCadabra notebook, not a Python file). It then uses the standard Python logic to do the import."
 		},
 		{
+			"cell_id" : 13398410042259813666,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 15901214011191945668,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Writing expressions to a file and reading them back}\n\nA somewhat more difficult way to re-use expressions is to write them to a file\nusing standard Python methods, and then read them back elsewhere. This method is best\nused for long computations of which you want to write an intermediate result out to \ndisk, to be read in later (instead of doing a re-computation). Be aware that if you \nwrite an expression to disk, you do not write the property information of any of the\nsymbols in that expression to disk. "
@@ -139,11 +160,13 @@
 			"source" : "\\subsection*{Writing expressions to a file and reading them back}\n\nA somewhat more difficult way to re-use expressions is to write them to a file\nusing standard Python methods, and then read them back elsewhere. This method is best\nused for long computations of which you want to write an intermediate result out to \ndisk, to be read in later (instead of doing a re-computation). Be aware that if you \nwrite an expression to disk, you do not write the property information of any of the\nsymbols in that expression to disk. "
 		},
 		{
+			"cell_id" : 11444201106378708990,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 12988076038731780414,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsubsection*{Example}\n\nThe following example declares two expressions and writes them to disk. It then reads the\nexpressions back in again and assigns them to different Python names."
@@ -153,16 +176,19 @@
 			"source" : "\\subsubsection*{Example}\n\nThe following example declares two expressions and writes them to disk. It then reads the\nexpressions back in again and assigns them to different Python names."
 		},
 		{
+			"cell_id" : 11792617782253406692,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 74831037821067521,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 15970060422258541493,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{m n} \\sin(x)"
@@ -171,11 +197,13 @@
 					"source" : "\\begin{dmath*}{}A_{m n} \\sin{x}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 6535555148371619996,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 8248852654806885795,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "B_{m n}"
@@ -187,21 +215,25 @@
 			"source" : "ex1:= A_{m n} \\sin{x};\nex2:= B_{m n};\nwith open(\"output.cdb\", \"w\") as file:\n   file.write( ex1.input_form()+\"\\n\" )\n   file.write( ex2.input_form()+\"\\n\" )"
 		},
 		{
+			"cell_id" : 12958713239442749254,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : "with open(\"output.cdb\", \"r\") as file:\n   ex3=Ex( file.readline() )\n   ex4=Ex( file.readline() )"
 		},
 		{
+			"cell_id" : 2842740079552019795,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3025403952431302262,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 1436721049922411551,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "A_{m n} \\sin(x)"
@@ -210,11 +242,13 @@
 					"source" : "\\begin{dmath*}{}A_{m n} \\sin{x}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 11419665305986047774,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"cells" : 
 					[
 						{
+							"cell_id" : 5706079747164185254,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "B_{m n}"
@@ -226,11 +260,13 @@
 			"source" : "ex3;\nex4;"
 		},
 		{
+			"cell_id" : 4528355418093952061,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 2572353665904379176,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note that when written in this way, the file \\verb|output.cdb| only contains the expressions, not their names \n(\\verb|ex1| and \\verb|ex2| in the example above)."
@@ -240,6 +276,7 @@
 			"source" : "Note that when written in this way, the file \\verb|output.cdb| only contains the expressions, not their names \n(\\verb|ex1| and \\verb|ex2| in the example above)."
 		},
 		{
+			"cell_id" : 18362525774477466829,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""
