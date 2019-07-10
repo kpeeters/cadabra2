@@ -1,73 +1,83 @@
 # Testing that some expressions are canonicalised
 # properly using the young_reduce algorithm
 
-# Sum of single terms
 def test01():
-        __cdbkernel__ = create_scope()
-        {a, b, c, d, e, f, g}::Indices(position=fixed);
-        A_{a b c}::AntiSymmetric;
-        ex1 := A_{a b c} + A_{b a c} - A_{c a b};
-        young_reduce(ex1, $A_{a b c}$);
-        assert(ex1 == $-A_{a b c}$)
-        print("Test 1 passed")
-
+	__cdbkernel__ = create_scope()
+	S_{a b c}::Symmetric;
+	young_reduce($S_{a b c}S_{b a c} + S_{b a c}S_{c a b}$, $S_{a b c}S_{a b c}$);
+	assert(ex1 == $2S_{a b c}S_{a b c}$)
 test01()
 
-# Sum or products of two symmetric terms
 def test02():
 	__cdbkernel__ = create_scope()
-	{a, b, c, d, e, f, g}::Indices(position=fixed);
-	B_{a b c}::Symmetric;
-	ex2 := B_{a b c}B_{b a c} + B_{b a c}B_{c a b};
-	young_reduce(ex2, $B_{a b c}B_{a b c}$);
-	assert(ex2 == $2B_{a b c}B_{b a c}$)
-	print("Test 2 passed")
-
+	A_{a b c}::AntiSymmetric.
+	ex = young_reduce($A_{a b c} - A_{b a c}$, $A_{a b c}$)
+	assert ex == $2A_{a b c}$
 test02()
 
-# Riemann cyclic, should equal 3/2R_abcd R_abcd
 def test03():
 	__cdbkernel__ = create_scope()
-	{a, b, c, d, e, f, g}::Indices(position=fixed);
-	R_{a b c d}::RiemannTensor;
-	ex3 := R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d};
-	young_reduce(ex3, $R_{a b c d}R_{a b c d}$);
-	assert(ex3 == $3/2 R_{a b c d} R_{a b c d}$)
-	print("Test 3 passed")
-
+	A_{a b c}::AntiSymmetric.
+	ex = young_reduce($A_{a b c} + A_{a c b}$, $A_{a b c}$)
+	assert ex == $0$
 test03()
 
-#Riemann cyclic, should equal 0
 def test04():
 	__cdbkernel__ = create_scope()
-	{a, b, c, d, e, f, g}::Indices(position=fixed);
-	R_{a b c d}::RiemannTensor;
-	ex4 := 2R_{a b c d}R_{a c b d} - R_{a b c d}R_{a b c d};
-	young_reduce(ex4, $R_{a b c d}R_{a b c d}$);
-	assert(ex4 == 0)
-
+	A_{a b c}::AntiSymmetric.
+	ex = young_reduce($A_{c a b}A_{b a c} + A_{b c a}A_{c b a}$, $2A_{a b c}A_{a b c}$)
+	assert ex == $-2A_{a b c}A_{a b c}$
 test04()
 
-# Riemann cyclic, should equal 0
 def test05():
 	__cdbkernel__ = create_scope()
-	{a, b, c, d, e, f, g}::Indices(position=fixed);
-	R_{a b c d}::RiemannTensor;
-	ex5 := R_{a b c d}R_{a b c d} + R_{a b c d}R_{b a c d};
-	young_reduce(ex5, $R_{a b c d}R_{a b c d}$);
-	assert(ex5 == 0)
-	print("Test 5 passed")
-
+	A_{a b}::AntiSymmetric;
+	ex = young_reduce($A_{b a}$, $A_{a b}$);
+	assert(ex == $-A_{a b}$)
 test05()
 
-# Riemann cyclic, should equal 0
 def test06():
 	__cdbkernel__ = create_scope()
-	{a, b, c, d, e, f, g}::Indices(position=fixed);
-	R_{a b c d}::RiemannTensor;
-	ex6 := R_{a b c d} + R_{a c d b} + R_{a d b c};
-	young_reduce(ex6, $R_{a b c d}R_{a b c d}$);
-	assert(ex6 == 0)
-	print("Test 6 passed")
-
+	R_{a b c d}::RiemannTensor.
+	ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$, $R_{a b c d}R_{a b c d}$)
+	assert ex == $3/2 R_{a b c d}R_{a b c d}$
 test06()
+
+def test07():
+	__cdbkernel__ = create_scope()
+	R_{a b c d}::RiemannTensor.
+	ex = young_reduce($R_{a b c d}R_{a b c d} + R_{a b c d}R_{a c b d}$, $R_{a b c d}R_{a c b d}$)
+	assert ex == $3 R_{a b c d}R_{a c b d}$
+test07()
+
+def test08():
+	__cdbkernel__ = create_scope()
+	R_{a b c d}::RiemannTensor.
+	ex = young_reduce($R_{a b c d} + R_{a c d b} + R_{a d b c}$, $R_{a b c d}$)
+	assert ex == $0$
+test08()
+
+def test09():
+	__cdbkernel__ = create_scope()
+	R_{a b c d}::RiemannTensor.
+	ex = young_reduce($R_{a b c d} + R_{a d b c}$, $R_{a c d b}$)
+	assert ex == $-R_{a c d b}$
+test09()
+
+def test10():
+	__cdbkernel__ = create_scope()
+	{a, b, c, d, e, f, g, h}::Indices.
+	A_{a b}::AntiSymmetric.
+	S_{a b}::Symmetric.
+	ex = $A_{a b}S_{c d}A_{e f}S_{g h} + A_{b a}S_{c d}A_{e f}S_{h g}$
+	young_reduce(ex, $A_{a b}S_{c d}A_{e f}S_{g h}$)
+	assert ex == $0$
+test10()
+
+def test_11():
+	__cdbkernel__ = create_scope()
+	{a, b, c, d, e, f, g, h}::Indices.
+	T_{a b c d e f g h}::Symmetric.
+	ex = young_reduce($T_{b a d c f e h g}$, $T_{a b c d e f g h}$)
+	assert ex == $T_{a b c d e f g h}$
+test11()
