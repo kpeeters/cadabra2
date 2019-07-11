@@ -66,6 +66,7 @@ set(ALGOS
   einsteinify
   eliminate_kronecker
   eliminate_metric
+  eliminate_vielbein  
   epsilon_to_delta
   evaluate
   expand
