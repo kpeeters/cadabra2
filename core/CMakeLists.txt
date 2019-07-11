@@ -200,6 +200,7 @@ set(LOCAL_SRC_FILES
 	Exceptions.cc
 	Exchange.cc
 	Functional.cc
+	Hash.cc
 	IndexIterator.cc
 	IndexClassifier.cc
 	Kernel.cc

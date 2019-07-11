@@ -23,7 +23,8 @@ You should have received a copy of the GNU General Public License
 #include "Exceptions.hh"
 #include <iomanip>
 #include <sstream>
-#include <internal/uniconv.h>
+#include <locale>
+#include <codecvt>
 #include <pcrecpp.h>
 
 //#define DEBUG 1
@@ -713,8 +714,8 @@ found:
 
 	str_node::str_node(const std::u32string& nm, bracket_t br, parent_rel_t pr)
 		{
-		utf_converter conv;
-		std::string nm8=conv.to_utf8(nm);
+		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+		std::string nm8=conv.to_bytes(nm);
 #ifdef DEBUG
 		std::cerr << "str_node: " << nm8 << std::endl;
 #endif
@@ -772,7 +773,7 @@ found:
 		{
 		if((*name).size()==0) return false;
 		for(unsigned int i=0; i<(*name).size(); ++i) {
-			if (!std::isdigit((*name)[i], std::locale{}) && (*name)[i] != '/' && (*name)[i] != '-')
+			if(!isdigit((*name)[i]) && (*name)[i]!='/' && (*name)[i]!='-')
 				return false;
 			}
 		return true;
@@ -782,7 +783,7 @@ found:
 		{
 		if((*name).size()==0) return false;
 		for(unsigned int i=0; i<(*name).size(); ++i) {
-			if (!std::isdigit((*name)[i], std::locale{}) && (*name)[i] != '-')
+			if(!isdigit((*name)[i]) && (*name)[i]!='-')
 				return false;
 			}
 		return true;
@@ -896,7 +897,7 @@ found:
 		{
 		int len=(*name).size();
 		if(len>1)
-			if (std::isdigit((*name)[len - 1], std::locale{}))
+			if(isdigit((*name)[len-1]))
 				return true;
 		return false;
 		}
