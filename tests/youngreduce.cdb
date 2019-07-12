@@ -104,3 +104,17 @@ def test11():
    print("Test 11 passed")
    
 test11()
+
+def test12():
+   __cdbkernel__ = create_scope()
+   {m,n,p,q,r,s,t,u,v,w,a,b,c,d,e,f}::Indices(vector).
+   W_{m n p q}::WeylTensor.
+   ex:= W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w} 
+     - W_{p q r s} W_{p q t u} W_{r v t w} W_{s v u w}
+     - W_{m n a b} W_{n p b c} W_{m s c d} W_{s p d a}
+     + (1/4) W_{m n a b} W_{p s b a} W_{m p c d} W_{n s d c};
+   
+   young_reduce(ex, $W_{p q r s} W_{p t r u} W_{t v q w} W_{u v s w}$);
+   assert(ex==0)
+   print("Test 12 passed")
+   
