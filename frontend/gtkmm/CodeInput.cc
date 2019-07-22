@@ -473,8 +473,8 @@ void CodeInput::enable_highlighting(DataCell::CellType cell_type, const Prefs& p
 	// Error tag
 	if (!edit.get_buffer()->get_tag_table()->lookup("error")) {
 		auto error_tag = edit.get_buffer()->create_tag("error");
-#if GTKMM_MINOR_VERSION>=16		
 		error_tag->property_underline() = Pango::Underline::UNDERLINE_ERROR;
+#if GTKMM_MINOR_VERSION>=20		
 		error_tag->property_underline_rgba() = Gdk::RGBA("red");
 #endif
 		}
