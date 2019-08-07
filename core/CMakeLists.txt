@@ -23,7 +23,7 @@ configure_file(
 #---------------------------------------------------------------------------
 
 # Boost.regex, Boost.system
-find_package(Boost 1.53 COMPONENTS system timer)
+find_package(Boost 1.53 COMPONENTS system asio)
 
 # Find glibmm (for base64)
 find_package(GLIBMM  REQUIRED)
