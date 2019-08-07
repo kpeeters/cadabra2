@@ -14,7 +14,12 @@ include(cmake/functions.cmake)
 
 # Include Visual Studio specific build commands
 if (MSVC)
-	include(cmake/windows.cmake)
+  # https://developercommunity.visualstudio.com/content/problem/618088/cmake-msvc-toolset-version-is-incorrect-in-visual.html
+  if (MSVC_VERSION EQUAL 1921 AND MSVC_TOOLSET_VERSION EQUAL 141)
+	 set(MSVC_TOOLSET_VERSION 142)
+  endif()
+  
+  include(cmake/windows.cmake)
 endif()
 
 # Make sure the build type is non-empty.
