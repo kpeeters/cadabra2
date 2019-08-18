@@ -391,6 +391,15 @@ warned, it can easily take several hours, but at least it's automatic)::
     vcpkg install gtkmm:x64-windows                     (run overnight)
     vcpkg integrate install
 
+boost-system:x64-windows
+boost-asio:x64-windows
+boost-uuid:x64-windows
+boost-program-options:x64-windows
+boost-signals2:x64-windows
+boost-property-tree:x64-windows
+boost-date-time:x64-windows
+boost-filesystem:x64-windows
+
 The last line will spit out a CMAKE toolchain path; write it down, you need that shortly.
 Now clone the cadabra repository and configure as::
 
@@ -403,12 +412,21 @@ Now clone the cadabra repository and configure as::
           -DCMAKE_BUILD_TYPE=RelWithDebInfo
     		 -DVCPKG_TARGET_TRIPLET=x64-windows
     		 -DCMAKE_INSTALL_PREFIX=C:\Cadabra
-          -G "Visual Studio 15 2017 Win64" ..
+          -G "Visual Studio 16 2019" -A x64 ..
 
 the latter all on one line, in which you replace the
-``CMAKE_TOOLCHAIN_PATH`` with the path produced by the ``vcpkg integrate
-install`` step. Do _not_ forget the ``..`` at the very end!
-You can ignore warnings (but not errors) about Boost. Finally build with::
+``CMAKE_TOOLCHAIN_PATH`` with the path produced by the ``vcpkg
+integrate install`` step. Do _not_ forget the ``..`` at the very end!
+The last line can be adjusted to `-G "Visual Studio 15 2017 Win64"` if you
+are on the previous version of Visual Studio. You can ignore warnings
+(but not errors) about Boost. You may have to add::
+
+    -DCMAKE_INCLUDE_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Redist\MSVC\14.22.27821"
+
+or a similar path to make cmake pick up `msvc140.dll` and related;
+see [https://developercommunity.visualstudio.com/content/problem/618084/cmake-installrequiredsystemlibraries-broken-in-lat.html]
+    
+Now build Cadabra with::
 		
     cmake --build . --config RelWithDebInfo --target install
 

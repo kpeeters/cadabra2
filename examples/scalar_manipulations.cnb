@@ -1,12 +1,15 @@
 {
+	"cell_id" : 16196410739394470454,
 	"cells" : 
 	[
 		{
+			"cell_id" : 2397022013342117586,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 7640017755221737874,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors). {\\bfseries Note:} this functionality changed\nsubstantially in Cadabra version 2.1.5.\n"
@@ -16,11 +19,13 @@
 			"source" : "\\section*{Using Cadabra and Sympy together}\n\nThis notebook illustrates the interaction of Cadabra with Sympy. In particular, it shows how Cadabra expressions\ncan be manipulated by Sympy if they are index-free (i.e.~non-tensors). {\\bfseries Note:} this functionality changed\nsubstantially in Cadabra version 2.1.5.\n"
 		},
 		{
+			"cell_id" : 10411792927078810246,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14165469431464740252,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Scalar expression handling}\n\nWhile Cadabra's main strength is its handling of tensorial expressions, you can of course write down scalar\nexpressions as well. Here is a simple example: "
@@ -30,24 +35,37 @@
 			"source" : "\\subsection*{Scalar expression handling}\n\nWhile Cadabra's main strength is its handling of tensorial expressions, you can of course write down scalar\nexpressions as well. Here is a simple example: "
 		},
 		{
+			"cell_id" : 1031975010951575642,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775809,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"source" : "\\begin{dmath*}{}\\frac{{\\left(\\sin{x}\\right)}^{2}+{\\left(\\cos{x}\\right)}^{2}}{x}\\end{dmath*}"
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775810,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "((\\sin(x))**2 + (\\cos(x))**2) (x)**(-1)"
+						}
+					],
+					"source" : "\\begin{dmath*}{}\\left({\\left(\\sin{x}\\right)}^{2}+{\\left(\\cos{x}\\right)}^{2}\\right) {x}^{-1}\\end{dmath*}"
 				}
 			],
 			"source" : "ex:=(\\sin(x)**2 + \\cos(x)**2)/x;"
 		},
 		{
+			"cell_id" : 14833699298536241506,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1766423708678417973,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note the use of \\LaTeX{} notation for things like trigonometric functions. \nYou can then directly call Sympy algorithms on these Cadabra expressions, for instance\nto integrate them:"
@@ -57,24 +75,37 @@
 			"source" : "Note the use of \\LaTeX{} notation for things like trigonometric functions. \nYou can then directly call Sympy algorithms on these Cadabra expressions, for instance\nto integrate them:"
 		},
 		{
+			"cell_id" : 3398547768646584936,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775812,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775813,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\log(x)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\log\\left(x\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "map_sympy(_, \"integrate\");"
 		},
 		{
+			"cell_id" : 4694496657445179560,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 2644018676051541557,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note how, in the spirit of Cadabra's logic that algorithms act in-place, this changes the actual expression: \\verb|ex| now contains\nthe integral of the original expression:"
@@ -84,24 +115,37 @@
 			"source" : "Note how, in the spirit of Cadabra's logic that algorithms act in-place, this changes the actual expression: \\verb|ex| now contains\nthe integral of the original expression:"
 		},
 		{
+			"cell_id" : 10399642188525316643,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775815,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775816,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\log(x)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\log\\left(x\\right)\\end{dmath*}"
 				}
 			],
 			"source" : "ex;"
 		},
 		{
+			"cell_id" : 18422108908642547796,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 4404009003303455389,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then fed through Sympy, which then immediately evaluates the\nexpression. Again note the use of \nstandard \\LaTeX{}-like constructions to write down integrals."
@@ -111,37 +155,61 @@
 			"source" : "You can do more complicated things as well, like integrals and sums. Here is an example which is\nfirst entered in Cadabra form (which is inert), and then fed through Sympy, which then immediately evaluates the\nexpression. Again note the use of \nstandard \\LaTeX{}-like constructions to write down integrals."
 		},
 		{
+			"cell_id" : 12991923136293708135,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775818,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775819,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\int{\\sin(x) \\cos(x)}{x}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\int \\sin{x} \\cos{x}\\,\\,{\\rm d}x\\end{dmath*}"
 				}
 			],
 			"source" : "ex2:= \\int{\\sin(x) \\cos(x)}{x};"
 		},
 		{
+			"cell_id" : 5302759014020368514,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775821,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775822,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : " 1/2 (\\sin(x))**2"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\frac{1}{2}{\\left(\\sin{x}\\right)}^{2}\\end{dmath*}"
 				}
 			],
 			"source" : "map_sympy(_);"
 		},
 		{
+			"cell_id" : 17515994551843006891,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9814090675240098969,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note how \\verb|map_sympy| was used without giving it any Sympy function. This simply makes Sympy evaluate the expression, which in this case\nmeans evaluating the integral."
@@ -151,11 +219,13 @@
 			"source" : "Note how \\verb|map_sympy| was used without giving it any Sympy function. This simply makes Sympy evaluate the expression, which in this case\nmeans evaluating the integral."
 		},
 		{
+			"cell_id" : 1323182593666494251,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 6009557834554846792,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Note that \\verb|map_sympy| is almost always the way in which you want to invoke Sympy. You can, alternatively, feed expressions directly into \nSympy functions (by virtue of the fact that \\verb|Ex| objects have a \\verb|_sympy_()| method), \nbut that has the disadvantage that you will not change the original expression (it will not act in-place):"
@@ -165,29 +235,43 @@
 			"source" : "Note that \\verb|map_sympy| is almost always the way in which you want to invoke Sympy. You can, alternatively, feed expressions directly into \nSympy functions (by virtue of the fact that \\verb|Ex| objects have a \\verb|_sympy_()| method), \nbut that has the disadvantage that you will not change the original expression (it will not act in-place):"
 		},
 		{
+			"cell_id" : 17774675881972332128,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775824,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775825,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\sin(x) \\cos(x)"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\sin{x} \\cos{x}\\end{dmath*}"
 				}
 			],
 			"source" : "ex3:= \\sin(x)\\cos(x);"
 		},
 		{
+			"cell_id" : 9418494559682487195,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775827,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\sin{\\left (x \\right )} \\cos{\\left (x \\right )}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775828,
 					"cell_origin" : "server",
 					"cell_type" : "output",
 					"source" : "\\begin{verbatim}<class 'sympy.core.mul.Mul'>\n\\end{verbatim}"
@@ -196,16 +280,19 @@
 			"source" : "ex3._sympy_();\nprint(type(ex3._sympy_()))"
 		},
 		{
+			"cell_id" : 16882035327664891703,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775829,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\frac{1}{2} \\sin^{2}{\\left (x \\right )}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775830,
 					"cell_origin" : "server",
 					"cell_type" : "output",
 					"source" : "\\begin{verbatim}<class 'sympy.core.mul.Mul'>\n\\end{verbatim}"
@@ -214,11 +301,13 @@
 			"source" : "sympy.integrate(ex3);\nprint(type(sympy.integrate(ex3)))"
 		},
 		{
+			"cell_id" : 12031936897201182650,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 1219690406474710688,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Observe how the result of these evaluations are non-Cadabra objects (they have not been converted back, the way in which \\verb|map_sympy| does)."
@@ -228,11 +317,13 @@
 			"source" : "Observe how the result of these evaluations are non-Cadabra objects (they have not been converted back, the way in which \\verb|map_sympy| does)."
 		},
 		{
+			"cell_id" : 13885344332305935057,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 13715658223384534022,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "The fact that algorithms act in-place may sometimes be a bit unexpected. Here's an example of solving a cubic equation to make this clear:"
@@ -242,50 +333,85 @@
 			"source" : "The fact that algorithms act in-place may sometimes be a bit unexpected. Here's an example of solving a cubic equation to make this clear:"
 		},
 		{
+			"cell_id" : 6944118161509755270,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775831,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775832,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "(x)**3-(x)**2-4"
+						}
+					],
 					"source" : "\\begin{dmath*}{}{x}^{3}-{x}^{2}-4\\end{dmath*}"
 				}
 			],
 			"source" : "ex4:= x**3 -  x**2 - 4;"
 		},
 		{
+			"cell_id" : 2193515675547865598,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775834,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775835,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{2,  -  1/2  -  1/2 \\sqrt(7) I,  -  1/2  +  1/2 \\sqrt(7) I}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\left[2,~\\discretionary{}{}{}  - \\frac{1}{2} - \\frac{1}{2}\\sqrt{7} I,~\\discretionary{}{}{}  - \\frac{1}{2}+\\frac{1}{2}\\sqrt{7} I\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "map_sympy(_, \"solve\");"
 		},
 		{
+			"cell_id" : 17545968025948297929,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775837,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775838,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{2,  -  1/2  -  1/2 \\sqrt(7) I,  -  1/2  +  1/2 \\sqrt(7) I}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\left[2,~\\discretionary{}{}{}  - \\frac{1}{2} - \\frac{1}{2}\\sqrt{7} I,~\\discretionary{}{}{}  - \\frac{1}{2}+\\frac{1}{2}\\sqrt{7} I\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "ex4;"
 		},
 		{
+			"cell_id" : 6235099031437028842,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 14930237185539884179,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Tensor expression handling}\n\nThe real power of mixing Cadabra with Sympy lies in the fact that you can act with Sympy on any Cadabra subexpression which is\na pure scalar (i.e.~which has no indices). Here is a contrived example which has a sum of tensors, with pre-factors which are\nscalar expressions which Sympy can simplify."
@@ -295,88 +421,148 @@
 			"source" : "\\subsection*{Tensor expression handling}\n\nThe real power of mixing Cadabra with Sympy lies in the fact that you can act with Sympy on any Cadabra subexpression which is\na pure scalar (i.e.~which has no indices). Here is a contrived example which has a sum of tensors, with pre-factors which are\nscalar expressions which Sympy can simplify."
 		},
 		{
+			"cell_id" : 1015689800355736399,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775840,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[r,~\\discretionary{}{}{} t\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775841,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property PartialDerivative to~}\\partial{\\#}.\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775842,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775843,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "((\\sin(r))**2 + (\\cos(r))**2) A_{m} \\partial_{r}(r)-A_{m} + \\int{(r)**2}{r} B_{m}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\left({\\left(\\sin{r}\\right)}^{2}+{\\left(\\cos{r}\\right)}^{2}\\right) A_{m} \\partial_{r}{r}-A_{m}+\\int {r}^{2}\\,\\,{\\rm d}r B_{m}\\end{dmath*}"
 				}
 			],
 			"source" : "{r,t}::Coordinate;\n\\partial{#}::PartialDerivative;\nex:= (\\sin(r)**2 + \\cos(r)**2) A_{m} \\partial_{r}{r} - A_{m} + \\int{r**2}{r} B_{m};"
 		},
 		{
+			"cell_id" : 16249232945008950540,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775845,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775846,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : " 1/3 (r)**3 B_{m}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\frac{1}{3}{r}^{3} B_{m}\\end{dmath*}"
 				}
 			],
 			"source" : "map_sympy(_, \"simplify\");"
 		},
 		{
+			"cell_id" : 496590915626066002,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775848,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\left[r,~\\discretionary{}{}{} t\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775849,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Indices(position=free) to~}\\left[\\mu,~\\discretionary{}{}{} \\nu\\right].\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775850,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775851,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\partial_{\\mu}(A^{\\mu \\nu})"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\partial_{\\mu}{A^{\\mu \\nu}}\\end{dmath*}"
 				},
 				{
+					"cell_id" : 9223372036854775852,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775853,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "{A^{t t} -> t (\\sin(r))**2, A^{r r} -> \\int{(\\cos(r))**2}{r}}"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\left[A^{t t} \\rightarrow t {\\left(\\sin{r}\\right)}^{2},~\\discretionary{}{}{} A^{r r} \\rightarrow \\int {\\left(\\cos{r}\\right)}^{2}\\,\\,{\\rm d}r\\right]\\end{dmath*}"
 				}
 			],
 			"source" : "{r,t}::Coordinate;\n{\\mu,\\nu}::Indices(values={r,t});\nex:= \\partial_{\\mu}{ A^{\\mu \\nu} };\nrl:= A^{t t} -> t \\sin(r)**2, A^{r r} -> \\int{\\cos{r}**2}{r};"
 		},
 		{
+			"cell_id" : 266316123620937444,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775855,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
+					"cells" : 
+					[
+						{
+							"cell_id" : 9223372036854775856,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "\\components^{\\nu}({{r} = (\\cos(r))**2, {t} = (\\sin(r))**2})"
+						}
+					],
 					"source" : "\\begin{dmath*}{}\\square{}^{\\nu}\\left\\{\\begin{aligned}\\square{}^{r}= & {\\left(\\cos{r}\\right)}^{2}\\\\[-.5ex]\n\\square{}^{t}= & {\\left(\\sin{r}\\right)}^{2}\\\\[-.5ex]\n\\end{aligned}\\right.\n\\end{dmath*}"
 				}
 			],
 			"source" : "evaluate(ex, rl);"
 		},
 		{
+			"cell_id" : 4200993043775371094,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 3642927302528569773,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "\\subsection*{Sympy only with sympy notation throughout}\n\nOf course, if you do not like or need Cadabra's input format, then you can happily use Sympy in the way\nyou have always used it, but taking advantage of the display logic of the Cadabra notebook:"
@@ -386,11 +572,13 @@
 			"source" : "\\subsection*{Sympy only with sympy notation throughout}\n\nOf course, if you do not like or need Cadabra's input format, then you can happily use Sympy in the way\nyou have always used it, but taking advantage of the display logic of the Cadabra notebook:"
 		},
 		{
+			"cell_id" : 11413881385092483965,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775858,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\int_{0}^{2} \\sin{\\left (x \\right )}\\, dx\\end{dmath*}"
@@ -399,11 +587,13 @@
 			"source" : "from sympy import *\nx,y=var('x,y')\ni = Integral(sin(x),(x,0,2));"
 		},
 		{
+			"cell_id" : 11343062090422437627,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"cells" : 
 			[
 				{
+					"cell_id" : 9223372036854775860,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}- \\cos{\\left (2 \\right )} + 1\\end{dmath*}"
@@ -412,11 +602,13 @@
 			"source" : "i.doit();"
 		},
 		{
+			"cell_id" : 16989736678816052971,
 			"cell_origin" : "client",
 			"cell_type" : "latex",
 			"cells" : 
 			[
 				{
+					"cell_id" : 18276766872141662081,
 					"cell_origin" : "client",
 					"cell_type" : "latex_view",
 					"source" : "Hope this has triggered your interest; as usual, any feedback to \\url{mailto:info@cadabra.science} is greatly appreciated."
@@ -426,6 +618,7 @@
 			"source" : "Hope this has triggered your interest; as usual, any feedback to \\url{mailto:info@cadabra.science} is greatly appreciated."
 		},
 		{
+			"cell_id" : 15401019696627785290,
 			"cell_origin" : "client",
 			"cell_type" : "input",
 			"source" : ""

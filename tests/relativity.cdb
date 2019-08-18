@@ -175,3 +175,15 @@ test13()
 # ex:= e_{m}^{\mu} e^{m}_{\nu};
 # eliminate_vielbein(_);
 
+def post_process(ex):
+    substitute(ex, $\delta^{0}_{\alpha} -> 0$)
+    return ex
+        
+{a,b,c,d,e}::Indices(fourD, position=independent);
+{a,b,c,d,e}::Integer(0..4);
+{\alpha,\beta,\gamma,\delta,\epsilon}::Indices(threeD, position=independent, parent=fourD);
+{\alpha,\beta,\gamma,\delta,\epsilon}::Integer(1..3);
+\delta{#}::KroneckerDelta();
+ex := \gamma^{\alpha \beta} \delta^{0}_{d} \delta^{d}_{\alpha};
+eliminate_kronecker(ex, repeat=False);
+    
