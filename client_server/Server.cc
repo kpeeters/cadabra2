@@ -12,7 +12,6 @@
 #include <boost/uuid/uuid_generators.hpp> // generators
 #include <boost/uuid/uuid_io.hpp>         // streaming operators etc.
 #include <boost/algorithm/string/replace.hpp>
-#include <glibmm/miscutils.h>
 #include <json/json.h>
 
 #include "Config.hh"
@@ -100,14 +99,6 @@ void Server::init()
 	{
 	started=false;
 
-	// The Anaconda people _really_ do not understand packaging...
-	std::string pythonhome=Glib::getenv("PYTHONHOME");
-	std::string pythonpath=Glib::getenv("PYTHONPATH");	
-	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
-	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
-	std::cerr << "Server::init: using PYTHONPATH = " << Glib::getenv("PYTHONPATH")
-				 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;	
-	
 	main_module = pybind11::module::import("__main__");
 	main_namespace = main_module.attr("__dict__");
 
