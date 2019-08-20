@@ -714,8 +714,15 @@ found:
 
 	str_node::str_node(const std::u32string& nm, bracket_t br, parent_rel_t pr)
 		{
+#ifdef _MSC_VER
+		std::wstring_convert<std::codecvt_utf8<int32_t>, int32_t> conv;
+		auto p = reinterpret_cast<const int32_t*>(nm.data());
+		std::string nm8 = conv.to_bytes(p, p + nm.size());
+#else
 		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
 		std::string nm8=conv.to_bytes(nm);
+#endif
+		
 #ifdef DEBUG
 		std::cerr << "str_node: " << nm8 << std::endl;
 #endif
