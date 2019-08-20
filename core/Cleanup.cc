@@ -325,6 +325,14 @@ namespace cadabra {
 				++sib;
 			}
 
+		// Do not allow equalities as terms inside a sum.
+		sib=tr.begin(it);
+		while(sib!=tr.end(it)) {
+			if(*sib->name=="\\equals")
+				throw ConsistencyException("Encountered an equality as a term in a sum; not allowed.");
+			++sib;
+			}
+		
 		// Flatten sums which are supposed to be flat.
 		long num=tr.number_of_children(it);
 		if(num==0) {
