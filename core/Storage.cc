@@ -969,12 +969,14 @@ found:
 	void multiply(rset_t::iterator& num, multiplier_t fac)
 		{
 		fac*=*num;
+		fac.canonicalize();
 		num=rat_set.insert(fac).first;
 		}
 
 	void add(rset_t::iterator& num, multiplier_t fac)
 		{
 		fac+=*num;
+		fac.canonicalize();		
 		num=rat_set.insert(fac).first;
 		}
 
@@ -990,12 +992,16 @@ found:
 
 	void flip_sign(rset_t::iterator& num)
 		{
-		num=rat_set.insert(-(*num)).first;
+		multiplier_t fac=-(*num);
+		fac.canonicalize();
+		num=rat_set.insert(fac).first;
 		}
 
 	void half(rset_t::iterator& num)
 		{
-		num=rat_set.insert((*num)/2).first;
+		multiplier_t fac=(*num)/2;
+		fac.canonicalize();
+		num=rat_set.insert(fac).first;
 		}
 
 	bool str_node::operator<(const cadabra::str_node& other) const

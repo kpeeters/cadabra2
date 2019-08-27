@@ -40,6 +40,7 @@ namespace cadabra {
 	void cleanup_rational(const Kernel&, Ex&, Ex::iterator& st)
 		{
 		multiplier_t num(*st->name);
+		num.canonicalize();
 		st->name=name_set.insert("1").first;
 		multiply(st->multiplier,num);
 		}
