@@ -325,6 +325,48 @@ namespace cadabra {
 				++sib;
 			}
 
+		// Do not allow equalities as terms inside a sum if there are
+		// other terms present as well.
+		sib=tr.begin(it);
+		int equalities=0;
+		int nonequalities=0;
+		while(sib!=tr.end(it)) {
+			if(*sib->name=="\\equals") ++equalities;
+			else                       ++nonequalities;
+			if(equalities!=0 && nonequalities!=0) 
+				throw ConsistencyException("Encountered an equality and a normal term in the same sum; not allowed.");
+			++sib;
+			}
+		if(equalities>1) { // This is a sum of at least 2 equalities.
+			// Combine all lhs and all rhs.
+			auto frst=tr.begin(it);
+			Ex::sibling_iterator lhs=tr.begin(frst);
+			Ex::sibling_iterator rhs=lhs;
+			++rhs;
+			// Ensure both lhs and rhs are sums.
+			if(*lhs->name!="\\sum")
+				lhs=tr.wrap(lhs, str_node("\\sum"));
+			if(*rhs->name!="\\sum")
+				rhs=tr.wrap(rhs, str_node("\\sum"));
+			Ex::sibling_iterator lhsend=tr.end(lhs);
+			Ex::sibling_iterator rhsend=tr.end(rhs);
+			sib=frst;
+			++sib;
+			while(sib!=tr.end(it)) {
+            // sib is an `\equals` node
+				Ex::sibling_iterator side=tr.begin(sib);
+				multiply(side->multiplier, *sib->multiplier);
+				tr.move_before(lhsend, side);
+				side=tr.begin(sib);
+				multiply(side->multiplier, *sib->multiplier);
+				tr.move_before(rhsend, side);
+				sib=tr.erase(sib);
+				}
+			Ex::iterator tmp1=lhs, tmp2=rhs;
+			cleanup_sumlike(k, tr, tmp1);
+			cleanup_sumlike(k, tr, tmp2);			
+			}
+		
 		// Flatten sums which are supposed to be flat.
 		long num=tr.number_of_children(it);
 		if(num==0) {

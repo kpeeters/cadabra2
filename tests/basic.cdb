@@ -331,3 +331,14 @@ def test37():
     print("Test 37 passed")
 
 test37()
+
+def test38():
+    __cdbkernel__=create_scope()
+    ex1:= a+b = c+e;
+    ex2:= g+h = c;
+    ex:= 3 @(ex1) - 2 @(ex2);
+    assert(lhs(ex)==$3a + 3b - 2g - 2h$)
+    assert(rhs(ex)==$c + 3e$)
+    print("Test 38 passed")
+
+test38()

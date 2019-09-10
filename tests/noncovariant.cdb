@@ -38,7 +38,7 @@ def test03():
    split_index(_, $\mu, a, A$)
    tst:= (K_{a A} = 1/2 D_{\tau}{D_{\sigma}{\Theta}} e^{\tau}_{a}^{b \beta} R_{b \beta A}^{\sigma}
        + 1/2 D_{\tau}{D_{\sigma}{\Theta}} e^{\tau}_{a}^{B \beta} R_{B \beta A}^{\sigma}) - @(ex);
-   assert(tst==0)
+   assert(tst==$0=0$)
    print("Test 03 passed")
 
 test03()

@@ -95,6 +95,7 @@ Ex::iterator sympy::apply(const Kernel& kernel, Ex& ex, Ex::iterator& it, const 
 	//ex.print_recursive_treeform(std::cerr, it);
 #ifdef DEBUG
 	std::cerr << "feeding " << str.str() << std::endl;
+	std::cerr << "which is " << it << std::endl;
 #endif
 
 	auto module = pybind11::module::import("sympy.parsing.sympy_parser");

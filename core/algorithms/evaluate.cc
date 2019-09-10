@@ -14,7 +14,7 @@
 #include "properties/Accent.hh"
 #include <functional>
 
-//#define DEBUG 1
+// #define DEBUG 1
 
 using namespace cadabra;
 

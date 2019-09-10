@@ -109,7 +109,7 @@ def test09():
     ex:= S = \int{ Q + R +  A \partial{B} C }{x};
     vary(_, $S -> \delta{S}, B -> b$)
     tst:= (\delta{S} = \int{ A \partial{b} C }{x}) - @(ex);
-    assert(tst==0)
+    assert(tst==$0=0$)
     print("Test 09 passed")
 
 test09()
