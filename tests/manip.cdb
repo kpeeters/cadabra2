@@ -18,7 +18,7 @@ def test02():
     manip.to_rhs(ex, $b$)
     manip.to_rhs(ex, $a$)
     tst:= ( 0 = c + d + b - a ) - @(ex);
-    assert(tst==0)
+    assert(tst==$0=0$)
     print("Test 02 passed")
 #to_lhs(ex0, $d + b$);
 
@@ -33,7 +33,7 @@ def test03():
     manip.multiply_through(ex1, $k_{\alpha}$)
     manip.swap_sides(ex1)
     tst:= (k_{\alpha} c = k_{\alpha} (a_{\mu} a^{\mu} + b ) ) - @(ex1);
-    assert(tst==0)
+    assert(tst==$0=0$)
     print("Test 03 passed")
 
 test03()
@@ -105,7 +105,7 @@ def test06():
     ex:= 2a+b+j*b+k*b = c+d;
     manip.to_lhs(ex)
     tst := (2a+b+j*b+k*b-c-d = 0) - @(ex);
-    assert(tst==0)
+    assert(tst==$0=0$)
     print("Test 06 passed")
 
 test06()

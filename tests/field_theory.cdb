@@ -143,7 +143,7 @@ def test09():
     ex:= N = g_{i}^{i};
     eliminate_kronecker(_)
     tst:= (N = N) - @(ex);
-    assert(tst==0)
+    assert(tst==$0=0$)
     print("Test 09b passed")
 
 test09()

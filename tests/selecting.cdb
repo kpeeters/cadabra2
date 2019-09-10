@@ -26,14 +26,14 @@ def test01():
     substitute(_, $A = 0$)
     unzoom(_)
     tst:= ( R = \int{A + B D G}{x} ) - @(ex);
-    assert(tst==0)
+    assert(tst== $0 = 0$)
     print("Test 01d passed")
     ex:= R + S = \int{A + B D G + C D A}{x};
     zoom(_, $D Q??$)
     substitute(_, $A = 0$)
     unzoom(_)
     tst:= ( R + S = \int{A + B D G}{x} ) - @(ex);
-    assert(tst==0)
+    assert(tst== $0 = 0$)
     print("Test 01e passed")
 
 test01()

@@ -4,7 +4,7 @@
 
 using namespace cadabra;
 
-#define DEBUG 1
+// #define DEBUG 1
 
 collect_components::collect_components(const Kernel& k, Ex& tr)
 	: Algorithm(k, tr)
