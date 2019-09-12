@@ -34,6 +34,9 @@ endif()
 
 # Set path to additional cmake files
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
+if (APPLE)
+   set(ENV{PKG_CONFIG_PATH} "/usr/local/opt/libffi/lib/pkgconfig:")
+endif()
 
 # Get version information. 
 include(cmake/version.cmake)
