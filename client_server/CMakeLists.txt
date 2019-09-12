@@ -157,9 +157,16 @@ endif()
 if(NOT ENABLE_JUPYTER)
   add_executable(cadabra2html 
 	 cadabra2html.cc 
-	 ${CADABRA_CORE_DIR}/DataCell.cc
 	 )
   target_link_libraries(cadabra2html cadabra_client)
+endif()
+
+# cadabra2latex
+if(NOT ENABLE_JUPYTER)
+  add_executable(cadabra2latex 
+	 cadabra2latex.cc 
+	 )
+  target_link_libraries(cadabra2latex cadabra_client)
 endif()
 
 # Client library
@@ -218,7 +225,7 @@ endif()
 
 install(TARGETS cadabra-server DESTINATION bin)
 if(NOT ENABLE_JUPYTER)
-  install(TARGETS cadabra2html DESTINATION bin)
+  install(TARGETS cadabra2html cadabra2latex DESTINATION bin)
 endif()
 # We don't need to install the libcadabra_client library as it is statically
 # linked with our binaries anyway.
