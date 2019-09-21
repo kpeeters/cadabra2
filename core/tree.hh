@@ -417,6 +417,12 @@ class tree {
 		/// Compute the depth to the root or to a fixed other iterator.
 		static int depth(const iterator_base&);
 		static int depth(const iterator_base&, const iterator_base&);
+		/// Compute the depth to the root, counting all levels for which predicate returns true.
+		template<class Predicate>
+		static int depth(const iterator_base&, Predicate p);
+		/// Compute the depth distance between two nodes, counting all levels for which predicate returns true.
+		template<class Predicate>
+		static int distance(const iterator_base& top, const iterator_base& bottom, Predicate p);
 		/// Determine the maximal depth of the tree. An empty tree has max_depth=-1.
 		int      max_depth() const;
 		/// Determine the maximal depth of the tree with top node at the given position.
@@ -2143,6 +2149,36 @@ int tree<T, tree_node_allocator>::depth(const iterator_base& it, const iterator_
 	while(pos->parent!=0 && pos!=root.node) {
 		pos=pos->parent;
 		++ret;
+		}
+	return ret;
+	}
+
+template <class T, class tree_node_allocator>
+template <class Predicate>
+int tree<T, tree_node_allocator>::depth(const iterator_base& it, Predicate p) 
+	{
+	tree_node* pos=it.node;
+	assert(pos!=0);
+	int ret=0;
+	while(pos->parent!=0) {
+		pos=pos->parent;
+		if(p(pos))
+			++ret;
+		}
+	return ret;
+	}
+
+template <class T, class tree_node_allocator>
+template <class Predicate>
+int tree<T, tree_node_allocator>::distance(const iterator_base& top, const iterator_base& bottom, Predicate p) 
+	{
+	tree_node* pos=bottom.node;
+	assert(pos!=0);
+	int ret=0;
+	while(pos->parent!=0 && pos!=top.node) {
+		pos=pos->parent;
+		if(p(pos))
+			++ret;
 		}
 	return ret;
 	}

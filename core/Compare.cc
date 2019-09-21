@@ -296,6 +296,7 @@ namespace cadabra {
 	Ex_comparator::match_t Ex_comparator::equal_subtree(Ex::iterator i1, Ex::iterator i2,
 	      useprops_t use_props, bool ignore_parent_rel)
 		{
+		DEBUG( std::cerr << "equal_subtree with use_props = " << use_props << std::endl; );
 		++offset;
 
 		Ex::sibling_iterator i1end(i1);
@@ -303,17 +304,26 @@ namespace cadabra {
 		++i1end;
 		++i2end;
 
+		// When measuring depth (to determine if we need to use
+		// properties or not), things like \dot{\alpha} should give the
+		// same depth for \dot and for \alpha, because \dot is an
+		// Accent. We use a predicate function to take care of this.
+		auto depth_predicate = [this,use_props](const Ex::iterator& i) {
+			if(use_props!=useprops_t::not_at_top) return true;
+			DEBUG( std::cerr << "***** NOT SUPPOSED TO HAPPEN" << std::endl; );
+			const Accent *accent = properties.get<Accent>(i);
+			return (accent==0);
+		};
+		
 		bool first_call=true;
 		match_t worst_mismatch=match_t::subtree_match;
-		int topdepth=Ex::depth(i1);
+		Ex::iterator rememberi1=i1;
 
 		while(i1!=i1end && i2!=i2end) {
-			int curdepth=Ex::depth(i1);
-			// std::cerr << tab() << "match at depth " << curdepth << std::endl;
 			useprops_t up = use_props;
 			if(use_props==useprops_t::not_at_top) {
-				if(topdepth!=curdepth) up=useprops_t::always;
-				else                   up=useprops_t::never;
+				if(Ex::distance(rememberi1, i1, depth_predicate)!=0) up=useprops_t::always;
+				else                                                 up=useprops_t::never;
 				}
 			match_t mm=compare(i1, i2, first_call, up, ignore_parent_rel);
 			//		DEBUG( std::cerr << "COMPARE " << *i1->name << ", " << *i2->name << " = " << static_cast<int>(mm) << std::endl; )
@@ -388,10 +398,12 @@ namespace cadabra {
 					break;
 				}
 			// Continue walking the tree downwards.
+			DEBUG( std::cerr << "one down" << std::endl; );
 			++i1;
 			++i2;
 			}
-
+		DEBUG( std::cerr << "equal_subtree done" << std::endl; );
+		
 		return report(worst_mismatch);
 		}
 
@@ -459,7 +471,7 @@ namespace cadabra {
 		// nobrackets also implies 'no multiplier', i.e. 'toplevel'.
 		// 'one' is the substitute pattern, 'two' the expression under consideration.
 
-		DEBUG( std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << ", ignore_parent_rel = " << ignore_parent_rel << std::endl; )
+		DEBUG( std::cerr << tab() << "matching " << Ex(one) << tab() << "to " << Ex(two) << tab() << "using props = " << use_props << ", ignore_parent_rel = " << ignore_parent_rel << std::endl; );
 
 		if(nobrackets==false && one->fl.bracket != two->fl.bracket)
 			return report( (one->fl.bracket < two->fl.bracket)?match_t::no_match_less:match_t::no_match_greater );
@@ -555,12 +567,17 @@ namespace cadabra {
 			bool tested_full=true;
 
 			// If this is a pattern with a non-zero number of children,
-			// also search the pattern without the children.
+			// also search the pattern without the children (but not if
+			// this node is an Accent, because then the child nodes are
+			// very relevant).
 			if(loc == replacement_map.end() && Ex::number_of_children(one)!=0) {
-				Ex tmp1(one);
-				tmp1.erase_children(tmp1.begin());
-				loc = replacement_map.find(tmp1);
-				tested_full=false;
+				DEBUG( std::cerr << tab() << "**** not found, trying without child nodes" << std::endl; );
+				if(properties.get<Accent>(one)==0 ) {
+					Ex tmp1(one);
+					tmp1.erase_children(tmp1.begin());
+					loc = replacement_map.find(tmp1);
+					tested_full=false;
+					}
 				}
 
 			if(loc!=replacement_map.end()) {
@@ -578,11 +595,11 @@ namespace cadabra {
 					tmp2.erase_children(tmp2.begin());
 					cmp=subtree_compare(&properties, (*loc).second.begin(), tmp2.begin(), -2);
 					}
-				//			std::cerr << " pattern " << *two->name
-				//						 << " should be " << *((*loc).second.begin()->name)
-				//						 << " because that's what " << *one->name
-				//						 << " was set to previously; result " << cmp << std::endl;
-
+				DEBUG(std::cerr << " pattern " << two
+						<< " should be " << (*loc).second.begin()
+						<< " because that's what " << one
+						<< " was set to previously; result " << cmp << std::endl;  );
+					
 				if(cmp==0)      return report(match_t::subtree_match);
 				else if(cmp>0)  return report(match_t::no_match_less);
 				else            return report(match_t::no_match_greater);
@@ -594,16 +611,16 @@ namespace cadabra {
 				// If two is a rational, we have already checked that one can take this value.
 
 				if(one->is_index()) {
-					DEBUG( std::cerr << tab() << "object one is index" << std::endl; )
+					DEBUG( std::cerr << tab() << "object one is index" << std::endl; );
 
 					const Indices *t1=0;
 					const Indices *t2=0;
 					if(use_props==useprops_t::always) {
-						DEBUG( std::cerr << tab() << "is " << *one->name << " an index?" << std::endl; )
+						DEBUG( std::cerr << tab() << "is " << one << " an index?" << std::endl; );
 						t1=properties.get<Indices>(one, false);
-						DEBUG( std::cerr << tab() << t1 << std::endl; );
+						DEBUG( std::cerr << tab() << "found for one: " << t1 << std::endl; );
 						if(two->is_rational()==false) {
-							DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; )
+							DEBUG( std::cerr << tab() << "is " << two << " an index?" << std::endl; );
 							t2=properties.get<Indices>(two, false);
 							DEBUG( std::cerr << tab() << t2 << std::endl; );
 							// It is still possible that t2 is a Coordinate and
@@ -621,13 +638,15 @@ namespace cadabra {
 								[&](const Ex& a) {
 									if(subtree_compare(&properties, a.begin(), two, 0)==0) return true;
 									else return false;
-									});
+								});
 								if(ivals!=t1->values.end())
 									t2=t1;
 								}
 							}
-						else
-							t2=t1; // We already know 'one' can take the value 'two', so in a sense two is in the same set as one.
+							else {
+								t2=t1; // We already know 'one' can take the value 'two', so in a sense t2 is in the same set as t1.
+								DEBUG( std::cerr << tab() << two << " is rational" << std::endl; );
+								}
 						}
 
 					// Check parent rel if a) there is no Indices property for the indices, b) the index positions
@@ -668,13 +687,14 @@ namespace cadabra {
 							}
 						}
 					}
-
+					
 				// See the documentation of substitute::can_apply for details about
 				// how the replacement_map is supposed to work. In general, if we want
 				// that e.g a found _{z} also leads to a replacement rule for (z), or
 				// if we want that a found _{z} also leads to a replacement for ^{z},
 				// this needs to be added to the replacement map explicitly.
 
+					DEBUG( std::cerr << "adding " << one << " -> " << two << " to replacement map " << std::endl; );
 				replacement_map[one]=two;
 
 				// if this is an index, also store the pattern with the parent_rel flipped
@@ -711,6 +731,12 @@ namespace cadabra {
 					// std::cerr << "storing " << Ex(tmp1) << " -> " << Ex(tmp2) << std::endl;
 					replacement_map[tmp1]=tmp2;
 					}
+
+				DEBUG( std::cerr << "Replacement map is now:" << std::endl; 
+						 for(auto& rule: replacement_map)
+							 std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
+						 );
+						 
 				}
 
 			// Return a match of the appropriate type. If we are comparing indices and
@@ -727,7 +753,7 @@ namespace cadabra {
 		else if(objectpattern) {
 			subtree_replacement_map_t::iterator loc=subtree_replacement_map.find(one->name);
 			if(loc!=subtree_replacement_map.end()) {
-				return report(equal_subtree((*loc).second,two));
+				return report(equal_subtree((*loc).second,two,use_props));
 				}
 			else subtree_replacement_map[one->name]=two;
 
@@ -736,7 +762,7 @@ namespace cadabra {
 		else if(is_coordinate || is_number) {   // Check if the coordinate can come from an index.
 			const Indices *t2=0;
 			if(use_props==useprops_t::always) {
-				DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; )
+				DEBUG( std::cerr << tab() << "is " << *two->name << " an index?" << std::endl; );
 				t2=properties.get<Indices>(two, true);
 				DEBUG( std::cerr << tab() << t2 << std::endl; );
 				}

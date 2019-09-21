@@ -144,8 +144,10 @@ Algorithm::result_t substitute::apply(iterator& st)
 	{
 	// std::cerr << "substitute::apply at " << Ex(st) << std::endl;
 
-	//for(auto& rule: comparator.replacement_map)
-	//	std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
+#ifdef DEBUG
+	for(auto& rule: comparator.replacement_map)
+		std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
+#endif
 
 	sibling_iterator arrow=use_rule;
 	iterator lhs=tr.begin(arrow);

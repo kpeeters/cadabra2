@@ -40,7 +40,7 @@ pattern::pattern(const Ex& o)
 	{
 	}
 
-bool pattern::match(const Properties& properties, const Ex::iterator& it, bool ignore_parent_rel) const
+bool pattern::match(const Properties& properties, const Ex::iterator& it, bool ignore_parent_rel, bool ignore_properties) const
 	{
 	// Special case for range wildcards.
 	// FIXME: move this to Compare.cc (see the FIXME there)
@@ -98,13 +98,17 @@ bool pattern::match(const Properties& properties, const Ex::iterator& it, bool i
 	// 'equal_subtree': the first argument is supposed to be a
 	// pattern, the second an expression which is to be matched.
 
-	Ex_comparator comp(properties);
-	Ex_comparator::match_t res=comp.equal_subtree(obj.begin(), it,
-	                           Ex_comparator::useprops_t::not_at_top,
-	                           ignore_parent_rel);
-
 #ifdef DEBUG
-	std::cerr << "*** Comparing " << Ex(it) <<  " with " << Ex(obj) << " = " << static_cast<int>(res) << std::endl;
+	std::cerr << "vvvvvvv " << ignore_properties << std::endl;
+#endif
+	Ex_comparator comp(properties);
+	Ex_comparator::match_t res=
+		comp.equal_subtree(obj.begin(), it,
+								 ignore_properties?Ex_comparator::useprops_t::never:Ex_comparator::useprops_t::not_at_top,
+								 ignore_parent_rel);
+#ifdef DEBUG
+	std::cerr << "pattern::match: comparing" << Ex(it) <<  " with " << Ex(obj) << " = " << static_cast<int>(res) << std::endl;
+	std::cerr << "^^^^^^" << std::endl;
 #endif
 
 	if(is_in(res, {

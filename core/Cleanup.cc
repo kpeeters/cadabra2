@@ -362,6 +362,10 @@ namespace cadabra {
 				tr.move_before(rhsend, side);
 				sib=tr.erase(sib);
 				}
+#ifdef DEBUG
+			std::cerr << "got through equals cleanup" << std::endl;
+			std::cerr << it << std::endl;
+#endif
 			Ex::iterator tmp1=lhs, tmp2=rhs;
 			cleanup_sumlike(k, tr, tmp1);
 			cleanup_sumlike(k, tr, tmp2);			

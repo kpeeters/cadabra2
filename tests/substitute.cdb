@@ -479,5 +479,25 @@ def test123():
     tst:= A + B + C + D - @(ex);
     assert(tst==0)
     print("Test 123d passed")
+
+#test123()
         
 # substitute(_, $A C?* F -> F A B C?* $, partial=False);        
+
+def test124():
+    __cdbkernel__=create_scope()
+    \dot{#}::Accent;
+    {\dot{\alpha}, \dot{\beta}, \dot{\gamma}, \dot{\delta}}::Indices(spinor, position=fixed);
+    {\dot{\alpha}, \dot{\beta}, \dot{\gamma}, \dot{\delta}}::Integer(1..2);
+    \nabla{#}::Derivative;
+    ex:=\nabla^{\dot{\gamma}}(\theta^{\dot{\alpha}}) \theta_{\dot{\alpha}};
+    substitute(_, $\nabla^{\dot{\alpha}}{\theta^{\dot{\beta}}} -> \epsilon^{\dot{\beta} \dot{\alpha}}$)
+    tst:= \epsilon^{\dot{\alpha} \dot{\gamma}} \theta_{\dot{\alpha}} - @(ex);
+    assert(tst==0)
+    print("Test 124 passed")
+
+test124()
+    
+    
+# \hat{R}_{a b c d}
+# R(x,y)

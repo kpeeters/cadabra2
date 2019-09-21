@@ -25,19 +25,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <map>
 #include <list>
+#include <type_traits>
 #include "Storage.hh"
 
 namespace cadabra {
 
 	class Properties;
 	class Kernel;
+	class Accent;
 
 	class pattern {
 		public:
 			pattern();
 			pattern(const Ex&);
 
-			bool match(const Properties&, const Ex::iterator&, bool ignore_parent_rel=false) const;
+			/// Match a pattern to an expression. If ignore_parent_rel is
+			/// true, this will match regardless of the parent_rel of the
+			/// top node. If ignore_properties is true, property
+			/// information will not be used to match symbols anywhere
+			/// (in which case A_{a} and A_{b} will no longer match even
+			/// when 'a' and 'b' have the same Indices property, for
+			/// example). The latter feature is mostly used to do pattern
+			/// matching when the property for which we need it cannot
+			/// rely on such child node properties, e.g. Accent; see the
+			/// specialisation in get_composite below.
+			
+			bool match(const Properties&, const Ex::iterator&, bool ignore_parent_rel=false, bool ignore_properties=false) const;
 			bool children_wildcard() const;
 
 			Ex obj;
@@ -331,6 +344,13 @@ namespace cadabra {
 		// once looking for patterns which do not have wildcards, and then looking
 		// for wildcard patterns.
 		bool wildcards=false;
+
+		// For some properties, we cannot lookup properties lower down the
+		// tree, because it would lead to an endless recursion (and it would
+		// not make sense anyway). At the moment, this is only for Accent.
+		bool ignore_properties=false;
+		if(std::is_same<T, Accent>::value) ignore_properties=true;
+		
 		for(;;) {
 			property_map_t::const_iterator walk=pit.first;
 			while(walk!=pit.second) {
@@ -338,7 +358,7 @@ namespace cadabra {
 					// First check property type; a dynamic cast is much faster than a pattern match.
 					ret.first=dynamic_cast<const T *>((*walk).second.second);
 					if(ret.first) {
-						if((*walk).second.first->match(*this, it, ignore_parent_rel)) {
+						if((*walk).second.first->match(*this, it, ignore_parent_rel, ignore_properties)) {
 							ret.second=(*walk).second.first;
 							if(doserial) {
 								std::pair<pattern_map_t::const_iterator, pattern_map_t::const_iterator>
@@ -408,11 +428,18 @@ namespace cadabra {
 		// once looking for patterns which do not have wildcards, and then looking
 		// for wildcard patterns.
 		bool wildcards=false;
+
+		// For some properties, we cannot lookup properties lower down the
+		// tree, because it would lead to an endless recursion (and it would
+		// not make sense anyway). At the moment, this is only for Accent.
+		bool ignore_properties=false;
+		if(std::is_same<T, Accent>::value) ignore_properties=true;
+		
 		for(;;) {
 			property_map_t::const_iterator walk=pit.first;
 			while(walk!=pit.second) {
 				if(wildcards==(*walk).second.first->children_wildcard()) {
-					if((*walk).second.first->match(*this, it)) { // match found
+					if((*walk).second.first->match(*this, it, false, ignore_properties)) { // match found
 						ret=dynamic_cast<const T *>((*walk).second.second);
 						if(ret) { // found! determine serial number
 							// std::cerr << "found weight for " << ret->label << " vs " << label << std::endl;
