@@ -1,12 +1,24 @@
 
-A::Matrix;
-A::DifferentialForm(degree=1);
-F::DifferentialForm(degree=2);
+def test01():
+    __cdbkernel__=create_scope()
+    {f,g}::DifferentialForm(degree=0).
+    {V, W}::DifferentialForm(degree=1).
+    ex := f V ^ (g W + V);
+    unwrap(_);
+    tst:= f * (V ^ (g W + V) ) - @(ex);
+    assert(tst==0)
+    print("Test 01 passed")
 
-ex:= A ^ A ^ A;
-assert(ex!=0)
-print("Test 01 passed")
+test01()
 
-ex:= A ^ F ^ A;
-sort_product(_);
+# A::Matrix;
+# A::DifferentialForm(degree=1);
+# F::DifferentialForm(degree=2);
+# 
+# ex:= A ^ A ^ A;
+# assert(ex!=0)
+# print("Test 01 passed")
+# 
+# ex:= A ^ F ^ A;
+# sort_product(_);
 

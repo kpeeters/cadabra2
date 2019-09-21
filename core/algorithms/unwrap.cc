@@ -6,6 +6,7 @@
 #include "properties/Accent.hh"
 #include "properties/DiracBar.hh"
 #include "properties/Spinor.hh"
+#include "properties/DifferentialForm.hh"
 #include "properties/GammaMatrix.hh"
 #include "properties/DependsBase.hh"
 //#include "algorithms/prodcollectnum.hh"
@@ -55,7 +56,39 @@ bool unwrap::can_apply(iterator it)
 		return true;
 		}
 
+	if(*it->name=="\\wedge") return true;
+
 	return false;
+	}
+
+Algorithm::result_t unwrap::apply_on_wedge(iterator& it)
+	{
+	result_t res=result_t::l_no_action;
+
+	auto prodwrap = tr.wrap(it, str_node("\\prod"));
+	
+	sibling_iterator sib=tr.begin(it);
+	while(sib!=tr.end(it)) {
+		if(*sib->name=="\\prod") {
+			sibling_iterator fac=tr.begin(sib);
+			while(fac!=tr.end(sib)) {
+				const DifferentialForm *diff = kernel.properties.get<DifferentialForm>(fac);
+				sibling_iterator nxt=fac;
+				++nxt;
+				if(diff==0 || diff->degree(kernel.properties, fac).begin()->is_zero() ) {
+					tr.move_before(tr.begin(prodwrap), fac);
+					}
+				fac=nxt;
+				}
+			}
+		sibling_iterator nxt=sib;
+		++nxt;
+		iterator tmp=sib;
+		cleanup_dispatch(kernel, tr, tmp);
+		sib=nxt;
+		}
+	
+	return res;
 	}
 
 // \del{a*f*A*b*C*d*e} -> a*f*\del{A*b*C}*d*e
@@ -79,6 +112,10 @@ Algorithm::result_t unwrap::apply(iterator& it)
 #ifdef DEBUG
 	std::cerr << "Applying unwrap at " << Ex(it) << std::endl;
 #endif
+
+	if(*it->name=="\\wedge")
+		return apply_on_wedge(it);
+	
 	result_t res = result_t::l_no_action;
 
 	bool is_accent=kernel.properties.get<Accent>(it);

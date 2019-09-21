@@ -11,6 +11,10 @@ namespace cadabra {
 			virtual result_t apply(iterator&) override;
 
 			std::vector<Ex> wrappers;
+
+		private:
+			result_t apply_on_wedge(iterator&);
+			
 		};
 
 	}
