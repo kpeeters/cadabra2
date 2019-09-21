@@ -1115,6 +1115,8 @@ Ex::iterator evaluate::handle_prod(iterator it)
 	{
 	// std::cerr << "handle_prod " << Ex(it) << std::endl;
 
+	std::string prod_name=*it->name;
+	
 	// All factors are either \component nodes, pure scalar nodes, or nodes which still need replacing.
 	// The handle_factor function takes care of the latter two.
 
@@ -1215,7 +1217,7 @@ Ex::iterator evaluate::handle_prod(iterator it)
 						// Create new merged index value set.
 						Ex ivs("\\equals");
 						auto ivs_lhs = tr.append_child(ivs.begin(), str_node("\\comma"));
-						auto ivs_rhs = tr.append_child(ivs.begin(), str_node("\\prod"));
+						auto ivs_rhs = tr.append_child(ivs.begin(), str_node(prod_name));
 						auto ci = tr.begin(lhs1);
 						int n=0;
 						while(ci!=tr.end(lhs1)) {

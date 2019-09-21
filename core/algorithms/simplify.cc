@@ -23,7 +23,20 @@ bool simplify::can_apply(iterator st)
 	if(*st->name=="\\components") return false;
 	if(*st->name=="\\equals") return false;
 	if(*st->name=="\\comma") return false;
+	if(*st->name=="\\wedge") return false;
 
+	// If this is a sum, determine if there are any wedge products (we
+	// do not pass enough info to sympy yet to enable it to simplify these).
+
+	if(*st->name=="\\sum") {
+		for(sibling_iterator sib=tr.begin(st), end=tr.end(st); sib!=end; ++sib)
+			if(*sib->name=="\\wedge")
+				return false;
+		}
+
+	// Check that any occuring indices are 'harmless', in the sense that
+	// sympy knows how to handle them.
+	
 	left.clear();
 	index_factors.clear();
 	index_map_t ind_free, ind_dummy;
