@@ -51,6 +51,20 @@ patches (pull requests) and so on. Check out the source code from
 there and follow the instructions on how to build it.
 
 
+Code conventions
+----------------
+
+To generate debug output, we use the [dbg][8] facility. To turn this
+on for a particular source file, comment out the `DBG_MACRO_DISABLE`
+definition at the top. You will then get nicely formatted debug output
+while running.
+
+Code is formatted using tabs for indentation, K&R style braces,
+with some fine-tuning. All is taken care of by `make format` in the
+top-level directory, which runs through the entire source tree and
+does a reformat using `astyle`.
+
+
 [1] https://cadabra.science/qa/
 [2] mailto:info@cadabra.science
 [3] https://cadabra.science/tutorials.html
@@ -58,3 +72,4 @@ there and follow the instructions on how to build it.
 [5] https://cadabra.science/man.html
 [6] https://cadabra.science/doxygen/html/
 [7] https://github.com/kpeeters/cadabra2
+[8] https://github.com/sharkdp/dbg-macro

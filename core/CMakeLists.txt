@@ -246,6 +246,7 @@ include_directories(
 	"."
 	"${CADABRA_LIBS_DIR}/internal/include"
 	"${CADABRA_LIBS_DIR}/whereami"
+	"${CADABRA_LIBS_DIR}/dbg"   
 	${Boost_INCLUDE_DIRS}
 	)
 if(ENABLE_SYSTEM_JSONCPP)

@@ -5,6 +5,10 @@
 #include "algorithms/substitute.hh"
 #include "properties/Indices.hh"
 
+#define DBG_MACRO_NO_WARNING 
+//#define DBG_MACRO_DISABLE 
+#include "dbg.h"
+
 // #define DEBUG 1
 
 using namespace cadabra;
@@ -119,10 +123,8 @@ bool substitute::can_apply(iterator st)
 			// If we are not matching a partial sum or partial product, need to check that all
 			// terms or factors are accounted for.
 			if(!partial) {
-#ifdef DEBUG
-				std::cerr << comparator.factor_locations.size() << " vs "
-				          << tr.number_of_children(st) << std::endl;
-#endif
+				dbg(comparator.factor_locations.size());
+				dbg(tr.number_of_children(st));
 				if(comparator.factor_locations.size()!=tr.number_of_children(st))
 					return args.end();
 				}
@@ -144,10 +146,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 	{
 	// std::cerr << "substitute::apply at " << Ex(st) << std::endl;
 
-#ifdef DEBUG
-	for(auto& rule: comparator.replacement_map)
-		std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
-#endif
+//	dbg(comparator.replacement_map);
+//	for(auto& rule: comparator.replacement_map)
+//		std::cerr << "* " << rule.first << " -> " << rule.second << std::endl;
 
 	sibling_iterator arrow=use_rule;
 	iterator lhs=tr.begin(arrow);
@@ -285,9 +286,9 @@ Algorithm::result_t substitute::apply(iterator& st)
 
 	// After all replacements have been done, we need to cleanup the
 	// replacement tree.
-#ifdef DEBUG
-	std::cerr << "substitute: repl before: \n" << repl << std::endl;
-#endif
+
+	dbg(repl);
+
 	cleanup_dispatch_deep(kernel, repl);
 	// std::cerr << "repl after: \n" << repl << std::endl;
 
@@ -355,9 +356,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 	int totsign=1;
 	for(unsigned int i=0; i<comparator.factor_moving_signs.size(); ++i) {
 		totsign*=comparator.factor_moving_signs[i];
-#ifdef DEBUG
-		std::cerr << "factor " << i << " picked up sign " << comparator.factor_moving_signs[i] << std::endl;
-#endif
+		dbg(i);
+		dbg(comparator.factor_moving_signs[i]);
 		}
 	multiply(st->multiplier, totsign);
 
@@ -368,10 +368,8 @@ Algorithm::result_t substitute::apply(iterator& st)
 	//	// FIXME: still needed?
 	//	cleanup_dispatch(kernel, tr, st);
 
-#ifdef DEBUG
-	std::cerr << "substitute: before final cleanup: " << tr.begin() << std::endl;
-	std::cerr << "substitute: we have " << subtree_insertion_points.size() << " insertion points" << std::endl;
-#endif
+	dbg(tr.begin());
+	dbg(subtree_insertion_points.size());
 
 	// Cleanup nests on all insertion points and on the top node.
 //	for(unsigned int i=0; i<subtree_insertion_points.size(); ++i) {
@@ -382,9 +380,7 @@ Algorithm::result_t substitute::apply(iterator& st)
 //
 	cleanup_dispatch(kernel, tr, st);
 
-#ifdef DEBUG
-	std::cerr << "substitute: complete" << std::endl;
-#endif
+	dbg("complete");
 
 	return result_t::l_applied;
 	}
