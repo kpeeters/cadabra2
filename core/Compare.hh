@@ -321,6 +321,10 @@ namespace cadabra {
 			                       Ex::sibling_iterator two, bool fix_one=false) ;
 
 
+			/// Determine whether object 'one' can be moved to be the first
+			/// factor in the given product.
+			int  can_move_to_front(Ex&, Ex::iterator prod, Ex::sibling_iterator one);
+			
 			/// Alternative to the above, which handles more complicated versions where we
 			/// need to keep track of previously moved factors (used by algorithms/substitute.cc).
 

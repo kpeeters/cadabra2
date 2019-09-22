@@ -53,6 +53,7 @@ Algorithm::result_t factor_out::apply(iterator& it)
 		Ex collector("\\prod"); // collect all factors that we have taken out
 
 		// Insert a dummy symbol at the very front or back.
+		// FIXME: there is now a 'can_move_to_front', use that.
 		iterator dummy;
 		if(to_right) dummy = tr.append_child(prod, str_node("dummy"));
 		else         dummy = tr.prepend_child(prod, str_node("dummy"));

@@ -76,7 +76,25 @@ Algorithm::result_t unwrap::apply_on_wedge(iterator& it)
 				sibling_iterator nxt=fac;
 				++nxt;
 				if(diff==0 || diff->degree(kernel.properties, fac).begin()->is_zero() ) {
-					tr.move_before(tr.begin(prodwrap), fac);
+					// Figure out the sign. First move to front of existing
+					// simple product. Then move through all other factors
+					// in the wedge product.
+					Ex_comparator comp(kernel.properties);
+					int sign=comp.can_move_to_front(tr, sib, fac);
+					if(sign!=0) {
+						sibling_iterator prevwedfac=sib;
+						if(prevwedfac!=tr.begin(it)) {
+							do {
+								--prevwedfac;
+								auto stc=comp.equal_subtree(prevwedfac, fac);
+								sign*=comp.can_swap(prevwedfac, fac, stc);
+								} while(prevwedfac!=tr.begin(it));
+							}
+						if(sign!=0) {
+							tr.move_before(it, fac);
+							multiply(prodwrap->multiplier, sign);
+							}
+						}
 					}
 				fac=nxt;
 				}
@@ -87,6 +105,7 @@ Algorithm::result_t unwrap::apply_on_wedge(iterator& it)
 		cleanup_dispatch(kernel, tr, tmp);
 		sib=nxt;
 		}
+	cleanup_dispatch(kernel, tr, prodwrap);	
 	
 	return res;
 	}

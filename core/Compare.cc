@@ -1148,6 +1148,16 @@ namespace cadabra {
 		return sign;
 		}
 
+	int Ex_comparator::can_move_to_front(Ex& tr, Ex::iterator prod, Ex::sibling_iterator one)
+		{
+		// Insert a dummy, determine whether we can move
+		// next to the dummy, then erase the dummy again.
+		auto dummy = tr.prepend_child(prod, str_node("dummy"));		
+		int sign=can_move_adjacent(prod, dummy, one, true);
+		tr.erase(dummy);
+		return sign;
+		}
+
 
 	// Determine the sign required to move the last factor in 'factors' to
 	// the right of the first.  If moving left, do not count signs from
