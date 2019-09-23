@@ -144,7 +144,10 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 				auto propname = std::string(ares[1]);
 				auto argument = std::string(ares[2]);
 				if(argument.size()>0) { // declaration with arguments
-					argument=argument.substr(1,argument.size()-2);
+					if(argument[argument.size()-2]==')')
+						argument=argument.substr(1,argument.size()-2);
+					else
+						argument=argument.substr(1,argument.size()-1);
 					ret = indent_line + "__cdbtmp__ = "+propname
 					      +"(Ex(r'"+escape_quotes(line_stripped.substr(0,found))
 					      +"'), Ex(r'" +escape_quotes(argument) + "') )";

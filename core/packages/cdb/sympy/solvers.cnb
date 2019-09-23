@@ -1,5 +1,5 @@
 {
-	"cell_id" : 17139894900848566399,
+	"cell_id" : 13514018476988944983,
 	"cells" : 
 	[
 		{
@@ -319,7 +319,7 @@
 			"cell_id" : 911768519859269492,
 			"cell_origin" : "client",
 			"cell_type" : "input",
-			"source" : "def nonlinsolve(exs, objs):\n   ret = $@(exs)$\n   obl = $@(objs)$\n   if ret.head()!=r\"\\comma\":\n      ret = $\\comma{ @(ret) }$\n   if obl.head()!=r\"\\comma\":\n      obl = $\\comma{ @(obl) }$\n   sb = SympyBridge(ret)\n   sb.from_sympy( str(sympy.nonlinsolve( sb.to_sympy(), objs._sympy_())) )\n   # The result is a list of solutions. Turn this into a list of\n   # rules.\n   if len(obl)==1:\n      nret = $\\comma{}$\n      for i in range(len(ret)):\n         tmps=ret[i]\n         nret.top().append_child($ \\comma{ @(objs) -> @(tmps) } $)\n      ret=nret\n   else:\n      nret = $\\comma{}$\n      for i in range(len(ret)):\n         tsol=$\\comma{}$\n         for v in range(len(objs)):\n            tmpv=objs[v]\n            tmps=ret[i][v]\n            tsol.top().append_child($ @(tmpv) -> @(tmps) $)\n         nret.top().append_child(tsol)\n      ret=nret\n   return ret"
+			"source" : "def nonlinsolve(exs, objs):\n   ret = $@(exs)$\n   obl = $@(objs)$\n   if ret.head()!=r\"\\comma\":\n      ret = $\\comma{ @(ret) }$\n   if obl.head()!=r\"\\comma\":\n      obl = $\\comma{ @(obl) }$\n   sb = SympyBridge(ret)\n   print(sb.to_sympy())\n   sb.from_sympy( str(sympy.nonlinsolve( sb.to_sympy(), objs._sympy_())) )\n   # The result is a list of solutions. Turn this into a list of\n   # rules.\n   if len(obl)==1:\n      nret = $\\comma{}$\n      for i in range(len(ret)):\n         tmps=ret[i]\n         nret.top().append_child($ \\comma{ @(objs) -> @(tmps) } $)\n      ret=nret\n   else:\n      nret = $\\comma{}$\n      for i in range(len(ret)):\n         tsol=$\\comma{}$\n         for v in range(len(objs)):\n            tmpv=objs[v]\n            tmps=ret[i][v]\n            tsol.top().append_child($ @(tmpv) -> @(tmps) $)\n         nret.top().append_child(tsol)\n      ret=nret\n   return ret"
 		},
 		{
 			"cell_id" : 4737965800086152437,
