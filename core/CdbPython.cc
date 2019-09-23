@@ -137,17 +137,14 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 	else {   // {a,b,c}::Indices(real, parent=holo);
 		found = line_stripped.find("::");
 		if(found!=std::string::npos) {
-			std::regex amatch(R"(([a-zA-Z]+)(.*)[;\.:]*)");
+			std::regex amatch(R"(([a-zA-Z]+)(\(.*\))?[;\.:]*)");
 			std::smatch ares;
 			std::string subline=line_stripped.substr(found+2); // need to store the copy, not feed it straight into regex_match!
 			if(std::regex_match(subline, ares, amatch)) {
 				auto propname = std::string(ares[1]);
 				auto argument = std::string(ares[2]);
 				if(argument.size()>0) { // declaration with arguments
-					if(argument[argument.size()-2]==')')
-						argument=argument.substr(1,argument.size()-2);
-					else
-						argument=argument.substr(1,argument.size()-1);
+					argument=argument.substr(1,argument.size()-2);
 					ret = indent_line + "__cdbtmp__ = "+propname
 					      +"(Ex(r'"+escape_quotes(line_stripped.substr(0,found))
 					      +"'), Ex(r'" +escape_quotes(argument) + "') )";
@@ -156,7 +153,7 @@ std::string cadabra::convert_line(const std::string& line, std::string& lhs, std
 					// no arguments
 					line_stripped=line_stripped.substr(0,line_stripped.size()-1);
 					ret = indent_line + "__cdbtmp__ = " + line_stripped.substr(found+2)
-					      + "(Ex(r'"+escape_quotes(line_stripped.substr(0,found))+"'))";
+					      + "(Ex(r'"+escape_quotes(line_stripped.substr(0,found))+"'), Ex(r''))";
 					}
 				if(lastchar==";" && display)
 					ret += "; display(__cdbtmp__)";

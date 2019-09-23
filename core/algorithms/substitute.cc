@@ -6,7 +6,7 @@
 #include "properties/Indices.hh"
 
 #define DBG_MACRO_NO_WARNING 
-//#define DBG_MACRO_DISABLE 
+#define DBG_MACRO_DISABLE 
 #include "dbg.h"
 
 // #define DEBUG 1
