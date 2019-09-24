@@ -72,7 +72,7 @@ Algorithm::result_t unwrap::apply_on_wedge(iterator& it)
 		if(*sib->name=="\\prod") {
 			sibling_iterator fac=tr.begin(sib);
 			while(fac!=tr.end(sib)) {
-				const DifferentialForm *diff = kernel.properties.get<DifferentialForm>(fac);
+				const DifferentialFormBase *diff = kernel.properties.get<DifferentialFormBase>(fac);
 				sibling_iterator nxt=fac;
 				++nxt;
 				if(diff==0 || diff->degree(kernel.properties, fac).begin()->is_zero() ) {
