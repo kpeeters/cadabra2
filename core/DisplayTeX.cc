@@ -733,7 +733,7 @@ void DisplayTeX::print_components(std::ostream& str, Ex::iterator it)
 			++in;
 			++iv;
 			}
-		str << "= & ";
+		str << "& = ";
 		++c;
 		dispatch(str, c);
 		str << "\\\\[-.5ex]\n";
