@@ -192,6 +192,7 @@ std::string cadabra::cnb2python(const std::string& in_name, bool display)
 	    << "import cadabra2\n"
 	    << "import imp\n"
 	    << "from cadabra2 import *\n"
+		 << "from cadabra2_defaults import *\n"
 	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
 	    << "temp__all__ = dir() + ['temp__all__']\n\n"
 	    << "def display(ex):\n"
