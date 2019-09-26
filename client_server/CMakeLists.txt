@@ -151,7 +151,10 @@ if(ENABLE_SYSTEM_JSONCPP)
 endif()
 if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
-endif()
+ endif()
+ if(UNIX)
+   target_link_libraries(cadabra-server dl)
+ endif()
 
 # cadabra2html
 if(NOT ENABLE_JUPYTER)
