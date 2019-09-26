@@ -153,7 +153,7 @@ if(WIN32)
    target_link_libraries(cadabra-server ws2_32 mswsock bcrypt)
  endif()
  if(UNIX)
-   target_link_libraries(cadabra-server dl)
+   target_link_libraries(cadabra-server dl util)
  endif()
 
 # cadabra2html
