@@ -20,6 +20,10 @@ __cdbkernel__=cadabra2.__cdbkernel__
 import os
 os.environ.setdefault('PATH', '')
 
+PY3 = sys.version_info[0] == 3
+if PY3:
+   unicode = str
+
 if "@ENABLE_JUPYTER@" == "OFF":
    discr = "\\discretionary{}{}{} "
 else:
@@ -38,7 +42,8 @@ class PackageCompiler(MetaPathFinder):
 			path = sys.path
 		# Get unqualified package name
 		if '.' in fullname:
-			*parents, name = fullname.split('.')	
+			parents = fullname.split('.')
+			name = parents.pop()
 		else:
 			name = fullname
 			parents = []
@@ -232,7 +237,7 @@ def display(obj, delay_send=False):
                 # Make a child cell of the above with input form content.
                 server.send(obj.input_form(), "input_form", id, False)                
         else:
-            server.send(str(obj), "plain", 0, False)
+            server.send(unicode(obj), "plain", 0, False)
 
     elif isinstance(obj, Property):
         if server.handles('latex_view'):
@@ -244,7 +249,7 @@ def display(obj, delay_send=False):
                 # Not yet available.
                 # server.send(obj.input_form(), "input_form", 0, False)
         else:
-            server.send(str(obj), "plain", 0, False)
+            server.send(unicode(obj), "plain", 0, False)
             
     elif type(obj)==list:
         out="{}$\\big[$"
@@ -269,7 +274,7 @@ def display(obj, delay_send=False):
         if delay_send:
             return "\\verb|"+str(obj)+"|"
         else:
-            server.send(str(obj), "verbatim", 0, False)
+            server.send(unicode(obj), "verbatim", 0, False)
     
 __cdbkernel__.server=server
 __cdbkernel__.display=display
@@ -287,7 +292,7 @@ class Console(object):
 		if server.architecture() == "terminal":
 			print(text)
 		elif server.architecture() == "client-server":
-			server.send(str(obj), "csl_out", 0, False)
+			server.send(unicode(obj), "csl_out", 0, False)
 
 	def clear(self):
 		"""
@@ -304,9 +309,9 @@ console = Console()
 def _displayhook(arg):
     global remember_display_hook
     if isinstance(arg, Ex):
-        print(str(arg))
+        print(unicode(arg))
     elif isinstance(arg, Property):
-        print(str(arg))
+        print(unicode(arg))
     else:
         remember_display_hook(arg)
 
