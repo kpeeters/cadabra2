@@ -1,17 +1,27 @@
 def test01():
     __cdbkernel__=create_scope()
     ex:= a*b+a*c+d;
-    factor_in(_, $b,c$);
+    factor_in(_, $b,c$)
     tst:=(b+c)*a + d - @(ex);
     assert(tst==0)
     print('Test 01 passed')
 
 test01()
 
+def test01b():
+    __cdbkernel__=create_scope()
+    ex:= a*b*c+a*c+d;
+    factor_in(_, $b,c$)
+    tst:=(b*c+c)*a + d - @(ex);
+    assert(tst==0)
+    print('Test 01b passed')
+
+test01b()
+
 def test02():
     __cdbkernel__=create_scope()
     ex:=2*a+b*a;
-    factor_in(_, $b$);
+    factor_in(_, $b$)
     tst:=(2+b)*a - @(ex);
     assert(tst==0)
     print('Test 02 passed')
@@ -21,7 +31,7 @@ test02()
 def test03():
     __cdbkernel__=create_scope()
     ex:= 3*a*b + 5*c*b;
-    factor_in(_, $a,c$);
+    factor_in(_, $a,c$)
     tst:=(3 a + 5 c) b - @(ex);
     assert(tst==0)
     print('Test 03 passed')
@@ -31,7 +41,7 @@ test03()
 def test04():
     __cdbkernel__=create_scope()
     ex:= a b + a c e - 4 q - 2 g a d + a d - 3 p s - 9/2 a;
-    factor_out(_, $a$);
+    factor_out(_, $a$)
     tst4:= -4 q - 3 p s + a*(b + c e - 2 g d + d - 9/2) - @(ex);
     assert(tst4==0)
     print('Test 04 passed')
@@ -51,7 +61,7 @@ test05()
 def test06():
     __cdbkernel__=create_scope()
     ex:= 3 a b + 2 a c e + 5 a c + 7 e f - 2 c e + c d - a d + a - c;
-    factor_out(ex, $a,c$);
+    factor_out(ex, $a,c$)
     tst5:=  a * c * (2 * e + 5) + c * ( - 2 * e + d - 1) + a * (3 * b - d + 1) + 7 * e * f - @(ex);
     assert(tst5==0)
     print('Test 06 passed')
@@ -65,8 +75,8 @@ def test07():
     __cdbkernel__=create_scope()
     {A, B, C, D, E}::NonCommuting;
     ex := A B + A C + D A + E A:
-    factor_out(_, $A$, right=True);
-    factor_out(_, $A$, right=False);
+    factor_out(_, $A$, right=True)
+    factor_out(_, $A$, right=False)
     tst := A*(B + C) + (D + E)*A - @(ex);
     assert(tst==0)
     print('Test 07 passed')
@@ -77,7 +87,7 @@ def test08():
     __cdbkernel__=create_scope()
     {A, B, C, D}::AntiCommuting.
     obj := A B + A C + D A:
-    factor_out(_, $A$);
+    factor_out(_, $A$)
     tst := A*(B + C - D) - @(obj);
     assert(tst==0)
     print('Test 08 passed')
@@ -89,7 +99,7 @@ def test09():
     __cdbkernel__=create_scope()
     {A, B}::AntiCommuting.
     obj := A B c X + c B A Y:
-    factor_out(_, $A, B, c$);
+    factor_out(_, $A, B, c$)
     tst := A B c * (X - Y) - @(obj);
     assert(tst==0)
     print('Test 09 passed')
@@ -102,8 +112,8 @@ def test10():
     {A, X, Y}::NonCommuting.
     {B, X, Y}::NonCommuting.
     obj := A B c X + c B A Y + X A B c + Y c B A:
-    factor_out(_, $c, A, B$);
-    factor_out(_, $c, A, B$, right=True);
+    factor_out(_, $c, A, B$)
+    factor_out(_, $c, A, B$, right=True)
     tst := (A B (X-Y) + (-X+Y) A B) c - @(obj);
     assert(tst==0)
     print('Test 10 passed')
@@ -117,7 +127,7 @@ def test11():
     {A, X}::NonCommuting.
     {B, X}::NonCommuting.
     obj := X A B Y + X B A Z:
-    factor_out(_, $A, B, X$);
+    factor_out(_, $A, B, X$)
     tst := X A B (Y - Z) - @(obj);
     assert(tst==0)
     print('Test 11 passed')
@@ -130,7 +140,7 @@ def test12():
     {A, X}::NonCommuting.
     {B, X}::NonCommuting.
     obj := A B X A B Y + B A X B A Z:
-    factor_out(_, $A, B, X$);
+    factor_out(_, $A, B, X$)
     tst := A B X A B (Y + Z) - @(obj);
     assert(tst==0)
     print('Test 12 passed')
@@ -143,7 +153,7 @@ def test13():
     {A, X}::NonCommuting.
     {B, X}::NonCommuting.
     obj := A B C D Y + D A B C Z:
-    factor_out(_, $A, B, C, D$);
+    factor_out(_, $A, B, C, D$)
     tst := A B C D (Y - Z) - @(obj);
     assert(tst==0)
     print('Test 13 passed')
@@ -155,7 +165,7 @@ test13()
 def test14():
     __cdbkernel__=create_scope()
     obj:= A_{a} B_{b} + A_{a} C_{b} + A_{b} D_{a};
-    factor_out(_, $A_{a}$);
+    factor_out(_, $A_{a}$)
     tst:= A_{a} (B_{b} + C_{b}) + A_{b} D_{a} - @(obj);
     assert(tst==0)
     print('Test 14 passed')
@@ -165,7 +175,7 @@ test14()
 def test15():
     __cdbkernel__=create_scope()
     ex:=  3 A G B_{m} C D + 4 E_{m}  ;
-    factor_out(_,  $  A $ );
+    factor_out(_,  $  A $ )
     tst:= 3 A G B_{m} C D + 4 E_{m}  - @(ex);
     assert(tst==0)
     print('Test 15 passed')
@@ -175,12 +185,23 @@ test15()
 def test16():
     __cdbkernel__=create_scope()
     ex:=  3 A G B_{m} C D + 4 E_{m}  ;
-    factor_out(_,  $  A $, right=True );
+    factor_out(_,  $  A $, right=True )
     tst:= 4 E_{m} + 3 G B_{m} C D A - @(ex);
     assert(tst==0)
     print('Test 16 passed')
 
 test16()
+
+def test17():
+    __cdbkernel__=create_scope()
+    ex:= x*x + x*x*x;
+    factor_in(ex, $x$)
+    tst:= x*x + x*x*x - @(ex);
+    assert(tst==0)
+    print("Test 17 passed")
+
+test17()
+    
 
 
 # @reset.
@@ -225,8 +246,8 @@ test16()
 #
 #
     
-{m,n,p,q,r,s,t}::Indices;
-ex:= A_{m n} D_{m p} Q_{n p} + A_{q r} E_{q t} F_{t s} Q_{r s} ;
-factor_out(_, $A_{m n}$);
-sort_product(_);
-rename_dummies(_);
+# {m,n,p,q,r,s,t}::Indices;
+# ex:= A_{m n} D_{m p} Q_{n p} + A_{q r} E_{q t} F_{t s} Q_{r s} ;
+# factor_out(_, $A_{m n}$);
+# sort_product(_);
+# rename_dummies(_);

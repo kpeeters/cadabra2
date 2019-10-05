@@ -65,6 +65,15 @@ top-level directory, which runs through the entire source tree and
 does a reformat using `astyle`.
 
 
+Documentation
+-------------
+
+We have tutorials, manual pages and reference documentation. In
+addition, there are user-contributed notebooks. In this sense, we try
+to follow [divio][9]. Contributions to all of these parts of the
+documentation are welcome.
+
+
 [1] https://cadabra.science/qa/
 [2] mailto:info@cadabra.science
 [3] https://cadabra.science/tutorials.html
@@ -73,3 +82,4 @@ does a reformat using `astyle`.
 [6] https://cadabra.science/doxygen/html/
 [7] https://github.com/kpeeters/cadabra2
 [8] https://github.com/sharkdp/dbg-macro
+[9] https://www.divio.com/blog/documentation/

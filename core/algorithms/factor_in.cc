@@ -2,6 +2,10 @@
 #include "Functional.hh"
 #include "algorithms/factor_in.hh"
 
+#define DBG_MACRO_NO_WARNING 
+#define DBG_MACRO_DISABLE 
+#include "dbg.h"
+
 using namespace cadabra;
 
 factor_in::factor_in(const Kernel& k, Ex& tr, Ex& factors_)
@@ -133,12 +137,11 @@ Algorithm::result_t factor_in::apply(iterator& it)
 			//			txtout << "doing one" << std::endl;
 			prefac.set_head(str_node("\\sum"));
 			if(*(thisbin1->second->name)=="\\prod") { // search for all to-be-factored-out factors
-				iterator prefacprod=prefac.append_child(prefac.begin(), str_node("\\prod", str_node::b_round));
+				iterator prefacprod=prefac.append_child(prefac.begin(), str_node("\\prod"));
 				sibling_iterator ps=tr.begin(thisbin1->second);
 				while(ps!=tr.end(thisbin1->second)) {
 					if(factnodes.count(Ex(ps))!=0) {
-						iterator theterm=prefac.append_child(prefacprod, (iterator)(ps));
-						theterm->fl.bracket=str_node::b_round;
+						prefac.append_child(prefacprod, (iterator)(ps));
 						}
 					++ps;
 					}
@@ -155,7 +158,7 @@ Algorithm::result_t factor_in::apply(iterator& it)
 					}
 				}
 			else {   // just insert the constant
-				str_node pf("1", str_node::b_round);
+				str_node pf("1");
 				pf.multiplier=thisbin1->second->multiplier;
 				prefac.append_child(prefac.begin(), pf);
 				}
@@ -219,10 +222,17 @@ Algorithm::result_t factor_in::apply(iterator& it)
 		}
 
 	// Remove all terms which have zero multiplier.
+	// Remove all terms which are empty `\prod` nodes.
+	// Distribute sum multipliers over terms.
+	dbg( it );
 	sibling_iterator one=tr.begin(it);
 	while(one!=tr.end(it)) {
+		dbg( one );
 		if(*one->multiplier==0)
 			one=tr.erase(one);
+		else if(*one->name=="\\prod" && tr.number_of_children(one)==0) {
+			one=tr.erase(one);
+			}
 		else if(*one->name=="\\sum" && *one->multiplier!=1) {
 			sibling_iterator oneit=tr.begin(one);
 			while(oneit!=tr.end(one)) {
@@ -235,7 +245,7 @@ Algorithm::result_t factor_in::apply(iterator& it)
 		else ++one;
 		}
 
-	// If there is only one term left, flatten the tree.
+	// If there is only one term in the sum left, flatten the tree.
 	if(tr.number_of_children(it)==1) {
 		tr.begin(it)->fl.bracket=it->fl.bracket;
 		tr.begin(it)->fl.parent_rel=it->fl.parent_rel;
