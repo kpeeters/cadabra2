@@ -272,6 +272,6 @@ if(NOT MSVC)
 	 FILES
 	 ../man/man1/cadabra-server.1
 	 DESTINATION
-	 man/man1
+	 share/man/man1
 	 )
 endif()

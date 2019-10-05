@@ -429,6 +429,6 @@ if(NOT MSVC)
 	 ../man/man1/cadabra2html.1
 	 ../man/man1/cadabra2python.1	 
 	 DESTINATION
-	 man/man1
+	 share/man/man1
 	 )
 endif()
