@@ -123,7 +123,7 @@ if (NOT PYBIND_MASTER_PROJECT)
   install(
           CODE
           "
-          if (EXISTS \"$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1\")
+          if (EXISTS \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1\")
             message(FATAL_ERROR \"The location of the Cadabra manual has changed since the last installation. Please remove the old files with make deduplicate.\")
           endif()
           "
