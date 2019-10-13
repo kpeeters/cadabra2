@@ -1,5 +1,5 @@
 {
-	"cell_id" : 17591436373968656652,
+	"cell_id" : 8532263027731670433,
 	"cells" : 
 	[
 		{
@@ -193,10 +193,10 @@
 							"cell_id" : 9223372036854775813,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "\\partial(f g)"
+							"source" : "\\partial_{\\tau}(f g)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}\\partial\\left(f g\\right)\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}\\partial_{\\tau}\\left(f g\\right)\\end{dmath*}"
 				},
 				{
 					"cell_id" : 9223372036854775814,
@@ -208,13 +208,13 @@
 							"cell_id" : 9223372036854775815,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
-							"source" : "g \\partial(f)"
+							"source" : "g \\partial_{\\tau}(f)"
 						}
 					],
-					"source" : "\\begin{dmath*}{}g \\partial{f}\\end{dmath*}"
+					"source" : "\\begin{dmath*}{}g \\partial_{\\tau}{f}\\end{dmath*}"
 				}
 			],
-			"source" : "\\tau::Coordinate;\n\\partial{#}::Derivative(\\tau);\nf::Depends(\\tau);\nex:= \\partial{f g};\nunwrap(ex);"
+			"source" : "\\tau::Coordinate;\n\\partial{#}::Derivative(\\tau);\nf::Depends(\\tau);\nex:= \\partial_{\\tau}{f g};\nunwrap(ex);"
 		},
 		{
 			"cell_id" : 833494938170628554,
