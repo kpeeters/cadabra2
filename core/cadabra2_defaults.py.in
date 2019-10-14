@@ -13,8 +13,9 @@ import cadabra2
 from cadabra2 import *
 from importlib.machinery import PathFinder, ModuleSpec, SourceFileLoader
 from importlib.abc import MetaPathFinder
-from cdb_appdirs import user_config_dir
+from cdb_appdirs import user_config_dir, user_data_dir
 import datetime
+import atexit
 
 __cdbkernel__=cadabra2.__cdbkernel__
 import os
@@ -159,6 +160,22 @@ try:
     matplotlib.use('Agg')
 except ImportError:
     have_matplotlib=False
+
+def save_history(history_path):
+    try:
+        readline.write_history_file(history_path)
+    except:
+        pass
+
+try:
+    import readline
+    history_path = os.path.join(user_data_dir(), "cadabra_history")
+    if os.path.exists(history_path):
+        readline.read_history_file(history_path)
+        readline.set_history_length(1000)
+    atexit.register(save_history, history_path)
+except:
+    pass
 
 import io
 import base64
