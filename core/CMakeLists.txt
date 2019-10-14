@@ -420,6 +420,14 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("core")
 endif()
 
+add_custom_target(deduplicate
+                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1"
+                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2cadabra.1"
+                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2html.1"
+                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2python.1"
+                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2-gtk.1"
+                  COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra-server.1")
+
 # manual pages
 if(NOT MSVC)
   install(
@@ -429,6 +437,6 @@ if(NOT MSVC)
 	 ../man/man1/cadabra2html.1
 	 ../man/man1/cadabra2python.1	 
 	 DESTINATION
-	 man/man1
+	 share/man/man1
 	 )
 endif()
