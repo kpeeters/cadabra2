@@ -196,6 +196,6 @@ if(NOT MSVC)
 	 FILES
 	 ../../man/man1/cadabra2-gtk.1
 	 DESTINATION
-	 man/man1
+	 share/man/man1
 	 )
 endif()
