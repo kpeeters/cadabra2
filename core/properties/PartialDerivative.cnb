@@ -1,5 +1,5 @@
 {
-	"cell_id" : 17591436373968656652,
+	"cell_id" : 5894066773150673170,
 	"cells" : 
 	[
 		{
@@ -95,6 +95,15 @@
 							"cell_id" : 9223372036854775820,
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
+							"cells" : 
+							[
+								{
+									"cell_id" : 9223372036854775821,
+									"cell_origin" : "server",
+									"cell_type" : "input_form",
+									"source" : "\\partial(f g)"
+								}
+							],
 							"source" : "D(c d e)"
 						}
 					],
@@ -120,6 +129,12 @@
 							"cell_origin" : "server",
 							"cell_type" : "input_form",
 							"source" : "D(c) d e + c D(d) e + c d D(e)"
+						},
+						{
+							"cell_id" : 9223372036854775823,
+							"cell_origin" : "server",
+							"cell_type" : "input_form",
+							"source" : "g \\partial(f)"
 						}
 					],
 					"source" : "\\begin{dmath*}{}D{c} d e+c D{d} e+c d D{e}\\end{dmath*}"
@@ -166,51 +181,33 @@
 			"cells" : 
 			[
 				{
-					"cell_id" : 9223372036854775809,
+					"cell_id" : 9223372036854775817,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Coordinate to~}\\tau.\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775810,
+					"cell_id" : 9223372036854775818,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Derivative to~}\\partial{\\#}.\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775811,
+					"cell_id" : 9223372036854775819,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
 					"source" : "\\begin{dmath*}{}\\text{Attached property Depends to~}f.\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775812,
+					"cell_id" : 9223372036854775820,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 9223372036854775813,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "\\partial(f g)"
-						}
-					],
 					"source" : "\\begin{dmath*}{}\\partial\\left(f g\\right)\\end{dmath*}"
 				},
 				{
-					"cell_id" : 9223372036854775814,
+					"cell_id" : 9223372036854775822,
 					"cell_origin" : "server",
 					"cell_type" : "latex_view",
-					"cells" : 
-					[
-						{
-							"cell_id" : 9223372036854775815,
-							"cell_origin" : "server",
-							"cell_type" : "input_form",
-							"source" : "g \\partial(f)"
-						}
-					],
 					"source" : "\\begin{dmath*}{}g \\partial{f}\\end{dmath*}"
 				}
 			],
