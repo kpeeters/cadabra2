@@ -42,6 +42,7 @@ Algorithm::result_t combine::apply(iterator& it)
 
 		bool isbrack1=false, isbrack2=false;
 		bool ismatorvec1=false, ismatorvec2=false;
+		bool diffparents=tr.parent(dums1->second)!=tr.parent(dums2->second);
 		const Matrix *mat1=kernel.properties.get<Matrix>(tr.parent(dums1->second));
 		if(mat1)
 			ismatorvec1=true;
@@ -61,7 +62,7 @@ Algorithm::result_t combine::apply(iterator& it)
 		else if(tr.number_of_children(tr.parent(dums2->second))==1)
 			ismatorvec2=true;
 
-		if(ismatorvec1 && ismatorvec2) {
+		if(ismatorvec1 && ismatorvec2 && diffparents) {
 			//			txtout << "gluing " << *(dums2->second->name) << std::endl;
 			// create new indexbracket with product node
 			iterator outerbrack=tr.insert(tr.parent(dums1->second), str_node("\\indexbracket"));
@@ -69,14 +70,16 @@ Algorithm::result_t combine::apply(iterator& it)
 			iterator parn1=tr.parent(dums1->second);
 			iterator parn2=tr.parent(dums2->second);
 			// remove the dummy index from these two objects, and move
-			// the non-dummy indices to the outer indexbracket.
+			// other (dummy or not) indices to the outer indexbracket.
 			sibling_iterator ind1=tr.begin(tr.parent(dums1->second));
 			sibling_iterator stop1=tr.end(tr.parent(dums1->second));
 			if(isbrack1)
 				++ind1;
 			while(ind1!=stop1) {
 				if(ind1!=dums1->second) {
-					tr.append_child(outerbrack, iterator(ind1));
+					sibling_iterator nxt=ind1;
+					++nxt;
+					tr.reparent(outerbrack, ind1, nxt);
 					}
 				++ind1;
 				//				ind1=tr.erase(ind1);
@@ -88,7 +91,9 @@ Algorithm::result_t combine::apply(iterator& it)
 				++ind2;
 			while(ind2!=stop2) {
 				if(ind2!=dums2->second) {
-					tr.append_child(outerbrack, iterator(ind2));
+					sibling_iterator nxt=ind2;
+					++nxt;
+					tr.reparent(outerbrack, ind2, nxt);
 					}
 				++ind2;
 				//				ind2=tr.erase(ind2);
@@ -129,7 +134,7 @@ Algorithm::result_t combine::apply(iterator& it)
 		++dums1;
 		}
 
-	std::cerr << it << std::endl;
+	//std::cerr << it << std::endl;
 
 	//	prodflatten pf(tr, tr.end());
 	//	pf.apply_recursive(it, false);
