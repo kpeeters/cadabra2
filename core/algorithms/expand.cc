@@ -42,7 +42,7 @@ bool expand::can_apply(iterator it)
 			sibling_iterator prod=tr.begin(it);
 			sibling_iterator sib=tr.begin(prod);
 			sibling_iterator ind1=prod;
-			++ind;
+			++ind1;
 			sibling_iterator ind2=ind1;
 			if(!one_index) ++ind2;
 			const Indices *props=kernel.properties.get<Indices>(ind1, true);
@@ -102,7 +102,7 @@ bool expand::can_apply(iterator it)
 								return false;
 								}
 							}
-						else check_pos=fase;
+						else check_pos=false;
 						}
 					}
 				++sib;
@@ -168,7 +168,7 @@ Algorithm::result_t expand::apply(iterator& it)
 				if(check_pos) {
 					Ex::iterator eform=impi.first->explicit_form.begin();
 					Ex::iterator iform=impi.second->obj.begin();
-					index_iterator ch1=nth_implicit_index(eform, iform, 1);
+					index_iterator ch=nth_implicit_index(eform, iform, 1);
 					tmpit->fl.parent_rel=ch->fl.parent_rel;
 					}
 				else tmpit->fl.parent_rel=str_node::p_sub;
@@ -190,7 +190,7 @@ Algorithm::result_t expand::apply(iterator& it)
 					if(check_pos) {
 						Ex::iterator eform=impi.first->explicit_form.begin();
 						Ex::iterator iform=impi.second->obj.begin();
-						index_iterator ch1=nth_implicit_index(eform, iform, 2);
+						index_iterator ch=nth_implicit_index(eform, iform, 2);
 						tmpit->fl.parent_rel=ch->fl.parent_rel;
 						}
 					else tmpit->fl.parent_rel=str_node::p_sub;
@@ -204,7 +204,7 @@ Algorithm::result_t expand::apply(iterator& it)
 					if(check_pos) {
 						Ex::iterator eform=impi.first->explicit_form.begin();
 						Ex::iterator iform=impi.second->obj.begin();
-						index_iterator ch1=nth_implicit_index(eform, iform, 1);
+						index_iterator ch=nth_implicit_index(eform, iform, 1);
 						tmpit->fl.parent_rel=ch->fl.parent_rel;
 						}
 					else tmpit->fl.parent_rel=str_node::p_sub;
