@@ -50,4 +50,25 @@ def test04():
 
 test04()
         
-    
+def test05():
+    __cdbkernel__=create_scope()
+    {a,b,c,d}::Indices(vector);
+    ex:=(A)_{a b} (B)_{b c} (C)_{c d};
+    combine(_);
+    tst:= (A B C)_{a d} - @(ex);
+    assert(tst==0)
+    print("Test 05 passed")
+
+test05()
+
+def test06():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    ex:=(A)_{a b} (B)_{b a};
+    combine(_);
+    tst:= (A B)_{b b} - @(ex);
+    assert(tst==0)
+    print("Test 06 passed")
+
+test06()
+
