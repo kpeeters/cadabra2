@@ -119,17 +119,6 @@ if(NOT (CMAKE_VERSION VERSION_LESS 3.0))  # CMake >= 3.0
   target_link_libraries(embed INTERFACE pybind11::pybind11 $<BUILD_INTERFACE:${PYTHON_LIBRARIES}>)
 endif()
 
-if (NOT PYBIND_MASTER_PROJECT)
-  install(
-          CODE
-          "
-          if (EXISTS \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1\")
-            message(FATAL_ERROR \"The location of the Cadabra manual has changed since the last installation. Please remove the old files with make deduplicate.\")
-          endif()
-          "
-  )
-endif()
-
 if (PYBIND11_INSTALL)
   install(DIRECTORY ${PYBIND11_INCLUDE_DIR}/pybind11 DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
   # GNUInstallDirs "DATADIR" wrong here; CMake search path wants "share".
