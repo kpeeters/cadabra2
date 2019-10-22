@@ -54,7 +54,7 @@ endif()
 install(
   CODE
   "
-  if (NOT EXISTS \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1\")
+  if (EXISTS \"\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1\")
      message(FATAL_ERROR \"\nThe location of the Cadabra manual has changed since the last installation. Please remove the old files with 'make deduplicate'.\n\")
   endif()
   "
