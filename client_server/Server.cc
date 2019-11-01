@@ -159,7 +159,7 @@ std::string Server::run_string(const std::string& blk, bool handle_output)
 	std::string result;
 
 	// Preparse input block.
-	auto newblk = cadabra::cdb2python(blk, true);
+	auto newblk = cadabra::cdb2python_string(blk, true);
 
 	//	std::cerr << "PREPARSED:\n" << newblk << std::endl;
 	// snoop::log("preparsed") << newblk << snoop::flush;

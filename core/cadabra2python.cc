@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 	while(std::getline(file, line))
 		content+=line+"\n";
 
-	auto python = cadabra::cdb2python(content, true);
+	auto python = cadabra::cdb2python_string(content, true);
 
 	if(python_file!="") {
 		std::ofstream pythonfile(python_file);

@@ -15,8 +15,34 @@ std::string cadabra::escape_quotes(const std::string& line)
 	//	return ret;
 	}
 
+std::string cadabra::cdb2python(const std::string& in_name, bool display)
+	{
+	// Read the file into a string.
+	std::ifstream ifs(in_name);
+	std::stringstream buffer;
+	buffer << ifs.rdbuf();
 
-std::string cadabra::cdb2python(const std::string& blk, bool display)
+	std::time_t t = std::time(nullptr);
+	std::tm tm = *std::localtime(&t);
+
+	std::ostringstream ofs;
+	ofs << "# cadabra2 package, auto-compiled " << std::put_time(&tm, "%F %T") << '\n'
+	    << "# Do not modify - changing the timestamp of this file may cause import errors\n"
+	    << "# Original file location: " << in_name << '\n'
+	    << "import cadabra2\n"
+	    << "import imp\n"
+	    << "from cadabra2 import *\n"
+		 << "from cadabra2_defaults import *\n"
+	    << "__cdbkernel__ = cadabra2.__cdbkernel__\n"
+	    << "temp__all__ = dir() + ['temp__all__']\n\n"
+	    << "def display(ex):\n"
+	    << "   pass\n\n";
+
+	ofs << cdb2python_string(buffer.str(), display);
+	return ofs.str();
+	}
+
+std::string cadabra::cdb2python_string(const std::string& blk, bool display)
 	{
 	std::stringstream str(blk);
 	std::string line;

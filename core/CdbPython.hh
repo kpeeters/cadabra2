@@ -16,6 +16,8 @@ namespace cadabra {
 
 	std::string cdb2python(const std::string&, bool display);
 
+	std::string cdb2python_string(const std::string&, bool display);	
+
 	/// \ingroup files
 	/// As above, but for a single line; for private use only.
 	/// If display is false, this will not make ';' characters 
