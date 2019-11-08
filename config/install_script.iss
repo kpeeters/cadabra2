@@ -44,8 +44,28 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "C:\Cadabra\bin\cadabra2-gtk.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "C:\Cadabra\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "vcredist_x64.exe"; DestDir: "{tmp}"
 ; Source: "C:\Users\kasper\Anaconda3\DLLs\sqlite3.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+
+[Code]
+procedure DoPreInstall();
+var
+  ResultCode: Integer;
+
+begin
+Log('Inside DoPreInstall');
+Exec(ExpandConstant('{tmp}\vcredist_x64.exe'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssInstall then
+  begin
+    DoPreInstall();
+  end;
+end; 
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"
