@@ -149,7 +149,11 @@ else()
    endif()
 endif()
 
+# Ensure that on Windows we also install the libraries provided
+# by Visual Studio, e.g. MSVCnnn.DLL.
+set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
 include (InstallRequiredSystemLibraries)
+
 set(CPACK_SET_DESTDIR true)
 set(CPACK_INSTALL_PREFIX /usr)
 set(CPACK_PACKAGE_NAME           "cadabra2")
