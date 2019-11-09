@@ -153,7 +153,9 @@ endif()
 # by Visual Studio, e.g. MSVCnnn.DLL. This does mean that the installer
 # will now contain both the normal and the debug libraries, but better
 # to have both than to have none.
-set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
+#   set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
+# That didn't work... Commented out for future reference.
+
 include (InstallRequiredSystemLibraries)
 
 set(CPACK_SET_DESTDIR true)
