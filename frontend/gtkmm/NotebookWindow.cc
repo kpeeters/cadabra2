@@ -180,13 +180,13 @@ NotebookWindow::NotebookWindow(Cadabra *c, bool ro)
 
 	auto highlight_syntax_action0 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOff", "Off (default)");
 	highlight_syntax_action0->property_value() = 0;
-	actiongroup->add(highlight_syntax_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), 0));
+	actiongroup->add(highlight_syntax_action0, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), false));
 	if (prefs.highlight == false) highlight_syntax_action0->set_active();
 	default_actions.push_back(highlight_syntax_action0);
 
 	auto highlight_syntax_action1 = Gtk::RadioAction::create(group_highlight_syntax, "HighlightSyntaxOn", "On");
 	highlight_syntax_action1->property_value() = 1;
-	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), 1));
+	actiongroup->add(highlight_syntax_action1, sigc::bind(sigc::mem_fun(*this, &NotebookWindow::on_prefs_highlight_syntax), true));
 	if (prefs.highlight == true) highlight_syntax_action1->set_active();
 
 	actiongroup->add(Gtk::Action::create("HighlightSyntaxChoose", "Choose Colours..."), sigc::mem_fun(*this, &NotebookWindow::on_prefs_choose_colours));
