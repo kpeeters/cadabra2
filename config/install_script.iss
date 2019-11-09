@@ -50,7 +50,7 @@ Source: "C:\Cadabra\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs cr
 Source: "vcredist_x64.exe"; DestDir: {tmp}; Flags: dontcopy
 
 [Run]
-Filename: "{tmp}\vcredist_x64.exe"; StatusMsg: "{cm:InstallingVC2019redist}"; Parameters: "/quiet"; Check: VC2019RedistNeedsInstall ; Flags: waituntilterminated
+Filename: "{tmp}\vcredist_x64.exe"; StatusMsg: "Installing VC++ redistributables..."; Parameters: "/quiet"; Check: VC2019RedistNeedsInstall ; Flags: waituntilterminated
 
 ; https://stackoverflow.com/questions/24574035/how-to-install-microsoft-vc-redistributables-silently-in-inno-setup
 [Code]
