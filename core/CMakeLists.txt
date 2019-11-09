@@ -420,6 +420,7 @@ if (MSVC AND NOT INSTALL_TARGETS_ONLY)
 	install_dlls_from("core")
 endif()
 
+if(NOT MSVC)
 add_custom_target(deduplicate
                   COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2.1"
                   COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra2cadabra.1"
@@ -429,6 +430,7 @@ add_custom_target(deduplicate
                   COMMAND rm -f "\$(DESTDIR)${CMAKE_INSTALL_PREFIX}/man/man1/cadabra-server.1"
                   COMMENT "Removing manual pages from old location."
                   )
+endif()             
 
 # manual pages
 if(NOT MSVC)
