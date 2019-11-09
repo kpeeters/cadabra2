@@ -1876,6 +1876,7 @@ class GitChooseModelColumns : public Gtk::TreeModel::ColumnRecord {
 
 void NotebookWindow::compare_git_choose()
 	{
+#if(NOT MSVC)
 	try {
 		std::string commit_hash;
 		std::string max_entries = "15";
@@ -1927,6 +1928,7 @@ void NotebookWindow::compare_git_choose()
 		error_dialog.set_title("Git error");
 		error_dialog.run();
 		}
+#endif
 	}
 
 void NotebookWindow::compare_git_specific()
