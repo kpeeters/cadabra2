@@ -6,6 +6,7 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#include <WinReg.hpp>
 #endif
 
 // Run a simple Cadabra server on a local port.
@@ -14,10 +15,18 @@ int main()
 	{
 #ifdef _WIN32
 	// The Anaconda people _really_ do not understand packaging...
+	// We are going to find out the installation path for Anaconda/Miniconda
+	// by querying a registry key.
 	std::string pythonhome=Glib::getenv("PYTHONHOME");
-	std::string pythonpath=Glib::getenv("PYTHONPATH");	
-	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
-	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
+	std::string pythonpath=Glib::getenv("PYTHONPATH");
+	
+	winreg::RegKey  key{ winreg::HKEY_CURRENT_USER, L"SOFTWARE\\Python\\PythonCore\\3.7" };
+	std::wstring s  = key.GetStringValue(L"");
+	
+//	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
+//	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");
+	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + s);
+	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + s);
 //	std::cerr << "Server::init: using PYTHONPATH = " << Glib::getenv("PYTHONPATH")
 //				 << " and PYTHONHOME = " << Glib::getenv("PYTHONHOME") << "." << std::endl;
 #endif
