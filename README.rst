@@ -388,7 +388,7 @@ warned, it can easily take several hours, but at least it's automatic)::
   
     vcpkg install mpir:x64-windows glibmm:x64-windows   (go have a coffee)
     vcpkg install sqlite3:x64-windows boost:x64-windows (go for dinner)
-    vcpkg install gtkmm:x64-windows winreg:x64-windows  (run overnight)
+    vcpkg install gtkmm:x64-windows  (run overnight)
     vcpkg integrate install
 
 boost-system:x64-windows
