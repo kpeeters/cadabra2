@@ -10,13 +10,13 @@
 
 #ifdef _WIN32
 
-std::string getRegKey(const std::string& location, const std::string& name)
+std::string getRegKey(const std::string& location, const std::string& name, bool system)
 	{
 	HKEY key;
 	TCHAR value[1024]; 
 	DWORD bufLen = 1024*sizeof(TCHAR);
 	long ret;
-	ret = RegOpenKeyExA(HKEY_CURRENT_USER, location.c_str(), 0, KEY_QUERY_VALUE, &key);
+	ret = RegOpenKeyExA(system?HKEY_LOCAL_MACHINE:HKEY_CURRENT_USER, location.c_str(), 0, KEY_QUERY_VALUE, &key);
 	if( ret != ERROR_SUCCESS ){
 		return std::string();
 		}
@@ -46,7 +46,9 @@ int main()
 	std::string pythonhome=Glib::getenv("PYTHONHOME");
 	std::string pythonpath=Glib::getenv("PYTHONPATH");
 
-	std::string s = getRegKey("SOFTWARE\\Python\\PythonCore\\3.7", "");
+	std::string s = getRegKey("SOFTWARE\\Python\\PythonCore\\3.7", "", false);
+	if(s=="")
+		s = getRegKey("SOFTWARE\\Python\\PythonCore\\3.7", "", true);
 	
 //	Glib::setenv("PYTHONHOME", (pythonhome.size()>0)?(pythonhome+":"):"" + Glib::get_home_dir()+"/Anaconda3");
 //	Glib::setenv("PYTHONPATH", (pythonpath.size()>0)?(pythonpath+":"):"" + Glib::get_home_dir()+"/Anaconda3");

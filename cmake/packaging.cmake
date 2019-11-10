@@ -1,6 +1,11 @@
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
 
+if(MSVC)
+  set(CPACK_GENERATOR "NSIS")
+  message("-- This is a Windows system")
+endif()
+
 set(LINUX_NAME "")
 if(EXISTS "/etc/redhat-release")
    file(READ "/etc/redhat-release" LINUX_ISSUE)
