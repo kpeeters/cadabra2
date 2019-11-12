@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Cadabra2"
-#define MyAppVersion "2.1.9"
+#define MyAppVersion "2.2.7"
 #define MyAppPublisher "Kasper Peeters"
-#define MyAppURL "http://www.cadabra.science/"
+#define MyAppURL "https://www.cadabra.science/"
 #define MyAppExeName "cadabra2-gtk.exe"
 
 [Setup]
@@ -46,6 +46,35 @@ Source: "C:\Cadabra\bin\cadabra2-gtk.exe"; DestDir: "{app}\bin"; Flags: ignoreve
 Source: "C:\Cadabra\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Source: "C:\Users\kasper\Anaconda3\DLLs\sqlite3.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+; VC++ redistributable runtime. Extracted by VC2019RedistNeedsInstall(), if needed.
+Source: "vcredist_x64.exe"; DestDir: {tmp}; Flags: dontcopy
+
+[Run]
+Filename: "{tmp}\vcredist_x64.exe"; StatusMsg: "Installing VC++ redistributables..."; Parameters: "/quiet"; Check: VC2019RedistNeedsInstall ; Flags: waituntilterminated
+
+; https://stackoverflow.com/questions/24574035/how-to-install-microsoft-vc-redistributables-silently-in-inno-setup
+[Code]
+function VC2019RedistNeedsInstall: Boolean;
+var 
+  Version: String;
+begin
+  if (RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Version', Version)) then
+  begin
+    // Is the installed version at least 14.23 ? 
+    Log('VC Redist Version check : found ' + Version);
+    Result := (CompareStr(Version, 'v14.23.27820.00')<0);
+  end
+  else 
+  begin
+    // Not even an old version installed
+    Result := True;
+  end;
+  if (Result) then
+  begin
+    ExtractTemporaryFile('vcredist_x64.exe');
+  end;
+end;
+
 
 [Icons]
 Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\bin\{#MyAppExeName}"

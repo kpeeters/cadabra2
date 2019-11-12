@@ -1,6 +1,11 @@
 # Logic to build packages (RPM/DEB) using CPack; see https://cmake.org/Wiki/CMake:Packaging_With_CPack
 # 
 
+if(MSVC)
+  set(CPACK_GENERATOR "NSIS")
+  message("-- This is a Windows system")
+endif()
+
 set(LINUX_NAME "")
 if(EXISTS "/etc/redhat-release")
    file(READ "/etc/redhat-release" LINUX_ISSUE)
@@ -149,7 +154,15 @@ else()
    endif()
 endif()
 
+# Ensure that on Windows we also install the libraries provided
+# by Visual Studio, e.g. MSVCnnn.DLL. This does mean that the installer
+# will now contain both the normal and the debug libraries, but better
+# to have both than to have none.
+#   set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
+# That didn't work... Commented out for future reference.
+
 include (InstallRequiredSystemLibraries)
+
 set(CPACK_SET_DESTDIR true)
 set(CPACK_INSTALL_PREFIX /usr)
 set(CPACK_PACKAGE_NAME           "cadabra2")

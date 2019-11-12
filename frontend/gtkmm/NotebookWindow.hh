@@ -202,7 +202,7 @@ namespace cadabra {
 
 			void on_prefs_set_cv(int vis);
 			void on_prefs_font_size(int num);
-			void on_prefs_highlight_syntax(int on);
+			void on_prefs_highlight_syntax(bool on);
 			void on_prefs_choose_colours();
 			void on_prefs_use_defaults();
 			void on_help_about();

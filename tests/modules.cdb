@@ -26,6 +26,16 @@ def test02():
 test02()
 
 
+from module03 import ex as ex4
+
+def test03():
+    tst:= Q_{m} R^{m} - @(ex4);
+    assert(tst==0)
+    print("Test 03 passed")
+
+test03()
+
+
 
 # import module02
 # 

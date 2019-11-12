@@ -72,3 +72,17 @@ def test06():
 
 test06()
 
+def test07():
+    __cdbkernel__=create_scope()
+    {m,n}::Indices(vector);
+    {a,b,c}::Indices(spinor, position=fixed);
+    \Gamma^{m}::ImplicitIndex(\Gamma^{m a}_{b});
+    \Gamma^{m}::Matrix;
+    ex:=(\Gamma^{m} \Gamma^{n})^{a}_{c};
+    expand(_);
+    tst:= (\Gamma^{m})^{a}_{b} (\Gamma^{n})^{b}_{c} - @(ex);
+    assert(tst==0)
+    print("Test 07 passed")
+
+test07()
+
