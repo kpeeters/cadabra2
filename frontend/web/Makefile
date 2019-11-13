@@ -1,12 +1,13 @@
 
 .PHONY: docker
 
+# Prepare a tarball with 
 docker-prepare:
-	(cd docker; wget https://github.com/kpeeters/cadabra2/archive/2.2.7.tar.gz)
+	(git archive --format=tar.gz master > docker/master.tar.gz)
 
 docker-build:
-	docker build -t kpeeters/cadabra2:2.2.7 --force-rm docker
+	docker build -t kpeeters/cadabra2:master --force-rm docker
 
 docker-run:
-	docker run -t -i kpeeters/cadabra2:2.2.7 /bin/bash
+	docker run -t -i kpeeters/cadabra2:master /bin/bash
 

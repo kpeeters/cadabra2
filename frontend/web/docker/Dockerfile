@@ -2,7 +2,7 @@
 FROM continuumio/miniconda3
 LABEL maintainer="info@cadabra.science"
 
-ADD 2.2.7.tar.gz /tmp
+ADD master.tar.gz /tmp
 RUN ls -laR /tmp
 RUN apt update && apt install -y cmake g++ pkg-config \
                       libpcre3 libpcre3-dev libgmp3-dev \
