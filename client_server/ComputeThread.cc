@@ -16,9 +16,9 @@ typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 using namespace cadabra;
 
-ComputeThread::ComputeThread(int server_port)
+ComputeThread::ComputeThread(int server_port, std::string token)
 	: gui(0), docthread(0), connection_is_open(false), restarting_kernel(false), server_pid(0),
-	  server_stdout(0), server_stderr(0), forced_server_port(server_port)
+	  server_stdout(0), server_stderr(0), forced_server_port(server_port), forced_server_token(token)
 	{
 	// The ComputeThread constructor (but _not_ the run() member!) is
 	// always run on the gui thread, so we can grab the gui thread id
@@ -175,6 +175,7 @@ void ComputeThread::try_spawn_server()
 
 	if(forced_server_port!=0) {
 		port=forced_server_port;
+		authentication_token=forced_server_token;
 		return;
 		}
 

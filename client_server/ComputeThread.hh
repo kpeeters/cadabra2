@@ -37,7 +37,7 @@ namespace cadabra {
 			/// If the ComputeThread is constructed with a null pointer to the
 			/// gui, there will be no gui updates, just DTree updates.
 
-			ComputeThread(int server_port=0);
+			ComputeThread(int server_port=0, std::string token="");
 			ComputeThread(const ComputeThread& )=delete; // You cannot copy this object
 			~ComputeThread();
 
@@ -134,6 +134,7 @@ namespace cadabra {
 			unsigned short  port;
 			std::string     authentication_token;
 			int             forced_server_port;
+			std::string     forced_server_token;
 		};
 
 	}
