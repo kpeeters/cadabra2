@@ -506,7 +506,7 @@ void Server::on_kernel_fault(Block blk)
 	wserver.send(blk.hdl, str.str(), websocketpp::frame::opcode::text);
 	}
 
-void Server::run()
+void Server::run(int port)
 	{
 	try {
 		wserver.clear_access_channels(websocketpp::log::alevel::all);
@@ -523,7 +523,7 @@ void Server::run()
 #ifdef DEBUG
 		std::cerr << "going to listen" << std::endl;
 #endif
-		wserver.listen(websocketpp::lib::asio::ip::tcp::v4(), 0);
+		wserver.listen(websocketpp::lib::asio::ip::tcp::v4(), port);
 #ifdef DEBUG
 		std::cerr << "going to accept" << std::endl;
 #endif

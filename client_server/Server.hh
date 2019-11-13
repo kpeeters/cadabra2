@@ -38,8 +38,8 @@ class Server {
 
 		/// The only user-visible part: just instantiate a server object and
 		/// start it with run(). This will not return until the server has
-		/// been shut down.
-		void run();
+		/// been shut down. Picks a random port when port==0.
+		void run(int port=0);
 
 
 		/// Python output catching. We implement this in a C++ class
