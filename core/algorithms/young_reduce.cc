@@ -1,533 +1,515 @@
 #include <iostream>
-#include <iomanip>
 #include <map>
 #include <vector>
 #include <algorithm>
-#include <numeric>
-#include <regex>
-#include <sstream>
-#include <deque>
 
 #include "Compare.hh"
 #include "Cleanup.hh"
-#include "Hash.hh"
-#include "DisplayTerminal.hh"
-#include "Stopwatch.hh"
 #include "algorithms/young_reduce.hh"
 #include "properties/TableauSymmetry.hh"
 
-#define DEBUG_OUTPUT 0
+/////////////////////////////////////////////////////////////////////
 
+#include <sstream>
+#include "DisplayTerminal.hh"
+
+std::string ex_to_string(cadabra::Ex ex, const cadabra::Kernel& kernel)
+{
+	cadabra::DisplayTerminal dt(kernel, ex, true);
+	std::stringstream ss;
+	dt.output(ss);
+	return "$" + ss.str() + "$";
+}
+
+std::string ex_to_string(cadabra::Ex::iterator it, const cadabra::Kernel& kernel)
+{
+	return ex_to_string(cadabra::Ex(it), kernel);
+}
+
+#define DEBUG_OUTPUT 1
 #define cdebug if (!DEBUG_OUTPUT) {} else std::cerr
 
 
-using namespace cadabra;
+////////////////////////////////////////////////////////////////////
 
-// Debugging code, to be removed eventually
-template <typename It>
-std::string join(It begin, It end, const std::string& delim = " ")
+// Returns the position of 'val' between 'begin' and 'end', starting
+// the search at 'offset'
+template <typename It, typename T>
+size_t index_of(It begin, It end, const T& val, size_t offset = 0)
 {
-	std::stringstream ss;
-	It next = std::next(begin);
-	while (next != end) {
-		ss << *begin << delim;
-		++begin, ++next;
-	}
-	ss << *begin;
-	return ss.str();
+	auto pos = std::find(begin + offset, end, val);
+	return std::distance(begin, pos);
 }
 
-template <typename Container>
-std::string join(const Container& container, const std::string& delim = " ")
-{
-	return join(container.begin(), container.end(), delim);
-}
-
-std::string to_string(const Ex& ex, const Kernel& kernel)
-{
-	DisplayTerminal dt(kernel, ex, false);
-	std::stringstream ss;
-	dt.output(ss);
-	return '$' + ss.str() + '$';
-}
-
-std::string to_string(const Ex::iterator& ex, const Kernel& kernel)
-{
-	return to_string(Ex(ex), kernel);
-}
-//------------------------------------------------------------------------
-
-
-using index_t = young_reduce::index_t;
-using indices_t = young_reduce::indices_t;
-using tableau_t = TableauSymmetry::tab_t;
-using terms_t = young_reduce::terms_t;
-using names_t = young_reduce::names_t;
-
-struct young_reduce::IndexMap
-{
-	index_t name_to_idx(nset_t::iterator name)
+namespace cadabra {
+	namespace yr
 	{
-		auto pos = std::find(data_.begin(), data_.end(), name);
-		if (pos == data_.end()) {
-			data_.push_back(name);
-			return (index_t)data_.size();
+		mpq_class ProjectedForm::compare(const ProjectedForm& other) const
+		{
+			// Early failure checks
+			if (data.empty() || data.size() != other.data.size())
+				return 0;
+
+			// Find the numeric factor between the first two terms, then loop over all
+			// other terms checking that the factor is the same. If not, return 0
+			auto a_it = data.begin(), b_it = other.data.begin(), a_end = data.end();
+			mpq_class factor = a_it->second / b_it->second;
+			while (a_it != a_end) {
+				if (a_it->second / b_it->second != factor)
+					return 0;
+				++a_it, ++b_it;
+			}
+			return factor;
 		}
-		else {
-			return (index_t)std::distance(data_.begin(), pos) + 1;
+
+		void ProjectedForm::combine(const ProjectedForm& other)
+		{
+			for (const auto& kv : other.data) {
+				data[kv.first] += kv.second;
+				if (data[kv.first] == 0)
+					data.erase(kv.first);
+			}
 		}
-	}
 
-	nset_t::iterator idx_to_name(index_t idx)
-	{
-		return data_[idx - 1];
-	}
-
-	std::vector<nset_t::iterator> data_;
-};
-
-class Symmetry
-{
-public:
-	Symmetry(bool antisymmetric)
-		: antisymmetric{ antisymmetric }
-	{
-		reset();
-	}
-
-	Symmetry(const indices_t& indices, bool antisymmetric, int offset = 0)
-		: antisymmetric{ antisymmetric }
-	{
-		set_indices(indices, offset);
-		reset();
-	}
-	
-	void set_indices(const indices_t& new_indices, int offset)
-	{
-		indices = new_indices;
-		for (size_t i = 0; i < indices.size(); ++i)
-			indices[i] += offset;
-		std::sort(indices.begin(), indices.end());
-		reset();
-	}
-
-	size_t n_perms() const
-	{
-		size_t ret = 1;
-		for (size_t i = 1; i <= indices.size(); ++i)
-			ret *= i;
-		return ret;
-	}
-
-	bool next()
-	{
-		if (antisymmetric && (flip = !flip))
-			parity *= -1;
-		return std::next_permutation(indices.begin(), indices.end());
-	}
-
-	void reset()
-	{
-		perm = indices;
-		flip = false;
-		parity = 1;
-	}
-
-	std::pair<indices_t, int> apply(const indices_t & original) const
-	{
-		auto ret = std::make_pair(original, parity);
-		for (size_t i = 0; i < indices.size(); ++i) {
-			ret.first[indices[i]] = original[perm[i]];
+		void ProjectedForm::multiply(mpq_class k)
+		{
+			for (auto& kv : data)
+				kv.second *= k;
 		}
-		for (auto index : indices) {
-			if (ret.first[index] >= 0)
-				ret.first[ret.first[index]] = index;
+
+		void ProjectedForm::clear()
+		{
+			data.clear();
 		}
-		return ret;
-	}
 
-	indices_t indices, perm;
-	bool antisymmetric : 1;
-	bool flip : 1;
-	int parity : 2;
-};
-
-indices_t to_pi_form(const indices_t& in)
-{
-	indices_t out(in.size(), -1);
-	for (size_t i = 0; i < in.size(); ++i) {
-		if (out[i] >= 0) {
-			continue;
+		void ProjectedForm::insert(adjform_t adjform, mpq_class value)
+		{
+			data[adjform] = value;
 		}
-		size_t pos = std::distance(in.begin(), std::find(in.begin() + i + 1, in.end(), in[i]));
-		if (pos == in.size()) {
-			out[i] = -in[i];
+
+		void ProjectedForm::apply_young_symmetry(const std::vector<index_t>& indices, bool antisymmetric)
+		{
+			map_t old_data = data;
+
+			// Loop over all entries, for each one looping over all permutations
+			// of the indices to be symmetrized and creating a new term for that
+			// permutation; then add the new term to the list of entries
+			for (const auto& kv : old_data) {
+				auto perm = indices;
+				bool flip = false;
+				int parity = 1;
+				while (std::next_permutation(perm.begin(), perm.end())) {
+					if (antisymmetric && (flip = !flip))
+						parity *= -1;
+					auto ret = kv.first;
+					for (size_t i = 0; i < indices.size(); ++i) {
+						ret[indices[i]] = kv.first[perm[i]];
+					}
+					for (auto index : indices) {
+						if (ret[index] >= 0)
+							ret[ret[index]] = index;
+					}
+					data[ret] += parity * kv.second;
+				}
+			}
 		}
-		else {
-			out[i] = static_cast<index_t>(pos);
-			out[pos] = static_cast<index_t>(i);
+
+		void ProjectedForm::apply_ident_symmetry(std::vector<index_t> positions, index_t n_indices)
+		{
+			map_t old_data = data;
+			std::sort(positions.begin(), positions.end());
+			auto perm = positions;
+
+			// Loop over all entries, for each loop over all permutations
+			// of identical symbol and create a new term for that permutation;
+			// then add the new term to the list of entries
+			for (const auto& kv : old_data) {
+				while (std::next_permutation(perm.begin(), perm.end())) {
+					auto term = collapse_dummy_indices(kv.first);
+					adjform_t out = term;
+					for (size_t i = 0; i < perm.size(); ++i) {
+						for (index_t k = 0; k < n_indices; ++k) {
+							out[perm[i] + k] = term[positions[i] + k];
+						}
+					}
+					data[expand_dummy_indices(out)] += kv.second;
+				}
+			}
 		}
-	}
-	return out;
-}
 
-indices_t from_pi_form(const indices_t& in)
-{
-	index_t counter = 1;
-	indices_t out(in.size());
-	for (size_t i = 0; i < in.size(); ++i) {
-		if (in[i] < 0) {
-			out[i] = counter;
-			++counter;
-		}
-		else if (i < in[i]) {
-			out[i] = counter;
-			++counter;
-		}
-		else {
-			out[i] = out[in[i]];
-		}
-	}
-	return out;
-}
-
-void swap_indices(indices_t& in, index_t beg_1, index_t beg_2, index_t n)
-{
-	cdebug << "performing swap: ";
-	for (int i = 0; i < in.size(); ++i) {
-		if (i == beg_1 || i == beg_2)
-			cdebug << '[';
-		cdebug << in[i];
-		if (i == beg_1 + n - 1 || i == beg_2 + n - 1)
-			cdebug << ']';
-	}
-
-	for (index_t i = 0; i < n; ++i) {
-		if (in[beg_1 + i] == beg_2 + i && in[beg_2 + i] == beg_1 + i)
-			continue;
-		if (in[beg_1 + i] >= 0)
-			in[in[beg_1 + i]] = beg_2 + i;
-		if (in[beg_2 + i] >= 0)
-			in[in[beg_2 + i]] = beg_1 + i;
-		std::swap(in[beg_1 + i], in[beg_2 + i]);
-	}
-
-	cdebug << " -> " << join(in.begin(), in.end(), "") << '\n';
-}
-
-mpq_class linear_compare(const terms_t& a, const terms_t& b)
-{
-	if (a.empty() || a.size() != b.size())
-		return 0;
-
-	auto a_it = a.begin(), b_it = b.begin(), a_end = a.end();
-	mpq_class factor = a_it->second / b_it->second;
-	while (a_it != a_end) {
-		if (a_it->second / b_it->second != factor)
-			return 0;
-		++a_it, ++b_it;
-	}
-	return factor;
-}
-
-bool is_tensor(Ex::iterator it)
-{
-	// Check whether it has children which are indices. If so, it is
-	// a tensor
-	for (auto beg = it.begin(), end = it.end(); beg != end; ++beg) {
-		if (beg->is_index())
-			return true;
-	}
-	return false;
-}
-
-void add_terms(terms_t& lhs, const terms_t& rhs, mpq_class factor)
-{
-	for (const auto& kv : rhs) {
-		lhs[kv.first] += kv.second * factor;
-		if (lhs[kv.first] == 0)
-			lhs.erase(kv.first);
-	}
-}
-
-bool has_tableau_symmetry(const Kernel& kernel, Ex::iterator it)
-{
-	if (*it->name == "\\prod") {
-		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-			if (!has_tableau_symmetry(kernel, beg))
+		bool check_structure(Ex::iterator lhs, Ex::iterator rhs)
+		{
+			// Early failure checks
+			if (lhs->name != rhs->name) {
 				return false;
+			}
+
+			Ex::iterator l1 = lhs.begin(), l2 = lhs.end();
+			Ex::iterator r1 = rhs.begin(), r2 = rhs.end();
+
+			// Loop over all tree nodes using a depth first iterator. If the
+			// entry is an index ensure that it has the same parent_rel, if it
+			// is any other type of node check that the names match.
+			while (l1 != l2 && r1 != r2) {
+				if (l1->is_index()) {
+					if (l1->fl.parent_rel != r1->fl.parent_rel) {
+						return false;
+					}
+				}
+				else {
+					if (l1->name != r1->name || l1->multiplier != r1->multiplier) {
+						return false;
+					}
+				}
+				++l1, ++r1;
+			}
+
+			return l1 == l2 && r1 == r2;
 		}
-		return true;
-	}
-	else if (is_tensor(it)) {
-		auto tb = kernel.properties.get_composite<TableauBase>(it);
-		return tb != nullptr;
-	}
-	else {
-		return false;
+
+		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim)
+		{
+			if (*it->name == delim) {
+				// Loop over children creating a list
+				std::vector<Ex::iterator> res;
+				Ex::sibling_iterator beg = it.begin(), end = it.end();
+				while (beg != end) {
+					res.push_back(beg);
+					++beg;
+				}
+				return res;
+			}
+			else {
+				// Return a list containing only 'it'
+				return std::vector<Ex::iterator>(1, it);
+			}
+		}
+
+		std::vector<Ex::iterator> split_ex(Ex::iterator it, const std::string& delim, Ex pat)
+		{
+			if (*it->name == delim) {
+				std::vector<Ex::iterator> res;
+				Ex::sibling_iterator beg = it.begin(), end = it.end();
+				while (beg != end) {
+					if (check_structure(beg, pat.begin()))
+						res.push_back(beg);
+					++beg;
+				}
+				return res;
+			}
+			else {
+				if (check_structure(it, pat.begin()))
+					return std::vector<Ex::iterator>(1, it);
+				else
+					return std::vector<Ex::iterator>();
+			}
+		}
+
+		adjform_t collapse_dummy_indices(adjform_t adjform)
+		{
+			index_t next_free_index = adjform.size();
+			for (size_t i = 0; i < adjform.size(); ++i) {
+				if (adjform[i] >= 0 && adjform[i] < (index_t)adjform.size()) {
+					adjform[adjform[i]] = next_free_index;
+					adjform[i] = next_free_index;
+					++next_free_index;
+				}
+			}
+			return adjform;
+		}
+
+		adjform_t expand_dummy_indices(adjform_t adjform)
+		{
+			for (size_t idx = 0; idx < adjform.size(); ++idx) {
+				if (adjform[idx] >= (index_t)adjform.size()) {
+					auto pos = index_of(adjform.begin(), adjform.end(), adjform[idx], idx + 1);
+					adjform[idx] = pos;
+					adjform[pos] = idx;
+				}
+			}
+			return adjform;
+		}
 	}
 }
 
-young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex& pat)
+using namespace cadabra;
+using namespace yr;
+
+young_reduce::young_reduce(const Kernel& kernel, Ex& ex, const Ex* pattern)
 	: Algorithm(kernel, ex)
-	, pat(pat)
-	, index_map(std::make_unique<IndexMap>())
 {
-	cdebug << "#-----------------------------------------\n";
-	cdebug << "# Calling young_reduce with\n";
-	cdebug << "#   ex = " << to_string(ex, kernel) << '\n';
-	cdebug << "#   pat = " << to_string(pat, kernel) << '\n';
-	cdebug << "#-----------------------------------------\n";
-	if (!has_tableau_symmetry(kernel, pat.begin()))
-		throw std::runtime_error("Argument `pat` must have a TableauSymmetry");
+	if (pattern) {
+		if (!set_pattern(pattern->begin()))
+			throw std::runtime_error("Tried to construct young_reduce object with invalid pattern");
+	}
 }
 
 young_reduce::~young_reduce()
 {
+
 }
 
 bool young_reduce::can_apply(iterator it)
 {
-	if (*it->name == "\\sum") {
-		for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-			if (can_apply(beg))
-				return true;
-		}
-		return false;
+	if (pat == Ex::iterator()) {
+		// No pattern set, can only apply to a sum node
+		return *it->name == "\\sum";
 	}
 	else {
-		return hash_compare(it, pat.begin(), HASH_IGNORE_INDEX_ORDER | HASH_IGNORE_TOP_MULTIPLIER);
-	}
-}
-
-young_reduce::result_t young_reduce::apply_sum(iterator& it)
-{
-	std::vector<terms_t> decomps;
-	std::vector<iterator> terms;
-
-	for (Ex::sibling_iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
-		if (!hash_compare(beg, pat.begin(), HASH_IGNORE_INDEX_ORDER | HASH_IGNORE_TOP_MULTIPLIER))
-			continue;
-		decomps.push_back(symmetrize(beg));
-		terms.push_back(beg);
-	}
-
-	// Now that we have a bunch of decompositions, we should try and
-	// get rid of the maximum number of terms possible. Begin by adding
-	// all the terms together and seeing if that works, if not then
-	// work through the combinations.
-	for (size_t n_terms = decomps.size(); n_terms >= 1; --n_terms) {
-		std::vector<int> mask(decomps.size(), 1);
-		std::fill(mask.begin() + n_terms, mask.end(), 0);
-		do {
-			terms_t decomp;
-			for (size_t i = 0; i < decomps.size(); ++i) {
-				if (mask[i]) {
-					add_terms(decomp, decomps[i], 1);
-				}
-			}
-
-			if (decomp.empty()) { // The decomposition is zero
-				cdebug << "Matched " << to_string(it, kernel) << " to 0\n";
-				// Remove old terms
-				for (size_t i = 0; i < terms.size(); ++i) {
-					if (mask[i])
-						tr.erase(terms[i]);
-				}
-				cleanup_dispatch(kernel, tr, it);
-				return result_t::l_applied;
-			}
-
-			auto fact = linear_compare(decomp, pat_decomp);
-			if (fact != 0) { // We found a match
-				cdebug << "Matched " << to_string(it, kernel) << " to ";
-
-				// Remove old terms
-				for (size_t i = 0; i < terms.size(); ++i) {
-					if (mask[i]) {
-						cdebug << to_string(terms[i], kernel) << ", ";
-						tr.erase(terms[i]);
-					}
-				}
-				cdebug << '\n';
-				// Add new term and give it the correct multiplier
-				auto rep = tr.append_child(it, pat.begin());
-				multiply(rep->multiplier, fact);
-				return result_t::l_applied;
-			}
-		} while (std::next_permutation(mask.begin(), mask.end()));
-
-	}
-	return result_t::l_no_action;
-}
-
-young_reduce::result_t young_reduce::apply_monoterm(iterator& it)
-{
-	auto d = symmetrize(it);
-	auto fact = linear_compare(d, pat_decomp);
-	if (fact != 0) {
-		cdebug << "Matched " << to_string(it, kernel) << " to " << to_string(pat, kernel) << '\n';
-		it = tr.replace(it, pat.begin());
-		multiply(it->multiplier, fact);
-		cleanup_dispatch(kernel, tr, it);
-		return result_t::l_applied;
-	}
-	else {
-		return result_t::l_no_action;
+		return true;
 	}
 }
 
 young_reduce::result_t young_reduce::apply(iterator& it)
 {
-	cdebug << "--- Applying to " << to_string(it, kernel) << "\n";
-	// We symmetrize pattern now (lazily) to avoid an expensive
-	// symmetrization in case of no nodes matching
-	if (pat_decomp.empty())
-		pat_decomp = symmetrize(pat.begin());
-
 	result_t res;
-	if (*it->name == "\\sum")
-		res = apply_sum(it);
-	else
-		res = apply_monoterm(it);
 
-	cdebug << "--- tree is now " << to_string(tr, kernel) << '\n';
+	if (pat == Ex::iterator()) {
+		res = apply_unknown(it);
+	}
+	else {
+		res = apply_known(it);
+	}
+
+	if (res != result_t::l_no_action)
+		cleanup_dispatch(kernel, tr, it);
+	return res;
+}
+
+young_reduce::result_t young_reduce::apply_known(iterator& it)
+{
+	cdebug << "Apply known:\n\tpat = " << ex_to_string(pat, kernel) << "\n\t it = " << ex_to_string(it, kernel) << '\n';
+	ProjectedForm it_sym;
+	auto nodes = split_ex(it, "\\sum", pat);
+	cdebug << "Found " << nodes.size() << " terms which match pat:\n";
+	for (auto& node : nodes) {
+		cdebug << "\t" << ex_to_string(node, kernel) << "\n";
+		it_sym.combine(symmetrize(node));
+	}
+
+	// Check if projection yielded zero
+	if (it_sym.data.empty()) {
+		cdebug << "Projection yielded 0; zeroing node\n";
+		node_zero(it);
+		return result_t::l_applied;
+	}
+
+	// Check if projection is a multiple of 'pat'
+	auto factor = it_sym.compare(pat_sym);
+	if (factor != 0) {
+		cdebug << "Projection was a multiple of pat; reducing...\n";
+		auto newit = tr.replace(nodes.back(), pat);
+		nodes.pop_back();
+		for (auto node : nodes)
+			node_zero(node);
+		multiply(newit->multiplier, factor);
+		cdebug << "Produced " << ex_to_string(it, kernel) << '\n';
+		return result_t::l_applied;
+	}
+	else {
+		cdebug << "No match found\n";
+		return result_t::l_no_action;
+	}
+}
+
+young_reduce::result_t young_reduce::apply_unknown(iterator& it)
+{
+	cdebug << "Apply unknown:\n\t it = " << ex_to_string(it, kernel) << '\n';
+
+	result_t res = result_t::l_no_action;
+
+	auto terms = split_ex(it, "\\sum");
+	cdebug << "Found " << terms.size() << " terms:\n";
+	for (auto term : terms)
+		cdebug << "\t" << ex_to_string(term, kernel) << "\n";
+	while (!terms.empty()) {
+		cdebug << "Examining " << ex_to_string(terms.back(), kernel) << "...";
+		bool can_reduce = set_pattern(terms.back());
+		std::vector<Ex::iterator> cur_terms;
+		for (index_t i = terms.size() - 2; i != -1; --i) {
+			if (check_structure(terms.back(), terms[i])) {
+				cur_terms.push_back(terms[i]);
+				terms.erase(terms.begin() + i);
+			}
+		}
+		terms.pop_back();
+		cdebug << "found " << cur_terms.size() << " matching term(s):\n";
+		for (auto term : cur_terms)
+			cdebug << "\t" << ex_to_string(term, kernel) << '\n';
+		if (can_reduce && !cur_terms.empty()) {
+			cdebug << "Pat is (potentially) reduceable...\n";
+			ProjectedForm it_sym;
+			for (auto& node : cur_terms)
+				it_sym.combine(symmetrize(node));
+
+			if (it_sym.data.empty()) {
+				cdebug << "Projection yielded 0; zeroing nodes\n";
+				for (auto node : cur_terms)
+					node_zero(node);
+				res = result_t::l_applied;
+			}
+			else {
+				auto factor = it_sym.compare(pat_sym);
+				if (factor != 0) {
+					cdebug << "Projection was a multiple of pat (factor " << factor << "); reducing...\n";
+					multiply(pat->multiplier, factor + 1);
+					for (auto& node : cur_terms)
+						node_zero(node);
+					cdebug << "Now have " << ex_to_string(it, kernel) << '\n';
+					res = result_t::l_applied;
+				}
+				else {
+					cdebug << "No match found...\n";
+				}
+			}
+		}
+		else {
+			cdebug << "Pat is not reduceable, skipping...\n";
+		}
+	}
 
 	return res;
 }
 
-//----------------------------------------
-terms_t young_reduce::symmetrize(Ex::iterator it)
+bool young_reduce::set_pattern(Ex::iterator new_pat)
 {
-	cdebug << "--- symmetrizing " << to_string(it, kernel) << ":\n";
+	cdebug << "Setting pattern to " << ex_to_string(new_pat, kernel) << '\n';
+	pat = Ex::iterator();
+	pat_sym.clear();
 
-	names_t names;
-	indices_t indices;
-	std::deque<Symmetry> symmetries;
+	auto collect = split_ex(new_pat, "\\prod");
+	if (collect.empty())
+		throw std::runtime_error("pat is empty");
 
-	Ex::sibling_iterator beg, end;
-	if (*it->name == "\\prod") {
-		beg = it.begin();
-		end = it.end();
-	}
-	else {
-		beg = it;
-		end = it;
-		++end;
-	}
-
-	// Iterate over terms in product, or just `it` if no product, and populate
-	// `names`, `indices` and `symmetries`
-	while (beg != end) {
-		// Populate `symmetries`
-		auto tb = kernel.properties.get_composite<TableauBase>(beg);
-		if (tb) {
-			auto tab = tb->get_tab(kernel.properties, tr, beg, 0);
-			for (size_t row = 0; row < tab.number_of_rows(); ++row) {
-				if (tab.row_size(row) > 1) {
-					cdebug << "Found symmetry " << join(tab.begin_row(row), tab.end_row(row)) << '\n';
-					symmetries.emplace_back(indices_t(tab.begin_row(row), tab.end_row(row)), false, indices.size());
-				}
-			}
-			for (size_t col = 0; col < tab.row_size(0); ++col) {
-				if (tab.column_size(col) > 1) {
-					cdebug << "Found antisymmetry " << join(tab.begin_column(col), tab.end_column(col)) << '\n';
-					symmetries.emplace_front(indices_t(tab.begin_column(col), tab.end_column(col)), true, indices.size());
-				}
-			}
-		}
-
-		size_t n_indices = 0;
-		//Iterate over children to populate `indices`
-		for (auto idx = beg.begin(), edx = beg.end(); idx != edx; ++idx) {
-			if (idx->is_index()) {
-				++n_indices;
-				cdebug << "Found index " << *idx->name << '\n';
-				indices.push_back(index_map->name_to_idx(idx->name));
-			}
-		}
-		// Populate `names`
-		cdebug << "Added " << n_indices << " to " << *beg->name << '\n';
-		names.emplace_back(beg->name, n_indices);
-
-		++beg;
-	}
-
-	cdebug << "Indices: " << join(indices.begin(), indices.end()) << '\n';
-
-	indices_t identity(indices.size(), -1);
-	for (size_t i = 0; i < identity.size(); ++i) {
-		if (identity[i] >= 0) {
-			continue;
-		}
-		size_t pos = std::distance(indices.begin(), std::find(indices.begin() + i + 1, indices.end(), indices[i]));
-		if (pos == indices.size()) {
-			identity[i] = -indices[i];
-		}
-		else {
-			identity[i] = static_cast<index_t>(pos);
-			identity[pos] = static_cast<index_t>(i);
+	cdebug << "Checking for TableauBase property...";
+	bool has_tableau_symmetry = false;
+	for (const auto& term: collect) {
+		if (kernel.properties.get_composite<TableauBase>(term) != nullptr) {
+			has_tableau_symmetry = true;
+			break;
 		}
 	}
+	cdebug << (has_tableau_symmetry ? "true!" : "false - exiting...") << '\n';
 
-	cdebug << "PII: " << join(identity.begin(), identity.end()) << '\n';
+	if (!has_tableau_symmetry) 
+		return false;
 
-	terms_t terms;
-	terms[identity] = *it->multiplier;
+	pat = new_pat;
+	pat_sym = symmetrize(new_pat);	
+
+	return true;	
+}
+
+ProjectedForm young_reduce::symmetrize(Ex::iterator it)
+{
+	ProjectedForm sym;
+	sym.insert(to_adjform(it), 1);
 
 	// Symmetrize in identical tensors
-	index_t pos_i = 0;
-	for (size_t i = 0; i < names.size(); ++i) {
-		index_t pos_j = pos_i + (index_t)names[i].second;
-		for (size_t j = i + 1; j < names.size(); ++j) {
-			if (names[i] == names[j]) {
-				terms_t new_terms;
-				for (const auto& term : terms) {
-					// Make new term
-					auto new_term = term.first;
-					// Apply symmetry
-					swap_indices(new_term, pos_i, pos_j, (index_t)names[i].second);
-					// Insert
-					new_terms[new_term] = term.second;
-				}
-				terms = new_terms;
-			}
-		}
-		pos_i += (index_t)names[i].second;
+	std::map<std::string, std::pair<index_t, std::vector<index_t>>> idents;
+	index_t pos = 0;
+	auto terms = split_ex(it, "\\prod");
+	for (auto& term : terms) {
+		idents[*term->name].first = term.number_of_children();
+		idents[*term->name].second.push_back(pos);
+		pos += term.number_of_children();
 	}
 
-	cdebug << "Symmetrized in identical tensors:\n";
-	for (const auto& kv : terms)
-		cdebug << '\t' << join(kv.first.begin(), kv.first.end()) << '\t' << kv.second << '\n';
-
-
-	// Young project
-	size_t n_terms = terms.size();
-	for (auto symmetry : symmetries) {
-		cdebug << "Applying " << (symmetry.antisymmetric ? "anti" : "") << "symmetry " << join(symmetry.indices.begin(), symmetry.indices.end());
-		terms_t new_terms;
-		for (const auto& term : terms) {
-			// Divide contribution
-			new_terms[term.first] += term.second;
-			// Make new terms
-			symmetry.reset();
-			while (symmetry.next()) {
-				auto new_term = symmetry.apply(term.first);
-				new_terms[new_term.first] += new_term.second * term.second;
-				if (new_terms[new_term.first] == 0) {
-					new_terms.erase(new_term.first);
-				}
-			}
-		}
-		terms = new_terms;
-		cdebug << "(generated " << (terms.size() - n_terms) << " terms)\n";
-		n_terms = terms.size();
+	for (const auto& ident : idents) {
+		if (ident.second.second.size() == 1)
+			continue;
+		sym.apply_ident_symmetry(ident.second.second, ident.second.first);
 	}
 
-	cdebug << "Projected:\n";
-	for (const auto& kv : terms)
-		cdebug << '\t' << join(kv.first.begin(), kv.first.end()) << '\t' << kv.second << '\n';
-	cdebug << "\n";
+	// Young project antisymmetric components
+	pos = 0;
+	for (auto& it : terms) {
+		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+		for (size_t col = 0; col < tab.row_size(0); ++col) {
+			if (tab.column_size(col) > 1) {
+				std::vector<index_t> indices;
+				for (auto beg = tab.begin_column(col), end = tab.end_column(col); beg != end; ++beg)
+					indices.push_back(*beg + pos);
+				std::sort(indices.begin(), indices.end());
+				sym.apply_young_symmetry(indices, true);
+			}
+		}
+		pos += it.number_of_children();
+	}
 
-	return terms;
+	// Young project symmetric components
+	pos = 0;
+	for (auto& it : terms) {
+		// Apply the symmetries
+		auto tb = kernel.properties.get_composite<TableauBase>(it);
+		auto tab = tb->get_tab(kernel.properties, tr, it, 0);
+		for (size_t row = 0; row < tab.number_of_rows(); ++row) {
+			if (tab.row_size(row) > 1) {
+				std::vector<index_t> indices;
+				for (auto beg = tab.begin_row(row), end = tab.end_row(row); beg != end; ++beg)
+					indices.push_back(*beg + pos);
+				std::sort(indices.begin(), indices.end());
+				sym.apply_young_symmetry(indices, false);
+			}
+		}
+		pos += it.number_of_children();
+	}
+
+	sym.multiply(*it->multiplier);
+
+	return sym;
+}
+
+adjform_t young_reduce::to_adjform(Ex::iterator it)
+{
+	adjform_t adjform;
+	size_t pos = 0;
+	for (Ex::iterator beg = it.begin(), end = it.end(); beg != end; ++beg) {
+		if (!beg->is_index())
+			continue;
+
+		// Only fill in if it hasn't been yet
+		if (adjform.size() <= pos || adjform[pos] < 0) {
+			// Attempt to find a matching dummy index
+			bool found = false;
+			size_t searchpos = pos + 1;
+			for (Ex::iterator cur = std::next(beg); cur != end; ++cur) {
+				if (!cur->is_index())
+					continue;
+				if (beg->name == cur->name) {
+					// Make sure vector is big enough
+					if (adjform.size() <= searchpos)
+						adjform.resize(searchpos + 1, -1);
+					adjform[pos] = searchpos;
+					adjform[searchpos] = pos;
+					found = true;
+					break;
+				}
+				++searchpos;
+			}
+
+			// No matching dummy index found, add as a free index
+			if (!found) {
+				if (adjform.size() <= pos)
+					adjform.resize(pos + 1, -1);
+				adjform[pos] = get_free_index(beg->name);
+			}
+		}
+		++pos;
+	}
+
+	return adjform;
+}
+
+index_t young_reduce::get_free_index (nset_t::iterator name)
+{
+	auto pos = index_of(index_map.begin(), index_map.end(), name);
+	if (pos == index_map.size()) {
+		index_map.push_back(name);
+		return -(index_t)index_map.size();
+	}
+	else {
+		return -(index_t)pos - 1;
+	}
 }
