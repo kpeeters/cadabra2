@@ -66,7 +66,7 @@ def test06():
     {a,b}::Indices(vector);
     ex:=(A)_{a b} (B)_{b a};
     combine(_);
-    tst:= (A B)_{b b} - @(ex);
+    tst:= (B A)_{b b} - @(ex);
     assert(tst==0)
     print("Test 06 passed")
 
@@ -85,4 +85,15 @@ def test07():
     print("Test 07 passed")
 
 test07()
+
+def test08():
+    __cdbkernel__=create_scope()
+    {a,b}::Indices(vector);
+    ex:=(u)_{a} (M)^{a b} (v)_{b};
+    combine(_);
+    tst:= (u M v) - @(ex);
+    assert(tst==0)
+    print("Test 08 passed")
+
+test08()
 
